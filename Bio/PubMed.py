@@ -95,8 +95,8 @@ class Dictionary:
         self.limiter.wait()
         
         try:
-            handle = NCBI.pmfetch(
-                db='PubMed', id=id, report='medlars', mode='text')
+            handle = NCBI.efetch(
+                db="pubmed", id=id, retmode='text', rettype='medlars')
         except IOError, x:
             # raise a KeyError instead of an IOError
             # XXX I really should distinguish between a real IOError and
@@ -106,67 +106,43 @@ class Dictionary:
             return self.parser.parse(handle)
         return handle.read()
 
-def search_for(search, batchsize=10000, delay=2, callback_fn=None,
+def search_for(search, reldate=None, mindate=None, maxdate=None,
+               batchsize=100, delay=2, callback_fn=None,
                start_id=0, max_ids=None):
-    """search_for(search[, batchsize][, delay][, callback_fn]
-    [, start_id][, max_ids]) -> ids
+    """search_for(search[, reldate][, mindate][, maxdate]
+    [, batchsize][, delay][, callback_fn][, start_id][, max_ids]) -> ids
 
     Search PubMed and return a list of the PMID's that match the
     criteria.  search is the search string used to search the
-    database.  batchsize specifies the number of ids to return at one
-    time.  By default, it is set to 10000, the maximum.  delay is the
-    number of seconds to wait between queries (default 2).
-    callback_fn is an optional callback function that will be called
-    as passed a PMID as results are retrieved.  start_id specifies the
-    index of the first id to retrieve and max_ids specifies the
-    maximum number of id's to retrieve.
+    database.  reldate is the number of dates prior to the current
+    date to restrict the search.  mindate and maxdate are the dates to
+    restrict the search, e.g. 2002/01/01.  batchsize specifies the
+    number of ids to return at one time.  By default, it is set to
+    10000, the maximum.  delay is the number of seconds to wait
+    between queries (default 2).  callback_fn is an optional callback
+    function that will be called as passed a PMID as results are
+    retrieved.  start_id specifies the index of the first id to
+    retrieve and max_ids specifies the maximum number of id's to
+    retrieve.
 
     """
     class ResultParser(sgmllib.SGMLParser):
-        # Parse the ID's out of the HTML-formatted page that PubMed
+        # Parse the ID's out of the XML-formatted page that PubMed
         # returns.  The format of the page is:
-        # <Title>QueryResult</Title>
-        # <Body>
-        # 10807727<Br>
         # [...]
-        # </Body>
-        # 5/30/2001: <Body> tag now missing.  Start in body by default.
-        # 8/28/2001: <Title> tags now missing.  Ignore QueryResult.
-
-        # 12/4/2001: If no results found, I get back:
-        # <QueryResult>
-        #         <ERROR>Can't run executor</ERROR>
-        #         <ErrorList>
-        #                 <PhraseNotFound>foobar[All Fields]</PhraseNotFound>
-        #         </ErrorList>
-        #         <WarningList>
-        #                 <OutputMessage>No items found.</OutputMessage>
-        #         </WarningList>
-        # </QueryResult>
+        #    <Id>...</Id>
+        # [...]
         def __init__(self):
             sgmllib.SGMLParser.__init__(self)
             self.ids = []
-            self.in_body = 1
-            self.in_queryresult = 0
-        def start_queryresult(self, attributes):
-            self.in_queryresult = 1
-        def end_queryresult(self):
-            self.in_queryresult = 0
-        def start_body(self, attributes):
-            self.in_body = 1
-        def end_body(self):
-            self.in_body = 0
+            self.in_id = 0
+        def start_id(self, attributes):
+            self.in_id = 1
+        def end_id(self):
+            self.in_id = 0
         _not_pmid_re = re.compile(r'\D')
         def handle_data(self, data):
-            # If I'm in a QueryResult tag, ignore.
-            if self.in_queryresult:
-                return
-            # The ID's only appear in the body.  If I'm not in the body,
-            # then don't do anything.
-            if not self.in_body:
-                return
-            # I have to ignore QueryResult.
-            if data == 'QueryResult':
+            if not self.in_id:
                 return
             # If data is just whitespace, then ignore it.
             data = string.strip(data)
@@ -182,6 +158,17 @@ def search_for(search, batchsize=10000, delay=2, callback_fn=None,
                       repr(data)
             self.ids.append(data)
 
+    params = {
+        'db' : 'pubmed',
+        'term' : search,
+        'reldate' : reldate,
+        'mindate' : mindate,
+        'maxdate' : maxdate
+        }
+    for k, v in params.items():
+        if v is None:
+            del params[k]
+
     limiter = RequestLimiter(delay)
     ids = []
     while max_ids is None or len(ids) < max_ids:
@@ -196,9 +183,9 @@ def search_for(search, batchsize=10000, delay=2, callback_fn=None,
         if max_ids is not None and max > max_ids - len(ids):
             max = max_ids - len(ids)
 
-        # Do a query against PmQty.  Search medline, using the
-        # search string, and get only the ID's in the results.
-        h = NCBI.pmqty('m', search, dopt='d', dispmax=max, dispstart=start)
+        params['retstart'] = start
+        params['retmax'] = max
+        h = NCBI.esearch(**params)
         parser.feed(h.read())
         ids.extend(parser.ids)
         if callback_fn is not None:
@@ -219,22 +206,29 @@ def find_related(pmid):
     class ResultParser(sgmllib.SGMLParser):
         # Parse the ID's out of the HTML-formatted page that PubMed
         # returns.  The format of the page is:
-        # <pmneighborResult> 
-        #      <id>######</id>
+        # [...]
+        #   <Link>
+        #      <Id>######</Id>
+        #      <Score>######</Score>
         #      [...]
-        # </pmneighborResult>
-
+        #   </Link>
+        # [...]
         def __init__(self):
             sgmllib.SGMLParser.__init__(self)
             self.ids = []
+            self.in_link = 0
             self.in_id = 0
         def start_id(self, attributes):
             self.in_id = 1
         def end_id(self):
             self.in_id = 0
+        def start_link(self, attributes):
+            self.in_link = 1
+        def end_link(self):
+            self.in_link = 0
         _not_pmid_re = re.compile(r'\D')
         def handle_data(self, data):
-            if not self.in_id:
+            if not self.in_link or not self.in_id:
                 return
             # Everything here should be a PMID.  Check and make sure
             # data really is one.  A PMID should be a string consisting
@@ -249,7 +243,7 @@ def find_related(pmid):
     parser = ResultParser()
     if type(pmid) is type([]):
         pmid = string.join(pmid, ',')
-    h = NCBI.pmneighbor(pmid, 'pmid')
+    h = NCBI.elink(dbfrom='pubmed', id=pmid)
     parser.feed(h.read())
     return parser.ids
 
@@ -300,8 +294,8 @@ def download_many(ids, callback_fn, broken_fn=None, delay=120.0, faildelay=5.0,
         try:
             # Query PubMed.  If one or more of the id's are broken,
             # this will raise an IOError.
-            handle = NCBI.pmfetch(
-                db='PubMed', id=id_str, report='medlars', mode='text')
+            handle = NCBI.efetch(
+                db="pubmed", id=id_str, retmode='text', rettype='medlars')
 
             # I'm going to check to make sure PubMed returned the same
             # number of id's as I requested.  If it didn't then I'm going

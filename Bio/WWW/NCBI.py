@@ -3,15 +3,17 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""NCBI.py
-
-Provides code to access NCBI over the WWW.
+"""Provides code to access NCBI over the WWW.
 
 The main Entrez web page is available at:
 http://www.ncbi.nlm.nih.gov/Entrez/
 
-A list of the Entrez utilities is available at:
+A list of the Entrez utilities (will go away Dec 2002) is available
+at:
 http://www.ncbi.nlm.nih.gov/entrez/utils/utils_index.html
+
+Documentation for the e-utilies are available at:
+http://www.ncbi.nlm.nih.gov/entrez/query/static/eutils_help.html
 
 The main Blast web page is available at:
 http://www.ncbi.nlm.nih.gov/BLAST/
@@ -22,6 +24,8 @@ query        Query Entrez.
 pmfetch      Retrieve results using a unique identifier.
 pmqty        Search PubMed.
 pmneighbor   Return a list of related articles for a PubMed entry.
+
+efetch       Access the efetch script.
 _open
 
 """
@@ -104,6 +108,69 @@ def pmneighbor(pmid, display,
     # good workaround.
     fullcgi = "%s?pmid=%s&%s" % (cgi, pmid, display)
     return _open(fullcgi)
+
+# XXX retmode?
+def epost(db, id, cgi='http://www.ncbi.nlm.nih.gov/entrez/eutils/epost.fcgi',
+          **keywds):
+    """epost(db, id[, cgi]) -> handle
+
+    Query Entrez and return a handle to the results.  See the online
+    documentation for an explanation of the parameters:
+    http://www.ncbi.nlm.nih.gov/entrez/query/static/epost_help.html
+
+    Raises an IOError exception if there's a network error.
+
+    """
+    variables = {'db' : db, 'id' : id}
+    variables.update(keywds)
+    return _open(cgi, variables)
+
+def efetch(db, cgi='http://www.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi',
+          **keywds):
+    """efetch(db[, cgi][...]) -> handle
+
+    Query Entrez and return a handle to the results.  See the online
+    documentation for an explanation of the parameters:
+    http://www.ncbi.nlm.nih.gov/entrez/query/static/efetch_help.html
+
+    Raises an IOError exception if there's a network error.
+
+    """
+    variables = {'db' : db}
+    variables.update(keywds)
+    return _open(cgi, variables)
+
+def esearch(db, term,
+            cgi='http://www.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi',
+            **keywds):
+    """esearch(db, term[, cgi][...]) -> handle
+
+    Query Entrez and return a handle to the results.  See the online
+    documentation for an explanation of the parameters:
+    http://www.ncbi.nlm.nih.gov/entrez/query/static/esearch_help.html
+
+    Raises an IOError exception if there's a network error.
+
+    """
+    variables = {'db' : db,
+                 'term' : term}
+    variables.update(keywds)
+    return _open(cgi, variables)
+
+def elink(cgi='http://www.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi',
+          **keywds):
+    """elink([, cgi][...]) -> handle
+
+    Query Entrez and return a handle to the results.  See the online
+    documentation for an explanation of the parameters:
+    http://www.ncbi.nlm.nih.gov/entrez/query/static/elink_help.html
+
+    Raises an IOError exception if there's a network error.
+
+    """
+    variables = {}
+    variables.update(keywds)
+    return _open(cgi, variables)
 
 def _open(cgi, params={}, get=1):
     """_open(cgi, params={}, get=1) -> UndoHandle
