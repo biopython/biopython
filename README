@@ -75,6 +75,21 @@ Biopython available in the ports tree.  According to Johann:
   (Python itself as well as Distutils) will be handled automagically.
 
 
+We have been noticing some problems building the _KDTreecmodule
+extension on some platforms (e.g. Solaris).  If you see lots of error
+messages followed by:
+ld: fatal: relocations remain against allocatable but non-writable sections
+
+you may be having this error.  We are trying to track this down.  In
+the meantime, you can disable this module by commenting out the
+following lines in the setup.py file:
+                     Extension('Bio.KDTree._KDTreecmodule',
+                               ["Bio/KDTree/_KDTree.C", 
+                                "Bio/KDTree/_KDTree.swig.C"],
+                               libraries=["stdc++"]
+                               ),
+The rest of Biopython will build and run fine.
+
 
 **Testing**
 
