@@ -137,8 +137,8 @@ class run_tests(Command):
 
 setup(name='Martel', 
       version='0.6',
-      author='Dalke Scientific Software, LLC of the The Biopython Consortium',
-      author_email='dalke@acm.org',
+      author='Dalke Scientific Software, LLC; member of the The Biopython Consortium',
+      author_email='dalke@dalkescientific.com',
       url='http://www.biopython.org/~dalke/Martel/',
 
       cmdclass = {"install" : my_install,
