@@ -39,6 +39,9 @@ setup(name='biopython',
                       ),
                      ('Bio.Tools.cmathfns',
                       { 'sources' : ['Bio/Tools/cmathfnsmodule.c'] }
+                      ),
+                     ('Bio.Tools.cstringfns',
+                      { 'sources' : ['Bio/Tools/cstringfnsmodule.c'] }
                       )
                      ]
       )
