@@ -23,8 +23,6 @@ import os
 import time
 
 from Bio.WWW import RequestLimiter
-from Bio.MultiProc.copen import copen_fn
-
 
 def find_submodules(modulename):
     """find_submodules(modulename) -> list of module names
@@ -133,6 +131,7 @@ class make_timed_function:
         retval = self.fn(*args, **keywds)
         return self.retval2pickleable_fn(retval)
     def __call__(self, *args, **keywds):
+        from Bio.MultiProc.copen import copen_fn
         end_time = time.time() + self.timeout
         handle = copen_fn(self._call_fn, *args, **keywds)
         while time.time() < end_time:

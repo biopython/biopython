@@ -23,7 +23,7 @@ FormatGroup      Describes a group of Biopython file formats.
 
 from Bio.config.Registry import *
 
-import _support
+from Bio.config import _support
 
 
 class FormatRegistry(Registry):
