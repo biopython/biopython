@@ -50,8 +50,15 @@ class TaggingConsumer(AbstractConsumer):
     prints it to a handle.  Useful for debugging.
 
     """
-    def __init__(self, handle=sys.stdout, colwidth=15, maxwidth=80):
-        """__init__(self, handle=sys.stdout)"""
+    def __init__(self, handle=None, colwidth=15, maxwidth=80):
+        """TaggingConsumer(handle=sys.stdout, colwidth=15, maxwidth=80)"""
+        # I can't assign sys.stdout to handle in the argument list.
+        # If I do that, handle will be assigned the value of sys.stdout
+        # the first time this function is called.  This will fail if
+        # the user has assigned sys.stdout to some other file, which may
+        # be closed or invalid at a later time.
+        if handle is None:
+            handle = sys.stdout
 	self._handle = handle
         self._colwidth = colwidth
         self._maxwidth = maxwidth
@@ -79,8 +86,7 @@ class TaggingConsumer(AbstractConsumer):
             method = lambda x, a=attr, s=self: s._print_name(a, x)
         return method
 
-def read_and_call(uhandle, method,
-                  start=None, end=None, contains=None, blank=None):
+def read_and_call(uhandle, method, **keywds):
     """_read_and_call(uhandle, method,
     start=None, end=None, contains=None, blank=None)
 
@@ -95,30 +101,53 @@ def read_and_call(uhandle, method,
     to None if the check is not necessary.
 
     """
-    line = uhandle.readline()
-    if not line:
-        raise SyntaxError, "Unexpected end of stream."
-    if start:
-        if line[:len(start)] != start:
-            raise SyntaxError, "Line does not start with '%s': %s" % \
-                  (start, line)
-    if end:
-        if string.rstrip(line)[-len(end):] != end:
-            raise SyntaxError, "Line does not end with '%s': %s" % \
-                  (end, line)
-    if contains:
-        if string.find(line, contains) == -1:
-            raise SyntaxError, "Line does not contain '%s': %s" % \
-                  (contains, line)
-    if blank is not None:
-        if blank:
-            if not is_blank_line(line):
-                raise SyntaxError, "Expected blank line, but got: %s" % \
-                      line
-        else:
-            if is_blank_line(line):
-                raise SyntaxError, "Expected non-blank line, but got a blank one"
-    apply(method, (line,))
+    line = safe_readline(uhandle)
+    errmsg = apply(_fails_conditions, (line,), keywds)
+    if errmsg is not None:
+        raise SyntaxError, errmsg
+    method(line)
+
+def read_and_call_while(uhandle, method, **keywds):
+    """read_and_call_while(uhandle, method, 
+    start=None, end=None, contains=None, blank=None) -> number of lines
+
+    Read a line from uhandle and pass it to the method as long as
+    some condition is true.  Returns the number of lines that were read.
+
+    See the docstring for read_and_call for a description of the parameters.
+    
+    """
+    nlines = 0
+    while 1:
+        line = safe_readline(uhandle)
+        # If I've failed the condition, then stop reading the line.
+        if apply(_fails_conditions, (line,), keywds):
+            uhandle.saveline(line)
+            break
+        method(line)
+        nlines = nlines + 1
+    return nlines
+
+def read_and_call_until(uhandle, method, **keywds):
+    """read_and_call_until(uhandle, method, 
+    start=None, end=None, contains=None, blank=None) -> number of lines
+
+    Read a line from uhandle and pass it to the method until
+    some condition is true.  Returns the number of lines that were read.
+
+    See the docstring for read_and_call for a description of the parameters.
+    
+    """
+    nlines = 0
+    while 1:
+        line = safe_readline(uhandle)
+        # If I've met the condition, then stop reading the line.
+        if not apply(_fails_conditions, (line,), keywds):
+            uhandle.saveline(line)
+            break
+        method(line)
+        nlines = nlines + 1
+    return nlines
 
 def attempt_read_and_call(uhandle, method, **keywds):
     """attempt_read_and_call(uhandle, method, **keywds) -> boolean
@@ -131,31 +160,32 @@ def attempt_read_and_call(uhandle, method, **keywds):
     arguments.
 
     """
-    # Delegate as much work as possible to read_and_call.  If the
-    # line fails the test inside that function, I will need to catch
-    # the SyntaxError exception and restore the state of the
-    # buffer.  Thus, I will need to first take a peek at the next line
-    # so I can restore it if necessary.
-    line = uhandle.peekline()
-        
-    try:
-        apply(read_and_call, (uhandle, method), keywds)
-    except SyntaxError:
-        # I only want to catch the exception if it was raised by
-        # the read_and_call method.  Thus, I will examine the traceback.
-        # If it contains more than 2 stack frames, then pass the exception on.
-        try:
-            tb = sys.exc_info()[2]
-            if len(traceback.extract_tb(tb)) > 2:
-                raise
-        finally:
-            del tb  # prevent circular reference to tb
-        
-        # read_and_call has read out a line and failed.
-        # Put the line back in the buffer.
+    line = safe_readline(uhandle)
+    passed = not apply(_fails_conditions, (line,), keywds)
+    if passed:
+        method(line)
+    else:
         uhandle.saveline(line)
-        return 0
-    return 1
+    return passed
+
+def _fails_conditions(line, start=None, end=None, contains=None, blank=None):
+    if start:
+        if line[:len(start)] != start:
+            return "Line does not start with '%s': %s" % (start, line)
+    if end:
+        if string.rstrip(line)[-len(end):] != end:
+            return "Line does not end with '%s': %s" % (end, line)
+    if contains:
+        if string.find(line, contains) == -1:
+            return "Line does not contain '%s': %s" % (contains, line)
+    if blank is not None:
+        if blank:
+            if not is_blank_line(line):
+                return "Expected blank line, but got: %s" % line
+        else:
+            if is_blank_line(line):
+                return "Expected non-blank line, but got a blank one"
+    return None
 
 def is_blank_line(line, allow_spaces=0):
     """is_blank_line(line, allow_spaces=0) -> boolean
