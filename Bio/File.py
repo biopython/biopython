@@ -34,7 +34,6 @@ class UndoHandle:
         self._saved = []
 
     def readlines(self, *args, **keywds):
-        #lines = self._saved + apply(self._handle.readlines, args, keywds)
         lines = self._saved + self._handle.readlines(*args,**keywds)
         self._saved = []
         return lines
@@ -43,7 +42,6 @@ class UndoHandle:
         if self._saved:
             line = self._saved.pop(0)
         else:
-            #line = apply(self._handle.readline, args, keywds)
             line = self._handle.readline(*args,**keywds)
         return line
 
@@ -82,7 +80,6 @@ class UndoHandle:
 
     def seek(self, *args):
         self._saved = []
-        ##apply(self._handle.seek, args)
         self._handle.seek(*args)
 
     def __getattr__(self, attr):
@@ -109,15 +106,15 @@ class SGMLHandle:
         self._stripper = SGMLStripper()
 
     def read(self, *args, **keywds):
-        data = apply(self._handle.read, args, keywds)
+        data = self._handle.read(*args, **keywds)
         return self._stripper.strip(data)
 
     def readline(self, *args, **keywds):
-        line = apply(self._handle.readline, args, keywds)
+        line = self._handle.readline(*args, **keywds)
         return self._stripper.strip(line)
 
     def readlines(self, *args, **keywds):
-        lines = apply(self._handle.readlines, args, keywds)
+        lines = self._handle.readlines(*args, **keywds)
         for i in range(len(lines)):
             lines[i] = self._stripper.strip(str)
         return lines

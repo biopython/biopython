@@ -295,7 +295,7 @@ def read_and_call(uhandle, method, **keywds):
 
     """
     line = safe_readline(uhandle)
-    errmsg = apply(_fails_conditions, (line,), keywds)
+    errmsg = _fails_conditions(*(line,), **keywds)
     if errmsg is not None:
         raise SyntaxError, errmsg
     method(line)
@@ -313,7 +313,7 @@ def read_and_call_while(uhandle, method, **keywds):
     while 1:
         line = safe_readline(uhandle)
         # If I've failed the condition, then stop reading the line.
-        if apply(_fails_conditions, (line,), keywds):
+        if _fails_conditions(*(line,), **keywds):
             uhandle.saveline(line)
             break
         method(line)
@@ -334,7 +334,7 @@ def read_and_call_until(uhandle, method, **keywds):
     while 1:
         line = safe_readline(uhandle)
         # If I've met the condition, then stop reading the line.
-        if not apply(_fails_conditions, (line,), keywds):
+        if not _fails_conditions(*(line,), **keywds):
             uhandle.saveline(line)
             break
         method(line)
@@ -353,7 +353,7 @@ def attempt_read_and_call(uhandle, method, **keywds):
 
     """
     line = safe_readline(uhandle)
-    passed = not apply(_fails_conditions, (line,), keywds)
+    passed = not _fails_conditions(*(line,), **keywds)
     if passed:
         method(line)
     else:
