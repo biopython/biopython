@@ -1,4 +1,4 @@
-#!/bin/user/python
+#!/usr/bin/python
 
 # Copyright (C) 2002, Thomas Hamelryck (thamelry@vub.ac.be)
 # This code is part of the Biopython distribution and governed by its
@@ -34,18 +34,18 @@ parser.add_option("-o", "--out", dest="outfile",
                   help="output to PDB file (B factor=exposure)")
 
 parser.add_option("-r", "--radius", dest="radius", type="float", 
-                  help="sphere radius (for CA3, CB and FS)", 
+                  help="sphere radius (default 13.0 A)", 
                   default=13.0)
 
 parser.add_option("-m", "--model", dest="model", type="int", 
-                  help="model number", 
+                  help="model number (default 0)", 
                   default=0)
 
 parser.add_option("-d", "--down-sphere", action="store_true", dest="ds", 
-                  help="use sphere opposite side chain") 
+                  help="use half sphere opposite side chain") 
 
 parser.add_option("-s", "--offset", dest="offset", type="float", 
-                  help="offset along CB direction",
+                  help="offset of cutting plane along CB direction (default 0)",
                   default=0.0)
 
 (options, args)=parser.parse_args()
@@ -112,7 +112,7 @@ for r in residue_list:
         hetflag, resseq, icode=r.get_id()
 
         if icode==' ':
-            icode=='_'
+            icode='_'
 
         resname=r.get_resname()
 
@@ -123,7 +123,6 @@ for r in residue_list:
     for atom in r.get_iterator():
         atom.set_bfactor(exposure)
 
- 
 if options.outfile:
     io=PDBIO()
     io.set_structure(s)
