@@ -188,7 +188,9 @@ class UniGeneParser( sgmllib.SGMLParser ):
             print item
 
     def print_tags( self ):
-        for key in self.queue.keys():
+        queue_keys = self.queue.keys()
+        queue_keys.sort()
+        for key in queue_keys:
             print 'key %s' % key
             self.print_item( self.queue[ key ] )
 
