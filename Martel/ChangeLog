@@ -28,6 +28,31 @@ expression, as in
   [Jj][Aa][Nn]
   >>>
 
+Added Martel.Debug to print a message if the matching reaches that
+part of the pattern.
+
+The IterParser class handles iteration of records when on the
+record boundary.  Uses 'yield' so only works with 2.2.  The older
+Iterator.py classes still work for iteration support on pre-2.2
+installations.
+
+The Dispatch class help with "well-formed" ContentHandler calls by
+mapping elements like <spam> into 'start_spam'.  The Parser class
+contains special-case performance code to handle Dispatch calls.
+
+New function 'replace_groups' takes an expression and a list of
+replacement (old_tag, new_expression).  It replaces the contents of
+the matching group with the new expression.
+
+  >>> exp = Martel.Group("spam", Martel.Str("viking"))
+  >>> exp = Martel.replace_groups(exp, [("spam", Martel.Str("rabbit"))])
+  >>> from xml.sax import saxutils
+  >>> p = exp.make_parser()
+  >>> p.setContentHandler(saxutils.XMLGenerator())
+  >>> p.parseString("rabbit")
+  <spam>rabbit</spam>
+  >>>
+	
 Added:
   Martel.UntilSep = read up to a seperator character, don't consume it
   Martel.UntilEol = read up to a newline character, don't consume it
