@@ -5,7 +5,6 @@
 
 import sys
 
-DEBUG = 0
 
 __doc__="""
 Consumer class that builds a Structure object. This is used by 
@@ -82,7 +81,7 @@ class StructureBuilder:
         """
         if self.model.has_id(chain_id):
             self.chain=self.model[chain_id]
-            if DEBUG:
+            if __debug__:
                 sys.stderr.write("WARNING: Chain %s is discontinuous at line %i.\n" 
                         % (chain_id, self.line_counter))
         else:
@@ -117,7 +116,7 @@ class StructureBuilder:
             if self.chain.has_id(res_id):
                 # There already is a residue with the id (field, resseq, icode).
                 # This only makes sense in the case of a point mutation.
-                if DEBUG:
+                if __debug__:
                     sys.stderr.write("WARNING: Residue ('%s', %i, '%s') redefined at line %i.\n" 
                             % (field, resseq, icode, self.line_counter))
                 duplicate_residue=self.chain[res_id]
@@ -156,7 +155,7 @@ class StructureBuilder:
         self.chain.add(residue)
         self.residue=residue
 
-    def init_atom(self, name, coord, b_factor, occupancy, altloc, fullname):
+    def init_atom(self, name, coord, b_factor, occupancy, altloc, fullname, serial_number=None):
         """
         Initiate a new Atom object.
 
@@ -185,10 +184,10 @@ class StructureBuilder:
                 if duplicate_fullname!=fullname:
                     # name of current atom now includes spaces
                     name=fullname
-                    if DEBUG:
+                    if __debug__:
                         sys.stderr.write("WARNING: atom names %s and %s differ only in spaces at line %i.\n" 
                             % (duplicate_fullname, fullname, self.line_counter))
-        atom=self.atom=Atom(name, coord, b_factor, occupancy, altloc, fullname)
+        atom=self.atom=Atom(name, coord, b_factor, occupancy, altloc, fullname, serial_number)
         if altloc!=" ":
             # The atom is disordered
             if residue.has_id(name):
@@ -208,7 +207,7 @@ class StructureBuilder:
                     disordered_atom.disordered_add(atom)
                     disordered_atom.disordered_add(duplicate_atom)
                     residue.flag_disordered()
-                    if DEBUG:
+                    if __debug__:
                         sys.stderr.write("WARNING: disordered atom found with blanc altloc before line %i.\n"  
                                 % self.line_counter)
             else:

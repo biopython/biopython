@@ -14,7 +14,7 @@ __doc__="Atom class, used in Structure objects."
 
 
 class Atom:
-    def __init__(self, name, coord, bfactor, occupancy, altloc, fullname):
+    def __init__(self, name, coord, bfactor, occupancy, altloc, fullname, serial_number):
         """
         Atom object.
 
@@ -58,6 +58,7 @@ class Atom:
         self.anisou_array=None
         self.siguij_array=None
         self.sigatm_array=None
+        self.serial_number=serial_number
 
     # Special methods   
 
@@ -79,6 +80,9 @@ class Atom:
         return sqrt(sum(diff*diff))
 
     # set methods
+
+    def set_serial_number(self, n):
+        self.serial_number=n
 
     def set_bfactor(self, bfactor):
         self.bfactor=bfactor
@@ -164,6 +168,9 @@ class Atom:
     def get_parent(self):
         "Return parent residue."
         return self.parent
+
+    def get_serial_number(self):
+        return self.serial_number
 
     def destroy(self):
         self.parent=None
