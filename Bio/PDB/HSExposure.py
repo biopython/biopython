@@ -239,7 +239,7 @@ class HSExposure:
             d[r1]=(hs_sidechain, hs_mainchain)
         return d
     
-    def calc_hs_exposure(self, model, radius=12.0, option='CB'):
+    def calc_hs_exposure(self, model, radius=13.0, option='CB'):
         """
         Calculate the half sphere exposure. A dictionary is returned that uses 
         a L{Residue} object as key, and the residue exposure (a tuple of two ints)
@@ -270,7 +270,7 @@ class HSExposure:
             raise "Options: CA3 or CB"
         return self._calc_hs_exposure(rotran_list, residue_list, radius)
 
-    def calc_fs_exposure(self, model, radius=12.0):
+    def calc_fs_exposure(self, model, radius=13.0):
         """
         A residue's exposure is defined as the number of CA atoms around 
         that residues CA atom. A dictionary is returned that uses a L{Residue}
