@@ -17,8 +17,20 @@ swissprot_expasy_cgi = CGIDB(
     failure_cases=[(blank_expr, "no results")]
     )
 
+swissprot_usmirror_cgi = CGIDB(
+    name="swissprot-usmirror-cgi",
+    doc="Retrieve a swiss-prot entry by ID",
+    cgi="http://us.expasy.org/cgi-bin/get-sprot-raw.pl",
+    delay=5.0,
+    timeout=10,
+    params=[],
+    key="",
+    failure_cases=[(blank_expr, "no results")]
+    )
+
 swissprot = DBGroup(
     name="swissprot",
     behavior="serial",
     )
 swissprot.add(swissprot_expasy_cgi)
+swissprot.add(swissprot_usmirror_cgi)
