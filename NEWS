@@ -25,7 +25,7 @@ Added Residue Depth support (through MSMS)
 Added Half Sphere Exposure.
 Added Fragment classification of the protein backbone (see Kolodny et al., 
 JMB, 2002)
-Corrected problem on Windows with PDBList (thanks to Matta Dimmic)
+Corrected problem on Windows with PDBList (thanks to Matt Dimmic)
 Added StructureAlignment module to superimpose structures based on a FASTA 
 sequence alignment.
 Various additions to Polypeptide.
