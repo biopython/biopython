@@ -7,7 +7,7 @@ from Bio.Align import Generic
 from Bio import Alphabet
 fff_rec = fssp_rec.fff_rec
 """
-A module to handle FSSP files. For now it parses only the summary and alignment
+A module to handle FSSP files. For now it parses only the header, summary and alignment
 sections.
 
 functions: read_fssp(file_handle): reads an fssp file into the records. Returns a
@@ -53,20 +53,6 @@ class FSSPHeader:
                setattr(self,i,attr)
             else:
                setattr(self,i,string.split(inline)[1])
-#      if database_rec.match(inline):
-#         self.database = int(string.split(inline)[1])
-#      elif pdbid_rec.match(inline):
-#         self.pdbid = string.split(inline)[1]
-#      elif header_rec.match(inline):
-#         self.header = string.split(inline)[1]
-#      elif cmpnd_rec.match(inline):
-#         self.cmpnd = string.split(inline)[1]
-#      elif author_rec.match(inline):
-#      elif seqlength_rec.match(inline):
-#         self.seqlength = int(string.split(inline)[1])
-#      elif nalign_rec.match(inline):
-#         self.nalign = int(string.split(inline)[1])
-#      
 
 class PosAlign:
    def __init__(self,inStr):
@@ -162,25 +148,6 @@ class FSSPAlignRec:
       for i in self.PosAlignList:
          self.pos_align_dict[j] = i
          j = j + 1
-
-#   def calcEntropy(self,expDict):
-#      vector = []
-#      for i in self.pos_align_dict.values():
-#         if i.gap:
-#            vector.append('.')
-#         else:
-#            vector.append(i.aa)
-#      self.entropy = util.entropy(vector,expDict)
-#   def calcSumPairs(self,matrixFile='blosum62',gapPenalty=8.0):
-#      vector = []
-#      for i in self.pos_align_dict.values():
-#         if i.gap:
-#            vector.append('.')
-#         else:
-#            vector.append(i.aa)
-#      # reads the matrix file every time... gotta change this
-#      subsMatrix = matrix.read_gcg_matrix(dirs.matrix+matrixFile)
-#      self.sumPairs = util.sumPairs(vector,subsMatrix,gapPenalty)
 
 
 class FSSPAlignDict(UserDict.UserDict):
@@ -295,6 +262,5 @@ def read_fssp(fssp_handle):
       i.pos_align_list2dict()
       del i.PosAlignList
    align_dict.build_resnum_list()
-   # sum_dict.build_resnum_list()
    return (header, sum_dict, align_dict)
 
