@@ -197,7 +197,8 @@ class ErrorParser:
         # deal with any problems as Parser Errors
         # XXX Watch out for changes in exceptions, as noted in Andrew's
         # comments in the Martel code.
-        except Martel.Parser.ParserException:
+        except (Martel.Parser.ParserException,
+                Martel.Parser.ParserPositionException):
             if self._bad_file_handle:
                 self._bad_file_handle.write(record)
 
