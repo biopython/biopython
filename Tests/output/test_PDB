@@ -1,22 +1,25 @@
-test_PDB
-PDBConstructionException: Atom N defined twice in residue <Residue het=  resseq=2 icode= > at line 17.
-Exception ignored. Some atoms or residues will be missing in the data structure.
-WARNING: disordered atom found with blanc altloc before line 29.
-WARNING: Residue (' ', 4, ' ') redefined at line 39.
-PDBConstructionException: Blank altlocs in duplicate residue SER (' ', 4, ' ') at line 39.
-Exception ignored. Some atoms or residues will be missing in the data structure.
-WARNING: Residue (' ', 10, ' ') redefined at line 71.
-WARNING: Residue (' ', 14, ' ') redefined at line 102.
-WARNING: Residue (' ', 16, ' ') redefined at line 131.
-WARNING: Residue (' ', 80, ' ') redefined at line 629.
-WARNING: Residue (' ', 81, ' ') redefined at line 642.
-PDBConstructionException: Atom O defined twice in residue <Residue het=W resseq=67 icode= > at line 818.
-Exception ignored. Some atoms or residues will be missing in the data structure.
+PDBConstructionException: Atom N defined twice in residue <Residue het=  resseq=2 icode= > at line 19.
+Exception ignored.
+Some atoms or residues will be missing in the data structure.
+WARNING: disordered atom found with blanc altloc before line 31.
+WARNING: Residue (' ', 4, ' ') redefined at line 41.
+PDBConstructionException: Blank altlocs in duplicate residue SER (' ', 4, ' ') at line 41.
+Exception ignored.
+Some atoms or residues will be missing in the data structure.
+WARNING: Residue (' ', 10, ' ') redefined at line 73.
+WARNING: Residue (' ', 14, ' ') redefined at line 104.
+WARNING: Residue (' ', 16, ' ') redefined at line 133.
+WARNING: Residue (' ', 80, ' ') redefined at line 631.
+WARNING: Residue (' ', 81, ' ') redefined at line 644.
+PDBConstructionException: Atom O defined twice in residue <Residue het=W resseq=67 icode= > at line 820.
+Exception ignored.
+Some atoms or residues will be missing in the data structure.
 Model 0 contains 1 chains.
 	Chain 'A' contains 1 residues.
 		Residue ('H_PCA', 1, ' ') contains 8 atoms.
 Model 1 contains 3 chains.
-	Chain 'A' contains 85 residues.
+	Chain 'A' contains 86 residues.
+		Residue (' ', 0, ' ') contains 1 atoms.
 		Residue (' ', 2, ' ') contains 11 atoms.
 		Residue (' ', 3, ' ') contains 6 atoms.
 			The residue contains 1 disordered atoms.
@@ -200,3 +203,8 @@ Model 1 contains 3 chains.
 		Residue ('W', 74, ' ') contains 1 atoms.
 		Residue ('W', 75, ' ') contains 1 atoms.
 		Residue ('W', 77, ' ') contains 1 atoms.
+WARNING: some strange peptide bonds are present
+<Polypeptide start=A17 end=A78 length=62>
+<Polypeptide start=A82 end=A86 length=5>
+<Polypeptide start=A11 end=A13 length=3>
+<Polypeptide start=A0 end=A9 length=7>

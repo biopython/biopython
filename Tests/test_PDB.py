@@ -5,6 +5,7 @@
 
 
 from Bio.PDB.PDBParser import PDBParser 
+from Bio.PDB.Polypeptide import build_peptides
 
 
 # first make a PDB parser object
@@ -39,4 +40,10 @@ for model in structure.get_list():
 						disordered_count=disordered_count+1
 				if disordered_count>0:
 					print "\t\t\tThe residue contains %i disordered atoms." % disordered_count
+
+polypep_list=build_peptides(structure, 1)
+
+
+for pp in polypep_list:
+	print pp
 					
