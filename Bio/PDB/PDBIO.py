@@ -70,6 +70,10 @@ class PDBIO:
 		for model in self.structure.get_list():
 			if not select.accept_model(model):
 				continue
+			# necessary for ENDMDL 
+			# do not write ENDMDL if no residues were written
+			# for this model
+			model_residues_written=0
 			atom_number=1
 			if model_flag:
 				fp.write("MODEL \n")
@@ -80,7 +84,7 @@ class PDBIO:
 				# necessary for TER 
 				# do not write TER if no residues were written
 				# for this chain
-				residues_written=0
+				chain_residues_written=0
 				for residue in chain.get_unpacked_list():
 					if not select.accept_residue(residue):
 						continue
@@ -92,14 +96,15 @@ class PDBIO:
 							continue
 						else:
 							# flag to write TER
-							residues_written=1
+							chain_residues_written=1
+							model_residues_written=1
 						s=get_atom_line(atom, hetfield, segid, atom_number, resname,
 								resseq, icode, chain_id)
 						fp.write(s)
 						atom_number=atom_number+1
-				if residues_written:
+				if chain_residues_written:
 					fp.write("TER\n")
-			if model_flag:
+			if model_flag and model_residues_written:
 				fp.write("ENDMDL\n")
 		fp.close()
 
