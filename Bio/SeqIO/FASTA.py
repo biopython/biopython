@@ -77,7 +77,7 @@ class FastaWriter:
             self.outfile.write(data[i:i+60] + "\n")
 
     
-    def write_records(records):
+    def write_records(self, records):
         # In general, can assume homogenous records... useful?
         for record in records:
             self.write(record)
