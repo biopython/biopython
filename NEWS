@@ -4,6 +4,8 @@ News for the Biopython Project
 This file contains release notes and general news 
 about the biopython project.
 
+March 29, 2005: MEME parser added. Thanks to Jason Hackney
+
 Feb 18, 2005: Biopython 1.40 beta
 Major Changes since v1.30. For a full list of changes please see the CVS
 
