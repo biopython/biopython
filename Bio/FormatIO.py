@@ -1,5 +1,3 @@
-from __future__ import generators
-
 import sys, urllib
 from xml.sax import saxutils
 import ReseekFile
