@@ -420,7 +420,7 @@ class _Scanner:
     
     def _scan_rp(self, uhandle, consumer):
         self._scan_line('RP', uhandle, consumer.reference_position,
-                        exactly_one=1)
+                        one_or_more=1)
     
     def _scan_rc(self, uhandle, consumer):
         self._scan_line('RC', uhandle, consumer.reference_comment,
