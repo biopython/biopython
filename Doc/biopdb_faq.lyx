@@ -61,8 +61,10 @@ Structural Bioinformatics FAQ
 \layout Author
 
 Thomas Hamelryck
-\layout Address
+\layout Author
 
+
+\size normal 
 Bioinformatics center
 \newline 
 University of Copenhagen 
@@ -74,6 +76,8 @@ DK-2100 København Ø
 Denmark 
 \newline 
 thamelry@binf.ku.dk
+\size default 
+
 \newline 
 
 \begin_inset LatexCommand \url{http://www.binf.ku.dk/users/thamelry/}
@@ -345,7 +349,7 @@ Then, create a structure object from a PDB file in the following way (the
  for the structure):
 \layout LyX-Code
 
-structure=p.get_structure('PHA-L', '1FAT.pdb')
+structure=parser.get_structure('PHA-L', '1FAT.pdb')
 \layout Subsubsection*
 
 How do I create a structure object from an mmCIF file?
@@ -364,7 +368,7 @@ parser=MMCIFParser()
 Then use this parser to create a structure object from the mmCIF file:
 \layout LyX-Code
 
-structure=p.get_structure('PHA-L', '1FAT.cif')
+structure=parser.get_structure('PHA-L', '1FAT.cif')
 \layout Subsubsection*
 
 ...and what about the new PDB XML format?
@@ -878,7 +882,7 @@ The following code iterates through all atoms of a structure:
 p=PDBParser()
 \layout LyX-Code
 
-s=p.get_structure('X', 'pdb1fat.ent')
+structure=p.get_structure('X', 'pdb1fat.ent')
 \layout LyX-Code
 
 for model in structure.get_iterator():
@@ -1784,8 +1788,8 @@ Residue
 wide false
 collapsed false
 
-\layout Standard
-\align center 
+\layout Subsubsection*
+
 
 \begin_inset  Tabular
 <lyxtabular version="3" rows="9" columns="2">
@@ -2090,12 +2094,8 @@ How do I calculate residue depth?
 
 Residue depth is the average distance of a residue's atoms from the solvent
  accessible surface.
- It's a fairly new and very powerful parameterization of solvent accessibility
- (but I'm working on something even more powerful :-).
- 
-\layout Standard
-
-For this functionality, you need to install Michel Sanner's MSMS program
+ It's a fairly new and very powerful parameterization of solvent accessibility.
+ For this functionality, you need to install Michel Sanner's MSMS program
  (
 \begin_inset LatexCommand \url{http://www.scripps.edu/pub/olson-web/people/sanner/html/msms_home.html}
 
@@ -2107,11 +2107,114 @@ For this functionality, you need to install Michel Sanner's MSMS program
 ResidueDepth
 \family default 
  class.
- You can also get access to the molecular surface itself (via the 
+ This class behaves as a dictionary wich maps 
+\family typewriter 
+Residue
+\family default 
+ objects to corresponding (residue depth, C
+\begin_inset Formula $\alpha$
+\end_inset 
+
+ depth) tuples.
+ The C
+\begin_inset Formula $\alpha$
+\end_inset 
+
+ depth is the distance of a residue's C
+\begin_inset Formula $\alpha$
+\end_inset 
+
+ atom to the solvent accessible surface.
+ 
+\layout Standard
+
+Example:
+\layout LyX-Code
+
+model=structure[0]
+\layout LyX-Code
+
+rd=ResidueDepth(model, pdb_file)
+\layout LyX-Code
+
+residue_depth, ca_depth=rd[some_residue]
+\layout Standard
+
+You can also get access to the molecular surface itself (via the 
 \family typewriter 
 get_surface
 \family default 
  function), in the form of a Numpy array with the surface points.
+\layout Subsubsection*
+
+How do I calculate Half Sphere Exposure?
+\layout Standard
+
+Half Sphere Exposure (HSE) is a new, 2D measure of solvent exposure.
+ It comes in two flavors: HSE
+\begin_inset Formula $\alpha$
+\end_inset 
+
+ and HSE
+\begin_inset Formula $\beta$
+\end_inset 
+
+.
+ The HSE measure is calculated by the 
+\family typewriter 
+HSExposure
+\family default 
+ class, which can also calculate the contact number.
+ The latter class has methods which return dictionaries that map a 
+\family typewriter 
+Residue
+\family default 
+ object to HSE
+\begin_inset Formula $\alpha$
+\end_inset 
+
+, HSE
+\begin_inset Formula $\beta$
+\end_inset 
+
+ and contact number values.
+\layout Standard
+
+Example:
+\layout LyX-Code
+
+model=structure[0]
+\layout LyX-Code
+
+# Neighbor sphere radius RADIUS=13.0
+\layout LyX-Code
+
+RADIUS=13.0
+\layout LyX-Code
+
+hse=HSExposure()
+\layout LyX-Code
+
+# Calculate HSEalpha
+\layout LyX-Code
+
+exp_ca=hse.calc_hs_exposure(model, RADIUS, option='CA3')
+\layout LyX-Code
+
+# Calculate HSEbeta
+\layout LyX-Code
+
+exp_cb=hse.calc_hs_exposure(model, RADIUS, option='CB')
+\layout LyX-Code
+
+# Calculate classical coordination number exp_fs=hse.calc_fs_exposure(model,
+ RADIUS)
+\layout LyX-Code
+
+# Print HSEalpha for a residue
+\layout LyX-Code
+
+print exp_ca[some_residue]
 \layout Subsubsection*
 
 How do I map the residues of two related structures onto each other?

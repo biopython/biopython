@@ -20,11 +20,6 @@
 \providecommand{\tabularnewline}{\\}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
- \newcommand{\lyxaddress}[1]{
-   \par {\raggedright #1 
-   \vspace{1.4em}
-   \noindent\par}
- }
  \newenvironment{lyxcode}
    {\begin{list}{}{
      \setlength{\rightmargin}{\leftmargin}
@@ -71,16 +66,16 @@
 
 \author{Thomas Hamelryck}
 
-\maketitle
 
-\lyxaddress{Bioinformatics center\\
-University of Copenhagen \\
-Universitetsparken 15, Bygning 10\\
-DK-2100 København Ø\\
-Denmark \\
-thamelry@binf.ku.dk\\
+\author{{\normalsize Bioinformatics center}\\
+{\normalsize University of Copenhagen }\\
+{\normalsize Universitetsparken 15, Bygning 10}\\
+{\normalsize DK-2100 København Ø}\\
+{\normalsize Denmark }\\
+{\normalsize thamelry@binf.ku.dk}\\
 \url{http://www.binf.ku.dk/users/thamelry/}}
 
+\maketitle
 
 \section{Introduction}
 
@@ -214,7 +209,7 @@ Then, create a structure object from a PDB file in the following way
 defined name for the structure):
 
 \begin{lyxcode}
-structure=p.get\_structure('PHA-L',~'1FAT.pdb')
+structure=parser.get\_structure('PHA-L',~'1FAT.pdb')
 \end{lyxcode}
 
 \subsubsection*{How do I create a structure object from an mmCIF file?}
@@ -228,7 +223,7 @@ parser=MMCIFParser()
 Then use this parser to create a structure object from the mmCIF file:
 
 \begin{lyxcode}
-structure=p.get\_structure('PHA-L',~'1FAT.cif')
+structure=parser.get\_structure('PHA-L',~'1FAT.cif')
 \end{lyxcode}
 
 \subsubsection*{...and what about the new PDB XML format?}
@@ -310,7 +305,7 @@ pdbl=PDBList()
 pdbl.retrieve\_pdb\_file('1FAT',~here=1)
 \end{lyxcode}
 In this case, the downloaded file will be called \texttt{pdb1fat.ent},
-and it will be downloaded to the current directory (\texttt{here=1}). 
+and it will be downloaded to the current directory (option \texttt{here=1}). 
 
 The \texttt{retrieve\_pdb\_file} method also has some options to specify
 the compression format used for the download, and the program used
@@ -448,6 +443,10 @@ io.set\_structure(s)
 
 io.save('gly\_only.pdb',~GlySelect())
 \end{lyxcode}
+If this is all too complicated for you, the \texttt{Dice} module contains
+a handy \texttt{extract} function that writes out all residues in
+a chain between a start and end residue. 
+
 
 \subsubsection*{Can I write mmCIF files?}
 
@@ -498,7 +497,7 @@ The following code iterates through all atoms of a structure:
 \begin{lyxcode}
 p=PDBParser()
 
-s=p.get\_structure('X',~'pdb1fat.ent')
+structure=p.get\_structure('X',~'pdb1fat.ent')
 
 for~model~in~structure.get\_iterator():
 
@@ -918,7 +917,8 @@ models!
 
 %
 \begin{table}
-\begin{center}\begin{tabular}{|c|c|}
+
+\subsubsection*{\begin{tabular}{|c|c|}
 \hline 
 Code&
 Secondary structure\tabularnewline
@@ -948,7 +948,7 @@ Bend \tabularnewline
 -&
 Other\tabularnewline
 \hline
-\end{tabular}\end{center}
+\end{tabular}}
 
 
 \caption{\label{cap:DSSP-codes}DSSP codes in Bio.PDB.}
@@ -966,15 +966,60 @@ next entry.
 
 Residue depth is the average distance of a residue's atoms from the
 solvent accessible surface. It's a fairly new and very powerful parameterization
-of solvent accessibility (but I'm working on something even more powerful
-:-). 
+of solvent accessibility. For this functionality, you need to install
+Michel Sanner's MSMS program (\url{http://www.scripps.edu/pub/olson-web/people/sanner/html/msms_home.html}).
+Then use the \texttt{ResidueDepth} class. This class behaves as a
+dictionary wich maps \texttt{Residue} objects to corresponding (residue
+depth, C$\alpha$ depth) tuples. The C$\alpha$ depth is the distance
+of a residue's C$\alpha$ atom to the solvent accessible surface. 
 
-For this functionality, you need to install Michel Sanner's MSMS program
-(\url{http://www.scripps.edu/pub/olson-web/people/sanner/html/msms_home.html}).
-Then use the \texttt{ResidueDepth} class. You can also get access
-to the molecular surface itself (via the \texttt{get\_surface} function),
-in the form of a Numpy array with the surface points.
+Example:
 
+\begin{lyxcode}
+model=structure{[}0{]}
+
+rd=ResidueDepth(model,~pdb\_file)
+
+residue\_depth,~ca\_depth=rd{[}some\_residue{]}
+\end{lyxcode}
+You can also get access to the molecular surface itself (via the \texttt{get\_surface}
+function), in the form of a Numpy array with the surface points.
+
+
+\subsubsection*{How do I calculate Half Sphere Exposure?}
+
+Half Sphere Exposure (HSE) is a new, 2D measure of solvent exposure.
+It comes in two flavors: HSE$\alpha$ and HSE$\beta$. The HSE measure
+is calculated by the \texttt{HSExposure} class, which can also calculate
+the contact number. The latter class has methods which return dictionaries
+that map a \texttt{Residue} object to HSE$\alpha$, HSE$\beta$ and
+contact number values.
+
+Example:
+
+\begin{lyxcode}
+model=structure{[}0{]}
+
+\#~Neighbor~sphere~radius~RADIUS=13.0
+
+RADIUS=13.0
+
+hse=HSExposure()
+
+\#~Calculate~HSEalpha
+
+exp\_ca=hse.calc\_hs\_exposure(model,~RADIUS,~option='CA3')
+
+\#~Calculate~HSEbeta
+
+exp\_cb=hse.calc\_hs\_exposure(model,~RADIUS,~option='CB')
+
+\#~Calculate~classical~coordination~number~exp\_fs=hse.calc\_fs\_exposure(model,~RADIUS)
+
+\#~Print~HSEalpha~for~a~residue
+
+print~exp\_ca{[}some\_residue{]}
+\end{lyxcode}
 
 \subsubsection*{How do I map the residues of two related structures onto each other?}
 
