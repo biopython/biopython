@@ -299,7 +299,7 @@ def download_many(ids, callback_fn, broken_fn=None, delay=120.0, batchsize=500,
         while 1:
             if iter.next() is None:
                 break
-            num_ids += 1
+            num_ids = num_ids + 1
         if num_ids != current_batchsize and num_ids != len(ids):
             raise SyntaxError, "I requested %d id's from PubMed but found %d" \
                   % (current_batchsize, num_ids)
