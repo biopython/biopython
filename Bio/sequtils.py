@@ -153,14 +153,21 @@ def six_frame_translations(seq, genetic_code = 1):
    return res
    
 def GC(seq):
-   " calculates G+C content "
+   """ calculates G+C content """
+#      19/8/03: Iddo: added provision for lowercase
+#      19/8/03: Iddo: divide by the sequence's length rather than by the
+#      A+T+G+C number. In that way, make provision for N.
+ 
+       
    d = {}
-   for nt in ['A','T','G','C']:
+   for nt in ['A','T','G','C','a','t','g','c','S','s']:
       d[nt] = seq.count(nt)
-      gc = d.get('G',0) + d.get('C',0)
+      gc = d.get('G',0) + d.get('C',0) + d.get('g',0) + d.get('c',0) + \
+           d.get('S',0) + d.get('s',0)
 
    if gc == 0: return 0
-   return gc*100.0/(d['A'] +d['T'] + gc)
+#   return gc*100.0/(d['A'] +d['T'] + gc)
+   return gc*100.0/len(seq)
     
 def GC123(seq):
    " calculates totla G+C content plus first, second and third position "
@@ -195,22 +202,26 @@ def GC123(seq):
    return gcall, gc[0], gc[1], gc[2]
 
 def GC_skew(seq, window = 100):
-   " calculates GC skew (G-C)/(G+C) "
+   """ calculates GC skew (G-C)/(G+C) """
+	# 8/19/03: Iddo: added lowercase 
    values = []
    for i in range(0, len(seq), window):
       s = seq[i: i + window]
-      g = s.count('G')
-      c = s.count('C')
+      g = s.count('G') + s.count('g')
+      c = s.count('C') + s.count('c')
       skew = (g-c)/float(g+c)
       values.append(skew)
    return values
 
+# 8/19/03 Iddo: moved these imports from within the function as
+# ``import * '' is only
+# allowed within the module
+from Tkinter import *
+from math import pi, sin, cos, log
 def xGC_skew(seq, window = 1000, zoom = 100, 
                          r = 300, px = 100, py = 100):
    " calculates and plots normal and accumulated GC skew (GRAPHICS !!!) "
    
-   from Tkinter import *
-   from math import pi, sin, cos, log
 
    yscroll = Scrollbar(orient = VERTICAL)
    xscroll = Scrollbar(orient = HORIZONTAL)
