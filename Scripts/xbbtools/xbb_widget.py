@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # Created: Wed Jun 21 10:28:14 2000
-# Last changed: Time-stamp: <00/12/03 13:55:10 thomas>
+# Last changed: Time-stamp: <01/09/04 09:22:53 thomas>
 # thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas
 # File: xbb_widget.py
 
@@ -21,8 +21,10 @@ import xbb_io
 from xbb_utils import *
 from xbb_translations import xbb_translations
 from xbb_blast import BlastIt
+from xbb_search import XDNAsearch
+from xbb_help import xbbtools_help
 from Bio.Tools import Translate
-
+from Bio.sequtils import quick_FASTA_reader
 
 
 
@@ -137,6 +139,7 @@ class xbb_widget:
         menu.add_command(label='Complement', command = self.complement)
         menu.add_command(label='Reverse', command = self.reverse)
         menu.add_command(label='Fix sequence', command = self.fix_sequence)
+        menu.add_command(label='Search', command = self.search)
         self.menubar.add_cascade(label="Edit", menu=self.edit_menu)
 
         # Translation menu
@@ -171,6 +174,11 @@ class xbb_widget:
         menu.add_command(label='Stats', command = self.statistics)
         self.menubar.add_cascade(label="Tools", menu=self.tools_menu)
         
+        # Help menu
+        self.help_menu = Menu(self.menubar, name = 'help')
+        menu = self.help_menu
+        menu.add_command(label='Help', command = xbbtools_help)
+        self.menubar.add_cascade(label="Help", menu=self.help_menu)
 
         self.parent.config(menu = self.menubar)
 
@@ -228,7 +236,17 @@ class xbb_widget:
                           command = func, width = 7)
             b_id.pack(side = TOP, pady = 5, padx = 10)
             self.buttons[text] = b_id
-            
+
+        f = Frame(self.button_frame)
+        l = Label(f, text = 'Goto:', bg = self.colorsbg['frame'], fg = self.colorsfg['button'])
+        l.pack(side = LEFT)
+        l.bind('<Button-1>', self.goto)
+        
+        self.goto_entry = Entry(f, width = 5)
+        self.goto_entry.pack(side = RIGHT, pady = 5, padx = 4)
+        self.goto_entry.bind('<Return>', self.goto)
+        f.pack(side = BOTTOM)
+        
     def create_seqfield(self, parent):
         self.sequence_id = Text(parent, wrap = 'char',
                                 width = self.seqwidth)
@@ -323,11 +341,11 @@ class xbb_widget:
         if not file:
             file = askopenfilename()
         if not file: return
-        genes = self.seq_io.read_fasta_file(file)
-        
+        #genes = self.seq_io.read_fasta_file(file)
+        genes = quick_FASTA_reader(file)
         self.insert_sequence(genes[0])
 
-    def insert_sequence(self, (sequence, name)):
+    def insert_sequence(self, (name, sequence)):
         self.sequence_id.delete(0.0, END)
         self.sequence_id.insert(END, string.upper(sequence))
         self.fix_sequence()
@@ -439,6 +457,37 @@ GC=%f
         w.tag_add(SEL, start, stop)
         w.tag_remove(SEL, stop, END)
              
+    def search(self):
+        seq = self.get_selection_or_sequence()
+        searcher = XDNAsearch(seq, master = self.sequence_id, highlight = 1)
+
+    def goto(self, *args):
+        pos = self.goto_entry.get()
+        try:
+            pos = int(pos) -1
+        except:
+            try:
+                start, stop = pos.split(':')
+                start = int(start)-1
+                stop = int(stop)
+                self.mark(start, stop)
+                return
+            except:
+                import traceback
+                traceback.print_exc()
+
+                self.goto_entry.delete(0,END)
+                return
+            
+        self.sequence_id.focus()
+        self.sequence_id.mark_set('insert','1.%d' % pos)
+
+    def mark(self, start, stop):
+        self.sequence_id.focus()
+        self.sequence_id.mark_set('insert','1.%d' % start)
+        self.sequence_id.tag_add(SEL, '1.%d' % start, '1.%d' % stop)
+        
+
         
 if __name__ == '__main__':
     xbbtools = xbb_widget()
