@@ -1,0 +1,53 @@
+ID   CHS3_BROFI     STANDARD;      PRT;   394 AA.
+AC   O23729;
+DT   15-JUL-1999 (Rel. 38, Created)
+DT   15-JUL-1999 (Rel. 38, Last sequence update)
+DT   15-JUL-1999 (Rel. 38, Last annotation update)
+DE   CHALCONE SYNTHASE 3 (EC 2.3.1.74) (NARINGENIN-CHALCONE SYNTHASE 3).
+GN   CHS3.
+OS   Bromheadia finlaysoniana (Orchid).
+OC   Eukaryota; Viridiplantae; Embryophyta; Tracheophyta; Spermatophyta;
+OC   Magnoliophyta; Liliopsida; Asparagales; Orchidaceae; Bromheadia.
+OX   NCBI_TaxID=41205;
+RN   [1]
+RP   SEQUENCE FROM N.A.
+RC   TISSUE=Flower;
+RA   Liew C.F., Lim S.H., Loh C.S., Goh C.J.;
+RT   "Molecular cloning and sequence analysis of chalcone synthase cDNAs of
+RT   Bromheadia finlaysoniana.";
+RL   Submitted (JUN-1997) to the EMBL/GenBank/DDBJ databases.
+CC   -!- FUNCTION: THE PRIMARY PRODUCT OF THIS ENZYME IS 4,2',4',6'-
+CC       TETRAHYDROXYCHALCONE (ALSO TERMED NARINGENIN-CHALCONE OR CHALCONE)
+CC       WHICH CAN UNDER SPECIFIC CONDITIONS SPONTANEOUSLY ISOMERIZE INTO
+CC       NARINGENIN.
+CC   -!- CATALYTIC ACTIVITY: 3 MALONYL-COA + 4-COUMAROYL-COA = 4 COA +
+CC       NARINGENIN-CHALCONE + 3 CO(2).
+CC   -!- PATHWAY: PART OF THE BIOSYNTHETIC PATHWAY FOR ALL CLASSES OF
+CC       FLAVONOIDS, A LARGE CLASS OF SECONDARY PLANT METABOLITES, MANY
+CC       OF WHICH ARE BRIGHTLY COLORED.
+CC   -!- SIMILARITY: BELONGS TO THE CHALCONE/STILBENE SYNTHASES FAMILY.
+CC   --------------------------------------------------------------------------
+CC   This SWISS-PROT entry is copyright. It is produced through a collaboration
+CC   between  the Swiss Institute of Bioinformatics  and the  EMBL outstation -
+CC   the European Bioinformatics Institute.  There are no  restrictions on  its
+CC   use  by  non-profit  institutions as long  as its content  is  in  no  way
+CC   modified and this statement is not removed.  Usage  by  and for commercial
+CC   entities requires a license agreement (See http://www.isb-sib.ch/announce/
+CC   or send an email to license@isb-sib.ch).
+CC   --------------------------------------------------------------------------
+DR   EMBL; AF007097; AAB62874.1; -.
+DR   InterPro; IPR001099; -.
+DR   Pfam; PF00195; Chal_stil_synt; 1.
+DR   PROSITE; PS00441; CHALCONE_SYNTH; 1.
+KW   Flavonoid biosynthesis; Transferase; Acyltransferase;
+KW   Multigene family.
+FT   ACT_SITE    165    165       BY SIMILARITY.
+SQ   SEQUENCE   394 AA;  42941 MW;  2F8D14AF4870BBB2 CRC64;
+     MAPAMEEIRQ AQRAEGPAAV LAIGTSTPPN ALYQADYPDY YFRITKSEHL TELKEKFKRM
+     CDKSMIKKRY MYLTEEILKE NPNICAFMAP SLDARQDIVV TEVPKLAKEA AVRAIKEWGH
+     PKSRITHLIF CTTSGIDMPG ADYQLTRLLG LRPSVNRFML YQQGCFAGGT VLRLAKDLAE
+     NNAGARVLVV CSEITAVTFR GPSESHLDSL VGQALFGDGA AAIIVGSDPD SATERPLFQL
+     VSASQTILPE SEGAIDGHLR EIGLTFHLLK DVPGLISKNI QKCLLDAFKP LGVHDWNSIF
+     WIAHPGGPAI LDQVEIKLGL KAEKLAASRN VLAEYGNMSS ACVLFILDEM RRRSAEAGQA
+     TTGEGLEWGV LFGFGPGLTV ETIVLRSVPI AGAE
+//
