@@ -1,3 +1,34 @@
+- Changes for 0.9
+
+INCOMPATIBLE CHANGE: ParseRecord and HeaderFooter now take an attrs
+dictionary, for use with startElement.  (This should have been done
+last summer with the changes for Group to take an attr.)  There was no
+easy and elegant way to make a backwards compatible solution, but I
+did make it give a TypeError if you pass in what would be the proper
+term for the old API.  To make old code work, use {} for attrs.
+
+Fast path optimizations in iteration (for 'characters') - 10%
+performance boost for my test case.
+
+There is now a default iterator boundary tag: 'record'
+
+It's possible for an expression to go to completion but allow some
+text to remain unparsed.  This now throws a new exception (a subtype
+of the old one) to allow the handlers to do something different for
+that case.  This is used for the Bioformat format recognition code.
+
+Martel.SimpleRecordFilter is used by the Bioformat code to write a
+quick test filter, to determine if more identification work should be
+done.
+
+Added Martel.NoCase to produce a case insensitive version of the given
+expression, as in
+  >>> import Martel
+  >>> print str(Martel.NoCase(Martel.Str("JAN")))
+  [Jj][Aa][Nn]
+  >>>
+
+
 - Changes for 0.8
 
 Added new, standard definitions

@@ -983,5 +983,6 @@ def _make_no_case(node):
     return node
 
 def NoCase(expr):
+    """expression -> expression where the text is case insensitive"""
     expr = expr.copy()
     return expr._modify_leaves(_make_no_case)
