@@ -1,6 +1,9 @@
 import string
 import math
 
+STRONG_BONDS = ["G", "C"]
+WEAK_BONDS = ["A", "T", "U"]
+
 def Tm_staluc(s,dnac=50,saltc=50,rna=0):
     """Returns DNA/DNA tm using nearest neighbor thermodynamics. dnac is
     DNA concentration [nM] and saltc is salt concentration [mM].
@@ -34,33 +37,33 @@ def Tm_staluc(s,dnac=50,saltc=50,rna=0):
         if rna==0:
             #DNA/DNA
             #Allawi and SantaLucia (1997). Biochemistry 36 : 10581-10594
-            if stri[0]=="G" or stri[0]=="C":
+	    if stri[0] in STRONG_BONDS:
                 deltah=deltah-0.1
                 deltas=deltas+2.8
-            elif stri[0]=="A" or stri[0]=="T":
+            elif stri[0] in WEAK_BONDS:
                 deltah=deltah-2.3
                 deltas=deltas-4.1
-            if stri[-1]=="G" or stri[-1]=="C":
-                deltah=deltah-0.1
+            if stri[0] in STRONG_BONDS:
+		deltah=deltah-0.1
                 deltas=deltas+2.8
-            elif stri[-1]=="A" or stri[-1]=="T":
+            elif stri[0] in WEAK_BONDS:
                 deltah=deltah-2.3
                 deltas=deltas-4.1
             dhL=dh+deltah
             dsL=ds+deltas
             return dsL,dhL
         elif rna==1:
-            #RNA
-            if stri[0]=="G" or stri[0]=="C":
+            #RNA/RNA
+            if stri[0] in STRONG_BONDS:
                 deltah=deltah-3.61
                 deltas=deltas-1.5
-            elif stri[0]=="A" or stri[0]=="T" or stri[0]=="U":
+            elif stri[0] in WEAK_BONDS:
                 deltah=deltah-3.72
                 deltas=deltas+10.5
-            if stri[-1]=="G" or stri[-1]=="C":
+            if stri[0] in STRONG_BONDS:
                 deltah=deltah-3.61
                 deltas=deltas-1.5
-            elif stri[-1]=="A" or stri[-1]=="T" or stri[0]=="U":
+            elif stri[0] in WEAK_BONDS:
                 deltah=deltah-3.72
                 deltas=deltas+10.5
             dhL=dh+deltah
@@ -68,23 +71,21 @@ def Tm_staluc(s,dnac=50,saltc=50,rna=0):
             # print "delta h=",dhL
             return dsL,dhL
 
-    def overcount(st,p):
-        """Returns how many p are on st, works even for overlapping"""
-        ocu=0
-        x=0
-        while 1:
-            try:
-                i=st.index(p,x)
-            except ValueError:
-                break
-            ocu=ocu+1
-            x=i+1
-        return ocu
+    def countdinucs(s):
+        """Counts dinucleotide frequencies in a sequence"""
+        dinucs={}
+        map(dinucs.__setitem__,[a+b for a in 'ACGT' for b in 'ACGT'],[0]*16)
+        for i in range(len(s)-1):
+            dn=s[i:i+2]
+            dinucs[dn]+=1
+        return dinucs
 
     sup=string.upper(s)
     R=1.987 # universal gas constant in Cal/degrees C*Mol
     vsTC,vh=tercorr(sup)
     vs=vsTC
+    dinuc=countdinucs(sup)
+
     
     k=(dnac/4.0)*1e-8
     #With complementary check on, the 4.0 should be changed to a variable.
@@ -92,45 +93,27 @@ def Tm_staluc(s,dnac=50,saltc=50,rna=0):
     if rna==0:
         #DNA/DNA
         #Allawi and SantaLucia (1997). Biochemistry 36 : 10581-10594
-        vh=vh+((overcount(sup,"AA"))*7.9+(overcount(sup,"TT"))*
-           7.9+(overcount(sup,"AT"))*7.2+(overcount(sup,"TA"))*
-           7.2+(overcount(sup,"CA"))*8.5+(overcount(sup,"TG"))*
-           8.5+(overcount(sup,"GT"))*8.4+(overcount(sup,"AC"))*8.4)
-        vh=vh+((overcount(sup,"CT"))*7.8+(overcount(sup,"AG"))*
-           7.8+(overcount(sup,"GA"))*8.2+(overcount(sup,"TC"))*8.2)
-        vh=vh+((overcount(sup,"CG"))*10.6+(overcount(sup,"GC"))*
-          10.6+(overcount(sup,"GG"))*8+(overcount(sup,"CC"))*8)
-        
-        vs=vs+((overcount(sup,"AA"))*22.2+(overcount(sup,"TT"))*
-          22.2+(overcount(sup,"AT"))*20.4+(overcount(sup,"TA"))*21.3)
-        vs=vs+((overcount(sup,"CA"))*22.7+(overcount(sup,"TG"))*
-          22.7+(overcount(sup,"GT"))*22.4+(overcount(sup,"AC"))*22.4)
-        vs=vs+((overcount(sup,"CT"))*21.0+(overcount(sup,"AG"))*
-          21.0+(overcount(sup,"GA"))*22.2+(overcount(sup,"TC"))*22.2)
-        vs=vs+((overcount(sup,"CG"))*27.2+(overcount(sup,"GC"))*
-          27.2+(overcount(sup,"GG"))*19.9+(overcount(sup,"CC"))*19.9)
+        vh=vh+dinuc["AA"]*7.9+dinuc["TT"]*7.9+dinuc["AT"]*7.2+dinuc["TA"]*7.2+\
+         dinuc["CA"]*8.5+dinuc["TG"]*8.5+dinuc["GT"]*8.4+dinuc["AC"]*8.4+\
+         dinuc["CT"]*7.8+dinuc["AG"]*7.8+dinuc["GA"]*8.2+dinuc["TC"]*8.2+\
+         dinuc["CG"]*10.6+dinuc["GC"]*10.6+dinuc["GG"]*8+dinuc["CC"]*8
+        vs=vs+dinuc["AA"]*22.2+dinuc["TT"]*22.2+dinuc["AT"]*20.4+dinuc["TA"]*21.3+\
+         dinuc["CA"]*22.7+dinuc["TG"]*22.7+dinuc["GT"]*22.4+dinuc["AC"]*22.4+\
+         dinuc["CT"]*21.0+dinuc["AG"]*21.0+dinuc["GA"]*22.2+dinuc["TC"]*22.2+\
+         dinuc["CG"]*27.2+dinuc["GC"]*27.2+dinuc["GG"]*19.9+dinuc["CC"]*19.9
         ds=vs
         dh=vh
     else:
         #RNA/RNA hybridisation of Xia et al (1998)
         #Biochemistry 37: 14719-14735         
-        vh=vh+((overcount(sup,"AA"))*6.82+(overcount(sup,"TT"))*
-           6.6+(overcount(sup,"AT"))*9.38+(overcount(sup,"TA"))*
-          7.69+(overcount(sup,"CA"))*10.44+(overcount(sup,"TG"))*
-          10.5+(overcount(sup,"GT"))*11.4+(overcount(sup,"AC"))*10.2)
-        vh=vh+((overcount(sup,"CT"))*10.48+(overcount(sup,"AG"))*
-           7.6+(overcount(sup,"GA"))*12.44+(overcount(sup,"TC"))*13.3)
-        vh= vh+((overcount(sup,"CG"))*10.64+(overcount(sup,"GC"))*
-          14.88+(overcount(sup,"GG"))*13.39+(overcount(sup,"CC"))*12.2)
-
-        vs=vs+((overcount(sup,"AA"))*19.0+(overcount(sup,"TT"))*
-          18.4+(overcount(sup,"AT"))*26.7+(overcount(sup,"TA"))*20.5)
-        vs=vs+((overcount(sup,"CA"))*26.9+(overcount(sup,"TG"))*
-          27.8+(overcount(sup,"GT"))*29.5+(overcount(sup,"AC"))*26.2)
-        vs=vs+((overcount(sup,"CT"))*27.1+(overcount(sup,"AG"))*
-          19.2+(overcount(sup,"GA"))*32.5+(overcount(sup,"TC"))*35.5)
-        vs=vs+((overcount(sup,"CG"))*26.7+(overcount(sup,"GC"))*
-          36.9+(overcount(sup,"GG"))*32.7+(overcount(sup,"CC"))*29.7)
+        vh=dinuc["AA"]*6.6+dinuc["TT"]*6.6+dinuc["AT"]*5.7+dinuc["TA"]*8.1+\
+         dinuc["CA"]*10.5+dinuc["TG"]*10.5+dinuc["GT"]*10.2+dinuc["AC"]*10.2+\
+         dinuc["CT"]*7.6+dinuc["AG"]*7.6+dinuc["GA"]*13.3+dinuc["TC"]*13.3+\
+         dinuc["CG"]*8.0+dinuc["GC"]*14.2+dinuc["GG"]*12.2+dinuc["CC"]*12.2+\
+         dinuc["AA"]*18.4+dinuc["TT"]*18.4+dinuc["AT"]*15.5+dinuc["TA"]*16.9
+        vs=vs+dinuc["CA"]*27.8+dinuc["TG"]*27.8+dinuc["GT"]*26.2+dinuc["AC"]*26.2+\
+         dinuc["CT"]*19.2+dinuc["AG"]*19.2+dinuc["GA"]*35.5+dinuc["TC"]*35.5+\
+         dinuc["CG"]*19.4+dinuc["GC"]*34.9+dinuc["GG"]*29.7+dinuc["CC"]*29.7
         ds=vs
         dh=vh
 
