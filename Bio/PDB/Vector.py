@@ -138,7 +138,8 @@ class Vector:
 
     def __init__(self, x, y=None, z=None):
         if y is None and z is None:
-            # Array
+            # Array, list, tuple...
+            assert(len(x)==3)
             self._ar=array(x, 'd')
         else:
             # Three numbers
@@ -155,17 +156,17 @@ class Vector:
 
     def __add__(self, other):
         "Return Vector+other Vector or scalar"
-        if not isinstance(other, Vector):
-            a=self._ar+other
-        else:
+        try:
+            a=self._ar+array(other)
+        except:
             a=self._ar+other._ar
         return Vector(a)
 
     def __sub__(self, other):
         "Return Vector-other Vector or scalar"
-        if not isinstance(other, Vector):
-            a=self._ar-other
-        else:
+        try:
+            a=self._ar-array(other)
+        except:
             a=self._ar-other._ar
         return Vector(a)
 
@@ -175,25 +176,27 @@ class Vector:
 
     def __div__(self, x):
         "Return Vector(coords/a)"
-        a=self._ar/x
+        a=self._ar/array(x)
         return Vector(a)
 
     def __pow__(self, other):
         "Return VectorxVector (cross product) or Vectorxscalar"
-        if isinstance(other, Vector):
+        try:
+            a=self._ar*array(other)
+            return Vector(a)
+        except:
             a,b,c=self._ar
             d,e,f=other._ar
             c1=determinant(array(((b,c), (e,f))))
             c2=-determinant(array(((a,c), (d,f))))
             c3=determinant(array(((a,b), (d,e))))
             return Vector(c1,c2,c3)
-        else:
-            a=self._ar*other
-            return Vector(a)
 
-    def __str__(self):
-        x,y,z=self._ar
-        return "<Vector %.2f %.2f %.2f>" % (x,y,z)
+    def __getitem__(self, i):
+        return self._ar[i]
+
+    def __setitem__(self, i, value):
+        self._ar[i]=value
 
     def norm(self):
         "Return vector norm"
@@ -229,7 +232,7 @@ class Vector:
 
     def copy(self):
         "Return a deep copy of the Vector"
-        return Vector(self._ar)
+        return Vector(array(self._ar))
 
 if __name__=="__main__":
 
@@ -255,4 +258,27 @@ if __name__=="__main__":
         print v1.left_multiply(ref)
         print v1.left_multiply(rot)
         print v1.right_multiply(transpose(rot))
+
+        # -
+        print v1-v2
+        print v1-1
+        print v1+(1,2,3)
+        # +
+        print v1+v2
+        print v1+3
+        print v1-(1,2,3)
+        # *
+        print v1*v2
+        # /
+        print v1/2
+        print v1/(1,2,3)
+        # **
+        print v1**v2
+        print v1**2
+        print v1**(1,2,3)
+        # setitem
+        v1[2]=10
+        print v1
+        # getitem
+        print v1[2]
 
