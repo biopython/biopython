@@ -1,5 +1,5 @@
 /******************************************************************************/
-/* The C clustering library for cDNA microarray data.
+/* The C Clustering Library for cDNA microarray data.
  * Copyright (C) 2002 Michiel Jan Laurens de Hoon.
  *
  * This library was written at the Laboratory of DNA Information Analysis,
@@ -66,14 +66,19 @@ void getclustermean (int nclusters, int nrows, int ncolumns,
 void getclustermedian (int nclusters, int nrows, int ncolumns,
   double** data, int** mask, int clusterid[], double** cdata, int** cmask,
   int transpose);
+void getclustermedoid(int nclusters, int nelements, double** distance,
+  int clusterid[], int centroids[], double errors[]);
 void CALL kcluster (int nclusters, int ngenes, int ndata, double** data,
   int** mask, double weight[], int transpose, int npass, char method, char dist,
   int clusterid[], double** cdata, double* error, int* ifound);
+void CALL kmedoids (int nclusters, int nelements, double** distance,
+  int npass, int clusterid[], double* error, int* ifound);
 
 /* Chapter 6 */
 void CALL treecluster (int nrows, int ncolumns, double** data, int** mask,
   double weight[], int applyscale, int transpose, char dist, char method,
   int result[][2], double linkdist[], double** distmatrix);
+void cuttree (int nelements, int tree[][2], int nclusters, int clusterid[]);
 
 /* Chapter 7 */
 void CALL somcluster (int nrows, int ncolumns, double** data, int** mask,

@@ -29,8 +29,8 @@
 #include <time.h>
 #include <stdlib.h>
 #include <math.h>
-#include <ranlib.h>
 #include <float.h>
+#include "ranlib.h"
 #include "cluster.h"
 #ifdef WINDOWS
 #  include <windows.h>
@@ -1574,8 +1574,6 @@ void getclustermedian(int nclusters, int nrows, int ncolumns,
   double** data, int** mask, int clusterid[], double** cdata, int** cmask,
   int transpose)
 /*
--- getclustermedian routine --
-
 Purpose
 =======
 
@@ -1676,9 +1674,65 @@ columns (microarrays) are specified.
 
 /* ********************************************************************* */
 
+void getclustermedoid(int nclusters, int nelements, double** distance,
+  int clusterid[], int centroids[], double errors[])
+/*
+Purpose
+=======
+
+The getclustermedoid routine calculates the cluster centroids, given to which
+cluster each element belongs. The centroid is defined as the element with the
+smallest sum of distances to the other elements.
+
+Arguments
+=========
+
+nclusters  (input) int
+The number of clusters.
+
+nelements  (input) int
+The total number of elements.
+
+distmatrix (input) double array, ragged
+  (number of rows is nelements, number of columns is equal to the row number)
+The distance matrix. To save space, the distance matrix is given in the
+form of a ragged array. The distance matrix is symmetric and has zeros
+on the diagonal. See distancematrix for a description of the content.
+
+clusterid  (output) int array, dimension( nelements )
+The cluster number to which each element belongs.
+
+centroid   (output) int array, dimension( nclusters )
+The index of the element that functions as the centroid for each cluster.
+
+errors     (output) double array, dimension( nclusters )
+The within-cluster sum of distances between the items and the cluster
+centroid.
+
+========================================================================
+*/
+{ int i, j, k;
+  for (j = 0; j < nclusters; j++) errors[j] = 1.e99;
+  for (i = 0; i < nelements; i++)
+  { double d = 0.0;
+    j = clusterid[i];
+    for (k = 0; k < nelements; k++)
+    { if (i==k || clusterid[k]!=j) continue;
+      d += (i < k ? distance[k][i] : distance[i][k]);
+      if (d > errors[j]) break;
+    }
+    if (d < errors[j])
+    { errors[j] = d;
+      centroids[j] = i;
+    }
+  }
+}
+
+/* ********************************************************************* */
+
 static
 void emalg (int nclusters, int nrows, int ncolumns,
-  double** data, int** mask, double weight[], int transpose,
+  double** data, int** mask, double weight[], int transpose, int init_given,
   void getclustercenter
     (int,int,int,double**,int**,int[],double**,int**,int),
   double metric (int,double**,double**,int**,int**,const double[],int,int,int),
@@ -1703,7 +1757,7 @@ void emalg (int nclusters, int nrows, int ncolumns,
   int jj;
   for (jj = 0; jj < nobjects; jj++) order[jj] = jj;
 
-  randomassign (nclusters, nobjects, clusterid);
+  if(!init_given) randomassign (nclusters, nobjects, clusterid);
 
   for (jj = 0; jj < nclusters; jj++) cn[jj] = 0;
   for (jj = 0; jj < nobjects; jj++)
@@ -1719,14 +1773,16 @@ void emalg (int nclusters, int nrows, int ncolumns,
       for (ii = 0; ii < nobjects; ii++) savedids[ii] = clusterid[ii];
       period = period * 2;
     }
-    iteration = iteration + 1;
+    iteration += 1;
 
     /* Find the center */
     getclustercenter (nclusters, nrows, ncolumns, data, mask,
                       clusterid, cdata, cmask, transpose);
 
-    /* Create a random order */
-    genprm (order, nobjects);
+    /* Create a random order (except if the user specified an initial
+     * clustering, in which case we run the algorithm fully
+     * deterministically.  */
+    if (!init_given) genprm (order, nobjects);
 
     changed = 0;
 
@@ -1825,10 +1881,12 @@ If transpose==0, the rows of the matrix are clustered. Otherwise, columns
 of the matrix are clustered.
 
 npass      (input) int
-The number of times clustering is performed. Clustering is
-performed npass times, each time starting from a different
-(random) initial assignment of genes to clusters. The clustering
-solution with the lowest inside-cluster sum of distances is chosen.
+The number of times clustering is performed. Clustering is performed npass
+times, each time starting from a different (random) initial assignment of 
+genes to clusters. The clustering solution with the lowest within-cluster sum
+of distances is chosen.
+If npass==0, then the clustering algorithm will be run once, where the initial
+assignment of elements to clusters is taken from the clusterid array.
 
 method     (input) char
 Defines whether the arithmic mean (method=='a') or the median
@@ -1847,8 +1905,11 @@ dist=='s': Spearman's rank correlation
 dist=='k': Kendall's tau
 For other values of dist, the default (Euclidean distance) is used.
 
-clusterid  (output) int array, dimension( nrows or ncolumns )
-The cluster number to which a gene or microarray was assigned.
+clusterid  (output; input) int array, dimension( nrows or ncolumns )
+The cluster number to which a gene or microarray was assigned. If npass==0,
+then on input clusterid contains the initial clustering assignment from which
+the clustering algorithm starts. On output. it contains the clustering solution
+that was found.
 
 cdata      (output) double array, dimension( nclusters,ncolumns ) (transpose==0)
                                or dimension( nrows, nclusters) (transpose==1)
@@ -1872,6 +1933,8 @@ found. The value of ifound is at least 1; its maximum value is npass.
     (int,int,int,double**,int**,int[],double**,int**,int);
   double (*metric)
     (int,double**,double**,int**,int**,const double[],int,int,int);
+  const int init_given = (npass==0) ? 1 : 0;
+
   int i;
   int** cmask;
   int** tcmask;
@@ -1879,12 +1942,13 @@ found. The value of ifound is at least 1; its maximum value is npass.
   int ipass;
   int* tclusterid;
   int* mapping;
+  int* savedinitialid = NULL;
 
   if (nobjects < nclusters)
   { *ifound = 0;
     return;
   }
-  /* More clusters asked for than genes available */
+  /* More clusters asked for than objects available */
 
   /* First initialize the random number generator */
   initran();
@@ -1899,6 +1963,13 @@ found. The value of ifound is at least 1; its maximum value is npass.
   /* Set the result of the first pass as the initial best clustering solution */
   *ifound = 1;
 
+  /* Find out if the user specified an initial clustering */
+  if (init_given)
+  /* Save the initial clustering specified by the user */
+  { savedinitialid = (int*)malloc((size_t)nobjects*sizeof(int));
+    for (i = 0; i < nobjects; i++) savedinitialid[i] = clusterid[i];
+  }
+
   if (transpose==0)
   { cmask = (int**)malloc((size_t)nclusters*sizeof(int*));
     for (i = 0; i < nclusters; i++)
@@ -1911,7 +1982,7 @@ found. The value of ifound is at least 1; its maximum value is npass.
   }
 
   *error = 0.;
-  emalg(nclusters, nrows, ncolumns, data, mask, weight, transpose,
+  emalg(nclusters, nrows, ncolumns, data, mask, weight, transpose, init_given,
     getclustercenter, metric, clusterid, cdata, cmask);
 
   for (i = 0; i < nobjects; i++)
@@ -1923,6 +1994,8 @@ found. The value of ifound is at least 1; its maximum value is npass.
   else
     for (i = 0; i < ndata; i++) free(cmask[i]);
   free(cmask);
+
+  if (npass==0) return;
 
   /* Create temporary space for cluster centroid information */
   if (transpose==0)
@@ -1948,7 +2021,9 @@ found. The value of ifound is at least 1; its maximum value is npass.
   { double tssin = 0.;
     int same = 1;
 
-    emalg(nclusters, nrows, ncolumns, data, mask, weight, transpose,
+    if (init_given)
+      for (i = 0; i < nobjects; i++) tclusterid[i] = savedinitialid[i];
+    emalg(nclusters, nrows, ncolumns, data, mask, weight, transpose, init_given,
       getclustercenter, metric, tclusterid, tcdata, tcmask);
 
     for (i = 0; i < nclusters; i++) mapping[i] = -1;
@@ -1982,6 +2057,7 @@ found. The value of ifound is at least 1; its maximum value is npass.
   /* Deallocate temporarily used space */
   free(mapping);
   free(tclusterid);
+  if (savedinitialid) free(savedinitialid);
 
   if (transpose==0)
   { for (i = 0; i < nclusters; i++)
@@ -1997,6 +2073,229 @@ found. The value of ifound is at least 1; its maximum value is npass.
   }
   free(tcmask);
   free(tcdata);
+
+  return;
+}
+
+/* *********************************************************************** */
+
+void CALL kmedoids (int nclusters, int nelements, double** distance,
+  int npass, int clusterid[], double* error, int* ifound)
+/*
+-- kmedoids routine --
+
+Purpose
+=======
+
+The kmedoids routine performs k-medoids clustering on a given set of elements,
+using the distance matrix and the number of clusters passed by the user.
+Multiple passes are being made to find the optimal clustering solution, each
+time starting from a different initial clustering.
+
+
+Arguments
+=========
+
+nclusters  (input) int
+The number of clusters to be found.
+
+nelements  (input) int
+The number of elements to be clustered.
+
+distmatrix (input) double array, ragged
+  (number of rows is nelements, number of columns is equal to the row number)
+The distance matrix. To save space, the distance matrix is given in the
+form of a ragged array. The distance matrix is symmetric and has zeros
+on the diagonal. See distancematrix for a description of the content.
+
+npass      (input) int
+The number of times clustering is performed. Clustering is performed npass
+times, each time starting from a different (random) initial assignment of genes
+to clusters. The clustering solution with the lowest within-cluster sum of
+distances is chosen.
+If npass==0, then the clustering algorithm will be run once, where the initial
+assignment of elements to clusters is taken from the clusterid array.
+
+clusterid  (output; input) int array, dimension( nelements )
+On input, if npass==0, then clusterid contains the initial clustering assignment
+from which the clustering algorithm starts; all numbers in clusterid should be
+between zero and nelements-1 inclusive. If npass!=0, clusterid is ignored on
+input.
+On output, clusterid contains the clustering solution that was found: clusterid
+contains the number of the cluster to which each item was assigned. On output,
+the number of a cluster is defined as the item number of the centroid of the
+cluster.
+
+error      (output) double
+The sum of distances to the cluster center of each item in the optimal k-medoids
+clustering solution that was found.
+
+ifound     (output) int
+The number of times the optimal clustering solution was
+found. The value of ifound is at least 1; its maximum value is npass.
+
+========================================================================
+*/
+
+{ int i, j, k, icluster, ipass;
+  int* tclusterid;
+  int* centroids;
+  int* savedids;
+  double* errors;
+  int same, changed;
+  int iteration = 0;
+  int period = 10;
+  /* needed to check for periodic behavior */
+
+  if (nelements < nclusters)
+  { *ifound = 0;
+    return;
+  } /* More clusters asked for than elements available */
+
+  centroids = (int*)malloc(nclusters*sizeof(int));
+  savedids = (int*)malloc(nelements*sizeof(int));
+  errors = (double*)malloc(nclusters*sizeof(double));
+
+  /* Set the result of the first pass as the initial best clustering solution */
+  *ifound = 1;
+
+  /* Find out if the user specified an initial clustering */
+  if (npass)
+  { initran(); /* First initialize the random number generator */
+    randomassign (nclusters, nelements, clusterid); /* Ready for the first run */
+  }
+
+  *error = 0.;
+  do /* Start the loop */
+  { if (iteration % period == 0)
+    { /* save the current clustering solution */
+      for (i = 0; i < nelements; i++) savedids[i] = clusterid[i];
+      period *= 2;
+    }
+    iteration++;
+
+    /* Find the center */
+    getclustermedoid (nclusters, nelements, distance, clusterid, centroids, errors);
+
+    changed = 0;
+    for (i = 0; i < nelements; i++)
+    /* Find the closest cluster */
+    { double d = 1.e99;
+      for (icluster = 0; icluster < nclusters; icluster++)
+      { double td;
+        j = centroids[icluster];
+        if (i==j)
+        { d = 0.0;
+          clusterid[i] = icluster;
+          changed = 1;
+          break;
+        }
+        td = (i > j) ? distance[i][j] : distance[j][i];
+        if (td < d)
+        { d = td;
+          clusterid[i] = icluster;
+          changed = 1;
+        }
+      }
+    }
+    /* compare to the saved clustering solution (periodicity check) */
+    same = 1;
+    for (i = 0; i < nelements; i++)
+    { if (savedids[i] != clusterid[i])
+      { same = 0;
+        break;   /* No point in checking the other ids */
+      }
+    }
+  } while (changed && !same);
+
+  for (i = 0; i < nelements; i++)
+  { const int j = centroids[clusterid[i]];
+    /* Set the cluster number to the item number of the cluster centroid */
+    clusterid[i] = j;
+    if (i==j) continue;
+    *error += (i > j) ? distance[i][j] : distance[j][i];
+  }
+  if (npass==0)
+  /* Deterministic result depending on the specified initial clustering */
+  { free(savedids);
+    free(centroids);
+    free(errors);
+    return; /* Done for today */
+  }
+
+  tclusterid = (int*)malloc(nelements*sizeof(int));
+  for (ipass = 1; ipass < npass; ipass++)
+  { double terror = 0.0;
+    same = 1;
+
+    iteration = 0;
+    period = 10;
+ 
+    randomassign (nclusters, nelements, tclusterid);
+    do /* Start the loop */
+    { if (iteration % period == 0)
+      { /* save the current clustering solution */
+        for (i = 0; i < nelements; i++) savedids[i] = tclusterid[i];
+        period = period * 2;
+      }
+      iteration++;
+
+      /* Find the center */
+      getclustermedoid (nclusters, nelements, distance, tclusterid, centroids, errors);
+
+      changed = 0;
+      for (i = 0; i < nelements; i++)
+      /* Find the closest cluster */
+      { double d = 1.e99;
+        for (icluster = 0; icluster < nclusters; icluster++)
+        { double td;
+          j = centroids[icluster];
+          if (i==j)
+          { d = 0.0;
+            tclusterid[i] = icluster;
+            changed = 1;
+            break;
+          }
+          td = (i > j) ? distance[i][j] : distance[j][i];
+          if (td < d)
+          { d = td;
+            tclusterid[i] = icluster;
+            changed = 1;
+          }
+        }
+      }
+      /* compare to the saved clustering solution */
+      same = 1;
+      for (i = 0; i < nelements; i++)
+      { if (savedids[i] != tclusterid[i])
+        { same = 0;
+          break;   /* No point in checking the other ids */
+        }
+      }
+    } while (changed && !same);
+
+    same = 1;
+    for (i = 0; i < nelements; i++)
+    { k = tclusterid[i];
+      j = centroids[k];
+      if (j!=clusterid[i]) same = 0;
+      if (i==j) continue;
+      terror += (i > j) ? distance[i][j] : distance[j][i];
+    }
+    if (same) (*ifound)++;
+    else if (terror < *error)
+    { *ifound = 1;
+      *error = terror;
+      /* The cluster number is set to the item number of the cluster centroid */
+      for (i = 0; i < nelements; i++) clusterid[i] = centroids[tclusterid[i]];
+    }
+  }
+
+  /* Deallocate temporarily used space */
+  free(savedids);
+  free(centroids);
+  free(tclusterid);
+  free(errors);
 
   return;
 }
@@ -2156,6 +2455,92 @@ For other values of dist, no scaling is done.
   return 1.0;
 }
 
+/* ********************************************************************* */
+
+void cuttree (int nelements, int tree[][2], int nclusters, int clusterid[]) 
+
+/*
+Purpose
+=======
+
+The cuttree routine takes the output of a hierarchical clustering routine, and
+divides the elements in the tree structure into clusters based on the
+hierarchical clustering result. The number of clusters is specified by the user.
+
+Arguments
+=========
+
+nelements      (input) int
+The number of elements that were clustered.
+
+tree           (input) int array, dimension( nelements-1,2 )
+The clustering solution. Each row in the matrix describes one linking event,
+with the two columns containing the name of the nodes that were joined.
+The original elements are numbered 0..nelements-1, nodes are numbered
+-1..-(nelements-1). The cuttree routine checks the tree array for errors to
+avoid segmentation faults. Errors in the tree array that would not cause
+segmentation faults may pass undetected. If an error is found, all elements
+are assigned to cluster -1, and the routine returns.
+
+nclusters      (input) int
+The number of clusters to be formed.
+
+clusterid      (output) int array, dimensions( nelements )
+The number of the cluster to which each element was assigned. Space for this
+array should be allocated before calling the cuttree routine.
+
+========================================================================
+*/
+{ int i, j, k;
+  int icluster = 0;
+  const int n = nelements-nclusters; /* number of nodes to join */
+  int* nodeid;
+  /* Check the tree */
+  int flag = 0;
+  if (nclusters > nelements || nclusters < 1) flag = 1;
+  for (i = 0; i < nelements-1; i++)
+  { if (tree[i][0] >= nelements || tree[i][0] < -i ||
+        tree[i][1] >= nelements || tree[i][1] < -i)  
+    { flag = 1;
+      break;
+    }
+  }
+  /* Assign all elements to cluster -1 and return if an error is found. */
+  if (flag)
+  { for (i = 0; i < nelements; i++) clusterid[i] = -1;
+    return;
+  }
+  /* The tree array is safe to use. */
+  for (i = nelements-2; i >= n; i--)
+  { k = tree[i][0];
+    if (k>=0)
+    { clusterid[k] = icluster;
+      icluster++;
+    }
+    k = tree[i][1];
+    if (k>=0)
+    { clusterid[k] = icluster;
+      icluster++;
+    }
+  }
+  nodeid = (int*)malloc((size_t)n*sizeof(int));
+  for (i = 0; i < n; i++) nodeid[i] = -1;
+  for (i = n-1; i >= 0; i--)
+  { if(nodeid[i]<0) 
+    { j = icluster;
+      nodeid[i] = j;
+      icluster++;
+    }
+    else j = nodeid[i];
+    k = tree[i][0];
+    if (k<0) nodeid[-k-1] = j; else clusterid[k] = j;
+    k = tree[i][1];
+    if (k<0) nodeid[-k-1] = j; else clusterid[k] = j;
+  }
+  free(nodeid);
+  return;
+}
+
 /* ******************************************************************** */
 
 static
@@ -2216,7 +2601,7 @@ The distance matrix. This matrix is precalculated by the calling routine
 treecluster. The pclcluster routine modifies the contents of distmatrix, but
 does not deallocate it.
 
-result  (output) int array, dimension( nelements,2 )
+result  (output) int array, dimension( nelements-1,2 )
 The clustering solution. Each row in the matrix describes one linking event,
 with the two columns containing the name of the nodes that were joined.
 The original genes are numbered 0..ngenes-1, nodes are numbered
@@ -2428,7 +2813,7 @@ The distance matrix, with nelements rows, each row being filled up to the
 diagonal. The elements on the diagonal are not used, as they are assumed to be
 zero. The distance matrix will be modified by this routine.
 
-result  (output) int array, dimension( nelements,2 )
+result  (output) int array, dimension( nelements-1,2 )
 The clustering solution. Each row in the matrix describes one linking event,
 with the two columns containing the name of the nodes that were joined.
 The original elements are numbered 0..nelements-1, nodes are numbered
@@ -2511,7 +2896,7 @@ The distance matrix, with nelements rows, each row being filled up to the
 diagonal. The elements on the diagonal are not used, as they are assumed to be
 zero. The distance matrix will be modified by this routine.
 
-result  (output) int array, dimension( nelements,2 )
+result  (output) int array, dimension( nelements-1,2 )
 The clustering solution. Each row in the matrix describes one linking event,
 with the two columns containing the name of the nodes that were joined.
 The original elements are numbered 0..nelements-1, nodes are numbered
@@ -2593,7 +2978,7 @@ The distance matrix, with nelements rows, each row being filled up to the
 diagonal. The elements on the diagonal are not used, as they are assumed to be
 zero. The distance matrix will be modified by this routine.
 
-result  (output) int array, dimension( nelements,2 )
+result  (output) int array, dimension( nelements-1,2 )
 The clustering solution. Each row in the matrix describes one linking event,
 with the two columns containing the name of the nodes that were joined.
 The original elements are numbered 0..nelements-1, nodes are numbered
