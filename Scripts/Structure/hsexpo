@@ -1,0 +1,113 @@
+#!/usr/bin/python
+
+from optparse import OptionParser
+
+from Bio.PDB import *
+
+# Get the user's options
+parser=OptionParser()
+
+parser.add_option("-t", "--type", dest="exp", 
+                  help="exposure type (CA3, CB, FS, DSSP, RD)",
+                  default="CA3")
+
+parser.add_option("-i", "--in", dest="infile", 
+                  help="input PDB file")
+
+parser.add_option("-o", "--out", dest="outfile", 
+                  help="output to PDB file (B factor=exposure)")
+
+parser.add_option("-r", "--radius", dest="radius", type="float", 
+                  help="sphere radius (for CA3, CB and FS)", 
+                  default=13.0)
+
+parser.add_option("-m", "--model", dest="model", type="int", 
+                  help="model number", 
+                  default=0)
+
+parser.add_option("-d", "--down-sphere", action="store_true", dest="ds", 
+                  help="use sphere opposite side chain") 
+
+parser.add_option("-s", "--offset", dest="offset", type="float", 
+                  help="offset along CB direction",
+                  default=0.0)
+
+(options, args)=parser.parse_args()
+
+# Get the structure
+p=PDBParser()
+s=p.get_structure('X', options.infile)
+
+# First model by default
+m=s[options.model]
+
+RADIUS=options.radius
+
+# d=dictionary of expsoures
+# k=position in ntuple containing the desired exposure
+
+format="%4i"
+
+if options.exp=="CA3":
+    hse=HSExposure(OFFSET=options.offset)
+    d=hse.calc_hs_exposure(m, RADIUS, option="CA3")
+    if options.ds:
+        k=1
+    else:
+        k=0
+elif options.exp=="CB":
+    hse=HSExposure(OFFSET=options.offset)
+    d=hse.calc_hs_exposure(m, RADIUS, option="CB")
+    if options.ds:
+        k=1
+    else:
+        k=0
+elif options.exp=="FS":
+    hse=HSExposure()
+    d=hse.calc_fs_exposure(m, RADIUS)
+    k=0
+elif options.exp=="ANGLE":
+    hse=HSExposure()
+    d=hse.get_angles()
+    k=0
+    format="%4.1f"
+elif options.exp=="DSSP":
+    d=DSSP(m, options.infile)
+    k=1
+elif options.exp=="RD":
+    d=ResidueDepth(m, options.infile)
+    k=0
+    format="%4.1f"
+elif options.exp=="RD_CA":
+    d=ResidueDepth(m, options.infile)
+    k=1
+    format="%4.1f"
+
+residue_list=Selection.unfold_entities(m, 'R')
+
+for r in residue_list:
+
+    if d.has_key(r):
+        exposure=d[r][k] 
+
+        # Print info
+        hetflag, resseq, icode=r.get_id()
+
+        if icode==' ':
+            icode=='_'
+
+        resname=r.get_resname()
+
+        print (("%s %4i %c\t"+format) % (resname, resseq, icode, exposure)) 
+    else:
+        exposure=0.0
+
+    for atom in r.get_iterator():
+        atom.set_bfactor(exposure)
+
+ 
+if options.outfile:
+    io=PDBIO()
+    io.set_structure(s)
+    io.save(options.outfile)
+
