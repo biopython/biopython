@@ -139,6 +139,8 @@ def Re(pattern, fix_newlines = 0):
     return convert_re.make_expression(pattern)
 
 NullOp = Expression.NullOp
+Debug = Expression.Debug
+
 def Assert(expression):
     return Expression.Assert(expression)
 
@@ -356,6 +358,14 @@ def select_names(expression, names):
     # Get rid of unnamed groups
     import optimize
     return optimize.optimize_unnamed_groups(exp)
+
+def replace_groups(expr, replacements):
+    expr = expr.copy()
+    for tagname, replacement_expr in replacements:
+        matches = expr._find_groups(tagname)
+        for match in matches:
+            match.expression = replacement_expr
+    return expr
 
 def SimpleRecordFilter(expr, make_reader, reader_args = ()):
     return ParseRecords("dataset", {"format": "*filter*"},
