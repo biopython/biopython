@@ -1458,7 +1458,7 @@ class NCBIDictionary:
     Methods:
     
     """
-    def __init__(self, database='sequences', format="gb", delay=5.0,
+    def __init__(self, database='sequences', format=None, delay=5.0,
                  parser=None):
         """NCBIDictionary([database][, delay][, parser])
 
@@ -1474,15 +1474,15 @@ class NCBIDictionary:
         self.parser = parser
         self.limiter = RequestLimiter(delay)
         self.database = database
-        # JTC: This is broken.  Why is it changing the value of format?
-        if format:
-            self.format = format
-        elif self.database == 'nucleotide':
-            self.format = 'gb'
-        elif self.database == 'protein' or self.database == 'popset':
-            self.format = 'gp'
-        else:
-            self.format = 'native'
+        if format is None:   # No format specified, try to guess it.
+            ldatabase = database.lower()
+            if ldatabase == "nucleotide":
+                format = "gb"
+            elif ldatabase in ["protein", "popset"]:
+                format = "gb"
+            else:   # don't recognize the database, just use 'native'.
+                format = "native"
+        self.format = format
 
     def __len__(self):
         raise NotImplementedError, "GenBank contains lots of entries"
