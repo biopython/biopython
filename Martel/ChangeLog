@@ -28,6 +28,13 @@ expression, as in
   [Jj][Aa][Nn]
   >>>
 
+Added:
+  Martel.UntilSep = read up to a seperator character, don't consume it
+  Martel.UntilEol = read up to a newline character, don't consume it
+  Time.make_expression("%(MM)") parses '01' .. '12' (must have two digits)
+  Time.make_expression("%(DD)") parses '01' .. '31' (must have two digits)
+  Chaged ToSep and DelimitedFields to take a 'sep' instead of a 'delimiter'
+
 
 - Changes for 0.8
 
