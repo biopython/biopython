@@ -3,6 +3,7 @@ from UserList import UserList
 from Bio.SCOP.Raf import to_one_letter_code
 from Bio.PDB.PathFinder import PathFinder
 from Bio.PDB.NeighborSearch import NeighborSearch
+from Bio.PDB.PDBExceptions import PDBException
 
 
 class Polypeptide(UserList):
@@ -74,10 +75,13 @@ def build_peptides(structure, model_id=0, aa_only=1, radius=1.8):
 		residue2=b.get_parent()
 		# check if it is indeed a peptide bond
 		# residue at N-terminus should come first!
-		if na=="C" and nb=="N":
-			pf.add_edge(residue1, residue2)
-		elif na=="N" and nb=="C":
-			pf.add_edge(residue2, residue1)
+		try:
+			if na=="C" and nb=="N":
+				pf.add_edge(residue1, residue2)
+			elif na=="N" and nb=="C":
+				pf.add_edge(residue2, residue1)
+		except PDBException:
+			print "WARNING: some strange peptide bonds are present"
 	# return a list of lists of residues
 	# each list of residues represents a polypeptide
 	polypeptide_list=[]
@@ -94,7 +98,7 @@ if __name__=="__main__":
 	from Bio.PDB.PDBParser import PDBParser
 
 	p=PDBParser()
-	s=p.get_structure("scr", "/home/tham/data/pdb/SMALL.pdb")
+	s=p.get_structure("scr", "SMALL.pdb")
 
 	for pp in build_peptides(s):
 		print pp
