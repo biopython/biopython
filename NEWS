@@ -4,13 +4,12 @@ News for the Biopython Project
 This file contains release notes and general news
 about the biopython project.
 
-
+  syntax fixes in triemodule.c to compile on SGI
   updates in NCBIStandalone, short query error
   Sebastian Bassi submitted code to calculate LCC complexity
   Greg Kettler's NCBIStandalone fix for long query lengths
   slew of miscellaneous fixes from George Paci
   miscellaneous cleanups and updates from Andreas Kuntzagk
-
 
 
 Dec 17, 2002: Biopython 1.10
