@@ -1,6 +1,7 @@
 from __future__ import generators
 
-import sys
+import sys, urllib
+from xml.sax import saxutils
 import ReseekFile
 
 class FormatIO:
@@ -30,11 +31,15 @@ class FormatIO:
 ##                    (self.name, resolver.format.name))
         return builder
 
-    def _get_file_format(self, format, infile):
-        import Format
+    def _get_file_format(self, format, source):
+        import Format        
         # By construction, this is the lowest we can go, so don't try
         if isinstance(format, Format.FormatDef):
             return format
+
+        source = saxutils.prepare_input_source(source)
+        infile = source.getCharacterStream() or source.getByteStream()
+        
         is_reseek = 0
         try:
             infile.tell()
@@ -59,7 +64,7 @@ class FormatIO:
         format, infile = self._get_file_format(format, infile)
             
         if format is None:
-            raise TypeError("Could not not determine file type")
+            raise TypeError("Could not determine file type")
 
         builder = self._find_builder(builder, format)
 
