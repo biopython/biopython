@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # Created: Sat Jul 21 08:01:13 2001
-# Last changed: Time-stamp: <01/07/25 16:13:15 thomas>
+# Last changed: Time-stamp: <01/07/25 16:30:25 thomas>
 # thomas@cbs.dtu.dk, Cecilia.Alsmark@ebc.uu.se
 # Copyright 2001 by Thomas Sicheritz-Ponten and Cecilia Alsmark.
 # All rights reserved.
@@ -192,8 +192,7 @@ def GC123(seq):
       nall = nall + n
 
    gcall = 100.0*gcall/nall
-   res = '%.1f%%, %.1f%%, %.1f%%, %.1f%%' % (gcall, gc[0], gc[1], gc[2])
-   return res
+   return gcall, gc[0], gc[1], gc[2]
 
 def GC_skew(seq, window = 100):
    " calculates GC skew (G-C)/(G+C) "
