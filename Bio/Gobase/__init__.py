@@ -14,11 +14,9 @@ Record             Holds gobase sequence data.
 Iterator           Iterates over sequence data in a gobase file.
 Dictionary         Accesses a gobase file using a dictionary interface.
 RecordParser       Parses gobase sequence data into a Record object.
-SequenceParser     Parses gobase sequence data into a Sequence object.
 
 _Scanner           Scans a gobase-format stream.
 _RecordConsumer    Consumes gobase data to a Record object.
-_SequenceConsumer  Consumes gobase data to a Sequence object.
 
 
 Functions:
@@ -30,7 +28,6 @@ import string
 import re
 from Bio import File
 from Bio import Index
-from Bio import Sequence
 from Bio.ParserSupport import *
 
 class Record:
@@ -223,19 +220,6 @@ class RecordParser:
     def parse(self, handle):
         self._scanner.feed(handle, self._consumer)
         return self._consumer.data
-
-class SequenceParser:
-    """Parses gobase sequence data into a Sequence object.
-
-    """
-    def __init__(self):
-        self._scanner = _Scanner()
-        self._consumer = _SequenceConsumer()
-
-    def parse(self, handle):
-        self._scanner.feed(handle, self._consumer)
-        return self._consumer.data
-
 
 class _Scanner:
     """Scans a gobase file.

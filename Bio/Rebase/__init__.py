@@ -14,11 +14,9 @@ Record             Holds rebase sequence data.
 Iterator           Iterates over sequence data in a rebase file.
 Dictionary         Accesses a rebase file using a dictionary interface.
 RecordParser       Parses rebase sequence data into a Record object.
-SequenceParser     Parses rebase sequence data into a Sequence object.
 
 _Scanner           Scans a rebase-format stream.
 _RecordConsumer    Consumes rebase data to a Record object.
-_SequenceConsumer  Consumes rebase data to a Sequence object.
 
 
 Functions:
@@ -29,7 +27,6 @@ from types import *
 import string
 from Bio import File
 from Bio import Index
-from Bio import Sequence
 from Bio.ParserSupport import *
 
 class Record:
@@ -168,19 +165,6 @@ class RecordParser:
     def parse(self, handle):
         self._scanner.feed(handle, self._consumer)
         return self._consumer.data
-
-class SequenceParser:
-    """Parses rebase sequence data into a Sequence object.
-
-    """
-    def __init__(self):
-        self._scanner = _Scanner()
-        self._consumer = _SequenceConsumer()
-
-    def parse(self, handle):
-        self._scanner.feed(handle, self._consumer)
-        return self._consumer.data
-
 
 class _Scanner:
     """Scans a rebase file.
