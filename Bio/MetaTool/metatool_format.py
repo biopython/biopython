@@ -18,7 +18,7 @@ This helps us have endlines be consistent across platforms.
 import string
 
 # Martel
-from Martel import Opt, Alt, Integer, SignedInteger, Group, Str, MaxRepeat
+from Martel import Opt, Alt, Digits, Integer, Group, Str, MaxRepeat
 from Martel import Any, AnyBut, RepN, Rep, Rep1, ToEol, AnyEol
 from Martel import Expression
 from Martel import RecordReader
@@ -32,9 +32,9 @@ blank_line = optional_blank_space + AnyEol()
 lower_case_letter = Group( "lower_case_letter", Any( "abcdefghijklmnopqrstuvwxyz" ) )
 digits = "0123456789"
 
-enzyme = Group( "enzyme", optional_blank_space + Integer() +
+enzyme = Group( "enzyme", optional_blank_space + Digits() +
     optional_blank_space + Str( ':' ) + ToEol() )
-reaction = Group( "reaction", optional_blank_space + Integer() +
+reaction = Group( "reaction", optional_blank_space + Digits() +
     optional_blank_space + Str( ":" ) + ToEol() )
 not_found_line = Group( "not_found_line", optional_blank_space + Str( "- not found -" ) +
     ToEol() )
@@ -54,8 +54,8 @@ reactions_block = Group( "reactions_block", reactions_header + Rep( blank_line )
     reactions_list )
 
 rev = Group( "rev", Opt( lower_case_letter ) )
-version = Group( "version", Integer( "version_major") + Any( "." ) +
-    Integer( "version_minor") + rev )
+version = Group( "version", Digits( "version_major") + Any( "." ) +
+    Digits( "version_minor") + rev )
 metatool_tag = Str( "METATOOL OUTPUT" )
 metatool_line = Group( "metatool_line", metatool_tag + blank_space +
     Str( "Version" ) + blank_space + version + ToEol() )
@@ -66,20 +66,20 @@ input_file_line = Group( "input_file_line", input_file_tag + blank_space +
 
 metabolite_count_tag = Str( "INTERNAL METABOLITES:" )
 metabolite_count_line = Group( "metabolite_count_line",  metabolite_count_tag +
-    blank_space + Integer( "num_int_metabolites" ) + ToEol() )
+    blank_space + Digits( "num_int_metabolites" ) + ToEol() )
 
 reaction_count_tag = Str( "REACTIONS:" )
 reaction_count_line = Group( "reaction_count_line", reaction_count_tag + blank_space +
-    Integer( "num_reactions" ) + ToEol() )
+    Digits( "num_reactions" ) + ToEol() )
 
 type_metabolite = Group( "type_metabolite", Alt( Str( "int" ), \
     Str( "external" ) ) )
 metabolite_info = Group( "metabolite_info", optional_blank_space +
-    Integer() + blank_space + type_metabolite + blank_space +
+    Digits() + blank_space + type_metabolite + blank_space +
 #    Integer() + blank_space + Rep1( lower_case_letter ) +
     Rep1( AnyBut( white_space ) ) )
 metabolite_line = Group( "metabolite_line", metabolite_info + ToEol() )
-metabolites_summary = Group( "metabolites_summary", optional_blank_space + Integer() +
+metabolites_summary = Group( "metabolites_summary", optional_blank_space + Digits() +
     blank_space + Str( "metabolites" ) + ToEol() )
 metabolites_block = Group( "metabolites_block", Rep1( metabolite_line ) +
     metabolites_summary + Rep( blank_line ) )
@@ -87,13 +87,13 @@ metabolites_block = Group( "metabolites_block", Rep1( metabolite_line ) +
 graph_structure_heading = Group( "graph_structure_heading", optional_blank_space +
     Str( "edges" ) + blank_space + Str( "frequency of nodes" ) + ToEol() )
 graph_structure_line = Group( "graph_structure_line", optional_blank_space +
-    Integer( "edge_count" ) + blank_space + Integer( "num_nodes" ) + ToEol() )
+    Digits( "edge_count" ) + blank_space + Digits( "num_nodes" ) + ToEol() )
 graph_structure_block =  Group( "graph_structure_block", \
     graph_structure_heading + Rep( blank_line ) +
     Rep1( graph_structure_line ) + Rep( blank_line ) )
 
 sum_is_constant_line = Group( "sum_is_constant_line", optional_blank_space +
-    Integer() + optional_blank_space + Any( ":" ) + optional_blank_space +
+    Digits() + optional_blank_space + Any( ":" ) + optional_blank_space +
     Rep1( AnyBut( white_space ) ) +
     Rep( blank_space + Any( "+" ) + blank_space + Rep1( AnyBut( white_space ) ) ) +
     optional_blank_space + Str( "=" ) + ToEol() )
@@ -114,8 +114,8 @@ subsets_line = Group( "subsets_line", \
 
 reduced_system_tag = Group( "reduced_system_tag", Str( "REDUCED SYSTEM" ) )
 reduced_system_line = Group( "reduced_system_line", reduced_system_tag +
-    Rep1(  AnyBut( digits ) ) + Integer( "branch_points" ) +
-    Rep1( AnyBut( digits ) ) + Integer() + ToEol() )
+    Rep1(  AnyBut( digits ) ) + Digits( "branch_points" ) +
+    Rep1( AnyBut( digits ) ) + Digits() + ToEol() )
 
 kernel_tag = Group( "kernel_tag", Str( "KERNEL" ) )
 kernel_line = Group( "kernel_line", kernel_tag + ToEol() )
@@ -134,13 +134,13 @@ elementary_modes_tag = Group( "elementary_modes_tag", \
 elementary_modes_line = Group( "elementary_modes_line", \
     elementary_modes_tag + ToEol() )
 
-num_rows = Group( "num_rows", Integer() )
-num_cols = Group( "num_cols", Integer() )
+num_rows = Group( "num_rows", Digits() )
+num_cols = Group( "num_cols", Digits() )
 matrix_header = Group( "matrix_header", optional_blank_space +
     Str( "matrix dimension" ) + blank_space  + Any( "r" ) +
     num_rows + blank_space +  Any( "x" ) + blank_space +
     Any( "c" ) + num_cols + optional_blank_space + AnyEol() )
-matrix_element = Group( "matrix_element", SignedInteger() )
+matrix_element = Group( "matrix_element", Integer() )
 matrix_row = Group( "matrix_row", MaxRepeat( optional_blank_space + matrix_element, \
     "num_cols", "num_cols" ) + ToEol() )
 matrix = Group( "matrix", MaxRepeat( matrix_row, "num_rows", "num_rows" ) )
@@ -166,10 +166,10 @@ metabolite_role_cols = Group( "metabolite_role_cols", \
     blank_space + Str( "reactions" ) + ToEol() )
 branch_metabolite = Group( "branch_metabolite", optional_blank_space +
     Rep1( AnyBut( white_space ) ) + blank_space +
-    RepN( Integer() + blank_space, 3 ) + Rep1( Any( "ir" ) ) + ToEol() )
+    RepN( Digits() + blank_space, 3 ) + Rep1( Any( "ir" ) ) + ToEol() )
 non_branch_metabolite = Group( "non_branch_metabolite", optional_blank_space +
     Rep1( AnyBut( white_space ) ) + blank_space +
-    RepN( Integer() + blank_space, 3 ) + Rep1( Any( "ir" ) ) + ToEol() )
+    RepN( Digits() + blank_space, 3 ) + Rep1( Any( "ir" ) ) + ToEol() )
 branch_metabolite_block = Group( "branch_metabolite_block", \
     metabolite_roles_heading +
     metabolite_role_cols + Rep( branch_metabolite ) )

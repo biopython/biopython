@@ -26,8 +26,8 @@ from xml.sax import handler
 
 # Martel
 import Martel
-from Martel import Opt, Alt, Integer, SignedInteger, Group, Str, MaxRepeat
-from Martel import Any, AnyBut, RepN, Rep, Rep1, ToEol
+# from Martel import Opt, Alt, Integer, SignedInteger, Group, Str, MaxRepeat
+# from Martel import Any, AnyBut, RepN, Rep, Rep1, ToEol
 from Martel import RecordReader
 
 from Bio.ParserSupport import EventGenerator
