@@ -52,6 +52,7 @@ class PrimaryNamespace(BaseDB.DictLookup):
         loc = self.db.primary_table[name]
         filetag, startpos, length = loc.split("\t")
         filename = self.db.fileid_info[filetag][0]
+        print "filename:", filename
         return [
             Location.Location(self.namespace,
                               name,
@@ -78,7 +79,7 @@ class SecondaryNamespace(BaseDB.DictLookup):
         for key in text.split("\t"):
             loc = self.db.primary_table[key]
             filetag, start, length = loc.split("\t")
-            filename = self.db.fileid_info[filetag]
+            filename = self.db.fileid_info[filetag][0]
             data.append(Location.Location(self.namespace,
                                           name,
                                           filename,
