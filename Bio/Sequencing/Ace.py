@@ -180,6 +180,9 @@ class Iterator:
             raise ValueError, "I expected a file handle or file-like object"
         self._uhandle = File.UndoHandle(handle)
         self._parser = parser
+    
+    def __iter__(self):
+        return iter(self.next, None)
 
     def next(self):
         """next(self) -> object
@@ -189,7 +192,7 @@ class Iterator:
         """
 
         lines = []
-        while 1: 
+        while 1:
             # if at beginning, skip the AS and look for first CO command
             line=self._uhandle.readline()
             if not line:                    # empty or corrupt file
@@ -573,7 +576,7 @@ class _RecordConsumer(AbstractConsumer):
     
     def wa_data(self,taglines):
         if len(taglines)<1:
-            raise SyntaxError, 'Missing header line in CT tag'
+            raise SyntaxError, 'Missing header line in WA tag'
         header=taglines[0].split()
         self.data.wa[-1].tag_type=header[0]
         self.data.wa[-1].program=header[1]
