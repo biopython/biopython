@@ -69,7 +69,9 @@ class Record:
             ref.print_kabat_reference()
         for ref in self.nucleotide_refs:
             ref.print_kabat_reference()
-        for key in self.annotation.keys():
+        ks = self.annotation.keys()
+        ks.sort()
+        for key in ks:
             val = self.annotation[ key ]
             print '%s: %s' % ( key, val )
         dna_seq = self.nucleotide_sequence.tostring()
