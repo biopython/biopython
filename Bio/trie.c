@@ -261,24 +261,19 @@ _get_approximate_transition(const unsigned char *key,
 
     /* Short circuit optimization.  If there's too many characters to
        possibly be a match, then don't even try to match things. */
-    if((abs(strlen(suffix)-strlen(key))) > k)
+    if((int)(strlen(suffix) - strlen(key)) > k)
 	return;
 
     /* Match as many characters as possible. */
     i = 0;
-    while(suffix[i] && key[i] && (key[i] == suffix[i])) {
-	if(prev_keylen+i >= max_key)
-	    break;
-	current_key[prev_keylen+i] = suffix[i];
+    while(suffix[i] && (key[i] == suffix[i])) {
 	i++;
     }
     /* Check to make sure the key is not too long.  BUG: If it is,
        fails silently. */
-    if((prev_keylen+i) >= max_key) {
-	current_key[prev_keylen] = 0;
+    if((prev_keylen+i) >= max_key)
 	return;
-    }
-    current_key[prev_keylen+i] = 0;
+    strncat(current_key, suffix, i);
 
     /* If all the letters in the suffix matched, then move to the
        next trie. */
