@@ -17,6 +17,12 @@ from Hetero import Hetero
 from Bio.Seq import Seq
 from Bio.Seq import MutableSeq
 
+def wrap_line( line ):
+    output = ''
+    for i in range( 0, len( line ), 80 ):
+        output = output + '%s\n' % line[ i: i + 80 ]
+    return output
+
 def validate_key( key ):
     if( type( key ) != type( '' ) ):
         raise CrystalError( 'chain requires a string label' )
@@ -65,11 +71,11 @@ class Hetero:
         return not self.__eq__(other)
 
     def __repr__(self):
-        return "%s(%s)" % (self.__class__.__name__,  \
-                               repr(self.data) )
+        return "%s" % self.data
+
     def __str__(self):
-        s = repr(self.data)
-        return "%s(%s)" % (self.__class__.__name__, s )
+        return "%s" % self.data
+
 
     def __len__(self): return len(self.data)
 
@@ -107,6 +113,7 @@ class Chain:
         for element in self.data:
             output = output + '%s ' % element
         output = output.strip()
+        output = wrap_line( output )
         return output
 
 
@@ -238,11 +245,17 @@ class Crystal:
 
 
     def __repr__(self):
-        return "%s(%s)" % (self.__class__.__name__,
-                               repr(self.data) )
+        output = ''
+        for key in self.data.keys():
+            output = output +  '%s : %s\n' % ( key, self.data[ key ] )
+        return output
+
     def __str__(self):
-        s = repr(self.data)
-        return "%s(%s)" % (self.__class__.__name__, s )
+        output = ''
+        for key in self.data.keys():
+            output = output +  '%s : %s\n' % ( key, self.data[ key ] )
+        return output
+
     def tostring(self):
         return self.data
 
