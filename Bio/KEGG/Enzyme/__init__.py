@@ -9,9 +9,9 @@ This module provides code to work with the KEGG Enzyme database.
 
 
 Classes:
-Record
-Iterator
-Parser
+Record               -- Holds the information from a KEGG Enzyme record.
+Iterator             -- Iterates through a file of KEGG Enzyme records.
+Parser               -- Parses KEGG Enzyme records into Record objects.
 
 _Scanner
 _Consumer
@@ -394,7 +394,7 @@ class _Scanner:
         self._parser = expression.make_parser(debug_level = debug)
 
     def feed(self, handle, consumer):
-        """Feeed a set of data into the scanner.
+        """Feed a set of data into the scanner.
 
         Arguments:
         o handle - A handle with the information to parse.
