@@ -3,7 +3,7 @@ import unittest
 
 def suite():
     modules_to_test = ('testCla', 'testDes', 'testHie', 'testScop',
-                       'testResidues') 
+                       'testResidues', 'testRaf') 
     alltests = unittest.TestSuite()
     for module in map(__import__, modules_to_test):
         alltests.addTest(unittest.findTestCases(module))
