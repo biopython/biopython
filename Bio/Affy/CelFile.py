@@ -13,7 +13,79 @@ class CelRecord: stores the information from a cel file
 
 """
 
-import _cel
+# import _cel
+
+from Bio.ParserSupport import AbstractConsumer
+from Numeric import *
+
+class CelScanner:
+    """Scannner for Affymetrix CEL files.
+
+    Methods:
+    feed     Feed data into the scanner.
+
+    The scanner generates (and calls the consumer) the following
+    types of events:
+
+    Rows - the number of rows on the microarray
+    Cols - the number of columns on the microarray
+    StartIntensity - generated when the section [INTENSITY] is found
+    ReadIntensity - one line in the section [INTENSITY]
+
+    """
+    def feed(self, handle, consumer):
+        """scanner.feed(handle, consumer)
+
+        Feed in a handle to a Cel file for scanning.  handle is a file-like
+        object that contains the Cel file.  consumer is a Consumer
+        object that will receive events as the report is scanned.
+        """
+        section = ""
+        for line in handle:
+            if line.strip()=="": continue
+            if line[0]=="[":
+                section = ""
+                if line[:8]=="[HEADER]":
+                    section = "HEADER"
+                elif line[:11]=="[INTENSITY]":
+                    section = "INTENSITY"
+                    consumer.StartIntensity()
+                continue
+            if section=="HEADER":
+                keyword, value = line.split("=", 1)
+                if keyword=="Cols": consumer.Cols(value)
+                if keyword=="Rows": consumer.Rows(value)
+                continue
+            elif section=="INTENSITY":
+                if "=" in line: continue
+                consumer.ReadIntensity(line)
+
+
+class CelConsumer(AbstractConsumer):
+
+    def __init__(self):
+        self._mean  = None
+        self._stdev = None
+        self._npix  = None
+
+    def Cols(self, value):
+        self._cols = int(value)
+
+    def Rows(self, value):
+        self._rows = int(value)
+
+    def StartIntensity(self):
+        self._mean  = zeros((self._rows, self._cols), Float)
+        self._stdev = zeros((self._rows, self._cols), Float)
+        self._npix  = zeros((self._rows, self._cols), Int)
+
+    def ReadIntensity(self, line):
+        y, x, mean, stdev, npix = map(float, line.split())
+        x = int(x)
+        y = int(y)
+        self._mean[x,y]  = mean
+        self._stdev[x,y] = stdev
+        self._npix[x,y]  = int(npix)
 
 class CelRecord:
     """
@@ -86,13 +158,13 @@ class CelRecord:
 
 class CelParser:
     """
-    Parses an Affymetrix cel file passed in as a string and returns
-    an instance of a CelRecord
+    Takes a handle to an Affymetrix cel file, parses the file and
+    returns an instance of a CelRecord
 
     This class needs error handling.
     """
 
-    def __init__(self, data=None):
+    def __init__(self, handle=None):
         """
         Usually load the class with the cel file (not file name) as
         an argument.
@@ -102,19 +174,25 @@ class CelParser:
         self._stdevs      = None
         self._npix        = None
 
-        if data is not None: self.parse(data)
+        if handle is not None: self.parse(handle)
 
 
-    def parse(self, data):
+    def parse(self, handle):
         """
-        Takes the contents of a cel file passed as a string, parses it
+        Takes a handle to a cel file, parses it
         and stores it in the three arrays.
 
         There is more information in the cel file that could be retrieved
         and stored in CelRecord.  The chip type should be a priority.
         """
 
-        (self._intensities, self._stdevs, self._npix) = _cel.parse(data)
+        # (self._intensities, self._stdevs, self._npix) = _cel.parse(data)
+        scanner = CelScanner()
+        consumer = CelConsumer()
+        scanner.feed(handle, consumer)
+        self._intensities = consumer._mean
+        self._stdevs = consumer._stdev
+        self._npix = consumer._npix
         self._nrows = self._intensities.shape[0]
         self._ncols = self._intensities.shape[1]
 

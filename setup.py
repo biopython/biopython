@@ -453,10 +453,10 @@ NUMPY_EXTENSIONS = [
 #             libraries=["stdc++"],
 #             language="c++"
 #             ),
-    CplusplusExtension('Bio.Affy._cel',
-             ['Bio/Affy/celmodule.cc'],
-             language="c++"
-             ),
+#   CplusplusExtension('Bio.Affy._cel',  # The file parser in celmodule.cc was
+#            ['Bio/Affy/celmodule.cc'],  # replaced by a scanner/consumer in
+#            language="c++"              # CelFile.py, using Biopython's
+#            ),                          # parser framework
 ]
 
 DATA_FILES=[
