@@ -150,6 +150,16 @@ class IteratorTest(unittest.TestCase):
         iterator = Fasta.Iterator(self.test_handle, parser)
         for rec in iter(iterator):
             assert isinstance(rec, SeqRecord.SeqRecord)
+    
+    def t_parsing_comments(self):
+        """Parse FASTA files with # style comment lines in them.
+        """
+        handle = open(os.path.join("Fasta", "f003"))
+        iterator = Fasta.Iterator(handle, Fasta.RecordParser())
+        num_recs = 0
+        for rec in iter(iterator):
+            num_recs += 1
+        assert num_recs == 2
 
 class DictionaryTest(unittest.TestCase):
     def setUp(self):

@@ -116,9 +116,9 @@ class IterHeaderFooter:
             footer_parser = footer_parser.copy()
             
         return IterHeaderFooter(
-            header_parser, self.make_header_reader, header_args,
-            record_parser, self.make_record_reader, record_args,
-            footer_parser, self.make_footer_reader, footer_args,
+            header_parser, self.make_header_reader, self.header_args,
+            record_parser, self.make_record_reader, self.record_args,
+            footer_parser, self.make_footer_reader, self.footer_args,
             self.marker_tag)
 
     def iterate(self, source, cont_handler = None):

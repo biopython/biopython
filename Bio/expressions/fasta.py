@@ -87,14 +87,20 @@ generic_term = Std.dbxref(
 id_term = ncbi_term | generic_term
 ###########################################################
 
-comment = Str(">") + Std.description_line(id_term + UntilEol()) + AnyEol()
+comment_lines = Rep(Str("#") + ToEol())
+title = Str(">") + Std.description_line(id_term + UntilEol()) + AnyEol()
 seqline = AssertNot(Str(">")) + Std.sequence(UntilEol()) + AnyEol()
 # can get a sequence line without an Eol at the end of a file
 seqline_nonewline = AssertNot(Str(">")) + Std.sequence(Word())
 
 sequence = Std.sequence_block(Rep(seqline | seqline_nonewline))
 
-record = Std.record(comment + sequence + Rep(AnyEol()))
+record = Std.record(comment_lines + title + sequence + Rep(AnyEol()))
 
-format = ParseRecords("dataset", {"format": "fasta"}, record,
-                      RecordReader.StartsWith, (">",) )
+# define a format which reads records, but allows #-style comments in 
+# the FASTA file
+format = HeaderFooter("dataset", {"format": "fasta"},
+                      comment_lines, RecordReader.Until, (">",),
+                      record, RecordReader.StartsWith, (">",),
+                      comment_lines, RecordReader.Everything, ()
+                     )
