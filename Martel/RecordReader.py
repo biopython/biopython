@@ -252,7 +252,7 @@ class EndsWith(RecordReader):
         pos = string.find(text, "\n")
         if pos != -1:
             if pos != len(text)-1:
-                raise Assertionerror, "'\\n' can only exist at the end of the string"
+                raise AssertionError, "'\\n' can only exist at the end of the string"
             text = text[:-1]
             has_newline = 1
         else:
