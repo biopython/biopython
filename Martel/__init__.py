@@ -256,6 +256,15 @@ def UntilEol(name = None, attrs = None):
     else:
         return Group(name, Re(r"[^\R]*"), attrs)
 
+def SkipLinesUntil(expr):
+    """read and ignore lines up to, but excluding, the line matching expr"""
+    return Rep(AssertNot(expr) + ToEol())
+
+def SkipLinesTo(expr):
+    """read and ignore lines up to and including, the line matching expr"""
+    return Rep(AssertNot(expr) + ToEol()) + expr + ToEol()
+
+
 def ToSep(name = None, sep = None, attrs = None):
     """match all characters up to the given seperator(s)
 
