@@ -79,9 +79,9 @@ To Do
   o consumers to fill data structures
   o support for 2.0.11
   o PSI-BLAST on WWW
-- more parsers
+- parsers
   o FASTA
-    - random access
+    - finish documentation
   o SWISSPROT
     - iterator, random access
   o PDB
@@ -89,10 +89,12 @@ To Do
   o Prosite
   o Prodoc
   o Genbank
-- index file?
+- generalize parsers
 - bug database
-- testing code
-- Corba support, compatibility with Ewan Birney's IDL.
+- improve regression testing framework
+  o short tests and long tests
+  o more descriptive error messages
+  o count the tests
 - documentation
 - look into Zope-ifying the web site
 
