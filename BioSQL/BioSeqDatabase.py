@@ -61,6 +61,28 @@ class DBServer:
         self.adaptor.execute_one(sql, (db_name))
         return BioSeqDatabase(self.adaptor, db_name)
 
+    def load_database_sql(self, sql_file):
+        """Load a database schema into the given database.
+
+        This is used to create tables, etc when a database is first created.
+        sql_file should specify the complete path to a file containing
+        SQL entries for building the tables.
+        """
+        # break the file up into SQL statements
+        sql_handle = open(sql_file, "rb")
+        sql = r""
+        for line in sql_handle.xreadlines():
+            if line.find("#") == 0: # don't include comment lines
+                pass
+            elif line.strip(): # only include non-blank lines
+                sql += line.strip()
+                sql += ' '
+        sql_parts = sql.split(";") # one line per sql command
+
+        # create the schema
+        for sql_line in sql_parts[:-1]: # don't use the last item, it's blank
+            self.adaptor.cursor.execute(sql_line, ())
+
 class Adaptor:
     def __init__(self, conn):
         self.conn = conn
