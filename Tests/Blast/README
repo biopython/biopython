@@ -4,7 +4,8 @@ BLAST TEST DATA FILES
 This directory contains various data files for testing the
 BLAST-related code in Biopython.
 
-
+News: release 1.40 depreaces all those. The only test files used are bt100, and bt101.
+Scroll to teh bottom for information
 
 BLAST OUTPUT FILES
 ------------------
@@ -83,3 +84,6 @@ bt070 NCBIWWW  2.2.4  ad-hoc              -p blastp       nov 2002 new format
 bt071 blastpgp 2.2.8  ad-hoc from Jer-Yee John Chuang, no Searching... lines 
 
 * bt008 is not included because the file is too big (>15Mb).
+
+bt100 NCBIWWW  2.2.20 blastq
+bt101 NCBIWWW  2.2.20 blastp
