@@ -209,6 +209,20 @@ def _quote(s):
         terms.append(lookup[c])
     return string.join(terms, "")
 
+def _make_group_pattern(name, expression, attrs):
+    if name is None:
+        return '(%s)' % str(expression)
+
+    elif attrs:
+        # Convert them to the proper URL-encoded form
+        terms = []
+        for k, v in attrs.items():
+            terms.append("%s=%s" % (_quote(k), _quote(v)))
+        attrname = name + "?" + string.join(terms, "&")
+        return '(?P<%s>%s)' % (attrname, str(expression))
+    else:
+        return '(?P<%s>%s)' % (name, str(expression))
+
 class Group(Expression):
     def __init__(self, name, expression, attrs = None):
         """(name, expression)
@@ -247,19 +261,7 @@ class Group(Expression):
 
     def __str__(self):
         """the corresponding pattern string"""
-        if self.name is None:
-            return '(%s)' % str(self.expression)
-        
-        elif self.attrs:
-            # Convert them to the proper URL-encoded form
-            terms = []
-            for k, v in self.attrs.items():
-                terms.append("%s=%s" % (_quote(k), _quote(v)))
-            attrname = self.name + "?" + string.join(terms, "&")
-            return '(?P<%s>%s)' % (attrname, str(self.expression))
-        
-        else:
-            return '(?P<%s>%s)' % (self.name, str(self.expression))
+        return _make_group_pattern(self.name, self.expression, self.attrs)
                                    
 
 # group reference: '(?P<name>.)(?P=name)'
