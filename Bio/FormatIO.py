@@ -125,14 +125,18 @@ class FormatIO:
             infile = systemID
         return self.readFile(infile, format, builder, debug_level)
 
-    def make_writer(self, outfile = sys.stdout, format = None):
+    def make_writer(self, outfile = None, format = None):
+        outfile = outfile or sys.stdout
         if format is None:
             format = self.default_output_format
         format = self.registery.normalize(format)
         return self.registery.find_writer(self, format, outfile)
 
-    def convert(self, infile = sys.stdin, outfile = sys.stdout,
+    def convert(self, infile = None, outfile = None,
                 input_format = None, output_format = None):
+        infile = infile or sys.stdin
+        outfile = outfile or sys.stdout
+        
         if input_format is None:
             input_format = self.default_input_format
         input_format = self.registery.normalize(input_format)

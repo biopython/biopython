@@ -426,8 +426,9 @@ class ReadSeq:
             }
         
 
-    def Convert(self, informat, outformat,
-                instream = sys.stdin, outstream=sys.stdout):
+    def Convert(self, informat, outformat, instream=None, outstream=None):
+        instream = instream or sys.stdin
+        outstrem = outstream or sys.stdout
 
         if instream == '-': instream = sys.stdin
         if outstream == '-': outstream = sys.stdout

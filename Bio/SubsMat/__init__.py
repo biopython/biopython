@@ -271,8 +271,9 @@ class SeqMat(UserDict.UserDict):
    def all_letters_sum(self):
       for letter in self.alphabet.letters:
          self.sum_letters[letter] = self.letter_sum(letter)
-   def print_full_mat(self,f=sys.stdout,format="%4d",topformat="%4s",
-              alphabet=None,factor=1,non_sym=None): 
+   def print_full_mat(self,f=None,format="%4d",topformat="%4s",
+              alphabet=None,factor=1,non_sym=None):
+      f = f or sys.stdout 
       # create a temporary dictionary, which holds the full matrix for
       # printing
       assert non_sym == None or type(non_sym) == type(1.) or \
@@ -305,13 +306,14 @@ class SeqMat(UserDict.UserDict):
          outline = outline+'\n'
          f.write(outline)
 
-   def print_mat(self,f=sys.stdout,format="%4d",bottomformat="%4s",
-              alphabet=None,factor=1): 
+   def print_mat(self,f=None,format="%4d",bottomformat="%4s",
+              alphabet=None,factor=1):
       """Print a nice half-matrix. f=sys.stdout to see on the screen
       User may pass own alphabet, which should contain all letters in the
       alphabet of the matrix, but may be in a different order. This
       order will be the order of the letters on the axes"""
-
+      
+      f = f or sys.stdout
       if not alphabet:
          alphabet = self.ab_list
       bottomline = ''
@@ -565,9 +567,10 @@ def two_mat_DJS(mat_1,mat_2,pi_1=0.5,pi_2=0.5):
       
 """
 This isn't working yet. Boo hoo!
-def two_mat_print(mat_1, mat_2, f=sys.stdout,alphabet=None,factor_1=1, factor_2=1,
+def two_mat_print(mat_1, mat_2, f=None,alphabet=None,factor_1=1, factor_2=1,
                   format="%4d",bottomformat="%4s",topformat="%4s",
                   topindent=7*" ", bottomindent=1*" "):
+   f = f or sys.stdout
    if not alphabet:
       assert mat_1.ab_list == mat_2.ab_list
       alphabet = mat_1.ab_list

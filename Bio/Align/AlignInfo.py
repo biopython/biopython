@@ -576,9 +576,10 @@ class PSSM:
         return self.pssm[pos][0]
 
 
-def print_info_content(summary_info,fout=sys.stdout,rep_record=0):
+def print_info_content(summary_info,fout=None,rep_record=0):
     """ Three column output: position, aa in representative sequence,
         ic_vector value"""
+    fout = fout or sys.stdout
     if not summary_info.ic_vector:
         summary_info.information_content()
     rep_sequence = summary_info.alignment._records[rep_record].seq
