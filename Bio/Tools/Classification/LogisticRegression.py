@@ -69,7 +69,7 @@ def train(xs, ys, update_fn=None, typecode=None):
     # Initialize the beta parameter to 0.
     beta = zeros(ndims, typecode)
 
-    MAX_ITERATIONS = 100
+    MAX_ITERATIONS = 500
     CONVERGE_THRESHOLD = 0.01
     stepsize = 1.0
     # Now iterate using Newton-Raphson until the log-likelihoods
