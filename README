@@ -21,12 +21,17 @@ System Requirements
 
 o Python 1.52 or above
 
+Some of the testing code will not work with DOS.
 
 
 Installation
 ------------
 
-Hmmm...  No code yet.
+Currently, this package is 100% pure Python so there is nothing to
+compile.  All you need to do is add the directory where 'biopython' is
+installed to the $PYTHONPATH environment variable.  All the libraries
+should be available under the 'Bio' package.
+
 
 
 
