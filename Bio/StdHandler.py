@@ -185,14 +185,14 @@ location_pos_table = {
     }
 
 class Feature:
-    def __init__(self, category, description, location, qualifiers):
-        self.category = category
+    def __init__(self, name, description, location, qualifiers):
+        self.name = name
         self.description = description
         self.location = location
         self.qualifiers = qualifiers
     def __str__(self):
         return "Feature %r %r %s num_qualifiers = %d" % \
-               (self.category, self.description, self.location,
+               (self.name, self.description, self.location,
                 len(self.qualifiers))
 
 
@@ -252,8 +252,8 @@ class Handle_features(Dispatch.Callback):
         Dispatch.acquire_append_text(self, "feature_description",
                                      "description")
 
-        Dispatch.acquire_text(self, tag = "feature_category",
-                              attribute = "category")
+        Dispatch.acquire_text(self, tag = "feature_name",
+                              attribute = "name")
 
         self.acquire(Handle_location(self.add_location, self.settings),
                      prefix = "feature")
@@ -262,12 +262,12 @@ class Handle_features(Dispatch.Callback):
                                               self.settings))
 
     def start_feature_block(self, tag, attrs):
-        self.settings["join"] = attrs.get("join") or "english"
-        self.settings["location-style"] = attrs.get("location-style") or \
-                                          attrs.get("style") or \
+        self.settings["join"] = attrs.get("join", "english")
+        self.settings["location-style"] = attrs.get("location-style", None) or\
+                                          attrs.get("style", None) or \
                                           "swissprot"
-        self.settings["qualifier-join"] = attrs.get("qualifier-join") or \
-                                          attrs.get("join") or \
+        self.settings["qualifier-join"] = attrs.get("qualifier-join", None) or\
+                                          attrs.get("join", None) or \
                                           "english"
         self.features = []
 
@@ -276,14 +276,14 @@ class Handle_features(Dispatch.Callback):
         self.features = None
         
     def start_feature(self, tag, attrs):
-        self.category = None
+        self.name = None
         self.description = []
         self.location = None
         self.qualifiers = []
 
     def end_feature(self, tag):
         join = join_table[self.settings["join"]]
-        self.features.append(Feature(self.category,
+        self.features.append(Feature(self.name,
                                      join(self.description),
                                      self.location,
                                      self.qualifiers))
