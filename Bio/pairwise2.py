@@ -197,7 +197,8 @@ alignment occurs.
             i = 0
             while i < len(self.param_names):
                 if self.param_names[i] in [
-                    'sequenceA', 'sequenceB', 'gap_A_fn', 'gap_B_fn']:
+                    'sequenceA', 'sequenceB',
+                    'gap_A_fn', 'gap_B_fn', 'match_fn']:
                     keywds[self.param_names[i]] = args[i]
                     i += 1
                 elif self.param_names[i] == 'match':
