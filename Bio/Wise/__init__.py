@@ -1,6 +1,6 @@
 #!/usr/bin/env python2.3
 
-__version__ = "$Revision: 1.9 $"
+__version__ = "$Revision: 1.10 $"
 
 import os
 import sys
@@ -87,11 +87,11 @@ def align(cmdline, pair, kbyte=None, force_type=None, dry_run=False, quiet=False
     status = os.system(cmdline_str) >> 8
 
     if status > 1:
-        if kbyte: # possible memory problem
+        if kbyte != 0: # possible memory problem; could be None
             print >>sys.stderr, "INFO trying again with the linear model"
             return align(cmdline, pair, 0, force_type, dry_run, quiet, debug)
         else:
-            raise OSError, "%s returned %s" % (cmdline, status)
+            raise OSError, "%s returned %s" % (" ".join(cmdline), status)
     
     return output_file
 
