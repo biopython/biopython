@@ -262,6 +262,11 @@ setup(name='biopython',
                                 'Bio/Tools/csupport.c'],
                                include_dirs=["Bio/Tools"]
                                ),
+                     Extension('Bio.Tools.Clustering.ckMeans',
+                               ['Bio/Tools/Clustering/ckMeansmodule.c',
+                                'Bio/Tools/csupport.c'],
+                               include_dirs=["Bio/Tools"]
+                               ),
                      Extension('Bio.Tools.clistfns',
                                ['Bio/Tools/clistfnsmodule.c']
                                ),
@@ -273,8 +278,10 @@ setup(name='biopython',
                      Extension('Bio.Tools.cstringfns',
                                ['Bio/Tools/cstringfnsmodule.c']
                                ),
-                     Extension('Bio.Align.csupport',
-                               ['Bio/Align/csupportmodule.c']
+                     Extension('Bio.Tools.cdistance',
+                               ['Bio/Tools/cdistancemodule.c',
+                                'Bio/Tools/csupport.c'],
+                               include_dirs=["Bio/Tools"]
                                ),
                      Extension('Bio.Align.cfastpairwise',
                                ['Bio/Align/cfastpairwisemodule.c',
