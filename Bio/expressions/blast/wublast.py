@@ -244,9 +244,39 @@ blastx_hsp_header = (Opt(blastx_strand + spaces_line) +
 
 
 #############################
+######################### tblastn
+tblastn_strand =Re(r" *(Plus|Minus) Strand HSPs:\R")
+
+tblastn_score = blastp_score
+
+tblastn_identities = (
+    Re(r" *Identities = ") +
+    Std.hsp_value(Digits(), {"name": "identical",
+                             "bioformat:decode": "int",
+                             }) +
+    Str("/") +
+    
+    Std.hsp_value(Digits(), {"name": "length",
+                             "bioformat:decode": "int",
+                             }) +
+    ToSep(sep = ",") +
+    Str(" Positives =") +
+    Spaces() +
+    Std.hsp_value(Digits(), {"name": "positives",
+                             "bioformat:decode": "int",
+                             }) +
+    ToSep(sep = ",") + 
+    ncbiblast.frame
+    # that 'strand' already includes a newline
+    )
+
+
+tblastn_hsp_header = (Opt(tblastn_strand + spaces_line) +
+                     tblastn_score + tblastn_identities + spaces_line)
 
 
 
+#############################
 # May have to skip the WARNING section
 ending_start = (Opt(Str("WARNING") + ToEol() +
                     Rep(AssertNot(Str(">")) +
@@ -311,8 +341,9 @@ statistics = (
                              {"name": "neighborhood_generation_time"})) +
 
         #  No. of threads or processors used:  2
-    _nv("  No. of threads or processors used:  ",
-        int_stat("num_threads")) +
+    Opt(
+    	_nv("  No. of threads or processors used:  ",
+        	int_stat("num_threads"))) +
 
         #  Search cpu time:  38.04u 0.15s 38.19t  Elapsed: 00:00:33
     _nv("  Search cpu time: ",
@@ -356,13 +387,17 @@ blastx = replace_groups(format,
                          ("table_entry", blastx_table_entry),
                          ("to_database", blastx_to_database),
                          ("hsp_header", blastx_hsp_header)))
+tblastn = replace_groups(format,
+                        (("appheader", tblastn_appheader),
+                         ("table_entry", blastx_table_entry),
+                         ("hsp_header", tblastn_hsp_header)))
+			 
 
-
-def main():
+def main(outf):
     from xml.sax import saxutils
-    parser = blastp.make_parser(debug_level = 0)
+    parser = blastn.make_parser(debug_level = 0)
     parser.setContentHandler(saxutils.XMLGenerator())
-    parser.parse("wu-blastp.out")
+    parser.parse(outf)
     #parser.parse("wu-sh_blastp.out")
     
 if __name__ == "__main__":
