@@ -1657,7 +1657,7 @@ py_clusterdistance (PyObject* self, PyObject* args, PyObject* keywords)
   double* weight;
   char DIST = 'e';
   char METHOD = 'a';
-  int TRANSPOSE;
+  int TRANSPOSE = 0;
   int N1;
   int N2;
   PyObject* INDEX1 = NULL;
@@ -1763,6 +1763,9 @@ static char clustercentroid__doc__[] =
 "microarrays are clustered.\n"
 "The array clusterid contains the cluster number for each gene or microarray.\n"
 "The cluster number should be non-negative.\n"
+"The parameter method specifies whether the centroid is calculated from the\n"
+"arithmetic mean (method=='a', default) or the median (method=='m') over each\n"
+"dimension.\n"
 "This function returns an array cdata and an array cmask.\n"
 "The array cdata contains the cluster centroids. If transpose==0, then the\n"
 "dimensions of cdata are nclusters x nmicroarrays. If transpose==1, then the\n"
@@ -1784,13 +1787,13 @@ py_clustercentroid (PyObject* self, PyObject* args, PyObject* keywords)
   PyObject* CLUSTERID = NULL;
   PyArrayObject* aCLUSTERID = NULL;
   int* clusterid;
-  char METHOD;
+  char METHOD = 'a';
   int shape[2];
   PyArrayObject* aCDATA = NULL;
   double** cdata;
   PyArrayObject* aCMASK = NULL;
   int** cmask;
-  int TRANSPOSE;
+  int TRANSPOSE = 0;
   int i;
 
   /* -- Read the input variables ----------------------------------------- */
