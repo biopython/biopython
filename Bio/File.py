@@ -34,7 +34,8 @@ class UndoHandle:
         self._saved = []
 
     def readlines(self, *args, **keywds):
-        lines = self._saved + apply(self._handle.readlines, args, keywds)
+        #lines = self._saved + apply(self._handle.readlines, args, keywds)
+        lines = self._saved + self._handle.readlines(*args,**keywds)
         self._saved = []
         return lines
 
@@ -42,7 +43,8 @@ class UndoHandle:
         if self._saved:
             line = self._saved.pop(0)
         else:
-            line = apply(self._handle.readline, args, keywds)
+            #line = apply(self._handle.readline, args, keywds)
+            line = self._handle.readline(*args,**keywds)
         return line
 
     def read(self, size=-1):
@@ -80,7 +82,8 @@ class UndoHandle:
 
     def seek(self, *args):
         self._saved = []
-        apply(self._handle.seek, args)
+        ##apply(self._handle.seek, args)
+        self._handle.seek(*args)
 
     def __getattr__(self, attr):
         return getattr(self._handle, attr)
