@@ -166,6 +166,7 @@ class run_tests(Command):
 # --- set up the packages we are going to install
 # standard biopython packages
 biopython_packages = ['Bio',
+                      'Bio.Application',
                       'Bio.Align',
                       'Bio.Alphabet',
                       'Bio.Application',
@@ -214,7 +215,15 @@ biopython_packages = ['Bio',
                       'Bio.Tools.MultiProc',
                       'Bio.Tools.Parsers',
                       'Bio.UniGene',
-                      'Bio.WWW'
+                      'Bio.WWW',
+                      'Bio.builders',
+                      'Bio.builders.SeqRecord',
+                      'Bio.expressions',
+                      'Bio.expressions.embl',
+                      'Bio.expressions.swissprot',
+                      'Bio.formatdefs',
+                      'Bio.writers',
+                      'Bio.writers.SeqRecord'
                       ]
 
 # Martel -- for building parsers
