@@ -120,18 +120,18 @@ class SGMLStrippingConsumer:
         return self._apply_clean_data
 
 def read_and_call(uhandle, method, **keywds):
-    """_read_and_call(uhandle, method,
-    start=None, end=None, contains=None, blank=None)
+    """read_and_call(uhandle, method[, start][, end][, contains][, blank][, has_re])
 
     Read a line from uhandle, check it, and pass it to the method.
     Raises a SyntaxError if the line does not pass the checks.
 
-    start, end, contains, and blank specify optional conditions that
-    the line must pass.  start and end specifies what the line must
+    start, end, contains, blank, and has_re specify optional conditions
+    that the line must pass.  start and end specifies what the line must
     begin or end with (not counting EOL characters).  contains
     specifies a substring that must be found in the line.  If blank
-    is a true value, then the line must be blank.  Set these parameters
-    to None if the check is not necessary.
+    is a true value, then the line must be blank.  has_re should be
+    a regular expression object with a pattern that the line must match
+    somewhere.
 
     """
     line = safe_readline(uhandle)
@@ -141,8 +141,7 @@ def read_and_call(uhandle, method, **keywds):
     method(line)
 
 def read_and_call_while(uhandle, method, **keywds):
-    """read_and_call_while(uhandle, method, 
-    start=None, end=None, contains=None, blank=None) -> number of lines
+    """read_and_call_while(uhandle, method[, start][, end][, contains][, blank][, has_re]) -> number of lines
 
     Read a line from uhandle and pass it to the method as long as
     some condition is true.  Returns the number of lines that were read.
@@ -201,14 +200,15 @@ def attempt_read_and_call(uhandle, method, **keywds):
         uhandle.saveline(line)
     return passed
 
-def _fails_conditions(line, start=None, end=None, contains=None, blank=None):
-    if start:
+def _fails_conditions(line, start=None, end=None, contains=None, blank=None,
+                      has_re=None):
+    if start is not None:
         if line[:len(start)] != start:
             return "Line does not start with '%s': %s" % (start, line)
-    if end:
+    if end is not None:
         if string.rstrip(line)[-len(end):] != end:
             return "Line does not end with '%s': %s" % (end, line)
-    if contains:
+    if contains is not None:
         if string.find(line, contains) == -1:
             return "Line does not contain '%s': %s" % (contains, line)
     if blank is not None:
@@ -218,6 +218,10 @@ def _fails_conditions(line, start=None, end=None, contains=None, blank=None):
         else:
             if is_blank_line(line):
                 return "Expected non-blank line, but got a blank one"
+    if has_re is not None:
+        if has_re.search(line) is None:
+            return "Line does not match regex '%s': %s" % (
+                has_re.pattern, line)
     return None
 
 def is_blank_line(line, allow_spaces=0):

@@ -4,7 +4,7 @@
 # as part of this package.
 
 import os
-import string
+import string, re
 from Bio import File
 from Bio import ParserSupport
 
@@ -100,33 +100,30 @@ GTAEVI
 h = File.UndoHandle(File.StringHandle(data))
 
 rac = ParserSupport.read_and_call
-lines = []
 def m(line):
-    lines.append(line)
+    print line,
     
 rac(h, m)
-print lines[-1][:10]   # '>gi|132871'
 rac(h, m, start='MAKLE', end='KEQ', contains='SVIG')
 rac(h, m, blank=0)
+rac(h, m, has_re=re.compile(r'HEL\wP'))
 
 # These should be errors.  If they're not, then complain.
-try: rac(h, m, blank=1)
-except SyntaxError: print "correctly failed"
-else: print "ERROR, should have failed"
-try: rac(h, m, start='foobar')
-except SyntaxError: print "correctly failed"
-else: print "ERROR, should have failed"
-try: rac(h, m, end='foobar')
-except SyntaxError: print "correctly failed"
-else: print "ERROR, should have failed"
-try: rac(h, m, contains='foobar')
-except SyntaxError: print "correctly failed"
-else: print "ERROR, should have failed"
-try: rac(h, m, blank=0)
-except SyntaxError: print "correctly failed"
-else: print "ERROR, should have failed"
-        
-
+fail_tests = [
+    {'blank' : 1},
+    {'start' : 'foobar'},
+    {'end' : 'foobar'},
+    {'contains' : 'foobar'},
+    {'has_re' : re.compile(r'\d')},
+    {'blank' : 0},
+    ]
+for keywds in fail_tests:
+    try:
+        apply(rac, (h, m), keywds)
+    except SyntaxError:
+        pass
+    else:
+        print "ERROR, test should have failed, but didn't: %s" % repr(keywds)
 
 
 ### attempt_read_and_call
