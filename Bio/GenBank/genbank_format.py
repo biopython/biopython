@@ -381,6 +381,7 @@ feature_key_names = (
     "old_sequence",     # Presented sequence revises a previous version
     "polyA_signal",     # Signal for cleavage & polyadenylation
     "polyA_site",       # Site at which polyadenine is added to mRNA
+    "Precursor",
     "precursor_RNA",    # Any RNA species that is not yet the mature
                         #   RNA product
     "prim_transcript",  # Primary (unprocessed) transcript
@@ -524,6 +525,7 @@ feature_qualifier_names = (
                       #   information in another database. A description of
                       #   all cross-references can be found at:
                       #   http://www.ncbi.nlm.nih.gov/collab/db_xref.html
+    "derived_from",
     "dev_stage",      # If the sequence was obtained from an organism in
                       #   a specific developmental stage, it is specified
                       #   with this qualifier
