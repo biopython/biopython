@@ -9,15 +9,21 @@ o SummaryInfo
 o PSSM
 """
 
+
 # standard library
 import string
 import math
+import sys
 
 # biopython modules
 from Bio import Alphabet
 from Bio.Alphabet import IUPAC
 from Bio.Seq import Seq
 
+# Expected random distributions for 20-letter protein, and
+# for 4-letter nucleotide alphabets
+Protein20Random = 0.05
+Nucleotide4Random = 0.25
 class SummaryInfo:
     """Calculate summary info about the alignment.
 
@@ -27,8 +33,10 @@ class SummaryInfo:
     """
     def __init__(self, alignment):
         """Initialize with the alignment to calculate information on.
+           ic_vector attribute. A dictionary. Keys: column numbers. Values:
         """
         self.alignment = alignment
+        self.ic_vector = {}
 
     def dumb_consensus(self, threshold = .7, ambiguous = "N",
                        consensus_alpha = None, require_multiple = 0):
@@ -376,7 +384,20 @@ class SummaryInfo:
             raise ValueError \
                   ("Start (%s) and end (%s) are not in the range %s to %s"
                    % (start, end, 0, len(self.alignment._records[0].seq)))
-
+        # determine random expected frequencies, if necessary
+        if not e_freq_table:
+            if isinstance(self.alignment._alphabet.alphabet,
+                Alphabet.ProteinAlphabet):
+                random_expected = Protein20Random
+            elif isinstance(self.alignment._alphabet.alphabet,
+                Alphabet.NucleotideAlphabet):
+                random_expected = Nucleotide4Random
+            else:
+                errstr = "Error in alphabet: not Nucleotide or Protein, "
+                errstr += "supply expected frequencies"
+                raise ValueError, errstr
+        else:
+            random_expected = None
         # determine all of the letters we have to deal with
         all_letters = self.alignment._alphabet.letters
         for char in chars_to_ignore:
@@ -387,18 +408,21 @@ class SummaryInfo:
             freq_dict = self._get_letter_freqs(residue_num,
                                                self.alignment._records,
                                                all_letters, chars_to_ignore)
-
+            print freq_dict,
             column_score = self._get_column_info_content(freq_dict,
                                                          e_freq_table,
-                                                         log_base)
+                                                         log_base,
+                                                         random_expected)
 
             info_content[residue_num] = column_score
-
+            print column_score
         # sum up the score
         total_info = 0
         for column_info in info_content.values():
             total_info = total_info + column_info
-
+        # fill in the ic_vector member: holds IC for each column
+        for i in info_content.keys():
+            self.ic_vector[i] = info_content[i]
         return total_info
 
     def _get_letter_freqs(self, residue_num, all_records, letters, to_ignore):
@@ -441,7 +465,8 @@ class SummaryInfo:
 
         return freq_info
             
-    def _get_column_info_content(self, obs_freq, e_freq_table, log_base):
+    def _get_column_info_content(self, obs_freq, e_freq_table, log_base,
+                                 random_expected):
         """Calculate the information content for a column.
 
         Arguments:
@@ -464,14 +489,16 @@ class SummaryInfo:
         total_info = 0
 
         for letter in obs_freq.keys():
+            inner_log = 0.
             # if we have expected frequencies, modify the log value by them
             # gap characters do not have expected frequencies, so they
             # should just be the observed frequency.
-            if e_freq_table and letter != self.alignment._alphabet.gap_char:
-                inner_log = obs_freq[letter] / e_freq_table.data[letter]
-            else:
-                inner_log = obs_freq[letter]
-
+            # Iddo, 11/6/2001: do not tally gap chars on any occasion
+            if letter != self.alignment._alphabet.gap_char:
+                if e_freq_table:
+                    inner_log = obs_freq[letter] / e_freq_table.data[letter]
+                else:
+                    inner_log = obs_freq[letter] / random_expected
             # if the observed frequency is zero, we don't add any info to the
             # total information content
             if inner_log > 0:
@@ -479,8 +506,11 @@ class SummaryInfo:
                                math.log(inner_log) / math.log(log_base))
 
                 total_info = total_info + letter_info
+        return -total_info # Do not abs this. Iddo.
+#        return abs(total_info)
 
-        return abs(total_info)
+    def get_column(self,col):
+        return self.alignment.get_column(col)
 
 class PSSM:
     """Represent a position specific score matrix.
@@ -549,4 +579,16 @@ class PSSM:
         """
         return self.pssm[pos][0]
 
-    
+
+def print_info_content(summary_info,fout=sys.stdout,rep_record=0):
+    """ Three column output: position, aa in representative sequence,
+        ic_vector value"""
+    if not summary_info.ic_vector:
+        summary_info.information_content()
+    rep_sequence = summary_info.alignment._records[rep_record].seq
+    positions = summary_info.ic_vector.keys()
+    positions.sort()
+    for pos in positions:
+        fout.write("%d %s %.3f\n" % (pos, rep_sequence[pos],
+                   summary_info.ic_vector[pos]))
+
