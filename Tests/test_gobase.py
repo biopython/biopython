@@ -18,7 +18,7 @@ record_parser = Gobase.RecordParser()
 
 def print_list( list ):
     for item in list:
-        print( '    ' + str( item ) )
+        print "testing %s" % item
 
 def print_sequence_record( data ):
     print 'modlecule type %s ' % data.molecule_type
