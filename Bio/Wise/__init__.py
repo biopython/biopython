@@ -1,6 +1,6 @@
 #!/usr/bin/env python2.3
 
-__version__ = "$Revision: 1.8 $"
+__version__ = "$Revision: 1.9 $"
 
 import os
 import sys
@@ -27,8 +27,7 @@ def _build_align_cmdline(cmdline, pair, output_filename, kbyte=None, force_type=
     """
     cmdline = cmdline[:]
 
-    if force_type:
-        cmdline.insert(0, "WISE_FORCE_TYPE=%s" % force_type)
+    ### XXX: force_type ignored
 
     if kbyte is None:
         try:
@@ -85,9 +84,9 @@ def align(cmdline, pair, kbyte=None, force_type=None, dry_run=False, quiet=False
     if debug:
         print >>sys.stderr, cmdline_str
         
-    status = os.system(cmdline_str)
+    status = os.system(cmdline_str) >> 8
 
-    if status:
+    if status > 1:
         if kbyte: # possible memory problem
             print >>sys.stderr, "INFO trying again with the linear model"
             return align(cmdline, pair, 0, force_type, dry_run, quiet, debug)
