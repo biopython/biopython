@@ -438,16 +438,10 @@ class CheckGroupRef:
 def generate_groupref(expression, genstate):
     # Look up the string from the match group
     # It can be of length 0 or more, so use the +1/-1 trick.
-    if supports_lookahead:
-        return [
-            (None, TT.Call + TT.LookAhead, CheckGroupRef(expression.name),
-             TT.MatchFail),
-            ]
-    else:
-        return [
-            (None, TT.Call, CheckGroupRef(expression.name), TT.MatchFail),
-            (None, TT.Skip, -1, TT.MatchFail),
-            ]
+    return [
+        (None, TT.Call, CheckGroupRef(expression.name), TT.MatchFail),
+        (None, TT.Skip, -1, TT.MatchFail),
+        ]
 
 # Used to define parsers which read a record at time.  They contain no
 # parse information themselves, but only in their children
