@@ -44,19 +44,31 @@ type: source
 location: (1..513)
 ref: None:None
 strand: 0
-qualifiers: {'db_xref': 'taxon:3702', 'strain': 'Columbia', 'organism': 'Arabidopsis thaliana'}
+qualifiers: 
+	Key: db_xref, Value: taxon:3702
+	Key: organism, Value: Arabidopsis thaliana
+	Key: strain, Value: Columbia
 
 type: gene
 location: (50..250)
 ref: None:None
 strand: 0
-qualifiers: {'gene': 'cor6.6'}
+qualifiers: 
+	Key: gene, Value: cor6.6
 
 type: CDS
 location: (50..250)
 ref: None:None
 strand: 0
-qualifiers: {'protein_id': 'CAA38894.1', 'codon_start': '1', 'translation': 'MSETNKNAFQAGQAAGKAEEKSNVLLDKAKDAAAAAGASAQQAG\012                     KSISDAAVGGVNFVKDKTGLNK', 'gene': 'cor6.6', 'db_xref1': 'SWISS-PROT:P31169', 'db_xref': 'GI:16230', 'note': 'cold regulated'}
+qualifiers: 
+	Key: codon_start, Value: 1
+	Key: db_xref, Value: GI:16230
+	Key: db_xref1, Value: SWISS-PROT:P31169
+	Key: gene, Value: cor6.6
+	Key: note, Value: cold regulated
+	Key: protein_id, Value: CAA38894.1
+	Key: translation, Value: MSETNKNAFQAGQAAGKAEEKSNVLLDKAKDAAAAAGASAQQAG
+                     KSISDAAVGGVNFVKDKTGLNK
 
 ***Record from the FeatureParser
 Seq: Seq('ATTTGGCCTATAAATATAAACCCTTAAGCCCACATATCTTCTCAATCCATCACAAACAAA ...', DNAAlphabet())
@@ -100,129 +112,152 @@ type: source
 location: (1..880)
 ref: None:None
 strand: 1
-qualifiers: {'db_xref': 'taxon:3702', 'strain': 'ssp. L. Heynh, Colombia', 'organism': 'Arabidopsis thaliana'}
+qualifiers: 
+	Key: db_xref, Value: taxon:3702
+	Key: organism, Value: Arabidopsis thaliana
+	Key: strain, Value: ssp. L. Heynh, Colombia
 
 type: TATA_signal
 location: (9..20)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 type: exon
 location: (44..160)
 ref: None:None
 strand: 1
-qualifiers: {'gene': 'kin2', 'number': '1'}
+qualifiers: 
+	Key: gene, Value: kin2
+	Key: number, Value: 1
 
 type: prim_transcript
 location: (44..>579)
 ref: None:None
 strand: 1
-qualifiers: {'gene': 'kin2'}
+qualifiers: 
+	Key: gene, Value: kin2
 
 type: mRNA
 location: (44..>579)
 ref: None:None
 strand: 1
-qualifiers: {'gene': 'kin2'}
+qualifiers: 
+	Key: gene, Value: kin2
 Sub-Features
 type: mRNA_join
 location: (44..160)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 type: mRNA_join
 location: (320..390)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 type: mRNA_join
 location: (504..>579)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 
 type: gene
 location: (44..579)
 ref: None:None
 strand: 1
-qualifiers: {'gene': 'kin2'}
+qualifiers: 
+	Key: gene, Value: kin2
 
 type: CDS
 location: (104..579)
 ref: None:None
 strand: 1
-qualifiers: {'db_xref1': 'SWISS-PROT:P31169', 'protein_id': 'CAA44171.1', 'codon_start': '1', 'gene': 'kin2', 'translation': 'MSETNKNAFQAGQAAGKAERRRAMFCWTRPRMLLLQLELPRNRA\012                     GKSISDAAVGGVNFVKDKTGLNK', 'db_xref': 'GI:16354'}
+qualifiers: 
+	Key: codon_start, Value: 1
+	Key: db_xref, Value: GI:16354
+	Key: db_xref1, Value: SWISS-PROT:P31169
+	Key: gene, Value: kin2
+	Key: protein_id, Value: CAA44171.1
+	Key: translation, Value: MSETNKNAFQAGQAAGKAERRRAMFCWTRPRMLLLQLELPRNRA
+                     GKSISDAAVGGVNFVKDKTGLNK
 Sub-Features
 type: CDS_join
 location: (104..160)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (320..390)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (504..579)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 
 type: intron
 location: (161..319)
 ref: None:None
 strand: 1
-qualifiers: {'gene': 'kin2', 'number': '1'}
+qualifiers: 
+	Key: gene, Value: kin2
+	Key: number, Value: 1
 
 type: exon
 location: (320..390)
 ref: None:None
 strand: 1
-qualifiers: {'gene': 'kin2', 'number': '2'}
+qualifiers: 
+	Key: gene, Value: kin2
+	Key: number, Value: 2
 
 type: intron
 location: (391..503)
 ref: None:None
 strand: 1
-qualifiers: {'gene': 'kin2', 'number': '2'}
+qualifiers: 
+	Key: gene, Value: kin2
+	Key: number, Value: 2
 
 type: exon
 location: (504..>579)
 ref: None:None
 strand: 1
-qualifiers: {'gene': 'kin2', 'number': '3'}
+qualifiers: 
+	Key: gene, Value: kin2
+	Key: number, Value: 3
 
 type: polyA_signal
 location: (620..625)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 type: polyA_signal
 location: (641..646)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 type: polyA_site
 location: (785..785)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 type: polyA_site
 location: (800..800)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 ***Record from the FeatureParser
 Seq: Seq('AAAAAAACACAACAAAACTCAATAAATAAACAAATGGCAGACAACAAGCAGAGCTTCCAA ...', RNAAlphabet())
@@ -258,37 +293,55 @@ type: source
 location: (1..441)
 ref: None:None
 strand: 0
-qualifiers: {'organism': 'Brassica napus', 'cultivar': 'Jet neuf', 'dev_stage': 'cold induced', 'tissue_type': 'leaf', 'db_xref': 'taxon:3708'}
+qualifiers: 
+	Key: cultivar, Value: Jet neuf
+	Key: db_xref, Value: taxon:3708
+	Key: dev_stage, Value: cold induced
+	Key: organism, Value: Brassica napus
+	Key: tissue_type, Value: leaf
 
 type: gene
 location: (34..300)
 ref: None:None
 strand: 0
-qualifiers: {'gene': 'kin1'}
+qualifiers: 
+	Key: gene, Value: kin1
 
 type: CDS
 location: (34..231)
 ref: None:None
 strand: 0
-qualifiers: {'evidence': 'experimental', 'codon_start': '1', 'gene': 'kin1', 'db_xref': 'GI:167146', 'protein_id': 'AAA32993.1', 'translation': 'MADNKQSFQAGQASGRAEEKGNVLMDKVKDAATAAGASAQTAGQ\012                     KITEAAGGAVNLVKEKTGMNK'}
+qualifiers: 
+	Key: codon_start, Value: 1
+	Key: db_xref, Value: GI:167146
+	Key: evidence, Value: experimental
+	Key: gene, Value: kin1
+	Key: protein_id, Value: AAA32993.1
+	Key: translation, Value: MADNKQSFQAGQASGRAEEKGNVLMDKVKDAATAAGASAQTAGQ
+                     KITEAAGGAVNLVKEKTGMNK
 
 type: polyA_signal
 location: (241..247)
 ref: None:None
 strand: 0
-qualifiers: {'gene': 'kin1', 'note': 'putative'}
+qualifiers: 
+	Key: gene, Value: kin1
+	Key: note, Value: putative
 
 type: polyA_signal
 location: (294..300)
 ref: None:None
 strand: 0
-qualifiers: {'gene': 'kin1', 'note': 'putative'}
+qualifiers: 
+	Key: gene, Value: kin1
+	Key: note, Value: putative
 
 type: polyA_site
 location: (441..441)
 ref: None:None
 strand: 0
-qualifiers: {'gene': 'kin1'}
+qualifiers: 
+	Key: gene, Value: kin1
 
 ***Record from the FeatureParser
 Seq: Seq('GGACAAGGCCAAGGATGCTGCTGCTGCAGCTGGAGCTTCCGCGCAACAAGTAAACAGATA ...', DNAAlphabet())
@@ -332,69 +385,86 @@ type: source
 location: (1..206)
 ref: None:None
 strand: 1
-qualifiers: {'country': 'Russia:Bashkortostan', 'db_xref': 'taxon:3704', 'organism': 'Armoracia rusticana'}
+qualifiers: 
+	Key: country, Value: Russia:Bashkortostan
+	Key: db_xref, Value: taxon:3704
+	Key: organism, Value: Armoracia rusticana
 
 type: mRNA
 location: (<1..>206)
 ref: None:None
 strand: 1
-qualifiers: {'gene': 'csp14'}
+qualifiers: 
+	Key: gene, Value: csp14
 Sub-Features
 type: mRNA_join
 location: (<1..48)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 type: mRNA_join
 location: (143..>206)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 
 type: exon
 location: (1..48)
 ref: None:None
 strand: 1
-qualifiers: {'gene': 'csp14', 'number': '2'}
+qualifiers: 
+	Key: gene, Value: csp14
+	Key: number, Value: 2
 
 type: gene
 location: (1..206)
 ref: None:None
 strand: 1
-qualifiers: {'gene': 'csp14'}
+qualifiers: 
+	Key: gene, Value: csp14
 
 type: CDS
 location: (<1..>206)
 ref: None:None
 strand: 1
-qualifiers: {'codon_start': '2', 'db_xref': 'GI:4538893', 'gene': 'csp14', 'product': 'cold shock protein', 'protein_id': 'CAB39890.1', 'translation': 'DKAKDAAAAAGASAQQAGKNISDAAAGGVNFVKEKTG'}
+qualifiers: 
+	Key: codon_start, Value: 2
+	Key: db_xref, Value: GI:4538893
+	Key: gene, Value: csp14
+	Key: product, Value: cold shock protein
+	Key: protein_id, Value: CAB39890.1
+	Key: translation, Value: DKAKDAAAAAGASAQQAGKNISDAAAGGVNFVKEKTG
 Sub-Features
 type: CDS_join
 location: (<1..48)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (143..>206)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 
 type: intron
 location: (49..142)
 ref: None:None
 strand: 1
-qualifiers: {'gene': 'csp14', 'number': '2'}
+qualifiers: 
+	Key: gene, Value: csp14
+	Key: number, Value: 2
 
 type: exon
 location: (143..206)
 ref: None:None
 strand: 1
-qualifiers: {'gene': 'csp14', 'number': '3'}
+qualifiers: 
+	Key: gene, Value: csp14
+	Key: number, Value: 3
 
 ***Record from the FeatureParser
 Seq: Seq('AACAAAACTCAATAAATAAACAAATGGCAGACAACAAGCAGAGCTTCCAAGCCGGTCAAG ...', RNAAlphabet())
@@ -430,19 +500,29 @@ type: source
 location: (1..282)
 ref: None:None
 strand: 0
-qualifiers: {'dev_stage': 'flower', 'db_xref': 'taxon:3711', 'organism': 'Brassica rapa'}
+qualifiers: 
+	Key: db_xref, Value: taxon:3711
+	Key: dev_stage, Value: flower
+	Key: organism, Value: Brassica rapa
 
 type: gene
 location: (24..221)
 ref: None:None
 strand: 0
-qualifiers: {'gene': 'kin'}
+qualifiers: 
+	Key: gene, Value: kin
 
 type: CDS
 location: (24..221)
 ref: None:None
 strand: 0
-qualifiers: {'protein_id': 'AAA91051.1', 'codon_start': '1', 'gene': 'kin', 'translation': 'MADNKQSFQAGQAAGRAEEKGNVLLMDKVKDAATAAGALQTAGQ\012                     KITEAAGGAVNLVKEKTGMNK', 'db_xref': 'GI:1209262'}
+qualifiers: 
+	Key: codon_start, Value: 1
+	Key: db_xref, Value: GI:1209262
+	Key: gene, Value: kin
+	Key: protein_id, Value: AAA91051.1
+	Key: translation, Value: MADNKQSFQAGQAAGRAEEKGNVLLMDKVKDAATAAGALQTAGQ
+                     KITEAAGGAVNLVKEKTGMNK
 
 ***Record from the FeatureParser
 Seq: Seq('ATGGCAGACAACAAGCAGAGCTTCCAAGCCGGTCAAGCCGCTGGTCGTGCTGAGGTCTCT ...', DNAAlphabet())
@@ -486,62 +566,77 @@ type: source
 location: (1..497)
 ref: None:None
 strand: 1
-qualifiers: {'db_xref': 'taxon:3708', 'cultivar': 'Cascade', 'organism': 'Brassica napus'}
+qualifiers: 
+	Key: cultivar, Value: Cascade
+	Key: db_xref, Value: taxon:3708
+	Key: organism, Value: Brassica napus
 
 type: mRNA
 location: (<1..>497)
 ref: None:None
 strand: 1
-qualifiers: {'gene': 'BN28a', 'product': 'BN28a'}
+qualifiers: 
+	Key: gene, Value: BN28a
+	Key: product, Value: BN28a
 Sub-Features
 type: mRNA_join
 location: (<1..54)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 type: mRNA_join
 location: (241..309)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 type: mRNA_join
 location: (423..>497)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 
 type: gene
 location: (<1..>497)
 ref: None:None
 strand: 1
-qualifiers: {'gene': 'BN28a'}
+qualifiers: 
+	Key: gene, Value: BN28a
 
 type: CDS
 location: (1..497)
 ref: None:None
 strand: 1
-qualifiers: {'protein_id': 'AAG13407.1', 'codon_start': '1', 'translation': 'MADNKQSFQAGQAAGRAEEKGNVLMDKVKDAATAAGASAQTAGQ\012                     KITEAAGGAVNLVKEKTGMNK', 'gene': 'BN28a', 'product': 'BN28a', 'db_xref': 'GI:10121869', 'note': 'low temperature-induced; similar to Brassica napus\012                     Kin1 in Accession Number M81224'}
+qualifiers: 
+	Key: codon_start, Value: 1
+	Key: db_xref, Value: GI:10121869
+	Key: gene, Value: BN28a
+	Key: note, Value: low temperature-induced; similar to Brassica napus
+                     Kin1 in Accession Number M81224
+	Key: product, Value: BN28a
+	Key: protein_id, Value: AAG13407.1
+	Key: translation, Value: MADNKQSFQAGQAAGRAEEKGNVLMDKVKDAATAAGASAQTAGQ
+                     KITEAAGGAVNLVKEKTGMNK
 Sub-Features
 type: CDS_join
 location: (1..54)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (241..309)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (423..497)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 
 ***Record from the FeatureParser
@@ -588,31 +683,48 @@ type: source
 location: (1..1326)
 ref: None:None
 strand: 0
-qualifiers: {'chromosome': '21', 'clone_lib': 'Soares fetal liver spleen 1NFLS', 'organism': 'Homo sapiens', 'clone': 'IMAGE cDNA clone 125195', 'db_xref': 'taxon:9606', 'note': 'contains Alu repeat; likely to be be derived from\012                     unprocessed nuclear RNA or genomic DNA; encodes putative\012                     exons identical to FTCD; formimino transferase\012                     cyclodeaminase; formimino transferase (EC 2.1.2.5)\012                     /formimino tetrahydro folate cyclodeaminase (EC 4.3.1.4)'}
+qualifiers: 
+	Key: chromosome, Value: 21
+	Key: clone, Value: IMAGE cDNA clone 125195
+	Key: clone_lib, Value: Soares fetal liver spleen 1NFLS
+	Key: db_xref, Value: taxon:9606
+	Key: note, Value: contains Alu repeat; likely to be be derived from
+                     unprocessed nuclear RNA or genomic DNA; encodes putative
+                     exons identical to FTCD; formimino transferase
+                     cyclodeaminase; formimino transferase (EC 2.1.2.5)
+                     /formimino tetrahydro folate cyclodeaminase (EC 4.3.1.4)
+	Key: organism, Value: Homo sapiens
 
 type: gene
 location: (341..756)
 ref: None:None
 strand: 0
-qualifiers: {'gene': 'FTCD'}
+qualifiers: 
+	Key: gene, Value: FTCD
 
 type: exon
 location: (341..384)
 ref: None:None
 strand: 0
-qualifiers: {'gene': 'FTCD', 'number': '1'}
+qualifiers: 
+	Key: gene, Value: FTCD
+	Key: number, Value: 1
 
 type: intron
 location: (385..617)
 ref: None:None
 strand: 0
-qualifiers: {'gene': 'FTCD', 'number': '1'}
+qualifiers: 
+	Key: gene, Value: FTCD
+	Key: number, Value: 1
 
 type: exon
 location: (618..756)
 ref: None:None
 strand: 0
-qualifiers: {'gene': 'FTCD', 'number': '2'}
+qualifiers: 
+	Key: gene, Value: FTCD
+	Key: number, Value: 2
 
 ***Record from the FeatureParser
 Seq: Seq('GATCATGCATGCACTCCAGCCTGGGACAAGAGCGAAACTCCGTCTCAAAAAAAAAAAAAA ...', DNAAlphabet())
@@ -656,31 +768,45 @@ type: source
 location: (1..741)
 ref: None:None
 strand: 1
-qualifiers: {'chromosome': '1', 'clone_lib': 'partial Hae III/Alu I fetal human liver\012                     library in lambda Ch4A of Maniatis', 'organism': 'Homo sapiens', 'dev_stage': 'fetal', 'clone': 'lambda hGT5-157', 'map': '1p31', 'tissue_type': 'liver', 'db_xref': 'taxon:9606'}
+qualifiers: 
+	Key: chromosome, Value: 1
+	Key: clone, Value: lambda hGT5-157
+	Key: clone_lib, Value: partial Hae III/Alu I fetal human liver
+                     library in lambda Ch4A of Maniatis
+	Key: db_xref, Value: taxon:9606
+	Key: dev_stage, Value: fetal
+	Key: map, Value: 1p31
+	Key: organism, Value: Homo sapiens
+	Key: tissue_type, Value: liver
 
 type: repeat_region
 location: (1..73)
 ref: None:None
 strand: 1
-qualifiers: {'rpt_family': 'Alu'}
+qualifiers: 
+	Key: rpt_family, Value: Alu
 
 type: promoter
 location: (1..513)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 type: 5'UTR
 location: (514..609)
 ref: None:None
 strand: 1
-qualifiers: {'gene': 'GLUT5'}
+qualifiers: 
+	Key: gene, Value: GLUT5
 
 type: exon
 location: (514..642)
 ref: None:None
 strand: 1
-qualifiers: {'gene': 'GLUT5', 'product': 'fructose transporter', 'number': '1'}
+qualifiers: 
+	Key: gene, Value: GLUT5
+	Key: number, Value: 1
+	Key: product, Value: fructose transporter
 
 ***Record from the FeatureParser
 Seq: Seq('AAGCTTTGCTACGATCTACATTTGGGAATGTGAGTCTCTTATTGTAACCTTAGGGTTGGT ...', DNAAlphabet())
@@ -750,730 +876,1019 @@ type: source
 location: (1..86436)
 ref: None:None
 strand: 1
-qualifiers: {'chromosome': '1', 'organism': 'Arabidopsis thaliana', 'clone': 'T25K16', 'db_xref': 'taxon:3702'}
+qualifiers: 
+	Key: chromosome, Value: 1
+	Key: clone, Value: T25K16
+	Key: db_xref, Value: taxon:3702
+	Key: organism, Value: Arabidopsis thaliana
 
 type: CDS
 location: (3462..5332)
 ref: None:None
 strand: 1
-qualifiers: {'evidence': 'not_experimental', 'protein_id': 'AAF26460.1', 'codon_start': '1', 'translation': 'MEDQVGFGFRPNDEELVGHYLRNKIEGNTSRDVEVAISEVNICS\012                     YDPWNLRFQSKYKSRDAMWYFFSRRENNKGNRQSRTTVSGKWKLTGESVEVKDQWGFC\012                     SEGFRGKIGHKRVLVFLDGRYPDKTKSDWVIHEFHYDLLPEHQKLCNVTLFRFSSYFR\012                     LSLLSPMFYTDELMCLPPEILQRTYVICRLEYKGDDADILSAYAIDPTPAFVPNMTSS\012                     AGSVVNQSRQRNSGSYNTYSEYDSANHGQQFNENSNIMQQQPLQGSFNPLLEYDFANH\012                     GGQWLSDYIDLQQQVPYLAPYENESEMIWKHVIEENFEFLVDERTSMQQHYSDHRPKK\012                     PVSGVLPDDSSDTETGSMIFEDTSSSTDSVGSSDEPGHTRIDDIPSLNIIEPLHNYKA\012                     QEQPKQQSKEKVISSQKSECEWKMAEDSIKIPPSTNTVKQSWIVLENAQWNYLKNMII\012                     GVLLFISVISWIILVG', 'product': 'T25K16.1', 'db_xref': 'GI:6715633', 'note': 'containing similarity to NAM-like proteins\012                     gi|3695378'}
+qualifiers: 
+	Key: codon_start, Value: 1
+	Key: db_xref, Value: GI:6715633
+	Key: evidence, Value: not_experimental
+	Key: note, Value: containing similarity to NAM-like proteins
+                     gi|3695378
+	Key: product, Value: T25K16.1
+	Key: protein_id, Value: AAF26460.1
+	Key: translation, Value: MEDQVGFGFRPNDEELVGHYLRNKIEGNTSRDVEVAISEVNICS
+                     YDPWNLRFQSKYKSRDAMWYFFSRRENNKGNRQSRTTVSGKWKLTGESVEVKDQWGFC
+                     SEGFRGKIGHKRVLVFLDGRYPDKTKSDWVIHEFHYDLLPEHQKLCNVTLFRFSSYFR
+                     LSLLSPMFYTDELMCLPPEILQRTYVICRLEYKGDDADILSAYAIDPTPAFVPNMTSS
+                     AGSVVNQSRQRNSGSYNTYSEYDSANHGQQFNENSNIMQQQPLQGSFNPLLEYDFANH
+                     GGQWLSDYIDLQQQVPYLAPYENESEMIWKHVIEENFEFLVDERTSMQQHYSDHRPKK
+                     PVSGVLPDDSSDTETGSMIFEDTSSSTDSVGSSDEPGHTRIDDIPSLNIIEPLHNYKA
+                     QEQPKQQSKEKVISSQKSECEWKMAEDSIKIPPSTNTVKQSWIVLENAQWNYLKNMII
+                     GVLLFISVISWIILVG
 Sub-Features
 type: CDS_join
 location: (3462..3615)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (3698..3978)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (4077..4307)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (4408..4797)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (4876..5028)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (5141..5332)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 
 type: CDS
 location: (6617..8368)
 ref: None:None
 strand: -1
-qualifiers: {'evidence': 'not_experimental', 'protein_id': 'AAF26477.1', 'codon_start': '1', 'translation': 'MAASEHRCVGCGFRVKSLFIQYSPGNIRLMKCGNCKEVADEYIE\012                     CERMVCFNHFLSLFGPKVYRHVLYNAINPATVNIQVKNYFNSTSRCVVGEIHRQTYLK\012                     SPELIIDRSLLLRKSDEESSFSDSPVLLSIKVLIGVLSANAAFIISFAIATKGLLNEV\012                     SRESLLLQVWEFPMSVIFFVDILLLTSNSMALKGQTFKMFSMQIVFCCCYFGISQCKF\012                     VFKPVMTESTMTRCIAVCLIAHLIRFLVGQIFEPTIFLIQIGSLLQYMSYFFRIV', 'product': 'T25K16.2', 'db_xref': 'GI:6715650', 'note': 'hypothetical protein'}
+qualifiers: 
+	Key: codon_start, Value: 1
+	Key: db_xref, Value: GI:6715650
+	Key: evidence, Value: not_experimental
+	Key: note, Value: hypothetical protein
+	Key: product, Value: T25K16.2
+	Key: protein_id, Value: AAF26477.1
+	Key: translation, Value: MAASEHRCVGCGFRVKSLFIQYSPGNIRLMKCGNCKEVADEYIE
+                     CERMVCFNHFLSLFGPKVYRHVLYNAINPATVNIQVKNYFNSTSRCVVGEIHRQTYLK
+                     SPELIIDRSLLLRKSDEESSFSDSPVLLSIKVLIGVLSANAAFIISFAIATKGLLNEV
+                     SRESLLLQVWEFPMSVIFFVDILLLTSNSMALKGQTFKMFSMQIVFCCCYFGISQCKF
+                     VFKPVMTESTMTRCIAVCLIAHLIRFLVGQIFEPTIFLIQIGSLLQYMSYFFRIV
 Sub-Features
 type: CDS_join
 location: (6617..6953)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (7266..7351)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (7464..7603)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (7916..7998)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (8087..8166)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (8273..8368)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 
 type: CDS
 location: (11566..12642)
 ref: None:None
 strand: -1
-qualifiers: {'evidence': 'not_experimental', 'protein_id': 'AAF26476.1', 'codon_start': '1', 'translation': 'MDLSLAPTTTTSSDQEQDRDQELTSNIGASSSSGPSGNNNNLPM\012                     MMIPPPEKEHMFDKVVTPSDVGKLNRLVIPKQHAERYFPLDSSNNQNGTLLNFQDRNG\012                     KMWRFRYSYWNSSQSYVMTKGWSRFVKEKKLDAGDIVSFQRGIGDESERSKLYIDWRH\012                     RPDMSLVQAHQFGNFGFNFNFPTTSQYSNRFHPLPEYNSVPIHRGLNIGNHQRSYYNT\012                     QRQEFVGYGYGNLAGRCYYTGSPLDHRNIVGSEPLVIDSVPVVPGRLTPVMLPPLPPP\012                     PSTAGKRLRLFGVNMECGNDYNQQEESWLVPRGEIGASSSSSSALRLNLSTDHDDDND\012                     DGDDGDDDQFAKKGKSSLSLNFNP', 'product': 'T25K16.3', 'db_xref': 'GI:6715649', 'note': 'putative RAP2.8 protein gi|3695373'}
+qualifiers: 
+	Key: codon_start, Value: 1
+	Key: db_xref, Value: GI:6715649
+	Key: evidence, Value: not_experimental
+	Key: note, Value: putative RAP2.8 protein gi|3695373
+	Key: product, Value: T25K16.3
+	Key: protein_id, Value: AAF26476.1
+	Key: translation, Value: MDLSLAPTTTTSSDQEQDRDQELTSNIGASSSSGPSGNNNNLPM
+                     MMIPPPEKEHMFDKVVTPSDVGKLNRLVIPKQHAERYFPLDSSNNQNGTLLNFQDRNG
+                     KMWRFRYSYWNSSQSYVMTKGWSRFVKEKKLDAGDIVSFQRGIGDESERSKLYIDWRH
+                     RPDMSLVQAHQFGNFGFNFNFPTTSQYSNRFHPLPEYNSVPIHRGLNIGNHQRSYYNT
+                     QRQEFVGYGYGNLAGRCYYTGSPLDHRNIVGSEPLVIDSVPVVPGRLTPVMLPPLPPP
+                     PSTAGKRLRLFGVNMECGNDYNQQEESWLVPRGEIGASSSSSSALRLNLSTDHDDDND
+                     DGDDGDDDQFAKKGKSSLSLNFNP
 
 type: CDS
 location: (23221..30781)
 ref: None:None
 strand: 1
-qualifiers: {'evidence': 'not_experimental', 'protein_id': 'AAF26461.1', 'codon_start': '1', 'translation': 'MVMEDEPREATIKPSYWLDACEDISCDLIDDLVSEFDPSSVAVN\012                     ESTDENGVINDFFGGIDHILDSIKNGGGLPNNGVSDTNSQINEVTVTPQVIAKETVKE\012                     NGLQKNGGKRDEFSKEEGDKDRKRARVCSYQSERSNLSGRGHVNNSREGDRFMNRKRT\012                     RNWDEAGNNKKKRECNNYRRDGRDREVRGYWERDKVGSNELVYRSGTWEADHERDVKK\012                     VSGGNRECDVKAEENKSKPEERKEKVVEEQARRYQLDVLEQAKAKNTIAFLETGAGKT\012                     LIAILLIKSVHKDLMSQNRKMLSVFLVPKVPLVYQVPPNKKHQAEVIRNQTCFQVGHY\012                     CGEMGQDFWDSRRWQREFESKQFLKLTSFFLFSSTQVLVMTAQILLNILRHSIIRMET\012                     IDLLILDECHHAVKKHPYSLVMSEFYHTTPKDKRPAIFGMTASPVNLKGVSSQVDCAI\012                     KIRNLETKLDSTVCTIKDRKELEKHVPMPSEIVVEYDKAATMWSLHETIKQMIAAVEE\012                     AAQASSRKSKWQFMGARDAGAKDELRQVYGVSERTESDGAANLIHKLRAINYTLAELG\012                     QWCAYKVGQSFLSALQSDERVNFQVDVKFQESYLSEVVSLLQCELLEGAAAEKVAAEV\012                     GKPENGNAHDEMEEGELPDDPVVSGGEHVDEVIGAAVADGKVTPKVQSLIKLLLKYQH\012                     TADFRAIVFVERVVAALVLPKVRIKVFAELPSLSFIRCASMIGHNNSQEMKSSQMQDT\012                     ISKFRDGHVTLLVATSVAEEGLDIRQCNVVMRFDLAKTVLAYIQSRGRARKPGSDYIL\012                     MVERYIKSFKNYILIFVTTGHQISTDMSTCVTCRGNVSHAAFLRNARNSEETLRKEAI\012                     ERTDLSHLKDTSRLISIDAVPGTVYKVEATGAMVSLNSAVGLVHFYCSQLPGDRYAIL\012                     RPEFSMEKHEKPGGHTEYSCRLQLPCNAPFEILEGPVCSSMRLAQQVDIIVSACKKLH\012                     EMGAFTDMLLPDKGSGQDAEKADQDDEGEPVPGTARHREFYPEGVADVLKGEWVSSGK\012                     EVCESSKLFHLYMYNVRCVDFGSSKDPFLSEVSEFAILFGNELDAEVLSMSMDLYVAR\012                     AMITKASLAFKGSLDITENQLSSLKKFHVRLMSIVLDVDVEPSTTPWDPAKAYLFVPV\012                     TDNTSMEPIKGINWELVEKITKTTAWDNPLQRARPDVYLGTNERTLGGDRREYGFGKL\012                     RHNIVFGQKSHPTYGIRGAVASFDVVRASGLLPVRDAFEKEVEEDLSKGKLMMADGCM\012                     VAEDLIGKIVTAAHSGKRFYVDSICYDMSAETSFPRKEGYLGPLEYNTYADYYKQKIY\012                     VVQDRLFFYFLHNLRLLRLYKSSSIMLFIRYGVDLNCKQQPLIKGRGVSYCKNLLSPR\012                     FEQSGESETVLDKTYYVFLPPELCVVHPLSGSLIRGAQRLPSIMRRVESMLLAVQLKN\012                     LISYPIPTSKILEALTAASCQETFCYERAELLGDAYLKWVVSRFLFLKYPQKHEGQLT\012                     RMRQQMVSNMVLYQFALVKGLQSYIQADRFAPSRWSAPGVPPVFDEDTKDGGSSFFDE\012                     EQKPVSEENSDVFEDGEMEDGELEGDLSSYRVLSSKTLADVVEALIGVYYVEGGKIAA\012                     NHLMKWIGIHVEDDPDEVDGTLKNVNVPESVLKSIDFVGLERALKYEFKEKGLLVEAI\012                     THASRPSSGVSCYQRLEFVGDAVLDHLITRHLFFTYTSLPPGRLTDLRAAAVNNENFA\012                     RVAVKHKLHLYLRHGSSALEKQVNKIKKQSILFSKSFKCLTVWLLFVFQIREFVKEVQ\012                     TESSKPGFNSFGLGDCKAPKVLGDIVESIAGAIFLDSGKDTTAAWKVFQPLLQPMVTP\012                     ETLPMHPVRELQERCQQQAEGLEYKASRSGNTATVEVFIDGVQVGVAQNPQKKMAQKL\012                     AARNALAALKEKEIAESKEKHINNGNAGEDQGENENGNKKNGHQPFTRQTLNDICLRK\012                     NWPMPSYRCVKEGGPAHAKRFTFGVRVNTSDRGWTDECIGEPMPSVKKAKDSAAVLLL\012                     ELLNKTFS', 'product': 'T25K16.4', 'db_xref': 'GI:6715634', 'note': 'similar to UFD1 protein emb|CAB10321.1; similar to\012                     ESTs gb|H36434, gb|AI996152.1'}
+qualifiers: 
+	Key: codon_start, Value: 1
+	Key: db_xref, Value: GI:6715634
+	Key: evidence, Value: not_experimental
+	Key: note, Value: similar to UFD1 protein emb|CAB10321.1; similar to
+                     ESTs gb|H36434, gb|AI996152.1
+	Key: product, Value: T25K16.4
+	Key: protein_id, Value: AAF26461.1
+	Key: translation, Value: MVMEDEPREATIKPSYWLDACEDISCDLIDDLVSEFDPSSVAVN
+                     ESTDENGVINDFFGGIDHILDSIKNGGGLPNNGVSDTNSQINEVTVTPQVIAKETVKE
+                     NGLQKNGGKRDEFSKEEGDKDRKRARVCSYQSERSNLSGRGHVNNSREGDRFMNRKRT
+                     RNWDEAGNNKKKRECNNYRRDGRDREVRGYWERDKVGSNELVYRSGTWEADHERDVKK
+                     VSGGNRECDVKAEENKSKPEERKEKVVEEQARRYQLDVLEQAKAKNTIAFLETGAGKT
+                     LIAILLIKSVHKDLMSQNRKMLSVFLVPKVPLVYQVPPNKKHQAEVIRNQTCFQVGHY
+                     CGEMGQDFWDSRRWQREFESKQFLKLTSFFLFSSTQVLVMTAQILLNILRHSIIRMET
+                     IDLLILDECHHAVKKHPYSLVMSEFYHTTPKDKRPAIFGMTASPVNLKGVSSQVDCAI
+                     KIRNLETKLDSTVCTIKDRKELEKHVPMPSEIVVEYDKAATMWSLHETIKQMIAAVEE
+                     AAQASSRKSKWQFMGARDAGAKDELRQVYGVSERTESDGAANLIHKLRAINYTLAELG
+                     QWCAYKVGQSFLSALQSDERVNFQVDVKFQESYLSEVVSLLQCELLEGAAAEKVAAEV
+                     GKPENGNAHDEMEEGELPDDPVVSGGEHVDEVIGAAVADGKVTPKVQSLIKLLLKYQH
+                     TADFRAIVFVERVVAALVLPKVRIKVFAELPSLSFIRCASMIGHNNSQEMKSSQMQDT
+                     ISKFRDGHVTLLVATSVAEEGLDIRQCNVVMRFDLAKTVLAYIQSRGRARKPGSDYIL
+                     MVERYIKSFKNYILIFVTTGHQISTDMSTCVTCRGNVSHAAFLRNARNSEETLRKEAI
+                     ERTDLSHLKDTSRLISIDAVPGTVYKVEATGAMVSLNSAVGLVHFYCSQLPGDRYAIL
+                     RPEFSMEKHEKPGGHTEYSCRLQLPCNAPFEILEGPVCSSMRLAQQVDIIVSACKKLH
+                     EMGAFTDMLLPDKGSGQDAEKADQDDEGEPVPGTARHREFYPEGVADVLKGEWVSSGK
+                     EVCESSKLFHLYMYNVRCVDFGSSKDPFLSEVSEFAILFGNELDAEVLSMSMDLYVAR
+                     AMITKASLAFKGSLDITENQLSSLKKFHVRLMSIVLDVDVEPSTTPWDPAKAYLFVPV
+                     TDNTSMEPIKGINWELVEKITKTTAWDNPLQRARPDVYLGTNERTLGGDRREYGFGKL
+                     RHNIVFGQKSHPTYGIRGAVASFDVVRASGLLPVRDAFEKEVEEDLSKGKLMMADGCM
+                     VAEDLIGKIVTAAHSGKRFYVDSICYDMSAETSFPRKEGYLGPLEYNTYADYYKQKIY
+                     VVQDRLFFYFLHNLRLLRLYKSSSIMLFIRYGVDLNCKQQPLIKGRGVSYCKNLLSPR
+                     FEQSGESETVLDKTYYVFLPPELCVVHPLSGSLIRGAQRLPSIMRRVESMLLAVQLKN
+                     LISYPIPTSKILEALTAASCQETFCYERAELLGDAYLKWVVSRFLFLKYPQKHEGQLT
+                     RMRQQMVSNMVLYQFALVKGLQSYIQADRFAPSRWSAPGVPPVFDEDTKDGGSSFFDE
+                     EQKPVSEENSDVFEDGEMEDGELEGDLSSYRVLSSKTLADVVEALIGVYYVEGGKIAA
+                     NHLMKWIGIHVEDDPDEVDGTLKNVNVPESVLKSIDFVGLERALKYEFKEKGLLVEAI
+                     THASRPSSGVSCYQRLEFVGDAVLDHLITRHLFFTYTSLPPGRLTDLRAAAVNNENFA
+                     RVAVKHKLHLYLRHGSSALEKQVNKIKKQSILFSKSFKCLTVWLLFVFQIREFVKEVQ
+                     TESSKPGFNSFGLGDCKAPKVLGDIVESIAGAIFLDSGKDTTAAWKVFQPLLQPMVTP
+                     ETLPMHPVRELQERCQQQAEGLEYKASRSGNTATVEVFIDGVQVGVAQNPQKKMAQKL
+                     AARNALAALKEKEIAESKEKHINNGNAGEDQGENENGNKKNGHQPFTRQTLNDICLRK
+                     NWPMPSYRCVKEGGPAHAKRFTFGVRVNTSDRGWTDECIGEPMPSVKKAKDSAAVLLL
+                     ELLNKTFS
 Sub-Features
 type: CDS_join
 location: (23221..24174)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (24244..24357)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (24412..24664)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (24743..25137)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (25226..25445)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (25527..25711)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (25783..25905)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (25994..26478)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (26564..26730)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (26814..26983)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (27074..27235)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (27320..27415)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (27505..28133)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (28314..28507)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (28592..28782)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (28862..30013)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (30112..30518)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (30604..30781)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 
 type: CDS
 location: (31084..32372)
 ref: None:None
 strand: -1
-qualifiers: {'evidence': 'not_experimental', 'protein_id': 'AAF26475.1', 'codon_start': '1', 'translation': 'MSEETKDNQRLQRPAPRLNERILSSLSRRSVAAHPWHDLEIGPG\012                     APQIFNVVVEITKGSKVKYELDKKTGLIKVDRILYSSVVYPHNYGFVPRTLCEDNDPI\012                     DVLVIMQEPVLPGCFLRARAIGLMPMIDQGEKDDKIIAVCVDDPEYKHYTDIKELPPH\012                     RLSEIRRFFEDCILFLQCSSLFISIDLSTNKKNENKEVAVNDFLPSESAVEAIQYSMD\012                     LYAEYILHTLRR', 'product': 'T25K16.5', 'db_xref': 'GI:6715648', 'note': 'putative inorganic pyrophosphatase gi|3510259;\012                     similar to ESTs gb|T42316, gb|AI994042.1, gb|AI994013.1,\012                     emb|Z29202'}
+qualifiers: 
+	Key: codon_start, Value: 1
+	Key: db_xref, Value: GI:6715648
+	Key: evidence, Value: not_experimental
+	Key: note, Value: putative inorganic pyrophosphatase gi|3510259;
+                     similar to ESTs gb|T42316, gb|AI994042.1, gb|AI994013.1,
+                     emb|Z29202
+	Key: product, Value: T25K16.5
+	Key: protein_id, Value: AAF26475.1
+	Key: translation, Value: MSEETKDNQRLQRPAPRLNERILSSLSRRSVAAHPWHDLEIGPG
+                     APQIFNVVVEITKGSKVKYELDKKTGLIKVDRILYSSVVYPHNYGFVPRTLCEDNDPI
+                     DVLVIMQEPVLPGCFLRARAIGLMPMIDQGEKDDKIIAVCVDDPEYKHYTDIKELPPH
+                     RLSEIRRFFEDCILFLQCSSLFISIDLSTNKKNENKEVAVNDFLPSESAVEAIQYSMD
+                     LYAEYILHTLRR
 Sub-Features
 type: CDS_join
 location: (31084..31126)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (31223..31304)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (31341..31515)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (31635..31700)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (31790..31897)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (31984..32049)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (32133..32161)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (32249..32372)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 
 type: CDS
 location: (33694..36763)
 ref: None:None
 strand: -1
-qualifiers: {'evidence': 'not_experimental', 'protein_id': 'AAF26474.1', 'codon_start': '1', 'translation': 'MDTNTSGEELLAKARKPYTITKQRERWTEDEHERFLEALRLYGR\012                     AWQRIEEHIGTKTAVQIRSHAQKFFTKFGKAHSFWFTFQLEKEAEVKGIPVCQALDIE\012                     IPPPRPKRKPNTPYPRKPGNNGTSSSQVSSAKDAKLVSSASSSQLNQAFLDLEKMPFS\012                     EKTSTGKENQDENCSGVSTVNKYPLPTKVSGDIETSKTSTVDNAVQDVPKKNKDKDGN\012                     DGTTVHSMQNYPWHFHADIVNGNIAKCPQNHPSGMVSQDFMFHPMREETHGHANLQAT\012                     TASATTTASHQAFPACHSQDDYRSFLQISSTFSNLIMSTLLQNPAAHAAATFAASVWP\012                     YASVGNSGDSSTPMSSSPPSITAIAAATVAAATAWWASHGLLPVCAPAPITCVPFSTV\012                     AVPTPAMTEMDTVENTQPFEKQNTALQDQNLASKSPASSSDDSDETGVTKLNADSKTN\012                     DDKIEEVVVTAAVHDSNTAQKKNLVDRSSCGSNTPSGSDAETDALDKMEKDKEDVKET\012                     DENQPDVIELNNRKIKMRDNNSNNNATTDSWKEVSEEGRIAFQALFARERLPQSFSPP\012                     QVAENVNRKQSDTSMPLAPNFKSQDSCAADQEGVVMIGVGTCKSLKTRQTGFKPYKRC\012                     SMEVKESQVGNINNQSDEKVCKRLRLEGEAST', 'product': 'T25K16.6', 'db_xref': 'GI:6715647', 'note': 'putative late elongated hypocotyl emb|CAA07004;\012                     similar to ESTS gb|AI993521.1, gb|AA650979'}
+qualifiers: 
+	Key: codon_start, Value: 1
+	Key: db_xref, Value: GI:6715647
+	Key: evidence, Value: not_experimental
+	Key: note, Value: putative late elongated hypocotyl emb|CAA07004;
+                     similar to ESTS gb|AI993521.1, gb|AA650979
+	Key: product, Value: T25K16.6
+	Key: protein_id, Value: AAF26474.1
+	Key: translation, Value: MDTNTSGEELLAKARKPYTITKQRERWTEDEHERFLEALRLYGR
+                     AWQRIEEHIGTKTAVQIRSHAQKFFTKFGKAHSFWFTFQLEKEAEVKGIPVCQALDIE
+                     IPPPRPKRKPNTPYPRKPGNNGTSSSQVSSAKDAKLVSSASSSQLNQAFLDLEKMPFS
+                     EKTSTGKENQDENCSGVSTVNKYPLPTKVSGDIETSKTSTVDNAVQDVPKKNKDKDGN
+                     DGTTVHSMQNYPWHFHADIVNGNIAKCPQNHPSGMVSQDFMFHPMREETHGHANLQAT
+                     TASATTTASHQAFPACHSQDDYRSFLQISSTFSNLIMSTLLQNPAAHAAATFAASVWP
+                     YASVGNSGDSSTPMSSSPPSITAIAAATVAAATAWWASHGLLPVCAPAPITCVPFSTV
+                     AVPTPAMTEMDTVENTQPFEKQNTALQDQNLASKSPASSSDDSDETGVTKLNADSKTN
+                     DDKIEEVVVTAAVHDSNTAQKKNLVDRSSCGSNTPSGSDAETDALDKMEKDKEDVKET
+                     DENQPDVIELNNRKIKMRDNNSNNNATTDSWKEVSEEGRIAFQALFARERLPQSFSPP
+                     QVAENVNRKQSDTSMPLAPNFKSQDSCAADQEGVVMIGVGTCKSLKTRQTGFKPYKRC
+                     SMEVKESQVGNINNQSDEKVCKRLRLEGEAST
 Sub-Features
 type: CDS_join
 location: (33694..34029)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (34103..35173)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (35269..35349)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (35432..35701)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (36326..36387)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (36512..36623)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (36725..36763)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 
 type: CDS
 location: (38600..40579)
 ref: None:None
 strand: -1
-qualifiers: {'evidence': 'not_experimental', 'protein_id': 'AAF26473.1', 'codon_start': '1', 'translation': 'MAGDMQGVRVVEKYSPVIVMVMSNVAMGSVNALVKKALDVGVNH\012                     MVIGAYRMAISALILVPFAYVLERASLMQFFFLLGLSYTSATVSCALVSMLPAITFAL\012                     ALIFRTENVKILKTKAGMLKVIGTLICISGALFLTFYKGPQISNSHSHSHGGASHNNN\012                     DQDKANNWLLGCLYLTIGTVLLSLWMLFQGTLSIKYPCKYSSTCLMSIFAAFQCALLS\012                     LYKSRDVNDWIIDDRFVITVIIYAGVVGQAMTTVATTWGIKKLGAVFASAFFPLTLIS\012                     ATLFDFLILHTPLYLGSVIGSLVTITGLYMFLWGKNKETESSTALSSGMDNEAQYTTP\012                     NKDNDSKSPV', 'product': 'T25K16.7', 'db_xref': 'GI:6715646', 'note': 'similar to Medicago truncatula MtN2 gi|3193308;\012                     similar to EST gb|H77065'}
+qualifiers: 
+	Key: codon_start, Value: 1
+	Key: db_xref, Value: GI:6715646
+	Key: evidence, Value: not_experimental
+	Key: note, Value: similar to Medicago truncatula MtN2 gi|3193308;
+                     similar to EST gb|H77065
+	Key: product, Value: T25K16.7
+	Key: protein_id, Value: AAF26473.1
+	Key: translation, Value: MAGDMQGVRVVEKYSPVIVMVMSNVAMGSVNALVKKALDVGVNH
+                     MVIGAYRMAISALILVPFAYVLERASLMQFFFLLGLSYTSATVSCALVSMLPAITFAL
+                     ALIFRTENVKILKTKAGMLKVIGTLICISGALFLTFYKGPQISNSHSHSHGGASHNNN
+                     DQDKANNWLLGCLYLTIGTVLLSLWMLFQGTLSIKYPCKYSSTCLMSIFAAFQCALLS
+                     LYKSRDVNDWIIDDRFVITVIIYAGVVGQAMTTVATTWGIKKLGAVFASAFFPLTLIS
+                     ATLFDFLILHTPLYLGSVIGSLVTITGLYMFLWGKNKETESSTALSSGMDNEAQYTTP
+                     NKDNDSKSPV
 Sub-Features
 type: CDS_join
 location: (38600..38756)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (38838..38989)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (39111..39516)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (39915..40031)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (40377..40579)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 
 type: CDS
 location: (45150..48868)
 ref: None:None
 strand: -1
-qualifiers: {'evidence': 'not_experimental', 'protein_id': 'AAF26472.1', 'codon_start': '1', 'translation': 'MATAFAPTKLTATVPLHGSHENRLLLPIRLAPPSSFLGSTRSLS\012                     LRRLNHSNATRRSPVVSVQEVVKEKQSTNNTSLLITKEEGLELYEDMILGRSFEDMCA\012                     QMYYRGKMFGFVHLYNGQEAVSTGFIKLLTKSDSVVSTYRDHVHALSKGVSARAVMSE\012                     LFGKVTGCCRGQGGSMHMFSKEHNMLGGFAFIGEGIPVATGAAFSSKYRREVLKQDCD\012                     DVTVAFFGDGTCNNGQFFECLNMAALYKLPIIFVVENNLWAIGMSHLRATSDPEIWKK\012                     GPAFGMPGVHVDGMDVLKVREVAKEAVTRARRGEGPTLVECETYRFRGHSLADPDELR\012                     DAAEKAKYAARDPIAALKKYLIENKLAKEAELKSIEKKIDELVEEAVEFADASPQPGR\012                     SQLLENVFADPKGFGIGPDGRYRSQPLQIKVSSSELSVLDEEKEEEVVKGEAEPNKDS\012                     VVSKAEPVKKPRPCELYVCNIPRSYDIAQLLDMFQPFGTVISVEVVSRNPQTGESRGS\012                     GYVTMGSINSAKIAIASLDGTVRARETKKQEVGGREMRVRYSVDMNPGTRRNPEVLNS\012                     TPKKILMYESQHKVYVGNLPWFTQPDGLRNHFSKFGTIVSTRVLHDRKTGRNRVFAFL\012                     SFTSGEERDAALSFNGTVNNMKVAESSSEKVSRRVSRKPTVLLLLQRHLLDTNNV', 'product': 'T25K16.8', 'db_xref': 'GI:6715645', 'note': 'putative pyruvate dehydrogenase E1 alpha subunit\012                     gi|2454182; similar to ESTs emb|Z48417, gb|AW039459.1,\012                     gb|T15146, emb|Z48416, gb|AF066871, gb|T76832,\012                     gb|AI996061.1'}
+qualifiers: 
+	Key: codon_start, Value: 1
+	Key: db_xref, Value: GI:6715645
+	Key: evidence, Value: not_experimental
+	Key: note, Value: putative pyruvate dehydrogenase E1 alpha subunit
+                     gi|2454182; similar to ESTs emb|Z48417, gb|AW039459.1,
+                     gb|T15146, emb|Z48416, gb|AF066871, gb|T76832,
+                     gb|AI996061.1
+	Key: product, Value: T25K16.8
+	Key: protein_id, Value: AAF26472.1
+	Key: translation, Value: MATAFAPTKLTATVPLHGSHENRLLLPIRLAPPSSFLGSTRSLS
+                     LRRLNHSNATRRSPVVSVQEVVKEKQSTNNTSLLITKEEGLELYEDMILGRSFEDMCA
+                     QMYYRGKMFGFVHLYNGQEAVSTGFIKLLTKSDSVVSTYRDHVHALSKGVSARAVMSE
+                     LFGKVTGCCRGQGGSMHMFSKEHNMLGGFAFIGEGIPVATGAAFSSKYRREVLKQDCD
+                     DVTVAFFGDGTCNNGQFFECLNMAALYKLPIIFVVENNLWAIGMSHLRATSDPEIWKK
+                     GPAFGMPGVHVDGMDVLKVREVAKEAVTRARRGEGPTLVECETYRFRGHSLADPDELR
+                     DAAEKAKYAARDPIAALKKYLIENKLAKEAELKSIEKKIDELVEEAVEFADASPQPGR
+                     SQLLENVFADPKGFGIGPDGRYRSQPLQIKVSSSELSVLDEEKEEEVVKGEAEPNKDS
+                     VVSKAEPVKKPRPCELYVCNIPRSYDIAQLLDMFQPFGTVISVEVVSRNPQTGESRGS
+                     GYVTMGSINSAKIAIASLDGTVRARETKKQEVGGREMRVRYSVDMNPGTRRNPEVLNS
+                     TPKKILMYESQHKVYVGNLPWFTQPDGLRNHFSKFGTIVSTRVLHDRKTGRNRVFAFL
+                     SFTSGEERDAALSFNGTVNNMKVAESSSEKVSRRVSRKPTVLLLLQRHLLDTNNV
 Sub-Features
 type: CDS_join
 location: (45150..45261)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (45343..45656)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (45719..45847)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (46075..46313)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (47448..47684)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (47777..48554)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (48638..48868)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 
 type: CDS
 location: (49986..50656)
 ref: None:None
 strand: -1
-qualifiers: {'evidence': 'not_experimental', 'protein_id': 'AAF26471.1', 'codon_start': '1', 'translation': 'MSTVGELACSYAVMILEDEGIAITADKIATLVKAAGVSIESYWP\012                     MLFAKMAEKRNVTDLIMNVGAGGGGGAPVAAAAPAAGGGAAAAPAAEEKKKDEPAEES\012                     DGDLGFGLFD', 'product': 'T25K16.9', 'db_xref': 'GI:6715644', 'note': 'similar to acidic ribosomal protein p1 gi|2252857;\012                     similar to ESTs gb|T42111, gb|AI099979, gb|AA728491'}
+qualifiers: 
+	Key: codon_start, Value: 1
+	Key: db_xref, Value: GI:6715644
+	Key: evidence, Value: not_experimental
+	Key: note, Value: similar to acidic ribosomal protein p1 gi|2252857;
+                     similar to ESTs gb|T42111, gb|AI099979, gb|AA728491
+	Key: product, Value: T25K16.9
+	Key: protein_id, Value: AAF26471.1
+	Key: translation, Value: MSTVGELACSYAVMILEDEGIAITADKIATLVKAAGVSIESYWP
+                     MLFAKMAEKRNVTDLIMNVGAGGGGGAPVAAAAPAAGGGAAAAPAAEEKKKDEPAEES
+                     DGDLGFGLFD
 Sub-Features
 type: CDS_join
 location: (49986..50039)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (50121..50333)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (50585..50656)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 
 type: CDS
 location: (51941..54196)
 ref: None:None
 strand: 1
-qualifiers: {'evidence': 'not_experimental', 'protein_id': 'AAF26462.1', 'codon_start': '1', 'translation': 'MGKKNGSSSWLTAVKRAFRSPTKKDHSNDVEEDEEKKREKRRWF\012                     RKPATQESPVKSSGISPPAPQEDSLNVNSKPSPETAPSYATTTPPSNAGKPPSAVVPI\012                     ATSASKTLAPRRIYYARENYAAVVIQTSFRGYLARRALRALKGLVKLQALVRGHNVRK\012                     QAKMTLRCMQALVRVQSRVLDQRKRLSHDGSRKSAFSDSHAVFESRYLQDLSDRQSMS\012                     REGSSAAEDWDDRPHTIDAVKVMLQRRRDTALRHDKTNLSQAFSQKMWRTVGNQSTEG\012                     HHEVELEEERPKWLDRWMATRPWDKRASSRASVDQRVSVKTVEIDTSQPYSRTGAGSP\012                     SRGQRPSSPSRTSHHYQSRNNFSATPSPAKSRPILIRSASPRCQRDPREDRDRAAYSY\012                     TSNTPSLRSNYSFTARSGCSISTTMVNNASLLPNYMASTESAKARIRSHSAPRQRPST\012                     PERDRAGLVKKRLSYPVPPPAEYEDNNSLRSPSFKSVAGSHFGGMLEQQSNYSSCCTE\012                     SNGVEISPASTSDFRNWLR', 'product': 'T25K16.10', 'db_xref': 'GI:6715635', 'note': 'hypothetical protein'}
+qualifiers: 
+	Key: codon_start, Value: 1
+	Key: db_xref, Value: GI:6715635
+	Key: evidence, Value: not_experimental
+	Key: note, Value: hypothetical protein
+	Key: product, Value: T25K16.10
+	Key: protein_id, Value: AAF26462.1
+	Key: translation, Value: MGKKNGSSSWLTAVKRAFRSPTKKDHSNDVEEDEEKKREKRRWF
+                     RKPATQESPVKSSGISPPAPQEDSLNVNSKPSPETAPSYATTTPPSNAGKPPSAVVPI
+                     ATSASKTLAPRRIYYARENYAAVVIQTSFRGYLARRALRALKGLVKLQALVRGHNVRK
+                     QAKMTLRCMQALVRVQSRVLDQRKRLSHDGSRKSAFSDSHAVFESRYLQDLSDRQSMS
+                     REGSSAAEDWDDRPHTIDAVKVMLQRRRDTALRHDKTNLSQAFSQKMWRTVGNQSTEG
+                     HHEVELEEERPKWLDRWMATRPWDKRASSRASVDQRVSVKTVEIDTSQPYSRTGAGSP
+                     SRGQRPSSPSRTSHHYQSRNNFSATPSPAKSRPILIRSASPRCQRDPREDRDRAAYSY
+                     TSNTPSLRSNYSFTARSGCSISTTMVNNASLLPNYMASTESAKARIRSHSAPRQRPST
+                     PERDRAGLVKKRLSYPVPPPAEYEDNNSLRSPSFKSVAGSHFGGMLEQQSNYSSCCTE
+                     SNGVEISPASTSDFRNWLR
 Sub-Features
 type: CDS_join
 location: (51941..52048)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (52136..52432)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (52640..52885)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (53186..53326)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (53405..54196)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 
 type: CDS
 location: (57094..58680)
 ref: None:None
 strand: -1
-qualifiers: {'evidence': 'not_experimental', 'protein_id': 'AAF26470.1', 'codon_start': '1', 'translation': 'MERTNSIEMDRERLTAEMAFRDSSSAVIRIRRRLPDLLTSVKLK\012                     YVKLGLHNSCNVTTILFFLIILPLTGTVLVQLTGLTFDTFSELWSNQAVQLDTATRLT\012                     CLVFLSFVLTLYVANRSKPVYLVDFSCYKPEDERKISVDSFLTMTEENGSFTDDTVQF\012                     QQRISNRAGLGDETYLPRGITSTPPKLNMSEARAEAEAVMFGALDSLFEKTGIKPAEV\012                     GILIVNCSLFNPTPSLSAMIVNHYKMREDIKSYNLGGMGCSAGLISIDLANNLLKANP\012                     NSYAVVVSTENITLNWYFGNDRSMLLCNCIFRMGGAAILLSNRRQDRKKSKYSLVNVV\012                     RTHKGSDDKNYNCVYQKEDERGTIGVSLARELMSVAGDALKTNITTLGPMVLPLSEQL\012                     MFLISLVKRKMFKLKVKPYIPDFKLAFEHFCIHAGGRAVLDEVQKNLDLKDWHMEPSR\012                     MTLHRFGNTSSSSLWYEMAYTEAKGRVKAGDRLWQIAFGSGFKCNSAVWKALRPVSTE\012                     EMTGNAWAGSIDQYPVKVVQ', 'product': 'T25K16.11', 'db_xref': 'GI:6715643', 'note': 'putative fatty acid elongase 3-ketoacyl-coA\012                     synthase 1 gi|4091810; similar to ESTs gb|T42377,\012                     gb|N96054, gb|T44368, gb|AI999379.1, emb|Z26005'}
+qualifiers: 
+	Key: codon_start, Value: 1
+	Key: db_xref, Value: GI:6715643
+	Key: evidence, Value: not_experimental
+	Key: note, Value: putative fatty acid elongase 3-ketoacyl-coA
+                     synthase 1 gi|4091810; similar to ESTs gb|T42377,
+                     gb|N96054, gb|T44368, gb|AI999379.1, emb|Z26005
+	Key: product, Value: T25K16.11
+	Key: protein_id, Value: AAF26470.1
+	Key: translation, Value: MERTNSIEMDRERLTAEMAFRDSSSAVIRIRRRLPDLLTSVKLK
+                     YVKLGLHNSCNVTTILFFLIILPLTGTVLVQLTGLTFDTFSELWSNQAVQLDTATRLT
+                     CLVFLSFVLTLYVANRSKPVYLVDFSCYKPEDERKISVDSFLTMTEENGSFTDDTVQF
+                     QQRISNRAGLGDETYLPRGITSTPPKLNMSEARAEAEAVMFGALDSLFEKTGIKPAEV
+                     GILIVNCSLFNPTPSLSAMIVNHYKMREDIKSYNLGGMGCSAGLISIDLANNLLKANP
+                     NSYAVVVSTENITLNWYFGNDRSMLLCNCIFRMGGAAILLSNRRQDRKKSKYSLVNVV
+                     RTHKGSDDKNYNCVYQKEDERGTIGVSLARELMSVAGDALKTNITTLGPMVLPLSEQL
+                     MFLISLVKRKMFKLKVKPYIPDFKLAFEHFCIHAGGRAVLDEVQKNLDLKDWHMEPSR
+                     MTLHRFGNTSSSSLWYEMAYTEAKGRVKAGDRLWQIAFGSGFKCNSAVWKALRPVSTE
+                     EMTGNAWAGSIDQYPVKVVQ
 
 type: CDS
 location: (59508..63513)
 ref: None:None
 strand: -1
-qualifiers: {'evidence': 'not_experimental', 'protein_id': 'AAF26469.1', 'codon_start': '1', 'translation': 'MEKRSDSESVEILGDWDSPPPEERIVMVSVPTSPESDYARSNQP\012                     KEIESRVSDKETASASGEVAARRVLPPWMDPSYEWGGGKWKVDGRKNKNKKEKEKEKE\012                     EIIPFKEIIEALLGNSGDKVQQDNKVFEVAPSLHVVELRKTGDDTLEFHKVYFRFNLY\012                     QPVQLPLILFVVIRFSMLKIIHYHQFTMAHIKEFVCMWDTHLYKEITNLNIWDTLSST\012                     LVLAIWTVNASHE', 'product': 'T25K16.12', 'db_xref': 'GI:6715642', 'note': 'hypothetical protein'}
+qualifiers: 
+	Key: codon_start, Value: 1
+	Key: db_xref, Value: GI:6715642
+	Key: evidence, Value: not_experimental
+	Key: note, Value: hypothetical protein
+	Key: product, Value: T25K16.12
+	Key: protein_id, Value: AAF26469.1
+	Key: translation, Value: MEKRSDSESVEILGDWDSPPPEERIVMVSVPTSPESDYARSNQP
+                     KEIESRVSDKETASASGEVAARRVLPPWMDPSYEWGGGKWKVDGRKNKNKKEKEKEKE
+                     EIIPFKEIIEALLGNSGDKVQQDNKVFEVAPSLHVVELRKTGDDTLEFHKVYFRFNLY
+                     QPVQLPLILFVVIRFSMLKIIHYHQFTMAHIKEFVCMWDTHLYKEITNLNIWDTLSST
+                     LVLAIWTVNASHE
 Sub-Features
 type: CDS_join
 location: (59508..59665)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (61670..61826)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (63133..63513)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 
 type: CDS
 location: (64100..67214)
 ref: None:None
 strand: -1
-qualifiers: {'evidence': 'not_experimental', 'protein_id': 'AAF26468.1', 'codon_start': '1', 'translation': 'MSGSRRKATPASRTRVGNYEMGRTLGEGSFAKVKYAKNTVTGDQ\012                     AAIKILDREKVFRHKMVEQLKREISTMKLIKHPNVVEIIEVMASKTKIYIVLELVNGG\012                     ELFDKIAQQGRLKEDEARRYFQQLINAVDYCHSRGVYHRDLKPENLILDANGVLKVSD\012                     FGLSAFSRQVREDGLLHTACGTPNYVAPEVLSDKGYDGAAADVWSCGVILFVLMAGYL\012                     PFDEPNLMTLYKRVRICKAEFSCPPWFSQGAKRVIKRILEPNPITRISIAELLEDEWF\012                     KKGYKPPSFDQDDEDITIDDVDAAFSNSKECLVTEKKEKPVSMNAFELISSSSEFSLE\012                     NLFEKQAQLVKKETRFTSQRSASEIMSKMEETAKPLGFNVRKDNYKIKMKGDKSGRKG\012                     QLSVATEVFEVAPSLHVVELRKTGGDTLEFHKVCDSFYKNFSSGLKDVVWNTDAAAEE\012                     QKQ', 'product': 'T25K16.13', 'db_xref': 'GI:6715641', 'note': 'similar to wpk4 protein kinase dbj|BAA34675;\012                     similar to ESTs dbj|AB015122, gb|AI997157.1'}
+qualifiers: 
+	Key: codon_start, Value: 1
+	Key: db_xref, Value: GI:6715641
+	Key: evidence, Value: not_experimental
+	Key: note, Value: similar to wpk4 protein kinase dbj|BAA34675;
+                     similar to ESTs dbj|AB015122, gb|AI997157.1
+	Key: product, Value: T25K16.13
+	Key: protein_id, Value: AAF26468.1
+	Key: translation, Value: MSGSRRKATPASRTRVGNYEMGRTLGEGSFAKVKYAKNTVTGDQ
+                     AAIKILDREKVFRHKMVEQLKREISTMKLIKHPNVVEIIEVMASKTKIYIVLELVNGG
+                     ELFDKIAQQGRLKEDEARRYFQQLINAVDYCHSRGVYHRDLKPENLILDANGVLKVSD
+                     FGLSAFSRQVREDGLLHTACGTPNYVAPEVLSDKGYDGAAADVWSCGVILFVLMAGYL
+                     PFDEPNLMTLYKRVRICKAEFSCPPWFSQGAKRVIKRILEPNPITRISIAELLEDEWF
+                     KKGYKPPSFDQDDEDITIDDVDAAFSNSKECLVTEKKEKPVSMNAFELISSSSEFSLE
+                     NLFEKQAQLVKKETRFTSQRSASEIMSKMEETAKPLGFNVRKDNYKIKMKGDKSGRKG
+                     QLSVATEVFEVAPSLHVVELRKTGGDTLEFHKVCDSFYKNFSSGLKDVVWNTDAAAEE
+                     QKQ
 Sub-Features
 type: CDS_join
 location: (64100..64177)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (64272..64358)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (64453..64509)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (64603..64719)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (64812..64919)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (65033..65158)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (65265..65354)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (65435..65566)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (65809..65862)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (65964..66044)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (66152..66259)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (66380..66451)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (66537..66599)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (67026..67214)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 
 type: CDS
 location: (69831..71700)
 ref: None:None
 strand: -1
-qualifiers: {'evidence': 'not_experimental', 'protein_id': 'AAF26467.1', 'codon_start': '1', 'translation': 'MVSDLPLDEDDIALLKSPYCDDGGDEDVNSAPNIFTYDNVPLKK\012                     RHYLGTSDTFRSFEPLNEHACIVCDIADDGVVPCSGNECPLAVHRKCVELDCEDPATF\012                     YCPYCWFKEQATRSTALRTRGVAAAKTLVQYGCSELRSGDIVMTRENSQLENGSDNSL\012                     PMQLHENLHQLQELVKHLKARNSQLDESTDQFIDMEKSCGEAYAVVNDQPKRVLWTVN\012                     EEKMLREGVEKFSDTINKNMPWKKILEMGKGIFHTTRNSSDLKDKWRNMVRIIILIWL\012                     RSRLTSSSSSQRSEIKMERERNAGVMKKMSPTGTIQRLEFVGWYL', 'product': 'T25K16.14', 'db_xref': 'GI:6715640', 'note': 'similar to ataxia-telangiectasia group D protein\012                     pir|A49618'}
+qualifiers: 
+	Key: codon_start, Value: 1
+	Key: db_xref, Value: GI:6715640
+	Key: evidence, Value: not_experimental
+	Key: note, Value: similar to ataxia-telangiectasia group D protein
+                     pir|A49618
+	Key: product, Value: T25K16.14
+	Key: protein_id, Value: AAF26467.1
+	Key: translation, Value: MVSDLPLDEDDIALLKSPYCDDGGDEDVNSAPNIFTYDNVPLKK
+                     RHYLGTSDTFRSFEPLNEHACIVCDIADDGVVPCSGNECPLAVHRKCVELDCEDPATF
+                     YCPYCWFKEQATRSTALRTRGVAAAKTLVQYGCSELRSGDIVMTRENSQLENGSDNSL
+                     PMQLHENLHQLQELVKHLKARNSQLDESTDQFIDMEKSCGEAYAVVNDQPKRVLWTVN
+                     EEKMLREGVEKFSDTINKNMPWKKILEMGKGIFHTTRNSSDLKDKWRNMVRIIILIWL
+                     RSRLTSSSSSQRSEIKMERERNAGVMKKMSPTGTIQRLEFVGWYL
 Sub-Features
 type: CDS_join
 location: (69831..69987)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (70534..70670)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (70743..71357)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (71644..71700)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 
 type: CDS
 location: (72285..73585)
 ref: None:None
 strand: 1
-qualifiers: {'evidence': 'not_experimental', 'protein_id': 'AAF26463.1', 'codon_start': '1', 'translation': 'MQQQQSPQMFPMVPSIPPANNITTEQIQKYLDENKKLIMAIMEN\012                     QNLGKLAECAQYQALLQKNLMYLAAIADAQPPPPTPGPSPSTAVAAQMATPHSGMQPP\012                     SYFMQHPQASPAGIFAPRGPLQFGSPLQFQDPQQQQQIHQQAMQGHMGIRPMGMTNNG\012                     MQHAMQQPETGLGGNVGLRGGKQDGADGQGKDDGK', 'product': 'T25K16.15', 'db_xref': 'GI:6715636', 'note': 'similar to SYT gi|2252866; similar to ESTs\012                     emb|F14390, gb|H36066, emb|F14391'}
+qualifiers: 
+	Key: codon_start, Value: 1
+	Key: db_xref, Value: GI:6715636
+	Key: evidence, Value: not_experimental
+	Key: note, Value: similar to SYT gi|2252866; similar to ESTs
+                     emb|F14390, gb|H36066, emb|F14391
+	Key: product, Value: T25K16.15
+	Key: protein_id, Value: AAF26463.1
+	Key: translation, Value: MQQQQSPQMFPMVPSIPPANNITTEQIQKYLDENKKLIMAIMEN
+                     QNLGKLAECAQYQALLQKNLMYLAAIADAQPPPPTPGPSPSTAVAAQMATPHSGMQPP
+                     SYFMQHPQASPAGIFAPRGPLQFGSPLQFQDPQQQQQIHQQAMQGHMGIRPMGMTNNG
+                     MQHAMQQPETGLGGNVGLRGGKQDGADGQGKDDGK
 Sub-Features
 type: CDS_join
 location: (72285..72371)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (72789..72865)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (72989..73097)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (73190..73442)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (73524..73585)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 
 type: CDS
 location: (73807..74145)
 ref: None:None
 strand: -1
-qualifiers: {'evidence': 'not_experimental', 'protein_id': 'AAF26466.1', 'codon_start': '1', 'translation': 'MASGGKAKYIIGALIGSFGISYIFDKVISDNKIFGGKDDLNGYL\012                     LVKISGTTPGTVSNKEWWAATDEKFQAWPRTAGPPVVMNPISRQNFIVKTRPE', 'product': 'T25K16.16', 'db_xref': 'GI:6715639', 'note': 'similar to stress-induced protein OZI1 precursor\012                     pir|S59544; similar to EST gb|AI995719.1'}
+qualifiers: 
+	Key: codon_start, Value: 1
+	Key: db_xref, Value: GI:6715639
+	Key: evidence, Value: not_experimental
+	Key: note, Value: similar to stress-induced protein OZI1 precursor
+                     pir|S59544; similar to EST gb|AI995719.1
+	Key: product, Value: T25K16.16
+	Key: protein_id, Value: AAF26466.1
+	Key: translation, Value: MASGGKAKYIIGALIGSFGISYIFDKVISDNKIFGGKDDLNGYL
+                     LVKISGTTPGTVSNKEWWAATDEKFQAWPRTAGPPVVMNPISRQNFIVKTRPE
 Sub-Features
 type: CDS_join
 location: (73807..73990)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (74036..74145)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 
 type: CDS
 location: (75335..77148)
 ref: None:None
 strand: 1
-qualifiers: {'evidence': 'not_experimental', 'protein_id': 'AAF26464.1', 'codon_start': '1', 'translation': 'MKEDRRLPHKRDAFQFLKTKAAYVIVIVLTYAFGYFSAYHYHQP\012                     LQQQLPPSTTAVETTKPQVCSIDNFRVTTPCGNLVPPELIRQTVIDRIFNGTSPYIDF\012                     PPPHAKKFLRPKRIKGWGSYGAVFENLIRRVKPKTIVEVGSFLGASAIHMANLTRRLG\012                     LEETQILCVDDFRGWPGFRDRFKDMALVNGDVLLMYQFMQNVVISDFSGSILPVPFST\012                     GSALEKLCEWGVTADLVEIDAGHDFNSAWADINRAVRILRPGGVIFGHDYFTAADNRG\012                     VRRAVNLFAEINRLKVKTDGQHWVIDSVKVINKGTRFAISKTVAKIKEDANQWFFAQV\012                     LENQDLVNEQAVHISVKVLRGFLRDEHGKVLIHARRSFASVHSKLDATFLCWQWAMES\012                     MKSLRVDKIIFASEDNDLIGAVTRLPSWPSYKFQIHFLLGELIRSSNLGAHLIAKSVT\012                     MEDRRQSYVATGFPFWLKHLFEKERSIA', 'product': 'T25K16.17', 'db_xref': 'GI:6715637', 'note': 'putative reverse transcriptase gb|AAD17395'}
+qualifiers: 
+	Key: codon_start, Value: 1
+	Key: db_xref, Value: GI:6715637
+	Key: evidence, Value: not_experimental
+	Key: note, Value: putative reverse transcriptase gb|AAD17395
+	Key: product, Value: T25K16.17
+	Key: protein_id, Value: AAF26464.1
+	Key: translation, Value: MKEDRRLPHKRDAFQFLKTKAAYVIVIVLTYAFGYFSAYHYHQP
+                     LQQQLPPSTTAVETTKPQVCSIDNFRVTTPCGNLVPPELIRQTVIDRIFNGTSPYIDF
+                     PPPHAKKFLRPKRIKGWGSYGAVFENLIRRVKPKTIVEVGSFLGASAIHMANLTRRLG
+                     LEETQILCVDDFRGWPGFRDRFKDMALVNGDVLLMYQFMQNVVISDFSGSILPVPFST
+                     GSALEKLCEWGVTADLVEIDAGHDFNSAWADINRAVRILRPGGVIFGHDYFTAADNRG
+                     VRRAVNLFAEINRLKVKTDGQHWVIDSVKVINKGTRFAISKTVAKIKEDANQWFFAQV
+                     LENQDLVNEQAVHISVKVLRGFLRDEHGKVLIHARRSFASVHSKLDATFLCWQWAMES
+                     MKSLRVDKIIFASEDNDLIGAVTRLPSWPSYKFQIHFLLGELIRSSNLGAHLIAKSVT
+                     MEDRRQSYVATGFPFWLKHLFEKERSIA
 Sub-Features
 type: CDS_join
 location: (75335..76249)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (76516..76653)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (76733..76982)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (77015..77148)
 ref: None:None
 strand: 1
-qualifiers: {}
+qualifiers: 
 
 
 type: CDS
 location: (82723..84581)
 ref: None:None
 strand: -1
-qualifiers: {'evidence': 'not_experimental', 'protein_id': 'AAF26465.1', 'codon_start': '1', 'translation': 'MFSLNMRTEIESLWVFALASKFNIYMQQHFASLLVAIAITWFTI\012                     TIVFWSTPGGPAWGKYFFTRRFISLDYNRKYKNLIPGPRGFPLVGSMSLRSSHVAHQR\012                     IASVAEMSNAKRLMAFSLGDTKVVVTCHPAVAKEILNSSVFADRPVDETAYGLMFNRA\012                     MGFAPNGTYWRTLRRLGSNHLFNPKQIKQSEDQRRVIATQMVNAFARNPKSACAVRDL\012                     LKTASLCNMMGLVFGREYELESNNNLESECLKGLVEEGYDLLGTLNWTDHLPWLAGLD\012                     FQQIRFRCSQLVPKVNLLLSRIIHEQRAATGNFLDMLLSLQGSEKLSESDMVAVLWEM\012                     IFRGTDTVAVLVEWVLARIVMHPKVQLTVHDELDRVVGRSRTVDESDLPSLTYLTAMI\012                     KEVLRLHPPGPLLSWARLSITDTSVDGYHVPAGTTAMVNMWAIARDPHVWEDPLEFKP\012                     ERFVAKEGEAEFSVFGSDLRLAPFGSGKRVCPGKNLGLTTVSFWVATLLHEFEWLPSV\012                     EANPPDLSEVLRLSCEMACPLIVNVSSRRKIIAWMF', 'product': 'T25K16.18', 'db_xref': 'GI:6715638', 'note': 'putative cytochrome P450 gi|3831440'}
+qualifiers: 
+	Key: codon_start, Value: 1
+	Key: db_xref, Value: GI:6715638
+	Key: evidence, Value: not_experimental
+	Key: note, Value: putative cytochrome P450 gi|3831440
+	Key: product, Value: T25K16.18
+	Key: protein_id, Value: AAF26465.1
+	Key: translation, Value: MFSLNMRTEIESLWVFALASKFNIYMQQHFASLLVAIAITWFTI
+                     TIVFWSTPGGPAWGKYFFTRRFISLDYNRKYKNLIPGPRGFPLVGSMSLRSSHVAHQR
+                     IASVAEMSNAKRLMAFSLGDTKVVVTCHPAVAKEILNSSVFADRPVDETAYGLMFNRA
+                     MGFAPNGTYWRTLRRLGSNHLFNPKQIKQSEDQRRVIATQMVNAFARNPKSACAVRDL
+                     LKTASLCNMMGLVFGREYELESNNNLESECLKGLVEEGYDLLGTLNWTDHLPWLAGLD
+                     FQQIRFRCSQLVPKVNLLLSRIIHEQRAATGNFLDMLLSLQGSEKLSESDMVAVLWEM
+                     IFRGTDTVAVLVEWVLARIVMHPKVQLTVHDELDRVVGRSRTVDESDLPSLTYLTAMI
+                     KEVLRLHPPGPLLSWARLSITDTSVDGYHVPAGTTAMVNMWAIARDPHVWEDPLEFKP
+                     ERFVAKEGEAEFSVFGSDLRLAPFGSGKRVCPGKNLGLTTVSFWVATLLHEFEWLPSV
+                     EANPPDLSEVLRLSCEMACPLIVNVSSRRKIIAWMF
 Sub-Features
 type: CDS_join
 location: (82723..82738)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (82751..83373)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 type: CDS_join
 location: (83586..84581)
 ref: None:None
 strand: -1
-qualifiers: {}
+qualifiers: 
 
 
 ***Record from the RecordParser

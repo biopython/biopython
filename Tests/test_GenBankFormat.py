@@ -35,6 +35,8 @@ LOCUS       HUMALPPC2      53 bp ds-mRNA            PRI       18-DEC-1998
 LOCUS       HUMMGAT       648 bp    DNA   circular  PRI       26-MAR-1997
 LOCUS       S40706        895 bp                    PRI       08-MAY-1993
 LOCUS       HUMMTTSF1    1040 bp    mRNA  circular  PRI       26-JUL-1995
+LOCUS       18_Char_LOCUS_Name 99999999999 bp ss-snRNA circular HTC DD-MMM-YYYY
+LOCUS       AB000383                  5423 bp    DNA   circular VRL 05-FEB-1999
 """)
 
 add_test("definition 1", definition_block, """\
@@ -142,6 +144,9 @@ REFERENCE   2  (bases 1 to 60; 1561 to 3000; 3241 to 3300; 6721 to 6780; 7201
 """)
 add_test("reference_line 3", reference_line, """\
 REFERENCE   14 (sites)
+""")
+add_test("reference_line 4", reference_line, """\
+REFERENCE   2
 """)
 
 add_test("authors 1", authors_block, """\
