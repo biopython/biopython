@@ -60,7 +60,7 @@ class Seq:
 class MutableSeq:
     def __init__(self, data, alphabet = Alphabet.generic_alphabet):
         if type(data) == type(""):
-            self.data = array.array( ("c", data) )
+            self.data = array.array("c", data)
         else:
             self.data = data   # assumes the input is an array
         self.alphabet = alphabet
