@@ -517,6 +517,7 @@ feature_qualifier_names = (
                       #   was obtained
     "isolate",        # Individual isolate from which the sequence was
                       #   obtained
+    "isolation_source",
     "kinetoplast",    # Organelle type from which the sequence was obtained
     "label",          # A label used to permanently identify a feature
     "lab_host",       # Laboratory host used to propagate the organism
