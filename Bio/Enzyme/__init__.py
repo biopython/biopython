@@ -131,7 +131,7 @@ class EnzymeRecord:
 		self.ID = ''
 		self.DE = []
 		self.AN = []
-		self.CA = []
+		self.CA = ''
 		self.CF = []
 		self.CC = []   # one comment per line
 		self.DI = []
@@ -178,16 +178,13 @@ class _RecordConsumer(AbstractConsumer):
 	def identification(self, id_info):
 		self.enzyme_record.ID = id_info.split()[1]
 	def description(self,de_info):
-		self.enzyme_record.DE.append(de_info.split()[1].strip())
+		self.enzyme_record.DE.append(de_info[2:].strip())
 	def alternate_name(self,an_info):
-		for an in an_info:
-			self.enzyme_record.AN.append(an[2:].strip())
+		self.enzyme_record.AN.append(an_info[2:].strip())
 	def catalytic_activity(self, ca_info):
-		for ca in ca_info:
-			self.enzyme_record.CA.append(ca[2:].strip())
+		self.enzyme_record.CA = string.join([self.enzyme_record.CA,ca_info[2:].strip()],'')
 	def cofactor(self, cf_info):
-		for cf in cf_info:
-			self.enzyme_record.CF.append(cf[2:].strip())
+		self.enzyme_record.CF.append(cf_info[2:].strip())
 
 	def prosite_reference(self,pr_info):
 		self.enzyme_record.PR.append(pr_info.split(';')[1].strip())
