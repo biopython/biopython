@@ -269,6 +269,7 @@ class _Scanner:
         read_and_call(uhandle, consumer.noevent, start='{BEGIN}')
         self._scan_text(uhandle, consumer)
         self._scan_refs(uhandle, consumer)
+        self._scan_copyright(uhandle, consumer)
         read_and_call(uhandle, consumer.noevent, start='{END}')
 
         consumer.end_record()
@@ -293,10 +294,18 @@ class _Scanner:
     def _scan_refs(self, uhandle, consumer):
         while 1:
             line = safe_readline(uhandle)
-            if line[:5] == '{END}':
+            if line[:5] == '{END}' or is_blank_line(line):
                 uhandle.saveline(line)
                 break
             consumer.reference(line)
+
+    def _scan_copyright(self, uhandle, consumer):
+        # Cayte Lindner found some PRODOC records with the copyrights
+        # appended at the end.  We'll try and recognize these.
+        read_and_call_while(uhandle, consumer.noevent, blank=1)
+        if attempt_read_and_call(uhandle, consumer.noevent, start='+----'):
+            read_and_call_while(uhandle, consumer.noevent, start='|')
+            read_and_call(uhandle, consumer.noevent, start='+----')
 
 class _RecordConsumer(AbstractConsumer):
     """Consumer that converts a Prodoc record to a Record object.
