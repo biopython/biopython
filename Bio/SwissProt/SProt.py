@@ -34,12 +34,12 @@ index_file         Index a SwissProt file for a Dictionary.
 from types import *
 import os
 import string
-import time
 from Bio import File
 from Bio import Index
 from Bio import Sequence
 from Bio.ParserSupport import *
 from Bio.WWW import ExPASy
+from Bio.WWW import RequestLimiter
 
 class Record:
     """Holds information from a SwissProt record.
@@ -220,9 +220,8 @@ class ExPASyDictionary:
         between each query.
 
         """
-        self.delay = delay
         self.parser = parser
-        self.last_query_time = None
+        self.limiter = RequestLimiter()
 
     def __len__(self):
         raise NotImplementedError, "SwissProt contains lots of entries"
@@ -265,11 +264,7 @@ class ExPASyDictionary:
         """
         # First, check to see if enough time has passed since my
         # last query.
-        if self.last_query_time is not None:
-            delay = self.last_query_time + self.delay - time.time()
-            if delay > 0.0:
-                time.sleep(delay)
-        self.last_query_time = time.time()
+        self.limiter.wait()
 
         try:
             handle = ExPASy.get_sprot_raw(id)
