@@ -27,10 +27,10 @@ class _Scanner:
 
     Methods:
     feed     Feed data into the scanner.
-    """
     
+    """
     def feed(self, handle, consumer):
-        """feed(self, handle, consumer)
+        """S.feed(handle, consumer)
 
         Feed in a BLAST report for scanning.  handle is a file-like
         object that contains the BLAST report.  consumer is a Consumer
@@ -50,6 +50,7 @@ class _Scanner:
         # </HEAD>
         # <BODY BGCOLOR="#FFFFFF" LINK="#0000FF" VLINK="#660099" ALINK="#660099
         # <A HREF="http://www.ncbi.nlm.nih.gov/BLAST/blast_form.map"> <IMG SRC=
+        # <BR><BR><PRE>
 
         # BLAST Formatted information
         
@@ -63,34 +64,18 @@ class _Scanner:
         else:
             uhandle = File.UndoHandle(handle)
         # Read HTML formatting up to the "BLAST" version line.
-        if attempt_read_and_call(uhandle, consumer.noevent, start='<p>'):
-            read_and_call(uhandle, consumer.noevent, start='QBlastInfoBegin')
-            read_and_call(uhandle, consumer.noevent, contains='Status=READY')
-            read_and_call(uhandle, consumer.noevent, start='QBlastInfoEnd')
-            read_and_call(uhandle, consumer.noevent, start='--><p>')
-
-        read_and_call(uhandle, consumer.noevent, start='<HTML>')
-        read_and_call(uhandle, consumer.noevent, start='<HEAD>')
-        read_and_call(uhandle, consumer.noevent, start='<TITLE>')
-        read_and_call(uhandle, consumer.noevent, start='</HEAD>')
-        read_and_call(uhandle, consumer.noevent, start='<BODY')
-        read_and_call(uhandle, consumer.noevent, start='<A HREF')
+        read_and_call_until(uhandle, consumer.noevent, start='<b>', contains='BLAST')
 
         self._scan_header(uhandle, consumer)
 	self._scan_rounds(uhandle, consumer)
         self._scan_database_report(uhandle, consumer)
-        read_and_call(uhandle, consumer.noevent, blank=1)
         self._scan_parameters(uhandle, consumer)
 
         # Read HTML footer information.
-        read_and_call(uhandle, consumer.noevent, blank=1)
-        read_and_call(uhandle, consumer.noevent, start='</BODY>')
-        read_and_call(uhandle, consumer.noevent, start='</HTML>')
-        read_and_call(uhandle, consumer.noevent, start='</BODY>')
-        read_and_call(uhandle, consumer.noevent, start='</HTML>')
+        while uhandle.peekline():
+            read_and_call(uhandle, consumer.noevent)
 
     def _scan_header(self, uhandle, consumer):
-        # <BR><BR><PRE>
         # <b>BLASTP 2.0.10 [Aug-26-1999]</b>
         # 
         # 
@@ -127,32 +112,21 @@ class _Scanner:
 
         consumer.start_header()
 
-        # Read the "BLAST" version line and the two following blanks.
-        read_and_call(uhandle, consumer.noevent, contains='PRE')
+        # Read the "BLAST" version line and the following blanks.
         read_and_call(uhandle, consumer.version, contains='BLAST')
-        read_and_call(uhandle, consumer.noevent, blank=1)
-        read_and_call(uhandle, consumer.noevent, blank=1)
+        read_and_call_while(uhandle, consumer.noevent, blank=1)
 
         # Read the reference lines and the '<p>' line.
-        read_and_call(uhandle, consumer.reference, start='<b><a href=')
-        while 1:
-            line = safe_readline(uhandle)
-            if line[:3] == '<p>':
-                consumer.noevent(line)
-                break
-            consumer.reference(line)
+        read_and_call_until(uhandle, consumer.reference, start='<p>')
+        read_and_call(uhandle, consumer.noevent)
 
         # Read the RID line, for version 2.0.12 (2.0.11?) and above.
         attempt_read_and_call(uhandle, consumer.noevent, start='RID')
 
         # Read the Query lines and the following blank line.
         read_and_call(uhandle, consumer.query_info, contains='Query=')
-        while 1:
-            line = safe_readline(uhandle)
-            if is_blank_line(line):
-                consumer.noevent(line)
-                break
-            consumer.query_info(line)
+        read_and_call_until(uhandle, consumer.query_info, blank=1)
+        read_and_call_while(uhandle, consumer.noevent, blank=1)
 
         # Read the database lines and the following blank line.
         read_and_call(uhandle, consumer.database_info, contains='Database')
@@ -164,11 +138,12 @@ class _Scanner:
         # Read the blast form, if it exists. 
         if attempt_read_and_call(uhandle, consumer.noevent,
                                  contains='BLASTFORM'):
-            while 1:
-                line = safe_readline(uhandle)
-                consumer.noevent(line)
-                if line[:5] == '<PRE>':
-                    break
+            read_and_call_until(uhandle, consumer.noevent, blank=1)
+        elif attempt_read_and_call(uhandle, consumer.noevent, start='<PRE>'):
+            read_and_call_until(uhandle, consumer.noevent, blank=1)
+
+        # Read the blank lines until the next section.
+        read_and_call_while(uhandle, consumer.noevent, blank=1)
 
         consumer.end_header()
 
@@ -179,74 +154,62 @@ class _Scanner:
     def _scan_descriptions(self, uhandle, consumer):
         consumer.start_descriptions()
 
-        line = safe_peekline(uhandle)
-        if string.find(line, 'No significant similarity') >= 0:
-            # no hits found:
-            # <b>No significant similarity found.</b> For reasons why, <A HREF
-            read_and_call(uhandle, consumer.no_hits)
-        elif is_blank_line(line):
-            # no descriptions:
-            # 
-            # 
-            read_and_call(uhandle, consumer.noevent, blank=1)
-            read_and_call(uhandle, consumer.noevent, blank=1)
-        else:
-            # Normal descriptions:
-            # <PRE>
-            # 
-            #                                                                  
-            # Sequences producing significant alignments:                      
-            # 
-            # <a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Ret
-            # <a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Ret
-            # 
-            read_and_call(uhandle, consumer.noevent, start='<PRE>')
-            read_and_call(uhandle, consumer.noevent, blank=1)
+        # Three things can happen here:
+        # 1.  line contains 'Score     E'
+        # 2.  line contains "No significant similarity"
+        # 3.  no descriptions
+        if not attempt_read_and_call(
+            uhandle, consumer.noevent, contains='Score     E'):
+            # Either case 2 or 3.  Look for "No hits found".
+            attempt_read_and_call(uhandle, consumer.no_hits,
+                                  contains='No significant similarity')
+            read_and_call_while(uhandle, consumer.noevent, blank=1)
+            consumer.end_descriptions()
+            # Stop processing.
+            return
+        # Sequences producing significant alignments:                      
+        # 
+        # <a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Ret
+        # <a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Ret
+        # 
+        # Read the score header lines and a blank line.
+        read_and_call(uhandle, consumer.noevent, start='Sequences producing')
+        read_and_call(uhandle, consumer.noevent, blank=1)
 
-            # Read the score header lines and a blank line.
-            read_and_call(uhandle, consumer.noevent,
-                          contains='Score     E')
-            read_and_call(uhandle, consumer.noevent,
-                          start='Sequences producing')
-            read_and_call(uhandle, consumer.noevent, blank=1)
-
-            # Read the descriptions and the following blank line.
-            while 1:
-                if not attempt_read_and_call(uhandle, consumer.description,
-                                             start='<a href'):
-                    read_and_call(uhandle, consumer.noevent, blank=1)
-                    break
+        # Read the descriptions and the following blank line.
+        read_and_call_until(uhandle, consumer.description, blank=1)
+        read_and_call_while(uhandle, consumer.noevent, blank=1)
 
         consumer.end_descriptions()
 
     def _scan_alignments(self, uhandle, consumer):
-        # An alignment starts at a <PRE>.
-        # If I'm at a blank line, then there's no alignment and I'm
-        # at a database report.
+        # Both the alignment and database report starts with a <PRE>.
+        # Check the second line to see if it's a database report.
         line1 = safe_readline(uhandle)
         line2 = safe_readline(uhandle)
         uhandle.saveline(line2)
         uhandle.saveline(line1)
-        if is_blank_line(line1) or line2[:10] == '  Database':
-            return
-
+        if line1[:5] != '<PRE>':
+            # XXX
+            raise SyntaxError, "I expected a <PRE> but got %s" % line1
         # It appears that first sequence in a masterslave alignment
         # is generated by BLAST and contains no link to the descriptions.
-        if line2[:9] == 'blast_tmp':
+        if line2[:10] == '  Database':
+            return
+        elif line2[:9] == 'blast_tmp':
             self._scan_masterslave_alignment(uhandle, consumer)
         else:
             self._scan_pairwise_alignments(uhandle, consumer)
 
     def _scan_pairwise_alignments(self, uhandle, consumer):
         while 1:
-            # If I'm at an alignment header, the first line should be
-            # <PRE>.  If I'm at the database report, then the
-            # first line will be blank.
+            # The first line is <PRE>.  Check the second line to see if
+            # I'm still at an alignment.
             line1 = safe_readline(uhandle)
             line2 = safe_readline(uhandle)
             uhandle.saveline(line2)
             uhandle.saveline(line1)
-            if line1[:5] != '<PRE>':
+            if line2[:10] == '  Database':
                 break
 
             # Occasionally, there's a bug where the alignment_header and
@@ -307,9 +270,7 @@ class _Scanner:
         #            
         while 1:
             line = safe_readline(uhandle)
-            index = string.find(line, 'Length =')
-            # if index == 10 or index == 11 or index == 12:
-            if index >= 10:
+            if string.lstrip(line)[:8] == 'Length =':
                 consumer.length(line)
                 break
             elif is_blank_line(line):
@@ -365,8 +326,7 @@ class _Scanner:
             if not attempt_read_and_call(uhandle, consumer.noevent, blank=1):
                 break
         read_and_call(uhandle, consumer.noevent, start='</PRE>')
-        read_and_call(uhandle, consumer.noevent, blank=1)
-        read_and_call(uhandle, consumer.noevent, blank=1)
+        read_and_call_while(uhandle, consumer.noevent, blank=1)
 
     def _scan_masterslave_alignment(self, uhandle, consumer):
         consumer.start_alignment()
@@ -375,24 +335,15 @@ class _Scanner:
             line = safe_readline(uhandle)
             if is_blank_line(line):
                 consumer.noevent(line)
-                # # If the blank line is followed by '<PRE>', then
-                # # the blank line belongs to the database report.
-                # line2 = safe_readline(uhandle)
-                # if line2[:5] == '<PRE>':
-                #    uhandle.saveline(line2)
-                #    uhandle.saveline(line)
-                #    break
-                #consumer.noevent(line)
-                #uhandle.saveline(line2)
             elif line[:6] == '</PRE>':
                 consumer.noevent(line)
                 break
             else:
                 consumer.multalign(line)
+        read_and_call_while(uhandle, consumer.noevent, blank=1)
         consumer.end_alignment()
 
     def _scan_database_report(self, uhandle, consumer):
-        # 
         # <PRE>
         #   Database: Non-redundant SwissProt sequences
         #     Posted date:  Dec 18, 1999  8:26 PM
@@ -409,8 +360,6 @@ class _Scanner:
 
         consumer.start_database_report()
 
-        # There's no blank line if there were no hits!
-        attempt_read_and_call(uhandle, consumer.noevent, blank=1)
         read_and_call(uhandle, consumer.noevent, start='<PRE>')
         read_and_call(uhandle, consumer.database, start='  Database')
         read_and_call(uhandle, consumer.posted_date, start='    Posted')
@@ -429,7 +378,7 @@ class _Scanner:
         # not TBLASTX
         if attempt_read_and_call(uhandle, consumer.noevent, start='Lambda'):
             read_and_call(uhandle, consumer.ka_params_gap)
-            read_and_call(uhandle, consumer.noevent, blank=1)
+        read_and_call_while(uhandle, consumer.noevent, blank=1)
 
         consumer.end_database_report()
 

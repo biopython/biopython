@@ -51,10 +51,10 @@ class _Scanner:
 
     Methods:
     feed     Feed data into the scanner.
-    """
     
+    """
     def feed(self, handle, consumer):
-        """feed(self, handle, consumer)
+        """S.feed(handle, consumer)
 
         Feed in a BLAST report for scanning.  handle is a file-like
         object that contains the BLAST report.  consumer is a Consumer
@@ -69,7 +69,6 @@ class _Scanner:
         self._scan_header(uhandle, consumer)
 	self._scan_rounds(uhandle, consumer)
         self._scan_database_report(uhandle, consumer)
-        read_and_call(uhandle, consumer.noevent, blank=1)
         self._scan_parameters(uhandle, consumer)
 
     def _scan_header(self, uhandle, consumer):
@@ -91,31 +90,22 @@ class _Scanner:
         consumer.start_header()
 
         read_and_call(uhandle, consumer.version, contains='BLAST')
-        read_and_call(uhandle, consumer.noevent, blank=1)
-        read_and_call(uhandle, consumer.noevent, blank=1)
+        read_and_call_while(uhandle, consumer.noevent, blank=1)
 
         # Read the reference lines and the following blank line.
         read_and_call(uhandle, consumer.reference, start='Reference')
-        while 1:
-            line = safe_readline(uhandle)
-            if is_blank_line(line):
-                consumer.noevent(line)
-                break
-            consumer.reference(line)
+        read_and_call_until(uhandle, consumer.reference, blank=1)
+        read_and_call_while(uhandle, consumer.noevent, blank=1)
 
         # Read the Query lines and the following blank line.
         read_and_call(uhandle, consumer.query_info, start='Query=')
-        while 1:
-            line = safe_readline(uhandle)
-            if is_blank_line(line):
-                consumer.noevent(line)
-                break
-            consumer.query_info(line)
+        read_and_call_until(uhandle, consumer.query_info, blank=1)
+        read_and_call_while(uhandle, consumer.noevent, blank=1)
 
         # Read the database lines and the following blank line.
         read_and_call(uhandle, consumer.database_info, start='Database')
         read_and_call(uhandle, consumer.database_info, contains='sequences')
-        read_and_call(uhandle, consumer.noevent, blank=1)
+        read_and_call_while(uhandle, consumer.noevent, blank=1)
 
         consumer.end_header()
 
@@ -176,22 +166,13 @@ class _Scanner:
         #
         #
         #     Results from round 2
-        if not attempt_read_and_call(uhandle, consumer.round, start='Results'):
-            # Check to see if the "Results" line is further down
-            line1 = safe_readline(uhandle)
-            line2 = safe_readline(uhandle)
-            line3 = safe_peekline(uhandle)
-            uhandle.saveline(line2)
-            uhandle.saveline(line1)
-            if line3[:7] == 'Results':
-                read_and_call(uhandle, consumer.noevent, blank=1)
-                read_and_call(uhandle, consumer.noevent, blank=1)
-                read_and_call(uhandle, consumer.round, start='Results')
-            
-        # Read 1 or 2 blank lines.
-        read_and_call(uhandle, consumer.noevent, blank=1)
-        attempt_read_and_call(uhandle, consumer.noevent, blank=1)
-
+        
+        # Skip a bunch of blank lines.
+        read_and_call_while(uhandle, consumer.noevent, blank=1)
+        # Check for the results line if it's there.
+        if attempt_read_and_call(uhandle, consumer.round, start='Results'):
+            read_and_call_while(uhandle, consumer.noevent, blank=1)
+        
         # Three things can happen here:
         # 1.  line contains 'Score     E'
         # 2.  line contains "No hits found"
@@ -199,48 +180,36 @@ class _Scanner:
         # The first one begins a bunch of descriptions.  The last two
         # indicates that no descriptions follow, and we should go straight
         # to the alignments.
-
-        line = safe_peekline(uhandle)
-        if string.find(line, 'Score     E') == -1:
-            # no descriptions.
-            # Look for "No hits found".  If this exists, then read the
-            # next blank line and stop processing.
-            if attempt_read_and_call(uhandle, consumer.no_hits,
-                                     contains='No hits found'):
-                read_and_call(uhandle, consumer.noevent, blank=1)
+        if not attempt_read_and_call(
+            uhandle, consumer.noevent, contains='Score     E'):
+            # Either case 2 or 3.  Look for "No hits found".
+            attempt_read_and_call(uhandle, consumer.no_hits,
+                                  contains='No hits found')
+            read_and_call_while(uhandle, consumer.noevent, blank=1)
             consumer.end_descriptions()
+            # Stop processing.
             return
 
         # Read the score header lines
-        read_and_call(uhandle, consumer.noevent, contains='Score     E')
         read_and_call(uhandle, consumer.noevent, start='Sequences producing')
 
         # If PSI-BLAST, read the 'Sequences used in model' line.
         attempt_read_and_call(uhandle, consumer.model_sequences,
                               start='Sequences used in model')
-        read_and_call(uhandle, consumer.noevent, blank=1)
+        read_and_call_while(uhandle, consumer.noevent, blank=1)
 
-        # Read the descriptions and the following blank line.
-        while 1:
-            line = safe_readline(uhandle)
-            if is_blank_line(line):
-                consumer.noevent(line)
-                break
-            consumer.description(line)
+        # Read the descriptions and the following blank lines.
+        read_and_call_until(uhandle, consumer.description, blank=1)
+        read_and_call_while(uhandle, consumer.noevent, blank=1)
 
         # If PSI-BLAST, read the 'Sequences not found' line followed
         # by more descriptions.
         if attempt_read_and_call(uhandle, consumer.nonmodel_sequences,
                                  start='Sequences not found'):
-            read_and_call(uhandle, consumer.noevent, blank=1)
-
-            # Read the descriptions and the following blank line.
-            while 1:
-                line = safe_readline(uhandle)
-                if is_blank_line(line):
-                    consumer.noevent(line)
-                    break
-                consumer.description(line)
+            # Read the descriptions and the following blank lines.
+            read_and_call_while(uhandle, consumer.noevent, blank=1)
+            read_and_call_until(uhandle, consumer.description, blank=1)
+            read_and_call_while(uhandle, consumer.noevent, blank=1)
 
         # If PSI-BLAST has converged, then it will add an extra
         # blank line followed by 'CONVERGED'.
@@ -250,7 +219,6 @@ class _Scanner:
         # 
         # 
         # CONVERGED!
-        attempt_read_and_call(uhandle, consumer.noevent, blank=1)
         attempt_read_and_call(uhandle, consumer.converged, start='CONVERGED')
 
         consumer.end_descriptions()
@@ -261,6 +229,7 @@ class _Scanner:
         if line[:10] == '  Database':
             return
         elif line[0] == '>':
+            # XXX make a better check here between pairwise and masterslave
             self._scan_pairwise_alignments(uhandle, consumer)
         else:
             # XXX put in a check to make sure I'm in a masterslave alignment
@@ -284,7 +253,6 @@ class _Scanner:
             if line[:6] != ' Score':
                 break
             self._scan_hsp(uhandle, consumer)
-            read_and_call(uhandle, consumer.noevent, blank=1)
         consumer.end_alignment()
 
     def _scan_alignment_header(self, uhandle, consumer):
@@ -295,9 +263,7 @@ class _Scanner:
         read_and_call(uhandle, consumer.title, start='>')
         while 1:
             line = safe_readline(uhandle)
-            index = string.find(line, 'Length =')
-            # if index == 10 or index == 11 or index == 12:
-            if index >= 10:
+            if string.lstrip(line)[:8] == 'Length =':
                 consumer.length(line)
                 break
             elif is_blank_line(line):
@@ -344,12 +310,12 @@ class _Scanner:
             read_and_call(uhandle, consumer.query, start='Query')
             read_and_call(uhandle, consumer.align, start='     ')
             read_and_call(uhandle, consumer.sbjct, start='Sbjct')
-            read_and_call(uhandle, consumer.noevent, blank=1)
+            read_and_call_while(uhandle, consumer.noevent, blank=1)
             line = safe_peekline(uhandle)
             # Alignment continues if I see a 'Query' or the spaces for Blastn.
             if line[:5] != 'Query' and line[:5] != '     ':
                 break
-
+ 
     def _scan_masterslave_alignment(self, uhandle, consumer):
         consumer.start_alignment()
         while 1:
@@ -361,6 +327,7 @@ class _Scanner:
                 consumer.noevent(line)
             else:
                 consumer.multalign(line)
+        read_and_call_while(uhandle, consumer.noevent, blank=1)
         consumer.end_alignment()
 
     def _scan_database_report(self, uhandle, consumer):
@@ -396,7 +363,7 @@ class _Scanner:
         # not TBLASTX
         if attempt_read_and_call(uhandle, consumer.noevent, start='Lambda'):
             read_and_call(uhandle, consumer.ka_params_gap)
-            read_and_call(uhandle, consumer.noevent, blank=1)
+        read_and_call_while(uhandle, consumer.noevent, blank=1)
 
         consumer.end_database_report()
 
@@ -826,7 +793,7 @@ class _HSPConsumer:
             "I could not find the sbjct in line\n%s" % line)
         self._hsp.sbjct = self._hsp.sbjct + seq
         if self._hsp.sbjct_start is None:
-            self._hsp.sbjct_start = start
+            self._hsp.sbjct_start = _safe_int(start)
 
         if len(seq) != self._query_len:
             raise SyntaxError, \
