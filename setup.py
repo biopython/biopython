@@ -2,11 +2,12 @@
 # how to run distutils to install the package
 
 import sys
+import os
 try:
     from distutils.core import setup
 except ImportError:
-    # XXX improve this error message
-    print "Requires distutils"
+    print "Biopython installation requires distutils, avaiable with python 2.0"
+    print "or from http://python.org/sigs/distutils-sig/download.html"
     sys.exit(0)
 
 # check if the distutils has the new extension class stuff
@@ -15,6 +16,8 @@ try:
     from distutils.extension import Extension
     new_extension = 1
 except ImportError:
+    print "Your version of distutils is really old. You should definately"
+    print "upgrade to a newer version!"
     new_extension = 0
 
 if new_extension:
@@ -48,33 +51,34 @@ else:
 
 
 setup(name='biopython', 
-      version='0.90-d03',
+      version='0.90d03',
       author='The Biopython Consortium',
       author_email='biopython@biopython.org',
       url='http://www.bipoython.org/',
       
       packages=['Bio',
-                'Bio/Align',
-                'Bio/Alphabet',
-                'Bio/Blast',
-                'Bio/Clustalw',
-                'Bio/Data',
-                'Bio/Encodings',
-                'Bio/Entrez',
-                'Bio/Enzyme',
-                'Bio/Fasta',
-                'Bio/Gobase',
-                'Bio/Medline',
-                'Bio/PDB',
-                'Bio/Prosite',
-                'Bio/Rebase',
-                'Bio/SCOP',
-                'Bio/SeqIO',
-                'Bio/SwissProt',
-                'Bio/Tools', 'Bio/Tools/Classification',
-                'Bio/WWW'
+                'Bio.Align',
+                'Bio.Alphabet',
+                'Bio.Blast',
+                'Bio.Clustalw',
+                'Bio.Data',
+                'Bio.Encodings',
+                'Bio.Entrez',
+                'Bio.Enzyme',
+                'Bio.Fasta',
+                'Bio.Gobase',
+                'Bio.Medline',
+                'Bio.PDB',
+                'Bio.Prosite',
+                'Bio.Rebase',
+                'Bio.SCOP',
+                'Bio.SeqIO',
+                'Bio.SubsMat',
+                'Bio.SwissProt',
+                'Bio.Tools', 'Bio.Tools.Classification',
+                'Bio.WWW'
                 ],
-
+      
       ext_modules = extensions
       )
 
