@@ -120,11 +120,15 @@ if __name__=="__main__":
     mmcif_dict=MMCIF2Dict(filename)
 
     input=""
-    print "Now type a key ('q' to end):"
+    print "Now type a key ('q' to end, 'k' for a list of all keys):"
     while(input!="q"):
         input=raw_input("MMCIF dictionary key ==> ")    
         if input=="q":
             sys.exit()
+        if input=="k":
+            for key in mmcif_dict.keys():
+                print key
+            continue
         try:
             value=mmcif_dict[input]
             if type(value)==type([]):
