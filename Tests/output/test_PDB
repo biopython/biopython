@@ -1,5 +1,5 @@
 test_PDB
-PDBConstructionException: Atom N defined twice in residue <Residue het=  resseq=2 icode= > at line 19.
+PDBConstructionException: Atom N defined twice in residue <Residue ARG het=  resseq=2 icode= > at line 19.
 Exception ignored.
 Some atoms or residues will be missing in the data structure.
 WARNING: disordered atom found with blanc altloc before line 31.
@@ -12,7 +12,7 @@ WARNING: Residue (' ', 14, ' ') redefined at line 104.
 WARNING: Residue (' ', 16, ' ') redefined at line 133.
 WARNING: Residue (' ', 80, ' ') redefined at line 631.
 WARNING: Residue (' ', 81, ' ') redefined at line 644.
-PDBConstructionException: Atom O defined twice in residue <Residue het=W resseq=67 icode= > at line 820.
+PDBConstructionException: Atom O defined twice in residue <Residue HOH het=W resseq=67 icode= > at line 820.
 Exception ignored.
 Some atoms or residues will be missing in the data structure.
 Model 0 contains 1 chains.

@@ -242,24 +242,19 @@ if __name__=="__main__":
 
     # Print accessibilities for each residue
     for r in residue_list:
-        # get the residue info
-        hetflag, resseq, icode=r.get_id()
-        resname=r.get_resname()
-
-        # form a "GLY 236 A"-like string to print residue id
-        rid="%s\t%i\t%c " % (resname, resseq, icode)
+        print r
 
         # CA hs-exposure
         if exp_ca.has_key(r):
-            print rid, exp_ca[r]
+            print "CA3  ", exp_ca[r]
 
         # CB hs-exposure
         if exp_cb.has_key(r):
-            print rid, exp_cb[r]
+            print "CB   ", exp_cb[r]
 
         # Classical sphere coordination number
         if exp_fs.has_key(r):
-            print rid, exp_fs[r]
+            print "SPHE ", exp_fs[r]
 
         print "--------------------"
 

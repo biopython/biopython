@@ -61,7 +61,8 @@ Structural Bioinformatics FAQ
 \layout Author
 
 Thomas Hamelryck
-\newline 
+\layout Address
+
 Bioinformatics center
 \newline 
 University of Copenhagen 
@@ -132,14 +133,6 @@ Bio.PDB is automatically installed as part of Biopython.
 
 .
  It runs on many platforms (Linux/Unix, windows, Mac,...).
-\layout Section
-
-What's the Bio.PDB license?
-\layout Standard
-
-The Biopython license, which is one of the most unrestricted Open Source
- licenses around.
- Read the license before you start using Biopython, please.
 \layout Section
 
 Who's using Bio.PDB?
@@ -1206,9 +1199,9 @@ atom.disordered_select('B') # select altloc B atom
 
 A special case arises when disorder is due to 
 \series bold 
-point mutation
+point mutations
 \series default 
-s, i.e.
+, i.e.
  when two or more point mutants of a polypeptide are present in the crystal.
  An example of this can be found in PDB structure 1EN2.
 \layout Standard
@@ -1360,10 +1353,8 @@ Yup, supported.
 \layout Subsubsection*
 
 I think the SMCRA data structure is not flexible/\SpecialChar \-
-molecular/\SpecialChar \-
 sexy/\SpecialChar \-
-whatever
- enough...
+whatever enough...
 \layout Standard
 
 Sure, sure.
@@ -2351,4 +2342,26 @@ Can I contribute?
 
 Yes, yes, yes! Just send me an e-mail (thamelry@binf.ku.dk) if you have something
  useful to contribute! Eternal fame awaits!
+\layout Section
+
+Biopython License Agreement
+\layout Standard
+
+Permission to use, copy, modify, and distribute this software and its documentat
+ion with or without modifications and for any purpose and without fee is
+ hereby granted, provided that any copyright notices appear in all copies
+ and that both those copyright notices and this permission notice appear
+ in supporting documentation, and that the names of the contributors or
+ copyright holders not be used in advertising or publicity pertaining to
+ distribution of the software without specific prior permission.
+\layout Standard
+
+THE CONTRIBUTORS AND COPYRIGHT HOLDERS OF THIS SOFTWARE DISCLAIM ALL WARRANTIES
+ WITH REGARD TO THIS SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILI
+TY AND FITNESS, IN NO EVENT SHALL THE CONTRIBUTORS OR COPYRIGHT HOLDERS
+ BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+ WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION
+ OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
+ CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+ 
 \the_end

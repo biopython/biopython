@@ -33,7 +33,7 @@ class Residue(Entity):
         resname=self.get_resname()
         hetflag, resseq, icode=self.get_id()
         full_id=(resname, hetflag, resseq, icode)
-        return "<Residue het=%s resseq=%s icode=%s>" % full_id
+        return "<Residue %s het=%s resseq=%s icode=%s>" % full_id
 
     # Private methods
 
