@@ -232,15 +232,17 @@ if __name__=="__main__":
         from math import pi
         from RandomArray import *
 
-        v1=Vector(0.5,0.5,1.3)
-        v2=Vector(0.1,0.1,0.1)
-        v3=Vector(1.9,0.8,0.6)
-        v4=Vector(1,-1,0)
+        v1=Vector(0,0,1)
+        v2=Vector(0,0,0)
+        v3=Vector(1,0,0)
+        v4=Vector(1,1,0)
+
+        v4.normalize()
 
         print v4
 
-        calc_angle(v1, v2, v3)
-        calc_dihedral(v1, v2, v3, v4)
+        print calc_angle(v1, v2, v3)
+        print calc_dihedral(v1, v2, v3, v4)
 
         ref=refmat(v1, v3)
         rot=rotmat(v1, v3)
