@@ -41,11 +41,18 @@ class SeqDatabase(DBRegistry.DBRegistry):
         serial_groups = []   # list of groupname, name
         for name, tagvalue_pairs in inidata:
             tagvalue_dict = _tagvalue_asdict(tagvalue_pairs)
-            if tagvalue_dict['protocol'] in ('xembl', 'biofetch'):
+            protocol = tagvalue_dict['protocol'].lower()
+            if protocol in ('xembl', 'biofetch'):
                 self._add_cgi_db(name, tagvalue_dict)
+            elif protocol in ('biocorba', 'bsane-corba'):
+                self._add_biocorba_db(name, tagvalue_dict)
+            elif protocol in ('biosql',):
+                self._add_biosql_db(name, tagvalue_dict)
+            elif protocol in ('index-flat', 'index-berkeleydb'):
+                self._add_indexed_db(name, tagvalue_dict)
             else:
-                # Ignore unknown protocols silently (?)
-                pass
+                import warnings
+                warnings.warn("Protocol %s not recognized" % protocol)
             if tagvalue_dict.has_key("fallback_group"):
                 groupname = tagvalue_dict['fallback_group']
                 serial_groups.append((groupname, name))
@@ -71,8 +78,66 @@ class SeqDatabase(DBRegistry.DBRegistry):
 
         self.register_db(**db_params)
 
+    def _add_biocorba_db(self, name, tagvalue_dict):
+        """Register a BioCorba style database defined in the registry.
+        """
+        # get the source object
+        source_params = {}
+        source_params['name'] = name
+        source_params['ior_ref'] = tagvalue_dict['location']
+        source = apply(sources.BioCorba, (), source_params)
 
+        # now add it to the database
+        db_params = {}
+        db_params['name'] = name
+        db_params['source'] = source
+        db_params['key'] = tagvalue_dict.get('key', None)
 
+        apply(self.register_db, (), db_params)
+
+    def _add_biosql_db(self, name, tagvalue_dict):
+        """Register a BioSQL database defined in the registry.
+        """
+        # get the source object
+        source_params = {}
+        source_params['name'] = name
+        source_params['db_host'] = tagvalue_dict.get('host', 'localhost')
+        source_params['db_port'] = tagvalue_dict.get('port', '')
+        source_params['db_user'] = tagvalue_dict.get('user', 'root')
+        source_params['db_passwd'] = tagvalue_dict.get('pass', '')
+        source_params['sql_db'] = tagvalue_dict['dbname']
+        source_params['namespace_db'] = tagvalue_dict['biodbname']
+        db_type = tagvalue_dict.get('driver', 'mysql').lower()
+        source_params['db_type'] = db_type
+        
+        source = apply(sources.BioSQL, (), source_params)
+
+        # register the source object with the database
+        db_params = {}
+        db_params['name'] = name
+        db_params['source'] = source
+        db_params['key'] = tagvalue_dict.get('key', None)
+        
+        apply(self.register_db, (), db_params)
+
+    def _add_indexed_db(self, name, tagvalue_dict):
+        """Register a Berkeley or Flat indexed file defined in the registry.
+        """
+        # get the source object
+        source_params = {}
+        source_params['name'] = name
+        # XXX This is probably not right; we have no examples yet, though
+        source_params['dbname'] = tagvalue_dict["indexdir"]
+        source = apply(sources.IndexedFile, (), source_params)
+
+        # register the source object with the database
+        db_params = {}
+        db_params['name'] = name
+        db_params['source'] = source
+        db_params['key'] = tagvalue_dict.get('key', None)
+        
+        apply(self.register_db, (), db_params)
+        
 def _pathsep():
     # I would use os.pathsep, except that it breaks on OS X.  It
     # return ":", which the OS doesn't accept...
