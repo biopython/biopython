@@ -67,6 +67,8 @@ except AttributeError:
 del _f
 
 def _check_name(f, text):
+    if text == "record": # XXX FIXME
+        return
     assert NS + f.func_name == text, (NS + ":" + f.func_name, text)
 
 def _check_attrs(attrs, names):
@@ -102,7 +104,9 @@ def record(expr, attrs = {}):
     attrs = _check_attrs(attrs, ("format",))
     d = {"xmlns:bioformat": XMLNS}
     _set_if_given(attrs, "format", d)
-    return Group("record", expr, d) # XX FIXME
+    return Group("record", expr, d) # XXX FIXME
+_settag(record, "record") # XXX AND FIXME
+
 
 def dbid(expr, attrs = {}):
     attrs = _check_attrs(attrs, ("type", "style", "dbname"))

@@ -67,6 +67,19 @@ class ReseekFile:
     def nobuffer(self):
         self._use_buffer = 0
 
+def prepare_input_source(source):
+    from xml.sax import saxutils
+    source = saxutils.prepare_input_source(source)
+    # Is this correct?  Don't know - don't have Unicode exprerience
+    f = source.getCharacterStream() or source.getByteStream()
+    try:
+        f.tell()
+    except (AttributeError, IOError):
+        f = ReseekFile.ReseekFile(f)
+        source.setByteStream(f)
+        source.setCharacterStream(None)
+    return source
+
 def test_reads(test_s, file, seek0):
     assert file.read(2) == "Th"
     assert file.read(3) == "is "

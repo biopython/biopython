@@ -19,7 +19,7 @@ class MidPoint:
         self.left = []
         self.right = []
 
-class MarkupEdit:
+class MarkupEditor:
     def __init__(self, text):
         self.text = text
         self._max = len(text)
@@ -83,7 +83,7 @@ def _compare(markup, expect):
     assert s == expect, (s, expect)
 
 def test():
-    markup = MarkupEdit("01234")
+    markup = MarkupEditor("01234")
     _compare(markup, "01234")
     markup.insert_text(0, "A")
     _compare(markup, "A01234")

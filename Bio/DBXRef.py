@@ -14,6 +14,7 @@ class DBXRef:
         if self.negate:
             s = "not(%s)" % s
         return s
+    __repr__ = __str__
 
 class BioformatDBName:
     def __getitem__(self, name):

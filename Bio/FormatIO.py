@@ -24,7 +24,7 @@ def _get_selected_names(builder, format):
     if not hasattr(builder, "uses_tags"):
         return None
     
-    select_names = tuple(builder.uses_tags())
+    select_names = tuple(builder.uses_tags()) + ("record",)
     if not hasattr(builder, "get_supported_features"):
         return select_names
     
@@ -179,8 +179,8 @@ class FormatIO:
 
         writer = self.make_writer(outfile, output_format)
 
-        select_names = _get_selected_names(builder, format)
-        parser = format.make_parser(select_names = select_names)
+        select_names = _get_selected_names(builder, input_format)
+        parser = input_format.make_parser(select_names = select_names)
 
         # We can optimize StdHandler conversions
         import StdHandler
@@ -189,6 +189,7 @@ class FormatIO:
         else:
             cont_h = StdHandler.ConvertHandler(builder, writer)
         parser.setContentHandler(cont_h)
-            
-        parser.parseFile(infile)
 
+        writer.writeHeader()
+        parser.parseFile(infile)
+        writer.writeFooter()

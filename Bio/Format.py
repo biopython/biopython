@@ -215,7 +215,7 @@ def check_parser_file(expression, infile, trace, debug_level):
     trace.dedent()
     return handler.recognized
  
-def check_parser_string(expression, s, debug_level):
+def check_parser_string(expression, s, trace, debug_level):
     if expression is None:
         trace.writeln("No filter defined")
         return 1
@@ -286,13 +286,8 @@ class Format:
         raise NotImplementedError("must be defined in subclass")
     
     def identify(self, source, trace = 0, debug_level = 0):
-        source = saxutils.prepare_input_source(source)
-        # Is this correct?  Don't know - don't have Unicode exprerience
+        source = ReseekFile.prepare_input_source(source)
         f = source.getCharacterStream() or source.getByteStream()
-        try:
-            f.tell()
-        except (AttributeError, IOError):
-            f = ReseekFile.ReseekFile(f)
         return self.identifyFile(f, trace, debug_level)
 
     def _get_parents_in_depth_order(self):
@@ -346,9 +341,9 @@ class FormatDef(Format):
     def identifyString(self, s, trace = 0, debug_level = 0):
         trace = _Trace(trace)
         if self.filter is self.expression:
-            trace.writeln("%r: Checking expression", (self.name,))
+            trace.writeln("%r: Checking expression" % (self.name,))
         else:
-            trace.writeln("%r: Checking filter", (self.name,))
+            trace.writeln("%r: Checking filter" % (self.name,))
         if check_parser_string(self.filter, s, trace, debug_level):
             return self
         return None
@@ -426,6 +421,7 @@ class FormatGroup(Format):
 
     def identifyString(self, s, trace = 0, debug_level = 0):
         # See if the filter test weeds things out
+        trace = _Trace(trace)
         if not check_parser_string(self.filter, s, trace, debug_level):
             return None
         

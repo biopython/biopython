@@ -3,7 +3,7 @@ from xml.sax import handler
 from Martel import Dispatch
 
 from Bio import SeqRecord, StdHandler, Std, DBXRef, Seq
-from Bio import Alphabet
+from Bio import Alphabet, DecodeLocation, SeqFeature
 from Bio.Alphabet import IUPAC
 
 alphabet_table = {
@@ -23,6 +23,8 @@ alphabet_table = {
 # Convert from the internal Feature data structure used by the parser
 # into the standard Biopytho form
 def convert_std_feature(feature):
+    f = SeqFeature.SeqFeature()
+    loc = feature.location
     return feature
 
 class BuildSeqRecord(Dispatch.Dispatcher):
@@ -63,11 +65,12 @@ class BuildSeqRecord(Dispatch.Dispatcher):
         self.seq = Seq.Seq(seq, alphabet)
 
     def add_dbxref(self, dbname_style, dbname, idtype, dbid, negate):
-        self.dbxrefs.append(DBXRef.from_parser(dbname_style, dbname, dbid,
-                                               idtype, negate))
+        self.dbxrefs.append(DBXRef.from_parser(dbname_style, dbname, idtype,
+                                               dbid, negate))
 
     def add_features(self, features):
         assert self.features is None
+        #print [feature.location for feature in features]
         self.features = map(convert_std_feature, features)
 
     def end_record(self, tag):

@@ -164,14 +164,14 @@ class ConvertHandler(handler.ContentHandler):
 class ConvertDispatchHandler(Dispatch.Dispatcher):
     """Used to read records and produce output through a Dispatcher"""
     def __init__(self, record_builder, writer, record_tag = "record"):
+        setattr(self, "end_" + record_tag, self.write_record)
         Dispatch.Dispatcher.__init__(self,
-                                     remap = {record_tag: "bioformat:"})
-        setattr(self, "start_" + record_tag, self.write_record)
+                                     remap = {record_tag: "bioformat:"}
+                                     )
         self.acquire(record_builder)
         self.record_builder = record_builder
         self.writer = writer
         self.record_tag = record_tag
-
     def write_record(self, tag):
         self.writer.write(self.record_builder.document)
 
@@ -388,6 +388,7 @@ class Handle_dbxref(Dispatch.Callback):
 
 ##################
 class Handle_sequence(Dispatch.Callback):
+    global_alphabet = None
     def start_(self, tag, attrs):
         self.global_alphabet = None
         
