@@ -102,6 +102,9 @@
 }	
 
 // This is actually swigged
+
+float KDTREE_dist(float *onedim, float *onedim, int POSITIVE);
+
 class KDTree
 {
 	public:

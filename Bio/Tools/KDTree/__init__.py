@@ -6,7 +6,7 @@ except ImportError:
 
 from Bio.Tools.KDTree import _KDTree 
 
-def neighbor_test(nr_points, dim, bucket_size, radius):
+def _neighbor_test(nr_points, dim, bucket_size, radius):
 		kdt=_KDTree.KDTree(dim, bucket_size)
 		coords=random((nr_points, dim)).astype("f")
 		kdt.set_data(coords, nr_points)
@@ -14,11 +14,27 @@ def neighbor_test(nr_points, dim, bucket_size, radius):
 		l1=len(kdt.neighbor_get_radii())
 		kdt.neighbor_simple_search(radius)
 		l2=len(kdt.neighbor_get_radii())
-		if l1!=l2:
-			print "Not passed: %i <> %i." % (l1, l2)
-		else:
+		if l1==l2:
 			print "Passed."
+		else:
+			print "Not passed: %i <> %i." % (l1, l2)
 
+def _test(nr_points, dim, bucket_size, radius):
+	kdt=_KDTree.KDTree(dim, bucket_size)
+	coords=random((nr_points, dim)).astype("f")
+	center=coords[0]
+	kdt.set_data(coords, nr_points)
+	kdt.search_center_radius(center, radius)
+	l1=len(kdt.get_indices())
+	l2=0
+	for i in range(0, nr_points):
+		p=coords[i]
+		if _KDTree.KDTREE_dist(p, center, dim)<=radius:
+			l2=l2+1
+	if l1==l2:
+		print "Passed."
+	else:
+		print "Not passed: %i <> %i." % (l1, l2)
 
 class KDTree:
 	def __init__(self, dim, bucket_size=1):
@@ -110,11 +126,12 @@ class KDTree:
 
 if __name__=="__main__":
 
-	nr_points=100000
+	nr_points=1000
 	dim=3
 	bucket_size=10
 	radius=0.05
 
 	while(1):
- 		 neighbor_test(nr_points, dim, bucket_size, radius)
+ 		 #_neighbor_test(nr_points, dim, bucket_size, radius)
+		 _test(nr_points, dim, bucket_size, radius)
 
