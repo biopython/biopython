@@ -48,9 +48,8 @@ class PathwayTransform:
 
     def __str__( self ):
         out = ''
-        if( self.matrix != None ):
-            out = out + '\nMatrix\n'
-            out = out + str( self.matrix )
+        out = out + '\nMatrix\n'
+        out = out + str( self.matrix )
         if( len( self.enzymes ) > 0 ):
             out = out + '\n Enzymes\n'
             for enzyme in self.enzymes:
