@@ -11,12 +11,16 @@ http://www.ncbi.nlm.nih.gov/BLAST/
 
 Classes:
 Scanner     Scans output from standalone BLAST.
+
+Functions:
+blastall    Execute and retrieve data from blastall.
+blastpgp    Execute and retrieve data from blastpgp.
 """
 
-# XXX use safe_peekline where appropriate
 
-
+import os
 import string
+import popen2
 
 from Bio import File
 from Bio.ParserSupport import *
@@ -439,3 +443,229 @@ class Scanner:
         read_and_call(uhandle, consumer.blast_cutoff, start='S2')
 
         consumer.end_parameters()
+
+
+
+def blastall(blastcmd, program, database, infile, **keywds):
+    """blastall(blastcmd, program, database, infile, **keywds) ->
+    read, error Undohandles
+    
+    Execute and retrieve data from blastall.  blastcmd is the command
+    used to launch the 'blastall' executable.  program is the blast program
+    to use, e.g. 'blastp', 'blastn', etc.  database is the path to the database
+    to search against.  infile is the path to the file containing
+    the sequence to search with.
+
+    You may pass more parameters to **keywds to change the behavior of
+    the search.  Otherwise, optional values will be chosen by blastall.
+    
+        Scoring
+    matrix              Matrix to use.
+    gap_open            Gap open penalty.
+    gap_extend          Gap extension penalty.
+    nuc_match           Nucleotide match reward.  (BLASTN)
+    nuc_mismatch        Nucleotide mismatch penalty.  (BLASTN)
+    query_genetic_code  Genetic code for Query.
+    db_genetic_code     Genetic code for database.  (TBLAST[NX])
+
+        Algorithm
+    gapped              Whether to do a gapped alignment. T/F (not for TBLASTX)
+    expectation         Expectation value cutoff.
+    wordsize            Word size.
+    strands             Query strands to search against database.([T]BLAST[NX])
+    keep_hits           Number of best hits from a region to keep.
+    xdrop               Dropoff value (bits) for gapped alignments.
+    hit_extend          Threshold for extending hits.
+    region_length       Length of region used to judge hits.
+    db_length           Effective database length.
+    search_length       Effective length of search space.
+
+        Processing
+    filter              Filter query sequence?  T/F
+    believe_query       Believe the query defline.  T/F
+    restrict_gi         Restrict search to these GI's.
+    nprocessors         Number of processors to use.
+
+        Formatting
+    html                Produce HTML output?  T/F
+    descriptions        Number of one-line descriptions.
+    alignments          Number of alignments.
+    align_view          Alignment view.  Integer 0-6.
+    show_gi             Show GI's in deflines?  T/F
+    seqalign_file       seqalign file to output.
+
+    """
+
+    att2param = {
+        'matrix' : '-M',
+        'gap_open' : '-G',
+        'gap_extend' : '-E',
+        'nuc_match' : '-r',
+        'nuc_mismatch' : '-q',
+        'query_genetic_code' : '-Q',
+        'db_genetic_code' : '-D',
+
+        'gapped' : '-g',
+        'expectation' : '-e',
+        'wordsize' : '-W',
+        'strands' : '-S',
+        'keep_hits' : '-K',
+        'xdrop' : '-X',
+        'hit_extend' : '-f',
+        'region_length' : '-L',
+        'db_length' : '-z',
+        'search_length' : '-Y',
+        
+        'program' : '-p',
+        'database' : '-d',
+        'infile' : '-i',
+        'filter' : '-F',
+        'believe_query' : '-J',
+        'restrict_gi' : '-l',
+        'nprocessors' : '-a',
+
+        'html' : '-T',
+        'descriptions' : '-v',
+        'alignments' : '-b',
+        'align_view' : '-m',
+        'show_gi' : '-I',
+        'seqalign_file' : '-O'
+        }
+
+    if not os.path.exists(blastcmd):
+        raise ValueError, "blastall does not exist at %s" % blastcmd
+    
+    params = []
+
+    params.extend([att2param['program'], program])
+    params.extend([att2param['database'], database])
+    params.extend([att2param['infile'], infile])
+
+    for attr in keywds.keys():
+        params.extend([att2param[attr], str(keywds[attr])])
+
+    r, w, e = popen2.popen3([blastcmd] + params)
+    w.close()
+    return File.UndoHandle(r), File.UndoHandle(e)
+
+
+def blastpgp(blastcmd, database, infile, **keywds):
+    """blastpgp(blastcmd, database, infile, **keywds) ->
+    read, error Undohandles
+    
+    Execute and retrieve data from blastpgp.  blastcmd is the command
+    used to launch the 'blastpgp' executable.  database is the path to the
+    database to search against.  infile is the path to the file containing
+    the sequence to search with.
+
+    You may pass more parameters to **keywds to change the behavior of
+    the search.  Otherwise, optional values will be chosen by blastpgp.
+
+        Scoring
+    matrix              Matrix to use.
+    gap_open            Gap open penalty.
+    gap_extend          Gap extension penalty.
+    window_size         Multiple hits window size.
+    npasses             Number of passes.
+    passes              Hits/passes.  Integer 0-2.
+
+        Algorithm
+    gapped              Whether to do a gapped alignment.  T/F
+    expectation         Expectation value cutoff.
+    wordsize            Word size.
+    keep_hits           Number of beset hits from a region to keep.
+    xdrop               Dropoff value (bits) for gapped alignments.
+    hit_extend          Threshold for extending hits.
+    region_length       Length of region used to judge hits.
+    db_length           Effective database length.
+    search_length       Effective length of search space.
+    nbits_gapping       Number of bits to trigger gapping.
+    pseudocounts        Pseudocounts constants for multiple passes.
+    xdrop_final         X dropoff for final gapped alignment.
+    xdrop_extension     Dropoff for blast extensions.
+    model_threshold     E-value threshold to include in multipass model.
+    required_start      Start of required region in query.
+    required_end        End of required region in query.
+
+        Processing
+    program             The blast program to use. (PHI-BLAST)
+    filter              Filter query sequence with SEG?  T/F
+    believe_query       Believe the query defline?  T/F
+    nprocessors         Number of processors to use.
+
+        Formatting
+    html                Produce HTML output?  T/F
+    descriptions        Number of one-line descriptions.
+    alignments          Number of alignments.
+    align_view          Alignment view.  Integer 0-6.
+    show_gi             Show GI's in deflines?  T/F
+    seqalign_file       seqalign file to output.
+    align_outfile       Output file for alignment.
+    checkpoint_outfile  Output file for PSI-BLAST checkpointing.
+    restart_infile      Input file for PSI-BLAST restart.
+    hit_infile          Hit file for PHI-BLAST.
+    matrix_outfile      Output file for PSI-BLAST matrix in ASCII.
+    align_infile        Input alignment file for PSI-BLAST restart.
+    
+    """
+
+    att2param = {
+        'matrix' : '-M',
+        'gap_open' : '-G',
+        'gap_extend' : '-E',
+        'window_size' : '-A',
+        'npasses' : '-j',
+        'passes' : '-P',
+
+        'gapped' : '-g',
+        'expectation' : '-e',
+        'wordsize' : '-W',
+        'keep_hits' : '-K',
+        'xdrop' : '-X',
+        'hit_extend' : '-f',
+        'region_length' : '-L',
+        'db_length' : '-Z',
+        'search_length' : '-Y',
+        'nbits_gapping' : '-N',
+        'pseudocounts' : '-c',
+        'xdrop_final' : '-Z',
+        'xdrop_extension' : '-y',
+        'model_threshold' : '-h',
+        'required_start' : '-S',
+        'required_end' : '-H',
+
+        'program' : '-p',
+        'database' : '-d',
+        'infile' : '-i',
+        'filter' : '-F',
+        'believe_query' : '-J',
+        'nprocessors' : '-a',
+
+        'html' : '-T',
+        'descriptions' : '-v',
+        'alignments' : '-b',
+        'align_view' : '-m',
+        'show_gi' : '-I',
+        'seqalign_file' : '-O',
+        'align_outfile' : '-o',
+        'checkpoint_outfile' : '-C',
+        'restart_infile' : '-R',
+        'hit_infile' : '-k',
+        'matrix_outfile' : '-Q',
+        'align_infile' : '-B'
+        }
+        
+    if not os.path.exists(blastcmd):
+        raise ValueError, "blastpgp does not exist at %s" % blastcmd
+    
+    params = []
+
+    params.extend([att2param['database'], database])
+    params.extend([att2param['infile'], infile])
+
+    for attr in keywds.keys():
+        params.extend([att2param[attr], str(keywds[attr])])
+
+    r, w, e = popen2.popen3([blastcmd] + params)
+    w.close()
+    return File.UndoHandle(r), File.UndoHandle(e)

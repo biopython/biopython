@@ -75,19 +75,30 @@ To Do
 - NamedSequence class
 - Annotations on sequences
 - BLAST additions
-  o scripting front end
+  o scripting front end to NCBIWWW
   o heavyweight/lightweight data structure
   o consumers to fill data structures
-  o PSI-BLAST for WWW
   o support for 2.0.11
+  o PSI-BLAST on WWW
 - more parsers
   o FASTA
+    - random access
   o SWISSPROT
+    - iterator, random access
   o PDB
   o Medline
   o Prosite
   o Prodoc
   o Genbank
+- index file?
 - bug database
 - testing code
+- Corba support, compatibility with Ewan Birney's IDL.
 - documentation
+- look into Zope-ifying the web site
+
+If you see something here you would like to work on, please let me
+know!
+
+Thanks,
+Jeff (jchang@smi.stanford.edu)
