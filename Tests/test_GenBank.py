@@ -4,6 +4,7 @@
 # standard library
 import os
 import copy
+import cStringIO
 
 # Biopython
 from Bio import File
@@ -80,9 +81,9 @@ for parser in all_parsers:
                     print "num qualifiers:", len(feature.qualifiers)
                     for qualifier in feature.qualifiers:
                         print "key:", qualifier.key, "value:", qualifier.value
-
+                         
         handle.close()
-
+        
 # test GenBank dictionary
 print "Testing dictionaries..."
 dict_file = os.path.join(gb_file_dir, 'cor6_6.gb')
@@ -101,5 +102,60 @@ for key in gb_dict.keys()[:3]:
     cur_seqrecord = gb_dict[key]
     print "description:", cur_seqrecord.description
     print "id:", cur_seqrecord.id
+
+# test writing GenBank format
+print "Testing writing GenBank format..."
+
+def do_comparison(good_record, test_record):
+    """Compare two records to see if they are the same.
+
+    Ths compares the two GenBank record, and will raise an AssertionError
+    if two lines do not match, showing the non-matching lines.
+    """
+    good_handle = cStringIO.StringIO(good_record)
+    test_handle = cStringIO.StringIO(test_record)
+
+    while 1:
+        good_line = good_handle.readline()
+        test_line = test_handle.readline()
+
+        if not(good_line) and not(test_line):
+            break
+
+        if not(good_line):
+            raise AssertionError("Extra info in Test: `%s`" % test_line)
+        if not(test_line):
+            raise AssertionError("Extra info in Expected: `%s`" % good_line)
+
+        assert test_line == good_line, \
+               "Expected does not match Test.\nExpect:`%s`\nTest  :`%s`\n" % \
+               (good_line, test_line)
+    
+def t_write_format():
+    record_parser = GenBank.RecordParser(debug_level = 0)
+
+    for file in test_files:
+        print "Testing GenBank writing for %s..." % os.path.basename(file)
+        cur_handle = open(os.path.join("GenBank", file), "r")
+        compare_handle = open(os.path.join("GenBank", file), "r")
+        
+        iterator = GenBank.Iterator(cur_handle, record_parser)
+        compare_iterator = GenBank.Iterator(compare_handle)
+        
+        while 1:
+            cur_record = iterator.next()
+            compare_record = compare_iterator.next()
+            
+            if cur_record is None or compare_record is None:
+                break
+
+            print "\tTesting for %s" % cur_record.version
+
+            output_record = str(cur_record) + "\n"
+            do_comparison(compare_record, output_record)
+
+        cur_handle.close()
+
+t_write_format()    
 
 
