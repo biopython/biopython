@@ -31,157 +31,86 @@ class AceTestOne(unittest.TestCase):
     def tearDown(self):
         self.handle.close()
 
-    def t_check_ACEParser(self):
-        """Test to check that ACEParser can parse the whole file into one record. 
-        """
-        aceparser=Ace.ACEParser()
-        record=aceparser.parse(self.handle)
-        record.sort()
-        x=0
-        print 'Contigs:',record.contigs,'; Reads:',record.reads
-        for r in record.records:
-            x+=1
-            print '--------------------'
-            print 'Contig no.',x,'has',len(r.rd),'reads.'
-            print 'CO:',r.contig_name,r.bases,r.reads,r.segments,r.uorc
-            print r.sequence[:10],'...',r.sequence[len(r.sequence)/2-5:len(r.sequence)/2+5],'...',r.sequence[-10:]
-            print r.quality[:10],'...',r.quality[len(r.quality)/2-5:len(r.quality)/2+5],'...',r.quality[-10:]
-            print '# AF:',len(r.af),'; # BS:',len(r.bs)
-            for i in (0,len(r.af)/2,-1):
-                print 'AF(%d) %s %s %d' % (i,r.af[i].name,r.af[i].coru,r.af[i].padded_start),';',
-            print
-            for i in (0,len(r.bs)/2,-1):
-                print 'BS(%d) %s %d %d' % (i,r.bs[i].name,r.bs[i].padded_start,r.bs[i].padded_end),';',
-            print
-            if len(r.rd)==len(r.qa) and len(r.ds)==len(r.rd):
-                print 'No. of reads in RD,QA,DS matches.'
+    def contig_summary(self,c,x):
+        """Print a summary of a contig."""
+        print '\n--------------------'
+        print 'Contig no.',x,'has',len(c.reads),'reads.'
+        print 'CO:',c.name,c.nbases,c.nreads,c.nsegments,c.uorc
+        print c.sequence[:10],'...',c.sequence[len(c.sequence)/2-5:len(c.sequence)/2+5],'...',c.sequence[-10:]
+        print c.quality[:10],'...',c.quality[len(c.quality)/2-5:len(c.quality)/2+5],'...',c.quality[-10:]
+        print '# AF:',len(c.af),'; # BS:',len(c.bs)
+        for i in (len(c.af)/2,-1):
+            print 'AF(%d) %s %s %d' % (i,c.af[i].name,c.af[i].coru,c.af[i].padded_start),';',
+        print
+        for i in (len(c.bs)/2,-1):
+            print 'BS(%d) %s %d %d' % (i,c.bs[i].name,c.bs[i].padded_start,c.bs[i].padded_end),';',
+        print
+        print 'CT:',
+        if not c.ct:
+            print 'none'
+        else:
+            print 
+            for i in c.ct:
+                print i.name, i.tag_type, i.program, i.padded_start, i.padded_end, i.date, i.info
+        print 'WA:',
+        if not c.wa:
+            print 'none'
+        else:
+            print 
+            for i in c.wa:
+                print i.tag_type, i.program, i.date, i.info
+        for r in c.reads:
+            print 'RD:',r.rd.name,r.rd.padded_bases,r.rd.info_items,r.rd.read_tags,
+            print r.rd.sequence[:10],'...',r.rd.sequence[len(r.rd.sequence)/2-5:len(r.rd.sequence)/2+5],'...',r.rd.sequence[-10:]
+            print 'QA:',r.qa.qual_clipping_start,r.qa.qual_clipping_end,r.qa.align_clipping_start,r.qa.align_clipping_end
+            if r.ds:
+                print 'DS:','CHROMAT_FILE:',r.ds.chromat_file,'PHD_FILE:',r.ds.phd_file,'TIME:',r.ds.time,
+                print 'CHEM:',r.ds.chem,'DYE:',r.ds.dye,'TEMPLATE:',r.ds.template,'DIRECTION:',r.ds.direction
             else:
-                print 'No. of reads in RD,QA,DS does not match.'
-            for i,(rd,qa,ds) in enumerate(zip(r.rd,r.qa,r.ds)):
-                print 'RD:',rd.name,rd.padded_bases,rd.info_items,rd.read_tags,
-                print rd.sequence[:10],'...',rd.sequence[len(rd.sequence)/2-5:len(rd.sequence)/2+5],'...',rd.sequence[-10:]
-                print 'QA:',qa.qual_clipping_start,qa.qual_clipping_end,qa.align_clipping_start,qa.align_clipping_end
-                print 'DS:','CHROMAT_FILE:',ds.chromat_file,'PHD_FILE:',ds.phd_file,'TIME:',ds.time,
-                print 'CHEM:',ds.chem,'DYE:',ds.dye,'TEMPLATE:',ds.template,'DIRECTION:',ds.direction
+                print 'DS: none'
             print 'RT:',
-            if r.rt==[]:
+            if not r.rt:
                 print 'none'
             else:
                 print
                 for i in r.rt:
                     print i.name, i.tag_type, i.program, i.padded_start, i.padded_end, i.date
             print 'WR:',
-            if r.wr==[]:
+            if not r.wr:
                 print 'none'
             else:
                 print
                 for i in r.wr:
                     print i.name, i.aligned, i.program, i.date
-            print 'CT:',
-            if r.ct==[]:
-                print 'none'
-            else:
-                print 
-                for i in r.ct:
-                    print i.name, i.tag_type, i.program, i.padded_start, i.padded_end, i.date, i.info
-            print 'WA:',
-            if r.wa==[]:
-                print 'none'
-            else:
-                print 
-                for i in r.wa:
-                    print i.tag_type, i.program, i.date, i.info
-        print 'Unrelated tags'
-        print 'RT:',
-        if record.rt==[]:
-            print 'none'
-        else:
-            print
-            for i in record.rt:
-                print i.name, i.tag_type, i.program, i.padded_start, i.padded_end, i.date
-        print 'WR:',
-        if record.wr==[]:
-            print 'none'
-        else:
-            print 
-            for i in record.wr:
-                print i.name, i.aligned, i.program, i.date
-        print 'CT:',
-        if record.ct==[]:
-            print 'none'
-        else:
-            print
-            for i in record.ct:
-                print i.name, i.tag_type, i.program, i.padded_start, i.padded_end, i.date, i.info
-        print 'WA:',
-        if record.wa==[]:
+
+    def t_check_ACEParser(self):
+        """Test to check that ACEParser can parse the whole file into one record."""
+        aceparser=Ace.ACEParser()
+        record=aceparser.parse(self.handle)
+        x=0
+        print '\nContigs:',record.ncontigs,'; Reads:',record.nreads
+        print 'all WA:',
+        if not record.wa:
             print 'none'
         else:
             print 
             for i in record.wa:
                 print i.tag_type, i.program, i.date, i.info
-
+        for c in record.contigs:
+            self.contig_summary(c,x)
+            x+=1
+    
     def t_check_record_parser(self):
-        """Test to check that record parser parses each contig into a record.
-        """
-        recparser = Ace.RecordParser()
-        it = Ace.Iterator(self.handle,recparser)
+        """Test to check that record parser parses each contig into a record."""
+        recparser=Ace.RecordParser()
+        it=Ace.Iterator(self.handle,recparser)
         x=0
         while 1:
             r=it.next()
             if not r:
                 break
+            self.contig_summary(r,x)
             x+=1
-            print '\n--------------------'
-            print 'Contig no.',x,'has',len(r.rd),'reads.'
-            print 'CO:',r.contig_name,r.bases,r.reads,r.segments,r.uorc
-            print r.sequence[:10],'...',r.sequence[len(r.sequence)/2-5:len(r.sequence)/2+5],'...',r.sequence[-10:]
-            print r.quality[:10],'...',r.quality[len(r.quality)/2-5:len(r.quality)/2+5],'...',r.quality[-10:]
-            print '# AF:',len(r.af),'; # BS:',len(r.bs)
-            for i in (0,len(r.af)/2,-1):
-                print 'AF(%d) %s %s %d' % (i,r.af[i].name,r.af[i].coru,r.af[i].padded_start),';',
-            print
-            for i in (0,len(r.bs)/2,-1):
-                print 'BS(%d) %s %d %d' % (i,r.bs[i].name,r.bs[i].padded_start,r.bs[i].padded_end),';',
-            print
-            if len(r.rd)==len(r.qa) and len(r.ds)==len(r.rd):
-                print 'No. of reads in RD,QA,DS matches.'
-            else:
-                print 'No. of reads in RD,QA,DS does not match.'
-            for i,(rd,qa,ds) in enumerate(zip(r.rd,r.qa,r.ds)):
-                print 'RD:',rd.name,rd.padded_bases,rd.info_items,rd.read_tags,
-                print rd.sequence[:10],'...',rd.sequence[len(rd.sequence)/2-5:len(rd.sequence)/2+5],'...',rd.sequence[-10:]
-                print 'QA:',qa.qual_clipping_start,qa.qual_clipping_end,qa.align_clipping_start,qa.align_clipping_end
-                print 'DS:','CHROMAT_FILE:',ds.chromat_file,'PHD_FILE:',ds.phd_file,'TIME:',ds.time,
-                print 'CHEM:',ds.chem,'DYE:',ds.dye,'TEMPLATE:',ds.template,'DIRECTION:',ds.direction
-            print 'RT:',
-            if r.rt==[]:
-                print 'none'
-            else:
-                print 
-                for i in r.rt:
-                    print i.name, i.tag_type, i.program, i.padded_start, i.padded_end, i.date
-            print 'WR:',
-            if r.wr==[]:
-                print 'none'
-            else:
-                print
-                for i in r.wr:
-                    print i.name, i.aligned, i.program, i.date
-            print 'CT:',
-            if r.ct==[]:
-                print 'none'
-            else:
-                print 
-                for i in r.ct:
-                    print i.name, i.tag_type, i.program, i.padded_start, i.padded_end, i.date, i.info
-            print 'WA:',
-            if r.wa==[]:
-                print 'none'
-            else:
-                print 
-                for i in r.wa:
-                    print i.tag_type, i.program, i.date, i.info
 
 if __name__ == "__main__":
     sys.exit(run_tests(sys.argv))
