@@ -856,11 +856,11 @@ class _FeatureConsumer(_BaseGenBankConsumer):
 
         if self._seq_type:
             if string.find(self._seq_type, 'DNA') != -1:
-                seq_alphabet = Alphabet.generic_dna
+                seq_alphabet = IUPAC.ambiguous_dna
             elif string.find(self._seq_type, 'RNA') != -1:
-                seq_alphabet = Alphabet.generic_rna
+                seq_alphabet = IUPAC.ambiguous_rna
             elif self._seq_type == "PROTEIN":
-                seq_alphabet = Alphabet.generic_protein
+                seq_alphabet = IUPAC.protein  # or extended protein?
             # we have a bug if we get here
             else:
                 raise ValueError("Could not determine alphabet for seq_type %s"
