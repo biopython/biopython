@@ -4,7 +4,7 @@
 # as part of this package.  
 
 
-from Bio.PDB.PDBParser import *
+from Bio.PDB.PDBParser import PDBParser 
 
 
 # first make a PDB parser object
