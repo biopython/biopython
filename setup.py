@@ -183,10 +183,9 @@ biopython_packages = ['Bio',
                       ]
 
 # Martel -- for building parsers
-martel_packages = ['Martel',
-                   'Martel.formats']
+martel_packages = ['Martel']
 # a flag to determine if we should install Martel
-INSTALL_MARTEL = 0
+INSTALL_MARTEL = 1
 
 # -- setup the packages list
 all_packages = biopython_packages
