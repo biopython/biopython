@@ -92,8 +92,8 @@ class NeighborSearch:
 		"""
 		if not level in entity_levels:
 			raise Exception, "%s: Unknown level" % level
-		self.kdt.neighbor_search(radius)
-		indices=self.kdt.get_indices()
+		self.kdt.all_search(radius)
+		indices=self.kdt.all_get_indices()
 		atom_list=self.atom_list
 		atom_pair_list=[]
 		for i in indices.shape[0]:
