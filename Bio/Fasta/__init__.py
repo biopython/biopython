@@ -155,7 +155,7 @@ class SequenceParser(_MartelBaseFastaParser):
 
         return rec
 
-class Dictionary:
+class Dictionary(dict):
     """Accesses an indexed FASTA file using a dictionary interface.
     """
     def __init__(self, indexname, parser=None, filename = None):
@@ -180,15 +180,16 @@ class Dictionary:
         
         self._index = Mindy.open(indexname)
         self._parser = parser
+        
+        primary_key_retriever = self._index['id']
+        for k in primary_key_retriever.keys():
+            dict.__setitem__(self,k,None)
 
-    def __len__(self):
-        return len(self.keys())
 
-    def __getitem__(self, key):
-        # first try to retrieve by the base id
+    def _load_seq(self,key):
         try:
             seqs = self._index.lookup(id = key)
-        # if we can't do that, we have to try and fetch by alias
+            # if we can't do that, we have to try and fetch by alias
         except KeyError:
             seqs = self._index.lookup(aliases = key)
 
@@ -199,13 +200,16 @@ class Dictionary:
 
         if self._parser:
             handle = cStringIO.StringIO(seq.text)
-            return self._parser.parse(handle)
+            self[key] = self._parser.parse(handle)
         else:
-            return seq.text
+            self[key] = seq.text
+                                                                
 
-    def keys(self):
-        primary_key_retriever = self._index['id']
-        return primary_key_retriever.keys()
+    def __getitem__(self, key):
+        if self.has_key(key) and dict.__getitem__(self,key) is None:
+            self._load_seq(key)
+        return dict.__getitem__(self,key)
+            
 
 def index_file(filename, indexname, rec2key = None, use_berkeley = 0):
     """Index a FASTA file.
