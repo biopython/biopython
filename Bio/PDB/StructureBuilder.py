@@ -178,10 +178,6 @@ class StructureBuilder:
 				# Residue already contains this atom
 				duplicate_atom=residue[name]
 				if duplicate_atom.is_disordered()==2:
-					# A disordered atom is found, altloc's are OK
-					if duplicate_atom.disordered_has_id(altloc):
-						# if this exception is ignored, an atom will be missing
-						raise PDBConstructionException, "Disordered atoms with identical altlocs" 
 					duplicate_atom.disordered_add(atom)		
 				else:
 					# This is an error in the PDB file:

@@ -85,7 +85,7 @@ class Chain(Entity):
 		"""Return a list of undisordered residues.
 
 		Some Residue objects hide several disordered residues
-		(DisorderedResidue objects).  This method unpacks them, 
+		(DisorderedResidue objects). This method unpacks them, 
 		ie. it returns a list of simple Residue objects.
 		"""
 		unpacked_list=[]
