@@ -355,6 +355,7 @@ PACKAGES = [
     'Bio.SeqIO',
     'Bio.SeqUtils',
     'Bio.Sequencing',
+    'Bio.Statistics',
     'Bio.SubsMat',
     'Bio.SVDSuperimposer',
     'Bio.SwissProt',
