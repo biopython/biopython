@@ -105,7 +105,7 @@ elif options.exp=="RDA":
     k=1
     format="%4.1f"
 else:
-    print "Unknown option."
+    print "ERROR: Unknown option."
     sys.exit()
 
 residue_list=Selection.unfold_entities(m, 'R')
