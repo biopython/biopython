@@ -10,7 +10,7 @@ from Bio.Application import _Option
 class Primer3Commandline(Application.AbstractCommandline):
     """Commandline object for the Primer3 interface from EMBOSS.
     """
-    def __init__(self, cmd = "primer3"):
+    def __init__(self, cmd = "eprimer3"):
         Application.AbstractCommandline.__init__(self)
         self.program_name = cmd
 
