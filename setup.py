@@ -218,6 +218,7 @@ biopython_packages = ['Bio',
                       'Bio.WWW',
                       'Bio.builders',
                       'Bio.builders.SeqRecord',
+                      'Bio.dbdefs',
                       'Bio.expressions',
                       'Bio.expressions.embl',
                       'Bio.expressions.swissprot',
@@ -234,7 +235,7 @@ INSTALL_MARTEL = 1
 
 # BioSQL -- for interacting with relational databases
 biosql_packages = ['BioSQL']
-INSTALL_BIOSQL = 0
+INSTALL_BIOSQL = 1
 
 # -- setup the packages list
 all_packages = biopython_packages

@@ -252,7 +252,40 @@ class EConsenseCommandline(Application.AbstractCommandline):
                   "Do not print out the sets of species"),
           _Option(["-printsets"], ["input"], None, 0,
                   "Print out the sets of species")]
-                  
+
+class ESeqBootCommandline(Application.AbstractCommandline):
+    """Commandline object for the eseqboot program from EMBOSS.
+
+    This is an EMBOSS wrapper around seqboot from PHYLIP.
+    """
+    def __init__(self, cmd = "eseqboot"):
+        Application.AbstractCommandline.__init__(self)
+        self.program_name = cmd
+
+        self.parameters = \
+         [_Option(["-datafile"], ["input", "file"], None, 1,
+                  "Input file"),
+          _Option(["-outfile"], ["output", "file"], None, 1,
+                  "Output file name"),
+          _Option(["-randseed"], ["input"], None, 1,
+                  "Random number seed (must be odd)"),
+          _Option(["-method"], ["input"], None, 1,
+                  "Choose the method"),
+          _Option(["-test"], ["input"], None, 1,
+                  "Choose test"),
+          _Option(["-reps"], ["input"], None, 1,
+                  "How many replicates"),
+          _Option(["-inter"], ["input"], None, 0,
+                  "Interleaved input"),
+          _Option(["-enzymes"], ["input"], None, 0,
+                  "Present in input file"),
+          _Option(["-all"], ["input"], None, 0,
+                  "All alleles present at each locus"),
+          _Option(["-printdata"], ["input"], None, 0,
+                  "Print out the data at start of run"),
+          _Option(["-progress"], ["input"], None, 0,
+                  "Print indications of progress of run")]
+
 class WaterCommandline(Application.AbstractCommandline):
     """Commandline object for the water program from EMBOSS.
     """

@@ -5,6 +5,36 @@ Test basic point crossover functionality. ... ok
 Ran 1 tests in 0.001s
 
 OK
+Test basic asymmetric 2-point crossover functionality. ... ok
+Test basic 4-point crossover functionality. ... ok
+Test properties of symmetric 4-point crossover. ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.004s
+
+OK
+Test basic interleave crossover functionality. ... ok
+Test basic interleave crossover with asymmetric genomes. ... ok
+Test properties of interleave point crossover. ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.005s
+
+OK
+Test basic asymmetric 2-point crossover functionality. ... ok
+
+----------------------------------------------------------------------
+Ran 1 tests in 0.001s
+
+OK
+Test basic uniform crossover functionality. ... ok
+Test properties of differing genome length, uniform crossovers. ... ok
+Test properties of equal genome length, uniform crossovers. ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.003s
+
+OK
 Make sure we always keep higher fitness when specified. ... ok
 Make sure we do normal crossover functionality when specified. ... ok
 
