@@ -34,10 +34,7 @@ def items(l):
     in arbitrary order.
 
     """
-    dict = {}
-    for i in l:
-        dict[i] = 1
-    return dict.keys()
+    return asdict(l).keys()
 
 def intersection(l1, l2):
     """intersection(l1, l2) -> list of common items
