@@ -4,6 +4,11 @@ News for the Biopython Project
 This file contains release notes and general news 
 about the biopython project.
 
+Jul 28, 2003: Biopython 1.21
+  Martel added back into the released package
+  new AlignACE module by Bartek Wilczynski
+  Andreas Kuntzagk fix for GenBank Iterator on empty files
+
 Jul 27, 2003: Biopython 1.20
   added Andrew Dalke's EUtils library
   added Michiel de Hoon's gene expression analysis package
