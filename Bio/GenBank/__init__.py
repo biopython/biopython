@@ -948,8 +948,26 @@ class _RecordConsumer(_BaseGenBankConsumer):
         self._cur_qualifier = Record.Qualifier()
         self._cur_qualifier.key = content
 
+    def _clean_qualifier_value(self, text):
+        """Clean up the qualifier value so it is one long string.
+
+        This removes newlines, and gets rid of excessive spaces, so that
+        the qualifier value is just a long string with works separated by
+        single spaces.
+        """
+        # get rid of newlines in the qualifier value
+        newlines = ["\n", "\r"]
+        for ws in newlines:
+            text = text.replace(ws, "")
+
+        # get rid of excessive spaces
+        text_parts = text.split(" ")
+        while '' in text_parts:
+            text_parts.remove('')
+        return string.join(text_parts)
+
     def qualifier_value(self, content):
-        self._cur_qualifier.value = content
+        self._cur_qualifier.value = self._clean_qualifier_value(content)
 
     def base_count(self, content):
         self.data.base_counts = content
