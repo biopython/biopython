@@ -687,7 +687,18 @@ void KDTree::neighbor_search(float neighbor_radius)
 
 	// start with [-INF, INF]
 	region=new Region();
-	_neighbor_search(_root, region, 0);
+
+	if (_root->is_leaf())
+	{
+		// this is a boundary condition
+		// bucket_size>nr of points
+		_search_neighbors_in_bucket(_root);
+	}
+	else
+	{
+		// "normal" situation
+		_neighbor_search(_root, region, 0);
+	}
 	delete region;
 }
 

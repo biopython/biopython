@@ -27,13 +27,20 @@ def _neighbor_test(nr_points, dim, bucket_size, radius):
 		coords=random((nr_points, dim)).astype("f")
 		kdt.set_data(coords, nr_points)
 		kdt.neighbor_search(radius)
-		l1=len(kdt.neighbor_get_radii())
+		r=kdt.neighbor_get_radii()
+		if r is None:
+			l1=0
+		else:
+			l1=len(r)
 		# now do a slow search to compare results
 		kdt.neighbor_simple_search(radius)
-		l2=len(kdt.neighbor_get_radii())
+		r=kdt.neighbor_get_radii()
+		if r is None:
+			l2=0
+		else:
+			l2=len(r)
 		if l1==l2:
-			#print "Passed."
-			pass
+			print "Passed."
 		else:
 			print "Not passed: %i <> %i." % (l1, l2)
 
@@ -53,7 +60,11 @@ def _test(nr_points, dim, bucket_size, radius):
 	center=coords[0]
 	kdt.set_data(coords, nr_points)
 	kdt.search_center_radius(center, radius)
-	l1=len(kdt.get_indices())
+	r=kdt.get_indices()
+	if r is None:
+		l1=0
+	else:
+		l1=len(r)
 	l2=0
 	# now do a manual search to compare results
 	for i in range(0, nr_points):
@@ -61,8 +72,7 @@ def _test(nr_points, dim, bucket_size, radius):
 		if _dist(p, center)<=radius:
 			l2=l2+1
 	if l1==l2:
-		#print "Passed."
-		pass
+		print "Passed."
 	else:
 		print "Not passed: %i <> %i." % (l1, l2)
 
