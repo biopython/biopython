@@ -174,6 +174,9 @@ class Atom:
 		"Return alternative location specifier."
 		return self.altloc
 
+	def get_level(self):
+		return self.level
+
 
 class DisorderedAtom(DisorderedEntityWrapper):
 	"""
