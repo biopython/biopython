@@ -4,6 +4,12 @@ News for the Biopython Project
 This file contains release notes and general news 
 about the biopython project.
 
+Oct 18, 2003: Biopython 1.23
+  Fixed distribution of files in Bio/Cluster
+  Now distributing Bio/KDTree/_KDTree.swig.C
+  minor updates in installation code
+  added mmCIF support for PDB files
+
 Oct 9, 2003: Biopython 1.22
   Added Peter Slicker's patches for speeding up modules under Python 2.3
   Fixed Martel installation.
