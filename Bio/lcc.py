@@ -1,5 +1,6 @@
-# Copyright 2003 by Sebastian Bassi.  All rights reserved.  This code
-# is part of the Biopython distribution and governed by its license.
+# Copyright 2003 by Sebastian Bassi. sbassi@genesdigitales.com
+# All rights reserved.  This code is part of the Biopython 
+# distribution and governed by its license.
 # Please see the LICENSE file that should have been included as part
 # of this package.
 
@@ -11,7 +12,7 @@ compone=[0]
 lccsal=[0]
 
 def lcc_mult(seq,wsize,start,end):
-    """Return a vector called lccsal, the LCC, a complexity measure 
+    """Return a list called lccsal, the LCC, a complexity measure 
 from a sequence, called seq."""
     l2=math.log(2)
     tamseq=end-start
@@ -115,6 +116,7 @@ def lcc_simp(seq,start,end):
     window=seq[start:end]
     if count(window,'A')==0:
         term_a=0
+	# This check is usefull in order to avoid calculate log of 0.
     else:
         term_a=((count(window,'A'))/float(wsize))*((math.log((count(window,'A'))/float(wsize)))/l2)
     if count(window,'C')==0:
