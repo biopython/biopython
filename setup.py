@@ -312,6 +312,7 @@ PACKAGES = [
     'Bio.SCOP.tests',
     'Bio.SeqIO',
     'Bio.SeqUtils',
+    'Bio.Sequencing',
     'Bio.SubsMat',
     'Bio.SVDSuperimposer',
     'Bio.SwissProt',
