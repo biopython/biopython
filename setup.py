@@ -168,11 +168,13 @@ biopython_packages = ['Bio',
                       'Bio.GenBank',
                       'Bio.Gobase',
                       'Bio.InterPro',
+                      'Bio.IntelliGenetics',
                       'Bio.Kabat',
                       'Bio.KEGG',
                       'Bio.KEGG.Compound',
                       'Bio.KEGG.Enzyme',
                       'Bio.Medline',
+                      'Bio.MetaTool',
                       'Bio.PDB',
                       'Bio.Prosite',
                       'Bio.Rebase',
@@ -222,12 +224,12 @@ setup(name='biopython',
                                ),
                      Extension('Bio.Tools.cstringfns',
                                ['Bio/Tools/cstringfnsmodule.c']
-                               )
+                               ),
                      Extension('Bio.Align.csupport',
-                               ['Bio.Align.csupportmodule.c']
-                               )
+                               ['Bio/Align/csupportmodule.c']
+                               ),
                      Extension('Bio.Align.cfastpairwise',
-                               ['Bio.Align.cfastpairwisemodule.c']
+                               ['Bio/Align/cfastpairwisemodule.c']
                                )
                      ]
       )
