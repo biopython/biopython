@@ -16,7 +16,7 @@ RecordParser       Parses FASTA sequence data into a Record object.
 SequenceParser     Parses FASTA sequence data into a Sequence object.
 
 _Scanner           Scans a FASTA-format stream.
-_RecordConsumer    Consumes FASTA data to a FASTA Record object.
+_RecordConsumer    Consumes FASTA data to a Record object.
 _SequenceConsumer  Consumes FASTA data to a Sequence object.
 
 
@@ -24,6 +24,8 @@ Functions:
 index_file         Index a FASTA file for a Dictionary.
 
 """
+from types import *
+import string
 from Bio import File
 from Bio import Index
 from Bio import Sequence
@@ -72,6 +74,8 @@ class Iterator:
         If set to None, then the raw contents of the file will be returned.
 
         """
+        if type(handle) is not FileType and type(handle) is not InstanceType:
+            raise ValueError, "I expected a file handle or file-like object"
         self._uhandle = File.UndoHandle(handle)
         self._parser = parser
 
@@ -101,12 +105,15 @@ class Iterator:
         return data
 
 class Dictionary:
+    """Accesses a FASTA file using a dictionary interface.
+
+    """
     __filename_key = '__filename'
     
     def __init__(self, indexname, parser=None):
         """__init__(self, indexname, parser=None)
 
-        Create a new Fasta Dictionary.  indexname is the name of the
+        Open a Fasta Dictionary.  indexname is the name of the
         index for the dictionary.  The index should have been created
         using the index_file function.  parser is an optional Parser
         object to change the results into another form.  If set to None,
@@ -163,7 +170,6 @@ class _Scanner:
     feed   Feed in one FASTA record.
 
     """
-
     def feed(self, handle, consumer):
         """feed(self, handle, consumer)
 
@@ -204,7 +210,7 @@ class _RecordConsumer(AbstractConsumer):
 
     Members:
     data    Record with FASTA data.
-
+    
     """
     def __init__(self):
         self.data = None
