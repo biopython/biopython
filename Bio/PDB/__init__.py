@@ -10,6 +10,7 @@ __all__=[
 "PDBExceptions",
 "PDBIO",
 "PDBParser",
+"PDBList",
 "Polypeptide",
 "Residue",
 "Selection",
