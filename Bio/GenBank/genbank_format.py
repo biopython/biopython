@@ -76,14 +76,15 @@ size = Martel.Group("size",
 
 # deal with the different kinds of residues we can have
 valid_residue_prefixes = ["ss-", "ds-", "ms-"]
-valid_residue_types = ["DNA", "RNA", "mRNA", "tRNA", "rRNA", "uRNA", "PROTEIN"]
+valid_residue_types = ["DNA", "RNA", "mRNA", "tRNA", "rRNA", "uRNA",
+                       "snRNA", "PROTEIN"]
 
 residue_prefixes = map(Martel.Str, valid_residue_prefixes)
 residue_types = map(Martel.Str, valid_residue_types)
 
 residue_type = Martel.Group("residue_type",
                             Martel.Opt(Martel.Alt(*residue_prefixes)) +
-                            Martel.Alt(*residue_types) +
+                            Martel.Opt(Martel.Alt(*residue_types)) +
                             Martel.Opt(blank_space +
                                        Martel.Str("circular")))
 date = Martel.Group("date",
@@ -92,7 +93,7 @@ date = Martel.Group("date",
 # the PLN, etc stuff indicates data file divisions
 valid_divisions = ["PRI", "ROD", "MAM", "VRT", "INV", "PLN", "BCT", "RNA",
                    "VRL", "PHG", "SYN", "UNA", "EST", "PAT", "STS", "GSS",
-                   "HTG"]
+                   "HTG", "HTC"]
 divisions = map(Martel.Str, valid_divisions)
 data_file_division = Martel.Group("data_file_division",
                                   Martel.Alt(*divisions))
@@ -203,8 +204,8 @@ reference_line = Martel.Group("reference_line",
                               Martel.Str("REFERENCE") +
                               blank_space +
                               reference_num +
-                              blank_space +
-                              reference_bases +
+                              Martel.Opt(blank_space +
+                                         reference_bases) +
                               Martel.AnyEol())
 
 authors_block = define_block("  AUTHORS", "authors_block", "authors")
