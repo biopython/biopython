@@ -1841,3 +1841,5 @@ Running tests on BlastParser
 ************************************************** TESTING bt062
 ************************************************** TESTING bt063
 ************************************************** TESTING bt067
+Running tests on Blast Records
+	Testing conversion of multiple alignments

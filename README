@@ -24,13 +24,13 @@ python setup.py install
 
 **System Requirements**
 
-o "Python 2.2":http://www.python.org/
+o "Python 2.2 or better":http://www.python.org/
 
-o "mxTextTools 2.0.3":http://starship.python.net/~lemburg/mxTextTools.html
+o "mxTextTools":http://starship.python.net/~lemburg/mxTextTools.html
   This is used in many of the text handling routines in Biopython.
   Much of Biopython will not work without it.
 
-o "Numerical Python 15.3":http://numpy.sourceforge.net/ (optional)
+o "Numerical Python":http://numpy.sourceforge.net/ (optional)
   This package is only used in the computationally-oriented modules.
   It is required for Bio.Cluster and a few other modules.  If you
   think you might need these modules, then please install Numeric
@@ -48,9 +48,6 @@ o psycopg:http://initd.org/software/psycopg/ (optional)
 
 o MySQLdb:http://sourceforge.net/projects/mysql-python (optional)
   This package is only used by Bio.GFF to access a MySQL database.
-
-These version numbers indicate the earliest tested versions.  Later
-versions of these packages may work as well.
 
 
 **Installation**
@@ -115,14 +112,12 @@ planning on using.  If you did want to use that module, please install
 the required dependency and re-run the tests.
 
 
-
-
 **Bugs**
 
 While we try to ship a robust package, bugs inevitably pop up.  If you
 are having problems that might be caused by a bug in Biopython, it is
 possible that it has already been identified.  Search the 
-"bug database":http://www.biopython.org/Bugs.shtml and mailing lists
+"bug database":http://bugzilla.open-bio.org/ and mailing lists
 to see if it has already been reported (and hopefully fixed).
 
 If you suspect the problem lies within a parser, it is likely that the
@@ -152,7 +147,7 @@ writing, technical administration, and whatever else comes up.
 
 If you wish to contribute, please visit the 
 "web site":http://www.biopython.org
-and join our "mailing list":http://www.biopython.org/MailList.shtml
+and join our "mailing list":http://biopython.org/maillists/
 
 
 
@@ -171,7 +166,11 @@ MANIFEST.in  -- Tells distutils what files to distribute
 
 setup.py     -- Installation file.
 
-Bio/         -- The code.
+Bio/         -- The main code base code.
+
+Martel/      -- Code for the Martel parsing system, used in many Biopython parsers.
+
+BioSQL/      -- Code for using Biopython with BioSQL databases.
 
 Doc/         -- Documentation.
 

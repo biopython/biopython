@@ -67,3 +67,18 @@ for test in all_tests:
             rec = pb_parser.parse(open(datafile))
         else:
             raise
+
+### Blast Record
+# - incredibly incomplete. Just testing what I'm adding -- Brad.
+
+print "Running tests on Blast Records"
+
+datafile = os.path.join("Blast", all_tests[4]) # bt005
+rec = parser.parse(open(datafile))
+
+print "\tTesting conversion of multiple alignments"
+from Bio.Alphabet import IUPAC
+generic_align = rec.multiple_alignment.to_generic(IUPAC.protein)
+test_seq = generic_align.get_seq_by_num(0)
+assert test_seq.alphabet == IUPAC.protein
+assert test_seq.data[:60] == rec.multiple_alignment.alignment[0][2]

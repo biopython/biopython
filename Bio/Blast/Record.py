@@ -22,6 +22,8 @@ Parameters         Holds information from the parameters.
 
 import string
 
+from Bio.Align import Generic
+
 class Header:
     """Saves information from a blast header.
 
@@ -160,6 +162,35 @@ class MultipleAlignment:
     """
     def __init__(self):
         self.alignment = []
+
+    def to_generic(self, alphabet):
+        """Retrieve generic alignment object for the given alignment.
+
+        Instead of the tuples, this returns an Alignment object from
+        Bio.Align.Generic, through which you can manipulate and query
+        the object.
+
+        alphabet is the specified alphabet for the sequences in the code (for
+        example IUPAC.IUPACProtein.
+
+        Thanks to James Casbon for the code.
+        """
+        seq_parts = {}
+        name_order = [] # make sure we keep the alignments
+                        # in the same order as they appear in the
+                        # alignment
+        for name, start, seq, end in self.alignment:
+            if name in seq_parts:
+                seq_parts[name].append(seq)
+            else:
+                name_order.append(name)
+                seq_parts[name] = [seq]
+             
+        generic = Generic.Alignment(alphabet)
+        for seq_name in name_order:
+            generic.add_sequence(seq_name, "".join(seq_parts[seq_name]))
+ 
+        return generic
 
 class Round:
     """Holds information from a PSI-BLAST round.
