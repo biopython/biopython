@@ -40,7 +40,7 @@ def match_all(string, trie):
     """
     matches = []
     for i in range(len(string)):
-        substr = string[:i]
+        substr = string[:i+1]
         if not trie.has_prefix(substr):
             break
         if trie.has_key(substr):
