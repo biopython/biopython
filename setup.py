@@ -173,16 +173,21 @@ class build_ext_biopython(build_ext):
     def build_extension(self, ext):
         """Work around distutils bug which uses the C compiler for C++ code.
         """
+        # build this extension by default
+        build = 1
         if hasattr(ext, "language") and ext.language == "c++":
-            # fix for distutils where C++ is not handled. This includes
-            # Python 2.2.x and Mingw 32 -- need to find the C++ compiler
+            # places where C++ just won't build right now:
+            # mingw32
+            if self.compiler.compiler_type in ["mingw32"]:
+                build = 0
+            
+            # fix for distutils where C++ is not handled well. This includes
+            # Python 2.2.x -- need to find the C++ compiler
             cxx = None
-            if (sys.version_info[1] < 3 or # Python 2.2
-                self.compiler.compiler_type in ["mingw32"]):
+            if (sys.version_info[1] < 3): # Python 2.2
                 cxx = sysconfig.get_config_vars("CXX")
                 if os.environ.has_key("CXX"):
                     cxx = os.environ["CXX"]
-
             # set the C++ compiler if it doesn't exist in distutils
             if cxx:
                 self.compiler.set_executable("compiler", cxx)
@@ -194,7 +199,9 @@ class build_ext_biopython(build_ext):
         else:
             self.compiler.compiler_so = self._original_compiler_so
 
-        build_ext.build_extension(self, ext)
+        # C++ extensions just plain won't build on some platforms
+        if build:
+            build_ext.build_extension(self, ext)
 
 class test_biopython(Command):
     """Run all of the tests for the package.
