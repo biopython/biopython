@@ -1,4 +1,4 @@
-PYTHON_INC_DIR=-I/usr/include/python2.2/ -I/usr/include/python2.2/Numeric/
+PYTHON_INC_DIR=-I/usr/include/python2.3/ -I/usr/include/python2.3/Numeric/
 CC=gcc
 LEX=flex
  
