@@ -1,0 +1,27 @@
+test_HMMGeneral
+Testing allow_all_transtions. ... ok
+Making sure MarkovModelBuilder is initialized correctly. ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.001s
+
+OK
+Testing the calculation of transitions_from ... ok
+
+----------------------------------------------------------------------
+Ran 1 tests in 0.002s
+
+OK
+Testing the calculation of s values. ... ok
+
+----------------------------------------------------------------------
+Ran 1 tests in 0.002s
+
+OK
+Calculate log likelihood. ... ok
+Test the maximum likelihood estimator for simple cases. ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.001s
+
+OK
