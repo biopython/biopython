@@ -227,7 +227,6 @@ class StructureBuilder:
 		return self.structure
 
 	def set_symmetry(self, spacegroup, cell):
-		print spacegroup
-		print cell
+		pass
 
 

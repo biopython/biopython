@@ -33,7 +33,7 @@ class MMCIF2Dict(UserDict):
 		DOUBLEQUOTED=self.DOUBLEQUOTED
 		QUOTED=self.QUOTED
 		SIMPLE=self.SIMPLE
-		get_token=Bio.PDB.mmCIFlex.get_token
+		get_token=Bio.PDB.mmCIF.MMCIFlex.get_token
 		# are we looping?
 		loop_flag=0
 		# list of names in loop

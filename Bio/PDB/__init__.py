@@ -6,7 +6,7 @@ __all__=[
 "Entity",
 "MMCIFParser",
 "Model",
-"NeighborSearch",
+#"NeighborSearch", # This is commented out - it uses KDTRee!
 "PDBExceptions",
 "PDBIO",
 "PDBParser",
