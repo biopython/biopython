@@ -70,7 +70,6 @@ def process_dict( params ):
         if type( element ) == type( {} ):
             for key, val in element.items():
                 put( container, key, val )
-#                container[ key ] = val
         elif is_close_token( element ): break
         elif is_open_token( element ):
             params.append( element )
@@ -79,17 +78,20 @@ def process_dict( params ):
             if type( val ) == type( [] ):
                 if len( val ) == 1:
                     val = val[ 0 ]
-                put( container, element, val )
-#                container[ element ] = val
+                try:
+                    put( container, element, val )
+                except:
+                    print 'Element'
+                    print element
+                    params.append( element )
 
             elif(  not is_close_token( val ) ):
                 try:
                     put( container, element, val )
-#                    container[ element ] = val
                 except:
                     print 'Element'
                     print element
-                    params.append( val )
+                    params.append( element )
             else:
                 break
     return container
@@ -263,9 +265,9 @@ class LocusLinkParser( sgmllib.SGMLParser ):
         for key in keys:
             if comment.startswith( key ):
                 if key in [ 'nomenclature', 'overview', 'function',
-'relationships', 'map', 'locus', 'additional', 'external' ]:
+'relationships', 'map', 'locus', 'external' ]:
                     self.structure_stack.append( open_dict )
-                elif key in [ 'genbank' ]:
+                elif key in [ 'genbank', 'additional' ]:
                     self.structure_stack.append( open_list )
                 elif key in [ 'refseq' ]:
                     self.structure_stack.append( open_list )
@@ -275,12 +277,15 @@ class LocusLinkParser( sgmllib.SGMLParser ):
                 if( key == 'refseq' ):
                     self.detail_state = 'waiting_category'
                 else:
-                    self.detail_state = 'scan_key'
+                    self.detail_state = 'waiting_key'
                 break
         if comment.startswith( 'end' ):
             if is_substring( comment.lower(), self.outer_state ):
                 if self.outer_state == 'refseq':
                     self.structure_stack.append( close_list )
+                elif self.outer_state == 'function':
+                    self.structure_stack.append( close_list )
+                    self.structure_stack.append( close_dict )
                 self.process_structure_stack()
                 while 1:
                     try:
@@ -304,9 +309,16 @@ class LocusLinkParser( sgmllib.SGMLParser ):
         for key, val in attrs:
             attr_dict[ key ] = val
         outer_state = self.outer_state
-        if( outer_state in [ 'nomenclature', 'overview', 'function', 'relationships', 'locus', 'map', 'genbank', 'refseq', 'additional', 'external' ] ):
+        if( outer_state in [ 'nomenclature', 'overview', 'relationships', 'locus', 'map', 'genbank', 'refseq', 'additional', 'external' ] ):
             if self.section_state == 'local_contents':
-                if self.detail_state == 'scan_val':
+                if self.detail_state in [ 'scan_val', 'unpaired_key' ]:
+                    if attr_dict.has_key( 'href' ):
+                        href = attr_dict[ 'href' ]
+                        self.text = ''
+                        self.structure_stack.append( Url( href, '' ) )
+        elif outer_state == 'function':
+            if self.section_state == 'local_contents':
+                if self.detail_state in [ 'scan_val', 'unpaired_key', 'may_be_val' ]:
                     if attr_dict.has_key( 'href' ):
                         href = attr_dict[ 'href' ]
                         self.text = ''
@@ -319,9 +331,19 @@ class LocusLinkParser( sgmllib.SGMLParser ):
         except:
             self.open_tag = 'open_html'
         outer_state = self.outer_state
-        if( outer_state in [ 'nomenclature', 'overview', 'function', 'relationships', 'locus', 'map', 'refseq', 'genbank', 'additional', 'external' ] ):
+        if( outer_state in [ 'nomenclature', 'overview', 'relationships', 'locus', 'map', 'refseq', 'genbank', 'additional', 'external' ] ):
             if self.section_state == 'local_contents':
-                if self.detail_state == 'scan_val':
+                if self.detail_state in [ 'scan_val', 'unpaired_key' ]:
+                    text = self.get_text()
+                    url = self.structure_stack.pop()
+                    if isinstance( url, Url ):
+                        url.label = text
+                    self.structure_stack.append( url )
+
+        elif outer_state == 'function':
+            if self.section_state == 'local_contents':
+                if self.detail_state in [ 'scan_val', 'unpaired_key',
+'may_be_val' ]:
                     text = self.get_text()
                     url = self.structure_stack.pop()
                     if isinstance( url, Url ):
@@ -349,26 +371,40 @@ class LocusLinkParser( sgmllib.SGMLParser ):
                 text = self.get_text()
                 cols = text.split( ':', 1 )
                 key = cols[ 0 ]
-                self.detail_state = 'scan_val'
                 if( outer_state == 'refseq' ):
                     self.structure_stack.append( cols[ 1 ] )
                     self.structure_stack.append( open_dict )
-                    self.detail_state = 'scan_key'
+                    self.detail_state = 'waiting_key'
                 elif outer_state == 'relationships':
                     self.structure_stack.append( key )
                     self.structure_stack.append( open_list )
                     self.detail_state = 'skip'
-                elif outer_state == 'function':
+                elif outer_state == 'additional':
+                    self.structure_stack.append( open_dict )
                     self.structure_stack.append( key )
+                    self.structure_stack.append( open_list )
+                    self.detail_state = 'unpaired_key'
+                elif outer_state == 'function':
+                    if self.detail_state != 'waiting_key':
+                        self.structure_stack.append( close_list )
+                    self.structure_stack.append( key )
+                    self.detail_state = 'unpaired_key'
+                    self.structure_stack.append( open_list )
                     self.structure_stack.append( open_list )
                     try:
                         val = cols[ 1 ]
                         if val.strip() != '':
                             self.structure_stack.append( val )
+                            self.detail_state = 'unpaired_key'
+
                     except IndexError:
                         pass
                 else:
+                    if self.detail_state != 'waiting_key':
+                        self.structure_stack.append( close_list )
+                    self.detail_state = 'scan_val'
                     self.structure_stack.append( key )
+                    self.structure_stack.append( open_list )
                     self.structure_stack.append( open_list )
                     try:
                         val = cols[ 1 ]
@@ -433,10 +469,10 @@ class LocusLinkParser( sgmllib.SGMLParser ):
         if self.outer_state == 'genbank':
             if self.section_state == 'local_contents':
                 self.detail_state = 'skip'
-        elif( self.outer_state in [ 'nomenclature', 'overview', 'function', 'relationships', 'locus', 'map', 'genbank', 'additional', 'external' ] ):
+        elif( self.outer_state in [ 'nomenclature', 'overview', 'relationships', 'locus', 'map', 'genbank', 'additional', 'external' ] ):
 
-                if self.section_state == 'local_contents':
-                    self.detail_state = 'scan_key'
+            if self.section_state == 'local_contents':
+                self.detail_state = 'waiting_key'
 
     def end_table( self ):
         try:
@@ -446,15 +482,19 @@ class LocusLinkParser( sgmllib.SGMLParser ):
         if( self.section_state == 'local_title' ):
             if self.outer_state == 'refseq':
                 self.section_state = 'local_contents'
+            elif self.outer_state == 'additional':
+                self.section_state = 'local_contents'
+                self.detail_state = 'scan_val'
             else:
                 self.section_state = 'local_contents'
-                self.detail_state = 'scan_key'
+                self.detail_state = 'waiting_key'
         elif self.section_state == 'local_contents':
-            if( self.outer_state in [  'nomenclature', 'relationships', 'locus', 'map', 'additional', 'external' ] ):
-                self.structure_stack.append( close_dict )
-            elif ( self.outer_state in [ 'function', 'genbank' ] ):
+            if( self.outer_state in [  'nomenclature', 'relationships', 'locus', 'map', 'external' ] ):
+                self.structure_stack.append( close_list )
+            elif ( self.outer_state in [ 'genbank', 'additional' ] ):
                 if self.detail_state == 'scan_val':
                     self.structure_stack.append( close_list )
+
             elif self.outer_state == 'refseq':
                 if self.detail_state in ['may_be_val', 'scan_val' ]:
                     self.structure_stack.append( close_list )
@@ -477,39 +517,70 @@ class LocusLinkParser( sgmllib.SGMLParser ):
         self.open_tag = 'open_table_row'
         self.text = ''
         outer_state = self.outer_state
-        if( outer_state in [   'relationships', 'locus',  'genbank', 'additional_links', 'external_annotation' ] ):
+        if( outer_state in [   'relationships', 'locus', 'function', 'genbank', 'external'
+] ):
             if self.section_state == 'local_contents':
                 if self.detail_state == 'scan_val':
                     self.structure_stack.append( open_list )
+        elif outer_state == 'map':
+            if self.section_state == 'local_contents':
+                if self.detail_state == 'scan_val':
+                    self.structure_stack.append( open_list )
+
+        elif outer_state == 'additional':
+            if self.section_state == 'local_contents':
+                self.detail_state = 'scan_val'
+                self.structure_stack.append( open_list )
+
 
     def end_tr( self ):
         try:
             self.open_tag = self.open_tag_stack.pop()
         except:
             self.open_tag = 'open_html'
-
-        if( self.outer_state in [  'overview', 'nomenclature', 'relationships',
-'map', 'locus', 'genbank', 'additional', 'external' ] ):
-            if self.detail_state == 'scan_val':
-                self.structure_stack.append( close_list )
-            elif self.detail_state == 'skip':
-                self.detail_state = 'scan_val'
-            elif self.detail_state == 'scan_headings':
-                self.detail_state = 'scan_val'
-        elif self.outer_state in [ 'function', ]:
-            if self.detail_state == 'scan_headings':
-                self.detail_state = 'scan_val'
-        elif self.outer_state in [ 'refseq', ]:
-            if self.section_state == 'local_contents':
+        if self.section_state == 'local_contents':
+            if( self.outer_state in [  'overview', 'nomenclature', 'relationships',
+'locus', 'genbank', 'external' ] ):
                 if self.detail_state == 'scan_val':
                     self.structure_stack.append( close_list )
+                elif self.detail_state == 'unpaired_key':
+                    self.structure_stack.append( close_list )
+                elif self.detail_state == 'skip':
+                    self.detail_state = 'scan_val'
+                elif self.detail_state == 'scan_headings':
+                    self.detail_state = 'scan_val'
+            elif self.outer_state in [ 'additional', ]:
+                if self.detail_state == 'unpaired_key':
+                    self.structure_stack.append( close_list )
+                    self.structure_stack.append( close_dict )
+                    self.structure_stack.append( close_list )
+                elif self.detail_state == 'scan_val':
+                    self.structure_stack.append( close_list )
+            elif self.outer_state in [ 'function', ]:
+                if self.detail_state == 'scan_headings':
+                    self.detail_state = 'scan_val'
+                elif self.detail_state == 'unpaired_key':
+                    self.detail_state = 'may_be_val'
+                    self.structure_stack.append( close_list )
+                elif self.detail_state == 'scan_val':
+                    self.detail_state = 'may_be_val'
+                    self.structure_stack.append( close_list )
+            elif self.outer_state in [ 'refseq', ]:
+                if self.section_state == 'local_contents':
+                    if self.detail_state == 'scan_val':
+                        self.structure_stack.append( close_list )
+                        self.detail_state = 'may_be_val'
+            elif self.outer_state == 'map':
+                if self.section_state == 'local_contents':
+                    if self.detail_state == 'scan_val':
+                        self.structure_stack.append( close_list )
                     self.detail_state = 'may_be_val'
 
 
     def start_td( self, attrs ):
         self.open_tag_stack.append( self.open_tag )
         self.open_tag = 'open_table_data'
-        if self.outer_state in [ 'nomenclature', 'overview', 'function', 'relationships', 'map', 'locus', 'genbank', 'additional', 'external' ]:
+        if self.outer_state in [ 'nomenclature', 'overview', 'relationships', 'map', 'locus', 'genbank', 'additional', 'external' ]:
             if( self.section_state == 'local_contents' ):
                 self.text = ''
         elif self.outer_state == 'refseq':
@@ -527,11 +598,31 @@ class LocusLinkParser( sgmllib.SGMLParser ):
 
 
 
-        if self.outer_state in [ 'nomenclature', 'overview', 'function', 'relationships', 'map', 'locus', 'genbank', 'additional', 'external' ]:
+        if self.outer_state in [ 'nomenclature', 'overview',  'relationships', 'locus', 'genbank', 'additional', 'external' ]:
             if( self.section_state == 'local_contents' ):
                 if self.detail_state == 'scan_val':
                     text = self.get_text()
                     if( text != '' ):
+                        self.structure_stack.append( text )
+        elif self.outer_state == 'function':
+            if self.section_state == 'local_contents':
+                text = self.get_text()
+                if( text != '' ):
+                    if self.detail_state == 'may_be_val':
+                        if text.strip() != '':
+                            self.structure_stack.append( open_list )
+                            self.detail_state = 'scan_val'
+                    if self.detail_state in [ 'unpaired_key', 'scan_val' ]:
+                        self.structure_stack.append( text )
+        elif self.outer_state == 'map':
+            if self.section_state == 'local_contents':
+                text = self.get_text()
+                if( text != '' ):
+                    if self.detail_state == 'may_be_val':
+                        if text.strip() != '':
+                            self.structure_stack.append( open_list )
+                            self.detail_state = 'scan_val'
+                    if self.detail_state == 'scan_val':
                         self.structure_stack.append( text )
         elif self.outer_state == 'refseq':
             if self.section_state == 'local_contents':
