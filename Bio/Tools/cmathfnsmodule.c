@@ -11,26 +11,6 @@
 #include <math.h>
 
 
-/* Return a PyNumber as a double.
- * Raises a TypeError if I can't do it.
- */
-static double PyNumber_AsDouble(PyObject *py_num)
-{
-    double val;
-    PyObject *floatobj;
-
-    if(!PyNumber_Check(py_num)) {
-	PyErr_SetString(PyExc_TypeError, "I received a non-number");
-	return 0.0;
-    }
-    if((floatobj = PyNumber_Float(py_num)) == NULL)
-	return 0.0;
-    val = PyFloat_AsDouble(floatobj);
-    Py_DECREF(floatobj);
-    return val;
-}
-
-
 /************************************** Exported Functions ***********/
 
 static char cmathfns_safe_log__doc__[] = 
@@ -47,7 +27,6 @@ cmathfns_safe_log(self, args, keywds)
      PyObject *args;
      PyObject *keywds;
 {
-    int i;
     PyObject *zero = Py_None,
 	*neg = Py_None;
     double n;
