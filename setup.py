@@ -165,7 +165,7 @@ setup(name='biopython',
       version='0.95d01',
       author='The Biopython Consortium',
       author_email='biopython@biopython.org',
-      url='http://www.bipoython.org/',
+      url='http://www.biopython.org/',
 
       cmdclass = {"install" : my_install},
       
