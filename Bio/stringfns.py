@@ -31,7 +31,7 @@ def splitany(s, sep=" \011\012\013\014\015", maxsplit=None, negate=0):
     strlist.append(s[prev:])
     return strlist
 
-def find_anychar(string, chars, index=None):
+def find_anychar(string, chars, index=None, negate=0):
     """find_anychar(string, chars[, index]) -> index of a character or -1
 
     Find a character in string.  chars is a list of characters to look
@@ -43,13 +43,15 @@ def find_anychar(string, chars, index=None):
     """
     if index is None:
         index = 0
-    while index < len(string) and string[index] not in chars:
+    while index < len(string) and \
+          ((not negate and string[index] not in chars) or
+           (negate and string[index] in chars)):
         index += 1
     if index == len(string):
         return -1
     return index
 
-def rfind_anychar(string, chars, index=None):
+def rfind_anychar(string, chars, index=None, negate=0):
     """rfind_anychar(string, chars[, index]) -> index of a character or -1
 
     Find a character in string, looking from the end to the start.
@@ -61,7 +63,9 @@ def rfind_anychar(string, chars, index=None):
     """
     if index is None:
         index = len(string)-1
-    while index >= 0 and string[index] not in chars:
+    while index >= 0 and \
+          ((not negate and string[index] not in chars) or
+           (negate and string[index] in chars)):
         index -= 1
     # If not found, index will already be -1.
     return index
