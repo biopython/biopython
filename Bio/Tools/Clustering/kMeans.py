@@ -126,10 +126,8 @@ def cluster(data, k, distance_fn=distance.euclidean,
         # Assign the clusters.  Each data point is assigned to the
         # closest centroid.
         old_clusters = clusters
-        clusters = [None] * len(data)
-        for j in range(len(data)):
-            clusters[j] = _find_closest_centroid(
-                data[j], centroids, distance_fn)
+        clusters = [_find_closest_centroid(x, centroids, distance_fn) \
+                    for x in data]
 
         # Stop if the clusters were the same as the previous iteration.
         if clusters == old_clusters:
@@ -143,8 +141,8 @@ def cluster(data, k, distance_fn=distance.euclidean,
         # not happen if the initial centroids were chosen carefully.
         centroids = zeros((k, ndims), Float)
         for j in range(len(data)):
-            cluster = clusters[j]
-            centroids[cluster] = centroids[cluster] + data[j]
+            c, d = clusters[j], data[j]
+            centroids[c] = centroids[c] + d
         num_in_cluster = listfns.count(clusters)
         for j in range(k):
             if num_in_cluster.has_key(j):
@@ -153,3 +151,6 @@ def cluster(data, k, distance_fn=distance.euclidean,
         # The loop iterated without converging.
         return None
     return centroids, clusters
+
+import ckMeans
+_find_closest_centroid = ckMeans._find_closest_centroid
