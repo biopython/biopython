@@ -207,6 +207,12 @@ class Vector:
         "Normalize the Vector"
         self._ar=self._ar/self.norm()
 
+    def normalized(self):
+        "Return a normalized copy of the Vector"
+        v=self.copy()
+        v.normalize()
+        return v
+
     def angle(self, other):
         "Return angle between two vectors"
         n1=self.norm()
