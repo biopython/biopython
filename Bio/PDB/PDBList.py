@@ -159,7 +159,8 @@ OBSLTE     26-SEP-03 1DYV      1UN2
         tw.append(self.get_list(urls[2]))
         return tw
 
-    def retrieve_pdb_file(self,pdb_code, compression='.Z', uncompress="gunzip", dir=None, exist=0):
+    def retrieve_pdb_file(self,pdb_code, compression='.gz', 
+            uncompress="gunzip", dir=None, exist=0):
         """Retrieves a PDB structure file from the PDB server and
         stores it in a local file tree.
         The PDB structure is returned as a single string.
