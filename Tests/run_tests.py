@@ -88,7 +88,7 @@ def main(argv):
         root.mainloop()
     else:    
         test_suite = testing_suite(args)
-        runner = unittest.TextTestRunner()
+        runner = unittest.TextTestRunner(verbosity = 2)
         runner.run(test_suite)
 
 def testing_suite(tests_to_run = []):
