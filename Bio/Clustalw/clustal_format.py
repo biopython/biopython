@@ -25,12 +25,13 @@ version = Martel.Group("version",
 header = Martel.Group("header",
                      Martel.Str("CLUSTAL ") +
                      Martel.Re("[X|W]") +
-                     Martel.Str(" (") +
+                     Martel.Re("[ (]+") +
                      version +
-                     Martel.Str(") multiple sequence alignment\n\n\n"))
+                     Martel.Str(") multiple sequence alignment") +
+                     Martel.MaxRepeat(Martel.Str("\n"), 0, 3))
 
 seq_id = Martel.Group("seq_id",
-                      Martel.Re("[a-zA-Z|.\d]+"))
+                      Martel.Re("[-a-zA-Z\|.\d\/]+"))
 
 # space between the sequence and id
 seq_space = Martel.Group("seq_space",
@@ -46,25 +47,25 @@ seq_num = Martel.Group("seq_num",
                        Martel.Re("[\d]+"))
 
 seq_line = Martel.Group("seq_line", seq_id + seq_space + seq_info +
-                        Martel.MaxRepeat(seq_num, 0, 1) +
+                        Martel.Opt(seq_num) +
                         Martel.Str("\n"))
 
 match_stars = Martel.Group("match_stars",
                            Martel.Re("[ \*]+") +
-                           Martel.Str("\n"))
+                           Martel.Opt(Martel.Str("\n")))
 
 # separator between blocks
 new_block = Martel.Group("new_block",
                          Martel.Str("\n"))
 
 block_info = Martel.Group("block_info",
-                          Martel.Rep(seq_line) +
-                          match_stars +
-                          Martel.MaxRepeat(new_block, 0, 1))
+                          Martel.Rep1(seq_line) +
+                          Martel.Opt(match_stars) +
+                          Martel.Rep(new_block))
 
 
 # define the format we can import to parse clustal files, one header
 # plus multiple lines of alignments
 format = Martel.Group("clustalx",
                       header +
-                      Martel.Rep(block_info))
+                      Martel.Rep1(block_info))
