@@ -8,6 +8,7 @@
 
 
 Classes:
+AbstractParser         Base class for parsers.
 AbstractConsumer       Base class of all Consumers.
 TaggingConsumer        Consumer that tags output with its event.  For debugging
 SGMLStrippingConsumer  Consumer that strips SGML tags from output.
@@ -30,6 +31,15 @@ from types import *
 
 from Bio import File
 
+class AbstractParser:
+    """Base class for other parsers.
+
+    """
+    def parse(self, handle):
+        raise NotImplementedError, "Please implement in a derived class"
+
+    def parse_str(self, string):
+        return self.parse(File.StringHandle(string))
 
 class AbstractConsumer:
     """Base class for other Consumers.
