@@ -126,7 +126,7 @@ class Dictionary:
     """
     __filename_key = '__filename'
     
-    def __init__(self, indexname, parser=None):
+    def __init__(self, indexname, parser=None, filename = None):
         """__init__(self, indexname, parser=None)
 
         Open a Fasta Dictionary.  indexname is the name of the
@@ -134,10 +134,17 @@ class Dictionary:
         using the index_file function.  parser is an optional Parser
         object to change the results into another form.  If set to None,
         then the raw contents of the file will be returned.
-
+        
+        filename specifies the name of the file that this index references. 
+        This is useful in cases where the file has been moved since indexing.
+        If no filename is supplied (the default) the filename stored in the
+        index will be used.
         """
         self._index = Index.Index(indexname)
-        self._handle = open(self._index[Dictionary.__filename_key])
+        if filename:
+            self._handle = open(filename)
+        else:
+            self._handle = open(self._index[Dictionary.__filename_key])
         self._parser = parser
 
     def __len__(self):
