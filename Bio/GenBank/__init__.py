@@ -31,6 +31,8 @@ LocationParserError   Exception indiciating a problem with the spark based
 Functions:
 index_file            Get a GenBank file ready to be used as a Dictionary.
 search_for            Do a query against GenBank.
+download_many         Download many GenBank records.
+
 """
 # standard library
 import string
@@ -1455,3 +1457,65 @@ def search_for(search, database='Nucleotide', max_ids=500):
                         dispmax=max_ids)
     parser.feed(handle.read())
     return parser.ids
+
+def download_many(gis, callback_fn, broken_fn=None, db='Nucleotide',
+                  delay=127.0, batchsize=500,  parser=None):
+    """download_many(gis, callback_fn[, delay][, batchsize])
+
+    Download many records from GenBank.  gis is a list of Genbank
+    Gi's.  Each time a record is downloaded, callback_fn is called
+    with the text of the record.  delay is the number of seconds to
+    wait between requests.  Waits 127 seconds by default.  abatchsize
+    is the number of records to request each time.  Default is 500
+    records, which is the maximum NCBI can handle.
+
+    This does not check to make sure all gi's are returned.  The
+    client must make sure that the gi's are valid.  This may be
+    implemented in the future.
+
+    """
+    class _RecordExtractor(sgmllib.SGMLParser):
+        def __init__(self):
+            sgmllib.SGMLParser.__init__(self)
+            self.records = []
+            self._in_record = 0
+        def start_pre(self, attributes):
+            self._in_record = 1
+            self._current_record = []
+        def end_pre(self):
+            self.records.append(''.join(self._current_record))
+            self._in_record = 0
+        def handle_data(self, data):
+            if self._in_record:
+                self._current_record.append(data)
+    
+    # parser is an undocumented parameter that allows people to
+    # specify an optional parser to handle each record.  This is
+    # dangerous because the results may be malformed, and exceptions
+    # in the parser may disrupt the whole download process.
+    limiter = RequestLimiter(delay)
+    
+    # Loop until all the gis are processed.
+    while gis:
+        gi_str = ','.join(gis[:batchsize])
+
+        # Make sure enough time has passed before I do another query.
+        limiter.wait()
+        
+        # Query GenBank.  This results in a HTML page that contains
+        # GenBank formatted records.  If an ID is broken, this will
+        # return no data.
+        handle = NCBI.query('Retrieve', db, list_uids=gi_str,
+                            dopt='GenBank', txt='on', dispmax=batchsize)
+        results = handle.read()
+
+        # Iterate through the results and pass the records to the
+        # callback.  The GenBank records are between the <pre></pre>
+        # tags.
+        extractor = _RecordExtractor()
+        extractor.feed(results)
+
+        for rec in extractor.records:
+            callback_fn(rec)
+
+        gis = gis[batchsize:]
