@@ -122,6 +122,10 @@ class _PrimerSearchScanner:
 
 class Primer3Record:
     """Represent information from a primer3 run finding primers.
+
+    Members:
+
+    primers   A list of primers that are generated (usually 5)
     """
     def __init__(self):
         self.comments = ""
@@ -129,6 +133,20 @@ class Primer3Record:
 
 class Primer3Primers:
     """A primer set designed by Primer3.
+
+    Members:
+
+    size
+    forward_seq
+    forward_start
+    forward_length
+    forward_tm
+    forward_gc
+    reverse_seq
+    reverse_start
+    reverse_length
+    reverse_tm
+    reverse_gc
     """
     def __init__(self):
         self.size = 0
