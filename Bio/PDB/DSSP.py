@@ -4,6 +4,7 @@ import os
 import tempfile
 from Bio.PDB import *
 from PDBExceptions import PDBException
+import re
 
 
 __doc__="""
@@ -22,6 +23,9 @@ The DSSP codes for secondary structure used here are:
     - S        Bend
     - -        None
 """
+
+# Match C in DSSP
+_dssp_cys=re.compile('[a-z]')
 
 # Maximal ASA of amino acids
 # Values from Sander & Rost, (1994), Proteins, 20:216-226
@@ -158,11 +162,13 @@ class DSSP:
                     # Verify if AA in DSSP == AA in Structure
                     # Something went wrong if this is not true!
                     resname=to_one_letter_code[resname]
-                    if not resname=="C":
-                        # Do not check CYS - DSSP uses funny names for CYS
-                        if not (resname==aa):
-                            raise PDBException,\
-                                    "Structure/DSSP mismatch at "+str(res) 
+                    if resname=="C":
+                        # DSSP renames C in C-bridges to a,b,c,d,...
+                        # - we rename it back to 'C'
+                        if _dssp_cys.match(aa):
+                            aa='C'
+                    if not (resname==aa):
+                        raise PDBException, "Structure/DSSP mismatch at "+str(res) 
                     map[res]=(ss, acc, rel_acc)
                     res_list.append((res, (ss, acc, rel_acc)))
                 else:
