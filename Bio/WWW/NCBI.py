@@ -100,7 +100,12 @@ def pmneighbor(pmid, display,
     Raises an IOError exception if there's a network error.
     
     """
-    variables = {'pmid' : pmid, 'display' : display}
+    # Warning: HUGE HACK HERE!  pmneighbor expects the display parameter
+    # to be passed as just a tag, with no value.  Unfortunately, _open
+    # doesn't support these types of parameters, so I'm tacking the display
+    # value onto the pmid tag.  This is really due to the limitations
+    # of urllib.urlencode.  We'll have to figure out a good workaround.
+    variables = {'%s&pmid' % display : pmid}
     return _open(cgi, variables)
 
 def _open(cgi, params={}, get=1):
@@ -136,9 +141,11 @@ def _open(cgi, params={}, get=1):
                    
     if string.find(data, "500 Proxy Error") >= 0:
         # Sometimes Entrez returns a Proxy Error instead of results
-        raise IOError, "500 Proxy Error (Entrez busy?)"
+        raise IOError, "500 Proxy Error (NCBI busy?)"
+    elif string.find(data, "502 Proxy Error") >= 0:
+        raise IOError, "502 Proxy Error (NCBI busy?)"
     elif string.find(data, "WWW Error 500 Diagnostic") >= 0:
-        raise IOError, "WWW Error 500 Diagnostic (Entrez busy?)"
+        raise IOError, "WWW Error 500 Diagnostic (NCBI busy?)"
     elif data[:5] == "ERROR":
         # XXX Possible bug here, because I don't know whether this really
         # occurs on the first line.  I need to check this!
