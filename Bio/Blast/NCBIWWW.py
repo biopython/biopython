@@ -145,8 +145,13 @@ class _Scanner:
         read_and_call_while(uhandle, consumer.noevent, blank=1)
 
         # Read the reference lines and the '<p>' line.
-        read_and_call_until(uhandle, consumer.reference, start='<p>')
-        read_and_call(uhandle, consumer.noevent)
+        # TBLASTN 2.2.6 has a blank line instead of a "<p>".
+        while 1:
+            line = uhandle.readline()
+            if line[:3] == '<p>' or not line.strip():
+                consumer.noevent(line)
+                break
+            consumer.reference(line)
 
         # Read the RID line, for version 2.0.12 (2.0.11?) and above.
         attempt_read_and_call(uhandle, consumer.noevent, start='RID')
@@ -162,7 +167,19 @@ class _Scanner:
         else:
             self._scan_database_info(uhandle, consumer)
             self._scan_query_info(uhandle, consumer)
+        read_and_call_while(uhandle, consumer.noevent, blank=1)
         consumer.end_header()
+
+    def _scan_blastform(self, uhandle, consumer):
+        if attempt_read_and_call(uhandle, consumer.noevent,
+                                 contains="BLASTFORM"):
+            while 1:
+                line = uhandle.peekline()
+                if is_blank_line(line):
+                    break
+                elif string.find(line, "Query=") >= 0:
+                    break
+                consumer.noevent(uhandle.readline())
 
     def _scan_database_info(self, uhandle, consumer):
         attempt_read_and_call(uhandle, consumer.noevent, start='<p>')
@@ -174,17 +191,9 @@ class _Scanner:
                             contains='sequences;')
         read_and_call(uhandle, consumer.database_info, contains='sequences;')
         read_and_call(uhandle, consumer.noevent, blank=1)
-        read_and_call(uhandle, consumer.noevent,
-                      contains='problems or questions')
-        if attempt_read_and_call(uhandle, consumer.noevent,
-                                 contains="BLASTFORM"):
-            while 1:
-                line = uhandle.peekline()
-                if is_blank_line(line):
-                    break
-                elif string.find(line, "Query=") >= 0:
-                    break
-                consumer.noevent(uhandle.readline())
+        attempt_read_and_call(uhandle, consumer.noevent,
+                              contains='problems or questions')
+        self._scan_blastform(uhandle, consumer)
         
         attempt_read_and_call(uhandle, consumer.noevent, blank=1)
         if attempt_read_and_call(uhandle, consumer.noevent,
@@ -199,11 +208,22 @@ class _Scanner:
         if attempt_read_and_call(uhandle, consumer.noevent,
                                  contains="Taxonomy reports"):
             read_and_call(uhandle, consumer.noevent, start="<BR>")
-        
-        if not attempt_read_and_call(uhandle, consumer.noevent, start="<PRE>"):
-            if attempt_read_and_call(uhandle, consumer.noevent, start="</PRE>"):
-                read_and_call_until(uhandle, consumer.noevent, start="<PRE>")
-                read_and_call_while(uhandle, consumer.noevent, start="<PRE>")
+        attempt_read_and_call(uhandle, consumer.noevent, start="<PRE>")
+
+        # </PRE>
+        # <!-- Progress msg from the server 500 7-->
+        # <!-- Progress msg from the server 1000 15-->
+        # <!-- Progress msg from the server 1500 21-->
+        # ...
+        # <PRE><HR><BR><b>Query=</b> test
+        #          (60 letters)
+        if attempt_read_and_call(uhandle, consumer.noevent, start="</PRE>"):
+            read_and_call_until(uhandle, consumer.noevent, start="<PRE>")
+            while 1:
+                line = uhandle.peekline()
+                if not line[:5] == "<PRE>" or line.find("Query=") >= 0:
+                    break
+                read_and_call(uhandle, consumer.noevent, start="<PRE>")
             
         read_and_call_while(uhandle, consumer.noevent, blank=1)
 
@@ -214,6 +234,7 @@ class _Scanner:
         read_and_call_while(uhandle, consumer.noevent, blank=1)
         if attempt_read_and_call(uhandle, consumer.noevent, start="<PRE>"):
             read_and_call_while(uhandle, consumer.noevent, blank=1)
+        self._scan_blastform(uhandle, consumer)
             
         
     def _scan_rounds(self, uhandle, consumer):
@@ -248,7 +269,10 @@ class _Scanner:
         read_and_call(uhandle, consumer.noevent, blank=1)
 
         # Read the descriptions
-        read_and_call_while(uhandle, consumer.description, blank=0, start='<a')
+        # The description contains at least an <a href> into the alignments.
+        # What is no alignments are chosen?
+        read_and_call_while(uhandle, consumer.description,
+                            blank=0, contains='<a')
 
         # two choices here, either blank lines or a </PRE>
         if not attempt_read_and_call(uhandle, consumer.noevent,
@@ -312,7 +336,7 @@ class _Scanner:
             line2 = safe_readline(uhandle)
             uhandle.saveline(line2)
             uhandle.saveline(line1)
-            if line2[:10] == '  Database':
+            if line1.find('Database') >= 0 or line2.find("Database") >= 0:
                 break
 
             # Occasionally, there's a bug where the alignment_header and
@@ -479,8 +503,12 @@ class _Scanner:
 
         consumer.start_database_report()
 
-        read_and_call(uhandle, consumer.noevent, start='<PRE>')
-        read_and_call(uhandle, consumer.database, start='  Database')
+        # TBALSTN 2.2.6
+        # <PRE>  Database: /tmp/affyA.fasta
+        line = uhandle.peekline()
+        if line.find("Database") < 0:
+            read_and_call(uhandle, consumer.noevent, start='<PRE>')
+        read_and_call(uhandle, consumer.database, contains='  Database')
         read_and_call_until(uhandle, consumer.database, contains="Posted")
         read_and_call(uhandle, consumer.posted_date, start='    Posted')
         read_and_call(uhandle, consumer.num_letters_in_database,
@@ -584,7 +612,7 @@ class _Scanner:
         read_and_call(uhandle, consumer.gap_trigger, start='S1')
         attempt_read_and_call(uhandle, consumer.blast_cutoff, start='S2')
 
-        read_and_call(uhandle, consumer.noevent, blank=1)
+        attempt_read_and_call(uhandle, consumer.noevent, blank=1)
         attempt_read_and_call(uhandle, consumer.noevent, start="</PRE>")
         attempt_read_and_call(uhandle, consumer.noevent, start="</form>")
 
