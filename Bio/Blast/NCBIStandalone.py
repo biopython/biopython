@@ -462,20 +462,23 @@ class _Scanner:
                           start="Number of HSP's that")
             read_and_call(uhandle, consumer.hsps_gapped,
                           start="Number of HSP's gapped")
-
-        read_and_call(uhandle, consumer.query_length,
-                      start='length of query')
+        # not in blastx 2.2.1
+        attempt_read_and_call(uhandle, consumer.query_length,
+                              start='length of query')
         read_and_call(uhandle, consumer.database_length,
                       start='length of database')
 
         read_and_call(uhandle, consumer.effective_hsp_length,
                       start='effective HSP')
-        read_and_call(uhandle, consumer.effective_query_length,
-                      start='effective length of query')
+        # Not in blastx 2.2.1
+        attempt_read_and_call(uhandle, consumer.effective_query_length,
+                              start='effective length of query')
         read_and_call(uhandle, consumer.effective_database_length,
                       start='effective length of database')
-        read_and_call(uhandle, consumer.effective_search_space,
-                      start='effective search space')
+        # Not in blastx 2.2.1, added a ':' to distinguish between
+        # this and the 'effective search space used' line
+        attempt_read_and_call(uhandle, consumer.effective_search_space,
+                              start='effective search space:')
         # Does not appear in BLASTP 2.0.5
         attempt_read_and_call(uhandle, consumer.effective_search_space_used,
                               start='effective search space used')
@@ -490,7 +493,11 @@ class _Scanner:
         attempt_read_and_call(uhandle, consumer.gap_x_dropoff_final,
                               start='X3')
         read_and_call(uhandle, consumer.gap_trigger, start='S1')
-        read_and_call(uhandle, consumer.blast_cutoff, start='S2')
+        # not in blastx 2.2.1
+        # first we make sure we have additional lines to work with, if
+        # not then the file is done and we don't have a final S2
+        if uhandle.peekline(): 
+            read_and_call(uhandle, consumer.blast_cutoff, start='S2')
 
         consumer.end_parameters()
 
