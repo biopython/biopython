@@ -130,10 +130,11 @@ def search_for(search, batchsize=10000, delay=2, callback_fn=None,
         # 10807727<Br>
         # [...]
         # </Body>
+        # 5/30/2001: <Body> tag now missing.  Start in body by default.
         def __init__(self):
             sgmllib.SGMLParser.__init__(self)
             self.ids = []
-            self.in_body = 0
+            self.in_body = 1
         def start_body(self, attributes):
             self.in_body = 1
         def end_body(self):
