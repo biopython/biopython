@@ -173,7 +173,7 @@ Now that we've got what we need, let's get into the installation:
 
 \item This install requires that you have the python source available. You can check this by looking for \verb|Python.h| and \verb|config.h| in some place like \verb|/usr/local/include/python1.5|.
 
-\item The distutils setup process allows you to do some customization of your install so you don't have to stick everything in the default location (in case you don't have write permissions there, or just want to test Biopython out). You have quite a few choices, which are covered in detail in the distutils installation manual (\ahrefurl{\url{http://www.python.org/sigs/distutils-sig/doc/inst/inst.html}}), specifically in the Alternative installation section.
+\item The distutils setup process allows you to do some customization of your install so you don't have to stick everything in the default location (in case you don't have write permissions there, or just want to test Biopython out). You have quite a few choices, which are covered in detail in the distutils installation manual (\ahrefurl{\url{http://www.python.org/sigs/distutils-sig/doc/inst/inst.html}}), specifically in the Alternative installation section. For example, to install Biopython into your home directory, you need to type \verb|python setup.py install --home=$HOME|. This will install the package into someplace like \verb|$HOME/lib/python2.1/site-packages|. You'll need to subsequently modify the \verb|PYTHONPATH| environmental variable to include this directory so python will be able to find the installation.
 
 \end{enumerate}
 
