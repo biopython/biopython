@@ -1,6 +1,9 @@
-from Bio.KDTree import *
-from Selection import unfold_entities, get_unique_parents, entity_levels, uniqueify
 from Numeric import array
+
+from Bio.KDTree import *
+from PDBExceptions import PDBException
+from Selection import unfold_entities, get_unique_parents, entity_levels, uniqueify
+
 
 
 class NeighborSearch:
@@ -69,7 +72,7 @@ class NeighborSearch:
 		o level - char (A, R, C, M, S)
 		"""
 		if not level in entity_levels:
-			raise Exception, "%s: Unknown level" % level
+			raise PDBException, "%s: Unknown level" % level
 		self.kdt.search(center, radius)
 		indices=self.kdt.get_indices()
 		n_atom_list=[]
@@ -92,7 +95,7 @@ class NeighborSearch:
 		o level - char (A, R, C, M, S)
 		"""
 		if not level in entity_levels:
-			raise Exception, "%s: Unknown level" % level
+			raise PDBException, "%s: Unknown level" % level
 		self.kdt.all_search(radius)
 		indices=self.kdt.all_get_indices()
 		atom_list=self.atom_list
