@@ -63,10 +63,10 @@ def classify(me, observation):
 
     """
     scores = calculate(me, observation)
-    max_score, klass = scores[0], self.classes[0]
+    max_score, klass = scores[0], me.classes[0]
     for i in range(1, len(scores)):
         if scores[i] > max_score:
-            max_score, klass = scores[i], self.classes[i]
+            max_score, klass = scores[i], me.classes[i]
     return klass
 
 def _eval_feature_fn(fn, xs, classes):
