@@ -34,6 +34,11 @@ prefix directory.  For example, with Python 2.2 and a prefix of
 (The setup.py program will warn you if the correct directory is not in
 your path.)
 
+To build then test then install you can do
+
+  python setup.py build
+  python setup.py test
+  python setup.py install
 
 REQUIREMENTS:
 

@@ -19,8 +19,8 @@ at biopython@biopython.org and ask for help.
 # This setup.py is a modified vesion of the standard Biopython
 # setup.py, which explains why some of the code is overkill :)
 
-import sys
-import os
+import sys, os
+
 try:
     from distutils.core import setup
     from distutils.command.install import install
@@ -119,6 +119,7 @@ class run_local_tests(Command):
         # change back to the current directory
         os.chdir(this_dir)
 
+
 class run_install_tests(run_local_tests):
     """Run all of the tests for the package using installed files
 
@@ -147,6 +148,7 @@ setup(name = "Martel",
                "member of the The Biopython Consortium",
       author_email = "dalke@dalkescientific.com",
       url = "http://www.dalkescientific.com/Martel",
+      license = "Biopython license",
 
       cmdclass = {"install" : my_install,
                   "test" : run_local_tests,
@@ -154,6 +156,5 @@ setup(name = "Martel",
                   },
       package_dir = {"Martel": ""},
       packages = ["Martel"],
-      
       )
 
