@@ -26,7 +26,7 @@ class xbb_io:
         while 1:
             rec = iter.next()
             if not rec: break
-            genes.append(rec.sequence, rec.title)
+            genes.append((rec.sequence, rec.title))
 
         return genes
     
