@@ -11,15 +11,16 @@ def create_flatdb():
     return FlatDB.CreateFlatDB(dbname, unique, data_fields, format)
 
 def open(dbname):
-    line = _open(os.path.join(dbname, "BIOINDEX.dat")).readline()
-    if line == "index\tBerkeleyDB/1\n":
+    text = _open(os.path.join(dbname, "config.dat"), "rb").read()
+    line = text.split("\n")[0]
+    if line == "index\tBerkeleyDB/1":
         import BerkeleyDB
         return BerkeleyDB.open(dbname)
-    elif line == "index\tflat/1\n":
+    elif line == "index\tflat/1":
         import FlatDB
         return FlatDB.open(dbname)
 
-    raise TypeError("Unknown index type: %r" % (dbname,))
+    raise TypeError("Unknown index type: %r" % (line,))
     
 
 def main():
@@ -27,7 +28,7 @@ def main():
     import XPath
     import FlatDB
     XPath.xpath_index(
-        dbname = "sprot",
+        dbname = "sprot_flat",
         filenames = ["/home/dalke/ftps/swissprot/smaller_sprot38.dat",
                      ],
         unique = "entry",

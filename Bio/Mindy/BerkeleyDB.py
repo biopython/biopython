@@ -15,7 +15,7 @@ class CreateBerkeleyDB(BaseDB.CreateDB):
         self.format = Bio.formats.normalize(format)
 
         os.mkdir(dbname)
-        outfile = _open(os.path.join(dbname, "BIOINDEX.dat"), "w")
+        outfile = _open(os.path.join(dbname, "config.dat"), "wb")
         outfile.write("index\tBerkeleyDB/1\n")
         outfile.close()
         

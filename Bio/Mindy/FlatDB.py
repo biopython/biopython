@@ -1,3 +1,4 @@
+
 import os, bisect
 import BaseDB, Location
 import Bio
@@ -5,9 +6,9 @@ import Bio
 _open = open
 
 class CreateFlatDB(BaseDB.CreateDB):
-    def __init__(self, dbname, unique, data_fields, format):
+    def __init__(self, dbname, primary_namespace, data_fields, format):
         self.dbname = dbname        
-        self.unique = unique
+        self.primary_namespace = primary_namespace
         self.data_fields = data_fields
         self.format = Bio.formats.normalize(format)
 
@@ -23,22 +24,22 @@ class CreateFlatDB(BaseDB.CreateDB):
             self.lookup_tables[field] = {}
 
         os.mkdir(dbname)
-        outfile = _open(os.path.join(dbname, "BIOINDEX.dat"), "w")
+        outfile = _open(os.path.join(dbname, "config.dat"), "wb")
         outfile.write("index\tflat/1\n")
         outfile.close()
 
         self.fileids = {}
 
     def add_record(self, filetag, startpos, length, table):
-        key_list = table[self.unique]
+        key_list = table[self.primary_namespace]
         if len(key_list) != 1:
             raise TypeError(
                 "Field %s has %d entries but must have only one "
                 "(must be unique)" % (repr(unique), len(key_list)))
         key = key_list[0]
         if self.primary_table.has_key(key):
-            raise TypeError("Field %r = %r already exists" %
-                            (self.unique, key))
+            raise TypeError("Field %r = %r already exists; must be unique" %
+                            (self.primary_namespace, key))
         self.primary_table[key] = "%s\t%s\t%s" % (filetag, startpos, length)
 
         for field in self.data_fields:
@@ -49,20 +50,26 @@ class CreateFlatDB(BaseDB.CreateDB):
                 lookup.setdefault(val, []).append(key)
 
     def close(self):
-        # Write the fileid table
-        outfile = _open(os.path.join(self.dbname, "fileids.dat"), "w")
-        for tag, s in self.filemap.items():
-            outfile.write("%s\t%s\n" % (tag, s))
-        outfile.close()
-
         # Write the configuration
-        outfile = _open(os.path.join(self.dbname, "config.dat"), "w")
-        outfile.write("namespace\t%s\n" % self.unique)
-        outfile.close()
+        configfile = _open(os.path.join(self.dbname, "config.dat"), "ab")
+
+        # Write the namespace information
+        configfile.write("primary_namespace\t%s\n" % self.primary_namespace)
+        keys = self.lookup_tables.keys()
+        keys.sort()
+        configfile.write("secondary_namespaces\t")
+        configfile.write("\t".join(keys) + "\n")
+        
+        # Write the fileid table
+        items = self.filemap.items()
+        items.sort()
+        for fileid, s in items:
+            configfile.write("fileid_%s\t%s\n" % (fileid, s))
+
+        configfile.close()
 
         # Write the primary identifier information, which is fixed width
-        filename = os.path.join(self.dbname, "key_%s.key" % (self.unique,) )
-        outfile = _open(filename, "w")
+        filename = os.path.join(self.dbname, "key_%s.key" % (self.primary_namespace,) )
         info = self.primary_table.items()
         info.sort()
         n = 1
@@ -71,16 +78,21 @@ class CreateFlatDB(BaseDB.CreateDB):
             s = "%s\t%s" % (k, v)
             if len(s) > n:
                 n = len(s)
+                if n > 9999:
+                    raise AssertionError(
+                        "Primary index record too large for format spec! " +
+                        " %s bytes in %r" % (n, s))
+        outfile = _open(filename, "wb")
+        outfile.write("%04d" % n)
         for k, v in info:
             s = "%s\t%s" % (k, v)
-            outfile.write(s.ljust(n) + "\n")
+            outfile.write(s.ljust(n))
         outfile.close()
 
         # Write the secondary identifier information
         for field, table in self.lookup_tables.items():
             
             filename = os.path.join(self.dbname, "id_%s.index" % field)
-            outfile = _open(filename, "w")
             items = table.items()
             items.sort()
             # Find the largest field
@@ -90,11 +102,17 @@ class CreateFlatDB(BaseDB.CreateDB):
                     s = "%s\t%s" % (k, x)
                     if len(s) > n:
                         n = len(s)
+                        if n > 9999:
+                            raise AssertionError(
+                       "Secondary index record too large for format spec! " +
+                       " %s bytes in %r" % (n, s))
             # And write the output
+            outfile = _open(filename, "wb")
+            outfile.write("%04d" % n)
             for k, v in items:
                 for x in v:
                     s = "%s\t%s" % (k, x)
-                    outfile.write(s.ljust(n) + "\n")
+                    outfile.write(s.ljust(n))
             outfile.close()
 
         self.primary_table = self.fileids = self.lookup_tables = None
@@ -106,7 +124,7 @@ class CreateFlatDB(BaseDB.CreateDB):
 
 def _read_tab_dict(filename):
     d = {}
-    for line in _open(filename).readlines():
+    for line in _open(filename, "rb").read().split("\n"):
         words = line.rstrip().split("\t")
         d[words[0]] = words[1:]
     return d
@@ -116,48 +134,44 @@ class BisectFile:
         self.infile = infile
         self.size = size
         infile.seek(0)
-        s = infile.readline()
-        if not s:
-            self.record_size = None
-        else:
-            self.record_size = len(s)
-        n = int(self.size / self.record_size)
-        assert n * self.record_size == self.size, "record size is wrong"
+        self.record_size = int(infile.read(4))
+        assert (size - 4) % self.record_size == 0, "record size is wrong"
     def __len__(self):
-        if self.record_size is None:
+        if self.record_size == 0:
             return 0
-        return int(self.size / self.record_size)
+        return int((self.size - 4) / self.record_size)
     def __getitem__(self, i):
-        self.infile.seek(i * self.record_size)
-        return self.infile.readline().split("\t")[0]
-    def getline(self, i):
-        self.infile.seek(i * self.record_size)
-        return self.infile.readline()
+        self.infile.seek(i * self.record_size + 4)
+        return self.infile.read(self.record_size).split("\t")[0]
+    def get_line(self, i):
+        self.infile.seek(i * self.record_size + 4)
+        return self.infile.read(self.record_size)
 
 def _find_line(filename, wantword):
     size = os.path.getsize(filename)
-    infile = _open(filename)
+    infile = _open(filename, "rb")
 
     bf = BisectFile(infile, size)
     left = bisect.bisect_left(bf, wantword)
-    line = bf.getline(left)
+    line = bf.get_line(left)
     if not line.startswith(wantword):
         return None
     return line
 
 def _find_range(filename, wantword):
     size = os.path.getsize(filename)
-    infile = _open(filename)
+    infile = _open(filename, "rb")
 
     bf = BisectFile(infile, size)
     left = bisect.bisect_left(bf, wantword)
-    line = bf.getline(left)
+    line = bf.get_line(left)
     if not line.startswith(wantword):
         return None
+    
     right = bisect.bisect_right(bf, wantword)
     data = []
     for i in range(left, right):
-        x = bf.getline(i)
+        x = bf.get_line(i)
         data.append(x)
     return data
 
@@ -192,22 +206,30 @@ class OpenFlatDB(BaseDB.OpenDB):
         BaseDB.OpenDB.__init__(self, dbname)
         
         config = _read_tab_dict(os.path.join(dbname, "config.dat"))
-        fileids = _read_tab_dict(os.path.join(dbname, "fileids.dat"))
-        for k, v in fileids.items():
+        if config["index"][0] != "flat/1":
+            raise TypeError("FlatDB does not support %r index" %
+                            (config["index"][0],))
+        self.primary_namespace = config["primary_namespace"][0]
+        self.secondary_namespaces = config["secondary_namespaces"]
+
+        fileids = {}
+        for k, v in config.items():
+            if not k.startswith("fileid_"):
+                continue
+            fileid = k[7:]
             filename, size = v
             size = long(size)
-            fileids[k] = filename, size
+            fileids[fileid] = filename, size
             if os.path.getsize(filename) != size:
                 raise TypeError(
                     "File %s has changed size from %d to %d bytes!" %
                     (size, os.path.getsize(filename)))
 
-        self.unique = config["namespace"][0]
         self.fileids = fileids
         self.dbname = dbname
 
         self.key_filename = os.path.join(dbname,
-                                         "key_%s.key" % self.unique)
+                                         "key_%s.key" % self.primary_namespace)
 
     def _turn_into_query(self, *args, **kwargs):
         if args:
@@ -215,7 +237,7 @@ class OpenFlatDB(BaseDB.OpenDB):
                 raise TypeError("Cannot specify both args and kwargs")
             if len(args) != 1:
                 raise TypeError("Only one identifier handled")
-            return self.unique, args[0]
+            return self.primary_namespace, args[0]
         
         if len(kwargs) != 1:
             raise TypeError("lookup takes a single key")
@@ -224,7 +246,7 @@ class OpenFlatDB(BaseDB.OpenDB):
     def lookup(self, *args, **kwargs):
         query = self._turn_into_query(*args, **kwargs)
         namespace, name = query
-        if namespace == self.unique:
+        if namespace == self.primary_namespace:
             loc = _lookup_location(self.key_filename, name)
             if loc is None:
                 raise KeyError("Cannot find primary key %r" % (name,))
