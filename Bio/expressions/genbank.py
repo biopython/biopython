@@ -3,14 +3,6 @@
 This is a huge regular regular expression for GenBank, built using
 the 'regular expressions on steroids' capabilities of Martel.
 
-Notes:
-Just so I remember -- the new end of line syntax is:
-  New regexp syntax - \R
-     \R    means "\n|\r\n?"
-     [\R]  means "[\n\r]"
-
-This helps us have endlines be consistent across platforms.
-
 Documentation for GenBank format that I found:
 
 o GenBank/EMBL feature tables are described at:
@@ -19,7 +11,6 @@ http://www.ebi.ac.uk/embl/Documentation/FT_definitions/feature_table.html
 o There are also descriptions of different GenBank lines at:
 http://www.ibc.wustl.edu/standards/gbrel.txt
 """
-
 # Martel
 import Martel
 from Martel import RecordReader
@@ -35,10 +26,11 @@ INDENT = 12
 FEATURE_KEY_INDENT = 5
 FEATURE_QUALIFIER_INDENT = 21
 
-blank_space = Martel.Rep1(Martel.Str(" "))
+blank_space = Martel.Spaces()
 small_indent_space = Martel.Str(" " * 2)
 big_indent_space = Martel.Str(" " * FEATURE_KEY_INDENT)
-qualifier_space = Martel.Str(" " * FEATURE_QUALIFIER_INDENT)
+qualifier_space = Martel.Str(" " * FEATURE_QUALIFIER_INDENT) | \
+                  Martel.Str("\t" + " " * (FEATURE_QUALIFIER_INDENT - 8))
 
 # - useful functions
 def define_block(identifier, block_tag, block_data, std_block_tag = None,
@@ -109,7 +101,7 @@ residue_types = map(Martel.Str, valid_residue_types)
 residue_type = Martel.Group("residue_type",
                             Martel.Opt(Martel.Alt(*residue_prefixes)) +
                             Martel.Opt(Martel.Alt(*residue_types)) +
-                            Martel.Opt(Martel.Opt(blank_space) + 
+                            Martel.Opt(Martel.Opt(blank_space) +
                                        Martel.Alt(Martel.Str("circular"),
                                                   Martel.Str("linear"))))
 
@@ -138,12 +130,12 @@ locus_line = Martel.Group("locus_line",
                           data_file_division +
                           blank_space +
                           date +
-                          Martel.AnyEol()) 
+                          Martel.AnyEol())
 
 # definition line
 # DEFINITION  Genomic sequence for Arabidopsis thaliana BAC T25K16 from
 #             chromosome I, complete sequence.
-definition_block = define_block("DEFINITION", "definition_block", 
+definition_block = define_block("DEFINITION", "definition_block",
                                 "definition", Std.description_block,
                                 Std.description)
 
@@ -173,10 +165,10 @@ nid_line = Martel.Group("nid_line",
 # PID         g6754304
 pid = Martel.Group("pid",
                    Martel.Re("[\w\d]+"))
-pid_line = Martel.Group("pid_line", 
+pid_line = Martel.Group("pid_line",
                         Martel.Str("PID") +
                         blank_space +
-                        pid + 
+                        pid +
                         Martel.AnyEol())
 
 # version and GI line
@@ -186,7 +178,7 @@ version = Martel.Group("version",
                                 {"type" : "primary", "dbname" : "genbank"}))
 
 gi = Martel.Group("gi",
-                  Std.dbid(Martel.Re("[\d]+"), 
+                  Std.dbid(Martel.Re("[\d]+"),
                            {"type" : "secondary", "dbname" : "genbank"}))
 
 version_line = Martel.Group("version_line",
@@ -199,12 +191,6 @@ version_line = Martel.Group("version_line",
                             Martel.AnyEol())
 
 # DBSOURCE    REFSEQ: accession NM_010510.1
-# db_source = Martel.Group("db_source",
-#                          Martel.ToEol())
-# db_source_line = Martel.Group("db_source_line",
-#                              Martel.Str("DBSOURCE") +
-#                              blank_space +
-#                              db_source) 
 db_source_block = define_block("DBSOURCE", "db_source_block", "db_source")
 
 # keywords line
@@ -309,7 +295,7 @@ primary_line = Martel.Group("primary_line",
                             blank_space +
                             Martel.Str("PRIMARY_SPAN") +
                             blank_space +
-                            Martel.Str("COMP") + 
+                            Martel.Str("COMP") +
                             Martel.ToEol())
 
 primary_ref_line =Martel.Group("primary_ref_line",
@@ -336,365 +322,58 @@ features_line = Martel.Group("features_line",
                              Martel.Str("Location/Qualifiers") +
                              Martel.AnyEol())
 
-# --- now we need to read in the features one at a time
-# -- first, set up the feature keys and locations
-# a listing of valid feature keys
-# XXX Because of a bug in Martel, if one name is a substring of
-# XXX another, put the longer name first.  Eg, "primer_bind" before "bind"
-feature_key_names = (
-    "allele",           # Obsolete; see variation feature key
-    "attenuator",       # Sequence related to transcription termination
-    "Bond",             # found in GenBank protein files
-    "C_region",         # Span of the C immunological feature
-    "CAAT_signal",      # 'CAAT box' in eukaryotic promoters
-    "CDS",              # Sequence coding for amino acids in protein (includes
-                        #   stop codon)
-    "conflict",         # Independent sequence determinations differ
-    "D-loop",           # Displacement loop
-    "D_segment",        # Span of the D immunological feature
-    "enhancer",         # Cis-acting enhancer of promoter function
-    "exon",             # Region that codes for part of spliced mRNA
-    "GC_signal",        # 'GC box' in eukaryotic promoters
-    "gene",             # Region that defines a functional gene, possibly
-                        #   including upstream (promotor, enhancer, etc)
-                        #   and downstream control elements, and for which
-                        #   a name has been assigned.
-    "iDNA",             # Intervening DNA eliminated by recombination
-    "intron",           # Transcribed region excised by mRNA splicing
-    "J_segment",         # Span of the J immunological feature
-    "LTR",              # Long terminal repeat
-    "mat_peptide",      # Mature peptide coding region (does not include
-                        #   stop codon)
-    "misc_binding",     # Miscellaneous binding site
-    "misc_difference",  # Miscellaneous difference feature
-    "misc_feature",     # Region of biological significance that cannot
-                        #   be described by any other feature
-    "misc_recomb",      # Miscellaneous recombination feature
-    "misc_RNA",         # Miscellaneous transcript feature not defined by
-                        #   other RNA keys
-    "misc_signal",      # Miscellaneous signal
-    "misc_structure",   # Miscellaneous DNA or RNA structure
-    "modified_base",    # The indicated base is a modified nucleotide
-    "mRNA",             # Messenger RNA
-    "mutation",         # Obsolete: see variation feature key
-    "N_region",         # Span of the N immunological feature
-    "old_sequence",     # Presented sequence revises a previous version
-    "operon",
-    "oriT",
-    "polyA_signal",     # Signal for cleavage & polyadenylation
-    "polyA_site",       # Site at which polyadenine is added to mRNA
-    "Precursor",
-    "precursor_RNA",    # Any RNA species that is not yet the mature
-                        #   RNA product
-    "prim_transcript",  # Primary (unprocessed) transcript
-    "primer_bind",      # Non-covalent primer binding site
-    "primer",           # Primer binding region used with PCR  XXX not in 
-                        #   http://www.ncbi.nlm.nih.gov/collab/FT/index.html
-    "promoter",         # A region involved in transcription initiation
-    "proprotein",
-    "Protein",          # A REFSEQ invention for referring to a protein
-    "protein_bind",     # Non-covalent protein binding site on DNA or RNA
-    "RBS",              # Ribosome binding site
-    "Region",           # Another REFSEQ invention that doesn't make any sense
-    "rep_origin",       # Replication origin for duplex DNA
-    "repeat_region",    # Sequence containing repeated subsequences
-    "repeat_unit",      # One repeated unit of a repeat_region
-    "rRNA",             # Ribosomal RNA
-    "S_region",         # Span of the S immunological feature
-    "satellite",        # Satellite repeated sequence
-    "scRNA",            # Small cytoplasmic RNA
-    "SecStr",           # RefSeq invention -- I have no idea what it means
-    "Het",
-    "sig_peptide",      # Signal peptide coding region
-    "Site-ref",
-    "Site",             # RefSeq invention for a protein site
-    "snRNA",            # Small nuclear RNA
-    "source",           # Biological source of the sequence data
-                        #   represented by a GenBank record. Mandatory
-                        #   feature, one or more per record.  For organisms
-                        #   that have been incorporated within the NCBI
-                        #   taxonomy database, an associated
-                        #   /db_xref="taxon:NNNN" qualifier will be present
-                        #   (where NNNNN is the numeric identifier assigned
-                        #   to the organism within the NCBI taxonomy
-                        #   database).
-    "stem_loop",        # Hair-pin loop structure in DNA or RNA
-    "STS",              # Sequence Tagged Site; operationally unique
-                        #   sequence that identifies the combination of
-                        #   primer spans used in a PCR assay
-    "TATA_signal",      # 'TATA box' in eukaryotic promoters
-    "terminator",       # Sequence causing transcription termination
-    "transit_peptide",  # Transit peptide coding region
-    "transposon",       # Transposable element (TN)
-    "tRNA",             # Transfer RNA
-    "unsure",           # Authors are unsure about the sequence in this region
-    "V_region",         # Span of the V immunological feature
-    "V_segment",        # Variable segment of immunoglobulin light and heavy
-                        #   chains, and T-cell receptor alpha, beta, and
-                        #   gamma chains
-    "variation",        # A related population contains stable mutation
-    "-10_signal",       # 'Pribnow box' in prokaryotic promoters
-    "-35_signal",       # '-35 box' in prokaryotic promoters
-    "3'clip",           # 3'-most region of a precursor transcript removed'
-                        #   in processing
-    "3'UTR",            # 3' untranslated region (trailer)'
-    "5'clip",           # 5'-most region of a precursor transcript removed'
-                        # in processing
-    "5'UTR",            # 5' untranslated region (leader)'
-    "-",                # (hyphen)      Placeholder
-    "snoRNA"            # small nucleolar RNA
-)
-valid_feature_keys = map(Martel.Str, feature_key_names)
-
+# feature key names are basically words, but sometimes have additional
+# characters ("-10_signal", "3'UTR"...)
 feature_key = Martel.Group("feature_key",
-                           Martel.Alt(*valid_feature_keys))
-
-# handle lots of different kinds of locations
-# complement(10..20)
-# join(10..20,30..40)
-# 10..20
-# we can have an optional reference to another accession number, ie:
-# J00194:(100..202)
-# can also have a version ie. A10000.1
-location_ref = Martel.Group("location_ref",
-                            Martel.Re("[_\d\w\.]+") +
-                            Martel.Str(":"))
+                            Martel.Re("[\w'-]+"))
 """
-location_part  = Martel.Group("location_part",
-                              Martel.Rep1(Martel.Re("[\<\>\(\)\^\.\,\d]") |
-                                          Martel.Str("complement") |
-                                          Martel.Str("join") |
-                                          Martel.Str("order") |
-                                          Martel.Str("replace") |
-                                          (Martel.Str('"') +
-                                           Martel.Opt(Martel.Re("\w")) +
-                                           Martel.Str('"')) |
-                                          location_ref))
-
-location = Martel.Group("location",
-                        Martel.Rep1(blank_space +
-                                    Martel.Rep1(location_part +
-                                                Martel.AnyEol())))
-"""
-
 location = Martel.Group("location",
                       Martel.ToEol("feature_location") + \
                       Martel.Rep(qualifier_space + \
                                  Martel.Re("(?!/)") + \
                                  Martel.ToEol("feature_location")))
+"""
 
-
+location = Martel.Group("location",
+                        Std.feature_location(Martel.UntilEol()) +
+                        Martel.AnyEol() +
+                        Martel.Rep(qualifier_space +
+                                   Martel.AssertNot(Martel.Str("/")) +
+                                   Std.feature_location(Martel.UntilEol()) +
+                                   Martel.AnyEol())
+                        )
 
 feature_key_line = Martel.Group("feature_key_line",
                                 big_indent_space +
-                                feature_key +
+                                Std.feature_name(feature_key) +
                                 location)
 
-# -- now set up all of the info we can have for qualifiers
-# a listing of valid qualifier keys
-# For now use a simple list and get all of the matching text.
-# In the future could allow more specific matches for each key.
-# XXX Because of a bug in Martel, if one name is a substring of
-# XXX another, put the longer name first.  Eg, "clone_lib" before "clone"
-feature_qualifier_names = (
-    "allele",         # Name of the allele for the a given gene
-    "anticodon",      # Location of the anticodon of tRNA and the amino
-                      #   acid for which it codes
-    "bond_type",      # refseq qualifier for bond information
-    "bound_moiety",   # Moiety bound
-    "cell_line",      # Cell line from which the sequence was obtained
-    "cell_type",      # Cell type from which the sequence was obtained
-    "chromosome",     # Chromosome (e.g. Chromosome number) from which
-                      #   the sequence was obtained
-    "chloroplast",    # Organelle type from which the sequence was obtained
-    "chromoplast",    # Organelle type from which the sequence was obtained
-    "citation",       # Reference to a citation providing the claim of or
-                      #   evidence for a feature
-    "clone_lib",      # Clone library from which the sequence was obtained
-    "clone",          # Clone from which the sequence was obtained
-    "coded_by",       # REFSEQ invention to specify a crossreference
-    "codon_start",    # Indicates the first base of the first complete codon
-                      #   in a CDS (as 1 or 2 or 3)
-    "codon",          # Specifies a codon that is different from any found
-                      #   in the reference genetic code
-    "cons_splice",    # Identifies intron splice sites that do not conform to
-                      #   the 5'-GT... AG-3' splice site consensus
-    "country",        # Country of origin for DNA sample, intended for
-                      #   epidemiological or population studies.
-    "cultivar",       # Variety of plant from which sequence was obtained
-    "cyanelle",       # Organelle type from which the sequence was obtained
-    "db_xref",        # A database cross-reference; pointer to related
-                      #   information in another database. A description of
-                      #   all cross-references can be found at:
-                      #   http://www.ncbi.nlm.nih.gov/collab/db_xref.html
-    "derived_from",
-    "dev_stage",      # If the sequence was obtained from an organism in
-                      #   a specific developmental stage, it is specified
-                      #   with this qualifier
-    "direction",      # Direction of DNA replication
-    "EC_number",      # Enzyme Commission number for the enzyme product
-                      #   of the sequence
-    "environmental_sample", # Identifies sequences derived by direct molecular
-                      #   isolation (PCR, DGGE, or other anonymous methods)
-                      #   from an environmental sample with no reliable
-                      # identification of the source organism
-    "evidence",       # Value indicating the nature of supporting evidence
-    "exception",      # Indicates that the amino acid or RNA sequence
-                      #   will not translate or agree with the DNA sequence
-                      #   according to standard biological rules
-    "focus",          # Defines the source feature of primary biological
-                      #   interest for records that have multiple source
-                      #   features originating from different organisms
-    "frequency",      # Frequency of the occurrence of a feature
-    "function",       # Function attributed to a sequence
-    "gene",           # Symbol of the gene corresponding to a sequence
-                      #   region (usable with all features)
-    "germline",       # If the sequence shown is DNA and a member of the
-                      #   immunoglobulin family, this qualifier is used to
-                      #   denote that the sequence is from unrearranged DNA
-    "heterogen",
-    "haplotype",      # Haplotype of organism from which the sequence was
-                      #   obtained
-    "hgml_locus_uid", # Found in old GenBank records
-    "insertion_seq",  # Insertion sequence element from which the sequence
-                      #   was obtained
-    "isolate",        # Individual isolate from which the sequence was
-                      #   obtained
-    "isolation_source", # Describes the physical, environmental and/or local
-                      #   geographical source of the biological sample from
-                      #   which the sequence was derived
-    "kinetoplast",    # Organelle type from which the sequence was obtained
-    "label",          # A label used to permanently identify a feature
-    "lab_host",       # Laboratory host used to propagate the organism
-                      #   from which the sequence was obtained
-    "locus_tag",      # Feature tag assigned for tracking purposes
-    "macronuclear",   # If the sequence shown is DNA and from an organism
-                      #   which undergoes chromosomal differentiation
-                      #   between macronuclear and micronuclear stages,
-                      #   this qualifier is used to denote that the
-                      #   sequence is from macronuclear DNA.
-    "match",
-    "map",            # Map position of the feature in free-format text
-    "mitochondrion",  # Organelle type from which the sequence was obtained
-    "mod_base",       # Abbreviation for a modified nucleotide base
-    "mol_type",       # In vivo molecule type
-    "motif",
-    "name",           # RefSeq specification for a Protein name
-    "note",           # Any comment or additional information
-    "number",         # A number indicating the order of genetic elements
-                      #   (e.g., exons or introns) in the 5 to 3 direction
-    "operon",
-    "organelle",      # Type of membrane-bound intracellular structure from
-                      #  which the sequence was obtained
-    "organism",       # Name of the organism that is the source of the
-                      #   sequence data in the record. 
-    "partial",        # Differentiates between complete regions and
-                      #   partial ones
-    "PCR_conditions", # Description of reaction conditions and components
-                      #   for PCR
-    "phenotype",      # Phenotype conferred by the feature
-    "plasmid",        # Name of plasmid from which sequence was obtained
-    "pop_variant",    # Population variant from which the sequence was obtained
-    "prediction",
-    "product",        # Name of a product encoded by a coding region (CDS)
-                      #   feature
-    "protein_id",     # Protein Identifier, issued by International
-                      #   collaborators.  This qualifier consists of a stable
-                      #   ID portion (3+5 format with 3 position letters and
-                      #   5 numbers) plus a version number after the decimal
-                      #   point
-    "proviral",       # If the sequence shown is viral and integrated into
-                      #   another organism's genome, this qualifier is used
-                      #   to denote that.
-    "pseudo",         # Indicates that this feature is a non-functional
-                      #   version of the element named by the feature key
-    "rearranged",     # If the sequence shown is DNA and a member of the
-                      #   immunoglobulin family, this qualifier is used to
-                      #   denote that the sequence is from rearranged DNA
-    "region_name",    # REFSEQ invention to go with their Region Type
-    "replace",        # Indicates that the sequence identified a feature's
-                      #   intervals is replaced by the  sequence shown in
-                      #   "text"
-    "rpt_family",     # Type of repeated sequence; Alu or Kpn, for example
-    "rpt_type",       # Organization of repeated sequence
-    "rpt_unit",       # Identity of repeat unit that constitutes a
-                      #   repeat_region
-    "sec_str_type",   # RefSeq invention, no idea what it means
-    "segment",        # Name of viral or phage segment sequenced
-    "selenocysteine",
-    "sequenced_mol",  # Molecule from which the sequence was obtained
-    "serotype",       # Variety of a species (usually bacteria or virus)
-                      #   characterized by its antigenic properties
-    "serovar",        # Seriological variety of a species (prokaryote)
-    "sex",            # Sex of the organism from which the sequence
-                      #   was obtained
-    "site_type",      # RefSeq invention for protein site
-    "specific_host",  # Natural host from which the sequence was obtained
-    "specimen_voucher", # An identifier of the individual or collection
-                      #   of the source organism and the place where it
-                      #   is currently stored, usually an institution.
-    "standard_name",  # Accepted standard name for this feature
-    "strain",         # Strain from which the sequence was obtained
-    "sub_clone",      # Sub-clone from which the sequence was obtained
-    "sub_species",    # Sub-species name of organism  from which the
-                      #   sequence was obtained
-    "sub_strain",     # Sub_strain from which the sequence was obtained
-    "tissue_lib",     # Tissue library from which the sequence was obtained
-    "tissue_type",    # Tissue type from which the sequence was obtained
-    "transgenic",     # Identifies the source feature of the organism
-                      #   which was the recipient of transgenic DNA
-    "translation",    # Amino acid translation of a coding region
-    "transl_except",  # Translational exception: single codon, the
-                      #   translation of which does not conform to the
-                      #   reference genetic code
-    "transl_table",   # Definition of genetic code table used if other
-                      #   than universal genetic code table
-    "transposon",     # Transposable element from which the sequence
-                      #   was obtained
-    "transcript_id",  # REFSEQ qualifier id
-    "type",           # Name of a strain if different from that in the
-                      #   SOURCE field  (XXX not in
-                      #   http://www.ncbi.nlm.nih.gov/collab/FT/index.html )
-    "usedin",         # Indicates that feature is used in a compound
-                      #   feature in another entry
-    "variety",        # Variety from which sequence was obtained
-    "virion",         # Viral genomic sequence as it is encapsidated
-                      #   (distinguished from its proviral form integrated
-                      #   in a host cell's chromosome) 
-    
-)
+# qualifiers escape quotes using double quotes
+quote = Martel.Str('"')
+quoted_chars = Std.feature_qualifier_description(Martel.Re(r'([^"\R]|"")*'))
 
-feature_qualifiers = map(Martel.Str, feature_qualifier_names)
+quoted_string = (quote + quoted_chars +
+                 Martel.Rep(Martel.AnyEol() + qualifier_space + quoted_chars) +
+                 quote + Martel.AnyEol())
 
-qualifier_key = Martel.Group("qualifier_key",
-                             Martel.Opt(blank_space) +
-                             Martel.Str("/") +
-                             Martel.Alt(*feature_qualifiers) +
-                             Martel.Opt(Martel.Str("=")))
+unquoted_string = Martel.AssertNot(quote) + \
+                  Std.feature_qualifier_description(Martel.UntilEol()) + \
+                  Martel.AnyEol()
 
-# this fails on really annoying records that have / in the first
-# line not signalling a keyword.
-# qualifier_value = Martel.Group("qualifier_value",
-#                               Martel.ToEol() +
-#                               Martel.Rep(qualifier_space +
-#                                          Martel.AnyBut("/") +
-#                                          Martel.ToEol()))
+qualifier = Std.feature_qualifier(
+    qualifier_space +
+    Martel.Str("/") +
+    Std.feature_qualifier_name(Martel.Word("feature_qualifier_name")) +
+    (Martel.AnyEol() | #  '/pseudo'
+     (Martel.Str("=") +
+     Martel.Group("feature_qualifier_description",
+      (unquoted_string |  #  '/evidence=experimental'
+       quoted_string))))   #  '/translation="AAAAAAAA....
+                          #   AAAAAAAAAAAAAAAAAAAA'
+    )
 
-qualifier_value = Martel.Group(
-    "qualifier_value",
-    Martel.ToEol() +
-    Martel.Rep(qualifier_space +
-               ((Martel.AnyBut("/") + Martel.ToEol()) |
-                (Martel.Str("/") + Martel.Rep(Martel.AnyBut("\""))
-                 + Martel.Str("\"\n")))))
-
-qualifier = Martel.Group("qualifier",
-                         qualifier_key +
-                         qualifier_value)
-feature = Martel.Group("feature",
-                       feature_key_line +
-                       Martel.Rep(qualifier))
-
+feature = Std.feature(feature_key_line +
+                      Martel.Rep(qualifier))
 
 # BASE COUNT    28300 a  15069 c  15360 g  27707 t
 base_count = Martel.Group("base_count",
@@ -718,7 +397,7 @@ sequence = Std.sequence(Martel.Group("sequence",
                         Martel.Re("[\w]+")))
 sequence_plus_spaces = Martel.Group("sequence_plus_spaces",
                                     Martel.Rep1(Martel.Str(" ") +
-                                    Martel.Opt(sequence)) + 
+                                    Martel.Opt(sequence)) +
                                     Martel.Opt(Martel.Str(" ")))
 sequence_line = Martel.Group("sequence_line",
                              blank_space +
@@ -807,9 +486,3 @@ format = Martel.HeaderFooter("genbank", {},
 
 multirecord = Martel.ParseRecords("genbank", {}, record,
                                   RecordReader.EndsWith, ("//",))
-
-
-                          
-
-
-
