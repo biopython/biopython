@@ -5,7 +5,7 @@ This code is described in great detail in the BLAST section of the Biopython
 documentation.
 """
 # standard library
-import copy
+import cStringIO
 
 # biopython
 from Bio.Blast import NCBIWWW
@@ -28,7 +28,13 @@ save_file.close()
 
 print 'Parsing the results and extracting info...'
 b_parser = NCBIWWW.BlastParser()
-b_record = b_parser.parse_str(blast_results)
+
+# option 1 -- parse the string directly
+# b_record = b_parser.parse_str(blast_results)
+
+# option 2 -- create a handle from the string and parse it
+string_result_handle = cStringIO.StringIO(blast_results)
+b_record = b_parser.parse(string_result_handle)
 
 # now get the alignment info for all e values greater than some threshold
 E_VALUE_THRESH = 0.1
