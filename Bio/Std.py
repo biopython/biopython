@@ -5,6 +5,7 @@ Group = Martel.Group
 
 namespace = "bioformat"
 NS = namespace + ":"
+XMLNS = "http://biopython.org/bioformat"
 
 def _set_if_given(attrs, field, d, valid = None, convert = None):
     value = attrs.get(field)
@@ -97,10 +98,9 @@ else:
         x.tag = tag
 
 ################ identifier, description, and cross-references
-
 def record(expr, attrs = {}):
     attrs = _check_attrs(attrs, ("format",))
-    d = {}
+    d = {"xmlns:bioformat": XMLNS}
     _set_if_given(attrs, "format", d)
     return Group("record", expr, d) # XX FIXME
 
@@ -263,11 +263,13 @@ def feature_block(expr, attrs = {}):
 _settag(feature_block, NS + "feature_block")
 
 def feature(expr, attrs = {}):
-    attrs = _check_attrs(attrs, ())
+    attrs = _check_attrs(attrs, ("location-style",))
+    d = {}
+    _set_if_given(attrs, "location-style", d)
     _must_have(expr, feature_name)
     _must_have_set(expr, [[feature_location],
                           [feature_location_start, feature_location_end]])
-    return Group(NS + "feature", expr)
+    return Group(NS + "feature", expr, d)
 _settag(feature, NS + "feature")
 
 def feature_name(expr, attrs = {}):
