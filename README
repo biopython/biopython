@@ -20,8 +20,8 @@ System Requirements
 -------------------
 
 o Python 1.52 or above
+o distutils
 
-Some of the testing code will not work with DOS.
 
 
 Installation
@@ -34,6 +34,10 @@ Currently, this package is 100% pure Python so there is nothing to
 compile.  All you need to do is add the directory where 'biopython' is
 installed to the $PYTHONPATH environment variable.  All the libraries
 should be available under the 'Bio' package.
+
+
+XXX to test
+python br_regrtest.py
 
 
 
@@ -59,17 +63,16 @@ please report bugs to biopython@biopython.org.
 Distribution Structure
 ----------------------
 
+AUTHORS       An (incomplete) list of people who have contributed.
 Bio/          The python package that makes up biopython
 Doc/          Documentation
-Experimental/ Experimental code, not officially part of the distribution
 LICENSE       License information for this package
+MANIFEST.in   Tells distutils what files to distribute
 NEWS          Release notes and news
 README        This file
 Scripts/      Miscellaneous, possibly useful, standalone scripts
 Tests/        Regression testing code
-
-The regression tests are currently all broken!  We need to develop a
-workable framework for doing this right.
+setup.py      
 
 
 
@@ -80,7 +83,7 @@ To Do
 
 - Annotations on sequences
 - BLAST additions
-  o fix Scanner and write Parser for NCBIWWW
+  o write Parser for NCBIWWW
   o PSI-BLAST on WWW
 - parsers
   o Enzyme
@@ -96,6 +99,8 @@ To Do
 - documentation(!!)
 - look into Zope-ifying the web site
 - deprecate Seq.py
+- microarray data
+- look into docstring browser
 
 If you see something here you would like to work on, please let me
 know!
