@@ -293,3 +293,331 @@ class Handle_features(Dispatch.Callback):
 
     def add_location(self, location):
         self.location = location
+
+### XXX "text" or "string" ?
+decode_text = {
+    None: str,
+    }
+
+class Text(Dispatch.DispatchHandler):
+    def __init__(self, obj, attrname, verify_none = 1):
+        Dispatch.DispatchHandler.__init__(self)
+        self.obj = obj
+        self.attrname = attrname
+        self.verify_none = verify_none
+    def start_(self, tag, attrs):  # yes, this an empty tag
+        self.save_characters()     # it expects everything from the prefix
+    def end_(self, tag):
+        assert self.verify_none == 0 or\
+               getattr(self.obj, self.attrname, None) is None, \
+               "%s %r must be None (it is %s); or set verify_none to 0" % \
+               (self.obj, self.attrname, getattr(self.obj, self.attrname))
+        setattr(self.obj, self.attrname, self.get_characters())
+
+join_text = {
+    None: lambda lines: " ".join((" ".join(lines)).split()).strip(),
+    "space": lambda lines: " ".join(lines),
+    "concat": lambda lines: "".join(lines),
+    }
+        
+class TextBlock(Dispatch.DispatchHandler):
+    def __init__(self, obj, attrname, verify_none = 1):
+        Dispatch.DispatchHandler.__init__(self)
+        self.obj = obj
+        self.attrname = attrname
+        self.verify_none = verify_none
+    def start__block(self, tag, attrs):
+        self.join_func = join_text[attrs.get("join", "space")]
+        self.lines = []
+    def start_(self, tag, attrs):  # yes, this an empty tag
+        self.save_characters()     # it expects everything from the prefix
+    def end_(self, tag):
+        s = self.get_characters()
+        self.lines.append(s)
+
+    def end__block(self, tag):
+        s = self.join_func(self.lines)
+        
+        assert self.verify_none == 0 or\
+               getattr(self.obj, self.attrname, None) is None, \
+               "%s %r must be None (it is %s); or set verify_none to 0" % \
+               (self.obj, self.attrname, getattr(self.obj, self.attrname))
+        setattr(self.obj, self.attrname, s)
+
+class AppendText(Dispatch.DispatchHandler):
+    def __init__(self, obj, attrname):
+        Dispatch.DispatchHandler.__init__(self)
+        self.obj = obj
+        self.attrname = attrname
+    def start_(self, tag, attrs):
+        self.save_characters()
+    def end_(self, tag):
+        getattr(self.obj, self.attrname).append(self.get_characters())
+
+def safe_int(s):
+    try:
+        return int(s)
+    except ValueError:
+        return long(s)
+
+decode_int = {
+    None: safe_int,
+    "digits": safe_int,
+    "comma": lambda s: int(s.replace(",", "")),
+    }
+
+class Int(Dispatch.DispatchHandler):
+    def __init__(self, obj, attrname, verify_none = 1):
+        Dispatch.DispatchHandler.__init__(self)
+        self.obj = obj
+        self.attrname = attrname
+        self.verify_none = verify_none
+    def start_(self, tag, attrs):  # yes, this an empty tag
+        self.decode_func = decode_int[attrs.get("bioformat:encoding",
+                                                "digits")]
+        self.save_characters()     # it expects everything from the prefix
+    def end_(self, tag):
+        s = self.get_characters()
+        n = self.decode_func(s)
+        assert self.verify_none == 0 or\
+               getattr(self.obj, self.attrname, None) is None, \
+               "%s %r must be None (it is %s); or set verify_none to 0" % \
+               (self.obj, self.attrname, getattr(self.obj, self.attrname))
+        setattr(self.obj, self.attrname, n)
+
+decode_float = {
+    None: float,
+    }
+
+class Float(Dispatch.DispatchHandler):
+    def __init__(self, obj, attrname, verify_none = 1):
+        Dispatch.DispatchHandler.__init__(self)
+        self.obj = obj
+        self.attrname = attrname
+        self.verify_none = verify_none
+    def start_(self, tag, attrs):  # yes, this an empty tag
+        self.save_characters()     # it expects everything from the prefix
+    def end_(self, tag):
+        s = self.get_characters()
+        x = float(s)   # FIXME to handle various encodings ... What encodings?
+        assert self.verify_none == 0 or\
+               getattr(self.obj, self.attrname, None) is None, \
+               "%s %r must be None (it is %s); or set verify_none to 0" % \
+               (self.obj, self.attrname, getattr(self.obj, self.attrname))
+        setattr(self.obj, self.attrname, x)
+
+decoding_tables = {
+    "int": decode_int,
+    "string": decode_text,
+    "float": decode_float,
+    }
+
+class Value(Dispatch.DispatchHandler):
+    def __init__(self, obj, attrname, verify_none = 1):
+        Dispatch.DispatchHandler.__init__(self)
+        self.obj = obj
+        self.attrname = attrname
+        self.verify_none = verify_none
+    def start_(self, tag, attrs):  # yes, this an empty tag
+        self.name = attrs["name"]
+        datatype = attrs.get("bioformat:type", "string")
+        encoding = attrs.get("bioformat:encoding", None)
+        self.f = decoding_tables[datatype][encoding]
+        self._attrs = attrs
+        self.save_characters()     # it expects everything from the prefix
+    def end_(self, tag):
+        s = self.get_characters()
+        x = self.f(s)
+        dict = getattr(self.obj, self.attrname)
+        assert self.verify_none == 0 or not dict.has_key(self.name), \
+               "%s.%s[%r] already exists (it is %s); or set verify_none to 0" % \
+               (self.obj, self.attrname, self.name, dict[self.name])
+        dict[self.name] = x
+
+############## Search handlers
+
+class Handle_hsp_seqalign(Dispatch.Callback):
+    def __init__(self, callback):
+        Dispatch.Callback.__init__(self, callback)
+        self.acquire(Text(self, "_name"), "hsp_seqalign_name")
+        self.acquire(Text(self, "_line"), "hsp_seqalign_line")
+        self.acquire(Text(self, "_leader"), "hsp_seqalign_leader")
+        self.acquire(Text(self, "_seq"), "hsp_seqalign_seq")
+        self.acquire(Text(self, "_start"), "hsp_seqalign_start")
+        self.acquire(Text(self, "_end"), "hsp_seqalign_end")
+
+    def start_hsp(self, tag, attrs):
+        self.names = {}    # "Query", "Sbjct"
+        self.seqs = {"query": "",     # the actual text of the sequence
+                     "homology": "",
+                     "subject": ""}
+        self.start_locs = {}
+        self.end_locs = {}
+
+    def end_hsp(self, tag):
+        self.callback(self.names, self.seqs, self.start_locs, self.end_locs)
+
+    def start_hsp_seqalign(self, tag, attrs):
+        self.sub_names = {}
+        self.sub_seqs = {}
+        self.sub_lines = {}
+        self.sub_leaders = {}   # the text up to the sequence
+        self.sub_starts = {}
+        self.sub_ends = {}
+
+    def start_hsp_seqalign_line(self, tag, attrs):
+        self.getting_hsp = which = attrs["which"]
+        assert which in ["subject", "query", "homology"], which
+        self._name = self._line = self._seq = self._leader = None
+        self._start = self._end = None
+
+    def end_hsp_seqalign_line(self, tag):
+        self.sub_names[self.getting_hsp] = self._name
+        self.sub_lines[self.getting_hsp] = self._line
+        self.sub_seqs[self.getting_hsp] = self._seq
+        self.sub_leaders[self.getting_hsp] = self._leader
+        self.sub_starts[self.getting_hsp] = self._start
+        self.sub_ends[self.getting_hsp] = self._end
+
+    def end_hsp_seqalign(self, tag):
+        # All three lines (should have been) read.
+        if not self.names:
+            self.names.update(self.sub_names)
+            self.start_locs.update(self.sub_starts)
+
+        # Always update the end locations
+        self.end_locs.update(self.sub_ends)
+
+        # Need to match up the homology line to the other lines
+        query_seq = self.sub_seqs["query"]
+        query_leader = self.sub_leaders["query"]
+        subj_seq = self.sub_seqs["subject"]
+        subj_leader = self.sub_leaders["subject"]
+        h_seq = self.sub_seqs["homology"]
+
+        assert len(query_seq) == len(subj_seq), \
+               (query_seq, subj_seq)
+        assert len(query_leader) == len(subj_leader), \
+               (query_leader, subj_leader)
+
+        h_seq = h_seq[len(query_leader):][:len(query_seq)]
+
+        assert len(h_seq) == len(query_seq), (h_seq, query_seq)
+
+        self.seqs["query"] += query_seq
+        self.seqs["homology"] += h_seq
+        self.seqs["subject"] += subj_seq
+
+
+
+class Handle_hsp(Dispatch.Callback):
+    def __init__(self, callback):
+        Dispatch.Callback.__init__(self, callback)
+        self.acquire(Handle_hsp_seqalign(self.add_hsp_seqs))
+
+        self.acquire(Value(self, "hsp_values"), "hsp_value")
+        
+    def start_hsp(self, tag, attrs):
+        self.hsp_values = {}      # expect, p, identities, ...
+        self.strands = {}
+        self.frames = {}
+
+    def end_hsp(self, tag):
+        self.callback(self.hsp_values,
+                      self.names, self.seqs, self.start_locs, self.end_locs,
+                      self.strands, self.frames,
+                      )
+        
+    def start_hsp_strand(self, tag, attrs):
+        self.strands[attrs["which"]] = attrs["strand"]
+
+    def start_hsp_frame(self, tag, attrs):
+        self.getting_frame = attrs["which"]
+        self.save_characters()
+
+    def end_hsp_frame(self, tag):
+        self.frames[self.getting_frame] = self.get_characters()
+        self.getting_frame = None
+
+    def add_hsp_seqs(self, names, seqs, start_locs, end_locs):
+        self.names = names
+        self.seqs = seqs
+        self.start_locs = start_locs
+        self.end_locs = end_locs
+
+class Handle_search_table(Dispatch.Callback):
+    def __init__(self, callback):
+        Dispatch.Callback.__init__(self, callback)
+        self.acquire(Text(self, "description"), "search_table_description")
+        self.acquire(Value(self, "values"), "search_table_value")
+        
+
+    def start_search_table(self, tag, attrs):
+        self.data = []
+    def end_search_table(self, tag):
+        self.callback(self.data)
+        self.data = None
+
+    def start_search_table_entry(self, tag, attrs):
+        self.description = None
+        self.values = {}
+        
+    def end_search_table_entry(self, tag):
+        self.data.append( (self.description, self.values) )
+        self.description = self.values = None
+    
+class Handle_search_header(Dispatch.Callback):
+    def __init__(self, callback):
+        Dispatch.Callback.__init__(self, callback)
+        self.acquire(Text(self, "appname"),
+                     "application_name")
+        
+        self.acquire(Text(self, "appversion"),
+                     "application_version")
+                                     
+        self.acquire(Text(self, "dbname"),
+                     "database_name")
+        
+        self.acquire(Int(self, "db_num_sequences"),
+                     "database_num_sequences")
+                                    
+        self.acquire(Int(self, "db_num_letters"),
+                     "database_num_letters")
+                                    
+        self.acquire(AppendText(self, "query_description"),
+                     "query_description")
+
+        self.acquire(Text(self, "query_size"),
+                     "query_size")
+        
+    def start_(self, tag, attrs):
+        self.appname = None
+        self.appversion = None
+        self.dbname = None
+        self.db_num_sequences = None
+        self.db_num_letters = None
+        self.query_description = []
+        self.query_size = None
+
+    def end_search_header(self, tag):
+        query_description = join_text[None](self.query_description)
+        self.callback({"appname": self.appname,
+                       "appversion": self.appversion,
+                       "dbname": self.dbname,
+                       "db_num_sequences": self.db_num_sequences,
+                       "db_num_letters": self.db_num_letters,
+                       "query_description": query_description,
+                       "query_size": self.query_size})
+    
+class Handle_search_info(Dispatch.Callback):
+    def __init__(self, callback):
+        Dispatch.Callback.__init__(self, callback)
+        self.acquire(Value(self, "parameters"), "search_parameter")
+        self.acquire(Value(self, "statistics"), "search_statistic")
+
+    def start_(self, tag, attrs):
+        self.parameters = {}
+        self.statistics = {}
+        
+    def end_(self, tag):
+        self.callback(self.parameters, self.statistics)

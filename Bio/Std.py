@@ -312,10 +312,144 @@ def feature_qualifier_description(expr, attrs = {}):
     return Group(NS + "feature_qualifier_description", expr)
 _settag(feature_qualifier_description, NS + "feature_qualifier_description")
 
-def _remap(from_dict, mapping):
+
+############ For homology searches
+
+# "BLASTN", "BLASTP"
+def application_name(expr, attrs = {}):
+    attrs = _check_attrs(attrs, ("app",))
+    return Group("bioformat:application_name", expr, attrs)
+
+# "2.0.11", "2.0a19MP-WashU"
+def application_version(expr, attrs = {}):
+    attrs = _check_attrs(attrs, ())
+    return Group("bioformat:application_version", expr, attrs)
+
+def search_header(expr, attrs = {}):
+    attrs = _check_attrs(attrs, ())
+    return Group("bioformat:search_header", expr, attrs)
+
+def search_table(expr, attrs = {}):
+    attrs = _check_attrs(attrs, ())
+    return Group("bioformat:search_table", expr, attrs)
+
+def search_table_description(expr, attrs = {}):
+    attrs = _check_attrs(attrs, ())
+    return Group("bioformat:search_table_description", expr, attrs)
+
+def search_table_value(expr, attrs = {}):
+    attrs = _check_attrs(attrs, ("name", "bioformat:type"))
+    return Group("bioformat:search_table_value", expr, attrs)
+
+def search_table_entry(expr, attrs = {}):
+    attrs = _check_attrs(attrs, ())
+    return Group("bioformat:search_table_entry", expr, attrs)
+
+def query_description_block(expr, attrs = {}):
+    attrs = _check_attrs(attrs, ())
+    return Group("bioformat:query_description_block", expr)
+
+def query_description(expr, attrs = {}):
+    attrs = _check_attrs(attrs, ())
+    return Group("bioformat:query_description", expr)
+
+def query_size(expr, attrs = {}):
+    attrs = _check_attrs(attrs, ())
+    return Group("bioformat:query_size", expr)
+
+def database_name(expr, attrs = {}):
+    attrs = _check_attrs(attrs, ())
+    return Group("bioformat:database_name", expr, attrs)
+
+def database_num_sequences(expr, attrs = {}):
+    attrs = _check_attrs(attrs, ("bioformat:encoding",))
+    return Group("bioformat:database_num_sequences", expr, attrs)
+
+def database_num_letters(expr, attrs = {}):
+    attrs = _check_attrs(attrs, ("bioformat:encoding",))
+    return Group("bioformat:database_num_letters", expr, attrs)
+
+def hit(expr, attrs = {}):
+    attrs = _check_attrs(attrs, ())
+    return Group("bioformat:hit", expr, attrs)
+
+def hit_length(expr, attrs = {}):
+    attrs = _check_attrs(attrs, ())
+    return Group("bioformat:hit_length", expr, attrs)
+
+def hit_description(expr, attrs = {}):
+    attrs = _check_attrs(attrs, ())
+    return Group("bioformat:hit_description", expr, attrs)
+
+def hsp(expr, attrs = {}):
+    attrs = _check_attrs(attrs, ())
+    return Group("bioformat:hsp", expr, attrs)
+
+def hsp_value(expr, attrs = {}):
+    attrs = _check_attrs(attrs, ("name", "bioformat:type"))
+    return Group("bioformat:hsp_value", expr, attrs)
+
+def hsp_frame(expr, attrs = {}):
+    attrs = _check_attrs(attrs, ("which",))
     d = {}
-    for k, v in mapping.items():
-        if from_dict.has_key(k):
-            d[v] = from_dict[k]
-    return d
+    _set_if_given(attrs, "which", d, valid = ("query", "homology", "subject"))
+    return Group("bioformat:hsp_frame", expr, d)
+
+def hsp_strand(expr, attrs = {}):
+    attrs = _check_attrs(attrs, ("strand", "which"))
+    d = {}
+    _set_if_given(attrs, "which", d, valid = ("query", "homology", "subject"))
+    _set_if_given(attrs, "strand", d, valid = ("+1", "0", "-1", ""))
+    return Group("bioformat:hsp_strand", expr, d)
+
+def hsp_seqalign_seq(expr, attrs = {}):
+    attrs = _check_attrs(attrs, ())
+    return Group("bioformat:hsp_seqalign_seq", expr, attrs)
+
+def hsp_seqalign_line(expr, attrs = {}):
+    attrs = _check_attrs(attrs, ("which",))
+    d = {}
+    _set_if_given(attrs, "which", d, valid = ("query", "homology", "subject"))
+    return Group("bioformat:hsp_seqalign_line", expr, d)
+
+def hsp_seqalign_leader(expr, attrs = {}):
+    attrs = _check_attrs(attrs, ())
+    return Group("bioformat:hsp_seqalign_leader", expr, attrs)
+    
+
+def hsp_seqalign_name(expr, attrs = {}):
+    attrs = _check_attrs(attrs, ())
+    return Group("bioformat:hsp_seqalign_name", expr, attrs)
+
+def hsp_seqalign(expr, attrs = {}):
+    attrs = _check_attrs(attrs, ())
+    return Group("bioformat:hsp_seqalign", expr, attrs)
+
+def hsp_seqalign_start(expr, attrs = {}):
+    attrs = _check_attrs(attrs, ())
+    return Group("bioformat:hsp_seqalign_start", expr, attrs)
+
+def hsp_seqalign_end(expr, attrs = {}):
+    attrs = _check_attrs(attrs, ())
+    return Group("bioformat:hsp_seqalign_end", expr, attrs)
+
+def search_parameter(expr, attrs = {}):
+    attrs = _check_attrs(attrs, ("name", "bioformat:type",
+                                 "bioformat:encoding"))
+    d = {}
+    _set_if_given(attrs, "name", d)
+    _set_if_given(attrs, "bioformat:encoding", d)
+    _set_if_given(attrs, "bioformat:type", d,
+                  valid = ("int", "float", "text"))
+    return Group("bioformat:search_parameter", expr, d)
+
+def search_statistic(expr, attrs = {}):
+    attrs = _check_attrs(attrs, ("name", "bioformat:type",
+                                 "bioformat:encoding"))
+    d = {}
+    _set_if_given(attrs, "name", d)
+    _set_if_given(attrs, "bioformat:encoding", d)
+    _set_if_given(attrs, "bioformat:type", d,
+                  valid = ("int", "float", "text"))
+    return Group("bioformat:search_statistic", expr, d)
 
