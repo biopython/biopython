@@ -60,7 +60,7 @@ class Record:
                              (http://www.ncbi.nlm.nih.gov/Taxonomy/)
     references        List of Reference objects.
     comments          List of strings.
-    cross_references  List of tuples (db, id1, id2 [, id3]).  See the docs.
+    cross_references  List of tuples (db, id1[, id2][, id3]).  See the docs.
     keywords          List of the keywords.
     features          List of tuples (key name, from, to, description).
                       from and to can be either integers for the residue
@@ -413,8 +413,8 @@ class _RecordConsumer(AbstractConsumer):
         self.data.sequence_length = int(cols[4])
     
     def accession(self, line):
-        cols = string.split(line, ';')
-        for ac in cols[1:]:
+        cols = string.split(self._chomp(string.rstrip(line[5:])), ';')
+        for ac in cols:
             self.data.accessions.append(string.lstrip(ac))
     
     def date(self, line):
@@ -444,9 +444,11 @@ class _RecordConsumer(AbstractConsumer):
         self.data.organelle = self.data.organelle + line[5:]
     
     def organism_classification(self, line):
+        line = self._chomp(string.rstrip(line))
         cols = string.split(line, ';')
         for col in cols[1:]:
-            self.data.organism_classification.append(string.lstrip(col))
+            if col:
+                self.data.organism_classification.append(string.lstrip(col))
     
     def reference_number(self, line):
         rn = string.rstrip(line[5:])
@@ -525,14 +527,23 @@ class _RecordConsumer(AbstractConsumer):
             self.data.comments[-1] = self.data.comments[-1] + line[5:]
     
     def database_cross_reference(self, line):
-        cols = string.split(line)
-        for i in range(1, len(cols)):
-            cols[i] = self._chomp(cols[i])
-        self.data.cross_references.append(tuple(cols[1:]))
+        # From CLD1_HUMAN, Release 39:
+        # DR   EMBL; [snip]; -. [EMBL / GenBank / DDBJ] [CoDingSequence]
+        # DR   PRODOM [Domain structure / List of seq. sharing at least 1 domai
+        # DR   SWISS-2DPAGE; GET REGION ON 2D PAGE.
+        line = line[5:]
+        # Remove the comments at the end of the line
+        i = string.find(line, '[')
+        if i >= 0:
+            line = line[:i]
+        cols = string.split(self._chomp(string.rstrip(line)), ';')
+        for i in range(len(cols)):
+            cols[i] = string.lstrip(cols[i])
+        self.data.cross_references.append(tuple(cols))
     
     def keyword(self, line):
-        cols = string.split(self._chomp(line[5:]), ';')
-        for col in cols[1:]:
+        cols = string.split(self._chomp(string.rstrip(line[5:])), ';')
+        for col in cols:
             self.data.keywords.append(string.lstrip(col))
     
     def feature_table(self, line):
@@ -574,6 +585,11 @@ class _RecordConsumer(AbstractConsumer):
         if word[-1] in to_chomp:
             return word[:-1]
         return word
+
+    def _clean(self, line, rstrip=1):
+        if rstrip:
+            return string.rstrip(line[5:])
+        return line[5:]
             
 class _SequenceConsumer(AbstractConsumer):
     """Consumer that converts a SwissProt record to a Sequence object.
