@@ -1,0 +1,34 @@
+NetCatch enables the user to scan a list of labelled urls and select a subset to read
+into a file.
+
+class ExtractUrls scans a file in http format and builds a dictionary of urls
+
+class NetCatch is a decorator for a dictionary of links. Each link is indexed
+by its label.  Allows the user to select links of interest and read each
+selection into its own file. The filename is contructed by appending the label
+with an extension of html.
+
+Files can be selected by index, range or label. The destination directory
+defaults to the current directory.  The user can specify another dictionary
+by passing a list of path segments to the constructor.
+
+    net_catch = NetCatch()
+    net_catch = NetCatch( [ 'amylase', 'species' ] )
+    net_catch.get_all_urls()
+    net_catch.get_urls_by_label( [ 'pig', 'dog', 'cow' ] )
+    net_catch.get_urls_by_index( [ 1, 4, 6, 9 ] )
+    net_catch.get_urls_by_range( 2, 5 )
+
+This example uses ExtractUrls to build a dictionary of urls.  Then it imports
+the links into a NetCatch instance.
+
+    fh = open( file )
+    urls = ExtractUrls()
+    url_dict = urls.extract_urls( fh )
+    net_catch = NetCatch()
+    net_catch.import_dict( url_dict )
+    net_catch.get_all_urls()
+
+
+
+
