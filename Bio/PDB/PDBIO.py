@@ -39,7 +39,7 @@ class PDBIO:
 		for model in self.structure.get_list():
 			atom_number=1
 			if model_flag:
-				fp.write("MODEL\n")
+				fp.write("MODEL \n")
 			for chain in model.get_list():
 				chain_id=chain.get_id()
 				for residue in chain.get_unpacked_list():

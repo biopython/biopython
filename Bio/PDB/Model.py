@@ -24,7 +24,7 @@ class Model(Entity):
 		Arguments:
 		o id - int
 		"""
-		self.level=1
+		self.level="M"
 		Entity.__init__(self, id)
 
 	# Private methods

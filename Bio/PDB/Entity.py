@@ -54,11 +54,11 @@ class Entity:
 	def get_level(self):
 		"""Return level in hierarchy.
 
-		4 - atom
-		3 - residue
-		2 - chain
-		1 - model
-		0 - structure
+		A - atom
+		R - residue
+		C - chain
+		M - model
+		S - structure
 		"""
 		return self.level
 

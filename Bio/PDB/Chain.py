@@ -13,7 +13,7 @@ from Entity import Entity
 
 class Chain(Entity):
 	def __init__(self, id):
-		self.level=2
+		self.level="C"
 		Entity.__init__(self, id)
 
 	# Private methods
