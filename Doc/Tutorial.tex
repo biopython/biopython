@@ -1321,7 +1321,7 @@ If you are in the Medical field or interested in human issues (and many times ev
 Querying PubMed using Biopython is extremely painless. To get all of the article ids for articles having to do with orchids, we only need the following three lines of code:
 
 \begin{verbatim}
-from Bio.Medline import PubMed
+from Bio import PubMed
 
 search_term = 'orchid'
 orchid_ids = PubMed.search_for(search_term)
@@ -1345,7 +1345,7 @@ The previous section described how to get a bunch of article ids. Now that we've
 The interface for retrieving records from PubMed should be very intuitive to python programmers -- it models a python dictionary. To set up this interface, we need to set up a parser that will parse the results that we retrieve. The following lines of code get everything set up:
 
 \begin{verbatim}
-from Bio.Medline import PubMed
+from Bio import PubMed
 from Bio import Medline
 
 rec_parser = Medline.RecordParser()
