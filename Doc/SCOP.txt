@@ -1,0 +1,16 @@
+SCOP.txt
+========
+
+
+Representation of protein location
+----------------------------------
+
+    chain        The chain ID of the sequence.
+    start        The starting residue of the sequence, or None.
+    end          The ending residue (inclusive) of the sequence, or None.
+                 Either both start_res and end_res need to be specified,
+                 or they should both be None.  If they are None, then
+                 this location applies to the whole chain.
+                 I try to convert these to integers.  However, sometimes
+                 letters are part of the PDB numbering, in which case I'll
+                 leave these as strings.

@@ -27,6 +27,9 @@ Some of the testing code will not work with DOS.
 Installation
 ------------
 
+XXX distutils
+
+XXX out of date
 Currently, this package is 100% pure Python so there is nothing to
 compile.  All you need to do is add the directory where 'biopython' is
 installed to the $PYTHONPATH environment variable.  All the libraries
@@ -80,8 +83,6 @@ To Do
   o scripting front end to NCBIWWW
   o PSI-BLAST on WWW
 - parsers
-  o SCOP
-    - needs to be done
   o Enzyme
     - add parsers, iterator, dictionary, etc.
   o PDB
