@@ -167,7 +167,6 @@ class run_tests(Command):
 # standard biopython packages
 biopython_packages = ['Bio',
                       'Bio.Ais',
-                      'Bio.Ais.Examples',
                       'Bio.Align',
                       'Bio.Alphabet',
                       'Bio.Application',
@@ -237,7 +236,7 @@ biopython_packages = ['Bio',
                       'Bio.SwissProt',
                       'Bio.UniGene',
                       'Bio.writers',
-                      'Bio.writers.SeqRecord'
+                      'Bio.writers.SeqRecord',
                       'Bio.WWW',
                       ]
 
