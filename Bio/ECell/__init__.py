@@ -29,9 +29,9 @@ import ecell_format
 import Record
 
 """
-Ecell converts the ECell input from spreadsheet format to an intermediate format, decribed in
+Ecell converts the ECell input from spreadsheet format to an intermediate format, described in
 http://www.e-cell.org/manual/chapter2E.html#3.2.  It provides an alternative to the perl script
-supplies with the Ecell2 distribution at http://bioinformatics.org/project/?group_id=49.
+supplied with the Ecell2 distribution at http://bioinformatics.org/project/?group_id=49.
 """
 
 __all__ = [
