@@ -4,7 +4,7 @@
 % If you just want to read the documentation, you can pick up ready-to-go 
 % copies in both pdf and html format from:
 %
-% http://biopython.org/wiki/html/BioPython/BiopythonCode.html
+% http://www.biopython.org/documentation/
 %
 % If you want to typeset the documentation, you'll need a standard TeX/LaTeX
 % distribution (I use teTeX, which works great for me on unix platforms).
@@ -18,13 +18,11 @@
 % (http://www.lysator.liu.se/~alla/dia/dia.html).
 % These diagrams are available from biopython CVS in the original dia 
 % format, which you can easily save as .png format using Dia itself.
-% The two diagrams should be placed in an 'images' directory relative
-% to the Tutorial.tex file. If you don't want to use Dia, you can get
-% the two png files from:
+% They are also checked in as the png files, so if you make
+% modifications to the original dia files, the png files should also be
+% changed.
 %
-% http://www.bioinformatics.org/bradstuff/bp/tut/images/
-%
-% Once you've done this, you should be able to generate pdf by running:
+% Once you're all set, you should be able to generate pdf by running:
 % 
 % pdflatex Tutorial.tex  (to generate the first draft)
 % pdflatex Tutorial.tex  (to get the cross references right)
@@ -38,7 +36,7 @@
 % hacha Tutorial.html  (to split the html file into sections)
 %
 % If you want to typeset this and have problems, please report them
-% at biopython@biopython.org, and we'll try to get things resolved. We 
+% at biopython-dev@biopython.org, and we'll try to get things resolved. We 
 % always love to have people interested in the documentation!
 
 \documentclass{report}
@@ -67,7 +65,7 @@
 
 \title{Biopython Tutorial and Cookbook}
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck}
-\date{Last Update--21 Feb 2003}
+\date{Last Update--15 June 2003}
 
 \maketitle
 \tableofcontents
@@ -143,9 +141,9 @@ All of the installation information for Biopython was separated from
 this document to make it easier to keep updated. The instructions cover
 installation of python, Biopython dependencies and Biopython itself.
 It is available in pdf
-(\ahrefurl{\url{http://www.biopython.org/Download/Installation.pdf}})
+(\ahrefurl{\url{http://www.biopython.org/docs/install/Installation.pdf}})
 and html formats
-(\ahrefurl{\url{http://www.biopython.org/Download/Installation.html}}).
+(\ahrefurl{\url{http://www.biopython.org/docs/install/Installation.html}}).
 
 \section{FAQ}
 
@@ -1554,7 +1552,7 @@ To create a command line object to do a clustalw multiple alignment we do the fo
 
 \begin{verbatim}
 import os
-from Align.Clustalw import MultipleAlignCL
+from Bio.Clustalw import MultipleAlignCL
 
 cline = MultipleAlignCL(os.path.join(os.curdir, 'opuntia.fasta'))
 cline.set_output('test.aln')
@@ -3800,17 +3798,26 @@ The main forums for discussing feature requests and potential bugs are the biopy
   \item \mailto{biopython-dev@biopython.org} -- A more development oriented list that is mainly used by developers (but anyone is free to contribute!).
 \end{itemize}
 
-Additionally, if you think you've found a bug, you can submit it to our bug-tracking page at \ahrefurl{\url{http://www.biopython.org/biopython-bugs/}}. This way, it won't get buried in anyone's Inbox and forgotten about.
+Additionally, if you think you've found a bug, you can submit it to our
+bug-tracking page at \ahrefurl{\url{http://bugzilla.open-bio.org/}}. This 
+way, it won't get buried in anyone's Inbox and forgotten about.
 
 \section{Contributing Code}
 
 There are no barriers to joining biopython code development other than an interest in creating biology-related code in python. The best place to express an interest is on the biopython mailing lists -- just let us know you are interested in coding and what kind of stuff you want to work on. Normally, we try to have some discussion on modules before coding them, since that helps generate good ideas -- then just feel free to jump right in and start coding!
 
 
-The main biopython release tries to be fairly uniform and interworkable, to make it easier for users. You can read about some of (fairly informal) coding style guidelines we try to use in biopython on the wiki site at \ahrefurl{\url{http://biopython.org/wiki/html/BioPython/PythonStyle.html}}. We also try to add code to the distribution along with tests (see section~\ref{sec:regr_test} for more info on the regression testing framework) and documentation, so that everything can stay as workable and well documented as possible. This is, of course, the most ideal situation, under many situations you'll be able to find other people on the list who will be willing to help add documentation or more tests for your code once you make it available. So, to end this paragraph like the last, feel free to start working!
+The main biopython release tries to be fairly uniform and interworkable,
+to make it easier for users. You can read about some of (fairly
+informal) coding style guidelines we try to use in biopython in the
+contributing documentation at 
+\ahrefurl{\url{http://www.biopython.org/docs/developer/contrib.html}}. We also try to add code to the distribution along with tests (see section~\ref{sec:regr_test} for more info on the regression testing framework) and documentation, so that everything can stay as workable and well documented as possible. This is, of course, the most ideal situation, under many situations you'll be able to find other people on the list who will be willing to help add documentation or more tests for your code once you make it available. So, to end this paragraph like the last, feel free to start working!
 
 
-Additionally, if you have code that you don't think fits in the distribution, but that you want to make available, we maintain Script Central (\ahrefurl{\url{http://biopython.org/ScriptCentral.shtml}}) which has pointers to freely available code in python for bioinformatics. Just let us know on the mailing list, and we'll be happy to add links to your code.
+Additionally, if you have code that you don't think fits in the
+distribution, but that you want to make available, we maintain Script
+Central (\ahrefurl{\url{http://www.biopython.org/scriptcentral/}}) 
+which has pointers to freely available code in python for bioinformatics.
 
 
 Hopefully this documentation has got you excited enough about

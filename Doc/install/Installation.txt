@@ -3,8 +3,8 @@
                                      
                          Biopython Installation
                          **********************
-                 Brad Chapman (chapmanb@arches.uga.edu)
-                 ======================================
+                    Brad Chapman (chapmanb@uga.edu)
+                    ===============================
                                     
   
 
@@ -111,20 +111,20 @@ need to re-install all libraries you have added to python.
   
   First, you should go the main python web site and head over to the
 information page for the latest python release. At the time of this
-writing the latest stable python release is 2.2.2, which is available
-from http://www.python.org/2.2.2/. This page contains links to all
+writing the latest stable python release is 2.2.3, which is available
+from http://www.python.org/2.2.3/. This page contains links to all
 released files for the given release. For UNIX, we'll want to use the
-tarred and gzipped file, which is called `Python-2.2.2.tgz' at the time
+tarred and gzipped file, which is called `Python-2.2.3.tgz' at the time
 of this writing.
   Download this file and then unpack it with the following commands:
 <<
-  $ gunzip Python-2.2.2.tgz 
-  $ tar -xvpf Python-2.2.2.tar 
+  $ gunzip Python-2.2.3.tgz 
+  $ tar -xvpf Python-2.2.3.tar 
 >>
   
   Then enter into the created directory:
 <<
-  $ cd Python-2.2.2
+  $ cd Python-2.2.3
 >>
   
   Now, start the build process by configuring everything to your system:
@@ -181,8 +181,8 @@ and header files, which are often found in a separate package called
   Installation on Windows is most easily done using handy windows
 installers. As described above in the UNIX section, you should go to the
 webpage for the current stable version of Python to download this
-installer. At the current time, you'd go to http://www.python.org/2.2.2/
-and download `Python-2.2.2.exe'. 
+installer. At the current time, you'd go to http://www.python.org/2.2.3/
+and download `Python-2.2.3.exe'. 
   The installer is an executable program, so you only need to double
 click it to run it. Then just follow the friendly instructions. On all
 newer Windows machines you'll need to have Administrator privileges to
@@ -446,8 +446,8 @@ you are not going to use BioSQL, there shouldn't be any need to install
 these modules.
   Installation instructions for MySQLdb and psycopg are included in the
 BioSQL documentation, which is available from
-http://www.biopython.org/docs/python_biosql_basic.html and
-http://www.biopython.org/docs/python_biosql_basic.pdf.
+http://www.biopython.org/docs/biosql/python_biosql_basic.html and
+http://www.biopython.org/docs/biosql/python_biosql_basic.pdf.
   
 
 4  Installing Biopython
@@ -465,7 +465,7 @@ obtaining Biopython:
   
  
  1. Release code -- We made available releases on the download page 
-   (http://www.biopython.org/Download/).  The releases are also
+   (http://www.biopython.org/download/).  The releases are also
    available both as source and as installers  (windows installers right
    now), so you have some choices to pick from  on releases if you
    prefer not to deal with source code directly.
@@ -517,7 +517,7 @@ standard with  Python 1.6 and beyond.
       python with RPMs or  some other packaging system, this means
       you'll also have to install the header files. This requires
       installing the python development libraries as well (normally
-      called something like `python-devel-2.2.2.rpm').
+      called something like `python-devel-2.2.3.rpm').
     
     2. The distutils setup process allows you to do some customization
       of your install so you don't have to stick everything in the

@@ -19,7 +19,7 @@
 
 <H1 ALIGN=center>Biopython Installation</H1>
 
-<H3 ALIGN=center>Brad Chapman (chapmanb@arches.uga.edu)</H3>
+<H3 ALIGN=center>Brad Chapman (chapmanb@uga.edu)</H3>
 <!--TOC section Table of Contents-->
 
 <H2>Table of Contents</H2><!--SEC END -->
@@ -127,20 +127,20 @@ Let's get started with installation on various platforms.<BR>
 
 First, you should go the main python web site and head over to the information
 page for the latest python release. At the time of this writing the
-latest stable python release is 2.2.2, which is available from
-<A HREF="http://www.python.org/2.2.2/"><TT>http://www.python.org/2.2.2/</TT></A>. This page contains links
+latest stable python release is 2.2.3, which is available from
+<A HREF="http://www.python.org/2.2.3/"><TT>http://www.python.org/2.2.3/</TT></A>. This page contains links
 to all released files for the given release. For UNIX, we'll want to use
-the tarred and gzipped file, which is called <CODE>Python-2.2.2.tgz</CODE> at
+the tarred and gzipped file, which is called <CODE>Python-2.2.3.tgz</CODE> at
 the time of this writing.<BR>
 <BR>
 Download this file and then unpack it with the following commands:
 <PRE>
-$ gunzip Python-2.2.2.tgz 
-$ tar -xvpf Python-2.2.2.tar 
+$ gunzip Python-2.2.3.tgz 
+$ tar -xvpf Python-2.2.3.tar 
 </PRE>
 Then enter into the created directory:
 <PRE>
-$ cd Python-2.2.2
+$ cd Python-2.2.3
 </PRE>
 Now, start the build process by configuring everything to your system:
 <PRE>
@@ -193,8 +193,8 @@ Installation on Windows is most easily done using handy windows
 installers. As described above in the UNIX section, you should go to the
 webpage for the current stable version of Python to download this
 installer. At the current time, you'd go to
-<A HREF="http://www.python.org/2.2.2/"><TT>http://www.python.org/2.2.2/</TT></A> and download
-<CODE>Python-2.2.2.exe</CODE>. <BR>
+<A HREF="http://www.python.org/2.2.3/"><TT>http://www.python.org/2.2.3/</TT></A> and download
+<CODE>Python-2.2.3.exe</CODE>. <BR>
 <BR>
 The installer is an executable program, so you only need to double click
 it to run it. Then just follow the friendly instructions. On all newer Windows
@@ -457,8 +457,8 @@ these modules.<BR>
 <BR>
 Installation instructions for MySQLdb and psycopg are included in the
 BioSQL documentation, which is available from
-<A HREF="http://www.biopython.org/docs/python_biosql_basic.html"><TT>http://www.biopython.org/docs/python_biosql_basic.html</TT></A> and
-<A HREF="http://www.biopython.org/docs/python_biosql_basic.pdf"><TT>http://www.biopython.org/docs/python_biosql_basic.pdf</TT></A>.<BR>
+<A HREF="http://www.biopython.org/docs/biosql/python_biosql_basic.html"><TT>http://www.biopython.org/docs/biosql/python_biosql_basic.html</TT></A> and
+<A HREF="http://www.biopython.org/docs/biosql/python_biosql_basic.pdf"><TT>http://www.biopython.org/docs/biosql/python_biosql_basic.pdf</TT></A>.<BR>
 <BR>
 <!--TOC section Installing Biopython-->
 
@@ -475,7 +475,7 @@ Biopython's internet home is at, naturally enough,
 Biopython, so it is the best place to start looking around. 
 You have two choices for obtaining Biopython:
 <OL type=1><LI>Release code -- We made available releases on the download page 
-(<A HREF="http://www.biopython.org/Download/"><TT>http://www.biopython.org/Download/</TT></A>). 
+(<A HREF="http://www.biopython.org/download/"><TT>http://www.biopython.org/download/</TT></A>). 
 The releases are also available both as source and as installers 
 (windows installers right now), so you have some choices to pick from 
 on releases if you prefer not to deal with source code directly.<BR>
@@ -508,7 +508,7 @@ Now that we've got what we need, let's get into the installation:
 <OL type=a><LI>This install requires that you have the python source available. You can check this by looking for <CODE>Python.h</CODE> and <CODE>config.h</CODE> in some place like <CODE>/usr/local/include/python2.2</CODE>. If you installed python with RPMs or 
 some other packaging system, this means you'll also have to install the
 header files. This requires installing the python development libraries
-as well (normally called something like <CODE>python-devel-2.2.2.rpm</CODE>).<BR>
+as well (normally called something like <CODE>python-devel-2.2.3.rpm</CODE>).<BR>
 <BR>
 <LI>The distutils setup process allows you to do some customization of your install so you don't have to stick everything in the default location (in case you don't have write permissions there, or just want to test Biopython out). You have quite a few choices, which are covered in detail in the distutils installation manual (<A HREF="http://www.python.org/sigs/distutils-sig/doc/inst/inst.html"><TT>http://www.python.org/sigs/distutils-sig/doc/inst/inst.html</TT></A>), specifically in the Alternative installation section. For example, to install Biopython into your home directory, you need to type <CODE>python setup.py install --home=$HOME</CODE>. This will install the package into someplace like <CODE>$HOME/lib/python2.1/site-packages</CODE>. You'll need to subsequently modify the <CODE>PYTHONPATH</CODE> environmental variable to include this directory so python will be able to find the installation.</OL><BR>
 <BR>

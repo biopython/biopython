@@ -4,7 +4,7 @@
 % If you just want to read the documentation, you can pick up ready-to-go 
 % copies in both pdf and html format from:
 %
-% http://biopython.org/wiki/html/BioPython/BiopythonCode.html
+% http://www.biopython.org/documentation/
 %
 % If you want to typeset the documentation, you'll need a standard TeX/LaTeX
 % distribution (I use teTeX, which works great for me on unix platforms).
@@ -25,8 +25,11 @@
 % hevea Tutorial.tex   (to generate the first draft)
 % hevea Tutorial.tex   (to get all of the references right)
 %
+% A Makefile is also provided which should help with the building
+% process somewhat on UNIX-style systems.
+%
 % If you want to typeset this and have problems, please report them
-% at biopython@biopython.org, and we'll try to get things resolved. We 
+% at biopython-dev@biopython.org, and we'll try to get things resolved. We 
 % always love to have people interested in the documentation!
 
 \documentclass{article}
@@ -51,7 +54,7 @@
 \begin{document}
 
 \title{Biopython Installation}
-\author{Brad Chapman (chapmanb@arches.uga.edu)}
+\author{Brad Chapman (chapmanb@uga.edu)}
 
 \maketitle
 \tableofcontents
@@ -103,23 +106,23 @@ Let's get started with installation on various platforms.
 
 First, you should go the main python web site and head over to the information
 page for the latest python release. At the time of this writing the
-latest stable python release is 2.2.2, which is available from
-\ahrefurl{\url{http://www.python.org/2.2.2/}}. This page contains links
+latest stable python release is 2.2.3, which is available from
+\ahrefurl{\url{http://www.python.org/2.2.3/}}. This page contains links
 to all released files for the given release. For UNIX, we'll want to use
-the tarred and gzipped file, which is called \verb|Python-2.2.2.tgz| at
+the tarred and gzipped file, which is called \verb|Python-2.2.3.tgz| at
 the time of this writing.
 
 Download this file and then unpack it with the following commands:
 
 \begin{verbatim}
-$ gunzip Python-2.2.2.tgz 
-$ tar -xvpf Python-2.2.2.tar 
+$ gunzip Python-2.2.3.tgz 
+$ tar -xvpf Python-2.2.3.tar 
 \end{verbatim}
 
 Then enter into the created directory:
 
 \begin{verbatim}
-$ cd Python-2.2.2
+$ cd Python-2.2.3
 \end{verbatim}
 
 Now, start the build process by configuring everything to your system:
@@ -178,8 +181,8 @@ Installation on Windows is most easily done using handy windows
 installers. As described above in the UNIX section, you should go to the
 webpage for the current stable version of Python to download this
 installer. At the current time, you'd go to
-\ahrefurl{\url{http://www.python.org/2.2.2/}} and download
-\verb|Python-2.2.2.exe|. 
+\ahrefurl{\url{http://www.python.org/2.2.3/}} and download
+\verb|Python-2.2.3.exe|. 
 
 
 The installer is an executable program, so you only need to double click
@@ -445,8 +448,8 @@ these modules.
 
 Installation instructions for MySQLdb and psycopg are included in the
 BioSQL documentation, which is available from
-\ahrefurl{\url{http://www.biopython.org/docs/python_biosql_basic.html}} and
-\ahrefurl{\url{http://www.biopython.org/docs/python_biosql_basic.pdf}}.
+\ahrefurl{\url{http://www.biopython.org/docs/biosql/python_biosql_basic.html}} and
+\ahrefurl{\url{http://www.biopython.org/docs/biosql/python_biosql_basic.pdf}}.
 
 \section{Installing Biopython}
 
@@ -460,7 +463,7 @@ You have two choices for obtaining Biopython:
 \begin{enumerate}
 
 \item Release code -- We made available releases on the download page 
-(\ahrefurl{\url{http://www.biopython.org/Download/}}). 
+(\ahrefurl{\url{http://www.biopython.org/download/}}). 
 The releases are also available both as source and as installers 
 (windows installers right now), so you have some choices to pick from 
 on releases if you prefer not to deal with source code directly.
@@ -500,7 +503,7 @@ Now that we've got what we need, let's get into the installation:
 \item This install requires that you have the python source available. You can check this by looking for \verb|Python.h| and \verb|config.h| in some place like \verb|/usr/local/include/python2.2|. If you installed python with RPMs or 
 some other packaging system, this means you'll also have to install the
 header files. This requires installing the python development libraries
-as well (normally called something like \verb|python-devel-2.2.2.rpm|).
+as well (normally called something like \verb|python-devel-2.2.3.rpm|).
 
 \item The distutils setup process allows you to do some customization of your install so you don't have to stick everything in the default location (in case you don't have write permissions there, or just want to test Biopython out). You have quite a few choices, which are covered in detail in the distutils installation manual (\ahrefurl{\url{http://www.python.org/sigs/distutils-sig/doc/inst/inst.html}}), specifically in the Alternative installation section. For example, to install Biopython into your home directory, you need to type \verb|python setup.py install --home=$HOME|. This will install the package into someplace like \verb|$HOME/lib/python2.1/site-packages|. You'll need to subsequently modify the \verb|PYTHONPATH| environmental variable to include this directory so python will be able to find the installation.
 
