@@ -24,10 +24,9 @@ def print_list( list ):
 
 def print_references( list ):
     for item in list:
-        text = item.number + ' ' + item.authors + ' ' + item.citation
-        while text:
-            print text[ :80 ]
-            text = text[ 80: ]
+        print item.number
+        print item.authors
+        print item.citation
 
 for test in tests:
 #    print "testing %s" % test

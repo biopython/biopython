@@ -77,19 +77,40 @@ domain.
 
 
 references
-1 Hanks S.K., Hunter T. FASEB J. 9:576-596(1995).
-2 Hunter T. Meth. Enzymol. 200:3-37(1991).
-3 Hanks S.K., Quinn A.M. Meth. Enzymol. 200:38-62(1991).
-4 Hanks S.K. Curr. Opin. Struct. Biol. 1:369-383(1991).
-5 Hanks S.K., Quinn A.M., Hunter T. Science 241:42-52(1988).
-6 Knighton D.R., Zheng J., Ten Eyck L.F., Ashford V.A., Xuong N.-H., Taylor S.S.
-, Sowadski J.M.
+1
+Hanks S.K., Hunter T.
+FASEB J. 9:576-596(1995).
+2
+Hunter T.
+Meth. Enzymol. 200:3-37(1991).
+3
+Hanks S.K., Quinn A.M.
+Meth. Enzymol. 200:38-62(1991).
+4
+Hanks S.K.
+Curr. Opin. Struct. Biol. 1:369-383(1991).
+5
+Hanks S.K., Quinn A.M., Hunter T.
+Science 241:42-52(1988).
+6
+Knighton D.R., Zheng J., Ten Eyck L.F., Ashford V.A., Xuong N.-H.,
+Taylor S.S., Sowadski J.M.
 Science 253:407-414(1991).
-7 Bairoch A., Claverie J.-M. Nature 331:22(1988).
-8 Benner S. Nature 329:21-21(1987).
-9 Kirby R. J. Mol. Evol. 30:489-492(1992).
-10 Littler E., Stuart A.D., Chee M.S. Nature 358:160-162(1992).
-11 Munoz-Dorado J., Inouye S., Inouye M. Cell 67:995-1006(1991).
+7
+Bairoch A., Claverie J.-M.
+Nature 331:22(1988).
+8
+Benner S.
+Nature 329:21-21(1987).
+9
+Kirby R.
+J. Mol. Evol. 30:489-492(1992).
+10
+Littler E., Stuart A.D., Chee M.S.
+Nature 358:160-162(1992).
+11
+Munoz-Dorado J., Inouye S., Inouye M.
+Cell 67:995-1006(1991).
 PDOC00113
 prosite_refs
     ('PS00123', 'ALKALINE_PHOSPHATASE')
@@ -126,10 +147,15 @@ pattern.
 
 
 references
-1 Trowsdale J., Martin D., Bicknell D., Campbell I. Biochem. Soc. Trans. 18:178-
-180(1990).
-2 Manes T., Glade K., Ziomek C.A., Millan J.L. Genomics 8:541-554(1990).
-3 Mansouri K., Piepersberg W. Mol. Gen. Genet. 228:459-469(1991).
+1
+Trowsdale J., Martin D., Bicknell D., Campbell I.
+Biochem. Soc. Trans. 18:178-180(1990).
+2
+Manes T., Glade K., Ziomek C.A., Millan J.L.
+Genomics 8:541-554(1990).
+3
+Mansouri K., Piepersberg W.
+Mol. Gen. Genet. 228:459-469(1991).
 PDOC00144
 prosite_refs
     ('PS00159', 'ALDOLASE_KDPG_KHG_1')
@@ -170,7 +196,9 @@ base formation.
 
 
 references
-1 Vlahos C J., Dekker E.E. J. Biol. Chem. 263:11683-11691(1988).
+1
+Vlahos C J., Dekker E.E.
+J. Biol. Chem. 263:11683-11691(1988).
 PDOC00149
 prosite_refs
     ('PS00165', 'DEHYDRATASE_SER_THR')
@@ -213,14 +241,19 @@ threonine synthases.
 
 
 references
-1 Ogawa H., Gomi T., Konishi K., Date T., Naakashima H., Nose K., Matsuda Y., Pe
-raino C., Pitot H.C., Fujioka M.
+1
+Ogawa H., Gomi T., Konishi K., Date T., Naakashima H., Nose K.,
+Matsuda Y., Peraino C., Pitot H.C., Fujioka M.
 J. Biol. Chem. 264:15818-15823(1989).
-2 Datta P., Goss T.J., Omnaas J.R., Patil R.V. Proc. Natl. Acad. Sci. U.S.A. 84:
-393-397(1987).
-3 Parsot C. EMBO J. 5:3013-3019(1986).
-4 Grabowski R., Hofmeister A.E.M., Buckel W. Trends Biochem. Sci. 18:297-300(199
-3).
+2
+Datta P., Goss T.J., Omnaas J.R., Patil R.V.
+Proc. Natl. Acad. Sci. U.S.A. 84:393-397(1987).
+3
+Parsot C.
+EMBO J. 5:3013-3019(1986).
+4
+Grabowski R., Hofmeister A.E.M., Buckel W.
+Trends Biochem. Sci. 18:297-300(1993).
 PDOC00340
 prosite_refs
     ('PS00406', 'ACTINS_1')
@@ -284,12 +317,21 @@ actins.
 
 
 references
-1 Sheterline P., Clayton J., Sparrow J.C. (In) Actins, 3rd Edition, Academic Pre
-ss Ltd, London, (1996).
-2 Pollard T.D., Cooper J.A. Annu. Rev. Biochem. 55:987-1036(1986).
-3 Pollard T.D. Curr. Opin. Cell Biol. 1:33-40(1990).
-4 Rubenstein P.A. BioEssays 12:309-315(1990).
-5 Meagher R.B., McLean B.G. Cell Motil. Cytoskeleton 16:164-166(1990).
+1
+Sheterline P., Clayton J., Sparrow J.C.
+(In) Actins, 3rd Edition, Academic Press Ltd, London, (1996).
+2
+Pollard T.D., Cooper J.A.
+Annu. Rev. Biochem. 55:987-1036(1986).
+3
+Pollard T.D.
+Curr. Opin. Cell Biol. 1:33-40(1990).
+4
+Rubenstein P.A.
+BioEssays 12:309-315(1990).
+5
+Meagher R.B., McLean B.G.
+Cell Motil. Cytoskeleton 16:164-166(1990).
 PDOC00424
 prosite_refs
     ('PS00488', 'PAL_HISTIDASE')
@@ -324,12 +366,19 @@ pattern.
 
 
 references
-1 Taylor R.G., Lambert M.A., Sexsmith E., Sadler S.J., Ray P.N., Mahuran D.J., M
-cInnes R.R.
+1
+Taylor R.G., Lambert M.A., Sexsmith E., Sadler S.J., Ray P.N.,
+Mahuran D.J., McInnes R.R.
 J. Biol. Chem. 265:18192-18199(1990).
-2 Langer M., Reck G., Reed J., Retey J. Biochemistry 33:6462-6467(1994).
-3 Schuster B., Retey J. FEBS Lett. 349:252-254(1994).
-4 Taylor R.G., McInnes R.R. J. Biol. Chem. 269:27473-27477(1994).
+2
+Langer M., Reck G., Reed J., Retey J.
+Biochemistry 33:6462-6467(1994).
+3
+Schuster B., Retey J.
+FEBS Lett. 349:252-254(1994).
+4
+Taylor R.G., McInnes R.R.
+J. Biol. Chem. 269:27473-27477(1994).
 PDOC00472
 prosite_refs
     ('PS00546', 'CYSTEINE_SWITCH')
@@ -374,15 +423,22 @@ A cysteine switch has been found in the following zinc proteases:
 
 
 references
-1 Woessner J. Jr. FASEB J. 5:2145-2154(1991).
-2 Sanchez-Lopez R., Nicholson R., Gesnel M.C., Matrisian L.M., Breathnach R.
-J.
- Biol. Chem. 263:11892-11899(1988).
-3 Park A.J., Matrisian L.M., Kells A.F., Pearson R., Yuan Z., Navre M. J. Biol. 
-Chem. 266:1584-1590(1991).
-4 Lepage T., Gache C. EMBO J. 9:3003-3012(1990).
-5 Kinoshita T., Fukuzawa H., Shimada T., Saito T., Matsuda Y. Proc. Natl. Acad. 
-Sci. U.S.A. 89:4693-4697(1992).
+1
+Woessner J. Jr.
+FASEB J. 5:2145-2154(1991).
+2
+Sanchez-Lopez R., Nicholson R., Gesnel M.C., Matrisian L.M.,
+Breathnach R.
+J. Biol. Chem. 263:11892-11899(1988).
+3
+Park A.J., Matrisian L.M., Kells A.F., Pearson R., Yuan Z., Navre M.
+J. Biol. Chem. 266:1584-1590(1991).
+4
+Lepage T., Gache C.
+EMBO J. 9:3003-3012(1990).
+5
+Kinoshita T., Fukuzawa H., Shimada T., Saito T., Matsuda Y.
+Proc. Natl. Acad. Sci. U.S.A. 89:4693-4697(1992).
 PDOC00640
 prosite_refs
     ('PS00812', 'GLYCOSYL_HYDROL_F8')
@@ -427,14 +483,24 @@ a signature pattern.
 
 
 references
-1 Beguin P. Annu. Rev. Microbiol. 44:219-248(1990).
-2 Gilkes N.R., Henrissat B., Kilburn D.G., Miller R.C. Jr., Warren R.A.J. Microb
-iol. Rev. 55:303-315(1991).
-3 Henrissat B., Claeyssens M., Tomme P., Lemesle L., Mornon J.-P. Gene 81:83-95(
-1989).
-4 Henrissat B. Biochem. J. 280:309-316(1991).
-5 Alzari P.M., Souchon H., Dominguez R. Structure 4:265-275(1996).
-E1  http://www.expasy.ch/cgi-bin/lists?glycosid.txt
+1
+Beguin P.
+Annu. Rev. Microbiol. 44:219-248(1990).
+2
+Gilkes N.R., Henrissat B., Kilburn D.G., Miller R.C. Jr., Warren R.A.J.
+Microbiol. Rev. 55:303-315(1991).
+3
+Henrissat B., Claeyssens M., Tomme P., Lemesle L., Mornon J.-P.
+Gene 81:83-95(1989).
+4
+Henrissat B.
+Biochem. J. 280:309-316(1991).
+5
+Alzari P.M., Souchon H., Dominguez R.
+Structure 4:265-275(1996).
+E1
+
+http://www.expasy.ch/cgi-bin/lists?glycosid.txt
 PDOC00787
 prosite_refs
     ('PS01027', 'GLYCOSYL_HYDROL_F39')
@@ -467,10 +533,15 @@ pattern.
 
 
 references
-1 Henrissat B., Bairoch A. Biochem. J. 293:781-788(1993).
-2 Henrissat B., Callebaut I., Fabrega S., Lehn P., Mornon J.-P., Davies G. Proc.
- Natl. Acad. Sci. U.S.A. 92:7090-7094(1995).
-E1  http://www.expasy.ch/cgi-bin/lists?glycosid.txt
+1
+Henrissat B., Bairoch A.
+Biochem. J. 293:781-788(1993).
+2
+Henrissat B., Callebaut I., Fabrega S., Lehn P., Mornon J.-P., Davies G.
+Proc. Natl. Acad. Sci. U.S.A. 92:7090-7094(1995).
+E1
+
+http://www.expasy.ch/cgi-bin/lists?glycosid.txt
 PDOC00933
 prosite_refs
     ('PS01213', 'GLOBIN_FAM_2')
@@ -501,8 +572,12 @@ residue.
 
 
 references
-1 Concise Encyclopedia Biochemistry, Second Edition, Walter de Gruyter, Berlin N
-ew-York (1988).
-2 Takagi T. Curr. Opin. Struct. Biol. 3:413-418(1993).
-3 Couture M., Chamberland H., St-Pierre B., Lafontaine J., Guertin M.; Mol. Gen.
- Genet. 243:185-197(1994).
+1
+Concise Encyclopedia Biochemistry, Second Edition, Walter de Gruyter,
+Berlin New-York (1988).
+2
+Takagi T.
+Curr. Opin. Struct. Biol. 3:413-418(1993).
+3
+Couture M., Chamberland H., St-Pierre B., Lafontaine J., Guertin M.;
+Mol. Gen. Genet. 243:185-197(1994).
