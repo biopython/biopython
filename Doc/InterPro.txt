@@ -1,0 +1,32 @@
+InterPro.txt
+========
+
+
+Bio.InterPro
+---------------
+
+The Bio.InterPro module works with files from the
+InterPro database, which can be obtained from the InterPro project.
+http://www.ebi.ac.uk/interpro/
+
+The Bio.InterPro.Record contains all the information stored in
+an InterPro record. Its string representation also is a valid InterPro
+record, but it is NOT guaranteed to be equivalent to the record
+from which it was produced.
+
+The Bio.InterPro.Record contains:
+
+Database
+Accession
+Name
+Dates
+Type
+Parent
+Process
+Function
+Component
+Signatures
+Abstract
+Examples
+References
+Database links
