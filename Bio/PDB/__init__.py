@@ -34,7 +34,8 @@ import Selection
 from Superimposer import Superimposer
 
 # 3D vector class
-from Vector import Vector, calc_angle, calc_dihedral, refmat, rotmat, rotaxis
+from Vector import Vector, calc_angle, calc_dihedral, refmat, rotmat, rotaxis,\
+        vector_to_axis
 
 # Alignment module
 from StructureAlignment import StructureAlignment
