@@ -50,6 +50,9 @@ try:
     assert ns.name == '', "name"
     assert ns.uid == '', "uid"
     assert ns.dbid == '', "dbid"
-    assert ns[1:3] == "ND", "delegation"
+    assert ns.length() == 6, "delegation of length"
+    assert ns[1:3] == "ND", "delegation of slice"
+    ns.seq = "JEFF"
+    assert ns.length() == 4, "delegation of seq"
 except Exception, x:
     raise TestFailed, "NamedSequence (%s)" % x

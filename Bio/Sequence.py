@@ -84,6 +84,11 @@ class NamedSequence:
 
     def __getattr__(self, key):
         if self.__dict__.has_key(key):
-            return self.__dict[key]
+            return self.__dict__[key]
         return getattr(self._seq, key)
 
+    def __setattr__(self, key, value):
+        if key == '_seq' or self.__dict__.has_key(key):
+            self.__dict__[key] = value
+        else:
+            setattr(self._seq, key, value)
