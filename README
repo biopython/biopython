@@ -76,7 +76,6 @@ To Do
 - BLAST additions
   o scripting front end to NCBIWWW
   o PSI-BLAST on WWW
-  o lightweight data structure
 - parsers
   o SWISSPROT
     - add parser for Protein class

@@ -6,7 +6,7 @@
 """Record.py
 
 Classes:
-BlastAll           Holds all the information from a blastall search.
+Blast              Holds all the information from a blast search.
 PSIBlast           Not implemented.
 
 Header             Holds information from the header.
@@ -142,6 +142,24 @@ class MultipleAlignment:
     def __init__(self):
         self.alignment = []
 
+class Round:
+    """Holds information from a PSI-BLAST round.
+
+    Members:
+    number       Round number.  (int)
+    reused_seqs  Sequences in model, found again.  List of Description objects.
+    new_seqs     Sequences not found, or below threshold.  List of Description.
+    alignments          A list of Alignment objects.
+    multiple_alignment  A MultipleAlignment object.
+    
+    """
+    def __init__(self):
+        self.number = None
+        self.reused_seqs = []
+        self.new_seqs = []
+        self.alignments = []
+        self.multiple_alignment = None
+
 class DatabaseReport:
     """Holds information about a database report.
     
@@ -222,8 +240,8 @@ class Parameters:
         self.gap_trigger = (None, None)
         self.blast_cutoff = (None, None)
     
-class BlastAll(Header, DatabaseReport, Parameters):
-    """Saves the results from a blastall search.
+class Blast(Header, DatabaseReport, Parameters):
+    """Saves the results from a blast search.
 
     Members:
     descriptions        A list of Description objects.
@@ -240,3 +258,18 @@ class BlastAll(Header, DatabaseReport, Parameters):
         self.alignments = []
         self.multiple_alignment = None
 
+class PSIBlast(Header, DatabaseReport, Parameters):
+    """Saves the results from a blastpgp search.
+
+    Members:
+    rounds       A list of Round objects.
+    converged    Whether the search converged.
+    + members inherited from base classes
+
+    """
+    def __init__(self):
+        Header.__init__(self)
+        DatabaseReport.__init__(self)
+        Parameters.__init__(self)
+        self.rounds = []
+        converged = 0

@@ -10,11 +10,12 @@ BLAST, either blastall or blastpgp, provided by the NCBI.
 http://www.ncbi.nlm.nih.gov/BLAST/
 
 Classes:
-BlastAllParser           Consumes output from blastall.
-PSIBLASTParser           NotImplementedYet.
+BlastParser              Parses output from blast.
+PSIBlastParser           Parses output from psi-blast.
 
 _Scanner                 Scans output from standalone BLAST.
-_BlastAllConsumer        Consumes output from plain-vanilla blastall.
+_BlastConsumer           Consumes output from blast.
+_PSIBlastConsumer        Consumes output from psi-blast.
 _HeaderConsumer          Consumes header information.
 _DescriptionConsumer     Consumes description information.
 _AlignmentConsumer       Consumes alignment information.
@@ -30,8 +31,6 @@ blastpgp        Execute blastpgp.
 
 # To do:
 # optimize regex's
-# Add Consumers/Parsers for:
-#     psi-blast
 
 import os
 import string
@@ -483,20 +482,33 @@ class _Scanner:
 
         consumer.end_parameters()
 
-class BlastAllParser:
-    """Parses BLAST data into a Record.Comprehensive object.
+class BlastParser:
+    """Parses BLAST data into a Record.Blast object.
 
     """
     def __init__(self):
         """__init__(self)"""
         self._scanner = _Scanner()
-        self._consumer = _BlastAllConsumer()
+        self._consumer = _BlastConsumer()
 
     def parse(self, handle):
         """parse(self, handle)"""
         self._scanner.feed(handle, self._consumer)
         return self._consumer.data
 
+class PSIBlastParser:
+    """Parses BLAST data into a Record.PSIBlast object.
+
+    """
+    def __init__(self):
+        """__init__(self)"""
+        self._scanner = _Scanner()
+        self._consumer = _PSIBlastConsumer()
+
+    def parse(self, handle):
+        """parse(self, handle)"""
+        self._scanner.feed(handle, self._consumer)
+        return self._consumer.data
 
 class _HeaderConsumer:
     def start_header(self):
@@ -542,8 +554,43 @@ class _HeaderConsumer:
 class _DescriptionConsumer:
     def start_descriptions(self):
         self._descriptions = []
+        self._model_sequences = []
+        self._nonmodel_sequences = []
+        self._converged = 0
+        self._type = None
+        self._roundnum = None
     
     def description(self, line):
+        dh = self._parse(line)
+        if self._type == 'model':
+            self._model_sequences.append(dh)
+        elif self._type == 'nonmodel':
+            self._nonmodel_sequences.append(dh)
+        else:
+            self._descriptions.append(dh)
+
+    def model_sequences(self, line):
+        self._type = 'model'
+
+    def nonmodel_sequences(self, line):
+        self._type = 'nonmodel'
+
+    def converged(self, line):
+        self._converged = 1
+
+    def no_hits(self, line):
+        pass
+
+    def round(self, line):
+        if line[:18] != 'Results from round':
+            raise SyntaxError, "I didn't understand the round line\n%s" % line
+        self._roundnum = _safe_int(string.strip(line[18:]))
+
+    def end_descriptions(self):
+        pass
+
+    def _parse(self, description_line):
+        line = description_line  # for convenience
         dh = Record.Description()
         
         # I need to separate the score and p-value from the title.
@@ -557,14 +604,7 @@ class _DescriptionConsumer:
         dh.title, dh.score, dh.p = string.rstrip(line[:i]), cols[-2], cols[-1]
         dh.score = _safe_int(dh.score)
         dh.p = _safe_float(dh.p)
-        self._descriptions.append(dh)
-
-    def no_hits(self, line):
-        pass
-
-    def end_descriptions(self):
-        pass
-
+        return dh
 
 class _AlignmentConsumer:
     # This is a little bit tricky.  An alignment can either be a
@@ -939,7 +979,7 @@ class _ParametersConsumer:
 
     def frameshift(self, line):
         self._params.frameshift = _get_cols(
-            line, (4, 5), ncols=6, expected={0:"frameshift", 2:"decay"})
+           line, (4, 5), ncols=6, expected={0:"frameshift", 2:"decay"})
 
     def threshold(self, line):
         self._params.threshold, = _get_cols(
@@ -985,14 +1025,14 @@ class _ParametersConsumer:
         pass
     
 
-class _BlastAllConsumer(AbstractConsumer,
-                        _HeaderConsumer,
-                        _DescriptionConsumer,
-                        _AlignmentConsumer,
-                        _HSPConsumer,
-                        _DatabaseReportConsumer,
-                        _ParametersConsumer
-                        ):
+class _BlastConsumer(AbstractConsumer,
+                     _HeaderConsumer,
+                     _DescriptionConsumer,
+                     _AlignmentConsumer,
+                     _HSPConsumer,
+                     _DatabaseReportConsumer,
+                     _ParametersConsumer
+                     ):
     # This Consumer is inherits from many other consumer classes that handle
     # the actual dirty work.  An alternate way to do it is to create objects
     # of those classes and then delegate the parsing tasks to them in a
@@ -1009,15 +1049,17 @@ class _BlastAllConsumer(AbstractConsumer,
         # Make sure nobody's trying to pass me PSI-BLAST data!
         raise ValueError, \
               "This consumer doesn't handle PSI-BLAST data"
-
+        
     def start_header(self):
-        self.data = Record.BlastAll()
+        self.data = Record.Blast()
         _HeaderConsumer.start_header(self)
 
     def end_header(self):
         _HeaderConsumer.end_header(self)
         self.data.__dict__.update(self._header.__dict__)
-        del self._header
+
+    def end_descriptions(self):
+        self.data.descriptions = self._descriptions
 
     def end_alignment(self):
         _AlignmentConsumer.end_alignment(self)
@@ -1025,8 +1067,6 @@ class _BlastAllConsumer(AbstractConsumer,
             self.data.alignments.append(self._alignment)
         elif self._multiple_alignment is not None:
             self.data.multiple_alignment = self._multiple_alignment
-        del self._alignment
-        del self._multiple_alignment
 
     def end_hsp(self):
         _HSPConsumer.end_hsp(self)
@@ -1034,17 +1074,70 @@ class _BlastAllConsumer(AbstractConsumer,
             self._alignment.hsps.append(self._hsp)
         except AttributeError:
             raise SyntaxError, "Found an HSP before an alignment"
-        del self._hsp
 
     def end_database_report(self):
         _DatabaseReportConsumer.end_database_report(self)
         self.data.__dict__.update(self._dr.__dict__)
-        del self._dr
 
     def end_parameters(self):
         _ParametersConsumer.end_parameters(self)
         self.data.__dict__.update(self._params.__dict__)
-        del self._params
+
+class _PSIBlastConsumer(AbstractConsumer,
+                        _HeaderConsumer,
+                        _DescriptionConsumer,
+                        _AlignmentConsumer,
+                        _HSPConsumer,
+                        _DatabaseReportConsumer,
+                        _ParametersConsumer
+                        ):
+    def __init__(self):
+        self.data = None
+
+    def start_header(self):
+        self.data = Record.PSIBlast()
+        _HeaderConsumer.start_header(self)
+
+    def end_header(self):
+        _HeaderConsumer.end_header(self)
+        self.data.__dict__.update(self._header.__dict__)
+
+    def start_descriptions(self):
+        self._round = Record.Round()
+        self.data.rounds.append(self._round)
+        _DescriptionConsumer.start_descriptions(self)
+
+    def end_descriptions(self):
+        _DescriptionConsumer.end_descriptions(self)
+        self._round.number = self._roundnum
+        if self._descriptions:
+            self._round.new_seqs.extend(self._descriptions)
+        self._round.reused_seqs.extend(self._model_sequences)
+        self._round.new_seqs.extend(self._nonmodel_sequences)
+        if self._converged:
+            self.data.converged = 1
+
+    def end_alignment(self):
+        _AlignmentConsumer.end_alignment(self)
+        if self._alignment is not None:
+            self._round.alignments.append(self._alignment)
+        elif self._multiple_alignment is not None:
+            self._round.multiple_alignment = self._multiple_alignment
+
+    def end_hsp(self):
+        _HSPConsumer.end_hsp(self)
+        try:
+            self._alignment.hsps.append(self._hsp)
+        except AttributeError:
+            raise SyntaxError, "Found an HSP before an alignment"
+
+    def end_database_report(self):
+        _DatabaseReportConsumer.end_database_report(self)
+        self.data.__dict__.update(self._dr.__dict__)
+
+    def end_parameters(self):
+        _ParametersConsumer.end_parameters(self)
+        self.data.__dict__.update(self._params.__dict__)
 
 def blastall(blastcmd, program, database, infile, **keywds):
     """blastall(blastcmd, program, database, infile, **keywds) ->
