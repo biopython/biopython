@@ -1,6 +1,7 @@
 # Nexus.py - a NEXUS parser
 #
-# version 1.0
+# version 1.01
+# Feb. 20, 2005
 #
 # Copyright 2005 by Frank Kauff & Cymon J. Cox. All rights reserved.
 # This code is part of the Biopython distribution and governed by its
@@ -510,7 +511,10 @@ class Nexus(object):
         self.options={}                 # dict of the options command in the data block
         if input:
             self.read(input)
-    
+   
+        # some defaults
+        self.options['gapmode']='missing'
+
     def get_original_taxon_order(self):
         """Included for backwards compatibility."""
         return self.taxlabels
@@ -529,7 +533,7 @@ class Nexus(object):
             self.filename=input
         except (IOError,AttributeError):
             #2 Assume we have a string from a fh.read()
-            if isinstance(input, str) and input[:6].upper()=='#NEXUS':
+            if isinstance(input, str) and input.strip()[:6].upper()=='#NEXUS':
                 file_contents = input[6:]
                 self.filename='input_string'
             #3 Assume we have a file object
@@ -1306,7 +1310,7 @@ class Nexus(object):
                     # subset of an ambig or only missing in previous -> take subset
                     newconstant.append((site[0],self.ambiguous_values.get(seqsite,seqsite)))
                 elif seqsite in self.ambiguous_values:  # is it an ambig: check the intersection with prev. values
-                    intersect=sets.Set(self.ambiguous_values[seqsite]).intersect(site[1])
+                    intersect=sets.Set(self.ambiguous_values[seqsite]).intersection(site[1])
                     if intersect:
                         newconstant.append((site[0],''.join(intersect)))
                     #    print 'ok'

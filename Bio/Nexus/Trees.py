@@ -35,7 +35,7 @@ class Tree(Nodes.Chain):
     and multiple successors (=subclades).
     """ 
     # A newick tree is parsed into nested list and then converted to a node list in two stages
-    # mostly due to hsitorical reasons. This could be done in one swoop). Note: parentheses ( ) and
+    # mostly due to historical reasons. This could be done in one swoop). Note: parentheses ( ) and
     # colon : are not allowed in taxon names. This is against NEXUS standard, but makes life much
     # easier when parsing trees.
     
