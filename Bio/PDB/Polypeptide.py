@@ -29,9 +29,8 @@ class Polypeptide(list):
         """
         ca_list=[]
         for res in self:
-            if res.has_id("CA"):
-                ca=res["CA"]
-                ca_list.append(ca)
+            ca=res["CA"]
+            ca_list.append(ca)
         return ca_list
 
     def get_sequence(self):

@@ -10,13 +10,22 @@ class HSExposure:
     Calculates the Half-Sphere Exposure (HSE).
     """
     # unit vector along z
-    unit=Vector(0.0, 0.0, 1.0)
+    # CA-CB vectors or the CA-CA-CA approximation will
+    # be rotated onto this unit vector
+    unit_z=Vector(0.0, 0.0, 1.0)
 
     def __init__(self):
+        # List of CA-CB direction calculated from CA-CA-CA
+        # Used for the PyMol script
         self.ca_cb_list=[]
 
     def write_pymol_script(self, filename="pymol.py"):
+        """
+        Write a PyMol script that visualizes the pseudo CB-CA directions 
+        at the CA coordinates.
+        """
         if len(self.ca_cb_list)==0:
+            print "Nothing to draw."
             return
         fp=open(filename, "w")
         fp.write("from pymol.cgo import *\n")
@@ -34,21 +43,31 @@ class HSExposure:
         fp.close()
 
     def _get_gly_cb_coord(self, residue):
-        "CB=N rotated over -120 degrees along CA-C axis"
+        """
+        Return a pseudo CB coord for a Gly residue.
+        
+        CB coord=N coord rotated over -120 degrees 
+        along the CA-C axis.
+        """
         n=residue["N"].get_vector()
         c=residue["C"].get_vector()
         ca=residue["CA"].get_vector()
+        # center at origin
         n=n-ca
         c=c-ca
+        # rotation around c-ca over -120 deg
         rot=rotaxis(-pi*120.0/180.0, c)
-        cb=n.left_multiply(rot)
-        cb=cb+ca
+        cb_at_origin=n.left_multiply(rot)
+        # move back to ca position
+        cb=cb_at_origin+ca
         return cb.get_array()
 
     def _get_cb_from_ca(self, ca1, ca2, ca3):
         """
-        Calculate the approximate CA-CB direction based
-        on two flanking CA positions.
+        Calculate the approximate CA-CB direction for a central
+        CA atom based on the two flanking CA positions. 
+        
+        The CA-CB vector is centered at the origin.
         """
         # center
         ca1=ca1-ca2
@@ -58,36 +77,71 @@ class HSExposure:
         # bisection
         b=(ca1+ca3).normalize()
         b=-b
-        # for drawing
+        # Add to ca_cb_list for drawing
         self.ca_cb_list.append((ca2, b+ca2))
+        # b is centered at the origin!
         return b
 
     def _get_data_list_from_cb(self, residue_list):
-        # Unit vector along Z
+        """
+        Return a list of (translation, rotation, ca, residue)
+        tuples (using CB). 
+        
+        The translation and rotation are calculated 
+        using the CA-CB coordinates.
+
+        This list is used in the following way:
+
+        A certain atom is found within radius of a given position.
+        The coordinates are translated by -translation.
+        The coordinates are rotated by rotation.
+        If the z coordinate is >0 it lies in the side-chain sphere.
+        Otherwise it lies in the backbone sphere.
+        """
+        # list of (translation, rotation, ca, residue) tuples
         data_list=[]
-        for r in residue_list:
-            if is_aa(r):
-                ca=r["CA"]
+        for residue in residue_list:
+            if is_aa(residue):
+                ca=residue["CA"]
                 ca_coord=ca.get_coord()
-                if r.has_id("CB"):
-                    cb=r["CB"]
+                if residue.has_id("CB"):
+                    cb=residue["CB"]
                     cb_coord=cb.get_coord()
                 else:
-                    # GLY
-                    cb_coord=self._get_gly_cb_coord(r)
+                    # GLY has no CB - calculate pseudo CB position
+                    cb_coord=self._get_gly_cb_coord(residue)
                 x,y,z=cb_coord-ca_coord
+                # CB-CA vector
                 cb_ca=Vector(x,y,z)
-                m=rotmat(cb_ca, self.unit)
-                data_list.append((ca_coord, m, ca, r))
+                # Rotate CB-CA vector to unit vector along Z
+                rotation=rotmat(cb_ca, self.unit_z)
+                translation=ca_coord
+                data_list.append((translation, rotation, ca, residue))
         return data_list
 
     def _get_data_list_from_ca(self, structure):
-        ppb=PPBuilder()
+        """
+        Return a list of (translation, rotation, ca, residue)
+        tuples (using CA). 
+        
+        The translation and rotation are calculated 
+        using the CA-CA-CA coordinates (ie. the side chain 
+        direction is approximated using the CA-CA-CA vectors).
+
+        This list is used in the following way:
+
+        A certain atom is found within radius of a given position.
+        The coordinates are translated by -translation.
+        The coordinates are rotated by rotation.
+        If the z coordinate is >0 it lies in the side-chain sphere.
+        Otherwise it lies in the backbone sphere.
+        """
+        # list of (translation, rotation, ca, residue) tuples
         data_list=[]
+        ppb=PPBuilder()
         for pp in ppb.build_peptides(structure):
             ca_list=[]
-            for r in pp:
-                ca_list.append(r["CA"])
+            ca_list=pp.get_ca_list()
             for i in range(1, len(ca_list)-1):
                 r=pp[i]
                 ca1=ca_list[i-1]
@@ -96,10 +150,12 @@ class HSExposure:
                 ca_v1=ca1.get_vector()
                 ca_v2=ca2.get_vector()
                 ca_v3=ca3.get_vector()
+                # pseudo cb centred at origin
                 cb_v=self._get_cb_from_ca(ca_v1, ca_v2, ca_v3)
-                m=rotmat(cb_v, self.unit)
-                ca_coord2=ca2.get_coord()
-                data_list.append((ca_coord2, m, ca2, r))
+                # rotate cb to unit vector along z
+                rotation=rotmat(cb_v, self.unit_z)
+                translation=ca2.get_coord()
+                data_list.append((translation, rotation, ca2, r))
         return data_list
 
     def _calc_hs_exposure(self, data_list, radius):
