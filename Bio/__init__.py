@@ -1,1 +1,13 @@
-__all__ = ["ParserSupport", "Blast"]
+__all__ = [
+    "Blast",
+    "Enzyme",
+    "Fasta",
+    "File",
+    "PDB",
+    "ParserSupport",
+    "Prosite",
+    "PubMed",
+    "SCOP",
+    "Sequence",
+    "SwissProt"
+    ]
