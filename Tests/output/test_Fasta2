@@ -147,26 +147,40 @@ GTTGGGTCCACCCTCCAGGCTGTTACCTGTGGAAGATTGGCTTTCTGGGGACAGGTGTGG
 CAGGAGGGAGGGGGGTAGGGTGTGCCTGCCCTCCTCCAGTGCCGTTTCCTTCTCTCCTAG
 TGGGTAGGTG
 testing lupine.nu
-gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN gi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636 (X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence
-Seq('GAAAATTCATTTTCTTTGGACTTTCTCTGAAATCCGAGTCCTAGGAAAGATGCGTGAGAT ...', Alphabet())
+AI730987.1
+AI730987
+BNLGHi8354 Six-day Cotton fiber Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN gi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636 (X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence
+Seq('GAAAATTCATTTTCTTTGGACTTTCTCTGAAATCCGAGTCCTAGGAAAGATGCGTGAGAT ...', DNAAlphabet())
 testing elderberry.nu
-gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein HLPf gene, partial cds
-Seq('ATGAAGTTAAGCACTCTTCTCATCTTATCTTTTCCTTTCCTGCTCGGTACTATTGTCTTT ...', Alphabet())
+AF074388.1
+AF074388
+Sambucus nigra hevein-like protein HLPf gene, partial cds
+Seq('ATGAAGTTAAGCACTCTTCTCATCTTATCTTTTCCTTTCCTGCTCGGTACTATTGTCTTT ...', DNAAlphabet())
 testing phlox.nu
-gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal transcribed spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2, complete sequence
-Seq('TCGAAACCTGCCTAGCAGAACGACCCGCGAACTTGTATTCAAAACTTGGGTTGTGCGTGC ...', Alphabet())
+AF067555.1
+AF067555
+Phlox stansburyi internal transcribed spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2, complete sequence
+Seq('TCGAAACCTGCCTAGCAGAACGACCCGCGAACTTGTATTCAAAACTTGGGTTGTGCGTGC ...', DNAAlphabet())
 testing centaurea.nu
-gi|4104054|gb|AH007193.1|SEG_CVIGS Centaurea vallesiaca 18S ribosomal RNA gene, partial sequence
-Seq('CCTGTCACTTAACTTTTTGTTCATAAGGTATATATGGGGGGGTGTGTGTCTTCGGACACA ...', Alphabet())
+AH007193.1
+SEG_CVIGS
+Centaurea vallesiaca 18S ribosomal RNA gene, partial sequence
+Seq('CCTGTCACTTAACTTTTTGTTCATAAGGTATATATGGGGGGGTGTGTGTCTTCGGACACA ...', DNAAlphabet())
 testing wisteria.nu
-gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens maturase-like protein (matK) gene, complete cds; chloroplast gene for chloroplast product
-Seq('GCTCCATTTTTTACACATTTCTATGAACTAATTGGTTCATCCATACCATCGGTAGGGTTT ...', Alphabet())
+AF142731.1
+AF142731
+Wisteria frutescens maturase-like protein (matK) gene, complete cds; chloroplast gene for chloroplast product
+Seq('GCTCCATTTTTTACACATTTCTATGAACTAATTGGTTCATCCATACCATCGGTAGGGTTT ...', DNAAlphabet())
 testing sweetpea.nu
-gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA) gene, partial cds
-Seq('CAGGCTGCGCGGTTTCTATTTATGAAGAACAAGGTCCGTATGATAGTTGATTGTCATGCA ...', Alphabet())
+U78617.1
+LOU78617
+Lathyrus odoratus phytochrome A (PHYA) gene, partial cds
+Seq('CAGGCTGCGCGGTTTCTATTTATGAAGAACAAGGTCCGTATGATAGTTGATTGTCATGCA ...', DNAAlphabet())
 testing lavender.nu
-gi|5690369|gb|AF158246.1|AF158246 Cricetulus griseus glucose phosphate isomerase (GPI) gene, partial intron sequence
-Seq('GGCTCTTAAGTCATGTCTAGGCAGGTGTGCACAAGTTTAGGTCTTGTTCCGCCAGCATCT ...', Alphabet())
+AF158246.1
+AF158246
+Cricetulus griseus glucose phosphate isomerase (GPI) gene, partial intron sequence
+Seq('GGCTCTTAAGTCATGTCTAGGCAGGTGTGCACAAGTTTAGGTCTTGTTCCGCCAGCATCT ...', DNAAlphabet())
 testing aster.pro
 >gi|3298468|dbj|BAA31520.1| SAMIPF
 GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFSLSAGVG
@@ -202,14 +216,22 @@ INQLPCLQFGYDNLNDPKVAHQMFVTSNGTICIKSNYMNKFWRLSTDDWILVDGNDPRET
 NEAAALFRSDVHDFNVISLLNMQKTWFIKRFTSGKPGFINCMNAATQNVDETAILEIIEL
 GQNN
 testing aster.pro
-gi|3298468|dbj|BAA31520.1| SAMIPF
-Seq('GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFSLSAGVG', Alphabet())
+BAA31520.1
+
+SAMIPF
+Seq('GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFSLSAGVG', ProteinAlphabet())
 testing rosemary.pro
-gi|671626|emb|CAA85685.1| rubisco large subunit
-Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAE', Alphabet())
+CAA85685.1
+
+rubisco large subunit
+Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAE', ProteinAlphabet())
 testing rose.pro
-gi|4959044|gb|AAD34209.1|AF069992_1 LIM domain interacting RING finger protein
-Seq('MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTE', Alphabet())
+AAD34209.1
+AF069992_1
+LIM domain interacting RING finger protein
+Seq('MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTE', ProteinAlphabet())
 testing loveliesbleeding.pro
-gi|2781234|pdb|1JLY|B Chain B, Crystal Structure Of Amaranthus Caudatus Agglutinin
-Seq('XAGLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGLVHI', Alphabet())
+1JLY
+B
+Chain B, Crystal Structure Of Amaranthus Caudatus Agglutinin
+Seq('XAGLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGLVHI', ProteinAlphabet())
