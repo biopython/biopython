@@ -6,6 +6,7 @@
 from Bio.config.DBRegistry import CGIDB, DBGroup
 from _support import *
 
+# This returns HTML-formatted data.  Is there a way to get raw text?
 interpro_ebi_cgi = CGIDB(
     name="interpro-ebi-cgi",
     cgi='http://www.ebi.ac.uk/interpro/IEntry',

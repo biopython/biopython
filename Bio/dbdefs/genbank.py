@@ -56,16 +56,3 @@ protein_genbank_cgi = CGIDB(
     key="uid",
     failure_cases=ncbi_failures+[(not_exist_expr, "GI does not exist")]
     )
-
-nucleotide_dbfetch_cgi = CGIDB(
-    name="nucleotide-dbfetch-cgi",
-    cgi="http://www.ebi.ac.uk/cgi-bin/dbfetch",
-    doc="dbfetch provides EMBL, Genbank, and SWALL sequences",
-    delay=5.0,
-    params=[("db", "genbank"),
-            ("style", "raw"),
-            ("format", "embl"),
-            ],
-    key="id",
-    )
-#  XXX need failure cases

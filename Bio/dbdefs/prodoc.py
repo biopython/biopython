@@ -8,7 +8,7 @@ from Bio.config.DBRegistry import CGIDB, DBGroup
 prodoc_expasy_cgi = CGIDB(
     name="prodoc-expasy-cgi",
     doc="Retrieve a prodoc entry by ID",
-    cgi='http://www.expasy.ch/cgi-bin/get-prodoc-entry',
+    cgi='http://us.expasy.org/cgi-bin/get-prosite-raw.pl',
     delay=5.0,
     params=[],
     key="",

@@ -20,6 +20,7 @@ embl_xembl_cgi = CGIDB(
 embl_dbfetch_cgi = CGIDB(
     name="embl-dbfetch-cgi",
     cgi="http://www.ebi.ac.uk/cgi-bin/dbfetch",
+    url="http://www.ebi.ac.uk/cgi-bin/dbfetch",
     doc="dbfetch provides EMBL, Genbank, and SWALL sequences",
     delay=5.0,
     params=[("db", "embl"),

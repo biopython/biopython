@@ -9,7 +9,7 @@ from _support import *
 prosite_expasy_cgi = CGIDB(
     name="prosite-expasy-cgi",
     doc="Retrieve a prosite entry by ID",
-    cgi='http://www.expasy.ch/cgi-bin/get-prosite-entry',
+    cgi='http://us.expasy.org/cgi-bin/get-prosite-raw.pl',
     delay=5.0,
     params=[],
     key="",

@@ -1,0 +1,96 @@
+ID   EDD_RAT        STANDARD;      PRT;   920 AA.
+AC   Q62671;
+DT   01-NOV-1997 (Rel. 35, Created)
+DT   15-JUN-2002 (Rel. 41, Last sequence update)
+DT   15-JUN-2002 (Rel. 41, Last annotation update)
+DE   Ubiquitin--protein ligase EDD (EC 6.3.2.-) (Hyperplastic discs
+DE   protein homolog) (100 kDa protein) (Fragment).
+GN   EDD OR HYD.
+OS   Rattus norvegicus (Rat).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+OC   Mammalia; Eutheria; Rodentia; Sciurognathi; Muridae; Murinae; Rattus.
+RN   [1]
+RP   SEQUENCE FROM N.A.
+RC   STRAIN=Wistar; TISSUE=Testis;
+RA   Mueller D., Rehbein M., Baumeister H., Richter D.;
+RT   "Molecular characterization of a novel rat protein structurally
+RT   related to poly(A) binding proteins and the 70K protein of the U1
+RT   small nuclear ribonucleoprotein particle (snRNP).";
+RL   Nucleic Acids Res. 20:1471-1475(1992).
+RN   [2]
+RP   ERRATUM.
+RA   Mueller D., Rehbein M., Baumeister H., Richter D.;
+RL   Nucleic Acids Res. 20:2624-2624(1992).
+RN   [3]
+RP   IDENTIFICATION OF PROBABLE FRAMESHIFT.
+RA   Callaghan M.J., Russell A.J., Woollatt E., Sutherland G.R.,
+RA   Sutherland R.L., Watts C.K.W.;
+RT   "Identification of a human HECT family protein with homology to the
+RT   Drosophila tumor suppressor gene hyperplastic discs.";
+RL   Oncogene 17:3479-3491(1998).
+CC   -!- FUNCTION: E3 ubiquitin-protein ligase which accepts ubiquitin from
+CC       an E2 ubiquitin-conjugating enzyme in the form of a thioester and
+CC       then directly transfers the ubiquitin to targeted substrates (By
+CC       similarity). May be involved in maturation and/or post-
+CC       transcriptional regulation of mRNA. May play a role in control of
+CC       cell cycle progression. May have tumor suppressor function.
+CC       Regulates DNA topoisomerase II binding protein (TopBP1) for the
+CC       DNA damage response (By similarity).
+CC   -!- SUBCELLULAR LOCATION: Nuclear (By similarity).
+CC   -!- TISSUE SPECIFICITY: Highest levels found in testis. Also present
+CC       in liver, kidney, lung and brain.
+CC   -!- DEVELOPMENTAL STAGE: In early post-natal life, expression in
+CC       the testis increases to reach a maximum around day 28.
+CC   -!- MISCELLANEOUS: A cysteine residue is required for ubiquitin-
+CC       thiolester formation.
+CC   -!- SIMILARITY: CONTAINS 1 HECT-TYPE E3 UBIQUITIN-PROTEIN LIGASE
+CC       DOMAIN.
+CC   -!- CAUTION: Ref.1 sequence differs from that shown due to a
+CC       frameshift in position 30.
+CC   --------------------------------------------------------------------------
+CC   This SWISS-PROT entry is copyright. It is produced through a collaboration
+CC   between  the Swiss Institute of Bioinformatics  and the  EMBL outstation -
+CC   the European Bioinformatics Institute.  There are no  restrictions on  its
+CC   use  by  non-profit  institutions as long  as its content  is  in  no  way
+CC   modified and this statement is not removed.  Usage  by  and for commercial
+CC   entities requires a license agreement (See http://www.isb-sib.ch/announce/
+CC   or send an email to license@isb-sib.ch).
+CC   --------------------------------------------------------------------------
+DR   EMBL; X64411; CAA45756.1; ALT_FRAME.
+DR   HSSP; O95071; 1I2T.
+DR   InterPro; IPR000569; HECT_domain.
+DR   InterPro; IPR002004; PABP/HECT.
+DR   Pfam; PF00632; HECT; 1.
+DR   Pfam; PF00658; PABP; 1.
+DR   SMART; SM00119; HECTc; 1.
+DR   SMART; SM00517; PolyA; 1.
+DR   PROSITE; PS50237; HECT; 1.
+KW   Ubl conjugation pathway; Ligase; Nuclear protein.
+FT   NON_TER       1      1
+FT   DOMAIN      515    571       PABP-LIKE.
+FT   DOMAIN      583    920       HECT.
+FT   DOMAIN      108    119       ASP/GLU-RICH (ACIDIC).
+FT   DOMAIN      158    181       PRO-RICH.
+FT   DOMAIN      451    470       ARG/GLU-RICH (MIXED CHARGE).
+FT   DOMAIN      479    488       ARG/ASP-RICH (MIXED CHARGE).
+FT   DOMAIN      610    621       ASP/GLU-RICH (ACIDIC).
+FT   DOMAIN      858    878       PRO-RICH.
+FT   BINDING     889    889       UBIQUITIN (BY SIMILARITY).
+SQ   SEQUENCE   920 AA;  103949 MW;  465771084536C3AA CRC32;
+     ARRERMTARE EASLRTLEGR RRATLLSARQ GMMSARGDFL NYALSLMRSH NDEHSDVLPV
+     LDVCSLKHVA YVFQALIYWI KAMNQQTTLD TPQLERKRTR ELLELGIDNE DSEHENDDDT
+     SQSATLNDKD DESLPAETGQ NHPFFRRSDS MTFLGCIPPN PFEVPLAEAI PLADQPHLLQ
+     PNARKEDLFG RPSQGLYSSS AGSGKCLVEV TMDRNCLEVL PTKMSYAANL KNVMNMQNRQ
+     KKAGEDQSML AEEADSSKPG PSAHDVAAQL KSSLLAEIGL TESEGPPLTS FRPQCSFMGM
+     VISHDMLLGR WRLSLELFGR VFMEDVGAEP GSILTELGGF EVKESKFRRE MEKLRNQQSR
+     DLSLEVDRDR DLLIQQTMRQ LNNHFGRRCA TTPMAVHRVK VTFKDEPGEG SGVARSFYTA
+     IAQAFLSNEK LPNLDCIQNA NKGTHTSLMQ RLRNRGERDR EREREREMRR SSGLRAGSRR
+     DRDRDFRRQL SIDTRPFRPA SEGNPSDDPD PLPAHRQALG ERLYPRVQAM QPAFASKITG
+     MLLELSPAQL LLLLASEDSL RARVEEAMEL IVAHGRENGA DSILDLGLLD SSEKVQENRK
+     RHGSSRSVVD MDLDDTDDGD DNAPLFYQPG KRGFYTPRPG KNTEARLNCF RNIGRILGLC
+     LLQNELCPIT LNRHVIKVLL GRKVNWHDFA FFDPVMYESL RQLILASQSS DADAVFSAMD
+     LAFAVDLCKE EGGGQVELIP NGVNIPVTPQ NVYEYVRKYA EHRMLVVAEQ PLHAMRKGLL
+     DVLPKNSLED LTAEDFRLLV NGCGEVNVQM LISFTSFNDE SGENAEKLLQ FKRWFWSIVE
+     RMSMTERQDL VYFWTSSPSL PASEEGFQPM PSITIRPPDD QHLPTANTCI SRLYVPLYSS
+     KQILKQKLLL AIKTKNFGFV
+//

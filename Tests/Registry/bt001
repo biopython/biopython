@@ -1,0 +1,107 @@
+BLASTP 2.0.10 [Aug-26-1999]
+
+
+Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+
+Query= gi|120291|sp|P21297|FLBT_CAUCR FLBT PROTEIN
+         (141 letters)
+
+Database: data/swissprot
+           82,258 sequences; 29,652,561 total letters
+
+Searching..................................................done
+
+                                                                   Score     E
+Sequences producing significant alignments:                        (bits)  Value
+
+gi|120291|sp|P21297|FLBT_CAUCR FLBT PROTEIN                          284  7e-77
+gi|3024946|sp|Q58368|Y958_METJA HYPOTHETICAL PROTEIN MJ0958 PRE...    29  3.4
+gi|3024745|sp|O26320|THSA_METTH PROBABLE THERMOSOME SUBUNIT A         29  4.5
+
+>gi|120291|sp|P21297|FLBT_CAUCR FLBT PROTEIN
+           Length = 141
+           
+ Score =  284 bits (718), Expect = 7e-77
+ Identities = 141/141 (100%), Positives = 141/141 (100%)
+
+Query: 1   MPLKLSLKPGEKFVLNGAVVQNGDRRGVLVLQNKASVLREKDIMQPDQVTTPARHIYFPV 60
+           MPLKLSLKPGEKFVLNGAVVQNGDRRGVLVLQNKASVLREKDIMQPDQVTTPARHIYFPV
+Sbjct: 1   MPLKLSLKPGEKFVLNGAVVQNGDRRGVLVLQNKASVLREKDIMQPDQVTTPARHIYFPV 60
+
+Query: 61  MMMYLDEVGAEKFYEEFATRLNEFMGVVRNPVVLQDCIAISKHVMAREYYKALMLSRKLI 120
+           MMMYLDEVGAEKFYEEFATRLNEFMGVVRNPVVLQDCIAISKHVMAREYYKALMLSRKLI
+Sbjct: 61  MMMYLDEVGAEKFYEEFATRLNEFMGVVRNPVVLQDCIAISKHVMAREYYKALMLSRKLI 120
+
+Query: 121 EYEDERLGHVSSGVSAGGDAG 141
+           EYEDERLGHVSSGVSAGGDAG
+Sbjct: 121 EYEDERLGHVSSGVSAGGDAG 141
+
+
+>gi|3024946|sp|Q58368|Y958_METJA HYPOTHETICAL PROTEIN MJ0958
+           PRECURSOR
+           Length = 426
+           
+ Score = 29.3 bits (64), Expect = 3.4
+ Identities = 15/47 (31%), Positives = 23/47 (48%)
+
+Query: 28  VLVLQNKASVLREKDIMQPDQVTTPARHIYFPVMMMYLDEVGAEKFY 74
+           +LVL N  ++   K     D  TT   +IY P+ +    +  A+KFY
+Sbjct: 169 ILVLINNTNITELKKFEDDDYYTTFQHYIYQPIFIFTTYDSKAKKFY 215
+
+
+>gi|3024745|sp|O26320|THSA_METTH PROBABLE THERMOSOME SUBUNIT A
+           Length = 542
+           
+ Score = 29.0 bits (63), Expect = 4.5
+ Identities = 31/107 (28%), Positives = 46/107 (42%), Gaps = 9/107 (8%)
+
+Query: 34  KASVLREKDIMQPDQVTTPARHIYFPVMMMYLDEVGAEKFYEEFATRLNEFMGVVRNPVV 93
+           +A V+ EK I   D+V T       P  +  +     +   EE    L + +GVV +   
+Sbjct: 339 EAGVIYEKKIF--DEVLTFIEECRDPKAISIILRGSTKHVAEEMERALEDAIGVVAS--T 394
+
+Query: 94  LQDCIAISKHVMAREYYKALMLSRKLIEYEDERLGHVSSGVSAGGDA 140
+           L+D     + V+A      + ++RKL EY D   G     VSA  DA
+Sbjct: 395 LED-----REVVAGGGAPEVEIARKLREYADTISGREQLAVSAFADA 436
+
+
+  Database: data/swissprot
+    Posted date:  Nov 15, 1999  2:55 PM
+  Number of letters in database: 29,652,561
+  Number of sequences in database:  82,258
+  
+Lambda     K      H
+   0.321    0.138    0.390 
+
+Gapped
+Lambda     K      H
+   0.270   0.0470    0.230 
+
+
+Matrix: BLOSUM62
+Gap Penalties: Existence: 11, Extension: 1
+Number of Hits to DB: 7927717
+Number of Sequences: 82258
+Number of extensions: 284596
+Number of successful extensions: 567
+Number of sequences better than 10.0: 3
+Number of HSP's better than 10.0 without gapping: 2
+Number of HSP's successfully gapped in prelim test: 1
+Number of HSP's that attempted gapping in prelim test: 565
+Number of HSP's gapped (non-prelim): 3
+length of query: 141
+length of database: 29,652,561
+effective HSP length: 50
+effective length of query: 91
+effective length of database: 25,539,661
+effective search space: 2324109151
+effective search space used: 2324109151
+T: 11
+A: 40
+X1: 16 ( 7.4 bits)
+X2: 38 (14.8 bits)
+X3: 64 (24.9 bits)
+S1: 41 (21.8 bits)
+S2: 61 (28.2 bits)
