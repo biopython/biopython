@@ -14,14 +14,16 @@ _Scanner        Scans output from standalone BLAST.
 _HeavyConsumer  Heavyweight consumer.
 
 Functions:
-blastall       Execute blastall.
-blastpgp       Execute blastpgp.
+blastall        Execute blastall.
+blastpgp        Execute blastpgp.
 
 """
 
 # To do:
 # optimize regex's
-
+# Add Consumers/Parsers for:
+#     master-slave alignments
+#     psi-blast
 
 import os
 import string
@@ -512,7 +514,9 @@ class _HeaderConsumer:
             
     def query_info(self, line):
         if line[:7] == 'Query= ':
-            self._query = string.rstrip(line[7:])
+            self._query = line[7:]
+        elif line[:7] != '       ':  # continuation of query_info
+            self._query = self._query + line
         else:
             letters, = _re_search(
                 r"(\d+) letters", line,
@@ -600,7 +604,7 @@ class _HSPConsumer:
         self._bits = _safe_float(self._bits)
 
         self._expect, = _re_search(
-            r"Expect = ([0-9.e-]+)", line,
+            r"Expect\S* = ([0-9.e-]+)", line,
             "I could not find the expect in line\n%s" % line)
         self._expect = _safe_float(self._expect)
 
@@ -610,10 +614,11 @@ class _HSPConsumer:
             "I could not find the identities in line\n%s" % line)
         self._identities = _safe_int(self._identities)
 
-        self._positives, = _re_search(
-            r"Positives = (\d+)", line,
-            "I could not find the positives in line\n%s" % line)
-        self._positives = _safe_int(self._positives)
+        if string.find(line, 'Positives') >= 0:
+            self._positives, = _re_search(
+                r"Positives = (\d+)", line,
+                "I could not find the positives in line\n%s" % line)
+            self._positives = _safe_int(self._positives)
         
     def strand(self, line):
         self._strand = _re_search(
@@ -626,11 +631,11 @@ class _HSPConsumer:
         # Frame = +2 / +2
         if string.find(line, '/') >= 0:
             self._frame = _re_search(
-                r"Frame = ([-+][123])", line,
+                r"Frame = ([-+][123]) / ([-+][123])", line,
                 "I could not find the frame in line\n%s" % line)
         else:
             self._frame = _re_search(
-                r"Frame = ([-+][123]) / ([-+][123])", line,
+                r"Frame = ([-+][123])", line,
                 "I could not find the frame in line\n%s" % line)
 
     def query(self, line):
@@ -745,8 +750,7 @@ class _ParametersConsumer:
         self._blast_cutoff = (None, None)
 
     def matrix(self, line):
-        self._matrix, = _get_cols(
-            line, (-1,), ncols=2, expected={0:"Matrix:"})
+        self._matrix = string.rstrip(line[8:])
 
     def gap_penalties(self, line):
         self._gap_penalties = _get_cols(
@@ -904,6 +908,13 @@ class _ComprehensiveConsumer(AbstractConsumer,
     def __init__(self):
         self.data = None
 
+    def multalign(self, line):
+        raise ValueError, \
+              "This consumer doesn't handle master-slave alignments"
+    def round(self, line):
+        raise ValueError, \
+              "This consumer doesn't handle PSI-BLAST data"
+
     def start_header(self):
         self.data = Record.Comprehensive()
         _HeaderConsumer.start_header(self)
@@ -1036,7 +1047,6 @@ def blastall(blastcmd, program, database, infile, **keywds):
     seqalign_file       seqalign file to output.
 
     """
-
     att2param = {
         'matrix' : '-M',
         'gap_open' : '-G',
@@ -1149,7 +1159,6 @@ def blastpgp(blastcmd, database, infile, **keywds):
     align_infile        Input alignment file for PSI-BLAST restart.
     
     """
-
     att2param = {
         'matrix' : '-M',
         'gap_open' : '-G',

@@ -10,7 +10,7 @@ provided by the NCBI.
 http://www.ncbi.nlm.nih.gov/BLAST/
 
 Classes:
-Scanner      Scans output from NCBI's BLAST WWW server.
+_Scanner      Scans output from NCBI's BLAST WWW server.
 """
 
 
@@ -20,7 +20,7 @@ from Bio import File
 from Bio.ParserSupport import *
 
 
-class Scanner:
+class _Scanner:
     """Scan BLAST output from NCBI's web server at:
     http://www.ncbi.nlm.nih.gov/BLAST/
     
