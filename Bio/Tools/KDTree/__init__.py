@@ -1,9 +1,24 @@
 try:
 	import Numeric
+	from RandomArray import *
 except ImportError:
 	raise ImportError, "This module requires NumPy"
 
-import _KDTree
+from Bio.Tools.KDTree import _KDTree 
+
+def neighbor_test(nr_points, dim, bucket_size, radius):
+		kdt=_KDTree.KDTree(dim, bucket_size)
+		coords=random((nr_points, dim)).astype("f")
+		kdt.set_data(coords, nr_points)
+		kdt.neighbor_search(radius)
+		l1=len(kdt.neighbor_get_radii())
+		kdt.neighbor_simple_search(radius)
+		l2=len(kdt.neighbor_get_radii())
+		if l1!=l2:
+			print "Not passed: %i <> %i." % (l1, l2)
+		else:
+			print "Passed."
+
 
 class KDTree:
 	def __init__(self, dim, bucket_size=1):
@@ -38,7 +53,7 @@ class KDTree:
 		o radius - float>=0
 		"""
 		if not self.built:
-				raise Exception, "Not initialised or destroyed"
+				raise Exception, "No points set specified"
 		if center.shape!=(self.dim,):
 				raise Exception, "Expected a %i-dimensional Numpy array" % self.dim
 		if center.typecode()!="f":
@@ -71,7 +86,7 @@ class KDTree:
 		o radius - float (>0)
 		"""
 		if not self.built:
-				raise Exception, "Not initialised or destroyed"
+				raise Exception, "No points set specified"
 		self.kdt.neighbor_search(radius)
 
 	def neighbor_get_indices(self):
@@ -93,39 +108,13 @@ class KDTree:
 		a=self.kdt.neighbor_get_radii()
 		return a
 
-	# Test
-
-	def _neighbor_simple_search(self, radius):
-		"""
-		Also calculates the fixed radius nearest neighbors, using a
-		slower algorithm. This can be used as a test. BUT: this method
-		destroys the KD tree as a side effect.
-		"""
-		self.built=0
-		self.kdt.neighbor_simple_search(radius)
-
 if __name__=="__main__":
 
-	from RandomArray import *
-	from Bio.Tools.KDTree import *
+	nr_points=1000
+	dim=3
+	bucket_size=10
+	radius=0.05
 
-	DIM=3
-	N=9000
+	while(1):
+ 		 neighbor_test(nr_points, dim, bucket_size, radius)
 
-	kdt=KDTree(3)	
-
-	coords=random((N, DIM)).astype("f")
-	
-	kdt.set_coords(coords)
-
-	R=0.01
-
-	kdt._neighbor_simple_search(R)
-	print "Simple search : ", len(kdt.neighbor_get_radii())
-	
-	kdt.neighbor_search(R)
-	print "KD tree search : ", len(kdt.neighbors_get_radii())
-
-
-
-		
