@@ -408,14 +408,13 @@ class SummaryInfo:
             freq_dict = self._get_letter_freqs(residue_num,
                                                self.alignment._records,
                                                all_letters, chars_to_ignore)
-            print freq_dict,
+            # print freq_dict,
             column_score = self._get_column_info_content(freq_dict,
                                                          e_freq_table,
                                                          log_base,
                                                          random_expected)
 
             info_content[residue_num] = column_score
-            print column_score
         # sum up the score
         total_info = 0
         for column_info in info_content.values():
@@ -493,7 +492,6 @@ class SummaryInfo:
             # if we have expected frequencies, modify the log value by them
             # gap characters do not have expected frequencies, so they
             # should just be the observed frequency.
-            # Iddo, 11/6/2001: do not tally gap chars on any occasion
             if letter != self.alignment._alphabet.gap_char:
                 if e_freq_table:
                     inner_log = obs_freq[letter] / e_freq_table.data[letter]
@@ -504,10 +502,8 @@ class SummaryInfo:
             if inner_log > 0:
                 letter_info = (obs_freq[letter] * 
                                math.log(inner_log) / math.log(log_base))
-
                 total_info = total_info + letter_info
-        return -total_info # Do not abs this. Iddo.
-#        return abs(total_info)
+        return total_info 
 
     def get_column(self,col):
         return self.alignment.get_column(col)
