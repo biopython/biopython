@@ -489,7 +489,7 @@ class _Scanner:
 
         consumer.end_parameters()
 
-class BlastParser:
+class BlastParser(AbstractParser):
     """Parses BLAST data into a Record.Blast object.
 
     """
@@ -503,7 +503,7 @@ class BlastParser:
         self._scanner.feed(handle, self._consumer)
         return self._consumer.data
 
-class BlastErrorParser:
+class BlastErrorParser(AbstractParser):
     """Attempt to catch and diagnose BLAST errors while parsing.
 
     This utilizes the BlastParser module but adds an additional layer
@@ -571,7 +571,7 @@ class BlastErrorParser:
                                            data_record.query)
             line = handle.readline()
 
-class PSIBlastParser:
+class PSIBlastParser(AbstractParser):
     """Parses BLAST data into a Record.PSIBlast object.
 
     """

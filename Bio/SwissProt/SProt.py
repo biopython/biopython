@@ -223,7 +223,7 @@ class ExPASyDictionary:
 
         """
         self.parser = parser
-        self.limiter = RequestLimiter()
+        self.limiter = RequestLimiter(delay)
 
     def __len__(self):
         raise NotImplementedError, "SwissProt contains lots of entries"
@@ -277,7 +277,7 @@ class ExPASyDictionary:
             return self.parser.parse(handle)
         return handle.read()
 
-class RecordParser:
+class RecordParser(AbstractParser):
     """Parses SwissProt data into a Record object.
 
     """
@@ -289,7 +289,7 @@ class RecordParser:
         self._scanner.feed(handle, self._consumer)
         return self._consumer.data
 
-class SequenceParser:
+class SequenceParser(AbstractParser):
     """Parses SwissProt data into a Seq object.
 
     """

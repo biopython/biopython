@@ -190,10 +190,10 @@ class Iterator:
             
         data = string.join(lines, '')
         if self._parser is not None:
-            return self._parser.parse(File.StringHandle(data))
+            return self._parser.parse_str(data)
         return data
 
-class RecordParser:
+class RecordParser(AbstractParser):
     """Parses Medline data into a Record object.
 
     """

@@ -31,7 +31,7 @@ from Bio.WWW import NCBI
 from Bio.ParserSupport import *
 import NCBIStandalone
 
-class BlastParser:
+class BlastParser(AbstractParser):
     """Parses WWW BLAST data into a Record.Blast object.
 
     """

@@ -227,7 +227,7 @@ class ExPASyDictionary:
             return self.parser.parse(handle)
         return handle.read()
 
-class RecordParser:
+class RecordParser(AbstractParser):
     """Parses Prodoc data into a Record object.
 
     """

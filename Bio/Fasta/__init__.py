@@ -162,7 +162,7 @@ class Dictionary:
 
         return all_keys
 
-class RecordParser:
+class RecordParser(AbstractParser):
     """Parses FASTA sequence data into a Record object.
 
     """

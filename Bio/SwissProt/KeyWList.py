@@ -27,7 +27,7 @@ from types import *
 from Bio import File
 from Bio.ParserSupport import *
 
-class ListParser:
+class ListParser(AbstractParser):
     """Parses keywlist.txt data into a list of keywords.
 
     """

@@ -329,7 +329,7 @@ class ExPASyDictionary:
             return self.parser.parse(handle)
         return handle.read()
 
-class RecordParser:
+class RecordParser(AbstractParser):
     """Parses Prosite data into a Record object.
 
     """
