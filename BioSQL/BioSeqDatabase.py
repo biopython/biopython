@@ -80,7 +80,9 @@ class Adaptor:
         return seqid
 
     def fetch_seqid_by_seqid(self, dbid, seqid):
-        return seqid
+        # XXX can't implement this right since it doesn't seem like the 
+        # right id is stored in the database
+        raise NotImplementedError("No retrieval by this id")
 
     def list_biodatabase_names(self):
         self.cursor.execute("select name from biodatabase")
