@@ -15,12 +15,13 @@ J IMMUNOL 150: 4985-4995 (1993)
 SRCE: PCR AMPLIFIED cDNA FROM SPLEEN OF PATIENT WITH CHRONICMYELOGENOUS LEUKEMIA
 
 ccaagactggtgaagccctcgcagaccctctcactcacctgtgccatctccggggacagtgtctctaggaacagtgctgc
-ttggatcaggcagtccccatcgagaggccttgagtggctgggaaggacatactccaagtggtataatgattatgcagtat
-ctgtgaaaagtcgaataaccatcaacccagacacatccaagaaccagttctccctgcagctgactgagggcacggctgtg
-tattactgtgcaagagactccctggagtgggatgatatctggggcgggacaatggtcaccgttcttca
+ttggaattggatcaggcagtccccatcgagaggccttgagtggctgggaaggacatactacagg---tccaagtggtata
+atgattatgcagtatctgtgaaaagtcgaataaccatcaacccagacacatccaagaaccagttctccctgcagctgaac
+tctgtgactcc-gagggcacggctgtgtattactgtgcaagagactccctggagtgggatctaccgcacaatgatggt--
+----------tttgatatctggggcca-gggacaatggtcaccgt-tcttca
 
-PRLVKPSQTLSLTCAISGDSVSRNSAAWIRQSPSRGLEWLGRTYSKWYNDYAVSVKSRITINPDTSKNQFSLQLTEGTAV
-YYCARDSLEWDDIWGGTMVTVSS
+PRLVKPSQTLSLTCAISGDSVSRNSAAWNWIRQSPSRGLEWLGRTYYR-SKWYNDYAVSVKSRITINPDTSKNQFSLQLN
+SVT-EGTAVYYCARDSLEWDLPHNDG----FDIWG-GTMVTVSS
 
 
 Kabat id: 000255
@@ -43,12 +44,13 @@ NNNT: FOR ALIGNMENT, THE CODONS ctt acc acc gtc tac tac aac WEREREPLACED BY A # 
 SRCE: PCR AMPLIFIED cDNA FROM SPLEEN OF PATIENT WITH CHRONICMYELOGENOUS LEUKEMIA
 
 ccaggactggtgaagccctcgcagaccctctcactcacctgtgccatctccggggacagtgtctctgacaggagtgcttc
-ctggatcaggcagtccccttcgagaggccttgagtggctgggaaggacatactccaagtggtttagtgattatgcggact
-ctgttaaaggtcgaataatcgtcaacccggacacatccaccaaccagttctccctgcagttgactcccgaggacacggct
-gtatattactgtgcaagagctccgtgggcccgacgtgacgtctggggcccagggacctgggtcaccgtcttctca
+ctggagctggatcaggcagtccccttcgagaggccttgagtggctgggaaggacatactacagg---tccaagtggttta
+gtgattatgcggactctgttaaaggtcgaataatcgtcaacccggacacatccaccaaccagttctccctgcagttgaac
+tctgtgactcccgaggacacggctgtatattactgtgcaagagctccgtgggcccgacgtactgatatggttcggggact
+ttacggtctagacgtctggggcccagggacctgggtcaccgtcttctca
 
-PGLVKPSQTLSLTCAISGDSVSDRSASWIRQSPSRGLEWLGRTYSKWFSDYADSVKGRIIVNPDTSTNQFSLQLTPEDTA
-VYYCARAPWARRDVWGPGTWVTVFS
+PGLVKPSQTLSLTCAISGDSVSDRSASWSWIRQSPSRGLEWLGRTYYR-SKWFSDYADSVKGRIIVNPDTSTNQFSLQLN
+SVTPEDTAVYYCARAPWARRTDMVRGLYGLDVWGPGTWVTVFS
 
 
 Kabat id: 000347
@@ -67,12 +69,13 @@ EUR J IMMUNOL 23: 110-118 (1993)
 SRCE: PCR AMPLIFIED cDNA FROM 8-WEEK-OLD EMBRYO MONONUCLEAR CELLS
 
 ---caggtgcagctgcaggagtcgggcccaggactggtgaagccttcggagaccctgtccctcacctgcactgtctctgg
-tggctccatcagtagttactactggagctggatccggcagcccgccgggaagggactggagtggattgggcgtatctata
-ccagtgggagcaccaactacaacccctccctcaagagtcgagtcaccatgtcagtagacacgtccaagaaccagttctcc
-ctgaagctgaccgccgcggacacggccgtgtattactgtgcgagagatgcacctctgatg---gacgtctgg
+tggctccatcagtagttactactggagc------tggatccggcagcccgccgggaagggactggagtggattgggcgta
+tctat---------accagtgggagcaccaactacaacccctccctcaagagtcgagtcaccatgtcagtagacacgtcc
+aagaaccagttctccctgaagctgagctctgtgaccgccgcggacacggccgtgtattactgtgcgagagatgcacctct
+gatg---------------------------tacggtatggacgtctgg
 
--QVQLQESGPGLVKPSETLSLTCTVSGGSISSYYWSWIRQPAGKGLEWIGRIYTSGSTNYNPSLKSRVTMSVDTSKNQFS
-LKLTAADTAVYYCARDAPLM-DVW
+-QVQLQESGPGLVKPSETLSLTCTVSGGSISSYYWS--WIRQPAGKGLEWIGRIY---TSGSTNYNPSLKSRVTMSVDTS
+KNQFSLKLSSVTAADTAVYYCARDAPLM---------YGMDVW
 
 
 Kabat id: 000397
@@ -91,12 +94,13 @@ EUR J IMMUNOL 23: 110-118 (1993)
 SRCE: PCR AMPLIFIED cDNA FROM 13-WEEK-OLD EMBRYO MONONUCLEAR CELLS
 
 ---gaggtgcagctgttggagtctgggggaggcttggtacagcctggggggtccctgagactctcctgtgcagcctctgg
-attcacctttagcagctatgccatgagctgggtccgccaggctccagggaaggggctggagtgggtctcagctattagta
-gtggtggtagcacatactactcagactccgtgaagggccggttcaccatctccagagacaattccaagaacacgctgtat
-ctgcaaatgagagccgaggacacggccgtatattactgtgcgaagtgccctttcgctgggggagactactgg
+attcacctttagcagctatgccatgagc------tgggtccgccaggctccagggaaggggctggagtgggtctcagcta
+ttagtggt------agtggtggtagcacatactactcagactccgtgaagggccggttcaccatctccagagacaattcc
+aagaacacgctgtatctgcaaatgaacagcctgagagccgaggacacggccgtatattactgtgcgaagtgccctttcgc
+tgggggatctccgtct---------------------tttgactactgg
 
--EVQLLESGGGLVQPGGSLRLSCAASGFTFSSYAMSWVRQAPGKGLEWVSAISSGGSTYYSDSVKGRFTISRDNSKNTLY
-LQMRAEDTAVYYCAKCPFAGGDYW
+-EVQLLESGGGLVQPGGSLRLSCAASGFTFSSYAMS--WVRQAPGKGLEWVSAISG--SGGSTYYSDSVKGRFTISRDNS
+KNTLYLQMNSLRAEDTAVYYCAKCPFAGGSPS-------FDYW
 
 
 Kabat id: 000456
@@ -116,12 +120,12 @@ CLAS: IGA-
 SRCE: PCR AMPLIFIED cDNA FROM HUMAN CORD BLOOD MONONUCLEAR CELLS
 
 ---caggtgcagctggtggagtctgggggaggcttcgtcaagcctggagggtccctgagactctcctgtgcagcctctgg
-attcacctttagtgactactacatgagctggatccgccaggctccagggaaggggctggagtgggtttcatacattagta
-ctactggttacacaaactacgcagactctgtgaagggccgattcaccatctccagagacaacgccaagaactcactgtat
-ctgcaaatgagagccgaggacacggctgtgtattactgtgcgtgtgcgagattctatggttcggagtactggggccaggg
-aaccctggtcaccgtctcctca
+attcacctttagtgactactacatgagc------tggatccgccaggctccagggaaggggctggagtgggtttcataca
+ttagtggt------actactggttacacaaactacgcagactctgtgaagggccgattcaccatctccagagacaacgcc
+aagaactcactgtatctgcaaatgaggagcctgagagccgaggacacggctgtgtattactgtgcgtgtgcgagattcta
+tggttcggggagtttcgagcccttattt------------gagtactggggccagggaaccctggtcaccgtctcctca
 
--QVQLVESGGGFVKPGGSLRLSCAASGFTFSDYYMSWIRQAPGKGLEWVSYISTTGYTNYADSVKGRFTISRDNAKNSLY
-LQMRAEDTAVYYCACARFYGSEYWGQGTLVTVSS
+-QVQLVESGGGFVKPGGSLRLSCAASGFTFSDYYMS--WIRQAPGKGLEWVSYISG--TTGYTNYADSVKGRFTISRDNA
+KNSLYLQMRSLRAEDTAVYYCACARFYGSGSFEPLF----EYWGQGTLVTVSS
 
 

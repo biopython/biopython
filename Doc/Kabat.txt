@@ -1,0 +1,30 @@
+Kabat.txt
+=========
+
+
+Kabat
+-----
+
+Kabat is a gene expression and hybridization array data repository.
+
+The Kabat database contains sequence data related to immunology.
+Data is available at:
+http://immuno.bme.nwu.edu/
+
+Instructions:
+    Browse http://immuno.bme.nwu.edu/seqhunt.html
+    Choose a search criterion
+    Enter a search pattern
+    Select ASCII
+    Submit search
+    Cut and paste search results into a text file
+    Use code fragment as a template
+
+Code Fragment:
+    src_handle = open( datafile )
+    iterator = Kabat.Iterator(src_handle, record_parser)
+    data = iterator.next()
+    data.print_kabat()
+    print '\n'
+
+
