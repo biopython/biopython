@@ -2,13 +2,16 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+"""
+Implementation of sequence motifs.
+"""
 
 from __future__ import generators
 from Bio.SubsMat import FreqTable
 
 class Motif(object):
     """
-    A class representing the sequence motifs.
+    A class representing sequence motifs.
     """
     def __init__(self):
         self.instances = []
@@ -38,7 +41,7 @@ class Motif(object):
         self._check_alphabet(instance.alphabet)
         self._check_length(len(instance))
         self.instances.append(instance)
-        self._pwm_is_current = 0
+        self._pwm_is_current = False
 
     def set_mask(self,mask):
         """
@@ -74,7 +77,7 @@ class Motif(object):
             for seq in self.instances:
                 dict[seq[i]]=dict[seq[i]]+1
             self._pwm.append(FreqTable.FreqTable(dict,FreqTable.COUNT,self.alphabet)) 
-        self._pwm_is_current=1
+        self._pwm_is_current=True
         return self._pwm
 
     def search_instances(self,sequence):

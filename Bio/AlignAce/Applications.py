@@ -1,7 +1,7 @@
 """Definitions for interacting with AlignAce.
 """
 from Bio import Application
-from Bio.Application import _Option
+from Bio.Application import _Option,_Argument
 
 class AlignAceCommandline(Application.AbstractCommandline):
     """Create a commandline for the AlignAce program.
@@ -42,3 +42,35 @@ class AlignAceCommandline(Application.AbstractCommandline):
 
     def run(self):
         return Application.generic_run(self)
+
+
+
+class CompareAceCommandline(Application.AbstractCommandline):
+    """Create a commandline for the CompareAce program.
+
+    XXX This could use more checking for valid paramters to the program.
+    """
+    def __init__(self, cmd = "CompareACE"):
+
+        Application.AbstractCommandline.__init__(self)
+        self.program_name = cmd
+
+        self.parameters = \
+          [
+            _Argument(["motif1"],["input","file"], _file_exists,1,"name of file containing motif 1"),
+            _Argument(["motif2"],["input","file"], _file_exists,1,"name of file containing motif 2"),
+          ]
+
+    def run(self):
+        return Application.generic_run(self)
+
+def _file_exists(file_name):
+    """
+    Checks whether a given file exists
+    """
+    import os
+    try:
+        os.stat(file_name)
+        return True
+    except OSError:
+        return False

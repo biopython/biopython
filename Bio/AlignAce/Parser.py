@@ -2,9 +2,12 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+"""
+Classes for pparsing AlignAce and CompareACE files
+"""
 
 from Bio.ParserSupport import *
-from Scanner import AlignAceScanner
+from Scanner import AlignAceScanner,CompareAceScanner
 from Motif import Motif
 from Bio.Alphabet import IUPAC
 from Bio.Seq import Seq
@@ -71,3 +74,30 @@ class AlignAceParser(AbstractParser):
         """parse(self, handle)"""
         self._scanner.feed(handle, self._consumer)
         return self._consumer.motifs
+
+
+class CompareAceConsumer:
+    """
+    The general purpose consumer for the CompareAceScanner.
+
+    Should be passed as the consumer to the feed method of the CompareAceScanner. After 'consuming' the file, it has the list of motifs in the motifs property.
+    """
+    def __init__(self):
+        pass
+    def motif_score(self,line):
+        self.data = string.atof(line.split()[-1])
+    
+class CompareAceParser(AbstractParser):
+    """Parses CompareAce output to usable form
+
+    ### so far only in a very limited way
+    """
+    def __init__(self):
+        """__init__(self)"""
+        self._scanner = CompareAceScanner()
+        self._consumer = CompareAceConsumer()
+
+    def parse(self, handle):
+        """parse(self, handle)"""
+        self._scanner.feed(handle, self._consumer)
+        return self._consumer.data

@@ -2,6 +2,9 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+"""
+Consumers for AlignACE and CompareACE parsers.
+"""
 
 class AlignAceScanner:
     """Scannner for AlignACE output
@@ -55,3 +58,25 @@ class AlignAceScanner:
                 consumer.motif_mask(line)
             else:
                 raise ValueError, line
+
+class CompareAceScanner:
+    """Scannner for CompareACE output
+
+    Methods:
+    feed     Feed data into the scanner.
+
+    The scanner generates (and calls the consumer) the following types of events:
+
+    motif_score - CompareACE score of motifs
+
+    ###### TO DO #############3
+    extend the scanner to include other, more complex outputs.
+    """
+    def feed(self, handle, consumer):
+        """S.feed(handle, consumer)
+
+        Feed in a CompareACE report for scanning.  handle is a file-like
+        object that contains the CompareACE report.  consumer is a Consumer
+        object that will receive events as the report is scanned.
+        """
+        consumer.motif_score(handle.readline())
