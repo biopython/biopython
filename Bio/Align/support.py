@@ -191,16 +191,12 @@ def find_local_best(score_matrix):
     return _find_best(positions)
 
 def clean_alignments(alignments):
-    alignments.sort()
+    alignments = listfns.items(alignments)  # Get rid of duplicates
     i = 0
     while i < len(alignments):
-        # Get rid of duplicates.
-        if i < len(alignments)-1 and alignments[i] == alignments[i+1]:
-            del alignments[i]
-            continue
         seqA, seqB, score, begin, end = alignments[i]
         # Make sure end is set reasonably.
-        if end == None:   # global alignment
+        if end is None:   # global alignment
             end = len(seqA)
         elif end < 0:
             end = end + len(seqA)
