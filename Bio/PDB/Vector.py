@@ -31,7 +31,7 @@ def rotmat(p,q):
     rot=matrixmultiply(refmat(q, -p), refmat(p, -p))
     return rot
 
-def angle(v1, v2, v3):
+def calc_angle(v1, v2, v3):
     """
     Calculate the angle between 3 vectors
     representing 3 connected points.
@@ -40,7 +40,7 @@ def angle(v1, v2, v3):
     v3=v3-v2
     return v1.angle(v3)
 
-def dihedral(v1, v2, v3, v4):
+def calc_dihedral(v1, v2, v3, v4):
     """
     Calculate the dihedral angle between 4 vectors
     representing 4 connected points. The angle is in
@@ -90,9 +90,10 @@ class Vector:
         return Vector(x,y,z)
 
     def __mul__(self, other):
-        "Dot product"
+        "Dot or scalar product"
         if not isinstance(other, Vector):
-            return sum(self._ar*other)
+            x,y,z=self._ar*other
+            return Vector(x,y,z)
         else:
             return sum(self._ar*other._ar)
 
@@ -162,8 +163,8 @@ if __name__=="__main__":
         v3=Vector(1.9,0.8,0.6)
         v4=Vector(1,-1,0)
 
-        angle(v1, v2, v3)
-        dihedral(v1, v2, v3, v4)
+        calc_angle(v1, v2, v3)
+        calc_dihedral(v1, v2, v3, v4)
 
         ref=refmat(v1, v3)
         rot=rotmat(v1, v3)
