@@ -19,7 +19,7 @@ Dictionary
 
 import time
 
-from Bio.Entrez import WWW
+from Bio.Entrez import NCBIWWW
 
 class Dictionary:
     """Access PubMed using a read-only dictionary interface.
@@ -90,7 +90,7 @@ class Dictionary:
         self.last_query_time = time.time()
         
         try:
-            handle = WWW.query(db='m', uid=id, dopt='l')
+            handle = NCBIWWW.query(db='m', uid=id, dopt='l')
         except IOError, x:
             # raise a KeyError instead of an IOError
             raise KeyError, x
