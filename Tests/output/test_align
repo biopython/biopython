@@ -110,7 +110,7 @@ description: gi|6273291|gb|AF191665.1|AF191
 seq: Seq('TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA ...', Gapped(IUPACUnambiguousDNA(), '-'))
 length: 156
 Calculating summary information...
-consensus: Seq('TATACATTAAAGNAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA ...', IUPACAmbiguousDNA())
+consensus: Seq('TATACATTAAAGXAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA ...', IUPACAmbiguousDNA())
 Replacement dictionary
 ('A', 'A') : 1395.0
 ('A', 'C') : 3.0
@@ -143,7 +143,7 @@ A  7.0 0.0 0.0 0.0
 A  7.0 0.0 0.0 0.0
 A  7.0 0.0 0.0 0.0
 G  0.0 0.0 7.0 0.0
-N  4.0 0.0 3.0 0.0
+X  4.0 0.0 3.0 0.0
 A  7.0 0.0 0.0 0.0
 G  0.0 0.0 7.0 0.0
 G  0.0 0.0 7.0 0.0
@@ -211,7 +211,7 @@ A  7.0 0.0 0.0 0.0
 A  7.0 0.0 0.0 0.0
 T  0.0 0.0 0.0 7.0
 T  0.0 0.0 0.0 7.0
-N  0.0 3.0 0.0 4.0
+X  0.0 3.0 0.0 4.0
 C  0.0 7.0 0.0 0.0
 C  0.0 7.0 0.0 0.0
 T  0.0 0.0 0.0 7.0
@@ -302,7 +302,7 @@ A  7.0 0.0 0.0 0.0
 A  7.0 0.0 0.0 0.0
 A  7.0 0.0 0.0 0.0
 G  0.0 0.0 7.0 0.0
-N  4.0 0.0 3.0 0.0
+X  4.0 0.0 3.0 0.0
 A  7.0 0.0 0.0 0.0
 G  0.0 0.0 7.0 0.0
 G  0.0 0.0 7.0 0.0
@@ -370,7 +370,7 @@ A  7.0 0.0 0.0 0.0
 A  7.0 0.0 0.0 0.0
 T  0.0 0.0 0.0 7.0
 T  0.0 0.0 0.0 7.0
-N  0.0 3.0 0.0 4.0
+X  0.0 3.0 0.0 4.0
 C  0.0 7.0 0.0 0.0
 C  0.0 7.0 0.0 0.0
 T  0.0 0.0 0.0 7.0
