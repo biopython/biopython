@@ -34,20 +34,28 @@ class StructureAlignment:
         # List of residue pairs (None if -)
         duos=[]
         for i in range(0, l):
-            column=fa.get_column(i)
+            column=fasta_align.get_column(i)
             aa1=column[si]
             aa2=column[sj]
             if aa1!="-":
                 # Position in seq1 is not -
-                r1=rl1[p1]
-                p1=p1+1
+                while 1:
+                    # Loop until an aa is found
+                    r1=rl1[p1]
+                    p1=p1+1
+                    if is_aa(r1):
+                        break
                 self._test_equivalence(r1, aa1)
             else:
                 r1=None
             if aa2!="-":
                 # Position in seq2 is not -
-                r2=rl2[p2]
-                p2=p2+1
+                while 1:
+                    # Loop until an aa is found
+                    r2=rl2[p2]
+                    p2=p2+1
+                    if is_aa(r2):
+                        break
                 self._test_equivalence(r2, aa2)
             else:
                 r2=None
