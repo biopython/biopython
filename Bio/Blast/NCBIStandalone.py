@@ -76,7 +76,10 @@ class _Scanner:
             uhandle = handle
         else:
             uhandle = File.UndoHandle(handle)
-        
+
+        # Try to fast-forward to the beginning of the blast report.
+        read_and_call_until(uhandle, consumer.noevent, contains='BLAST')
+        # Now scan the BLAST report.
         self._scan_header(uhandle, consumer)
 	self._scan_rounds(uhandle, consumer)
         self._scan_database_report(uhandle, consumer)
@@ -122,12 +125,14 @@ class _Scanner:
 
     def _scan_rounds(self, uhandle, consumer):
         # Scan a bunch of rounds.
-        # Each round begins with a "Searching......" line
-        # followed by descriptions and alignments.
+        # Each round begins with either a "Searching......" line
+        # or a 'Score     E' line followed by descriptions and alignments.
+        # The email server doesn't give the "Searching....." line.
 
         while 1:
             line = safe_peekline(uhandle)
-            if line[:9] != 'Searching':
+            if line[:9] != 'Searching' and \
+               string.find(line, 'Score     E') < 0:
                 break
 
             self._scan_descriptions(uhandle, consumer)
@@ -159,7 +164,7 @@ class _Scanner:
         consumer.start_descriptions()
 
         # Read 'Searching'
-        read_and_call(uhandle, consumer.noevent, start='Searching')
+        attempt_read_and_call(uhandle, consumer.noevent, start='Searching')
 
         # blastpgp 2.0.10 from NCBI 9/19/99 for Solaris sometimes crashes here.
         # If this happens, the handle will yield no more information.

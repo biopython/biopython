@@ -14,20 +14,22 @@ BlastParser   Parses output from WWW blast.
 _Scanner      Scans output from NCBI's BLAST WWW server.
 
 Functions:
-blast        Do a BLAST search.
+blast         Do a BLAST search against the WWW page (deprecated).
+blasturl      Do a BLAST search against the stable blasturl.
 
 """
 import string
+import time
+import re
+import sgmllib
+import urlparse
+import socket
+import cStringIO
 
 from Bio import File
 from Bio.WWW import NCBI
 from Bio.ParserSupport import *
 import NCBIStandalone
-
-import time
-import re
-import sgmllib
-import urlparse
 
 class BlastParser:
     """Parses WWW BLAST data into a Record.Blast object.
@@ -673,3 +675,94 @@ def _parse_blast_results_page(handle):
     parser.feed(results)
     return parser.ready, results, parser.refresh
 
+
+def blasturl(program, datalib, sequence,
+             ncbi_gi=None, descriptions=None, alignments=None,
+             expect=None, matrix=None,
+             gap_existence=None, gap_extend=None, gapped=None,
+             filter=None, html=None, gcode=None, path=None
+             ):
+    """blasturl(program, datalib, sequence[, ncbi_gi][, descriptions]
+    [, alignments][, expect][, matrix][, gap_existence][, gap_extend]
+    [, gapped][, filter][, html][, gcode]) -> handle
+
+    Do a BLAST search using the stable URL provided by NCBI.
+    program        BLASTP, BLASTN, BLASTX, TBLASTN, or TBLASTX.
+    datalib        Which database to search against.
+    sequence       The sequence to search.
+    ncbi_gi        TRUE/FALSE whether to give 'gi' identifier.  Def FALSE.
+    descriptions   Number of descriptions to show.  Def 100.
+    alignments     Number of alignments to show.  Def 50.
+    expect         An expect value cutoff.
+    matrix         Specify an alt. matrix (PAM30, PAM70, BLOSUM80, BLOSUM45).
+    gap_existence  Give a gap open penalty.
+    gap_extend     Give a gap extension penalty.
+    gapped         TRUE/FALSE for giving gapped alignments.  Def TRUE.
+    filter         "none" turns off filtering.  Default uses 'seg' or 'dust'.
+    html           TRUE/FALSE for html output.  Def FALSE.
+    gcode          Specify an alternate genetic code for (T)BLASTX.
+
+    This function does no checking of the validity of the parameters
+    and passes the values to the server as is.  More help is available at:
+    http://www.ncbi.nlm.nih.gov/BLAST/blast_overview.html
+    
+    """
+    lines = []
+    lines.append('PROGRAM %s' % program)
+    lines.append('DATALIB %s' % datalib)
+
+    parameters = [('NCBI_GI', ncbi_gi),
+                  ('DESCRIPTIONS', descriptions),
+                  ('ALIGNMENTS', alignments),
+                  ('EXPECT', expect),
+                  ('MATRIX', matrix),
+                  ('GAP_EXISTENCE', gap_existence),
+                  ('GAP_EXTEND', gap_extend),
+                  ('GAPPED', gapped),
+                  ('FILTER', filter),
+                  ('HTML', html),
+                  ('GCODE', gcode),
+                  ('PATH', path)
+                  ]
+    for name, value in parameters:
+        if value is not None:
+            lines.append("%s %s" % (name, value))
+
+    lines.append('')
+    lines.append('BEGIN')
+    while sequence:
+        lines.append(sequence[:60])
+        sequence = sequence[60:]
+
+    message = string.join(lines, '\n')
+
+    outhandle = cStringIO.StringIO()
+    _send_to_blasturl(message, outhandle)
+    outhandle.seek(0)   # Reset the handle to the beginning.
+    return outhandle
+
+def _send_to_blasturl(query, outhandle):
+    """_send_to_blasturl(query, outhandle)
+
+    Send a BLAST request to the stable blasturl server at the NCBI.
+    ftp://ncbi.nlm.nih.gov/blast/blasturl/
+    The results are written to outhandle.
+    
+    """
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.connect(('www.ncbi.nlm.nih.gov', 80))
+    
+    sock.send('POST /cgi-bin/BLAST/nph-blast_report HTTP/1.0\n')
+    sock.send('User-Agent: BiopythonClient\n')
+    sock.send('Connection: Keep-Alive\n')
+    sock.send('Content-type: application/x-www-form-urlencoded\n')
+    sock.send('Content-Length: %d\n' % len(query))
+    sock.send('\n')
+    sock.send(query)
+
+    while 1:
+        data = sock.recv(1024)
+        if not data:
+            break
+        outhandle.write(data)
+    sock.close()
