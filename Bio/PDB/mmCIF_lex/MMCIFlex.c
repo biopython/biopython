@@ -44,7 +44,7 @@ static PyObject *MMCIFlex_get_token(PyObject *self, PyObject *args)
 	/* if flag==0 we are EOF */
 	if(flag)
 	{
-		value=mmcif_get_string();
+		value=(char *)mmcif_get_string();
 	}	
 
 	/* return the (tokennumber, string) tuple */
