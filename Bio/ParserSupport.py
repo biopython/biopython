@@ -92,11 +92,9 @@ class OopsHandle:
         self._saved = []
 
     def readlines(self, *args, **keywds):
-        if self._saved:
-            lines = self._saved + apply(self._handle.readlines, args, keywds)
-            self._saved = []
-            return lines
-        return apply(self._handle.readlines, args, keywds)
+        lines = self._saved + apply(self._handle.readlines, args, keywds)
+        self._saved = []
+        return lines
 
     def readline(self, *args, **keywds):
         if self._saved:
