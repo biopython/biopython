@@ -68,14 +68,12 @@ class DSSP:
 
     Note that DSSP can only handle one model.
     """
-    def __init__(self, pdb_file, dssp="dssp"):
+    def __init__(self, model, pdb_file, dssp="dssp"):
         """
         pdb_file --- a PDB file
         dssp --- the dssp executable (argument to os.system)
         """
         p=PDBParser()
-        s=p.get_structure("X", pdb_file)
-        model=s[0]
         # create DSSP dictionary
         self.dssp_dict=dssp_dict_from_pdb_file(pdb_file, dssp)
         map={}
@@ -136,7 +134,12 @@ if __name__=="__main__":
 
     import sys
 
-    d=DSSP(sys.argv[1])
+    p=PDBParser()
+    s=p.get_structure('X', sys.argv[1])
+
+    model=s[0]
+
+    d=DSSP(model, sys.argv[1])
 
     for r in d.get_iterator():
         print r
