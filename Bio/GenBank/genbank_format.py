@@ -74,12 +74,18 @@ def define_block(identifier, block_tag, block_data, std_block_tag = None,
             return martel_info
         std_tag = do_nothing
 
-    block_info = Martel.Group(block_tag,
-                        Martel.Str(identifier + " " * diff) +
-                        std_tag(Martel.UntilEol(block_data)) + Martel.AnyEol() 
-                        + Martel.Rep(Martel.Str(" " * INDENT) + 
-                                   std_tag(Martel.UntilEol(block_data)) +
-                                           Martel.AnyEol()))
+    identifier_and_text = Martel.Str(identifier) + \
+                          Martel.Rep(Martel.Str(" ")) + \
+                          std_tag(Martel.UntilEol(block_data)) + \
+                          Martel.AnyEol()
+    indented_text = Martel.Str(" "*INDENT) + \
+                    std_tag(Martel.UntilEol(block_data)) + \
+                    Martel.AnyEol()
+    block_info = Martel.Group(
+        block_tag,
+        identifier_and_text +
+        Martel.Rep(Martel.Alt(Martel.AnyEol(), indented_text))
+        )
     # tag the info as some standard Martel element if specified
     if std_block_tag is not None:
         block_info = std_block_tag(block_info)
