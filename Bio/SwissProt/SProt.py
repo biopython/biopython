@@ -430,11 +430,16 @@ class _Scanner:
     
     def _scan_rx(self, uhandle, consumer):
         self._scan_line('RX', uhandle, consumer.reference_cross_reference,
-                        up_to_one=1)
+                        any_number=1)
     
     def _scan_ra(self, uhandle, consumer):
+        # In UniProt release 1.12 of 6/21/04, there is a new RG
+        # (Reference Group) line, which references a group instead of
+        # an author.  Each block must have at least 1 RA or RG line.
         self._scan_line('RA', uhandle, consumer.reference_author,
-                        one_or_more=1)
+                        any_number=1)
+        self._scan_line('RG', uhandle, consumer.reference_author,
+                        any_number=1)
     
     def _scan_rt(self, uhandle, consumer):
         self._scan_line('RT', uhandle, consumer.reference_title,
