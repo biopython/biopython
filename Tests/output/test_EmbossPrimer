@@ -1,1 +1,12 @@
 test_EmbossPrimer
+Make sure we get info right from a single primer find. ... ok
+Make sure we get the data from normal primer3 files okay. ... ok
+Make sure that we can parse all primer3 files. ... ok
+Make sure the output from a simple primersearch file is correct. ... ok
+Make sure that we can parse all primersearch files. ... ok
+Make sure we can output primer information correctly. ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.144s
+
+OK

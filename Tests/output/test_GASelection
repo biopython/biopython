@@ -1,0 +1,23 @@
+test_GASelection
+Getting a new organism not in the new population. ... ok
+Test not getting an organism already in the new population. ... ok
+Test basic selection on a small population. ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.367s
+
+OK
+Ensure selection of the best organism in a population of 2. ... ok
+Test basic selection on a small population. ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.028s
+
+OK
+Ensure selection of a best organism in a population of 2. ... ok
+Test basic selection on a small population. ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.027s
+
+OK

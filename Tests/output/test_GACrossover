@@ -1,0 +1,14 @@
+test_GACrossover
+Test basic point crossover functionality. ... ok
+
+----------------------------------------------------------------------
+Ran 1 tests in 0.001s
+
+OK
+Make sure we always keep higher fitness when specified. ... ok
+Make sure we do normal crossover functionality when specified. ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.003s
+
+OK

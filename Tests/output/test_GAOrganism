@@ -1,0 +1,13 @@
+test_GAOrganism
+Create a population using a function to generate genomes. ... ok
+Create a population randomly from a alphabet. ... ok
+Creating a random population with different types of alphabets. ... ok
+Exercise basic organism functionality. ... ok
+Test copying of organisms. ... ok
+Test the ability to deal with the fitness of the genome. ... ok
+Test that providing a pre-calculated fitness works. ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.011s
+
+OK

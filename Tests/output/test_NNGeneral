@@ -1,0 +1,9 @@
+test_NNGeneral
+Stop training when the ValidationExamples increase. ... ok
+Make sure test examples are added properly. ... ok
+Test that we can change how to partition the test examples. ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.151s
+
+OK

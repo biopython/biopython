@@ -1,0 +1,35 @@
+test_NNGene
+SchemaMatchingTest:Matching schema to strings works correctly.
+     ... ok
+Reading and writing motifs to a file ... ok
+Reading and writing schemas to a file. ... ok
+Reading and writing signatures to a file. ... ok
+Retrieve counts for particular patterns in the repository. ... ok
+Retrieve all patterns from a repository. ... ok
+Retrieve patterns from both sides of the list (top and bottom). ... ok
+Retrieve random patterns from the repository. ... ok
+Retrieve a certain number of the top patterns. ... ok
+Retrieve the top percentge of patterns from the repository. ... ok
+Test the ability to remove A rich patterns from the repository. ... ok
+Find all motifs in a set of sequences. ... ok
+Find the difference in motif counts between two sets of sequences. ... ok
+Convert a sequence into its motif representation. ... ok
+Return all unambiguous characters that can be in a motif. ... ok
+Find the positions of ambiguous items in a sequence. ... ok
+Find all matches in a sequence. ... ok
+Make sure motif compiled regular expressions are cached properly. ... ok
+Find the number of ambiguous items in a sequence. ... ok
+Find how many matches are present in a sequence. ... ok
+Convert a string into a representation of motifs. ... ok
+Find schemas from sequence inputs. ... ok
+Find schemas that differentiate between two sets of sequences. ... ok
+Generating schema from a simple list of motifs. ... ok
+Generating schema from a real life set of motifs. ... ok
+Convert sequences into schema representations. ... ok
+Find signatures from sequence inputs. ... ok
+Convert a sequence into its signature representation. ... ok
+
+----------------------------------------------------------------------
+Ran 28 tests in 1.389s
+
+OK
