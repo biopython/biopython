@@ -590,6 +590,9 @@ class _RecordConsumer(AbstractConsumer):
     
     def reference_cross_reference(self, line):
         assert self.data.references, "RX: missing RN"
+        # The basic (older?) RX line is of the form:
+        # RX   MEDLINE; 85132727.
+        # but there are variants of this that need to be dealt with (see below)
         
         # CLD1_HUMAN in Release 39 and DADR_DIDMA in Release 33
         # have extraneous information in the RX line.  Check for
@@ -599,11 +602,33 @@ class _RecordConsumer(AbstractConsumer):
         if ind >= 0:
             line = line[:ind]
 
-        cols = string.split(line)
-        assert len(cols) == 3, "I don't understand RX line %s" \
-               % line
-        self.data.references[-1].references.append(
-            (self._chomp(cols[1]), self._chomp(cols[2])))
+        # RX lines can also be used of the form
+        # RX   PubMed=9603189;
+        # reported by edvard@farmasi.uit.no
+        # and these can be more complicated like:
+        # RX   MEDLINE=95385798; PubMed=7656980;
+        # We look for these cases first and deal with them
+        if string.find(line, "=") != -1:
+            cols = string.split(line)
+            assert len(cols) > 1, "I don't understand RX line %s" % line
+
+            for info_col in cols[1:]:
+                id_cols = string.split(info_col, "=")
+                if len(id_cols) == 2:
+                    self.data.references[-1].references.append(
+                        (self._chomp(id_cols[0]), self._chomp(id_cols[1])))
+                else:
+                    raise AssertionError("I don't understand RX line %s"
+                                         % line)
+        # otherwise we assume we have the type 'RX   MEDLINE; 85132727.'
+        else:
+            cols = string.split(line)
+            # normally we split into the three parts
+            if len(cols) == 3:
+                self.data.references[-1].references.append(
+                    (self._chomp(cols[1]), self._chomp(cols[2])))
+            else:
+                raise AssertionError("I don't understand RX line %s" % line)
     
     def reference_author(self, line):
         assert self.data.references, "RA: missing RN"
@@ -677,7 +702,40 @@ class _RecordConsumer(AbstractConsumer):
             name, from_res, to_res, old_description = self.data.features[-1]
             del self.data.features[-1]
             description = "%s %s" % (old_description, description)
+            
+            # special case -- VARSPLIC, reported by edvard@farmasi.uit.no
+            if name == "VARSPLIC":
+                description = self._fix_varsplic_sequences(description)
         self.data.features.append((name, from_res, to_res, description))
+
+    def _fix_varsplic_sequences(self, description):
+        """Remove unwanted spaces in sequences.
+
+        During line carryover, the sequences in VARSPLIC can get mangled
+        with unwanted spaces like:
+        'DISSTKLQALPSHGLESIQT -> PCRATGWSPFRRSSPC LPTH'
+        We want to check for this case and correct it as it happens.
+        """
+        descr_cols = string.split(description, " -> ")
+        if len(descr_cols) == 2:
+            first_seq = descr_cols[0]
+            second_seq = descr_cols[1]
+            extra_info = ''
+            # we might have more information at the end of the
+            # second sequence, which should be in parenthesis
+            extra_info_pos = string.find(second_seq, " (")
+            if extra_info_pos != -1:
+                extra_info = second_seq[extra_info_pos:]
+                second_seq = second_seq[:extra_info_pos]
+
+            # now clean spaces out of the first and second string
+            first_seq = string.replace(first_seq, " ", "")
+            second_seq = string.replace(second_seq, " ", "")
+
+            # reassemble the description
+            description = first_seq + " -> " + second_seq + extra_info
+
+        return description
     
     def sequence_header(self, line):
         cols = string.split(line)
