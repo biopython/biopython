@@ -173,7 +173,7 @@ void CALL sort(int n, const double data[], int index[])
  * are recalculated. The array data is unchanged.
  */
 { int i;
-  const double** p = (const double**)malloc((size_t)n*sizeof(double*));
+  const double** p = malloc(n*sizeof(double*));
   const double* start = data;
   for (i = 0; i < n; i++) p[i] = &(data[i]);
   qsort(p, n, sizeof(double*), compare);
@@ -188,7 +188,7 @@ void getrank (int n, double data[], double rank[])
  * elements different values.
  */
 { int i;
-  int* index = (int*)malloc((size_t)n*sizeof(int));
+  int* index = malloc(n*sizeof(int));
   /* Call sort to get an index table */
   sort (n, data, index);
   /* Build a rank table */
@@ -273,7 +273,7 @@ void CALL svd(int m, int n, double** u, double w[], double** v, int* ierr)
  *   2003.06.05
  */
 { int i, j, k, i1, k1, l1, its;
-  double* rv1 = (double*)malloc(n*sizeof(double));
+  double* rv1 = malloc(n*sizeof(double));
   double c,f,h,s,x,y,z;
   int l = 0;
   double g = 0.0;
@@ -490,8 +490,6 @@ double euclid (int n, double** data1, double** data2, int** mask1, int** mask2,
   const double weight[], int index1, int index2, int transpose)
  
 /*
--- euclid routine --
-
 Purpose
 =======
 
@@ -1176,8 +1174,8 @@ Otherwise, the distance between two columns in the matrix is calculated.
   double denom1 = 0.;
   double denom2 = 0.;
   double avgrank;
-  double* tdata1 = (double*)malloc((size_t)n*sizeof(double));
-  double* tdata2 = (double*)malloc((size_t)n*sizeof(double));
+  double* tdata1 = malloc(n*sizeof(double));
+  double* tdata2 = malloc(n*sizeof(double));
   int i;
   int m = 0;
   if (transpose==0)
@@ -1199,8 +1197,8 @@ Otherwise, the distance between two columns in the matrix is calculated.
     }
   }
   if (m==0) return 0;
-  rank1 = (double*)malloc((size_t)m*sizeof(double));
-  rank2 = (double*)malloc((size_t)m*sizeof(double));
+  rank1 = malloc(m*sizeof(double));
+  rank2 = malloc(m*sizeof(double));
   getrank(m, tdata1, rank1);
   free(tdata1);
   getrank(m, tdata2, rank2);
@@ -1428,7 +1426,7 @@ ranlib: int genprm
 */
 
 { int i;
-  long* map = (long*)malloc((size_t)nelements*sizeof(long));
+  long* map = malloc(nelements*sizeof(long));
   /* Initialize mapping */
   for (i = 0; i < nelements; i++) map[i] = i;
   /* Create a random permutation of this mapping */
@@ -1505,9 +1503,9 @@ columns (microarrays) are specified.
 */
 { int i, j, k;
   if (transpose==0)
-  { int** count = (int**)malloc((size_t)nclusters*sizeof(int*));
+  { int** count = malloc(nclusters*sizeof(int*));
     for (i = 0; i < nclusters; i++)
-    { count[i] = (int*)malloc((size_t)ncolumns*sizeof(int));
+    { count[i] = malloc(ncolumns*sizeof(int));
       for (j = 0; j < ncolumns; j++)
       { count[i][j] = 0;
         cdata[i][j] = 0.;
@@ -1535,9 +1533,9 @@ columns (microarrays) are specified.
     free (count);
   }
   else
-  { int** count = (int**)malloc((size_t)nrows*sizeof(int*));
+  { int** count = malloc(nrows*sizeof(int*));
     for (i = 0; i < nrows; i++)
-    { count[i] = (int*)malloc((size_t)nclusters*sizeof(int));
+    { count[i] = malloc(nclusters*sizeof(int));
       for (j = 0; j < nclusters; j++)
       { count[i][j] = 0;
         cdata[i][j] = 0.;
@@ -1626,7 +1624,7 @@ columns (microarrays) are specified.
 */
 { int i, j, k;
   if (transpose==0)
-  { double* temp = (double*)malloc((size_t)nrows*sizeof(double));
+  { double* temp = malloc(nrows*sizeof(double));
     for (i = 0; i < nclusters; i++)
     { for (j = 0; j < ncolumns; j++)
       { int count = 0;
@@ -1648,7 +1646,7 @@ columns (microarrays) are specified.
     free (temp);
   }
   else
-  { double* temp = (double*)malloc((size_t)ncolumns*sizeof(double));
+  { double* temp = malloc(ncolumns*sizeof(double));
     for (i = 0; i < nclusters; i++)
     { for (j = 0; j < nrows; j++)
       { int count = 0;
@@ -1741,19 +1739,19 @@ void emalg (int nclusters, int nrows, int ncolumns,
 { const int nobjects = (transpose==0) ? nrows : ncolumns;
   const int ndata = (transpose==0) ? ncolumns : nrows;
 
-  int* cn = (int*)malloc((size_t)nclusters*sizeof(int));
+  int* cn = malloc(nclusters*sizeof(int));
   /* This will contain the number of elements in each cluster. This is needed
    * to check for empty clusters.
    */
 
-  int* savedids = (int*)malloc((size_t)nobjects*sizeof(int));
+  int* savedids = malloc(nobjects*sizeof(int));
   /* needed to check for periodic behavior */
   int same;
 
   int changed;
   int iteration = 0;
   int period = 10;
-  long* order = (long*)malloc((size_t)nobjects*sizeof(long));
+  long* order = malloc(nobjects*sizeof(long));
   int jj;
   for (jj = 0; jj < nobjects; jj++) order[jj] = jj;
 
@@ -1842,8 +1840,6 @@ void CALL kcluster (int nclusters, int nrows, int ncolumns,
   int npass, char method, char dist,
   int clusterid[], double** cdata, double* error, int* ifound)
 /*
--- kcluster routine --
-
 Purpose
 =======
 
@@ -1966,19 +1962,17 @@ found. The value of ifound is at least 1; its maximum value is npass.
   /* Find out if the user specified an initial clustering */
   if (init_given)
   /* Save the initial clustering specified by the user */
-  { savedinitialid = (int*)malloc((size_t)nobjects*sizeof(int));
+  { savedinitialid = malloc(nobjects*sizeof(int));
     for (i = 0; i < nobjects; i++) savedinitialid[i] = clusterid[i];
   }
 
   if (transpose==0)
-  { cmask = (int**)malloc((size_t)nclusters*sizeof(int*));
-    for (i = 0; i < nclusters; i++)
-      cmask[i] = (int*)malloc((size_t)ndata*sizeof(int));
+  { cmask = malloc(nclusters*sizeof(int*));
+    for (i = 0; i < nclusters; i++) cmask[i] = malloc(ndata*sizeof(int));
   }
   else
-  { cmask = (int**)malloc((size_t)ndata*sizeof(int*));
-    for (i = 0; i < ndata; i++)
-      cmask[i] = (int*)malloc((size_t)nclusters*sizeof(int));
+  { cmask = malloc(ndata*sizeof(int*));
+    for (i = 0; i < ndata; i++) cmask[i] = malloc(nclusters*sizeof(int));
   }
 
   *error = 0.;
@@ -1999,24 +1993,24 @@ found. The value of ifound is at least 1; its maximum value is npass.
 
   /* Create temporary space for cluster centroid information */
   if (transpose==0)
-  { tcmask = (int**)malloc((size_t)nclusters*sizeof(int*));
+  { tcmask = malloc(nclusters*sizeof(int*));
+    tcdata = malloc(nclusters*sizeof(double*));
     for (i = 0; i < nclusters; i++)
-      tcmask[i] = (int*)malloc((size_t)ndata*sizeof(int));
-    tcdata = (double**)malloc((size_t)nclusters*sizeof(double*));
-    for (i = 0; i < nclusters; i++)
-      tcdata[i] = (double*)malloc((size_t)ndata*sizeof(double));
+    { tcmask[i] = malloc(ndata*sizeof(int));
+      tcdata[i] = malloc(ndata*sizeof(double));
+    }
   }
   else
-  { tcmask = (int**)malloc((size_t)ndata*sizeof(int*));
+  { tcmask = malloc(ndata*sizeof(int*));
+    tcdata = malloc(ndata*sizeof(double*));
     for (i = 0; i < ndata; i++)
-      tcmask[i] = (int*)malloc((size_t)nclusters*sizeof(int));
-    tcdata = (double**)malloc((size_t)ndata*sizeof(double*));
-    for (i = 0; i < ndata; i++)
-      tcdata[i] = (double*)malloc((size_t)nclusters*sizeof(double));
+    { tcmask[i] = malloc(nclusters*sizeof(int));
+      tcdata[i] = malloc(nclusters*sizeof(double));
+    }
   }
 
-  tclusterid = (int*)malloc((size_t)nobjects*sizeof(int));
-  mapping = (int*)malloc((size_t)nclusters*sizeof(int));
+  tclusterid = malloc(nobjects*sizeof(int));
+  mapping = malloc(nclusters*sizeof(int));
   for (ipass = 1; ipass < npass; ipass++)
   { double tssin = 0.;
     int same = 1;
@@ -2152,9 +2146,9 @@ found. The value of ifound is at least 1; its maximum value is npass.
     return;
   } /* More clusters asked for than elements available */
 
-  centroids = (int*)malloc(nclusters*sizeof(int));
-  savedids = (int*)malloc(nelements*sizeof(int));
-  errors = (double*)malloc(nclusters*sizeof(double));
+  centroids = malloc(nclusters*sizeof(int));
+  savedids = malloc(nelements*sizeof(int));
+  errors = malloc(nclusters*sizeof(double));
 
   /* Set the result of the first pass as the initial best clustering solution */
   *ifound = 1;
@@ -2223,7 +2217,7 @@ found. The value of ifound is at least 1; its maximum value is npass.
     return; /* Done for today */
   }
 
-  tclusterid = (int*)malloc(nelements*sizeof(int));
+  tclusterid = malloc(nelements*sizeof(int));
   for (ipass = 1; ipass < npass; ipass++)
   { double terror = 0.0;
     same = 1;
@@ -2377,10 +2371,9 @@ when microarrays are being clustered.
   if (n < 2) return 0;
 
   /* Set up the ragged array */
-  matrix = (double**) malloc((size_t)n*sizeof(double*));
-  for (i = 1; i < n; i++)
-    matrix[i] = (double*) malloc((size_t)i*sizeof(double));
-  /* The zeroth row has zero columns. It was allocates anyway for convenience.*/
+  matrix = malloc(n*sizeof(double*));
+  for (i = 1; i < n; i++) matrix[i] = malloc(i*sizeof(double));
+  /* The zeroth row has zero columns. We allocate it anyway for convenience.*/
   matrix[0] = 0;
 
   /* Set the metric function as indicated by dist */
@@ -2523,7 +2516,7 @@ array should be allocated before calling the cuttree routine.
       icluster++;
     }
   }
-  nodeid = (int*)malloc((size_t)n*sizeof(int));
+  nodeid = malloc(n*sizeof(int));
   for (i = 0; i < n; i++) nodeid[i] = -1;
   for (i = n-1; i >= 0; i--)
   { if(nodeid[i]<0) 
@@ -2619,7 +2612,7 @@ clustered, or the number of microarrays minus one if microarrays are clustered.
     (int,double**,double**,int**,int**,const double[],int,int,int);
   int i,j;
   const int nelements = (transpose==0) ? nrows : ncolumns;
-  int* distid = (int*)malloc((size_t)nelements*sizeof(int));
+  int* distid = malloc(nelements*sizeof(int));
   double** nodedata;
   int** nodecount;
   int inode;
@@ -2634,19 +2627,19 @@ clustered, or the number of microarrays minus one if microarrays are clustered.
 
   /* Storage for node data */
   if (transpose)
-  { nodedata = (double**)malloc((size_t)ndata*sizeof(double*));
-    nodecount = (int**)malloc((size_t)ndata*sizeof(int*));
+  { nodedata = malloc(ndata*sizeof(double*));
+    nodecount = malloc(ndata*sizeof(int*));
     for (i = 0; i < ndata; i++)
-    { nodedata[i] = (double*)malloc((size_t)nnodes*sizeof(double));
-      nodecount[i] = (int*)malloc((size_t)nnodes*sizeof(int));
+    { nodedata[i] = malloc(nnodes*sizeof(double));
+      nodecount[i] = malloc(nnodes*sizeof(int));
     }
   }
   else
-  { nodedata = (double**)malloc((size_t)nnodes*sizeof(double*));
-    nodecount = (int**)malloc((size_t)nnodes*sizeof(int*));
+  { nodedata = malloc(nnodes*sizeof(double*));
+    nodecount = malloc(nnodes*sizeof(int*));
     for (i = 0; i < nnodes; i++)
-    { nodedata[i] = (double*)malloc((size_t)ndata*sizeof(double));
-      nodecount[i] = (int*)malloc((size_t)ndata*sizeof(int));
+    { nodedata[i] = malloc(ndata*sizeof(double));
+      nodecount[i] = malloc(ndata*sizeof(int));
     }
   }
 
@@ -2830,7 +2823,7 @@ clustered, or the number of microarrays minus one if microarrays are clustered.
   int nNodes;
 
   /* Setup a list specifying to which cluster a gene belongs */
-  int* clusterid = (int*)malloc((size_t)nelements*sizeof(int));
+  int* clusterid = malloc(nelements*sizeof(int));
   for (i = 0; i < nelements; i++) clusterid[i] = i;
 
   for (nNodes = nelements; nNodes > 1; nNodes--)
@@ -2913,7 +2906,7 @@ clustered, or the number of microarrays minus one if microarrays are clustered.
   int nNodes;
 
   /* Setup a list specifying to which cluster a gene belongs */
-  int* clusterid = (int*)malloc((size_t)nelements*sizeof(int));
+  int* clusterid = malloc(nelements*sizeof(int));
   for (i = 0; i < nelements; i++) clusterid[i] = i;
 
   for (nNodes = nelements; nNodes > 1; nNodes--)
@@ -2996,9 +2989,9 @@ clustered, or the number of microarrays minus one if microarrays are clustered.
 
   /* Keep track of the number of elements in each cluster
    * (needed to calculate the average) */
-  int* number = (int*)malloc((size_t)nelements*sizeof(int));
+  int* number = malloc(nelements*sizeof(int));
   /* Setup a list specifying to which cluster a gene belongs */
-  int* clusterid = (int*)malloc((size_t)nelements*sizeof(int));
+  int* clusterid = malloc(nelements*sizeof(int));
   for (i = 0; i < nelements; i++)
   { number[i] = 1;
     clusterid[i] = i;
@@ -3202,7 +3195,7 @@ void somworker (int nrows, int ncolumns, double** data, int** mask,
   double (*metric)
     (int,double**,double**,int**,int**,const double[],int,int,int);
   int i, j;
-  double* stddata = (double*)malloc((size_t)nelements*sizeof(double));
+  double* stddata = malloc(nelements*sizeof(double));
   int** dummymask;
   int ix, iy;
   long* index;
@@ -3243,17 +3236,16 @@ void somworker (int nrows, int ncolumns, double** data, int** mask,
   }
 
   if (transpose==0)
-  { dummymask = (int**)malloc((size_t)nygrid*sizeof(int*));
+  { dummymask = malloc(nygrid*sizeof(int*));
     for (i = 0; i < nygrid; i++)
-      dummymask[i] = (int*)malloc((size_t)ndata*sizeof(int));
-    for (i = 0; i < nygrid; i++)
-      for (j = 0; j < ndata; j++)
-        dummymask[i][j] = 1;
+    { dummymask[i] = malloc(ndata*sizeof(int));
+      for (j = 0; j < ndata; j++) dummymask[i][j] = 1;
+    }
   }
   else
-  { dummymask = (int**)malloc((size_t)ndata*sizeof(int*));
+  { dummymask = malloc(ndata*sizeof(int*));
     for (i = 0; i < ndata; i++)
-    { dummymask[i] = (int*)malloc(sizeof(int));
+    { dummymask[i] = malloc(sizeof(int));
       dummymask[i][0] = 1;
     }
   }
@@ -3273,7 +3265,7 @@ void somworker (int nrows, int ncolumns, double** data, int** mask,
   }
 
   /* Randomize the order in which genes or arrays will be used */
-  index = (long*)malloc((size_t)nelements*sizeof(long));
+  index = malloc(nelements*sizeof(long));
   for (i = 0; i < nelements; i++) index[i] = i;
   genprm (index, nelements);
 
@@ -3322,8 +3314,7 @@ void somworker (int nrows, int ncolumns, double** data, int** mask,
     }
     else
     { double closest;
-      double** celldatavector =
-        (double**)malloc((size_t)ndata*sizeof(double*));
+      double** celldatavector = malloc(ndata*sizeof(double*));
       double radius = maxradius * (1. - ((double)iter)/((double)niter));
       double tau = inittau * (1. - ((double)iter)/((double)niter));
 
@@ -3392,12 +3383,11 @@ void somassign (int nrows, int ncolumns, double** data, int** mask,
   setmetric (dist, &metric);
 
   if (transpose==0)
-  { int** dummymask = (int**)malloc((size_t)nygrid*sizeof(int*));
+  { int** dummymask = malloc(nygrid*sizeof(int*));
     for (i = 0; i < nygrid; i++)
-      dummymask[i] = (int*)malloc((size_t)ncolumns*sizeof(int));
-    for (i = 0; i < nygrid; i++)
-      for (j = 0; j < ncolumns; j++)
-        dummymask[i][j] = 1;
+    { dummymask[i] = malloc(ncolumns*sizeof(int));
+      for (j = 0; j < ncolumns; j++) dummymask[i][j] = 1;
+    }
     for (i = 0; i < nrows; i++)
     { int ixbest = 0;
       int iybest = 0;
@@ -3423,12 +3413,12 @@ void somassign (int nrows, int ncolumns, double** data, int** mask,
     free(dummymask);
   }
   else
-  { double** celldatavector = (double**)malloc((size_t)ndata*sizeof(double*));
-    int** dummymask = (int**)malloc((size_t)nrows*sizeof(int*));
+  { double** celldatavector = malloc(ndata*sizeof(double*));
+    int** dummymask = malloc(nrows*sizeof(int*));
     int ixbest = 0;
     int iybest = 0;
     for (i = 0; i < nrows; i++)
-    { dummymask[i] = (int*)malloc(sizeof(int));
+    { dummymask[i] = malloc(sizeof(int));
       dummymask[i][0] = 1;
     }
     for (i = 0; i < ncolumns; i++)
@@ -3552,13 +3542,12 @@ somcluster.
   if (nobjects < 2) return;
 
   if (lcelldata==0)
-  { celldata =
-      (double***)malloc((size_t)nxgrid*nygrid*ndata*sizeof(double**));
+  { celldata = malloc(nxgrid*nygrid*ndata*sizeof(double**));
     for (i = 0; i < nxgrid; i++)
-      celldata[i] = (double**) malloc((size_t)nygrid*ndata*sizeof(double*));
-    for (i = 0; i < nxgrid; i++)
+    { celldata[i] = malloc(nygrid*ndata*sizeof(double*));
       for (j = 0; j < nygrid; j++)
-        celldata[i][j] = (double*) malloc((size_t)ndata*sizeof(double));
+        celldata[i][j] = malloc(ndata*sizeof(double));
+    }
   }
 
   somworker (nrows, ncolumns, data, mask, weight, transpose, nxgrid, nygrid,
@@ -3699,12 +3688,12 @@ when microarrays are being clustered.
         double* cdata[2];
         int* cmask[2];
         int* count[2];
-        count[0] = (int*)malloc((size_t)ncolumns*sizeof(int));
-        count[1] = (int*)malloc((size_t)ncolumns*sizeof(int));
-        cdata[0] = (double*)malloc((size_t)ncolumns*sizeof(double));
-        cdata[1] = (double*)malloc((size_t)ncolumns*sizeof(double));
-        cmask[0] = (int*)malloc((size_t)ncolumns*sizeof(int));
-        cmask[1] = (int*)malloc((size_t)ncolumns*sizeof(int));
+        count[0] = malloc(ncolumns*sizeof(int));
+        count[1] = malloc(ncolumns*sizeof(int));
+        cdata[0] = malloc(ncolumns*sizeof(double));
+        cdata[1] = malloc(ncolumns*sizeof(double));
+        cmask[0] = malloc(ncolumns*sizeof(int));
+        cmask[1] = malloc(ncolumns*sizeof(int));
         for (i = 0; i < 2; i++)
           for (j = 0; j < ncolumns; j++)
           { count[i][j] = 0;
@@ -3746,13 +3735,13 @@ when microarrays are being clustered.
       }
       else
       { double distance;
-        int** count = (int**)malloc((size_t)nrows*sizeof(int*));
-        double** cdata = (double**)malloc((size_t)nrows*sizeof(double*));
-        int** cmask = (int**)malloc((size_t)nrows*sizeof(int*));
+        int** count = malloc(nrows*sizeof(int*));
+        double** cdata = malloc(nrows*sizeof(double*));
+        int** cmask = malloc(nrows*sizeof(int*));
         for (i = 0; i < nrows; i++)
-        { count[i] = (int*)malloc((size_t)2*sizeof(int));
-          cdata[i] = (double*)malloc((size_t)2*sizeof(double));
-          cmask[i] = (int*)malloc((size_t)2*sizeof(int));
+        { count[i] = malloc(2*sizeof(int));
+          cdata[i] = malloc(2*sizeof(double));
+          cmask[i] = malloc(2*sizeof(int));
         }
         for (i = 0; i < nrows; i++)
         { for (j = 0; j < 2; j++)
@@ -3802,12 +3791,12 @@ when microarrays are being clustered.
     { int i, j, k;
       if (transpose==0)
       { double distance;
-        double* temp = (double*)malloc((size_t)nrows*sizeof(double));
+        double* temp = malloc(nrows*sizeof(double));
         double* cdata[2];
         int* cmask[2];
         for (i = 0; i < 2; i++)
-        { cdata[i] = (double*)malloc((size_t)ncolumns*sizeof(double));
-          cmask[i] = (int*)malloc((size_t)ncolumns*sizeof(int));
+        { cdata[i] = malloc(ncolumns*sizeof(double));
+          cmask[i] = malloc(ncolumns*sizeof(int));
         }
         for (j = 0; j < ncolumns; j++)
         { int count = 0;
@@ -3855,12 +3844,12 @@ when microarrays are being clustered.
       }
       else
       { double distance;
-        double* temp = (double*)malloc((size_t)ncolumns*sizeof(double));
-        double** cdata = (double**)malloc((size_t)nrows*sizeof(double*));
-        int** cmask = (int**)malloc((size_t)nrows*sizeof(int*));
+        double* temp = malloc(ncolumns*sizeof(double));
+        double** cdata = malloc(nrows*sizeof(double*));
+        int** cmask = malloc(nrows*sizeof(int*));
         for (i = 0; i < nrows; i++)
-        { cdata[i] = (double*)malloc((size_t)2*sizeof(double));
-          cmask[i] = (int*)malloc((size_t)2*sizeof(int));
+        { cdata[i] = malloc(2*sizeof(double));
+          cmask[i] = malloc(2*sizeof(int));
         }
         for (j = 0; j < nrows; j++)
         { int count = 0;
