@@ -37,6 +37,7 @@ LOCUS       S40706        895 bp                    PRI       08-MAY-1993
 LOCUS       HUMMTTSF1    1040 bp    mRNA  circular  PRI       26-JUL-1995
 LOCUS       18_Char_LOCUS_Name 99999999999 bp ss-snRNA circular HTC DD-MMM-YYYY
 LOCUS       AB000383                  5423 bp    DNA   circular VRL 05-FEB-1999
+LOCUS       AL123456  4411529 bp          circular  BCT       07-JUL-1998
 """)
 
 add_test("definition 1", definition_block, """\
@@ -75,6 +76,7 @@ add_test_lines("version", version_line, """\
 VERSION     Z96953.1  GI:2791932
 VERSION     AC000062.1  GI:1669374
 VERSION     D14718.1  GI:285928
+VERSION     AL123456
 """)
 
 # The documentation says:
