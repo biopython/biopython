@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
-"""LogisticRegression.py
-
+"""
 This module provides code for doing logistic regressions.
 
 
@@ -13,7 +12,6 @@ Functions:
 train        Train a new classifier.
 calculate    Calculate the probabilities of each class, given an observation.
 classify     Classify an observation into a class.
-
 """
 try:
     from Numeric import *

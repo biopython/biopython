@@ -1,5 +1,4 @@
-"""MarkovModel.py
-
+"""
 This is an implementation of a state-emitting MarkovModel.  I am using
 terminology similar to Manning and Schutze.
 
@@ -15,7 +14,6 @@ save            Save a MarkovModel.
 
 Classes:
 MarkovModel     Holds the description of a markov model
-
 """
 import math
 

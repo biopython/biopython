@@ -3,10 +3,10 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""AlignAce.py
+"""
 
-This module provides code to work with the standalone version of AlignACE, for motif search
-in DNA sequences
+This module provides code to work with the standalone version of AlignACE, 
+for motif search in DNA sequences.
 
 AlignACE homepage:
 
@@ -14,13 +14,19 @@ http://atlas.med.harvard.edu/
 
 AlignACE Citations:
 
-Computational identification of cis-regulatory elements associated with groups of functionally related genes in Saccharomyces cerevisiae, Hughes, JD, Estep, PW, Tavazoie S, & GM Church, Journal of Molecular Biology 2000 Mar 10;296(5):1205-14.
+Computational identification of cis-regulatory elements associated with 
+groups of functionally related genes in Saccharomyces cerevisiae, 
+Hughes, JD, Estep, PW, Tavazoie S, & GM Church, Journal of Molecular 
+Biology 2000 Mar 10;296(5):1205-14.
 
-Finding DNA Regulatory Motifs within Unaligned Non-Coding Sequences Clustered by Whole-Genome mRNA Quantitation, Roth, FR, Hughes, JD, Estep, PE & GM Church, Nature Biotechnology 1998 Oct;16(10):939-45. 
+Finding DNA Regulatory Motifs within Unaligned Non-Coding Sequences 
+Clustered by Whole-Genome mRNA Quantitation, 
+Roth, FR, Hughes, JD, Estep, PE & GM Church, Nature Biotechnology 
+1998 Oct;16(10):939-45. 
 
 functions:
-AlignAce - runs the AlignACE standalone prgram and returns the ApplicationResult object
-
+AlignAce - runs the AlignACE standalone prgram and returns the 
+ApplicationResult object
 """
 
 import os

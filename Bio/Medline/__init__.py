@@ -3,10 +3,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Medline
-
+"""
 This module provides code to work with Medline.
-
 
 Classes:
 Record           Holds Medline data.

@@ -1,7 +1,7 @@
 # Copyright 2000-2001, Dalke Scientific Software, LLC
 # Distributed under the Biopython License Agreement (see the LICENSE file).
 
-"""implement Martel parsers
+"""Implement Martel parsers.
 
 The classes in this module are used by other Martel modules and not
 typically by external users.

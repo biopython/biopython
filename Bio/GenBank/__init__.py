@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Code to work with GenBank -- http://www.ncbi.nlm.nih.gov/
+"""Code to work with GenBank formatted files.
 
 Classes:
 Iterator              Iterate through a file of GenBank entries

@@ -1,4 +1,4 @@
-"""Time.py -- parse a time or date string
+"""Parse a time or date string.
 
 Converts a strftime/strptime-like format string into a Martel regular
 expression (either as a string or an Expression).

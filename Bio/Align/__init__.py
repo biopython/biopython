@@ -1,4 +1,5 @@
-# Align directory
+"""Code for dealing with sequence alignments.
+"""
 
 __all__ = [
     'AlignInfo',

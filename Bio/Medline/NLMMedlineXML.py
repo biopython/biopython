@@ -3,8 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""NLMMedlineXML.py
-
+"""
 This module provides code to work the NCBI's XML format for Medline.
 
 Functions:

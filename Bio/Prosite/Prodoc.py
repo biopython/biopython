@@ -3,8 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Prodoc.py
-
+"""
 This module provides code to work with the prosite.doc file from
 Prosite.
 http://www.expasy.ch/prosite/

@@ -3,8 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""SProt.py
-
+"""
 This module provides code to work with the sprotXX.dat file from
 SwissProt.
 http://www.expasy.ch/sprot/sprot-top.html

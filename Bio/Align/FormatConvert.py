@@ -1,9 +1,9 @@
-"""FormatConvert.py
-
+"""
 Utility for conversion between different formats for representing alignments.
 
 classes:
-FormatConverter"""
+FormatConverter
+"""
 
 # biopython
 from Bio.Fasta.FastaAlign import FastaAlignment

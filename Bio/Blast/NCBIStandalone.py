@@ -4,8 +4,7 @@
 # as part of this package.
 # Patches by Mike Poidinger to support multiple databases.
 
-"""NCBIStandalone.py
-
+"""
 This module provides code to work with the standalone version of
 BLAST, either blastall or blastpgp, provided by the NCBI.
 http://www.ncbi.nlm.nih.gov/BLAST/

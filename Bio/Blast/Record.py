@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Record.py
+"""Record classes to hold BLAST output.
 
 Classes:
 Blast              Holds all the information from a blast search.

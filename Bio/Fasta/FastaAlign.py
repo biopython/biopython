@@ -1,6 +1,6 @@
-"""FastaAlign.py
-
+"""
 Code to deal with alignments written in Fasta format.
+
 This mostly just uses the regular Fasta parsing stuff written by Jeff
 to deal with all of the input and output formats.
 

@@ -3,8 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""SCOP.py
-
+"""
 Provides code to access SCOP over the WWW.  The main SCOP web page
 is available at:
 http://scop.mrc-lmb.cam.ac.uk/scop/

@@ -3,8 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""KEGG Map package
-
+"""
 This module provides code to import KEGG Pathway maps for use with
 the Biopython Pathway module.
 

@@ -4,9 +4,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Ndb
-
-This module provides code to work with html files from
+"""
+This module provides code to work with html files from NDB.
 http://ndbserver.rutgers.edu/NDB/structure-finder/ndb/index.html
 
 
@@ -14,10 +13,9 @@ Classes:
 Record             Holds NDB sequence data.
 NdbParser          Parses NDB sequence data into a Record object.
 
-The algorithm is based on a state machine because the record has multiple sections and the
-handling of tags varies depending on the section.  Citations have their own state machine.
-
-
+The algorithm is based on a state machine because the record has multiple 
+sections and the handling of tags varies depending on the section.  
+Citations have their own state machine.
 """
 
 __all__ = [

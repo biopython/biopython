@@ -1,6 +1,6 @@
 """
 Parser for PHD files output by PHRED and used by PHRAP and
-CONSED
+CONSED.
 
 Works fine with PHRED 0.020425.c
 

@@ -1,4 +1,4 @@
-"""Search and retreive information using the EUtils history
+"""Search and retreive information using the EUtils history.
 
 EUtils has two major modes.  One uses history while the other uses
 database identifiers.  This is a high-level interface for working with

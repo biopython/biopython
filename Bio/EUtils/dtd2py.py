@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 """
+Internal class to convert DTDs to python form.
+
 dtd2py [-m mixinmodule] [-u] <DTDfile>...
 
 Converts the given DTD to a python form, and stores it in the dtds package

@@ -1,4 +1,5 @@
-"""Scheduler.py
+"""
+Simple scheduling of threads to be run.
 
 Classes:
 Scheduler   Schedules threads to be run.

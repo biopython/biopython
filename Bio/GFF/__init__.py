@@ -6,7 +6,7 @@
 # as part of this package.
 
 """
-GFF.py: Access to General Feature Format databases created with Bio::DB:GFF
+Access to General Feature Format databases created with Bio::DB:GFF
 
 based on documentation for Lincoln Stein's Perl Bio::DB::GFF
 
@@ -19,7 +19,7 @@ based on documentation for Lincoln Stein's Perl Bio::DB::GFF
 
 """
 
-__version__ = "$Revision: 1.5 $"
+__version__ = "$Revision: 1.6 $"
 # $Source: /home/bartek/cvs2bzr/biopython_fastimport/cvs_repo/biopython/Bio/GFF/__init__.py,v $
 
 import exceptions

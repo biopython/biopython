@@ -1,5 +1,4 @@
-"""distance.py
-
+"""
 This module provides code for various distance measures.
 
 Functions:

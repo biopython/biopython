@@ -1,4 +1,4 @@
-"""Search and retrieve information given a set of database identifiers
+"""Search and retrieve information given a set of database identifiers.
 
 EUtils has two major modes.  One uses history while the other uses
 database identifiers.  This is a high-level interface for working with

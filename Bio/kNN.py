@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
-"""kNN.py
-
+"""
 This module provides code for doing k-nearest-neighbors classification.
 
 k Nearest Neighbors is a supervised learning algorithm that classifies

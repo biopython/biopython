@@ -1,5 +1,4 @@
-"""nlmmedline_xml_format.py
-
+"""
 A Martel format to parse the NLM's XML format for Medline.
 
 http://www.nlm.nih.gov/databases/dtd/nlmmedline_010319.dtd

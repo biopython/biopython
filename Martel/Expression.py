@@ -1,31 +1,29 @@
 # Copyright 2000-2001, Dalke Scientific Software, LLC
 # Distributed under the Biopython License Agreement (see the LICENSE file).
 
-"""Classes for nodes in the Expression tree
+"""Classes for nodes in the Expression tree.
 
-  Expression
-   |--- Any           - match (or don't match) a set of characters
-   |--- AnyEol        - match any newline representation ("\n", "\r" or "\r\n")
-   |--- Assert        - used for positive and negative lookahead assertions 
-   |--- AtBeginning   - match the beginning of a line
-   |--- AtEnd         - match the end of a line
-   |--- Debug         - print a debug message
-   |--- Dot           - match any character except newline
-   |--- Group         - give a group name to an expression
-   |--- GroupRef      - match a previously identified expression
-   |--- Literal       - match (or don't match) a single character
-   |--- MaxRepeat     - greedy repeat of an expression, within min/max bounds
-   |--- NullOp        - does nothing (useful as an initial seed)
-   |--- PassThrough   - used when overriding 'make_parser'; match its subexp
-   |      |--- FastFeature  - keeps information about possibly optional tags
-   |      |--- HeaderFooter - files with a header, records and a footer
-   |      `--- ParseRecords - parse a record at a time
-   |--- Str           - match a given string
-   `--- ExpressionList  - expressions containing several subexpressions
-          |--- Alt    - subexp1 or subexp2 or subexp3 or ...
-          `--- Seq    - subexp1 followed by subexp2 followed by subexp3 ...
-
-
+Expression
+ |--- Any           - match (or don't match) a set of characters
+ |--- AnyEol        - match any newline representation ("\n", "\r" or "\r\n")
+ |--- Assert        - used for positive and negative lookahead assertions 
+ |--- AtBeginning   - match the beginning of a line
+ |--- AtEnd         - match the end of a line
+ |--- Debug         - print a debug message
+ |--- Dot           - match any character except newline
+ |--- Group         - give a group name to an expression
+ |--- GroupRef      - match a previously identified expression
+ |--- Literal       - match (or don't match) a single character
+ |--- MaxRepeat     - greedy repeat of an expression, within min/max bounds
+ |--- NullOp        - does nothing (useful as an initial seed)
+ |--- PassThrough   - used when overriding 'make_parser'; match its subexp
+ |      |--- FastFeature  - keeps information about possibly optional tags
+ |      |--- HeaderFooter - files with a header, records and a footer
+ |      `--- ParseRecords - parse a record at a time
+ |--- Str           - match a given string
+ `--- ExpressionList  - expressions containing several subexpressions
+        |--- Alt    - subexp1 or subexp2 or subexp3 or ...
+        `--- Seq    - subexp1 followed by subexp2 followed by subexp3 ...
 """
 import re, string
 from xml.sax import xmlreader

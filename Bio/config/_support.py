@@ -5,7 +5,7 @@
 
 # This is based on some older code by Andrew Dalke.
 
-"""XXX document
+"""Support code for dealing with registries.
 
 Functions:
 find_submodules   Find all the modules in a package.

@@ -1,10 +1,10 @@
-"""clustal_format.py
-
-A parser to read information from a clustal formatted file (*.aln).
+"""
+A Martel grammar to read information from a clustal formatted file (*.aln).
 
 This uses Andrew Dalke's Martel to do the parsing dirty work for me.
 So all we need to do here is set up a big ol' regular expression to
-let Martel know what the file looks like."""
+let Martel know what the file looks like.
+"""
 # standard library
 import sys
 

@@ -3,8 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""MaxEnt.py
-
+"""
 Maximum Entropy code.
 
 Uses Improved Iterative Scaling:

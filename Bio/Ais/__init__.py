@@ -3,8 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """
-Based on ideas from
-Immunocomputing: a survey
+Immune system simulation based on ideas from Immunocomputing: a survey.
 I.Antoniou, S.Gutnikov, V.Ivanov, Yu.Melnikov, A.Tarakanov
 12. Forrest S., Perelson A. Aleen L. and Cherukuri R. 
 Self-nonself disctimination in a computer. Proc. of IEEE symposium on reseqrch

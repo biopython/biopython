@@ -1,8 +1,7 @@
-"""wrapper around a file handle to allow reseeks to the beginning
+"""Wrapper around a file handle to allow reseeks to the beginning.
 
 This will only seek back to the initial position, and only handles the
 'read' method, which is all that Martel uses.
-
 """
 
 

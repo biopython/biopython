@@ -1,4 +1,4 @@
-"""LAX.py -- a simple way to read lists of fields from flat XML records
+"""A simple way to read lists of fields from flat XML records.
 
 Many XML formats are very simple: all the fields are needed, there is
 no tree hierarchy, all the text inside of the tags is used, and the

@@ -1,7 +1,9 @@
 # Copyright Yair Benita Y.Benita@pharm.uu.nl
 # Biopython (http://biopython.org) license applies
 
-"""pK values and the methos are taken from:
+"""Calculate isoelectric points of polypeptides using methods of Bjellqvist.
+
+pK values and the methos are taken from:
 
 * Bjellqvist, B.,Hughes, G.J., Pasquali, Ch., Paquet, N., Ravier, F., Sanchez,
 J.-Ch., Frutiger, S. & Hochstrasser, D.F.

@@ -1,5 +1,4 @@
-"""copen.py
-
+"""
 This implements a set of classes that wraps a file object interface
 around code that executes in another process.  This allows you fork
 many different commands and let the run concurrently.

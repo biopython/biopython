@@ -1,3 +1,5 @@
+"""EUtils is a client-side library for the Entrez databases at NCBI.
+"""
 import re
 
 __version__ = "1.0p1"

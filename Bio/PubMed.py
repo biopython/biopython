@@ -3,8 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""PubMed.py
-
+"""
 This module provides code to work with PubMed from the NCBI.
 http://www.ncbi.nlm.nih.gov/PubMed/
 

@@ -1,5 +1,4 @@
-"""Generic.py
-
+"""
 Contains classes to deal with generic sequence alignment stuff not
 specific to a particular program or format.
 

@@ -3,17 +3,15 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""NetCatch.py
-
-NetCatch enables the user to scan a list of labelled urls and select a subset to read
-into a file.
+"""
+NetCatch enables the user to scan a list of labelled urls and select 
+a subset to read into a file.
 
 Functions:
 get_urls_by_label
 get_urls_by_index
 get_urls_by_range
 select_output_file
-
 """
 import sys
 import os

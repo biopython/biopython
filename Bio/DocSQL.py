@@ -6,7 +6,7 @@
 # as part of this package.
 
 """
-Bio.DocSQL: easy access to DB API databases
+Bio.DocSQL: easy access to DB API databases.
 
 >>> import DocSQL, MySQLdb, os
 >>> db=MySQLdb.connect(passwd='', db='test')
@@ -22,7 +22,7 @@ Bio.DocSQL: easy access to DB API databases
 CreatePeople(message=Success)
 """
 
-__version__ = "$Revision: 1.6 $"
+__version__ = "$Revision: 1.7 $"
 # $Source: /home/bartek/cvs2bzr/biopython_fastimport/cvs_repo/biopython/Bio/DocSQL.py,v $
 
 import exceptions

@@ -1,4 +1,4 @@
-"""Low-level interface to NCBI's EUtils for Entrez search and retrieval
+"""Low-level interface to NCBI's EUtils for Entrez search and retrieval.
 
 For higher-level interfaces, see DBIdsClient (which works with a set
 of database identifiers) and HistoryClient (which does a much better

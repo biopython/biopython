@@ -4,9 +4,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""InterPro
-
-This module provides code to work with html files from
+"""
+This module provides code to work with html files from InterPro.
 http://www.ebi.ac.uk/interpro/
 
 

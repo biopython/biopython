@@ -1,16 +1,15 @@
 # Clustalw modules
 
-"""Clustalw.py
-
+"""
 A set of classes to interact with the multiple alignment command
-line program Clustalw (which is the command line version of the current
-graphical Clustalx aligment program).
+line program clustalw. 
 
-This requires Clustalw1.8.1 available from:
+Clustalw is the command line version of the graphical Clustalx 
+aligment program.
+
+This requires clustalw available from:
 
 ftp://ftp-igbmc.u-strasbg.fr/pub/ClustalW/.
-
-Older versions may work, but haven't been tested yet.
 
 functions:
 o parse_file

@@ -6,8 +6,7 @@
 # Patched by Brad Chapman.
 # Chris Wroe added modifications for work in myGrid
 
-"""NCBIWWW.py
-
+"""
 This module provides code to work with the WWW version of BLAST
 provided by the NCBI.
 http://www.ncbi.nlm.nih.gov/BLAST/

@@ -1,7 +1,7 @@
 # Copyright 2000-2001, Dalke Scientific Software, LLC
 # Distributed under the Biopython License Agreement (see the LICENSE file).
 
-"""Converts a regular expression pattern string into an Expression tree
+"""Converts a regular expression pattern string into an Expression tree.
 
 This is not meant to be an externally usable module.
 

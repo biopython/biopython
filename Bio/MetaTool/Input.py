@@ -3,8 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""MetaTool Input module
-
+"""
 This module provides code to convert Bio.Pathway.System objects into
 a text file that can be used as input for the MetaTool program.
 

@@ -3,8 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""KEGG Enzyme package
-
+"""
 This module provides code to work with the KEGG Enzyme database.
 
 

@@ -1,5 +1,4 @@
-"""triefind.py
-
+"""
 Given a trie, find all occurrences of a word in the trie in a string.
 
 Like searching a string for a substring, except that the substring is

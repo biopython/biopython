@@ -3,9 +3,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Rebase
-
-This module provides code to work with files from
+"""
+This module provides code to work with files from Rebase.
 http://rebase.neb.com/rebase/rebase.html
 
 

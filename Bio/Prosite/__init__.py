@@ -8,8 +8,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Prosite
-
+"""
 This module provides code to work with the prosite.dat file from
 Prosite.
 http://www.expasy.ch/prosite/
