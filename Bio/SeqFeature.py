@@ -230,8 +230,7 @@ class WithinPosition(AbstractPosition):
     1 and extension as 3.
     """
     def __init__(self, position, extension = 0):
-        AbstractPosition.__init__(self, position)
-        self.extension = extension
+        AbstractPosition.__init__(self, position, extension)
 
     def __str__(self):
         return "(%s.%s)" % (self.position, self.position + self.extension)
@@ -249,8 +248,7 @@ class BetweenPosition(AbstractPosition):
     extension as 1.
     """
     def __init__(self, position, extension = 0):
-        AbstractPosition.__init__(self, position)
-        self.extension = extension
+        AbstractPosition.__init__(self, position, extension)
 
     def __str__(self):
         return "(%s^%s)" % (self.position, self.position + self.extension)
