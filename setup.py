@@ -154,6 +154,19 @@ class build_ext_biopython(build_ext):
                 )
         build_ext.run(self)
 
+    def build_extensions(self):
+        self._original_compiler_so = self.compiler.compiler_so
+
+        build_ext.build_extensions(self)
+
+    def build_extension(self, ext):
+        if ext.language == "c++":
+            self.compiler.compiler_so = self.compiler.compiler_cxx
+        else:
+            self.compiler.compiler_so = self._original_compiler_so
+
+        build_ext.build_extension(self, ext)
+
 class test_biopython(Command):
     """Run all of the tests for the package.
 
@@ -373,8 +386,8 @@ EXTENSIONS = [
               libraries=["fl"]
               ),
     Extension('Bio.KDTree._CKDTree',
-              ["Bio/KDTree/KDTree.C",
-               "Bio/KDTree/KDTree.swig.C"],
+              ["Bio/KDTree/KDTree.cxx",
+               "Bio/KDTree/KDTree.swig.cxx"],
               libraries=["stdc++"],
               language="c++"
               ),
