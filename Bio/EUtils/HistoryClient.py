@@ -133,7 +133,6 @@ class HistoryCookie:
         self.webenv_ref = webenv_ref
         self.query_key = query_key
 
-
 class HistoryLookup(object):
     """Look up information about a search in history
 
@@ -151,7 +150,7 @@ class HistoryLookup(object):
     def _check_invalid(self):
         # Check if we can get data from this history
         if self.cookie.query_key is None:
-            raise NotImplemented("empty data set")
+            raise NotImplementedError("empty data set")
         if self.query_key is None:
             raise Datatypes.EUtilsError(
                 "query history no longer available on server")
@@ -198,7 +197,6 @@ class HistoryLookup(object):
         return Datatypes.DBIds(self.cookie.db, ids)
     dbids = property(_get_dbids, None, None,
         "The DBIds for this results set, fetched from the server's 'uilist'")
-    
 
 class HistoryRecord(HistoryLookup):
     """Get information about a single record in a history"""
@@ -207,8 +205,6 @@ class HistoryRecord(HistoryLookup):
     def summary(self):
         """the Datatypes.Summary for this history record"""
         return HistoryLookup.summary(self)[0]
-    
-
 
 class SequenceHistoryFetchMixin:
     def efetch(self, retmode = 'xml', rettype = None,
@@ -368,8 +364,6 @@ class HistoryClient:
             self.query_history[searchinfo.query_key] = recordset
 
         return recordset
-
-                                 
 
     def post(self, dbids, dbtype = None):
         set_klass = _get_recordset_constructor(dbids.db, dbtype)

@@ -1,0 +1,10 @@
+test_EUtils
+Retrieve a single nucleotide record by accession. ... ok
+Retrieving more than 500 sequences from nucleotide database. ... ok
+Search and retrieval of PubMed records. ... ok
+Simple text search from PubMed. ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 27.986s
+
+OK

@@ -166,7 +166,6 @@ def parse_search(infile, webenv_ref = [None]):
             raise Datatypes.EUtilsSearchError(errmsg,
                                               errors,
                                               warnings)
-
             
     # In other words, check if something matched
     if not nothing_matched:
@@ -198,7 +197,11 @@ def parse_search(infile, webenv_ref = [None]):
 
         # Convert the RPN TranslationStack into an Expression
         stack = []
-        for ele in pom["TranslationStack"]:
+        try:
+            translation_stack = pom["TranslationStack"]
+        except IndexError:
+            translation_stack = []
+        for ele in translation_stack:
             if ele.__class__.__name__ == "TermSet":
                 stack.append(Datatypes.Term(
                     term = urllib.unquote_plus(ele["Term"].tostring()),
@@ -215,16 +218,30 @@ def parse_search(infile, webenv_ref = [None]):
                     stack[-2:] = [Datatypes.Range(stack[-2], stack[-1])]
                 elif s == "NOT":
                     stack[-2:] = [Datatypes.Not(stack[-2], stack[-1])]
+                elif s == "GROUP":
+                    # GROUP doesn't appear to do any more than put an extra
+                    # parenthesis around ANDs and ORs -- can't find any
+                    # specific documentation on its role
+                    # So right now it is redundant and just ignore it
+                    pass
                 else:
                     raise TypeError("Unknown OP code: %r" % (s,))
             else:
                 raise TypeError("Unknown TranslationStack element: %r" %
                                 (ele.__class__.__name__,))
+        
+        # hack -- it appears as if the translation stack is sometimes missing
+        # an AND at the end, which I guess is supposed to be implicit. For
+        # instance, doing a text word search plus date range leaves off a
+        # trailing and to link the final elements.
+        if len(stack) == 2:
+            stack[-2:] = [stack[-2] & stack[-1]]
+
         if len(stack) > 1:
-            raise TypeError("Incomplete TranslationStack")
+            raise TypeError("Incomplete TranslationStack: %r" % stack)
         elif not stack:
             stack = [None]
-
+        
         expression = stack[0]
 
     # Return either our synthesized query or 

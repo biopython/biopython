@@ -225,7 +225,6 @@ class Expression:
     def __iter__(self):
         """Traverse the tree in postfix order"""
         raise NotImplementedError
-        
 
 class Term(Expression):
     """Information about an Expression Term, which is the leaf node
@@ -281,7 +280,6 @@ class Not(BinaryOp):
     """
     def __str__(self):
         return "(%s NOT %s)" % (self.left, self.right)
-
 
 class Range(BinaryOp):
     """Used to store a date range"""

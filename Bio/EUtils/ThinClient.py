@@ -561,9 +561,6 @@ def _dbids_to_id_string(dbids):
     assert id_string.count(",") == len(dbids.ids)-1, "double checking"
     return id_string
 
-
-            
-
 class ThinClient:
     """Client-side interface to the EUtils services
 
@@ -629,7 +626,6 @@ class ThinClient:
 
         # Convert the query into the form needed for a GET.
         return urllib.urlencode(q)
-
     
     def _get(self, program, query):
         """Internal function: send the query string to the program as GET"""
@@ -646,7 +642,6 @@ class ThinClient:
             print " ================== Finished ============ "
             return cStringIO.StringIO(s)
         return self.opener.open(url)
-        
             
     def esearch(self,
                 term,           # In Entrez query language
@@ -751,7 +746,6 @@ class ThinClient:
             print " ================== Finished ============ "
             return cStringIO.StringIO(s)
         return self.opener.open(self.baseurl + program, q)
-        
 
     def esummary_using_history(self,
                                db,  # This is required.  Don't use a
@@ -785,7 +779,6 @@ class ThinClient:
                                   "retmax": retmax,
                                   "retmode": retmode,
                                   })
-        
                         
     def esummary_using_dbids(self,
                              dbids,
@@ -810,8 +803,6 @@ class ThinClient:
                                   # "retmax": len(dbids.ids), # needed?
                                   "retmode": retmode,
                                   })
-
-
 
     def efetch_using_history(self,
                              db,
@@ -931,14 +922,19 @@ class ThinClient:
         # that to supplement the information from the documentation.
         # Looks like efetch is based on pmfetch code and uses the same
         # types.
+        
+        # if retmax is specified and larger than 500, NCBI only returns 
+        # 500 sequences. Removing it from the URL relieves this constraint.
+        # To get around this, if retstart is 0 and retmax is greater than 500,
+        # we set retmax to be None.
+        if retstart == 0 and retmax > 500:
+            retmax = None
         return self._get(program = "efetch.fcgi",
                          query = {"db": db,
                                   "WebEnv": webenv,
                                   "query_key": query_key,
                                   "retstart": retstart,
-        # if retmax is specified, NCBI only returns 500 sequences (or whatever
-        # you are fetching). Removing it from the URL relieves this constraint
-        #                           "retmax": retmax,
+                                  "retmax": retmax,
                                   "retmode": retmode,
                                   "rettype": rettype,
                                   "seq_start": seq_start,
@@ -946,17 +942,18 @@ class ThinClient:
                                   "strand": strand,
                                   "complexity": complexity,
                                   })
-    def efetch_using_dbids(self,
-                           dbids,
-                           retmode = None,
-                           rettype = None,
 
-                           # sequence only
-                           seq_start = None,
-                           seq_stop = None,
-                           strand = None,
-                           complexity = None,
-                           ):
+    def efetch_using_dbids(self,
+                       dbids,
+                       retmode = None,
+                       rettype = None,
+
+                       # sequence only
+                       seq_start = None,
+                       seq_stop = None,
+                       strand = None,
+                       complexity = None,
+                       ):
         """dbids, retmode = None, rettype = None, seq_start = None, seq_stop = None, strand = None, complexity = None
 
         Fetch information for records specified by identifier
@@ -1107,7 +1104,6 @@ class ThinClient:
                 raise TypeError("Both mindate and maxdate must be set for eLink")
             query.update(daterange.get_query_params())
         return self._get(program = "elink.fcgi", query = query)
-
 
     def elink_using_dbids(self,
                           dbids,
