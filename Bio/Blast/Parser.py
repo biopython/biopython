@@ -84,7 +84,6 @@ NCBIWWWScanner     Scans output from NCBI's BLAST WWW server.
 """
 
 # XXX use _safe_peekline where appropriate
-# XXX bt033 is broken
 
 
 import string
@@ -170,7 +169,7 @@ class StandaloneScanner:
         # followed by descriptions and alignments.
 
         while 1:
-            line = ohandle.peekline()
+            line = _safe_peekline(ohandle)
             if line[:9] != 'Searching':
                 break
 
@@ -225,7 +224,7 @@ class StandaloneScanner:
         # indicates that no descriptions follow, and we should go straight
         # to the alignments.
 
-        line = ohandle.peekline()
+        line = _safe_peekline(ohandle)
         if string.find(line, 'Score     E') == -1:
             # no descriptions.
             # Look for "No hits found".  If this exists, then read the
@@ -282,7 +281,7 @@ class StandaloneScanner:
 
     def _scan_alignments(self, ohandle, consumer):
         # First, check to see if I'm at the database report.
-        line = ohandle.peekline()
+        line = _safe_peekline(ohandle)
         if line[:10] == '  Database':
             return
         elif line[0] == '>':
@@ -292,7 +291,7 @@ class StandaloneScanner:
 
     def _scan_pairwise_alignments(self, ohandle, consumer):
         while 1:
-            line = ohandle.peekline()
+            line = _safe_peekline(ohandle)
             if line[0] != '>':
                 break
             self._scan_one_pairwise_alignment(ohandle, consumer)
@@ -304,7 +303,7 @@ class StandaloneScanner:
 
         # Scan a bunch of score/alignment pairs.
         while 1:
-            line = ohandle.peekline()
+            line = _safe_peekline(ohandle)
             if line[:6] != ' Score':
                 break
             self._scan_hsp_header(ohandle, consumer)
@@ -364,7 +363,7 @@ class StandaloneScanner:
             read_and_call(ohandle, consumer.align, start='     ')
             read_and_call(ohandle, consumer.sbjct, start='Sbjct')
             read_and_call(ohandle, consumer.noevent, blank=1)
-            line = ohandle.peekline()
+            line = _safe_peekline(ohandle)
             # Alignment continues if I see a 'Query' or the spaces for Blastn.
             if line[:5] != 'Query' and line[:5] != '     ':
                 break
@@ -372,7 +371,7 @@ class StandaloneScanner:
     def _scan_masterslave_alignment(self, ohandle, consumer):
         consumer.start_alignment()
         while 1:
-            line = ohandle.readline()
+            line = _safe_readline(ohandle)
             if line[:10] == '  Database':
                 ohandle.saveline(line)
                 break
@@ -596,7 +595,6 @@ class NCBIWWWScanner:
         # <HR>
         # <PRE>
 
-        # XXX sample with no printout of data?
         consumer.start_header()
 
         # Read the "BLAST" version line and the two following blanks.
@@ -648,46 +646,43 @@ class NCBIWWWScanner:
     def _scan_descriptions(self, ohandle, consumer):
         consumer.start_descriptions()
 
-        line = ohandle.peekline()
+        line = _safe_peekline(ohandle)
         if string.find(line, 'No significant similarity') >= 0:
             # no hits found:
             # <b>No significant similarity found.</b> For reasons why, <A HREF
             read_and_call(ohandle, consumer.no_hits)
+        elif is_blank_line(line):
+            # no descriptions:
+            # 
+            # 
+            read_and_call(ohandle, consumer.noevent, blank=1)
+            read_and_call(ohandle, consumer.noevent, blank=1)
         else:
-            line = ohandle.peekline()
-            if is_blank_line(line):
-                # no descriptions:
-                # 
-                # 
-                read_and_call(ohandle, consumer.noevent, blank=1)
-                read_and_call(ohandle, consumer.noevent, blank=1)
-            else:
-                # Normal descriptions:
-                # <PRE>
-                # 
-                #
-                # Sequences producing significant alignments:
-                # 
-                # <a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd
-                # <a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd
-                # 
+            # Normal descriptions:
+            # <PRE>
+            # 
+            #                                                                  
+            # Sequences producing significant alignments:                      
+            # 
+            # <a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Ret
+            # <a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Ret
+            # 
+            read_and_call(ohandle, consumer.noevent, start='<PRE>')
+            read_and_call(ohandle, consumer.noevent, blank=1)
 
-                read_and_call(ohandle, consumer.noevent, start='<PRE>')
-                read_and_call(ohandle, consumer.noevent, blank=1)
+            # Read the score header lines and a blank line.
+            read_and_call(ohandle, consumer.noevent,
+                          contains='Score     E')
+            read_and_call(ohandle, consumer.noevent,
+                          start='Sequences producing')
+            read_and_call(ohandle, consumer.noevent, blank=1)
 
-                # Read the score header lines and a blank line.
-                read_and_call(ohandle, consumer.noevent,
-                              contains='Score     E')
-                read_and_call(ohandle, consumer.noevent,
-                              start='Sequences producing')
-                read_and_call(ohandle, consumer.noevent, blank=1)
-
-                # Read the descriptions and the following blank line.
-                while 1:
-                    if not attempt_read_and_call(ohandle, consumer.description,
-                                                 start='<a href'):
-                        read_and_call(ohandle, consumer.noevent, blank=1)
-                        break
+            # Read the descriptions and the following blank line.
+            while 1:
+                if not attempt_read_and_call(ohandle, consumer.description,
+                                             start='<a href'):
+                    read_and_call(ohandle, consumer.noevent, blank=1)
+                    break
 
         consumer.end_descriptions()
 
@@ -702,13 +697,9 @@ class NCBIWWWScanner:
         if is_blank_line(line1) or line2[:10] == '  Database':
             return
 
-        # XXX sample with no Description and master slave
-
         # It appears that first sequence in a masterslave alignment
         # is generated by BLAST and contains no link to the descriptions.
-        # XXX Check to see if the anchors are here even if there are
-        # no descriptions!
-        elif line2[:9] == 'blast_tmp':
+        if line2[:9] == 'blast_tmp':
             self._scan_masterslave_alignment(ohandle, consumer)
         else:
             self._scan_pairwise_alignments(ohandle, consumer)
