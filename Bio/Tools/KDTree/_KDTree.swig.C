@@ -837,15 +837,21 @@ extern "C" {
 static PyObject *_wrap_new_KDTree(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     int arg1 ;
+    int arg2 ;
     KDTree *result;
     
-    if(!PyArg_ParseTuple(args,(char *)"i:new_KDTree",&arg1)) return NULL;
+    if(!PyArg_ParseTuple(args,(char *)"ii:new_KDTree",&arg1,&arg2)) return NULL;
     {
         if (arg1 <= 0) {
             SWIG_exception(SWIG_ValueError,"Expected a positive value.");
         }
     }
-    result = (KDTree *)new KDTree(arg1);
+    {
+        if (arg2 <= 0) {
+            SWIG_exception(SWIG_ValueError,"Expected a positive value.");
+        }
+    }
+    result = (KDTree *)new KDTree(arg1,arg2);
     
     resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_KDTree, 1);
     return resultobj;
@@ -923,20 +929,6 @@ static PyObject *_wrap_KDTree_set_data(PyObject *self, PyObject *args) {
         }
     }
     (arg1)->set_data(arg2,arg3);
-    
-    Py_INCREF(Py_None); resultobj = Py_None;
-    return resultobj;
-}
-
-
-static PyObject *_wrap_KDTree_build_tree(PyObject *self, PyObject *args) {
-    PyObject *resultobj;
-    KDTree *arg1 ;
-    PyObject * obj0  = 0 ;
-    
-    if(!PyArg_ParseTuple(args,(char *)"O:KDTree_build_tree",&obj0)) return NULL;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_KDTree,1)) == -1) return NULL;
-    (arg1)->build_tree();
     
     Py_INCREF(Py_None); resultobj = Py_None;
     return resultobj;
@@ -1146,7 +1138,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_KDTree", _wrap_new_KDTree, METH_VARARGS },
 	 { (char *)"delete_KDTree", _wrap_delete_KDTree, METH_VARARGS },
 	 { (char *)"KDTree_set_data", _wrap_KDTree_set_data, METH_VARARGS },
-	 { (char *)"KDTree_build_tree", _wrap_KDTree_build_tree, METH_VARARGS },
 	 { (char *)"KDTree_search_center_radius", _wrap_KDTree_search_center_radius, METH_VARARGS },
 	 { (char *)"KDTree_get_count", _wrap_KDTree_get_count, METH_VARARGS },
 	 { (char *)"KDTree_neighbor_search", _wrap_KDTree_neighbor_search, METH_VARARGS },

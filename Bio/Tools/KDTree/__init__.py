@@ -6,9 +6,9 @@ except ImportError:
 import _KDTree
 
 class KDTree:
-	def __init__(self, dim):
+	def __init__(self, dim, bucket_size=1):
 		self.dim=dim
-		self.kdt=_KDTree.KDTree(dim)
+		self.kdt=_KDTree.KDTree(dim, bucket_size)
 		self.built=0
 
 	def set_coords(self, coords):
@@ -32,9 +32,6 @@ class KDTree:
 		dimensional. 
 		o radius - float>=0
 		"""
-		if self.built==0:
-			self.kdt.build_tree()
-			self.built=1
 		if center.shape!=(self.dim,):
 				raise Exception, "Expected a %i-dimensional Numpy array" % self.dim
 		if center.typecode()!="f":
@@ -48,9 +45,6 @@ class KDTree:
 
 		o radius - float (>0)
 		"""
-		if self.built==0:
-			self.kdt.build_tree()
-			self.built=1
 		self.kdt.neighbor_search(radius)
 
 	def neighbor_get_indices(self):

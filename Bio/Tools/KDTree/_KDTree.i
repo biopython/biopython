@@ -105,10 +105,9 @@
 class KDTree
 {
 	public:
-		KDTree(int POSITIVE);
+		KDTree(int POSITIVE, int POSITIVE);
 		~KDTree();
 		void set_data(float *twodim, unsigned long int POSITIVE);
-		void build_tree(void);
 		void search_center_radius(float *onedim, float POSITIVE);
 		long int get_count(void);
 		void neighbor_search(float POSITIVE);

@@ -28,7 +28,6 @@ class KDTree:
         if getattr(self,'thisown',0):
             _KDTreec.delete_KDTree(self)
     def set_data(*args): return apply(_KDTreec.KDTree_set_data,args)
-    def build_tree(*args): return apply(_KDTreec.KDTree_build_tree,args)
     def search_center_radius(*args): return apply(_KDTreec.KDTree_search_center_radius,args)
     def get_count(*args): return apply(_KDTreec.KDTree_get_count,args)
     def neighbor_search(*args): return apply(_KDTreec.KDTree_neighbor_search,args)
