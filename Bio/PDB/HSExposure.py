@@ -94,10 +94,11 @@ class HSExposure:
         # center
         ca1=ca1-ca2
         ca3=ca3-ca2
-        ca1=ca1.normalize()
-        ca3=ca3.normalize()
+        ca1.normalize()
+        ca3.normalize()
         # bisection
-        b=(ca1+ca3).normalize()
+        b=(ca1+ca3)
+        b.normalize()
         b=-b
         # Add to ca_cb_list for drawing
         self.ca_cb_list.append((ca2, b+ca2))

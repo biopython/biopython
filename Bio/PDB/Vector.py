@@ -15,7 +15,7 @@ __doc__="Vector class, including rotation-related functions."
 def rotaxis(theta, vector):
     """
     Calculate a left multiplying rotation matrix that rotates
-    theta degrees around vector.
+    theta rad around vector.
 
     Example: 
     
@@ -30,7 +30,7 @@ def rotaxis(theta, vector):
 
     @return: The rotation matrix, a 3x3 Numpy array.
     """
-    vector=vector.normalize()
+    vector.normalize()
     c=cos(theta)
     s=sin(theta)
     t=1-c
@@ -62,10 +62,10 @@ def refmat(p,q):
     @type p,q: L{Vector}
     @return: The mirror operation, a 3x3 Numpy array. 
     """
-    p=p.normalize()
-    q=q.normalize()
+    p.normalize()
+    q.normalize()
     pq=p-q
-    pq=pq.normalize()
+    pq.normalize()
     b=pq.get_array()
     b.shape=(3, 1)
     i=eye(3)
@@ -135,8 +135,13 @@ def calc_dihedral(v1, v2, v3, v4):
 class Vector:
     "3D vector"
 
-    def __init__(self, x, y, z):
-        self._ar=array((x, y, z), 'd')
+    def __init__(self, x, y=None, z=None):
+        if y is None and z is None:
+            # Array
+            self._ar=array(x, 'd')
+        else:
+            # Three numbers
+            self._ar=array((x, y, z), 'd')
 
     def __repr__(self):
         x,y,z=self._ar
@@ -144,46 +149,46 @@ class Vector:
 
     def __neg__(self):
         "Return Vector(-x, -y, -z)"
-        x,y,z=-self._ar
-        return Vector(x,y,z)
+        a=-self._ar
+        return Vector(a)
 
     def __add__(self, other):
         "Return Vector+other Vector or scalar"
         if not isinstance(other, Vector):
-            x,y,z=self._ar+other
+            a=self._ar+other
         else:
-            x,y,z=self._ar+other._ar
-        return Vector(x,y,z)
+            a=self._ar+other._ar
+        return Vector(a)
 
     def __sub__(self, other):
         "Return Vector-other Vector or scalar"
         if not isinstance(other, Vector):
-            x,y,z=self._ar-other
+            a=self._ar-other
         else:
-            x,y,z=self._ar-other._ar
-        return Vector(x,y,z)
+            a=self._ar-other._ar
+        return Vector(a)
 
     def __mul__(self, other):
-        "Return Vector . Vector (dot product) or Vector*scalar"
-        if not isinstance(other, Vector):
-            x,y,z=self._ar*other
-            return Vector(x,y,z)
-        else:
-            return sum(self._ar*other._ar)
+        "Return Vector.Vector (dot product)"
+        return sum(self._ar*other._ar)
 
-    def __div__(self, a):
+    def __div__(self, x):
         "Return Vector(coords/a)"
-        x,y,z=self._ar/a
-        return Vector(x,y,z)
+        a=self._ar/x
+        return Vector(a)
 
     def __pow__(self, other):
-        "Return Vector x Vector (cross product)"
-        a,b,c=self._ar
-        d,e,f=other._ar
-        c1=determinant(array(((b,c), (e,f))))
-        c2=determinant(array(((a,c), (d,f))))
-        c3=determinant(array(((a,b), (d,e))))
-        return Vector(c1,c2,c3)
+        "Return VectorxVector (cross product) or Vectorxscalar"
+        if isinstance(other, Vector):
+            a,b,c=self._ar
+            d,e,f=other._ar
+            c1=determinant(array(((b,c), (e,f))))
+            c2=-determinant(array(((a,c), (d,f))))
+            c3=determinant(array(((a,b), (d,e))))
+            return Vector(c1,c2,c3)
+        else:
+            a=self._ar*other
+            return Vector(a)
 
     def __str__(self):
         x,y,z=self._ar
@@ -194,9 +199,8 @@ class Vector:
         return sqrt(sum(self._ar*self._ar))
 
     def normalize(self):
-        "Return normalized Vector"
-        x,y,z=self._ar/self.norm()
-        return Vector(x,y,z)
+        "Normalize the Vector"
+        self._ar=self._ar/self.norm()
 
     def angle(self, other):
         "Return angle between two vectors"
@@ -214,18 +218,17 @@ class Vector:
 
     def left_multiply(self, matrix):
         "Return Vector=Matrix x Vector"
-        x,y,z=matrixmultiply(matrix, self._ar)
-        return Vector(x,y,z)
+        a=matrixmultiply(matrix, self._ar)
+        return Vector(a)
 
     def right_multiply(self, matrix):
         "Return Vector=Vector x Matrix"
-        x,y,z=matrixmultiply(self._ar, matrix)
-        return Vector(x,y,z)
+        a=matrixmultiply(self._ar, matrix)
+        return Vector(a)
 
     def copy(self):
         "Return a deep copy of the Vector"
-        x,y,z=self._ar
-        return Vector(x,y,z)
+        return Vector(self._ar)
 
 if __name__=="__main__":
 
