@@ -11,6 +11,8 @@ class KDTree:
 		self.kdt=_KDTree.KDTree(dim, bucket_size)
 		self.built=0
 
+	# Set data
+
 	def set_coords(self, coords):
 		"""Add the coordinates of the points.
 
@@ -23,6 +25,9 @@ class KDTree:
 		if coords.typecode()!="f":
 				raise Exception, "Expected a Numpy array of type float" 
 		self.kdt.set_data(coords, coords.shape[0])
+		self.built=1
+
+	# Fixed radius search for a point
 
 	def search(self, center, radius):
 		"""Search all points within radius of center.
@@ -32,11 +37,31 @@ class KDTree:
 		dimensional. 
 		o radius - float>=0
 		"""
+		if not self.built:
+				raise Exception, "Not initialised or destroyed"
 		if center.shape!=(self.dim,):
 				raise Exception, "Expected a %i-dimensional Numpy array" % self.dim
 		if center.typecode()!="f":
 				raise Exception, "Expected a Numpy array of type float" 
 		self.kdt.search_center_radius(center, radius)
+
+	def get_radii(self):
+		"""Return radii.
+
+		Return the list of distances from center.
+		"""
+		return self.kdt.get_radii()
+	
+	def get_indices(self):
+		"""Return the list of indices.
+
+		The indices refer to the original coords Numpy array. The
+		coordinates with these indices were within radius of center.
+		"""
+		return self.kdt.get_indices()
+
+	# Fixed radius search for all points
+
 
 	def neighbor_search(self, radius):
 		"""Fixed neighbor search.
@@ -45,6 +70,8 @@ class KDTree:
 
 		o radius - float (>0)
 		"""
+		if not self.built:
+				raise Exception, "Not initialised or destroyed"
 		self.kdt.neighbor_search(radius)
 
 	def neighbor_get_indices(self):
@@ -66,24 +93,15 @@ class KDTree:
 		a=self.kdt.neighbor_get_radii()
 		return a
 
-	def get_radii(self):
-		"""Return radii.
+	# Test
 
-		Return the list of distances from center.
+	def _neighbor_simple_search(self, radius):
 		"""
-		return self.kdt.get_radii()
-	
-	def get_indices(self):
-		"""Return the list of indices.
-
-		The indices refer to the original coords Numpy array. The
-		coordinates with these indices were within radius of center.
+		Also calculates the fixed radius nearest neighbors, using a
+		slower algorithm. This can be used as a test. BUT: this method
+		destroys the KD tree as a side effect.
 		"""
-		return self.kdt.get_indices()
-
-	def neighbor_simple_search(self, radius):
-		if self.built==1:
-			raise Exception, "KD tree is already built."
+		self.built=0
 		self.kdt.neighbor_simple_search(radius)
 
 if __name__=="__main__":
@@ -102,7 +120,7 @@ if __name__=="__main__":
 
 	R=0.01
 
-	kdt.neighbor_simple_search(R)
+	kdt._neighbor_simple_search(R)
 	print "Simple search : ", len(kdt.neighbor_get_radii())
 	
 	kdt.neighbor_search(R)
