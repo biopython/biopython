@@ -96,7 +96,7 @@ def define_block(identifier, block_tag, block_data, std_block_tag = None,
 # first line
 # LOCUS       AC007323    86436 bp    DNA             PLN       19-JAN-2000
 locus = Martel.Group("locus",
-                     Martel.Re("[\w]+"))
+                     Martel.Re(r"[\w\-]+"))
 size = Martel.Group("size",
                     Martel.Rep1(Martel.Integer()))
 
