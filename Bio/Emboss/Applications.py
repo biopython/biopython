@@ -181,6 +181,8 @@ class EProtParsCommandline(Application.AbstractCommandline):
                   "Search for the best tree"),
           _Option(["-random"], ["input"], None, 0,
                   "Randomize input order of species"),
+          _Option(["-norandom"], ["input"], None, 0,
+                  "Do not randomize input order of species"),
           _Option(["-randseed"], ["input"], None, 0,
                   "Random number seed (must be odd)"),
           _Option(["-randtimes"], ["input"], None, 0,
