@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""WWW.py
+"""NCBI.py
 
 Provides code to access the Entrez over the WWW.  The main Entrez web page
 is available at:
