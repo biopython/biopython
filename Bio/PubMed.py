@@ -305,9 +305,8 @@ def download_many(ids, callback_fn, broken_fn=None, delay=120.0, faildelay=5.0,
             # to raise an exception.  This could take a lot of memory if
             # the batchsize is large.
             results = handle.read()
-            iter = Medline.Iterator(File.StringHandle(results))
             num_ids = 0
-            while iter.next() is not None:
+            for x in Medline.Iterator(File.StringHandle(results)):
                 num_ids = num_ids + 1
             if num_ids != current_batchsize:
                 raise IOError
@@ -329,12 +328,8 @@ def download_many(ids, callback_fn, broken_fn=None, delay=120.0, faildelay=5.0,
 
         # Iterate through the results and pass the records to the
         # callback.
-        iter = Medline.Iterator(handle, parser)
         idnum = 0
-        while 1:
-            rec = iter.next()
-            if rec is None:
-                break
+        for rec in Medline.Iterator(handle, parser):
             callback_fn(ids[idnum], rec)
             idnum = idnum + 1
 
