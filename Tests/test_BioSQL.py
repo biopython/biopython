@@ -22,8 +22,8 @@ from BioSQL import BioSeq
 
 # Constants for the MySQL database
 DBHOST = 'localhost'
-DBUSER = 'root'
-DBPASSWD = 'howareyou'
+DBUSER = 'chapmanb'
+DBPASSWD = ''
 TESTDB = 'biosql'
 # XXX I need to put these SQL files somewhere in biopython
 SQL_FILE = os.path.join(os.pardir, os.pardir, "biosql-schema", "sql",
