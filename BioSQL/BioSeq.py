@@ -88,8 +88,10 @@ class DBInternalSeq:
         return f()
 
     def _get_description(self):
-        # XXX This should actually do something
-        return ''
+        sql = r"SELECT description FROM bioentry_description WHERE " \
+              r"bioentry_id = %s"
+        results = self.adaptor.execute_one(sql, (self.primary_id))
+        return results[0]
 
     def __len__(self):
         return self._length

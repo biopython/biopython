@@ -30,8 +30,9 @@ class DatabaseLoader:
         # self._load_bioentry_taxa(record, bioentry_id)
         self._load_biosequence(record, bioentry_id)
         self._load_bioentry_description(record, bioentry_id)
-        for seq_feature in record.features:
-            self._load_seqfeature(seq_feature, bioentry_id)
+        for seq_feature_num in range(len(record.features)):
+            seq_feature = record.features[seq_feature_num]
+            self._load_seqfeature(seq_feature, seq_feature_num, bioentry_id)
     
     def _load_bioentry_table(self, record):
         """Fill the bioentry table with sequence information.
@@ -106,15 +107,15 @@ class DatabaseLoader:
         sql = r"INSERT INTO bioentry_description VALUES (%s, %s)"
         self.adaptor.execute_one(sql, (bioentry_id, record.description))
 
-    def _load_seqfeature(self, feature, bioentry_id):
+    def _load_seqfeature(self, feature, feature_rank, bioentry_id):
         """Load a biopython SeqFeature into the database.
         """
-        seqfeature_id = self._load_seqfeature_basic(feature.type, 
+        seqfeature_id = self._load_seqfeature_basic(feature.type, feature_rank,
                                                     bioentry_id)
         self._load_seqfeature_locations(feature, seqfeature_id)
         self._load_seqfeature_qualifiers(feature.qualifiers, seqfeature_id)
 
-    def _load_seqfeature_basic(self, feature_type, bioentry_id):
+    def _load_seqfeature_basic(self, feature_type, feature_rank, bioentry_id):
         """Load the first tables of a seqfeature and returns the id.
 
         This loads the "key" of the seqfeature (ie. CDS, gene) and
@@ -126,11 +127,11 @@ class DatabaseLoader:
         results = self.adaptor.execute_one(sql, ())                
         seqfeature_key_id = results[0]               
         
-        # XXX This doesn't do source or rank yet, since I'm not
-        # sure I understand them.
-        sql = r"INSERT INTO seqfeature (bioentry_id, seqfeature_key_id) " \
-              r"VALUES (%s, %s)"
-        self.adaptor.execute_one(sql, (bioentry_id, seqfeature_key_id))
+        # XXX This doesn't do source yet, since I'm not sure I understand it.
+        sql = r"INSERT INTO seqfeature (bioentry_id, seqfeature_key_id, " \
+              r"seqfeature_rank) VALUES (%s, %s, %s)"
+        self.adaptor.execute_one(sql, (bioentry_id, seqfeature_key_id,
+                                       feature_rank))
         sql = r"SELECT max(seqfeature_id) FROM seqfeature"
         results = self.adaptor.execute_one(sql, ())
         seqfeature_id = results[0]
