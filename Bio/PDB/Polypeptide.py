@@ -1,4 +1,5 @@
 from Numeric import sum
+from types import StringType
 
 from Bio.Alphabet import ProteinAlphabet
 from Bio.Seq import Seq
@@ -12,7 +13,7 @@ def is_aa(residue):
 
     residue --- a residue object OR a three letter amino acid code
     """
-    if isinstance(residue, Residue) or isinstance(residue, DisorderedResidue):
+    if not type(residue)==StringType:
         residue=residue.get_resname()
     residue=residue.upper()
     return to_one_letter_code.has_key(residue)
