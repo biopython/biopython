@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-__version__ = "$Revision: 1.6 $"
+__version__ = "$Revision: 1.7 $"
 
 from __future__ import division
 
@@ -11,14 +11,21 @@ import re
 
 from Bio import Wise
 
-_SCORE_MATCH = "4"
-_SCORE_MISMATCH = "-1"
-_PENALTY_GAP_START = "5"
-_PENALTY_GAP_EXTENSION = "1"
+_SCORE_MATCH = 4
+_SCORE_MISMATCH = -1
+_SCORE_GAP_START = -5
+_SCORE_GAP_EXTENSION = -1
 
-_CMDLINE_DNAL = ["dnal", "-alb", "-nopretty",
-                "-match", _SCORE_MATCH, "-mis", _SCORE_MISMATCH,
-                "-gap", _PENALTY_GAP_START, "-ext", _PENALTY_GAP_EXTENSION]
+_CMDLINE_DNAL = ["dnal", "-alb", "-nopretty"]
+
+def _build_dnal_cmdline(match=_SCORE_MATCH, mismatch=_SCORE_MISMATCH, gap=_SCORE_GAP_START, extension=_SCORE_GAP_EXTENSION):
+    res = _CMDLINE_DNAL[:]
+    res.extend(["-match", match])
+    res.extend(["-mis", mismatch])
+    res.extend(["-gap", -gap]) # negative: convert score to penalty
+    res.extend(["-ext", -extension])  # negative: convert score to penalty
+
+    return res
 
 _CMDLINE_FGREP_COUNT = "fgrep -c '%s' %s"
 def _fgrep_count(pattern, file):
@@ -72,8 +79,9 @@ class Statistics(object):
     def __str__(self):
         return "\t".join([str(x) for x in (self.identity_fraction(), self.matches, self.mismatches, self.gaps, self.extensions)])
 
-def align(pair, *args, **keywds):
-    temp_file = Wise.align(_CMDLINE_DNAL, pair, *args, **keywds)
+def align(pair, match, mismatch, gap, extension, **keywds):
+    cmdline = _build_dnal_cmdline(match, mismatch, gap, extension)
+    temp_file = Wise.align(cmdline, pair, **keywds)
     try:
         return Statistics(temp_file.name)
     except AttributeError:
