@@ -72,7 +72,16 @@ Seq('GA', Alphabet())
 
 \end{verbatim}
 
-If this worked properly, then it looks like Biopython is in a happy place where python can find it, so now you might want to do some more rigorous tests. The \verb|Tests| directory inside the distribution contains a number of tests you can run to make sure all of the different parts of biopython are working. These should all work just by running \verb|python test_WhateverTheTestIs.py|. Eventually, we hope to have this built into a big test suite so you can test everything with one command. 
+If this worked properly, then it looks like Biopython is in a happy place where python can find it, so now you might want to do some more rigorous tests. The \verb|Tests| directory inside the distribution contains a number of tests you can run to make sure all of the different parts of biopython are working. These should all work just by running \verb|python test_WhateverTheTestIs.py|. You can also do a run of all of the tests py typing \verb|python br_regrtest.py| in the Tests directory:
+
+\begin{verbatim}
+[chapmanb@taxus Tests]$ python br_regrtest.py
+test_Enzyme
+test_Fasta
+test_Fasta2
+test_File
+....
+\end{verbatim}
 
 
 Well, now you've gotten Biopython installed and running, you are probably ready to get working with it, so continue reading...
