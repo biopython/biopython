@@ -1,0 +1,29 @@
+-ENZREV
+2.6.1.1
+
+-ENZIRREV
+1.14.18.1
+2.6.1.1
+
+-METINT
+o-Diphenol
+o-quinone
+L-Tyrosine
+dopaquinone
+Monophenol
+o-diphenol
+L-Aspartate
+2-oxoglutarate
+oxaloacetate
+L-glutamate
+
+-METEXT
+O2
+H2O
+L-dopa
+
+-CAT
+1.14.18.1 : 2 o-Diphenol + O2 = 2 o-quinone + 2 H2O .
+1.14.18.1 : L-Tyrosine + L-dopa + O2 = L-dopa + dopaquinone + H2O .
+1.14.18.1 : Monophenol + O2 = o-diphenol + H2O .
+2.6.1.1 : L-Aspartate + 2-oxoglutarate = oxaloacetate + L-glutamate

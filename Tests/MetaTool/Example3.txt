@@ -1,0 +1,21 @@
+-ENZREV
+3.5.1.38
+
+-ENZIRREV
+3.5.1.38
+4.1.1.12
+
+-METINT
+L-Glutamine
+H2O
+L-glutamate
+NH3
+L-Aspartate
+L-alanine
+CO2
+
+-METEXT
+
+-CAT
+3.5.1.38 : L-Glutamine + H2O = L-glutamate + NH3 .
+4.1.1.12 : L-Aspartate = L-alanine + CO2 .

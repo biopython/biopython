@@ -1,0 +1,30 @@
+-ENZREV
+Pgi Ald Tpi Rpi Rpe TktI TktII Tal Gpm Eno Pgl
+-ENZIRREV
+Pfk Fbp Zwf Gnd Pgk Pyk Gap Prs_DeoB
+-METINT
+E4P S7P X5P Ru5P GO6P GL6P
+DHAP FDP F6P GAP D13PG P3G P2G PEP R5P
+-METEXT
+CO2 ATP ADP NAD NADH NADP NADPH
+G6P PYR R5Pex Pi
+-CAT
+Pgi : G6P = F6P .
+Pfk : F6P + ATP = FDP + ADP .
+Fbp : FDP = F6P + Pi .
+Ald : FDP = DHAP + GAP .
+Tpi : DHAP = GAP .
+Gap : GAP + NAD + Pi = D13PG + NADH .
+Zwf : G6P + NADP = GO6P + NADPH .
+Pgl : GO6P = GL6P .
+Gnd : GL6P + NADP = Ru5P + NADPH + CO2 .
+Rpi : Ru5P = R5P .
+Rpe : Ru5P = X5P .
+TktI : X5P + R5P = GAP + S7P .
+TktII : E4P + X5P = F6P + GAP .
+Tal : S7P + GAP = E4P + F6P .
+Pgk : D13PG + ADP = P3G + ATP .
+Gpm : P3G = P2G .
+Eno : P2G = PEP .
+Pyk : PEP + ADP = PYR + ATP .
+Prs_DeoB : R5P = R5Pex .

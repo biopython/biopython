@@ -1,0 +1,36 @@
+-ENZREV
+1.2.1.5
+
+-ENZIRREV
+1.11.1.7
+1.13.11.27
+1.2.1.5
+1.4.3.4
+1.4.3.6
+
+-METINT
+Donor
+oxidized_donor
+4-Hydroxyphenylpyruvate
+homogentisate
+CO2
+An_aldehyde
+NAD(P)+
+an_acid
+NAD(P)H
+H+
+RCH2NH2
+RCHO
+NH3
+
+-METEXT
+H2O2
+H2O
+O2
+
+-CAT
+1.11.1.7 : Donor + H2O2 = oxidized_donor + 2 H2O .
+1.13.11.27 : 4-Hydroxyphenylpyruvate + O2 = homogentisate + CO2 .
+1.2.1.5 : An_aldehyde + NAD(P)+ + H2O = an_acid + NAD(P)H + H+ .
+1.4.3.4 : RCH2NH2 + H2O + O2 = RCHO + NH3 + H2O2 .
+1.4.3.6 : RCH2NH2 + H2O + O2 = RCHO + NH3 + H2O2 .

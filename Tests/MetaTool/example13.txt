@@ -1,0 +1,40 @@
+-ENZREV
+2.1.2.1
+
+-ENZIRREV
+2.1.2.1
+2.3.2.2
+3.2.1.21
+3.5.1.1
+6.3.1.1
+
+-METINT
+5,10-Methylenetetrahydrofolate
+glycine
+tetrahydrofolate
+L-serine
+(5-L-Glutamyl)-peptide
+an_amino_acid
+peptide
+5-L-glutamyl_amino_acid
+beta-D-oligosaccarides
+n_D-glucose
+L-Asparagine
+L-aspartate
+NH3
+ATP
+L-Asp
+NH4+
+AMP
+diphosphate
+L-Asn
+
+-METEXT
+H2O
+
+-CAT
+2.1.2.1 : 5,10-Methylenetetrahydrofolate + glycine + H2O = tetrahydrofolate + L-serine .
+2.3.2.2 : (5-L-Glutamyl)-peptide + an_amino_acid = peptide + 5-L-glutamyl_amino_acid .
+3.2.1.21 : beta-D-oligosaccarides + H2O = n_D-glucose .
+3.5.1.1 : L-Asparagine + H2O = L-aspartate + NH3 .
+6.3.1.1 : ATP + L-Asp + NH4+ = AMP + diphosphate + L-Asn .

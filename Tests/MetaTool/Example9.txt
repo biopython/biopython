@@ -1,0 +1,141 @@
+-ENZREV
+1.1.1.205
+2.1.2.2
+2.1.2.3
+2.4.2.1
+2.4.2.22
+2.4.2.4
+2.4.2.7
+2.4.2.8
+2.7.1.25
+2.7.4.11
+2.7.4.3
+2.7.4.6
+2.7.4.8
+2.7.6.1
+2.7.7.6
+2.7.7.7
+2.7.7.8
+3.1.3.5
+
+-ENZIRREV
+1.17.4.1
+1.6.6.8
+2.1.2.2
+2.1.2.3
+2.4.2.1
+2.4.2.14
+2.4.2.4
+2.7.1.25
+2.7.6.1
+2.7.6.5
+3.1.3.5
+3.1.4.16
+3.1.4.17
+3.1.5.1
+3.2.2.2
+3.2.2.4
+
+-METINT
+Inosine_5`-phosphate
+NAD+
+xanthosine_5`-phosphate
+NADH
+Ribonucleoside_diphosphate
+reduced_thioredoxin
+2`-deoxyribonucleoside_diphosphate
+oxidized_thioredoxin
+NADPH
+guanosine_5`-phosphate
+NADP+
+inosine_5`-phosphate
+10-Formyltetrahydrofolate
+5`-phosphoribosylglycinamide
+tetrahydrofolate
+5`-phosphoribosyl-N-formylglycinamide
+5`-phosphoribosyl-5-amino-4-imidazolecarboxamide
+5`-phosphoribosyl-5-formamido-4-imidazolecarboxamide
+Purine_nucleoside
+phosphate
+purine
+alpha-D-ribose_1-phosphate
+5-Phospho-beta-D-ribosylamine
+L-glutamate
+L-glutamine
+5-phospho-alpha-D-ribose_1-diphosphate
+5-Phospho-alpha-D-ribose_1-diphosphate
+xanthine
+(9-D-ribosylxanthine)-5`-phosphate
+Thymidine
+thymine
+2-deoxy-D-ribose_1-phosphate
+Adenine
+AMP
+Hypoxanthine
+IMP
+adenylylsulfate
+3`-phosphoadenylylsulfate
+dAMP
+dADP
+nucleoside_diphosphate
+nucleoside_triphosphate
+GMP
+GDP
+D-ribose_5-phosphate
+GTP
+guanosine_3`-diphosphate_5`-triphosphate
+Nucleoside_triphosphate
+RNAn
+RNAn+1
+Deoxynucleoside_triphosphate
+DNAn
+DNAn+1
+a_nucleoside_diphosphate
+A_5`-ribonucleotide
+a_ribonucleoside
+Nucleoside_2`,3`-cyclic_phosphate
+nucleoside_3`-phosphate
+Nucleoside_3`,5`-cyclic_phosphate
+nucleoside_5`-phosphate
+dGTP
+deoxyguanosine
+triphosphate
+Inosine
+hypoxanthine
+D-ribose
+adenine
+
+-METEXT
+H2O
+diphosphate
+ATP
+ADP
+
+-CAT
+1.1.1.205 : Inosine_5`-phosphate + NAD+ + H2O = xanthosine_5`-phosphate + NADH .
+1.17.4.1 : Ribonucleoside_diphosphate + reduced_thioredoxin = 2`-deoxyribonucleoside_diphosphate + oxidized_thioredoxin + H2O .
+1.6.6.8 : NADPH + guanosine_5`-phosphate = NADP+ + inosine_5`-phosphate .
+2.1.2.2 : 10-Formyltetrahydrofolate + 5`-phosphoribosylglycinamide = tetrahydrofolate + 5`-phosphoribosyl-N-formylglycinamide .
+2.1.2.3 : 10-Formyltetrahydrofolate + 5`-phosphoribosyl-5-amino-4-imidazolecarboxamide = tetrahydrofolate + 5`-phosphoribosyl-5-formamido-4-imidazolecarboxamide .
+2.4.2.1 : Purine_nucleoside + phosphate = purine + alpha-D-ribose_1-phosphate .
+2.4.2.14 : 5-Phospho-beta-D-ribosylamine + diphosphate + L-glutamate = L-glutamine + 5-phospho-alpha-D-ribose_1-diphosphate + H2O .
+2.4.2.22 : 5-Phospho-alpha-D-ribose_1-diphosphate + xanthine = (9-D-ribosylxanthine)-5`-phosphate + diphosphate .
+2.4.2.4 : Thymidine + phosphate = thymine + 2-deoxy-D-ribose_1-phosphate .
+2.4.2.7 : Adenine + 5-phospho-alpha-D-ribose_1-diphosphate = AMP + diphosphate .
+2.4.2.8 : Hypoxanthine + 5-phospho-alpha-D-ribose_1-diphosphate = IMP + diphosphate .
+2.7.1.25 : ATP + adenylylsulfate = ADP + 3`-phosphoadenylylsulfate .
+2.7.4.11 : ATP + dAMP = ADP + dADP .
+2.7.4.3 : ATP + AMP = ADP + ADP .
+2.7.4.6 : ATP + nucleoside_diphosphate = ADP + nucleoside_triphosphate .
+2.7.4.8 : ATP + GMP = ADP + GDP .
+2.7.6.1 : ATP + D-ribose_5-phosphate = AMP + 5-phospho-alpha-D-ribose_1-diphosphate .
+2.7.6.5 : ATP + GTP = AMP + guanosine_3`-diphosphate_5`-triphosphate .
+2.7.7.6 : Nucleoside_triphosphate + RNAn = diphosphate + RNAn+1 .
+2.7.7.7 : Deoxynucleoside_triphosphate + DNAn = diphosphate + DNAn+1 .
+2.7.7.8 : RNAn+1 + phosphate = RNAn + a_nucleoside_diphosphate .
+3.1.3.5 : A_5`-ribonucleotide + H2O = a_ribonucleoside + phosphate .
+3.1.4.16 : Nucleoside_2`,3`-cyclic_phosphate + H2O = nucleoside_3`-phosphate .
+3.1.4.17 : Nucleoside_3`,5`-cyclic_phosphate + H2O = nucleoside_5`-phosphate .
+3.1.5.1 : dGTP + H2O = deoxyguanosine + triphosphate .
+3.2.2.2 : Inosine + H2O = hypoxanthine + D-ribose .
+3.2.2.4 : AMP + H2O = adenine + D-ribose_5-phosphate .

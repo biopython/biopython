@@ -1,0 +1,21 @@
+-ENZREV
+1.8.5.1
+
+-ENZIRREV
+1.11.1.11
+1.8.5.1
+
+-METINT
+L-Ascorbate
+H2O2
+H2O
+Glutathione
+oxidized_glutathione
+ascorbate
+
+-METEXT
+dehydroascorbate
+
+-CAT
+1.11.1.11 : L-Ascorbate + H2O2 = dehydroascorbate + 2 H2O .
+1.8.5.1 : 2 Glutathione + dehydroascorbate = oxidized_glutathione + ascorbate .

@@ -1,0 +1,32 @@
+-ENZREV
+1.5.1.3
+
+-ENZIRREV
+1.5.1.3
+3.1.3.1
+3.5.4.16
+4.6.1.10
+
+-METINT
+5,6,7,8-Tetrahydrofolate
+NADP+
+7,8-dihydrofolate
+NADPH
+An_orthophosphoric_monoester
+an_alcohol
+phosphate
+GTP
+formate
+2-amino-4-hydroxy-6-(erythro-1,2,3-trihydroxypropyl)dihydropteridine_triphosphate
+6-(L-erythro-1,2-Dihydroxypropyl_3-triphosphate)-7,8-dihydropterin
+6-(1,2-dioxopropyl)-5,6,7,8-tetrahydropterin
+triphosphate
+
+-METEXT
+H2O
+
+-CAT
+1.5.1.3 : 5,6,7,8-Tetrahydrofolate + NADP+ = 7,8-dihydrofolate + NADPH .
+3.1.3.1 : An_orthophosphoric_monoester + H2O = an_alcohol + phosphate .
+3.5.4.16 : GTP + 2 H2O = formate + 2-amino-4-hydroxy-6-(erythro-1,2,3-trihydroxypropyl)dihydropteridine_triphosphate .
+4.6.1.10 : 6-(L-erythro-1,2-Dihydroxypropyl_3-triphosphate)-7,8-dihydropterin = 6-(1,2-dioxopropyl)-5,6,7,8-tetrahydropterin + triphosphate .

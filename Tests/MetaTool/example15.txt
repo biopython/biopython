@@ -1,0 +1,56 @@
+-ENZREV
+2.1.2.5
+4.3.1.3
+
+-ENZIRREV
+1.4.3.6
+2.1.1.22
+2.1.1.8
+2.1.2.5
+3.5.1.15
+3.5.2.7
+4.1.1.28
+4.2.1.49
+4.3.1.3
+
+-METINT
+RCH2NH2
+O2
+RCHO
+NH3
+H2O2
+S-Adenosyl-L-methionine
+carnosine
+S-adenosyl-L-homocysteine
+anserine
+histamine
+Ntau-methylhistamine
+5-Formiminotetrahydrofolate
+L-glutamate
+tetrahydrofolate
+N-formimino-L-glutamate
+N-Acetyl-L-aspartate
+a_fatty_acid_anion
+L-aspartate
+4-Imidazolone-5-propanoate
+L-Tryptophan
+tryptamine
+CO2
+Urocanate
+4,5-dihydro-4-oxo-5-imidazolepropanoate
+L-Histidine
+urocanate
+
+-METEXT
+H2O
+
+-CAT
+1.4.3.6 : RCH2NH2 + H2O + O2 = RCHO + NH3 + H2O2 .
+2.1.1.22 : S-Adenosyl-L-methionine + carnosine = S-adenosyl-L-homocysteine + anserine .
+2.1.1.8 : S-Adenosyl-L-methionine + histamine = S-adenosyl-L-homocysteine + Ntau-methylhistamine .
+2.1.2.5 : 5-Formiminotetrahydrofolate + L-glutamate = tetrahydrofolate + N-formimino-L-glutamate .
+3.5.1.15 : N-Acetyl-L-aspartate + H2O = a_fatty_acid_anion + L-aspartate .
+3.5.2.7 : 4-Imidazolone-5-propanoate + H2O = N-formimino-L-glutamate .
+4.1.1.28 : L-Tryptophan = tryptamine + CO2 .
+4.2.1.49 : Urocanate + H2O = 4,5-dihydro-4-oxo-5-imidazolepropanoate .
+4.3.1.3 : L-Histidine = urocanate + NH3 .

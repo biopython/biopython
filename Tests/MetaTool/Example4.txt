@@ -1,0 +1,45 @@
+-ENZREV
+2.6.1.19
+3.5.1.6
+3.5.2.2
+
+-ENZIRREV
+1.2.1.18
+1.4.3.6
+3.4.13.3
+3.5.1.6
+3.5.2.2
+
+-METINT
+3-Oxopropanoate
+CoA
+NAD(P)+
+acetyl-CoA
+CO2
+NAD(P)H
+RCH2NH2
+O2
+RCHO
+NH3
+H2O2
+4-Aminobutanoate
+2-oxoglutarate
+succinate_semialdehyde
+L-glutamate
+Beta-alanyl-L-histidine
+beta-alanine
+L-histidine
+N-Carbamoyl-beta-alanine
+5,6-Dihydrouracil
+3-ureidopropionate
+
+-METEXT
+H2O
+
+-CAT
+1.2.1.18 : 3-Oxopropanoate + CoA + NAD(P)+ = acetyl-CoA + CO2 + NAD(P)H .
+1.4.3.6 : RCH2NH2 + H2O + O2 = RCHO + NH3 + H2O2 .
+2.6.1.19 : 4-Aminobutanoate + 2-oxoglutarate = succinate_semialdehyde + L-glutamate .
+3.4.13.3 : Beta-alanyl-L-histidine + H2O = beta-alanine + L-histidine .
+3.5.1.6 : N-Carbamoyl-beta-alanine + H2O = beta-alanine + CO2 + NH3 .
+3.5.2.2 : 5,6-Dihydrouracil + H2O = 3-ureidopropionate .
