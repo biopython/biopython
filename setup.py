@@ -222,6 +222,7 @@ biopython_packages = ['Bio',
                       'Bio.expressions.embl',
                       'Bio.expressions.swissprot',
                       'Bio.formatdefs',
+                      'Bio.sources',
                       'Bio.writers',
                       'Bio.writers.SeqRecord'
                       ]
