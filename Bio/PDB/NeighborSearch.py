@@ -124,7 +124,7 @@ if __name__=="__main__":
 		def get_coord(self):
 			return self.coord
 
-	while 1:
+	for i in range(0, 20):
 		al=[]
 		for i in range(0, 100):
 			al.append(Atom())

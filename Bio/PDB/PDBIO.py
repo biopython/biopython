@@ -59,15 +59,17 @@ if __name__=="__main__":
 	
 	from Bio.PDB.PDBParser import PDBParser
 
+	import sys
+
 	p=PDBParser(PERMISSIVE=1)
 
-	s=p.get_structure("test", "../../Tests/PDB/a_structure.pdb")
+	s=p.get_structure("test", sys.argv[1])
 
 	io=PDBIO()
 
 	io.set_structure(s)
 
-	io.save("scr.pdb")
+	io.save("out.pdb")
 
 
 

@@ -5,9 +5,13 @@ __all__=[
 "Chain",
 "Entity",
 "Model",
+"NeighborSearch",
+"PathFinder",
 "PDBExceptions",
 "PDBIO",
 "PDBParser",
+"Polypeptide",
 "Residue",
+"Selection",
 "Structure",
 "StructureBuilder"]

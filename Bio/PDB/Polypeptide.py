@@ -57,13 +57,10 @@ def build_peptides(structure, model_id=0, aa_only=1, radius=1.8):
 						atom_list.append(a)
 	if len(atom_list)>2:
 		ns=NeighborSearch(atom_list)
-		print "Set", len(atom_list)
 		# all atom pairs within radius
 		# should be (C,N) but can be (N,N) and (C,C) 
 		# if the structure is funny
-		print radius
 		neighbors=ns.search_all(radius)
-		print "Neighbors"
 	else:
 		# not a single (N,C) pair found
 		return []
@@ -95,18 +92,17 @@ def build_peptides(structure, model_id=0, aa_only=1, radius=1.8):
 	return polypeptide_list
 		
 
-# if __name__=="__main__":
-if 1:
+if __name__=="__main__":
 
-	from glob import glob
+	import sys
 
 	from Bio.PDB.PDBParser import PDBParser
 
 	p=PDBParser(PERMISSIVE=1)
 
-	for file in glob("/home/tham/data/pdb/pdb1914.ent"):
+	for file in sys.argv[1:]:
+		print "Extracting polypeptides from ", file
 		s=p.get_structure("scr", file)
-		print file
 		for pp in build_peptides(s):
 			print pp
 		print
