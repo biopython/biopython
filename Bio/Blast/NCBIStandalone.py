@@ -652,7 +652,7 @@ class _HeaderConsumer:
             self._header.database = self._header.database + line.strip()
         else:
             sequences, letters =_re_search(
-                r"([0-9,]+) sequences; ([0-9,]+) total letters", line,
+                r"([0-9,]+) sequences; ([0-9,-]+) total letters", line,
                 "I could not find the sequences and letters in line\n%s" %line)
             self._header.database_sequences = _safe_int(sequences)
             self._header.database_letters = _safe_int(letters)
