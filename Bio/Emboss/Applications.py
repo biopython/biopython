@@ -416,9 +416,9 @@ class TranalignCommandline(Application.AbstractCommandline):
         self.program_name = cmd
 
         self.parameters = [
-         _Option(["-nsequence"], ["input", "file"], None, 1,
+         _Option(["-asequence"], ["input", "file"], None, 1,
                  "Nucleotide sequences to be aligned."),
-         _Option(["-psequence"], ["input", "file"], None, 1,
+         _Option(["-bsequence"], ["input", "file"], None, 1,
                  "Protein sequence alignment"),
          _Option(["-outseq"], ["output", "file"], None, 1,
                  "Output sequence file."),
