@@ -52,8 +52,9 @@ if getattr(sys, "version_info", (1, 5))[:2] >= (2, 1):
   register_db = db.register_db
   group_db = db.group
   del DBRegistry
-del sys
 
-# Disable the automatic config searching.  Not stable yet...
-#import config
-#seqdatabase = config._config_seqdatabase()
+  import config
+  seqdatabase = config.SeqDatabase()
+  del config
+  
+del sys

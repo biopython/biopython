@@ -142,7 +142,7 @@ class DBRegistry:
             return
         self._autoloading = 1
         _FmtUtils.load_basemodule(self.loadpath, package="dbdefs")
-        self.autoloading = 0
+        self._autoloading = 0
         self._autoloaded = 1
 
     # XXX need to check kwargs to make sure there's nothing extraneous
