@@ -30,7 +30,7 @@ def scan(file, format):
 def parse(file, format):
     if format == 'ncbi-blastall':
         from Bio.Blast import NCBIStandalone
-        parser = NCBIStandalone.BlastallParser()
+        parser = NCBIStandalone.BlastAllParser()
     elif format == 'ncbi-www':
         from Bio.Blast import NCBIWWW
         sys.stderr.write("The parser for NCBIWWW is not written.  Sorry.\n")

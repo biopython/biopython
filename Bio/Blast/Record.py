@@ -6,19 +6,22 @@
 """Record.py
 
 Classes:
-Comprehensive   Holds all the information from a BLAST record.
-Lightweight     Not implemented.
-PSIBlast        Not implemented.
-MasterSlave     Not implemented.
+BlastAll           Holds all the information from a blastall search.
+PSIBlast           Not implemented.
 
-Description     Holds information about a hit description.
-Alignment       Holds information about an alignment hit.
-HSP             Holds information about 1 HSP.
+Header             Holds information from the header.
+Description        Holds information about one hit description.
+Alignment          Holds information about one alignment hit.
+HSP                Holds information about one HSP.
+MultipleAlignment  Holds information about a multiple alignment.
+DatabaseReport     Holds information from the database report.
+Parameters         Holds information from the parameters.
 
 """
+import string
 
-class Comprehensive:
-    """Saves the results from a blast search.
+class Header:
+    """Saves information from a blast header.
 
     Members:
     application         The name of the BLAST flavor that generated this data.
@@ -33,40 +36,6 @@ class Comprehensive:
     database_sequences  Number of sequences in the database.  (int)
     database_letters    Number of letters in the database.  (int)
 
-    descriptions        A list of Description objects.
-    alignments          A list of Alignment objects.
-
-    posted_date         The date the database was posted.
-    ka_params           A tuple of (lambda, k, h) values.  (floats)
-    gapped         # XXX this isn't set right!
-    ka_params_gap       A tuple of (lambda, k, h) values.  (floats)
-    
-    matrix              Name of the matrix.
-    gap_penalties       Tuple of (open, extend) penalties.  (floats)
-    num_hits            Number of hits to the database.  (int)
-    num_sequences       Number of sequences.  (int)
-    num_good_extends    Number of extensions.  (int)
-    num_seqs_better_e   Number of sequences better than e-value.  (int)
-    hsps_no_gap         Number of HSP's better, without gapping.  (int)
-    hsps_prelim_gapped  Number of HSP's gapped in prelim test.  (int)
-    hsps_prelim_gapped_attemped  Number of HSP's attempted in prelim.  (int)
-    hsps_gapped         Total number of HSP's gapped.  (int)
-    query_length        Length of the query.  (int)
-    database_length     Number of letters in the database.  (int)
-    effective_hsp_length         Effective HSP length.  (int)
-    effective_query_length       Effective length of query.  (int)
-    effective_database_length    Effective length of database.  (int)
-    effective_search_space       Effective search space.  (int)
-    effective_search_space_used  Effective search space used.  (int)
-    frameshift          Frameshift window.  Tuple of (int, float)
-    threshold           Threshold.  (int)
-    window_size         Window size.  (int)
-    dropoff_1st_pass    Tuple of (score, bits).  (int, float)
-    gap_x_dropoff       Tuple of (score, bits).  (int, float)
-    gap_x_dropoff_final Tuple of (score, bits).  (int, float)
-    gap_trigger         Tuple of (score, bits).  (int, float)
-    blast_cutoff        Tuple of (score, bits).  (int, float)
-    
     """
     def __init__(self):
         self.application = ''
@@ -80,40 +49,6 @@ class Comprehensive:
         self.database = ''
         self.database_sequences = None
         self.database_letters = None
-
-        self.descriptions = []
-        self.alignments = []
-
-        self.posted_date = ''
-        self.ka_params = (None, None, None)
-        self.gapped = None # XXX ???
-        self.ka_params_gap = (None, None, None)
-
-        self.matrix = ''
-        self.gap_penalties = (None, None)
-        self.num_hits = None
-        self.num_sequences = None
-        self.num_good_extends = None
-        self.num_seqs_better_e = None
-        self.hsps_no_gap = None
-        self.hsps_prelim_gapped = None
-        self.hsps_prelim_gapped_attemped = None
-        self.hsps_gapped = None
-        self.query_length = None
-        self.database_length = None
-        self.effective_hsp_length = None
-        self.effective_query_length = None
-        self.effective_database_length = None
-        self.effective_search_space = None
-        self.effective_search_space_used = None
-        self.frameshift = (None, None)
-        self.threshold = None
-        self.window_size = None
-        self.dropoff_1st_pass = (None, None)
-        self.gap_x_dropoff = (None, None)
-        self.gap_x_dropoff_final = (None, None)
-        self.gap_trigger = (None, None)
-        self.blast_cutoff = (None, None)
 
 class Description:
     """Stores information about one hit in the descriptions section.
@@ -152,15 +87,14 @@ class HSP:
     expect       Expect value.  (float)
     identities   Number of identities.  (int)
     positives    Number of positives.  (int)
-    gaps         Number of gaps (gapped BLAST only).  XXX ???
     strand       Tuple of (query, target) strand.
     frame        Tuple of 1 or 2 frame shifts, depending on the flavor.
 
-    query        List of query sequences.
-    query_start  List of where the query sequences start.
-    match        List of the match sequences.
-    sbjct        List of the sbjct sequences.
-    sbjct_start  List of where the sbjct sequences start.
+    query        The query sequence.
+    query_start  The start residue for the query sequence.  (1-based)
+    match        The match sequence.
+    sbjct        The sbjct sequence.
+    sbjct_start  The start residue for the sbjct sequence.  (1-based)
     
     Not all flavors of BLAST return values for every attribute:
               score     expect     identities   positives    strand  frame
@@ -186,12 +120,123 @@ class HSP:
         self.expect = None
         self.identities = None
         self.positives = None
-        self.gaps = None
         self.strand = ()
         self.frame = ()
         
-        self.query = []
-        self.query_start = []
-        self.match = []
-        self.sbjct = []
-        self.sbjct_start = []
+        self.query = ''
+        self.query_start = None
+        self.match = ''
+        self.sbjct = ''
+        self.sbjct_start = None
+
+class MultipleAlignment:
+    """Holds information about a multiple alignment.
+
+    Members:
+    alignment  A list of tuples (name, start residue, sequence).
+
+    The start residue is 1-based.  It may be blank, if that sequence is
+    not aligned in the multiple alignment.
+
+    """
+    def __init__(self):
+        self.alignment = []
+
+class DatabaseReport:
+    """Holds information about a database report.
+    
+    Members:
+    database_name              The name of the database.
+    num_letters_in_database    Number of letters in the database.  (int)
+    num_sequences_in_database  Number of sequences in the database.  (int)
+    posted_date                The date the database was posted.
+    ka_params                  A tuple of (lambda, k, h) values.  (floats)
+    gapped                     # XXX this isn't set right!
+    ka_params_gap              A tuple of (lambda, k, h) values.  (floats)
+
+    """
+    def __init__(self):
+        self.database_name = ''
+        self.posted_date = ''
+        self.num_letters_in_database = None
+        self.num_sequences_in_database = None
+        self.ka_params = (None, None, None)
+        self.gapped = 0
+        self.ka_params_gap = (None, None, None)
+
+class Parameters:
+    """Holds information about the parameters.
+
+    Members:
+    matrix              Name of the matrix.
+    gap_penalties       Tuple of (open, extend) penalties.  (floats)
+    num_hits            Number of hits to the database.  (int)
+    num_sequences       Number of sequences.  (int)
+    num_good_extends    Number of extensions.  (int)
+    num_seqs_better_e   Number of sequences better than e-value.  (int)
+    hsps_no_gap         Number of HSP's better, without gapping.  (int)
+    hsps_prelim_gapped  Number of HSP's gapped in prelim test.  (int)
+    hsps_prelim_gapped_attemped  Number of HSP's attempted in prelim.  (int)
+    hsps_gapped         Total number of HSP's gapped.  (int)
+    query_length        Length of the query.  (int)
+    database_length     Number of letters in the database.  (int)
+    effective_hsp_length         Effective HSP length.  (int)
+    effective_query_length       Effective length of query.  (int)
+    effective_database_length    Effective length of database.  (int)
+    effective_search_space       Effective search space.  (int)
+    effective_search_space_used  Effective search space used.  (int)
+    frameshift          Frameshift window.  Tuple of (int, float)
+    threshold           Threshold.  (int)
+    window_size         Window size.  (int)
+    dropoff_1st_pass    Tuple of (score, bits).  (int, float)
+    gap_x_dropoff       Tuple of (score, bits).  (int, float)
+    gap_x_dropoff_final Tuple of (score, bits).  (int, float)
+    gap_trigger         Tuple of (score, bits).  (int, float)
+    blast_cutoff        Tuple of (score, bits).  (int, float)
+    
+    """
+    def __init__(self):
+        self.matrix = ''
+        self.gap_penalties = (None, None)
+        self.num_hits = None
+        self.num_sequences = None
+        self.num_good_extends = None
+        self.num_seqs_better_e = None
+        self.hsps_no_gap = None
+        self.hsps_prelim_gapped = None
+        self.hsps_prelim_gapped_attemped = None
+        self.hsps_gapped = None
+        self.query_length = None
+        self.database_length = None
+        self.effective_hsp_length = None
+        self.effective_query_length = None
+        self.effective_database_length = None
+        self.effective_search_space = None
+        self.effective_search_space_used = None
+        self.frameshift = (None, None)
+        self.threshold = None
+        self.window_size = None
+        self.dropoff_1st_pass = (None, None)
+        self.gap_x_dropoff = (None, None)
+        self.gap_x_dropoff_final = (None, None)
+        self.gap_trigger = (None, None)
+        self.blast_cutoff = (None, None)
+    
+class BlastAll(Header, DatabaseReport, Parameters):
+    """Saves the results from a blastall search.
+
+    Members:
+    descriptions        A list of Description objects.
+    alignments          A list of Alignment objects.
+    multiple_alignment  A Multiple Alignment object.
+    + members inherited from base classes
+
+    """
+    def __init__(self):
+        Header.__init__(self)
+        DatabaseReport.__init__(self)
+        Parameters.__init__(self)
+        self.descriptions = []
+        self.alignments = []
+        self.multiple_alignment = None
+
