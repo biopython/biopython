@@ -103,8 +103,8 @@ you see ImportErrors."""
         print "You can find %s at %s." % (name, url)
         print
         # exit automatically if required packages not installed
-        #if not(default):
-        #    sys.exit(-1)
+        if not(default):
+            sys.exit(-1)
 
         if not get_yes_or_no(
             "Do you want to continue this installation?", default):
@@ -131,9 +131,9 @@ class build_py_biopython(build_py):
         # it automatically.
         if not is_Martel_installed():
             self.packages.append("Martel")
-        # Only install the clustering software if Numpy is installed.
+        # Add software that requires Numpy to be installed.
         if is_Numpy_installed():
-            self.packages.append("Bio.Cluster")
+            self.packages.extend(NUMPY_PACKAGES)
         build_py.run(self)
 
 class CplusplusExtension(Extension):
@@ -169,22 +169,7 @@ class build_ext_biopython(build_ext):
             return
         # add software that requires NumPy to install
         if is_Numpy_installed():
-            self.extensions.extend((
-                Extension('Bio.Cluster.cluster',
-                          ['Bio/Cluster/clustermodule.c',
-                           'Bio/Cluster/cluster.c',
-                           'Bio/Cluster/ranlib.c',
-                           'Bio/Cluster/com.c',
-                           'Bio/Cluster/linpack.c'],
-                          include_dirs=["Bio/Cluster"]
-                          ),
-                CplusplusExtension('Bio.KDTree._CKDTree',
-                          ["Bio/KDTree/KDTree.cpp",
-                           "Bio/KDTree/KDTree.swig.cpp"],
-                          libraries=["stdc++"],
-                          language="c++"
-                          ),
-                ))
+            self.extensions.extend(NUMPY_EXTENSIONS)
         build_ext.run(self)
 
     def build_extensions(self):
@@ -379,6 +364,12 @@ PACKAGES = [
     'Bio.WWW',
     ]
 
+# packages that require Numeric Python
+NUMPY_PACKAGES = [
+    'Bio.Affy',
+    'Bio.Cluster',
+]
+
 EXTENSIONS = [
     Extension('Bio.cSVM',
               ['Bio/cSVMmodule.c',
@@ -428,6 +419,28 @@ EXTENSIONS = [
               libraries=["fl"]
               ),
     ]
+
+# extensions that require numeric python
+NUMPY_EXTENSIONS = [
+    Extension('Bio.Cluster.cluster',
+              ['Bio/Cluster/clustermodule.c',
+               'Bio/Cluster/cluster.c',
+               'Bio/Cluster/ranlib.c',
+               'Bio/Cluster/com.c',
+               'Bio/Cluster/linpack.c'],
+              include_dirs=["Bio/Cluster"]
+              ),
+    CplusplusExtension('Bio.KDTree._CKDTree',
+              ["Bio/KDTree/KDTree.cpp",
+               "Bio/KDTree/KDTree.swig.cpp"],
+              libraries=["stdc++"],
+              language="c++"
+              ),
+    CplusplusExtension('Affy._cel',
+             ['Bio/Affy/celmodule.cc'],
+             language="c++"
+             ),
+]
 
 DATA_FILES=[
     "Bio/EUtils/DTDs/*.dtd",
