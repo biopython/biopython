@@ -22,6 +22,29 @@ The DSSP codes for secondary structure used here are:
     - -        None
 """
 
+# Values from Miller et al. (1987), JMB, 196:641-656
+_GXG={}
+_GXG["ALA"]=113.0
+_GXG["CYS"]=140.0
+_GXG["ASP"]=151.0
+_GXG["GLU"]=183.0
+_GXG["PHE"]=218.0
+_GXG["GLY"]=85.0
+_GXG["HIS"]=194.0
+_GXG["ILE"]=182.0
+_GXG["LYS"]=211.0
+_GXG["LEU"]=180.0
+_GXG["MET"]=204.0
+_GXG["ASN"]=158.0
+_GXG["PRO"]=143.0
+_GXG["GLN"]=189.0
+_GXG["ARG"]=241.0
+_GXG["SER"]=122.0
+_GXG["THR"]=146.0
+_GXG["VAL"]=160.0
+_GXG["TRP"]=259.0
+_GXG["TYR"]=229.0
+
 def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
     """
     Create a DSSP dictionary from a PDB file.
@@ -124,13 +147,17 @@ class DSSP:
                 res_id=res.get_id()
                 if self.dssp_dict.has_key((chain_id, res_id)):
                     aa, ss, acc=self.dssp_dict[(chain_id, res_id)]
-                    # Verify if AA in DSSP == AA in Structure
                     resname=res.get_resname()
-                    resname=to_one_letter_code[resname]
+                    # relative accessibility
+                    rel_acc=acc/_GXG[resname]
+                    if rel_acc>1.0:
+                        rel_acc=1.0
+                    # Verify if AA in DSSP == AA in Structure
                     # Something went wrong if this is not true!
+                    resname=to_one_letter_code[resname]
                     assert(resname==aa)
-                    map[res]=(ss, acc)
-                    res_list.append((res, (ss, acc)))
+                    map[res]=(ss, acc, rel_acc)
+                    res_list.append((res, (ss, acc, rel_acc)))
                 else:
                     pass
         self.map=map
