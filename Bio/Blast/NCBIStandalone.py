@@ -12,6 +12,7 @@ http://www.ncbi.nlm.nih.gov/BLAST/
 Classes:
 BlastParser              Parses output from blast.
 PSIBlastParser           Parses output from psi-blast.
+Iterator                 Iterates over a file of blast results.
 
 _Scanner                 Scans output from standalone BLAST.
 _BlastConsumer           Consumes output from blast.
@@ -36,6 +37,7 @@ import os
 import string
 import re
 import popen2
+from types import *
 
 from Bio import File
 from Bio.ParserSupport import *
@@ -519,7 +521,7 @@ class _HeaderConsumer:
         self._header.application = c[0]
         self._header.version = c[1]
         self._header.date = c[2][1:-1]
-        
+
     def reference(self, line):
         if line[:11] == 'Reference: ':
             self._header.reference = line[11:]
@@ -548,8 +550,9 @@ class _HeaderConsumer:
             self._header.database_letters = _safe_int(letters)
 
     def end_header(self):
-        pass
-
+        # Get rid of the trailing newlines
+        self._header.reference = string.rstrip(self._header.reference)
+        self._header.query = string.rstrip(self._header.query)
 
 class _DescriptionConsumer:
     def start_descriptions(self):
@@ -618,11 +621,7 @@ class _AlignmentConsumer:
     def title(self, line):
         if self._alignment is None:
             self._alignment = Record.Alignment()
-        if self._alignment.title:
-            self._alignment.title = "%s %s" % (
-                self._alignment.title, string.strip(line))
-        else:
-            self._alignment.title = string.rstrip(line)
+        self._alignment.title = self._alignment.title + string.lstrip(line)
 
     def length(self, line):
         if self._alignment is None:
@@ -722,6 +721,10 @@ class _AlignmentConsumer:
             align[index] = aname, astart, aseq
 
     def end_alignment(self):
+        # Remove trailing newlines
+        if self._alignment:
+            self._alignment.title = string.rstrip(self._alignment.title)
+
         # If there's a multiple alignment, I will need to make sure
         # all the sequences are aligned.  That is, I may need to
         # right-pad the sequences.
@@ -739,7 +742,6 @@ class _AlignmentConsumer:
                     elif len(seq) > seqlen:
                         raise SyntaxError, \
                               "Sequence %s is longer than the query" % name
-
         # Clean up some variables, if they exist.
         try:
             del self._seq_index
@@ -1138,6 +1140,52 @@ class _PSIBlastConsumer(AbstractConsumer,
     def end_parameters(self):
         _ParametersConsumer.end_parameters(self)
         self.data.__dict__.update(self._params.__dict__)
+
+class Iterator:
+    """Iterates over a file of multiple BLAST results.
+
+    Methods:
+    next   Return the next record from the stream, or None.
+
+    """
+    def __init__(self, handle, parser=None):
+        """__init__(self, handle, parser=None)
+
+        Create a new iterator.  handle is a file-like object.  parser
+        is an optional Parser object to change the results into another form.
+        If set to None, then the raw contents of the file will be returned.
+
+        """
+        if type(handle) is not FileType and type(handle) is not InstanceType:
+            raise ValueError, "I expected a file handle or file-like object"
+        self._uhandle = File.UndoHandle(handle)
+        self._parser = parser
+
+    def next(self):
+        """next(self) -> object
+
+        Return the next Blast record from the file.  If no more records,
+        return None.
+
+        """
+        lines = []
+        while 1:
+            line = self._uhandle.readline()
+            if not line:
+                break
+            # If I've reached the next one, then put the line back and stop.
+            if lines and (line[:5] == 'BLAST' or line[1:6] == 'BLAST'):
+                self._uhandle.saveline(line)
+                break
+            lines.append(line)
+            
+        if not lines:
+            return None
+            
+        data = string.join(lines, '')
+        if self._parser is not None:
+            return self._parser.parse(File.StringHandle(data))
+        return data
 
 def blastall(blastcmd, program, database, infile, **keywds):
     """blastall(blastcmd, program, database, infile, **keywds) ->
