@@ -426,36 +426,40 @@ class MultipleAlignCL:
         self.output_file = output_file
 
         if output_type:
-            if output_type.upper() not in self.OUTPUT_TYPES:
+            output_type = string.upper(output_type)
+            if output_type not in self.OUTPUT_TYPES:
                 raise ValueError("Invalid output type %s. Valid choices are %s"
-                                 % (output_type.upper(), self.OUTPUT_TYPES))
+                                 % (output_type, self.OUTPUT_TYPES))
             else:
-                self.output_type = output_type.upper()
+                self.output_type = output_type
 
         if output_order:
-            if output_order.upper() not in self.OUTPUT_ORDER:
+            output_order = string.upper(output_order)
+            if output_order not in self.OUTPUT_ORDER:
                 raise ValueError("Invalid output order %s. Valid choices are %s"
-                                 % (output_order.upper(), self.OUTPUT_ORDER))
+                                 % (output_order, self.OUTPUT_ORDER))
             else:
-                self.output_order = output_order.upper()
+                self.output_order = output_order
 
         if change_case:
+            change_case = string.upper(change_case)
             if output_type != "GDE":
                 raise ValueError("Change case only valid for GDE output.")
-            elif change_case.upper not in self.CHANGE_CASE:
+            elif change_case not in self.CHANGE_CASE:
                 raise ValueError("Invalid change case %s. Valid choices are %s"
-                                 % (change_case.upper(), self.CHANGE_CASE))
+                                 % (change_case, self.CHANGE_CASE))
             else:
-                self.change_case = change_case.upper()
+                self.change_case = change_case
 
         if add_seqnos:
+            add_seqnos = string.upper(add_seqnos)
             if output_type:
                 raise ValueError("Add SeqNos only valid for CLUSTAL output.")
-            elif add_seqnos.upper() not in self.OUTPUT_SEQNOS:
+            elif add_seqnos not in self.OUTPUT_SEQNOS:
                 raise ValueError("Invalid seqnos option %s. Valid choices: %s"
-                                 % (add_seqnos.upper(), self.OUTPUT_SEQNOS))
+                                 % (add_seqnos, self.OUTPUT_SEQNOS))
             else:
-                self.add_seqnos = add_seqnos.upper()
+                self.add_seqnos = add_seqnos
 
     def set_guide_tree(self, tree_file):
         """Provide a file to use as the guide tree for alignment.
@@ -474,21 +478,22 @@ class MultipleAlignCL:
         Protein matrix can be either one of the defined types (blosum, pam,
         gonnet or id) or a file with your own defined matrix.
         """
-        if protein_matrix.upper() in self.PROTEIN_MATRIX:
-            self.protein_matrix = protein_matrix.upper()
+        if string.upper(protein_matrix) in self.PROTEIN_MATRIX:
+            self.protein_matrix = string.upper(protein_matrix)
         elif os.path.exists(protein_matrix):
             self.protein_matrix = protein_matrix
         else:
             raise ValueError("Invalid matrix %s. Options are %s or a file." %
-                             (protein_matrix.upper(), self.PROTEIN_MATRIX))
+                             (string.upper(protein_matrix),
+                              self.PROTEIN_MATRIX))
 
     def set_dna_matrix(self, dna_matrix):
         """Set the type of DNA matrix to use.
 
         The dna_matrix can either be one of the defined types (iub or clustalw)
         or a file with the matrix to use."""
-        if dna_matrix.upper() in self.DNA_MATRIX:
-            self.dna_matrix = dna_matrix.upper()
+        if string.upper(dna_matrix) in self.DNA_MATRIX:
+            self.dna_matrix = string.upper(dna_matrix)
         elif os.path.exists(dna_matrix):
             self.dna_matrix = dna_matrix
         else:
@@ -503,11 +508,12 @@ class MultipleAlignCL:
         protein or DNA you are working with, so this allows you to set it
         explicitly.
         """
-        if residue_type.upper() in self.RESIDUE_TYPES:
-            self.type = residue_type.upper()
+        residue_type = string.upper(residue_type)
+        if residue_type in self.RESIDUE_TYPES:
+            self.type = residue_type
         else:
             raise ValueError("Invalid residue type %s. Valid choices are %s"
-                             % (residue_type.upper(), self.RESIDUE_TYPES))
+                             % (residue_type, self.RESIDUE_TYPES))
 
         
 
