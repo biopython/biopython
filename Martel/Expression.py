@@ -218,7 +218,7 @@ class Group(Expression):
 
     def copy(self):
         """do a deep copy on this Expression tree"""
-        return Group(self.name, self.expression.copy(), self.attrs)
+        return Group(self.name, self.expression.copy(), self.attrs.copy())
 
     def __str__(self):
         """the corresponding pattern string"""
