@@ -103,7 +103,7 @@ class InterProParser(  sgmllib.SGMLParser ):
 
         Feed in interpro data for scanning.  handle is a file-like object
         containing interpro data.  consumer is a Consumer object that will
-        receive events as the rebase data is scanned.
+        receive events as the ndb data is scanned.
 
         """
         if isinstance(handle, File.UndoHandle):
