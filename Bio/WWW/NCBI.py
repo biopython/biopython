@@ -26,11 +26,7 @@ _open
 
 """
 import string
-import re
 import urllib
-import sgmllib
-import urlparse
-import time
 
 from Bio import File
 
