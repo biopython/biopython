@@ -372,11 +372,12 @@ EXTENSIONS = [
               include_dirs=["Bio"],
               libraries=["fl"]
               ),
-    #Extension('Bio.KDTree._CKDTree',
-    #          ["Bio/KDTree/KDTree.C",
-    #           "Bio/KDTree/KDTree.swig.C"],
-    #          libraries=["stdc++"]
-    #          ),
+    Extension('Bio.KDTree._CKDTree',
+              ["Bio/KDTree/KDTree.C",
+               "Bio/KDTree/KDTree.swig.C"],
+              libraries=["stdc++"],
+              language="c++"
+              ),
     ]
 
 DATA_FILES=[
