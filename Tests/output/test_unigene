@@ -1,5 +1,4 @@
 test_unigene
-Warning: can't open .\output\test_unigene
 testing Bt145.htm
 key EXPRESSION INFORMATION
         key is Note
@@ -91,61 +90,24 @@ key EST SEQUENCES
             cDNA clone IMAGE:574684 5' read
 
 
-testing Dr48.htm
+testing Rn35.htm
 key EXPRESSION INFORMATION
         key is cDNA sources
-            heart, kidney
-key SEE ALSO
-        key is LocusLink
-            30675
-        key is HomoloGene
-            Dr.48
-key MAPPING INFORMATION
-        key is Chromosome
-            LG 10
-key mRNA/GENE SEQUENCES
-        key is L77146
-            Danio rerio heat shock cognate (hsc70) mRNA, complete cds
-        key is Y11413
-            D.rerio hsc70 mRNA
+            Whole embryo
 key UniGene Cluster
-        Dr.48
+        Rn.35
+key SEE ALSO
+        key is HomoloGene
+            Rn.35
 key EST SEQUENCES
-        key is AI313707
-            cDNA clone ZAE39 3' read
-        key is AW116799
-            cDNA clone 2601688 3' read
-        key is AI331807
-            cDNA clone (no-name) 3' read
-        key is AI385065
-            cDNA clone (no-name) 3' read
-        key is AW232778
-            cDNA clone (no-name) 3' read
-        key is AI667629
-            cDNA clone 2351498 3' read
-        key is AW077180
-            cDNA clone (no-name) 3' read
-        key is AA658601
-            cDNA clone zbr1406 kidney 3' read
-        key is AW233742
-            cDNA clone (no-name) 3' read
-        key is AI330589
-            cDNA clone (no-name) 3' read
-key SELECTED MODEL
-        key is M. musculus
-            SP:P08109- HS7C_MOUSE HEAT SHOCK COGNATE 71 KDA PROTEIN93 % / 648 aa
-        key is C. elegans
-            PID:g3924750- similar to HSP-1 heat shock 70kd protein A83 % / 648 aa
-        key is D. melanogaster
-            SP:P11147- HS7D_DROME HEAT SHOCK 70 KDA PROTEIN COGNATE 483 % / 648 aa
-        key is S. cerevisiae
-            PID:g349747- Ssa1p: Heat shock protein of HSP70 family73 % / 648 aa
-        key is E. coli
-            PID:g1786196- chaperone Hsp7050 % / 566 aa
-        key is R. norvegicus
-            SP:P08109- HS7C_MOUSE HEAT SHOCK COGNATE 71 KDA PROTEIN93 % / 648 aa
-        key is H. sapiens
-            SP:P11142- HS7C_HUMAN HEAT SHOCK COGNATE 71 KD PROTEIN93 % / 648 aa
+        key is AA859652
+            cDNA clone UI-R-E0-bs-b-06-0-UI Whole embryo 3' read
+        key is BF547995
+            cDNA clone UI-R-E0-bs-b-06-0-UI Whole embryo 5' read
+        key is BE098081
+            cDNA clone UI-R-BJ1-asw-f-07-0-UI 3' read
+        key is BE101172
+            cDNA clone UI-R-BJ1-auh-h-09-0-UI 3' read
 
 
 testing Rn20.htm
@@ -333,4 +295,3 @@ key EST SEQUENCES
             cDNA clone IMAGE:223702 Eye 5' read 2.6 kb
 
 
-1 test OK.
