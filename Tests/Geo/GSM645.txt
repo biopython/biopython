@@ -1,0 +1,57 @@
+^SAMPLE=GSM645
+!Sample_status = Public on Dec 17 2001
+!Sample_title = Large Pre-BII cells 8b
+!Sample_type = single channel
+!Sample_organism = Mus musculus
+!Sample_target_source = Large Pre-BII cells
+!Sample_description = B220+CD25+sIg- Large Pre BII cells sorted out of mouse bone marrow, sort no. 8
+!Sample_author = Reinhard,,Hoffmann
+!Sample_author = Thomas,,Seidl
+!Sample_author = Ton,,Rolink
+!Sample_author = Fritz,,Melchers
+!Sample_submission_date = Nov 27 2001
+!Sample_submitter_name = Reinhard,,Hoffmann
+!Sample_submitter_email = r_hoffmann@m3401.mpk.med.uni-muenchen.de
+!Sample_submitter_institute = Max von Pettenkofer Institut
+!Sample_submitter_department = Bacteriology
+!Sample_submitter_address = Pettenkoferstr. 9a
+!Sample_submitter_city = Munich,80336,Germany
+!Sample_submitter_phone = +49-89-5160-5424
+!Sample_platform_id = GPL22
+!Sample_series_id = GSE13
+#ID_REF = Affymetrix Probe Set Identifier
+#Experiment Name = Experiment Name
+#POSITIVE = number of poisitive probe pairs
+#NEGATIVE = number of negative probe pairs
+#PAIRS = number of probe set specific probe pairs on the array
+#PAIRS_USED =
+#PAIRS_IN_AVG = Trimmed probe pair set
+#POS_FRACTION = Positive/Pairs Used
+#Log Avg =
+#PM Excess = number of probe pairs  where PM/MM exceeds the ratio limit (10 by default)
+#MM Excess = Number of probe peirs where MM/PM exceeds 1/ratio limit (10 by default)
+#POS/NEG = Positive/Negative
+#VALUE = Average Difference Intensity
+#ABS_CALL = Whether a probe set is present, marginal, or absent; see Affymetrix Literature
+ID_REF	Experiment Name	POSITIVE	NEGATIVE	PAIRS	PAIRS_USED	PAIRS_IN_AVG	POS_FRACTION	Log Avg	PM Excess	MM Excess	POS/NEG	VALUE	ABS_CALL
+IL2_at	RHMu8LarB	4	4	19	19	19	0.21	-0.58	0	0	1.0	-78	A
+IL10_at	RHMu8LarB	7	4	20	20	18	0.35	1.87	1	0	1.8	161	A
+GMCSF_at	RHMu8LarB	4	4	20	20	19	0.20	0.39	0	0	1.0	-11	A
+TNFRII_at	RHMu8LarB	2	2	20	20	18	0.10	0.48	0	0	1.0	52	A
+MIP1-B_at	RHMu8LarB	6	4	20	20	19	0.30	0.43	0	0	1.5	373	A
+IL4_at	RHMu8LarB	3	3	20	20	19	0.15	0.29	0	0	1.0	27	A
+IL12_P40_at	RHMu8LarB	3	5	20	20	19	0.15	-0.22	0	0	0.6	-163	A
+TNFa_at	RHMu8LarB	3	4	20	20	20	0.15	-0.57	1	0	0.8	-95	A
+TCRa_at	RHMu8LarB	1	4	20	20	19	0.05	-0.50	0	0	0.3	-186	A
+AFFX-BioB-5_at	RHMu8LarB	0	1	20	20	19	0.00	0.35	0	0	0.0	120	A
+AFFX-BioB-M_at	RHMu8LarB	0	1	20	20	19	0.00	0.02	0	0	0.0	-13	A
+AFFX-BioB-3_at	RHMu8LarB	2	0	20	20	19	0.10	0.38	0	0	Undef	136	A
+AFFX-BioC-5_at	RHMu8LarB	9	0	20	20	20	0.45	1.33	0	0	Undef	606	P
+AFFX-BioC-3_at	RHMu8LarB	2	0	20	20	19	0.10	0.64	0	0	Undef	257	A
+AFFX-BioDn-5_at	RHMu8LarB	8	0	20	20	20	0.40	1.23	0	0	Undef	380	P
+AFFX-BioDn-3_at	RHMu8LarB	16	0	20	20	19	0.80	2.79	0	0	Undef	2764	P
+AFFX-CreX-5_at	RHMu8LarB	19	0	20	20	19	0.95	5.65	0	0	Undef	4391	P
+AFFX-CreX-3_at	RHMu8LarB	19	0	20	20	20	0.95	6.42	2	0	Undef	10787	P
+AFFX-BioB-5_st	RHMu8LarB	5	3	20	20	19	0.25	0.48	0	0	1.7	80	A
+AFFX-BioB-M_st	RHMu8LarB	2	3	20	20	17	0.10	0.16	0	0	0.7	24	A
+

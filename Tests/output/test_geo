@@ -1,0 +1,587 @@
+test_geo
+Testing Bio.Geo on GSE16.txt
+
+
+GEO Type: SAMPLE
+GEO Id: GSM804
+Sample_author: Antoine,M,Snijders
+
+Sample_author: Norma,,Nowak
+
+Sample_author: Richard,,Segraves
+
+Sample_author: Stephanie,,Blackwood
+
+Sample_author: Nils,,Brown
+
+Sample_author: Jeffery,,Conroy
+
+Sample_author: Greg,,Hamilton
+
+Sample_author: Anna,K,Hindle
+
+Sample_author: Bing,,Huey
+
+Sample_author: Karen,,Kimura
+
+Sample_author: Sindy,,Law
+
+Sample_author: Ken,,Myambo
+
+Sample_author: Joel,,Palmer
+
+Sample_author: Bauke,,Ylstra
+
+Sample_author: Jingzhu,P,Yue
+
+Sample_author: Joe,W,Gray
+
+Sample_author: Ajay,N,Jain
+
+Sample_author: Daniel,,Pinkel
+
+Sample_author: Donna,G,Albertson
+
+Sample_description: Coriell Cell Repositories cell line <a h
+ref="http://locus.umdnj.edu/nigms/nigms_cgi/display.cgi?GM05296">GM05296</a>.
+
+Sample_description: Fibroblast cell line derived from a 1 mo
+nth old female with multiple congenital malformations, dysmorphic features, intr
+auterine growth retardation, heart murmur, cleft palate, equinovarus deformity, 
+microcephaly, coloboma of right iris, clinodactyly, reduced RBC catalase activit
+y, and 1 copy of catalase gene.
+
+Sample_description: Chromosome abnormalities are present.
+
+Sample_description: Karyotype is 46,XX,-11,+der(11)inv ins(1
+1;10)(11pter> 11p13::10q21>10q24::11p13>11qter)mat
+
+Sample_organism: Homo sapiens
+
+Sample_platform_id: GPL28
+
+Sample_pubmed_id: 11687795
+
+Sample_series_id: GSE16
+
+Sample_status: Public on Feb 12 2002
+
+Sample_submission_date: Jan 17 2002
+
+Sample_submitter_city: San Francisco,CA,94143,USA
+
+Sample_submitter_department: Comprehensive Cancer Center
+
+Sample_submitter_email: albertson@cc.ucsf.edu
+
+Sample_submitter_institute: University of California San Francisco
+
+Sample_submitter_name: Donna,G,Albertson
+
+Sample_submitter_phone: 415 502-8463
+
+Sample_target_source1: Cell line GM05296
+
+Sample_target_source2: normal male reference genomic DNA
+
+Sample_title: CGH_Albertson_GM05296-001218
+
+Sample_type: dual channel genomic
+
+Column Header Definitions
+    ID_REF: Unique row identifier, genome position o
+    rder
+
+    LINEAR_RATIO: Mean of replicate Cy3/Cy5 ratios
+
+    LOG2STDDEV: Standard deviation of VALUE
+
+    NO_REPLICATES: Number of replicate spot measurements
+
+    VALUE: aka LOG2RATIO, mean of log base 2 of LIN
+    EAR_RATIO
+
+0: ID_REF	VALUE	LINEAR_RATIO	LOG2STDDEV	NO_REPLICATES	
+1: 1		1.047765	0.011853	3	
+2: 2				0	
+3: 3	0.008824	1.006135	0.00143	3	
+4: 4	-0.000894	0.99938	0.001454	3	
+5: 5	0.075875	1.054	0.003077	3	
+6: 6	0.017303	1.012066	0.005876	2	
+7: 7	-0.006766	0.995321	0.013881	3	
+8: 8	0.020755	1.014491	0.005506	3	
+9: 9	-0.094938	0.936313	0.012662	3	
+10: 10	-0.054527	0.96291	0.01073	3	
+11: 11	-0.025057	0.982782	0.003855	3	
+12: 12				0	
+13: 13	0.108454	1.078072	0.005196	3	
+14: 14	0.078633	1.056017	0.009165	3	
+15: 15	0.098571	1.070712	0.007834	3	
+16: 16	0.044048	1.031003	0.013651	3	
+17: 17	0.018039	1.012582	0.005471	3	
+18: 18	-0.088807	0.9403	0.010571	3	
+19: 19	0.016349	1.011397	0.007113	3	
+20: 20	0.030977	1.021704	0.016798	3	
+
+
+
+Testing Bio.Geo on GSM645.txt
+
+
+GEO Type: SAMPLE
+GEO Id: GSM645
+Sample_author: Reinhard,,Hoffmann
+
+Sample_author: Thomas,,Seidl
+
+Sample_author: Ton,,Rolink
+
+Sample_author: Fritz,,Melchers
+
+Sample_description: B220+CD25+sIg- Large Pre BII cells sorte
+d out of mouse bone marrow, sort no. 8
+
+Sample_organism: Mus musculus
+
+Sample_platform_id: GPL22
+
+Sample_series_id: GSE13
+
+Sample_status: Public on Dec 17 2001
+
+Sample_submission_date: Nov 27 2001
+
+Sample_submitter_address: Pettenkoferstr. 9a
+
+Sample_submitter_city: Munich,80336,Germany
+
+Sample_submitter_department: Bacteriology
+
+Sample_submitter_email: r_hoffmann@m3401.mpk.med.uni-muenchen.de
+
+Sample_submitter_institute: Max von Pettenkofer Institut
+
+Sample_submitter_name: Reinhard,,Hoffmann
+
+Sample_submitter_phone: +49-89-5160-5424
+
+Sample_target_source: Large Pre-BII cells
+
+Sample_title: Large Pre-BII cells 8b
+
+Sample_type: single channel
+
+Column Header Definitions
+    ABS_CALL: Whether a probe set is present, marginal
+    , or absent; see Affymetrix Literature
+
+    Experiment Name: Experiment Name
+
+    ID_REF: Affymetrix Probe Set Identifier
+
+    Log Avg: 
+
+    MM Excess: Number of probe peirs where MM/PM exceed
+    s 1/ratio limit (10 by default)
+
+    NEGATIVE: number of negative probe pairs
+
+    PAIRS: number of probe set specific probe pairs
+     on the array
+
+    PAIRS_IN_AVG: Trimmed probe pair set
+
+    PAIRS_USED: 
+
+    PM Excess: number of probe pairs  where PM/MM excee
+    ds the ratio limit (10 by default)
+
+    POS/NEG: Positive/Negative
+
+    POSITIVE: number of poisitive probe pairs
+
+    POS_FRACTION: Positive/Pairs Used
+
+    VALUE: Average Difference Intensity
+
+0: ID_REF	Experiment Name	POSITIVE	NEGATIVE	PAIRS	PAIRS_USED	PAIRS_IN_AVG	POS_FRACTION	Log Avg	PM Excess	MM Excess	POS/NEG	VALUE	ABS_CALL	
+1: IL2_at	RHMu8LarB	4	4	19	19	19	0.21	-0.58	0	0	1.0	-78	A	
+2: IL10_at	RHMu8LarB	7	4	20	20	18	0.35	1.87	1	0	1.8	161	A	
+3: GMCSF_at	RHMu8LarB	4	4	20	20	19	0.20	0.39	0	0	1.0	-11	A	
+4: TNFRII_at	RHMu8LarB	2	2	20	20	18	0.10	0.48	0	0	1.0	52	A	
+5: MIP1-B_at	RHMu8LarB	6	4	20	20	19	0.30	0.43	0	0	1.5	373	A	
+6: IL4_at	RHMu8LarB	3	3	20	20	19	0.15	0.29	0	0	1.0	27	A	
+7: IL12_P40_at	RHMu8LarB	3	5	20	20	19	0.15	-0.22	0	0	0.6	-163	A	
+8: TNFa_at	RHMu8LarB	3	4	20	20	20	0.15	-0.57	1	0	0.8	-95	A	
+9: TCRa_at	RHMu8LarB	1	4	20	20	19	0.05	-0.50	0	0	0.3	-186	A	
+10: AFFX-BioB-5_at	RHMu8LarB	0	1	20	20	19	0.00	0.35	0	0	0.0	120	A	
+11: AFFX-BioB-M_at	RHMu8LarB	0	1	20	20	19	0.00	0.02	0	0	0.0	-13	A	
+12: AFFX-BioB-3_at	RHMu8LarB	2	0	20	20	19	0.10	0.38	0	0	Undef	136	A	
+13: AFFX-BioC-5_at	RHMu8LarB	9	0	20	20	20	0.45	1.33	0	0	Undef	606	P	
+14: AFFX-BioC-3_at	RHMu8LarB	2	0	20	20	19	0.10	0.64	0	0	Undef	257	A	
+15: AFFX-BioDn-5_at	RHMu8LarB	8	0	20	20	20	0.40	1.23	0	0	Undef	380	P	
+16: AFFX-BioDn-3_at	RHMu8LarB	16	0	20	20	19	0.80	2.79	0	0	Undef	2764	P	
+17: AFFX-CreX-5_at	RHMu8LarB	19	0	20	20	19	0.95	5.65	0	0	Undef	4391	P	
+18: AFFX-CreX-3_at	RHMu8LarB	19	0	20	20	20	0.95	6.42	2	0	Undef	10787	P	
+19: AFFX-BioB-5_st	RHMu8LarB	5	3	20	20	19	0.25	0.48	0	0	1.7	80	A	
+20: AFFX-BioB-M_st	RHMu8LarB	2	3	20	20	17	0.10	0.16	0	0	0.7	24	A	
+
+
+
+Testing Bio.Geo on GSM691.txt
+
+
+GEO Type: SAMPLE
+GEO Id: GSM691
+Sample_anchor: NlaIII
+
+Sample_author: Jeffrey,,Marks
+
+Sample_author: Gregory,J,Riggins
+
+Sample_author: Robert,L,Strausberg
+
+Sample_description: This library represents a Cancer Genome 
+Anatomy Project library, which was either produced through CGAP funding, or dona
+ted to CGAP.
+
+Sample_description: The Cancer Genome Anatomy Project (CGAP:
+ http://cgap.nci.nih.gov) is an interdisciplinary program established and admini
+stered by the National Cancer Institute (NCI: http://www.nci.nih.gov) to generat
+e the information and technological tools needed to decipher the molecular anato
+my of the cancer cell.
+
+Sample_description: Library constructed by Riggins laborator
+y Tissue supplied by Jeffrey Marks, Ph.D.
+
+Sample_description: Organ: Breast
+
+Sample_description: Tissue_type: normal epithelial organoids
+
+Sample_description: Library treatment: non-normalized
+
+Sample_description: Tissue description: Breast, Isolated nor
+mal epithelial organoids. Derived from a reduction mammoplasty.
+
+Sample_description: Tissue supplier: Jeffrey Marks, Ph.D.
+
+Sample_description: Sample type: Bulk
+
+Sample_description: Producer: Riggins Laboratory
+
+Sample_description: Clones generated to date: 768
+
+Sample_description: Sequences generated to date: 572
+
+Sample_organism: Homo sapiens
+
+Sample_platform_id: GPL4
+
+Sample_series_id: GSE14
+
+Sample_status: Public on Nov 28 2001
+
+Sample_submission_date: Nov 28 2001
+
+Sample_submitter_city: Bethesda,MD,20892,USA
+
+Sample_submitter_department: Cancer Genome Anatomy Project
+
+Sample_submitter_email: cgapbs-r@mail.nih.gov
+
+Sample_submitter_institute: National Cancer Institute
+
+Sample_submitter_name: Robert,L,Strausberg
+
+Sample_submitter_phone: 301-496-1550
+
+Sample_submitter_web_link: http://cgap.nci.nih.gov/
+
+Sample_tag_count: 7165
+
+Sample_target_source: Breast, isolated normal epithelial organ
+oids
+
+Sample_title: SAGE_Duke_40N
+
+Sample_type: sage
+
+Sample_web_link: http://cgap.nci.nih.gov
+
+Column Header Definitions
+    COUNT: Absolute tag count
+
+    TAG: Ten base SAGE tag, LINK_PRE:"http://www.
+    ncbi.nlm.nih.gov/SAGE/SAGEtag.cgi?tag
+
+    TPM: Tags per million, or (1000000*COUNT)/(To
+    tal tags)
+
+0: TAG	COUNT	TPM	
+1: TTGGGGTTTC	202	28192.6	
+2: TAGGTTGTCT	129	18004.2	
+3: GAGGGAGTTT	109	15212.8	
+4: TGCACGTTTT	92	12840.2	
+5: CTGGGTTAAT	83	11584.1	
+6: GTTGTGGTTA	82	11444.5	
+7: GATCCCAACT	63	8792.74	
+8: TGCAGTCACT	59	8234.47	
+9: GGATTTGGCC	58	8094.91	
+10: GGGCTGGGGT	56	7815.77	
+11: ATAATTCTTT	44	6140.96	
+12: CTTCCTTGCC	42	5861.83	
+13: TTGGTCCTCT	40	5582.69	
+14: GGCAAGCCCC	36	5024.42	
+15: AACTAAAAAA	34	4745.29	
+16: AGGGCTTCCA	34	4745.29	
+17: AGGCTACGGA	33	4605.72	
+18: GTGAAACCCC	32	4466.15	
+19: AACTAACAAA	31	4326.59	
+20: GAAAAATGGT	30	4187.02	
+
+
+
+Testing Bio.Geo on GSM700.txt
+
+
+GEO Type: SAMPLE
+GEO Id: GSM700
+Sample_anchor: NlaIII
+
+Sample_author: Gregory,J,Riggins
+
+Sample_author: Robert,L,Strausberg
+
+Sample_description: This library represents a Cancer Genome 
+Anatomy Project library, which was either produced through CGAP funding, or dona
+ted to CGAP.
+
+Sample_description: The Cancer Genome Anatomy Project (CGAP:
+ http://cgap.nci.nih.gov) is an interdisciplinary program established and admini
+stered by the National Cancer Institute (NCI: http://www.nci.nih.gov) to generat
+e the information and technological tools needed to decipher the molecular anato
+my of the cancer cell.
+
+Sample_description: Cell line grown under 1.5% oxygen condit
+ions for 24 hours prior to harvesting in zinc option media with 10% RBS and harv
+ested at passage 102. Library constructed in the laboratory of G. Riggins, M.D.,
+ Ph.D. (Duke University).
+
+Sample_description: Organ: brain
+
+Sample_description: Tissue_type: glioblastoma multiforme
+
+Sample_description: Cell_line: H247
+
+Sample_description: Lab host: DH10B
+
+Sample_description: Vector: pZErO-1
+
+Sample_description: Vector type: plasmid
+
+Sample_description: R. Site 1: Sph1
+
+Sample_description: R. Site 2: Sph1
+
+Sample_description: Library treatment: non-normalized
+
+Sample_description: Tissue description: Brain, Duke glioblas
+toma multiforme cell line, H247, grown under 1.5% oxygen conditions  for 24 hour
+s prior to harvesting.
+
+Sample_description: Tissue
+
+Sample_organism: Homo sapiens
+
+Sample_platform_id: GPL4
+
+Sample_series_id: GSE14
+
+Sample_status: Public on Nov 28 2001
+
+Sample_submission_date: Nov 28 2001
+
+Sample_submitter_city: Bethesda,MD,20892,USA
+
+Sample_submitter_department: Cancer Genome Anatomy Project
+
+Sample_submitter_email: cgapbs-r@mail.nih.gov
+
+Sample_submitter_institute: National Cancer Institute
+
+Sample_submitter_name: Robert,L,Strausberg
+
+Sample_submitter_phone: 301-496-1550
+
+Sample_submitter_web_link: http://cgap.nci.nih.gov/
+
+Sample_tag_count: 72031
+
+Sample_target_source: Brain, glioblastoma multiforme, cell-lin
+e H247
+
+Sample_title: SAGE_Duke_H247_Hypoxia
+
+Sample_type: sage
+
+Sample_web_link: http://cgap.nci.nih.gov
+
+Column Header Definitions
+    COUNT: Absolute tag count
+
+    TAG: Ten base SAGE tag, LINK_PRE:"http://www.
+    ncbi.nlm.nih.gov/SAGE/SAGEtag.cgi?tag
+
+    TPM: Tags per million, or (1000000*COUNT)/(To
+    tal tags)
+
+0: TAG	COUNT	TPM	
+1: TCCAAATCGA	520	7219.11	
+2: TACCATCAAT	434	6025.18	
+3: TTGGGGTTTC	389	5400.45	
+4: CCCATCGTCC	367	5095.03	
+5: GTGAAACCCC	365	5067.26	
+6: GGGGAAATCG	357	4956.2	
+7: CCTGTAATCC	346	4803.49	
+8: TGATTTCACT	334	4636.89	
+9: TGTGTTGAGA	315	4373.12	
+10: GCCCCCAATA	303	4206.52	
+11: CTAAGACTTC	279	3873.33	
+12: GCGACCGTCA	276	3831.68	
+13: TTGGTCCTCT	276	3831.68	
+14: CCTAGCTGGA	268	3720.62	
+15: GATGAGGAGA	251	3484.61	
+16: ACTTTTTCAA	244	3387.43	
+17: CCACTGCACT	223	3095.89	
+18: GTGTGTTTGT	223	3095.89	
+19: GAAATACAGT	218	3026.47	
+20: GCTTTATTTG	218	3026.47	
+
+
+
+Testing Bio.Geo on GSM804.txt
+
+
+GEO Type: SAMPLE
+GEO Id: GSM804
+Sample_author: Antoine,M,Snijders
+
+Sample_author: Norma,,Nowak
+
+Sample_author: Richard,,Segraves
+
+Sample_author: Stephanie,,Blackwood
+
+Sample_author: Nils,,Brown
+
+Sample_author: Jeffery,,Conroy
+
+Sample_author: Greg,,Hamilton
+
+Sample_author: Anna,K,Hindle
+
+Sample_author: Bing,,Huey
+
+Sample_author: Karen,,Kimura
+
+Sample_author: Sindy,,Law
+
+Sample_author: Ken,,Myambo
+
+Sample_author: Joel,,Palmer
+
+Sample_author: Bauke,,Ylstra
+
+Sample_author: Jingzhu,P,Yue
+
+Sample_author: Joe,W,Gray
+
+Sample_author: Ajay,N,Jain
+
+Sample_author: Daniel,,Pinkel
+
+Sample_author: Donna,G,Albertson
+
+Sample_description: Coriell Cell Repositories cell line <a h
+ref="http://locus.umdnj.edu/nigms/nigms_cgi/display.cgi?GM05296">GM05296</a>.
+
+Sample_description: Fibroblast cell line derived from a 1 mo
+nth old female with multiple congenital malformations, dysmorphic features, intr
+auterine growth retardation, heart murmur, cleft palate, equinovarus deformity, 
+microcephaly, coloboma of right iris, clinodactyly, reduced RBC catalase activit
+y, and 1 copy of catalase gene.
+
+Sample_description: Chromosome abnormalities are present.
+
+Sample_description: Karyotype is 46,XX,-11,+der(11)inv ins(1
+1;10)(11pter> 11p13::10q21>10q24::11p13>11qter)mat
+
+Sample_organism: Homo sapiens
+
+Sample_platform_id: GPL28
+
+Sample_pubmed_id: 11687795
+
+Sample_series_id: GSE16
+
+Sample_status: Public on Feb 12 2002
+
+Sample_submission_date: Jan 17 2002
+
+Sample_submitter_city: San Francisco,CA,94143,USA
+
+Sample_submitter_department: Comprehensive Cancer Center
+
+Sample_submitter_email: albertson@cc.ucsf.edu
+
+Sample_submitter_institute: University of California San Francisco
+
+Sample_submitter_name: Donna,G,Albertson
+
+Sample_submitter_phone: 415 502-8463
+
+Sample_target_source1: Cell line GM05296
+
+Sample_target_source2: normal male reference genomic DNA
+
+Sample_title: CGH_Albertson_GM05296-001218
+
+Sample_type: dual channel genomic
+
+Column Header Definitions
+    ID_REF: Unique row identifier, genome position o
+    rder
+
+    LINEAR_RATIO: Mean of replicate Cy3/Cy5 ratios
+
+    LOG2STDDEV: Standard deviation of VALUE
+
+    NO_REPLICATES: Number of replicate spot measurements
+
+    VALUE: aka LOG2RATIO, mean of log base 2 of LIN
+    EAR_RATIO
+
+0: ID_REF	VALUE	LINEAR_RATIO	LOG2STDDEV	NO_REPLICATES	
+1: 1		1.047765	0.011853	3	
+2: 2				0	
+3: 3	0.008824	1.006135	0.00143	3	
+4: 4	-0.000894	0.99938	0.001454	3	
+5: 5	0.075875	1.054	0.003077	3	
+6: 6	0.017303	1.012066	0.005876	2	
+7: 7	-0.006766	0.995321	0.013881	3	
+8: 8	0.020755	1.014491	0.005506	3	
+9: 9	-0.094938	0.936313	0.012662	3	
+10: 10	-0.054527	0.96291	0.01073	3	
+11: 11	-0.025057	0.982782	0.003855	3	
+12: 12				0	
+13: 13	0.108454	1.078072	0.005196	3	
+14: 14	0.078633	1.056017	0.009165	3	
+15: 15	0.098571	1.070712	0.007834	3	
+16: 16	0.044048	1.031003	0.013651	3	
+17: 17	0.018039	1.012582	0.005471	3	
+18: 18	-0.088807	0.9403	0.010571	3	
+19: 19	0.016349	1.011397	0.007113	3	
+20: 20	0.030977	1.021704	0.016798	3	
+
+
+

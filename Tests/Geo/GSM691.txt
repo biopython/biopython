@@ -1,0 +1,59 @@
+^SAMPLE=GSM691
+!Sample_status = Public on Nov 28 2001
+!Sample_title = SAGE_Duke_40N
+!Sample_type = sage
+!Sample_anchor = NlaIII
+!Sample_organism = Homo sapiens
+!Sample_target_source = Breast, isolated normal epithelial organoids
+!Sample_tag_count = 7165
+!Sample_description = This library represents a Cancer Genome Anatomy Project library, which was either produced through CGAP funding, or donated to CGAP.
+!Sample_description = The Cancer Genome Anatomy Project (CGAP: http://cgap.nci.nih.gov) is an interdisciplinary program established and administered by the National Cancer Institute (NCI: http://www.nci.nih.gov) to generate the information and technological tools needed to decipher the molecular anatomy of the cancer cell.
+!Sample_description =  Library constructed by Riggins laboratory Tissue supplied by Jeffrey Marks, Ph.D.
+!Sample_description = Organ: Breast
+!Sample_description = Tissue_type: normal epithelial organoids
+!Sample_description = Library treatment: non-normalized
+!Sample_description = Tissue description: Breast, Isolated normal epithelial organoids. Derived from a reduction mammoplasty.
+!Sample_description = Tissue supplier: Jeffrey Marks, Ph.D.
+!Sample_description = Sample type: Bulk
+!Sample_description = Producer: Riggins Laboratory
+!Sample_description = Clones generated to date: 768
+!Sample_description = Sequences generated to date: 572
+!Sample_author = Jeffrey,,Marks
+!Sample_author = Gregory,J,Riggins
+!Sample_author = Robert,L,Strausberg
+!Sample_web_link = http://cgap.nci.nih.gov
+!Sample_submission_date = Nov 28 2001
+!Sample_submitter_name = Robert,L,Strausberg
+!Sample_submitter_email = cgapbs-r@mail.nih.gov
+!Sample_submitter_institute = National Cancer Institute
+!Sample_submitter_department = Cancer Genome Anatomy Project
+!Sample_submitter_city = Bethesda,MD,20892,USA
+!Sample_submitter_phone = 301-496-1550
+!Sample_submitter_web_link = http://cgap.nci.nih.gov/
+!Sample_platform_id = GPL4
+!Sample_series_id = GSE14
+#TAG = Ten base SAGE tag, LINK_PRE:"http://www.ncbi.nlm.nih.gov/SAGE/SAGEtag.cgi?tag="
+#COUNT = Absolute tag count
+#TPM = Tags per million, or (1000000*COUNT)/(Total tags)
+TAG	COUNT	TPM
+TTGGGGTTTC	202	28192.6
+TAGGTTGTCT	129	18004.2
+GAGGGAGTTT	109	15212.8
+TGCACGTTTT	92	12840.2
+CTGGGTTAAT	83	11584.1
+GTTGTGGTTA	82	11444.5
+GATCCCAACT	63	8792.74
+TGCAGTCACT	59	8234.47
+GGATTTGGCC	58	8094.91
+GGGCTGGGGT	56	7815.77
+ATAATTCTTT	44	6140.96
+CTTCCTTGCC	42	5861.83
+TTGGTCCTCT	40	5582.69
+GGCAAGCCCC	36	5024.42
+AACTAAAAAA	34	4745.29
+AGGGCTTCCA	34	4745.29
+AGGCTACGGA	33	4605.72
+GTGAAACCCC	32	4466.15
+AACTAACAAA	31	4326.59
+GAAAAATGGT	30	4187.02
+

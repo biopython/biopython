@@ -1,0 +1,60 @@
+^SAMPLE=GSM700
+!Sample_status = Public on Nov 28 2001
+!Sample_title = SAGE_Duke_H247_Hypoxia
+!Sample_type = sage
+!Sample_anchor = NlaIII
+!Sample_organism = Homo sapiens
+!Sample_target_source = Brain, glioblastoma multiforme, cell-line H247
+!Sample_tag_count = 72031
+!Sample_description = This library represents a Cancer Genome Anatomy Project library, which was either produced through CGAP funding, or donated to CGAP.
+!Sample_description = The Cancer Genome Anatomy Project (CGAP: http://cgap.nci.nih.gov) is an interdisciplinary program established and administered by the National Cancer Institute (NCI: http://www.nci.nih.gov) to generate the information and technological tools needed to decipher the molecular anatomy of the cancer cell.
+!Sample_description =  Cell line grown under 1.5% oxygen conditions for 24 hours prior to harvesting in zinc option media with 10% RBS and harvested at passage 102. Library constructed in the laboratory of G. Riggins, M.D., Ph.D. (Duke University).
+!Sample_description = Organ: brain
+!Sample_description = Tissue_type: glioblastoma multiforme
+!Sample_description = Cell_line: H247
+!Sample_description = Lab host: DH10B
+!Sample_description = Vector: pZErO-1
+!Sample_description = Vector type: plasmid
+!Sample_description = R. Site 1: Sph1
+!Sample_description = R. Site 2: Sph1
+!Sample_description = Library treatment: non-normalized
+!Sample_description = Tissue description: Brain, Duke glioblastoma multiforme cell line, H247, grown under 1.5% oxygen conditions  for 24 hours prior to harvesting.
+!Sample_description = Tissue
+!Sample_author = Gregory,J,Riggins
+!Sample_author = Robert,L,Strausberg
+!Sample_web_link = http://cgap.nci.nih.gov
+!Sample_submission_date = Nov 28 2001
+!Sample_submitter_name = Robert,L,Strausberg
+!Sample_submitter_email = cgapbs-r@mail.nih.gov
+!Sample_submitter_institute = National Cancer Institute
+!Sample_submitter_department = Cancer Genome Anatomy Project
+!Sample_submitter_city = Bethesda,MD,20892,USA
+!Sample_submitter_phone = 301-496-1550
+!Sample_submitter_web_link = http://cgap.nci.nih.gov/
+!Sample_platform_id = GPL4
+!Sample_series_id = GSE14
+#TAG = Ten base SAGE tag, LINK_PRE:"http://www.ncbi.nlm.nih.gov/SAGE/SAGEtag.cgi?tag="
+#COUNT = Absolute tag count
+#TPM = Tags per million, or (1000000*COUNT)/(Total tags)
+TAG	COUNT	TPM
+TCCAAATCGA	520	7219.11
+TACCATCAAT	434	6025.18
+TTGGGGTTTC	389	5400.45
+CCCATCGTCC	367	5095.03
+GTGAAACCCC	365	5067.26
+GGGGAAATCG	357	4956.2
+CCTGTAATCC	346	4803.49
+TGATTTCACT	334	4636.89
+TGTGTTGAGA	315	4373.12
+GCCCCCAATA	303	4206.52
+CTAAGACTTC	279	3873.33
+GCGACCGTCA	276	3831.68
+TTGGTCCTCT	276	3831.68
+CCTAGCTGGA	268	3720.62
+GATGAGGAGA	251	3484.61
+ACTTTTTCAA	244	3387.43
+CCACTGCACT	223	3095.89
+GTGTGTTTGT	223	3095.89
+GAAATACAGT	218	3026.47
+GCTTTATTTG	218	3026.47
+
