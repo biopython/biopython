@@ -75,8 +75,6 @@ def check_dependencies():
     dependencies = [
         ("mxTextTools", is_mxTextTools_installed, 1,
          "http://www.egenix.com/files/python/eGenix-mx-Extensions.html"),
-        #("Martel", is_Martel_installed, 1,
-        # "http://www.biopython.org/~dalke/Martel/"),
         ("Numerical Python", is_Numpy_installed, 0,
          "http://numpy.sourceforge.net/"),
         ("Reportlab", is_reportlab_installed, 0,
