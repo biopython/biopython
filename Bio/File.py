@@ -19,6 +19,8 @@ import urllib
 class UndoHandle:
     """A Python handle that adds functionality for saving lines.
 
+    Saves lines in a LIFO fashion.
+
     XXX Bug: I don't handle the arguments to readline or readlines
     correctly, since their behavior isn't documented anywhere.
     I'll just pass the arguments along, and hope I don't do anything

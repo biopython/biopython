@@ -1,0 +1,57 @@
+BLASTP 2.0.11 [Jan-20-2000]
+
+
+Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+
+Query= gi|400206|sp|Q02112|LYTA_BACSU MEMBRANE-BOUND PROTEIN LYTA
+PRECURSOR
+         (102 letters)
+
+Database: data/pdbaa
+           6999 sequences; 1,461,753 total letters
+
+Searching..................................................done
+
+ ***** No hits found ******
+
+  Database: data/pdbaa
+    Posted date:  Feb 11, 2000  2:32 PM
+  Number of letters in database: 1,461,753
+  Number of sequences in database:  6999
+  
+Lambda     K      H
+   0.302    0.126    0.332 
+
+Gapped
+Lambda     K      H
+   0.270   0.0470    0.230 
+
+
+Matrix: BLOSUM62
+Gap Penalties: Existence: 11, Extension: 1
+Number of Hits to DB: 270485
+Number of Sequences: 6999
+Number of extensions: 9861
+Number of successful extensions: 7
+Number of sequences better than 10.0: 0
+Number of HSP's better than 10.0 without gapping: 0
+Number of HSP's successfully gapped in prelim test: 0
+Number of HSP's that attempted gapping in prelim test: 7
+Number of HSP's gapped (non-prelim): 0
+length of query: 102
+length of database: 1,461,753
+effective HSP length: 47
+effective length of query: 55
+effective length of database: 1,132,800
+effective search space: 62304000
+effective search space used: 62304000
+T: 11
+A: 40
+X1: 17 ( 7.4 bits)
+X2: 38 (14.8 bits)
+X3: 64 (24.9 bits)
+S1: 43 (21.7 bits)
+S2: 47 (22.7 bits)

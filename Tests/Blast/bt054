@@ -1,0 +1,166 @@
+TBLASTN 2.0.11 [Jan-20-2000]
+
+
+Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+
+Query= gi|729325|sp|P39483|DHG2_BACME GLUCOSE 1-DEHYDROGENASE II
+(GLCDH-II)
+         (261 letters)
+
+Database: data/sts
+           87,792 sequences; 31,998,854 total letters
+
+Searching..................................................done
+
+                                                                   Score     E
+Sequences producing significant alignments:                        (bits)  Value
+
+gi|3820341|emb|AJ229891|KLAJ9891 Kluyveromyces lactis DNA fragm...    47  1e-05
+gi|1375419|gb|G27169|G27169 human STS SHGC-31983.                     43  1e-04
+gi|3819804|emb|AJ230012|KLAJ0012 Kluyveromyces lactis DNA fragm...    39  0.002
+gi|1375215|gb|G26965|G26965 human STS SHGC-31083.                     31  0.73
+gi|5714409|gb|AF106665.1|AF106665 Mus musculus chromosome 6 clo...    29  2.2
+gi|177714|gb|L09988|HUM4STS889 Human Chromosome 4 (clone p4-109...    29  2.2
+gi|1341648|gb|G21322|G21322 human STS WI-12250.                       29  3.7
+
+>gi|3820341|emb|AJ229891|KLAJ9891 Kluyveromyces lactis DNA fragment
+           for sequence tagged site, clone okam5d07r [Kluyveromyces
+           lactis]
+           Length = 230
+           
+ Score = 46.9 bits (109), Expect = 1e-05
+ Identities = 25/72 (34%), Positives = 44/72 (60%), Gaps = 3/72 (4%)
+ Frame = +1
+
+Query: 108 NWNQVIDTNLTGAFLGSREAIKYFVEN---DIKGNVINMSSVHEMIPWPLFVHYAASKGG 164
+           +W QVIDTN+ G F   + A+     +   D +  V+N+S+V+ ++  P    Y A+K  
+Sbjct: 1   SWRQVIDTNINGTFYTLKYALPLMESSSSPDSEAAVVNLSAVNGLVGIPGISPYTATKHA 180
+
+Query: 165 MKLMTETLALEYAPK 179
+           +  +T+++ALEYA +
+Sbjct: 181 VIGITQSVALEYAER 225
+
+
+>gi|1375419|gb|G27169|G27169 human STS SHGC-31983.
+           Length = 594
+           
+ Score = 43.4 bits (100), Expect = 1e-04
+ Identities = 21/73 (28%), Positives = 34/73 (45%)
+ Frame = -1
+
+Query: 177 APKGIRVNNIGPGAIDTPINAEKFADPEQRADVESMIPMGYIGKPEEIASVAAFLASSQA 236
+           AP   RVN + P  + T +    + DP +   + +  P+G   + E +     FL S ++
+Sbjct: 312 APXRXRVNAVXPXVVMTSMGQATWXDPXKAXTMLNRXPLGXFAEVEHVVKAILFLLSDRS 133
+
+Query: 237 SYVTGITLFADGG 249
+              TG TL  +GG
+Sbjct: 132 GMTTGSTLPVEGG 94
+
+
+>gi|3819804|emb|AJ230012|KLAJ0012 Kluyveromyces lactis DNA fragment
+           for sequence tagged site, clone okam6d01d [Kluyveromyces
+           lactis]
+           Length = 199
+           
+ Score = 39.5 bits (90), Expect = 0.002
+ Identities = 18/49 (36%), Positives = 26/49 (52%)
+ Frame = -1
+
+Query: 200 FADPEQRADVESMIPMGYIGKPEEIASVAAFLASSQASYVTGITLFADG 248
+           F D + +    S+IPMG  G P+E+     + AS  ++Y TG  L  DG
+Sbjct: 157 FVDEDLKNKWHSLIPMGREGLPQELVGAYLYFASDASTYTTGSDLLVDG 11
+
+
+>gi|1375215|gb|G26965|G26965 human STS SHGC-31083.
+           Length = 268
+           
+ Score = 30.9 bits (68), Expect = 0.73
+ Identities = 12/37 (32%), Positives = 19/37 (50%)
+ Frame = -1
+
+Query: 214 PMGYIGKPEEIASVAAFLASSQASYVTGITLFADGGM 250
+           PMG  G PE++  V A      +  +TG ++   GG+
+Sbjct: 268 PMGXXGDPEDVXDVXAXXXXEXSGXITGTSVEVTGGL 158
+
+
+>gi|5714409|gb|AF106665.1|AF106665 Mus musculus chromosome 6 clone
+           D6wum9 map between Nkrp1 and Prp strain C57BL/6J,
+           sequence tagged site
+           Length = 299
+           
+ Score = 29.3 bits (64), Expect = 2.2
+ Identities = 17/55 (30%), Positives = 32/55 (57%), Gaps = 2/55 (3%)
+ Frame = -2
+
+Query: 142 NMSSVHEMIPWPLFVHYAASKGGMKLMTETL--ALEYAPKGIRVNNIGPGAIDTPIN 196
+           ++S    +I +P F+    S  G  L+  +L  A+ + P GI V+++GP ++ T +N
+Sbjct: 172 SLSPTQYLIMFPSFLPCPLSHPGPFLLPSSLVIAVFFLPNGIEVSSLGPFSLRTLLN 2
+
+
+>gi|177714|gb|L09988|HUM4STS889 Human Chromosome 4 (clone p4-1095)
+           STS4-889.
+           Length = 412
+           
+ Score = 29.3 bits (64), Expect = 2.2
+ Identities = 14/34 (41%), Positives = 22/34 (64%)
+ Frame = -1
+
+Query: 7   DKVVVVTGGSKGLGRAMAVRFGQEQSKVVVNYRS 40
+           DKV  V GGS+G+GRA+A    ++  ++ V  R+
+Sbjct: 316 DKVCAVFGGSRGIGRAVAQLMARKGYRLAVIARN 215
+
+
+>gi|1341648|gb|G21322|G21322 human STS WI-12250.
+           Length = 586
+           
+ Score = 28.6 bits (62), Expect = 3.7
+ Identities = 16/39 (41%), Positives = 20/39 (51%), Gaps = 1/39 (2%)
+ Frame = +1
+
+Query: 98  PVPSHELSLENWNQ-VIDTNLTGAFLGSREAIKYFVENDI 136
+           PVP  ELS  +W+Q  + T+ T  F  S     YF  N I
+Sbjct: 220 PVPMQELSKVHWSQFFLTTSPTMTFFFSHYLANYFFRNSI 339
+
+
+  Database: data/sts
+    Posted date:  Feb 11, 2000  2:37 PM
+  Number of letters in database: 31,998,854
+  Number of sequences in database:  87,792
+  
+Lambda     K      H
+   0.315    0.134    0.378 
+
+Gapped
+Lambda     K      H
+   0.270   0.0470    0.230 
+
+
+Matrix: BLOSUM62
+Gap Penalties: Existence: 11, Extension: 1
+Number of Hits to DB: 6165875
+Number of Sequences: 87792
+Number of extensions: 55665
+Number of successful extensions: 148
+Number of sequences better than 10.0: 14
+Number of HSP's better than 10.0 without gapping: 5
+Number of HSP's successfully gapped in prelim test: 2
+Number of HSP's that attempted gapping in prelim test: 142
+Number of HSP's gapped (non-prelim): 7
+length of query: 261
+length of database: 10,666,284
+effective HSP length: 50
+effective length of query: 211
+effective length of database: 6,276,684
+effective search space: 1324380324
+effective search space used: 1324380324
+frameshift window, decay const: 50,  0.1
+T: 13
+A: 40
+X1: 16 ( 7.3 bits)
+X2: 38 (14.8 bits)
+X3: 64 (24.9 bits)
+S1: 42 (22.0 bits)
+S2: 58 (27.0 bits)

@@ -1,0 +1,134 @@
+BLASTX 2.0.11 [Jan-20-2000]
+
+
+Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+
+Query= gi|1347369|gb|G25137|G25137 human STS EST48004.
+         (556 letters)
+
+Database: data/swissprot
+           82,258 sequences; 29,652,561 total letters
+
+Searching..................................................done
+
+                                                                   Score     E
+Sequences producing significant alignments:                        (bits)  Value
+
+gi|1731448|sp|P54103|ZRF1_MOUSE ZUOTIN RELATED FACTOR-1               87  3e-17
+gi|465911|sp|P34454|YMA9_CAEEL HYPOTHETICAL 31.6 KD PROTEIN F54...    42  0.001
+gi|2494160|sp|Q61712|MTJ1_MOUSE DNAJ PROTEIN HOMOLOG MTJ1             37  0.033
+gi|1730688|sp|P53745|YN8X_YEAST HYPOTHETICAL 68.1 KD PROTEIN IN...    29  7.4
+
+>gi|1731448|sp|P54103|ZRF1_MOUSE ZUOTIN RELATED FACTOR-1
+           Length = 514
+           
+ Score = 86.6 bits (211), Expect = 3e-17
+ Identities = 41/47 (87%), Positives = 44/47 (93%)
+ Frame = +1
+
+Query: 1   DLQLLIKAVNLFPAGTNSRWEVIANYMNIHSSSGVKRTAKDVIGKAK 141
+           DLQLLIKAVNLFPAG NSRW+VIANYMNIHSSSGVKRTAKDVI + +
+Sbjct: 458 DLQLLIKAVNLFPAGRNSRWDVIANYMNIHSSSGVKRTAKDVISEVR 504
+
+
+>gi|465911|sp|P34454|YMA9_CAEEL HYPOTHETICAL 31.6 KD PROTEIN F54F2.9
+           IN CHROMOSOME III
+           Length = 275
+           
+ Score = 41.8 bits (96), Expect = 0.001
+ Identities = 30/122 (24%), Positives = 54/122 (43%)
+ Frame = +1
+
+Query: 34  FPAGTNSRWEVIANYMNIHSSSGVKRTAKDVIGKAKSLQKLDPHQKDDINKKAFDKFKKE 213
+           +PAGT +RWE +   +N        R+A+DVI  A  ++++   +++D  K      ++ 
+Sbjct: 159 YPAGTPNRWEQMGRVLN--------RSAEDVIAMAGKMKQM---KQEDYTKLLMTTIQQS 207
+
+Query: 214 HGVVPQADNATPSERFXGPYTDFTPXTTEXQKLXEQALNTYPVNTXERWXXIAVAVPGRX 393
+             V  ++++                 +   QK  E AL  YP  T ERW  I+  +  + 
+Sbjct: 208 VPVEEKSED---------------DWSQAEQKAFETALQKYPKGTDERWERISEEIGSKT 252
+
+Query: 394 KE 399
+           K+
+Sbjct: 253 KK 254
+
+
+>gi|2494160|sp|Q61712|MTJ1_MOUSE DNAJ PROTEIN HOMOLOG MTJ1
+           Length = 552
+           
+ Score = 36.7 bits (83), Expect = 0.033
+ Identities = 17/36 (47%), Positives = 19/36 (52%)
+ Frame = +1
+
+Query: 292 TTEXQKLXEQALNTYPVNTXERWXXIAVAVPGRXKE 399
+           T   QKL E AL  YP    +RW  IA  VP + KE
+Sbjct: 496 TQSQQKLLELALQQYPKGASDRWDKIAKCVPSKSKE 531
+
+
+ Score = 31.3 bits (69), Expect = 1.5
+ Identities = 18/50 (36%), Positives = 26/50 (52%)
+ Frame = +1
+
+Query: 1   DLQLLIKAVNLFPAGTNSRWEVIANYMNIHSSSGVKRTAKDVIGKAKSLQ 150
+           DL  L +++  FP GT  RW+ IA+ +         R+  DV  KAK L+
+Sbjct: 332 DLSQLTRSMVKFPGGTPGRWDKIAHELG--------RSVTDVTTKAKELK 373
+
+
+>gi|1730688|sp|P53745|YN8X_YEAST HYPOTHETICAL 68.1 KD PROTEIN IN
+           BIO3-FRE4 INTERGENIC REGION
+           Length = 580
+           
+ Score = 29.0 bits (63), Expect = 7.4
+ Identities = 27/99 (27%), Positives = 41/99 (41%)
+ Frame = +1
+
+Query: 52  SRWEVIANYMNIHSSSGVKRTAKDVIGKAKSLQKLDPHQKDDINKKAFDKFKKEHGVVPQ 231
+           +RW+   +Y        V R+ KDV   ++SL  LD +QK     +A       H +   
+Sbjct: 75  NRWKSFISY--------VTRSRKDVKTVSRSLSNLDLYQKCSKEIRADQDISLLHSI--- 123
+
+Query: 232 ADNATPSERFXGPYTDFTPXTTEXQKLXEQALNTYPVNT 348
+                  E    PY +FT   +      EQ+ N +PV+T
+Sbjct: 124 -------ETKLFPYINFTALNS------EQSHNFWPVHT 149
+
+
+  Database: data/swissprot
+    Posted date:  Feb 2, 2000  9:39 AM
+  Number of letters in database: 29,652,561
+  Number of sequences in database:  82,258
+  
+Lambda     K      H
+   0.318    0.135    0.401 
+
+Gapped
+Lambda     K      H
+   0.270   0.0470    0.230 
+
+
+Matrix: BLOSUM62
+Gap Penalties: Existence: 11, Extension: 1
+Number of Hits to DB: 23174157
+Number of Sequences: 82258
+Number of extensions: 387821
+Number of successful extensions: 980
+Number of sequences better than 10.0: 8
+Number of HSP's better than 10.0 without gapping: 3
+Number of HSP's successfully gapped in prelim test: 1
+Number of HSP's that attempted gapping in prelim test: 973
+Number of HSP's gapped (non-prelim): 7
+length of query: 185
+length of database: 29,652,561
+effective HSP length: 49
+effective length of query: 135
+effective length of database: 25,621,919
+effective search space: 3458959065
+effective search space used: 3458959065
+frameshift window, decay const: 50,  0.1
+T: 12
+A: 40
+X1: 16 ( 7.3 bits)
+X2: 38 (14.8 bits)
+X3: 64 (24.9 bits)
+S1: 41 (21.7 bits)
+S2: 62 (28.6 bits)

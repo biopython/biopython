@@ -1,0 +1,143 @@
+BLASTP 2.0.11 [Jan-20-2000]
+
+
+Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+
+Query= gi|1718062|sp|P16153|UTXA_CLODI UTXA PROTEIN
+         (166 letters)
+
+Database: data/swissprot
+           82,258 sequences; 29,652,561 total letters
+
+Searching..................................................done
+
+>gi|1718062|sp|P16153|UTXA_CLODI UTXA PROTEIN
+           Length = 166
+           
+ Score =  332 bits (843), Expect = 2e-91
+ Identities = 166/166 (100%), Positives = 166/166 (100%)
+
+Query: 1   MHSSSPFYISNGNKIFFYINLGGVMNMTISFLSEHIFIKLVILTISFDTLLGCLSAIKSR 60
+           MHSSSPFYISNGNKIFFYINLGGVMNMTISFLSEHIFIKLVILTISFDTLLGCLSAIKSR
+Sbjct: 1   MHSSSPFYISNGNKIFFYINLGGVMNMTISFLSEHIFIKLVILTISFDTLLGCLSAIKSR 60
+
+Query: 61  KFNSSFGIDGGIRKVAMIACIFFLSVVDILTKFNFLFMLPQDCINFLRLKHLGISEFFSI 120
+           KFNSSFGIDGGIRKVAMIACIFFLSVVDILTKFNFLFMLPQDCINFLRLKHLGISEFFSI
+Sbjct: 61  KFNSSFGIDGGIRKVAMIACIFFLSVVDILTKFNFLFMLPQDCINFLRLKHLGISEFFSI 120
+
+Query: 121 LFILYESVSILKNMCLCGLPVPKRLKEKIAILLDAMTDEMNAKDEK 166
+           LFILYESVSILKNMCLCGLPVPKRLKEKIAILLDAMTDEMNAKDEK
+Sbjct: 121 LFILYESVSILKNMCLCGLPVPKRLKEKIAILLDAMTDEMNAKDEK 166
+
+
+>gi|140528|sp|P24811|YQXH_BACSU HYPOTHETICAL 15.7 KD PROTEIN IN
+           SPOIIIC-CWLA INTERGENIC REGION (ORF2)
+           Length = 140
+           
+ Score = 39.5 bits (90), Expect = 0.004
+ Identities = 27/130 (20%), Positives = 55/130 (41%), Gaps = 19/130 (14%)
+
+Query: 37  FIKLVILTISFDTLLGCLSAIKSRKFNSSFGIDGGIRKVAMIACIFFLSVVDILTKFNFL 96
+           ++ L+++    D L G + A K +K  S     G +RK+     +   +V+D +   N  
+Sbjct: 26  YLDLLLVLSIIDVLTGVIKAWKFKKLRSRSAWFGYVRKLLNFFAVILANVIDTVLNLN-- 83
+
+Query: 97  FMLPQDCINFLRLKHLGISEFFSILF-ILYESVSILKNMCLCGLPVPKRLKEKIAILLDA 155
+                           G+  F ++LF I  E +SI +N+   G+ +P  + +++  + + 
+Sbjct: 84  ----------------GVLTFGTVLFYIANEGLSITENLAQIGVKIPSSITDRLQTIENE 127
+
+Query: 156 MTDEMNAKDE 165
+                N  D+
+Sbjct: 128 KEQSKNNADK 137
+
+
+>gi|141088|sp|P26835|YNGD_CLOPE HYPOTHETICAL 14.9 KD PROTEIN IN NAGH
+           3'REGION (ORFD)
+           Length = 132
+           
+ Score = 38.7 bits (88), Expect = 0.007
+ Identities = 24/110 (21%), Positives = 52/110 (46%), Gaps = 18/110 (16%)
+
+Query: 41  VILTISFDTLLGCLSAIKSRKFNSSFGIDGGIRKVAMIACIFFLSVVD-ILTKFNFLFML 99
+           +++ I  D L G +   KS++  S+ G+ G  +K  ++  +    ++D +L    ++F  
+Sbjct: 33  LLVFIFLDYLTGVIKGCKSKELCSNIGLRGITKKGLILVVLLVAVMLDRLLDNGTWMFRT 92
+
+Query: 100 PQDCINFLRLKHLGISEFFSILFILYESVSILKNMCLCGLPVPKRLKEKI 149
+                              +  +I+ E +SIL+N    G+P+P++LK+ +
+Sbjct: 93  -----------------LIAYFYIMNEGISILENCAALGVPIPEKLKQAL 125
+
+
+>gi|6014830|sp|O78935|CYB_MARAM CYTOCHROME B
+           Length = 379
+           
+ Score = 29.3 bits (64), Expect = 4.6
+ Identities = 19/57 (33%), Positives = 33/57 (57%), Gaps = 2/57 (3%)
+
+Query: 80  CIFFLSVVDILTKFNFLFMLPQDCINFLRLKHLGISEFFSILFILYESVSILKNMCL 136
+           C+F+L V D+LT   ++   P +   F+ +  L    +F+IL IL  ++SI++N  L
+Sbjct: 323 CLFWLLVADLLT-LTWIGGQPVEH-PFITIGQLASILYFAILLILMPAISIIENNLL 377
+
+
+>gi|1351589|sp|P47694|Y456_MYCGE HYPOTHETICAL PROTEIN MG456
+           Length = 334
+           
+ Score = 29.0 bits (63), Expect = 6.0
+ Identities = 16/44 (36%), Positives = 24/44 (54%), Gaps = 2/44 (4%)
+
+Query: 90  LTKFNFLFMLPQDCINFLRLKHLGISEFFSILFILYESVSILKN 133
+           LTKFN  F+ P     FLR+  +G+   FS++ I +   S  +N
+Sbjct: 4   LTKFNKFFLTPNKLNAFLRV--IGLCGLFSVIAISFGIYSYTRN 45
+
+
+>gi|2496246|sp|Q57881|Y439_METJA HYPOTHETICAL ATP-BINDING PROTEIN
+           MJ0439
+           Length = 361
+           
+ Score = 28.6 bits (62), Expect = 7.8
+ Identities = 19/56 (33%), Positives = 30/56 (52%), Gaps = 12/56 (21%)
+
+Query: 106 FLRLKHLGIS---EFFSILFILYES----VSILKNMC-----LCGLPVPKRLKEKI 149
+           ++ L+ + IS   +F  +LF  YE     V I+K++      LCG+P PK   E+I
+Sbjct: 68  YINLRGIFISKYKDFIEVLFEEYEEDRKPVEIIKSLIKDVPSLCGIPTPKNTLEEI 123
+
+
+  Database: data/swissprot
+    Posted date:  Feb 2, 2000  9:39 AM
+  Number of letters in database: 29,652,561
+  Number of sequences in database:  82,258
+  
+Lambda     K      H
+   0.331    0.146    0.428 
+
+Gapped
+Lambda     K      H
+   0.270   0.0470    0.230 
+
+
+Matrix: BLOSUM62
+Gap Penalties: Existence: 11, Extension: 1
+Number of Hits to DB: 8801581
+Number of Sequences: 82258
+Number of extensions: 320828
+Number of successful extensions: 892
+Number of sequences better than 10.0: 6
+Number of HSP's better than 10.0 without gapping: 3
+Number of HSP's successfully gapped in prelim test: 3
+Number of HSP's that attempted gapping in prelim test: 888
+Number of HSP's gapped (non-prelim): 6
+length of query: 166
+length of database: 29,652,561
+effective HSP length: 46
+effective length of query: 120
+effective length of database: 25,868,693
+effective search space: 3104243160
+effective search space used: 3104243160
+T: 11
+A: 40
+X1: 15 ( 7.2 bits)
+X2: 38 (14.8 bits)
+X3: 64 (24.9 bits)
+S1: 40 (21.9 bits)
+S2: 62 (28.6 bits)

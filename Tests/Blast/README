@@ -50,5 +50,24 @@ bt037 NCBI WWW 2.0.10 sp:Q06110  swissprot blastp no graphical overview descript
 bt038 NCBI WWW 2.0.10 sp:Q06110  swissprot blastp descriptions=0 master-slave without identities
 bt039 blastall 2.0.10 sp:Q08386  swissprot -p blastp      >1 HSP in alignment
 bt040 blastall 2.0.10 sp:Q05362  swissprot -p blastp -v 0 -m 4 no descriptions, master-slave
+bt041 blastall 2.0.11 sp:P21297  swissprot -p blastp
+bt042 blastall 2.0.11 sp:Q02112  pdbaa     -p blastp      no hits
+bt043 blastall 2.0.11 sp:P16153  swissprot -p blastp -v 0 no descriptions 
+bt044 blastall 2.0.11 sp:P16153  swissprot -p blastp -b 0 no alignments
+bt045 blastall 2.0.11 sp:P15394  swissprot -p blastp -m 6 master-slave
+bt046 blastpgp 2.0.11 sp:P12921  swissprot -j 10          converges in 2 rounds
+bt047 blastpgp 2.0.11 sp:Q02134  swissprot -j 10          no new sequences before CONVERGED! message
+bt048 blastall 2.0.11 gi:1348916 sts       -p blastn
+bt049 blastall 2.0.11 gi:1348400 sts       -p blastn -b 0 no alignment
+bt050 blastall 2.0.11 gi:1347201 sts       -p blastn -v 0 no descriptions
+bt051 blastall 2.0.11 gi:859351  sts       -p blastn -m 1 master-slave
+bt052 blastall 2.0.11 gi:1347369 swissprot -p blastx
+bt053 blastall 2.0.11 gi:1347782 swissprot -p blastx      no hits
+bt054 blastall 2.0.11 sp:P39483  sts       -p tblastn
+bt055 blastall 2.0.11 sp:P19888  sts       -p tblastn     no hits
+bt056 blastall 2.0.11 gi:1348853 sts       -p tblastx
+bt057 blastall 2.0.11 sp:Q08386  swissprot -p blastp      >1 HSP in alignment
+bt058 blastall 2.0.11 sp:Q05362  swissprot -p blastp -v 0 -m 4 no descriptions, master-slave
+
 
 * bt008 is not included because the file is too big (>15Mb).

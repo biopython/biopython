@@ -1,0 +1,602 @@
+TBLASTX 2.0.11 [Jan-20-2000]
+
+
+Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+
+Query= gi|1348853|gb|G26621|G26621 human STS
+STS_D12006.gi|1396339|gb|G27620|G27620 human STS SHGC-32705.
+         (615 letters)
+
+Database: data/sts
+           87,792 sequences; 31,998,854 total letters
+
+Searching..................................................done
+
+                                                                   Score     E
+Sequences producing significant alignments:                        (bits)  Value
+
+gi|1348853|gb|G26621|G26621 human STS STS_D12006. >gi|1396339|g...   398  e-111
+gi|1348016|gb|G25784|G25784 human STS EST47998.                      302  1e-82
+gi|3403105|gb|G41148|G41148 Z7324 Zebrafish AB Danio rerio STS ...    31  0.60
+gi|1234967|emb|Z53521|HSB316XA9 H.sapiens (D22S1166) DNA segmen...    30  0.83
+gi|4185670|gb|G42865|G42865 Xq3845 KWOK Homo sapiens STS genomi...    30  1.1
+gi|4757419|gb|G49246.1|G49246 stbK116F5_30376 chromosome 22 gen...    29  1.6
+gi|6120694|gb|G55375.1|G55375 SHGC-100697 Human Homo sapiens ST...    29  3.0
+gi|5225124|gb|G53947.1|G53947 SHGC-85304 Human Homo sapiens STS...    29  3.0
+gi|1311530|gb|L77996|HUMSWX945 Human chromosome X STS sWXD945, ...    28  4.1
+gi|4631600|dbj|AU046965.1|AU046965 Rattus norvegicus, OTSUKA cl...    28  4.1
+gi|4631518|dbj|AU046883.1|AU046883 Rattus norvegicus, OTSUKA cl...    28  4.1
+gi|2226478|gb|G33174|G33174 human STS SHGC-6097 clone pG-2470         28  4.1
+gi|2734624|gb|G36957|G36957 SHGC-56642 Human Homo sapiens STS cDNA    28  4.1
+gi|859804|gb|G06559|G06559 human STS WI-7401.                         27  7.7
+gi|938611|gb|G08061|G08061 human STS CHLC.GGAA7E02.P7438 clone ...    27  7.7
+gi|307789|gb|L18105|HUMUT1736 Human STS UT1736.                       27  7.7
+gi|4492122|gb|G45831.1|G45831 Z4588_1 Zebrafish AB Danio rerio ...    27  7.7
+gi|6121804|gb|G56635.1|G56635 SHGC-102032 Human Homo sapiens ST...    27  7.7
+gi|4493143|gb|G46852.1|G46852 Z14841_1 Zebrafish AB Danio rerio...    27  7.7
+
+>gi|1348853|gb|G26621|G26621 human STS STS_D12006.
+           >gi|1396339|gb|G27620|G27620 human STS SHGC-32705.
+           Length = 615
+           
+ Score =  367 bits (796), Expect = e-102
+ Identities = 192/200 (96%), Positives = 192/200 (96%)
+ Frame = +2 / +2
+
+                                                                       
+Query: 2   IRMPLHS*DSSFCPL*QEKWECMXXXXXXXXRPKRCLQPHPLNWP*LGLNALMQNPLTKA 181
+           IRMPLHS*DSSFCPL*QEKWECM        RPKRCLQPHPLNWP*LGLNALMQNPLTKA
+Sbjct: 2   IRMPLHS*DSSFCPL*QEKWECMQSSQKKQKRPKRCLQPHPLNWP*LGLNALMQNPLTKA 181
+
+                                                                       
+Query: 182 HRLFQTSIVFYVTCFTASSQQLLTTAQFSPLQPLFWWTNNLGTPNPGRKNIQHYEXALX* 361
+           HRLFQTSIVFYVTCFTASSQQLLTTAQFSPLQPLFWWTNNLGTPNPGRKNIQHYE AL *
+Sbjct: 182 HRLFQTSIVFYVTCFTASSQQLLTTAQFSPLQPLFWWTNNLGTPNPGRKNIQHYEXALX* 361
+
+                                                                       
+Query: 362 S*NGFPKLVTHGPGXVXLXLXGLSSFQEFXSTVANPWGX*XXXXXXXXXFXXGXRXXXLX 541
+           S*NGFPKLVTHGPG V L L GLSSFQEF STVANPWG *         F  G R   L 
+Sbjct: 362 S*NGFPKLVTHGPGXVXLXLXGLSSFQEFXSTVANPWGX*XXXXXXXXXFXXGXRXXXLX 541
+
+                               
+Query: 542 XXXGGCXXVXXVXXXWXXXF 601
+              GGC  V  V   W   F
+Sbjct: 542 XXXGGCXXVXXVXXXWXXXF 601
+
+
+ Score =  350 bits (759), Expect = 3e-97
+ Identities = 195/205 (95%), Positives = 195/205 (95%)
+ Frame = +1 / +1
+
+                                                                       
+Query: 1   DQNAPPLMRLFILSTLTGKVGMYAELSKETKKAKTVPSATSSELALTWTKCTNAKSLDKS 180
+           DQNAPPLMRLFILSTLTGKVGMYAELSKETKKAKTVPSATSSELALTWTKCTNAKSLDKS
+Sbjct: 1   DQNAPPLMRLFILSTLTGKVGMYAELSKETKKAKTVPSATSSELALTWTKCTNAKSLDKS 180
+
+                                                                       
+Query: 181 A*VISNQHCFLCNLFYRIFSAASDHCSIFSFTAIVLVDK*PRYSKSWQEKYTAL*XSTXV 360
+           A*VISNQHCFLCNLFYRIFSAASDHCSIFSFTAIVLVDK*PRYSKSWQEKYTAL* ST V
+Sbjct: 181 A*VISNQHCFLCNLFYRIFSAASDHCSIFSFTAIVLVDK*PRYSKSWQEKYTAL*XSTXV 360
+
+                                                                       
+Query: 361 ILKWISKAGYTWPWXXXIXFXXAFFXXXXXXXXXXXXXXLXGXVX*XXXXSXGPXXXXVX 540
+           ILKWISKAGYTWPW   I F  AFF              L G V *    S GP    V 
+Sbjct: 361 ILKWISKAGYTWPWXXXIXFXXAFFXSGVXVNGGKSXGXLXGXVX*XXXXSXGPXXXXVX 540
+
+                                    
+Query: 541 XPXGWVXXGXFXFXXXXXXFXXXLG 615
+            P GWV  G F F      F   LG
+Sbjct: 541 XPXGWVXXGXFXFXXXXXXFXXXLG 615
+
+
+ Score =  180 bits (387), Expect(2) = 9e-91
+ Identities = 74/74 (100%), Positives = 74/74 (100%)
+ Frame = +3 / +3
+
+                                                                       
+Query: 3   SECPSTHETLHFVHFDRKSGNVCRALKRNKKGQNGAFSHIL*IGPDLD*MH*CKIP*QKR 182
+           SECPSTHETLHFVHFDRKSGNVCRALKRNKKGQNGAFSHIL*IGPDLD*MH*CKIP*QKR
+Sbjct: 3   SECPSTHETLHFVHFDRKSGNVCRALKRNKKGQNGAFSHIL*IGPDLD*MH*CKIP*QKR 182
+
+                         
+Query: 183 IGYFKPALFFM*PV 224
+           IGYFKPALFFM*PV
+Sbjct: 183 IGYFKPALFFM*PV 224
+
+
+ Score =  171 bits (368), Expect(2) = 9e-91
+ Identities = 114/114 (100%), Positives = 114/114 (100%)
+ Frame = +3 / +3
+
+                                                                       
+Query: 273 YSHCSGGQIT*VLQILAGKIYSIMXQHSXNPKMDFQSWLHMALXXSY*XXXGFLXFRSXG 452
+           YSHCSGGQIT*VLQILAGKIYSIM QHS NPKMDFQSWLHMAL  SY*   GFL FRS G
+Sbjct: 273 YSHCSGGQIT*VLQILAGKIYSIMXQHSXNPKMDFQSWLHMALXXSY*XXXGFLXFRSXG 452
+
+                                                                 
+Query: 453 QRWQIXGVXXWXGXLXXXXFXGAXGGXGXXSXXVGAXGXXXFXXXGXXXXXXXW 614
+           QRWQI GV  W G L    F GA GG G  S  VGA G   F   G       W
+Sbjct: 453 QRWQIXGVXXWXGXLXXXXFXGAXGGXGXXSXXVGAXGXXXFXXXGXXXXXXXW 614
+
+
+ Score =  398 bits (864), Expect = e-111
+ Identities = 205/205 (100%), Positives = 205/205 (100%)
+ Frame = -1 / -1
+
+                                                                       
+Query: 615 PKXXXKXXXXXXKTKXTXXHPPXWXXNXXXLWPXXXXXXLXNXXX*XPXGFATVDXNS*X 436
+           PK   K      KTK T  HPP W  N   LWP      L N   * P GFATVD NS* 
+Sbjct: 615 PKXXXKXXXXXXKTKXTXXHPPXWXXNXXXLWPXXXXXXLXNXXX*XPXGFATVDXNS*X 436
+
+                                                                       
+Query: 435 EESPXKXNXTXPGPCVTSFGNPF*DYXSAXS*CCIFFLPGFGVPRLFVHQNNGCKGEN*A 256
+           EESP K N T PGPCVTSFGNPF*DY SA S*CCIFFLPGFGVPRLFVHQNNGCKGEN*A
+Sbjct: 435 EESPXKXNXTXPGPCVTSFGNPF*DYXSAXS*CCIFFLPGFGVPRLFVHQNNGCKGEN*A 256
+
+                                                                       
+Query: 255 VVRSC*EDAVKQVT*KTMLV*NNLCAFVKGFCISAFSPSQGQFRGCG*RHRFGLFCFF*E 76
+           VVRSC*EDAVKQVT*KTMLV*NNLCAFVKGFCISAFSPSQGQFRGCG*RHRFGLFCFF*E
+Sbjct: 255 VVRSC*EDAVKQVT*KTMLV*NNLCAFVKGFCISAFSPSQGQFRGCG*RHRFGLFCFF*E 76
+
+                                    
+Query: 75  LCIHSHFSCQSGQNEESHEWRGILI 1
+           LCIHSHFSCQSGQNEESHEWRGILI
+Sbjct: 75  LCIHSHFSCQSGQNEESHEWRGILI 1
+
+
+ Score =  390 bits (846), Expect = e-109
+ Identities = 196/196 (100%), Positives = 196/196 (100%)
+ Frame = -3 / -3
+
+                                                                       
+Query: 589 PXXXNXXNPXAPTXXXX*PXPPXAPXKXXXXXXPXXLXTPXICHR*PKLLKXRKPX*XQX 410
+           P   N  NP APT    *P PP AP K      P  L TP ICHR*PKLLK RKP * Q 
+Sbjct: 589 PXXXNXXNPXAPTXXXX*PXPPXAPXKXXXXXXPXXLXTPXICHR*PKLLKXRKPX*XQX 410
+
+                                                                       
+Query: 409 DXXRAMCNQLWKSILGLXECXFIMLYIFPARIWST*VICPPEQWL*RRKLSSGQKLLRRC 230
+           D  RAMCNQLWKSILGL EC FIMLYIFPARIWST*VICPPEQWL*RRKLSSGQKLLRRC
+Sbjct: 409 DXXRAMCNQLWKSILGLXECXFIMLYIFPARIWST*VICPPEQWL*RRKLSSGQKLLRRC 230
+
+                                                                       
+Query: 229 GKTGYIKNNAGLK*PMRFCQGILH*CI*SKSGPIQRMWLKAPFWPFLFLLRALHTFPLFL 50
+           GKTGYIKNNAGLK*PMRFCQGILH*CI*SKSGPIQRMWLKAPFWPFLFLLRALHTFPLFL
+Sbjct: 229 GKTGYIKNNAGLK*PMRFCQGILH*CI*SKSGPIQRMWLKAPFWPFLFLLRALHTFPLFL 50
+
+                           
+Query: 49  SKWTK*RVS*VEGHSD 2
+           SKWTK*RVS*VEGHSD
+Sbjct: 49  SKWTK*RVS*VEGHSD 2
+
+
+ Score =  316 bits (684), Expect = 7e-87
+ Identities = 146/146 (100%), Positives = 146/146 (100%)
+ Frame = -2 / -2
+
+                                                                       
+Query: 440 EXKKAXXXSIXXXQGHV*PALEIHFRIT*VLXHNAVYFSCQDLEYLGYLSTRTMAVKEKI 261
+           E KKA   SI   QGHV*PALEIHFRIT*VL HNAVYFSCQDLEYLGYLSTRTMAVKEKI
+Sbjct: 440 EXKKAXXXSIXXXQGHV*PALEIHFRIT*VLXHNAVYFSCQDLEYLGYLSTRTMAVKEKI 261
+
+                                                                       
+Query: 260 EQWSEAAEKMR*NRLHKKQCWFEITYALLSRDFALVHLVQVRANSEDVAEGTVLAFFVSF 81
+           EQWSEAAEKMR*NRLHKKQCWFEITYALLSRDFALVHLVQVRANSEDVAEGTVLAFFVSF
+Sbjct: 260 EQWSEAAEKMR*NRLHKKQCWFEITYALLSRDFALVHLVQVRANSEDVAEGTVLAFFVSF 81
+
+                                     
+Query: 80  ESSAYIPTFPVKVDKMKSLMSGGAF* 3
+           ESSAYIPTFPVKVDKMKSLMSGGAF*
+Sbjct: 80  ESSAYIPTFPVKVDKMKSLMSGGAF* 3
+
+
+>gi|1348016|gb|G25784|G25784 human STS EST47998.
+           Length = 617
+           
+ Score =  170 bits (366), Expect(2) = 3e-63
+ Identities = 71/74 (95%), Positives = 71/74 (95%)
+ Frame = +3 / +3
+
+                                                                       
+Query: 3   SECPSTHETLHFVHFDRKSGNVCRALKRNKKGQNGAFSHIL*IGPDLD*MH*CKIP*QKR 182
+           S CPSTHETLHFVHFDRKSGNVCRALKRNKKGQNGAFSHIL*IGPDLD*  *CKIP*QKR
+Sbjct: 3   SXCPSTHETLHFVHFDRKSGNVCRALKRNKKGQNGAFSHIL*IGPDLD*XX*CKIP*QKR 182
+
+                         
+Query: 183 IGYFKPALFFM*PV 224
+           IGYFKPALFFM*PV
+Sbjct: 183 IGYFKPALFFM*PV 224
+
+
+ Score = 89.0 bits (188), Expect(2) = 3e-63
+ Identities = 42/67 (62%), Positives = 43/67 (63%)
+ Frame = +3 / +3
+
+                                                                       
+Query: 273 YSHCSGGQIT*VLQILAGKIYSIMXQHSXNPKMDFQSWLHMALXXSY*XXXGFLXFRSXG 452
+           YSHCSGGQIT*VLQILAGKIYSIM QHS   K  FQSWLHM     +     F   R  G
+Sbjct: 273 YSHCSGGQIT*VLQILAGKIYSIMKQHSVILKWIFQSWLHMXCKVLFKFKRPFSFTRGLG 452
+
+                  
+Query: 453 QRWQIXG 473
+           QR Q  G
+Sbjct: 453 QRXQTPG 473
+
+
+ Score =  273 bits (590), Expect = 7e-74
+ Identities = 121/133 (90%), Positives = 121/133 (90%)
+ Frame = +1 / +1
+
+                                                                       
+Query: 1   DQNAPPLMRLFILSTLTGKVGMYAELSKETKKAKTVPSATSSELALTWTKCTNAKSLDKS 180
+           DQ APPLMRLFILSTLTGKVGMYAELSKETKKAKTVPSATSSELALTWTK  NAKSLDKS
+Sbjct: 1   DQXAPPLMRLFILSTLTGKVGMYAELSKETKKAKTVPSATSSELALTWTKXXNAKSLDKS 180
+
+                                                                       
+Query: 181 A*VISNQHCFLCNLFYRIFSAASDHCSIFSFTAIVLVDK*PRYSKSWQEKYTAL*XSTXV 360
+           A*VISNQHCFLCNLFYRIFSAASDHCSIFSFTAIVLVDK*PRYSKSWQEKYTAL* ST  
+Sbjct: 181 A*VISNQHCFLCNLFYRIFSAASDHCSIFSFTAIVLVDK*PRYSKSWQEKYTAL*NSTQ* 360
+
+                        
+Query: 361 ILKWISKAGYTWP 399
+                SKAGYT P
+Sbjct: 361 S*NGFSKAGYTXP 399
+
+
+ Score =  274 bits (593), Expect(2) = 8e-76
+ Identities = 112/131 (85%), Positives = 112/131 (85%)
+ Frame = +2 / +2
+
+                                                                       
+Query: 2   IRMPLHS*DSSFCPL*QEKWECMXXXXXXXXRPKRCLQPHPLNWP*LGLNALMQNPLTKA 181
+           IR PLHS*DSSFCPL*QEKWECM        RPKRCLQPHPLNWP*LGL  LMQNPLTKA
+Sbjct: 2   IRXPLHS*DSSFCPL*QEKWECMQSSQKKQKRPKRCLQPHPLNWP*LGLXPLMQNPLTKA 181
+
+                                                                       
+Query: 182 HRLFQTSIVFYVTCFTASSQQLLTTAQFSPLQPLFWWTNNLGTPNPGRKNIQHYEXALX* 361
+           HRLFQTSIVFYVTCFTASSQQLLTTAQF PLQPLFWWTNNLGTPNPGRKNIQHYE AL  
+Sbjct: 182 HRLFQTSIVFYVTCFTASSQQLLTTAQFFPLQPLFWWTNNLGTPNPGRKNIQHYETALSN 361
+
+                      
+Query: 362 S*NGFPKLVTH 394
+               FPKLVTH
+Sbjct: 362 PKMDFPKLVTH 394
+
+
+ Score = 27.2 bits (53), Expect(2) = 8e-76
+ Identities = 9/13 (69%), Positives = 10/13 (76%)
+ Frame = +2 / +2
+
+                        
+Query: 437 FQEFXSTVANPWG 475
+           +Q F ST ANPWG
+Sbjct: 437 YQGFRSTXANPWG 475
+
+
+ Score =  302 bits (653), Expect = 1e-82
+ Identities = 128/157 (81%), Positives = 132/157 (83%)
+ Frame = -3 / -2
+
+                                                                       
+Query: 472 PXICHR*PKLLKXRKPX*XQXDXXRAMCNQLWKSILGLXECXFIMLYIFPARIWST*VIC 293
+           P +C R*PK L   K         + MCNQLWK    + EC FIMLYIFPARIWST*VIC
+Sbjct: 472 PGVCXR*PKPLVNEKGLLNLNKTLQXMCNQLWKIHFRITECCFIMLYIFPARIWST*VIC 293
+
+                                                                       
+Query: 292 PPEQWL*RRKLSSGQKLLRRCGKTGYIKNNAGLK*PMRFCQGILH*CI*SKSGPIQRMWL 113
+           PPEQWL*R+KLSSGQKLLRRCGKTGYIKNNAGLK*PMRFCQGILH*  *SKSGPIQRMWL
+Sbjct: 292 PPEQWL*RKKLSSGQKLLRRCGKTGYIKNNAGLK*PMRFCQGILH*XX*SKSGPIQRMWL 113
+
+                                                
+Query: 112 KAPFWPFLFLLRALHTFPLFLSKWTK*RVS*VEGHSD 2
+           KAPFWPFLFLLRALHTFPLFLSKWTK*RVS*VEG SD
+Sbjct: 112 KAPFWPFLFLLRALHTFPLFLSKWTK*RVS*VEGXSD 2
+
+
+ Score =  276 bits (598), Expect = 5e-75
+ Identities = 122/130 (93%), Positives = 122/130 (93%)
+ Frame = -2 / -1
+
+                                                                       
+Query: 398 GHV*PALEIHFRIT*VLXHNAVYFSCQDLEYLGYLSTRTMAVKEKIEQWSEAAEKMR*NR 219
+           GHV*PALE  F   *VL HNAVYFSCQDLEYLGYLSTRTMAVKEKIEQWSEAAEKMR*NR
+Sbjct: 398 GHV*PALENPF*DY*VLFHNAVYFSCQDLEYLGYLSTRTMAVKEKIEQWSEAAEKMR*NR 219
+
+                                                                       
+Query: 218 LHKKQCWFEITYALLSRDFALVHLVQVRANSEDVAEGTVLAFFVSFESSAYIPTFPVKVD 39
+           LHKKQCWFEITYALLSRDFAL  LVQVRANSEDVAEGTVLAFFVSFESSAYIPTFPVKVD
+Sbjct: 218 LHKKQCWFEITYALLSRDFALXXLVQVRANSEDVAEGTVLAFFVSFESSAYIPTFPVKVD 39
+
+                     
+Query: 38  KMKSLMSGGA 9
+           KMKSLMSGGA
+Sbjct: 38  KMKSLMSGGA 9
+
+
+ Score =  290 bits (628), Expect = 4e-79
+ Identities = 119/131 (90%), Positives = 120/131 (90%)
+ Frame = -1 / -3
+
+                                                                       
+Query: 393 CVTSFGNPF*DYXSAXS*CCIFFLPGFGVPRLFVHQNNGCKGEN*AVVRSC*EDAVKQVT 214
+           CVTSFG       SA S*CCIFFLPGFGVPRLFVHQNNGCKG+N*AVVRSC*EDAVKQVT
+Sbjct: 393 CVTSFGKSILGLLSAVS*CCIFFLPGFGVPRLFVHQNNGCKGKN*AVVRSC*EDAVKQVT 214
+
+                                                                       
+Query: 213 *KTMLV*NNLCAFVKGFCISAFSPSQGQFRGCG*RHRFGLFCFF*ELCIHSHFSCQSGQN 34
+           *KTMLV*NNLCAFVKGFCI  FSPSQGQFRGCG*RHRFGLFCFF*ELCIHSHFSCQSGQN
+Sbjct: 213 *KTMLV*NNLCAFVKGFCIXGFSPSQGQFRGCG*RHRFGLFCFF*ELCIHSHFSCQSGQN 34
+
+                      
+Query: 33  EESHEWRGILI 1
+           EESHEWRG LI
+Sbjct: 33  EESHEWRGXLI 1
+
+
+>gi|3403105|gb|G41148|G41148 Z7324 Zebrafish AB Danio rerio STS
+           genomic
+           Length = 351
+           
+ Score = 30.8 bits (61), Expect = 0.60
+ Identities = 11/27 (40%), Positives = 18/27 (65%)
+ Frame = +1 / +2
+
+                                      
+Query: 211 LCNLFYRIFSAASDHCSIFSFTAIVLV 291
+           L NL +R+F++  DHCS+  F   V++
+Sbjct: 2   LTNLIFRLFTSK*DHCSLKQFNNKVVI 82
+
+
+>gi|1234967|emb|Z53521|HSB316XA9 H.sapiens (D22S1166) DNA segment
+           containing (CA) repeat; clone AFMb316xa9; single read,
+           sequence tagged site [Homo sapiens]
+           Length = 345
+           
+ Score = 30.4 bits (60), Expect = 0.83
+ Identities = 10/19 (52%), Positives = 13/19 (67%)
+ Frame = -3 / +1
+
+                              
+Query: 316 IWST*VICPPEQWL*RRKL 260
+           +W T  +CPP  W *RR+L
+Sbjct: 226 LWGTAPLCPPVPWA*RRQL 282
+
+
+>gi|4185670|gb|G42865|G42865 Xq3845 KWOK Homo sapiens STS genomic,
+           sequence tagged site [Homo sapiens]
+           Length = 1200
+           
+ Score = 29.9 bits (59), Expect = 1.1
+ Identities = 10/24 (41%), Positives = 14/24 (57%)
+ Frame = -3 / -2
+
+                                   
+Query: 106 PFWPFLFLLRALHTFPLFLSKWTK 35
+           P WP + LL  +H+FP  +  W K
+Sbjct: 716 PEWPSINLLPGMHSFPRVIPCWEK 645
+
+
+>gi|4757419|gb|G49246.1|G49246 stbK116F5_30376 chromosome 22 genomic
+           clone Homo sapiens STS genomic clone 116F5, sequence
+           tagged site
+           Length = 375
+           
+ Score = 29.5 bits (58), Expect = 1.6
+ Identities = 15/34 (44%), Positives = 17/34 (49%)
+ Frame = -3 / -2
+
+                                             
+Query: 106 PFWPFLFLLRALHTFPLFLSKWTK*RVS*VEGHS 5
+           P W   FLLR LHT P    K+    V+  EG S
+Sbjct: 176 PGWTLRFLLRGLHTPPKAAEKFPSQGVAEPEGFS 75
+
+
+>gi|6120694|gb|G55375.1|G55375 SHGC-100697 Human Homo sapiens STS
+           genomic, sequence tagged site
+           Length = 460
+           
+ Score = 28.6 bits (56), Expect = 3.0
+ Identities = 9/28 (32%), Positives = 16/28 (57%)
+ Frame = +3 / +1
+
+                                       
+Query: 15  STHETLHFVHFDRKSGNVCRALKRNKKG 98
+           +TH    F+H  +K  N+C  +  N++G
+Sbjct: 82  TTHSMTVFLHVKKKLSNICIYMPENREG 165
+
+
+>gi|5225124|gb|G53947.1|G53947 SHGC-85304 Human Homo sapiens STS
+           genomic, sequence tagged site
+           Length = 444
+           
+ Score = 28.6 bits (56), Expect = 3.0
+ Identities = 10/24 (41%), Positives = 15/24 (61%)
+ Frame = +1 / -2
+
+                                   
+Query: 202 HCFLCNLFYRIFSAASDHCSIFSF 273
+           HC L ++F RIF    +  S+F+F
+Sbjct: 443 HCHLSSVFCRIFFTLEESLSLFAF 372
+
+
+>gi|1311530|gb|L77996|HUMSWX945 Human chromosome X STS sWXD945,
+           single read.
+           Length = 196
+           
+ Score = 28.1 bits (55), Expect = 4.1
+ Identities = 9/33 (27%), Positives = 19/33 (57%)
+ Frame = +3 / -2
+
+                                            
+Query: 24  ETLHFVHFDRKSGNVCRALKRNKKGQNGAFSHI 122
+           E +H+V F +  G +  + ++ ++ QN   SH+
+Sbjct: 141 EKIHYVLF*KNCGKIMTS*RQRQENQNNLLSHV 43
+
+
+>gi|4631600|dbj|AU046965.1|AU046965 Rattus norvegicus, OTSUKA clone,
+           108a02, microsatellite sequence, sequence tagged site
+           Length = 330
+           
+ Score = 28.1 bits (55), Expect = 4.1
+ Identities = 12/39 (30%), Positives = 19/39 (47%)
+ Frame = +2 / -3
+
+                                                  
+Query: 167 PLTKAHRLFQTSIVFYVTCFTASSQQLLTTAQFSPLQPL 283
+           PL    RLF + +  ++ C T     L  +  F P++PL
+Sbjct: 211 PLKTQGRLFYSKVSLFLKCRTTLCLFLNVSEGFXPIEPL 95
+
+
+>gi|4631518|dbj|AU046883.1|AU046883 Rattus norvegicus, OTSUKA clone,
+           085f03, microsatellite sequence, sequence tagged site
+           Length = 351
+           
+ Score = 28.1 bits (55), Expect = 4.1
+ Identities = 8/26 (30%), Positives = 15/26 (56%)
+ Frame = +1 / +3
+
+                                     
+Query: 205 CFLCNLFYRIFSAASDHCSIFSFTAI 282
+           CF+C L  +I+  A +   +  FT++
+Sbjct: 249 CFICKLVLKIYLRAEERTQLIEFTSL 326
+
+
+>gi|2226478|gb|G33174|G33174 human STS SHGC-6097 clone pG-2470
+           Length = 299
+           
+ Score = 28.1 bits (55), Expect = 4.1
+ Identities = 13/38 (34%), Positives = 19/38 (49%)
+ Frame = +1 / +2
+
+                                                 
+Query: 175 KSA*VISNQHCFLCNLFYRIFSAASDHCSIFSFTAIVL 288
+           +SA +I   HC    +   +FS ASD  S    T ++L
+Sbjct: 119 QSAWIIGMSHCAWAVIHCLLFSTASDEKSAVDLTGVLL 232
+
+
+>gi|2734624|gb|G36957|G36957 SHGC-56642 Human Homo sapiens STS cDNA
+           Length = 466
+           
+ Score = 28.1 bits (55), Expect = 4.1
+ Identities = 10/15 (66%), Positives = 11/15 (72%)
+ Frame = -3 / -3
+
+                          
+Query: 115 LKAPFWPFLFLLRAL 71
+           L  PFW FLF L+AL
+Sbjct: 242 LSVPFWKFLFYLQAL 198
+
+
+>gi|859804|gb|G06559|G06559 human STS WI-7401.
+            Length = 3280
+            
+ Score = 27.2 bits (53), Expect = 7.7
+ Identities = 9/21 (42%), Positives = 13/21 (61%)
+ Frame = -1 / -1
+
+                                 
+Query: 339  CCIFFLPGFGVPRLFVHQNNG 277
+            C IF++P F    LF+H+  G
+Sbjct: 1396 CFIFYVPDFPWSNLFLHRGRG 1334
+
+
+>gi|938611|gb|G08061|G08061 human STS CHLC.GGAA7E02.P7438 clone
+           GGAA7E02
+           Length = 338
+           
+ Score = 27.2 bits (53), Expect = 7.7
+ Identities = 12/24 (50%), Positives = 13/24 (54%)
+ Frame = -3 / +3
+
+                                   
+Query: 118 WLKAPFWPFLFLLRALHTFPLFLS 47
+           WL  PF PFL  L +L   P  LS
+Sbjct: 153 WLLFPFLPFLPFLPSLPFLPFLLS 224
+
+
+>gi|307789|gb|L18105|HUMUT1736 Human STS UT1736.
+           Length = 355
+           
+ Score = 27.2 bits (53), Expect = 7.7
+ Identities = 12/24 (50%), Positives = 13/24 (54%)
+ Frame = -3 / -1
+
+                                   
+Query: 118 WLKAPFWPFLFLLRALHTFPLFLS 47
+           WL  PF PFL  L +L   P  LS
+Sbjct: 235 WLLFPFLPFLPFLPSLPFLPFLLS 164
+
+
+>gi|4492122|gb|G45831.1|G45831 Z4588_1 Zebrafish AB Danio rerio STS
+           genomic clone Z4588 5', sequence tagged site
+           Length = 398
+           
+ Score = 27.2 bits (53), Expect = 7.7
+ Identities = 7/22 (31%), Positives = 13/22 (58%)
+ Frame = +1 / +1
+
+                                 
+Query: 205 CFLCNLFYRIFSAASDHCSIFS 270
+           CF   + +R+F+    HC+ F+
+Sbjct: 13  CFALTVIWRVFAGCRPHCATFT 78
+
+
+>gi|6121804|gb|G56635.1|G56635 SHGC-102032 Human Homo sapiens STS
+           genomic, sequence tagged site
+           Length = 541
+           
+ Score = 27.2 bits (53), Expect = 7.7
+ Identities = 9/20 (45%), Positives = 13/20 (65%)
+ Frame = -1 / +2
+
+                               
+Query: 174 VKGFCISAFSPSQGQFRGCG 115
+           V GFC+++FSP +    G G
+Sbjct: 125 VDGFCVTSFSPKKDTHPGSG 184
+
+
+>gi|4493143|gb|G46852.1|G46852 Z14841_1 Zebrafish AB Danio rerio STS
+           genomic clone Z14841 5', sequence tagged site
+           Length = 291
+           
+ Score = 27.2 bits (53), Expect = 7.7
+ Identities = 8/20 (40%), Positives = 13/20 (65%)
+ Frame = -3 / +1
+
+                               
+Query: 388 NQLWKSILGLXECXFIMLYI 329
+           NQ+WK  L +  C F+ +Y+
+Sbjct: 37  NQMWKHSLEVCMCVFVYIYV 96
+
+
+  Database: data/sts
+    Posted date:  Feb 11, 2000  2:37 PM
+  Number of letters in database: 31,998,854
+  Number of sequences in database:  87,792
+  
+Lambda     K      H
+   0.318    0.135    0.401 
+
+
+Matrix: BLOSUM62
+Number of Hits to DB: 40473548
+Number of Sequences: 87792
+Number of extensions: 487631
+Number of successful extensions: 13175
+Number of sequences better than 10.0: 38
+length of query: 205
+length of database: 10,666,284
+effective HSP length: 46
+effective length of query: 158
+effective length of database: 6,627,852
+effective search space: 1047200616
+effective search space used: 1047200616
+frameshift window, decay const: 50,  0.1
+T: 13
+A: 40
+X1: 16 ( 7.3 bits)
+X2: 0 ( 0.0 bits)
+S1: 41 (21.7 bits)
+S2: 52 (26.7 bits)

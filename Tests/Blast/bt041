@@ -1,0 +1,91 @@
+BLASTP 2.0.11 [Jan-20-2000]
+
+
+Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+
+Query= gi|120291|sp|P21297|FLBT_CAUCR FLBT PROTEIN
+         (141 letters)
+
+Database: data/swissprot
+           82,258 sequences; 29,652,561 total letters
+
+Searching..................................................done
+
+                                                                   Score     E
+Sequences producing significant alignments:                        (bits)  Value
+
+gi|120291|sp|P21297|FLBT_CAUCR FLBT PROTEIN                          256  2e-68
+gi|3024946|sp|Q58368|Y958_METJA HYPOTHETICAL PROTEIN MJ0958 PRE...    29  3.4
+
+>gi|120291|sp|P21297|FLBT_CAUCR FLBT PROTEIN
+           Length = 141
+           
+ Score =  256 bits (646), Expect = 2e-68
+ Identities = 127/127 (100%), Positives = 127/127 (100%)
+
+Query: 1   MPLKLSLKPGEKFVLNGAVVQNGDRRGVLVLQNKASVLREKDIMQPDQVTTPARHIYFPV 60
+           MPLKLSLKPGEKFVLNGAVVQNGDRRGVLVLQNKASVLREKDIMQPDQVTTPARHIYFPV
+Sbjct: 1   MPLKLSLKPGEKFVLNGAVVQNGDRRGVLVLQNKASVLREKDIMQPDQVTTPARHIYFPV 60
+
+Query: 61  MMMYLDEVGAEKFYEEFATRLNEFMGVVRNPVVLQDCIAISKHVMAREYYKALMLSRKLI 120
+           MMMYLDEVGAEKFYEEFATRLNEFMGVVRNPVVLQDCIAISKHVMAREYYKALMLSRKLI
+Sbjct: 61  MMMYLDEVGAEKFYEEFATRLNEFMGVVRNPVVLQDCIAISKHVMAREYYKALMLSRKLI 120
+
+Query: 121 EYEDERL 127
+           EYEDERL
+Sbjct: 121 EYEDERL 127
+
+
+>gi|3024946|sp|Q58368|Y958_METJA HYPOTHETICAL PROTEIN MJ0958
+           PRECURSOR
+           Length = 426
+           
+ Score = 29.3 bits (64), Expect = 3.4
+ Identities = 15/47 (31%), Positives = 23/47 (48%)
+
+Query: 28  VLVLQNKASVLREKDIMQPDQVTTPARHIYFPVMMMYLDEVGAEKFY 74
+           +LVL N  ++   K     D  TT   +IY P+ +    +  A+KFY
+Sbjct: 169 ILVLINNTNITELKKFEDDDYYTTFQHYIYQPIFIFTTYDSKAKKFY 215
+
+
+  Database: data/swissprot
+    Posted date:  Feb 2, 2000  9:39 AM
+  Number of letters in database: 29,652,561
+  Number of sequences in database:  82,258
+  
+Lambda     K      H
+   0.323    0.139    0.392 
+
+Gapped
+Lambda     K      H
+   0.270   0.0470    0.230 
+
+
+Matrix: BLOSUM62
+Gap Penalties: Existence: 11, Extension: 1
+Number of Hits to DB: 6932673
+Number of Sequences: 82258
+Number of extensions: 246623
+Number of successful extensions: 486
+Number of sequences better than 10.0: 2
+Number of HSP's better than 10.0 without gapping: 2
+Number of HSP's successfully gapped in prelim test: 0
+Number of HSP's that attempted gapping in prelim test: 484
+Number of HSP's gapped (non-prelim): 2
+length of query: 141
+length of database: 29,652,561
+effective HSP length: 50
+effective length of query: 91
+effective length of database: 25,539,661
+effective search space: 2324109151
+effective search space used: 2324109151
+T: 11
+A: 40
+X1: 16 ( 7.5 bits)
+X2: 38 (14.8 bits)
+X3: 64 (24.9 bits)
+S1: 41 (21.9 bits)
+S2: 61 (28.2 bits)

@@ -1,0 +1,701 @@
+BLASTN 2.0.11 [Jan-20-2000]
+
+
+Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+
+Query= gi|1347201|gb|G24969|G24969 human STS
+EST21946.gi|1375315|gb|G27065|G27065 human STS SHGC-31731.
+         (331 letters)
+
+Database: data/sts
+           87,792 sequences; 31,998,854 total letters
+
+Searching...................................................done
+
+>gi|1347201|gb|G24969|G24969 human STS EST21946.
+           >gi|1375315|gb|G27065|G27065 human STS SHGC-31731.
+           Length = 331
+           
+ Score =  656 bits (331), Expect = 0.0
+ Identities = 331/331 (100%)
+ Strand = Plus / Plus
+
+                                                                       
+Query: 1   cctccaccctctcatgagcaacaggatatgtgaaagtacttgcagccagaagcaaaacca 60
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Sbjct: 1   cctccaccctctcatgagcaacaggatatgtgaaagtacttgcagccagaagcaaaacca 60
+
+                                                                       
+Query: 61  caatcctcgggtgctagatggagctccccaaggagcagagaggaaaaggcaggaggagag 120
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Sbjct: 61  caatcctcgggtgctagatggagctccccaaggagcagagaggaaaaggcaggaggagag 120
+
+                                                                       
+Query: 121 ggccaggcagcagggatggagactaagtttggcccaaggctgcccgcaagcactgatgcc 180
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Sbjct: 121 ggccaggcagcagggatggagactaagtttggcccaaggctgcccgcaagcactgatgcc 180
+
+                                                                       
+Query: 181 atcatgccctctggtaggtgtctatttctgtctgaaccagaaatacaccaagctccacac 240
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Sbjct: 181 atcatgccctctggtaggtgtctatttctgtctgaaccagaaatacaccaagctccacac 240
+
+                                                                       
+Query: 241 atgggggctttgctggcttcgacatcactggttcaactatgtcactgctttgttatattt 300
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Sbjct: 241 atgggggctttgctggcttcgacatcactggttcaactatgtcactgctttgttatattt 300
+
+                                          
+Query: 301 agtgctccagaacctcaggttccttcagatt 331
+           |||||||||||||||||||||||||||||||
+Sbjct: 301 agtgctccagaacctcaggttccttcagatt 331
+
+
+>gi|2665277|emb|AL010115|HSPE77H4 H.sapiens flow-sorted chromosome 1
+           HindIII fragment, SC1pE77H4, sequence tagged site [Homo
+           sapiens]
+           Length = 554
+           
+ Score = 34.2 bits (17), Expect = 0.49
+ Identities = 17/17 (100%)
+ Strand = Plus / Minus
+
+                            
+Query: 123 ccaggcagcagggatgg 139
+           |||||||||||||||||
+Sbjct: 434 ccaggcagcagggatgg 418
+
+
+>gi|4757440|gb|G49267.1|G49267 stbK343C1_96809 chromosome 22 genomic
+           clone Homo sapiens STS genomic clone 343C1, sequence
+           tagged site
+           Length = 360
+           
+ Score = 32.2 bits (16), Expect = 1.9
+ Identities = 22/24 (91%)
+ Strand = Plus / Minus
+
+                                   
+Query: 112 ggaggagagggccaggcagcaggg 135
+           ||||||||||| | ||||||||||
+Sbjct: 287 ggaggagaggggctggcagcaggg 264
+
+
+>gi|4493602|gb|G47248.1|G47248 Z17392_1 Zebrafish AB Danio rerio STS
+           genomic clone Z17392 5', sequence tagged site
+           Length = 454
+           
+ Score = 32.2 bits (16), Expect = 1.9
+ Identities = 16/16 (100%)
+ Strand = Plus / Plus
+
+                           
+Query: 48  agaagcaaaaccacaa 63
+           ||||||||||||||||
+Sbjct: 434 agaagcaaaaccacaa 449
+
+
+>gi|6120731|gb|G55412.1|G55412 SHGC-100745 Human Homo sapiens STS
+           genomic, sequence tagged site
+           Length = 652
+           
+ Score = 32.2 bits (16), Expect = 1.9
+ Identities = 16/16 (100%)
+ Strand = Plus / Minus
+
+                           
+Query: 99  agaggaaaaggcagga 114
+           ||||||||||||||||
+Sbjct: 431 agaggaaaaggcagga 416
+
+
+>gi|1235411|emb|Z53965|HSC009WH1 H.sapiens (D2S2321) DNA segment
+           containing (CA) repeat; clone AFMc009wh1; single read,
+           sequence tagged site [Homo sapiens]
+           Length = 382
+           
+ Score = 32.2 bits (16), Expect = 1.9
+ Identities = 16/16 (100%)
+ Strand = Plus / Plus
+
+                           
+Query: 97  agagaggaaaaggcag 112
+           ||||||||||||||||
+Sbjct: 107 agagaggaaaaggcag 122
+
+
+>gi|939357|gb|G08807|G08807 human STS CHLC.GATA70E11.P18111 clone
+           GATA70E11
+           Length = 643
+           
+ Score = 32.2 bits (16), Expect = 1.9
+ Identities = 16/16 (100%)
+ Strand = Plus / Minus
+
+                           
+Query: 100 gaggaaaaggcaggag 115
+           ||||||||||||||||
+Sbjct: 482 gaggaaaaggcaggag 467
+
+
+>gi|1342139|gb|G21813|G21813 human STS WI-12408.
+           Length = 418
+           
+ Score = 32.2 bits (16), Expect = 1.9
+ Identities = 16/16 (100%)
+ Strand = Plus / Minus
+
+                           
+Query: 47  cagaagcaaaaccaca 62
+           ||||||||||||||||
+Sbjct: 193 cagaagcaaaaccaca 178
+
+
+>gi|719782|gb|G02824|G02824 human STS WI-1312.
+           Length = 349
+           
+ Score = 32.2 bits (16), Expect = 1.9
+ Identities = 16/16 (100%)
+ Strand = Plus / Plus
+
+                           
+Query: 286 tgctttgttatattta 301
+           ||||||||||||||||
+Sbjct: 111 tgctttgttatattta 126
+
+
+>gi|5902652|gb|G54536.1|G54536 Xq4072 KWOK Homo sapiens STS genomic,
+           sequence tagged site
+           Length = 997
+           
+ Score = 30.2 bits (15), Expect = 7.6
+ Identities = 15/15 (100%)
+ Strand = Plus / Minus
+
+                          
+Query: 1   cctccaccctctcat 15
+           |||||||||||||||
+Sbjct: 618 cctccaccctctcat 604
+
+
+>gi|5566455|gb|AF167528.1|AF167528 Mus musculus chromosome 10 STS
+           D10Jhu41, sequence tagged site
+           Length = 749
+           
+ Score = 30.2 bits (15), Expect = 7.6
+ Identities = 15/15 (100%)
+ Strand = Plus / Plus
+
+                          
+Query: 117 agagggccaggcagc 131
+           |||||||||||||||
+Sbjct: 487 agagggccaggcagc 501
+
+
+>gi|5566418|gb|AF167504.1|AF167504 Mus musculus chromosome 10 STS
+           D10Jhu59, sequence tagged site
+           Length = 550
+           
+ Score = 30.2 bits (15), Expect = 7.6
+ Identities = 15/15 (100%)
+ Strand = Plus / Minus
+
+                          
+Query: 81  gagctccccaaggag 95
+           |||||||||||||||
+Sbjct: 278 gagctccccaaggag 264
+
+
+>gi|5565757|gb|AF096569.1|AF096569 Rattus norvegicus clone D5Uwm59,
+           sequence tagged site
+           Length = 580
+           
+ Score = 30.2 bits (15), Expect = 7.6
+ Identities = 21/23 (91%)
+ Strand = Plus / Plus
+
+                                  
+Query: 95  gcagagaggaaaaggcaggagga 117
+           ||||| |||| ||||||||||||
+Sbjct: 84  gcagacaggagaaggcaggagga 106
+
+
+>gi|4757436|gb|G49263.1|G49263 stbK343C1_70109 chromosome 22 genomic
+           clone Homo sapiens STS genomic clone 343C1, sequence
+           tagged site
+           Length = 359
+           
+ Score = 30.2 bits (15), Expect = 7.6
+ Identities = 15/15 (100%)
+ Strand = Plus / Minus
+
+                          
+Query: 125 aggcagcagggatgg 139
+           |||||||||||||||
+Sbjct: 58  aggcagcagggatgg 44
+
+
+>gi|4518571|dbj|AU028648.1|AU028648 Rattus norvegicus, OTSUKA clone,
+           OT10.41/02694, microsatellite sequence, sequence tagged
+           site
+           Length = 465
+           
+ Score = 30.2 bits (15), Expect = 7.6
+ Identities = 15/15 (100%)
+ Strand = Plus / Minus
+
+                          
+Query: 184 atgccctctggtagg 198
+           |||||||||||||||
+Sbjct: 114 atgccctctggtagg 100
+
+
+>gi|6123014|gb|G57845.1|G57845 SHGC-103599 Human Homo sapiens STS
+           genomic, sequence tagged site
+           Length = 680
+           
+ Score = 30.2 bits (15), Expect = 7.6
+ Identities = 15/15 (100%)
+ Strand = Plus / Plus
+
+                          
+Query: 134 ggatggagactaagt 148
+           |||||||||||||||
+Sbjct: 451 ggatggagactaagt 465
+
+
+>gi|6124406|gb|G59237.1|G59237 SHGC-110189 Human Homo sapiens STS
+           genomic, sequence tagged site
+           Length = 505
+           
+ Score = 30.2 bits (15), Expect = 7.6
+ Identities = 15/15 (100%)
+ Strand = Plus / Minus
+
+                          
+Query: 128 cagcagggatggaga 142
+           |||||||||||||||
+Sbjct: 163 cagcagggatggaga 149
+
+
+>gi|6121931|gb|G56612.1|G56612 SHGC-102181 Human Homo sapiens STS
+           genomic, sequence tagged site
+           Length = 489
+           
+ Score = 30.2 bits (15), Expect = 7.6
+ Identities = 18/19 (94%)
+ Strand = Plus / Plus
+
+                              
+Query: 137 tggagactaagtttggccc 155
+           ||||||||||||| |||||
+Sbjct: 302 tggagactaagttgggccc 320
+
+
+>gi|3599905|gb|G41846|G41846 Z1061 Zebrafish AB Danio rerio STS
+           genomic, sequence tagged site [Danio rerio]
+           Length = 410
+           
+ Score = 30.2 bits (15), Expect = 7.6
+ Identities = 15/15 (100%)
+ Strand = Plus / Plus
+
+                          
+Query: 265 tcactggttcaacta 279
+           |||||||||||||||
+Sbjct: 185 tcactggttcaacta 199
+
+
+>gi|5224504|gb|G53327.1|G53327 SHGC-82321 Human Homo sapiens STS
+           genomic, sequence tagged site
+           Length = 421
+           
+ Score = 30.2 bits (15), Expect = 7.6
+ Identities = 18/19 (94%)
+ Strand = Plus / Plus
+
+                              
+Query: 90  aaggagcagagaggaaaag 108
+           |||||| ||||||||||||
+Sbjct: 209 aaggagaagagaggaaaag 227
+
+
+>gi|5221389|gb|G50212.1|G50212 SHGC-82917 Human Homo sapiens STS
+           genomic, sequence tagged site
+           Length = 297
+           
+ Score = 30.2 bits (15), Expect = 7.6
+ Identities = 15/15 (100%)
+ Strand = Plus / Plus
+
+                          
+Query: 116 gagagggccaggcag 130
+           |||||||||||||||
+Sbjct: 155 gagagggccaggcag 169
+
+
+>gi|3168757|gb|G38183|G38183 RPCI-6-164E4Sp6 Human Homo sapiens STS
+           genomic
+           Length = 395
+           
+ Score = 30.2 bits (15), Expect = 7.6
+ Identities = 15/15 (100%)
+ Strand = Plus / Plus
+
+                          
+Query: 42  gcagccagaagcaaa 56
+           |||||||||||||||
+Sbjct: 259 gcagccagaagcaaa 273
+
+
+>gi|3150191|emb|AL023622|HS863J11T H.sapiens STS from genomic clone
+           863J11, sequence tagged site [Homo sapiens]
+           Length = 558
+           
+ Score = 30.2 bits (15), Expect = 7.6
+ Identities = 15/15 (100%)
+ Strand = Plus / Plus
+
+                          
+Query: 199 tgtctatttctgtct 213
+           |||||||||||||||
+Sbjct: 155 tgtctatttctgtct 169
+
+
+>gi|3123402|emb|AL023351|DM171A7S Drosophila melanogaster STS
+           determined from European Mapping Project cosmid,
+           sequence tagged site [Drosophila melanogaster]
+           Length = 600
+           
+ Score = 30.2 bits (15), Expect = 7.6
+ Identities = 15/15 (100%)
+ Strand = Plus / Plus
+
+                          
+Query: 225 acaccaagctccaca 239
+           |||||||||||||||
+Sbjct: 163 acaccaagctccaca 177
+
+
+>gi|2665031|emb|AL009868|HSPE36B05 H.sapiens flow-sorted chromosome
+           1 HindIII fragment, SC1pE36B05, sequence tagged site
+           [Homo sapiens]
+           Length = 397
+           
+ Score = 30.2 bits (15), Expect = 7.6
+ Identities = 15/15 (100%)
+ Strand = Plus / Plus
+
+                          
+Query: 199 tgtctatttctgtct 213
+           |||||||||||||||
+Sbjct: 244 tgtctatttctgtct 258
+
+
+>gi|2641969|dbj|AB004264|AB004264 Mus spretus genomic DNA, RLGS
+           spot, D5Rik122, sequence tagged site [Mus spretus]
+           Length = 237
+           
+ Score = 30.2 bits (15), Expect = 7.6
+ Identities = 15/15 (100%)
+ Strand = Plus / Minus
+
+                          
+Query: 115 ggagagggccaggca 129
+           |||||||||||||||
+Sbjct: 53  ggagagggccaggca 39
+
+
+>gi|4529138|gb|G48478.1|G48478 SHGC-68947 Human Homo sapiens STS
+           genomic, sequence tagged site
+           Length = 415
+           
+ Score = 30.2 bits (15), Expect = 7.6
+ Identities = 15/15 (100%)
+ Strand = Plus / Plus
+
+                          
+Query: 262 acatcactggttcaa 276
+           |||||||||||||||
+Sbjct: 331 acatcactggttcaa 345
+
+
+>gi|2484048|gb|G36284|G36284   STS h14a2375 5
+           Length = 305
+           
+ Score = 30.2 bits (15), Expect = 7.6
+ Identities = 15/15 (100%)
+ Strand = Plus / Plus
+
+                          
+Query: 121 ggccaggcagcaggg 135
+           |||||||||||||||
+Sbjct: 108 ggccaggcagcaggg 122
+
+
+>gi|1871265|gb|G31295|G31295 sy625c11-R Human (A.Gnirke) Homo
+           sapiens STS genomic, sequence tagged site [Homo sapiens]
+           Length = 279
+           
+ Score = 30.2 bits (15), Expect = 7.6
+ Identities = 15/15 (100%)
+ Strand = Plus / Plus
+
+                          
+Query: 298 tttagtgctccagaa 312
+           |||||||||||||||
+Sbjct: 261 tttagtgctccagaa 275
+
+
+>gi|1263801|emb|Z70926|DM63D12T D. melanogaster STS determined from
+           European Mapping Project cosmid, sequence tagged site
+           [Drosophila melanogaster]
+           Length = 350
+           
+ Score = 30.2 bits (15), Expect = 7.6
+ Identities = 15/15 (100%)
+ Strand = Plus / Minus
+
+                          
+Query: 316 caggttccttcagat 330
+           |||||||||||||||
+Sbjct: 323 caggttccttcagat 309
+
+
+>gi|1244248|gb|G19461|G19461 human STS SHGC-11979.
+           Length = 400
+           
+ Score = 30.2 bits (15), Expect = 7.6
+ Identities = 15/15 (100%)
+ Strand = Plus / Minus
+
+                          
+Query: 43  cagccagaagcaaaa 57
+           |||||||||||||||
+Sbjct: 356 cagccagaagcaaaa 342
+
+
+>gi|1233253|emb|Z51953|HSA084XF1 H.sapiens (D19S932) DNA segment
+           containing (CA) repeat; clone AFMa084xf1; single read,
+           sequence tagged site [Homo sapiens]
+           Length = 276
+           
+ Score = 30.2 bits (15), Expect = 7.6
+ Identities = 15/15 (100%)
+ Strand = Plus / Minus
+
+                          
+Query: 311 aacctcaggttcctt 325
+           |||||||||||||||
+Sbjct: 54  aacctcaggttcctt 40
+
+
+>gi|1233152|emb|Z51852|HSA070WH1 H.sapiens (D9S1879) DNA segment
+          containing (CA) repeat; clone AFMa070wh1; single read,
+          sequence tagged site [Homo sapiens]
+          Length = 363
+          
+ Score = 30.2 bits (15), Expect = 7.6
+ Identities = 15/15 (100%)
+ Strand = Plus / Plus
+
+                         
+Query: 1  cctccaccctctcat 15
+          |||||||||||||||
+Sbjct: 59 cctccaccctctcat 73
+
+
+>gi|1215106|gb|G17680|G17680 human STS SHGC-3112 clone pG-956.
+           Length = 313
+           
+ Score = 30.2 bits (15), Expect = 7.6
+ Identities = 18/19 (94%)
+ Strand = Plus / Minus
+
+                              
+Query: 86  ccccaaggagcagagagga 104
+           |||| ||||||||||||||
+Sbjct: 213 ccccgaggagcagagagga 195
+
+
+>gi|1594113|gb|G30562|G30562 human STS SHGC-37420
+           Length = 447
+           
+ Score = 30.2 bits (15), Expect = 7.6
+ Identities = 18/19 (94%)
+ Strand = Plus / Plus
+
+                              
+Query: 112 ggaggagagggccaggcag 130
+           ||||||| |||||||||||
+Sbjct: 234 ggaggagggggccaggcag 252
+
+
+>gi|1593022|gb|G29471|G29471 human STS SHGC-33749
+           Length = 437
+           
+ Score = 30.2 bits (15), Expect = 7.6
+ Identities = 15/15 (100%)
+ Strand = Plus / Minus
+
+                          
+Query: 123 ccaggcagcagggat 137
+           |||||||||||||||
+Sbjct: 320 ccaggcagcagggat 306
+
+
+>gi|1052040|emb|Z67257|HSA090WF9 H.sapiens DNA segment containing
+           (CA) repeat; clone AFMa090wf9; single read, sequence
+           tagged site [Homo sapiens]
+           Length = 312
+           
+ Score = 30.2 bits (15), Expect = 7.6
+ Identities = 15/15 (100%)
+ Strand = Plus / Plus
+
+                          
+Query: 194 gtaggtgtctatttc 208
+           |||||||||||||||
+Sbjct: 201 gtaggtgtctatttc 215
+
+
+>gi|881858|gb|G07651|G07651 human STS SHGC-5830 clone pG-2175.
+           Length = 336
+           
+ Score = 30.2 bits (15), Expect = 7.6
+ Identities = 15/15 (100%)
+ Strand = Plus / Plus
+
+                          
+Query: 121 ggccaggcagcaggg 135
+           |||||||||||||||
+Sbjct: 86  ggccaggcagcaggg 100
+
+
+>gi|1344417|gb|G24091|G24091 human STS WI-12544.
+           Length = 452
+           
+ Score = 30.2 bits (15), Expect = 7.6
+ Identities = 18/19 (94%)
+ Strand = Plus / Minus
+
+                              
+Query: 104 aaaaggcaggaggagaggg 122
+           |||||||||||| ||||||
+Sbjct: 234 aaaaggcaggagaagaggg 216
+
+
+>gi|860391|gb|G07146|G07146 human STS WI-9143.
+           Length = 1946
+           
+ Score = 30.2 bits (15), Expect = 7.6
+ Identities = 15/15 (100%)
+ Strand = Plus / Minus
+
+                          
+Query: 280 tgtcactgctttgtt 294
+           |||||||||||||||
+Sbjct: 492 tgtcactgctttgtt 478
+
+
+>gi|858959|gb|G05714|G05714 human STS WI-8961.
+           Length = 1337
+           
+ Score = 30.2 bits (15), Expect = 7.6
+ Identities = 15/15 (100%)
+ Strand = Plus / Plus
+
+                          
+Query: 237 acacatgggggcttt 251
+           |||||||||||||||
+Sbjct: 117 acacatgggggcttt 131
+
+
+>gi|1341506|gb|G21180|G21180 human STS WI-14638.
+           Length = 375
+           
+ Score = 30.2 bits (15), Expect = 7.6
+ Identities = 15/15 (100%)
+ Strand = Plus / Minus
+
+                          
+Query: 288 ctttgttatatttag 302
+           |||||||||||||||
+Sbjct: 74  ctttgttatatttag 60
+
+
+>gi|1341551|gb|G21225|G21225 human STS WI-11777.
+           Length = 348
+           
+ Score = 30.2 bits (15), Expect = 7.6
+ Identities = 15/15 (100%)
+ Strand = Plus / Plus
+
+                          
+Query: 91  aggagcagagaggaa 105
+           |||||||||||||||
+Sbjct: 216 aggagcagagaggaa 230
+
+
+>gi|465219|gb|L29850|HUMUT50 Human STS UT50.
+           Length = 382
+           
+ Score = 30.2 bits (15), Expect = 7.6
+ Identities = 15/15 (100%)
+ Strand = Plus / Minus
+
+                          
+Query: 125 aggcagcagggatgg 139
+           |||||||||||||||
+Sbjct: 273 aggcagcagggatgg 259
+
+
+>gi|860599|gb|G07354|G07354 human STS WI-9600.
+           Length = 226
+           
+ Score = 30.2 bits (15), Expect = 7.6
+ Identities = 15/15 (100%)
+ Strand = Plus / Plus
+
+                          
+Query: 114 aggagagggccaggc 128
+           |||||||||||||||
+Sbjct: 124 aggagagggccaggc 138
+
+
+  Database: data/sts
+    Posted date:  Feb 11, 2000  2:37 PM
+  Number of letters in database: 31,998,854
+  Number of sequences in database:  87,792
+  
+Lambda     K      H
+    1.37    0.711     1.31 
+
+Gapped
+Lambda     K      H
+    1.37    0.711     1.31 
+
+
+Matrix: blastn matrix:1 -3
+Gap Penalties: Existence: 5, Extension: 2
+Number of Hits to DB: 6844
+Number of Sequences: 87792
+Number of extensions: 6844
+Number of successful extensions: 1887
+Number of sequences better than 10.0: 51
+length of query: 331
+length of database: 31,998,854
+effective HSP length: 17
+effective length of query: 314
+effective length of database: 30,506,390
+effective search space: 9579006460
+effective search space used: 9579006460
+T: 0
+A: 0
+X1: 6 (11.9 bits)
+X2: 10 (19.8 bits)
+S1: 12 (24.3 bits)
+S2: 15 (30.2 bits)

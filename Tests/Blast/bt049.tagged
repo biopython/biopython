@@ -1,0 +1,81 @@
+*************** start_header
+version        : BLASTN 2.0.11 [Jan-20-2000]
+noevent        : 
+noevent        : 
+reference      : Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A.
+reference      : Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1
+reference      : "Gapped BLAST and PSI-BLAST: a new generation of protein databa
+reference      : programs",  Nucleic Acids Res. 25:3389-3402.
+noevent        : 
+query_info     : Query= gi|1348400|gb|G26168|G26168 human STS
+query_info     : EST47274.gi|1375380|gb|G27130|G27130 human STS SHGC-32751.
+query_info     :          (434 letters)
+noevent        : 
+database_info  : Database: data/sts
+database_info  :            87,792 sequences; 31,998,854 total letters
+noevent        : 
+*************** end_header
+*************** start_descriptions
+noevent        : Searching...................................................don
+noevent        : 
+noevent        : 
+noevent        : Sequences producing significant alignments:
+noevent        : 
+description    : gi|1348400|gb|G26168|G26168 human STS EST47274. >gi|1375380|gb|
+description    : gi|4632200|dbj|AU047565.1|AU047565 Rattus norvegicus, OTSUKA cl
+description    : gi|6121436|gb|G56117.1|G56117 SHGC-101583 Human Homo sapiens ST
+description    : gi|3249175|gb|G38401|G38401 SHGC-57345 Human Homo sapiens STS g
+description    : gi|720383|gb|G03425|G03425 human STS WI-5868.
+description    : gi|605557|gb|L31312|HUMUT937B Human STS UT937, 3' primer bind.
+description    : gi|6123581|gb|G58262.1|G58262 SHGC-104352 Human Homo sapiens ST
+description    : gi|6122805|gb|G57486.1|G57486 SHGC-103345 Human Homo sapiens ST
+description    : gi|6121347|gb|G56178.1|G56178 SHGC-101470 Human Homo sapiens ST
+description    : gi|3893806|emb|AL034156|HSPE59A01 H.sapiens flow-sorted chromos
+description    : gi|5224295|gb|G52968.1|G52968 SHGC-86325 Human Homo sapiens STS
+description    : gi|1348143|gb|G25911|G25911 human STS EST349382.
+description    : gi|1233216|emb|Z51916|HSA082WB5 H.sapiens (D1S2890) DNA segment
+description    : gi|1232198|emb|Z50898|HS038XD8 H.sapiens (D18S1106) DNA segment
+description    : gi|1161890|gb|G16001|G16001 human STS CHLC.GCT8D08.P11278 clone
+description    : gi|1130137|gb|G14398|G14398 human STS SHGC-9310 clone pG-5191.
+description    : gi|1017612|gb|G11520|G11520 human STS SHGC-14676.
+description    : gi|1396897|gb|G28178|G28178 human STS SHGC-34170.
+description    : gi|859592|gb|G06347|G06347 human STS WI-7005.
+noevent        : 
+*************** end_descriptions
+*************** start_database_report
+database       :   Database: data/sts
+posted_date    :     Posted date:  Feb 11, 2000  2:37 PM
+num_letters_in_:   Number of letters in database: 31,998,854
+num_sequences_i:   Number of sequences in database:  87,792
+noevent        : 
+noevent        : Lambda     K      H
+ka_params      :     1.37    0.711     1.31
+noevent        : 
+gapped         : Gapped
+noevent        : Lambda     K      H
+ka_params_gap  :     1.37    0.711     1.31
+noevent        : 
+*************** end_database_report
+noevent        : 
+*************** start_parameters
+matrix         : Matrix: blastn matrix:1 -3
+gap_penalties  : Gap Penalties: Existence: 5, Extension: 2
+num_hits       : Number of Hits to DB: 8762
+num_sequences  : Number of Sequences: 87792
+num_extends    : Number of extensions: 8762
+num_good_extend: Number of successful extensions: 2655
+num_seqs_better: Number of sequences better than 10.0: 27
+query_length   : length of query: 434
+database_length: length of database: 31,998,854
+effective_hsp_l: effective HSP length: 17
+effective_query: effective length of query: 417
+effective_datab: effective length of database: 30,506,390
+effective_searc: effective search space: 12721164630
+effective_searc: effective search space used: 12721164630
+threshold      : T: 0
+window_size    : A: 0
+dropoff_1st_pas: X1: 6 (11.9 bits)
+gap_x_dropoff  : X2: 10 (19.8 bits)
+gap_trigger    : S1: 12 (24.3 bits)
+blast_cutoff   : S2: 16 (32.2 bits)
+*************** end_parameters

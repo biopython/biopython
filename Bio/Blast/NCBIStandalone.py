@@ -11,6 +11,7 @@ http://www.ncbi.nlm.nih.gov/BLAST/
 
 Classes:
 Scanner     Scans output from standalone BLAST.
+HConsumer   Heavyweight consumer.
 
 Functions:
 blastall    Execute and retrieve data from blastall.
@@ -24,12 +25,13 @@ import popen2
 
 from Bio import File
 from Bio.ParserSupport import *
+from Bio.Blast import Record
 
 
 class Scanner:
     """Scan BLAST output from blastall or blastpgp.
 
-    Tested with BLAST v2.0.10
+    Tested with blastall and blastpgp v2.0.10, v2.0.11
 
     Methods:
     feed     Feed data into the scanner.
@@ -140,19 +142,34 @@ class Scanner:
         # Read 'Searching'
         read_and_call(uhandle, consumer.noevent, start='Searching')
 
-        # XXX THIS IS A QUICK HACK.  TAKE IT OUT, OR IT'LL BREAK A LOT
-        # OF CODE!  I NEED TO DO THIS TO QUICKLY TEST 2.0.11
-        #read_and_call(uhandle, consumer.noevent, blank=1)
-        #read_and_call(uhandle, consumer.noevent, blank=1)
-
-        # blastpgp from NCBI 9/19/99 for Solaris sometimes crashes here.
+        # blastpgp 2.0.10 from NCBI 9/19/99 for Solaris sometimes crashes here.
         # If this happens, the handle will yield no more information.
         if not uhandle.peekline():
             raise SyntaxError, "Unexpected end of blast report.  " + \
                   "Looks suspiciously like a PSI-BLAST crash."
 
-        # If PSI-BLAST, read the round line.
-        attempt_read_and_call(uhandle, consumer.round, start='Results')
+        # Check to see if this is PSI-BLAST.
+        # If it is, the 'Searching' line will be followed by:
+        # (version 2.0.10)
+        #     Searching.............................
+        #     Results from round 2
+        # or (version 2.0.11)
+        #     Searching.............................
+        #
+        #
+        #     Results from round 2
+        if not attempt_read_and_call(uhandle, consumer.round, start='Results'):
+            # Check to see if the "Results" line is further down
+            line1 = safe_readline(uhandle)
+            line2 = safe_readline(uhandle)
+            line3 = safe_peekline(uhandle)
+            uhandle.saveline(line2)
+            uhandle.saveline(line1)
+            if line3[:7] == 'Results':
+                read_and_call(uhandle, consumer.noevent, blank=1)
+                read_and_call(uhandle, consumer.noevent, blank=1)
+                read_and_call(uhandle, consumer.round, start='Results')
+            
         # Read 1 or 2 blank lines.
         read_and_call(uhandle, consumer.noevent, blank=1)
         attempt_read_and_call(uhandle, consumer.noevent, blank=1)
@@ -443,6 +460,55 @@ class Scanner:
         read_and_call(uhandle, consumer.blast_cutoff, start='S2')
 
         consumer.end_parameters()
+
+class HConsumer(AbstractConsumer):
+    def __init__(self):
+        self.record = None
+
+
+    ### header
+        
+    def start_header(self):
+        self.record = Record.Heavyweight()
+        
+    def version(self, line):
+        c = string.split(line)
+        self.record.application = c[0]
+        self.record.version = c[1]
+        self.record.date = c[2][1:-1]
+        
+    def reference(self, line):
+        if line[:11] == 'Reference: ':
+            self.record.reference = line[11:]
+        else:
+            self.record = self.record + line
+            
+    def query_info(self, line):
+        if line[:7] == 'Query= ':
+            self.record.query = string.rstrip(line[7:])
+        else:
+            m = re.search(r'(\d+) letters', line)
+            if m:
+                self.record.query_letters = m.group(1)
+                
+    def database_info(self, line):
+        if line[:10] == 'Database: ':
+            self.record.database = string.rstrip(line[10:])
+        else:
+            m = re.search(r'(\w+) sequences; (\w+) total letters', line)
+            if m:
+                self.record.database_sequences = m.group(1)
+                self.record.database_letters = m.group(2)
+
+
+    ### description
+
+    # XXX round
+                
+
+    
+    
+    
 
 
 

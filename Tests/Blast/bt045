@@ -1,0 +1,157 @@
+BLASTP 2.0.11 [Jan-20-2000]
+
+
+Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+
+Query= gi|132349|sp|P15394|REPA_AGRTU REPLICATING PROTEIN
+         (250 letters)
+
+Database: data/swissprot
+           82,258 sequences; 29,652,561 total letters
+
+Searching..................................................done
+
+                                                                   Score     E
+Sequences producing significant alignments:                        (bits)  Value
+
+gi|132349|sp|P15394|REPA_AGRTU REPLICATING PROTEIN                   514  e-146
+gi|123932|sp|P19922|HYIN_BRAJA INDOLEACETAMIDE HYDROLASE (IAH) ...    34  0.29
+gi|137670|sp|P06422|VE2_HPV08 REGULATORY PROTEIN E2                   32  0.86
+gi|5921693|sp|Q05152|CCAB_RABIT VOLTAGE-DEPENDENT N-TYPE CALCIU...    32  1.5
+gi|121952|sp|P02256|H1_PARAN HISTONE H1, GONADAL                      31  2.5
+gi|3915729|sp|P51592|HYDP_DROME HYPERPLASTIC DISCS PROTEIN (HYD...    31  3.3
+gi|124141|sp|P08392|ICP4_HSV11 TRANS-ACTING TRANSCRIPTIONAL PRO...    31  3.3
+gi|462182|sp|P33438|GLT_DROME GLUTACTIN PRECURSOR                     31  3.3
+gi|1708851|sp|P55268|LMB2_HUMAN LAMININ BETA-2 CHAIN PRECURSOR ...    30  4.3
+gi|731294|sp|P39713|YAG1_YEAST HYPOTHETICAL ZINC-TYPE ALCOHOL D...    30  4.3
+gi|2495137|sp|Q24704|H1_DROVI HISTONE H1                              29  7.5
+gi|6226905|sp|Q59567|TOP1_MYCTU DNA TOPOISOMERASE I (OMEGA-PROT...    29  9.8
+gi|6093970|sp|Q61085|RHOP_MOUSE GTP-RHO BINDING PROTEIN 1 (RHOP...    29  9.8
+gi|1172635|sp|P46466|PRS4_ORYSA 26S PROTEASE REGULATORY SUBUNIT...    29  9.8
+gi|547963|sp|Q01989|MYS9_DROME MYOSIN HEAVY CHAIN 95F (95F MHC)       29  9.8
+
+QUERY 1    MFQQIGAVQAKSGTDEPAHPCEKFPPERKCEAVFWKPLPRHEAREILLAARKYELAMKQP 60
+0     1    MFQQIGAVQAKSGTDEPAHPCEKFPPERKCEAVFWKPLPRHEAREILLAARKYELAMKQP 60
+6011       ------------------------------------------------------------
+42735      ------------------------------------------------------------
+14903      ------------------------------------------------------------
+36499      ------------------------------------------------------------
+76818      ------------------------------------------------------------
+36850      ------------------------------------------------------------
+14245      ------------------------------------------------------------
+57583      ------------------------------------------------------------
+47667 228  -----------------------------------------------------ELAEKMG 234
+59981      ------------------------------------------------------------
+72095      ------------------------------------------------------------
+58685      ------------------------------------------------------------
+23110      ------------------------------------------------------------
+14284      ------------------------------------------------------------
+
+QUERY 61   GKRTGPLGHVALEVLDYLTNLVDFGNGRLDPSISTIMEKIGRAESCMSALYPNRQRGRRP 120
+0     61   GKRTGPLGHVALEVLDYLTNLVDFGNGRLDPSISTIMEKIGRAESCMSALYPNRQRGRRP 120
+6011       ------------------------------------------------------------
+42735      ------------------------------------------------------------
+14903 822  ---------------------------------------------------PGRDAPRGP 830
+36499      ------------------------------------------------------------
+76818      ------------------------------------------------------------
+36850 59   -----------------------------------------------------RRDGRAP 65
+14245 644  -------------------------------------EYVRAQEARQQEFIREREQRRRE 666
+57583 1671 --------------------------------------KLKRAGNSLAASTAEETAGSAQ 1692
+47667 235  ARVYDPTAHAAKESIDYLRSIADGGDG--------------------------------- 261
+59981      ------------------------------------------------------------
+72095 842  -----------------------------------------------------KRRGRQS 848
+58685      ------------------------------------------------------------
+23110 19   ---------------------------------------------------------RKP 21
+14284      ------------------------------------------------------------
+
+QUERY 121  AGAADKQRLPLEPAGARPRALLGKYVRK------AA---PL---PDDAAQAR-------- 160
+0     121  AGAADKQRLPLEPAGARPRALLGKYVRK------AA---PL---PDDAAQAR-------- 160
+6011       ------------------------------------------------------------
+42735 258  --------------------------------------------PQKEQRRS-------- 265
+14903 831  PGGKSRPDGSEAPEGADPPRRHHRHRDK------DK---AP---ATVPSAGE-------- 870
+36499 147  AAAKRKAALAKKKAAAAKRKAAAKAKKA------KK---PK---KKAAKKAK-------- 186
+76818      ------------------------------------------------------------
+36850 66   AAGTDAGEDAGDAVSPRQLALLASMVEE------AVRTIPT---PDPAASPP-------- 108
+14245 667  QQLRDQQRYPQQ----EPREQQDERIRQ------QR---EQ---EERLRQQR-------- 702
+57583 1693 GRAQEAEQLLRGPLGDQYQTVKALAERK------AQ---GVLAAQARAEQLR-------- 1735
+47667 260  ------------------------------------------------------------ 261
+59981 124  ---------------AKPKA--SAVEKK------TK---KV---NASAARAT-------- 146
+72095 849  ASAPPLRELGTDPASGKPMVI--KDGRF------GP---YV---TDGETNAS-------- 886
+58685      ------------------------------------------------------------
+23110 22   GGDGDKKDRKFEPSAAPSR--VGRKQRKQKGPEAAA---RL---PNVAPLSKCRLRLLKL 73
+14284 936  ---------------------------R------AA---KE---AEEQRQRE-------- 948
+
+QUERY 161  Q----ERHDTIKAHMDS---LSPADRLR----ET--VEDRTRAEQLAG-YVE-RAAQNR- 204
+0     161  Q----ERHDTIKAHMDS---LSPADRLR----ET--VEDRTRAEQLAG-YVE-RAAQNR- 204
+6011  12   -----QRRDLRGRDRRS---ASRTDARR----QS--AAERGCRRSQRG-SAE-GCACGR- 54
+42735 266  R----SRHRT-RSRSRS---LSRVRAVG----ST--TVSRSRSSSLTK-AVR-PRSRSR- 308
+14903 871  Q----DRAEALRAEGGE---LGPREERG----RP----RRSRSKEAPG-APEVRSDRGRG 914
+36499 187  K----PAKKSPKKAKKP---AKKSPKKK----KA--KRSPKKAKKAAG-KRK-PAAKKA- 230
+76818 1967 -----DKQDSISGRINN---LSPMTESY----DT--DDELANLEEFNA-DVQ-MSASSM- 2009
+36850 109  RTPAFRADDDDGDEYDD---AADAAGDR----AP--ARGREREAPLRGAYPD-PTDRLS- 157
+14245 703  E----QE-----------------ERLR----QQRELEERIRQQQERE-QYE-REQQER- 734
+57583 1736 D----EARDLLQAAQDK---LQRLQELE----GT--YEENERA----------------- 1765
+47667 260  ------------------------------------------------------------ 261
+59981 147  K----SKSSTSTTKKAA---GAADKKLS----KS--AAAKKNVEKKKA-DKE-KAKDAK- 190
+72095 887  L----RKGDDVASITD--------ERAA----EL--LADRRARGPAKR-PAR-KAARKV- 925
+58685 584  ----------------------------------------------------------R- 584
+23110 74   E----RVKDYLLMEEEF---VAAQERLRPTEDKT--EEDRSKVDDLRG------------ 112
+14284 949  E----IENKRLKAEMETRRKAAEAQRLR----QE--EEDRRAALALQE-QLE-KEAKDD- 995
+
+QUERY 205  --PSGPRKAARRRQQSRCSFTTPNRPRRTLPS------SHPQKFG---GTKGRKAFE 250
+0     205  --PSGPRKAARRRQQSRCSFTTPNRPRRTLPS------SHPQKFG---GTKGRKAFE 250
+6011  55   --QTGPRAA-----RSACCTACPSRSRRMSTT------EGRPNFN---GVPANKDF- 94
+42735 309  --SRGRATATSRRRAGRGS---PRRRRSTSRSPSTNTFKRSQRGG---GRRGR---- 353
+14903 915  PCPEGGRRHHRRGSPEEAAEREPRRHRAHRHG------PDPGKEGPASGTRGER--- 962
+36499 231  --RRSPRKAGKRRSPKK---------------------------------------- 245
+76818 2010 --PSGSQGTRRH------AFFARSESTLTLGC------SAPEGF------------- 2039
+36850 158  --PRPPAQPPRRRRHGR---------------------------------------- 172
+14245 735  --EQREREELERQQRER---------------------------------------- 749
+57583 1764 --------------------------------------------------------- 1765
+47667 260  --------------------------------------------------------- 261
+59981 191  --KTGTIKAKPTTAKAKSSATKPKTPKPKTTS------AKPKK-------------- 225
+72095 926  --PA--KKAAKR--------------------------------------------- 933
+58685 585  --GTGPRRAALLWNQRECGFETP-MPTRTRP-------------------------- 612
+23110 111  --------------------------------------------------------- 112
+14284 996  --AKYRQQLEQERRDHELALRLANESNGQVED------SPP---------------- 1028
+  Database: data/swissprot
+    Posted date:  Feb 2, 2000  9:39 AM
+  Number of letters in database: 29,652,561
+  Number of sequences in database:  82,258
+  
+Lambda     K      H
+   0.317    0.133    0.395 
+
+Gapped
+Lambda     K      H
+   0.270   0.0470    0.230 
+
+
+Matrix: BLOSUM62
+Gap Penalties: Existence: 11, Extension: 1
+Number of Hits to DB: 14679054
+Number of Sequences: 82258
+Number of extensions: 599117
+Number of successful extensions: 1508
+Number of sequences better than 10.0: 15
+Number of HSP's better than 10.0 without gapping: 4
+Number of HSP's successfully gapped in prelim test: 11
+Number of HSP's that attempted gapping in prelim test: 1504
+Number of HSP's gapped (non-prelim): 15
+length of query: 250
+length of database: 29,652,561
+effective HSP length: 51
+effective length of query: 199
+effective length of database: 25,457,403
+effective search space: 5066023197
+effective search space used: 5066023197
+T: 11
+A: 40
+X1: 16 ( 7.3 bits)
+X2: 38 (14.8 bits)
+X3: 64 (24.9 bits)
+S1: 41 (21.7 bits)
+S2: 63 (29.0 bits)

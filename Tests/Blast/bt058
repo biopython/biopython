@@ -1,0 +1,119 @@
+BLASTP 2.0.11 [Jan-20-2000]
+
+
+Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+
+Query= gi|730725|sp|Q05362|SCHB_STRHA SCHB PROTEIN
+         (138 letters)
+
+Database: data/swissprot
+           82,258 sequences; 29,652,561 total letters
+
+Searching..................................................done
+
+QUERY 1   MTEQQARIVAFDDVPPNRRRGGD----VRALLTPTTAGATSGFMGVAV------VR---- 46
+504   1   MTEQQARIVAFDDVPPNRRRGGD----VRALLTPTTAGATSGFMGVAV------VR---- 46
+10461 1   MTDQQVRIVSLGDIAPNRRRGGD----LRALLTPTTAGSTSGFMGVAI------VQ---- 46
+6345  1   MDKMRPRVVDVKEIEPNRKRGGD----LRTLLTPVTVGATSGFMGLAI------MR---- 46
+1128  11   TVAAAAKIAMSSVAPSHRQGGS----TRALLTPSSVGATSGFLGHIE------LA---- 55
+72438 417                                                 ------VR---- 418
+588   385                                                 ------VK---- 386
+5811  383                                                 ------VK---- 384
+7036  380                                                 ------VK---- 381
+30070 833                                             GKLV------LG---- 838
+22447 93                                             LGVSM------NRVDFA 103
+10500 385                                                 ------VK---- 386
+49644 385                                                 ------VK---- 386
+48079 48       AKVTAADFVYSGLAKPGNTTNIINAAVTPAFVGQFPGVIGLGVTLARLDLA---- 98
+22446 93                                             LGVSM------NRVDFA 103
+20808 93                                             LGVSM------NRVDFA 103
+64209 31                                                  ------VK---- 32
+33663 452          AAEDQKRYERELSD----MRATPTPTTAGKKVKFLG----------E---- 484
+8178  0                                                           ----
+
+QUERY 47  PGERISEHYHPYSEEFVYVTAGAFEV----DLDD----VPHPLRT---------GQG--- 86
+504   47  PGERISEHYHPYSEEFVYVTAGAFEV----DLDD----VPHPLRT---------GQG--- 86
+10461 47  PGDRIAEHYHPYSEEFVYVTEGALEV----DLDG----VPHSLGT---------GQG--- 86
+6345  47  PGERISEHYHPYSEEFVYVVEGRLEV----DLDG----ETFPLRA---------DQG--- 86
+1128  56  PGESVTEHYHPFSDKYLYLIEGSLVV----RVNG----EEVRLER---------DEA--- 95
+72438 419 PGKMLSLHKHFHRSEHWICVKGTAEV----TIED----RVTILHE---------NQS--- 458
+588   387 PGEGISEQQHYHRAEHWIIVAGTAKI----TIKG----EVKILTE---------NES--- 426
+5811  385 PGARLSLQMHHHRAEHWIVVSGTAQV----TCDD----KTFLLTE---------NQS--- 424
+7036  382 PGATLSLQMHHHRAEHWIVVSGTAEV----TRGD----EVLLLTE---------NQS--- 421
+7422  228  GDRIVDHYHEYHTETFYCLEGQMTM----WTDG----QEIQLNP---------GDF--- 266
+8765  46         HKHDIHDQIAYVAAGSFEV----VIEG----EKRILKT---------GDA--- 78
+30070 839 PYEEKGKQHVGQDILVFYVNFGDLLC----TLHE----TPYKLTT---------GDS--- 878
+22447 104 PGGTNPPHIHPRATEIGIVMKGELLVGILGSLDSGNKLYSRVVRA---------GET--- 151
+10500 387 PGEKFVAQMHHHRAEHWIVLSGTARV----TKGE----QTYMVSE---------NES--- 426
+59757 20         HHHEYPQ-IILGLMGKSEL----SIED----SSVCLSP---------GMG--- 51
+49644 387 PGGAFSMQMHHHRAEHWVILAGTGQV----TVNG----KQFLLTE---------NQS--- 426
+48079 99  PGGVIPMHTHPGASEILNVVEG                                       120
+22446 104 PGGTNPPHIHPRATEIGIVMKGELLVGILGSLDSGNKLYSRVVRA---------GET--- 151
+20808 104 PGGTNPPHVHPRATEIGIVMKGELLVGILGSLDSGNKLYSRVVRA---------GET--- 151
+64209 33  EGLRANWFYNPVLEEFA---------------------IPDSYQE---------GHG--- 59
+33663 485 PKKAPMNGYQKFSQELL                                            501
+8178  325 PGVIKAFHYHEKQDDLWFFPTGHAQV----VLYD----LREDSKTKGETDVYYMGEDNPM 376
+
+QUERY 87  -LLIPKDVRHRFRNTGDVEARLV---FHLG---PLAPRPDLGHVDTEETDETAPAGVVS 138
+504   87  -LLIPKDVRHRFRNTGDVEARLV---FHLG---PLAPRPDLGHVDTEETDETAPAGVVS 138
+10461 87  -LLIPQDMRHRFRNAGDVEARLV---FHLG---PLAPRPELGHVDTEDAEGNA       132
+6345  87  -LMIPIDMRHRFRNVGDEEARMV---FHLS---PLAPKPSLGHVDTE             126
+1128  96  -LFVTRGQRHRIENRGNVPARVV---FQIS---PLAPRPELGHVDTEPVPNPAAA     143
+72438 459 -IYIPEGAIHRLGNPGKIMLELVE--IQTG---AYLGEDDIIRVADESRNE         503
+588   427 -VYIPVGVKHCLENPGKIALELI                                     448
+5811  425 -TYIPIASVHRLANPGKIPLEII                                     446
+7036  422 -TYIPLGVTHRLKNPGKLPLELI                                     443
+7422  267 -LHVPANTVHSYR                                               278
+8765  79  -YMAVKNEMH                                                  87
+30070 879 -FYVPSGNHYNIKNLLNVESSLL---F                                 901
+22447 152 -FLIPRGLMHFQFNVGKTEASMV---VFFN---SQSP                       181
+10500 427 -TFIPPNTIHALENPGMTPLKLI                                     448
+59757 52  -YRINANVEHSFSGTSNNQV-LV---MNLP---PFISMTDV                   84
+49644 427 -TFIPIGAEHSLENPGRI                                          443
+22446 152 -FLIPRGLMHFQFNVGKTEASMV                                     173
+20808 152 -FLIPRGLMHFQFNVGKTEASMV                                     173
+64209 60  -VNVKITFSHRSRNTGQI                                          76
+39295 142        IRCRFRNSTRMEFRLQIWRYSMGPSPPIAPAPDLEEV---LTNITAPPG    187
+39294 142        IRCRFRNSTRMEFRLQIWRYSMGPSPPIAPAPDLEEV---LTNITAPPG    187
+8178  377 LLLIPKGVAHGYRVLGETPLTII---Y                                 400
+  Database: data/swissprot
+    Posted date:  Feb 2, 2000  9:39 AM
+  Number of letters in database: 29,652,561
+  Number of sequences in database:  82,258
+  
+Lambda     K      H
+   0.319    0.139    0.415 
+
+Gapped
+Lambda     K      H
+   0.270   0.0470    0.230 
+
+
+Matrix: BLOSUM62
+Gap Penalties: Existence: 11, Extension: 1
+Number of Hits to DB: 8952568
+Number of Sequences: 82258
+Number of extensions: 387403
+Number of successful extensions: 727
+Number of sequences better than 10.0: 23
+Number of HSP's better than 10.0 without gapping: 13
+Number of HSP's successfully gapped in prelim test: 10
+Number of HSP's that attempted gapping in prelim test: 712
+Number of HSP's gapped (non-prelim): 23
+length of query: 138
+length of database: 29,652,561
+effective HSP length: 47
+effective length of query: 91
+effective length of database: 25,786,435
+effective search space: 2346565585
+effective search space used: 2346565585
+T: 11
+A: 40
+X1: 16 ( 7.4 bits)
+X2: 38 (14.8 bits)
+X3: 64 (24.9 bits)
+S1: 41 (21.7 bits)
+S2: 61 (28.2 bits)
