@@ -24,10 +24,7 @@ version = Martel.Group("version",
 
 header = Martel.Group("header",
                      Martel.Str("CLUSTAL ") +
-                     Martel.Re("[X|W]") +
-                     Martel.Re("[ (]+") +
-                     version +
-                     Martel.Str(") multiple sequence alignment") +
+                     Martel.Re(".+") +
                      Martel.MaxRepeat(Martel.AnyEol(), 0, 3))
 
 seq_id = Martel.Group("seq_id",
