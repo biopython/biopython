@@ -1,0 +1,55 @@
+Exon Ayth.amer:e2:nad3:mt:-15449
+
+
+Exon Query Result 
+
+
+
+Other queries: [ Sequence | Gene | Protein | RNA | Exon | Intron | 
+Genes&Products | Map | Taxon | Main ] 
+Exon Ayth.amer:e2:nad3:mt:-15449
+  Gene Class: nad3 
+  Species name: Aythya americana 
+  Taxon division: Metazoa 
+  Exon number: 2 
+  Exon sequence: -15449 
+  Partial exon: no 
+  Exon location on published sequence 
+Sequence(gi)  Strand   From  To
+     4887659  plus    10778  10954  
+
+  Info on gene: Ayth.amer:nad3:mt:490386 
+  Info on published sequence: dna:mt:Ayth.amer:4887659 
+  Genbank accession: 
+    AF059096                  AF059156 
+    AF069422                  AF090337 
+  NCBI Entrez record: 4887659 
+  NCBI taxon classification: 
+    Eukaryota 
+    eukaryote crown group 
+    Fungi/Metazoa group 
+    Metazoa 
+    Eumetazoa 
+    Bilateria 
+    Coelomata 
+    Deuterostomia 
+    Chordata 
+    Craniata 
+    Vertebrata 
+    Gnathostomata 
+    Teleostomi 
+    Euteleostomi 
+    Sarcopterygii 
+    Tetrapoda 
+    Amniota 
+    Sauropsida 
+    Sauria 
+    Archosauria 
+    Aves 
+    Neognathae 
+    Anseriformes 
+    Anatidae 
+    Aythya 
+    Aythya americana 
+  GOBASEid#: -15449 
+

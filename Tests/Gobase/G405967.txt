@@ -1,0 +1,62 @@
+Gene Allo.macr:orf242:mt:405967
+
+
+Gene Query Result 
+
+
+
+Other queries: [ Sequence | Gene | Protein | RNA | Exon | Intron | 
+Genes&Products | Map | Taxon | Main ] 
+Gene Allo.macr:orf242:mt:405967
+  Gene Class: orf242 
+  Species name: Allomyces macrogynus 
+  Taxon division: Fungi 
+  Plasmid encoded: no 
+  Partial gene: no 
+  Pseudo: no 
+  Transpliced gene: no 
+  Chloroplast origin: no 
+  Contains intron(s): no 
+  Extracted gene sequence: 405967 
+  ORF: yes 
+  Gene location on published sequence 
+From     To  Strand  Sequence(gi)  Segment#
+9486  10265  plus         1236403         1  
+
+  Included in intron: yes 
+  Intron embracing the gene: Allo.macr:i5:cob:mt:405966 
+  Upstream genes 
+Gene                        For sequence segment#  Strand
+Allo.macr:cob:mt:405950                         1  plus  
+Allo.macr:rnl:mt:405940                         1  plus  
+Allo.macr:orf233:mt:405964                      1  plus  
+Allo.macr:orf246:mt:405960                      1  plus  
+
+  Downstream genes 
+Gene                        For gene segment#  Strand
+Allo.macr:cox2:mt:405976                    1  plus  
+Allo.macr:cox3:mt:405975                    1  plus  
+Allo.macr:nad5:mt:405980                    1  plus  
+Allo.macr:orf261:mt:405986                  1  plus  
+Allo.macr:orf361:mt:405971                  1  plus  
+
+  Info on published sequence: dna:mt:Allo.macr:1236403 
+  Genbank accession: U41288 
+  NCBI Entrez record: 1236403 
+  Product type: protein 
+  Product Class: unidentified protein 
+  Genetic code: 1 
+  Info on protein: Allo.macr:orf242:mt:1236407 
+  NCBI taxon classification: 
+    Eukaryota 
+    eukaryote crown group 
+    Fungi/Metazoa group 
+    Fungi 
+    Chytridiomycota 
+    Blastocladiales 
+    Blastocladiaceae 
+    Allomyces 
+    Allomyces macrogynus 
+  GOBASEid#(gene): 405967 
+  GOBASEid#(sequence): 153302 
+

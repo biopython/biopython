@@ -1,0 +1,42 @@
+Protein Juni.proc:cox1:mt:2661406
+
+
+Protein Query Result 
+
+
+
+Other queries: [ Sequence | Gene | Protein | RNA | Exon | Intron | 
+Genes&Products | Map | Taxon | Main ] 
+Protein Juni.proc:cox1:mt:2661406
+  Product Class: cytochrome c oxidase subunit 1 
+  Species name: Juniperus procera 
+  Taxon division: Plants 
+  Gene Class: cox1 
+  Partial protein: yes 
+  Conflict: no 
+  Plasmid: no 
+  Sequence length: 216 
+  Protein sequence: 413673 
+  General function: electron transport 
+  Enzyme complex: respiratory complex IV 
+  EC#: 1.9.3.1 
+  ENZYME database record: 1.9.3.1 
+  NCBI Entrez record: 2661406 
+  NCBI taxon classification: 
+    Eukaryota 
+    eukaryote crown group 
+    Viridiplantae 
+    Streptophyta 
+    Embryophyta 
+    Tracheophyta 
+    Euphyllophyta 
+    Spermatophyta 
+    Coniferophyta 
+    Coniferopsida 
+    Coniferales 
+    Taxodiaceae 
+    Juniperus 
+    Juniperus procera 
+  Gene(s): Juni.proc:cox1:mt:413672 
+  GOBASEid#: 413673 
+

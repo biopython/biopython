@@ -1,0 +1,39 @@
+Protein Anem.cali:orfX:mt:6513764
+
+
+Protein Query Result 
+
+
+
+Other queries: [ Sequence | Gene | Protein | RNA | Exon | Intron | 
+Genes&Products | Map | Taxon | Main ] 
+Protein Anem.cali:orfX:mt:6513764
+  Product Class: unidentified protein 
+  Species name: Anemopsis californica 
+  Taxon division: Plants 
+  Gene Class: orfX 
+  Partial protein: yes 
+  Conflict: no 
+  Plasmid: no 
+  Sequence length: 610 
+  Protein sequence: 474121 
+  General function: unknown 
+  NCBI Entrez record: 6513764 
+  NCBI taxon classification: 
+    Eukaryota 
+    eukaryote crown group 
+    Viridiplantae 
+    Streptophyta 
+    Embryophyta 
+    Tracheophyta 
+    Euphyllophyta 
+    Spermatophyta 
+    Magnoliophyta 
+    Piperales 
+    Saururaceae 
+    Anemopsis 
+    Anemopsis californica 
+  Gene(s): Anem.cali:orfX:mt:474119 
+  RNA(s): Anem.cali:orfX:mt:474120 
+  GOBASEid#: 474121 
+

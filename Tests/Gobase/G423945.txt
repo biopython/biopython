@@ -1,0 +1,61 @@
+Gene Vinc.rose:orf277:mt:423945
+
+
+Gene Query Result 
+
+
+
+Other queries: [ Sequence | Gene | Protein | RNA | Exon | Intron | 
+Genes&Products | Map | Taxon | Main ] 
+Gene Vinc.rose:orf277:mt:423945
+  Gene Class: orf277 
+  Species name: Vinca rosea 
+  Taxon division: Plants 
+  Plasmid encoded: no 
+  Partial gene: no 
+  Pseudo: no 
+  Transpliced gene: no 
+  Chloroplast origin: no 
+  Contains intron(s): no 
+  Extracted gene sequence: 423945 
+  ORF: yes 
+  Gene location on published sequence 
+From    To  Strand  Sequence(gi)  Segment#
+ 639  1472  plus         3288658         1  
+
+  Included in intron: yes 
+  Intron embracing the gene: Vinc.rose:i1:cox1:mt:423947 
+  Upstream genes 
+Gene                      For sequence segment#  Strand
+Vinc.rose:cox1:mt:423950                      1  plus  
+
+  Info on published sequence: dna:mt:Vinc.rose:3288658 
+  Genbank accession: AJ223423 
+  NCBI Entrez record: 3288658 
+  Submitter's comment: 
+    putative endonuclease or maturase based on homology with yeast intron
+  Product type: protein 
+  Product Class: unidentified protein 
+  Genetic code: 1 
+  Info on protein: Vinc.rose:orf277:mt:3288660 
+  NCBI taxon classification: 
+    Eukaryota 
+    eukaryote crown group 
+    Viridiplantae 
+    Streptophyta 
+    Embryophyta 
+    Tracheophyta 
+    Euphyllophyta 
+    Spermatophyta 
+    Magnoliophyta 
+    eudicotyledons 
+    core eudicots 
+    Asteridae 
+    euasterids I 
+    Gentianales 
+    Apocynaceae 
+    Vinca 
+    Vinca rosea 
+  GOBASEid#(gene): 423945 
+  GOBASEid#(sequence): 167567 
+

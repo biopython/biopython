@@ -1,0 +1,40 @@
+Sequence aa:mt:Agar.cali:4323016
+
+
+Sequence Query Result 
+
+
+
+Other queries: [ Sequence | Gene | Protein | RNA | Exon | Intron | 
+Genes&Products | Map | Taxon | Main ] 
+Sequence aa:mt:Agar.cali:4323016
+  Molecule type: aa 
+  Species name: Agaricus californicus 
+  Taxon division: Fungi 
+  Plasmid: no 
+  Complete genome: no 
+  Shape of molecule: not set 
+  Sequence length: 192 
+  Genbank definition line: 
+    Agaricus californicus isolate RWK1502 ATP synthase subunit 6 gene, 
+    mitochondrial gene encoding mitochondrial protein, partial cds
+  Submission date: Feb 22 1999 
+  Update date: Feb 22 1999 
+  Complete published sequence: 182712 
+  NCBI Entrez record: 4323016 
+  Genbank accession: AAD16160 
+  Coding gene(s): Agar.cali:atp6:mt:442674 
+  Protein info: Agar.cali:atp6:mt:4323016 
+  NCBI taxon classification: 
+    Eukaryota 
+    eukaryote crown group 
+    Fungi/Metazoa group 
+    Fungi 
+    Basidiomycota 
+    Hymenomycetes 
+    Agaricales 
+    Agaricaceae 
+    Agaricus 
+    Agaricus californicus 
+  GOBASEid#: 182712 
+
