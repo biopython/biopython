@@ -92,6 +92,8 @@ localds(sequenceA, sequenceB, match_dict, open, extend) -> alignments
 # - score_only: boolean
 #   Only get the best score, don't recover any alignments.  The return
 #   value of the function is the score.
+# - one_alignment_only: boolean
+#   Only recover one alignment.
 
 from types import *
 
@@ -236,6 +238,7 @@ alignment occurs.
                 ('gap_char', '-'),
                 ('force_generic', 0),
                 ('score_only', 0),
+                ('one_alignment_only', 0)
                 ]
             for name, default in default_params:
                 keywds[name] = keywds.get(name, default)
@@ -247,7 +250,8 @@ align = align()
 
 def _align(sequenceA, sequenceB, match_fn, gap_A_fn, gap_B_fn,
            penalize_extend_when_opening, penalize_end_gaps,
-           align_globally, gap_char, force_generic, score_only):
+           align_globally, gap_char, force_generic, score_only,
+           one_alignment_only):
     if not sequenceA or not sequenceB:
         return []
 
@@ -296,7 +300,7 @@ def _align(sequenceA, sequenceB, match_fn, gap_A_fn, gap_B_fn,
     # Recover the alignments and return them.
     x = _recover_alignments(
         sequenceA, sequenceB, starts, score_matrix, trace_matrix,
-        align_globally, penalize_end_gaps, gap_char)
+        align_globally, penalize_end_gaps, gap_char, one_alignment_only)
     return x
 
 def _make_score_matrix_generic(
@@ -520,7 +524,7 @@ def _make_score_matrix_fast(
     
 def _recover_alignments(sequenceA, sequenceB, starts,
                         score_matrix, trace_matrix, align_globally,
-                        penalize_end_gaps, gap_char):
+                        penalize_end_gaps, gap_char, one_alignment_only):
     # Recover the alignments by following the traceback matrix.  This
     # is a recursive procedure, but it's implemented here iteratively
     # with a stack.
@@ -551,6 +555,8 @@ def _recover_alignments(sequenceA, sequenceB, starts,
         in_process.append(
             (sequenceA[0:0], sequenceB[0:0], score, begin, end,
              (lenA, lenB), (row, col)))
+        if one_alignment_only:
+            break
     while in_process and len(tracebacks) < MAX_ALIGNMENTS:
         seqA, seqB, score, begin, end, prev_pos, next_pos = in_process.pop()
         prevA, prevB = prev_pos
@@ -561,7 +567,7 @@ def _recover_alignments(sequenceA, sequenceB, starts,
             seqB = sequenceB[:prevB] + seqB
             # add the rest of the gaps
             seqA, seqB = _lpad_until_equal(seqA, seqB, gap_char)
-                
+            
             # Now make sure begin is set.
             if begin is None:
                 if align_globally:
@@ -586,6 +592,9 @@ def _recover_alignments(sequenceA, sequenceB, starts,
                 for next_pos in trace_matrix[nextA][nextB]:
                     in_process.append(
                         (seqA, seqB, score, begin, end, prev_pos, next_pos))
+                    if one_alignment_only:
+                        break
+                    
     return _clean_alignments(tracebacks)
 
 def _find_start(score_matrix, sequenceA, sequenceB, gap_A_fn, gap_B_fn,
