@@ -1,12 +1,17 @@
 #!/usr/bin/env python
+#
+# Copyright 2002 by Michael Hoffman.  All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
 
 """
-easy: some functions to ease hte use of Biopython
+Bio.easy: some functions to ease the use of Biopython
 """
 
-from __future__ import generators
+from __future__ import generators # requires Python 2.2
 
-__version__ = "$Revision: 1.1 $"
+__version__ = "$Revision: 1.2 $"
 # $Source: /home/bartek/cvs2bzr/biopython_fastimport/cvs_repo/biopython/Bio/Attic/easy.py,v $
 
 import copy

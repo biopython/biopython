@@ -1,4 +1,9 @@
 #!/usr/bin/env python
+#
+# Copyright 2002 by Michael Hoffman.  All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
 
 """
 GFF.py: Access to General Feature Format databases created with Bio::DB:GFF
@@ -6,7 +11,7 @@ GFF.py: Access to General Feature Format databases created with Bio::DB:GFF
 based on documentation for Lincoln Stein's Perl Bio::DB::GFF
 """
 
-__version__ = "$Revision: 1.1 $"
+__version__ = "$Revision: 1.2 $"
 # $Source: /home/bartek/cvs2bzr/biopython_fastimport/cvs_repo/biopython/Bio/GFF/__init__.py,v $
 
 import exceptions
