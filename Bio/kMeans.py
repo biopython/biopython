@@ -16,6 +16,11 @@ cluster         Cluster a list of data points.
 
 """
 import random
+import warnings
+
+warnings.warn(
+    "Bio.kMeans is deprecated; please use kcluster in Bio.Cluster instead",
+    category=DeprecationWarning)
 
 try:
     from Numeric import *

@@ -12,6 +12,13 @@ from Bio.Clustering import kMeans
 from tkFileDialog import askopenfilename, asksaveasfilename
 import Pmw
 
+import warnings
+
+warnings.warn(
+    "Bio.xkMeans is deprecated; please use kcluster in Bio.Cluster instead",
+    category=DeprecationWarning)
+
+
 """
     This is a small xwrapper for Jeff's kMeans module. It displays the
     ongoing change of cluster sizes and allows easy retrieval of the observations
