@@ -157,17 +157,17 @@ class Vector:
 
     def __add__(self, other):
         "Return Vector+other Vector or scalar"
-        try:
+        if isinstance(other, Vector):
             a=self._ar+other._ar
-        except:
+        else:
             a=self._ar+array(other)
         return Vector(a)
 
     def __sub__(self, other):
         "Return Vector-other Vector or scalar"
-        try:
+        if isinstance(other, Vector):
             a=self._ar-other._ar
-        except:
+        else:
             a=self._ar-array(other)
         return Vector(a)
 
@@ -182,14 +182,14 @@ class Vector:
 
     def __pow__(self, other):
         "Return VectorxVector (cross product) or Vectorxscalar"
-        try:
+        if isinstance(other, Vector):
             a,b,c=self._ar
             d,e,f=other._ar
             c1=determinant(array(((b,c), (e,f))))
             c2=-determinant(array(((a,c), (d,f))))
             c3=determinant(array(((a,b), (d,e))))
             return Vector(c1,c2,c3)
-        except:
+        else:
             a=self._ar*array(other)
             return Vector(a)
 
