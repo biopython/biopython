@@ -12,10 +12,12 @@ o Converting between formats"""
 import os 
 
 # biopython
+from Bio.Alphabet import IUPAC
 from Bio.Clustalw import Clustalw
 from Bio.Align.FormatConvert import FormatConverter
 from Bio.Align import AlignInfo
 from Bio.Fasta import FastaAlign
+from Bio.SubsMat import FreqTable
 
 print "testing reading and writing clustal format..."
 test_dir = os.path.join(os.getcwd(), 'Clustalw')
@@ -74,8 +76,11 @@ e_freq = {'G' : 0.25,
           'A' : 0.25,
           'T' : 0.25}
 
+e_freq_table = FreqTable.FreqTable(e_freq, FreqTable.FREQ,
+                                   IUPAC.unambiguous_dna)
+
 print 'relative information:', align_info.information_content(
-                                   expected_freqs = e_freq,
+                                   e_freq_table = e_freq_table,
                                    chars_to_ignore = ['N'])
 
 print "testing reading and writing fasta format..."
