@@ -66,7 +66,7 @@ def test():
     for re_pat, good_list, bad_list in patterns:
         print "Testing", repr(re_pat)
         tree = convert_re.make_expression(re_pat)
-        exp = Parser.Parser(tuple(_generate(tree, {}, 0)))
+        exp = Parser.Parser(tuple(_generate(tree, GeneratorState({}, 0))))
         exp.setContentHandler(cb)
         exp.setErrorHandler(cb)
         if string.find(re_pat, r"\R") == -1:  # \R is a Martel-specific flag

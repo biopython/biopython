@@ -25,6 +25,7 @@
 
 """
 import re, string
+from xml.sax import xmlreader
 import msre_parse  # Modified version of Secret Labs' sre_parse
 import Parser
 
@@ -184,7 +185,7 @@ def _verify_name(s):
         raise AssertionError, "Illegal character in group name %s" % repr(s)
 
 class Group(Expression):
-    def __init__(self, name, expression):
+    def __init__(self, name, expression, attrs = None):
         """(name, expression)
 
         Create a group named 'name' which matches the given expression
@@ -193,6 +194,12 @@ class Group(Expression):
             _verify_name(name)
         self.name = name
         self.expression = expression
+        if attrs is None:
+            attrs = xmlreader.AttributesImpl({})
+        elif isinstance(attrs, type({})):
+            attrs = xmlreader.AttributesImpl(attrs)
+        self.attrs = attrs
+            
     def group_names(self):
         """the list of group names used by this Expression and its children"""
         subnames = self.expression.group_names()
@@ -211,10 +218,12 @@ class Group(Expression):
 
     def copy(self):
         """do a deep copy on this Expression tree"""
-        return Group(self.name, self.expression.copy())
+        return Group(self.name, self.expression.copy(), self.attrs)
 
     def __str__(self):
         """the corresponding pattern string"""
+        if self.attrs:
+            raise NotImplementedError("I have attrs!")
         if self.name is None:
             return '(%s)' % str(self.expression)
         else:

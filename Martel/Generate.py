@@ -43,6 +43,29 @@ supports_lookahead = hasattr(TT, "LookAhead")
 # element in the table and succeeds by jumping one past the last
 # element.
 
+class GeneratorState:
+    def __init__(self, groupref_names, debug_level):
+        self.groupref_names = groupref_names
+        self.debug_level = debug_level
+        self._count = 0
+        self.lookup = {}
+        
+    def add_group(self, group):
+        name = group.name
+        attrs = group.attrs
+        tag = self.new_group_tag()
+        self.lookup[tag] = (name, attrs)
+        return tag
+    
+    def new_group_tag(self):
+        i = self._count
+        tag = ">G%d" % i
+        i = i + 1
+        self._count = i
+        return tag
+    
+    
+
 # ==============
 
 #  a|b|c|d|...
@@ -61,11 +84,11 @@ supports_lookahead = hasattr(TT, "LookAhead")
 # (which jumped to the end+1 of the given table) to transition to the
 # end of the merged table.
 #
-def generate_alt(expression, groupref_names, debug_level):
+def generate_alt(expression, genstate):
     # Get the tagtables for each of the subexpressions
     tables = []
     for expr in expression.expressions:
-        tables.append(_generate(expr, groupref_names, debug_level))
+        tables.append(_generate(expr, genstate))
 
     # Make a set of branches testing each one
     i = 0
@@ -84,20 +107,20 @@ def generate_alt(expression, groupref_names, debug_level):
 #
 # Simply catenate the tagtables together, in order.  Works because falling
 # off the end of one table means success for that table, so try the next.
-def generate_seq(expression, groupref_names, debug_level):
+def generate_seq(expression, genstate):
     result = []
-    if debug_level == 0:
+    if genstate.debug_level == 0:
         for exp in expression.expressions:
-            table = _generate(exp, groupref_names, debug_level)
+            table = _generate(exp, genstate)
             result.extend(table)
-    elif debug_level == 1:
+    elif genstate.debug_level == 1:
         for exp in expression.expressions:
-            table = _generate(exp, groupref_names, debug_level)
+            table = _generate(exp, genstate)
             result.extend(table)
             result.append( (None, TT.Call, track_position, +1, +1) )
-    elif debug_level == 2:
+    elif genstate.debug_level == 2:
         for exp in expression.expressions:
-            table = _generate(exp, groupref_names, debug_level)
+            table = _generate(exp, genstate)
             result.extend(table)
             result.append( (None, TT.Call, track_position, +1, +1) )
             table.append( (None, TT.Call, print_info(exp), +1, +1) )
@@ -105,7 +128,7 @@ def generate_seq(expression, groupref_names, debug_level):
     return result
 
 # A literal character, or a character which isn't the given character
-def generate_literal(expression, groupref_names, debug_level):
+def generate_literal(expression, genstate):
     if expression.invert:
         # Can't use "InNot" since it can match EOF
         return [(None, TT.IsIn, convert_re.invert(expression.char))]
@@ -114,11 +137,11 @@ def generate_literal(expression, groupref_names, debug_level):
         return [(None, TT.Is, expression.char)]
 
 # A string
-def generate_str(expression, groupref_names, debug_level):
+def generate_str(expression, genstate):
     return [(None, TT.Word, expression.string)]
 
 # Any character in the given list of characters
-def generate_any(expression, groupref_names, debug_level):
+def generate_any(expression, genstate):
     if expression.invert:
         # I don't use "IsNotIn" since that allows EOF
         return [(None, TT.IsIn, convert_re.invert(expression.chars))]
@@ -136,15 +159,15 @@ class SetGroupValue:
         Parser._match_group[self.name] = text[l:r]
 
 # A 'group', either named or unnamed
-def generate_group(expression, groupref_names, debug_level):
-    tagtable = _generate(expression.expression, groupref_names, debug_level)
+def generate_group(expression, genstate):
+    tagtable = _generate(expression.expression, genstate)
 
     name = expression.name
     if name is None:
         # Don't really need to do anything, do I?
         return tagtable
         
-    if groupref_names.get(name) != 1:
+    if genstate.groupref_names.get(name) != 1:
         return [(name, TT.Table, tuple(tagtable)) ]
     else:
         # generate the code to save the match information
@@ -228,14 +251,14 @@ class _call_call:
     def __call__(self, text, x, end):
         return self.obj.call(text, x, end)
     
-def generate_named_max_repeat(expression, groupref_names, debug_level):
+def generate_named_max_repeat(expression, genstate):
     if type(expression.min_count) != type("") or \
        type(expression.max_count) != type(""):
         raise NotImplementedError("Cannot mix numeric and named repeat counts")
     if expression.min_count != expression.max_count:
         raise NotImplementedError("Only a single named repeat count allowed")
     
-    tagtable = _generate(expression.expression, groupref_names, debug_level)
+    tagtable = _generate(expression.expression, genstate)
     counter = HandleRepeatCount(tuple(tagtable),
                                 expression.min_count,
                                 expression.max_count)
@@ -254,19 +277,19 @@ def generate_named_max_repeat(expression, groupref_names, debug_level):
 #    generate i copies which must work
 #    generate j-i copies which may work, but fail okay.
 #    special case when j == 65535, which standard for "unbounded"
-def generate_max_repeat(expression, groupref_names, debug_level):
+def generate_max_repeat(expression, genstate):
     expr = expression.expression
     min_count = expression.min_count
     max_count = expression.max_count
 
     # Call some other code for named group repeats
     if type(min_count) == type("") or type(max_count) == "":
-        return generate_named_max_repeat(expression, groupref_names, debug_level)
+        return generate_named_max_repeat(expression, genstate)
 
     assert 0 <= min_count <= max_count, "bad ranges (%sd, %d)" % \
            (min_count, max_count)
 
-    tagtable = _generate(expr, groupref_names, debug_level)
+    tagtable = _generate(expr, genstate)
     result = []
 
     # Must repeat at least "i" times.
@@ -302,7 +325,7 @@ def check_at_beginning(text, x, end):
 # XXX Consider this code broken!
 #
 # Uses the +1/-1 trick.
-def generate_at_beginning(expression, groupref_names, debug_level):
+def generate_at_beginning(expression, genstate):
     if supports_lookahead:
         return [(None, TT.Call + TT.LookAhead, check_at_beginning, +1,
                  TT.MatchFail),]
@@ -316,16 +339,16 @@ def generate_at_beginning(expression, groupref_names, debug_level):
 #
 # XXX If 'check_at_beginning' is correct, then this is wrong since it
 # doesn't implement the multiline behaviour.  
-def generate_at_end(expression, groupref_names, debug_level):
+def generate_at_end(expression, genstate):
     return [(None, TT.EOF, TT.Here)]
 
 
 # Match any character except newline (by which I mean just "\012")
-def generate_dot(expression, groupref_names, debug_level):
+def generate_dot(expression, genstate):
     return [(None, TT.IsInSet, TT.invset('\n')), ]
 
 # Match any of the three standard newline conventions
-def generate_eol(expression, groupref_names, debug_level):
+def generate_eol(expression, genstate):
     return [(None, TT.Is, '\n', +1, +3),
             (None, TT.Is, '\r', TT.MatchFail, +1),
             (None, TT.Is, '\n', +1, +1),
@@ -370,8 +393,8 @@ class CheckAssert:
 
 # Create the tagtable for doing a lookahead assertion.
 # Uses the +1/-1 trick.
-def generate_assert(expression, groupref_names, debug_level):
-    tagtable = _generate(expression.expression, groupref_names, debug_level)
+def generate_assert(expression, genstate):
+    tagtable = _generate(expression.expression, genstate)
     if expression.invert:
         func = CheckAssertNot
     else:
@@ -402,7 +425,7 @@ class CheckGroupRef:
 
 # Make the tagtable needed for a named group backreference.
 # Uses the +1/-1 trick.
-def generate_groupref(expression, groupref_names, debug_level):
+def generate_groupref(expression, genstate):
     # Look up the string from the match group
     # It can be of length 0 or more, so use the +1/-1 trick.
     if supports_lookahead:
@@ -418,8 +441,8 @@ def generate_groupref(expression, groupref_names, debug_level):
 
 # Used to define parsers which read a record at time.  They contain no
 # parse information themselves, but only in their children
-def generate_pass_through(expression, groupref_names, debug_level):
-    return _generate(expression.expression, groupref_names, debug_level)
+def generate_pass_through(expression, genstate):
+    return _generate(expression.expression, genstate)
 
 # Mapping from Expression type to function used to generate the tagtable
 generate_table = {
@@ -468,7 +491,7 @@ class print_info:
         return x
 
 # The internal recursive call
-def _generate(expression, groupref_names, debug_level):
+def _generate(expression, genstate):
     try:
         func = generate_table[expression.__class__]
     except KeyError:
@@ -477,17 +500,17 @@ def _generate(expression, groupref_names, debug_level):
         else:
             raise AssertionError, \
                   "Unknown Expression object: %s" % repr(expression)
-    table = func(expression, groupref_names, debug_level)
+    table = func(expression, genstate)
 
-    if debug_level == 0:
+    if genstate.debug_level == 0:
         pass
-    elif debug_level == 1:
+    elif genstate.debug_level == 1:
         table.append( (None, TT.Call, track_position, +1, +1) )
-    elif debug_level == 2:
+    elif genstate.debug_level == 2:
         table.append( (None, TT.Call, track_position, +1, +1) )
         table.append( (None, TT.Call, print_info(expression), +1, +1) )
     else:
-        raise AssertionError, "Unknown debug level: %s" % debug_level
+        raise AssertionError, "Unknown debug level: %s" % genstate.debug_level
         
     return table
 
@@ -496,12 +519,13 @@ def _generate(expression, groupref_names, debug_level):
 def generate(expression, debug_level = 0):
     """expression -> Parser for the Expression tree"""
     groupref_names = _find_wanted_groupref_names(expression)
-    tagtable = _generate(expression, groupref_names, debug_level)
+    genstate = GeneratorState(groupref_names, debug_level)
+    tagtable = _generate(expression, genstate)
     if groupref_names:
         want_groupref_names = 1
     else:
         want_groupref_names = 0
-    return tuple(tagtable), want_groupref_names
+    return tuple(tagtable), want_groupref_names  #, genstate.lookup
 
 # Get the parser.  Main entry point for everything except record
 # oriented readers
