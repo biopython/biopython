@@ -1,7 +1,8 @@
 # tests of the iterator interface
 
+import os
+from testformats import swissprot38
 import Martel
-from Martel.formats import swissprot38
 from xml.sax import handler
 
 import test_swissprot38

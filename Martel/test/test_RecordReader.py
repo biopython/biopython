@@ -44,24 +44,23 @@ SEQUENCE
     reader = RecordReader.StartsWith(StringIO(">seq\n"), ">")
     assert test_count(reader) == 1
 
-sp_example = os.path.join(os.path.dirname(Martel.__file__),
-                          "examples", "sample.swissprot")
+sp_sample = os.path.join("samples", "sample.swissprot")
 
 def test_start():
-    reader = RecordReader.StartsWith(open(sp_example), "ID")
+    reader = RecordReader.StartsWith(open(sp_sample), "ID")
     assert test_count(reader, 0) == 8
 
 def test_start_lines():
-    lookahead = open(sp_example).read()
+    lookahead = open(sp_sample).read()
     reader = RecordReader.StartsWith(StringIO(""), "ID", lookahead = lookahead)
     assert test_count(reader) == 8
     
 def test_end():
-    reader = RecordReader.EndsWith(open(sp_example), "//\n")
+    reader = RecordReader.EndsWith(open(sp_sample), "//\n")
     assert test_count(reader) == 8
 
 def test_end_lines():
-    lookahead = open(sp_example).read()
+    lookahead = open(sp_sample).read()
     reader = RecordReader.EndsWith(StringIO(""), "//\n", lookahead = lookahead)
     assert test_count(reader) == 8
 

@@ -4,7 +4,7 @@
 from xml.sax import handler, saxutils
 from cStringIO import StringIO
 import Martel
-from Martel.formats import swissprot38
+from testformats import swissprot38
 
 import test_swissprot38
 

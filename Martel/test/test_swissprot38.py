@@ -1,4 +1,4 @@
-from Martel.formats.swissprot38 import *
+from testformats.swissprot38 import *
 
 
 import support
