@@ -24,7 +24,7 @@ SequenceParser     Parses a SwissProt record into a Sequence object.
 
 _Scanner           Scans SwissProt-formatted data.
 _RecordConsumer    Consumes SwissProt data to a Record object.
-_SequenceConsumer  Consumes SwissProt data to a Record object.
+_SequenceConsumer  Consumes SwissProt data to a Sequence object.
 
 
 Functions:
