@@ -3,61 +3,55 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Dom.py
+# Gavin E. Crooks 2001-11-07 :
+#     Interface and comments modified to reflect changes to the SCOP
+#     module, and to SCOP itself.
 
-This module provides code to work with the 'dom' files from SCOP.
-http://scop.mrc-lmb.cam.ac.uk/scop/
+""" Handle the SCOP DOMain file.
 
-Classes:
-Domain         Holds information about one domain.
-Iterator       Iterates over records in a 'dom' file.
-DomainParser   Parse a domain record.
-
+The DOM file has been officially deprecated. For more information see
+the SCOP"release notes.":http://scop.berkeley.edu/release-notes-1.55.html 
+The DOM files for older releases can be found 
+"elsewhere at SCOP.":http://scop.mrc-lmb.cam.ac.uk/scop/parse/
 """
-import string
+
 from types import *
 
-import Location
+from Residues import Residues
 
-class Domain:
+class Record:
     """Holds information for one SCOP domain.
 
-    Members:
-    sid          The SCOP ID of the entry, e.g. d1anu1
-    pdbid        The PDB ID for the sequence, e.g. 1dan
-    locations    A list of tuples (chain, start, end) describing the location.
-    hierarchy    A string specifying where this domain is in the hierarchy.
-    
+    sid -- The SCOP ID of the entry, e.g. d1anu1
+
+    residues -- The domain definition as a Residues object
+
+    hierarchy -- A string specifying where this domain is in the hierarchy.
     """
     def __init__(self):
         self.sid = ''
-        self.pdbid = ''
-        self.locations = []
+        self.residues = []
         self.hierarchy = ''
         
     def __str__(self):
         s = []
         s.append(self.sid)
-        s.append(self.pdbid)
-        s.append(Location.str(self.locations))
+        s.append(str(self.residues).replace(" ","\t") )
         s.append(self.hierarchy)
-        return string.join(s, "\t") + "\n"
+        return "\t".join(s) + "\n"
 
 class Iterator:
     """Iterates over a DOM file.
-
-    Methods:
-    next     Retrieve the next DOM record.
-    
     """
     def __init__(self, handle, parser=None):
-        """__init__(self, handle, parser=None)
+        """Create an object that iterates over a DES file.
 
-        Create an object that iterates over a 'dom' file.  handle is a
-        file-like object.  parser is an optional Parser object to change
-        the results into another form.  If set to None, then the raw contents
-        of the file will be returned.
+        handle -- file-like object.
 
+        parser -- an optional Parser object to change the results into
+                  another form.  If set to None, then the raw contents
+                  of the file will be returned.
+                  
         """
         if type(handle) is not FileType and type(handle) is not InstanceType:
             raise ValueError, "I expected a file handle or file-like object"
@@ -72,20 +66,38 @@ class Iterator:
             return self._parser.parse(line)
         return line
 
-class DomainParser:
-    """Parses dom entries.
-
-    Methods:
-    parse        Parse an entry from a DOM file.
+class Parser:
+    """Parses DOM records.
     
+    Records consist of 4 tab deliminated fields;
+    sid, pdbid, residues, hierarchy
     """
+    #For example ::
+    #
+    #d1sctg_ 1sct    g:      1.001.001.001.001.001
+    #d1scth_ 1sct    h:      1.001.001.001.001.001
+    #d1flp__ 1flp    -       1.001.001.001.001.002
+    #d1moh__ 1moh    -       1.001.001.001.001.002
+
     def parse(self, entry):
-        """parse(self, entry) -> Domain"""
-        entry = string.rstrip(entry)  # no trailing whitespace
-        columns = string.split(entry, "\t")  # separate the tab-delineated cols
+        """Returns a Dom.Record """
+        entry = entry.rstrip()  # no trailing whitespace
+        columns = entry.split("\t")  # separate the tab-delineated cols
         if len(columns) != 4:
             raise SyntaxError, "I don't understand the format of %s" % entry
-        dom = Domain()
-        dom.sid, dom.pdbid, locstr, dom.hierarchy = columns
-        dom.locations = Location.parse(locstr)
+        dom = Record()
+        dom.sid, pdbid, res, dom.hierarchy = columns
+        dom.residues = Residues(res)
+        dom.residues.pdbid =pdbid
         return dom
+
+
+
+
+
+
+
+
+
+
+
