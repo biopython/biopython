@@ -102,6 +102,8 @@ class Iterator:
             line = self._uhandle.readline()
             if not line:
                 break
+            if not line.strip():   # ignore blank lines
+                continue
             if line[0] == '>' and lines:
                 self._uhandle.saveline(line)
                 break
@@ -114,6 +116,9 @@ class Iterator:
         if self._parser is not None:
             return self._parser.parse(File.StringHandle(data))
         return data
+
+    def __iter__(self):
+        return iter(self.next, None)
 
 class Dictionary:
     """Accesses a FASTA file using a dictionary interface.
