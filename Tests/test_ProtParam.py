@@ -19,6 +19,8 @@ Helix, Turn, Sheet = X.secondary_structure_fraction()
 print "Fraction of amino acids in Helix: %.2f" % Helix
 print "Fraction of amino acids in Turn: %.2f" % Turn
 print "Fraction of amino acids in Sheet: %.2f" % Sheet
-print "\nKyde and Doolittle protein scale:"
+print "\nKyte and Doolittle protein scale:"
 for i in X.protein_scale(ProtParamData.kd, 9, 0.4):
 	print "%.3f" %i
+print "\nGRAVY:"
+print X.gravy()
