@@ -349,11 +349,11 @@ functionality for drawing biological objects like chromosomes. If you
 are not planning on using this installing ReportLab is not necessary.
 ReportLab in itself is very useful for a number of tasks besides just
 Biopython, so you may want to check out
-\ahrefurl{\url{http://www.reportlab.com}} before making your decision.
+\ahrefurl{\url{http://www.reportlab.org}} before making your decision.
 
 
 The main download page for ReportLab is
-\ahrefurl{\url{http://www.reportlab.com/download.html}}. The ReportLab
+\ahrefurl{\url{http://www.reportlab.org/downloads.html}}. The ReportLab
 company has some commercial products as well, but just scroll down their
 page to the Open Source software section for the base ReportLab
 downloads.
@@ -666,5 +666,60 @@ This should start up a Tk based graphical user interface (or default to the comm
 
 If you've made it this far, you've gotten Biopython installed and running.
 Congratulations!
+
+\section{Notes for installing with non-administrator permissions}
+
+Although I mentioned above that I wouldn't go much into installing in
+non-root directories, if you are stuck installing
+Biopython and it's dependencies into your home directory here are a
+few notes and tricks to keep you going:
+
+\begin{itemize}
+  \item The Numeric package will take a little trickery to get it to be
+    able to import. It will install a \verb|Numeric| directory and
+    \verb|Numeric.pth| file into \verb|your_dir/lib/python|. The problem
+    is that the \verb|Numeric.pth| file only works when located in the main
+    python \verb|site-packages| directory. The solution, fortunately, is
+    simple -- you need to make sure \verb|your_dir/lib/python| is in the
+    \verb|PYTHONPATH| and then need to make a \verb|__init__.py| file in
+    the \verb|Numeric| directory (an empty file or a file with just a
+    comment is fine, as long as it exists). Then \verb|import Numeric|
+    should work.
+
+  \item Building some C modules, such as \verb|Bio.Cluster| require that 
+    the Numeric include files (normally installed in
+    \verb|your_dir/include/python/Numeric|) be available. If the
+    compiler can't find these directories you'll normally get an error
+    like:
+
+    \begin{verbatim}
+Bio/Cluster/clustermodule.c:2: Numeric/arrayobject.h: No such file or directory
+    \end{verbatim}
+
+    Followed by a long messy list of syntax errors. To fix this, you'll
+    have to edit the \verb|setup.py| file to let it know where the
+    include directories are located. Look for the line in
+    \verb|setup.py| that looks like:
+
+    \begin{verbatim}
+    include_dirs=["Bio/Cluster"]
+    \end{verbatim}
+
+    and adjust it so that it includes the include directory where the
+    numeric libraries were installed:
+    
+    \begin{verbatim}
+    include_dirs=["Bio/Cluster", "your_dir/include/python"]
+    \end{verbatim}
+
+    Then you should be able to install everything happily.
+
+Yes, it's a bit of mess installing lots of packages in non-standard
+locations. The best solution is to talk with your friendly system
+administrator and get them to assist with the installation of at least
+the required packages (they are generally quite useful for any python
+install) before going ahead with Biopython installation.
+
+\end{itemize}
 
 \end{document}

@@ -62,6 +62,7 @@ Table of Contents
      
   
  - 5  Making sure everything worked 
+ - 6  Notes for installing with non-administrator permissions 
    
   
 
@@ -354,10 +355,10 @@ used in the Biopython Graphics modules, which contains basic
 functionality for drawing biological objects like chromosomes. If you
 are not planning on using this installing ReportLab is not necessary.
 ReportLab in itself is very useful for a number of tasks besides just
-Biopython, so you may want to check out http://www.reportlab.com before
+Biopython, so you may want to check out http://www.reportlab.org before
 making your decision.
   The main download page for ReportLab is
-http://www.reportlab.com/download.html. The ReportLab company has some
+http://www.reportlab.org/downloads.html. The ReportLab company has some
 commercial products as well, but just scroll down their page to the Open
 Source software section for the base ReportLab downloads.
   
@@ -751,6 +752,58 @@ run the tests from. You can also run them by typing `python
 run_tests.py' in the Tests directory.
   If you've made it this far, you've gotten Biopython installed and
 running. Congratulations!
+  
+
+6  Notes for installing with non-administrator permissions
+*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
+
+  
+  Although I mentioned above that I wouldn't go much into installing in
+non-root directories, if you are stuck installing Biopython and it's
+dependencies into your home directory here are a few notes and tricks to
+keep you going:
+  
+   
+ - The Numeric package will take a little trickery to get it to be  able
+   to import. It will install a `Numeric' directory and  `Numeric.pth'
+   file into `your_dir/lib/python'. The problem  is that the
+   `Numeric.pth' file only works when located in the main  python
+   `site-packages' directory. The solution, fortunately, is  simple --
+   you need to make sure `your_dir/lib/python' is in the  `PYTHONPATH'
+   and then need to make a `__init__.py' file in  the `Numeric'
+   directory (an empty file or a file with just a  comment is fine, as
+   long as it exists). Then `import Numeric'  should work.
+ 
+ - Building some C modules, such as `Bio.Cluster' require that   the
+   Numeric include files (normally installed in 
+   `your_dir/include/python/Numeric') be available. If the  compiler
+   can't find these directories you'll normally get an error  like:
+   <<
+     Bio/Cluster/clustermodule.c:2: Numeric/arrayobject.h: No such file
+   or directory
+         >>
+ 
+  Followed by a long messy list of syntax errors. To fix this, you'll 
+   have to edit the `setup.py' file to let it know where the  include
+   directories are located. Look for the line in  `setup.py' that looks
+   like:
+   <<
+         include_dirs=["Bio/Cluster"]
+         >>
+ 
+  and adjust it so that it includes the include directory where the 
+   numeric libraries were installed:
+   <<
+         include_dirs=["Bio/Cluster", "your_dir/include/python"]
+         >>
+ 
+  Then you should be able to install everything happily.
+ Yes, it's a bit of mess installing lots of packages in non-standard
+   locations. The best solution is to talk with your friendly system
+   administrator and get them to assist with the installation of at
+   least the required packages (they are generally quite useful for any
+   python install) before going ahead with Biopython installation.
+  
 -----------------------------------------------------------------------
   
    

@@ -75,6 +75,7 @@
 </UL>
 </UL>
 <LI><A HREF="#htoc31">5&nbsp;&nbsp;Making sure everything worked</A>
+<LI><A HREF="#htoc32">6&nbsp;&nbsp;Notes for installing with non-administrator permissions</A>
 </UL>
 
 <!--TOC section Purpose and Assumptions-->
@@ -364,10 +365,10 @@ functionality for drawing biological objects like chromosomes. If you
 are not planning on using this installing ReportLab is not necessary.
 ReportLab in itself is very useful for a number of tasks besides just
 Biopython, so you may want to check out
-<A HREF="http://www.reportlab.com"><TT>http://www.reportlab.com</TT></A> before making your decision.<BR>
+<A HREF="http://www.reportlab.org"><TT>http://www.reportlab.org</TT></A> before making your decision.<BR>
 <BR>
 The main download page for ReportLab is
-<A HREF="http://www.reportlab.com/download.html"><TT>http://www.reportlab.com/download.html</TT></A>. The ReportLab
+<A HREF="http://www.reportlab.org/downloads.html"><TT>http://www.reportlab.org/downloads.html</TT></A>. The ReportLab
 company has some commercial products as well, but just scroll down their
 page to the Open Source software section for the base ReportLab
 downloads.<BR>
@@ -652,6 +653,53 @@ This should start up a Tk based graphical user interface (or default to the comm
 If you've made it this far, you've gotten Biopython installed and running.
 Congratulations!<BR>
 <BR>
+<!--TOC section Notes for installing with non-administrator permissions-->
+
+<H2><A NAME="htoc32">6</A>&nbsp;&nbsp;Notes for installing with non-administrator permissions</H2><!--SEC END -->
+
+Although I mentioned above that I wouldn't go much into installing in
+non-root directories, if you are stuck installing
+Biopython and it's dependencies into your home directory here are a
+few notes and tricks to keep you going:
+<UL><LI>
+ The Numeric package will take a little trickery to get it to be
+ able to import. It will install a <CODE>Numeric</CODE> directory and
+ <CODE>Numeric.pth</CODE> file into <CODE>your_dir/lib/python</CODE>. The problem
+ is that the <CODE>Numeric.pth</CODE> file only works when located in the main
+ python <CODE>site-packages</CODE> directory. The solution, fortunately, is
+ simple -- you need to make sure <CODE>your_dir/lib/python</CODE> is in the
+ <CODE>PYTHONPATH</CODE> and then need to make a <CODE>__init__.py</CODE> file in
+ the <CODE>Numeric</CODE> directory (an empty file or a file with just a
+ comment is fine, as long as it exists). Then <CODE>import Numeric</CODE>
+ should work.<BR>
+<BR>
+<LI>Building some C modules, such as <CODE>Bio.Cluster</CODE> require that 
+ the Numeric include files (normally installed in
+ <CODE>your_dir/include/python/Numeric</CODE>) be available. If the
+ compiler can't find these directories you'll normally get an error
+ like:
+<PRE>
+Bio/Cluster/clustermodule.c:2: Numeric/arrayobject.h: No such file or directory
+    </PRE>
+ Followed by a long messy list of syntax errors. To fix this, you'll
+ have to edit the <CODE>setup.py</CODE> file to let it know where the
+ include directories are located. Look for the line in
+ <CODE>setup.py</CODE> that looks like:
+<PRE>
+    include_dirs=["Bio/Cluster"]
+    </PRE>
+ and adjust it so that it includes the include directory where the
+ numeric libraries were installed:
+<PRE>
+    include_dirs=["Bio/Cluster", "your_dir/include/python"]
+    </PRE>
+ Then you should be able to install everything happily.<BR>
+<BR>
+Yes, it's a bit of mess installing lots of packages in non-standard
+locations. The best solution is to talk with your friendly system
+administrator and get them to assist with the installation of at least
+the required packages (they are generally quite useful for any python
+install) before going ahead with Biopython installation.</UL>
 <!--HTMLFOOT-->
 <!--ENDHTML-->
 <!--FOOTER-->
