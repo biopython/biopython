@@ -378,7 +378,7 @@ DATA_FILES=[
 # Thus, we have to add a hack to make it work on both platforms.
 dtd_path = os.path.join("Bio", "EUtils", "DTDs")
 if sys.platform == 'win32':
-    path = dtd_path
+    path = os.path.join("Lib\\site-packages", dtd_path)
 else:
     path = os.path.join(
         os.path.split(os.__file__)[0], "site-packages", dtd_path)
