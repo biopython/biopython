@@ -6,9 +6,6 @@ o Reference - hold reference data for a record.
 o Feature - Hold the information in a Feature Table.
 o Qualifier - Qualifiers on a Feature.
 """
-# standard modules
-import string
-
 # local stuff
 import Bio.GenBank
 
@@ -173,6 +170,7 @@ class Record:
         self.origin = ''
         self.sequence = ''
         self.contig = ''
+        self.primary=[]
 
     def __str__(self):
         """Provide a GenBank formatted output option for a Record.

@@ -19,9 +19,7 @@ http://www.ebi.ac.uk/embl/Documentation/FT_definitions/feature_table.html
 o There are also descriptions of different GenBank lines at:
 http://www.ibc.wustl.edu/standards/gbrel.txt
 """
-# standard library
-import string
-     
+
 # Martel
 import Martel
 from Martel import RecordReader
@@ -301,7 +299,32 @@ reference = Martel.Group("reference",
 
 # COMMENT     On Dec 16, 1999 this sequence version replaced gi:5729683.
 comment_block = define_block("COMMENT", "comment_block", "comment")
+# PRIMARY
+primary_line = Martel.Group("primary_line",
+                            Martel.Str("PRIMARY") +
+                            blank_space +
+                            Martel.Str("TPA_SPAN") +
+                            blank_space +
+                            Martel.Str("PRIMARY_IDENTIFIER") +
+                            blank_space +
+                            Martel.Str("PRIMARY_SPAN") +
+                            blank_space +
+                            Martel.Str("COMP") + 
+                            Martel.ToEol())
 
+primary_ref_line =Martel.Group("primary_ref_line",
+                               blank_space +
+                               Martel.Re(r"\d+\-\d+") +
+                               blank_space +
+                               Martel.Re("[\S]+") +
+                               blank_space +
+                               Martel.Re("\d+\-\d+")+
+                               Martel.Opt(blank_space +  Martel.Str("c"))+
+                               Martel.ToEol())
+                              
+primary =  Martel.Group("primary",primary_line +
+                        Martel.Rep1(primary_ref_line))
+                                       
 # start on the feature table. Eeek -- This is the part I was afraid of
 # most!
 
@@ -733,6 +756,7 @@ record = Martel.Group("genbank_record",
                       source_block + \
                       organism_block + \
                       Martel.Rep(reference) + \
+                      Martel.Opt(primary) +\
                       Martel.Opt(comment_block) + \
                       features_line + \
                       Martel.Rep1(feature) + \

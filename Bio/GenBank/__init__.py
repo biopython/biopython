@@ -1,4 +1,4 @@
-# Copyright 2000 by Jeffrey Chang.  All rights reserved.
+# Copyright 2000 by Jeffrey Chang, Brad Chapman.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -985,7 +985,7 @@ class _RecordConsumer(_BaseGenBankConsumer):
         self._cur_reference = None
         self._cur_feature = None
         self._cur_qualifier = None
-
+        
     def locus(self, content):
         self.data.locus = content
 
@@ -1065,16 +1065,23 @@ class _RecordConsumer(_BaseGenBankConsumer):
 
     def medline_id(self, content):
         self._cur_reference.medline_id = content
-
+        
     def pubmed_id(self, content):
         self._cur_reference.pubmed_id = content
 
     def remark(self, content):
         self._cur_reference.remark = content
-
+        
     def comment(self, content):
         self.data.comment = "\n".join(content)
 
+    def primary_ref_line(self,content):
+        """Data for the PRIMARY line"""
+        self.data.primary.append(content)
+
+    def primary(self,content):
+        pass
+    
     def features_line(self, content):
         """Get ready for the feature table when we reach the FEATURE line.
         """
@@ -1214,7 +1221,7 @@ class _Scanner:
                               "location", "qualifier_key",
                               "qualifier_value", "origin_name",
                               "base_count", "base_number",
-                              "sequence", "contig_location", "record_end"]
+                              "sequence", "contig_location", "record_end","primary_ref_line"]
 
         # a listing of all tags which should be left alone with respect
         # to whitespace handles
