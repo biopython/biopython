@@ -168,6 +168,30 @@ def blast(program, datalib, sequence,
     handle = _open(cgi, variables, get=0)
     # Now parse the HTML from the handle and figure out how to retrieve
     # the results.
+    refcgi, params = _parse_blast_ref_page(handle, cgi)
+
+    start = time.time()
+    while 1:
+        # Sometimes the BLAST results aren't done yet.  Look at the page
+        # to see if the results are there.  If not, then try again later.
+        handle = _open(cgi, params, get=0)
+        ready, results, refresh_delay = _parse_blast_results_page(handle)
+        if ready:
+            break
+        # Time out if it's not done after timeout minutes.
+        if time.time() - start > timeout*60:
+            raise IOError, "timed out after %d minutes" % timeout
+        # pause and try again.
+        time.sleep(refresh_delay)
+    return File.UndoHandle(File.StringHandle(results))
+
+def _parse_blast_ref_page(handle, base_cgi):
+    """_parse_blast_ref_page(handle, base_cgi) -> cgi, parameters"""
+    # I can speed things up by putting the class declarations into the
+    # module scope, instead of recreating them in every function call.
+    # However, since the running time for the blast call will be dominated
+    # by NCBI's BLAST, it probably won't make much of a difference.
+    # This way, the implementation details are hidden in the function.
     class RefPageParser(sgmllib.SGMLParser):
         def __init__(self, cgi):
             sgmllib.SGMLParser.__init__(self)
@@ -191,12 +215,15 @@ def blast(program, datalib, sequence,
                     rid = value
             if is_rid and rid:
                 self.params['RID'] = rid
-    parser = RefPageParser(cgi)
+                
+    parser = RefPageParser(base_cgi)
     parser.feed(handle.read())
     if not parser.params.has_key('RID'):
         raise SyntaxError, "Error getting BLAST results: RID not found"
-    # This gets the CGI page and the params to retrieve the BLAST results.
-    cgi, params = parser.cgi, parser.params
+    return parser.cgi, parser.params
+    
+def _parse_blast_results_page(handle):
+    """_parse_blast_results_page(handle) -> ready, results, refresh_delay"""
     class ResultsParser(sgmllib.SGMLParser):
         def __init__(self):
             sgmllib.SGMLParser.__init__(self)
@@ -212,21 +239,10 @@ def blast(program, datalib, sequence,
                 m = self._refresh_re.search(value)
                 if m:
                     self.refresh = int(m.group(1))
-    start = time.time()
-    while 1:
-        # Sometimes the BLAST results aren't done yet.  Look at the page
-        # to see if the results are there.  If not, then try again later.
-        results = _open(cgi, params, get=0).read()
-        parser = ResultsParser()
-        parser.feed(results)
-        if parser.ready:
-            break
-        # Time out if it's not done after timeout minutes.
-        if time.time() - start > timeout*60:
-            raise IOError, "timed out after %d minutes" % timeout
-        # pause and try again.
-        time.sleep(parser.refresh)
-    return File.UndoHandle(File.StringHandle(results))
+    results = handle.read()
+    parser = ResultsParser()
+    parser.feed(results)
+    return parser.ready, results, parser.refresh
 
 def _open(cgi, params={}, get=1):
     """_open(cgi, params={}, get=1) -> UndoHandle
