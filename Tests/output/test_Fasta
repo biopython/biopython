@@ -1,7 +1,7 @@
 test_Fasta
 Running test on Record
-<type 'string'>
-<type 'string'>
+1
+1
 Running tests on _Scanner
 testing f001
 *************** start_sequence

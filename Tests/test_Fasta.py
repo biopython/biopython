@@ -15,8 +15,8 @@ from Bio import Fasta
 print "Running test on Record"
 
 r = Fasta.Record()
-print type(r.title)    # StringType
-print type(r.sequence) #  StringType
+print type(r.title) is StringType    # StringType
+print type(r.sequence) is StringType # StringType
     
 
 ### _Scanner
