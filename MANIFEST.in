@@ -9,6 +9,7 @@ include README
 
 recursive-include Scripts *    # Include scripts.
 recursive-include Tests *      # Include regression tests.
+recursive-include Bio *.c      # Include all .c files.
 recursive-include Bio *.h      # Include headers to compile .c files.
 recursive-include Doc *.tex    # Include relevant documentation.
 recursive-include Doc *.pdf
