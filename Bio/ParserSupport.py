@@ -103,10 +103,10 @@ class TaggingConsumer(AbstractConsumer):
 
     def _print_name(self, name, data=None):
         if data is None:
-	    # Write the name of a section.
+            # Write the name of a section.
             self._handle.write("%s %s\n" % ("*"*self._colwidth, name))
         else:
-	    # Write the tag and line.
+            # Write the tag and line.
             self._handle.write("%-*s: %s\n" % (
                 self._colwidth, name[:self._colwidth],
                 string.rstrip(data[:self._maxwidth-self._colwidth-2])))
@@ -195,12 +195,6 @@ if xml_support:
             self._finalizer = callback_finalizer
             self._exempt_tags = exempt_tags
 
-            # a dictionary of flags to recognize when we are in different
-            # info items
-            self.flags = {}
-            for tag in self.interest_tags:
-                self.flags[tag] = 0
-
             # a dictionary of content for each tag of interest
             # the information for each tag is held as a list of the lines.
             # This allows us to collect information from multiple tags
@@ -216,44 +210,21 @@ if xml_support:
             self._previous_tag = ''
 
             # the current character information for a tag
-            self._cur_content = ''
-
-        def _get_set_flags(self):
-            """Return a listing of all of the flags which are set as positive.
-            """
-            set_flags = []
-            for tag in self.flags.keys():
-                if self.flags[tag] == 1:
-                    set_flags.append(tag)
-
-            return set_flags
+            self._cur_content = []
+            # whether we should be collecting information
+            self._collect_characters = 0
 
         def startElement(self, name, attrs):
-            """Recognize when we are recieving different items from Martel.
-
-            We want to recognize when Martel is passing us different items
-            of interest, so that we can collect the information we want from
-            the characters passed.
+            """Determine if we should collect characters from this tag.
             """
-            # set the appropriate flag if we are keeping track of these flags
-            if self.flags.has_key(name):
-                # make sure that all of the flags are being properly unset
-                assert self.flags[name] == 0, "Flag %s not unset" % name
-
-                self.flags[name] = 1
+            if name in self.interest_tags:
+                self._collect_characters = 1
 
         def characters(self, content):
-            """Extract the information.
-
-            Using the flags that are set, put the character information in
-            the appropriate place.
+            """Extract the information if we are interested in it.
             """
-            set_flags = self._get_set_flags()
-
-            # deal with each flag in the set flags
-            for flag in set_flags:
-                # collect up the content for all of the characters
-                self._cur_content += content
+            if self._collect_characters:
+                self._cur_content.append(content)
 
         def endElement(self, name):
             """Send the information to the consumer.
@@ -267,10 +238,12 @@ if xml_support:
             """
             # only deal with the tag if it is something we are
             # interested in and potentially have information for
-            if name in self._get_set_flags():
+            if self._collect_characters:
                 # add all of the information collected inside this tag
-                self.info[name].append(self._cur_content)
-                self._cur_content = ''
+                self.info[name].append("".join(self._cur_content))
+                # reset our information and flags
+                self._cur_content = []
+                self._collect_characters = 0
                 
                 # if we are at a new tag, pass on the info from the last tag
                 if self._previous_tag and self._previous_tag != name:
@@ -278,10 +251,6 @@ if xml_support:
 
                 # set this tag as the next to be passed
                 self._previous_tag = name
-
-                # unset the flag for this tag so we stop collecting info
-                # with it
-                self.flags[name] = 0
 
         def _make_callback(self, name):
             """Call the callback function with the info with the given name.
