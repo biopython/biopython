@@ -8,7 +8,7 @@
 
 
 Classes:
-Consumer         Base class of all Consumers.
+AbstractConsumer Base class of all Consumers.
 TaggingConsumer  Consumer that tags output with its event.
 OopsHandle       File object decorator with support for undo-like things.
 
@@ -24,7 +24,7 @@ import sys
 import string
 
 
-class Consumer:
+class AbstractConsumer:
     """Base class for other Consumers.
 
     Derive Consumers from this class and implement appropriate
@@ -42,7 +42,7 @@ class Consumer:
             method = self._unhandled
         return method
 
-class TaggingConsumer(Consumer):
+class TaggingConsumer(AbstractConsumer):
     """A Consumer that tags the data stream with the event and
     prints it to a handle.  Useful for debugging.
 

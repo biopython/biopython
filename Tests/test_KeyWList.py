@@ -8,13 +8,27 @@ from TestSupport import verbose, TestFailed
 from Bio import ParserSupport
 from Bio.SwissProt import KeyWList
 
-if verbose:
-    print """No tests yet.  I'm not sure if we can include SwissProt files
-for testing purposes."""
 
 
 ### Scanner
 
-#if verbose:
-#    print "Running tests on Scanner"
+if verbose:
+    print "Running tests on Scanner"
 
+tests = ['kw001', 'kw002']
+
+class TestHandle:
+    def __init__(self, h):
+        self._h = h
+    def write(self, s):
+        assert self._h.readline() == s
+
+scanner = KeyWList.Scanner()
+for test in tests:
+    datafile = os.path.join("SwissProt", test)
+    modelfile = datafile + ".tagged"
+    tc = ParserSupport.TaggingConsumer(handle=TestHandle(open(modelfile)))
+    try:
+        scanner.feed(open(datafile), tc)
+    except:
+        raise TestFailed, "Scanner (%s)" % test

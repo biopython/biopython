@@ -1,0 +1,17 @@
+FASTA TEST DATA FILES
+=====================
+
+This directory contains various data files for testing the
+Fasta-related code in Biopython.
+
+
+
+FASTA TEST FILES
+----------------
+
+ID     Description
+f001   1 protein sequence
+f002   3 DNA sequences
+
+
+
