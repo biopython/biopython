@@ -167,6 +167,9 @@ class _Scanner:
     def _scan_database_info(self, uhandle, consumer):
         attempt_read_and_call(uhandle, consumer.noevent, start='<p>')
         read_and_call(uhandle, consumer.database_info, contains='Database')
+        # Sagar Damle reported that databases can consist of multiple lines.
+        read_and_call_until(uhandle, consumer.database_info,
+                            contains='sequences')
         read_and_call(uhandle, consumer.database_info, contains='sequences')
         read_and_call(uhandle, consumer.noevent, blank=1)
         read_and_call(uhandle, consumer.noevent,
@@ -207,7 +210,8 @@ class _Scanner:
         # 2.  line contains "No significant similarity"
         # 3.  no descriptions
         if not attempt_read_and_call(
-            uhandle, consumer.description_header, contains='Score     E'):
+            uhandle, consumer.description_header,
+            has_re=re.compile(r"Score {4,5}E")):
             # Either case 2 or 3.  Look for "No hits found".
             attempt_read_and_call(uhandle, consumer.no_hits,
                                   contains='No significant similarity')
@@ -335,9 +339,12 @@ class _Scanner:
             # see if I'm at an HSP header.
             line1 = safe_readline(uhandle)
             line2 = safe_readline(uhandle)
+            line3 = safe_readline(uhandle)
+            uhandle.saveline(line3)
             uhandle.saveline(line2)
             uhandle.saveline(line1)
-            if line1[:6] != ' Score' and line2[:6] != ' Score':
+            if line1[:6] != ' Score' and line2[:6] != ' Score' and \
+               line3[:6] != ' Score':
                 break
             self._scan_hsp(uhandle, consumer)
                 
@@ -443,6 +450,7 @@ class _Scanner:
 
         read_and_call(uhandle, consumer.noevent, start='<PRE>')
         read_and_call(uhandle, consumer.database, start='  Database')
+        read_and_call_until(uhandle, consumer.database, contains="Posted")
         read_and_call(uhandle, consumer.posted_date, start='    Posted')
         read_and_call(uhandle, consumer.num_letters_in_database,
                       start='  Number of letters')
