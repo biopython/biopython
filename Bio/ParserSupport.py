@@ -52,7 +52,10 @@ class AbstractParser:
         return self.parse(File.StringHandle(string))
 
     def parse_file(self, filename):
-        return self.parse(open(filename))
+        h = open(filename)
+        retval = self.parse(h)
+        h.close()
+        return retval
 
 class AbstractConsumer:
     """Base class for other Consumers.
