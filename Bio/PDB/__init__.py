@@ -39,6 +39,9 @@ from Vector import Vector, calc_angle, calc_dihedral, refmat, rotmat, rotaxis
 # Alignment module
 from StructureAlignment import StructureAlignment
 
+# DSSP handle
+from DSSP import DSSP, make_dssp_dict
+
 # Fast atom neighbor search
 # Depends on KDTree C++ module
 try:
