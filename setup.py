@@ -178,6 +178,7 @@ biopython_packages = ['Bio',
                       'Bio.SwissProt',
                       'Bio.Tools',
                       'Bio.Tools.Classification',
+                      'Bio.Tools.Clustering',
                       'Bio.Tools.MultiProc',
                       'Bio.Tools.Parsers',
                       'Bio.UniGene',
@@ -196,7 +197,7 @@ if INSTALL_MARTEL:
     all_packages.extend(martel_packages)
 
 setup(name='biopython', 
-      version='1.00a1',
+      version='1.00a2',
       author='The Biopython Consortium',
       author_email='biopython@biopython.org',
       url='http://www.biopython.org/',
