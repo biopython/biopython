@@ -83,6 +83,13 @@ print 'relative information:', align_info.information_content(
                                    e_freq_table = e_freq_table,
                                    chars_to_ignore = ['N'])
 
+print 'Column 1:', align_info.get_column(1)
+print 'IC for column 1:', align_info.ic_vector[1]
+print 'Column 7:', align_info.get_column(7)
+print 'IC for column 7:', align_info.ic_vector[7]
+print 'test print_info_content, results will be in output/info_content.txt'
+fout = open('output/info_content.txt','w')
+AlignInfo.print_info_content(align_info,fout)
 print "testing reading and writing fasta format..."
 
 to_parse = os.path.join(os.curdir, 'Fasta', 'fa01')
