@@ -16,6 +16,9 @@ recursive-include Doc *.py
 recursive-include Doc *.html
 recursive-include Doc *.fasta
 
+# csupport.h is necessary to compile several .c files...
+include Bio/Tools/csupport.h
+
 recursive-include Tests *
 global-exclude CVS
 global-exclude CVS/*
