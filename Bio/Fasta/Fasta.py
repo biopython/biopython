@@ -266,7 +266,7 @@ class _SequenceConsumer(AbstractConsumer):
     data    Sequence with FASTA data.
 
     """
-    def __init__(self, alphabet):
+    def __init__(self, alphabet = Alphabet.generic_alphabet):
         """Initialize the Consumer.
 
         Arguments:
