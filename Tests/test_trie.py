@@ -29,6 +29,19 @@ print trieobj.has_prefix("hello world")   # 0
 
 print len(trieobj)               # 4
 
+k = trieobj.with_prefix("he")
+k.sort()
+print k                          # ["he", "hej", "hello"]
+k = trieobj.with_prefix("l")
+k.sort()
+print k                          # []
+k = trieobj.with_prefix("hej")
+k.sort()
+print k                          # ["hej"]
+k = trieobj.with_prefix("hejk")
+k.sort()
+print k                          # []
+
 trieobj2 = trie.trie()
 trieobj2["foo"] = 1
 k = trieobj2.keys()
