@@ -71,7 +71,7 @@ _match_group = {}
 
 
 # The SAX startElements take an AttributeList as the second argument.
-# Martel's attributes are always empty, so make a simple class which
+# Martel's attributes can be empty, so make a simple class which
 # doesn't do anything and which I can guarantee won't be modified.
 class MartelAttributeList(xmlreader.AttributesImpl):
     def getLength(self):
@@ -99,6 +99,10 @@ class MartelAttributeList(xmlreader.AttributesImpl):
         return 0
     def get(self, key, alternative):
         return alternative
+    def __repr__(self):
+        return "{}"
+    def __str__(self):
+        return "{}"
 
 # singleton object shared amoung all startElement calls
 _attribute_list = MartelAttributeList([])
