@@ -1,0 +1,107 @@
+test_ecell
+# this is ecell rule file for E-CELL0.9.4.6
+# converted by Ecell module 
+
+include(qty.er)
+
+system Cell(/:CELL,"The cell")
+{
+	Stepper SlaveStepper;
+}
+
+system Environment(/:ENVIRONMENT,"The culture medium")
+{
+	Stepper SlaveStepper;
+	VolumeIndex /ENVIRONMENT:VOLUME;
+}
+
+system Cytoplasm(/CELL:CYTOPLASM,"The cytoplasm")
+{
+	Stepper SlaveStepper;
+	VolumeIndex /CELL/CYTOPLASM:VOLUME;
+}
+
+system Membrane(/CELL:MEMBRANE,"The menbrane")
+{
+	Stepper SlaveStepper;
+	Inside  /CELL:CYTOPLASM;
+	Outside /:ENVIRONMENT;
+}
+
+_SETVOLUME(/ENVIRONMENT,1E-015)
+_SETVOLUME(/CELL/CYTOPLASM,1E-018)
+substance /CELL/CYTOPLASM:SA "Substance A" 1000000;
+fix /CELL/CYTOPLASM:SA;
+substance /CELL/CYTOPLASM:SB "Substance B" 0;
+substance /CELL/CYTOPLASM:SC "Substance C" 0;
+substance /CELL/CYTOPLASM:SD "Substance D" 0;
+substance /CELL/CYTOPLASM:SE "Substance E" 0;
+substance /CELL/CYTOPLASM:E.ab "Isomerase of A" QTY(0.83027009,/CELL/CYTOPLASM);
+fix /CELL/CYTOPLASM:E.ab;
+substance /CELL/CYTOPLASM:E.bc "Dehydratase of B" QTY(0.02,/CELL/CYTOPLASM);
+substance /CELL/CYTOPLASM:E.cd "Isomerase of C" QTY(0.01,/CELL/CYTOPLASM);
+substance /CELL/CYTOPLASM:E.de "Isomerase of D" QTY(0.01,/CELL/CYTOPLASM);
+substance /CELL/CYTOPLASM:C.Ebc-D "Complex of E.bc and D" QTY(0,/CELL/CYTOPLASM);
+
+reactor ConstantParameterReactor(/ENVIRONMENT:VOLUME,"Volume index for environment")
+{
+	Value 1E-015;
+	InitialActivity 1E-015;
+}
+
+reactor ConstantParameterReactor(/CELL/CYTOPLASM:VOLUME,"Volume index for cytoplasm")
+{
+	Value 1E-018;
+	InitialActivity 1E-018;
+}
+
+reactor MichaelisUniUniReversibleReactor(/CELL/CYTOPLASM:E.ab-0,"Isomerization of A")
+{
+	Substrate /CELL/CYTOPLASM:SA 1;
+	Product /CELL/CYTOPLASM:SB 1;
+	Catalyst /CELL/CYTOPLASM:E.ab;
+	KmS 10;
+	KmP 0.1;
+	KcF 5;
+	KcR 4;
+}
+
+reactor MichaelisUniUniReversibleReactor(/CELL/CYTOPLASM:E.bc-0,"Dehydration of B")
+{
+	Substrate /CELL/CYTOPLASM:SB 1;
+	Product /CELL/CYTOPLASM:SC 1;
+	Catalyst /CELL/CYTOPLASM:E.bc;
+	KmS 0.1;
+	KmP 0.1;
+	KcF 3;
+	KcR 0.1;
+}
+
+reactor MichaelisUniUniReversibleReactor(/CELL/CYTOPLASM:E.cd-0,"Isomerization of C")
+{
+	Substrate /CELL/CYTOPLASM:SC 1;
+	Product /CELL/CYTOPLASM:SD 1;
+	Catalyst /CELL/CYTOPLASM:E.cd;
+	KmS 0.1;
+	KmP 0.1;
+	KcF 2;
+	KcR 0.1;
+}
+
+reactor MichaelisUniUniReactor(/CELL/CYTOPLASM:E.de-0,"Isomerization of D")
+{
+	Substrate /CELL/CYTOPLASM:SD 1;
+	Product /CELL/CYTOPLASM:SE 1;
+	Catalyst /CELL/CYTOPLASM:E.de;
+	KmS 0.1;
+	KcF 1;
+}
+
+reactor RapidEquilibriumPReactor(/CELL/CYTOPLASM:!EQ-Ebc-D,"Bonding of Ebc and D")
+{
+	Substrate /CELL/CYTOPLASM:E.bc 1;
+	Substrate /CELL/CYTOPLASM:SD 1;
+	Product /CELL/CYTOPLASM:C.Ebc-D 1;
+	Keq 100;
+}
+

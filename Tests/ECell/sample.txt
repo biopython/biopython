@@ -1,0 +1,39 @@
+"Type"	"Class"	"path"	"ID"	"Name"	"Inside"	"Outside"	"VolumeIndex"	"Memo"						
+"System"	"Cell"	"/"	"CELL"	"The cell"				"Definition of CellComponent"						
+"System"	"Environment"	"/"	"ENVIRONMENT"	"The culture medium"			"/ENVIRONMENT:VOLUME"	"Definition of CellComponent"						
+"System"	"Cytoplasm"	"/CELL"	"CYTOPLASM"	"The cytoplasm"			"/CELL/CYTOPLASM:VOLUME"	"Definition of CellComponent"						
+"System"	"Membrane"	"/CELL"	"MEMBRANE"	"The menbrane"	"/CELL:CYTOPLASM"	"/:ENVIRONMENT"		"Definition of CellComponent"						
+"Type"	"Class"	"path"	"ID"	"Name"	"Arg_tag"	"Arg_coeff"	"init_act"	"Memo"						
+"Reactor"	"ConstantParameterReactor"	"/ENVIRONMENT"	"VOLUME"	"Volume index for environment"	"Value"	1E-015	1E-015	"Definition of Volume"						
+"Reactor"	"ConstantParameterReactor"	"/CELL/CYTOPLASM"	"VOLUME"	"Volume index for cytoplasm"	"Value"	1E-018	1E-018	"Definition of Volume"						
+"Type"		"path"	"ID"	"Name"	"QTY"	"CONC"	"Memo"							
+"Substance"		"/CELL/CYTOPLASM"	"SA"	"Substance A"	1000000		"1e+06 meens 1 * 10^6"							
+					"Fix"		"SA is fixed"							
+"Substance"		"/CELL/CYTOPLASM"	"SB"	"Substance B"	0									
+"Substance"		"/CELL/CYTOPLASM"	"SC"	"Substance C"	0									
+"Substance"		"/CELL/CYTOPLASM"	"SD"	"Substance D"	0									
+"Substance"		"/CELL/CYTOPLASM"	"SE"	"Substance E"	0									
+"Substance"		"/CELL/CYTOPLASM"	"E.ab"	"Isomerase of A"		0.83027009								
+						"Fix"								
+"Type"		"path"	"ID"	"Name"	"CONC"	"Arg_tag"	"Arg_coeff"							
+"Substance"		"/CELL/CYTOPLASM"	"E.bc"	"Dehydratase of B"	0.02	"Accumulator"	"SimpleAccumulator"							
+"Substance"		"/CELL/CYTOPLASM"	"E.cd"	"Isomerase of C"	0.01									
+"Substance"		"/CELL/CYTOPLASM"	"E.de"	"Isomerase of D"	0.01									
+"Substance"		"/CELL/CYTOPLASM"	"C.Ebc-D"	"Complex of E.bc and D"	0									
+"Type"	"Class"	"path"	"ID"	"Name"	"S_ID"	"S_path"	"S_Coeff"	"P_ID"	"P_path"	"P_Coeff"	"C_ID"	"C_path"	"Arg_tag"	"Arg_coeff"
+"Reactor"	"MichaelisUniUniReversibleReactor"	"/CELL/CYTOPLASM"	"E.ab-0"	"Isomerization of A"	"SA"	"/CELL/CYTOPLASM"	1	"SB"	"/CELL/CYTOPLASM"	1	"E.ab"	"/CELL/CYTOPLASM"	"KmS"	10
+													"KmP"	0.1
+													"KcF"	5
+													"KcR"	4
+"Reactor"	"MichaelisUniUniReversibleReactor"	"/CELL/CYTOPLASM"	"E.bc-0"	"Dehydration of B"	"SB"	"/CELL/CYTOPLASM"	1	"SC"	"/CELL/CYTOPLASM"	1	"E.bc"	"/CELL/CYTOPLASM"	"KmS"	0.1
+													"KmP"	0.1
+													"KcF"	3
+													"KcR"	0.1
+"Reactor"	"MichaelisUniUniReversibleReactor"	"/CELL/CYTOPLASM"	"E.cd-0"	"Isomerization of C"	"SC"	"/CELL/CYTOPLASM"	1	"SD"	"/CELL/CYTOPLASM"	1	"E.cd"	"/CELL/CYTOPLASM"	"KmS"	0.1
+													"KmP"	0.1
+													"KcF"	2
+													"KcR"	0.1
+"Reactor"	"MichaelisUniUniReactor"	"/CELL/CYTOPLASM"	"E.de-0"	"Isomerization of D"	"SD"	"/CELL/CYTOPLASM"	1	"SE"	"/CELL/CYTOPLASM"	1	"E.de"	"/CELL/CYTOPLASM"	"KmS"	0.1
+													"KcF"	1
+"Reactor"	"RapidEquilibriumPReactor"	"/CELL/CYTOPLASM"	"!EQ-Ebc-D"	"Bonding of Ebc and D"	"E.bc"	"/CELL/CYTOPLASM"	1	"C.Ebc-D"	"/CELL/CYTOPLASM"	1			"Keq"	100
+					"SD"	"/CELL/CYTOPLASM"	1							
