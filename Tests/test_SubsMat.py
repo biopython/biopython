@@ -32,10 +32,24 @@ f.write("Total sum %.2f should be 1.0\n" % (s))
 lo_mat_prot = \
 SubsMat.make_log_odds_matrix(acc_rep_mat=acc_rep_mat,round_digit=1) #,ftab_prot
 f.write("\nLog odds matrix\n")
+f.write("\nLog odds half matrix\n")
 lo_mat_prot.print_mat(f=f,format=" %.2f",alphabet='AVILMCFWYHSTNQKRDEGP')
+f.write("\nLog odds full matrix\n")
+lo_mat_prot.print_full_mat(f=f,format=" %.2f",alphabet='AVILMCFWYHSTNQKRDEGP')
 
 f.write("\nTesting MatrixInfo\n")
 for i in MatrixInfo.available_matrices:
     mat = SubsMat.SeqMat(getattr(MatrixInfo,i))
     f.write("\n%s\n------------\n" % i)
     mat.print_mat(f=f)
+f.write("\nTesting Entropy\n")
+lo_mat_prot.make_relative_entropy(obs_freq_mat)
+f.write("relative entropy %.3f\n" % lo_mat_prot.relative_entropy)
+
+# Will uncomment the following once the Bio.Tools.Statistics is in place
+# f.write("\nmatrix correlations\n")
+#blosum90 = SubsMat.SeqMat(MatrixInfo.blosum90)
+#blosum30 = SubsMat.SeqMat(MatrixInfo.blosum30)
+#f.write("BLOSUM30 & BLOSUM90 %s\n" % SubsMat.two_mat_correlation(blosum30, blosum90))
+#f.write("BLOSUM90 & BLOSUM30 %s\n" % SubsMat.two_mat_correlation(blosum90, blosum30))
+
