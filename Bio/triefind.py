@@ -23,8 +23,8 @@ def match(string, trie):
 
     """
     longest = None
-    for i in range(len(string)+1):
-        substr = string[:i]
+    for i in range(len(string)):
+        substr = string[:i+1]
         if not trie.has_prefix(substr):
             break
         if trie.has_key(substr):
