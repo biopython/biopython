@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Copyright 2002 by Michael Hoffman.  All rights reserved.
+# Copyright 2002-2003 by Michael Hoffman.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -22,15 +22,31 @@ Bio.DocSQL: easy access to DB API databases
 CreatePeople(message=Success)
 """
 
-__version__ = "$Revision: 1.5 $"
+__version__ = "$Revision: 1.6 $"
 # $Source: /home/bartek/cvs2bzr/biopython_fastimport/cvs_repo/biopython/Bio/DocSQL.py,v $
 
 import exceptions
 import MySQLdb
 import sys
-from GFF.GenericTools import enumerate
 
 connection = None
+
+# THIS IS A DUPLICATION
+# from Bio.GFF.GenericTools to avoid an annoying circular reference problem
+def enumerate(collection):
+    """
+    Generates an indexed series:  (0,coll[0]), (1,coll[1]) ...
+
+    >>> for i, item in enumerate([4, 5, 6]):
+    ...     print "%d: %d" % (i, item)
+    0: 4
+    1: 5
+    2: 6
+    """
+    i = 0
+    for item in collection:
+        yield (i, item)
+        i += 1
 
 class NoInsertionError(exceptions.Exception):
     pass
