@@ -274,6 +274,7 @@ class _Scanner:
                 read_and_call_while(uhandle, consumer.noevent, blank=1)
 
         attempt_read_and_call(uhandle, consumer.converged, start='CONVERGED')
+        read_and_call_while(uhandle, consumer.noevent, blank=1)
 
         consumer.end_descriptions()
 
