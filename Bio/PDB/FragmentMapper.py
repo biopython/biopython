@@ -50,12 +50,13 @@ def _read_fragments(size, length, dir="."):
     @param length: length of the fragments
     @type length: int
 
-    @param dir: directory where the fragment files can be found
+    @param dir: directory where the fragment spec files can be found
     @type dir: string
     """
     filename=(dir+"/"+_FRAGMENT_FILE) % (size, length)
     fp=open(filename, "r")
     flist=[]
+    # ID of fragment=rank in spec file
     fid=0
     for l in fp.readlines():
                 # skip comment and blank lines
@@ -66,10 +67,12 @@ def _read_fragments(size, length, dir="."):
             # Start of fragment definition
             f=Fragment(length, fid)
             flist.append(f)
+            # increase fragment id (rank)
             fid+=1
             continue
         # Add CA coord to Fragment
         coord=array(map(float, sl[0:3]))
+        # XXX= dummy residue name
         f.add_residue("XXX", coord)
     fp.close()
     return flist
@@ -95,6 +98,13 @@ class Fragment:
         # CA coordinate matrix
         self.coords_ca=zeros((length, 3), "d")
         self.fid=fid
+
+    def get_resname_list(self):
+        """
+        @return: the residue names
+        @rtype: [string, string,...]
+        """
+        return self.resname_list
 
     def get_id(self):
         """
