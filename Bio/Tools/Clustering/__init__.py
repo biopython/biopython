@@ -5,4 +5,5 @@
 
 __init__ = [
     'kMeans',
+    'xkMeans'
     ]

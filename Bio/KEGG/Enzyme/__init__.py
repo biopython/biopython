@@ -17,6 +17,7 @@ _Scanner
 _Consumer
 
 """
+__all__ = ['enzyme_format']
 
 # XML from python
 from xml.sax import handler

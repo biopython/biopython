@@ -17,6 +17,8 @@ __all__ = [
     "GenBank",
     "Gobase",
     "Index",
+    "InterPro",
+    "KEGG",
     "Kabat",
     "Medline",
     "PDB",
