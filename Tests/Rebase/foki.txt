@@ -1,0 +1,32 @@
+
+                                       FokI
+          [Enzymes]         Type II restriction enzyme          [Search]
+                                   (subtype s)
+
+                              Recognition Sequence:
+
+                        G G A T G N N N N N N N N N^N N N N
+                        C C T A C N N N N N N N N N N N N N^
+
+         REBASE enzyme #: 1056
+         Prototype: FokI                                     # sites on
+         Source: IFO 12536                                   Adeno2: 78
+         Microorganism: Flavobacterium okeanokoites          Lambda: 150
+         Growth Temperature: 30 °                            pBR322: 12
+         Single-stranded cleavage: n                         PhiX174: 8
+         Enzyme gene cloned.                                 SV40: 11
+         Enzyme gene sequenced.
+         Crystal data present.
+         Comment: CACCC sites also methylated somewhat    Related Records:
+         Entered: Jan 1 1981 ... Modified: Aug 31 1999             M.FokI
+
+     Related     Commercially Isoschizomers... Sequence   Methylation    Crystal
+  References...  Available...                  Data...  Sensistivity...  Data...
+    (sorted by                  (commercially
+  date) (sorted                  available)
+   by authors)
+
+                                    07/13/2000
+           [Home]     [Help]      Dr. Richard J.     [Search]  [Enzymes]
+                                     Roberts
+                                 and Dana Macelis
