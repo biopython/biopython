@@ -1,0 +1,121 @@
+#NEXUS
+
+[ NEXUS test file. Weird, but NEXUS standard compatible.]
+
+begin data;
+dimensions ntax=9 nchar=48;
+format datatype=dna gap=- missing=? interleave=yes;
+taxlabels t1 
+'t2 the name' 
+'isn''that [a] strange name?' 'one should be punished, for (that)!' 
+t5 t6 t7 t8 t9;
+charlabels 1 'a', 2 'b', 3 'c', 5 'f', 10 'A', 11 'B', 23 'x', 24 'y', 30 '1,2,3 can''t decide for a name?!', 48 final; 
+
+matrix
+[interleaved matrix: secont taxon name is spelled either with quotes or with underscores,
+but must be treated as the same name]
+t1                                      A-C-G-Tc-gtgtgtgctct-t-t
+'t2 the name'                           A-C-GcTc-gtg-----tct-t-t
+'isn''that [a] strange name?'           A-CcGcTc-gtgtgtgct------
+'one should be punished, for (that)!'   A-C-G-T-----------------
+t5                                      A-C?G-T?--acgt??-???-???
+t6                                      AcCaGtTc-?--aaaaaaaa-a-a
+t7                                      A?C-GgTg-ggggggggggg-g-g
+t8                                      AtCtGtTt-ttttttttttt-?-?
+[last taxon of the matrix]
+t9                                      cccccccc-cccccccccccNc-c
+
+t1                                      ------ac-gtgtgtgctct-t-t
+t2_the_name                             ----acac-gtg-----tct-t-t
+'isn''that [a] strange name?'           --acacac-gtgtgtgct------
+'one should be punished, for (that)!'   ------------------------
+t5                                      --??---?--acgt??-???-???
+t6                                      acgactac-?--aaaaaaaa-a-a
+t7                                      ??--?ggg-ggggggggggg-g-g
+t8                                      tttttttt-ttttttttttt-?-?
+[last taxon of the matrix]
+t9                                      cccccccc-cccccccccccNc-c
+;
+end;
+[t5                                      --??---?--a[last quarter of sequence starts here]cgt??-???-???]
+
+[ this is a [nested ] comment]
+[ a special commend was [& not cut out] here]
+
+begin sets;
+
+[simple blocks dividing the data into three parts]
+charset 
+c1=1-8;
+charset c2= 9-16;
+charset c3
+            =
+                17-24
+                        ;
+
+[characters can be specified by their character labels]
+charset byname= 1 f-'1,2,3 can''t decide for a name?!';
+charset pos1=1-48\3;
+charset pos2=b-final\3;
+charset pos3=3-11\3 12-48\3;
+charset mix=pos2 1; charset mux=mix 9 c3
+;
+
+[big chinks are nice for testing]
+charset bigchunk=2-47;
+charset firsthalf=1-24;
+charset secondhalf=25-48;
+charset big=1 3 5 7;
+
+[classical subdivision into codon positions]
+charpartition codons  =  a : pos1,
+b: pos2            ,
+c:pos3
+;
+
+[some taxon sets]
+taxset normal=1 3 4-6 8;
+taxset tbyname1=3 t1-t6;
+taxset tbyname2   =  't2 the_name' - t7;
+taxset tbyname3   =  t1 - t2_the_name;
+taxset reference=1 2 tbyname1;
+
+
+[another character partition]
+charpartition 
+
+part=one:c1, 
+two:c2, 
+three:c3;
+
+[and a taxpartition]
+taxpartition taxpart=goodnames:1 5-9, badnames: 2 3 4;
+
+end;
+
+[unknown blocks should be read and ignored]
+begin spam;
+this is a unknown block;
+and should be completely ignored;
+end;
+
+[Some trees]
+begin trees;
+translate
+
+3 t1,                                   
+4 't2 the name'                  
+,1 'isn''that [a] strange name?',        
+2 'one should be punished, for (that)!'
+,
+9 t5,                                
+7 t6  ,
+8 t7,                              
+5
+t8, 6 t9;
+
+tree tree1 = [&R] [&W3.5] (1,(2,3),(4,(5,6,(7,(8,9)))));
+tree tree1 = (1,(2,(4,(5,6,(7,(8,(9,3)))))));
+tree tree1 = (1,(2:0.5,(4:0.3,(5:1.2,6:3.4,(7:1,(8:99.9,(9:99,3:0.98)12:13)33:0.44)1:2.0)3:4.0)0.3:0.4)10:100);
+end;
+
