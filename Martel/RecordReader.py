@@ -422,6 +422,7 @@ class CountLines(RecordReader):
             lookahead = lookahead + data
 
         self.lookahead = lookahead
+        self.pos = 0
         self.positions = positions
 
         if not lookahead:
@@ -444,7 +445,6 @@ class CountLines(RecordReader):
 ##            self.positions = []
 ##            self.index = 0
 ##            return s
-        
         raise ReaderError, \
               "Only found %d lines, expecting %d (starting with %s ...)" % \
               (len(positions), self.count, repr(lookahead[:20]))
