@@ -4,9 +4,38 @@
 # as part of this package.
 
 
-from Numeric import array, sum, sqrt, arccos
+from Numeric import array, sum, sqrt, arccos, matrixmultiply, transpose
 from LinearAlgebra import determinant
+from MLab import eye
 
+
+def refmat(p,q):
+    """
+    Return a (left multiplying) matrix that mirrors p onto q.
+    p and q should be unit vectors.
+    """
+    p.normalize()
+    q.normalize()
+    pq=p-q
+    npq=pq.norm()
+    p=p.get_array()
+    q=q.get_array()
+    pq=pq.get_array()
+    b=pq/npq
+    b.shape=(3, 1)
+    i=eye(3)
+    ref=i-2*matrixmultiply(b, transpose(b))
+    return ref
+
+def rotmat(p,q):
+    """
+    Return a (left multiplying) matrix that rotates p onto q.
+    p and q should be unit vectors.
+    """
+    p.normalize()
+    q.normalize()
+    rot=matrixmultiply(refmat(q, -p), refmat(p, -p))
+    return rot
 
 def angle(v1, v2, v3):
     """
@@ -47,6 +76,11 @@ class Vector:
     def __init__(self, x, y, z):
         self._ar=array((x, y, z), 'd')
         self._norm=None
+
+    def __neg__(self):
+        "Return Vector(-x, -y, -z)"
+        x,y,z=-self._ar
+        return Vector(x,y,z)
 
     def __add__(self, other):
         "Add a vector or a scalar"
@@ -112,6 +146,16 @@ class Vector:
         "Return array of coordinates"
         return self._ar
 
+    def left_multiply(self, matrix):
+        "Return Vector=Matrix x Vector"
+        x,y,z=matrixmultiply(matrix, self._ar)
+        return Vector(x,y,z)
+
+    def right_multiply(self, matrix):
+        "Return Vector=Vector x Matrix"
+        x,y,z=matrixmultiply(self._ar, matrix)
+        return Vector(x,y,z)
+
 if __name__=="__main__":
 
         from math import pi
@@ -123,7 +167,10 @@ if __name__=="__main__":
 
         print angle(v1, v2, v3)
         print dihedral(v1, v2, v3, v4)
-        print 180*dihedral(v1, v2, v3, v4)/pi
+
+        print v1, v3
+        print refmat(v1, v3)
+        print rotmat(v1, v3)
 
 
         
