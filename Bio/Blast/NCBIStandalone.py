@@ -567,13 +567,13 @@ class _DescriptionConsumer:
         # sp|P21297|FLBT_CAUCR FLBT PROTEIN     [snip]           284  7e-77
         # special cases to handle:
         #   - title must be preserved exactly (including whitespaces)
-        #   - score could be equal to p-value (not likely, but what if??)
+        #   - score could be equal to e-value (not likely, but what if??)
         cols = string.split(line)
         i = string.rfind(line, cols[-1])        # find start of p-value
         i = string.rfind(line, cols[-2], 0, i)  # find start of score
-        dh.title, dh.score, dh.p = string.rstrip(line[:i]), cols[-2], cols[-1]
+        dh.title, dh.score, dh.e = string.rstrip(line[:i]), cols[-2], cols[-1]
         dh.score = _safe_int(dh.score)
-        dh.p = _safe_float(dh.p)
+        dh.e = _safe_float(dh.e)
         return dh
 
 class _AlignmentConsumer:
@@ -611,12 +611,20 @@ class _AlignmentConsumer:
             except ValueError:
                 raise SyntaxError, "I do not understand the line\n%s" \
                       % line
-            self._seq_index = string.index(line, seq)
+            self._start_index = string.index(line, start, len(name))
+            self._seq_index = string.index(line, seq,
+                                           self._start_index+len(start))
             # subtract 1 for the space
-            self._seq_length = string.index(line, end) - self._seq_index - 1
-            self._start_index = string.index(line, start)
+            self._name_length = self._start_index - 1
             self._start_length = self._seq_index - self._start_index - 1
-            self._name_length = self._start_index
+            self._seq_length = string.rfind(line, end) - self._seq_index - 1
+            
+            #self._seq_index = string.index(line, seq)
+            ## subtract 1 for the space
+            #self._seq_length = string.rfind(line, end) - self._seq_index - 1
+            #self._start_index = string.index(line, start)
+            #self._start_length = self._seq_index - self._start_index - 1
+            #self._name_length = self._start_index
 
         # Extract the information from the line
         name = string.rstrip(line[:self._name_length])
@@ -624,6 +632,10 @@ class _AlignmentConsumer:
             line[self._start_index:self._start_index+self._start_length])
         if start:
             start = _safe_int(start)
+        end = string.rstrip(
+            line[self._seq_index+self._seq_length:])
+        if end:
+            end = _safe_int(end)
         seq = string.rstrip(
             line[self._seq_index:self._seq_index+self._seq_length])
         # right pad the sequence with spaces if necessary
@@ -648,67 +660,79 @@ class _AlignmentConsumer:
         # Sequence 403 will need padding before being added to the alignment.
 
         align = self._multiple_alignment.alignment  # for convenience
-        
-        # If the sequence is the query, then just add it.
-        if name == 'QUERY':
-            if len(align) == 0:
-                align.append((name, start, seq))
-            else:
-                aname, astart, aseq = align[0]
-                if name != aname:
-                    raise SyntaxError, "Query is not the first sequence"
-                aseq = aseq + seq
-                align[0] = aname, astart, aseq
-        else:
-            if len(align) == 0:
-                raise SyntaxError, "I could not find the query sequence"
-            (qname, qstart, qseq) = align[0]
-            
-            # Now find my sequence in the multiple alignment.
-            for i in range(1, len(align)):
-                aname, astart, aseq = align[i]
-                if name == aname:
-                    index = i
-                    break
-            else:
-                # If I couldn't find it, then add it.
-                align.append((None, None, None))
-                index = len(align)-1
-                aname, astart, aseq = name, start, ''
+        align.append((name, start, seq, end))
 
-            if len(qseq) != len(aseq) + len(seq):
-                # If my sequences are shorter than the query sequence,
-                # then I will need to pad some spaces to make them line up.
-                # Since I've already right padded seq, that means aseq
-                # must be too short.
-                aseq = aseq + ' '*(len(qseq)-len(aseq)-len(seq))
-            aseq = aseq + seq
-            if not astart:
-                astart = start
-            align[index] = aname, astart, aseq
+        # This is old code that tried to line up all the sequences
+        # in a multiple alignment by using the sequence title's as
+        # identifiers.  The problem with this is that BLAST assigns
+        # different HSP's from the same sequence the same id.  Thus,
+        # in one alignment block, there may be multiple sequences with
+        # the same id.  I'm not sure how to handle this, so I'm not
+        # going to.
+        
+        # # If the sequence is the query, then just add it.
+        # if name == 'QUERY':
+        #     if len(align) == 0:
+        #         align.append((name, start, seq))
+        #     else:
+        #         aname, astart, aseq = align[0]
+        #         if name != aname:
+        #             raise SyntaxError, "Query is not the first sequence"
+        #         aseq = aseq + seq
+        #         align[0] = aname, astart, aseq
+        # else:
+        #     if len(align) == 0:
+        #         raise SyntaxError, "I could not find the query sequence"
+        #     qname, qstart, qseq = align[0]
+        #     
+        #     # Now find my sequence in the multiple alignment.
+        #     for i in range(1, len(align)):
+        #         aname, astart, aseq = align[i]
+        #         if name == aname:
+        #             index = i
+        #             break
+        #     else:
+        #         # If I couldn't find it, then add a new one.
+        #         align.append((None, None, None))
+        #         index = len(align)-1
+        #         # Make sure to left-pad it.
+        #         aname, astart, aseq = name, start, ' '*(len(qseq)-len(seq))
+        # 
+        #     if len(qseq) != len(aseq) + len(seq):
+        #         # If my sequences are shorter than the query sequence,
+        #         # then I will need to pad some spaces to make them line up.
+        #         # Since I've already right padded seq, that means aseq
+        #         # must be too short.
+        #         aseq = aseq + ' '*(len(qseq)-len(aseq)-len(seq))
+        #     aseq = aseq + seq
+        #     if astart is None:
+        #         astart = start
+        #     align[index] = aname, astart, aseq
 
     def end_alignment(self):
         # Remove trailing newlines
         if self._alignment:
             self._alignment.title = string.rstrip(self._alignment.title)
 
+        # This code is also obsolete.  See note above.
         # If there's a multiple alignment, I will need to make sure
         # all the sequences are aligned.  That is, I may need to
         # right-pad the sequences.
-        if self._multiple_alignment is not None:
-            align = self._multiple_alignment.alignment
-            seqlen = None
-            for i in range(len(align)):
-                name, start, seq = align[i]
-                if seqlen is None:
-                    seqlen = len(seq)
-                else:
-                    if len(seq) < seqlen:
-                        seq = seq + ' '*(seqlen - len(seq))
-                        align[i] = name, start, seq
-                    elif len(seq) > seqlen:
-                        raise SyntaxError, \
-                              "Sequence %s is longer than the query" % name
+        # if self._multiple_alignment is not None:
+        #     align = self._multiple_alignment.alignment
+        #     seqlen = None
+        #     for i in range(len(align)):
+        #         name, start, seq = align[i]
+        #         if seqlen is None:
+        #             seqlen = len(seq)
+        #         else:
+        #             if len(seq) < seqlen:
+        #                 seq = seq + ' '*(seqlen - len(seq))
+        #                 align[i] = name, start, seq
+        #             elif len(seq) > seqlen:
+        #                 raise SyntaxError, \
+        #                       "Sequence %s is longer than the query" % name
+        
         # Clean up some variables, if they exist.
         try:
             del self._seq_index
@@ -1295,6 +1319,7 @@ def blastpgp(blastcmd, database, infile, **keywds):
     required_end        End of required region in query.
 
         Processing
+    XXX should document default values
     program             The blast program to use. (PHI-BLAST)
     filter              Filter query sequence with SEG?  T/F
     believe_query       Believe the query defline?  T/F

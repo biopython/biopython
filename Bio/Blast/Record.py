@@ -7,7 +7,7 @@
 
 Classes:
 Blast              Holds all the information from a blast search.
-PSIBlast           Not implemented.
+PSIBlast           Holds all the information from a psi-blast search.
 
 Header             Holds information from the header.
 Description        Holds information about one hit description.
@@ -56,13 +56,13 @@ class Description:
     Members:
     title       Title of the hit.
     score       Number of bits.  (int)
-    p           P value.  (float)
+    e           E value.  (float)
     
     """
     def __init__(self):
         self.title = ''
         self.score = None
-        self.p = None
+        self.e = None
 
 class Alignment:
     """Stores information about one hit in the alignments section.
@@ -133,7 +133,7 @@ class MultipleAlignment:
     """Holds information about a multiple alignment.
 
     Members:
-    alignment  A list of tuples (name, start residue, sequence).
+    alignment  A list of tuples (name, start residue, sequence, end residue).
 
     The start residue is 1-based.  It may be blank, if that sequence is
     not aligned in the multiple alignment.
