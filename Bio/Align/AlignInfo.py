@@ -1,0 +1,533 @@
+"""Extract information from alignment objects.
+
+In order to try and avoid huge alignment objects with tons of functions,
+functions which return summary type information about alignments should
+be put into classes in this module.
+
+classes:
+o SummaryInfo
+o PSSM"""
+
+# standard library
+import string
+import math
+
+# biopython modules
+from Bio import Alphabet
+from Bio.Alphabet import IUPAC
+from Bio.Seq import Seq
+
+class SummaryInfo:
+    """Calculate summary info about the alignment.
+
+    This class should be used to caclculate information summarizing the
+    results of an alignment. This may either be straight consensus info
+    or more complicated things.
+    """
+    def __init__(self, alignment):
+        """Initialize with the alignment to calculate information on.
+        """
+        self.alignment = alignment
+
+    def dumb_consensus(self, threshold = .7, ambiguous = "N",
+                       consensus_alpha = None):
+        """Output a fast consensus sequence of the alignment.
+
+        This doesn't do anything fancy at all. It will just go through the
+        sequence residue by residue and count up the number of each type
+        of residue (ie. A or G or T or C for DNA) in all sequences in the
+        alignment. If the percentage of the most common residue type is
+        greater then the passed threshold, then we will add that residue type,
+        otherwise an ambiguous character will be added.
+
+        This could be made a lot fancier (ie. to take a substitution matrix
+        into account), but it just meant for a quick and dirty consensus.
+
+        Arguments:
+        o threshold - The threshold value that is required to add a particular
+        atom.
+        o ambiguous - The ambiguous character to be added when the threshold is
+        not reached.
+        o consensus_alpha - The alphabet to return for the consensus sequence.
+        If this is None, then we will try to guess the alphabet.
+        """
+        consensus = ''
+
+        # find the length of the consensus we are creating
+        con_len = self.alignment.get_alignment_length()
+
+        # go through each seq item
+        for n in range(con_len):
+            # keep track of the counts of the different atoms we get
+            atom_dict = {}
+            num_atoms = 0
+
+            for record in self.alignment._records:
+                # make sure we haven't run past the end of any sequences
+                # if they are of different lengths
+                if n < len(record.seq):
+                    if record.seq[n] != '-' and record.seq[n] != '.':
+                        if record.seq[n] not in atom_dict.keys():
+                            atom_dict[record.seq[n]] = 1
+                        else:
+                            atom_dict[record.seq[n]] = \
+                              atom_dict[record.seq[n]] + 1
+
+                        num_atoms = num_atoms + 1
+
+            max_atoms = []
+            max_size = 0
+
+            for atom in atom_dict.keys():
+                if atom_dict[atom] > max_size:
+                    max_atoms = [atom]
+                    max_size = atom_dict[atom]
+                elif atom_dict[atom] == max_size:
+                    max_atoms.append(atom)
+
+            if (len(max_atoms) == 1) and ((float(max_size)/float(num_atoms))
+                                         >= threshold):
+                consensus = consensus + max_atoms[0]
+            else:
+                consensus = consensus + ambiguous
+
+        # we need to guess a consensus alphabet if one isn't specified
+        if consensus_alpha is None:
+            consensus_alpha = self._guess_consensus_alphabet()
+
+        return Seq(consensus, consensus_alpha)
+            
+    def _guess_consensus_alphabet(self):
+        """Pick an alphabet for a consesus sequence of an alignment.
+
+        This just looks at the sequences we have, checks their type, and
+        returns as appropriate type which seems to make sense with the
+        sequences we've got.
+        """
+        # check to be sure our alphabet is a gapped alphabet, otherwise
+        # we have a weird bunch of sequences -- this would make it harder
+        # to find an alphabet (since we'd have to check non-gapped types
+        # as well).
+        # Right now we'll raise an error for non-gapped alphabets, and
+        # if anyone complains, we can figure out what the use is for
+        # non-gapped alphabets.
+
+        if not(isinstance(self.alignment._records[0].seq.alphabet,
+                          Alphabet.Gapped)):
+            raise ValueError \
+                  ("Non-gapped alphabet found in alignment object.")
+
+        # now check the types, and get an ambiguous alphabet based on the
+        # type of alphabet found.
+        if isinstance(self.alignment._records[0].seq.alphabet.alphabet,
+                      Alphabet.ProteinAlphabet):
+            alpha = IUPAC.protein
+        elif isinstance(self.alignment._records[0].seq.alphabet.alphabet,
+                        Alphabet.DNAAlphabet):
+            alpha = IUPAC.ambiguous_dna
+        elif isinstance(self.alignment._records[0].seq.alphabet.alphabet,
+                        Alphabet.RNAAlphabet):
+            alpha = IUPAC.ambiguous_rna
+        else:
+            raise ValueError("Could not determine the type of alphabet.")
+
+        return alpha
+
+    def replacement_dictionary(self, skip_chars = []):
+        """Generate a replacement dictionary to plug into a substitution matrix
+        
+        This should look at an alignment, and be able to generate the number
+        of substitutions of different residues for each other in the
+        aligned object.
+
+        Will then return a dictionary with this information:
+        {('A', 'C') : 10, ('C', 'A') : 12, ('G', 'C') : 15 ....}
+
+        This also treats weighted sequences. The following example shows how
+        we calculate the replacement dictionary. Given the following
+        multiple sequence alignments:
+
+        GTATC  0.5
+        AT--C  0.8
+        CTGTC  1.0
+
+        For the first column we have:
+        ('A', 'G') : 0.5 * 0.8 = 0.4
+        ('C', 'G') : 0.5 * 1.0 = 0.5
+        ('A', 'C') : 0.8 * 1.0 = 0.8
+
+        We then continue this for all of the columns in the alignment, summing
+        the information for each substitution in each column, until we end
+        up with the replacement dictionary.
+
+        Arguments:
+        o skip_chars - A list of characters to skip when creating the dictionary.
+        For instance, you might have Xs (screened stuff) or Ns, and not want
+        to include the ambiguity characters in the dictionary.
+        """
+        # get a starting dictionary based on the alphabet of the alignment
+        rep_dict, skip_items = self._get_base_replacements()
+
+        # iterate through each record
+        for rec_num1 in range(len(self.alignment._records)):
+            # iterate through each record from one beyond the current record
+            # to the end of the list of records
+            for rec_num2 in range(rec_num1 + 1, len(self.alignment._records)):
+                # for each pair of records, compare the sequences and add
+                # the pertinent info to the dictionary
+                rep_dict = self._pair_replacement(
+                    self.alignment._records[rec_num1].seq,
+                    self.alignment._records[rec_num2].seq,
+                    self.alignment._records[rec_num1].annotations['weight'],
+                    self.alignment._records[rec_num2].annotations['weight'],
+                    rep_dict, skip_items + skip_chars)
+
+        return rep_dict
+
+    def _pair_replacement(self, seq1, seq2, weight1, weight2,
+                          start_dict, ignore_chars):
+        """Compare two sequences and generate info on the replacements seen.
+
+        Arguments:
+        o seq1, seq2 - The two sequences to compare.
+        o weight1, weight2 - The relative weights of seq1 and seq2.
+        o start_dict - The dictionary containing the starting replacement
+        info that we will modify.
+        o ignore_chars - A list of characters to ignore when calculating
+        replacements (ie. '-').
+
+        Returns:
+        o A replacment dictionary which is modified from initial_dict with
+        the information from the sequence comparison.
+        """
+        # loop through each residue in the sequences
+        for residue_num in range(len(seq1)):
+            residue1 = seq1[residue_num]
+            try:
+                residue2 = seq2[residue_num]
+            # if seq2 is shorter, then we just stop looking at replacements
+            # and return the information
+            except IndexError:
+                return start_dict
+
+            # if the two residues are characters we want to count
+            if (residue1 not in ignore_chars) and (residue2 not in ignore_chars):
+                try:
+                    # add info about the replacement to the dictionary,
+                    # modified by the sequence weights
+                    start_dict[(residue1, residue2)] = \
+                                         start_dict[(residue1, residue2)] + \
+                                         weight1 * weight2
+                                         
+                # if we get a key error, then we've got a problem with alphabets
+                except KeyError:
+                    raise ValueError("Residues %s, %s not found in alphabet %s"
+                                     % (residue1, residue2,
+                                        self.alignment._alphabet))
+
+        return start_dict
+
+
+    def _get_base_replacements(self):
+        """Get a zeroed dictonary of all possible letter combinations.
+
+        This looks at the type of alphabet and gets the letters for it.
+        It then creates a dictionary with all possible combinations of these
+        letters as keys (ie. ('A', 'G')) and sets the values as zero.
+
+        Returns:
+        o The base dictionary created
+        o A list of alphabet items to skip when filling the dictionary.Right
+        now the only thing I can imagine in this list is gap characters, but
+        maybe X's or something else might be useful later.
+        """
+        skip_items = []
+        base_dictionary = {}
+        all_letters = self.alignment._alphabet.letters
+
+        # if we have a gapped alphabet we need to find the gap character
+        # and drop it out
+        if isinstance(self.alignment._alphabet, Alphabet.Gapped):
+            skip_items.append(self.alignment._alphabet.gap_char)
+            all_letters = string.replace(all_letters,
+                                         self.alignment._alphabet.gap_char,
+                                         '')
+
+        # now create the dictionary
+        for first_letter in all_letters:
+            for second_letter in all_letters:
+                base_dictionary[(first_letter, second_letter)] = 0
+
+        return base_dictionary, skip_items
+
+
+    def pos_specific_score_matrix(self, consensus_seq = None,
+                                  chars_to_ignore = []):
+        """Create a position specific score matrix object for the alignment.
+
+        This creates a position specific score matrix (pssm) which is an
+        alternative method to look at a consensus sequence.
+
+        Arguments:
+        o chars_to_ignore - A listing of all characters not to include in
+        the pssm.
+        o use_consensus - An optional argument to put the consensus
+        sequence as the left hand side of the PSSM. If a consensus Seq object
+        is passed (ie. once calculated from dumb_consensus()) this will be
+        used, otherwise the first sequence in the alignment will be put there.
+
+        Returns:
+        o A PSSM (position specific score matrix) object.
+        """
+        # determine all of the letters we have to deal with
+        all_letters = self.alignment._alphabet.letters
+        for char in chars_to_ignore:
+            all_letters = string.replace(all_letters, char, '')
+
+        if consensus_seq:
+            left_seq = consensus_seq
+        else:
+            left_seq = self.alignment._records[0].seq
+
+        pssm_info = []
+        # now start looping through all of the sequences and getting info
+        for residue_num in range(len(left_seq)):
+            score_dict = self._get_base_letters(all_letters)
+            for record in self.alignment._records:
+                try:
+                    this_residue = record.seq[residue_num]
+                # if we hit an index error we've run out of sequence and
+                # should not add new residues
+                except IndexError:
+                    this_residue = None
+                    
+                if this_residue and this_residue not in chars_to_ignore:
+                    try:
+                        score_dict[this_residue] = score_dict[this_residue] + \
+                          record.annotations['weight']
+                        
+                    # if we get a KeyError then we have an alphabet problem
+                    except KeyError:
+                        raise ValueError("Residue %s not found in alphabet %s"
+                                     % (this_residue,
+                                        self.alignment._alphabet))
+
+            pssm_info.append((left_seq[residue_num],
+                              score_dict))
+
+
+        return PSSM(pssm_info)
+                    
+    def _get_base_letters(self, letters):
+        """Create a zeroed dictionary with all of the specified letters.
+        """
+        base_info = {}
+        for letter in letters:
+            base_info[letter] = 0
+
+        return base_info
+
+    def information_content(self, start = 0,
+                            end = None,
+                            expected_freqs = None, log_base = 2,
+                            chars_to_ignore = []):
+        """Calculate the information content for each residue along an alignment.
+
+        Arguments:
+        o start, end - The starting an ending points to calculate the
+        information content. These points should be relative to the first
+        sequence in the alignment, starting at zero (ie. even if the 'real'
+        first position in the seq is 203 in the initial sequence, for
+        the info content, we need to use zero). This defaults to the entire
+        length of the first sequence.
+        o expected_freqs - A dictionary specifying the expected frequencies
+        for each letter in the alphabet we are using (ie. {'G' : 0.4,
+        'C' : 0.4, 'T' : 0.1, 'A' : 0.1})
+        o log_base - The base of the logathrim to use in calculating the
+        information content. This defaults to 2 so the info is in bits.
+        o chars_to_ignore - A listing of characterw which should be ignored
+        in calculating the info content.
+
+        Returns:
+        o A number representing the info content for the specified region.
+
+        Please see the Biopython manual for more information on how information
+        content is calculated.
+        """
+        # if no end was specified, then we default to the end of the sequence
+        if end is None:
+            end = len(self.alignment._records[0].seq)
+        
+        if start < 0 or end > len(self.alignment._records[0].seq):
+            raise ValueError \
+                  ("Start (%s) and end (%s) are not in the range %s to %s"
+                   % (start, end, 0, len(self.alignment._records[0].seq)))
+
+        # determine all of the letters we have to deal with
+        all_letters = self.alignment._alphabet.letters
+        for char in chars_to_ignore:
+            all_letters = string.replace(all_letters, char, '')
+
+        info_content = {}
+        for residue_num in range(start, end):
+            freq_dict = self._get_letter_freqs(residue_num,
+                                               self.alignment._records,
+                                               all_letters, chars_to_ignore)
+
+            column_score = self._get_column_info_content(freq_dict,
+                                                         expected_freqs,
+                                                         log_base)
+
+            info_content[residue_num] = column_score
+
+        # sum up the score
+        total_info = 0
+        for column_info in info_content.values():
+            total_info = total_info + column_info
+
+        return total_info
+
+    def _get_letter_freqs(self, residue_num, all_records, letters, to_ignore):
+        """Determine the frequency of specific letters in the alignment.
+
+        Arguments:
+        o residue_num - The number of the column we are getting frequencies
+        from.
+        o all_records - All of the SeqRecords in the alignment.
+        o letters - The letters we are interested in getting the frequency
+        for.
+        o to_ignore - Letters we are specifically supposed to ignore.
+
+        This will calculate the frequencies of each of the specified letters
+        in the alignment at the given frequency, and return this as a
+        dictionary where the keys are the letters and the values are the
+        frequencies.
+        """
+        freq_info = self._get_base_letters(letters)
+
+        total_count = 0
+        # collect the count info into the dictionary for all the records
+        for record in all_records:
+            try:
+                if record.seq[residue_num] not in to_ignore:
+                    freq_info[record.seq[residue_num]] = \
+                      freq_info[record.seq[residue_num]] + \
+                      record.annotations['weight']
+
+                    total_count = total_count + record.annotations['weight']
+            # getting a key error means we've got a problem with the alphabet 
+            except KeyError:
+                raise ValueError("Residue %s not found in alphabet %s"
+                                 % (record.seq[residue_num],
+                                    self.alignment._alphabet))
+
+        # now convert the counts into frequencies
+        for letter in freq_info.keys():
+            freq_info[letter] = freq_info[letter] / total_count
+
+        return freq_info
+            
+    def _get_column_info_content(self, obs_freq, expected_freq, log_base):
+        """Calculate the information content for a column.
+
+        Arguments:
+        o obs_freq - The frequencies observed for each letter in the column.
+        o expected_freq - An optional argument specifying the expected
+        frequencies for each letter.
+        o log_base - The base of the logathrim to use in calculating the
+        info content.
+        """
+        if expected_freq:
+            # check the expected freq information to make sure it is good
+            if expected_freq.keys() != obs_freq.keys():
+                raise ValueError \
+                      ("Expected frequency letters %s do not match observed %s"
+                       % (expected_freq.keys(), obs_freq.keys()))
+        
+        total_info = 0
+
+        for letter in obs_freq.keys():
+            # if we have expected frequencies, modify the log value by them
+            if expected_freq:
+                inner_log = obs_freq[letter] / expected_freq[letter]
+            else:
+                inner_log = obs_freq[letter]
+
+            # if the observed frequency is zero, we don't add any info to the
+            # total information content
+            if inner_log > 0:
+                letter_info = (obs_freq[letter] * 
+                               math.log(inner_log) / math.log(log_base))
+
+                total_info = total_info + letter_info
+
+        return abs(total_info)
+
+class PSSM:
+    """Represent a position specific score matrix.
+
+    This class is meant to make it easy to access the info within a PSSM
+    and also make it easy to print out the information in a nice table.
+
+    Let's say you had an alignment like this:
+    GTATC
+    AT--C
+    CTGTC
+
+    The position specific score matrix (when printed) looks like:
+
+      G A T C
+    G 1 1 0 1
+    T 0 0 3 0
+    A 1 1 0 0
+    T 0 0 2 0
+    C 0 0 0 3
+
+    You can access a single element of the PSSM using the following:
+
+    your_pssm[sequence_number][residue_count_name]
+
+    For instance, to get the 'T' residue for the second element in the
+    above alignment you would need to do:
+
+    your_pssm[1]['T']
+    """
+    def __init__(self, pssm):
+        """Initialize with pssm data to represent.
+
+        The pssm passed should be a list with the following structure:
+
+        list[0] - The letter of the residue being represented (for instance,
+        from the example above, the first few list[0]s would be GTAT...
+        list[1] - A dictionary with the letter substitutions and counts.
+        """
+        self.pssm = pssm
+
+    def __getitem__(self, pos):
+        return self.pssm[pos][1]
+
+    def __str__(self):
+        out = " "
+        all_residues = self.pssm[0][1].keys()
+        all_residues.sort()
+        
+        # first print out the top header
+        for res in all_residues:
+            out = out + "   %s" % res
+        out = out + "\n"
+
+        # for each item, write out the substitutions
+        for item in self.pssm:
+            out = out + "%s " % item[0]
+            for res in all_residues:
+                out = out + " %.1f" % item[1][res]
+
+            out = out + "\n"
+        return out
+
+    def get_residue(self, pos):
+        """Return the residue letter at the specified position.
+        """
+        return self.pssm[pos][0]
+
+    
