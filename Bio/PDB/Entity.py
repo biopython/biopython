@@ -45,6 +45,11 @@ class Entity:
         self.child_list=self.child_dict.values()
         self.child_list.sort(self._sort)
 
+    def __iter__(self):
+        "Iterate over children."
+        for child in self.child_list:
+            yield child
+
     # Private methods
 
     def _sort(self, e1, e2):
