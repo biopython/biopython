@@ -9,7 +9,7 @@ import string
 from types import *
 from Bio import File
 from Bio import ParserSupport
-from Bio.Gobase import Gobase
+from Bio import Gobase
 
 
 tests = [ 'G405967.htm', 'G423945.htm', 'P2661406.htm', 'S4323016.htm' ]
