@@ -5,15 +5,13 @@ Retrieval of FASTA protein and nucleotide sequences. ... ok
 Retrieval of GenBank from various sources. ... ok
 Retrieval of InterPro data from EBI. ... ok
 Retrieval of Medline data from various locations. ... ok
-Retrieval of PDB data from various locations. ... ok
 Retrieval of Prodoc data from various locations. ... ok
 Retrieval of Prosite data from various locations. ... ok
-Retrieval of Swissprot records from various sources. ... ok
 Retrieve sequences using the GenBank download_many function. ... ok
 Retrieve sequences using a GenBank dictionary-like interface. ... ok
 Search for ids using the GenBank search_for function. ... ok
 
 ----------------------------------------------------------------------
-Ran 13 tests in 67.952s
+Ran 11 tests in 108.319s
 
 OK

@@ -315,7 +315,7 @@ class _Scanner:
 
         is_pairwise = is_masterslave = 0
 #        Was line1, changed to line2. 16-feb-2005. Iddo
-#        if string.find(line2, 'Alignments') >= 0:
+#        if string.find(line1, 'Alignments') >= 0:
         if string.find(line2, 'Alignments') >= 0:
             is_pairwise = 1
         elif line2[:10] == '  Database':
@@ -327,7 +327,7 @@ class _Scanner:
         elif line1[:5] == '<PRE>':
             is_pairwise = 1
         else:
-            raise SyntaxError, "Cannot resolve location at line:\n%s\n%s" % (line1, line2)
+            raise SyntaxError, "Cannot resolve location at lines:\n%s\n%s" % (line1, line2)
 
         if is_pairwise:
             self._scan_pairwise_alignments(uhandle, consumer)

@@ -434,7 +434,7 @@ EXTENSIONS = [
               include_dirs=["Bio"],
               libraries=["fl"]
               ),
-    Extension('Bio.cnexus',
+    Extension('Bio.Nexus.cnexus',
               ['Bio/Nexus/cnexus.c']
               ),
     Extension('Bio.Restriction.DNAUtils',

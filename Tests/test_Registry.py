@@ -48,15 +48,15 @@ class BaseRetrievalTest(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def t_swissprot(self):
-        """Retrieval of Swissprot records from various sources.
-        """
-        sp_db = db["swissprot"]
-        for swissprot_location in sp_db.objs:
-            handle = swissprot_location[self.sp_id]
-            first_line = handle.read(20)
-            assert first_line.find(self.sp_id) >= 0, \
-                    (swissprot_location.name, first_line)
+#    def t_swissprot(self):
+#        """Retrieval of Swissprot records from various sources.
+#        """
+#        sp_db = db["swissprot"]
+#        for swissprot_location in sp_db.objs:
+#            handle = swissprot_location[self.sp_id]
+#            first_line = handle.read(20)
+#            assert first_line.find(self.sp_id) >= 0, \
+#                    (swissprot_location.name, first_line)
 
     def t_embl(self):
         """Retrieval of EMBL records from various sources.
@@ -103,15 +103,15 @@ class BaseRetrievalTest(unittest.TestCase):
             assert data.find(self.interpro_id) >= 0, \
                     (interpro_location.name, data)
 
-    def t_pdb(self):
-        """Retrieval of PDB data from various locations.
-        """
-        pdb_db = db["pdb"]
-        for pdb_loc in pdb_db.objs:
-            handle = pdb_loc[self.pdb_id]
-            first_line = handle.read(80)
-            assert first_line.find(self.pdb_id) >= 0, \
-                    (pdb_loc.name, first_line)
+#    def t_pdb(self):
+#        """Retrieval of PDB data from various locations.
+#        """
+#        pdb_db = db["pdb"]
+#        for pdb_loc in pdb_db.objs:
+#            handle = pdb_loc[self.pdb_id]
+#            first_line = handle.read(80)
+#            assert first_line.find(self.pdb_id) >= 0, \
+#                    (pdb_loc.name, first_line)
 
     def t_prodoc(self):
         """Retrieval of Prodoc data from various locations.
