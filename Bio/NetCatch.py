@@ -19,6 +19,10 @@ import sys
 import os
 import urllib
 from tempfile import mktemp
+import sgmllib
+import string
+from Bio import File
+
 
 def is_absolute_url( candidate ):
     ( url_type, url ) = urllib.splittype( candidate )
@@ -28,6 +32,69 @@ def is_absolute_url( candidate ):
     if( url_host == None ):
         return 0
     return 1
+
+"""
+ExtractUrls.py
+
+
+Scans a file in http format and builds a dictionary of urls
+"""
+
+class ExtractUrls(  sgmllib.SGMLParser ):
+
+    def __init__( self ):
+        sgmllib.SGMLParser.__init__( self )
+        self.reset()
+
+    def reset( self ):
+        sgmllib.SGMLParser.reset( self )
+        self.urls = {}
+        self._inlink = 0
+        self._pending_url = ''
+        self.text = ''
+
+    def __str__( self ):
+        output = ''
+        for key in self.urls.keys():
+            val = self.urls[ key ]
+            output = output + '%s : %s\n' % ( key, val )
+        return output
+
+    def extract_urls(self, handle):
+        self.feed(handle)
+        return self.urls
+
+    def feed(self, handle):
+        """feed(self, handle )
+
+        Feed in data for scanning.  handle is a file-like object
+        containing html.
+
+        """
+        if isinstance(handle, File.UndoHandle):
+            uhandle = handle
+        else:
+            uhandle = File.UndoHandle(handle)
+        text = uhandle.read()
+        sgmllib.SGMLParser.feed( self, text )
+
+    def handle_data(self, data):
+        if( self._inlink ):
+            self.text = self.text + data
+
+    def start_a( self, attrs ):
+        self._inlink = 1
+        for key, val in attrs:
+            if key.lower() == 'href':
+                self._pending_url = val
+
+    def end_a( self ):
+        self._inlink = 0
+        key = self.text
+        self.text = ''
+        if not key == '':
+            key = key.replace( ' ', '_' )
+            self.urls[ key ] = self._pending_url
 
 class Url:
 
