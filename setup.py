@@ -276,7 +276,7 @@ PACKAGES = [
     'Bio.KEGG.Compound',
     'Bio.KEGG.Enzyme',
     'Bio.KEGG.Map',
-    #'Bio.LocusLink',
+    'Bio.LocusLink',
     'Bio.Medline',
     'Bio.MetaTool',
     'Bio.Mindy',
