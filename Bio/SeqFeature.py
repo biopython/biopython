@@ -47,6 +47,11 @@ class SeqFeature:
     o location_operator - a string specifying how this SeqFeature may
     be related to others. For example, in the example GenBank feature
     shown below, the location_operator would be "join"
+    o strand - A value specifying on which strand (of a DNA sequence, for
+    instance) the feature deals with. 1 indicates the plus strand, -1 
+    indicates the minus strand, 0 indicates both strands, and None indicates
+    that strand doesn't apply (ie. for proteins) or is not known.
+    o id - A string identifier for the feature.
     o ref - A reference to another sequence. This could be an accession
     number for some different sequence.
     o ref_db - A different database for the reference accession number.
@@ -64,7 +69,8 @@ class SeqFeature:
     40 and 50 to 60, respectively.
     """
     def __init__(self, location = None, type = '', location_operator = '',
-                 strand = None, qualifiers = {}, sub_features = [],
+                 strand = 0, id = "<unknown id>", 
+                 qualifiers = {}, sub_features = [],
                  ref = None, ref_db = None):
         """Initialize a SeqFeature on a Sequence.
         """
@@ -72,11 +78,16 @@ class SeqFeature:
 
         self.type = type
         self.location_operator = location_operator
+        self.strand = strand
+        self.id = id
+        # XXX right now sub_features and qualifiers cannot be set 
+        # from the initializer because this causes all kinds 
+        # of recursive import problems. I can't understand why this is
+        # at all :-<
+        self.qualifiers = {}
+        self.sub_features = []
         self.ref = ref 
         self.ref_db = ref_db
-        self.strand = strand
-        self.qualifiers = qualifiers
-        self.sub_features = sub_features
 
     def __str__(self):
         """Make it easier to debug features.
@@ -208,6 +219,18 @@ class AbstractPosition:
     def __init__(self, position, extension):
         self.position = position
         self.extension = extension
+
+    def __cmp__(self, other):
+        """A simple comparison function for positions.
+
+        This is very simple-minded and just compares the position attribute
+        of the features; extensions are not considered at all. This could
+        potentially be expanded to try to take advantage of extensions.
+        """
+        assert isinstance(other, AbstractPosition), \
+          "We can only do comparisons between Biopython Position objects."
+
+        return cmp(self.position, other.position)  
             
 class ExactPosition(AbstractPosition):
     """Specify the specific position of a boundary.
