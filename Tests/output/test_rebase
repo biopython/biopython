@@ -1,0 +1,75 @@
+testing cac81.htm
+sequence
+G C N^N G C
+C G N^N C G
+Enzyme number 638 
+ prototype Cac8I
+G. Reysett
+Clostridium acetobutylicum ABKn8 
+37
+Jun 12 1991
+285
+238
+31
+19
+8
+testing bamii.htm
+sequence
+G^G A T C C
+C C T A G^G
+Enzyme number 185 
+ prototype BamHI
+ATCC 49763
+Bacillus amyloliquefaciens H 
+37
+Jan 1 1975
+3
+5
+1
+0
+1
+testing pvuii.htm
+sequence
+ CAGCTG 
+
+Enzyme number 3485 
+ prototype PvuII
+ ATCC 13315
+Proteus vulgaris 
+37
+Jan 1 1980
+24
+15
+1
+0
+3
+testing taqi.htm
+sequence
+ TCGA 
+
+Enzyme number 3520 
+ prototype TaqI
+ J.I. Harris
+Thermus aquaticus YTI 
+70
+Jan 1 1977
+50
+121
+7
+10
+1
+testing foki.htm
+sequence
+G G A T G N N N N N N N N N^N N N N
+C C T A C N N N N N N N N N N N N N^
+Enzyme number 1056 
+ prototype FokI
+IFO 12536
+Flavobacterium okeanokoites 
+30
+Jan 1 1981
+78
+150
+12
+8
+11
