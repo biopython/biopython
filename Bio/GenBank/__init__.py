@@ -1466,7 +1466,7 @@ class NCBIDictionary:
     
     """
     def __init__(self, database='sequences', format=None, delay=5.0,
-                 parser=None):
+                 retmax=1, parser=None):
         """NCBIDictionary([database][, delay][, parser])
 
         Create a new Dictionary to access GenBank.  Valid values for
@@ -1483,13 +1483,14 @@ class NCBIDictionary:
         self.database = database
         if format is None:   # No format specified, try to guess it.
             ldatabase = database.lower()
-            if ldatabase == "nucleotide":
+            if ldatabase in ["sequences", "nucleotide"]:
                 format = "gb"
             elif ldatabase in ["protein", "popset"]:
                 format = "gb"
             else:   # don't recognize the database, just use 'native'.
                 format = "native"
         self.format = format
+        self.retmax = retmax
 
     def __len__(self):
         raise NotImplementedError, "GenBank contains lots of entries"
@@ -1534,10 +1535,14 @@ class NCBIDictionary:
         # First, check to see if enough time has passed since my
         # last query.
         self.limiter.wait()
-        
+
+        params = {}
+        params['rettype'] = self.format
+        params['id'] = id
+        if self.retmax:
+            params['retmax'] = str(self.retmax)
         try:
-            handle = NCBI.efetch(
-                self.database, rettype=self.format, id=id)
+            handle = NCBI.efetch(self.database, **params)
         except IOError, x:
             # raise a KeyError instead of an IOError
             # XXX I really should distinguish between a real IOError and
