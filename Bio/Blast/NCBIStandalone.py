@@ -125,6 +125,7 @@ class _Scanner:
         while 1:
             line = uhandle.readline()
             if is_blank_line(line) or line.startswith("RID"):
+                consumer.noevent(line)
                 read_and_call_while(uhandle, consumer.noevent, blank=1)
                 break
             consumer.reference(line)
@@ -428,8 +429,12 @@ class _Scanner:
         #
 
         consumer.start_database_report()
-	while 1:
-            read_and_call(uhandle, consumer.database, start='  Database')
+        
+        # Sameet Mehta reported seeing output from BLASTN 2.2.9 that
+        # was missing the "Database" stanza completely.
+
+	while attempt_read_and_call(uhandle, consumer.database,
+                                    start='  Database'):
             # Database can span multiple lines.
             read_and_call_until(uhandle, consumer.database, start='    Posted')
             read_and_call(uhandle, consumer.posted_date, start='    Posted')
@@ -497,15 +502,21 @@ class _Scanner:
         if not uhandle.peekline():
             return
 
+        # BLASTN 2.2.9 looks like it reverses the "Number of Hits" and
+        # "Number of Sequences" lines.
         consumer.start_parameters()
 
-        read_and_call(uhandle, consumer.matrix, start='Matrix')
+        # Matrix line may be missing in BLASTN 2.2.9
+        attempt_read_and_call(uhandle, consumer.matrix, start='Matrix')
         # not TBLASTX
         attempt_read_and_call(uhandle, consumer.gap_penalties, start='Gap')
+
+        attempt_read_and_call(uhandle, consumer.num_sequences,
+                              start='Number of Sequences')
         read_and_call(uhandle, consumer.num_hits,
                       start='Number of Hits')
-        read_and_call(uhandle, consumer.num_sequences,
-                      start='Number of Sequences')
+        attempt_read_and_call(uhandle, consumer.num_sequences,
+                              start='Number of Sequences')
         read_and_call(uhandle, consumer.num_extends,
                       start='Number of extensions')
         read_and_call(uhandle, consumer.num_good_extends,
@@ -517,36 +528,52 @@ class _Scanner:
         # not BLASTN, TBLASTX
         if attempt_read_and_call(uhandle, consumer.hsps_no_gap,
                                  start="Number of HSP's better"):
-            read_and_call(uhandle, consumer.hsps_prelim_gapped,
-                          start="Number of HSP's successfully")
-            read_and_call(uhandle, consumer.hsps_prelim_gap_attempted,
-                          start="Number of HSP's that")
-            read_and_call(uhandle, consumer.hsps_gapped,
-                          start="Number of HSP's gapped")
+            # BLASTN 2.2.9
+            if attempt_read_and_call(uhandle, consumer.noevent,
+                                     start="Number of HSP's gapped:"):
+                read_and_call(uhandle, consumer.noevent,
+                              start="Number of HSP's successfully")
+                read_and_call(uhandle, consumer.noevent,
+                              start="Number of extra gapped extensions")
+            else:
+                read_and_call(uhandle, consumer.hsps_prelim_gapped,
+                              start="Number of HSP's successfully")
+                read_and_call(uhandle, consumer.hsps_prelim_gap_attempted,
+                              start="Number of HSP's that")
+                read_and_call(uhandle, consumer.hsps_gapped,
+                              start="Number of HSP's gapped")
         # not in blastx 2.2.1
         attempt_read_and_call(uhandle, consumer.query_length,
-                              start='length of query')
+                              has_re=re.compile(r"[Ll]ength of query"))
         read_and_call(uhandle, consumer.database_length,
-                      start='length of database')
+                      has_re=re.compile(r"[Ll]ength of \s*[Dd]atabase"))
 
-        read_and_call(uhandle, consumer.effective_hsp_length,
-                      start='effective HSP')
+        # BLASTN 2.2.9
+        attempt_read_and_call(uhandle, consumer.noevent,
+                              start="Length adjustment")
+        attempt_read_and_call(uhandle, consumer.effective_hsp_length,
+                              start='effective HSP')
         # Not in blastx 2.2.1
-        attempt_read_and_call(uhandle, consumer.effective_query_length,
-                              start='effective length of query')
-        read_and_call(uhandle, consumer.effective_database_length,
-                      start='effective length of database')
+        attempt_read_and_call(
+            uhandle, consumer.effective_query_length,
+            has_re=re.compile(r'[Ee]ffective length of query'))
+        read_and_call(
+            uhandle, consumer.effective_database_length,
+            has_re=re.compile(r'[Ee]ffective length of \s*[Dd]atabase'))
         # Not in blastx 2.2.1, added a ':' to distinguish between
         # this and the 'effective search space used' line
-        attempt_read_and_call(uhandle, consumer.effective_search_space,
-                              start='effective search space:')
+        attempt_read_and_call(
+            uhandle, consumer.effective_search_space,
+            has_re=re.compile(r'[Ee]ffective search space:'))
         # Does not appear in BLASTP 2.0.5
-        attempt_read_and_call(uhandle, consumer.effective_search_space_used,
-                              start='effective search space used')
+        attempt_read_and_call(
+            uhandle, consumer.effective_search_space_used,
+            has_re=re.compile(r'[Ee]ffective search space used'))
 
         # BLASTX, TBLASTN, TBLASTX
         attempt_read_and_call(uhandle, consumer.frameshift, start='frameshift')
-        read_and_call(uhandle, consumer.threshold, start='T')
+        # not in BLASTN 2.2.9
+        attempt_read_and_call(uhandle, consumer.threshold, start='T')
         read_and_call(uhandle, consumer.window_size, start='A')
         read_and_call(uhandle, consumer.dropoff_1st_pass, start='X1')
         read_and_call(uhandle, consumer.gap_x_dropoff, start='X2')
@@ -1100,12 +1127,12 @@ class _ParametersConsumer:
         
     def query_length(self, line):
         self._params.query_length, = _get_cols(
-            line, (-1,), ncols=4, expected={0:"length", 2:"query:"})
+            line.lower(), (-1,), ncols=4, expected={0:"length", 2:"query:"})
         self._params.query_length = _safe_int(self._params.query_length)
         
     def database_length(self, line):
         self._params.database_length, = _get_cols(
-            line, (-1,), ncols=4, expected={0:"length", 2:"database:"})
+            line.lower(), (-1,), ncols=4, expected={0:"length", 2:"database:"})
         self._params.database_length = _safe_int(self._params.database_length)
 
     def effective_hsp_length(self, line):
@@ -1122,7 +1149,7 @@ class _ParametersConsumer:
 
     def effective_database_length(self, line):
         self._params.effective_database_length, = _get_cols(
-            line, (-1,), ncols=5, expected={1:"length", 3:"database:"})
+            line.lower(), (-1,), ncols=5, expected={1:"length", 3:"database:"})
         self._params.effective_database_length = _safe_int(
             self._params.effective_database_length)
         
