@@ -11,6 +11,7 @@ from Bio import File
 
 # GenBank stuff to test
 from Bio import GenBank
+from Bio.GenBank import utils
 
 gb_file_dir = os.path.join(os.getcwd(), 'GenBank')
 
@@ -163,4 +164,23 @@ def t_write_format():
 
 t_write_format()    
 
+def t_cleaning_features():
+    """Test the ability to clean up feature values.
+    """
+    parser = GenBank.FeatureParser(feature_cleaner = \
+                                   utils.FeatureValueCleaner())
+    handle = open(os.path.join("GenBank", "arab1.gb"))
+    iterator = GenBank.Iterator(handle, parser)
 
+    first_record = iterator.next()
+    
+    # test for cleaning of translation
+    translation_feature = first_record.features[1]
+    test_trans = translation_feature.qualifiers["translation"][0]
+    assert test_trans.find(" ") == -1, \
+      "Did not clean spaces out of the translation"
+    assert test_trans.find("\012") == -1, \
+      "Did not clean newlines out of the translation"
+
+print "Testing feature cleaning..."
+t_cleaning_features()
