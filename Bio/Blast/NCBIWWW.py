@@ -210,11 +210,9 @@ class _Scanner:
         read_and_call_while(uhandle, consumer.description, blank=0, start='<a')
 
         # two choices here, either blank lines or a </PRE>
-        if attempt_read_and_call(uhandle, consumer.noevent, blank=1):
+        if not attempt_read_and_call(uhandle, consumer.noevent,
+                                     contains='</PRE>'):
             read_and_call_while(uhandle, consumer.noevent, blank=1)
-        # otherwise we've got a </PRE> (introduced in 2.1.1)
-        else:
-            read_and_call(uhandle, consumer.noevent, contains='</PRE>')
 
         consumer.end_descriptions()
 
