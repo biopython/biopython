@@ -10,7 +10,7 @@ provided by the NCBI.
 http://www.ncbi.nlm.nih.gov/BLAST/
 
 Classes:
-BlastParser
+BlastParser   Parses output from WWW blast.
 _Scanner      Scans output from NCBI's BLAST WWW server.
 
 Functions:
