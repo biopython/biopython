@@ -1,7 +1,6 @@
-Biopython README file
-=====================
-
-The Biopython Project (http://www.biopython.org/) is an international
+**Biopython README file**
+ 
+	"The Biopython Project":http://www.biopython.org/ is an international
 association of developers of freely available Python tools for
 computational molecular biology.
 
@@ -16,28 +15,26 @@ see the LICENSE file for further details.
 
 
 
-System Requirements
--------------------
+**System Requirements**
 
-o Python 1.52 or above
-  http://www.python.org/
-o Distutils 0.8.2
-  http://www.python.org/sigs/distutils-sig/
-  0.9 may not work, due to differences in specifying extension packages.
-o Numerical Python 15.3 (optional)
-  http://numpy.sourceforge.net/
-  This is only required if you want to use the classification tools.
+
+o "Python 1.52":http://www.python.org/ or above
+
+o "Distutils 0.8.2":http://www.python.org/sigs/distutils-sig/
+
+o "Numerical Python 15.3":http://numpy.sourceforge.net/ (optional)
+This is only required if you want to use the classification tools.
 
 
 
-Installation
-------------
+**Installation**
 
 *** Make sure Python and Distutils are installed correctly ***
 
 Installation should be as simple as going to the biopython directory,
 and typing:
-python setup.py install
+
+	'python setup.py install'
 
 
 If you need to do additional configuration, e.g. changing the base
@@ -47,102 +44,116 @@ Distutils.
 
 
 
-For FreeBSD users, Johann Visagie <wjv@cityip.co.za> has made
+For FreeBSD users, "Johann Visagie", mailto:wjv@cityip.co.za has made
 Biopython available in the ports tree.  According to Johann:
 
   This means that a FreeBSD user with an up-to-date ports tree can now
   install BioPython as simply as:
 
-  cd /usr/ports/biology/py-biopython ; make install
+  'cd /usr/ports/biology/py-biopython ; make install'
 
   Fetching of the package as well as installation of all dependencies
   (Python itself as well as Distutils) will be handled automagically.
 
-
-
-
-Testing
--------
+**Testing**
 
 Biopython includes a suite of regression tests to check if
 everything's running correctly.  To do the tests, go to the Tests/
 die
-rectory in the distribution and run br_regrtest.py:
+rectory in the distribution and run 'br_regrtest.py'::
 
-  drevil:~/biopython/Tests> python br_regrtest.py
+ drevil:~/biopython/Tests> python br_regrtest.py
   test_Enzyme
   test_Fasta
   test_Fasta2
   test_File
   test_KeyWList
   5 tests OK.
-  drevil:~/biopython/Tests> 
-
+  drevil:~/biopython/Tests>
 
 XXX We need to get this more closely integrated with the installation
 process.
 
 
+**Contributing, Bug Reports**
 
-
-Contributing, Bug Reports
--------------------------
 
 Biopython is run by volunteers from all over the world, with many
 types of backgrounds. We are always looking for people interested in
 helping with code development, web-site management, technical
 administration, and whatever else comes up.
 
-If you wish to contribute, please visit the web site and join our
-mailing list.
-http://www.biopython.org/
-http://www.biopython.org/MailList.shtml
+If you wish to contribute, please visit the "web site":http://www.biopython.org
+and join our "mailing list":http://www.biopython.org/MailList.shtml
 
 If you wish to contribute a bug report, please submit them to the
-online bug reporting form at:
-http://www.biopython.org/biopython-bugs/
+"online bug reporting form":http://www.biopython.org/biopython-bugs/
 
 
 
-Distribution Structure
-----------------------
+**Distribution Structure**
 
-AUTHORS       An (incomplete) list of people who have contributed.
-Bio/          The python package that makes up biopython
-Doc/          Documentation
-LICENSE       License information for this package
-MANIFEST.in   Tells distutils what files to distribute
-NEWS          Release notes and news
-README        This file
-Scripts/      Miscellaneous, possibly useful, standalone scripts
-Tests/        Regression testing code
-setup.py      Installation file.
+AUTHORS --      An (incomplete) list of people who have contributed.
+
+Bio/ --         The python package that makes up biopython
+
+Doc/ --         Documentation
+
+LICENSE --      License information for this package
+
+MANIFEST.in --  Tells distutils what files to distribute
+
+NEWS --         Release notes and news
+
+README --       This file
+
+Scripts/ --     Miscellaneous, possibly useful, standalone scripts
+
+Tests/ --       Regression testing code
+
+setup.py --     Installation file.
 
 
 
-To Do
------
+**To Do**
+
 
 (In no particular order...)
 
 - Annotations on sequences
+
 - BLAST additions
+
   o PSI-BLAST on WWW
+
 - parsers
+
   o Enzyme
+
     - add parsers, iterator, dictionary, etc.
+
   o PDB
+
     - needs to be done
+
     - build on Andrew's UPDB?
+
   o Genbank
+
     - Chris Fenton chrisf@fagmed.uit.no
+
 - generalize parsers
+
 - regression tests
+
 - documentation(!!)
+
 - look into Zope-ifying the web site
+
 - deprecate Seq.py
+
 - microarray data
-- look into docstring browser
+
 
 If you see something here you would like to work on, please let me
 know!
