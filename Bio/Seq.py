@@ -6,8 +6,9 @@ import Alphabet
 class Seq:
     def __init__(self, data, alphabet = Alphabet.generic_alphabet):
         # Enforce string storage
-        assert type(data) == type("")  # must use a string
-        
+        assert (type(data) == type("") or # must use a string
+                type(data) == type(u""))  # but can be a unicode string
+
         self.data = data                           # Seq API requirement
         self.alphabet = alphabet                   # Seq API requirement
 
