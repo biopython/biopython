@@ -21,6 +21,6 @@ register_format(
 
 
 link_format("sequence", "genbank")
-link_format("genbank", "genbank-release")
+link_format("genbank", "genbank-records")
 link_format("genbank", "genbank-release")
 
