@@ -132,6 +132,9 @@ class IteratorRecords:
         self.reader_args = reader_args
         self.marker_tag = marker_tag
 
+    def copy(self):
+        return self  # This is (so far) an immutable object
+
     def iterateString(self, s, cont_handler = None):
         return self.iterateFile(StringIO(s), cont_handler)
 

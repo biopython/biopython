@@ -39,7 +39,6 @@ try:
 except SyntaxError:
     IterParser = None
 
-
 class Expression:
     """Base class for nodes in the Expression tree"""
     def __add__(self, other):
@@ -544,7 +543,7 @@ class PassThrough(Expression):
     def group_names(self):
         return self.expression.group_names()
     def _find_groups(self, tag):
-        return self.expression._find_groups()
+        return self.expression._find_groups(tag)
     def features(self):
         """return a list of all features"""
         return self.expression.features()
