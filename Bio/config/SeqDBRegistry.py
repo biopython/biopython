@@ -31,26 +31,19 @@ from Bio.config import DBRegistry
 # _urlparamdecode         Decode the parameters of a URL to tag/value pairs.
 # _tagvalue_asdict        Convert list of tag/value to a dictionary.
 
-def init(registry=None, prefix="seqdb-", more_files=[]):
-    """init()
 
-    Create a registry from seqdatabase.ini files.  Currently, I create
-    a registry called Bio.seqdb.  This may change in the future.
+class SeqDBRegistry(DBRegistry.DBRegistry):
+    def __init__(self, name):
+        DBRegistry.DBRegistry.__init__(self, name)
+        
+    def _load(self, path):
+        # path is always None here
+        self.sources = _find_ini_files("seqdatabase.ini")
+        for file in self.sources:
+            for obj in _load_file(_open(file)):
+                self.register(obj)
 
-    """
-    files = _find_ini_files("seqdatabase.ini") + more_files
-    registry_objects = []
-    for file in files:
-        x = _load_file(_open(file))
-        registry_objects.extend(x)
-
-    # Now make the registry and put the objects in them.
-    if registry is None:
-        import Bio
-        registry = DBRegistry.DBRegistry("seqdb")
-        setattr(Bio, 'seqdb', registry)
-    for obj in registry_objects:
-        registry.register(obj)
+seqdb = SeqDBRegistry("seqdb")
 
 def _load_file(ini_file):
     # Return a list of RegisterableObjects.

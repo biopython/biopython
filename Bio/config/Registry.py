@@ -116,7 +116,7 @@ class Registry:
         objs = self.keys()
         objs.sort()
         if not objs:
-            return name
+            return self._name
         obj_str = ', '.join(map(repr, objs))
         return "%s, exporting %s" % (self._name, obj_str)
     __repr__ = __str__
