@@ -1,96 +1,128 @@
-from UserList import UserList
-
 from Bio.SCOP.Raf import to_one_letter_code
-from Bio.PDB.PathFinder import PathFinder
-from Bio.PDB.NeighborSearch import NeighborSearch
 from Bio.PDB.PDBExceptions import PDBException
+from Numeric import sum
 
 
-class Polypeptide(UserList):
-	def __init__(self, residue_list):
-		UserList.__init__(self, residue_list)
+def dist_sq(p, q):
+	"Return squared distance between coordinates."
+	d=p-q
+	return sum(d*d)
 
+
+class Polypeptide(list):
+	"""
+	A polypeptide is simply a list of Residue objects.
+	"""
 	def __repr__(self):
-		# get chain, resseq for start residue
-		s, m, c, r=self[0].get_full_id()
-		if c==" ":
-			c=""
-		start=c+str(r[1])
-		# get chain, resseq for end residue
-		s, m, c, r=self[-1].get_full_id()
-		if c==" ":
-			c=""
-		end=c+str(r[1])
-		return "<Polypeptide start=%s end=%s length=%s>" % (start, end, len(self))
+		start=self[0].get_id()[1]
+		end=self[-1].get_id()[1]
+		s="<Polypeptide start=%s end=%s>" % (start, end)
+		return s
 
 
-def build_peptides(structure, model_id=0, aa_only=1, radius=1.8):
+class _PPBuilder:
 	"""
-	Extract all polypeptides from a structure.
-
-	Arguments:
-	o structure - structure object
-	o model_id - polypeptides are extracted from this model (default 0)
-	o aa_only - only consider standard AA if this flag is set (default 1) 
-	o radius - maximum bond length for a C-N bond (default 1.8)
-
-	Returns a list of lists of residues. Each list of residues
-	represents a polypeptide.
+	Base class to extract polypeptides.
+	It checks if two consecutive residues in a chain 
+	are connected. The connectivity test is implemented by a 
+	subclass.
 	"""
-	model=structure[model_id]
-	atom_list=[]
-	# get all N and C atoms from this model
-	for chain in model.get_list():
-		for residue in chain.get_list():
-			if aa_only:
-				# only use standard AA
-				resname=residue.get_resname()
-				if not to_one_letter_code.has_key(resname):
-					# not a standard AA so skip
-					continue
-			# get N and C atoms from residue
-			for atom_name in ["C", "N"]:
-				if residue.has_id(atom_name):
-					a=residue[atom_name]
-					if not a.is_disordered():
-						# skip disordered N or C atoms
-						atom_list.append(a)
-	if len(atom_list)>2:
-		ns=NeighborSearch(atom_list)
-		# all atom pairs within radius
-		# should be (C,N) but can be (N,N) and (C,C) 
-		# if the structure is funny
-		neighbors=ns.search_all(radius)
-	else:
-		# not a single (N,C) pair found
-		return []
-	# Now find connected stretches, ie. polypeptides
-	pf=PathFinder()
-	for a, b in neighbors:
-		# get atom names
-		na=a.get_id()
-		nb=b.get_id()
-		# get residues
-		residue1=a.get_parent()
-		residue2=b.get_parent()
-		# check if it is indeed a peptide bond
-		# residue at N-terminus should come first!
-		try:
-			if na=="C" and nb=="N":
-				pf.add_edge(residue1, residue2)
-			elif na=="N" and nb=="C":
-				pf.add_edge(residue2, residue1)
-		except PDBException:
-			print "WARNING: some strange peptide bonds are present"
-	# return a list of lists of residues
-	# each list of residues represents a polypeptide
-	polypeptide_list=[]
-	# create Polypeptide objects and put them in a list
-	for residue_list in pf.get_paths():
-		polypeptide=Polypeptide(residue_list)
-		polypeptide_list.append(polypeptide)
-	return polypeptide_list
-		
+	def __init__(self, radius_sq):
+		self.radius_sq=radius_sq
+
+	def _accept(self, residue):
+		"Check if the residue is an amino acid."
+		resname=residue.get_resname()
+		if to_one_letter_code.has_key(resname):
+			# not a standard AA so skip
+			return 1
+		else:
+			return 0
+	
+	def build_peptides(self, structure, model_id=0, aa_only=1):
+		"""
+		Build and return a list of Polypeptide objects.
+		model_id --- only this model is examined
+		aa_only --- if 1, the residue name needs to be standard AA
+		"""
+		is_connected=self._is_connected
+		accept=self._accept
+		model=structure[model_id]
+		pp_list=[]
+		for chain in model.get_list():
+			prev=None
+			pp=None
+			for next in chain.get_list():
+				if prev:
+					if is_connected(prev, next):
+						if pp is None:
+							pp=Polypeptide()
+							pp.append(prev)
+							pp_list.append(pp)
+						pp.append(next)
+					else:
+						pp=None
+				if aa_only:
+					if accept(next):
+						prev=next
+					else:
+						prev=None
+						pp=None
+				else:
+					prev=next
+		return pp_list
+
+
+class CaPPBuilder(_PPBuilder):
+	"""
+	Use CA--CA distance to find polypeptides.
+	"""
+	def __init__(self, radius=4.3):
+		_PPBuilder.__init__(self, radius*radius)
+
+	def _is_connected(self, prev, next):
+		for r in [prev, next]:
+			if not r.has_id("CA"):
+				return 0
+		n_ca=next["CA"]
+		p_ca=prev["CA"]
+		for a in [n_ca, p_ca]:
+			if a.is_disordered():
+				return 0
+		nc=n_ca.get_coord()
+		pc=p_ca.get_coord()
+		if dist_sq(nc, pc)<self.radius_sq:
+			return 1
+		else:
+			return 0
+
+
+class PPBuilder(_PPBuilder):
+	"""
+	Use C--N distance to find polypeptides.
+	"""
+	def __init__(self, radius=1.8):
+		_PPBuilder.__init__(self, radius*radius)
+
+	def _is_connected(self, prev, next):
+		if not prev.has_id("C"):
+			return 0
+		if not next.has_id("N"):
+			return 0
+		c=prev["C"]
+		if c.is_disordered():
+			return 0
+		n=next["N"]
+		if n.is_disordered():
+			return 0
+		cc=c.get_coord()
+		nc=n.get_coord()
+		#print dist_sq(cc, nc), self.radius_sq
+		if dist_sq(cc, nc)<self.radius_sq:
+			return 1
+		else:
+			return 0
+	
 
 if __name__=="__main__":
 
@@ -100,13 +132,19 @@ if __name__=="__main__":
 
 	p=PDBParser(PERMISSIVE=1)
 
-	for file in sys.argv[1:]:
-		print "Extracting polypeptides from ", file
-		s=p.get_structure("scr", file)
-		for pp in build_peptides(s):
-			print pp
-		print
+	s=p.get_structure("scr", sys.argv[1])
 
+	ppb=PPBuilder()
+
+	print "C-N"
+	for pp in ppb.build_peptides(s):
+		print pp
+
+	ppb=CaPPBuilder()
+
+	print "CA-CA"
+	for pp in ppb.build_peptides(s):
+		print pp
 
 
 

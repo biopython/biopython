@@ -5,7 +5,7 @@
 
 
 from Bio.PDB.PDBParser import PDBParser 
-from Bio.PDB.Polypeptide import build_peptides
+from Bio.PDB.Polypeptide import CaPPBuilder, PPBuilder
 
 
 # first make a PDB parser object
@@ -41,8 +41,15 @@ for model in structure.get_list():
 				if disordered_count>0:
 					print "\t\t\tThe residue contains %i disordered atoms." % disordered_count
 
-polypep_list=build_peptides(structure, 1)
 
+print "Polypeptides using C-N"
+ppb=PPBuilder()
+for pp in ppb.build_peptides(structure, 1):
+	print pp
 
-print "Found ", len(polypep_list), " polypeptides."
+print "Polypeptides using CA-CA"
+ppb=CaPPBuilder()
+for pp in ppb.build_peptides(structure, 1):
+	print pp
+
 					

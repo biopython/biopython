@@ -1,4 +1,3 @@
-test_PDB
 PDBConstructionException: Atom N defined twice in residue <Residue het=  resseq=2 icode= > at line 19.
 Exception ignored.
 Some atoms or residues will be missing in the data structure.
@@ -204,5 +203,13 @@ Model 1 contains 3 chains.
 		Residue ('W', 74, ' ') contains 1 atoms.
 		Residue ('W', 75, ' ') contains 1 atoms.
 		Residue ('W', 77, ' ') contains 1 atoms.
-WARNING: some strange peptide bonds are present
-Found  4  polypeptides.
+Polypeptides using C-N
+<Polypeptide start=3 end=9>
+<Polypeptide start=11 end=13>
+<Polypeptide start=17 end=78>
+<Polypeptide start=82 end=86>
+Polypeptides using CA-CA
+<Polypeptide start=2 end=9>
+<Polypeptide start=11 end=13>
+<Polypeptide start=17 end=78>
+<Polypeptide start=82 end=86>
