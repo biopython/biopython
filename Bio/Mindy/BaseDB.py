@@ -61,7 +61,18 @@ class OpenDB:
             if len(kwargs) != 1:
                 raise TypeError("lookup takes a single key")
             namespace, name = kwargs.items()[0]
-        return self.lookup_query(namespace, name)
+        return self[namespace][name]
 
-    def lookup_query(self, namespace, name):
-        raise NotImplementedError("must be implemented in a derived class")
+    def __getitem__(self, name):
+        raise NotImplementedError("must be implemented in the derived class")
+
+    # Introspection
+    def keys(self):
+        return [self.primary_namespace] + self.secondary_namespaces
+    def values(self):
+        return [self[key] for key in self.keys()]
+    def items(self):
+        return [(key, self[key]) for key in self.keys()]
+        
+        
+

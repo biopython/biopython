@@ -6,10 +6,11 @@ import Bio
 _open = open
 
 class CreateFlatDB(BaseDB.CreateDB):
-    def __init__(self, dbname, primary_namespace, data_fields, format):
+    def __init__(self, dbname, primary_namespace,
+                 secondary_namespaces, format):
         self.dbname = dbname        
         self.primary_namespace = primary_namespace
-        self.data_fields = data_fields
+        self.secondary_namespaces = secondary_namespaces
         self.format = Bio.formats.normalize(format)
 
         # This is used in __del__ to tell if the file has been closed.
@@ -20,8 +21,8 @@ class CreateFlatDB(BaseDB.CreateDB):
 
         self.primary_table = {}
         self.lookup_tables = {}
-        for field in data_fields:
-            self.lookup_tables[field] = {}
+        for namespace in secondary_namespaces:
+            self.lookup_tables[namespace] = {}
 
         os.mkdir(dbname)
         outfile = _open(os.path.join(dbname, "config.dat"), "wb")
@@ -42,8 +43,8 @@ class CreateFlatDB(BaseDB.CreateDB):
                             (self.primary_namespace, key))
         self.primary_table[key] = "%s\t%s\t%s" % (filetag, startpos, length)
 
-        for field in self.data_fields:
-            lookup = self.lookup_tables[field]
+        for namespace in secondary_namespaces:
+            lookup = self.lookup_tables[namespace]
             # Get the list of secondary identifiers for this identifier
             for val in table.get(field, ()):
                 # Go from secondary identifier to list of primary identifiers
@@ -120,6 +121,7 @@ class CreateFlatDB(BaseDB.CreateDB):
     def __del__(self):
         if self.fileids is not None:
             self.close()
+
 
 
 def _read_tab_dict(filename):

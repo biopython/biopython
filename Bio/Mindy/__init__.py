@@ -28,15 +28,17 @@ def main():
     import XPath
     import FlatDB
     XPath.xpath_index(
-        dbname = "sprot_flat",
-        filenames = ["/home/dalke/ftps/swissprot/smaller_sprot38.dat",
+        #dbname = "sprot_flat",
+        dbname = "sprot_fullbdb",
+        #filenames = ["/home/dalke/ftps/swissprot/smaller_sprot38.dat",
+        filenames = ["/home/dalke/ftps/swissprot/sprot38.dat",
                      ],
         unique = "entry",
         extract_info = [
         ("entry", "//entry_name"),
         ("accession", "//%s[@type='accession']" % (Std.dbid.tag,)),
         ],
-        creator_class = FlatDB.CreateFlatDB,
+        #creator_class = FlatDB.CreateFlatDB,
         )
 
 
