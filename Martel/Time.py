@@ -523,16 +523,16 @@ is a bug.
    of the common month formats.
   Pattern: "(0[1-9]|1[012]?|[2-9]| [1-9])"
   Example: "5", "05", " 5", and "12".
-  Element name: 
-  Element attributes: "type" = "numeric"
-  Note: See also "%m" and %(MM).
-
-%(MM) is the same as "%(month)".
-  Pattern: See the definition for "%month"
-  Example: "5", "05", " 5", and "12".
   Element name: "month"
   Element attributes: "type" = "numeric"
   Note: See also "%m" and %(MM).
+
+%(MM) is the same as "%m", which is a two-digit month number [01,12]
+  Pattern: See the definition for "%m"
+  Example: "05", "01", and "12".
+  Element name: "month"
+  Element attributes: "type" = "numeric"
+  Note: See also %(month).
 
 %(YY)
   Pattern: "[0-9][0-9]"
