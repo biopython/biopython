@@ -44,6 +44,9 @@ class SeqFeature:
     Attributes:
     o location - the location of the feature on the sequence
     o type - the specified type of the feature (ie. CDS, exon, repeat...)
+    o location_operator - a string specifying how this SeqFeature may
+    be related to others. For example, in the example GenBank feature
+    shown below, the location_operator would be "join"
     o ref - A reference to another sequence. This could be an accession
     number for some different sequence.
     o ref_db - A different database for the reference accession number.
@@ -57,20 +60,23 @@ class SeqFeature:
     CDS    join(1..10,30..40,50..60)
 
     The the top level feature would be a CDS from 1 to 60, and the sub
-    features would be of 'CDS_span' type and would be from 1 to 10, 30 to
+    features would be of 'CDS_join' type and would be from 1 to 10, 30 to
     40 and 50 to 60, respectively.
     """
-    def __init__(self):
+    def __init__(self, location = None, type = '', location_operator = '',
+                 strand = None, qualifiers = {}, sub_features = [],
+                 ref = None, ref_db = None):
         """Initialize a SeqFeature on a Sequence.
         """
-        self.location = None
+        self.location = location
 
-        self.type = ''
-        self.ref = None
-        self.ref_db = None
-        self.strand = 0
-        self.qualifiers = {}
-        self.sub_features = []
+        self.type = type
+        self.location_operator = location_operator
+        self.ref = ref 
+        self.ref_db = ref_db
+        self.strand = strand
+        self.qualifiers = qualifiers
+        self.sub_features = sub_features
 
     def __str__(self):
         """Make it easier to debug features.
