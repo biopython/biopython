@@ -13,9 +13,13 @@
 # Added some small changes: the whole PDB file is not read in anymore, but just
 # until the first ATOM record (faster). I also split parse_pdb_header into 
 # parse_pdb_header and parse_pdb_header_list, because parse_pdb_header_list
-# can be more easily used in PDBParser.
+# can be more easily reused in PDBParser.
 #
 # Thomas, 19/03/04
+#
+# Renamed some clearly private functions to _something (ie. parse_pdb_header_list
+# is now _parse_pdb_header_list)
+# Thomas 9/05/04
 
 __doc__="Parse the header of a PDB file."
 
@@ -24,7 +28,7 @@ import os,string,re
 import urllib
 
 
-def get_journal(inl):
+def _get_journal(inl):
     # JRNL        AUTH   L.CHEN,M.DOI,F.S.MATHEWS,A.Y.CHISTOSERDOV,           2BBK   7
     journal=""
     for l in inl:
@@ -33,7 +37,7 @@ def get_journal(inl):
     journal=re.sub("\s\s+"," ",journal)
     return journal
 
-def get_references(inl):
+def _get_references(inl):
     # REMARK   1 REFERENCE 1                                                  1CSE  11
     # REMARK   1  AUTH   W.BODE,E.PAPAMOKOS,D.MUSIL                           1CSE  12
     references=[]
@@ -57,7 +61,7 @@ def get_references(inl):
     
       
 # bring dates to format: 1909-01-08
-def format_date(pdb_date):
+def _format_date(pdb_date):
     """Converts dates from DD-Mon-YY to YYYY-MM-DD format."""
     date=""
     year=int(pdb_date[7:])
@@ -115,9 +119,9 @@ def parse_pdb_header(file):
         else:
             break
     f.close()
-    return parse_pdb_header_list(header)
+    return _parse_pdb_header_list(header)
 
-def parse_pdb_header_list(header):
+def _parse_pdb_header_list(header):
     # database fields
     dict={'name':"",
         'head':'',
@@ -130,8 +134,8 @@ def parse_pdb_header_list(header):
         'author' : "",
         'compound':{'1':{'misc':''}},'source':{'1':{'misc':''}}}
 
-    dict['structure_reference'] = get_references(header)
-    dict['journal_reference'] = get_journal(header)
+    dict['structure_reference'] = _get_references(header)
+    dict['journal_reference'] = _get_journal(header)
     comp_molid="1"
     src_molid="1"
     last_comp_key="misc"
@@ -153,7 +157,7 @@ def parse_pdb_header_list(header):
         elif key=="HEADER":            
             rr=re.search("\d\d-\w\w\w-\d\d",tail)
             if rr!=None:
-                dict['deposition_date']=format_date(nice_case(rr.group()))
+                dict['deposition_date']=_format_date(nice_case(rr.group()))
             head=string.lower(chop_end_misc(tail))
             dict['head']=head
         elif key=="COMPND":            
@@ -211,7 +215,7 @@ def parse_pdb_header_list(header):
         elif key=="REVDAT":
             rr=re.search("\d\d-\w\w\w-\d\d",tail)
             if rr!=None:
-                dict['release_date']=format_date(nice_case(rr.group()))
+                dict['release_date']=_format_date(nice_case(rr.group()))
         elif key=="JRNL":
             # print key,tail
             if dict.has_key('journal'):

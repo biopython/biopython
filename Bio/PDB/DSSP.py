@@ -51,7 +51,10 @@ def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
 def make_dssp_dict(filename):
     """
     Return a DSSP dictionary that maps (chainid, resid) to
-    aa, ss and accessibility, from DSSP file.
+    aa, ss and accessibility, from a DSSP file.
+
+    @param filename: the DSSP output file
+    @type filename: string
     """
     dssp={}
     fp=open(filename, "r")

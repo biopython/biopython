@@ -8,16 +8,22 @@ __doc__="Superimpose two structures."
 
 
 class Superimposer:
+    """
+    Rotate/translate one set of atoms on top of another,
+    thereby minimizing the RMSD.
+    """
     def __init__(self):
         self.rotran=None
         self.rms=None
 
     def set_atoms(self, fixed, moving):
         """
-        fixed --- lost of atoms
-        moving --- list of atoms
+        Put (translate/rotate) the atoms in fixed on the atoms in 
+        moving, in such a way that the RMSD is minimized.
 
-        Moving will be translated/rotated on fixed.
+        @param fixed: list of (fixed) atoms
+        @param moving: list of (moving) atoms 
+        @type fixed,moving: [L{Atom}, L{Atom},...]
         """
         if not (len(fixed)==len(moving)):
             raise PDBError, "Fixed and moving atom lists differ in size"

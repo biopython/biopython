@@ -12,7 +12,7 @@ from Numeric import array, Float0
 # My stuff
 from StructureBuilder import StructureBuilder
 from PDBExceptions import PDBConstructionException
-from parse_pdb_header import parse_pdb_header_list
+from parse_pdb_header import _parse_pdb_header_list
 
 __doc__="Parser for PDB files."
 
@@ -98,7 +98,7 @@ class PDBParser:
         # Return the rest of the coords+trailer for further processing
         self.line_counter=i
         coords_trailer=header_coords_trailer[i:]
-        header_dict=parse_pdb_header_list(header)
+        header_dict=_parse_pdb_header_list(header)
         return header_dict, coords_trailer
     
     def _parse_coordinates(self, coords_trailer):
