@@ -162,3 +162,92 @@ class ENeighborCommandline(Application.AbstractCommandline):
                   "Print out the data at start of run"),
           _Option(["-progress"], ["input"], None, 0,
                   "Print indications of progress of run")]
+
+class EProtParsCommandline(Application.AbstractCommandline):
+    """Commandline object for the eprotpars program from EMBOSS.
+
+    This is an EMBOSS wrapper around protpars from PHYLIP.
+    """
+    def __init__(self, cmd = "eprotpars"):
+        Application.AbstractCommandline.__init__(self)
+        self.program_name = cmd
+
+        self.parameters = \
+         [_Option(["-msf"], ["input", "file"], None, 1,
+                  "Sequences file to be read in"),
+          _Option(["-outfile"], ["output", "file"], None, 1,
+                  "Output file"),
+          _Option(["-besttree"], ["input"], None, 0,
+                  "Search for the best tree"),
+          _Option(["-random"], ["input"], None, 0,
+                  "Randomize input order of species"),
+          _Option(["-randseed"], ["input"], None, 0,
+                  "Random number seed (must be odd)"),
+          _Option(["-randtimes"], ["input"], None, 0,
+                  "How many times to randomize"),
+          _Option(["-og"], ["input"], None, 0,
+                  "Use an outgroup root"),
+          _Option(["-noog"], ["input"], None, 0,
+                  "Do not use an outgroup root"),
+          _Option(["-outgnum"], ["input"], None, 0,
+                  "Number of the outgroup"),
+          _Option(["-thresh"], ["input"], None, 0,
+                  "Use Threshold parsimony"),
+          _Option(["-valthresh"], ["input"], None, 0,
+                  "threshold value"),
+          _Option(["-printdata"], ["input"], None, 0,
+                  "Print out the data at start of run"),
+          _Option(["-progress"], ["input"], None, 0,
+                  "Print indications of progress of run"),
+          _Option(["-steps"], ["input"], None, 0,
+                  "Print out steps in each site"),
+          _Option(["-seqatnodes"], ["input"], None, 0,
+                  "Print sequences at all nodes of tree"),
+          _Option(["-drawtree"], ["input"], None, 0,
+                  "Draw tree"),
+          _Option(["-trout"], ["input"], None, 0,
+                  "Create a tree file"),
+          _Option(["-notrout"], ["input"], None, 0,
+                  "Do not create a tree file"),
+          _Option(["-treefile"], ["output", "file"], None, 0,
+                  "Output treefile name")]
+
+class EConsenseCommandline(Application.AbstractCommandline):
+    """Commandline object for the econsense program from EMBOSS.
+
+    This is an EMBOSS wrapper around consense from PHYLIP.
+    """
+    def __init__(self, cmd = "econsense"):
+        Application.AbstractCommandline.__init__(self)
+        self.program_name = cmd
+
+        self.parameters = \
+         [_Option(["-infile"], ["input", "file"], None, 1,
+                  "file to read in (New Hampshire standard form)"),
+          _Option(["-outfile"], ["output", "file"], None, 1,
+                  "Output file name"),
+          _Option(["-notrout"], ["input"], None, 0,
+                  "Do not create a tree file"),
+          _Option(["-trout"], ["input"], None, 0,
+                  "Create a tree file"),
+          _Option(["-treefile"], ["output", "file"], None, 0,
+                  "tree file name"),
+          _Option(["-noog"], ["input"], None, 0,
+                  "Do not use an outgroup"),
+          _Option(["-og"], ["input"], None, 0,
+                  "Use an outgroup"),
+          _Option(["-outgnum"], ["input"], None, 0,
+                  "number of the outgroup"),
+          _Option(["-nodrawtree"], ["input"], None, 0,
+                  "Do not draw a tree"),
+          _Option(["-drawtree"], ["input"], None, 0,
+                  "Draw tree"),
+          _Option(["-root"], ["input"], None, 0,
+                  "Trees to be treated as Rooted"),
+          _Option(["-progress"], ["input"], None, 0,
+                  "Print indications of the progress of run"),
+          _Option(["-noprintsets"], ["input"], None, 0,
+                  "Do not print out the sets of species"),
+          _Option(["-printsets"], ["input"], None, 0,
+                  "Print out the sets of species")]
+                  
