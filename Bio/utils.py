@@ -101,7 +101,8 @@ def total_weight_range(seq, weight_table = None):
 
 def reduce_sequence(seq, reduction_table,new_alphabet=None):
    """ given an amino-acid sequence, return it in reduced alphabet form based
-       on the letter-translation table passed
+       on the letter-translation table passed. Some "standard" tables are in
+       Alphabet.Reduced.
        seq: a Seq.Seq type sequence
        reduction_table: a dictionary whose keys are the "from" alphabet, and values
        are the "to" alphabet"""
