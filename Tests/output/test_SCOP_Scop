@@ -1,0 +1,9 @@
+test_SCOP_Scop
+testParse (test_SCOP_Scop.ScopTests) ... ok
+testParseDomain (test_SCOP_Scop.ScopTests) ... ok
+testSccsOrder (test_SCOP_Scop.ScopTests) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.015s
+
+OK

@@ -1,0 +1,12 @@
+test_SCOP_Residues
+Astral encloses residue subsets in brackets. Lets make sure we ... ok
+testJustPdbId (test_SCOP_Residues.ResiduesTests) ... ok
+testParse (test_SCOP_Residues.ResiduesTests) ... ok
+testParseError (test_SCOP_Residues.ResiduesTests) ... ok
+testPdbId (test_SCOP_Residues.ResiduesTests) ... ok
+testStr (test_SCOP_Residues.ResiduesTests) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.007s
+
+OK

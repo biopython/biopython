@@ -1,0 +1,20 @@
+# dir.cla.scop.txt 
+# SCOP release 1.55 (July 2001)  [File format version 1.00]
+# http://scop.mrc-lmb.cam.ac.uk/scop/
+# Copyright (c) 1994-2001 the scop authors; see http://scop.mrc-lmb.cam.ac.uk/scop/lic/copy.html
+d1dlwa_	1dlw	A:	a.1.1.1	14982	cl=46456,cf=46457,sf=46458,fa=46459,dm=46460,sp=46461,px=14982
+d1dlya_	1dly	A:	a.1.1.1	14983	cl=46456,cf=46457,sf=46458,fa=46459,dm=46460,sp=46462,px=14983
+d3sdha_	3sdh	A:	a.1.1.2	14984	cl=46456,cf=46457,sf=46458,fa=46463,dm=46464,sp=46465,px=14984
+d3sdhb_	3sdh	B:	a.1.1.2	14985	cl=46456,cf=46457,sf=46458,fa=46463,dm=46464,sp=46465,px=14985
+d3hbia_	3hbi	A:	a.1.1.2	14986	cl=46456,cf=46457,sf=46458,fa=46463,dm=46464,sp=46465,px=14986
+d3hbib_	3hbi	B:	a.1.1.2	14987	cl=46456,cf=46457,sf=46458,fa=46463,dm=46464,sp=46465,px=14987
+d4sdha_	4sdh	A:	a.1.1.2	14988	cl=46456,cf=46457,sf=46458,fa=46463,dm=46464,sp=46465,px=14988
+d4sdhb_	4sdh	B:	a.1.1.2	14989	cl=46456,cf=46457,sf=46458,fa=46463,dm=46464,sp=46465,px=14989
+d4hbia_	4hbi	A:	a.1.1.2	14990	cl=46456,cf=46457,sf=46458,fa=46463,dm=46464,sp=46465,px=14990
+d4hbib_	4hbi	B:	a.1.1.2	14991	cl=46456,cf=46457,sf=46458,fa=46463,dm=46464,sp=46465,px=14991
+d5hbia_	5hbi	A:	a.1.1.2	14992	cl=46456,cf=46457,sf=46458,fa=46463,dm=46464,sp=46465,px=14992
+d5hbib_	5hbi	B:	a.1.1.2	14993	cl=46456,cf=46457,sf=46458,fa=46463,dm=46464,sp=46465,px=14993
+d7hbia_	7hbi	A:	a.1.1.2	14994	cl=46456,cf=46457,sf=46458,fa=46463,dm=46464,sp=46465,px=14994
+d7hbib_	7hbi	B:	a.1.1.2	14995	cl=46456,cf=46457,sf=46458,fa=46463,dm=46464,sp=46465,px=14995
+d1hbia_	1hbi	A:	a.1.1.2	14996	cl=46456,cf=46457,sf=46458,fa=46463,dm=46464,sp=46465,px=14996
+d1hbib_	1hbi	B:	a.1.1.2	14997	cl=46456,cf=46457,sf=46458,fa=46463,dm=46464,sp=46465,px=14997

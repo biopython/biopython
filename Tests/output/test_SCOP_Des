@@ -1,0 +1,10 @@
+test_SCOP_Des
+testError (test_SCOP_Des.DesTests) ... ok
+testParse (test_SCOP_Des.DesTests) ... ok
+testRecord (test_SCOP_Des.DesTests) ... ok
+testStr (test_SCOP_Des.DesTests) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.003s
+
+OK

@@ -1,0 +1,10 @@
+test_SCOP_Raf
+Can we parse a RAF record? ... ok
+testSeqMapAdd (test_SCOP_Raf.RafTests) ... ok
+testSeqMapIndex (test_SCOP_Raf.RafTests) ... ok
+testSeqMapSlice (test_SCOP_Raf.RafTests) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.054s
+
+OK

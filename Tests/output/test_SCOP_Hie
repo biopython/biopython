@@ -1,0 +1,9 @@
+test_SCOP_Hie
+testError (test_SCOP_Hie.HieTests) ... ok
+testParse (test_SCOP_Hie.HieTests) ... ok
+testStr (test_SCOP_Hie.HieTests) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.005s
+
+OK

@@ -1,0 +1,10 @@
+test_SCOP_Dom
+testError (test_SCOP_Dom.DomTests) ... ok
+testParse (test_SCOP_Dom.DomTests) ... ok
+testRecord (test_SCOP_Dom.DomTests) ... ok
+testStr (test_SCOP_Dom.DomTests) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.004s
+
+OK

@@ -1,0 +1,11 @@
+test_SCOP_Cla
+testError (test_SCOP_Cla.ClaTests) ... ok
+testIndex (test_SCOP_Cla.ClaTests) ... ok
+Can we parse a CLA file? ... ok
+testRecord (test_SCOP_Cla.ClaTests) ... ok
+testStr (test_SCOP_Cla.ClaTests) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.010s
+
+OK
