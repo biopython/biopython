@@ -45,7 +45,7 @@ def t_KEGG_Map(testfiles):
     """Tests Bio.KEGG.Map functionality."""
     for file in testfiles:
         fh = open(os.path.join("KEGG", file))
-        print "Testing Bio.KEGG.Compound on " + file + "\n\n"
+        print "Testing Bio.KEGG.Map on " + file + "\n\n"
         reactions = Map.Iterator(fh, Map.Parser(debug_level=0))
         system = System()
         while 1:
@@ -54,7 +54,13 @@ def t_KEGG_Map(testfiles):
                 system.add_reaction(r)
             else:
                 break
-        for x in system.reactions():
+        # sort the reaction output by the string names, so that the
+        # output will be consistent between python versions
+        def str_cmp(first, second):
+            return cmp(str(first), str(second))
+        rxs = system.reactions()
+        rxs.sort(str_cmp)
+        for x in rxs:
             print str(x)
 
 
