@@ -9,7 +9,7 @@ import string
 from types import *
 from Bio import File
 from Bio import ParserSupport
-from Bio.UniGene import UniGene
+from Bio import UniGene
 
 
 tests = [ 'Bt145.htm', 'Dr20.htm', 'Hs28199.htm', 'Rn35.htm', 'Mm421.htm' ]
