@@ -2,7 +2,7 @@
 
 __all__ = [
     'ExPASy',
-    'NCBI,
+    'NCBI',
     'SCOP',
     ]
 
