@@ -110,6 +110,61 @@ class SummaryInfo:
             consensus_alpha = self._guess_consensus_alphabet()
 
         return Seq(consensus, consensus_alpha)
+
+    def gap_consensus(self, threshold = .7, ambiguous = "N",
+                       consensus_alpha = None, require_multiple = 0):
+        """Same as dumb_consensus(), but allows gap on the output.
+
+	Things to do: Let the user define that with only one gap, the result
+	character in consensus is gap. Let the user select gap character, now
+	it takes the same is input.
+        """
+        consensus = ''
+
+        # find the length of the consensus we are creating
+        con_len = self.alignment.get_alignment_length()
+
+        # go through each seq item
+        for n in range(con_len):
+            # keep track of the counts of the different atoms we get
+            atom_dict = {}
+            num_atoms = 0
+
+            for record in self.alignment._records:
+                # make sure we haven't run past the end of any sequences
+                # if they are of different lengths
+                if n < len(record.seq):
+                    if record.seq[n] not in atom_dict.keys():
+                        atom_dict[record.seq[n]] = 1
+                    else:
+                        atom_dict[record.seq[n]] = \
+                          atom_dict[record.seq[n]] + 1
+
+                    num_atoms = num_atoms + 1
+
+            max_atoms = []
+            max_size = 0
+
+            for atom in atom_dict.keys():
+                if atom_dict[atom] > max_size:
+                    max_atoms = [atom]
+                    max_size = atom_dict[atom]
+                elif atom_dict[atom] == max_size:
+                    max_atoms.append(atom)
+
+            if require_multiple and num_atoms == 1:
+                consensus = consensus + ambiguous
+            elif (len(max_atoms) == 1) and ((float(max_size)/float(num_atoms))
+                                         >= threshold):
+                consensus = consensus + max_atoms[0]
+            else:
+                consensus = consensus + ambiguous
+
+        # we need to guess a consensus alphabet if one isn't specified
+        if consensus_alpha is None:
+            consensus_alpha = self._guess_consensus_alphabet()
+
+        return Seq(consensus, consensus_alpha)
             
     def _guess_consensus_alphabet(self):
         """Pick an alphabet for a consesus sequence of an alignment.

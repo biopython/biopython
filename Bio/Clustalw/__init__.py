@@ -6,9 +6,9 @@ A set of classes to interact with the multiple alignment command
 line program Clustalw (which is the command line version of the current
 graphical Clustalx aligment program).
 
-This requires Clustalx1.8.1 available from:
+This requires Clustalw1.8.1 available from:
 
-ftp://ftp-igbmc.u-strasbg.fr/pub/ClustalX/.
+ftp://ftp-igbmc.u-strasbg.fr/pub/ClustalW/.
 
 Older versions may work, but haven't been tested yet.
 
