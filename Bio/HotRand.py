@@ -17,20 +17,30 @@ from Bio.SGMLExtractor import SGMLExtractorHandle
 
 
 def hex_convert( text ):
-    num_val = 0l
+    num_val = 0L
     text = text.lower()
     for letter in text:
         hex_digit = string.hexdigits.find( letter )
-        if( hex_digit < 0 ): raise ValueError
+        if( hex_digit < 0 ):
+            raise ValueError
         num_val = ( num_val * 16 ) + hex_digit
     return num_val
+
+def byte_concat( text ):
+    val = 0
+    numbytes = len( text )
+    for i in range( 0, numbytes ):
+        val = val * 256
+        val = val + ord( text[ i ] )
+
+    return val
 
 class HotCache:
 
     def __init__( self  ):
 #        self.url = 'http://www.fourmilab.ch/cgi-bin/uncgi/Hotbits?num=5000&min=1&max=6&col=1'
-        self.url = 'http://www.random.org/cgi-bin/randbyte?nbytes=5000&format=h'
-        self.query = { 'nbytes' : 128, 'fmt' : 'hex' }
+        self.url = 'http://www.random.org/cgi-bin/randbyte?'
+        self.query = { 'nbytes' : 128, 'fmt' : 'h' }
         self.fill_hot_cache()
 
     def fill_hot_cache( self ):
@@ -39,25 +49,25 @@ class HotCache:
         url_opener = FancyURLopener( )
         fh = url_opener.open( url )
         hot_rand_handle = SGMLExtractorHandle( fh, [ 'pre', ] )
-        hot_cache = hot_rand_handle.read()
-        lines = hot_cache.splitlines()
-        hot_cache = ''.join( lines )
-        hot_cache = hot_cache.replace( ' ', '' )
-        self.hot_cache = hot_cache.strip()
+
+        hot_cache = fh.read()
+        self.hot_cache = hot_cache
         fh.close()
         return self.hot_cache
 
     def next_num( self, num_digits = 4 ):
         cache = self.hot_cache
-        if( len( cache ) % num_digits != 0 ):
+        numbytes = num_digits / 2
+        if( len( cache ) % numbytes != 0 ):
             print 'len_cache is %d' % len( cache )
             raise ValueError
         if( cache == '' ):
             self.fill_hot_cache()
             cache = self.hot_cache
-        hexdigits = cache[ :num_digits ]
-        self.hot_cache = cache[ num_digits: ]
-        return hex_convert( hexdigits )
+        hexdigits = cache[ :numbytes ]
+        self.hot_cache = cache[ numbytes: ]
+        return byte_concat( hexdigits )
+
 
 
 class HotRandom:
