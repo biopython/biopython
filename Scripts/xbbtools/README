@@ -1,0 +1,43 @@
+Tue Aug  8 23:23:15 2000
+
+Xbbtools
+========
+
+Xbbtools is a Graphical Sequence Editor originally written in Tcl/Tk with
+BioWish. This is the start of a pure python re-implementation of xbbtools with
+biopython.
+Usage: xbbtools test.fas
+
+nextorf.py
+==========
+nextorf.py is a python re-implementation of the Tcl script nextorf.tcl
+used together with xbbtools for ORF-fishing during the Complete Genome
+Sequencing Project of the Typhus Bacteria Rickettsia Prowazekii developed
+by Thomas Sicheritz-Ponten, Jan Andersson an Morten Andersen
+
+Usage: nextorf.py testrp.fas
+    or nextorf.py -h
+
+Feel free to suggest, fix and hack
+ ... have fun 
+         -thomas
+
+Sicheritz Ponten Thomas E.  CBS, Department of Biotechnology
+blippblopp@linux.nu         The Technical University of Denmark
+CBS:  +45 45 252485         Building 208, DK-2800 Lyngby
+Fax   +45 45 931585         http://www.cbs.dtu.dk/thomas/index.html
+
+	De Chelonian Mobile ... The Turtle Moves ...
+
+
+
+Sicheritz-Ponten T.: BioWish: a molecular biology command extension to Tcl/Tk.
+Comput Appl Biosci. 1997 Dec;13(6):621-2. 
+PMID: 9475992; UI: 98136469
+
+Andersson SG, Zomorodipour A, Andersson JO, Sicheritz-Ponten T,
+Alsmark UC, Podowski RM, Naslund AK, Eriksson AS, Winkler HH,
+Kurland CG: The genome sequence of Rickettsia prowazekii and the origin of mitochondria.
+Nature. 1998 Nov 12;396(6707):133-40.
+PMID: 9823893; UI: 99039499
+

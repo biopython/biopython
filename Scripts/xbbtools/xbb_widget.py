@@ -1,0 +1,345 @@
+#!/usr/bin/env python
+# Created: Wed Jun 21 10:28:14 2000
+# Last changed: Time-stamp: <00/08/08 23:30:14 thomas>
+# Thomas.Sicheritz@molbio.uu.se, http://evolution.bmc.uu.se/~thomas
+# File: xbb_widget.py
+
+import string, re, regsub
+import posixpath, posix
+import os, sys  # os.system, sys.argv
+
+from Tkinter import *
+import Pmw
+from tkFileDialog import askopenfilename, asksaveasfilename
+
+sys.path.insert(0, '.')
+import xbb_io
+from xbb_utils import *
+from xbb_translations import xbb_translations
+from xbb_blast import *
+
+sys.path.insert(0, os.path.expanduser('~thomas/cbs/python/biopython'))
+from Bio.Tools import Translate
+
+
+
+
+class xbb_widget:
+    def __init__(self, parent = None):
+        self.is_a_master = (parent == None)
+        self.parent = parent
+            
+        self.init_variables()
+        self.init_colors()
+        # master frame
+        self.main_frame = Frame(parent)
+        if not parent:
+            self.init_optionsdb()
+            self.parent = self.main_frame.master
+            
+        self.main_frame.pack(fill = BOTH, expand = 1)
+        #self.main_frame.master.wm_geometry()
+        
+        # sequence info (GC%, positins etc.)
+        self.info_frame = Frame(self.main_frame)
+        self.info_frame.pack(fill = BOTH, expand = 1)
+        
+        self.create_menu(self.info_frame)
+        self.create_seqinfo(self.info_frame)
+
+        # sequence field and fast buttons
+        self.seq_frame = Frame(self.main_frame)
+        self.seq_frame.pack(fill = BOTH, expand = 1)
+        
+        self.create_buttons(self.seq_frame)
+        self.create_seqfield(self.seq_frame)
+
+        self.create_bindings()
+        
+    def init_variables(self):
+        self.seqwidth = 60
+        self.seq_io = xbb_io.xbb_io()
+        self.translation_tables = {}
+        for i in Translate.unambiguous_dna_by_id.keys():
+            self.translation_tables[Translate.unambiguous_dna_by_id[i].table.names[0]] = i
+        self.translator = xbb_translations()
+
+    def init_colors(self):
+        self.colorsbg = {'frame':'brown',
+                         'button':'darkgreen',
+                         'radiobutton':'darkgrey',
+                         'checkbutton':'darkgrey',
+                         'label':'dimgrey',
+                         'text':'bisque1',
+                         'entry':'bisque1',
+                         'menu':'darkgreen',
+                         'menubutton':'darkgreen',
+                         'seqinfo':'dimgrey'}
+        self.colorsfg = {'button':'lightblue',
+                         'radiobutton':'lightblue',
+                         'checkbutton':'lightblue',
+                         'label':'green3',
+                         'text':'black',
+                         'entry':'black',
+                         'menu':'black',
+                         'menubutton':'lightblue'}
+
+    def init_optionsdb(self):
+        tk = self.main_frame.master
+        for k,v in self.colorsbg.items():
+            name = '*' + string.upper(k[0]) + k[1:] + '.background'
+            tk.option_add(name, v)
+
+        for k,v in self.colorsfg.items():
+            name = '*' + string.upper(k[0]) + k[1:] + '.foreground'
+            tk.option_add(name, v)
+            
+    def create_menu(self, parent):
+        self.menubar = Menu(self.main_frame)
+        
+        # File menu
+        self.file_menu = Menu(self.menubar)
+        menu = self.file_menu
+        menu.add_command(label='Exit', command = self.exit)
+        self.menubar.add_cascade(label="File", menu=self.file_menu)
+
+        # Edit menu
+        self.edit_menu = Menu(self.menubar)
+        menu = self.edit_menu
+        menu.add_command(label='Complement', command = self.complement)
+        menu.add_command(label='Reverse', command = self.reverse)
+        menu.add_command(label='Fix sequence', command = self.fix_sequence)
+        self.menubar.add_cascade(label="Edit", menu=self.edit_menu)
+
+        # Translation menu
+        self.translation_menu = Menu(self.menubar)
+        menu = self.translation_menu
+        menu.add_command(label='+1 Frame', command = self.translate)
+        menu.add_command(label='6 Frames', command = self.gcframe)
+
+        self.current_codon_table = StringVar()
+        self.current_codon_table.set('Standard')
+        self.current_codon_table_id = 1
+        
+        keys = self.translation_tables.keys()
+        keys.remove('Standard')
+        keys.sort()
+        keys = ['Standard'] + keys
+
+        self.gencode_menu = Menu(self.translation_menu)
+        menu = self.gencode_menu
+        for table in keys:
+            menu.add_radiobutton(label=table, command = self.set_codon_table, variable = self.current_codon_table)
+        self.translation_menu.add_cascade(label="Genetic Codes", menu=self.gencode_menu)
+
+
+        self.menubar.add_cascade(label="Translations", menu=self.translation_menu)
+
+        # Blast menu
+        self.blast_menu = Menu(self.menubar)
+        menu = self.blast_menu
+        menu.add_command(label='Blast', command = self.blast)
+        self.menubar.add_cascade(label="Tools", menu=self.blast_menu)
+
+        self.parent.config(menu = self.menubar)
+
+    def set_codon_table(self):
+        self.current_codon_table_id = self.translation_tables[self.current_codon_table.get()]
+        print self.current_codon_table_id
+        
+    def exit(self, *args):
+        print 'exit'
+        if self.is_a_master:
+            sys.exit(0)
+        else:
+            self.main_frame.destroy()
+            
+    def create_seqinfo(self, parent):
+        self.seq_info1 = Frame(parent, relief = RIDGE,
+                               borderwidth = 5, height = 30)
+        self.seq_info1.pack(fill = BOTH, expand = 1, side = TOP)
+
+        self.position_ids = {}
+        d = self.position_ids
+        d['id'] = Label(self.seq_info1, width = 10)
+        d['from_id'] = Label(self.seq_info1, width = 10)
+        d['to_id'] = Label(self.seq_info1, width = 10)
+        d['length_id'] = Label(self.seq_info1, width = 10)
+        d['label'] = Label(self.seq_info1, width = 10)
+        for i in ['id', 'from_id', 'to_id', 'length_id', 'label']:
+            d[i].pack(side = LEFT, fill = BOTH, expand = 1)
+            
+        self.seq_info2 = Frame(parent, relief = RIDGE,
+                               borderwidth = 5, height = 30)
+        self.seq_info2.pack(fill = BOTH, expand = 1, side = TOP)
+
+    def create_buttons(self, parent):
+        self.button_frame = Frame(parent)
+        self.button_frame.pack(fill = Y, side = LEFT)
+        self.buttons = {}
+        for text, func in [('Open', self.open),
+                           ('Export', self.export),
+                           ('GC Frame', self.gcframe),
+                           ('Exit', self.exit)]:
+            b_id = Button(self.button_frame, text = text,
+                          command = func, width = 7)
+            b_id.pack(side = TOP, pady = 5, padx = 10)
+            self.buttons[text] = b_id
+            
+    def create_seqfield(self, parent):
+        self.sequence_id = Text(parent, wrap = 'char',
+                                width = self.seqwidth)
+        self.sequence_id.pack(fill = BOTH, expand = 1, side = RIGHT)
+
+    def create_bindings(self):
+        self.sequence_id.bind('<Motion>', self.position)
+        self.sequence_id.bind('<Leave>', lambda x,s = self:
+                              s.position_ids['id'].configure(text = ''))
+        self.sequence_id.bind('<1>', self.zero)
+        self.sequence_id.bind('<B1-Motion>', self.count_selection)
+        self.sequence_id.bind('<Double-Button-1>', self.select_all)
+        
+    def zero(self, event):
+        p = self.position_ids
+        for i in ['from_id', 'to_id', 'length_id']:
+            self.position_ids[i].configure(text = '')
+
+    def get_length(self):
+        self.sequence_length = len(self.sequence_id.get(1.0,END))
+        return self.sequence_length
+    
+    def select_all(self, event):
+        self.select(1, self.get_length())
+        self.count_selection(None)
+        
+    def select(self, a, b):
+        w = self.sequence_id
+        w.selection_own()
+        w.tag_add('sel', '1.%d' % (a - 1), '1.%d' % b)
+        self.count_selection(None)
+
+    def get_selection_or_sequence(self):
+        w = self.sequence_id
+        seq = self.get_selection()
+        if not seq:
+            seq = self.sequence_id.get(1.0,END)
+
+        seq = re.sub('[^A-Z]','',seq)    
+        return seq
+    
+    def get_selection(self):
+        w = self.sequence_id
+        #w.selection_own()
+        try:
+            return w.selection_get()
+            #return string.upper(w.get(sel.first, sel.last))
+        except:
+            return ''
+        
+    def get_self_selection(self):
+        w = self.sequence_id
+        w.selection_own()
+        try:
+            #return w.selection_get()
+            return string.upper(w.get(sel.first, sel.last))
+        except:
+            return ''
+        
+    def count_selection(self, event):
+        w = self.sequence_id
+        w.selection_own()
+        try:
+            a = int(string.split(w.index('sel.first'), '.')[1]) +1
+            b = int(string.split(w.index('sel.last'), '.')[1])
+            length = b - a + 1
+
+            self.position_ids['from_id'].configure(text = 'Start:%d'% a)
+            self.position_ids['to_id'].configure(text = 'Stop:%d'% b)
+            self.position_ids['length_id'].configure(text = '%d nt' % length)
+        except:
+            pass
+        
+    def position(self, event):
+        x = event.x
+        y = event.y
+        pos = string.split(self.sequence_id.index('@%d,%d' % (x,y)),'.')
+        pos = int(pos[1]) + 1
+        self.position_ids['id'].configure(text = str(pos))
+        
+    def open(self, file = None):
+        if not file:
+            file = askopenfilename()
+        if not file: return
+        genes = self.seq_io.read_fasta_file(file)
+        
+        self.insert_sequence(genes[0])
+
+    def insert_sequence(self, (sequence, name)):
+        self.sequence_id.delete(0.0, END)
+        self.sequence_id.insert(END, string.upper(sequence))
+        self.fix_sequence()
+        self.update_label(name)
+
+    def fix_sequence(self):
+        seq = self.sequence_id.get(1.0,END)
+        seq = string.upper(seq)
+        seq = re.sub('[^A-Z]','',seq)
+        self.sequence_id.delete(0.0,END)
+        self.sequence_id.insert(END, seq)
+        
+    def update_label(self, header):
+        name = string.split(header,' ')[0]
+        name = string.split(name,',')[0]
+        self.position_ids['label'].configure(text = name)
+        
+    def export(self):
+        ""
+    def gcframe(self):
+        seq = self.get_selection_or_sequence()
+        if not seq: return
+        np = NotePad()
+        tid = np.text_id()
+        tid.insert(END, self.translator.gcframe(seq, self.current_codon_table_id))
+
+    def translate(self, frame = 1):
+        seq = self.get_selection_or_sequence()
+        if not seq: return
+        np = NotePad()
+        tid = np.text_id()
+        tid.insert(END, self.translator.frame_nice(seq, frame, self.current_codon_table_id))
+
+    def show_blast(self, result):
+        np = NotePad()
+        tid = np.text_id()
+        tid.insert(END, result)
+
+    def blast(self):
+        blast_popup(self.get_selection_or_sequence, self.show_blast)
+
+    def reverse(self):
+        ""
+    def complement(self):
+        w = self.sequence_id
+        w.selection_own()
+        #FIX FUCKING SELECTION !!!!
+        print w.selection_range
+        ()
+        if 1:
+        #try:
+            start, stop = sel.first, sel.last
+            
+        #except:
+            #start, stop = 0.0, END
+
+        seq = w.get(start, stop)
+        print 'seq >%s<' % seq
+        complementary = self.translator.complement(seq)
+        w.delete(start, stop)
+        w.insert(start, complementary)
+        
+        
+        
+if __name__ == '__main__':
+    xbbtools = xbb_widget()
+    xbbtools.main_frame.option_add('*frame.background', 'dimgrey')
+    xbbtools.open('test.fas')
