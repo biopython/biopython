@@ -5,8 +5,20 @@ Saf.txt
 Saf
 ---
 
-The Saf module works with NBRF-formatted sequence data.  Data is available at:
+The Saf module works with Saf-formatted sequence data.  Data is available at:
 http://www.embl-heidelberg.de/predictprotein/Dexa/optin_safDes.html
 
 
-The Saf record contains a Generic alignment object.  Generic is part of the biopython distribution.
+The Saf record contains a Generic alignment object.  Generic is part of the biopython
+distribution.  The following code fragment is an example of how to parse SAF files into
+a record and print the record.
+
+    records = Bio.Saf.Iterator( fh, Bio.Saf.RecordParser(debug_level=0))
+    while 1:
+        record = records.next()
+        if record is not None:
+            print record
+            pass
+        else:
+            break
+    print "\n"
