@@ -1,6 +1,7 @@
 all: csupport.o \
 	cpairwise2.so \
 	cmathfns.so clistfns.so cstringfns.so cdistance.so \
+	cMarkovModel.so \
 	cSVM.so \
 	ckMeans.so
 
