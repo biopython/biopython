@@ -2,6 +2,12 @@ This file provides documentation for modules in Biopython that have been moved
 or deprecated in favor of other modules. This provides some quick and easy
 to find documentation about how to update your code to work again.
 
+Bio.Blast.NCBIWWW.blast
+=======================
+Deprecated as of Release 1.31.
+Use Bio.Blast.NCBIWWW.qblast instead. The web blast interface is very
+unstable, and qblast should be more reliable.
+
 Bio.sequtils
 ============
 Deprecated as of Release 1.30.
