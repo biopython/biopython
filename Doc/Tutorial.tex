@@ -21,7 +21,7 @@
 
 \title{Biopython Tutorial and Cookbook}
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg}
-\date{Last Update--11 November 2000}
+\date{Last Update--18 November 2000}
 
 \maketitle
 \tableofcontents
@@ -30,26 +30,29 @@
 
 \subsection{What is Biopython?}
 
-\subsection{Obtaining and Installing Biopython}
+\subsection{Obtaining Biopython}
 
-Biopython's internet home is at, naturally enough,  \ahrefurl{\url{http://www.biopython.org}}. This is the home of all things biopython, so it is the best place to start looking around if you are interested. When you feel ready to dive in and start working with the code, you have two choices:
+Biopython's internet home is at, naturally enough,  \ahrefurl{\url{http://www.biopython.org}}. This is the home of all things biopython, so it is the best place to start looking around if you are interested. When you feel ready to dive in and start working with the code, you have three choices:
 
 \begin{enumerate}
 
-\item Release code -- We made available both stable and developer's releases on the download page (\ahrefurl{\url{http://www.biopython.org/Download/}}). The stable releases are likely to be more well tested, while the development releases are closer to what is in CVS, and so will probably have more features.
+\item Release code -- We made available both stable and developer's releases on the download page (\ahrefurl{\url{http://www.biopython.org/Download/}}). The stable releases are likely to be more well tested, while the development releases are closer to what is in CVS, and so will probably have more features. The releases are also available both as source and as installers (rpms and windows installers, right now), so you have some choices to pick from on releases if you prefer not to deal with source code directly.
 
 \item CVS -- The current working copy of the Biopython sources is always available via CVS (Concurrent Versions Systems -- \ahrefurl{\url{http://www.cvshome.org/}}). Concise instructions for accessing this copy are available at \ahrefurl{\url{http://cvs.biopython.org}}.
 
 \end{enumerate}
 
-No matter which way you choose, installing Biopython will require the following easy steps.
+Based on which way you choose, you'll need to follow one of the following installation options. Read on for the information you are interested in.
 
-\subsubsection{Installation}
+\subsection{Installation}
+
+\subsubsection{Installing from source on UNIX}
+\label{sec:unix_install}
 
 Biopython uses Distutils, which is the new standard python installation package. Copies are available at \ahrefurl{\url{http://www.python.org/sigs/distutils-sig/download.html}} and Distutils will also come standard with Python 1.6 and future versions (the version that is shipped with alpha versions of 1.6 should work just fine). Distutils will make installation a snap, as you will see in a second.
 
 
-Now that we've got what we need let's get into the installation: (Warning: These instructions are strongly biased to UNIX type machines. If you are installing on Windows or Mac or some brand of UNIX for which these instructions are not very helpful, please let us know how we can make them better!)
+Now that we've got what we need let's get into the installation:
 
 \begin{enumerate}
 
@@ -67,13 +70,78 @@ Now that we've got what we need let's get into the installation: (Warning: These
 
 \end{enumerate}
 
-\item That's it! Biopython is installed. Wasn't that easy? Now let's check and make sure it worked properly.
+\item That's it! Biopython is installed. Wasn't that easy? Now let's check and make sure it worked properly. Skip on ahead to section~\ref{sec:is_working}.
 
 \end{enumerate}
 
-\subsubsection{Making sure it worked}
+\subsubsection{Installing from source on Windows}
+\label{sec:windows_install}
 
-First, we'll just do a quick test to make sure python. The most important thing is that python can find the biopython installation. Biopython all installs into a top level \verb|Bio| directory, and you want to make sure this is on your\verb| $PYTHONPATH| on UNIX (hmmm, what do you do on other platforms?). If you used the default install, this shouldn't be a problem, but if not, you'll need to set the \verb|PYTHONPATH| with something like \verb|export PYTHONPATH = $PYTHONPATH':/directory/where/you/put/Biopython'|. Now that we think we are ready, fire up your python interpreter and follow allong with the following quick script:
+This section deals with installing the source (ie. from CVS or from a source zip file) on a Windows machine. Much of the information from the UNIX install applies here, so it would be good to read section~\ref{sec:unix_install} before starting. Also, a little warning -- I (Brad) am writing these instructions based on very limited experience with Windows; I am basically a UNIX geek. So if you know more about Windows and want to add/correct things in this section, please feel let us know!
+
+
+I have successfully managed to use distutils to compile Biopython with Borland's free C++ compiler (available from \ahrefurl{\url{http://www.inprise.com/bcppbuilder/freecompiler/}}). It should also be possible with other Distutils supported compilers (please provide info if you've done this!).
+
+\begin{enumerate}
+  \item Borland C++ compiler
+
+\begin{itemize}
+  \item First you need to install and setup Borland C++. There are instructions on the Borland page and on the web, so you should follow these.
+
+  \item Now you have to get python, which is compiled with a microsoft compiler, able to live happily with Borland compiled extensions. Gordon Williams has an excellent page describing doing this (\ahrefurl{\url{http://www.cyberus.ca/~g_will/pyExtenDL.shtml}}), which is where I learned everything I know. Basically, what I did was run the Borland supplied tool \verb|COFF2OMF| on the python20.lib file:
+
+\begin{verbatim}
+> COFF2OMF python20.lib python20-borland.lib
+\end{verbatim}
+
+Then I just renamed \verb|python20.lib| to \verb|python20-orig.lib| and renamed \verb|python20-borland.lib| to \verb|python20.lib|, so that distutils will link against this ``Borland friendly'' python library.
+
+  \item Now that that is ready, we are at the easy part -- using distutils to build it. All I did was:
+
+\begin{verbatim}
+> python setup.py build --compiler=bcpp
+> python setup.py install
+\end{verbatim}
+
+and voila!, it's installed. 
+
+\end{itemize}
+
+\end{enumerate}
+
+Now that you've got everything installed, skip on ahead to section~\ref{sec:is_working} to make sure everything worked.
+
+\subsubsection{Installing using RPMs}
+
+People who use RPM based systems might like to install everything with a RPM to use it's packaging system. Additionally, this saves the necessity of having a C compiler and compiling things. 
+
+
+Installing Biopython from a RPM package should be much the same process as used for other RPMs. If you need general information about how RPMs work, the best place to go is \ahrefurl{\url{http://www.rpm.org}}.
+
+
+To install it, you should just need to do:
+
+\begin{verbatim}
+rpm -i your_biopython.rpm
+\end{verbatim}
+
+To see what you installed try doing \verb|rpm -qpl your_biopython.rpm| which will list all of the installed files.
+
+
+RPMs do not install the documentation, tests, or example code, so you might want to also grab a source distribution, so you can use these resources (and also look at the source code if you want to).
+
+
+\subsubsection{Installing with a Windows Installer}
+
+Installing things on Windows with the installer should be really easy (hey, that's why they've got graphical installers, right?). You should just need to download the \verb|Biopython-version.exe| installer from biopython web site. Then you just need to double click and voila, a nice little installer will come up and you can stick the libraries where you need to. No need for a C compiler or anything fancy.
+
+
+This does not install the documentation, tests, example code or source code, so it is probably also a good idea to download the zip file containing this so you can test your installation and learn how to use it.
+
+\subsection{Making sure it worked}
+\label{sec:is_working}
+
+First, we'll just do a quick test to make sure python. The most important thing is that python can find the biopython installation. Biopython all installs into a top level \verb|Bio| directory, and you want to make sure this directory is specified in on your\verb| $PYTHONPATH| environmental variable. If you used the default install, this shouldn't be a problem, but if not, you'll need to set the \verb|PYTHONPATH| with something like \verb|export PYTHONPATH = $PYTHONPATH':/directory/where/you/put/Biopython'| (on UNIX). Now that we think we are ready, fire up your python interpreter and follow along with the following code:
 
 \begin{verbatim}
 
@@ -2324,9 +2392,50 @@ Any one of the following may be done to geerate the frequency table (ftab):
 
 \section{Biocorba}
 
-Just a quick introduction and a pointer to the Biocorba documentation.
+Biocorba does some cool stuff with CORBA. You should check out the biocorba specific documentation.
 
 \section{Where to go from here -- contributing to Biopython}
+
+\subsection{Maintaining a distribution for a platform}
+\label{sec:maintain_dist}
+
+We try to release Biopython to make it as easy to install as possible for users. Thus, we try to provide the Biopython libraries in as many install formats as we can. Doing this from release to release can be a lot of work for developers, and sometimes requires them to maintain packages they are not all that familiar with. This section is meant to provide tips to encourage other people besides developers to maintain platform builds.
+
+
+In general, this is fairly easy -- all you would need to do is produce the system specific package whenever we make a release. You should then check the package (of course!) to make sure it installs everything properly. Then you just send it to one of the main developers, they stick the package on the web site and just like that, you've contributed to Biopython! Snazzy.
+
+
+Below are some tips for certain platforms to maybe get people started with helping out:
+
+\begin{description}
+  \item[RPMs] -- RPMs are pretty popular package systems on some platforms. There is lots of documentation on RPMs available at \ahrefurl{\url{http://www.rpm.org}} to help you get started with them. To create an RPM for your platform is really easy. You just need to be able to build the package from source (having a C compiler that works is thus essential) -- see section~\ref{sec:unix_install} for more info on this.
+
+
+To make the RPM, you just need to do:
+
+\begin{verbatim}
+python setup.py bdist_rpm
+\end{verbatim}
+
+This will create an RPM for your specific platform and a source RPM in the directory \verb|dist|. This RPM should be good and ready to go, so this is all you need to do! Nice and easy.
+
+\item[Windows] -- Windows products typically have a nice graphical installer that installs all of the essential components in the right place. We can use Disttutils to create a installer of this type fairly easily.
+
+
+You must first make sure you have a C compiler on your Windows computer, and that you can compile and install things (see section~\ref{sec:windows_install} for info on how to do this.
+
+
+Once you are setup with a C compiler, making the installer just requires doing:
+
+\begin{verbatim}
+python setup.py bdist_wininst
+\end{verbatim}
+
+Now you've got a Windows installer. Congrats!
+
+\end{description}
+
+Once you've got a package, please test it on your system to make sure it installs everything in a good way and seems to work properly. Once you feel good about it, send it off to one of the biopython developers (write to our main list serve at biopython@biopython.org if you're not sure who to send it to) and you've done it. Thanks!
 
 \subsection{Bug Reports + Feature Requests}
 
