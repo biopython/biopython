@@ -115,7 +115,7 @@ class DSSP:
         """
         return len(self.res_list)
 
-    def has_key(self, item):
+    def has_key(self, res):
         return self.map.has_key(res)
 
     def get_keys(self):
