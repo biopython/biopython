@@ -10,7 +10,7 @@ from Bio import ParserSupport
 from Bio.Rebase import Rebase
 
 
-tests = [ 'cac81.htm', 'bamii.htm', 'pvuii.htm', 'taqi.htm' ]
+tests = [ 'cac81.htm', 'bamii.htm', 'pvuii.htm', 'taqi.htm', 'foki.htm' ]
 #    'ps00488.txt', 'ps00546.txt' ]
 record_parser = Rebase.RecordParser()
 
@@ -23,17 +23,18 @@ for test in tests:
     datafile = os.path.join( 'Rebase', test )
     src_handle = open( datafile )
     data = record_parser.parse( src_handle )
-    print data.sequence
+    print data.seq_5_to_3
+    print data.seq_3_to_5
     print '!!! %s ' % data.enzyme_num
-    print data.methylation
-    print data.prototype
+    print ' prototype %s' % data.prototype
     print data.source
     print data.microorganism
     print data.temperature
     print data.date_entered
-    print data.date_modified
+#    print data.date_modified
     print data.num_Adeno2
     print data.num_Lambda
     print data.num_pBR322
     print data.num_PhiX174
     print data.num_SV40
+

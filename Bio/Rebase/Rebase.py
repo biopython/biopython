@@ -37,8 +37,8 @@ class Record:
     """Holds information from a FASTA record.
 
     Members:
-    sequence         The sequence.
-    complement       The complementary sequence.
+    seq_5_to_3       The sequence.
+    seq_3_to_5
     enzyme_num       The enzyme number
     pos              Position of cleavage
     prototype        Prototype
@@ -62,8 +62,8 @@ class Record:
         to put on each line.
 
         """
-        self.sequence = ''
-        self.complement = ''
+        self.seq_5_to_3 = ''
+        self.seq_3_to_5 = ''
         self.methylation = ''
         self.enzyme_num = None
         self.prototype = ''
@@ -222,7 +222,6 @@ class _Scanner:
         consumer.start_sequence()
         text = ''
         text = self._text_in( uhandle, text, 100 )
-	print text
         self._scan_sequence( text, consumer)
         self._scan_methylation( text, consumer)
         self._scan_enzyme_num( text, consumer )
@@ -246,7 +245,6 @@ class _Scanner:
         if( end == -1 ):
             end = string.find( text, 'REBASE enzyme #:' )
         next_item = text[ start:end ]
-        print next_item
         consumer.sequence( next_item )
 
     def _scan_methylation(self, text, consumer ):
@@ -254,28 +252,24 @@ class _Scanner:
         if( start != -1 ):
             end = string.find( text, 'REBASE enzyme #:' )
             next_item = text[ start:end ]
-            print next_item
             consumer.methylation( next_item )
 
     def _scan_enzyme_num(self, text, consumer ):
         start = string.find( text, 'REBASE enzyme #:' )
         end = string.find( text, 'Prototype:' )
         next_item = text[ start:end ]
-        print next_item
         consumer.enzyme_num( next_item )
 
     def _scan_prototype(self,  text, consumer ):
         start = string.find( text, 'Prototype:' )
         end = string.find( text, 'Source:' )
         next_item = text[ start:end ]
-        print next_item
         consumer.prototype( next_item )
 
     def _scan_source(self, text, consumer ):
         start = string.find( text, 'Source:' )
         end = string.find( text, 'Microorganism:' )
         next_item = text[ start:end ]
-        print next_item
         consumer.source( next_item )
 
 
@@ -283,14 +277,12 @@ class _Scanner:
         start = string.find( text, 'Microorganism:' )
         end = string.find( text, 'Growth Temperature:' )
         next_item = text[ start:end ]
-        print next_item
         consumer.microorganism( next_item )
 
     def _scan_temperature(self, text, consumer):
         start = string.find( text, 'Growth Temperature:' )
         end = start + 30
         next_item = text[ start:end ]
-        print next_item
         consumer.temperature( next_item )
 
 
@@ -298,7 +290,6 @@ class _Scanner:
         start = string.find( text, 'Entered:' )
         end = start + 30
         next_item = text[ start:end ]
-        print next_item
         consumer.data_entered( next_item )
 
     def _scan_date_modified(self, text, consumer):
@@ -306,42 +297,36 @@ class _Scanner:
         if( start != -1 ):
             end = start + 30
             next_item = text[ start:end ]
-            print next_item
             consumer.data_modified( next_item )
 
     def _scan_Adeno2( self, text, consumer ):
         start = string.find( text, 'Adeno2:' )
         end = string.find( text, 'Lambda:' )
         next_item = text[ start:end ]
-        print next_item
         consumer.num_Adeno2( next_item )
 
     def _scan_Lambda( self, text, consumer ):
         start = string.find( text, 'Lambda:' )
         end = string.find( text, 'pBR322:' )
         next_item = text[ start:end ]
-        print next_item
         consumer.num_Lambda( next_item )
 
     def _scan_pBR322(self, text, consumer ):
         start = string.find( text, 'pBR322:' )
         end = string.find( text, 'PhiX174:' )
         next_item = text[ start:end ]
-        print next_item
         consumer.num_pBR322( next_item )
 
     def _scan_PhiX174(self, text, consumer ):
         start = string.find( text, 'PhiX174:' )
         end = string.find( text, 'SV40:' )
         next_item = text[ start:end ]
-        print next_item
         consumer.num_PhiX174( next_item )
 
     def _scan_SV40(self, text, consumer ):
         start = string.find( text, 'SV40:' )
         end = start + 30
         next_item = text[ start:end ]
-        print next_item
         consumer.num_SV40( next_item )
 
 
@@ -364,7 +349,15 @@ class _RecordConsumer(AbstractConsumer):
     def sequence( self, line ):
         print '### %s ' % line
 	cols = string.split( line, ': ' )
-        self.data.sequence = cols[ 1 ]
+        sequence = cols[ 1 ]
+        sequence = string.strip( sequence )
+        if( string.find( sequence, ' ...' ) != -1 ):
+            cols = string.split( sequence, '...' )
+            self.data.seq_5_to_3 = cols[ 1 ]
+        elif( string.lower( sequence ) != 'unknown' ):
+            seq_len = len( sequence ) / 2
+            self.data.seq_5_to_3 = string.strip( sequence[ :seq_len ] )
+            self.data.seq_3_to_5 = string.strip( sequence[ seq_len: ] )
 
     def methylation( self, line ):
         cols = string.split( line, ': ' )
@@ -393,16 +386,12 @@ class _RecordConsumer(AbstractConsumer):
 
     def data_entered( self, line ):
         cols = string.split( line, ':' )
-        print cols[ 0 ]
         cols = string.split( cols[ 1 ] )
-        print cols[ 0 ]
         self.data.date_entered = string.join( cols[ :3 ] )
 
     def data_modified( self, line ):
         cols = string.split( line, ':' )
-        print cols[ 0 ]
         cols = string.split( cols[ 1 ] )
-        print cols[ 0 ]
         self.data.date_modified = string.join( cols[ :3 ] )
 
     def num_Adeno2( self, line ):
