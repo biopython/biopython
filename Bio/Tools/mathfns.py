@@ -6,12 +6,28 @@
 """This provides useful general math tools.
 
 Functions:
+intd       Represent a floating point number as an integer.
 safe_log   log, but returns an arbitrarily small number for log(0).
 safe_exp   exp, but returns a large or small number instead of overflows.
 
 """
-
 import math
+
+def intd(x, digits_after_decimal=0):
+    """intd(x[, digits_after_decimal]) -> int x, rounded
+
+    Represent a floating point number with some digits after the
+    decimal point as an integer.  This is useful when floating point
+    comparisons are failing due to precision problems.  e.g.
+    intd(5.35, 1) -> 54.
+
+    """
+    precision = 10.**digits_after_decimal
+    if x >= 0:
+        x = int(x * precision + 0.5)
+    else:
+        x = int(x * precision - 0.5)
+    return x
 
 def safe_log(n, zero=None, neg=None):
     """safe_log(n, zero=None, neg=None) -> log(n)
