@@ -10,4 +10,6 @@ split    Split a string using many delimiters.
 
 """
 
+# XXX allow split separators to be negated
+
 from cstringfns import *
