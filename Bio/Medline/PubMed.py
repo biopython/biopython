@@ -30,17 +30,7 @@ import sgmllib
 from Bio import File
 from Bio.WWW import NCBI
 from Bio.Medline import Medline
-
-class _Timer:
-    # This class implements a simple countdown timer.
-    def __init__(self, delay):
-        self.last_time = 0.0
-        self.delay = delay
-    def wait(self):
-        how_long = self.last_time + self.delay - time.time()
-        if how_long > 0:
-            time.sleep(how_long)
-        self.last_time = time.time()
+from Bio.WWW import RequestLimiter
 
 class Dictionary:
     """Access PubMed using a read-only dictionary interface.
@@ -59,7 +49,7 @@ class Dictionary:
 
         """
         self.parser = parser
-        self._timer = _Timer(delay)
+        self.limiter = RequestLimiter(delay)
 
     def __len__(self):
         raise NotImplementedError, "PubMed contains lots of entries"
@@ -103,7 +93,7 @@ class Dictionary:
         """
         # First, check to see if enough time has passed since my
         # last query.
-        self._timer.wait()
+        self.limiter.wait()
         
         try:
             handle = NCBI.pmfetch(
@@ -252,7 +242,7 @@ def download_many(ids, callback_fn, broken_fn=None, delay=120.0, batchsize=500,
     # in the parser may disrupt the whole download process.
     if batchsize > 500 or batchsize < 1:
         raise ValueError, "batchsize must be between 1 and 500"
-    timer = _Timer(delay)
+    limiter = RequestLimiter(delay)
     current_batchsize = batchsize
     
     # Loop until all the ids are processed.  We want to process as
@@ -269,7 +259,7 @@ def download_many(ids, callback_fn, broken_fn=None, delay=120.0, batchsize=500,
         id_str = ','.join(ids[:current_batchsize])
 
         # Make sure enough time has passed before I do another query.
-        timer.wait()
+        limiter.wait()
         try:
             # Query PubMed.  If one or more of the id's are broken,
             # this will raise an IOError.
