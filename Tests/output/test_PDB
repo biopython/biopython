@@ -1,3 +1,4 @@
+test_PDB
 PDBConstructionException: Atom N defined twice in residue <Residue het=  resseq=2 icode= > at line 19.
 Exception ignored.
 Some atoms or residues will be missing in the data structure.
