@@ -181,7 +181,7 @@ Now that we've got what we need, let's get into the installation:
 
 \end{enumerate}
 
-\subsubsection{Installation of FreeBSD}
+\subsubsection{Installation on FreeBSD}
 
 Johann Visagie has been kind enough to create (and keep updated) a FreeBSD port of Biopython. Thanks to the wonders of the ports system, this means that all you need to do to install Biopython on FreeBSD is do the following as root:
 
@@ -198,7 +198,7 @@ If you want more information on FreeBSD and things, Johann has written a nice pr
 \subsection{Installing from source on Windows}
 \label{sec:windows_install}
 
-This section deals with installing the source (ie. from CVS or from a source zip file) on a Windows machine. Much of the information from the UNIX install applies here, so it would be good to read section~\ref{sec:unix_install} before starting. Also, a little warning -- I (Brad) am writing these instructions based on very limited experience with Windows; I am basically a UNIX geek. So if you know more about Windows and want to add/correct things in this section, please feel let us know!
+This section deals with installing the source (i.~e.~from CVS or from a source zip file) on a Windows machine. Much of the information from the UNIX install applies here, so it would be good to read section~\ref{sec:unix_install} before starting. Also, a little warning -- I (Brad) am writing these instructions based on very limited experience with Windows; I am basically a UNIX geek. So if you know more about Windows and want to add/correct things in this section, please feel let us know!
 
 
 I have successfully managed to use distutils to compile Biopython with Borland's free C++ compiler (available from \ahrefurl{\url{http://www.inprise.com/bcppbuilder/freecompiler/}}). It should also be possible with other Distutils supported compilers (please provide info if you've done this!).
@@ -234,7 +234,14 @@ Now that you've got everything installed, skip on ahead to section~\ref{sec:is_w
 
 \subsection{Installing using RPMs}
 
-People who use RPM based systems might like to install everything with a RPM to use it's packaging system. Additionally, this saves the necessity of having a C compiler and compiling things. 
+Warning. Right now we're not making RPMs for biopython (because I
+stopped using an RPM system, basically). If anyone wants to pick this
+up, or feels especially strongly that they'd like RPMs, please let us
+know.
+
+To simplify things for people running RPM-based systems, biopython can
+also be installed via the RPM system. Additionally, this saves the 
+necessity of having a C compiler to install biopython. 
 
 
 Installing Biopython from a RPM package should be much the same process as used for other RPMs. If you need general information about how RPMs work, the best place to go is \ahrefurl{\url{http://www.rpm.org}}.
@@ -381,7 +388,7 @@ Even though this is a sequence object, we can deal with it in some ways as if it
 Seq('GATGGGCC', IUPACUnambiguousDNA())
 \end{verbatim}
 
-Two things are interesting to note. First, this follows the normal conventions for python sequences.  So the first element of the sequence is 0 (which is normal for computer science, but not so normal for biology). When you do a slice the first item is included (ie. 4 in this case) and the last is excluded (12 in this case), which is the way things work in python, but of course not necessarily the way everyone in the world would expect. The main goal is to stay consistent with what python does. The second thing to notice is that the slice is performed on the sequence data string, but the new object produced retains the alphabet information from the original Seq object.
+Two things are interesting to note. First, this follows the normal conventions for python sequences.  So the first element of the sequence is 0 (which is normal for computer science, but not so normal for biology). When you do a slice the first item is included (i.~e.~4 in this case) and the last is excluded (12 in this case), which is the way things work in python, but of course not necessarily the way everyone in the world would expect. The main goal is to stay consistent with what python does. The second thing to notice is that the slice is performed on the sequence data string, but the new object produced retains the alphabet information from the original Seq object.
 
 
 You can treat the Seq object like the string in many ways:
@@ -457,7 +464,7 @@ Now that the nature of the sequence object makes some sense, the next thing to l
 Seq('GAUCGAUGGGCCUAUAUAGGAUCGAAAAUCGC', IUPACUnambiguousRNA())
 \end{verbatim}
 
-The alphabet of the new RNA Seq object is created for free for you, so again, dealing with a Seq object is no more difficult then dealing with a simple string.
+The alphabet of the new RNA Seq object is created for free, so again, dealing with a Seq object is no more difficult then dealing with a simple string.
 
 
 You can also reverse transcribe RNA sequences:
@@ -806,7 +813,7 @@ Now that we've got the index, we can create an in-memory dictionary to access th
 >>> orchid_dict = Fasta.Dictionary("my_orchid_dict.idx", dna_parser)
 \end{verbatim} 
 
-The dictionary is created from our \verb|my_orchid_dict.idx| file, and returns Sequence objects. The type of objects returned by the index file are based on the second argument passed. This argument should be a parser that the index file will pass the information through before returning it. If no parser is passed, then the dictionary will just return the raw object (ie. exactly as it appears in the file). 
+The dictionary is created from our \verb|my_orchid_dict.idx| file, and returns Sequence objects. The type of objects returned by the index file are based on the second argument passed. This argument should be a parser that the index file will pass the information through before returning it. If no parser is passed, then the dictionary will just return the raw object (i.~e.~exactly as it appears in the file). 
 
 
 The parser that we pass here is a \verb|SequenceParser| which converts FASTA files into \verb|SeqRecord| objects. The \verb|SequenceParser| takes an argument of the alphabet we should be using for the sequences. Since the parser can't be smart enough to know exactly what it will be parsing, we need to tell it. If no alphabet is provided, then the parser will default to \verb|Alphabet.generic_alphabet|.
@@ -1054,7 +1061,7 @@ section~\ref{sec:running-www-blast}. The
 second way is to manually do the BLAST on the NCBI site, and then save
 the results. In order to have your output in the right format, you
 need to save the final BLAST page you get (you know, the one with all
-of the interesting results!) as HTML (ie. do not save as text!) to a
+of the interesting results!) as HTML (i.~e.~do not save as text!) to a
 file. The important point is that you do not have to use biopython
 scripts to fetch the data in order to be able to parse it.
 
@@ -1385,7 +1392,7 @@ Hopefully the \verb|BlastErrorParser| will make it much easier to debug and deal
 
 \subsection{Dealing with PSIBlast}
 
-We should write some stuff to make it easier to deal directly with PSIBlast from scripts (ie. output the align file in the proper format from an alignment). I need to look at PSIBlast more and come up with some good ways of going this...
+We should write some stuff to make it easier to deal directly with PSIBlast from scripts (i.~e.~output the align file in the proper format from an alignment). I need to look at PSIBlast more and come up with some good ways of going this...
 
 \section{SWISS-PROT}
 \label{sec:swiss_prot}
@@ -1909,7 +1916,7 @@ where:
 \begin{itemize}
   \item $IC_{j}$ -- The information content for the jth column in an alignment.
   \item $N_{a}$ -- The number of letters in the alphabet.
-  \item $P_{ij}$ -- The frequency of a particular letter in the column (ie. if G occured 3 out of 6 times in an aligment column, this would be 0.5)
+  \item $P_{ij}$ -- The frequency of a particular letter in the column (i.~e.~if G occured 3 out of 6 times in an aligment column, this would be 0.5)
   \item $Q_{i}$ --  The expected frequency of a letter. This is an
   optional argument, usage of which is left at the user's
   discretion. By default, it is automatically assigned to 0.05 for a
@@ -2093,7 +2100,7 @@ my_arm = SubsMat.SeqMat(replace_info)
 \end{verbatim}
 
 With this accepted replacement matrix, we can go right ahead and
-create our log odds matrix (ie. a standard type Substitution Matrix):
+create our log odds matrix (i.~e.~a standard type Substitution Matrix):
 
 \begin{verbatim}
 my_lom = SubsMat.make_log_odds_matrix(my_arm)
@@ -2120,7 +2127,7 @@ optional arguments:
 
 
   \item \verb|round_digit| - The digit to round to in the matrix. This
-  defaults to 0 (ie. no digits).
+  defaults to 0 (i.~e.~no digits).
 
 \end{itemize}
 
@@ -2217,7 +2224,7 @@ The first level of dealing with Sequence features is the SeqFeature class itself
 
   \item[strand] -- The strand on the sequence that the feature is located on. This may either be '1' for the top strand, '-1' for the bottom strand, or '0' for both strands (or if it doesn't matter). Keep in mind that this only really makes sense for double stranded DNA, and not for proteins or RNA. 
 
-  \item[qualifiers] -- This is a python dictionary of additional information about the feature. The key is some kind of terse one-word description of what the information contained in the value is about, and the value is the actual information. For example, a common key for a qualifier might be ``evidence'' and the value might be ``computational (non-experimental).'' This is just a way to let the person who is looking at the feature know that it has not be experimentally (ie. in a wet lab) confirmed.
+  \item[qualifiers] -- This is a python dictionary of additional information about the feature. The key is some kind of terse one-word description of what the information contained in the value is about, and the value is the actual information. For example, a common key for a qualifier might be ``evidence'' and the value might be ``computational (non-experimental).'' This is just a way to let the person who is looking at the feature know that it has not be experimentally (i.~e.~in a wet lab) confirmed.
   
   \item[sub\_features] -- A very important feature of a feature is that it can have additional \verb|sub_features| underneath it. This allows nesting of features, and helps us to deal with things such as the GenBank/EMBL feature lines in a (we hope) intuitive way.
 \end{description}
@@ -2232,13 +2239,27 @@ To show an example of SeqFeatures in action, let's take a look at the following 
 To look at the easiest attributes of the SeqFeature first, if you got a SeqFeature object for this it would have it \verb|type| of 'mRNA', a \verb|strand| of -1 (due to the 'complement'), and would have None for the \verb|ref| and \verb|ref_db| since there are no references to external databases. The \verb|qualifiers| for this SeqFeature would be a python dictionarary that looked like \verb|{'gene' : 'F28B23.12'}|.
 
 
-Now lets, look at the more tricky part, how the 'join' in the location line is handled. First, the location for the top level SeqFeature (the one we are dealing with right now) is set as going from '<49223' to '>50208' (see section~\ref{sec:locations} for the nitty gritty on how fuzzy locations like this are handled). So the location of the top level object is the entire span of the feature. So, how do you get at the information in the 'join?' Well, that is where the \verb|sub_features| go in.
+Now lets, look at the more tricky part, how the 'join' in the location 
+line is handled. First, the location for the top level SeqFeature (the 
+one we are dealing with right now) is set as going from 
+\verb|'<49223' to '>50208'| (see section~\ref{sec:locations} for 
+the nitty gritty on how fuzzy locations like this are handled). 
+So the location of the top level object is the entire span of the 
+feature. So, how do you get at the information in the 'join?' 
+Well, that's where the \verb|sub_features| go in.
 
 
-The \verb|sub_features| attribute will have a list with two SeqFeature objects in it, and these contain the information in the join. Let's look at \verb|top_level_feature.sub_features[0]|; the first \verb|sub_feature|). This object is a SeqFeature object with a \verb|type| of '\verb|mRNA_join|,' a \verb|strand| of -1 (inherited from the parent SeqFeature) and a location going from '<49223' to '49300'. 
+
+The \verb|sub_features| attribute will have a list with two SeqFeature 
+objects in it, and these contain the information in the join. Let's 
+look at \verb|top_level_feature.sub_features[0]|; the first 
+\verb|sub_feature|). This object is a SeqFeature object with a 
+\verb|type| of '\verb|mRNA_join|,' a \verb|strand| of -1 (inherited 
+from the parent SeqFeature) and a location going from 
+\verb|'<49223' to '49300'|. 
 
 
-So, the \verb|sub_features| allow you to get at the internal information if you want it (ie. if you were trying to get only the exons out of a genomic sequence), or just to deal with the broad picture (ie. you just want to know that the coding sequence for a gene lies in a region). Hopefully this structuring makes it easy and intuitive to get at the sometimes complex information that can be contained in a SeqFeature.
+So, the \verb|sub_features| allow you to get at the internal information if you want it (i.~e.~if you were trying to get only the exons out of a genomic sequence), or just to deal with the broad picture (i.~e.~you just want to know that the coding sequence for a gene lies in a region). Hopefully this structuring makes it easy and intuitive to get at the sometimes complex information that can be contained in a SeqFeature.
 
 \subsubsection{Locations}
 \label{sec:locations}
@@ -2246,9 +2267,11 @@ So, the \verb|sub_features| allow you to get at the internal information if you 
 In the section on SeqFeatures above, we skipped over one of the more difficult parts of Features, dealing with the locations. The reason this can be difficult is because of fuzziness of the positions in locations. Before we get into all of this, let's just define the vocabulary we'll use to talk about this. Basically there are two terms we'll use:
 
 \begin{description}
-  \item[position] -- This refers to a single position on a sequence, which may be fuzzy or not. For instance, 5, 20, <100 and 3\^5 are all positions.
+  \item[position] -- This refers to a single position on a sequence, 
+  which may be fuzzy or not. For instance, 5, 20, \verb|<100| and 
+  \verb|3^5| are all positions.
 
-  \item[location] -- A location is two positions that defines a region of a sequence. For instance 5..20 (ie. 5 to 20) is a location.
+  \item[location] -- A location is two positions that defines a region of a sequence. For instance 5..20 (i.~e.~5 to 20) is a location.
 \end{description}
 
 I just mention this because sometimes I get confused between the two.
@@ -2259,13 +2282,30 @@ The complication in dealing with locations comes in the positions themselves. In
 \begin{description}
   \item[ExactPosition] -- As its name suggests, this class represents a position which is specified as exact along the sequence. This is represented as just a a number, and you can get the position by looking at the \verb|position| attribute of the object.
 
-  \item[BeforePosition] -- This class represents a fuzzy position that occurs prior to some specified site. In GenBank/EMBL notation, this is represented as something like '<13', signifying that the real position is located somewhere less then 13. To get the specified upper boundary, look at the \verb|position| attribute of the object.
+  \item[BeforePosition] -- This class represents a fuzzy position 
+  that occurs prior to some specified site. In GenBank/EMBL notation, 
+  this is represented as something like \verb|'<13'|, signifying that 
+  the real position is located somewhere less then 13. To get 
+  the specified upper boundary, look at the \verb|position| 
+  attribute of the object.
 
-  \item[AfterPosition] -- Contrary to \verb|BeforePosition|, this class represents a position that occurs after some specified site. This is represented in GenBank as '>13', and like \verb|BeforePosition|, you get the boundary number by looking at the \verb|position| attribute of the object.
+  \item[AfterPosition] -- Contrary to \verb|BeforePosition|, this 
+  class represents a position that occurs after some specified site. 
+  This is represented in GenBank as \verb|'>13'|, and like 
+  \verb|BeforePosition|, you get the boundary number by looking 
+  at the \verb|position| attribute of the object.
 
   \item[WithinPosition] -- This class models a position which occurs somewhere between two specified nucleotides. In GenBank/EMBL notation, this would be represented as '(1.5)', to represent that the position is somewhere within the range 1 to 5. To get the information in this class you have to look at two attributes. The \verb|position| attribute specifies the lower boundary of the range we are looking at, so in our example case this would be one. The \verb|extension| attribute specifies the range to the higher boundary, so in this case it would be 4. So \verb|object.position| is the lower boundary and \verb|object.position + object.extension| is the upper boundary.
 
-  \item[BetweenPosition] -- This class deals with a position that occurs between two coordinates. For instance, you might have a protein binding site that occurs between two nucleotides on a sequence. This is represented as '2\^3', which indicates that the real position happens between position 2 and 3. Getting this information from the object is very similar to \verb|WithinPosition|, the \verb|position| attribute specifies the lower boundary (2, in this case) and the \verb|extension| indicates the range to the higher boundary (1 in this case).
+  \item[BetweenPosition] -- This class deals with a position that 
+  occurs between two coordinates. For instance, you might have a 
+  protein binding site that occurs between two nucleotides on a 
+  sequence. This is represented as \verb|'2^3'|, which indicates that 
+  the real position happens between position 2 and 3. Getting 
+  this information from the object is very similar to 
+  \verb|WithinPosition|, the \verb|position| attribute specifies 
+  the lower boundary (2, in this case) and the \verb|extension| 
+  indicates the range to the higher boundary (1 in this case).
 \end{description}
 
 Now that we've got all of the types of fuzzy positions we can have taken care of, we are ready to actually specify a location on a sequence. This is handled by the \verb|FeatureLocation| class. An object of this type basically just holds the potentially fuzzy start and end positions of a feature. You can create a \verb|FeatureLocation| object by creating the positions and passing them in:
@@ -3165,8 +3205,8 @@ Handles provide (at least) two benefits over plain text information:
   load them all.
 \end{enumerate}
 
-Handles can deal with text information that is being read (ie. reading 
-from a file) or written (ie. writing information to a file). In the
+Handles can deal with text information that is being read (i.~e.~reading 
+from a file) or written (i.~e.~writing information to a file). In the
 case of a ``read'' handle, commonly used functions are \verb|read()|,
 which reads the entire text information from the handle, and
 \verb|readline()|, which reads information one line at a time. For
