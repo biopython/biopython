@@ -1,0 +1,338 @@
+METATOOL OUTPUT Version 3.5 (28.03.2001) C:\METATOOL\META35~1.EXE
+
+INPUT FILE: example.txt
+INTERNAL METABOLITES: 16
+REACTIONS: 24
+
+  6 int      CoA
+  5 int      PEP
+  5 external CO2
+  5 int      OAA
+  5 int      OG
+  4 int      Pyr
+  4 external ATP
+  4 int      Glu
+  3 external ADP
+  3 external NAD
+  3 int      AcCoA
+  3 external NADH
+  3 int      IsoCit
+  3 int      SucCoA
+  3 int      Succ
+  3 int      Fum
+  3 int      Mal
+  3 int      Asp
+  2 int      Cit
+  2 external NADP
+  2 external NADPH
+  2 int      Gly
+  2 external NH3
+  2 int      Ala
+  1 external PG
+  1 external FAD
+  1 external FADH2
+  1 external Aspex
+  1 external AMP
+  1 external Gluex
+  1 external Alaex
+  1 external Sucex
+ 32 metabolites,  88 is the summarized frequency
+
+edges	frequency of nodes
+  0	  0
+  1	  8
+  2	  6
+  3	 10
+  4	  3
+  5	  4
+  6	  1
+
+STOICHIOMETRIC MATRIX
+ 
+ matrix dimension r16 x c24
+ 0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0 -1  0 
+ 0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0 -1 -1  0  0  0  0  0  0 
+ 0  0  0  0  0  0 -1  1 -1  0  0  0  0  0  0  0  0  0  0  0  0 -1  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  1 -1  0  0  0  0  0  0  0  0 
+ 0  0  0  0  1 -1  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0 
+ 0  0  0  1 -1  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0 
+ 0  0  1 -1  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0
+ 0  0 -1  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0 -1 
+ 0  0  0  0  0  0  1 -1  1  0  0  0  1 -1  0  0  0  0  0  0  0  0  0  0 
+ 0  1  0  0  0  0  0  0  0  0  0  0 -1  0 -1  0  0  0  0  0  0  0  0  0 
+ 0 -1  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  1 -1  0  0  0  0 -1  0  0  0  0  0  0 -1  1  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  1 -1  0  0  0 -1  0  0  0  0  0  0  0  0 
+ 0  0  1  0  0  0  0  0  0  0 -1  1  0 -1  0  1  0  0  0  0  0  0  0  1 
+ 0  0  0  0  0  0  0  0 -1  1 -1  0  0  0  0  0  0  0  0  0 -1  0  0  0 
+ 1  0  0  0  0  0  0  0  0 -1  0  0  0  0  0  0  0  0  1 -1  1  0  0  0 
+The following line indicates reversible (0) and irreversible reactions (1)
+ 0  0  0  0  0  0  0  0  0  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1 
+rows and columns are sorted as declared in the inputfile
+
+
+KERNEL
+ 
+ matrix dimension r9 x c24
+ 1  1  1  1  1  1  0  0  0  1  1  1  1  1  0  0  0  0  0  0  0  0  0  0 
+ 2  1  0  1  1  2  1  1  0  2  2  1  0  0  1  1  1  0  0  0  0  0  0  0 
+ 0  0  0  0  1  1  1  1  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0 
+ 1  1  0  1  1  2  0  0  0  2  2  1  0  0  1  1  0  0  1  0  0  0  0  0 
+ 1  1  0  1  1  2  0  0  0  2  2  1  0  0  1  1  0  0  0 -1  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  1  0  0  0 
+ 3  2  0  1  1  2  0  1  0  3  3  2  1  0  1  1  0  0  0  0  0  1  0  0 
+ 1  0  0  0  0  0  0  1  1  1  0  0  0  0  0  0  0  0  0  0  0  0  1  0 
+ 2  1 -1  0  0  1  0  0  0  2  2  1  0  0  1  1  0  0  0  0  0  0  0  1 
+24 reactions (columns) are sorted in the same order as in the ENZREV ENZIRREV section.
+
+ enzymes
+
+ 1:	 Eno Acn SucCD Sdh Fum Mdh Pyk AceEF GltA Icd SucAB irreversible
+ 2:	 (2 Eno) Acn Sdh Fum (2 Mdh) AspC Gdh (2 Pyk) (2 AceEF) GltA Icl Mas AspCon irreversible
+ 3:	 Fum Mdh AspC Gdh AspA irreversible
+ 4:	 Eno Acn Sdh Fum (2 Mdh) (2 Pyk) (2 AceEF) GltA Icl Mas Pck irreversible
+ 5:	 Eno Acn Sdh Fum (2 Mdh) (2 Pyk) (2 AceEF) GltA Icl Mas -Ppc irreversible
+ 6:	 Pyk Pps irreversible
+ 7:	 (3 Eno) (2 Acn) Sdh Fum (2 Mdh) Gdh (3 Pyk) (3 AceEF) (2 GltA) Icd Icl Mas GluCon irreversible
+ 8:	 Eno Gdh IlvEAvtA Pyk AlaCon irreversible
+ 9:	 (2 Eno) Acn -SucCD Mdh (2 Pyk) (2 AceEF) GltA Icl Mas SucCoACon irreversible
+
+ overall reaction
+
+ 1:	2 ADP + FAD + NADP + 3 NAD + PG = 2 ATP + FADH2 + NADPH + 3 NADH + 3 CO2
+ 2:	2 ADP + NH3 + FAD + NADPH + 4 NAD + 2 PG = 2 ATP + Aspex + FADH2 + NADP + 4 NADH + 2 CO2
+ 3:	NADPH + NAD = NADP + NADH
+ 4:	ADP + FAD + 4 NAD + PG = ATP + FADH2 + 4 NADH + 3 CO2
+ 5:	2 ADP + FAD + 4 NAD + PG = 2 ATP + FADH2 + 4 NADH + 3 CO2
+ 6:	ADP = AMP
+ 7:	3 ADP + NH3 + FAD + 5 NAD + 3 PG = Gluex + 3 ATP + FADH2 + 5 NADH + 4 CO2
+ 8:	ADP + NH3 + NADPH + PG = Alaex + ATP + NADP
+ 9:	ADP + 3 NAD + 2 PG = Sucex + ATP + 3 NADH + 2 CO2
+
+SUBSETS OF REACTIONS
+ 
+ matrix dimension r21 x c24
+ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  1  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+ 0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0 
+ 0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  1  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1 
+24 reactions (columns) are sorted in the same order as in the ENZREV ENZIRREV section.
+
+ enzymes
+
+ 1:	 Eno reversible
+ 2:	 Acn GltA irreversible
+ 3:	 SucCD reversible
+ 4:	 Sdh reversible
+ 5:	 Fum reversible
+ 6:	 Mdh reversible
+ 7:	 AspC reversible
+ 8:	 Gdh reversible
+ 9:	 IlvEAvtA AlaCon irreversible
+ 10:	 Pyk irreversible
+ 11:	 AceEF irreversible
+ 12:	 Icd irreversible
+ 13:	 SucAB irreversible
+ 14:	 Icl Mas irreversible
+ 15:	 AspCon irreversible
+ 16:	 AspA irreversible
+ 17:	 Pck irreversible
+ 18:	 Ppc irreversible
+ 19:	 Pps irreversible
+ 20:	 GluCon irreversible
+ 21:	 SucCoACon irreversible
+
+ overall reaction
+
+ 1:	PG = PEP
+ 2:	OAA + AcCoA = IsoCit + CoA
+ 3:	SucCoA + ADP = Succ + CoA + ATP
+ 4:	Succ + FAD = Fum + FADH2
+ 5:	Fum = Mal
+ 6:	Mal + NAD = OAA + NADH
+ 7:	Glu + OAA = Asp + OG
+ 8:	OG + NH3 + NADPH = Glu + NADP
+ 9:	Glu + Pyr = OG + Alaex
+ 10:	PEP + ADP = Pyr + ATP
+ 11:	CoA + Pyr + NAD = AcCoA + NADH + CO2
+ 12:	IsoCit + NADP = OG + NADPH + CO2
+ 13:	OG + CoA + NAD = SucCoA + NADH + CO2
+ 14:	IsoCit + AcCoA = Mal + Succ + CoA
+ 15:	Asp = Aspex
+ 16:	Asp = Fum + NH3
+ 17:	OAA + ATP = PEP + ADP + CO2
+ 18:	PEP + CO2 = OAA
+ 19:	Pyr + ATP = PEP + AMP
+ 20:	Glu = Gluex
+ 21:	SucCoA = CoA + Sucex
+
+REDUCED SYSTEM with 13 branch point metabolites in 21 reactions (columns)
+ 
+ matrix dimension r13 x c21
+ 0  0  0  0  0  0  1  0  0  0  0  0  0  0 -1 -1  0  0  0  0  0 
+ 0  0  0  0  0  0 -1  1 -1  0  0  0  0  0  0  0  0  0  0 -1  0 
+ 0  0  0  0  1 -1  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0 
+ 0  0  0  1 -1  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0 
+ 0  0  1 -1  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0 
+ 0  0 -1  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0 -1 
+ 0  0  0  0  0  0  1 -1  1  0  0  1 -1  0  0  0  0  0  0  0  0 
+ 0  1  0  0  0  0  0  0  0  0  0 -1  0 -1  0  0  0  0  0  0  0 
+ 0 -1  0  0  0  1 -1  0  0  0  0  0  0  0  0  0 -1  1  0  0  0 
+ 0 -1  0  0  0  0  0  0  0  0  1  0  0 -1  0  0  0  0  0  0  0 
+ 0  1  1  0  0  0  0  0  0  0 -1  0 -1  1  0  0  0  0  0  0  1 
+ 0  0  0  0  0  0  0  0 -1  1 -1  0  0  0  0  0  0  0 -1  0  0 
+ 1  0  0  0  0  0  0  0  0 -1  0  0  0  0  0  0  1 -1  1  0  0 
+The following line indicates reversible (0) and irreversible reactions (1)
+ 0  1  0  0  0  0  0  0  1  1  1  1  1  1  1  1  1  1  1  1  1 
+
+-> Branch metabolites are : 
+met                 	cons	built	reactions
+Asp                 	2	1	3	rii
+Glu                 	3	1	4	rrir
+Mal                 	1	2	3	rri
+Fum                 	1	2	3	rri
+Succ                	1	2	3	rri
+SucCoA              	2	1	3	iri
+OG                  	2	3	5	iirrr
+IsoCit              	2	1	3	rii
+OAA                 	3	2	5	irrii
+AcCoA               	2	1	3	iii
+CoA                 	2	4	6	iiirii
+Pyr                 	3	1	4	iiir
+PEP                 	2	3	5	riiii
+
+-> No branch metabolites are : 
+met                 	cons	built	reactions
+Ala                 	1	1	2	ri
+Gly                 	1	1	2	ii
+Cit                 	1	1	2	ir
+
+CONVEX BASIS
+ 
+ matrix dimension r12 x c24
+ 0  0  0  0  1  1  1  1  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  1  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  1  0  0  0 
+ 1  0  0  0  0  0  1  1  0  0  0  0  0  0  0  0  1  0  0  1  0  0  0  0
+ 1  0 -1 -1 -1 -1  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  1 
+ 1  0  0  0  0  0  0  1  1  1  0  0  0  0  0  0  0  0  0  0  0  0  1  0 
+ 1  1  1  1  1  1  0  0  0  1  1  1  1  1  0  0  0  0  0  0  0  0  0  0 
+ 2  1  0  0  0  0  0  1  0  1  1  1  1  0  0  0  0  0  0  1  0  1  0  0 
+ 1  1  0  1  1  2  0  0  0  2  2  1  0  0  1  1  0  0  1  0  0  0  0  0 
+ 2  1  0  1  1  2  1  1  0  2  2  1  0  0  1  1  1  0  0  0  0  0  0  0 
+ 2  1 -1  0  0  1  0  0  0  2  2  1  0  0  1  1  0  0  0  0  0  0  0  1 
+ 3  2  0  1  1  2  0  1  0  3  3  2  1  0  1  1  0  0  0  0  0  1  0  0 
+
+ enzymes
+
+ 1:	 Fum Mdh AspC Gdh AspA irreversible
+ 2:	 Pck Ppc irreversible
+ 3:	 Pyk Pps irreversible
+ 4:	 Eno AspC Gdh AspCon Ppc irreversible
+ 5:	 Eno -SucCD -Sdh -Fum -Mdh Ppc SucCoACon irreversible
+ 6:	 Eno Gdh IlvEAvtA Pyk AlaCon irreversible
+ 7:	 Eno Acn SucCD Sdh Fum Mdh Pyk AceEF GltA Icd SucAB irreversible
+ 8:	 (2 Eno) Acn Gdh Pyk AceEF GltA Icd Ppc GluCon irreversible
+ 9:	 Eno Acn Sdh Fum (2 Mdh) (2 Pyk) (2 AceEF) GltA Icl Mas Pck irreversible
+ 10:	 (2 Eno) Acn Sdh Fum (2 Mdh) AspC Gdh (2 Pyk) (2 AceEF) GltA Icl Mas AspCon irreversible
+ 11:	 (2 Eno) Acn -SucCD Mdh (2 Pyk) (2 AceEF) GltA Icl Mas SucCoACon irreversible
+ 12:	 (3 Eno) (2 Acn) Sdh Fum (2 Mdh) Gdh (3 Pyk) (3 AceEF) (2 GltA) Icd Icl Mas GluCon irreversible
+
+ overall reaction
+
+ 1:	NADPH + NAD = NADP + NADH
+ 2:	ATP = ADP
+ 3:	ADP = AMP
+ 4:	NH3 + NADPH + CO2 + PG = Aspex + NADP
+ 5:	ATP + FADH2 + NADH + CO2 + PG = Sucex + ADP + FAD + NAD
+ 6:	ADP + NH3 + NADPH + PG = Alaex + ATP + NADP
+ 7:	2 ADP + FAD + NADP + 3 NAD + PG = 2 ATP + FADH2 + NADPH + 3 NADH + 3 CO2
+ 8:	ADP + NH3 + NAD + 2 PG = Gluex + ATP + NADH + CO2
+ 9:	ADP + FAD + 4 NAD + PG = ATP + FADH2 + 4 NADH + 3 CO2
+ 10:	2 ADP + NH3 + FAD + NADPH + 4 NAD + 2 PG = 2 ATP + Aspex + FADH2 + NADP + 4 NADH + 2 CO2
+ 11:	ADP + 3 NAD + 2 PG = Sucex + ATP + 3 NADH + 2 CO2
+ 12:	3 ADP + NH3 + FAD + 5 NAD + 3 PG = Gluex + 3 ATP + FADH2 + 5 NADH + 4 CO2
+
+CONSERVATION RELATIONS
+ 
+ matrix dimension r1 x c16
+ 0  0  0  0  0  0  0  1  0  0  0  0  1  1  0  0 
+ 1 :	SucCoA + AcCoA + CoA = const
+
+ELEMENTARY MODES
+ 
+ matrix dimension r16 x c24
+ 0  0  0  0  1  1  1  1  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  1  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  1  0  0  0 
+ 1  0  0  0  0  0  1  1  0  0  0  0  0  0  0  0  1  0  0  1  0  0  0  0 
+ 1  0 -1 -1 -1 -1  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  1 
+ 1  0 -1 -1  0  0  1  1  0  0  0  0  0  0  0  0  0  1  0  1  0  0  0  1 
+ 1  0  0  0  0  0  0  1  1  1  0  0  0  0  0  0  0  0  0  0  0  0  1  0 
+ 2  1 -1  0  0  1  0  0  0  2  2  1  0  0  1  1  0  0  0  0  0  0  0  1 
+ 1  1  1  1  1  1  0  0  0  1  1  1  1  1  0  0  0  0  0  0  0  0  0  0 
+ 3  1 -2 -1 -1  0  0  0  0  2  2  1  0  0  1  1  0  0  0  1  0  0  0  2 
+ 2  1  0  0  0  0  0  1  0  1  1  1  1  0  0  0  0  0  0  1  0  1  0  0 
+ 2  1  0  0  0  0  0  0  0  1  1  1  1  1  0  0  0  0  0  1  0  0  0  1 
+ 1  1  0  1  1  2  0  0  0  2  2  1  0  0  1  1  0  0  1  0  0  0  0  0 
+ 2  1  0  1  1  2  1  1  0  2  2  1  0  0  1  1  1  0  0  0  0  0  0  0 
+ 3  2  0  1  1  2  0  1  0  3  3  2  1  0  1  1  0  0  0  0  0  1  0  0 
+ 3  2  0  1  1  2  0  0  0  3  3  2  1  1  1  1  0  0  0  0  0  0  0  1 
+24 reactions (columns) are sorted in the same order as in the ENZREV ENZIRREV section.
+
+ enzymes
+
+ 1:	 Fum Mdh AspC Gdh AspA irreversible
+ 2:	 Pck Ppc irreversible
+ 3:	 Pyk Pps irreversible
+ 4:	 Eno AspC Gdh AspCon Ppc irreversible
+ 5:	 Eno -SucCD -Sdh -Fum -Mdh Ppc SucCoACon irreversible
+ 6:	 Eno -SucCD -Sdh AspC Gdh AspA Ppc SucCoACon irreversible
+ 7:	 Eno Gdh IlvEAvtA Pyk AlaCon irreversible
+ 8:	 (2 Eno) Acn -SucCD Mdh (2 Pyk) (2 AceEF) GltA Icl Mas SucCoACon irreversible
+ 9:	 Eno Acn SucCD Sdh Fum Mdh Pyk AceEF GltA Icd SucAB irreversible
+ 10:	 (3 Eno) Acn (-2 SucCD) -Sdh -Fum (2 Pyk) (2 AceEF) GltA Icl Mas Ppc (2 SucCoACon) irreversible
+ 11:	 (2 Eno) Acn Gdh Pyk AceEF GltA Icd Ppc GluCon irreversible
+ 12:	 (2 Eno) Acn Pyk AceEF GltA Icd SucAB Ppc SucCoACon irreversible
+ 13:	 Eno Acn Sdh Fum (2 Mdh) (2 Pyk) (2 AceEF) GltA Icl Mas Pck irreversible
+ 14:	 (2 Eno) Acn Sdh Fum (2 Mdh) AspC Gdh (2 Pyk) (2 AceEF) GltA Icl Mas AspCon irreversible
+ 15:	 (3 Eno) (2 Acn) Sdh Fum (2 Mdh) Gdh (3 Pyk) (3 AceEF) (2 GltA) Icd Icl Mas GluCon irreversible
+ 16:	 (3 Eno) (2 Acn) Sdh Fum (2 Mdh) (3 Pyk) (3 AceEF) (2 GltA) Icd SucAB Icl Mas SucCoACon irreversible
+
+ overall reaction
+
+ 1:	NADPH + NAD = NADP + NADH
+ 2:	ATP = ADP
+ 3:	ADP = AMP
+ 4:	NH3 + NADPH + CO2 + PG = Aspex + NADP
+ 5:	ATP + FADH2 + NADH + CO2 + PG = Sucex + ADP + FAD + NAD
+ 6:	ATP + FADH2 + NADPH + CO2 + PG = Sucex + ADP + FAD + NADP
+ 7:	ADP + NH3 + NADPH + PG = Alaex + ATP + NADP
+ 8:	ADP + 3 NAD + 2 PG = Sucex + ATP + 3 NADH + 2 CO2
+ 9:	2 ADP + FAD + NADP + 3 NAD + PG = 2 ATP + FADH2 + NADPH + 3 NADH + 3 CO2
+ 10:	FADH2 + 2 NAD + 3 PG = 2 Sucex + FAD + 2 NADH + CO2
+ 11:	ADP + NH3 + NAD + 2 PG = Gluex + ATP + NADH + CO2
+ 12:	ADP + NADP + 2 NAD + 2 PG = Sucex + ATP + NADPH + 2 NADH + 2 CO2
+ 13:	ADP + FAD + 4 NAD + PG = ATP + FADH2 + 4 NADH + 3 CO2
+ 14:	2 ADP + NH3 + FAD + NADPH + 4 NAD + 2 PG = 2 ATP + Aspex + FADH2 + NADP + 4 NADH + 2 CO2
+ 15:	3 ADP + NH3 + FAD + 5 NAD + 3 PG = Gluex + 3 ATP + FADH2 + 5 NADH + 4 CO2
+ 16:	3 ADP + FAD + NADP + 6 NAD + 3 PG = Sucex + 3 ATP + FADH2 + NADPH + 6 NADH + 5 CO2
+
+The elementary modes (4) 6 10 12 16 are additional to the convex basis.
