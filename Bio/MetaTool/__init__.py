@@ -39,7 +39,7 @@ import Record
 
 
 class Iterator:
-    """Iterator interface to move over a file of Kabat entries one at a time.
+    """Iterator interface to move over a file of MetaTool entries one at a time.
     """
     def __init__(self, handle, parser = None):
         """Initialize the iterator.

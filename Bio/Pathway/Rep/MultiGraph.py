@@ -32,7 +32,7 @@ class MultiGraph:
         keys = self.__adjacency_list.keys()
         keys.sort()
         for key in keys:
-            values = self.__adjacency_list[key]
+            values = self.__adjacency_list[key].list()
             values.sort()
             s = s + "(" + repr(key) + ": " + ",".join(map(repr, values)) + ")" 
         return s + ">"
@@ -113,25 +113,34 @@ class MultiGraph:
         if not self.__adjacency_list.has_key(node):
             raise ValueError, "Unknown node: " + str(node)
         # remove node (and all out-edges) from adjacency list
-        self.__adjacency_list.remove(node)
+        del self.__adjacency_list[node]
         # remove all in-edges from adjacency list
-        for node in self.__adjacency_list.keys():
-            self.__adjacency_list[node] = filter(lambda x,node=node: x[0] is node,
-                                                 self.__adjacency_list[node].list())
+        for n in self.__adjacency_list.keys():
+            self.__adjacency_list[n] = HashSet(filter(lambda x,node=node: x[0] is not node,
+                                                      self.__adjacency_list[n].list()))
         # remove all refering pairs in label map
         for label in self.__label_map.keys():
-            self.__label_map[label] = filter(lambda x,node=node: x[0] is node or x[1] is node,
-                                             self.__label_map[label].list())
+            lm = HashSet(filter(lambda x,node=node: \
+                                (x[0] is not node) and (x[1] is not node),
+                                self.__label_map[label].list()))
+            # remove the entry completely if the label is now unused
+            if lm.empty():
+                del self.__label_map[label]
+            else:
+                self.__label_map[label] = lm
 
     def remove_edge(self, parent, child, label):
         """Removes edge. -- NOT IMPLEMENTED"""
-        pass # hm , this is a multigraph - how should this be implemented?
-
+        # hm , this is a multigraph - how should this be implemented?
+        raise NotImplementedError, "remove_edge is not yet implemented"
 
 # auxilliary graph functions
 
 def df_search(graph, root = None):
     """Depth first search of g.
+
+    Returns a list of all nodes that can be reached from the root node
+    in depth-first order.
 
     If root is not given, the search will be rooted at an arbitrary node.
     """
@@ -155,6 +164,9 @@ def df_search(graph, root = None):
 
 def bf_search(graph, root = None):
     """Breadth first search of g.
+
+    Returns a list of all nodes that can be reached from the root node
+    in breadth-first order.
 
     If root is not given, the search will be rooted at an arbitrary node.
     """

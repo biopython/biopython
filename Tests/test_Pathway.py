@@ -121,7 +121,7 @@ class MultiGraphTestCase(unittest.TestCase):
         l.sort()
         self.assertEqual(l, [('b','label1'),('b','label2')], "incorrect child edges")
         a.add_edge('b','a','label2')
-        self.assertEqual(a.parent_edges('a'), [('b','label2')])#, "incorrect parent edges")
+        self.assertEqual(a.parent_edges('a'), [('b','label2')], "incorrect parent edges")
         a.add_edge('b','c','label3')
         self.assertEqual(a.parent_edges('c'), [('b','label3')], "incorrect parent edges")
         l = a.children('b')
@@ -129,6 +129,19 @@ class MultiGraphTestCase(unittest.TestCase):
         self.assertEqual(l, ['a', 'c'], "incorrect children")
         self.assertEqual(a.children('d'), [], "incorrect children for singleton")
         self.assertEqual(a.parents('a'), ['b'], "incorrect parents")
+
+    def testRemoveNode(self):
+        a = MultiGraph(['a','b','c','d','e'])
+        a.add_edge('a','e','label1')
+        a.add_edge('b','e','label1')
+        a.add_edge('c','e','label2')
+        a.add_edge('d','e','label3')
+        a.add_edge('e','d','label4')
+        a.add_edge('a','b','label5')
+        a.remove_node('e')
+        b = MultiGraph(['a','b','c','d'])
+        b.add_edge('a','b','label5')
+        self.assertEqual(a, b)#, "incorrect node removal")
 
         
 class RepTestSuite(unittest.TestSuite):

@@ -57,8 +57,7 @@ class Reaction:
 
     reactants   -- map of involved species to their stochiometric coefficients:
                      reactants[S] = stochiometric constant for S
-    catalysts   -- list of tuples of catalysts involved in the same reaction
-                     step
+    catalysts   -- list of tuples of catalysts required for this reaction
     reversible  -- true iff reaction is reversible
     data        -- reference to arbitrary additional data
 

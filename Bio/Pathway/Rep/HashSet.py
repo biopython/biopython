@@ -66,6 +66,12 @@ class HashSet:
         """Returns the elements of this set in a list."""
         return self.__elements.keys()
 
+    # Information:
+
+    def empty(self):
+        """Returns true iff this set is empty."""
+        return len(self.__elements) == 0
+
     # Set operations:
 
     def union(self, s):
@@ -88,3 +94,5 @@ class HashSet:
                 p.append((i,j))
         return HashSet(p)
     
+
+
