@@ -2,7 +2,6 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-
 """Code for more fancy file handles.
 
 Classes:
@@ -30,6 +29,10 @@ the current record.  If it is already within the record, RecordFile.read
 will return data from the current position.
 
 """
+import warnings
+warnings.warn("Bio.RecordFile is deprecated. " +
+              "Please use standard parsers instead",
+              DeprecationWarning)
 
 import os
 import string
