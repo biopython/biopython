@@ -38,7 +38,7 @@ class SummaryInfo:
         self.alignment = alignment
         self.ic_vector = {}
 
-    def dumb_consensus(self, threshold = .7, ambiguous = "N",
+    def dumb_consensus(self, threshold = .7, ambiguous = "X",
                        consensus_alpha = None, require_multiple = 0):
         """Output a fast consensus sequence of the alignment.
 
@@ -63,6 +63,7 @@ class SummaryInfo:
         1 sequence be part of an alignment to put it in the consensus (ie.
         not just 1 sequence and gaps).
         """
+        # Iddo Friedberg, 1-JUL-2004: changed ambiguous default to "X"
         consensus = ''
 
         # find the length of the consensus we are creating
@@ -111,7 +112,7 @@ class SummaryInfo:
 
         return Seq(consensus, consensus_alpha)
 
-    def gap_consensus(self, threshold = .7, ambiguous = "N",
+    def gap_consensus(self, threshold = .7, ambiguous = "X",
                        consensus_alpha = None, require_multiple = 0):
         """Same as dumb_consensus(), but allows gap on the output.
 
@@ -119,6 +120,7 @@ class SummaryInfo:
 	character in consensus is gap. Let the user select gap character, now
 	it takes the same is input.
         """
+        # Iddo Friedberg, 1-JUL-2004: changed ambiguous default to "X"
         consensus = ''
 
         # find the length of the consensus we are creating
@@ -440,11 +442,13 @@ class SummaryInfo:
                   ("Start (%s) and end (%s) are not in the range %s to %s"
                    % (start, end, 0, len(self.alignment._records[0].seq)))
         # determine random expected frequencies, if necessary
+        # Iddo Friedberg, 1-JUL-2004: fixed self.alignment._alphabet.alphabet to 
+        # self.alignment._alphabet
         if not e_freq_table:
-            if isinstance(self.alignment._alphabet.alphabet,
+            if isinstance(self.alignment._alphabet,
                 Alphabet.ProteinAlphabet):
                 random_expected = Protein20Random
-            elif isinstance(self.alignment._alphabet.alphabet,
+            elif isinstance(self.alignment._alphabet,
                 Alphabet.NucleotideAlphabet):
                 random_expected = Nucleotide4Random
             else:
