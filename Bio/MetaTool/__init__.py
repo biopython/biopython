@@ -205,6 +205,12 @@ class _RecordConsumer:
             item = string.join( items[ 1: ] )
             self._enzymes.append( item.strip() )
 
+    def sum_is_constant_line( self, lines ):
+        for line in lines:
+            items = line.split( ':')
+            items = items[ 1 ].split( '=' )
+            self.data.sum_is_constant_lines.append( items[ 0 ] )
+
     def num_rows( self, num_rows ):
         pass
 
@@ -262,6 +268,14 @@ class _RecordConsumer:
         for reaction in self._reactions:
             self.data.convex_basis.reactions.append( reaction )
 
+    def end_conservation_relations( self, content ):
+        self.data.conservation_relations.matrix = Matrix.Matrix( self._vectors )
+        self.data.conservation_relations.enzymes = []
+        for enzyme in self._enzymes:
+            self.data.conservation_relations.enzymes.append( enzyme )
+        for reaction in self._reactions:
+            self.data.conservation_relations.reactions.append( reaction )
+
 
     def end_elementary_modes( self, content ):
         self.data.elementary_modes.matrix = Matrix.Matrix( self._vectors )
@@ -299,9 +313,10 @@ class _Scanner:
             "stoichiometric_tag", "kernel_tag", "subsets_tag", \
             "reduced_system_tag", "convex_basis_tag", \
             "conservation_relations_tag", "elementary_modes_tag", \
-            "reaction", "enzyme", "matrix_row", \
+            "reaction", "enzyme", "matrix_row", "sum_is_constant_line", \
             "end_stochiometric", "end_kernel", "end_subsets", \
-            "end_reduced_system", "end_convex_basis", "end_elementary_modes" ]
+            "end_reduced_system", "end_convex_basis", \
+            "end_conservation_relations", "end_elementary_modes" ]
 
         # make a parser that returns only the tags we are interested in
         expression = Martel.select_names( metatool_format.metatool_record,

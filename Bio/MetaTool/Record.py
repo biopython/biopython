@@ -51,12 +51,14 @@ class PathwayTransform:
         if( self.matrix != None ):
             out = out + '\nMatrix\n'
             out = out + str( self.matrix )
-        out = out + '\n Enzymes\n'
-        for enzyme in self.enzymes:
-            out = out + '%s\n' % enzyme
-        out = out + '\n Reactions\n'
-        for reaction in self.reactions:
-            out = out + '%s\n' % reaction
+        if( len( self.enzymes ) > 0 ):
+            out = out + '\n Enzymes\n'
+            for enzyme in self.enzymes:
+                out = out + '%s\n' % enzyme
+        if( len( self.reactions ) > 0 ):
+            out = out + '\n Reactions\n'
+            for reaction in self.reactions:
+                out = out + '%s\n' % reaction
         if( len( self.irreversible_vector ) > 0 ):
             out = out + '\n\nIrreversible\n\n'
             for scalar in self.irreversible_vector:
@@ -77,11 +79,13 @@ class Record:
         self.unbalanced_metabolites = []
         self.branch_metabolites = []
         self.non_branch_metabolites = []
+        self.sum_is_constant_lines = []
         self.stochiometric = PathwayTransform()
         self.kernel = PathwayTransform()
         self.subsets = PathwayTransform()
         self.reduced_system = PathwayTransform()
         self.convex_basis = PathwayTransform()
+        self.conservation_relations = PathwayTransform()
         self.elementary_modes = PathwayTransform()
 
     def __str__( self ):
@@ -115,6 +119,11 @@ class Record:
         out = out + str( self.reduced_system )
         out = out + '\n\nConvex Basis\n\n'
         out = out + str( self.convex_basis )
+        out = out + '\n\nConservation Relations\n\n'
+        out = out + str( self.conservation_relations )
+        out = out + '\n'
+        for line in self.sum_is_constant_lines:
+            out = out + '%s\n' % line
         out = out + '\n\nElementary Modes\n\n'
         out = out + str( self.elementary_modes )
         return out

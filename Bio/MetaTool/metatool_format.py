@@ -224,7 +224,7 @@ convex_basis_block = Group( "convex_basis_block", convex_basis_line +
     enzymes_block + Rep( blank_line ) + reactions_block + end_convex_basis )
 conservation_relations_block = Group( "conservation_relations_block", \
     conservation_relations_line + Rep( blank_line ) + matrix_block +
-    Opt( ToEol() ) + Rep( blank_line ) + sum_is_constant_block +
+    Rep( blank_line ) + sum_is_constant_block +
     end_conservation_relations )
 elementary_modes_block = Group( "elementary_modes_block", elementary_modes_line +
     Rep( blank_line ) + matrix_block + Opt( ToEol() ) + Rep( blank_line ) +
