@@ -1,0 +1,848 @@
+------------------------------------------------------------------------------
+
+                SWISS-PROT Protein Sequence Data Bank.
+                Release 37.0, December 1998
+
+------------------------------------------------------------------------------
+
+List of keywords
+
+------------------------------------------------------------------------------
+Amos Bairoch                              Email: bairoch@medecine.unige.ch
+Swiss Institute of Bioinformatics
+and University of Geneva
+Switzerland
+------------------------------------------------------------------------------
+Document name: KEYWLIST.TXT
+------------------------------------------------------------------------------
+
+3D-structure
+3Fe-4S
+4Fe-4S
+Acetoin biosynthesis
+Acetylation
+Acetylcholine receptor inhibitor
+Actin-binding
+Activator
+Acute phase
+Acyltransferase
+ADP-ribosylation
+AIDS
+Albinism
+Albumin
+Alginate biosynthesis
+Alkaloid metabolism
+Alkylation
+Alkylphosphonate uptake
+Allergen
+Allosteric enzyme
+Alpha-amylase inhibitor
+Alternative initiation
+Alternative splicing
+Alzheimer's disease
+Amidation
+Amino-acid biosynthesis
+Amino-acid transport
+Aminoacyl-tRNA synthetase
+Aminopeptidase
+Aminotransferase
+Amphibian skin
+Amyloid
+Amyloplast
+Amyotrophic lateral sclerosis
+Anion exchange
+ANK repeat
+Annexin
+Antenna complex
+Anti-oncogene
+Antiarsonate antibody
+Antibiotic
+Antibiotic biosynthesis
+Antibiotic resistance
+Antifreeze protein
+Antigen
+Antioxidant
+Antiviral
+Apoptosis
+Arabinose catabolism
+Arginine biosynthesis
+Arginine metabolism
+Aromatic amino acid biosynthesis
+Aromatic hydrocarbons catabolism
+Arsenical resistance
+Ascorbate biosynthesis
+Asparagine biosynthesis
+Aspartic protease inhibitor
+Aspartyl protease
+Atherosclerosis
+ATP synthesis
+ATP-binding
+Autoimmune encephalomyelitis
+Autoimmune uveitis
+Autoinducer induction
+Auxin biosynthesis
+B-cell
+B-cell activation
+Bacteriochlorophyll
+Bacteriocin
+Bacteriolytic enzyme
+Bait region
+Basement membrane
+Behavior
+Bence-Jones protein
+Bernard Soulier syndrome
+Bile acid catabolism
+Bile pigment
+Biological rhythms
+Biotin
+Biotin biosynthesis
+Blood coagulation
+Blood group antigen
+Bombesin family
+Bone
+Bradykinin
+Brain
+Branched-chain amino acid biosynthesis
+Branched-chain amino acid metabolism
+Bromodomain
+Cadmium
+Cadmium resistance
+Calcium
+Calcium channel
+Calcium channel inhibitor
+Calcium transport
+Calcium-binding
+Calcium/phospholipid-binding
+Calmodulin-binding
+Calvin cycle
+cAMP
+cAMP synthesis
+cAMP-binding
+Capping protein
+Capsid assembly
+Carbohydrate metabolism
+Carbon dioxide fixation
+Carboxypeptidase
+Cardiotoxin
+Carotenoid biosynthesis
+Cartilage
+Catecholamine biosynthesis
+Catecholamine metabolism
+CBS domain
+Cell adhesion
+Cell cycle
+Cell division
+Cell shape
+Cell wall
+Cellulose biosynthesis
+Cellulose degradation
+Centromere
+CF(0)
+CF(1)
+cGMP
+cGMP synthesis
+cGMP-binding
+Chaperone
+Charcot-Marie-Tooth disease
+Chelation
+Chemotaxis
+Chitin degradation
+Chitin-binding
+Chlorophyll
+Chlorophyll biosynthesis
+Chloroplast
+Cholesterol biosynthesis
+Cholesterol metabolism
+Chorion
+Chromate resistance
+Chromophore
+Chromosomal protein
+Chromosomal translocation
+Chronic granulomatous disease
+Chylomicron
+Citrate utilization
+Cleavage on pair of basic residues
+Coagulation
+Coat protein
+Coated pits
+Cobalamin biosynthesis
+Cobalt
+Cobalt transport
+Cockayne's syndrome
+Coiled coil
+Colicin
+Colicin transport
+Collagen
+Collagen degradation
+Competence
+Complement alternate pathway
+Complement pathway
+Cone-rod dystrophy
+Conidiation
+Conjugation
+Connective tissue
+Contraceptive
+Copper
+Copper transport
+Copulatory plug
+Core protein
+Covalent protein-DNA linkage
+Covalent protein-RNA linkage
+Crown gall tumor
+Cuticle
+Cyanelle
+Cyclin
+Cycloheximide resistance
+Cyclosporin
+Cysteine biosynthesis
+Cytadherence
+Cytochrome c-type biogenesis
+Cytokine
+Cytokinin biosynthesis
+Cytolysis
+Cytosine metabolism
+Cytoskeleton
+Cytotoxin
+D-amino acid
+Decarboxylase
+Defensin
+Dehydrin
+Dejerine-Sottas syndrome
+Dental caries
+Deoxyribonucleotide synthesis
+Detoxification
+Developmental protein
+Diabetes
+Diaminopimelate biosynthesis
+Differentiation
+Digestion
+Dioxygenase
+Dipeptidase
+Disease mutation
+DNA condensation
+DNA damage
+DNA excision
+DNA integration
+DNA packaging
+DNA priming
+DNA recombination
+DNA repair
+DNA replication
+DNA replication inhibitor
+DNA synthesis
+DNA-binding
+DNA-directed DNA polymerase
+DNA-directed RNA polymerase
+Down's syndrome
+Duplication
+Dwarfism
+Dynein
+Early protein
+EGF-like domain
+Egg white
+Eggshell
+Electron transport
+Elliptocytosis
+Elongation factor
+Embryo
+Enamel
+Enamel pellicle
+Endocytosis
+Endonuclease
+Endoplasmic reticulum
+Endorphin
+Endothelial cell
+Enterobactin biosynthesis
+Enterotoxin
+Envelope protein
+Eosinophil
+Erythrocyte
+Erythrocyte maturation
+Ethylene biosynthesis
+Excision nuclease
+Exonuclease
+Exopolysaccharide synthesis
+Extracellular matrix
+Eye lens protein
+FAD
+Fatty acid biosynthesis
+Fatty acid metabolism
+Feather
+Feedback-inhibition
+Fertilization
+Fiber protein
+Fibrinolysis
+Fibrous protein
+Fimbria
+Flagella
+Flagellar rotation
+Flavonoid biosynthesis
+Flavoprotein
+Flight
+FMN
+Folate biosynthesis
+Folate-binding
+Follitropin inhibitor
+Formylation
+Fruit ripening
+Fruiting body
+Fucose metabolism
+Fungicide
+Fusion protein
+G-protein coupled receptor
+Galactitol metabolism
+Galactose metabolism
+Galaptin
+Gamma-carboxyglutamic acid
+Gap
+Gap junction
+Gas vesicle
+Gaseous exchange
+Gastric juice
+Gastrulation
+Gaucher disease
+Germination
+Glucagon family
+Gluconate utilization
+Gluconeogenesis
+Glucose metabolism
+Glutamate biosynthesis
+Glutamine amidotransferase
+Glutaricaciduria
+Glutathione biosynthesis
+Glycerol metabolism
+Glycogen biosynthesis
+Glycogen metabolism
+Glycogen storage disease
+Glycolate pathway
+Glycolysis
+Glycoprotein
+Glycosidase
+Glycosome
+Glycosyltransferase
+Glyoxylate bypass
+Glyoxysome
+GM2-gangliosidosis
+GMP biosynthesis
+Golgi stack
+Gonadal differentiation
+Gout
+GPI-anchor
+Growth arrest
+Growth factor
+Growth factor binding
+Growth regulation
+GTP-binding
+GTPase activation
+Guanine-nucleotide releasing factor
+HDL
+Heat shock
+Helicase
+Hemagglutinin
+Heme
+Heme biosynthesis
+Hemoglobin-binding
+Hemolymph
+Hemolymph clotting
+Hemolysis
+Hemophilia
+Hemostasis
+Heparan sulfate
+Heparin-binding
+Heptad repeat pattern
+Herbicide resistance
+Hereditary hemolytic anemia
+Hexon protein
+Hexon-associated protein
+Histidine biosynthesis
+Histidine metabolism
+Homeobox
+Hormone
+Hyaluronic acid
+Hybridoma
+Hydrogen ion transport
+Hydrogen peroxide
+Hydrogenosome
+Hydrolase
+Hydroxylation
+Hyperlipoproteinemia
+Hypersensitive response
+Hypotensive agent
+Hypothalamus
+Hypothetical protein
+Hypusine
+Hypusine biosynthesis
+Ice nucleation
+IgA-binding protein
+IgE-binding protein
+IgG-binding protein
+Immune response
+Immunoglobulin C region
+Immunoglobulin fold
+Immunoglobulin V region
+Immunomodulation
+Immunopotentiation
+Inflammatory response
+Initiation factor
+Inner membrane
+Inositol biosynthesis
+Insect immunity
+Insulin family
+Integrin
+Interferon induction
+Intermediate filament
+Intron homing
+Invertase
+Iodination
+Ion transport
+Ionic channel
+Iron
+Iron storage
+Iron transport
+Iron-sulfur
+Isoleucine biosynthesis
+Isomerase
+Isoprene biosynthesis
+Karyogamy
+Keratin
+Keratinocyte
+Kinase
+Kinetoplast
+Kininogenase
+Kringle
+Lactation
+Lactose
+Lactose biosynthesis
+Lactose metabolism
+Laminin EGF-like domain
+Lantibiotic
+Late protein
+Latex
+LDL
+Leader peptide
+Leber's hereditary optic neuropathy
+Lectin
+Leucine biosynthesis
+Leucine-repeat
+Leukotriene biosynthesis
+Ligase
+Light-harvesting polypeptide
+Lignin biosynthesis
+Lignin degradation
+LIM motif
+Lipid A biosynthesis
+Lipid degradation
+Lipid metabolism
+Lipid synthesis
+Lipid transport
+Lipid-binding
+Lipocalin
+Lipopolysaccharide biosynthesis
+Lipoprotein
+Lipoyl
+Lithium
+Liver
+Luminescence
+Lyase
+Lysine biosynthesis
+Lysosome
+Macrophage
+Magnesium
+Malaria
+Maltose metabolism
+Mandelate pathway
+Manganese
+Mannose-binding
+Maple syrup urine disease
+Mast cell degranulation
+Matrix protein
+Meiosis
+Melanin biosynthesis
+Melatonin biosynthesis
+Membrane
+Membrane attack complex
+Menaquinone biosynthesis
+Mercuric resistance
+Mercury
+Merozoite
+Metachromatic leucodystrophy
+Metal-binding
+Metal-thiolate cluster
+Metalloenzyme inhibitor
+Metalloprotease
+Metalloprotease inhibitor
+Methanogenesis
+Methanol utilization
+Methionine biosynthesis
+Methionine metabolism
+Methotrexate resistance
+Methylation
+Methyltransferase
+MHC
+MHC I
+MHC II
+MHC III
+Microsome
+Microtubules
+Milk
+Mineral balance
+Mitochondrion
+Mitogen
+Mitosis
+Mobility protein
+Molybdenum
+Molybdenum cofactor biosynthesis
+Monoclonal antibody
+Monooxygenase
+Morphogen
+Motor protein
+mRNA capping
+mRNA processing
+mRNA splicing
+Mucopolysaccharidosis
+Multifunctional enzyme
+Multigene family
+Muscle
+Muscle protein
+Mutator protein
+Myelin
+Myogenesis
+Myosin
+Myristylation
+NAD
+NADP
+Nerve
+Neurodegeneration
+Neurogenesis
+Neuronal ceroid lipofuscinosis
+Neurone
+Neuropeptide
+Neurotoxin
+Neurotransmitter
+Neurotransmitter biosynthesis
+Neurotransmitter degradation
+Neurotransmitter transport
+Nickel
+Nitrate assimilation
+Nitrogen fixation
+Nodulation
+Noncapsid protein
+Nonstructural protein
+Nuclear protein
+Nuclease
+Nucleocapsid
+Nucleoprotein
+Nucleosome core
+Nucleotide biosynthesis
+Nucleotide metabolism
+Nucleotide-binding
+Nucleotidyltransferase
+Nylon degradation
+Obesity
+Oil body
+Olfaction
+Oncogene
+One-carbon metabolism
+Opioid peptide
+Organic radical
+Outer membrane
+Oxidative phosphorylation
+Oxidoreductase
+Oxygen transport
+Pair-rule protein
+Paired box
+Palmitate
+Pancreas
+Parotid gland
+Parturition
+Pathogenesis-related protein
+Pentaxin
+Pentose shunt
+Peptide transport
+Peptidoglycan synthesis
+Periplasmic
+Peroxidase
+Peroxisome
+PHA biosynthesis
+Phage lysis protein
+Phage maturation
+Phage recognition
+Phagocytosis
+PHB biosynthesis
+Phenylalanine biosynthesis
+Phenylalanine catabolism
+Phenylketonuria
+Phenylpropanoid metabolism
+Pheromone
+Pheromone response
+Pheromone-binding
+Phorbol-ester binding
+Phosphate transport
+Phospholipase A2 inhibitor
+Phospholipid biosynthesis
+Phospholipid degradation
+Phosphopantetheine
+Phosphorylation
+Phosphotransferase system
+Photoprotein
+Photoreceptor
+Photorespiration
+Photosynthesis
+Photosystem I
+Photosystem II
+Phycobilisome
+Phytochrome
+Pigment
+Pituitary
+Placenta
+Plant toxin
+Plasma
+Plasmid
+Plasmid copy control
+Plasmid partition
+Plasminogen activation
+Plastoquinone
+Platelet
+Polyamine biosynthesis
+Polymorphism
+Polyneuropathy
+Polyprotein
+Polysaccharide degradation
+Polysaccharide transport
+Porin
+Porphyrin biosynthesis
+Postsynaptic membrane
+Postsynaptic neurotoxin
+Potassium channel inhibitor
+Potassium transport
+PQQ
+Pregnancy
+Prenylation
+Prenyltransferase
+Presynaptic neurotoxin
+Primosome
+Prion
+Proline biosynthesis
+Proline metabolism
+Prostaglandin biosynthesis
+Prostaglandin metabolism
+Protease
+Protease inhibitor
+Proteasome
+Protein biosynthesis
+Protein kinase inhibitor
+Protein splicing
+Protein synthesis inhibitor
+Protein transport
+Proteoglycan
+Prothrombin activator
+Proto-oncogene
+Pseudohermaphroditism
+Purine biosynthesis
+Purine metabolism
+Purine salvage
+Putrescine biosynthesis
+Pyridine nucleotide biosynthesis
+Pyridoxal phosphate
+Pyridoxine biosynthesis
+Pyrimidine biosynthesis
+Pyrogen
+Pyrokinin
+Pyropoikilocytosis
+Pyruvate
+Queuosine biosynthesis
+Quinate metabolism
+Reaction center
+Receptor
+Redox-active center
+Repeat
+Repressor
+Respiratory chain
+Respiratory protein
+Restriction system
+Retinal protein
+Retinitis pigmentosa
+Retinol-binding
+Rhamnose metabolism
+Riboflavin biosynthesis
+Ribonucleoprotein
+Ribosomal protein
+RNA editing
+RNA repair
+RNA replication
+RNA-binding
+RNA-directed DNA polymerase
+RNA-directed RNA polymerase
+Rotamase
+rRNA processing
+rRNA-binding
+S-layer
+Saliva
+Sarcoplasmic reticulum
+Schiff base
+SCID
+Seed
+Seed embryo
+Seed storage protein
+Segmentation polarity protein
+Selectin
+Selenium
+Selenocysteine
+Self-incompatibility
+Semen
+Seminal vesicle
+Sensory transduction
+Septation
+Serine biosynthesis
+Serine esterase
+Serine protease
+Serine protease homolog
+Serine protease inhibitor
+Serine/threonine-protein kinase
+Serotonin biosynthesis
+Serpin
+Sexual differentiation
+SH2 domain
+SH3 domain
+SH3-binding
+Sialic acid
+Sigma factor
+Signal
+Signal recognition particle
+Signal transduction inhibitor
+Signal-anchor
+Silk
+Sodium channel inhibitor
+Sodium transport
+Sodium/potassium transport
+SOS mutagenesis
+SOS response
+Sperm
+Spermatogenesis
+Spermidine biosynthesis
+Sphingolipid metabolism
+Spliceosome
+Sporozoite
+Sporulation
+Starch biosynthesis
+Steroid biosynthesis
+Steroid metabolism
+Steroid-binding
+Steroidogenesis
+Sterol biosynthesis
+Stomach
+Storage protein
+Streptomycin biosynthesis
+Structural protein
+Submandibular gland
+Sugar transport
+Sulfatation
+Sulfate respiration
+Sulfate transport
+Superantigen
+Surface film
+Sushi
+Sweet-taste
+Symport
+Synapse
+Synaptosome
+Systemic lupus erythematosus
+T-cell
+T-cell differentiation
+T-DNA
+Tachykinin
+Teichoic acid biosynthesis
+Tellurium resistance
+Telomere
+Terminal addition
+Testis
+Testosterone
+Tetrahydrobiopterin biosynthesis
+Thiamin biosynthesis
+Thiamin catabolism
+Thiamine pyrophosphate
+Thick filament
+Thiol protease
+Thiol protease inhibitor
+Thionin
+Threonine biosynthesis
+Thrombophilia
+Thylakoid membrane
+Thymus
+Thyroid hormone
+Tissue remodeling
+TonB box
+Topoisomerase
+Toxin
+TPQ
+TPR domain
+Trans-acting factor
+Transcription
+Transcription regulation
+Transcription termination
+Transducer
+Transferase
+Transforming protein
+Transit peptide
+Translation regulation
+Translocation
+Transmembrane
+Transport
+Transposable element
+Transposition
+Tricarboxylic acid cycle
+Trimethoprim resistance
+Triplet repeat expansion
+tRNA processing
+tRNA-binding
+Trypanosomiasis
+Tryptophan biosynthesis
+TTQ
+Tumor antigen
+Tyrosine biosynthesis
+Tyrosine catabolism
+Tyrosine-protein kinase
+Ubiquinone
+Ubiquinone biosynthesis
+Ubiquitin conjugation
+Urea cycle
+Vanadium
+Vascularization
+Vasoactive
+Vasoconstrictor
+Vasodilator
+Venom
+Viral occlusion body
+Virulence
+Vision
+Vitamin A
+Vitamin B12
+Vitamin C
+Vitamin D
+Vitamin D3
+Vitamin K
+VLDL
+Voltage-gated channel
+von Willebrand disease
+WD repeat
+Whey
+Whooping cough
+Xeroderma pigmentosum
+Xylan degradation
+Xylose metabolism
+Yolk
+Yolk sac
+Zellweger syndrome
+Zinc
+Zinc-finger
+Zymogen
+
+----------------------------------------------------------------------------
+SWISS-PROT is copyright.  It is produced through a collaboration between the
+Swiss Institute  of  Bioinformatics   and the EMBL Outstation - the European
+Bioinformatics Institute. There are no restrictions on its use by non-profit
+institutions as long as its  content is in no way modified. Usage by and for
+commercial entities requires a license agreement.  For information about the
+licensing  scheme  see: http://www.isb-sib.ch/announce/ or send  an email to
+license@isb-sib.ch.
+----------------------------------------------------------------------------

@@ -1,0 +1,94 @@
+ID   NDOA_PSEPU     STANDARD;      PRT;   103 AA.
+AC   P23082; Q52123; O07829;
+DT   01-NOV-1991 (Rel. 20, Created)
+DT   15-DEC-1998 (Rel. 37, Last sequence update)
+DT   15-DEC-1998 (Rel. 37, Last annotation update)
+DE   NAPHTHALENE 1,2-DIOXYGENASE SYSTEM FERREDOXIN COMPONENT.
+GN   NDOA OR NAHAB OR DOXA OR NDOC1.
+OS   Pseudomonas putida, and Pseudomonas sp. (strain C18).
+OG   Plasmid pDTG1, and Plasmid NAH7.
+OC   Bacteria; Proteobacteria; gamma subdivision; Pseudomonas group;
+OC   Pseudomonas.
+RN   [1]
+RP   SEQUENCE FROM N.A.
+RC   SPECIES=P.PUTIDA; STRAIN=NCIB 9816;
+RX   MEDLINE; 89211973.
+RA   KURKELA S., LEHVAESLAIHO H., PALVA E.T., TEERI T.H.;
+RT   "Cloning, nucleotide sequence and characterization of genes encoding
+RT   naphthalene dioxygenase of Pseudomonas putida strain NCIB9816.";
+RL   Gene 73:355-362(1988).
+RN   [2]
+RP   SEQUENCE FROM N.A., AND SEQUENCE OF 1-8.
+RC   SPECIES=P.PUTIDA; STRAIN=NCIB 9816-4, AND STRAIN=G7 / ATCC 17485;
+RX   MEDLINE; 93252277.
+RA   SIMON M.J., OSSLUND T.D., SAUNDERS R., ENSLEY B.D., SUGGS S.,
+RA   HARCOURT A.A., SUEN W.-C., CRUDEN D.L., GIBSON D.T., ZYLSTRA G.J.;
+RT   "Sequences of genes encoding naphthalene dioxygenase in Pseudomonas
+RT   putida strains G7 and NCIB 9816-4.";
+RL   Gene 127:31-37(1993).
+RN   [3]
+RP   SEQUENCE FROM N.A.
+RC   STRAIN=C18;
+RX   MEDLINE; 94042852.
+RA   DENOME S.A., STANLEY D.C., OLSON E.S., YOUNG K.D.;
+RT   "Metabolism of dibenzothiophene and naphthalene in Pseudomonas
+RT   strains: complete DNA sequence of an upper naphthalene catabolic
+RT   pathway.";
+RL   J. Bacteriol. 175:6890-6901(1993).
+RN   [4]
+RP   SEQUENCE FROM N.A.
+RC   SPECIES=P.PUTIDA; STRAIN=ATCC 17484;
+RA   HAMANN C.;
+RL   Submitted (JUN-1997) to the EMBL/GenBank/DDBJ databases.
+CC   -!- FUNCTION: COMPONENT OF NAPHTHALENE DIOXYGENASE (NDO)
+CC       MULTICOMPONENT ENZYME SYSTEM WHICH CATALYZES THE INCORPORATION OF
+CC       BOTH ATOMS OF MOLECULAR OXYGEN INTO NAPHTALENE TO FORM CIS-
+CC       NAPHTHALENE DIHYDRODIOL. THIS SUBUNIT IS A 2FE-2S FERREDOXIN THAT
+CC       TRANSFERS ELECTRONS TO IRON SULFUR PROTEIN COMPONENTS (ISP).
+CC   -!- COFACTOR: BINDS A 2FE-2S CLUSTER.
+CC   -!- PATHWAY: UPPER NAPTHALENE CATABOLIC PATHWAY WHICH INVOLVES
+CC       CONVERSION OF NAPTHALENE TO SALICYLATE, AND CATABOLISM OF
+CC       DIBENZOTHIOPHENE (DBT) AND PHENANTHRENE. CONVERTS PHENANTHRENE TO
+CC       1-HYDROXY-2-NAPTHOIC ACID AND THE METABOLISM OF DBT IS LIMITED TO
+CC       OXIDATION OF THE AROMATIC RING.
+CC   -!- SUBUNIT: NAPHTALENE DIOXYGENASE (NDO) MULTICOMPONENT ENZYME SYSTEM
+CC       IS COMPOSED OF AN ELECTRON TRANSFER COMPONENT AND AN IRON SULFUR
+CC       PROTEIN (ISP). THE ELECTRON TRANSFER COMPONENT IS COMPOSED OF
+CC       FERREDOXIN REDUCTASE (NDOR) AND FERREDOXIN (NDOA), AND ISP IS
+CC       COMPOSED OF A LARGE ALPHA SUBUNIT (NDOB) AND A SMALL BETA SUBUNIT
+CC       (NDOC).
+CC   -!- SIMILARITY: BELONGS TO THE BACTERIAL RING-HYDROXYLATING
+CC       DIOXYGENASE FERREDOXIN COMPONENT FAMILY.
+CC   --------------------------------------------------------------------------
+CC   This SWISS-PROT entry is copyright. It is produced through a collaboration
+CC   between  the Swiss Institute of Bioinformatics  and the  EMBL outstation -
+CC   the European Bioinformatics Institute.  There are no  restrictions on  its
+CC   use  by  non-profit  institutions as long  as its content  is  in  no  way
+CC   modified and this statement is not removed.  Usage  by  and for commercial
+CC   entities requires a license agreement (See http://www.isb-sib.ch/announce/
+CC   or send an email to license@isb-sib.ch).
+CC   --------------------------------------------------------------------------
+DR   EMBL; M23914; AAB47590.1; -.
+DR   EMBL; M83950; AAA25905.1; -.
+DR   EMBL; M83949; AAA25901.1; -.
+DR   EMBL; M60405; AAA16124.1; -.
+DR   EMBL; AF004284; AAB61372.1; -.
+DR   PIR; JS0070; JS0070.
+KW   Aromatic hydrocarbons catabolism; Electron transport; Iron-sulfur;
+KW   Plasmid.
+FT   INIT_MET      0      0
+FT   METAL        44     44       IRON-SULFUR (2FE-2S) (POTENTIAL).
+FT   METAL        46     46       IRON-SULFUR (2FE-2S) (POTENTIAL).
+FT   METAL        63     63       IRON-SULFUR (2FE-2S) (POTENTIAL).
+FT   METAL        66     66       IRON-SULFUR (2FE-2S) (POTENTIAL).
+FT   VARIANT       2      2       V -> E (IN STRAIN G7).
+FT   VARIANT      14     14       L -> P (IN STRAIN G7).
+FT   VARIANT      48     48       S -> A (IN STRAIN G7).
+FT   VARIANT      76     76       K -> R (IN STRAIN G7).
+FT   VARIANT      84     84       Q -> E (IN STRAIN G7).
+FT   VARIANT      90     90       P -> A (IN STRAIN G7).
+FT   VARIANT     103    103       S -> GEF (IN STRAIN G7).
+SQ   SEQUENCE   103 AA;  11315 MW;  9F91B3C8 CRC32;
+     TVKWIEAVAL SDILEGDVLG VTVEGKELAL YEVEGEIYAT DNLCTHGSAR MSDGYLEGRE
+     IECPLHQGRF DVCTGKALCA PVTQNIKTYP VKIENLRVMI DLS
+//

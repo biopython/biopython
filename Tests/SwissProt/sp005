@@ -1,0 +1,49 @@
+ID   NU3M_BALPH     STANDARD;      PRT;   115 AA.
+AC   P24973;
+DT   01-MAR-1992 (Rel. 21, Created)
+DT   01-MAR-1992 (Rel. 21, Last sequence update)
+DT   15-JUL-1999 (Rel. 38, Last annotation update)
+DE   NADH-UBIQUINONE OXIDOREDUCTASE CHAIN 3 (EC 1.6.5.3).
+GN   MTND3 OR ND3 OR NADH3.
+OS   Balaenoptera physalus (Finback whale) (Common rorqual), and
+OS   Balaenoptera musculus (Blue whale).
+OG   Mitochondrion.
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Mammalia;
+OC   Eutheria; Cetartiodactyla; Cetacea; Mysticeti; Balaenopteridae;
+OC   Balaenoptera.
+RN   [1]
+RP   SEQUENCE FROM N.A.
+RC   SPECIES=B.PHYSALUS; STRAIN=ISOLATE=NO 27, ANNO 1987; TISSUE=LIVER;
+RX   MEDLINE; 92139449.
+RA   ARNASON U., GULLBERG A., WIDEGREN B.;
+RT   "The complete nucleotide sequence of the mitochondrial DNA of the fin
+RT   whale, Balaenoptera physalus.";
+RL   J. Mol. Evol. 33:556-568(1991).
+RN   [2]
+RP   SEQUENCE FROM N.A.
+RC   SPECIES=B.MUSCULUS;
+RX   MEDLINE; 94141932.
+RA   ARNASON U., GULLBERG A.;
+RT   "Comparison between the complete mtDNA sequences of the blue and the
+RT   fin whale, two species that can hybridize in nature.";
+RL   J. Mol. Evol. 37:312-322(1993).
+CC   -!- CATALYTIC ACTIVITY: NADH + UBIQUINONE = NAD(+) + UBIQUINOL.
+CC   -!- SIMILARITY: BELONGS TO THE COMPLEX I SUBUNIT 3 FAMILY.
+CC   --------------------------------------------------------------------------
+CC   This SWISS-PROT entry is copyright. It is produced through a collaboration
+CC   between  the Swiss Institute of Bioinformatics  and the  EMBL outstation -
+CC   the European Bioinformatics Institute.  There are no  restrictions on  its
+CC   use  by  non-profit  institutions as long  as its content  is  in  no  way
+CC   modified and this statement is not removed.  Usage  by  and for commercial
+CC   entities requires a license agreement (See http://www.isb-sib.ch/announce/
+CC   or send an email to license@isb-sib.ch).
+CC   --------------------------------------------------------------------------
+DR   EMBL; X61145; CAA43446.1; -.
+DR   EMBL; X72204; CAA51002.1; -.
+DR   PIR; S41827; S41827.
+DR   PFAM; PF00507; oxidored_q4; 1.
+KW   Oxidoreductase; NAD; Ubiquinone; Mitochondrion.
+SQ   SEQUENCE   115 AA;  13022 MW;  ACF02965 CRC32;
+     MNLLLTLLTN TTLALLLVFI AFWLPQLNVY AEKTSPYECG FDPMGSARLP FSMKFFLVAI
+     TFLLFDLEIA LLLPLPWAIQ SNNLNTMLTM ALFLISLLAA SLAYEWTQEG LEWAE
+//

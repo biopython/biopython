@@ -1,0 +1,29 @@
+SWISSPROT TEST DATA FILES
+=========================
+
+This directory contains various data files for testing the
+SwissProt-related code in Biopython.
+
+
+
+SPROT TEST FILES
+----------------
+
+ID     Version   SPID        Comments
+sp001  38        N33_HUMAN   DR buried within comments
+sp002  38        CSP_MOUSE   broken RC line
+sp003  37        143E_HUMAN
+sp004  38        NDOA_PSEPU  broken RC line
+sp005  38        NU3M_BALPH  broken RC line
+sp006  37        TCMO_STRGA  comment with no topic
+
+
+KEYWLIST TEST FILES
+-------------------
+
+ID     Version
+kw001  38
+kw002  37
+
+
+

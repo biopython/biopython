@@ -1,0 +1,63 @@
+ID   CSP_MOUSE      STANDARD;      PRT;   198 AA.
+AC   P54101;
+DT   01-OCT-1996 (Rel. 34, Created)
+DT   01-OCT-1996 (Rel. 34, Last sequence update)
+DT   15-JUL-1998 (Rel. 36, Last annotation update)
+DE   CYSTEINE STRING PROTEIN (CSP).
+GN   CSP.
+OS   Mus musculus (Mouse), and Rattus norvegicus (Rat).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Mammalia;
+OC   Eutheria; Rodentia; Sciurognathi; Muridae; Murinae; Mus.
+RN   [1]
+RP   SEQUENCE FROM N.A.
+RC   SPECIES=MOUSE; TISSUE=BRAIN;
+RA   QIN N., LIN T., BIRNBAUMER L.;
+RL   Submitted (OCT-1997) to the EMBL/GenBank/DDBJ databases.
+RN   [2]
+RP   SEQUENCE FROM N.A.
+RC   SPECIES=RAT; STRAIN=SPRAGUE-DAWLEY; TISSUE=BRAIN;
+RX   MEDLINE; 95223109.
+RA   MASTROGIACOMO A., GUNDERSEN C.B.;
+RT   "The nucleotide and deduced amino acid sequence of a rat cysteine
+RT   string protein.";
+RL   Brain Res. Mol. Brain Res. 28:12-18(1995).
+RN   [3]
+RP   SEQUENCE FROM N.A.
+RC   SPECIES=RAT; STRAIN=TISSUE=BRAIN;
+RX   MEDLINE; 96188189.
+RA   BRAUN J.E., SCHELLER R.H.;
+RT   "Cysteine string protein, a DnaJ family member, is present on diverse
+RT   secretory vesicles.";
+RL   Neuropharmacology 34:1361-1369(1995).
+CC   -!- FUNCTION: MAY HAVE AN IMPORTANT ROLE IN PRESYNAPTIC FUNCTION.
+CC   -!- SUBUNIT: HOMODIMER (PROBABLE).
+CC   -!- TISSUE SPECIFICITY: BRAIN. PREDOMINANTLY ASSOCIATED WITH NERVE
+CC       ENDINGS AND SYNAPTIC VESICLES.
+CC   -!- PTM: FATTY ACYLATED.
+CC   -!- SIMILARITY: CONTAINS A DNAJ-LIKE DOMAIN.
+CC   --------------------------------------------------------------------------
+CC   This SWISS-PROT entry is copyright. It is produced through a collaboration
+CC   between  the Swiss Institute of Bioinformatics  and the  EMBL outstation -
+CC   the European Bioinformatics Institute.  There are no  restrictions on  its
+CC   use  by  non-profit  institutions as long  as its content  is  in  no  way
+CC   modified and this statement is not removed.  Usage  by  and for commercial
+CC   entities requires a license agreement (See http://www.isb-sib.ch/announce/
+CC   or send an email to license@isb-sib.ch).
+CC   --------------------------------------------------------------------------
+DR   EMBL; U39320; AAA81372.1; -.
+DR   EMBL; S81917; AAB36303.1; -.
+DR   EMBL; AF032115; AAB87080.1; -.
+DR   HSSP; P25685; 1HDJ.
+DR   MGD; MGI:892995; CSP.
+DR   PFAM; PF00226; DnaJ; 1.
+DR   PROSITE; PS00636; DNAJ_1; 1.
+DR   PROSITE; PS50076; DNAJ_2; 1.
+KW   Lipoprotein.
+FT   DOMAIN       13     82       DNAJ-LIKE.
+FT   DOMAIN      118    128       POLY-CYS.
+SQ   SEQUENCE   198 AA;  22100 MW;  9DF0142B CRC32;
+     MADQRQRSLS TSGESLYHVL GLDKNATSDD IKKSYRKLAL KYHPDKNPDN PEAADKFKEI
+     NNAHAILTDA TKRNIYDKYG SLGLYVAEQF GEENVNTYFV LSSWWAKALF VVCGLLTCCY
+     CCCCLCCCFN CCCGKCKPKA PEGEETEFYV SPEDLEAQLQ SDEREATDTP IVIQPASATE
+     TTQLTADSHP SYHTDGFN
+//

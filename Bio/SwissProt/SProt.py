@@ -9,6 +9,10 @@ This module provides code to work with the sprotXX.dat file from
 SwissProt.
 http://www.expasy.ch/sprot/sprot-top.html
 
+Tested with:
+Release 37
+Release 38
+
 
 Classes:
 Record           Holds SwissProt data.
@@ -410,15 +414,12 @@ class _RecordConsumer(AbstractConsumer):
             raise SyntaxError, "I don't understand the date line %s" % line
     
     def description(self, line):
-        # XXX 143E_HUMAN
         self.data.description = self.data.description + line[5:]
     
     def gene_name(self, line):
-        # XXX make sure this is a string
         self.data.gene_name = self.data.gene_name + line[5:]
     
     def organism_species(self, line):
-        # XXX 143E_HUMAN
         self.data.organism = self.data.organism + line[5:]
     
     def organelle(self, line):
@@ -447,10 +448,15 @@ class _RecordConsumer(AbstractConsumer):
         for col in cols[1:]:
             if not col:  # last column will be the empty string
                 continue
-            if col == ' STRAIN=TISSUE=BRAIN;':
-                # from CSP_MOUSE, release 38:
-                # RC   SPECIES=RAT; STRAIN=TISSUE=BRAIN;
+            if col == ' STRAIN=TISSUE=BRAIN':
+                # from CSP_MOUSE, release 38
                 token, text = "TISSUE", "BRAIN"
+            elif col == ' STRAIN=NCIB 9816-4, AND STRAIN=G7 / ATCC 17485':
+                # from NDOA_PSEPU, release 38
+                token, text = "STRAIN", "NCIB 9816-4 AND G7 / ATCC 17485"
+            elif col == ' STRAIN=ISOLATE=NO 27, ANNO 1987':
+                # from NU3M_BALPH, release 38
+                token, text = "STRAIN", "ISOLATE NO 27, ANNO 1987"
             else:
                 token, text = string.split(col, '=')
             ref.comments.append((string.lstrip(token), text))
@@ -482,8 +488,11 @@ class _RecordConsumer(AbstractConsumer):
         if line[5:8] == '-!-':   # Make a new comment
             self.data.comments.append(line[9:])
         elif line[5:8] == '   ': # add to the previous comment
-            assert self.data.comments, "I don't understand CC line" %s % line
-            self.data.comments[-1] = self.data.comments[-1] + line[9:]
+            if not self.data.comments:
+                # TCMO_STRGA in Release 37 has comment with no topic
+                self.data.comments.append(line[9:])
+            else:
+                self.data.comments[-1] = self.data.comments[-1] + line[9:]
         elif line[5:8] == '---':
             # If there are no comments, and it's not the closing line,
             # make a new comment.
@@ -501,9 +510,9 @@ class _RecordConsumer(AbstractConsumer):
         self.data.cross_references.append(tuple(cols[1:]))
     
     def keyword(self, line):
-        cols = string.split(line)
+        cols = string.split(self._chomp(line[5:]), ';')
         for col in cols[1:]:
-            self.data.keywords.append(self._chomp(col))
+            self.data.keywords.append(string.lstrip(col))
     
     def feature_table(self, line):
         # XXX AAC_ACTUT

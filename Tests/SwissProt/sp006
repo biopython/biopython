@@ -1,0 +1,47 @@
+ID   TCMO_STRGA     STANDARD;      PRT;   339 AA.
+AC   P39896;
+DT   01-FEB-1995 (REL. 31, CREATED)
+DT   01-FEB-1995 (REL. 31, LAST SEQUENCE UPDATE)
+DT   01-NOV-1995 (REL. 32, LAST ANNOTATION UPDATE)
+DE   TETRACENOMYCIN POLYKETIDE SYNTHESIS 8-O-METHYL TRANSFERASE TCMO
+DE   (EC 2.1.1.-).
+GN   TCMO.
+OS   STREPTOMYCES GLAUCESCENS.
+OC   BACTERIA; FIRMICUTES; ACTINOBACTERIA; ACTINOBACTERIDAE;
+OC   ACTINOMYCETALES; STREPTOMYCINEAE; STREPTOMYCETACEAE; STREPTOMYCES.
+RN   [1]
+RP   SEQUENCE FROM N.A.
+RC   STRAIN=GLA.0;
+RX   MEDLINE; 92193265.
+RA   SUMMERS R.G., WENDT-PIENKOWSKI E., MOTAMEDI H., HUTCHINSON C.R.;
+RT   "Nucleotide sequence of the tcmII-tcmIV region of the tetracenomycin
+RT   C biosynthetic gene cluster of Streptomyces glaucescens and evidence
+RT   that the tcmN gene encodes a multifunctional
+RT   cyclase-dehydratase-O-methyl transferase.";
+RL   J. BACTERIOL. 174:1810-1820(1992).
+CC       TETRACENOMYCIN B3 TO TETRACENOMYCIN E. METHYLATES AS WELL TCM D3
+CC       INTO 8-O-METHYL-TCM D3, A SIDE REACTION.
+CC   -!- PATHWAY: SECOND STEP IN THE BIOSYNTHESIS OF THE POLYKETIDE
+CC       ANTIBIOTIC TETRACENOMYCIN C (TCM C) FROM TCM D3.
+CC   --------------------------------------------------------------------------
+CC   This SWISS-PROT entry is copyright. It is produced through a collaboration
+CC   between  the Swiss Institute of Bioinformatics  and the  EMBL outstation -
+CC   the European Bioinformatics Institute.  There are no  restrictions on  its
+CC   use  by  non-profit  institutions as long  as its content  is  in  no  way
+CC   modified and this statement is not removed.  Usage  by  and for commercial
+CC   entities requires a license agreement (See http://www.isb-sib.ch/announce/
+CC   or send an email to license@isb-sib.ch).
+CC   --------------------------------------------------------------------------
+DR   EMBL; M80674; G153500; -.
+DR   PIR; S27697; S27697.
+DR   PIR; C42276; C42276.
+DR   PFAM; PF00891; Methyltransf; 1.
+KW   ANTIBIOTIC BIOSYNTHESIS; TRANSFERASE; METHYLTRANSFERASE.
+SQ   SEQUENCE   339 AA;  37035 MW;  848B7337 CRC32;
+     MTPHTHVRGP GDILQLTMAF YGSRALISAV ELDLFTLLAG KPLPLGELCE RAGIHPRGAR
+     DFLDALVALG LLEREGEDTY RNSPAADRHL DRRKPGYVGG YARLADTKLF PVWARLTEAL
+     RTGEKQVPSQ GGFFGGYADP EAARGFLGAM DAVNGGVGHS LAGALDWTEY SSFVDLGGAR
+     GNLAAHLHRA HPHLRATCFD LPEMEPFFQE HMKSLETTDQ VRFAGGDFFT DPLPRADVFI
+     VGHILHYFGL RQREALIARI HQALTPGGAV LVYDRMIDDD RRSAALSLLG SLNMLLTSDE
+     GREYTPAECV RWLSDAGFTD VRTTAVSGPD TLAIGRKPR
+//

@@ -1,0 +1,67 @@
+ID   N33_HUMAN      STANDARD;      PRT;   348 AA.
+AC   Q13454; Q14911; Q14912;
+DT   15-JUL-1999 (Rel. 38, Created)
+DT   15-JUL-1999 (Rel. 38, Last sequence update)
+DT   15-JUL-1999 (Rel. 38, Last annotation update)
+DE   N33 PROTEIN.
+GN   N33.
+OS   Homo sapiens (Human).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+RN   [1]
+RP   SEQUENCE FROM N.A.
+RX   MEDLINE; 96299740.
+RA   MACGROGAN D., LEVY A., BOVA G.S., ISAACS W.B., BOOKSTEIN R.;
+RT   "Structure and methylation-associated silencing of a gene within a
+RT   homozygously deleted region of human chromosome band 8p22.";
+RL   Genomics 35:55-65(1996).
+CC   -!- SUBCELLULAR LOCATION: INTEGRAL MEMBRANE PROTEIN (POTENTIAL).
+CC   -!- ALTERNATIVE PRODUCTS: TWO ISOFORMS SEEM TO BE PRODUCED BY
+CC       ALTERNATIVE SPLICING.
+CC   -!- TISSUE SPECIFICITY: EXPRESSED IN MOST NONLYMPHOID CELLS AND
+CC       TISSUES EXAMINED, INCLUDING PROSTATE, LUNG, LIVER, AND COLON.
+CC   -!- SIMILARITY: BELONGS TO THE OST3 FAMILY.
+DR   MIM; 601385; -.
+CC   --------------------------------------------------------------------------
+CC   This SWISS-PROT entry is copyright. It is produced through a collaboration
+CC   between  the Swiss Institute of Bioinformatics  and the  EMBL outstation -
+CC   the European Bioinformatics Institute.  There are no  restrictions on  its
+CC   use  by  non-profit  institutions as long  as its content  is  in  no  way
+CC   modified and this statement is not removed.  Usage  by  and for commercial
+CC   entities requires a license agreement (See http://www.isb-sib.ch/announce/
+CC   or send an email to license@isb-sib.ch).
+CC   --------------------------------------------------------------------------
+DR   EMBL; U42349; AAB18374.1; -.
+DR   EMBL; U42359; AAB18375.1; -.
+DR   EMBL; U42350; AAB18375.1; JOINED.
+DR   EMBL; U42351; AAB18375.1; JOINED.
+DR   EMBL; U42352; AAB18375.1; JOINED.
+DR   EMBL; U42354; AAB18375.1; JOINED.
+DR   EMBL; U42355; AAB18375.1; JOINED.
+DR   EMBL; U42356; AAB18375.1; JOINED.
+DR   EMBL; U42357; AAB18375.1; JOINED.
+DR   EMBL; U42358; AAB18375.1; JOINED.
+DR   EMBL; U42360; AAB18376.1; -.
+DR   EMBL; U42350; AAB18376.1; JOINED.
+DR   EMBL; U42351; AAB18376.1; JOINED.
+DR   EMBL; U42352; AAB18376.1; JOINED.
+DR   EMBL; U42354; AAB18376.1; JOINED.
+DR   EMBL; U42355; AAB18376.1; JOINED.
+DR   EMBL; U42356; AAB18376.1; JOINED.
+DR   EMBL; U42357; AAB18376.1; JOINED.
+DR   EMBL; U42358; AAB18376.1; JOINED.
+KW   Transmembrane; Alternative splicing.
+FT   TRANSMEM     20     40       POTENTIAL.
+FT   TRANSMEM    197    217       POTENTIAL.
+FT   TRANSMEM    222    242       POTENTIAL.
+FT   TRANSMEM    277    297       POTENTIAL.
+FT   TRANSMEM    313    333       POTENTIAL.
+FT   VARSPLIC    344    348       DLDFE -> FLIK (IN FORM 2).
+SQ   SEQUENCE   348 AA;  39676 MW;  75818910 CRC32;
+     MGARGAPSRR RQAGRRLRYL PTGSFPFLLL LLLLCIQLGG GQKKKENLLA EKVEQLMEWS
+     SRRSIFRMNG DKFRKFIKAP PRNYSMIVMF TALQPQRQCS VCRQANEEYQ ILANSWRYSS
+     AFCNKLFFSM VDYDEGTDVF QQLNMNSAPT FMHFPPKGRP KRADTFDLQR IGFAAEQLAK
+     WIADRTDVHI RVFRPPNYSG TIALALLVSL VGGLLYLRRN NLEFIYNKTG WAMVSLCIVF
+     AMTSGQMWNH IRGPPYAHKN PHNGQVSYIH GSSQAQFVAE SHIILVLNAA ITMGMVLLNE
+     AATSKGDVGK RRIICLVGLG LVVFFFSFLL SIFRSKYHGY PYSDLDFE
+//
