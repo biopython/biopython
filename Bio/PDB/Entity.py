@@ -4,6 +4,8 @@
 # as part of this package.  
 
 from Numeric import Float0
+from copy import copy
+from __future__ import generators
 
 from PDBExceptions import PDBConstructionException
 
@@ -114,10 +116,15 @@ class Entity:
 		self.child_list.append(entity)
 		#self.child_list.sort(self._sort)
 		self.child_dict[entity_id]=entity
+	
+	def get_iterator(self):
+		"Return iterator over children."
+		for child in self.child_list:
+			yield child
 
 	def get_list(self):
-		"Return the list of children."
-		return self.child_list
+		"Return a copy of the list of children."
+		return copy(self.child_list)
 
 	def has_id(self, id):
 		"Return 1 if a child with given id exists, otherwise 0."
