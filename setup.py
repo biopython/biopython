@@ -48,26 +48,29 @@ else:
 
 
 setup(name='biopython', 
-      version='0.90-d02',
+      version='0.90-d03',
       author='The Biopython Consortium',
       author_email='biopython@biopython.org',
       url='http://www.bipoython.org/',
       
       packages=['Bio',
-                'Bio/SwissProt',
+                'Bio/Alphabet',
                 'Bio/Blast',
+                'Bio/Data',
+                'Bio/Encodings',
+                'Bio/Entrez',
                 'Bio/Enzyme',
                 'Bio/Fasta',
+                'Bio/Gobase',
+                'Bio/Medline',
                 'Bio/PDB',
                 'Bio/Prosite',
-                'Bio/Medline',
-                'Bio/Data',
-                'Bio/Entrez',
+                'Bio/Rebase',
+                'Bio/SCOP',
+                'Bio/SeqIO',
+                'Bio/SwissProt',
                 'Bio/Tools', 'Bio/Tools/Classification',
-                'Bio/WWW',
-                'Bio/Alphabet',
-                'Bio/Encodings',
-                'Bio/SeqIO'
+                'Bio/WWW'
                 ],
 
       ext_modules = extensions

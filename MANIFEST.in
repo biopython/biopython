@@ -16,9 +16,11 @@ exclude Tests/Amino
 exclude Tests/Blast
 exclude Tests/Enzymes
 exclude Tests/Fasta
+exclude Tests/Gobase
 exclude Tests/Nucleic
 exclude Tests/Prosite
 exclude Tests/Prosite/Doc
+exclude Tests/Rebase
 exclude Tests/SwissProt
 exclude Tests/UnitTests
 exclude Tests/UnitTests/Prosite
