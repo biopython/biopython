@@ -184,6 +184,15 @@ class _Scanner:
             attempt_read_and_call(uhandle, consumer.no_hits,
                                   contains='No hits found')
             read_and_call_while(uhandle, consumer.noevent, blank=1)
+
+	    #Psiblast can repeat the Searching...No hits found section
+	    if attempt_read_and_call(uhandle, consumer.noevent,
+                                     start='Searching'):
+	        read_and_call_while(uhandle, consumer.noevent, blank=1)
+	        read_and_call(uhandle, consumer.noevent,
+                              contains='No hits found')
+	        read_and_call_while(uhandle, consumer.noevent, blank=1)
+	    
             consumer.end_descriptions()
             # Stop processing.
             return
@@ -775,7 +784,7 @@ class _HSPConsumer:
 
     def score(self, line):
         self._hsp.score, self._hsp.bits = _re_search(
-            r"Score =\s*([0-9.]+) bits \(([0-9]+)\)", line,
+            r"Score =\s*([0-9.e+]+) bits \(([0-9]+)\)", line,
             "I could not find the score in line\n%s" % line)
         self._hsp.score = _safe_float(self._hsp.score)
         self._hsp.bits = _safe_float(self._hsp.bits)
@@ -851,8 +860,14 @@ class _HSPConsumer:
 
     def sbjct(self, line):
         start, seq = _re_search(
-            r"Sbjct: (\d+)\s+(.+) \d", line,
+            r"Sbjct: (\d+)\s*(.+) \d", line,
             "I could not find the sbjct in line\n%s" % line)
+	#mikep 26/9/00
+	#On occasion, there is a blast hit with no subject match
+	#so far, it only occurs with 1-line short "matches"
+	#I have decided to let these pass as they appear
+	if not string.strip(seq):
+            seq = ' ' * self._query_len
         self._hsp.sbjct = self._hsp.sbjct + seq
         if self._hsp.sbjct_start is None:
             self._hsp.sbjct_start = _safe_int(start)
@@ -1490,7 +1505,7 @@ def _safe_int(str):
     except ValueError:
         pass
     # If it fails again, maybe it's too long?
-    return long(str)
+    return long(float(str))
 
 def _safe_float(str):
     try:
