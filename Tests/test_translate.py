@@ -80,6 +80,10 @@ print "works."
 back_rna = rna_trans.back_translate(protein_from_rna)
 assert string.replace(back_dna.data, "T", "U") == back_rna.data
 
+# some tests for "by name"
+trans = Translate.unambiguous_dna_by_name[ 'Vertebrate Mitochondrial' ]
+trans = Translate.unambiguous_dna_by_name[ 'SGC1' ]
+
 # How about some forward ambiguity?
 print "Forward ambiguous"
 s = "RATGATTARAATYTA"
