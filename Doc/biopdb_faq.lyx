@@ -509,9 +509,9 @@ In this case, the downloaded file will be called
 \family typewriter 
 pdb1fat.ent
 \family default 
-, and it will be downloaded to the current directory (
+, and it will be downloaded to the current directory (option
 \family typewriter 
-here=1
+ here=1
 \family default 
 ).
  
@@ -748,6 +748,19 @@ io.set_structure(s)
 \layout LyX-Code
 
 io.save('gly_only.pdb', GlySelect())
+\layout Standard
+
+If this is all too complicated for you, the 
+\family typewriter 
+Dice 
+\family default 
+module contains a handy 
+\family typewriter 
+extract
+\family default 
+ function that writes out all residues in a chain between a start and end
+ residue.
+ 
 \layout Subsubsection*
 
 Can I write mmCIF files?
