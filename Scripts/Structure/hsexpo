@@ -32,7 +32,7 @@ if len(sys.argv)==1:
 parser=OptionParser()
 
 parser.add_option("-t", "--type", dest="exp", 
-                  help="exposure type (HSEa, HSEb, CN, DSSPr, DSSPa, RD, RDa)",
+                  help="exposure type (HSEAU, HSEAD, HSEBU, HSEBD, CN, DSSPr, DSSPa, RD, RDa)",
                   default="HSEb")
 
 parser.add_option("-o", "--out", dest="outfile", 
@@ -45,13 +45,6 @@ parser.add_option("-r", "--radius", dest="radius", type="float",
 parser.add_option("-m", "--model", dest="model", type="int", 
                   help="model number (default 0)", 
                   default=0)
-
-parser.add_option("-d", "--down-sphere", action="store_true", dest="ds", 
-                  help="use half sphere opposite side chain (ie. HSEd)") 
-
-parser.add_option("-s", "--offset", dest="offset", type="float", 
-                  help="offset of cutting plane along CB direction (default 0)",
-                  default=0.0)
 
 (options, args)=parser.parse_args()
 
@@ -73,18 +66,18 @@ format="%4i"
 
 options.exp=options.exp.upper()
 
-if options.exp=="HSEA":
-    hse=HSExposure(OFFSET=options.offset)
+if options.exp[0]=="H" and options.exp[3]=="A":
+    hse=HSExposure()
     d=hse.calc_hs_exposure(m, RADIUS, option="CA3")
-    if options.ds:
+    if options.exp[-1]=="D":
         k=1
     else:
         k=0
-elif options.exp=="HSEB":
-    hse=HSExposure(OFFSET=options.offset)
+elif options.exp[0]=="H" and options.exp[3]=="B":
+    hse=HSExposure()
     d=hse.calc_hs_exposure(m, RADIUS, option="CB")
-    hse.write_pymol_script()
-    if options.ds:
+    #hse.write_pymol_script()
+    if options.exp[-1]=="D":
         k=1
     else:
         k=0
@@ -111,6 +104,9 @@ elif options.exp=="RDA":
     d=ResidueDepth(m, pdbfile)
     k=1
     format="%4.1f"
+else:
+    print "Unknown option."
+    sys.exit()
 
 residue_list=Selection.unfold_entities(m, 'R')
 
