@@ -39,6 +39,10 @@ However, if you're concerned about details such as the training
 algorithm, you will need to use some of the classes provided.
 
 """
+import warnings
+warnings.warn("Bio.SVM is deprecated. We recommend using LIBSVM: "
+              "http://www.csie.ntu.edu.tw/~cjlin/libsvm/",
+              DeprecationWarning)
 
 # To do:
 # make update_fn better

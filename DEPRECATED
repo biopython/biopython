@@ -7,9 +7,18 @@ Bio.sequtils
 Deprecated as of Release 1.30.
 Use Bio.SeqUtils instead.
 
+Bio.SVM
+=======
+Deprecated as of Release 1.30.
+The Support Vector Machine code in Biopython has been superceeded by a 
+more robust (and maintained) SVM library, which includes a python
+interface. We recommend using LIBSVM:
+
+http://www.csie.ntu.edu.tw/~cjlin/libsvm/
 
 Bio.kMeans and Bio.xkMeans
 ==========================
+Deprecated as of Release 1.30.
 
 The k-Means algorithm is an algorithm for unsupervised clustering of data.
 Biopython includes an implementation of the k-means clustering algorithm
