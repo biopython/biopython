@@ -20,7 +20,7 @@ def print_list( list ):
 
 for test in tests:
     print "testing %s" % test
-    datafile = os.path.join( 'rebase', test )
+    datafile = os.path.join( 'Rebase', test )
     src_handle = open( datafile )
     data = record_parser.parse( src_handle )
     print data.sequence
