@@ -230,8 +230,8 @@ def find_related(pmid):
     parser.feed(h.read())
     return parser.ids
 
-def download_many(ids, callback_fn, broken_fn=None, delay=120.0, batchsize=500,
-                  parser=None):
+def download_many(ids, callback_fn, broken_fn=None, delay=120.0, faildelay=5.0,
+                  batchsize=500, parser=None):
     """download_many(ids, callback_fn, broken_fn=None, delay=120.0, batchsize=500)
 
     Download many records from PubMed.  ids is a list of either the
@@ -262,6 +262,7 @@ def download_many(ids, callback_fn, broken_fn=None, delay=120.0, batchsize=500,
     # get.  If there's only one more record, then I'll report it as
     # broken and move on.  If the request succeeds, I'll double the
     # number of records until I get back up to the batchsize.
+    nsuccesses = 0
     while ids:
         if current_batchsize > len(ids):
             current_batchsize = len(ids)
@@ -269,12 +270,28 @@ def download_many(ids, callback_fn, broken_fn=None, delay=120.0, batchsize=500,
         id_str = ','.join(ids[:current_batchsize])
 
         # Make sure enough time has passed before I do another query.
-        limiter.wait()
+        if not nsuccesses:
+            limiter.wait(faildelay)
+        else:
+            limiter.wait()
         try:
             # Query PubMed.  If one or more of the id's are broken,
             # this will raise an IOError.
             handle = NCBI.pmfetch(
                 db='PubMed', id=id_str, report='medlars', mode='text')
+
+            # I'm going to check to make sure PubMed returned the same
+            # number of id's as I requested.  If it didn't then I'm going
+            # to raise an exception.  This could take a lot of memory if
+            # the batchsize is large.
+            results = handle.read()
+            iter = Medline.Iterator(File.StringHandle(results))
+            num_ids = 0
+            while iter.next() is not None:
+                num_ids = num_ids + 1
+            if num_ids != current_batchsize:
+                raise IOError
+            handle = File.StringHandle(results)
         except IOError:   # Query did not work.
             if current_batchsize == 1:
                 # There was only 1 id in the query.  Report it as
@@ -286,27 +303,13 @@ def download_many(ids, callback_fn, broken_fn=None, delay=120.0, batchsize=500,
                 # I don't know which one is broken.  Try again with
                 # fewer id's.
                 current_batchsize = current_batchsize / 2
+            nsuccesses = 0
             continue
-
-        results = handle.read()
-        
-        # I'm going to check to make sure PubMed returned the same
-        # number of id's as I requested.  If it didn't then I'm going
-        # to raise an exception.  This could take a lot of memory if
-        # the batchsize is large.
-        iter = Medline.Iterator(File.StringHandle(results))
-        num_ids = 0
-        while iter.next() is not None:
-            num_ids = num_ids + 1
-        if num_ids != current_batchsize:
-            raise SyntaxError, \
-                  "I requested %d entries from PubMed but only found %d.  " \
-                  % (current_batchsize, num_ids) + \
-                  "Is there a broken ID somewhere?"
+        nsuccesses = nsuccesses + 1
 
         # Iterate through the results and pass the records to the
         # callback.
-        iter = Medline.Iterator(File.StringHandle(results), parser)
+        iter = Medline.Iterator(handle, parser)
         idnum = 0
         while 1:
             rec = iter.next()
@@ -319,7 +322,7 @@ def download_many(ids, callback_fn, broken_fn=None, delay=120.0, batchsize=500,
 
         # If I'm not downloading the maximum number of articles,
         # double the number for next time.
-        if current_batchsize < batchsize:
+        if nsuccesses >= 2 and current_batchsize < batchsize:
             current_batchsize = current_batchsize * 2
             if current_batchsize > batchsize:
                 current_batchsize = batchsize
