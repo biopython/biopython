@@ -97,7 +97,7 @@ class Iterator:
         return Iterate(EventStream(events.events), self.tag, cont_handler)
 
     def iterateFile(self, fileobj, cont_handler = None):
-        return self.iterateString(self, fileobj.read(), cont_handler)
+        return self.iterateString(fileobj.read(), cont_handler)
         
     def iterate(self, systemId, cont_handler = None):
         return self.iterateFile(urllib.urlopen(systemId), cont_handler)
