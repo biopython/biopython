@@ -127,7 +127,7 @@ class MemoryFlatDB(BaseDB.WriteDB, BaseFlatDB):
     def __init__(self, dbname):
         self.__in_constructor = 1
         self._need_flush = 0
-        BaseFlatDB.__init__(self, dbname, INDEX_TYPE)
+        BaseFlatDB.__init__(self, dbname)
 
         primary_filename = os.path.join(self.dbname,
                              "key_%s.key" % (self.primary_namespace,) )

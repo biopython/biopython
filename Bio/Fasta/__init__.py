@@ -204,7 +204,7 @@ class Dictionary:
         primary_key_retriever = self._index['id']
         return primary_key_retriever.keys()
 
-def index_file(filename, indexname, rec2key = None):
+def index_file(filename, indexname, rec2key = None, use_berkeley = 0):
     """Index a FASTA file.
 
     filename is the name of the file to index.
@@ -220,13 +220,20 @@ def index_file(filename, indexname, rec2key = None):
     Optionally, it can also return 3 items, to be used as the id (unique key)
     name, and aliases for the index. If not specified, the sequence title 
     will be used.
+
+    use_berkeley specifies whether to use the BerkeleyDB indexer, which 
+    uses the bsddb3 wrappers around the embedded database Berkeley DB. By
+    default, the standard flat file (non-Berkeley) indexes are used.
     """
     if rec2key:
         indexer = _FastaFunctionIndexer(rec2key)
     else:
         indexer = _FastaTitleIndexer()
 
-    SimpleSeqRecord.create_berkeleydb([filename], indexname, indexer)
+    if use_berkeley:
+        SimpleSeqRecord.create_berkeleydb([filename], indexname, indexer)
+    else:
+        SimpleSeqRecord.create_flatdb([filename], indexname, indexer)
 
 class _FastaTitleIndexer(SimpleSeqRecord.BaseSeqRecordIndexer):
     """Simple indexer to index by the title of a FASTA record.
