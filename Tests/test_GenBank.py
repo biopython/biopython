@@ -102,7 +102,9 @@ GenBank.index_file(dict_file, index_file)
 gb_dict = GenBank.Dictionary(index_file, GenBank.FeatureParser())
 
 print "len:", len(gb_dict)
-print "keys:", gb_dict.keys()
+k = gb_dict.keys()
+k.sort()
+print "keys:", k
 
 # pick out some keys and make sure we are getting back decent records
 for key in gb_dict.keys()[:3]:

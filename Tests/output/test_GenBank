@@ -3470,7 +3470,7 @@ key: /translation= value: "MEEEAPRFNVLEEAFNGNGNGCANVEATQSAILKVLTRVNRFQMRVRKHIEDN
 Testing dictionaries...
 Indexing file to serve as a dictionary...
 len: 7
-keys: ['X55053', 'M81224', 'AF297471', 'X62281', 'L31939', 'AJ237582']
+keys: ['AF297471', 'AJ237582', 'L31939', 'M81224', 'X55053', 'X62281']
 Retrieving record with key X55053
 description: A.thaliana cor6.6 mRNA.
 id: X55053.1
