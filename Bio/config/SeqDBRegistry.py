@@ -5,8 +5,8 @@
 
 """This module handles seqdatabase.INI file.
 
-Functions:
-init    Read the seqdatabase.INI file and load into a registry.
+Classes:
+SeqDBRegistry   Holds databases from seqdatabase.INI.
 
 """
 import os
