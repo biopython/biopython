@@ -78,20 +78,12 @@ def copen_fn(func, *args, **keywords):
         cwrite, errwrite = os.fdopen(w, 'w'), os.fdopen(ew, 'w')
         try:
             output = apply(func, args, keywords)
-        except:
-            type, value, tb = sys.exc_info()   # get the traceback
-            errwrite.writelines(traceback.format_tb(tb))
-            del tb       # delete it, so no circular reference
-            if value:
-                errwrite.write("%s: %s" % (type, value))
-            else:
-                errwrite.write(type)
-            errwrite.flush()
-            os._exit(-1)
-        try:
             s = pickle.dumps(output, 1)
-        except pickle.PicklingError, x:
-            errwrite.write(x)
+        except:
+            etype, value, tb = sys.exc_info()   # get the traceback
+            tb = traceback.extract_tb(tb)
+            s = pickle.dumps((etype, value, tb), 1)
+            errwrite.write(s)
             errwrite.flush()
             os._exit(-1)
         cwrite.write(s)
@@ -144,7 +136,6 @@ class _CommandHandle:
         self.pid = pid
         self.status = None
         self.killsig = None
-        self.error = ""
         
         self._start, self._end = time.time(), None
         self._cread, self._errread = cread, errread
@@ -273,8 +264,15 @@ class _CommandHandle:
         self._output = self._cread.readlines()
         self._cread.close()
         if self._errread:
-            self.error = self._errread.read()
+            error = self._errread.read()
             self._errread.close()
+            if error:
+                error = pickle.loads(error)
+                etype, value, tb = error
+                # tb gets lost, and the stack frame of the parent
+                # process is printed out instead.  I should find a way
+                # where the client can optionally get access to this.
+                raise etype, value
         # Remove myself from the active list.
         if _active and self in _active:
             _active.remove(self)
@@ -323,18 +321,16 @@ class _PickleHandle:
         return getattr(self._cmd_handle, attr)
 
     def read(self):
-        """S.read() -> python object, or None
+        """S.read() -> python object
 
         Returns None on error.  Most likely, the function returned
         an object that could not be pickled.
 
         """
         r = self._cmd_handle.read()
-        if r:
-            obj = pickle.loads(r)
-        else:
-            raise self.error
-        return obj
+        if not r:
+            return r
+        return pickle.loads(r)
 
 
 # Handle SIGTERM below
