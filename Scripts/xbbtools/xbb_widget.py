@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # Created: Wed Jun 21 10:28:14 2000
-# Last changed: Time-stamp: <01/09/04 09:22:53 thomas>
+# Last changed: Time-stamp: <01/09/04 09:42:06 thomas>
 # thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas
 # File: xbb_widget.py
 
@@ -137,6 +137,7 @@ class xbb_widget:
         self.edit_menu = Menu(self.menubar)
         menu = self.edit_menu
         menu.add_command(label='Complement', command = self.complement)
+        menu.add_command(label='Antiparallel', command = self.antiparallel)
         menu.add_command(label='Reverse', command = self.reverse)
         menu.add_command(label='Fix sequence', command = self.fix_sequence)
         menu.add_command(label='Search', command = self.search)
@@ -449,7 +450,7 @@ GC=%f
         seq = w.get(start, stop)
         seq = re.sub('[^A-Z]','',seq)    
 
-        print 'seq >%s<' % seq
+        #print 'seq >%s<' % seq
         complementary = self.translator.complement(seq)
         w.delete(start, stop)
         w.insert(start, complementary)
@@ -457,6 +458,24 @@ GC=%f
         w.tag_add(SEL, start, stop)
         w.tag_remove(SEL, stop, END)
              
+    def antiparallel(self):
+        w = self.sequence_id
+        w.selection_own()
+        try:
+            start, stop = w.tag_ranges(SEL)
+        except:
+            start, stop = 1.0, self.sequence_id.index(END)
+
+        seq = w.get(start, stop)
+        seq = re.sub('[^A-Z]','',seq)    
+
+        antip = self.translator.antiparallel(seq)
+        w.delete(start, stop)
+        w.insert(start, antip)
+        w.tag_remove(SEL, 1.0, start)
+        w.tag_add(SEL, start, stop)
+        w.tag_remove(SEL, stop, END)
+
     def search(self):
         seq = self.get_selection_or_sequence()
         searcher = XDNAsearch(seq, master = self.sequence_id, highlight = 1)
@@ -486,8 +505,6 @@ GC=%f
         self.sequence_id.focus()
         self.sequence_id.mark_set('insert','1.%d' % start)
         self.sequence_id.tag_add(SEL, '1.%d' % start, '1.%d' % stop)
-        
-
         
 if __name__ == '__main__':
     xbbtools = xbb_widget()
