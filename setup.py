@@ -144,6 +144,7 @@ biopython_packages = ['Bio',
                       'Bio.SwissProt',
                       'Bio.Tools',
                       'Bio.Tools.Classification',
+                      'Bio.Tools.MultiProc',
                       'Bio.Tools.Parsers',
                       'Bio.UniGene',
                       'Bio.WWW'
