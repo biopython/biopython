@@ -6,20 +6,16 @@
 
 """InterPro
 
-This module provides code to work with files from
+This module provides code to work with htl files from
 http://www.ebi.ac.uk/interpro/
 
 
 Classes:
-Record             Holds rebase sequence data.
-Iterator           Iterates over sequence data in a rebase file.
-Dictionary         Accesses a rebase file using a dictionary interface.
+Record             Holds interpro sequence data.
 InterProParser     Parses interpro sequence data into a Record object.
 
 
 
-Functions:
-index_file         Index a FASTA file for a Dictionary.
 
 """
 
