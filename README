@@ -58,6 +58,7 @@ Distribution Structure
 
 Bio/          The python package that makes up biopython
 Doc/          Documentation
+Experimental/ Experimental code, not officially part of the distribution
 LICENSE       License information for this package
 NEWS          Release notes and news
 README        This file

@@ -1,0 +1,13 @@
+Fasta.txt
+=========
+
+
+Fasta
+-----
+
+The Fasta.py module works with FASTA-formatted sequence data.
+
+The Fasta Scanner produces the following events:
+sequence
+    title
+    sequence

@@ -1,0 +1,23 @@
+Enzyme.txt
+==========
+
+
+
+Enzyme
+------
+
+The Enzyme.py module works with the enzyme.dat file included with the
+Enzyme distribution.
+
+The Enzyme Scanner produces the following events:
+record
+    identification
+    description
+    alternate_name
+    catalytic_activity
+    cofactor
+    comment
+    disease
+    prosite_reference
+    databank_reference
+    terminator

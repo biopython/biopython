@@ -200,7 +200,6 @@ try:
     except SyntaxError: pass
     else: assert 0
 except:
-    raise
     raise TestFailed, "read_and_call"
         
 
