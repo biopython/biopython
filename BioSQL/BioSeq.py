@@ -88,13 +88,35 @@ class DBInternalSeq:
         return f()
 
     def _get_description(self):
-        sql = r"SELECT description FROM bioentry_description WHERE " \
-              r"bioentry_id = %s"
-        results = self.adaptor.execute_one(sql, (self.primary_id))
-        return results[0]
+        descr_results = _get_ontology_terms("description", self.primary_id,
+                                            self.adaptor)
+        if len(descr_results) == 0:
+            description = ""
+        elif len(descr_results) == 1:
+            description = descr_results[0]
+        else:
+            raise ValueError("Got multiple unexpected descriptions: %s" %
+                             descr_results)
+
+        self.description = description
+        return description
 
     def __len__(self):
         return self._length
+
+def _get_ontology_terms(ontology_name, bioentry_id, adaptor):
+    """Retrieve ontology values associated with the given id and name.
+    """
+    sql = r"SELECT ontology_term_id FROM ontology_term " \
+          r"WHERE term_name = %s" 
+    id_info = adaptor.execute_and_fetchall(sql, (ontology_name,))
+    ontology_id = id_info[0][0]
+
+    sql = r"SELECT qualifier_value FROM bioentry_qualifier_value " \
+          r"WHERE bioentry_id = %s AND ontology_term_id = %s"
+    values = adaptor.execute_and_fetch_col0(sql, (bioentry_id,
+                                                  ontology_id))
+    return values
 
 class DBLink:
     def __init__(self, database, primary_id, optional_id = None,
@@ -245,24 +267,38 @@ def load_seq_features(adaptor, primary_id):
     from Bio import SeqFeature
     
     # Get the seqfeature id list
-    results = adaptor.execute_and_fetchall(
-        """select sf.seqfeature_id, sf.seqfeature_rank, sfkey.key_name
-               from seqfeature sf, seqfeature_key sfkey
-               where sf.seqfeature_key_id = sfkey.seqfeature_key_id and
-                     sf.bioentry_id = %s""",
-        (primary_id,))
+    sql = r"SELECT seqfeature_id, seqfeature_rank, seqfeature_key_id " \
+          r"FROM seqfeature WHERE bioentry_id = %s"
+    results = adaptor.execute_and_fetchall(sql, (primary_id,))
+    
+    #results = adaptor.execute_and_fetchall(
+    #    """select sf.seqfeature_id, sf.seqfeature_rank, sfkey.key_name
+    #           from seqfeature sf, seqfeature_key sfkey
+    #           where sf.seqfeature_key_id = sfkey.seqfeature_key_id and
+    #                 sf.bioentry_id = %s""",
+    #    (primary_id,))
 
     seq_feature_list = []
 
-    for seqfeature_id, seqfeature_rank, seqfeature_key in results:
+    for seqfeature_id, seqfeature_rank, seqfeature_key_id in results:
+        # Get the name
+        sql = r"SELECT term_name FROM ontology_term " \
+              r"WHERE ontology_term_id = %s"
+        seqfeature_key = adaptor.execute_one(sql, (seqfeature_key_id,))[0]
+        
         # Get its qualifiers
         qualifiers = {}
-        results = adaptor.execute_and_fetchall("""
-          select sq.qualifier_name, sqv.qualifier_value
-            from seqfeature_qualifier sq, seqfeature_qualifier_value sqv
-            where sq.seqfeature_qualifier_id = sqv.seqfeature_qualifier_id and
-                  sqv.seqfeature_id = %s""",
-                                     (seqfeature_id,))
+        sql = r"SELECT ot.term_name, sqv.qualifier_value " \
+              r"FROM ontology_term ot, seqfeature_qualifier_value sqv " \
+              r"WHERE ot.ontology_term_id = sqv.ontology_term_id AND " \
+              r"sqv.seqfeature_id = %s"
+        results = adaptor.execute_and_fetchall(sql, (seqfeature_id,))
+        #results = adaptor.execute_and_fetchall("""
+        #  select sq.qualifier_name, sqv.qualifier_value
+        #    from seqfeature_qualifier sq, seqfeature_qualifier_value sqv
+        #    where sq.seqfeature_qualifier_id = sqv.seqfeature_qualifier_id and
+        #          sqv.seqfeature_id = %s""",
+        #                             (seqfeature_id,))
 
         for key, value in results:
             if qualifiers.has_key(key):
@@ -389,11 +425,7 @@ class DBSeqRecord:
     # -- BioSQL only attributes
    
     def _get_dates(self):
-        dates = self.adaptor.execute_and_fetch_col0(
-            """select date from bioentry_date
-                       where bioentry_id = %s""",
-            (self.primary_id,))
-        self.dates = dates
+        self.dates = _get_ontology_terms("date", self.primary_id, self.adaptor)
         return dates
 
     def _get_species(self):

@@ -132,7 +132,7 @@ class DatabaseLoader:
     def _load_bioentry_description(self, record, bioentry_id):
         """Load the description table.
         """
-        descr_id = self._get_ontology_id("descrption", "Sequence descrption")
+        descr_id = self._get_ontology_id("description", "Sequence description")
         sql = r"INSERT INTO bioentry_qualifier_value VALUES (%s, %s, %s)"
         self.adaptor.execute_one(sql, (bioentry_id, descr_id, 
                                        record.description))
@@ -289,13 +289,6 @@ class DatabaseRemover:
                   r"seqfeature_id = %s"
             self.adaptor.cursor.execute(sql, (seqfeature_id))
 
-        # delete the main seqfeature table and its key
-        sql = r"SELECT seqfeature_key_id FROM seqfeature WHERE " \
-              r"bioentry_id = %s"
-        seqfeature_key_ids = self.adaptor.list_any_ids(sql, (bioentry_id))
-        for seqfeature_key_id in seqfeature_key_ids:
-            sql = r"DELETE FROM seqfeature_key WHERE seqfeature_key_id = %s"
-            self.adaptor.execute_one(sql, (seqfeature_key_id))
         sql = r"DELETE FROM seqfeature WHERE bioentry_id = %s"
         self.adaptor.cursor.execute(sql, (bioentry_id))
         
