@@ -1,0 +1,10 @@
+# This file has comments in it
+>gi|3318709|pdb|1A91|
+MENLNMDLLYMAAAVMMGLAAIGAAIGIGILGGKFLEGAARQPDLIPLLRTQFFIVMGLVDAIPMIAVGL
+GLYVMFAVA
+# I don't really know if FASTA format is supposed to support this
+# but we might be able to without many problems
+>gi|whatever|whatever
+MENLNMDLLYMAAAVMMGLAAIGAAIGIGILGG
+# More comments at the end of the file
+# Man, this file has more comments than sequence
