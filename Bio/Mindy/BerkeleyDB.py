@@ -52,7 +52,6 @@ class PrimaryNamespace(BaseDB.DictLookup):
         loc = self.db.primary_table[name]
         filetag, startpos, length = loc.split("\t")
         filename = self.db.fileid_info[filetag][0]
-        print "filename:", filename
         return [
             Location.Location(self.namespace,
                               name,
