@@ -201,22 +201,17 @@ class _Scanner:
         read_and_call_while(uhandle, consumer.noevent, blank=1)
 
         # If PSI-BLAST, read the 'Sequences not found' line followed
-        # by more descriptions.
+        # by more descriptions.  However, I need to watch out for the
+        # case where there were no sequences not found previously, in
+        # which case there will be no more descriptions.
         if attempt_read_and_call(uhandle, consumer.nonmodel_sequences,
                                  start='Sequences not found'):
             # Read the descriptions and the following blank lines.
             read_and_call_while(uhandle, consumer.noevent, blank=1)
-            read_and_call_until(uhandle, consumer.description, blank=1)
-            read_and_call_while(uhandle, consumer.noevent, blank=1)
+            if safe_peekline(uhandle)[:9] != 'CONVERGED':
+                read_and_call_until(uhandle, consumer.description, blank=1)
+                read_and_call_while(uhandle, consumer.noevent, blank=1)
 
-        # If PSI-BLAST has converged, then it will add an extra
-        # blank line followed by 'CONVERGED'.
-        # Exception: it does not add that blank line if there were
-        # no sequences not found previously, e.g.
-        # Sequences not found previously or not previously below threshold:
-        # 
-        # 
-        # CONVERGED!
         attempt_read_and_call(uhandle, consumer.converged, start='CONVERGED')
 
         consumer.end_descriptions()
@@ -577,6 +572,9 @@ class _DescriptionConsumer:
         #   - score could be equal to e-value (not likely, but what if??)
         #   - sometimes there's an "N" score of '1'.  Ignore it.
         cols = string.split(line)
+        if len(cols) < 3:
+            raise SyntaxError, \
+                  "Line does not appear to contain description:\n%s" % line
         if cols[-1] == '1':  # ignore N.  XXX this is kinda broken.  N may
             del cols[-1]     # not be 1.  I'm assuming e-value would be 1.0.
         i = string.rfind(line, cols[-1])        # find start of p-value
@@ -764,16 +762,23 @@ class _HSPConsumer:
         self._hsp.expect = _safe_float(self._hsp.expect)
 
     def identities(self, line):
-        self._hsp.identities, = _re_search(
-            r"Identities = (\d+)", line,
+        x, y = _re_search(
+            r"Identities = (\d+)\/(\d+)", line,
             "I could not find the identities in line\n%s" % line)
-        self._hsp.identities = _safe_int(self._hsp.identities)
+        self._hsp.identities = _safe_int(x), _safe_int(y)
 
         if string.find(line, 'Positives') >= 0:
-            self._hsp.positives, = _re_search(
-                r"Positives = (\d+)", line,
+            x, y = _re_search(
+                r"Positives = (\d+)\/(\d+)", line,
                 "I could not find the positives in line\n%s" % line)
-            self._hsp.positives = _safe_int(self._hsp.positives)
+            self._hsp.positives = _safe_int(x), _safe_int(y)
+
+        if string.find(line, 'Gaps') >= 0:
+            x, y = _re_search(
+                r"Gaps = (\d+)\/(\d+)", line,
+                "I could not find the positives in line\n%s" % line)
+            self._hsp.gaps = _safe_int(x), _safe_int(y)
+
         
     def strand(self, line):
         self._hsp.strand = _re_search(

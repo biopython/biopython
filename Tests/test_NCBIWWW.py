@@ -7,36 +7,48 @@ import os
 from Bio import ParserSupport
 from Bio.Blast import NCBIWWW
 
+all_tests = [
+    'bt019', 'bt020', 'bt021', 'bt022', 'bt023',
+    'bt024', 'bt025', 'bt026', 'bt027', 'bt028',
+    'bt029', 'bt030', 'bt031', 'bt032', 'bt033',
+    'bt034', 'bt035', 'bt036', 'bt037', 'bt038',
+    'bt061'
+    ]
 
-test_files = ['bt019', 'bt020', 'bt021', 'bt022', 'bt023',
-              'bt024', 'bt025', 'bt026', 'bt027', 'bt028',
-              'bt029', 'bt030', 'bt031', 'bt032', 'bt033',
-              'bt034', 'bt035', 'bt036', 'bt037', 'bt038'
-              ]
-
-
+# In order to keep the output file sizes reasonable, only generate
+# a bunch of output for a few of the tests.
+detailed_tests = [
+    'bt019',    # 2.0.10 blastp
+    'bt023',    # 2.0.10 blastp master-slave
+    'bt026',    # 2.0.10 blastn
+    'bt028',    # 2.0.10 blastx
+    'bt030',    # 2.0.10 tblastn
+    'bt032',    # 2.0.10 tblastx
+    ]
 
 ### _Scanner
 
 print "Running tests on _Scanner"
     
 scanner = NCBIWWW._Scanner()
-for test in test_files:
+for test in all_tests:
     print "*" * 50, "TESTING %s" % test
     datafile = os.path.join("Blast", test)
-    tc = ParserSupport.TaggingConsumer()
-    scanner.feed(open(datafile), tc)
+    scanner.feed(open(datafile), ParserSupport.AbstractConsumer())
 
+for test in detailed_tests:
+    print "*" * 50, "TESTING %s" % test
+    datafile = os.path.join("Blast", test)
+    scanner.feed(open(datafile), ParserSupport.TaggingConsumer())
 
 ### BlastParser
 
 print "Running tests on BlastParser"
 
-for test in test_files:
+parser = NCBIWWW.BlastParser()
+for test in all_tests:
     print "*" * 50, "TESTING %s" % test
     datafile = os.path.join("Blast", test)
-    parser = NCBIWWW.BlastParser()
     rec = parser.parse(open(datafile))
-    print "parsed without exception"
     # XXX should check this more thoroughly
     

@@ -85,8 +85,9 @@ class HSP:
     score        BLAST score of hit.  (float)
     bits         Number of bits for that score.  (float)
     expect       Expect value.  (float)
-    identities   Number of identities.  (int)
-    positives    Number of positives.  (int)
+    identities   Number of identities/total aligned.  tuple of (int, int)
+    positives    Number of positives/total aligned.  tuple of (int, int)
+    gaps         Numer of gaps/total aligned.  tuple of (int, int)
     strand       Tuple of (query, target) strand.
     frame        Tuple of 1 or 2 frame shifts, depending on the flavor.
 
@@ -118,9 +119,10 @@ class HSP:
         self.score = None
         self.bits = None
         self.expect = None
-        self.identities = None
-        self.positives = None
-        self.strand = ()
+        self.identities = (None, None)
+        self.positives = (None, None)
+        self.gaps = (None, None)
+        self.strand = (None, None)
         self.frame = ()
         
         self.query = ''
@@ -164,10 +166,10 @@ class DatabaseReport:
     """Holds information about a database report.
     
     Members:
-    database_name              The name of the database.
+    database_name              List of database names.  (can have multiple dbs)
     num_letters_in_database    Number of letters in the database.  (int)
     num_sequences_in_database  Number of sequences in the database.  (int)
-    posted_date                The date the database was posted.
+    posted_date                List of the dates the databases were posted.
     ka_params                  A tuple of (lambda, k, h) values.  (floats)
     gapped                     # XXX this isn't set right!
     ka_params_gap              A tuple of (lambda, k, h) values.  (floats)
