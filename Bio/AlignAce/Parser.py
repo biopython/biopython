@@ -39,20 +39,17 @@ class AlignAceConsumer:
         self.current_motif = Motif()
         self.motifs.append(self.current_motif)
         self.current_motif.alphabet=IUPAC.unambiguous_dna
-        print "new motif",line,
         
     def motif_hit(self,line):
         seq = Seq(line.split("\t")[0],IUPAC.unambiguous_dna)
         self.current_motif.add_instance(seq)
-        print "motif_hit",line,
         
     def motif_score(self,line):
-        print "motif_score",line,
+        self.current_motif.score = string.atof(line.split()[-1])
         
     def motif_mask(self,line):
         self.current_motif.set_mask(line.strip("\n\c"))
-        print "motif_mask ",line,
-        
+
     def noevent(self,line):
         pass
         
