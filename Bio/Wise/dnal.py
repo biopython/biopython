@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-__version__ = "$Revision: 1.1 $"
+__version__ = "$Revision: 1.2 $"
 
 from __future__ import division
 
@@ -21,7 +21,7 @@ _CMDLINE_DNAL = ["dnal", "-alb", "-nopretty",
 try:
     import lsf
     if lsf.jobid:
-        _CMDLINE_DNAL.extend("-silent", "-quiet")
+        _CMDLINE_DNAL.extend(["-silent", "-quiet"])
 except ImportError:
     pass
 
