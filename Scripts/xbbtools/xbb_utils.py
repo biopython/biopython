@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # Created: Thu Jul 13 12:09:58 2000
-# Last changed: Time-stamp: <00/12/02 15:56:51 thomas>
+# Last changed: Time-stamp: <00/12/03 12:10:58 thomas>
 # thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas
 # File: xbb_utils.py
 
@@ -8,6 +8,7 @@ import string, re
 import os, sys
 sys.path.insert(0, '.')
 from Tkinter import *
+from FileDialog import SaveFileDialog
 
 class NotePad(Toplevel):
     def __init__(self, master= None):

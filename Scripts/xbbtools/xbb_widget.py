@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # Created: Wed Jun 21 10:28:14 2000
-# Last changed: Time-stamp: <00/12/02 15:56:11 thomas>
+# Last changed: Time-stamp: <00/12/03 13:55:10 thomas>
 # thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas
 # File: xbb_widget.py
 
@@ -20,7 +20,7 @@ sys.path.insert(0, '.')
 import xbb_io
 from xbb_utils import *
 from xbb_translations import xbb_translations
-
+from xbb_blast import BlastIt
 from Bio.Tools import Translate
 
 
@@ -68,6 +68,7 @@ class xbb_widget:
 
     def init_colors(self):
         self.colorsbg = {'frame':'brown',
+                         'canvas':'brown',
                          'button':'darkgreen',
                          'radiobutton':'darkgrey',
                          'checkbutton':'darkgrey',
@@ -91,6 +92,15 @@ class xbb_widget:
                          'T':'tomato'
                          }
 
+        self.colorsPMWbg = {
+            'ComboBox':'darkgreen',
+            'ComboBox.Label':'darkgreen',
+            }
+        
+        self.colorsPMWfg = {
+            'ComboBox.Label':'lightblue',
+            }
+
 
     def init_optionsdb(self):
         # does anybody know a better way of defining colors ?
@@ -101,6 +111,14 @@ class xbb_widget:
             tk.option_add(name, v)
 
         for k,v in self.colorsfg.items():
+            name = '*' + string.upper(k[0]) + k[1:] + '.foreground'
+            tk.option_add(name, v)
+            
+        for k,v in self.colorsPMWbg.items():
+            name = '*' + string.upper(k[0]) + k[1:] + '.background'
+            tk.option_add(name, v)
+
+        for k,v in self.colorsPMWfg.items():
             name = '*' + string.upper(k[0]) + k[1:] + '.foreground'
             tk.option_add(name, v)
             
@@ -204,6 +222,7 @@ class xbb_widget:
         for text, func in [('Open', self.open),
                            ('Export', self.export),
                            ('GC Frame', self.gcframe),
+                           ('Blast', self.blast),
                            ('Exit', self.exit)]:
             b_id = Button(self.button_frame, text = text,
                           command = func, width = 7)
@@ -378,14 +397,9 @@ GC=%f
                len(seq), aa['A'], aa['C'], aa['G'], aa['T'], aa['N'], GC)
                    )
         
-    def show_blast(self, result):
-        np = NotePad()
-        tid = np.text_id()
-        tid.insert(END, result)
-
     def blast(self):
         seq = self.get_selection_or_sequence()
-        os.system('%s %s &' % (self.blastit, seq))
+        self.blaster = BlastIt(seq, self.parent)
 
     def reverse(self):
         w = self.sequence_id
@@ -425,7 +439,6 @@ GC=%f
         w.tag_add(SEL, start, stop)
         w.tag_remove(SEL, stop, END)
              
-        
         
 if __name__ == '__main__':
     xbbtools = xbb_widget()

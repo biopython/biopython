@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # Created: Thu Jul 13 14:07:25 2000
-# Last changed: Time-stamp: <00/12/02 15:59:14 thomas>
+# Last changed: Time-stamp: <00/12/03 13:27:24 thomas>
 # thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas
 # File: xbb_blast.py
 
@@ -13,11 +13,14 @@ import Pmw
 sys.path.insert(0, '.')
 
 from xbb_utils import NotePad
-
+import xbb_blastbg
 
 class BlastIt:
-    def __init__(self, seq):
+    def __init__(self, seq, parent = None):
         self.seq = seq
+        self.parent = parent
+        self.toplevel = Toplevel(parent)
+        Pmw.initialise(parent)
         self.GetBlasts()
         self.Choices()
         
@@ -40,7 +43,7 @@ class BlastIt:
 
     def Choices(self):
         self.GetBlasts()
-        self.cf = Frame()
+        self.cf = Frame(self.toplevel)
         self.cf.pack(side = TOP, expand = 1, fill = X)
         self.dbs = Pmw.ComboBox(self.cf,
                                 label_text = 'Blast Databases:',
@@ -73,9 +76,9 @@ class BlastIt:
         db = self.dbs.get()
         prog = self.blasts.get()
         color = 'red'
-        if (prog in ['blastn', 'tblastx']) == (db in self.nin):
+        if (prog in ['blastn', 'tblastx', 'tblastn']) == (db in self.nin):
             color = 'green'
-        elif (prog in ['blastp', 'blastx', 'tblastn']) == (db in self.pin):
+        elif (prog in ['blastp', 'blastx']) == (db in self.pin):
             color = 'green'
 
         self.dbs.component('entry').configure(bg = color)
@@ -95,10 +98,10 @@ class BlastIt:
 
     def Update(self):
         self.notepad.update()
-        print '.',
+        #print '.',
         self.notepad.after(1, self.Update)
         
-    def Run(self):
+    def oldRun(self):
         self.notepad = NotePad()
         self.notepad.menubar.configure(bg='red')
         self.notepad.bind('<Destroy>', self.Exit)
@@ -121,6 +124,22 @@ class BlastIt:
             self.notepad.menubar.configure(bg='green')
         except:
             pass
+
+    def Run(self):
+        self.notepad = NotePad()
+        tid = self.notepad.tid
+        self.notepad.menubar.configure(bg='red')
+
+        self.toplevel.destroy()
+        blastbg = xbb_blastbg.BlastDisplayer(self.command, tid)
+        blastbg.RunCommand()
+
+        # indicate the finished run by changing color
+        try:
+            self.notepad.menubar.configure(bg='green4')
+        except:
+            pass
+        
         
     def Exit(self, *args):
 
