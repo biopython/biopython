@@ -362,6 +362,8 @@ PACKAGES = [
     'Bio.PDB.mmCIF',
     'Bio.Prosite',
     'Bio.Rebase',
+    'Bio.Restriction',
+    'Bio.Restriction._Update',
     'Bio.Saf',
     'Bio.SCOP',
     'Bio.SeqIO',
@@ -431,6 +433,9 @@ EXTENSIONS = [
                'Bio/PDB/mmCIF/MMCIFlexmodule.c'],
               include_dirs=["Bio"],
               libraries=["fl"]
+              ),
+    Extension('Bio.Restriction.DNAUtils',
+              ['Bio/Restriction/DNAUtils.c']
               ),
     ]
 

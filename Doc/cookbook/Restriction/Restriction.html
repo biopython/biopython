@@ -1,0 +1,854 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta content="text/html; charset=ISO-8859-1"
+ http-equiv="content-type">
+  <title>Restriction.html</title>
+</head>
+<body vlink="#ff0000" alink="#000088" link="#0000ff"
+ style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<h2><a class="mozTocH2" name="mozTocId419365"></a><span class="mozTocH2"></span>&nbsp;
+Working
+with restriction enzymes</h2>
+<big style="font-weight: bold;"><br>
+Table of content<br>
+</big>
+<ul id="mozToc">
+<!--mozToc h1 1 h2 2 h3 3 h4 4 h5 5 h6 6--><li><a href="#mozTocId419365">&nbsp;
+Working
+with restriction enzymes</a>
+    <ul>
+      <li>
+        <ul>
+          <li><a href="#mozTocId101269">1&nbsp; The
+restriction enzymes classes </a>
+            <ul>
+              <li><a href="#mozTocId59051">1.1&nbsp;
+Importing the enzymes</a></li>
+              <li><a href="#mozTocId868359">1.2&nbsp;
+Naming convention </a></li>
+              <li><a href="#mozTocId447698">1.3&nbsp;
+Searching for restriction sites</a></li>
+              <li><a href="#mozTocId29937">1.4&nbsp;
+Retrieving the sequences produced by a digestion</a></li>
+              <li><a href="#mozTocId255275">1.5&nbsp;
+Analysing circular sequences</a></li>
+              <li><a href="#mozTocId25220">1.6 Comparing enzymes with
+each others </a></li>
+              <li><a href="#mozTocId724099">1.7
+Other
+facilities provided by the enzyme classes</a></li>
+            </ul>
+          </li>
+          <li><a href="#mozTocId343319">2&nbsp;
+The
+RestrictionBatch class : a class to deal with several enzymes </a>
+            <ul>
+              <li><a href="#mozTocId32850">2.1
+Creating a RestrictionBatch </a></li>
+              <li><a href="#mozTocId672810">2.2
+Restricting a RestrictionBatch to a particular supplier</a></li>
+              <li><a href="#mozTocId436678">2.3
+Adding enzymes to a RestrictionBatch </a></li>
+              <li><a href="#mozTocId432981">2.4
+Removing enzymes from a RestrictionBatch</a></li>
+              <li><a href="#mozTocId479498">2.5
+Manipulating RestrictionBatch</a></li>
+              <li><a href="#mozTocId919079">2.6
+Analysing sequences with a RestrictionBatch </a></li>
+              <li><a href="#mozTocId114148">2.7
+Other
+RestrictionBatch methods </a></li>
+            </ul>
+          </li>
+          <li><a href="#mozTocId569237">3&nbsp; AllEnzymes
+and CommOnly : two
+preconfigured RestrictionBatches </a></li>
+          <li><a href="#mozTocId960354">4&nbsp; The Analysis
+class : even simpler
+restriction analysis </a>
+            <ul>
+              <li><a href="#mozTocId994414">4.1 Setting up an
+Analysis</a></li>
+              <li><a href="#mozTocId129244">4.2 Full restriction
+analysis </a></li>
+              <li><a href="#mozTocId441271">4.3 Changing the title </a></li>
+              <li><a href="#mozTocId450266">4.4 Customising the
+output </a></li>
+              <li><a href="#mozTocId864311">4.5 Fancier
+restriction analysis </a></li>
+              <li><a href="#mozTocId289477">4.6 More complex
+analysis </a></li>
+            </ul>
+          </li>
+          <li><a href="#mozTocId343319">5&nbsp;
+Advanced features : the FormattedSeq class </a>
+            <ul>
+              <li><a href="#mozTocId74092">5.1 Creating a
+FormattedSeq </a></li>
+              <li><a href="#mozTocId143837">5.2 Unlike Bio.Seq,
+FormattedSeq retains information about their shape </a></li>
+              <li><a href="#mozTocId123270">5.3 Changing the
+shape of a FormattedSeq </a></li>
+              <li><a href="#mozTocId710376">5.4 Using / and //
+operators with FormattedSeq </a></li>
+            </ul>
+          </li>
+          <li><a href="#mozTocId80946">6&nbsp; More advanced
+features </a>
+            <ul>
+              <li><a href="#mozTocId546339">6.1 Updating the
+enzymes from Rebase : rebase_update.py </a></li>
+              <li><a href="#mozTocId49285">6.2 Compiling a new
+dictionary : the script ranacompiler.py </a></li>
+              <li><a href="#mozTocId968583">6.3 Subclassing
+the class Analysis </a></li>
+            </ul>
+          </li>
+          <li><a href="#mozTocId114111">7&nbsp; Limitation
+and caveat </a>
+            <ul>
+              <li><a href="#mozTocId218594">7.1 All DNA are non
+methylated </a></li>
+              <li><a href="#mozTocId790484">7.2 No support for
+star activity </a></li>
+              <li><a href="#mozTocId218334">7.3 Safe to use with
+degenerated DNA </a></li>
+              <li><a href="#mozTocId49392">7.4 Non standard bases
+in DNA are not
+allowed </a></li>
+              <li><a href="#mozTocId395117">7.5 Sites found at
+the edge of linear
+DNA might not be accessible in a real digestion </a></li>
+              <li><a href="#mozTocId112206">7.6 Restriction
+reports cutting sites
+not enzyme recognition sites </a></li>
+            </ul>
+          </li>
+          <li><a href="#mozTocId386540">8&nbsp; Annexe :
+modifying dir() to use
+with from Bio.Restriction import * </a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+<big style="font-weight: bold;"><br>
+</big><br>
+<br>
+<h3><a class="mozTocH3" name="mozTocId101269"></a>1&nbsp; The
+restriction enzymes classes<br>
+</h3>
+<br>
+The restriction enzyme
+package is situated in Bio/Restriction. This package will allow you to
+work with restriction enzymes and realise restriction analysis on your
+sequence. Restriction make use of the facilities offered by Rebase and
+contains classes for more than 600 restriction enzymes. This chapter
+will lead you through a quick overview of the facilities offered by the
+Restriction package of biopython. The chapter is constructed as an
+interactive python session and the best way to read it is with a python
+shell open alongside you.<br>
+<h4><a class="mozTocH4" name="mozTocId59051"></a><span class="mozTocH4"></span>1.1&nbsp;
+Importing the enzymes</h4>
+To import the enzymes, open a python shell and type :<br>
+<pre>&gt;&gt;&gt; from Bio import Restriction<br>&gt;&gt;&gt; dir()<br>['Restriction', '__builtins__', '__doc__', '__name__']<br>&gt;&gt;&gt; Restriction.EcoRI<br>EcoRI<br>&gt;&gt;&gt; Restriction.EcoRI.site<br>'GAATTC'<br>&gt;&gt;&gt;<br></pre>
+You will certainly notice that the package is quite slow to load. This
+is normal as each enzyme possess its own class and there is a lot of
+them. This will not affect the speed of python after the initial
+import. <br>
+<br>
+I don't know for you but I find it quite cumbersome to have to prefix
+each operation with <span style="font-family: monospace;">Restriction.</span>,
+so here is another way to import
+the package.<br>
+<pre>&gt;&gt;&gt; from Bio.Restriction import *<br>&gt;&gt;&gt; EcoRI<br>EcoRI<br>&gt;&gt;&gt; EcoRI.site<br>'GAATTC'<br>&gt;&gt;&gt;</pre>
+However, this method has one big disadvantage :<br>
+It
+is almost impossible to use the command 'dir()' anymore as there is
+so much enzymes the results is hardly readable. A workaround is
+provided at the end of this tutorial. I let you decide which method you
+prefer. But in this tutorial I
+will use the second. If you prefer the first method you will need to
+prefix each call to a restriction enzyme with 'Restriction.' in the
+remaining of the tutorial.<br>
+<h4><a class="mozTocH4" name="mozTocId868359"></a><span class="mozTocH4"></span>1.2&nbsp;
+Naming convention<br>
+</h4>
+To access an Enzyme simply enter
+it's name. You must respect the usual naming convention with the upper
+case letters and Latin numbering (in upper case as well):<br>
+<pre>&gt;&gt;&gt; EcoRI <br>EcoRI<br>&gt;&gt;&gt; ecori<br><br>Traceback (most recent call last):<br>  File "&lt;pyshell#25&gt;", line 1, in -toplevel-<br>    ecori<br>NameError: name 'ecori' is not defined<br>&gt;&gt;&gt; EcoR1<br><br>Traceback (most recent call last):<br>  File "&lt;pyshell#26&gt;", line 1, in -toplevel-<br>    EcoR1<br>NameError: name 'EcoR1' is not defined<br>&gt;&gt;&gt; KpnI<br>KpnI<br>&gt;&gt;&gt;<br></pre>
+ecori or EcoR1 are not enzymes, EcoRI and KpnI are.<br>
+<h4><a class="mozTocH4" name="mozTocId447698"></a><span class="mozTocH4"></span>1.3&nbsp;
+Searching for restriction sites</h4>
+So what can we do with these restriction enzymes. To see that we
+will
+need a DNA sequence. Restriction enzymes support both <span
+ style="font-family: monospace;">Bio.Seq.MutableSeq</span> and <span
+ style="font-family: monospace;">Bio.Seq.Seq</span> objects. You can
+use any DNA
+alphabet which complies with the IUPAC
+alphabet.
+<pre>&gt;&gt;&gt; from Bio.Seq import Seq<br>&gt;&gt;&gt; from Bio.Alphabet.IUPAC import IUPACAmbiguousDNA<br>&gt;&gt;&gt; amb = IUPACAmbiguousDNA()<br>&gt;&gt;&gt; my_seq = Seq('AAAAAAAAAAAAAA', amb)<br>&gt;&gt;&gt; my_seq<br>Seq('AAAAAAAAAAAAAA', IUPACAmbiguousDNA())<br></pre>
+Searching a sequence for the presence of restriction site for your
+preferred enzyme is as simple as :<br>
+<pre>&gt;&gt;&gt; EcoRI.search(my_seq)<br>[]<br></pre>
+The results is a list. Here the list is empty since there is
+obviously no site EcoRI site in my_seq.&nbsp; Let's try to get a
+sequence
+with a EcoRI site.<br>
+<pre>&gt;&gt;&gt; ecoseq = my_seq + Seq(EcoRI.site, amb) + my_seq<br>&gt;&gt;&gt; ecoseq<br>Seq('AAAAAAAAAAAAAAGAATTCAAAAAAAAAAAAAA', IUPACAmbiguousDNA())<br>&gt;&gt;&gt; EcoRI.search(ecoseq)<br>[16]<br></pre>
+We therefore have a site at position 16 of the sequence ecoseq. The
+position returned by the method search is the first base of the
+downstream segment produced by a restriction (i.e. the first base after
+the position where the enzyme will cut). The Restriction
+package follows biological convention (the first base of a sequence is
+base 1). No need to make difficult conversions between your recorded
+biological data and the results produced by the enzymes in this
+package.<br>
+<h4><a class="mozTocH4" name="mozTocId29937"></a><span class="mozTocH4"></span>1.4&nbsp;
+Retrieving the sequences produced by a digestion</h4>
+Seq objects as all python sequence, have different conventions and the
+first base of a sequence is base 0. Therefore to get the sequences
+produced by an EcoRI digestion of ecoseq, one should do the following :<br>
+<pre>&gt;&gt;&gt; ecoseq[:15], ecoseq[15:] <br>(Seq('AAAAAAAAAAAAAAG', IUPACAmbiguousDNA()), Seq('AATTCAAAAAAAAAAAAAA', IUPACAmbiguousDNA())) <br></pre>
+I hear you thinking "this is a cumbersome and error prone method to get
+these sequences".&nbsp; To simplify your life, enzymes provide another
+method to get theses sequences
+without hassle : <span style="font-family: monospace;">catalyse</span>.
+This method will return a tuple containing
+all the fragments produced by a complete digestion of the sequence.
+Using it is as simple as before :<br>
+<pre>&gt;&gt;&gt; EcoRI.catalyse(ecoseq)<br>(Seq('AAAAAAAAAAAAAAG', IUPACAmbiguousDNA()), Seq('AATTCAAAAAAAAAAAAAA', IUPACAmbiguousDNA()))</pre>
+<h4><a class="mozTocH4" name="mozTocId255275"></a><span class="mozTocH4"></span>1.5&nbsp;
+Analysing circular sequences</h4>
+Now, if you have entered the previous command in your shell you may
+have noticed that both 'search' and 'catalyse' can take a second
+argument 'linear' which default to True. Using this will allow you to
+simulate circular sequences such as plasmids. Setting linear to False
+inform the enzyme to make the search over a circular sequence and to
+search for potential sites spanning over the boundaries of the sequence.<br>
+<pre>&gt;&gt;&gt; EcoRI.search(ecoseq, linear=False)<br>[16]<br>&gt;&gt;&gt; EcoRI.catalyse(ecoseq, linear=False)<br>(Seq('AATTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAG', IUPACAmbiguousDNA()),)<br>&gt;&gt;&gt; ecoseq  # for memory<br>Seq('AAAAAAAAAAAAAAGAATTCAAAAAAAAAAAAAA', IUPACAmbiguousDNA())</pre>
+OK, this is quite a difference, we only get one fragment, which
+correspond to the linearised sequence. The beginning sequence has been
+shifted to take this fact into account. Moreover we can see another
+difference :<br>
+<pre>&gt;&gt;&gt; new_seq = Seq('TTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA', IUPACAmbiguousDNA())<br>&gt;&gt;&gt; EcoRI.search(new_seq)<br>[]<br>&gt;&gt;&gt; EcoRI.search(new_seq, linear=False)<br>[33]<br></pre>
+As you can see using 'linear=False', make a site appears in the
+sequence new_seq. This site does not exist in a linear sequence as the
+EcoRI site is split into two halves at the start and the end of the
+sequence. In a circular sequence however, the site is effectively
+present when the beginning and end of the sequence are joined.<br>
+<h4><a class="mozTocH4" name="mozTocId25220"></a>1.6 Comparing enzymes
+with each others<br>
+</h4>
+Restriction Enzymes define 4 comparative operators ==, !=, &gt;&gt; and
+%. All these operator compares two enzymes together and either return
+True or False.<br>
+<br>
+== :<br>
+<br>
+It will return True if the two sides of the operator are the same. same
+is defined as : same name, same site, same overhang (i.e. the only
+thing which is equal to EcoRI is EcoRI).<br>
+<br>
+!= :<br>
+<br>
+It will return True if the two sides of the operator are different. Two
+enzymes are not different if the result produced by one enzyme will
+always be the same as the result produced by the other (i.e. True
+isoschizomers will not being the same enzymes, are not different since
+they are interchangeable).<br>
+<br>
+&gt;&gt; :<br>
+<br>
+True if the enzymes recognise the same site, but cut it in a different
+way (i.e. the enzymes are neoschizomers).<br>
+<br>
+% :<br>
+<br>
+Test the compatibility of the ending produced by the enzymes. (will be
+True if the fragments produced with one of the enzyme can directly be
+ligated to fragments produced by the other).<br>
+<br>
+Let's use Acc65I and its isoschizomers as example :<br>
+<pre>&gt;&gt;&gt; Acc65I.isoschizomers()<br>[Asp718I, KpnI]<br>&gt;&gt;&gt; Acc65I.elucidate()<br>'G^GTAC_C'<br>&gt;&gt;&gt; Asp718I.elucidate()<br>'G^GTAC_C'<br>&gt;&gt;&gt; KpnI.elucidate()<br>'G_GTAC^C'<br>&gt;&gt;&gt; # Asp718I and Acc65I are True isoschizomers, <br>&gt;&gt;&gt; # they recognise the same site and cut it the <br>&gt;&gt;&gt; # same way.<br>&gt;&gt;&gt; # KpnI is a neoschizomers of the 2  others.<br>&gt;&gt;&gt; # here is the results of the 4 operator<br>&gt;&gt;&gt; # for each pair of enzymes<br>&gt;&gt;&gt; <br>&gt;&gt;&gt; ############# x == y  (x is y)<br>&gt;&gt;&gt; Acc65I == Acc65I  	# same enzyme =&gt; True<br>True<br>&gt;&gt;&gt; Acc65I == KpnI    	# all other cases =&gt; False<br>False<br>&gt;&gt;&gt; Acc65I == Asp718I<br>False<br>&gt;&gt;&gt; Acc65I == EcoRI<br>False<br>&gt;&gt;&gt; ############ x != y  (x and y are not true isoschizomers)<br>&gt;&gt;&gt; Acc65I != Acc65I	# same enzyme =&gt; False<br>False<br>&gt;&gt;&gt; Acc65I != Asp718I	# different enzymes, but cut same manner =&gt; False<br>False<br>&gt;&gt;&gt; Acc65I != KpnI      # all other cases =&gt; True<br>True<br>&gt;&gt;&gt; Acc65I != EcoRI<br>True<br>&gt;&gt;&gt; ###########  x &gt;&gt; y (x is neoschizomer of y)<br>&gt;&gt;&gt; Acc65I &gt;&gt; Acc65I	# same enzyme =&gt; False<br>False<br>&gt;&gt;&gt; Acc65I &gt;&gt; Asp718I   # same site, same cut =&gt; False<br>False<br>&gt;&gt;&gt; Acc65I &gt;&gt; EcoRI     # different site =&gt; False<br>False<br>&gt;&gt;&gt; Acc65I &gt;&gt; KpnI      # same site, different cut =&gt; True<br>True <br>&gt;&gt;&gt; ########### x % y   (fragments produced by x and fragments produced by y<br>&gt;&gt;&gt; #			 can be directly ligated to each other)<br>&gt;&gt;&gt; Acc65I % Asp718I<br>True<br>&gt;&gt;&gt; Acc65I % Acc65I<br>True<br>&gt;&gt;&gt; Acc65I % KpnI   # KpnI -&gt; '3 overhang, Acc65I-&gt; 5' overhang =&gt; False <br>False<br>&gt;&gt;&gt;<br>&gt;&gt;&gt; SunI.elucidate()<br>'C^GTAC_G'<br>&gt;&gt;&gt; SunI == Acc65I<br>False<br>&gt;&gt;&gt; SunI != Acc65I<br>True<br>&gt;&gt;&gt; SunI &gt;&gt; Acc65I<br>False<br>&gt;&gt;&gt; SunI % Acc65I  # different site, same overhang (5' GTAC) =&gt; True<br>True<br>&gt;&gt;&gt; SmaI % EcoRV   # 2 Blunt enzymes, all blunt enzymes are compatible =&gt; True<br>True<br></pre>
+<h4><a class="mozTocH4" name="mozTocId724099"></a>1.7
+Other
+facilities provided by the enzyme classes</h4>
+The restriction enzymes class provided quite a number of others
+methods. We will not go through all of them, but only have a quick look
+to the most useful ones. <br>
+<br>
+Not all enzymes possess the same properties when it comes to the way
+they digest a DNA. If you want to know more about the way a particular
+enzyme cut you can use the three following methods. They are fairly
+straightforward to understand and refer to the ends that the enzyme
+produces blunt, 5' overhanging (also called 3' recessed) sticky end and
+3' overhanging (or 5' recessed) sticky end.<br>
+<pre>&gt;&gt;&gt; EcoRI.is_blunt()<br>False<br>&gt;&gt;&gt; EcoRI.is_5overhang()<br>True<br>&gt;&gt;&gt; EcoRI.is_3overhang()<br>False<br></pre>
+A more detailled view of the restriction site can be produced using the
+<span style="font-family: monospace;">elucidate()</span> method. the
+"^" refers to the position of the cut in the
+sense strand of the sequence. "_" to the cut on the antisense or
+complementary strand.&nbsp; "^_" means blunt.
+<pre>&gt;&gt;&gt; EcoRI.elucidate()<br>'G^AATT_C'<br>&gt;&gt;&gt; KpnI.elucidate()<br>'G_GTAC^C'<br>&gt;&gt;&gt; EcoRV.elucidate()<br>'GAT^_ATC'<br></pre>
+The method frequency will give you the statiscal <span
+ style="font-family: monospace;">frequency()</span> of the
+enzyme site. <br>
+<pre>&gt;&gt;&gt; EcoRI.frequency()<br>4096<br>&gt;&gt;&gt; XhoII.elucidate()<br>'R^GATC_Y'<br>&gt;&gt;&gt; XhoII.frequency()<br>1024 </pre>
+To get the length of a the recognition sequence of an enzyme use the
+built-in function <span style="font-family: monospace;">len()</span> :<br>
+<pre>&gt;&gt;&gt; len(EcoRI)<br>6<br>&gt;&gt;&gt; BstXI.elucidate()<br>'CCAN_NNNN^NTGG'<br>&gt;&gt;&gt; len(BstXI)<br>12<br>&gt;&gt;&gt; FokI.site<br>'GGATG'<br>&gt;&gt;&gt; FokI.elucidate()  	# FokI cut well outside its recognition site<br>'GGATGNNNNNNNNN^NNNN_N'<br>&gt;&gt;&gt; len(FokI)	   	# its length is the length of the recognition site	<br>5</pre>
+Also interesting are the methods dealing with isoschizomers.
+For memory, two enzymes are isoschizomers if they share a same
+recognition site. <br>
+A further division is made between isoschizomers (same name, recognise
+the same
+sequence and cut the same way) and neoschizomers which cut at different
+positions. equischizomer is an arbitrary choice to design
+"isoschizomers_that_are_not_neoschizomers" as this last one was a bit
+long.<br>
+Another set of method <span style="font-family: monospace;">one_enzyme.is_*schizomers(one_other_enzyme)</span>,
+allow to test 2
+enzymes against each other.<br>
+<pre>&gt;&gt;&gt; Acc65I.isoschizomers()<br>[Asp718I, KpnI]<br>&gt;&gt;&gt; Acc65I.neoschizomers()<br>[KpnI]<br>&gt;&gt;&gt; Acc65I.equischizomers()<br>[Asp718I]<br>&gt;&gt;&gt; KpnI.elucidate()<br>'G_GTAC^C'<br>&gt;&gt;&gt; Acc65I.elucidate()<br>'G^GTAC_C'<br>&gt;&gt;&gt; KpnI.is_neoschizomer(Acc65I)<br>True<br>&gt;&gt;&gt; KpnI.is_neoschizomer(KpnI)<br>False<br>&gt;&gt;&gt; KpnI.is_isoschizomer(Acc65I)<br>True<br>&gt;&gt;&gt; KpnI.is_isoschizomer(KpnI)<br>True<br>&gt;&gt;&gt; KpnI.is_equischizomer(Acc65I)<br>False<br>&gt;&gt;&gt; KpnI.is_equischizomer(KpnI)<br>True<br></pre>
+<span style="font-family: monospace;">suppliers()</span> will get you
+the list of all the suppliers of the enzyme. <span
+ style="font-family: monospace;">all_suppliers()</span> will give you
+all the suppliers in the database.<br>
+<br>
+<h3><a class="mozTocH3" name="mozTocId343319"></a><span class="mozTocH3"></span>2&nbsp;
+The
+RestrictionBatch class : a class to deal with several enzymes<br>
+</h3>
+If you want to
+make a restriction map of a sequence, using individual enzymes can
+become tedious and will endures a big overhead due to the repetitive
+conversion of the sequence to a FormattedSeq. Restriction provides a
+class to make easier the use of
+large number of enzymes in one go : RestrictionBatch.<br>
+RestrictionBatch will help you to manipulate lots of enzymes with a
+single command. Moreover all the enzymes in the restrictionBatch will
+share the same converted sequence, reducing the overhead to <br>
+<h4><a class="mozTocH4" name="mozTocId32850"></a><span class="mozTocH4"></span>2.1
+Creating a RestrictionBatch<br>
+</h4>
+You can initiate a
+restriction batch by passing it a list of enzymes or enzymes name as
+argument.
+<pre>&gt;&gt;&gt; rb = RestrictionBatch([EcoRI])<br>&gt;&gt;&gt; rb<br>RestrictionBatch(['EcoRI'])<br>&gt;&gt;&gt; rb2 = RestrictionBatch(['EcoRI'])<br>RestrictionBatch(['EcoRI'])<br>&gt;&gt;&gt; rb == rb2<br>True<br></pre>
+Adding a new enzyme to a restriction batch is easy :<br>
+<pre>&gt;&gt;&gt; rb.add(KpnI)<br>&gt;&gt;&gt; rb<br>RestrictionBatch(['EcoRI', 'KpnI'])<br>&gt;&gt;&gt; rb += EcoRV<br>&gt;&gt;&gt; rb<br>RestrictionBatch(['EcoRI', 'EcoRV', 'KpnI'])])<br></pre>
+Another way to create a RestrictionBatch is by simply adding
+restriction enzymes together, this is particularly useful for small
+batches :<br>
+<pre>&gt;&gt;&gt; rb3 = EcoRI + KpnI + EcoRV<br>&gt;&gt;&gt; rb3<br>RestrictionBatch(['EcoRI', 'EcoRV', 'KpnI'])<br></pre>
+<h4><a class="mozTocH4" name="mozTocId672810"></a><span class="mozTocH4"></span>2.2
+Restricting a RestrictionBatch to a particular supplier</h4>
+The Restriction package is based upon the Rebase database. This
+database gives a list of suppliers for each enzyme. It would be a shame
+not to make use of this facility. You can Produce a RestrictionBatch
+containing only enzymes from one or a few supplier(s). Here is how to
+do it :<br>
+<pre>&gt;&gt;&gt; rb_supp = RestrictionBatch(first=[], suppliers=['A','C','E','G','F','I','H','K','J','M','O','N','Q','P','S','R','U','V','X'])<br>&gt;&gt;&gt; # This will create a RestrictionBatch with the all enzymes which possess a supplier. </pre>
+The argument 'suppliers' take a list of one or several single letter
+codes corresponding to the supplier(s). The codes are the same as
+defined in Rebase. As it would be a pain to have to remember each
+supplier code, RestrictionBatch provides a method which show the pair
+code &lt;=&gt; supplier :<br>
+<pre>&gt;&gt;&gt; RestrictionBatch.show_codes()	# as of july 2004 Rebase release.<br>A = Amersham Pharmacia Biotech<br>C = Minotech Biotechnology<br>E = Stratagene<br>G = Qbiogene<br>F = Fermentas AB<br>I = SibEnzyme Ltd.<br>H = American Allied Biochemical, Inc.<br>K = Takara Shuzo Co. Ltd.<br>J = Nippon Gene Co., Ltd.<br>M = Roche Applied Science<br>O = Toyobo Biochemicals<br>N = New England Biolabs<br>Q = CHIMERx<br>P = Megabase Research Products<br>S = Sigma Chemical Corporation<br>R = Promega Corporation<br>U = Bangalore Genei<br>V = MRC-Holland<br>X = EURx Ltd.<br>&gt;&gt;&gt; # You can now choose a code and built your RestrictionBatch<br></pre>
+This way of producing a RestrictionBatch can drastically reduce the
+amount of useless output from a restriction analysis, limiting the
+search to enzymes that you can get hold of and limiting the risks of
+nervous breakdown. Nothing is more frustrating than to get the perfect
+enzyme for a sub-cloning only to find it's not commercially available.<br>
+<h4><a class="mozTocH4" name="mozTocId436678"></a><span class="mozTocH4"></span>2.3
+Adding enzymes to a RestrictionBatch<br>
+</h4>
+Adding an enzyme to a batch if the enzyme is already present will not
+raise an exception, but will have no effects. Sometimes you want to get
+an enzyme from a RestrictionBatch or add it to the batch if it is not
+present.<br>
+You will use the get method setting the second argument to True.<br>
+<pre>&gt;&gt;&gt; rb3<br>RestrictionBatch(['EcoRI', 'EcoRV', 'KpnI'])<br>&gt;&gt;&gt; rb3.add(EcoRI)<br>&gt;&gt;&gt; rb3<br>RestrictionBatch(['EcoRI', 'EcoRV', 'KpnI'])<br>&gt;&gt;&gt; rb3.get(EcoRI)<br>EcoRI<br>&gt;&gt;&gt; rb3.get(SmaI)<br><br>Traceback (most recent call last):<br>  File "&lt;pyshell#4&gt;", line 1, in -toplevel-<br>    rb3.get(SmaI)<br>  File "/usr/lib/python2.3/site-packages/Bio/Restriction/Restriction.py", line 1800, in get<br>    raise ValueError, 'enzyme %s is not in RestrictionBatch'%e.__name__<br>ValueError: enzyme SmaI is not in RestrictionBatch<br>&gt;&gt;&gt; rb3.get(SmaI, True)<br>SmaI<br>&gt;&gt;&gt; rb3<br>RestrictionBatch(['EcoRI', 'EcoRV', 'KpnI', 'SmaI'])<br></pre>
+<h4><a class="mozTocH4" name="mozTocId432981"></a><span class="mozTocH4"></span>2.4
+Removing enzymes from a RestrictionBatch</h4>
+Removing enzymes from a Batch is done using the <span
+ style="font-family: monospace;">remove()</span> method. If the
+enzyme is not present in the batch this will raise a KeyError. If the
+value you want to remove is not an enzyme this will raise a ValueError.<br>
+<pre>&gt;&gt;&gt; rb3.remove(EcoRI)<br>&gt;&gt;&gt; rb3<br>RestrictionBatch(['EcoRV', 'KpnI', 'SmaI'])<br>&gt;&gt;&gt; rb3.remove(EcoRI)<br><br>Traceback (most recent call last):<br>  File "&lt;pyshell#14&gt;", line 1, in -toplevel-<br>    rb3.remove('EcoRI')<br>  File "/usr/lib/python2.3/site-packages/Bio/Restriction/Restriction.py", line 1839, in remove<br>    return Set.remove(self, self.format(other))<br>  File "/usr/lib/python2.3/sets.py", line 534, in remove<br>    del self._data[element]<br>KeyError: EcoRI<br>&gt;&gt;&gt; rb3 += EcoRI<br>&gt;&gt;&gt; rb3 <br>RestrictionBatch(['EcoRI', 'EcoRV', 'KpnI', 'SmaI'])<br>&gt;&gt;&gt; rb3.remove('EcoRI')<br>&gt;&gt;&gt; rb3<br>RestrictionBatch(['EcoRV', 'KpnI', 'SmaI'])<br>&gt;&gt;&gt; rb3.remove('spam')<br><br>Traceback (most recent call last):<br>  File "&lt;pyshell#18&gt;", line 1, in -toplevel-<br>    rb3.remove('spam')<br>  File "/usr/lib/python2.3/site-packages/Bio/Restriction/Restriction.py", line 1839, in remove<br>    return Set.remove(self, self.format(other))<br>  File "/usr/lib/python2.3/site-packages/Bio/Restriction/Restriction.py", line 1871, in format<br>    raise ValueError, '%s is not a RestrictionType'%y.__class__<br>ValueError: &lt;type 'str'&gt; is not a RestrictionType</pre>
+<h4><a class="mozTocH4" name="mozTocId479498"></a><span class="mozTocH4"></span>2.5
+Manipulating RestrictionBatch</h4>
+You can not however add batch together, as they are python sets. You
+must use the operator | instead. You can find the intersection between
+2 batches using &amp; (see the python documentation about sets for more
+information (or import sets; help(sets)).<br>
+<pre>&gt;&gt;&gt; rb3 = EcoRI+KpnI+EcoRV<br>&gt;&gt;&gt; rb3<br>RestrictionBatch(['EcoRI', 'EcoRV', 'KpnI'])<br>&gt;&gt;&gt; rb4 = SmaI + PstI<br>&gt;&gt;&gt; rb4<br>RestrictionBatch(['PstI', 'SmaI'])<br>&gt;&gt;&gt; rb3 + rb4<br><br>Traceback (most recent call last):<br>  File "&lt;pyshell#23&gt;", line 1, in -toplevel-<br>    rb3 + rb4<br>  File "/usr/lib/python2.3/site-packages/Bio/Restriction/Restriction.py", line 1829, in __add__<br>    new.add(other)<br>  File "/usr/lib/python2.3/site-packages/Bio/Restriction/Restriction.py", line 1848, in add<br>    return Set.add(self, self.format(other))<br>  File "/usr/lib/python2.3/site-packages/Bio/Restriction/Restriction.py", line 1871, in format<br>    raise ValueError, '%s is not a RestrictionType'%y.__class__<br>ValueError: &lt;class 'Bio.Restriction.Restriction.RestrictionBatch'&gt; is not a RestrictionType<br>&gt;&gt;&gt; rb3 | rb4<br>RestrictionBatch(['EcoRI', 'EcoRV', 'KpnI', 'PstI', 'SmaI'])<br>&gt;&gt;&gt; rb3 &amp; rb4<br>RestrictionBatch([])<br>&gt;&gt;&gt; rb4 += EcoRI<br>&gt;&gt;&gt; rb4<br>RestrictionBatch(['EcoRI', 'PstI', 'SmaI'])<br>&gt;&gt;&gt; rb3 &amp; rb4<br>RestrictionBatch(['EcoRI'])<br></pre>
+<h4><a class="mozTocH4" name="mozTocId919079"></a><span class="mozTocH4"></span>2.6
+Analysing sequences with a RestrictionBatch<br>
+</h4>
+To analyse a sequence for potential site, you can use the search
+method of the batch, the same way you did for restriction enzymes. The
+results is no longer a list however, but a dictionary. The keys of the
+dictionary are the names of the enzymes and the value a list of
+position site. RestrictionBatch does not implement a catalyse method,
+as it would not have a real meaning when used with large batch.<br>
+<pre>&gt;&gt;&gt; new_seq = Seq('TTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA', IUPACAmbiguousDNA())<br>&gt;&gt;&gt; rb.search(new_seq)<br>{'KpnI': [], 'EcoRV': [], 'EcoRI': []}<br>&gt;&gt;&gt; rb.search(new_seq, linear=False)<br>{'KpnI': [], 'EcoRV': [], 'EcoRI': [33]}</pre>
+<h4><a class="mozTocH4" name="mozTocId114148"></a><span class="mozTocH4"></span>2.7
+Other
+RestrictionBatch methods<br>
+</h4>
+Amongst the other methods provided by RestrictionBatch <span
+ style="font-family: monospace;">elements()</span> which
+return a list of all the element names
+alphabetically sorted is certainly the most useful.<br>
+<pre>&gt;&gt;&gt; rb = EcoRI + KpnI + EcoRV<br>&gt;&gt;&gt; rb.elements()<br>['EcoRI', 'EcoRV', 'KpnI']</pre>
+If you don't care about the alphabetical order use the method <span
+ style="font-family: monospace;">as_string()</span>, to get the same
+thing a bit faster. The list is not sorted.
+The order is random as python sets are dictionary.<br>
+<pre>&gt;&gt;&gt; rb = EcoRI + KpnI + EcoRV <br>&gt;&gt;&gt; rb.as_string()<br>['EcoRI', 'KpnI', 'EcoRV']</pre>
+Other RestrictionBatch methods are generally used for particular
+purposes and will not be discussed here. See the source if you are
+interested.<span style="font-family: monospace;"></span><br>
+<br>
+<h3><a class="mozTocH3" name="mozTocId569237"></a>3&nbsp; AllEnzymes
+and CommOnly : two
+preconfigured RestrictionBatches<br>
+</h3>
+While it is sometime practical to produce a RestrictionBatch of your
+own you will certainly more frequently use the two batches provided
+with the Restriction packages : AllEnzymes and CommOnly. These two
+batches contain respectively all the enzymes in the database and only
+the enzymes which have a commercial supplier. They are rather big, but
+that's what make them useful. With these batch you can produce a full
+description of a sequence with a single command. You can use these two
+batch as any other batch.<br>
+<pre>&gt;&gt;&gt; len(AllEnzymes)<br>671<br>&gt;&gt;&gt; len(CommOnly)<br>589<br>&gt;&gt;&gt; AllEnzymes.search(new_seq) ...</pre>
+There is not a lot to say about them apart the fact that they are
+present. They are really normal batches, and you can use them as any
+other batch.
+<h3><a class="mozTocH3" name="mozTocId960354"></a>4&nbsp; The Analysis
+class : even simpler
+restriction analysis<br>
+</h3>
+RestrictionBatch can give you a dictionary with the sites for all the
+enzymes in a RestrictionBatch. However, it is sometime nice to
+get something a bit easier to read than a python dictionary. Complex
+restriction analysis are not easy with RestrictionBatch. Some
+refinements in the way to search a sequence for restriction sites will
+help. Analysis
+provides a serie of command to customise the results obtained from a
+pair RestrictionBatch/sequence and some facilities to make the output
+sligthly more human readable.<br>
+<h4><a class="mozTocH4" name="mozTocId994414"></a>4.1 Setting up an
+Analysis</h4>
+To build a Restriction Analysis you will need a
+RestrictionBatch and a sequence and to tell it if the sequence is
+linear or circular. The first argument Analysis take is the
+RestrictionBatch, the second is the sequence. If the third argument is
+not provided Analysis will assume the sequence is linear.<br>
+<pre>&gt;&gt;&gt; new_seq = Seq('TTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA', IUPACAmbiguousDNA())<br>&gt;&gt;&gt; rb = RestrictionBatch([EcoRI, KpnI, EcoRV])<br>&gt;&gt;&gt; Ana = Analysis(rb, new_seq, linear=False)<br>&gt;&gt;&gt; Ana<br>Analysis(RestrictionBatch(['EcoRI', 'EcoRV', 'KpnI']),Seq('TTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA', IUPACAmbiguousDNA()),False)<br></pre>
+<h4><a class="mozTocH4" name="mozTocId129244"></a>4.2 Full restriction
+analysis<br>
+</h4>
+Once you have created your new Analysis, you can use it to get a
+restriction analysis of your sequence. The way to make a full
+restriction analysis of the sequence is :<br>
+<pre>&gt;&gt;&gt; Ana.full()<br>{'KpnI': [], 'EcoRV': [], 'EcoRI': [33]}<br></pre>
+This is much the same as the output of a RestrictionBatch.search
+method. You will get a more easy to read output with "print_that" used
+without argument :<br>
+<pre>&gt;&gt;&gt; <br>&gt;&gt;&gt; # let's create a something a bit more complex to analyse.<br>&gt;&gt;&gt;<br>&gt;&gt;&gt; rb = RestrictionBatch([], ['A'])	# we will explain the meaning of the<br>&gt;&gt;&gt;					# double list argument later. <br>&gt;&gt;&gt;<br>&gt;&gt;&gt; multi_site = Seq('AAA' + EcoRI.site +'G' + KpnI.site + EcoRV.site + 'CT' +\  <br>SmaI.site + 'GT' + FokI.site + 'GAAAGGGC' + EcoRI.site + 'ACGT', IUPACAmbiguousDNA())<br>&gt;&gt;&gt;<br>&gt;&gt;&gt; Analong = Analysis(rb, multi_site) <br>&gt;&gt;&gt; Analong.full()<br>{'EaeI': [], 'CpoI': [], 'AccII': [], 'Bpu1102I': [], 'HindIII': [], 'BalI': [],<br>&nbsp;'NaeI': [], 'BssHII': [], 'HapII': [27], 'BamHI': [], 'XhoI': [], 'EcoO109I': [<br>], 'XbaI': [], 'SacII': [], 'AvaII': [], 'BbeI': [], 'FokI': [47], 'Eco81I': [],<br>&nbsp;'BanII': [], 'KpnI': [16], 'NcoI': [], 'FseI': [], 'ApaLI': [], 'NheI': [], 'Ap<br>aI': [], 'AatII': [], 'DraI': [], 'EcoRV': [20], 'BstXI': [], 'HaeIII': [], 'Mlu<br>I': [], 'Aor51HI': [], 'EcoRI': [5, 47], 'AvaI': [26], 'PvuI': [], 'EcoT22I': []<br>, 'PstI': [], 'MvaI': [], 'NotI': [], 'HinfI': [], 'ScaI': [], 'NdeI': [], 'AccI<br>': [], 'MboII': [], 'SnaBI': [], 'SspI': [], 'HhaI': [], 'BglI': [], 'Cfr13I': [<br>], 'SpeI': [], 'AflII': [], 'HpaI': [], 'Van91I': [], 'SfiI': [], 'SphI': [], 'B<br>sp1286I': [], 'SmaI': [28], 'NruI': [], 'FbaI': [], 'AluI': [], 'BglII': [], 'Hi<br>ncII': [], 'StuI': [], 'Sse8387I': [], 'ClaI': [], 'Sau3AI': [], 'MspI': [27], '<br>PshAI': [], 'AfaI': [14], 'MboI': [], 'PmaCI': [], 'SacI': [], 'PvuII': [], 'Eco<br>T14I': [], 'SalI': [], 'BlnI': [], 'TaqI': []}<br>&gt;&gt;&gt;<br>&gt;&gt;&gt; # The results are here but it is difficult to read. let's try print_that<br>&gt;&gt;&gt;<br>&gt;&gt;&gt; Analong.print_that()<br><br>AfaI       :  14.<br>AvaI       :  26.<br>EcoRI      :  5, 47.<br>EcoRV      :  20.<br>FokI       :  47.<br>HapII      :  27.<br>KpnI       :  16.<br>MspI       :  27.<br>SmaI       :  28.<br><br>   Enzymes which do not cut the sequence.<br><br>AatII     AccI      AccII     AflII     AluI      Aor51HI   ApaI      ApaLI     <br>AvaII     BalI      BamHI     BanII     BbeI      BglI      BglII     BlnI      <br>Bpu1102I  Bsp1286I  BssHII    BstXI     Cfr13I    ClaI      CpoI      DraI      <br>EaeI      Eco81I    EcoO109I  EcoT14I   EcoT22I   FbaI      FseI      HaeIII    <br>HhaI      HincII    HindIII   HinfI     HpaI      MboI      MboII     MluI      <br>MvaI      NaeI      NcoI      NdeI      NheI      NotI      NruI      PmaCI     <br>PshAI     PstI      PvuI      PvuII     SacI      SacII     SalI      Sau3AI    <br>ScaI      SfiI      SnaBI     SpeI      SphI      Sse8387I  SspI      StuI      <br>TaqI      Van91I    XbaI      XhoI</pre>
+Much clearer, is'nt ? The output is optimised for a shell 80 columns
+wide. If the output seems odd, check that&nbsp; the width of your shell
+is at least 80 columns.<br>
+<h4><a class="mozTocH4" name="mozTocId441271"></a>4.3 Changing the title<br>
+</h4>
+You can provide a title to the analysis and modify the sentence
+<span style="font-family: monospace;">'Enzymes which do not cut the
+sequence'</span>, by setting the two optional
+arguments of <span style="font-family: monospace;">print_that</span>&nbsp;
+"title" and "s1". No formating will be
+done on these strings so if you have to include the newline (<span
+ style="font-family: monospace;">'\n'</span>) as
+you see fit :<br>
+<pre>&gt;&gt;&gt; Analong.print_that(None, title='sequence = multi_site\n\n')<br><br>sequence = multi_site<br><br>AfaI       :  14.<br>AvaI       :  26.<br>EcoRI      :  5, 47.<br>EcoRV      :  20.<br>FokI       :  47.<br>HapII      :  27.<br>KpnI       :  16.<br>MspI       :  27.<br>SmaI       :  28.<br><br>   Enzymes which do not cut the sequence.<br><br>AatII     AccI      AccII     AflII     AluI      Aor51HI   ApaI      ApaLI     <br>AvaII     BalI      BamHI     BanII     BbeI      BglI      BglII     BlnI      <br>Bpu1102I  Bsp1286I  BssHII    BstXI     Cfr13I    ClaI      CpoI      DraI      <br>EaeI      Eco81I    EcoO109I  EcoT14I   EcoT22I   FbaI      FseI      HaeIII    <br>HhaI      HincII    HindIII   HinfI     HpaI      MboI      MboII     MluI      <br>MvaI      NaeI      NcoI      NdeI      NheI      NotI      NruI      PmaCI     <br>PshAI     PstI      PvuI      PvuII     SacI      SacII     SalI      Sau3AI    <br>ScaI      SfiI      SnaBI     SpeI      SphI      Sse8387I  SspI      StuI      <br>TaqI      Van91I    XbaI      XhoI  </pre>
+<pre>&gt;&gt;&gt; Analong.print_that(None, <br>		       title = 'sequence = multi_site\n\n',<br>		        s1 = '\n no site :\n\n')<br><br>sequence = multi_site<br><br>AfaI       :  14.<br>AvaI       :  26.<br>EcoRI      :  5, 47.<br>EcoRV      :  20.<br>FokI       :  47.<br>HapII      :  27.<br>KpnI       :  16.<br>MspI       :  27.<br>SmaI       :  28.<br><br> no site :<br><br>AatII     AccI      AccII     AflII     AluI      Aor51HI   ApaI      ApaLI     <br>AvaII     BalI      BamHI     BanII     BbeI      BglI      BglII     BlnI      <br>Bpu1102I  Bsp1286I  BssHII    BstXI     Cfr13I    ClaI      CpoI      DraI      <br>EaeI      Eco81I    EcoO109I  EcoT14I   EcoT22I   FbaI      FseI      HaeIII    <br>HhaI      HincII    HindIII   HinfI     HpaI      MboI      MboII     MluI      <br>MvaI      NaeI      NcoI      NdeI      NheI      NotI      NruI      PmaCI     <br>PshAI     PstI      PvuI      PvuII     SacI      SacII     SalI      Sau3AI    <br>ScaI      SfiI      SnaBI     SpeI      SphI      Sse8387I  SspI      StuI      <br>TaqI      Van91I    XbaI      XhoI       </pre>
+<h4><a class="mozTocH4" name="mozTocId450266"></a>4.4 Customising the
+output <br>
+</h4>
+You can modify some aspects of the output interactively. There is three
+main type of output,
+two listing types (alphabetically sorted and sorted by number of
+site) and map-like type. To change the output, use the method <span
+ style="font-family: monospace;">print_as()</span> of Analysis. The
+change of output is permanent for the
+instance of Analysis (that is
+until the next time you use&nbsp; <span style="font-family: monospace;">print_as()</span>).
+The argument of <span style="font-family: monospace;">print_as()</span>
+are
+strings : <span style="font-family: monospace;">'map'</span>, <span
+ style="font-family: monospace;">'number'</span> or <span
+ style="font-family: monospace;">'alpha'</span>. As you have seen
+previously the
+default behaviour is an
+alphabetical list (<span style="font-family: monospace;">'alpha'</span>).<br>
+<pre>&gt;&gt;&gt; Analong.print_as('map')    <br>&gt;&gt;&gt; Analong.print_that()<br><br>    5 EcoRI<br>    |                                                       <br>    |        14 AfaI<br>    |        |                                              <br>    |        | 16 KpnI<br>    |        | |                                            <br>    |        | |   20 EcoRV<br>    |        | |   |                                        <br>    |        | |   |     26 AvaI<br>    |        | |   |     |                                  <br>    |        | |   |     |27 HapII MspI<br>    |        | |   |     ||                                 <br>    |        | |   |     ||28 SmaI<br>    |        | |   |     |||                                <br>    |        | |   |     |||                  47 EcoRI FokI<br>    |        | |   |     |||                  |             <br>AAAGAATTCGGGTACCGATATCCTCCCGGGGTGGATGGAAAGGGCGAATTCACGT<br>|||||||||||||||||||||||||||||||||||||||||||||||||||||||<br>TTTCTTAAGCCCATGGCTATAGGAGGGCCCCACCTACCTTTCCCGCTTAAGTGCA<br>1                                                    55<br><br><br>   Enzymes which do not cut the sequence.<br><br>AatII     AccI      AccII     AflII     AluI      Aor51HI   ApaI      ApaLI     <br>AvaII     BalI      BamHI     BanII     BbeI      BglI      BglII     BlnI      <br>Bpu1102I  Bsp1286I  BssHII    BstXI     Cfr13I    ClaI      CpoI      DraI      <br>EaeI      Eco81I    EcoO109I  EcoT14I   EcoT22I   FbaI      FseI      HaeIII    <br>HhaI      HincII    HindIII   HinfI     HpaI      MboI      MboII     MluI      <br>MvaI      NaeI      NcoI      NdeI      NheI      NotI      NruI      PmaCI     <br>PshAI     PstI      PvuI      PvuII     SacI      SacII     SalI      Sau3AI    <br>ScaI      SfiI      SnaBI     SpeI      SphI      Sse8387I  SspI      StuI      <br>TaqI      Van91I    XbaI      XhoI <br><br>&gt;&gt;&gt; Analong.print_as('number')<br>&gt;&gt;&gt; Analong.print_that()<br><br><br><br>enzymes which cut 1 times :<br><br>AfaI       :  15.<br>AvaI       :  27.<br>EcoRV      :  21.<br>FokI       :  48.<br>HapII      :  28.<br>KpnI       :  17.<br>MspI       :  28.<br>SmaI       :  29.<br><br><br>enzymes which cut 2 times :<br><br>EcoRI      :  6, 48.<br><br>   Enzymes which do not cut the sequence.<br><br>AatII     AccI      AccII     AflII     AluI      Aor51HI   ApaI      ApaLI     <br>AvaII     BalI      BamHI     BanII     BbeI      BglI      BglII     BlnI      <br>Bpu1102I  Bsp1286I  BssHII    BstXI     Cfr13I    ClaI      CpoI      DraI      <br>EaeI      Eco81I    EcoO109I  EcoT14I   EcoT22I   FbaI      FseI      HaeIII    <br>HhaI      HincII    HindIII   HinfI     HpaI      MboI      MboII     MluI      <br>MvaI      NaeI      NcoI      NdeI      NheI      NotI      NruI      PmaCI     <br>PshAI     PstI      PvuI      PvuII     SacI      SacII     SalI      Sau3AI    <br>ScaI      SfiI      SnaBI     SpeI      SphI      Sse8387I  SspI      StuI      <br>TaqI      Van91I    XbaI      XhoI      <br><br>&gt;&gt;&gt; <br></pre>
+To come back to the previous behaviour :<br>
+<pre>&gt;&gt;&gt; Analong.print_as('alpha')<br>&gt;&gt;&gt; Analong.print_that()<br><br>AfaI       :  14.<br>AvaI       :  26.<br>EcoRI      :  5, 47.<br>EcoRV      :  20.<br>etc ...</pre>
+<h4><a class="mozTocH4" name="mozTocId864311"></a>4.5 Fancier
+restriction analysis<br>
+</h4>
+I will not go into the detail for each single method, here are all the
+functions that are available. Most are perfectly self explanatory and
+the others are fairly well documented (use <span
+ style="font-family: monospace;">help('Analysis.command_name')</span>).
+The methods are :<br>
+<pre>	full(self,linear=True) <br>	blunt(self,dct = None) &nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp; <br>	overhang5(self, dct=None) <br>	overhang3(self, dct=None)&nbsp; <br>	defined(self,dct=None)&nbsp; <br>	with_sites(self, dct=None)&nbsp; <br>	without_site(self, dct=None)&nbsp; <br>	with_N_sites(self, N, dct=None)&nbsp; <br>	with_number_list(self, list, dct=None)&nbsp; <br>	with_name(self, names, dct=None) &nbsp;&nbsp; <br>	with_site_size(self, site_size, dct=None) &nbsp;&nbsp; <br>	only_between(self, start, end, dct=None) &nbsp;&nbsp; <br>	between(self,start, end, dct=None) &nbsp;&nbsp; <br>	show_only_between(self, start, end, dct=None) &nbsp;&nbsp; <br>	only_outside(self, start, end, dct =None) &nbsp;&nbsp; <br>	outside(self, start, end, dct=None) &nbsp;&nbsp; <br>	do_not_cut(self, start, end, dct =None) <br></pre>
+Using these methods is simple :<br>
+<pre>&gt;&gt;&gt; new_seq = Seq('TTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA', IUPACAmbiguousDNA())<br>&gt;&gt;&gt; rb = RestrictionBatch([EcoRI, KpnI, EcoRV])<br>&gt;&gt;&gt; Ana = Analysis(rb, new_seq, linear=False)<br>&gt;&gt;&gt; Ana<br>Analysis(RestrictionBatch(['EcoRI', 'EcoRV', 'KpnI']),Seq('TTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA', IUPACAmbiguousDNA()),False)<br>&gt;&gt;&gt; Ana.blunt()  		# output only the result for enzymes which cut blunt<br>{'EcoRV': []}<br>&gt;&gt;&gt; Ana.full()			# all the enzymes in the RestrictionBatch<br>{'KpnI': [], 'EcoRV': [], 'EcoRI': [33]}<br>&gt;&gt;&gt; Ana.with_sites()		# output only the result for enzymes which have a site in the sequence<br>{'EcoRI': [33]}<br>&gt;&gt;&gt; Ana.without_site()		# output only the enzymes which have no site in the sequence<br>{'KpnI': [], 'EcoRV': []}<br>&gt;&gt;&gt; Ana.only_between(1, 20)	# the enzymes which cut between the base pairs 1 and 20<br>{}<br>&gt;&gt;&gt; Ana.only_between(20, 34)    # etc...<br>{'EcoRI': [33]}<br>&gt;&gt;&gt; Ana.only_outside(20, 34)<br>{}<br>&gt;&gt;&gt; Ana.with_name([EcoRI])<br>{'EcoRI': [33]}<br>&gt;&gt;&gt; </pre>
+To get a nice output, you still use <span
+ style="font-family: monospace;">print_that</span> but this time with
+the
+command you want executed as argument.<br>
+<pre>&gt;&gt;&gt; Ana.print_that(Ana.blunt())<br><br><br>   Enzymes which do not cut the sequence.<br><br>EcoRV     <br><br>&gt;&gt;&gt; pt = Ana.print_that<br>&gt;&gt;&gt; pt(Ana.with_sites())<br><br>EcoRI      :  33.<br><br>&gt;&gt;&gt; pt(Ana.without_site())<br><br><br>   Enzymes which do not cut the sequence.<br><br>EcoRV     KpnI      <br><br>&gt;&gt;&gt; # etc ...<br></pre>
+<h4><a class="mozTocH4" name="mozTocId289477"></a>4.6 More complex
+analysis<br>
+</h4>
+All of these methods (except <span style="font-family: monospace;">full()</span>
+which, well ... do a full
+restriction analysis) can be supplied with an additional dictionary. <br>
+If no
+dictionary is supplied a full
+restriction analysis is used as starting point. Otherwise the
+dictionary provided by the argument dct is used. The dictionary must be
+formatted as the result of <span style="font-family: monospace;">RestrictionBatch.search</span>.
+Therefore of
+the form <span style="font-family: monospace;">{'enzyme_name' :
+[position1, position2],...}</span>, where
+position1 and position2 are integer. All methods list previously output
+such dictionaries and can be used as starting point.<br>
+<br>
+Using this method you can build really complex query by
+chaining several method one after the other. For example if
+you want all the enzymes which are 5' overhang and cut the sequence
+only once, you have two ways to go :<br>
+<br>
+The hard way consist to build a
+RestrictionBatch containing only 5' overhang enzymes and use this batch
+to create a new analysis instance and then use the method <span
+ style="font-family: monospace;">with_N_sites()</span> as follow :<br>
+<pre>&gt;&gt;&gt; rbov5 = RestrictionBatch([x for x in rb if x.is_5overhang()])<br>&gt;&gt;&gt; Anaov5 = Analysis(rbov5, new_seq, linear=False)<br>&gt;&gt;&gt; Anaov5.with_N_sites(1)<br>{'EcoRI' : [33]}<br></pre>
+The easy solution is to chain several Analysis methods. This is
+possible since each method return a dictionary as results and is able
+to take a dictionary as input:<br>
+<pre>&gt;&gt;&gt; Ana.with_N_sites(1, Ana.overhang5())<br>{'EcoRI': [33]}<br></pre>
+The dictionary is always the last argument whatever the command you use.<br>
+<br>
+The way to prefer certainly depends of the conditions you will use your
+Analysis instance. If
+you are likely to frequently reuse the same batch with different
+sequences, using a dedicated RestrictionBatch might be faster as the
+batch is likely to be smaller. Chaining methods is
+generally quicker when working with an interactive shell.&nbsp; In a
+script, the extended syntax may be easier to understand in a few
+months.
+<br>
+<br>
+<h3><a class="mozTocH3" name="mozTocId343319"></a><span class="mozTocH3"></span>5&nbsp;
+Advanced features : the FormattedSeq class<br>
+</h3>
+Restriction enzymes require a much more strict formatting of the DNA
+sequences than Bio.Seq object provides. For example, the restriction
+enzymes expect to find an ungapped (no space) upper-case sequence,
+while Bio.Seq object allow sequences to be in lower-case separated by
+spaces. Therefore when&nbsp; a restriction enzyme analyse a Bio.Seq
+object (be it a Seq or a MutableSeq), the object undergoes a
+conversion. The class FormattedSeq ensure the smooth conversion from
+a&nbsp; Bio.Seq object to something which can be safely be used by the
+enzyme.<br>
+<br>
+While this conversion is done automatically by the enzymes if you
+provide them with a Seq&nbsp; or a MutableSeq, there is time where it
+will be more efficient to realise the conversion before hand. Each time
+a Seq object is passed to an enzyme for analysis you pay a overhead due
+to the conversion. When analysing the same sequence over and over, it
+will be faster to convert the sequence, store the conversion and then
+use only the converted sequence. <br>
+<h4><a class="mozTocH4" name="mozTocId74092"></a>5.1 Creating a
+FormattedSeq<br>
+</h4>
+Creating a FormattedSeq from a Bio.Seq object is simple. The first
+argument of FormattedSeq is the sequence you wish to convert. You can
+specify a shape with the second argument linear, if you don't the
+FormattedSeq will be linear :
+<pre>&gt;&gt;&gt; from Bio.Restriction import *<br>&gt;&gt;&gt; from Bio.Seq import Seq<br>&gt;&gt;&gt; seq = Seq('TTCAAAAAAAAAAGAATTCAAAAGAA')<br>&gt;&gt;&gt; linear_fseq = FormattedSeq(seq, linear=True) <br>&gt;&gt;&gt; default_fseq = FormattedSeq(seq)<br>&gt;&gt;&gt; circular_fseq = FormattedSeq(seq, linear=False)<br>&gt;&gt;&gt; linear_fseq<br>FormattedSeq(Seq('TTCAAAAAAAAAAGAATTCAAAAGAA', Alphabet()), linear=True)<br>&gt;&gt;&gt; linear_fseq.is_linear()<br>True<br>&gt;&gt;&gt; default_fseq.is_linear()<br>True<br>&gt;&gt;&gt; circular_fseq.is_linear()<br>False<br>&gt;&gt;&gt; circular_fseq<br>FormattedSeq(Seq('TTCAAAAAAAAAAGAATTCAAAAGAA', Alphabet()), linear=False)<br></pre>
+<h4><a class="mozTocH4" name="mozTocId143837"></a>5.2 Unlike Bio.Seq,
+FormattedSeq retains information about their shape<br>
+</h4>
+FormattedSeq retains information about the shape of the sequence.
+Therefore unlike with Seq and MutableSeq you don't need to specify the
+shape of the sequence when using <span style="font-family: monospace;">search()</span>
+or <span style="font-family: monospace;">catalyse()</span>:<br>
+<pre>&gt;&gt;&gt; EcoRI.search(linear_fseq)<br>[15]<br>&gt;&gt;&gt; EcoRI.search(circular_fseq)  # no need to specify the shape<br>[15, 25]<br></pre>
+In fact, the shape of a FormattedSeq is not altered by the second
+argument of the commands search() and catalyse() :<br>
+<pre>&gt;&gt;&gt; # In fact the shape is blocked.<br>&gt;&gt;&gt; # The 3 following commands give the same results<br>&gt;&gt;&gt; # which correspond to a circular sequence<br>&gt;&gt;&gt; EcoRI.search(circular_fseq) <br>[15, 25]<br>&gt;&gt;&gt; EcoRI.search(circular_fseq, linear=True)<br>[15, 25]<br>&gt;&gt;&gt; EcoRI.search(circular_fseq, linear=False)<br>[15, 25]<br>&gt;&gt;&gt;<br></pre>
+<h4><a class="mozTocH4" name="mozTocId123270"></a>5.3 Changing the
+shape of a FormattedSeq<br>
+</h4>
+You can however change the shape of the FormattedSeq. The command to
+use are :<br>
+<pre>FormattedSeq.to_circular() =&gt; new FormattedSeq, shape will be circular. <br>FormattedSeq.to_linear()   =&gt; new FormattedSeq, shape will be linear<br>FormattedSeq.circularise() =&gt; change the shape of FormattedShape to circular<br>FormattedSeq.linearise()   =&gt; change the shape of FormattedShape to linear<br><br>&gt;&gt;&gt; circular_fseq<br>FormatedSeq(Seq('TTCAAAAAAAAAAGAATTCAAAAGAA', Alphabet()), linear=False)<br>&gt;&gt;&gt; circular_fseq.is_linear()<br>False<br>&gt;&gt;&gt; circular_fseq == linear_fseq<br>False<br>&gt;&gt;&gt; newseq = circular_fseq.to_linear()<br>&gt;&gt;&gt; circular_fseq<br>FormatedSeq(Seq('TTCAAAAAAAAAAGAATTCAAAAGAA', Alphabet()), linear=False)<br>&gt;&gt;&gt; newseq<br>FormatedSeq(Seq('TTCAAAAAAAAAAGAATTCAAAAGAA', Alphabet()), linear=True)<br>&gt;&gt;&gt; circular_fseq.linearise()<br>&gt;&gt;&gt; circular_fseq<br>FormatedSeq(Seq('TTCAAAAAAAAAAGAATTCAAAAGAA', Alphabet()), linear=True)<br>&gt;&gt;&gt; circular_fseq.is_linear()<br>True<br>&gt;&gt;&gt; circular_fseq == linear_fseq<br>True<br>&gt;&gt;&gt; EcoRI.search(circular_fseq) # which is now linear<br>[15]</pre>
+<h4><a class="mozTocH4" name="mozTocId710376"></a>5.4 Using / and //
+operators with FormattedSeq<br>
+</h4>
+Not having to specify the shape of the sequence to analyse gives you
+the opportunity to use the shorthand '/' and '//' with restriction
+enzymes :<br>
+<pre>&gt;&gt;&gt; EcoRI/linear_fseq  # &lt;=&gt; EcoRI.search(linear_fseq)<br>[15]<br>&gt;&gt;&gt; linear_fseq/EcoRI  # &lt;=&gt; EcoRI.search(linear_fseq)<br>[15]<br>&gt;&gt;&gt; EcoRI//linear_fseq # &lt;=&gt; linear_fseq//EcoRI &lt;=&gt; EcoRI.catalyse(linear_fseq)<br>(Seq('TTCAAAAAAAAAAG', Alphabet()), Seq('AATTCAAAAGAA', Alphabet()))<br></pre>
+Another way to avoid the overhead due to a repetitive conversion from a
+Seq object to a FormattedSeq is to use a RestrictionBatch. <br>
+<br>
+To conclude, the performance gain achieved when using a FormattedSeq
+instead of a Seq is not huge. The analysis of a 10 kb sequence by all
+the enzymes in AllEnzymes (<span style="font-family: monospace;">for x
+in AllEnzymes : x.search(seq), </span>671 enzymes)<span
+ style="font-family: monospace;"></span> is 7 % faster when using a
+FormattedSeq than a Seq. Using a RestrictionBatch (<span
+ style="font-family: monospace;">AllEnzymes.search(seq)</span>) is
+about as fast as using a FormattedSeq the first time the search is run.
+This however is dramatically reduced in subsequent runs with the same
+sequence (RestrictionBatch keep in memory the result of their last run
+while the sequence is not changed).<br>
+<h3><a class="mozTocH3" name="mozTocId80946"></a>6&nbsp; More advanced
+features <br>
+</h3>
+This chapter addresses some more advanced features of the packages,
+most
+users can safely ignore it.<br>
+<h4><a class="mozTocH4" name="mozTocId546339"></a>6.1 Updating the
+enzymes from Rebase : rebase_update.py<br>
+</h4>
+Most people will certainly not need to update the enzymes. The
+restriction enzyme package will be updated in with each new release of
+biopython. But if you wish to get an update in between
+biopython-releases here is how to do it. Each month, Rebase release a
+new compilation of data about restriction enzymes. While the enzymes do
+not change so frequently, you may wish to update the restriction
+enzymes classes. The first thing to do is to get the last rebase file.
+You can find the release of Rebase at <span
+ style="font-family: monospace;">http://rebase.neb.com/rebase.files.html</span>.
+The file you are interested in are in the EMBOSS format. You can
+download the files directly from the rebase ftp server using your
+browser. The file are situated at <span style="font-family: monospace;">ftp://ftp.neb.com/pub/rebase</span>.
+<br>
+You will have to download 3 files :<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; <span
+ style="font-family: monospace;">emboss_e.###</span><br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; <span
+ style="font-family: monospace;">emboss_r.###</span><br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; <span
+ style="font-family: monospace;">emboss_s.###</span><br>
+The <span style="font-family: monospace;">###</span> is a 3 digit
+number corresponding to the year and month of the release. The first
+digit is the year, the two last are the month : so July 2004 will be :
+407; October 2005 : 510, etc... Download the three file corresponding
+to the current month and place them in a folder. <br>
+<br>
+Another way to do the same thing is to use the <span
+ style="font-family: monospace;">rebase_update.py</span>. script
+provided in the package. The script is in
+biopython/Bio/Restriction/Scripts. It will connect directly to the
+rebase ftp server and download the last batch of emboss files. From a
+DOS or Unix shell do the following :<br>
+<pre>$ cd path_to_/Scripts<br>$ ls<br>ranacompiler.py  rebase_update.py<br>$ ./rebase_update.py -m your_e_mail@my_address.com -p http://www.somewhere.com:8000<br><br>Please wait, trying to connect to Rebase<br><br><br>copying ftp://ftp.neb.com/pub/rebase/emboss_e.407<br>to /cvsroot/biopython/Bio/Restriction/Scripts/emboss_e.407<br>copying ftp://ftp.neb.com/pub/rebase/emboss_s.407<br>to /cvsroot/biopython/Bio/Restriction/Scripts/emboss_s.407<br>copying ftp://ftp.neb.com/pub/rebase/emboss_r.407<br>to /cvsroot/biopython/Bio/Restriction/Scripts/emboss_r.407<br><br></pre>
+Some explanation are needed : <span style="font-family: monospace;">-m</span>
+stands for e-mail, in order to connect to the ftp server you need to
+provide a your e-mail address. So replace <span
+ style="font-family: monospace;">your_e_mail@your_address.com</span>
+with your e-mail address. <span style="font-family: monospace;">-p</span>
+is the switch to indicate to the script you are using a proxy. If you
+use a ftp proxy enter its address and the connection port after the '<span
+ style="font-family: monospace;">:</span>'.<br>
+<span style="font-family: monospace;"></span>
+<h4><a class="mozTocH4" name="mozTocId49285"></a>6.2 Compiling a new
+dictionary : the script ranacompiler.py<br>
+</h4>
+Once you have got a the last serie of emboss files you can compile a
+new module containing the data necessary to create restriction enzyme.
+You will need to get out of the python shell and open either a DOS
+shell on windows, or your prefered Unix shell for the others.<br>
+<br>
+Note : if the emboss files are not present in the current directory or
+if they are not up to date, <span style="font-family: monospace;">ranacompiler.py</span>
+will invoke the script rebase_update. You will need to use the same
+options as before (ie <span style="font-family: monospace;">-m</span>
+and <span style="font-family: monospace;">-p</span>). See the previous
+paragraph on <span style="font-family: monospace;">rebase_update.py</span>
+for more details.<br>
+<br>
+For
+simplicity let's assume we have put the emboss files in the same folder
+as the files which contains the script <span
+ style="font-family: monospace;">ranacompiler.py</span>.<br>
+<pre><br>$ cd path_to_/Scripts<br>$ ls<br>emboss_e.407  emboss_r.407   emboss_s.407 ranacompiler.py  rebase_update.py<br><br></pre>
+We will use the script <span style="font-family: monospace;">ranacompiler.py</span>.
+You may have the change the mode of the file to make it executable :<br>
+<pre>$ chmod '+x' ranacompiler.py<br></pre>
+Now execute the script :<br>
+<pre>$ python ranacompiler.py  # or ./ranacompiler.py</pre>
+You get normally the following message :<br>
+<pre>$ ./ranacompiler.py<br><br> Using the files : emboss_e.407, emboss_r.407, emboss_s.407<br><br>WARNING : HaeIV cut twice with different overhang length each time.<br>	Unable to deal with this behaviour.<br>        This enzyme will not be included in the database. Sorry.<br>        Checking : Anyway, HaeIV is not commercially available.<br><br><br>WARNING : TaqII has two different sites.<br><br>WARNING : It seems that AspCNI is both commercially available<br>        and its characteristics are unknown.<br>        This seems counter-intuitive.<br>        There is certainly an error either in ranacompiler or<br>        in this REBASE release.<br>        The supplier is : New England Biolabs.<br><br>The new database contains 671 enzymes.<br><br>Writing the dictionary containing the new Restriction classes.  OK.<br><br>Writing the dictionary containing the suppliers datas.          OK.<br><br>Writing the dictionary containing the Restriction types.        OK.<br><br><br> ******************************************************************************<br><br>                Compilation of the new dictionary : OK.<br>                Installation : No.<br><br> You will find the newly created 'Restriction_Dictionary.py' file<br> in the folder :<br><br>        /cvsroot/biopython/Bio/Restriction/Scripts<br><br> Make a copy of 'Restriction_Dictionary.py' and place it with<br> the other Restriction libraries.<br><br> note :<br> This folder should be :<br><br>        /usr/lib/python2.3/site-packages/Bio/Restriction<br><br><br> ******************************************************************************<br></pre>
+The first line indicate which emboss files have been used for the
+present compilation. You can safely ignore the warnings as long as the<span
+ style="font-family: monospace;">&nbsp; compilation of the new
+dictionary : OK.</span>
+is present in the last part of the output. They are here for debugging
+purpose. The number of enzymes in the new module is indicated as
+well as a list of the dictionary which have been compiled. The last
+part indicate that the module has been succesfully created but not
+installed. To finish the update you must copy the file<span
+ style="font-family: monospace;">
+/cvsroot/biopython/Bio/Restriction/Scripts/Restriction_Dictionary.py</span>
+into the folder <span style="font-family: monospace;">/usr/lib/python2.3/site-packages/Bio/Restriction/</span>
+as indicated by the script. Looking into the present folder, you will
+see to new files : the newly created dictionary <span
+ style="font-family: monospace;">Restriction_Dictionary.py </span>and <span
+ style="font-family: monospace;">Restriction_Dictionary.old</span>
+. This last file containing the old dictionary to which you can revert
+in case anything the new file is corrupted (this should not happen
+since the script is happy enough the new dictionary is good, but if
+there is a problem it is always nice to know you can revert to the
+previous setting without having to reinstall the whole thing.<br>
+<pre>$ ls<br>emboss_e.407  ranacompiler.py*            Restriction_Dictionary.py<br>emboss_r.407  rebase_update.py*<br>emboss_s.407  Restriction_Dictionary.old<br>$<br>$ # complete the installation by copying the new dictionary to the Bio/Restriction/ folder.<br>$ # You may have to become root to do this :<br>$<br>$ su -c "cp Restriction_Dictionary.py <span
+ style="font-family: monospace;">/usr/lib/python2.3/site-packages/Bio/Restriction/"<br>password :<br></span></pre>
+Enter your password and that's it. If you whish, the script may install
+the folder for you as well,
+but you will have to run it as root if your normal user has no write
+access to your python installation (and it should'nt). Use the command <span
+ style="font-family: monospace;">ranacompiler.py -i</span> or <span
+ style="font-family: monospace;">ranacompiler.py --install</span>.<br>
+<pre>$ su -c "./ranacompiler.py -i"<br>password :<br><br> Using the files : emboss_e.407, emboss_r.407, emboss_s.407<br><br>WARNING : HaeIV cut twice with different overhang length each time.<br>        Unable to deal with this behaviour.<br>        This enzyme will not be included in the database. Sorry.<br>        Checking : Anyway, HaeIV is not commercially available.<br><br><br>WARNING : TaqII has two different sites.<br><br>WARNING : It seems that AspCNI is both commercially available<br>        and its characteristics are unknown.<br>        This seems counter-intuitive.<br>        There is certainly an error either in ranacompiler or<br>        in this REBASE release.<br>        The supplier is : New England Biolabs.<br><br>The new database contains 671 enzymes.<br><br>Writing the dictionary containing the new Restriction classes.  OK.<br><br>Writing the dictionary containing the suppliers datas.          OK.<br><br>Writing the dictionary containing the Restriction types.        OK.<br><br><br> ******************************************************************************<br><br><br>                Installing Restriction_Dictionary.py<br><br>        The new file seems ok. Proceeding with the installation.<br><br>         Everything ok. If you need it a version of the old<br>         dictionary have been saved in the Updates folder under<br>         the name Restriction_Dictionary.old.<br><br> ******************************************************************************</pre>
+Much of the same really, but this time the module has directly been
+installed with your other python modules, you don't need to do anything
+more. If anything goes wrong (you have no write access to the
+destination folder for example) the script will let you know it did not
+perform the installation. It will however still save the new module in
+the current directory :<br>
+<pre>$ ./ranacompiler.py -i<br><br> Using the files : emboss_e.407, emboss_r.407, emboss_s.407<br><br>WARNING : HaeIV cut twice with different overhang length each time.<br>        Unable to deal with this behaviour.<br>        This enzyme will not be included in the database. Sorry.<br>        Checking : Anyway, HaeIV is not commercially available.<br><br><br>WARNING : TaqII has two different sites.<br><br>WARNING : It seems that AspCNI is both commercially available<br>        and its characteristics are unknown.<br>        This seems counter-intuitive.<br>        There is certainly an error either in ranacompiler or<br>        in this REBASE release.<br>        The supplier is : New England Biolabs.<br><br>The new database contains 671 enzymes.<br><br>Writing the dictionary containing the new Restriction classes.  OK.<br><br>Writing the dictionary containing the suppliers datas.          OK.<br><br>Writing the dictionary containing the Restriction types.        OK.<br><br><br> ******************************************************************************<br><br><br>                Installing Restriction_Dictionary.py<br><br>        The new file seems ok. Proceeding with the installation.<br><br> ******************************************************************************<br><br><br>         WARNING : Impossible to install the new dictionary.<br>         Are you sure you have write permission to the folder :<br><br>         /usr/lib/python2.3/site-packages/Bio/Restriction ?<br><br><br><br> ******************************************************************************<br><br>                Compilation of the new dictionary : OK.<br>                Installation : No.<br><br> You will find the newly created 'Restriction_Dictionary.py' file<br> in the folder :<br><br>        /home/bssfs/cvsroot/biopython/Bio/Restriction/Scripts<br><br> Make a copy of 'Restriction_Dictionary.py' and place it with<br> the other Restriction libraries.<br><br> note :<br> This folder should be :<br><br>        /usr/lib/python2.3/site-packages/Bio/Restriction<br><br><br> ******************************************************************************<br></pre>
+As you can see the script is not very bright and will redo the
+compilation each time it is invoked, no matter if a previous version of
+the module is already present. <br>
+<h4><a class="mozTocH4" name="mozTocId968583"></a>6.3 Subclassing
+the class Analysis<br>
+</h4>
+As seen previously, you can modify some aspects of the Analysis output
+interactively. However if you want to write your own Analysis class,
+you may wish to provide others output facilities than is given in this
+package. Depending on what you want to do you may get away with simply
+changing the <span style="font-family: monospace;">make_format</span>
+method of your derived class or you will need
+to provide new methods. Rather than get into a long explanation, here
+is the implementation of a rather useless Analysis class :<br>
+<pre>&gt;&gt;&gt; class UselessAnalysis(Analysis) :<br><br>    def __init__(self, rb=RestrictionBatch(), seq=Seq(''), lin=True) :<br>	"""UselessAnalysis -&gt; A class that waste your time"""<br>	#<br>	#    Unless you want to do something more fancy all<br>	#    you need to do here is instantiate Analysis.<br>	#    Don't forget the self in __init__<br>	#<br>        Analysis.__init__(self, rb, seq, lin)<br><br>    def make_format(self, cut=[], t='', nc=[], s='') :<br>	"""not funny"""<br>	#<br>	#    Generally, you don't need to do anything else here<br>	#    This will tell to your new class to default to the <br>	#    _make_joke format.<br>	#<br>        return self._make_joke(cut, t, nc, s)<br><br>    def print_as(self, what='joke') :<br>	"""Never know somebody might want to change the behaviour of<br>	this class."""<br>	#<br>	#    add your new option to print_as<br>	#<br>    	if what == 'joke' :<br>	    self.make_format = self._make_joke<br>            return<br>	else :<br>	    #<br>	    #	The other options will be treated as before<br>	    # <br>	    return Analysis.print_as(self, what)<br><br>    def _make_joke(self, cut=[], title='', nc=[], s1='') :<br>	"""UA._make_joke(cut, t, nc, s) -&gt; new analysis output"""<br>	#<br>	#    starting your new method with '_make_'<br>	#    will give a hint to what it is suppose to do <br>	#   <br>	#    We will not process the non-cutting enzymes <br>	#    Their names are in nc<br>	#    s1 is the string printed before them	<br>	#<br>	if not title :<br>		title = '\nYou have guessed right the following enzymes :\n\n'         <br>	for name, sites in cut :<br>	    #<br>	    #    cut contains :<br>	    #    - the name of the enzymes which cut the sequence (name) <br>	    #    - a list of the site positions (sites)<br>	    #<br>	   &nbsp;guess = raw_input("next enzyme is %s, Guess how many sites ?\n&gt;&gt;&gt; "%name)<br>            try :<br>                guess = int(guess)<br>            except :<br>                guess = None<br>            if guess == len(sites) :<br>                print 'You did guess right. Good. Next.'<br>		result = '%i site' % guess<br>		if guess &gt; 1 :<br>			result += 's' 	<br>					<br>		#<br>		#    now we format the line. See the PrintFormat module<br>		#    for some examples <br>		#	PrintFormat.__section_list and _make_map are good start.<br>		#	<br>                title=''.join((title, str(name).ljust(self.NameWidth),<br>				' :  ', result, '.\n'))<br>	print '\nNo more enzyme.'<br>        return  title <br>	#<br>	#    I you want to print the non cutting enzymes use <br>	#    the following return instead of the previous one :<br>	#<br>	#return  title + t + self._make_nocut_only(nc,s1)<br><br>&gt;&gt;&gt; # You initiate and use it as before<br>&gt;&gt;&gt; rb = RestrictionBatch([], ['A'])	<br>&gt;&gt;&gt; multi_site = Seq('AAA' + EcoRI.site +'G' + KpnI.site + EcoRV.site + 'CT' +\  <br>SmaI.site + 'GT' + FokI.site + 'GAAAGGGC' + EcoRI.site + 'ACGT', IUPACAmbiguousDNA())<br>&gt;&gt;&gt;<br>&gt;&gt;&gt; b = UselessAnalysis(rb, multi_site)<br>&gt;&gt;&gt; b.print_that() # Well, I let you discover if you haven't already guessed </pre>
+<br>
+Using this example, as a template you should now be able to subclass
+Analysis as you wish. You will found more implementation details in the
+module <span style="font-family: monospace;">Bio.Restriction.PrintFormat</span>
+which contains the class providing all the <span
+ style="font-family: monospace;">_make_*</span> methods.<br>
+<pre>        </pre>
+<h3><a class="mozTocH3" name="mozTocId114111"></a>7&nbsp; Limitation
+and caveat <br>
+</h3>
+You must be aware that Restriction is a fairly young package.
+Particularly, the class Analysis is a quick and
+dirty implementation based on the facilities furnished by the package.
+Please check your
+results and report any fault.<br>
+<br>
+On a more general basis, Restriction have some other limitations :<br>
+<h4><a class="mozTocH4" name="mozTocId218594"></a>7.1 All DNA are non
+methylated<br>
+</h4>
+No facility to work with methylated DNA has been implemented yet. As
+far as the enzyme classes are concerned all DNA is non methylated DNA.
+Implementation of methylation sensibility will certainly occur in the
+future. But for now, if your sequence is methylated, you will have to
+check if the site is methylated using other means. <br>
+<h4><a class="mozTocH4" name="mozTocId790484"></a>7.2 No support for
+star activity<br>
+</h4>
+As before no support has been yet implemented to find site
+mis-recognised by enzymes under high salt concentration conditions, the
+so-called star activity. This will be implemented as soon as I can get
+a good source of information for that.<br>
+<h4><a class="mozTocH4" name="mozTocId218334"></a>7.3 Safe to use with
+degenerated DNA<br>
+</h4>
+It is safe to use degenerated DNA as input for the query. You will not
+be flooded with meaningless results. But this come at a price : GAA<span
+ style="text-decoration: underline;">N</span>TC
+will not be recognised as a potential EcoRI site for example, in fact
+it will not
+be recognised at all. Degenerated sequences will not be analysed. If
+your sequence is not fully sequenced, you will certainly miss
+restriction sites :<br>
+<pre>&gt;&gt;&gt; a = Seq('nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnGAATTCrrrrrrrrrrr', IUPACAmbiguousDNA())<br>&gt;&gt;&gt; EcoRI.search(a)<br>[36]<br>&gt;&gt;&gt; b = Seq('nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnGAAnTCrrrrrrrrrrr', IUPACAmbiguousDNA())<br>&gt;&gt;&gt; EcoRI.search(b)<br>[]<br></pre>
+<h4><a class="mozTocH4" name="mozTocId49392"></a>7.4 Non standard bases
+in DNA are not
+allowed<br>
+</h4>
+While you can use degenerated DNA, using non standard base alphabet
+will make the enzymes choke, even if Bio.Seq.Seq accepts them. However,
+space-like characters (' ', '\n', '\t', ...) and digit will be removed
+but will not stop the enzyme analysing the sequence. You can use them
+but the fragments produced by catalyse will have lost any formatting.
+Catalyse try to keep the original case of the sequence (i.e lower case
+sequences will generate lower case fragments, upper case sequences
+upper case fragments), but mixed case will return upper case fragments :<br>
+<pre>&gt;&gt;&gt; c = Seq('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxGAANTCrrrrrrrrrrr', IUPACAmbiguousDNA())<br>&gt;&gt;&gt; EcoRI.search(c)<br><br>Traceback (most recent call last):<br>  File "&lt;pyshell#110&gt;", line 1, in -toplevel-<br>    EcoRI.search(b)<br>  File "/usr/lib/python2.3/site-packages/Bio/Restriction/Restriction.py", line 396, in search<br>    cls.dna = FormatedSeq(dna, linear)<br>  File "/usr/lib/python2.3/site-packages/Bio/Restriction/Restriction.py", line 137, in __init__<br>    self.format()<br>  File "/usr/lib/python2.3/site-packages/Bio/Restriction/Restriction.py", line 153, in format<br>    raise AlphabetError, " '%s' is not in the IUPAC alphabet" % s<br>AlphabetError: 'X' is not in the IUPAC alphabet<br>&gt;&gt;&gt; d = Seq('1 nnnnn nnnnn nnnnn nnnnn nnnnn \n\<br>26 nnnnn nnnnG AATTC rrrrr rrrrr \n\<br>51 r', IUPACAmbiguousDNA())<br>&gt;&gt;&gt; d<br>Seq('1 nnnnn nnnnn nnnnn nnnnn nnnnn \n26 nnnnn nnnnG AATTC rrrrr rrrrr \n51 r', IUPACAmbiguousDNA())<br>&gt;&gt;&gt; EcoRI.search(d)<br>[36]<br>&gt;&gt;&gt; EcoRI.catalyse(d)<br>(Seq('AATTCRRRRRRRRRRR', IUPACAmbiguousDNA()), Seq('NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNG', IUPACAmbiguousDNA()))<br>&gt;&gt;&gt; e = Seq('nnnnGAATTCrr', IUPACAmbiguousDNA())<br>&gt;&gt;&gt; f = Seq('NNNNGAATTCRR', IUPACAmbiguousDNA())<br>&gt;&gt;&gt; g = Seq('nnnngaattcrr', IUPACAmbiguousDNA())<br>&gt;&gt;&gt; EcoRI.catalyse(e)<br>(Seq('NNNNG', IUPACAmbiguousDNA()), Seq('AATTCRR', IUPACAmbiguousDNA()))<br>&gt;&gt;&gt; EcoRI.catalyse(f)<br>(Seq('NNNNG', IUPACAmbiguousDNA()), Seq('AATTCRR', IUPACAmbiguousDNA()))<br>&gt;&gt;&gt; EcoRI.catalyse(g)<br>(Seq('nnnng', IUPACAmbiguousDNA()), Seq('aattcrr', IUPACAmbiguousDNA()))<br></pre>
+Not allowing other letters than IUPAC might seems drastic but this is
+really to limit errors. It is not
+totally fool proof but it does help. <br>
+<br>
+<h4><a class="mozTocH4" name="mozTocId395117"></a>7.5 Sites found at
+the edge of linear
+DNA might not be accessible in a real digestion<br>
+</h4>
+While sites clearly outsides a sequence will not be reported, nothing
+has been done to try to determine if a restriction site at the end of a
+linear sequence is valid :<br>
+<pre>&gt;&gt;&gt; d = Seq('GAATTCAAAAAAAAAAAAAAAAAAAAAAAAAAGGATG', IUPACAmbiguousDNA())<br>&gt;&gt;&gt; FokI.site			# site present<br>'GGATG'<br>&gt;&gt;&gt; FokI.elucidate()  		# but cut outside the sequence <br>'GGATGNNNNNNNNN^NNNN_N'<br>&gt;&gt;&gt; FokI.search(d)		# therefore no site found<br>[]<br>&gt;&gt;&gt; EcoRI.search(d)<br>[2] <br></pre>
+EcoRI finds a site at position 2 even if it is highly unlikely that
+EcoRI accepts to cut this site in a tube. It is generally considered
+that at about 5 nucleotides must separate the site from the edge of the
+sequence to be reasonably sure the enzyme will work correctly. This
+"security margin" is variable from one enzyme to the other. In doubt
+consult the documentation for the enzyme.<br>
+<h4><a class="mozTocH4" name="mozTocId112206"></a>7.6 Restriction
+reports cutting sites
+not enzyme recognition sites<br>
+</h4>
+Some enzymes will cut twice each time they encounter a restriction
+site. The enzymes in this package report both cut not the site. Other
+software may only reports restriction sites. Therefore the output given
+for some enzymes might seems to be the double when compared with the
+results of these software. It is not a bug.<br>
+<pre>&gt;&gt;&gt; AloI.cut_twice()<br>True<br>&gt;&gt;&gt; AloI.fst5              # first cut<br>-7<br>&gt;&gt;&gt; AloI.scd5		   # second cut	<br>25<br>&gt;&gt;&gt; AloI.site<br>'GAACNNNNNNTCC'<br>&gt;&gt;&gt; b = Seq('AAAAAAAAAAA'+ AloI.site + 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')<br>&gt;&gt;&gt; b<br>Seq('AAAAAAAAAAAGAACNNNNNNTCCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', Alphabet())<br>&gt;&gt;&gt; AloI.search(b)	# one site, two cuts -&gt; two positions<br>[5, 37]<br><br><br><br></pre>
+<h3><a class="mozTocH3" name="mozTocId386540"></a>8&nbsp; Annexe :
+modifying dir() to use
+with from Bio.Restriction import *<br>
+</h3>
+Having all the enzymes imported directly in the shell is useful when
+working in an interactive shell (even if it is not recommended by the
+purists). Here is a little hack to get some sanity back when using
+dir() in those conditions :<br>
+<pre>&gt;&gt;&gt; # we will change the builtin dir() function to get ride of the enzyme names.<br>&gt;&gt;&gt; import sys<br>&gt;&gt;&gt; def dir(object=None) :<br>	"""dir([object]) -&gt; list of string.<br><br>	over-ride the built-in function to get some clarity."""<br>	if object :<br>		# we only want to modify dir(),<br>		# so here we return the result of the builtin function.<br>		return __builtins__.dir(object)<br>	else :<br>		# now the part we want to modify.<br>		# All the enzymes are in a RestrictionBatch (we will talk about<br>		# that later, for the moment simply believe me).<br>		# So if we remove from the results of dir() everything which is<br>		# in AllEnzymes we will get a much shorter list when we do dir()<br>		#<br>		# the current level is __main__ ie dir() is equivalent to<br>		# ask what's in __main__ at the moment.<br>		# we can't access __main__ directly.<br>		# so we will use sys.modules['__main__'] to reach it.<br>		# the following list comprehension remove from the result of<br>		# dir() everything which is also present in AllEnzymes.<br>		#<br>		return [x for x in __builtins__.dir(sys.modules['__main__'])<br>			if not x in AllEnzymes]<br><br>	<br>&gt;&gt;&gt; # now let's see if it works.<br>&gt;&gt;&gt; dir()<br>['AllEnzymes', 'Analysis', 'CommOnly', 'NonComm', 'PrintFormat', 'RanaConfig',<br> 'Restriction', 'RestrictionBatch', 'Restriction_Dictionary', '__builtins__',<br> '__doc__', '__name__', 'dir', 'sys']<br>&gt;&gt;&gt; # ok that's much better.<br>&gt;&gt;&gt; # The enzymes are still there<br>&gt;&gt;&gt; EcoRI.site<br>'GAATTC'<br><br><br></pre>
+</body>
+</html>

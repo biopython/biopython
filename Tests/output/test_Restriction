@@ -1,0 +1,12 @@
+test_Restriction
+Deal with cutting circular sequences. ... ok
+Test basic cutting with EcoRI. ... ok
+Test to be sure isochizomer and neoschizomers are as expected. ... ok
+Comparison operators between iso and neoschizomers. ... ok
+Sequence analysis with a restriction batch. ... ok
+Creating and modifying a restriction batch. ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.011s
+
+OK
