@@ -226,13 +226,12 @@ real_DR_general = Std.dbxref(database_id + Martel.Str("; ") + \
                         primary_id + Martel.Str("; ") + \
                         secondary_id,
                         )
-DR_general = Std.fast_dbxref(Martel.select_names(real_DR_general, ()),
+fast_DR_general = Std.fast_dbxref(real_DR_general,
                              {"style": "sp-general"})
 
-# This gains a factor of 2
-use_fast = 1
-if not use_fast:
-    DR_general = real_DR_general
+DR_general = Martel.FastFeature(fast_DR_general, "fast-sp-dbxref",
+                                real_DR_general.group_names() )
+
 
 # used in StdHandler for fast dxbref - don't rename!
 real_DR_prosite = Std.dbxref(
@@ -248,11 +247,10 @@ real_DR_prosite = Std.dbxref(
     )
 
 # used in StdHandler for fast dxbref - don't rename!
-DR_prosite = Std.fast_dbxref(Martel.select_names(real_DR_prosite, ()),
-                             {"style": "sp-prosite"})
+fast_DR_prosite = Std.fast_dbxref(real_DR_prosite, {"style": "sp-prosite"})
 
-if not use_fast:
-    DR_prosite = real_DR_prosite
+DR_prosite = Martel.FastFeature(fast_DR_prosite, "fast-sp-dbxref",
+                                real_DR_prosite.group_names())
 
 real_DR_embl = Std.dbxref(
     Std.dbxref_dbname(Martel.Group("database_identifier",
@@ -267,12 +265,9 @@ real_DR_embl = Std.dbxref(
     Martel.UntilSep("status_identifier", "."),
     )
 
-DR_embl = Std.fast_dbxref(Martel.select_names(real_DR_embl, ()),
-                             {"style": "sp-embl"})
-
-if not use_fast:
-    DR_embl = real_DR_embl
-
+fast_DR_embl = Std.fast_dbxref(real_DR_embl, {"style": "sp-embl"})
+DR_embl = Martel.FastFeature(fast_DR_embl, "fast-sp-dbxref",
+                             real_DR_embl.group_names())
 
 DR = Martel.Group("DR", Martel.Str("DR   ") + \
                   Martel.Group("database_reference",
@@ -332,7 +327,8 @@ FT_continuation = Martel.Str("FT                                ") + \
                   FT_desc + \
                   Martel.AnyEol()
 
-FT = Std.feature(FT_range + Martel.Rep(FT_continuation))
+FT = Std.feature(FT_range + Martel.Rep(FT_continuation),
+                 {"location-style": "sp"})
 
 
 ##feature_block = Martel.Group("feature_block", Martel.Rep1(FT))
@@ -368,23 +364,23 @@ end = Martel.Group("END", Martel.Str("//") + Martel.AnyEol())
 
 ####################### put it all together
 
-record = Martel.Group("record", \
-    ID + \
-    AC + \
-    DT_created + \
-    DT_seq_update + \
-    DT_ann_update + \
-    Martel.Opt(DE_block) + \
-    Martel.Opt(GN_block) + \
-    Martel.Opt(OS_block) + \
-    Martel.Opt(OG_block) + \
-    Martel.Opt(OC_block) + \
-    Martel.Group("reference_block", Martel.Rep(reference)) + \
-    comment + \
-    Martel.Opt(DR_block) + \
-    Martel.Opt(KW_block) + \
-    Martel.Opt(feature_block) + \
-    sequence + \
+record = Std.record(
+    ID +
+    AC +
+    DT_created +
+    DT_seq_update +
+    DT_ann_update +
+    Martel.Opt(DE_block) +
+    Martel.Opt(GN_block) +
+    Martel.Opt(OS_block) +
+    Martel.Opt(OG_block) +
+    Martel.Opt(OC_block) +
+    Martel.Group("reference_block", Martel.Rep(reference)) +
+    comment +
+    Martel.Opt(DR_block) +
+    Martel.Opt(KW_block) +
+    Martel.Opt(feature_block) +
+    sequence +
     end,
                       {"format": "swissprot/38"})
 
