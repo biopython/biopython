@@ -77,7 +77,6 @@ Value: Arabidopsis thaliana
 References*
 location: (0..513)
 authors: Thomashow,M.F.
-consrtm: 
 title: Direct Submission
 journal: Submitted (01-FEB-1991) M.F. Thomashow, Dept. Crop and Soil Sciences, Dept. Microbiology, Michigan State University, East Lansing, Michigan 48824, USA
 medline id: 
@@ -86,7 +85,6 @@ comment:
 
 location: (0..513)
 authors: Gilmour,S.J., Artus,N.N. and Thomashow,M.F.
-consrtm: 
 title: cDNA sequence analysis and expression of two cold-regulated genes of Arabidopsis thaliana
 journal: Plant Mol. Biol. 18 (1), 13-21 (1992)
 medline id: 92119220
@@ -145,7 +143,6 @@ Value: Arabidopsis thaliana
 References*
 location: (0..880)
 authors: Borg-Franck,M.E.
-consrtm: 
 title: Direct Submission
 journal: Submitted (27-SEP-1991) M.E. Borg-Franck, Inst of Biotechnology, University of Helsinki, Karvaamokuja 3, SF-00380 Helsinki, FINLAND
 medline id: 
@@ -154,7 +151,6 @@ comment:
 
 location: (0..880)
 authors: Kurkela,S. and Borg-Franck,M.
-consrtm: 
 title: Structure and expression of kin2, one of two cold- and ABA-induced genes of Arabidopsis thaliana
 journal: Plant Mol. Biol. 19 (4), 689-692 (1992)
 medline id: 92329728
@@ -334,7 +330,6 @@ Value: Brassica napus
 References*
 location: (0..441)
 authors: Orr,W., Iu,B., White,T., Robert,L.S. and Singh,J.
-consrtm: 
 title: Nucleotide sequence of a winter B. napus Kin 1 cDNA
 journal: Plant Physiol. 98, 1532-1534 (1992)
 medline id: 
@@ -418,7 +413,6 @@ Value: Armoracia rusticana
 References*
 location: (0..206)
 authors: Baymiev,A.K., Gimalov,F.R. and Vakhitov,V.A.
-consrtm: 
 title: 
 journal: Unpublished
 medline id: 
@@ -427,7 +421,6 @@ comment:
 
 location: (0..206)
 authors: Baymiev,A.K.
-consrtm: 
 title: Direct Submission
 journal: Submitted (20-MAR-1999) Baymiev A.K., Departament of Biochemistry and Cytochemistry, Ufa Scientific Centre, pr. Oktyabrya 69, Ufa, Bashkortostan, Russia, 450054, RUSSIA
 medline id: 
@@ -543,7 +536,6 @@ Value: Brassica rapa
 References*
 location: (0..282)
 authors: Kim,J.-B., Kim,H.-U., Park,B.-S., Yun,C.-H., Cho,W.-S., Ryu,J.-C. and Chung,T.-Y.
-consrtm: 
 title: Nucleotide sequences of kin gene in chinese cabbage
 journal: Unpublished (1994)
 medline id: 
@@ -601,7 +593,6 @@ Value: Brassica napus
 References*
 location: (0..497)
 authors: Byass,L.J. and Flanagan,A.M.
-consrtm: 
 title: BN28a, a low temperature-induced gene of Brassica napus
 journal: Unpublished
 medline id: 
@@ -610,7 +601,6 @@ comment:
 
 location: (0..497)
 authors: Byass,L.J. and Flanagan,A.M.
-consrtm: 
 title: Direct Submission
 journal: Submitted (18-AUG-2000) AFNS, University of Alberta, 4-10 Agriculture/Forestry Centre, Edmonton, Alberta T6G 2P5, Canada
 medline id: 
@@ -730,7 +720,6 @@ Value: Homo sapiens
 References*
 location: (0..1326)
 authors: Auffray,C., Ansorge,W., Ballabio,A., Estivill,X., Gibson,K., Lehrach,H., Poustka,A. and Lundeberg,J.
-consrtm: 
 title: The European IMAGE consortium for integrated Molecular analysis of human gene transcripts
 journal: Unpublished
 medline id: 
@@ -739,7 +728,6 @@ comment:
 
 location: (0..1326)
 authors: Carim,L., Estivill,X., Sumoy,L. and Escarceller,M.
-consrtm: 
 title: Direct Submission
 journal: Submitted (11-AUG-1999) Dept. Genetica Molecular, Institut de Recerca Oncologica (IRO), Hospital Duran i Reynals, Autovia de Castelldefels Km 2,7 L'Hospitalet de Llobregat, 08907 Barcelona, Catalunya, SPAIN. Tel: ++34-93-260-7775 Fax: ++34-93-260-7776 WWW site: http://www.iro.es e-mail enquiries: lsumoy@iro.es, mescarceller@iro.es
 medline id: 
@@ -813,7 +801,6 @@ Value: Homo sapiens
 References*
 location: (0..741)
 authors: Mahraoui,L., Takeda,J., Mesonero,J., Chantret,I., Dussaulx,E., Bell,G.I. and Brot-Laroche,E.
-consrtm: 
 title: Regulation of expression of the human fructose transporter (GLUT5) by cyclic AMP
 journal: Biochem. J. 301 (Pt 1), 169-175 (1994)
 medline id: 94311827
@@ -822,7 +809,6 @@ comment:
 
 location: (0..741)
 authors: Takeda,J.
-consrtm: 
 title: Direct Submission
 journal: Submitted (24-JAN-1994) Jun Takeda, Howard Hughes Medical Institute, The University of Chicago, 5841 S. Maryland Ave., Chicago, IL 60637, USA
 medline id: 
@@ -898,7 +884,6 @@ Value: Arabidopsis thaliana
 References*
 location: (0..86436)
 authors: Dunn,P., Shinn,P., Brooks,S., Buehler,E., Chao,Q., Johnson-Hopson,C., Khan,S., Kim,C., Altafi,H., Bei,Q., Chin,C., Chiou,J., Choi,E., Conn,L., Conway,A., Gonzales,A., Hansen,N., Howing,B., Koo,T., Lam,B., Lee,J., Lenz,C., Li,J., Liu,A., Liu,K., Liu,S., Mukharsky,N., Nguyen,M., Palm,C., Pham,P., Sakano,H., Schwartz,J., Southwick,A., Thaveri,A., Toriumi,M., Vaysberg,M., Yu,G., Federspiel,N.A., Theologis,A. and Ecker,J.R.
-consrtm: 
 title: Genomic sequence for Arabidopsis thaliana BAC T25K16 from chromosome I
 journal: Unpublished
 medline id: 
@@ -907,7 +892,6 @@ comment:
 
 location: (0..86436)
 authors: Ecker,J.R.
-consrtm: 
 title: Direct Submission
 journal: Submitted (17-APR-1999) Arabidopsis thaliana Genome Center, Department of Biology, University of Pennsylvania, 38th Street and Hamilton Walk, Philadelphia, Pennsylvania 19104-6018, USA
 medline id: 
@@ -916,7 +900,6 @@ comment:
 
 location: (0..86436)
 authors: Ecker,J.R.
-consrtm: 
 title: Direct Submission
 journal: Submitted (11-AUG-1999) Arabidopsis thaliana Genome Center, Department of Biology, University of Pennsylvania, 38th Street and Hamilton Walk, Philadelphia, Pennsylvania 19104-6018, USA
 medline id: 
@@ -925,7 +908,6 @@ comment:
 
 location: (0..86436)
 authors: Ecker,J.R.
-consrtm: 
 title: Direct Submission
 journal: Submitted (16-DEC-1999) Arabidopsis thaliana Genome Center, Department of Biology, University of Pennsylvania, 38th Street and Hamilton Walk, Philadelphia, Pennsylvania 19104-6018, USA
 medline id: 
@@ -934,7 +916,6 @@ comment:
 
 location: (0..86436)
 authors: Chao,Q., Brooks,S., Buehler,E., Johnson-Hopson,C., Khan,S., Kim,C., Shinn,P., Altafi,H., Bei,B., Chin,C., Chiou,J., Choi,E., Conn,L., Conway,A., Gonzalez,A., Hansen,N., Howing,B., Koo,T., Lam,B., Lee,J., Lenz,C., Li,J., Liu,A., Liu,J., Liu,S., Mukharsky,N., Nguyen,M., Palm,C., Pham,P., Sakano,H., Schwartz,J., Southwick,A., Thaveri,A., Toriumi,M., Vaysberg,M., Yu,G., Davis,R., Federspiel,N., Theologis,A. and Ecker,J.
-consrtm: 
 title: Direct Submission
 journal: Submitted (19-JAN-2000) Arabidopsis thaliana Genome Center, Department of Biology, University of Pennsylvania, 38th and Hamilton Walk, Philadelphia, PA 19104-6018, USA
 medline id: 
@@ -1832,7 +1813,6 @@ Value: g6754304
 References*
 location: (0..182)
 authors: Higashi,Y., Sokawa,Y., Watanabe,Y., Kawade,Y., Ohno,S., Takaoka,C. and Taniguchi,T.
-consrtm: 
 title: structure and expression of a cloned cdna for mouse interferon-beta
 journal: J. Biol. Chem. 258, 9522-9529 (1983)
 medline id: 83265757
@@ -1944,7 +1924,6 @@ Value: Drosophila melanogaster
 References*
 location: (0..154329)
 authors: Murphy,L., Harris,D. and Barrell,B.
-consrtm: 
 title: Sequencing the distal X chromosome of Drosophila melanogaster
 journal: Unpublished
 medline id: 
@@ -1953,7 +1932,6 @@ comment: Sanger Centre, Wellcome Trust Genome Campus, Hinxton Hall, Hinxton, Cam
 
 location: (0..154329)
 authors: Benos,P.
-consrtm: 
 title: Direct Submission
 journal: Submitted (06-FEB-2000) European Drosophila Genome Sequencing Consortium
 medline id: 
@@ -2729,7 +2707,6 @@ Value: Homo sapiens
 References*
 location: (0..2509)
 authors: Harris,C.A., Andryuk,P.J., Cline,S.W., Siekierka,J.J. and Goldstein,G.
-consrtm: 
 title: Structure and mapping of the human thymopoietin (TMPO) gene and relationship of TMPO beta to rat lamin-associated polypeptide 2
 journal: Unpublished
 medline id: 
@@ -2738,7 +2715,6 @@ comment:
 
 location: (0..2509)
 authors: Harris,C.A.
-consrtm: 
 title: Direct Submission
 journal: Submitted (07-DEC-1994) Crafford A. Harris, Immunobiology Research Institute, Route 22 East, Annandale, NJ 08801-0999, USA
 medline id: 
@@ -3200,7 +3176,6 @@ Value: Homo sapiens
 References*
 location: (0..1250660)
 authors: NCBI Annotation Project.
-consrtm: 
 title: Direct Submission
 journal: Submitted (11-OCT-2001) National Center for Biotechnology Information, NIH, Bethesda, MD 20894, USA
 medline id: 
@@ -3366,7 +3341,6 @@ Key: organism
 Value: Mesorhizobium loti
 References*
 authors: Kaneko,T., Nakamura,Y., Sato,S., Asamizu,E., Kato,T., Sasamoto,S., Watanabe,A., Idesawa,K., Ishikawa,A., Kawashima,K., Kimura,T., Kishida,Y., Kiyokawa,C., Kohara,M., Matsumoto,M., Matsuno,A., Mochizuki,Y., Nakayama,S., Nakazaki,N., Shimpo,S., Sugimoto,M., Takeuchi,C., Yamada,M. and Tabata,S.
-consrtm: 
 title: Complete genome structure of the nitrogen-fixing symbiotic bacterium Mesorhizobium loti
 journal: DNA Res. 7, 331-338 (2000)
 medline id: 
@@ -3375,7 +3349,6 @@ comment:
 
 location: (0..7036074)
 authors: Kaneko,T.
-consrtm: 
 title: Direct Submission
 journal: Submitted (05-DEC-2000) Takakazu Kaneko, Kazusa DNA Research Institute, The First Laboratory for Plant Gene Research; Yana 1532-3, Kisarazu, Chiba 292-0812, Japan (E-mail:kaneko@kazusa.or.jp, URL:http://www.kazusa.or.jp/rhizobase/, Tel:81-438-52-3935, Fax:81-438-52-3934)
 medline id: 
@@ -3440,7 +3413,6 @@ Value: g4502929
 References*
 location: (0..360)
 authors: Munro,S., Thomas,K.L. and Abu-Shaar,M.
-consrtm: 
 title: Molecular characterization of a peripheral receptor for cannabinoids
 journal: Nature 365 (6441), 61-65 (1993)
 medline id: 93368659
@@ -3449,7 +3421,6 @@ comment:
 
 location: (0..360)
 authors: Galiegue,S., Mary,S., Marchand,J., Dussossoy,D., Carriere,D., Carayon,P., Bouaboula,M., Shire,D., Le Fur,G. and Casellas,P.
-consrtm: 
 title: Expression of central and peripheral cannabinoid receptors in human immune tissues and leukocyte subpopulations
 journal: Eur. J. Biochem. 232 (1), 54-61 (1995)
 medline id: 96048028
@@ -3458,7 +3429,6 @@ comment:
 
 location: (0..360)
 authors: Shire,D., Calandra,B., Rinaldi-Carmona,M., Oustric,D., Pessegue,B., Bonnin-Cabanne,O., Le Fur,G., Caput,D. and Ferrara,P.
-consrtm: 
 title: Molecular cloning, expression and function of the murine CB2 peripheral cannabinoid receptor
 journal: Biochim. Biophys. Acta 1307 (2), 132-136 (1996)
 medline id: 96283804
@@ -3534,7 +3504,6 @@ Value: g134354
 References*
 location: (0..64)
 authors: Vargas,O., Gregoire,J., Martin,M.-F., Bechis,G. and Rochat,H.
-consrtm: 
 title: Neurotoxins from the venoms of two scorpions: Buthus occitanus tunetanus and Buthus occitanus mardochei
 journal: Toxicon 20, 79-79 (1982)
 medline id: 

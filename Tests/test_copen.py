@@ -57,5 +57,7 @@ handle = copen.copen_fn(raise_error)
 try:
     handle.wait()
 except AssertionError, x:
-    print str(x)   # Error in child process: ...
-
+    s = str(x)   # Error in child process: ...
+    # chop out the path of the file, since it varies from machine to machine:
+    reported = s[:s.index('"')+1] + s[s.index('Bio/'):]
+    print reported

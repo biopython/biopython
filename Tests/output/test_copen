@@ -10,7 +10,7 @@ KILLED WITH 15
 Error in child process:
 
 Traceback (most recent call last):
-  File "/Users/jchang/local/lib/jchang/python/Bio/MultiProc/copen.py", line 69, in copen_fn
+  File "Bio/MultiProc/copen.py", line 71, in copen_fn
     output = apply(func, args, keywords)
   File "test_copen.py", line 54, in raise_error
     raise AssertionError, "raised"

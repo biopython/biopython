@@ -1544,6 +1544,13 @@ class NCBIDictionary:
             # XXX I really should distinguish between a real IOError and
             # if the id is not in the database.
             raise KeyError, x
+        import StringIO
+        from Bio import File
+        s = handle.read()
+        print s
+        handle = File.UndoHandle(StringIO.StringIO(s))
+
+        
         # If the id is not in the database, I get a message like:
         # 'GenPept does not exist for GI "433174"\012\012' 
         line = handle.peekline()

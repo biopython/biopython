@@ -25,7 +25,7 @@ if not TESTED:
     
     import socket
     try:
-        socket.getaddrinfo(RELIABLE_DOMAIN, 80)
+        socket.getaddrinfo(RELIABLE_DOMAIN, 80, socket.AF_UNSPEC, socket.SOCK_STREAM)
     except socket.gaierror, x:
         AVAILABLE = 0
     else:

@@ -107,8 +107,8 @@ hot_mode = 0 ):
             'replicant_num' : 1 \
         }
 
-    def tune( self, tuner_dict = self.tuner_dict ):
-        for ( key, val ) in tuner_dict:
+    def tune( self ):
+        for ( key, val ) in self.tuner_dict:
             key = key.strip()
             val = int( val.strip() )
             self.__dict__[ key ] = val
@@ -119,7 +119,7 @@ hot_mode = 0 ):
         len_seq = len( seq )
         step = self.segment_size
         for j in range( 0, len_seq, step ):
-            segment = seq[ j: j + step )
+            segment = seq[j : j + step]
             align.add_sequence( name, segment )
         self.friendly = align
 

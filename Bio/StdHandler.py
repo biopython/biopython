@@ -52,7 +52,7 @@ def add_text_dict_handler(klass, tag, attrname, key):
 
 def add_text_decode_handler(klass, tag, attrname):
     assert not hasattr(klass, "start_" +tag), "existing method exists"
-    assert not hastattr(klass, "end_" +tag), "existing method exists"
+    assert not hasattr(klass, "end_" +tag), "existing method exists"
     s = """if 1:
     def start(self, tag, attrs):
         self.save_characters()

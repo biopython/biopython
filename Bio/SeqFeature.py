@@ -144,7 +144,8 @@ class Reference:
         for single_location in self.location:
             out += "location: %s\n" % single_location
         out += "authors: %s\n" % self.authors
-        out += "consrtm: %s\n" % self.consrtm
+        if self.consrtm:
+            out += "consrtm: %s\n" % self.consrtm
         out += "title: %s\n" % self.title
         out += "journal: %s\n" % self.journal
         out += "medline id: %s\n" % self.medline_id

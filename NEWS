@@ -4,6 +4,11 @@ News for the Biopython Project
 This file contains release notes and general news
 about the biopython project.
 
+checked in Sebastian Bassi's LCC complexity code
+checked in Greg Kettler's NCBIStandalone fix for long query lengths
+checked in slew of miscellaneous fixes from George Paci
+
+
 Dec 17, 2002: Biopython 1.10
   Python requirement bumped up to 2.2
   hierarchy reorg, many things moved upwards into Bio namespace
