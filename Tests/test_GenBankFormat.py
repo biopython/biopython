@@ -581,8 +581,8 @@ add_test("record 1", record, record_s1)
 add_test("record 2", record, record_s2)
 add_test("record 3", record, record_s3)
 
-add_test("multirecord", multirecord, record_s1+record_s2+record_s3)
-add_test("format", format, header_s + record_s1+record_s2+record_s3)
+add_test("format", format, record_s1+record_s2+record_s3)
+add_test("ncbi_format", ncbi_format, header_s + record_s1+record_s2+record_s3)
 
 def run_tests(args):
     test_list.test()

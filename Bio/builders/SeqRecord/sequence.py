@@ -69,7 +69,10 @@ class BuildSeqRecord(Dispatch.Dispatcher):
                                                dbid, negate))
 
     def add_features(self, features):
-        assert self.features is None
+        # Brad -- I can't understand this assertion -- there is no
+        # self.features on the first call to add features and then you'll
+        # expect to have some on future calls
+        # assert self.features is None
         #print [feature.location for feature in features]
         self.features = map(convert_std_feature, features)
 

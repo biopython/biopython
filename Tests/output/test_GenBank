@@ -4526,15 +4526,15 @@ num qualifiers: 1
 key: /site_type= value: "amidation"
 Testing dictionaries...
 Indexing file to serve as a dictionary...
-len: 7
-keys: ['AF297471', 'AJ237582', 'L31939', 'M81224', 'X55053', 'X62281']
-Retrieving record with key AF297471
+len: 6
+keys: ['AF297471.1', 'AJ237582.1', 'L31939.1', 'M81224.1', 'X55053.1', 'X62281.1']
+Retrieving record with key AF297471.1
 description: Brassica napus BN28a (BN28a) gene, complete cds.
 id: AF297471.1
-Retrieving record with key AJ237582
+Retrieving record with key AJ237582.1
 description: Armoracia rusticana csp14 gene (partial), exons 2-3.
 id: AJ237582.1
-Retrieving record with key L31939
+Retrieving record with key L31939.1
 description: Brassica rapa (clone bif72) kin mRNA, complete cds.
 id: L31939.1
 Testing writing GenBank format...

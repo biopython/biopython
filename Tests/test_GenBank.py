@@ -104,11 +104,11 @@ for parser in all_parsers:
 # test GenBank dictionary
 print "Testing dictionaries..."
 dict_file = os.path.join(gb_file_dir, 'cor6_6.gb')
-index_file = os.path.join(gb_file_dir, 'cor6_6.idx')
+indexname = os.path.join(gb_file_dir, 'cor6_6.idx')
 
 print "Indexing file to serve as a dictionary..."
-GenBank.index_file(dict_file, index_file)
-gb_dict = GenBank.Dictionary(index_file, GenBank.FeatureParser())
+GenBank.index_file(dict_file, indexname)
+gb_dict = GenBank.Dictionary(indexname, GenBank.FeatureParser())
 
 print "len:", len(gb_dict)
 k = gb_dict.keys()
@@ -121,6 +121,14 @@ for key in k[:3]:
     cur_seqrecord = gb_dict[key]
     print "description:", cur_seqrecord.description
     print "id:", cur_seqrecord.id
+
+# remove the dictionary
+try:
+    os.remove(indexname) # remove files -- old Biopython
+except OSError: # is a directory -- new
+    for filename in os.listdir(indexname):
+        os.remove(os.path.join(indexname, filename))
+    os.removedirs(indexname)
 
 # test writing GenBank format
 print "Testing writing GenBank format..."
@@ -175,7 +183,7 @@ def t_write_format():
 
         cur_handle.close()
 
-t_write_format()    
+t_write_format()
 
 def t_cleaning_features():
     """Test the ability to clean up feature values.

@@ -5,7 +5,7 @@ from Bio.config.FormatRegistry import FormatObject, FormatGroup
 genbank_records = FormatObject(
     name = "genbank-records",
     abbrev = "genbank_records",
-    expression = "Bio.expressions.genbank.multirecord",
+    expression = "Bio.expressions.genbank.format",
     )
 
 # This is the format as released by NCBI.  It includes
@@ -13,7 +13,7 @@ genbank_records = FormatObject(
 genbank_release = FormatObject(
     name = "genbank-release",
     abbrev = "genbank_release",
-    expression = "Bio.expressions.genbank.format",
+    expression = "Bio.expressions.genbank.ncbi_format",
     )
 
 

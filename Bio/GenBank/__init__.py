@@ -39,70 +39,58 @@ __all__ = [
     'Record',
     ]
 
+import cStringIO
+
 # other Biopython stuff
 from Bio.expressions import genbank
 from Bio.ParserSupport import AbstractConsumer
 import utils
 
+from Bio import Mindy
+from Bio.Mindy import SimpleSeqRecord
 
 class Dictionary:
-    """Allow a GenBank file to be accessed using a dictionary interface.
+    """Access a GenBank file using a dictionary-like interface.
     """
-    __filename_key = '__filename'
-    def __init__(self, index_file, parser = None):
+    def __init__(self, indexname, parser = None):
         """Initialize and open up a GenBank dictionary.
 
         Arguments:
-        o index_file - The name of the file that servers as the dictionary
-        index. You need to use the index_file function in this module
-        to creat this index.
+        indexname - The name of the index for the file. This should have been
+        created using the index_file function.
         o parser - An optional argument specifying a parser object that
         the records should be run through before returning the output. If
         parser is None then the unprocessed contents of the file will be
         returned.
         """
-        from Bio import Index
-        self._index = Index.Index(index_file)
-        self._handle = open(self._index[Dictionary.__filename_key])
+        self._index = Mindy.open(indexname)
         self._parser = parser
-
+    
     def __len__(self):
-        return len(self._index)
+        return len(self.keys())
 
     def __getitem__(self, key):
-        """Retrieve an item from the dictionary.
-        """
-        from Bio import File
-        # print "keys:", self._index.keys()
-        # get the location of the record of interest in the file
-        start, len = self._index[key]
-        # print "start:", start, "len:", len
+        # first try to retrieve by the base id
+        try:
+            seqs = self._index.lookup(id = key)
+        # if we can't do that, we have to try and fetch by alias
+        except KeyError:
+            seqs = self._index.lookup(aliases = key)
 
-        # read through and get the data from the file
-        self._handle.seek(start)
-        data = self._handle.read(len)
-        # print "data:", data
+        if len(seqs) == 1:
+            seq = seqs[0]
+        else:
+            raise KeyError("Multiple sequences found for %s" % key)
 
-        # run the data through the parser if one is specified
-        if self._parser is not None:
-            return self._parser.parse(File.StringHandle(data))
-
-        return data
-
-    def __getattr__(self, name):
-        return getattr(self._index, name)
+        if self._parser:
+            handle = cStringIO.StringIO(seq.text)
+            return self._parser.parse(handle)
+        else:
+            return seq.text
 
     def keys(self):
-        """Provide valid keys from the index.
-
-        If keys is just called on the index (using getattr) then
-        the index will return internal values such as '__filename' which
-        we just don't want to see. This just strips these values out
-        before returning.
-        """
-        all_keys = [key for key in self._index.keys() if not key.startswith('__')]
-
-        return all_keys
+        primary_key_retriever = self._index['id']
+        return primary_key_retriever.keys()
         
 class Iterator:
     """Iterator interface to move over a file of GenBank entries one at a time.
@@ -1259,206 +1247,29 @@ class _Scanner:
 
         self._parser.parseFile(handle)
 
-def index_file_db(genbank_file, db_name, db_directory,
-                  identifier = "locus", aliases = ["accession"],
-                  keywords = [], always_index = 0):
-    """Index a GenBank file into a database for quick loading.
-
-    WARNING: This is very experimental and subject to change.
-    It requires the use of Andrew Dalke's mindy.
-
-    This is very similar to index_file, but uses a database instead
-    of a flat file to store the information about the genbank_file.
-
-    Arguments:
-
-    o genbank_file - The GenBank formatted file that we want to index.
-
-    o db_name - The name of the database to create. This name will allow you
-    to retrieve the file later.
-
-    o db_directory - The directory where the database information should be
-    stored.
-
-    o identifier - The primary identifier used to store records in the file
-    under. This will be used for retrieving them later.
-
-    o aliases - Secondary identifiers that point to the record. These can
-    be used for searching if a primary identifier is not found. This is
-    useful for GenBank since we'll index by a single identifier (the LOCUS
-    identifier by default) but might want to search by some other
-    identifier.
-
-    o keywords - More advanced Mindy features that I'm not positive
-    how to make full use of right now.
-
-    o always_index - A flag indicating whether or not to index a file even
-    if the file appears not to have changed. By default, the function will
-    try to skip indexing if it thinks the file hasn't changed.
-    """
-    import os
-    try:
-        from mindy import mindy_index, mindy_search
-    except ImportError:
-        raise SystemExit("You must have mindy installed:\n" +
-                         "http://www.biopython.org/~dalke/mindy-0.1.tar.gz")
-
-    # try to skip the indexing if everything seems up to date
-    if not(always_index):
-        if os.path.exists(os.path.join(db_directory, db_name)):
-            # load up the database and see if the file size is the same
-            search_db = mindy_search.mindy_open(db_directory, db_name)
-
-            if "file_sizes" in search_db.mindy_data:
-                file_size = search_db.mindy_data["file_sizes"][genbank_file]
-
-                if file_size == os.path.getsize(genbank_file):
-                    print "File already indexed. Skipping...."
-                    return
-
-    if not(os.path.exists(db_directory)):
-        os.makedirs(db_directory)
-
-    mindy_db = mindy_index.create(db_directory, db_name)
-    mindy_db.use_filename(genbank_file)
-
-    indexer = mindy_index.SimpleIndexer(mindy_db, "genbank_record", identifier,
-                                        aliases, keywords)
-    gb_format = genbank.record_format
-
-    parser = gb_format.make_parser()
-    parser.setContentHandler(indexer)
-
-    mindy_db.use_filename(genbank_file)
-    parser.parseFile(open(genbank_file, "rb"))
-    
-class MindyDictionary:
-    """Access a GenBank file using a dictionary interface, though a Mindy DB.
-
-    WARNING: This is very experimental and subject to change.
-    It requires the use of Andrew Dalke's mindy.
-
-    This is the Dictionary interface to use after you create an index
-    database using the function index_file_db.
-    """
-    def __init__(self, db_name, db_directory, parser = None):
-        """Initialize and open up a GenBank dictionary.
-
-        Arguments:
-        
-        o db_name - The name of the database we should retrieve information
-        from.
-
-        o db_directory - The location of the database specified in db_name.
-        
-        o parser - An optional argument specifying a parser object that
-        the records should be run through before returning the output. If
-        parser is None then the unprocessed contents of the file will be
-        returned.
-        """
-        try:
-            from mindy import mindy_search
-        except ImportError:
-            raise SystemExit("You must have mindy installed:\n" +
-                          "http://www.biopython.org/~dalke/mindy-0.1.tar.gz")
-
-        self._search = mindy_search.mindy_open(db_directory, db_name)
-        self._parser = parser
-
-    def __len__(self):
-        return len(self._search.identifiers)
-
-    def __getitem__(self, key):
-        """Retrieve an item from the indexed file.
-
-        The key can be either a primary identifier or an alias. The lookup
-        will first try to get the file via the primary identifier, and if
-        it can't do this, will subsequently try to get it through the
-        aliases to these keys. If the aliases are ambigous, an error will
-        be raised.
-
-        Most of the time I find it easiest to search by aliases (the GenBank
-        accession numbers), but YMMV.
-        """
-        from Bio import File
-        try:
-            data = self._search[key]
-        except KeyError:
-            ids = self._search.aliases.get(key, [])
-            
-            if len(ids) == 0:
-                raise KeyError("No records found for key %s" % key)
-            elif len(ids) != 1:
-                raise KeyError("Multiple records found for key %s" % key)
-            else:
-                data = self._search[ids[0]]
-            
-        # run the data through the parser if one is specified
-        if self._parser is not None:
-            return self._parser.parse(File.StringHandle(data))
-
-        return File.StringHandle(data)
-
-    def __getattr__(self, name):
-        return getattr(self._index, name)
-
-    def keys(self):
-        """Provide all identifiers for the current database.
-        """
-        return self._search.identifiers.keys()
-
-    def aliases(self):
-        """Provide all aliases in the current database.
-        """
-        return self._search.aliases.keys()
-           
-def index_file(genbank_file, index_file, rec_to_key = None):
+def index_file(filename, indexname, rec2key = None, use_berkeley = 0):
     """Index a GenBank file to prepare it for use as a dictionary.
 
     Arguments:
-    o genbank_file - The name of the GenBank file to be index.
-    o index_name - The name of the index file which will be created.
-    o rec_to_key - A function object which, when called with a GenBank
-    record object, will return a key to be used for the record. If no
-    function is specified, then the accession numbers will be used as
-    the keys.
+    filename - The name of the GenBank file to be indexed.
+    indexname - The name of the index to create
+    rec2key - A reference to a function object which, when called with a 
+    SeqRecord object, will return a key to be used for the record. If no 
+    function is specified then the records will be indexed by the 'id'
+    attribute of the SeqRecord (the versioned GenBank id).
+    use_berkeley - specifies whether to use the BerkeleyDB indexer, which 
+    uses the bsddb3 wrappers around the embedded database Berkeley DB. By
+    default, the standard flat file (non-Berkeley) indexes are used.
     """
-    import os
-    from Bio import Index
-    if not os.path.exists(genbank_file):
-        raise ValueError("%s does not exist" % genbank_file)
+    if rec2key:
+        indexer = SimpleSeqRecord.FunctionIndexer(rec2key)
+    else:
+        indexer = SimpleSeqRecord.SimpleIndexer()
 
-    index = Index.Index(index_file, truncate = 1)
-    index[Dictionary._Dictionary__filename_key] = genbank_file
-
-    gb_iter = Iterator(open(genbank_file), parser = RecordParser())
-    while 1:
-        start = gb_iter._reader.positions[gb_iter._reader.index]
-        rec = gb_iter.next()
-        length = gb_iter._reader.positions[gb_iter._reader.index] - start
-
-        # when we run out of records, stop looping
-        if rec is None:
-            break
-
-        # if we have a function to get a key, use it, otherwise use the default
-        if rec_to_key is not None:
-            key = rec_to_key(rec)
-        else:
-            # if we have accession numbers in the record use them
-            if len(rec.accession) >= 1:
-                key = rec.accession[0]
-            else:
-                key = None
-
-        # check for problems with the key
-        if key is None:
-            raise KeyError("Empty sequence key produced")
-        elif index.has_key(key):
-            raise KeyError("Duplicate key %s found" % key)
-
-        # finally apply the information to the key
-        index[key] = start, length
+    if use_berkeley:
+        SimpleSeqRecord.create_berkeleydb([filename], indexname, indexer)
+    else:
+        SimpleSeqRecord.create_flatdb([filename], indexname, indexer)
 
 class NCBIDictionary:
     """Access GenBank using a read-only dictionary interface.

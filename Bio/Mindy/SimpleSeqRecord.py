@@ -62,6 +62,44 @@ class SimpleIndexer(BaseSeqRecordIndexer):
                    "aliases" : []}
         return id_info
 
+class FunctionIndexer(BaseSeqRecordIndexer):
+    """Indexer to index based on values returned by a function.
+    
+    This class is passed a function which will return id, name and alias
+    information from a SeqRecord object. It needs to return either one item, 
+    which is an id from the title, or three items which are (in order), the id, 
+    a list of names, and a list of aliases.
+
+    This indexer allows indexing to be completely flexible based on passed
+    functions.
+    """
+    def __init__(self, index_function):
+        BaseSeqRecordIndexer.__init__(self)
+        self.index_function = index_function
+
+    def primary_key_name(self):
+        return "id"
+
+    def secondary_key_names(self):
+        return ["name", "aliases"]
+
+    def get_id_dictionary(self, seq_record):
+        items = self.index_function(seq_record)
+        if type(items) is not type([]) and type(items) is not type(()):
+            items = [items]
+        if len(items) == 1:
+            seq_id = items[0]
+            name = []
+            aliases = []
+        elif len(items) == 3:
+            seq_id, name, aliases = items
+        else:
+            raise ValueError("Unexpected items from index function: %s" %
+                    (items))
+        
+        return {"id" : [seq_id],
+                "name" : name,
+                "aliases" : aliases}
 
 class FixDocumentBuilder(BuildSeqRecord):
     """A SAX builder-style class to make a parsed SeqRecord available.

@@ -375,6 +375,9 @@ qualifier = Std.feature_qualifier(
 feature = Std.feature(feature_key_line +
                       Martel.Rep(qualifier))
 
+feature_block = Std.feature_block(Martel.Rep1(feature),
+                            {"location-style" : "genbank"})
+
 # BASE COUNT    28300 a  15069 c  15360 g  27707 t
 base_count = Martel.Group("base_count",
                           Martel.Re("[\w\d ]+"))
@@ -429,7 +432,7 @@ record_end = Martel.Group("record_end",
                           Martel.Str("//") +
                           Martel.Rep1(Martel.AnyEol()))
 
-record = Martel.Group("genbank_record",
+record = Std.record(Martel.Group("genbank_record",
                       locus_line + \
                       definition_block + \
                       accession_block + \
@@ -445,26 +448,15 @@ record = Martel.Group("genbank_record",
                       Martel.Opt(primary) +\
                       Martel.Opt(comment_block) + \
                       features_line + \
-                      Martel.Rep1(feature) + \
+                      feature_block + \
                       Martel.Alt(Martel.Opt(base_count_line) +
                                  sequence_entry,
                                  contig_block) + \
-                      record_end)
-
-# Martel-specific stuff to try and support standard tag names used
-# by Andrew for Bioformats
-martel_record = Martel.Group("record", record)
-format_expression = Martel.Group("dataset", Martel.Rep1(martel_record),
-                                 {"format" : "genbank"})
-
-record_format = Martel.ParseRecords("genbank_file", {"format" : "genbank"}, 
-                                    martel_record,
-                                    RecordReader.StartsWith, ("LOCUS",) )
-
+                      record_end))
 
 # if you download a big mess of GenBank files, it'll have a header
-# in that case you should be using 'format' instead of the standard
-# 'record'
+# in that case you should be using 'ncbi_format' instead of the standard
+# 'format'
 header = Martel.Re("""\
 (?P<filename>[^ ]+) +Genetic Sequence Data Bank
  *(?P<release_day>\d+) (?P<release_month>\w+) (?P<release_year>\d+)
@@ -478,11 +470,11 @@ header = Martel.Re("""\
 
 """)
 
-format = Martel.HeaderFooter("genbank", {},
+ncbi_format = Martel.HeaderFooter("genbank", {"format" : "ncbi_genbank"},
                              header, RecordReader.CountLines, (10,),
                              record, RecordReader.EndsWith, ("//",),
                              None, None, None,
                              )
 
-multirecord = Martel.ParseRecords("genbank", {}, record,
-                                  RecordReader.EndsWith, ("//",))
+format = Martel.ParseRecords("genbank", {"format" : "genbank"},
+                             record, RecordReader.EndsWith, ("//",))
