@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 # Created: Sat Jul 21 08:01:13 2001
-# Last changed: Time-stamp: <01/07/24 13:25:44 thomas>
-# thomas@cbs.dtu.dk, # Cecilia.Alsmark@ebc.uu.se
-
+# Last changed: Time-stamp: <01/07/24 14:38:06 thomas>
+# thomas@cbs.dtu.dk, Cecilia.Alsmark@ebc.uu.se
 # Copyright 2001 by Thomas Sicheritz-Ponten and Cecilia Alsmark.
 # All rights reserved.
 # This code is part of the Biopython distribution and governed by its
@@ -10,7 +9,7 @@
 # as part of this package.
 # File: sequtils.py
 
-import os, sys, getopt, re
+import os, sys, getopt, re, time
 from Bio import Fasta
 from Bio.Tools import Translate
 from Bio.Seq import Seq
@@ -49,9 +48,6 @@ from PropertyManager import default_manager
    more suggestions ?
 
 """
-
-# should we provide a FASTA fasta reader for huge files ?
-#  .... reading a complete genome file with the parser takes ages ...
 
 # temporary hack for exception free translation of "dirty" DNA
 # should be moved to ???
@@ -108,6 +104,53 @@ def translate(seq, frame = 1, genetic_code = 1, translator = None):
       translator = Translate.Translator(table)
 
    return translator.translate(Seq(seq[frame-1:], IUPAC.ambiguous_dna)).data
+
+def GC_Frame(seq, genetic_code = 1):
+   " just an alias for six_frame_translations "
+   return six_frame_translations(seq, genetic_code)
+
+def six_frame_translations(seq, genetic_code = 1):
+   """
+   nice looking 6 frame translation with GC content - code from xbbtools
+   similar to DNA Striders six-frame translation
+   """
+   comp = complement(seq)
+   anti = reverse(comp)
+   length = len(seq)
+   frames = {}
+   for i in range(0,3):
+      frames[i+1]  = translate(seq[i:], genetic_code)
+      frames[-(i+1)] = reverse(translate(anti[i:], genetic_code))
+
+   # create header
+   if length > 20:
+      short = '%s ... %s' % (seq[:10], seq[-10:])
+   else:
+      short = seq
+   date = time.strftime('%y %b %d, %X', time.localtime(time.time()))
+   header = 'GC_Frame: %s, ' % date
+   for nt in ['a','t','g','c']:
+      header += '%s:%d ' % (nt, seq.count(nt.upper()))
+      
+   header += '\nSequence: %s, %d nt, %0.2f %%GC\n\n\n' % (short.lower(),length, GC(seq))       
+   res = header
+   
+   for i in range(0,length,60):
+      subseq = seq[i:i+60]
+      csubseq = comp[i:i+60]
+      p = i/3
+      res = res + '%d/%d\n' % (i+1, i/3+1)
+      res = res + '  ' + '  '.join(map(None,frames[3][p:p+20])) + '\n'
+      res = res + ' ' + '  '.join(map(None,frames[2][p:p+20])) + '\n'
+      res = res + '  '.join(map(None,frames[1][p:p+20])) + '\n'
+      # seq
+      res = res + subseq.lower() + '%5d %%\n' % int(GC(subseq))
+      res = res + csubseq.lower() + '\n'
+      # - frames
+      res = res + '  '.join(map(None,frames[-2][p:p+20]))  +' \n'
+      res = res + ' ' + '  '.join(map(None,frames[-1][p:p+20])) + '\n'
+      res = res + '  ' + '  '.join(map(None,frames[-3][p:p+20])) + '\n\n'
+   return res
    
 def GC(seq):
    " calculates G+C content "
@@ -254,7 +297,7 @@ def quick_FASTA_reader(file):
       
    return entries
     
-def multi_fasta_to(file, function):
+def apply_on_multi_fasta(file, function):
    " apply function on each sequence in a multiple FASTA file "
    try:
       f = globals()[function]
@@ -272,7 +315,7 @@ def multi_fasta_to(file, function):
       if result:
          print '>%s\n%s' % (record.title, result)
          
-def quicker_multi_fasta_to(file, function):
+def quicker_apply_on_multi_fasta(file, function):
    " apply function on each sequence in a multiple FASTA file "
    try:
       f = globals()[function]
@@ -319,9 +362,9 @@ if __name__ == '__main__':
       function = options['apply_on_multi_fasta']
 
       if options.get('quick'):
-         quicker_multi_fasta_to(file, function)
+         quicker_apply_on_multi_fasta(file, function)
       else:
-         multi_fasta_to(file, function)
+         apply_on_multi_fasta(file, function)
       
    elif options.get('uniq_ids'):
       file = args[0]
