@@ -1,0 +1,610 @@
+test_cdd
+Testing Bio.CDD on pfam00035
+
+
+ALIGNED RANGE:
+
+1-67
+
+ALIGNED SEQUENCES:
+
+89
+
+CD:
+
+pfam00035
+
+CD STATUS:
+
+Full-length sequences, including 3D 
+structure if known. Alignment from source, reindexed to 
+representative
+
+CREATED:
+
+12-Sep-2001
+
+DESCRIPTION:
+
+dsrm, Double-stranded RNA binding motif. 
+Putative motif shared by proteins that bind to dsRNA. At least some DSRM 
+proteins seem to bind to specific RNA targets. Exemplified by Staufen, 
+which is involved in localization of at least five different mRNAs in the 
+early Drosophila embryo. Also by interferon-induced protein kinase in 
+humans, which is part of the cellular response to dsRNA.
+
+REPRESENTATIVE:
+
+Consensus sequence:
+
+SEQUENCE:
+
+PKSALQELAQKRKLPLPEYELVEEEGPAHAPRFTVEVTVGGKTYFEGSGSSKKEAKQNAAEAALRIL
+
+SOURCE:
+
+Pfam[US], Pfam[UK]
+
+TAXONOMY SPANNED:
+
+root->
+[ 
+81] from
+cellular 
+organisms
+[ 
+7] from
+Viruses
+
+ALIGNMENT_LOOKUP:
+
+    1173093 = RIBONUCLEASE III (RNASE III) 
+    125527 = INTERFERON-INDUCED, DOUBLE-STRANDED RNA-ACTIVATED PROTEIN KINASE(INTERFERON-INDUCIBLE RNA-DEPENDENT PROTEIN KINASE) (P68 KINASE)(P1/EIF-2A PROTEIN KINASE) 
+    12643664 = DOUBLE-STRANDED RNA-BINDING PROTEIN STAUFEN HOMOLOG 
+    127156 = DOSAGE COMPENSATION REGULATOR (MALE-LESS PROTEIN) (NO ACTION POTENTIALPROTEIN) 
+    129540 = DOUBLE-STRAND-SPECIFIC PAC1 RIBONUCLEASE (HCS PROTEIN) 
+    133151 = RIBONUCLEASE III (RNASE III) 
+    134950 = MATERNAL EFFECT PROTEIN STAUFEN 
+    1350789 = 60S RIBOSOMAL PROTEIN L3, MITOCHONDRIAL PRECURSOR (YML3) 
+    1519659 = Caenorhabditis elegans chromosome X clone F55A4 strain Bristol N2 
+    1519663 = Caenorhabditis elegans chromosome X clone F55A4 strain Bristol N2 
+    1706532 = DOUBLE-STRANDED RNA-SPECIFIC ADENOSINE DEAMINASE (DRADA) (136 KDADOUBLE-STRANDED RNA BINDING PROTEIN) (P136) (K88DSRBP) 
+    1710608 = RIBONUCLEASE III (RNASE III) 
+    1710609 = RIBONUCLEASE III (RNASE III) 
+    1814270 = Rattus norvegicus double-stranded RNA specific adenosine deaminase(RED2) mRNA, and translated products 
+    1932813Xenopus laevis dsRNA adenosine deaminase (dsRAD-1) mRNA, and = translated products 
+    1DI2A = Xenopus laevis 
+    1EKZA = Drosophila melanogaster 
+    1QU6A = Homo sapiens 
+    2160163 = Sequence of BAC F21M12 from Arabidopsis thaliana chromosome 1 
+    2388673 = Drosophila C virus strain EB, complete genome 
+    2500552 = RIBONUCLEASE III (RNASE III) 
+    2500553 = RIBONUCLEASE III (RNASE III) 
+    2500554 = RIBONUCLEASE III (RNASE III) 
+    2500555 = HYPOTHETICAL 27.1 KDA PROTEIN SLR0346 
+    2500556 = PUTTIVE PROTEIN A464R 
+    2500557 = RIBONUCLEASE III (RNASE III) 
+    2500558 = PUTATIVE RIBONUCLEASE III (RNASE III) 
+    2507204 = INTERFERON-INDUCED, DOUBLE-STRANDED RNA-ACTIVATED PROTEIN KINASE(INTERFERON-INDUCIBLE RNA-DEPENDENT PROTEIN KINASE) (P68 KINASE)(P1/EIF-2A PROTEIN KINASE) (SERINE/THREONINE-PROTEIN KINASE TIK) 
+    2668620 = Acyrthosiphon pisum virus protein P1 gene, complete cds; and proteinP2 gene, partial cds 
+    2829669 = DOUBLE-STRANDED RNA-SPECIFIC EDITASE 1 (DSRNA ADENOSINE DEAMINASE)(RNA EDITING ENZYME 1) 
+    2984731 = Orf virus interferon resistance determinant protein (OV20.0L) gene,complete cds; and RNA polymerase subunit homolog (OV20.3L) gene, partialcds 
+    3283023 = Caenorhabditis elegans putative RNA adenosine deaminase mRNA, completecds 
+    3290198 = Homo sapiens 
+    3334379 = TAR RNA-BINDING PROTEIN 2 (PROTAMINE-1 RNA BINDING PROTEIN) (PRM-1 RNABINDING PROTEIN) 
+    3334380 = TAR RNA-BINDING PROTEIN 2 (TRANS-ACTIVATION RESPONSIVE RNA-BINDINGPROTEIN) 
+    3334381 = DOUBLE STRANDED RNA BINDING PROTEIN A (XLRBPA) 
+    3650397 = Sciara ocellaris 
+    3850201 = Coltivirus JKT-6423 vp12 gene, complete cds 
+    3850247 = Coltivirus JKT-7075 segment 8 Vp8 gene, complete cds 
+    3913434 = ATP-DEPENDENT RNA HELICASE A (NUCLEAR DNA HELICASE II) (NDH II)(DEAD-BOX PROTEIN 9) (MHEL-5) 
+    3913436 = PROBABLE ATP-DEPENDENT RNA HELICASE A (NUCLEAR DNA HELICASE II) (NDHII) 
+    4490937 = Homo sapiens mRNA for hypothetical helicase K12H4.8-like protein,partial, and translated products 
+    458490 = Caenorhabditis elegans chromosome III clone T20G5 
+    465071 = PROTEIN E3 
+    465898 = HYPOTHETICAL HELICASE K12H4.8 IN CHROMOSOME III 
+    466149 = HYPOTHETICAL 80.5 KD PROTEIN ZK632.2 IN CHROMOSOME III 
+    468373 = RNA-dependent initiation factor-2 kinase 
+    532315 = NF90 protein 
+    586013 = SON PROTEIN (SON3) 
+    6094109 = RIBONUCLEASE III (RNASE III) 
+    6226018 = RIBONUCLEASE III (RNASE III) 
+    673456 = M.musculus Tenr mRNA for RNA binding protein, and translated products
+    7290203 = Drosophila melanogaster chromosome X 
+    7531188 = RIBONUCLEASE III (RNASE III) 
+    7531189 = RIBONUCLEASE III (RNASE III) 
+    7531190 = RIBONUCLEASE III (RNASE III) 
+    7531191 = RIBONUCLEASE III (RNASE III) 
+    7531193 = RIBONUCLEASE III (RNASE III) 
+    7531196 = RIBONUCLEASE III (RNASE III) 
+    7531197 = RIBONUCLEASE III (RNASE III) 
+    7531275 = RIBONUCLEASE III (RNASE III) 
+    7531276 = RIBONUCLEASE III (RNASE III) 
+    9789804 = DOUBLE-STRANDED RNA-BINDING PROTEIN STAUFEN HOMOLOG 
+
+REFERENCES:
+
+    PubMed
+
+
+
+
+
+
+
+Testing Bio.CDD on pfam01356
+
+
+ALIGNED RANGE:
+
+1-70
+
+ALIGNED SEQUENCES:
+
+3
+
+CD:
+
+pfam01356
+
+CD STATUS:
+
+Full-length sequences, including 3D 
+structure if known. Alignment from source, reindexed to 
+representative
+
+CREATED:
+
+13-Sep-2001
+
+DESCRIPTION:
+
+A_amylase_inhib, Alpha amylase 
+inhibitor.
+
+REPRESENTATIVE:
+
+Consensus sequence:
+
+SEQUENCE:
+
+ASEPAPACVTLYESWRYSQAANGCADTVSVKVAYEDDAEGLCAALAPGAITTVGDGYIGEHGHADHLALC
+
+SOURCE:
+
+Pfam[US], Pfam[UK]
+
+TAXONOMY SPANNED:
+
+Streptomyces->
+[ 
+1] from
+Streptomyces 
+olivaceoviridis
+[ 
+1] from
+Streptomyces 
+tendae
+
+ALIGNMENT_LOOKUP:
+
+    123962 = ALPHA-AMYLASE INHIBITOR PAIM I (PIG PANCREATIC ALPHA-AMYLASE INHIBITOROF MICROBES I) 
+    1HOE = Streptomyces tendae 
+
+REFERENCES:
+
+    PubMed
+
+
+
+
+
+
+
+Testing Bio.CDD on pfam02903
+
+
+ALIGNED RANGE:
+
+1-119
+
+ALIGNED SEQUENCES:
+
+12
+
+CD:
+
+pfam02903
+
+CD STATUS:
+
+Full-length sequences, including 3D 
+structure if known. Alignment from source, reindexed to 
+representative
+
+CREATED:
+
+13-Sep-2001
+
+DESCRIPTION:
+
+alpha-amylase_N, Alpha amylase, N-terminal 
+ig-like domain.
+
+REPRESENTATIVE:
+
+Consensus sequence:
+
+SEQUENCE:
+
+MILEAIYHRPKNNYAYAYNGRTLHIRLRTKKDDVDHVYLLYGDPYEWLDWTNETAPMRKEGSDELFDYWEAEVTPPYRRL
+RYGFLLTSDHEKLYFTEKGFYPEPPKNDIAYYFCFPFIN
+
+SOURCE:
+
+Pfam[US], Pfam[UK]
+
+TAXONOMY SPANNED:
+
+Bacteria->
+[ 
+10] from
+Firmicutes
+[ 
+1] from
+Thermus/Deinococcus 
+group
+
+ALIGNMENT_LOOKUP:
+
+    1168855 = CYCLOMALTODEXTRINASE (CDASE) (CYCLOMALTODEXTRIN HYDROLASE, DECYCLING)
+    1236529 = cyclomaltodextrinase 
+    1255196 = Bacillus stearothermophilus maltogenic amylase BSMA gene, andtranslated products 
+    1945665 = B.subtilis genomic DNA fragment (88 kb), and translated products 
+    1BVZA = Thermoactinomyces vulgaris 
+    1SMAA = Thermus sp. 
+    216292 = Bacillus sp. KSM-1876 clone pBH216 strain KSM-1876 
+    231725 = CYCLOMALTODEXTRINASE (CDASE) (CYCLOMALTODEXTRIN HYDROLASE, DECYCLING)
+    3318593 = Bacillus sp. 
+    416620 = MALTOGENIC ALPHA-AMYLASE PRECURSOR (GLUCAN 1,4-ALPHA-MALTOHYDROLASE)
+    584758 = MALTOGENIC ALPHA-AMYLASE PRECURSOR (GLUCAN 1,4-ALPHA-MALTOHYDROLASE)
+
+REFERENCES:
+
+    PubMed
+
+
+
+
+
+
+
+Testing Bio.CDD on smart00499
+
+
+ALIGNED RANGE:
+
+1-80
+
+ALIGNED SEQUENCES:
+
+138
+
+CD:
+
+smart00499
+
+CD STATUS:
+
+Full-length sequences, including 3D 
+structure if known. Alignment from source, reindexed to 
+representative
+
+CREATED:
+
+13-Sep-2001
+
+DESCRIPTION:
+
+AAI, Plant lipid transfer protein / seed 
+storage protein / trypsin-alpha amylase inhibitor domain family
+
+REPRESENTATIVE:
+
+Consensus sequence:
+
+SEQUENCE:
+
+CPPVLLQLCAPCLSYLVGGSQRGAPPSQACCSQLRGLPSAAQCRCLALRAAVLGILIPGVNAQNAASLPSACGVPVPPDC
+
+SOURCE:
+
+Smart
+
+TAXONOMY SPANNED:
+
+Eukaryota->
+[ 
+1] from
+Alveolata
+[ 
+3] from
+Fungi/Metazoa 
+group
+[133] 
+from
+Viridiplantae
+
+ALIGNMENT_LOOKUP:
+
+    1041815 = Oryza sativa putative lipid transfer protein (Ltp-2) gene, andtranslated products 
+    112743 = 2S SEED STORAGE PROTEIN 4 PRECURSOR (2S ALBUMIN STORAGE PROTEIN) 
+    112744 = 2S SEED STORAGE PROTEIN PRECURSOR (2S ALBUMIN STORAGE PROTEIN) 
+    112745 = ALBUMIN 8 PRECURSOR (METHIONINE-RICH 2S PROTEIN) (SFA8) 
+    112754 = 2S SULFUR-RICH SEED STORAGE PROTEIN PRECURSOR (ALLERGEN BER E 1) 
+    112762 = 2S ALBUMIN PRECURSOR (ALLERGEN RIC C 1) 
+    115062 = BLT4 PROTEIN PRECURSOR 
+    121098 = ALPHA/BETA-GLIADIN MM1 PRECURSOR (PROLAMIN) 
+    121103 = GAMMA-GLIADIN B PRECURSOR 
+    123464 = GAMMA-HORDEIN 1 PRECURSOR 
+    123956ALPHA-AMYLASE/TRYPSIN INHIBITOR CM2 PRECURSOR = (CHLOROFORM/METHANOL-SOLUBLE PROTEIN CM2) 
+    128378 = NONSPECIFIC LIPID-TRANSFER PROTEIN A (NS-LTP A) (PHOSPHOLIPID TRANSFERPROTEIN) (PLTP) 
+    128384 = NONSPECIFIC LIPID-TRANSFER PROTEIN PRECURSOR (LTP) (EXTRACELLULARPROTEIN 2) 
+    1352505 = NONSPECIFIC LIPID-TRANSFER PROTEIN (LTP) (PHOSPHOLIPID TRANSFERPROTEIN) (PLTP) 
+    1398913 = Rice mRNA for allergenic protein, and translated products 
+    1420885 = proline-rich 14 kDa protein 
+    1420887 = non-specific lipid transfer-like protein 
+    15028045 = Arabidopsis thaliana chromosome 1 clone RAFL08-13-J16 (R11185) 
+    15225850 = Arabidopsis thaliana chromosome 2 
+    15231964 = Arabidopsis thaliana chromosome 3 
+    1628469 = S.latifolia mRNA for Men-7 protein, and translated products 
+    1657851 = Triticum aestivum cold acclimation protein WCOR518 (Wcor518) mRNA,parial cds., and translated products 
+    166553 = avenin 
+    166557 = avenin 
+    167311 = 2S albumin storage protein 
+    170156 = [Sorghum bicolor endosperm tissue mRNA, complete CDS.], gene product
+    1709916 = PUROINDOLINE-A PRECURSOR 
+    1709917 = PUROINDOLINE-B PRECURSOR 
+    1771785 = T.aestivum mRNA for PUP88 protein, and translated products 
+    1794252 = Juglans regia 2S albumin seed storage protein precursor mRNA, partialcds. cDNA., and translated products 
+    1817546 = Capparis masaikai mRNA for mabinlin, and translated products 
+    1848225 = Hordeum vulgare nonspecific lipid transfer protein (ltp-BR1) mRNA, andtranslated products 
+    1857654 = Triticum aestivum chromosome 1 clone F23A strain Cheyenne 
+    19141 = L. angustifolius mRNA for conglutin delta, and translated products 
+    1HSSA = Triticum aestivum 
+    1JTB = Hordeum vulgare 
+    1RZL = Oryza sativa 
+    1TMQB = Eleusine coracana 
+    20306 = O.sativa mRNA for prolamin storage protein, and translated products
+    20645 = P.strobus mRNA for albumin 3, and translated products 
+    2130113 = trypsin inhibitor CMx precursor (clones pCMx1 and pCMx3) - wheat 
+    2226329 = Zea mays physical impedance induced protein (IIG1) mRNA, complete cds
+    2264392 = Hordeum vulgare tetrameric alpha-amylase inhibitor subunit CMd3 gene,and translated products 
+    232161 = 19 KD GLOBULIN PRECURSOR (ALPHA-GLOBULIN) 
+    2330653 = Pisum sativum mRNA for non-specific lipid transfer protein, andtranslated products 
+    2347088 = Phaseolus vulgaris non-specific lipid transfer protein PvLTP-24(Pvltp-24) mRNA, and translated products 
+    2497734 = NONSPECIFIC LIPID-TRANSFER PROTEIN PRECURSOR (LTP) 
+    2497739 = NONSPECIFIC LIPID-TRANSFER PROTEIN B PRECURSOR (LTP B) (WAX-ASSOCIATEDPROTEIN 9B) 
+    2497741 = NONSPECIFIC LIPID-TRANSFER PROTEIN PRECURSOR (LTP) 
+    2497748 = NONSPECIFIC LIPID-TRANSFER PROTEIN 4 PRECURSOR (LTP 4) 
+    2497751 = NONSPECIFIC LIPID-TRANSFER PROTEIN PRECURSOR (LTP) 
+    2497752 = NONSPECIFIC LIPID-TRANSFER PROTEIN 1 PRECURSOR (LTP 1) 
+    2497753 = NONSPECIFIC LIPID-TRANSFER PROTEIN 3 PRECURSOR (LTP 3) 
+    2497757 = NONSPECIFIC LIPID-TRANSFER PROTEIN 1 PRECURSOR (LTP 1) 
+    2497758 = ANTIMICROBIAL PROTEIN ACE-AMP1 PRECURSOR 
+    2506771ALPHA-AMYLASE INHIBITOR BMAI-1 PRECURSOR (ALLERGEN HOR V 1) = (ALPHA-AMYLASE FLOUR INHIBITOR) 
+    2507619 = Pinus radiata PrLTP1 mRNA, complete cds 
+    2507621 = Pinus radiata PrMC2 mRNA, complete cds 
+    2565001 = Arabidopsis thaliana chromosome IV, near centromere, likely from thelong arm 
+    2598597 = Medicago truncatula mRNA for MtN5 gene, and translated products 
+    2627141 = Picea abies 
+    2827316 = Oryza sativa allergenic protein mRNA, complete cds 
+    2827544 = Arabidopsis thaliana chromosome 4 
+    288709 = H.vulgare mRNA for gamma 3 hordein, 3' end, and translated products
+    2894148Triticum aestivum mRNA for monomeric alpha-amylase inhibitor = (WAI-0.28), and translated products 
+    296443 = G.max ADR11 mRNA, and translated products 
+    2980778 = Arabidopsis thaliana chromosome 4 
+    3062791 = Brassica rapa PEC-1 mRNA for Lipid transfer protein, partial cds., andtranslated products 
+    3128175 = Arabidopsis thaliana chromosome II 
+    3157922 = Arabidopsis thaliana chromosome 1 BAC F12F1 sequence, completesequence 
+    3183088 = PROBABLE NONSPECIFIC LIPID-TRANSFER PROTEIN AKCS9 PRECURSOR (LTP) 
+    3193330 = Arabidopsis thaliana BAC F6N15 
+    322863 = alpha-amylase inhibitor SIalpha4 - sorghum 
+    3372342 = Hordeum vulgare 7 kDa lipid transfer protein (LTP-ne) mRNA, completecds 
+    3549657 = Arabidopsis thaliana chromosome 4 
+    3550132 = Picea glauca 2S albumin-like protein mRNA, complete cds 
+    3818416 = Medicago sativa proline-rich cell wall protein gene, complete cds 
+    3881065 = Caenorhabditis elegans chromosome II clone Y51B9A 
+    3892707 = Arabidopsis thaliana chromosome 4 
+    3892720 = Arabidopsis thaliana chromosome 4 
+    3913900 = ALPHA-AMYLASE INHIBITOR 5 (SI ALPHA-5) 
+    3914132 = PROBABLE NONSPECIFIC LIPID-TRANSFER PROTEIN 1 PRECURSOR (LTP) (MAJORPOLLEN ALLERGEN PAR J 1.0102) (PAR J I) (P9 PROTEIN) 
+    3914136 = NONSPECIFIC LIPID-TRANSFER PROTEIN PRECURSOR (LTP) 
+    400249 = MFS14 PROTEIN PRECURSOR 
+    4185505 = Brassica napus nonspecific lipid-transfer protein precursor, mRNA,complete cds 
+    4263771 = Arabidopsis thaliana chromosome II 
+    4309730 = Arabidopsis thaliana chromosome II 
+    452592 = Lily mRNA for ORF (similar to FIL1 gene), partial cds., and translatedproducts 
+    4587567 = Arabidopsis thaliana chromosome 1 BAC F10O3 sequence 
+    459405 = Cucurbita sp. 
+    4678942 = Arabidopsis thaliana chromosome 3 
+    4680343 = Oryza sativa subsp. indica BAC clone 16F19 php20725 region, completesequence 
+    4725952 = Arabidopsis thaliana chromosome 4 
+    481828 = 5B protein - tomato 
+    4868127 = Avena fatua puroindoline precursor, mRNA, complete cds 
+    4895197 = Arabidopsis thaliana chromosome II 
+    498036 = lipid transfer protein 
+    5281047 = Arabidopsis thaliana chromosome 4 
+    537639 = lipid transfer protein 
+    5381323 = Sesamum indicum strain Tainan 1 2S albumin precursor, mRNA, completecds 
+    543565 = hypothetical 10.0K protein - Zinnia elegans 
+    5729706 = Arabidopsis thaliana chromosome II 
+    5729707 = Arabidopsis thaliana chromosome II 
+    5824504 = Caenorhabditis elegans chromosome X clone F45B8 
+    585290ALPHA-AMYLASE/TRYPSIN INHIBITOR CMB PRECURSOR = (CHLOROFORM/METHANOL-SOLUBLE PROTEIN CMB) 
+    5902675 = PROTEIN 108 PRECURSOR 
+    5902685 = 2S ALBUMIN PRECURSOR (GM2S-1) [CONTAINS: ASPARTIC ACID-RICH PEPTIDE; 8KDA METHIONINE-RICH PROTEIN (8 KDA MRP)] 
+    5923742 = Arachis hypogaea allergen Arah6 (Ara h 6) mRNA, partial cds 
+    5931948 = Arachis hypogaea allergen (Ara h 7) mRNA, complete cds 
+    6015153 = STAMEN-SPECIFIC PROTEIN FIL1 PRECURSOR 
+    6016531 = MALE-CONE PROTEIN 1 PRECURSOR (PRMC1) 
+    6016542 = MEN-8 PROTEIN PRECURSOR 
+    6137299 = YY1 PROTEIN PRECURSOR 
+    619308 = GSP-1a=minor grain softness protein [Triticum=wheat, cv. Timgalen,endosperm, Peptide, 164 aa] 
+    6225764 = NONSPECIFIC LIPID-TRANSFER PROTEIN 4.1 PRECURSOR (LTP 4.1) (CW21)(CW-21) 
+    6225767 = NONSPECIFIC LIPID-TRANSFER PROTEIN PRECURSOR 
+    6273279 = Tetrahymena thermophila SerH3 immobilization antigen (SerH3) gene,complete cds 
+    6492243 = Hordeum vulgare lipid transfer protein mRNA, complete cds 
+    6562693 = Mus musculus 
+    6573247 = Dicranopteris linearis 2S storage protein-like albumin precursor(dili2) mRNA, complete cds 
+    6689676 = Zea mays mRNA for anther specific protein, and translated products 
+    6691517 = Solanum melongena EEF48 mRNA, partial cds., and translated products
+    6714296 = Genomic sequence for Arabidopsis thaliana BAC F15H18 from chromosome I
+    671591 = O.sativa mRNA for prolamin, and translated products 
+    6735310 = Arabidopsis thaliana DNA chromosome 3, BAC clone F28O9, and translatedproducts 
+    6735372Arabidopsis thaliana DNA chromosome 3, BAC clone F14P22, and = translated products 
+    6782436 = Nicotiana glauca cell-type guard cell lipid-transfer protein (LTP1)mRNA, complete cds 
+    728749 = TAPETUM-SPECIFIC PROTEIN A9 PRECURSOR 
+    7438316 = mabinlin III - Yunnan caper (fragments) 
+    7486608 = hypothetical protein F7K2.190 - Arabidopsis thaliana 
+    7486612 = hypothetical protein F7K2.40 - Arabidopsis thaliana 
+    7487994 = pEARLI 1 protein homolog T1P17.60 - Arabidopsis thaliana 
+    7488324 = root-specific protein RCc3 homolog F7K2.70 - Arabidopsis thaliana 
+    8778716 = Arabidopsis thaliana chromosome 1 clone T25N20 
+    99819 = napin nIa - rape 
+
+REFERENCES:
+
+    PubMed
+
+
+
+
+
+
+
+Testing Bio.CDD on smart00505
+
+
+ALIGNED RANGE:
+
+1-45
+
+ALIGNED SEQUENCES:
+
+61
+
+CD:
+
+smart00505
+
+CD STATUS:
+
+Full-length sequences, including 3D 
+structure if known. Alignment from source, reindexed to 
+representative
+
+CREATED:
+
+13-Sep-2001
+
+DESCRIPTION:
+
+Knot1, Knottins; Knottins, representing 
+plant lectins/antimicrobial peptides, plant proteinase/amylase inhibitors, 
+plant gamma-thionins and arthropod defensins.
+
+REPRESENTATIVE:
+
+Consensus sequence:
+
+SEQUENCE:
+
+TCDGYSVDFSGNCKSSCLCAKLCKKKGASGGYCRGTRRCFCYKLC
+
+SOURCE:
+
+Smart
+
+TAXONOMY SPANNED:
+
+Eukaryota->
+[ 
+27] from
+Fungi/Metazoa 
+group
+[ 
+33] from
+Viridiplantae
+
+ALIGNMENT_LOOKUP:
+
+    102790 = neurotoxin V-5 - bark scorpion 
+    112671 = 10 KDA PROTEIN PRECURSOR (CLONE PSAS10) 
+    11387216 = GAMMA-THIONIN HOMOLOG AT2G02140 PRECURSOR 
+    114248 = ANTHER-SPECIFIC PROTEIN SF18 PRECURSOR 
+    1169263 = DEFENSIN 
+    1171503 = C.annuum gamma thionin gene, and translated products 
+    118427 = DEFENSIN, ISOFORMS B AND C 
+    134340 = INSECT TOXINS 1 AND 1' (INSECT TOXIN LQQIT1/LQQIT1') 
+    134341 = NEUROTOXIN OS1 (OS-1) 
+    134376 = NEUROTOXIN M14 
+    1360108 = P.abies mRNA for gamma-thionin protein (putative), and translatedproducts 
+    15219858 = Arabidopsis thaliana chromosome 1 
+    1653972 = Brassica oleracea 
+    1706353 = DEFENSIN 
+    1706354 = ROYALISIN PRECURSOR (DEFENSIN) 
+    1781281 = Medicago truncatula mRNA for MtN1 gene, and translated products 
+    1AYJ = Raphanus sativus var. longipinnatus 
+    1B3CA = Centruroides exilicauda 
+    1B7DA = Tityus serrulatus 
+    1BK8 = Aesculus hippocastanum 
+    1CN2 = Centruroides noxius 
+    1FH3A = Leiurus quinquestriatus hebraeus 
+    1GPS = Triticum turgidum 
+    1MYN = Drosophila melanogaster 
+    1NRA = Centruroides exilicauda 
+    1PTX = Androctonus australis 
+    1SN4A = Buthus martensii 
+    1VNA = Centruroides exilicauda 
+    2147322 = defensin AFP1 - Heuchera sanguinea 
+    2500709 = NEUROTOXIN-LIKE PROTEIN STR1 (ANATOXIN AAH STR1) 
+    2501197 = GAMMA-ZEATHIONIN 2 
+    2506269 = SAPECIN B PRECURSOR 
+    2598581 = Medicago truncatula mRNA for MtN15 gene, and translated products 
+    3062795 = Brassica rapa PEC-3 mRNA for PCP-1 family, and translated products 
+    3273105 = Orthochirus scrobiculosus mRNA for insecticidal toxin, partial, andtranslated products 
+    3287860 = PUTATIVE TRYPSIN INHIBITOR AT2G43510 PRECURSOR (DIDI 4T-1) 
+    3287862 = PUTATIVE TRYPSIN INHIBITOR AT2G43530 PRECURSOR 
+    3287863 = PUTATIVE TRYPSIN INHIBITOR AT2G43550 PRECURSOR 
+    3877921 = Caenorhabditis elegans chromosome II clone F58G1 
+    3913645 = FABATIN-1 
+    3914969 = TOXIN IV-5 
+    3915104 = GAMMA-THIONIN 1 PRECURSOR 
+    401072 = NEUROTOXIN III PRECURSOR (AAH III) 
+    4883634 = Buthus martensii depressant insect toxin BmK ITa precursor, mRNA,complete cds 
+    509769 = Glycine max seed-specific low molecular weight sulfur-rich protein.,and translated products 
+    533692 = Glycine max Essex protease inhibitor mRNA, and translated products 
+    544136 = DISEASE RESISTANCE RESPONSE PROTEIN 230 PRECURSOR 
+    5712121 = Mesobuthus martensii AS neurotoxin precursor, gene, complete cds 
+    585042 = DEFENSIN 
+    5924283 = Stomoxys calcitrans defensin 1a (smd1a) gene, complete cds 
+    6069519 = Brassica rapa mRNA for S-locus protein 11, and translated products 
+    6225076 = ANTIFUNGAL PROTEIN AX1 
+    6572987 = Brassica oleracea haplotype S6 S-locus cysteine-rich protein (SCR)mRNA, complete cds 
+    6572989 = Brassica oleracea haplotype S13 S-locus cysteine-rich protein (SCR)mRNA, complete cds 
+    6601331 = Capsicum annuum gamma-thionin 1 precursor (thion1) mRNA, complete cds
+    676882 = Tobacco pit1 mRNA (which expression is induced by Pi starvation), andtranslated products 
+    7487674 = hypothetical protein T5C23.190 - Arabidopsis thaliana 
+    790641 = gamma-thionin 
+    7993732 = ANTIFUNGAL PROTEIN AX2 
+    924624 = flower-specific gamma-thionin-like protein/acidic protein precursor
+
+REFERENCES:
+
+
+
+
+
+
+
