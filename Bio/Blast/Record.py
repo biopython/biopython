@@ -185,7 +185,7 @@ class DatabaseReport:
     Members:
     database_name              List of database names.  (can have multiple dbs)
     num_letters_in_database    Number of letters in the database.  (int)
-    num_sequences_in_database  Number of sequences in the database.  (int)
+    num_sequences_in_database  List of number of sequences in the database.
     posted_date                List of the dates the databases were posted.
     ka_params                  A tuple of (lambda, k, h) values.  (floats)
     gapped                     # XXX this isn't set right!
