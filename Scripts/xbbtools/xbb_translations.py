@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # Created: Wed Jun 21 15:53:22 2000
-# Last changed: Time-stamp: <00/08/09 19:55:59 thomas>
+# Last changed: Time-stamp: <00/08/10 14:50:36 thomas>
 # Thomas.Sicheritz@molbio.uu.se, http://evolution.bmc.uu.se/~thomas
 # File: xbb_translations.py
 

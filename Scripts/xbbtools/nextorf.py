@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # Created: Tue Aug  8 20:32:36 2000
-# Last changed: Time-stamp: <00/08/10 09:55:44 thomas>
+# Last changed: Time-stamp: <00/08/10 15:05:37 thomas>
 # thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas/index.html
 # File: nextorf.py
 
@@ -73,10 +73,10 @@ class NextORF:
         seq = re.sub('(............................................................)','\\1\n',seq)
         return '>%s\n%s' % (header, seq)
 
-    def gc(self,seq):
+    def gc(self, seq):
         gc = string.count(seq, 'G') + string.count(seq, 'C')
         if gc == 0: return 0
-        return len(seq)*100.0/gc
+        return gc*100.0/len(seq)
         
     def handle_record(self, rec):
         plus, minus= 0,0
@@ -84,37 +84,68 @@ class NextORF:
         if self.options['strand'] == 'both' or self.options['strand'] == 'minus': minus = 1         
         s = string.upper(rec.sequence[self.options['start']:self.options['stop']])
         seq = Seq(s,IUPAC.ambiguous_dna)
-        if minus: rseq = Seq(complement(s), IUPAC.ambiguous_dna)
-
+        if minus:
+            r = map(None,s)
+            r.reverse()
+            rseq = Seq(complement(r), IUPAC.ambiguous_dna)
 
         n = 0
         if plus:
             for frame in self.options['frames']:
                 orf = self.translator.translate(seq[frame-1:])
                 orfs = string.split(orf.data,'*')
-                l = int(self.options['minlength'])
-                orfs = filter(lambda x,l=l: len(x) >= l, orfs)
-                if self.options['maxlength']:
-                    l = int(self.options['maxlength'])
-                    orfs = filter(lambda x,l=l: len(x) <= l, orfs)
+                start = 0
                 for orf in orfs:
-                    n = n + 1
-                    print self.toFasta('orf_%s:%s:+%d' % (n, self.header,frame), orf)
+                    stop = start + 3*(len(orf) + 1)
+                    subs = seq[frame-1:][start:stop]
+                    start = stop
 
+                    # ORF too small ?
+                    if len(orf) < int(self.options['minlength']): continue
+                    # ORF too big ?
+                    if self.options['maxlength'] and \
+                       len(orf) > int(self.options['maxlength']): continue
+                    
+                    n = n + 1
+                    # ORF just allright ...
+                    out = self.options['output']
+                    head = 'orf_%s:%s:+%d:%d:%d' % (n, self.header, frame, start,stop)
+                    if self.options['gc']: head = '%s:%f%%' % (head, self.gc(subs.data))
+                    if out == 'aa':
+                        print self.toFasta(head, orf)
+                    elif out == 'nt':
+                        print self.toFasta(head, subs.data)
+                    elif out == 'pos':
+                        print head
+                        
+                        
 
         if minus:
             for frame in self.options['frames']:
                 orf = self.translator.translate(rseq[frame-1:])
                 orfs = string.split(orf.data,'*')
-
-                l = int(self.options['minlength'])
-                orfs = filter(lambda x,l=l: len(x) >= l, orfs)
-                if self.options['maxlength']:
-                    l = int(self.options['maxlength'])
-                    orfs = filter(lambda x,l=l: len(x) <= l, orfs)
+                start = 0
                 for orf in orfs:
+                    stop = start + 3*(len(orf) + 1)
+                    subs = rseq[frame-1:][start:stop]
+                    start = stop
+
+                    # ORF too small ?
+                    if len(orf) < int(self.options['minlength']): continue
+                    # ORF too big ?
+                    if self.options['maxlength'] and \
+                       len(orf) > int(self.options['maxlength']): continue
+                    # ORF just allright ...
                     n = n + 1
-                    print self.toFasta('orf_%s:%s:-%d' % (n, self.header,frame), orf)
+                    head = 'orf_%s:%s:-%d:%d:%d' % (n, self.header, frame, start,stop)
+                    if self.options['gc']: head = '%s:%f%%' % (head, self.gc(subs.data))
+                    if out == 'aa':
+                        print self.toFasta(head, orf)
+                    elif out == 'nt':
+                        print self.toFasta(head, subs.data)
+                    elif out == 'pos':
+                        print head
+
             
 
 def help():
@@ -151,7 +182,7 @@ if __name__ == '__main__':
 
     show_help = len(sys.argv)<=1
 
-    shorts = 'h'
+    shorts = 'hv'
     longs = map(lambda x: x +'=', options.keys())
     optlist, args = getopt.getopt(args,shorts, longs)
     if show_help: help()
@@ -161,8 +192,12 @@ if __name__ == '__main__':
             sys.exit(0)
         for key in options.keys():
             if arg[0][2:] == key:
-                options[key] = arg[1]
-
+                if arg[1] == 'no': 
+                    options[key] = None
+                else:
+                    options[key] = arg[1]
+        if arg[0] == 'v':
+            print options
     file = args[0]
 
     nextorf = NextORF(file, options)
