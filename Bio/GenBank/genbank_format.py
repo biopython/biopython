@@ -377,6 +377,7 @@ feature_key_names = (
     "satellite",        # Satellite repeated sequence
     "scRNA",            # Small cytoplasmic RNA
     "SecStr",           # RefSeq invention -- I have no idea what it means
+    "Het",
     "sig_peptide",      # Signal peptide coding region
     "Site-ref",
     "Site",             # RefSeq invention for a protein site
@@ -523,6 +524,7 @@ feature_qualifier_names = (
     "germline",       # If the sequence shown is DNA and a member of the
                       #   immunoglobulin family, this qualifier is used to
                       #   denote that the sequence is from unrearranged DNA
+    "heterogen",
     "haplotype",      # Haplotype of organism from which the sequence was
                       #   obtained
     "hgml_locus_uid", # Found in old GenBank records
