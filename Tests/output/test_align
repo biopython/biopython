@@ -95,21 +95,186 @@ gi|671626|emb|CAA85685.1|           -
 
 all_seqs...
 description: gi|6273285|gb|AF191659.1|AF191
-seq: Seq('TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA---- ...', IUPACAmbiguousDNA())
+seq: Seq('TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA---- ...', IUPACUnambiguousDNA())
 description: gi|6273284|gb|AF191658.1|AF191
-seq: Seq('TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATA-- ...', IUPACAmbiguousDNA())
+seq: Seq('TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATA-- ...', IUPACUnambiguousDNA())
 description: gi|6273287|gb|AF191661.1|AF191
-seq: Seq('TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA---- ...', IUPACAmbiguousDNA())
+seq: Seq('TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA---- ...', IUPACUnambiguousDNA())
 description: gi|6273286|gb|AF191660.1|AF191
-seq: Seq('TATACATAAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA---- ...', IUPACAmbiguousDNA())
+seq: Seq('TATACATAAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA---- ...', IUPACUnambiguousDNA())
 description: gi|6273290|gb|AF191664.1|AF191
-seq: Seq('TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA ...', IUPACAmbiguousDNA())
+seq: Seq('TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA ...', IUPACUnambiguousDNA())
 description: gi|6273289|gb|AF191663.1|AF191
-seq: Seq('TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA ...', IUPACAmbiguousDNA())
+seq: Seq('TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA ...', IUPACUnambiguousDNA())
 description: gi|6273291|gb|AF191665.1|AF191
-seq: Seq('TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA ...', IUPACAmbiguousDNA())
+seq: Seq('TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA ...', IUPACUnambiguousDNA())
 length: 156
-consensus: Seq('TATACATNAAAGNAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA ...', IUPACAmbiguousDNA())
+Calculating summary information...
+consensus: Seq('TATACATTAAAGNAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA ...', IUPACAmbiguousDNA())
+Replacement dictionary
+{('C', 'C'): 271.0, ('G', 'T'): 0, ('A', 'G'): 13.0, ('A', 'A'): 1395.0, ('A', 'C'): 3.0, ('T', 'C'): 12.0, ('T', 'A'): 6.0, ('T', 'G'): 0, ('C', 'A'): 3.0, ('A', 'T'): 6.0, ('G', 'G'): 480.0, ('C', 'G'): 0, ('G', 'C'): 0, ('C', 'T'): 16.0, ('G', 'A'): 5.0, ('T', 'T'): 874.0}
+position specific score matrix.
+    -   A   C   G   T
+T  0.0 0.0 0.0 0.0 7.0
+A  0.0 7.0 0.0 0.0 0.0
+T  0.0 0.0 0.0 0.0 7.0
+A  0.0 7.0 0.0 0.0 0.0
+C  0.0 0.0 7.0 0.0 0.0
+A  0.0 7.0 0.0 0.0 0.0
+T  0.0 0.0 0.0 0.0 7.0
+T  0.0 1.0 0.0 0.0 6.0
+A  0.0 7.0 0.0 0.0 0.0
+A  0.0 7.0 0.0 0.0 0.0
+A  0.0 7.0 0.0 0.0 0.0
+G  0.0 0.0 0.0 7.0 0.0
+N  0.0 4.0 0.0 3.0 0.0
+A  0.0 7.0 0.0 0.0 0.0
+G  0.0 0.0 0.0 7.0 0.0
+G  0.0 0.0 0.0 7.0 0.0
+G  0.0 0.0 0.0 7.0 0.0
+G  0.0 0.0 0.0 7.0 0.0
+G  0.0 0.0 0.0 7.0 0.0
+A  0.0 7.0 0.0 0.0 0.0
+T  0.0 0.0 0.0 0.0 7.0
+G  0.0 0.0 0.0 7.0 0.0
+C  0.0 0.0 7.0 0.0 0.0
+G  0.0 0.0 0.0 7.0 0.0
+G  0.0 0.0 0.0 7.0 0.0
+A  0.0 7.0 0.0 0.0 0.0
+T  0.0 0.0 0.0 0.0 7.0
+A  0.0 7.0 0.0 0.0 0.0
+A  0.0 7.0 0.0 0.0 0.0
+A  0.0 7.0 0.0 0.0 0.0
+T  0.0 0.0 0.0 0.0 7.0
+G  0.0 0.0 0.0 7.0 0.0
+G  0.0 0.0 0.0 7.0 0.0
+A  0.0 7.0 0.0 0.0 0.0
+A  0.0 7.0 0.0 0.0 0.0
+A  0.0 7.0 0.0 0.0 0.0
+G  0.0 0.0 0.0 7.0 0.0
+G  0.0 0.0 0.0 7.0 0.0
+C  0.0 0.0 7.0 0.0 0.0
+G  0.0 0.0 0.0 7.0 0.0
+A  0.0 7.0 0.0 0.0 0.0
+A  0.0 7.0 0.0 0.0 0.0
+A  0.0 7.0 0.0 0.0 0.0
+G  0.0 0.0 0.0 7.0 0.0
+A  0.0 7.0 0.0 0.0 0.0
+A  0.0 7.0 0.0 0.0 0.0
+A  0.0 7.0 0.0 0.0 0.0
+G  0.0 0.0 0.0 7.0 0.0
+A  0.0 7.0 0.0 0.0 0.0
+A  0.0 7.0 0.0 0.0 0.0
+T  0.0 0.0 0.0 0.0 7.0
+A  0.0 7.0 0.0 0.0 0.0
+T  0.0 0.0 0.0 0.0 7.0
+A  0.0 7.0 0.0 0.0 0.0
+T  0.0 0.0 0.0 0.0 7.0
+A  0.0 7.0 0.0 0.0 0.0
+T  3.0 0.0 0.0 0.0 4.0
+A  3.0 4.0 0.0 0.0 0.0
+T  4.0 0.0 0.0 0.0 3.0
+A  4.0 3.0 0.0 0.0 0.0
+T  6.0 0.0 0.0 0.0 1.0
+A  6.0 1.0 0.0 0.0 0.0
+T  6.0 0.0 0.0 0.0 1.0
+A  6.0 1.0 0.0 0.0 0.0
+T  6.0 0.0 0.0 0.0 1.0
+A  6.0 1.0 0.0 0.0 0.0
+A  0.0 7.0 0.0 0.0 0.0
+T  0.0 0.0 0.0 0.0 7.0
+A  0.0 7.0 0.0 0.0 0.0
+T  0.0 0.0 0.0 0.0 7.0
+A  0.0 7.0 0.0 0.0 0.0
+T  0.0 0.0 0.0 0.0 7.0
+T  0.0 0.0 0.0 0.0 7.0
+T  0.0 0.0 0.0 0.0 7.0
+C  0.0 1.0 6.0 0.0 0.0
+A  0.0 6.0 0.0 0.0 1.0
+A  0.0 7.0 0.0 0.0 0.0
+A  0.0 7.0 0.0 0.0 0.0
+T  0.0 0.0 0.0 0.0 7.0
+T  0.0 0.0 0.0 0.0 7.0
+N  0.0 0.0 3.0 0.0 4.0
+C  0.0 0.0 7.0 0.0 0.0
+C  0.0 0.0 7.0 0.0 0.0
+T  0.0 0.0 0.0 0.0 7.0
+T  0.0 0.0 0.0 0.0 7.0
+A  0.0 7.0 0.0 0.0 0.0
+T  0.0 0.0 0.0 0.0 7.0
+A  0.0 7.0 0.0 0.0 0.0
+T  0.0 0.0 0.0 0.0 7.0
+A  0.0 7.0 0.0 0.0 0.0
+T  0.0 0.0 2.0 0.0 5.0
+C  0.0 0.0 7.0 0.0 0.0
+C  0.0 0.0 7.0 0.0 0.0
+A  0.0 7.0 0.0 0.0 0.0
+A  0.0 7.0 0.0 0.0 0.0
+A  0.0 7.0 0.0 0.0 0.0
+T  0.0 0.0 0.0 0.0 7.0
+A  0.0 7.0 0.0 0.0 0.0
+T  0.0 0.0 0.0 0.0 7.0
+A  0.0 7.0 0.0 0.0 0.0
+A  0.0 7.0 0.0 0.0 0.0
+A  0.0 7.0 0.0 0.0 0.0
+A  0.0 7.0 0.0 0.0 0.0
+A  0.0 7.0 0.0 0.0 0.0
+T  0.0 0.0 0.0 0.0 7.0
+A  0.0 7.0 0.0 0.0 0.0
+T  0.0 0.0 0.0 0.0 7.0
+C  0.0 0.0 7.0 0.0 0.0
+T  0.0 0.0 0.0 0.0 7.0
+A  0.0 7.0 0.0 0.0 0.0
+A  0.0 7.0 0.0 0.0 0.0
+T  0.0 0.0 0.0 0.0 7.0
+A  0.0 7.0 0.0 0.0 0.0
+A  0.0 7.0 0.0 0.0 0.0
+A  0.0 7.0 0.0 0.0 0.0
+T  0.0 0.0 0.0 0.0 7.0
+T  0.0 0.0 0.0 0.0 7.0
+A  0.0 7.0 0.0 0.0 0.0
+G  0.0 0.0 0.0 7.0 0.0
+A  0.0 7.0 0.0 0.0 0.0
+T  0.0 0.0 0.0 0.0 7.0
+G  0.0 0.0 0.0 7.0 0.0
+A  0.0 7.0 0.0 0.0 0.0
+A  0.0 7.0 0.0 0.0 0.0
+T  0.0 0.0 0.0 0.0 7.0
+A  0.0 7.0 0.0 0.0 0.0
+T  0.0 0.0 0.0 0.0 7.0
+C  0.0 0.0 7.0 0.0 0.0
+A  0.0 7.0 0.0 0.0 0.0
+A  0.0 7.0 0.0 0.0 0.0
+A  0.0 7.0 0.0 0.0 0.0
+G  0.0 0.0 0.0 7.0 0.0
+A  0.0 7.0 0.0 0.0 0.0
+A  0.0 7.0 0.0 0.0 0.0
+T  0.0 0.0 0.0 0.0 7.0
+C  0.0 0.0 7.0 0.0 0.0
+T  0.0 0.0 1.0 0.0 6.0
+A  0.0 7.0 0.0 0.0 0.0
+T  0.0 0.0 0.0 0.0 7.0
+T  0.0 0.0 0.0 0.0 7.0
+G  0.0 0.0 0.0 7.0 0.0
+A  0.0 7.0 0.0 0.0 0.0
+T  0.0 0.0 0.0 0.0 7.0
+T  0.0 0.0 0.0 0.0 7.0
+T  0.0 0.0 0.0 0.0 7.0
+A  0.0 7.0 0.0 0.0 0.0
+G  0.0 0.0 0.0 7.0 0.0
+T  0.0 0.0 0.0 0.0 7.0
+G  0.0 1.0 0.0 6.0 0.0
+T  0.0 0.0 0.0 0.0 7.0
+A  0.0 7.0 0.0 0.0 0.0
+C  0.0 0.0 7.0 0.0 0.0
+C  0.0 0.0 7.0 0.0 0.0
+A  0.0 7.0 0.0 0.0 0.0
+G  0.0 0.0 0.0 7.0 0.0
+A  0.0 7.0 0.0 0.0 0.0
+
+information content
+part of alignment: 1.57690091462
+entire alignment: 13.2828899492
 testing reading and writing fasta format...
 all_seqs...
 description: AK1H_ECOLI/1-378

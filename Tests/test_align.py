@@ -14,6 +14,7 @@ import os
 # biopython
 from Bio.Clustalw import Clustalw
 from Bio.Align.FormatConvert import FormatConverter
+from Bio.Align import AlignInfo
 from Bio.Fasta import FastaAlign
 
 print "testing reading and writing clustal format..."
@@ -40,8 +41,24 @@ for seq_record in all_seqs:
     print 'description:', seq_record.description
     print 'seq:', seq_record.seq
 print 'length:', alignment.get_alignment_length()
-print 'consensus:', alignment.dumb_consensus()
 
+print 'Calculating summary information...'
+align_info = AlignInfo.SummaryInfo(alignment)
+consensus = align_info.dumb_consensus()
+print 'consensus:', consensus
+
+
+print 'Replacement dictionary'
+print align_info.replacement_dictionary(['N'])
+
+print 'position specific score matrix.'
+print align_info.pos_specific_score_matrix(consensus, ['N'])
+
+print 'information content'
+print 'part of alignment:', align_info.information_content(5, 50,
+                                chars_to_ignore = ['N'])
+print 'entire alignment:', align_info.information_content(
+                                chars_to_ignore = ['N'])
 
 print "testing reading and writing fasta format..."
 
