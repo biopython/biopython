@@ -33,7 +33,7 @@ from Bio.Align.Generic import Alignment
 
 # PyXML package
 from xml.sax import saxutils
-from xml.sax import saxlib
+from xml.sax import handler
 
 def parse_file(file_name, type = 'DNA'):
     """Parse the given file into a clustal aligment object.
@@ -52,17 +52,17 @@ def parse_file(file_name, type = 'DNA'):
         raise ValueError("Invalid type %s passed. Need DNA, RNA or PROTEIN"
                          % type)
         
-    handler = _AlignCreator(Alphabet.Gapped(alphabet))
+    align_handler = _AlignCreator(Alphabet.Gapped(alphabet))
 
     parser = clustal_format.format.make_parser()
-    parser.setContentHandler(handler)
-    parser.setErrorHandler(saxutils.ErrorRaiser())
+    parser.setContentHandler(align_handler)
+    parser.setErrorHandler(handler.ErrorHandler())
 
     to_parse = open(file_name, 'r')
     parser.parse(to_parse.read())
     to_parse.close()
 
-    return handler.align
+    return align_handler.align
 
 def do_alignment(command_line):
     """Perform an alignment with the given command line.
@@ -184,7 +184,7 @@ class ClustalAlignment(Alignment):
         """
         self._version = version
 
-class _AlignCreator(saxlib.HandlerBase):
+class _AlignCreator(handler.ContentHandler):
     """Handler to create a ClustalAlignment object from clustal file info.
 
     This handler is used to accept events coming from a Martel parsing
