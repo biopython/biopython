@@ -3,7 +3,6 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-
 # The Prosite patterns are defined at http://www.expasy.ch/txt/prosuser.txt
 # 
 # The PA  (PAttern) lines  contains the definition of a PROSITE pattern. The
@@ -39,19 +38,78 @@
 # x->X
 # . ->
 
+# Note:
+#  [G>] is a valid Prosite pattern, equivalent to "([G]|$)"
+
+# I assume then that
+#  [>G] is equivalent to "(^|[G])"
+# It is conceivable that [G>]-G-G is valid, meaning a "G" at the end
+# of the sequence or followed by two more Gs.  I did not implement
+# this.  I haven't gotten an answer to my query on either of these two
+# non-documented possibilities.
+
 import string, re
-import Alphabet, Seq
+from Bio import Seq, Alphabet
+
+
+# Syntactic conversion to two types of regular expressions
 
 _prosite_trans = string.maketrans("abcdefghijklmnopqrstuvwxyzX}()<>",
                                   "ABCDEFGHIJKLMNOPQRSTUVW.YZ.]{}^$")
 
-# These fix the known problems in release 16.0 of July 1999.
-# To use it, try:
-#   pattern = fix_errors.get(pattern, pattern)
-fix_errors = {
-  "F-[GSTV]-P-R-L-[G>].": "F-[GSTV]-P-R-L-G>.",        # PS00539
-  "F-[IVFY]-G-[LM]-M-[G>].": "F-[IVFY]-G-[LM]-M-G>.",  # PS00267
-  }
+# This does not verify that the pattern is correct - invalid patterns
+# can be converted!
+def prosite_to_re(pattern):
+    """convert a valid Prosite pattern into an re string"""
+    flg = (pattern[:2] == "[<")
+    s = string.replace(pattern, "{", "[^")
+    s = string.translate(s, _prosite_trans, "-.")
+    # special case "[<" and ">]", if they exist
+    if flg:
+        i = string.index(s, "]")
+        s = "(?:^|[" + s[2:i] + "])" + s[i+1:]
+    if s[-2:] == "$]":
+        i = string.rindex(s, "[")
+        s = s[:i] + "(?:" + s[i:-2] + "]|$)"
+    elif s[-3:] == "$]$":
+        i = string.rindex(s, "[")
+        s = s[:i] + "(?:" + s[i:-3] + "]|$)$"
+    return s
+        
+
+# This does not verify the pattern is correct - invalid patterns can
+# be converted!
+def prosite_to_grouped_re(pattern):
+    """convert a valid Prosite pattern into an re with groups for each term"""
+    flg = (pattern[:2] == "[<")
+    s = string.replace(pattern, "{", "[^")
+    # Don't delete the "-" characters: use them to place the ()s
+    s = string.translate(s, _prosite_trans, ".")
+
+    # Get the [< and >] terms correct
+    if flg:
+        i = string.index(s, "]")
+        s = "(?:^|[" + s[2:i] + "])" + s[i+1:]
+    if s[-2:] == "$]":
+        i = string.rindex(s, "[")
+        s = s[:i] + "(?:" + s[i:-2] + "]|$)"
+    if s[-3:] == "$]$":
+        i = string.rindex(s, "[")
+        s = s[:i] + "(?:" + s[i:-3] + "]|$)$"
+
+    # Watch out for unescaped < and > terms
+    if s[:1] == "^":
+        s = "^(" + s[1:]
+    else:
+        s = "(" + s
+    if s[-1:] == "$":
+        s = s[:-1] + ")$"
+    else:
+        s = s + ")"
+
+    return string.replace(s, "-", ")(")
+
+
 
 # Both the Prosite pattern and match result act like sequences.
 class PrositeAlphabet(Alphabet.Alphabet):
@@ -65,6 +123,10 @@ def compile(pattern):
 
 class Prosite:
     alphabet = prosite_alphabet
+
+    # Don't like having two different types of input - not very pythonic
+    # However, it is faster since I can assume the input has already been
+    # verified (if it's a pattern).
     def __init__(self, pattern = None, data = None):
         assert (pattern is None and data is not None) ^ \
                (pattern is not None and data is None), \
@@ -121,29 +183,23 @@ class Prosite:
 # Elements of a Prosite pattern
 class PrositeTerm:
     def __init__(self, letters, ignore, is_begin, is_end, \
-                 min_count, max_count):
+                 min_count, max_count, can_begin, can_end):
         self.letters = letters
         self.ignore = ignore
         self.is_begin = is_begin
         self.is_end = is_end
         self.min_count = min_count
         self.max_count = max_count
+        self.can_begin = can_begin
+        self.can_end = can_end
     def copy(self):
         return PrositeTerm(self.letters, self.ignore, self.is_begin,
-                           self.is_end, self.min_count, self.max_count)
+                           self.is_end, self.min_count, self.max_count,
+                           self.can_begin, self.can_end)
     def __str__(self):
         # Convert the term back into Prosite form
-        if self.is_begin:
-            s = "<"
-        else:
-            s = ""
-        if self.ignore:
-            s = s + "{" + self.letters + "}"
-        elif len(self.letters) == 1:
-            s = s + self.letters
-        else:
-            s = s + "[" + self.letters + "]"
-
+        s = self.base_str()
+        
         if self.min_count == self.max_count:
             if self.min_count == 1:
                 pass
@@ -155,7 +211,7 @@ class PrositeTerm:
             s = s + ">"
         return s
         
-    def no_count_str(self):
+    def base_str(self):
         # Convert the term back into Prosite form, without the repeat
         # count fields.
         
@@ -165,10 +221,17 @@ class PrositeTerm:
             s = ""
         if self.ignore:
             s = s + "{" + self.letters + "}"
-        elif len(self.letters) == 1:
+        elif len(self.letters) == 1 and \
+             (not self.can_begin and not self.can_end):
             s = s + self.letters
         else:
-            s = s + "[" + self.letters + "]"
+            s = s + "["
+            if self.can_begin:
+                s = s + "<"
+            s = s + self.letters
+            if self.can_end:
+                s = s + ">"
+            s = s + "]"
         return s
 
 # Results of a Prosite match.  Wrapper to the re.MatchObj, but returns
@@ -263,17 +326,6 @@ class PrositeMatch:
             retval.append(Seq.Seq(x, self.alphabet))
         return tuple(retval)
 
-# Use to parse a single element of a pattern
-prosite_term_re = re.compile(r"""
-(?:
-  ([A-Zx])|            # a character OR
-  (\[[A-Z]+\])|        # something in []s OR
-  (\{[A-Z]+\})         # something in {}s
-)(?:\((\d+)(,\d+)?\))? # optional count of the form "(i,j)", ",j" optional
-$
-""", re.VERBOSE)
-
-
 def pattern_mapping(prosite, mapping):
     data = []
     for i in mapping:
@@ -282,6 +334,14 @@ def pattern_mapping(prosite, mapping):
         data.append(x)
     return Prosite(data=data)
     
+prosite_term_re = re.compile(r"""
+(?:
+  ([A-Zx])|              # a character OR
+  \[(<?)([A-Z]+)(>?)\]|  # something in []s OR
+  \{([A-Z]+)\}           # something in {}s
+)(?:\((\d+)(,\d+)?\))?   # optional count of the form "(i,j)", ",j" optional
+$
+""", re.VERBOSE)
 
 # This does not verify the pattern is correct - invalid patterns can
 # be converted!
@@ -291,7 +351,9 @@ def find_terms(pattern):
     pattern = pattern[:-1]
     terms = string.split(pattern, "-")
     result = []
+    i = 0
     for term in terms:
+        can_begin = can_end = 0
         # Starts with a "<"?
         if term[:1] == "<":
             term = term[1:]
@@ -306,79 +368,70 @@ def find_terms(pattern):
         else:
             is_end = 0
 
-        # Get the elements of the term
         match = prosite_term_re.match(term)
         if match is None:
             raise TypeError, "not a Prosite term (%s)" % repr(term)
-
         if match.group(1) is not None:
             # Single letter
             ignore = 0
             letters = match.group(1)
-        elif match.group(2) is not None:
+        elif match.group(3) is not None:
             # Letters inside of "[]"s
             ignore = 0
-            letters = match.group(2)[1:-1]
-        elif match.group(3) is not None:
+            letters = match.group(3)
+            if match.group(2):
+                can_begin = 1
+                if i != 0:
+                    raise TypeError, \
+                          "[<] only allowed for first term (%s)" % repr(term)
+                    
+            if match.group(4):
+                can_end = 1
+                if i != len(terms) - 1:
+                    raise TypeError, \
+                          "[>] only allowed for last term (%s)" % repr(term)
+                      
+        elif match.group(5) is not None:
             # Letters inside of "{}"s
             ignore = 1
-            letters = match.group(3)[1:-1]
+            letters = match.group(5)
         else:
-            raise TypeError, "not a prosite pattern - unknown group?"
+            raise TypeError, "not a prosite term (%s)" % repr(term)
 
-        if match.group(4) is not None:
+        if match.group(6) is not None:
             # there is a minimum number
-            min_count = int(match.group(4))
+            min_count = int(match.group(6))
         else:
             # no min, so it's 1
             min_count = 1
-        if match.group(5) is not None:
+        if match.group(7) is not None:
             # there is a maximum number
-            max_count = int(match.group(5)[1:])
+            max_count = int(match.group(7)[1:])
         else:
             # no max specified, so use the same as the min
             max_count = min_count
 
         result.append(PrositeTerm(letters, ignore, is_begin,
-                                  is_end, min_count, max_count))
+                                  is_end, min_count, max_count,
+                                  can_begin, can_end))
+
+        i = i + 1
     return result
 
 
-# This does not verify that the pattern is correct - invalid patterns
-# can be converted!
-def prosite_to_re(pattern):
-    """convert a valid Prosite pattern into an re string"""
-    s = string.replace(pattern, "{", "[^")
-    return string.translate(s, _prosite_trans, "-.")
-
-# This does not verify the pattern is correct - invalid patterns can
-# be converted!
-def prosite_to_grouped_re(pattern):
-    """convert a valid Prosite pattern into an re with groups for each term"""
-    s = string.replace(pattern, "{", "[^")
-    s = string.translate(s, _prosite_trans, ".")
-    if s[:1] == "^":
-        s = "^(" + s[1:]
-    else:
-        s = "(" + s
-    if s[-1:] == "$":
-        s = s[:-1] + ")$"
-    else:
-        s = s + ")"
-    return string.replace(s, "-", ")(")
 
 
 prosite_re = re.compile(r"""
 ^<?                   # starts with an optional "<"
 (
   [A-Zx]|             # a character OR
-  \[[A-Z]+\]|         # something in []s OR
+  (\[<?[A-Z]+>?\])|   # something in []s OR
   \{[A-Z]+\}          # something in {}s
 )(\(\d+(,\d+)?\))?    # optional count of the form "(i,j)" (",j" is optional)
 (-                    # new terms seperated by a '-'
  (
   [A-Zx]|             # a character OR
-  \[[A-Z]+\]|         # something in []s OR
+  \[[A-Z]+>?\]|       # something in []s OR
   \{[A-Z]+\}          # something in {}s
  )(\(\d+(,\d+)?\))?   # optional count
 )*                    # repeat until done
@@ -389,7 +442,15 @@ prosite_re = re.compile(r"""
 # This verifies the pattern is correct.
 def verify_pattern(pattern):
     """returns 1 if the Prosite pattern is syntactically correct, else 0"""
-    return prosite_re.match(pattern) is not None
+    x = prosite_re.match(pattern)
+    if x is None:
+        return 0
+    # check there's only one [< at the beginning, or >] at the end
+    if string.find(pattern, "[<", 1) != -1:
+        return 0
+    if string.find(pattern, ">]", 0, len(pattern)-2) != -1:
+        return 0
+    return 1
 
 def _verify_test(infile):
     """verify the patterns from a Prosite file handle"""
