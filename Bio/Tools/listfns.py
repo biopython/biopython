@@ -13,6 +13,7 @@ contents      Calculate percentage each item appears in a list.
 itemindex     Make an index of the items in the list.
 intersection  Get the items in common between 2 lists.
 difference    Get the items in 1 list, but not the other.
+indexesof     Get a list of the indexes of some items in a list.
 
 """
 
@@ -103,6 +104,18 @@ def itemindex(l):
         if not dict.has_key(l[i]):
             dict[l[i]] = i
     return dict
+
+def indexesof(l, fn):
+    """indexesof(l, fn) -> list of indexes
+
+    Return a list of indexes i where fn(l[i]) is true.
+
+    """
+    indexes = []
+    for i in range(len(l)):
+        if fn(l[i]):
+            indexes.append(i)
+    return indexes
 
 # Try and load C implementations of functions.  If I can't,
 # then just ignore and use the pure python implementations.
