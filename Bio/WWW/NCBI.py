@@ -22,10 +22,12 @@ query        Query Entrez.
 pmfetch      Retrieve results using a unique identifier.
 pmqty        Search PubMed.
 pmneighbor   Return a list of related articles for a PubMed entry.
+blast        Do a BLAST search.
 _open
 
 """
 import string
+import re
 import urllib
 import sgmllib
 import urlparse
@@ -110,11 +112,35 @@ def blast(program, datalib, sequence,
           other_advanced=None, ncbi_gi=None, overview=None,
           alignment_view='0', descriptions=None, alignments=None,
           email=None, path=None, html=None, 
-          cgi='http://www.ncbi.nlm.nih.gov/blast/blast.cgi'
+          cgi='http://www.ncbi.nlm.nih.gov/blast/blast.cgi',
+          timeout=20
           ):
-    """
+    """blast(program, datalib, sequence,
+    input_type='Sequence in FASTA format',
+    double_window=None, gi_list='(None)', expect='10',
+    filter='L', genetic_code='Standard (1)',
+    mat_param='PAM30     9       1',
+    other_advanced=None, ncbi_gi=None, overview=None,
+    alignment_view='0', descriptions=None, alignments=None,
+    email=None, path=None, html=None, 
+    cgi='http://www.ncbi.nlm.nih.gov/blast/blast.cgi',
+    timeout=20) -> handle
+
+    Do a BLAST search against NCBI.  Returns a handle to the results.
+    timeout is the number of seconds to wait for the results before timing
+    out.  The other parameters are provided to BLAST.  A description
+    can be found online at:
+    http://www.ncbi.nlm.nih.gov/BLAST/newoptions.html
 
     """
+    # NCBI Blast is hard to work with.  The user enters a query, and then
+    # it returns a "reference" page which contains a button that the user
+    # clicks to retrieve the results.  This will retrieve the "results"
+    # page.  However, this page may not contain BLAST results if the
+    # search isn't done.
+    # This function will send off the query and parse the reference
+    # page to figure out how to retrieve the results.  Then, it needs to
+    # check the results to see if the search has been finished.
     params = {'PROGRAM' : program,
               'DATALIB' : datalib,
               'SEQUENCE' : sequence,
@@ -148,11 +174,13 @@ def blast(program, datalib, sequence,
             self.cgi = cgi
             self.params = {}
         def do_form(self, attributes):
+            # parse the "FORM" tag to see where the CGI script should be.
             for attr, value in attributes:
                 attr = string.upper(attr)
                 if attr == 'ACTION':
                     self.cgi = urlparse.urljoin(self.cgi, value)
         def do_input(self, attributes):
+            # parse the "INPUT" tags to try and find the reference ID (RID)
             is_rid = 0
             rid = None
             for attr, value in attributes:
@@ -173,10 +201,17 @@ def blast(program, datalib, sequence,
         def __init__(self):
             sgmllib.SGMLParser.__init__(self)
             self.ready = 0
+            self.refresh = 5
         def handle_comment(self, comment):
             comment = string.lower(comment)
             if string.find(comment, 'status=ready') >= 0:
                 self.ready = 1
+        _refresh_re = re.compile('REFRESH_DELAY=(\d+)', re.IGNORECASE)
+        def do_meta(self, attributes):
+            for attr, value in attributes:
+                m = self._refresh_re.search(value)
+                if m:
+                    self.refresh = int(m.group(1))
     start = time.time()
     while 1:
         # Sometimes the BLAST results aren't done yet.  Look at the page
@@ -186,11 +221,11 @@ def blast(program, datalib, sequence,
         parser.feed(results)
         if parser.ready:
             break
-        # Time out if it's not done after 15 minutes.
-        if time.time() - start > 15*60:
-            raise IOError, "timed out"
-        # pause for 5 seconds and try again.
-        time.sleep(5)
+        # Time out if it's not done after timeout minutes.
+        if time.time() - start > timeout*60:
+            raise IOError, "timed out after %d minutes" % timeout
+        # pause and try again.
+        time.sleep(parser.refresh)
     return File.UndoHandle(File.StringHandle(results))
 
 def _open(cgi, params={}, get=1):
