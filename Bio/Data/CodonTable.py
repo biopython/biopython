@@ -100,10 +100,12 @@ def register_ncbi_table(name, alt_name, id,
     unambiguous_dna_by_id[id] = dna
     unambiguous_rna_by_id[id] = rna
 
-
     if alt_name is not None:
-        unambiguous_dna_by_name[alt_name] = dna
-        unambiguous_rna_by_name[alt_name] = rna
+        names.append(alt_name)
+
+    for name in names:
+        unambiguous_dna_by_name[name] = dna
+        unambiguous_rna_by_name[name] = rna
 
 ### These tables created from the data file
 ###  ftp://ncbi.nlm.nih.gov/entrez/misc/data/gc.prt
