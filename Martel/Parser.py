@@ -37,6 +37,8 @@ try:
 except ImportError:
     from StringIO import StringIO
 
+import Dispatch
+
 # These exceptions are liable to change in the future
 class ParserException(_exceptions.SAXException):
     """used when a parse cannot be done"""
@@ -125,6 +127,7 @@ def _do_callback(s, begin, end, taglist, cont_handler, attrlookup):
     'end' is 1 past the last position of the text allowed to be parsed
     'taglist' is the tag list from mxTextTools.parse
     'cont_handler' is the SAX ContentHandler
+    'attrlookup' is a dict mapping the encoded tag name to the element info
     """
     for item in taglist:
         tag, l, r, subtags = item
@@ -178,6 +181,88 @@ def _do_callback(s, begin, end, taglist, cont_handler, attrlookup):
     if begin < end:
         cont_handler.characters(s[begin:end])
 
+def _do_dispatch_callback(s, begin, end, taglist,
+                          start_table_get, cont_handler, save_stack,
+                          end_table_get,
+                          attrlookup):
+    """internal function to convert the tagtable into ContentHandler events
+
+    THIS IS A SPECIAL CASE FOR Dispatch.Dispatcher objects
+
+    's' is the input text
+    'begin' is the current position in the text
+    'end' is 1 past the last position of the text allowed to be parsed
+    'taglist' is the tag list from mxTextTools.parse
+    'start_table_get' is the Dispatcher._start_table
+    'cont_handler' is the Dispatcher
+    'end_table_get' is the Dispatcher._end_table
+    'cont_handler' is the SAX ContentHandler
+    'attrlookup' is a dict mapping the encoded tag name to the element info
+    """
+    for item in taglist:
+        tag, l, r, subtags = item
+        # If the tag's beginning is after the current position, then
+        # the text from here to the tag's beginning are characters()
+        if begin < l:
+            if save_stack:
+                cont_handler._save_text += s[begin:l]
+        else:
+            # Some integrity checking
+            assert begin == l, "begin = %d and l = %d" % (begin, l)
+
+        # Normal tags, see if the start function exists and call it
+        #  ** This is a bit of a hack, in that this check also occurs
+        #     with special tags.  But those begin with a '>' so will
+        #     always fail.  This makes the logic a bit simpler and
+        #     faster than checking the '>G' and '>ignore' terms.
+        #     However, it is possible that specially constructed
+        #     handlers could mess things up.  That cannot happen by
+        #     accident, so I won't worry about it.
+        # Yes, this reaches into the implementation of the Dispatcher.
+        f = start_table_get(tag)
+        if f is not None:
+            f(tag, _attribute_list)
+        else:
+            # Tags with attributes
+            x = attrlookup.get(tag)
+            if x is not None:
+                realtag, attrs = x
+                # Does this function exist?
+                f = start_table_get(realtag)
+                if f is not None:
+                    f(realtag, attrs)
+        
+        # Recurse if it has any children
+        if subtags:
+            _do_dispatch_callback(s, l, r, subtags,
+                                  start_table_get,
+                                  cont_handler, save_stack,
+                                  end_table_get,
+                                  attrlookup)
+        elif save_stack:
+            # Yes, this reaches into the implementation of the Dispatcher.
+            cont_handler._save_text += s[l:r]
+        begin = r
+
+        # See if theres' a function for the normal tag
+        f = end_table_get(tag)
+        if f is not None:
+            f(tag)
+        else:
+            # See if the special attribute tag exists
+            x = attrlookup.get(tag)
+            if x is not None:
+                realtag, attrs = x
+                # Yes, this reaches into the implementation of the Dispatcher.
+                f = end_table_get(realtag)
+                if f is not None:
+                    f(realtag)
+
+    # anything after the last tag and before the end of the current
+    # range are characters
+    if begin < end and save_stack:
+        cont_handler._save_text += s[begin:end]
+
 def _parse_elements(s, tagtable, cont_handler, debug_level, attrlookup):
     """parse the string with the tagtable and send the ContentHandler events
 
@@ -190,9 +275,15 @@ def _parse_elements(s, tagtable, cont_handler, debug_level, attrlookup):
 
     result, taglist, pos = TextTools.tag(s, tagtable, 0, len(s))
 
-    # Special case text for the base ContentHandler since I know that
+    # Special case test for the base ContentHandler since I know that
     # object does nothing and I want to test the method call overhead.
-    if cont_handler.__class__ != handler.ContentHandler:
+    if isinstance(cont_handler, Dispatch.Dispatcher):
+        _do_dispatch_callback(s, 0, pos, taglist,
+                              cont_handler._start_table.get,
+                              cont_handler, cont_handler._save_stack,
+                              cont_handler._end_table.get,
+                              attrlookup)
+    elif cont_handler.__class__ != handler.ContentHandler:
         # Send any tags to the client (there can be some even if there
         _do_callback(s, 0, pos, taglist, cont_handler, attrlookup)
 
@@ -412,267 +503,6 @@ class RecordParser(xmlreader.XMLReader):
 
     def close(self):
         pass
-
-# This is entirely too complex, but I don't see a way to simplify it
-class obsolete_HeaderFooterParser(xmlreader.XMLReader):
-    """Header followed by 0 or more records followed by a footer"""
-    def __init__(self, format_name, attrs,
-                 make_header_reader, header_reader_args, header_tagtable,
-                 make_reader, reader_args, record_tagtable,
-                 make_footer_reader, footer_reader_args, footer_tagtable,
-                 (want_groupref_names, debug_level, attrlookup)):
-        xmlreader.XMLReader.__init__(self)
-
-        self.format_name = format_name
-        self.attrs = attrs
-
-        self.make_header_reader = make_header_reader
-        self.header_reader_args = header_reader_args
-        self.header_tagtable = header_tagtable
-
-        self.make_reader = make_reader
-        self.reader_args = reader_args
-        self.record_tagtable = record_tagtable
-        
-        self.make_footer_reader = make_footer_reader
-        self.footer_reader_args = footer_reader_args
-        self.footer_tagtable = footer_tagtable
-        
-        self.want_groupref_names = want_groupref_names
-        self.debug_level = debug_level
-        self.attrlookup = attrlookup
-
-    def __str__(self):
-        x = StringIO()
-        pprint.pprint( (self.header_tagtable, self.record_tagtable,
-                        self.footer_tagtable), x)
-        return "header footer records: " + x.getvalue()
-
-    def parseString(self, s):
-        strfile = StringIO(s)
-        self.parseFile(strfile)
-
-    def parse(self, source):
-        """parse using the URL or file handle"""
-        source = saxutils.prepare_input_source(source)
-        self.parseFile(source.getCharacterStream() or source.getByteStream())
-
-    def parseFile(self, fileobj):
-        self._cont_handler.startDocument()
-        self._cont_handler.startElement(self.format_name, self.attrs)
-
-        if self.want_groupref_names:
-            _match_group.clear()
-
-        # Read the header
-        if self.make_header_reader is not None:
-            try:
-                header_reader = apply(self.make_header_reader,
-                                      (fileobj,) + self.header_reader_args)
-                header = header_reader.next()
-            except (KeyboardInterrupt, SystemExit):
-                raise
-            except:
-                # something unexpected happened
-                # so call it a fatal error and stop
-                outfile = StringIO()
-                traceback.print_exc(file=outfile)
-                self._err_handler.fatalError(ParserRecordException(
-                    outfile.getvalue(), sys.exc_info()[1]))
-                self._cont_handler.endDocument()
-                return
-
-            # Parse the text (if any) and send the SAX events
-            if header is None:
-                header = ""
-
-            result = _parse_elements(header, self.header_tagtable,
-                                     self._cont_handler, self.debug_level,
-                                     self.attrlookup)
-
-            if result is None:
-                # Successful parse
-                pass
-            elif isinstance(result, _exceptions.SAXException):
-                # could not parse header, and wasn't EOF
-                self._err_handler.fatalError(result)
-                self._cont_handler.endDocument()
-                return
-            else:
-                # Reached EOF
-                pos = result
-                self._err_handler.fatalError(ParserPositionException(pos))
-                self._cont_handler.endDocument()
-                return
-
-        # We've successfully parsed the header, now parse the records
-
-        # Get any forward data from the header reader
-        if self.make_header_reader is None:
-            x, lookahead = fileobj, ""
-        else:
-            x, lookahead = header_reader.remainder()
-
-        # Make the record reader
-        try:
-            reader = apply(self.make_reader, (fileobj,) + self.reader_args,
-                           {"lookahead": lookahead})
-        except (KeyboardInterrupt, SystemExit):
-            raise
-        except:
-            # something unexpected happened
-            # so call it a fatal error and stop
-            outfile = StringIO()
-            traceback.print_exc(file=outfile)
-            self._err_handler.fatalError(ParserRecordException(
-                outfile.getvalue(), sys.exc_info()[1]))
-            self._cont_handler.endDocument()
-            return
-
-        if header is None:
-            filepos = 0
-        else:
-            filepos = len(header)
-
-        record_exc_info = None
-        while 1:
-            try:
-                record = reader.next()
-##                print "RECORD"
-##                print repr(record)
-            except (KeyboardInterrupt, SystemExit):
-                raise
-            except:
-#                print "PRoiblem here"
-                # Something strange happened, so perhaps it's a footer?
-                # Save the exception in case the footer doesn't parse
-                outfile = StringIO()
-                traceback.print_exc(file=outfile)
-                record_exc_info = ParserRecordException(outfile.getvalue(),
-                                                        sys.exc_info()[1])
-                record = None
-                break
-
-            if record is None:
-                # Reached EOF, but need to see if an empty footer is okay
-                break
-
-            result = _parse_elements(record, self.record_tagtable,
-                                     self._cont_handler, self.debug_level,
-                                     self.attrlookup)
-
-            if result is None:
-                # Successfully parsed the record
-                pass
-            else:
-                # Failed to parse the record, so maybe it's a footer?
-                # XXX If it isn't a footer, should try to recover by reading
-                # next record -- this whole function needs a rewrite!
-                if self.make_footer_reader is not None:
-                    # Perhaps, so have to try
-                    if isinstance(result, _exceptions.SAXException):
-                        result += filepos
-                        record_exc_info = result, None
-                    else:
-                        record_exc_info = \
-                                    ParserPositionException(filepos + result), \
-                                    None
-                    break
-                else:
-                    # No footer possible
-                    if isinstance(result, _exceptions.SAXException):
-                        # Wrong format or a SAX problem, but recoverable
-                        if isinstance(result, ParserPositionException):
-                            # fix offset if possible
-                            result += filepos
-                        self._err_handler.error(result)
-                    else:
-                        # Did not reach end of string, but recoverable
-                        pos = filepos + result
-                        self._err_handler.error(ParserPositionException(pos))
-
-            filepos = filepos + len(record)
-
-
-        # At this point one of:
-        #  - Reached EOF, so record is None and reader.lookahead == ""
-        #  - The record could not be read, so record is None and
-        #        reader.lookahead may contain data
-        #  - The record could not be parsed, so record contains text and
-        #        reader.lookahead may contain data
-
-        x, lookahead = reader.remainder()
-        if record is not None:
-            # For the case when the record footer and the format have
-            # the same RecordReader
-            lookahead = record + lookahead
-
-        if self.make_footer_reader is not None:
-            # Make the footer reader
-            try:
-                reader = apply(self.make_footer_reader,
-                               (fileobj,) + self.footer_reader_args,
-                               {"lookahead": lookahead})
-                footer = reader.next()
-            except (KeyboardInterrupt, SystemExit):
-                raise
-            except:
-                # something unexpected happened
-
-                # If there was an error processing records, use that first
-                if record_exc_info is not None:
-                    self._err_handler.fatalError(record_exc_info)
-                    self._cont_handler.endDocument()
-                    return
-                
-                # Else call it a fatal error and stop
-                outfile = StringIO()
-                traceback.print_exc(file=outfile)
-                self._err_handler.fatalError(ParserRecordException(
-                    outfile.getvalue(), sys.exc_info()[1]))
-                self._cont_handler.endDocument()
-                return
-
-            if footer is None:
-                footer = ""
-
-            result = _parse_elements(footer, self.footer_tagtable,
-                                     self._cont_handler, self.debug_level,
-                                     self.attrlookup)
-
-            if result is None:
-                # Successful parse
-                pass
-            elif record_exc_info is not None:
-                self._err_handler.fatalError(record_exc_info)
-                self._cont_handler.endDocument()
-                return
-            elif isinstance(result, _exceptions.SAXException):
-                if isinstance(result, ParserPositionException):
-                    result += filepos+ result.pos
-                self._err_handler.fatalError(result)
-                self._cont_handler.endDocument()
-                return
-            else:
-                # Reached EOF
-                pos = filepos + result
-                self._err_handler.fatalError(ParserPositionException(pos))
-                self._cont_handler.endDocument()
-                return
-
-            # see if there is any text left over
-            x, lookahead = reader.remainder()
-            
-        if lookahead or fileobj.read(1):
-            pos = filepos + len(footer)
-            self._err_handler.fatalError(ParserPositionException(pos))
-            self._cont_handler.endDocument()
-            return
-
-        # Hey, it finished.
-        self._cont_handler.endElement(self.format_name)
-        self._cont_handler.endDocument()
-
 
 class HeaderFooterParser(xmlreader.XMLReader):
     """Header followed by 0 or more records followed by a footer"""
