@@ -33,7 +33,8 @@ class PDBParser:
         Arguments:
         o PERMISSIVE - int, if this is 0 exceptions in constructing the
         SMCRA data structure are fatal. If 1 (DEFAULT), the exceptions are 
-        caught, but some residues or atoms will be missing. 
+        caught, but some residues or atoms will be missing. THESE EXCEPTIONS 
+        ARE DUE TO PROBLEMS IN THE PDB FILE!.
         o structure_builder - an optional user implemented StructureBuilder class. 
         """
         if structure_builder!=None:
