@@ -146,6 +146,27 @@ class _CommandHandle:
     def __del__(self):
         self.close()  # kill the process
 
+    def _kill(self):
+        # return killsig
+        try:
+            pid, ind = os.waitpid(self.pid, os.WNOHANG)
+            if pid == self.pid:   # died
+                return 0
+            # First, try to kill it with a SIGTERM.
+            os.kill(self.pid, signal.SIGTERM)
+            # Wait .5 seconds for the process to die.
+            end = time.time() + 0.5
+            while time.time() < end:
+                pid, ind = os.waitpid(self.pid, os.WNOHANG)
+                if pid == self.pid:
+                    return ind & 0xff
+                time.sleep(0.1)
+            # It didn't die, so kill with a SIGKILL
+            os.kill(self.pid, signal.SIGKILL)
+            return signal.SIGKILL
+        except OSError:
+            pass
+        
     def close(self):
         """S.close()
 
@@ -160,12 +181,7 @@ class _CommandHandle:
         if _active and self in _active:
             _active.remove(self)
         if not self._done:
-            try:
-                pid, ind = os.waitpid(self.pid, os.WNOHANG)
-                if pid != self.pid:    # not finished
-                    os.kill(self.pid, signal.SIGTERM)
-            except OSError:
-                pass
+            self.killsig = self._kill()
             self._end = time.time()
             self.status = None
             self.killsig = signal.SIGTERM
