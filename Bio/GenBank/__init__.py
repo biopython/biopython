@@ -1128,7 +1128,7 @@ class _RecordConsumer(_BaseGenBankConsumer):
         # remove all spaces from the value if it is a type where spaces
         # are not important
         for remove_space_key in self.__class__.remove_space_keys:
-            if remove_space_key in self._cur_qualifier.key:
+            if self._cur_qualifier.key.find(remove_space_key) >= 0:
                 cur_content = self._remove_spaces(cur_content)
         self._cur_qualifier.value = self._normalize_spaces(cur_content)
 
