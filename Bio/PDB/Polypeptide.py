@@ -17,6 +17,10 @@ Example:
     >>>     print pp.get_sequence()
 """
 
+standard_aa_names=["ALA", "CYS", "ASP", "GLU", "PHE", "GLY", "HIS", "ILE", "LYS", 
+                   "LEU", "MET", "ASN", "PRO", "GLN", "ARG", "SER", "THR", "VAL",
+                   "TRP", "TYR"]
+
 def is_aa(residue):
     """
     Return 1 if residue object/string is an amino acid.
