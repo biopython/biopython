@@ -1,1 +1,19 @@
 test_Pathway
+testEquals (test_Pathway.HashSetTestCase) ... ok
+testLen (test_Pathway.HashSetTestCase) ... ok
+testContains (test_Pathway.HashSetTestCase) ... ok
+testList (test_Pathway.HashSetTestCase) ... ok
+testSetOps (test_Pathway.HashSetTestCase) ... ok
+testEquals (test_Pathway.GraphTestCase) ... ok
+testNodes (test_Pathway.GraphTestCase) ... ok
+testEdges (test_Pathway.GraphTestCase) ... ok
+testEquals (test_Pathway.MultiGraphTestCase) ... ok
+testNodes (test_Pathway.MultiGraphTestCase) ... ok
+testEdges (test_Pathway.MultiGraphTestCase) ... ok
+testEq (test_Pathway.ReactionTestCase) ... ok
+testRev (test_Pathway.ReactionTestCase) ... ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 0.002s
+
+OK

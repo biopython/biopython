@@ -5,6 +5,7 @@
 
 # python unittest framework
 import unittest
+import sys
 
 # modules to be tested
 from Bio.Pathway import *
@@ -256,7 +257,9 @@ class PathwayTestSuite(unittest.TestSuite):
                                     map(ReactionTestCase, ("testEq", "testRev"))) 
     
 
+def run_tests(argv):
+    runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
+    runner.run(unittest.TestSuite([RepTestSuite(), PathwayTestSuite()]))
 
 if __name__ == "__main__":
-    unittest.main()                               
-
+    sys.exit(run_tests(sys.argv))
