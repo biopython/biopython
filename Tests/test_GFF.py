@@ -2,6 +2,7 @@
 """Test the Bio.GFF module and dependencies
 """
 
+import MySQLdb
 import Bio.GFF
 import Bio.GFF.GenericTools
 import Bio.GFF.easy
