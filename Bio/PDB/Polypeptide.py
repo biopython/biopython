@@ -1,12 +1,19 @@
 from Bio.SCOP.Raf import to_one_letter_code
 from Bio.PDB.PDBExceptions import PDBException
+from Bio.PDB.Residue import Residue
 from Numeric import sum
 
 
-def dist_sq(p, q):
-    "Return squared distance between coordinates."
-    d=p-q
-    return sum(d*d)
+def is_aa(residue):
+    """
+    Return 1 if residue object/string is an amino acid.
+
+    residue --- a residue object OR a three letter amino acid code
+    """
+    if isinstance(residue, Residue):
+        residue=residue.get_resname()
+    residue=residue.upper()
+    return to_one_letter_code.has_key(residue) 
 
 
 class Polypeptide(list):
@@ -19,7 +26,6 @@ class Polypeptide(list):
         s="<Polypeptide start=%s end=%s>" % (start, end)
         return s
 
-
 class _PPBuilder:
     """
     Base class to extract polypeptides.
@@ -27,13 +33,12 @@ class _PPBuilder:
     are connected. The connectivity test is implemented by a 
     subclass.
     """
-    def __init__(self, radius_sq):
-        self.radius_sq=radius_sq
+    def __init__(self, radius):
+        self.radius=radius
 
     def _accept(self, residue):
         "Check if the residue is an amino acid."
-        resname=residue.get_resname()
-        if to_one_letter_code.has_key(resname):
+        if is_aa(residue):
             # not a standard AA so skip
             return 1
         else:
@@ -78,7 +83,7 @@ class CaPPBuilder(_PPBuilder):
     Use CA--CA distance to find polypeptides.
     """
     def __init__(self, radius=4.3):
-        _PPBuilder.__init__(self, radius*radius)
+        _PPBuilder.__init__(self, radius)
 
     def _is_connected(self, prev, next):
         for r in [prev, next]:
@@ -92,9 +97,7 @@ class CaPPBuilder(_PPBuilder):
             # chain
             if a.is_disordered():
                 return 0
-        nc=n_ca.get_coord()
-        pc=p_ca.get_coord()
-        if dist_sq(nc, pc)<self.radius_sq:
+        if (n_ca-p_ca)<self.radius:
             return 1
         else:
             return 0
@@ -105,7 +108,7 @@ class PPBuilder(_PPBuilder):
     Use C--N distance to find polypeptides.
     """
     def __init__(self, radius=1.8):
-        _PPBuilder.__init__(self, radius*radius)
+        _PPBuilder.__init__(self, radius)
 
     def _is_connected(self, prev, next):
         if not prev.has_id("C"):
@@ -144,10 +147,7 @@ class PPBuilder(_PPBuilder):
 
     def _test_dist(self, c, n):
         "Return 1 if distance between atoms<radius"
-        cc=c.get_coord()
-        nc=n.get_coord()
-        #print dist_sq(cc, nc), self.radius_sq
-        if dist_sq(cc, nc)<self.radius_sq:
+        if (c-n)<self.radius:
             return 1
         else:
             return 0
