@@ -136,8 +136,8 @@ class Scanner:
 
         # XXX THIS IS A QUICK HACK.  TAKE IT OUT, OR IT'LL BREAK A LOT
         # OF CODE!  I NEED TO DO THIS TO QUICKLY TEST 2.0.11
-        read_and_call(ohandle, consumer.noevent, blank=1)
-        read_and_call(ohandle, consumer.noevent, blank=1)
+        #read_and_call(ohandle, consumer.noevent, blank=1)
+        #read_and_call(ohandle, consumer.noevent, blank=1)
 
         # blastpgp from NCBI 9/19/99 for Solaris sometimes crashes here.
         # If this happens, the handle will yield no more information.
