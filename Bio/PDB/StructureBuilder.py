@@ -219,7 +219,7 @@ class StructureBuilder:
 	def get_structure(self):
 		"Return the structure."
 		# first sort everything
-		self.structure.sort()
+		# self.structure.sort()
 		return self.structure
 
 
