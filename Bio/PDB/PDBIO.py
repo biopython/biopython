@@ -83,14 +83,17 @@ class PDBIO:
 
     def save(self, filename, select=Select()):
         """
-        select --- selects which entities will be written.
-            Should have the following methods:
-                accept_model(model)
-                accept_chain(chain)
-                accept_residue(residue)
-                accept_atom(atom)
+        @param select: selects which entities will be written.
+        @type select: 
+            select hould have the following methods:
+                - accept_model(model)
+                - accept_chain(chain)
+                - accept_residue(residue)
+                - accept_atom(atom)
             These methods should return 1 if the entity
             is to be written out, 0 otherwise.
+
+            Typically select is a subclass of L{Select}.
         """
         get_atom_line=self._get_atom_line
         fp=open(filename, "w")

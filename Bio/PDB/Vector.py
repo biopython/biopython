@@ -112,6 +112,9 @@ def calc_dihedral(v1, v2, v3, v4):
     Calculate the dihedral angle between 4 vectors
     representing 4 connected points. The angle is in
     ]-pi, pi].
+
+    @param v1, v2, v3, v4: the four points that define the dihedral angle
+    @type v1, v2, v3, v4: L{Vector}
     """
     ab=v1-v2
     cb=v3-v2

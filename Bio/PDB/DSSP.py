@@ -1,30 +1,25 @@
-# make yield compatible with Python 2.2
 from __future__ import generators
 
 import os
 import tempfile
-
 from Bio.PDB import *
-
 
 
 __doc__="""
 Use the DSSP program to calculate secondary structure and accessibility.
-You need to have a working version of DSSP (and a
-license - free for academic use) in order to use this. 
-
-For DSSP, see http://www.cmbi.kun.nl/gv/dssp/.
+You need to have a working version of DSSP (and a license, free for 
+academic use) in order to use this. For DSSP, see U{http://www.cmbi.kun.nl/gv/dssp/}.
 
 The DSSP codes for secondary structure used here are:
 
-H        Alpha helix (4-12)
-B        Isolated beta-bridge residue
-E        Strand ("extended")
-G        3-10 helix
-I        pi helix
-T        Turn
-S        Bend
--        None
+    - H        Alpha helix (4-12)
+    - B        Isolated beta-bridge residue
+    - E        Strand
+    - G        3-10 helix
+    - I        pi helix
+    - T        Turn
+    - S        Bend
+    - -        None
 """
 
 def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
