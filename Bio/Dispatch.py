@@ -74,6 +74,7 @@ class DispatchHandler:
         start_table = self._start_table = {}
         end_table = self._end_table = {}
         self._acquired = []
+        self._prefix = prefix
 
         for methodname in superdir(self):
             if methodname.startswith("start_"):
@@ -94,8 +95,13 @@ class DispatchHandler:
         # a prefix.
         for tagname, new_method in obj._start_table.items():
             tagname = prefix + tagname
+
+            # If you get an AttributeError exception with the text
+            #     "Show instance has no attribute '_start_table'"
+            # then you forgot to initialize the parent class
             method = _merge_methods(self._start_table.get(tagname, None),
                                     new_method, MulticallStart)
+            
             self._start_table[tagname] = method
 
         for tagname, new_method in obj._end_table.items():
@@ -181,7 +187,7 @@ class RemapStart:
         self.obj = obj
         self.new_tag = new_tag
     def __call__(self, tag, attrs):
-        self.obj.startElement(self.new_tag, tag)
+        self.obj.startElement(self.new_tag, attrs)
 class RemapEnd:
     def __init__(self, obj, new_tag):
         self.obj = obj
@@ -217,6 +223,10 @@ class Dispatcher(handler.ContentHandler, DispatchHandler):
         self.setCharacterSaver(self)
 
     def acquire(self, obj, prefix = ""):
+        if prefix[:1] == ":":
+            prefix = prefix[1:]
+        else:
+            prefix = self._prefix + prefix
         DispatchHandler.acquire(self, obj, prefix)
         obj.setCharacterSaver(self)
 
@@ -228,6 +238,9 @@ class Dispatcher(handler.ContentHandler, DispatchHandler):
         return d.keys()
 
     # Dispatch events to the appropriate handlers
+    def startDocument(self):
+        self.startElement(self._prefix, {})
+            
     def startElement(self, tag, attrs):
         f = self._start_table.get(tag)
         if f is not None:
@@ -236,6 +249,9 @@ class Dispatcher(handler.ContentHandler, DispatchHandler):
         f = self._end_table.get(tag)
         if f is not None:
             f(tag)
+
+    def endDocument(self):
+        self.endElement(self._prefix)
 
     # Stack-based way for the handlers to get data without
     # stepping on each other's toes -- so long as the calls
