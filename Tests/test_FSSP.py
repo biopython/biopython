@@ -5,7 +5,7 @@ import os
 import cPickle
 import time
 
-test_file = 'FSSP/1cnv.fssp'
+test_file = os.path.join('FSSP', '1cnv.fssp')
 f = sys.stdout
 f.write("\nRead in %s\n" % os.path.basename(test_file))
 head_rec, sum_rec, align_rec = FSSP.read_fssp(open(test_file))
@@ -27,7 +27,8 @@ k.sort()
 f.write("\nRecords filtered in %s\n" % k)
 f.write("\nLet's Pickle this\n")
 time_1 = time.time()
-cPickle.dump((head_rec, sum_rec, align_rec),open('FSSP/mydump.pik','w'))
+dump_file = os.path.join('FSSP', 'mydump.pik')
+cPickle.dump((head_rec, sum_rec, align_rec),open(dump_file, 'w'))
 # f.write("Took me %.2f seconds to pickle\n" % (time.time() - time_1))
 
 f.write("\nFilter by name\n")
