@@ -1,0 +1,422 @@
+                          Martel
+                       version 0.5
+
+               Life's too short to (re)write parsers
+
+             A scanner generator for regular grammars
+               supporting a SAX-like output interface
+
+
+- To see output right away
+
+Make sure your PYTHONPATH includes the parent of this directory (so
+you can do an 'import Martel')
+
+ cd examples
+ python swissprot2html.py < sample.swissprot > sample.html
+
+Then view the HTML output.  Look at the README in that file for a
+slightly better description than this.
+
+- To run the regression tests
+
+Again, make sure your PYTHONPATH includes Martel From the 'Martel'
+directory:
+
+  cd test
+  python __init__.py
+
+===
+
+  There are a lot of bioinformatics file formats.  It's annoying to
+have to write parsers for them all the time, and when you do they
+rarely read all the data elements.  And even in those cases, it
+doesn't preserve enough physical layout information for things like
+marking up a file for HTML.
+
+  It would be nice to give the computer a description of a file format
+and have it generate a parser.  Indeed, there are tools for that, like
+lex and yacc.  Unfortunately, the bioinformatics formats aren't easy
+to parse with those tools.  It isn't that they aren't powerful enough.
+The problem is the formats are very stateful.
+
+  That is, a lexer likes being able to recognize a word just by
+looking at it.  But consider the word "GENE".  It could be a keyword,
+the submitter's first name or part of a sequence, depending on where
+you are in the file.  For the lexer to handle it, the parser (yacc)
+has to tell flex the current position.  This requires explicit
+communications between the two components, which gets complex and
+tedious.
+
+  Instead, I'm taking advantage of some nice properties of these
+formats; they are generally -
+    ASCII
+    line-oriented
+    relatively easy to write a parser
+      - written by hand
+      - and in FORTAN
+    almost no look-ahead needed - nearly always only one line
+    regular (!)
+
+The last is the most interesting since because of Perl's history in
+bioinformatics, a lot of people in this field know how to use regular
+expressions.  Why not use a regular expression for parsing these
+files?
+
+Regular expressions as available in Perl and Python aren't good
+enough.  Consider the following SwissProt line:
+
+AC   P93209; P42651; P12345;
+
+where there is one or more accession id.  The regular expression of
+this might be "AC   (\w+);(\s+(\w+);)*" but when you do the match,
+$1 is set to P93209 and $3 is set to P12345.  There's no way to get
+the middle id.
+
+The regular expression engines store all the matches until the end,
+which is why new matches override older ones.  Another way to do this
+is to pass in a callback object, and have it called for each match.
+In the above case there would be 5 calls:
+
+  "$1", "P93209"
+  "$2", " P42651;"
+  "$3", "P42651"
+  "$2", " P12345;"
+  "$3", "P12345"
+
+Python has a nice variant on regular expressions, named groups, which
+makes this easier to understand.  Suppose the pattern was:
+
+   "AC   (?P<ac>\w+);(\s+(?P<ac>\w+);)*"
+
+and suppose non-named fields are ignored.  Then the calls would be:
+
+  "ac", "P93209"
+  "ac", "P42651"
+  "ac", "P12345"
+
+Since the current engines don't support callbacks like, I wrote one
+which does.  But how should the callbacks work?
+
+A hot buzzword for the last few years has been XML.  There are a
+couple of common ways to parse XML.  One of them is SAX, which is
+callback based.  If the interface for my regular expression scanner
+generator is the same as SAX, then there are a slew of tools available
+to work with the resultant data (eg, put it into a DOM).
+
+Even better, XML is based off of SGML, where they've put work into
+making sure both the semantic and the physical information can be
+preserved, so you still can produce converters for HTML without
+loosing formatting information.
+
+The mapping from regular expressions to SAX events is actually pretty
+simple since I'm using named groups.  It looks like:
+
+  (?P<name>pattern)
+                  ^-- callback.endElement("name")
+           ^-- callback.characters(contents of group)
+  ^-- callback.startElement("name")
+
+And parsing the "AC" line above gets turned into the following method
+calls of the callback object (which SAX calls a handler):
+
+  characters("AC   ")
+  startElement("ac_number")
+    characters("P93209"
+  endElment("ac_number")
+  characters("; ")
+  startElement("ac_number")
+    characters("P42651")
+  endElement("ac_number")
+  startElement("ac_number")
+    characters("P12345")
+  endElement("ac_number")
+  characters(";")
+
+
+Prerequisites:
+
+  These are the two Python packages you will need to install
+     mxTextTools
+     xml
+
+  My copy of the XML module is version v0.5.2.  I tried the xml
+in the Python 1.6 alpha distribution, and the API has changed.
+(Eg, there are some modules changes and they are using SAX 2.0
+instead of 1.0.  (Namespaces?))
+
+Available Formats:
+
+  These formats will migrate to the biopython code distribution.
+Until then, the ones supported so far are:
+
+  GenBank - incomplete support for release 119 (does not parse some records)
+  MDL_10_1996 - MDL's .mol format, as described in documentation
+                    dated 10/1996 and tested against WDI and ACD
+                    (thanks Daylight!)
+
+  PDB_2_1  - tested against 1PLM and will fail against most PDB files.
+  PIR_3_0  - tested against all of PIR
+  blastall_2_0_10 - tested against the non-master-slave 'blastall 2.0.10
+                    records from biopython.Bio.Tests.Blast (thanks Jeff!)
+  blocks_12  - tested against Blocks 12.0 format
+  blocksplus - tested against Blocks+ 15Nov00 format
+  embl65   - tested against hum7 from EMBL Release 65, December 2000
+  enzyme26  - ENZYME nomenclature database, release 26 of May 2000
+  primers  - PCR primers from EBI; database date is from 1997
+  prodoc16  - the format version is 16, tested against Prosite release 39
+  prosite16  - the format version is 16, tested against Prosite release 39
+  swissprot38 - tested against all of SWISS-PROT 38.  Pretty complete.
+  taxonomy  - NCBI's taxonomy database, dated 05-NOV-1998
+  trembl14  - tested against hum and mam of TrEMBL release 14, June 2000
+
+These formats are in various states of support.  Most are pretty
+complete in that they can parse quite a bit of information from the
+records.  They haven't been used for anything yet so things will
+likely need to be tweaked.
+
+Building your own formats:
+
+  Go ahead and try it out.  There's some beginning documentation under
+the doc directory and there are working examples.  Doing everything
+with regular expression strings is a mess so I'm using a function
+syntax similar to Greg Ewing's Plex.  I use regular expressions to
+describe parts of a line, then convert those into expression trees.
+The Plex-like functions then operate on expression trees.
+
+Debugging:
+
+  Debugging large patterns is very hard.  It's best to break things
+down into more manageable chunks.  Take a look at my test code in the
+"test/" subdirectory for how I do it.  Especially useful is the "dump"
+method which lets you see roughly how far the parsing progressed.
+
+  The implementation has a downside.  It requires a named regular
+expression group to match fully before the startElement and any of the
+internal characters are sent to the callback.  If there is a failure
+somewhere inside the group, you won't be told how far it went, but
+only that it stopped at the start of the group.
+
+When debugging fails at a named group, try commenting it out so you
+can see what happened inside.  You might also use Martel.select_names
+to create a new expression with no named groups. Or copy the text that
+failed and try just that subpattern.  Also, the make_parser method has
+an optional parameter 'debug_level' which is 0 by default.  When set
+to 1 it reports better error locations.  When set to 2 it also prints
+a large amount of debugging information to stdout.
+
+  
+Performance:
+
+  (Note: Timings are pre-0.4, which has a faster RecordReader and
+should trim about a minute off of the timings.)
+
+  I have a 233MHz PII laptop.  I did some tests with swissprot.  With
+a dataset of 10,023 lines (491,659 bytes), it took about 0.82 seconds
+to parse and about 5.4MB.  With 50,000 lines (2,498,664 bytes) it took
+7.9 seconds and 19,488K.
+
+  Extroplating linearly, Swissprot is 4,521,693 lines and 227,311,276
+bytes (80,000 records), so should take about 12 minutes to parse and
+1.7GB of RAM.
+
+  Following Jeff Chang's lead, I wrote a 'RecordReader' class which is
+smart enough to read a file a record at a time.  It takes advantage of
+the fact that large files are composed of lots of small files.  I used
+this to read each of the records in SWISS-PROT 38.  That took 6.9
+minutes to parse the records counting just around the parse call, and
+10.5 minutes from the output of the shell's built-in time call.  It
+was running 99.9% of the time, so almost no system overhead and no
+page faults.  If I use a callback, the parsing time is 16.6 minutes
+(10 extra minutes in method call overhead!) and the total time is
+20:20 minutes.  Only three seconds spent in system time.
+
+BUGS:
+
+Backtracking does not always work the same way as regular expressions.
+Don't do "\s*\n" since the \s eats the \n but doesn't backtrack.
+
+  There's a bug in Alt where (x|y|z) doesn't work but (x|z|y) does
+work.  Only occurs when the first part of x is same as the first part
+of y (?).  Use negative lookahead assertions as a work around or force
+the different parts to be in a named group
+
+  The conversion from an expression to a regular expression doesn't
+always work.  It's a debugging tool and isn't yet needed for normal
+operation.
+
+Future Plans:
+
+  More formats.
+
+  Example output converters (eg, for HTML)
+
+  The patterns are useable for other langauges, so would it to
+generate parsers for perl, C, etc.  Probably write something in C
+which is a SWIGged engine for use by everyone else.
+
+  Need standard names for things For example, NCBI has a DTD for BLAST
+output, but that's just the semantic data.  There is extra
+organization of the BLAST output, so I need names for them.
+
+  Even better, the names and meanings should by consistent across
+different formats (eg, "sequence") and consistent with XML usage (like
+'*_list' for a list of items (?))
+
+  Would be interested to rewrite the SWISS-PROT to HTML converter (in
+examples/swissprot2html) using DOM since it should be a lot easier to
+write.
+
+  If I have access to a description of the datatype for each named
+group, I can likely make a DTD for it.  Hmm, but the DTD only allows
+one tag lookaheads so perhaps now
+
+  Still want to include "lenient" parsers which skip data they
+assume is correct.
+
+  I want to make an example for how to index files.  It might be
+called like:
+  make_index --record <record tag> --id <id tag> [--aliases <alias tag>]*
+             [--format <format name>] --dbm <filename> files...
+where:
+  <record tag> is the outermost name for the record (like 'swissprot38_record')
+  <id tag> is the unique id for the record (like 'entry_name')
+  <alias tag> is a set of tags listing aliases for the record (like 'ac_number')
+  <format name> is the (optional) format name for the data file
+  <filename> is the name for the DBM file
+  files... is the file or files to parse to generate the index
+
+The index will contain mappings from aliases to primary id, and from primary
+id to filename and character ranges.  The data is stored in a dbm file
+(probably Berkeley DBM from Sleepycat).
+
+Using the index could be something like:
+  lookup --dbm <filename> [--primary | --alias | --either ] [--show] identifier
+where
+  <filename> is the name of the DBM file
+  --primary means the identifier is a primary key name
+  --alias means the identifier is an alias
+  --either means it's either; returns all unique matches
+
+By default, the output is the list of matching records as (filename,
+start byte, end byte).  When --show is used, the matching records are
+displayed as a stream to stdout.
+
+  Add keyword searching by adding a list of fields which should be
+indexed.  This would allow searching for all records from Spam and
+Eggs which didn't have Vikings for a gene name.
+
+
+
+===
+- Changes between 0.5 and 0.4
+
+Bug fix where HeaderFooter and ParseRecords weren't copying their
+subexpressions when making a .copy()
+
+Added SignedInteger and Float definitions.
+
+Fixed some problems with the error reporting. (Status message,
+location offset, rewrote HeaderFooterParser.)
+
+Replaced \n with \R in the various format definitions.
+
+Added a lot of formats, although most are incomplete in that
+additional fields could be parsed.
+
+Fixed swissprot parsing so non-existant fields don't generate empty
+tags.
+
+- Changes between version 0.35 and 0.4
+
+Allow Unix, Mac and DOS newline conventions in a file.  Can even be
+mixed in the same file (which does happen in real life).
+
+RecordReaders use mxTextTools to find the record begin & end
+locations.  Gives about a 50% performance boost because it doesn't
+need to split and rejoin the lines and because it can use Boyer-Moore.
+
+RecordReader's constructor and 'remainder' method use/return a
+lookahead buffer as a string rather than a list of lines.
+
+
+- Changes between version 0.3 and 0.35
+
+Migrated to Python 2.0 and its xml package.  No longer runs under
+older (1.x) Pythons.
+
+Added more RecordReaders (Until, CountLines, Nothing, Everything).
+
+Changed the RecordReader protocol to seed the line buffer (in the
+constructor) and to get the final state for the input file and line
+buffer (using remainder()).  Needed to allow chaining of different
+reader types as with headers and footers.
+
+Added a HeaderFooter Parser for formats like Prosite and PIR which
+have a header and/or a footer with records in between.
+
+Renamed the StateTable exception to Parser exceptions and removed the
+EOF exception.
+
+Experimental Iterator support ("make_iterator") as an alternate for
+the pure SAX callback method.
+
+Improved error reporting.  make_parser and make_iterator takes an
+optional "debug_level".  Better error location is available with
+debug_level == 1 and if it == 2, print current match information to
+stdout.  Warning: debug_level == 1 is about 11 times slower than
+debug_level == 0, which is why it is off by default.
+
+Support for both the 1.1 and 1.2 mxTextTools.
+
+- Changes between version 0.25 and 0.3
+
+Added documentation on the internals and on how to write a parser.
+
+Renamed and moved Generate.StateTable to Parser.Parser
+
+Renamed the various "ContentHandler" to "DocumentHandler."
+ContentHandler was flat out the wrong method name for SAX.
+
+The parser and exceptions now inherit from the xml.sax.saxlib classes.
+
+To parse a string, use the "parseString" method.  The old "parse"
+method now takes a system identifier string.  A system identifier is
+the SAX way of saying URL.  (Note: this will change again with Python
+2.0 and the InputSource class.)
+
+The "generate_*" commands now manipulate lists directly instead of
+passing around 'Parser' objects.
+
+Added parsers which can read a record at a time (ParseRecord and the
+RecordReader classes.)
+
+Added the optimize module, which does some limited regexp expression
+cleanups and optimizations.  Haven't tested the performance
+differences yet.
+
+Started a Prosite 16.0 parser.
+
+- Changes between 0.2 to 0.25
+
+Consistent naming schemes to distinguish between a regexp written as a
+string (a "pattern"), a parse tree (an "expression") or an mxTextTools
+table (a "tagtable").
+  
+The "Subpattern" Node was renamed to "Group" for naming consistency
+with Plex.  "Any" was renamed "Dot".  "In" was renamed "Any.
+
+Fixed several bugs when translating from an expression tree back to a
+pattern string.
+
+Added docstrings and comments.
+
+Added type check for the external Plex-like functions, since I was
+getting annoyed that the error for doing 'Opt("text")' instead of
+'Opt(Str("text"))' occured during tagtable generation and was hard to
+track down.
+
+Moved self test code from the modules into the test/ directory.
+
+Changed the regression code to raise an Assertion error when there was
+a problem rather than just printing the error and continueing.
