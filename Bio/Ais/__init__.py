@@ -61,6 +61,7 @@ def match_sequence( first, second, threshold ):
                 max_match = match_count
         else:
             match_count = 0
+    print max_match
     if( max_match >= threshold ):
         return 1
     else:
@@ -80,7 +81,7 @@ class Immune:
     protected sequences.
     """
 
-    def __init__( self, friendly, alphabet = [ 'a', 'c', 'g', 't' ], size = 20 ):
+    def __init__( self, friendly, alphabet = 'acgt', size = 20 ):
         self.hot_random = HotRandom()
         self.friendly = friendly
         self.alphabet = alphabet[:]
@@ -90,14 +91,31 @@ class Immune:
         selector = self.hot_random.hot_rand( len( items ) - 1 )
         return selector
 
-    def scramble( self, seq ):
+    def guess_gaps( self, seq ):
+        """
+        Fill gaps with random selction from alphabet
+        """
         seq = seq.lower()
-        for index in range( 0, len( seq ) ):
-            if( seq[ index ] not in self.alphabet ):
-                seq[ index ] = seq[ select_at_random( self.alphabet ) ]
+        for dest_index in range( 0, len( seq ) ):
+            if( seq[ dest_index ] not in self.alphabet ):
+                source_index = self.select_at_random( self.alphabet )
+                seq = seq[ :dest_index] + self.alphabet[ source_index ] + seq[ dest_index + 1: ]
         return seq
 
-    def found_antigen( self, detector, mystery_sequence, threshold = 7 ):
+    def scramble( self, seq, num_tosses = 5 ):
+        """
+        Substitute residues in sequence at random.
+        """
+        seq = seq[:].lower()
+        for toss in range( 0, num_tosses ):
+            dest_index = self.select_at_random( seq )
+            source_index = self.select_at_random( self.alphabet )
+            seq = seq[ :dest_index] + self.alphabet[ source_index ] + seq[ dest_index + 1: ]
+
+        return seq
+
+
+    def found_antigen( self, detector, mystery_sequence, threshold = 3 ):
         return( match_sequence( detector, mystery_sequence, threshold ) )
 
     def lazy_auto_immune_check( self, seq ):
@@ -138,6 +156,7 @@ class Immune:
         """
         weight = self.hot_random.hot_rand( self.accum_weight )
         index = self.search_accum_weight( weight )
+        return index
 
     def random_test( self, mystery_sequence ):
         """
@@ -164,7 +183,8 @@ class Immune:
 
 
     def create_lymphocyte( self ):
-        lymphocyte = self.scramble( consensus.data )
+        lymphocyte = self.guess_gaps( consensus.data )
+        lymphocyte = self.scramble( lymphocyte )
         self.lymphocytes.append( Lymphocyte( lymphocyte ) )
         self.compute_accum_weight()
 
@@ -176,7 +196,8 @@ class Immune:
         consensus = summary_info.dumb_consensus()
         self.consensus = consensus
         for j in range( 0, num_lymphocytes ):
-            lymphocyte = self.scramble( consensus.data )
+            lymphocyte = self.guess_gaps( consensus.data )
+            lymphocyte = self.scramble( lymphocyte )
             self.lymphocytes.append( Lymphocyte( lymphocyte ) )
         self.compute_accum_weight()
 
