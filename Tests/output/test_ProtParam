@@ -52,7 +52,7 @@ Fraction of amino acids in Helix: 0.28
 Fraction of amino acids in Turn: 0.26
 Fraction of amino acids in Sheet: 0.25
 
-Kyde and Doolittle protein scale:
+Kyte and Doolittle protein scale:
 -0.078
 0.036
 0.126
@@ -197,3 +197,6 @@ Kyde and Doolittle protein scale:
 1.837
 2.028
 2.356
+
+GRAVY:
+-0.597368421053
