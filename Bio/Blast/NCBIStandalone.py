@@ -761,7 +761,7 @@ class _HSPConsumer:
         self._hsp.bits = _safe_float(self._hsp.bits)
 
         self._hsp.expect, = _re_search(
-            r"Expect\S* = ([0-9.e-]+)", line,
+            r"Expect\S* = +([0-9.e-]+)", line,
             "I could not find the expect in line\n%s" % line)
         self._hsp.expect = _safe_float(self._hsp.expect)
 
