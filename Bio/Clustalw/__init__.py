@@ -62,18 +62,20 @@ def parse_file(file_name, alphabet = IUPAC.unambiguous_dna):
 
     return align_handler.align
 
-def do_alignment(command_line):
+def do_alignment(command_line, alphabet=None):
     """Perform an alignment with the given command line.
 
     Arguments:
     o command_line - A command line object that can give out
     the command line we will input into clustalw.
+    o alphabet - the alphabet to use in the created alignment. If not
+    specified IUPAC.unambiguous_dna and IUPAC.protein will be used for
+    dna and protein alignment respectively.
     
     Returns:
     o A clustal alignment object corresponding to the created alignment.
     If the alignment type was not a clustal object, None is returned.
     """
-    print "executing %s..." % command_line
     run_clust = os.popen(str(command_line))
     value = run_clust.close()
 
@@ -107,7 +109,10 @@ def do_alignment(command_line):
         return None
     # otherwise parse it into a ClustalAlignment object
     else:
-        return parse_file(out_file)
+        if not alphabet:
+            alphabet = (IUPAC.unambiguous_dna, IUPAC.protein)[
+                command_line.type == 'PROTEIN']
+        return parse_file(out_file, alphabet)
 
 
 class ClustalAlignment(Alignment):
@@ -124,6 +129,7 @@ class ClustalAlignment(Alignment):
 
         # represent all of those stars in the aln output format
         self._star_info = ''
+        
         self._version = ''
 
     def __str__(self):
@@ -361,6 +367,7 @@ class MultipleAlignCL:
 
         # 2. a guide tree to use
         self.guide_tree = None
+        self.new_tree = None
 
         # 3. matrices
         self.protein_matrix = None
@@ -369,7 +376,7 @@ class MultipleAlignCL:
         # 4. type of residues
         self.type = None
 
-    def __repr__(self):
+    def __str__(self):
         """Write out the command line as a string."""
         cline = self.command + " " + self.sequence_file
 
@@ -392,6 +399,9 @@ class MultipleAlignCL:
             cline = cline + " -CASE=" + self.change_case
         if self.add_seqnos:
             cline = cline + " -SEQNOS=" + self.add_seqnos
+        if self.new_tree:
+            # clustal does not work if -align is written -ALIGN
+            cline = cline + " -NEWTREE=" + self.new_tree + " -align"
 
         # multiple alignment options
         if self.guide_tree:
@@ -478,6 +488,11 @@ class MultipleAlignCL:
         else:
             self.guide_tree = tree_file
 
+    def set_new_guide_tree(self, tree_file):
+        """Set the name of the guide tree file generated in the alignment.
+        """
+        self.new_tree = tree_file
+        
     def set_protein_matrix(self, protein_matrix):
         """Set the type of protein matrix to use.
 
