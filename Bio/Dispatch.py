@@ -198,7 +198,7 @@ class Dispatcher(handler.ContentHandler, DispatchHandler):
         # remap is *not* prefixed, else we couldn't remap from outside
         # our namespace.  (Is that important?)
         if remap is None:
-            from expressions import Std
+            import Std
             remap = {"record": Std.NS}  # Is this really appropriate?
             
         for old_tagname, new_tagname in remap.items():
