@@ -1,0 +1,9 @@
+
+During installation the already present swig file _KDTree.i is
+used, because I could not get Distutils to work correctly with swig.
+This should work without any problem. If you want to rebuild the
+swig file for some reason just type "make". 
+
+Cheers,
+
+-Thomas

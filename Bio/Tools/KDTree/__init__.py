@@ -26,13 +26,13 @@ class KDTree:
 	def search(self, center, radius):
 		"""Search all points within radius of center.
 
-		o center - two dimensional Numpy array of type "f". E.g. if the 
-		points have dimensionality D, the center array should be 1xD 
+		o center - one dimensional Numpy array of type "f". E.g. if the 
+		points have dimensionality D, the center array should be D 
 		dimensional. 
 		o radius - float>=0
 		"""
-		if len(center.shape)!=2 or center.shape[1]!=self.dim:
-				raise Exception, "Expected a 1x%i Numpy array" % self.dim
+		if center.shape!=(self.dim,):
+				raise Exception, "Expected a %i-dimensional Numpy array" % self.dim
 		if center.typecode()!="f":
 				raise Exception, "Expected a Numpy array of type float" 
 		self.kdt.search_center_radius(center, radius)
