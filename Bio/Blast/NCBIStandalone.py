@@ -240,7 +240,8 @@ class _Scanner:
                                  start='Sequences not found'):
             # Read the descriptions and the following blank lines.
             read_and_call_while(uhandle, consumer.noevent, blank=1)
-            if safe_peekline(uhandle)[:9] != 'CONVERGED':
+            l = safe_peekline(uhandle)
+            if l[:9] != 'CONVERGED' and l[0] != '>':
                 read_and_call_until(uhandle, consumer.description, blank=1)
                 read_and_call_while(uhandle, consumer.noevent, blank=1)
 
