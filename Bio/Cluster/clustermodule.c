@@ -781,7 +781,7 @@ cluster_clusterdistance (PyObject* unused, PyObject* args) {
     NROWS = aDATA->dimensions[0];
     NCOLUMNS = aDATA->dimensions[1];
     N1 = aINDEX1->dimensions[0];
-    N2 = aINDEX2->dimensions[1];
+    N2 = aINDEX2->dimensions[0];
     eDATA[0] = NROWS;
     eDATA[1] = NCOLUMNS;
     eMASK[0] = NROWS;
