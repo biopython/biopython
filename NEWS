@@ -4,7 +4,7 @@ News for the Biopython Project
 This file contains release notes and general news
 about the biopython project.
 
-Aug 31, 2000: Biopython 0.90d03
+Sept 6, 2000: Biopython 0.90d03
   Blast updates:
     - bug fixes in NCBIStandalone, NCBIWWW
     - some __str__ methods in Record.py implemented (incomplete)
