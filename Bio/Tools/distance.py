@@ -20,7 +20,10 @@ def euclidean(x, y):
     """euclidean(x, y) -> euclidean distance between x and y"""
     if len(x) != len(y):
         raise ValueError, "vectors must be same length"
-    return sqrt(sum((x-y)**2))
+    #return sqrt(sum((x-y)**2))
+    # Optimization by John Corradi (JCorradi@msn.com)
+    d = x-y
+    return sqrt(dot(d, d))
 
 def euclidean_py(x, y):
     """euclidean_py(x, y) -> euclidean distance between x and y"""
