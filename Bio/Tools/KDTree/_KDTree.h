@@ -97,13 +97,18 @@ class KDTree
 		KDTree(int dim);
 		~KDTree();
 		void set_data(float *coords, long int nr_points);
+		void build_tree(void);
+		// single neighbor search 
 		void search_center_radius(float *coord, float radius);
 		long int get_count(void);
-		void neighbor_search(float neighbor_radius);
-		long int get_neighbor_count(void);
 		void copy_indices(long int *indices);
 		void copy_radii(float *radii);
-		void copy_neighbors(long int *indices);
+		// all neighbor search
+		long int neighbor_get_count(void);
+		void neighbor_search(float neighbor_radius);
+		void neighbor_simple_search(float neighbor_radius);
+		void neighbor_copy_indices(long int *indices);
+		void neighbor_copy_radii(float *radii);
 };
 
 

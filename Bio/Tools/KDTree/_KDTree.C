@@ -466,12 +466,16 @@ void KDTree::set_data(float *coords, long int nr_points)
 	{
 		_add_point(i, coords+i*KDTree::dim);
 	}
+}
 
+void KDTree::build_tree(void)
+{
 	// build KD tree
 	_root=_build_tree();
 	// we can get rid of the vector now
 	_data_point_list.clear();
 }
+
 	
 void KDTree::search_center_radius(float *coord, float radius)
 {
@@ -537,7 +541,7 @@ void KDTree::copy_radii(float *radii)
 	}
 }
 
-void KDTree::copy_neighbors(long int *indices)
+void KDTree::neighbor_copy_indices(long int *indices)
 {
 	long int i;
 
@@ -552,7 +556,22 @@ void KDTree::copy_neighbors(long int *indices)
 	}
 }
 
-long int KDTree::get_neighbor_count(void)
+void KDTree::neighbor_copy_radii(float *radii)
+{
+	long int i;
+
+	if (_neighbor_count==0)
+	{
+		return;
+	}
+
+	for(i=0; i<_neighbor_count; i++)
+	{
+		radii[i]=_neighbor_radius_list[i];
+	}
+}
+
+long int KDTree::neighbor_get_count(void)
 {
 	return _neighbor_count;
 }
@@ -712,5 +731,61 @@ void KDTree::_neighbor_search_pairs(Node *left, Node *right, int depth)
 	}
 	
 }
+
+void KDTree::neighbor_simple_search(float radius)
+{
+	float radius_sq;
+	long int i;
+
+	radius_sq=radius*radius;
+
+	_neighbor_count=0;
+	_neighbor_index_list.clear();
+	_neighbor_radius_list.clear();
+
+	DataPoint::current_dim=0;
+	sort(_data_point_list.begin(), _data_point_list.end());
+
+	for (i=0; i<_data_point_list.size(); i++)
+	{
+		float x1;
+		long int j;
+		DataPoint p1;
+
+		p1=_data_point_list[i];
+		x1=p1.get_coord()[0];
+
+		for (j=i+1; j<_data_point_list.size(); j++)
+		{
+			DataPoint p2;
+			float x2;
+
+			p2=_data_point_list[j];
+			x2=p2.get_coord()[0];
+
+			if (fabs(x2-x1)<=radius)
+			{
+				float r;
+
+
+				r=KDTREE_dist(p1.get_coord(), p2.get_coord(), KDTree::dim);
+
+				if (r<=radius_sq)
+				{
+					_neighbor_index_list.push_back(p1.get_index());
+					_neighbor_index_list.push_back(p2.get_index());
+					// note sqrt
+					_neighbor_radius_list.push_back(sqrt(r));
+					_neighbor_count++;
+				}
+			}
+			else
+			{
+				break;
+			}
+		}
+	}
+}
+
 
 

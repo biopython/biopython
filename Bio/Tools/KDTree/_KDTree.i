@@ -108,10 +108,12 @@ class KDTree
 		KDTree(int POSITIVE);
 		~KDTree();
 		void set_data(float *twodim, unsigned long int POSITIVE);
+		void build_tree(void);
 		void search_center_radius(float *onedim, float POSITIVE);
 		long int get_count(void);
 		void neighbor_search(float POSITIVE);
-		long int get_neighbor_count(void);
+		void neighbor_simple_search(float POSITIVE);
+		long int neighbor_get_count(void);
 };		
 
 
@@ -142,12 +144,12 @@ class KDTree
 // Add a function to return indices of coordinates within radius
 // as a Numpy array
 %{
-	PyObject *KDTree_get_neighbor_indices(KDTree *kdtree)
+	PyObject *KDTree_neighbor_get_indices(KDTree *kdtree)
 	{
 		int length[1];
 		PyArrayObject *_array;
 	 
-		length[0]=2*kdtree->get_neighbor_count();
+		length[0]=2*kdtree->neighbor_get_count();
 		
 		if (length[0]==0)
 		{
@@ -158,7 +160,7 @@ class KDTree
 		_array=(PyArrayObject *) PyArray_FromDims(1, length, PyArray_LONG);
 
 		// copy the data into the Numpy data pointer
-		kdtree->copy_neighbors((long int *) _array->data);
+		kdtree->neighbor_copy_indices((long int *) _array->data);
 		return PyArray_Return(_array);
 	}                                   
 %}
@@ -187,11 +189,36 @@ class KDTree
 	}                                   
 %}
 
+// Add a function to return distances of coordinates within radius
+// as a Numpy array
+%{
+	PyObject *KDTree_neighbor_get_radii(KDTree *kdtree)
+	{
+		int length[1];
+		PyArrayObject *_array;
+	 
+		length[0]=kdtree->neighbor_get_count();
+
+		if (length[0]==0)
+		{
+			Py_INCREF(Py_None);
+			return Py_None;
+		}
+		
+		_array=(PyArrayObject *) PyArray_FromDims(1, length, PyArray_FLOAT);
+
+		// copy the data into the Numpy data pointer
+		kdtree->neighbor_copy_radii((float *) _array->data);
+		return PyArray_Return(_array);
+	}                                   
+%}
+
 // Add above two methods to KDTree class
 %addmethods KDTree 
 {
 	PyObject *get_indices();
 	PyObject *get_radii();
-	PyObject *get_neighbor_indices();
+	PyObject *neighbor_get_indices();
+	PyObject *neighbor_get_radii();
 }	
 

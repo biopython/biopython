@@ -9,6 +9,7 @@ class KDTree:
 	def __init__(self, dim):
 		self.dim=dim
 		self.kdt=_KDTree.KDTree(dim)
+		self.built=0
 
 	def set_coords(self, coords):
 		"""Add the coordinates of the points.
@@ -31,6 +32,9 @@ class KDTree:
 		dimensional. 
 		o radius - float>=0
 		"""
+		if self.built==0:
+			self.kdt.build_tree()
+			self.built=1
 		if center.shape!=(self.dim,):
 				raise Exception, "Expected a %i-dimensional Numpy array" % self.dim
 		if center.typecode()!="f":
@@ -44,21 +48,28 @@ class KDTree:
 
 		o radius - float (>0)
 		"""
+		if self.built==0:
+			self.kdt.build_tree()
+			self.built=1
 		self.kdt.neighbor_search(radius)
 
-	def get_neighbors(self):
+	def neighbor_get_indices(self):
 		"""Return Fixed neighbor search results.
 
 		Returns a Nx2 dim Numpy array containing
 		the indices of the point pairs, where N
 		is the number of neighbor pairs.
 		"""
-		a=self.kdt.get_neighbor_indices()
+		a=self.kdt.neighbor_get_indices()
 		if a is None:
 			return a
 		# return as Nx2 dim Numpy array, where N
 		# is number of neighbor pairs.
 		a.shape=(-1, 2)
+		return a
+
+	def neighbor_get_radii(self):
+		a=self.kdt.neighbor_get_radii()
 		return a
 
 	def get_radii(self):
@@ -76,31 +87,32 @@ class KDTree:
 		"""
 		return self.kdt.get_indices()
 
+	def neighbor_simple_search(self, radius):
+		if self.built==1:
+			raise Exception, "KD tree is already built."
+		self.kdt.neighbor_simple_search(radius)
+
 if __name__=="__main__":
 
 	from RandomArray import *
+	from Bio.Tools.KDTree import *
 
 	DIM=3
 	N=9000
 
-	i=1
-	while(i):
-		kdt=KDTree(3)	
-		coords=random((N, DIM)).astype("f")
-		#center=random((1, DIM)).astype("f")
-		kdt.set_coords(coords)
-		#kdt.search(center, 0.1)
-		#indices=kdt.get_indices()
-		#radii=kdt.get_radii()
-		kdt.neighbor_search(0.01)
-		indices=kdt.get_neighbors()
-		if indices is None:
-			l="no"
-		else:
-			l=len(indices)/2
-		print "Cycle ", i,
-		print " found ", l, " points."
-		i=i+1
+	kdt=KDTree(3)	
+
+	coords=random((N, DIM)).astype("f")
+	
+	kdt.set_coords(coords)
+
+	R=0.01
+
+	kdt.neighbor_simple_search(R)
+	print "Simple search : ", len(kdt.neighbor_get_radii())
+	
+	kdt.neighbor_search(R)
+	print "KD tree search : ", len(kdt.neighbors_get_radii())
 
 
 
