@@ -8,6 +8,7 @@
 import sys
 from string import split
 from Numeric import array, Float0
+import types
 
 # My stuff
 from StructureBuilder import StructureBuilder
@@ -50,18 +51,19 @@ class PDBParser:
 
     # Public methods
 
-    def get_structure(self, id, filename):
+    def get_structure(self, id, file):
         """Return the structure.
 
         Arguments:
         o id - string, the id that will be used for the structure
-        o filename - name of the PDB file
+        o file - name of the PDB file OR an open file
         """
         self.header=None
         self.trailer=None
         # Make a StructureBuilder instance (pass id of structure as parameter)
         self.structure_builder.init_structure(id)
-        file=open(filename)
+        if not isinstance(file, types.FileType):
+            file=open(file)
         self._parse(file.readlines())
         file.close()
         self.structure_builder.set_header(self.header)
