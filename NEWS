@@ -4,6 +4,24 @@ News for the Biopython Project
 This file contains release notes and general news
 about the biopython project.
 
+July 5, 2001: Biopython1.00a2
+  deprecated old regression testing frameworks
+  deprecated Sequence.py
+  Swiss-Prot parser bug fixes
+  GenBank parser bug fixes
+  Can now output GenBank format
+  can now download many sequences at a time from GenBank
+  kMeans clustering algorithm
+  Kabat format now supported
+  FSSP format now supported
+  more functionality for alignment code
+  SubsMat bug fixes and updates
+  fixed memory leak in listfns bug fixes
+  Martel bundled and part of the install procedure
+  Medline.Parser bug fixes
+  PubMed.download_many handles broken IDs better
+
+
 Mar 3, 2001: Biopython 1.00a1
   Refactoring of modules.  X/X.py moved to X/__init__.py.
   Can search sequences for Prosite patterns at ExPASy
