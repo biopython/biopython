@@ -11,12 +11,21 @@ import sys
 
 def rotaxis(theta, vector):
     """
-    Left multiplying rotation matrix that rotates
-    theta along vector (which should be a unit 
-    vector).
+    Calculate a left multiplying rotation matrix that rotates
+    theta degrees around vector.
 
-    ie. m=rotaxis(pi, Vector(1,0,0))
-        rotated_vector=any_vector.left_multiply(m)
+    Example: 
+    
+        >>> m=rotaxis(pi, Vector(1,0,0))
+        >>> rotated_vector=any_vector.left_multiply(m)
+
+    @type theta: float
+    @param theta: the rotation angle
+
+    @type vector: Vector
+    @param vector: the rotation axis
+
+    @return: The rotation matrix, a 3x3 Numpy array.
     """
     vector=vector.normalize()
     c=cos(theta)
@@ -41,6 +50,14 @@ def rotaxis(theta, vector):
 def refmat(p,q):
     """
     Return a (left multiplying) matrix that mirrors p onto q.
+
+    Example:
+        >>> mirror=refmat(p,q)
+        >>> qq=p.left_multiply(mirror)
+        >>> print q, qq # q and qq should be the same
+
+    @type p,q: Vector
+    @return: The mirror operation, a 3x3 Numpy array. 
     """
     p=p.normalize()
     q=q.normalize()
@@ -95,6 +112,10 @@ class Vector:
 
     def __init__(self, x, y, z):
         self._ar=array((x, y, z), 'd')
+
+    def __repr__(self):
+        x,y,z=self._ar
+        return "<Vector %.2f, %.2f, %.2f>" % (x,y,z)
 
     def __neg__(self):
         "Return Vector(-x, -y, -z)"
@@ -190,6 +211,8 @@ if __name__=="__main__":
         v2=Vector(0.1,0.1,0.1)
         v3=Vector(1.9,0.8,0.6)
         v4=Vector(1,-1,0)
+
+        print v4
 
         calc_angle(v1, v2, v3)
         calc_dihedral(v1, v2, v3, v4)
