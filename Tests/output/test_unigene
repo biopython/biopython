@@ -1,24 +1,19 @@
 test_unigene
 testing Bt145.htm
-key EXPRESSION INFORMATION
-        key is Note
-            Found only in library21: MARC 3BOV
-key mRNA/GENE SEQUENCE
-        key is AF011357
-            Bos taurus regulator of G-protein signaling 9 (RGS9) mRNA, complete cds
-key UniGene Cluster
-        Bt.145
 key EST SEQUENCE
         key is BF653298
             cDNA clone (no-name) 5' read
+key EXPRESSION INFORMATION
+        key is Note
+            Found only in library21: MARC 3BOV
+key UniGene Cluster
+        Bt.145
+key mRNA/GENE SEQUENCE
+        key is AF011357
+            Bos taurus regulator of G-protein signaling 9 (RGS9) mRNA, complete cds
 
 
 testing Dr20.htm
-key EXPRESSION INFORMATION
-        key is cDNA sources
-            heart
-key UniGene Cluster
-        Dr.20
 key EST SEQUENCES
         key is AI616857
             cDNA clone (no-name) heart 5' read
@@ -28,42 +23,39 @@ key EST SEQUENCES
             cDNA clone 2352068 3' read
         key is AI584287
             cDNA clone (no-name) 3' read
+key EXPRESSION INFORMATION
+        key is cDNA sources
+            heart
+key UniGene Cluster
+        Dr.20
 
 
 testing Hs28199.htm
-key EXPRESSION INFORMATION
-        key is cDNA sources
-            Brain
-        key is SAGE
-            Gene to Tag mapping
-        key is Note
-            Found only in libraries from Brain
-key UniGene Cluster
-        Hs.28199
 key EST SEQUENCES
         key is D59854
             cDNA clone GEN-071B07 Brain 3' read
         key is D59855
             cDNA clone GEN-071B07 Brain 5' read
+        key is F10922
+            cDNA clone c-3lg05 Brain 3' read
         key is D61454
             cDNA clone GEN-403B11 Brain 5' read
         key is H19446
             cDNA clone IMAGE:51620 Brain 3' read 2.4 kb
-        key is F10922
-            cDNA clone c-3lg05 Brain 3' read
         key is D61065
             cDNA clone GEN-152B08 Brain 5' read
+key EXPRESSION INFORMATION
+        key is Note
+            Found only in libraries from Brain
+        key is SAGE
+            Gene to Tag mapping
+        key is cDNA sources
+            Brain
+key UniGene Cluster
+        Hs.28199
 
 
 testing Rn35.htm
-key EXPRESSION INFORMATION
-        key is cDNA sources
-            Whole embryo
-key UniGene Cluster
-        Rn.35
-key SEE ALSO
-        key is HomoloGene
-            Rn.35
 key EST SEQUENCES
         key is AA859652
             cDNA clone UI-R-E0-bs-b-06-0-UI Whole embryo 3' read
@@ -73,32 +65,32 @@ key EST SEQUENCES
             cDNA clone UI-R-BJ1-asw-f-07-0-UI 3' read
         key is BE101172
             cDNA clone UI-R-BJ1-auh-h-09-0-UI 3' read
+key EXPRESSION INFORMATION
+        key is cDNA sources
+            Whole embryo
+key SEE ALSO
+        key is HomoloGene
+            Rn.35
+key UniGene Cluster
+        Rn.35
 
 
 testing Mm421.htm
+key EST SEQUENCES
+        key is AI448660
+            cDNA clone IMAGE:574684 3' read
+        key is AI530483
+            cDNA clone IMAGE:574684 5' read
+        key is AA125262
+            cDNA clone IMAGE:574684 5' read
 key EXPRESSION INFORMATION
         key is Note
             Found only in library376: Soares_thymus_2NbMT
 key UniGene Cluster
         Mm.421
-key EST SEQUENCES
-        key is AI448660
-            cDNA clone IMAGE:574684 3' read
-        key is AA125262
-            cDNA clone IMAGE:574684 5' read
-        key is AI530483
-            cDNA clone IMAGE:574684 5' read
 
 
 testing Rn35.htm
-key EXPRESSION INFORMATION
-        key is cDNA sources
-            Whole embryo
-key UniGene Cluster
-        Rn.35
-key SEE ALSO
-        key is HomoloGene
-            Rn.35
 key EST SEQUENCES
         key is AA859652
             cDNA clone UI-R-E0-bs-b-06-0-UI Whole embryo 3' read
@@ -108,17 +100,17 @@ key EST SEQUENCES
             cDNA clone UI-R-BJ1-asw-f-07-0-UI 3' read
         key is BE101172
             cDNA clone UI-R-BJ1-auh-h-09-0-UI 3' read
+key EXPRESSION INFORMATION
+        key is cDNA sources
+            Whole embryo
+key SEE ALSO
+        key is HomoloGene
+            Rn.35
+key UniGene Cluster
+        Rn.35
 
 
 testing Rn20.htm
-key EXPRESSION INFORMATION
-        key is cDNA sources
-            Other, Whole embryo
-key UniGene Cluster
-        Rn.20
-key SEE ALSO
-        key is HomoloGene
-            Rn.20
 key EST SEQUENCES
         key is AA900408
             cDNA clone UI-R-E0-dl-e-06-0-UI Whole embryo 3' read
@@ -140,52 +132,17 @@ key EST SEQUENCES
             cDNA clone RGICJ32 Other 5' read
         key is AW535747
             cDNA clone UI-R-BS0-aod-f-01-0-UI 3' read
+key EXPRESSION INFORMATION
+        key is cDNA sources
+            Other, Whole embryo
+key SEE ALSO
+        key is HomoloGene
+            Rn.20
+key UniGene Cluster
+        Rn.20
 
 
 testing Hs13225.htm
-key EXPRESSION INFORMATION
-        key is SAGE
-            Gene to Tag mapping
-        key is cDNA sources
-            Brain, CNS, Colon, Germ Cell, Heart, Kidney, Lung, Muscle, Ovary, Pancreas, Parathyroid, Placenta, Pooled, Prostate, Stomach, Testis, Tonsil, Uterus, Whole embryo, cervix, colon, head_neck, lung, muscle, nervous_normal, ovary, pancreas, uterus
-key SEE ALSO
-        key is LocusLink
-            8702
-        key is OMIM
-            604015
-        key is HomoloGene
-            Hs.13225
-key MAPPING INFORMATION
-        key is Chromosome
-            3
-        key is Cytogenetic Position
-            3q13.3
-        key is UniSTS entries
-                1765
-                A004F36
-                stSG42984
-key SELECTED MODEL
-        key is M. musculus
-            PID:g3869131- beta-1,4-galactosyltransferase II51 % / 262 aa
-        key is R. norvegicus
-            PID:g3258653- UDP-Gal:glucosylceramide beta-1,4-galactosyltransferase43 % / 262 aa
-        key is H. sapiens
-            PID:g3132900- beta-1,4-galactosyltransferase100 % / 343 aa
-        key is C. elegans
-            PID:g3880435- similar to n-acetyllactosamine synthase39 % / 217 aa
-        key is D. melanogaster
-            PID:g4972702- unknown41 % / 277 aa
-key mRNA/GENE SEQUENCES
-        key is AB024436
-            Homo sapiens mRNA for beta-1,4-galactosyltransferase IV, complete cds
-        key is AK001006
-            Homo sapiens cDNA FLJ10144 fis, clone HEMBA1003286, highly similar to Homo sapiens mRNA for beta-1,4-galactosyltransferase IV
-        key is AF022367
-            Homo sapiens beta-1,4-galactosyltransferase mRNA, complete cds
-        key is AF038662
-            Homo sapiens chromosome 3q13 beta-1,4-galactosyltransferase mRNA, complete cds
-key UniGene Cluster
-        Hs.13225
 key EST SEQUENCES
         key is R82654
             cDNA clone IMAGE:149308 Placenta 3' read 2.4 kb
@@ -207,34 +164,52 @@ key EST SEQUENCES
             cDNA clone IMAGE:489768 Uterus 3' read 2.0 kb
         key is AA101851
             cDNA clone IMAGE:489768 Uterus 5' read 2.0 kb
+key EXPRESSION INFORMATION
+        key is SAGE
+            Gene to Tag mapping
+        key is cDNA sources
+            Brain, CNS, Colon, Germ Cell, Heart, Kidney, Lung, Muscle, Ovary, Pancreas, Parathyroid, Placenta, Pooled, Prostate, Stomach, Testis, Tonsil, Uterus, Whole embryo, cervix, colon, head_neck, lung, muscle, nervous_normal, ovary, pancreas, uterus
+key MAPPING INFORMATION
+        key is Chromosome
+            3
+        key is Cytogenetic Position
+            3q13.3
+        key is UniSTS entries
+                1765
+                A004F36
+                stSG42984
+key SEE ALSO
+        key is LocusLink
+            8702
+        key is OMIM
+            604015
+        key is HomoloGene
+            Hs.13225
+key SELECTED MODEL
+        key is M. musculus
+            PID:g3869131- beta-1,4-galactosyltransferase II51 % / 262 aa
+        key is R. norvegicus
+            PID:g3258653- UDP-Gal:glucosylceramide beta-1,4-galactosyltransferase43 % / 262 aa
+        key is H. sapiens
+            PID:g3132900- beta-1,4-galactosyltransferase100 % / 343 aa
+        key is C. elegans
+            PID:g3880435- similar to n-acetyllactosamine synthase39 % / 217 aa
+        key is D. melanogaster
+            PID:g4972702- unknown41 % / 277 aa
+key UniGene Cluster
+        Hs.13225
+key mRNA/GENE SEQUENCES
+        key is AB024436
+            Homo sapiens mRNA for beta-1,4-galactosyltransferase IV, complete cds
+        key is AK001006
+            Homo sapiens cDNA FLJ10144 fis, clone HEMBA1003286, highly similar to Homo sapiens mRNA for beta-1,4-galactosyltransferase IV
+        key is AF022367
+            Homo sapiens beta-1,4-galactosyltransferase mRNA, complete cds
+        key is AF038662
+            Homo sapiens chromosome 3q13 beta-1,4-galactosyltransferase mRNA, complete cds
 
 
 testing Mm28919.htm
-key EXPRESSION INFORMATION
-        key is cDNA sources
-            brain, Colon, colon, Embryo, Embryonal carcinoma, Heart, Kidney, kidney, Liver, lung, Lymph, Macrophage, mammary, mammary gland, Muscle, Pituitary gland, Spleen, uterus
-key SEE ALSO
-        key is LocusLink
-            56431
-        key is HomoloGene
-            Mm.28919
-key MAPPING INFORMATION
-        key is UniSTS entries
-            1014360,404112
-key SELECTED MODEL
-        key is M. musculus
-            PID:g5931561- sid23p100 % / 164 aa
-        key is S. cerevisiae
-            PID:g6322978- Cofilin, actin binding and severing protein36 % / 149 aa
-        key is D. melanogaster
-            SP:P45594- CADF_DROME COFILIN/ACTIN DEPOLYMERIZING FACTOR HOMOLOG38 % / 151 aa
-key mRNA/GENE SEQUENCES
-        key is NM_019771
-            Mus musculus Sid23p (Sid23p), mRNA
-        key is AB025406
-            Mus musculus mRNA for sid23p, complete cds
-key UniGene Cluster
-        Mm.28919
 key EST SEQUENCES
         key is AU042046
             cDNA clone J1013A02 3' read
@@ -256,22 +231,34 @@ key EST SEQUENCES
             cDNA clone IMAGE:3671073 mammary 5' read
         key is AA117830
             cDNA clone IMAGE:537096 Embryo 5' read 0.3 kb
+key EXPRESSION INFORMATION
+        key is cDNA sources
+            brain, Colon, colon, Embryo, Embryonal carcinoma, Heart, Kidney, kidney, Liver, lung, Lymph, Macrophage, mammary, mammary gland, Muscle, Pituitary gland, Spleen, uterus
+key MAPPING INFORMATION
+        key is UniSTS entries
+            1014360,404112
+key SEE ALSO
+        key is LocusLink
+            56431
+        key is HomoloGene
+            Mm.28919
+key SELECTED MODEL
+        key is M. musculus
+            PID:g5931561- sid23p100 % / 164 aa
+        key is D. melanogaster
+            SP:P45594- CADF_DROME COFILIN/ACTIN DEPOLYMERIZING FACTOR HOMOLOG38 % / 151 aa
+        key is S. cerevisiae
+            PID:g6322978- Cofilin, actin binding and severing protein36 % / 149 aa
+key UniGene Cluster
+        Mm.28919
+key mRNA/GENE SEQUENCES
+        key is NM_019771
+            Mus musculus Sid23p (Sid23p), mRNA
+        key is AB025406
+            Mus musculus mRNA for sid23p, complete cds
 
 
 testing Hs227583.htm
-key EXPRESSION INFORMATION
-        key is SAGE
-            Gene to Tag mapping
-        key is cDNA sources
-            Brain, Eye, Germ Cell, Kidney, Prostate, Uterus, lung
-key SEE ALSO
-        key is HomoloGene
-            Hs.227583
-key MAPPING INFORMATION
-        key is UniSTS entries
-            sts-R39879
-key UniGene Cluster
-        Hs.227583
 key EST SEQUENCES
         key is H86980
             cDNA clone IMAGE:223655 Eye 5' read 2.7 kb
@@ -293,5 +280,18 @@ key EST SEQUENCES
             cDNA clone IMAGE:223629 Eye 5' read 2.6 kb
         key is H86721
             cDNA clone IMAGE:223702 Eye 5' read 2.6 kb
+key EXPRESSION INFORMATION
+        key is SAGE
+            Gene to Tag mapping
+        key is cDNA sources
+            Brain, Eye, Germ Cell, Kidney, Prostate, Uterus, lung
+key MAPPING INFORMATION
+        key is UniSTS entries
+            sts-R39879
+key SEE ALSO
+        key is HomoloGene
+            Hs.227583
+key UniGene Cluster
+        Hs.227583
 
 
