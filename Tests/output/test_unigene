@@ -1,0 +1,67 @@
+testing Bt145.htm
+
+TAGS
+
+EXPRESSION INFORMATION
+{'Note': 'Found only in library21: \012      MARC 3BOV'}
+EST SEQUENCE (1)
+{'BF653298': " cDNA clone (no-name)  5' read   "}
+UniGene Cluster
+Bt.145
+mRNA/GENE SEQUENCE (1)
+{'AF011357': ' Bos taurus regulator of G-protein signaling 9 (RGS9) mRNA, complete \012      cds  '}
+
+
+testing Dr20.htm
+
+TAGS
+
+EXPRESSION INFORMATION
+{'cDNA sources': 'heart'}
+UniGene Cluster
+Dr.20
+EST SEQUENCES (4)
+{'AI616857': " cDNA clone (no-name) heart 5' read   ", 'AA495266': " cDNA clone 2E18  3' read   ", 'AI722560': " cDNA clone 2352068  3' read   ", 'AI584287': " cDNA clone (no-name)  3' read   "}
+
+
+testing Hs28199.htm
+
+TAGS
+
+UniGene Cluster
+Hs.28199
+EST SEQUENCES (6)
+{'D59854': " cDNA clone GEN-071B07 Brain 3' read   ", 'D59855': " cDNA clone GEN-071B07 Brain 5' read   ", 'D61454': " cDNA clone GEN-403B11 Brain 5' read   ", 'H19446': " cDNA clone IMAGE:51620 Brain 3' read 2.4 kb  ", 'F10922': " cDNA clone c-3lg05 Brain 3' read   ", 'D61065': " cDNA clone GEN-152B08 Brain 5' read   "}
+EXPRESSION 
+INFORMATION
+{'cDNA sources': 'Brain', 'SAGE': 'Gene to Tag \012      mapping', 'Note': 'Found only in libraries from Brain'}
+
+
+testing Rn35.htm
+
+TAGS
+
+EST SEQUENCES (4)
+{'AA859652': " cDNA clone UI-R-E0-bs-b-06-0-UI Whole embryo 3' read   ", 'BF547995': " cDNA clone UI-R-E0-bs-b-06-0-UI Whole embryo 5' read   ", 'BE098081': " cDNA clone UI-R-BJ1-asw-f-07-0-UI  3' read   ", 'BE101172': " cDNA clone UI-R-BJ1-auh-h-09-0-UI  3' read   "}
+SEE ALSO
+{'HomoloGene': 'Rn.35'}
+UniGene Cluster
+Rn.35
+EXPRESSION 
+INFORMATION
+{'cDNA sources': 'Whole embryo'}
+
+
+testing Mm421.htm
+
+TAGS
+
+EST SEQUENCES (3)
+{'AI448660': " cDNA clone IMAGE:574684  3' read   ", 'AA125262': " cDNA clone IMAGE:574684  5' read   ", 'AI530483': " cDNA clone IMAGE:574684  5' read   "}
+UniGene Cluster
+Mm.421
+EXPRESSION 
+INFORMATION
+{'Note': 'Found only in library376: \012      Soares_thymus_2NbMT'}
+
+

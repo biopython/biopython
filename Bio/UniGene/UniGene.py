@@ -22,6 +22,34 @@ class UniGeneParser( sgmllib.SGMLParser ):
         self.table = ''
         self.context = 'general_info'
 
+    def parse( self, handle ):
+        self.reset()
+        self.feed( handle )
+        for key in self.queue.keys():
+            if( self.queue[ key ] == {} ):
+                if( key[ :15 ] == 'UniGene Cluster' ):
+                    self.queue[ 'UniGene Cluster' ] = key[ 16: ]
+                del self.queue[ key ]
+        return self.queue
+
+#
+# Assumes an empty line between records
+#
+    def feed( self, handle ):
+        if isinstance(handle, Bio.File.UndoHandle):
+            uhandle = handle
+        else:
+            uhandle = Bio.File.UndoHandle(handle)
+        text = ''
+        while 1:
+            line = uhandle.readline()
+            if( string.strip( line ) == '' ):
+                break
+            text = text + line
+        sgmllib.SGMLParser.feed( self, text )
+
+
+
     def handle_data(self, newtext ):
         newtext = string.strip( newtext )
         self.text = self.text + newtext
@@ -61,10 +89,9 @@ class UniGeneParser( sgmllib.SGMLParser ):
                     self.table = key
         elif( self.context == 'general_info' ):
             self.table = key
-            if( key == 'SEQUENCE INFORMATION' ):
+            if( string.find( key, 'SEQUENCE' ) != -1 ):
                 self.context = 'seq_info'
-            else:
-                self.queue[ key ] = UserDict.UserDict()
+            self.queue[ key ] = UserDict.UserDict()
         elif( self.context == 'seq_info' ):
             self.queue[ key ] = UserDict.UserDict()
             self.table = key
@@ -142,14 +169,8 @@ class UniGeneParser( sgmllib.SGMLParser ):
 if( __name__ == '__main__' ):
     handle = urllib.urlopen( 'http://www.ncbi.nlm.nih.gov/UniGene/clust.cgi?ORG=Hs&CID=222015&OPT=text')
     undo_handle = Bio.File.UndoHandle( handle )
-    text = ''
     unigene_parser = UniGeneParser()
-    while 1:
-        line = undo_handle.readline()
-        if( line == '' ):
-            break
-        text = text + line
-    unigene_parser.feed( text )
+    unigene_parser.parse( handle )
     unigene_parser.print_tags()
 #    unigene_parser.print_data()
 
