@@ -35,13 +35,30 @@ def random_centroids(data, k):
     """random_centroids(data, k) -> list of centroids
 
     Return a list of data points to serve as the initial centroids.
-    This is k randomly chosen data points.
+    This is k randomly chosen data points.  Tries to avoid having
+    repeated centroies, if possible.
 
     """
-    centroids = []
+    if k > len(data):
+        raise ValueError, "k is larger than the number of data points"
+    # Randomize the centroids.
     indexes = range(len(data))
     random.shuffle(indexes)
-    return take(data, indexes[:k])
+    # Now get a list of the first k unique data points.
+    centroid_indexes = []
+    seen = {}
+    i = 0
+    while len(centroid_indexes) < k and i < len(indexes):
+        key = ','.join(map(str, data[i]))   # make the array hashable
+        if not seen.has_key(key):
+            centroid_indexes.append(i)
+            seen[key] = 1
+        i += 1
+    # If there aren't k unique data points, then just pick the first
+    # k.
+    if len(centroid_indexes) < k:
+        centroid_indexes = indexes[:k]
+    return take(data, centroid_indexes)
 
 def first_k_points_as_centroids(data, k):
     """first_k_points_as_centroids(data, k) -> list of centroids
@@ -136,7 +153,8 @@ def cluster(data, k, distance_fn=euclidean_dist,
             centroids[cluster] = centroids[cluster] + data[j]
         num_in_cluster = listfns.count(clusters)
         for j in range(k):
-            centroids[j] = centroids[j] / num_in_cluster[j]
+            if num_in_cluster.has_key(j):
+                centroids[j] = centroids[j] / num_in_cluster[j]
     else:
         # The loop iterated without converging.
         return None
