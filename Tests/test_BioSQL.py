@@ -17,6 +17,13 @@ from Bio import GenBank
 from BioSQL import BioSeqDatabase
 from BioSQL import BioSeq
 
+# This testing suite should try to detect whether a valid database
+# installation exists on this computer.  Only run the tests if it
+# does.  For now, I'm just going to disable the tests completely, so
+# it doesn't generate spurious and alarming errors when people without
+# databases try to run it.
+raise ImportError, "Please comment out this line to enable the tests."
+
 # -- MySQL
 DBDRIVER = 'MySQLdb'
 DBTYPE = 'mysql'
@@ -269,7 +276,6 @@ class LoaderTest(unittest.TestCase):
     """Load a database from a GenBank file.
     """
     def setUp(self):
-
         # create TESTDB
         create_database()
         
