@@ -37,10 +37,10 @@ download_many         Download many GenBank records.
 __all__ = [
     'LocationParser',
     'Record',
-    'genbank_format',
     ]
 
 # other Biopython stuff
+from Bio.expressions import genbank
 from Bio.ParserSupport import AbstractConsumer
 import utils
 
@@ -878,13 +878,13 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             else:
                 self._cur_feature.qualifiers[key] = [value]
 
-    def qualifier_key(self, content):
+    def feature_qualifier_name(self, content):
         """When we get a qualifier key, use it as a dictionary key.
         """
         # add a qualifier if we've got one
         self._add_qualifier()
 
-        # remove the / and = from the qualifier
+        # remove the / and = from the qualifier if they're present
         qual_key = content.replace('/', '')
         qual_key = qual_key.replace('=', '')
         qual_key = qual_key.strip()
@@ -892,7 +892,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         self._cur_qualifier_key = qual_key
         self._cur_qualifier_value = ''
         
-    def qualifier_value(self, content):
+    def feature_qualifier_description(self, content):
         # get rid of the quotes surrounding the qualifier if we've got 'em
         qual_value = content.replace('"', '')
         
@@ -1126,7 +1126,10 @@ class _RecordConsumer(_BaseGenBankConsumer):
     def location(self, content):
         self._cur_feature.location = self._clean_location(content)
 
-    def qualifier_key(self, content):
+    def feature_qualifier_name(self, content):
+        # the record parser keeps the /s -- add them if we don't have 'em
+        if content.find("/") != 0:
+            content = "/%s" % content
         # add on a qualifier if we've got one
         if self._cur_qualifier is not None:
             self._cur_feature.qualifiers.append(self._cur_qualifier)
@@ -1134,7 +1137,10 @@ class _RecordConsumer(_BaseGenBankConsumer):
         self._cur_qualifier = Record.Qualifier()
         self._cur_qualifier.key = content
 
-    def qualifier_value(self, content):
+    def feature_qualifier_description(self, content):
+        # if we have info then the qualifier key should have a ='s
+        if self._cur_qualifier.key.find("=") == -1:
+            self._cur_qualifier.key = "%s=" % self._cur_qualifier.key
         cur_content = self._remove_newlines(content)
         # remove all spaces from the value if it is a type where spaces
         # are not important
@@ -1208,12 +1214,11 @@ class _Scanner:
         for more info on this.
         """
         import Martel
-        import genbank_format
         # a listing of all tags we are interested in scanning for
         # in the MartelParser
         self.interest_tags = ["locus", "size", "residue_type",
                               "data_file_division", "date",
-                              "definition", "accession", "nid", 
+                              "definition", "accession", "nid",
                               "pid", "version", "db_source",
                               "gi", "keywords", "segment",
                               "source", "organism",
@@ -1222,8 +1227,8 @@ class _Scanner:
                               "journal", "medline_id", "pubmed_id",
                               "remark", "comment",
                               "features_line", "feature_key",
-                              "location", "qualifier_key",
-                              "qualifier_value", "origin_name",
+                              "location", "feature_qualifier_name",
+                              "feature_qualifier_description", "origin_name",
                               "base_count", "base_number",
                               "sequence", "contig_location", "record_end","primary_ref_line"]
 
@@ -1232,7 +1237,7 @@ class _Scanner:
         self.exempt_tags = ["comment"]
 
         # make a parser that returns only the tags we are interested in
-        expression = Martel.select_names(genbank_format.record,
+        expression = Martel.select_names(genbank.record,
                                          self.interest_tags)
         self._parser = expression.make_parser(debug_level = debug)
 
@@ -1292,7 +1297,6 @@ def index_file_db(genbank_file, db_name, db_directory,
     try to skip indexing if it thinks the file hasn't changed.
     """
     import os
-    import genbank_format
     try:
         from mindy import mindy_index, mindy_search
     except ImportError:
@@ -1320,14 +1324,7 @@ def index_file_db(genbank_file, db_name, db_directory,
 
     indexer = mindy_index.SimpleIndexer(mindy_db, "genbank_record", identifier,
                                         aliases, keywords)
-    gb_format = genbank_format.record_format
-
-    # -- don't use this optimization right now, it causes genbank_format
-    # to be reset so that future calls to it don't return all of the item
-    # of interest
-    #if hasattr(indexer, "_wanted_elements"):
-    #    gb_format = Martel.select_names(genbank_format.record_format,
-    #                                    indexer._wanted_elements)
+    gb_format = genbank.record_format
 
     parser = gb_format.make_parser()
     parser.setContentHandler(indexer)
