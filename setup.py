@@ -299,6 +299,7 @@ PACKAGES = [
     'Bio.NeuralNetwork',
     'Bio.NeuralNetwork.BackPropagation',
     'Bio.NeuralNetwork.Gene',
+    'Bio.NMR',
     'Bio.Parsers',
     'Bio.Pathway',
     'Bio.Pathway.Rep',
