@@ -20,6 +20,7 @@ def _neighbor_test(nr_points, dim, bucket_size, radius):
 			print "Not passed: %i <> %i." % (l1, l2)
 
 def _test(nr_points, dim, bucket_size, radius):
+	radius_sq=radius*radius
 	kdt=_KDTree.KDTree(dim, bucket_size)
 	coords=random((nr_points, dim)).astype("f")
 	center=coords[0]
@@ -29,7 +30,7 @@ def _test(nr_points, dim, bucket_size, radius):
 	l2=0
 	for i in range(0, nr_points):
 		p=coords[i]
-		if _KDTree.KDTREE_dist(p, center, dim)<=radius:
+		if _KDTree.KDTREE_dist(p, center, dim)<=radius_sq:
 			l2=l2+1
 	if l1==l2:
 		print "Passed."
@@ -132,6 +133,6 @@ if __name__=="__main__":
 	radius=0.05
 
 	while(1):
- 		 #_neighbor_test(nr_points, dim, bucket_size, radius)
+ 		 _neighbor_test(nr_points, dim, bucket_size, radius)
 		 _test(nr_points, dim, bucket_size, radius)
 
