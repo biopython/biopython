@@ -28,7 +28,7 @@
 
 \section{Background and Purpose}
 
-Logistic regression is a supervised learning approach that attempts to distinguish $K$ classes from each other using a weighted sum of some predictor variables $x_i$. The logistic regression model is used to calculate the weights $\beta_i$ of the predictor variables.
+Logistic regression is a supervised learning approach that attempts to distinguish $K$ classes from each other using a weighted sum of some predictor variables $x_i$. The logistic regression model is used to calculate the weights $\beta_i$ of the predictor variables. In Biopython, the logistic regression model is currently implemented for two classes only ($K = 2$); the number of predictor variables has no predefined limit.
 
 As an example, let's try to predict the operon structure in bacteria. An operon is a set of adjacent genes on the same strand of DNA that  are transcribed into a single mRNA molecule. Translation of the single mRNA molecule then yields the individual proteins. For {\it Bacillus subtilis}, whose data we will be using, the average number of genes in an operon is about 2.4.
 
@@ -51,7 +51,6 @@ The logistic regression model gives us appropriate values for the parameters $\b
 \item OP: Adjacent genes, on the same strand of DNA, known to belong to the same operon;
 \item NOP: Adjacent genes, on the same strand of DNA, known to belong to different operons.
 \end{itemize}
-The logistic regression model implemented in Biopython can currently handle two classes only; the number of predictor variables has no predefined limit. In general, the logistic regression model can also be used to distinguish more than two classes.
 
 In the logistic regression model, the probability of belonging to a class depends on the score via the logistic function. For the two classes OP and NOP, we can write this as
 \begin{eqnarray}
@@ -144,7 +143,7 @@ Here, \verb+xs+ and \verb+ys+ are the training data: \verb+xs+ contains the pred
 Note that $\beta_1$ is negative, as gene pairs with a shorter intergene distance have a higher probability of belonging to the same operon (class OP). On the other hand, $\beta_2$ is positive, as gene pairs belonging to the same operon typically have a higher similarity score of their gene expression profiles.
 The parameter $\beta_0$ is positive due to the higher prevalence of operon gene pairs than non-operon gene pairs in the training data.
 
-The function \verb+train+ has an optional argument \verb+update_fn+, a callback function taking as arguments the iteration number and the log-likelihood. This callback function can be used to track the progress of the model calculation (which uses a Newton-Raphson iteration to maximize the log-likelihood function of the logistic regression model):
+The function \verb+train+ has two optional arguments: \verb+update_fn+ and \verb+typecode+. The \verb+update_fn+ can be used to specify a callback function, taking as arguments the iteration number and the log-likelihood. With the callback function, we can for example track the progress of the model calculation (which uses a Newton-Raphson iteration to maximize the log-likelihood function of the logistic regression model):
 
 \begin{verbatim}
 >>> def show_progress(iteration, loglikelihood):
@@ -197,7 +196,7 @@ Iteration: 41 Log-likelihood function: -2.98413867259
 
 The iteration stops once the increase in the log-likelihood function is less than 0.01. If no convergence is reached after 500 iterations, the \verb+train+ function returns with an \verb+AssertionError+.
 
-{\bf The function \verb+train+ has another keyword \verb+typecode+. I don't know its usage.}
+The optional keyword \verb+typecode+ can almost always be ignored. This keyword allows the user to choose the type of Numeric matrix to use. In particular, to avoid memory problems for very large problems, it may be necessary to use single-precision floats (Float8, Float16, etc.) rather than double, which is used by default.
 
 \section{Using the logistic regression model for classification}
 
@@ -239,7 +238,7 @@ and for {\it yxiB}, {\it yxiA}
 class OP: probability = 0.000321211251817 class NOP: probability = 0.999678788748
 \end{verbatim}
 
-To get some idea of the prediction accuracy of the logistic regression model, we can apply them to the training data:
+To get some idea of the prediction accuracy of the logistic regression model, we can apply it to the training data:
 \begin{verbatim}
 >>> for i in range(len(ys)):
         print "True:", ys[i], "Predicted:", LogisticRegression.classify(model, xs[i])

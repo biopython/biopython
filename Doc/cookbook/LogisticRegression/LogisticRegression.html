@@ -36,7 +36,7 @@
 
 <H2><A NAME="htoc1">1</A>&nbsp;&nbsp;Background and Purpose</H2><!--SEC END -->
 
-Logistic regression is a supervised learning approach that attempts to distinguish <I>K</I> classes from each other using a weighted sum of some predictor variables <I>x</I><SUB><FONT SIZE=2><I>i</I></FONT></SUB>. The logistic regression model is used to calculate the weights <FONT FACE=symbol>b</FONT><SUB><FONT SIZE=2><I>i</I></FONT></SUB> of the predictor variables.<BR>
+Logistic regression is a supervised learning approach that attempts to distinguish <I>K</I> classes from each other using a weighted sum of some predictor variables <I>x</I><SUB><FONT SIZE=2><I>i</I></FONT></SUB>. The logistic regression model is used to calculate the weights <FONT FACE=symbol>b</FONT><SUB><FONT SIZE=2><I>i</I></FONT></SUB> of the predictor variables. In Biopython, the logistic regression model is currently implemented for two classes only (<I>K</I> = 2); the number of predictor variables has no predefined limit.<BR>
 <BR>
 As an example, let's try to predict the operon structure in bacteria. An operon is a set of adjacent genes on the same strand of DNA that are transcribed into a single mRNA molecule. Translation of the single mRNA molecule then yields the individual proteins. For <I>Bacillus subtilis</I>, whose data we will be using, the average number of genes in an operon is about 2.4.<BR>
 <BR>
@@ -58,8 +58,6 @@ The logistic regression model gives us appropriate values for the parameters <FO
 OP: Adjacent genes, on the same strand of DNA, known to belong to the same operon;
 <LI>NOP: Adjacent genes, on the same strand of DNA, known to belong to different operons.
 </UL>
-The logistic regression model implemented in Biopython can currently handle two classes only; the number of predictor variables has no predefined limit. In general, the logistic regression model can also be used to distinguish more than two classes.<BR>
-<BR>
 In the logistic regression model, the probability of belonging to a class depends on the score via the logistic function. For the two classes OP and NOP, we can write this as
 <DIV ALIGN=center><TABLE CELLSPACING=0 CELLPADDING=0>
 <TR VALIGN=middle><TD NOWRAP>
@@ -279,7 +277,7 @@ Here, <CODE>xs</CODE> and <CODE>ys</CODE> are the training data: <CODE>xs</CODE>
 Note that <FONT FACE=symbol>b</FONT><SUB><FONT SIZE=2>1</FONT></SUB> is negative, as gene pairs with a shorter intergene distance have a higher probability of belonging to the same operon (class OP). On the other hand, <FONT FACE=symbol>b</FONT><SUB><FONT SIZE=2>2</FONT></SUB> is positive, as gene pairs belonging to the same operon typically have a higher similarity score of their gene expression profiles.
 The parameter <FONT FACE=symbol>b</FONT><SUB><FONT SIZE=2>0</FONT></SUB> is positive due to the higher prevalence of operon gene pairs than non-operon gene pairs in the training data.<BR>
 <BR>
-The function <CODE>train</CODE> has an optional argument <CODE>update_fn</CODE>, a callback function taking as arguments the iteration number and the log-likelihood. This callback function can be used to track the progress of the model calculation (which uses a Newton-Raphson iteration to maximize the log-likelihood function of the logistic regression model):
+The function <CODE>train</CODE> has two optional arguments: <CODE>update_fn</CODE> and <CODE>typecode</CODE>. The <CODE>update_fn</CODE> can be used to specify a callback function, taking as arguments the iteration number and the log-likelihood. With the callback function, we can for example track the progress of the model calculation (which uses a Newton-Raphson iteration to maximize the log-likelihood function of the logistic regression model):
 <PRE>
 &gt;&gt;&gt; def show_progress(iteration, loglikelihood):
         print "Iteration:", iteration, "Log-likelihood function:", loglikelihood
@@ -330,7 +328,7 @@ Iteration: 41 Log-likelihood function: -2.98413867259
 </PRE>
 The iteration stops once the increase in the log-likelihood function is less than 0.01. If no convergence is reached after 500 iterations, the <CODE>train</CODE> function returns with an <CODE>AssertionError</CODE>.<BR>
 <BR>
-<B>The function </B><CODE><B>train</B></CODE><B> has another keyword </B><CODE><B>typecode</B></CODE><B>. I don't know its usage.</B><BR>
+The optional keyword <CODE>typecode</CODE> can almost always be ignored. This keyword allows the user to choose the type of Numeric matrix to use. In particular, to avoid memory problems for very large problems, it may be necessary to use single-precision floats (Float8, Float16, etc.) rather than double, which is used by default.<BR>
 <BR>
 <!--TOC section Using the logistic regression model for classification-->
 
@@ -376,7 +374,7 @@ class OP: probability = 0.993242163503 class NOP: probability = 0.00675783649744
 &gt;&gt;&gt; print "class OP: probability =", p, "class NOP: probability =", q
 class OP: probability = 0.000321211251817 class NOP: probability = 0.999678788748
 </PRE>
-To get some idea of the prediction accuracy of the logistic regression model, we can apply them to the training data:
+To get some idea of the prediction accuracy of the logistic regression model, we can apply it to the training data:
 <PRE>
 &gt;&gt;&gt; for i in range(len(ys)):
         print "True:", ys[i], "Predicted:", LogisticRegression.classify(model, xs[i])

@@ -29,7 +29,9 @@ Table of Contents
   Logistic regression is a supervised learning approach that attempts to
 distinguish K classes from each other using a weighted sum of some
 predictor variables x_i. The logistic regression model is used to
-calculate the weights beta_i of the predictor variables.
+calculate the weights beta_i of the predictor variables. In Biopython,
+the logistic regression model is currently implemented for two classes
+only (K = 2); the number of predictor variables has no predefined limit.
   As an example, let's try to predict the operon structure in bacteria.
 An operon is a set of adjacent genes on the same strand of DNA that are
 transcribed into a single mRNA molecule. Translation of the single mRNA
@@ -74,10 +76,7 @@ parameters beta_0, beta_1, beta_2 using two sets of example genes:
    same operon; 
  - NOP: Adjacent genes, on the same strand of DNA, known to belong to
    different operons. 
-   The logistic regression model implemented in Biopython can currently
-handle two classes only; the number of predictor variables has no
-predefined limit. In general, the logistic regression model can also be
-used to distinguish more than two classes.
+  
   In the logistic regression model, the probability of belonging to a
 class depends on the score via the logistic function. For the two
 classes OP and NOP, we can write this as 
@@ -227,11 +226,12 @@ belonging to the same operon typically have a higher similarity score of
 their gene expression profiles. The parameter beta_0 is positive due to
 the higher prevalence of operon gene pairs than non-operon gene pairs in
 the training data.
-  The function `train' has an optional argument `update_fn', a callback
-function taking as arguments the iteration number and the
-log-likelihood. This callback function can be used to track the progress
-of the model calculation (which uses a Newton-Raphson iteration to
-maximize the log-likelihood function of the logistic regression model):
+  The function `train' has two optional arguments: `update_fn' and
+`typecode'. The `update_fn' can be used to specify a callback function,
+taking as arguments the iteration number and the log-likelihood. With
+the callback function, we can for example track the progress of the
+model calculation (which uses a Newton-Raphson iteration to maximize the
+log-likelihood function of the logistic regression model):
 <<
   >>> def show_progress(iteration, loglikelihood):
           print "Iteration:", iteration, "Log-likelihood function:",
@@ -285,8 +285,11 @@ loglikelihood
   The iteration stops once the increase in the log-likelihood function
 is less than 0.01. If no convergence is reached after 500 iterations,
 the `train' function returns with an `AssertionError'.
-  The function `train' has another keyword `typecode'. I don't know its
-usage.
+  The optional keyword `typecode' can almost always be ignored. This
+keyword allows the user to choose the type of Numeric matrix to use. In
+particular, to avoid memory problems for very large problems, it may be
+necessary to use single-precision floats (Float8, Float16, etc.) rather
+than double, which is used by default.
   
 
 3  Using the logistic regression model for classification
@@ -344,7 +347,7 @@ the `calculate' function to obtain the probabilities (equations (2) and
 >>
   
   To get some idea of the prediction accuracy of the logistic regression
-model, we can apply them to the training data: 
+model, we can apply it to the training data: 
 <<
   >>> for i in range(len(ys)):
           print "True:", ys[i], "Predicted:",
