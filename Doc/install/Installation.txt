@@ -798,12 +798,12 @@ keep you going:
          >>
  
   Then you should be able to install everything happily.
- Yes, it's a bit of mess installing lots of packages in non-standard
-   locations. The best solution is to talk with your friendly system
-   administrator and get them to assist with the installation of at
-   least the required packages (they are generally quite useful for any
-   python install) before going ahead with Biopython installation.
   
+  Yes, it's a bit of a mess installing lots of packages in non-standard
+locations. The best solution is to talk with your friendly system
+administrator and get them to assist with the installation of at least
+the required packages (they are generally quite useful for any python
+install) before going ahead with Biopython installation.
 -----------------------------------------------------------------------
   
    
