@@ -139,7 +139,8 @@ class Vector:
     def __init__(self, x, y=None, z=None):
         if y is None and z is None:
             # Array, list, tuple...
-            assert(len(x)==3)
+            if len(x)!=3:
+                raise "Vector: x is not a list/tuple/array of 3 numbers"
             self._ar=array(x, 'd')
         else:
             # Three numbers
