@@ -49,6 +49,36 @@ class Polypeptide(list):
             ca_list.append(ca)
         return ca_list
 
+    def get_tau_list(self):
+        """
+        Return list of tau torsions angles for all 4 consecutive
+        Calpha atoms.
+        """
+        ca_list=self.get_ca_list()
+        tau_list=[]
+        for i in range(0, len(ca_list)-3):
+            atom_list=[ca_list[i], ca_list[i+1], ca_list[i+2], ca_list[i+3]]
+            vector_list=map(lambda a: a.get_vector(), atom_list)
+            v1, v2, v3, v4=vector_list
+            tau=calc_dihedral(v1, v2, v3, v4)
+            tau_list.append(tau)
+        return tau_list
+
+    def get_omega_list(self):
+        """
+        Return list of omega angles for all 3 consecutive
+        Calpha atoms.
+        """
+        omega_list=[]
+        ca_list=self.get_ca_list()
+        for i in range(0, len(ca_list)-2):
+            atom_list=[ca_list[i], ca_list[i+1], ca_list[i+2]]
+            vector_list=map(lambda a: a.get_vector(), atom_list)
+            v1, v2, v3=vector_list
+            omage=calc_angle(v1, v2, v3)
+            omega_list.append(omega)
+        return omega_list
+
     def get_sequence(self):
         """
         Return the AA sequence.
