@@ -15,13 +15,6 @@ RegisterableObject   Base class for objects in the Registry.
 RegisterableGroup    Base class for groups of objects in the Registry.
 
 """
-import re
-
-import _support
-
-_legal_abbrev = re.compile(r"[a-zA-Z][a-zA-Z0-9_]*$")
-check_abbrev = _legal_abbrev.match
-
 class Registry:
     """This is a dictionary-like object for storing and retrieving
     objects in a registry.
@@ -60,6 +53,7 @@ class Registry:
     def _load(self, path):
         if path is None:
             return
+        import _support
         # Get a list of all the modules in that path.
         modulenames = _support.find_submodules(path)
         modulenames = filter(lambda x: not x.startswith("_"), modulenames)
@@ -77,7 +71,7 @@ class Registry:
                 self.register(obj)
 
     def register(self, obj):
-        """S.register(self, obj)
+        """S.register(obj)
 
         Add an object to the registry.  obj must be a
         RegisterableObject object.
@@ -127,16 +121,19 @@ class RegisterableObject:
     Members:
     name                The name of the object.
     abbrev              An abbreviation for the name
-    doc                 Documentation describing the object.
 
     """
     def __init__(self, name, abbrev, doc):
         """RegisterableObject(name, abbrev, doc)"""
+        import re
+        
         self.name = name
         self.abbrev = abbrev or name
+        _legal_abbrev = re.compile(r"[a-zA-Z][a-zA-Z0-9_]*$")
+        check_abbrev = _legal_abbrev.match
         if not check_abbrev(self.abbrev):
             raise ValueError, "abbrev name of %r is not allowed" % self.abbrev
-        self.doc = doc
+        self.__doc__ = doc
 
         
 class RegisterableGroup(RegisterableObject):

@@ -21,18 +21,7 @@ FormatGroup      Describes a group of Biopython file formats.
 # _load_expression        Load a Martel expression.
 # _load_object            Load a Python object.
 
-import string
-import weakref
-try:
-    from cStringIO import StringIO
-except ImportError:
-    from StringIO import StringIO
-import operator
-
-from Bio import StdHandler
 from Bio.config.Registry import *
-import Martel
-from Martel import Parser
 
 import _support
 
@@ -145,6 +134,7 @@ class FormatObject(RegisterableObject):
         be used to parse multiple records.  By default, it is 1.
 
         """
+        import operator
         RegisterableObject.__init__(self, name, abbrev, doc)
         self.expression = _normalize_expression(expression)
         self.filter = _normalize_expression(filter) or self.expression
@@ -182,6 +172,7 @@ class FormatObject(RegisterableObject):
             key = None, debug_level
 
         if not self._parser_cache.has_key(key):
+            import Martel
             exp = self.expression
             if select_names is not None:
                 exp = Martel.select_names(exp, select_names)
@@ -199,6 +190,7 @@ class FormatObject(RegisterableObject):
             key = None, debug_level
 
         if not self._iterator_cache.has_key(key):
+            import Martel
             exp = self.expression
             if select_names is not None:
                 exp = Martel.select_names(exp, select_names)
@@ -250,6 +242,7 @@ class FormatGroup(RegisterableGroup):
 
     def identifyString(self, s, debug_level=0):
         """S.identifyString(s[, debug_level]) -> FormatObject or None"""
+        from StringIO import StringIO
         return self.identifyFile(StringIO(s), debug_level)
 
     def identify(self, source, debug_level=0):
@@ -259,12 +252,16 @@ class FormatGroup(RegisterableGroup):
         return self.identifyFile(f, debug_level)
 
     def add(self, obj, *args, **keywds):
+        import weakref
         RegisterableGroup.add(self, obj, *args, **keywds)
         obj._parents.append(weakref.proxy(self))
         
 
 def _parses_file(expression, infile, debug_level):
     # Return a boolean indicating whether expression can parse infile.
+    from Bio import StdHandler
+    from Martel import Parser
+    
     parser = expression.make_parser(debug_level)
     handler = StdHandler.RecognizeHandler()
     parser.setErrorHandler(handler)
@@ -280,6 +277,7 @@ def _parses_file(expression, infile, debug_level):
     return handler.recognized
  
 def _parses_string(expression, s, debug_level):
+    from StringIO import StringIO
     return _parses_string(expression, StringIO(s), debug_level)
 
 def _normalize_expression(expression_or_path):
@@ -308,7 +306,7 @@ def _load_expression(path):
     raise TypeError(msg)
 
 def _load_object(path):
-    terms = string.split(path, ".")
+    terms = path.split(".")
     s = terms[0]
     # Import all the needed modules
     # (Don't know which are modules and which are classes, so simply

@@ -22,22 +22,7 @@ BioCorbaDB     Accesses a BioCorba database.
 IndexedFileDB  Accesses a Mindy Indexed file.
 
 """
-import operator
-import urllib
-try:
-    from cStringIO import StringIO
-except ImportError:
-    from StringIO import StringIO
-import time
-
-from Martel import Parser
-
-from Bio import StdHandler
-from Bio.ReseekFile import ReseekFile
-from Bio.MultiProc.copen import copen_fn
 from Bio.config.Registry import *
-from Bio import FormatIO
-import _support
 
 class DBRegistry(Registry):
     """This implements a dictionary-like interface to databases.
@@ -71,6 +56,7 @@ class DBObject(RegisterableObject):
     """
     def __init__(self, name, abbrev=None, doc=None, delay=None, timeout=None):
         """DBObject(name[, abbrev][, doc][, delay][, timeout])"""
+        import _support
         abbrev = _clean_abbrev(abbrev or name)
         RegisterableObject.__init__(self, name, abbrev, doc)
         if delay is not None:
@@ -139,8 +125,9 @@ class DBGroup(RegisterableGroup):
     """Groups DBObjects that return the same kind of data.
 
     """
-    def __init__(self, name, abbrev=None, behavior="serial", cache=None):
-        """DBGroup(name[, abbrev][, behavior])
+    def __init__(self, name, abbrev=None, doc=None,
+                 behavior="serial", cache=None):
+        """DBGroup(name[, abbrev][, behavior][, doc])
 
         name is the name of the object, and abbrev is an abbreviation
         for the name.
@@ -152,7 +139,7 @@ class DBGroup(RegisterableGroup):
 
         """
         abbrev = _clean_abbrev(abbrev or name)
-        RegisterableGroup.__init__(self, name, abbrev, None)
+        RegisterableGroup.__init__(self, name, abbrev, doc)
         if behavior not in ['concurrent', 'serial']:
             raise ValueError, "behavior must be 'concurrent' or 'serial'"
         self.behavior = behavior
@@ -178,6 +165,9 @@ class DBGroup(RegisterableGroup):
         return self._last_object_used._convert_to(data, to_io)
 
     def _run_concurrent(self, key):
+        import time
+        from Bio.MultiProc.copen import copen_fn
+        
         def get_pickleable(obj, key):
             return obj._make_pickleable(obj[key])
         def unpickleable(obj, data):
@@ -257,6 +247,7 @@ class CGIDB(DBObject):
         script.
 
         """
+        import _support
         DBObject.__init__(self, name=name, abbrev=abbrev,
                           doc=doc, delay=delay, timeout=timeout)
         self.cgi = cgi
@@ -278,6 +269,7 @@ class CGIDB(DBObject):
         return handle
 
     def _cgiopen(self, key):
+        import urllib
         params = self._normalize_params(key)
         options = _my_urlencode(params)
         if self.getmethod:
@@ -290,6 +282,10 @@ class CGIDB(DBObject):
         return handle
     
     def _check_for_errors(self, handle):
+        from Martel import Parser
+        from Bio import StdHandler
+        from Bio.ReseekFile import ReseekFile
+        
         if not self.failure_cases:
             return handle
         handle = ReseekFile(handle)
@@ -310,6 +306,7 @@ class CGIDB(DBObject):
         return handle
 
     def _convert_to(self, handle, to_io):
+        from Bio import FormatIO
         x = to_io.read(handle)
         if isinstance(x, FormatIO.FormatIOIterator):
             i = 0
@@ -325,6 +322,7 @@ class CGIDB(DBObject):
         return handle.read()
 
     def _unmake_pickleable(self, obj):
+        import StringIO
         return StringIO(obj)
 
 class BioSQLDB(DBObject):
@@ -522,6 +520,8 @@ class IndexedFileDB(DBObject):
         """
         # XXX jchang: how does this namespace/key stuff work?  can we
         # get rid of namespace?
+        import operator
+        import StringIO
         if not operator.isSequenceType(key) or len(key) != 2:
             raise ValueError, "Key should be tuple of (namespace, key)"
         namespace, key = key
@@ -534,6 +534,7 @@ class IndexedFileDB(DBObject):
         return StringIO(location[0].text)
 
     def _convert_to(self, handle, to_io):
+        from Bio import FormatIO
         x = to_io.read(handle)
         if isinstance(x, FormatIO.FormatIOIterator):
             i = 0
@@ -553,6 +554,9 @@ def _my_urlencode(params):
 
     # params could be a dictionary of key->value or a list of
     # (key,value) pairs.  If it's a dictionary, convert it to a list.
+    import operator
+    import urllib
+    
     if operator.isMappingType(params):
         params = params.items()
 
