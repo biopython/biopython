@@ -1619,12 +1619,16 @@ def _safe_int(str):
     return long(float(str))
 
 def _safe_float(str):
+    # Thomas Rosleff Soerensen (rosleff@mpiz-koeln.mpg.de) noted that
+    # float('e-172') does not produce an error on his platform.  Thus,
+    # we need to check the string for this condition.
+    
+    # Sometimes BLAST leaves of the '1' in front of an exponent.
+    if str[0] in ['E', 'e']:
+        str = '1' + str
     try:
         return float(str)
     except ValueError:
-        # Sometimes BLAST leaves of the '1' in front of an exponent.
-        if str[0] in ['E', 'e']:
-            str = '1' + str
         # Remove all commas from the string
         str = string.replace(str, ',', '')
     # try again.
