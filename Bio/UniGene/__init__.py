@@ -181,7 +181,9 @@ class UniGeneParser( sgmllib.SGMLParser ):
             for subitem in item:
                 self.print_item( subitem, level + 1 )
         elif( isinstance( item, UserDict.UserDict ) ):
-            for subitem in item.keys():
+            keys = item.keys()
+            keys.sort()
+            for subitem in keys:
                 print '%skey is %s' % ( indent, subitem )
                 self.print_item( item[ subitem ], level + 1 )
         else:
