@@ -1,7 +1,7 @@
 """Martel based parser to read GenBank formatted files.
 
 This is a huge regular regular expression for GenBank, built using
-the 'regular expressiona on steroids' capabilities of Martel.
+the 'regular expressions on steroids' capabilities of Martel.
 
 Notes:
 Just so I remember -- the new end of line syntax is:
@@ -269,7 +269,8 @@ reference_line = Martel.Group("reference_line",
                               Martel.AnyEol())
 
 authors_block = define_block("  AUTHORS", "authors_block", "authors")
-title_block = define_block("  TITLE", "title_block", "title")
+consrtm_block = define_block("  CONSRTM", "consrtm_block", "consrtm")
+title_block   = define_block("  TITLE",   "title_block",   "title")
 journal_block = define_block("  JOURNAL", "journal_block", "journal")
 
 #  MEDLINE   92119220
@@ -291,6 +292,7 @@ remark_block = define_block("  REMARK", "remark_block", "remark")
 reference = Martel.Group("reference",
                          reference_line +
                          authors_block +
+                         Martel.Opt(consrtm_block) +
                          Martel.Opt(title_block) +
                          journal_block +
                          Martel.Opt(medline_line) +
@@ -376,6 +378,7 @@ feature_key_names = (
     "scRNA",            # Small cytoplasmic RNA
     "SecStr",           # RefSeq invention -- I have no idea what it means
     "sig_peptide",      # Signal peptide coding region
+    "Site-ref",
     "Site",             # RefSeq invention for a protein site
     "snRNA",            # Small nuclear RNA
     "source",           # Biological source of the sequence data
@@ -650,10 +653,8 @@ qualifier_value = Martel.Group(
     Martel.ToEol() +
     Martel.Rep(qualifier_space +
                ((Martel.AnyBut("/") + Martel.ToEol()) |
-                (Martel.Str("/") + Martel.Opt(blank_space) + Martel.Re("[\w\-\,]+") +
-                 blank_space + Martel.ToEol()) |
-                (Martel.Str("/") + Martel.Re("[\w\-\,\/]+\"\n"))
-                )))
+                (Martel.Str("/") + Martel.Rep(Martel.AnyBut("\""))
+                 + Martel.Str("\"\n")))))
 
 qualifier = Martel.Group("qualifier",
                          qualifier_key +
@@ -685,7 +686,7 @@ sequence = Std.sequence(Martel.Group("sequence",
                         Martel.Re("[\w]+")))
 sequence_plus_spaces = Martel.Group("sequence_plus_spaces",
                                     Martel.Rep1(Martel.Str(" ") +
-                                        Martel.Opt(sequence)) + 
+                                    Martel.Opt(sequence)) + 
                                     Martel.Opt(Martel.Str(" ")))
 sequence_line = Martel.Group("sequence_line",
                              blank_space +

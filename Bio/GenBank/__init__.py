@@ -8,7 +8,7 @@
 Classes:
 Iterator              Iterate through a file of GenBank entries
 Dictionary            Access a GenBank file using a dictionary interface.
-ErrorFeatureParser    Catch errors caused during parsing.
+ErrorFeatreParser     Catch errors caused during parsing.
 FeatureParser         Parse GenBank data in Seq and SeqFeature objects.
 RecordParser          Parse GenBank data into a Record object.
 NCBIDictionary        Access GenBank using a dictionary interface.
@@ -149,25 +149,16 @@ class Iterator:
         o handle - A handle with GenBank entries to iterate through.
         o parser - An optional parser to pass the entries through before
         returning them. If None, then the raw entry will be returned.
-        o has_header - Whether or not the file to iterate over has one of
-        those GenBank headers (ie. if you downloaded it directly from
-        GenBank). If so, we'll iterate over the header to get past it, and
-        then the iterator will be set up to return the first record in
-        the file.
+        o has_header - Deprecated, headers are now autodetected.
         """
         if isinstance(handle, File.UndoHandle):
             _handle = handle
         else:
             _handle = File.UndoHandle(handle)
-            
-        if has_header:
-            first_line = _handle.readline()
-            assert first_line.find("Genetic Sequence Data Bank") >= 0, \
-                   "Doesn't seem to have a GenBank header."
-            # skip ahead until we find first record
-            while _handle.peekline().find("LOCUS") < 0:
-                _handle.readline()
-            
+        # skip ahead until we find first record
+        while _handle.peekline().find("LOCUS") < 0:
+            _handle.readline()
+
         self._reader = RecordReader.StartsWith(_handle, "LOCUS")          
         self._parser = parser
 
@@ -578,6 +569,9 @@ class _FeatureConsumer(_BaseGenBankConsumer):
 
     def authors(self, content):
         self._current_ref.authors = content
+
+    def consrtm(self, content):
+        self._current_ref.consrtm = content
 
     def title(self, content):
         self._current_ref.title = content
@@ -1073,6 +1067,9 @@ class _RecordConsumer(_BaseGenBankConsumer):
     def authors(self, content):
         self._cur_reference.authors = content
 
+    def consrtm(self, content):
+        self._cur_reference.consrtm = content
+
     def title(self, content):
         self._cur_reference.title = content
 
@@ -1221,7 +1218,7 @@ class _Scanner:
                               "gi", "keywords", "segment",
                               "source", "organism",
                               "taxonomy", "reference_num",
-                              "reference_bases", "authors", "title",
+                              "reference_bases", "authors", "consrtm", "title",
                               "journal", "medline_id", "pubmed_id",
                               "remark", "comment",
                               "features_line", "feature_key",

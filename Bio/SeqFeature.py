@@ -130,6 +130,7 @@ class Reference:
     def __init__(self):
         self.location = []
         self.authors = ''
+        self.consrtm = ''
         self.title = ''
         self.journal = ''
         self.medline_id = ''
@@ -143,6 +144,7 @@ class Reference:
         for single_location in self.location:
             out += "location: %s\n" % single_location
         out += "authors: %s\n" % self.authors
+        out += "consrtm: %s\n" % self.consrtm
         out += "title: %s\n" % self.title
         out += "journal: %s\n" % self.journal
         out += "medline id: %s\n" % self.medline_id

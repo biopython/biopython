@@ -591,4 +591,4 @@ def dump():
     test_list.dump()
 
 if __name__ == "__main__":
-    tests([])
+    test_list.test()

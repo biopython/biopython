@@ -227,7 +227,7 @@ class Record:
         # treat circular types differently, since they'll have long residue
         # types
         if self.residue_type.find("circular") >= 0:
-            output += "%17s" % self.residue_type
+             output += "%17s" % self.residue_type
         # second case: ss-DNA types of records
         elif self.residue_type.find("-") >= 0:
             output += "%7s" % self.residue_type
@@ -453,6 +453,7 @@ class Reference:
     o number - The number of the reference in the listing of references.
     o bases - The bases in the sequence the reference refers to.
     o authors - String with all of the authors.
+    o consrtm - Consortium the authors belong to. 
     o title - The title of the reference.
     o journal - Information about the journal where the reference appeared.
     o medline_id - The medline id for the reference.
@@ -463,6 +464,7 @@ class Reference:
         self.number = ''
         self.bases = ''
         self.authors = ''
+        self.consrtm = ''
         self.title = ''
         self.journal = ''
         self.medline_id = ''
@@ -472,6 +474,7 @@ class Reference:
     def __str__(self):
         output = self._reference_line()
         output += self._authors_line()
+        output += self._consrtm_line()
         output += self._title_line()
         output += self._journal_line()
         output += self._medline_line()
@@ -485,11 +488,12 @@ class Reference:
         """
         output = Record.BASE_FORMAT % "REFERENCE"
         if self.number:
-            output += "%s" % self.number
-        if self.number and self.bases:
-            output += "  "
-        if self.bases:
-            output += "%s" % self.bases
+            if self.bases:
+                output += "%-3s" % self.number
+                output += "%s" % self.bases
+            else:
+                output += "%s" % self.number
+
         output += "\n"
         return output
 
@@ -500,6 +504,15 @@ class Reference:
         if self.authors:
             output += Record.INTERNAL_FORMAT % "AUTHORS"
             output += _wrapped_genbank(self.authors, Record.GB_BASE_INDENT)
+        return output
+
+    def _consrtm_line(self):
+        """Output for CONSRTM information.
+        """
+        output = ""
+        if self.consrtm:
+            output += Record.INTERNAL_FORMAT % "CONSRTM"
+            output += _wrapped_genbank(self.consrtm, Record.GB_BASE_INDENT)
         return output
 
     def _title_line(self):
@@ -582,7 +595,7 @@ class Qualifier:
     """Hold information about a qualifier in a GenBank feature.
 
     Attributes:
-    o key - The key name of the qualifier (ie. /organim=)
+    o key - The key name of the qualifier (ie. /organism=)
     o value - The value of the qualifier ("Dictyostelium discoideum").
     """
     def __init__(self):
