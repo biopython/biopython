@@ -6,13 +6,14 @@
 """This provides useful general functions for working with strings.
 
 Functions:
-split        Split a string using many delimiters.
-starts_with  Check whether a string starts with another string.
+splitany       Split a string using many delimiters.
+find_anychar   Find one of a list of characters in a string.
+rfind_anychar  Find one of a list of characters in a string, from end to start.
+starts_with    Check whether a string starts with another string.
 
 """
-
-def split(s, sep=" \011\012\013\014\015", maxsplit=None, negate=0):
-    """split(s [,sep [,maxsplit [,negate]]]) -> list of strings
+def splitany(s, sep=" \011\012\013\014\015", maxsplit=None, negate=0):
+    """splitany(s [,sep [,maxsplit [,negate]]]) -> list of strings
 
     Split a string.  Similar to string.split, except that this considers
     any one of the characters in sep to be a delimiter.  If negate is
@@ -30,6 +31,42 @@ def split(s, sep=" \011\012\013\014\015", maxsplit=None, negate=0):
     strlist.append(s[prev:])
     return strlist
 
+def find_anychar(string, chars, index=None):
+    """find_anychar(string, chars[, index]) -> index of a character or -1
+
+    Find a character in string.  chars is a list of characters to look
+    for.  Return the index of the first occurrence of any of the
+    characters, or -1 if not found.  index is the index where the
+    search should start.  By default, I search from the beginning of
+    the string.
+    
+    """
+    if index is None:
+        index = 0
+    while index < len(string) and string[index] not in chars:
+        index += 1
+    if index == len(string):
+        return -1
+    return index
+
+def rfind_anychar(string, chars, index=None):
+    """rfind_anychar(string, chars[, index]) -> index of a character or -1
+
+    Find a character in string, looking from the end to the start.
+    chars is a list of characters to look for.  Return the index of
+    the first occurrence of any of the characters, or -1 if not found.
+    index is the index where the search should start.  By default, I
+    search from the end of the string.
+    
+    """
+    if index is None:
+        index = len(string)-1
+    while index >= 0 and string[index] not in chars:
+        index -= 1
+    # If not found, index will already be -1.
+    return index
+
+# XXX should deprecate.  Python 2.0 and above has ''.startswith function.
 def starts_with(s, start):
     """starts_with(s, start) -> 1/0
 

@@ -13,8 +13,8 @@
 
 /* Functions in this module. */
 
-static char cstringfns_split__doc__[] = 
-"split(str [,sep [,maxsplit [,negate]]]) -> list of strings\n\
+static char cstringfns_splitany__doc__[] = 
+"splitany(str [,sep [,maxsplit [,negate]]]) -> list of strings\n\
 \n\
 Split a string.  Similar to string.split, except that this considers\n\
 any one of the characters in sep to be a delimiter.  If negate is\n\
@@ -22,15 +22,15 @@ true, then everything but sep will be a separator.\n\
 \n\
 ";
 
-static PyObject *cstringfns_split(
+static PyObject *cstringfns_splitany(
      PyObject *self, PyObject *args, PyObject *keywds)
 {
     int i, prev;
     int nsplit, maxsplit=0;
-    int negate=0;
+    /*int negate=0;*/
     PyObject *py_negate=NULL;
     PyObject *strlist, *newstr;
-    char *str, 
+    unsigned char *str, 
 	*sep=" \011\012\013\014\015";  /* whitespace */
     char tosplit[256];
     static char *kwlist[] = {"str", "sep", "maxsplit", "negate", NULL};
@@ -40,13 +40,18 @@ static PyObject *cstringfns_split(
 	return NULL;
     if(maxsplit < 0)
 	maxsplit = 1;
-    negate = (py_negate && PyObject_IsTrue(py_negate));
+    /* negate = (py_negate && PyObject_IsTrue(py_negate));*/
+    /* XXX NO MORE NEGATE */
 
     /* Set the tosplit array to 1 for characters to split on. */
     memset(tosplit, 0, 256);
     while(*sep) {
 	tosplit[(unsigned char)*sep++] = 1;
 	}
+    if(py_negate && PyObject_IsTrue(py_negate)) {
+	for(i=0; i<256; i++)
+	    tosplit[i] = !tosplit[i];
+    }
 
     /* Create a new list to store the variables. */
     if(!(strlist = PyList_New(0))) {
@@ -57,7 +62,9 @@ static PyObject *cstringfns_split(
     prev = 0;
     nsplit = 0;
     for(i=0; str[i] && (maxsplit == 0 || nsplit < maxsplit); i++) {
-	if(!(tosplit[(int)str[i]] == !negate))
+	/*if(!(tosplit[(int)str[i]] == !negate))
+	  continue; */
+	if(!tosplit[(int)str[i]])
 	    continue;
 
 	/* Split the string here. */
@@ -98,8 +105,8 @@ static PyObject *cstringfns_split(
 /* Module definition stuff */
 
 static PyMethodDef cstringfnsMethods[] = {
-  {"split", (PyCFunction)cstringfns_split, METH_VARARGS|METH_KEYWORDS, 
-   cstringfns_split__doc__},
+  {"splitany", (PyCFunction)cstringfns_splitany, METH_VARARGS|METH_KEYWORDS, 
+   cstringfns_splitany__doc__},
   {NULL, NULL}
 };
 
