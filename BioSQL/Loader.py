@@ -173,10 +173,14 @@ class DatabaseLoader:
             strand = 0
         else:
             strand = feature.strand
+
+        # convert biopython locations to the 1-based location system
+        # used in bioSQL
+        # XXX This could also handle fuzzies
+        start = feature.location.nofuzzy_start + 1
+        end = feature.location.nofuzzy_end 
             
-        self.adaptor.execute_one(sql, (seqfeature_id, 
-            feature.location.nofuzzy_start, feature.location.nofuzzy_end, 
-            strand, rank))
+        self.adaptor.execute_one(sql, (seqfeature_id, start, end, strand, rank))
 
     def _load_seqfeature_qualifiers(self, qualifiers, seqfeature_id):
         """Insert the (key, value) pair qualifiers relating to a feature.

@@ -27,11 +27,12 @@ def open_database(driver = "MySQLdb", *args, **kwargs):
     module = __import__(driver)
     connect = getattr(module, "connect")
     conn = connect(*args, **kwargs)
-    return DBServer(conn)
+    return DBServer(conn, module)
 
 class DBServer:
-    def __init__(self, conn):
+    def __init__(self, conn, module):
         self.conn = conn
+        self.module = module
         self.adaptor = Adaptor(self.conn)
     def __repr__(self):
         return self.__class__.__name__ + "(%r)" % self.conn
