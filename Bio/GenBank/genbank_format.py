@@ -388,6 +388,7 @@ feature_key_names = (
     "primer",           # Primer binding region used with PCR  XXX not in 
                         #   http://www.ncbi.nlm.nih.gov/collab/FT/index.html
     "promoter",         # A region involved in transcription initiation
+    "proprotein",
     "Protein",          # A REFSEQ invention for referring to a protein
     "protein_bind",     # Non-covalent protein binding site on DNA or RNA
     "RBS",              # Ribosome binding site
