@@ -4,6 +4,19 @@ News for the Biopython Project
 This file contains release notes and general news
 about the biopython project.
 
+Mar 3, 2001: Biopython 1.00a1
+  Refactoring of modules.  X/X.py moved to X/__init__.py.
+  Can search sequences for Prosite patterns at ExPASy
+  Can do BLAST searches against stable URL at NCBI
+  Prosite Pattern bug fixes
+  GenBank parser
+  Complete Seq and SeqFeatures framework
+  distutils cleanup
+  compile warning cleanups
+  support for UniGene
+  code for working with substitution matrices
+  Tools.MultiProc package for rudimentary multiprocessing stuff
+
 
 Nov 10, 2000: Biopython 0.90d04
   Added support for multiple alignments, ClustalW
