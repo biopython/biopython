@@ -74,7 +74,7 @@ class Vector:
         return Vector(x,y,z)
 
     def __add__(self, other):
-        "Add a vector or a scalar"
+        "Return Vector+other Vector or scalar"
         if not isinstance(other, Vector):
             x,y,z=self._ar+other
         else:
@@ -82,7 +82,7 @@ class Vector:
         return Vector(x,y,z)
 
     def __sub__(self, other):
-        "Substract a vector or a scalar"
+        "Return Vector-other Vector or scalar"
         if not isinstance(other, Vector):
             x,y,z=self._ar-other
         else:
@@ -90,7 +90,7 @@ class Vector:
         return Vector(x,y,z)
 
     def __mul__(self, other):
-        "Dot or scalar product"
+        "Return Vector . Vector (dot product) or Vector*scalar"
         if not isinstance(other, Vector):
             x,y,z=self._ar*other
             return Vector(x,y,z)
@@ -98,12 +98,12 @@ class Vector:
             return sum(self._ar*other._ar)
 
     def __div__(self, a):
-        "Divide by a scalar"
+        "Return Vector(coords/a)"
         x,y,z=self._ar/a
         return Vector(x,y,z)
 
     def __pow__(self, other):
-        "Cross product"
+        "Return Vector x Vector (cross product)"
         a,b,c=self._ar
         d,e,f=other._ar
         c1=determinant(array(((b,c), (e,f))))
@@ -120,12 +120,12 @@ class Vector:
         return sqrt(sum(self._ar*self._ar))
 
     def normalize(self):
-        "Normalize the vector"
+        "Return normalized Vector"
         x,y,z=self._ar/self.norm()
         return Vector(x,y,z)
 
     def angle(self, other):
-        "Angle between two vectors"
+        "Return angle between two vectors"
         n1=self.norm()
         n2=other.norm()
         c=(self*other)/(n1*n2)
@@ -149,7 +149,7 @@ class Vector:
         return Vector(x,y,z)
 
     def copy(self):
-        "Deep copy"
+        "Return a deep copy of the Vector"
         x,y,z=self._ar
         return Vector(x,y,z)
 
