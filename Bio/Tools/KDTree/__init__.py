@@ -106,10 +106,7 @@ class KDTree:
 
 	This KD implementation also performs a "all fixed radius neighbor search",
 	i.e. it can find all point pairs in a set that are within a certain radius
-	of each other. I suspect that the algorithm is described in:
-
-	Bentley, Stanat & Williams, "The complexity of finding fixed radius near 
-	neighbors", Inf. Proc. Lett., 6, 209-213, 1977
+	of each other. As far as I now the algorithm has not been published.
 	"""
 
 	def __init__(self, dim, bucket_size=1):
