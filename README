@@ -65,6 +65,9 @@ README        This file
 Scripts/      Miscellaneous, possibly useful, standalone scripts
 Tests/        Regression testing code
 
+The regression tests are currently all broken!  We need to develop a
+workable framework for doing this right.
+
 
 
 To Do
@@ -79,11 +82,11 @@ To Do
 - parsers
   o SWISSPROT
     - add parser for Protein class
+    - WWW access
   o SCOP
     - needs to be done
   o Medline
-    - document _Scanner
-    - parser for html-ized version
+    - WWW queries for PubMed
   o Enzyme
     - add parsers, iterator, dictionary, etc.
   o Prosite

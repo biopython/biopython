@@ -1,0 +1,25 @@
+Prosite.txt
+===========
+
+
+
+Prosite
+-------
+
+The Prosite scanner produces the following events:
+copyrights
+    copyright
+record
+    identification
+    accession
+    date
+    description
+    pattern
+    matrix
+    rule
+    numerical_results
+    comment
+    database_reference
+    pdb_reference
+    documentation
+    terminator

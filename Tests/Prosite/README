@@ -1,0 +1,15 @@
+PROSITE TEST DATA FILES
+=======================
+
+This directory contains various data files for testing the
+Prosite-related code in Biopython.
+
+
+
+PROSITE.DAT TEST FILES
+----------------------
+
+ID     Version   SPID                  Comments
+ps001  15        C_TYPE_LECTIN_1       DO line before 3D lines
+ps002  15        ZN2_CY6_FUNGAL_2      CC line within MA lines
+ps003  15        GLU_CARBOXYLATION     INF UPDATE
