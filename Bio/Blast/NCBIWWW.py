@@ -237,7 +237,6 @@ class _Scanner:
         if attempt_read_and_call(uhandle, consumer.noevent, start="<PRE>"):
             read_and_call_while(uhandle, consumer.noevent, blank=1)
         self._scan_blastform(uhandle, consumer)
-            
         
     def _scan_rounds(self, uhandle, consumer):
         self._scan_descriptions(uhandle, consumer)
@@ -304,6 +303,9 @@ class _Scanner:
         #   </form>
         #   <script src="blastResult.js"></script><table border="0"><tr><td><FO
         #   <PRE>
+        # 6) Qblast 2.2.10, database (no 'Database' line)
+        #  <PRE>
+        #  Lambda     K      H
 
         # Get the first two lines and examine them.
         line1 = safe_readline(uhandle)
@@ -315,6 +317,8 @@ class _Scanner:
         if string.find(line1, 'Alignments') >= 0:
             is_pairwise = 1
         elif line2[:10] == '  Database':
+            pass
+        elif line2[:19] == 'Lambda     K      H':
             pass
         elif line2[:9] == 'blast_tmp':
             is_masterslave = 1
@@ -338,7 +342,9 @@ class _Scanner:
             line2 = safe_readline(uhandle)
             uhandle.saveline(line2)
             uhandle.saveline(line1)
-            if line1.find('Database') >= 0 or line2.find("Database") >= 0:
+            # Lambda is for Q-blast results, which do not have a Database line
+            if line1.find('Database') >= 0 or line2.find("Database") >= 0 \
+                or line2.find('Lambda     K      H') >= 0:
                 break
 
             # Occasionally, there's a bug where the alignment_header and
@@ -503,21 +509,28 @@ class _Scanner:
         #    0.270   0.0470    0.230 
         # 
 
+        # qblast (BLASTN 2.2.10) does not give the Database: bits before the Lambda
+        # information, so that needs to be skipped
+
         consumer.start_database_report()
 
         # TBALSTN 2.2.6
         # <PRE>  Database: /tmp/affyA.fasta
         line = uhandle.peekline()
+        # only look for database information if we aren't already at the
+        # Lambda bits
         if line.find("Database") < 0:
             read_and_call(uhandle, consumer.noevent, start='<PRE>')
-        read_and_call(uhandle, consumer.database, contains='  Database')
-        read_and_call_until(uhandle, consumer.database, contains="Posted")
-        read_and_call(uhandle, consumer.posted_date, start='    Posted')
-        read_and_call(uhandle, consumer.num_letters_in_database,
-                      start='  Number of letters')
-        read_and_call(uhandle, consumer.num_sequences_in_database,
-                      start='  Number of sequences')
-        read_and_call(uhandle, consumer.noevent, start='  ')
+        line2 = uhandle.peekline()
+        if line2.find("Lambda     K      H") < 0:
+            read_and_call(uhandle, consumer.database, contains='  Database')
+            read_and_call_until(uhandle, consumer.database, contains="Posted")
+            read_and_call(uhandle, consumer.posted_date, start='    Posted')
+            read_and_call(uhandle, consumer.num_letters_in_database,
+                          start='  Number of letters')
+            read_and_call(uhandle, consumer.num_sequences_in_database,
+                          start='  Number of sequences')
+            read_and_call(uhandle, consumer.noevent, start='  ')
 
         read_and_call(uhandle, consumer.noevent, start='Lambda')
         read_and_call(uhandle, consumer.ka_params)
@@ -561,13 +574,23 @@ class _Scanner:
 
         consumer.start_parameters()
 
-        read_and_call(uhandle, consumer.matrix, start='Matrix')
+        # qblast doesn't have Matrix line
+        attempt_read_and_call(uhandle, consumer.matrix, start='Matrix')
         # not TBLASTX
         attempt_read_and_call(uhandle, consumer.gap_penalties, start='Gap')
-        read_and_call(uhandle, consumer.num_hits,
-                      start='Number of Hits')
-        read_and_call(uhandle, consumer.num_sequences,
-                      start='Number of Sequences')
+        
+        # in qblast the Number of Hits and Number of Sequences lines are
+        # reversed
+        if attempt_read_and_call(uhandle, consumer.num_hits,
+                start='Number of Hits'):
+            read_and_call(uhandle, consumer.num_sequences,
+                          start='Number of Sequences')
+        else:
+            read_and_call(uhandle, consumer.num_sequences,
+                          start='Number of Sequences')
+            read_and_call(uhandle, consumer.num_hits,
+                          start='Number of Hits')
+
         read_and_call(uhandle, consumer.num_extends,
                       start='Number of extensions')
         read_and_call(uhandle, consumer.num_good_extends,
@@ -579,32 +602,56 @@ class _Scanner:
         # not BLASTN, TBLASTX
         if attempt_read_and_call(uhandle, consumer.hsps_no_gap,
                                  start="Number of HSP's better"):
-            read_and_call(uhandle, consumer.hsps_prelim_gapped,
-                          start="Number of HSP's successfully")
-            read_and_call(uhandle, consumer.hsps_prelim_gap_attempted,
-                          start="Number of HSP's that")
-            read_and_call(uhandle, consumer.hsps_gapped,
-                          start="Number of HSP's gapped")
+            # for qblast order of HSP info is changed
+            if attempt_read_and_call(uhandle, consumer.hsps_prelim_gapped,
+                    start="Number of HSP's successfully"):
+                read_and_call(uhandle, consumer.hsps_prelim_gap_attempted,
+                              start="Number of HSP's that")
+                read_and_call(uhandle, consumer.hsps_gapped,
+                              start="Number of HSP's gapped")
+            else:
+                read_and_call(uhandle, consumer.no_event,
+                              start="Number of HSP's gapped")
+                read_and_call(uhandle, consumer.no_event,
+                              start="Number of HSP's successfully")
+                read_and_call(uhandle, consumer.no_event,
+                              start="Number of extra gapped")
+        
+        # QBlast has different capitalization on the Length info:
+        if attempt_read_and_call(uhandle, consumer.query_length,
+                start='Length of query'):
+            read_and_call(uhandle, consumer.database_length,
+                start='Length of database')
+            read_and_call(uhandle, consumer.no_event,
+                          start='Length adjustment')
+            attempt_read_and_call(uhandle, consumer.effective_query_length,
+                                  start='Effective length of query')
+            read_and_call(uhandle, consumer.effective_database_length,
+                          start='Effective length of database')
+            attempt_read_and_call(uhandle, consumer.effective_search_space,
+                                  start='Effective search space:')
+            attempt_read_and_call(uhandle, consumer.effective_search_space_used,
+                                  start='Effective search space used')
 
-        attempt_read_and_call(uhandle, consumer.query_length,
-                              start='length of query')
-        read_and_call(uhandle, consumer.database_length,
-                      start='length of database')
-
-        read_and_call(uhandle, consumer.effective_hsp_length,
-                      start='effective HSP')
-        attempt_read_and_call(uhandle, consumer.effective_query_length,
-                              start='effective length of query')
-        read_and_call(uhandle, consumer.effective_database_length,
-                      start='effective length of database')
-        attempt_read_and_call(uhandle, consumer.effective_search_space,
-                              start='effective search space:')
-        attempt_read_and_call(uhandle, consumer.effective_search_space_used,
-                              start='effective search space used')
+        else:
+            attempt_read_and_call(uhandle, consumer.query_length,
+                                  start='length of query')
+            read_and_call(uhandle, consumer.database_length,
+                start='length of database')
+            read_and_call(uhandle, consumer.effective_hsp_length,
+                          start='effective HSP')
+            attempt_read_and_call(uhandle, consumer.effective_query_length,
+                                  start='effective length of query')
+            read_and_call(uhandle, consumer.effective_database_length,
+                          start='effective length of database')
+            attempt_read_and_call(uhandle, consumer.effective_search_space,
+                                  start='effective search space:')
+            attempt_read_and_call(uhandle, consumer.effective_search_space_used,
+                                  start='effective search space used')
 
         # BLASTX, TBLASTN, TBLASTX
         attempt_read_and_call(uhandle, consumer.frameshift, start='frameshift')
-        read_and_call(uhandle, consumer.threshold, start='T')
+        attempt_read_and_call(uhandle, consumer.threshold, start='T')
         read_and_call(uhandle, consumer.window_size, start='A')
         read_and_call(uhandle, consumer.dropoff_1st_pass, start='X1')
         read_and_call(uhandle, consumer.gap_x_dropoff, start='X2')
