@@ -91,12 +91,15 @@ class Dictionary:
     def __getitem__(self, key):
         """Retrieve an item from the dictionary.
         """
+        print "keys:", self._index.keys()
         # get the location of the record of interest in the file
         start, len = self._index[key]
+        print "start:", start, "len:", len
 
         # read through and get the data from the file
         self._handle.seek(start)
         data = self._handle.read(len)
+        print "data:", data
 
         # run the data through the parser if one is specified
         if self._parser is not None:
@@ -940,7 +943,7 @@ class _RecordConsumer(_BaseGenBankConsumer):
     def qualifier_key(self, content):
         # add on a qualifier if we've got one
         if self._cur_qualifier is not None:
-            self._cur_feature.qualifiers.append(self._cur_qualifer)
+            self._cur_feature.qualifiers.append(self._cur_qualifier)
 
         self._cur_qualifier = Record.Qualifier()
         self._cur_qualifier.key = content
@@ -1190,7 +1193,7 @@ class MindyDictionary:
         """Provide all aliases in the current database.
         """
         return self._search.aliases.keys()
-
+           
 def index_file(genbank_file, index_file, rec_to_key = None):
     """Index a GenBank file to prepare it for use as a dictionary.
 
