@@ -1,0 +1,9 @@
+threshold = 5
+# number of lymphocytes
+num_lymphocytes = 100
+#number of mutations
+num_tossed = 5
+# maximum number of lymphosites
+max_num_lymphocytes = 1000
+segment_size = 60
+num_replicants = 1
