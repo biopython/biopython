@@ -75,10 +75,8 @@ To Do
 - Annotations on sequences
 - BLAST additions
   o scripting front end to NCBIWWW
-  o heavyweight/lightweight data structure
-  o consumers to fill data structures
-  o support for 2.0.11
   o PSI-BLAST on WWW
+  o lightweight data structure
 - parsers
   o SWISSPROT
     - add parser for Protein class
@@ -86,7 +84,6 @@ To Do
     - needs to be done
   o Medline
     - document _Scanner
-    - add Pubmed.py, for web access
     - parser for html-ized version
   o Enzyme
     - add parsers, iterator, dictionary, etc.
