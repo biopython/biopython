@@ -310,5 +310,5 @@ class WaterCommandline(Application.AbstractCommandline):
                  "Display percent identity and similarity"),
          _Option(["-nosimilarity"], ["input"], None, 0,
                  "Do not display percent identity and similarity"),
-         _Option(["-fasta"], ["input"], None, 0,
-                 "Output overlap as fasta sequences")]
+         _Option(["-aformat"], ["input"], None, 0,
+                 "Display output in a different specified output format")]
