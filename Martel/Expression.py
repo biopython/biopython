@@ -70,7 +70,7 @@ class Expression:
         tagtable, want_flg, attrlookup = Generate.generate(self, debug_level)
         return Parser.Parser(tagtable, (want_flg, debug_level, attrlookup))
 
-    def make_iterator(self, tag, debug_level = 0):
+    def make_iterator(self, tag = "record", debug_level = 0):
         """create an iterator for this regexp; the 'tag' defines a record"""
         import Iterator
         return Iterator.Iterator(self.make_parser(debug_level), tag)
@@ -471,10 +471,18 @@ class PassThrough(Expression):
         return self.expression.group_names()
 
 class HeaderFooter(PassThrough):
-    def __init__(self, format_name,
+    def __init__(self, format_name, attrs,
                  header_expression, make_header_reader, header_args,
                  record_expression, make_record_reader, record_args,
                  footer_expression, make_footer_reader, footer_args):
+        # I added attrs to the parameter list but couldn't make it
+        # backwards compatible.  Without this check, it's possible to
+        # have the object constructed seemingly okay then have the
+        # error appear downstream, making it hard to track down.
+        if isinstance(attrs, Expression):
+            raise TypeError("Looks like you need an attrs between the format_name and the record_expression")
+
+        
         if header_expression is None:
             assert make_header_reader is None and header_args is None
             exp = MaxRepeat(record_expression, 1)
@@ -484,9 +492,14 @@ class HeaderFooter(PassThrough):
             exp = exp + footer_expression
         else:
             assert make_footer_reader is None and footer_args is None
-        PassThrough.__init__(self, Group(format_name, exp))
+        PassThrough.__init__(self, Group(format_name, exp, attrs))
 
         self.format_name = format_name
+        if attrs is None:
+            attrs = xmlreader.AttributesImpl({})
+        elif isinstance(attrs, type({})):
+            attrs = xmlreader.AttributesImpl(attrs)
+        self.attrs = attrs
         self.header_expression = header_expression
         self.make_header_reader = make_header_reader
         self.header_args = header_args
@@ -508,7 +521,7 @@ class HeaderFooter(PassThrough):
         if footer_exp is not None: footer_exp = footer_exp.copy()
             
         return HeaderFooter(
-            self.format_name,
+            self.format_name, self.attrs.copy(),
             header_exp, self.make_header_reader, self.header_args,
             record_exp, self.make_record_reader, self.record_args,
             footer_exp, self.make_footer_reader, self.footer_args)
@@ -555,7 +568,7 @@ class HeaderFooter(PassThrough):
         want = want or want_flg
 
         return Parser.HeaderFooterParser(
-            self.format_name,
+            self.format_name, self.attrs,
             make_header_reader, header_args, header_tagtable,
             make_record_reader, record_args, record_tagtable,
             make_footer_reader, footer_args, footer_tagtable,
@@ -570,17 +583,32 @@ class HeaderFooter(PassThrough):
 
 # Might be useful to allow a minimum record count (likely either 0 or 1)
 class ParseRecords(PassThrough):
-    def __init__(self, format_name, record_expression,
+    def __init__(self, format_name, attrs, record_expression,
                  make_reader, reader_args = ()):
         PassThrough.__init__(self, Group(format_name,
-                                         MaxRepeat(record_expression, 1)))
+                                         MaxRepeat(record_expression, 1),
+                                         attrs))
+
+        # I added attrs to the parameter list but couldn't make it
+        # backwards compatible.  Without this check, it's possible to
+        # have the object constructed seemingly okay then have the
+        # error appear downstream, making it hard to track down.
+        if isinstance(attrs, Expression):
+            raise TypeError("Looks like you need an attrs between the format_name and the record_expression")
+        
         self.format_name = format_name
+        if attrs is None:
+            attrs = xmlreader.AttributesImpl({})
+        elif isinstance(attrs, type({})):
+            attrs = xmlreader.AttributesImpl(attrs)
+        self.attrs = attrs
         self.record_expression = record_expression
         self.make_reader = make_reader
         self.reader_args = reader_args
     def copy(self):
         """do a deep copy on this Expression tree"""
-        return ParseRecords(self.format_name, self.record_expression.copy(),
+        return ParseRecords(self.format_name, self.attrs,
+                            self.record_expression.copy(),
                             self.make_reader, self.reader_args)
     
     def make_parser(self, debug_level = 0):
@@ -588,7 +616,7 @@ class ParseRecords(PassThrough):
         tagtable, want_flg, attrlookup = Generate.generate(
             self.record_expression, debug_level)
 
-        return Parser.RecordParser(self.format_name,
+        return Parser.RecordParser(self.format_name, self.attrs,
                                    tagtable, (want_flg, debug_level, attrlookup),
                                    self.make_reader, self.reader_args)
     
