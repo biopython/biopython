@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-__version__ = "$Revision: 1.7 $"
+__version__ = "$Revision: 1.8 $"
 
 from __future__ import division
 
@@ -18,12 +18,12 @@ _SCORE_GAP_EXTENSION = -1
 
 _CMDLINE_DNAL = ["dnal", "-alb", "-nopretty"]
 
-def _build_dnal_cmdline(match=_SCORE_MATCH, mismatch=_SCORE_MISMATCH, gap=_SCORE_GAP_START, extension=_SCORE_GAP_EXTENSION):
+def _build_dnal_cmdline(match, mismatch, gap, extension):
     res = _CMDLINE_DNAL[:]
-    res.extend(["-match", match])
-    res.extend(["-mis", mismatch])
-    res.extend(["-gap", -gap]) # negative: convert score to penalty
-    res.extend(["-ext", -extension])  # negative: convert score to penalty
+    res.extend(["-match", str(match)])
+    res.extend(["-mis", str(mismatch)])
+    res.extend(["-gap", str(-gap)]) # negative: convert score to penalty
+    res.extend(["-ext", str(-extension)])  # negative: convert score to penalty
 
     return res
 
@@ -60,11 +60,11 @@ class Statistics(object):
     """
     Calculate statistics from an ALB report
     """
-    def __init__(self, filename):
-        self.matches = _fgrep_count('"SEQUENCE" %s' % _SCORE_MATCH, filename)
-        self.mismatches = _fgrep_count('"SEQUENCE" %s' % _SCORE_MISMATCH, filename)
-        self.gaps = _fgrep_count('"INSERT" -%s' % _PENALTY_GAP_START, filename)
-        self.extensions = _fgrep_count('"INSERT" -%s' % _PENALTY_GAP_EXTENSION, filename)
+    def __init__(self, filename, match, mismatch, gap, extension):
+        self.matches = _fgrep_count('"SEQUENCE" %s' % match, filename)
+        self.mismatches = _fgrep_count('"SEQUENCE" %s' % mismatch, filename)
+        self.gaps = _fgrep_count('"INSERT" %s' % gap, filename)
+        self.extensions = _fgrep_count('"INSERT" %s' % extension, filename)
 
         if _any([self.matches, self.mismatches, self.gaps, self.extensions]):
             self.coords = _get_coords(filename)
@@ -79,11 +79,11 @@ class Statistics(object):
     def __str__(self):
         return "\t".join([str(x) for x in (self.identity_fraction(), self.matches, self.mismatches, self.gaps, self.extensions)])
 
-def align(pair, match, mismatch, gap, extension, **keywds):
+def align(pair, match=_SCORE_MATCH, mismatch=_SCORE_MISMATCH, gap=_SCORE_GAP_START, extension=_SCORE_GAP_EXTENSION, **keywds):
     cmdline = _build_dnal_cmdline(match, mismatch, gap, extension)
     temp_file = Wise.align(cmdline, pair, **keywds)
     try:
-        return Statistics(temp_file.name)
+        return Statistics(temp_file.name, match, mismatch, gap, extension)
     except AttributeError:
         try:
             keywds['dry_run']
