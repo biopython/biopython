@@ -7,7 +7,7 @@ class PDBIO:
 
 	# Private methods
 
-	def _get_atom_line(self, atom, hetfield, segid, serial, resname, 
+	def _get_atom_line(self, atom, hetfield, segid, atom_number, resname, 
 				resseq, icode, chain_id, element="  ", charge="  "):
 		if hetfield!=" ":
 			record_type="HETATM"
@@ -18,7 +18,7 @@ class PDBIO:
 		x, y, z=atom.get_coord()
 		bfactor=atom.get_bfactor()
 		occupancy=atom.get_occupancy()
-		args=(record_type, serial, name, altloc, resname, chain_id,
+		args=(record_type, atom_number, name, altloc, resname, chain_id,
 			resseq, icode, x, y, z, occupancy, bfactor, segid,
 			element, charge)
 		return ATOM_FORMAT_STRING % args
@@ -37,7 +37,7 @@ class PDBIO:
 		else:
 			model_flag=0
 		for model in self.structure.get_list():
-			serial=0
+			atom_number=1
 			if model_flag:
 				fp.write("MODEL\n")
 			for chain in model.get_list():
@@ -47,10 +47,10 @@ class PDBIO:
 					resname=residue.get_resname()  
 					segid=residue.get_segid()
 					for atom in residue.get_unpacked_list():
-						s=get_atom_line(atom, hetfield, segid, serial, resname,
+						s=get_atom_line(atom, hetfield, segid, atom_number, resname,
 								resseq, icode, chain_id)
 						fp.write(s)
-						serial=serial+1
+						atom_number=atom_number+1
 			if model_flag:
 				fp.write("ENDMDL\n")
 		fp.close()
