@@ -36,6 +36,9 @@ from Superimposer import Superimposer
 # 3D vector class
 from Vector import Vector, calc_angle, calc_dihedral, refmat, rotmat, rotaxis
 
+# Alignment module
+from StructureAlignment import StructureAlignment
+
 # Fast atom neighbor search
 # Depends on KDTree C++ module
 try:
