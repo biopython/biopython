@@ -1143,6 +1143,10 @@ class NCBIDictionary:
         line = handle.peekline()
         if line.find('does not exist') >= 0:
             raise KeyError, line
+        # if there is a problem with the server, we'll get back a line like:
+        # Please try again later. Server error  for GI "7212005"
+        elif line.find("Please try again later.") >= 0:
+            raise KeyError, line
         elif line.lower().find('html') >= 0:
             raise KeyError, "I unexpectedly got back html-formatted data."
         # Parse the record if a parser was passed in.
