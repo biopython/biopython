@@ -1,0 +1,589 @@
+test_ndb
+
+Cell Constants
+A : 30.530
+B : 45.220
+C : 162.020 (Ångstroms)
+alpha : 90.00
+beta : 90.00
+gamma :   90.00  (degrees)
+Citation: authors: V. Tereshko, S. Wallace, N. Usman, F. Wincott, M. Egli
+title: X-ray crystallographic observation of "in-line" and "adjacent" conformations in a bulged self-cleaving RNA/DNA hybrid
+journal: RNA,7, pp. 405-420, 2001.
+medline id: 
+pubmed id: 
+comment: 
+
+Coordinates: Thecoordinates for the asymmetric unitof this structure are stored in the NDB archive.
+
+Crystallization Conditions
+
+Method: vapor diffusion, sitting drop
+Drop: spermine, MPD
+Reservoir: MPD
+
+
+
+Features: A-Form nucleic acid hybrid double helix, bulges, flipped-out bases, mismatch
+Id:  AH0014
+Name: 5'-r(GpCpG)-d(pApTpApT)-r(pApCpGpU)-3'
+Refinement: The structure was refined using the CNS 1.0 program. The R value is 21.7 for 26418 reflections in the resolution range 10.0 to 1.7 Å with I>0.0 sigma(I).
+Sequence: F : g c g a t a t a c g u
+
+D : g c g a t a t a c g u
+
+E : g c g a t a t a c g u
+
+B : g c g a t a t a c g u
+
+C : g c g a t a t a c g u
+
+A : g c g a t a t a c g u
+
+
+Space Group: P 2(1) 2(1) 2(1) 
+
+
+
+
+Cell Constants
+A : 101.880
+B : 101.880
+C : 85.180 (Ångstroms)
+alpha : 90.00
+beta : 90.00
+gamma :   90.00  (degrees)
+Citation: authors: M. Teplova, S.T. Wallace, V. Tereshko, G. Minasov, A.M. Simons, P.D. Cook, M. Manoharan, M. Egli
+title: Structural origins of the exonuclease resistance of a zwitterionic RNA
+journal: Proc. Nat. Acad. Sci. USA,96, pp. 14240-14245, 1999.
+medline id: 
+pubmed id: 
+comment: 
+
+Coordinates: Thecoordinates for the asymmetric unitof this structure are stored in the NDB archive.
+
+Crystallization Conditions
+
+Method: vapor diffusion, sitting drop
+Drop: sodium citrate
+
+
+Features: DNA single strand
+Id:  PD0072
+Name: DNA POLYMERASE I (E.C.2.7.7.7)/DNA COMPLEX
+Refinement: The structure was refined using the CNS program. The R value is 21.7 for 44062 reflections in the resolution range 20.0 to 2.1 Å with Fobs>2.0 sigma(Fobs).
+Sequence: B : met ile ser tyr asp asn tyr val thr ile leu asp glu glu thr leu lys ala trp ile 
+ala lys leu glu lys ala pro val phe ala phe ala thr ala thr asp ser leu asp asn 
+ile ser ala asn leu val gly leu ser phe ala ile glu pro gly val ala ala tyr ile 
+pro val ala his asp tyr leu asp ala pro asp gln ile ser arg glu arg ala leu glu 
+leu leu lys pro leu leu glu asp glu lys ala leu lys val gly gln asn leu lys tyr 
+asp arg gly ile leu ala asn tyr gly ile glu leu arg gly ile ala phe asp thr met 
+leu glu ser tyr ile leu asn ser val ala gly arg his asp met asp ser leu ala glu 
+arg trp leu lys his lys thr ile thr phe glu glu ile ala gly lys gly lys asn gln 
+leu thr phe asn gln ile ala leu glu glu ala gly arg tyr ala ala glu asp ala asp 
+val thr leu gln leu his leu lys met trp pro asp leu gln lys his lys gly pro leu 
+asn val phe glu asn ile glu met pro leu val pro val leu ser arg ile glu arg asn 
+gly val lys ile asp pro lys val leu his asn his ser glu glu leu thr leu arg leu 
+ala glu leu glu lys lys ala his glu ile ala gly glu glu phe asn leu ser ser thr 
+lys gln leu gln thr ile leu phe glu lys gln gly ile lys pro leu lys lys thr pro 
+gly gly ala pro ser thr ser glu glu val leu glu glu leu ala leu asp tyr pro leu 
+pro lys val ile leu glu tyr arg gly leu ala lys leu lys ser thr tyr thr asp lys 
+leu pro leu met ile asn pro lys thr gly arg val his thr ser tyr his gln ala val 
+thr ala thr gly arg leu ser ser thr asp pro asn leu gln asn ile pro val arg asn 
+glu glu gly arg arg ile arg gln ala phe ile ala pro glu asp tyr val ile val ser 
+ala asp tyr ser gln ile glu leu arg ile met ala his leu ser arg asp lys gly leu 
+leu thr ala phe ala glu gly lys asp ile his arg ala thr ala ala glu val phe gly 
+leu pro leu glu thr val thr ser glu gln arg arg ser ala lys ala ile asn phe gly 
+leu ile tyr gly met ser ala phe gly leu ala arg gln leu asn ile pro arg lys glu 
+ala gln lys tyr met asp leu tyr phe glu arg tyr pro gly val leu glu tyr met glu 
+arg thr arg ala gln ala lys glu gln gly tyr val glu thr leu asp gly arg arg leu 
+tyr leu pro asp ile lys ser ser asn gly ala arg arg ala ala ala glu arg ala ala 
+ile asn ala pro met gln gly thr ala ala asp ile ile lys arg ala met ile ala val 
+asp ala trp leu gln ala glu gln pro arg val arg met ile met gln val his asp glu 
+leu val phe glu val his lys asp asp val asp ala val ala lys gln ile his gln leu 
+met glu asn cys thr arg leu asp val pro leu leu val glu val gly ser gly glu asn 
+trp asp gln ala his
+
+A : t t t t t t t t t t t t t t t t t t t
+
+
+Space Group: P 4(3) 
+
+
+
+
+Cell Constants
+A : 102.650
+B : 102.650
+C : 86.300 (Ångstroms)
+alpha : 90.00
+beta : 90.00
+gamma :   90.00  (degrees)
+Citation: authors: M. Teplova, S.T. Wallace, V. Tereshko, G. Minasov, A.M. Simons, P.D. Cook, M. Manoharan, M. Egli
+title: Structural origins of the exonuclease resistance of a zwitterionic RNA
+journal: Proc. Nat. Acad. Sci. USA,96, pp. 14240-14245, 1999.
+medline id: 
+pubmed id: 
+comment: 
+
+Coordinates: Thecoordinates for the asymmetric unitof this structure are stored in the NDB archive.
+
+Crystallization Conditions
+
+Method: vapor diffusion, sitting drop
+Drop: sodium citrate
+
+
+Features: DNA single strand, modified
+Id:  PD0080
+Name: DNA POLYMERASE I (E.C.2.7.7.7)/DNA COMPLEX
+Refinement: The structure was refined using the CNS program. The R value is 22.4 for 16291 reflections in the resolution range 20.0 to 3.0 Å with Fobs>2.0 sigma(Fobs).
+Sequence: B : met ile ser tyr asp asn tyr val thr ile leu asp glu glu thr leu lys ala trp ile 
+ala lys leu glu lys ala pro val phe ala phe asp thr glu thr asp ser leu asp asn 
+ile ser ala asn leu val gly leu ser phe ala ile glu pro gly val ala ala tyr ile 
+pro val ala his asp tyr leu asp ala pro asp gln ile ser arg glu arg ala leu glu 
+leu leu lys pro leu leu glu asp glu lys ala leu lys val gly gln asn leu lys tyr 
+asp arg gly ile leu ala asn tyr gly ile glu leu arg gly ile ala phe asp thr met 
+leu glu ser tyr ile leu asn ser val ala gly arg his asp met asp ser leu ala glu 
+arg trp leu lys his lys thr ile thr phe glu glu ile ala gly lys gly lys asn gln 
+leu thr phe asn gln ile ala leu glu glu ala gly arg tyr ala ala glu asp ala asp 
+val thr leu gln leu his leu lys met trp pro asp leu gln lys his lys gly pro leu 
+asn val phe glu asn ile glu met pro leu val pro val leu ser arg ile glu arg asn 
+gly val lys ile asp pro lys val leu his asn his ser glu glu leu thr leu arg leu 
+ala glu leu glu lys lys ala his glu ile ala gly glu glu phe asn leu ser ser thr 
+lys gln leu gln thr ile leu phe glu lys gln gly ile lys pro leu lys lys thr pro 
+gly gly ala pro ser thr ser glu glu val leu glu glu leu ala leu asp tyr pro leu 
+pro lys val ile leu glu tyr arg gly leu ala lys leu lys ser thr tyr thr asp lys 
+leu pro leu met ile asn pro lys thr gly arg val his thr ser tyr his gln ala val 
+thr ala thr gly arg leu ser ser thr asp pro asn leu gln asn ile pro val arg asn 
+glu glu gly arg arg ile arg gln ala phe ile ala pro glu asp tyr val ile val ser 
+ala asp tyr ser gln ile glu leu arg ile met ala his leu ser arg asp lys gly leu 
+leu thr ala phe ala glu gly lys asp ile his arg ala thr ala ala glu val phe gly 
+leu pro leu glu thr val thr ser glu gln arg arg ser ala lys ala ile asn phe gly 
+leu ile tyr gly met ser ala phe gly leu ala arg gln leu asn ile pro arg lys glu 
+ala gln lys tyr met asp leu tyr phe glu arg tyr pro gly val leu glu tyr met glu 
+arg thr arg ala gln ala lys glu gln gly tyr val glu thr leu asp gly arg arg leu 
+tyr leu pro asp ile lys ser ser asn gly ala arg arg ala ala ala glu arg ala ala 
+ile asn ala pro met gln gly thr ala ala asp ile ile lys arg ala met ile ala val 
+asp ala trp leu gln ala glu gln pro arg val arg met ile met gln val his asp glu 
+leu val phe glu val his lys asp asp val asp ala val ala lys gln ile his gln leu 
+met glu asn cys thr arg leu asp val pro leu leu val glu val gly ser gly glu asn 
+trp asp gln ala his
+
+A : t t u t
+
+
+Space Group: P 4(3) 
+
+
+
+
+Cell Constants
+A : 76.900
+B : 76.900
+C : 143.640 (Ångstroms)
+alpha : 90.00
+beta : 90.00
+gamma :  120.00  (degrees)
+Citation: authors: S. Chen, J. Vojtechovsky, G.N. Parkinson, R.H. Ebright, H.M. Berman
+title: Indirect Readout of DNA Sequence at the Primary-kink Site in the CAP-DNA Complex: DNA Binding Specificity Based on Energetics of DNA Kinking
+journal: J. Mol. Biol.,314, pp. 63-74, 2001.
+medline id: 
+pubmed id: 
+comment: 
+
+Coordinates: Thecoordinates for the asymmetric unitof this structure and thecoordinates with symmetry related strandsare stored in the NDB archive.
+
+Crystallization Conditions
+
+Method: vapor diffusion, hanging drop
+Drop: 1,4-dioxane, MES, NaCl, MgCl2, CAMP, peg 8000
+Reservoir: peg 8000
+
+
+
+Features: B-DNA double helix, overhanging bases
+Id:  PD0082
+Name: CATABOLITE GENE ACTIVATOR PROTEIN/DNA COMPLEX
+Refinement: The structure was refined using the CNS 0.5 program. The R value is 23.1 for 9519 reflections in the resolution range 20.0 to 3.0 Å with Fobs>0.0 sigma(Fobs).
+Sequence: E : asp pro thr leu glu trp phe leu ser his cys his ile his lys tyr pro ser lys ser 
+thr leu ile his gln gly glu lys ala glu thr leu tyr tyr ile val lys gly ser val 
+ala val leu ile lys asp glu glu gly lys glu met ile leu ser tyr leu asn gln gly 
+asp phe ile gly glu leu gly leu phe glu glu gly gln glu arg ser ala trp val arg 
+ala lys thr ala cys glu val ala glu ile ser tyr lys lys phe arg gln leu ile gln 
+val asn pro asp ile leu met arg leu ser ala gln met ala arg arg leu gln val thr 
+ser glu lys val gly asn leu ala phe leu asp val thr gly arg ile ala gln thr leu 
+leu asn leu ala lys gln pro asp ala met thr his pro asp gly met gln ile lys ile 
+thr arg gln glu ile gly gln ile val gly cys ser arg glu thr val gly arg ile leu 
+lys met leu glu asp gln asn leu ile ser ala his gly lys thr ile val val tyr gly
+
+C : c t a g a t c g c a t t t t t
+
+A : a a a a a t g c g a t
+
+
+Space Group: P 3(1) 2 1
+
+
+
+
+Cell Constants
+A : 287.500
+B : 287.500
+C : 652.100 (Ångstroms)
+alpha : 90.00
+beta : 90.00
+gamma :  120.00  (degrees)
+Citation: authors: S. Rowsell, N.J. Stonehouse, M.A. Convery, C.J. Adams, A.D. Ellington, I. Hirao, D.S. Peabody, P.G. Stockley, S.E.V. Phillips
+title: Crystal Structures of a Series of RNA Aptamers Complexed to the Same Protein Target
+journal: Nat. Struct. Biol.,5, pp. 970-975, 1998.
+medline id: 
+pubmed id: 
+comment: 
+
+Coordinates: Thecoordinates for the asymmetric unitof this structure are stored in the NDB archive.
+
+Crystallization Conditions
+
+Drop: PEG 8000, Na3PO4, NaN3
+Reservoir: Na3PO4, NaN3
+
+
+Features: RNA single strand, loops, overhanging bases
+Id:  PR0002
+Name: MS2 PROTEIN CAPSID/RNA COMPLEX
+Refinement: The structure was refined using the X-PLOR 3.860 program. The R value is 20.0 for 166564 reflections in the resolution range 30.0 to 2.8 Å with Fobs>0.0 sigma(Fobs).
+Sequence: D : ala ser asn phe thr gln phe val leu val asp asn gly gly thr gly asp val thr val 
+ala pro ser asn phe ala asn gly val ala glu trp ile ser ser asn ser arg ser gln 
+ala tyr lys val thr cys ser val arg gln ser ser ala gln asn arg lys tyr thr ile 
+lys val glu val pro lys val ala thr gln thr val gly gly val glu leu pro val ala 
+ala trp arg ser tyr leu asn met glu leu thr ile pro ile phe ala thr asn ser asp 
+cys glu leu ile val lys ala met gln gly leu leu lys asp gly asn pro ile pro ser 
+ala ile ala ala asn ser gly ile tyr
+
+E : ala ser asn phe thr gln phe val leu val asp asn gly gly thr gly asp val thr val 
+ala pro ser asn phe ala asn gly val ala glu trp ile ser ser asn ser arg ser gln 
+ala tyr lys val thr cys ser val arg gln ser ser ala gln asn arg lys tyr thr ile 
+lys val glu val pro lys val ala thr gln thr val gly gly val glu leu pro val ala 
+ala trp arg ser tyr leu asn met glu leu thr ile pro ile phe ala thr asn ser asp 
+cys glu leu ile val lys ala met gln gly leu leu lys asp gly asn pro ile pro ser 
+ala ile ala ala asn ser gly ile tyr
+
+B : u c g c c a a c a g g c g g
+
+C : ala ser asn phe thr gln phe val leu val asp asn gly gly thr gly asp val thr val 
+ala pro ser asn phe ala asn gly val ala glu trp ile ser ser asn ser arg ser gln 
+ala tyr lys val thr cys ser val arg gln ser ser ala gln asn arg lys tyr thr ile 
+lys val glu val pro lys val ala thr gln thr val gly gly val glu leu pro val ala 
+ala trp arg ser tyr leu asn met glu leu thr ile pro ile phe ala thr asn ser asp 
+cys glu leu ile val lys ala met gln gly leu leu lys asp gly asn pro ile pro ser 
+ala ile ala ala asn ser gly ile tyr
+
+A : u c g c c a a c a g g c g g
+
+
+Space Group: R 3 2
+
+
+
+
+Cell Constants
+A : 126.750
+B : 132.980
+C : 154.880 (Ångstroms)
+alpha : 90.00
+beta : 90.00
+gamma :   90.00  (degrees)
+Citation: authors: P. Nissen, S. Thirup, M. Kjeldgaard, J. Nyborg
+title: The Crystal Structure of Cys-tRNA-EF-Tu-GDPNP Reveals General and Specific Features of the Ternary Complex and in tRNA
+journal: Structure,7, pp. 143-156, 1999.
+medline id: 
+pubmed id: 
+comment: 
+
+Coordinates: Thecoordinates for the asymmetric unitof this structure are stored in the NDB archive.
+
+Crystallization Conditions
+
+Method: vapor diffusion, hanging drop
+Drop: (NH4)2SO4, tris, MES, MgCl2, DTT
+
+
+Features: tRNA, modified, mismatch
+Id:  PR0004
+Name: ELONGATION FACTOR TU/CYSTEINYL TRNA COMPLEX
+Refinement: The structure was refined using the X-PLOR 3.851 program. The R value is 20.6 for 18043 reflections in the resolution range 10.0 to 2.6 Å with Fobs>0.0 sigma(Fobs).
+Sequence: B : ala lys gly glu phe ile arg thr lys pro his val asn val gly thr ile gly his val 
+asp his gly lys thr thr leu thr ala ala leu thr tyr val ala ala ala glu asn pro 
+asn val glu val lys asp tyr gly asp ile asp lys ala pro glu glu arg ala arg gly 
+ile thr ile asn thr ala his val glu tyr glu thr ala lys arg his tyr ser his val 
+asp cys pro gly his ala asp tyr ile lys asn met ile thr gly ala ala gln met asp 
+gly ala ile leu val val ser ala ala asp gly pro met pro gln thr arg glu his ile 
+leu leu ala arg gln val gly val pro tyr ile val val phe met asn lys val asp met 
+val asp asp pro glu leu leu asp leu val glu met glu val arg asp leu leu asn gln 
+tyr glu phe pro gly asp glu val pro val ile arg gly ser ala leu leu ala leu glu 
+glu met his lys asn pro lys thr lys arg gly glu asn glu trp val asp lys ile trp 
+glu leu leu asp ala ile asp glu tyr ile pro thr pro val arg asp val asp lys pro 
+phe leu met pro val glu asp val phe thr ile thr gly arg gly thr val ala thr gly 
+arg ile glu arg gly lys val lys val gly asp glu val glu ile val gly leu ala pro 
+glu thr arg lys thr val val thr gly val glu met his arg lys thr leu gln glu gly 
+ile ala gly asp asn val gly leu leu leu arg gly val ser arg glu glu val glu arg 
+gly gln val leu ala lys pro gly ser ile thr pro his thr lys phe glu ala ser val 
+tyr ile leu lys lys glu glu gly gly arg his thr gly phe phe thr gly tyr arg pro 
+gln phe tyr phe arg thr thr asp val thr gly val val arg leu pro gln gly val glu 
+met val met pro gly asp asn val thr phe thr val glu leu ile lys pro val ala leu 
+glu glu gly leu arg phe ala ile arg glu gly gly arg thr val gly ala gly val val 
+thr lys ile leu glu
+
+A : g g c g c g u 4su a a c a a a g c g g h2u h2u a u g u a g c g g a psu u g c a mi
+a a psu c c g u c u a g u c c g g t psu c g a c u c c g g a a c g c g c c u c c 
+a
+
+
+Space Group: F 2 2 2
+
+
+
+
+Cell Constants
+A : 79.557
+B : 176.797
+C : 82.489 (Ångstroms)
+alpha : 90.00
+beta : 117.67
+gamma :   90.00  (degrees)
+Citation: authors: R.C. Deo, J.B. Bonanno, N. Sonenberg, S.K. Burley
+title: Recognition of polyadenylate RNA by the poly(A)-binding protein
+journal: Cell (Cambridge,Mass. ),17, pp. 835-845, 1999.
+medline id: 
+pubmed id: 
+comment: 
+
+Coordinates: Thecoordinates for the asymmetric unitof this structure are stored in the NDB archive.
+
+Crystallization Conditions
+
+Method: vapor diffusion, hanging drop
+Drop: tcep, tris-hcl, KCl, (NH4)SO4, glycerol
+Reservoir: (NH4)SO4, glycerol
+
+
+
+Features: RNA single strand
+Id:  PR0007
+Name: POLYDENYLATE BINDING PROTEIN 1/RNA COMPLEX
+Refinement: The structure was refined using the CNS program. The R value is 23.0 for 57149 reflections in the resolution range 20.0 to 2.6 Å with Fobs>2.0 sigma(Fobs).
+Sequence: P : met asn pro ser ala pro ser tyr pro met ala ser leu tyr val gly asp leu his pro 
+asp val thr glu ala met leu tyr glu lys phe ser pro ala gly pro ile leu ser ile 
+arg val cys arg asp met ile thr arg arg ser leu gly tyr ala tyr val asn phe gln 
+gln pro ala asp ala glu arg ala leu asp thr met asn phe asp val ile lys gly lys 
+pro val arg ile met trp ser gln arg asp pro ser leu arg lys ser gly val gly asn 
+ile phe ile lys asn leu asp lys ser ile asp asn lys ala leu tyr asp thr phe ser 
+ala phe gly asn ile leu ser cys lys val val cys asp glu asn gly ser lys gly tyr 
+gly phe val his phe glu thr gln glu ala ala glu arg ala ile glu lys met asn gly 
+met leu leu asn asp arg lys val phe val gly arg phe lys ser arg lys glu arg glu 
+ala glu leu gly ala arg ala lys glu phe
+
+N : met asn pro ser ala pro ser tyr pro met ala ser leu tyr val gly asp leu his pro 
+asp val thr glu ala met leu tyr glu lys phe ser pro ala gly pro ile leu ser ile 
+arg val cys arg asp met ile thr arg arg ser leu gly tyr ala tyr val asn phe gln 
+gln pro ala asp ala glu arg ala leu asp thr met asn phe asp val ile lys gly lys 
+pro val arg ile met trp ser gln arg asp pro ser leu arg lys ser gly val gly asn 
+ile phe ile lys asn leu asp lys ser ile asp asn lys ala leu tyr asp thr phe ser 
+ala phe gly asn ile leu ser cys lys val val cys asp glu asn gly ser lys gly tyr 
+gly phe val his phe glu thr gln glu ala ala glu arg ala ile glu lys met asn gly 
+met leu leu asn asp arg lys val phe val gly arg phe lys ser arg lys glu arg glu 
+ala glu leu gly ala arg ala lys glu phe
+
+O : met asn pro ser ala pro ser tyr pro met ala ser leu tyr val gly asp leu his pro 
+asp val thr glu ala met leu tyr glu lys phe ser pro ala gly pro ile leu ser ile 
+arg val cys arg asp met ile thr arg arg ser leu gly tyr ala tyr val asn phe gln 
+gln pro ala asp ala glu arg ala leu asp thr met asn phe asp val ile lys gly lys 
+pro val arg ile met trp ser gln arg asp pro ser leu arg lys ser gly val gly asn 
+ile phe ile lys asn leu asp lys ser ile asp asn lys ala leu tyr asp thr phe ser 
+ala phe gly asn ile leu ser cys lys val val cys asp glu asn gly ser lys gly tyr 
+gly phe val his phe glu thr gln glu ala ala glu arg ala ile glu lys met asn gly 
+met leu leu asn asp arg lys val phe val gly arg phe lys ser arg lys glu arg glu 
+ala glu leu gly ala arg ala lys glu phe
+
+L : met asn pro ser ala pro ser tyr pro met ala ser leu tyr val gly asp leu his pro 
+asp val thr glu ala met leu tyr glu lys phe ser pro ala gly pro ile leu ser ile 
+arg val cys arg asp met ile thr arg arg ser leu gly tyr ala tyr val asn phe gln 
+gln pro ala asp ala glu arg ala leu asp thr met asn phe asp val ile lys gly lys 
+pro val arg ile met trp ser gln arg asp pro ser leu arg lys ser gly val gly asn 
+ile phe ile lys asn leu asp lys ser ile asp asn lys ala leu tyr asp thr phe ser 
+ala phe gly asn ile leu ser cys lys val val cys asp glu asn gly ser lys gly tyr 
+gly phe val his phe glu thr gln glu ala ala glu arg ala ile glu lys met asn gly 
+met leu leu asn asp arg lys val phe val gly arg phe lys ser arg lys glu arg glu 
+ala glu leu gly ala arg ala lys glu phe
+
+M : met asn pro ser ala pro ser tyr pro met ala ser leu tyr val gly asp leu his pro 
+asp val thr glu ala met leu tyr glu lys phe ser pro ala gly pro ile leu ser ile 
+arg val cys arg asp met ile thr arg arg ser leu gly tyr ala tyr val asn phe gln 
+gln pro ala asp ala glu arg ala leu asp thr met asn phe asp val ile lys gly lys 
+pro val arg ile met trp ser gln arg asp pro ser leu arg lys ser gly val gly asn 
+ile phe ile lys asn leu asp lys ser ile asp asn lys ala leu tyr asp thr phe ser 
+ala phe gly asn ile leu ser cys lys val val cys asp glu asn gly ser lys gly tyr 
+gly phe val his phe glu thr gln glu ala ala glu arg ala ile glu lys met asn gly 
+met leu leu asn asp arg lys val phe val gly arg phe lys ser arg lys glu arg glu 
+ala glu leu gly ala arg ala lys glu phe
+
+J : met asn pro ser ala pro ser tyr pro met ala ser leu tyr val gly asp leu his pro 
+asp val thr glu ala met leu tyr glu lys phe ser pro ala gly pro ile leu ser ile 
+arg val cys arg asp met ile thr arg arg ser leu gly tyr ala tyr val asn phe gln 
+gln pro ala asp ala glu arg ala leu asp thr met asn phe asp val ile lys gly lys 
+pro val arg ile met trp ser gln arg asp pro ser leu arg lys ser gly val gly asn 
+ile phe ile lys asn leu asp lys ser ile asp asn lys ala leu tyr asp thr phe ser 
+ala phe gly asn ile leu ser cys lys val val cys asp glu asn gly ser lys gly tyr 
+gly phe val his phe glu thr gln glu ala ala glu arg ala ile glu lys met asn gly 
+met leu leu asn asp arg lys val phe val gly arg phe lys ser arg lys glu arg glu 
+ala glu leu gly ala arg ala lys glu phe
+
+K : met asn pro ser ala pro ser tyr pro met ala ser leu tyr val gly asp leu his pro 
+asp val thr glu ala met leu tyr glu lys phe ser pro ala gly pro ile leu ser ile 
+arg val cys arg asp met ile thr arg arg ser leu gly tyr ala tyr val asn phe gln 
+gln pro ala asp ala glu arg ala leu asp thr met asn phe asp val ile lys gly lys 
+pro val arg ile met trp ser gln arg asp pro ser leu arg lys ser gly val gly asn 
+ile phe ile lys asn leu asp lys ser ile asp asn lys ala leu tyr asp thr phe ser 
+ala phe gly asn ile leu ser cys lys val val cys asp glu asn gly ser lys gly tyr 
+gly phe val his phe glu thr gln glu ala ala glu arg ala ile glu lys met asn gly 
+met leu leu asn asp arg lys val phe val gly arg phe lys ser arg lys glu arg glu 
+ala glu leu gly ala arg ala lys glu phe
+
+H : a a a a a a a a a a a
+
+I : met asn pro ser ala pro ser tyr pro met ala ser leu tyr val gly asp leu his pro 
+asp val thr glu ala met leu tyr glu lys phe ser pro ala gly pro ile leu ser ile 
+arg val cys arg asp met ile thr arg arg ser leu gly tyr ala tyr val asn phe gln 
+gln pro ala asp ala glu arg ala leu asp thr met asn phe asp val ile lys gly lys 
+pro val arg ile met trp ser gln arg asp pro ser leu arg lys ser gly val gly asn 
+ile phe ile lys asn leu asp lys ser ile asp asn lys ala leu tyr asp thr phe ser 
+ala phe gly asn ile leu ser cys lys val val cys asp glu asn gly ser lys gly tyr 
+gly phe val his phe glu thr gln glu ala ala glu arg ala ile glu lys met asn gly 
+met leu leu asn asp arg lys val phe val gly arg phe lys ser arg lys glu arg glu 
+ala glu leu gly ala arg ala lys glu phe
+
+F : a a a a a a a a a a a
+
+G : a a a a a a a a a a a
+
+D : a a a a a a a a a a a
+
+E : a a a a a a a a a a a
+
+B : a a a a a a a a a a a
+
+C : a a a a a a a a a a a
+
+A : a a a a a a a a a a a
+
+
+Space Group: P 2(1) 
+
+
+
+
+Cell Constants
+A : 60.300
+B : 68.000
+C : 149.500 (Ångstroms)
+alpha : 90.00
+beta : 90.00
+gamma :   90.00  (degrees)
+Citation: authors: M.B. Comarmond, R. Giege, J.C. Thierry, D. Moras, J. Fischer
+title: Three-Dimensional Structure of Yeast T-RNA-ASP. I. Structure Determination
+journal: Acta Crystallogr. ,Sect. B,42, pp. 272-280, 1986.
+medline id: 
+pubmed id: 
+comment: 
+
+Coordinates: Thecoordinates for the asymmetric unitof this structure are stored in the NDB archive.
+
+Crystallization Conditions
+Features: tRNA, loops
+Id:  TRNA05
+Name: transfer ribo-nucleic acid (yeast, ASP) T-RNA
+Refinement: The structure was refined using the NUCLSQ program. The R value is 23.5 for 4585 reflections in the resolution range 10.0 to 3.0 Å with Fobs>2.0 sigma(Fobs).
+Sequence: 
+Space Group: C222(1) 
+
+
+
+
+Cell Constants
+A : 64.980
+B : 64.980
+C : 138.140 (Ångstroms)
+alpha : 90.00
+beta : 90.00
+gamma :  120.00  (degrees)
+Citation: authors: W.G. Scott, J.T. Finch, A. Klug
+title: The Crystal Structure of an All-RNA Hammerhead Ribozyme: A Proposed Mechanism for RNA Catalytic Cleavage
+journal: Cell,81, pp. 991-1002, 1995.
+medline id: 
+pubmed id: 
+comment: 
+
+Coordinates: Thecoordinates for the asymmetric unitof this structure are stored in the NDB archive.
+
+Crystallization Conditions
+
+Method: vapor diffusion, sitting drop
+Solution: nucleic acid, water, PEG 6000, glycerol, spermine, magnesium acetate, ammonium acetate, ammonium cacodylate
+
+
+Features: RNA, RNA hammerhead ribozyme, catalytic RNA, loop
+Id:  URX035
+Name: RNA hammerhead ribozyme
+Refinement: The structure was refined using the X-PLOR 3.1 program. The R value is 25.1 for 6199 reflections in the resolution range 15.0 to 3.1 Å with Fobs>2.0 sigma(Fobs).
+Sequence: D : g g c c g a a a c u c g u a a g a g u c a c c a c
+
+B : g g c c g a a a c u c g u a a g a g u c a c c a c
+
+C : g u g g u c u g a u g a g g c c
+
+A : g u g g u c u g a u g a g g c c
+
+
+Space Group: P3(1) 21
+
+
+
+
+Cell Constants
+A : 18.250
+B : 30.930
+C : 43.050 (Ångstroms)
+alpha : 90.00
+beta : 90.00
+gamma :   90.00  (degrees)
+Citation: authors: M. Teng, Y. -C. Liaw, G.A. Van Der Marel, J.H. Van Boom, A.H. -J. Wang
+title: Effects of the O2' Hydroxyl Group on Z-DNA Conformation: Structure of Z-RNA and (ARA C)-[Z-DNA]
+journal: Biochemistry,28, pp. 4923-4928, 1989.
+medline id: 
+pubmed id: 
+comment: 
+
+Coordinates: 
+
+Crystallization Conditions
+
+Method: vapor diffusion
+Solution: nucleic acid, MPD, water, NaCl, MgCl2, spermine, sodium cacodylate
+Reservoir: MPD, water
+
+
+
+Features: 
+Id:  ZHF026
+Name: 5'-d(CpGp)-r(CpGp)-d(CpG)-3'
+Refinement: The refinement information is not available for this entry.
+Sequence: B : c g c g c g
+
+A : c g c g c g
+
+
+Space Group: P2(1) 2(1) 2(1) 
+
+
+
