@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 
-from Bio.Align import newalign
+from Bio.Align import pairwise2
 
 
 def _pretty_print_align(align1, align2, score, begin, end):
-    s = newalign.format_alignment(align1, align2, score, begin, end)
+    s = pairwise2.format_alignment(align1, align2, score, begin, end)
     print s,
 
 def _pretty_print_all(aligns):
@@ -16,7 +16,7 @@ def _align_and_print(fn, *args, **keywds):
     print fn.__name__
     _pretty_print_all(fn(*args, **keywds))
 
-a = newalign.align
+a = pairwise2.align
 
 print "### Test the function generation code"
 fn = a.globalxx
