@@ -12,11 +12,11 @@ Classes:
 AbstractSequence  Base class for all sequences.
 Sequence          Basic class that stores sequences as a string.
 SubSequence       Handles subsequencing with different indexing schemes.
+NamedSequence     Sequence that has a name.
 
 """
 
 # To do:
-# Add NamedSequence, add a name and id
 # Add Annotation (base class, with annotation types?)
 
 class AbstractSequence:
@@ -30,16 +30,6 @@ class AbstractSequence:
     
     def __getslice__(self, i, j):
         raise NotImplementedError
-
-class Sequence(AbstractSequence):
-    def __init__(self, seq=''):
-        self.seq = seq
-
-    def length(self):
-        return len(self.seq)
-        
-    def __getslice__(self, i, j):
-        return self.seq[i:j]
 
 class SubSequence:
     def __init__(self, seq):
@@ -65,3 +55,35 @@ class SubSequence:
     
     def python(self, min, max):
         return self.seq[min:max]
+
+class Sequence(AbstractSequence):
+    def __init__(self, seq=''):
+        self.seq = seq
+
+    def length(self):
+        return len(self.seq)
+        
+    def __getslice__(self, i, j):
+        return self.seq[i:j]
+
+class NamedSequence:
+    """A decorator that adds names to a Sequence.
+
+    Members:
+    name    A human-readable name for the sequence.
+    uid     A unique id assigned by the implementation.
+    dbid    The id assigned by the database the sequence is from.
+
+    """
+    def __init__(self, seq, name='', uid='', dbid=''):
+        """__init__(self, seq, name='', uid='', dbid='')"""
+        self._seq = seq
+        self.name = name
+        self.uid = uid
+        self.dbid = dbid
+
+    def __getattr__(self, key):
+        if self.__dict__.has_key(key):
+            return self.__dict[key]
+        return getattr(self._seq, key)
+

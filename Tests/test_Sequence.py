@@ -37,3 +37,19 @@ try:
     assert s.subseq.python(1, 3) == "ND", "python"
 except Exception, x:
     raise TestFailed, "SubSequence (%s)" % x
+
+
+### NamedSequence
+
+if verbose:
+    print "Running tests on NamedSequence"
+
+s = Sequence.Sequence("ANDREW")
+ns = Sequence.NamedSequence(s)
+try:
+    assert ns.name == '', "name"
+    assert ns.uid == '', "uid"
+    assert ns.dbid == '', "dbid"
+    assert ns[1:3] == "ND", "delegation"
+except Exception, x:
+    raise TestFailed, "NamedSequence (%s)" % x
