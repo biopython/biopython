@@ -16,8 +16,8 @@ class FSSPMultAlign(UserDict.UserDict):
         self.abs_res = []
         self.pdb_res = []
         self.data = {}
-# Returns a biopython multiple alignment instance (Bio.Align.Generic)
 def mult_align(sum_dict,align_dict):
+   """Returns a biopython multiple alignment instance (Bio.Align.Generic)"""
    mult_align_dict = {}
    for j in align_dict.abs(1).pos_align_dict.keys():
       mult_align_dict[j] = ''
@@ -39,7 +39,7 @@ def mult_align(sum_dict,align_dict):
 
 
 # Several routines used to extract information from FSSP sections
-
+# filter:
 # filters a passed summary section and alignment section according to a numeric
 # attribute in the summary section. Returns new summary and alignment sections
 # For example, to filter in only  those records which have a zscore greater than
@@ -51,7 +51,10 @@ def mult_align(sum_dict,align_dict):
 # new_align_dict. I have to figure out something better.
 # Took me ~160 seconds for the largest FSSP file (1reqA.fssp)
 #
+
 def filter(sum_dict,align_dict,filter_attribute,low_bound, high_bound):
+   """filters a passed summary section and alignment section according to a numeric
+   attribute in the summary section. Returns new summary and alignment sections"""
    new_sum_dict = FSSP.FSSPSumDict()
    new_align_dict = copy.deepcopy(align_dict)
 #   for i in align_dict.keys():
@@ -70,7 +73,10 @@ def filter(sum_dict,align_dict,filter_attribute,low_bound, high_bound):
          new_align_dict.abs(pos_num).pos_align_dict[prot_num] = \
                    align_dict.abs(pos_num).pos_align_dict[prot_num]
    return new_sum_dict, new_align_dict
+
 def name_filter(sum_dict, align_dict, name_list):
+   """ Accepts a list of names. Returns a new Summary block and Alignment block which
+       contain the info only for those names passed."""
    new_sum_dict = FSSP.FSSPSumDict()
    new_align_dict = copy.deepcopy(align_dict)
    for cur_pdb_name in name_list:
