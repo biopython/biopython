@@ -3,7 +3,7 @@ from xml.sax import handler
 from Martel import Dispatch
 
 from Bio import SeqRecord, StdHandler, Std, DBXRef, Seq
-from Bio import Alphabet, DecodeLocation, SeqFeature
+from Bio import Alphabet, SeqFeature
 from Bio.Alphabet import IUPAC
 
 alphabet_table = {
