@@ -4,7 +4,9 @@ Contains classes to deal with generic sequence alignment stuff not
 specific to a particular program or format.
 
 classes:
-o Alignment"""
+o Alignment
+"""
+
 # standard library
 import string
 
@@ -103,7 +105,13 @@ class Alignment:
         new_record.annotations['weight'] = weight
 
         self._records.append(new_record)
-
+    def get_column(self,col):
+        """Returns a string containing a given column"""
+        col_str = ''
+        assert col >= 0 and col <= self.get_alignment_length()
+        for rec in self._records:
+            col_str += rec.seq[col]
+        return col_str
                 
         
         
