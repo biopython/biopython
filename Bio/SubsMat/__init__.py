@@ -199,7 +199,9 @@ class SeqMat(UserDict.UserDict):
       if build_later:
          self._init_zero()
       else:
-         self._full_to_half()
+			# Convert full to half if matrix is not already a log-odds matrix
+         if self.mat_type <> LO:
+            self._full_to_half()
          self._correct_matrix()
       self.sum_letters = {}
       self.relative_entropy = 0
@@ -270,9 +272,11 @@ class SeqMat(UserDict.UserDict):
       for letter in self.alphabet.letters:
          self.sum_letters[letter] = self.letter_sum(letter)
    def print_full_mat(self,f=sys.stdout,format="%4d",topformat="%4s",
-              alphabet=None,factor=1): 
+              alphabet=None,factor=1,non_sym=None): 
       # create a temporary dictionary, which holds the full matrix for
       # printing
+      assert non_sym == None or type(non_sym) == type(1.) or \
+      type(non_sym) == type(1)
       full_mat = copy.copy(self.data)
       for i in full_mat.keys():
          if i[0] <> i[1]:
@@ -287,8 +291,11 @@ class SeqMat(UserDict.UserDict):
       for i in alphabet:
          outline = i
          for j in alphabet:
-            val = full_mat[i,j]
-            val *= factor
+            if alphabet.index(j) > alphabet.index(i) and non_sym <> None:
+               val = non_sym
+            else:
+               val = full_mat[i,j]
+               val *= factor
             if val <= -999:
                cur_str = '  ND' 
             else:
@@ -441,7 +448,7 @@ def make_log_odds_matrix(acc_rep_mat,exp_freq_table=None,logbase=2,
       exp_freq_table = _exp_freq_table_from_obs_freq(obs_freq_mat)
    exp_freq_mat = _build_exp_freq_mat(exp_freq_table)
    subs_mat = _build_subs_mat(obs_freq_mat, exp_freq_mat)
-   lo_mat = _build_log_odds_mat(subs_mat,logbase,factor,round_digit)
+   lo_mat = _build_log_odds_mat(subs_mat,logbase,factor,round_digit,keep_nd)
    lo_mat.make_relative_entropy(obs_freq_mat)
    return lo_mat
 def observed_frequency_to_substitution_matrix(obs_freq_mat):
@@ -449,7 +456,7 @@ def observed_frequency_to_substitution_matrix(obs_freq_mat):
    exp_freq_mat = _build_exp_freq_mat(exp_freq_table)
    subs_mat = _build_subs_mat(obs_freq_mat, exp_freq_mat)
    return subs_mat
-def read_text_matrix(data_file):
+def read_text_matrix(data_file,mat_type=NOTYPE):
    matrix = {}
    tmp = string.split(data_file.read(),"\n")
    table=[]
@@ -483,7 +490,7 @@ def read_text_matrix(data_file):
    # delete entries with an asterisk
    for i in matrix.keys():
       if '*' in i: del(matrix[i])
-   ret_mat = SeqMat(matrix)
+   ret_mat = SeqMat(matrix,mat_type=mat_type)
    return ret_mat
 
 diagNO = 1
