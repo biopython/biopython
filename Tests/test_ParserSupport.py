@@ -10,7 +10,7 @@ from Bio import File
 from Bio import ParserSupport
 
 # pyUnit
-import unittest
+
 
 ### TaggingConsumer
 
@@ -251,15 +251,9 @@ all_tests = [EventGeneratorTest]
 
 runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
 
-test_loader = unittest.defaultTestLoader
+test_loader = unittest.TestLoader()
 test_loader.testMethodPrefix = 't_'
 
 for cur_test in all_tests:
     test_suite = test_loader.loadTestsFromTestCase(cur_test)
     runner.run(test_suite)
-
-        
-        
-        
-
-
