@@ -86,6 +86,25 @@ def sprot_search_de(text, swissprot=1, trembl=None,
         variables['T'] = 'on'
     return _open(cgi, variables)
 
+def scanprosite1(seq=None, id=None, exclude_frequent=None, 
+                 cgi='http://expasy.cbr.nrc.ca/cgi-bin/scanprosite/scanprosite?1'):
+    """scanprosite1(seq=None, id=None, exclude_frequent=None, 
+    cgi='http://expasy.cbr.nrc.ca/cgi-bin/scanprosite/scanprosite?1') -> handle
+    
+    Scan a sequence for a Prosite pattern.  Either a sequence or a SwissProt/
+    trEMBL sequence can be passed.  exclude_frequent specifies whether to
+    exclude patterns with high probability.
+    
+    """
+    variables = {}
+    if seq:
+        variables['SEQ'] = seq
+    if id:
+        variables['ID'] = id
+    if exclude_frequent:
+        variables['box'] = 'ok'
+    return _open(cgi, variables, get=0)
+
 def _open(cgi, params={}, get=1):
     """_open(cgi, params={}, get=1) -> UndoHandle
 
