@@ -110,13 +110,13 @@ cfastpairwise__make_score_matrix(self, args)
     M = PySequence_Length(py_sequenceA);
     N = PySequence_Length(py_sequenceB);
     Dmatrix = Pmatrix = Qmatrix = (double *)NULL;
-    direction_matrix = (char *)NULL;
+    direction_matrix = (unsigned char *)NULL;
     dsize = M * N * sizeof(*Dmatrix);
     csize = M * N * sizeof(*direction_matrix);
     Dmatrix = (double *)malloc(dsize);
     Pmatrix = (double *)malloc(dsize);
     Qmatrix = (double *)malloc(dsize);
-    direction_matrix = (char *)malloc(csize);
+    direction_matrix = (unsigned char *)malloc(csize);
     if(!Dmatrix || !Pmatrix || !Qmatrix || !direction_matrix) {
 	if(Dmatrix)
 	    free(Dmatrix);
