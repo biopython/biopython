@@ -26,7 +26,6 @@ def refmat(p,q):
 def rotmat(p,q):
     """
     Return a (left multiplying) matrix that rotates p onto q.
-    p and q should be unit vectors.
     """
     rot=matrixmultiply(refmat(q, -p), refmat(p, -p))
     return rot
