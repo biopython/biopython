@@ -1,13 +1,8 @@
 #!/usr/bin/env python
-# Created: Tue Aug  8 20:32:36 2000
-# Last changed: Time-stamp: <00/12/02 15:58:45 thomas>
+# Created: Thu Feb 15 14:22:12 2001
+# Last changed: Time-stamp: <01/02/15 17:09:02 thomas>
 # thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas
 # File: nextorf.py
-
-# Copyright 2000 by Thomas Sicheritz-Ponten.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
 
 import string, re
 import os, sys, commands
@@ -20,21 +15,11 @@ from Bio import Alphabet
 from Bio.Alphabet import IUPAC
 from Bio.Data import IUPACData, CodonTable
 
-# From: "Andrew Dalke" <dalke@acm.org>
-# To: <thomas@cbs.dtu.dk>, <biopython-dev@biopython.org>
-# Subject: Re: [Biopython-dev] unambiguous DNA
-# Date: Thu, 10 Aug 2000 01:43:07 -0600
-# [..] There isn't an alphabet in biopython which supports output sequence
-# uses the ambiguous protein alphabet along with '*' for stop codon
-# symbol and 'X' for untranslatable protein residues , so we need to
-# make a new one:
-
 class ProteinX(Alphabet.ProteinAlphabet):
    letters = IUPACData.extended_protein_letters + "X"
 
 proteinX = ProteinX()
 
-# Forward translation table, mapping codon to protein
 class MissingTable:
   def __init__(self, table):
     self._table = table
@@ -55,28 +40,40 @@ def makeTableX(table):
 def complement(seq):
     return string.join(map(lambda x:IUPACData.ambiguous_dna_complement[x], map(None,seq)),'')
 
-class NextORF:
+def reverse(seq):
+    r = map(None, seq)
+    r.reverse()
+    return string.join(r,'')
+
+def antiparallel(seq):
+    s = complement(seq)
+    s = reverse(s)
+    return s
+
+class NextOrf:
     def __init__(self, file, options):
-        self.code = 1
-        self.file = file
         self.options = options
-        table = makeTableX(CodonTable.ambiguous_dna_by_id[int(self.options['table'])])
-        self.translator = Translate.Translator(table)
+        self.file = file
+        self.genetic_code = int(self.options['table'])
+        self.table = makeTableX(CodonTable.ambiguous_dna_by_id[self.genetic_code])
+        self.translator = Translate.Translator(self.table)
+        self.counter = 0
+        self.ReadFile()
         
-    def read_file(self):
+    def ReadFile(self):
         self.parser = Fasta.RecordParser()
         self.iter = Fasta.Iterator(handle = open(self.file), parser = self.parser)
         while 1:
             rec = self.iter.next()
             if not rec: break
-            self.header = string.split(rec.title,',')[0]
-            self.handle_record(rec)
+            self.header = rec.title.split()[0].split(',')[0]
+            self.HandleRecord(rec)
 
-    def toFasta(self, header, seq):
+    def ToFasta(self, header, seq):
        seq = re.sub('(............................................................)','\\1\n',seq)
        return '>%s\n%s' % (header, seq)
 
-    def gc(self, seq):
+    def Gc(self, seq):
        d = {}
        for nt in ['A','T','G','C']:
           d[nt] = string.count(seq, nt)
@@ -84,7 +81,7 @@ class NextORF:
        if gc == 0: return 0
        return round(gc*100.0/(d['A'] +d['T'] + gc),1)
 
-    def gc2(self,seq):
+    def Gc2(self,seq):
        l = len(seq)
        d= {}
        for nt in ['A','T','G','C']:
@@ -112,83 +109,106 @@ class NextORF:
           nall = nall + n
 
        gcall = 100.0*gcall/nall
-       return '%.1f%%, %.1f%%, %.1f%%, %.1f%%' % (gcall, gc[0], gc[1], gc[2])
+       res = '%.1f%%, %.1f%%, %.1f%%, %.1f%%' % (gcall, gc[0], gc[1], gc[2])
+       print 'GC:', res
+       return res
           
-   
-    def handle_record(self, rec):
-        plus, minus= 0,0
-        if self.options['strand'] == 'both' or self.options['strand'] == 'plus': plus = 1
-        if self.options['strand'] == 'both' or self.options['strand'] == 'minus': minus = 1         
-        s = string.upper(rec.sequence[self.options['start']:self.options['stop']])
-        seq = Seq(s,IUPAC.ambiguous_dna)
+
+    def GetOrfCoordinates(self, seq):
+        s = seq.data
+        letters = []
+        table = self.table
+        get = self.table.forward_table.get
+        n = len(seq)
+        start_codons = self.table.start_codons
+        stop_codons = self.table.stop_codons
+        frame_coordinates = []
+        for frame in range(0,3):
+            coordinates = []
+            for i in range(0+frame, n-n%3, 3):
+                codon = s[i:i+3]
+                if codon in start_codons: coordinates.append((i,1,codon))
+                elif codon in stop_codons: coordinates.append((i,0,codon))
+
+
+            frame_coordinates.append(coordinates)
+
+        return frame_coordinates
+
+    def HandleRecord(self, rec):
+        frame_coordinates = ''
+        dir = self.options['strand']
+        plus = dir in ['both', 'plus']
+        minus = dir in ['both', 'minus']
+
+        start, stop = int(self.options['start']), int(self.options['stop'])
+        s = string.upper(rec.sequence[start:stop])
+        self.seq = Seq(s,IUPAC.ambiguous_dna)
+        self.length = len(self.seq)
+        self.rseq = None
+
+        
+        CDS = []
+        if plus: CDS.extend(self.GetCDS(self.seq))
         if minus:
-            r = map(None,s)
-            r.reverse()
-            rseq = Seq(complement(r), IUPAC.ambiguous_dna)
-            length = len(s)
+            self.rseq = Seq(antiparallel(s),IUPAC.ambiguous_dna)
+            CDS.extend(self.GetCDS(self.rseq, strand = -1))
 
-        n = 0
-        if plus:
-            for frame in self.options['frames']:
-                orf = self.translator.translate(seq[frame-1:])
-                orfs = string.split(orf.data,'*')
-                start = 0
-                for orf in orfs:
-                    stop = start + 3*(len(orf) + 1)
-                    subs = seq[frame-1:][start:stop]
-                    _start = start
-                    start = stop
-
-                    # ORF too small ?
-                    if len(orf) < int(self.options['minlength']): continue
-                    # ORF too big ?
-                    if self.options['maxlength'] and \
-                       len(orf) > int(self.options['maxlength']): continue
-                    
-                    n = n + 1
-                    # ORF just allright ...
-                    out = self.options['output']
-                    head = 'orf_%s:%s:+%d:%d:%d' % (n, self.header, frame, _start+1,stop+1)
-                    if self.options['gc']: head = '%s:%s' % (head, self.gc2(subs.data))
-                    if out == 'aa':
-                        print self.toFasta(head, orf)
-                    elif out == 'nt':
-                        print self.toFasta(head, subs.data)
-                    elif out == 'pos':
-                        print head
-                        
-                        
-
-        if minus:
-            for frame in self.options['frames']:
-                orf = self.translator.translate(rseq[frame-1:])
-                orfs = string.split(orf.data,'*')
-                start = 0
-                for orf in orfs:
-                    stop = start + 3*(len(orf) + 1)
-                    subs = rseq[frame-1:][start:stop]
-                    _start = start
-                    start = stop
-
-                    # ORF too small ?
-                    if len(orf) < int(self.options['minlength']): continue
-                    # ORF too big ?
-                    if self.options['maxlength'] and \
-                       len(orf) > int(self.options['maxlength']): continue
-                    # ORF just allright ...
-                    n = n + 1
-                    head = 'orf_%s:%s:-%d:%d:%d' % (n, self.header, frame, length - stop +2, length - _start)
-                    if self.options['gc']: head = '%s:%s' % (head, self.gc2(subs.data))
-                    out = self.options['output']
-                    if out == 'aa':
-                        print self.toFasta(head, orf)
-                    elif out == 'nt':
-                        print self.toFasta(head, subs.data)
-                    elif out == 'pos':
-                        print head
-
+        self.Output(CDS)
             
+        
 
+    def GetCDS(self, seq, strand = 1):
+        frame_coordinates = self.GetOrfCoordinates(seq)
+        START, STOP = 1,0
+        so = self.options
+        nostart = so['nostart']
+        minlength, maxlength = int(so['minlength']), int(so['maxlength'])
+        CDS = []
+        f = 0
+        for frame in frame_coordinates:
+            f+=1
+            start_site = -1
+            if nostart: start_site = 0
+            frame.append((self.length, 0, 'XXX'))
+            for pos, codon_type, codon in frame:
+                if codon_type == START:
+                    if start_site == -1:start_site = pos
+                elif codon_type == STOP:
+                    if start_site == -1: continue
+                    stop = pos
+                    length = stop - start_site +1
+                    if length >= minlength and length <= maxlength:
+                        s = seq[start_site:stop +1]
+                        CDS.append((start_site, stop, length, s, strand*f))
+                        start_site = -1
+                        if nostart: start_site = pos + 3
+                        del stop
+
+        return CDS
+    
+
+    def Output(self, CDS):
+        out = self.options['output']
+        seqs = (self.seq, self.rseq)
+        
+        for start, stop, length, subs, strand in CDS:
+            self.counter += 1
+            head = 'orf_%s:%s:%d:%d:%d' % (self.counter, self.header, strand, start,stop+1)
+
+            if self.options['gc']:
+                head = '%s:%s' % (head, self.Gc2(subs.data))
+                
+            if out == 'aa':
+                orf = self.translator.translate(subs)
+                print self.ToFasta(head, orf.data)
+            elif out == 'nt':
+                print self.ToFasta(head, subs.data)
+            elif out == 'pos':
+                print head
+                
+        
+    
 def help():
     global options
     print 'Usage:', sys.argv[0], '<FASTA file> (<options>)'
@@ -199,7 +219,8 @@ def help():
     print "NCBI's Codon Tables:"
     for key, table in CodonTable.ambiguous_dna_by_id.items():
         print '\t',key, table._codon_table.names[0]
-        
+
+    print 'e.g.\n./nextorf.py --minlength 5 --strand plus --output nt --gc 1 testjan.fas'
     sys.exit(0)
     
 
@@ -207,41 +228,35 @@ options = {
     'start': 0,
     'stop': -1,
     'minlength': 100,
-    'maxlength': None,
+    'maxlength': 100000000,
     'strand': 'both',
     'output': 'aa',
     'frames': [1,2,3],
-    'gc': None,
-    'cc': None,
-    'nostart': None,
+    'gc': 0,
+    'nostart': 0,
     'table': 1,
     }
 
 if __name__ == '__main__':
-
     args = sys.argv[1:]
-
     show_help = len(sys.argv)<=1
 
     shorts = 'hv'
-    longs = map(lambda x: x +'=', options.keys())
+    longs = map(lambda x: x +'=', options.keys()) + ['help']
+
     optlist, args = getopt.getopt(args,shorts, longs)
     if show_help: help()
+
     for arg in optlist:
         if arg[0] == '-h' or arg[0] == '--help':
             help()
             sys.exit(0)
         for key in options.keys():
-            if arg[0][2:] == key:
-                if arg[1] == 'no': 
-                    options[key] = None
-                else:
-                    options[key] = arg[1]
-        if arg[0] == 'v':
-            print options
+            if arg[1].lower() == 'no': arg[1] = 0
+            elif arg[1].lower() == 'yes': arg[1] = 1
+            if arg[0][2:] == key: options[key] = arg[1]
+            
+        if arg[0] == '-v':print 'OPTIONS', options
+
     file = args[0]
-
-    nextorf = NextORF(file, options)
-    nextorf.read_file()
-
-    
+    nextorf = NextOrf(file, options)
