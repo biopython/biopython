@@ -1,76 +1,249 @@
 test_rebase
-testing cac81.htm
-sequence
-G C N^N G C
-C G N^N C G
-Enzyme number 638 
- prototype Cac8I
-G. Reysett
-Clostridium acetobutylicum ABKn8 
-37
-Jun 12 1991
-285
-238
-31
-19
-8
 testing bamii.htm
-sequence
-G^G A T C C
-C C T A G^G
-Enzyme number 185 
- prototype BamHI
-ATCC 49763
-Bacillus amyloliquefaciens H 
-37
-Jan 1 1975
-3
-5
-1
-0
-1
-testing pvuii.htm
-sequence
- CAGCTG 
+key Growth Temperature
+         37 °
+key number_of_sites
+        key is Lambda
+            5
+        key is PhiX174
+            0
+        key is SV40
+            1
+        key is Adeno2
+            3
+        key is pBR322
+            1
+key Entered
+         Jan 1 1975 ...
+key Modified
+         Jan 17 2000
+key factoids
+             Exhibits star activity
+             Enzyme gene cloned.
+             Enzyme gene sequenced.
+             Crystal data present.
+key descriptor
+        Type II restriction enzyme
+key Source
+         ATCC 49763
+key Single-stranded cleavage
+         n
+key 3_to_5_strand
+        C C T A G^G
+key title
+        BamHI
+key Microorganism
+         Bacillus amyloliquefaciens H
+key REBASE enzyme #
+         185
+key Prototype
+         BamHI
+key 5_to_3_strand
+        G^G A T C C
 
-Enzyme number 3485 
- prototype PvuII
- ATCC 13315
-Proteus vulgaris 
-37
-Jan 1 1980
-24
-15
-1
-0
-3
-testing taqi.htm
-sequence
- TCGA 
 
-Enzyme number 3520 
- prototype TaqI
- J.I. Harris
-Thermus aquaticus YTI 
-70
-Jan 1 1977
-50
-121
-7
-10
-1
+testing cac81.htm
+key Growth Temperature
+         37 °
+key number_of_sites
+        key is Lambda
+            238
+        key is PhiX174
+            19
+        key is SV40
+            8
+        key is Adeno2
+            285
+        key is pBR322
+            31
+key Entered
+         Jun 12 1991 ...
+key Modified
+         Aug 6 1999
+key factoids
+key descriptor
+        Type II restriction enzyme
+key Source
+         G. Reysett
+key 3_to_5_strand
+        C G N^N C G
+key title
+        Cac8I
+key Microorganism
+         Clostridium acetobutylicum ABKn8
+key REBASE enzyme #
+         638
+key Prototype
+         Cac8I
+key 5_to_3_strand
+        G C N^N G C
+
+
+testing crei.htm
+key Growth Temperature
+         26 °
+key number_of_sites
+        key is Lambda
+            0
+        key is PhiX174
+            0
+        key is SV40
+            0
+        key is Adeno2
+            0
+        key is pBR322
+            0
+key Entered
+         Jan 1 1979 ...
+key Modified
+         Sep 9 1999
+key factoids
+             Enzyme gene cloned.
+             Enzyme gene sequenced.
+             Crystal data present.
+key descriptor
+        Homing endonuclease
+key Source
+         J.-D. Rochaix
+key 3_to_5_strand
+        G A C C C A A G T T T T G C A G^C A C T C T G T C A A A C C 0
+key title
+        I-CreI
+key Microorganism
+         Chlamydomonas reinhardtii
+key REBASE enzyme #
+         2540
+key Prototype
+         I-CreI
+key 5_to_3_strand
+        C T G G G T T C A A A A C G T C G T G A^G A C A G T T T G G 0
+key Comment
+         Insertion site CGT^CGT
+
+
 testing foki.htm
-sequence
-G G A T G N N N N N N N N N^N N N N
-C C T A C N N N N N N N N N N N N N^
-Enzyme number 1056 
- prototype FokI
-IFO 12536
-Flavobacterium okeanokoites 
-30
-Jan 1 1981
-78
-150
-12
-8
-11
+key Growth Temperature
+         30 °
+key number_of_sites
+        key is Lambda
+            150
+        key is PhiX174
+            8
+        key is SV40
+            11
+        key is Adeno2
+            78
+        key is pBR322
+            12
+key Entered
+         Jan 1 1981 ...
+key Modified
+         Aug 31 1999
+key factoids
+             Enzyme gene cloned.
+             Enzyme gene sequenced.
+             Crystal data present.
+key descriptor
+        Type II restriction enzyme(subtype s)
+key Source
+         IFO 12536
+key Single-stranded cleavage
+         n
+key 3_to_5_strand
+        C C T A C N N N N N N N N N N N N N^
+key title
+        FokI
+key Microorganism
+         Flavobacterium okeanokoites
+key REBASE enzyme #
+         1056
+key Prototype
+         FokI
+key 5_to_3_strand
+        G G A T G N N N N N N N N N^N N N N
+key Comment
+         CACCC sites also methylated somewhat
+
+
+testing pvuii.htm
+key Growth Temperature
+         37 °
+key number_of_sites
+        key is Lambda
+            15
+        key is PhiX174
+            0
+        key is SV40
+            3
+        key is Adeno2
+            24
+        key is pBR322
+            1
+key Entered
+         Jan 1 1980 ...
+key Modified
+         Jun 1 2000
+key Base (Type of methylation)
+         4 (N4-methylcytosine)
+key descriptor
+        Type II methylase(subtype beta)
+key Source
+         ATCC 13315
+key 3_to_5_strand
+key title
+        M.PvuII
+key Microorganism
+         Proteus vulgaris
+key REBASE enzyme #
+         3485
+key Prototype
+         PvuII
+key factoids
+             Enzyme gene cloned.
+             Enzyme gene sequenced.
+             Crystal data present.
+key 5_to_3_strand
+          CAGCTG  
+
+
+testing taqi.htm
+key Growth Temperature
+         70 °
+key number_of_sites
+        key is Lambda
+            121
+        key is PhiX174
+            10
+        key is SV40
+            1
+        key is Adeno2
+            50
+        key is pBR322
+            7
+key Entered
+         Jan 1 1977 ...
+key Modified
+         Jun 1 2000
+key Base (Type of methylation)
+         4 (6-methyladenosine)
+key descriptor
+        Type II methylase(subtype gamma)
+key Source
+         J.I. Harris
+key 3_to_5_strand
+key title
+        M.TaqI
+key Microorganism
+         Thermus aquaticus YTI
+key REBASE enzyme #
+         3520
+key Prototype
+         TaqI
+key factoids
+             Enzyme gene cloned.
+             Enzyme gene sequenced.
+             Crystal data present.
+key 5_to_3_strand
+          TCGA  
+
+
