@@ -56,7 +56,7 @@ class PDBList:
     http://www.pdb.org/.
     """
 
-    def __init__(self,server='ftp://ftp.pdb.mdc-berlin.de',pdb='/pdb'):
+    def __init__(self,server='ftp://ftp.pdb.mdc-berlin.de', pdb=os.sep+'pdb'):
         """Initialize the class with the default server or a custom one."""
         # remote pdb server
         self.pdb_server = server
@@ -195,7 +195,7 @@ OBSLTE     26-SEP-03 1DYV      1UN2
                 return final_file
         # Read the file
         lines=urllib.urlopen(url).read()
-        open(filename,'w').write(lines)
+        open(filename,'wb').write(lines)
         # uncompress the file
         os.system("%s %s" % (uncompress, filename))
 
