@@ -9,8 +9,7 @@
 \title{Biopython
 Tutorial and Cookbook}
 \author{Jeff Chang and Brad Chapman}
-\date{Last
-Update--1 July 00}
+\date{Last Update--4 August 00}
 
 \section{Introduction}
 
@@ -18,28 +17,265 @@ Update--1 July 00}
 
 \subsection{Obtaining and Installing Biopython}
 
-I think it's nice to have all of the documentation on everything
-together, but we can take it out if you think it'll make it too big.
+Biopython's internet home is at, naturally enough,  \ahrefurl{\url{http://www.biopython.org}}. This is the home of all things biopython, so it is the best place to start looking around if you are interested. When you feel ready to dive in and start working with the code, you have two choices:
 
-Tips and Tricks
+\begin{enumerate}
+
+\item Release code -- We made available both stable and developer's releases on the download page (\ahrefurl{\url{http://www.biopython.org/Download/}}). The stable releases are likely to be more well tested, while the development releases are closer to what is in CVS, and so will probably have more features.
+
+\item CVS -- The current working copy of the Biopython sources is always available via CVS (Concurrent Versions Systems -- \ahrefurl{\url{http://www.cvshome.org/}}). Concise instructions for accessing this copy are available at \ahrefurl{\url{http://cvs.biopython.org}}.
+
+\end{enumerate}
+
+No matter which way you choose, installing Biopython will require the following easy steps.
+
+\subsubsection{Installation}
+
+Biopython uses Distutils, which is the new standard python installation package. Copies are available at \ahrefurl{\url{http://www.python.org/sigs/distutils-sig/download.html}} and Distutils will also come standard with Python 1.6 and future versions (the version that is shipped with alpha versions of 1.6 should work just fine). Distutils will make installation a snap, as you will see in a second.
+
+
+Now that we've got what we need let's get into the installation: (Warning: These instructions are strongly biased to UNIX type machines. If you are installing on Windows or Mac or some brand of UNIX for which these instructions are not very helpful, please let us know how we can make them better!)
+
+\begin{enumerate}
+
+\item First you need to unpack the distribution. If you got the CVS version, you are all set to go and can skip on ahead. Otherwise, you'll need to unpack it. On UN*X machines, a tar.gz package is provided, which you can unpack with \verb|tar -xzvpf biopython-X.X.tar.gz|. A zip file is also provided for other platforms. XXX Add stuff about rpms once we get them working.
+
+\item Now that everything is unpacked, move into the \verb| biopython*| directory (this will just be \verb|biopython| for CVS users, and will be \verb|biopython-X.X| for those using a packaged download). 
+
+\item Now you are ready for your one step install -- \verb|python setup.py install|. This performs the default install, and will put Biopython into the \verb|site-packages| directory of your python library tree (on my machine this is \verb|/usr/local/python1.5/site-packages|). You will have to have permissions to write to this directory. 
+
+\begin{enumerate}
+
+\item This install requires that you have the python source available. You can check this by looking for \verb|Python.h| and \verb|config.h| in some place like \verb|/usr/local/include/python1.5|.
+
+\item The distutils setup process allows you to do some customization of your install so you don't have to stick everything in the default location (in case you don't have write permissions there, or just want to test Biopython out). You have quite a few choices, which are covered in detail in the distutils installation manual (http://www.python.org/sigs/distutils-sig/doc/inst/inst.html), specifically in the Alternative installation section.
+
+\end{enumerate}
+
+\item That's it! Biopython is installed. Wasn't that easy? Now let's check and make sure it worked properly.
+
+\end{enumerate}
+
+\subsubsection{Making sure it worked}
+
+First, we'll just do a quick test to make sure python. The most important thing is that python can find the biopython installation. Biopython all installs into a top level \verb|Bio| directory, and you want to make sure this is on your\verb| $PYTHONPATH| on UNIX (hmmm, what do you do on other platforms?). If you used the default install, this shouldn't be a problem, but if not, you'll need to set the \verb|PYTHONPATH| with something like \verb|export PYTHONPATH = $PYTHONPATH':/directory/where/you/put/Biopython'|. Now that we think we are ready, fire up your python interpreter and follow allong with the following quick script:
+
+\begin{verbatim}
+
+[chapmanb@taxus chapmanb]$ python
+Python 1.6a2 (#1, Jul 31 2000, 09:04:26)  [GCC 2.95.2 19991024 (release/franzo)] on linux2
+Copyright 1991-1995 Stichting Mathematisch Centrum, Amsterdam
+>>> from Bio.Seq import Seq
+>>> new_seq = Seq('GATC') 
+>>> new_seq[0:2]
+Seq('GA', Alphabet())
+
+\end{verbatim}
+
+If this worked properly, then it looks like Biopython is in a happy place where python can find it, so now you might want to do some more rigorous tests. The \verb|Tests| directory inside the distribution contains a number of tests you can run to make sure all of the different parts of biopython are working. These should all work just by running \verb|python test_WhateverTheTestIs.py|. Eventually, we hope to have this built into a big test suite so you can test everything with one command. 
+
+
+Well, now you've gotten Biopython installed and running, you are probably ready to get working with it, so continue reading...
 
 \subsection{FAQ}
 
 
 
-\section{Quick Start -- 
-What can you do with Biopython?}
+\section{Quick Start -- What can you do with Biopython?}
 
-This is going to be the meat of the tutorial.  We should run people
-through an example of things, much like in the ACM SIGBIO paper.  We
-should not get too technical.  It's intended audience is for new users
-of biopython.  That is, we should give just enough detail for people
-to start hacking on their own.
-
-We can assume: internet connection, knowledge of Python, biopython
-installed.
+This section is designed to get you started quickly with Biopython, and to give a general overview of what is available and how to use it. All of the examples in this section assume that you have some general working knowledge of python, and that you have successfully installed biopython on your system. If you think you need to brush up on your python, the main python web site provides quick a bit of free documentation to get started with at \ahrefurl{\url{http://www.python.org/doc/}}. 
 
 
+Since much biological work on the computer involves connecting with databases on the internet, some of the examples will also require a working internet connection in order to run. 
+
+
+Now that that is all out of the way, let's get into what we can do with Biopython.
+
+\subsection{General overview of what Biopython provides}
+
+As mentioned in the introduction, Biopython is a set of libraries to provide the ability to deal with ''things'' of interest to biologists working on the computer. In general this means that you will need to have at least some programming experience (in python, of course!) or at least an interest in learning to program. Biopython's job is to make your job easier as a programmer by supplying reusable libraries so that you can focus on answering your specific question of interest, instead of focusing on the internals of parsing a particular file format (of course, if you want to help by writing a parser that doesn't exist and contributing it to Biopython, please go ahead!). So Biopython's job is to make you happy!
+
+
+One thing to note about Biopython is that it often provides multiple ways of ``doing the same thing.'' To me, this can be frustrating since I  often way to just know the one right way to do something. However, this is also a real benefit because it gives you lots of flexibility and control over the libraries. The tutorial helps to show you the common or easy ways to do things so that you can just make things work. To learn more about the alternative possibilities, look into the Cookbook section (which tells you some cools tricks and tips) and the Advanced section (which provides you with as much detail as you'd ever want to know!). 
+
+\subsection{Working with sequences}
+
+Disputedly (of course!), the central object in bioinformatics is the sequence. Thus, we'll start with the Biopython mechanisms for dealing with sequences. When I think of a sequence the first thing that pops into my mind is a string of letters:\verb| 'AGTACACTGGT'| which seems natural since this is the most common way that sequences are seen in biological file formats.  However, a simple string of letters by itself is also very uninformative -- is it a DNA or  protein sequence (okay, a protein with a lot of Alanines, Glycines, Cysteines and Threonines!), what type of organism did it come from, what is so interesting about it, and so on. The challenge in designing a sequence interface is to pick a representation that is informative enough to take into account the more complex information, yet is as lightweight and easy to work with as just a simple sequence.
+
+
+The approach taken in the Biopython sequence class is to utilize a class that holds more complex information, yet can be manipulated as if it were a simple string. This is accomplished by utliziing operator overloading to make manipulating a sequence object feel like manipulating a python string. The sequence class, referred to simply as Seq,  is defined in the file \verb|Bio/Seq.py.| Let's look at the Seq class deeper to see what it has to offer.
+
+
+A biopython Seq object has two important attributes:
+
+\begin{enumerate}
+
+\item \verb|data| -- as the name implies, this is the actual sequence data string of the sequence.
+
+\item \verb|alphabet| -- an object describing what the individual characters making up the string ``mean'' and how they should be interpreted.
+
+\end{enumerate}
+
+Clearly the alphabet object is the important thing that is making the Seq object more than just a string. The currently available alphabets for Biopython are defined in the \verb|Bio/Alphabet| module. We'll use the IUPAC alphabets \ahrefurl ({\url{http://www.chem.qmw.ac.uk/iupac/}}) here to deal with some of our favorite objects: DNA, RNA and Proteins.  
+
+
+\verb|Bio/Alphabet/IUPAC.py| provides basic definitions for proteins, DNA and RNA, but additionally provides the abilitiy to extend and cutomize the basic definitions. For instance, for proteins, there is a basic IUPACProtein class, but there is an additional ExtendedIUPACProtein class providing for the additional elements ``Asx'' (asparagine or aspartic acid), ``Sec'' (selenocysteine), and ``Glx'' (glutamine or glutamic acid). For DNA you've got choices of IUPACUnambiguousDNA, which provides for just the basic letters, IUPACAmbiguousDNA (which provides for ambiguity letters for every possible situation) and ExtenedIUPACDNA, which allows letters for modified bases. Similarly, RNA can be represented by IUPACAmbigousRNA or IUPACUnambigousRNA.
+
+
+The advantages of having an alphabet class are two fold. First, this gives an idea of the type of information the \verb|data| object contains. Secondly, this provides a means of contraining the information you have in the data object, as a means of type checking.
+
+
+Now that we know what we are dealing with, let's look at how to utilize this class to do interesting work.
+
+
+First, create a Sequence object from a string of information we've got. We'll create an unambiougous DNA object:
+
+\begin{verbatim}
+>>> from Bio.Alphabet import IUPAC
+>>> my_alpha = IUPAC.unambiguous_dna
+>>> from Bio.Seq import Seq
+>>> my_seq = Seq('GATCGATGGGCCTATATAGGATCGAAAATCGC', my_alpha)
+>>> print my_seq
+Seq('GATCGATGGGCCTATATAGGATCGAAAATCGC', IUPACUnambiguousDNA())
+\end{verbatim}
+
+
+Even though this is a sequence object, we can deal with it in some ways as if it were a normal python string. For instance, let's get a slice of the sequence.
+
+\begin{verbatim}
+>>> my_seq[4:12]
+Seq('GATGGGCC', IUPACUnambiguousDNA())
+\end{verbatim}
+
+Two things are interesting to note. First, this follows the normal conventions for python sequences.  So the first element of the sequence is 0 (which is normal for computer science, but not so normal for biology). When you do a slice the first item is included (ie. 4 in this case) and the last is excluded (12 in this case), which is the way things work in python, but of course not necessarily the way everyone in the world would expect. The main goal is to stay consistent with what python does. The second thing to notice is that the slice is performed on the sequence data string, but the new object produced retains the alphabet information from the original Seq object.
+
+
+You can treat the Seq object like the string in many ways:
+
+\begin{verbatim}
+>>> len(my_seq)
+32
+>>> new_seq = my_seq[0:5]
+>>> print new_seq
+Seq('GATCG', IUPACUnambiguousDNA())
+>>> my_seq + new_seq
+Seq('GATCGATGGGCCTATATAGGATCGAAAATCGCGATCG', IUPACUnambiguousDNA())
+>>> my_seq[5]
+'A'
+>>> my_seq == new_seq
+0
+\end{verbatim}
+
+In all of the operations, the alphabet property is maintained. This is very useful in case you accidentally end up trying to do something weird like add a protein sequence and a DNA sequence:
+
+\begin{verbatim}
+>>> protein_seq = Seq('EVRNAK', IUPAC.protein)
+>>> dna_seq = Seq('ACGT', IUPAC.unambiguous_dna)
+>>> protein_seq + dna_seq
+Traceback (most recent call last):
+  File "<stdin>", line 1, in ?
+  File "/usr/local/lib/python1.6/site-packages/Bio/Seq.py", line 42, in __add__
+    raise TypeError, ("incompatable alphabets", str(self.alphabet),
+TypeError: ('incompatable alphabets', 'IUPACProtein()', 'IUPACUnambiguousDNA()')
+\end{verbatim}
+
+
+And if you are really just need the string to insert into something, this is very easy to extract:
+
+\begin{verbatim}
+>>> my_seq.tostring()
+'GATCGATGGGCCTATATAGGATCGAAAATCGC'
+\end{verbatim} 
+
+The sequence object is not mutable by default, since in many biological applications you want to ensure you are not changing your data:
+
+\begin{verbatim}
+>>> my_seq[5] = 'G'
+Traceback (most recent call last):
+  File "<stdin>", line 1, in ?
+AttributeError: 'Seq' instance has no attribute '__setitem__'
+\end{verbatim}
+
+However, you can convert it into a mutable sequence and do pretty much anything you want with it:
+
+\begin{verbatim}
+>>> mutable_seq = my_seq.tomutable()
+>>> print mutable_seq
+MutableSeq('GATCGATGGGCCTATATAGGATCGAAAATCGC', IUPACUnambiguousDNA())
+>>> mutable_seq[5] = 'T'
+>>> print mutable_seq
+MutableSeq('GATCGTTGGGCCTATATAGGATCGAAAATCGC', IUPACUnambiguousDNA())
+>>> mutable_seq.remove('T')
+>>> print mutable_seq
+MutableSeq('GACGTTGGGCCTATATAGGATCGAAAATCGC', IUPACUnambiguousDNA())
+>>> mutable_seq.reverse()
+>>> print mutable_seq
+MutableSeq('CGCTAAAAGCTAGGATATATCCGGGTTGCAG', IUPACUnambiguousDNA())
+\end{verbatim}
+
+Now that the nature of the sequence object makes some sense, the next thing to look at is what kind of things we can do with a sequence. The \verb|Bio/Tools| directory contains two useful modules to transcribe and translate a sequence object. These tools work based on the alphabet of the sequence. For instance, let's supposed we want to transcribe our \verb|my_seq| object. Remember that this contains an unambiguous alphabet, so to transcribe we would do the following:
+
+\begin{verbatim}
+>>> from Bio.Tools import Transcribe
+>>> transcriber = Transcribe.unambiguous_transcriber
+>>> my_rna_seq = transcriber.transcribe(my_seq)
+>>> print my_rna_seq
+Seq('GAUCGAUGGGCCUAUAUAGGAUCGAAAAUCGC', IUPACUnambiguousRNA())
+\end{verbatim}
+
+The alphabet of the new RNA Seq object is created for free for you, so again, dealing with a Seq object is no more difficult then dealing with a simple string.
+
+
+You can also reverse transcribe RNA sequences:
+
+\begin{verbatim}
+>>> transcriber.back_transcribe(my_rna_seq)
+Seq('GATCGATGGGCCTATATAGGATCGAAAATCGC', IUPACUnambiguousDNA())
+\end{verbatim}
+
+
+To translate our DNA object we have quite a few choices. First, we can use any number of translation tables depending on what we know about our DNA sequence. The translation tables available in biopython were taken from information at \ahrefurl{\url{ftp://ncbi.nlm.nih.gov/entrez/misc/data/gc.prt}}. So, you have tons of choices to pick from. For this, let's just focus on two choices: the Standard translation table, and the Translation table for Vertebrate Mitochondriall DNA. These tables are labelled with id numbers 1 and 2, respectively. Now that we know what tables we are looking to get, we're all set to perform a basic translation. First, we need to get our translators that use these tables. Since we are still dealing with our unambiguous DNA object, we want to fetch translators that take this into account:
+
+\begin{verbatim}
+>>> from Bio.Tools import Translate
+>>> standard_translator = Translate.unambiguous_dna_by_id[1] 
+>>> mito_translator = Translate.unambiguous_dna_by_id[2]
+\end{verbatim}
+
+Once we've got the proper translators, it's time to go ahead and translate a sequence:
+
+\begin{verbatim}
+>>> my_seq = Seq('GCCATTGTAATGGGCCGCTGAAAGGGTGCCCGA', IUPAC.unambiguous_dna)
+>>> standard_translator.translate(my_seq)
+Seq('AIVMGR*KGAR', IUPACProtein())
+>>> mito_translator.translate(my_seq)
+Seq('AIVMGRWKGAR', IUPACProtein())
+\end{verbatim}
+
+Notice that the default translation will just go ahead and proceed blindly through a stop codon. If you are aware that you are translating some kind of open reading frame and want to just see everything up until the stop codon, this can be easily done with the \verb|translate_to_stop| function:
+
+\begin{verbatim}
+>>> standard_translator.translate_to_stop(my_seq)
+Seq('AIVMGR', IUPACProtein())
+\end{verbatim}
+
+Similar to the transcriber, it is also possible to reverse translate a protein into a DNA sequence:
+
+\begin{verbatim}
+>>> my_protein = Seq('AVMGRWKGGRAAG', IUPAC.protein)
+>>> standard_translator.back_translate(my_protein)
+Seq('GCTGTTATGGGTCGTTGGAAGGGTGGTCGTGCTGCTGGT', IUPACUnambiguousDNA())
+\end{verbatim}
+
+This covers the basic features and uses of the Biopython sequence class. There is a more detailed description of the design ideas behind the sequence class in the Advanced section of this tutorial. This class is still under development and comments on the design and use are, of course, very welcome. Now that you've got some idea of what it is like to interact with the Biopython libraries, it's time to delve into the fun, fun world of dealing with biological file formats!
+
+\subsection{Parsing biological file formats}
+
+\subsection{Connecting with biological databases}
+
+\subsection{Other nifty things}
+
+\subsection{What to do next}
 
 \section{Cookbook -- Cool things to do with it}
 
@@ -47,7 +283,7 @@ installed.
 
 \subsection{SWISS-PROT}
 
-\subsubsection{PubMed}
+\subsection{PubMed}
 
 \subsection{Classification}
 
