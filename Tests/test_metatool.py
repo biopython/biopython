@@ -17,8 +17,8 @@ from Bio import File
 from Bio import MetaTool
 
 
-test_files = [ 'meta.out', 'meta2.out', 'meta3.out', 'meta4.out', \
-    'meta6.out', 'meta7.out', 'meta8.out', 'meta9.out' ]
+test_files = [ 'meta.out', 'meta2.out', 'Meta3.out', 'Meta4.out', \
+    'Meta6.out', 'Meta7.out', 'Meta8.out', 'meta9.out' ]
 
 
 
