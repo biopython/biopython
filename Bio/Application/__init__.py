@@ -15,16 +15,25 @@ def generic_run(commandline):
     standard output and standard error.
     """
     # print str(commandline)
-    r, w, e = popen2.popen3(str(commandline))
+    child = popen2.Popen3(str(commandline), 1)
     # get information and close the files, so if we call this function
     # repeatedly we won't end up with too many open files
-    r_out = r.read()
-    r.close()
-    e_out = e.read()
-    e.close()
-    w.close()
 
-    return ApplicationResult(commandline), \
+    # here are the file descriptors
+    r = child.fromchild
+    w = child.tochild
+    e = child.childerr
+    
+    r_out = r.read()
+    e_out = e.read()
+    w.close()
+    r.close()
+    e.close()
+    
+    # capture error code
+    error_code = os.WEXITSTATUS(child.wait())
+
+    return ApplicationResult(commandline, error_code), \
            File.UndoHandle(StringIO.StringIO(r_out)), \
            File.UndoHandle(StringIO.StringIO(e_out))
 
@@ -34,14 +43,18 @@ class ApplicationResult:
     This tries to pick up output information available from the program
     and make it available programmatically.
     """
-    def __init__(self, application_cl):
+    def __init__(self, application_cl, return_code):
         """Intialize with the commandline from the program.
         """
         self._cl = application_cl
 
-        # get the results we can provide
+        # provide the return code of the application
+        self.return_code = return_code
+
+        # get the application dependent results we can provide
         # right now the only results we handle are output files
         self._results = {}
+
         for parameter in self._cl.parameters:
             if "file" in parameter.param_types and \
                "output" in parameter.param_types:
