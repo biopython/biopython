@@ -104,7 +104,7 @@ class MartelAttributeList(xmlreader.AttributesImpl):
 _attribute_list = MartelAttributeList([])
 
 
-def _do_callback(s, begin, end, taglist, cont_handler):
+def _do_callback(s, begin, end, taglist, cont_handler, attrlookup):
     """internal function to convert the tagtable into ContentHandler events
 
     's' is the input text
@@ -123,21 +123,41 @@ def _do_callback(s, begin, end, taglist, cont_handler):
             # Some integrity checking
             assert begin == l, "begin = %d and l = %d" % (begin, l)
 
-        # Named groups doesn't create ">ignore" tags, so pass them on
-        # to the ContentHandler.  Unnamed groups still need a name so
-        # mxTextTools can create subtags for them.  I named them
-        # ">ignore" - don't create events for them.
-        if tag != ">ignore":
-            cont_handler.startElement(tag, _attribute_list)
+        if tag[0] == ">":
+            if tag == ">ignore":
+                # Named groups doesn't create ">ignore" tags, so pass them on
+                # to the ContentHandler.  Unnamed groups still need a name so
+                # mxTextTools can create subtags for them.  I named them
+                # ">ignore" - don't create events for them.
+                pass
 
+            elif tag[:2] == ">G":
+                # This needs a lookup to get the full attrs
+                realtag, attrs = attrlookup[tag]
+                cont_handler.startElement(realtag, attrs)
+
+            else:
+                raise AssertionError("Unknown special tag %s" % repr(tag))
+        else:
+            # Normal tags
+            cont_handler.startElement(tag, _attribute_list)
+        
         # Recurse if it has any children
         if subtags:
-            _do_callback(s, l, r, subtags, cont_handler)
+            _do_callback(s, l, r, subtags, cont_handler, attrlookup)
         else:
             cont_handler.characters(s[l:r])
         begin = r
 
-        if tag != ">ignore":
+        if tag[0] == ">":
+            if tag == ">ignore":
+                pass
+            elif tag[:2] == ">G":
+                realtag, attrs = attrlookup[tag]
+                cont_handler.endElement(realtag)
+            else:
+                raise AssertionError("Unknown special tag %s" % repr(tag))
+        else:
             cont_handler.endElement(tag)
 
     # anything after the last tag and before the end of the current
@@ -145,7 +165,7 @@ def _do_callback(s, begin, end, taglist, cont_handler):
     if begin < end:
         cont_handler.characters(s[begin:end])
 
-def _parse_elements(s, tagtable, cont_handler, debug_level):
+def _parse_elements(s, tagtable, cont_handler, debug_level, attrlookup):
     """parse the string with the tagtable and send the ContentHandler events
 
     Specifically, it sends the startElement, endElement and characters
@@ -161,7 +181,7 @@ def _parse_elements(s, tagtable, cont_handler, debug_level):
     # object does nothing and I want to test the method call overhead.
     if cont_handler.__class__ != handler.ContentHandler:
         # Send any tags to the client (there can be some even if there
-        _do_callback(s, 0, pos, taglist, cont_handler)
+        _do_callback(s, 0, pos, taglist, cont_handler, attrlookup)
 
     if not result:
         if debug_level:
@@ -177,7 +197,7 @@ def _parse_elements(s, tagtable, cont_handler, debug_level):
 class Parser(xmlreader.XMLReader):
     """Parse the input data all in memory"""
 
-    def __init__(self, tagtable, (want_groupref_names, debug_level) = (0, 1)):
+    def __init__(self, tagtable, (want_groupref_names, debug_level, attrlookup) = (0, 1)):
         xmlreader.XMLReader.__init__(self)
 
         assert type(tagtable) == type( () ), "mxTextTools only allows a tuple tagtable"
@@ -189,6 +209,7 @@ class Parser(xmlreader.XMLReader):
         self.want_groupref_names = want_groupref_names
 
         self.debug_level = debug_level
+        self.attrlookup = attrlookup
         
     def __str__(self):
         x = StringIO()
@@ -222,7 +243,7 @@ class Parser(xmlreader.XMLReader):
 
         # parse the text and send the SAX events
         result = _parse_elements(s, self.tagtable, self._cont_handler,
-                                 self.debug_level)
+                                 self.debug_level, self.attrlookup)
 
         if result is None:
             # Successful parse
@@ -246,7 +267,7 @@ class Parser(xmlreader.XMLReader):
 class RecordParser(xmlreader.XMLReader):
     """Parse the input data a record at a time"""
     def __init__(self, format_name, record_tagtable,
-                 (want_groupref_names, debug_level),
+                 (want_groupref_names, debug_level, attrlookup),
                  make_reader, reader_args = ()):
         """parse the input data a record at a time
 
@@ -268,6 +289,7 @@ class RecordParser(xmlreader.XMLReader):
         self.tagtable = record_tagtable
         self.want_groupref_names = want_groupref_names
         self.debug_level = debug_level
+        self.attrlookup = attrlookup
         self.make_reader = make_reader
         self.reader_args = reader_args
     
@@ -321,7 +343,7 @@ class RecordParser(xmlreader.XMLReader):
             if record is None:
                 break
             result = _parse_elements(record, self.tagtable, self._cont_handler,
-                                     self.debug_level)
+                                     self.debug_level, self.attrlookup)
 
             if result is None:
                 # Successfully read the record
@@ -365,7 +387,7 @@ class HeaderFooterParser(xmlreader.XMLReader):
                  make_header_reader, header_reader_args, header_tagtable,
                  make_reader, reader_args, record_tagtable,
                  make_footer_reader, footer_reader_args, footer_tagtable,
-                 (want_groupref_names, debug_level)):
+                 (want_groupref_names, debug_level, attrlookup)):
         xmlreader.XMLReader.__init__(self)
 
         self.format_name = format_name
@@ -384,6 +406,7 @@ class HeaderFooterParser(xmlreader.XMLReader):
         
         self.want_groupref_names = want_groupref_names
         self.debug_level = debug_level
+        self.attrlookup = attrlookup
 
     def __str__(self):
         x = StringIO()
@@ -428,7 +451,8 @@ class HeaderFooterParser(xmlreader.XMLReader):
                 header = ""
 
             result = _parse_elements(header, self.header_tagtable,
-                                     self._cont_handler, self.debug_level)
+                                     self._cont_handler, self.debug_level,
+                                     self.attrlookup)
 
             if result is None:
                 # Successful parse
@@ -498,7 +522,8 @@ class HeaderFooterParser(xmlreader.XMLReader):
                 break
 
             result = _parse_elements(record, self.record_tagtable,
-                                     self._cont_handler, self.debug_level)
+                                     self._cont_handler, self.debug_level,
+                                     self.attrlookup)
 
             if result is None:
                 # Successfully parsed the record
@@ -576,7 +601,8 @@ class HeaderFooterParser(xmlreader.XMLReader):
                 footer = ""
 
             result = _parse_elements(footer, self.footer_tagtable,
-                                     self._cont_handler, self.debug_level)
+                                     self._cont_handler, self.debug_level,
+                                     self.attrlookup)
 
             if result is None:
                 # Successful parse
@@ -618,7 +644,7 @@ class HeaderFooterParser(xmlreader.XMLReader):
                  make_header_reader, header_reader_args, header_tagtable,
                  make_reader, reader_args, record_tagtable,
                  make_footer_reader, footer_reader_args, footer_tagtable,
-                 (want_groupref_names, debug_level)):
+                 (want_groupref_names, debug_level, attrlookup)):
         xmlreader.XMLReader.__init__(self)
 
         self.format_name = format_name
@@ -637,6 +663,7 @@ class HeaderFooterParser(xmlreader.XMLReader):
         
         self.want_groupref_names = want_groupref_names
         self.debug_level = debug_level
+        self.attrlookup = attrlookup
 
     def __str__(self):
         x = StringIO()
@@ -684,7 +711,8 @@ class HeaderFooterParser(xmlreader.XMLReader):
             filepos += len(header)
 
             result = _parse_elements(header, self.header_tagtable,
-                                     self._cont_handler, self.debug_level)
+                                     self._cont_handler, self.debug_level,
+                                     self.attrlookup)
             if result is None:
                 # Successful parse
                 pass
@@ -748,7 +776,8 @@ class HeaderFooterParser(xmlreader.XMLReader):
                     return
 
                 result = _parse_elements(record, self.record_tagtable,
-                                         self._cont_handler, self.debug_level)
+                                         self._cont_handler, self.debug_level,
+                                         self.attrlookup)
                 if result is None:
                     # Successfully parsed the record
                     pass
@@ -802,7 +831,8 @@ class HeaderFooterParser(xmlreader.XMLReader):
                 break
 
             result = _parse_elements(record, self.record_tagtable,
-                                     self._cont_handler, self.debug_level)
+                                     self._cont_handler, self.debug_level,
+                                     self.attrlookup)
             if result is None:
                 # Successfully parsed the record
                 pass
@@ -853,7 +883,8 @@ class HeaderFooterParser(xmlreader.XMLReader):
                 # Hmm, okay, it was a valid footer, but can be it be
                 # parsed?
                 result = _parse_elements(footer, self.footer_tagtable,
-                                         self._cont_handler, self.debug_level)
+                                         self._cont_handler, self.debug_level,
+                                         self.attrlookup)
 
                 if result is None:
                     # parsed the footer, but need to check that it's

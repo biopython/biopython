@@ -135,10 +135,38 @@ def convert_in(group_names, name, terms):
             raise AssertionError("unknown option for 'in': %s" % c[0])
     return Expression.Any(s, negate)
 
+
 # Convert a 'subpattern' tuple into a Group object
 def convert_subpattern(group_names, name, (id, terms)):
     pattern_name = group_names.reverse_name(id)
-    return Expression.Group(pattern_name, convert_list(group_names, terms))
+
+    # The name in the ?P<group> may contain attr information
+    # serialized in a URL-encoded form; if present, deconvolute.
+    pos = string.find(pattern_name, "?")
+    if pos != -1:
+        import cgi
+        qs = pattern_name[pos+1:]
+        if not qs:
+            # cgi.parse_qs doesn't like parsing the empty string
+            attrs = {}
+        else:
+            attrs = cgi.parse_qs(pattern_name[pos+1:],
+                                 keep_blank_values = 1,
+                                 strict_parsing = 1)
+        pattern_name = pattern_name[:pos]
+
+        for k, v in attrs.items():
+            if len(v) != 1:
+                raise AssertionError(
+"The attribute name %s was found more than once (%d times) in the tag %s" %
+            (repr(k), len(v), repr(pattern_name)))
+
+            attrs[k] = v[0]
+    else:
+        attrs = {}
+    
+    return Expression.Group(pattern_name, convert_list(group_names, terms),
+                            attrs)
 
 # Convert a 'newline' tuple into an AnyEol object
 def convert_newline(group_names, name, ignore):

@@ -66,8 +66,8 @@ class Expression:
     def make_parser(self, debug_level = 0):
         """create a SAX compliant parser for this regexp"""
         import Generate
-        tagtable, want_flg = Generate.generate(self, debug_level)
-        return Parser.Parser(tagtable, (want_flg, debug_level))
+        tagtable, want_flg, attrlookup = Generate.generate(self, debug_level)
+        return Parser.Parser(tagtable, (want_flg, debug_level, attrlookup))
 
     def make_iterator(self, tag, debug_level = 0):
         """create an iterator for this regexp"""
@@ -184,6 +184,30 @@ def _verify_name(s):
     if not msre_parse.isname(s):
         raise AssertionError, "Illegal character in group name %s" % repr(s)
 
+_fast_quote_lookup = None
+def _make_fast_lookup():
+    global _fast_quote_lookup
+    
+    safe = ('ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+            'abcdefghijklmnopqrstuvwxyz'
+            '0123456789' '_.-')
+    lookup = {}
+    for c in range(256):
+        lookup[chr(c)] = '%%%02X' % c
+    for c in safe:
+        lookup[c] = c
+    
+    _fast_quote_lookup = lookup
+    
+def _quote(s):
+    if _fast_quote_lookup is None:
+        _make_fast_lookup()
+    lookup = _fast_quote_lookup
+    terms = []
+    for c in s:
+        terms.append(lookup[c])
+    return string.join(terms, "")
+
 class Group(Expression):
     def __init__(self, name, expression, attrs = None):
         """(name, expression)
@@ -222,10 +246,17 @@ class Group(Expression):
 
     def __str__(self):
         """the corresponding pattern string"""
-        if self.attrs:
-            raise NotImplementedError("I have attrs!")
         if self.name is None:
             return '(%s)' % str(self.expression)
+        
+        elif self.attrs:
+            # Convert them to the proper URL-encoded form
+            terms = []
+            for k, v in self.attrs.items():
+                terms.append("%s=%s" % (_quote(k), _quote(v)))
+            attrname = self.name + "?" + string.join(terms, "&")
+            return '(?P<%s>%s)' % (attrname, str(self.expression))
+        
         else:
             return '(?P<%s>%s)' % (self.name, str(self.expression))
                                    
@@ -455,7 +486,7 @@ class HeaderFooter(PassThrough):
         import Generate, RecordReader
         want = 0
         if self.header_expression is not None:
-            header_tagtable, want_flg = \
+            header_tagtable, want_flg, attrlookup = \
                              Generate.generate(self.header_expression,
                                                debug_level = debug_level)
             make_header_reader = self.make_header_reader
@@ -463,24 +494,27 @@ class HeaderFooter(PassThrough):
         else:
             header_tagtable = ()
             want_flg = 0
+            attrlookup = {}
             make_header_reader = None,
             header_args = None
             
 
-        record_tagtable, want_flag = \
+        record_tagtable, want_flag, tmp_attrlookup = \
                          Generate.generate(self.record_expression,
                                            debug_level = debug_level)
         make_record_reader = self.make_record_reader
         record_args = self.record_args
+        attrlookup.update(tmp_attrlookup)
         
         want = want or want_flg
 
         if self.footer_expression is not None:
-            footer_tagtable, want_flag = \
+            footer_tagtable, want_flag, tmp_attrlookup = \
                              Generate.generate(self.footer_expression,
                                                debug_level = debug_level)
             make_footer_reader = self.make_footer_reader
             footer_args = self.footer_args
+            attrlookup.update(tmp_attrlookup)
         else:
             footer_tagtable = ()
             want_flg = 0
@@ -494,7 +528,7 @@ class HeaderFooter(PassThrough):
             make_header_reader, header_args, header_tagtable,
             make_record_reader, record_args, record_tagtable,
             make_footer_reader, footer_args, footer_tagtable,
-            (want, debug_level))
+            (want, debug_level, attrlookup))
 
     def make_iterator(self, tag, debug_level = 0):
         raise NotImplementedError, "Need an IteratorHeaderFooter"
@@ -520,10 +554,11 @@ class ParseRecords(PassThrough):
     
     def make_parser(self, debug_level = 0):
         import Generate
-        tagtable, want_flg = Generate.generate(self.record_expression,
-                                               debug_level)
+        tagtable, want_flg, attrlookup = Generate.generate(
+            self.record_expression, debug_level)
+
         return Parser.RecordParser(self.format_name,
-                                   tagtable, (want_flg, debug_level),
+                                   tagtable, (want_flg, debug_level, attrlookup),
                                    self.make_reader, self.reader_args)
     
     def make_iterator(self, tag, debug_level = 0):

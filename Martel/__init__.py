@@ -6,6 +6,7 @@ __version__ = "0.6"
 import Expression
 import convert_re
 import string
+from xml.sax import xmlreader
 
 # This interface is based off of Greg Ewing's Plex parser.
 
@@ -117,11 +118,11 @@ def RepN(expr, count):
     return Expression.MaxRepeat(expr, count, count)
 
 
-def Group(name, expr):
+def Group(name, expr, attrs = None):
     """name, expr -> use 'name' to describe a successful match of the expression"""
     assert isinstance(expr, Expression.Expression), \
            "expecting an Expression, not a %s" % type(expr)
-    return Expression.Group(name, expr)
+    return Expression.Group(name, expr, attrs)
 
 
 def _fix_newlines(s):

@@ -43,11 +43,13 @@ supports_lookahead = hasattr(TT, "LookAhead")
 # element in the table and succeeds by jumping one past the last
 # element.
 
+# This is single threaded!
+_generate_count = 0
+
 class GeneratorState:
     def __init__(self, groupref_names, debug_level):
         self.groupref_names = groupref_names
         self.debug_level = debug_level
-        self._count = 0
         self.lookup = {}
         
     def add_group(self, group):
@@ -58,13 +60,13 @@ class GeneratorState:
         return tag
     
     def new_group_tag(self):
-        i = self._count
+        global _generate_count
+        i = _generate_count
         tag = ">G%d" % i
         i = i + 1
-        self._count = i
+        _generate_count = i
         return tag
-    
-    
+
 
 # ==============
 
@@ -164,16 +166,20 @@ def generate_group(expression, genstate):
 
     name = expression.name
     if name is None:
+        assert not expression.attrs, "unnamed group can't have attrs!"
         # Don't really need to do anything, do I?
         return tagtable
         
     if genstate.groupref_names.get(name) != 1:
+        if expression.attrs:
+            name = genstate.add_group(expression)
         return [(name, TT.Table, tuple(tagtable)) ]
     else:
         # generate the code to save the match information
+        if expression.attrs:
+            name = genstate.add_group(expression)
         return [(SetGroupValue(name), TT.Table+TT.CallTag,
-                             tuple(tagtable)), ]
-
+                                      tuple(tagtable)), ]
 
 # Uglyness to handle named group repeats.
 
@@ -525,13 +531,14 @@ def generate(expression, debug_level = 0):
         want_groupref_names = 1
     else:
         want_groupref_names = 0
-    return tuple(tagtable), want_groupref_names  #, genstate.lookup
+    return tuple(tagtable), want_groupref_names, genstate.lookup
 
 # Get the parser.  Main entry point for everything except record
 # oriented readers
 def generate_parser(expression, debug_level = 0):
-    tagtable, want_groupref_names = generate(expression)
-    return Parser.Parser(tagtable, (want_groupref_names, debug_level))
+    tagtable, want_groupref_names, attrlookup = generate(expression)
+    return Parser.Parser(tagtable, (want_groupref_names, debug_level,
+                                    attrlookup))
 
 
 # This code is ugly.  There are couple possible fixes:

@@ -17,6 +17,7 @@
 import string, sys
 
 from msre_constants import *  # Modified version of Secret Labs' sre_constants
+import re  # needed to verify the attr format
 
 SPECIAL_CHARS = ".\\[{()*+?^$|"
 REPEAT_CHARS = "*+?{"
@@ -214,6 +215,17 @@ class Tokenizer:
 ### Martel changes to allow all XML identifiers
 #  '[a-zA-Z_:][-a-zA-Z0-9._:]*'
 
+# Any (optional) attrs are stored after a '?'
+# key/values are done in URL-style
+#  key1=value1&key2=value2;
+# only [-a-zA-Z0-9._] are allowed to be unescaped
+# escaping is done with URL-style hex escapes, so '=' becomes '%3D'
+# For example:
+#   seqdb format="swissprot" version="38"
+# can be represented as
+#   seqdb?format=swissprot&version=38
+
+
 # Martel specific changes
 def is_firstchar(char):
     return "a" <= char <= "z" or "A" <= char <= "Z" or  char in "_:"
@@ -234,6 +246,34 @@ def isname(name):
         if not is_char(char):
             return 0
     return 1
+
+# More Martel specific changes
+# Checks if the serialized form of attrs is correct
+_name_with_attr_pattern = re.compile(r"""
+[a-zA-Z_:]        # first character of the tag
+[-a-zA-Z0-9._:]*  # rest of the tag
+(\?                                      # optional attrs flagged with '?'
+ (
+  ([-a-zA-Z0-9._]|(%[0-9A-Fa-f]{2}))+    # name can contain % escapes
+  =                                      # '=' flags value
+  ([-a-zA-Z0-9._]|(%[0-9A-Fa-f]{2}))*    # value can contain % escapes
+  (&                                     # flag for additional args
+    ([-a-zA-Z0-9._]|(%[0-9A-Fa-f]{2}))+  # name
+    =                                    # '='
+    ([-a-zA-Z0-9._]|(%[0-9A-Fa-f]{2}))*  # value
+  )*                                     # 0 or more add'l args
+ )?                                      # can have nothing after the '?'
+)?                                       # attrs are optional
+$                                        # must get full string
+""", re.X)
+
+def isname_with_attrs(name):
+    # check that group name is a valid string
+    if not name:
+        return 0
+    m = _name_with_attr_pattern.match(name)
+    return m is not None
+    
 
 ### End of Martel changes
 
@@ -553,7 +593,7 @@ def _parse(source, state):
                                 break
                             name = name + char
                         group = 1
-                        if not isname(name):
+                        if not isname_with_attrs(name):
                             raise error, "bad character in group name"
                     elif source.match("="):
                         # named backreference
