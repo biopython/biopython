@@ -87,6 +87,9 @@ class CaPPBuilder(_PPBuilder):
 		n_ca=next["CA"]
 		p_ca=prev["CA"]
 		for a in [n_ca, p_ca]:
+			# if a CA is disordered we consider
+			# it as not part of a polypeptide 
+			# chain
 			if a.is_disordered():
 				return 0
 		nc=n_ca.get_coord()
@@ -109,12 +112,38 @@ class PPBuilder(_PPBuilder):
 			return 0
 		if not next.has_id("N"):
 			return 0
+		test_dist=self._test_dist
 		c=prev["C"]
-		if c.is_disordered():
-			return 0
 		n=next["N"]
+		# Test all disordered atom positions!
+		if c.is_disordered():
+			clist=c.disordered_get_list()
+		else:
+			clist=[c]
 		if n.is_disordered():
-			return 0
+			nlist=n.disordered_get_list()
+		else:
+			nlist=[n]
+		for nn in nlist:
+			for cc in clist:
+				# To form a peptide bond, N and C must be 
+				# within radius and have the same altloc
+				# identifier
+				n_altloc=nn.get_altloc()
+				c_altloc=cc.get_altloc()
+				if n_altloc==c_altloc: 
+					if test_dist(nn, cc):
+						# Select the disordered atoms that
+						# are indeed bonded
+						if c.is_disordered():
+							c.disordered_select(c_altloc)
+						if n.is_disordered():
+							n.disordered_select(n_altloc)
+						return 1
+		return 0
+
+	def _test_dist(self, c, n):
+		"Return 1 if distance between atoms<radius"
 		cc=c.get_coord()
 		nc=n.get_coord()
 		#print dist_sq(cc, nc), self.radius_sq
