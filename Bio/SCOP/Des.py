@@ -50,7 +50,7 @@ class Record:
         else :
             s.append("-")
         s.append(self.description)        
-        return "\t".join(s) + "\n"
+        return "\t".join(map(str,s)) + "\n"
 
 class Iterator:
     """Iterates over a DES file.
@@ -108,7 +108,7 @@ class Parser:
         rec = Record()
         rec.sunid, rec.nodetype, rec.sccs, rec.name, rec.description = columns
         if rec.name == '-' : rec.name =''
-
+        rec.sunid = int(rec.sunid)
         return rec
 
 

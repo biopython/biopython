@@ -34,15 +34,20 @@ class Record:
         
     def __str__(self):
         s = []
-        s.append(self.sunid)
+        s.append(str(self.sunid))
 
-        if self.parent :
-            s.append(self.parent)
+        if self.parent:
+            s.append(str(self.parent))
         else:
-            s.append('-')
+            if self.sunid != 0:
+                s.append('0')
+            else:
+                s.append('-')
+                
 
         if self.children :
-            s.append(",".join(self.children))
+            child_str = map(str, self.children)
+            s.append(",".join(child_str))
         else:
             s.append('-')
 
@@ -102,13 +107,17 @@ class Parser:
         rec = Record()
         rec.sunid, rec.parent, children = columns
 
-        if rec.sunid =='-' : rec.sunid =''
-        if rec.parent =='-' : rec.parent =''
+        if rec.sunid =='-' : rec.sunid = ''
+        if rec.parent =='-' : rec.parent = ''
+        else : rec.parent = int( rec.parent )
 
         if children =='-' :
             rec.children = ()
         else :
             rec.children = children.split(',')
+            rec.children = map ( int, rec.children )
+
+        rec.sunid = int(rec.sunid)
 
         return rec
 

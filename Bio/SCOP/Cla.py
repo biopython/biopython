@@ -52,10 +52,10 @@ class Record:
 
         h=[]
         for ht in self.hierarchy:
-             h.append("=".join(ht)) 
+             h.append("=".join(map(str,ht))) 
         s.append(",".join(h))
        
-        return "\t".join(s) + "\n"
+        return "\t".join(map(str,s)) + "\n"
 
 class Iterator:
     """Iterates over a CLA file.
@@ -103,11 +103,15 @@ class Parser:
         rec.sid, pdbid, residues, rec.sccs, rec.sunid, hierarchy = columns
         rec.residues = Residues(residues)
         rec.residues.pdbid = pdbid
-
+        rec.sunid = int(rec.sunid)
+        
         h = []
         for ht in hierarchy.split(",") :
             h.append( ht.split('='))        
+        for ht in h:
+            ht[1] = int(ht[1])
         rec.hierarchy = h
+        
 
         return rec
 
