@@ -38,6 +38,9 @@ def dump_saved( name, text, j ):
         dump_file.write(  '%s\n' % text[ i : i + 80 ] )
     dump_file.close()
 
+def remove_leading_whitespace( line ):
+    return line.lstrip()
+
 
 def remove_empty_line( line ):
     stripped_line = line.strip()
