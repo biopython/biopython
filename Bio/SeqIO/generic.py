@@ -1,14 +1,16 @@
 #!/usr/bin/env python
 # Created: Tue Sep 11 17:21:54 2001
-# Last changed: Time-stamp: <01/09/19 10:47:20 thomas>
+# Last changed: Time-stamp: <01/09/19 13:09:51 thomas>
 # thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas/index.html
 # File: generic.py
+# based on Brads's code
+
 
 import sys
-import os, time
+import os, re, time
 sys.path.insert(0, os.path.expanduser('~thomas/cbs/python/biopython'))
 
-import string, re
+import string
 import Bio.Alphabet
 
 from Bio.Seq import Seq
@@ -23,7 +25,6 @@ class SeqRecord:
         self.id = id
         self.name = name
         self.description = description
-        self.type = 'P' 
         # annotations about the whole sequence
         self.annotations = {}
         
@@ -35,6 +36,7 @@ class SeqRecord:
         res += '%s %s' % (self.name, self.seq.data)
         return res
     
+
 class GenericFormat:
     def __init__(self, instream=None, outstream=None,
                  alphabet = Bio.Alphabet.generic_alphabet,
@@ -54,6 +56,16 @@ class GenericFormat:
             line = self.instream.readline()
         self._lookahead = line
         self._n = 0
+
+    def get_header(self, line):
+        x = string.split(line[1:-1], None, 1)
+        if len(x) == 1:
+            id = x.strip()
+            desc = ""
+        else:
+            id, desc = [x.strip() for x in x]
+
+        return (id, desc)
     
     def next(self):
         self._n = self._n + 1
@@ -61,17 +73,10 @@ class GenericFormat:
         line = self._lookahead
         if not line: return None
 
-        x = string.split(line[1:-1], None, 1)
-        if len(x) == 1:
-            id = x[0].strip()
-            desc = ""
-        else:
-            id, desc = [x.strip() for x in x]
-
+        id, desc = self.get_header(line)
         lines = []
         line = self.instream.readline()
         l = len(self.start_indicator)
-        print >> sys.stderr, id, desc
         while line:
             if line[:l] == self.start_indicator:
                 break
@@ -79,7 +84,7 @@ class GenericFormat:
             line = self.instream.readline()
             
         self._lookahead = line
-        print >> sys.stderr, 'record'
+
         return SeqRecord(Seq(string.join(lines, ""), self.alphabet),
                          id = id, name = id, description = desc)
         
@@ -113,54 +118,47 @@ class FastaFormat(GenericFormat):
     def write(self, record):
         id = record.id
         description = record.description
-        if id == description: description = ''
         
         self.outstream.write(">%s %s\n" % (id, description))
 
         data = record.seq.tostring()
         for i in range(0, len(data), 60):
             self.outstream.write(data[i:i+60] + "\n")
-            
+
 class LargeFastaFormat(GenericFormat):
     def __init__(self, instream=None, outstream=None, alphabet = Bio.Alphabet.generic_alphabet):
         GenericFormat.__init__(self, instream, outstream, alphabet)
         self.entries = None
         
-        
-
     def next(self):
         if not self.entries:
-            txt = self.instream.read()
+            txt = instream.read()
             self.entries = txt.split('>')[1:]
             self._n = -1
-            
-        self._n = self._n + 1
+
+        self._n += 1
         if self._n >= len(self.entries): return None
-        
+
         entry = self.entries[self._n]
-        line ,seq= entry.split('\n',1)
+        
+        name,seq= entry.split('\n',1)
+        name, desc = self.get_header(name)
+        
         seq = seq.replace('\n','')
+        return SeqRecord(Seq(seq, self.alphabet), id = name,
+                         name = name, description = desc)
 
-        x = string.split(line[1:-1], None, 1)
-        if len(x) == 1:
-            id = x[0].strip()
-            desc = ""
-        else:
-            id, desc = [x.strip() for x in x]
-
-        return SeqRecord(Seq(seq, self.alphabet), id = id, name = id, description = desc)
-
+    
     def write(self, record):
         id = record.id
         description = record.description
-        if id == description: description = ''
         
         self.outstream.write(">%s %s\n" % (id, description))
 
         data = record.seq.tostring()
         for i in range(0, len(data), 60):
             self.outstream.write(data[i:i+60] + "\n")
-            
+
 class PirFormat(GenericFormat):
     def __init__(self, instream=None, outstream=None, alphabet = Bio.Alphabet.generic_alphabet):
         GenericFormat.__init__(self, instream, outstream, alphabet, '>P1;')
@@ -168,7 +166,9 @@ class PirFormat(GenericFormat):
 
     def write(self, record):
         id = record.id
+        assert "\n" not in id
         description = record.description
+        assert "\n" not in description
         
         self.outstream.write(">P1;%s %s\n" % (id, description))
 
@@ -207,11 +207,7 @@ class EMBLFormat(GenericFormat):
         
         self._lookahead = self.instream.readline()
 
-        seq = ''
-        for line in dict['SQ'][1:]:
-            seq += re.sub('[^a-zA-Z]', '', line).upper()
-
-        seq = Seq(seq, self.alphabet)
+        seq = Seq(string.join(dict['SQ'][1:], ''), self.alphabet)
         ID = dict['ID'][0].split()[0]
 
         rec = SeqRecord(seq, id = ID, name = ID, description = dict.get('DE',[])[0])
@@ -223,7 +219,8 @@ class EMBLFormat(GenericFormat):
         id = record.id
 
         description = record.description
-        if description and not description[-1] == '\n': description = description + '\n'
+        if description and not description[-1] == '\n':
+            description = description + '\n'
 
         dataclass = 'STANDARD;'
         division = 'PRT;' # fix that to change for DNA sequence
@@ -264,177 +261,206 @@ class EMBLFormat(GenericFormat):
             
         put('//\n')
             
-
 class GCGFormat(GenericFormat):
     def __init__(self, instream=None, outstream=None, alphabet = Bio.Alphabet.generic_alphabet):
         GenericFormat.__init__(self, instream, outstream, alphabet)
-        # GCG format allows only one sequence per file, so no need for find_start
-        
+
     def next(self):
-        self._n = self._n + 1
-        line = self.instream.readline()
+        line = instream.readline()
         if not line: return None
 
         desc = ''
-        while line:
-            # Get the descriptive info (anything before the line with '..')
+        while 1:
             if line.find('..') > -1: break
             desc += line.strip()
-            line = self.instream.readline()
+            line = instream.readline()
 
-        # Get ID and Type from the line containing '..'
-        ID = line.split()[0]
-        m = re.match('Type:\s(\w)\s', line)
-        if m:
-            Type = m.group(1)
-        else:
-            Type = 'P'
+        id = line.split()[0]
 
-        # anything after '..' is sequence ...
         seq = ''
-        line = self.instream.readline()
-        while line:
-            if line.find('..') > -1:
-                # Arrgggghhh multiple GCG ???
-                break
-            
-            # remove anything that is not alphabet char and make sequence uppercase
-            seq += re.sub('[^a-zA-Z]', '', line).upper()
-            line = self.instream.readline()
-            
-        
-        seq = Seq(seq, self.alphabet)
-        rec = SeqRecord(seq, id = ID, name = ID, description = desc)
-        rec.type = Type
-        return rec
-        
+        while 1:
+            line = instream.readline()
+            if not line: break
+            seq += re.sub('[^a-zA-Z-]','',line).upper()
 
+        return SeqRecord(Seq(seq, self.alphabet),
+                         id = id, name = id, description = desc)
+
+        
     def write(self, record):
         id = record.id
         description = record.description
 
         put = self.outstream.write
-        if description:
-            put(description)
-            if description[-1] != '\n': put('\n')
-        else: put('%s\n' % id)
-        
+
+        if not description: description = id
+        put(description)
+        if description[-1] != '\n': put('\n')
+
         timestamp = time.strftime('%B %d, %Y %H:%M', time.localtime(time.time()))
-        put('%s Length: %d %s Type: %s ..\n' % (id, len(record.seq), timestamp, record.type))
-        
+        put('%s Length: %d %s Type: P\n' % (id, len(record.seq), timestamp))
         data = record.seq.tostring()
         for i in range(0, len(data), 60):
-            put('% 8d %s\n' % (i+1, data[i:i+60]))
+            put('% 6d %s\n' % (i+1,data[i:i+60]))
+
         put('\n')
-
-
+        
 class ClustalFormat(GenericFormat):
     def __init__(self, instream=None, outstream=None, alphabet = Bio.Alphabet.generic_alphabet):
         GenericFormat.__init__(self, instream, outstream, alphabet)
         self.sequences = None
         self.ids = None
-        
+
     def ParseAlignment(self):
         line = self.instream.readline()
-        if not line: return None
-
+        if not line: return
         if not line[:7] == 'CLUSTAL':
-            sys.stderr.write('Warning, file does not start with a CLUSTAL header\n')
-        else:
-            line = self.instream.readline()
-            
-        self.sequences = {}
-        dict = self.sequences
-        self.ids = []
-        while line:
-            if not line: break
+            print >> sys.stderr, 'Warning file does not start with CLUSTAL header'
 
-            if line[0] == ' ':
-                line = self.instream.readline()
-                continue
-            
+        dict = {}
+        self.ids = []
+        while 1:
+            line = self.instream.readline()
+            if not line: break
+            if line[0] == ' ': continue
             fields = line.split()
-            if not len(fields):
-                line = self.instream.readline()
-                continue
-            
+            if not len(fields): continue
             name, seq = fields
             if not name in self.ids: self.ids.append(name)
-            dict.setdefault(name,'')
-            dict[name] += seq
-            
-            line = self.instream.readline()
-            
+            dict.setdefault(name, '')
+            dict[name] += seq.upper()
+
+        self.sequences = dict
         self._n = -1
+            
         
     def next(self):
         if not self.ids: self.ParseAlignment()
-        self._n = self._n + 1
-        if self._n >= len(self.ids): return None
-        
-        name = self.ids[self._n]
-        seq = self.sequences[name] 
-        rec = SeqRecord(Seq(seq, self.alphabet), id = name, name = name, description = 'CLustal alignment')
-        return rec
-    
-    def write(self, record):
-        pass
-    
 
-    
+        self._n += 1
+        if self._n >= len(self.ids): return None
+
+        name = self.ids[self._n]
+        seq = self.sequences[name]
+        
+        return SeqRecord(Seq(seq, self.alphabet),id = name, name = name,
+                         description = 'Clustal Alignment')
+
+class NexusFormat(GenericFormat):
+    def __init__(self, instream=None, outstream=None, alphabet = Bio.Alphabet.generic_alphabet):
+        GenericFormat.__init__(self, instream, outstream, alphabet)
+        self.sequences = None
+        self.ids = None
+
+    def ParseNexus(self):
+        line = self.instream.readline()
+        if not line: return
+
+        self.ids = []
+
+        found_data, found_matrix = 0,0
+        while 1:
+            # search for the data block
+            if line.lower().find('begin data;') > -1:
+                found_data = 1
+                break
+            line = self.instream.readline()
+            if not line: break
+
+        while 1:
+            # search for the matrix block
+            if line.lower().find('matrix') > -1:
+                found_matrix = 1
+                break
+            line = self.instream.readline()
+            if not line: break
+
+
+        dict = {}
+        while 1:
+            # read name, sequence pairs until first ';'
+            line = self.instream.readline()
+            if not line: break
+            if line.find(';') > -1: break
+            
+            fields = line.split()
+            if len(fields) <2: continue
+
+            name = fields[0]
+            if not name in self.ids: self.ids.append(name)
+            dict.setdefault(name, '')
+            dict[name] += ''.join(fields[1:])
+
+        self.sequences = dict
+        self._n = -1
+            
+        
+    def next(self):
+        if not self.ids: self.ParseNexus()
+
+        self._n += 1
+        if self._n >= len(self.ids): return None
+
+        name = self.ids[self._n]
+        seq = self.sequences[name]
+        
+        return SeqRecord(Seq(seq, self.alphabet),id = name, name = name,
+                         description = '')
+
 class ReadSeq:
     def __init__(self):
-        self.fdict = {'fasta': FastaFormat,
-                      'largefasta': LargeFastaFormat,
-                      'pir': PirFormat,
-                      'embl': EMBLFormat,
-                      'gcg': GCGFormat,
-                      'clustal': ClustalFormat, # read only
-                      }
-
-
-    def Convert(self, from_format, to_format,
-                instream = sys.stdin, outstream = sys.stdout):
+        self.fdict = {
+            'fasta': FastaFormat,
+            'largefasta': LargeFastaFormat,
+            'embl': EMBLFormat,
+            'pir': PirFormat,
+            'gcg': GCGFormat,
+            'clustal': ClustalFormat, # read only
+            'nexus': NexusFormat,     # read only
+            }
         
+
+    def Convert(self, informat, outformat,
+                instream = sys.stdin, outstream=sys.stdout):
+
         if instream == '-': instream = sys.stdin
-        if not type(instream) == type(sys.stdin): instream = open(instream)
         if outstream == '-': outstream = sys.stdout
-        if not type(outstream) == type(sys.stdout): outstream = open(outstream, 'w+')
-        
+        if type(instream) != type(sys.stdin): instream = open(instream)
+        if type(outstream) != type(sys.stdout): outstream = open(outstream, 'w+')
+
         try:
-            reader = self.fdict[from_format.lower()](instream)
-            writer = self.fdict[to_format.lower()](outstream=outstream)
+            reader = self.fdict[informat.lower()](instream=instream)
+            writer = self.fdict[outformat.lower()](outstream = outstream)
         except:
-            import traceback
-            traceback.print_exc()
-            print >> sys.stderr, 'Unknown Format: %s->%s' % (from_format, to_format)
+            print >> sys.stderr, 'Unknown format: %s -> %s' % (informat, outformat)
             return
 
         while 1:
-            record = reader.next()
-            if not record: break
-            writer.write(record)
-        
-        
+            rec = reader.next()
+            if not rec: break
+            writer.write(rec)
+
 
 if __name__ == '__main__':
+
     readseq = ReadSeq()
     
     try:
-        infile = sys.argv[1]
+        instream = sys.argv[1]
         informat = sys.argv[2]
-        outfile = sys.argv[3]
+        outstream = sys.argv[3]
         outformat = sys.argv[4]
-    except:
-        print >> sys.stderr, 'Usage: generic.py <infile> <informat> <outfile> <outformat>'
-        print >> sys.stderr, '\tWhere "-" is stdin resp. stdout'
-        print >> sys.stderr, '\tKnown formats: %s' % ', '.join(readseq.fdict.keys())
-        print >> sys.stderr, '\n\te.g. generic.py myfile.fas fasta myfile.emb embl'
-        print >> sys.stderr, '\tor   zcat eftu.aln.gz| generic.py - clustal - fasta'
-        
-        sys.exit(1)
-        
-        
 
-    readseq.Convert(informat, outformat, infile, outfile)
+    except:
+        p = os.path.basename(sys.argv[0])
+        print >> sys.stderr, 'Usage: %s <instream> <informat> <outstream> <outformat>' % p
+        print >> sys.stderr, '\twhere "-" can be used for stdin resp. stdout'
+        print >> sys.stderr, 'Known formats: %s' % ', '.join(readseq.fdict.keys())
+        sys.exit(0)
+
+    readseq.Convert(informat, outformat, instream, outstream)
+    
+        
+        
+    
     
