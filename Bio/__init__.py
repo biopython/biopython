@@ -5,7 +5,7 @@
 
 __all__ = [
     "Align",
-    "Alphabet"
+    "Alphabet",
     "Blast",
     "Clustalw",
     "Data",
