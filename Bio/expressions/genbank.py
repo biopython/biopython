@@ -87,7 +87,7 @@ residue_type = Martel.Group("residue_type",
                             Martel.Opt(Martel.Alt(residue_prefixes)) +
                             Martel.Opt(Martel.Alt(*residue_types)) +
                             Martel.Opt(Martel.Opt(blank_space) + 
-                                       Martel.Str("circular")))
+                                       Martel.Str("circular", "linear")))
 
 date = Martel.Group("date",
                     Martel.Re("[-\w]+"))
