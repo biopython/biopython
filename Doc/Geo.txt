@@ -1,0 +1,27 @@
+Geo.txt
+=======
+
+
+Geo
+---
+
+GEO is a gene expression and hybridization array data repository.
+
+The Geo ( ene Expression Omnibus module works with Geo-formatted sequence data.
+Data is available at:
+http://www.ncbi.nlm.nih.gov/geo/
+
+The following code fragment is an example of how to parse Geo files into
+a record and print the record.
+
+    fh = open(os.path.join("Geo", file))
+    records = Bio.Geo.Iterator( fh, Bio.Geo.RecordParser(debug_level=0))
+    while 1:
+        record = records.next()
+        if record is not None:
+            print record
+            pass
+        else:
+            break
+    print "\n"
+
