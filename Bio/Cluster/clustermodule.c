@@ -1158,6 +1158,8 @@ py_treecluster (PyObject* self, PyObject* args, PyObject* keywords)
     int** mask = NULL;
     double* weight = NULL;
     int shape[2];
+    int (*result)[2];
+
     /* -- Check the method variable ---------------------------------------- */
     if (!strchr("csma", METHOD))
     { strcpy(message, "keyword method should be 'c', 's', 'm', or 'a'");
@@ -1202,6 +1204,7 @@ py_treecluster (PyObject* self, PyObject* args, PyObject* keywords)
       free_weight(aWEIGHT, weight);
       return NULL;
     }
+    result = (int(*)[2]) (aRESULT->data);
     /* -- Create the output variable linkdist ------------------------------ */
     aLINKDIST = (PyArrayObject*) PyArray_FromDims(1, &nnodes, PyArray_DOUBLE);
     if (!aLINKDIST)
@@ -1222,13 +1225,18 @@ py_treecluster (PyObject* self, PyObject* args, PyObject* keywords)
         TRANSPOSE,
         DIST,
         METHOD,
-        (int(*)[2]) (aRESULT->data),
+        result,
         (double*) (aLINKDIST->data), 0);
     /* --------------------------------------------------------------------- */
     free_data(aDATA, data);
     free_mask(aMASK, mask, nrows);
     free_weight(aWEIGHT, weight);
-    /* --------------------------------------------------------------------- */
+    /* -- Check if a memory allocation error occurred ---------------------- */
+    if(result[0][0]==0 && result[0][1]==0)
+    { strcpy(message, "insufficient memory to store the distance matrix");
+      PyErr_SetString (ErrorObject, buffer);
+      return NULL;
+    }
   }
   else
   { double** distances = NULL;
@@ -2006,31 +2014,37 @@ py_distancematrix (PyObject* self, PyObject* args, PyObject* keywords)
                                 DIST,
                                 TRANSPOSE);
     /* ------------------------------------------------------------------- */
-    for (i = 0; i < nelements; i++)
-    { double* rowdata = NULL;
-      PyObject* row = PyArray_FromDims(1, &i, PyArray_DOUBLE);
-      if (!row)
-      { strcpy(message, "Could not create distance matrix -- too big?");
-        PyErr_SetString (ErrorObject, buffer);
-        break;
+    if (distances)
+    { for (i = 0; i < nelements; i++)
+      { double* rowdata = NULL;
+        PyObject* row = PyArray_FromDims(1, &i, PyArray_DOUBLE);
+        if (!row)
+        { strcpy(message, "Could not create distance matrix -- too big?");
+          PyErr_SetString (ErrorObject, buffer);
+          break;
+        }
+        rowdata = (double*) (((PyArrayObject*)row)->data);
+        for (j = 0; j < i; j++) rowdata[j] = distances[i][j];
+        free(distances[i]);
+        PyList_SET_ITEM(result, i, row);
       }
-      rowdata = (double*) (((PyArrayObject*)row)->data);
-      for (j = 0; j < i; j++) rowdata[j] = distances[i][j];
-      free(distances[i]);
-      PyList_SET_ITEM(result, i, row);
+      if (i < nelements)
+      { for (j = 0; j < i; j++)
+        { PyObject* row =  PyList_GET_ITEM(result, i);
+          Py_DECREF(row);
+        }
+        for (j = i; j < nelements; j++) free(distances[j]);
+        Py_DECREF(result);
+        result = NULL;
+      }
+      free(distances);
     }
-    if (i < nelements)
-    { for (j = 0; j < i; j++)
-      { PyObject* row =  PyList_GET_ITEM(result, i);
-        Py_DECREF(row);
-      }
-      for (j = i; j < nelements; j++) free(distances[j]);
-      Py_DECREF(result);
+    else
+    { Py_DECREF(result);
       result = NULL;
     }
-    free(distances);
   }
-  else
+  if(result==NULL)
   { strcpy(message, "Could not create distance matrix -- too big?");
     PyErr_SetString (ErrorObject, buffer);
   }

@@ -1682,7 +1682,7 @@ centroid.
 ========================================================================
 */
 { int i, j, k;
-  for (j = 0; j < nclusters; j++) errors[j] = 1.e99;
+  for (j = 0; j < nclusters; j++) errors[j] = DBL_MAX;
   for (i = 0; i < nelements; i++)
   { double d = 0.0;
     j = clusterid[i];
@@ -2144,7 +2144,7 @@ found. The value of ifound is at least 1; its maximum value is npass.
     changed = 0;
     for (i = 0; i < nelements; i++)
     /* Find the closest cluster */
-    { double d = 1.e99;
+    { double d = DBL_MAX;
       for (icluster = 0; icluster < nclusters; icluster++)
       { double td;
         j = centroids[icluster];
@@ -2210,7 +2210,7 @@ found. The value of ifound is at least 1; its maximum value is npass.
       changed = 0;
       for (i = 0; i < nelements; i++)
       /* Find the closest cluster */
-      { double d = 1.e99;
+      { double d = DBL_MAX;
         for (icluster = 0; icluster < nclusters; icluster++)
         { double td;
           j = centroids[icluster];
@@ -2282,6 +2282,9 @@ The distancematrix routine allocates space for the distance matrix. If the
 parameter transpose is set to a nonzero value, the distances between the columns
 (microarrays) are calculated, otherwise distances between the rows (genes) are
 calculated.
+If sufficient space in memory cannot be allocated to store the distance matrix,
+the routine returns a NULL pointer, and all memory allocated so far for the
+distance matrix is freed.
 
 
 Arguments
@@ -2336,13 +2339,22 @@ when microarrays are being clustered.
   double (*metric)
     (int,double**,double**,int**,int**,const double[],int,int,int);
 
-  if (n < 2) return 0;
+  if (n < 2) return NULL;
 
   /* Set up the ragged array */
   matrix = malloc(n*sizeof(double*));
-  for (i = 1; i < n; i++) matrix[i] = malloc(i*sizeof(double));
+  if(matrix==NULL) return NULL; /* Not enough memory available */
+  matrix[0] = NULL;
   /* The zeroth row has zero columns. We allocate it anyway for convenience.*/
-  matrix[0] = 0;
+  for (i = 1; i < n; i++)
+  { matrix[i] = malloc(i*sizeof(double));
+    if (matrix[i]==NULL) break; /* Not enough memory available */
+  }
+  if (i < n) /* break condition encountered */
+  { j = i;
+    for (i = 1; i < j; i++) free(matrix[i]);
+    return NULL;
+  }
 
   /* Set the metric function as indicated by dist */
   setmetric (dist, &metric);
@@ -3026,7 +3038,6 @@ void CALL treecluster (int nrows, int ncolumns, double** data, int** mask,
   double weight[], int applyscale, int transpose, char dist, char method,
   int result[][2], double linkdist[], double** distmatrix)
 /*
-
 Purpose
 =======
 
@@ -3092,6 +3103,8 @@ with the two columns containing the name of the nodes that were joined.
 The original elements are numbered 0..nelements-1, nodes are numbered
 -1..-(nelements-1), where nelements is nrows or ncolumns depending on whether
 genes (rows) or microarrays (columns) are being clustered.
+If the treecluster routine fails due to lack of memory, the two columns of the
+first row of result are set to (0,0) before returning.
 
 linkdist (output) double array, dimension(nelements-1)
 For each node, the distance between the two subnodes that were joined. The
@@ -3109,7 +3122,7 @@ routine should deallocate the distance matrix after the return from treecluster.
 ========================================================================
 */
 { const int nelements = (transpose==0) ? nrows : ncolumns;
-  const int ldistmatrix = (distmatrix==0) ? 0 : 1;
+  const int ldistmatrix = (distmatrix==NULL) ? 0 : 1;
   int i;
 
   if (nelements < 2) return;
@@ -3118,6 +3131,12 @@ routine should deallocate the distance matrix after the return from treecluster.
   if(!ldistmatrix)
     distmatrix =
       distancematrix (nrows, ncolumns, data, mask, weight, dist, transpose);
+  if (!distmatrix) /* Insufficient memory */
+  { /* Set the first clustering result to (0,0) to indicate the memory error */
+    result[0][0] = 0;
+    result[0][1] = 0;
+    return;
+  }
 
   switch(method)
   { case 's':
