@@ -198,8 +198,6 @@ class build_ext_biopython(build_ext):
                 self.compiler.set_executable("compiler_so", cxx)
                 self.compiler.set_executable("linker_so",
                         cxx + ["-shared"])
-            elif build: # fix for 2.3, only if we are making C++ modules
-                self.compiler.compiler_so = self.compiler.compiler_cxx
         else:
             self.compiler.compiler_so = self._original_compiler_so
 
@@ -339,7 +337,6 @@ PACKAGES = [
     'Bio.IntelliGenetics',
     'Bio.InterPro',
     'Bio.Kabat',
-    'Bio.KDTree',
     'Bio.KEGG',
     'Bio.KEGG.Compound',
     'Bio.KEGG.Enzyme',
@@ -384,6 +381,7 @@ PACKAGES = [
 NUMPY_PACKAGES = [
     'Bio.Affy',
     'Bio.Cluster',
+#   'Bio.KDTree', # disabled by default to avoid C++ compilation errors
 ]
 
 EXTENSIONS = [
@@ -449,12 +447,12 @@ NUMPY_EXTENSIONS = [
                'Bio/Cluster/linpack.c'],
               include_dirs=["Bio/Cluster"]
               ),
-    CplusplusExtension('Bio.KDTree._CKDTree',
-              ["Bio/KDTree/KDTree.cpp",
-               "Bio/KDTree/KDTree.swig.cpp"],
-              libraries=["stdc++"],
-              language="c++"
-              ),
+#   CplusplusExtension('Bio.KDTree._CKDTree', # Disabled by default to avoid
+#             ["Bio/KDTree/KDTree.cpp",       # C++ compilation errors
+#              "Bio/KDTree/KDTree.swig.cpp"],
+#             libraries=["stdc++"],
+#             language="c++"
+#             ),
     CplusplusExtension('Bio.Affy._cel',
              ['Bio/Affy/celmodule.cc'],
              language="c++"
