@@ -23,8 +23,8 @@ def rotaxis(theta, vector):
     s=sin(theta)
     t=1-c
     x,y,z=vector.get_array()
-    # 1st row
     rot=zeros((3,3), "d")
+    # 1st row
     rot[0,0]=t*x*x+c
     rot[0,1]=t*x*y-s*z
     rot[0,2]=t*x*z+s*y
