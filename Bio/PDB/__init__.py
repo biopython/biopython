@@ -33,6 +33,9 @@ import Selection
 # Superimpose atom sets
 from Superimposer import Superimposer
 
+# 3D vector class
+from Vector import Vector, dihedral
+
 # Fast atom neighbor search
 # Depends on KDTree C++ module
 try:

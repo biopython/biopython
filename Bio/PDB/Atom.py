@@ -8,6 +8,7 @@ from Numeric import sum, sqrt, matrixmultiply
 
 # My stuff
 from Entity import DisorderedEntityWrapper
+from Vector import Vector
 
 
 class Atom:
@@ -195,6 +196,11 @@ class Atom:
         trans --- The translation (a size 3 Numpy array)
         """
         self.coord=matrixmultiply(self.coord, rot)+tran
+        
+    def get_vector(self):
+        "Return coordinates as Vector"
+        x,y,z=self.coord
+        return Vector(x,y,z)
 
 
 class DisorderedAtom(DisorderedEntityWrapper):
