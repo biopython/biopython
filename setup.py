@@ -178,7 +178,7 @@ def is_Martel_installed():
     # path from sys.path.
     i = 0
     while i < len(sys.path):
-        if sys.path[i] in ['', '.']:
+        if sys.path[i] in ['', '.', os.getcwd()]:
             del sys.path[i]
         else:
             i += 1
