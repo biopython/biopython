@@ -6,4 +6,7 @@ register_format(
 
 register_format(
     name = "fasta",
+    expression = "Bio.expressions.fasta.format",
 )
+
+link_format("sequence", "fasta")
