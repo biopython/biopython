@@ -7,7 +7,7 @@
 
 Classes:
 RecordFile is a decorator for File that allows the user to skip over 
-boilerplate and read the contents of a record.  The initializer requires the 
+boilerplate and read the contents of a record.  The initializer requires the
 starting tag and the ending tag of the record.  RecordFile processes multiple
 records, provided they all have the same starting and ending tags.
 
@@ -93,8 +93,11 @@ class RecordFile:
         if( len_expected ):
             len_to_read = len_expected + adjustment
             if( len_to_read > 0 ):
-                text = saved_text + self._handle.read( len_to_read )
+                text_read = self._handle.read( len_to_read )
+                text = saved_text + text_read
                 self._saved_text = text[ len_expected : ]
+                if( len( text_read ) < len_to_read ):
+                    self._file_state = 'AT_END_FILE'
             else:
                 len_to_retrieve = len_expected + lookahead_len
                 text = saved_text[ : len_to_retrieve ]
