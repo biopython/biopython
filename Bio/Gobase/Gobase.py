@@ -11,15 +11,15 @@ http://megasun.bch.umontreal.ca/gobase/
 
 
 Classes:
-Record             Holds rebase sequence data.
-Iterator           Iterates over sequence data in a rebase file.
-Dictionary         Accesses a rebase file using a dictionary interface.
-RecordParser       Parses rebase sequence data into a Record object.
-SequenceParser     Parses rebase sequence data into a Sequence object.
+Record             Holds gobase sequence data.
+Iterator           Iterates over sequence data in a gobase file.
+Dictionary         Accesses a gobase file using a dictionary interface.
+RecordParser       Parses gobase sequence data into a Record object.
+SequenceParser     Parses gobase sequence data into a Sequence object.
 
-_Scanner           Scans a rebase-format stream.
-_RecordConsumer    Consumes rebase data to a Record object.
-_SequenceConsumer  Consumes rebase data to a Sequence object.
+_Scanner           Scans a gobase-format stream.
+_RecordConsumer    Consumes gobase data to a Record object.
+_SequenceConsumer  Consumes gobase data to a Sequence object.
 
 
 Functions:
@@ -226,7 +226,7 @@ class RecordParser:
         return self._consumer.data
 
 class SequenceParser:
-    """Parses rebase sequence data into a Sequence object.
+    """Parses gobase sequence data into a Sequence object.
 
     """
     def __init__(self):
@@ -239,7 +239,7 @@ class SequenceParser:
 
 
 class _Scanner:
-    """Scans a rebase file.
+    """Scans a gobase file.
 
     Methods:
     feed   Feed in one gobase record.
@@ -410,7 +410,7 @@ class _Scanner:
 
 
 class _RecordConsumer(AbstractConsumer):
-    """Consumer that converts a rebase record to a Record object.
+    """Consumer that converts a gobase record to a Record object.
 
     Members:
     data    Record with gobase data.
