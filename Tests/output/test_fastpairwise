@@ -1,0 +1,77 @@
+test_fastpairwise
+Aligning 'GAACT' to 'GAT'
+  Gap penalties are 0, 0
+  Score=3
+    GAACT
+    |||||
+    G-A-T
+  Score=3
+    GAACT
+    |||||
+    GA--T
+  Gap penalties are -1, 0
+  Score=2
+    GAACT
+      |||
+    -GA-T
+  Score=2
+    GAACT
+    |||||
+    GA--T
+  Score=2
+    GAACT
+    ||
+    GAT--
+  Score=2
+    GAACT
+    |||
+    GAT--
+  Gap penalties are -0.1, -0.1
+  Score=2.8
+    GAACT
+    |||||
+    G-A-T
+  Score=2.8
+    GAACT
+    |||||
+    GA--T
+Aligning 'AxBx' to 'zABz'
+  Gap penalties are 0, 0
+  Score=2
+    -AxBx
+     |||
+    zA-Bz
+  Score=2
+    -AxBx
+     ||||
+    zA-Bz
+  Gap penalties are -1, 0
+  Score=1
+    -AxBx
+     |
+    zABz-
+  Score=1
+    -AxBx
+     ||
+    zABz-
+  Score=1
+    -AxBx
+     |||
+    zABz-
+  Score=1
+    AxBx
+      |
+    zABz
+  Score=1
+    AxBx
+      ||
+    zABz
+  Gap penalties are -0.1, -0.1
+  Score=1.9
+    -AxBx
+     |||
+    zA-Bz
+  Score=1.9
+    -AxBx
+     ||||
+    zA-Bz
