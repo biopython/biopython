@@ -382,6 +382,8 @@ class _Scanner:
         consumer.start_database_report()
 	while 1:
             read_and_call(uhandle, consumer.database, start='  Database')
+            # Database can span multiple lines.
+            read_and_call_until(uhandle, consumer.database, start='    Posted')
             read_and_call(uhandle, consumer.posted_date, start='    Posted')
             read_and_call(uhandle, consumer.num_letters_in_database,
                        start='  Number of letters')
@@ -474,8 +476,9 @@ class _Scanner:
                       start='effective length of database')
         read_and_call(uhandle, consumer.effective_search_space,
                       start='effective search space')
-        read_and_call(uhandle, consumer.effective_search_space_used,
-                      start='effective search space used')
+        # Does not appear in BLASTP 2.0.5
+        attempt_read_and_call(uhandle, consumer.effective_search_space_used,
+                              start='effective search space used')
 
         # BLASTX, TBLASTN, TBLASTX
         attempt_read_and_call(uhandle, consumer.frameshift, start='frameshift')
@@ -983,9 +986,13 @@ class _DatabaseReportConsumer:
         self._dr = Record.DatabaseReport()
 
     def database(self, line):
-        self._dr.database_name.append(_re_search(
-            r"Database: (.+)$", line,
-            "I could not find the database in line\n%s" % line))
+        m = re.search(r"Database: (.+)$", line)
+        if m:
+            self._dr.database_name.append(m.group(1))
+        elif self._dr.database_name:
+            # This must be a continuation of the previous name.
+            x = self._dr.database_name[-1] + string.strip(line)
+            self._dr.database_name[-1] = x
 
     def posted_date(self, line):
         self._dr.posted_date.append(_re_search(
