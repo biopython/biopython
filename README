@@ -80,18 +80,19 @@ To Do
   o support for 2.0.11
   o PSI-BLAST on WWW
 - parsers
-  o FASTA
-    - finish documentation
   o SWISSPROT
-    - iterator, random access
-  o PDB
+    - finish testing
+    - sequence parser
+  o SCOP
   o Medline
   o Prosite
   o Prodoc
+  o PDB
   o Genbank
 - generalize parsers
 - bug database
 - improve regression testing framework
+  o generate testing files
   o short tests and long tests
   o more descriptive error messages
   o count the tests

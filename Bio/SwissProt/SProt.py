@@ -15,24 +15,27 @@ Release 38
 
 
 Classes:
-Record           Holds SwissProt data.
-Reference        Holds reference data from a SwissProt entry.
-Iterator         Iterates over entries in a SwissProt file.
-Dictionary       Accesses a SwissProt file using a dictionary interface.
-RecordParser     Parses SwissProt data into a Record object.
+Record             Holds SwissProt data.
+Reference          Holds reference data from a SwissProt entry.
+Iterator           Iterates over entries in a SwissProt file.
+Dictionary         Accesses a SwissProt file using a dictionary interface.
+RecordParser       Parses a SwissProt record into a Record object.
+SequenceParser     Parses a SwissProt record into a Sequence object.
 
-_Scanner         Scans SwissProt-formatted data.
-_RecordConsumer  Consumes SwissProt data to a Record object.
+_Scanner           Scans SwissProt-formatted data.
+_RecordConsumer    Consumes SwissProt data to a Record object.
+_SequenceConsumer  Consumes SwissProt data to a Record object.
 
 
 Functions:
-index_file       Index a SwissProt file for a Dictionary.
+index_file         Index a SwissProt file for a Dictionary.
 
 """
 from types import *
 import string
 from Bio import File
 from Bio import Index
+from Bio import Sequence
 from Bio.ParserSupport import *
 
 class Record:
@@ -199,6 +202,18 @@ class RecordParser:
     def __init__(self):
         self._scanner = _Scanner()
         self._consumer = _RecordConsumer()
+
+    def parse(self, handle):
+        self._scanner.feed(handle, self._consumer)
+        return self._consumer.data
+
+class SequenceParser:
+    """Parses SwissProt data into a Sequence object.
+
+    """
+    def __init__(self):
+        self._scanner = _Scanner()
+        self._consumer = _SequenceConsumer()
 
     def parse(self, handle):
         self._scanner.feed(handle, self._consumer)
@@ -542,7 +557,7 @@ class _RecordConsumer(AbstractConsumer):
         self.data.seqinfo = int(cols[2]), int(cols[4]), cols[6]
     
     def sequence_data(self, line):
-        seq = string.replace(line, " ", "")
+        seq = string.rstrip(string.replace(line, " ", ""))
         self.data.sequence = self.data.sequence + seq
     
     def terminator(self, line):
@@ -554,6 +569,30 @@ class _RecordConsumer(AbstractConsumer):
             return word[:-1]
         return word
             
+class _SequenceConsumer(AbstractConsumer):
+    """Consumer that converts a SwissProt record to a Sequence object.
+
+    Members:
+    data    Record with SwissProt data.
+
+    """
+    def __init__(self):
+        self.data = None
+        
+    def start_record(self):
+        self.data = Sequence.NamedSequence(Sequence.Sequence())
+        
+    def end_record(self):
+        pass
+
+    def identification(self, line):
+        cols = string.split(line)
+        self.data.name = cols[1]
+        
+    def sequence_data(self, line):
+        seq = string.rstrip(string.replace(line, " ", ""))
+        self.data.seq = self.data.seq + seq
+
 def index_file(filename, indexname, rec2key=None):
     """index_file(filename, indexname, rec2key=None)
 
