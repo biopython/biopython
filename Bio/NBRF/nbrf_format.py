@@ -57,9 +57,10 @@ name_line = Martel.Group( "name_line", \
     Str( ";" ) +
     sequence_name +
     AnyEol() )
-comment_line = Group( "comment_line", \
-               Martel.Expression.GroupRef( "sequence_name" ) +
-               ToEol( "comment" ) )
+comment_line = Group( "comment_line", 
+                      Rep1(AnyBut(' ')) +
+                      ToEol( "comment" ) )
+
 excluded_chars = chr( 0x2a ) + chr( 10 ) + chr( 13 )
 sequence_text = Group( "sequence_text", \
     Martel.Rep1( AnyBut( excluded_chars ) ) )
