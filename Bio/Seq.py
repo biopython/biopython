@@ -1,6 +1,7 @@
 import string, array
 
 import Alphabet
+from Alphabet import IUPAC
 from Data.IUPACData import ambiguous_dna_complement, ambiguous_rna_complement
 
 
@@ -64,39 +65,53 @@ class Seq:
     def count(self, item):
         return len([x for x in self.data if x == item])
 
-    def complement(self):
-        """Returns the complement sequence.
+    def __maketrans(self, alphabet) :
+        """Seq.__maketrans(alphabet) -> translation table.
+
+        Return a translation table for use with complement()
+        and reverse_complement().
+
+        Compatible with lower case and upper case sequences.
+
+        alphabet is a dictionary as implement in Data.IUPACData
+
+        For internal use only.
         """
-        if seq.alphabet in (IUPAC.ambiguous_dna, IUPAC.unambiguous_dna):
+        before = ''.join(alphabet.keys())
+        after  = ''.join(alphabet.values())
+        before = before + before.lower()
+        after  = after + after.lower()
+        return string.maketrans(before, after)
+
+    def complement(self):
+        """Returns the complement sequence. New Seq object.
+        """
+        if self.alphabet in (IUPAC.ambiguous_dna, IUPAC.unambiguous_dna):
             d = ambiguous_dna_complement
-        elif seq.alphabet in (IUPAC.ambiguous_rna, IUPAC.unambiguous_rna):
+        elif self.alphabet in (IUPAC.ambiguous_rna, IUPAC.unambiguous_rna):
             d = ambiguous_rna_complement
         elif 'U' in self.data:
             d = ambiguous_rna_complement
         else:
             d = ambiguous_dna_complement
-        before = ''.join(d.keys())
-        after = ''.join(d.values())
-        ttable = maketrans(before, after)
+        ttable = self.__maketrans(d)
         #Much faster on really long sequences than the previous loop based one.
         #thx to Michael Palmer, University of Waterloo
         s = self.data.translate(ttable)
         return Seq(s, self.alphabet)
 
     def reverse_complement(self):
-        """Returns the reverse complement sequence.
+        """Returns the reverse complement sequence. new Seq object.
         """
-        if seq.alphabet in (IUPAC.ambiguous_dna, IUPAC.unambiguous_dna):
+        if self.alphabet in (IUPAC.ambiguous_dna, IUPAC.unambiguous_dna):
             d = ambiguous_dna_complement
-        elif seq.alphabet in (IUPAC.ambiguous_rna, IUPAC.unambiguous_rna):
+        elif self.alphabet in (IUPAC.ambiguous_rna, IUPAC.unambiguous_rna):
             d = ambiguous_rna_complement
         elif 'U' in self.data:
             d = ambiguous_rna_complement
         else:
             d = ambiguous_dna_complement
-        before = ''.join(d.keys())
-        after = ''.join(d.values())
-        ttable = maketrans(before, after)
+        ttable = self.__maketrans(d)
         #Much faster on really long sequences than the previous loop based one.
         #thx to Michael Palmer, University of Waterloo
         s = self.data[-1::-1].translate(ttable)
@@ -200,16 +215,19 @@ class MutableSeq:
     def reverse(self):
         self.data.reverse()
     def complement(self):
-        if seq.alphabet in (IUPAC.ambiguous_dna, IUPAC.unambiguous_dna):
+        if self.alphabet in (IUPAC.ambiguous_dna, IUPAC.unambiguous_dna):
             d = ambiguous_dna_complement
-        elif seq.alphabet in (IUPAC.ambiguous_rna, IUPAC.unambiguous_rna):
+        elif self.alphabet in (IUPAC.ambiguous_rna, IUPAC.unambiguous_rna):
             d = ambiguous_rna_complement
         elif 'U' in self.data:
             d = ambiguous_rna_complement
         else:
             d = ambiguous_dna_complement
+        c = dict([(x.lower(), y.lower()) for x,y in d.iteritems()])
+        d.update(c)
         self.data = map(lambda c: d[c], self.data)
         self.data = array.array('c', self.data)
+        
     def reverse_complement(self):
         self.complement()
         self.data.reverse()
