@@ -2590,7 +2590,7 @@ can be used to access the atomic data in the file in a convenient manner.
 \subsection{Structure representation}
 
 A macromolecular structure is represented using a structure, model chain,
-residue, atom (or SMCRA) hierarchy. Fig. \ref{SMCRA UML diagram} shows a UML
+residue, atom (or SMCRA) hierarchy. Fig. \ref{fig:smcra} shows a UML
 class diagram of the SMCRA data structure.  Such a data structure is not
 necessarily best suited for the representation of the macromolecular content of
 a structure, but it is absolutely necessary for a good interpretation of the
@@ -2602,12 +2602,21 @@ there is reason to suspect a problem. Parsing a PDB file can thus be used to
 detect likely problems. We will give several examples of this in section
 \ref{problem structures}. 
 
-\begin{figure}
-{\par\centering
-\resizebox*{0.75\textwidth}{!}{\includegraphics{images/smcra.eps}} \par}
-\caption{\label{SMCRA UML diagram}UML diagram of the SMCRA data structure used to represent
-a macromolecular structure.}
+\begin{htmlonly}
+\label{fig:smcra}
+\imgsrc[width=650, height=750]{images/smcra.png}
+\end{htmlonly}
+
+\begin{latexonly}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{images/smcra.png}
+\label{fig:smcra}
+\caption{UML diagram of the SMCRA data structure 
+used to represent a macromolecular structure.}
 \end{figure}
+\end{latexonly}
+
 
 Structure, Model, Chain and Residue are all subclasses of the Entity base class.
 The Atom class only (partly) implements the Entity interface (because an Atom
