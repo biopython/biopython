@@ -89,6 +89,9 @@ localds(sequenceA, sequenceB, match_dict, open, extend) -> alignments
 # - force_generic: boolean
 #   Always use the generic, non-cached, dynamic programming function.
 #   For debugging.
+# - score_only: boolean
+#   Only get the best score, don't recover any alignments.  The return
+#   value of the function is the score.
 
 from types import *
 
@@ -232,6 +235,7 @@ alignment occurs.
                 ('align_globally', self.align_type == 'global'),
                 ('gap_char', '-'),
                 ('force_generic', 0),
+                ('score_only', 0),
                 ]
             for name, default in default_params:
                 keywds[name] = keywds.get(name, default)
@@ -243,7 +247,7 @@ align = align()
 
 def _align(sequenceA, sequenceB, match_fn, gap_A_fn, gap_B_fn,
            penalize_extend_when_opening, penalize_end_gaps,
-           align_globally, gap_char, force_generic):
+           align_globally, gap_char, force_generic, score_only):
     if not sequenceA or not sequenceB:
         return []
 
@@ -273,6 +277,11 @@ def _align(sequenceA, sequenceB, match_fn, gap_A_fn, gap_B_fn,
         gap_A_fn, gap_B_fn, penalize_end_gaps, align_globally)
     # Find the highest score.
     best_score = max([x[0] for x in starts])
+
+    # If they only want the score, then return it.
+    if score_only:
+        return best_score
+    
     tolerance = 0  # XXX do anything with this?
     # Now find all the positions within some tolerance of the best
     # score.
