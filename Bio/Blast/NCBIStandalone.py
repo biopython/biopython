@@ -199,7 +199,8 @@ class _Scanner:
         # indicates that no descriptions follow, and we should go straight
         # to the alignments.
         if not attempt_read_and_call(
-            uhandle, consumer.description_header, contains='Score     E'):
+            uhandle, consumer.description_header,
+            has_re=re.compile(r'Score {4,5}E')):
             # Either case 2 or 3.  Look for "No hits found".
             attempt_read_and_call(uhandle, consumer.no_hits,
                                   contains='No hits found')
