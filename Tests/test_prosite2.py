@@ -10,7 +10,10 @@ from Bio import ParserSupport
 from Bio.Prosite import Prosite
 
 
-tests = [ 'ps00107.txt', 'ps00159.txt', 'ps00165.txt', 'ps00213.txt', 'ps00432.txt', \
+#tests = [ 'ps00107.txt', 'ps00159.txt', 'ps00165.txt', 'ps00213.txt', 'ps00432.txt', \
+#    'ps00488.txt', 'ps00546.txt' ]
+
+tests = [ 'ps00107.txt', 'ps00159.txt', 'ps00165.txt', 'ps00432.txt', \
     'ps00488.txt', 'ps00546.txt' ]
 record_parser = Prosite.RecordParser()
 
@@ -28,6 +31,7 @@ for test in tests:
     print data.accession
     print data.created
     print data.data_update
+    print data.info_update
 #    print data.data_info
     print data.pdoc
     print data.description
