@@ -1,0 +1,49 @@
+MetaTool
+========
+
+
+The MetaTool parser works with MetaTool output files.  MetaTool implements
+algorithms to decompose a biochemical pathway into a combination of simpler networks,
+that are more accessible to analysis.
+
+The software is available at:
+http://www2.bioinf.mdc-berlin.de/metabolic/metatool/
+
+The MetaTool web page is 
+  http://www.biologie.hu-berlin.de/biophysics/Theory/tpfeiffer/metatool.html
+
+The MetaTool parser requires Numeric.py. Information is available at
+http://www.python.org/topics/scicomp/
+
+The Bio.MetaTool.Scanner produces the following events:
+
+input_file_name
+num_int_metabolites
+num_reactions
+metabolite_line
+unbalanced_metabolite
+num_rows
+num_cols
+irreversible_vector
+branch_metabolite
+non_branch_metabolite
+stoichiometric_tag
+kernel_tag
+subsets_tag
+reduced_system_tag
+convex_basis_tag
+conservation_relations_tag
+elementary_modes_tag
+reaction
+enzyme
+matrix_row
+sum_is_constant_line
+end_stochiometric
+end_kernel
+end_subsets
+end_reduced_system
+end_convex_basis
+end_conservation_relations
+end_elementary_modes
+
+
