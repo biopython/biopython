@@ -18,6 +18,8 @@ from Martel import RecordReader
 
 self = sys.modules[__name__]
 
+OSpaces = Opt(Spaces())
+
 def _start_elem(element, *attrs):
     if attrs:
         attr_groups = []
@@ -321,6 +323,39 @@ group_elem("MedlineCitationSet", Rep(MedlineCitation) + Opt(DeleteCitation))
 
 
 ######################################################################
+# For Pubmed queries                                                 #
+#                                                                    #
+######################################################################
+
+group_elem("PubMedPubDate", \
+           OSpaces + Year + \
+           OSpaces + Month + \
+           OSpaces + Day + \
+           Opt(OSpaces + Hour) + \
+           Opt(OSpaces + Minute) + \
+           OSpaces,
+           "PubStatus")
+group_elem("History", Rep(OSpaces + PubMedPubDate) + OSpaces)
+simple_elem("PublicationStatus")
+simple_elem("ArticleId", "IdType")
+group_elem("ArticleIdList", Rep(OSpaces + ArticleId) + OSpaces)
+
+group_elem("PubmedData",
+           OSpaces + History + \
+           OSpaces + PublicationStatus +
+           OSpaces + ArticleIdList)
+group_elem("PubmedArticle", MedlineCitation + PubmedData)
+group_elem("PubmedArticleSet", Rep(PubmedArticle + Rep(AnyEol())))
+
+xml_version = Str('<?xml version="1.0"?>') + AnyEol()
+doctype = Str('<!DOCTYPE PubmedArticleSet PUBLIC "-//NLM//DTD PubMedArticle, 1st November 2003//EN" "http://www.ncbi.nlm.nih.gov/entrez/query/DTD/pubmed_031101.dtd">') + AnyEol()
+
+pubmed_query_format = xml_version + doctype + PubmedArticleSet
+
+
+
+
+######################################################################
 # Other stuff                                                        #
 #                                                                    #
 ######################################################################
@@ -352,3 +387,5 @@ format = HeaderFooter(
     citation_format, RecordReader.EndsWith, ("</MedlineCitation>",),
     footer_format, RecordReader.Everything, (),
     )
+
+
