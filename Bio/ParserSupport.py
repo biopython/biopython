@@ -204,23 +204,23 @@ def _fails_conditions(line, start=None, end=None, contains=None, blank=None,
                       has_re=None):
     if start is not None:
         if line[:len(start)] != start:
-            return "Line does not start with '%s': %s" % (start, line)
+            return "Line does not start with '%s':\n%s" % (start, line)
     if end is not None:
         if string.rstrip(line)[-len(end):] != end:
-            return "Line does not end with '%s': %s" % (end, line)
+            return "Line does not end with '%s':\n%s" % (end, line)
     if contains is not None:
         if string.find(line, contains) == -1:
-            return "Line does not contain '%s': %s" % (contains, line)
+            return "Line does not contain '%s':\n%s" % (contains, line)
     if blank is not None:
         if blank:
             if not is_blank_line(line):
-                return "Expected blank line, but got: %s" % line
+                return "Expected blank line, but got:\n%s" % line
         else:
             if is_blank_line(line):
                 return "Expected non-blank line, but got a blank one"
     if has_re is not None:
         if has_re.search(line) is None:
-            return "Line does not match regex '%s': %s" % (
+            return "Line does not match regex '%s':\n%s" % (
                 has_re.pattern, line)
     return None
 
