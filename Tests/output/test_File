@@ -1,5 +1,5 @@
 test_File
-'This\012'
+'This\n'
 3
 ''
 This
@@ -12,8 +12,9 @@ saved
 another
 saved
 'saved again'
-'a multi-line\012'
+'a multi-line\n'
 'file'
 ''
 save after empty
 ''
+more textsome text

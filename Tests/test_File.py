@@ -52,4 +52,8 @@ print repr(h.readline())       # ''
 h.saveline("save after empty")
 print h.readline()             # 'save after empty'
 print repr(h.readline())       # ''
-h.close()  # should pass this to the original handle
+
+# test read method
+h = File.UndoHandle(File.StringHandle("some text"))
+h.saveline("more text")
+print h.read()                 # 'more textsome text'
