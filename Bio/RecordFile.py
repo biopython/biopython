@@ -6,7 +6,29 @@
 """Code for more fancy file handles.
 
 Classes:
-RecordHandle     File object decorator with support for record operations.
+RecordFile is a decorator for File that allows the user to skip over 
+boilerplate and read the contents of a record.  The initializer requires the 
+starting tag and the ending tag of the record.  RecordFile processes multiple
+records, provided they all have the same starting and ending tags.
+
+The implementation is based on a state machine. and assumes sequential access.
+RecordRead.read provides the same interface as read.  It has an optional
+parameter, size.  
+
+RecordFile.read, with no parameters, searches for the next record and returns
+it in its entirety.  A subsequent call returns an empty string to signal the
+end of the record.  However, the next call will advance to the next record
+and return it, it it exists.  Otherwise RecordFile.read will return a second
+ empty string.
+
+If a calling program passes a size parameter RecordFile will check its own
+position with respect to record data. If it just past the end of record, it
+will return an empty string.  It it is between records it will advance to
+the next record and retuurn the specified number of bytes from the record,
+if they are available.  Otherwise, it will return all the data remaining in
+the current record.  If it is already within the record, RecordFile.read
+will return data from the current position.
+
 """
 
 import os
