@@ -440,6 +440,11 @@ class _Scanner:
                         any_number=1)
         self._scan_line('RG', uhandle, consumer.reference_author,
                         any_number=1)
+        # PRKN_HUMAN has RG lines, then RA lines.  The best solution
+        # is to write code that accepts either of the line types.
+        # This is the quick solution...
+        self._scan_line('RA', uhandle, consumer.reference_author,
+                        any_number=1)
     
     def _scan_rt(self, uhandle, consumer):
         self._scan_line('RT', uhandle, consumer.reference_title,
