@@ -4,6 +4,7 @@
 
 import Bio.DocSQL
 
-print "Running Bio.DocSQL doctests..."
-Bio.DocSQL._test()
-print "Bio.DocSQL doctests complete."
+print "Skipping Bio.DocSQL doctests."
+#print "Running Bio.DocSQL doctests..."
+#Bio.DocSQL._test()
+#print "Bio.DocSQL doctests complete."

@@ -11,8 +11,8 @@ Docstring
 
 from __future__ import generators
 
-__version__ = "$Revision: 1.2 $"
-# $Source: /home/bartek/cvs2bzr/biopython_fastimport/cvs_repo/biopython/Bio/Attic/GenericTools.py,v $
+__version__ = "$Revision: 1.1 $"
+# $Source: /home/bartek/cvs2bzr/biopython_fastimport/cvs_repo/biopython/Bio/GFF/GenericTools.py,v $
 
 import exceptions
 import os

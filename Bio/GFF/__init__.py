@@ -11,7 +11,7 @@ GFF.py: Access to General Feature Format databases created with Bio::DB:GFF
 based on documentation for Lincoln Stein's Perl Bio::DB::GFF
 """
 
-__version__ = "$Revision: 1.2 $"
+__version__ = "$Revision: 1.3 $"
 # $Source: /home/bartek/cvs2bzr/biopython_fastimport/cvs_repo/biopython/Bio/GFF/__init__.py,v $
 
 import exceptions
@@ -24,20 +24,21 @@ import MySQLdb
 
 from Bio.Alphabet import IUPAC
 from Bio import DocSQL
-import Bio.easy
-from Bio import GenericTools
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio import Translate
 
 import binning
+import easy
+import GenericTools
+
 
 DEFAULT_ALPHABET = IUPAC.unambiguous_dna
 standard_translator = Translate.unambiguous_dna_by_id[1]
 
 class Segment(object):
     """
-    this will only work for the simplest of Bio.easy.Location objects
+    this will only work for the simplest of easy.Location objects
     """
     def __init__(self, gff, location=None):
         self.gff = gff
@@ -76,11 +77,11 @@ class RetrieveSeqname(GenericTools.Surrogate, SeqRecord):
     """
     Singleton: contain records of loaded FASTA files
 
-    >>> RetrieveSeqname._dir = '/home/grouse/lib/python/t/Profiler/BLAST'
+    >>> RetrieveSeqname._dir = 'GFF'
     >>> RetrieveSeqname._diagnostics = 1
     >>> sys.stderr = sys.stdout # dump diagnostics to stdout so doctest can see them
     >>> record1 = RetrieveSeqname('NC_001802.fna')
-    Loading /home/grouse/lib/python/t/Profiler/BLAST/NC_001802.fna... Done.
+    Loading GFF/NC_001802.fna... Done.
     >>> record1.id
     'gi|9629357|ref|NC_001802.1|'
     >>> record2 = RetrieveSeqname('NC_001802.fna')
@@ -97,7 +98,7 @@ class RetrieveSeqname(GenericTools.Surrogate, SeqRecord):
             filename = os.path.join(self._dir, seqname)
             if self._diagnostics:
                 sys.stderr.write("Loading %s..." % filename)
-            record = Bio.easy.fasta_single(filename)
+            record = easy.fasta_single(filename)
             self.__records[seqname] = record
             GenericTools.Surrogate.__init__(self, self.__records[seqname])
             if self._diagnostics:
@@ -111,7 +112,7 @@ class Feature(object):
 
     I propose that we start calling these the Rosalind and Franklin strands
     
-    >>> RetrieveSeqname._dir = '/home/grouse/lib/python/grouse-misc-python/tests/'
+    >>> RetrieveSeqname._dir = 'GFF'
     >>> feature = Feature("NC_001802x.fna", 73, 78) # not having the x will interfere with the RetrieveSequence test
     >>> feature.seq()
     Seq('AATAAA', Alphabet())
@@ -122,16 +123,16 @@ class Feature(object):
     >>> writer.write(feature.record())
     > NC_001802x.fna:73..78
     AATAAA
-    >>> feature2 = Feature(location=Bio.easy.LocationFromString("NC_001802x.fna:73..78"))
+    >>> feature2 = Feature(location=easy.LocationFromString("NC_001802x.fna:73..78"))
     >>> writer.write(feature2.record())
     > NC_001802x.fna:73..78
     AATAAA
-    >>> location3 = Bio.easy.LocationFromString("NC_001802x.fna:complement(73..78)")
+    >>> location3 = easy.LocationFromString("NC_001802x.fna:complement(73..78)")
     >>> feature3 = Feature(location=location3)
     >>> writer.write(feature3.record())
     > NC_001802x.fna:complement(73..78)
     TTTATT
-    >>> location4 = Bio.easy.LocationFromString("NC_001802x.fna:336..1631")
+    >>> location4 = easy.LocationFromString("NC_001802x.fna:336..1631")
     >>> feature4 = Feature(location=location4, frame=0)
     >>> feature4.frame
     0
@@ -143,11 +144,11 @@ class Feature(object):
     >>> feature4.frame = 1
     >>> feature4.translate()[:5]
     Seq('WVRER', HasStopCodon(IUPACProtein(), '*'))
-    >>> location5 = Bio.easy.LocationFromString("NC_001802lc.fna:336..1631") # lowercase data
+    >>> location5 = easy.LocationFromString("NC_001802lc.fna:336..1631") # lowercase data
     >>> feature5 = Feature(location=location5, frame=0)
     >>> feature5.translate()[:7]
     Seq('MGARASV', HasStopCodon(IUPACProtein(), '*'))
-    >>> location6 = Bio.easy.LocationFromString("NC_001802lc.fna:335..351")
+    >>> location6 = easy.LocationFromString("NC_001802lc.fna:335..351")
     >>> feature6 = Feature(location=location6, frame=1)
     >>> feature6.translate()
     Seq('MGARA', HasStopCodon(IUPACProtein(), '*'))
@@ -178,7 +179,7 @@ class Feature(object):
 
     def seq(self):
         rec = RetrieveSeqname(self.seqname)
-        return Bio.easy.record_subseq(rec, self.location(), upper=1)
+        return easy.record_subseq(rec, self.location(), upper=1)
 
     def translate(self):
         seq = self.seq()
@@ -198,14 +199,14 @@ class Feature(object):
                 raise
 
     def location(self):
-        return Bio.easy.LocationFromCoords(self.start-1, self.end-1, self.strand, seqname=self.seqname)
+        return easy.LocationFromCoords(self.start-1, self.end-1, self.strand, seqname=self.seqname)
 
     def target_location(self):
         if self.target_start <= self.target_end:
-            return Bio.easy.LocationFromCoords(self.target_start-1, self.target_end-1, 0, seqname=self.gname)
+            return easy.LocationFromCoords(self.target_start-1, self.target_end-1, 0, seqname=self.gname)
         else:
             # switch start and end and make it complement:
-            return Bio.easy.LocationFromCoords(self.target_end-1, self.target_start-1, 1, seqname=self.gname)
+            return easy.LocationFromCoords(self.target_end-1, self.target_start-1, 1, seqname=self.gname)
 
     def id(self):
         try:
@@ -295,8 +296,8 @@ def object2fgroup_sql(object):
 
 class FeatureAggregate(list, Feature):
     """
-    >>> feature1_1 = Feature(location=Bio.easy.LocationFromString("NC_001802x.fna:336..1631"), frame=0) # gag-pol
-    >>> feature1_2 = Feature(location=Bio.easy.LocationFromString("NC_001802x.fna:1631..4642"), frame=0) # slippage
+    >>> feature1_1 = Feature(location=easy.LocationFromString("NC_001802x.fna:336..1631"), frame=0) # gag-pol
+    >>> feature1_2 = Feature(location=easy.LocationFromString("NC_001802x.fna:1631..4642"), frame=0) # slippage
     >>> aggregate = FeatureAggregate([feature1_1, feature1_2])
     >>> print aggregate.location()
     join(NC_001802x.fna:336..1631,NC_001802x.fna:1631..4642)
@@ -304,8 +305,8 @@ class FeatureAggregate(list, Feature):
     >>> xlate_str[:5], xlate_str[-5:]
     ('MGARA', 'RQDED')
     
-    >>> location1 = Bio.easy.LocationFromString("NC_001802x.fna:complement(1..6)")
-    >>> location2 = Bio.easy.LocationFromString("NC_001802x.fna:complement(7..12)")
+    >>> location1 = easy.LocationFromString("NC_001802x.fna:complement(1..6)")
+    >>> location2 = easy.LocationFromString("NC_001802x.fna:complement(7..12)")
     >>> feature2_1 = Feature(location=location1, frame=0)
     >>> feature2_2 = Feature(location=location2, frame=0)
     >>> aggregate2 = FeatureAggregate([feature2_1, feature2_2])
@@ -325,8 +326,8 @@ class FeatureAggregate(list, Feature):
     Seq('LSG', HasStopCodon(IUPACProtein(), '*'))
     
     >>> aggregate4 = FeatureAggregate()
-    >>> aggregate4.append(Feature(location=Bio.easy.LocationFromString("NC_001802x.fna:1..5"), frame=0))
-    >>> aggregate4.append(Feature(location=Bio.easy.LocationFromString("NC_001802x.fna:6..12"), frame=2))
+    >>> aggregate4.append(Feature(location=easy.LocationFromString("NC_001802x.fna:1..5"), frame=0))
+    >>> aggregate4.append(Feature(location=easy.LocationFromString("NC_001802x.fna:6..12"), frame=2))
     >>> aggregate4.seq()
     Seq('GGTCTCTCTGGT', Alphabet())
     >>> aggregate4.translate()
@@ -339,7 +340,7 @@ class FeatureAggregate(list, Feature):
             list.__init__(self, map(lambda x: x, feature_query))
 
     def location(self):
-        loc = Bio.easy.LocationJoin(map(lambda x: x.location(), self))
+        loc = easy.LocationJoin(map(lambda x: x.location(), self))
         loc.reorient()
         return loc
 
