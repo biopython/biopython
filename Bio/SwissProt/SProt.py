@@ -411,6 +411,15 @@ class _RecordConsumer(AbstractConsumer):
         self.data.data_class = self._chomp(cols[2])    # don't want ';'
         self.data.molecule_type = self._chomp(cols[3]) # don't want ';'
         self.data.sequence_length = int(cols[4])
+
+        # data class can be 'STANDARD' or 'PRELIMINARY'
+        if self.data.data_class not in ['STANDARD', 'PRELIMINARY']:
+            raise SyntaxError, "Unrecognized data class %s in line\n%s" % \
+                  (self.data.data_class, line)
+        # molecule_type should be 'PRT' for PRoTein
+        if self.data.molecule_type != 'PRT':
+            raise SyntaxError, "Unrecognized molecule type %s in line\n%s" % \
+                  (self.data.molecule_type, line)
     
     def accession(self, line):
         cols = string.split(self._chomp(string.rstrip(line[5:])), ';')
@@ -482,12 +491,18 @@ class _RecordConsumer(AbstractConsumer):
     
     def reference_cross_reference(self, line):
         assert self.data.references, "RX: missing RN"
+        
+        # CLD1_HUMAN in Release 39 and DADR_DIDMA in Release 33
+        # have extraneous information in the RX line.  Check for
+        # this and chop it out of the line.
+        # (noticed by katel@worldpath.net)
+        ind = string.find(line, '[NCBI, ExPASy, Israel, Japan]')
+        if ind >= 0:
+            line = line[:ind]
+
         cols = string.split(line)
-        if line[:22] != 'RX   MEDLINE; 99132301':
-            # CLD1_HUMAN in Release 39 has a broken RX line.
-            # (noticed by katel@worldpath.net)
-            assert len(cols) == 3, "I don't understand RX line %s" \
-                   % line
+        assert len(cols) == 3, "I don't understand RX line %s" \
+               % line
         self.data.references[-1].references.append(
             (self._chomp(cols[1]), self._chomp(cols[2])))
     
@@ -546,7 +561,6 @@ class _RecordConsumer(AbstractConsumer):
             self.data.keywords.append(string.lstrip(col))
     
     def feature_table(self, line):
-        # XXX AAC_ACTUT
         line = line[5:]    # get rid of junk in front
         name = string.rstrip(line[0:8])
         try:
