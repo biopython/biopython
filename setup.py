@@ -16,21 +16,22 @@ the 'Installing Python Modules' distutils documentation, available from:
 
 http://python.org/sigs/distutils-sig/doc/
 
-Or, if all else, fails, feel free to write to the biopython list
-(biopython@biopython.org) and ask for help.
+Or, if all else fails, feel free to write to the biopython list
+at biopython@biopython.org and ask for help.
 """
 
 import sys
 import os
 try:
     from distutils.core import setup
+    from distutils.command.install import install
 except ImportError:
     print "Biopython installation requires distutils, avaiable with python 2.0"
-    print "or from http://python.org/sigs/distutils-sig/download.html"
+    print "or better, or from:"
+    print "http://python.org/sigs/distutils-sig/download.html"
     sys.exit(0)
 
 # check if the distutils has the new extension class stuff
-# this is to support old distutils which do extensions differently
 try:
     from distutils.extension import Extension
 except ImportError:
@@ -39,37 +40,136 @@ except ImportError:
     print "from http://python.org/sigs/distutils-sig/download.html"
     sys.exit(0)
 
+# --- check for installed programs needed by Biopython
+
+def check_install(name, check_library, location, other_messages = None):
+    """Check if a program is installed and print a warning message if not.
+
+    This helps users at least know they are missing some installed stuff
+    and where to get it when they install biopython.
+
+    Arguments:
+    
+    o check_library -- a function to check whether or not the specified
+    program and version is present, returns 1 if it is, 0 otherwise.
+
+    o name -- the name of the library we are looking for
+
+    o location -- a URL where the library can be downloaded
+
+    o other_messages -- other random messages to print if the library
+    is not present (ie. version information, etc...)
+    """
+    if not(check_library()):
+        print "\nWARNING -- %s is not installed." % name
+        print "You should install this from:"
+        print location
+        print "to get full functionality from Biopython."
+        if other_messages:
+            print other_messages
+
+# -- functions to check for specific libraries and versions.
+
+def check_Martel():
+    """Check for Martel version 0.5 or better.
+    """
+    try:
+        import Martel
+        if str(Martel.__version__) >= "0.5":
+            return 1
+        else:
+            return 0
+    except ImportError:
+        return 0
+
+def check_mxTextTools():
+    try:
+        import TextTools
+        return 1
+    except ImportError:
+        try:
+            from mx import TextTools
+            return 1
+        except ImportError:
+            return 0
+
+def check_Numpy():
+    try:
+        from Numeric import *
+        return 1
+    except ImportError:
+        return 0
+                  
+class my_install(install):
+    """Override the standard install to check for dependencies.
+
+    This will just run the normal install, and then print warning messages
+    if packages are missing.
+    """
+    def run(self):
+        # run the normal install and everthing
+        install.run(self)
+
+        # now print warning messages if we are missing stuff
+        check_install("Martel", check_Martel,
+                      "http://www.biopython.org/~dalke/Martel/",
+                      "Version 0.5 or better required")
+
+        check_install("mxTextTools", check_mxTextTools,
+                      "http://www.lemburg.com/files/python/mxExtensions.html")
+
+        check_install("Numerical Python", check_Numpy,
+                      "http://numpy.sourceforge.net/")
+
+# --- set up the packages we are going to install
+# standard biopython packages
+biopython_packages = ['Bio',
+                      'Bio.Align',
+                      'Bio.Alphabet',
+                      'Bio.Blast',
+                      'Bio.Clustalw',
+                      'Bio.Data',
+                      'Bio.Encodings',
+                      'Bio.Enzyme',
+                      'Bio.Fasta',
+                      'Bio.GenBank',
+                      'Bio.Gobase',
+                      'Bio.Medline',
+                      'Bio.PDB',
+                      'Bio.Prosite',
+                      'Bio.Rebase',
+                      'Bio.SCOP',
+                      'Bio.SeqIO',
+                      'Bio.SubsMat',
+                      'Bio.SwissProt',
+                      'Bio.Tools',
+                      'Bio.Tools.Classification',
+                      'Bio.Tools.Parsers',
+                      'Bio.UniGene',
+                      'Bio.WWW'
+                      ]
+
+# Martel -- for building parsers
+martel_packages = ['Martel',
+                   'Martel.formats']
+# a flag to determine if we should install Martel
+INSTALL_MARTEL = 0
+
+# -- setup the packages list
+all_packages = biopython_packages
+# only install Martel if we have the flag set 
+if INSTALL_MARTEL:
+    all_packages.extend(martel_packages)
+
 setup(name='biopython', 
-      version='0.90d04',
+      version='0.95d01',
       author='The Biopython Consortium',
       author_email='biopython@biopython.org',
       url='http://www.bipoython.org/',
+
+      cmdclass = {"install" : my_install},
       
-      packages=['Bio',
-                'Bio.Align',
-                'Bio.Alphabet',
-                'Bio.Blast',
-                'Bio.Clustalw',
-                'Bio.Data',
-                'Bio.Encodings',
-                'Bio.Entrez',
-                'Bio.Enzyme',
-                'Bio.Fasta',
-                'Bio.GenBank',
-                'Bio.Gobase',
-                'Bio.Medline',
-                'Bio.PDB',
-                'Bio.Prosite',
-                'Bio.Rebase',
-                'Bio.SCOP',
-                'Bio.SeqIO',
-                'Bio.SubsMat',
-                'Bio.SwissProt',
-                'Bio.Tools',
-                'Bio.Tools.Classification',
-                'Bio.Tools.Parsers',
-                'Bio.WWW'
-                ],
+      packages = all_packages,
       
       ext_modules = [Extension('Bio.Tools.Classification.cSVM',
                                ['Bio/Tools/Classification/cSVMmodule.c']
