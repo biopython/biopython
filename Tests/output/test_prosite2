@@ -1276,8 +1276,7 @@ G-[LIVM]-x(3)-E-[LIV]-T-[LF]-R.
 ???P?
 1
 cc_site
-    8
-    active_site
+    (8, 'active_site')
 dr_positive
     ('P00885', 'ALKD_PSEPU')
     ('P10177', 'ALKH_ECOLI')
@@ -1309,8 +1308,7 @@ Serine/threonine dehydratases pyridoxal-phosphate attachment site.
 ??EP?
 1
 cc_site
-    7
-    pyridoxal_phosphate
+    (7, 'pyridoxal_phosphate')
 dr_positive
     ('P54555', 'SDHD_BACSU')
     ('P00926', 'SDHD_ECOLI')
@@ -1645,8 +1643,7 @@ G-[STG]-[LIVM]-[STG]-[AC]-S-G-[DH]-L-x-P-L-[SA]-x(2)-[SA].
 ??EP?
 1
 cc_site
-    6
-    active_site
+    (6, 'active_site')
 dr_positive
     ('P10944', 'HUTH_BACSU')
     ('Q20502', 'HUTH_CAEEL')
@@ -1724,8 +1721,7 @@ P-R-C-[GN]-x-P-[DR]-[LIVSAPKQ].
 ??E??
 1
 cc_site
-    3
-    chelates_zinc
+    (3, 'chelates_zinc')
 dr_positive
     ('P28053', 'COG1_BOVIN')
     ('P03956', 'COG1_HUMAN')
