@@ -358,7 +358,7 @@ class HistoryClient:
         else:
             assert searchinfo.count == 0
             cookie = HistoryCookie(db, None, None)
-        
+
         recordset = set_klass(self.eutils, cookie, 0, searchinfo.count,
                               searchinfo)
         # won't have a query_key if the search turned up empty

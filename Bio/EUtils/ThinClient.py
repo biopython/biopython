@@ -936,7 +936,9 @@ class ThinClient:
                                   "WebEnv": webenv,
                                   "query_key": query_key,
                                   "retstart": retstart,
-                                     "retmax": retmax,
+        # if retmax is specified, NCBI only returns 500 sequences (or whatever
+        # you are fetching). Removing it from the URL relieves this constraint
+        #                           "retmax": retmax,
                                   "retmode": retmode,
                                   "rettype": rettype,
                                   "seq_start": seq_start,
