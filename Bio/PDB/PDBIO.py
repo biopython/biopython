@@ -52,8 +52,12 @@ class PDBIO:
         >>> io.set_structure(s)
         >>> io.save("out.pdb")
     """
-    def __init__(self):
-        pass
+    def __init__(self, use_model_flag=0):
+        """
+        @param use_model_flag: if 1, force use of the MODEL record in output.
+        @type use_model_flag: int
+        """
+        self.use_model_flag=use_model_flag
     
     # private mathods
 
@@ -107,7 +111,7 @@ class PDBIO:
             fp=file
             close_file=0
         # multiple models?
-        if len(self.structure)>1:
+        if len(self.structure)>1 or self.use_model_flag:
             model_flag=1
         else:
             model_flag=0
