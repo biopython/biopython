@@ -16,8 +16,9 @@ BlastParser   Parses output from WWW blast.
 _Scanner      Scans output from NCBI's BLAST WWW server.
 
 Functions:
-blast         Do a BLAST search against the WWW page.
-blasturl      Do a BLAST search against the stable blasturl.
+blast         Do a BLAST search against the WWW page. (Deprecated)
+blasturl      Do a BLAST search against the stable blasturl. (Deprecated)
+qblast        Do a BLAST search using the QBLAST API.
 
 """
 import string
@@ -683,6 +684,8 @@ def blast(program, database, query,
     """
     import time
     import urlparse
+    import warnings
+    warnings.warn("blast is deprecated.  Please use qblast instead.")
     
     # NCBI Blast is hard to work with.  The user enters a query, and then
     # it returns a "reference" page which contains a button that the user
@@ -916,6 +919,8 @@ def blasturl(program, datalib, sequence,
     http://www.ncbi.nlm.nih.gov/BLAST/blast_overview.html
     
     """
+    import warnings
+    warnings.warn("blasturl is deprecated.  Please use qblast instead.")
     lines = []
     lines.append('PROGRAM %s' % program)
     lines.append('DATALIB %s' % datalib)
