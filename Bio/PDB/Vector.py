@@ -233,7 +233,7 @@ class Vector:
 
     def copy(self):
         "Return a deep copy of the Vector"
-        return Vector(array(self._ar))
+        return Vector(self._ar)
 
 if __name__=="__main__":
 
