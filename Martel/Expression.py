@@ -71,7 +71,7 @@ class Expression:
         return Parser.Parser(tagtable, (want_flg, debug_level, attrlookup))
 
     def make_iterator(self, tag, debug_level = 0):
-        """create an iterator for this regexp"""
+        """create an iterator for this regexp; the 'tag' defines a record"""
         import Iterator
         return Iterator.Iterator(self.make_parser(debug_level), tag)
     
@@ -593,7 +593,7 @@ class ParseRecords(PassThrough):
                                    self.make_reader, self.reader_args)
     
     def make_iterator(self, tag, debug_level = 0):
-        """create an iterator for this regexp"""
+        """create an iterator for this regexp; the 'tag' defines a record"""
         import Iterator
         if tag == self.format_name:
             return self.expression.make_iterator(self, tag)
