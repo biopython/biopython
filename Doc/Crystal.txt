@@ -1,0 +1,15 @@
+Crystal.txt
+===========
+
+
+Crystal
+-------
+Supports structures that contain nucleotides and amino acids plus some other small molecules.
+
+
+Classes
+Hetero - supports PDB hetero codes.  Each code consists of up to 3 alphameric characters
+
+Chain - a sequence of Hetero elements
+
+Crystal - a dictionary of labeled chains from the same structure
