@@ -105,8 +105,10 @@ you see ImportErrors."""
             print "You can find %s at %s." % (name, url)
             print
 
-            return get_yes_or_no("Do you want to continue this installation?",
-                                 default)
+            if not get_yes_or_no(
+                "Do you want to continue this installation?", default):
+                return 0
+        return 1
         
     def run(self):
         if self.check_dependencies():
