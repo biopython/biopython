@@ -1,0 +1,981 @@
+<HTML>
+<HEAD>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" LINK="#0000FF" VLINK="#660099" ALINK="#660099">
+<IMG SRC="images/head_results.gif" ALT="Header of the page" BORDER="0"NAME="BlastHeaderGif" WIDTH="600" HEIGHT="45" ALIGN="middle">
+<form action="Blast.cgi" enctype="application/x-www-form-urlencoded" method="POST"><input name="ALIGNMENTS" type="hidden" value="50"><input name="AUTO_FORMAT" type="hidden" value="on"><input name="CLIENT" type="hidden" value="web"><input name="DESCRIPTIONS" type="hidden" value="100"><input name="EXPECT" type="hidden" value="10"><input name="HITLIST_SIZE" type="hidden" value="100"><input name="LAYOUT" type="hidden" value="OneWindow"><input name="NCBI_GI" type="hidden" value="checked"><input name="PAGE" type="hidden" value="Translations"><input name="RID" type="hidden" value="1032425806-013487-3242"><input name="RTOE" type="hidden" value="47"><input name="SHOW_OVERVIEW" type="hidden" value="checked"><input name="STEP_NUMBER" type="hidden" value="1"><input name="CMD" type="hidden" value="Get"></form>
+<form action="Blast.cgi" enctype="application/x-www-form-urlencoded" method="POST" TARGET=""><input name="ALIGNMENTS" type="hidden" value="50"><input name="AUTO_FORMAT" type="hidden" value="on"><input name="CLIENT" type="hidden" value="web"><input name="DESCRIPTIONS" type="hidden" value="100"><input name="EXPECT" type="hidden" value="10"><input name="HITLIST_SIZE" type="hidden" value="100"><input name="LAYOUT" type="hidden" value="OneWindow"><input name="NCBI_GI" type="hidden" value="checked"><input name="PAGE" type="hidden" value="Translations"><input name="RID" type="hidden" value="1032425806-013487-3242"><input name="RTOE" type="hidden" value="47"><input name="SHOW_OVERVIEW" type="hidden" value="checked"><input name="STEP_NUMBER" type="hidden" value="1"><input name="CMD" type="hidden" value="Get">
+
+<p><!--
+QBlastInfoBegin
+	Status=READY
+QBlastInfoEnd
+--><p><TITLE> RID=1032425806-013487-3242,  </TITLE>
+<b>BLASTX 2.2.4 [Aug-26-2002]</b>
+
+<pre>
+<b><a href="http://www.ncbi.nlm.nih.gov/htbin-
+post/Entrez/query?uid=9254694&form=6&db=m&Dopt=r">Reference</a>:</b>
+Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch&auml;ffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+<p>
+RID: 1032425806-013487-3242
+<p>
+<b>Query=</b> 
+         (577 letters)
+
+<p>
+<b>Database:</b> All non-redundant GenBank CDS
+translations+PDB+SwissProt+PIR+PRF 
+           1,171,253 sequences; 370,891,306 total letters
+
+<p> <p>If you have any problems or questions with the results of this search <br>please refer to the <b><a href=http://www.ncbi.nlm.nih.gov/blast/blast_FAQs.html>BLAST FAQs</a></b><br><p>
+<a href="Blast.cgi?CMD=Get&RID=1032425806-013487-3242&FORMAT_OBJECT=TaxBlast" TARGET="Taxonomy BLAST Results for 1032425806-013487-3242">Taxonomy reports</a>
+<BR>
+<PRE>
+
+
+                                                                 Score    E
+Sequences producing significant alignments:                      (bits) Value
+
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=22725997&dopt=GenPept" >gb|AAN04997.1|</a>  (AC105744) putative transcription initiation...   <a href = #22725997>292</a>   2e-78
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=15235418&dopt=GenPept" >ref|NP_192998.1|</a>  (NM_117331) putative protein; protein id: ...   <a href = #15235418>179</a>   2e-44
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=06862918&dopt=GenPept" >gb|AAF30307.1|AC018907_7</a>  (AC018907) putative RING zinc fing...   <a href = #6862918> 38</a>   0.067
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=18397483&dopt=GenPept" >ref|NP_566274.1|</a>  (NM_111489) putative RING zinc finger prot...   <a href = #18397483> 38</a>   0.067
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=21928149&dopt=GenPept" >gb|AAM78102.1|</a>  (AY125510) AT5g19080/T16G12_120 [Arabidopsis...   <a href = #21928149> 38</a>   0.067
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=18398633&dopt=GenPept" >ref|NP_566356.1|</a>  (NM_111812) expressed protein; protein id:...   <a href = #18398633> 38</a>   0.087
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=15239642&dopt=GenPept" >ref|NP_197409.1|</a>  (NM_121913) unknown protein; protein id: A...   <a href = #15239642> 37</a>   0.11 
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=17551576&dopt=GenPept" >ref|NP_510817.1|</a>  (NM_078416) F10D7.5b.p [Caenorhabditis ele...   <a href = #17551576> 37</a>   0.19 
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=19225030&dopt=GenPept" >gb|AAL86506.1|AC099040_10</a>  (AC099040) putative hydroxyprolin...   <a href = #19225030> 37</a>   0.19 
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=21913050&dopt=GenPept" >gb|AAM81093.1|U40945_8</a>  (U40945) Hypothetical protein F10D7....   <a href = #21913050> 37</a>   0.19 
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=17551578&dopt=GenPept" >ref|NP_510818.1|</a>  (NM_078417) D. melanogaster finger protein...   <a href = #17551578> 37</a>   0.19 
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=21913047&dopt=GenPept" >gb|AAM81090.1|U40945_5</a>  (U40945) Hypothetical protein F10D7....   <a href = #21913047> 37</a>   0.19 
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=07498826&dopt=GenPept" >pir||T16028</a>  hypothetical protein F10D7.5 - Caenorhabditis e...   <a href = #7498826> 37</a>   0.19 
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=15240979&dopt=GenPept" >ref|NP_195765.1|</a>  (NM_120223) putative protein; protein id: ...   <a href = #15240979> 36</a>   0.25 
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=07292914&dopt=GenPept" >gb|AAF48305.1|</a>  (AE003493) CG9941-PA [Drosophila melanogaster]    <a href = #7292914> 35</a>   0.43 
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=21618140&dopt=GenPept" >gb|AAM67190.1|</a>  (AY088884) putative RING zinc finger protein...   <a href = #21618140> 35</a>   0.43 
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=15242675&dopt=GenPept" >ref|NP_195940.1|</a>  (NM_120398) expressed protein; protein id:...   <a href = #15242675> 35</a>   0.43 
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=17545794&dopt=GenPept" >ref|NP_519196.1|</a>  (NC_003295) PROBABLE TWO-COMPONENT SYSTEM ...   <a href = #17545794> 35</a>   0.74 
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=21292673&dopt=GenPept" >gb|EAA04818.1|</a>  (AAAB01008810) agCP6745 [Anopheles gambiae s...   <a href = #21292673> 35</a>   0.74 
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=22999586&dopt=GenPept" >gb|ZP_00043559.1|</a>  (NZ_AAAN01000154) hypothetical protein [M...   <a href = #22999586> 35</a>   0.74 
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=15241556&dopt=GenPept" >ref|NP_199282.1|</a>  (NM_123836) putative protein; protein id: ...   <a href = #15241556> 35</a>   0.74 
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=15231808&dopt=GenPept" >ref|NP_190909.1|</a>  (NM_115201) putative protein; protein id: ...   <a href = #15231808> 34</a>   0.96 
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=03043612&dopt=GenPept" >dbj|BAA25470.1|</a>  (AB011116) KIAA0544 protein [Homo sapiens]       <a href = #3043612> 34</a>   1.3  
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=17550346&dopt=GenPept" >ref|NP_510385.1|</a>  (NM_077984) Zinc finger, C3HC4 type (RING ...   <a href = #17550346> 34</a>   1.3  
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=21356667&dopt=GenPept" >ref|NP_649187.1|</a>  (NM_140930) CG7298 gene product [Drosophil...   <a href = #21356667> 33</a>   1.6  
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=23093055&dopt=GenPept" >gb|AAF49059.2|</a>  (AE003514) CG7298-PA [Drosophila melanogaster]    <a href = #23093055> 33</a>   1.6  
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=20891615&dopt=GenPept" >ref|XP_148077.1|</a>  (XM_148077) RIKEN cDNA 2610042J20 [Mus mus...   <a href = #20891615> 33</a>   1.6  
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=23002453&dopt=GenPept" >gb|ZP_00046129.1|</a>  (NZ_AAAB01000003) hypothetical protein [L...   <a href = #23002453> 33</a>   1.6  
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=12848068&dopt=GenPept" >dbj|BAB27816.1|</a>  (AK011747) Zinc finger, C3HC4 type (RING fi...   <a href = #12848068> 33</a>   1.6  
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=18403707&dopt=GenPept" >ref|NP_566724.1|</a>  (NM_113229) auxin-regulated protein; prote...   <a href = #18403707> 33</a>   2.1  
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=21593715&dopt=GenPept" >gb|AAM65682.1|</a>  (AY088137) unknown [Arabidopsis thaliana]         <a href = #21593715> 33</a>   2.1  
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=07939538&dopt=GenPept" >dbj|BAA95741.1|</a>  (AB025608) contains similarity to ankyrin l...   <a href = #7939538> 33</a>   2.1  
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=15242304&dopt=GenPept" >ref|NP_199323.1|</a>  (NM_123878) putative protein; protein id: ...   <a href = #15242304> 33</a>   2.1  
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=22331278&dopt=GenPept" >ref|NP_683586.1|</a>  (NM_148744) auxin-regulated protein; prote...   <a href = #22331278> 33</a>   2.1  
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=18414200&dopt=GenPept" >ref|NP_567428.1|</a>  (NM_117514) Expressed protein; protein id:...   <a href = #18414200> 33</a>   2.8  
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=15387746&dopt=GenPept" >emb|CAC59873.1|</a>  (AL160371) probable heat shock protein hslu...   <a href = #15387746> 33</a>   2.8  
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=14587218&dopt=GenPept" >dbj|BAB61152.1|</a>  (AP003199) contains ESTs AU068079(C11823),A...   <a href = #14587218> 33</a>   2.8  
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=15224462&dopt=GenPept" >ref|NP_181354.1|</a>  (NM_129376) unknown protein; protein id: A...   <a href = #15224462> 32</a>   3.7  
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=22296435&dopt=GenPept" >dbj|BAC10202.1|</a>  (AP004395) contains ESTs AU055804(S20063),A...   <a href = #22296435> 32</a>   4.8  
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=19922258&dopt=GenPept" >ref|NP_610973.1|</a>  (NM_137129) CG12863 gene product [Drosophi...   <a href = #19922258> 32</a>   4.8  
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=21627199&dopt=GenPept" >gb|AAF58228.2|</a>  (AE003814) CG12863-PA [Drosophila melanogaster]   <a href = #21627199> 32</a>   4.8  
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=15128197&dopt=GenPept" >gb|AAK84420.1|AF400063_1</a>  (AF400063) neuralized 1 [Mus muscu...   <a href = #15128197> 32</a>   6.2  
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=10946688&dopt=GenPept" >ref|NP_067335.1|</a>  (NM_021360) neuralized homolog (Drosophila...   <a href = #10946688> 32</a>   6.2  
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=15226959&dopt=GenPept" >ref|NP_181076.1|</a>  (NM_129085) unknown protein; protein id: A...   <a href = #15226959> 32</a>   6.2  
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=17231254&dopt=GenPept" >ref|NP_487802.1|</a>  (NC_003272) oligopeptide binding protein o...   <a href = #17231254> 32</a>   6.2  
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=15320749&dopt=GenPept" >ref|NP_203261.1|</a>  (NC_003083) IAP-4 [Epiphyas postvittana nu...   <a href = #15320749> 32</a>   6.2  
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=22531056&dopt=GenPept" >gb|AAM97032.1|</a>  (AY136366) unknown protein [Arabidopsis thal...   <a href = #22531056> 32</a>   6.2  
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=20890044&dopt=GenPept" >ref|XP_123433.1|</a>  (XM_123433) similar to neuralized homolog ...   <a href = #20890044> 32</a>   6.2  
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=15420883&dopt=GenPept" >gb|AAK97495.1|AF401228_1</a>  (AF401228) neuralized [Mus musculus]    <a href = #15420883> 32</a>   6.2  
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=18590406&dopt=GenPept" >ref|XP_085974.1|</a>  (XM_085974) similar to zinc finger protein...   <a href = #18590406> 32</a>   6.2  
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=07489906&dopt=GenPept" >pir||S68824</a>  rngB protein, cytosolic - slime mold (Dictyoste...   <a href = #7489906> 32</a>   6.2  
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=06635096&dopt=GenPept" >emb|CAB64571.1|</a>  (AL135898) hypothetical protein L673.04 [Le...   <a href = #6635096> 32</a>   6.2  
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=14583262&dopt=GenPept" >ref|NP_127506.1|</a>  (NC_002532) replicase ORF1ab polyprotein [...   <a href = #14583262> 31</a>   8.2  
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=15221532&dopt=GenPept" >ref|NP_174371.1|</a>  (NM_102823) hypothetical protein; protein ...   <a href = #15221532> 31</a>   8.2  
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00133455&dopt=GenPept" >sp|P19811|RPOA_EAV</a>  POL polyprotein (ORF1A/1B) [Contains: RN...   <a href = #133455> 31</a>   8.2  
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=22047436&dopt=GenPept" >ref|XP_094260.3|</a>  (XM_094260) similar to neuralized [Homo sa...   <a href = #22047436> 31</a>   8.2  
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=21617976&dopt=GenPept" >gb|AAM67026.1|</a>  (AY088707) unknown [Arabidopsis thaliana]         <a href = #21617976> 31</a>   8.2  
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=18448645&dopt=GenPept" >gb|AAL69890.1|AF419159_1</a>  (AF419159) neuralized [Xenopus lae...   <a href = #18448645> 31</a>   8.2  
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=18399792&dopt=GenPept" >ref|NP_566438.1|</a>  (NM_112128) expressed protein; protein id:...   <a href = #18399792> 31</a>   8.2  
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=20468614&dopt=GenPept" >ref|XP_116162.1|</a>  (XM_116162) similar to evidence:NAS~hypoth...   <a href = #20468614> 31</a>   8.2  
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=05732038&dopt=GenPept" >gb|AAC32390.3|</a>  (AF082873) histidine kinase [Herbaspirillum ...   <a href = #5732038> 31</a>   8.2  
+</PRE>
+<CENTER><b><FONT color="green">Alignments</FONT></b></CENTER>
+</form>
+<script src="blastResult.js"></script><table border="0"><tr><td><FORM  method="post" action="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?SUBMIT=y" name="submitterTop"><input type=button value="Get selected sequences" onClick="finalSubmit(0, 'getSeqAlignment', 'getSeqGi', 'submitterTop')"><input type="hidden" name="db" value=""><input type="hidden" name="term" value=""><input type="hidden" name="doptcmdl" value="docsum"><input type="hidden" name="cmd" value="search"></form></td><td><FORM><input type="button" value="Select all" onClick="handleCheckAll('select', 'getSeqAlignment', 'getSeqGi')"></form></td><td><FORM><input type="button" value="Deselect all" onClick="handleCheckAll('deselect', 'getSeqAlignment', 'getSeqGi')"></form></td></tr></table><form name="getSeqAlignment">
+<PRE>
+<input type="checkbox" name="getSeqGi" value="22725997" onClick="synchronizeCheck(this.value, 'getSeqAlignment', 'getSeqGi', this.checked)">><a name = 22725997></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=22725997&dopt=GenPept" >gb|AAN04997.1|</a> (AC105744) putative transcription initiation factor [Oryza sativa
+           (japonica cultivar-group)]
+          Length = 532
+
+ Score =  292 bits (747), Expect = 2e-78
+ Identities = 140/141 (99%), Positives = 140/141 (99%)
+ Frame = +3
+
+Query: 153 MGSADLVLKAACEGCGSPSDLYGTSCKHTTLCSSCGKSMALSSARCLVCSAPITNLIREY 332
+           MGSADLVLKAACEGCGSPSDLYGTSCKHTTLCSSCGKSMALS ARCLVCSAPITNLIREY
+Sbjct: 1   MGSADLVLKAACEGCGSPSDLYGTSCKHTTLCSSCGKSMALSGARCLVCSAPITNLIREY 60
+
+Query: 333 NVRANATTDKSFSIGRFVTGLPPFSKKKSAENKWSLHKEGLQGRQIPENMREKYNRKPWI 512
+           NVRANATTDKSFSIGRFVTGLPPFSKKKSAENKWSLHKEGLQGRQIPENMREKYNRKPWI
+Sbjct: 61  NVRANATTDKSFSIGRFVTGLPPFSKKKSAENKWSLHKEGLQGRQIPENMREKYNRKPWI 120
+
+Query: 513 LEDETGQYQYQGQMEGSQSST 575
+           LEDETGQYQYQGQMEGSQSST
+Sbjct: 121 LEDETGQYQYQGQMEGSQSST 141
+</PRE>
+
+
+<PRE>
+<input type="checkbox" name="getSeqGi" value="15235418" onClick="synchronizeCheck(this.value, 'getSeqAlignment', 'getSeqGi', this.checked)">><a name = 15235418></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=15235418&dopt=GenPept" >ref|NP_192998.1|</a> (NM_117331) putative protein; protein id: At4g12610.1 [Arabidopsis
+           thaliana]
+ <a name = 5823572></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=05823572&dopt=GenPept" >emb|CAB53754.1|</a> (AL049730) putative protein [Arabidopsis thaliana]
+ <a name = 7267963></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=07267963&dopt=GenPept" >emb|CAB78304.1|</a> (AL161534) putative protein [Arabidopsis thaliana]
+          Length = 649
+
+ Score =  179 bits (454), Expect = 2e-44
+ Identities = 85/136 (62%), Positives = 102/136 (74%)
+ Frame = +3
+
+Query: 168 LVLKAACEGCGSPSDLYGTSCKHTTLCSSCGKSMALSSARCLVCSAPITNLIREYNVRAN 347
+           L L  +C GCGS SDLYG+SC+H TLC  CG++MA + ++C  C   +T LIREYNVRA 
+Sbjct: 5   LQLNTSCVGCGSQSDLYGSSCRHMTLCLKCGRTMAQNKSKCHECGTVVTRLIREYNVRAA 64
+
+Query: 348 ATTDKSFSIGRFVTGLPPFSKKKSAENKWSLHKEGLQGRQIPENMREKYNRKPWILEDET 527
+           A TDK++ IGRFVTGLP F  KK +ENKWSL K+  QGRQ  +  REK   KPWILEDET
+Sbjct: 65  APTDKNYFIGRFVTGLPNF--KKGSENKWSLRKDIPQGRQFTDAQREKLKNKPWILEDET 122
+
+Query: 528 GQYQYQGQMEGSQSST 575
+           GQ+QYQG +EGSQS+T
+Sbjct: 123 GQFQYQGHLEGSQSAT 138
+</PRE>
+
+
+<PRE>
+<input type="checkbox" name="getSeqGi" value="6862918" onClick="synchronizeCheck(this.value, 'getSeqAlignment', 'getSeqGi', this.checked)">><a name = 6862918></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=06862918&dopt=GenPept" >gb|AAF30307.1|AC018907_7</a> (AC018907) putative RING zinc finger protein [Arabidopsis thaliana]
+          Length = 546
+
+ Score = 38.1 bits (87), Expect = 0.067
+ Identities = 13/32 (40%), Positives = 19/32 (58%)
+ Frame = +3
+
+Query: 228 CKHTTLCSSCGKSMALSSARCLVCSAPITNLI 323
+           C+H  +CS C K + L S +C +C  PI  L+
+Sbjct: 504 CRHLCMCSDCAKELRLQSNKCPICRQPIEELL 535
+</PRE>
+
+
+<PRE>
+<input type="checkbox" name="getSeqGi" value="18397483" onClick="synchronizeCheck(this.value, 'getSeqAlignment', 'getSeqGi', this.checked)">><a name = 18397483></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=18397483&dopt=GenPept" >ref|NP_566274.1|</a> (NM_111489) putative RING zinc finger protein; protein id:
+           At3g06140.1, supported by cDNA: 40787. [Arabidopsis
+           thaliana]
+ <a name = 21593638></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=21593638&dopt=GenPept" >gb|AAM65605.1|</a> (AY088059) putative RING zinc finger protein [Arabidopsis thaliana]
+          Length = 359
+
+ Score = 38.1 bits (87), Expect = 0.067
+ Identities = 13/32 (40%), Positives = 19/32 (58%)
+ Frame = +3
+
+Query: 228 CKHTTLCSSCGKSMALSSARCLVCSAPITNLI 323
+           C+H  +CS C K + L S +C +C  PI  L+
+Sbjct: 317 CRHLCMCSDCAKELRLQSNKCPICRQPIEELL 348
+</PRE>
+
+
+<PRE>
+<input type="checkbox" name="getSeqGi" value="21928149" onClick="synchronizeCheck(this.value, 'getSeqAlignment', 'getSeqGi', this.checked)">><a name = 21928149></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=21928149&dopt=GenPept" >gb|AAM78102.1|</a> (AY125510) AT5g19080/T16G12_120 [Arabidopsis thaliana]
+          Length = 378
+
+ Score = 38.1 bits (87), Expect = 0.067
+ Identities = 13/41 (31%), Positives = 22/41 (52%)
+ Frame = +3
+
+Query: 204 PSDLYGTSCKHTTLCSSCGKSMALSSARCLVCSAPITNLIR 326
+           P D     C+H +LCS C + +   + +C +C  PI  L++
+Sbjct: 328 PKDTAVMPCRHLSLCSDCAEELRFQTNKCPICRQPIHELVK 368
+</PRE>
+
+
+<PRE>
+<input type="checkbox" name="getSeqGi" value="18398633" onClick="synchronizeCheck(this.value, 'getSeqAlignment', 'getSeqGi', this.checked)">><a name = 18398633></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=18398633&dopt=GenPept" >ref|NP_566356.1|</a> (NM_111812) expressed protein; protein id: At3g09770.1, supported
+           by cDNA: 38757., supported by cDNA: gi_18377643
+           [Arabidopsis thaliana]
+ <a name = 6681341></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=06681341&dopt=GenPept" >gb|AAF23258.1|AC015985_16</a> (AC015985) putative RING zinc finger protein [Arabidopsis thaliana]
+ <a name = 6682260></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=06682260&dopt=GenPept" >gb|AAF23312.1|AC016661_37</a> (AC016661) unknown protein [Arabidopsis thaliana]
+ <a name = 18377644></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=18377644&dopt=GenPept" >gb|AAL66972.1|</a> (AY074275) putative RING zinc finger protein [Arabidopsis thaliana]
+ <a name = 21593417></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=21593417&dopt=GenPept" >gb|AAM65384.1|</a> (AY087831) putative RING zinc finger protein [Arabidopsis thaliana]
+          Length = 388
+
+ Score = 37.7 bits (86), Expect = 0.087
+ Identities = 16/48 (33%), Positives = 23/48 (47%)
+ Frame = +3
+
+Query: 204 PSDLYGTSCKHTTLCSSCGKSMALSSARCLVCSAPITNLIREYNVRAN 347
+           P D     C+H  +CS C K +   + RC +C  P+  L+ E  V  N
+Sbjct: 326 PRDTTVLPCRHMCMCSGCAKVLRFQTNRCPICRQPVERLL-EIKVHGN 372
+</PRE>
+
+
+<PRE>
+<input type="checkbox" name="getSeqGi" value="15239642" onClick="synchronizeCheck(this.value, 'getSeqAlignment', 'getSeqGi', this.checked)">><a name = 15239642></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=15239642&dopt=GenPept" >ref|NP_197409.1|</a> (NM_121913) unknown protein; protein id: At5g19080.1 [Arabidopsis
+           thaliana]
+          Length = 378
+
+ Score = 37.4 bits (85), Expect = 0.11
+ Identities = 13/41 (31%), Positives = 21/41 (50%)
+ Frame = +3
+
+Query: 204 PSDLYGTSCKHTTLCSSCGKSMALSSARCLVCSAPITNLIR 326
+           P D     C+H  LCS C + +   + +C +C  PI  L++
+Sbjct: 328 PKDTAVMPCRHLCLCSDCAEELRFQTNKCPICRQPIHELVK 368
+</PRE>
+
+
+<PRE>
+<input type="checkbox" name="getSeqGi" value="17551576" onClick="synchronizeCheck(this.value, 'getSeqAlignment', 'getSeqGi', this.checked)">><a name = 17551576></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=17551576&dopt=GenPept" >ref|NP_510817.1|</a> (NM_078416) F10D7.5b.p [Caenorhabditis elegans]
+          Length = 750
+
+ Score = 36.6 bits (83), Expect = 0.19
+ Identities = 11/36 (30%), Positives = 21/36 (57%)
+ Frame = +3
+
+Query: 225 SCKHTTLCSSCGKSMALSSARCLVCSAPITNLIREY 332
+           +C H  +C  CG+ +  +   C +C AP+ ++I+ Y
+Sbjct: 713 TCGHMCMCFECGRRLLTTKGTCPICRAPVQDVIKTY 748
+</PRE>
+
+
+<PRE>
+<input type="checkbox" name="getSeqGi" value="19225030" onClick="synchronizeCheck(this.value, 'getSeqAlignment', 'getSeqGi', this.checked)">><a name = 19225030></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=19225030&dopt=GenPept" >gb|AAL86506.1|AC099040_10</a> (AC099040) putative hydroxyproline-rich glycoprotein [Oryza sativa
+           (japonica cultivar-group)]
+ <a name = 20279471></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=20279471&dopt=GenPept" >gb|AAM18751.1|AC099325_7</a> (AC099325) unknown protein [Oryza sativa (japonica cultivar-group)]
+          Length = 425
+
+ Score = 36.6 bits (83), Expect = 0.19
+ Identities = 13/40 (32%), Positives = 20/40 (49%)
+ Frame = +3
+
+Query: 204 PSDLYGTSCKHTTLCSSCGKSMALSSARCLVCSAPITNLI 323
+           P D     C+H  +CS C K +   + RC +C  P+  L+
+Sbjct: 350 PRDTTVLPCRHMCMCSECAKVLRYQTNRCPICRQPVERLL 389
+</PRE>
+
+
+<PRE>
+<input type="checkbox" name="getSeqGi" value="21913050" onClick="synchronizeCheck(this.value, 'getSeqAlignment', 'getSeqGi', this.checked)">><a name = 21913050></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=21913050&dopt=GenPept" >gb|AAM81093.1|U40945_8</a> (U40945) Hypothetical protein F10D7.5d [Caenorhabditis elegans]
+          Length = 465
+
+ Score = 36.6 bits (83), Expect = 0.19
+ Identities = 11/36 (30%), Positives = 21/36 (57%)
+ Frame = +3
+
+Query: 225 SCKHTTLCSSCGKSMALSSARCLVCSAPITNLIREY 332
+           +C H  +C  CG+ +  +   C +C AP+ ++I+ Y
+Sbjct: 428 TCGHMCMCFECGRRLLTTKGTCPICRAPVQDVIKTY 463
+</PRE>
+
+
+<PRE>
+<input type="checkbox" name="getSeqGi" value="17551578" onClick="synchronizeCheck(this.value, 'getSeqAlignment', 'getSeqGi', this.checked)">><a name = 17551578></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=17551578&dopt=GenPept" >ref|NP_510818.1|</a> (NM_078417) D. melanogaster finger protein neuralized
+           [Caenorhabditis elegans]
+          Length = 795
+
+ Score = 36.6 bits (83), Expect = 0.19
+ Identities = 11/36 (30%), Positives = 21/36 (57%)
+ Frame = +3
+
+Query: 225 SCKHTTLCSSCGKSMALSSARCLVCSAPITNLIREY 332
+           +C H  +C  CG+ +  +   C +C AP+ ++I+ Y
+Sbjct: 758 TCGHMCMCFECGRRLLTTKGTCPICRAPVQDVIKTY 793
+</PRE>
+
+
+<PRE>
+<input type="checkbox" name="getSeqGi" value="21913047" onClick="synchronizeCheck(this.value, 'getSeqAlignment', 'getSeqGi', this.checked)">><a name = 21913047></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=21913047&dopt=GenPept" >gb|AAM81090.1|U40945_5</a> (U40945) Hypothetical protein F10D7.5a [Caenorhabditis elegans]
+          Length = 634
+
+ Score = 36.6 bits (83), Expect = 0.19
+ Identities = 11/36 (30%), Positives = 21/36 (57%)
+ Frame = +3
+
+Query: 225 SCKHTTLCSSCGKSMALSSARCLVCSAPITNLIREY 332
+           +C H  +C  CG+ +  +   C +C AP+ ++I+ Y
+Sbjct: 597 TCGHMCMCFECGRRLLTTKGTCPICRAPVQDVIKTY 632
+</PRE>
+
+
+<PRE>
+<input type="checkbox" name="getSeqGi" value="7498826" onClick="synchronizeCheck(this.value, 'getSeqAlignment', 'getSeqGi', this.checked)">><a name = 7498826></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=07498826&dopt=GenPept" >pir||T16028</a> hypothetical protein F10D7.5 - Caenorhabditis elegans
+          Length = 824
+
+ Score = 36.6 bits (83), Expect = 0.19
+ Identities = 11/36 (30%), Positives = 21/36 (57%)
+ Frame = +3
+
+Query: 225 SCKHTTLCSSCGKSMALSSARCLVCSAPITNLIREY 332
+           +C H  +C  CG+ +  +   C +C AP+ ++I+ Y
+Sbjct: 787 TCGHMCMCFECGRRLLTTKGTCPICRAPVQDVIKTY 822
+</PRE>
+
+
+<PRE>
+<input type="checkbox" name="getSeqGi" value="15240979" onClick="synchronizeCheck(this.value, 'getSeqAlignment', 'getSeqGi', this.checked)">><a name = 15240979></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=15240979&dopt=GenPept" >ref|NP_195765.1|</a> (NM_120223) putative protein; protein id: At5g01450.1 [Arabidopsis
+           thaliana]
+ <a name = 11357966></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=11357966&dopt=GenPept" >pir||T48167</a> hypothetical protein T10O8.160 - Arabidopsis thaliana
+ <a name = 7320723></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=07320723&dopt=GenPept" >emb|CAB81928.1|</a> (AL161746) putative protein [Arabidopsis thaliana]
+          Length = 428
+
+ Score = 36.2 bits (82), Expect = 0.25
+ Identities = 20/64 (31%), Positives = 28/64 (43%), Gaps = 1/64 (1%)
+ Frame = +3
+
+Query: 150 AMGSADLVLKAACEGC-GSPSDLYGTSCKHTTLCSSCGKSMALSSARCLVCSAPITNLIR 326
+           A G      +  C  C  +P D +  SC H   C  CG  +A +S  C VC   I  + +
+Sbjct: 365 AHGEGHSSTRYLCAICYDAPRDCFFLSCGHCVACFQCGTRIAETSGFCPVCRKKIRKVKK 424
+
+Query: 327 EYNV 338
+            +NV
+Sbjct: 425 IFNV 428
+</PRE>
+
+
+<PRE>
+<input type="checkbox" name="getSeqGi" value="7292914" onClick="synchronizeCheck(this.value, 'getSeqAlignment', 'getSeqGi', this.checked)">><a name = 7292914></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=07292914&dopt=GenPept" >gb|AAF48305.1|</a> (AE003493) CG9941-PA [Drosophila melanogaster]
+          Length = 789
+
+ Score = 35.4 bits (80), Expect = 0.43
+ Identities = 14/43 (32%), Positives = 23/43 (52%)
+ Frame = +3
+
+Query: 228 CKHTTLCSSCGKSMALSSARCLVCSAPITNLIREYNVRANATT 356
+           C+H  LC+SC  S+   +  C +C AP   L++   V+   +T
+Sbjct: 334 CRHLCLCNSCADSLRYQANNCPICRAPFRALLQIRAVQKGIST 376
+</PRE>
+
+
+<PRE>
+<input type="checkbox" name="getSeqGi" value="21618140" onClick="synchronizeCheck(this.value, 'getSeqAlignment', 'getSeqGi', this.checked)">><a name = 21618140></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=21618140&dopt=GenPept" >gb|AAM67190.1|</a> (AY088884) putative RING zinc finger protein [Arabidopsis thaliana]
+          Length = 337
+
+ Score = 35.4 bits (80), Expect = 0.43
+ Identities = 16/47 (34%), Positives = 23/47 (48%), Gaps = 1/47 (2%)
+ Frame = +3
+
+Query: 186 CEGCGS-PSDLYGTSCKHTTLCSSCGKSMALSSARCLVCSAPITNLI 323
+           C  C S P D     C+H  +CS C K++   +  C VC  P+  L+
+Sbjct: 285 CVVCLSEPRDTTVLPCRHMCMCSGCAKALRFQTNLCPVCRQPVEMLL 331
+</PRE>
+
+
+<PRE>
+<input type="checkbox" name="getSeqGi" value="15242675" onClick="synchronizeCheck(this.value, 'getSeqAlignment', 'getSeqGi', this.checked)">><a name = 15242675></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=15242675&dopt=GenPept" >ref|NP_195940.1|</a> (NM_120398) expressed protein; protein id: At5g03200.1, supported
+           by cDNA: 98672. [Arabidopsis thaliana]
+ <a name = 11357455></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=11357455&dopt=GenPept" >pir||T48341</a> hypothetical protein F15A17.230 - Arabidopsis thaliana
+ <a name = 7413597></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=07413597&dopt=GenPept" >emb|CAB86087.1|</a> (AL163002) putative protein [Arabidopsis thaliana]
+ <a name = 9757771></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=09757771&dopt=GenPept" >dbj|BAB08380.1|</a> (AB005240) RING zinc finger protein-like [Arabidopsis thaliana]
+          Length = 337
+
+ Score = 35.4 bits (80), Expect = 0.43
+ Identities = 16/47 (34%), Positives = 23/47 (48%), Gaps = 1/47 (2%)
+ Frame = +3
+
+Query: 186 CEGCGS-PSDLYGTSCKHTTLCSSCGKSMALSSARCLVCSAPITNLI 323
+           C  C S P D     C+H  +CS C K++   +  C VC  P+  L+
+Sbjct: 285 CVVCLSEPRDTTVLPCRHMCMCSGCAKALRFQTNLCPVCRQPVEMLL 331
+</PRE>
+
+
+<PRE>
+<input type="checkbox" name="getSeqGi" value="17545794" onClick="synchronizeCheck(this.value, 'getSeqAlignment', 'getSeqGi', this.checked)">><a name = 17545794></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=17545794&dopt=GenPept" >ref|NP_519196.1|</a> (NC_003295) PROBABLE TWO-COMPONENT SYSTEM SENSOR HISTIDINE KINASE
+           TRANSCRIPTION REGULATOR PROTEIN [Ralstonia solanacearum]
+ <a name = 17428088></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=17428088&dopt=GenPept" >emb|CAD14777.1|</a> (AL646062) PROBABLE TWO-COMPONENT SYSTEM SENSOR HISTIDINE KINASE
+           TRANSCRIPTION REGULATOR PROTEIN [Ralstonia solanacearum]
+          Length = 784
+
+ Score = 34.7 bits (78), Expect = 0.74
+ Identities = 21/43 (48%), Positives = 25/43 (57%)
+ Frame = +2
+
+Query: 167 PGAEGGVRGLRLAVGPLRHVMQAHHALQLLRQIHGALQRPLPR 295
+           P  +  VRGL LA GP  H++  H ALQL RQ   AL   +PR
+Sbjct: 173 PDPDSVVRGLYLAEGPRGHLLD-HLALQLARQAGPALAGDVPR 214
+</PRE>
+
+
+<PRE>
+<input type="checkbox" name="getSeqGi" value="21292673" onClick="synchronizeCheck(this.value, 'getSeqAlignment', 'getSeqGi', this.checked)">><a name = 21292673></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=21292673&dopt=GenPept" >gb|EAA04818.1|</a> (AAAB01008810) agCP6745 [Anopheles gambiae str. PEST]
+          Length = 307
+
+ Score = 34.7 bits (78), Expect = 0.74
+ Identities = 12/33 (36%), Positives = 19/33 (57%)
+ Frame = +3
+
+Query: 228 CKHTTLCSSCGKSMALSSARCLVCSAPITNLIR 326
+           C+H  LC+SC  S+   +  C +C AP   L++
+Sbjct: 246 CRHLCLCNSCADSLRYQANNCPICRAPFRALLQ 278
+</PRE>
+
+
+<PRE>
+<input type="checkbox" name="getSeqGi" value="22999586" onClick="synchronizeCheck(this.value, 'getSeqAlignment', 'getSeqGi', this.checked)">><a name = 22999586></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=22999586&dopt=GenPept" >gb|ZP_00043559.1|</a> (NZ_AAAN01000154) hypothetical protein [Magnetococcus sp. MC-1]
+          Length = 487
+
+ Score = 34.7 bits (78), Expect = 0.74
+ Identities = 21/62 (33%), Positives = 30/62 (47%), Gaps = 1/62 (1%)
+ Frame = +3
+
+Query: 150 AMGSADLVLKAACEGCGSPSDLYGTSCKHTTLCSSCGKSMALSSARCLVC-SAPITNLIR 326
+           AM   D  ++  C  CG+  D YG SC+   +CS+  +   L  A+C VC S P+     
+Sbjct: 130 AMFLPDRFIRGTCPHCGAV-DQYGDSCE---VCSATYRPTELKEAKCAVCGSQPVEKSSE 185
+
+Query: 327 EY 332
+            Y
+Sbjct: 186 HY 187
+</PRE>
+
+
+<PRE>
+<input type="checkbox" name="getSeqGi" value="15241556" onClick="synchronizeCheck(this.value, 'getSeqAlignment', 'getSeqGi', this.checked)">><a name = 15241556></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=15241556&dopt=GenPept" >ref|NP_199282.1|</a> (NM_123836) putative protein; protein id: At5g44690.1 [Arabidopsis
+           thaliana]
+ <a name = 9758373></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=09758373&dopt=GenPept" >dbj|BAB08822.1|</a> (AB016874) gene_id:K23L20.2~pir||T00474~similar to unknown protein
+           [Arabidopsis thaliana]
+          Length = 684
+
+ Score = 34.7 bits (78), Expect = 0.74
+ Identities = 16/54 (29%), Positives = 25/54 (45%), Gaps = 1/54 (1%)
+ Frame = +3
+
+Query: 174 LKAACEGCGS-PSDLYGTSCKHTTLCSSCGKSMALSSARCLVCSAPITNLIREY 332
+           L+  C  C   P D     C H   C  C   +  S+ +C +C API +++R +
+Sbjct: 628 LERNCSICFEMPIDSLLYRCGHMCTCLKCAHELQWSNMKCPICMAPIVDVVRAF 681
+</PRE>
+
+
+<PRE>
+<input type="checkbox" name="getSeqGi" value="15231808" onClick="synchronizeCheck(this.value, 'getSeqAlignment', 'getSeqGi', this.checked)">><a name = 15231808></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=15231808&dopt=GenPept" >ref|NP_190909.1|</a> (NM_115201) putative protein; protein id: At3g53410.1, supported by
+           cDNA: 110247. [Arabidopsis thaliana]
+ <a name = 11357789></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=11357789&dopt=GenPept" >pir||T45881</a> hypothetical protein F4P12.110 - Arabidopsis thaliana
+ <a name = 6729492></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=06729492&dopt=GenPept" >emb|CAB67648.1|</a> (AL132966) putative protein [Arabidopsis thaliana]
+ <a name = 21536752></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=21536752&dopt=GenPept" >gb|AAM61084.1|</a> (AY084516) putative RING zinc finger protein [Arabidopsis thaliana]
+          Length = 299
+
+ Score = 34.3 bits (77), Expect = 0.96
+ Identities = 12/40 (30%), Positives = 19/40 (47%)
+ Frame = +3
+
+Query: 204 PSDLYGTSCKHTTLCSSCGKSMALSSARCLVCSAPITNLI 323
+           P D     C+H  +CS C K +   +  C +C  P+  L+
+Sbjct: 250 PRDTTVLPCRHMCMCSGCAKLLRFQTNLCPICRQPVDRLL 289
+</PRE>
+
+
+<PRE>
+<input type="checkbox" name="getSeqGi" value="3043612" onClick="synchronizeCheck(this.value, 'getSeqAlignment', 'getSeqGi', this.checked)">><a name = 3043612></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=03043612&dopt=GenPept" >dbj|BAA25470.1|</a> (AB011116) KIAA0544 protein [Homo sapiens]
+          Length = 583
+
+ Score = 33.9 bits (76), Expect = 1.3
+ Identities = 20/60 (33%), Positives = 28/60 (46%), Gaps = 5/60 (8%)
+ Frame = +3
+
+Query: 207 SDLYGT---SCKHTTLCSSCGKSMALSSARCLVCSAPITNL--IREYNVRANATTDKSFS 371
+           SDL  T    C+H  LC+SC  ++   +  C +C  P   L  IR    +  A +  SFS
+Sbjct: 314 SDLRDTLILPCRHLCLCTSCADTLRYQANNCPICRLPFRALLQIRAVRKKPGALSPVSFS 373
+</PRE>
+
+
+<PRE>
+<input type="checkbox" name="getSeqGi" value="17550346" onClick="synchronizeCheck(this.value, 'getSeqAlignment', 'getSeqGi', this.checked)">><a name = 17550346></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=17550346&dopt=GenPept" >ref|NP_510385.1|</a> (NM_077984) Zinc finger, C3HC4 type (RING finger) [Caenorhabditis
+           elegans]
+ <a name = 7495870></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=07495870&dopt=GenPept" >pir||T19204</a> hypothetical protein C11H1.3 - Caenorhabditis elegans
+ <a name = 3874246></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=03874246&dopt=GenPept" >emb|CAA94116.1|</a> (Z70205) predicted using Genefinder~contains similarity to Pfam
+           domain: PF00097 (Zinc finger, C3HC4 type (RING finger)),
+           Score=29.8, E-value=2.2e-08, N=1~cDNA EST yk67c6.5 comes
+           from this gene~cDNA EST yk597f9.5 comes from this
+           gene~cDNA EST yk653f11.5>
+          Length = 529
+
+ Score = 33.9 bits (76), Expect = 1.3
+ Identities = 12/33 (36%), Positives = 18/33 (54%)
+ Frame = +3
+
+Query: 228 CKHTTLCSSCGKSMALSSARCLVCSAPITNLIR 326
+           C+H  +CS+C  S+      C +C +P   LIR
+Sbjct: 284 CRHLCVCSNCADSLRYKHNNCPICRSPFRALIR 316
+</PRE>
+
+
+<PRE>
+<input type="checkbox" name="getSeqGi" value="21356667" onClick="synchronizeCheck(this.value, 'getSeqAlignment', 'getSeqGi', this.checked)">><a name = 21356667></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=21356667&dopt=GenPept" >ref|NP_649187.1|</a> (NM_140930) CG7298 gene product [Drosophila melanogaster]
+ <a name = 16769330></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=16769330&dopt=GenPept" >gb|AAL28884.1|</a> (AY061336) LD26327p [Drosophila melanogaster]
+          Length = 369
+
+ Score = 33.5 bits (75), Expect = 1.6
+ Identities = 26/87 (29%), Positives = 37/87 (41%), Gaps = 2/87 (2%)
+ Frame = +3
+
+Query: 144 SPAMGSADLVLKAACEGCGSPSDLYGT--SCKHTTLCSSCGKSMALSSARCLVCSAPITN 317
+           S   G+ + VL++ C+    P   +G   SC     C S    + L S +C        N
+Sbjct: 144 SNTQGTNETVLESLCDVV-PPGQYFGDTESCSTWHYCESTSTGLVLQSGKCSA------N 196
+
+Query: 318 LIREYNVRANATTDKSFSIGRFVTGLP 398
+               YNV AN  T +S S+   VT +P
+Sbjct: 197 NQTAYNVLANQCTYESASVCSRVTNIP 223
+</PRE>
+
+
+<PRE>
+<input type="checkbox" name="getSeqGi" value="23093055" onClick="synchronizeCheck(this.value, 'getSeqAlignment', 'getSeqGi', this.checked)">><a name = 23093055></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=23093055&dopt=GenPept" >gb|AAF49059.2|</a> (AE003514) CG7298-PA [Drosophila melanogaster]
+          Length = 356
+
+ Score = 33.5 bits (75), Expect = 1.6
+ Identities = 26/87 (29%), Positives = 37/87 (41%), Gaps = 2/87 (2%)
+ Frame = +3
+
+Query: 144 SPAMGSADLVLKAACEGCGSPSDLYGT--SCKHTTLCSSCGKSMALSSARCLVCSAPITN 317
+           S   G+ + VL++ C+    P   +G   SC     C S    + L S +C        N
+Sbjct: 131 SNTQGTNETVLESLCDVV-PPGQYFGDTESCSTWHYCESTSTGLVLQSGKCSA------N 183
+
+Query: 318 LIREYNVRANATTDKSFSIGRFVTGLP 398
+               YNV AN  T +S S+   VT +P
+Sbjct: 184 NQTAYNVLANQCTYESASVCSRVTNIP 210
+</PRE>
+
+
+<PRE>
+<input type="checkbox" name="getSeqGi" value="20891615" onClick="synchronizeCheck(this.value, 'getSeqAlignment', 'getSeqGi', this.checked)">><a name = 20891615></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=20891615&dopt=GenPept" >ref|XP_148077.1|</a> (XM_148077) RIKEN cDNA 2610042J20 [Mus musculus]
+          Length = 578
+
+ Score = 33.5 bits (75), Expect = 1.6
+ Identities = 20/60 (33%), Positives = 28/60 (46%), Gaps = 5/60 (8%)
+ Frame = +3
+
+Query: 207 SDLYGT---SCKHTTLCSSCGKSMALSSARCLVCSAPITNL--IREYNVRANATTDKSFS 371
+           SDL  T    C+H  LC+SC  ++   +  C +C  P   L  IR    +  A +  SFS
+Sbjct: 283 SDLRDTLILPCRHLCLCTSCADTLRYQANNCPICRLPFRALLQIRAVRKKPGALSPISFS 342
+</PRE>
+
+
+<PRE>
+<input type="checkbox" name="getSeqGi" value="23002453" onClick="synchronizeCheck(this.value, 'getSeqAlignment', 'getSeqGi', this.checked)">><a name = 23002453></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=23002453&dopt=GenPept" >gb|ZP_00046129.1|</a> (NZ_AAAB01000003) hypothetical protein [Lactobacillus gasseri]
+          Length = 281
+
+ Score = 33.5 bits (75), Expect = 1.6
+ Identities = 24/95 (25%), Positives = 40/95 (41%)
+ Frame = +3
+
+Query: 246 CSSCGKSMALSSARCLVCSAPITNLIREYNVRANATTDKSFSIGRFVTGLPPFSKKKSAE 425
+           C +CGK + L  A+C  C     N     N+ A    D    +G  +  +P   KK   E
+Sbjct: 5   CPNCGKEVNLGEAKCPFCGYDFVN-----NINAKIPADLGM-MGIRLNNVPKKKKKAEPE 58
+
+Query: 426 NKWSLHKEGLQGRQIPENMREKYNRKPWILEDETG 530
+           NK  + K   Q   + +    K+ +K  +++ + G
+Sbjct: 59  NK-RVEKNTTQKVAVTKAKELKHAKKNKVVKKKKG 92
+</PRE>
+
+
+<PRE>
+<input type="checkbox" name="getSeqGi" value="12848068" onClick="synchronizeCheck(this.value, 'getSeqAlignment', 'getSeqGi', this.checked)">><a name = 12848068></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=12848068&dopt=GenPept" >dbj|BAB27816.1|</a> (AK011747) Zinc finger, C3HC4 type (RING finger) containing
+           protein~data source:Pfam, source key:PF00097,
+           evidence:ISS~putative [Mus musculus]
+          Length = 494
+
+ Score = 33.5 bits (75), Expect = 1.6
+ Identities = 20/60 (33%), Positives = 28/60 (46%), Gaps = 5/60 (8%)
+ Frame = +3
+
+Query: 207 SDLYGT---SCKHTTLCSSCGKSMALSSARCLVCSAPITNL--IREYNVRANATTDKSFS 371
+           SDL  T    C+H  LC+SC  ++   +  C +C  P   L  IR    +  A +  SFS
+Sbjct: 245 SDLRDTLILPCRHLCLCTSCADTLRYQANNCPICRLPFRALLQIRAVRKKPGALSPISFS 304
+</PRE>
+
+
+<PRE>
+<input type="checkbox" name="getSeqGi" value="18403707" onClick="synchronizeCheck(this.value, 'getSeqAlignment', 'getSeqGi', this.checked)">><a name = 18403707></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=18403707&dopt=GenPept" >ref|NP_566724.1|</a> (NM_113229) auxin-regulated protein; protein id: At3g23280.1,
+           supported by cDNA: 41648. [Arabidopsis thaliana]
+          Length = 462
+
+ Score = 33.1 bits (74), Expect = 2.1
+ Identities = 16/46 (34%), Positives = 22/46 (47%)
+ Frame = +3
+
+Query: 201 SPSDLYGTSCKHTTLCSSCGKSMALSSARCLVCSAPITNLIREYNV 338
+           +PS+     C H   C SC K +   +  C VC A I  +I+ Y V
+Sbjct: 417 APSEAVCVPCGHVAGCMSCLKEIKSKNWGCPVCRAKIDQVIKLYRV 462
+</PRE>
+
+
+<PRE>
+<input type="checkbox" name="getSeqGi" value="21593715" onClick="synchronizeCheck(this.value, 'getSeqAlignment', 'getSeqGi', this.checked)">><a name = 21593715></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=21593715&dopt=GenPept" >gb|AAM65682.1|</a> (AY088137) unknown [Arabidopsis thaliana]
+          Length = 462
+
+ Score = 33.1 bits (74), Expect = 2.1
+ Identities = 16/46 (34%), Positives = 22/46 (47%)
+ Frame = +3
+
+Query: 201 SPSDLYGTSCKHTTLCSSCGKSMALSSARCLVCSAPITNLIREYNV 338
+           +PS+     C H   C SC K +   +  C VC A I  +I+ Y V
+Sbjct: 417 APSEAVCVPCGHVAGCMSCLKEIKSKNWGCPVCRAKIDQVIKLYRV 462
+</PRE>
+
+
+<PRE>
+<input type="checkbox" name="getSeqGi" value="7939538" onClick="synchronizeCheck(this.value, 'getSeqAlignment', 'getSeqGi', this.checked)">><a name = 7939538></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=07939538&dopt=GenPept" >dbj|BAA95741.1|</a> (AB025608) contains similarity to ankyrin like
+           protein~gene_id:K14B15.19 [Arabidopsis thaliana]
+          Length = 454
+
+ Score = 33.1 bits (74), Expect = 2.1
+ Identities = 16/46 (34%), Positives = 22/46 (47%)
+ Frame = +3
+
+Query: 201 SPSDLYGTSCKHTTLCSSCGKSMALSSARCLVCSAPITNLIREYNV 338
+           +PS+     C H   C SC K +   +  C VC A I  +I+ Y V
+Sbjct: 409 APSEAVCVPCGHVAGCMSCLKEIKSKNWGCPVCRAKIDQVIKLYRV 454
+</PRE>
+
+
+<PRE>
+<input type="checkbox" name="getSeqGi" value="15242304" onClick="synchronizeCheck(this.value, 'getSeqAlignment', 'getSeqGi', this.checked)">><a name = 15242304></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=15242304&dopt=GenPept" >ref|NP_199323.1|</a> (NM_123878) putative protein; protein id: At5g45100.1, supported by
+           cDNA: gi_16604441 [Arabidopsis thaliana]
+ <a name = 9758985></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=09758985&dopt=GenPept" >dbj|BAB09495.1|</a> (AB019224) gene_id:K17O22.9~pir||T04751~strong similarity to
+           unknown protein [Arabidopsis thaliana]
+ <a name = 16604442></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=16604442&dopt=GenPept" >gb|AAL24227.1|</a> (AY058839) AT5g45100/K17O22_9 [Arabidopsis thaliana]
+          Length = 294
+
+ Score = 33.1 bits (74), Expect = 2.1
+ Identities = 17/54 (31%), Positives = 25/54 (45%), Gaps = 1/54 (1%)
+ Frame = +3
+
+Query: 156 GSADLVLKAACEGCGS-PSDLYGTSCKHTTLCSSCGKSMALSSARCLVCSAPIT 314
+           G    V+   C+ CG   + +    C+H  LC+ CG S  L +  C VC   +T
+Sbjct: 234 GDVTAVVNGGCKRCGELTASVLVLPCRHLCLCTVCGSSALLRT--CPVCDMVMT 285
+</PRE>
+
+
+<PRE>
+<input type="checkbox" name="getSeqGi" value="22331278" onClick="synchronizeCheck(this.value, 'getSeqAlignment', 'getSeqGi', this.checked)">><a name = 22331278></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=22331278&dopt=GenPept" >ref|NP_683586.1|</a> (NM_148744) auxin-regulated protein; protein id: At3g23280.2,
+           supported by cDNA: gi_15010671, supported by cDNA:
+           gi_16974316 [Arabidopsis thaliana]
+ <a name = 15010672></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=15010672&dopt=GenPept" >gb|AAK73995.1|</a> (AY045637) AT3g23280/K14B15_17 [Arabidopsis thaliana]
+ <a name = 16974317></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=16974317&dopt=GenPept" >gb|AAL31143.1|</a> (AY059650) AT3g23280/K14B15_17 [Arabidopsis thaliana]
+          Length = 438
+
+ Score = 33.1 bits (74), Expect = 2.1
+ Identities = 16/46 (34%), Positives = 22/46 (47%)
+ Frame = +3
+
+Query: 201 SPSDLYGTSCKHTTLCSSCGKSMALSSARCLVCSAPITNLIREYNV 338
+           +PS+     C H   C SC K +   +  C VC A I  +I+ Y V
+Sbjct: 393 APSEAVCVPCGHVAGCMSCLKEIKSKNWGCPVCRAKIDQVIKLYRV 438
+</PRE>
+
+
+<PRE>
+<input type="checkbox" name="getSeqGi" value="18414200" onClick="synchronizeCheck(this.value, 'getSeqAlignment', 'getSeqGi', this.checked)">><a name = 18414200></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=18414200&dopt=GenPept" >ref|NP_567428.1|</a> (NM_117514) Expressed protein; protein id: At4g14365.1, supported
+           by cDNA: 37809., supported by cDNA: gi_13358233,
+           supported by cDNA: gi_17065423, supported by cDNA:
+           gi_20148546 [Arabidopsis thaliana]
+ <a name = 11762236></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=11762236&dopt=GenPept" >gb|AAG40396.1|AF325044_1</a> (AF325044) AT4g14360 [Arabidopsis thaliana]
+ <a name = 17065424></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=17065424&dopt=GenPept" >gb|AAL32866.1|</a> (AY062788) ankyrin homolog [Arabidopsis thaliana]
+ <a name = 20148547></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=20148547&dopt=GenPept" >gb|AAM10164.1|</a> (AY081602) ankyrin homolog [Arabidopsis thaliana]
+          Length = 376
+
+ Score = 32.7 bits (73), Expect = 2.8
+ Identities = 16/46 (34%), Positives = 22/46 (47%)
+ Frame = +3
+
+Query: 201 SPSDLYGTSCKHTTLCSSCGKSMALSSARCLVCSAPITNLIREYNV 338
+           +PS+     C H   C SC K +      C VC A I  +I+ Y+V
+Sbjct: 331 APSEAVCVPCGHVAGCISCLKEIENKKMGCPVCRANIDQVIKLYHV 376
+</PRE>
+
+
+<PRE>
+<input type="checkbox" name="getSeqGi" value="15387746" onClick="synchronizeCheck(this.value, 'getSeqAlignment', 'getSeqGi', this.checked)">><a name = 15387746></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=15387746&dopt=GenPept" >emb|CAC59873.1|</a> (AL160371) probable heat shock protein hslu [Leishmania major]
+          Length = 288
+
+ Score = 32.7 bits (73), Expect = 2.8
+ Identities = 29/120 (24%), Positives = 48/120 (39%), Gaps = 2/120 (1%)
+ Frame = +3
+
+Query: 177 KAACEGCGSPSDLYGTSCKHTTLCSSCGKSMALSSARCLVCSAPITNLIREYNVRANATT 356
+           +A    C S     G +  HT L      S A ++A     +AP+TN   +  +R     
+Sbjct: 3   RALSLSCRSSVAATGAASSHTLLTGVRCCSTAAAAAAAPAPAAPLTNPGSKTLIRDMRPR 62
+
+Query: 357 DKSFSIGRFVTGLPPFSKKKSA--ENKWSLHKEGLQGRQIPENMREKYNRKPWILEDETG 530
+           +    + R++ G     K  S    N+W  H       Q+P ++RE+   K  ++   TG
+Sbjct: 63  ELMKELDRYIVGQSEAKKAVSVALRNRWRRH-------QVPSDIREEIAPKNILMIGPTG 115
+</PRE>
+
+
+<PRE>
+<input type="checkbox" name="getSeqGi" value="14587218" onClick="synchronizeCheck(this.value, 'getSeqAlignment', 'getSeqGi', this.checked)">><a name = 14587218></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=14587218&dopt=GenPept" >dbj|BAB61152.1|</a> (AP003199) contains ESTs AU068079(C11823),AU068080(C11823)~similar
+           to Arabidopsis thaliana chromosome 3, F4P12.110~unknown
+           protein [Oryza sativa (japonica cultivar-group)]
+          Length = 313
+
+ Score = 32.7 bits (73), Expect = 2.8
+ Identities = 17/52 (32%), Positives = 24/52 (45%), Gaps = 1/52 (1%)
+ Frame = +3
+
+Query: 186 CEGCGS-PSDLYGTSCKHTTLCSSCGKSMALSSARCLVCSAPITNLIREYNV 338
+           C  C S P D     C+H  LC  C + +   + +C +C  P+  L RE  V
+Sbjct: 246 CVVCLSEPRDTAVLPCRHMCLCRECAQVLKYQTNKCPICRQPVEGL-REIEV 296
+</PRE>
+
+
+<PRE>
+<input type="checkbox" name="getSeqGi" value="15224462" onClick="synchronizeCheck(this.value, 'getSeqAlignment', 'getSeqGi', this.checked)">><a name = 15224462></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=15224462&dopt=GenPept" >ref|NP_181354.1|</a> (NM_129376) unknown protein; protein id: At2g38190.1 [Arabidopsis
+           thaliana]
+ <a name = 7485584></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=07485584&dopt=GenPept" >pir||T01251</a> hypothetical protein F16M14.12 - Arabidopsis thaliana
+ <a name = 3335367></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=03335367&dopt=GenPept" >gb|AAC27168.1|</a> (AC003028) unknown protein [Arabidopsis thaliana]
+          Length = 124
+
+ Score = 32.3 bits (72), Expect = 3.7
+ Identities = 13/45 (28%), Positives = 20/45 (43%)
+ Frame = +3
+
+Query: 204 PSDLYGTSCKHTTLCSSCGKSMALSSARCLVCSAPITNLIREYNV 338
+           P D +   C H+  C  CG +M  +   C +C   +  + R Y V
+Sbjct: 80  PRDCFFLPCGHSVSCYECGTTMQEADGSCPICRRKMKKVKRIYTV 124
+</PRE>
+
+
+<PRE>
+<input type="checkbox" name="getSeqGi" value="22296435" onClick="synchronizeCheck(this.value, 'getSeqAlignment', 'getSeqGi', this.checked)">><a name = 22296435></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=22296435&dopt=GenPept" >dbj|BAC10202.1|</a> (AP004395) contains ESTs
+           AU055804(S20063),AU055998(S20213),
+           AU055803(S20063)~similar to ankyrin homolog [Oryza
+           sativa (japonica cultivar-group)]
+          Length = 489
+
+ Score = 32.0 bits (71), Expect = 4.8
+ Identities = 20/61 (32%), Positives = 25/61 (40%)
+ Frame = +3
+
+Query: 156 GSADLVLKAACEGCGSPSDLYGTSCKHTTLCSSCGKSMALSSARCLVCSAPITNLIREYN 335
+           G+  + L A  EG   P       C H   C SC K +      C +C A I  +IR Y 
+Sbjct: 436 GTCVICLDAPVEGACIP-------CGHMAGCMSCLKDIESKKWGCPICRAKINQIIRLYA 488
+
+Query: 336 V 338
+           V
+Sbjct: 489 V 489
+</PRE>
+
+
+<PRE>
+<input type="checkbox" name="getSeqGi" value="19922258" onClick="synchronizeCheck(this.value, 'getSeqAlignment', 'getSeqGi', this.checked)">><a name = 19922258></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=19922258&dopt=GenPept" >ref|NP_610973.1|</a> (NM_137129) CG12863 gene product [Drosophila melanogaster]
+ <a name = 17945550></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=17945550&dopt=GenPept" >gb|AAL48827.1|</a> (AY071205) RE24565p [Drosophila melanogaster]
+          Length = 184
+
+ Score = 32.0 bits (71), Expect = 4.8
+ Identities = 27/116 (23%), Positives = 43/116 (36%)
+ Frame = +3
+
+Query: 186 CEGCGSPSDLYGTSCKHTTLCSSCGKSMALSSARCLVCSAPITNLIREYNVRANATTDKS 365
+           C  CG    + G + KH   C +C K   +  + C  C+    +    Y  + +      
+Sbjct: 69  CNRCGKCPSVNGQTYKHCESCDACVKPNYVHCSDCRRCTQKEGHNCSFYQTKQHCW--MC 126
+
+Query: 366 FSIGRFVTGLPPFSKKKSAENKWSLHKEGLQGRQIPENMREKYNRKPWILEDETGQ 533
+              G   T  P F K+K+   K  L       R+   + R KY R+   + + T Q
+Sbjct: 127 GQKGHIETKCPNFRKRKTNYTKGCLLCGKRNHREKRCSYRSKYFREQCFMNETTIQ 182
+</PRE>
+
+
+<PRE>
+<input type="checkbox" name="getSeqGi" value="21627199" onClick="synchronizeCheck(this.value, 'getSeqAlignment', 'getSeqGi', this.checked)">><a name = 21627199></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=21627199&dopt=GenPept" >gb|AAF58228.2|</a> (AE003814) CG12863-PA [Drosophila melanogaster]
+          Length = 425
+
+ Score = 32.0 bits (71), Expect = 4.8
+ Identities = 27/116 (23%), Positives = 43/116 (36%)
+ Frame = +3
+
+Query: 186 CEGCGSPSDLYGTSCKHTTLCSSCGKSMALSSARCLVCSAPITNLIREYNVRANATTDKS 365
+           C  CG    + G + KH   C +C K   +  + C  C+    +    Y  + +      
+Sbjct: 310 CNRCGKCPSVNGQTYKHCESCDACVKPNYVHCSDCRRCTQKEGHNCSFYQTKQHCW--MC 367
+
+Query: 366 FSIGRFVTGLPPFSKKKSAENKWSLHKEGLQGRQIPENMREKYNRKPWILEDETGQ 533
+              G   T  P F K+K+   K  L       R+   + R KY R+   + + T Q
+Sbjct: 368 GQKGHIETKCPNFRKRKTNYTKGCLLCGKRNHREKRCSYRSKYFREQCFMNETTIQ 423
+</PRE>
+
+
+<PRE>
+<input type="checkbox" name="getSeqGi" value="15128197" onClick="synchronizeCheck(this.value, 'getSeqAlignment', 'getSeqGi', this.checked)">><a name = 15128197></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=15128197&dopt=GenPept" >gb|AAK84420.1|AF400063_1</a> (AF400063) neuralized 1 [Mus musculus]
+          Length = 574
+
+ Score = 31.6 bits (70), Expect = 6.2
+ Identities = 14/37 (37%), Positives = 21/37 (55%), Gaps = 1/37 (2%)
+ Frame = +3
+
+Query: 225 SCKHTTLCSSCGKSMALS-SARCLVCSAPITNLIREY 332
+           +C H  LC SCG  +  +  A C +C  PI ++I+ Y
+Sbjct: 535 TCGHMCLCYSCGLRLKKALHACCPICRRPIKDIIKTY 571
+</PRE>
+
+
+<PRE>
+<input type="checkbox" name="getSeqGi" value="10946688" onClick="synchronizeCheck(this.value, 'getSeqAlignment', 'getSeqGi', this.checked)">><a name = 10946688></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=10946688&dopt=GenPept" >ref|NP_067335.1|</a> (NM_021360) neuralized homolog (Drosophila) [Mus musculus]
+ <a name = 6688679></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=06688679&dopt=GenPept" >emb|CAB65238.1|</a> (Y15160) neuralized-like protein [Mus musculus]
+          Length = 574
+
+ Score = 31.6 bits (70), Expect = 6.2
+ Identities = 14/37 (37%), Positives = 21/37 (55%), Gaps = 1/37 (2%)
+ Frame = +3
+
+Query: 225 SCKHTTLCSSCGKSMALS-SARCLVCSAPITNLIREY 332
+           +C H  LC SCG  +  +  A C +C  PI ++I+ Y
+Sbjct: 535 TCGHMCLCYSCGLRLKKALHACCPICRRPIKDIIKTY 571
+</PRE>
+
+
+<PRE>
+<input type="checkbox" name="getSeqGi" value="15226959" onClick="synchronizeCheck(this.value, 'getSeqAlignment', 'getSeqGi', this.checked)">><a name = 15226959></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=15226959&dopt=GenPept" >ref|NP_181076.1|</a> (NM_129085) unknown protein; protein id: At2g35330.1 [Arabidopsis
+           thaliana]
+ <a name = 3608154></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=03608154&dopt=GenPept" >gb|AAC36187.1|</a> (AC005314) unknown protein [Arabidopsis thaliana]
+          Length = 711
+
+ Score = 31.6 bits (70), Expect = 6.2
+ Identities = 14/36 (38%), Positives = 18/36 (49%), Gaps = 1/36 (2%)
+ Frame = +3
+
+Query: 228 CKHTTLCSSCGKS-MALSSARCLVCSAPITNLIREY 332
+           C H  +C+SC  S M    A C  C AP+   IR +
+Sbjct: 672 CAHQVVCASCSDSFMGSGKATCPCCRAPVQQRIRVF 707
+</PRE>
+
+
+<PRE>
+<input type="checkbox" name="getSeqGi" value="17231254" onClick="synchronizeCheck(this.value, 'getSeqAlignment', 'getSeqGi', this.checked)">><a name = 17231254></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=17231254&dopt=GenPept" >ref|NP_487802.1|</a> (NC_003272) oligopeptide binding protein of ABC transporter [Nostoc
+           sp. PCC 7120]
+ <a name = 17132896></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=17132896&dopt=GenPept" >dbj|BAB75461.1|</a> (AP003594) oligopeptide binding protein of ABC transporter [Nostoc
+           sp. PCC 7120]
+          Length = 588
+
+ Score = 31.6 bits (70), Expect = 6.2
+ Identities = 18/58 (31%), Positives = 29/58 (49%), Gaps = 3/58 (5%)
+ Frame = +3
+
+Query: 333 NVRANATTDKSFSIGRFVTGLPPFSKK---KSAENKWSLHKEGLQGRQIPENMREKYN 497
+           N    ATT  ++ + + V  +  ++ K   +S    WSL   GL G  IP ++ EK+N
+Sbjct: 143 NPAVGATTSANYEVVKSVEAIDDYTVKVNFQSPNPAWSLPFVGLNGMIIPRHIFEKFN 200
+</PRE>
+
+
+<PRE>
+<input type="checkbox" name="getSeqGi" value="15320749" onClick="synchronizeCheck(this.value, 'getSeqAlignment', 'getSeqGi', this.checked)">><a name = 15320749></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=15320749&dopt=GenPept" >ref|NP_203261.1|</a> (NC_003083) IAP-4 [Epiphyas postvittana nucleopolyhedrovirus]
+ <a name = 4378822></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=04378822&dopt=GenPept" >gb|AAD19699.1|</a> (AF119228) apoptosis inhibitor iap-4 [Epiphyas postvittana
+           nucleopolyhedrovirus]
+ <a name = 15213217></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=15213217&dopt=GenPept" >gb|AAK85656.1|</a> (AY043265) IAP-4 [Epiphyas postvittana nucleopolyhedrovirus]
+          Length = 141
+
+ Score = 31.6 bits (70), Expect = 6.2
+ Identities = 14/36 (38%), Positives = 21/36 (57%)
+ Frame = +3
+
+Query: 228 CKHTTLCSSCGKSMALSSARCLVCSAPITNLIREYN 335
+           C H TLC+ C  S+ +    CL+C  P+T  + +YN
+Sbjct: 106 CGHYTLCTVC--SVQMCGKPCLLCQMPVTEYV-DYN 138
+</PRE>
+
+
+<PRE>
+<input type="checkbox" name="getSeqGi" value="22531056" onClick="synchronizeCheck(this.value, 'getSeqAlignment', 'getSeqGi', this.checked)">><a name = 22531056></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=22531056&dopt=GenPept" >gb|AAM97032.1|</a> (AY136366) unknown protein [Arabidopsis thaliana]
+          Length = 738
+
+ Score = 31.6 bits (70), Expect = 6.2
+ Identities = 14/36 (38%), Positives = 18/36 (49%), Gaps = 1/36 (2%)
+ Frame = +3
+
+Query: 228 CKHTTLCSSCGKS-MALSSARCLVCSAPITNLIREY 332
+           C H  +C+SC  S M    A C  C AP+   IR +
+Sbjct: 699 CAHQVVCASCSDSFMGSGKATCPCCRAPVQQRIRVF 734
+</PRE>
+
+
+<PRE>
+<input type="checkbox" name="getSeqGi" value="20890044" onClick="synchronizeCheck(this.value, 'getSeqAlignment', 'getSeqGi', this.checked)">><a name = 20890044></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=20890044&dopt=GenPept" >ref|XP_123433.1|</a> (XM_123433) similar to neuralized homolog (Drosophila) [Mus
+           musculus]
+          Length = 499
+
+ Score = 31.6 bits (70), Expect = 6.2
+ Identities = 14/37 (37%), Positives = 21/37 (55%), Gaps = 1/37 (2%)
+ Frame = +3
+
+Query: 225 SCKHTTLCSSCGKSMALS-SARCLVCSAPITNLIREY 332
+           +C H  LC SCG  +  +  A C +C  PI ++I+ Y
+Sbjct: 460 TCGHMCLCYSCGLRLKKALHACCPICRRPIKDIIKTY 496
+</PRE>
+
+
+<PRE>
+<input type="checkbox" name="getSeqGi" value="15420883" onClick="synchronizeCheck(this.value, 'getSeqAlignment', 'getSeqGi', this.checked)">><a name = 15420883></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=15420883&dopt=GenPept" >gb|AAK97495.1|AF401228_1</a> (AF401228) neuralized [Mus musculus]
+          Length = 557
+
+ Score = 31.6 bits (70), Expect = 6.2
+ Identities = 14/37 (37%), Positives = 21/37 (55%), Gaps = 1/37 (2%)
+ Frame = +3
+
+Query: 225 SCKHTTLCSSCGKSMALS-SARCLVCSAPITNLIREY 332
+           +C H  LC SCG  +  +  A C +C  PI ++I+ Y
+Sbjct: 518 TCGHMCLCYSCGLRLKKALHACCPICRRPIKDIIKTY 554
+</PRE>
+
+
+<PRE>
+<input type="checkbox" name="getSeqGi" value="18590406" onClick="synchronizeCheck(this.value, 'getSeqAlignment', 'getSeqGi', this.checked)">><a name = 18590406></a><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=18590406&dopt=GenPept" >ref|XP_085974.1|</a> (XM_085974) similar to zinc finger protein [Homo sapiens]
+          Length = 241
+
+ Score = 31.6 bits (70), Expect = 6.2
+ Identities = 16/50 (32%), Positives = 22/50 (44%), Gaps = 11/50 (22%)
+ Frame = +3
+
+Query: 186 CEGCGSPSDLYGTSCKHTTL--------CSSCGKSMALSS---ARCLVCS 302
+           C  CG   +   T C+H  +        CS CGKS + SS     C +C+
+Sbjct: 187 CHACGKAFNTSSTLCQHNRIHTGEKPFQCSQCGKSFSCSSHLTRHCRMCN 236
+</PRE>
+
+
+</form>
+<table border="0"><tr><td><FORM  method="post" action="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?SUBMIT=y" name="submitterBottom"><input type=button value="Get selected sequences" onClick="finalSubmit(0, 'getSeqAlignment', 'getSeqGi', 'submitterBottom')"><input type="hidden" name="db" value=""><input type="hidden" name="term" value=""><input type="hidden" name="doptcmdl" value="docsum"><input type="hidden" name="cmd" value="search"></form></td><td><FORM><input type="button" value="Select all" onClick="handleCheckAll('select', 'getSeqAlignment', 'getSeqGi')"></form></td><td><FORM><input type="button" value="Deselect all" onClick="handleCheckAll('deselect', 'getSeqAlignment', 'getSeqGi')"></form></td></tr></table><form>
+
+<PRE>
+  Database: All non-redundant GenBank CDS
+  translations+PDB+SwissProt+PIR+PRF
+    Posted date:  Sep 19, 2002  1:01 AM
+  Number of letters in database: 370,891,306
+  Number of sequences in database:  1,171,253
+  
+Lambda     K      H
+   0.318    0.135    0.401 
+
+Gapped
+Lambda     K      H
+   0.267   0.0410    0.140 
+
+
+Matrix: BLOSUM62
+Gap Penalties: Existence: 11, Extension: 1
+Number of Hits to DB: 342,546,019
+Number of Sequences: 1171253
+Number of extensions: 6751909
+Number of successful extensions: 24973
+Number of sequences better than 10.0: 122
+Number of HSP's better than 10.0 without gapping: 23403
+Number of HSP's successfully gapped in prelim test: 0
+Number of HSP's that attempted gapping in prelim test: 0
+Number of HSP's gapped (non-prelim): 24941
+length of database: 370,891,306
+effective HSP length: 115
+effective length of database: 236,197,211
+effective search space used: 17950988036
+frameshift window, decay const: 50,  0.1
+T: 12
+A: 40
+X1: 16 ( 7.3 bits)
+X2: 38 (14.6 bits)
+X3: 64 (24.7 bits)
+S1: 41 (21.7 bits)
+
+</form>
+

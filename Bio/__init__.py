@@ -45,7 +45,7 @@ def _load_registries():
     
     if getattr(sys, "version_info", (1, 5))[:2] < (2, 1):
         return
-    
+
     self = sys.modules[__name__]        # self refers to this module.
     # Load the registries.  Look in all the '.py' files in Bio.config
     # for Registry objects.  Save them all into the local namespace.

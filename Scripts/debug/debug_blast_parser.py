@@ -85,6 +85,8 @@ def test_blast_output(outfile):
     scanner_class = parser_class()._scanner.__class__
     consumer_class = parser_class()._consumer.__class__
 
+    #parser_class()._scanner.feed(
+    #    open(outfile), ParserSupport.TaggingConsumer())
     print "I'm going to run the data through the parser to see what happens..."
     parser = parser_class()
     try:

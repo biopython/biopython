@@ -77,6 +77,6 @@ bt064 NCBIWWW  2.1.12 ad-hoc                              from Brad Chapman
 bt065 blastn   2.1.2  ad-hoc                              no hits found
 bt066 NCBIWWW  2.1.3  ad-hoc                              6/3/01 new format
 bt067 blastall 2.2.1  ad-hoc              -p blastx       No 'length of query'
-
+bt068 NCBIWWW  2.2.4  ad-hoc
 
 * bt008 is not included because the file is too big (>15Mb).

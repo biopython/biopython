@@ -255,6 +255,11 @@ class _Scanner:
         # 4) BLASTP 2.0.10, 2.0.14, database
         #   <PRE>
         #     Database: Non-redundant SwissProt sequences
+        # 5) BLASTX 2.2.4, pairwise alignment
+        #   <CENTER><b><FONT color="green">Alignments</FONT></b></CENTER>
+        #   </form>
+        #   <script src="blastResult.js"></script><table border="0"><tr><td><FO
+        #   <PRE>
 
         # Get the first two lines and examine them.
         line1 = safe_readline(uhandle)
@@ -281,6 +286,8 @@ class _Scanner:
 
     def _scan_pairwise_alignments(self, uhandle, consumer):
         while 1:
+            read_and_call_until(uhandle, consumer.noevent, start='<PRE>')
+        
             # The first line is <PRE>.  Check the second line to see if
             # I'm still at an alignment.
             line1 = safe_readline(uhandle)
@@ -326,7 +333,6 @@ class _Scanner:
         # The hsp_header and hsp_alignment blocks can be repeated.
 
         consumer.start_alignment()
-        attempt_read_and_call(uhandle, consumer.noevent, contains='Alignments')
         read_and_call(uhandle, consumer.noevent, start='<PRE>')
         self._scan_alignment_header(uhandle, consumer)
 
