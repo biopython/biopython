@@ -1,8 +1,14 @@
 #!/usr/bin/env python
 # Created: Thu Jul 13 11:09:00 2000
-# Last changed: Time-stamp: <00/08/08 23:32:18 thomas>
+# Last changed: Time-stamp: <00/08/11 10:07:05 thomas>
 # Thomas.Sicheritz@molbio.uu.se, http://evolution.bmc.uu.se/~thomas
 # File: xbbtools.py
+
+# Copyright 2000 by Thomas Sicheritz-Ponten.  All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
 
 import string, re, regsub
 import posixpath, posix

@@ -1,9 +1,13 @@
 #!/usr/bin/env python
 # Created: Tue Aug  8 20:32:36 2000
-# Last changed: Time-stamp: <00/08/10 21:16:04 thomas>
+# Last changed: Time-stamp: <00/08/11 10:06:40 thomas>
 # thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas/index.html
 # File: nextorf.py
 
+# Copyright 2000 by Thomas Sicheritz-Ponten.  All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
 
 import string, re, regsub
 import posixpath, posix

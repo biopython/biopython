@@ -1,8 +1,13 @@
 #!/usr/bin/env python
 # Created: Wed Jun 21 10:28:14 2000
-# Last changed: Time-stamp: <00/08/09 19:56:09 thomas>
+# Last changed: Time-stamp: <00/08/11 10:06:55 thomas>
 # Thomas.Sicheritz@molbio.uu.se, http://evolution.bmc.uu.se/~thomas
 # File: xbb_widget.py
+
+# Copyright 2000 by Thomas Sicheritz-Ponten.  All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
 
 import string, re, regsub
 import posixpath, posix
