@@ -26,7 +26,7 @@ try:
     from distutils.command.install import install
     from distutils.core import Command
 except ImportError:
-    print "Martel installation requires distutils, avaiable with python 2.0"
+    print "Martel installation requires distutils, available with python 2.0"
     print "or better, or from:"
     print "  http://python.org/sigs/distutils-sig/download.html"
     sys.exit(0)
@@ -89,15 +89,14 @@ class my_install(install):
         check_install("mxTextTools", check_mxTextTools,
                       "http://www.lemburg.com/files/python/mxExtensions.html")
 
-class run_tests(Command):
-    """Run all of the tests for the package.
+class run_local_tests(Command):
+    """Run all of the tests for the package using uninstalled (local) files
 
     This is a automatic test run class to make distutils kind of act like
     perl. With this you can do:
 
-    python setup.py build
-    python setup.py install
     python setup.py test
+
     """
     description = "Automatically run the test suite for the package."
 
@@ -115,19 +114,44 @@ class run_tests(Command):
         # change to the test dir and run the tests
         os.chdir("test")
         import run_tests
-        run_tests.main([])
+        run_tests.local_test_main([])
 
         # change back to the current directory
         os.chdir(this_dir)
 
-setup(name='Martel', 
-      version='0.6',
-      author='Dalke Scientific Software, LLC; member of the The Biopython Consortium',
-      author_email='dalke@dalkescientific.com',
-      url='http://www.biopython.org/~dalke/Martel/',
+class run_install_tests(run_local_tests):
+    """Run all of the tests for the package using installed files
+
+    This is a automatic test run class to make distutils kind of act like
+    perl. With this you can do:
+
+    python setup.py install
+    python setup.py installtest
+    
+    """
+    def run(self):
+        this_dir = os.getcwd()
+
+        # change to the test dir and run the tests
+        os.chdir("test")
+        import run_tests
+        run_tests.install_test_main([])
+
+        # change back to the current directory
+        os.chdir(this_dir)
+
+setup(name = "Martel",
+      version = "0.8",
+      description = "Parse flat-file formats as if they are in XML",
+      author = "Dalke Scientific Software, LLC; " \
+               "member of the The Biopython Consortium",
+      author_email = "dalke@dalkescientific.com",
+      url = "http://www.dalkescientific.com/Martel",
 
       cmdclass = {"install" : my_install,
-                  "test" : run_tests},
+                  "test" : run_local_tests,
+                  "installtest" : run_install_tests,
+                  },
       package_dir = {"Martel": ""},
       packages = ["Martel"],
       
