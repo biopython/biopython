@@ -76,8 +76,6 @@ class NamedSequence:
         self.dbid = dbid
 
     def __getattr__(self, key):
-        if self.__dict__.has_key(key):
-            return self.__dict__[key]
         return getattr(self._seq, key)
 
     def __setattr__(self, key, value):
