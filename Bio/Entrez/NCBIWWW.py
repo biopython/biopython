@@ -107,7 +107,10 @@ def _open(cgi, params={}, get=1):
     # Open a handle to Entrez.
     options = urllib.urlencode(params)
     if get:  # do a GET
-        handle = urllib.urlopen("%s?%s" % (cgi, options))
+        fullcgi = cgi
+        if options:
+            fullcgi = "%s?%s" % (cgi, options)
+        handle = urllib.urlopen(fullcgi)
     else:    # do a POST
         handle = urllib.urlopen(cgi, options)
 
