@@ -79,9 +79,9 @@ The Biopython Project is an international association of developers of freely av
 
 Basically, we just like to program in python and want to make it as easy as possible to use python for bioinformatics by creating high-quality, reusable modules and scripts.
 
-\subsection{What can I find in the biopython package}
+\subsection{What can I find in the Biopython package}
 
-The main biopython releases have lots of functionality, including:
+The main Biopython releases have lots of functionality, including:
 
 \begin{itemize}
   \item The ability to parse bioinformatics files into python utilizable data structures, including support for the following formats:
@@ -161,7 +161,7 @@ and html formats
 
 \chapter{Quick Start -- What can you do with Biopython?}
 
-This section is designed to get you started quickly with Biopython, and to give a general overview of what is available and how to use it. All of the examples in this section assume that you have some general working knowledge of python, and that you have successfully installed biopython on your system. If you think you need to brush up on your python, the main python web site provides quite a bit of free documentation to get started with (\ahrefurl{\url{http://www.python.org/doc/}}). 
+This section is designed to get you started quickly with Biopython, and to give a general overview of what is available and how to use it. All of the examples in this section assume that you have some general working knowledge of python, and that you have successfully installed Biopython on your system. If you think you need to brush up on your python, the main python web site provides quite a bit of free documentation to get started with (\ahrefurl{\url{http://www.python.org/doc/}}). 
 
  
 Since much biological work on the computer involves connecting with databases on the internet, some of the examples will also require a working internet connection in order to run. 
@@ -182,7 +182,7 @@ One thing to note about Biopython is that it often provides multiple ways of ``d
 Disputedly (of course!), the central object in bioinformatics is the sequence. Thus, we'll start with the Biopython mechanisms for dealing with sequences. When I think of a sequence the first thing that pops into my mind is a string of letters:\verb| 'AGTACACTGGT'| which seems natural since this is the most common way that sequences are seen in biological file formats.  However, a simple string of letters by itself is also very uninformative -- is it a DNA or  protein sequence (okay, a protein with a lot of Alanines, Glycines, Cysteines and Threonines!), what type of organism did it come from, what is so interesting about it, and so on. The challenge in designing a sequence interface is to pick a representation that is informative enough to take into account the more complex information, yet is as lightweight and easy to work with as just a simple sequence.
 
 
-The approach taken in the Biopython sequence class is to utilize a class that holds more complex information, yet can be manipulated as if it were a simple string. This is accomplished by utliziing operator overloading to make manipulating a sequence object feel like manipulating a python string. The sequence class, referred to simply as Seq,  is defined in the file \verb|Bio/Seq.py.| Let's look at the Seq class deeper to see what it has to offer.
+The approach taken in the Biopython sequence class is to utilize a class that holds more complex information, yet can be manipulated as if it were a simple string. This is accomplished by utilizing operator overloading to make manipulating a sequence object feel like manipulating a python string. The sequence class, referred to simply as Seq,  is defined in the file \verb|Bio/Seq.py.| Let's look at the Seq class deeper to see what it has to offer.
 
 
 A biopython Seq object has two important attributes:
@@ -198,16 +198,16 @@ A biopython Seq object has two important attributes:
 Clearly the alphabet object is the important thing that is making the Seq object more than just a string. The currently available alphabets for Biopython are defined in the \verb|Bio/Alphabet| module. We'll use the IUPAC alphabets \ahrefurl ({\url{http://www.chem.qmw.ac.uk/iupac/}}) here to deal with some of our favorite objects: DNA, RNA and Proteins.  
 
 
-\verb|Bio/Alphabet/IUPAC.py| provides basic definitions for proteins, DNA and RNA, but additionally provides the abilitiy to extend and cutomize the basic definitions. For instance, for proteins, there is a basic IUPACProtein class, but there is an additional ExtendedIUPACProtein class providing for the additional elements ``Asx'' (asparagine or aspartic acid), ``Sec'' (selenocysteine), and ``Glx'' (glutamine or glutamic acid). For DNA you've got choices of IUPACUnambiguousDNA, which provides for just the basic letters, IUPACAmbiguousDNA (which provides for ambiguity letters for every possible situation) and ExtenedIUPACDNA, which allows letters for modified bases. Similarly, RNA can be represented by IUPACAmbigousRNA or IUPACUnambigousRNA.
+\verb|Bio/Alphabet/IUPAC.py| provides basic definitions for proteins, DNA and RNA, but additionally provides the ability to extend and customize the basic definitions. For instance, for proteins, there is a basic IUPACProtein class, but there is an additional ExtendedIUPACProtein class providing for the additional elements ``Asx'' (asparagine or aspartic acid), ``Sec'' (selenocysteine), and ``Glx'' (glutamine or glutamic acid). For DNA you've got choices of IUPACUnambiguousDNA, which provides for just the basic letters, IUPACAmbiguousDNA (which provides for ambiguity letters for every possible situation) and ExtendedIUPACDNA, which allows letters for modified bases. Similarly, RNA can be represented by IUPACAmbigousRNA or IUPACUnambigousRNA.
 
 
-The advantages of having an alphabet class are two fold. First, this gives an idea of the type of information the \verb|data| object contains. Secondly, this provides a means of contraining the information you have in the data object, as a means of type checking.
+The advantages of having an alphabet class are two fold. First, this gives an idea of the type of information the \verb|data| object contains. Secondly, this provides a means of constraining the information you have in the data object, as a means of type checking.
 
 
 Now that we know what we are dealing with, let's look at how to utilize this class to do interesting work.
 
 
-First, create a Sequence object from a string of information we've got. We'll create an unambiougous DNA object:
+First, create a Sequence object from a string of information we've got. We'll create an unambiguous DNA object:
 
 \begin{verbatim}
 >>> from Bio.Alphabet import IUPAC
@@ -319,7 +319,7 @@ Seq('GATCGATGGGCCTATATAGGATCGAAAATCGC', IUPACUnambiguousDNA())
 \end{verbatim}
 
 
-To translate our DNA object we have quite a few choices. First, we can use any number of translation tables depending on what we know about our DNA sequence. The translation tables available in biopython were taken from information at \ahrefurl{\url{ftp://ncbi.nlm.nih.gov/entrez/misc/data/gc.prt}}. So, you have tons of choices to pick from. For this, let's just focus on two choices: the Standard translation table, and the Translation table for Vertebrate Mitochondriall DNA. These tables are labelled with id numbers 1 and 2, respectively. Now that we know what tables we are looking to get, we're all set to perform a basic translation. First, we need to get our translators that use these tables. Since we are still dealing with our unambiguous DNA object, we want to fetch translators that take this into account:
+To translate our DNA object we have quite a few choices. First, we can use any number of translation tables depending on what we know about our DNA sequence. The translation tables available in biopython were taken from information at \ahrefurl{\url{ftp://ncbi.nlm.nih.gov/entrez/misc/data/gc.prt}}. So, you have tons of choices to pick from. For this, let's just focus on two choices: the Standard translation table, and the Translation table for Vertebrate Mitochondrial DNA. These tables are labeled with id numbers 1 and 2, respectively. Now that we know what tables we are looking to get, we're all set to perform a basic translation. First, we need to get our translators that use these tables. Since we are still dealing with our unambiguous DNA object, we want to fetch translators that take this into account:
 
 \begin{verbatim}
 >>> from Bio import Translate
@@ -360,14 +360,14 @@ This covers the basic features and uses of the Biopython sequence class. There i
 Before we jump right into parsers and everything else to do with Biopython, let's set up an example to motivate everything we do and make life more interesting. After all, if there wasn't any biology in this tutorial, why would you want you read it?
 
 
-Since I love plants, I think we're just going to have to have a plant based example (sorry to all the fans of other organisms out there!).  Having just completed a recent trip to our local greenhouse, we've suddenly developed an incredible obsession with Lady Slipper Orchids (if you wonder why take a look at \ahrefurl{\url{http://www.millicentorchids.com/greenhouse/images/papesq01.jpg}}. If that doesn't convince you, you can look at all of the available photos at  \ahrefurl{\url{http://www.millicentorchids.com/greenhouse/indexphoto.htm}}).  Of course, orchids are not only beautiful to look at, they are also extermely interesting for people studying evolution and systematics. So we're thinking about writing a little proposal to do a molecular study of Lady Slipper evolution and would like to see what kind of research has already been done and how we can add to that.
+Since I love plants, I think we're just going to have to have a plant based example (sorry to all the fans of other organisms out there!).  Having just completed a recent trip to our local greenhouse, we've suddenly developed an incredible obsession with Lady Slipper Orchids (if you wonder why take a look at \ahrefurl{\url{http://www.millicentorchids.com/greenhouse/images/papesq01.jpg}}. If that doesn't convince you, you can look at all of the available photos at  \ahrefurl{\url{http://www.millicentorchids.com/greenhouse/indexphoto.htm}}).  Of course, orchids are not only beautiful to look at, they are also extremely interesting for people studying evolution and systematics. So we're thinking about writing a little proposal to do a molecular study of Lady Slipper evolution and would like to see what kind of research has already been done and how we can add to that.
 
 
 After a little bit of reading up we discover that the Lady Slipper Orchids are in the Orchidaceae family and the Cypripedioideae sub-family and are made up of 5 genera:  \emph{Cypripedium}, \emph{Paphiopedilum}, \emph{Phragmipedium}, \emph{Selenipedium} and \emph{Mexipedium}. That gives us enough information to get started delving for more information. So, let's look at how biopython tools can help us.
 
 \section{Parsing biological file formats}
 
-A large part of much bioinformatics work involves dealing with the many types of file formats designed to hold biological data. These files are loaded with interesting biological data, and a special challenge is parsing these files into a format so that you can manipulate them with some kind of programming language. However the task of parsing these files can be frustrated by the fact that the formats can change quite regularly, and that formats may contain small subleties which can break even the most well designed parsers. 
+A large part of much bioinformatics work involves dealing with the many types of file formats designed to hold biological data. These files are loaded with interesting biological data, and a special challenge is parsing these files into a format so that you can manipulate them with some kind of programming language. However the task of parsing these files can be frustrated by the fact that the formats can change quite regularly, and that formats may contain small subtleties which can break even the most well designed parsers. 
 
 \subsection{General parser design}
 
@@ -380,7 +380,7 @@ All of the parsers have two components:
 
 \item Scanner - The part of the parser that actually does the work or going through the file and extracting useful information. This useful information is converted into Events.
 
-\item Consumer - The consumer does the job of processing the useful information and spitting it out ina format that the programmer can use. The consumer does this by recieving the events created by the scanner.
+\item Consumer - The consumer does the job of processing the useful information and spitting it out in a format that the programmer can use. The consumer does this by receiving the events created by the scanner.
 
 \end{enumerate}
 
@@ -414,7 +414,7 @@ So, events are being produced. Big deal, unless we are able to capture these eve
 
 \begin{enumerate}
 
-\item Register itself with the the scanner to let it know that it wants to recieve those events that are being generated.
+\item Register itself with the the scanner to let it know that it wants to receive those events that are being generated.
 
 \item Do something with the events (and the information associated with them).
 
@@ -456,7 +456,7 @@ The first thing we do is import the base class which Consumers should derive fro
 Just like any other python class, we define a \verb|__init__| function that will be called when a new instance of the class is created. In the initialization we set a \verb|species_list| class attribute. This will store the species information as the file is parsed, and will allow us to extract this information later on.
 
 
-Now we come to the function that is really nifty, the \verb|title| function. This function will be called by the Scanner everytime a 'title' event is generated. So, when the Scanner comes to the first line in our example FASTA file:
+Now we come to the function that is really nifty, the \verb|title| function. This function will be called by the Scanner every time a 'title' event is generated. So, when the Scanner comes to the first line in our example FASTA file:
 
 \begin{verbatim}
 >gi|2765658|emb|Z78533.1|CIZ78533 C.irapeanum 5.8S rRNA gene and ITS1 and ITS2 DNA
@@ -465,7 +465,7 @@ Now we come to the function that is really nifty, the \verb|title| function. Thi
 It will recognize this as a title, and call the \verb|title| function with the \verb|title_info| argument set as the value of the title.
 
 
-Now that we've captured the title, we want to extract the information from it we are interested in. Looking at the FASTA title info, we notice that the second item in the info string is the organism name. To get this out we can just use the builtin python function \verb|string.split| to split the string at every space, creating the list \verb|title_atoms|. Since the second element of this list is the species name, we then grab this out of the list. Then we simply check to see if the species is already in our current list of organisms, and if not, we add it.
+Now that we've captured the title, we want to extract the information from it we are interested in. Looking at the FASTA title info, we notice that the second item in the info string is the organism name. To get this out we can just use the built-in python function \verb|string.split| to split the string at every space, creating the list \verb|title_atoms|. Since the second element of this list is the species name, we then grab this out of the list. Then we simply check to see if the species is already in our current list of organisms, and if not, we add it.
 
 
 Okay, well that was easy enough -- so now we need to call the Scanner and actual do this work. To do this, we write a little function:
@@ -527,7 +527,7 @@ One big problem with the parser we used above was that we were required to know 
 To deal with this problem, a very useful class was written into many of the Biopython parsers -- a \verb|RecordParser|, which parses a file into a python class that represents it. For instance, for FASTA files, the Record class is just an object with \verb|title| and \verb|sequence| attributes. 
 
 
-Let's make all of this talk more concrete by using the Iterator and Record interefaces to do what we did before -- extract a unique list of all species in our FASTA file. First we need to set up our parser and iterator:
+Let's make all of this talk more concrete by using the Iterator and Record interfaces to do what we did before -- extract a unique list of all species in our FASTA file. First we need to set up our parser and iterator:
 
 \begin{verbatim}
 >>> from Bio import Fasta
@@ -697,7 +697,7 @@ Biopython has a lot of parsers, and each has its own little special niches based
 One of the very common things that you need to do in bioinformatics is extract information from biological databases. It can be quite tedious to access these databases manually, especially if you have a lot of repetitive work to do. Biopython attempts to save you time and energy by making some on-line databases available from python scripts. Currently, Biopython has code to extract information from the following databases:
 
 \begin{itemize}
-  \item ExPASy -- \ahrefurl{\url{http://www.expasy.ch/}} See section~\ref{sec:swiss_prot} in the Cookbook for more information.
+  \item ExPASy -- \ahrefurl{\url{http://www.expasy.org/}} See section~\ref{sec:swiss_prot} in the Cookbook for more information.
   \item Entrez from NCBI -- \ahrefurl{\url{http://www.ncbi.nlm.nih.gov/Entrez/}}
   \item PubMed from NCBI -- \ahrefurl{\url{http://www.ncbi.nlm.nih.gov/PubMed/}}. See section~\ref{sec:pub_med} in the Cookbook for example code detailing how to use this.
   \item SCOP -- \ahrefurl{\url{http://scop.mrc-lmb.cam.ac.uk/scop/}}
@@ -709,7 +709,7 @@ The code is these modules basically makes it easy to write python code that inte
 Here we'll show a simple example of performing a remote Entrez query. More information on the other services is available in the Cookbook, which begins on page~\pageref{sec:cookbook}.
 
 
-In section~\ref{sec:writing_consumer} of the parsing examples, we talked about using Entrez to search the NCBI nucleotide databases for info on Cypripedioideae, our friends the lady slipper orchids. Now, we'll look at how to automate that process using a python script. For Entrez searching, this is more useful for displaying results then as a tool for getting sequences. The NCBI web site is mostly set up to allow remote queries so that you could write our own local cgi scripts that return information from NCBI pages. For this reason, the results are returned as HTML and it is pretty tough to get a flat file in a quick manner.
+In section~\ref{sec:writing_consumer} of the parsing examples, we talked about using Entrez to search the NCBI nucleotide databases for info on Cypripedioideae, our friends the lady slipper orchids. Now, we'll look at how to automate that process using a python script. For Entrez searching, this is more useful for displaying results then as a tool for getting sequences. The NCBI web site is mostly set up to allow remote queries so that you could write our own local CGI scripts that return information from NCBI pages. For this reason, the results are returned as HTML and it is pretty tough to get a flat file in a quick manner.
 
 
 In this example, we'll just show how to connect, get the results, and display them in a web browser. First, we'll start by defining our search and how to display the results:
@@ -779,16 +779,16 @@ Hey, everybody loves BLAST right? I mean, geez, how can get it get any easier to
 
 Fortunately, the Biopython folks know this only too well, so they've developed lots of tools for dealing with BLAST and making things much easier. This section details how to use these tools and do useful things with 'em. 
 
-\subsection{Running BLAST over the internet}
+\subsection{Running BLAST over the Internet}
 \label{sec:running-www-blast}
 
-The first step in automating BLASTing is to make everything accessable
+The first step in automating BLASTing is to make everything accessible
 from python scripts. So, biopython contains code that allows you to
 run the WWW version of BLAST
 (\ahrefurl{\url{http://www.ncbi.nlm.nih.gov/BLAST/}}) directly from
 your python scripts. This is very nice, especially since BLAST can be
 a real pain to deal with from scripts, especially with the whole BLAST
-queue thing and the separate results page. Keeping the BioPython code
+queue thing and the separate results page. Keeping the Biopython code
 up to date with all of the changes at NCBI is hard enough!
 
 
@@ -817,7 +817,7 @@ FASTA file against all of the non-redundant databases) is:
 
 \begin{verbatim}
 from Bio.Blast import NCBIWWW
-b_results = NCBIWWW.qblast('blastn', 'nr', f_record)
+result_handle = NCBIWWW.qblast('blastn', 'nr', f_record)
 \end{verbatim}
 
 The \verb|qblast| function also take a number of other option arguments
@@ -840,7 +840,7 @@ Note that in version 1.40 of Biopython, \verb|blast| is deprecated, and
 and blasp as program arguments.
 
 After you have set the search options, you just need to pass in your
-fasta sequence as a string, which is the third argument, and you are
+Fasta sequence as a string, which is the third argument, and you are
 all ready to BLAST. Biopython takes care of worrying about when the
 results are available, and will pause until it can get the results and
 return them.
@@ -883,7 +883,7 @@ parser:
 
 \begin{verbatim}
 import cStringIO
-string_result_handle = cStringIO.StringIO(blast_results)
+blast_out = cStringIO.StringIO(blast_results)
 \end{verbatim}
 
 
@@ -922,12 +922,12 @@ of input the BLAST parser (and the other biopython parsers take).
 
 If you followed the code above for interacting with BLAST through a
 script, then you already have \verb|blast_results|, which is great for
-passing to a parser. If you saved the results in a file, then opening
+passing to a parser via a \verb|cStringIO.StringIO|. If you saved the results in a file, then opening
 up the file with code like the following will get you what you need:
 
 
 \begin{verbatim}
-blast_results = open('my_blast_results', 'r')
+blast_out = open('my_blast.out', 'r')
 \end{verbatim}
 
 
@@ -939,7 +939,7 @@ code to parse it is really quite small:
 from Bio.Blast import NCBIWWW
 
 b_parser = NCBIWWW.BlastParser()
-b_record = b_parser.parse(blast_results)
+b_record = b_parser.parse(blast_out)
 \end{verbatim}
 
 What this accomplishes is parsing the BLAST output into a Blast Record
@@ -1029,7 +1029,7 @@ The PSIBlast record object is similar, but has support for the rounds that are u
 
 \subsection{Running BLAST locally}
 
-If you want to make your own database to search for sequences against, then local BLAST is definately the way you want to go. As with online BLAST, biopython provides lots of nice code to make you able to call local BLAST executables from your scripts, and have full access to the many command line options that these executables provide. You can obtain local BLAST precompiled for a number of platforms at \ahrefurl{\url{ftp://ncbi.nlm.nih.gov/blast/executables/}}, or can compile it yourself in the NCBI toolbox (\ahrefurl{\url{ftp://ncbi.nlm.nih.gov/toolbox/}}).
+If you want to make your own database to search for sequences against, then local BLAST is definitely the way you want to go. As with online BLAST, biopython provides lots of nice code to make you able to call local BLAST executables from your scripts, and have full access to the many command line options that these executables provide. You can obtain local BLAST precompiled for a number of platforms at \ahrefurl{\url{ftp://ncbi.nlm.nih.gov/blast/executables/}}, or can compile it yourself in the NCBI toolbox (\ahrefurl{\url{ftp://ncbi.nlm.nih.gov/toolbox/}}).
 
 
 The code for dealing with local BLAST is found in \verb|Bio.Blast.NCBIStandalone|, specifically in the functions \verb|blastall| and \verb|blastpgp|, which correspond with the BLAST executables that their names imply.
@@ -1071,7 +1071,7 @@ Well, now that you've got output, we should start parsing them, so read on to le
 Since the output generated by local BLAST is different than that generated by the web-based BLAST, we use the parsers located in \verb|Bio.Blast.NCBIStandalone| to parse and deal with the results.
 
 
-As with WWW blast (see the info on this above) we need to have a handle object that we can pass to the parser. The handle must implement the \verb|readline()| method and do this properly. The common ways to get such a handle are to either use the provided \verb|blastall| or \verb|blastpgp| functions to run the local blast, or to run a local blast via the commandline, and then do something like the following:
+As with WWW blast (see the info on this above) we need to have a handle object that we can pass to the parser. The handle must implement the \verb|readline()| method and do this properly. The common ways to get such a handle are to either use the provided \verb|blastall| or \verb|blastpgp| functions to run the local blast, or to run a local blast via the command line, and then do something like the following:
 
 \begin{verbatim}
 blast_out = open('my_file_of_blast_output', 'r')
@@ -1112,7 +1112,7 @@ Sure, parsing one record is great, but I've got a BLAST file with tons of record
 
 \subsection{Parsing a file full of BLAST runs}
 
-Of course, local blast is cool because you can run a whole bunch of sequences against a database and get back a nice report on all of it. So, biopython definately has facilities to make it easy to parse humungous files without memory problems. 
+Of course, local blast is cool because you can run a whole bunch of sequences against a database and get back a nice report on all of it. So, biopython definitely has facilities to make it easy to parse humongous files without memory problems. 
 
 
 We can do this using the blast iterator. To set up an iterator, we first set up a parser, to parse our blast reports in Blast Record objects:
@@ -1169,7 +1169,7 @@ while 1:
                 print hsp.sbjct[0:75] + dots
 \end{verbatim}
 
-Notice that \verb|b_iterator.next()| will return \verb|None| when it runs out of records to parse, so it is easy to iterate through the entire file with a while loop that checks for the existance of a record.
+Notice that \verb|b_iterator.next()| will return \verb|None| when it runs out of records to parse, so it is easy to iterate through the entire file with a while loop that checks for the existence of a record.
 
 
 The iterator allows you to deal with huge blast records without any memory problems, since things are read in one at a time. I have parsed tremendously huge files without any problems using this.
@@ -1223,7 +1223,7 @@ except NCBIStandalone.LowQualityBlastError, info:
 Right now the \verb|BlastErrorParser| can generate the following errors:
 
 \begin{itemize}
-  \item \verb|SyntaxError| -- This is the same error generated by the regular BlastParser, and is due to the parser not being able to parse a specific file. This is normally either due to a bug in the parser, or some kind of descrepency between the version of BLAST you are using and the versions the parser is able to handle.
+  \item \verb|SyntaxError| -- This is the same error generated by the regular BlastParser, and is due to the parser not being able to parse a specific file. This is normally either due to a bug in the parser, or some kind of discrepancy between the version of BLAST you are using and the versions the parser is able to handle.
 
   \item \verb|LowQualityBlastError| -- When BLASTing a sequence that is of really bad quality (for example, a short sequence that is basically a stretch of one nucleotide), it seems that Blast ends up masking out the entire sequence and ending up with nothing to parse. In this case it will produce a truncated report that causes the parser to generate a SyntaxError. \verb|LowQualityBlastError| is reported in these cases. This error returns an info item with the following information:
   \begin{itemize}
@@ -1232,7 +1232,7 @@ Right now the \verb|BlastErrorParser| can generate the following errors:
   \end{itemize}
 \end{itemize}
 
-As mentioned, with each error generated, the BlastErrorParser will write the offending record to the specified \verb|error_handle|. You can then go ahead and look and these and deal with them as you see fit. Either you will be able to debug the parser with a single blast report, or will find out problems in your blast runs. Either way, it will definately be a useful experience!
+As mentioned, with each error generated, the BlastErrorParser will write the offending record to the specified \verb|error_handle|. You can then go ahead and look and these and deal with them as you see fit. Either you will be able to debug the parser with a single blast report, or will find out problems in your blast runs. Either way, it will definitely be a useful experience!
 
 
 Hopefully the \verb|BlastErrorParser| will make it much easier to debug and deal with large Blast files.
@@ -1246,7 +1246,7 @@ We should write some stuff to make it easier to deal directly with PSIBlast from
 
 \subsection{Retrieving a SWISS-PROT record}
 
-SwissProt (\ahrefurl{\url{http://www.expasy.ch/sprot/sprot-top.html}}) is a handcurated database of protein sequences. Let's look at how we connect with it from a script and parse SwissProt formatted results. 
+SwissProt (\ahrefurl{\url{http://www.expasy.org/sprot/sprot-top.html}}) is a hand-curated database of protein sequences. Let's look at how we connect with it from a script and parse SwissProt formatted results. 
 
 
 First, we need to retrieve some results to parse. Let's say we are looking at chalcone synthases for Orchids (see section~\ref{sec:orchids} for some justification for looking for interesting things about orchids). Chalcone synthase is involved in flavanoid biosynthesis in plants, and flavanoids make lots of cool things like pigment colors and UV protectants. 
@@ -1255,7 +1255,7 @@ First, we need to retrieve some results to parse. Let's say we are looking at ch
 If you do a search on SwissProt, you can find three orchid proteins for Chalcone Synthase, id numbers O23729, O23730, O23731. Now, let's write a script which grabs these, and parses out some interesting information.
 
 
-First, we grab the records, using the \verb|get_sprot_raw()| function of \verb|Bio.WWW.Expasy|. This function is very nice since you can feed it an id and get back a raw text record (no html to mess with!). As we get the three records we are interested in, we'll just put them together into one big string, which we'll then use for parsing. The following code accomplishes what I just wrote:
+First, we grab the records, using the \verb|get_sprot_raw()| function of \verb|Bio.WWW.ExPASy|. This function is very nice since you can feed it an id and get back a raw text record (no html to mess with!). As we get the three records we are interested in, we'll just put them together into one big string, which we'll then use for parsing. The following code accomplishes what I just wrote:
 
 \begin{verbatim}
 from Bio.WWW import ExPASy
@@ -1263,8 +1263,8 @@ from Bio.WWW import ExPASy
 ids = ['O23729', 'O23730', 'O23731']
 
 all_results = ''
-for id in ids:
-    results = ExPASy.get_sprot_raw(id)
+for eid in ids:
+    results = ExPASy.get_sprot_raw(eid)
     all_results = all_results + results.read()
 \end{verbatim}
 
@@ -1311,7 +1311,51 @@ classification: ['Eukaryota', 'Viridiplantae', 'Embryophyta', 'Tracheophyta',
 'Bromheadia']
 \end{verbatim}
 
+Since Python 2.2, we can simplify the loop:
+
+\begin{verbatim}
+for cur_record in s_iterator:
+    print "description:", cur_record.description
+    for ref in cur_record.references:
+        print "authors:", ref.authors
+        print "title:", ref.title
+
+    print "classification:", cur_record.organism_classification
+    print
+\end{verbatim}
+
+
 It is equally easy to extract any kind of information you'd like from SwissProt records.
+
+
+Now, you may remark that I knew the records' accession numbers
+beforehand. Indeed, \verb|get_sprot_raw()| needs either the entry name
+or an accession number. When you don't have them handy, you can use
+one of the \verb|sprot_search_de()| or \verb|sprot_search_ful()|
+functions.
+
+\verb|sprot_search_de()| searches in the ID, DE, GN, OS and OG lines;
+\verb|sprot_search_ful()| searches in (nearly) all the fields. They
+are detailed on
+\ahrefurl{\url{http://www.expasy.org/cgi-bin/sprot-search-de}} and
+\ahrefurl{\url{http://www.expasy.org/cgi-bin/sprot-search-ful}}
+respectively. Note that thet don't search in TrEMBL by default
+(argument \verb|trembl|). Note also that they return html pages;
+however, accession numbers are quite easily extractable:
+
+\begin{verbatim}
+from Bio.WWW import ExPASy
+import re
+
+handle = ExPASy.sprot_search_de("Orchid Chalcone Synthase")
+# or:
+# handle = ExPASy.sprot_search_ful("Orchid and {Chalcone Synthase}")
+html_results = handle.read()
+if "Number of sequences found" in html_results:
+    ids = re.findall(r'HREF="/cgi-bin/niceprot\.pl\?(\w+)"', html_results)
+else:
+    ids = re.findall(r'href="/cgi-bin/get-sprot-raw\.pl\?(\w+)"', html_results)
+\end{verbatim}
 
 \section{PubMed}
 \label{sec:pub_med}
@@ -1361,8 +1405,8 @@ What we've done is create a dictionary like object \verb|medline_dict|. To get a
 Now let's look at how to use this nice dictionary to print out some information about some ids. We just need to loop through our ids (\verb|orchid_ids| from the previous section) and print out the information we are interested in:
 
 \begin{verbatim}
-for id in orchid_ids[0:5]:
-    cur_record = medline_dict[id]
+for oid in orchid_ids[0:5]:
+    cur_record = medline_dict[oid]
     print 'title:', string.rstrip(cur_record.title)
     print 'authors:', cur_record.authors
     print 'source:', string.strip(cur_record.source)
@@ -1385,8 +1429,8 @@ Especially interesting to note is the list of authors, which is returned as a st
 \begin{verbatim}
 search_author = 'Waits T'
 
-for id in our_id_list:
-    cur_record = medline_dict[id]
+for our_id in our_id_list:
+    cur_record = medline_dict[our_id]
     
     if search_author in cur_record.authors:
         print "Author %s found: %s" % (search_author,
@@ -1421,7 +1465,7 @@ gi_list = GenBank.search_for("Opuntia AND rpl16")
 Now that we've got the GIs, we can use these to access the NCBI database through a dictionary interface. For instance, to retrieve the information for the first GI, we'll first have to create a dictionary that accesses NCBI:
 
 \begin{verbatim}
-ncbi_dict = GenBank.NCBIDictionary()
+ncbi_dict = GenBank.NCBIDictionary('nucleotide', 'genbank')
 \end{verbatim}
 
 Now that we've got this, we do the retrieval:
@@ -1445,7 +1489,8 @@ In this case, we are just getting the raw records. We can also pass these record
 
 \begin{verbatim}
 record_parser = GenBank.FeatureParser()
-ncbi_dict = GenBank.NCBIDictionary(parser = record_parser)
+ncbi_dict = GenBank.NCBIDictionary('nucleotide', 'genbank',
+                                   parser = record_parser)
 \end{verbatim}
 
 Now retrieving a record will give you a SeqRecord object instead of the raw record:
