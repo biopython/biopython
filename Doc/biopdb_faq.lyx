@@ -2151,7 +2151,17 @@ How do I calculate Half Sphere Exposure?
 \layout Standard
 
 Half Sphere Exposure (HSE) is a new, 2D measure of solvent exposure.
- It comes in two flavors: HSE
+ Basically, it counts the number of C
+\begin_inset Formula $\alpha$
+\end_inset 
+
+ atoms around a residue in the direction of its side chain, and in the opposite
+ direction (within a radius of 13 Å).
+ Despite its simplicity, it outperforms many other measures of solvent exposure.
+ An article describing this novel 2D measure has been submitted.
+\layout Standard
+
+HSE comes in two flavors: HSE
 \begin_inset Formula $\alpha$
 \end_inset 
 
@@ -2160,6 +2170,19 @@ Half Sphere Exposure (HSE) is a new, 2D measure of solvent exposure.
 \end_inset 
 
 .
+ The former only uses the C
+\begin_inset Formula $\alpha$
+\end_inset 
+
+ atom positions, while the latter uses the C
+\begin_inset Formula $\alpha$
+\end_inset 
+
+ and C
+\begin_inset Formula $\beta$
+\end_inset 
+
+ atom positions.
  The HSE measure is calculated by the 
 \family typewriter 
 HSExposure
@@ -2169,7 +2192,7 @@ HSExposure
 \family typewriter 
 Residue
 \family default 
- object to HSE
+ object to its corresponding HSE
 \begin_inset Formula $\alpha$
 \end_inset 
 
@@ -2186,29 +2209,22 @@ Example:
 model=structure[0]
 \layout LyX-Code
 
-# Neighbor sphere radius RADIUS=13.0
-\layout LyX-Code
-
-RADIUS=13.0
-\layout LyX-Code
-
 hse=HSExposure()
 \layout LyX-Code
 
 # Calculate HSEalpha
 \layout LyX-Code
 
-exp_ca=hse.calc_hs_exposure(model, RADIUS, option='CA3')
+exp_ca=hse.calc_hs_exposure(model, option='CA3')
 \layout LyX-Code
 
 # Calculate HSEbeta
 \layout LyX-Code
 
-exp_cb=hse.calc_hs_exposure(model, RADIUS, option='CB')
+exp_cb=hse.calc_hs_exposure(model, option='CB')
 \layout LyX-Code
 
-# Calculate classical coordination number exp_fs=hse.calc_fs_exposure(model,
- RADIUS)
+# Calculate classical coordination number exp_fs=hse.calc_fs_exposure(model)
 \layout LyX-Code
 
 # Print HSEalpha for a residue

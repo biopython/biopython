@@ -989,32 +989,36 @@ function), in the form of a Numpy array with the surface points.
 \subsubsection*{How do I calculate Half Sphere Exposure?}
 
 Half Sphere Exposure (HSE) is a new, 2D measure of solvent exposure.
-It comes in two flavors: HSE$\alpha$ and HSE$\beta$. The HSE measure
-is calculated by the \texttt{HSExposure} class, which can also calculate
-the contact number. The latter class has methods which return dictionaries
-that map a \texttt{Residue} object to HSE$\alpha$, HSE$\beta$ and
-contact number values.
+Basically, it counts the number of C$\alpha$ atoms around a residue
+in the direction of its side chain, and in the opposite direction
+(within a radius of 13 Å). Despite its simplicity, it outperforms
+many other measures of solvent exposure. An article describing this
+novel 2D measure has been submitted.
+
+HSE comes in two flavors: HSE$\alpha$ and HSE$\beta$. The former
+only uses the C$\alpha$ atom positions, while the latter uses the
+C$\alpha$ and C$\beta$ atom positions. The HSE measure is calculated
+by the \texttt{HSExposure} class, which can also calculate the contact
+number. The latter class has methods which return dictionaries that
+map a \texttt{Residue} object to its corresponding HSE$\alpha$, HSE$\beta$
+and contact number values.
 
 Example:
 
 \begin{lyxcode}
 model=structure{[}0{]}
 
-\#~Neighbor~sphere~radius~RADIUS=13.0
-
-RADIUS=13.0
-
 hse=HSExposure()
 
 \#~Calculate~HSEalpha
 
-exp\_ca=hse.calc\_hs\_exposure(model,~RADIUS,~option='CA3')
+exp\_ca=hse.calc\_hs\_exposure(model,~option='CA3')
 
 \#~Calculate~HSEbeta
 
-exp\_cb=hse.calc\_hs\_exposure(model,~RADIUS,~option='CB')
+exp\_cb=hse.calc\_hs\_exposure(model,~option='CB')
 
-\#~Calculate~classical~coordination~number~exp\_fs=hse.calc\_fs\_exposure(model,~RADIUS)
+\#~Calculate~classical~coordination~number~exp\_fs=hse.calc\_fs\_exposure(model)
 
 \#~Print~HSEalpha~for~a~residue
 
