@@ -4,6 +4,63 @@ News for the Biopython Project
 This file contains release notes and general news 
 about the biopython project.
 
+May 14, 2004: Biopython 1.30
+ Affy package added for dealing with Affymetrix cel files -- thanks to Harry 
+  Zuzan.
+ Added code for parsing Blast XML output -- thanks to Bertrand Frottier.
+ Added code for parsing Compass output -- thanks to James Casbon.
+ New melting temperature calculation module -- thanks to Sebastian Bassi.
+ Added lowess function for non-parameteric regression -- thanks to Michiel.
+ Reduced protein alphabet supported added -- thanks to Iddo.
+ 
+ Added documentation for Logistic Regression and Bio.PDB -- thanks to Michiel
+  and Thomas.
+ Documentation added for converting between file formats.
+ Updates to install documentation for non-root users -- thanks to Jakob 
+  Fredslund.
+ epydoc now used for automatic generation of documentation.
+
+ Fasta parser updated to use Martel for parsing and indexing, allowing better
+  speed and dealing with large data files.
+ Updated to Registry code. Now 'from Bio import db' gives you a number of new
+  retrieval options, including embl, fasta, genbak, interpro, prodoc and swissprot.
+ GenBank parser uses new Martel format. GenBank retrieval now uses EUtils instead
+  of the old non-working entrez scripts. GenBank indexing uses standard Mindy
+  indexing. Fix for valueless qualifiers in feature keys -- thanks to Leighton 
+  Pritchard.
+ Numerous updated to Bio.PDB modules -- thanks to Thomas. PDB can now parse headers
+  -- thanks to Kristian Rother.
+ Updates to the Ace parser -- thanks to Frank Kauff and Leighton Pritchard.
+
+ Added pgdb (PyGreSQL) support to BioSQL -- thanks to Marc Colosimo.
+ Fix problems with using py2exe and Biopython -- thanks to Michael Cariaso.
+ PSIBlast parser fixes -- thanks to Jer-Yee John Chuang and James Casbon.
+ Fix to NCBIWWW retrieval so that HTML results are returned correctly.
+ Fix to Clustalw to handle question marks in title names -- thanks to Ashleigh 
+  Smythe.
+ Fix to NBRF parsing to it accepts files produced by Clustalw -- thanks to
+  Ashleigh Smythe.
+ Fixes to the Enyzme module -- thanks to Marc Colosimo.
+ Fix for bugs in SeqUtils -- thanks to Frank Kauff.
+ Fix for optional hsps in ncbiblast Martel format -- thanks to Heiko.
+ Fix to Fasta parsing to allow # comment lines -- thanks to Karl Diedrich.
+ Updates to the C clustering library -- thanks to Michiel.
+ Fixes for breakage in the SCOP module and addition of regression tests to
+  framework -- thanks to Gavin.
+ Various fixes to Bio.Wise -- thanks to Michael.
+ Fix for bug in FastaReader -- thanks to Micheal.
+ Fix EUtils bug where efetch would only return 500 sequences.
+ Updates for Emboss commandlines, water and tranalign.
+ Fixes to the FormatIO system of file conversion.
+
+ C++ code (KDTree, Affy) now compiled by default on most platforms -- thanks to
+  Michael for some nice distutils hacks and many people for testing.
+ Deprecated Bio.sequtils -- use Bio.SeqUtils instead.
+ Deprecated Bio.SVM -- use libsvm instead.
+ Deprecated Bio.kMeans and Bio.xkMeans -- use Bio.cluster instead.
+ Deprecated RecordFile -- doesn't appear to be finished code.
+
+
 Feb 16, 2004: Biopython 1.24
  New parsers for Phred and Ace format files -- thanks to Frank Kauff
  New Code for dealing with NMR data -- thanks to Bob Bussell

@@ -43,8 +43,9 @@ o ReportLab (optional)
   of chromosomes.  If you do not need this functoinality, you will not
   need to install this package.
 
-o psycopg:http://initd.org/software/psycopg/ (optional)
-  This package is only used by BioSQL to access a PostgreSQL database.
+o psycopg:http://initd.org/software/psycopg/ (optional) or
+  pgdb:http://www.druid.net/pygresql/ (optional)
+  These packages are used by BioSQL to access a PostgreSQL database.
 
 o MySQLdb:http://sourceforge.net/projects/mysql-python (optional)
   This package is only used by Bio.GFF to access a MySQL database.
@@ -63,36 +64,6 @@ and typing:
 If you need to do additional configuration, e.g. changing the base
 directory, please type 'python setup.py', or see the documentation for
 Distutils.
-
-
-For FreeBSD users, "Johann Visagie", mailto:wjv@cityip.co.za has made
-Biopython available in the ports tree.  According to Johann:
-
-  This means that a FreeBSD user with an up-to-date ports tree can now
-  install BioPython as simply as:
-
-  'cd /usr/ports/biology/py-biopython ; make install'
-
-  Fetching of the package as well as installation of all dependencies
-  (Python itself as well as Distutils) will be handled automagically.
-
-
-We have been noticing some problems building the _KDTreecmodule
-extension on some platforms (e.g. Solaris).  If you see lots of error
-messages followed by:
-ld: fatal: relocations remain against allocatable but non-writable sections
-
-you may be having this error.  We are trying to track this down.  In
-the meantime, you can disable this module by commenting out the
-following lines in the setup.py file:
-                     Extension('Bio.KDTree._KDTreecmodule',
-                               ["Bio/KDTree/_KDTree.C", 
-                                "Bio/KDTree/_KDTree.swig.C"],
-                               libraries=["stdc++"]
-                               ),
-This module is commented out by default now -- so please uncomment if you
-want to install and use it.
-The rest of Biopython will build and run fine.
 
 
 **Testing**
@@ -164,6 +135,10 @@ LICENSE      -- What you can do with the code.
 CONTRIB      -- An (incomplete) list of people who helped Biopython in
                 one way or another.
 
+DEPRECATED   -- Contains information about modules in Biopython that are
+		removed or no longer recommended for use, and how to update
+		code that uses those modules.
+
 MANIFEST.in  -- Tells distutils what files to distribute
 
 setup.py     -- Installation file.
@@ -179,4 +154,3 @@ Doc/         -- Documentation.
 Scripts/     -- Miscellaneous, possibly useful, standalone scripts
 
 Tests/       -- Regression testing code
-
