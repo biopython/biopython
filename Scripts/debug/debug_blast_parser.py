@@ -235,8 +235,9 @@ if __name__ == '__main__':
             VERBOSITY += 1
 
     if len([x for x in (PROTEIN, NUCLEOTIDE, OUTPUT) if x is not None]) != 1:
-        print >>sys.stderr, "Exactly one of -p, -n, or -o should be specified."
-        sys.exit(-1)
+        OUTPUT = 1
+        #print >>sys.stderr, "Exactly one of -p, -n, or -o should be specified."
+        #sys.exit(-1)
     if PROTEIN or NUCLEOTIDE:
         print >>sys.stderr, "-p and -n not implemented yet"
         sys.exit(-1)

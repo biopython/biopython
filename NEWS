@@ -4,9 +4,11 @@ News for the Biopython Project
 This file contains release notes and general news
 about the biopython project.
 
+updates in NCBIStandalone, short query error
 checked in Sebastian Bassi's LCC complexity code
 checked in Greg Kettler's NCBIStandalone fix for long query lengths
 checked in slew of miscellaneous fixes from George Paci
+checked in miscellaneous cleanups and updates from Andreas Kuntzagk
 
 
 Dec 17, 2002: Biopython 1.10

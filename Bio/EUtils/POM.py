@@ -10,8 +10,6 @@ here.
 """
 
 import sys, os, re, string
-from UserList import UserList
-from UserString import UserString
 
 try:
 	True
@@ -35,7 +33,7 @@ class ValidationError(ValueError):
 
 # plain text data to be added to a GenericNode.
 # this class needs to emulate much of the ElementNode interface.
-class IndentedText(UserString):
+class IndentedText(str):
 	def __init__(self, data=""):
 		self.data = unescape(unicode(data))
 		self._level = 0
@@ -860,7 +858,7 @@ class Enumeration(list):
 	pass
 # XXX
 
-class AttributeList(UserList):
+class AttributeList(list):
 	def __repr__(self):
 		return "%s(%r)" % (self.__class__, self.data)
 	def __str__(self):

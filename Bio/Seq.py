@@ -1,4 +1,3 @@
-import UserList
 import string, array
 
 import Alphabet

@@ -11,11 +11,10 @@
 
 # Could cache search results for better performance.
 
-import UserDict
 
 # Dictionary which creates dictionary elements, so lookups never fail.
 # The new elements are always dictionaries.
-class CreateDict(UserDict.UserDict):
+class CreateDict(dict):
     def __getitem__(self, key):
         try:
             return self.data[key]

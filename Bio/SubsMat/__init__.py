@@ -8,7 +8,6 @@ import string
 import sys
 import copy
 import math
-import UserDict
 # BioPython imports
 from Bio import Alphabet
 from Bio.SubsMat import FreqTable
@@ -130,7 +129,7 @@ BadMatrixError = BadMatrix()
 # build_log_odds_matrix does that. User provides an ARM and an expected
 # frequency table. The function returns the log-odds matrix
 #
-class SeqMat(UserDict.UserDict):
+class SeqMat(dict):
    """A Generic sequence matrix class
    The key is a 2-tuple containing the letter indices of the matrix. Those
    should be sorted in the tuple (low, high). Because each matrix is dealt
@@ -170,7 +169,7 @@ class SeqMat(UserDict.UserDict):
       # This whole creation-during-execution is done to avoid changing
       # default values, the way Python does because default values are
       # created when the function is defined, not when it is created.
-      assert (type(data) == type({}) or isinstance(data,UserDict.UserDict) or
+      assert (type(data) == type({}) or isinstance(data,dict) or
               data == None)
       if data == None:
          data = {}

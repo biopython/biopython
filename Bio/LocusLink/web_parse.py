@@ -3,7 +3,6 @@ import copy
 import operator
 import urllib
 import sgmllib
-import UserDict
 import Bio.File
 import Martel
 from mx import TextTools
@@ -157,10 +156,10 @@ class Url:
         return output
 
 
-class Record( UserDict.UserDict):
+class Record(dict):
 
     def __init__( self ):
-        UserDict.UserDict.__init__( self )
+        dict.__init__( self )
 
     def __str__( self ):
         queue_keys = self.keys()
@@ -191,7 +190,7 @@ class Record( UserDict.UserDict):
             for subitem in keys:
                 out = out + '%skey is %s\n' % ( indent, subitem )
                 out = out + self.print_item( item[ subitem ], level + 1 )
-        elif( isinstance( item, UserDict.UserDict ) ):
+        elif( isinstance( item, dict ) ):
             keys = item.keys()
             keys.sort()
             for subitem in keys:

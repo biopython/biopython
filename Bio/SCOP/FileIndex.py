@@ -3,13 +3,11 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-from UserDict import UserDict
-
 # This functionality may be of general use, in which case this module should
 # be moved out of the SCOP package.
 
 
-class FileIndex(UserDict) :
+class FileIndex(dict) :
     """ An in memory index that allows rapid random access into a file.
 
     The class can be used to turn a file into a read-only
@@ -28,7 +26,7 @@ class FileIndex(UserDict) :
           key_gen -- A function that generates an index key from the items
                      created by the iterator. 
         """
-        UserDict.__init__(self)
+        dict.__init__(self)
         
         self.filename = filename
         self.iterator_gen = iterator_gen

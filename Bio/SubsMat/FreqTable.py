@@ -1,4 +1,3 @@
-import UserDict
 import string
 from Bio import Alphabet
 COUNT = 1
@@ -48,7 +47,7 @@ FREQ = 2
 #
 #  
 ##################################################################
-class FreqTable(UserDict.UserDict):
+class FreqTable(dict):
     
     def _freq_from_count(self):
         self.data = {}

@@ -19,9 +19,8 @@ import array
 import string
 import cPickle
 import shelve
-import UserDict
 
-class _ShelveIndex(UserDict.UserDict):
+class _ShelveIndex(dict):
     """An index file wrapped around shelve.
 
     """
@@ -34,7 +33,7 @@ class _ShelveIndex(UserDict.UserDict):
     __version_key = '__version'
 
     def __init__(self, indexname, truncate=None):
-        UserDict.UserDict.__init__(self)
+        dict.__init__(self)
         try:
             if truncate:
                 # In python 1.52 and before, dumbdbm (under shelve)
@@ -65,7 +64,7 @@ class _ShelveIndex(UserDict.UserDict):
         if self.__dict__.has_key('data'):
             self.data.close()
 
-class _InMemoryIndex(UserDict.UserDict):
+class _InMemoryIndex(dict):
     """This creates an in-memory index file.
 
     """
@@ -79,7 +78,7 @@ class _InMemoryIndex(UserDict.UserDict):
 
     def __init__(self, indexname, truncate=None):
         self._indexname = indexname
-        UserDict.UserDict.__init__(self)
+        dict.__init__(self)
         self.__changed = 0     # the index hasn't changed
         
         # Remove the database if truncate is true.
@@ -103,16 +102,16 @@ class _InMemoryIndex(UserDict.UserDict):
 
     def update(self, dict):
         self.__changed = 1
-        UserDict.UserDict.update(self, dict)
+        dict.update(self, dict)
     def __setitem__(self, key, value):
         self.__changed = 1
-        UserDict.UserDict.__setitem__(self, key, value)
+        dict.__setitem__(self, key, value)
     def __delitem__(self, key):
         self.__changed = 1
-        UserDict.UserDict.__delitem__(self, key)
+        dict.__delitem__(self, key)
     def clear(self):
         self.__changed = 1
-        UserDict.UserDict.clear(self)
+        dict.clear(self)
             
     def __del__(self):
         if self.__changed:

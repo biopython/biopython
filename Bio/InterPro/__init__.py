@@ -32,10 +32,8 @@ import urllib
 import sgmllib
 from Bio.ParserSupport import *
 from Bio.SeqFeature import Reference
-import UserDict
 
-
-class Record( UserDict.UserDict ):
+class Record( dict ):
 
     def __str__( self ):
         keys = self.keys()

@@ -100,16 +100,7 @@ class Dictionary:
         we just don't want to see. This just strips these values out
         before returning.
         """
-        all_keys = self._index.keys()
-        keys_to_remove = []
-
-        for key in all_keys:
-            # if the key is internal (has a __) then add it to the remove list
-            if key[:2] == '__':
-                keys_to_remove.append(key)
-
-        for key in keys_to_remove:
-            all_keys.remove(key)
+        all_keys = [key for key in self._index.keys() if not key.startswith('__')]
 
         return all_keys
         
@@ -877,7 +868,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             if self._feature_cleaner is not None:
                 value = self._feature_cleaner.clean_value(key, value)
             # if the qualifier name exists, append the value
-            if self._cur_feature.qualifiers.has_key(key):
+            if key in self._cur_feature.qualifiers:
                 self._cur_feature.qualifiers[key].append(value)
             # otherwise start a new list of the key with its values
             else:
@@ -1137,7 +1128,7 @@ class _RecordConsumer(_BaseGenBankConsumer):
         # remove all spaces from the value if it is a type where spaces
         # are not important
         for remove_space_key in self.__class__.remove_space_keys:
-            if self._cur_qualifier.key.find(remove_space_key) >= 0:
+            if remove_space_key in self._cur_qualifier.key:
                 cur_content = self._remove_spaces(cur_content)
         self._cur_qualifier.value = self._normalize_spaces(cur_content)
 
@@ -1303,7 +1294,7 @@ def index_file_db(genbank_file, db_name, db_directory,
             # load up the database and see if the file size is the same
             search_db = mindy_search.mindy_open(db_directory, db_name)
 
-            if search_db.mindy_data.has_key("file_sizes"):
+            if "file_sizes" in search_db.mindy_data:
                 file_size = search_db.mindy_data["file_sizes"][genbank_file]
 
                 if file_size == os.path.getsize(genbank_file):

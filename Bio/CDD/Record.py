@@ -26,8 +26,6 @@ import string
 
 
 from Bio.Seq import Seq
-from UserDict import UserDict
-
 
 
 """Hold CDD data in a straightforward format.
@@ -36,7 +34,7 @@ classes:
 o Record - All of the information in a CDD record.
 """
 
-class Record( UserDict ):
+class Record( dict ):
     """Hold CDD information in a format similar to the original record.
 
     The Record class is meant to make data easy to get to when you are
@@ -56,7 +54,7 @@ class Record( UserDict ):
     sequence
     """
     def __init__(self):
-        UserDict.__init__( self )
+        dict.__init__( self )
         self.data[ 'references' ] = []
         self.data[ 'alignment_lookup' ] = {}
 

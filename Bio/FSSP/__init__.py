@@ -2,7 +2,6 @@ __all__ = ['fssp_rec','FSSPTools']
 import string
 import re
 import fssp_rec
-import UserDict
 from Bio.Align import Generic
 from Bio import Alphabet
 fff_rec = fssp_rec.fff_rec
@@ -150,7 +149,7 @@ class FSSPAlignRec:
          j = j + 1
 
 
-class FSSPAlignDict(UserDict.UserDict):
+class FSSPAlignDict(dict):
    def __init__(self):
       # The following two dictionaries are pointers to records in self
       # The first dictionary is a "pdb_residue_number: self_key"
@@ -201,7 +200,7 @@ class FSSPAlignDict(UserDict.UserDict):
          out_str += '\n'
       return out_str
 
-class FSSPSumDict(UserDict.UserDict):
+class FSSPSumDict(dict):
    pass
 
 #

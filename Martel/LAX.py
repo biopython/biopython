@@ -78,7 +78,7 @@ as in:
 
 """
 
-import string, UserDict
+import string
 from xml.sax import handler
 
 # Used to simplify the check if 
@@ -87,10 +87,10 @@ class _IsIn:
     def __contains__(self, obj):
         return 1
 
-class LAX(handler.ContentHandler, UserDict.UserDict):
+class LAX(handler.ContentHandler, dict):
     def __init__(self, fields = None):
         handler.ContentHandler.__init__(self)
-        UserDict.UserDict.__init__(self)
+        dict.__init__(self)
         if fields is None:
             fields = _IsIn()
         self.__fields = fields

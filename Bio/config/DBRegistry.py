@@ -323,7 +323,7 @@ class CGIDB(DBObject):
 
     def _unmake_pickleable(self, obj):
         import StringIO
-        return StringIO(obj)
+        return StringIO.StringIO(obj)
 
 class BioSQLDB(DBObject):
     """Represent a BioSQL-style database to retrieve SeqRecord objects.

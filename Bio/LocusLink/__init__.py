@@ -1,6 +1,5 @@
 import string
 import operator
-import UserDict
 from Bio import File
 import Martel
 from Martel.Dispatch import Dispatcher
@@ -18,10 +17,10 @@ __all__ = [
     'Iterator'
     ]
 
-class Record( UserDict.UserDict):
+class Record( dict):
 
     def __init__( self ):
-        UserDict.UserDict.__init__( self )
+        dict.__init__( self )
 
     def __str__( self ):
         queue_keys = self.keys()
@@ -45,7 +44,7 @@ class Record( UserDict.UserDict):
             for subitem in item:
                 out = out + self.print_item( subitem, level + 1 )
             out = out + '\n'
-        elif( isinstance( item, UserDict.UserDict ) ):
+        elif( isinstance( item, dict ) ):
             keys = item.keys()
             keys.sort()
             for subitem in keys:

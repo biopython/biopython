@@ -32,7 +32,6 @@ import urllib
 import sgmllib
 from Bio.ParserSupport import *
 import Bio.File
-import UserDict
 
 class Record:
     """Holds information from a Rebase record.
@@ -129,7 +128,7 @@ class Dictionary:
     def __getattr__(self, name):
         return getattr(self._index, name)
 
-class EnzymeDict( UserDict.UserDict ):
+class EnzymeDict( dict ):
     def print_item( self, item, level = 1 ):
         indent = '    '
         for j in range( 0, level ):
@@ -141,7 +140,7 @@ class EnzymeDict( UserDict.UserDict ):
         elif( type( item ) == type([])):
             for subitem in item:
                 out = out + self.print_item( subitem, level + 1 )
-        elif( isinstance( item, UserDict.UserDict ) ):
+        elif( isinstance( item, dict ) ):
             keys = item.keys()
             keys.sort()
             for subitem in keys:
@@ -178,7 +177,7 @@ class RebaseParser(  sgmllib.SGMLParser ):
         self._state = 'title'
         self.key_waiting = ''
         self.enzyme_dict[ 'factoids' ] = []
-        self.enzyme_dict[ 'number_of_sites' ] = UserDict.UserDict()
+        self.enzyme_dict[ 'number_of_sites' ] = dict()
         self._table_nest_level = 0
         self._table_nest_dir = ''
         self._factoid = ''

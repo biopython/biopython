@@ -5,12 +5,11 @@
 import string
 
 import Matrix
-import UserDict
 
 # local stuff
 import Bio.MetaTool
 
-class Metabolite( UserDict.UserDict ):
+class Metabolite( dict ):
 
     def __init__( self, reaction_count, metabolite_name ):
         self.reaction_count = reaction_count
@@ -20,7 +19,7 @@ class Metabolite( UserDict.UserDict ):
         out = '%d        %s\n' % ( self.reaction_count, self.metabolite_name )
         return out
 
-class MetaboliteRole( UserDict.UserDict ):
+class MetaboliteRole( dict ):
 
     def __init__( self, met, consumed, built, irreversible_vector ):
         self.met = met

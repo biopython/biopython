@@ -2,7 +2,6 @@ import string
 import operator
 import urllib
 import sgmllib
-import UserDict
 import Bio.File
 import Martel
 from mx import TextTools
@@ -12,10 +11,10 @@ The UniGene site is:
 http://www.ncbi.nlm.nih.gov/UniGene/
 """
 
-class Record( UserDict.UserDict):
+class Record( dict):
 
     def __init__( self ):
-        UserDict.UserDict.__init__( self )
+        dict.__init__( self )
 
     def __str__( self ):
         queue_keys = self.keys()
@@ -38,7 +37,7 @@ class Record( UserDict.UserDict):
         elif( type( item ) == type([])):
             for subitem in item:
                 out = out + self.print_item( subitem, level + 1 )
-        elif( isinstance( item, UserDict.UserDict ) ):
+        elif( isinstance( item, dict ) ):
             keys = item.keys()
             keys.sort()
             for subitem in keys:
@@ -147,9 +146,9 @@ class UniGeneParser( sgmllib.SGMLParser ):
             self.master_key = key
             if( string.find( key, 'SEQUENCE' ) != -1 ):
                 self.context = 'seq_info'
-            self.queue[ key ] = UserDict.UserDict()
+            self.queue[ key ] = dict()
         elif( self.context == 'seq_info' ):
-            self.queue[ key ] = UserDict.UserDict()
+            self.queue[ key ] = dict()
             self.master_key = key
 
 

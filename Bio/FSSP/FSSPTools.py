@@ -1,4 +1,3 @@
-import UserDict
 from Bio import FSSP
 import copy
 from Bio.Align import Generic
@@ -11,7 +10,7 @@ class FSSPAlign(Generic.Alignment):
         new_record.annotations['pdb2abs'] = {}
 
    
-class FSSPMultAlign(UserDict.UserDict):
+class FSSPMultAlign(dict):
     def __init__(self):
         self.abs_res = []
         self.pdb_res = []

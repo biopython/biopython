@@ -37,10 +37,9 @@ import urllib
 import sgmllib
 from Bio.ParserSupport import *
 from Bio.SeqFeature import Reference
-import UserDict
 
 
-class Record( UserDict.UserDict ):
+class Record( dict ):
 
     def __init__( self ):
         self.data = {}
@@ -72,7 +71,7 @@ class Record( UserDict.UserDict ):
                 subkeys.sort()
                 for item in subkeys:
                     out = out + '%s : %s\n' % ( item, val[ item ] )
-            elif( isinstance( val, UserDict.UserDict ) ):
+            elif( isinstance( val, dict ) ):
                 out = out + '\n%s\n' % key
                 subkeys = val.keys()
                 subkeys.sort()
