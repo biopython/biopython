@@ -4,7 +4,7 @@
 # as part of this package.
 
 from Bio import register_io
-from Bio.sources import NCBI
+from Bio.sources import NCBI, EBI
 
 from Martel import *
 
@@ -46,3 +46,13 @@ register_io(
     failure=ncbi_failures+[(not_exist_expr, "GI does not exist")]
     )
 
+register_io(
+    name="nucleotide-dbfetch-cgi",
+    source=EBI.dbfetch,
+    params=[("db", "genbank"),
+            ("style", "raw"),
+            ("format", "embl"),
+            ],
+    key="id",
+    )
+#  XXX need failure cases

@@ -32,3 +32,10 @@ IEntry = CGI(
     cgi='http://www.ebi.ac.uk/interpro/IEntry',
     doc="Retrieve an InterPro entry",
     )
+
+dbfetch = CGI(
+    name="dbfetch",
+    delay=5.0,
+    cgi="http://www.ebi.ac.uk/cgi-bin/dbfetch",
+    doc="dbfetch provides EMBL, Genbank, and SWALL sequences",
+    )
