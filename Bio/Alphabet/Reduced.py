@@ -1,4 +1,17 @@
 from Bio import Alphabet
+"""
+Reduced (redundant or simplified) alphabets are used to represent protein sequences using an
+alternative alphabet which lumps together several amino-acids into one letter, based
+on physico-chemical traits. For example, all the aliphatics (I,L,V) are usually
+quite interchangeable, so many sequence studies group them into one letter
+
+Examples of reduced alphabets are available in:
+
+http://viscose.ifg.uni-muenster.de/html/alphabets.html
+
+Bio.utils.reduce_sequence is used to take a Protein alphabet, and reduce it using one of
+the tables here, or a user-defined table.
+"""
 # The Murphy tables are from here:
 #  	Murphy L.R., Wallqvist A, Levy RM. (2000) Simplified amino acid alphabets for protein
 #  	fold recognition and implications for folding. Protein Eng. 13(3):149-152
