@@ -360,7 +360,6 @@ PACKAGES = [
     'Bio.Rebase',
     'Bio.Saf',
     'Bio.SCOP',
-    'Bio.SCOP.tests',
     'Bio.SeqIO',
     'Bio.SeqUtils',
     'Bio.Sequencing',
