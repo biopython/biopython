@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # Created: Sat Jul 21 08:01:13 2001
-# Last changed: Time-stamp: <01/07/21 16:58:18 thomas>
+# Last changed: Time-stamp: <01/07/24 13:25:44 thomas>
 # thomas@cbs.dtu.dk, # Cecilia.Alsmark@ebc.uu.se
 
 # Copyright 2001 by Thomas Sicheritz-Ponten and Cecilia Alsmark.
@@ -10,7 +10,7 @@
 # as part of this package.
 # File: sequtils.py
 
-import os, sys
+import os, sys, getopt, re
 from Bio import Fasta
 from Bio.Tools import Translate
 from Bio.Seq import Seq
@@ -24,13 +24,19 @@ from PropertyManager import default_manager
 * sequtils is a temporary bucket for sequence utilities created by
   molecular biologs for molecular biologs.
   
-* all functions can be used on multi FASTA files from the command line via the
+* most functions can be used on multi FASTA files from the command line via the
   function multi_fasta_to.
-  Usage: multi_fasta_to <name of FASTA file> <name of function to call>
+   Usage: ./sequtils.py --apply_on_multi_fasta <name of function to call> <name of FASTA file>
+   e.g.
+      ./sequtils.py --apply_on_multi_fasta GC123 ../Scripts/xbbtools/test.fas
 
-* to get a list of functions type: sequtils.py describe
+* to get a list of functions type: sequtils.py --describe
 
-* functions starting with 'x' are graphical functions ... should definitely be   moved elsewhere ...
+* for huge FASTA files (like complete genomes) use quick_FASTA_reader
+  (on the command line --quick)
+  
+* functions starting with 'x' are graphical functions ... should definitely be
+  moved elsewhere ...
 
 * most functions should probably be moved into better locations
     ... someday ... someone ...
@@ -39,6 +45,7 @@ from PropertyManager import default_manager
    - primer calculation and selection
    - melting point
    - pattern matcher
+   - sequence logos (thomas move pylogo)
    more suggestions ?
 
 """
@@ -77,40 +84,40 @@ def makeTableX(table):
 
 def complement(seq):
    " returns the complementary sequence (NOT antiparallel) "
-    return ''.join([IUPACData.ambiguous_dna_complement[x] for x in seq])
+   return ''.join([IUPACData.ambiguous_dna_complement[x] for x in seq])
 
 def reverse(seq):
    " reverse the sequence "
-    r = map(None, seq)
-    r.reverse()
-    return ''.join(r)
+   r = map(None, seq)
+   r.reverse()
+   return ''.join(r)
 
 def antiparallel(seq):
    " returns reversed complementary sequence ( = other strand ) "
-    s = complement(seq)
-    s = reverse(s)
-    return s
+   s = complement(seq)
+   s = reverse(s)
+   return s
 
 def translate(seq, frame = 1, genetic_code = 1, translator = None):
    " translation of DNA in one of the six different reading frames "
-    if frame not in [1,2,3,-1,-2,-3]:
-        raise ValueError, 'invalid frame'
+   if frame not in [1,2,3,-1,-2,-3]:
+      raise ValueError, 'invalid frame'
 
-    if not translator:
-        table = makeTableX(CodonTable.ambiguous_dna_by_id[genetic_code])
-        translator = Translate.Translator(table)
-        
-    return translator.translate(Seq(seq[frame-1:], IUPAC.ambiguous_dna)).data
+   if not translator:
+      table = makeTableX(CodonTable.ambiguous_dna_by_id[genetic_code])
+      translator = Translate.Translator(table)
 
+   return translator.translate(Seq(seq[frame-1:], IUPAC.ambiguous_dna)).data
+   
 def GC(seq):
    " calculates G+C content "
-    d = {}
-    for nt in ['A','T','G','C']:
-        d[nt] = seq.count(nt)
-        gc = d.get('G',0) + d.get('C',0)
-        
-    if gc == 0: return 0
-    return round(gc*100.0/(d['A'] +d['T'] + gc),1)
+   d = {}
+   for nt in ['A','T','G','C']:
+      d[nt] = seq.count(nt)
+      gc = d.get('G',0) + d.get('C',0)
+
+   if gc == 0: return 0
+   return round(gc*100.0/(d['A'] +d['T'] + gc),1)
     
 def GC123(seq):
    " calculates totla G+C content plus first, second and third position "
@@ -165,45 +172,45 @@ def Accumulated_GC_skew(seq, window = 1000):
       values.append(acc)
    return values
 
-def xGC_skew(seq, window = 1000, zoom = 1,
-                         r = 400, px = 100, py = 100):
-   " calculates and plots the GC skew (GRAPHICS !!!) "
+# def NOT_READY_xGC_skew(seq, window = 1000, zoom = 1,
+#                          r = 400, px = 100, py = 100):
+#    " calculates and plots the GC skew (GRAPHICS !!!) "
    
-   from Tkinter import *
-   from math import pi, sin, cos, log
+#    from Tkinter import *
+#    from math import pi, sin, cos, log
 
-   yscroll = Scrollbar(orient = VERTICAL)
-   xscroll = Scrollbar(orient = HORIZONTAL)
-   canvas = Canvas(yscrollcommand = yscroll.set,
-                   xscrollcommand = xscroll.set, background = 'white')
+#    yscroll = Scrollbar(orient = VERTICAL)
+#    xscroll = Scrollbar(orient = HORIZONTAL)
+#    canvas = Canvas(yscrollcommand = yscroll.set,
+#                    xscrollcommand = xscroll.set, background = 'white')
    
-   yscroll.config(command = canvas.yview)
-   xscroll.config(command = canvas.xview)
-   yscroll.pack(side = RIGHT, fill = Y)
-   xscroll.pack(side = BOTTOM, fill = X)        
-   canvas.pack(fill=BOTH, side = LEFT, expand = 1)
-   canvas.update()
+#    yscroll.config(command = canvas.yview)
+#    xscroll.config(command = canvas.xview)
+#    yscroll.pack(side = RIGHT, fill = Y)
+#    xscroll.pack(side = BOTTOM, fill = X)        
+#    canvas.pack(fill=BOTH, side = LEFT, expand = 1)
+#    canvas.update()
 
-   X0, Y0  = r + px, r + py
-   x1, x2, y1, y2 = X0 - r, X0 + r, Y0 -r, Y0 + r
-   r1 = r
+#    X0, Y0  = r + px, r + py
+#    x1, x2, y1, y2 = X0 - r, X0 + r, Y0 -r, Y0 + r
+#    r1 = r
    
-   canvas.create_oval(x1,y1, x2, y2)
+#    canvas.create_oval(x1,y1, x2, y2)
 
-   start = 0
-   for gc in GC_skew(seq, window):
-      alpha = pi - (2*pi*start)/len(seq)
-      r2 = r1 - gc*zoom
-      x1 = X0 + r1 * sin(alpha)
-      y1 = Y0 + r1 * cos(alpha)
-      x2 = X0 + r2 * sin(alpha)
-      y2 = Y0 + r2 * cos(alpha)
-      canvas.create_line(x1,y1,x2,y2, fill = 'green4')
-      canvas.update()
-      start = start + window
+#    start = 0
+#    for gc in GC_skew(seq, window):
+#       alpha = pi - (2*pi*start)/len(seq)
+#       r2 = r1 - gc*zoom
+#       x1 = X0 + r1 * sin(alpha)
+#       y1 = Y0 + r1 * cos(alpha)
+#       x2 = X0 + r2 * sin(alpha)
+#       y2 = Y0 + r2 * cos(alpha)
+#       canvas.create_line(x1,y1,x2,y2, fill = 'green4')
+#       canvas.update()
+#       start = start + window
       
 
-   canvas.configure(scrollregion = canvas.bbox(ALL))
+#    canvas.configure(scrollregion = canvas.bbox(ALL))
 
 def molecular_weight(seq):
    if type(seq) == type(''): seq = Seq(seq, IUPAC.unambiguous_dna)
@@ -213,7 +220,40 @@ def molecular_weight(seq):
       sum += weight_table[x]
    return sum
 
+def fasta_uniqids(file):
+   " checks and changes the name/ID's to be unique identifiers by adding numbers "
+   dict = {}
+   txt = open(file).read()
+   entries = []
+   for entry in txt.split('>')[1:]:
+      name, seq= entry.split('\n',1)
+      name = name.split()[0].split(',')[0]
+      
+      if dict.has_key(name):
+         n = 1
+         while 1:
+            n = n + 1
+            _name = name + str(n)
+            if not dict.has_key(_name):
+               name = _name
+               break
+            
+      dict[name] = seq
 
+   for name, seq in dict.items():
+      print '>%s\n%s' % (name, seq)
+
+def quick_FASTA_reader(file):
+   " simple and FASTA reader, preferable to be used on large files "
+   txt = open(file).read()
+   entries = []
+   for entry in txt.split('>')[1:]:
+      name,seq= entry.split('\n',1)
+      seq = seq.replace('\n','').replace(' ','').upper()
+      entries.append((name, seq))
+      
+   return entries
+    
 def multi_fasta_to(file, function):
    " apply function on each sequence in a multiple FASTA file "
    try:
@@ -228,39 +268,63 @@ def multi_fasta_to(file, function):
    while 1:
       record = iter.next()
       if not record: break
-      print '>%s\n%s' % (record.title, f(record.sequence))
-
-
-
-def test_all():
-    string_seq = 'ATGACAAAGCTAATTATTCACTTGGTTTCAGACTCTTCTGTGCAAACTGCAAAACATGCAGCAAATTCTGCTCTTGCTCAATTTACTTCTATAAAACAAAAATTGTATCATTGGCCAATGATTAGAAATTGTGAATTACTAAATGAAGTATTAAGTAAAATAGAATCTAAACATGGAATAGTATTATACACAATTGCTGA'
-    seq = Seq(string_seq, IUPAC.ambiguous_dna)
-    
-    print 'GC(Seq): ',GC(seq), 'GC(string):', GC(string_seq)
-    print 'GC123(Seq):',GC123(seq), 'GC123(string):', GC123(string_seq)
-    print 'seq:         ', seq.data
-    print 'complement:  ', complement(seq)
-    print 'reverse:     ', reverse(seq)
-    print 'antiparallel:', antiparallel(seq)
-    print 'comp+rev    :', complement(reverse(seq))
-
-
-
-
+      result = f(record.sequence)
+      if result:
+         print '>%s\n%s' % (record.title, result)
+         
+def quicker_multi_fasta_to(file, function):
+   " apply function on each sequence in a multiple FASTA file "
+   try:
+      f = globals()[function]
+   except:
+      raise NotImplementedError, "%s not implemented" % function
+   
+   entries = quick_FASTA_reader(file)
+   for name, seq in entries:
+      result = f(seq)
+      if result:
+         print '>%s\n%s' % (record.title, result)
+         
     
 if __name__ == '__main__':
+   # crude command line options to use most functions directly on a FASTA file
+   options = {'apply_on_multi_fasta':0,
+              'quick':0,
+              'uniq_ids':0,
+              }
 
-   if sys.argv[1] == 'describe':
-      # get all new functions from this file
-      mol_funcs = [x[0] for x in locals().items() if type(x[1]) == type(GC)]
-      mol_funcs.sort()
-      print 'available functions:'
-      for f in mol_funcs: print '\t', f
-      sys.exit(0)
+   optlist, args = getopt.getopt(sys.argv[1:], '', ['describe', 'apply_on_multi_fasta=',
+                                                    'help', 'quick', 'uniq_ids', 'search'])
+   for arg in optlist:
+      if arg[0] in ['-h', '--help']:
+         pass
+      elif arg[0] in ['--describe']:
+         # get all new functions from this file
+         mol_funcs = [x[0] for x in locals().items() if type(x[1]) == type(GC)]
+         mol_funcs.sort()
+         print 'available functions:'
+         for f in mol_funcs: print '\t', f
+         sys.exit(0)
+      elif arg[0] in ['--apply_on_multi_fasta']:
+         options['apply_on_multi_fasta'] = arg[1]
+      elif arg[0] in ['--search']:
+         options['search'] = arg[1]
+      else:
+         key = re.search('-*(.+)', arg[0]).group(1)
+         options[key] = 1
 
-   
-   file = sys.argv[1]
-   function = sys.argv[2]
-   multi_fasta_to(file, function)
+         
+   if options.get('apply_on_multi_fasta'):
+      file = args[0]
+      function = options['apply_on_multi_fasta']
 
+      if options.get('quick'):
+         quicker_multi_fasta_to(file, function)
+      else:
+         multi_fasta_to(file, function)
       
+   elif options.get('uniq_ids'):
+      file = args[0]
+      fasta_uniqids(file)
+      
+
