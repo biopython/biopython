@@ -448,9 +448,16 @@ class SummaryInfo:
             if isinstance(self.alignment._alphabet,
                 Alphabet.ProteinAlphabet):
                 random_expected = Protein20Random
-            elif isinstance(self.alignment._alphabet,
-                Alphabet.NucleotideAlphabet):
+            elif isinstance(self.alignment._alphabet, Alphabet.RNAAlphabet) or \
+                 isinstance(self.alignment._alphabet, Alphabet.DNAAlphabet):
                 random_expected = Nucleotide4Random
+            # Iddo, 15-FEB-2005: added the following for encoded Alpahbets (e.g. Gapped())
+            elif isinstance(self.alignment._alphabet, Alphabet.AlphabetEncoder):
+                if isinstance(self.alignment._alphabet.alphabet, Alphabet.ProteinAlphabet):
+                    random_expected = Protein20Random
+                elif isinstance(self.alignment._alphabet.alphabet, Alphabet.RNAAlphabet) or \
+                     isinstance(self.alignment._alphabet.alphabet, Alphabet.DNAAlphabet):
+                    random_expected = Nucleotide4Random
             else:
                 errstr = "Error in alphabet: not Nucleotide or Protein, "
                 errstr += "supply expected frequencies"
