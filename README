@@ -88,16 +88,13 @@ To Do
     - needs to be done
     - build on Andrew's UPDB?
   o Genbank
-    - needs to be done
+    - Chris Fenton chrisf@fagmed.uit.no
 - generalize parsers
 - bug database
-- improve regression testing framework
-  o generate testing files
-  o short tests and long tests
-  o more descriptive error messages
-  o count the tests
+- regression tests
 - documentation
 - look into Zope-ifying the web site
+- deprecate Seq.py
 
 If you see something here you would like to work on, please let me
 know!

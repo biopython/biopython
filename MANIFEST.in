@@ -1,0 +1,22 @@
+# MANIFEST.in
+#
+# This tells distutils what files to distribute.
+
+include AUTHORS
+include LICENSE
+include NEWS
+include README
+recursive-include Scripts *.py
+recursive-include Doc *
+recursive-include Tests *
+global-exclude CVS
+global-exclude CVS/*
+
+exclude Tests/Blast
+exclude Tests/Fasta
+exclude Tests/Prosite
+exclude Tests/SwissProt
+exclude Tests/UnitTests
+exclude Tests/UnitTests/Save
+exclude Tests/output
+exclude Tests/Blast/bt008*    # file too large

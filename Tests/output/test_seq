@@ -1,0 +1,11 @@
+test_seq
+TCAAAAGGATGCATCATG
+18
+T
+G
+AA
+GATC
+IUPACUnambiguousDNA()
+19
+expected error, and got it
+IUPACAmbiguousDNA()

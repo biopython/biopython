@@ -1,0 +1,13 @@
+test_property_manager
+only Foo
+Foo Bar
+[4, 5, 6]
+resolving list
+[14, 15, 16]
+resolving list
+[14, 15, 16]
+resolving list
+[14, 15, 16, 0]
+I am called
+test_property_manager.Fooqwq
+test_property_manager.Fooqwq
