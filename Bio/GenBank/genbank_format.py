@@ -380,6 +380,7 @@ feature_key_names = (
     "N_region",         # Span of the N immunological feature
     "old_sequence",     # Presented sequence revises a previous version
     "operon",
+    "oriT",
     "polyA_signal",     # Signal for cleavage & polyadenylation
     "polyA_site",       # Site at which polyadenine is added to mRNA
     "Precursor",
