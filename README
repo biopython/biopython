@@ -42,7 +42,11 @@ o ReportLab (optional)
   of chromosomes.  If you do not need this functoinality, you will not
   need to install this package.
 
+o psycopg:http://initd.org/software/psycopg/ (optional)
+  This package is only used by BioSQL to access a PostgreSQL database.
 
+o MySQLdb:http://sourceforge.net/projects/mysql-python (optional)
+  This package is only used by Bio.GFF to access a MySQL database.
 
 These version numbers indicate the earliest tested versions.  Later
 versions of these packages may work as well.
