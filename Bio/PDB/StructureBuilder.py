@@ -25,7 +25,7 @@ class StructureBuilder:
 
 	def _is_completely_disordered(self, residue):
 		"Return 1 if all atoms in the residue have a non blanc altloc."
-		atom_list=residue.get_unpacked_atoms()
+		atom_list=residue.get_unpacked_list()
 		for atom in atom_list:
 			altloc=atom.get_altloc()
 			if altloc==" ":

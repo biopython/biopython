@@ -78,7 +78,7 @@ class Residue(Entity):
 	def get_resname(self):
 		return self.resname
 
-	def get_unpacked_atoms(self):
+	def get_unpacked_list(self):
 		"""
 		Returns the list of all atoms, unpack DisorderedAtoms."
 		"""
