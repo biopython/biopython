@@ -28,10 +28,10 @@ header = Martel.Group("header",
                      Martel.Re("[ (]+") +
                      version +
                      Martel.Str(") multiple sequence alignment") +
-                     Martel.MaxRepeat(Martel.Str("\n"), 0, 3))
+                     Martel.MaxRepeat(Martel.AnyEol(), 0, 3))
 
 seq_id = Martel.Group("seq_id",
-                      Martel.Re("[-a-zA-Z_\|.\d\/]+"))
+                      Martel.Re("[-a-zA-Z:;^_'\",\#\|\[\]\(\)\/\.\d]+"))
 
 # space between the sequence and id
 seq_space = Martel.Group("seq_space",
@@ -52,11 +52,11 @@ seq_line = Martel.Group("seq_line", seq_id + seq_space + seq_info +
 
 match_stars = Martel.Group("match_stars",
                            Martel.Re("[ :\.\*]+") +
-                           Martel.Opt(Martel.Str("\n")))
+                           Martel.Opt(Martel.AnyEol()))
 
 # separator between blocks
 new_block = Martel.Group("new_block",
-                         Martel.Str("\n"))
+                         Martel.AnyEol())
 
 block_info = Martel.Group("block_info",
                           Martel.Rep1(seq_line) +
