@@ -548,8 +548,8 @@ class Handle_features(Dispatch.Callback):
             self.location,
             self.qualifiers))
         
-    def add_feature_qualifier(self, fq):
-        self.qualifiers.append(fq)
+    def add_feature_qualifier(self, name, description):
+        self.qualifiers.append((name, description))
 
     def add_location(self, style, location_info):
         self.location = (style, location_info)
