@@ -107,7 +107,7 @@ class DistributionPage:
         o num_y_drawings - The number of drawings we'll have in the y
         (up/down) direction.
         """
-        for y_drawing in range(num_y_drawings):
+        for y_drawing in range(int(num_y_drawings)):
             # if we are on the last y position, we may not be able
             # to fill all of the x columns
             if ((y_drawing + 1) * self.number_of_columns >
