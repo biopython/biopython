@@ -31,7 +31,7 @@ header = Martel.Group("header",
                      Martel.MaxRepeat(Martel.Str("\n"), 0, 3))
 
 seq_id = Martel.Group("seq_id",
-                      Martel.Re("[-a-zA-Z\|.\d\/]+"))
+                      Martel.Re("[-a-zA-Z_\|.\d\/]+"))
 
 # space between the sequence and id
 seq_space = Martel.Group("seq_space",
