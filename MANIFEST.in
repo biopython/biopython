@@ -20,6 +20,7 @@ recursive-include Doc *.fasta
 include Bio/KDTree/Makefile    # Include files for building KDTree.
 include Bio/KDTree/_KDTree.i
 include Bio/KDTree/_KDTree.C
+include Bio/KDTree/_KDTree.swig.C
 include Bio/KDTree/README
 include Bio/SCOP/tests/*.txt   # Include files for testing SCOP.
 
