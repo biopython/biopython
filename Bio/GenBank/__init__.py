@@ -1544,6 +1544,10 @@ class NCBIDictionary:
         # The sequence has been intentionally withdrawn : GI "9993999"
         elif line.find("intentionally withdrawn") >= 0:
             raise KeyError, line
+        # sometimes the intentianally withdrawn sequences just
+        # return and empty sting
+        elif line == '':
+            raise KeyError, "Empty information returned."
         elif line.lower().find('html') >= 0:
             raise KeyError, "I unexpectedly got back html-formatted data."
         # Parse the record if a parser was passed in.
