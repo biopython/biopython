@@ -22,8 +22,8 @@ try:
 except ImportError, x:
     raise ImportError, "This module requires NumPy"
 
-from Bio.Tools import listfns
-from Bio.Tools import distance
+from Bio import listfns
+from Bio import distance
 
 def random_centroids(data, k):
     """random_centroids(data, k) -> list of centroids

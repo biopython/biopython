@@ -8,7 +8,7 @@ import string, re
 import os, sys, commands
 from Tkinter import *
 from Numeric import *
-from Bio.Tools.Clustering import kMeans 
+from Bio.Clustering import kMeans 
 from tkFileDialog import askopenfilename, asksaveasfilename
 import Pmw
 

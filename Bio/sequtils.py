@@ -11,7 +11,7 @@
 
 import os, sys, getopt, re, time
 from Bio import Fasta
-from Bio.Tools import Translate
+from Bio import Translate
 from Bio.Seq import Seq
 from Bio import Alphabet
 from Bio.Alphabet import IUPAC

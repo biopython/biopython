@@ -95,7 +95,7 @@ localds(sequenceA, sequenceB, match_dict, open, extend) -> alignments
 
 from types import *
 
-from Bio.Tools import listfns
+from Bio import listfns
 
 MAX_ALIGNMENTS = 1000   # maximum alignments recovered in traceback
 

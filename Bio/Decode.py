@@ -1,7 +1,7 @@
 # Decode elements from a Std/Martel parsed XML stream
 
 import string
-from Bio.Tools.Parsers.spark import GenericScanner, GenericParser
+from Bio.Parsers.spark import GenericScanner, GenericParser
 
 def unescape_C(s):
     result = []

@@ -6,8 +6,8 @@
 import time
 
 import _FmtUtils
-from Bio.Tools import listfns
-from Bio.Tools.MultiProc.copen import copen_fn
+from Bio import listfns
+from Bio.MultiProc.copen import copen_fn
 from ReseekFile import ReseekFile
 
 

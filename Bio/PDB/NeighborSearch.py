@@ -1,4 +1,4 @@
-from Bio.Tools.KDTree import *
+from Bio.KDTree import *
 from Selection import unfold_entities, get_unique_parents, entity_levels, uniqueify
 from Numeric import array
 

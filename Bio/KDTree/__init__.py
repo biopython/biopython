@@ -5,7 +5,7 @@ try:
 except ImportError:
 	raise ImportError, "This module requires NumPy"
 
-from Bio.Tools.KDTree import _KDTree 
+from Bio.KDTree import _KDTree 
 
 def _dist(p, q):
 	diff=p-q

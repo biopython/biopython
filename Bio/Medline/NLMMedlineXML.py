@@ -20,7 +20,7 @@ import types
 from xml.sax import handler
 
 from Bio.ParserSupport import *
-from Bio.Tools import MultiProc
+from Bio import MultiProc
 
 import Martel
 

@@ -14,7 +14,7 @@ try:
 except ImportError, x:
     raise ImportError, "This module requires NumPy"
 
-from Bio.Tools import listfns
+from Bio import listfns
 
 def euclidean(x, y):
     """euclidean(x, y) -> euclidean distance between x and y"""

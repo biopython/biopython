@@ -15,7 +15,7 @@ XXX ref
 """
 import math
 from Numeric import *
-from Bio.Tools import listfns
+from Bio import listfns
 
 # XXX typecodes for Numeric
 # XXX multiprocessor

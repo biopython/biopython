@@ -6,7 +6,7 @@ from Bio import Alphabet
 from Bio.Alphabet import IUPAC
 from Bio.Data import IUPACData
 
-from Bio.Tools import Transcribe, Translate
+from Bio import Transcribe, Translate
 
 set_prop = default_manager.class_property
 

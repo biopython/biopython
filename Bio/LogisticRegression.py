@@ -21,7 +21,7 @@ try:
 except ImportError, x:
     raise ImportError, "This module requires NumPy with the LinearAlgebra lib"
 
-from Bio.Tools import listfns
+from Bio import listfns
 
 class LogisticRegression:
     """Holds information necessary to do logistic regression

@@ -30,8 +30,8 @@ try:
 except ImportError, x:
     raise ImportError, "This module requires NumPy"
 
-from Bio.Tools import listfns
-from Bio.Tools import distance
+from Bio import listfns
+from Bio import distance
 
 class kNN:
     """Holds information necessary to do nearest neighbors classification.

@@ -34,7 +34,6 @@ __all__ = [
     "SeqRecord",
     "SubsMat",
     "SwissProt",
-    "Tools",
     "UniGene",
     "WWW",
     "utils"

@@ -34,7 +34,7 @@ try:
 except ImportError, x:
     raise ImportError, "This module requires NumPy"
 
-from Bio.Tools import mathfns, listfns
+from Bio import mathfns, listfns
 
 class NaiveBayes:
     """Holds information for a NaiveBayes classifier.

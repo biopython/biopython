@@ -13,7 +13,7 @@ import operator
 import StringIO
 
 from Bio import StdHandler
-from Bio.Tools.MultiProc.copen import copen_fn
+from Bio.MultiProc.copen import copen_fn
 from Bio.ReseekFile import ReseekFile
 from Bio.WWW import RequestLimiter
 from Bio import SeqRecord

@@ -7,7 +7,7 @@
 # examples.  Conflicts resolved to agree with real examples.
 
 # Uses John Aycock's SPARK for parsing
-from Bio.Tools.Parsers.spark import GenericScanner, GenericParser
+from Bio.Parsers.spark import GenericScanner, GenericParser
 
 class Token:
     def __init__(self, type):
