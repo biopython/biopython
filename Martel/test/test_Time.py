@@ -188,15 +188,16 @@ def test():
     test_times()
 
     test_terms("%(Jan)",
-               ("Jan", "JAN", "jan", "DeC", "OCT"),
+               ("Jan", "JAN", "jan", "Feb", "MAR", "apR", "mAy",
+                "jUN", "JUL", "aug", "sEP", "Oct", "NOv", "DeC"),
                ("Jan.", "October", ""))
 
     test_terms("%(January)",
-               ("May", "January", "October"),
+               ("May", "March", "January", "October"),
                ("Jan.", "JAN", "jan", "", "Mayo"))
 
     test_terms("%(Mon)day",
-               ("Monday", "TUEday", "Wedday", "fRiday"),
+               ("Monday", "TUEday", "Wedday", "fRiday", "THuday"),
                ("MON", "Sun", "wednesday", ""))
 
     test_terms("%(Monday)",
