@@ -9,6 +9,19 @@ class Polypeptide(UserList):
 	def __init__(self, residue_list):
 		UserList.__init__(self, residue_list)
 
+	def __repr__(self):
+		# get chain, resseq for start residue
+		s, m, c, r=self[0].get_full_id()
+		if c==" ":
+			c=""
+		start=c+str(r[1])
+		# get chain, resseq for end residue
+		s, m, c, r=self[-1].get_full_id()
+		if c==" ":
+			c=""
+		end=c+str(r[1])
+		return "<Polypeptide start=%s end=%s length=%s>" % (start, end, len(self))
+
 
 def build_peptides(structure, model_id=0, aa_only=1, radius=1.8):
 	"""
@@ -67,7 +80,13 @@ def build_peptides(structure, model_id=0, aa_only=1, radius=1.8):
 			pf.add_edge(residue2, residue1)
 	# return a list of lists of residues
 	# each list of residues represents a polypeptide
-	return pf.get_paths()
+	polypeptide_list=[]
+	# create Polypeptide objects and put them in a list
+	for residue_list in pf.get_paths():
+		polypeptide=Polypeptide(residue_list)
+		polypeptide_list.append(polypeptide)
+	return polypeptide_list
+		
 
 
 if __name__=="__main__":
@@ -77,10 +96,8 @@ if __name__=="__main__":
 	p=PDBParser()
 	s=p.get_structure("scr", "/home/tham/data/pdb/SMALL.pdb")
 
-	for l in build_peptides(s):
-		for r in l:
-			print r
-		print
+	for pp in build_peptides(s):
+		print pp
 
 
 
