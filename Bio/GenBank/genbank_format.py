@@ -155,7 +155,7 @@ pid_line = Martel.Group("pid_line",
 # version and GI line
 # VERSION     AC007323.5  GI:6587720
 version = Martel.Group("version",
-                       Martel.Re("[\w\d\.]+"))
+                       Martel.Re(r"(?P<entry_name>[\w\d\.]+)"))
 
 gi = Martel.Group("gi",
                   Martel.Re("[\d]+"))
@@ -634,11 +634,16 @@ origin_line = Martel.Group("origin_line",
 base_number = Martel.Group("base_number",
                            Martel.Re("[\d]+"))
 sequence = Martel.Group("sequence",
-                        Martel.ToEol())
+                        Martel.Re("[\w]+"))
+sequence_plus_spaces = Martel.Group("sequence_plus_spaces",
+                                    Martel.Rep1(Martel.Str(" ") +
+                                        sequence) + 
+                                    Martel.Opt(Martel.Str(" ")) +
+                                    Martel.AnyEol())
 sequence_line = Martel.Group("sequence_line",
                              blank_space +
                              Martel.Opt(base_number) +
-                             sequence)
+                             sequence_plus_spaces)
 
 sequence_entry = Martel.Group("sequence_entry",
                               origin_line +
@@ -685,7 +690,14 @@ record = Martel.Group("genbank_record",
                                  contig_block) + \
                       record_end)
 
-record_format = Martel.ParseRecords("genbank_file", {}, record,
+# Martel-specific stuff to try and support standard tag names used
+# by Andrew for Bioformats
+martel_record = Martel.Group("record", record)
+format_expression = Martel.Group("dataset", Martel.Rep1(martel_record),
+                                 {"format" : "genbank"})
+
+record_format = Martel.ParseRecords("genbank_file", {"format" : "genbank"}, 
+                                    martel_record,
                                     RecordReader.StartsWith, ("LOCUS",) )
 
 
