@@ -222,7 +222,9 @@ class DatabaseLoader:
             accession = record.id
             version = 0
             
-        taxon_id = self._get_taxon_id(record)
+#        taxon_id = self._get_taxon_id(record)
+        taxon_id = "0" # inserted this because the taxon population code is out of date
+                       # with the tables
         identifier = record.annotations.get('gi')
         description = getattr(record, 'description', None)
         division = record.annotations.get("data_file_division", "UNK")
@@ -334,7 +336,7 @@ class DatabaseLoader:
                                              reference.medline_id, 0)
             elif reference.pubmed_id:
                 dbxref_id = self._add_dbxref("PUBMED",
-                                             reference.medline_id, 0)
+                                             reference.pubmed_id, 0)
             else:
                 dbxref_id = None
             authors = reference.authors or None
