@@ -267,7 +267,12 @@ class _Scanner:
             # Read the descriptions and the following blank lines.
             read_and_call_while(uhandle, consumer.noevent, blank=1)
             l = safe_peekline(uhandle)
-            if not l.startswith('CONVERGED') and l[0] != '>':
+            # Brad -- added check for QUERY. On some PSI-BLAST outputs
+            # there will be a 'Sequences not found' line followed by no
+            # descriptions. Check for this case since the first thing you'll
+            # get is a blank line and then 'QUERY'
+            if not l.startswith('CONVERGED') and l[0] != '>' \
+                    and not l.startswith('QUERY'):
                 read_and_call_until(uhandle, consumer.description, blank=1)
                 read_and_call_while(uhandle, consumer.noevent, blank=1)
 
