@@ -78,7 +78,20 @@ def test_times():
 
 def test_expand():
     # make sure tag name expansion works correctly
-    pass
+    class Capture:
+        def __init__(self):
+            self.capture = []
+        def __mod__(self, s):
+            self.capture.append(s)
+            return s
+    cap = Capture()
+    exp = Time.make_expression("%m-%Y", cap)
+    parser = exp.make_parser()
+    parser.parseString("05-1921")
+    x = cap.capture
+    x.sort()
+    assert x == ["month", "year"]
+    
 
 def _find_quoted_words(line):
     words = []
@@ -169,6 +182,7 @@ def test_docstring():
 
 def test():
     test_docstring()
+    test_expand()
     test_syntax()
 
     test_times()
