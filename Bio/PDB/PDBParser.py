@@ -161,7 +161,7 @@ class PDBParser:
 					try:
 						structure_builder.init_residue(resname, hetero_flag, resseq, icode)
 					except PDBConstructionException, message:
-						self._handle_PDB_exception(message, self.line_counter+local_line_counter+1) 
+						self._handle_PDB_exception(message, global_line_counter) 
 				# init atom
 				try:
 					structure_builder.init_atom(name, coord, bfactor, occupancy, altloc, fullname)
