@@ -31,7 +31,8 @@ FEATURE_QUALIFIER_INDENT = 21
 blank_space = Martel.Spaces()
 small_indent_space = Martel.Str(" " * 2)
 big_indent_space = Martel.Str(" " * FEATURE_KEY_INDENT)
-qualifier_space = Martel.Str(" " * FEATURE_QUALIFIER_INDENT)
+qualifier_space = Martel.Str(" " * FEATURE_QUALIFIER_INDENT) | \
+                  Martel.Str("\t" + " " * (FEATURE_QUALIFIER_INDENT - 8))
 
 # - useful functions
 def define_block(identifier, block_tag, block_data):
@@ -57,13 +58,11 @@ def define_block(identifier, block_tag, block_data):
     return Martel.Group(block_tag,
                         Martel.Str(identifier + " " * diff) +
                         Martel.ToEol(block_data) +
-                        Martel.Rep(Martel.Str(" " * INDENT) + 
-                                   Martel.ToEol(block_data)))
+                        Martel.Rep(Martel.AnyEol() |
+                                   (Martel.Str(" " * INDENT) + Martel.ToEol(block_data))))
+                                   
 
-# The first line is sometimes blank
-sometimes_blank = Martel.Opt(Martel.AnyEol())
-
-# The real first line
+# The first line
 # LOCUS       AC007323    86436 bp    DNA             PLN       19-JAN-2000
 locus = Std.dbid(Martel.Word(), {"dbname": "gb", "type": "primary"})
 
@@ -649,25 +648,26 @@ record_end = Martel.Group("record_end",
                           Martel.Rep1(Martel.AnyEol()))
 
 record = Martel.Group("record",
-                      sometimes_blank + \
-                      locus_line + \
-                      definition_block + \
-                      accession_block + \
-                      Martel.Opt(nid_line) + \
-                      Martel.Opt(pid_line) + \
-                      Martel.Opt(version_line) + \
-                      Martel.Opt(db_source_line) + \
-                      keywords_block + \
-                      Martel.Opt(segment_line) + \
-                      source_block + \
-                      organism_block + \
-                      Martel.Rep(reference) + \
-                      Martel.Opt(comment_block) + \
-                      feature_block + \
+                      locus_line +
+                      definition_block +
+                      accession_block +
+                      Martel.Opt(nid_line) +
+                      Martel.Opt(pid_line) +
+                      Martel.Opt(version_line) +
+                      Martel.Opt(db_source_line) +
+                      keywords_block +
+                      Martel.Opt(segment_line) +
+                      source_block +
+                      organism_block +
+                      Martel.Rep(reference) +
+                      Martel.Opt(comment_block) +
+                      feature_block +
                       Martel.Alt(Martel.Opt(base_count_line) +
                                  sequence_entry,
-                                 contig_block) + \
-                      record_end)
+                                 contig_block) +
+                      record_end +
+                      Martel.Rep(Martel.AnyEol())  # Allow extra blank lines at the end
+                      )
 
 
 format_expression = Martel.Group("dataset", Martel.Rep1(record),
@@ -696,12 +696,12 @@ header = Martel.Re("""\
 
 format = Martel.HeaderFooter("dataset", {},
                              header, RecordReader.CountLines, (10,),
-                             record, RecordReader.EndsWith, ("//",),
+                             record, RecordReader.StartsWith, ("LOCUS",),
                              None, None, None,
                              )
 
 multirecord = Martel.ParseRecords("dataset", {}, record,
-                                  RecordReader.EndsWith, ("//",))
+                                  RecordReader.StartsWith, ("LOCUS",))
 
 if __name__ == "__main__":
     from xml.sax import saxutils
