@@ -52,13 +52,31 @@ print 'Replacement dictionary'
 print align_info.replacement_dictionary(['N'])
 
 print 'position specific score matrix.'
+print 'with a supplied consensus sequence...'
 print align_info.pos_specific_score_matrix(consensus, ['N'])
+
+print 'defaulting to a consensus sequence...'
+print align_info.pos_specific_score_matrix(chars_to_ignore = ['N'])
+
+print 'with a selected sequence...'
+second_seq = alignment.get_seq_by_num(1)
+print align_info.pos_specific_score_matrix(second_seq, ['N'])
 
 print 'information content'
 print 'part of alignment:', align_info.information_content(5, 50,
                                 chars_to_ignore = ['N'])
 print 'entire alignment:', align_info.information_content(
                                 chars_to_ignore = ['N'])
+
+print 'relative information content'
+e_freq = {'G' : 0.25,
+          'C' : 0.25,
+          'A' : 0.25,
+          'T' : 0.25}
+
+print 'relative information:', align_info.information_content(
+                                   expected_freqs = e_freq,
+                                   chars_to_ignore = ['N'])
 
 print "testing reading and writing fasta format..."
 
@@ -74,7 +92,9 @@ for seq_record in all_seqs:
     print 'seq:', seq_record.seq
 
 print 'length:', alignment.get_alignment_length()
-print 'consensus:', alignment.dumb_consensus(ambiguous = "X")
+align_info = AlignInfo.SummaryInfo(alignment)
+consensus = align_info.dumb_consensus(ambiguous = "X")
+print 'consensus:', consensus
 
 print alignment
 
