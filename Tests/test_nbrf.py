@@ -7,8 +7,8 @@ import Bio.NBRF
 from Bio.RecordFile import RecordFile
 from Bio.File import SGMLHandle
 
-testfiles   = [  'B_nuc.pir', 'Cw_prot.pir', 'DMA_nuc.pir', 'DMB_prot.pir'
-                            ]
+testfiles   = [  'B_nuc.pir', 'Cw_prot.pir', 'DMA_nuc.pir', 'DMB_prot.pir',
+                 'clustalw.pir']
 
 for file in testfiles:
     fh = open(os.path.join("NBRF", file))

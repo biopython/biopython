@@ -91,7 +91,7 @@ class _Scanner:
             "sequence_name", \
             "comment", \
             "sequence_line", \
-            "sequence_final_line" ]
+            "sequence_final_text" ]
 
         # make a parser that returns only the tags we are interested in
         expression = Martel.select_names( nbrf_format.nbrf_record, self.interest_tags)
@@ -115,29 +115,28 @@ class _RecordConsumer:
     """
     def __init__(self):
         self.data = Record.Record()
-
+        self._sequences = []
 
     def sequence_type(self, sequence_type ):
-        self.data.sequence_type = sequence_type[ 0 ]
+        self.data.sequence_type = "".join(sequence_type)
 
     def sequence_name(self, sequence_name ):
-        self.data.sequence_name = sequence_name[ 0 ]
+        self.data.sequence_name = "".join(sequence_name)
 
     def comment(self, comment ):
-        self.data.comment = comment[ 0 ]
+        self.data.comment = "".join(comment)
 
     def sequence_line( self, sequences ):
-        for sequence in sequences:
-            sequence = sequence.strip()
-            sequence = sequence.replace( ' ', '' )
-            self.data.sequence.data = self.data.sequence.data + sequence[:]
+        new_seq = "".join(sequences)
+        parts = new_seq.split()
+        self._sequences.append("".join(parts))
 
-    def sequence_final_line( self, sequences ):
-        for sequence in sequences:
-            sequence = sequence.strip()
-            sequence = sequence.replace( ' ', '' )
-            sequence = sequence[ :-1 ]
-            self.data.sequence.data = self.data.sequence.data + sequence[:]
+    def sequence_final_text( self, sequences ):
+        new_seq = "".join(sequences)
+        parts = new_seq.split()
+        self._sequences.append("".join(parts))
+        
+        self.data.sequence.data = "".join(self._sequences)
 
 
 class RecordParser:
