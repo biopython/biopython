@@ -1,8 +1,8 @@
 **Biopython README file**
  
-	"The Biopython Project":http://www.biopython.org/ is an international
-association of developers of freely available Python tools for
-computational molecular biology.
+	"The Biopython Project":http://www.biopython.org/ is an
+international association of developers of freely available Python
+tools for computational molecular biology.
 
 biopython.org provides an online resource for modules, scripts, and
 web links for developers of Python-based software for life science
@@ -22,22 +22,23 @@ python setup.py test
 python setup.py install
 
 
-
-
 **System Requirements**
 
+o "Python 2.2":http://www.python.org/
 
-o "Python 2.0":http://www.python.org/ or above
+o "mxTextTools 2.0.3":http://starship.python.net/~lemburg/mxTextTools.html
+  This is used in many of the text handling routines in Biopython.
+  Much of Biopython will not work without it.
 
-o "Numerical Python 15.3 or above":http://numpy.sourceforge.net/ (optional)
-This is only required if you want to use the classification tools.
+o "Numerical Python 15.3":http://numpy.sourceforge.net/ (optional)
+  This package is only used in the computationally-oriented modules.
+  It is not required for most of the modules in Biopython.  You can
+  most likely skip this requirement.  Please install if you are seeing
+  error messages such as:
+  ImportError: No module named Numeric
 
-o "Martel":http://www.biopython.org/~dalke/Martel/
-  (now included in Biopython by default, so don't worry about adding this)
-
-o "mxTextTools":http://starship.python.net/~lemburg/mxTextTools.html
-
-o "ReportLab":URL
+These version numbers indicate the earliest tested versions.  Later
+versions of these packages may work as well.
 
 
 **Installation**
@@ -55,8 +56,6 @@ directory, please type 'python setup.py', or see the documentation for
 Distutils.
 
 
-
-
 For FreeBSD users, "Johann Visagie", mailto:wjv@cityip.co.za has made
 Biopython available in the ports tree.  According to Johann:
 
@@ -69,59 +68,77 @@ Biopython available in the ports tree.  According to Johann:
   (Python itself as well as Distutils) will be handled automagically.
 
 
+
 **Testing**
 
 Biopython includes a suite of regression tests to check if
 everything's running correctly.  To do the tests, type:
-drevil:~biopython/> python setup.py test
+drevil:~/biopython> python setup.py test
 
 If you have Tk installed, this will run a nice GUI that displays the
 results of the tests.  Otherwise, you will see results on the command
 line.
 
 
+**Bugs**
+
+While we try to ship a robust package, bugs inevitably pop up.  If you
+are having problems that might be caused by a bug in Biopython, it is
+possible that it has already been identified.  Search the 
+"bug database":http://www.biopython.org/Bugs.shtml and mailing lists
+to see if it has already been reported (and hopefully fixed).
+
+If you suspect the problem lies within a parser, it is likely that the
+data format has changed and broken the parsing code.  (The BLAST and
+GenBank formats seem to be particularly fragile.)  Thus, the parsing
+code in Biopython is updated faster than we can build Biopython
+releases.  You can get the most recent parser by pulling the relevant
+files (e.g. genbank_format.py) out of 
+"anonymous cvs":http://cvs.biopython.org/ .
+However, be careful when doing this, because the code in CVS is not as
+well-tested as released code, and may contain new dependencies.
+
+Finally, you can send a bug report to the bug database or
+biopython@biopython.org.  In the bug report, please let us know 1)
+which operating system and hardware you are using, 2) Python version,
+3) Biopython version (or CVS version/date), 4) traceback that occurs,
+5) offending code, and 6) data file that causes the problem.
+
+
 
 **Contributing, Bug Reports**
 
-
 Biopython is run by volunteers from all over the world, with many
 types of backgrounds. We are always looking for people interested in
-helping with code development, web-site management, technical
-administration, and whatever else comes up.
+helping with code development, web-site management, documentation
+writing, technical administration, and whatever else comes up.
 
-If you wish to contribute, please visit the "web site":http://www.biopython.org
+If you wish to contribute, please visit the 
+"web site":http://www.biopython.org
 and join our "mailing list":http://www.biopython.org/MailList.shtml
-
-If you wish to contribute a bug report, please submit them to the
-"online bug reporting form":http://www.biopython.org/biopython-bugs/
 
 
 
 **Distribution Structure**
 
-AUTHORS --      An (incomplete) list of people who have contributed.
+README       -- This file.
 
-Bio/ --         The python package that makes up biopython
+NEWS         -- Release notes and news
 
-Doc/ --         Documentation
+LICENSE      -- What you can do with the code.
 
-LICENSE --      License information for this package
+CONTRIB      -- An (incomplete) list of people who helped Biopython in
+                one way or another.
 
-MANIFEST.in --  Tells distutils what files to distribute
+MANIFEST.in  -- Tells distutils what files to distribute
 
-NEWS --         Release notes and news
+setup.py     -- Installation file.
 
-README --       This file
+Bio/         -- The code.
 
-Scripts/ --     Miscellaneous, possibly useful, standalone scripts
+Doc/         -- Documentation.
 
-Tests/ --       Regression testing code
+Scripts/     -- Miscellaneous, possibly useful, standalone scripts
 
-setup.py --     Installation file.
+Tests/       -- Regression testing code
 
-
-
-If you see something here you would like to work on, please send mail
-to biopython@biopython.org!
-
-Thanks
