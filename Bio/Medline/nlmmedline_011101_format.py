@@ -241,8 +241,8 @@ simple_elem("GeneSymbol")
 group_elem("GeneSymbolList", Rep1(GeneSymbol))
 simple_elem("NameOfSubstance")
 simple_elem("CASRegistryNumber")
-group_elem("Chemical",
-           Alt(RegistryNumber, CASRegistryNumber) + \
+simple_elem("RegistryNumber")
+group_elem("Chemical", Alt(CASRegistryNumber, RegistryNumber) + \
            NameOfSubstance)
 group_elem("ChemicalList", Rep1(Chemical))
 simple_elem("CitationSubset")
