@@ -147,7 +147,7 @@ class CplusplusExtension(Extension):
     better.
     """
     def __init__(self, *args, **kw):
-        # fix the language
+        # fix the language -- 2.2 doesn't have languages
         if sys.version_info[1] < 3:
             try:
                 self.language = kw['language']
@@ -155,13 +155,6 @@ class CplusplusExtension(Extension):
             except KeyError:
                 pass
         Extension.__init__(self, *args, **kw)
-
-        # fix the compiler -- 2.2 doesn't have C++ compilers
-        if sys.version_info[1] < 3 and self.language == "c++":
-            cxx = sysconfig.get_config_vars("CXX")
-            if os.environ.has_key("CXX"):
-                cxx = os.environ["CXX"]
-            self.cxx = cxx
 
 class build_ext_biopython(build_ext):
     def run(self):
@@ -181,12 +174,21 @@ class build_ext_biopython(build_ext):
         """Work around distutils bug which uses the C compiler for C++ code.
         """
         if hasattr(ext, "language") and ext.language == "c++":
-            # fix for before 2.2 only -- need to set the compiler to C++
-            if hasattr(ext, "cxx"):
-                self.compiler.set_executable("compiler", ext.cxx)
-                self.compiler.set_executable("compiler_so", ext.cxx)
+            # fix for distutils where C++ is not handled. This includes
+            # Python 2.2.x and Mingw 32 -- need to find the C++ compiler
+            cxx = None
+            if (sys.version_info[1] < 3 or # Python 2.2
+                self.compiler.compiler_type in ["mingw32"]):
+                cxx = sysconfig.get_config_vars("CXX")
+                if os.environ.has_key("CXX"):
+                    cxx = os.environ["CXX"]
+
+            # set the C++ compiler if it doesn't exist in distutils
+            if cxx:
+                self.compiler.set_executable("compiler", cxx)
+                self.compiler.set_executable("compiler_so", cxx)
                 self.compiler.set_executable("linker_so",
-                        ext.cxx + ["-shared"])
+                        cxx + ["-shared"])
             else: # fix for 2.3
                 self.compiler.compiler_so = self.compiler.compiler_cxx
         else:
@@ -438,7 +440,7 @@ NUMPY_EXTENSIONS = [
               libraries=["stdc++"],
               language="c++"
               ),
-    CplusplusExtension('Affy._cel',
+    CplusplusExtension('Bio.Affy._cel',
              ['Bio/Affy/celmodule.cc'],
              language="c++"
              ),
