@@ -1,6 +1,7 @@
 import cPickle
 import sys
-from Bio.SubsMat import *
+from Bio import SubsMat
+from Bio.SubsMat import FreqTable, MatrixInfo
 
 f = sys.stdout
 ftab_prot = FreqTable.read_count(open('SubsMat/protein_count.txt'))

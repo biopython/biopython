@@ -6,7 +6,7 @@ Requires SubsMat.py and FreqTable.py from Iddo."""
 import sys
 
 # Biopython
-from Bio.SubsMat import SubsMat
+from Bio import SubsMat
 from Bio import Clustalw
 from Bio.Alphabet import IUPAC
 from Bio.Align import AlignInfo
