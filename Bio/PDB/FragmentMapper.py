@@ -279,7 +279,7 @@ class FragmentMapper:
         """
         @type res: L{Residue}
         """
-        return self.fd.has_key(r)
+        return self.fd.has_key(res)
 
     def __getitem__(self, res):
         """
@@ -288,7 +288,7 @@ class FragmentMapper:
         @return: fragment classification
         @rtype: L{Fragment}
         """
-        return self.fd[r]
+        return self.fd[res]
 
 
 if __name__=="__main__":
