@@ -79,6 +79,7 @@
         """
 
 import sre
+
 from sets import Set
 import itertools
 
@@ -508,15 +509,7 @@ class AbstractCut(RestrictionType) :
         frequency of the site."""
         return self.freq
     frequency = classmethod(frequency)
-
-class NonBritishMixin:
-    """Simple mixin class to provide non-British spelling of functions.
-    """
-    def catalyze(self, dna):
-        """Non-british-ize (is that a word?), the catalyse function as well.
-        """
-        return self.catalyse(dna)
-    catalyze = classmethod(catalyze)
+        
 
 class NoCut(AbstractCut) :
     """Implement the methods specific to the enzymes that do not cut.
@@ -841,7 +834,7 @@ class NonPalindromic(AbstractCut) :
         return False
     is_palindromic = classmethod(is_palindromic)
 
-class Unknown(AbstractCut, NonBritishMixin) :
+class Unknown(AbstractCut) :
     """Implement the methods specific to the enzymes for which the overhang
     is unknown.
 
@@ -849,8 +842,9 @@ class Unknown(AbstractCut, NonBritishMixin) :
 
     Internal use only. Not meant to be instantiated."""
     
-    def catalyse(self, dna) :
-        """RE.catalyse(dna) -> tuple of DNA.
+    def catalyse(self, dna, linear=True) :
+        """RE.catalyse(dna, linear=True) -> tuple of DNA.
+        RE.catalyze(dna, linear=True) -> tuple of DNA.
 
         return a tuple of dna as will be produced by using RE to restrict the
         dna.
@@ -860,7 +854,7 @@ class Unknown(AbstractCut, NonBritishMixin) :
         if linear is False, the sequence is considered to be circular and the
         output will be modified accordingly."""
         raise NotImplementedError, '%s restriction is unknown.' % self.__name__
-    catalyse = classmethod(catalyse)
+    catalyze = catalyse = classmethod(catalyse)
 
     def is_blunt(self) :
         """RE.is_blunt() -> bool.
@@ -921,7 +915,7 @@ class Unknown(AbstractCut, NonBritishMixin) :
         return False
     _mod1 = classmethod(_mod1)
     
-class Blunt(AbstractCut, NonBritishMixin) :
+class Blunt(AbstractCut) :
     """Implement the methods specific to the enzymes for which the overhang
     is blunt.
 
@@ -930,8 +924,9 @@ class Blunt(AbstractCut, NonBritishMixin) :
     
     Internal use only. Not meant to be instantiated."""
 
-    def catalyse(self, dna,linear=True) :
-        """RE.catalyse(dna) -> tuple of DNA.
+    def catalyse(self, dna, linear=True) :
+        """RE.catalyse(dna, linear=True) -> tuple of DNA.
+        RE.catalyze(dna, linear=True) -> tuple of DNA.
 
         return a tuple of dna as will be produced by using RE to restrict the
         dna.
@@ -975,7 +970,7 @@ class Blunt(AbstractCut, NonBritishMixin) :
             fragments += [d[r[x]:r[x+1]] for x in xrange(length)]
         fragments.sort()
         return tuple(fragments)
-    catalyse = classmethod(catalyse)
+    catalyze = catalyse = classmethod(catalyse)
 
     def is_blunt(self) :
         """RE.is_blunt() -> bool.
@@ -1040,7 +1035,7 @@ class Blunt(AbstractCut, NonBritishMixin) :
         else : return False
     _mod1 = staticmethod(_mod1)
 
-class Ov5(AbstractCut, NonBritishMixin) :
+class Ov5(AbstractCut) :
     """Implement the methods specific to the enzymes for which the overhang
     is recessed in 3'.
 
@@ -1048,8 +1043,9 @@ class Ov5(AbstractCut, NonBritishMixin) :
     
     Internal use only. Not meant to be instantiated."""
     
-    def catalyse(self, dna,linear=True) :
-        """RE.catalyse(dna) -> tuple of DNA.
+    def catalyse(self, dna, linear=True) :
+        """RE.catalyse(dna, linear=True) -> tuple of DNA.
+        RE.catalyze(dna, linear=True) -> tuple of DNA.
 
         return a tuple of dna as will be produced by using RE to restrict the
         dna.
@@ -1093,7 +1089,7 @@ class Ov5(AbstractCut, NonBritishMixin) :
             fragments += [d[r[x]:r[x+1]] for x in xrange(length)]
         fragments.sort()
         return tuple(fragments)
-    catalyse = classmethod(catalyse)
+    catalyze = catalyse = classmethod(catalyse)
 
     def is_blunt(self) :
         """RE.is_blunt() -> bool.
@@ -1159,7 +1155,7 @@ class Ov5(AbstractCut, NonBritishMixin) :
     _mod1 = classmethod(_mod1)
             
 
-class Ov3(AbstractCut, NonBritishMixin) :
+class Ov3(AbstractCut) :
     """Implement the methods specific to the enzymes for which the overhang
     is recessed in 5'.
 
@@ -1168,7 +1164,8 @@ class Ov3(AbstractCut, NonBritishMixin) :
     Internal use only. Not meant to be instantiated."""
 
     def catalyse(self, dna, linear=True) :
-        """RE.catalyse(dna) -> tuple of DNA.
+        """RE.catalyse(dna, linear=True) -> tuple of DNA.
+        RE.catalyze(dna, linear=True) -> tuple of DNA.
 
         return a tuple of dna as will be produced by using RE to restrict the
         dna.
@@ -1212,7 +1209,7 @@ class Ov3(AbstractCut, NonBritishMixin) :
             fragments += [d[r[x]:r[x+1]] for x in xrange(length)]
         fragments.sort()
         return tuple(fragments)
-    catalyse = classmethod(catalyse)
+    catalyze = catalyse = classmethod(catalyse)
     
     def is_blunt(self) :
         """RE.is_blunt() -> bool.
