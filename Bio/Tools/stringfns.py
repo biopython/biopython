@@ -12,7 +12,7 @@ starts_with  Check whether a string starts with another string.
 """
 
 def split(s, sep=" \011\012\013\014\015", maxsplit=None, negate=0):
-    """split(str [,sep [,maxsplit [,negate]]]) -> list of strings
+    """split(s [,sep [,maxsplit [,negate]]]) -> list of strings
 
     Split a string.  Similar to string.split, except that this considers
     any one of the characters in sep to be a delimiter.  If negate is
