@@ -1,0 +1,17 @@
+IntelliGenetics.txt
+========
+
+
+Bio.IntelliGenetics
+-------------------
+
+The Bio.IntelliGenetics.Record contains all the information stored in
+an IntelliGenetics record. Its string representation also is a valid IntelliGenetics
+record, but it is NOT guaranteed to be equivalent to the record
+from which it was produced.
+
+The Bio.InterPro.Record contains:
+
+comments
+title
+sequence
