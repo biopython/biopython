@@ -28,7 +28,7 @@ header_records = {
 summary_title = re.compile('## +SUMMARY')
 summary_rec = re.compile(' *[0-9]+: +[1-9][0-9a-z]{3,3}')
 alignments_title= re.compile('## +ALIGNMENTS')
-alignments_rec = re.compile(' *[0-9]+ + [0-9]+')
+alignments_rec = re.compile(' *[0-9]+ +-{0,1}[0-9]+')
 equiv_title = re.compile('## +EQUIVALENCES')
 
 class FSSPHeader:
@@ -236,7 +236,7 @@ def read_fssp(fssp_handle):
          curline = fssp_handle.readline()
       if not alignments_title.match(curline):
          if equiv_title.match(curline):
-            print "Reached equiv_title"
+            # print "Reached equiv_title"
             break
          else:
             raise ValueError,'Bad FSSP file: no alignments title record found'
