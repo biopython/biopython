@@ -3,7 +3,7 @@
 import string
 
 # biopython
-from Bio.Medline import PubMed
+from Bio import PubMed
 from Bio import Medline
 
 # do the search and get the ids
