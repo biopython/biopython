@@ -99,6 +99,7 @@ class _InMemoryIndex(UserDict.UserDict):
                 self[key] = value
             
     def __del__(self):
+        # XXX Bug: should only save if changed!
         handle = open(self._indexname, 'w')
         handle.write("%s\n" % self._tostr(self.__version))
         for key, value in self.items():
