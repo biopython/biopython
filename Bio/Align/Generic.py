@@ -36,7 +36,18 @@ class Alignment:
 
         The return value is a list of SeqRecord objects.
         """
-        return self._records 
+        return self._records
+
+    def get_seq_by_num(self, number):
+        """Retrieve a sequence by the number of the sequence in the consensus.
+
+        Returns:
+        o A Seq object for the requested sequence.
+
+        Raises:
+        o IndexError - If the specified number is out of range.
+        """
+        return self._records[number].seq
 
     def get_alignment_length(self):
         """Return the maximum length of the alignment.

@@ -261,7 +261,7 @@ class SummaryInfo:
         return base_dictionary, skip_items
 
 
-    def pos_specific_score_matrix(self, consensus_seq = None,
+    def pos_specific_score_matrix(self, axis_seq = None,
                                   chars_to_ignore = []):
         """Create a position specific score matrix object for the alignment.
 
@@ -270,24 +270,29 @@ class SummaryInfo:
 
         Arguments:
         o chars_to_ignore - A listing of all characters not to include in
-        the pssm.
-        o use_consensus - An optional argument to put the consensus
-        sequence as the left hand side of the PSSM. If a consensus Seq object
-        is passed (ie. once calculated from dumb_consensus()) this will be
-        used, otherwise the first sequence in the alignment will be put there.
+        the pssm. By default, gap characters will be excluded.
+        o axis_seq - An optional argument specifying the sequence to
+        put on the axis of the PSSM. This should be a Seq object. If nothing
+        is specified, the consensus sequence, calculated with default
+        parameters, will be used.
 
         Returns:
         o A PSSM (position specific score matrix) object.
         """
         # determine all of the letters we have to deal with
         all_letters = self.alignment._alphabet.letters
+
+        # if we have a gap char, add it to stuff to ignore
+        if isinstance(self.alignment._alphabet, Alphabet.Gapped):
+            chars_to_ignore.append(self.alignment._alphabet.gap_char)
+        
         for char in chars_to_ignore:
             all_letters = string.replace(all_letters, char, '')
 
-        if consensus_seq:
-            left_seq = consensus_seq
+        if axis_seq:
+            left_seq = axis_seq
         else:
-            left_seq = self.alignment._records[0].seq
+            left_seq = self.dumb_consensus()
 
         pssm_info = []
         # now start looping through all of the sequences and getting info
@@ -342,7 +347,8 @@ class SummaryInfo:
         length of the first sequence.
         o expected_freqs - A dictionary specifying the expected frequencies
         for each letter in the alphabet we are using (ie. {'G' : 0.4,
-        'C' : 0.4, 'T' : 0.1, 'A' : 0.1})
+        'C' : 0.4, 'T' : 0.1, 'A' : 0.1}). Gap characters should not be
+        included, since these should not have expected frequencies.
         o log_base - The base of the logathrim to use in calculating the
         information content. This defaults to 2 so the info is in bits.
         o chars_to_ignore - A listing of characterw which should be ignored
@@ -439,16 +445,21 @@ class SummaryInfo:
         """
         if expected_freq:
             # check the expected freq information to make sure it is good
-            if expected_freq.keys() != obs_freq.keys():
-                raise ValueError \
-                      ("Expected frequency letters %s do not match observed %s"
-                       % (expected_freq.keys(), obs_freq.keys()))
+            for key in obs_freq.keys():
+                if (key != self.alignment._alphabet.gap_char and
+                    key not in expected_freq.keys()):
+                    raise ValueError("Expected frequency letters %s" +
+                                     " do not match observed %s"
+                           % (expected_freq.keys(), obs_freq.keys() -
+                              [self.alignment._alphabet.gap_char]))
         
         total_info = 0
 
         for letter in obs_freq.keys():
             # if we have expected frequencies, modify the log value by them
-            if expected_freq:
+            # gap characters do not have expected frequencies, so they
+            # should just be the observed frequency.
+            if expected_freq and letter != self.alignment._alphabet.gap_char:
                 inner_log = obs_freq[letter] / expected_freq[letter]
             else:
                 inner_log = obs_freq[letter]
