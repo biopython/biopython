@@ -292,7 +292,12 @@ class _Scanner:
 
             # Check to see if it's a continuation line.
             qualifier = string.rstrip(line[:4])
-            if line[0] == '\t' or qualifier == '':
+            # There's a bug in some MH lines where the "isolation &
+            # purification" subheading gets split across lines and
+            # purification at the beginning of the line, with only 1
+            # space.
+            if line[0] == '\t' or qualifier == '' or \
+               line[:13] == ' purification':
                 if prev_qualifier is None:
                     raise SyntaxError, "Continuation on first line\n%s" % line
                 qualifier = prev_qualifier
@@ -501,6 +506,8 @@ class _RecordConsumer(AbstractConsumer):
         tab = string.find(line, '\t')
         if tab >= 0:
             nospace = line[tab+1:]
+        elif line[:13] == ' purification':
+            nospace = line[1:]
         else:
             nospace = line[6:]
         if rstrip:
