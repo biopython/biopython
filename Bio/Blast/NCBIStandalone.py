@@ -406,8 +406,15 @@ class _Scanner:
         # not TBLASTX
         if attempt_read_and_call(uhandle, consumer.noevent, start='Lambda'):
             read_and_call(uhandle, consumer.ka_params_gap)
-        read_and_call_while(uhandle, consumer.noevent, blank=1)
-
+            
+        # Blast 2.2.4 can sometimes skip the whole parameter section.
+        # Thus, I need to be careful not to read past the end of the
+        # file.
+        try:
+            read_and_call_while(uhandle, consumer.noevent, blank=1)
+        except SyntaxError, x:
+            if str(x) != "Unexpected end of stream.":
+                raise
         consumer.end_database_report()
 
     def _scan_parameters(self, uhandle, consumer):
@@ -436,6 +443,12 @@ class _Scanner:
         # X3: 64 (24.9 bits)
         # S1: 41 (21.9 bits)
         # S2: 42 (20.8 bits)
+
+        # Blast 2.2.4 can sometimes skip the whole parameter section.
+        # Thus, check to make sure that the parameter section really
+        # exists.
+        if not uhandle.peekline():
+            return
 
         consumer.start_parameters()
 
