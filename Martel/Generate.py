@@ -492,7 +492,7 @@ class print_info:
             s = s[:17] + " ... " + s[-17:]
         self.msg = s
     def __call__(self, text, x, end):
-        print "Match %s (x=%d): %s" % (repr(text[x-8:x+8]), x,
+        print "Match %s (x=%d): %s" % (repr(text[min(0, x-8):x+8]), x,
                                             repr(self.msg))
         return x
 
