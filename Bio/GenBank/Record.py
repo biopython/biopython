@@ -106,7 +106,9 @@ class Record:
     o date - The date of submission of the record, in a form like '28-JUL-1998'
     o accession - list of all accession numbers for the sequence.
     o nid - Nucleotide identifier number.
+    o pid - Proteint identifier number
     o version - The accession number + version (ie. AB01234.2)
+    o db_source - Information about the database the record came from
     o gi - The NCBI gi identifier for the record.
     o keywords - A list of keywords related to the record.
     o segment - If the record is one of a series, this is info about which
@@ -153,7 +155,9 @@ class Record:
         self.definition = ''
         self.accession = []
         self.nid = ''
+        self.pid = ''
         self.version = ''
+        self.db_source = ''
         self.gi = ''
         self.keywords = []
         self.segment = ''
@@ -185,7 +189,9 @@ class Record:
         output += self._accession_line()
         output += self._version_line()
         output += self._nid_line()
+        output += self._pid_line()
         output += self._keywords_line()
+        output += self._db_source_line()
         output += self._segment_line()
         output += self._source_line()
         output += self._organism_line()
@@ -210,7 +216,10 @@ class Record:
         output += "%-9s" % self.locus
         output += " " # 22 space
         output += "%7s" % self.size
-        output += " bp "
+        if self.residue_type.find("PROTEIN") >= 0:
+            output += " aa"
+        else:
+            output += " bp "
 
         # treat circular types differently, since they'll have long residue
         # types
@@ -272,6 +281,16 @@ class Record:
             output = ""
         return output
 
+    def _pid_line(self):
+        """Output for PID line. Presumedly, PID usage is also obsolete.
+        """
+        if self.pid:
+            output = Record.BASE_FORMAT % "PID"
+            output += "%s\n" % self.pid
+        else:
+            output = ""
+        return output
+
     def _keywords_line(self):
         """Output for the KEYWORDS line.
         """
@@ -288,6 +307,16 @@ class Record:
             output += _wrapped_genbank(keyword_info,
                                        Record.GB_BASE_INDENT)
 
+        return output
+
+    def _db_source_line(self):
+        """Output for DBSOURCE line.
+        """
+        if self.db_source:
+            output = Record.BASE_FORMAT % "DBSOURCE"
+            output += "%s\n" % self.db_source
+        else:
+            output = ""
         return output
 
     def _segment_line(self):

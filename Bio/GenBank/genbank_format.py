@@ -142,6 +142,15 @@ nid_line = Martel.Group("nid_line",
                         nid +
                         Martel.AnyEol())
 
+# PID         g6754304
+pid = Martel.Group("pid",
+                   Martel.Re("[\w\d]+"))
+pid_line = Martel.Group("pid_line", 
+                        Martel.Str("PID") +
+                        blank_space +
+                        pid + 
+                        Martel.AnyEol())
+
 # version and GI line
 # VERSION     AC007323.5  GI:6587720
 version = Martel.Group("version",
@@ -158,6 +167,14 @@ version_line = Martel.Group("version_line",
                             Martel.Str("GI:") +
                             gi +
                             Martel.AnyEol())
+
+# DBSOURCE    REFSEQ: accession NM_010510.1
+db_source = Martel.Group("db_source",
+                         Martel.ToEol())
+db_source_line = Martel.Group("db_source_line",
+                              Martel.Str("DBSOURCE") +
+                              blank_space +
+                              db_source) 
 
 # keywords line
 # KEYWORDS    antifreeze protein homology; cold-regulated gene; cor6.6 gene;
@@ -312,8 +329,10 @@ feature_key_names = (
     "primer",           # Primer binding region used with PCR  XXX not in 
                         #   http://www.ncbi.nlm.nih.gov/collab/FT/index.html
     "promoter",         # A region involved in transcription initiation
+    "Protein",          # A REFSEQ invention for referring to a protein
     "protein_bind",     # Non-covalent protein binding site on DNA or RNA
     "RBS",              # Ribosome binding site
+    "Region",           # Another REFSEQ invention that doesn't make any sense
     "rep_origin",       # Replication origin for duplex DNA
     "repeat_region",    # Sequence containing repeated subsequences
     "repeat_unit",      # One repeated unit of a repeat_region
@@ -424,6 +443,7 @@ feature_qualifier_names = (
                       #   evidence for a feature
     "clone_lib",      # Clone library from which the sequence was obtained
     "clone",          # Clone from which the sequence was obtained
+    "coded_by",       # REFSEQ invention to specify a crossreference
     "codon_start",    # Indicates the first base of the first complete codon
                       #   in a CDS (as 1 or 2 or 3)
     "codon",          # Specifies a codon that is different from any found
@@ -505,6 +525,7 @@ feature_qualifier_names = (
     "rearranged",     # If the sequence shown is DNA and a member of the
                       #   immunoglobulin family, this qualifier is used to
                       #   denote that the sequence is from rearranged DNA
+    "region_name",    # REFSEQ invention to go with their Region Type
     "replace",        # Indicates that the sequence identified a feature's
                       #   intervals is replaced by the  sequence shown in
                       #   "text"
@@ -624,7 +645,9 @@ record = Martel.Group("genbank_record",
                       definition_block + \
                       accession_block + \
                       Martel.Opt(nid_line) + \
+                      Martel.Opt(pid_line) + \
                       Martel.Opt(version_line) + \
+                      Martel.Opt(db_source_line) + \
                       keywords_block + \
                       Martel.Opt(segment_line) + \
                       source_block + \
@@ -633,7 +656,7 @@ record = Martel.Group("genbank_record",
                       Martel.Opt(comment_block) + \
                       features_line + \
                       Martel.Rep1(feature) + \
-                      base_count_line + \
+                      Martel.Opt(base_count_line) + \
                       sequence_entry + \
                       record_end)
 

@@ -98,15 +98,15 @@ class Dictionary:
     def __getitem__(self, key):
         """Retrieve an item from the dictionary.
         """
-        print "keys:", self._index.keys()
+        # print "keys:", self._index.keys()
         # get the location of the record of interest in the file
         start, len = self._index[key]
-        print "start:", start, "len:", len
+        # print "start:", start, "len:", len
 
         # read through and get the data from the file
         self._handle.seek(start)
         data = self._handle.read(len)
-        print "data:", data
+        # print "data:", data
 
         # run the data through the parser if one is specified
         if self._parser is not None:
@@ -434,6 +434,9 @@ class _FeatureConsumer(_BaseGenBankConsumer):
     def nid(self, content):
         self.data.annotations['nid'] = content
 
+    def pid(self, content):
+        self.data.annotations['pid'] = content
+
     def version(self, version_id):
         """Set the version to overwrite the id.
 
@@ -442,6 +445,9 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         a version.
         """
         self.data.id = version_id
+
+    def db_source(self, content):
+        self.data.annotations['db_source'] = content.rstrip()
 
     def gi(self, content):
         self.data.annotations['gi'] = content
@@ -485,26 +491,26 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         (bases 1 to 86436)
         (sites)
         (bases 1 to 105654; 110423 to 111122)
+        1  (residues 1 to 182)
         """
-        # first remove the parentheses
+        # first remove the parentheses or other junk
         ref_base_info = content[1:-1]
 
         all_locations = []
-        # only attempt to get out information if we find the words
-        # 'bases' and 'to'
+        # parse if we've got 'bases' and 'to'
         if (string.find(ref_base_info, 'bases') != -1 and
             string.find(ref_base_info, 'to') != -1):
             # get rid of the beginning 'bases'
             ref_base_info = ref_base_info[5:]
-            # split possibly multiple locations using the ';'
-            all_base_info = string.split(ref_base_info, ';')
-
-            for base_info in all_base_info:
-                start, end = string.split(base_info, 'to')
-                this_location = \
-                  SeqFeature.FeatureLocation(int(string.strip(start)),
-                                             int(string.strip(end)))
-                all_locations.append(this_location)
+            locations = self._split_reference_locations(ref_base_info)
+            all_locations.extend(locations)
+        elif (ref_base_info.find("residues") >= 0 and
+              ref_base_info.find("to") >= 0):
+            residues_start = ref_base_info.find("residues")
+            # get only the information after "residues"
+            ref_base_info = ref_base_info[(residues_start + len("residues ")):]
+            locations = self._split_reference_locations(ref_base_info)
+            all_locations.extend(locations)
 
         # make sure if we are not finding information then we have
         # the string 'sites' or the string 'bases'
@@ -517,7 +523,29 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                              (ref_base_info, self.data.id))
 
         self._current_ref.location = all_locations
-                
+
+    def _split_reference_locations(self, location_string):
+        """Get reference locations out of a string of reference information
+        
+        The passed string should be of the form:
+
+            1 to 20; 20 to 100
+
+        This splits the information out and returns a list of location objects
+        based on the reference locations.
+        """
+        # split possibly multiple locations using the ';'
+        all_base_info = location_string.split(';')
+
+        new_locations = []
+        for base_info in all_base_info:
+            start, end = base_info.split('to')
+            this_location = \
+              SeqFeature.FeatureLocation(int(string.strip(start)),
+                                             int(string.strip(end)))
+            new_locations.append(this_location)
+        return new_locations
+
     def authors(self, content):
         self._current_ref.authors = content
 
@@ -905,8 +933,14 @@ class _RecordConsumer(_BaseGenBankConsumer):
     def nid(self, content):
         self.data.nid = content
 
+    def pid(self, content):
+        self.data.pid = content
+
     def version(self, content):
         self.data.version = content
+
+    def db_source(self, content):
+        self.data.db_source = content.rstrip()
 
     def gi(self, content):
         self.data.gi = content
@@ -1070,7 +1104,8 @@ class _Scanner:
         # in the MartelParser
         self.interest_tags = ["locus", "size", "residue_type",
                               "data_file_division", "date",
-                              "definition", "accession", "nid", "version",
+                              "definition", "accession", "nid", 
+                              "pid", "version", "db_source",
                               "gi", "keywords", "segment",
                               "source", "organism",
                               "taxonomy", "reference_num",
