@@ -1,8 +1,9 @@
 #!/usr/bin/env python2.3
 
-__version__ = "$Revision: 1.3 $"
+__version__ = "$Revision: 1.4 $"
 
 import os
+import sys
 
 try:
     import poly
@@ -43,7 +44,7 @@ def _build_align_cmdline(cmdline, pair, output_filename, kbyte=None, force_type=
 
     return cmdline_str
 
-def align(cmdline, pair, kbyte=None, force_type=None, dry_run=False, quiet=False):
+def align(cmdline, pair, kbyte=None, force_type=None, dry_run=False, quiet=False, debug=False):
     """
     Returns a filehandle
     """
@@ -59,8 +60,9 @@ def align(cmdline, pair, kbyte=None, force_type=None, dry_run=False, quiet=False
         print cmdline_str
         return
 
-    import sys
-    print >>sys.stderr, cmdline_str
+    if debug:
+        print >>sys.stderr, cmdline_str
+        
     os.system(cmdline_str)
     return temp_file
 
