@@ -30,7 +30,7 @@ class SummaryInfo:
         self.alignment = alignment
 
     def dumb_consensus(self, threshold = .7, ambiguous = "N",
-                       consensus_alpha = None):
+                       consensus_alpha = None, require_multiple = 0):
         """Output a fast consensus sequence of the alignment.
 
         This doesn't do anything fancy at all. It will just go through the
@@ -50,6 +50,9 @@ class SummaryInfo:
         not reached.
         o consensus_alpha - The alphabet to return for the consensus sequence.
         If this is None, then we will try to guess the alphabet.
+        o require_multiple - If set as 1, this will require that more than
+        1 sequence be part of an alignment to put it in the consensus (ie.
+        not just 1 sequence and gaps).
         """
         consensus = ''
 
@@ -85,7 +88,9 @@ class SummaryInfo:
                 elif atom_dict[atom] == max_size:
                     max_atoms.append(atom)
 
-            if (len(max_atoms) == 1) and ((float(max_size)/float(num_atoms))
+            if require_multiple and num_atoms == 1:
+                consensus = consensus + ambiguous
+            elif (len(max_atoms) == 1) and ((float(max_size)/float(num_atoms))
                                          >= threshold):
                 consensus = consensus + max_atoms[0]
             else:
