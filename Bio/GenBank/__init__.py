@@ -239,7 +239,8 @@ class ErrorParser:
 class FeatureParser:
     """Parse GenBank files into Seq + Feature objects.
     """
-    def __init__(self, debug_level = 0, use_fuzziness = 1):
+    def __init__(self, debug_level = 0, use_fuzziness = 1, 
+                 feature_cleaner = None):
         """Initialize a GenBank parser and Feature consumer.
 
         Arguments:
@@ -249,14 +250,19 @@ class FeatureParser:
         you can set this as high as two and see exactly where a parse fails.
         o use_fuzziness - Specify whether or not to use fuzzy representations.
         The default is 1 (use fuzziness).
+        o feature_cleaner - A class which will be used to clean out the
+        values of features. This class must implement the function 
+        clean_value. GenBank.utils has a "standard" cleaner class.
         """
         self._scanner = _Scanner(debug_level)
         self.use_fuzziness = use_fuzziness
+        self._cleaner = feature_cleaner
 
     def parse(self, handle):
         """Parse the specified handle.
         """
-        self._consumer = _FeatureConsumer(self.use_fuzziness)
+        self._consumer = _FeatureConsumer(self.use_fuzziness, 
+                                          self._cleaner)
         self._scanner.feed(handle, self._consumer)
         return self._consumer.data
 
@@ -398,12 +404,15 @@ class _FeatureConsumer(_BaseGenBankConsumer):
     Attributes:
     o use_fuzziness - specify whether or not to parse with fuzziness in
     feature locations.
+    o feature_cleaner - a class that will be used to provide specialized
+    cleaning-up of feature values.
     """
-    def __init__(self, use_fuzziness):
+    def __init__(self, use_fuzziness, feature_cleaner = None):
         _BaseGenBankConsumer.__init__(self)
         self.data = SeqRecord(None, id = None)
 
         self._use_fuzziness = use_fuzziness
+        self._feature_cleaner = feature_cleaner
 
         self._seq_type = ''
         self._seq_data = []
@@ -856,6 +865,8 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         if self._cur_qualifier_key:
             key = self._cur_qualifier_key
             value = self._cur_qualifier_value
+            if self._feature_cleaner is not None:
+                value = self._feature_cleaner.clean_value(key, value)
             # if the qualifier name exists, append the value
             if self._cur_feature.qualifiers.has_key(key):
                 self._cur_feature.qualifiers[key].append(value)
