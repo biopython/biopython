@@ -222,7 +222,8 @@ class _RecordConsumer:
             cols = metabolite_role.split()
 
     def end_stochiometric( self, content ):
-        self.data.stochiometric.matrix = Matrix.Matrix( self._vectors  )
+        if( self._vectors != [] ):
+            self.data.stochiometric.matrix = Matrix.Matrix( self._vectors  )
         self.data.stochiometric.enzymes = []
         for enzyme in self._enzymes:
             self.data.stochiometric.enzymes.append( enzyme )
@@ -233,7 +234,8 @@ class _RecordConsumer:
             self.data.stochiometric.irreversible_vector.append( col )
 
     def end_kernel( self, content ):
-        self.data.kernel.matrix = Matrix.Matrix( self._vectors )
+        if( self._vectors != [] ):
+            self.data.kernel.matrix = Matrix.Matrix( self._vectors )
         self.data.kernel.enzymes = []
         for enzyme in self._enzymes:
             self.data.kernel.enzymes.append( enzyme )
@@ -241,7 +243,8 @@ class _RecordConsumer:
             self.data.kernel.reactions.append( reaction )
 
     def end_subsets( self, content ):
-        self.data.subsets.matrix = Matrix.Matrix( self._vectors )
+        if( self._vectors != [] ):
+            self.data.subsets.matrix = Matrix.Matrix( self._vectors )
         self.data.subsets.enzymes = []
         for enzyme in self._enzymes:
             self.data.subsets.enzymes.append( enzyme )
@@ -250,7 +253,8 @@ class _RecordConsumer:
 
 
     def end_reduced_system( self, content ):
-        self.data.reduced_system.matrix = Matrix.Matrix( self._vectors[:14] )
+        if( self._vectors != [] ):
+            self.data.reduced_system.matrix = Matrix.Matrix( self._vectors[:14] )
         self.data.reduced_system.enzymes = []
         for enzyme in self._enzymes:
             self.data.reduced_system.enzymes.append( enzyme )
@@ -261,7 +265,8 @@ class _RecordConsumer:
 
 
     def end_convex_basis( self, content ):
-        self.data.convex_basis.matrix = Matrix.Matrix( self._vectors )
+        if( self._vectors != [] ):
+            self.data.convex_basis.matrix = Matrix.Matrix( self._vectors )
         self.data.convex_basis.enzymes = []
         for enzyme in self._enzymes:
             self.data.convex_basis.enzymes.append( enzyme )
@@ -269,7 +274,8 @@ class _RecordConsumer:
             self.data.convex_basis.reactions.append( reaction )
 
     def end_conservation_relations( self, content ):
-        self.data.conservation_relations.matrix = Matrix.Matrix( self._vectors )
+        if( self._vectors != [] ):
+            self.data.conservation_relations.matrix = Matrix.Matrix( self._vectors )
         self.data.conservation_relations.enzymes = []
         for enzyme in self._enzymes:
             self.data.conservation_relations.enzymes.append( enzyme )
@@ -278,7 +284,8 @@ class _RecordConsumer:
 
 
     def end_elementary_modes( self, content ):
-        self.data.elementary_modes.matrix = Matrix.Matrix( self._vectors )
+        if( self._vectors != [] ):
+            self.data.elementary_modes.matrix = Matrix.Matrix( self._vectors )
         self.data.elementary_modes.enzymes = []
         for enzyme in self._enzymes:
             self.data.elementary_modes.enzymes.append( enzyme )
