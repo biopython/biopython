@@ -1,4 +1,4 @@
-import string
+import os, string
 import Bio.Alphabet
 
 from Bio.Seq import Seq
