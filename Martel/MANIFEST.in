@@ -1,0 +1,10 @@
+include *.py
+include examples/sample.*
+include formats/*.py
+include test/*.py
+
+include README
+include TODO
+include ChangeLog
+include HISTORY
+
