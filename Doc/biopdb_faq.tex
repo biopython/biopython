@@ -20,6 +20,11 @@
 \providecommand{\tabularnewline}{\\}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
+ \newcommand{\lyxaddress}[1]{
+   \par {\raggedright #1 
+   \vspace{1.4em}
+   \noindent\par}
+ }
  \newenvironment{lyxcode}
    {\begin{list}{}{
      \setlength{\rightmargin}{\leftmargin}
@@ -64,8 +69,11 @@
 {\huge Structural Bioinformatics FAQ}}
 
 
-\author{Thomas Hamelryck\\
-Bioinformatics center\\
+\author{Thomas Hamelryck}
+
+\maketitle
+
+\lyxaddress{Bioinformatics center\\
 University of Copenhagen \\
 Universitetsparken 15, Bygning 10\\
 DK-2100 København Ø\\
@@ -73,7 +81,6 @@ Denmark \\
 thamelry@binf.ku.dk\\
 \url{http://www.binf.ku.dk/users/thamelry/}}
 
-\maketitle
 
 \section{Introduction}
 
@@ -91,9 +98,9 @@ the goal of biopython is to make it as easy as possible to use python
 for bioinformatics by creating high-quality, reusable modules and
 classes. Biopython features include parsers for various Bioinformatics
 file formats (BLAST, Clustalw, FASTA, Genbank,...), access to online
-services (NCBI, Expasy,...), interfaces to common programs (Clustalw,
-DSSP,...), a standard sequence class, various clustering modules,
-a KD tree data structure etc. and documentation. 
+services (NCBI, Expasy,...), interfaces to common and not-so-common
+programs (Clustalw, DSSP, MSMS...), a standard sequence class, various
+clustering modules, a KD tree data structure etc. and even documentation. 
 
 Bio.PDB is a biopython module that focuses on working with crystal
 structures of biological macromolecules. This document gives a fairly
@@ -132,16 +139,18 @@ implemented in Python. \textit{Bioinformatics}, \textbf{19}, 2308-2310.
 \end{quote}
 The article can be freely downloaded via the Bioinformatics journal
 website (\url{http://www.binf.ku.dk/users/thamelry/references.html}).
+I welcome e-mails telling me what you are using Bio.PDB for. Feature
+requests are welcome too.
 
 
 \section{How well tested is Bio.PDB?}
 
-Pretty well, actually. Bio.PDB has been tested on nearly 5500 structures
-from the PDB and did not crash once. Moreover, all structures seemed
-to be parsed correctly. More details can be found in the Bio.PDB Bioinformatics
+Pretty well, actually. Bio.PDB has been extensively tested on nearly
+5500 structures from the PDB - all structures seemed to be parsed
+correctly. More details can be found in the Bio.PDB Bioinformatics
 article. Bio.PDB has been used/is being used in many research projects
 as a reliable tool. In fact, I'm using Bio.PDB almost daily for research
-purposes and continue working on improving it.
+purposes and continue working on improving it and adding new features.
 
 
 \section{How fast is it?}
@@ -225,7 +234,8 @@ structure=p.get\_structure('PHA-L',~'1FAT.cif')
 \subsubsection*{...and what about the new PDB XML format?}
 
 That's not yet supported, but I'm definitely planning to support that
-in the future.
+in the future (it's not a lot of work). Contact me if you need this,
+it might encourage me :-).
 
 
 \subsubsection*{I'd like to have some more low level access to an mmCIF file...}
@@ -500,13 +510,16 @@ for~model~in~structure.get\_iterator():
 \end{lyxcode}
 Structures, models, chains, residues and atoms are called \texttt{Entities}
 in Biopython. You can always get a parent \texttt{Entity} from a child
-\texttt{Entity}, eg:
+\texttt{Entity}, eg.:
 
 \begin{lyxcode}
 residue=atom.get\_parent()
 
 chain=residue.get\_parent()
 \end{lyxcode}
+You can also test wether an \texttt{Entity} has a certain child using
+the \texttt{has\_id} method.
+
 
 \subsubsection*{Can I do that a bit more conveniently?}
 
@@ -522,7 +535,7 @@ res\_list=Selection.unfold\_entities(structure,~'R')
 atom\_list=Selection.unfold\_entities(chain,~'A')
 \end{lyxcode}
 Obviously, A=atom, R=residue, C=chain, M=model, S=structure. You can
-also use this to go up in the hierarchy, eg. to get a list of (unique)
+use this to go up in the hierarchy, eg. to get a list of (unique)
 \texttt{Residue} or \texttt{Chain} parents from a list of \texttt{Atoms}:
 
 \begin{lyxcode}
@@ -533,7 +546,8 @@ chain\_list=Selection.unfold\_entities(atom\_list,~'C')
 For more info, see the API documentation.
 
 
-\subsubsection*{How do I extract a specific Atom/Residue/Chain/Model from a Structure?}
+\subsubsection*{How do I extract a specific \texttt{Atom/\-Residue/\-Chain/\-Model}
+from a Structure?}
 
 Easy. Here are some examples:
 
@@ -686,9 +700,9 @@ residue=chain{[}10{]}
 residue.disordered\_select('CYS')
 \end{lyxcode}
 In addition, you can get a list of all \texttt{Atom} objects (ie.
-all \texttt{DisorderedAtom} objects are 'unpacked' to \texttt{Atom}
-objects) using the \texttt{get\_unpacked\_list} method of a \texttt{(Disordered)\-Residue}
-object.
+all \texttt{DisorderedAtom} objects are 'unpacked' to their individual
+\texttt{Atom} objects) using the \texttt{get\_unpacked\_list} method
+of a \texttt{(Disordered)\-Residue} object.
 
 
 \subsubsection*{Can I sort residues in a chain somehow?}
@@ -717,18 +731,19 @@ Yup, supported. See section \ref{sub:Analysis}.
 \subsubsection*{I think the SMCRA data structure is not flexible/\-sexy/\-whatever
 enough...}
 
-Sure, sure. Everybody is always coming up with (mostly vaporware)
-data structures that handle all possible situations and are extensible
-in all thinkable (and unthinkable) ways. The prosaic truth however
-is that 99.9\% of people using (and I mean really using!) crystal
-structures think in terms of models, chains, residues and atoms. The
-philosophy of Bio.PDB is to provide a reasonably fast, clean, simple,
-but complete data structure to access structure data. The proof of
-the pudding is in the eating.
+Sure, sure. Everybody is always coming up with (mostly vaporware or
+partly implemented) data structures that handle all possible situations
+and are extensible in all thinkable (and unthinkable) ways. The prosaic
+truth however is that 99.9\% of people using (and I mean really using!)
+crystal structures think in terms of models, chains, residues and
+atoms. The philosophy of Bio.PDB is to provide a reasonably fast,
+clean, simple, but complete data structure to access structure data.
+The proof of the pudding is in the eating.
 
 Moreover, it is quite easy to build more specialised data structures
-on top of the \texttt{Structure} class. On the other hand, the \texttt{Structure}
-object is built using a Parser/\-Consumer approach (called \texttt{PDBParser/\-MMCIFParser}
+on top of the \texttt{Structure} class (eg. there's a \texttt{Polypeptide}
+class). On the other hand, the \texttt{Structure} object is built
+using a Parser/\-Consumer approach (called \texttt{PDBParser/\-MMCIFParser}
 and \texttt{Structure\-Builder}, respectively). One can easily re-use
 the PDB/mmCIF parsers by implementing a specialised \texttt{Structure\-Builder}
 class. It is of course also trivial to add support for new file formats
@@ -738,7 +753,7 @@ by writing new parsers.
 \subsection{\label{sub:Analysis}Analysis}
 
 
-\subsubsection*{How do I extract information from an Atom object?}
+\subsubsection*{How do I extract information from an \texttt{Atom} object?}
 
 Using the following methods:
 
@@ -751,7 +766,7 @@ a.get\_coord()~\#~atomic~coordinates
 
 a.get\_vector()~\#~atomic~coordinates~as~Vector~object
 
-a.get\_bfactor()~\#~B~factor
+a.get\_bfactor()~\#~isotropic~B~factor
 
 a.get\_occupancy()~\#~occupancy
 
@@ -766,7 +781,7 @@ a.get\_anisou()~\#~anisotropic~B~factor
 a.get\_fullname()~\#~atom~name~(with~spaces,~e.g.~'.CA.')
 \end{lyxcode}
 
-\subsubsection*{How do I extract information from a Residue object?}
+\subsubsection*{How do I extract information from a \texttt{Residue} object?}
 
 Using the following methods:
 
@@ -776,6 +791,8 @@ r.get\_resname()~\#~return~the~residue~name~(eg.~'GLY')
 r.is\_disordered()~\#~1~if~the~residue~has~disordered~atoms
 
 r.get\_segid()~\#~return~the~SEGID
+
+r.has\_id(name)~\#~test~if~a~residue~has~a~certain~atom
 \end{lyxcode}
 
 \subsubsection*{How do I measure distances?}
@@ -837,7 +854,7 @@ Use \texttt{NeighborSearch}. This uses a KD tree data structure coded
 in C++ behind the screens, so it's pretty darn fast (see \texttt{Bio.KDTree}).
 
 
-\subsubsection*{How do I extract polypeptides from a structure object?}
+\subsubsection*{How do I extract polypeptides from a \texttt{Structure} object?}
 
 Use \texttt{PolypeptideBuilder}. You can use the resulting \texttt{Polypeptide}
 object to get the sequence as a \texttt{Seq} object or to get a list
@@ -861,8 +878,13 @@ ppb=CaPPBuilder()
 
 for~pp~in~ppb.build\_peptides(structure):~
 
-~~~~print~pp.get\_sequence()~
+~~~~print~pp.get\_sequence()
 \end{lyxcode}
+Note that in the above case only model 0 of the structure is considered
+by \texttt{PolypeptideBuilder}. However, it is possible to use \texttt{PolypeptideBuilder}
+to build \texttt{Polypeptide} objects from \texttt{Model} and \texttt{Chain}
+objects as well.
+
 
 \subsubsection*{How do I get the sequence of a structure?}
 
@@ -947,7 +969,8 @@ of solvent accessibility (but I'm working on something even more powerful
 For this functionality, you need to install Michel Sanner's MSMS program
 (\url{http://www.scripps.edu/pub/olson-web/people/sanner/html/msms_home.html}).
 Then use the \texttt{ResidueDepth} class. You can also get access
-to the molecular surface itself (via the \texttt{get\_surface} function).
+to the molecular surface itself (via the \texttt{get\_surface} function),
+in the form of a Numpy array with the surface points.
 
 
 \subsubsection*{How do I map the residues of two related structures onto each other?}
@@ -957,15 +980,30 @@ class. This class can also be used for alignments with more than two
 structures.
 
 
+\subsubsection*{How do I test if a Residue object is an amino acid?}
+
+Use \texttt{is\_aa(residue)}.
+
+
+\subsubsection*{Can I do vector operations on atomic coordinates?}
+
+\texttt{Atom} objects return a \texttt{Vector} object representation
+of the coordinates with the \texttt{get\_vector} method. \texttt{Vector}
+implements the full set of 3D vector operations, matrix multiplication
+(left and right) and some advanced rotation-related operations as
+well. See also next question.
+
+
 \subsubsection*{How do I put a virtual C$\beta$ on a Gly residue?}
 
 OK, I admit, this example is only present to show off the possibilities
 of Bio.PDB's \texttt{Vector} module (though this code is actually
-used in the upcoming \texttt{HSExposure} module). Suppose that you
-would like to find the position of a Gly residue's C$\beta$ atom,
+used in the \texttt{HSExposure} module, which contains a novel way
+to parametrize residue exposure - publication underway). Suppose that
+you would like to find the position of a Gly residue's C$\beta$ atom,
 if it had one. How would you do that? Well, rotating the N atom of
-the Gly residue along the C$\alpha$-C bond over -120 degrees would
-roughly put it in the position of a C$\beta$ atom. Here's how to
+the Gly residue along the C$\alpha$-C bond over -120 degrees roughly
+puts it in the position of a virtual C$\beta$ atom. Here's how to
 do it, making use of the \texttt{rotaxis} method (which can be used
 to construct a rotation around a certain axis) of the \texttt{Vector}
 module:
@@ -1001,10 +1039,11 @@ cb=cb\_at\_origin+ca
 \end{lyxcode}
 This example shows that it's possible to do some quite nontrivial
 vector operations on atomic data, which can be quite useful. In addition
-to all the usual vector operations (cross and dot product, angle,
-norm, etc.) and the above mentioned \texttt{rotaxis} function, the
-\texttt{Vector} module also has methods to rotate (\texttt{rotmat})
-or reflect (\texttt{refmat}) one vector on top of another.
+to all the usual vector operations (cross (use \texttt{{*}{*}}), and
+dot (use \texttt{{*}}) product, angle, norm, etc.) and the above mentioned
+\texttt{rotaxis} function, the \texttt{Vector} module also has methods
+to rotate (\texttt{rotmat}) or reflect (\texttt{refmat}) one vector
+on top of another.
 
 
 \subsection{Manipulating the structure}
@@ -1068,12 +1107,12 @@ or directly using the \texttt{set\_coord} method.
 
 \subsubsection*{Bio.SCOP}
 
-Coming soon.
+Info coming soon.
 
 
 \subsubsection*{Bio.FSSP}
 
-Coming soon.
+Info coming soon.
 
 
 \section{You haven't answered my question yet!}
@@ -1090,7 +1129,7 @@ donated code to interact with the PDB database, and to parse the PDB
 header. Indraneel Majumdar sent in some bug reports and assisted in
 coding the \texttt{Polypeptide} module. Many thanks to Brad Chapman,
 Jeffrey Chang, Andrew Dalke and Iddo Friedberg for suggestions, comments,
-help and/or biting criticism.
+help and/or biting criticism :-).
 
 
 \section{Can I contribute?}

@@ -111,9 +111,10 @@ The Biopython web site (
  classes.
  Biopython features include parsers for various Bioinformatics file formats
  (BLAST, Clustalw, FASTA, Genbank,...), access to online services (NCBI, Expasy,...),
- interfaces to common programs (Clustalw, DSSP,...), a standard sequence class,
- various clustering modules, a KD tree data structure etc.
- and documentation.
+ interfaces to common and not-so-common programs (Clustalw, DSSP, MSMS...),
+ a standard sequence class, various clustering modules, a KD tree data structure
+ etc.
+ and even documentation.
  
 \layout Standard
 
@@ -198,20 +199,21 @@ The article can be freely downloaded via the Bioinformatics journal website
 \end_inset 
 
 ).
+ I welcome e-mails telling me what you are using Bio.PDB for.
+ Feature requests are welcome too.
 \layout Section
 
 How well tested is Bio.PDB?
 \layout Standard
 
 Pretty well, actually.
- Bio.PDB has been tested on nearly 5500 structures from the PDB and did not
- crash once.
- Moreover, all structures seemed to be parsed correctly.
+ Bio.PDB has been extensively tested on nearly 5500 structures from the PDB
+ - all structures seemed to be parsed correctly.
  More details can be found in the Bio.PDB Bioinformatics article.
  Bio.PDB has been used/is being used in many research projects as a reliable
  tool.
  In fact, I'm using Bio.PDB almost daily for research purposes and continue
- working on improving it.
+ working on improving it and adding new features.
 \layout Section
 
 How fast is it?
@@ -369,7 +371,8 @@ structure=p.get_structure('PHA-L', '1FAT.cif')
 \layout Standard
 
 That's not yet supported, but I'm definitely planning to support that in
- the future.
+ the future (it's not a lot of work).
+ Contact me if you need this, it might encourage me :-).
 \layout Subsubsection*
 
 I'd like to have some more low level access to an mmCIF file...
@@ -888,13 +891,24 @@ Entity
 \family typewriter 
 Entity
 \family default 
-, eg:
+, eg.:
 \layout LyX-Code
 
 residue=atom.get_parent()
 \layout LyX-Code
 
 chain=residue.get_parent()
+\layout Standard
+
+You can also test wether an 
+\family typewriter 
+Entity
+\family default 
+ has a certain child using the 
+\family typewriter 
+has_id
+\family default 
+ method.
 \layout Subsubsection*
 
 Can I do that a bit more conveniently?
@@ -920,7 +934,7 @@ atom_list=Selection.unfold_entities(chain, 'A')
 \layout Standard
 
 Obviously, A=atom, R=residue, C=chain, M=model, S=structure.
- You can also use this to go up in the hierarchy, eg.
+ You can use this to go up in the hierarchy, eg.
  to get a list of (unique) 
 \family typewriter 
 Residue
@@ -945,7 +959,14 @@ chain_list=Selection.unfold_entities(atom_list, 'C')
 For more info, see the API documentation.
 \layout Subsubsection*
 
-How do I extract a specific Atom/Residue/Chain/Model from a Structure?
+How do I extract a specific 
+\family typewriter 
+Atom/\SpecialChar \-
+Residue/\SpecialChar \-
+Chain/\SpecialChar \-
+Model
+\family default 
+ from a Structure?
 \layout Standard
 
 Easy.
@@ -1298,7 +1319,7 @@ Atom
 \family typewriter 
 DisorderedAtom
 \family default 
- objects are 'unpacked' to 
+ objects are 'unpacked' to their individual 
 \family typewriter 
 Atom
 \family default 
@@ -1358,9 +1379,9 @@ whatever enough...
 \layout Standard
 
 Sure, sure.
- Everybody is always coming up with (mostly vaporware) data structures that
- handle all possible situations and are extensible in all thinkable (and
- unthinkable) ways.
+ Everybody is always coming up with (mostly vaporware or partly implemented)
+ data structures that handle all possible situations and are extensible
+ in all thinkable (and unthinkable) ways.
  The prosaic truth however is that 99.9% of people using (and I mean really
  using!) crystal structures think in terms of models, chains, residues and
  atoms.
@@ -1374,7 +1395,12 @@ Moreover, it is quite easy to build more specialised data structures on
 \family typewriter 
 Structure
 \family default 
- class.
+ class (eg.
+ there's a 
+\family typewriter 
+Polypeptide
+\family default 
+ class).
  On the other hand, the 
 \family typewriter 
 Structure 
@@ -1410,7 +1436,11 @@ Builder
 Analysis
 \layout Subsubsection*
 
-How do I extract information from an Atom object?
+How do I extract information from an 
+\family typewriter 
+Atom
+\family default 
+ object?
 \layout Standard
 
 Using the following methods:
@@ -1429,7 +1459,7 @@ a.get_coord() # atomic coordinates
 a.get_vector() # atomic coordinates as Vector object
 \layout LyX-Code
 
-a.get_bfactor() # B factor
+a.get_bfactor() # isotropic B factor
 \layout LyX-Code
 
 a.get_occupancy() # occupancy
@@ -1455,7 +1485,11 @@ a.get_fullname() # atom name (with spaces, e.g.
  '.CA.')
 \layout Subsubsection*
 
-How do I extract information from a Residue object?
+How do I extract information from a 
+\family typewriter 
+Residue
+\family default 
+ object?
 \layout Standard
 
 Using the following methods:
@@ -1469,6 +1503,9 @@ r.is_disordered() # 1 if the residue has disordered atoms
 \layout LyX-Code
 
 r.get_segid() # return the SEGID
+\layout LyX-Code
+
+r.has_id(name) # test if a residue has a certain atom
 \layout Subsubsection*
 
 How do I measure distances?
@@ -1570,7 +1607,11 @@ Bio.KDTree
 ).
 \layout Subsubsection*
 
-How do I extract polypeptides from a structure object?
+How do I extract polypeptides from a 
+\family typewriter 
+Structure
+\family default 
+ object?
 \layout Standard
 
 Use 
@@ -2083,7 +2124,7 @@ ResidueDepth
 \family typewriter 
 get_surface
 \family default 
- function).
+ function), in the form of a Numpy array with the surface points.
 \layout Subsubsection*
 
 How do I map the residues of two related structures onto each other?
@@ -2095,6 +2136,41 @@ StructureAlignment
 \family default 
  class.
  This class can also be used for alignments with more than two structures.
+\layout Subsubsection*
+
+How do I test if a Residue object is an amino acid?
+\layout Standard
+
+Use 
+\family typewriter 
+is_aa(residue)
+\family default 
+.
+\layout Subsubsection*
+
+Can I do vector operations on atomic coordinates?
+\layout Standard
+
+
+\family typewriter 
+Atom
+\family default 
+ objects return a 
+\family typewriter 
+Vector
+\family default 
+ object representation of the coordinates with the 
+\family typewriter 
+get_vector
+\family default 
+ method.
+ 
+\family typewriter 
+Vector
+\family default 
+ implements the full set of 3D vector operations, matrix multiplication
+ (left and right) and some advanced rotation-related operations as well.
+ See also next question.
 \layout Subsubsection*
 
 How do I put a virtual C
@@ -2109,11 +2185,12 @@ OK, I admit, this example is only present to show off the possibilities
 \family typewriter 
 Vector
 \family default 
- module (though this code is actually used in the upcoming 
+ module (though this code is actually used in the 
 \family typewriter 
 HSExposure
 \family default 
- module).
+ module, which contains a novel way to parametrize residue exposure - publicatio
+n underway).
  Suppose that you would like to find the position of a Gly residue's C
 \begin_inset Formula $\beta$
 \end_inset 
@@ -2124,7 +2201,7 @@ HSExposure
 \begin_inset Formula $\alpha$
 \end_inset 
 
--C bond over -120 degrees would roughly put it in the position of a C
+-C bond over -120 degrees roughly puts it in the position of a virtual C
 \begin_inset Formula $\beta$
 \end_inset 
 
@@ -2185,8 +2262,15 @@ cb=cb_at_origin+ca
 
 This example shows that it's possible to do some quite nontrivial vector
  operations on atomic data, which can be quite useful.
- In addition to all the usual vector operations (cross and dot product,
- angle, norm, etc.) and the above mentioned 
+ In addition to all the usual vector operations (cross (use 
+\family typewriter 
+**
+\family default 
+), and dot (use 
+\family typewriter 
+*
+\family default 
+) product, angle, norm, etc.) and the above mentioned 
 \family typewriter 
 rotaxis
 \family default 
@@ -2325,13 +2409,13 @@ Other Structural Bioinformatics modules
 Bio.SCOP
 \layout Standard
 
-Coming soon.
+Info coming soon.
 \layout Subsubsection*
 
 Bio.FSSP
 \layout Standard
 
-Coming soon.
+Info coming soon.
 \layout Section
 
 You haven't answered my question yet!
@@ -2359,7 +2443,7 @@ Polypeptide
 \family default 
 module.
  Many thanks to Brad Chapman, Jeffrey Chang, Andrew Dalke and Iddo Friedberg
- for suggestions, comments, help and/or biting criticism.
+ for suggestions, comments, help and/or biting criticism :-).
 \layout Section
 
 Can I contribute?
