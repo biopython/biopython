@@ -49,7 +49,7 @@ trie_length(trieobject *mp)
 static PyObject *
 trie_subscript(trieobject *mp, PyObject *py_key)
 {
-    char *key;
+    unsigned char *key;
     PyObject *py_value;
 
     /* Make sure key is a string. */
@@ -57,10 +57,10 @@ trie_subscript(trieobject *mp, PyObject *py_key)
 	PyErr_SetString(PyExc_TypeError, "key must be a string");
 	return NULL;
     }
-    key = PyString_AS_STRING(py_key);
+    key = (unsigned char *)PyString_AS_STRING(py_key);
     py_value = (PyObject *)Trie_get(mp->trie, key);
     if(py_value == NULL)
-	PyErr_SetString(PyExc_KeyError, key);
+	PyErr_SetString(PyExc_KeyError, (char *)key);
     else
 	Py_INCREF(py_value);
     return py_value;
@@ -69,7 +69,7 @@ trie_subscript(trieobject *mp, PyObject *py_key)
 static int
 trie_ass_sub(trieobject *mp, PyObject *py_key, PyObject *py_value)
 {
-    char *key;
+    unsigned char *key;
     PyObject *py_prev;
 
     /* Make sure key is a string. */
@@ -77,7 +77,7 @@ trie_ass_sub(trieobject *mp, PyObject *py_key, PyObject *py_value)
 	PyErr_SetString(PyExc_TypeError, "key must be a string");
 	return -1;
     }
-    key = PyString_AS_STRING(py_key);
+    key = (unsigned char *)PyString_AS_STRING((char *)py_key);
     
     /* Check to see whether something already exists at that key.  If
        there's already an object there, then I will have to remove it.
@@ -93,7 +93,7 @@ trie_ass_sub(trieobject *mp, PyObject *py_key, PyObject *py_value)
     if(!py_value) {
 	/* If the key doesn't exist, raise a KeyError. */
 	if(!py_prev) {
-	    PyErr_SetString(PyExc_KeyError, key);
+	    PyErr_SetString(PyExc_KeyError, (char *)key);
 	    return -1;
 	}
 	Trie_set(mp->trie, key, NULL);
@@ -115,7 +115,7 @@ static char has_key__doc__[] =
 static PyObject *
 trie_has_key(trieobject *mp, PyObject *py_key)
 {
-    char *key;
+    unsigned char *key;
     int has_key;
 
     /* Make sure key is a string. */
@@ -123,7 +123,7 @@ trie_has_key(trieobject *mp, PyObject *py_key)
 	PyErr_SetString(PyExc_TypeError, "key must be a string");
 	return NULL;
     }
-    key = PyString_AS_STRING(py_key);
+    key = (unsigned char *)PyString_AS_STRING(py_key);
     has_key = Trie_has_key(mp->trie, key);
     return PyInt_FromLong((long)has_key);
 }
@@ -145,7 +145,7 @@ static char has_prefix__doc__[] =
 static PyObject *
 trie_has_prefix(trieobject *mp, PyObject *py_prefix)
 {
-    char *prefix;
+    unsigned char *prefix;
     int has_prefix;
 
     /* Make sure prefix is a string. */
@@ -153,7 +153,7 @@ trie_has_prefix(trieobject *mp, PyObject *py_prefix)
 	PyErr_SetString(PyExc_TypeError, "k must be a string");
 	return NULL;
     }
-    prefix = PyString_AS_STRING(py_prefix);
+    prefix = (unsigned char *)PyString_AS_STRING(py_prefix);
     has_prefix = Trie_has_prefix(mp->trie, prefix);
     return PyInt_FromLong((long)has_prefix);
 }
@@ -180,7 +180,7 @@ _trie_with_prefix_helper(const unsigned char *key, const void *value,
     if(PyErr_Occurred())
 	return;
 
-    if(!(py_key = PyString_FromString(key)))
+    if(!(py_key = PyString_FromString((const char *)key)))
 	return;
     PyList_Append(py_list, py_key);
     Py_DECREF(py_key);
@@ -189,7 +189,7 @@ _trie_with_prefix_helper(const unsigned char *key, const void *value,
 static PyObject *
 trie_with_prefix(trieobject *mp, PyObject *py_prefix)
 {
-    char *prefix;
+    unsigned char *prefix;
     PyObject *py_list;
 
     /* Make sure prefix is a string. */
@@ -197,7 +197,7 @@ trie_with_prefix(trieobject *mp, PyObject *py_prefix)
 	PyErr_SetString(PyExc_TypeError, "k must be a string");
 	return NULL;
     }
-    prefix = PyString_AS_STRING(py_prefix);
+    prefix = (unsigned char *)PyString_AS_STRING(py_prefix);
 
     if(!(py_list = PyList_New(0)))
 	return NULL;
@@ -232,7 +232,7 @@ _trie_keys_helper(const unsigned char *key, const void *value, void *data)
     if(PyErr_Occurred())
 	return;
 
-    if(!(py_key = PyString_FromString(key)))
+    if(!(py_key = PyString_FromString((char *)key)))
 	return;
     PyList_Append(py_list, py_key);
     Py_DECREF(py_key);
@@ -306,7 +306,7 @@ static char get__doc__[] =
 static PyObject *
 trie_get(trieobject *mp, PyObject *args)
 {
-    char *key;
+    unsigned char *key;
     PyObject *py_value;
     PyObject *py_failobj = Py_None;
 
@@ -336,7 +336,7 @@ _trie_get_approximate_helper(const unsigned char *key, const void *value,
     if(PyErr_Occurred())
 	return;
 
-    if(!(py_key = PyString_FromString(key)))
+    if(!(py_key = PyString_FromString((const char *)key)))
 	return;
     if(!(py_mismatches = PyInt_FromLong(mismatches))) {
 	Py_DECREF(py_key);
@@ -360,7 +360,7 @@ _trie_get_approximate_helper(const unsigned char *key, const void *value,
 static PyObject *
 trie_get_approximate(trieobject *mp, PyObject *args)
 {
-    char *key;
+    unsigned char *key;
     int k;
     PyObject *py_list;
 
@@ -553,7 +553,7 @@ _read_from_handle(void *wasread, const int length, void *handle)
 						  segment, &retval)) == -1)
 	    goto _read_from_handle_cleanup; 
 	memcpy(wasread, retval, bytes_read);
-	((char *)wasread) += bytes_read;
+	wasread = (void *)((char *)wasread + bytes_read);
 	bytes_left -= bytes_read;
 	segment += 1;
     }
@@ -567,12 +567,12 @@ _read_from_handle(void *wasread, const int length, void *handle)
     return success;
 }
 
+#define MAX_KEY_LENGTH 2000
 static void *
 _read_value_from_handle(void *handle)
 {
     int length;
-    const int MAX_KEY_LENGTH = 2000;
-    unsigned char KEY[MAX_KEY_LENGTH];
+    char KEY[MAX_KEY_LENGTH];
 
     if(!_read_from_handle((void *)&length, sizeof(length), (void *)handle))
 	return NULL;
