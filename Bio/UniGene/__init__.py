@@ -7,6 +7,46 @@ import Bio.File
 import Martel
 from mx import TextTools
 
+"""
+The UniGene site is:
+http://www.ncbi.nlm.nih.gov/UniGene/
+"""
+
+class Record( UserDict.UserDict):
+
+    def __init__( self ):
+        UserDict.UserDict.__init__( self )
+
+    def __str__( self ):
+        queue_keys = self.keys()
+        queue_keys.sort()
+        out = ''
+        for key in queue_keys:
+            out = out +  'key %s\n' % key
+            out = out + self.print_item( self[ key ] )
+        out = out + '\n'
+        return out
+
+    def print_item( self, item, level = 1 ):
+        indent = '    '
+        out = ''
+        for j in range( 0, level ):
+            indent = indent + '    '
+        if( type( item ) == type( '' ) ):
+            if( item != '' ):
+                out = out + '%s%s\n' % ( indent, item )
+        elif( type( item ) == type([])):
+            for subitem in item:
+                out = out + self.print_item( subitem, level + 1 )
+        elif( isinstance( item, UserDict.UserDict ) ):
+            keys = item.keys()
+            keys.sort()
+            for subitem in keys:
+                out = out + '%skey is %s\n' % ( indent, subitem )
+                out = out + self.print_item( item[ subitem ], level + 1 )
+        else:
+            out = out + '%s\n' % str( item )
+        return out
 
 
 class UniGeneParser( sgmllib.SGMLParser ):
@@ -14,7 +54,7 @@ class UniGeneParser( sgmllib.SGMLParser ):
     def reset( self ):
         sgmllib.SGMLParser.reset( self )
         self.text = ''
-        self.queue = UserDict.UserDict()
+        self.queue = Record()
         self.open_tag_stack = []
         self.open_tag = 'open_html'
         self.key_waiting = ''
@@ -170,37 +210,11 @@ class UniGeneParser( sgmllib.SGMLParser ):
         if( self.context == 'seq_info' ):
             self.text = self.text + ' '
 
-    def print_item( self, item, level = 1 ):
-        indent = '    '
-        for j in range( 0, level ):
-            indent = indent + '    '
-        if( type( item ) == type( '' ) ):
-            if( item != '' ):
-                print '%s%s' % ( indent, item )
-        elif( type( item ) == type([])):
-            for subitem in item:
-                self.print_item( subitem, level + 1 )
-        elif( isinstance( item, UserDict.UserDict ) ):
-            keys = item.keys()
-            keys.sort()
-            for subitem in keys:
-                print '%skey is %s' % ( indent, subitem )
-                self.print_item( item[ subitem ], level + 1 )
-        else:
-            print item
-
-    def print_tags( self ):
-        queue_keys = self.queue.keys()
-        queue_keys.sort()
-        for key in queue_keys:
-            print 'key %s' % key
-            self.print_item( self.queue[ key ] )
-
 
 
 if( __name__ == '__main__' ):
     handle = open( 'Hs13225.htm')
     undo_handle = Bio.File.UndoHandle( handle )
     unigene_parser = UniGeneParser()
-    unigene_parser.parse( handle )
-    unigene_parser.print_tags()
+    record = unigene_parser.parse( handle )
+    print record

@@ -22,5 +22,5 @@ for test in tests:
     datafile = os.path.join( 'UniGene', test )
     src_handle = open( datafile )
     data = record_parser.parse( src_handle )
-    record_parser.print_tags()
-    print '\n'
+    print data
+#    print '\n'
