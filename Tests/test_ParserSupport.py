@@ -5,10 +5,12 @@
 
 import os
 import string
+import sys
 from Bio import File
 from Bio import ParserSupport
 
-
+# pyUnit
+import unittest
 
 ### TaggingConsumer
 
@@ -151,3 +153,91 @@ print arac(h, m, contains="RIBOSOMAL PROTEIN")   # 1
 print arac(h, m, start="foobar")                 # 0
 print arac(h, m, blank=1)                        # 0
 print arac(h, m, end="LVSVKEQ")                  # 1
+
+# --- EventGenerator
+print "Running tests on EventGenerator"
+
+class TestConsumer:
+    """Collect information from callbacks from the EventGenerator.
+    """
+    def __init__(self):
+        self.info = {}
+
+    def main_tag(self, content):
+        raise AssertionError("We should never call this.")
+
+    def single_tag(self, content):
+        self.info['single_tag'] = content
+
+    def multiple_tags(self, content):
+        self.info['multiple_tags'] = content
+
+def strip_and_combine(line_list):
+    """Function to be sure the optional finalizer works.
+    """
+    stripped_line_list = map(string.strip, line_list)
+    return string.join(stripped_line_list, ',')
+
+class EventGeneratorTest(unittest.TestCase):
+    """Test the EventGenerator class to be sure callbacks are correct.
+    """
+    def setUp(self):
+        self.interest_tags = ['single_tag', 'multiple_tags']
+
+        import Martel
+
+        test_format = \
+           Martel.Group("main_tag",
+                        Martel.Group("single_tag", Martel.Str("Spam")) +
+                        Martel.Rep(Martel.Group("multiple_tags",
+                                                Martel.Str("  Lots of Spam"))))
+        self.test_parser = test_format.make_parser()
+
+    def t_basic_callback(self):
+        """Test the basic callback functionality.
+        """
+        consumer = TestConsumer()
+        event_gen = ParserSupport.EventGenerator(consumer,
+                                                 self.interest_tags)
+
+        self.test_parser.setContentHandler(event_gen)
+        self.test_parser.parseString("Spam" + "  Lots of Spam" +
+                                     "  Lots of Spam")
+        
+        assert consumer.info["single_tag"] == ["Spam"], \
+               "Single tag parsing failed: %s" % consumer.info["single_tag"]
+        assert consumer.info["multiple_tags"] == \
+               ["  Lots of Spam", "  Lots of Spam"], \
+               "Multiple tag parsing failed: %s" % \
+               consumer.info["multiple_tags"]
+
+    def t_finalizer_callback(self):
+        """Test the ability to pass a finalizer to the consumer.
+        """
+        consumer = TestConsumer()
+        event_gen = ParserSupport.EventGenerator(consumer, self.interest_tags,
+                                                 strip_and_combine)
+        
+        self.test_parser.setContentHandler(event_gen)
+        self.test_parser.parseString("Spam" + "  Lots of Spam" +
+                                     "  Lots of Spam")
+        
+        assert consumer.info["single_tag"] == "Spam", \
+               "Single tag parsing failed: %s" % consumer.info["single_tag"]
+        assert consumer.info["multiple_tags"] == "Lots of Spam,Lots of Spam", \
+               "Multiple tag parsing failed: %s" % \
+               consumer.info["multiple_tags"]     
+
+all_tests = [EventGeneratorTest]
+
+runner = unittest.TextTestRunner(sys.stdout)
+
+for cur_test in all_tests:
+    test_suite = unittest.makeSuite(cur_test, 't_')
+    runner.run(test_suite)
+
+        
+        
+        
+
+
