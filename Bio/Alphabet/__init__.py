@@ -23,6 +23,8 @@ class SingleLetterAlphabet(Alphabet):
     size = 1
     letters = None   # string of all letters in the alphabet
 
+single_letter_alphabet = SingleLetterAlphabet()
+
 ########### Protein
 
 class ProteinAlphabet(SingleLetterAlphabet):
