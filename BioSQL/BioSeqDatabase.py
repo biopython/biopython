@@ -261,14 +261,19 @@ class BioSeqDatabase:
         which will be used to populate the database. The Iterator should
         implement next() and either return None when it is out of objects
         or raise StopIteration (XXX python 2.2, we won't suport this yet).
+
+        Returns the number of records loaded
         """
         db_loader = Loader.DatabaseLoader(self.adaptor, self.dbid)
+        num_records = 0
         while 1:
             # XXX add a break with StopIteration here.
             cur_record = record_iterator.next()
             
             if cur_record is None:
                 break
-
+            num_records += 1
             db_loader.load_seqrecord(cur_record)
+
+        return num_records
         
