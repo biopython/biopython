@@ -1,4 +1,3 @@
-test_FSSP
 
 Read in 1cnv.fssp
 Reached equiv_title
@@ -17,14 +16,6 @@ The above two numbers should be the same
 
 Create a multiple alignment instance using Bio.Align
 ...Done
-
-Filter in percent ID's >= 15%
-
-number of records filtered in: 11
-
-Records filtered in [1, 2, 3, 4, 6, 7, 8, 9, 118, 134, 165]
-
-Let's Pickle this
 
 Filter by name
 

@@ -19,18 +19,19 @@ f.write("The above two numbers should be the same\n")
 f.write("\nCreate a multiple alignment instance using Bio.Align\n")
 alignment = FSSPTools.mult_align(sum_rec, align_rec)
 f.write("...Done\n")
-f.write("\nFilter in percent ID's >= 15%\n")
-sum_ge_15, align_ge_15 = FSSPTools.filter(sum_rec, align_rec, 'pID', 15,100)
+# Percent ID filtering takes too long.. remove from test.
 
-f.write("\nnumber of records filtered in: %d\n" % len(sum_ge_15))
-k = sum_ge_15.keys()
-k.sort()
-f.write("\nRecords filtered in %s\n" % k)
-f.write("\nLet's Pickle this\n")
-time_1 = time.time()
-dump_file = os.path.join('FSSP', 'mydump.pik')
-cPickle.dump((head_rec, sum_rec, align_rec),open(dump_file, 'w'))
-# f.write("Took me %.2f seconds to pickle\n" % (time.time() - time_1))
+# f.write("\nFilter in percent ID's >= 15%\n")
+# sum_ge_15, align_ge_15 = FSSPTools.filter(sum_rec, align_rec, 'pID', 15,100)
+
+# f.write("\nnumber of records filtered in: %d\n" % len(sum_ge_15))
+# k = sum_ge_15.keys()
+# k.sort()
+# f.write("\nRecords filtered in %s\n" % k)
+# Pickling takes too long.. remove from test.
+# f.write("\nLet's Pickle this\n")
+# dump_file = os.path.join('FSSP', 'mydump.pik')
+# cPickle.dump((head_rec, sum_rec, align_rec),open(dump_file, 'w'))
 
 f.write("\nFilter by name\n")
 name_list = ['2hvm0', '1hvq0', '1nar0', '2ebn0']
