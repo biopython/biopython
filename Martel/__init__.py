@@ -239,6 +239,55 @@ def ToEol(name = None, attrs = None):
     else:
         return Group(name, Re(r"[^\R]*"), attrs) + AnyEol()
 
+def ToSep(name = None, delimiter = None, attrs = None):
+    """match all characters up to the given delimiter(s)
+
+    This is useful for parsing space, tab, color, or other character
+    delimited fields.  There is no default delimiter.
+    
+    If 'name' is not None, the matching text, except for the delimiter
+    will be put inside a group of the given name.  You can optionally
+    include group attributes.  The delimiter character will also be
+    consumed.
+
+    Neither "\\r" nor "\\n" may be used as a delimiter.
+    """
+    if delimiter is None:
+        # I found it was too easy to make a mistake with a default
+        raise TypeError("Must specify a delimiter")
+
+    assert "\r" not in delimiter and "\n" not in delimiter, \
+           "cannot use %s as a delimiter" % (repr(delimiter),)
+
+    exp = Rep(AnyBut(delimiter + "\r\n"))
+    return _group(name, exp, attrs) + Str(delimiter)
+
+def DelimitedFields(name = None, delimiter = None, attrs = None):
+    """match 0 or more fields seperated by the given delimiter(s)
+
+    This is useful for parsing space, tab, color, or other character
+    delimited fields.  There is no default delimiter.
+
+    If 'name' is not None, the delimited text, excluding the delimiter,
+    will be put inside groups of the given name.  You can optionally
+    include group attributes.  The delimiter character is consumed,
+    but not accessible using a group.
+
+    Neither "\\r" nor "\\n" may be used as a delimiter.
+    The line as a whole is not included in a group.
+    """
+    if delimiter is None:
+        # I found it was too easy to make a mistake with a default
+        raise TypeError("Must specify a delimiter")
+
+    assert "\r" not in delimiter and "\n" not in delimiter, \
+           "cannot use %s as a delimiter" % (repr(delimiter),)
+
+    term = _group(name, Rep(AnyBut(delimiter + "\r\n")), attrs)
+    rep = Rep(Any(delimiter) + term)
+    return term + rep + AnyEol()
+    
+
 # Used when making parsers which read a record at a time
 ParseRecords = Expression.ParseRecords
 HeaderFooter = Expression.HeaderFooter
