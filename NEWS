@@ -1,16 +1,34 @@
 News for the Biopython Project
 ==============================
 
-This file contains release notes and general news
+This file contains release notes and general news 
 about the biopython project.
 
-  syntax fixes in triemodule.c to compile on SGI
+Jul 27, 3004: Biopython 1.20
+  added Andrew Dalke's EUtils library
+  added Michiel de Hoon's gene expression analysis package
+  updates to setup code, now smarter about dependencies
+  updates to test suite, now smarter about code that is imported
+  Michael Hoffman's fixes to DocSQL
+  syntax fixes in triemodule.c to compile on SGI, Python 2.1 compatible
   updates in NCBIStandalone, short query error
   Sebastian Bassi submitted code to calculate LCC complexity
   Greg Kettler's NCBIStandalone fix for long query lengths
   slew of miscellaneous fixes from George Paci
   miscellaneous cleanups and updates from Andreas Kuntzagk
-
+  Peter Bienstman's fixes to Genbank code -- now parses whole database
+  Kayte Lindner's LocusLink package
+  miscellaneous speedups and code cleanup in ParserSupport by Brad Chapman
+  miscellaneous BLAST fixes and updates
+  Iddo added new code to parse BLAST table output format
+  Karl Diedrich's patch to read T_Coffee files
+  Larry Heisler's fix for primer3 output
+  Bio.Medline now uses proper iterator objects
+  copen now handles SIGTERM correctly
+  small bugfixes and updates in Thomas Hamelryck's PDB package
+  bugfixes and updates to SeqIO.FASTA reader
+  updates to Registry system, conforms to 2003 hackathon OBDA spec
+  Yu Huang patch to support tblastn in wublast expression
 
 Dec 17, 2002: Biopython 1.10
   Python requirement bumped up to 2.2
