@@ -430,9 +430,16 @@ class _Scanner:
 
         consumer.start_database_report()
         
+        # Subset of the database(s) listed below
+        #    Number of letters searched: 562,618,960
+        #    Number of sequences searched:  228,924
+        if attempt_read_and_call(uhandle, consumer.noevent, start="  Subset"):
+            read_and_call(uhandle, consumer.noevent, contains="letters")
+            read_and_call(uhandle, consumer.noevent, contains="sequences")
+            read_and_call(uhandle, consumer.noevent, start="  ")
+
         # Sameet Mehta reported seeing output from BLASTN 2.2.9 that
         # was missing the "Database" stanza completely.
-
 	while attempt_read_and_call(uhandle, consumer.database,
                                     start='  Database'):
             # Database can span multiple lines.
