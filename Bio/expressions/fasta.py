@@ -89,8 +89,10 @@ id_term = ncbi_term | generic_term
 
 comment = Str(">") + Std.description_line(id_term + UntilEol()) + AnyEol()
 seqline = AssertNot(Str(">")) + Std.sequence(UntilEol()) + AnyEol()
+# can get a sequence line without an Eol at the end of a file
+seqline_nonewline = AssertNot(Str(">")) + Std.sequence(Word())
 
-sequence = Std.sequence_block(Rep(seqline))
+sequence = Std.sequence_block(Rep(seqline | seqline_nonewline))
 
 record = Std.record(comment + sequence + Rep(AnyEol()))
 
