@@ -154,16 +154,34 @@ if xml_support:
         'Biopython events', which can then be caught by a standard
         biopython consumer
         """
-        def __init__(self, consumer, interest_tags):
+        def __init__(self, consumer, interest_tags, callback_finalizer = None):
             """Initialize to begin catching and firing off events.
 
             Arguments:
             o consumer - The consumer that we'll send Biopython events to.
+            
             o interest_tags - A listing of all the tags we are interested in.
+
+            o callback_finalizer - A function to deal with the collected
+            information before passing it on to the consumer. By default
+            the collected information is a list of all of the lines read
+            for a particular tag -- if there are multiple tags in a row
+            like:
+
+            <some_info>Spam<some_info>
+            <some_info>More Spam<some_info>
+
+            In this case the list of information would be:
+
+            ['Spam', 'More Spam']
+            
+            This list of lines will be passed to the callback finalizer if
+            it is present. Otherwise the consumer will be called with the
+            list of content information.
             """
             self._consumer = consumer
-
             self.interest_tags = interest_tags
+            self._finalizer = callback_finalizer
 
             # a dictionary of flags to recognize when we are in different
             # info items
@@ -172,15 +190,21 @@ if xml_support:
                 self.flags[tag] = 0
 
             # a dictionary of content for each tag of interest
+            # the information for each tag is held as a list of the lines.
+            # This allows us to collect information from multiple tags
+            # in a row, and return it all at once.
             self.info = {}
             for tag in self.interest_tags:
-                self.info[tag] = ''
+                self.info[tag] = []
 
             # the previous tag we were collecting information for.
             # We set a delay in sending info to the consumer so that we can
             # collect a bunch of tags in a row and append all of the info
             # together.
             self._previous_tag = ''
+
+            # the current character information for a tag
+            self._cur_content = ''
 
         def _get_set_flags(self):
             """Return a listing of all of the flags which are set as positive.
@@ -200,7 +224,7 @@ if xml_support:
             the characters passed.
             """
             # set the appropriate flag if we are keeping track of these flags
-            if name in self.flags.keys():
+            if self.flags.has_key(name):
                 # make sure that all of the flags are being properly unset
                 assert self.flags[name] == 0, "Flag % not unset" % name
 
@@ -216,7 +240,8 @@ if xml_support:
 
             # deal with each flag in the set flags
             for flag in set_flags:
-                self.info[flag] += content
+                # collect up the content for all of the characters
+                self._cur_content += content
 
         def endElement(self, name):
             """Send the information to the consumer.
@@ -231,6 +256,10 @@ if xml_support:
             # only deal with the tag if it is something we are
             # interested in and potentially have information for
             if name in self._get_set_flags():
+                # add all of the information collected inside this tag
+                self.info[name].append(self._cur_content)
+                self._cur_content = ''
+                
                 # if we are at a new tag, pass on the info from the last tag
                 if self._previous_tag and self._previous_tag != name:
                     self._make_callback(self._previous_tag)
@@ -242,20 +271,24 @@ if xml_support:
                 # with it
                 self.flags[name] = 0
 
-                # add a space to the end of the info. Then we'll have this
-                # if we roll over lines, and it'll get stripped out otherwise
-                self.info[name] += ' '
-
         def _make_callback(self, name):
             """Call the callback function with the info with the given name.
             """
             # strip off whitespace and call the consumer
-            callback_function = eval('self._consumer.' + name)
-            info_to_pass = string.strip(self.info[name])
+            callback_function = getattr(self._consumer, name)
+
+            # --- pass back the information
+            # if there is a finalizer, use that
+            if self._finalizer is not None:
+                info_to_pass = self._finalizer(self.info[name])
+            # otherwise pass back the entire list of information
+            else:
+                info_to_pass = self.info[name]
+            
             callback_function(info_to_pass)
 
             # reset the information for the tag
-            self.info[name] = ''
+            self.info[name] = []
 
         def endDocument(self):
             """Make sure all of our information has been passed.
