@@ -1,6 +1,6 @@
 #!/usr/bin/env python2.3
 
-__version__ = "$Revision: 1.1 $"
+__version__ = "$Revision: 1.2 $"
 
 import exceptions
 import os
@@ -9,8 +9,7 @@ import sys
 
 from Bio import Wise
 
-_CMDLINE_PSW = ["psw-force", 
-                "-l"]
+_CMDLINE_PSW = ["psw", "-l"]
 _OPTION_GAP_START = "-g"
 _OPTION_GAP_EXTENSION = "-e"
 _OPTION_SCORES = "-m"
