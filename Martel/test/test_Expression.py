@@ -82,7 +82,9 @@ def test_max_repeat():
     compare(str(MaxRepeat( Literal("a") | Str("test"))), "(a|test)*")
     compare(str(MaxRepeat( Literal("a") + Str(" test"))), "(a test)*")
             
-
+def test_null_op():
+    compare(str(NullOp()), "")
+    compare(str(NullOp() + Str("TeSt")), str(Str("TeSt")))
 
 def test_str():
     compare(str(Str("Andrew Dalke")), "Andrew Dalke")
@@ -130,6 +132,7 @@ def test_nodes():
     test_groupref()
     test_literal()
     test_max_repeat()
+    test_null_op()
     test_str()
     test_alt()
     test_seq()

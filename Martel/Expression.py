@@ -14,6 +14,7 @@
    |--- GroupRef      - match a previously identified expression
    |--- Literal       - match (or don't match) a single character
    |--- MaxRepeat     - greedy repeat of an expression, within min/max bounds
+   |--- NullOp        - does nothing (useful as an initial seed)
    |--- PassThrough   - used when overriding 'make_parser'; match its subexp
    |      |--- HeaderFooter - files with a header, records and a footer
    |      `--- ParseRecords - parse a record at a time
@@ -416,6 +417,34 @@ class MaxRepeat(Expression):
                 ext = "{%d,%d}" % (min_count, max_count)
 
         return s + ext
+
+# does nothing
+class NullOp(Expression):
+    def __init__(self):
+        """()
+
+        Doesn't match anything.  This is a null operation.  It's
+        useful if you want a valid initial object from which to build,
+        as in:
+
+          exp = NullOp()
+          for c in string.split(line):
+            exp = exp + Str(c)
+
+        (That's contrived -- see Time.py for a real use.)
+        """
+    def _select_names(self, names):
+        pass
+    def copy(self):
+        return NullOp()
+    def __str__(self):
+        return ""
+    def group_names(self):
+        return ()
+    def __add__(self, other):
+        return other
+    def __or__(self, other):
+        raise TypeError("Cannot 'or' a NullOp with anything (only 'and')")
 
 
 # Match the subexpression.

@@ -319,6 +319,10 @@ def generate_max_repeat(expression, genstate):
             offset = offset - 1
     return result
 
+# Doesn't do anything
+def generate_null_op(expression, genstate):
+    return []
+
 # XXX Is this correct?  This is the multiline behaviour which allows
 # "^" to match the beginning of a line.
 def check_at_beginning(text, x, end):
@@ -463,6 +467,7 @@ generate_table = {
     Expression.GroupRef: generate_groupref,
     Expression.Literal: generate_literal,
     Expression.MaxRepeat: generate_max_repeat,
+    Expression.NullOp: generate_null_op,
     Expression.Seq: generate_seq,
     Expression.Str: generate_str,
 }
@@ -508,7 +513,7 @@ def _generate(expression, genstate):
                   "Unknown Expression object: %s" % repr(expression)
     table = func(expression, genstate)
 
-    if genstate.debug_level == 0:
+    if genstate.debug_level == 0 or not table:
         pass
     elif genstate.debug_level == 1:
         table.append( (None, TT.Call, track_position, +1, +1) )
@@ -562,6 +567,8 @@ def _find_wanted_groupref_names(expression):
 
     The dict value is 1 if the group name is needed, else there is
     no entry in the dict.
+
+    XXX need to make this a method!
     """
     want_names = {}
     if isinstance(expression, Expression.Alt) or \
@@ -590,7 +597,8 @@ def _find_wanted_groupref_names(expression):
          isinstance(expression, Expression.AtBeginning) or \
          isinstance(expression, Expression.AtEnd) or \
          isinstance(expression, Expression.Dot) or \
-         isinstance(expression, Expression.AnyEol):
+         isinstance(expression, Expression.AnyEol) or \
+         isinstance(expression, Expression.NullOp):
         pass
 
     else:

@@ -139,6 +139,7 @@ def Re(pattern, fix_newlines = 0):
         pattern = _fix_newlines(pattern)
     return convert_re.make_expression(pattern)
 
+NullOp = Expression.NullOp
 
 def Integer(name = None):
     """(name = None) -> match digits, possibly inside of a named group
