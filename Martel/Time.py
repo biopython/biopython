@@ -660,24 +660,56 @@ for v in _time_table.values():
     v = v[0]
     assert (v[0] == '(' and v[-1] == ')') or '|' not in v, v
 
-def make_pattern(pattern, tag_format = "%s"):
-    return _parse_time(pattern, tag_format,
+def make_pattern(format, tag_format = "%s"):
+    """format, tag_format = "%s" -> regular expression pattern string
+
+    Turn the given time format string into the corresponding regular
+    expression string.  A format term may contain a Group name and attribute
+    information.  If present, the group name is %'ed with the
+    tag_format to produce the tag name to use.  Use None to specify
+    that named groups should not be used.
+
+    >>> from Martel import Time
+    >>> print Time.make_pattern("%m-%Y)", "created-%s")
+    (?P<created-month?type=numeric>(0[1-9]|1[012]))\\-(?P<created-year?type=long>\\d{4})\\)
+    >>>
+
+    See the Time module docstring for more information.
+    
+    """
+    return _parse_time(format, tag_format,
                        text_to_result = Expression.escape,
                        group_to_result = Expression._make_group_pattern,
                        re_to_result = lambda x: x,
                        t = "")
 
-def make_expression(pattern, tag_format = "%s"):
-    return _parse_time(pattern, tag_format,
+def make_expression(format, tag_format = "%s"):
+    """format, tag_format = "%s" -> Martel Expresion
+
+    Turn the given time format string into the corresponding Martel
+    Expression.  A format term may contain a Group name and attribute
+    information.  If present, the group name is %'ed with the
+    tag_format to produce the tag name to use.  Use None to specify
+    that named groups should not be used.
+
+    >>> from Martel import Time
+    >>> from xml.sax import saxutils
+    >>> exp = Time.make_expression("%m-%Y\\n", "created-%s")
+    >>> parser = exp.make_parser()
+    >>> parser.setContentHandler(saxutils.XMLGenerator())
+    >>> parser.parseString("05-1921\n")
+    <?xml version="1.0" encoding="iso-8859-1"?>
+    <created-month type="numeric">05</created-month>-<created-year type="long">1921</created-year>
+    >>> 
+
+    See the Time module docstring for more information.
+    
+    """
+    return _parse_time(format, tag_format,
                        text_to_result = Martel.Str,
                        group_to_result = Martel.Group,
                        re_to_result = Martel.Re,
                        t = Martel.NullOp())
-
-def qmake_expression(pattern, tag_format = "%s"):
-    pat = make_pattern(pattern, tag_format)
-    return Martel.Re(pat)
-
 
 def _use_tag_format(tag_format, name):
     if not tag_format:
