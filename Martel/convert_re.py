@@ -5,22 +5,24 @@
 
 This is not meant to be an externally usable module.
 
-This works by using sre_parse.py to parse the pattern.  The result is
+This works by using msre_parse.py to parse the pattern.  The result is
 a tree data structure, where the nodes in the tree are tuples.  The
 first element of the tuple is the name of the node type.  The format
 of the other elements depends on the type.
 
-The conversion routine is pretty simple - convert each sre_parse tuple
+The conversion routine is pretty simple - convert each msre_parse tuple
 node into a Martel Expression node.  It's a recusive implementation.
+
+'msre_parse.py' is a modified version of Secret Labs' 'sre_parse.py'
 
 """
 
 import string
-import sre_parse, Expression
+import msre_parse, Expression
 
-# The sre_parse parser uses a "master pattern object" which keeps
+# The msre_parse parser uses a "master pattern object" which keeps
 # track of the mapping from group id to group name.  This is okay for
-# sre_parse because they only track the last group with a given name.
+# msre_parse because they only track the last group with a given name.
 # I need to get all groups with the same name, so I need a new object
 # which stores them in a list that I can use later.
 
@@ -103,7 +105,7 @@ def invert(s):
             letters.append(c)
     return string.join(letters, "") 
 
-# Map from the sre_parse category names into actual characters.
+# Map from the msre_parse category names into actual characters.
 # I can do this here since I don't worry about non-ASCII character sets.
 categories = {
     "category_word": string.letters + "0123456789_",
@@ -152,7 +154,7 @@ def convert_max_repeat(group_names, name, (min_count, max_count, terms)):
 def convert_groupref(group_names, name, id):
     assert type(id) != type(0), \
            "Martel cannot use numbered group reference: %d" % id
-    # sre_parse returns the list from the GroupNames
+    # msre_parse returns the list from the GroupNames
     # Map that back to a number.
     pattern_name = group_names.reverse_name(id[0])
     return Expression.GroupRef(pattern_name)
@@ -175,7 +177,7 @@ converter_table = {
     "subpattern":  convert_subpattern,
     }
 
-# Convert a list of sre_parse tuples into a Seq
+# Convert a list of msre_parse tuples into a Seq
 def convert_list(group_names, terms):
     # This is always a sequence of terms
     results = []
@@ -198,10 +200,10 @@ def make_expression(pattern):
     """pattern -> the Expression tree for the given pattern string"""
 
     # In the following, the "pattern =" and "x.pattern" are the names
-    # used by sre_parse.  They have nothing to do the input pattern.
+    # used by msre_parse.  They have nothing to do the input pattern.
     
-    # Make the sre_parse tuple tree from the string ...
-    x = sre_parse.parse(str = pattern, pattern = GroupNames())
+    # Make the msre_parse tuple tree from the string ...
+    x = msre_parse.parse(str = pattern, pattern = GroupNames())
 
     # ... and convert it into an Expression
     return convert_list(x.pattern, x)

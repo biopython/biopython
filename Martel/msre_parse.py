@@ -16,7 +16,7 @@
 # this module works under 1.5.2 and later.  don't use string methods
 import string, sys
 
-from sre_constants import *
+from msre_constants import *  # Modified version of Secret Labs' sre_constants
 
 SPECIAL_CHARS = ".\\[{()*+?^$|"
 REPEAT_CHARS = "*+?{"

@@ -10,7 +10,7 @@ try:
 except ImportError:
     import TextTools as TT
 
-import sre_parse
+import msre_parse  # Modified version of Secret Labs' sre_parse
 import Expression, convert_re
 
 import Parser
@@ -274,7 +274,7 @@ def generate_max_repeat(expression, groupref_names, debug_level):
         result.append( (None, TT.SubTable, tuple(tagtable)) )
 
     # Special case for when the max count means "unbounded"
-    if max_count == sre_parse.MAXREPEAT:
+    if max_count == msre_parse.MAXREPEAT:
         result.append( (None, TT.SubTable, tuple(tagtable),
                                   +1, 0))
     elif min_count == max_count:

@@ -19,21 +19,6 @@ at biopython@biopython.org and ask for help.
 # This setup.py is a modified vesion of the standard Biopython
 # setup.py, which explains why some of the code is overkill :)
 
-# Martel includes 'sre_parse.py' and 'sre_constants.py' which are
-# needed by Python's own sre regular expressions.  I'll play some
-# nasty tricks to import what Python expects.  Perhaps instead I
-# should change the file names?
-import sys
-sys_path = sys.path
-while 1:
-    try:
-        sys.path.remove("")
-    except ValueError:
-        break
-import sre_constants, sre_parse
-sys.path = sys_path
-        
-
 import sys
 import os
 try:

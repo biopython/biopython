@@ -25,10 +25,10 @@
 
 """
 import re, string
-import sre_parse
+import msre_parse  # Modified version of Secret Labs' sre_parse
 import Parser
 
-MAXREPEAT = sre_parse.MAXREPEAT
+MAXREPEAT = msre_parse.MAXREPEAT
 
 class Expression:
     """Base class for nodes in the Expression tree"""
@@ -180,7 +180,7 @@ class AnyEol(Expression):
 # Group names must be valid XML identifiers
 def _verify_name(s):
     assert s, "Group name can not be the empty string"
-    if not sre_parse.isname(s):
+    if not msre_parse.isname(s):
         raise AssertionError, "Illegal character in group name %s" % repr(s)
 
 class Group(Expression):

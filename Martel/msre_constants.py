@@ -217,6 +217,7 @@ SRE_INFO_LITERAL = 2 # entire pattern is literal (given by prefix)
 SRE_INFO_CHARSET = 4 # pattern starts with character from given set
 
 if __name__ == "__main__":
+    raise NotImplementedError("Not supported by Martel's modified sre_constants")
     import string
     def dump(f, d, prefix):
         items = d.items()
