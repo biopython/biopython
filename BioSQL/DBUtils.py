@@ -1,3 +1,5 @@
+_dbutils = {}
+
 class Generic_dbutils:
     def __init__(self):
         pass
@@ -30,6 +32,7 @@ class Generic_dbutils:
 class Mysql_dbutils(Generic_dbutils):
     def last_id(self, cursor, table):
         return cursor.insert_id()
+_dbutils["MySQLdb"] = Mysql_dbutils
 
 class Pg_dbutils(Generic_dbutils):
     def next_id(self, cursor, table):
@@ -46,14 +49,12 @@ class Pg_dbutils(Generic_dbutils):
         rv = cursor.fetchone()
         return rv[0]
 
-    def autocommit(self, conn, y = 1):
+    def autocommit(self, conn, y = True):
         conn.autocommit(y)
+_dbutils["psycopg"] = Pg_dbutils
 
-def create_Generic_dbutils():
-    return Generic_dbutils()
-
-def create_Mysql_dbutils():
-    return Mysql_dbutils()
-
-def create_Pg_dbutils():
-    return Pg_dbutils()
+def get_dbutils(module_name):
+    try:
+        return _dbutils[module_name]()
+    except:
+        return Generic_dbutils()

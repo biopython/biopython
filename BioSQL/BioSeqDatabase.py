@@ -7,7 +7,7 @@ import BioSeq
 import Loader
 import DBUtils
 
-def open_database(driver = "MySQLdb", *args, **kwargs):
+def open_database(driver = "MySQLdb", **kwargs):
     """Main interface for loading a existing BioSQL-style database.
 
     This function is the easiest way to retrieve a connection to a
@@ -21,36 +21,43 @@ def open_database(driver = "MySQLdb", *args, **kwargs):
     driver should implement the python DB API. By default, the MySQLdb
     driver is used.
     user -> the username to connect to the database with.
-    passwd -> the password to connect with
+    password, passwd -> the password to connect with
     host -> the hostname of the database
-    db -> the name of the database
+    database or db -> the name of the database
     """
     module = __import__(driver)
     connect = getattr(module, "connect")
+
+    # Different drivers use different keywords...
+    kw = kwargs.copy()
+    if driver == "MySQLdb":
+        if kw.has_key("database"):
+            kw["db"] = kw["database"]
+            del kw["database"]
+        if kw.has_key("password"):
+            kw["passwd"] = kw["password"]
+            del kw["password"]
+    else:
+        # DB-API recommendations
+        if kw.has_key("db"):
+            kw["database"] = kw["db"]
+            del kw["db"]
+        if kw.has_key("passwd"):
+            kw["password"] = kw["passwd"]
+            del kw["passwd"]
+    if driver == "psycopg" and not kw.get("database"):
+        kw["database"] = "template1"
     try:
-        conn = connect(*args, **kwargs)
-    except TypeError:
-        # Perhaps a version of psycopg with different parameter style
-        # (i.e., dsn="dbname= host= user=..."
-        # FIXME: doesn't use the args array
-        kw = kwargs.copy()
-
-        for k in kw.keys():
-            if kw[k] == '': del kw[k]
-
-        if kw.has_key('db'):
-            kw['dbname'] = kw['db']
-            del kw['db']
-        if kw.has_key('passwd'):
-            kw['password'] = kw['passwd']
-            del kw['passwd']
-
-        # PostgreSQL needs a database to connect to, so use a
-        # system one if needed
-        # FIXME: might be a security risk?
-        #        So currently, we keep dbname=user
-##        if not kw.has_key('dbname'):
-##            kw['dbname'] = 'template1'
+        conn = connect(**kw)
+    except module.InterfaceError:
+        # Ok, so let's try building a DSN
+        # (older releases of psycopg need this)
+        if kw.has_key("database"):
+            kw["dbname"] = kw["database"]
+            del kw["database"]
+        elif kw.has_key("db"):
+            kw["dbname"] = kw["db"]
+            del kw["db"]
         
         dsn = ' '.join(['='.join(i) for i in kw.items()])
         conn = connect(dsn)
@@ -58,16 +65,11 @@ def open_database(driver = "MySQLdb", *args, **kwargs):
     return DBServer(conn, module)
 
 class DBServer:
-    def __init__(self, conn, module, module_name = None):
+    def __init__(self, conn, module, module_name=None):
         self.module = module
-        if module_name is None: module_name = module.__name__
-        if module_name == 'psycopg':
-            create_dbutils = DBUtils.create_Pg_dbutils
-        elif module_name == 'MySQLdb':
-            create_dbutils = DBUtils.create_Mysql_dbutils
-        else:
-            create_dbutils = DBUtils.create_Generic_dbutils
-        self.adaptor = Adaptor(conn, create_dbutils)
+        if module_name is None:
+            module_name = module.__name__
+        self.adaptor = Adaptor(conn, DBUtils.get_dbutils(module_name))
         
     def __repr__(self):
         return self.__class__.__name__ + "(%r)" % self.adaptor.conn
@@ -87,13 +89,13 @@ class DBServer:
         remover = Loader.DatabaseRemover(self.adaptor, db_id)
         remover.remove()
 
-    def new_database(self, db_name):
+    def new_database(self, db_name, authority=None, description=None):
         """Add a new database to the server and return it.
         """
         # make the database
-        sql = r"INSERT INTO biodatabase (name) VALUES" \
-              r" (%s)" 
-        self.adaptor.execute(sql, (db_name,))
+        sql = r"INSERT INTO biodatabase (name, authority, description)" \
+              r" VALUES (%s, %s, %s)" 
+        self.adaptor.execute(sql, (db_name,authority, description))
         return BioSeqDatabase(self.adaptor, db_name)
 
     def load_database_sql(self, sql_file):
@@ -103,33 +105,37 @@ class DBServer:
         sql_file should specify the complete path to a file containing
         SQL entries for building the tables.
         """
-        # break the file up into SQL statements
-        sql_handle = open(sql_file, "rb")
-        sql = r""
-        for line in sql_handle.xreadlines():
-            if line.find("#") == 0: # don't include comment lines
-                pass
-            elif line.find("--") == 0: # ditto, SQL std. comments
-                pass
-            elif line.strip(): # only include non-blank lines
-                sql += line.strip()
-                sql += ' '
-        sql_parts = sql.split(";") # one line per sql command
+        sql = file(sql_file, "rb").read()
+        self.adaptor.cursor.execute(sql)
+        # Not sophisticated enough for PG schema. Is it needed by MySQL?
+        if 0:
+            # break the file up into SQL statements
+            sql_handle = open(sql_file, "rb")
+            sql = r""
+            for line in sql_handle.xreadlines():
+                if line.find("--") == 0: # don't include comment lines
+                    pass
+                if line.find("#") == 0: # ditto for MySQL comments
+                    pass
+                elif line.strip(): # only include non-blank lines
+                    sql += line.strip()
+                    sql += ' '
+            sql_parts = sql.split(";") # one line per sql command
 
-        # create the schema
-        for sql_line in sql_parts[:-1]: # don't use the last item, it's blank
-            self.adaptor.cursor.execute(sql_line, ())
+            # create the schema
+            for sql_line in sql_parts[:-1]: # don't use the last item, it's blank
+                self.adaptor.cursor.execute(sql_line)
 
 class Adaptor:
-    def __init__(self, conn, create_dbutils):
+    def __init__(self, conn, dbutils):
         self.conn = conn
         self.cursor = conn.cursor()
-        self.dbutils = create_dbutils()
+        self.dbutils = dbutils
 
     def last_id(self, table):
         return self.dbutils.last_id(self.cursor, table)
 
-    def autocommit(self, y = 1):
+    def autocommit(self, y=True):
         return self.dbutils.autocommit(self.conn, y)
 
     def commit(self):
@@ -137,6 +143,9 @@ class Adaptor:
 
     def rollback(self):
         return self.conn.rollback()
+
+    def close(self):
+        return self.conn.close()
 
     def fetch_dbid_by_dbname(self, dbname):
         self.cursor.execute(
@@ -150,7 +159,7 @@ class Adaptor:
         return rv[0][0]
 
     def fetch_seqid_by_display_id(self, dbid, name):
-        sql = r"select bioentry_id from bioentry where display_id = %s"
+        sql = r"select bioentry_id from bioentry where name = %s"
         fields = [name]
         if dbid:
             sql += " and biodatabase_id = %s"
@@ -159,7 +168,8 @@ class Adaptor:
         rv = self.cursor.fetchall()
         if not rv:
             raise IndexError("Cannot find display id %r" % name)
-        assert len(rv) == 1, "More than one entry with display id of %r" % name
+        if len(rv) > 1:
+            raise IndexError("More than one entry with display id %r" % name)
         return rv[0][0]
 
     def fetch_seqid_by_accession(self, dbid, name):
@@ -168,35 +178,71 @@ class Adaptor:
         if dbid:
             sql += " and biodatabase_id = %s"
             fields.append(dbid)
-
         self.cursor.execute(sql, fields)
         rv = self.cursor.fetchall()
         if not rv:
             raise IndexError("Cannot find accession %r" % name)
-        # Can happen: several versions (or biodatabases)
-        assert len(rv) == 1, "More than one entry with accession of %r" % name
+        if len(rv) > 1:
+            raise IndexError("More than one entry with accession %r" % name)
         return rv[0][0]
 
-    def fetch_seqid_by_seqid(self, dbid, seqid):
-        # XXX can't implement this right since it doesn't seem like the 
-        # right id is stored in the database
-        raise NotImplementedError("No retrieval by this id")
+    def fetch_seqids_by_accession(self, dbid, name):
+        sql = r"select bioentry_id from bioentry where accession = %s"
+        fields = [name]
+        if dbid:
+            sql += " and biodatabase_id = %s"
+            fields.append(dbid)
+        return self.execute_and_fetch_col0(sql, fields)
+
+    def fetch_seqid_by_version(self, dbid, name):
+        acc_version = name.split(".")
+        if len(acc_version) > 2:
+            raise IndexError("Bad version %r" % name)
+        acc = acc_version[0]
+        if len(acc_version) == 2:
+            version = acc_version[1]
+        else:
+            version = "0"
+        sql = r"SELECT bioentry_id FROM bioentry WHERE accession = %s" \
+              r" AND version = %s"
+        fields = [acc, version]
+        if dbid:
+            sql += " and biodatabase_id = %s"
+            fields.append(dbid)
+        self.cursor.execute(sql, fields)
+        rv = self.cursor.fetchall()
+        if not rv:
+            raise IndexError("Cannot find version %r" % name)
+        if len(rv) > 1:
+            raise IndexError("More than one entry with version %r" % name)
+        return rv[0][0]
+
+    def fetch_seqid_by_identifier(self, dbid, identifier):
+        # YB: was fetch_seqid_by_seqid
+        sql = "SELECT bioentry_id FROM bioentry WHERE identifier = %s"
+        fields = [identifier]
+        if dbid:
+            sql += " and biodatabase_id = %s"
+            fields.append(dbid)
+        self.cursor.execute(sql, fields)
+        rv = self.cursor.fetchall()
+        if not rv:
+            raise IndexError("Cannot find display id %r" % identifier)
+        return rv[0][0]
 
     def list_biodatabase_names(self):
-        self.cursor.execute("select name from biodatabase")
-        return [field[0] for field in self.cursor.fetchall()]
+        return self.execute_and_fetch_col0(
+            "SELECT name FROM biodatabase")
 
     def list_bioentry_ids(self, dbid):
-        self.cursor.execute(
-            r"select bioentry_id from bioentry where biodatabase_id = %s",
+        return self.execute_and_fetch_col0(
+            "SELECT bioentry_id FROM bioentry WHERE biodatabase_id = %s",
             (dbid,))
-        return [field[0] for field in self.cursor.fetchall()]
 
     def list_bioentry_display_ids(self, dbid):
-        self.cursor.execute(
-            r"select display_ids from bioentry where biodatabase_id = %s",
+        return self.execute_and_fetch_col0(
+            "SELECT name FROM bioentry WHERE biodatabase_id = %s",
             (dbid,))
-        return [field[0] for field in self.cursor.fetchall()]
 
     def list_any_ids(self, sql, args):
         """Return ids given a SQL statement to select for them.
@@ -205,42 +251,42 @@ class Adaptor:
         returns a list of items. This parses them out of the 2D list
         they come as and just returns them in a list.
         """
-        self.cursor.execute(sql, args)
-        return [field[0] for field in self.cursor.fetchall()]
+        return self.cursor.execute_and_fetch_col0(sql, args)
 
-    def execute_one(self, sql, args):
-        self.cursor.execute(sql, args)
+    def execute_one(self, sql, args=None):
+        self.cursor.execute(sql, args or ())
         rv = self.cursor.fetchall()
-        assert len(rv) == 1, "Expected 1 response, got %s" % count
+        assert len(rv) == 1, "Expected 1 response, got %d" % len(rv)
         return rv[0]
 
-    def execute(self, sql, args):
+    def execute(self, sql, args=None):
         """Just execute an sql command.
         """
-##        print "sql:", `sql`
-##        print "args:", `args`
-        self.cursor.execute(sql, args)
+        self.cursor.execute(sql, args or ())
 
     def get_subseq_as_string(self, seqid, start, end):
         length = end - start
         return self.execute_one(
-            """select SUBSTRING(biosequence_str FROM %s FOR %s)
+            """select SUBSTRING(seq FROM %s FOR %s)
                      from biosequence where bioentry_id = %s""",
             (start+1, length, seqid))[0]
 
-    def execute_and_fetch_col0(self, sql, args):
-        self.cursor.execute(sql, args)
+    def execute_and_fetch_col0(self, sql, args=None):
+        self.cursor.execute(sql, args or ())
         return [field[0] for field in self.cursor.fetchall()]
 
-    def execute_and_fetchall(self, sql, args):
-        self.cursor.execute(sql, args)
+    def execute_and_fetchall(self, sql, args=None):
+        self.cursor.execute(sql, args or ())
         return self.cursor.fetchall()
 
 _allowed_lookups = {
     # Lookup name / function name to get id, function to list all ids
-    'primary_id': "fetch_seqid_by_seqid",
+    'primary_id': "fetch_seqid_by_identifier",
+    'gi':         "fetch_seqid_by_identifier",
     'display_id': "fetch_seqid_by_display_id",
-    'accession': "fetch_seqid_by_accession",
+    'name':       "fetch_seqid_by_display_id",
+    'accession':  "fetch_seqid_by_accession",
+    'version':    "fetch_seqid_by_version",
     }
 
 class BioSeqDatabase:
@@ -269,6 +315,24 @@ class BioSeqDatabase:
         seqid = self.adaptor.fetch_seqid_by_accession(self.dbid, name)
         return BioSeq.DBSeqRecord(self.adaptor, seqid)
 
+    def get_Seq_by_ver(self, name):
+        """Gets a Bio::Seq object by version number
+
+        Example: seq = db.get_Seq_by_ver('X77802.1')
+
+        """
+        seqid = self.adaptor.fetch_seqid_by_version(self.dbid, name)
+        return BioSeq.DBSeqRecord(self.adaptor, seqid)
+
+    def get_Seqs_by_acc(self, name):
+        """Gets a *list* of Bio::Seq objects by accession number
+
+        Example: seqs = db.get_Seq_by_acc('X77802')
+
+        """
+        seqids = self.adaptor.fetch_seqids_by_accession(self.dbid, name)
+        return [BioSeq.DBSeqRecord(self.adaptor, seqid) for seqid in seqids]
+
     def get_PrimarySeq_stream(self):
         # my @array = $self->get_all_primary_ids;
         # my $stream = Bio::DB::BioDatabasePSeqStream->new(
@@ -277,7 +341,7 @@ class BioSeqDatabase:
         raise NotImplementedError("waiting for Python 2.2's iter")
 
     def get_all_primary_ids(self):
-        """ array of all the primary_ids of the sequences in the database.
+        """Array of all the primary_ids of the sequences in the database.
 
         These maybe ids (display style) or accession numbers or
         something else completely different - they *are not*
@@ -320,17 +384,18 @@ class BioSeqDatabase:
 
         record_iterator is an Iterator object that returns SeqRecord objects
         which will be used to populate the database. The Iterator should
-        implement next() and either return None when it is out of objects
-        or raise StopIteration (XXX python 2.2, we won't suport this yet).
+        implement next() and either return None or raise StopIteration
+        when it is out of objects.
 
-        Returns the number of records loaded
+        Returns the number of records loaded.
         """
         db_loader = Loader.DatabaseLoader(self.adaptor, self.dbid)
         num_records = 0
         while 1:
-            # XXX add a break with StopIteration here.
-            cur_record = record_iterator.next()
-            
+            try:
+                cur_record = record_iterator.next()
+            except StopIteration:
+                break
             if cur_record is None:
                 break
             num_records += 1
