@@ -386,8 +386,8 @@ EXTENSIONS = [
               libraries=["fl"]
               ),
     Extension('Bio.KDTree._CKDTree',
-              ["Bio/KDTree/KDTree.C",
-               "Bio/KDTree/KDTree.swig.C"],
+              ["Bio/KDTree/KDTree.cpp",
+               "Bio/KDTree/KDTree.swig.cpp"],
               libraries=["stdc++"],
               language="c++"
               ),
