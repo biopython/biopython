@@ -48,22 +48,16 @@ cmathfns_safe_log(self, args, keywds)
      PyObject *keywds;
 {
     int i;
-    PyObject *nobj,
-	*zero = Py_None,
+    PyObject *zero = Py_None,
 	*neg = Py_None;
-    double n, logn;
+    double n;
 
     static char *kwlist[] = {"n", "zero", "neg", NULL};
 
-    if(!PyArg_ParseTupleAndKeywords(args, keywds, "O|OO", kwlist, 
-				    &nobj, &zero, &neg))
+    if(!PyArg_ParseTupleAndKeywords(args, keywds, "d|OO", kwlist, 
+				    &n, &zero, &neg))
 	return NULL;
     
-    n = PyNumber_AsDouble(nobj);
-    if(PyErr_Occurred()) {
-	return NULL;
-    }
-
     if(n < 0) {
 	Py_INCREF(neg);
 	return neg;
@@ -72,8 +66,7 @@ cmathfns_safe_log(self, args, keywds)
 	return zero;
     }
 
-    logn = log(n);
-    return PyFloat_FromDouble(logn);
+    return PyFloat_FromDouble(log(n));
 }
 
 
