@@ -46,6 +46,21 @@ Distutils.
 
 
 
+
+For FreeBSD users, Johann Visagie <wjv@cityip.co.za> has made
+Biopython available in the ports tree.  According to Johann:
+
+  This means that a FreeBSD user with an up-to-date ports tree can now
+  install BioPython as simply as:
+
+  cd /usr/ports/biology/py-biopython ; make install
+
+  Fetching of the package as well as installation of all dependencies
+  (Python itself as well as Distutils) will be handled automagically.
+
+
+
+
 Testing
 -------
 
