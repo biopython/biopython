@@ -5,14 +5,21 @@ This file contains release notes and general news
 about the biopython project.
 
 
+July 6, 2000
+Biopython 0.90d01 is released.
+
+
+
 
 February 8, 2000
-- Anonymous CVS made available.
+Anonymous CVS made available.
 
 
 
 August 1999
-- Call for Participation sent out to relevant mailing lists, news
+Biopython project founded.
+
+Call for Participation sent out to relevant mailing lists, news
 groups.
 
 The Biopython Project (http://www.biopython.org/) is a new open
@@ -34,4 +41,3 @@ Jeffrey Chang <jchang@smi.stanford.edu>
 Andrew Dalke <dalke@bioreason.com>
 
 
-- Biopython project founded.
