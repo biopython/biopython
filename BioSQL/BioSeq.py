@@ -262,14 +262,11 @@ def load_seq_features(adaptor, primary_id):
                   sqv.seqfeature_id = %s""",
                                      (seqfeature_id,))
 
-        # Needed for uniqueness in the current biopython scheme
-        # (Ugly, I know)
-        counts = {}
-        for k, v in results:
-            i = counts.setdefault(k, -1) + 1
-            if i != 0:
-                k = k + str(i)
-            qualifiers[k] = v
+        for key, value in results:
+            if qualifiers.has_key(key):
+                qualifiers[key].append(value)
+            else:
+                qualifiers[key] = [value]
 
         # Get its locations
         locations = []
@@ -307,7 +304,6 @@ def load_seq_features(adaptor, primary_id):
             feature.location = SeqFeature.FeatureLocation(start, end)
             feature.strand = strand
             feature.ref = accession
-            feature.ref_db = version # This is almost certainly WRONG!
         else:
             min_start = locations[0][1]
             max_end = locations[0][2]
@@ -318,11 +314,11 @@ def load_seq_features(adaptor, primary_id):
                 max_end = max(max_end, end)
 
                 subfeature = SeqFeature.SeqFeature()
-                subfeature.type = seqfeature_key + "_span"
+                subfeature.type = seqfeature_key 
+                subfeature.location_operator = "join"
                 subfeature.location = SeqFeature.FeatureLocation(start, end)
                 subfeature.strand = strand
                 subfeature.ref = accession
-                subfeature.ref_db = version # This is almost certainly WRONG!
                 feature.sub_features.append(subfeature)
             feature.sub_features.sort(lambda x, y: cmp(x.location.start, y.location.start))
             feature.location = SeqFeature.FeatureLocation(min_start, max_end)
