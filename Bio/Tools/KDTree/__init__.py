@@ -110,7 +110,7 @@ class KDTree:
 
 if __name__=="__main__":
 
-	nr_points=1000
+	nr_points=100000
 	dim=3
 	bucket_size=10
 	radius=0.05

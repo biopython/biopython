@@ -876,6 +876,11 @@ void KDTree::_neighbor_search_pairs(Node *down, Region *down_region,
 		_neighbor_search_pairs(up_left, up_left_region, down_right, down_right_region, depth+1);
 		_neighbor_search_pairs(up_right, up_right_region, down_left, down_left_region, depth+1);
 		_neighbor_search_pairs(up_right, up_right_region, down_right, down_right_region, depth+1);
+
+		delete down_left_region;
+		delete down_right_region;
+		delete up_left_region;
+		delete up_right_region;
 	}
 }
 
