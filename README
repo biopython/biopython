@@ -81,14 +81,24 @@ To Do
   o PSI-BLAST on WWW
 - parsers
   o SWISSPROT
-    - finish testing
-    - sequence parser
+    - add parser for Protein class
   o SCOP
+    - needs to be done
   o Medline
+    - document _Scanner
+    - add Pubmed.py, for web access
+    - parser for html-ized version
+  o Enzyme
+    - add parsers, iterator, dictionary, etc.
   o Prosite
+    - needs to be done
   o Prodoc
+    - needs to be done
   o PDB
+    - needs to be done
+    - build on Andrew's UPDB?
   o Genbank
+    - needs to be done
 - generalize parsers
 - bug database
 - improve regression testing framework
