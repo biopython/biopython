@@ -1,6 +1,8 @@
 from xml.sax import handler
 
-from Bio import SeqRecord, StdHandler, Dispatch, Std, DBXRef, Seq
+from Martel import Dispatch
+
+from Bio import SeqRecord, StdHandler, Std, DBXRef, Seq
 from Bio import Alphabet
 from Bio.Alphabet import IUPAC
 
@@ -16,6 +18,12 @@ alphabet_table = {
     "rna": Alphabet.generic_rna,
     "unknown": Alphabet.single_letter_alphabet,
     }
+
+
+# Convert from the internal Feature data structure used by the parser
+# into the standard Biopytho form
+def convert_std_feature(feature):
+    return feature
 
 class BuildSeqRecord(Dispatch.Dispatcher):
     def __init__(self):
@@ -37,7 +45,7 @@ class BuildSeqRecord(Dispatch.Dispatcher):
         self.description = None
         self.alphabet = None
         self.seq = None
-        self.features = []
+        self.features = None
         self.dbxrefs = []
         
 
@@ -49,20 +57,22 @@ class BuildSeqRecord(Dispatch.Dispatcher):
     def add_description(self, text):
         self.description = text
 
-    def add_sequence(self, alphabet, seq):
+    def add_sequence(self, (alphabet, seq, gapchar, stopchar)):
         alphabet = alphabet_table.get(alphabet,
                                       Alphabet.single_letter_alphabet)
         self.seq = Seq.Seq(seq, alphabet)
 
-    def add_dbxref(self, (dbname, dbid, idtype, negate)):
-        self.dbxrefs.append(DBXRef.DBXRef(dbname, dbid, idtype, negate))
+    def add_dbxref(self, dbname_style, dbname, idtype, dbid, negate):
+        self.dbxrefs.append(DBXRef.from_parser(dbname_style, dbname, dbid,
+                                               idtype, negate))
 
     def add_features(self, features):
-        self.features.extend(features)
+        assert self.features is None
+        self.features = map(convert_std_feature, features)
 
     def end_record(self, tag):
         self.document = SeqRecord.SeqRecord(
-            seq = self.seq,    # Need a real Seq record!
+            seq = self.seq,
             id = self.id_text,
             description = self.description,
             dbxrefs = self.dbxrefs,
