@@ -1,8 +1,8 @@
 """copen.py
 
-This implements a set of command classes that behave like
-file objects.  This allows you fork off many different commands
-and let the run concurrently.
+This implements a set of classes that wraps a file object interface
+around code that executes in another process.  This allows you fork
+many different commands and let the run concurrently.
 
 Functions:
 copen_sys     Open a file-like pipe to a system command.
