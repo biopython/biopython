@@ -69,13 +69,6 @@ def copen_fn(func, *args, **keywords):
         cwrite, errwrite = os.fdopen(w, 'w'), os.fdopen(ew, 'w')
         try:
             output = apply(func, args, keywords)
-            s = pickle.dumps(output, 1)
-            cwrite.write(s)
-            cwrite.flush()
-        except pickle.PicklingError, x:
-            errwrite.write(x)
-            errwrite.flush()
-            os._exit(-1)
         except:
             type, value, tb = sys.exc_info()   # get the traceback
             errwrite.writelines(traceback.format_tb(tb))
@@ -86,6 +79,14 @@ def copen_fn(func, *args, **keywords):
                 errwrite.write(type)
             errwrite.flush()
             os._exit(-1)
+        try:
+            s = pickle.dumps(output, 1)
+        except pickle.PicklingError, x:
+            errwrite.write(x)
+            errwrite.flush()
+            os._exit(-1)
+        cwrite.write(s)
+        cwrite.flush()
         os._exit(0)
 
     # parent
