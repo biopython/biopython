@@ -25,6 +25,9 @@ DBHOST = 'localhost'
 DBUSER = 'root'
 DBPASSWD = 'howareyou'
 TESTDB = 'biosql'
+# XXX I need to put these SQL files somewhere in biopython
+SQL_FILE = os.path.join(os.pardir, os.pardir, "biosql-schema", "sql",
+                        "biosqldb-mysql.sql")
 
 def run_tests(argv):
     test_suite = testing_suite()
@@ -38,8 +41,7 @@ def testing_suite():
 
     test_loader = unittest.TestLoader()
     test_loader.testMethodPrefix = 't_'
-    tests = [ReadTest, SeqInterfaceTest, LoaderTest]
-    tests = [LoaderTest]
+    tests = [LoaderTest, ReadTest, SeqInterfaceTest]
     
     for test in tests:
         cur_suite = test_loader.loadTestsFromTestCase(test)
@@ -47,17 +49,69 @@ def testing_suite():
 
     return test_suite
 
+def load_database(gb_handle):
+    """Load a GenBank file into a BioSQL database.
+    
+    This is useful for running tests against a newly created database.
+    """
+    # first open a connection to create the database
+    server = BioSeqDatabase.open_database(user = DBUSER, passwd = DBPASSWD,
+                                          host = DBHOST)
+    
+    # drop anything in the database
+    try:
+        sql = r"DROP DATABASE " + TESTDB
+        server.adaptor.cursor.execute(sql, ())
+    except server.module.OperationalError: # the database doesn't exist
+        pass
+    
+    # create a new database
+    sql = r"CREATE DATABASE " + TESTDB
+    server.adaptor.execute_one(sql, ())
+    
+    # grab the SQL file with the schema
+    sql_handle = open(SQL_FILE, "rb")
+    sql = r""
+    for line in sql_handle.xreadlines():
+        if line.find("#") == 0: # don't include comment lines
+            pass
+        elif line.strip(): # only include non-blank lines
+            sql += line.strip()
+            sql += ' '
+    sql_parts = sql.split(";") # one line per sql command
+
+
+    # now open a connection to load the database
+    db_name = "biosql-test"
+    server = BioSeqDatabase.open_database(user = DBUSER, passwd = DBPASSWD,
+                                          host = DBHOST, db = TESTDB)
+    # create the schema
+    for sql_line in sql_parts[:-1]: # don't use the last item, it's blank
+        server.adaptor.cursor.execute(sql_line, ())
+    db = server.new_database(db_name)
+    
+    # get the GenBank file we are going to put into it
+    parser = GenBank.FeatureParser()
+    iterator = GenBank.Iterator(gb_handle, parser)
+    # finally put it in the database
+    db.load(iterator)
+
 class ReadTest(unittest.TestCase):
     """Test reading a database from an already built database.
-
-    XXX Once we have loading ability, this should use that instead
-    of insisting on an existing database.
     """
+    loaded_db = 0
+    
     def setUp(self):
         """Connect to and load up the database.
         """
-        server = BioSeqDatabase.open_database(user = DBUSER, passwd = DBPASSWD,
-                                              host = DBHOST, db = TESTDB)
+        gb_file = os.path.join(os.getcwd(), "GenBank", "cor6_6.gb")
+        gb_handle = open(gb_file, "r")
+        load_database(gb_handle)
+        gb_handle.close()
+            
+        server = BioSeqDatabase.open_database(user = DBUSER, 
+                     passwd = DBPASSWD, host = DBHOST, db = TESTDB)
+            
         self.db = server["biosql-test"]
 
     def t_get_db_items(self):
@@ -66,7 +120,7 @@ class ReadTest(unittest.TestCase):
         items = self.db.values()
 
     def t_lookup_items(self):
-        """Test retrieval of itmes using various ids.
+        """Test retrieval of items using various ids.
         """
         item = self.db.lookup(accession = "X62281")
         try:
@@ -93,10 +147,12 @@ class SeqInterfaceTest(unittest.TestCase):
     """
     def setUp(self):
         """Load a database.
-
-        XXX This is an already created database. We should actually
-        build our own for testing when possible.
         """
+        gb_file = os.path.join(os.getcwd(), "GenBank", "cor6_6.gb")
+        gb_handle = open(gb_file, "r")
+        load_database(gb_handle)
+        gb_handle.close()
+
         server = BioSeqDatabase.open_database(user = DBUSER, passwd = DBPASSWD,
                                               host = DBHOST, db = TESTDB)
         db = server["biosql-test"]
@@ -158,7 +214,8 @@ class SeqInterfaceTest(unittest.TestCase):
         test_features = self.item.features
         cds_feature = test_features[6]
         assert cds_feature.type == "CDS", cds_feature.type
-        assert str(cds_feature.location) == "(103..579)"
+        assert str(cds_feature.location) == "(103..579)", \
+            str(cds_feature.location)
         for sub_feature in cds_feature.sub_features:
             assert sub_feature.type == "CDS"
             assert sub_feature.location_operator == "join"
@@ -175,7 +232,7 @@ class LoaderTest(unittest.TestCase):
     """
     def setUp(self):
         # load the database
-        db_name = "biosql-loadertest"
+        db_name = "biosql-test"
         server = BioSeqDatabase.open_database(user = DBUSER, passwd = DBPASSWD,
                                               host = DBHOST, db = TESTDB)
         
