@@ -84,8 +84,7 @@ class DomainParser:
         entry = string.rstrip(entry)  # no trailing whitespace
         columns = string.split(entry, "\t")  # separate the tab-delineated cols
         if len(columns) != 4:
-            raise error, "I don't understand the format of %s" % entry
-        
+            raise SyntaxError, "I don't understand the format of %s" % entry
         dom = Domain()
         dom.sid, dom.pdbid, locstr, dom.hierarchy = columns
         dom.locations = Location.parse(locstr)
