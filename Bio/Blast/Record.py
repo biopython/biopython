@@ -175,21 +175,26 @@ class MultipleAlignment:
 
         Thanks to James Casbon for the code.
         """
-        seq_parts = {}
-        name_order = [] # make sure we keep the alignments
-                        # in the same order as they appear in the
-                        # alignment
+        seq_parts = []
+        seq_names = []
+        parse_number = 0
+        n = 0
         for name, start, seq, end in self.alignment:
-            if name in seq_parts:
-                seq_parts[name].append(seq)
+            if name == 'QUERY': #QUERY is the first in each alignment block
+                parse_number = parse_number + 1
+                n = 0
+
+            if parse_number == 1: # create on first_parse, append on all others
+                seq_parts.append(seq)
+                seq_names.append(name)
             else:
-                name_order.append(name)
-                seq_parts[name] = [seq]
-             
+                seq_parts[n] = seq_parts[n] + seq
+                n = n + 1
+
         generic = Generic.Alignment(alphabet)
-        for seq_name in name_order:
-            generic.add_sequence(seq_name, "".join(seq_parts[seq_name]))
- 
+        for (name,seq) in zip(seq_names,seq_parts):
+            generic.add_sequence(name, seq)
+
         return generic
 
 class Round:
