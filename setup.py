@@ -249,7 +249,7 @@ if INSTALL_BIOSQL:
     all_packages.extend(biosql_packages)
 
 setup(name='biopython', 
-      version='1.00a4',
+      version='1.00a4_022205',
       author='The Biopython Consortium',
       author_email='biopython@biopython.org',
       url='http://www.biopython.org/',
@@ -287,6 +287,11 @@ setup(name='biopython',
                                ),
                      Extension('Bio.Align.cfastpairwise',
                                ['Bio/Align/cfastpairwisemodule.c',
+                                'Bio/Tools/csupport.c'],
+                               include_dirs=["Bio/Tools"]
+                               ),
+                     Extension('Bio.Align.cpairwise2',
+                               ['Bio/Align/cpairwise2module.c',
                                 'Bio/Tools/csupport.c'],
                                include_dirs=["Bio/Tools"]
                                ),

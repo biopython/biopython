@@ -52,62 +52,92 @@ static void IndexList_free(struct IndexList *il)
     IndexList_init(il);
 }
 
+static void IndexList_clear(struct IndexList *il)
+{
+    il->num_used = 0;
+}
+
 static int IndexList_contains(struct IndexList *il, 
 			      const int row, const int col) 
 {
     int i;
-    for(i=0; i<il->num_used*2; i+=2) {
+    int stop;
+
+    stop = il->num_used*2;
+    for(i=0; i<stop; i+=2) {
 	if((il->indexes[i] == row) && (il->indexes[i+1] == col))
 	    return 1;
     }
     return 0;
 }
 
+static int IndexList__verify_free_index(struct IndexList *il, int num_needed)
+{
+    int *indexes;
+    int num_to_allocate;
+    int num_bytes;
+
+    if(il->num_allocated >= num_needed)
+	return 1;
+
+    /* Nearly all the cases are for list of length 1 or 2.
+       Empirically, the code seems to run fastest when I allocate the
+       exact amount for these. */
+    if(num_needed <= 2)
+	num_to_allocate = num_needed;
+    else 
+	num_to_allocate = num_needed*2;
+    num_bytes = num_to_allocate*sizeof(int)*2;
+    if(!(indexes = realloc((void *)il->indexes, num_bytes))) {
+	PyErr_SetString(PyExc_MemoryError, "Out of memory");
+	return 0;
+    }
+    il->indexes = indexes;
+    il->num_allocated = num_to_allocate;
+    return 1;
+}
+
 static void IndexList_append(struct IndexList *il, 
 			     const int row, const int col) 
 {
-    const int START_SIZE = 1;
-    int *indexes;
-
-    if(!il->indexes) {
-	if(!(indexes = malloc(START_SIZE*sizeof(int)*2))) {
-	    PyErr_SetString(PyExc_MemoryError, "Out of memory");
-	    return;
-	}
-	il->indexes = indexes;
-	il->num_used = 0;
-	il->num_allocated = START_SIZE;
-    }
-    else if(il->num_used >= il->num_allocated) {
-	if(!(indexes = realloc((void *)il->indexes, 
-			       il->num_allocated*2*sizeof(int)*2))) {
-	    PyErr_SetString(PyExc_MemoryError, "Out of memory");
-	    return;
-	}
-	il->indexes = indexes;
-	il->num_allocated *= 2;
-    }
-    
-    il->indexes[il->num_used*2] = row;
-    il->indexes[il->num_used*2+1] = col;
+    int i;
+    if(!IndexList__verify_free_index(il, il->num_used+1))
+	return;
+    i=il->num_used*2;
+    il->indexes[i] = row;
+    il->indexes[i+1] = col;
     il->num_used += 1;
 }
 
 static void IndexList_extend(struct IndexList *il1, struct IndexList *il2) 
 {
-    int i;
-    for(i=0; i<il2->num_used*2; i+=2) {
-	IndexList_append(il1, il2->indexes[i], il2->indexes[i+1]);
-	if(PyErr_Occurred())
-	    break;
+    int i1, i2;
+    int stop;
+
+    if(!IndexList__verify_free_index(il1, il1->num_used+il2->num_used))
+	return;
+    stop=il2->num_used * 2;
+    for(i1=il1->num_used*2, i2=0; i2<stop; i1+=2, i2+=2) {
+	il1->indexes[i1] = il2->indexes[i2];
+	il1->indexes[i1+1] = il2->indexes[i2+1];
     }
+    il1->num_used += il2->num_used;
 }
 
-static void IndexList_copy(struct IndexList *il1, struct IndexList *il2) 
+/* static void IndexList_copy(struct IndexList *il1, struct IndexList *il2) 
 {
-    IndexList_free(il1);
+    IndexList_clear(il1);
     IndexList_extend(il1, il2);
-}
+    } */
+
+/* static void IndexList_assign(struct IndexList *il1, struct IndexList *il2)
+{
+    if(il1->indexes)
+	free(il1->indexes);
+    il1->indexes = il2->indexes;
+    il1->num_used = il2->num_used;
+    il1->num_allocated = il2->num_allocated;
+    } */
 
 
 double _get_match_score(PyObject *py_sequenceA, PyObject *py_sequenceB, 
@@ -258,46 +288,50 @@ static PyObject *cpairwise2__make_score_matrix_fast(
     /* Fill in the score matrix. */
     for(row=1; row<lenA; row++) {
 	for(col=1; col<lenB; col++) {
-	    double best_score;
+	    double nogap_score, row_score, col_score, best_score;
 	    int best_score_rint;
-	    struct IndexList best_index;
+	    struct IndexList *il;
 
 	    double score, open_score, extend_score;
-	    int score_rint, open_score_rint, extend_score_rint;
+	    int open_score_rint, extend_score_rint;
 
-	    /* Calculate thes score that would occur by extending the
-	       alignment without gaps. */
-	    best_score = score_matrix[(row-1)*lenB+col-1];
-	    best_score_rint = rint(best_score);
-	    IndexList_init(&best_index);
-	    IndexList_append(&best_index, row-1, col-1);
-
-	    /* Check the score that would occur if there were a gap in
-	       sequence A. */
+	    /* Calculate the best score. */
+	    nogap_score = score_matrix[(row-1)*lenB+col-1];
 	    if(col > 1) {
-		score = row_cache_score[row-1];
-		score_rint = rint(score);
-		if(score_rint == best_score_rint) {
-		    IndexList_extend(&best_index, &row_cache_index[row-1]);
-		} else if(score_rint > best_score_rint) {
-		    best_score = score;
-		    best_score_rint = score_rint;
-		    IndexList_copy(&best_index, &row_cache_index[row-1]);
-		}
+		row_score = row_cache_score[row-1];
+	    } else {
+		row_score = nogap_score-1; /* Make sure it's not best score */
+	    }
+	    if(row > 1) {
+		col_score = col_cache_score[col-1];
+	    } else {
+		col_score = nogap_score-1; /* Make sure it's not best score */
 	    }
 
-	    /* Check the score that would occur if there were a gap in
-	       sequence B. */
-	    if(row > 1) {
-		score = col_cache_score[col-1];
-		score_rint = rint(score);
-		if(score_rint == best_score_rint) {
-		    IndexList_extend(&best_index, &col_cache_index[col-1]);
-		} else if(score_rint > best_score_rint) {
-		    best_score = score;
-		    best_score_rint = score_rint;
-		    IndexList_copy(&best_index, &col_cache_index[col-1]);
-		}
+	    best_score = (row_score > col_score) ? row_score : col_score;
+	    if(nogap_score > best_score)
+		best_score = nogap_score;
+	    best_score_rint = rint(best_score);
+
+	    /* Set the score and traceback matrices. */
+	    score = best_score + _get_match_score(py_sequenceA, py_sequenceB, 
+						  py_match_fn, row, col);
+	    if(PyErr_Occurred())
+		goto _cleanup_make_score_matrix_fast;
+	    if(!align_globally && score < 0)
+		score_matrix[row*lenB+col] = 0;
+	    else
+		score_matrix[row*lenB+col] = score;
+
+	    il = &trace_matrix[row*lenB+col];
+	    if(best_score_rint == rint(nogap_score)) {
+		IndexList_append(il, row-1, col-1);
+	    }
+	    if(best_score_rint == rint(row_score)) {
+		IndexList_extend(il, &row_cache_index[row-1]);
+	    }
+	    if(best_score_rint == rint(col_score)) {
+		IndexList_extend(il, &col_cache_index[col-1]);
 	    }
 
 	    /* Update the cached column scores. */
@@ -307,7 +341,7 @@ static PyObject *cpairwise2__make_score_matrix_fast(
 	    extend_score_rint = rint(extend_score);
 	    if(open_score_rint > extend_score_rint) {
 		col_cache_score[col-1] = open_score;
-		IndexList_free(&col_cache_index[col-1]);
+		IndexList_clear(&col_cache_index[col-1]);
 		IndexList_append(&col_cache_index[col-1], row-1, col-1);
 	    } else if(extend_score_rint > open_score_rint) {
 		col_cache_score[col-1] = extend_score;
@@ -324,7 +358,7 @@ static PyObject *cpairwise2__make_score_matrix_fast(
 	    extend_score_rint = rint(extend_score);
 	    if(open_score_rint > extend_score_rint) {
 		row_cache_score[row-1] = open_score;
-		IndexList_free(&row_cache_index[row-1]);
+		IndexList_clear(&row_cache_index[row-1]);
 		IndexList_append(&row_cache_index[row-1], row-1, col-1);
 	    } else if(extend_score_rint > open_score_rint) {
 		row_cache_score[row-1] = extend_score;
@@ -333,18 +367,6 @@ static PyObject *cpairwise2__make_score_matrix_fast(
 		if(!IndexList_contains(&row_cache_index[row-1], row-1, col-1))
 		    IndexList_append(&row_cache_index[row-1], row-1, col-1);
 	    }
-
-	    /* Set the score and traceback matrices. */
-	    score = best_score + _get_match_score(py_sequenceA, py_sequenceB, 
-						  py_match_fn, row, col);
-	    if(PyErr_Occurred())
-		goto _cleanup_make_score_matrix_fast;
-	    if(!align_globally && score < 0)
-		score_matrix[row*lenB+col] = 0;
-	    else
-		score_matrix[row*lenB+col] = score;
-	    IndexList_copy(&trace_matrix[row*lenB+col], &best_index);
-	    IndexList_free(&best_index);
 	}
     }
 
