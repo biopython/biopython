@@ -100,8 +100,8 @@ Node   1 joins node  -1 with node   0; link distance is  44.000
 Node   2 joins node   3 with node  -2; link distance is 162.540
 Second data set:
 Pairwise average-linkage clustering
-Number of nodes is 12 (should be 3)
-Number of link distances is 12 (should be 3)
+Number of nodes is 12 (should be 12)
+Number of link distances is 12 (should be 12)
 Node   0 joins node   5 with node   4; link distance is   0.006
 Node   1 joins node   9 with node  12; link distance is   0.058
 Node   2 joins node   2 with node   1; link distance is   0.121
@@ -115,8 +115,8 @@ Node   9 joins node   8 with node  -9; link distance is   6.468
 Node  10 joins node  -6 with node   6; link distance is   9.272
 Node  11 joins node -11 with node -10; link distance is  25.483
 Pairwise single-linkage clustering
-Number of nodes is 12 (should be 3)
-Number of link distances is 12 (should be 3)
+Number of nodes is 12 (should be 12)
+Number of link distances is 12 (should be 12)
 Node   0 joins node   5 with node   4; link distance is   0.006
 Node   1 joins node   9 with node  12; link distance is   0.058
 Node   2 joins node  11 with node  -2; link distance is   0.066
@@ -130,8 +130,8 @@ Node   9 joins node   8 with node  -9; link distance is   3.872
 Node  10 joins node  -6 with node -10; link distance is   6.865
 Node  11 joins node   6 with node -11; link distance is   7.071
 Pairwise centroid-linkage clustering
-Number of nodes is 12 (should be 3)
-Number of link distances is 12 (should be 3)
+Number of nodes is 12 (should be 12)
+Number of link distances is 12 (should be 12)
 Node   0 joins node   4 with node   5; link distance is   0.006
 Node   1 joins node  12 with node   9; link distance is   0.058
 Node   2 joins node   1 with node   2; link distance is   0.121
@@ -145,8 +145,8 @@ Node   9 joins node  -9 with node   8; link distance is   6.126
 Node  10 joins node   6 with node  -6; link distance is   9.156
 Node  11 joins node -10 with node -11; link distance is  23.072
 Pairwise maximum-linkage clustering
-Number of nodes is 12 (should be 3)
-Number of link distances is 12 (should be 3)
+Number of nodes is 12 (should be 12)
+Number of link distances is 12 (should be 12)
 Node   0 joins node   5 with node   4; link distance is   0.006
 Node   1 joins node   9 with node  12; link distance is   0.058
 Node   2 joins node   2 with node   1; link distance is   0.121
