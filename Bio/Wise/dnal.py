@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-__version__ = "$Revision: 1.2 $"
+__version__ = "$Revision: 1.3 $"
 
 from __future__ import division
 
@@ -19,8 +19,8 @@ _CMDLINE_DNAL = ["dnal", "-alb", "-nopretty",
                 "-gap", _PENALTY_GAP_START, "-ext", _PENALTY_GAP_EXTENSION]
 
 try:
-    import lsf
-    if lsf.jobid:
+    import poly
+    if poly.jobid:
         _CMDLINE_DNAL.extend(["-silent", "-quiet"])
 except ImportError:
     pass

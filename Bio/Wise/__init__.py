@@ -1,13 +1,13 @@
 #!/usr/bin/env python2.3
 
-__version__ = "$Revision: 1.2 $"
+__version__ = "$Revision: 1.3 $"
 
 import os
 
 try:
-    import lsf
+    import poly
 
-    _NamedTemporaryFile = lsf.NamedTemporaryFile
+    _NamedTemporaryFile = poly.NamedTemporaryFile
 except ImportError:
     import tempfile
     
@@ -59,6 +59,8 @@ def align(cmdline, pair, kbyte=None, force_type=None, dry_run=False, quiet=False
         print cmdline_str
         return
 
+    import sys
+    print >>sys.stderr, cmdline_str
     os.system(cmdline_str)
     return temp_file
 
