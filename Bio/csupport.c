@@ -22,10 +22,6 @@ double PyNumber_AsDouble(PyObject *py_num)
     double val;
     PyObject *floatobj;
 
-    if(!PyNumber_Check(py_num)) {
-	PyErr_SetString(PyExc_TypeError, "I received a non-number");
-	return(0.0);
-    }
     if((floatobj = PyNumber_Float(py_num)) == NULL)
 	return(0.0);
     val = PyFloat_AsDouble(floatobj);

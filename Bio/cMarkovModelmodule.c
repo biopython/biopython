@@ -1,28 +1,13 @@
 /* cMarkovModelmodule.c
  * jchang
  * Created: 1/13/01
- * Last modified: 1/13/01
+ * Last modified: 11/26/02
  *
  * This optimizes some of the functions in MarkovModel.py.
  */
 
 #include "Python.h"
-
-
-/* Return a PyNumber as a double.
- * Raises a TypeError if I can't do it.
- */
-static double PyNumber_AsDouble(PyObject *py_num)
-{
-    double val;
-    PyObject *floatobj;
-
-    if((floatobj = PyNumber_Float(py_num)) == NULL)
-	return 0.0;
-    val = PyFloat_AsDouble(floatobj);
-    Py_DECREF(floatobj);
-    return val;
-}
+#include "csupport.h"
 
 
 /* Functions in this module. */
