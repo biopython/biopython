@@ -17,7 +17,7 @@ an API which allows both full and record oriented parsers.
 
 Here's an example use of the API:
 >>> import sys
->>> from Martel.formats import swissprot38
+>>> import swissprot38  # one is in Martel/test/testformats
 >>> from xml.dom import pulldom
 >>> iterator = swissprot38.format.make_iterator("swissprot38_record")
 >>> text = open("sample.swissprot").read()
@@ -231,26 +231,3 @@ class Iterate:
 
     def __iter__(self):
         return iter(self.next, None)
-
-def test1():
-    from Martel.formats import swissprot38
-    from Martel.test import support
-    iterator = swissprot38.format.make_iterator("swissprot38_record")
-    infile = open("/home/dalke/ftps/swissprot/smaller_sprot38.dat")
-    output = support.Dump()
-    from xml.sax import saxlib
-    #output = saxlib.HandlerBase()
-    for record in iterator.iterateFile(infile, output):
-        pass
-
-def test2():
-    record_format = Martel.Group("letter", Martel.Is("a"))
-    format = Group("all", Rep(record_format))
-    
-def test():
-    test1()
-    test2()
-
-if __name__ == "__main__":
-    test2()
-    
