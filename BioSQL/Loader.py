@@ -174,7 +174,16 @@ class DatabaseLoader:
         if not left_value:
             left_value = 0
         left_value += 1
-        right_value = left_value + 2 * len(lineage) - 1
+        
+        # XXX -- Brad: Fixing this for now in an ugly way because
+        # I am getting overlaps for right_values. I need to dig into this
+        # more to actually understand how it works. I'm not sure it is
+        # actually working right anyhow.
+        right_start_value = self.adaptor.execute_one(
+            "SELECT MAX(right_value) FROM taxon")[0]
+        if not right_start_value:
+            right_start_value = 0
+        right_value = right_start_value + 2 * len(lineage) - 1
 
         parent_taxon_id = None
         for taxon in lineage:
