@@ -185,10 +185,26 @@ class _Scanner:
                 elif string.find(line, "Query=") >= 0:
                     break
                 consumer.noevent(uhandle.readline())
+        
+        attempt_read_and_call(uhandle, consumer.noevent, blank=1)
+        if attempt_read_and_call(uhandle, consumer.noevent,
+                                 start="<table border=0 width=600"):
+            read_and_call_until(uhandle, consumer.noevent,
+                            contains="</table>")
+            consumer.noevent(uhandle.readline())
+            read_and_call(uhandle, consumer.noevent, blank=1)
+
+        attempt_read_and_call(uhandle, consumer.noevent, start="<p>")
+        
         if attempt_read_and_call(uhandle, consumer.noevent,
                                  contains="Taxonomy reports"):
             read_and_call(uhandle, consumer.noevent, start="<BR>")
-        attempt_read_and_call(uhandle, consumer.noevent, start="<PRE>")
+        
+        if not attempt_read_and_call(uhandle, consumer.noevent, start="<PRE>"):
+            if attempt_read_and_call(uhandle, consumer.noevent, start="</PRE>"):
+                read_and_call_until(uhandle, consumer.noevent, start="<PRE>")
+                read_and_call_while(uhandle, consumer.noevent, start="<PRE>")
+            
         read_and_call_while(uhandle, consumer.noevent, blank=1)
 
     def _scan_query_info(self, uhandle, consumer):
@@ -351,6 +367,11 @@ class _Scanner:
             uhandle.saveline(line3)
             uhandle.saveline(line2)
             uhandle.saveline(line1)
+            # There can be <a> links in front of 'Score'
+            rea = re.compile(r"</?a[^>]*>")
+            line1 = rea.sub("", line1)
+            line2 = rea.sub("", line2)
+            line3 = rea.sub("", line3)
             if line1[:6] != ' Score' and line2[:6] != ' Score' and \
                line3[:6] != ' Score':
                 break
@@ -361,7 +382,7 @@ class _Scanner:
     def _scan_alignment_header(self, uhandle, consumer):
         # <a name = 120291> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/
         #            Length = 141
-        #            
+        #
         while 1:
             line = safe_readline(uhandle)
             if string.lstrip(line)[:8] == 'Length =':
@@ -394,7 +415,8 @@ class _Scanner:
 
         attempt_read_and_call(uhandle, consumer.noevent, start='<PRE>')
         attempt_read_and_call(uhandle, consumer.noevent, blank=1)
-        read_and_call(uhandle, consumer.score, start=' Score')
+        read_and_call(uhandle, consumer.score,
+                      has_re=re.compile(r'^ (<a[^>]*></a>)*Score'))
         read_and_call(uhandle, consumer.identities, start=' Identities')
         # BLASTN
         attempt_read_and_call(uhandle, consumer.strand, start = ' Strand')

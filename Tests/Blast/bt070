@@ -1,0 +1,157 @@
+<HTML>
+<HEAD>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" LINK="#0000FF" VLINK="#660099" ALINK="#660099">
+<IMG SRC="images/head_results.gif" ALT="Header of the page" BORDER="0"NAME="BlastHeaderGif" WIDTH="600" HEIGHT="45" ALIGN="middle">
+<form action="Blast.cgi" enctype="application/x-www-form-urlencoded" method="POST"><input name="ALIGNMENTS" type="hidden" value="10"><input name="ALIGNMENT_VIEW" type="hidden" value="Pairwise"><input name="AUTO_FORMAT" type="hidden" value="on"><input name="CLIENT" type="hidden" value="web"><input name="DESCRIPTIONS" type="hidden" value="10"><input name="EXPECT" type="hidden" value="0.01"><input name="FORMAT_ENTREZ_QUERY" type="hidden" value="(none)"><input name="FORMAT_OBJECT" type="hidden" value="Alignment"><input name="FORMAT_TYPE" type="hidden" value="HTML"><input name="HITLIST_SIZE" type="hidden" value="10"><input name="RID" type="hidden" value="1038588547-028642-15893"><input name="RTOE" type="hidden" value="85"><input name="SHOW_OVERVIEW" type="hidden" value="on"><input name="STEP_NUMBER" type="hidden" value="1"><input name="WWW_BLAST_TYPE" type="hidden" value="hs_genes"><input name="CMD" type="hidden" value="Get"></form>
+<form action="Blast.cgi" enctype="application/x-www-form-urlencoded" method="POST" TARGET=""><input name="ALIGNMENTS" type="hidden" value="10"><input name="ALIGNMENT_VIEW" type="hidden" value="Pairwise"><input name="AUTO_FORMAT" type="hidden" value="on"><input name="CLIENT" type="hidden" value="web"><input name="DESCRIPTIONS" type="hidden" value="10"><input name="EXPECT" type="hidden" value="0.01"><input name="FORMAT_ENTREZ_QUERY" type="hidden" value="(none)"><input name="FORMAT_OBJECT" type="hidden" value="Alignment"><input name="FORMAT_TYPE" type="hidden" value="HTML"><input name="HITLIST_SIZE" type="hidden" value="10"><input name="RID" type="hidden" value="1038588547-028642-15893"><input name="RTOE" type="hidden" value="85"><input name="SHOW_OVERVIEW" type="hidden" value="on"><input name="STEP_NUMBER" type="hidden" value="1"><input name="WWW_BLAST_TYPE" type="hidden" value="hs_genes"><input name="CMD" type="hidden" value="Get">
+
+<p><!--
+QBlastInfoBegin
+	Status=READY
+QBlastInfoEnd
+--><p><TITLE> RID=1038588547-028642-15893, lcl|1 </TITLE>
+<HTML>
+<HEAD>
+<TITLE>Human Genome BLAST Search Results</TITLE>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="http://www.ncbi.nlm.nih.gov/genome/seq/ncbi.css">
+</HEAD>
+
+
+<body bgcolor="#FFFFFF">
+
+
+<table border="0" width="600" cellspacing="0" cellpadding="0">
+  <tr valign="bottom"> 
+    <td width="144" valign="top" align="left"><img src="http://www.ncbi.nlm.nih.gov/genome/seq/IMG/pix_tr.gif" width="144" height="1"><br>
+      <a href="http://www.ncbi.nlm.nih.gov/"><img src="http://www.ncbi.nlm.nih.gov/genome/seq/IMG/ncbilogo.gif" width="130" height="45" border="0"></a></td>
+    <td width="456"><a href="http://www.ncbi.nlm.nih.gov/genome/guide/"><img src="http://www.ncbi.nlm.nih.gov/entrez/query/static/gifs/entrez_gen.gif" width="456" height="45" border="0"></a></td>
+  </tr>
+</table>
+
+
+
+
+
+<BR><BR>
+
+<p class=HEAD2> Commencing search, please wait for results.</p>
+
+<BR><BR>
+<PRE>
+
+
+<b>BLASTP 2.2.4 [Aug-26-2002]</b>
+
+<pre>
+<b><a href="http://www.ncbi.nlm.nih.gov/htbin-
+post/Entrez/query?uid=9254694&form=6&db=m&Dopt=r">Reference</a>:</b>
+Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch&auml;ffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+<p>
+RID: 1038588547-028642-15893
+<p>
+<b>Query=</b> lcl|1
+         (87 letters)
+
+<p>
+<b>Database:</b> Homo sapiens protein sequences 
+           39,341 sequences; 15,598,025 total letters
+
+<p> <p>If you have any problems or questions with the results of this search <br>please refer to the <b><a href=http://www.ncbi.nlm.nih.gov/blast/blast_FAQs.html>BLAST FAQs</a></b><br><p>
+
+<table border=0 width=600 cellpadding=8>
+<tr valign="top">
+<td><a href="http://www.ncbi.nlm.nih.gov/mapview/map_search.cgi?chr=hum_chr.inf&RID=1038588547-028642-15893">
+<img border=0 src="html/GenomeView.gif"></a></td>
+<td>Show positions of the BLAST hits in the human genome using the Entrez Genomes MapViewer</td>
+</tr>
+</table>
+
+<p>
+<a href="Blast.cgi?CMD=Get&RID=1038588547-028642-15893&FORMAT_OBJECT=TaxBlast" TARGET="Taxonomy BLAST Results for 1038588547-028642-15893">Taxonomy reports</a>
+<BR>
+</PRE>
+<CENTER>
+<H3><a href="/blast/newoptions.html#graphical-overview"> Distribution of 1 Blast Hits on the Query Sequence</a></H3>
+<input name=defline size=80 value="Mouse-over to show defline and scores. Click to show alignments">
+</CENTER>
+<map name=img_map>
+<area shape=rect coords=164,101,427,106 href="#22748611" ONMOUSEOVER='document.forms[1].defline.value="NP_689464  defensin, beta 106; defensin, beta 6 [Homo sapiens]  ..S= 110 E=2e-25"' ONMOUSEOUT='document.forms[1].defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+</map>
+<CENTER>
+<IMG WIDTH=536 HEIGHT=108 USEMAP=#img_map BORDER=1 SRC="nph-getgif.cgi?iblast31&207891705318584.gif" ISMAP></CENTER>
+<HR>
+<PRE>
+<PRE>
+
+
+                                                                 Score    E
+Sequences producing significant alignments:                      (bits) Value
+
+<a href="http://www.ncbi.nlm.nih.gov/LocusLink/LocRpt.cgi?db=protein%20&na=0&gnl=ref%7CNP_689464.1%7C&gi=22748611&RID=1038588547-028642-15893&segs=16-64&seal=504D6EF60FDA6D00B5DF1946356E5FE4">ref|NP_689464.1|</a>  defensin, beta 106; defensin, beta 6 [Homo...   <a href = #22748611>110</a>   2e-25
+</PRE>
+<CENTER><b><FONT color="green">Alignments</FONT></b></CENTER>
+</form>
+<PRE>
+><a name = 22748611></a><a href="http://www.ncbi.nlm.nih.gov/LocusLink/LocRpt.cgi?db=protein%20&na=0&gnl=ref%7CNP_689464.1%7C&gi=22748611&RID=1038588547-028642-15893&segs=16-64&seal=504D6EF60FDA6D00B5DF1946356E5FE4">ref|NP_689464.1|</a> defensin, beta 106; defensin, beta 6 [Homo sapiens]
+ <a name = 22252904></a><a href="http://www.ncbi.nlm.nih.gov/LocusLink/LocRpt.cgi?db=protein%20&na=0&gnl=gb%7CAAM93908.1%7C&gi=22252904&RID=1038588547-028642-15893&segs=16-64&seal=CB377645AB0B7850EEA227F7D9C069D7">gb|AAM93908.1|</a> defensin beta 106 [Homo sapiens]
+ <a name = 22506647></a><a href="http://www.ncbi.nlm.nih.gov/LocusLink/LocRpt.cgi?db=protein%20&na=0&gnl=dbj%7CBAC10631.1%7C&gi=22506647&RID=1038588547-028642-15893&segs=16-64&seal=F9EC3397411EB87986F3766DE1BE480F">dbj|BAC10631.1|</a> beta-defensin-6 [Homo sapiens]
+          Length = 65
+
+ <a name = 22748611_274></a><a name = 22748611_274_21_69_17_65></a>Score =  110 bits (274), Expect = 2e-25
+ Identities = 49/49 (100%), Positives = 49/49 (100%)
+
+Query: 21 AKNAFFDEKCNKLKGTCKNNCGKNEELIALCQKSLKCCRTIQPCGSIID 69
+          AKNAFFDEKCNKLKGTCKNNCGKNEELIALCQKSLKCCRTIQPCGSIID
+Sbjct: 17 AKNAFFDEKCNKLKGTCKNNCGKNEELIALCQKSLKCCRTIQPCGSIID 65
+</PRE>
+
+
+<form>
+
+<PRE>
+  Database: Homo sapiens protein sequences
+    Posted date:  Nov 27, 2002 12:59 AM
+  Number of letters in database: 15,598,025
+  Number of sequences in database:  39,341
+  
+Lambda     K      H
+   0.327    0.142    0.483 
+
+Gapped
+Lambda     K      H
+   0.267   0.0410    0.140 
+
+
+Matrix: BLOSUM62
+Gap Penalties: Existence: 11, Extension: 1
+Number of Hits to DB: 3,148,972
+Number of Sequences: 39341
+Number of extensions: 121780
+Number of successful extensions: 393
+Number of sequences better than 1.0e-02: 1
+Number of HSP's better than  0.0 without gapping: 1
+Number of HSP's successfully gapped in prelim test: 0
+Number of HSP's that attempted gapping in prelim test: 392
+Number of HSP's gapped (non-prelim): 1
+length of query: 87
+length of database: 15,598,025
+effective HSP length: 63
+effective length of query: 24
+effective length of database: 13,119,542
+effective search space: 314869008
+effective search space used: 314869008
+T: 11
+A: 40
+X1: 15 ( 7.1 bits)
+X2: 38 (14.6 bits)
+X3: 64 (24.7 bits)
+S1: 40 (21.7 bits)
+S2: 79 (35.0 bits)
+
+</form>
+
