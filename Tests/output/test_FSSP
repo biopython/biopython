@@ -1,7 +1,5 @@
-test_FSSP
 
 Read in 1cnv.fssp
-Reached equiv_title
 ...1cnv.fssp read
 head_rec.author ['M.Hennig']
 head_rec.compnd ['concanavalin', 'b']
