@@ -61,11 +61,25 @@ int Trie_len(const Trie trie);
  */
 int Trie_has_key(const Trie trie, const unsigned char *key);
 
+
 /* Trie_has_prefix
  * ---------------
  * Return whether a string is a prefix of a key in the trie.
  */
 int Trie_has_prefix(const Trie trie, const unsigned char *prefix);
+
+
+/* Trie_with_prefix
+ * ----------------
+ * Iterate over all the keys in the trie that start with a prefix.
+ */
+void Trie_with_prefix(const Trie trie, const unsigned char *prefix,
+		      void (*callback)(const unsigned char *key, 
+				       const void *value,
+				       void *data),
+		      void *data
+		      );
+
 
 /* Trie_iterate
  * ------------

@@ -482,6 +482,70 @@ Trie_iterate(const Trie trie,
     _iterate_helper(trie, callback, data, KEY, MAX_KEY_LENGTH);
 }
 
+static void
+_with_prefix_helper(const Trie trie, const unsigned char *prefix,
+		    void (*callback)(const unsigned char *key, 
+				     const void *value,
+				     void *data),
+		    void *data,
+		    unsigned char *current_key, const int max_key)
+{
+    int first, last, mid;
+
+    if(!prefix[0]) {
+	_iterate_helper(trie, callback, data, current_key, max_key);
+	return;
+    }
+
+    /* The transitions are stored in alphabetical order.  Do a binary
+     * search to find the proper one.
+     */
+    first = 0;
+    last = trie->num_transitions-1;
+    while(first <= last) {
+	Transition transition;
+	unsigned char *suffix;
+	int suffixlen, prefixlen, minlen;
+	int c;
+	mid = (first+last)/2;
+	transition = &trie->transitions[mid];
+	suffix = transition->suffix;
+	suffixlen = strlen(suffix);
+	prefixlen = strlen(prefix);
+	minlen = (suffixlen < prefixlen) ? suffixlen : prefixlen;
+	c = strncmp(prefix, suffix, minlen);
+	if(c < 0)
+	    last = mid-1;
+	else if(c > 0)
+	    first = mid+1;
+	else {
+	    int keylen = strlen(current_key);
+	    if(keylen + minlen >= max_key) {
+		/* BUG: This will fail silently.  It should raise some
+		   sort of error. */
+		break;
+	    }
+	    strncat(current_key, suffix, minlen);
+	    _with_prefix_helper(transition->next, prefix+minlen,
+				callback, data, current_key, max_key);
+	    current_key[keylen] = 0;
+	    break;
+	}
+    }
+}
+
+void 
+Trie_with_prefix(const Trie trie, const unsigned char *prefix,
+		 void (*callback)(const unsigned char *key, 
+				  const void *value,
+				  void *data),
+		 void *data
+		 )
+{
+    KEY[0] = 0;
+    _with_prefix_helper(trie, prefix, callback, data, KEY, MAX_KEY_LENGTH);
+}
+
 
 
 /* Need to declare _serialize_transition here so it can be called from

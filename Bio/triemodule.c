@@ -147,6 +147,49 @@ trie_has_prefix(trieobject *mp, PyObject *py_prefix)
     return PyInt_FromLong((long)has_prefix);
 }
 
+static char with_prefix__doc__[] =
+"D.with_prefix(prefix) -> list of D's keys that begins with prefix";
+
+static void 
+_trie_with_prefix_helper(const unsigned char *key, const void *value, 
+			 void *data) 
+{
+    PyObject *py_list = (PyObject *)data;
+    PyObject *py_key;
+
+    if(PyErr_Occurred())
+	return;
+
+    if(!(py_key = PyString_FromString(key)))
+	return;
+    PyList_Append(py_list, py_key);
+    Py_DECREF(py_key);
+}
+
+static PyObject *
+trie_with_prefix(trieobject *mp, PyObject *py_prefix)
+{
+    char *prefix;
+    PyObject *py_list;
+
+    /* Make sure prefix is a string. */
+    if(!PyString_Check(py_prefix)) {
+	PyErr_SetString(PyExc_TypeError, "k must be a string");
+	return NULL;
+    }
+    prefix = PyString_AS_STRING(py_prefix);
+
+    if(!(py_list = PyList_New(0)))
+	return NULL;
+    Trie_with_prefix(mp->trie, prefix, 
+		     _trie_with_prefix_helper, (void *)py_list);
+    if(PyErr_Occurred()) {
+	Py_DECREF(py_list);
+	return NULL;
+    }
+    return py_list;
+}
+
 static char keys__doc__[] =
 "D.keys() -> list of D's keys";
 
@@ -304,6 +347,8 @@ static PyMethodDef trieobj_methods[] = {
      has_key__doc__},
     {"has_prefix", (PyCFunction)trie_has_prefix,  METH_O,
      has_prefix__doc__},
+    {"with_prefix", (PyCFunction)trie_with_prefix,  METH_O,
+     with_prefix__doc__},
     {"keys",    (PyCFunction)trie_keys,     METH_NOARGS,
      keys__doc__},
     {"values",  (PyCFunction)trie_values,   METH_NOARGS,
