@@ -1443,7 +1443,7 @@ def blastall(blastcmd, program, database, infile, **keywds):
     for attr in keywds.keys():
         params.extend([att2param[attr], str(keywds[attr])])
 
-    r, w, e = popen2.popen3([blastcmd] + params)
+    r, w, e = popen2.popen3(' '.join([blastcmd] + params))
     w.close()
     return File.UndoHandle(r), File.UndoHandle(e)
 
