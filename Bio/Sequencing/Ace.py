@@ -1,7 +1,7 @@
 """
 Parser for (new) ACE files output by PHRAP.
 
-version 1.1, 02/03/2004
+version 1.2, 02/03/2004
 Written by Frank Kauff (fkauff@duke.edu) and
 Cymon J. Cox (cymon@duke.edu)
 
@@ -22,6 +22,7 @@ gives you
         acefilerecord.reads (the number of reads in the ace file)
         acefilerecord.records[] (one record for each contig)
         acefilerecord.wa[] (all WA tags)
+        acefilerecord.wr[] (all WR tags)
         acefilerecord.ct[] (all CT tags)
         acefilerecord.rt[] (all RT tags)
 
@@ -49,9 +50,9 @@ The records[] includes the data objects for each contig. All the info in the
                 break
             ...
 
-        if WA, CT, RT tags are at the end and the iterator is used, they will be returned
+        if WA, CT, RT, WR tags are at the end and the iterator is used, they will be returned
         with the last contig record. This is is necessarily the case when using an interator.
-        Thus an ace file does not entirerly suit the concept of iterating. If WA, CT, RT tags
+        Thus an ace file does not entirerly suit the concept of iterating. If WA, CT, RT, WR tags
         are needed, the ACEParser instead of the RecordParser might be appropriate.
         
 """
@@ -131,6 +132,13 @@ class _wa:
         self.date=''
         self.info=[]
 
+class _wr:
+    def __init__(self):
+        self.name=''
+        self.aligned=''
+        self.program=''
+        self.date=[]
+
 class Record:
     """Hold information from a ACE record
         
@@ -150,6 +158,7 @@ class Record:
         self.ds=[]
         self.rt=[]
         self.ct=[]
+        self.wr=[]
         self.wa=[]
         
 class Iterator:
@@ -205,9 +214,6 @@ class Iterator:
         if self._parser is not None:
             return self._parser.parse(File.StringHandle(data))
         return data
-    
-    def __iter__(self):
-        return iter(self.next, None)
 
 class RecordParser(AbstractParser):
     """Parses ACE file data into a Record object
@@ -233,6 +239,7 @@ class ACEFileRecord:
         self.contigs=None
         self.reads=None
         self.wa=[]
+        self.wr=[]
         self.rt=[]
         self.ct=[]
 
@@ -254,6 +261,12 @@ class ACEFileRecord:
                     self.records[i].rt.append(self.rt[j])
                     self.rt[j]=None
             self.rt=[rt for rt in self.rt if rt]
+            for j in range(len(self.wr)):
+                if self.wr[j].name in [r.name for r in self.records[i].rd]:
+                    self.records[i].wr.append(self.wr[j])
+                    self.wr[j]=None
+            self.wr=[wr for wr in self.wr if wr]
+        
         
 class ACEParser(AbstractParser):
     """Parses full ACE file in list of records.
@@ -334,7 +347,7 @@ class _Scanner:
             read_and_call(uhandle,consumer.qa,start='QA ')
             read_and_call_while(uhandle,consumer.noevent,blank=1)
             read_and_call(uhandle,consumer.ds,start='DS ')
-            # rt tags can be interspersed between reads
+            # rt and wr tags can be interspersed between reads
             while 1:
                 # something left 
                 try:
@@ -347,6 +360,9 @@ class _Scanner:
                 if line.startswith('RT'):
                     read_and_call(uhandle,consumer.rt_start,start='RT')
                     consumer.rt_data(self._scan_bracket_tags(uhandle))
+                elif line.startswith('WR'):
+                    read_and_call(uhandle,consumer.wr_start,start='WR')
+                    consumer.wr_data(self._scan_bracket_tags(uhandle))
                 else:
                     break
             if not line.startswith('RD'): # another read?
@@ -515,6 +531,12 @@ class _RecordConsumer(AbstractConsumer):
         wadata=_wa()
         self.data.wa.append(wadata)   
     
+    def wr_start(self,line):
+        if not line.strip().endswith('{'):
+            raise SyntaxError, 'WR tag does not start with WR{'
+        wrdata=_wr()
+        self.data.wr.append(wrdata)   
+    
     def ct_data(self,taglines):
         if len(taglines)<1:
             raise SyntaxError, 'Missing header line in CT tag'
@@ -540,13 +562,13 @@ class _RecordConsumer(AbstractConsumer):
         self.data.rt[-1].padded_end=eval(header[4])
         self.data.rt[-1].date=header[5]
     
-    def wa_data(self,taglines):
+    def wr_data(self,taglines):
         if len(taglines)<1:
-            raise SyntaxError, 'Missing header line in WA tag'
+            raise SyntaxError, 'Missing header line in WR tag'
         header=taglines[0].split()
-        self.data.wa[-1].tag_type=header[0]
-        self.data.wa[-1].program=header[1]
-        self.data.wa[-1].date=header[2]
-        self.data.wa[-1].info=taglines[1:]
+        self.data.wr[-1].name=header[0]
+        self.data.wr[-1].aligned=header[1]
+        self.data.wr[-1].program=header[2]
+        self.data.wr[-1].date=header[3]
 
     
