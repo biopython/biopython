@@ -49,10 +49,22 @@ def _load_registries():
     self = sys.modules[__name__]        # self refers to this module.
     # Load the registries.  Look in all the '.py' files in Bio.config
     # for Registry objects.  Save them all into the local namespace.
-    x = os.listdir(
-        os.path.dirname(__import__("Bio.config", {}, {}, ["Bio"]).__file__))
-    x = filter(lambda x: not x.startswith("_") and x.endswith(".py"), x)
-    x = map(lambda x: x[:-3], x)            # chop off '.py'
+    # Import code changed to allow for compilation with py2exe from distutils
+    # import Bio.config
+    config_imports = __import__("Bio.config", {}, {}, ["Bio"]).__file__)
+    # in a zipfile
+    if hasattr(config_imports, '__loader__':
+        zipfiles = __import__("Bio.config", {}, {}, ["Bio"]).__loader__.files
+        # Get only Bio.config modules
+        x = [zipfiles[file][0] for file in zipfiles.keys() \
+                if 'Bio\\config' in file]
+        x = [name.split("\\")[-1] for name in x] # Get module name
+        x = map(lamdba x: x[:-4], x) # chop off '.pyc'
+    # not in a zipfile, get files normally
+    else:
+        x = os.listdir(config_imports.__file__))
+        x = filter(lambda x: not x.startswith("_") and x.endswith(".py"), x)
+        x = map(lambda x: x[:-3], x)            # chop off '.py'
     for module in x:
         module = __import__("Bio.config.%s" % module, {}, {}, ["Bio","config"])
         for name, obj in module.__dict__.items():
