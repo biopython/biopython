@@ -10,6 +10,7 @@ a database, this is the place to start looking for useful classes.
 import time
 import urllib
 import operator
+import StringIO
 
 from Bio import StdHandler
 from Bio.Tools.MultiProc.copen import copen_fn
@@ -263,17 +264,60 @@ class BioCorba(Source):
 
         return self.corba_dict[find_id]
 
+class IndexedFile(Source):
+    """Return SeqRecord objects from an indexed file.
+
+    This module deals with both flat file and BerkeleyDB indexes.
+    These indexed files can be created by any of the compliant indexing
+    implementations from Biopython, BioPerl, BioJava, etc...
+    """
+    def __init__(self, name, doc = "", dbname = ""):
+        """Intialize with information about loading the database.
+
+        dbname is the name of the database to open. This will likely
+        be a filesystem path to a database directory.
+        """
+        Source.__init__(self, name, None, None, doc, None)
+        self.db = self._load_database(dbname)
+
+    def _load_database(self, name):
+        """Get a connection with the given database.
+        """
+        from Bio import Mindy
+        db = Mindy.open(dbname = name)
+        return db
+
+    def _rawget(self, params):
+        """Do the database retrieval of the sequence, returning a handle.
+        """
+        assert len(params) == 1, "Expected one parameter, got %s" % \
+                                 str(params)
+        namespace, key = params[0]
+        location = apply(self.db.lookup, (), {namespace : key})
+        assert len(location) == 1, "Got multiple hits: %s" % location
+        return StringIO.StringIO(location[0].text)
+
+    def _post_process(self, handle):
+        """Try to parse the results of a query into a SeqRecord.
+
+        This uses Martel auto-detection to try to determine the
+        format of a file. If the format cannot be determined, the
+        handle itself is returned.
+        """
+        try:
+            records = SeqRecord.io.read(handle)
+            # don't do this check now; not really a list, an Iterator
+            # assert len(records) == 1, "Expected one record, got %s" \
+            #                           % (str(records))
+            return records[0]
+        except TypeError: # could not determine file type
+            return handle
+
 ##class PythonFunction:
 ##    function name
 
 ##class Application:
 ##    location
-
-##class BerkeleyDBIndex:
-##    index_filename
-
-##class FlatIndex:
-##    filename
 
 def _my_urlencode(params):
     # urllib only handles key=value pairs.  However, some CGI
