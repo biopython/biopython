@@ -22,7 +22,9 @@ The DSSP codes for secondary structure used here are:
     - -        None
 """
 
-# Values from Miller et al. (1987), JMB, 196:641-656
+# ASA of amino acids in a G-X-G peptide in extended conformation
+# Values from Miller et al. (1987), JMB, 196:641-656 (see Creighton)
+# Used for relative accessibility
 _GXG={}
 _GXG["ALA"]=113.0
 _GXG["CYS"]=140.0
@@ -172,8 +174,8 @@ class DSSP:
         @param res: a residue
         @type res: L{Residue}
 
-        @return: (secondary structure, accessibility) tuple
-        @rtype: (char, int)
+        @return: (secondary structure, accessibility, relative accessibility) tuple
+        @rtype: (char, int, float)
         """
         return self.map[res]
 
@@ -214,12 +216,13 @@ class DSSP:
 
     def get_iterator(self):
         """
-        Iterate over the (residue, (secondary structure, accessibility))
-        list. Handy alternative to the dictionary-like access.
+        Iterate over the (residue, (secondary structure, accessibility,
+        relative accessibility)) list. Handy alternative to the dictionary-like 
+        access.
 
         Example:
-            >>> for (res, (sec, acc)) in dssp.get_iterator():
-            >>>     print res, sec, acc         
+            >>> for (res, (sec, acc, rel_acc)) in dssp.get_iterator():
+            >>>     print res, sec, acc, rel_acc         
 
         @return: iterator
         """
@@ -239,7 +242,7 @@ if __name__=="__main__":
     d=DSSP(model, sys.argv[1])
 
     for r in d.get_iterator():
-        print r
+        print r[1][2]
 
 
 
