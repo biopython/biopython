@@ -1,6 +1,7 @@
 import sys, urllib
 from xml.sax import saxutils
 import ReseekFile
+from Martel import Dispatch
 
 class FormatIOIterator:
     def __init__(self, obj):
@@ -72,26 +73,48 @@ class FormatIO:
         
 
     def readFile(self, infile, format = None, builder = None, debug_level = 0):
+        import time
         if format is None:
             format = self.default_input_format
         format = self.registery.normalize(format)
 
+        t1 = time.clock()
         format, infile = self._get_file_format(format, infile)
+        t2 = time.clock()
+        print "format detected", t2-t1
             
         if format is None:
             raise TypeError("Could not determine file type")
 
+        t1 = time.clock()
         builder = self._find_builder(builder, format)
-
-        exp = format.expression
+        t2 = time.clock()
+        print "builder found", t2-t1
 
         if hasattr(builder, "uses_tags"):
-            import Martel
-            uses_tags = tuple(builder.uses_tags())
-            exp = Martel.select_names(exp, uses_tags + ("record", "dataset"))
-        
-        iterator = exp.make_iterator("record", debug_level = debug_level)
-        return FormatIOIterator(iterator.iterateFile(infile, builder))
+            select_names = tuple(builder.uses_tags())
+        else:
+            select_names = None
+
+        if format.multirecord == 1:
+            iterator = format.make_iterator("record",
+                                            select_names = select_names,
+                                            debug_level = debug_level)
+            return FormatIOIterator(iterator.iterateFile(infile, builder))
+        elif format.multirecord == 0:
+            t1 = time.clock()
+            parser = format.make_parser(select_names = select_names,
+                                        debug_level = debug_level)
+            t2 = time.clock()
+            print "Parser made", t2-t1
+            parser.setContentHandler(builder)
+            t1 = time.clock()
+            parser.parseFile(infile)
+            t2 = time.clock()
+            print "document created", t2-t1
+            return builder.document
+        else:
+            raise AssertionError(format.multirecord)
 
 
     def readString(self, s, format = None, builder = None, debug_level = 0):
@@ -107,7 +130,16 @@ class FormatIO:
 
         iterator = format.make_iterator("record", debug_level = debug_level)
         
-        return FormatIOIterator(iterator.iterateString(s, builder))
+        if format.multirecord == 1:
+            iterator = exp.make_iterator("record", debug_level = debug_level)
+            return FormatIOIterator(iterator.iterateString(s, builder))
+        elif format.multirecord == 0:
+            parser = exp.make_parser(debug_level = debug_level)
+            parser.setContentHandler(builder)
+            parser.parseString(infile)
+            return builder.document
+        else:
+            raise AssertionError(format.multirecord)
       
                   
     def read(self, systemID, format = None, builder = None, debug_level = 0):
@@ -146,8 +178,12 @@ class FormatIO:
         
         parser = exp.make_parser()
 
-        import StdHandler        
-        parser.setContentHandler(StdHandler.ConvertHandler(builder, writer))
+        import StdHandler
+        if isinstance(builder, Dispatch.Dispatcher):
+            cont_h = StdHandler.ConvertDispatchHandler(builder, writer)
+        else:
+            cont_h = StdHandler.ConvertHandler(builder, writer)
+        parser.setContentHandler(cont_h)
             
         parser.parseFile(infile)
 
