@@ -185,7 +185,7 @@ class _Scanner:
         # 2.  line contains "No significant similarity"
         # 3.  no descriptions
         if not attempt_read_and_call(
-            uhandle, consumer.noevent, contains='Score     E'):
+            uhandle, consumer.description_header, contains='Score     E'):
             # Either case 2 or 3.  Look for "No hits found".
             attempt_read_and_call(uhandle, consumer.no_hits,
                                   contains='No significant similarity')
@@ -199,7 +199,8 @@ class _Scanner:
         # <a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Ret
         # 
         # Read the score header lines and a blank line.
-        read_and_call(uhandle, consumer.noevent, start='Sequences producing')
+        read_and_call(uhandle, consumer.description_header,
+                      start='Sequences producing')
         read_and_call(uhandle, consumer.noevent, blank=1)
 
         # Read the descriptions and the following blank line.

@@ -60,8 +60,8 @@ noevent        :
 *************** start_descriptions
 noevent        : Searching..................................................done
 noevent        : 
-noevent        : 
-noevent        : Sequences producing significant alignments:
+description_hea: 
+description_hea: Sequences producing significant alignments:
 noevent        : 
 description    : gi|120291|sp|P21297|FLBT_CAUCR FLBT PROTEIN
 description    : gi|3024946|sp|Q58368|Y958_METJA HYPOTHETICAL PROTEIN MJ0958 PRE
@@ -364,8 +364,8 @@ noevent        : Searching..................................................done
 round          : Results from round 1
 noevent        : 
 noevent        : 
-noevent        : 
-noevent        : Sequences producing significant alignments:
+description_hea: 
+description_hea: Sequences producing significant alignments:
 noevent        : 
 description    : gi|1174726|sp|P12921|TMRB_BACSU TUNICAMYCIN RESISTANCE PROTEIN
 description    : gi|1352934|sp|P47169|YJ9F_YEAST HYPOTHETICAL 161.2 KD PROTEIN I
@@ -515,8 +515,8 @@ noevent        :
 *************** start_descriptions
 noevent        : Searching..................................................done
 noevent        : 
-noevent        : 
-noevent        : Sequences producing significant alignments:
+description_hea: 
+description_hea: Sequences producing significant alignments:
 noevent        : 
 description    : gi|1348916|gb|G26684|G26684 human STS STS_D11570. >gi|1375195|g
 description    : gi|720683|gb|G03725|G03725 human STS WI-344.
@@ -673,8 +673,8 @@ noevent        :
 *************** start_descriptions
 noevent        : Searching..................................................done
 noevent        : 
-noevent        : 
-noevent        : Sequences producing significant alignments:
+description_hea: 
+description_hea: Sequences producing significant alignments:
 noevent        : 
 description    : gi|1731448|sp|P54103|ZRF1_MOUSE ZUOTIN RELATED FACTOR-1
 description    : gi|465911|sp|P34454|YMA9_CAEEL HYPOTHETICAL 31.6 KD PROTEIN F54
@@ -835,8 +835,8 @@ noevent        :
 *************** start_descriptions
 noevent        : Searching..................................................done
 noevent        : 
-noevent        : 
-noevent        : Sequences producing significant alignments:
+description_hea: 
+description_hea: Sequences producing significant alignments:
 noevent        : 
 description    : gi|3820341|emb|AJ229891|KLAJ9891 Kluyveromyces lactis DNA fragm
 description    : gi|1375419|gb|G27169|G27169 human STS SHGC-31983.
@@ -1038,8 +1038,8 @@ noevent        :
 *************** start_descriptions
 noevent        : Searching..................................................done
 noevent        : 
-noevent        : 
-noevent        : Sequences producing significant alignments:
+description_hea: 
+description_hea: Sequences producing significant alignments:
 noevent        : 
 description    : gi|1348853|gb|G26621|G26621 human STS STS_D12006. >gi|1396339|g
 description    : gi|1348016|gb|G25784|G25784 human STS EST47998.

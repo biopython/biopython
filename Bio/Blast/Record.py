@@ -56,15 +56,17 @@ class Description:
     """Stores information about one hit in the descriptions section.
 
     Members:
-    title       Title of the hit.
-    score       Number of bits.  (int)
-    e           E value.  (float)
+    title           Title of the hit.
+    score           Number of bits.  (int)
+    e               E value.  (float)
+    num_alignments  Number of alignments for the same subject.  (int)
     
     """
     def __init__(self):
         self.title = ''
         self.score = None
         self.e = None
+        self.num_alignments = None
     def __str__(self):
         return "%-66s %5s  %s" % (self.title, self.score, self.e)
 
@@ -95,20 +97,21 @@ class HSP:
     """Stores information about one hsp in an alignment hit.
 
     Members:
-    score        BLAST score of hit.  (float)
-    bits         Number of bits for that score.  (float)
-    expect       Expect value.  (float)
-    identities   Number of identities/total aligned.  tuple of (int, int)
-    positives    Number of positives/total aligned.  tuple of (int, int)
-    gaps         Numer of gaps/total aligned.  tuple of (int, int)
-    strand       Tuple of (query, target) strand.
-    frame        Tuple of 1 or 2 frame shifts, depending on the flavor.
+    score           BLAST score of hit.  (float)
+    bits            Number of bits for that score.  (float)
+    expect          Expect value.  (float)
+    num_alignments  Number of alignments for same subject.  (int)
+    identities      Number of identities/total aligned.  tuple of (int, int)
+    positives       Number of positives/total aligned.  tuple of (int, int)
+    gaps            Numer of gaps/total aligned.  tuple of (int, int)
+    strand          Tuple of (query, target) strand.
+    frame           Tuple of 1 or 2 frame shifts, depending on the flavor.
 
-    query        The query sequence.
-    query_start  The start residue for the query sequence.  (1-based)
-    match        The match sequence.
-    sbjct        The sbjct sequence.
-    sbjct_start  The start residue for the sbjct sequence.  (1-based)
+    query           The query sequence.
+    query_start     The start residue for the query sequence.  (1-based)
+    match           The match sequence.
+    sbjct           The sbjct sequence.
+    sbjct_start     The start residue for the sbjct sequence.  (1-based)
     
     Not all flavors of BLAST return values for every attribute:
               score     expect     identities   positives    strand  frame
@@ -132,6 +135,7 @@ class HSP:
         self.score = None
         self.bits = None
         self.expect = None
+        self.num_alignments = None
         self.identities = (None, None)
         self.positives = (None, None)
         self.gaps = (None, None)

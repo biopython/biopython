@@ -179,7 +179,7 @@ class _Scanner:
         # indicates that no descriptions follow, and we should go straight
         # to the alignments.
         if not attempt_read_and_call(
-            uhandle, consumer.noevent, contains='Score     E'):
+            uhandle, consumer.description_header, contains='Score     E'):
             # Either case 2 or 3.  Look for "No hits found".
             attempt_read_and_call(uhandle, consumer.no_hits,
                                   contains='No hits found')
@@ -189,7 +189,8 @@ class _Scanner:
             return
 
         # Read the score header lines
-        read_and_call(uhandle, consumer.noevent, start='Sequences producing')
+        read_and_call(uhandle, consumer.description_header,
+                      start='Sequences producing')
 
         # If PSI-BLAST, read the 'Sequences used in model' line.
         attempt_read_and_call(uhandle, consumer.model_sequences,
@@ -534,6 +535,14 @@ class _DescriptionConsumer:
         self._converged = 0
         self._type = None
         self._roundnum = None
+
+        self.__has_n = 0   # Does the description line contain an N value?
+
+    def description_header(self, line):
+        if line[:19] == 'Sequences producing':
+            cols = string.split(line)
+            if cols[-1] == 'N':
+                self.__has_n = 1
     
     def description(self, line):
         dh = self._parse(line)
@@ -574,16 +583,25 @@ class _DescriptionConsumer:
         # special cases to handle:
         #   - title must be preserved exactly (including whitespaces)
         #   - score could be equal to e-value (not likely, but what if??)
-        #   - sometimes there's an "N" score of '1'.  Ignore it.
+        #   - sometimes there's an "N" score of '1'.
         cols = string.split(line)
         if len(cols) < 3:
             raise SyntaxError, \
                   "Line does not appear to contain description:\n%s" % line
-        if cols[-1] == '1':  # ignore N.  XXX this is kinda broken.  N may
-            del cols[-1]     # not be 1.  I'm assuming e-value would be 1.0.
-        i = string.rfind(line, cols[-1])        # find start of p-value
-        i = string.rfind(line, cols[-2], 0, i)  # find start of score
-        dh.title, dh.score, dh.e = string.rstrip(line[:i]), cols[-2], cols[-1]
+        if self.__has_n:
+            i = string.rfind(line, cols[-1])        # find start of N
+            i = string.rfind(line, cols[-2], 0, i)  # find start of p-value
+            i = string.rfind(line, cols[-3], 0, i)  # find start of score
+        else:
+            i = string.rfind(line, cols[-1])        # find start of p-value
+            i = string.rfind(line, cols[-2], 0, i)  # find start of score
+        if self.__has_n:
+            dh.title, dh.score, dh.e, dh.num_alignments = \
+                      string.rstrip(line[:i]), cols[-3], cols[-2], cols[-1]
+        else:
+            dh.title, dh.score, dh.e, dh.num_alignments = \
+                      string.rstrip(line[:i]), cols[-2], cols[-1], 1
+        dh.num_alignments = _safe_int(dh.num_alignments)
         dh.score = _safe_int(dh.score)
         dh.e = _safe_float(dh.e)
         return dh
@@ -760,10 +778,14 @@ class _HSPConsumer:
         self._hsp.score = _safe_float(self._hsp.score)
         self._hsp.bits = _safe_float(self._hsp.bits)
 
-        self._hsp.expect, = _re_search(
-            r"Expect\S* = +([0-9.e-]+)", line,
+        x, y = _re_search(
+            r"Expect\(?(\d*)\)? = +([0-9.e-]+)", line,
             "I could not find the expect in line\n%s" % line)
-        self._hsp.expect = _safe_float(self._hsp.expect)
+        if x:
+            self._hsp.num_alignments = _safe_int(x)
+        else:
+            self._hsp.num_alignments = 1
+        self._hsp.expect = _safe_float(y)
 
     def identities(self, line):
         x, y = _re_search(

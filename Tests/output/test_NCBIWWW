@@ -65,8 +65,8 @@ noevent        : <PRE>
 noevent        : 
 *************** end_header
 *************** start_descriptions
-noevent        : 
-noevent        : Sequences producing significant alignments:
+description_hea: 
+description_hea: Sequences producing significant alignments:
 noevent        : 
 description    : <a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=R
 description    : <a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=R
@@ -222,8 +222,8 @@ noevent        : <PRE>
 noevent        : 
 *************** end_header
 *************** start_descriptions
-noevent        : 
-noevent        : Sequences producing significant alignments:
+description_hea: 
+description_hea: Sequences producing significant alignments:
 noevent        : 
 description    : <a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=R
 description    : <a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=R
@@ -699,8 +699,8 @@ noevent        : <PRE>
 noevent        : 
 *************** end_header
 *************** start_descriptions
-noevent        : 
-noevent        : Sequences producing significant alignments:
+description_hea: 
+description_hea: Sequences producing significant alignments:
 noevent        : 
 description    : <a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=R
 description    : <a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=R
@@ -907,8 +907,8 @@ noevent        : <PRE>
 noevent        : 
 *************** end_header
 *************** start_descriptions
-noevent        : 
-noevent        : Sequences producing significant alignments:
+description_hea: 
+description_hea: Sequences producing significant alignments:
 noevent        : 
 description    : <a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=R
 description    : <a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=R
@@ -1162,8 +1162,8 @@ noevent        : <PRE>
 noevent        : 
 *************** end_header
 *************** start_descriptions
-noevent        : 
-noevent        : Sequences producing significant alignments:
+description_hea: 
+description_hea: Sequences producing significant alignments:
 noevent        : 
 description    : <a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=R
 description    : <a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=R
