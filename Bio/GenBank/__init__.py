@@ -1015,8 +1015,8 @@ class _Scanner:
         self._parser.parseFile(handle)
 
 def index_file_db(genbank_file, db_name, db_directory,
-                  identifier = "accession", aliases = ["locus"],
-                  keywords = []):
+                  identifier = "locus", aliases = ["accession"],
+                  keywords = [], always_index = 0):
     """Index a GenBank file into a database for quick loading.
 
     WARNING: This is very experimental and subject to change.
@@ -1038,8 +1038,18 @@ def index_file_db(genbank_file, db_name, db_directory,
     o identifier - The primary identifier used to store records in the file
     under. This will be used for retrieving them later.
 
-    o aliases, keywords - More advanced Mindy features that I'm not positive
+    o aliases - Secondary identifiers that point to the record. These can
+    be used for searching if a primary identifier is not found. This is
+    useful for GenBank since we'll index by a single identifier (the LOCUS
+    identifier by default) but might want to search by some other
+    identifier.
+
+    o keywords - More advanced Mindy features that I'm not positive
     how to make full use of right now.
+
+    o always_index - A flag indicating whether or not to index a file even
+    if the file appears not to have changed. By default, the function will
+    try to skip indexing if it thinks the file hasn't changed.
     """
     try:
         from mindy import mindy_index, mindy_search
@@ -1048,14 +1058,17 @@ def index_file_db(genbank_file, db_name, db_directory,
                          "http://www.biopython.org/~dalke/mindy-0.1.tar.gz")
 
     # try to skip the indexing if everything seems up to date
-    if os.path.exists(os.path.join(db_directory, db_name)):
-        # load up the database and see if the file size is the same
-        search_db = mindy_search.mindy_open(db_directory, db_name)
-        file_size = search_db.mindy_data["file_sizes"][genbank_file]
+    if not(always_index):
+        if os.path.exists(os.path.join(db_directory, db_name)):
+            # load up the database and see if the file size is the same
+            search_db = mindy_search.mindy_open(db_directory, db_name)
 
-        if file_size == os.path.getsize(genbank_file):
-            print "File already indexed. Skipping...."
-            return
+            if search_db.mindy_data.has_key("file_sizes"):
+                file_size = search_db.mindy_data["file_sizes"][genbank_file]
+
+                if file_size == os.path.getsize(genbank_file):
+                    print "File already indexed. Skipping...."
+                    return
 
     if not(os.path.exists(db_directory)):
         os.makedirs(db_directory)
@@ -1065,18 +1078,21 @@ def index_file_db(genbank_file, db_name, db_directory,
 
     indexer = mindy_index.SimpleIndexer(mindy_db, "genbank_record", identifier,
                                         aliases, keywords)
+    gb_format = genbank_format.record_format
 
-    gb_format = mindy_index.load_format(
-        "Bio.GenBank.genbank_format.record_format")
-
-    if hasattr(indexer, "_wanted_elements"):
-        gb_format = Martel.select_names(gb_format, indexer._wanted_elements)
+    # -- don't use this optimization right now, it causes genbank_format
+    # to be reset so that future calls to it don't return all of the item
+    # of interest
+    #if hasattr(indexer, "_wanted_elements"):
+    #    gb_format = Martel.select_names(genbank_format.record_format,
+    #                                    indexer._wanted_elements)
 
     parser = gb_format.make_parser()
     parser.setContentHandler(indexer)
 
+    mindy_db.use_filename(genbank_file)
     parser.parseFile(open(genbank_file, "rb"))
-
+    
 class MindyDictionary:
     """Access a GenBank file using a dictionary interface, though a Mindy DB.
 
@@ -1115,14 +1131,33 @@ class MindyDictionary:
 
     def __getitem__(self, key):
         """Retrieve an item from the indexed file.
+
+        The key can be either a primary identifier or an alias. The lookup
+        will first try to get the file via the primary identifier, and if
+        it can't do this, will subsequently try to get it through the
+        aliases to these keys. If the aliases are ambigous, an error will
+        be raised.
+
+        Most of the time I find it easiest to search by aliases (the GenBank
+        accession numbers), but YMMV.
         """
-        data = self._search[key]
-        
+        try:
+            data = self._search[key]
+        except KeyError:
+            ids = self._search.aliases.get(key, [])
+            
+            if len(ids) == 0:
+                raise KeyError("No records found for key %s" % key)
+            elif len(ids) != 1:
+                raise KeyError("Multiple records found for key %s" % key)
+            else:
+                data = self._search[ids[0]]
+            
         # run the data through the parser if one is specified
         if self._parser is not None:
             return self._parser.parse(File.StringHandle(data))
 
-        return data
+        return File.StringHandle(data)
 
     def __getattr__(self, name):
         return getattr(self._index, name)
@@ -1131,6 +1166,11 @@ class MindyDictionary:
         """Provide all identifiers for the current database.
         """
         return self._search.identifiers.keys()
+
+    def aliases(self):
+        """Provide all aliases in the current database.
+        """
+        return self._search.aliases.keys()
 
 def index_file(genbank_file, index_file, rec_to_key = None):
     """Index a GenBank file to prepare it for use as a dictionary.
