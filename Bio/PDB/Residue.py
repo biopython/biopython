@@ -121,7 +121,9 @@ class DisorderedResidue(DisorderedEntityWrapper):
 
 	def add(self, atom):
 		residue=self.disordered_get()
-		if atom.get_altloc()==" ":
+		if not atom.is_disordered()==2:
+			# Atoms in disordered residues should have non-blanc
+			# altlocs, and are thus represented by DisorderedAtom objects.
 			resname=residue.get_resname()
 			het, resseq, icode=residue.get_id()	
 			# add atom anyway, if PDBParser ignores exception the atom will be part of the residue
@@ -141,6 +143,9 @@ class DisorderedResidue(DisorderedEntityWrapper):
 		o residue - Residue object
 		"""
 		resname=residue.get_resname()
+		# add chain parent to residue
+		chain=self.get_parent()
+		residue.set_parent(chain)
 		assert(not self.disordered_has_id(resname))
 		self[resname]=residue
 		self.disordered_select(resname)

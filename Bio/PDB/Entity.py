@@ -223,6 +223,10 @@ class DisorderedEntityWrapper:
 		for child in self.disordered_get_list():
 			child.detach_parent()
 
+	def get_parent(self):
+		"Return parent."
+		return self.parent
+
 	def set_parent(self, parent):
 		"Set the parent for the object and its children."
 		self.parent=parent

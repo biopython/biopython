@@ -110,9 +110,12 @@ class StructureBuilder:
 					# The residue in the chain is a DisorderedResidue object.
 					# So just add the last Residue object. 
 					if duplicate_residue.disordered_has_id(resname):
+						# The residue was already made
 						self.residue=duplicate_residue
 						duplicate_residue.disordered_select(resname)
 					else:
+						# Make a new residue and add it to the already
+						# present DisorderedResidue
 						new_residue=Residue(res_id, resname, self.segid)
 						duplicate_residue.disordered_add(new_residue)
 						self.residue=duplicate_residue
@@ -126,12 +129,12 @@ class StructureBuilder:
 						# if this exception is ignored, a residue will be missing
 						self.residue=None
 						raise PDBConstructionException, "Blank altlocs in duplicate residue %s ('%s', %i, '%s')" % (resname, field, resseq, icode)
+					self.chain.detach_child(res_id)
 					new_residue=Residue(res_id, resname, self.segid)
 					disordered_residue=DisorderedResidue(res_id)
+					self.chain.add(disordered_residue)
 					disordered_residue.disordered_add(duplicate_residue)
 					disordered_residue.disordered_add(new_residue)
-					self.chain.detach_child(res_id)
-					self.chain.add(disordered_residue)
 					self.residue=disordered_residue
 					return
 		residue=Residue(res_id, resname, self.segid)
@@ -185,9 +188,9 @@ class StructureBuilder:
 					# atom.
 					residue.detach_child(name)
 					disordered_atom=DisorderedAtom(name)
+					residue.add(disordered_atom)
 					disordered_atom.disordered_add(atom)
 					disordered_atom.disordered_add(duplicate_atom)
-					residue.add(disordered_atom)
 					residue.flag_disordered()
 					if __debug__:
 						print "WARNING: disordered atom found with blanc altloc before line %i."  % self.line_counter
@@ -195,10 +198,10 @@ class StructureBuilder:
 				# The residue does not contain this disordered atom
 				# so we create a new one.
 				disordered_atom=DisorderedAtom(name)
+				residue.add(disordered_atom)
 				# Add the real atom to the disordered atom, and the 
 				# disordered atom to the residue
 				disordered_atom.disordered_add(atom)
-				residue.add(disordered_atom)
 				residue.flag_disordered()
 		else:	
 			# The atom is not disordered

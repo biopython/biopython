@@ -205,6 +205,9 @@ class DisorderedAtom(DisorderedEntityWrapper):
 		"Add a disordered atom."
 		# Add atom to dict, use altloc as key	
 		atom.flag_disorder()
+		# set the residue parent of the added atom
+		residue=self.get_parent()
+		atom.set_parent(residue)
 		altloc=atom.get_altloc()
 		occupancy=atom.get_occupancy()
 		self[altloc]=atom

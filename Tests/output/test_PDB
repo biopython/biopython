@@ -205,9 +205,10 @@ Model 1 contains 3 chains.
 		Residue ('W', 75, ' ') contains 1 atoms.
 		Residue ('W', 77, ' ') contains 1 atoms.
 Polypeptides using C-N
-<Polypeptide start=3 end=9>
+<Polypeptide start=2 end=9>
 <Polypeptide start=11 end=13>
 <Polypeptide start=17 end=78>
+<Polypeptide start=79 end=81>
 <Polypeptide start=82 end=86>
 Polypeptides using CA-CA
 <Polypeptide start=2 end=9>

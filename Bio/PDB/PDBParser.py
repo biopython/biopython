@@ -211,6 +211,15 @@ class PDBParser:
 		else:
 			# exceptions are fatal - raise again with new message (including line nr)
 			raise PDBConstructionException, message
+
+
+if __name__=="__main__":
+
+	import sys
+
+	p=PDBParser(PERMISSIVE=1)
+
+	print p.get_structure("scr", sys.argv[1])
 				
 				
 		
