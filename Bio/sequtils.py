@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # Created: Sat Jul 21 08:01:13 2001
-# Last changed: Time-stamp: <01/07/24 18:50:05 thomas>
+# Last changed: Time-stamp: <01/07/25 16:13:15 thomas>
 # thomas@cbs.dtu.dk, Cecilia.Alsmark@ebc.uu.se
 # Copyright 2001 by Thomas Sicheritz-Ponten and Cecilia Alsmark.
 # All rights reserved.
@@ -160,7 +160,7 @@ def GC(seq):
       gc = d.get('G',0) + d.get('C',0)
 
    if gc == 0: return 0
-   return round(gc*100.0/(d['A'] +d['T'] + gc),1)
+   return gc*100.0/(d['A'] +d['T'] + gc)
     
 def GC123(seq):
    " calculates totla G+C content plus first, second and third position "
@@ -200,61 +200,75 @@ def GC_skew(seq, window = 100):
    values = []
    for i in range(0, len(seq), window):
       s = seq[i: i + window]
-      gc = GC(s)
-      values.append(gc)
+      g = s.count('G')
+      c = s.count('C')
+      skew = (g-c)/float(g+c)
+      values.append(skew)
    return values
 
-def Accumulated_GC_skew(seq, window = 1000):
-   " calculates the accumulated GC skew (G-C)/(G+C) (easier to see)"
-   values = []
+def xGC_skew(seq, window = 1000, zoom = 100, 
+                         r = 300, px = 100, py = 100):
+   " calculates and plots normal and accumulated GC skew (GRAPHICS !!!) "
+   
+   from Tkinter import *
+   from math import pi, sin, cos, log
+
+   yscroll = Scrollbar(orient = VERTICAL)
+   xscroll = Scrollbar(orient = HORIZONTAL)
+   canvas = Canvas(yscrollcommand = yscroll.set,
+                   xscrollcommand = xscroll.set, background = 'white')
+   win = canvas.winfo_toplevel()
+   win.geometry('700x700')
+   
+   yscroll.config(command = canvas.yview)
+   xscroll.config(command = canvas.xview)
+   yscroll.pack(side = RIGHT, fill = Y)
+   xscroll.pack(side = BOTTOM, fill = X)        
+   canvas.pack(fill=BOTH, side = LEFT, expand = 1)
+   canvas.update()
+
+   X0, Y0  = r + px, r + py
+   x1, x2, y1, y2 = X0 - r, X0 + r, Y0 -r, Y0 + r
+   
+   ty = Y0
+   canvas.create_text(X0, ty, text = '%s...%s (%d nt)' % (seq[:7], seq[-7:], len(seq)))
+   ty +=20
+   canvas.create_text(X0, ty, text = 'GC %3.2f%%' % (GC(seq)))
+   ty +=20
+   canvas.create_text(X0, ty, text = 'GC Skew', fill = 'blue')
+   ty +=20
+   canvas.create_text(X0, ty, text = 'Accumulated GC Skew', fill = 'magenta')
+   ty +=20
+   canvas.create_oval(x1,y1, x2, y2)
+
    acc = 0
-   for i in range(0, len(seq), window):
-      s = seq[i: i + window]
-      print GC(s)
-      acc += GC(s)
-      values.append(acc)
-   return values
+   start = 0
+   for gc in GC_skew(seq, window):
+      r1 = r
+      acc+=gc
+      # GC skew
+      alpha = pi - (2*pi*start)/len(seq)
+      r2 = r1 - gc*zoom
+      x1 = X0 + r1 * sin(alpha)
+      y1 = Y0 + r1 * cos(alpha)
+      x2 = X0 + r2 * sin(alpha)
+      y2 = Y0 + r2 * cos(alpha)
+      canvas.create_line(x1,y1,x2,y2, fill = 'blue')
+      # accumulated GC skew
+      r1 = r - 50
+      r2 = r1 - acc
+      x1 = X0 + r1 * sin(alpha)
+      y1 = Y0 + r1 * cos(alpha)
+      x2 = X0 + r2 * sin(alpha)
+      y2 = Y0 + r2 * cos(alpha)
+      canvas.create_line(x1,y1,x2,y2, fill = 'magenta')
 
-# def NOT_READY_xGC_skew(seq, window = 1000, zoom = 1,
-#                          r = 400, px = 100, py = 100):
-#    " calculates and plots the GC skew (GRAPHICS !!!) "
-   
-#    from Tkinter import *
-#    from math import pi, sin, cos, log
-
-#    yscroll = Scrollbar(orient = VERTICAL)
-#    xscroll = Scrollbar(orient = HORIZONTAL)
-#    canvas = Canvas(yscrollcommand = yscroll.set,
-#                    xscrollcommand = xscroll.set, background = 'white')
-   
-#    yscroll.config(command = canvas.yview)
-#    xscroll.config(command = canvas.xview)
-#    yscroll.pack(side = RIGHT, fill = Y)
-#    xscroll.pack(side = BOTTOM, fill = X)        
-#    canvas.pack(fill=BOTH, side = LEFT, expand = 1)
-#    canvas.update()
-
-#    X0, Y0  = r + px, r + py
-#    x1, x2, y1, y2 = X0 - r, X0 + r, Y0 -r, Y0 + r
-#    r1 = r
-   
-#    canvas.create_oval(x1,y1, x2, y2)
-
-#    start = 0
-#    for gc in GC_skew(seq, window):
-#       alpha = pi - (2*pi*start)/len(seq)
-#       r2 = r1 - gc*zoom
-#       x1 = X0 + r1 * sin(alpha)
-#       y1 = Y0 + r1 * cos(alpha)
-#       x2 = X0 + r2 * sin(alpha)
-#       y2 = Y0 + r2 * cos(alpha)
-#       canvas.create_line(x1,y1,x2,y2, fill = 'green4')
-#       canvas.update()
-#       start = start + window
+      canvas.update()
+      start = start + window
       
 
-#    canvas.configure(scrollregion = canvas.bbox(ALL))
-
+   canvas.configure(scrollregion = canvas.bbox(ALL))
+   
 def molecular_weight(seq):
    if type(seq) == type(''): seq = Seq(seq, IUPAC.unambiguous_dna)
    weight_table = IUPACData.unambiguous_dna_weights
@@ -264,6 +278,10 @@ def molecular_weight(seq):
    return sum
 
 def nt_search(seq, subseq):
+   """ search for a DNA subseq in sequence
+       use ambiguous values (like N = A or T or C or G, R = A or G etc.)
+       searches only on forward strand
+   """
    pattern = ''
    for nt in subseq:
       value = IUPACData.ambiguous_dna_values[nt]
@@ -285,9 +303,6 @@ def nt_search(seq, subseq):
 
    return result
 
-      
-      
-   
    
 def fasta_uniqids(file):
    " checks and changes the name/ID's to be unique identifiers by adding numbers "
@@ -397,7 +412,8 @@ if __name__ == '__main__':
       arguments = []
       if options.get('search'):
          arguments = options['search']
-                          
+      if function == 'xGC_skew':
+         arguments = 1000
       if options.get('quick'):
          results = quicker_apply_on_multi_fasta(file, function, arguments)
       else:
