@@ -5,17 +5,22 @@
 
 """Medline.py
 
-This module provides code to work with Medline from NLM.
+This module provides code to work with Medline.
 
 
 Classes:
 Record           Holds Medline data.
+Iterator         Iterates over a file containint Medline records.
 RecordParser     Parses a Medline record into a Record object.
 
 _Scanner         Scans a Medline record.
 _RecordConsumer  Consumes Medline data to a Record object.
 
 """
+
+# XXX get rid of trailing newlines
+
+from types import *
 
 from Bio import File
 from Bio.ParserSupport import *
@@ -136,6 +141,58 @@ class Record:
 
         self.undefined = []
         
+class Iterator:
+    """Returns one record at a time from a file of Medline records.
+
+    Methods:
+    next   Return the next record from the stream, or None.
+
+    """
+    def __init__(self, handle, parser=None):
+        """__init__(self, handle, parser=None)
+
+        Create a new iterator.  handle is a file-like object.  parser
+        is an optional Parser object to change the results into another form.
+        If set to None, then the raw contents of the file will be returned.
+
+        """
+        if type(handle) is not FileType and type(handle) is not InstanceType:
+            raise ValueError, "I expected a file handle or file-like object"
+        self._uhandle = File.UndoHandle(handle)
+        self._parser = parser
+
+    def next(self):
+        """next(self) -> object
+
+        Return the next medline record from the file.  If no more records,
+        return None.
+
+        """
+        lines = []
+        while 1:
+            line = self._uhandle.readline()
+            if not line:
+                break
+            lines.append(line)
+            if string.rstrip(line) == '':
+                break
+        while 1:  # read remaining blank lines
+            line = self._uhandle.readline()
+            if not line:
+                break
+            if string.rstrip(line) != '':
+                self._uhandle.saveline(line)
+                break
+            lines.append(line)
+            
+        if not lines:
+            return None
+            
+        data = string.join(lines, '')
+        if self._parser is not None:
+            return self._parser.parse(File.StringHandle(data))
+        return data
+
 class RecordParser:
     """Parses Medline data into a Record object.
 
@@ -213,8 +270,9 @@ class _Scanner:
         else:
             uhandle = File.UndoHandle(handle)
 
-        uhandle.readline()
-        uhandle.readline()
+        # Read the Entrez header information, if it exists
+        if attempt_read_and_call(uhandle, consumer.noevent, start='Entrez'):
+            read_and_call(uhandle, consumer.noevent, start='----------------')
         self._scan_record(uhandle, consumer)
 
     def _scan_record(self, uhandle, consumer):
