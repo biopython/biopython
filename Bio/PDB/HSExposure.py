@@ -183,7 +183,10 @@ class HSExposure:
                 translation=ca2.get_coord()
                 rotran_list.append((translation, rotation, ca2, r))
                 # Calculate angle between pseudo-CB-CA and CA-CB
-                angles[r]=self._calc_delta_angle(r, cb_v)
+                a=self._calc_delta_angle(r, cb_v)
+                # None if CB is absent
+                if not (a is None):
+                    angles[r]=a
         self.angles=angles
         return rotran_list
 
@@ -195,10 +198,13 @@ class HSExposure:
             # Calculate pseudo CA for GLY
             cb_v=self._get_gly_cb_vector(res)
             ca_v=res["CA"].get_vector()
-        else:
+        elif res.has_id("CB"):
             # Calculate CB-CA vector
             cb_v=res["CB"].get_vector()
             ca_v=res["CA"].get_vector()
+        else:
+            # CB absent
+            return None
         real_cb_v=cb_v-ca_v
         angle=360*real_cb_v.angle(pseudo_cb_v)/(2*pi)
         return angle
