@@ -90,7 +90,7 @@ def _load_registries():
     config_imports = __import__("Bio.config", {}, {}, ["Bio"])
     # in a zipfile
     if hasattr(config_imports, '__loader__'):
-        zipfiles = __import__("Bio.config", {}, {}, ["Bio"]).__loader__.files
+        zipfiles = __import__("Bio.config", {}, {}, ["Bio"]).__loader__._files
         # Get only Bio.config modules
         x = [zipfiles[file][0] for file in zipfiles.keys() \
                 if 'Bio\\config' in file]
