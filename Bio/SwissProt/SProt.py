@@ -20,11 +20,11 @@ Iterator           Iterates over entries in a SwissProt file.
 Dictionary         Accesses a SwissProt file using a dictionary interface.
 ExPASyDictionary   Accesses SwissProt records from ExPASy.
 RecordParser       Parses a SwissProt record into a Record object.
-SequenceParser     Parses a SwissProt record into a Sequence object.
+SequenceParser     Parses a SwissProt record into a Seq object.
 
 _Scanner           Scans SwissProt-formatted data.
 _RecordConsumer    Consumes SwissProt data to a Record object.
-_SequenceConsumer  Consumes SwissProt data to a Sequence object.
+_SequenceConsumer  Consumes SwissProt data to a Seq object.
 
 
 Functions:
@@ -36,7 +36,9 @@ import os
 import string
 from Bio import File
 from Bio import Index
-from Bio import Sequence
+from Bio import Alphabet
+from Bio import Seq
+from Bio import SeqRecord
 from Bio.ParserSupport import *
 from Bio.WWW import ExPASy
 from Bio.WWW import RequestLimiter
@@ -288,12 +290,18 @@ class RecordParser:
         return self._consumer.data
 
 class SequenceParser:
-    """Parses SwissProt data into a Sequence object.
+    """Parses SwissProt data into a Seq object.
 
     """
-    def __init__(self):
+    def __init__(self, alphabet = Alphabet.generic_protein):
+        """Initialize a RecordParser.
+
+        Arguments:
+        o alphabet - The alphabet to use for the generated Seq objects. If
+        not supplied this will default to the generic protein alphabet.
+        """
         self._scanner = _Scanner()
-        self._consumer = _SequenceConsumer()
+        self._consumer = _SequenceConsumer(alphabet)
 
     def parse(self, handle):
         self._scanner.feed(handle, self._consumer)
@@ -390,7 +398,7 @@ class _Scanner:
 
     def _scan_ox(self, uhandle, consumer):
         self._scan_line('OX', uhandle, consumer.taxonomy_id,
-                        one_or_more=1)
+                        any_number=1)
 
     def _scan_reference(self, uhandle, consumer):
         while 1:
@@ -712,27 +720,46 @@ class _RecordConsumer(AbstractConsumer):
             setattr(ref, m, string.rstrip(attr))
 
 class _SequenceConsumer(AbstractConsumer):
-    """Consumer that converts a SwissProt record to a Sequence object.
+    """Consumer that converts a SwissProt record to a Seq object.
 
     Members:
-    data    Record with SwissProt data.
+    data      Record with SwissProt data.
+    alphabet  The alphabet the generated Seq objects will have.
 
     """
-    def __init__(self):
+    def __init__(self, alphabet = Alphabet.generic_protein):
+        """Initialize a Sequence Consumer
+
+        Arguments:
+        o alphabet - The alphabet to use for the generated Seq objects. If
+        not supplied this will default to the generic protein alphabet.
+        """
         self.data = None
+        self.alphabet = alphabet
         
     def start_record(self):
-        self.data = Sequence.NamedSequence(Sequence.Sequence())
+        seq = Seq.Seq("", self.alphabet)
+        self.data = SeqRecord.SeqRecord(seq)
+        self.data.description = ""
         
     def end_record(self):
-        pass
+        self.data.description = string.rstrip(self.data.description)
 
     def identification(self, line):
         cols = string.split(line)
         self.data.name = cols[1]
+
+    def accession(self, line):
+        ids = string.split(string.rstrip(line[5:]), ';')
+        self.data.id = ids[0]
+
+    def description(self, line):
+        self.data.description = self.data.description + \
+                                string.strip(line[5:]) + "\n"
         
     def sequence_data(self, line):
-        seq = string.rstrip(string.replace(line, " ", ""))
+        seq = Seq.Seq(string.rstrip(string.replace(line, " ", "")),
+                      self.alphabet)
         self.data.seq = self.data.seq + seq
 
 def index_file(filename, indexname, rec2key=None):
