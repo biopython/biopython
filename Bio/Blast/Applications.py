@@ -3,6 +3,24 @@
 from Bio import Application
 from Bio.Application import _Option
 
+class FastacmdCommandline(Application.AbstractCommandline):
+    """Create a commandline for the fasta program from NCBI.
+
+    """
+
+    def __init__(self, fastacmd = "fastacmd"):
+        Application.AbstractCommandline.__init__(self)
+        
+        self.program_name = fastacmd
+
+        self.parameters = \
+          [
+           _Option(["-d", "database"], ["input"], None, 1,
+                   "The database to retrieve from."),
+           _Option(["-s", "search_string"], ["input"], None, 1,
+                   "The id to search for.")
+          ]
+  
 class BlastallCommandline(Application.AbstractCommandline):
     """Create a commandline for the blastall program from NCBI.
 
