@@ -174,24 +174,29 @@ class FeatureLocation:
 
         To get fuzzy start and ends, just ask for item.start and
         item.end. To get non-fuzzy attributes (ie. the position only)
-        ask for 'item.nofuzzy_start', 'item.nofuzzy_end'.
+        ask for 'item.nofuzzy_start', 'item.nofuzzy_end'. These should return
+        the largest range of the fuzzy position. So something like:
+        (10.20)..(30.40) should return 10 for start, and 40 for end.
         """
         if attr == 'start':
             return self._start
         elif attr == 'end':
             return self._end
         elif attr == 'nofuzzy_start':
-            return self._start.position
+            return min(self._start.position,
+                       self._start.position + self._start.extension)
         elif attr == 'nofuzzy_end':
-            return self._end.position
+            return max(self._end.position,
+                       self._end.position + self._end.extension)
         else:
             raise AttributeError("Cannot evaluate attribute %s." % attr)
 
 class AbstractPosition:
     """Abstract base class representing a position.
     """
-    def __init__(self, position):
+    def __init__(self, position, extension):
         self.position = position
+        self.extension = extension
             
 class ExactPosition(AbstractPosition):
     """Specify the specific position of a boundary.
@@ -207,7 +212,7 @@ class ExactPosition(AbstractPosition):
         if extension != 0:
             raise AttributeError("Non-zero extension %s for exact position."
                                  % extension)
-        AbstractPosition.__init__(self, position)
+        AbstractPosition.__init__(self, position, 0)
 
     def __str__(self):
         return str(self.position)
@@ -266,7 +271,7 @@ class BeforePosition(AbstractPosition):
         if extension != 0:
             raise AttributeError("Non-zero extension %s for exact position."
                                  % extension)
-        AbstractPosition.__init__(self, position)
+        AbstractPosition.__init__(self, position, 0)
 
     def __str__(self):
         return "<%s" % self.position
@@ -287,7 +292,7 @@ class AfterPosition(AbstractPosition):
         if extension != 0:
             raise AttributeError("Non-zero extension %s for exact position."
                                  % extension)
-        AbstractPosition.__init__(self, position)
+        AbstractPosition.__init__(self, position, 0)
 
     def __str__(self):
         return ">%s" % self.position
