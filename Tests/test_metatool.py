@@ -16,9 +16,9 @@ from Bio import File
 
 from Bio import MetaTool
 
-kabat_file_dir = os.path.join(os.getcwd(), 'MetaTool')
 
-test_files = [ 'meta.out', 'meta9.out' ]
+test_files = [ 'meta.out', 'meta2.out', 'meta3.out', 'meta4.out', \
+    'meta6.out', 'meta7.out', 'meta8.out', 'meta9.out' ]
 
 
 
