@@ -327,7 +327,7 @@ class _RecordConsumer(AbstractConsumer):
         self.data = Record()
 
     def end_record(self):
-        pass
+        self._clean_record(self.data)
 
     def abstract_author(self, line):
         self.data.abstract_author = self._clean(line)
@@ -506,3 +506,13 @@ class _RecordConsumer(AbstractConsumer):
         if rstrip:
             return string.rstrip(nospace)
         return nospace
+
+    _needs_stripping = [
+        'abstract', 'source', 'address', 'title_abbreviation',
+        'title', 'transliterated_title'
+        ]
+    def _clean_record(self, rec):
+        # Remove trailing newlines
+        for m in self._needs_stripping:
+            value = getattr(rec, m)
+            setattr(rec, m, string.rstrip(value))
