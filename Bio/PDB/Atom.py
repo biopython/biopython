@@ -71,6 +71,9 @@ class Atom:
         
         Example:
             >>> distance=atom1-atom2
+
+        @param other: the other atom
+        @type other: L{Atom}
         """
         diff=self.coord-other.coord
         return sqrt(sum(diff*diff))

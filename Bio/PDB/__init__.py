@@ -50,6 +50,9 @@ from ResidueDepth import ResidueDepth, get_surface
 # My new solvent exposure method - article coming up
 from HSExposure import HSExposure
 
+# Kolodny et al.'s backbone libraries
+from FragmentMapper import FragmentMapper
+
 # Fast atom neighbor search
 # Depends on KDTree C++ module
 try:

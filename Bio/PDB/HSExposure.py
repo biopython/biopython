@@ -15,7 +15,7 @@ class HSExposure:
     # unit vector along z
     # CA-CB vectors or the CA-CA-CA approximation will
     # be rotated onto this unit vector
-    unit_z=Vector(0.0, 0.0, 1.0)
+    _unit_z=Vector(0.0, 0.0, 1.0)
 
     def __init__(self, OFFSET=0.0):
         # List of CA-CB direction calculated from CA-CA-CA
@@ -127,7 +127,7 @@ class HSExposure:
                 # CB-CA vector
                 cb_ca_v=cb_v-ca_v
                 # Rotate CB-CA vector to unit vector along Z
-                rotation=rotmat(cb_ca_v, self.unit_z)
+                rotation=rotmat(cb_ca_v, self._unit_z)
                 translation=ca.get_coord()
                 rotran_list.append((translation, rotation, ca, residue))
         return rotran_list
@@ -168,7 +168,7 @@ class HSExposure:
                 # pseudo cb centred at origin
                 cb_v=self._get_cb_from_ca(ca_v1, ca_v2, ca_v3)
                 # rotate cb to unit vector along z
-                rotation=rotmat(cb_v, self.unit_z)
+                rotation=rotmat(cb_v, self._unit_z)
                 translation=ca2.get_coord()
                 rotran_list.append((translation, rotation, ca2, r))
                 # Calculate angle between pseudo-CB-CA and CA-CB

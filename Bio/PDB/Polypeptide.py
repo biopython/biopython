@@ -7,13 +7,22 @@ from Bio.SCOP.Raf import to_one_letter_code
 from Bio.PDB.PDBExceptions import PDBException
 from Bio.PDB.Residue import Residue, DisorderedResidue
 
-__doc__="Polypeptide related classes (construction and representation)."
+__doc__="""
+Polypeptide related classes (construction and representation).
+
+Example:
+
+    >>> ppb=PPBuilder()
+    >>> for pp in ppb.build_peptides(structure):
+    >>>     print pp.get_sequence()
+"""
 
 def is_aa(residue):
     """
     Return 1 if residue object/string is an amino acid.
 
-    residue --- a residue object OR a three letter amino acid code
+    @param residue: a L{Residue} object OR a three letter amino acid code
+    @type residue: L{Residue} or string
     """
     if not type(residue)==StringType:
         residue=residue.get_resname()
@@ -23,11 +32,12 @@ def is_aa(residue):
 
 class Polypeptide(list):
     """
-    A polypeptide is simply a list of Residue objects.
+    A polypeptide is simply a list of L{Residue} objects.
     """
     def get_ca_list(self):
         """
-        Get the list of CA atoms.
+        @return: the list of C-alpha atoms
+        @rtype: [L{Atom}, L{Atom}, ...]
         """
         ca_list=[]
         for res in self:
@@ -36,7 +46,12 @@ class Polypeptide(list):
         return ca_list
 
     def get_sequence(self):
-        "Return the AA sequence."
+        """
+        Return the AA sequence.
+
+        @return: polypeptide sequence 
+        @rtype: L{Seq}
+        """
         s=""
         for res in self:
             resname=res.get_resname()
@@ -49,6 +64,10 @@ class Polypeptide(list):
         return seq
 
     def __repr__(self):
+        """
+        Return <Polypeptide start=START end=END>, where START
+        and END are sequence identifiers of the outer residues.
+        """
         start=self[0].get_id()[1]
         end=self[-1].get_id()[1]
         s="<Polypeptide start=%s end=%s>" % (start, end)
@@ -62,6 +81,10 @@ class _PPBuilder:
     subclass.
     """
     def __init__(self, radius):
+        """
+        @param radius: distance
+        @type radius: float
+        """
         self.radius=radius
 
     def _accept(self, residue):
@@ -75,8 +98,12 @@ class _PPBuilder:
     def build_peptides(self, entity, aa_only=1):
         """
         Build and return a list of Polypeptide objects.
-        model_id --- only this model is examined
-        aa_only --- if 1, the residue name needs to be standard AA
+
+        @param entity: polypeptides are searched for in this object
+        @type entity: L{Structure}, L{Model} or L{Chain}
+
+        @param aa_only: if 1, the residue needs to be a standard AA
+        @type aa_only: int
         """
         is_connected=self._is_connected
         accept=self._accept
