@@ -11,7 +11,9 @@ BLAST, either blastall or blastpgp, provided by the NCBI.
 http://www.ncbi.nlm.nih.gov/BLAST/
 
 Classes:
+LowQualityBlastError     Except that indicates low quality query sequences.
 BlastParser              Parses output from blast.
+BlastErrorParser         Parses output and tries to diagnose possible errors.
 PSIBlastParser           Parses output from psi-blast.
 Iterator                 Iterates over a file of blast results.
 
@@ -41,6 +43,17 @@ from Bio import File
 from Bio.ParserSupport import *
 from Bio.Blast import Record
 
+
+class LowQualityBlastError(Exception):
+    """Error caused by running a low quality sequence through BLAST.
+
+    When low quality sequences (like GenBank entries containing only
+    stretches of a single nucleotide) are BLASTed, they will result in
+    BLAST generating an error and not being able to perform the BLAST.
+    search. This error should be raised for the BLAST reports produced
+    in this case.
+    """
+    pass
 
 class _Scanner:
     """Scan BLAST output from blastall or blastpgp.
@@ -484,6 +497,74 @@ class BlastParser:
         """parse(self, handle)"""
         self._scanner.feed(handle, self._consumer)
         return self._consumer.data
+
+class BlastErrorParser:
+    """Attempt to catch and diagnose BLAST errors while parsing.
+
+    This utilizes the BlastParser module but adds an additional layer
+    of complexity on top of it by attempting to diagnose SyntaxError's
+    that may actually indicate problems during BLAST parsing.
+
+    Current BLAST problems this detects are:
+    o LowQualityBlastError - When BLASTing really low quality sequences
+    (ie. some GenBank entries which are just short streches of a single
+    nucleotide), BLAST will report an error with the sequence and be
+    unable to search with this. This will lead to a badly formatted
+    BLAST report that the parsers choke on. The parser will convert the
+    SyntaxError to a LowQualityBlastError and attempt to provide useful
+    information.
+    """
+    def __init__(self, bad_report_handle = None):
+        """Initialize a parser that tries to catch BlastErrors.
+
+        Arguments:
+        o bad_report_handle - An optional argument specifying a handle
+        where bad reports should be sent. This would allow you to save
+        all of the bad reports to a file, for instance. If no handle
+        is specified, the bad reports will not be saved.
+        """
+        self._bad_report_handle = bad_report_handle
+        
+        self._b_parser = BlastParser()
+
+    def parse(self, handle):
+        """Parse a handle, attempting to diagnose errors.
+        """
+        results = handle.read()
+
+        try:
+            return self._b_parser.parse(File.StringHandle(results))
+        except SyntaxError, msg:
+            # if we have a bad_report_file, save the info to it first
+            if self._bad_report_handle:
+                # send the info to the error handle
+                self._bad_report_handle.write(results)
+
+            # now we want to try and diagnose the error
+            self._diagnose_error(
+                File.StringHandle(results), self._b_parser._consumer.data)
+
+            # if we got here we can't figure out the problem
+            # so we should pass along the syntax error we got
+            raise SyntaxError, msg
+
+    def _diagnose_error(self, handle, data_record):
+        """Attempt to diagnose an error in the passed handle.
+
+        Arguments:
+        o handle - The handle potentially containing the error
+        o data_record - The data record partially created by the consumer.
+        """
+        line = handle.readline()
+
+        while line:
+            # 'Searchingdone' instead of 'Searching......done' seems
+            # to indicate a failure to perform the BLAST due to
+            # low quality sequence
+            if line[:13] == 'Searchingdone':
+                raise LowQualityBlastError("Blast failure occured on query: ",
+                                           data_record.query)
+            line = handle.readline()
 
 class PSIBlastParser:
     """Parses BLAST data into a Record.PSIBlast object.
@@ -1524,3 +1605,4 @@ def _safe_float(str):
         str = string.replace(str, ',', '')
     # try again.
     return float(str)
+
