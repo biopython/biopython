@@ -32,7 +32,7 @@ class FastaReader:
         # description.  If there's only one word, it's the id.
         x = string.split(line[1:].rstrip(), None, 1)
         if len(x) == 1:
-            id = x
+            id = x[0]
             desc = ""
         else:
             id, desc = x
