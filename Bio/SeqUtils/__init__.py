@@ -1,20 +1,19 @@
 #!/usr/bin/env python
 # Created: Wed May 29 08:07:18 2002
-# Last changed: Time-stamp: <02/05/29 08:52:40 thomas>
-# thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas/index.html
-# File: /home/thomas/cbs/python/biopython/Bio/SeqUtils/sequtils.py
+# thomas@cbs.dtu.dk, Cecilia.Alsmark@ebc.uu.se
+# Copyright 2001 by Thomas Sicheritz-Ponten and Cecilia Alsmark.
+# All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
 
-import os, sys
+import os, sys, getopt, re, time
 from Bio import Fasta
 from Bio import Translate
 from Bio.Seq import Seq
 from Bio import Alphabet
 from Bio.Alphabet import IUPAC
 from Bio.Data import IUPACData, CodonTable
-
-#from PropertyManager import default_manager
-
-
 
 ######################################
 # DNA
@@ -38,14 +37,20 @@ def antiparallel(seq):
    return s
 
 def GC(seq):
-   " calculates G+C content "
+   """ calculates G+C content """
+#      19/8/03: Iddo: added provision for lowercase
+#      19/8/03: Iddo: divide by the sequence's length rather than by the
+#      A+T+G+C number. In that way, make provision for N.
+       
    d = {}
-   for nt in ['A','T','G','C']:
+   for nt in ['A','T','G','C','a','t','g','c','S','s']:
       d[nt] = seq.count(nt)
-      gc = d.get('G',0) + d.get('C',0)
+      gc = d.get('G',0) + d.get('C',0) + d.get('g',0) + d.get('c',0) + \
+           d.get('S',0) + d.get('s',0)
 
    if gc == 0: return 0
-   return gc*100.0/(d['A'] +d['T'] + gc)
+#   return gc*100.0/(d['A'] +d['T'] + gc)
+   return gc*100.0/len(seq)
     
 def GC123(seq):
    " calculates totla G+C content plus first, second and third position "
@@ -80,15 +85,89 @@ def GC123(seq):
    return gcall, gc[0], gc[1], gc[2]
 
 def GC_skew(seq, window = 100):
-   " calculates GC skew (G-C)/(G+C) "
+   """ calculates GC skew (G-C)/(G+C) """
+	# 8/19/03: Iddo: added lowercase 
    values = []
    for i in range(0, len(seq), window):
       s = seq[i: i + window]
-      g = s.count('G')
-      c = s.count('C')
+      g = s.count('G') + s.count('g')
+      c = s.count('C') + s.count('c')
       skew = (g-c)/float(g+c)
       values.append(skew)
    return values
+
+# 8/19/03 Iddo: moved these imports from within the function as
+# ``import * '' is only
+# allowed within the module
+# Brad -- added an import check so you don't have to have Tkinter
+# installed to use other sequtils functions. A little ugly but
+# it really should be fixed by not using 'import *' which I'm not
+# really excited about doing right now.
+try:
+    from Tkinter import *
+except ImportError:
+    pass
+from math import pi, sin, cos, log
+def xGC_skew(seq, window = 1000, zoom = 100,
+                         r = 300, px = 100, py = 100):
+   " calculates and plots normal and accumulated GC skew (GRAPHICS !!!) "
+   
+
+   yscroll = Scrollbar(orient = VERTICAL)
+   xscroll = Scrollbar(orient = HORIZONTAL)
+   canvas = Canvas(yscrollcommand = yscroll.set,
+                   xscrollcommand = xscroll.set, background = 'white')
+   win = canvas.winfo_toplevel()
+   win.geometry('700x700')
+   
+   yscroll.config(command = canvas.yview)
+   xscroll.config(command = canvas.xview)
+   yscroll.pack(side = RIGHT, fill = Y)
+   xscroll.pack(side = BOTTOM, fill = X)
+   canvas.pack(fill=BOTH, side = LEFT, expand = 1)
+   canvas.update()
+
+   X0, Y0  = r + px, r + py
+   x1, x2, y1, y2 = X0 - r, X0 + r, Y0 -r, Y0 + r
+   
+   ty = Y0
+   canvas.create_text(X0, ty, text = '%s...%s (%d nt)' % (seq[:7], seq[-7:], len(seq)))
+   ty +=20
+   canvas.create_text(X0, ty, text = 'GC %3.2f%%' % (GC(seq)))
+   ty +=20
+   canvas.create_text(X0, ty, text = 'GC Skew', fill = 'blue')
+   ty +=20
+   canvas.create_text(X0, ty, text = 'Accumulated GC Skew', fill = 'magenta')
+   ty +=20
+   canvas.create_oval(x1,y1, x2, y2)
+
+   acc = 0
+   start = 0
+   for gc in GC_skew(seq, window):
+      r1 = r
+      acc+=gc
+      # GC skew
+      alpha = pi - (2*pi*start)/len(seq)
+      r2 = r1 - gc*zoom
+      x1 = X0 + r1 * sin(alpha)
+      y1 = Y0 + r1 * cos(alpha)
+      x2 = X0 + r2 * sin(alpha)
+      y2 = Y0 + r2 * cos(alpha)
+      canvas.create_line(x1,y1,x2,y2, fill = 'blue')
+      # accumulated GC skew
+      r1 = r - 50
+      r2 = r1 - acc
+      x1 = X0 + r1 * sin(alpha)
+      y1 = Y0 + r1 * cos(alpha)
+      x2 = X0 + r2 * sin(alpha)
+      y2 = Y0 + r2 * cos(alpha)
+      canvas.create_line(x1,y1,x2,y2, fill = 'magenta')
+
+      canvas.update()
+      start = start + window
+      
+
+   canvas.configure(scrollregion = canvas.bbox(ALL))
 
 def molecular_weight(seq):
    if type(seq) == type(''): seq = Seq(seq, IUPAC.unambiguous_dna)
