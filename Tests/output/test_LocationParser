@@ -55,6 +55,8 @@ Function('join', [AbsoluteLocation(None, Range(Integer(2004), Integer(2195))), A
 AbsoluteLocation(None, Range(HighBound(Integer(1)), LowBound(Integer(336))))
 --> Trying 394..>402
 AbsoluteLocation(None, Range(Integer(394), LowBound(Integer(402))))
+--> Trying join(10000,10200..10450)
+Function('join', [AbsoluteLocation(None, Integer(10000)), AbsoluteLocation(None, Range(Integer(10200), Integer(10450)))])
 --> Trying join(AB001090.1:1669..1713)
 Function('join', [AbsoluteLocation(Path(None, 'AB001090.1'), Range(Integer(1669), Integer(1713)))])
 --> Trying join(AB001090.1:1669..1713,AB001091.1:85..196)
