@@ -22,7 +22,7 @@ Bio.DocSQL: easy access to DB API databases.
 CreatePeople(message=Success)
 """
 
-__version__ = "$Revision: 1.7 $"
+__version__ = "$Revision: 1.8 $"
 # $Source: /home/bartek/cvs2bzr/biopython_fastimport/cvs_repo/biopython/Bio/DocSQL.py,v $
 
 import exceptions
@@ -33,37 +33,41 @@ connection = None
 
 # THIS IS A DUPLICATION
 # from Bio.GFF.GenericTools to avoid an annoying circular reference problem
-def enumerate(collection):
-    """
-    Generates an indexed series:  (0,coll[0]), (1,coll[1]) ...
+try:
+    enumerate
+except NameError:
+    def enumerate(collection):
+        """
+        Generates an indexed series:  (0,coll[0]), (1,coll[1]) ...
 
-    >>> for i, item in enumerate([4, 5, 6]):
-    ...     print "%d: %d" % (i, item)
-    0: 4
-    1: 5
-    2: 6
-    """
-    i = 0
-    for item in collection:
-        yield (i, item)
-        i += 1
+        >>> for i, item in enumerate([4, 5, 6]):
+        ...     print "%d: %d" % (i, item)
+        0: 4
+        1: 5
+        2: 6
+        """
+        i = 0
+        for item in collection:
+            yield (i, item)
+            i += 1
 
 class NoInsertionError(exceptions.Exception):
     pass
 
 def _check_is_public(name):
-    if name[6] == "_names":
+    if name[:6] == "_names":
         raise AttributeError
     
 class QueryRow(list):
     def __init__(self, cursor):
         try:
-            super(QueryRow, self).__init__(self, cursor.fetchone())
+            row = cursor.fetchone()
+            super(QueryRow, self).__init__(row)
         except TypeError:
             raise StopIteration
 
-        self._names = [x[0] for x in cursor.description] # FIXME: legacy
-        self._names_hash = {}
+        object.__setattr__(self, "_names", [x[0] for x in cursor.description]) # FIXME: legacy
+        object.__setattr__(self, "_names_hash", {})
         
         for i, name in enumerate(self._names):
             self._names_hash[name] = i
@@ -81,14 +85,14 @@ class QueryRow(list):
         try:
             self._names_hash
         except AttributeError:
-            return super(QueryRow, self).__setattr__(self, name, value)
+            return object.__setattr__(self, name, value)
             
         _check_is_public(name)
         try:
             index = self._names_hash[name]
             self[index] = value
         except KeyError:
-            super(QueryRow, self).__setattr__(self, name, value)
+            return object.__setattr__(self, name, value)
 
 class Query(object):
     """
@@ -158,7 +162,7 @@ class QuerySingle(Query, QueryRow):
             if not self.ignore_warnings:
                 raise
         self.row_class.__init__(self, self.cursor())
-        self.message = self.MSG_SUCCESS
+        object.__setattr__(self, "message", self.MSG_SUCCESS)
 
     def cursor(self):
         return self.single_cursor
