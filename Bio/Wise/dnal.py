@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 
-__version__ = "$Revision: 1.4 $"
+__version__ = "$Revision: 1.5 $"
 
 from __future__ import division
 
 import commands
 import os
+import re
 
 from Bio import Wise
 
@@ -22,6 +23,25 @@ _CMDLINE_FGREP_COUNT = "fgrep -c '%s' %s"
 def _fgrep_count(pattern, file):
     return int(commands.getoutput(_CMDLINE_FGREP_COUNT % (pattern, file)))
 
+_re_alb_line2coords = re.compile(r"^\[([^:]+):[^\[]+\[([^:]+):")
+def _alb_line2coords(line):
+    return tuple([int(coord)+1 for coord in _re_alb_line2coords.match(line).groups()])
+
+def _get_coords(filename):
+    alb = file(filename)
+
+    start_line = None
+    end_line = None
+
+    for line in alb:
+        if line.startswith("["):
+            if not start_line:
+                start_line = line # rstrip not needed
+            else:
+                end_line = line
+
+    return zip(*map(_alb_line2coords, [start_line, end_line]))
+
 class Statistics(object):
     """
     Calculate statistics from an ALB report
@@ -31,6 +51,8 @@ class Statistics(object):
         self.mismatches = _fgrep_count('"SEQUENCE" %s' % _SCORE_MISMATCH, filename)
         self.gaps = _fgrep_count('"INSERT" -%s' % _PENALTY_GAP_START, filename)
         self.extensions = _fgrep_count('"INSERT" -%s' % _PENALTY_GAP_EXTENSION, filename)
+
+        self.coords = _get_coords(filename)
 
     def identity_fraction(self):
         return self.matches/(self.matches+self.mismatches)
@@ -58,6 +80,7 @@ def main():
                      for attr in
                      ("matches", "mismatches", "gaps", "extensions")])
     print "identity_fraction: %s" % stats.identity_fraction()
+    print "coords: %s" % stats.coords
 
 def _test(*args, **keywds):
     import doctest, sys
