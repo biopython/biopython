@@ -79,7 +79,7 @@ def check_dependencies():
         ("Numerical Python", is_Numpy_installed, 0,
          "http://numpy.sourceforge.net/"),
         ("Reportlab", is_reportlab_installed, 0,
-         "http://www.reportlab.com/download.html"),
+         "http://www.reportlab.org/downloads.html"),
         ]
 
     for name, is_installed_fn, is_required, url in dependencies:
@@ -96,7 +96,7 @@ it before you install Biopython."""
         else:
             print """
 This package is optional, which means it is only used in a few
-specialized modules in Biopython.  You probably don't need this is you
+specialized modules in Biopython.  You probably don't need this if you
 are unsure.  You can ignore this requirement, and install it later if
 you see ImportErrors."""
             default = 1
