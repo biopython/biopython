@@ -307,3 +307,7 @@ def select_names(expression, names):
     import optimize
     return optimize.optimize_unnamed_groups(exp)
 
+def SimpleRecordFilter(expr, make_reader, reader_args = ()):
+    return ParseRecords("dataset", {"format": "*filter*"},
+                        Group("record", expr + Rep(ToEol())),
+                        make_reader, reader_args)
