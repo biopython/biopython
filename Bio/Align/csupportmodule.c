@@ -16,11 +16,8 @@
 
 /* Functions in this module. */
 
-static PyObject *
-csupport_rint(self, args, keywds)
-     PyObject *self;
-     PyObject *args;
-     PyObject *keywds;
+static PyObject *csupport_rint(
+    PyObject *self, PyObject *args, PyObject *keywds)
 {
     double x;
     int precision = _PRECISION;
@@ -37,7 +34,7 @@ csupport_rint(self, args, keywds)
 /* Module definition stuff */
 
 static PyMethodDef csupportMethods[] = {
-    {"rint", csupport_rint, METH_VARARGS|METH_KEYWORDS},
+    {"rint", (PyCFunction)csupport_rint, METH_VARARGS|METH_KEYWORDS},
     {NULL, NULL}
 };
 
@@ -46,7 +43,7 @@ static char csupport__doc__[] =
 \n\
 ";
 
-void initcsupport()
+void initcsupport(void)
 {
     (void) Py_InitModule3("csupport", csupportMethods, csupport__doc__);
 }

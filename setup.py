@@ -255,13 +255,17 @@ setup(name='biopython',
       packages = all_packages,
       
       ext_modules = [Extension('Bio.Tools.Classification.cSVM',
-                               ['Bio/Tools/Classification/cSVMmodule.c']
+                               ['Bio/Tools/Classification/cSVMmodule.c',
+                                'Bio/Tools/csupport.c'],
+                               include_dirs=["Bio/Tools"]
                                ),
                      Extension('Bio.Tools.clistfns',
                                ['Bio/Tools/clistfnsmodule.c']
                                ),
                      Extension('Bio.Tools.cmathfns',
-                               ['Bio/Tools/cmathfnsmodule.c']
+                               ['Bio/Tools/cmathfnsmodule.c',
+                                'Bio/Tools/csupport.c'],
+                               include_dirs=["Bio/Tools"]
                                ),
                      Extension('Bio.Tools.cstringfns',
                                ['Bio/Tools/cstringfnsmodule.c']
@@ -270,7 +274,9 @@ setup(name='biopython',
                                ['Bio/Align/csupportmodule.c']
                                ),
                      Extension('Bio.Align.cfastpairwise',
-                               ['Bio/Align/cfastpairwisemodule.c']
+                               ['Bio/Align/cfastpairwisemodule.c',
+                                'Bio/Tools/csupport.c'],
+                               include_dirs=["Bio/Tools"]
                                )
                      ]
       )

@@ -11,26 +11,7 @@
 
 #include "Python.h"
 
-
-/* Return a PyNumber as a double.
- * Raises a TypeError if I can't do it.
- */
-static double PyNumber_AsDouble(PyObject *py_num)
-{
-    double val;
-    PyObject *floatobj;
-
-    if(!PyNumber_Check(py_num)) {
-	PyErr_SetString(PyExc_TypeError, "I received a non-number");
-	return(0.0);
-    }
-    if((floatobj = PyNumber_Float(py_num)) == NULL)
-	return(0.0);
-    val = PyFloat_AsDouble(floatobj);
-    Py_DECREF(floatobj);
-    return val;
-}
-
+#include "csupport.h"
 
 
 /* Functions in this module. */
@@ -38,10 +19,7 @@ static double PyNumber_AsDouble(PyObject *py_num)
 static char cSVM_classify__doc__[] = 
 "classify(svm, x) -> num";
 
-static PyObject *
-cSVM_classify(self, args)
-     PyObject *self;
-     PyObject *args;
+static PyObject *cSVM_classify(PyObject *self, PyObject *args)
 {
     int i;
     PyObject *svm, *x;
@@ -143,10 +121,7 @@ cSVM_classify(self, args)
 static char cSVM__sparse_dot__doc__[] = 
 "_sparse_dot(x, y) -> num";
 
-static PyObject *
-cSVM__sparse_dot(self, args)
-     PyObject *self;
-     PyObject *args;
+static PyObject *cSVM__sparse_dot(PyObject *self, PyObject *args)
 {
     int i;
     int size;
@@ -201,10 +176,7 @@ cSVM__sparse_dot(self, args)
 static char cSVM__dot__doc__[] = 
 "_dot(x, y) -> num";
 
-static PyObject *
-cSVM__dot(self, args)
-     PyObject *self;
-     PyObject *args;
+static PyObject *cSVM__dot(PyObject *self, PyObject *args)
 {
     int i;
     double sum;
@@ -262,7 +234,7 @@ static char cSVM__doc__[] =
 \n\
 ";
 
-void initcSVM()
+void initcSVM(void)
 {
     (void) Py_InitModule3("cSVM", cSVMMethods, cSVM__doc__);
 }

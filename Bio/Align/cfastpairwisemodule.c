@@ -12,6 +12,8 @@
 #include "Python.h"
 #include <string.h>
 
+#include "csupport.h"
+
 
 #define GO_D 1
 #define GO_P 2
@@ -24,27 +26,9 @@
 
 /* Functions in this module. */
 
-static double PyNumber_AsDouble(PyObject *py_num)
-{
-    double val;
-    PyObject *floatobj;
 
-    if(!PyNumber_Check(py_num)) {
-	PyErr_SetString(PyExc_TypeError, "I received a non-number");
-	return(0.0);
-    }
-    if((floatobj = PyNumber_Float(py_num)) == NULL)
-	return(0.0);
-    val = PyFloat_AsDouble(floatobj);
-    Py_DECREF(floatobj);
-    return val;
-}
-
-double 
-calc_affine_penalty(length, open, extend, count_first)
-     int length;
-     double open, extend;
-     int count_first;
+double calc_affine_penalty(int length, double open, double extend, 
+    int count_first)
 {
     double penalty;
 
@@ -57,10 +41,8 @@ calc_affine_penalty(length, open, extend, count_first)
 }
 
 
-static PyObject *
-cfastpairwise__make_score_matrix(self, args)
-     PyObject *self;
-     PyObject *args;
+static PyObject *cfastpairwise__make_score_matrix(
+    PyObject *self, PyObject *args)
 {
     int i, j;
 
@@ -292,10 +274,8 @@ cfastpairwise__make_score_matrix(self, args)
 }
 
 
-static PyObject *
-cfastpairwise__make_score_matrix_faster(self, args)
-     PyObject *self;
-     PyObject *args;
+static PyObject *cfastpairwise__make_score_matrix_faster(
+    PyObject *self, PyObject *args)
 {
     int i, j;
 
@@ -514,7 +494,7 @@ static char cfastpairwise__doc__[] =
 \n\
 ";
 
-void initcfastpairwise()
+void initcfastpairwise(void)
 {
     (void) Py_InitModule3("cfastpairwise", cfastpairwiseMethods, 
 			  cfastpairwise__doc__);

@@ -22,11 +22,8 @@ true, then everything but sep will be a separator.\n\
 \n\
 ";
 
-static PyObject *
-cstringfns_split(self, args, keywds)
-     PyObject *self;
-     PyObject *args;
-     PyObject *keywds;
+static PyObject *cstringfns_split(
+     PyObject *self, PyObject *args, PyObject *keywds)
 {
     int i, prev;
     int nsplit, maxsplit=0;
@@ -112,7 +109,7 @@ You should never import this module on its own.\n\
 \n\
 ";
 
-void initcstringfns()
+void initcstringfns(void)
 {
   (void) Py_InitModule3("cstringfns", cstringfnsMethods, cstringfns__doc__);
 }

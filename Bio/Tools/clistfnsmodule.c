@@ -22,10 +22,7 @@ Count the number of times each item appears in a list of data.\n\
 \n\
 ";
 
-static PyObject *
-clistfns_count(self, args)
-     PyObject *self;
-     PyObject *args;
+static PyObject *clistfns_count(PyObject *self, PyObject *args)
 {
     int i;
     PyObject *items, *counts;
@@ -80,10 +77,7 @@ it is in 0.3 of the list\n\
 \n\
 ";
 
-static PyObject *
-clistfns_contents(self, args)
-     PyObject *self;
-     PyObject *args;
+static PyObject *clistfns_contents(PyObject *self, PyObject *args)
 {
     int i;
     PyObject *items, *counts, *percentages;
@@ -161,7 +155,7 @@ You should never import this module on its own.\n\
 \n\
 ";
 
-void initclistfns()
+void initclistfns(void)
 {
     (void) Py_InitModule3("clistfns", clistfnsMethods, clistfns__doc__);
 }

@@ -10,26 +10,8 @@
 #include "Python.h"
 #include <math.h>
 
+#include "csupport.h"
 
-/* Return a PyNumber as a double.
- * Raises a TypeError if I can't do it.
- * XXX THIS IS REPEATED IN cSVMmodule.c.  Need to combine them!
- */
-static double PyNumber_AsDouble(PyObject *py_num)
-{
-    double val;
-    PyObject *floatobj;
-
-    if(!PyNumber_Check(py_num)) {
-	PyErr_SetString(PyExc_TypeError, "I received a non-number");
-	return(0.0);
-    }
-    if((floatobj = PyNumber_Float(py_num)) == NULL)
-	return(0.0);
-    val = PyFloat_AsDouble(floatobj);
-    Py_DECREF(floatobj);
-    return val;
-}
 
 
 /************************************** Exported Functions ***********/
@@ -44,11 +26,8 @@ intd(5.35, 1) -> 54.\n\
 \n\
 ";
 
-static PyObject *
-cmathfns_intd(self, args, keywds)
-     PyObject *self;
-     PyObject *args;
-     PyObject *keywds;
+static PyObject *cmathfns_intd(
+    PyObject *self, PyObject *args, PyObject *keywds)
 {
     PyObject *digits_after_decimal = Py_None;
     double x, digits;
@@ -81,11 +60,8 @@ cmathfns_intd(self, args, keywds)
 static char cmathfns_fcmp__doc__[] = 
 "fcmp(x, y, precision) -> -1, 0, or 1";
 
-static PyObject *
-cmathfns_fcmp(self, args, keywds)
-     PyObject *self;
-     PyObject *args;
-     PyObject *keywds;
+static PyObject *cmathfns_fcmp(
+    PyObject *self, PyObject *args, PyObject *keywds)
 {
     double x, y, precision;
     int result;
@@ -113,11 +89,8 @@ negative, returns the value of neg.\n\
 \n\
 ";
 
-static PyObject *
-cmathfns_safe_log(self, args, keywds)
-     PyObject *self;
-     PyObject *args;
-     PyObject *keywds;
+static PyObject *cmathfns_safe_log(
+    PyObject *self, PyObject *args, PyObject *keywds)
 {
     PyObject *zero = Py_None,
 	*neg = Py_None;
@@ -161,7 +134,7 @@ You should never import this module on its own.\n\
 \n\
 ";
 
-void initcmathfns()
+void initcmathfns(void)
 {
     (void) Py_InitModule3("cmathfns", cmathfnsMethods, cmathfns__doc__);
 }

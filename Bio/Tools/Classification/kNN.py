@@ -21,21 +21,17 @@ train        Train a new kNN classifier.
 calculate    Calculate the probabilities of each class, given an observation.
 classify     Classify an observation into a class.
 
-    Distance Functions:
-euclidean_dist  The euclidean distance between two points.
-
     Weighting Functions:
 equal_weight    Every example is given a weight of 1.
 
 """
-import math
-
 try:
     from Numeric import *
 except ImportError, x:
     raise ImportError, "This module requires NumPy"
 
 from Bio.Tools import listfns
+from Bio.Tools import distance
 
 class kNN:
     """Holds information necessary to do nearest neighbors classification.
@@ -53,24 +49,6 @@ class kNN:
         self.xs = []
         self.ys = []
         self.k = None
-
-def euclidean_dist(x, y):
-    """euclidean_dist(x, y) -> euclidean distance between x and y"""
-    if len(x) != len(y):
-        raise ValueError, "vectors must be same length"
-    return math.sqrt(sum((x-y)**2))
-
-def euclidean_dist_py(x, y):
-    """euclidean_dist_py(x, y) -> euclidean distance between x and y"""
-    # lightly modified from implementation by Thomas Sicheritz-Ponten.
-    # This works faster than the Numeric implementation on shorter
-    # vectors.
-    if len(x) != len(y):
-        raise ValueError, "vectors must be same length"
-    sum = 0
-    for i in range(len(x)):
-        sum += (x[i]-y[i])**2
-    return math.sqrt(sum)
 
 def equal_weight(x, y):
     """equal_weight(x, y) -> 1"""
@@ -94,7 +72,7 @@ def train(xs, ys, k, typecode=None):
     knn.k = k
     return knn
 
-def calculate(knn, x, weight_fn=equal_weight, distance_fn=euclidean_dist):
+def calculate(knn, x, weight_fn=equal_weight, distance_fn=distance.euclidean):
     """calculate(knn, x[, weight_fn][, distance_fn]) -> weight dict
 
     Calculate the probability for each class.  knn is a kNN object.  x
@@ -123,7 +101,7 @@ def calculate(knn, x, weight_fn=equal_weight, distance_fn=euclidean_dist):
 
     return weights
 
-def classify(knn, x, weight_fn=equal_weight, distance_fn=euclidean_dist):
+def classify(knn, x, weight_fn=equal_weight, distance_fn=distance.euclidean):
     """classify(knn, x[, weight_fn][, distance_fn]) -> class
 
     Classify an observation into a class.  If not specified, weight_fn will

@@ -14,9 +14,6 @@ centroids - A vector "in the middle" of a cluster.
 Functions:
 cluster         Cluster a list of data points.
 
-    Distance Functions:
-euclidean_dist  The euclidean distance between two points.
-
 """
 import random
 
@@ -26,10 +23,7 @@ except ImportError, x:
     raise ImportError, "This module requires NumPy"
 
 from Bio.Tools import listfns
-
-# Import the euclidean distance function in the kNN class.  This
-# should probably be pulled out in a separate module.
-from Bio.Tools.Classification.kNN import euclidean_dist, euclidean_dist_py
+from Bio.Tools import distance
 
 def random_centroids(data, k):
     """random_centroids(data, k) -> list of centroids
@@ -84,7 +78,7 @@ def _find_closest_centroid(vector, centroids, distance_fn):
             closest_index = i
     return closest_index
 
-def cluster(data, k, distance_fn=euclidean_dist,
+def cluster(data, k, distance_fn=distance.euclidean,
             init_centroids_fn=random_centroids,
             max_iterations=1000, update_fn=None):
     """cluster(data, k[, distance_fn][, max_iterations][, update_fn]) ->
