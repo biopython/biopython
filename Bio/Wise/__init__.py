@@ -1,6 +1,6 @@
 #!/usr/bin/env python2.3
 
-__version__ = "$Revision: 1.10 $"
+__version__ = "$Revision: 1.11 $"
 
 import os
 import sys
@@ -56,6 +56,8 @@ def align(cmdline, pair, kbyte=None, force_type=None, dry_run=False, quiet=False
     """
     Returns a filehandle
     """
+    assert len(pair) == 2
+    
     output_file = _NamedTemporaryFile(mode='r')
     input_files = _NamedTemporaryFile(mode="w"), _NamedTemporaryFile(mode="w")
 
