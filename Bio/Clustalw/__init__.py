@@ -41,7 +41,7 @@ from Bio.Align.Generic import Alignment
 from xml.sax import saxutils
 from xml.sax import handler
 
-def parse_file(file_name, alphabet = IUPAC.unambiguous_dna):
+def parse_file(file_name, alphabet = IUPAC.unambiguous_dna, debug_level = 0):
     """Parse the given file into a clustal aligment object.
     
     Arguments:
@@ -52,7 +52,7 @@ def parse_file(file_name, alphabet = IUPAC.unambiguous_dna):
     """ 
     align_handler = _AlignCreator(Alphabet.Gapped(alphabet))
 
-    parser = clustal_format.format.make_parser()
+    parser = clustal_format.format.make_parser(debug_level)
     parser.setContentHandler(align_handler)
     parser.setErrorHandler(handler.ErrorHandler())
 
