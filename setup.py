@@ -74,7 +74,7 @@ def check_dependencies():
     # forced an installation, should we also ignore dependencies?
     dependencies = [
         ("mxTextTools", is_mxTextTools_installed, 1,
-         "http://www.lemburg.com/files/python/mxExtensions.html"),
+         "http://www.egenix.com/files/python/eGenix-mx-Extensions.html"),
         #("Martel", is_Martel_installed, 1,
         # "http://www.biopython.org/~dalke/Martel/"),
         ("Numerical Python", is_Numpy_installed, 0,
