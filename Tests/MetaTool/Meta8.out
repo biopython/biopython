@@ -1,0 +1,163 @@
+METATOOL OUTPUT Version 3.5 (28.03.2001) C:\METATOOL\META35~1.EXE
+
+INPUT FILE: EXAMPLE8.TXT
+
+INTERNAL METABOLITES: 14
+REACTIONS: 6
+
+  2 external NAD+
+  2 external 2,3-dihydroxybenzoate
+  2 external NADH
+  2 external ATP
+  2 external diphosphate
+  1 int      2,3-Dihydro-2,3-dihydroxybenzoate
+  1 int      ubiquinone
+  1 int      ubiquinol
+  1 int      S-Adenosyl-L-methionine
+  1 int      3-demethylubiquinone-9
+  1 int      S-adenosyl-L-homocysteine
+  1 int      ubiquinone-9
+  1 int      (2,3-dihydroxybenzoyl)adenylate
+  1 int      Chorismate
+  1 int      isochorismate
+  1 int      o-succinylbenzoate
+  1 int      CoA
+  1 int      AMP
+  1 int      o-succinylbenzoyl-CoA
+ 19 metabolites,  24 is the summarized frequency
+
+edges	frequency of nodes
+  0	  0
+  1	 14
+  2	  5
+
+STOICHIOMETRIC MATRIX
+ 
+ matrix dimension r14 x c6
+-1  0  0  0  0  0 
+ 0 -1  0  0  0  0 
+ 0  1  0  0  0  0 
+ 0  0  0  0 -1  0 
+ 0  0  0  0 -1  0 
+ 0  0  0  0  1  0 
+ 0  0  0  0  1  0 
+ 0  0  1  0  0  0 
+ 0  0  0 -1  0  0 
+ 0  0  0  1  0  0 
+ 0  0  0  0  0 -1 
+ 0  0  0  0  0 -1 
+ 0  0  0  0  0  1 
+ 0  0  0  0  0  1 
+The following line indicates reversible (0) and irreversible reactions (1)
+ 0  0  0  0  1  1 
+rows and columns are sorted as declared in the inputfile
+
+NOT BALANCED INTERNAL METABOLITES
+2,3-Dihydro-2,3-dihydroxybenzoate	ubiquinone	ubiquinol	S-Adenosyl-L-methionine	3-demethylubiquinone-9	S-adenosyl-L-homocysteine	ubiquinone-9	(2,3-dihydroxybenzoyl)adenylate	Chorismate	isochorismate	o-succinylbenzoate	CoA	AMP	o-succinylbenzoyl-CoA	
+
+KERNEL
+ 
+ matrix dimension r0 x c6
+6 reactions (columns) are sorted in the same order as in the ENZREV ENZIRREV section.
+
+ enzymes
+ - not found -
+
+
+ overall reaction
+ - not found -
+
+
+The remaining overall reactions perform no net transformation of external metabolites.
+
+SUBSETS OF REACTIONS
+ 
+ matrix dimension r0 x c6
+6 reactions (columns) are sorted in the same order as in the ENZREV ENZIRREV section.
+
+ enzymes
+ - not found -
+
+
+ overall reaction
+ - not found -
+
+
+The remaining overall reactions perform no net transformation of external metabolites.
+
+REDUCED SYSTEM with 14 branch point metabolites in 6 reactions (columns)
+ 
+ matrix dimension r0 x c6
+The following line indicates reversible (0) and irreversible reactions (1)
+ 0  0  0  0  0  0 
+
+-> Branch metabolites are : 
+met                 	cons	built	reactions
+
+-> No branch metabolites are : 
+met                 	cons	built	reactions
+2,3-Dihydro-2,3-dihydroxybenzoate	1	0	1	r
+ubiquinone          	1	0	1	r
+ubiquinol           	0	1	1	r
+S-Adenosyl-L-methionine	1	0	1	i
+3-demethylubiquinone-9	1	0	1	i
+S-adenosyl-L-homocysteine	0	1	1	i
+ubiquinone-9        	0	1	1	i
+(2,3-dihydroxybenzoyl)adenylate	0	1	1	r
+Chorismate          	1	0	1	r
+isochorismate       	0	1	1	r
+o-succinylbenzoate  	1	0	1	i
+CoA                 	1	0	1	i
+AMP                 	0	1	1	i
+o-succinylbenzoyl-CoA	0	1	1	i
+
+CONVEX BASIS
+ 
+ matrix dimension r0 x c6
+
+ enzymes
+ - not found -
+
+
+ overall reaction
+ - not found -
+
+
+The remaining overall reactions perform no net transformation of external metabolites.
+
+CONSERVATION RELATIONS
+ 
+ matrix dimension r8 x c14
+ 0  1  1  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  1 -1  0  0  0  0  0  0  0  0  0 
+ 0  0  0  1  0  1  0  0  0  0  0  0  0  0 
+ 0  0  0  1  0  0  1  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  1  1  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  1 -1  0  0 
+ 0  0  0  0  0  0  0  0  0  0  1  0  1  0 
+ 0  0  0  0  0  0  0  0  0  0  1  0  0  1 
+ 1 :	ubiquinone + ubiquinol = const
+ 2 :	S-Adenosyl-L-methionine + 3-demethylubiquinone-9 = const
+ 3 :	S-Adenosyl-L-methionine + S-adenosyl-L-homocysteine = const
+ 4 :	S-Adenosyl-L-methionine + ubiquinone-9 = const
+ 5 :	Chorismate + isochorismate = const
+ 6 :	o-succinylbenzoate + CoA = const
+ 7 :	o-succinylbenzoate + AMP = const
+ 8 :	o-succinylbenzoate + o-succinylbenzoyl-CoA = const
+
+ELEMENTARY MODES
+ 
+ matrix dimension r0 x c6
+6 reactions (columns) are sorted in the same order as in the ENZREV ENZIRREV section.
+
+ enzymes
+ - not found -
+
+
+ overall reaction
+ - not found -
+
+
+The remaining overall reactions perform no net transformation of external metabolites.
+
+The elementary modes ARE EQUAL to convex basis.

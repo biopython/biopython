@@ -1,0 +1,225 @@
+METATOOL OUTPUT Version 3.5 (28.03.2001) C:\METATOOL\META35~1.EXE
+
+INPUT FILE: example2.txt
+
+INTERNAL METABOLITES: 15
+REACTIONS: 19
+
+  6 int      GAP
+  5 int      F6P
+  3 external ATP
+  3 int      FDP
+  3 external ADP
+  3 int      Ru5P
+  3 int      R5P
+  3 int      X5P
+  2 external G6P
+  2 external Pi
+  2 int      DHAP
+  2 int      D13PG
+  2 external NADP
+  2 int      GO6P
+  2 external NADPH
+  2 int      GL6P
+  2 int      S7P
+  2 int      E4P
+  2 int      P3G
+  2 int      P2G
+  2 int      PEP
+  1 external NAD
+  1 external NADH
+  1 external CO2
+  1 external PYR
+  1 external R5Pex
+ 26 metabolites,  60 is the summarized frequency
+
+edges	frequency of nodes
+  0	  0
+  1	  5
+  2	 13
+  3	  6
+  4	  0
+  5	  1
+  6	  1
+
+STOICHIOMETRIC MATRIX
+ 
+ matrix dimension r15 x c19
+ 0  0  0  0  0  0 -1  1  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  1  0 -1  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  1 -1 -1  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0 -1 -1  0  0  0  0  0  0  0  0  0  1  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0 -1  0  0  1  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  1  0  0  0 -1  0  0  0  0 
+ 0  1 -1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0 -1  0  0  0  0  0  0  0  0  0  1 -1  0  0  0  0  0  0 
+ 1  0  0  0  0  0  1  1  0  0  0 -1  1  0  0  0  0  0  0 
+ 0  1  1  0  0  1  1 -1  0  0  0  0  0  0  0  0  0 -1  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 -1  0  1  0 
+ 0  0  0  0  0  0  0  0 -1  0  0  0  0  0  0  1  0  0  0 
+ 0  0  0  0  0  0  0  0  1 -1  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0 -1  0  0 
+ 0  0  0  1  0 -1  0  0  0  0  0  0  0  0  0  0  0  0 -1 
+The following line indicates reversible (0) and irreversible reactions (1)
+ 0  0  0  0  0  0  0  0  0  0  0  1  1  1  1  1  1  1  1 
+rows and columns are sorted as declared in the inputfile
+
+
+KERNEL
+ 
+ matrix dimension r4 x c19
+ 0  0  0  0  0  0  0  0  0  0  0  1  1  0  0  0  0  0  0 
+ 5  1  1 -2 -4 -2 -2 -2  0  0 -6  1  0 -6 -6  0  0  0  0 
+ 1  1  1  0  0  0  0  0  2  2  0  1  0  0  0  2  2  2  0 
+-5 -1 -1 -4  4  2  2  2  0  0  0 -1  0  0  0  0  0  0 -6 
+19 reactions (columns) are sorted in the same order as in the ENZREV ENZIRREV section.
+
+ enzymes
+
+ 1:	 Pfk Fbp irreversible
+ 2:	 (5 Pgi) Ald Tpi (-2 Rpi) (-4 Rpe) (-2 TktI) (-2 TktII) (-2 Tal) (-6 Pgl) Pfk (-6 Zwf) (-6 Gnd) irreversible
+ 3:	 Pgi Ald Tpi (2 Gpm) (2 Eno) Pfk (2 Pgk) (2 Pyk) (2 Gap) irreversible
+ 4:	 (-5 Pgi) -Ald -Tpi (-4 Rpi) (4 Rpe) (2 TktI) (2 TktII) (2 Tal) -Pfk (-6 Prs_DeoB) irreversible
+
+ overall reaction
+
+ 1:	ATP = ADP + Pi
+ 2:	6 CO2 + ATP + 12 NADPH = ADP + 12 NADP + G6P
+ 3:	3 ADP + 2 NAD + G6P + 2 Pi = 3 ATP + 2 NADH + 2 PYR
+ 4:	ADP + 6 R5Pex = ATP + 5 G6P
+
+SUBSETS OF REACTIONS
+ 
+ matrix dimension r9 x c19
+ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  1  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  2  1  1  1  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  1  1  0  0  0  0  0  1  1  1  0 
+ 0  0  0  0  0  0  0  0  0  0  1  0  0  1  1  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1 
+19 reactions (columns) are sorted in the same order as in the ENZREV ENZIRREV section.
+
+ enzymes
+
+ 1:	 Pgi reversible
+ 2:	 Ald Tpi reversible
+ 3:	 Rpi reversible
+ 4:	 (2 Rpe) TktI TktII Tal reversible
+ 5:	 Gpm Eno Pgk Pyk Gap irreversible
+ 6:	 Pgl Zwf Gnd irreversible
+ 7:	 Pfk irreversible
+ 8:	 Fbp irreversible
+ 9:	 Prs_DeoB irreversible
+
+ overall reaction
+
+ 1:	G6P = F6P
+ 2:	FDP = 2 GAP
+ 3:	Ru5P = R5P
+ 4:	2 Ru5P + R5P = 2 F6P + GAP
+ 5:	GAP + 2 ADP + NAD + Pi = 2 ATP + NADH + PYR
+ 6:	2 NADP + G6P = Ru5P + CO2 + 2 NADPH
+ 7:	F6P + ATP = FDP + ADP
+ 8:	FDP = F6P + Pi
+ 9:	R5P = R5Pex
+
+REDUCED SYSTEM with 5 branch point metabolites in 9 reactions (columns)
+ 
+ matrix dimension r5 x c9
+ 0  0 -1 -2  0  1  0  0  0 
+ 0 -1  0  0  0  0  1 -1  0 
+ 1  0  0  2  0  0 -1  1  0 
+ 0  2  0  1 -1  0  0  0  0 
+ 0  0  1 -1  0  0  0  0 -1 
+The following line indicates reversible (0) and irreversible reactions (1)
+ 0  0  0  0  1  1  1  1  1 
+
+-> Branch metabolites are : 
+met                 	cons	built	reactions
+Ru5P                	2	1	3	irr
+FDP                 	2	1	3	iir
+F6P                 	1	4	5	riirr
+GAP                 	2	4	6	rrirrr
+R5P                 	2	1	3	rri
+
+-> No branch metabolites are : 
+met                 	cons	built	reactions
+E4P                 	1	1	2	rr
+S7P                 	1	1	2	rr
+X5P                 	2	1	3	rrr
+GO6P                	1	1	2	ir
+GL6P                	1	1	2	ri
+DHAP                	1	1	2	rr
+D13PG               	1	1	2	ii
+P3G                 	1	1	2	ir
+P2G                 	1	1	2	rr
+PEP                 	1	1	2	ri
+
+CONVEX BASIS
+ 
+ matrix dimension r6 x c19
+ 0  0  0  1  0  0  0  0  0  0  1  0  0  1  1  0  0  0  1 
+-2  0  0  1  2  1  1  1  1  1  3  0  0  3  3  1  1  1  0 
+-5 -1 -1  2  4  2  2  2  0  0  6  0  1  6  6  0  0  0  0 
+ 5  1  1  4 -4 -2 -2 -2  0  0  0  1  0  0  0  0  0  0  6 
+ 1  1  1  0  0  0  0  0  2  2  0  1  0  0  0  2  2  2  0 
+ 0  0  0  0  0  0  0  0  0  0  0  1  1  0  0  0  0  0  0 
+
+ enzymes
+
+ 1:	 Rpi Pgl Zwf Gnd Prs_DeoB irreversible
+ 2:	 (-2 Pgi) Rpi (2 Rpe) TktI TktII Tal Gpm Eno (3 Pgl) (3 Zwf) (3 Gnd) Pgk Pyk Gap irreversible
+ 3:	 (-5 Pgi) -Ald -Tpi (2 Rpi) (4 Rpe) (2 TktI) (2 TktII) (2 Tal) (6 Pgl) Fbp (6 Zwf) (6 Gnd) irreversible
+ 4:	 (5 Pgi) Ald Tpi (4 Rpi) (-4 Rpe) (-2 TktI) (-2 TktII) (-2 Tal) Pfk (6 Prs_DeoB) irreversible
+ 5:	 Pgi Ald Tpi (2 Gpm) (2 Eno) Pfk (2 Pgk) (2 Pyk) (2 Gap) irreversible
+ 6:	 Pfk Fbp irreversible
+
+ overall reaction
+
+ 1:	2 NADP + G6P = CO2 + 2 NADPH + R5Pex
+ 2:	2 ADP + NAD + 6 NADP + G6P + Pi = 3 CO2 + 2 ATP + NADH + 6 NADPH + PYR
+ 3:	12 NADP + G6P = 6 CO2 + 12 NADPH + Pi
+ 4:	ATP + 5 G6P = ADP + 6 R5Pex
+ 5:	3 ADP + 2 NAD + G6P + 2 Pi = 3 ATP + 2 NADH + 2 PYR
+ 6:	ATP = ADP + Pi
+
+CONSERVATION RELATIONS
+ 
+ matrix dimension r0 x c15
+
+ELEMENTARY MODES
+ 
+ matrix dimension r7 x c19
+ 0  0  0  0  0  0  0  0  0  0  0  1  1  0  0  0  0  0  0 
+ 1  1  1  0  0  0  0  0  2  2  0  1  0  0  0  2  2  2  0 
+ 0  0  0  1  0  0  0  0  0  0  1  0  0  1  1  0  0  0  1 
+-2  0  0  1  2  1  1  1  1  1  3  0  0  3  3  1  1  1  0 
+-5 -1 -1  2  4  2  2  2  0  0  6  0  1  6  6  0  0  0  0 
+ 0  2  2  1  2  1  1  1  5  5  3  2  0  3  3  5  5  5  0 
+ 5  1  1  4 -4 -2 -2 -2  0  0  0  1  0  0  0  0  0  0  6 
+19 reactions (columns) are sorted in the same order as in the ENZREV ENZIRREV section.
+
+ enzymes
+
+ 1:	 Pfk Fbp irreversible
+ 2:	 Pgi Ald Tpi (2 Gpm) (2 Eno) Pfk (2 Pgk) (2 Pyk) (2 Gap) irreversible
+ 3:	 Rpi Pgl Zwf Gnd Prs_DeoB irreversible
+ 4:	 (-2 Pgi) Rpi (2 Rpe) TktI TktII Tal Gpm Eno (3 Pgl) (3 Zwf) (3 Gnd) Pgk Pyk Gap irreversible
+ 5:	 (-5 Pgi) -Ald -Tpi (2 Rpi) (4 Rpe) (2 TktI) (2 TktII) (2 Tal) (6 Pgl) Fbp (6 Zwf) (6 Gnd) irreversible
+ 6:	 (2 Ald) (2 Tpi) Rpi (2 Rpe) TktI TktII Tal (5 Gpm) (5 Eno) (3 Pgl) (2 Pfk) (3 Zwf) (3 Gnd) (5 Pgk) (5 Pyk) (5 Gap) irreversible
+ 7:	 (5 Pgi) Ald Tpi (4 Rpi) (-4 Rpe) (-2 TktI) (-2 TktII) (-2 Tal) Pfk (6 Prs_DeoB) irreversible
+
+ overall reaction
+
+ 1:	ATP = ADP + Pi
+ 2:	3 ADP + 2 NAD + G6P + 2 Pi = 3 ATP + 2 NADH + 2 PYR
+ 3:	2 NADP + G6P = CO2 + 2 NADPH + R5Pex
+ 4:	2 ADP + NAD + 6 NADP + G6P + Pi = 3 CO2 + 2 ATP + NADH + 6 NADPH + PYR
+ 5:	12 NADP + G6P = 6 CO2 + 12 NADPH + Pi
+ 6:	8 ADP + 5 NAD + 6 NADP + 3 G6P + 5 Pi = 3 CO2 + 8 ATP + 5 NADH + 6 NADPH + 5 PYR
+ 7:	ATP + 5 G6P = ADP + 6 R5Pex
+
+The elementary mode 6 is additional to the convex basis.

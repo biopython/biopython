@@ -1,0 +1,162 @@
+METATOOL OUTPUT Version 3.5 (28.03.2001) C:\METATOOL\META35~1.EXE
+
+INPUT FILE: EXAMPLE14.TXT
+
+INTERNAL METABOLITES: 13
+REACTIONS: 5
+
+  2 external H2O
+  1 int      5,6,7,8-Tetrahydrofolate
+  1 int      NADP+
+  1 int      7,8-dihydrofolate
+  1 int      NADPH
+  1 int      An_orthophosphoric_monoester
+  1 int      an_alcohol
+  1 int      phosphate
+  1 int      GTP
+  1 int      formate
+  1 int      2-amino-4-hydroxy-6-(erythro-1,2,3-trihydroxypropyl)dihydropteridine_triphosphate
+  1 int      6-(L-erythro-1,2-Dihydroxypropyl_3-triphosphate)-7,8-dihydropterin
+  1 int      6-(1,2-dioxopropyl)-5,6,7,8-tetrahydropterin
+  1 int      triphosphate
+ 14 metabolites,  15 is the summarized frequency
+
+edges	frequency of nodes
+  0	  0
+  1	 13
+  2	  1
+
+STOICHIOMETRIC MATRIX
+ 
+ matrix dimension r13 x c5
+-1  0  0  0  0 
+-1  0  0  0  0 
+ 1  0  0  0  0 
+ 1  0  0  0  0 
+ 0  0 -1  0  0 
+ 0  0  1  0  0 
+ 0  0  1  0  0 
+ 0  0  0 -1  0 
+ 0  0  0  1  0 
+ 0  0  0  1  0 
+ 0  0  0  0 -1 
+ 0  0  0  0  1 
+ 0  0  0  0  1 
+The following line indicates reversible (0) and irreversible reactions (1)
+ 0  1  1  1  1 
+rows and columns are sorted as declared in the inputfile
+
+NOT BALANCED INTERNAL METABOLITES
+5,6,7,8-Tetrahydrofolate	NADP+	7,8-dihydrofolate	NADPH	An_orthophosphoric_monoester	an_alcohol	phosphate	GTP	formate	2-amino-4-hydroxy-6-(erythro-1,2,3-trihydroxypropyl)dihydropteridine_triphosphate	6-(L-erythro-1,2-Dihydroxypropyl_3-triphosphate)-7,8-dihydropterin	6-(1,2-dioxopropyl)-5,6,7,8-tetrahydropterin	triphosphate	
+
+KERNEL
+ 
+ matrix dimension r1 x c5
+ 0  1  0  0  0 
+5 reactions (columns) are sorted in the same order as in the ENZREV ENZIRREV section.
+
+ enzymes
+
+ 1:	 1.5.1.3 irreversible
+
+ overall reaction
+ - not found -
+
+
+The remaining overall reactions perform no net transformation of external metabolites.
+
+SUBSETS OF REACTIONS
+ 
+ matrix dimension r1 x c5
+ 0  1  0  0  0 
+5 reactions (columns) are sorted in the same order as in the ENZREV ENZIRREV section.
+
+ enzymes
+
+ 1:	 1.5.1.3 irreversible
+
+ overall reaction
+ - not found -
+
+
+The remaining overall reactions perform no net transformation of external metabolites.
+
+REDUCED SYSTEM with 13 branch point metabolites in 1 reactions (columns)
+ 
+ matrix dimension r0 x c1
+The following line indicates reversible (0) and irreversible reactions (1)
+ 1 
+
+-> Branch metabolites are : 
+met                 	cons	built	reactions
+
+-> No branch metabolites are : 
+met                 	cons	built	reactions
+5,6,7,8-Tetrahydrofolate	1	0	1	r
+NADP+               	1	0	1	r
+7,8-dihydrofolate   	0	1	1	r
+NADPH               	0	1	1	r
+An_orthophosphoric_monoester	1	0	1	i
+an_alcohol          	0	1	1	i
+phosphate           	0	1	1	i
+GTP                 	1	0	1	i
+formate             	0	1	1	i
+2-amino-4-hydroxy-6-(erythro-1,2,3-trihydroxypropyl)dihydropteridine_triphosphate	0	1	1	i
+6-(L-erythro-1,2-Dihydroxypropyl_3-triphosphate)-7,8-dihydropterin	1	0	1	i
+6-(1,2-dioxopropyl)-5,6,7,8-tetrahydropterin	0	1	1	i
+triphosphate        	0	1	1	i
+
+CONVEX BASIS
+ 
+ matrix dimension r1 x c5
+ 0  1  0  0  0 
+
+ enzymes
+
+ 1:	 1.5.1.3 irreversible
+
+ overall reaction
+ - not found -
+
+
+The remaining overall reactions perform no net transformation of external metabolites.
+
+CONSERVATION RELATIONS
+ 
+ matrix dimension r9 x c13
+ 1 -1  0  0  0  0  0  0  0  0  0  0  0 
+ 1  0  1  0  0  0  0  0  0  0  0  0  0 
+ 1  0  0  1  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  1  1  0  0  0  0  0  0  0 
+ 0  0  0  0  1  0  1  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  1  1  0  0  0  0 
+ 0  0  0  0  0  0  0  1  0  1  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  1  1  0 
+ 0  0  0  0  0  0  0  0  0  0  1  0  1 
+ 1 :	5,6,7,8-Tetrahydrofolate + NADP+ = const
+ 2 :	5,6,7,8-Tetrahydrofolate + 7,8-dihydrofolate = const
+ 3 :	5,6,7,8-Tetrahydrofolate + NADPH = const
+ 4 :	An_orthophosphoric_monoester + an_alcohol = const
+ 5 :	An_orthophosphoric_monoester + phosphate = const
+ 6 :	GTP + formate = const
+ 7 :	GTP + 2-amino-4-hydroxy-6-(erythro-1,2,3-trihydroxypropyl)dihydropteridine_triphosphate = const
+ 8 :	6-(L-erythro-1,2-Dihydroxypropyl_3-triphosphate)-7,8-dihydropterin + 6-(1,2-dioxopropyl)-5,6,7,8-tetrahydropterin = const
+ 9 :	6-(L-erythro-1,2-Dihydroxypropyl_3-triphosphate)-7,8-dihydropterin + triphosphate = const
+
+ELEMENTARY MODES
+ 
+ matrix dimension r1 x c5
+ 0  1  0  0  0 
+5 reactions (columns) are sorted in the same order as in the ENZREV ENZIRREV section.
+
+ enzymes
+
+ 1:	 1.5.1.3 irreversible
+
+ overall reaction
+ - not found -
+
+
+The remaining overall reactions perform no net transformation of external metabolites.
+
+The elementary modes ARE EQUAL to convex basis.

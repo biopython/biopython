@@ -1,0 +1,191 @@
+METATOOL OUTPUT Version 3.5 (28.03.2001) C:\METATOOL\META35~1.EXE
+
+INPUT FILE: EXAMPLE13.TXT
+
+INTERNAL METABOLITES: 19
+REACTIONS: 6
+
+  3 external H2O
+  1 int      5,10-Methylenetetrahydrofolate
+  1 int      glycine
+  1 int      tetrahydrofolate
+  1 int      L-serine
+  1 int      (5-L-Glutamyl)-peptide
+  1 int      an_amino_acid
+  1 int      peptide
+  1 int      5-L-glutamyl_amino_acid
+  1 int      beta-D-oligosaccarides
+  1 int      n_D-glucose
+  1 int      L-Asparagine
+  1 int      L-aspartate
+  1 int      NH3
+  1 int      ATP
+  1 int      L-Asp
+  1 int      NH4+
+  1 int      AMP
+  1 int      diphosphate
+  1 int      L-Asn
+ 20 metabolites,  22 is the summarized frequency
+
+edges	frequency of nodes
+  0	  0
+  1	 19
+  2	  0
+  3	  1
+
+STOICHIOMETRIC MATRIX
+ 
+ matrix dimension r19 x c6
+-1  0  0  0  0  0 
+-1  0  0  0  0  0 
+ 1  0  0  0  0  0 
+ 1  0  0  0  0  0 
+ 0  0 -1  0  0  0 
+ 0  0 -1  0  0  0 
+ 0  0  1  0  0  0 
+ 0  0  1  0  0  0 
+ 0  0  0 -1  0  0 
+ 0  0  0  1  0  0 
+ 0  0  0  0 -1  0 
+ 0  0  0  0  1  0 
+ 0  0  0  0  1  0 
+ 0  0  0  0  0 -1 
+ 0  0  0  0  0 -1 
+ 0  0  0  0  0 -1 
+ 0  0  0  0  0  1 
+ 0  0  0  0  0  1 
+ 0  0  0  0  0  1 
+The following line indicates reversible (0) and irreversible reactions (1)
+ 0  1  1  1  1  1 
+rows and columns are sorted as declared in the inputfile
+
+NOT BALANCED INTERNAL METABOLITES
+5,10-Methylenetetrahydrofolate	glycine	tetrahydrofolate	L-serine	(5-L-Glutamyl)-peptide	an_amino_acid	peptide	5-L-glutamyl_amino_acid	beta-D-oligosaccarides	n_D-glucose	L-Asparagine	L-aspartate	NH3	ATP	L-Asp	NH4+	AMP	diphosphate	L-Asn	
+
+KERNEL
+ 
+ matrix dimension r1 x c6
+ 0  1  0  0  0  0 
+6 reactions (columns) are sorted in the same order as in the ENZREV ENZIRREV section.
+
+ enzymes
+
+ 1:	 2.1.2.1 irreversible
+
+ overall reaction
+ - not found -
+
+
+The remaining overall reactions perform no net transformation of external metabolites.
+
+SUBSETS OF REACTIONS
+ 
+ matrix dimension r1 x c6
+ 0  1  0  0  0  0 
+6 reactions (columns) are sorted in the same order as in the ENZREV ENZIRREV section.
+
+ enzymes
+
+ 1:	 2.1.2.1 irreversible
+
+ overall reaction
+ - not found -
+
+
+The remaining overall reactions perform no net transformation of external metabolites.
+
+REDUCED SYSTEM with 19 branch point metabolites in 1 reactions (columns)
+ 
+ matrix dimension r0 x c1
+The following line indicates reversible (0) and irreversible reactions (1)
+ 1 
+
+-> Branch metabolites are : 
+met                 	cons	built	reactions
+
+-> No branch metabolites are : 
+met                 	cons	built	reactions
+5,10-Methylenetetrahydrofolate	1	0	1	r
+glycine             	1	0	1	r
+tetrahydrofolate    	0	1	1	r
+L-serine            	0	1	1	r
+(5-L-Glutamyl)-peptide	1	0	1	i
+an_amino_acid       	1	0	1	i
+peptide             	0	1	1	i
+5-L-glutamyl_amino_acid	0	1	1	i
+beta-D-oligosaccarides	1	0	1	i
+n_D-glucose         	0	1	1	i
+L-Asparagine        	1	0	1	i
+L-aspartate         	0	1	1	i
+NH3                 	0	1	1	i
+ATP                 	1	0	1	i
+L-Asp               	1	0	1	i
+NH4+                	1	0	1	i
+AMP                 	0	1	1	i
+diphosphate         	0	1	1	i
+L-Asn               	0	1	1	i
+
+CONVEX BASIS
+ 
+ matrix dimension r1 x c6
+ 0  1  0  0  0  0 
+
+ enzymes
+
+ 1:	 2.1.2.1 irreversible
+
+ overall reaction
+ - not found -
+
+
+The remaining overall reactions perform no net transformation of external metabolites.
+
+CONSERVATION RELATIONS
+ 
+ matrix dimension r14 x c19
+ 1 -1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 1  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 1  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  1 -1  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  1  0  1  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  1  0  0  1  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  1  1  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  1  1  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  1  0  1  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  1 -1  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  1  0 -1  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  1  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  1  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  1 
+ 1 :	5,10-Methylenetetrahydrofolate + glycine = const
+ 2 :	5,10-Methylenetetrahydrofolate + tetrahydrofolate = const
+ 3 :	5,10-Methylenetetrahydrofolate + L-serine = const
+ 4 :	(5-L-Glutamyl)-peptide + an_amino_acid = const
+ 5 :	(5-L-Glutamyl)-peptide + peptide = const
+ 6 :	(5-L-Glutamyl)-peptide + 5-L-glutamyl_amino_acid = const
+ 7 :	beta-D-oligosaccarides + n_D-glucose = const
+ 8 :	L-Asparagine + L-aspartate = const
+ 9 :	L-Asparagine + NH3 = const
+10 :	ATP + L-Asp = const
+11 :	ATP + NH4+ = const
+12 :	ATP + AMP = const
+13 :	ATP + diphosphate = const
+14 :	ATP + L-Asn = const
+
+ELEMENTARY MODES
+ 
+ matrix dimension r1 x c6
+ 0  1  0  0  0  0 
+6 reactions (columns) are sorted in the same order as in the ENZREV ENZIRREV section.
+
+ enzymes
+
+ 1:	 2.1.2.1 irreversible
+
+ overall reaction
+ - not found -
+
+
+The remaining overall reactions perform no net transformation of external metabolites.
+
+The elementary modes ARE EQUAL to convex basis.

@@ -1,0 +1,186 @@
+METATOOL OUTPUT Version 3.5 (28.03.2001) C:\METATOOL\META35~1.EXE
+
+INPUT FILE: EXAMPLE7.TXT
+
+INTERNAL METABOLITES: 19
+REACTIONS: 6
+
+  2 external NADPH
+  2 external NADP+
+  2 external isopentenyl_diphosphate
+  1 int      (S)-3-Hydroxy-3-methylglutaryl-CoA
+  1 int      (R)-mevalonate
+  1 int      CoA
+  1 int      Calcidiol
+  1 int      O2
+  1 int      calcitriol
+  1 int      H2O
+  1 int      Geranyl_diphosphate
+  1 int      diphosphate
+  1 int      trans,trans-farnesyl_diphosphate
+  1 int      ATP
+  1 int      (R)-5-diphosphomevalonate
+  1 int      ADP
+  1 int      phosphate
+  1 int      CO2
+  1 int      Isopentenyl_diphosphate
+  1 int      dimethylallyl_diphosphate
+  1 int      (S)-2,3-Epoxysqualene
+  1 int      lanosterol
+ 22 metabolites,  25 is the summarized frequency
+
+edges	frequency of nodes
+  0	  0
+  1	 19
+  2	  3
+
+STOICHIOMETRIC MATRIX
+ 
+ matrix dimension r19 x c6
+ 0 -1  0  0  0  0 
+ 0  1  0  0  0  0 
+ 0  1  0  0  0  0 
+ 0  0 -1  0  0  0 
+ 0  0 -1  0  0  0 
+ 0  0  1  0  0  0 
+ 0  0  1  0  0  0 
+ 0  0  0 -1  0  0 
+ 0  0  0  1  0  0 
+ 0  0  0  1  0  0 
+ 0  0  0  0 -1  0 
+ 0  0  0  0 -1  0 
+ 0  0  0  0  1  0 
+ 0  0  0  0  1  0 
+ 0  0  0  0  1  0 
+-1  0  0  0  0  0 
+ 1  0  0  0  0  0 
+ 0  0  0  0  0 -1 
+ 0  0  0  0  0  1 
+The following line indicates reversible (0) and irreversible reactions (1)
+ 0  1  1  1  1  1 
+rows and columns are sorted as declared in the inputfile
+
+NOT BALANCED INTERNAL METABOLITES
+(S)-3-Hydroxy-3-methylglutaryl-CoA	(R)-mevalonate	CoA	Calcidiol	O2	calcitriol	H2O	Geranyl_diphosphate	diphosphate	trans,trans-farnesyl_diphosphate	ATP	(R)-5-diphosphomevalonate	ADP	phosphate	CO2	Isopentenyl_diphosphate	dimethylallyl_diphosphate	(S)-2,3-Epoxysqualene	lanosterol	
+
+KERNEL
+ 
+ matrix dimension r0 x c6
+6 reactions (columns) are sorted in the same order as in the ENZREV ENZIRREV section.
+
+ enzymes
+ - not found -
+
+
+ overall reaction
+ - not found -
+
+
+The remaining overall reactions perform no net transformation of external metabolites.
+
+SUBSETS OF REACTIONS
+ 
+ matrix dimension r0 x c6
+6 reactions (columns) are sorted in the same order as in the ENZREV ENZIRREV section.
+
+ enzymes
+ - not found -
+
+
+ overall reaction
+ - not found -
+
+
+The remaining overall reactions perform no net transformation of external metabolites.
+
+REDUCED SYSTEM with 19 branch point metabolites in 6 reactions (columns)
+ 
+ matrix dimension r0 x c6
+The following line indicates reversible (0) and irreversible reactions (1)
+ 0  0  0  0  0  0 
+
+-> Branch metabolites are : 
+met                 	cons	built	reactions
+
+-> No branch metabolites are : 
+met                 	cons	built	reactions
+(S)-3-Hydroxy-3-methylglutaryl-CoA	1	0	1	i
+(R)-mevalonate      	0	1	1	i
+CoA                 	0	1	1	i
+Calcidiol           	1	0	1	i
+O2                  	1	0	1	i
+calcitriol          	0	1	1	i
+H2O                 	0	1	1	i
+Geranyl_diphosphate 	1	0	1	i
+diphosphate         	0	1	1	i
+trans,trans-farnesyl_diphosphate	0	1	1	i
+ATP                 	1	0	1	i
+(R)-5-diphosphomevalonate	1	0	1	i
+ADP                 	0	1	1	i
+phosphate           	0	1	1	i
+CO2                 	0	1	1	i
+Isopentenyl_diphosphate	1	0	1	r
+dimethylallyl_diphosphate	0	1	1	r
+(S)-2,3-Epoxysqualene	1	0	1	i
+lanosterol          	0	1	1	i
+
+CONVEX BASIS
+ 
+ matrix dimension r0 x c6
+
+ enzymes
+ - not found -
+
+
+ overall reaction
+ - not found -
+
+
+The remaining overall reactions perform no net transformation of external metabolites.
+
+CONSERVATION RELATIONS
+ 
+ matrix dimension r13 x c19
+ 1  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 1  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  1 -1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  1  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  1  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  1  1  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  1  0  1  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  1 -1  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  1  0  1  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  1  0  0  1  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  1  0  0  0  1  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  1  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  1 
+ 1 :	(S)-3-Hydroxy-3-methylglutaryl-CoA + (R)-mevalonate = const
+ 2 :	(S)-3-Hydroxy-3-methylglutaryl-CoA + CoA = const
+ 3 :	Calcidiol + O2 = const
+ 4 :	Calcidiol + calcitriol = const
+ 5 :	Calcidiol + H2O = const
+ 6 :	Geranyl_diphosphate + diphosphate = const
+ 7 :	Geranyl_diphosphate + trans,trans-farnesyl_diphosphate = const
+ 8 :	ATP + (R)-5-diphosphomevalonate = const
+ 9 :	ATP + ADP = const
+10 :	ATP + phosphate = const
+11 :	ATP + CO2 = const
+12 :	Isopentenyl_diphosphate + dimethylallyl_diphosphate = const
+13 :	(S)-2,3-Epoxysqualene + lanosterol = const
+
+ELEMENTARY MODES
+ 
+ matrix dimension r0 x c6
+6 reactions (columns) are sorted in the same order as in the ENZREV ENZIRREV section.
+
+ enzymes
+ - not found -
+
+
+ overall reaction
+ - not found -
+
+
+The remaining overall reactions perform no net transformation of external metabolites.
+
+The elementary modes ARE EQUAL to convex basis.

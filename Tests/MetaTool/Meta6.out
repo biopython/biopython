@@ -1,0 +1,173 @@
+METATOOL OUTPUT Version 3.5 (28.03.2001) C:\METATOOL\META35~1.EXE
+
+INPUT FILE: EXAMPLE6.TXT
+
+INTERNAL METABOLITES: 13
+REACTIONS: 6
+
+  4 external H2O
+  3 external H2O2
+  3 external O2
+  2 int      RCH2NH2
+  2 int      RCHO
+  2 int      NH3
+  1 int      Donor
+  1 int      oxidized_donor
+  1 int      4-Hydroxyphenylpyruvate
+  1 int      homogentisate
+  1 int      CO2
+  1 int      An_aldehyde
+  1 int      NAD(P)+
+  1 int      an_acid
+  1 int      NAD(P)H
+  1 int      H+
+ 16 metabolites,  26 is the summarized frequency
+
+edges	frequency of nodes
+  0	  0
+  1	 10
+  2	  3
+  3	  2
+  4	  1
+
+STOICHIOMETRIC MATRIX
+ 
+ matrix dimension r13 x c6
+ 0 -1  0  0  0  0 
+ 0  1  0  0  0  0 
+ 0  0 -1  0  0  0 
+ 0  0  1  0  0  0 
+ 0  0  1  0  0  0 
+-1  0  0  0  0  0 
+-1  0  0  0  0  0 
+ 1  0  0  0  0  0 
+ 1  0  0  0  0  0 
+ 1  0  0  0  0  0 
+ 0  0  0  0 -1 -1 
+ 0  0  0  0  1  1 
+ 0  0  0  0  1  1 
+The following line indicates reversible (0) and irreversible reactions (1)
+ 0  1  1  1  1  1 
+rows and columns are sorted as declared in the inputfile
+
+NOT BALANCED INTERNAL METABOLITES
+Donor	oxidized_donor	4-Hydroxyphenylpyruvate	homogentisate	CO2	An_aldehyde	NAD(P)+	an_acid	NAD(P)H	H+	
+
+KERNEL
+ 
+ matrix dimension r2 x c6
+ 0  0  0  1  0  0 
+ 0  0  0  0  1 -1 
+6 reactions (columns) are sorted in the same order as in the ENZREV ENZIRREV section.
+
+ enzymes
+
+ 1:	 1.2.1.5 irreversible
+ 2:	 1.4.3.4 -1.4.3.6 irreversible
+
+ overall reaction
+ - not found -
+
+
+The remaining overall reactions perform no net transformation of external metabolites.
+
+SUBSETS OF REACTIONS
+ 
+ matrix dimension r2 x c6
+ 0  0  0  1  0  0 
+ 0  0  0  0 -1  1 
+6 reactions (columns) are sorted in the same order as in the ENZREV ENZIRREV section.
+
+ enzymes
+
+ 1:	 1.2.1.5 irreversible
+ 2:	 -1.4.3.4 1.4.3.6 irreversible
+
+ overall reaction
+ - not found -
+
+
+The remaining overall reactions perform no net transformation of external metabolites.
+
+!!! Subset 2 with contradictory irreversibility constraints, please check your model.
+    Enzymes of that subset are cancelled for further calculations.
+
+REDUCED SYSTEM with 13 branch point metabolites in 2 reactions (columns)
+ 
+ matrix dimension r0 x c2
+The following line indicates reversible (0) and irreversible reactions (1)
+ 1  1 
+
+-> Branch metabolites are : 
+met                 	cons	built	reactions
+
+-> No branch metabolites are : 
+met                 	cons	built	reactions
+Donor               	1	0	1	i
+oxidized_donor      	0	1	1	i
+4-Hydroxyphenylpyruvate	1	0	1	i
+homogentisate       	0	1	1	i
+CO2                 	0	1	1	i
+An_aldehyde         	1	0	1	r
+NAD(P)+             	1	0	1	r
+an_acid             	0	1	1	r
+NAD(P)H             	0	1	1	r
+H+                  	0	1	1	r
+RCH2NH2             	2	0	2	ii
+RCHO                	0	2	2	ii
+NH3                 	0	2	2	ii
+
+CONVEX BASIS
+ 
+ matrix dimension r1 x c6
+ 0  0  0  1  0  0 
+
+ enzymes
+
+ 1:	 1.2.1.5 irreversible
+
+ overall reaction
+ - not found -
+
+
+The remaining overall reactions perform no net transformation of external metabolites.
+
+CONSERVATION RELATIONS
+ 
+ matrix dimension r9 x c13
+ 1  1  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  1  1  0  0  0  0  0  0  0  0  0 
+ 0  0  1  0  1  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  1 -1  0  0  0  0  0  0 
+ 0  0  0  0  0  1  0  1  0  0  0  0  0 
+ 0  0  0  0  0  1  0  0  1  0  0  0  0 
+ 0  0  0  0  0  1  0  0  0  1  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  1  1  0 
+ 0  0  0  0  0  0  0  0  0  0  1  0  1 
+ 1 :	Donor + oxidized_donor = const
+ 2 :	4-Hydroxyphenylpyruvate + homogentisate = const
+ 3 :	4-Hydroxyphenylpyruvate + CO2 = const
+ 4 :	An_aldehyde + NAD(P)+ = const
+ 5 :	An_aldehyde + an_acid = const
+ 6 :	An_aldehyde + NAD(P)H = const
+ 7 :	An_aldehyde + H+ = const
+ 8 :	RCH2NH2 + RCHO = const
+ 9 :	RCH2NH2 + NH3 = const
+
+ELEMENTARY MODES
+ 
+ matrix dimension r1 x c6
+ 0  0  0  1  0  0 
+6 reactions (columns) are sorted in the same order as in the ENZREV ENZIRREV section.
+
+ enzymes
+
+ 1:	 1.2.1.5 irreversible
+
+ overall reaction
+ - not found -
+
+
+The remaining overall reactions perform no net transformation of external metabolites.
+
+The elementary modes ARE EQUAL to convex basis.

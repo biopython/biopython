@@ -1,0 +1,208 @@
+METATOOL OUTPUT Version 3.5 (28.03.2001) C:\METATOOL\META35~1.EXE
+
+INPUT FILE: EXAMPLE4.TXT
+
+INTERNAL METABOLITES: 21
+REACTIONS: 8
+
+  4 external H2O
+  2 int      CO2
+  2 int      NH3
+  2 int      beta-alanine
+  1 int      3-Oxopropanoate
+  1 int      CoA
+  1 int      NAD(P)+
+  1 int      acetyl-CoA
+  1 int      NAD(P)H
+  1 int      RCH2NH2
+  1 int      O2
+  1 int      RCHO
+  1 int      H2O2
+  1 int      4-Aminobutanoate
+  1 int      2-oxoglutarate
+  1 int      succinate_semialdehyde
+  1 int      L-glutamate
+  1 int      Beta-alanyl-L-histidine
+  1 int      L-histidine
+  1 int      N-Carbamoyl-beta-alanine
+  1 int      5,6-Dihydrouracil
+  1 int      3-ureidopropionate
+ 22 metabolites,  28 is the summarized frequency
+
+edges	frequency of nodes
+  0	  0
+  1	 18
+  2	  3
+  3	  0
+  4	  1
+
+STOICHIOMETRIC MATRIX
+ 
+ matrix dimension r21 x c8
+ 0  0  0 -1  0  0  0  0 
+ 0  0  0 -1  0  0  0  0 
+ 0  0  0 -1  0  0  0  0 
+ 0  0  0  1  0  0  0  0 
+ 0  1  0  1  0  0  0  0 
+ 0  0  0  1  0  0  0  0 
+ 0  0  0  0 -1  0  0  0 
+ 0  0  0  0 -1  0  0  0 
+ 0  0  0  0  1  0  0  0 
+ 0  1  0  0  1  0  0  0 
+ 0  0  0  0  1  0  0  0 
+-1  0  0  0  0  0  0  0 
+-1  0  0  0  0  0  0  0 
+ 1  0  0  0  0  0  0  0 
+ 1  0  0  0  0  0  0  0 
+ 0  0  0  0  0 -1  0  0 
+ 0  1  0  0  0  1  0  0 
+ 0  0  0  0  0  1  0  0 
+ 0 -1  0  0  0  0  0  0 
+ 0  0 -1  0  0  0  0  0 
+ 0  0  1  0  0  0  0  0 
+The following line indicates reversible (0) and irreversible reactions (1)
+ 0  0  0  1  1  1  1  1 
+rows and columns are sorted as declared in the inputfile
+
+NOT BALANCED INTERNAL METABOLITES
+3-Oxopropanoate	CoA	NAD(P)+	acetyl-CoA	NAD(P)H	RCH2NH2	O2	RCHO	H2O2	4-Aminobutanoate	2-oxoglutarate	succinate_semialdehyde	L-glutamate	Beta-alanyl-L-histidine	L-histidine	N-Carbamoyl-beta-alanine	5,6-Dihydrouracil	3-ureidopropionate	
+
+KERNEL
+ 
+ matrix dimension r2 x c8
+ 0  0  0  0  0  0  1  0 
+ 0  0  0  0  0  0  0  1 
+8 reactions (columns) are sorted in the same order as in the ENZREV ENZIRREV section.
+
+ enzymes
+
+ 1:	 3.5.1.6 irreversible
+ 2:	 3.5.2.2 irreversible
+
+ overall reaction
+ - not found -
+
+
+The remaining overall reactions perform no net transformation of external metabolites.
+
+SUBSETS OF REACTIONS
+ 
+ matrix dimension r2 x c8
+ 0  0  0  0  0  0  1  0 
+ 0  0  0  0  0  0  0  1 
+8 reactions (columns) are sorted in the same order as in the ENZREV ENZIRREV section.
+
+ enzymes
+
+ 1:	 3.5.1.6 irreversible
+ 2:	 3.5.2.2 irreversible
+
+ overall reaction
+ - not found -
+
+
+The remaining overall reactions perform no net transformation of external metabolites.
+
+REDUCED SYSTEM with 21 branch point metabolites in 2 reactions (columns)
+ 
+ matrix dimension r0 x c2
+The following line indicates reversible (0) and irreversible reactions (1)
+ 1  1 
+
+-> Branch metabolites are : 
+met                 	cons	built	reactions
+
+-> No branch metabolites are : 
+met                 	cons	built	reactions
+3-Oxopropanoate     	1	0	1	i
+CoA                 	1	0	1	i
+NAD(P)+             	1	0	1	i
+acetyl-CoA          	0	1	1	i
+CO2                 	0	2	2	ir
+NAD(P)H             	0	1	1	i
+RCH2NH2             	1	0	1	i
+O2                  	1	0	1	i
+RCHO                	0	1	1	i
+NH3                 	0	2	2	ir
+H2O2                	0	1	1	i
+4-Aminobutanoate    	1	0	1	r
+2-oxoglutarate      	1	0	1	r
+succinate_semialdehyde	0	1	1	r
+L-glutamate         	0	1	1	r
+Beta-alanyl-L-histidine	1	0	1	i
+beta-alanine        	0	2	2	ir
+L-histidine         	0	1	1	i
+N-Carbamoyl-beta-alanine	1	0	1	r
+5,6-Dihydrouracil   	1	0	1	r
+3-ureidopropionate  	0	1	1	r
+
+CONVEX BASIS
+ 
+ matrix dimension r2 x c8
+ 0  0  0  0  0  0  1  0 
+ 0  0  0  0  0  0  0  1 
+
+ enzymes
+
+ 1:	 3.5.1.6 irreversible
+ 2:	 3.5.2.2 irreversible
+
+ overall reaction
+ - not found -
+
+
+The remaining overall reactions perform no net transformation of external metabolites.
+
+CONSERVATION RELATIONS
+ 
+ matrix dimension r15 x c21
+ 1 -1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 1  0 -1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 1  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 1  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  1 -1  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  1  0  1  0  0  0  0  0  0  0  0  0  0  0  0 
+-1  0  0  0 -1  0  1  0  0  1  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  1  0  0  0  1  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  1 -1  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  1  0  1  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  1  0  0  1  0  0  0  0  0  0 
+-1  0  0  0 -1  0  0  0  0  0  0  0  0  0  0  1  1  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  1  0  0  0 
+ 1  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  1 
+ 1 :	3-Oxopropanoate + CoA = const
+ 2 :	3-Oxopropanoate + NAD(P)+ = const
+ 3 :	3-Oxopropanoate + acetyl-CoA = const
+ 4 :	3-Oxopropanoate + NAD(P)H = const
+ 5 :	RCH2NH2 + O2 = const
+ 6 :	RCH2NH2 + RCHO = const
+ 7 :	3-Oxopropanoate + CO2 + RCH2NH2 + NH3 = const
+ 8 :	RCH2NH2 + H2O2 = const
+ 9 :	4-Aminobutanoate + 2-oxoglutarate = const
+10 :	4-Aminobutanoate + succinate_semialdehyde = const
+11 :	4-Aminobutanoate + L-glutamate = const
+12 :	3-Oxopropanoate + CO2 + Beta-alanyl-L-histidine + beta-alanine = const
+13 :	Beta-alanyl-L-histidine + L-histidine = const
+14 :	3-Oxopropanoate + CO2 + N-Carbamoyl-beta-alanine = const
+15 :	5,6-Dihydrouracil + 3-ureidopropionate = const
+
+ELEMENTARY MODES
+ 
+ matrix dimension r2 x c8
+ 0  0  0  0  0  0  1  0 
+ 0  0  0  0  0  0  0  1 
+8 reactions (columns) are sorted in the same order as in the ENZREV ENZIRREV section.
+
+ enzymes
+
+ 1:	 3.5.1.6 irreversible
+ 2:	 3.5.2.2 irreversible
+
+ overall reaction
+ - not found -
+
+
+The remaining overall reactions perform no net transformation of external metabolites.
+
+The elementary modes ARE EQUAL to convex basis.
