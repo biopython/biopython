@@ -556,8 +556,8 @@ def _my_urlencode(params):
     # (key,value) pairs.  If it's a dictionary, convert it to a list.
     import operator
     import urllib
-    
-    if operator.isMappingType(params):
+
+    if operator.isMappingType(params) and hasattr(params, "items"):
         params = params.items()
 
     paramlist = []
