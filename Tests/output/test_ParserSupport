@@ -1,0 +1,43 @@
+test_ParserSupport
+Running tests on TaggingConsumer
+***** start_section
+
+test1: myline
+
+***** end_section
+
+Running tests on is_blank_line
+1
+1
+1
+1
+1
+1
+1
+0
+0
+0
+0
+Running tests on safe_readline
+This
+
+file
+correctly failed
+Running tests on safe_peekline
+This
+
+file
+correctly failed
+hello
+Running tests on read_and_call
+>gi|132871
+correctly failed
+correctly failed
+correctly failed
+correctly failed
+correctly failed
+Running tests on attempt_read_and_call
+1
+0
+0
+1

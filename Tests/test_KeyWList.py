@@ -4,31 +4,33 @@
 # as part of this package.
 
 import os
-from TestSupport import verbose, TestFailed
 from Bio import ParserSupport
 from Bio.SwissProt import KeyWList
 
 
+### _Scanner
 
-### Scanner
-
-if verbose:
-    print "Running tests on Scanner"
+print "Running tests on _Scanner"
 
 tests = ['kw001', 'kw002']
 
-class TestHandle:
-    def __init__(self, h):
-        self._h = h
-    def write(self, s):
-        assert self._h.readline() == s
+class MyConsumer(ParserSupport.TaggingConsumer):
+    def __init__(self, *args, **keywds):
+        apply(ParserSupport.TaggingConsumer.__init__, (self,) + args, keywds)
+        self._keywd = 0
 
-scanner = KeyWList.Scanner()
+    # Only print the first keyword, so I don't generate a bunch of
+    # output.
+    def keyword(self, line):
+        if not self._keywd:
+            self._print_name("keyword", line)
+            self._keywd = 1
+        
+
+scanner = KeyWList._Scanner()
 for test in tests:
+    print "testing %s" % test
     datafile = os.path.join("SwissProt", test)
-    modelfile = datafile + ".tagged"
-    tc = ParserSupport.TaggingConsumer(handle=TestHandle(open(modelfile)))
-    try:
-        scanner.feed(open(datafile), tc)
-    except:
-        raise TestFailed, "Scanner (%s)" % test
+    tc = MyConsumer()
+    scanner.feed(open(datafile), tc)
+

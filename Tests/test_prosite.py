@@ -1,4 +1,4 @@
-from Bio.Tools import Prosite
+from Bio.Prosite import Pattern
 from Bio import Seq
 
 unchanged_patterns = (
@@ -74,7 +74,7 @@ unchanged_patterns = (
 )
 
 for pattern, good_list, bad_list in unchanged_patterns:
-    p = Prosite.Prosite(pattern = pattern)
+    p = Pattern.Prosite(pattern = pattern)
     print "Patterns:", repr(pattern), repr(p.re.pattern), \
           repr(p.grouped_re.pattern)
     assert p.tostring() == pattern, (p.tostring(), pattern)
@@ -146,7 +146,7 @@ bad_patterns = (
 for pat in bad_patterns:
     print pat, "-",
     try:
-        Prosite.compile(pat)
+        Pattern.compile(pat)
     except TypeError:
         print "correctly failed"
     else:

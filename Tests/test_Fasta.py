@@ -5,7 +5,6 @@
 
 import os
 from types import *
-from TestSupport import verbose, TestFailed
 from Bio import File
 from Bio import ParserSupport
 from Bio.Fasta import Fasta
@@ -13,97 +12,73 @@ from Bio.Fasta import Fasta
 
 ### Record
 
-if verbose:
-    print "Running tests on Record"
+print "Running test on Record"
 
 r = Fasta.Record()
-try:
-    assert type(r.title) is StringType, "title should be string"
-    assert type(r.sequence) is StringType, "sequence should be string"
-except Exception, x:
-    raise TestFailed, "Record (%s)" % x
+print type(r.title)    # StringType
+print type(r.sequence) #  StringType
     
 
-### Scanner
+### _Scanner
 
-if verbose:
-    print "Running tests on Scanner"
+print "Running tests on _Scanner"
 
 tests = ['f001', 'f002']
 
-class TestHandle:
-    def __init__(self, h):
-        self._h = h
-    def write(self, s):
-        assert self._h.readline() == s
-
-scanner = Fasta.Scanner()
+scanner = Fasta._Scanner()
 for test in tests:
+    print "testing %s" % test
     datafile = os.path.join("Fasta", test)
-    modelfile = datafile + ".tagged"
-    tc = ParserSupport.TaggingConsumer(handle=TestHandle(open(modelfile)))
-    try:
-        scanner.feed(open(datafile), tc)
-    except:
-        raise TestFailed, "Scanner (%s)" % test
+    tc = ParserSupport.TaggingConsumer()
+    scanner.feed(open(datafile), tc)
 
 
-### StandardConsumer
+### _RecordConsumer
 
-if verbose:
-    print "Running tests on StandardConsumer"
+print "Running tests on _RecordConsumer"
 
-c = Fasta.StandardConsumer()
-try:
-    c.start_sequence()
-    c.title('>This is a title\n')
-    c.sequence('ABCD\n')
-    c.sequence('EFG\n')
-    c.end_sequence()
+c = Fasta._RecordConsumer()
+c.start_sequence()
+c.title('>This is a title\n')
+c.sequence('ABCD\n')
+c.sequence('EFG\n')
+c.end_sequence()
 
-    assert c.data.title == "This is a title", "title is incorrect"
-    assert c.data.sequence == "ABCDEFG", "sequence is incorrect"
-
-    c.start_sequence()
-    c.end_sequence()
-    assert c.data.title == '', "record should be cleared"
-except Exception, x:
-    raise TestFailed, "StandardConsumer (%s)" % x
+print c.data.title        # "This is a title"
+print c.data.sequence     # "ABCDEFG"
+# clear the record
+c.start_sequence()   
+c.end_sequence()
+print repr(c.data.title)  # ''
 
 
-### SequenceConsumer
 
-if verbose:
-    print "Running tests on SequenceConsumer"
+### _SequenceConsumer
 
-c = Fasta.SequenceConsumer()
-try:
-    c.start_sequence()
-    c.title('>This is a title\n')
-    c.sequence('ABCD\n')
-    c.sequence('EFG\n')
-    c.end_sequence()
+print "Running tests on _SequenceConsumer"
 
-    assert c.data.name == "This is a title", "title is incorrect"
-    assert c.data.seq == "ABCDEFG", "sequence is incorrect"
+c = Fasta._SequenceConsumer()
+c.start_sequence()
+c.title('>This is a title\n')
+c.sequence('ABCD\n')
+c.sequence('EFG\n')
+c.end_sequence()
 
-    c.start_sequence()
-    c.end_sequence()
-    assert c.data.name == '', "record should be cleared"
-except Exception, x:
-    raise TestFailed, "SequenceConsumer (%s)" % x
+print c.data.name         # "This is a title"
+print c.data.seq          # "ABCDEFG"
+# clear the record
+c.start_sequence()   
+c.end_sequence()
+print repr(c.data.name)   # ''
+
 
 
 ### Iterator
 
-if verbose:
-    print "Running tests on Iterator"
+print "Running tests on Iterator"
 
 i = Fasta.Iterator(open(os.path.join('Fasta', 'f002')))
-try:
-    assert i.next()[:11] == '>gi|1348912', "sequence 1"
-    assert i.next()[:11] == '>gi|1348917', "sequence 2"
-    assert i.next()[:11] == '>gi|1592936', "sequence 3"
-    assert not i.next(), "no more sequences"
-except Exception, x:
-    raise TestFailed, "Iterator (%s)" % x
+print i.next()   # '>gi|1348912' [...]
+print i.next()   # '>gi|1348917'
+print i.next()   # '>gi|1592936'
+print repr(i.next())   # None

@@ -1,0 +1,19 @@
+test_File
+'This\012'
+3
+''
+This
+
+is
+
+is
+
+saved
+another
+saved
+'saved again'
+'a multi-line\012'
+'file'
+''
+save after empty
+''

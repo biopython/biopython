@@ -5,72 +5,51 @@
 
 import os
 import string
-from TestSupport import verbose, TestFailed
 from Bio import File
+
+
+
+data = """This
+is
+a multi-line
+file"""
 
 
 
 ### StringHandle
 
-if verbose:
-    print "Running tests on StringHandle"
-
-data = """This
-is
-a multi-line
-file"""
-
 h = File.StringHandle(data)
-try:
-    assert string.rstrip(h.readline()) == 'This', "readline"
-    assert len(h.readlines()) == 3, "readlines"
-    assert h.readline() == ''
-    h.close()
-except Exception, x:
-    raise TestFailed, "StringHandle (%s)" % x
+print repr(h.readline())  # 'This'
+print len(h.readlines())  # 3
+print repr(h.readline())  # ''
+h.close()
 
 
 
 ### UndoHandle
 
-if verbose:
-    print "Running tests on UndoHandle"
+h = File.UndoHandle(File.StringHandle(data))
 
-data = """This
-is
-a multi-line
-file"""
+print h.readline()   # 'This'
+print h.peekline()   # 'is'
+print h.readline()   # 'is'
+h.saveline("saved")
+print h.peekline()   # 'saved'
+h.saveline("another")
+print h.readline()   # 'another'
+print h.readline()   # 'saved'
 
-# os.pipe is not available on MS-DOS.  If DOS compatibility turns
-# out to be important, we may have to save the data to a temporary
-# file and make a real file handle.
-r, w = os.pipe()
-os.fdopen(w, 'w').write(data)
-h = File.UndoHandle(os.fdopen(r, 'r'))
-
-try:
-    assert string.rstrip(h.readline()) == 'This'
-    assert string.rstrip(h.peekline()) == 'is'
-    assert string.rstrip(h.readline()) == 'is'
-    h.saveline("saved")
-    assert h.peekline() == 'saved'
-    h.saveline("another")
-    assert h.readline() == 'another'
-    assert h.readline() == 'saved'
-
-    # Test readlines after saveline
-    h.saveline("saved again")
-    lines = h.readlines()
-    assert string.strip(lines[0]) == 'saved again'
-    assert string.strip(lines[1]) == 'a multi-line'
-    assert string.strip(lines[2]) == 'file'
+# Test readlines after saveline
+h.saveline("saved again")
+lines = h.readlines()
+print repr(lines[0])   # 'saved again'
+print repr(lines[1])   # 'a multi-line'
+print repr(lines[2])   # 'file'
     
-    # should be empty now
-    assert h.readline() == ''
+# should be empty now
+print repr(h.readline())       # ''
     
-    h.saveline("save after empty")
-    assert h.readline() == 'save after empty'
-    assert h.readline() == ''
-    h.close()  # should pass this to the original handle
-except Exception, x:
-    raise TestFailed, "UndoHandle (%s)" % x
+h.saveline("save after empty")
+print h.readline()             # 'save after empty'
+print repr(h.readline())       # ''
+h.close()  # should pass this to the original handle

@@ -1,0 +1,76 @@
+test_KeyWList
+Running tests on _Scanner
+testing kw001
+*************** start_header
+noevent        : ---------------------------------------------------------------
+noevent        : 
+noevent        :                 SWISS-PROT Protein Sequence Data Bank.
+noevent        :                 Release 37.0, December 1998
+noevent        : 
+noevent        : ---------------------------------------------------------------
+noevent        : 
+noevent        : List of keywords
+noevent        : 
+noevent        : ---------------------------------------------------------------
+noevent        : Amos Bairoch                              Email: bairoch@medeci
+noevent        : Swiss Institute of Bioinformatics
+noevent        : and University of Geneva
+noevent        : Switzerland
+noevent        : ---------------------------------------------------------------
+noevent        : Document name: KEYWLIST.TXT
+noevent        : ---------------------------------------------------------------
+noevent        : 
+*************** end_header
+*************** start_keywords
+keyword        : 3D-structure
+noevent        : 
+*************** end_keywords
+*************** start_footer
+noevent        : ---------------------------------------------------------------
+copyright      : SWISS-PROT is copyright.  It is produced through a collaboratio
+copyright      : Swiss Institute  of  Bioinformatics   and the EMBL Outstation -
+copyright      : Bioinformatics Institute. There are no restrictions on its use
+copyright      : institutions as long as its  content is in no way modified. Usa
+copyright      : commercial entities requires a license agreement.  For informat
+copyright      : licensing  scheme  see: http://www.isb-sib.ch/announce/ or send
+copyright      : license@isb-sib.ch.
+noevent        : ---------------------------------------------------------------
+*************** end_footer
+testing kw002
+*************** start_header
+noevent        : ---------------------------------------------------------------
+noevent        : 
+noevent        :                 SWISS-PROT Protein Sequence Data Bank.
+noevent        :                 Release 38.0, July 1999
+noevent        : 
+noevent        : ---------------------------------------------------------------
+noevent        : 
+noevent        : List of keywords
+noevent        : 
+noevent        : ---------------------------------------------------------------
+noevent        : Amos Bairoch                              Email: bairoch@medeci
+noevent        : Swiss Institute of Bioinformatics
+noevent        : and University of Geneva
+noevent        : Switzerland
+noevent        : ---------------------------------------------------------------
+noevent        : Document name: KEYWLIST.TXT
+noevent        : ---------------------------------------------------------------
+noevent        : 
+*************** end_header
+*************** start_keywords
+noevent        : Keyword
+noevent        : ______________________________________
+keyword        : 3D-structure
+noevent        : 
+*************** end_keywords
+*************** start_footer
+noevent        : ---------------------------------------------------------------
+copyright      : SWISS-PROT is copyright.  It is produced through a collaboratio
+copyright      : Swiss Institute  of  Bioinformatics   and the EMBL Outstation -
+copyright      : Bioinformatics Institute. There are no restrictions on its use
+copyright      : institutions as long as its  content is in no way modified. Usa
+copyright      : commercial entities requires a license agreement.  For informat
+copyright      : licensing  scheme  see: http://www.isb-sib.ch/announce/ or send
+copyright      : license@isb-sib.ch.
+noevent        : ---------------------------------------------------------------
+*************** end_footer
