@@ -1,101 +1,13 @@
-#ifdef __CPLUSPLUS__
-extern "C" {
-#endif
 #include "Python.h"
 #include "Numeric/arrayobject.h"
  
 static PyObject *ErrorObject;
-
-static int array_really_contiguous(PyArrayObject *ap) {
-      int sd;
-      int i;
-
-      sd = ap->descr->elsize;
-      for (i = ap->nd-1; i >= 0; --i) {
-              if (ap->dimensions[i] == 0) return 1; /* contiguous by definition */
-              if (ap->strides[i] != sd) return 0;
-              sd *= ap->dimensions[i];
-      }
-      return 1;
-}
-
-struct fcomplex {
-    float r;
-    float i;
-    };
-typedef struct fcomplex Py_complex_float;
-#define TRANSPOSE_OPTION 0
-#define MIRROR_OPTION 0
-#define get_fortran_dim(v,n) v->dimensions[(n)-1]
-
-/* 
-    Built by PyFort for C compiler.
-*/
-
-static int default_option = TRANSPOSE_OPTION;
-static PyObject*
-set_pyfort_option (PyObject* unused, PyObject* args) {
-    if(!PyArg_ParseTuple(args, "i", &default_option)) return NULL;
-    Py_INCREF(Py_None);
-    return Py_None;
-}
 
 static void
 set_pyfort_error (char* routine, char* var, char* problem) {
     char buf[512];
     sprintf(buf, "%s, argument %s: %s", routine, var, problem);
     PyErr_SetString (ErrorObject, buf);
-}
-
-static void set_transposed_strides (PyArrayObject* ar)
-{
-    int m1, n1, itmp; 
-    n1 = ar->nd; 
-    if (n1 < 2) return;
-    m1 = ar->strides[n1-1];   /* stride for one element */ 
-    for(itmp=0; itmp < n1 ; itmp++) { 
-        ar->strides[itmp] = m1; 
-        m1 *= ar->dimensions[itmp]; 
-    } 
-    ar->flags &= ~CONTIGUOUS; 
-}
-
-
-static PyArrayObject*
-transpose_array (char* rname, char* vname, PyArrayObject* ap) {
-/* return transpose of ap, possibly not contiguous so as to avoid copy if we
-   are transposing a previously transposed contiguous array
-   This means with the transpose option on the output of one call might
-   not need any copying if used as input to another call. I.e., Fortran 
-   arrays stay in row-major order.
-*/
-    int i, n;
-    PyArrayObject *ret;
-    n  = ap->nd;
-
-    /* this allocates memory for dimensions and strides (but fills them
-           incorrectly), sets up descr, and points data at ap->data. */
-    ret = (PyArrayObject *)PyArray_FromDimsAndData(n, ap->dimensions,
-                                                    ap->descr->type_num,
-                                                    ap->data);
-    if (!ret) {
-        set_pyfort_error (rname, vname, "Could not create descriptors for transpose.");
-        return NULL;
-    }
-       
-    /* point at true owner of memory: */
-    ret->base = (PyObject *)ap;
-    Py_INCREF(ap);
-    for(i=0; i<n; i++) {
-        ret->dimensions[i] = ap->dimensions[n - i - 1];
-        ret->strides[i] = ap->strides[n - i - 1];
-    }
-    if (array_really_contiguous(ret)) {
-        ret->flags |= CONTIGUOUS;
-    } else {
-        ret->flags &= ~CONTIGUOUS;
-    }
-    return ret;
 }
 
 static PyArrayObject* make_contiguous(char* rname, char* vname, PyArrayObject* ap)
@@ -113,10 +25,10 @@ static PyArrayObject* make_contiguous(char* rname, char* vname, PyArrayObject* a
     }
 }
 
-static int do_size_check (char* rname, char* vname, PyArrayObject *av, int rank,  int extents[], int mirror)
+static int do_size_check (char* rname, char* vname, PyArrayObject *av, int rank,  int extents[])
 {
     int size1;
-    int i, j;
+    int i;
     char buf[512];
 
     size1 = av->nd;
@@ -127,11 +39,10 @@ static int do_size_check (char* rname, char* vname, PyArrayObject *av, int rank,
             if (i == size1-1) {
                if (extents[i] == 1) break;
             }
-            j = mirror ? size1 - 1 - i : i;
-            if(av->dimensions[j] != extents[i]) 
+            if(av->dimensions[i] != extents[i]) 
             {
                sprintf(buf, "Incorrect extent in dimension %d (%d expected %d)",
-                       i+1, av->dimensions[j], extents[i]);
+                       i+1, av->dimensions[i], extents[i]);
                set_pyfort_error(rname, vname, buf);
                return 0;
             }
@@ -161,7 +72,7 @@ do_array_in (char* rname, char* vname, PyObject *v,
         t = (PyArrayObject *) PyArray_ContiguousFromObject(v, PyArray_NOTYPE, 0, 0);
         if (!t) {
             set_pyfort_error(rname, vname, "Argument cannot be converted to needed array.");
-            goto err;
+            return (PyArrayObject*) 0;
         }
     } else {
         t = (PyArrayObject*) v;
@@ -173,63 +84,24 @@ do_array_in (char* rname, char* vname, PyObject *v,
         t = av;
         if (!t) {
             set_pyfort_error(rname, vname, "Argument cannot be cast to needed type.");
-            goto err;
+            return (PyArrayObject*) 0;
         }
     } 
     return t;
-
-err:
-   return (PyArrayObject*) 0;
 }
 
-static PyArrayObject*
-do_array_inout (char* rname, char* vname, PyObject *v, 
-    enum PyArray_TYPES python_array_type)
-{
-    PyArrayObject* av;
-
-   if (!PyArray_Check (v)) {
-        set_pyfort_error(rname, vname, "Argument intent(inout) must be an array.");
-        goto err;
-   }
-   av = (PyArrayObject*) v;
-   if (av->descr->type_num != python_array_type) {
-        set_pyfort_error(rname, vname, "Argument intent(inout) must be of correct type.");
-        goto err;
-   }
-   if (!(av->flags & CONTIGUOUS))  {
-       set_pyfort_error(rname, vname, "Argument intent(inout) must be contiguous.");
-       goto err;
-   }
-   Py_INCREF(av);
-   return av;
-err:
-   return (PyArrayObject*) 0;
-}
 
 static PyArrayObject*
 do_array_create (char* rname, char* vname, enum PyArray_TYPES python_array_type, 
-    int rank, int extents[], int mirror)
+    int rank, int extents[])
 {
-    PyArrayObject* av;
-    int i, dims[7];
-    if (rank > 7) {
-        set_pyfort_error(rname, vname, "Too many dimensions -- limit is 7.");
-        goto err;
-    }
-    if(mirror) {
-        for(i=0; i < rank; ++i) dims[i] = extents[rank-1-i];
-    } else {
-        for(i=0; i < rank; ++i) dims[i] = extents[i];
-    }
-    av = (PyArrayObject*) PyArray_FromDims(rank, dims, python_array_type);
+    PyArrayObject* av =
+        (PyArrayObject*) PyArray_FromDims(rank, extents, python_array_type);
     if (!av) {
         set_pyfort_error(rname, vname, "Could not create array -- too big?");
-        goto err;
+        return (PyArrayObject*) 0;
     }
     return av;
-err:
-    return (PyArrayObject*) 0;
 }
 /* Methods */
 
@@ -271,7 +143,6 @@ static PyObject*
 cluster_kcluster (PyObject* unused, PyObject* args) {
 
     PyObject *pyfort_result;
-    int keyoption;
     long NCLUSTERS;
     long NROWS;
     long NCOLUMNS;
@@ -309,68 +180,49 @@ cluster_kcluster (PyObject* unused, PyObject* args) {
     aWEIGHT = (PyArrayObject*) 0;
     aCLUSTERID = (PyArrayObject*) 0;
     aCDATA = (PyArrayObject*) 0;
-    keyoption = default_option;
 
-    if(!PyArg_ParseTuple(args, "lOOOllcc|i", &NCLUSTERS, &DATA, &MASK, &WEIGHT, &TRANSPOSE, &NPASS, &METHOD, &DIST, &keyoption)) {
+    if(!PyArg_ParseTuple(args, "lOOOllcc", &NCLUSTERS, &DATA, &MASK, &WEIGHT, &TRANSPOSE, &NPASS, &METHOD, &DIST)) {
         return NULL;
     }
     if (!(aDATA = do_array_in ("kcluster", "DATA", DATA, PyArray_DOUBLE))) goto err;
     if (!(aMASK = do_array_in ("kcluster", "MASK", MASK, PyArray_LONG))) goto err;
     if (!(aWEIGHT = do_array_in ("kcluster", "WEIGHT", WEIGHT, PyArray_DOUBLE))) goto err;
-    NROWS = get_fortran_dim(aDATA, 1);
-    NCOLUMNS = get_fortran_dim(aDATA, 2);
+    NROWS = aDATA->dimensions[0];
+    NCOLUMNS = aDATA->dimensions[1];
     eDATA[0] = NROWS;
     eDATA[1] = NCOLUMNS;
     eMASK[0] = NROWS;
     eMASK[1] = NCOLUMNS;
-    eWEIGHT[0] = ((1-TRANSPOSE)*NCOLUMNS+TRANSPOSE*NROWS);
-    eCLUSTERID[0] = ((1-TRANSPOSE)*NROWS+TRANSPOSE*NCOLUMNS);
-    eCDATA[0] = ((1-TRANSPOSE)*NCLUSTERS+TRANSPOSE*NROWS);
-    eCDATA[1] = ((1-TRANSPOSE)*NCOLUMNS+TRANSPOSE*NCLUSTERS);
-    if (!do_size_check ("kcluster", "DATA", aDATA, 2, eDATA, keyoption & MIRROR_OPTION)) goto err;
-    if ((keyoption & TRANSPOSE_OPTION) && (aDATA->nd > 1)) {
-        pyarray_value = aDATA;
-        aDATA = transpose_array ("kcluster", "DATA", pyarray_value);
-        Py_DECREF(pyarray_value);
-        if(!aDATA) goto err;
-    }
+    eWEIGHT[0] = TRANSPOSE ? NROWS : NCOLUMNS;
+    eCLUSTERID[0] = TRANSPOSE ? NCOLUMNS : NROWS;
+    eCDATA[0] = TRANSPOSE ? NROWS : NCLUSTERS;
+    eCDATA[1] = TRANSPOSE ? NCLUSTERS : NCOLUMNS;
+    if (!do_size_check ("kcluster", "DATA", aDATA, 2, eDATA)) goto err;
     pyarray_value = aDATA;
     aDATA = make_contiguous ("kcluster", "DATA", pyarray_value);
     Py_DECREF(pyarray_value);
     if(!aDATA) goto err;
-    if (!do_size_check ("kcluster", "MASK", aMASK, 2, eMASK, keyoption & MIRROR_OPTION)) goto err;
-    if ((keyoption & TRANSPOSE_OPTION) && (aMASK->nd > 1)) {
-        pyarray_value = aMASK;
-        aMASK = transpose_array ("kcluster", "MASK", pyarray_value);
-        Py_DECREF(pyarray_value);
-        if(!aMASK) goto err;
-    }
+    if (!do_size_check ("kcluster", "MASK", aMASK, 2, eMASK)) goto err;
     pyarray_value = aMASK;
     aMASK = make_contiguous ("kcluster", "MASK", pyarray_value);
     Py_DECREF(pyarray_value);
     if(!aMASK) goto err;
-    if (!do_size_check ("kcluster", "WEIGHT", aWEIGHT, 1, eWEIGHT, keyoption & MIRROR_OPTION)) goto err;
-    if ((keyoption & TRANSPOSE_OPTION) && (aWEIGHT->nd > 1)) {
-        pyarray_value = aWEIGHT;
-        aWEIGHT = transpose_array ("kcluster", "WEIGHT", pyarray_value);
-        Py_DECREF(pyarray_value);
-        if(!aWEIGHT) goto err;
-    }
+    if (!do_size_check ("kcluster", "WEIGHT", aWEIGHT, 1, eWEIGHT)) goto err;
     pyarray_value = aWEIGHT;
     aWEIGHT = make_contiguous ("kcluster", "WEIGHT", pyarray_value);
     Py_DECREF(pyarray_value);
     if(!aWEIGHT) goto err;
-    if (!(aCLUSTERID = do_array_create ("kcluster", "CLUSTERID", PyArray_LONG, 1, eCLUSTERID, keyoption&MIRROR_OPTION))) goto err;
-    if (!(aCDATA = do_array_create ("kcluster", "CDATA", PyArray_DOUBLE, 2, eCDATA, keyoption&MIRROR_OPTION))) goto err;
+    if (!(aCLUSTERID = do_array_create ("kcluster", "CLUSTERID", PyArray_LONG, 1, eCLUSTERID))) goto err;
+    if (!(aCDATA = do_array_create ("kcluster", "CDATA", PyArray_DOUBLE, 2, eCDATA))) goto err;
     ppaDATA = (double**)malloc((size_t)NROWS*sizeof(double*));
     ppaMASK = (long**)malloc((size_t)NROWS*sizeof(long*));
-    ppaCDATA = (double**)malloc((size_t)((1-TRANSPOSE)*NCLUSTERS+TRANSPOSE*NROWS)*sizeof(double*));
+    ppaCDATA = (double**)malloc((size_t)(TRANSPOSE ? NROWS : NCLUSTERS)*sizeof(double*));
     paDATA = (double*) (aDATA->data);
     paMASK = (long*) (aMASK->data);
     paCDATA = (double*) (aCDATA->data);
     for (ii=0; ii<NROWS; ii++) ppaDATA[ii]=&(paDATA[ii*NCOLUMNS]);
     for (ii=0; ii<NROWS; ii++) ppaMASK[ii]=&(paMASK[ii*NCOLUMNS]);
-    for (ii=0; ii<((1-TRANSPOSE)*NCLUSTERS+TRANSPOSE*NROWS); ii++) ppaCDATA[ii]=&(paCDATA[ii*((1-TRANSPOSE)*NCOLUMNS+TRANSPOSE*NCLUSTERS)]);
+    for (ii=0; ii<(TRANSPOSE ? NROWS : NCLUSTERS); ii++) ppaCDATA[ii]=&(paCDATA[ii*(TRANSPOSE ? NCLUSTERS : NCOLUMNS)]);
     kcluster(NCLUSTERS, 
         NROWS, 
         NCOLUMNS, 
@@ -412,7 +264,8 @@ err:
 /* treecluster */
 static char cluster_treecluster__doc__[] =
 "hierarchical clustering\n"
-"result, linkdist = pclcluster(data,mask,weight,applyscale,transpose,dist,method)\n"
+"result, linkdist = treecluster(data,mask,weight,applyscale,transpose,dist,\n"
+"                               method,distances)\n"
 "This function implements the pairwise centroid-, single-, maximum-, and\n"
 "average-linkage clustering algorithm.\n"
 "The nrows x ncolumns array data contains the gene expression data.\n"
@@ -441,6 +294,11 @@ static char cluster_treecluster__doc__[] =
 "method=='m': Maximum- or complete-linkage\n"
 "method=='a': Average-linkage\n"
 "method=='c': Centroid-linkage\n"
+"The integer distances denotes if the data array contains the original gene\n"
+"expression data, or the distance matrix calculated from those data. If\n"
+"distances==1, then data is interpreted as the distance matrix, and the\n"
+"arguments mask, weight, transpose, and dist are ignored.\n"
+"\n"
 "Return values:\n"
 "result is an (nobject x 2) array describing the hierarchical clustering\n"
 "  result. Each row in the array represents one node, with the two columns\n"
@@ -457,7 +315,6 @@ static PyObject*
 cluster_treecluster (PyObject* unused, PyObject* args) {
 
     PyObject *pyfort_result;
-    int keyoption;
     long NROWS;
     long NCOLUMNS;
     PyArrayObject* pyarray_value;
@@ -474,6 +331,7 @@ cluster_treecluster (PyObject* unused, PyObject* args) {
     long TRANSPOSE;
     char DIST;
     char METHOD;
+    long DISTANCES;
     PyArrayObject* aRESULT;
     PyObject* rRESULT;
     int eRESULT[2];
@@ -481,92 +339,105 @@ cluster_treecluster (PyObject* unused, PyObject* args) {
     PyObject* rLINKDIST;
     int eLINKDIST[1];
     int ii;
-    double* paDATA;
-    double** ppaDATA;
-    long* paMASK;
-    long** ppaMASK;
     aDATA = (PyArrayObject*) 0;
     aMASK = (PyArrayObject*) 0;
     aWEIGHT = (PyArrayObject*) 0;
     aRESULT = (PyArrayObject*) 0;
     aLINKDIST = (PyArrayObject*) 0;
-    keyoption = default_option;
 
-    if(!PyArg_ParseTuple(args, "OOOllcc|i", &DATA, &MASK, &WEIGHT, &APPLYSCALE, &TRANSPOSE, &DIST, &METHOD, &keyoption)) {
+    if(!PyArg_ParseTuple(args, "OOOllccl", &DATA, &MASK, &WEIGHT, &APPLYSCALE, &TRANSPOSE, &DIST, &METHOD, &DISTANCES)) {
         return NULL;
     }
     if (!(aDATA = do_array_in ("treecluster", "DATA", DATA, PyArray_DOUBLE))) goto err;
-    if (!(aMASK = do_array_in ("treecluster", "MASK", MASK, PyArray_LONG))) goto err;
-    if (!(aWEIGHT = do_array_in ("treecluster", "WEIGHT", WEIGHT, PyArray_DOUBLE))) goto err;
-    NROWS = get_fortran_dim(aDATA, 1);
-    NCOLUMNS = get_fortran_dim(aDATA, 2);
+    NROWS = aDATA->dimensions[0];
+    NCOLUMNS = aDATA->dimensions[1];
     eDATA[0] = NROWS;
     eDATA[1] = NCOLUMNS;
-    eMASK[0] = NROWS;
-    eMASK[1] = NCOLUMNS;
-    eWEIGHT[0] = ((1-TRANSPOSE)*NCOLUMNS+TRANSPOSE*NROWS);
-    eRESULT[0] = ((1-TRANSPOSE)*NROWS+TRANSPOSE*NCOLUMNS-1);
+    eRESULT[0] = ((TRANSPOSE==1) ? NCOLUMNS : NROWS) - 1;
     eRESULT[1] = 2;
-    eLINKDIST[0] = ((1-TRANSPOSE)*NROWS+TRANSPOSE*NCOLUMNS-1);
-    if (!do_size_check ("treecluster", "DATA", aDATA, 2, eDATA, keyoption & MIRROR_OPTION)) goto err;
-    if ((keyoption & TRANSPOSE_OPTION) && (aDATA->nd > 1)) {
-        pyarray_value = aDATA;
-        aDATA = transpose_array ("treecluster", "DATA", pyarray_value);
-        Py_DECREF(pyarray_value);
-        if(!aDATA) goto err;
-    }
+    eLINKDIST[0] = ((TRANSPOSE==1) ? NCOLUMNS : NROWS) - 1;
+    if (!do_size_check ("treecluster", "DATA", aDATA, 2, eDATA)) goto err;
     pyarray_value = aDATA;
     aDATA = make_contiguous ("treecluster", "DATA", pyarray_value);
     Py_DECREF(pyarray_value);
     if(!aDATA) goto err;
-    if (!do_size_check ("treecluster", "MASK", aMASK, 2, eMASK, keyoption & MIRROR_OPTION)) goto err;
-    if ((keyoption & TRANSPOSE_OPTION) && (aMASK->nd > 1)) {
-        pyarray_value = aMASK;
-        aMASK = transpose_array ("treecluster", "MASK", pyarray_value);
-        Py_DECREF(pyarray_value);
-        if(!aMASK) goto err;
+    if (!(aRESULT = do_array_create ("treecluster", "RESULT", PyArray_LONG, 2, eRESULT))) goto err;
+    if (!(aLINKDIST = do_array_create ("treecluster", "LINKDIST", PyArray_DOUBLE, 1, eLINKDIST))) goto err;
+    if (DISTANCES==0) /* aDATA contains gene expression data */
+    { double* paDATA = 0;
+      double** ppaDATA = 0;
+      long* paMASK = 0;
+      long** ppaMASK = 0;
+      if (!(aMASK = do_array_in ("treecluster", "MASK", MASK, PyArray_LONG))) goto err;
+      if (!(aWEIGHT = do_array_in ("treecluster", "WEIGHT", WEIGHT, PyArray_DOUBLE))) goto err;
+      eMASK[0] = NROWS;
+      eMASK[1] = NCOLUMNS;
+      eWEIGHT[0] = ((TRANSPOSE==0) ? NCOLUMNS : NROWS);
+      if (!do_size_check ("treecluster", "MASK", aMASK, 2, eMASK)) goto err;
+      pyarray_value = aMASK;
+      aMASK = make_contiguous ("treecluster", "MASK", pyarray_value);
+      Py_DECREF(pyarray_value);
+      if(!aMASK) goto err;
+      if (!do_size_check ("treecluster", "WEIGHT", aWEIGHT, 1, eWEIGHT)) goto err;
+      pyarray_value = aWEIGHT;
+      aWEIGHT = make_contiguous ("treecluster", "WEIGHT", pyarray_value);
+      Py_DECREF(pyarray_value);
+      if(!aWEIGHT) goto err;
+      ppaDATA = (double**)malloc((size_t)NROWS*sizeof(double*));
+      paDATA = (double*) (aDATA->data);
+      for (ii=0; ii<NROWS; ii++) ppaDATA[ii]=&(paDATA[ii*NCOLUMNS]);
+      ppaMASK = (long**)malloc((size_t)NROWS*sizeof(long*));
+      paMASK = (long*) (aMASK->data);
+      for (ii=0; ii<NROWS; ii++) ppaMASK[ii]=&(paMASK[ii*NCOLUMNS]);
+      treecluster(NROWS, 
+          NCOLUMNS, 
+          ppaDATA, 
+          ppaMASK, 
+          (double*) (aWEIGHT->data), 
+          APPLYSCALE, 
+          TRANSPOSE, 
+          DIST, 
+          METHOD, 
+          (long**) (aRESULT->data), 
+          (double*) (aLINKDIST->data), 0);
+      free (ppaDATA);
+      free (ppaMASK);
     }
-    pyarray_value = aMASK;
-    aMASK = make_contiguous ("treecluster", "MASK", pyarray_value);
-    Py_DECREF(pyarray_value);
-    if(!aMASK) goto err;
-    if (!do_size_check ("treecluster", "WEIGHT", aWEIGHT, 1, eWEIGHT, keyoption & MIRROR_OPTION)) goto err;
-    if ((keyoption & TRANSPOSE_OPTION) && (aWEIGHT->nd > 1)) {
-        pyarray_value = aWEIGHT;
-        aWEIGHT = transpose_array ("treecluster", "WEIGHT", pyarray_value);
-        Py_DECREF(pyarray_value);
-        if(!aWEIGHT) goto err;
+    else
+    { int jj;
+      double** distmatrix = 0;
+      double* paDATA = 0;
+      if(NROWS!=NCOLUMNS)
+      { set_pyfort_error ("treecluster", "DATA", "matrix is not square");
+        goto err;
+      }
+      distmatrix = (double**)malloc((size_t)NROWS*sizeof(double*));
+      paDATA = (double*) (aDATA->data);
+      for(ii=1; ii<NROWS; ii++)
+      { distmatrix[ii] = (double*)malloc((size_t)ii*sizeof(double));
+        for(jj=0; jj<ii; jj++)
+          distmatrix[ii][jj] = paDATA[ii*NCOLUMNS+jj];
+      }
+      treecluster(NROWS, 
+          NCOLUMNS, 
+          0, 
+          0, 
+          0, 
+          APPLYSCALE, 
+          TRANSPOSE, 
+          DIST, 
+          METHOD, 
+          (long**) (aRESULT->data), 
+          (double*) (aLINKDIST->data),
+          distmatrix);
+      for(ii=1; ii<NROWS; ii++) free(distmatrix[ii]);
+      free(distmatrix);
     }
-    pyarray_value = aWEIGHT;
-    aWEIGHT = make_contiguous ("treecluster", "WEIGHT", pyarray_value);
-    Py_DECREF(pyarray_value);
-    if(!aWEIGHT) goto err;
-    if (!(aRESULT = do_array_create ("treecluster", "RESULT", PyArray_LONG, 2, eRESULT, keyoption&MIRROR_OPTION))) goto err;
-    if (!(aLINKDIST = do_array_create ("treecluster", "LINKDIST", PyArray_DOUBLE, 1, eLINKDIST, keyoption&MIRROR_OPTION))) goto err;
-    ppaDATA = (double**)malloc((size_t)NROWS*sizeof(double*));
-    ppaMASK = (long**)malloc((size_t)NROWS*sizeof(long*));
-    paDATA = (double*) (aDATA->data);
-    paMASK = (long*) (aMASK->data);
-    for (ii=0; ii<NROWS; ii++) ppaDATA[ii]=&(paDATA[ii*NCOLUMNS]);
-    for (ii=0; ii<NROWS; ii++) ppaMASK[ii]=&(paMASK[ii*NCOLUMNS]);
-    treecluster(NROWS, 
-        NCOLUMNS, 
-        ppaDATA, 
-        ppaMASK, 
-        (double*) (aWEIGHT->data), 
-        APPLYSCALE, 
-        TRANSPOSE, 
-        DIST, 
-        METHOD, 
-        (long**) (aRESULT->data), 
-        (double*) (aLINKDIST->data), 0);
     rRESULT = PyArray_Return(aRESULT);
     rLINKDIST = PyArray_Return(aLINKDIST);
     Py_XDECREF((PyObject*) aDATA);
     Py_XDECREF((PyObject*) aMASK);
     Py_XDECREF((PyObject*) aWEIGHT);
-    free (ppaDATA);
-    free (ppaMASK);
 
     pyfort_result = Py_BuildValue("OO",rRESULT, rLINKDIST);
 
@@ -618,7 +489,6 @@ static PyObject*
 cluster_somcluster (PyObject* unused, PyObject* args) {
 
     PyObject *pyfort_result;
-    int keyoption;
     long NROWS;
     long NCOLUMNS;
     PyArrayObject* pyarray_value;
@@ -656,16 +526,15 @@ cluster_somcluster (PyObject* unused, PyObject* args) {
     aWEIGHT = (PyArrayObject*) 0;
     aCELLDATA = (PyArrayObject*) 0;
     aCLUSTERID = (PyArrayObject*) 0;
-    keyoption = default_option;
 
-    if(!PyArg_ParseTuple(args, "OOOllldlc|i", &DATA, &MASK, &WEIGHT, &TRANSPOSE, &NXGRID, &NYGRID, &INITTAU, &NITER, &DIST, &keyoption)) {
+    if(!PyArg_ParseTuple(args, "OOOllldlc", &DATA, &MASK, &WEIGHT, &TRANSPOSE, &NXGRID, &NYGRID, &INITTAU, &NITER, &DIST)) {
         return NULL;
     }
     if (!(aDATA = do_array_in ("somcluster", "DATA", DATA, PyArray_DOUBLE))) goto err;
     if (!(aMASK = do_array_in ("somcluster", "MASK", MASK, PyArray_LONG))) goto err;
     if (!(aWEIGHT = do_array_in ("somcluster", "WEIGHT", WEIGHT, PyArray_DOUBLE))) goto err;
-    NROWS = get_fortran_dim(aDATA, 1);
-    NCOLUMNS = get_fortran_dim(aDATA, 2);
+    NROWS = aDATA->dimensions[0];
+    NCOLUMNS = aDATA->dimensions[1];
     eDATA[0] = NROWS;
     eDATA[1] = NCOLUMNS;
     eMASK[0] = NROWS;
@@ -676,41 +545,23 @@ cluster_somcluster (PyObject* unused, PyObject* args) {
     eCELLDATA[2] = ((1-TRANSPOSE)*NCOLUMNS+TRANSPOSE*NROWS);
     eCLUSTERID[0] = ((1-TRANSPOSE)*NROWS+TRANSPOSE*NCOLUMNS);
     eCLUSTERID[1] = 2;
-    if (!do_size_check ("somcluster", "DATA", aDATA, 2, eDATA, keyoption & MIRROR_OPTION)) goto err;
-    if ((keyoption & TRANSPOSE_OPTION) && (aDATA->nd > 1)) {
-        pyarray_value = aDATA;
-        aDATA = transpose_array ("somcluster", "DATA", pyarray_value);
-        Py_DECREF(pyarray_value);
-        if(!aDATA) goto err;
-    }
+    if (!do_size_check ("somcluster", "DATA", aDATA, 2, eDATA)) goto err;
     pyarray_value = aDATA;
     aDATA = make_contiguous ("somcluster", "DATA", pyarray_value);
     Py_DECREF(pyarray_value);
     if(!aDATA) goto err;
-    if (!do_size_check ("somcluster", "MASK", aMASK, 2, eMASK, keyoption & MIRROR_OPTION)) goto err;
-    if ((keyoption & TRANSPOSE_OPTION) && (aMASK->nd > 1)) {
-        pyarray_value = aMASK;
-        aMASK = transpose_array ("somcluster", "MASK", pyarray_value);
-        Py_DECREF(pyarray_value);
-        if(!aMASK) goto err;
-    }
+    if (!do_size_check ("somcluster", "MASK", aMASK, 2, eMASK)) goto err;
     pyarray_value = aMASK;
     aMASK = make_contiguous ("somcluster", "MASK", pyarray_value);
     Py_DECREF(pyarray_value);
     if(!aMASK) goto err;
-    if (!do_size_check ("somcluster", "WEIGHT", aWEIGHT, 1, eWEIGHT, keyoption & MIRROR_OPTION)) goto err;
-    if ((keyoption & TRANSPOSE_OPTION) && (aWEIGHT->nd > 1)) {
-        pyarray_value = aWEIGHT;
-        aWEIGHT = transpose_array ("somcluster", "WEIGHT", pyarray_value);
-        Py_DECREF(pyarray_value);
-        if(!aWEIGHT) goto err;
-    }
+    if (!do_size_check ("somcluster", "WEIGHT", aWEIGHT, 1, eWEIGHT)) goto err;
     pyarray_value = aWEIGHT;
     aWEIGHT = make_contiguous ("somcluster", "WEIGHT", pyarray_value);
     Py_DECREF(pyarray_value);
     if(!aWEIGHT) goto err;
-    if (!(aCELLDATA = do_array_create ("somcluster", "CELLDATA", PyArray_DOUBLE, 3, eCELLDATA, keyoption&MIRROR_OPTION))) goto err;
-    if (!(aCLUSTERID = do_array_create ("somcluster", "CLUSTERID", PyArray_LONG, 2, eCLUSTERID, keyoption&MIRROR_OPTION))) goto err;
+    if (!(aCELLDATA = do_array_create ("somcluster", "CELLDATA", PyArray_DOUBLE, 3, eCELLDATA))) goto err;
+    if (!(aCLUSTERID = do_array_create ("somcluster", "CLUSTERID", PyArray_LONG, 2, eCLUSTERID))) goto err;
     ppaDATA = (double**)malloc((size_t)NROWS*sizeof(double*));
     ppaMASK = (long**)malloc((size_t)NROWS*sizeof(long*));
     ppaCELLDATA = (double**)malloc((size_t)NXGRID*NYGRID*sizeof(double*));
@@ -772,7 +623,6 @@ static PyObject*
 cluster_median (PyObject* unused, PyObject* args) {
 
     PyObject *pyfort_result;
-    int keyoption;
     double fortran_result;
     long N;
     PyArrayObject* pyarray_value;
@@ -780,21 +630,14 @@ cluster_median (PyObject* unused, PyObject* args) {
     PyArrayObject* aDATA;
     int eDATA[1];
     aDATA = (PyArrayObject*) 0;
-    keyoption = default_option;
 
-    if(!PyArg_ParseTuple(args, "O|i", &DATA, &keyoption)) {
+    if(!PyArg_ParseTuple(args, "O", &DATA)) {
         return NULL;
     }
     if (!(aDATA = do_array_in ("median", "DATA", DATA, PyArray_DOUBLE))) goto err;
-    N = get_fortran_dim(aDATA, 1);
+    N = aDATA->dimensions[0];
     eDATA[0] = N;
-    if (!do_size_check ("median", "DATA", aDATA, 1, eDATA, keyoption & MIRROR_OPTION)) goto err;
-    if ((keyoption & TRANSPOSE_OPTION) && (aDATA->nd > 1)) {
-        pyarray_value = aDATA;
-        aDATA = transpose_array ("median", "DATA", pyarray_value);
-        Py_DECREF(pyarray_value);
-        if(!aDATA) goto err;
-    }
+    if (!do_size_check ("median", "DATA", aDATA, 1, eDATA)) goto err;
     pyarray_value = aDATA;
     aDATA = make_contiguous ("median", "DATA", pyarray_value);
     Py_DECREF(pyarray_value);
@@ -823,7 +666,6 @@ static PyObject*
 cluster_mean (PyObject* unused, PyObject* args) {
 
     PyObject *pyfort_result;
-    int keyoption;
     double fortran_result;
     long N;
     PyArrayObject* pyarray_value;
@@ -831,21 +673,14 @@ cluster_mean (PyObject* unused, PyObject* args) {
     PyArrayObject* aDATA;
     int eDATA[1];
     aDATA = (PyArrayObject*) 0;
-    keyoption = default_option;
 
-    if(!PyArg_ParseTuple(args, "O|i", &DATA, &keyoption)) {
+    if(!PyArg_ParseTuple(args, "O", &DATA)) {
         return NULL;
     }
     if (!(aDATA = do_array_in ("mean", "DATA", DATA, PyArray_DOUBLE))) goto err;
-    N = get_fortran_dim(aDATA, 1);
+    N = aDATA->dimensions[0];
     eDATA[0] = N;
-    if (!do_size_check ("mean", "DATA", aDATA, 1, eDATA, keyoption & MIRROR_OPTION)) goto err;
-    if ((keyoption & TRANSPOSE_OPTION) && (aDATA->nd > 1)) {
-        pyarray_value = aDATA;
-        aDATA = transpose_array ("mean", "DATA", pyarray_value);
-        Py_DECREF(pyarray_value);
-        if(!aDATA) goto err;
-    }
+    if (!do_size_check ("mean", "DATA", aDATA, 1, eDATA)) goto err;
     pyarray_value = aDATA;
     aDATA = make_contiguous ("mean", "DATA", pyarray_value);
     Py_DECREF(pyarray_value);
@@ -900,7 +735,6 @@ static PyObject*
 cluster_clusterdistance (PyObject* unused, PyObject* args) {
 
     PyObject *pyfort_result;
-    int keyoption;
     double fortran_result;
     long NROWS;
     long NCOLUMNS;
@@ -935,9 +769,8 @@ cluster_clusterdistance (PyObject* unused, PyObject* args) {
     aWEIGHT = (PyArrayObject*) 0;
     aINDEX1 = (PyArrayObject*) 0;
     aINDEX2 = (PyArrayObject*) 0;
-    keyoption = default_option;
 
-    if(!PyArg_ParseTuple(args, "OOOOOccl|i", &DATA, &MASK, &WEIGHT, &INDEX1, &INDEX2, &DIST, &METHOD, &TRANSPOSE, &keyoption)) {
+    if(!PyArg_ParseTuple(args, "OOOOOccl", &DATA, &MASK, &WEIGHT, &INDEX1, &INDEX2, &DIST, &METHOD, &TRANSPOSE)) {
         return NULL;
     }
     if (!(aDATA = do_array_in ("clusterdistance", "DATA", DATA, PyArray_DOUBLE))) goto err;
@@ -945,10 +778,10 @@ cluster_clusterdistance (PyObject* unused, PyObject* args) {
     if (!(aWEIGHT = do_array_in ("clusterdistance", "WEIGHT", WEIGHT, PyArray_DOUBLE))) goto err;
     if (!(aINDEX1 = do_array_in ("clusterdistance", "INDEX1", INDEX1, PyArray_LONG))) goto err;
     if (!(aINDEX2 = do_array_in ("clusterdistance", "INDEX2", INDEX2, PyArray_LONG))) goto err;
-    NROWS = get_fortran_dim(aDATA, 1);
-    NCOLUMNS = get_fortran_dim(aDATA, 2);
-    N1 = get_fortran_dim(aINDEX1, 1);
-    N2 = get_fortran_dim(aINDEX2, 1);
+    NROWS = aDATA->dimensions[0];
+    NCOLUMNS = aDATA->dimensions[1];
+    N1 = aINDEX1->dimensions[0];
+    N2 = aINDEX2->dimensions[1];
     eDATA[0] = NROWS;
     eDATA[1] = NCOLUMNS;
     eMASK[0] = NROWS;
@@ -956,57 +789,27 @@ cluster_clusterdistance (PyObject* unused, PyObject* args) {
     eWEIGHT[0] = TRANSPOSE*NROWS+(1-TRANSPOSE)*NCOLUMNS;
     eINDEX1[0] = N1;
     eINDEX2[0] = N2;
-    if (!do_size_check ("clusterdistance", "DATA", aDATA, 2, eDATA, keyoption & MIRROR_OPTION)) goto err;
-    if ((keyoption & TRANSPOSE_OPTION) && (aDATA->nd > 1)) {
-        pyarray_value = aDATA;
-        aDATA = transpose_array ("clusterdistance", "DATA", pyarray_value);
-        Py_DECREF(pyarray_value);
-        if(!aDATA) goto err;
-    }
+    if (!do_size_check ("clusterdistance", "DATA", aDATA, 2, eDATA)) goto err;
     pyarray_value = aDATA;
     aDATA = make_contiguous ("clusterdistance", "DATA", pyarray_value);
     Py_DECREF(pyarray_value);
     if(!aDATA) goto err;
-    if (!do_size_check ("clusterdistance", "MASK", aMASK, 2, eMASK, keyoption & MIRROR_OPTION)) goto err;
-    if ((keyoption & TRANSPOSE_OPTION) && (aMASK->nd > 1)) {
-        pyarray_value = aMASK;
-        aMASK = transpose_array ("clusterdistance", "MASK", pyarray_value);
-        Py_DECREF(pyarray_value);
-        if(!aMASK) goto err;
-    }
+    if (!do_size_check ("clusterdistance", "MASK", aMASK, 2, eMASK)) goto err;
     pyarray_value = aMASK;
     aMASK = make_contiguous ("clusterdistance", "MASK", pyarray_value);
     Py_DECREF(pyarray_value);
     if(!aMASK) goto err;
-    if (!do_size_check ("clusterdistance", "WEIGHT", aWEIGHT, 1, eWEIGHT, keyoption & MIRROR_OPTION)) goto err;
-    if ((keyoption & TRANSPOSE_OPTION) && (aWEIGHT->nd > 1)) {
-        pyarray_value = aWEIGHT;
-        aWEIGHT = transpose_array ("clusterdistance", "WEIGHT", pyarray_value);
-        Py_DECREF(pyarray_value);
-        if(!aWEIGHT) goto err;
-    }
+    if (!do_size_check ("clusterdistance", "WEIGHT", aWEIGHT, 1, eWEIGHT)) goto err;
     pyarray_value = aWEIGHT;
     aWEIGHT = make_contiguous ("clusterdistance", "WEIGHT", pyarray_value);
     Py_DECREF(pyarray_value);
     if(!aWEIGHT) goto err;
-    if (!do_size_check ("clusterdistance", "INDEX1", aINDEX1, 1, eINDEX1, keyoption & MIRROR_OPTION)) goto err;
-    if ((keyoption & TRANSPOSE_OPTION) && (aINDEX1->nd > 1)) {
-        pyarray_value = aINDEX1;
-        aINDEX1 = transpose_array ("clusterdistance", "INDEX1", pyarray_value);
-        Py_DECREF(pyarray_value);
-        if(!aINDEX1) goto err;
-    }
+    if (!do_size_check ("clusterdistance", "INDEX1", aINDEX1, 1, eINDEX1)) goto err;
     pyarray_value = aINDEX1;
     aINDEX1 = make_contiguous ("clusterdistance", "INDEX1", pyarray_value);
     Py_DECREF(pyarray_value);
     if(!aINDEX1) goto err;
-    if (!do_size_check ("clusterdistance", "INDEX2", aINDEX2, 1, eINDEX2, keyoption & MIRROR_OPTION)) goto err;
-    if ((keyoption & TRANSPOSE_OPTION) && (aINDEX2->nd > 1)) {
-        pyarray_value = aINDEX2;
-        aINDEX2 = transpose_array ("clusterdistance", "INDEX2", pyarray_value);
-        Py_DECREF(pyarray_value);
-        if(!aINDEX2) goto err;
-    }
+    if (!do_size_check ("clusterdistance", "INDEX2", aINDEX2, 1, eINDEX2)) goto err;
     pyarray_value = aINDEX2;
     aINDEX2 = make_contiguous ("clusterdistance", "INDEX2", pyarray_value);
     Py_DECREF(pyarray_value);
@@ -1077,7 +880,6 @@ static PyObject*
 cluster_getclustermean (PyObject* unused, PyObject* args) {
 
     PyObject *pyfort_result;
-    int keyoption;
     long NCLUSTERS;
     long NROWS;
     long NCOLUMNS;
@@ -1112,16 +914,15 @@ cluster_getclustermean (PyObject* unused, PyObject* args) {
     aCLUSTERID = (PyArrayObject*) 0;
     aCDATA = (PyArrayObject*) 0;
     aCMASK = (PyArrayObject*) 0;
-    keyoption = default_option;
 
-    if(!PyArg_ParseTuple(args, "lOOOl|i", &NCLUSTERS, &DATA, &MASK, &CLUSTERID, &TRANSPOSE, &keyoption)) {
+    if(!PyArg_ParseTuple(args, "lOOOl", &NCLUSTERS, &DATA, &MASK, &CLUSTERID, &TRANSPOSE)) {
         return NULL;
     }
     if (!(aDATA = do_array_in ("getclustermean", "DATA", DATA, PyArray_DOUBLE))) goto err;
     if (!(aMASK = do_array_in ("getclustermean", "MASK", MASK, PyArray_LONG))) goto err;
     if (!(aCLUSTERID = do_array_in ("getclustermean", "CLUSTERID", CLUSTERID, PyArray_LONG))) goto err;
-    NROWS = get_fortran_dim(aDATA, 1);
-    NCOLUMNS = get_fortran_dim(aDATA, 2);
+    NROWS = aDATA->dimensions[0];
+    NCOLUMNS = aDATA->dimensions[1];
     eDATA[0] = NROWS;
     eDATA[1] = NCOLUMNS;
     eMASK[0] = NROWS;
@@ -1131,41 +932,23 @@ cluster_getclustermean (PyObject* unused, PyObject* args) {
     eCDATA[1] = ((1-TRANSPOSE)*NCOLUMNS+TRANSPOSE*NCLUSTERS);
     eCMASK[0] = ((1-TRANSPOSE)*NCLUSTERS+TRANSPOSE*NROWS);
     eCMASK[1] = ((1-TRANSPOSE)*NCOLUMNS+TRANSPOSE*NCLUSTERS);
-    if (!do_size_check ("getclustermean", "DATA", aDATA, 2, eDATA, keyoption & MIRROR_OPTION)) goto err;
-    if ((keyoption & TRANSPOSE_OPTION) && (aDATA->nd > 1)) {
-        pyarray_value = aDATA;
-        aDATA = transpose_array ("getclustermean", "DATA", pyarray_value);
-        Py_DECREF(pyarray_value);
-        if(!aDATA) goto err;
-    }
+    if (!do_size_check ("getclustermean", "DATA", aDATA, 2, eDATA)) goto err;
     pyarray_value = aDATA;
     aDATA = make_contiguous ("getclustermean", "DATA", pyarray_value);
     Py_DECREF(pyarray_value);
     if(!aDATA) goto err;
-    if (!do_size_check ("getclustermean", "MASK", aMASK, 2, eMASK, keyoption & MIRROR_OPTION)) goto err;
-    if ((keyoption & TRANSPOSE_OPTION) && (aMASK->nd > 1)) {
-        pyarray_value = aMASK;
-        aMASK = transpose_array ("getclustermean", "MASK", pyarray_value);
-        Py_DECREF(pyarray_value);
-        if(!aMASK) goto err;
-    }
+    if (!do_size_check ("getclustermean", "MASK", aMASK, 2, eMASK)) goto err;
     pyarray_value = aMASK;
     aMASK = make_contiguous ("getclustermean", "MASK", pyarray_value);
     Py_DECREF(pyarray_value);
     if(!aMASK) goto err;
-    if (!do_size_check ("getclustermean", "CLUSTERID", aCLUSTERID, 1, eCLUSTERID, keyoption & MIRROR_OPTION)) goto err;
-    if ((keyoption & TRANSPOSE_OPTION) && (aCLUSTERID->nd > 1)) {
-        pyarray_value = aCLUSTERID;
-        aCLUSTERID = transpose_array ("getclustermean", "CLUSTERID", pyarray_value);
-        Py_DECREF(pyarray_value);
-        if(!aCLUSTERID) goto err;
-    }
+    if (!do_size_check ("getclustermean", "CLUSTERID", aCLUSTERID, 1, eCLUSTERID)) goto err;
     pyarray_value = aCLUSTERID;
     aCLUSTERID = make_contiguous ("getclustermean", "CLUSTERID", pyarray_value);
     Py_DECREF(pyarray_value);
     if(!aCLUSTERID) goto err;
-    if (!(aCDATA = do_array_create ("getclustermean", "CDATA", PyArray_DOUBLE, 2, eCDATA, keyoption&MIRROR_OPTION))) goto err;
-    if (!(aCMASK = do_array_create ("getclustermean", "CMASK", PyArray_LONG, 2, eCMASK, keyoption&MIRROR_OPTION))) goto err;
+    if (!(aCDATA = do_array_create ("getclustermean", "CDATA", PyArray_DOUBLE, 2, eCDATA))) goto err;
+    if (!(aCMASK = do_array_create ("getclustermean", "CMASK", PyArray_LONG, 2, eCMASK))) goto err;
     ppaDATA = (double**)malloc((size_t)NROWS*sizeof(double*));
     ppaMASK = (long**)malloc((size_t)NROWS*sizeof(long*));
     ppaCDATA = (double**)malloc((size_t)((1-TRANSPOSE)*NCLUSTERS+TRANSPOSE*NROWS)*sizeof(double*));
@@ -1239,7 +1022,6 @@ static PyObject*
 cluster_getclustermedian (PyObject* unused, PyObject* args) {
 
     PyObject *pyfort_result;
-    int keyoption;
     long NCLUSTERS;
     long NROWS;
     long NCOLUMNS;
@@ -1274,16 +1056,15 @@ cluster_getclustermedian (PyObject* unused, PyObject* args) {
     aCLUSTERID = (PyArrayObject*) 0;
     aCDATA = (PyArrayObject*) 0;
     aCMASK = (PyArrayObject*) 0;
-    keyoption = default_option;
 
-    if(!PyArg_ParseTuple(args, "lOOOl|i", &NCLUSTERS, &DATA, &MASK, &CLUSTERID, &TRANSPOSE, &keyoption)) {
+    if(!PyArg_ParseTuple(args, "lOOOl", &NCLUSTERS, &DATA, &MASK, &CLUSTERID, &TRANSPOSE)) {
         return NULL;
     }
     if (!(aDATA = do_array_in ("getclustermedian", "DATA", DATA, PyArray_DOUBLE))) goto err;
     if (!(aMASK = do_array_in ("getclustermedian", "MASK", MASK, PyArray_LONG))) goto err;
     if (!(aCLUSTERID = do_array_in ("getclustermedian", "CLUSTERID", CLUSTERID, PyArray_LONG))) goto err;
-    NROWS = get_fortran_dim(aDATA, 1);
-    NCOLUMNS = get_fortran_dim(aDATA, 2);
+    NROWS = aDATA->dimensions[0];
+    NCOLUMNS = aDATA->dimensions[1];
     eDATA[0] = NROWS;
     eDATA[1] = NCOLUMNS;
     eMASK[0] = NROWS;
@@ -1293,41 +1074,23 @@ cluster_getclustermedian (PyObject* unused, PyObject* args) {
     eCDATA[1] = ((1-TRANSPOSE)*NCOLUMNS+TRANSPOSE*NCLUSTERS);
     eCMASK[0] = ((1-TRANSPOSE)*NCLUSTERS+TRANSPOSE*NROWS);
     eCMASK[1] = ((1-TRANSPOSE)*NCOLUMNS+TRANSPOSE*NCLUSTERS);
-    if (!do_size_check ("getclustermedian", "DATA", aDATA, 2, eDATA, keyoption & MIRROR_OPTION)) goto err;
-    if ((keyoption & TRANSPOSE_OPTION) && (aDATA->nd > 1)) {
-        pyarray_value = aDATA;
-        aDATA = transpose_array ("getclustermedian", "DATA", pyarray_value);
-        Py_DECREF(pyarray_value);
-        if(!aDATA) goto err;
-    }
+    if (!do_size_check ("getclustermedian", "DATA", aDATA, 2, eDATA)) goto err;
     pyarray_value = aDATA;
     aDATA = make_contiguous ("getclustermedian", "DATA", pyarray_value);
     Py_DECREF(pyarray_value);
     if(!aDATA) goto err;
-    if (!do_size_check ("getclustermedian", "MASK", aMASK, 2, eMASK, keyoption & MIRROR_OPTION)) goto err;
-    if ((keyoption & TRANSPOSE_OPTION) && (aMASK->nd > 1)) {
-        pyarray_value = aMASK;
-        aMASK = transpose_array ("getclustermedian", "MASK", pyarray_value);
-        Py_DECREF(pyarray_value);
-        if(!aMASK) goto err;
-    }
+    if (!do_size_check ("getclustermedian", "MASK", aMASK, 2, eMASK)) goto err;
     pyarray_value = aMASK;
     aMASK = make_contiguous ("getclustermedian", "MASK", pyarray_value);
     Py_DECREF(pyarray_value);
     if(!aMASK) goto err;
-    if (!do_size_check ("getclustermedian", "CLUSTERID", aCLUSTERID, 1, eCLUSTERID, keyoption & MIRROR_OPTION)) goto err;
-    if ((keyoption & TRANSPOSE_OPTION) && (aCLUSTERID->nd > 1)) {
-        pyarray_value = aCLUSTERID;
-        aCLUSTERID = transpose_array ("getclustermedian", "CLUSTERID", pyarray_value);
-        Py_DECREF(pyarray_value);
-        if(!aCLUSTERID) goto err;
-    }
+    if (!do_size_check ("getclustermedian", "CLUSTERID", aCLUSTERID, 1, eCLUSTERID)) goto err;
     pyarray_value = aCLUSTERID;
     aCLUSTERID = make_contiguous ("getclustermedian", "CLUSTERID", pyarray_value);
     Py_DECREF(pyarray_value);
     if(!aCLUSTERID) goto err;
-    if (!(aCDATA = do_array_create ("getclustermedian", "CDATA", PyArray_DOUBLE, 2, eCDATA, keyoption&MIRROR_OPTION))) goto err;
-    if (!(aCMASK = do_array_create ("getclustermedian", "CMASK", PyArray_LONG, 2, eCMASK, keyoption&MIRROR_OPTION))) goto err;
+    if (!(aCDATA = do_array_create ("getclustermedian", "CDATA", PyArray_DOUBLE, 2, eCDATA))) goto err;
+    if (!(aCMASK = do_array_create ("getclustermedian", "CMASK", PyArray_LONG, 2, eCMASK))) goto err;
     ppaDATA = (double**)malloc((size_t)NROWS*sizeof(double*));
     ppaMASK = (long**)malloc((size_t)NROWS*sizeof(long*));
     ppaCDATA = (double**)malloc((size_t)((1-TRANSPOSE)*NCLUSTERS+TRANSPOSE*NROWS)*sizeof(double*));
@@ -1383,17 +1146,15 @@ static struct PyMethodDef cluster_methods[] = {
    {"clusterdistance", (PyCFunction) cluster_clusterdistance, METH_VARARGS, cluster_clusterdistance__doc__},
    {"getclustermean", (PyCFunction) cluster_getclustermean, METH_VARARGS, cluster_getclustermean__doc__},
    {"getclustermedian", (PyCFunction) cluster_getclustermedian, METH_VARARGS, cluster_getclustermedian__doc__},
-   {"set_pyfort_option", (PyCFunction) set_pyfort_option, METH_VARARGS, 
-           "set_pyfort_option (value) sets default value of option keyword."},
    {NULL,          NULL, 0, NULL}/* sentinel */
 };
 
 static char cluster_module_documentation[] =
-"Fortran interface module cluster";
+"C interface module cluster";
 
 void initcluster(void)
 {
-        PyObject *m, *d, *j;
+        PyObject *m, *d;
  
         import_array ();
         m = Py_InitModule4("cluster", cluster_methods,
@@ -1403,22 +1164,8 @@ void initcluster(void)
         d = PyModule_GetDict(m);
         ErrorObject = PyString_FromString("cluster.error");
         PyDict_SetItemString(d, "error", ErrorObject);
-        j = PyInt_FromLong((long) TRANSPOSE_OPTION);
-        PyDict_SetItemString(d, "TRANSPOSE", j);
-        Py_XDECREF(j);
-        j = PyInt_FromLong((long) MIRROR_OPTION);
-        PyDict_SetItemString(d, "MIRROR", j);
-        Py_XDECREF(j);
-        j = PyInt_FromLong(0L);
-        PyDict_SetItemString(d, "NONE", j);
-        Py_XDECREF(j);
 
         if (PyErr_Occurred()) {
             Py_FatalError("can't initialize module cluster");
         }
 }
-
-/* C++ trailer */
-#ifdef __CPLUSCPLUS__
-}
-#endif

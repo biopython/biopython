@@ -56,7 +56,7 @@ nfound is the number of times the optimal solution was found."""
   x = cluster.kcluster(nclusters,data,mask,weight,transpose,npass,method,dist)
   return x
 
-def treecluster(data,mask=None,weight=None,applyscale=0,transpose=0,dist='e',method='m'):
+def treecluster(data=None,mask=None,weight=None,applyscale=0,transpose=0,dist='e',method='m',distancematrix=None):
   """returns tree, linkdist
 
 This function implements the pairwise single, complete, centroid, and
@@ -89,6 +89,15 @@ method=='s': Single pairwise linkage
 method=='m': Complete (maximum) pairwise linkage (default)
 method=='c': Centroid linkage
 method=='a': Average pairwise linkage
+The 2D array distancematrix, which is square and symmetric, is the distance
+matrix. Either data or distancematrix should be None. If distancematrix==None,
+the hierarchical clustering solution is calculated from the gene expression
+data stored in the argument data. If data==None, the hierarchical clustering
+solution is calculated from the distance matrix instead. Pairwise centroid-
+linkage clustering can be calculated only from the gene expression data and
+not from the distance matrix. Pairwise single-, maximum-, and average-linkage
+clustering can be calculated from either the gene expression data or from
+the distance matrix.
 
 Return values:
 tree is an (nobject x 2) array describing the hierarchical clustering
@@ -98,19 +107,31 @@ tree is an (nobject x 2) array describing the hierarchical clustering
   -(nobjects-1).
 linkdist is a vector with (nobjects-1) elements containing the distances
 between the two subnodes that are joined at each node."""
-  (n,m) = shape(data)
-  if dist not in ['e','b','h','c','a','u','x','s','k']:
-    print "Error in treecluster: unknown distance function specified (dist='"+dist+"')"
+  if data!=None and distancematrix!=None:
+    print "Use either data or distancematrix, do not use both"
     return
-  if transpose: transpose = 1
-  if not mask: mask = ones((n,m))
-  if not weight:
-    if transpose: weight=ones(n,'d')
-    else: weight=ones(m,'d')
-  if not method in ['c','s','m','a']:
-    print "Error in treecluster: keyword method should be 'c', 's', 'm', or 'a'"
-    return
-  return cluster.treecluster(data,mask,weight,applyscale,transpose,dist,method)
+  if data!=None:
+    if not method in ['c','s','m','a']:
+      print "Error in treecluster: keyword method should be 'c', 's', 'm', or 'a'"
+      return
+    if dist not in ['e','b','h','c','a','u','x','s','k']:
+      print "Error in treecluster: unknown distance function specified (dist='"+dist+"')"
+      return
+    if transpose: transpose = 1
+    (n,m) = shape(data)
+    if not mask: mask = ones((n,m))
+    if not weight:
+      if transpose: weight=ones(n,'d')
+      else: weight=ones(m,'d')
+    return cluster.treecluster(data,mask,weight,applyscale,transpose,dist,method,0)
+  if distancematrix!=None:
+    if not method in ['s','m','a']:
+      print "Error in treecluster: keyword method should be 's', 'm', or 'a'"
+      print "(single-, maximum-, or average-linkage clustering). Centroid-"
+      print "linkage clustering needs the original gene expression data"
+      print "and cannot be performed using the distance matrix alone"
+      return
+    return cluster.treecluster(distancematrix,mask,weight,applyscale,transpose,dist,method,1)
 
 def somcluster(data,mask=None,weight=None,transpose=0,nxgrid=2,nygrid=1,inittau=0.02,niter=1,dist='e'):
   """returns clusterid, celldata
