@@ -20,24 +20,51 @@ System Requirements
 -------------------
 
 o Python 1.52 or above
-o distutils
+  http://www.python.org/
+o Distutils 0.8.2
+  http://www.python.org/sigs/distutils-sig/
+  0.9 may not work, due to differences in specifying extension packages.
+o Numerical Python 15.3 (optional)
+  http://numpy.sourceforge.net/
+  This is only required if you want to use the classification tools.
 
 
 
 Installation
 ------------
 
-XXX distutils
-
-XXX out of date
-Currently, this package is 100% pure Python so there is nothing to
-compile.  All you need to do is add the directory where 'biopython' is
-installed to the $PYTHONPATH environment variable.  All the libraries
-should be available under the 'Bio' package.
+First, make sure Python and Distutils are installed correctly.
 
 
-XXX to test
-python br_regrtest.py
+python setup.py build
+
+
+
+python setup.py install
+
+
+
+
+Testing
+-------
+
+Biopython includes a suite of regression tests to check if
+everything's running correctly.  To do the tests, go to the Tests/
+die
+rectory in the distribution and run br_regrtest.py:
+
+  riboweb:~/biopython/Tests> python br_regrtest.py
+  test_Enzyme
+  test_Fasta
+  test_Fasta2
+  test_File
+  test_KeyWList
+  5 tests OK.
+  riboweb:~/biopython/Tests> 
+
+
+XXX We need to get this more closely integrated with the installation
+process.
 
 
 
@@ -72,7 +99,7 @@ NEWS          Release notes and news
 README        This file
 Scripts/      Miscellaneous, possibly useful, standalone scripts
 Tests/        Regression testing code
-setup.py      
+setup.py      Installation file.
 
 
 
@@ -83,7 +110,6 @@ To Do
 
 - Annotations on sequences
 - BLAST additions
-  o write Parser for NCBIWWW
   o PSI-BLAST on WWW
 - parsers
   o Enzyme

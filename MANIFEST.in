@@ -12,11 +12,16 @@ recursive-include Tests *
 global-exclude CVS
 global-exclude CVS/*
 
+exclude Tests/Amino
 exclude Tests/Blast
+exclude Tests/Enzymes
 exclude Tests/Fasta
+exclude Tests/Nucleic
 exclude Tests/Prosite
 exclude Tests/SwissProt
 exclude Tests/UnitTests
+exclude Tests/UnitTests/Prosite
 exclude Tests/UnitTests/Save
+exclude Tests/UnitTests/Seq
 exclude Tests/output
 exclude Tests/Blast/bt008*    # file too large

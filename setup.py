@@ -10,7 +10,7 @@ except ImportError:
     sys.exit(0)
 
 setup(name='biopython', 
-      version='0.1-d1',
+      version='0.90-d01',
       author='The Biopython Consortium',
       author_email='biopython@biopython.org',
       url='http://www.bipoython.org/',
