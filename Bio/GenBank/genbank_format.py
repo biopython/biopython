@@ -404,7 +404,8 @@ feature_key_names = (
     "5'clip",           # 5'-most region of a precursor transcript removed'
                         # in processing
     "5'UTR",            # 5' untranslated region (leader)'
-    "-"                 # (hyphen)      Placeholder
+    "-",                # (hyphen)      Placeholder
+    "snoRNA"            # small nucleolar RNA
 )
 valid_feature_keys = map(Martel.Str, feature_key_names)
 
