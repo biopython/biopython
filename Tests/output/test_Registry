@@ -12,6 +12,6 @@ Retrieve sequences using a GenBank dictionary-like interface. ... ok
 Search for ids using the GenBank search_for function. ... ok
 
 ----------------------------------------------------------------------
-Ran 11 tests in 108.319s
+Ran 11 tests in 103.455s
 
 OK

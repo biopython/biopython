@@ -12,7 +12,11 @@ IMPORTANT: Biopython now works with Python version >= 2.3
 NEW: Bio.Nexus -- thanks to Frank Kauff
 Bio.Nexus is a Nexus file parser. Nexus is  a common format for phylogenetic trees.
 
-Bio.PDB -- thanks to Thomas Hamelryck
+NEW: CAPS module -- Thanks to Jonathan Taylor
+
+NEW: Restriction enzyme package contributed by Frederic Sohm. This includes classes for
+manipulating enzymes, updating from Rebase, as well as documentation and Tests.
+CHANGED: Bio.PDB -- thanks to Thomas Hamelryck
 Added atom serial number.
 Epydoc style documentation.
 Added secondary structure support (through DSSP)
@@ -28,7 +32,7 @@ Various additions to Polypeptide.
 Various bug corrections in Vector.
 Lots of smaller bug corrections and additional features
 
-MutableSeq -- thanks to Michiel De Hoon
+CHANGED: MutableSeq -- thanks to Michiel De Hoon
 Added the functions 'complement' and 'reverse_complement' to Bio.Seq's Seq and
 MutableSeq objects. Similar functions previous existed in various locations in
 BioPython:
@@ -39,6 +43,7 @@ when used.
 The functions complement and reverse_complement, when applied to a Seq object,
 will return a new Seq object. The same function applied to a MutableSeq object
 will modify the MutableSeq object itself, and don't return anything.
+
 
 ===================================================================
 
