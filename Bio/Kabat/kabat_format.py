@@ -35,6 +35,8 @@ FEATURE_QUALIFIER_INDENT = 21
 
 # --- first set up some helper constants and functions
 blank_space = Martel.MaxRepeat(Martel.Str(" "), 1, 80 )
+lower_alpha = Martel.Any( "abcdefghijklmnopqrstuvwxyz" )
+alpha = Martel.NoCase( lower_alpha )
 date = Martel.Group("date",
                     Martel.Re("[-\w]+"))
 amino_3_letter_codes = [ 'ALA', 'CYS', 'ASP', 'GLU', 'PHE', 'GLY', 'PHE', 'GLY',\
@@ -49,109 +51,80 @@ nucleotides = 'gcat-'
 amino_alts = map( Martel.Str, amino_3_letter_codes )
 
 codon = Martel.Group( "codon", Martel.MaxRepeat( Martel.Any( nucleotides ), 1, 3 ) )
-amino_3_letter_code = Martel.Group( "amino_3_letter_code", \
-    reduce( Martel.Alt, amino_alts ) )
+amino_3_letter_code = reduce( Martel.Alt, amino_alts )
 amino_1_letter_code = Martel.Group( "amino_1_letter_code", \
     Martel.Any( amino_1_letter_codes ) )
-residue = Martel.Group( "residue",
-                           blank_space +
-                           codon +
-                           blank_space +
-                           amino_3_letter_code +
-                           blank_space +
-                           amino_1_letter_code )
+amino_codes = Martel.Opt( amino_3_letter_code + blank_space + amino_1_letter_code )
+
+residue =   blank_space + codon + blank_space + amino_codes
 
 
 kabatid = Martel.Group("kabatid",
                     Martel.Rep1(Martel.Integer()))
-pubmed_num = Martel.Group("pubmed_num",
-                    Martel.Rep1(Martel.Integer()))
-residue_num = Martel.Group("residue_num",
-                    Martel.Rep1(Martel.Integer()))
-kabat_num = Martel.Group("kabat_num",
-                    Martel.Rep1(Martel.Integer()))
-id_line = Martel.Group("id_line",
-                          Martel.Str("KADBID") +
-                          blank_space +
-                          kabatid +
-                          Martel.ToEol() )
-creation_date_line = Martel.Group( "creation_date_line", \
-                              Martel.Str( "CREATD" ) +
-                              blank_space +
-                              Martel.ToEol("creation_date") )
-last_mod_date_line = Martel.Group( "last_mod_date_line", \
-                              Martel.Str( "LMODIF" ) +
-                              blank_space +
-                              Martel.ToEol("last_mod_date") )
-definition_line = Martel.Group( "definition_line", \
-                              Martel.Str( "DEFINI" ) +
-                              blank_space +
-                              Martel.ToEol( "definition" ) )
-species_line = Martel.Group( "species_line", \
-                              Martel.Str( "SPECIE" ) +
-                              blank_space +
-                              Martel.ToEol( "species" ) )
-amino_acid_sequence_name_line = Martel.Group( "amino_acid_sequence_name_line",
-                                Martel.Str( "AANAME" ) +
-                                blank_space +
-                                Martel.ToEol( "amino_acid_sequence_name" ) )
+pubmed_num = Martel.Rep1(Martel.Integer())
+residue_num = Martel.Rep1(Martel.Integer())
+kabat_num = Martel.Rep1(Martel.Integer()) + Martel.Opt( alpha )
+id_line = Martel.Str("KADBID") + \
+          blank_space + \
+          kabatid + \
+          Martel.ToEol()
+creation_date_line =  Martel.Str( "CREATD" ) + \
+                      blank_space + \
+                      Martel.ToEol("creation_date")
+last_mod_date_line =  Martel.Str( "LMODIF" ) + \
+                      blank_space + \
+                      Martel.ToEol("last_mod_date")
+definition_line = Martel.Str( "DEFINI" ) + \
+                  blank_space + \
+                  Martel.ToEol( "definition" )
+species_line = Martel.Str( "SPECIE" ) + \
+               blank_space + \
+               Martel.ToEol( "species" )
+amino_acid_sequence_name_line = Martel.Str( "AANAME" ) + \
+                                blank_space + \
+                                Martel.ToEol( "amino_acid_sequence_name" )
 
-nucleotide_sequence_name_line = Martel.Group( "nucleotide_sequence_name_line",
-                                Martel.Str( "NNNAME" ) +
-                                blank_space +
-                                Martel.ToEol( "nucleotide_sequence_name" ) )
-amino_acid_ref_author_line = Martel.Group( "amino_acid_ref_author_line",
-                                Martel.Str( "AAREFA" ) +
-                                Martel.ToEol( "amino_acid_ref_author" ) )
-amino_acid_ref_journal_line = Martel.Group( "amino_acid_ref_journal_line",
-                                Martel.Str( "AAREFJ" ) +
-                                Martel.ToEol( "amino_acid_ref_journal" ) )
-amino_acid_ref_pubmed_line = Martel.Group( "amino_acid_ref_pubmed_line",
-                                Martel.Str( "AAPUBM" ) +
-                                Martel.ToEol( "amino_acid_ref_pubmed" ) )
-nucleotide_ref_author_line = Martel.Group( "nucleotide_ref_author_line",
-                                Martel.Str( "NNREFA" ) +
-                                Martel.ToEol( "nucleotide_ref_author" ) )
-nucleotide_ref_journal_line = Martel.Group( "nucleotide_ref_journal_line",
-                                Martel.Str( "NNREFJ" ) +
-                                Martel.ToEol( "nucleotide_ref_journal" ) )
-nucleotide_ref_pubmed_line = Martel.Group( "nucleotide_ref_pubmed_line",
-                                Martel.Str( "NNPUBM" ) +
-                                Martel.ToEol("nucleotide_ref_pubmed") )
+nucleotide_sequence_name_line = Martel.Str( "NNNAME" ) + \
+                                blank_space + \
+                                Martel.ToEol( "nucleotide_sequence_name" )
+amino_acid_ref_author_line = Martel.Str( "AAREFA" ) + \
+                             Martel.ToEol( "amino_acid_ref_author" )
+amino_acid_ref_journal_line = Martel.Str( "AAREFJ" ) + \
+                              Martel.ToEol( "amino_acid_ref_journal" )
+amino_acid_ref_pubmed_line = Martel.Str( "AAPUBM" ) +  \
+                             Martel.ToEol( "amino_acid_ref_pubmed" )
+nucleotide_ref_author_line = Martel.Str( "NNREFA" ) +  \
+                             Martel.ToEol( "nucleotide_ref_author" )
+nucleotide_ref_journal_line = Martel.Str( "NNREFJ" ) + \
+                              Martel.ToEol( "nucleotide_ref_journal" )
+nucleotide_ref_pubmed_line = Martel.Str( "NNPUBM" ) +  \
+                             Martel.ToEol("nucleotide_ref_pubmed")
 annotation_key = Martel.Group( "annotation_key", Martel.RepN( Martel.Re( "\w" ), 4 ) )
 annotation_val = Martel.Group( "annotation_val", Martel.ToEol() )
-annotation_item = Martel.Group( "annotation_item",
-                                annotation_key +
-                                blank_space +
-                                annotation_val )
+annotation_item = annotation_key + \
+                  blank_space + \
+                  annotation_val
 
-annotation_line = Martel.Group( "annotation_line",
-                                Martel.Str( "ANNOTA" ) +
-                                blank_space + annotation_item )
-residue_line = Martel.Group( "residue_line",
-                             Martel.Str( "SEQTPA" ) +
-                             blank_space +
-                             residue_num +
-                             blank_space +
-                             kabat_num +
-                             Martel.Opt( residue ) +
-                             Martel.ToEol( ) )
-kabat_record_end_line =      Martel.Group( "record_end",
-                             Martel.Str( "RECEND" ) +
-                             Martel.ToEol() +
-                             Martel.ToEol() +
-                             Martel.ToEol())
-amino_acid_ref = Martel.Group( "amino_acid_ref",
-                               amino_acid_ref_author_line +
-                               amino_acid_ref_journal_line +
-                               amino_acid_ref_pubmed_line )
-nucleotide_ref = Martel.Group( "nucleotide_ref",
-                               nucleotide_ref_author_line +
-                               nucleotide_ref_journal_line +
-                               nucleotide_ref_pubmed_line )
-residue_lines = Martel.Group( "residue_lines", Martel.Rep( residue_line ) )
+annotation_line = Martel.Str( "ANNOTA" ) + \
+                  blank_space + annotation_item
+residue_line = Martel.Str( "SEQTPA" ) + \
+               blank_space + \
+               residue_num + \
+               blank_space + \
+               kabat_num + \
+               Martel.Opt( residue ) + \
+               Martel.ToEol( )
+kabat_record_end_line = Martel.Str( "RECEND" ) + \
+                        Martel.ToEol()
+amino_acid_ref = amino_acid_ref_author_line + \
+                 amino_acid_ref_journal_line + \
+                 amino_acid_ref_pubmed_line
+nucleotide_ref = nucleotide_ref_author_line + \
+                 nucleotide_ref_journal_line + \
+                 nucleotide_ref_pubmed_line
+residue_lines = Martel.Rep( residue_line )
 annotation = Martel.Group( "annotation", Martel.Rep( annotation_line ) )
-refs = Martel.Group( "refs", Martel.Rep1( amino_acid_ref | nucleotide_ref ) )
+refs = Martel.Rep1( amino_acid_ref | nucleotide_ref )
 kabat_record = id_line + creation_date_line + last_mod_date_line + \
                definition_line + species_line + amino_acid_sequence_name_line + \
                nucleotide_sequence_name_line + refs + annotation +  \

@@ -5,10 +5,10 @@
 
 from Bio.SeqFeature import Reference
 from Bio.Seq import MutableSeq
-"""Hold GenBank data in a straightforward format.
+"""Hold Kabat data in a straightforward format.
 
 classes:
-o Record - All of the information in a GenBank record.
+o Record - All of the information in a Kabat record.
 o KabatReference - hold reference data for a record.
 o Annotation - Hold the information in a Feature Table.
 """
@@ -27,7 +27,7 @@ class Record:
     """Hold Kabat information in a format similar to the original record.
 
     The Record class is meant to make data easy to get to when you are
-    just interested in looking at GenBank data.
+    just interested in looking at Kabat data.
 
     Attributes:
     kabatid - id of the sequence in the Kabat database
