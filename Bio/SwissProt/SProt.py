@@ -408,6 +408,8 @@ class _Scanner:
             self._scan_rp(uhandle, consumer)
             self._scan_rc(uhandle, consumer)
             self._scan_rx(uhandle, consumer)
+            # ws:2001-12-05 added, for record with RL before RA
+            self._scan_rl(uhandle, consumer)
             self._scan_ra(uhandle, consumer)
             self._scan_rt(uhandle, consumer)
             self._scan_rl(uhandle, consumer)
@@ -508,7 +510,8 @@ class _RecordConsumer(AbstractConsumer):
         self.data.sequence_length = int(cols[4])
 
         # data class can be 'STANDARD' or 'PRELIMINARY'
-        if self.data.data_class not in ['STANDARD', 'PRELIMINARY']:
+        # ws:2001-12-05 added IPI
+        if self.data.data_class not in ['STANDARD', 'PRELIMINARY', 'IPI']: 
             raise SyntaxError, "Unrecognized data class %s in line\n%s" % \
                   (self.data.data_class, line)
         # molecule_type should be 'PRT' for PRoTein
@@ -525,13 +528,29 @@ class _RecordConsumer(AbstractConsumer):
         uprline = string.upper(line)
         if string.find(uprline, 'CREATED') >= 0:
             cols = string.split(line)
-            self.data.created = cols[1], int(self._chomp(cols[3]))
+            # ws:2001-12-05 prevent e.g. (IPIrel. , created)
+            # !no number given! from crashing
+            if self._chomp(cols[3]) == '':                            #<=
+                self.data.created = cols[1], 0                        #<=
+	    else:	                                              #<=
+                self.data.created = cols[1], int(self._chomp(cols[3]))
         elif string.find(uprline, 'LAST SEQUENCE UPDATE') >= 0:
             cols = string.split(line)
-            self.data.sequence_update = cols[1], int(self._chomp(cols[3]))
+            # ws:2001-12-05 prevent e.g. (IPIrel. , created)
+            # !no number given! from crashing
+            if self._chomp(cols[3]) == '':                            #<=
+                self.data.sequence_update = cols[1], 0                #<=
+	    else:                                                     #<=
+                self.data.sequence_update = cols[1], int(self._chomp(cols[3]))
         elif string.find(uprline, 'LAST ANNOTATION UPDATE') >= 0:
             cols = string.split(line)
-            self.data.annotation_update = cols[1], int(self._chomp(cols[3]))
+            # ws:2001-12-05 prevent e.g. (IPIrel. , created)
+            # !no number given! from crashing
+            if self._chomp(cols[3]) == '':                               #<=
+                self.data.annotation_update = cols[1], 0                 #<=
+	    else:                                                        #<=
+                self.data.annotation_update = cols[1], \
+                                              int(self._chomp(cols[3]))  #<=
         else:
             raise SyntaxError, "I don't understand the date line %s" % line
     
