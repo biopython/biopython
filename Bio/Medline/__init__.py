@@ -161,6 +161,9 @@ class Iterator:
         self._uhandle = File.UndoHandle(handle)
         self._parser = parser
 
+    def __iter__(self):
+        return self
+
     def next(self):
         """next(self) -> object
 
@@ -186,7 +189,7 @@ class Iterator:
             lines.append(line)
             
         if not lines:
-            return None
+            raise StopIteration
             
         data = string.join(lines, '')
         if self._parser is not None:
