@@ -43,26 +43,26 @@ c     A callback function returns the gap penalties.
 All the different alignment functions are contained in an object
 "align".  For example:
 
-    >>> from Bio.Align import pairwise
-    >>> alignments = pairwise.align.globalxx("ACCGT", "ACG")
+    >>> from Bio import pairwise2
+    >>> alignments = pairwise2.align.globalxx("ACCGT", "ACG")
 
 will return a list of the alignments between the two strings.  The
 parameters of the alignment function depends on the function called.
 Some examples:
 
->>> pairwise.align.globalxx("ACCGT", "ACG")
+>>> pairwise2.align.globalxx("ACCGT", "ACG")
     # Find the best global alignment between the two sequences.
     # Identical characters are given 1 point.  No points are deducted
     # for mismatches or gaps.
     
->>> pairwise.align.localxx("ACCGT", "ACG")
+>>> pairwise2.align.localxx("ACCGT", "ACG")
     # Same thing as before, but with a local alignment.
     
->>> pairwise.align.globalmx("ACCGT", "ACG", 2, -1)
+>>> pairwise2.align.globalmx("ACCGT", "ACG", 2, -1)
     # Do a global alignment.  Identical characters are given 2 points,
     # 1 point is deducted for each non-identical character.
 
->>> pairwise.align.globalms("ACCGT", "ACG", 2, -1, -.5, -.1)
+>>> pairwise2.align.globalms("ACCGT", "ACG", 2, -1, -.5, -.1)
     # Same as above, except now 0.5 points are deducted when opening a
     # gap, and 0.1 points are deducted when extending it.
 
@@ -447,31 +447,38 @@ def _make_score_matrix_fast(
         for col in range(1, lenB):
             # Calculate the score that would occur by extending the
             # alignment without gaps.
-            best_score = score_matrix[row-1][col-1]
-            best_score_rint = rint(best_score)
-            best_index = [(row-1, col-1)]
-
+            nogap_score = score_matrix[row-1][col-1]
+            
             # Check the score that would occur if there were a gap in
             # sequence A.
             if col > 1:
-                score = row_cache_score[row-1]
-                score_rint = rint(score)
-                if score_rint == best_score_rint:
-                    best_index = best_index + row_cache_index[row-1]
-                elif score_rint > best_score_rint:
-                    best_score, best_score_rint = score, score_rint
-                    best_index = row_cache_index[row-1]
-
+                row_score = row_cache_score[row-1]
+            else:
+                row_score = nogap_score - 1   # Make sure it's not the best.
             # Check the score that would occur if there were a gap in
             # sequence B.  
             if row > 1:
-                score = col_cache_score[col-1]
-                score_rint = rint(score)
-                if score_rint == best_score_rint:
-                    best_index = best_index + col_cache_index[col-1]
-                elif score_rint > best_score_rint:
-                    best_score, best_score_rint = score, score_rint
-                    best_index = col_cache_index[col-1]
+                col_score = col_cache_score[col-1]
+            else:
+                col_score = nogap_score - 1
+
+            best_score = max(nogap_score, row_score, col_score)
+            best_score_rint = rint(best_score)
+            best_index = []
+            if best_score_rint == rint(nogap_score):
+                best_index.append((row-1, col-1))
+            if best_score_rint == rint(row_score):
+                best_index.extend(row_cache_index[row-1])
+            if best_score_rint == rint(col_score):
+                best_index.extend(col_cache_index[col-1])
+
+            # Set the score and traceback matrices.
+            score = best_score + match_fn(sequenceA[row], sequenceB[col])
+            if not align_globally and score < 0:
+                score_matrix[row][col] = 0
+            else:
+                score_matrix[row][col] = score
+            trace_matrix[row][col] = best_index
 
             # Update the cached column scores.  The best score for
             # this can come from either extending the gap in the
@@ -509,13 +516,6 @@ def _make_score_matrix_fast(
                     row_cache_index[row-1] = row_cache_index[row-1] + \
                                              [(row-1, col-1)]
                     
-            # Set the score and traceback matrices.
-            score = best_score + match_fn(sequenceA[row], sequenceB[col]) 
-            if not align_globally and score < 0:
-                score_matrix[row][col] = 0
-            else:
-                score_matrix[row][col] = score
-            trace_matrix[row][col] = best_index
     return score_matrix, trace_matrix
     
 def _recover_alignments(sequenceA, sequenceB, starts,
