@@ -30,7 +30,10 @@ class Residue(Entity):
     # Special methods
 
     def __repr__(self):
-        return "<Residue het=%s resseq=%s icode=%s>" % self.get_id()
+        resname=self.get_resname()
+        hetflag, resseq, icode=self.get_id()
+        full_id=(resname, hetflag, resseq, icode)
+        return "<Residue het=%s resseq=%s icode=%s>" % full_id
 
     # Private methods
 
@@ -117,7 +120,10 @@ class DisorderedResidue(DisorderedEntityWrapper):
         DisorderedEntityWrapper.__init__(self, id)
 
     def __repr__(self):
-        return "<DisorderedResidue het=%s resseq=%i icode=%s>" % self.get_id()
+        resname=self.get_resname()
+        hetflag, resseq, icode=self.get_id()
+        full_id=(resname, hetflag, resseq, icode)
+        return "<DisorderedResidue %s het=%s resseq=%i icode=%s>" % full_id
 
     def add(self, atom):
         residue=self.disordered_get()

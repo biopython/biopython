@@ -82,7 +82,7 @@ class HSExposure:
         # b is centered at the origin!
         return b
 
-    def _get_data_list_from_cb(self, residue_list):
+    def _get_rotran_list_from_cb(self, residue_list):
         """
         Return a list of (translation, rotation, ca, residue)
         tuples (using CB). 
@@ -99,7 +99,7 @@ class HSExposure:
         Otherwise it lies in the backbone sphere.
         """
         # list of (translation, rotation, ca, residue) tuples
-        data_list=[]
+        rotran_list=[]
         for residue in residue_list:
             if is_aa(residue):
                 ca=residue["CA"]
@@ -116,10 +116,10 @@ class HSExposure:
                 # Rotate CB-CA vector to unit vector along Z
                 rotation=rotmat(cb_ca, self.unit_z)
                 translation=ca_coord
-                data_list.append((translation, rotation, ca, residue))
-        return data_list
+                rotran_list.append((translation, rotation, ca, residue))
+        return rotran_list
 
-    def _get_data_list_from_ca(self, structure):
+    def _get_rotran_list_from_ca(self, structure):
         """
         Return a list of (translation, rotation, ca, residue)
         tuples (using CA). 
@@ -137,7 +137,7 @@ class HSExposure:
         Otherwise it lies in the backbone sphere.
         """
         # list of (translation, rotation, ca, residue) tuples
-        data_list=[]
+        rotran_list=[]
         ppb=PPBuilder()
         for pp in ppb.build_peptides(structure):
             ca_list=[]
@@ -155,94 +155,114 @@ class HSExposure:
                 # rotate cb to unit vector along z
                 rotation=rotmat(cb_v, self.unit_z)
                 translation=ca2.get_coord()
-                data_list.append((translation, rotation, ca2, r))
-        return data_list
+                rotran_list.append((translation, rotation, ca2, r))
+        return rotran_list
 
-    def _calc_hs_exposure(self, data_list, radius):
+    def _calc_hs_exposure(self, rotran_list, residue_list, radius):
+        """
+        Calculate for each residue how many CA atoms are present in 
+        the half sphere in the side chain direction, and in the half
+        sphere on the opposite side.'
+        """
         d={}
-        for tran1, rot1, ca1, r1 in data_list:
+        for tran, rot, ca1, r1 in rotran_list:
             hs_sidechain=0
-            hs_backbone=0
-            for tran2, rot2, ca2, r2 in data_list:
+            hs_mainchain=0
+            for r2 in residue_list:
+                if not is_aa(r2):
+                    continue
                 if r1 is r2:
                     continue
+                ca2=r2["CA"]
                 if (ca1-ca2)<radius:
-                    ca_coord2=ca2.get_coord()
-                    rot_coord=matrixmultiply(rot1, ca_coord2-tran1)
+                    neighbor_coord=ca2.get_coord()
+                    # Rotate neighbor to the CB-CA direction
+                    rot_coord=matrixmultiply(rot, neighbor_coord-tran)
                     if rot_coord[2]>0:
+                        # in side chain half sphere
                         hs_sidechain+=1
                     else:
-                        hs_backbone+=1
-            d[r1]=(hs_sidechain, hs_backbone)
+                        # in main chain half sphere
+                        hs_mainchain+=1
+            d[r1]=(hs_sidechain, hs_mainchain)
         return d
     
-    def calc_ca_exposure(self, structure, radius=12.0):
-        data_list=self._get_data_list_from_ca(structure)
-        return self._calc_hs_exposure(data_list, radius)
-                
-    def calc_cb_exposure(self, structure, radius=12.0):
+    def calc_hs_exposure(self, structure, radius=12.0, option='CB'):
         residue_list=Selection.unfold_entities(structure, 'R')
-        data_list=self._get_data_list_from_cb(residue_list)
-        return self._calc_hs_exposure(data_list, radius)
+        if option=='CA3':
+            rotran_list=self._get_rotran_list_from_ca(structure)
+        elif option=='CB':
+            rotran_list=self._get_rotran_list_from_cb(residue_list)
+        else:
+            raise "Options: CA3 or CB"
+        return self._calc_hs_exposure(rotran_list, residue_list, radius)
 
-def calc_simple_exposure(residue_list, radius):
-    """
-    A residue's exposure is defined as the number of CA atoms around 
-    that residues CA atom. A dictionary is returned that uses a Residue
-    object as key, and the residue exposure as corresponding value.
-    """
-    ca_list=[]
-    # Extract the CA coordinates
-    for r in residue_list:
-        if is_aa(r) and r.has_id("CA"):
-            ca=r["CA"]
-            ca_list.append((ca, r))
-    # Calculate exposure
-    d={}
-    for ca1, res1 in ca_list:
-        for ca2, res2 in ca_list:
-            if ca1 is ca2:
-                continue
-            if (ca1-ca2)<=radius:
-                if d.has_key(res1):
-                    d[res1]=d[res1]+1
-                else:
-                    d[res1]=1
-    return d
+    def calc_fs_exposure(self, structure, radius=12.0):
+        """
+        A residue's exposure is defined as the number of CA atoms around 
+        that residues CA atom. A dictionary is returned that uses a Residue
+        object as key, and the residue exposure as corresponding value.
+        """
+        residue_list=Selection.unfold_entities(structure, 'R')
+        ca_list=[]
+        # Extract the CA coordinates
+        for r in residue_list:
+            if is_aa(r) and r.has_id("CA"):
+                ca=r["CA"]
+                ca_list.append((ca, r))
+        # Calculate exposure
+        d={}
+        for ca1, res1 in ca_list:
+            for ca2, res2 in ca_list:
+                if ca1 is ca2:
+                    continue
+                if (ca1-ca2)<=radius:
+                    if d.has_key(res1):
+                        d[res1]=d[res1]+1
+                    else:
+                        d[res1]=1
+        return d
 
 
 if __name__=="__main__":
 
     import sys
-    import os
 
-    p=PDBParser(PERMISSIVE=1)
+    p=PDBParser()
     s=p.get_structure('X', sys.argv[1])
 
-    #residue_list=Selection.unfold_entities(s, 'R')
-    #exp_simple=calc_simple_exposure(residue_list, 12.0)
+    RADIUS=13.0
 
     hse=HSExposure()
-    exp=hse.calc_ca_exposure(s, 12.0)
-    #exp=hse.calc_cb_exposure(s, 12.0)
+    exp_ca=hse.calc_hs_exposure(s, RADIUS, option='CA3')
+    exp_cb=hse.calc_hs_exposure(s, RADIUS, option='CB')
+    exp_fs=hse.calc_fs_exposure(s, RADIUS)
 
-    keys=exp.keys()
-    keys.sort()
+    residue_list=Selection.unfold_entities(s, 'R')
 
-    os.system("touch exp_ca3.txt")
+    # Print accessibilities for each residue
+    for r in residue_list:
+        # get the residue info
+        hetflag, resseq, icode=r.get_id()
+        resname=r.get_resname()
 
-    fp=open("exp_ca3.txt", "a")
-    for key in keys:
-        if exp.has_key(key):
-            name=key.get_resname()
-            up, down=exp[key][0], exp[key][1]
-            fp.write("%s %.2f %.2f\n" % (name, up, down))
-    fp.close()
+        # form a "GLY 236 A"-like string to print residue id
+        rid="%s\t%i\t%c " % (resname, resseq, icode)
 
-    print "%s done."  % sys.argv[1]
-    sys.stdout.flush()
+        # CA hs-exposure
+        if exp_ca.has_key(r):
+            print rid, exp_ca[r]
 
-    #hse.write_pymol_script()
+        # CB hs-exposure
+        if exp_cb.has_key(r):
+            print rid, exp_cb[r]
+
+        # Classical sphere coordination number
+        if exp_fs.has_key(r):
+            print rid, exp_fs[r]
+
+        print "--------------------"
+
 
 
 
