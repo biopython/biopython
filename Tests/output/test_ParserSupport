@@ -44,7 +44,8 @@ Running tests on attempt_read_and_call
 Running tests on EventGenerator
 Test the basic callback functionality. ... ok
 Test the ability to pass a finalizer to the consumer. ... ok
-------------------------------------------------------------------------------
-Ran 2 tests in 0.132s
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.172s
 
 OK
