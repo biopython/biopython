@@ -18,7 +18,7 @@
 % (http://www.lysator.liu.se/~alla/dia/dia.html).
 % These diagrams are available from biopython CVS in the original dia 
 % format, which you can easily save as .png format using Dia itself.
-% The two diagrams should be places in an 'images' directory relative
+% The two diagrams should be placed in an 'images' directory relative
 % to the Tutorial.tex file. If you don't want to use Dia, you can get
 % the two png files from:
 %
@@ -67,7 +67,7 @@
 
 \title{Biopython Tutorial and Cookbook}
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg}
-\date{Last Update--3 March 2001}
+\date{Last Update--5 June 2001}
 
 \maketitle
 \tableofcontents
@@ -665,6 +665,7 @@ species names: ['C.irapeanum', 'C.californicum', 'C.fasciculatum',
 \end{verbatim}
 
 \subsection{Making it easier}
+\label{sec:fasta-parsing}
 
 The last section explained all of the nitty gritty of writing a specialized consumer. The flexibility of being able to write your own consumer is very nice, however for many applications it can be overkill. For a simple application, the nice Biopython folks have provided some useful classes that act more like full parsers. So, for quick and dirty applications, these are what you want to look at. 
 
@@ -928,11 +929,27 @@ Hey, everybody loves BLAST right? I mean, geez, how can get it get any easier to
 Fortunately, the Biopython folks know this only too well, so they've developed lots of tools for dealing with BLAST and making things much easier. This section details how to use these tools and do useful things with 'em. 
 
 \subsection{Running BLAST over the internet}
+\label{sec:running-www-blast}
 
-The first step in automating BLASTing is to make everything accessable from python scripts. So, biopython contains code that allows you to run the WWW version of BLAST (\ahrefurl{\url{http://www.ncbi.nlm.nih.gov/BLAST/}}) directly from your python scripts. This is very nice, especially since BLAST can be a real pain to deal with from scripts, especially with the whole BLAST queue thing and the separate results page.
+The first step in automating BLASTing is to make everything accessable
+from python scripts. So, biopython contains code that allows you to
+run the WWW version of BLAST
+(\ahrefurl{\url{http://www.ncbi.nlm.nih.gov/BLAST/}}) directly from
+your python scripts. This is very nice, especially since BLAST can be
+a real pain to deal with from scripts, especially with the whole BLAST
+queue thing and the separate results page. Keeping the BioPython code
+up to date with all of the changes at NCBI is hard enough!
 
 
-The code to deal with the WWW version of BLAST is found in the \verb|Bio.Blast.NCBIWWW| module, and the \verb|blast| function. Let's say we want to BLAST info we have in a FASTA formatted file against the database. First, we need to get the info in the FASTA file. The easiest way to do this is to use the Fasta iterator to get a record:
+The code to deal with the WWW version of BLAST is found in the
+\verb|Bio.Blast.NCBIWWW| module, and the \verb|blast| function. Let's
+say we want to BLAST info we have in a FASTA formatted file against
+the database. First, we need to get the info in the FASTA file. The
+easiest way to do this is to use the Fasta iterator to get a
+record. In this example, we'll just grab the first FASTA record from a 
+file, using an Iterator (section~\ref{sec:fasta-parsing} explains
+FASTA iterators in more detail).
+
 
 \begin{verbatim}
 from Bio import Fasta
@@ -943,59 +960,126 @@ f_iterator = Fasta.Iterator(file_for_blast)
 f_record = f_iterator.next()
 \end{verbatim}
 
-Now that we've got the fasta record, we are ready to blast it. The code to do the simplest possible BLAST (ie. a simple blastn of the FASTA file against all of the non-redundant databases) is:
+Now that we've got the FASTA record, we are ready to blast it. The
+code to do the simplest possible BLAST (a simple blastn of the
+FASTA file against all of the non-redundant databases) is:
 
 \begin{verbatim}
 from Bio.Blast import NCBIWWW
-
 b_results = NCBIWWW.blast('blastn', 'nr', f_record)
 \end{verbatim}
 
-The \verb|blast| function also take a number of other option arguments which are basically analogous to the different parameters you can set on the basic BLAST page (\ahrefurl{\url{http://www.ncbi.nlm.nih.gov/blast/blast.cgi?Jform=0}}), but for this I'll just talk about the first few arguments, which are the most important (and are also non-optional).
+The \verb|blast| function also take a number of other option arguments
+which are basically analogous to the different parameters you can set
+on the basic BLAST page
+(\ahrefurl{\url{http://www.ncbi.nlm.nih.gov/blast/blast.cgi?Jform=0}}),
+but for this I'll just talk about the first few arguments, which are
+the most important (and are also non-optional).
 
 
-The first argument is the blast program to use for the search. The options and descriptions of the programs are available at \ahrefurl{\url{http://www.ncbi.nlm.nih.gov/BLAST/blast_program.html}}. The second argument specifies the databases to search against. Again, the options for this are available on the NCBI web pages at \ahrefurl{\url{http://www.ncbi.nlm.nih.gov/BLAST/blast_databases.html}}. 
+The first argument is the blast program to use for the search. The
+options and descriptions of the programs are available at
+\ahrefurl{\url{http://www.ncbi.nlm.nih.gov/BLAST/blast_program.html}}.
+The second argument specifies the databases to search against. Again,
+the options for this are available on the NCBI web pages at
+\ahrefurl{\url{http://www.ncbi.nlm.nih.gov/BLAST/blast_databases.html}}.
 
 
-After you have set the search options, you just need to pass in your fasta sequence, which is the third argument, and you are all ready to BLAST. Biopython takes care of worrying about when the results are available, and will pause until it can get the results and return them.
+After you have set the search options, you just need to pass in your
+fasta sequence as a string, which is the third argument, and you are
+all ready to BLAST. Biopython takes care of worrying about when the
+results are available, and will pause until it can get the results and
+return them.
 
 
-Before parsing the results, it is often useful to save them into a file so that you can use them later without having to go back and re-blast everything. I find this especially useful when debugging my code that extracts info from the BLAST files, but it could also be useful just for making backups of things you've done. If you want to save the results returned, and also parse the results, we need to copy the results before saving them, since using \verb|handle.read()| to write the results to the file will result in not having the info in the handle anymore. I use the \verb|copy| module and code like the following to do this:
+Before parsing the results, it is often useful to save them into a
+file so that you can use them later without having to go back and
+re-blast everything. I find this especially useful when debugging my
+code that extracts info from the BLAST files, but it could also be
+useful just for making backups of things you've done. If you want to
+save the results returned, and also parse the results, we need to be
+careful since using \verb|handle.read()| to write the results to the
+file will result in not having the info in the handle anymore. The
+best way to handle this is to first use \verb|read()| to get all of
+the information from the handle into a string, and then deal with this 
+string (note: using the \verb|copy| module will not work, despite what 
+was written here before (whoops!), since it is not possible to copy a
+handle). We can get a string with the BLAST results and write it to a
+file by doing:
 
 \begin{verbatim}
-import copy
-
+# save the results for later, in case we want to look at it
 save_file = open('my_blast.out', 'w')
-# copy the handle so we can write it out and still have something for parsing
-save_handle = copy.deepcopy(b_results)
-save_file.write(save_handle.read())
+blast_results = result_handle.read()
+save_file.write(blast_results)
 save_file.close()
 \end{verbatim}
 
-After this, the results are in the file \verb|my_blast.out| and the variable \verb|b_results| still contains the results in a ready to parse form.
+After doing this, the results are in the file \verb|my_blast.out| and the
+variable \verb|blast_results| contains the blast results in a string
+form.
 
 
-Well, now that we've got the BLAST results, we are ready to do something with them, so this leads us right into the parsing section.
-
-\subsection{Parsing the output from the WWW version of BLAST}
-
-The WWW version of BLAST is of course infamous for continually changing the output in a way that will break parsers that deal with it. Because of this, having a centralized parser in libraries such as Biopython is very important, since then you can have multiple people testing and using it and keeping it up to date. This is so much nicer than trying to keep a tool such as this running yourself.
-
-
-You can get information to parse with the WWW BLAST parser in one of the two ways. The first is to grab the info using the biopython function for dealing with blast -- doing this is described above. The second way is to manually do the BLAST on the NCBI site, and then save the results. In order to have your output in the right format, you need to save the final BLAST page you get (you know, the one with all of the interesting results!) as HTML (ie. do not save as text!) to a file. The important thing is that you do not have to use biopython scripts to fetch the data in order to be able to parse it.
-
-
-Doing things either of these two ways, you then need to get a handle to the results. In python, a handle is just a nice general way of describing input to any info source so that the info can be retrieved using \verb|read()| and \verb|readline()| functions. This is the type of input the BLAST parser (and the other biopython parsers take). 
-
-
-If you followed the code above for interacting with BLAST through a script, then you already have \verb|b_results|, which is great for passing to a parser. If you saved the results in a file, then opening up the file with code like the following will get you what you need:
+The \verb|parse| function of the BLAST parser, as described
+in~\ref{sec:parsing-www-blast}, takes a file-handle-like object to be
+parsed. We can get a handle-like object from our string of BLAST
+results using the python standard library module \verb|cStringIO|. The 
+following code will give us a handle we can feed directly into the
+parser:
 
 \begin{verbatim}
-b_results = open('my_blast_results', 'r')
+import cStringIO
+string_result_handle = cStringIO.StringIO(blast_results)
 \end{verbatim}
 
 
-Now that we've got a handle, we are ready to parse the output. The code to parse it is really quite small:
+Now that we've got the BLAST results, we are ready to do
+something with them, so this leads us right into the parsing section.
+
+\subsection{Parsing the output from the WWW version of BLAST}
+\label{sec:parsing-www-blast}
+
+The WWW version of BLAST is infamous for continually
+changing the output in a way that will break parsers that deal with
+it. Because of this, having a centralized parser in libraries such as
+Biopython is very important, since then you can have multiple people
+testing and using it and keeping it up to date. This is so much nicer
+than trying to keep a tool such as this running yourself.
+
+
+You can get information to parse with the WWW BLAST parser in one of
+the two ways. The first is to grab the info using the biopython
+function for dealing with blast -- doing this is described in
+section~\ref{sec:running-www-blast}. The 
+second way is to manually do the BLAST on the NCBI site, and then save
+the results. In order to have your output in the right format, you
+need to save the final BLAST page you get (you know, the one with all
+of the interesting results!) as HTML (ie. do not save as text!) to a
+file. The important point is that you do not have to use biopython
+scripts to fetch the data in order to be able to parse it.
+
+
+Doing things either of these two ways, you then need to get a handle
+to the results. In python, a handle is just a nice general way of
+describing input to any info source so that the info can be retrieved
+using \verb|read()| and \verb|readline()| functions. This is the type
+of input the BLAST parser (and the other biopython parsers take). 
+
+
+If you followed the code above for interacting with BLAST through a
+script, then you already have \verb|blast_results|, which is great for
+passing to a parser. If you saved the results in a file, then opening
+up the file with code like the following will get you what you need:
+
+
+\begin{verbatim}
+blast_results = open('my_blast_results', 'r')
+\end{verbatim}
+
+
+Now that we've got a handle, we are ready to parse the output. The
+code to parse it is really quite small:
+
 
 \begin{verbatim}
 from Bio.Blast import NCBIWWW
@@ -1004,10 +1088,20 @@ b_parser = NCBIWWW.BlastParser()
 b_record = b_parser.parse(b_results)
 \end{verbatim}
 
-What this accomplishes is parsing the BLAST output into a Blast Record class. The section below on the Record class describes what is contained in this class, but in general, it has got everything you might ever want to extract from the output. Right now we'll just show an example of how to get some info out of the BLAST report, but if you want something in particular that is not described here, look at the info on the record class in detail, and take a gander into the code or automatically generated documentation -- the docstrings have lots of good info about what is stored in each piece of information.
+What this accomplishes is parsing the BLAST output into a Blast Record
+class. The section below on the Record class describes what is
+contained in this class, but in general, it has got everything you
+might ever want to extract from the output. Right now we'll just show
+an example of how to get some info out of the BLAST report, but if you
+want something in particular that is not described here, look at the
+info on the record class in detail, and take a gander into the code or
+automatically generated documentation -- the docstrings have lots of
+good info about what is stored in each piece of information.
 
 
-To continue with our example, let's just print out some summary info about all hits in our blast report greater than a particular threshold. The following code does this:
+To continue with our example, let's just print out some summary info
+about all hits in our blast report greater than a particular
+threshold. The following code does this:
 
 \begin{verbatim}
 E_VALUE_THRESH = 0.04
@@ -1037,7 +1131,10 @@ tacttgttgatattggatcgaacaaactggagaaccaacatgctcacgtcacttttagtcccttacatattcctc...
 tacttgttggtgttggatcgaaccaattggaagacgaatatgctcacatcacttctcattccttacatcttcttc...
 \end{verbatim}
 
-Basically, you can do anything you want to with the info in the BLAST report once you have parsed it. This will, of course, depend on what you want to use it for, but hopefully this helps you get started on doing what you need to do!
+Basically, you can do anything you want to with the info in the BLAST
+report once you have parsed it. This will, of course, depend on what
+you want to use it for, but hopefully this helps you get started on
+doing what you need to do!
 
 \subsection{The BLAST record class}
 
@@ -1932,7 +2029,13 @@ Biopython provides a ton of common substitution matrices, and also provides func
 \subsection{Creating your own substitution matrix from an alignment}
 \label{sec:subs_mat_ex}
 
-A very cool thing that you can do easily with the substitution matrix classes is to create your own substitution matrix from an alignment. To do this, we first need to get a biopython alignment object and then get a summary object to calculate info about the alignment:
+A very cool thing that you can do easily with the substitution matrix
+classes is to create your own substitution matrix from an
+alignment. In practice, this is normally done with protein
+alignments. In this example, we'll first get a biopython alignment
+object and then get a summary object to calculate info about the
+alignment:
+
 
 \begin{verbatim}
 from Bio import Clustalw
@@ -1940,62 +2043,99 @@ from Bio.Alphabet import IUPAC
 from Bio.Align import AlignInfo
 
 # get an alignment object from a Clustalw alignment output
-c_align = Clustalw.parse_file('test.aln', IUPAC.unambiguous_dna)
+c_align = Clustalw.parse_file('protein.aln', IUPAC.protein)
 summary_align = AlignInfo.SummaryInfo(c_align)
 \end{verbatim}
 
-Sections~\ref{sec:align_clustal} and~\ref{sec:summary_info} contain more information on doing this.
+Sections~\ref{sec:align_clustal} and~\ref{sec:summary_info} contain
+more information on doing this.
 
 
-Now that we've got our \verb|summary_align| object, we want to use it to find out the number of times different residues substitute for each other:
+Now that we've got our \verb|summary_align| object, we want to use it
+to find out the number of times different residues substitute for each
+other. To make the example more readable, we'll focus on only amino
+acids with polar charged side chains. Luckily, this can be done easily 
+when generating a replacement dictionary, by passing in all of the
+characters that should be ignored. Thus we'll create a dictionary of
+replacements for only charged polar amino acids using:
 
 \begin{verbatim}
-replace_info = summary_align.replacement_dictionary(['N'])
+replace_info = summary_align.replacement_dictionary(["G", "A", "V", "L", "I",
+                                                     "M", "P", "F", "W", "S",
+                                                     "T", "N", "Q", "Y", "C"])
 \end{verbatim}
 
-This replacement information is represented as a python dictionary which will look something like:
+This information about amino acid replacements is represented as a
+python dictionary which will look something like:
+
 
 \begin{verbatim}
-{('C', 'C'): 2473.0, ('G', 'T'): 4.0, ('A', 'G'): 16.0, ('A', 'A'): 7814.0, 
-('A', 'C'): 15.0, ('T', 'C'): 26.0, ('T', 'A'): 20.0, ('T', 'G'): 20.0, 
-('C', 'A'): 15.0, ('A', 'T'): 24.0, ('G', 'G'): 2548.0, ('C', 'G'): 12.0, 
-('G', 'C'): 0, ('C', 'T'): 19.0, ('G', 'A'): 22.0, ('T', 'T'): 5730.0}
+{('R', 'R'): 2079.0, ('R', 'H'): 17.0, ('R', 'K'): 103.0, ('R', 'E'): 2.0, 
+('R', 'D'): 2.0, ('H', 'R'): 0, ('D', 'H'): 15.0, ('K', 'K'): 3218.0, 
+('K', 'H'): 24.0, ('H', 'K'): 8.0, ('E', 'H'): 15.0, ('H', 'H'): 1235.0, 
+('H', 'E'): 18.0, ('H', 'D'): 0, ('K', 'D'): 0, ('K', 'E'): 9.0, 
+('D', 'R'): 48.0, ('E', 'R'): 2.0, ('D', 'K'): 1.0, ('E', 'K'): 45.0, 
+('K', 'R'): 130.0, ('E', 'D'): 241.0, ('E', 'E'): 3305.0, 
+('D', 'E'): 270.0, ('D', 'D'): 2360.0}
 \end{verbatim}
 
-This information gives us our accepted number of replacements, or how often we expect different things to substitute for each other. It turns out, amazingly enough, that this is all of the information we need to go ahead and create a substitution matrix. First, we use the replacement dictionary information to create an Accepted Replacement Matrix (ARM):
+This information gives us our accepted number of replacements, or how
+often we expect different things to substitute for each other. It
+turns out, amazingly enough, that this is all of the information we
+need to go ahead and create a substitution matrix. First, we use the
+replacement dictionary information to create an Accepted Replacement
+Matrix (ARM):
+
 
 \begin{verbatim}
 from Bio import SubsMat
 my_arm = SubsMat.SeqMat(replace_info)
 \end{verbatim}
 
-With this accepted replacement matrix, we can go right ahead and create our log odds matrix (ie. a standard type Substitution Matrix):
+With this accepted replacement matrix, we can go right ahead and
+create our log odds matrix (ie. a standard type Substitution Matrix):
 
 \begin{verbatim}
 my_lom = SubsMat.make_log_odds_matrix(my_arm)
 \end{verbatim}
 
-The log odds matrix you create is customizable with the following optional arguments:
+The log odds matrix you create is customizable with the following
+optional arguments:
+
 
 \begin{itemize}
-  \item \verb|exp_freq_table| -- You can pass a table of expected frequencies for each alphabet. If supplied, this will be used instead of the passed accepted replacement matrix when calculate expected replacments.
+  \item \verb|exp_freq_table| -- You can pass a table of expected
+  frequencies for each alphabet. If supplied, this will be used
+  instead of the passed accepted replacement matrix when calculate
+  expected replacments.
 
-  \item \verb|logbase| - The base of the logarithm taken to create the log odd matrix. Defaults to base 10.
 
-  \item \verb|factor| - The factor to multiply each matrix entry by. This defaults to 10, which normally makes the matrix numbers easy to work with.
+  \item \verb|logbase| - The base of the logarithm taken to create the
+  log odd matrix. Defaults to base 10.
 
-  \item \verb|round_digit| - The digit to round to in the matrix. This defaults to 0 (ie. no digits).
+
+  \item \verb|factor| - The factor to multiply each matrix entry
+  by. This defaults to 10, which normally makes the matrix numbers
+  easy to work with.
+
+
+  \item \verb|round_digit| - The digit to round to in the matrix. This
+  defaults to 0 (ie. no digits).
+
 \end{itemize}
 
-Once you've got your log odds matrix, you can display it prettily using the function \verb|print_mat|. Doing this on our created matrix gives:
+Once you've got your log odds matrix, you can display it prettily
+using the function \verb|print_mat|. Doing this on our created matrix
+gives:
 
 \begin{verbatim}
 >>> my_lom.print_mat()
-A   4
-C -18   9
-G -18 -18   9
-T -20 -15 -18   5
-   A   C   G   T
+D   6
+E  -5   5
+H -15 -13  10
+K -31 -15 -13   6
+R -13 -25 -14  -7   7
+   D   E   H   K   R
 \end{verbatim}
 
 Very nice. Now we've got our very own substitution matrix to play with!
@@ -2988,5 +3128,82 @@ The main biopython release tries to be fairly uniform and interworkable, to make
 Additionally, if you have code that you don't think fits in the distribution, but that you want to make available, we maintain Script Central (\ahrefurl{\url{http://biopython.org/ScriptCentral.shtml}}) which has pointers to freely available code in python for bioinformatics. Just let us know on the mailing list, and we'll be happy to add links to your code.
 
 
-Hopefully this documentation has got you excited enough about biopython to try it out (and most importantly, contribute!). Thanks for reading all the way through!
+Hopefully this documentation has got you excited enough about
+biopython to try it out (and most importantly, contribute!). Thanks
+for reading all the way through!
+
+\chapter{Appendix: Useful stuff about Python}
+\label{sec:appendix}
+
+If you haven't spent a lot of time programming in python, many
+questions and problems that come up in using Biopython are often
+related to python itself. This section tries to present some ideas and 
+code that come up often (at least for us!) while using the Biopython
+libraries. If you have any suggestions for useful pointers that could
+go here, please contribute!
+
+\section{What the heck in a handle?}
+\label{sec:appendix-handles}
+
+Handles are mentioned quite frequently throughout this documentation,
+and are also fairly confusing (at least to me!). Basically, you can
+think of a handle as being a ``wrapper'' around text information.
+
+
+Handles provide (at least) two benefits over plain text information:
+
+\begin{enumerate}
+  \item They provide a standard way to deal with information stored in 
+  different ways. The text information can be in a file, or in a
+  string stored in memory, or at some remote website, but the handle
+  provides a common way of dealing with information in all of these
+  formats. 
+
+  \item They allow text information to be read incrementally, instead
+  of all at once. This is really important when you are dealing with
+  huge text files which would use up all of your memory if you had to
+  load them all.
+\end{enumerate}
+
+Handles can deal with text information that is being read (ie. reading 
+from a file) or written (ie. writing information to a file). In the
+case of a ``read'' handle, commonly used functions are \verb|read()|,
+which reads the entire text information from the handle, and
+\verb|readline()|, which reads information one line at a time. For
+``write'' handles, the function \verb|write()| is regularly used.
+
+
+The most common usage for handles is reading information from a file,
+which is done using the built-in python function \verb|open|:
+
+\begin{verbatim}
+>>> handle = open("m_cold.fasta", "r")
+>>> handle.readline()
+">gi|8332116|gb|BE037100.1|BE037100 MP14H09 MP Mesembryanthemum crystallinum cDNA 5' similar to cold acclimation protein, mRNA sequence\n"
+\end{verbatim}
+
+Handles are regularly used in Biopython for passing information to parsers.
+
+\subsection{Creating a handle from a string}
+
+One useful thing is to be able to turn information contained in a
+string into a handle. The following example shows how to do this using 
+\verb|cStringIO| from the Python standard library:
+
+\begin{verbatim}
+>>> my_info = 'A string\n with multiple lines.'
+>>> print my_info
+A string
+ with multiple lines.
+>>> import cStringIO
+>>> my_info_handle = cStringIO.StringIO(my_info)
+>>> first_line = my_info_handle.readline()
+>>> print first_line
+A string
+
+>>> second_line = my_info_handle.readline()
+>>> print second_line
+ with multiple lines.
+\end{verbatim}
+
 \end{document}
