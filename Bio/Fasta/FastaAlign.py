@@ -70,10 +70,10 @@ class FastaAlignment(Alignment):
             new_f_record.title = item.description
             new_f_record.sequence = item.seq.data
 
-            return_string = return_string + str(new_f_record) + "\n\n"
+            return_string = return_string + str(new_f_record) + os.linesep + os.linesep
 
         # have a extra newline, so strip two off and add one before returning
-        return string.rstrip(return_string) + "\n"
+        return string.rstrip(return_string) + os.linesep
 
             
             
