@@ -4,6 +4,18 @@ used, because I could not get Distutils to work correctly with swig.
 This should work without any problem. If you want to rebuild the
 swig file for some reason just type "make". 
 
+Structure of the module:
+
+KDTree.C        C++ KDTree code
+KDTree.h        C++ header for KDTree code 
+KDTree.i        SWIG input file for KDTree.C
+KDTree.swig.C   SWIG generated wrapper for KDTree.C
+_CKDTree.so     SWIG generated KDTree shared library
+CKDTree.py      SWIG generated python code to access KDTree shared library
+KDTree.py       Hand implemented python module for public access to CKDTree.py       
+Makefile        Generate KDTree.swig.C
+README          This file
+
 Cheers,
 
 -Thomas
