@@ -23,7 +23,6 @@ import Location
 
 class Lin:
     """Holds information from a 'lin' file.
-    XXX rename id to hierarchy
 
     Members:
     pdb          The PDB name for the sequence, e.g. 3sdh
