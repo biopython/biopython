@@ -1,6 +1,7 @@
 from Numeric import matrixmultiply, transpose, array, sqrt
 from math import pi
 from MLab import eye
+import sys
 
 from Bio.PDB import *
 
@@ -21,13 +22,13 @@ class HSExposure:
         # Dummy 
         self.angles={}
 
-    def write_pymol_script(self, filename="pymol.py"):
+    def write_pymol_script(self, filename="hs_exp.py"):
         """
         Write a PyMol script that visualizes the pseudo CB-CA directions 
         at the CA coordinates.
         """
         if len(self.ca_cb_list)==0:
-            print "Nothing to draw."
+            sys.stderr.write("Nothing to draw.\n")
             return
         fp=open(filename, "w")
         fp.write("from pymol.cgo import *\n")
@@ -44,25 +45,30 @@ class HSExposure:
         fp.write("cmd.load_cgo(obj, 'HS')\n")
         fp.close()
 
-    def _get_gly_cb_coord(self, residue):
+    def _get_gly_cb_vector(self, residue):
         """
         Return a pseudo CB coord for a Gly residue.
         
+        The pseudoCB vector is centered at CA (ie. it's the
+        atom position itself).
+
         CB coord=N coord rotated over -120 degrees 
         along the CA-C axis.
         """
-        n=residue["N"].get_vector()
-        c=residue["C"].get_vector()
-        ca=residue["CA"].get_vector()
+        n_v=residue["N"].get_vector()
+        c_v=residue["C"].get_vector()
+        ca_v=residue["CA"].get_vector()
         # center at origin
-        n=n-ca
-        c=c-ca
+        n_v=n_v-ca_v
+        c_v=c_v-ca_v
         # rotation around c-ca over -120 deg
-        rot=rotaxis(-pi*120.0/180.0, c)
-        cb_at_origin=n.left_multiply(rot)
+        rot=rotaxis(-pi*120.0/180.0, c_v)
+        cb_at_origin_v=n_v.left_multiply(rot)
         # move back to ca position
-        cb=cb_at_origin+ca
-        return cb.get_array()
+        cb_v=cb_at_origin_v+ca_v
+        # This is for PyMol visualization
+        self.ca_cb_list.append((ca_v, cb_v))
+        return cb_v
 
     def _get_cb_from_ca(self, ca1, ca2, ca3):
         """
@@ -105,19 +111,21 @@ class HSExposure:
         for residue in residue_list:
             if is_aa(residue):
                 ca=residue["CA"]
-                ca_coord=ca.get_coord()
+                ca_v=ca.get_vector()
                 if residue.has_id("CB"):
                     cb=residue["CB"]
-                    cb_coord=cb.get_coord()
+                    cb_v=cb.get_vector()
+                    # Call _get_gly_cb_vector here for PyMol output
+                    # self._get_gly_cb_vector(residue)
                 else:
                     # GLY has no CB - calculate pseudo CB position
-                    cb_coord=self._get_gly_cb_coord(residue)
-                x,y,z=cb_coord-ca_coord
+                    # based on N/CA/C positions
+                    cb_v=self._get_gly_cb_vector(residue)
                 # CB-CA vector
-                cb_ca=Vector(x,y,z)
+                cb_ca_v=cb_v-ca_v
                 # Rotate CB-CA vector to unit vector along Z
-                rotation=rotmat(cb_ca, self.unit_z)
-                translation=ca_coord
+                rotation=rotmat(cb_ca_v, self.unit_z)
+                translation=ca.get_coord()
                 rotran_list.append((translation, rotation, ca, residue))
         return rotran_list
 
@@ -161,18 +169,25 @@ class HSExposure:
                 translation=ca2.get_coord()
                 rotran_list.append((translation, rotation, ca2, r))
                 # Calculate angle between pseudo-CB-CA and CA-CB
-                try:
-                    if r.get_resname()!="GLY":
-                        vcb=r["CB"].get_vector()
-                        vca=r["CA"].get_vector()
-                        real=vcb-vca
-                        angle=360*real.angle(cb_v)/(2*pi)
-                        angles[r]=angle
-                except KeyError:
-                    # No CB :-(
-                    pass
+                angles[r]=self._calc_delta_angle(r, cb_v)
         self.angles=angles
         return rotran_list
+
+    def _calc_delta_angle(self, res, pseudo_cb_v):
+        """
+        Caculate delta angle between CB-CA and pseudoCB-CA
+        """
+        if res.get_resname()=="GLY":
+            # Calculate pseudo CA for GLY
+            cb_v=self._get_gly_cb_vector(res)
+            ca_v=res["CA"].get_vector()
+        else:
+            # Calculate CB-CA vector
+            cb_v=res["CB"].get_vector()
+            ca_v=res["CA"].get_vector()
+        real_cb_v=cb_v-ca_v
+        angle=360*real_cb_v.angle(pseudo_cb_v)/(2*pi)
+        return angle
 
     def _calc_hs_exposure(self, rotran_list, residue_list, radius):
         """
@@ -294,6 +309,8 @@ if __name__=="__main__":
             print "DELTA %.2f" % angles[r]
 
         print "--------------------"
+
+    hse.write_pymol_script()
 
 
 

@@ -95,9 +95,7 @@ class DSSP:
                     map[res]=(ss, acc)
                     res_list.append((res, (ss, acc)))
                 else:
-                    # Ignored by DSSP
-                    map[res]=None
-                    res_list.append((res, None))
+                    pass
         self.map=map
         self.res_list=res_list
         self.model=model
