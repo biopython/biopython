@@ -9,6 +9,7 @@ import os
 # biopython
 from Bio.Clustalw import Clustalw
 from Bio.Clustalw.Clustalw import MultipleAlignCL
+from Bio.Align import AlignInfo
 
 # create the command line to run clustalw
 # this assumes you've got clustalw somewhere on your path, otherwise
@@ -29,7 +30,26 @@ print 'sequence:', all_records[0].seq
 # get the length of the alignment
 print 'length', alignment.get_alignment_length()
 
-# print out a consensus
-print 'consensus', alignment.dumb_consensus()
-
 print alignment
+
+# print out interesting information about the alignment
+summary_align = AlignInfo.SummaryInfo(alignment)
+
+consensus = summary_align.dumb_consensus()
+print 'consensus', consensus
+
+my_pssm = summary_align.pos_specific_score_matrix(consensus,
+                                                  chars_to_ignore = ['N'])
+
+print my_pssm
+
+expect_freq = {
+    'A' : .3,
+    'G' : .2,
+    'T' : .3,
+    'C' : .1,
+    '-' : .1}
+
+info_content = summary_align.information_content(5, 30,
+                                                 chars_to_ignore = ['N'])
+

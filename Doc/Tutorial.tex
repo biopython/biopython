@@ -1,15 +1,28 @@
-\documentclass[dvips]{article}
+\documentclass{article}
 \usepackage{url}
 \usepackage{fullpage}
 \usepackage{hevea}
-\usepackage[pdftex]{graphicx}
+\usepackage{graphicx}
+
+% Make links between references
+\usepackage{hyperref}
+\newif\ifpdf
+\ifx\pdfoutput\undefined
+  \pdffalse
+\else
+  \pdfoutput=1
+  \pdftrue
+\fi
+\ifpdf
+  \hypersetup{colorlinks=true, hyperindex=true, citecolor=red, urlcolor=blue}
+\fi
 
 \begin{document}
 
 \title{Biopython
 Tutorial and Cookbook}
 \author{Jeff Chang and Brad Chapman}
-\date{Last Update--12 October 00}
+\date{Last Update--05 November}
 
 \maketitle
 \tableofcontents
@@ -575,7 +588,7 @@ This creates an index file \verb|my_orchid_dict.idx| based on the input from \ve
 Now that we've got the index, we can create an in-memory dictionary to access the file contents using the index:
 
 \begin{verbatim}
->>> from Bio.Fasta import IUPAC
+>>> from Bio.Alphabet import IUPAC
 >>> dna_parser = Fasta.SequenceParser(IUPAC.ambiguous_dna)
 >>> orchid_dict = Fasta.Dictionary("my_orchid_dict.idx", dna_parser)
 \end{verbatim} 
@@ -624,11 +637,11 @@ Biopython has a lot of parsers, and each has its own little special niches based
 Biopython contains some code to deal with doing alignments and dealing with different alignment formats. Right now, you can do the following fun things:
 
 \begin{enumerate}
-\item Interact with the clustalw alignment program and parse things in clustalw format. Check the Cookbook for examples of how to use this.
+\item Interact with the clustalw alignment program and parse things in clustalw format. Check section~\ref{sec:align_clustal} of the Cookbook for examples of how to use this.
 
 \item Parse and write out alignments in fasta format. 
 
-\item Translate between the different formats we can deal with. The cookbook also has an example of how to do this.
+\item Translate between the different formats we can deal with. The cookbook also has an example of how to do this in section~\ref{sec:align_translate}
 \end{enumerate}
 
 Eventually, it would be nice to be able to deal with all of the various alignment formats and also have code to do pairwise alignments simply from within Biopython. These are definately things that are on my wish list!
@@ -782,7 +795,7 @@ Here are my attempts at UML class diagrams for the \verb|Blast| and \verb|PSIBla
 \begin{latexonly}
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.8\textwidth]{images/BlastRecord}
+\includegraphics[width=0.8\textwidth]{images/BlastRecord.png}
 \caption{Class diagram for the Blast Record class representing all of the info in a BLAST report}
 \label{fig:blastrecord}
 \end{figure}
@@ -798,7 +811,7 @@ The PSIBlast record object is similar, but has support for the rounds that are u
 \begin{latexonly}
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.8\textwidth]{images/PSIBlastRecord}
+\includegraphics[width=0.8\textwidth]{images/PSIBlastRecord.png}
 \caption{Class diagram for the PSIBlast Record class.}
 \label{fig:psiblastrecord}
 \end{figure}
@@ -1030,6 +1043,7 @@ We should write some stuff to make it easier to deal directly with PSIBlast from
 It is often very useful to be able to align particular sequences. I do this quite often to get a quick and dirty idea of relationships between sequences. Consequently, it is very nice to be able to quickly write up a python script that does an alignment and gives you back objects that are easy to work with. The alignment related code in Biopython is meant to allow python-level access to alignment programs so that you can run alignments quickly from within scripts.
 
 \subsubsection{Clustalw}
+\label{sec:align_clustal}
 
 Clustalx (\ahrefurl{\url{http://www-igbmc.u-strasbg.fr/BioInfo/ClustalX/Top.html}}) is a very nice program for doing multiple alignments. Biopython offers access to alignments in clustal format (these normally have a \verb|*.aln| extension) that are produced by Clustalx. It also offers access to clustalw, which the is command line version of clustalx.
 
@@ -1093,29 +1107,6 @@ You can also calculate the maximum length of the alignment with:
 length = alignment.get_alignment_length()
 \end{verbatim}
 
-There is also an option to calculate a quick consensus of the alignment:
-
-\begin{verbatim}
-consensus = alignment.dumb_consensus()
-\end{verbatim}
-
-As the name suggests, this is a really simple consensus calculator, and will just add up all of the residues at each point in the consensus, and if the most common value is higher than some threshold value (the default is .3) will add the common residue to the consensus. If it doesn't reach the threshold, it adds an ambiguity character to the consensus. The returned consensus object is Seq object whose alphabet is inferred from the alphabets of the sequences making up the consensus. So doing a \verb|print consensus| would give:
-
-\begin{verbatim}
-consensus Seq('TATACATNAAAGNAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAAAAAAATGAAT 
-...', IUPACAmbiguousDNA())
-\end{verbatim} 
-
-You can adjust how \verb|dumb_consensus| works by passing optional parameters:
-
-\begin{description}
-\item[the threshold] This is the threshold specifying how common a particular residue has to be at a position before it is added. The default is .3.
-
-\item[the ambiguous character] This is the ambiguity character to use. The default is 'N'.
-
-\item[the consensus alphabet] This is the alphabet to use for the consensus sequence. If an alphabet is not specified than we will try to guess the alphabet based on the alphabets of the sequences in the alignment.
-\end{description}
-
 Finally, to write out the alignment object in the original format, we just need to access the \verb|__str__| function. So doing a \verb|print alignment| gives:
 
 \begin{verbatim}
@@ -1129,7 +1120,182 @@ gi|6273284|gb|AF191658.1|AF191      TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG
 
 This makes it easy to write your alignment back into a file with all of the original info intact.
 
+
+If you want to do more interesting things with an alignment, the best thing to do is to pass the alignment to an alignment information generating object, such as the SummaryInfo object, described in section~\ref{sec:summary_info}.
+
+\subsubsection{Calculating summary information}
+\label{sec:summary_info}
+
+Once you have an alignment, you are very likely going to want to find out information about it. Instead of trying to have all of the functions that can generate information about an alignment in the alignment object itself, we've tried to separate out the functionality into separate classes, which act on the alignment. 
+
+
+Getting ready to calculate summary information about an object is quick to do. Let's say we've got an alignment object called \verb|alignment|. All we need to do to get an object that will calculate summary information is:
+
+\begin{verbatim}
+from Bio.Align import AlignInfo
+summary_align = AlignInfo.SummaryInfo(alignment)
+\end{verbatim}
+
+The \verb|summary_align| object is very useful, and will do the following neat things for you:
+
+\begin{enumerate}
+  \item Calculate a quick consensus sequence -- see section~\ref{sec:consensus}
+  \item Get a position specific score matrix for the alignment -- see section~\ref{sec:pssm}
+  \item Calculate the information content for the alignment -- see section~\ref{sec:getting_info_content}
+  \item Generate information on substitutions in the alignment -- section~\ref{sec:sub_matrix} details using this to generate a substitution matrix.
+\end{enumerate}
+
+\subsubsection{Calculating a quick consensus sequence}
+\label{sec:consensus}
+
+The \verb|SummaryInfo| object, described in section~\ref{sec:summary_info}, provides functionality to calculate a quick consensus of an alignment. Assuming we've got a \verb|SummaryInfo| object called \verb|summary_align| we can calculate a consensus by doing:
+
+\begin{verbatim}
+consensus = summary_align.dumb_consensus()
+\end{verbatim}
+
+As the name suggests, this is a really simple consensus calculator, and will just add up all of the residues at each point in the consensus, and if the most common value is higher than some threshold value (the default is .3) will add the common residue to the consensus. If it doesn't reach the threshold, it adds an ambiguity character to the consensus. The returned consensus object is Seq object whose alphabet is inferred from the alphabets of the sequences making up the consensus. So doing a \verb|print consensus| would give:
+
+\begin{verbatim}
+consensus Seq('TATACATNAAAGNAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAAAAAAATGAAT 
+...', IUPACAmbiguousDNA())
+\end{verbatim} 
+
+You can adjust how \verb|dumb_consensus| works by passing optional parameters:
+
+\begin{description}
+\item[the threshold] This is the threshold specifying how common a particular residue has to be at a position before it is added. The default is .7.
+
+\item[the ambiguous character] This is the ambiguity character to use. The default is 'N'.
+
+\item[the consensus alphabet] This is the alphabet to use for the consensus sequence. If an alphabet is not specified than we will try to guess the alphabet based on the alphabets of the sequences in the alignment.
+\end{description}
+
+\subsubsection{Position Specific Score Matrices}
+\label{sec:pssm}
+
+Position specific score matrices (PSSMs) summarize the alignment information in a different way than a consensus, and may be useful for different tasks. Basically, a PSSM relates a consensus sequence to the different sequences that occur in that alignment at that same position. For instance, if we have an alignment like:
+
+\begin{verbatim}
+GTATC
+AT--C
+CTGTC
+\end{verbatim}
+
+the PSSM for this would look something like:
+
+\begin{verbatim}
+      G A T C
+    G 1 1 0 1
+    T 0 0 3 0
+    A 1 1 0 0
+    T 0 0 2 0
+    C 0 0 0 3
+\end{verbatim}
+
+Let's assume we've got an alignment object called \verb|c_align|. To get a PSSM with the consensus sequence along the side we first get a summary object and calculate the consensus sequence:
+
+\begin{verbatim}
+summary_align = AlignInfo.SummaryInfo(c_align)
+consensus = summary_align.dumb_consensus()
+\end{verbatim}
+
+Now, we want to make the PSSM, but ignore any \verb|N| ambiguity residues when calculating this:
+
+\begin{verbatim}
+my_pssm = summary_align.pos_specific_score_matrix(consensus,
+                                                  chars_to_ignore = ['N'])
+\end{verbatim}
+
+To maintain strictness with the alphabets, you can only include characters along the top of the PSSM that are in the alphabet of the alignment object.
+
+The command above returns a \verb|PSSM| object. To print out the PSSM as we showed above, we simply need to do a \verb|print my_pssm|, which gives:
+
+\begin{verbatim}
+    -   A   C   G   T
+T  0.0 0.0 0.0 0.0 7.0
+A  0.0 7.0 0.0 0.0 0.0
+T  0.0 0.0 0.0 0.0 7.0
+A  0.0 7.0 0.0 0.0 0.0
+C  0.0 0.0 7.0 0.0 0.0
+A  0.0 7.0 0.0 0.0 0.0
+T  0.0 0.0 0.0 0.0 7.0
+T  0.0 1.0 0.0 0.0 6.0
+...
+\end{verbatim}
+
+You can access any element of the PSSM by subscripting like \verb|your_pssm[sequence_number][residue_count_name]|. For instance, to get the counts for the 'A' residue in the second element of the above PSSM you would do:
+
+\begin{verbatim}
+>>> print my_pssm[1]['A']
+7.0
+\end{verbatim}
+
+The structure of the PSSM class makes it easy to access elements, and pretty print the matrix itself.
+
+\subsubsection{Information Content}
+\label{sec:getting_info_content}
+
+A potentially useful measure of evolutionary conservation is the information ceontent of a sequence.
+
+
+A useful introduction to information theory targetted towards molecular biologists can be found at \ahrefurl{\url{http://www.lecb.ncifcrf.gov/~toms/paper/primer/}}. For our purposes, we will be looking at the information content of a consesus sequence, or a portion of a consensus sequence. We calculate information content at a particular column in a multiple sequence alignment using the following formula:
+
+\begin{displaymath}
+IC_{j} = \sum_{i=1}^{N_{a}} P_{ij} * log(\frac{P_{ij}}{Q_{i}}) 
+\end{displaymath}
+
+where:
+
+\begin{itemize}
+  \item $IC_{j}$ -- The information content for the jth column in an alignment.
+  \item $N_{a}$ -- The number of letters in the alphabet. Gap characters are included as letters in the alphabet.
+  \item $P_{ij}$ -- The frequency of a particular letter in the column (ie. if G occured 3 out of 6 times in an aligment column, this would be 0.5)
+  \item $Q_{i}$ -- The expected frequency of a letter. This is an \emph{optional} argument. If it is included then we are calculating ``relative information content''. If it is not included (set as 1) then we are just calculating plain ol' information content.
+\end{itemize}
+
+Well, now that we have an idea what information content is being calculated in Biopython, let's look at how to get it for a particular region of the alignment.
+
+
+First, we need to use our alignment to get a alignment summary object, which we'll assume is called \verb|summary_align| (see section~\ref{sec:summary_info}) for instructions on how to get this. Once we've got this object, calculating the information content for a region is as easy as:
+
+\begin{verbatim}
+info_content = summary_align.information_content(5, 30, 
+                                                 chars_to_ignore = ['N'])
+\end{verbatim}
+
+Wow, that was much easier then the formula above made it look! The variable \verb|info_content| now contains a float value specifying the information content over the specified region (from 5 to 30 of the alignment). We specifically ignore the ambiguity residue 'N' when calculating the information content, since this value is not included in our alphabet (so we shouldn't be interested in looking at it!).
+
+
+As mentioned above, we can also calculate relative information content by supplying the expected frequencies:
+
+\begin{verbatim}
+expect_freq = {
+    'A' : .3,
+    'G' : .2,
+    'T' : .3,
+    'C' : .1,
+    '-' : .1}
+
+info_content = summary_align.information_content(5, 30,
+                                                 expected_freqs = expect_freq,
+                                                 chars_to_ignore = ['N'])
+\end{verbatim}
+
+Now, \verb|info_content| will contain the relative information content over the region in relation to the expected frequencies.
+
+
+The value return is calculated using base 2 as the logarithm base in the formula above. You can modify this by passing the parameter \verb|log_base| as the base you want:
+
+\begin{verbatim}
+info_content = summary_align.information_content(5, 30, log_base = 10
+                                                 chars_to_ignore = ['N'])
+\end{verbatim}
+
+Well, now you are ready to calculate information content. If you want to try applying this to some real life problems, it would probably be best to dig into the literature on information content. Hopefully your digging won't reveal any mistakes made in coding this function!
+
 \subsubsection{Translating between Alignment formats}
+\label{sec:align_translate}
 
 One thing that you always end up having to do is convert between different formats. Biopython does this using a FormatConverter class for alignment objects. First, let's say we have just parsed an alignment from clustal format into a \verb|ClustalAlignment| object:
 
@@ -1167,6 +1333,86 @@ The conversion process will, of course, lose information specific to a particula
 
 
 As more formats are added the converter will be beefed up to read and write all of these different formats.
+
+\subsection{Substitution Matrices}
+\label{sec:sub_matrix}
+
+Substitution matrices are an extremely important part of everyday bioinformatics work. They provide the scoring terms for classifying how likely two different residues are to substitute for each other. This is essential in doing sequence comparisons. The book ``Biological Sequence Analysis'' by Durbin et al. provides a really nice introduction to Substitution Matrices and their uses. Some famous substitution matrices are the PAM and BLOSUM series of matrices.
+
+
+Biopython provides a ton of common substitution matrices, and also provides functionality for creating your own substitution matrices.
+
+\subsubsection{Using common substitution matrices}
+
+\subsubsection{Creating your own substitution matrix from an alignment}
+
+A very cool thing that you can do easily with the substitution matrix classes is to create your own substitution matrix from an alignment. To do this, we first need to get a biopython alignment object and then get a summary object to calculate info about the alignment:
+
+\begin{verbatim}
+from Bio.Clustalw import Clustalw
+from Bio.Alphabet import IUPAC
+from Bio.Align import AlignInfo
+
+# get an alignment object from a Clustalw alignment output
+c_align = Clustalw.parse_file('test.aln', IUPAC.unambiguous_dna)
+summary_align = AlignInfo.SummaryInfo(c_align)
+\end{verbatim}
+
+Sections~\ref{sec:align_clustal} and~\ref{sec:summary_info} contain more information on doing this.
+
+
+Now that we've got our \verb|summary_align| object, we want to use it to find out the number of times different residues substitute for each other:
+
+\begin{verbatim}
+replace_info = summary_align.replacement_dictionary(['N'])
+\end{verbatim}
+
+This replacement information is represented as a python dictionary which will look something like:
+
+\begin{verbatim}
+{('C', 'C'): 2473.0, ('G', 'T'): 4.0, ('A', 'G'): 16.0, ('A', 'A'): 7814.0, 
+('A', 'C'): 15.0, ('T', 'C'): 26.0, ('T', 'A'): 20.0, ('T', 'G'): 20.0, 
+('C', 'A'): 15.0, ('A', 'T'): 24.0, ('G', 'G'): 2548.0, ('C', 'G'): 12.0, 
+('G', 'C'): 0, ('C', 'T'): 19.0, ('G', 'A'): 22.0, ('T', 'T'): 5730.0}
+\end{verbatim}
+
+This information gives us our accepted number of replacements, or how often we expect different things to substitute for each other. It turns out, amazingly enough, that this is all of the information we need to go ahead and create a substitution matrix. First, we use the replacement dictionary information to create an Accepted Replacement Matrix (ARM):
+
+\begin{verbatim}
+from Bio.SubsMat import SubsMat
+my_arm = SubsMat.SeqMat(replace_info)
+\end{verbatim}
+
+With this accepted replacement matrix, we can go right ahead and create our log odds matrix (ie. a standard type Substitution Matrix):
+
+\begin{verbatim}
+my_lom = SubsMat.make_log_odds_matrix(my_arm)
+\end{verbatim}
+
+The log odds matrix you create is customizable with the following optional arguments:
+
+\begin{itemize}
+  \item \verb|exp_freq_table| -- You can pass a table of expected frequencies for each alphabet. If supplied, this will be used instead of the passed accepted replacement matrix when calculate expected replacments.
+
+  \item \verb|logbase| - The base of the logarithm taken to create the log odd matrix. Defaults to base 10.
+
+  \item \verb|factor| - The factor to multiply each matrix entry by. This defaults to 10, which normally makes the matrix numbers easy to work with.
+
+  \item \verb|round_digit| - The digit to round to in the matrix. This defaults to 0 (ie. no digits).
+\end{itemize}
+
+Once you've got your log odds matrix, you can display it prettily using the function \verb|print_mat|. Doing this on our created matrix gives:
+
+\begin{verbatim}
+>>> my_lom.print_mat()
+A   4
+C -18   9
+G -18 -18   9
+T -20 -15 -18   5
+   A   C   G   T
+\end{verbatim}
+
+Very nice. Now we've got our very own substitution matrix to play with!
 
 \subsection{Classification}
 
