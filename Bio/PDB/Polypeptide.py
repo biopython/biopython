@@ -38,7 +38,10 @@ class Polypeptide(list):
         s=""
         for res in self:
             resname=res.get_resname()
-            resname=to_one_letter_code[resname]
+            if to_one_letter_code.has_key(resname):
+                resname=to_one_letter_code[resname]
+            else:
+                resname='X'
             s=s+resname
         seq=Seq(s, ProteinAlphabet)
         return seq
@@ -197,6 +200,7 @@ if __name__=="__main__":
     print "CA-CA"
     for pp in ppb.build_peptides(s):
         print pp.get_sequence()
+        print pp.get_ca_list()
 
 
 
