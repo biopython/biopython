@@ -129,44 +129,57 @@ def _do_callback(s, begin, end, taglist, cont_handler, attrlookup):
     'cont_handler' is the SAX ContentHandler
     'attrlookup' is a dict mapping the encoded tag name to the element info
     """
-    # bind functions to local names for a slight speedup
-    characters   = cont_handler.characters
-    startElement = cont_handler.startElement
-    endElement   = cont_handler.endElement
-    
-    for tag, l, r, subtags in taglist:
+    for item in taglist:
+        tag, l, r, subtags = item
         # If the tag's beginning is after the current position, then
         # the text from here to the tag's beginning are characters()
-        assert begin <= l, "begin = %d and l = %d" % (begin, l)
         if begin < l:
-            characters(s[begin:l])
+            cont_handler.characters(s[begin:l])
+        else:
+            # Some integrity checking
+            assert begin == l, "begin = %d and l = %d" % (begin, l)
 
-        if tag.startswith(">"):
-            if not tag == ">ignore":
-                assert tag.startswith(">G"),"Unknown special tag %s" % repr(tag)
+        if tag[0] == ">":
+            if tag == ">ignore":
+                # Named groups doesn't create ">ignore" tags, so pass them on
+                # to the ContentHandler.  Unnamed groups still need a name so
+                # mxTextTools can create subtags for them.  I named them
+                # ">ignore" - don't create events for them.
+                pass
+
+            elif tag[:2] == ">G":
                 # This needs a lookup to get the full attrs
                 realtag, attrs = attrlookup[tag]
-                startElement(realtag, attrs)
-        
+                cont_handler.startElement(realtag, attrs)
+
+            else:
+                raise AssertionError("Unknown special tag %s" % repr(tag))
+        else:
             # Normal tags
-            startElement(tag, _attribute_list)
+            cont_handler.startElement(tag, _attribute_list)
         
         # Recurse if it has any children
         if subtags:
             _do_callback(s, l, r, subtags, cont_handler, attrlookup)
         else:
-            characters(s[l:r])
+            cont_handler.characters(s[l:r])
+        begin = r
 
-        if not tag == ">ignore":
-            realtag, attrs = attrlookup[tag]
-            endElement(realtag)
+        if tag[0] == ">":
+            if tag == ">ignore":
+                pass
+            elif tag[:2] == ">G":
+                realtag, attrs = attrlookup[tag]
+                cont_handler.endElement(realtag)
+            else:
+                raise AssertionError("Unknown special tag %s" % repr(tag))
         else:
-            endElement(tag)
+            cont_handler.endElement(tag)
 
     # anything after the last tag and before the end of the current
     # range are characters
-    if r < end:
-        characters(s[r:end])
+    if begin < end:
+        cont_handler.characters(s[begin:end])
 
 def _do_dispatch_callback(s, begin, end, taglist,
                           start_table_get, cont_handler, save_stack,
@@ -186,12 +199,16 @@ def _do_dispatch_callback(s, begin, end, taglist,
     'cont_handler' is the SAX ContentHandler
     'attrlookup' is a dict mapping the encoded tag name to the element info
     """
-    for tag, l, r, subtags in taglist:
+    for item in taglist:
+        tag, l, r, subtags = item
         # If the tag's beginning is after the current position, then
         # the text from here to the tag's beginning are characters()
-        assert begin <= l, "begin = %d and l = %d" % (begin, l)
-        if begin < l and save_stack:
-            cont_handler._save_text += s[begin:l]
+        if begin < l:
+            if save_stack:
+                cont_handler._save_text += s[begin:l]
+        else:
+            # Some integrity checking
+            assert begin == l, "begin = %d and l = %d" % (begin, l)
 
         # Normal tags, see if the start function exists and call it
         #  ** This is a bit of a hack, in that this check also occurs
@@ -225,6 +242,7 @@ def _do_dispatch_callback(s, begin, end, taglist,
         elif save_stack:
             # Yes, this reaches into the implementation of the Dispatcher.
             cont_handler._save_text += s[l:r]
+        begin = r
 
         # See if theres' a function for the normal tag
         f = end_table_get(tag)
@@ -242,8 +260,8 @@ def _do_dispatch_callback(s, begin, end, taglist,
 
     # anything after the last tag and before the end of the current
     # range are characters
-    if r < end and save_stack:
-        cont_handler._save_text += s[r:end]
+    if begin < end and save_stack:
+        cont_handler._save_text += s[begin:end]
 
 def _parse_elements(s, tagtable, cont_handler, debug_level, attrlookup):
     """parse the string with the tagtable and send the ContentHandler events
@@ -522,12 +540,10 @@ class HeaderFooterParser(xmlreader.XMLReader):
 
     def copy(self):
         parser = HeaderFooterParser(self.format_name, self.attrs,
-                                    self.make_header_reader, self.header_reader_args,
-                                    self.header_tagtable,self.make_reader,
-                                    self.reader_args, self.record_tagtable,
-                                    self.make_footer_reader, self.footer_reader_args,
-                                    self.footer_tagtable,
-                                    (self.want_groupref_names, self.debug_level, self.attrlookup))
+    self.make_header_reader, self.header_reader_args, self.header_tagtable,
+    self.make_reader, self.reader_args, self.record_tagtable,
+    self.make_footer_reader, self.footer_reader_args, self.footer_tagtable,
+    (self.want_groupref_names, self.debug_level, self.attrlookup))
 
         parser.setContentHandler(self.getContentHandler())
         parser.setErrorHandler(self.getErrorHandler())
