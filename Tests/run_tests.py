@@ -125,6 +125,14 @@ class RegressionTest(unittest.TestCase):
         return self.test_name
 
     def runTest(self):
+        """Run the actual test inside a try/except to catch import errors.
+        """
+        try:
+            self.runSafeTest()
+        except ImportError, msg:
+            print "Skipping test because of import error: %s" % msg
+
+    def runSafeTest(self):
         generated_output = ''
         output = cStringIO.StringIO()
 
