@@ -175,7 +175,11 @@ class RecordParser(AbstractParser):
         self._consumer = _RecordConsumer()
 
     def parse(self, handle):
-        self._scanner.feed(handle, self._consumer)
+        if isinstance(handle, File.UndoHandle):
+            uhandle = handle
+        else:
+            uhandle = File.UndoHandle(handle)
+        self._scanner.feed(uhandle, self._consumer)
         return self._consumer.data
 
 class SequenceParser:
@@ -197,7 +201,11 @@ class SequenceParser:
         self._consumer = _SequenceConsumer(alphabet, title2ids)
 
     def parse(self, handle):
-        self._scanner.feed(handle, self._consumer)
+        if isinstance(handle, File.UndoHandle):
+            uhandle = handle
+        else:
+            uhandle = File.UndoHandle(handle)
+        self._scanner.feed(uhandle, self._consumer)
         return self._consumer.data
 
 
@@ -216,13 +224,10 @@ class _Scanner:
         receive events as the FASTA data is scanned.
 
         """
-        if isinstance(handle, File.UndoHandle):
-            uhandle = handle
-        else:
-            uhandle = File.UndoHandle(handle)
-        
-        if uhandle.peekline():
-            self._scan_record(uhandle, consumer)
+        assert isinstance(handle, File.UndoHandle), \
+               "handle must be an UndoHandle"
+        if handle.peekline():
+            self._scan_record(handle, consumer)
 
     def _scan_record(self, uhandle, consumer):
         consumer.start_sequence()

@@ -30,7 +30,8 @@ for test in tests:
     print "testing %s" % test
     datafile = os.path.join("Fasta", test)
     tc = ParserSupport.TaggingConsumer()
-    scanner.feed(open(datafile), tc)
+    handle = File.UndoHandle(open(datafile))
+    scanner.feed(handle, tc)
 
 
 ### _RecordConsumer

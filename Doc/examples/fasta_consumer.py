@@ -1,5 +1,6 @@
 from Bio.ParserSupport import AbstractConsumer
 from Bio import Fasta
+from Bio.File import UndoHandle
 
 import string
 
@@ -20,7 +21,7 @@ def extract_organisms(file, num_records):
     scanner = Fasta._Scanner()
     consumer = SpeciesExtractor()
 
-    file_to_parse = open(file, 'r')
+    file_to_parse = UndoHandle(open(file, 'r'))
 
     for fasta_record in range(num_records):
         scanner.feed(file_to_parse, consumer)
