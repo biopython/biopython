@@ -160,7 +160,7 @@ record = Group("KEGG_Compound_record",
                Opt(formula_line) +
                record_end)
 
-record_format = ParseRecords("KEGG_Compound_file",
+record_format = ParseRecords("KEGG_Compound_file", {},
                              record, RecordReader.EndsWith, ("///",))
 
 

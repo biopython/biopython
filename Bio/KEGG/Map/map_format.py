@@ -38,7 +38,7 @@ reaction = Group("reaction",
                  Rep1(Opt(stoch + Str1(" ")) + Rep(Str1(" ")) + reactant + Opt(plus)) +
                  Rep(Str1(" ")) + end)
 
-record_format = ParseRecords("KEGG_Map_File",
+record_format = ParseRecords("KEGG_Map_File", {},
                              reaction, RecordReader.CountLines, (1,))
 
 

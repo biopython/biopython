@@ -277,7 +277,7 @@ record = Group("KEGG_Enzyme_record",
                        dblinks_block)) +
                record_end)
 
-record_format = ParseRecords("KEGG_Enzyme_file",
+record_format = ParseRecords("KEGG_Enzyme_file", {},
                              record, RecordReader.EndsWith, ("///",))
 
 

@@ -319,7 +319,7 @@ citation_format = MedlineCitation
 header_format = Group("header", DOCTYPE + MedlineCitationSet_start)
 footer_format = Opt(DeleteCitation) + MedlineCitationSet_end
 format = HeaderFooter(
-    None,
+    None, {},
     header_format, RecordReader.Until, ("<MedlineCitation>",),
     citation_format, RecordReader.EndsWith, ("</MedlineCitation>",),
     footer_format, RecordReader.Everything, (),

@@ -332,7 +332,7 @@ citation_format = MedlineCitation
 header_format = Group("header", DOCTYPE + MedlineCitationSet_start)
 footer_format = Opt(DeleteCitation) + MedlineCitationSet_end
 format = HeaderFooter(
-    None,
+    None, {},
     # Unfortunately, RecordReader.Until doesn't work because some
     # MedlineCitations have attributes are in the form
     # <MedlineCitation Owner="NLM">.  "<MedlineCitation" by itself

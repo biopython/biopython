@@ -685,7 +685,7 @@ record = Martel.Group("genbank_record",
                                  contig_block) + \
                       record_end)
 
-record_format = Martel.ParseRecords("genbank_file", record,
+record_format = Martel.ParseRecords("genbank_file", {}, record,
                                     RecordReader.StartsWith, ("LOCUS",) )
 
 
@@ -705,13 +705,13 @@ header = Martel.Re("""\
 
 """)
 
-format = Martel.HeaderFooter("genbank",
+format = Martel.HeaderFooter("genbank", {},
                              header, RecordReader.CountLines, (10,),
                              record, RecordReader.EndsWith, ("//",),
                              None, None, None,
                              )
 
-multirecord = Martel.ParseRecords("genbank", record,
+multirecord = Martel.ParseRecords("genbank", {}, record,
                                   RecordReader.EndsWith, ("//",))
 
 
