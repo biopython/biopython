@@ -241,7 +241,8 @@ def _parse_pdb_header_list(header):
                 try:
                     dict['resolution']=float(r)
                 except:
-                    print 'nonstandard resolution',r
+                    #print 'nonstandard resolution',r
+                    dict['resolution']=None
         else:
             # print key
             pass
