@@ -9,6 +9,7 @@
    |--- Assert        - used for positive and negative lookahead assertions 
    |--- AtBeginning   - match the beginning of a line
    |--- AtEnd         - match the end of a line
+   |--- Debug         - print a debug message
    |--- Dot           - match any character except newline
    |--- Group         - give a group name to an expression
    |--- GroupRef      - match a previously identified expression
@@ -32,6 +33,12 @@ import Parser
 
 MAXREPEAT = msre_parse.MAXREPEAT
 
+try:
+    import IterParser
+except SyntaxError:
+    IterParser = None
+
+
 class Expression:
     """Base class for nodes in the Expression tree"""
     def __add__(self, other):
@@ -47,6 +54,10 @@ class Expression:
     def group_names(self):
         """the list of group names used by this Expression and its children"""
         return ()
+
+    def _find_groups(self, tag):
+        """return a list of all groups matching the given tag"""
+        return []
     
     def _select_names(self, names):
         """internal function used by 'select_names'.
@@ -166,6 +177,18 @@ class AtEnd(Expression):
     def __str__(self):
         """the corresponding pattern string"""
         return '$'
+
+# Print a message when there is a match at this point.
+# Helpful for debugging
+class Debug(Expression):
+    def __init__(self, msg):
+        self.msg = msg
+    def __str__(self):
+        # There is no pattern for this
+        return ""
+    def copy(self):
+        """do a deep copy on this Expression"""
+        return Debug(self.msg)
     
 # Any character except newline: '.'
 class Dot(Expression):
@@ -261,6 +284,13 @@ class Group(Expression):
             else:
                 return (self.name, ) + subnames
         return subnames
+
+    def _find_groups(self, tag):
+        """return a list of all groups matching the given tag"""
+        x = []
+        if self.name == tag:
+            x.append(self)
+        return x + self.expression._find_groups(tag)
 
     def _select_names(self, names):
         """internal function: do not use"""
@@ -379,6 +409,8 @@ class MaxRepeat(Expression):
         # These are the names created by this Expression, not the names
         # *used* by it.
         return self.expression.group_names()
+    def _find_groups(self, tag):
+        return self.expression._find_groups(tag)
     
     def copy(self):
         """do a deep copy on this Expression tree"""
@@ -467,8 +499,6 @@ class NullOp(Expression):
         return NullOp()
     def __str__(self):
         return ""
-    def group_names(self):
-        return ()
     def __add__(self, other):
         return other
     def __or__(self, other):
@@ -500,6 +530,8 @@ class PassThrough(Expression):
         return str(self.expression)
     def group_names(self):
         return self.expression.group_names()
+    def _find_groups(self, tag):
+        return self.expression._find_groups()
 
 class HeaderFooter(PassThrough):
     def __init__(self, format_name, attrs,
@@ -634,16 +666,25 @@ class HeaderFooter(PassThrough):
         else:
             header_parser = self.header_expression.make_parser(debug_level)
 
-        if self.record_expression is None:
-            record_parser = None
-        else:
-            record_parser = self.record_expression.make_parser(debug_level)
+        assert self.record_expression is not None
+        record_parser = self.record_expression.make_parser(debug_level)
 
         if self.footer_expression is None:
             footer_parser = None
         else:
             footer_parser = self.footer_expression.make_parser(debug_level)
-            
+
+        if isinstance(self.record_expression, Group) and \
+           self.record_expression.name == tag and \
+           IterParser is not None:
+            # There's an optimization for this case
+            return IterParser.IterHeaderFooter(
+                header_parser, self.make_header_reader, self.header_args,
+                record_parser, self.make_record_reader, self.record_args,
+                footer_parser, self.make_footer_reader, self.footer_args,
+                tag
+                )
+        
         return Iterator.IteratorHeaderFooter(
             header_parser, self.make_header_reader, self.header_args,
             record_parser, self.make_record_reader, self.record_args,
@@ -652,7 +693,22 @@ class HeaderFooter(PassThrough):
             )
 
     def group_names(self):
-        return self.expression.group_names()
+        x = [self.format_name]
+        if self.header_expression is not None:
+            x.extend(self.header_expression.group_names())
+        x.extend(self.expression.group_names())
+        if self.footer_expression is not None:
+            x.extend(self.footer_expression.group_names())
+        return x
+    def _find_groups(self, tag):
+        assert tag != self.format_name, "can't handle that case"
+        x = []
+        if self.header_expression is not None:
+            x.extend(self.header_expression._find_groups(tag))
+        x.extend(self.expression._find_groups(tag))
+        if self.footer_expression is not None:
+            x.extend(self.footer_expression._find_groups(tag))
+        return x
 
 # Might be useful to allow a minimum record count (likely either 0 or 1)
 class ParseRecords(PassThrough):
@@ -698,13 +754,25 @@ class ParseRecords(PassThrough):
         import Iterator
         if tag == self.format_name:
             return self.expression.make_iterator(self, tag)
+
+        if isinstance(self.record_expression, Group) and \
+           self.record_expression.name == tag and \
+           IterParser is not None:
+            # There's an optimization for this case
+            return IterParser.IterRecords(
+                self.record_expression.make_parser(debug_level),
+                self.make_reader, self.reader_args, tag)
+
         return Iterator.IteratorRecords(
             self.record_expression.make_parser(debug_level),
             self.make_reader, self.reader_args, tag)
     
     
     def group_names(self):
-        return self.expression.group_names()
+        return self.format_name + self.expression.group_names()
+    def _find_groups(self, tag):
+        assert tag != self.format_name, "can't handle that case"
+        return self.expression._find_groups(tag)
 
     def _modify_leaves(self, func):
         exp = self.expression.modify_leaves(func)
@@ -740,6 +808,11 @@ class ExpressionList(Expression):
             for name in exp.group_names():
                 names[name] = 1
         return tuple(names.keys())
+    def _find_groups(self, tag):
+        x = []
+        for exp in self.expressions:
+            x.extend(exp._find_groups(tag))
+        return x
     def _select_names(self, names):
         """internal function.  Do not use."""
         for exp in self.expressions:
