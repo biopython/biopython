@@ -1,0 +1,83 @@
+BLASTX 2.2.1 [Jul-12-2001]
+
+
+Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+
+Query= gi|8333950|gb|BE038934.1|BE038934 AB07D09 AB Arabidopsis
+thaliana cDNA 5' similar to cold-regulated protein cor47, mRNA
+sequence
+         (738 letters)
+
+Database: cold_tolerance_protein.fasta
+           19 sequences; 7312 total letters
+
+Searching..................done
+
+                                                                   Score     E
+Sequences producing significant alignments:                        (bits)  Value
+
+gi|729204|sp|Q06396|CR13_ORYSA 13 KD COLD-INDUCED PROTEIN              21  0.78
+gi|729205|sp|Q06397|CR18_ORYSA 18 KD COLD-INDUCED PROTEIN              18  5.1
+
+>gi|729204|sp|Q06396|CR13_ORYSA 13 KD COLD-INDUCED PROTEIN
+          Length = 120
+
+ Score = 20.8 bits (42), Expect = 0.78
+ Identities = 6/7 (85%), Positives = 6/7 (85%)
+ Frame = -3
+
+Query: 181 CCRHYSF 161
+           CC HYSF
+Sbjct: 93  CCSHYSF 99
+
+
+>gi|729205|sp|Q06397|CR18_ORYSA 18 KD COLD-INDUCED PROTEIN
+          Length = 156
+
+ Score = 18.1 bits (35), Expect = 5.1
+ Identities = 5/7 (71%), Positives = 7/7 (99%)
+ Frame = +3
+
+Query: 33 HCLGVLS 53
+          HCLG++S
+Sbjct: 54 HCLGIVS 60
+
+
+  Database: cold_tolerance_protein.fasta
+    Posted date:  Sep 27, 2001  4:17 PM
+  Number of letters in database: 7312
+  Number of sequences in database:  19
+  
+Lambda     K      H
+   0.318    0.135    0.401 
+
+Gapped
+Lambda     K      H
+   0.267   0.0410    0.140 
+
+
+Matrix: BLOSUM62
+Gap Penalties: Existence: 11, Extension: 1
+Number of Hits to DB: 3730
+Number of Sequences: 19
+Number of extensions: 61
+Number of successful extensions: 2
+Number of sequences better than 10.0: 4
+Number of HSP's better than 10.0 without gapping: 2
+Number of HSP's successfully gapped in prelim test: 0
+Number of HSP's that attempted gapping in prelim test: 0
+Number of HSP's gapped (non-prelim): 2
+length of database: 7312
+effective HSP length: 47
+effective length of database: 6419
+effective search space used:  1270962
+frameshift window, decay const: 50,  0.1
+T: 12
+A: 40
+X1: 16 ( 7.3 bits)
+X2: 38 (14.6 bits)
+X3: 64 (24.7 bits)
+S1: 33 (18.0 bits)

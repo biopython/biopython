@@ -18,9 +18,8 @@ all_tests = [
     'bt047', 'bt048', 'bt049', 'bt050', 'bt051',
     'bt052', 'bt053', 'bt054', 'bt055', 'bt056',
     'bt057', 'bt058', 'bt059', 'bt060', 'bt062',
-    'bt063'
+    'bt063', 'bt067'
     ]
-
 # In order to keep the output file sizes reasonable, only generate
 # a bunch of output for a few of the tests.
 detailed_tests = [
@@ -33,7 +32,6 @@ detailed_tests = [
     'bt018',   # 2.0.10 tblastx
     'bt042',   # 2.0.11 blastp
     ]
-
 
 ### _Scanner
 
