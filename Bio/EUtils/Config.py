@@ -42,7 +42,6 @@ def _add_db(x):
 # <option value="UniSts">UniSTS</option>
 # <option value="cdd">Domains</option>
 # <option value="snp">SNP</option>
-# <option value="unigene">UniGene</option>
 # <option value="popset">PopSet</option>
 
 databases.PUBMED = _add_db(DatabaseInfo("pubmed", 0))
@@ -54,6 +53,8 @@ databases.NUCLEOTIDE = _add_db(DatabaseInfo("nucleotide", 1))
 databases.PROTEIN = _add_db(DatabaseInfo("protein", 1))
 databases.POPSET = _add_db(DatabaseInfo("popset", 1))
 databases.SEQUENCES = _add_db(DatabaseInfo("sequences", 1))
+databases.UNIGENE = _add_db(DatabaseInfo("unigene", 1))
+databases.GENE = _add_db(DatabaseInfo("gene", 1))
 
 
 # Someday I want to make it easier to get a given format.  I would
