@@ -148,7 +148,6 @@ class FilteredReader:
                 line = apply( filter, ( line, ) )
             filtered_text = filtered_text + line
 
-        print filtered_text
         return filtered_text
 
 def has_trailing_linefeed( line ):
