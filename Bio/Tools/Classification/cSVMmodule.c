@@ -153,7 +153,6 @@ cSVM__sparse_dot(self, args)
     PyObject *x, *y;
     PyObject *xkeys, *key, *xvalue, *yvalue;
     double sum, xdouble, ydouble;
-    PyObject *retvalue;
 
     if(!PyArg_ParseTuple(args, "O!O!", &PyDict_Type, &x, &PyDict_Type, &y))
 	return NULL;
