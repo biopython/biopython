@@ -1,4 +1,4 @@
-
+import types
 
 __doc__="Output of PDB files."
 
@@ -81,8 +81,11 @@ class PDBIO:
     def set_structure(self, structure):
         self.structure=structure
 
-    def save(self, filename, select=Select()):
+    def save(self, file, select=Select()):
         """
+        @param file: output file
+        @type file: string or filehandle 
+
         @param select: selects which entities will be written.
         @type select: 
             select hould have the following methods:
@@ -96,7 +99,13 @@ class PDBIO:
             Typically select is a subclass of L{Select}.
         """
         get_atom_line=self._get_atom_line
-        fp=open(filename, "w")
+        if type(file)==types.StringType:
+            fp=open(file, "w")
+            close_file=1
+        else:
+            # filehandle, I hope :-)
+            fp=file
+            close_file=0
         # multiple models?
         if len(self.structure)>1:
             model_flag=1
@@ -138,7 +147,8 @@ class PDBIO:
                     fp.write("TER\n")
             if model_flag and model_residues_written:
                 fp.write("ENDMDL\n")
-        fp.close()
+        if close_file:
+            fp.close()
 
 if __name__=="__main__":
     
@@ -151,11 +161,18 @@ if __name__=="__main__":
     s=p.get_structure("test", sys.argv[1])
 
     io=PDBIO()
-
     io.set_structure(s)
+    io.save("out1.pdb")
 
-    io.save("out.pdb")
-
+    fp=open("out2.pdb", "w")
+    s1=p.get_structure("test1", sys.argv[1])
+    s2=p.get_structure("test2", sys.argv[2])
+    io=PDBIO()
+    io.set_structure(s1)
+    io.save(fp)
+    io.set_structure(s2)
+    io.save(fp)
+    fp.close()
 
 
 
