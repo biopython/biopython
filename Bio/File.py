@@ -90,6 +90,7 @@ class UndoHandle:
 #        else:
 #            setattr(self._handle, name, value)
 
+# XXX need to replace this with StringIO
 class StringHandle:
     def __init__(self, str):
         self._filename = tempfile.mktemp()
