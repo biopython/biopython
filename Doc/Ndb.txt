@@ -1,0 +1,25 @@
+Ndb.txt
+=======
+
+
+Ndb
+---
+
+The Ndb module works with Ndb-formatted sequence data.  Data is available at:
+http://ndbserver.rutgers.edu/NDB/NDBATLAS/index.html
+
+The Ndb record contains the following items:
+        Id
+        Features
+        Name
+        Sequence
+        Citation
+        Space Group
+        Cell Constants
+        Crystallization Conditions
+        Refinement
+        Coordinates
+
+Sequence is an instance of Crystal which is dictionary of Chain objects.  Each chain
+is a sequence of PDB hetero items.  Citation is a list of Reference objects.
+Crystal, Reference, Chain and Hetero are part of the biopython distribution.

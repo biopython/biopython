@@ -1,0 +1,16 @@
+NBRF.txt
+=========
+
+
+NBRF
+----
+
+The NBRF module works with NBRF-formatted sequence data.  Data is available at:
+http://www-nbrf.georgetown.edu/pirwww/pirhome.shtml
+
+
+The NBRF Scanner produces the following events:
+    sequence_type
+    sequence_name
+    comment
+    sequence

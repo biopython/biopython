@@ -28,17 +28,17 @@ Features: A-Form nucleic acid hybrid double helix, bulges, flipped-out bases, mi
 Id:  AH0014
 Name: 5'-r(GpCpG)-d(pApTpApT)-r(pApCpGpU)-3'
 Refinement: The structure was refined using the CNS 1.0 program. The R value is 21.7 for 26418 reflections in the resolution range 10.0 to 1.7 Å with I>0.0 sigma(I).
-Sequence: F : g c g a t a t a c g u
-
-D : g c g a t a t a c g u
-
-E : g c g a t a t a c g u
-
-B : g c g a t a t a c g u
+Sequence: A : g c g a t a t a c g u
 
 C : g c g a t a t a c g u
 
-A : g c g a t a t a c g u
+B : g c g a t a t a c g u
+
+E : g c g a t a t a c g u
+
+D : g c g a t a t a c g u
+
+F : g c g a t a t a c g u
 
 
 Space Group: P 2(1) 2(1) 2(1) 
@@ -72,7 +72,9 @@ Features: DNA single strand
 Id:  PD0072
 Name: DNA POLYMERASE I (E.C.2.7.7.7)/DNA COMPLEX
 Refinement: The structure was refined using the CNS program. The R value is 21.7 for 44062 reflections in the resolution range 20.0 to 2.1 Å with Fobs>2.0 sigma(Fobs).
-Sequence: B : met ile ser tyr asp asn tyr val thr ile leu asp glu glu thr leu lys ala trp ile 
+Sequence: A : t t t t t t t t t t t t t t t t t t t
+
+B : met ile ser tyr asp asn tyr val thr ile leu asp glu glu thr leu lys ala trp ile 
 ala lys leu glu lys ala pro val phe ala phe ala thr ala thr asp ser leu asp asn 
 ile ser ala asn leu val gly leu ser phe ala ile glu pro gly val ala ala tyr ile 
 pro val ala his asp tyr leu asp ala pro asp gln ile ser arg glu arg ala leu glu 
@@ -103,8 +105,6 @@ asp ala trp leu gln ala glu gln pro arg val arg met ile met gln val his asp glu
 leu val phe glu val his lys asp asp val asp ala val ala lys gln ile his gln leu 
 met glu asn cys thr arg leu asp val pro leu leu val glu val gly ser gly glu asn 
 trp asp gln ala his
-
-A : t t t t t t t t t t t t t t t t t t t
 
 
 Space Group: P 4(3) 
@@ -138,7 +138,9 @@ Features: DNA single strand, modified
 Id:  PD0080
 Name: DNA POLYMERASE I (E.C.2.7.7.7)/DNA COMPLEX
 Refinement: The structure was refined using the CNS program. The R value is 22.4 for 16291 reflections in the resolution range 20.0 to 3.0 Å with Fobs>2.0 sigma(Fobs).
-Sequence: B : met ile ser tyr asp asn tyr val thr ile leu asp glu glu thr leu lys ala trp ile 
+Sequence: A : t t u t
+
+B : met ile ser tyr asp asn tyr val thr ile leu asp glu glu thr leu lys ala trp ile 
 ala lys leu glu lys ala pro val phe ala phe asp thr glu thr asp ser leu asp asn 
 ile ser ala asn leu val gly leu ser phe ala ile glu pro gly val ala ala tyr ile 
 pro val ala his asp tyr leu asp ala pro asp gln ile ser arg glu arg ala leu glu 
@@ -169,8 +171,6 @@ asp ala trp leu gln ala glu gln pro arg val arg met ile met gln val his asp glu
 leu val phe glu val his lys asp asp val asp ala val ala lys gln ile his gln leu 
 met glu asn cys thr arg leu asp val pro leu leu val glu val gly ser gly glu asn 
 trp asp gln ala his
-
-A : t t u t
 
 
 Space Group: P 4(3) 
@@ -206,7 +206,11 @@ Features: B-DNA double helix, overhanging bases
 Id:  PD0082
 Name: CATABOLITE GENE ACTIVATOR PROTEIN/DNA COMPLEX
 Refinement: The structure was refined using the CNS 0.5 program. The R value is 23.1 for 9519 reflections in the resolution range 20.0 to 3.0 Å with Fobs>0.0 sigma(Fobs).
-Sequence: E : asp pro thr leu glu trp phe leu ser his cys his ile his lys tyr pro ser lys ser 
+Sequence: A : a a a a a t g c g a t
+
+C : c t a g a t c g c a t t t t t
+
+E : asp pro thr leu glu trp phe leu ser his cys his ile his lys tyr pro ser lys ser 
 thr leu ile his gln gly glu lys ala glu thr leu tyr tyr ile val lys gly ser val 
 ala val leu ile lys asp glu glu gly lys glu met ile leu ser tyr leu asn gln gly 
 asp phe ile gly glu leu gly leu phe glu glu gly gln glu arg ser ala trp val arg 
@@ -216,10 +220,6 @@ ser glu lys val gly asn leu ala phe leu asp val thr gly arg ile ala gln thr leu
 leu asn leu ala lys gln pro asp ala met thr his pro asp gly met gln ile lys ile 
 thr arg gln glu ile gly gln ile val gly cys ser arg glu thr val gly arg ile leu 
 lys met leu glu asp gln asn leu ile ser ala his gly lys thr ile val val tyr gly
-
-C : c t a g a t c g c a t t t t t
-
-A : a a a a a t g c g a t
 
 
 Space Group: P 3(1) 2 1
@@ -253,23 +253,7 @@ Features: RNA single strand, loops, overhanging bases
 Id:  PR0002
 Name: MS2 PROTEIN CAPSID/RNA COMPLEX
 Refinement: The structure was refined using the X-PLOR 3.860 program. The R value is 20.0 for 166564 reflections in the resolution range 30.0 to 2.8 Å with Fobs>0.0 sigma(Fobs).
-Sequence: D : ala ser asn phe thr gln phe val leu val asp asn gly gly thr gly asp val thr val 
-ala pro ser asn phe ala asn gly val ala glu trp ile ser ser asn ser arg ser gln 
-ala tyr lys val thr cys ser val arg gln ser ser ala gln asn arg lys tyr thr ile 
-lys val glu val pro lys val ala thr gln thr val gly gly val glu leu pro val ala 
-ala trp arg ser tyr leu asn met glu leu thr ile pro ile phe ala thr asn ser asp 
-cys glu leu ile val lys ala met gln gly leu leu lys asp gly asn pro ile pro ser 
-ala ile ala ala asn ser gly ile tyr
-
-E : ala ser asn phe thr gln phe val leu val asp asn gly gly thr gly asp val thr val 
-ala pro ser asn phe ala asn gly val ala glu trp ile ser ser asn ser arg ser gln 
-ala tyr lys val thr cys ser val arg gln ser ser ala gln asn arg lys tyr thr ile 
-lys val glu val pro lys val ala thr gln thr val gly gly val glu leu pro val ala 
-ala trp arg ser tyr leu asn met glu leu thr ile pro ile phe ala thr asn ser asp 
-cys glu leu ile val lys ala met gln gly leu leu lys asp gly asn pro ile pro ser 
-ala ile ala ala asn ser gly ile tyr
-
-B : u c g c c a a c a g g c g g
+Sequence: A : u c g c c a a c a g g c g g
 
 C : ala ser asn phe thr gln phe val leu val asp asn gly gly thr gly asp val thr val 
 ala pro ser asn phe ala asn gly val ala glu trp ile ser ser asn ser arg ser gln 
@@ -279,7 +263,23 @@ ala trp arg ser tyr leu asn met glu leu thr ile pro ile phe ala thr asn ser asp
 cys glu leu ile val lys ala met gln gly leu leu lys asp gly asn pro ile pro ser 
 ala ile ala ala asn ser gly ile tyr
 
-A : u c g c c a a c a g g c g g
+B : u c g c c a a c a g g c g g
+
+E : ala ser asn phe thr gln phe val leu val asp asn gly gly thr gly asp val thr val 
+ala pro ser asn phe ala asn gly val ala glu trp ile ser ser asn ser arg ser gln 
+ala tyr lys val thr cys ser val arg gln ser ser ala gln asn arg lys tyr thr ile 
+lys val glu val pro lys val ala thr gln thr val gly gly val glu leu pro val ala 
+ala trp arg ser tyr leu asn met glu leu thr ile pro ile phe ala thr asn ser asp 
+cys glu leu ile val lys ala met gln gly leu leu lys asp gly asn pro ile pro ser 
+ala ile ala ala asn ser gly ile tyr
+
+D : ala ser asn phe thr gln phe val leu val asp asn gly gly thr gly asp val thr val 
+ala pro ser asn phe ala asn gly val ala glu trp ile ser ser asn ser arg ser gln 
+ala tyr lys val thr cys ser val arg gln ser ser ala gln asn arg lys tyr thr ile 
+lys val glu val pro lys val ala thr gln thr val gly gly val glu leu pro val ala 
+ala trp arg ser tyr leu asn met glu leu thr ile pro ile phe ala thr asn ser asp 
+cys glu leu ile val lys ala met gln gly leu leu lys asp gly asn pro ile pro ser 
+ala ile ala ala asn ser gly ile tyr
 
 
 Space Group: R 3 2
@@ -313,7 +313,11 @@ Features: tRNA, modified, mismatch
 Id:  PR0004
 Name: ELONGATION FACTOR TU/CYSTEINYL TRNA COMPLEX
 Refinement: The structure was refined using the X-PLOR 3.851 program. The R value is 20.6 for 18043 reflections in the resolution range 10.0 to 2.6 Å with Fobs>0.0 sigma(Fobs).
-Sequence: B : ala lys gly glu phe ile arg thr lys pro his val asn val gly thr ile gly his val 
+Sequence: A : g g c g c g u 4su a a c a a a g c g g h2u h2u a u g u a g c g g a psu u g c a mi
+a a psu c c g u c u a g u c c g g t psu c g a c u c c g g a a c g c g c c u c c 
+a
+
+B : ala lys gly glu phe ile arg thr lys pro his val asn val gly thr ile gly his val 
 asp his gly lys thr thr leu thr ala ala leu thr tyr val ala ala ala glu asn pro 
 asn val glu val lys asp tyr gly asp ile asp lys ala pro glu glu arg ala arg gly 
 ile thr ile asn thr ala his val glu tyr glu thr ala lys arg his tyr ser his val 
@@ -334,10 +338,6 @@ gln phe tyr phe arg thr thr asp val thr gly val val arg leu pro gln gly val glu
 met val met pro gly asp asn val thr phe thr val glu leu ile lys pro val ala leu 
 glu glu gly leu arg phe ala ile arg glu gly gly arg thr val gly ala gly val val 
 thr lys ile leu glu
-
-A : g g c g c g u 4su a a c a a a g c g g h2u h2u a u g u a g c g g a psu u g c a mi
-a a psu c c g u c u a g u c c g g t psu c g a c u c c g g a a c g c g c c u c c 
-a
 
 
 Space Group: F 2 2 2
@@ -373,7 +373,21 @@ Features: RNA single strand
 Id:  PR0007
 Name: POLYDENYLATE BINDING PROTEIN 1/RNA COMPLEX
 Refinement: The structure was refined using the CNS program. The R value is 23.0 for 57149 reflections in the resolution range 20.0 to 2.6 Å with Fobs>2.0 sigma(Fobs).
-Sequence: P : met asn pro ser ala pro ser tyr pro met ala ser leu tyr val gly asp leu his pro 
+Sequence: A : a a a a a a a a a a a
+
+C : a a a a a a a a a a a
+
+B : a a a a a a a a a a a
+
+E : a a a a a a a a a a a
+
+D : a a a a a a a a a a a
+
+G : a a a a a a a a a a a
+
+F : a a a a a a a a a a a
+
+I : met asn pro ser ala pro ser tyr pro met ala ser leu tyr val gly asp leu his pro 
 asp val thr glu ala met leu tyr glu lys phe ser pro ala gly pro ile leu ser ile 
 arg val cys arg asp met ile thr arg arg ser leu gly tyr ala tyr val asn phe gln 
 gln pro ala asp ala glu arg ala leu asp thr met asn phe asp val ile lys gly lys 
@@ -384,40 +398,9 @@ gly phe val his phe glu thr gln glu ala ala glu arg ala ile glu lys met asn gly
 met leu leu asn asp arg lys val phe val gly arg phe lys ser arg lys glu arg glu 
 ala glu leu gly ala arg ala lys glu phe
 
-N : met asn pro ser ala pro ser tyr pro met ala ser leu tyr val gly asp leu his pro 
-asp val thr glu ala met leu tyr glu lys phe ser pro ala gly pro ile leu ser ile 
-arg val cys arg asp met ile thr arg arg ser leu gly tyr ala tyr val asn phe gln 
-gln pro ala asp ala glu arg ala leu asp thr met asn phe asp val ile lys gly lys 
-pro val arg ile met trp ser gln arg asp pro ser leu arg lys ser gly val gly asn 
-ile phe ile lys asn leu asp lys ser ile asp asn lys ala leu tyr asp thr phe ser 
-ala phe gly asn ile leu ser cys lys val val cys asp glu asn gly ser lys gly tyr 
-gly phe val his phe glu thr gln glu ala ala glu arg ala ile glu lys met asn gly 
-met leu leu asn asp arg lys val phe val gly arg phe lys ser arg lys glu arg glu 
-ala glu leu gly ala arg ala lys glu phe
+H : a a a a a a a a a a a
 
-O : met asn pro ser ala pro ser tyr pro met ala ser leu tyr val gly asp leu his pro 
-asp val thr glu ala met leu tyr glu lys phe ser pro ala gly pro ile leu ser ile 
-arg val cys arg asp met ile thr arg arg ser leu gly tyr ala tyr val asn phe gln 
-gln pro ala asp ala glu arg ala leu asp thr met asn phe asp val ile lys gly lys 
-pro val arg ile met trp ser gln arg asp pro ser leu arg lys ser gly val gly asn 
-ile phe ile lys asn leu asp lys ser ile asp asn lys ala leu tyr asp thr phe ser 
-ala phe gly asn ile leu ser cys lys val val cys asp glu asn gly ser lys gly tyr 
-gly phe val his phe glu thr gln glu ala ala glu arg ala ile glu lys met asn gly 
-met leu leu asn asp arg lys val phe val gly arg phe lys ser arg lys glu arg glu 
-ala glu leu gly ala arg ala lys glu phe
-
-L : met asn pro ser ala pro ser tyr pro met ala ser leu tyr val gly asp leu his pro 
-asp val thr glu ala met leu tyr glu lys phe ser pro ala gly pro ile leu ser ile 
-arg val cys arg asp met ile thr arg arg ser leu gly tyr ala tyr val asn phe gln 
-gln pro ala asp ala glu arg ala leu asp thr met asn phe asp val ile lys gly lys 
-pro val arg ile met trp ser gln arg asp pro ser leu arg lys ser gly val gly asn 
-ile phe ile lys asn leu asp lys ser ile asp asn lys ala leu tyr asp thr phe ser 
-ala phe gly asn ile leu ser cys lys val val cys asp glu asn gly ser lys gly tyr 
-gly phe val his phe glu thr gln glu ala ala glu arg ala ile glu lys met asn gly 
-met leu leu asn asp arg lys val phe val gly arg phe lys ser arg lys glu arg glu 
-ala glu leu gly ala arg ala lys glu phe
-
-M : met asn pro ser ala pro ser tyr pro met ala ser leu tyr val gly asp leu his pro 
+K : met asn pro ser ala pro ser tyr pro met ala ser leu tyr val gly asp leu his pro 
 asp val thr glu ala met leu tyr glu lys phe ser pro ala gly pro ile leu ser ile 
 arg val cys arg asp met ile thr arg arg ser leu gly tyr ala tyr val asn phe gln 
 gln pro ala asp ala glu arg ala leu asp thr met asn phe asp val ile lys gly lys 
@@ -439,7 +422,7 @@ gly phe val his phe glu thr gln glu ala ala glu arg ala ile glu lys met asn gly
 met leu leu asn asp arg lys val phe val gly arg phe lys ser arg lys glu arg glu 
 ala glu leu gly ala arg ala lys glu phe
 
-K : met asn pro ser ala pro ser tyr pro met ala ser leu tyr val gly asp leu his pro 
+M : met asn pro ser ala pro ser tyr pro met ala ser leu tyr val gly asp leu his pro 
 asp val thr glu ala met leu tyr glu lys phe ser pro ala gly pro ile leu ser ile 
 arg val cys arg asp met ile thr arg arg ser leu gly tyr ala tyr val asn phe gln 
 gln pro ala asp ala glu arg ala leu asp thr met asn phe asp val ile lys gly lys 
@@ -450,9 +433,7 @@ gly phe val his phe glu thr gln glu ala ala glu arg ala ile glu lys met asn gly
 met leu leu asn asp arg lys val phe val gly arg phe lys ser arg lys glu arg glu 
 ala glu leu gly ala arg ala lys glu phe
 
-H : a a a a a a a a a a a
-
-I : met asn pro ser ala pro ser tyr pro met ala ser leu tyr val gly asp leu his pro 
+L : met asn pro ser ala pro ser tyr pro met ala ser leu tyr val gly asp leu his pro 
 asp val thr glu ala met leu tyr glu lys phe ser pro ala gly pro ile leu ser ile 
 arg val cys arg asp met ile thr arg arg ser leu gly tyr ala tyr val asn phe gln 
 gln pro ala asp ala glu arg ala leu asp thr met asn phe asp val ile lys gly lys 
@@ -463,19 +444,38 @@ gly phe val his phe glu thr gln glu ala ala glu arg ala ile glu lys met asn gly
 met leu leu asn asp arg lys val phe val gly arg phe lys ser arg lys glu arg glu 
 ala glu leu gly ala arg ala lys glu phe
 
-F : a a a a a a a a a a a
+O : met asn pro ser ala pro ser tyr pro met ala ser leu tyr val gly asp leu his pro 
+asp val thr glu ala met leu tyr glu lys phe ser pro ala gly pro ile leu ser ile 
+arg val cys arg asp met ile thr arg arg ser leu gly tyr ala tyr val asn phe gln 
+gln pro ala asp ala glu arg ala leu asp thr met asn phe asp val ile lys gly lys 
+pro val arg ile met trp ser gln arg asp pro ser leu arg lys ser gly val gly asn 
+ile phe ile lys asn leu asp lys ser ile asp asn lys ala leu tyr asp thr phe ser 
+ala phe gly asn ile leu ser cys lys val val cys asp glu asn gly ser lys gly tyr 
+gly phe val his phe glu thr gln glu ala ala glu arg ala ile glu lys met asn gly 
+met leu leu asn asp arg lys val phe val gly arg phe lys ser arg lys glu arg glu 
+ala glu leu gly ala arg ala lys glu phe
 
-G : a a a a a a a a a a a
+N : met asn pro ser ala pro ser tyr pro met ala ser leu tyr val gly asp leu his pro 
+asp val thr glu ala met leu tyr glu lys phe ser pro ala gly pro ile leu ser ile 
+arg val cys arg asp met ile thr arg arg ser leu gly tyr ala tyr val asn phe gln 
+gln pro ala asp ala glu arg ala leu asp thr met asn phe asp val ile lys gly lys 
+pro val arg ile met trp ser gln arg asp pro ser leu arg lys ser gly val gly asn 
+ile phe ile lys asn leu asp lys ser ile asp asn lys ala leu tyr asp thr phe ser 
+ala phe gly asn ile leu ser cys lys val val cys asp glu asn gly ser lys gly tyr 
+gly phe val his phe glu thr gln glu ala ala glu arg ala ile glu lys met asn gly 
+met leu leu asn asp arg lys val phe val gly arg phe lys ser arg lys glu arg glu 
+ala glu leu gly ala arg ala lys glu phe
 
-D : a a a a a a a a a a a
-
-E : a a a a a a a a a a a
-
-B : a a a a a a a a a a a
-
-C : a a a a a a a a a a a
-
-A : a a a a a a a a a a a
+P : met asn pro ser ala pro ser tyr pro met ala ser leu tyr val gly asp leu his pro 
+asp val thr glu ala met leu tyr glu lys phe ser pro ala gly pro ile leu ser ile 
+arg val cys arg asp met ile thr arg arg ser leu gly tyr ala tyr val asn phe gln 
+gln pro ala asp ala glu arg ala leu asp thr met asn phe asp val ile lys gly lys 
+pro val arg ile met trp ser gln arg asp pro ser leu arg lys ser gly val gly asn 
+ile phe ile lys asn leu asp lys ser ile asp asn lys ala leu tyr asp thr phe ser 
+ala phe gly asn ile leu ser cys lys val val cys asp glu asn gly ser lys gly tyr 
+gly phe val his phe glu thr gln glu ala ala glu arg ala ile glu lys met asn gly 
+met leu leu asn asp arg lys val phe val gly arg phe lys ser arg lys glu arg glu 
+ala glu leu gly ala arg ala lys glu phe
 
 
 Space Group: P 2(1) 
@@ -536,13 +536,13 @@ Features: RNA, RNA hammerhead ribozyme, catalytic RNA, loop
 Id:  URX035
 Name: RNA hammerhead ribozyme
 Refinement: The structure was refined using the X-PLOR 3.1 program. The R value is 25.1 for 6199 reflections in the resolution range 15.0 to 3.1 Å with Fobs>2.0 sigma(Fobs).
-Sequence: D : g g c c g a a a c u c g u a a g a g u c a c c a c
-
-B : g g c c g a a a c u c g u a a g a g u c a c c a c
+Sequence: A : g u g g u c u g a u g a g g c c
 
 C : g u g g u c u g a u g a g g c c
 
-A : g u g g u c u g a u g a g g c c
+B : g g c c g a a a c u c g u a a g a g u c a c c a c
+
+D : g g c c g a a a c u c g u a a g a g u c a c c a c
 
 
 Space Group: P3(1) 21
@@ -578,9 +578,9 @@ Features:
 Id:  ZHF026
 Name: 5'-d(CpGp)-r(CpGp)-d(CpG)-3'
 Refinement: The refinement information is not available for this entry.
-Sequence: B : c g c g c g
+Sequence: A : c g c g c g
 
-A : c g c g c g
+B : c g c g c g
 
 
 Space Group: P2(1) 2(1) 2(1) 

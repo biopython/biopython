@@ -1,0 +1,12 @@
+Saf.txt
+=======
+
+
+Saf
+---
+
+The Saf module works with NBRF-formatted sequence data.  Data is available at:
+http://www.embl-heidelberg.de/predictprotein/Dexa/optin_safDes.html
+
+
+The Saf record contains a Generic alignment object.  Generic is part of the biopython distribution.
