@@ -636,7 +636,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
 
         # assume positive strand to start with if we have DNA. The
         # complement in the location will change this later.
-        if self._seq_type == "DNA":
+        if self._seq_type.find("DNA") >= 0:
             self._cur_feature.strand = 1
 
     def location(self, content):

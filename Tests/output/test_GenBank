@@ -3378,7 +3378,7 @@ Feaures
 type: source
 location: (0..7036074)
 ref: None:None
-strand: None
+strand: 1
 qualifiers: 
 	Key: db_xref, Value: ['taxon:381']
 	Key: organism, Value: ['Mesorhizobium loti']
@@ -3387,7 +3387,7 @@ qualifiers:
 type: gene
 location: (286..1084)
 ref: None:None
-strand: None
+strand: 1
 qualifiers: 
 	Key: gene, Value: ['mlr0002']
 
