@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-from Bio import register_io
+from Bio import register_io, group_io
 from Bio.sources import ExPASy
 
 from _support import *
@@ -14,3 +14,9 @@ register_io(
     key="",
     failure=[(blank_expr, "no results")]
     )
+
+register_io(
+    name="swissprot",
+    behavior="serial",
+    )
+group_io("swissprot", "swissprot-expasy-cgi")
