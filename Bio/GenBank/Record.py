@@ -383,14 +383,19 @@ class Record:
             count_parts = self.base_counts.split(" ")
             while '' in count_parts:
                 count_parts.remove('')
-            assert len(count_parts) % 2 == 0, \
-              "Unexpected count information: %s" % self.base_counts
-            while len(count_parts) > 0:
-                count_info = count_parts.pop(0)
-                count_type = count_parts.pop(0)
+            # deal with the standard case, with a normal origin line
+            # like: 474 a    356 c    428 g    364 t
+            if len(count_parts) % 2 == 0:
+                while len(count_parts) > 0:
+                    count_info = count_parts.pop(0)
+                    count_type = count_parts.pop(0)
 
-                output += "%7s %s" % (count_info, count_type)
-
+                    output += "%7s %s" % (count_info, count_type)
+            # deal with ugly ORIGIN lines like:
+            # 1311257 a2224835 c2190093 g1309889 t
+            # by just outputting the raw information
+            else:
+                output += self.base_counts
             output += "\n"
         return output
 
