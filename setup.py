@@ -103,6 +103,9 @@ you see ImportErrors."""
             default = 1
         print "You can find %s at %s." % (name, url)
         print
+        # exit automatically if required packages not installed
+        if not(default):
+            sys.exit(-1)
 
         if not get_yes_or_no(
             "Do you want to continue this installation?", default):
