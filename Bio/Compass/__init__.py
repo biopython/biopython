@@ -1,5 +1,4 @@
 # Copyright 2004 by James Casbon.  All rights reserved.
-# Patched: 2005 Michal Kurowski
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -21,9 +20,6 @@ _Scanner      Scan compass results
 _Consumer     Consume scanner events
 RecordParser  Parse one compass record
 Iterator      Iterate through a number of compass records
-
-Todo: handle "-n" option output parsing
-
 """
 from Bio import File
 from Bio.ParserSupport import *
@@ -154,11 +150,11 @@ class _Consumer:
       re.compile("length1=(\S+)\s+filtered_length1=(\S+)\s+length2=(\S+)"
         + "\s+filtered_length2=(\S+)")
     _re_profilewidth = \
-        re.compile("Nseqs1=(\S+)\s+Neff1=(\S+)\s+Nseqs2=(\S+)\s+Neff2=(\S+)")
+      re.compile("Nseqs1=(\S+)\s+Neff1=(\S+)\s+Nseqs2=(\S+)\s+Neff2=(\S+)")
     _re_scores = re.compile("Smith-Waterman score = (\S+)\s+Evalue = (\S+)")
     _re_start = re.compile("(\d+)")
-    _re_align = re.compile("^\S+.+?([A-Za-z\~\=\.\-]+)$")
-    _re_positive_alignment = re.compile("^\s+([\+\s]+)$")
+    _re_align = re.compile("^.{15}(\S+)")
+    _re_positive_alignment = re.compile("^.{15}(.+)")
 
     def __init__(self):
         self.data = None

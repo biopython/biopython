@@ -1058,6 +1058,10 @@ def qblast(program, database, sequence,
     import urllib
     from Bio.WWW import RequestLimiter
     
+    import warnings
+    warnings.warn("qblast works only with blastn and blastp for now.")
+    assert program == 'blastn' or program == 'blastp'
+
     parameters = [
         ('QUERY', sequence),
         ('PROGRAM', program),

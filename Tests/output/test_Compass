@@ -1,22 +1,12 @@
 test_Compass
-testAlignmentParsingOne (test_Compass.CompassTest) ... FAIL
+testAlignmentParsingOne (test_Compass.CompassTest) ... ok
 testAlignmentParsingTwo (test_Compass.CompassTest) ... ok
 testCompassIteratorEasy (test_Compass.CompassTest) ... ok
 testCompassIteratorHard (test_Compass.CompassTest) ... ok
 testCompassParser (test_Compass.CompassTest) ... ok
 testCompassScanAndConsume (test_Compass.CompassTest) ... ok
 
-======================================================================
-FAIL: testAlignmentParsingOne (test_Compass.CompassTest)
 ----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/home/idoerg/biopy_cvs/biopython/Tests/test_Compass.py", line 100, in testAlignmentParsingOne
-    self.assertEquals("++ ++++++", com_record.positives)
-  File "/usr/lib/python2.3/unittest.py", line 302, in failUnlessEqual
-    raise self.failureException, \
-AssertionError: '++ ++++++' != '++ ++++++\n'
+Ran 6 tests in 0.008s
 
-----------------------------------------------------------------------
-Ran 6 tests in 0.009s
-
-FAILED (failures=1)
+OK

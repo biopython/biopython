@@ -1,19 +1,33 @@
-# Copyright Jonathan Taylor 2005
-class CAPS:
-  """A differential cutsite.
+"""This module deals with CAPS markers.
+
+A CAPS marker is a location a DifferentialCutsite as described below and a
+set of primers that can be used to visualize this.  More information can
+be found in the paper located at:
+
+http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&list_uids=8106085&dopt=Abstract
+
+Copyright Jonathan Taylor 2005
+"""
+
+class DifferentialCutsite:
+  """A differential cutsite is a location in an alignment where an enzyme cuts
+  at least one sequence and also cannot cut at least one other sequence.
 
   Members:
-  start       Where the CAPS lives in the alignment indexed from 1.
-  enzyme      The enzyme that causes this CAPS.
-  cuts_in     A list of sequences as indexes it cuts in.
-  blocked_in  A list of sequences as indexes it is blocked in.
+  start       Where it lives in the alignment.
+  enzyme      The enzyme that causes this.
+  cuts_in     A list of sequences (as indexes into the alignment) the
+              enzyme cuts in.
+  blocked_in  A list of sequences (as indexes into the alignment) the
+              enzyme is blocked in.
 
   """
 
   def __init__(self, **kwds):
-    """Initialize a CAPS.
+    """Initialize a DifferentialCutsite.
 
-    Each member should be included as a keyword
+    Each member (as listed in the class description) should be included as a
+    keyword.
     """
     
     self.start = int(kwds["start"])
@@ -25,11 +39,12 @@ class AlignmentHasDifferentLengthsError(Exception):
   pass
 
 class CAPSMap:
-  """A map of an alignment showing all possible caps.
+  """A map of an alignment showing all possible dcuts.
 
   Members:
   alignment  The alignment that is mapped.
-  caps       A list of possible CAPS markers.
+  dcuts      A list of possible CAPS markers in the form of 
+             DifferentialCutsites.
   """
 
   def __init__(self, alignment, enzymes = []):
@@ -52,7 +67,7 @@ class CAPSMap:
     self.alignment = alignment
     self.enzymes = enzymes
 
-    # look for caps
+    # look for dcuts
     self._digest()
   
   def _digest_with(self, enzyme):
@@ -62,12 +77,8 @@ class CAPSMap:
     # go through each sequence
     for seq in self.sequences:
 
-      # FIXME: Possibly Bio.Restriction should be changed to handle gaps
-      from Bio.Seq import Seq
-      ungapped_seq = Seq(seq.tostring().replace("-", "n"))
-      
       # grab all the cuts in the sequence
-      cuts[seq] = [cut - enzyme.fst5 for cut in enzyme.search(ungapped_seq)]
+      cuts[seq] = [cut - enzyme.fst5 for cut in enzyme.search(seq)]
 
       # maintain a list of all cuts in all sequences
       all.extend(cuts[seq])
@@ -86,7 +97,7 @@ class CAPSMap:
     # all now has indices for all sequences in the alignment
 
     for cut in all:
-      # test the caps
+      # test for dcuts
 
       cuts_in = []
       blocked_in = []
@@ -99,22 +110,10 @@ class CAPSMap:
           blocked_in.append(i)
 
       if cuts_in != [] and blocked_in != []:
-        self.caps.append(CAPS(start = cut, enzyme = enzyme, cuts_in = cuts_in, blocked_in = blocked_in))
+        self.dcuts.append(DifferentialCutsite(start = cut, enzyme = enzyme, cuts_in = cuts_in, blocked_in = blocked_in))
 
   def _digest(self):
-    """Finds all caps in the alignment"""
+    self.dcuts = []
 
-    # start with no caps
-    self.caps = []
-
-    # check each enzyme for caps
     for enzyme in self.enzymes:
       self._digest_with(enzyme)
-
-  def __str__(self):
-    """Gives a summary of the CAPS Map."""
-    s = "Enzyme - Location - Cuts - Blocks"
-
-    for c in self.caps:
-      s += "\n%s - %d - %d - %d" % (c.enzyme, c.start, len(c.cuts_in), len(c.blocked_in))
-    return s
