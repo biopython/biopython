@@ -27,8 +27,8 @@ pdb_rcsb_cgi = CGIDB(
 
 pdb_ebi_cgi = CGIDB(
     name="pdb-ebi-cgi",
-    cgi="http://www.ebi.ac.uk/cgi-bin/emblfetch",
-    url="http://www.ebi.ac.uk/cgi-bin/emblfetch",
+    cgi="http://www.ebi.ac.uk/cgi-bin/dbfetch",
+    url="http://www.ebi.ac.uk/cgi-bin/dbfetch",
     delay=5.0,
     params=[("db", "PDB"),
             ("format", "default"),   # also Fasta, bsml, agave available
