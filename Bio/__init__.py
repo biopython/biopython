@@ -59,7 +59,7 @@ def _load_registries():
         x = [zipfiles[file][0] for file in zipfiles.keys() \
                 if 'Bio\\config' in file]
         x = [name.split("\\")[-1] for name in x] # Get module name
-        x = map(lamdba x: x[:-4], x) # chop off '.pyc'
+        x = map(lambda x: x[:-4], x) # chop off '.pyc'
     # not in a zipfile, get files normally
     else:
         x = os.listdir(os.path.dirname(config_imports.__file__))

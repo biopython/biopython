@@ -216,7 +216,14 @@ def GC_skew(seq, window = 100):
 # 8/19/03 Iddo: moved these imports from within the function as
 # ``import * '' is only
 # allowed within the module
-from Tkinter import *
+# Brad -- added an import check so you don't have to have Tkinter
+# installed to use other sequtils functions. A little ugly but
+# it really should be fixed by not using 'import *' which I'm not
+# really excited about doing right now.
+try:
+    from Tkinter import *
+except ImportError:
+    pass
 from math import pi, sin, cos, log
 def xGC_skew(seq, window = 1000, zoom = 100, 
                          r = 300, px = 100, py = 100):
