@@ -21,6 +21,7 @@ recursive-include Doc *.fasta
 recursive-include Doc Makefile
 recursive-include Doc/examples *.aln
 recursive-include Doc/examples *.xpk
+recursive-include Doc/images *.png
 include Bio/KDTree/Makefile    # Include files for building KDTree.
 include Bio/KDTree/KDTree.i
 include Bio/KDTree/KDTree.h
