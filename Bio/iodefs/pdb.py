@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-from Bio import register_io
+from Bio import register_io, group_io
 from Bio.sources import RCSB, EBI
 
 from Martel import *
@@ -32,3 +32,9 @@ register_io(
     failure=[(not_header_expr, "results do not look like PDB format")]
     )
 
+register_io(
+    name="pdb",
+    behavior="serial",
+    )
+group_io("pdb", "pdb-rcsb-cgi")
+group_io("pdb", "pdb-ebi-cgi")
