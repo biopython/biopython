@@ -266,6 +266,7 @@ class Group(Expression):
         """internal function: do not use"""
         if self.name is not None and self.name not in names:
             self.name = None
+            self.attrs = xmlreader.AttributesImpl({})
         self.expression._select_names(names)
 
     def _modify_leaves(self, func):
