@@ -33,7 +33,7 @@ class FormatRegistry:
             return
         self._autoloading = 1
         _FmtUtils.load_basemodule(self.loadpath)
-        self.autoloading = 0
+        self._autoloading = 0
         self._autoloaded = 1
         
     def register_format(self, **kwargs):
