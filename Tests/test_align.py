@@ -17,10 +17,21 @@ from Bio.Align.FormatConvert import FormatConverter
 from Bio.Fasta import FastaAlign
 
 print "testing reading and writing clustal format..."
-# parse the alignment file and get an aligment object
-alignment = Clustalw.parse_file(os.path.join(os.curdir, 'Clustalw',
-                                             'opuntia.aln'))
+test_dir = os.path.join(os.getcwd(), 'Clustalw')
+test_names = ['opuntia.aln', 'cw02.aln']
 
+test_files = []
+for name in test_names:
+    test_files.append(os.path.join(test_dir, name))
+
+for test_file in test_files:
+    # parse the alignment file and get an aligment object
+    alignment = Clustalw.parse_file(test_file)
+
+    # print the alignment back out
+    print alignment
+
+alignment = Clustalw.parse_file(os.path.join(test_dir, test_names[0]))
 
 # test the base alignment stuff
 print 'all_seqs...'
@@ -31,8 +42,6 @@ for seq_record in all_seqs:
 print 'length:', alignment.get_alignment_length()
 print 'consensus:', alignment.dumb_consensus()
 
-# print the alignment back out
-print alignment
 
 print "testing reading and writing fasta format..."
 
