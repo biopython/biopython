@@ -34,7 +34,7 @@ class Record:
 
     mesh_headings          List of MeSH headings.
     mesh_tree_numbers      List of MeSH Tree Numbers.
-    subheadings            List of MeSH subheadings.
+    mesh_subheadings       List of MeSH subheadings.
 
     abstract               The abstract.
     comments               List of references to comments.
@@ -91,7 +91,7 @@ class Record:
         
         self.mesh_headings = []
         self.mesh_tree_numbers = []
-        self.subheadings = []
+        self.mesh_subheadings = []
         
         self.abstract = ''
         self.comments = []
@@ -336,7 +336,7 @@ class _RecordConsumer(AbstractConsumer):
         self.data.abstract = self.data.abstract + self._clean(line, rstrip=0)
     
     def address(self, line):
-        self.data.address = self.data.address + self._clean(line)
+        self.data.address = self.data.address + self._clean(line, rstrip=0)
     
     def author(self, line):
         self.data.authors.append(self._clean(line))
@@ -452,24 +452,24 @@ class _RecordConsumer(AbstractConsumer):
         self.data.journal_subsets.append(self._clean(line))
     
     def subheadings(self, line):
-        self.data.subheadings.append(self._clean(line))
+        self.data.mesh_subheadings.append(self._clean(line))
     
     def secondary_source_id(self, line):
         self.data.secondary_source_ids.append(self._clean(line))
     
     def source(self, line):
-        self.data.source = self.data.source + self._clean(line)
+        self.data.source = self.data.source + self._clean(line, rstrip=0)
     
     def title_abbreviation(self, line):
         self.data.title_abbreviation = self.data.title_abbreviation + \
-                                       self._clean(line)
+                                       self._clean(line, rstrip=0)
     
     def title(self, line):
-        self.data.title = self.data.title + self._clean(line)
+        self.data.title = self.data.title + self._clean(line, rstrip=0)
     
     def transliterated_title(self, line):
         self.data.transliterated_title = self.data.transliterated_title + \
-                                         self._clean(line)
+                                         self._clean(line, rstrip=0)
     
     def unique_identifier(self, line):
         assert not self.data.id, "id already defined"
@@ -498,6 +498,11 @@ class _RecordConsumer(AbstractConsumer):
         self.data.undefined.append(line)
 
     def _clean(self, line, rstrip=1):
+        tab = string.find(line, '\t')
+        if tab >= 0:
+            nospace = line[tab+1:]
+        else:
+            nospace = line[6:]
         if rstrip:
-            return string.rstrip(line[6:])
-        return line[6:]
+            return string.rstrip(nospace)
+        return nospace
