@@ -10,7 +10,7 @@ This module provides code to work with Medline.
 
 Classes:
 Record           Holds Medline data.
-Iterator         Iterates over a file containint Medline records.
+Iterator         Iterates over a file containing Medline records.
 RecordParser     Parses a Medline record into a Record object.
 
 _Scanner         Scans a Medline record.
