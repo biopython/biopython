@@ -24,6 +24,7 @@ Intended only for experimentation.
 import os
 import sys
 import string
+import random
 from urllib import FancyURLopener
 from urllib import urlencode
 
@@ -38,7 +39,7 @@ from Bio.Alphabet import DNAAlphabet
 from Bio.Alphabet import Gapped
 from Bio.SGMLExtractor import SGMLExtractorHandle
 from Bio.HotRand import HotRandom
-from Bio.HotRand import hex_convert
+
 
 
 
@@ -80,46 +81,54 @@ class Immune:
     protected sequences.
     """
 
-    def __init__( self, friendly, alphabet = 'acgt', do_tuning = 1):
-        """Initialize an Immune object.
+    def __init__( self, friendly_seq, alphabet = 'acgt', tuner_dict = None,
+hot_mode = 0 ):
+        self.hot_mode = hot_mode
+        if hot_mode:
+            self.hot_random = HotRandom()
+        self.set_defaults()
 
-        do_tuning specifies whether or not we should look for a file with
-        parameters.
-        """
-        self.hot_random = HotRandom()
-        if do_tuning:
-            self.tune()
-        else:
-            self.set_defaults()
+        try:
+            self.tuner_dict = tuner_dict
+        except:
+            self.tuner_dict= self.default_tuner_dict
+        self.tune()
+        self.build_align( friendly_seq )
         self.friendly = friendly
         self.alphabet = alphabet[:]
         self.lymphocyte_factory()
 
-    def tune( self ):
-        self.set_defaults()
-        tune_path = os.path.join( '.' )
-        tune_file = os.path.join( tune_path, 'ais_tuner.txt' )
-        handle = open( tune_file  )
-        while 1:
-            line = handle.readline()
-            if line.strip() == '':
-                break
-            if line.startswith( '#' ):
-                continue
-            ( key, val ) = line.split( '=', 1 )
+    def set_defaults( self ):
+        self.default_tuner_dict = { \
+            'num_lymphocytes' : 20, \
+            'num_tosses' : 5, \
+            'threshold' : 5, \
+            'segment_size' : 60, \
+            'replicant_num' : 1 \
+        }
+
+    def tune( self, tuner_dict = self.tuner_dict ):
+        for ( key, val ) in tuner_dict:
             key = key.strip()
             val = int( val.strip() )
             self.__dict__[ key ] = val
 
-    def set_defaults( self ):
-        self.num_lymphocytes = 20
-        self.num_tosses = 5
-        self.threshold = 5
-        self.segment_size = 60
-        self.replicant_num = 1
+    def build_align( self, seq ):
+        align = Alignment( Gapped( DNAAlphabet() ) )
+        alphabet = self.alphabet
+        len_seq = len( seq )
+        step = self.segment_size
+        for j in range( 0, len_seq, step ):
+            segment = seq[ j: j + step )
+            align.add_sequence( name, segment )
+        self.friendly = align
 
     def select_at_random( self, items ):
-        selector = self.hot_random.hot_rand( len( items ) - 1 )
+        max_select = len( items )
+        if self.hot_mode:
+            selector = self.hot_random.hot_rand( max_select )
+        else:
+            selector = random.randint( 0, max_select )
         return selector
 
     def guess_gaps( self, seq ):
@@ -192,7 +201,10 @@ class Immune:
         """
         Random selection biased by weight
         """
-        weight = self.hot_random.hot_rand( self.accum_weight )
+        if self.hot_mode:
+            weight = self.hot_random.hot_rand( self.accum_weight )
+        else:
+            weight = random.randint( self.accum_weight )
         index = self.search_accum_weight( weight )
         return index
 
