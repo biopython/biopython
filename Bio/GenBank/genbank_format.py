@@ -627,7 +627,7 @@ record = Martel.Group("genbank_record",
                       record_end)
 
 record_format = Martel.ParseRecords("genbank_file", record,
-                                    RecordReader.EndsWith, ("//\n",) )
+                                    RecordReader.StartsWith, ("LOCUS",) )
 
 
 # if you download a big mess of GenBank files, it'll have a header
