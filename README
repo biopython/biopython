@@ -80,7 +80,7 @@ To Do
 
 - Annotations on sequences
 - BLAST additions
-  o scripting front end to NCBIWWW
+  o fix Scanner and write Parser for NCBIWWW
   o PSI-BLAST on WWW
 - parsers
   o Enzyme
@@ -93,7 +93,7 @@ To Do
 - generalize parsers
 - bug database
 - regression tests
-- documentation
+- documentation(!!)
 - look into Zope-ifying the web site
 - deprecate Seq.py
 

@@ -11,9 +11,8 @@ http://www.ncbi.nlm.nih.gov/BLAST/
 
 Classes:
 _Scanner      Scans output from NCBI's BLAST WWW server.
+
 """
-
-
 import string
 
 from Bio import File
@@ -38,6 +37,13 @@ class _Scanner:
         object that will receive events as the report is scanned.
 
         """
+        # This stuff appears in 2.0.12.
+        # <p><!--
+        # QBlastInfoBegin
+        #         Status=READY
+        # QBlastInfoEnd
+        # --><p>
+
         # <HTML>
         # <HEAD>
         # <TITLE>BLAST Search Results </TITLE>
@@ -52,13 +58,17 @@ class _Scanner:
         # </HTML>
         # </BODY>
         # </HTML>
-        
         if isinstance(handle, File.UndoHandle):
             uhandle = handle
         else:
             uhandle = File.UndoHandle(handle)
-
         # Read HTML formatting up to the "BLAST" version line.
+        if attempt_read_and_call(uhandle, consumer.noevent, start='<p>'):
+            read_and_call(uhandle, consumer.noevent, start='QBlastInfoBegin')
+            read_and_call(uhandle, consumer.noevent, contains='Status=READY')
+            read_and_call(uhandle, consumer.noevent, start='QBlastInfoEnd')
+            read_and_call(uhandle, consumer.noevent, start='--><p>')
+
         read_and_call(uhandle, consumer.noevent, start='<HTML>')
         read_and_call(uhandle, consumer.noevent, start='<HEAD>')
         read_and_call(uhandle, consumer.noevent, start='<TITLE>')
@@ -131,6 +141,9 @@ class _Scanner:
                 consumer.noevent(line)
                 break
             consumer.reference(line)
+
+        # Read the RID line, for version 2.0.12 (2.0.11?) and above.
+        attempt_read_and_call(uhandle, consumer.noevent, start='RID')
 
         # Read the Query lines and the following blank line.
         read_and_call(uhandle, consumer.query_info, contains='Query=')
