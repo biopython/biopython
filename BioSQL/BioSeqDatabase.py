@@ -4,9 +4,10 @@ This provides interfaces for loading biological objects from a relational
 database, and is compatible with the BioSQL standards.
 """
 import BioSeq
+import Loader
 
 def open_database(driver = "MySQLdb", *args, **kwargs):
-    """Main interface for loading an existing BioSQL-style database.
+    """Main interface for loading a existing BioSQL-style database.
 
     This function is the easiest way to retrieve a connection to a
     database, doing something like:
@@ -43,6 +44,46 @@ class DBServer:
     def items(self):
         return [(key, self[key]) for key in self.keys()]
 
+    def remove_database(self, db_name):
+        """Try to remove all references to items in a database.
+        
+        XXX I think this might be the worst optimized SQL in the history
+        of the world. There is probably a much better way to do it.
+        """
+        # first get the database id and entry ids in the database
+        db_id = self.adaptor.fetch_dbid_by_dbname(db_name)
+        bioentry_ids = self.adaptor.list_bioentry_ids(db_id)
+
+        # now remove all the entries
+        # XXX This doesn't work for all the tables.
+        for bioentry_id in bioentry_ids:
+            sql = r"DELETE FROM bioentry WHERE bioentry_id = %s"
+            self.adaptor.execute_one(sql, (bioentry_id))
+            sql = r"DELETE FROM bioentry_date WHERE bioentry_id = %s"
+            # self.adaptor.execute_one(sql, (bioentry_id))
+        
+        # finally remove the database
+        sql = r"DELETE FROM biodatabase WHERE biodatabase_id = %s"
+        self.adaptor.execute_one(sql, (db_id))
+
+    def new_database(self, db_name):
+        """Add a new database to the server and return it.
+        """
+        # get an id for the database
+        db_ids = self.adaptor.list_biodatabase_ids()
+        if len(db_ids) >= 1:
+            last_id = max(db_ids)
+            db_id = last_id + 1
+        else:
+            db_id = 1
+        assert db_id not in db_ids, "Failed to make a unique id"
+
+        # make the database
+        sql = r"INSERT INTO biodatabase VALUES" \
+              r" (%s, %s)" 
+        self.adaptor.execute_one(sql, (db_id, db_name))
+        return BioSeqDatabase(self.adaptor, db_name)
+
 class Adaptor:
     def __init__(self, conn):
         self.conn = conn
@@ -56,6 +97,11 @@ class Adaptor:
             raise KeyError("Cannot find biodatabase with name %r" % dbname)
         assert count == 1, "More than one biodatabase with name %r" % dbname
         return self.cursor.fetchone()[0]
+
+    def list_biodatabase_ids(self):
+        self.cursor.execute(
+            r"select biodatabase_id from biodatabase")
+        return [field[0] for field in self.cursor.fetchall()]
 
     def fetch_seqid_by_display_id(self, dbid, name):
         count = self.cursor.execute(
@@ -92,6 +138,13 @@ class Adaptor:
         self.cursor.execute(
             r"select bioentry_id from bioentry where biodatabase_id = %s",
             (dbid,))
+        return [field[0] for field in self.cursor.fetchall()]
+
+    def all_bioentry_ids(self):
+        """List all bioentry ids in the database.
+        """
+        self.cursor.execute(
+            r"SELECT bioentry_id from bioentry", ())
         return [field[0] for field in self.cursor.fetchall()]
         
     def list_bioentry_display_ids(self, dbid):
@@ -202,3 +255,22 @@ class BioSeqDatabase:
         guess) the primary_ids in a database.
         """
         return self[seqid]
+
+    def load(self, record_iterator):
+        """Load a set of SeqRecords into the BioSQL database.
+
+        record_iterator is an Iterator object that returns SeqRecord objects
+        which will be used to populate the database. The Iterator should
+        implement next() and either return None when it is out of objects
+        or raise StopIteration (XXX python 2.2, we won't suport this yet).
+        """
+        db_loader = Loader.DatabaseLoader(self.adaptor, self.dbid)
+        while 1:
+            # XXX add a break with StopIteration here.
+            cur_record = record_iterator.next()
+            
+            if cur_record is None:
+                break
+
+            db_loader.load_seqrecord(cur_record)
+        
