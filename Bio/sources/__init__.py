@@ -147,18 +147,33 @@ class BioSQL(Source):
     a handle (since BioSQL is not going to give you a handle). This
     should be standardized.
     """
-    def __init__(self, name, doc = "", db_host = 'localhost',
+    def __init__(self, name, doc = "", db_host = 'localhost', db_port = '',
                  db_user = 'root', db_passwd = '', sql_db = '',
-                 namespace_db = ''):
+                 namespace_db = '', db_type = 'mysql'):
         """Intialize with information for connecting to the BioSQL db.
         """
         Source.__init__(self, name, None, None, doc, None)
         self.db_host = db_host
+        self.db_port = db_port
         self.db_user = db_user
         self.db_passwd = db_passwd
         self.sql_db = sql_db
         self.namespace_db = namespace_db
-    
+        self.db_type = db_type
+
+    def _get_db_module(self, db_type):
+        """Retrieve the appropriate module to use for connecting to a database
+
+        This parses a description of the database and tries to determine
+        which module is appropriate for that database type.
+        """
+        if db_type in ['mysql']:
+            return 'MySQLdb'
+        elif db_type in ['pg', 'postgres', 'postgresql']:
+            raise ValueError("Postgres not supported yet. Sorry.")
+        else:
+            raise ValueError("Unknown database type: %s" % db_type)
+   
     def _rawget(self, params):
         # do the import here to prevent circular import problems
         from BioSQL import BioSeqDatabase
@@ -172,9 +187,16 @@ class BioSQL(Source):
         assert len(params[0]) == 2, "Expected two item parameter got %s" % \
                                     (str(params[0]))
         find_id = params[0][1]
-        server = BioSeqDatabase.open_database(user = self.db_user,
-                   passwd = self.db_passwd, host = self.db_host,
-                   db = self.sql_db)
+
+        db_driver = self._get_db_module(self.db_type)
+        open_args = {"user" : self.db_user,
+                     "passwd" : self.db_passwd,
+                     "host" : self.db_host,
+                     "db" : self.sql_db,
+                     "driver" : db_driver}
+        if self.db_port:
+            open_args["port"] = self.db_port
+        server = apply(BioSeqDatabase.open_database, (), open_args)
         db = server[self.namespace_db]
         # try our different id choices to test the query
         item = None
@@ -205,8 +227,9 @@ class BioCorba(Source):
         to muck around with. If not set, we just use a standard retriever.
         """
         Source.__init__(self, name, None, None, doc, None)
-        retriever = self._get_retriever(server_type)
-        self.corba_dict = self._get_corba_client(ior_ref, retriever)
+        self.retriever = self._get_retriever(server_type)
+        self.ior_ref = ior_ref
+        self.corba_dict = None
 
     def _get_retriever(self, server_type):
         """Return a BioCorba retriever object based on the specified server.
@@ -252,6 +275,11 @@ class BioCorba(Source):
         return GenBank.Dictionary(client, GenBank.FeatureParser())
 
     def _rawget(self, params):
+        # get the corba dictionary only once when fetched
+        if self.corba_dict is None:
+            self.corba_dict = self._get_corba_client(self.ior_ref, 
+                                                     self.retriever)
+        
         # for params, we expect to get something like
         # [('accession', 'AB030760')]. We don't worry about what the id
         # is called right now, and just try to find it in the database
@@ -287,13 +315,30 @@ class IndexedFile(Source):
         db = Mindy.open(dbname = name)
         return db
 
+    def _get_check_names(self, given_name, db):
+        """Get a list of all namespaces to search for the file under.
+
+        If given_name is a valid key, then it is returned as the only
+        thing to check. Otherwise, we go forward and check all possible
+        namespaces.
+        """
+        if given_name is not None and given_name in db.keys():
+            return [given_name]
+        else:
+            return db.keys()
+
     def _rawget(self, params):
         """Do the database retrieval of the sequence, returning a handle.
         """
         assert len(params) == 1, "Expected one parameter, got %s" % \
                                  str(params)
         namespace, key = params[0]
-        location = apply(self.db.lookup, (), {namespace : key})
+        names_to_check = self._get_check_names(namespace, self.db)
+        for check_name in names_to_check:
+            location = apply(self.db.lookup, (), {check_name : key})
+            if len(location) >= 1:
+                break
+
         assert len(location) == 1, "Got multiple hits: %s" % location
         return StringIO.StringIO(location[0].text)
 
