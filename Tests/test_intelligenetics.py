@@ -17,7 +17,7 @@ from Bio import IntelliGenetics
 
 intelligenetics_file_dir = os.path.join(os.getcwd(), 'IntelliGenetics')
 
-test_files = [ 'TAT_mase_nuc.txt', 'VIF_mase_pro.txt', 'vpu_nucaligned.txt' ]
+test_files = [ 'TAT_mase_nuc.txt', 'VIF_mase-pro.txt', 'vpu_nucaligned.txt' ]
 
 
 
