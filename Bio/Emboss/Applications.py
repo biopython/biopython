@@ -312,3 +312,24 @@ class WaterCommandline(Application.AbstractCommandline):
                  "Do not display percent identity and similarity"),
          _Option(["-aformat"], ["input"], None, 0,
                  "Display output in a different specified output format")]
+
+class FuzznucCommandline(Application.AbstractCommandline):
+    """Commandline object for the fuzznuc program from EMBOSS.
+    """
+    def __init__(self, cmd = "fuzznuc"):
+        Application.AbstractCommandline.__init__(self)
+        self.program_name = cmd
+
+        self.parameters = [
+         _Option(["-sequence"], ["input"], None, 1,
+                 "Sequence database USA"),
+         _Option(["-pattern"], ["input"], None, 1,
+                 "Search pattern, using standard IUPAC one-letter codes"),
+         _Option(["-mismatch"], ["input"], None, 1,
+                 "Number of mismatches"),
+         _Option(["-outfile"], ["output", "file"], None, 1,
+                 "Output report file name"),
+         _Option(["-complement"], ["input"], None, 0,
+                 "Search complementary strand"),
+         _Option(["-rformat"], ["input"], None, 0,
+                 "Specify the report format to output in.")]
