@@ -92,16 +92,13 @@ class PDBIO:
 					resname=residue.get_resname()  
 					segid=residue.get_segid()
 					for atom in residue.get_unpacked_list():
-						if not select.accept_atom(atom):
-							continue
-						else:
-							# flag to write TER
+						if select.accept_atom(atom):
 							chain_residues_written=1
 							model_residues_written=1
-						s=get_atom_line(atom, hetfield, segid, atom_number, resname,
+							s=get_atom_line(atom, hetfield, segid, atom_number, resname,
 								resseq, icode, chain_id)
-						fp.write(s)
-						atom_number=atom_number+1
+							fp.write(s)
+							atom_number=atom_number+1
 				if chain_residues_written:
 					fp.write("TER\n")
 			if model_flag and model_residues_written:
