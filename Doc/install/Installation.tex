@@ -91,12 +91,12 @@ the python website contains tons of documentation and reasons to learn
 to program in python.
 
 
-Biopython is designed to work with Python 2.2 or later. With python, the
+Biopython is designed to work with Python 2.3 or later. With python, the
 general rule of thumb is to keep yourself using the latest version, as
 the development process is very clean and new releases are quite stable.
-Upgrading bug-fix releases (for example. 2.2.1 to 2.2.2) 
+Upgrading bug-fix releases (for example. 2.3.1 to 2.3.2) 
 is incredibly easy and won't require any re-installation of libraries.
-Upgrading between versions (2.1 to 2.2) is more time consuming since you
+Upgrading between versions (2.3 to 2.4) is more time consuming since you
 need to re-install all libraries you have added to python.
 
 
@@ -106,23 +106,23 @@ Let's get started with installation on various platforms.
 
 First, you should go the main python web site and head over to the information
 page for the latest python release. At the time of this writing the
-latest stable python release is 2.2.3, which is available from
-\ahrefurl{\url{http://www.python.org/2.2.3/}}. This page contains links
+latest stable python release is 2.4, which is available from
+\ahrefurl{\url{http://www.python.org/2.4/}}. This page contains links
 to all released files for the given release. For UNIX, we'll want to use
-the tarred and gzipped file, which is called \verb|Python-2.2.3.tgz| at
+the tarred and gzipped file, which is called \verb|Python-2.4.tgz| at
 the time of this writing.
 
 Download this file and then unpack it with the following commands:
 
 \begin{verbatim}
-$ gunzip Python-2.2.3.tgz 
-$ tar -xvpf Python-2.2.3.tar 
+$ gunzip Python-2.4.tgz 
+$ tar -xvpf Python-2.4.tar 
 \end{verbatim}
 
 Then enter into the created directory:
 
 \begin{verbatim}
-$ cd Python-2.2.3
+$ cd Python-2.4
 \end{verbatim}
 
 Now, start the build process by configuring everything to your system:
@@ -150,17 +150,17 @@ python interpreter:
 
 \begin{verbatim}
 $ python
-Python 2.2.2 (#1, 01/12/03, 07:51:34) 
-[GCC Apple cpp-precomp 6.14] on darwin
+Python 2.4 (#1, Dec  5 2004, 20:47:03)
+[GCC 3.3.3] on cygwin
 Type "help", "copyright", "credits" or "license" for more information.
->>> 
+>>>
 \end{verbatim}
 
 \subsubsection{RPM and other Package Manager Installation}
 
 There are a multitude of package manager systems out there for which
 python is available. One popular one is the RPM (RedHat Package Manager)
-system. Each of these package managing systems has it's own quirks and
+system. Each of these package managing systems has its own quirks and
 tricks and I certainly can't pretend to understand them all so I won't
 try to describe them all here.
 
@@ -181,8 +181,8 @@ Installation on Windows is most easily done using handy windows
 installers. As described above in the UNIX section, you should go to the
 webpage for the current stable version of Python to download this
 installer. At the current time, you'd go to
-\ahrefurl{\url{http://www.python.org/2.2.3/}} and download
-\verb|Python-2.2.3.exe|. 
+\ahrefurl{\url{http://www.python.org/2.4/}} and download
+\verb|Python-2.4.msi|. 
 
 
 The installer is an executable program, so you only need to double click
@@ -233,14 +233,14 @@ for download at:
 
 For UNIX and UNIX-like systems you should download the \verb|tar.gz|
 file from the page listed above. At the current time, this is
-\verb|egenix-mx-base-2.0.4.tar.gz|.
+\verb|egenix-mx-base-2.0.6.tar.gz|.
 
 Once you download this, unpack it and change into the created directory:
 
 \begin{verbatim}
-$ gunzip egenix-mx-base-2.0.4.tar.gz 
-$ tar -xvpf egenix-mx-base-2.0.4.tar
-$ cd egenix-mx-base-2.0.4
+$ gunzip egenix-mx-base-2.0.6.tar.gz 
+$ tar -xvpf egenix-mx-base-2.0.6.tar
+$ cd egenix-mx-base-2.0.6
 \end{verbatim}
 
 To build it, use the standard python build procedure:
@@ -253,14 +253,14 @@ Then become root, and install it, again using the standard python
 mechanism:
 
 \begin{verbatim}
-# python setup.py install
+$ python setup.py install
 \end{verbatim}
 
 \subsubsection{Windows systems}
 
 For Windows operating systems, you should download the Windows installer
 for the version of python you are running. At the current time, this
-would be: \verb|egenix-mx-base-2.0.4.win32-py2.2.exe|.
+would be: \verb|egenix-mx-base-2.0.6.win32-py2.4.exe|.
 
 
 This is a standard graphical installer, so after download double click
@@ -275,11 +275,11 @@ your python interpreter and import it with no errors:
 
 \begin{verbatim}
 $ python
-Python 2.2.2 (#1, 01/12/03, 07:51:34) 
-[GCC Apple cpp-precomp 6.14] on darwin
+Python 2.4 (#1, Dec  5 2004, 20:47:03)
+[GCC 3.3.3] on cygwin
 Type "help", "copyright", "credits" or "license" for more information.
 >>> from mx import TextTools
->>> 
+>>>
 \end{verbatim}
 
 \subsection{Numerical Python}
@@ -288,27 +288,29 @@ The Numerical Python distribution (also known an Numeric or Numpy) is a
 fast implementation of arrays and associated array functionality. This
 is important for a number of Biopython modules that deal with
 number processing. The main web site for Numeric is:
-\ahrefurl{\url{http://www.pfdubois.com/numpy/}} and downloads are
+\ahrefurl{\url{http://sourceforge.net/projects/numpy}} and downloads are
 available from:
-\ahrefurl{\url{http://sourceforge.net/project/showfiles.php?group_id=1369}}.
+\ahrefurl{\url{http://sourceforge.net/project/showfiles.php?group_id=1369&package_id=1351}}.
 
 \subsubsection{UNIX and Mac OS X systems}
 
-As with mxTextTools, you should download the \verb|tar.gz| file. At the
-current time, this is \verb|Numeric-22.0.tar.gz|. The build
+As with mxTextTools, you should download the \verb|tar.gz| file. The last
+version of Numerical Python that compiles out of the box is
+\verb|Numeric-23.4.tar.gz|. With more recent versions of Numerical Python,
+you may need to tweak \verb|setup.py| for the compilation to work. The build
 process is exactly the same as with mxTextTools:
 
 \begin{verbatim}
-$ gunzip Numeric-22.0.tar.gz 
-$ tar -xvpf Numeric-22.0.tar
-$ cd Numeric-22.0
+$ gunzip Numeric-23.4.tar.gz 
+$ tar -xvpf Numeric-23.4.tar
+$ cd Numeric-23.4
 $ python setup.py build
 \end{verbatim}
 
 Once it is built, you should become root, and then install it:
 
 \begin{verbatim}
-# python setup.py install
+$ python setup.py install
 \end{verbatim}
 
 
@@ -323,7 +325,7 @@ and make sure to install this as well as the basic Numeric package.
 
 Once again, Windows installers are available for Numeric so you should
 follow the now-standard procedure of downloading the installer
-(\verb|Numeric-22.0.win32-py2.2.exe| at the current time), double
+(\verb|Numeric-23.7.win32-py2.4.exe| at the current time), double
 clicking it and then following the installation instructions. As before,
 you will need to have administrator permissions to do this.
 
@@ -334,11 +336,11 @@ interpreter and ensure you can import Numeric without any errors:
 
 \begin{verbatim}
 $ python
-Python 2.2.2 (#1, 01/12/03, 07:51:34) 
-[GCC Apple cpp-precomp 6.14] on darwin
+Python 2.4 (#1, Dec  5 2004, 20:47:03)
+[GCC 3.3.3] on cygwin
 Type "help", "copyright", "credits" or "license" for more information.
 >>> from Numeric import *
->>> 
+>>>
 \end{verbatim}
 
 \subsection{ReportLab (optional)}
@@ -346,7 +348,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 The ReportLab package is a library for generating PDF documents. It is
 used in the Biopython Graphics modules, which contains basic
 functionality for drawing biological objects like chromosomes. If you
-are not planning on using this installing ReportLab is not necessary.
+are not planning on using this, installing ReportLab is not necessary.
 ReportLab in itself is very useful for a number of tasks besides just
 Biopython, so you may want to check out
 \ahrefurl{\url{http://www.reportlab.org}} before making your decision.
@@ -362,13 +364,13 @@ downloads.
 
 For UNIX installs, you should download the tarred and gzipped version of
 the ReportLab distribution. At the time of this writing, this is called
-\verb|ReportLab_1_17.tgz|. First, unpack the distribution and change
+\verb|ReportLab_1_20.tgz|. First, unpack the distribution and change
 into the created directory:
 
 \begin{verbatim}
-$ gunzip ReportLab_1_17.tgz 
-$ tar -xvpf ReportLab_1_17.tar
-$ cd reportlab/
+$ gunzip ReportLab_1_20.tgz 
+$ tar -xvpf ReportLab_1_20.tar
+$ cd reportlab_1_20/
 \end{verbatim}
 
 Once again, ReportLab uses the standard python installation system which
@@ -382,7 +384,7 @@ $ python setup.py build
 Now become root, and install it:
 
 \begin{verbatim}
-# python setup.py install
+$ python setup.py install
 \end{verbatim}
 
 \subsubsection{Windows systems}
@@ -393,7 +395,7 @@ steps to work properly, so the installation is still quite easy.
 
 
 First, download the zipped distribution from the download site listed
-above. At the current time this is called \verb|ReportLab_1_17.zip|. You
+above. At the current time this is called \verb|ReportLab_1_20.zip|. You
 can also download the tarred/gzipped file (with a \verb|.tgz|
 extension), but Windows handles zipped files better.
 
@@ -407,7 +409,7 @@ should create a \verb|reportlab| directory.
 Finally, drag the created \verb|reportlab| directory to the standard
 directory for Python extensions. On current versions of python with a
 standard installation this would be something like 
-\verb|C:/Python22/Lib/site-packages|. All you have to do is drag it over
+\verb|C:/Python24/Lib/site-packages|. All you have to do is drag it over
 and you should be all set. Nice and easy.
 
 \subsubsection{Making sure it installed correctly}
@@ -416,12 +418,12 @@ If reportlab is installed correctly, you should be able to do the
 following:
 
 \begin{verbatim}
-$ python 
-Python 2.2.2 (#1, 01/12/03, 07:51:34) 
-[GCC Apple cpp-precomp 6.14] on darwin
+$ python
+Python 2.4 (#1, Dec  5 2004, 20:47:03)
+[GCC 3.3.3] on cygwin
 Type "help", "copyright", "credits" or "license" for more information.
 >>> from reportlab.graphics import renderPDF
->>> 
+>>>
 \end{verbatim}
 
 Depending on your version of python and what you have installed, you may
@@ -483,7 +485,7 @@ Based on which way you choose, you'll need to follow one of the following instal
 \subsection{Installing from source on UNIX and Mac OS X}
 \label{sec:unix_install}
 
-Biopython uses Distutils, the new standard python installation package, for
+Biopython uses Distutils, the standard python installation package, for
 its installation. If you read the install instructions above you are
 already quite familiar with its workings. Distutils comes standard with 
 Python 1.6 and beyond.
@@ -496,16 +498,16 @@ Now that we've got what we need, let's get into the installation:
 
 \item Now that everything is unpacked, move into the \verb| biopython*| directory (this will just be \verb|biopython| for CVS users, and will be \verb|biopython-X.X| for those using a packaged download). 
 
-\item Now you are ready for your one step install -- \verb|python setup.py install|. This performs the default install, and will put Biopython into the \verb|site-packages| directory of your python library tree (on my machine this is \verb|/usr/local/python2.2/site-packages|). You will have to have permissions to write to this directory, so you'll need to have root access on the machine.
+\item Now you are ready for your one step install -- \verb|python setup.py install|. This performs the default install, and will put Biopython into the \verb|site-packages| directory of your python library tree (on my machine this is \verb|/usr/local/lib/python2.4/site-packages|). You will have to have permissions to write to this directory, so you'll need to have root access on the machine.
 
 \begin{enumerate}
 
-\item This install requires that you have the python source available. You can check this by looking for \verb|Python.h| and \verb|config.h| in some place like \verb|/usr/local/include/python2.2|. If you installed python with RPMs or 
+\item This install requires that you have the python source available. You can check this by looking for \verb|Python.h| and \verb|config.h| in some place like \verb|/usr/local/include/python2.4|. If you installed python with RPMs or 
 some other packaging system, this means you'll also have to install the
 header files. This requires installing the python development libraries
-as well (normally called something like \verb|python-devel-2.2.3.rpm|).
+as well (normally called something like \verb|python-devel-2.4.rpm|).
 
-\item The distutils setup process allows you to do some customization of your install so you don't have to stick everything in the default location (in case you don't have write permissions there, or just want to test Biopython out). You have quite a few choices, which are covered in detail in the distutils installation manual (\ahrefurl{\url{http://www.python.org/sigs/distutils-sig/doc/inst/inst.html}}), specifically in the Alternative installation section. For example, to install Biopython into your home directory, you need to type \verb|python setup.py install --home=$HOME|. This will install the package into someplace like \verb|$HOME/lib/python2.1/site-packages|. You'll need to subsequently modify the \verb|PYTHONPATH| environmental variable to include this directory so python will be able to find the installation.
+\item The distutils setup process allows you to do some customization of your install so you don't have to stick everything in the default location (in case you don't have write permissions there, or just want to test Biopython out). You have quite a few choices, which are covered in detail in the distutils installation manual (\ahrefurl{\url{http://www.python.org/sigs/distutils-sig/doc/inst/inst.html}}), specifically in the Alternative installation section. For example, to install Biopython into your home directory, you need to type \verb|python setup.py install --home=$HOME|. This will install the package into someplace like \verb|$HOME/lib/python2.4/site-packages|. You'll need to subsequently modify the \verb|PYTHONPATH| environmental variable to include this directory so python will be able to find the installation.
 
 \end{enumerate}
 
@@ -638,8 +640,8 @@ in your\verb| $PYTHONPATH| environmental variable. If you used the default insta
 
 \begin{verbatim}
 $ python
-Python 2.2.2 (#1, 01/12/03, 07:51:34) 
-[GCC Apple cpp-precomp 6.14] on darwin
+Python 2.4 (#1, Dec  5 2004, 20:47:03)
+[GCC 3.3.3] on cygwin
 Type "help", "copyright", "credits" or "license" for more information.
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet.IUPAC import unambiguous_dna
@@ -650,6 +652,7 @@ Seq('GA', IUPACUnambiguousDNA())
 >>> translator = Translate.unambiguous_dna_by_name["Standard"]
 >>> translator.translate(new_seq)
 Seq('DQK', HasStopCodon(IUPACProtein(), '*'))
+>>>
 \end{verbatim}
 
 If this worked properly, then it looks like Biopython is in a happy place where python can find it, so now you might want to do some more rigorous tests. The \verb|Tests| directory inside the distribution contains a number of tests you can run to make sure all of the different parts of biopython are working. These should all work just by running \verb|python test_WhateverTheTestIs.py|. 
