@@ -196,7 +196,8 @@ class _Scanner:
         # Reported by David Weisman.
         # Check for these error lines and ignore them for now.  Let
         # the BlastErrorParser deal with them.
-        if uhandle.peekline().find("ERROR:") >= 0:
+        line = uhandle.peekline()
+        if line.find("ERROR:") >= 0 or line.startswith("done"):
             read_and_call_while(uhandle, consumer.noevent, contains="ERROR:")
             read_and_call(uhandle, consumer.noevent, start="done")
 
