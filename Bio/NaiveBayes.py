@@ -12,17 +12,17 @@ the Bayes assumption that the features are independent.  Although this
 is hardly ever true, the classifier works well enough in practice.
 
 Glossary:
-observation  A feature vector of discrete data.
-class        A possible classification for an observation.
+observation    A feature vector of discrete data.
+class          A possible classification for an observation.
 
 
 Classes:
-NaiveBayes   Holds information for a naive Bayes classifier.
+NaiveBayes     Holds information for a naive Bayes classifier.
 
 Functions:
-train        Train a new naive Bayes classifier.
-calculate    Calculate the probabilities of each class, given an observation.
-classify     Classify an observation into a class.
+train          Train a new naive Bayes classifier.
+calculate      Calculate the probabilities of each class, given an observation.
+classify       Classify an observation into a class.
 
 """
 # To Do:
@@ -79,7 +79,7 @@ def calculate(nb, observation, scale=0):
         probs = [None] * len(observation)
         for j in range(len(observation)):
             probs[j] = nb.p_conditional[i][j].get(observation[j], 0)
-        lprobs = map(lambda x: mathfns.safe_log(x, -10000), probs)
+        lprobs = [mathfns.safe_log(x, -10000) for x in probs]
         lprob = sum(lprobs)
         lp_observation_class.append(lprob)
 
@@ -112,12 +112,10 @@ def classify(nb, observation):
     """
     # The class is the one with the highest probability.
     probs = calculate(nb, observation, scale=0)
-    max_prob = None
-    max_class = None
+    max_prob = max_class = None
     for klass in nb.classes:
         if max_prob is None or probs[klass] > max_prob:
-            max_prob = probs[klass]
-            max_class = klass
+            max_prob, max_class = probs[klass], klass
     return max_class
 
 def train(training_set, results, priors=None, typecode=None):
@@ -135,16 +133,20 @@ def train(training_set, results, priors=None, typecode=None):
         raise ValueError, "No data in the training set."
     if len(training_set) != len(results):
         raise ValueError, "training_set and results should be parallel lists."
-    
-    dim = None
-    for obs in training_set:
-        if dim is None:
-            dim = len(obs)
-        elif dim != len(obs):
-            raise ValueError, "observations have different dimensionality"
-    
+
+    # If no typecode is specified, try to pick a reasonable one.  If
+    # training_set is a Numeric array, then use that typecode.
+    # Otherwise, choose a reasonable default.
+    # XXX NOT IMPLEMENTED
+
+    # Check to make sure each vector in the training set has the same
+    # dimensionality.
+    dimensions = [len(x) for x in training_set]
+    if min(dimensions) != max(dimensions):
+        raise ValueError, "observations have different dimensionality"
+
     nb = NaiveBayes()
-    nb.dimensionality = dim
+    nb.dimensionality = dimensions[0]
     
     # Get a list of all the classes.
     nb.classes = listfns.items(results)
@@ -165,30 +167,29 @@ def train(training_set, results, priors=None, typecode=None):
     # were guaranteed to be a matrix.  However, this may not be the
     # case, because the client may be hacking up a sparse matrix or
     # something.
-    index = {}         # next index into an array for each class
-    observations = []  # List of class by list of training instances
-    c2i = listfns.itemindex(nb.classes)   # class to index of class
-    class_counts = listfns.count(results)
-    for klass in nb.classes:
-        observations.append(
-            zeros((class_counts[klass], nb.dimensionality), typecode))
-        index[klass] = 0
+    c2i = listfns.itemindex(nb.classes)      # class to index of class
+    observations = [[] for c in nb.classes]  # separate observations by class
     for i in range(len(results)):
-        klass, instance = results[i], training_set[i]
-        ind = index[klass]
-        observations[c2i[klass]][ind] = instance
-        index[klass] = ind + 1
+        klass, obs = results[i], training_set[i]
+        observations[c2i[klass]].append(obs)
+    # Now make the observations Numeric matrics.
+    for i in range(len(observations)):
+        # XXX typecode must be specified!
+        observations[i] = asarray(observations[i], typecode)
 
-    import sys
     # Calculate P(value|class,dim) for every class.
     # This is a good loop to optimize.
     nb.p_conditional = []
     for i in range(len(nb.classes)):
+        class_observations = observations[i]   # observations for this class
         nb.p_conditional.append([None] * nb.dimensionality)
         for j in range(nb.dimensionality):
             # Collect all the values in this dimension.
-            values = observations[i][:, j]
+            values = class_observations[:, j]
+
+            # Add pseudocounts here.  This needs to be parameterized.
+            #values = list(values) + range(len(nb.classes))  # XXX add 1
+            
             # Estimate P(value|class,dim)
             nb.p_conditional[i][j] = listfns.contents(values)
     return nb
-
