@@ -11,8 +11,8 @@ This module provides code to work with sequences.
 Classes:
 AbstractSequence  Base class for all sequences.
 Sequence          Basic class that stores sequences as a string.
-SubSequence       Handles subsequencing with different indexing schemes.
 NamedSequence     Sequence that has a name.
+SubSequence       Handles subsequencing with different indexing schemes.
 
 """
 
@@ -20,6 +20,13 @@ NamedSequence     Sequence that has a name.
 # Add Annotation (base class, with annotation types?)
 
 class AbstractSequence:
+    """Abstract base class for all sequences.
+
+    Please derive sequence from here and implement the following methods:
+    length         Return the length of the sequence.
+    __getslice__   Return a portion of the sequence.
+
+    """
     def __getattr__(self, key):
         if key == "subseq":
             return SubSequence(self)
@@ -31,36 +38,22 @@ class AbstractSequence:
     def __getslice__(self, i, j):
         raise NotImplementedError
 
-class SubSequence:
-    def __init__(self, seq):
-        self.seq = seq
-        
-    def __call__(self, min, max):
-        # with a base of 1 and including the end
-        # Negative slice notation not allowed
-        assert min>=1 and max >= min
-        return self.seq[min-1:max]
-    
-    def omg(self, min, max):
-        # with a base of 1 and excluding the end
-        # Negative slice notation not allowed
-        assert min>=1 and max>min
-        return self.seq[min-1:max-1]
-    
-    def perl(self, min, max):
-        # with a base of 0 and including the end
-        # Negative slice notation not allowed
-        assert min>=1 and max>=min
-        return self.seq[min:max+1]
-    
-    def python(self, min, max):
-        return self.seq[min:max]
-
 class Sequence(AbstractSequence):
+    """Holds information about a biological sequence, represented as a string.
+
+    Members:
+    seq     The sequence.
+
+    Methods:
+    length  Return the length of the sequence.
+
+    """
     def __init__(self, seq=''):
+        """__init__(self, seq='')"""
         self.seq = seq
 
     def length(self):
+        """length(self) -> length of sequence"""
         return len(self.seq)
         
     def __getslice__(self, i, j):
@@ -92,3 +85,29 @@ class NamedSequence:
             self.__dict__[key] = value
         else:
             setattr(self._seq, key, value)
+
+class SubSequence:
+    def __init__(self, seq):
+        self.seq = seq
+        
+    def __call__(self, min, max):
+        # with a base of 1 and including the end
+        # Negative slice notation not allowed
+        assert min>=1 and max >= min
+        return self.seq[min-1:max]
+    
+    def omg(self, min, max):
+        # with a base of 1 and excluding the end
+        # Negative slice notation not allowed
+        assert min>=1 and max>min
+        return self.seq[min-1:max-1]
+    
+    def perl(self, min, max):
+        # with a base of 0 and including the end
+        # Negative slice notation not allowed
+        assert min>=1 and max>=min
+        return self.seq[min:max+1]
+    
+    def python(self, min, max):
+        return self.seq[min:max]
+
