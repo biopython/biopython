@@ -633,7 +633,7 @@ class _HeaderConsumer:
             self._header.query = self._header.query + line
         else:
             letters, = _re_search(
-                r"(\d+) letters", line,
+                r"([0-9,]+) letters", line,
                 "I could not find the number of letters in line\n%s" % line)
             self._header.query_letters = _safe_int(letters)
                 
