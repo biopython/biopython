@@ -37,6 +37,17 @@ from File import UndoHandle
 
 
 
+"""Used for debugging"""
+def dump_saved( name, text, j ):
+    dump_file = open( name + '%d' % j, "w" )
+    k = 0
+    for i in range ( 0, len( text ), 80 ):
+        dump_file.write(  '%s\n' % text[ i : i + 80 ] )
+    dump_file.close()
+
+
+
+
 class RecordFile:
     def __init__(self, handle, start_tag, end_tag ):
         self._handle = handle
@@ -45,6 +56,8 @@ class RecordFile:
         self._end_tag = end_tag
         self._end_len = len( self._end_tag )
         self._set_state_info()
+        self._valid_delims = [ chr( 10 ), chr( 13 ), chr( 10 ) + chr( 13 ), chr( 13 ) + chr( 10 ) ]
+        self._debug_count = 0
 
     def _set_state_info( self ):
         self._file_state = 'CLOSED'
@@ -83,6 +96,7 @@ class RecordFile:
             text = ''
         else:
             text = ''
+        self._debug_count = self._debug_count + 1
         return text
 
     def _in_record_state( self, args, keywds ):
@@ -95,16 +109,13 @@ class RecordFile:
             if( len_to_read > 0 ):
                 text_read = self._handle.read( len_to_read )
                 text = saved_text + text_read
-                self._saved_text = text[ len_expected : ]
                 if( len( text_read ) < len_to_read ):
                     self._file_state = 'AT_END_FILE'
             else:
                 len_to_retrieve = len_expected + lookahead_len
                 text = saved_text[ : len_to_retrieve ]
-                self._saved_text = saved_text[ len_expected : ]
-            requested_text = text[ :len_expected ]
+                requested_text = text[ :len_expected ]
         else:
-            text = saved_text + self._handle.read()
             self._file_state = 'AT_END_FILE'
             requested_text = text
         if( text == '' ):
@@ -112,12 +123,14 @@ class RecordFile:
             self._record_state = 'EXIT'
         else:
             requested_text = self._search_end( text )
+            self._saved_text = text[ len( requested_text ) : ]
 
         return requested_text
 
     def _get_len_expected( self, args, keywds ):
 
         if( len( args) > 0 ):
+
             len_expected = args[ 0 ]
         elif( keywds.has_key( 'size' ) ):
             len_expected = keywds[ 'size' ]
@@ -144,7 +157,7 @@ class RecordFile:
 
     def _search_start( self ):
         while(  self._record_state == 'SEARCHING' ):
-            line = self.extract_saved_line( ( "\r", "\n", "\r\n" ) )
+            line = self.extract_saved_line( self._valid_delims )
             if( line == '' ):
                 line = self._handle.readline()
                 line = self._saved_text + line
@@ -163,33 +176,58 @@ class RecordFile:
         if( self._file_state != 'AT_END_FILE' ):
             requested_text_len = requested_text_len - lookahead_len
         requested_text = text[ : requested_text_len ]
-        look_back = self._look_back
-        suffix = text[ pos + self._end_len :  ]
-        if( ( pos >= 0 ) and ( pos < requested_text_len ) ):
-            ( delim_pos, delim_len )= find_delim( suffix, ( "\r", "\n", "\r\n" ) )
-            if( delim_len > 0 ):
-                prefix = look_back + text[ : pos ]
-                if( is_prefix_in_set( prefix, ( "\r", "\n", "\r\n" ) ) ):
-                    len_to_end =  pos + self._end_len + delim_len
-                    save_pos = min( len_to_end, requested_text_len )
-                    self._saved_text = text[ save_pos : ] + self._saved_text
-                    requested_text = text[ : save_pos ]
-                    if( len_to_end <= requested_text_len ):
-                        self._record_state = 'AT_END_RECORD'
-                    else:
-                        self._record_state = 'SCANNING_END_TAG'
-                        scan_tag_index = len_to_end - requested_text_len
-                        self._tag_chars_pending = self._end_len + delim_len - scan_tag_index
+        len_to_end = self.find_record_boundary( text, requested_text_len )
+        requested_text = text[ : len_to_end ]
         requested_text_len = len( requested_text )
         self._look_back = text[ requested_text_len -2 : requested_text_len ]
         return requested_text
+
+    def find_record_boundary( self, text, text_len ):
+        len_to_end  = text_len
+        look_back = self._look_back
+        pos = 0
+        accum_pos = 0
+        newpos = 0
+        while( pos >= 0  and pos < text_len ):
+            acum_pos = accum_pos + pos
+            pos = text.find( self._end_tag, newpos )
+            current_pos = accum_pos + pos
+            newpos = pos + self._end_len
+            suffix = text[ current_pos + self._end_len :  ]
+            if( len( suffix ) == 0 ):
+                len_to_end = current_pos + self._end_len
+                self._record_state = 'AT_END_RECORD'
+                break
+            elif( ( pos >= 0 ) and ( current_pos < text_len ) ):
+                ( delim_pos, delim_len )= find_delim( suffix, self._valid_delims )
+                if( delim_len > 0 ):
+                    prefix = look_back + text[ : current_pos ]
+                    if( self.at_line_boundary( prefix, delim_pos ) ):
+                        len_to_end =  current_pos + self._end_len + delim_len
+                        len_to_end = min( len_to_end, text_len )
+                        self._saved_text = text[ len_to_end : ] + self._saved_text
+                        if( len_to_end <= text_len ):
+                            self._record_state = 'AT_END_RECORD'
+                        else:
+                            self._record_state = 'SCANNING_END_TAG'
+                            scan_tag_index = len_to_end - text_len
+                            self._tag_chars_pending = self._end_len + delim_len - scan_tag_index
+                        break
+        return len_to_end
+
+    def at_line_boundary( self, prefix, delim_pos ):
+        if( is_prefix_in_set( prefix, self._valid_delims ) or \
+            (  delim_pos == 0 ) ):
+            return 1
+        else:
+            return 0
 
     def extract_saved_line( self, delims ):
         text = self._saved_text
         if( text == '' ):
             return text
         ( delim_pos, delim_len )= find_delim( text, delims )
-        if( delim_pos >= 0 ):
+        if( delim_pos >= 0 and delim_pos < len( text ) ):
             line_len = delim_pos + delim_len
             line = text[ : line_len ]
             self._saved_text = text[ line_len : ]
