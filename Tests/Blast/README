@@ -29,7 +29,7 @@ bt016 blastall 2.0.10 sp:P39483  sts       -p tblastn
 bt017 blastall 2.0.10 sp:P19888  sts       -p tblastn     no hits
 bt018 blastall 2.0.10 gi:1348853 sts       -p tblastx
 bt019 NCBI WWW 2.0.10 sp:P21297  swissprot blastp
-bt020 RESERVED
+bt020 NCBI WWW 2.0.10 sp:P54929  pdb       blastp         no hits
 bt021 NCBI WWW 2.0.10 sp:P16153  swissprot blastp descriptions=0
 bt022 NCBI WWW 2.0.10 sp:P16153  swissprot blastp alignments=0
 bt023 NCBI WWW 2.0.10 sp:P15394  swissprot blastp flat master-slave without identities

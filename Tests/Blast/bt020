@@ -1,0 +1,72 @@
+<HTML>
+<HEAD>
+<TITLE>BLAST Search Results </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" LINK="#0000FF" VLINK="#660099" ALINK="#660099">
+<A HREF="http://www.ncbi.nlm.nih.gov/BLAST/blast_form.map"> <IMG SRC="http://www.ncbi.nlm.nih.gov/BLAST/blast_results.gif" BORDER=0 ISMAP></A>
+<BR><BR><PRE>
+<b>BLASTP 2.0.10 [Aug-26-1999]</b>
+
+
+<b><a href="http://www.ncbi.nlm.nih.gov/htbin-
+post/Entrez/query?uid=9254694&form=6&db=m&Dopt=r">Reference</a>:</b>
+Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch&auml;ffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+<p>
+<b>Query=</b> gi|1709271|sp|P54929|NIFA_AZOLI NIF-SPECIFIC REGULATORY
+PROTEIN.
+         (624 letters)
+
+<b>Database:</b> PDB protein sequences
+           7378 sequences; 1,543,095 total letters
+
+<p> <p>If you have any problems or questions with the results of this search <br>please refer to the <b><a href=http://www.ncbi.nlm.nih.gov/BLAST/blast_FAQs.html>BLAST FAQs</a></b><br><p>
+<b>No significant similarity found.</b> For reasons why, <A HREF = "/BLAST/blast_FAQs.html#no hits"><b>click here</A>.</b><br><br>
+<PRE>
+  Database: PDB protein sequences
+    Posted date:  Dec 29, 1999  5:21 PM
+  Number of letters in database: 1,543,095
+  Number of sequences in database:  7378
+  
+Lambda     K      H
+   0.320    0.138    0.399 
+
+Gapped
+Lambda     K      H
+   0.270   0.0470    0.230 
+
+
+Matrix: BLOSUM62
+Gap Penalties: Existence: 11, Extension: 1
+Number of Hits to DB: 1512037
+Number of Sequences: 7378
+Number of extensions: 54573
+Number of successful extensions: 81
+Number of sequences better than 10.0: 0
+Number of HSP's better than 10.0 without gapping: 0
+Number of HSP's successfully gapped in prelim test: 0
+Number of HSP's that attempted gapping in prelim test: 81
+Number of HSP's gapped (non-prelim): 0
+length of query: 624
+length of database: 1,543,095
+effective HSP length: 46
+effective length of query: 578
+effective length of database: 1,203,707
+effective search space: 695742646
+effective search space used: 695742646
+T: 11
+A: 40
+X1: 16 ( 7.4 bits)
+X2: 38 (14.8 bits)
+X3: 64 (24.9 bits)
+S1: 41 (21.8 bits)
+S2: 56 (26.2 bits)
+
+</PRE>
+
+</BODY>
+</HTML>
+</BODY>
+</HTML>

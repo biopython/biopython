@@ -45,7 +45,7 @@ if verbose:
 tests = ['bt019', 'bt021', 'bt023', 'bt024', 'bt025',
          'bt026', 'bt027', 'bt028', 'bt029', 'bt030',
          'bt031', 'bt032', 'bt033', 'bt034', 'bt035',
-         'bt036', 'bt037', 'bt038']
+         'bt036', 'bt037', 'bt038', 'bt020']
 
 scanner = Parser.NCBIWWWScanner()
 for test in tests:
