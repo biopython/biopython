@@ -1,3 +1,8 @@
+# Copyright (C) 2002, Thomas Hamelryck (thamelry@vub.ac.be)
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
 from Numeric import matrixmultiply, transpose, sum, sqrt
 from LinearAlgebra import singular_value_decomposition, determinant
 
