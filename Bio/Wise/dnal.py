@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 
-__version__ = "$Revision: 1.5 $"
+__version__ = "$Revision: 1.6 $"
 
 from __future__ import division
 
 import commands
+import itertools
 import os
 import re
 
@@ -25,7 +26,9 @@ def _fgrep_count(pattern, file):
 
 _re_alb_line2coords = re.compile(r"^\[([^:]+):[^\[]+\[([^:]+):")
 def _alb_line2coords(line):
-    return tuple([int(coord)+1 for coord in _re_alb_line2coords.match(line).groups()])
+    return tuple([int(coord)+1 # one-based -> zero-based
+                  for coord
+                  in _re_alb_line2coords.match(line).groups()])
 
 def _get_coords(filename):
     alb = file(filename)
@@ -40,7 +43,11 @@ def _get_coords(filename):
             else:
                 end_line = line
 
-    return zip(*map(_alb_line2coords, [start_line, end_line]))
+    return zip(*map(_alb_line2coords, [start_line, end_line])) # returns [(start0, end0), (start1, end1)]
+
+def _any(seq, pred=bool):
+    "Returns True if pred(x) is True at least one element in the iterable"
+    return True in itertools.imap(pred, seq)
 
 class Statistics(object):
     """
@@ -52,7 +59,10 @@ class Statistics(object):
         self.gaps = _fgrep_count('"INSERT" -%s' % _PENALTY_GAP_START, filename)
         self.extensions = _fgrep_count('"INSERT" -%s' % _PENALTY_GAP_EXTENSION, filename)
 
-        self.coords = _get_coords(filename)
+        if _any([self.matches, self.mismatches, self.gaps, self.extensions]):
+            self.coords = _get_coords(filename)
+        else:
+            self.coords = [(0, 0), (0,0)]
 
     def identity_fraction(self):
         return self.matches/(self.matches+self.mismatches)
