@@ -1626,7 +1626,32 @@ ppb=CaPPBuilder()
 for pp in ppb.build_peptides(structure): 
 \layout LyX-Code
 
-    print pp.get_sequence() 
+    print pp.get_sequence()
+\layout Standard
+
+Note that in the above case only model 0 of the structure is considered
+ by 
+\family typewriter 
+PolypeptideBuilder
+\family default 
+.
+ However, it is possible to use 
+\family typewriter 
+PolypeptideBuilder
+\family default 
+ to build 
+\family typewriter 
+Polypeptide
+\family default 
+ objects from 
+\family typewriter 
+Model
+\family default 
+ and 
+\family typewriter 
+Chain
+\family default 
+ objects as well.
 \layout Subsubsection*
 
 How do I get the sequence of a structure?

@@ -18,6 +18,8 @@ class HSExposure:
         # List of CA-CB direction calculated from CA-CA-CA
         # Used for the PyMol script
         self.ca_cb_list=[]
+        # Dummy 
+        self.angles={}
 
     def write_pymol_script(self, filename="pymol.py"):
         """
@@ -79,7 +81,7 @@ class HSExposure:
         b=-b
         # Add to ca_cb_list for drawing
         self.ca_cb_list.append((ca2, b+ca2))
-        # b is centered at the origin!
+        # vector b is centered at the origin!
         return b
 
     def _get_rotran_list_from_cb(self, residue_list):
@@ -139,6 +141,8 @@ class HSExposure:
         # list of (translation, rotation, ca, residue) tuples
         rotran_list=[]
         ppb=PPBuilder()
+        # angles between pseudo-CB-CA and CA-CB
+        angles={}
         for pp in ppb.build_peptides(model):
             ca_list=[]
             ca_list=pp.get_ca_list()
@@ -156,6 +160,18 @@ class HSExposure:
                 rotation=rotmat(cb_v, self.unit_z)
                 translation=ca2.get_coord()
                 rotran_list.append((translation, rotation, ca2, r))
+                # Calculate angle between pseudo-CB-CA and CA-CB
+                try:
+                    if r.get_resname()!="GLY":
+                        vcb=r["CB"].get_vector()
+                        vca=r["CA"].get_vector()
+                        real=vcb-vca
+                        angle=360*real.angle(cb_v)/(2*pi)
+                        angles[r]=angle
+                except KeyError:
+                    # No CB :-(
+                    pass
+        self.angles=angles
         return rotran_list
 
     def _calc_hs_exposure(self, rotran_list, residue_list, radius):
@@ -223,6 +239,12 @@ class HSExposure:
                         d[res1]=1
         return d
 
+    def get_angles(self):
+        """
+        Return delta angle between CA-CB and pseudoCB-CA
+        """
+        return self.angles
+
 
 if __name__=="__main__":
 
@@ -247,6 +269,8 @@ if __name__=="__main__":
     # Calculate classical coordination number
     exp_fs=hse.calc_fs_exposure(model, RADIUS)
 
+    angles=hse.get_angles()
+
     # All residues in the model
     residue_list=Selection.unfold_entities(model, 'R')
 
@@ -265,6 +289,9 @@ if __name__=="__main__":
         # Classical sphere coordination number
         if exp_fs.has_key(r):
             print "SPHE ", exp_fs[r]
+
+        if angles.has_key(r):
+            print "DELTA %.2f" % angles[r]
 
         print "--------------------"
 
