@@ -22,7 +22,8 @@
 #
 # Removed 'write' options from retrieve_pdb_file method: it is not used.
 # Also added a 'dir' options (pdb file is put in this directory if given),
-# and an 'exist' option (test if the file is already there).
+# and an 'exist' option (test if the file is already there). This method
+# now returns teh name of the downloaded uncompressed file.
 #
 # -Thomas, 1/06/04
 
@@ -167,32 +168,38 @@ OBSLTE     26-SEP-03 1DYV      1UN2
 
         @param dir: put the file in this directory (default: create a PDB-style directory tree) 
         @type dir: string
+
+        @return: filename
+        @rtype: string
         """
         # get the structure
         code=string.lower(pdb_code)
         filename="pdb%s.ent%s"%(code,compression)
-        if exist:
-            if os.path.exist(filename):
-                return 
         url=(self.pdb_server+
              '/pub/pdb/data/structures/divided/pdb/%s/pdb%s.ent%s'
              % (code[1:3],code,compression))
-        lines = urllib.urlopen(url).read()
-        # save the structure
-        if not dir is None:
+        # in which dir to put the pdb file?
+        if dir is None:
             # Put in PDB style directory tree
             path=self.local_pdb+os.sep+code[1:3]
-            if not os.access(path,os.F_OK):
-                os.mkdir(path)
-            filename=path+os.sep+filename
         else:
             # Put in specified directory
-            filename=dir+os.sep+filename
+            path=dir
+        if not os.access(path,os.F_OK):
+            os.mkdir(path)
+        filename=path+os.sep+filename
+        # the ifinal uncompressed file
+        final_file=path+os.sep+"pdb%s.ent" % code
+        if exist:
+            if os.path.exists(final_file):
+                return final_file
+        # Read the file
+        lines=urllib.urlopen(url).read()
         open(filename,'w').write(lines)
         # uncompress the file
         os.system("%s %s" % (uncompress, filename))
 
-        return lines
+        return final_file
             
 
     def update_pdb(self):

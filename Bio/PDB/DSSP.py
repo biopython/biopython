@@ -3,6 +3,7 @@ from __future__ import generators
 import os
 import tempfile
 from Bio.PDB import *
+from PDBExceptions import PDBException
 
 
 __doc__="""
@@ -25,27 +26,27 @@ The DSSP codes for secondary structure used here are:
 # Maximal ASA of amino acids
 # Values from Sander & Rost, (1994), Proteins, 20:216-226
 # Used for relative accessibility
-_MAX_ACC={}
-_MAX_ACC["ALA"]=106.0
-_MAX_ACC["CYS"]=135.0
-_MAX_ACC["ASP"]=163.0
-_MAX_ACC["GLU"]=194.0
-_MAX_ACC["PHE"]=197.0
-_MAX_ACC["GLY"]=84.0
-_MAX_ACC["HIS"]=184.0
-_MAX_ACC["ILE"]=169.0
-_MAX_ACC["LYS"]=205.0
-_MAX_ACC["LEU"]=164.0
-_MAX_ACC["MET"]=188.0
-_MAX_ACC["ASN"]=157.0
-_MAX_ACC["PRO"]=136.0
-_MAX_ACC["GLN"]=198.0
-_MAX_ACC["ARG"]=248.0
-_MAX_ACC["SER"]=130.0
-_MAX_ACC["THR"]=142.0
-_MAX_ACC["VAL"]=142.0
-_MAX_ACC["TRP"]=227.0
-_MAX_ACC["TYR"]=222.0
+MAX_ACC={}
+MAX_ACC["ALA"]=106.0
+MAX_ACC["CYS"]=135.0
+MAX_ACC["ASP"]=163.0
+MAX_ACC["GLU"]=194.0
+MAX_ACC["PHE"]=197.0
+MAX_ACC["GLY"]=84.0
+MAX_ACC["HIS"]=184.0
+MAX_ACC["ILE"]=169.0
+MAX_ACC["LYS"]=205.0
+MAX_ACC["LEU"]=164.0
+MAX_ACC["MET"]=188.0
+MAX_ACC["ASN"]=157.0
+MAX_ACC["PRO"]=136.0
+MAX_ACC["GLN"]=198.0
+MAX_ACC["ARG"]=248.0
+MAX_ACC["SER"]=130.0
+MAX_ACC["THR"]=142.0
+MAX_ACC["VAL"]=142.0
+MAX_ACC["TRP"]=227.0
+MAX_ACC["TYR"]=222.0
 
 def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
     """
@@ -151,13 +152,17 @@ class DSSP:
                     aa, ss, acc=self.dssp_dict[(chain_id, res_id)]
                     resname=res.get_resname()
                     # relative accessibility
-                    rel_acc=acc/_MAX_ACC[resname]
+                    rel_acc=acc/MAX_ACC[resname]
                     if rel_acc>1.0:
                         rel_acc=1.0
                     # Verify if AA in DSSP == AA in Structure
                     # Something went wrong if this is not true!
                     resname=to_one_letter_code[resname]
-                    assert(resname==aa)
+                    if not resname=="C":
+                        # Do not check CYS - DSSP uses funny names for CYS
+                        if not (resname==aa):
+                            raise PDBException,\
+                                    "Structure/DSSP mismatch at "+str(res) 
                     map[res]=(ss, acc, rel_acc)
                     res_list.append((res, (ss, acc, rel_acc)))
                 else:
