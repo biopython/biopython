@@ -329,7 +329,13 @@ class _Scanner:
         consumer.start_alignment()
         while 1:
             line = safe_readline(uhandle)
-            if line[:10] == '  Database':
+            # Check to see whether I'm finished reading the alignment.
+            # This is indicated by 1) database section, 2) next psi-blast round
+            # patch by chapmanb
+            if line[:9] == 'Searching':
+                uhandle.saveline(line)
+                break
+            elif line[:10] == '  Database':
                 uhandle.saveline(line)
                 break
             elif is_blank_line(line):
@@ -1176,9 +1182,9 @@ class _PSIBlastConsumer(AbstractConsumer,
 
     def end_alignment(self):
         _AlignmentConsumer.end_alignment(self)
-        if self._alignment is not None:
+        if self._alignment.hsps:
             self._round.alignments.append(self._alignment)
-        elif self._multiple_alignment is not None:
+        if self._multiple_alignment:
             self._round.multiple_alignment = self._multiple_alignment
 
     def end_hsp(self):

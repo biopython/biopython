@@ -265,7 +265,7 @@ class Blast(Header, DatabaseReport, Parameters):
     Members:
     descriptions        A list of Description objects.
     alignments          A list of Alignment objects.
-    multiple_alignment  A Multiple Alignment object.
+    multiple_alignment  A MultipleAlignment object.
     + members inherited from base classes
 
     """
