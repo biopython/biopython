@@ -18,6 +18,7 @@ exclude Tests/Enzymes
 exclude Tests/Fasta
 exclude Tests/Nucleic
 exclude Tests/Prosite
+exclude Tests/Prosite/Doc
 exclude Tests/SwissProt
 exclude Tests/UnitTests
 exclude Tests/UnitTests/Prosite
