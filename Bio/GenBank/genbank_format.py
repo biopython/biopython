@@ -341,6 +341,7 @@ feature_key_names = (
     "S_region",         # Span of the S immunological feature
     "satellite",        # Satellite repeated sequence
     "scRNA",            # Small cytoplasmic RNA
+    "SecStr",           # RefSeq invention -- I have no idea what it means
     "sig_peptide",      # Signal peptide coding region
     "Site",             # RefSeq invention for a protein site
     "snRNA",            # Small nuclear RNA
@@ -500,6 +501,7 @@ feature_qualifier_names = (
     "map",            # Map position of the feature in free-format text
     "mitochondrion",  # Organelle type from which the sequence was obtained
     "mod_base",       # Abbreviation for a modified nucleotide base
+    "name",           # RefSeq specification for a Protein name
     "note",           # Any comment or additional information
     "number",         # A number indicating the order of genetic elements
                       #   (e.g., exons or introns) in the 5 to 3 direction
@@ -538,6 +540,7 @@ feature_qualifier_names = (
     "rpt_type",       # Organization of repeated sequence
     "rpt_unit",       # Identity of repeat unit that constitutes a
                       #   repeat_region
+    "sec_str_type",   # RefSeq invention, no idea what it means
     "sequenced_mol",  # Molecule from which the sequence was obtained
     "serotype",       # Variety of a species (usually bacteria or virus)
                       #   characterized by its antigenic properties
