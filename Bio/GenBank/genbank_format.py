@@ -26,6 +26,9 @@ import string
 import Martel
 from Martel import RecordReader
 
+# identify certain items as important for format converters
+from Bio import Std
+
 # --- first set up some helper constants and functions
 
 # - useful constants for dealing with the blank space in GenBank documents
@@ -40,7 +43,8 @@ big_indent_space = Martel.Str(" " * FEATURE_KEY_INDENT)
 qualifier_space = Martel.Str(" " * FEATURE_QUALIFIER_INDENT)
 
 # - useful functions
-def define_block(identifier, block_tag, block_data):
+def define_block(identifier, block_tag, block_data, std_block_tag = None,
+                 std_tag = None):
     """Define a Martel grouping which can parse a block of text.
 
     Many of the GenBank lines we'll want to process are grouped into
@@ -56,15 +60,31 @@ def define_block(identifier, block_tag, block_data):
     o block_tag - A callback tag for the entire block.
     o block_data - A callback tag for the data in the block (ie. the
     stuff you are interested in).
+    o std_block_tag - A Bio.Std Martel tag used to register the entire
+    block as having being a "standard" type of information.
+    o std_tag - A Bio.Std Martel tag used to register just the information
+    in the block as being "standard"
     """
     diff = INDENT - len(identifier)
     assert diff > 0, diff
+   
+    # if no std_tag info is defined, just make std_tag a no-op function
+    if std_tag is None:
+        def do_nothing(martel_info):
+            return martel_info
+        std_tag = do_nothing
 
-    return Martel.Group(block_tag,
+    block_info = Martel.Group(block_tag,
                         Martel.Str(identifier + " " * diff) +
-                        Martel.ToEol(block_data) +
-                        Martel.Rep(Martel.Str(" " * INDENT) + 
-                                   Martel.ToEol(block_data)))
+                        std_tag(Martel.UntilEol(block_data)) + Martel.AnyEol() 
+                        + Martel.Rep(Martel.Str(" " * INDENT) + 
+                                   std_tag(Martel.UntilEol(block_data)) +
+                                           Martel.AnyEol()))
+    # tag the info as some standard Martel element if specified
+    if std_block_tag is not None:
+        block_info = std_block_tag(block_info)
+
+    return block_info
 
 
 # first line
@@ -118,7 +138,9 @@ locus_line = Martel.Group("locus_line",
 # definition line
 # DEFINITION  Genomic sequence for Arabidopsis thaliana BAC T25K16 from
 #             chromosome I, complete sequence.
-definition_block = define_block("DEFINITION", "definition_block", "definition")
+definition_block = define_block("DEFINITION", "definition_block", 
+                                "definition", Std.description_block,
+                                Std.description)
 
 # accession line
 # ACCESSION   AC007323
@@ -155,10 +177,12 @@ pid_line = Martel.Group("pid_line",
 # version and GI line
 # VERSION     AC007323.5  GI:6587720
 version = Martel.Group("version",
-                       Martel.Re(r"(?P<entry_name>[\w\d\.]+)"))
+                       Std.dbid(Martel.Re("[\w\d\.]+"),
+                                {"type" : "primary", "dbname" : "genbank"}))
 
 gi = Martel.Group("gi",
-                  Martel.Re("[\d]+"))
+                  Std.dbid(Martel.Re("[\d]+"), 
+                           {"type" : "secondary", "dbname" : "genbank"}))
 
 version_line = Martel.Group("version_line",
                             Martel.Str("VERSION") +
@@ -633,8 +657,8 @@ origin_line = Martel.Group("origin_line",
 
 base_number = Martel.Group("base_number",
                            Martel.Re("[\d]+"))
-sequence = Martel.Group("sequence",
-                        Martel.Re("[\w]+"))
+sequence = Std.sequence(Martel.Group("sequence",
+                        Martel.Re("[\w]+")))
 sequence_plus_spaces = Martel.Group("sequence_plus_spaces",
                                     Martel.Rep1(Martel.Str(" ") +
                                         sequence) + 
@@ -645,9 +669,9 @@ sequence_line = Martel.Group("sequence_line",
                              Martel.Opt(base_number) +
                              sequence_plus_spaces)
 
-sequence_entry = Martel.Group("sequence_entry",
-                              origin_line +
-                              Martel.Rep1(sequence_line))
+sequence_entry = Std.sequence_block(Martel.Group("sequence_entry",
+                                    origin_line +
+                                    Martel.Rep1(sequence_line)))
 
 # CONTIG
 # this is the contig information for RefSeq records
