@@ -230,6 +230,10 @@ class Annotation:
         else:
             return 0
 
+    def __delitem__(self, key):
+        # don't really get rid of things
+        pass
+
     def _get_comments(self):
         comments = self.adaptor.execute_and_fetch_col0(
             """select comment_text from comment where bioentry_id = %s""",
