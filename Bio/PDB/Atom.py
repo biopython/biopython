@@ -4,7 +4,7 @@
 # as part of this package.           
 
 # Python stuff
-from Numeric import sum, sqrt, matrixmultiply
+from Numeric import array, sum, sqrt, matrixmultiply
 
 # My stuff
 from Entity import DisorderedEntityWrapper

@@ -47,7 +47,7 @@ class Superimposer:
             raise DBNError, "No transformation has been calculated yet"
         rot, tran=self.rotran
         rot=rot.astype(Float0)
-        tran=rot.astype(Float0)
+        tran=tran.astype(Float0)
         for atom in atom_list:
             atom.transform(rot, tran)
 
