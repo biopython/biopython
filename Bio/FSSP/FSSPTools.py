@@ -1,8 +1,21 @@
+import UserDict
 from Bio import FSSP
 import copy
 from Bio.Align import Generic
 from Bio import Alphabet
 import time
+
+class FSSPAlign(Generic.Alignment):
+    def _add_numbering_table(self, new_record):
+        new_record.annotations['abs2pdb'] = {}
+        new_record.annotations['pdb2abs'] = {}
+
+   
+class FSSPMultAlign(UserDict.UserDict):
+    def __init__(self):
+        self.abs_res = []
+        self.pdb_res = []
+        self.data = {}
 # Returns a biopython multiple alignment instance (Bio.Align.Generic)
 def mult_align(sum_dict,align_dict):
    mult_align_dict = {}
@@ -21,6 +34,7 @@ def mult_align(sum_dict,align_dict):
    for i in seq_order:
       fssp_align.add_sequence(sum_dict[i].pdb2+sum_dict[i].chain2,
                                  mult_align_dict[i])
+#        fssp_align._add_numbering_table()
    return fssp_align
 
 
@@ -56,3 +70,19 @@ def filter(sum_dict,align_dict,filter_attribute,low_bound, high_bound):
          new_align_dict.abs(pos_num).pos_align_dict[prot_num] = \
                    align_dict.abs(pos_num).pos_align_dict[prot_num]
    return new_sum_dict, new_align_dict
+def name_filter(sum_dict, align_dict, name_list):
+   new_sum_dict = FSSP.FSSPSumDict()
+   new_align_dict = copy.deepcopy(align_dict)
+   for cur_pdb_name in name_list:
+      for prot_num in sum_dict.keys():
+         if sum_dict[prot_num].pdb2+sum_dict[prot_num].chain2 == cur_pdb_name:
+            new_sum_dict[prot_num] = sum_dict[prot_num]
+   prot_numbers = new_sum_dict.keys()
+   prot_numbers.sort()
+   for pos_num in new_align_dict.abs_res_dict.keys():
+      new_align_dict.abs(pos_num).pos_align_dict = {}
+      for prot_num in prot_numbers:
+         new_align_dict.abs(pos_num).pos_align_dict[prot_num] = \
+                   align_dict.abs(pos_num).pos_align_dict[prot_num]
+   return new_sum_dict, new_align_dict
+
