@@ -9,24 +9,26 @@ import unittest
 from StringIO import *
 
 from Bio.SCOP import *
+from Bio.SCOP.tests import findResource
 
 
-
-class ScopTest(unittest.TestCase):
+class ScopTests(unittest.TestCase):
 
     def testParse(self):
         #cla = open("dir.cla.scop.txt_1.55")
         #des = open("dir.des.scop.txt_1.55")
         #hie = open("dir.hie.scop.txt_1.55")
 
+        f = open(findResource("Bio/SCOP/tests/clatest.txt"))
         try:
-            f = open("clatest.txt")
             cla = f.read()
             f.close()
-            f = open("destest.txt")
+            
+            f = open(findResource("Bio/SCOP/tests/destest.txt"))
             des = f.read()
             f.close()
-            f = open("hietest.txt")
+
+            f = open(findResource("Bio/SCOP/tests/hietest.txt"))
             hie = f.read()
         finally:
             f.close()
@@ -89,6 +91,9 @@ class ScopTest(unittest.TestCase):
         except SyntaxError, e :
             pass
             
+
+def test_suite():
+    return unittest.makeSuite(ScopTests)
 
 if __name__ == '__main__':
     unittest.main()

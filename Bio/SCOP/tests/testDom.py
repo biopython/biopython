@@ -13,9 +13,11 @@ import unittest
 
 from Bio.SCOP import Dom
 from Bio.SCOP.Residues import Residues
+from Bio.SCOP.tests import findResource
 
-class DomTest(unittest.TestCase):
-    filename = 'testDom.txt'
+class DomTests(unittest.TestCase):
+    def setUp(self) :
+        self.filename = findResource('Bio/SCOP/tests/testDom.txt')
 
     def testParse(self):
        f = open(self.filename)
@@ -58,8 +60,15 @@ class DomTest(unittest.TestCase):
         self.assertEquals(rec.residues.fragments,(('b','',''),) )        
         self.assertEquals(rec.hierarchy,'1.001.001.001.001.001')
 
+
+def test_suite():
+    return unittest.makeSuite(DomTests)
+
 if __name__ == '__main__':
     unittest.main()
+
+
+
 
 
 

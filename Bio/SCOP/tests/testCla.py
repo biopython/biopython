@@ -11,35 +11,42 @@ import unittest
 from Bio.SCOP import Cla
 from Bio.SCOP.Residues import Residues
 
-class ClaTest(unittest.TestCase):
-    filename = 'clatest.txt'
+from Bio.SCOP.tests import findResource
+
+
+
+class ClaTests(unittest.TestCase):
+
+    def setUp(self) :
+        self.filename = findResource('Bio/SCOP/tests/clatest.txt')
 
     def testParse(self):
-       f = open(self.filename)
-       try: 
-           count = 0
-           i = Cla.Iterator(f, Cla.Parser())
-           while 1 :
-               rec = i.next() 
-               if rec is None : break
-               count +=1
-           assert count == 14, "Wrong number of records?!"
-       finally:
-           f.close()
+        """Can we parse a CLA file?"""
+        f=open(self.filename)
+        try: 
+            count = 0
+            i = Cla.Iterator(f, Cla.Parser())
+            while 1 :
+                rec = i.next() 
+                if rec is None : break
+                count +=1
+            assert count == 14, "Wrong number of records?!"
+        finally:
+            f.close()
     
     def testStr(self):
-       f = open(self.filename)
-       try: 
-           p = Cla.Parser()
-           i = Cla.Iterator(f)
-           while 1 :
-               line = i.next() 
-               if line is None : break
-               rec = p.parse(line)
-               #End of line is plateform dependant. Strip it off
-               assert str(rec).rstrip() == line.rstrip()
-       finally:
-           f.close()        
+        f = open(self.filename)
+        try: 
+            p = Cla.Parser()
+            i = Cla.Iterator(f)
+            while 1 :
+                line = i.next() 
+                if line is None : break
+                rec = p.parse(line)
+                #End of line is plateform dependant. Strip it off
+                assert str(rec).rstrip() == line.rstrip()
+        finally:
+            f.close()        
 
     def testError(self) :
         corruptRec = "49268\tsp\tb.1.2.1\t-\n"
@@ -73,9 +80,16 @@ class ClaTest(unittest.TestCase):
         rec = index['d1hbia_']
         assert rec.sunid == '14996'
 
-        
+
+def test_suite():
+    return unittest.makeSuite(ClaTests)
+
+
 if __name__ == '__main__':
     unittest.main()
+
+
+
 
 
 

@@ -10,9 +10,12 @@ import unittest
 
 from Bio.SCOP import Des
 from Bio.SCOP.Residues import Residues
+from Bio.SCOP.tests import findResource
 
-class DesTest(unittest.TestCase):
-    filename = 'destest.txt'
+class DesTests(unittest.TestCase):
+
+    def setUp(self) :
+        self.filename = findResource('Bio/SCOP/tests/destest.txt')
 
     def testParse(self):
        f = open(self.filename)
@@ -62,6 +65,9 @@ class DesTest(unittest.TestCase):
         assert rec.name == recFields[3]                
         assert rec.description == recFields[4]
 
+
+def test_suite():
+    return unittest.makeSuite(DesTests)
 
 if __name__ == '__main__':
     unittest.main()

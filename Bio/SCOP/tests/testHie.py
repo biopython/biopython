@@ -10,10 +10,13 @@ import unittest
 
 from Bio.SCOP import Hie
 from Bio.SCOP.Residues import Residues
+from Bio.SCOP.tests import findResource
 
 
-class HieTest(unittest.TestCase):
-    filename = 'hietest.txt'
+class HieTests(unittest.TestCase):
+
+    def setUp(self) :
+        self.filename = findResource('Bio/SCOP/tests/hietest.txt')
 
     def testParse(self):
        f = open(self.filename)
@@ -52,9 +55,15 @@ class HieTest(unittest.TestCase):
         except SyntaxError, e :
             pass
 
+def test_suite():
+    return unittest.makeSuite(HieTests)
 
 if __name__ == '__main__':
     unittest.main()
+
+
+
+
 
 
 

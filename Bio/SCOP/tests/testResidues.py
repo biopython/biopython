@@ -8,7 +8,7 @@
 import unittest
 from Bio.SCOP.Residues import *
 
-class ResiduesTest(unittest.TestCase):
+class ResiduesTests(unittest.TestCase):
     res = (
         ( "-",           () ),
         ( "A:",          (("A", "", ""),) ),
@@ -73,10 +73,16 @@ class ResiduesTest(unittest.TestCase):
         except SyntaxError, e :
             pass
 
+def test_suite():
+    return unittest.makeSuite(ResiduesTests)
 
             
 if __name__ == '__main__':
     unittest.main()
+
+
+
+
 
 
 
