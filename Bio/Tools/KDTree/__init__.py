@@ -154,7 +154,10 @@ class KDTree:
 		Return the list of distances from center after
 		a neighbor search.
 		"""
-		return self.kdt.get_radii()
+		a=self.kdt.get_radii()
+		if a is None:
+			return []
+		return a
 	
 	def get_indices(self):
 		"""Return the list of indices.
@@ -163,7 +166,10 @@ class KDTree:
 		The indices refer to the original coords Numpy array. The
 		coordinates with these indices were within radius of center.
 		"""
-		return self.kdt.get_indices()
+		a=self.kdt.get_indices()
+		if a is None:
+			return []
+		return a
 
 	# Fixed radius search for all points
 
@@ -188,7 +194,7 @@ class KDTree:
 		"""
 		a=self.kdt.neighbor_get_indices()
 		if a is None:
-			return a
+			return [] 
 		# return as Nx2 dim Numpy array, where N
 		# is number of neighbor pairs.
 		a.shape=(-1, 2)
@@ -202,16 +208,18 @@ class KDTree:
 		of neighbor pairs..
 		"""
 		a=self.kdt.neighbor_get_radii()
+		if a is None:
+			return [] 
 		return a
 
 if __name__=="__main__":
 
 	from RandomArray import *
 
-	nr_points=1000
+	nr_points=100000
 	dim=3
 	bucket_size=10
-	query_radius=0.1
+	query_radius=0.01
 
 	coords=random((nr_points, dim)).astype("f")
 
@@ -234,7 +242,7 @@ if __name__=="__main__":
 		radii=kdtree.get_radii()
 
 		x, y, z=center
-		print "Found %i points in radius %.2f around center (%.2f, %.2f, %.2f)." % (len(indices), query_radius, x, y, z)
+		print "Found %i points in radius %f around center (%.2f, %.2f, %.2f)." % (len(indices), query_radius, x, y, z)
 
 	# Find all point pairs within radius
 
@@ -248,7 +256,7 @@ if __name__=="__main__":
 	indices=kdtree.all_get_indices() 
 	radii=kdtree.all_get_radii()
 
-	print "Found %i point pairs within radius %.2f." % (len(indices), query_radius)
+	print "Found %i point pairs within radius %f." % (len(indices), query_radius)
 
 		
 		
