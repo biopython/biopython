@@ -388,7 +388,7 @@ class MultipleAlignCL:
 
         # general options
         if self.type:
-            cline = cline + " -TYPE=" + self.type
+            cline = cline + " -TYPE=%s" % self.type
         if self.is_quick == 1:
             cline = cline + " -INTERACTIVE"
         if self.allow_negative == 1:
@@ -396,34 +396,34 @@ class MultipleAlignCL:
 
         # output options
         if self.output_file:
-            cline = cline + " -OUTFILE=" + self.output_file
+            cline = cline + " -OUTFILE=%s" % self.output_file
         if self.output_type:
-            cline = cline + " -OUTPUT=" + self.output_type
+            cline = cline + " -OUTPUT=%s" % self.output_type
         if self.output_order:
-            cline = cline + " -OUTORDER=" + self.output_order
+            cline = cline + " -OUTORDER=%s" % self.output_order
         if self.change_case:
-            cline = cline + " -CASE=" + self.change_case
+            cline = cline + " -CASE=%s" % self.change_case
         if self.add_seqnos:
-            cline = cline + " -SEQNOS=" + self.add_seqnos
+            cline = cline + " -SEQNOS=%s" % self.add_seqnos
         if self.new_tree:
             # clustal does not work if -align is written -ALIGN
-            cline = cline + " -NEWTREE=" + self.new_tree + " -align"
+            cline = cline + " -NEWTREE=%s -align" % self.new_tree
 
         # multiple alignment options
         if self.guide_tree:
-            cline = cline + " -USETREE=" + self.guide_tree
+            cline = cline + " -USETREE=%s" % self.guide_tree
         if self.protein_matrix:
-            cline = cline + " -MATRIX=" + self.protein_matrix
+            cline = cline + " -MATRIX=%s" % self.protein_matrix
         if self.dna_matrix:
-            cline = cline + " -DNAMATRIX=" + self.dna_matrix
+            cline = cline + " -DNAMATRIX=%s" % self.dna_matrix
         if self.gap_open_pen:
-            cline = cline + " -GAPOPEN=" + self.gap_open_pen
+            cline = cline + " -GAPOPEN=%s" % self.gap_open_pen
         if self.gap_ext_pen:
-            cline = cline + " -GAPEXT=" + self.gap_ext_pen
+            cline = cline + " -GAPEXT=%s" % self.gap_ext_pen
         if self.is_no_end_pen == 1:
             cline = cline + " -ENDGAPS"
         if self.gap_sep_range:
-            cline = cline + " -GAPDIST=" + self.gap_sep_range
+            cline = cline + " -GAPDIST=%s" % self.gap_sep_range
         if self.is_no_pgap == 1:
             cline = cline + " -NOPGAP"
         if self.is_no_hgap == 1:
@@ -433,11 +433,11 @@ class MultipleAlignCL:
             residue_list = ''
             for residue in self.h_gap_residues:
                 residue_list = residue_list + residue
-            cline = cline + " -HGAPRESIDUES=" + residue_list
+            cline = cline + " -HGAPRESIDUES=%s" % residue_list
         if self.max_div:
-            cline = cline + " -MAXDIV=" + self.max_div
+            cline = cline + " -MAXDIV=%s" % self.max_div
         if self.trans_weight:
-            cline = cline + " -TRANSWEIGHT=" + self.trans_weight
+            cline = cline + " -TRANSWEIGHT=%s" % self.trans_weight
 
         return cline
 
