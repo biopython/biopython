@@ -41,7 +41,7 @@ def testing_suite():
 
     test_loader = unittest.TestLoader()
     test_loader.testMethodPrefix = 't_'
-    tests = [LoaderTest, ReadTest, SeqInterfaceTest]
+    tests = [LoaderTest, ReadTest, SeqInterfaceTest, InDepthLoadTest]
     
     for test in tests:
         cur_suite = test_loader.loadTestsFromTestCase(test)
@@ -166,7 +166,7 @@ class SeqInterfaceTest(unittest.TestCase):
           "Seq retrieval is not correct"
         assert test_record.id == "X62281"
         assert test_record.name == "ATKIN2"
-        assert test_record.description == "" # should have a real description
+        assert test_record.description == "A.thaliana kin2 gene."
 
         annotations = test_record.annotations
         # XXX should do something with annotations once they are like
@@ -271,6 +271,78 @@ class LoaderTest(unittest.TestCase):
                               'ATKIN2', 'BNAKINI', 'BRRBIF72']
         assert item_ids == ['AF297471', 'AJ237582', 'L31939', 'M81224', 
                             'X55053', 'X62281']
+
+class InDepthLoadTest(unittest.TestCase):
+    """Make sure we are loading and retreiving in a semi-lossless fashion.
+    """
+    def setUp(self):
+        gb_file = os.path.join(os.getcwd(), "GenBank", "cor6_6.gb")
+        gb_handle = open(gb_file, "r")
+        load_database(gb_handle)
+        gb_handle.close()
+
+        server = BioSeqDatabase.open_database(user = DBUSER, passwd = DBPASSWD,
+                                              host = DBHOST, db = TESTDB)
+        self.db = server["biosql-test"]
+
+    def t_record_loading(self):
+        """Make sure all records are correctly loaded.
+        """
+        test_record = self.db.lookup(accession = "X55053")
+        assert test_record.name == "ATCOR66M"
+        assert test_record.id == "X55053"
+        assert test_record.description == "A.thaliana cor6.6 mRNA."
+        assert isinstance(test_record.seq.alphabet, Alphabet.RNAAlphabet)
+        assert test_record.seq[:10].tostring() == 'AACAAAACAC'
+
+        test_record = self.db.lookup(accession = "X62281")
+        assert test_record.name == "ATKIN2"
+        assert test_record.id == "X62281"
+        assert test_record.description == "A.thaliana kin2 gene."
+        assert isinstance(test_record.seq.alphabet, Alphabet.DNAAlphabet)
+        assert test_record.seq[:10].tostring() == 'ATTTGGCCTA'
+
+    def t_seq_feature(self):
+        """Indepth check that SeqFeatures are transmitted through the db.
+        """
+        test_record = self.db.lookup(accession = "AJ237582")
+        features = test_record.features
+        assert len(features) == 7
+       
+        # test single locations
+        test_feature = features[0]
+        assert test_feature.type == "source"
+        assert str(test_feature.location) == "(0..206)"
+        assert len(test_feature.qualifiers.keys()) == 3
+        assert test_feature.qualifiers.has_key("organism")
+        assert test_feature.qualifiers["organism"] == ["Armoracia rusticana"]
+
+        # test split locations
+        test_feature = features[4]
+        assert test_feature.type == "CDS", test_feature.type
+        assert str(test_feature.location) == "(0..206)"
+        assert len(test_feature.sub_features) == 2
+        assert str(test_feature.sub_features[0].location) == "(0..48)"
+        assert test_feature.sub_features[0].type == "CDS"
+        assert test_feature.sub_features[0].location_operator == "join"
+        assert str(test_feature.sub_features[1].location) == "(142..206)"
+        assert test_feature.sub_features[1].type == "CDS"
+        assert test_feature.sub_features[1].location_operator == "join"
+        assert len(test_feature.qualifiers.keys()) == 6
+        assert test_feature.qualifiers.has_key("product")
+        assert test_feature.qualifiers["product"] == ["cold shock protein"]
+
+        # test passing strand information
+        # XXX We should be testing complement as well
+        test_record = self.db.lookup(accession = "AJ237582")
+        test_feature = test_record.features[4] # DNA, no complement
+        assert test_feature.strand == 1
+        for sub_feature in test_feature.sub_features:
+            assert sub_feature.strand == 1
+
+        test_record = self.db.lookup(accession = "X55053")
+        test_feature = test_record.features[0] # RNA, so no strand info
+        assert test_feature.strand == 0
 
 if __name__ == "__main__":
     sys.exit(run_tests(sys.argv))
