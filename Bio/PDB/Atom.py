@@ -4,7 +4,7 @@
 # as part of this package.           
 
 # Python stuff
-from Numeric import sum, sqrt
+from Numeric import sum, sqrt, matrixmultiply
 
 # My stuff
 from Entity import DisorderedEntityWrapper
@@ -184,6 +184,17 @@ class Atom:
 
     def get_level(self):
         return self.level
+
+    def transform(self, rot, tran):
+        """
+        Apply rotation and translation to the atomic coordinates.
+
+        COORD=COORD x ROT + TRAN 
+
+        rot --- A right multiplying matrix (a 3x3 Numpy array).
+        trans --- The translation (a size 3 Numpy array)
+        """
+        self.coord=matrixmultiply(self.coord, rot)+tran
 
 
 class DisorderedAtom(DisorderedEntityWrapper):
