@@ -18,7 +18,6 @@ from Bio.Crystal import CrystalError
 class ChainTestCase(unittest.TestCase):
 
     def setUp( self ):
-        sys.exit(0)
         self.a = 'C A A C T A G G T C A C U A G G T C A G'
         self.b = 'C T G A C C T A G T G A C C T A G T T G'
         self.c = 'THR LYS LEU ASN GLY MET VAL LEU LEU CYS LYS VAL CYS GLY ASP'
