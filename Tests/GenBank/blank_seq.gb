@@ -1,0 +1,73 @@
+LOCUS       NP_001832                360 aa            linear   PRI 18-DEC-2001
+DEFINITION  cannabinoid receptor 2 (macrophage) [Homo sapiens].
+ACCESSION   NP_001832
+PID         g4502929
+VERSION     NP_001832.1  GI:4502929
+DBSOURCE    REFSEQ: accession NM_001841.1
+KEYWORDS    .
+SOURCE      human.
+  ORGANISM  Homo sapiens
+            Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+            Mammalia; Eutheria; Primates; Catarrhini; Hominidae; Homo.
+REFERENCE   1  (residues 1 to 360)
+  AUTHORS   Munro,S., Thomas,K.L. and Abu-Shaar,M.
+  TITLE     Molecular characterization of a peripheral receptor for
+            cannabinoids
+  JOURNAL   Nature 365 (6441), 61-65 (1993)
+  MEDLINE   93368659
+   PUBMED   7689702
+REFERENCE   2  (residues 1 to 360)
+  AUTHORS   Galiegue,S., Mary,S., Marchand,J., Dussossoy,D., Carriere,D.,
+            Carayon,P., Bouaboula,M., Shire,D., Le Fur,G. and Casellas,P.
+  TITLE     Expression of central and peripheral cannabinoid receptors in human
+            immune tissues and leukocyte subpopulations
+  JOURNAL   Eur. J. Biochem. 232 (1), 54-61 (1995)
+  MEDLINE   96048028
+   PUBMED   7556170
+REFERENCE   3  (residues 1 to 360)
+  AUTHORS   Shire,D., Calandra,B., Rinaldi-Carmona,M., Oustric,D., Pessegue,B.,
+            Bonnin-Cabanne,O., Le Fur,G., Caput,D. and Ferrara,P.
+  TITLE     Molecular cloning, expression and function of the murine CB2
+            peripheral cannabinoid receptor
+  JOURNAL   Biochim. Biophys. Acta 1307 (2), 132-136 (1996)
+  MEDLINE   96283804
+   PUBMED   8679694
+COMMENT     REVIEWED REFSEQ: This record has been curated by NCBI staff. The
+            reference sequence was derived from X74328.1.
+            Summary: The cannabinoid delta-9-tetrahydrocannabinol is the
+            principal psychoactive ingredient of marijuana. The proteins
+            encoded by this gene and the cannabinoid receptor 1 (brain) (CNR1)
+            gene have the characteristics of a guanine nucleotide-binding
+            protein (G-protein)-coupled receptor for cannabinoids. They inhibit
+            adenylate cyclase activity in a dose-dependent, stereoselective,
+            and pertussis toxin-sensitive manner. These proteins have been
+            found to be involved in the cannabinoid-induced CNS effects
+            (including alterations in mood and cognition) experienced by users
+            of marijuana. The cannabinoid receptors are members of family 1 of
+            the G-protein-coupled receptors.
+FEATURES             Location/Qualifiers
+     source          1..360
+                     /organism="Homo sapiens"
+                     /db_xref="taxon:9606"
+                     /chromosome="1"
+                     /map="1p36.11"
+     Protein         1..360
+                     /product="cannabinoid receptor 2 (macrophage)"
+     Region          50..299
+                     /region_name="7 transmembrane receptor (rhodopsin family)"
+                     /db_xref="CDD:pfam00001"
+                     /note="7tm_1"
+     CDS             1..360
+                     /gene="CNR2"
+                     /db_xref="LocusID:1269"
+                     /db_xref="MIM:605051"
+                     /coded_by="NM_001841.1:127..1209"
+ORIGIN      
+        1 meecwvteia ngskdgldsn pmkdymilsg pqktavavlc tllgllsale nvavlylils
+       61 shqlrrkpsy lfigslagad flasvvfacs fvnfhvfhgv dskavfllki gsvtmtftas
+      121 vgsllltaid rylclrypps ykalltrgra lvtlgimwvl salvsylplm gwtccprpcs
+      181 elfplipndy llswllfiaf lfsgiiytyg hvlwkahqhv aslsghqdrq vpgmarmrld
+      241 vrlaktlglv lavllicwfp vlalmahsla ttlsdqvkka fafcsmlcli nsmvnpviya
+      301 lrsgeirssa hhclahwkkc vrglgseake eaprssvtet eadgkitpwp dsrdldlsdc
+      361 
+//

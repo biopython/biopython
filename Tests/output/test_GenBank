@@ -3391,6 +3391,105 @@ strand: None
 qualifiers: 
 	Key: gene, Value: ['mlr0002']
 
+***Record from the FeatureParser
+Seq: Seq('MEECWVTEIANGSKDGLDSNPMKDYMILSGPQKTAVAVLCTLLGLLSALENVAVLYLILS ...', Alphabet())
+Id: NP_001832.1
+Name: NP_001832
+Description cannabinoid receptor 2 (macrophage) [Homo sapiens].
+Annotations***
+Key: comment
+Value: REVIEWED REFSEQ: This record has been curated by NCBI staff. The
+reference sequence was derived from X74328.1.
+Summary: The cannabinoid delta-9-tetrahydrocannabinol is the
+principal psychoactive ingredient of marijuana. The proteins
+encoded by this gene and the cannabinoid receptor 1 (brain) (CNR1)
+gene have the characteristics of a guanine nucleotide-binding
+protein (G-protein)-coupled receptor for cannabinoids. They inhibit
+adenylate cyclase activity in a dose-dependent, stereoselective,
+and pertussis toxin-sensitive manner. These proteins have been
+found to be involved in the cannabinoid-induced CNS effects
+(including alterations in mood and cognition) experienced by users
+of marijuana. The cannabinoid receptors are members of family 1 of
+the G-protein-coupled receptors.
+Key: data_file_division
+Value: PRI
+Key: date
+Value: 18-DEC-2001
+Key: db_source
+Value: REFSEQ: accession NM_001841.1
+Key: gi
+Value: 4502929
+Key: keywords
+Value: ['']
+Key: organism
+Value: Homo sapiens
+Key: pid
+Value: g4502929
+References*
+location: (0..360)
+authors: Munro,S., Thomas,K.L. and Abu-Shaar,M.
+title: Molecular characterization of a peripheral receptor for cannabinoids
+journal: Nature 365 (6441), 61-65 (1993)
+medline id: 93368659
+pubmed id: 7689702
+comment: 
+
+location: (0..360)
+authors: Galiegue,S., Mary,S., Marchand,J., Dussossoy,D., Carriere,D., Carayon,P., Bouaboula,M., Shire,D., Le Fur,G. and Casellas,P.
+title: Expression of central and peripheral cannabinoid receptors in human immune tissues and leukocyte subpopulations
+journal: Eur. J. Biochem. 232 (1), 54-61 (1995)
+medline id: 96048028
+pubmed id: 7556170
+comment: 
+
+location: (0..360)
+authors: Shire,D., Calandra,B., Rinaldi-Carmona,M., Oustric,D., Pessegue,B., Bonnin-Cabanne,O., Le Fur,G., Caput,D. and Ferrara,P.
+title: Molecular cloning, expression and function of the murine CB2 peripheral cannabinoid receptor
+journal: Biochim. Biophys. Acta 1307 (2), 132-136 (1996)
+medline id: 96283804
+pubmed id: 8679694
+comment: 
+
+Key: source
+Value: human
+Key: taxonomy
+Value: ['Eukaryota', 'Metazoa', 'Chordata', 'Craniata', 'Vertebrata', 'Euteleostomi', 'Mammalia', 'Eutheria', 'Primates', 'Catarrhini', 'Hominidae', 'Homo']
+Feaures
+type: source
+location: (0..360)
+ref: None:None
+strand: None
+qualifiers: 
+	Key: chromosome, Value: ['1']
+	Key: db_xref, Value: ['taxon:9606']
+	Key: map, Value: ['1p36.11']
+	Key: organism, Value: ['Homo sapiens']
+
+type: Protein
+location: (0..360)
+ref: None:None
+strand: None
+qualifiers: 
+	Key: product, Value: ['cannabinoid receptor 2 (macrophage)']
+
+type: Region
+location: (49..299)
+ref: None:None
+strand: None
+qualifiers: 
+	Key: db_xref, Value: ['CDD:pfam00001']
+	Key: note, Value: ['7tm_1']
+	Key: region_name, Value: ['7 transmembrane receptor (rhodopsin family)']
+
+type: CDS
+location: (0..360)
+ref: None:None
+strand: None
+qualifiers: 
+	Key: coded_by, Value: ['NM_001841.1:127..1209']
+	Key: db_xref, Value: ['LocusID:1269', 'MIM:605051']
+	Key: gene, Value: ['CNR2']
+
 ***Record from the RecordParser
 locus: NM_006141
 definition: Homo sapiens dynein, cytoplasmic, light intermediate polypeptide 2 (DNCLI2), mRNA.
@@ -4253,6 +4352,37 @@ feature key: gene
 location: 287..1084
 num qualifiers: 1
 key: /gene= value: "mlr0002"
+***Record from the RecordParser
+locus: NP_001832
+definition: cannabinoid receptor 2 (macrophage) [Homo sapiens].
+accession: ['NP_001832']
+reference title: Molecular characterization of a peripheral receptor for cannabinoids
+reference title: Expression of central and peripheral cannabinoid receptors in human immune tissues and leukocyte subpopulations
+reference title: Molecular cloning, expression and function of the murine CB2 peripheral cannabinoid receptor
+feature key: source
+location: 1..360
+num qualifiers: 4
+key: /organism= value: "Homo sapiens"
+key: /db_xref= value: "taxon:9606"
+key: /chromosome= value: "1"
+key: /map= value: "1p36.11"
+feature key: Protein
+location: 1..360
+num qualifiers: 1
+key: /product= value: "cannabinoid receptor 2 (macrophage)"
+feature key: Region
+location: 50..299
+num qualifiers: 3
+key: /region_name= value: "7 transmembrane receptor (rhodopsin family)"
+key: /db_xref= value: "CDD:pfam00001"
+key: /note= value: "7tm_1"
+feature key: CDS
+location: 1..360
+num qualifiers: 4
+key: /gene= value: "CNR2"
+key: /db_xref= value: "LocusID:1269"
+key: /db_xref= value: "MIM:605051"
+key: /coded_by= value: "NM_001841.1:127..1209"
 Testing dictionaries...
 Indexing file to serve as a dictionary...
 len: 7
