@@ -1,5 +1,5 @@
 from Bio.ParserSupport import AbstractConsumer
-from Bio.Fasta import Fasta
+from Bio import Fasta
 
 import string
 

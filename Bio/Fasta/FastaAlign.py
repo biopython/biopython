@@ -16,7 +16,7 @@ import string
 from Bio.Align.Generic import Alignment
 from Bio import Alphabet
 from Bio.Alphabet import IUPAC
-import Fasta
+from Bio import Fasta
 
 def parse_file(file_name, type = 'DNA'):
     """Parse the given file into a FastaAlignment object.

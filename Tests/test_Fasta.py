@@ -7,7 +7,7 @@ import os
 from types import *
 from Bio import File
 from Bio import ParserSupport
-from Bio.Fasta import Fasta
+from Bio import Fasta
 
 
 ### Record

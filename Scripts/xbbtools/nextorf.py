@@ -13,7 +13,7 @@ import string, re
 import os, sys, commands
 import getopt
 
-from Bio.Fasta import Fasta
+from Bio import Fasta
 from Bio.Tools import Translate
 from Bio.Seq import Seq
 from Bio import Alphabet

@@ -1,5 +1,5 @@
 import string
-from Bio.Fasta import Fasta
+from Bio import Fasta
 from Bio.Alphabet import IUPAC
 
 def get_accession_num(fasta_record):

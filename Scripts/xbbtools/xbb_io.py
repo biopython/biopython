@@ -10,7 +10,7 @@ sys.path.insert(0, '.')
 sys.path.insert(0, os.path.expanduser('~thomas/cbs/python/biopython'))
 
 from Bio.ParserSupport import *
-from Bio.Fasta import Fasta
+from Bio import Fasta
 
 class xbb_io:
     def __init__(self):

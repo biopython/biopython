@@ -1,5 +1,5 @@
 import string
-from Bio.Fasta import Fasta
+from Bio import Fasta
 
 def extract_organisms(file_to_parse):
     # set up the parser and iterator

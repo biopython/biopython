@@ -8,7 +8,7 @@ import copy
 
 # biopython
 from Bio.Blast import NCBIWWW
-from Bio.Fasta import Fasta
+from Bio import Fasta
 
 # first get the sequence we want to parse from a FASTA file
 file_for_blast = open('m_cold.fasta', 'r')

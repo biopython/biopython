@@ -8,7 +8,7 @@ import string
 from types import *
 from Bio import File
 from Bio import ParserSupport
-from Bio.Fasta import Fasta
+from Bio import Fasta
 from Bio import Alphabet
 
 def title_to_ids(title):
