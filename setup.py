@@ -51,7 +51,7 @@ else:
 
 
 setup(name='biopython', 
-      version='0.90d03',
+      version='0.90d04',
       author='The Biopython Consortium',
       author_email='biopython@biopython.org',
       url='http://www.bipoython.org/',
