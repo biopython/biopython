@@ -78,8 +78,8 @@ def load_expression(path):
     msg = msg + "(You may need to add the top-level module to the PYTHONPATH)"
     raise TypeError(msg)
 
-def load_basemodule(modulename):
-    modulename = modulename + ".formatdefs"
+def load_basemodule(modulename, package="formatdefs"):
+    modulename = modulename + "." + package
     module = load_module(modulename)
     filename = module.__file__
     dirname = os.path.dirname(filename)
