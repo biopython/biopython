@@ -8,12 +8,16 @@ def mult_align(sum_dict,align_dict):
    mult_align_dict = {}
    for j in align_dict.abs(1).pos_align_dict.keys():
       mult_align_dict[j] = ''
-   for align_rec in align_dict.values():
-      for j in align_rec.pos_align_dict.keys():
-         mult_align_dict[j] += align_rec.pos_align_dict[j].aa
+   
+   for i in range(1,len(align_dict)+1):
+      # loop on positions
+      for j in align_dict.abs(i).pos_align_dict.keys():
+         # loop within a position
+         mult_align_dict[j] += align_dict.abs(i).pos_align_dict[j].aa
    seq_order = mult_align_dict.keys()
    seq_order.sort()
-   fssp_align = Generic.Alignment(Alphabet.Gapped(Alphabet.IUPAC.protein))
+   fssp_align = Generic.Alignment(Alphabet.Gapped(
+                                  Alphabet.IUPAC.extended_protein))
    for i in seq_order:
       fssp_align.add_sequence(sum_dict[i].pdb2+sum_dict[i].chain2,
                                  mult_align_dict[i])
