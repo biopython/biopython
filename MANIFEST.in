@@ -7,7 +7,15 @@ include LICENSE
 include NEWS
 include README
 recursive-include Scripts *.py
-recursive-include Doc *
+
+# add only the things we are interested in from the docs
+recursive-include Doc *.tex
+recursive-include Doc *.pdf
+recursive-include Doc *.txt
+recursive-include Doc *.py
+recursive-include Doc *.html
+recursive-include Doc *.fasta
+
 recursive-include Tests *
 global-exclude CVS
 global-exclude CVS/*
