@@ -9,6 +9,15 @@ copen_sys     Open a file-like pipe to a system command.
 copen_fn      Open a file-like pipe to a python function.
 
 """
+
+# The pickle stuff has to be redone.  We shouldn't have a whole new
+# handle object to unpickle the results.  Instead, the pickling and
+# unpickling should be done by function wrappers.
+# e.g.
+#    call_and_pickle(fn, args, keywds)
+# _CommandHandle should take a function that processes the results,
+# e.g. unpickle
+
 import os
 import sys
 import traceback

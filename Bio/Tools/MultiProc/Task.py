@@ -44,7 +44,9 @@ class Task:
 
         """
         self._target = target
-        self._name = str(name or _newname())
+        if name is None:
+            name = _newname()
+        self._name = str(name)
         self._args, self._kwargs = args, kwargs
         self._start = self._finished = None
         self._handle = None
