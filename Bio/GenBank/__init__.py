@@ -320,7 +320,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
     """
     def __init__(self, use_fuzziness):
         _BaseGenBankConsumer.__init__(self)
-        self.data = SeqRecord(None)
+        self.data = SeqRecord(None, id = None)
 
         self._use_fuzziness = use_fuzziness
 
@@ -361,9 +361,12 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         If we have multiple accession numbers, the first one passed is
         used.
         """
-        all_acc_nums = self._split_accessions(acc_num)
-        if len(all_acc_nums) > 0:
-            self.data.id = all_acc_nums[0]
+        new_acc_nums = self._split_accessions(acc_num)
+
+        # if we haven't set the id information yet, add the first acc num
+        if self.data.id is None:
+            if len(new_acc_nums) > 0:
+                self.data.id = new_acc_nums[0]
 
     def nid(self, content):
         self.data.annotations['nid'] = content
@@ -833,7 +836,8 @@ class _RecordConsumer(_BaseGenBankConsumer):
         self.data.definition = content
 
     def accession(self, content):
-        self.data.accession = self._split_accessions(content)
+        new_accessions = self._split_accessions(content)
+        self.data.accession.extend(new_accessions)
 
     def nid(self, content):
         self.data.nid = content

@@ -121,7 +121,17 @@ definition_block = define_block("DEFINITION", "definition_block", "definition")
 
 # accession line
 # ACCESSION   AC007323
-accession_block = define_block("ACCESSION", "accession_block", "accession")
+accession = Martel.Group("accession",
+                         Martel.Re("[\w]+"))
+
+accession_block = Martel.Group("accession_block",
+                               Martel.Str("ACCESSION") +
+                               Martel.Rep1(blank_space +
+                                           Martel.Rep1(accession +
+                                                Martel.Opt(Martel.Str(" "))) +
+                                           Martel.AnyEol()))
+
+# accession_block = define_block("ACCESSION", "accession_block", "accession")
 
 # NID         g44010
 nid = Martel.Group("nid",
