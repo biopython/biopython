@@ -1,6 +1,6 @@
 #!/usr/bin/env python2.3
 
-__version__ = "$Revision: 1.1 $"
+__version__ = "$Revision: 1.2 $"
 
 import os
 
@@ -8,12 +8,10 @@ try:
     import lsf
 
     _NamedTemporaryFile = lsf.NamedTemporaryFile
-    _localfilename = lsf.localfilename
 except ImportError:
     import tempfile
     
     _NamedTemporaryFile = tempfile.NamedTemporaryFile
-    _localfilename = lambda *args: args[0]
 
 def _build_align_cmdline(cmdline, pair, output_filename, kbyte=None, force_type=None, quiet=False):
     """
@@ -51,9 +49,11 @@ def align(cmdline, pair, kbyte=None, force_type=None, dry_run=False, quiet=False
     """
     temp_file = _NamedTemporaryFile(mode='r')
     cmdline_str = _build_align_cmdline(cmdline,
-                                       [_localfilename(filename)
-                                        for filename in pair],
-                                       temp_file.name, kbyte, force_type, quiet)
+                                       pair,
+                                       temp_file.name,
+                                       kbyte,
+                                       force_type,
+                                       quiet)
 
     if dry_run:
         print cmdline_str
