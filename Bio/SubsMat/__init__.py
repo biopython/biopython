@@ -173,10 +173,8 @@ class SeqMat(dict):
               data == None)
       if data == None:
          data = {}
-      if type(data) == type({}):
-         self.data = copy.copy(data)
       else:
-         self.data = copy.copy(data.data)
+         self.update(data)
       if alphabet == None:
          alphabet = Alphabet.Alphabet()
       assert Alphabet.generic_alphabet.contains(alphabet)
@@ -277,8 +275,8 @@ class SeqMat(dict):
       # printing
       assert non_sym == None or type(non_sym) == type(1.) or \
       type(non_sym) == type(1)
-      full_mat = copy.copy(self.data)
-      for i in full_mat.keys():
+      full_mat = copy.copy(self)
+      for i in self:
          if i[0] <> i[1]:
             full_mat[(i[1],i[0])] = full_mat[i]
       if not alphabet:

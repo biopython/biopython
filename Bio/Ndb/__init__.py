@@ -42,17 +42,16 @@ from Bio.SeqFeature import Reference
 class Record( dict ):
 
     def __init__( self ):
-        self.data = {}
-        self.data[ 'Id' ] = ''
-        self.data[ 'Features' ] = ''
-        self.data[ 'Name' ] = ''
-        self.data[ 'Sequence' ] = Crystal( {} )
-        self.data[ 'Citation' ] = Reference()
-        self.data[ 'Space Group' ] = ''
-        self.data[ 'Cell Constants' ] = {}
-        self.data[ 'Crystallization Conditions' ] = []
-        self.data[ 'Refinement' ] = ''
-        self.data[ 'Coordinates' ] = ''
+        self[ 'Id' ] = ''
+        self[ 'Features' ] = ''
+        self[ 'Name' ] = ''
+        self[ 'Sequence' ] = Crystal( {} )
+        self[ 'Citation' ] = Reference()
+        self[ 'Space Group' ] = ''
+        self[ 'Cell Constants' ] = {}
+        self[ 'Crystallization Conditions' ] = []
+        self[ 'Refinement' ] = ''
+        self[ 'Coordinates' ] = ''
 
     def __str__( self ):
         keys = self.keys()

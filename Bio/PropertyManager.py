@@ -16,14 +16,8 @@
 # The new elements are always dictionaries.
 class CreateDict(dict):
     def __getitem__(self, key):
-        try:
-            return self.data[key]
-        except KeyError:
-            pass
-        x = {}
-        self.data[key] = x
-        return x
-
+        return self.setdefault(key,{})
+    
 class PropertyManager:
     def __init__(self):
         self.class_property = CreateDict()
@@ -41,13 +35,13 @@ class PropertyManager:
     def resolve_class(self, klass, property):
         # Hopefully, we'll find the hit right away
         try:
-            return self.class_property.data[klass][property]
+            return self.class_property[klass][property]
         except KeyError:
             pass
 
         # Is there a property resolver?
         try:
-            return self.class_property_resolver.data[klass][property](
+            return self.class_property_resolver[klass][property](
                 self, klass, property)
         except KeyError:
             pass
@@ -67,11 +61,11 @@ class PropertyManager:
         while bases:
             base = bases.pop()
             try:
-                return self.class_property.data[base][property]
+                return self.class_property[base][property]
             except KeyError:
                 pass
             try:
-                return self.class_property_resolver.data[base][property](
+                return self.class_property_resolver[base][property](
                     self, klass, property)
             except KeyError:
                 pass

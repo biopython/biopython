@@ -50,7 +50,6 @@ FREQ = 2
 class FreqTable(dict):
     
     def _freq_from_count(self):
-        self.data = {}
         sum = 0.
         for i in self.count.values():
             sum = sum + i
@@ -72,7 +71,7 @@ class FreqTable(dict):
             self._freq_from_count()
         elif dict_type == FREQ:
             self.count = {}
-            self.data = in_dict
+            self.update(in_dict)
         else:
             raise ValueError,"bad dict_type"
         if not alphabet:

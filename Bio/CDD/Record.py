@@ -55,17 +55,16 @@ class Record( dict ):
     """
     def __init__(self):
         dict.__init__( self )
-        self.data[ 'references' ] = []
-        self.data[ 'alignment_lookup' ] = {}
-
+        self[ 'references' ] = []
+        self[ 'alignment_lookup' ] = {}
 
     def __str__( self ):
         output = ''
-        keys = self.data.keys()
+        keys = self.keys()
         keys.sort()
         for key in keys:
             output = output + '%s:\n\n' % key.upper()
-            contents = self.data[ key ]
+            contents = self[ key ]
             if( type( contents ) == type( '' ) ):
                 if( key == 'Sequence' ):
                     output = output + out_multiline( contents )

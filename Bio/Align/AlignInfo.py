@@ -534,10 +534,10 @@ class SummaryInfo:
             # check the expected freq information to make sure it is good
             for key in obs_freq.keys():
                 if (key != self.alignment._alphabet.gap_char and
-                    key not in e_freq_table.data.keys()):
+                    key not in e_freq_table):
                     raise ValueError("Expected frequency letters %s" +
                                      " do not match observed %s"
-                           % (e_freq_table.data.keys(), obs_freq.keys() -
+                           % (e_freq_table.keys(), obs_freq.keys() -
                               [self.alignment._alphabet.gap_char]))
         
         total_info = 0
@@ -549,7 +549,7 @@ class SummaryInfo:
             # should just be the observed frequency.
             if letter != self.alignment._alphabet.gap_char:
                 if e_freq_table:
-                    inner_log = obs_freq[letter] / e_freq_table.data[letter]
+                    inner_log = obs_freq[letter] / e_freq_table[letter]
                 else:
                     inner_log = obs_freq[letter] / random_expected
             # if the observed frequency is zero, we don't add any info to the
