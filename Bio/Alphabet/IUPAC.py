@@ -20,7 +20,7 @@ protein = IUPACProtein()
 class ExtendedIUPACProtein(Alphabet.ProteinAlphabet):
     letters = IUPACData.extended_protein_letters
     # B = "Asx";  aspartic acid or asparagine
-    # X = "Sec";  selenocysteine
+    # X = "Sec";  selenocysteine  Note: IUPAC is moving to use 'U' for this
     # Z = "Glx";  glutamic acid or glutamine (or substances such as
     #         4-carboxyglutamic acid and 5-oxoproline that yield glutamic
     #         acid on acid hydrolysis of peptides)
