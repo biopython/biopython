@@ -11,6 +11,7 @@ http://www.expasy.ch/prosite/
 
 Tested with:
 Release 15.0, July 1998
+Release 16.0, July 1999
 
 
 Classes:
@@ -325,7 +326,11 @@ class _Scanner:
             line = uhandle.peekline()
             if not line:
                 break
-            if line[:2] == 'ID':
+            elif is_blank_line(line):
+                # Skip blank lines between records
+                uhandle.readline()
+                continue
+            elif line[:2] == 'ID':
                 self._scan_record(uhandle, consumer)
             elif line[:2] == 'CC':
                 self._scan_copyrights(uhandle, consumer)

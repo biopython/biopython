@@ -11,6 +11,7 @@ http://www.expasy.ch/prosite/
 
 Tested with:
 Release 15.0, July 1998
+Release 16.0, July 1999
 
 
 Classes:
@@ -258,8 +259,16 @@ class _Scanner:
         else:
             uhandle = File.UndoHandle(handle)
 
-        while uhandle.peekline():
-            self._scan_record(uhandle, consumer)
+        while 1:
+            line = uhandle.peekline()
+            if not line:
+                break
+            elif is_blank_line(line):
+                # Skip blank lines between records
+                uhandle.readline()
+                continue
+            else:
+                self._scan_record(uhandle, consumer)
             
     def _scan_record(self, uhandle, consumer):
         consumer.start_record()
