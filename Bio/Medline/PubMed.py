@@ -27,9 +27,9 @@ import re
 import sgmllib
 
 from Bio import File
-from Bio.WWW import NCBI
-from Bio.Medline import Medline
 from Bio.WWW import RequestLimiter
+from Bio.WWW import NCBI
+from Bio import Medline
 
 class Dictionary:
     """Access PubMed using a read-only dictionary interface.

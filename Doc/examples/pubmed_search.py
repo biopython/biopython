@@ -4,7 +4,7 @@ import string
 
 # biopython
 from Bio.Medline import PubMed
-from Bio.Medline import Medline
+from Bio import Medline
 
 # do the search and get the ids
 search_term = 'orchid'
