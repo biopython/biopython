@@ -302,6 +302,7 @@ PACKAGES = [
     'Bio.Pathway',
     'Bio.Pathway.Rep',
     'Bio.PDB',
+    'Bio.PDB.mmCIF',
     'Bio.Prosite',
     'Bio.Rebase',
     'Bio.Saf',
@@ -360,6 +361,12 @@ EXTENSIONS = [
                'Bio/csupport.c'],
               include_dirs=["Bio"]
               ),
+    Extension('Bio.PDB.mmCIF.MMCIFlex',
+              ['Bio/PDB/mmCIF/lex.yy.c',
+               'Bio/PDB/mmCIF/MMCIFlexmodule.c'],
+              include_dirs=["Bio"],
+			  libraries=["fl"]
+			  ),
     #Extension('Bio.KDTree._KDTreecmodule',
     #          ["Bio/KDTree/_KDTree.C", 
     #           "Bio/KDTree/_KDTree.swig.C"],

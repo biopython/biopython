@@ -5,7 +5,7 @@ LEX=flex
 all:	MMCIFlexmodule.so mmcif_test
 
 MMCIFlexmodule.so: lex.yy.o MMCIFlexmodule.o
-	$(CC) -fPIC -shared -o $@ $^ -lfl
+	$(CC) -fPIC -shared -o $@ $^ -lfl 
 
 MMCIFlexmodule.o: MMCIFlexmodule.c
 	$(CC) -c -fPIC $(PYTHON_INC_DIR) -o $@ $<
