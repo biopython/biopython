@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 """Tests for dealing with storage of biopython objects in a relational db.
+
+Currently these tests require a MySQL db loaded with the GenBank info
+in GenBank/cor6_6.gb. This loading can be done with bioperl-db.
 """
 # standard library
 import sys
@@ -9,7 +12,9 @@ import os
 import unittest
 
 # local stuff
+import Bio
 from BioSQL import BioSeqDatabase
+from BioSQL import BioSeq
 
 # Constants for the MySQL database
 DBHOST = 'localhost'
@@ -59,10 +64,24 @@ class LoadTest(unittest.TestCase):
         """Test retrieval of itmes using various ids.
         """
         item = self.db.lookup(accession = "X62281")
-
-        item = self.db.lookup(primary_id = "16353")
-
+        try:
+            item = self.db.lookup(accession = "Not real")
+            raise Assertionerror("No problem on fake id retrieval")
+        except IndexError:
+            pass
         item = self.db.lookup(display_id = "ATKIN2")
+        try:
+            item = self.db.lookup(display_id = "Not real")
+            raise AssertionError("No problem on fake id retrieval")
+        except IndexError:
+            pass
+        
+        # primary id doesn't work right now
+        try:
+            item = self.db.lookup(primary_id = "16353")
+            raise AssertionError("Need to write tests for primary_id fetch")
+        except NotImplementedError:
+            pass
 
 class SeqInterfaceTest(unittest.TestCase):
     """Make sure the BioSQL objects implement the expected biopython interfaces
@@ -75,17 +94,39 @@ class SeqInterfaceTest(unittest.TestCase):
         """
         server = BioSeqDatabase.open_database(user = DBUSER, passwd = DBPASSWD,
                                               host = DBHOST, db = TESTDB)
-        self.db = server["biosql-test"]
-
+        db = server["biosql-test"]
+        self.item = db.lookup(accession = "X62281")
+    
     def t_seq_record(self):
         """Make sure SeqRecords from BioSQL implement the right interface.
         """
-        pass
+        test_record = self.item
+        assert isinstance(test_record.seq, BioSeq.DBSeq), \
+          "Seq retrieval is not correct"
+        assert test_record.id == "X62281"
+        assert test_record.name == "ATKIN2"
+        assert test_record.description == "" # should have a real description
+
+        annotations = test_record.annotations
+        # XXX should do something with annotations once they are like
+        # a dictionary
+        for feature in test_record.features:
+            assert isinstance(feature, Bio.SeqFeature.SeqFeature)
 
     def t_seq(self):
         """Make sure Seqs from BioSQL implement the right interface.
         """
-        pass
+        test_seq = self.item.seq
+
+    def t_seq_slicing(self):
+        """Check that slices of sequences are retrieved properly.
+        """
+        test_seq = self.item.seq
+
+    def t_seq_features(self):
+        """Check SeqFeatures of a sequence.
+        """
+        test_features = self.item.features
 
 if __name__ == "__main__":
     sys.exit(run_tests(sys.argv))
