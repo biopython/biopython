@@ -67,6 +67,7 @@ from Bio.ParserSupport import EventGenerator
 
 import genbank_format
 import Record
+import utils
 
 from Bio.SeqFeature import Reference
 from Bio import SeqFeature
@@ -240,7 +241,7 @@ class FeatureParser:
     """Parse GenBank files into Seq + Feature objects.
     """
     def __init__(self, debug_level = 0, use_fuzziness = 1, 
-                 feature_cleaner = None):
+                 feature_cleaner = utils.FeatureValueCleaner()):
         """Initialize a GenBank parser and Feature consumer.
 
         Arguments:
@@ -252,7 +253,8 @@ class FeatureParser:
         The default is 1 (use fuzziness).
         o feature_cleaner - A class which will be used to clean out the
         values of features. This class must implement the function 
-        clean_value. GenBank.utils has a "standard" cleaner class.
+        clean_value. GenBank.utils has a "standard" cleaner class, which
+        is used by default.
         """
         self._scanner = _Scanner(debug_level)
         self.use_fuzziness = use_fuzziness
@@ -670,8 +672,8 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             raise LocationParserError(location_line)
 
         # print "parse_info:", repr(parse_info)
-
-        # now add the information we get out of the parser to the feature
+        
+        # add the parser information the current feature
         self._set_location_info(parse_info, self._cur_feature)
 
     def _set_function(self, function, cur_feature):
@@ -702,6 +704,12 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         elif (function.name == "join" or function.name == "order" or
               function.name == "one-of"):
             self._set_ordering_info(function, cur_feature)
+        elif (function.name == "gap"):
+            assert len(function.args) == 1, \
+              "Unexpected number of arguments in gap %s" % function.args
+            # make the cur information location a gap object
+            position = self._get_position(function.args[0].local_location)
+            cur_feature.location = SeqFeature.PositionGap(position)
         else:
             raise ValueError("Unexpected function name: %s" % function.name)
 
@@ -841,6 +849,20 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         elif isinstance(position, LocationParser.TwoBound):
             final_pos = SeqFeature.WithinPosition(position.low.val,
                                                 position.high.val)
+        # case 6 -- we've got a one-of(100, 110) location
+        elif isinstance(position, LocationParser.Function) and \
+                        position.name == "one-of":
+            # first convert all of the arguments to positions
+            position_choices = []
+            for arg in position.args:
+                # we only handle AbsoluteLocations with no path
+                # right now. Not sure if other cases will pop up
+                assert isinstance(arg, LocationParser.AbsoluteLocation), \
+                  "Unhandled Location type %r" % arg
+                assert arg.path is None, "Unhandled path in location"
+                position = self._get_position(arg.local_location)
+                position_choices.append(position)
+            final_pos = SeqFeature.OneOfPosition(position_choices)
         # if it is none of these cases we've got a problem!
         else:
             raise ValueError("Unexpected LocationParser object %r" %
@@ -893,6 +915,25 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         qual_value = string.replace(content, '"', '')
         
         self._cur_qualifier_value = qual_value
+
+    def contig_location(self, content):
+        """Deal with a location of CONTIG information.
+        """
+        # add a last feature if is hasn't been added,
+        # so that we don't overwrite it
+        self._add_feature()
+
+        # make a feature to add the information to
+        self._cur_feature = SeqFeature.SeqFeature()
+        self._cur_feature.type = "contig"
+        
+        # now set the location on the feature using the standard
+        # location handler
+        self.location(content)
+        # add the contig information to the annotations and get rid
+        # of the feature to prevent it from being added to the feature table
+        self.data.annotations["contig"] = self._cur_feature
+        self._cur_feature = None
 
     def origin_name(self, content):
         pass
@@ -1108,6 +1149,11 @@ class _RecordConsumer(_BaseGenBankConsumer):
     def origin_name(self, content):
         self.data.origin = content
 
+    def contig_location(self, content):
+        """Signal that we have contig information to add to the record.
+        """
+        self.data.contig = self._clean_location(content) 
+
     def sequence(self, content):
         """Add sequence information to a list of sequence strings.
 
@@ -1177,7 +1223,7 @@ class _Scanner:
                               "location", "qualifier_key",
                               "qualifier_value", "origin_name",
                               "base_count", "base_number",
-                              "sequence", "record_end"]
+                              "sequence", "contig_location", "record_end"]
 
         # a listing of all tags which should be left alone with respect
         # to whitespace handles

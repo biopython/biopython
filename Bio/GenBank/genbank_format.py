@@ -94,7 +94,7 @@ date = Martel.Group("date",
 # the PLN, etc stuff indicates data file divisions
 valid_divisions = ["PRI", "ROD", "MAM", "VRT", "INV", "PLN", "BCT", "RNA",
                    "VRL", "PHG", "SYN", "UNA", "EST", "PAT", "STS", "GSS",
-                   "HTG", "HTC"]
+                   "HTG", "HTC", "CON"]
 divisions = map(Martel.Str, valid_divisions)
 data_file_division = Martel.Group("data_file_division",
                                   Martel.Alt(*divisions))
@@ -481,6 +481,7 @@ feature_qualifier_names = (
                       #   denote that the sequence is from unrearranged DNA
     "haplotype",      # Haplotype of organism from which the sequence was
                       #   obtained
+    "hgml_locus_uid", # Found in old GenBank records
     "insertion_seq",  # Insertion sequence element from which the sequence
                       #   was obtained
     "isolate",        # Individual isolate from which the sequence was
@@ -561,6 +562,7 @@ feature_qualifier_names = (
                       #   than universal genetic code table
     "transposon",     # Transposable element from which the sequence
                       #   was obtained
+    "transcript_id",  # REFSEQ qualifier id
     "type",           # Name of a strain if different from that in the
                       #   SOURCE field  (XXX not in
                       #   http://www.ncbi.nlm.nih.gov/collab/FT/index.html )
@@ -637,6 +639,20 @@ sequence_entry = Martel.Group("sequence_entry",
                               origin_line +
                               Martel.Rep1(sequence_line))
 
+# CONTIG
+# this is the contig information for RefSeq records
+
+contig_location = Martel.Group("contig_location",
+                    Martel.ToEol("feature_location") + \
+                    Martel.Rep(Martel.Str(" " * INDENT) + \
+                               Martel.Re("(?!/)") + \
+                               Martel.ToEol("feature_location")))
+
+contig_block = Martel.Group("contig_block",
+                            Martel.Str("CONTIG") +
+                            blank_space +
+                            contig_location)
+
 # all done!
 # //
 record_end = Martel.Group("record_end",
@@ -659,8 +675,9 @@ record = Martel.Group("genbank_record",
                       Martel.Opt(comment_block) + \
                       features_line + \
                       Martel.Rep1(feature) + \
-                      Martel.Opt(base_count_line) + \
-                      sequence_entry + \
+                      Martel.Alt(Martel.Opt(base_count_line) +
+                                 sequence_entry,
+                                 contig_block) + \
                       record_end)
 
 record_format = Martel.ParseRecords("genbank_file", record,

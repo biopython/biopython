@@ -123,6 +123,8 @@ class Record:
     o base_counts - A string with the counts of bases for the sequence.
     o origin - A string specifying info about the origin of the sequence.
     o sequence - A string with the sequence itself.
+    o contig - A string of location information for a CONTIG in a RefSeq
+    file.
     """
     # constants for outputting GenBank information
     GB_LINE_LENGTH = 79
@@ -170,6 +172,7 @@ class Record:
         self.base_counts = ''
         self.origin = ''
         self.sequence = ''
+        self.contig = ''
 
     def __str__(self):
         """Provide a GenBank formatted output option for a Record.
@@ -204,7 +207,7 @@ class Record:
         output += self._base_count_line()
         output += self._origin_line()
         output += self._sequence_line()
-
+        output += self._contig_line()
         output += "//"
         return output
             
@@ -373,55 +376,71 @@ class Record:
     def _base_count_line(self):
         """Output for the BASE COUNT line with base information.
         """
-        output = Record.BASE_FORMAT % "BASE COUNT  "
-        # split up the base counts into their individual parts
-        count_parts = self.base_counts.split(" ")
-        while '' in count_parts:
-            count_parts.remove('')
-        assert len(count_parts) % 2 == 0, "Unexpected count information: %s"\
-               % self.base_counts
-        while len(count_parts) > 0:
-            count_info = count_parts.pop(0)
-            count_type = count_parts.pop(0)
+        output = ""
+        if self.base_counts:
+            output += Record.BASE_FORMAT % "BASE COUNT  "
+            # split up the base counts into their individual parts
+            count_parts = self.base_counts.split(" ")
+            while '' in count_parts:
+                count_parts.remove('')
+            assert len(count_parts) % 2 == 0, \
+              "Unexpected count information: %s" % self.base_counts
+            while len(count_parts) > 0:
+                count_info = count_parts.pop(0)
+                count_type = count_parts.pop(0)
 
-            output += "%7s %s" % (count_info, count_type)
+                output += "%7s %s" % (count_info, count_type)
 
-        output += "\n"
+            output += "\n"
         return output
 
     def _origin_line(self):
         """Output for the ORIGIN line
         """
-        output = Record.BASE_FORMAT % "ORIGIN"
-        if self.origin:
-            output += _wrapped_genbank(self.origin,
-                                       Record.GB_BASE_INDENT)
-        else:
-            output += "\n"
+        output = ""
+        # only output the ORIGIN line if we have a sequence
+        if self.sequence:
+            output += Record.BASE_FORMAT % "ORIGIN"
+            if self.origin:
+                output += _wrapped_genbank(self.origin,
+                                           Record.GB_BASE_INDENT)
+            else:
+                output += "\n"
         return output
 
     def _sequence_line(self):
         """Output for all of the sequence.
         """
         output = ""
-        cur_seq_pos = 0
-        while cur_seq_pos < len(self.sequence):
-            output += Record.SEQUENCE_FORMAT % str(cur_seq_pos + 1)
+        if self.sequence:
+            cur_seq_pos = 0
+            while cur_seq_pos < len(self.sequence):
+                output += Record.SEQUENCE_FORMAT % str(cur_seq_pos + 1)
 
-            for section in range(6):
-                start_pos = cur_seq_pos + section * 10
-                end_pos = start_pos + 10
-                seq_section = self.sequence[start_pos:end_pos]
-                output += " %s" % seq_section.lower()
+                for section in range(6):
+                    start_pos = cur_seq_pos + section * 10
+                    end_pos = start_pos + 10
+                    seq_section = self.sequence[start_pos:end_pos]
+                    output += " %s" % seq_section.lower()
 
-                # stop looping if we are out of sequence
-                if end_pos > len(self.sequence):
-                    break
+                    # stop looping if we are out of sequence
+                    if end_pos > len(self.sequence):
+                        break
                 
-            output += "\n"
-            cur_seq_pos += 60
+                output += "\n"
+                cur_seq_pos += 60
         return output
-        
+
+    def _contig_line(self):
+        """Output for CONTIG location information from RefSeq.
+        """
+        output = ""
+        if self.contig:
+            output += Record.BASE_FORMAT % "CONTIG"
+            output += _wrapped_genbank(self.contig,
+                                       Record.GB_BASE_INDENT, split_char = ',')
+        return output
+
 class Reference:
     """Hold information from a GenBank reference.
 

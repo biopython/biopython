@@ -284,6 +284,9 @@ class LocationParser(GenericParser):
     def p_base_range(self, args):
         """
         base_range ::= base_position double_dot base_position
+        base_range ::= function double_dot base_position
+        base_range ::= base_position double_dot function
+        base_range ::= function double_dot function
         """
         return Range(args[0], args[2])
         
