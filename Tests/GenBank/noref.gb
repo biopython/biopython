@@ -1,0 +1,72 @@
+LOCUS       NM_006141    1622 bp    mRNA            PRI       01-NOV-2000
+DEFINITION  Homo sapiens dynein, cytoplasmic, light intermediate polypeptide 2
+            (DNCLI2), mRNA.
+ACCESSION   NM_006141
+VERSION     NM_006141.1  GI:5453633
+KEYWORDS    .
+SOURCE      human.
+  ORGANISM  Homo sapiens
+            Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+            Mammalia; Eutheria; Primates; Catarrhini; Hominidae; Homo.
+COMMENT     PROVISIONAL REFSEQ: This record has not yet been subject to final
+            NCBI review. The reference sequence was derived from AF035812.1.
+FEATURES             Location/Qualifiers
+     source          1..1622
+                     /organism="Homo sapiens"
+                     /db_xref="taxon:9606"
+                     /map="16"
+     gene            1..1622
+                     /gene="DNCLI2"
+                     /note="LIC2"
+                     /db_xref="LocusID:1783"
+     CDS             7..1485
+                     /gene="DNCLI2"
+                     /note="similar to R. norvegicus and G. gallus dynein light
+                     intermediate chain 2, Swiss-Prot Accession Numbers Q62698
+                     and Q90828, respectively"
+                     /codon_start=1
+                     /db_xref="LocusID:1783"
+                     /product="dynein, cytoplasmic, light intermediate
+                     polypeptide 2"
+                     /protein_id="NP_006132.1"
+                     /db_xref="GI:5453634"
+                     /translation="MAPVGVEKKLLLGPNGPAVAAAGDLTSEEEEGQSLWSSILSEVS
+                     TRARSKLPSGKNILVFGEDGSGKTTLMTKLQGAEHGKKGRGLEYLYLSVHDEDRDDHT
+                     RCNVWILDGDLYHKGLLKFAVSAESLPETLVIFVADMSRPWTVMESLQKWASVLREHI
+                     DKMKIPPEKMRELERKFVKDFQDYMEPEEGCQGSPQRRGPLTSGSDEENVALPLGDNV
+                     LTHNLGIPVLVVCTKCDAVSVLEKEHDYRDEHLDFIQSHLRRFCLQYGAALIYTSVKE
+                     EKNLDLLYKYIVHKTYGFHFTTPALVVEKDAVFIPAGWDNEKKIAILHENFTTVKPED
+                     AYEDFIVKPPVRKLVHDKELAAEDEQVFLMKQQSLLAKQPATPTRASESPARGPSGSP
+                     RTQGRGGPASVPSSSPGTSVKKPDPNIKNNAASEGVLASFFNSLLSKKTGSPGSPGAG
+                     GVQSTAKKSGQKTVLSNVQEELDRMTRKPDSMVTNSSTENEA"
+BASE COUNT      474 a    356 c    428 g    364 t
+ORIGIN      
+        1 ggcaagatgg cgccggtggg ggtggagaag aagctgctgc taggtcccaa cgggcccgcg
+       61 gtggcggccg ccggcgacct gaccagtgag gaggaggaag gccagagcct atggtcctcc
+      121 attctgagcg aagtgtccac ccgcgccagg tccaagctgc cgtccggcaa gaacatcctg
+      181 gtcttcggtg aagatggttc tggtaaaaca accctcatga ctaaactaca aggagctgag
+      241 catggcaaaa aaggaagagg cctagaatat ctctacctca gtgtccatga tgaggaccga
+      301 gatgatcaca cgcgctgcaa cgtgtggatt ctggatggag acttgtacca caaaggcctg
+      361 ctgaaatttg cagtttctgc tgaatccttg ccagagaccc tcgtcatttt tgttgcagac
+      421 atgtctagac cttggactgt gatggaatct ctgcagaaat gggctagtgt tttacgtgag
+      481 cacattgata aaatgaaaat tccaccagaa aaaatgaggg agctggaacg gaagtttgtg
+      541 aaagattttc aagactatat ggaacctgaa gaaggttgtc aaggttcccc acagagaaga
+      601 ggccctctga cctcaggctc cgatgaagaa aatgttgccc tgcctctggg tgacaatgtg
+      661 ctgactcata acctggggat cccggtgttg gtggtgtgca caaagtgtga tgcggtgagt
+      721 gtcctggaga aggagcacga ttacagggat gagcatttgg actttatcca gtcacacctg
+      781 cggaggttct gccttcagta tggagctgcc ttgatttaca catcagtgaa agaagagaaa
+      841 aacctcgact tgttgtataa gtatattgtt cataaaacat acggtttcca cttcaccaca
+      901 cctgccttag ttgtggaaaa ggatgccgtt tttatacctg caggctggga caatgaaaag
+      961 aaaatagcta ttttacatga aaattttaca accgtgaagc cggaagatgc atatgaagac
+     1021 tttattgtga aacctcccgt gagaaagctg gtccacgaca aagagttggc agcagaagat
+     1081 gagcaggtgt tcctaatgaa gcaacagtca ctccttgcca agcaaccagc cactcccacg
+     1141 agagcttctg aatctcctgc aagaggaccc tctggctctc caaggaccca gggtcgggga
+     1201 gggccagcca gtgtgcctag ctcctcccca ggcacgtcag taaaaaagcc ggacccaaac
+     1261 atcaaaaata atgcagcaag tgaaggggtg ttggccagct tcttcaacag tctgttgagt
+     1321 aaaaagacag gctctcctgg aagtcctggt gctggtgggg tgcagagcac agccaagaag
+     1381 tcaggacaaa agactgtgtt gtcaaatgtt caggaagaac tggatagaat gactcgaaag
+     1441 ccagactcta tggtaacaaa ctcttcaaca gaaaatgaag cctgaacctc cttaaaaagt
+     1501 gcatatgtcg aatgaccaaa taactatgta tattgatctg ctaagaccag gatttttctg
+     1561 atatggcaca tgctatcagt tttttggggc aggggagatg aactttaaaa aaaaaaaaaa
+     1621 aa
+//
