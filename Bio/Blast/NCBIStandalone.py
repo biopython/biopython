@@ -33,6 +33,7 @@ blastpgp        Execute blastpgp.
 
 """
 
+from __future__ import generators
 import os
 import re
 
@@ -1330,6 +1331,9 @@ class Iterator:
         if self._parser is not None:
             return self._parser.parse(File.StringHandle(data))
         return data
+
+    def __iter__(self):
+        return iter(self.next, None)
 
 def blastall(blastcmd, program, database, infile, **keywds):
     """blastall(blastcmd, program, database, infile, **keywds) ->
