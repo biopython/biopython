@@ -1,10 +1,6 @@
 import string
-import operator
-import urllib
 import sgmllib
 import Bio.File
-import Martel
-from mx import TextTools
 
 """
 The UniGene site is:
