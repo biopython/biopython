@@ -85,8 +85,9 @@ residue_types = map(Martel.Str, valid_residue_types)
 residue_type = Martel.Group("residue_type",
                             Martel.Opt(Martel.Alt(*residue_prefixes)) +
                             Martel.Opt(Martel.Alt(*residue_types)) +
-                            Martel.Opt(blank_space +
+                            Martel.Opt(Martel.Opt(blank_space) + 
                                        Martel.Str("circular")))
+
 date = Martel.Group("date",
                     Martel.Re("[-\w]+"))
 
@@ -163,9 +164,9 @@ version_line = Martel.Group("version_line",
                             Martel.Str("VERSION") +
                             blank_space +
                             version +
-                            blank_space +
-                            Martel.Str("GI:") +
-                            gi +
+                            Martel.Opt(blank_space +
+                                       Martel.Str("GI:") +
+                                       gi) +
                             Martel.AnyEol())
 
 # DBSOURCE    REFSEQ: accession NM_010510.1

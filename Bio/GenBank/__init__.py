@@ -406,7 +406,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         self._use_fuzziness = use_fuzziness
 
         self._seq_type = ''
-        self._seq_data = ''
+        self._seq_data = []
         self._current_ref = None
         self._cur_feature = None
         self._cur_qualifier_key = None
@@ -894,11 +894,15 @@ class _FeatureConsumer(_BaseGenBankConsumer):
 
     def sequence(self, content):
         """Add up sequence information as we get it.
+
+        To try and make things speedier, this puts all of the strings
+        into a list of strings, and then uses string.join later to put
+        them together. Supposedly, this is a big time savings
         """
         new_seq = string.replace(content, ' ', '')
         new_seq = string.upper(new_seq)
 
-        self._seq_data += new_seq
+        self._seq_data.append(new_seq)
 
     def record_end(self, content):
         """Clean up when we've finished the record.
@@ -919,13 +923,18 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 seq_alphabet = IUPAC.ambiguous_rna
             elif self._seq_type == "PROTEIN":
                 seq_alphabet = IUPAC.protein  # or extended protein?
+            # work around ugly GenBank record which have circular but
+            # no indication of sequence type
+            elif self._seq_type == "circular":
+                pass
             # we have a bug if we get here
             else:
                 raise ValueError("Could not determine alphabet for seq_type %s"
                                  % self._seq_type)
 
         # now set the sequence
-        self.data.seq = Seq(self._seq_data, seq_alphabet)
+        sequence = string.join(self._seq_data, "")
+        self.data.seq = Seq(sequence, seq_alphabet)
 
 class _RecordConsumer(_BaseGenBankConsumer):
     """Create a GenBank Record object from scanner generated information.
@@ -934,6 +943,7 @@ class _RecordConsumer(_BaseGenBankConsumer):
         _BaseGenBankConsumer.__init__(self)
         self.data = Record.Record()
 
+        self._seq_data = []
         self._cur_reference = None
         self._cur_feature = None
         self._cur_qualifier = None
@@ -1088,12 +1098,22 @@ class _RecordConsumer(_BaseGenBankConsumer):
         self.data.origin = content
 
     def sequence(self, content):
+        """Add sequence information to a list of sequence strings.
+
+        This removes spaces in the data and uppercases the sequence, and
+        then adds it to a list of sequences. Later on we'll join this
+        list together to make the final sequence. This is faster than
+        adding on the new string every time.
+        """
         new_seq = string.replace(content, ' ', '')
-        self.data.sequence += string.upper(new_seq)
+        self._seq_data.append(string.upper(new_seq))
 
     def record_end(self, content):
         """Signal the end of the record and do any necessary clean-up.
         """
+        # add together all of the sequence parts to create the
+        # final sequence string
+        self.data.sequence = string.join(self._seq_data, "")
         # add on the last feature
         self._add_feature()
 
