@@ -207,7 +207,7 @@ class PDBParser:
 		if self.PERMISSIVE:
 			# just print a warning - some residues/atoms will be missing
 			print "PDBConstructionException: %s" % message
-			print "Exception ignored. Some atoms or residues will be missing in the data structure."
+			print "Exception ignored.\nSome atoms or residues will be missing in the data structure."
 		else:
 			# exceptions are fatal - raise again with new message (including line nr)
 			raise PDBConstructionException, message

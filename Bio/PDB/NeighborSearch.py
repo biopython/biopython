@@ -112,6 +112,28 @@ class NeighborSearch:
 			next_level_pair_list=self._get_unique_parent_pairs(next_level_pair_list)
 			if level==l:
 				return next_level_pair_list	
+
+if __name__=="__main__":
+
+	from RandomArray import *
+
+	class Atom:
+		def __init__(self):
+			self.coord=(100*random(3))
+
+		def get_coord(self):
+			return self.coord
+
+	while 1:
+		al=[]
+		for i in range(0, 100):
+			al.append(Atom())
+
+		ns=NeighborSearch(al)
+
+		print "Found ", len(ns.search_all(5.0))
+
+
 			
 
 				
