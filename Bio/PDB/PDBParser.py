@@ -23,7 +23,7 @@ class PDBParser:
     Parse a PDB file and return a Structure object.
     """
 
-    def __init__(self, PERMISSIVE=0, get_header=0, structure_builder=None):
+    def __init__(self, PERMISSIVE=1, get_header=0, structure_builder=None):
         """
         The PDB parser call a number of standard methods in an aggregated
         StructureBuilder object. Normally this object is instanciated by the
@@ -31,9 +31,9 @@ class PDBParser:
         object, the latter is used instead.
 
         Arguments:
-        o PERMISSIVE - int, if this is 0 (default) exceptions in constructing the
-        SMCRA data structure are fatal. If 1, the exceptions are caught, but some 
-        residues or atoms will be missing. 
+        o PERMISSIVE - int, if this is 0 exceptions in constructing the
+        SMCRA data structure are fatal. If 1 (DEFAULT), the exceptions are 
+        caught, but some residues or atoms will be missing. 
         o structure_builder - an optional user implemented StructureBuilder class. 
         """
         if structure_builder!=None:
