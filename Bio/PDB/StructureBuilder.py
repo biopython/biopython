@@ -171,7 +171,8 @@ class StructureBuilder:
 					# name of current atom now includes spaces
 					name=fullname
 					if __debug__:
-						print "WARNING: atom names %s and %s differ only in spaces at line %i." % (duplicate_fullname, fullname, self.line_counter)
+						print "WARNING: atom names %s and %s differ only in spaces at line %i." \
+							% (duplicate_fullname, fullname, self.line_counter)
 		atom=self.atom=Atom(name, coord, b_factor, occupancy, altloc, fullname)
 		if altloc!=" ":
 			# The atom is disordered
@@ -224,5 +225,9 @@ class StructureBuilder:
 		# first sort everything
 		# self.structure.sort()
 		return self.structure
+
+	def set_symmetry(self, spacegroup, cell):
+		print spacegroup
+		print cell
 
 

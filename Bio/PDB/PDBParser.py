@@ -219,7 +219,22 @@ if __name__=="__main__":
 
 	p=PDBParser(PERMISSIVE=1)
 
-	print p.get_structure("scr", sys.argv[1])
+	s=p.get_structure("scr", sys.argv[1])
+
+	for m in s.get_iterator():
+		p=m.get_parent()
+		assert(p is s)
+		for c in m.get_iterator():
+			p=c.get_parent()
+			assert(p is m)
+			for r in c.get_iterator():
+				p=r.get_parent()
+				assert(p is c)
+				for a in r.get_iterator():
+					p=a.get_parent()
+					if not p is r:
+						print p, r
+					
 				
 				
 		
