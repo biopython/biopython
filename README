@@ -37,6 +37,13 @@ o "Numerical Python 15.3":http://numpy.sourceforge.net/ (optional)
   error messages such as:
   ImportError: No module named Numeric
 
+o ReportLab (optional)
+  This package is used in some code that generates graphical displays
+  of chromosomes.  If you do not need this functoinality, you will not
+  need to install this package.
+
+
+
 These version numbers indicate the earliest tested versions.  Later
 versions of these packages may work as well.
 
@@ -78,6 +85,16 @@ drevil:~/biopython> python setup.py test
 If you have Tk installed, this will run a nice GUI that displays the
 results of the tests.  Otherwise, you will see results on the command
 line.
+
+Do not panic if you see messages warning of skipped tests:
+    Skipping test because of import error: No module named reportlab.pdfgen
+
+This most likely means that a package is not installed.  You can
+ignore this if it occurs in the tests for a module that you were not
+planning on using.  If you did want to use that module, please install
+the required dependency and re-run the tests.
+
+
 
 
 **Bugs**
