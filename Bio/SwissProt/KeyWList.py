@@ -11,14 +11,36 @@ http://www.expasy.ch/sprot/sprot-top.html
 
 
 Classes:
-Scanner   Scans the keywlist.txt file.
+ListParser        Parses a keywlist.txt file into a list of keywords.
+
+_Scanner          Scans the keywlist.txt file.
+_ListConsumer     Consumes keywlist data to a list.
+
+
+Functions:
+extract_keywords  Return the keywords from a keywlist.txt file.
 
 """
+
+from types import *
 
 from Bio import File
 from Bio.ParserSupport import *
 
-class Scanner:
+class ListParser:
+    """Parses keywlist.txt data into a list of keywords.
+
+    """
+    def __init__(self):
+        self._scanner = _Scanner()
+        self._consumer = _ListConsumer()
+
+    def parse(self, handle):
+        self._scanner.feed(handle, self._consumer)
+        return self._consumer.keywords
+
+
+class _Scanner:
     """Scan the keywlist.txt file included with the SwissProt distribution.
 
     Tested with:
@@ -97,3 +119,30 @@ class Scanner:
             read_and_call(uhandle, consumer.copyright, blank=0)
 
         consumer.end_footer()
+
+class _ListConsumer(AbstractConsumer):
+    """Consumer that converts a keywlist.txt file into a list of keywords.
+
+    Members:
+    keywords    List of keywords.
+
+    """
+    def __init__(self):
+        self.keywords = None
+
+    def start_keywords(self):
+        self.keywords = []
+
+    def keyword(self, line):
+        self.keywords.append(string.rstrip(line))
+
+def extract_keywords(keywlist_handle):
+    """extract_keywords(keywlist_handle) -> list of keywords
+
+    Return the keywords from a keywlist.txt file.
+
+    """
+    if type(keywlist_handle) is not FileType and \
+       type(keywlist_handle) is not InstanceType:
+        raise ValueError, "I expected a file handle or file-like object"
+    return ListParser().parse(keywlist_handle)
