@@ -78,6 +78,8 @@ for parser in all_parsers:
                     print "feature key:", feature.key
                     print "location:", feature.location
                     print "num qualifiers:", len(feature.qualifiers)
+                    for qualifier in feature.qualifiers:
+                        print "key:", qualifier.key, "value:", qualifier.value
 
         handle.close()
 
