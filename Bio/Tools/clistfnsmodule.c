@@ -29,7 +29,7 @@ clistfns_count(self, args)
 {
     int i;
     PyObject *items, *counts;
-    PyObject *item, *count;
+    PyObject *item, *count, *newcount;
     long int current;
 
     if(!PyArg_ParseTuple(args, "O", &items))
@@ -50,29 +50,19 @@ clistfns_count(self, args)
 	    break;         /* no more numbers */
 	}
 
-	/* item needs to be Py_DECREF'd */
 	if(!(count = PyDict_GetItem(counts, item))) {
-	    /* This is a new item.  Set count to 1. */
-	    count = PyInt_FromLong(1);
-	    PyDict_SetItem(counts, item, count);
-	    Py_DECREF(count);
-            Py_DECREF(item);
-	    if(PyErr_Occurred()) 
-		/* item not hashable? */
-		return NULL;
-	} else {
-	    if(!PyInt_Check(count)) {
-                Py_DECREF(item);
-		PyErr_SetString(PyExc_SystemError, "non-int in dictionary");
-		return NULL;
-	    }
-	    current = PyInt_AsLong(count);
-	    count = PyInt_FromLong(current+1);
-	    PyDict_SetItem(counts, item, count);
-            Py_DECREF(item);
-	    if(PyErr_Occurred()) 
-		return NULL;
+	    newcount = PyInt_FromLong(1);  /* New item, set count to 1 */
 	}
+	else {
+	    current = PyInt_AsLong(count);
+	    newcount = PyInt_FromLong(current+1);
+	}
+
+	PyDict_SetItem(counts, item, newcount);
+	Py_DECREF(newcount);
+	Py_DECREF(item);
+	if(PyErr_Occurred()) 
+	    return NULL;
 
 	i++;
     }
@@ -96,9 +86,9 @@ clistfns_contents(self, args)
      PyObject *args;
 {
     int i;
-    PyObject *items, *counts, *count;
-    PyObject *percentages, *perc;
-    PyObject *keys, *key;
+    PyObject *items, *counts, *percentages;
+    PyObject *countitems, *countitem;
+    PyObject *key, *count, *perc;
     long c;
     double total;
 
@@ -114,16 +104,16 @@ clistfns_contents(self, args)
     }
     
     counts = clistfns_count(self, args);
-    if(PyErr_Occurred())
+    if(!counts || PyErr_Occurred())
 	return NULL;
 
     if(!(percentages = PyDict_New())) {
 	Py_DECREF(counts);
 	return NULL;
     }
-    
+
     /* Loop through every element in counts, calculating the probabilities. */
-    if(!(keys = PyMapping_Keys(counts))) {
+    if(!(countitems = PyMapping_Items(counts))) {
 	Py_DECREF(counts);
         Py_DECREF(percentages);
 	return NULL;
@@ -132,35 +122,26 @@ clistfns_contents(self, args)
     /* Go through the loop, counting how often each item appears. */
     i = 0;
     while(1) {
-	if(!(key = PySequence_GetItem(keys, i))) {
-	    PyErr_Clear(); /* clear the exception set by PySequence_GetItem */
+	if(!(countitem = PyList_GetItem(countitems, i))) {
+	    PyErr_Clear(); /* clear the exception set by PyList_GetItem */
 	    break;         /* no more numbers */
         }
-	if(!(count = PyDict_GetItem(counts, key))) {
-            Py_DECREF(key);
-	    break;
-	}
-	if(!PyInt_Check(count)) {
-            Py_DECREF(key);
-	    PyErr_SetString(PyExc_SystemError, "non-int in dictionary");
-            break;
-	}
+	key = PyTuple_GetItem(countitem, 0);
+	count = PyTuple_GetItem(countitem, 1);
 	c = PyInt_AsLong(count);
 	perc = PyFloat_FromDouble((double)c / total);
 	PyDict_SetItem(percentages, key, perc);
-        Py_DECREF(key);
 	Py_DECREF(perc);
-	if(PyErr_Occurred()) {
+	if(PyErr_Occurred())   /* PyDict_SetItem failed */
 	    break;
-	}
 	i++;
     }
     if(PyErr_Occurred()) {
 	Py_DECREF(percentages);
 	percentages = NULL;
     }
+    Py_DECREF(countitems);
     Py_DECREF(counts);
-    Py_DECREF(keys);
     
     return percentages;
 }
