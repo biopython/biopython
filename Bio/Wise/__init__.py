@@ -1,6 +1,6 @@
-#!/usr/bin/env python2.3
+#!/usr/bin/env python
 
-__version__ = "$Revision: 1.11 $"
+__version__ = "$Revision: 1.12 $"
 
 import os
 import sys
@@ -13,8 +13,10 @@ try:
     _NamedTemporaryFile = poly.NamedTemporaryFile
 except ImportError:
     import tempfile
-    
-    _NamedTemporaryFile = tempfile.NamedTemporaryFile
+    try:
+        _NamedTemporaryFile = tempfile.NamedTemporaryFile
+    except AttributeError: # no NamedTemporaryFile on 2.2, stuck without it
+        _NamedTemporaryFile = tempfile.TemporaryFile
 
 def _build_align_cmdline(cmdline, pair, output_filename, kbyte=None, force_type=None, quiet=False):
     """

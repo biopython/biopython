@@ -49,8 +49,7 @@ gives you
         are needed, the ACEParser instead of the RecordParser might be appropriate.
         
 """
-
-import os 
+import os
 from types import *
 
 from Bio import File
@@ -242,7 +241,8 @@ class ACEFileRecord:
         rt=[]
         wr=[]
         # search for tags that aren't in the right position
-        for i,c in enumerate(self.contigs):
+        for i in range(len(self.contigs)):
+            c = self.contigs[i]
             if c.wa:
                 if not self.wa:
                     self.wa=[]
@@ -251,7 +251,8 @@ class ACEFileRecord:
                 newcts=[ct_tag for ct_tag in c.ct if ct_tag.name!=c.name]
                 map(self.contigs[i].ct.remove,newcts)
                 ct.extend(newcts)
-            for j,r in enumerate(c.reads):
+            for j in range(len(c.reads)):
+                r = c.reads[j]
                 if r.rt:
                     newrts=[rt_tag for rt_tag in r.rt if rt_tag.name!=r.rd.name]
                     map(self.contigs[i].reads[j].rt.remove,newrts)
@@ -261,14 +262,16 @@ class ACEFileRecord:
                     map(self.contigs[i].reads[j].wr.remove,newwrs)
                     wr.extend(newwrs)
         # now sort them into their proper place
-        for i,c in enumerate(self.contigs):
+        for i in range(len(self.contigs)):
+            c = self.contigs[i]
             for ct_tag in ct:
                 if ct_tag.name==c.name:
                     if self.contigs[i].ct is None:
                         self.contigs[i].ct=[]
                     self.contigs[i].ct.append(ct_tag)
             if rt or wr:
-                for j,r in enumerate(c.reads):
+                for j in range(len(c.reads)):
+                    r = c.reads[j]
                     for rt_tag in rt:
                         if rt_tag.name==r.rd.name:
                             if self.contigs[i].reads[j].rt is None:

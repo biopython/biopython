@@ -1,10 +1,12 @@
+# make yield compatible with Python 2.2
+from __future__ import generators
+
 from Numeric import array, sum, sqrt
 import tempfile
 import os
 import sys
 
 from Bio.PDB import *
-
 
 __doc__="""
 Calculation of residue depth (using Michel Sanner's MSMS program for the

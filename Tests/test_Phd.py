@@ -48,8 +48,10 @@ class PhdTestOne(unittest.TestCase):
             comments=r.comments.items()
             comments.sort()
             print '\n'.join([c[0]+': '+str(c[1]) for c in comments])
-            allsites=['-'.join(s) for s in r.sites] 
-            print allsites[:10],'...',allsites[len(allsites)/2-5:len(allsites)/2+5:],'...',allsites[-10:]
+            allsites=['-'.join(s) for s in r.sites]
+            print allsites[:10],'...',allsites[len(allsites)/2-5:len(allsites)/2+5],'...',allsites[-10:]
             print r.seq.tostring()[:10],r.seq.tostring()[-10:]
             print r.seq_trimmed.tostring()[:10],r.seq_trimmed.tostring()[-10:]
         
+if __name__ == "__main__":
+    sys.exit(run_tests(sys.argv))

@@ -1,5 +1,7 @@
-from Bio.PDB import *
+# make yield compatible with Python 2.2
+from __future__ import generators
 
+from Bio.PDB import *
 
 __doc__="""
 Map the residues of two structures to each other based on 

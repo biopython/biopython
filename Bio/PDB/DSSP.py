@@ -1,7 +1,12 @@
+# make yield compatible with Python 2.2
+from __future__ import generators
+
 import os
 import tempfile
 
 from Bio.PDB import *
+
+
 
 __doc__="""
 Use the DSSP program to calculate secondary structure and accessibility.

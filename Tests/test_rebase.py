@@ -9,12 +9,12 @@ import string
 from types import *
 from Bio import File
 from Bio import ParserSupport
-from Bio.Rebase import Rebase
+from Bio import Rebase
 
 
 tests = [ 'bamii.htm', 'cac81.htm', 'crei.htm', 'foki.htm', 'pvuii.htm', \
           'taqi.htm' ]
-record_parser = Rebase.RebaseParser()
+record_parser = Rebase.RecordParser()
 
 
 for test in tests:
@@ -22,5 +22,5 @@ for test in tests:
     datafile = os.path.join( 'Rebase', test )
     src_handle = open( datafile )
     data = record_parser.parse( src_handle )
-    print data
+    print data.seq_5_to_3
     print '\n'

@@ -1,11 +1,13 @@
 #!/usr/bin/env python2.3
 
-__version__ = "$Revision: 1.1 $"
+__version__ = "$Revision: 1.2 $"
 
 import doctest, unittest
 import random
 import sys
 
+if sys.modules.has_key('requires_wise'):
+    del sys.modules['requires_wise']
 import requires_wise
 
 from Bio.Wise import psw

@@ -65,7 +65,8 @@ class ParserTest(unittest.TestCase):
         """Basic operation of the Record Parser.
         """
         parser = Fasta.RecordParser()
-        for index, handle in enumerate(self.handles):
+        for index in range(len(self.handles)):
+            handle = self.handles[index]
             rec = parser.parse(handle)
             assert isinstance(rec, Fasta.Record)
             assert len(rec.title) == self.lengths[index][0]
@@ -75,7 +76,8 @@ class ParserTest(unittest.TestCase):
         """Basic operation of the Sequence Parser.
         """
         parser = Fasta.SequenceParser()
-        for index, handle in enumerate(self.handles):
+        for index in range(len(self.handles)):
+            handle = self.handles[index]
             rec = parser.parse(handle)
             assert isinstance(rec, SeqRecord.SeqRecord)
             assert isinstance(rec.seq, Seq.Seq)
