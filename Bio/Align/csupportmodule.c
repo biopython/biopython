@@ -23,7 +23,7 @@ static PyObject *csupport_rint(
     int precision = _PRECISION;
     int rint_x;
 
-    static char *kwlist[] = {"precision", NULL};
+    static char *kwlist[] = {"x", "precision", NULL};
 
     if(!PyArg_ParseTupleAndKeywords(args, keywds, "d|l", kwlist,
 				    &x, &precision))

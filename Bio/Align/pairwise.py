@@ -21,6 +21,8 @@ no_penalty        Use no gap penalties.
 """
 from support import *
 
+MAX_ALIGNMENTS = 1000
+
 # Because of differences in how this and the gotoh algorithms
 # generate score matrices, they may stop off at different points in
 # the tracebacks during a local alignment.  For example, if you align:
@@ -58,6 +60,8 @@ def align_global(sequenceA, sequenceB, gap_A_fn, gap_B_fn,
         ('global_alignment', 1),
         ('penalize_end_gaps', 1),
         ('gap_char', '-'),
+        ('score_cutoff_fn', None),
+        ('forgiveness', 0),
         ]
     for name, default in params:
         keywds[name] = keywds.get(name, default)
@@ -90,36 +94,52 @@ def align_local(sequenceA, sequenceB, gap_A_fn, gap_B_fn,
         ('global_alignment', 0),
         ('penalize_end_gaps', 0),
         ('gap_char', '-'),
+        ('score_cutoff_fn', None),
+        ('forgiveness', 0),
         ]
     for name, default in params:
         keywds[name] = keywds.get(name, default)
     return _align(sequenceA, sequenceB, match_fn, gap_A_fn, gap_B_fn, **keywds)
 
 def _align(sequenceA, sequenceB, match_fn, gap_A_fn, gap_B_fn,
-           global_alignment, penalize_end_gaps, gap_char):
+           global_alignment, penalize_end_gaps, gap_char,
+           score_cutoff_fn, forgiveness):
     score_matrix, traceback_matrix = _make_score_matrix(
         sequenceA, sequenceB, match_fn, gap_A_fn, gap_B_fn,
-        global_alignment, penalize_end_gaps)
+        global_alignment, penalize_end_gaps, forgiveness)
 
-    score, indexes = _find_best_score(
-        score_matrix, sequenceA, sequenceB, gap_A_fn, gap_B_fn,
-        global_alignment, penalize_end_gaps)
+    # XXX copied from fastpairwise.py.
+    # Look for the proper starting point
+    starts = _find_start(score_matrix, sequenceA, sequenceB,
+                         gap_A_fn, gap_B_fn,
+                         global_alignment, penalize_end_gaps)
+    if score_cutoff_fn is None:
+        score_cutoff_fn = _default_score_cutoff_fn
+    scores = [x[0] for x in starts]
+    scores.sort()
+    scores.reverse()
+    i = 0
+    while i < len(starts):
+        score, pos = starts[i]
+        if not score_cutoff_fn(score, pos, scores):
+            del starts[i]
+        else:
+            i += 1
 
-##     for i in range(len(score_matrix)):
-##         for j in range(len(score_matrix[i])):
-##             print score_matrix[i][j],
-##         print
-##     print score, indexes
-
-    alignments = _recover_alignments(sequenceA, sequenceB, score, indexes,
+    alignments = _recover_alignments(sequenceA, sequenceB, starts,
                                      match_fn,
                                      score_matrix, traceback_matrix,
                                      global_alignment, penalize_end_gaps,
                                      gap_char)
     return alignments
 
+# XXX Duplicated in fastpairwise.py.  Merge.
+def _default_score_cutoff_fn(score, pos, all_scores):
+    return rint(score) == rint(all_scores[0])
+
 def _make_score_matrix(sequenceA, sequenceB, match_fn, gap_A_fn, gap_B_fn,
-                       global_alignment, penalize_end_gaps):
+                       global_alignment, penalize_end_gaps, forgiveness):
+    forgiveness_rint = rint(forgiveness)
     lenA, lenB = len(sequenceA), len(sequenceB)
     # Create the score and traceback matrices.  These should be in the
     # shape:
@@ -160,7 +180,16 @@ def _make_score_matrix(sequenceA, sequenceB, match_fn, gap_A_fn, gap_B_fn,
                 score = score_matrix[row-1][i] + gap_A_fn(
                     col-1-i, sequenceA, i)
                 score_rint = rint(score)
-                if score_rint == best_score_rint:
+
+##                if score_rint == best_score_rint:
+                if abs(score_rint-best_score_rint) <= forgiveness_rint:
+                    # Make sure the score matrix reflects the actual
+                    # best score, rather than one within a forgiveness
+                    # factor.  If the data is perverse, this could
+                    # result in indexes that are outside the
+                    # forgiveness factor being included.
+                    if score_rint > best_score_rint:
+                        best_score, best_score_rint = score, score_rint
                     best_indexes.append((row-1, i))
                 elif score_rint > best_score_rint:
                     best_score, best_score_rint = score, score_rint
@@ -171,7 +200,10 @@ def _make_score_matrix(sequenceA, sequenceB, match_fn, gap_A_fn, gap_B_fn,
                 score = score_matrix[i][col-1] + gap_B_fn(
                     row-1-i, sequenceB, i)
                 score_rint = rint(score)
-                if score_rint == best_score_rint:
+##                if score_rint == best_score_rint:
+                if abs(score_rint-best_score_rint) <= forgiveness_rint:
+                    if score_rint > best_score_rint:
+                        best_score, best_score_rint = score, score_rint
                     best_indexes.append((i, col-1))
                 elif score_rint > best_score_rint:
                     best_score, best_score_rint = score, score_rint
@@ -184,7 +216,7 @@ def _make_score_matrix(sequenceA, sequenceB, match_fn, gap_A_fn, gap_B_fn,
             traceback_matrix[row][col] = best_indexes
     return score_matrix, traceback_matrix
 
-def _recover_alignments(sequenceA, sequenceB, score, indexes,
+def _recover_alignments(sequenceA, sequenceB, starts,
                         match_fn,
                         score_matrix, traceback_matrix, global_alignment,
                         penalize_end_gaps, gap_char):
@@ -194,8 +226,11 @@ def _recover_alignments(sequenceA, sequenceB, score, indexes,
     tracebacks = [] # list of (seq1, seq2, score, begin, end)
     in_process = [] # list of ([same as tracebacks], prev_pos, next_pos)
     
+    #print "SCORE"; print_matrix(score_matrix)
+    #print "TRACEBACK"; print_matrix(traceback_matrix)
+
     # Initialize the in_process stack
-    for row, col in indexes:
+    for score, (row, col) in starts:
         if global_alignment:
             begin, end = None, None
         else:
@@ -204,7 +239,7 @@ def _recover_alignments(sequenceA, sequenceB, score, indexes,
                 end = None
         in_process.append(
             ('', '', score, begin, end, (lenA, lenB), (row, col)))
-    while in_process:
+    while in_process and len(tracebacks) < MAX_ALIGNMENTS:
         seqA, seqB, score, begin, end, prev_pos, next_pos = in_process.pop()
         prevA, prevB = prev_pos
         if next_pos is None:
@@ -244,12 +279,26 @@ def _recover_alignments(sequenceA, sequenceB, score, indexes,
                         (seqA, seqB, score, begin, end, prev_pos, next_pos))
     return clean_alignments(tracebacks)
 
-def _find_best_score(score_matrix, sequenceA, sequenceB, gap_A_fn, gap_B_fn,
-                     global_alignment, penalize_end_gaps):
+def _find_start(score_matrix, sequenceA, sequenceB,
+                gap_A_fn, gap_B_fn,
+                global_alignment, penalize_end_gaps):
     if global_alignment:
-        score, indexes = find_global_best(
-            sequenceA, sequenceB,
-            score_matrix, penalize_end_gaps, gap_A_fn, gap_B_fn)
+        if penalize_end_gaps:
+            starts = find_global_start(sequenceA, sequenceB,
+                                       score_matrix, 1, gap_A_fn, gap_B_fn)
+        else:
+            starts = find_global_start(sequenceA, sequenceB,
+                                       score_matrix, 0, None, None)
     else:
-        score, indexes = find_local_best(score_matrix)
-    return score, indexes
+        starts = find_local_start(score_matrix)
+    return starts
+
+##def _find_best_score(score_matrix, sequenceA, sequenceB, gap_A_fn, gap_B_fn,
+##                     global_alignment, penalize_end_gaps):
+##    if global_alignment:
+##        score, indexes = find_global_best(
+##            sequenceA, sequenceB,
+##            score_matrix, penalize_end_gaps, gap_A_fn, gap_B_fn)
+##    else:
+##        score, indexes = find_local_best(score_matrix)
+##    return score, indexes

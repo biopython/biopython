@@ -208,6 +208,19 @@ def clean_alignments(alignments):
         i += 1
     return alignments
 
+def print_matrix(matrix):
+    # Transpose the matrix and get the length of the values in each column.
+    matrixT = [[] for x in range(len(matrix[0]))]
+    for i in range(len(matrix)):
+        for j in range(len(matrix[i])):
+            matrixT[j].append(len(str(matrix[i][j])))
+    ndigits = map(max, matrixT)
+    for i in range(len(matrix)):
+        for j in range(len(matrix[i])):
+            n = ndigits[j]
+            print "%*s " % (n, matrix[i][j]),
+        print
+
 # Try and load C implementations of functions.  If I can't,
 # then just ignore and use the pure python implementations.
 try:

@@ -4,7 +4,8 @@
  * as part of this package.
  *
  * cfastpairwisemodule.c
- * Created 30 Sep 2001
+ * Created: 30 Sep 2001
+ * Last modified: 28 Feb 2001
  *
  * Optimized C routines that complement fastpairwise.py.
  */
@@ -368,7 +369,7 @@ static PyObject *cfastpairwise__make_score_matrix_faster(
 		Pscore = -10000.;
 	    }
 	    if(j>0 && j<N-1) {
-		offset = i*N + j;
+		offset = i*N + j-1;
 		q = Qmatrix[offset] + extend_A;
 		d = Dmatrix[offset] + first_A_gap;
 		Qscore = (q > d) ? q : d;

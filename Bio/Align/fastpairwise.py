@@ -62,6 +62,8 @@ def align_global(sequenceA, sequenceB, open, extend, match_fn=None, **keywds):
         ('global_alignment', 1),
         ('penalize_end_gaps', 1),
         ('gap_char', '-'),
+        ('score_cutoff_fn', None),
+        ('forgiveness', 0),
         ]
     for name, default in params:
         keywds[name] = keywds.get(name, default)
@@ -116,10 +118,10 @@ def _align(sequenceA, sequenceB, match_fn, gap_penalty_A, gap_penalty_B,
     # - penalize_end_gaps is whether the gaps at the beginning and
     # end of the alignments should be counted.
     # - gap_char is the character to use for gaps.
-    # - score_cutoff_fn is a callback that determines.  It takes the
-    # current score, the (row, col), and a list of all scores (sorted
-    # from best to worst) and returns a boolean for whether to recover
-    # this alignment.
+    # - score_cutoff_fn is a callback that takes the current score,
+    # the (row, col), and a list of all scores (sorted from best to
+    # worst) and returns a boolean for whether to recover this
+    # alignment.
     # - forgiveness is the some number of points the alignments are
     # allowed to deviate from the best score
     
@@ -267,35 +269,6 @@ def _find_start(score_matrix, sequenceA, sequenceB,
         starts = find_local_start(score_matrix)
     return starts
 
-##def _find_best_score(score_matrix, sequenceA, sequenceB,
-##                     open_A, extend_A, open_B, extend_B,
-##                     global_alignment, penalize_end_gaps, count_first):
-##    if global_alignment:
-##        if penalize_end_gaps:
-##            gap_A_fn = affine_penalty(open_A, extend_A, count_first)
-##            gap_B_fn = affine_penalty(open_B, extend_B, count_first)
-##            score, indexes = find_global_best(sequenceA, sequenceB,
-##                score_matrix, 1, gap_A_fn, gap_B_fn)
-##        else:
-##            score, indexes = find_global_best(sequenceA, sequenceB,
-##                score_matrix, 0, None, None)
-##    else:
-##        score, indexes = find_local_best(score_matrix)
-##    return score, indexes
-
-def _print_matrix(matrix):
-    nums = []
-    for m in matrix:
-        nums.extend(m)
-    numstrs = ["%g" % x for x in nums]
-    lens = map(len, numstrs)
-    ndigits = max(lens)
-    for i in range(len(matrix)):
-        for j in range(len(matrix[i])):
-            print "%*g " % (ndigits, matrix[i][j]),
-        print
-
-
 def _recover_alignments(sequenceA, sequenceB, starts,
                         score_matrix, direction_matrix,
                         global_alignment, gap_char):
@@ -304,9 +277,9 @@ def _recover_alignments(sequenceA, sequenceB, starts,
     tracebacks = []   # list of (seqA, seqB, score, begin, end)
     in_process = []   # list of ([same as tracebacks], row, col)
 
-    #print "SCORE"; _print_matrix(score_matrix)
-    #print "DIRECTION"; _print_matrix(direction_matrix)
-    #print "INDEXES", indexes
+    #print "SCORE"; print_matrix(score_matrix)
+    #print "DIRECTION"; print_matrix(direction_matrix)
+    #print "STARTS", starts
 
     # sequenceA and sequenceB may be sequences, including strings,
     # lists, or list-like objects.  In order to preserve the type of
