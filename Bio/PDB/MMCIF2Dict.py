@@ -1,5 +1,5 @@
 import os.path
-import Bio.cMmCIF
+import Bio.cmmCIF.MMCIFlex
 from UserDict import UserDict
 
 
@@ -20,9 +20,9 @@ class MMCIF2Dict(UserDict):
 		self.data[None]=[]
 		if not os.path.isfile(filename):
 			raise IOError, "File not found."
-		mmCIF_lex.MMCIFlex.open_file(filename)
+		Bio.cmmCIF.MMCIFlex.open_file(filename)
 		self._make_mmcif_dict()
-		mmCIF_lex.MMCIFlex.close_file()
+		Bio.cmmCIF.MMCIFlex.close_file()
 
 	def _make_mmcif_dict(self):	
 		# local copies
