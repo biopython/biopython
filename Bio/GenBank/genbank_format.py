@@ -662,13 +662,13 @@ sequence = Std.sequence(Martel.Group("sequence",
                         Martel.Re("[\w]+")))
 sequence_plus_spaces = Martel.Group("sequence_plus_spaces",
                                     Martel.Rep1(Martel.Str(" ") +
-                                        sequence) + 
-                                    Martel.Opt(Martel.Str(" ")) +
-                                    Martel.AnyEol())
+                                        Martel.Opt(sequence)) + 
+                                    Martel.Opt(Martel.Str(" ")))
 sequence_line = Martel.Group("sequence_line",
                              blank_space +
                              Martel.Opt(base_number) +
-                             sequence_plus_spaces)
+                             sequence_plus_spaces +
+                             Martel.AnyEol())
 
 sequence_entry = Std.sequence_block(Martel.Group("sequence_entry",
                                     origin_line +

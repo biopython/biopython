@@ -975,9 +975,9 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 seq_alphabet = IUPAC.ambiguous_rna
             elif self._seq_type == "PROTEIN":
                 seq_alphabet = IUPAC.protein  # or extended protein?
-            # work around ugly GenBank record which have circular but
-            # no indication of sequence type
-            elif self._seq_type == "circular":
+            # work around ugly GenBank records which have circular or
+            # linear but no indication of sequence type
+            elif self._seq_type in ["circular", "linear"]:
                 pass
             # we have a bug if we get here
             else:
