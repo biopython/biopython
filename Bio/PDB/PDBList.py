@@ -171,7 +171,7 @@ OBSLTE     26-SEP-03 1DYV      1UN2
         open(filename,'w').write(lines)
 
         # uncompress the file
-		os.system("%s %s" % (uncompress, filename))
+        os.system("%s %s" % (uncompress, filename))
 
         return lines
             
