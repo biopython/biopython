@@ -17,12 +17,13 @@ class HSExposure:
     # be rotated onto this unit vector
     unit_z=Vector(0.0, 0.0, 1.0)
 
-    def __init__(self):
+    def __init__(self, OFFSET=0.0):
         # List of CA-CB direction calculated from CA-CA-CA
         # Used for the PyMol script
         self.ca_cb_list=[]
         # Dummy 
         self.angles={}
+        self.OFFSET=OFFSET
 
     def write_pymol_script(self, filename="hs_exp.py"):
         """
@@ -211,7 +212,7 @@ class HSExposure:
                     neighbor_coord=ca2.get_coord()
                     # Rotate neighbor to the CB-CA direction
                     rot_coord=matrixmultiply(rot, neighbor_coord-tran)
-                    if rot_coord[2]>0:
+                    if rot_coord[2]>self.OFFSET:
                         # in side chain half sphere
                         hs_sidechain+=1
                     else:
