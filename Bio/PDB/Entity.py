@@ -97,8 +97,7 @@ class Entity:
 	def add(self, entity):
 		"Add a child to the Entity."
 		entity_id=entity.get_id()
-		if self.has_id(entity_id):
-			raise PDBConstructionException, "Duplicate child %s in %s" % (entity, self)
+		assert(not self.has_id(entity_id))
 		entity.set_parent(self)
 		self.child_list.append(entity)
 		#self.child_list.sort(self._sort)

@@ -64,6 +64,17 @@ class Residue(Entity):
 
 	# Public methods
 
+	def add(self, atom):
+		"""Add an Atom object.
+
+		Checks for adding duplicate atoms, and raises a
+		PDBConstructionException if so.
+		"""
+		atom_id=atom.get_id()
+		if self.has_id(atom_id):
+			raise PDBConstructionException, "Atom %s defined twice in residue %s" % (atom_id, self)
+		Entity.add(self, atom)
+
 	def sort(self):
 		self.child_list.sort(self._sort)
 
