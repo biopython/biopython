@@ -81,6 +81,22 @@ class Chain(Entity):
 
 	# Public methods
 
+	def get_unpacked_list(self):
+		"""Return a list of undisordered residues.
+
+		Some Residue objects hide several disordered residues
+		(DisorderedResidue objects).  This method unpacks them, 
+		ie. it returns a list of simple Residue objects.
+		"""
+		unpacked_list=[]
+		for residue in self.get_list():
+			if residue.is_disordered()==2:
+				for dresidue in residue.disordered_get_list():
+					unpacked_list.append(dresidue)
+			else:
+				unpacked_list.append(residue)
+		return unpacked_list
+
 	def has_id(self, id):
 		"""Return 1 if a residue with given id is present.
 
