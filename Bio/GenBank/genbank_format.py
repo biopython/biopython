@@ -342,6 +342,7 @@ feature_key_names = (
     "satellite",        # Satellite repeated sequence
     "scRNA",            # Small cytoplasmic RNA
     "sig_peptide",      # Signal peptide coding region
+    "Site",             # RefSeq invention for a protein site
     "snRNA",            # Small nuclear RNA
     "source",           # Biological source of the sequence data
                         #   represented by a GenBank record. Mandatory
@@ -542,6 +543,7 @@ feature_qualifier_names = (
                       #   characterized by its antigenic properties
     "sex",            # Sex of the organism from which the sequence
                       #   was obtained
+    "site_type",      # RefSeq invention for protein site
     "specific_host",  # Natural host from which the sequence was obtained
     "specimen_voucher", # An identifier of the individual or collection
                       #   of the source organism and the place where it
