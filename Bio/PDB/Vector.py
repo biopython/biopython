@@ -30,6 +30,7 @@ def rotaxis(theta, vector):
 
     @return: The rotation matrix, a 3x3 Numpy array.
     """
+    vector=Vector(vector)
     vector.normalize()
     c=cos(theta)
     s=sin(theta)
