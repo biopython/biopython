@@ -17,8 +17,8 @@ from Bio import InterPro
 
 kabat_file_dir = os.path.join(os.getcwd(), 'InterPro')
 
-test_files = [ 'ipr001064.htm', 'ipr001171.htm', 'ipr001391.htm', 'ipr001442.htm', \
-              'ipr001571.htm']
+test_files = ['IPR001064.htm', 'IPR001171.htm', 'IPR001391.htm',
+              'IPR001442.htm', 'IPR001571.htm']
 
 
 
