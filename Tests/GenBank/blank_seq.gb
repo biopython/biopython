@@ -58,6 +58,7 @@ FEATURES             Location/Qualifiers
                      /db_xref="CDD:pfam00001"
                      /note="7tm_1"
      CDS             1..360
+                     /pseudo
                      /gene="CNR2"
                      /db_xref="LocusID:1269"
                      /db_xref="MIM:605051"

@@ -3474,6 +3474,7 @@ qualifiers:
 	Key: coded_by, Value: ['NM_001841.1:127..1209']
 	Key: db_xref, Value: ['LocusID:1269', 'MIM:605051']
 	Key: gene, Value: ['CNR2']
+	Key: pseudo, Value: ['']
 
 ***Record from the FeatureParser
 Seq: Seq('VKDGYIVDDRNCTYFCGRNAYCNEECTKLKGESGYCQWASPYGNACYCYKVPDHVRTKGP ...', Alphabet())
@@ -4481,7 +4482,8 @@ key: /db_xref= value: "CDD:pfam00001"
 key: /note= value: "7tm_1"
 feature key: CDS
 location: 1..360
-num qualifiers: 4
+num qualifiers: 5
+key: /pseudo value: 
 key: /gene= value: "CNR2"
 key: /db_xref= value: "LocusID:1269"
 key: /db_xref= value: "MIM:605051"

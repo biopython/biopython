@@ -856,7 +856,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         # qualifiers
         if self._cur_qualifier_key:
             key = self._cur_qualifier_key
-            value = self._cur_qualifier_value
+            value = "".join(self._cur_qualifier_value)
             if self._feature_cleaner is not None:
                 value = self._feature_cleaner.clean_value(key, value)
             # if the qualifier name exists, append the value
@@ -866,25 +866,30 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             else:
                 self._cur_feature.qualifiers[key] = [value]
 
-    def feature_qualifier_name(self, content):
+    def feature_qualifier_name(self, content_list):
         """When we get a qualifier key, use it as a dictionary key.
-        """
-        # add a qualifier if we've got one
-        self._add_qualifier()
-
-        # remove the / and = from the qualifier if they're present
-        qual_key = content.replace('/', '')
-        qual_key = qual_key.replace('=', '')
-        qual_key = qual_key.strip()
         
-        self._cur_qualifier_key = qual_key
-        self._cur_qualifier_value = ''
+        We receive a list of keys, since you can have valueless keys such as
+        /pseudo which would be passed in with the next key (since no other
+        tags separate them in the file)
+        """
+        for content in content_list:
+            # add a qualifier if we've got one
+            self._add_qualifier()
+
+            # remove the / and = from the qualifier if they're present
+            qual_key = content.replace('/', '')
+            qual_key = qual_key.replace('=', '')
+            qual_key = qual_key.strip()
+            
+            self._cur_qualifier_key = qual_key
+            self._cur_qualifier_value = []
         
     def feature_qualifier_description(self, content):
         # get rid of the quotes surrounding the qualifier if we've got 'em
         qual_value = content.replace('"', '')
         
-        self._cur_qualifier_value = qual_value
+        self._cur_qualifier_value.append(qual_value)
 
     def contig_location(self, content):
         """Deal with a location of CONTIG information.
@@ -1114,16 +1119,23 @@ class _RecordConsumer(_BaseGenBankConsumer):
     def location(self, content):
         self._cur_feature.location = self._clean_location(content)
 
-    def feature_qualifier_name(self, content):
-        # the record parser keeps the /s -- add them if we don't have 'em
-        if content.find("/") != 0:
-            content = "/%s" % content
-        # add on a qualifier if we've got one
-        if self._cur_qualifier is not None:
-            self._cur_feature.qualifiers.append(self._cur_qualifier)
+    def feature_qualifier_name(self, content_list):
+        """Deal with qualifier names
+        
+        We receive a list of keys, since you can have valueless keys such as
+        /pseudo which would be passed in with the next key (since no other
+        tags separate them in the file)
+        """
+        for content in content_list:
+            # the record parser keeps the /s -- add them if we don't have 'em
+            if content.find("/") != 0:
+                content = "/%s" % content
+            # add on a qualifier if we've got one
+            if self._cur_qualifier is not None:
+                self._cur_feature.qualifiers.append(self._cur_qualifier)
 
-        self._cur_qualifier = Record.Qualifier()
-        self._cur_qualifier.key = content
+            self._cur_qualifier = Record.Qualifier()
+            self._cur_qualifier.key = content
 
     def feature_qualifier_description(self, content):
         # if we have info then the qualifier key should have a ='s
@@ -1221,8 +1233,8 @@ class _Scanner:
                               "sequence", "contig_location", "record_end","primary_ref_line"]
 
         # a listing of all tags which should be left alone with respect
-        # to whitespace handles
-        self.exempt_tags = ["comment"]
+        # to whitespace handling
+        self.exempt_tags = ["comment", "feature_qualifier_name"]
 
         # make a parser that returns only the tags we are interested in
         expression = Martel.select_names(genbank.record,
