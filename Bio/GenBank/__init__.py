@@ -1014,6 +1014,124 @@ class _Scanner:
 
         self._parser.parseFile(handle)
 
+def index_file_db(genbank_file, db_name, db_directory,
+                  identifier = "accession", aliases = ["locus"],
+                  keywords = []):
+    """Index a GenBank file into a database for quick loading.
+
+    WARNING: This is very experimental and subject to change.
+    It requires the use of Andrew Dalke's mindy.
+
+    This is very similar to index_file, but uses a database instead
+    of a flat file to store the information about the genbank_file.
+
+    Arguments:
+
+    o genbank_file - The GenBank formatted file that we want to index.
+
+    o db_name - The name of the database to create. This name will allow you
+    to retrieve the file later.
+
+    o db_directory - The directory where the database information should be
+    stored.
+
+    o identifier - The primary identifier used to store records in the file
+    under. This will be used for retrieving them later.
+
+    o aliases, keywords - More advanced Mindy features that I'm not positive
+    how to make full use of right now.
+    """
+    try:
+        from mindy import mindy_index, mindy_search
+    except ImportError:
+        raise SystemExit("You must have mindy installed:\n" +
+                         "http://www.biopython.org/~dalke/mindy-0.1.tar.gz")
+
+    # try to skip the indexing if everything seems up to date
+    if os.path.exists(os.path.join(db_directory, db_name)):
+        # load up the database and see if the file size is the same
+        search_db = mindy_search.mindy_open(db_directory, db_name)
+        file_size = search_db.mindy_data["file_sizes"][genbank_file]
+
+        if file_size == os.path.getsize(genbank_file):
+            print "File already indexed. Skipping...."
+            return
+
+    if not(os.path.exists(db_directory)):
+        os.makedirs(db_directory)
+
+    mindy_db = mindy_index.create(db_directory, db_name)
+    mindy_db.use_filename(genbank_file)
+
+    indexer = mindy_index.SimpleIndexer(mindy_db, "genbank_record", identifier,
+                                        aliases, keywords)
+
+    gb_format = mindy_index.load_format(
+        "Bio.GenBank.genbank_format.record_format")
+
+    if hasattr(indexer, "_wanted_elements"):
+        gb_format = Martel.select_names(gb_format, indexer._wanted_elements)
+
+    parser = gb_format.make_parser()
+    parser.setContentHandler(indexer)
+
+    parser.parseFile(open(genbank_file, "rb"))
+
+class MindyDictionary:
+    """Access a GenBank file using a dictionary interface, though a Mindy DB.
+
+    WARNING: This is very experimental and subject to change.
+    It requires the use of Andrew Dalke's mindy.
+
+    This is the Dictionary interface to use after you create an index
+    database using the function index_file_db.
+    """
+    def __init__(self, db_name, db_directory, parser = None):
+        """Initialize and open up a GenBank dictionary.
+
+        Arguments:
+        
+        o db_name - The name of the database we should retrieve information
+        from.
+
+        o db_directory - The location of the database specified in db_name.
+        
+        o parser - An optional argument specifying a parser object that
+        the records should be run through before returning the output. If
+        parser is None then the unprocessed contents of the file will be
+        returned.
+        """
+        try:
+            from mindy import mindy_search
+        except ImportError:
+            raise SystemExit("You must have mindy installed:\n" +
+                          "http://www.biopython.org/~dalke/mindy-0.1.tar.gz")
+
+        self._search = mindy_search.mindy_open(db_directory, db_name)
+        self._parser = parser
+
+    def __len__(self):
+        return len(self._search.identifiers)
+
+    def __getitem__(self, key):
+        """Retrieve an item from the indexed file.
+        """
+        data = self._search[key]
+        
+        # run the data through the parser if one is specified
+        if self._parser is not None:
+            return self._parser.parse(File.StringHandle(data))
+
+        return data
+
+    def __getattr__(self, name):
+        return getattr(self._index, name)
+
+    def keys(self):
+        """Provide all identifiers for the current database.
+        """
+        return self._search.identifiers.keys()
+
 def index_file(genbank_file, index_file, rec_to_key = None):
     """Index a GenBank file to prepare it for use as a dictionary.
 
