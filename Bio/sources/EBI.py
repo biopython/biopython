@@ -18,6 +18,14 @@ emblfetch = CGI(
     doc="Retrieve many kinds of sequences from EBI"
     )
 
+XEMBL = CGI(
+    name="XEMBL",
+    delay=5.0,
+    cgi="http://www.ebi.ac.uk/cgi-bin/xembl/XEMBL.pl",
+    url="http://www.ebi.ac.uk/xembl/",
+    doc="Query XEMBL for EMBL sequence data in XML format.",
+    )
+
 IEntry = CGI(
     name="IEntry",
     delay=5.0,

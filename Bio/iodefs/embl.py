@@ -4,13 +4,13 @@
 # as part of this package.
 
 from Bio import register_io, group_io
-from Bio.sources import XEMBL, EBI
+from Bio.sources import EBI
 
 from _support import *
 
 register_io(
     name="embl-xembl-cgi",
-    source=XEMBL.XEMBL,
+    source=EBI.XEMBL,
     params=[("format", "Bsml")],
     key="id",
     failure=[(has_str("NOT EXIST"), "id does not exist")],
