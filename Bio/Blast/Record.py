@@ -291,4 +291,4 @@ class PSIBlast(Header, DatabaseReport, Parameters):
         DatabaseReport.__init__(self)
         Parameters.__init__(self)
         self.rounds = []
-        converged = 0
+        self.converged = 0
