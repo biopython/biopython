@@ -63,7 +63,7 @@ class Record:
     organelle         The origin of the sequence.
     organism_classification  The taxonomy classification.  List of strings.
                              (http://www.ncbi.nlm.nih.gov/Taxonomy/)
-    taxonomy_id       NCBI taxonomy id
+    taxonomy_id       A list of NCBI taxonomy id's.
     references        List of Reference objects.
     comments          List of strings.
     cross_references  List of tuples (db, id1[, id2][, id3]).  See the docs.
@@ -92,7 +92,7 @@ class Record:
         self.organism = ''
         self.organelle = ''
         self.organism_classification = []
-        self.taxonomy_id = ''
+        self.taxonomy_id = []
         self.references = []
         self.comments = []
         self.cross_references = []
@@ -554,9 +554,26 @@ class _RecordConsumer(AbstractConsumer):
             self.data.organism_classification.append(string.lstrip(col))
 
     def taxonomy_id(self, line):
+        # The OX line is in the format:
+        # OX   DESCRIPTION=ID[, ID]...;
+        # If there are too many id's to fit onto a line, then the ID's
+        # continue directly onto the next line, e.g.
+        # OX   DESCRIPTION=ID[, ID]...
+        # OX   ID[, ID]...;
+        # Currently, the description is always "NCBI_TaxID".
+
+        # To parse this, I need to check to see whether I'm at the
+        # first line.  If I am, grab the description and make sure
+        # it's an NCBI ID.  Then, grab all the id's.
         line = self._chomp(string.rstrip(line[5:]))
-        descr, tax_id = string.split(line, '=')
-        self.data.taxonomy_id = tax_id
+        index = string.find(line, '=')
+        if index >= 0:
+            descr = line[:index]
+            assert descr == "NCBI_TaxID", "Unexpected taxonomy type %s" % descr
+            ids = string.split(line[index+1:], ',')
+        else:
+            ids = string.split(line, ',')
+        self.data.taxonomy_id.extend(map(string.strip, ids))
     
     def reference_number(self, line):
         rn = string.rstrip(line[5:])
