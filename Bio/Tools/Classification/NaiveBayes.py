@@ -41,7 +41,7 @@ class NaiveBayes:
 
     Members:
     classes         List of the possible classes of data.
-    p_conditional   CLASS x DIM array of dicts of value -> P(value,dim|class)
+    p_conditional   CLASS x DIM array of dicts of value -> P(value|class,dim)
     p_prior         List of the prior probabilities for every class.
     dimensionality  Dimensionality of the data.
 
@@ -159,7 +159,12 @@ def train(training_set, results, priors=None, typecode=None):
     for i in range(len(nb.classes)):
         nb.p_prior[i] = percs[nb.classes[i]]
 
-    # Collect all the observations in class.
+    # Collect all the observations in class.  For each class, make a
+    # matrix of training instances versus dimensions.  I might be able
+    # to optimize this with Numeric, if the training_set parameter
+    # were guaranteed to be a matrix.  However, this may not be the
+    # case, because the client may be hacking up a sparse matrix or
+    # something.
     index = {}         # next index into an array for each class
     observations = []  # List of class by list of training instances
     c2i = listfns.itemindex(nb.classes)   # class to index of class
@@ -174,7 +179,8 @@ def train(training_set, results, priors=None, typecode=None):
         observations[c2i[klass]][ind] = instance
         index[klass] = ind + 1
 
-    # Calculate P(value,dim|class) for every class.
+    import sys
+    # Calculate P(value|class,dim) for every class.
     # This is a good loop to optimize.
     nb.p_conditional = []
     for i in range(len(nb.classes)):
@@ -182,7 +188,7 @@ def train(training_set, results, priors=None, typecode=None):
         for j in range(nb.dimensionality):
             # Collect all the values in this dimension.
             values = observations[i][:, j]
-            # Estimate P(value,dim|class)
+            # Estimate P(value|class,dim)
             nb.p_conditional[i][j] = listfns.contents(values)
     return nb
 
