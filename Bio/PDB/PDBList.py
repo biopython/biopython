@@ -169,10 +169,12 @@ OBSLTE     26-SEP-03 1DYV      1UN2
             os.mkdir(path)
         open(filename,'w').write(lines)
 
-        # ungzip the file
+        # uncompress the file
         if compression==".Z":
-            os.system("gunzip -f %s"%(filename))
-        
+            os.system("uncompress %s" % filename)
+		elif compression==".gz":
+            os.system("gunzip %s" % filename)
+
         return lines
             
 
