@@ -1,7 +1,15 @@
 """Martel based parser to read GenBank formatted files.
 
 This is a huge regular regular expression for GenBank, built using
-the 'regular expressiona on steroids' capabilities of Martel.
+the 'regular expressions on steroids' capabilities of Martel.
+
+Notes:
+Just so I remember -- the new end of line syntax is:
+  New regexp syntax - \R
+     \R    means "\n|\r\n?"
+     [\R]  means "[\n\r]"
+
+This helps us have endlines be consistent across platforms.
 
 Documentation for GenBank format that I found:
 
@@ -10,14 +18,13 @@ http://www.ebi.ac.uk/embl/Documentation/FT_definitions/feature_table.html
 
 o There are also descriptions of different GenBank lines at:
 http://www.ibc.wustl.edu/standards/gbrel.txt
-
 """
-# standard library
-import string
-     
+
 # Martel
 import Martel
 from Martel import RecordReader
+
+# identify certain items as important for format converters
 from Bio import Std
 
 # --- first set up some helper constants and functions
@@ -28,14 +35,14 @@ INDENT = 12
 FEATURE_KEY_INDENT = 5
 FEATURE_QUALIFIER_INDENT = 21
 
-blank_space = Martel.Spaces()
+blank_space = Martel.Rep1(Martel.Str(" "))
 small_indent_space = Martel.Str(" " * 2)
 big_indent_space = Martel.Str(" " * FEATURE_KEY_INDENT)
-qualifier_space = Martel.Str(" " * FEATURE_QUALIFIER_INDENT) | \
-                  Martel.Str("\t" + " " * (FEATURE_QUALIFIER_INDENT - 8))
+qualifier_space = Martel.Str(" " * FEATURE_QUALIFIER_INDENT)
 
 # - useful functions
-def define_block(identifier, block_tag, block_data):
+def define_block(identifier, block_tag, block_data, std_block_tag = None,
+                 std_tag = None):
     """Define a Martel grouping which can parse a block of text.
 
     Many of the GenBank lines we'll want to process are grouped into
@@ -51,43 +58,60 @@ def define_block(identifier, block_tag, block_data):
     o block_tag - A callback tag for the entire block.
     o block_data - A callback tag for the data in the block (ie. the
     stuff you are interested in).
+    o std_block_tag - A Bio.Std Martel tag used to register the entire
+    block as having being a "standard" type of information.
+    o std_tag - A Bio.Std Martel tag used to register just the information
+    in the block as being "standard"
     """
     diff = INDENT - len(identifier)
     assert diff > 0, diff
+   
+    # if no std_tag info is defined, just make std_tag a no-op function
+    if std_tag is None:
+        def do_nothing(martel_info):
+            return martel_info
+        std_tag = do_nothing
 
-    return Martel.Group(block_tag,
-                        Martel.Str(identifier + " " * diff) +
-                        Martel.ToEol(block_data) +
-                        Martel.Rep(Martel.AnyEol() |
-                                   (Martel.Str(" " * INDENT) + Martel.ToEol(block_data))))
-                                   
+    identifier_and_text = Martel.Str(identifier) + \
+                          Martel.Rep(Martel.Str(" ")) + \
+                          std_tag(Martel.UntilEol(block_data)) + \
+                          Martel.AnyEol()
+    indented_text = Martel.Str(" "*INDENT) + \
+                    std_tag(Martel.UntilEol(block_data)) + \
+                    Martel.AnyEol()
+    block_info = Martel.Group(
+        block_tag,
+        identifier_and_text +
+        Martel.Rep(Martel.Alt(Martel.AnyEol(), indented_text))
+        )
+    # tag the info as some standard Martel element if specified
+    if std_block_tag is not None:
+        block_info = std_block_tag(block_info)
 
-# The first line
+    return block_info
+
+
+# first line
 # LOCUS       AC007323    86436 bp    DNA             PLN       19-JAN-2000
-locus = Std.dbid(Martel.Word(), {"dbname": "gb", "type": "primary"})
-
+locus = Martel.Group("locus",
+                     Martel.Re(r"[\w\-]+"))
 size = Martel.Group("size",
                     Martel.Rep1(Martel.Integer()))
 
 # deal with the different kinds of residues we can have
-residue_prefixes = Martel.Str("ss-", "ds-", "ms-")
-residue_types = [
-    Std.alphabet(Martel.Str("DNA"), {"alphabet": "iupac-ambiguous-dna"}),
-    Std.alphabet(Martel.Str("RNA"), {"alphabet": "iupac-ambiguous-rna"}),
-    Std.alphabet(Martel.Str("mRNA"), {"alphabet": "iupac-ambiguous-rna"}),
-    Std.alphabet(Martel.Str("tRNA"), {"alphabet": "iupac-ambiguous-rna"}),
-    Std.alphabet(Martel.Str("rRNA"), {"alphabet": "iupac-ambiguous-rna"}),
-    Std.alphabet(Martel.Str("uRNA"), {"alphabet": "iupac-ambiguous-rna"}),
-    Std.alphabet(Martel.Str("snRNA"), {"alphabet": "iupac-ambiguous-rna"}),
-    Std.alphabet(Martel.Str("PROTEIN"), {"alphabet": "iupac-protein"}),
-    ]
+valid_residue_prefixes = ["ss-", "ds-", "ms-"]
+valid_residue_types = ["DNA", "RNA", "mRNA", "tRNA", "rRNA", "uRNA",
+                       "scRNA", "snRNA", "snoRNA", "PROTEIN"]
 
+residue_prefixes = map(Martel.Str, valid_residue_prefixes)
+residue_types = map(Martel.Str, valid_residue_types)
 
 residue_type = Martel.Group("residue_type",
-                            Martel.Opt(Martel.Alt(residue_prefixes)) +
+                            Martel.Opt(Martel.Alt(*residue_prefixes)) +
                             Martel.Opt(Martel.Alt(*residue_types)) +
                             Martel.Opt(Martel.Opt(blank_space) + 
-                                       Martel.Str("circular", "linear")))
+                                       Martel.Alt(Martel.Str("circular"),
+                                                  Martel.Str("linear"))))
 
 date = Martel.Group("date",
                     Martel.Re("[-\w]+"))
@@ -119,15 +143,9 @@ locus_line = Martel.Group("locus_line",
 # definition line
 # DEFINITION  Genomic sequence for Arabidopsis thaliana BAC T25K16 from
 #             chromosome I, complete sequence.
-definition_block = Std.description_block(
-    Martel.Str("DEFINITION  ") +
-    Std.description(Martel.UntilEol()) +
-    Martel.AnyEol() +
-    Martel.Rep(Martel.Str("            ") +
-               Std.description(Martel.UntilEol()) +
-               Martel.AnyEol())
-    )
-
+definition_block = define_block("DEFINITION", "definition_block", 
+                                "definition", Std.description_block,
+                                Std.description)
 
 # accession line
 # ACCESSION   AC007323
@@ -164,10 +182,12 @@ pid_line = Martel.Group("pid_line",
 # version and GI line
 # VERSION     AC007323.5  GI:6587720
 version = Martel.Group("version",
-                       Martel.Re(r"(?P<entry_name>[\w\d\.]+)"))
+                       Std.dbid(Martel.Re("[\w\d\.]+"),
+                                {"type" : "primary", "dbname" : "genbank"}))
 
 gi = Martel.Group("gi",
-                  Martel.Re("[\d]+"))
+                  Std.dbid(Martel.Re("[\d]+"), 
+                           {"type" : "secondary", "dbname" : "genbank"}))
 
 version_line = Martel.Group("version_line",
                             Martel.Str("VERSION") +
@@ -179,12 +199,13 @@ version_line = Martel.Group("version_line",
                             Martel.AnyEol())
 
 # DBSOURCE    REFSEQ: accession NM_010510.1
-db_source = Martel.Group("db_source",
-                         Martel.ToEol())
-db_source_line = Martel.Group("db_source_line",
-                              Martel.Str("DBSOURCE") +
-                              blank_space +
-                              db_source) 
+# db_source = Martel.Group("db_source",
+#                          Martel.ToEol())
+# db_source_line = Martel.Group("db_source_line",
+#                              Martel.Str("DBSOURCE") +
+#                              blank_space +
+#                              db_source) 
+db_source_block = define_block("DBSOURCE", "db_source_block", "db_source")
 
 # keywords line
 # KEYWORDS    antifreeze protein homology; cold-regulated gene; cor6.6 gene;
@@ -246,7 +267,8 @@ reference_line = Martel.Group("reference_line",
                               Martel.AnyEol())
 
 authors_block = define_block("  AUTHORS", "authors_block", "authors")
-title_block = define_block("  TITLE", "title_block", "title")
+consrtm_block = define_block("  CONSRTM", "consrtm_block", "consrtm")
+title_block   = define_block("  TITLE",   "title_block",   "title")
 journal_block = define_block("  JOURNAL", "journal_block", "journal")
 
 #  MEDLINE   92119220
@@ -268,6 +290,7 @@ remark_block = define_block("  REMARK", "remark_block", "remark")
 reference = Martel.Group("reference",
                          reference_line +
                          authors_block +
+                         Martel.Opt(consrtm_block) +
                          Martel.Opt(title_block) +
                          journal_block +
                          Martel.Opt(medline_line) +
@@ -276,7 +299,32 @@ reference = Martel.Group("reference",
 
 # COMMENT     On Dec 16, 1999 this sequence version replaced gi:5729683.
 comment_block = define_block("COMMENT", "comment_block", "comment")
+# PRIMARY
+primary_line = Martel.Group("primary_line",
+                            Martel.Str("PRIMARY") +
+                            blank_space +
+                            Martel.Str("TPA_SPAN") +
+                            blank_space +
+                            Martel.Str("PRIMARY_IDENTIFIER") +
+                            blank_space +
+                            Martel.Str("PRIMARY_SPAN") +
+                            blank_space +
+                            Martel.Str("COMP") + 
+                            Martel.ToEol())
 
+primary_ref_line =Martel.Group("primary_ref_line",
+                               blank_space +
+                               Martel.Re(r"\d+\-\d+") +
+                               blank_space +
+                               Martel.Re("[\S]+") +
+                               blank_space +
+                               Martel.Re("\d+\-\d+")+
+                               Martel.Opt(blank_space +  Martel.Str("c"))+
+                               Martel.ToEol())
+                              
+primary =  Martel.Group("primary",primary_line +
+                        Martel.Rep1(primary_ref_line))
+                                       
 # start on the feature table. Eeek -- This is the part I was afraid of
 # most!
 
@@ -296,6 +344,7 @@ features_line = Martel.Group("features_line",
 feature_key_names = (
     "allele",           # Obsolete; see variation feature key
     "attenuator",       # Sequence related to transcription termination
+    "Bond",             # found in GenBank protein files
     "C_region",         # Span of the C immunological feature
     "CAAT_signal",      # 'CAAT box' in eukaryotic promoters
     "CDS",              # Sequence coding for amino acids in protein (includes
@@ -330,8 +379,11 @@ feature_key_names = (
     "mutation",         # Obsolete: see variation feature key
     "N_region",         # Span of the N immunological feature
     "old_sequence",     # Presented sequence revises a previous version
+    "operon",
+    "oriT",
     "polyA_signal",     # Signal for cleavage & polyadenylation
     "polyA_site",       # Site at which polyadenine is added to mRNA
+    "Precursor",
     "precursor_RNA",    # Any RNA species that is not yet the mature
                         #   RNA product
     "prim_transcript",  # Primary (unprocessed) transcript
@@ -339,6 +391,7 @@ feature_key_names = (
     "primer",           # Primer binding region used with PCR  XXX not in 
                         #   http://www.ncbi.nlm.nih.gov/collab/FT/index.html
     "promoter",         # A region involved in transcription initiation
+    "proprotein",
     "Protein",          # A REFSEQ invention for referring to a protein
     "protein_bind",     # Non-covalent protein binding site on DNA or RNA
     "RBS",              # Ribosome binding site
@@ -351,7 +404,9 @@ feature_key_names = (
     "satellite",        # Satellite repeated sequence
     "scRNA",            # Small cytoplasmic RNA
     "SecStr",           # RefSeq invention -- I have no idea what it means
+    "Het",
     "sig_peptide",      # Signal peptide coding region
+    "Site-ref",
     "Site",             # RefSeq invention for a protein site
     "snRNA",            # Small nuclear RNA
     "source",           # Biological source of the sequence data
@@ -386,27 +441,53 @@ feature_key_names = (
     "5'clip",           # 5'-most region of a precursor transcript removed'
                         # in processing
     "5'UTR",            # 5' untranslated region (leader)'
-    "-"                 # (hyphen)      Placeholder
+    "-",                # (hyphen)      Placeholder
+    "snoRNA"            # small nucleolar RNA
 )
 valid_feature_keys = map(Martel.Str, feature_key_names)
 
 feature_key = Martel.Group("feature_key",
                            Martel.Alt(*valid_feature_keys))
 
+# handle lots of different kinds of locations
+# complement(10..20)
+# join(10..20,30..40)
+# 10..20
+# we can have an optional reference to another accession number, ie:
+# J00194:(100..202)
+# can also have a version ie. A10000.1
+location_ref = Martel.Group("location_ref",
+                            Martel.Re("[_\d\w\.]+") +
+                            Martel.Str(":"))
+"""
+location_part  = Martel.Group("location_part",
+                              Martel.Rep1(Martel.Re("[\<\>\(\)\^\.\,\d]") |
+                                          Martel.Str("complement") |
+                                          Martel.Str("join") |
+                                          Martel.Str("order") |
+                                          Martel.Str("replace") |
+                                          (Martel.Str('"') +
+                                           Martel.Opt(Martel.Re("\w")) +
+                                           Martel.Str('"')) |
+                                          location_ref))
+
 location = Martel.Group("location",
-                        Std.feature_location(Martel.UntilEol()) +
-                        Martel.AnyEol() +
-                        Martel.Rep(qualifier_space + 
-                                   Martel.AssertNot(Martel.Str("/")) +
-                                   Std.feature_location(Martel.UntilEol()) +
-                                   Martel.AnyEol())
-                        )
+                        Martel.Rep1(blank_space +
+                                    Martel.Rep1(location_part +
+                                                Martel.AnyEol())))
+"""
+
+location = Martel.Group("location",
+                      Martel.ToEol("feature_location") + \
+                      Martel.Rep(qualifier_space + \
+                                 Martel.Re("(?!/)") + \
+                                 Martel.ToEol("feature_location")))
+
 
 
 feature_key_line = Martel.Group("feature_key_line",
                                 big_indent_space +
-                                Std.feature_name(feature_key) +
-                                Martel.Spaces() +
+                                feature_key +
                                 location)
 
 # -- now set up all of the info we can have for qualifiers
@@ -419,6 +500,7 @@ feature_qualifier_names = (
     "allele",         # Name of the allele for the a given gene
     "anticodon",      # Location of the anticodon of tRNA and the amino
                       #   acid for which it codes
+    "bond_type",      # refseq qualifier for bond information
     "bound_moiety",   # Moiety bound
     "cell_line",      # Cell line from which the sequence was obtained
     "cell_type",      # Cell type from which the sequence was obtained
@@ -445,12 +527,17 @@ feature_qualifier_names = (
                       #   information in another database. A description of
                       #   all cross-references can be found at:
                       #   http://www.ncbi.nlm.nih.gov/collab/db_xref.html
+    "derived_from",
     "dev_stage",      # If the sequence was obtained from an organism in
                       #   a specific developmental stage, it is specified
                       #   with this qualifier
     "direction",      # Direction of DNA replication
     "EC_number",      # Enzyme Commission number for the enzyme product
                       #   of the sequence
+    "environmental_sample", # Identifies sequences derived by direct molecular
+                      #   isolation (PCR, DGGE, or other anonymous methods)
+                      #   from an environmental sample with no reliable
+                      # identification of the source organism
     "evidence",       # Value indicating the nature of supporting evidence
     "exception",      # Indicates that the amino acid or RNA sequence
                       #   will not translate or agree with the DNA sequence
@@ -465,6 +552,7 @@ feature_qualifier_names = (
     "germline",       # If the sequence shown is DNA and a member of the
                       #   immunoglobulin family, this qualifier is used to
                       #   denote that the sequence is from unrearranged DNA
+    "heterogen",
     "haplotype",      # Haplotype of organism from which the sequence was
                       #   obtained
     "hgml_locus_uid", # Found in old GenBank records
@@ -472,10 +560,14 @@ feature_qualifier_names = (
                       #   was obtained
     "isolate",        # Individual isolate from which the sequence was
                       #   obtained
+    "isolation_source", # Describes the physical, environmental and/or local
+                      #   geographical source of the biological sample from
+                      #   which the sequence was derived
     "kinetoplast",    # Organelle type from which the sequence was obtained
     "label",          # A label used to permanently identify a feature
     "lab_host",       # Laboratory host used to propagate the organism
                       #   from which the sequence was obtained
+    "locus_tag",      # Feature tag assigned for tracking purposes
     "macronuclear",   # If the sequence shown is DNA and from an organism
                       #   which undergoes chromosomal differentiation
                       #   between macronuclear and micronuclear stages,
@@ -485,10 +577,13 @@ feature_qualifier_names = (
     "map",            # Map position of the feature in free-format text
     "mitochondrion",  # Organelle type from which the sequence was obtained
     "mod_base",       # Abbreviation for a modified nucleotide base
+    "mol_type",       # In vivo molecule type
+    "motif",
     "name",           # RefSeq specification for a Protein name
     "note",           # Any comment or additional information
     "number",         # A number indicating the order of genetic elements
                       #   (e.g., exons or introns) in the 5 to 3 direction
+    "operon",
     "organelle",      # Type of membrane-bound intracellular structure from
                       #  which the sequence was obtained
     "organism",       # Name of the organism that is the source of the
@@ -525,9 +620,12 @@ feature_qualifier_names = (
     "rpt_unit",       # Identity of repeat unit that constitutes a
                       #   repeat_region
     "sec_str_type",   # RefSeq invention, no idea what it means
+    "segment",        # Name of viral or phage segment sequenced
+    "selenocysteine",
     "sequenced_mol",  # Molecule from which the sequence was obtained
     "serotype",       # Variety of a species (usually bacteria or virus)
                       #   characterized by its antigenic properties
+    "serovar",        # Seriological variety of a species (prokaryote)
     "sex",            # Sex of the organism from which the sequence
                       #   was obtained
     "site_type",      # RefSeq invention for protein site
@@ -543,6 +641,8 @@ feature_qualifier_names = (
     "sub_strain",     # Sub_strain from which the sequence was obtained
     "tissue_lib",     # Tissue library from which the sequence was obtained
     "tissue_type",    # Tissue type from which the sequence was obtained
+    "transgenic",     # Identifies the source feature of the organism
+                      #   which was the recipient of transgenic DNA
     "translation",    # Amino acid translation of a coding region
     "transl_except",  # Translational exception: single codon, the
                       #   translation of which does not conform to the
@@ -566,36 +666,34 @@ feature_qualifier_names = (
 
 feature_qualifiers = map(Martel.Str, feature_qualifier_names)
 
-# qualifiers escape quotes using double quotes
-quote = Martel.Str('"')
-quoted_chars = Std.feature_qualifier_description(Martel.Re(r'([^"\R]|"")*'))
+qualifier_key = Martel.Group("qualifier_key",
+                             Martel.Opt(blank_space) +
+                             Martel.Str("/") +
+                             Martel.Alt(*feature_qualifiers) +
+                             Martel.Opt(Martel.Str("=")))
 
-quoted_string = (quote + quoted_chars +
-                 Martel.Rep(Martel.AnyEol() + qualifier_space + quoted_chars) +
-                 quote + Martel.AnyEol())
+# this fails on really annoying records that have / in the first
+# line not signalling a keyword.
+# qualifier_value = Martel.Group("qualifier_value",
+#                               Martel.ToEol() +
+#                               Martel.Rep(qualifier_space +
+#                                          Martel.AnyBut("/") +
+#                                          Martel.ToEol()))
 
-unquoted_string = Martel.AssertNot(quote) + \
-                  Std.feature_qualifier_description(Martel.UntilEol()) + \
-                  Martel.AnyEol()
+qualifier_value = Martel.Group(
+    "qualifier_value",
+    Martel.ToEol() +
+    Martel.Rep(qualifier_space +
+               ((Martel.AnyBut("/") + Martel.ToEol()) |
+                (Martel.Str("/") + Martel.Rep(Martel.AnyBut("\""))
+                 + Martel.Str("\"\n")))))
 
-qualifier = Std.feature_qualifier(
-    qualifier_space + 
-    Martel.Str("/") +
-    Std.feature_qualifier_name(Martel.Alt(*feature_qualifiers)) +
-    (Martel.AnyEol() | #  '/pseudo'
-     (Martel.Str("=") +
-      (unquoted_string |  #  '/evidence=experimental'
-       quoted_string)))   #  '/translation="AAAAAAAA....
-                          #   AAAAAAAAAAAAAAAAAAAA'
-    )
-feature = Std.feature(feature_key_line +
-                      Martel.Rep(qualifier))
-
-feature_block = Std.feature_block(
-    features_line + \
-    Martel.Rep1(feature),
-    {"location-style": "genbank"}
-    )
+qualifier = Martel.Group("qualifier",
+                         qualifier_key +
+                         qualifier_value)
+feature = Martel.Group("feature",
+                       feature_key_line +
+                       Martel.Rep(qualifier))
 
 
 # BASE COUNT    28300 a  15069 c  15360 g  27707 t
@@ -616,16 +714,21 @@ origin_line = Martel.Group("origin_line",
 
 base_number = Martel.Group("base_number",
                            Martel.Re("[\d]+"))
-sequence = Std.sequence(Martel.Re(r"[\w ]+"))
-
+sequence = Std.sequence(Martel.Group("sequence",
+                        Martel.Re("[\w]+")))
+sequence_plus_spaces = Martel.Group("sequence_plus_spaces",
+                                    Martel.Rep1(Martel.Str(" ") +
+                                    Martel.Opt(sequence)) + 
+                                    Martel.Opt(Martel.Str(" ")))
 sequence_line = Martel.Group("sequence_line",
                              blank_space +
                              Martel.Opt(base_number) +
-                             sequence +
+                             sequence_plus_spaces +
                              Martel.AnyEol())
 
-sequence_entry = Std.sequence_block(origin_line +
-                                    Martel.Rep1(sequence_line))
+sequence_entry = Std.sequence_block(Martel.Group("sequence_entry",
+                                    origin_line +
+                                    Martel.Rep1(sequence_line)))
 
 # CONTIG
 # this is the contig information for RefSeq records
@@ -647,34 +750,36 @@ record_end = Martel.Group("record_end",
                           Martel.Str("//") +
                           Martel.Rep1(Martel.AnyEol()))
 
-record = Martel.Group("record",
-                      locus_line +
-                      definition_block +
-                      accession_block +
-                      Martel.Opt(nid_line) +
-                      Martel.Opt(pid_line) +
-                      Martel.Opt(version_line) +
-                      Martel.Opt(db_source_line) +
-                      keywords_block +
-                      Martel.Opt(segment_line) +
-                      source_block +
-                      organism_block +
-                      Martel.Rep(reference) +
-                      Martel.Opt(comment_block) +
-                      feature_block +
+record = Martel.Group("genbank_record",
+                      locus_line + \
+                      definition_block + \
+                      accession_block + \
+                      Martel.Opt(nid_line) + \
+                      Martel.Opt(pid_line) + \
+                      Martel.Opt(version_line) + \
+                      Martel.Opt(db_source_block) + \
+                      keywords_block + \
+                      Martel.Opt(segment_line) + \
+                      source_block + \
+                      organism_block + \
+                      Martel.Rep(reference) + \
+                      Martel.Opt(primary) +\
+                      Martel.Opt(comment_block) + \
+                      features_line + \
+                      Martel.Rep1(feature) + \
                       Martel.Alt(Martel.Opt(base_count_line) +
                                  sequence_entry,
-                                 contig_block) +
-                      record_end +
-                      Martel.Rep(Martel.AnyEol())  # Allow extra blank lines at the end
-                      )
+                                 contig_block) + \
+                      record_end)
 
-
-format_expression = Martel.Group("dataset", Martel.Rep1(record),
+# Martel-specific stuff to try and support standard tag names used
+# by Andrew for Bioformats
+martel_record = Martel.Group("record", record)
+format_expression = Martel.Group("dataset", Martel.Rep1(martel_record),
                                  {"format" : "genbank"})
 
 record_format = Martel.ParseRecords("genbank_file", {"format" : "genbank"}, 
-                                    record,
+                                    martel_record,
                                     RecordReader.StartsWith, ("LOCUS",) )
 
 
@@ -694,17 +799,17 @@ header = Martel.Re("""\
 
 """)
 
-format = Martel.HeaderFooter("dataset", {},
+format = Martel.HeaderFooter("genbank", {},
                              header, RecordReader.CountLines, (10,),
-                             record, RecordReader.StartsWith, ("LOCUS",),
+                             record, RecordReader.EndsWith, ("//",),
                              None, None, None,
                              )
 
-multirecord = Martel.ParseRecords("dataset", {}, record,
-                                  RecordReader.StartsWith, ("LOCUS",))
+multirecord = Martel.ParseRecords("genbank", {}, record,
+                                  RecordReader.EndsWith, ("//",))
 
-if __name__ == "__main__":
-    from xml.sax import saxutils
-    p = format.make_parser(debug_level = 1)
-    #p.setContentHandler(saxutils.XMLGenerator())
-    p.parse("test.gb")
+
+                          
+
+
+
