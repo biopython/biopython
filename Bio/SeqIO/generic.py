@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # Created: Tue Sep 11 17:21:54 2001
-# Last changed: Time-stamp: <01/09/19 13:09:51 thomas>
+# Last changed: Time-stamp: <01/09/19 13:28:22 thomas>
 # thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas/index.html
 # File: generic.py
 # based on Brads's code
@@ -58,13 +58,19 @@ class GenericFormat:
         self._n = 0
 
     def get_header(self, line):
-        x = string.split(line[1:-1], None, 1)
-        if len(x) == 1:
-            id = x.strip()
-            desc = ""
-        else:
-            id, desc = [x.strip() for x in x]
+        try:
+            x = string.split(line[1:-1], None, 1)
+            if len(x) == 1:
+                id = x[0].strip()
+                desc = ""
+            else:
+                id, desc = [x.strip() for x in x]
 
+        except:
+            print >> sys.stderr, 'Unable to get header !!!'
+            print >> sys.stderr, 'Offending line:', line
+            sys.exit(0)
+                
         return (id, desc)
     
     def next(self):
@@ -450,12 +456,14 @@ if __name__ == '__main__':
         informat = sys.argv[2]
         outstream = sys.argv[3]
         outformat = sys.argv[4]
-
-    except:
+    except IndexError: 
         p = os.path.basename(sys.argv[0])
         print >> sys.stderr, 'Usage: %s <instream> <informat> <outstream> <outformat>' % p
         print >> sys.stderr, '\twhere "-" can be used for stdin resp. stdout'
-        print >> sys.stderr, 'Known formats: %s' % ', '.join(readseq.fdict.keys())
+        print >> sys.stderr, '\tKnown formats: %s' % ', '.join(readseq.fdict.keys())
+
+        print >> sys.stderr, '\n\te.g. %s eftu.fas fasta eftu.emb embl' % p 
+        print >> sys.stderr, '\tor   zcat test.aln.gz | %s - clustal - fasta' % p
         sys.exit(0)
 
     readseq.Convert(informat, outformat, instream, outstream)
