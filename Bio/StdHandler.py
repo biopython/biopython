@@ -1,8 +1,132 @@
 # Standard Content and Dispatch handlers for the Bioformat IO system
 
 from xml.sax import handler
-from Martel import Parser
-from Bio import Std, Dispatch
+from Martel import Parser, Dispatch
+from Bio import Std, Decode
+
+###################################
+
+# Helper functions to make functions
+
+def add_int_handler(klass, tag, attrname):
+    assert not hasattr(klass, "start_" +tag), "existing method exists"
+    assert not hasattr(klass, "end_" +tag), "existing method exists"
+    s = """if 1:
+    def start(self, tag, attrs):
+        self.save_characters()
+    def end(self, tag):
+        self.%s = int(self.get_characters())
+""" % attrname
+    d = {}
+    exec s in d
+    setattr(klass, "start_" + tag, d["start"])
+    setattr(klass, "end_" + tag, d["end"])
+
+def add_text_handler(klass, tag, attrname):
+    assert not hasattr(klass, "start_" +tag), "existing method exists"
+    assert not hasattr(klass, "end_" +tag), "existing method exists"
+    s = """if 1:
+    def start(self, tag, attrs):
+        self.save_characters()
+    def end(self, tag):
+        self.%s = self.get_characters()
+""" % attrname
+    d = {}
+    exec s in d
+    setattr(klass, "start_" + tag, d["start"])
+    setattr(klass, "end_" + tag, d["end"])
+
+def add_text_dict_handler(klass, tag, attrname, key):
+    assert not hasattr(klass, "start_" +tag), "existing method exists"
+    assert not hasattr(klass, "end_" +tag), "existing method exists"
+    s = """if 1:
+    def start(self, tag, attrs):
+        self.save_characters()
+    def end(self, tag):
+        self.%s["%s"] = self.get_characters()
+""" % (attrname, key)
+    d = {}
+    exec s in d
+    setattr(klass, "start_" + tag, d["start"])
+    setattr(klass, "end_" + tag, d["end"])
+
+def add_text_decode_handler(klass, tag, attrname):
+    assert not hasattr(klass, "start_" +tag), "existing method exists"
+    assert not hastattr(klass, "end_" +tag), "existing method exists"
+    s = """if 1:
+    def start(self, tag, attrs):
+        self.save_characters()
+        self._decode_%s = attrs.get("bioformat:decode", None)
+    def end(self, tag):
+        if self._decode_%s is not None:
+            s = Decode.make_decoder(self._decode_%s)(s)
+        self.%s = self.get_characters()
+""" % (tag, tag, tag, attrname)
+    d = {"Decode": Decode}
+    exec s in d
+    setattr(klass, "start_" + tag, d["start"])
+    setattr(klass, "end_" + tag, d["end"])
+
+def add_first_text_handler(klass, tag, attrname):
+    assert not hasattr(klass, "start_" +tag), "existing method exists"
+    assert not hasattr(klass, "end_" +tag), "existing method exists"
+    s = """if 1:
+    def start(self, tag, attrs):
+        if self.%s is None:
+            self.save_characters()
+    def end(self, tag):
+        if self.%s is None:
+            self.%s = self.get_characters()
+""" % (attrname, attrname, attrname)
+    d = {}
+    exec s in d
+    setattr(klass, "start_" + tag, d["start"])
+    setattr(klass, "end_" + tag, d["end"])
+
+def add_text_block_handler(klass, tag, joinattr, defaultjoin, attrname):
+    assert not hasattr(klass, "start_" + tag), "existing method exists"
+    assert not hasattr(klass, "end_" + tag), "existing method exists"
+    assert not hasattr(klass, "start_"+tag+"_block"), "existing method exists"
+    assert not hasattr(klass, "end_" +tag+"_block"), "existing method exists"
+    s = """if 1:
+    def start_block(self, tag, attrs):
+        self._%(tag)s_join_func = Decode.make_decoder(attrs.get(%(joinattr)r, %(defaultjoin)r))
+        self._%(tag)s_lines = []
+    def end_block(self, tag):
+        self.%(attrname)s = self._%(tag)s_join_func(self._%(tag)s_lines)
+    def start(self, tag, attrs):
+        self.save_characters()
+    def end(self, tag):
+        self._%(tag)s_lines.append(self.get_characters())
+""" % locals()
+    d = {"Decode": Decode}
+    exec s in d
+    setattr(klass, "start_" + tag, d["start"])
+    setattr(klass, "end_" + tag, d["end"])
+    setattr(klass, "start_" + tag + "_block", d["start_block"])
+    setattr(klass, "end_" + tag + "_block", d["end_block"])
+
+def add_value_handler(klass, tag, attrname):
+    assert not hasattr(klass, "start_" +tag), "existing method exists"
+    assert not hasattr(klass, "end_" +tag), "existing method exists"
+    s = """if 1:
+    def start(self, tag, attrs):
+        self._%(tag)s_name = attrs["name"]
+        self._%(tag)s_decode = attrs.get("bioformat:decode", None)
+        self.save_characters()
+    def end(self, tag):
+        s = self.get_characters()
+        if self._%(tag)s_decode is not None:
+            s = Decode.make_decoder(self._%(tag)s_decode)(s)
+        self.%(attrname)s[self._%(tag)s_name] = s
+""" % locals()
+    d = {"Decode": Decode}
+    exec s in d
+    setattr(klass, "start_" + tag, d["start"])
+    setattr(klass, "end_" + tag, d["end"])
+
+    
+#################################
 
 class ConvertHandler(handler.ContentHandler):
     """Used to read records and produce output"""
@@ -37,16 +161,33 @@ class ConvertHandler(handler.ContentHandler):
     def ignore_characters(self, s):
         pass
 
+class ConvertDispatchHandler(Dispatch.Dispatcher):
+    """Used to read records and produce output through a Dispatcher"""
+    def __init__(self, record_builder, writer, record_tag = "record"):
+        Dispatch.Dispatcher.__init__(self,
+                                     remap = {record_tag: "bioformat:"})
+        setattr(self, "start_" + record_tag, self.write_record)
+        self.acquire(record_builder)
+        self.record_builder = record_builder
+        self.writer = writer
+        self.record_tag = record_tag
+
+    def write_record(self, tag):
+        self.writer.write(self.record_builder.document)
+
+
 
 class RecognizeHandler(handler.ContentHandler, handler.ErrorHandler):
     def __init__(self):
         self.recognized = 1
+        self.exc = None
  
     def fatalError(self, exc):
         if isinstance(exc, Parser.ParserIncompleteException):
             pass
         else:
             self.recognized = 0
+            self.exc = exc
         raise exc
  
     error = fatalError
@@ -55,37 +196,6 @@ class RecognizeHandler(handler.ContentHandler, handler.ErrorHandler):
         if tag == "record":
             raise Parser.ParserException("we finished a record!")
 
-
-def join_english(fields):
-    if not fields:
-        return ""
-    s = fields[0]
-    for field in fields[1:]:
-        if s[-1:] == "-" and s[-3:-2] == "-":
-            s = s + field
-            continue
-        if s.find(" ") == -1 and field.find(" ") == -1:
-            s = s + field
-            continue
-        s = s + " " + field
-    return s
-
-def join_concat(fields):
-    return fields.join("")
-
-def join_space(fields):
-    return fields.join(" ")
-
-def join_newline(fields):
-    return field.join("\n")
-        
-
-join_table = {
-    "english": join_english,
-    "concat": join_concat,
-    "space": join_space,
-    "newline": join_newline,
-    }
 
 
 class Handle_dbid(Dispatch.Callback):
@@ -100,8 +210,11 @@ class Handle_dbid(Dispatch.Callback):
 
 class Handle_description(Dispatch.Callback):
     def start_description_block(self, tag, attrs):
-        join = attrs.get("join", "english")
-        self.join_fctn = join_table[join]
+        j = attrs.get("join", None)
+        if j is None:
+            self.join_fctn = Decode.join_fixspaces
+        else:
+            self.join_fctn = Decode.make_typechecked_decoder(j, list, str)
         self.descriptions = []
     def start_description(self, tag, attrs):
         self.save_characters()
@@ -109,80 +222,194 @@ class Handle_description(Dispatch.Callback):
         x = self.get_characters()
         self.descriptions.append(x)
     def end_description_block(self, tag):
-        text = self.join_fctn(self.descriptions)
-        self.descriptions = None
-        self.callback(text)
+        self.callback(self.join_fctn(self.descriptions))
+
+#### There can be multiple dbxref_dbids in a dbxref
+# DR   EMBL; X64411; CAA45756.1; -.
+#    <dbxref><..dbname style="swiss">EMBL</..dbname>
+#                        <dbid type="primary">X64411</dbid>
+#                        <dbid type="accession">CAA45756.1</dbid>
+#    </dbxref>
+###
+# DR   P35156, YPUI_BACSU, F;
+#   <dbxref><dbid type="primary" dbname="sprot">P35156</dbid>
+#           <dbid type="accession" dbname="sprot">YPUI_BACSU</dbid>
+#           <negate/>
+#    </dbxref>
+
+def _fixup_sp_pattern(exp):
+    import re
+    import Martel
+    exp = Martel.select_names(exp, (Std.dbxref_dbname.tag,Std.dbxref_dbid.tag))
+                               
+    e = exp._find_groups(Std.dbxref_dbname.tag)
+    assert len(e) == 1
+    e = e[0]
+    e.name = "dbname"
+    dbstyle = e.attrs["style"]
+    e.attrs = {}
+    e = exp._find_groups(Std.dbxref_dbid.tag)
+    assert len(e) == 2
+    e[0].name = "primary_dbid"
+    primary_type = e[0].attrs["type"]
+    e[0].attrs = {}
+    e[1].name = "secondary_dbid"
+    secondary_type = e[1].attrs["type"]
+    e[1].attrs = {}
+    pattern = str(exp) + "$"
+    pat = re.compile(pattern)
+    return pat, dbstyle, primary_type, secondary_type
+
+# Turns out these 'fast' versions speed up the dbxref code by about
+# a factor of 2.
+
+# DR   PIR; S08427; S08427.
+_fast_dbxref_sp_general_data = None
+def _fast_dbxref_sp_general(s):
+    global _fast_dbxref_sp_general_data
+    if _fast_dbxref_sp_general_data is None:
+        from Bio.expressions.swissprot import sprot38
+        _fast_dbxref_sp_general_data = _fixup_sp_pattern(
+                                                    sprot38.real_DR_general)
+
+    pat, dbstyle, primary_type, secondary_type = _fast_dbxref_sp_general_data
+
+    m = pat.match(s)
+    assert m is not None, "Ill-formated sp-general dxbref: %r" % s
+    return (
+        (dbstyle, m.group("dbname"), primary_type,
+                                     m.group("primary_dbid"), 0),
+        (dbstyle, m.group("dbname"), secondary_type,
+                                     m.group("secondary_dbid"), 0)
+        )
+
+# DR   PFAM; PF01018; GTP1_OBG; 1.
+# DR   PROSITE; PS00905; GTP1_OBG; 1.
+
+_fast_dbxref_sp_prosite_data = None
+def _fast_dbxref_sp_prosite(s):
+    global _fast_dbxref_sp_prosite_data
+
+    if _fast_dbxref_sp_prosite_data is None:
+        from Bio.expressions.swissprot import sprot38
+        _fast_dbxref_sp_prosite_data = _fixup_sp_pattern(
+                                                    sprot38.real_DR_prosite)
+
+    pat, dbstyle, primary_type, secondary_type = _fast_dbxref_sp_prosite_data
+    m = pat.match(s)
+    assert m is not None, "Ill-formated sp-prosite dxbref: %r" % s
+    return (
+        (dbstyle, m.group("dbname"), primary_type,
+                                     m.group("primary_dbid"), 0),
+        (dbstyle, m.group("dbname"), secondary_type,
+                                     m.group("secondary_dbid"), 0)
+        )
     
+
+# DR   EMBL; M36407; AAA33110.1; -.
+_fast_dbxref_sp_embl_data = None
+def _fast_dbxref_sp_embl(s):
+    global _fast_dbxref_sp_embl_data
+
+    if _fast_dbxref_sp_embl_data is None:
+        from Bio.expressions.swissprot import sprot38
+        _fast_dbxref_sp_embl_data = _fixup_sp_pattern(
+                                                    sprot38.real_DR_embl)
+
+    pat, dbstyle, primary_type, secondary_type = _fast_dbxref_sp_embl_data
+    m = pat.match(s)
+    assert m is not None, "Ill-formated sp-embl dxbref: %r" % s
+    return (
+        (dbstyle, m.group("dbname"), primary_type,
+                                     m.group("primary_dbid"), 0),
+        (dbstyle, m.group("dbname"), secondary_type,
+                                     m.group("secondary_dbid"), 0)
+        )
+
+_fast_dbxref_parser_table = {
+    "sp-general": _fast_dbxref_sp_general,
+    "sp-prosite": _fast_dbxref_sp_prosite,
+    "sp-embl": _fast_dbxref_sp_embl,
+}
+
 class Handle_dbxref(Dispatch.Callback):
-    def __init__(self, callback):
-        Dispatch.Callback.__init__(self, callback)
-        Dispatch.acquire_text(self, "dbxref_dbname", "dbname")
-        
     def start_dbxref(self, tag, attrs):
-        self.style = attrs.get("style", None)
-        self.dbname = None
-        self.ids = []
         self.negate = 0
+        self.dbname = None
+        self.dbids = []
+        self.info = []
+
+    def start_dbxref_dbname(self, tag, attrs):
+        assert self.dbname is None, "cannot set the dbname twice"
+        self.dbname_style = attrs.get("style", "unknown")
+        self.save_characters()
+    def end_dbxref_dbname(self, tag):
+        self.dbname = self.get_characters()
 
     def start_dbxref_dbid(self, tag, attrs):
-        dbname = attrs.get("dbname", None)
-        type = attrs.get("type", None)
-        self.ids.append( [None, dbname, type] )
+        d = attrs.get("dbname", None)
+        if d is None:
+            assert self.dbname is not None, "must set the dbname"
+            self.info.append( (self.dbname_style, self.dbname,
+                               attrs.get("type", "primary")) )
+        else:
+            self.info.append( ("bioformat", d,
+                               attrs.get("type", "primary")) )
         self.save_characters()
 
     def end_dbxref_dbid(self, tag):
-        self.ids[-1][0] = self.get_characters()
+        self.dbids.append( self.get_characters())
+
+    def start_dbxref_negate(self, tag, attrs):
+        self.negate = 1
 
     def end_dbxref(self, tag):
         negate = self.negate
-        for id, dbname, type in self.ids:
-            if dbname:
-                style = None
-            else:
-                style = self.style
-                dbname = self.dbname
-            if dbname is None:
-                raise TypeError("dbname not defined in the dbxref")
-            self.callback( (dbname, id, type, negate) )
+        for ( (dbname_style, dbname, idtype), dbid) in zip(self.info,
+                                                           self.dbids):
+            self.callback(dbname_style, dbname, idtype, dbid, negate)
 
-    def start_dbxref_negate(self, name, tag):
-        self.negate = 1
+    # The performance hack code
+    def start_fast_dbxref(self, tag, attrs):
+        style = attrs["style"]
+        self._fast_parser = _fast_dbxref_parser_table[style]
+        self.save_characters()
+    def end_fast_dbxref(self, tag):
+        for info in self._fast_parser(self.get_characters()):
+            self.callback(*info)
 
+##################
 class Handle_sequence(Dispatch.Callback):
-    def __init__(self, callback):
-        Dispatch.Callback.__init__(self, callback)
-        Dispatch.acquire_append_text(self, "sequence", "sequence")
-
     def start_(self, tag, attrs):
         self.global_alphabet = None
         
     def start_sequence_block(self, tag, attrs):
         self.local_alphabet = attrs.get("alphabet", None)
         self.gapchar = attrs.get("gapchar", None)
-        self.remove_spaces = attrs.get("remove_spaces", "1")
-        self.sequence = []
+        self.stopchar = attrs.get("stopchar", None)
+        j = attrs.get("join", None)
+        if j is not None:
+            self.join_func = Decode.make_typechecked_decoder(j, list, str)
+        else:
+            self.join_func = None
+        self.sequences = []
         
     def end_sequence_block(self, tag):
-        seq = "".join(self.sequence)
-        if self.remove_spaces == "1":
-            seq = seq.replace(" ", "")
+        f = self.join_func
+        if f is not None:
+            seq = self.f(self.sequences)
+        else:
+            seq = "".join(self.sequences).replace(" ", "")
         alphabet = self.local_alphabet or self.global_alphabet or "unknown"
-        self.callback(alphabet, seq)
+        self.callback( (alphabet, seq, self.gapchar, self.stopchar) )
 
     def start_alphabet(self, tag, attrs):
         self.global_alphabet = attrs["alphabet"]
 
-location_text_table = {
-    "genbank": "".join,
-    }
-
-def convert_swissprot(start, end):
-    return "Location(%r, %r)" % (start.strip(), end.strip())
-
-location_pos_table = {
-    None: lambda x, y: (int(x), int(y)),
-    "swissprot": convert_swissprot,
-    }
+    def start_sequence(self, tag, attrs):
+        self.save_characters()
+    def end_sequence(self, tag):
+        self.sequences.append(self.get_characters())
 
 class Feature:
     def __init__(self, name, description, location, qualifiers):
@@ -196,79 +423,98 @@ class Feature:
                 len(self.qualifiers))
 
 
-class Handle_location(Dispatch.Callback):
+class Handle_feature_location(Dispatch.Callback):
     def __init__(self, callback, settings = {}):
         Dispatch.Callback.__init__(self, callback)
         self.settings = settings
         
-        Dispatch.acquire_append_text(self, "_location", "location_text")
-        Dispatch.acquire_text(self, "_location_start", "location_start")
-        Dispatch.acquire_text(self, "_location_end", "location_end")
+    def start_feature(self, tag, attrs):
+        self.location_style = attrs.get("location-style",
+                                        self.settings["location-style"])
+        j = attrs.get("join-feature", None)
+        if j is None:
+            self.text_join_func = "".join
+        else:
+            self.text_join_func = Decode.make_typechecked_decoder(j, list, str)
 
-    # 'start_' and 'end_' are called by the 'feature' events
-    def start_(self, tag, attrs):
-        self.location_style = self.settings["location-style"]
         self.location_start = None
         self.location_end = None
-        self.location_text = []
+        self.text_lines = []
 
-    def end_(self, tag):
-        style = self.location_style
-        if self.location_text:
-            if self.location_start or self.location_end:
+    def end_feature(self, tag):
+        if self.location_start or self.location_end:
+            if self.text_lines:
                 raise TypeError("Cannot have both location text and start/end")
-            function = location_text_table[style]
-            location = function(self.location_text)
+            self.callback(self.location_style,
+                          (self.text_join_func(self.text_lines), None))
         else:
-            function = location_pos_table[style]
-            location = function(self.location_start, self.location_end)
-        self.callback(location)
+            self.callback(self.location_style,
+                          (self.location_start, self.location_end))
+    
+    def start_feature_location(self, tag, attrs):
+        self.save_characters()
+    def end_feature_location(self, tag):
+        self.text_lines.append(self.get_characters())
         
+add_text_handler(Handle_feature_location, "feature_location_start",
+                 "location_start")
+add_text_handler(Handle_feature_location, "feature_location_end",
+                 "location_end")
+
+##################################
 
 class Handle_feature_qualifier(Dispatch.Callback):
     def __init__(self, callback, settings):
         self.settings = settings
         Dispatch.Callback.__init__(self, callback)
 
-        Dispatch.acquire_text(self, "feature_qualifier_name", "name")
-        Dispatch.acquire_append_text(self, "feature_qualifier_description",
-                                     "description")
-
     def start_feature_qualifier(self, tag, attrs):
         self.name = None
         self.description = []
-        self.join = self.settings["qualifier-join"]
+        qj = attrs.get("join-qualifier", None)
+        if qj is None:
+            self.join = self.settings["qualifier_join_func"]
+        else:
+            self.join = Decode.make_typechecked_decoder(qj, list, str)
 
     def end_feature_qualifier(self, tag):
-        self.callback( (self.name,
-                        join_table[self.join](self.description)) )
+        self.callback(self.name, self.join(self.description))
 
+    def start_feature_qualifier_description(self, tag, attrs):
+        self.save_characters()
+    def end_feature_qualifier_description(self, tag):
+        self.description.append(self.get_characters())
+
+add_text_handler(Handle_feature_qualifier, "feature_qualifier_name", "name")
+
+####################
 
 class Handle_features(Dispatch.Callback):
     def __init__(self, callback):
         Dispatch.Callback.__init__(self, callback)
         self.settings = {}
 
-        Dispatch.acquire_append_text(self, "feature_description",
-                                     "description")
-
-        Dispatch.acquire_text(self, tag = "feature_name",
-                              attribute = "name")
-
-        self.acquire(Handle_location(self.add_location, self.settings),
-                     prefix = "feature")
+        self.acquire(Handle_feature_location(self.add_location, self.settings))
 
         self.acquire(Handle_feature_qualifier(self.add_feature_qualifier,
                                               self.settings))
 
     def start_feature_block(self, tag, attrs):
-        self.settings["join"] = attrs.get("join", "english")
-        self.settings["location-style"] = attrs.get("location-style", None) or\
-                                          attrs.get("style", None) or \
-                                          "swissprot"
-        self.settings["qualifier-join"] = attrs.get("qualifier-join", None) or\
-                                          attrs.get("join", None) or \
-                                          "english"
+        jf = attrs.get("join-description", None)
+        if jf is None:
+            self.join_feature_description = Decode.join_fixspaces
+        else:
+            self.join_feature_description = Decode.make_typechecked_decoder(
+                jf, list, str)
+
+        self.settings["location-style"] = attrs.get("location-style", None)
+
+        jq = attrs.get("join-qualifier", None)
+        if jq is None:
+            self.settings["qualifier_join_func"] = Decode.join_fixspaces
+        else:
+            self.settings["qualifier_join_func"] = \
+                          Decode.make_typechecked_decoder(jq, list, str)
         self.features = []
 
     def end_feature_block(self, tag):
@@ -281,242 +527,103 @@ class Handle_features(Dispatch.Callback):
         self.location = None
         self.qualifiers = []
 
+    def start_feature_description(self, tag, attrs):
+        self.save_characters()
+    def end_feature_description(self, tag):
+        self.description.append(self.get_characters())
+
     def end_feature(self, tag):
-        join = join_table[self.settings["join"]]
-        self.features.append(Feature(self.name,
-                                     join(self.description),
-                                     self.location,
-                                     self.qualifiers))
+        self.features.append(Feature(
+            self.name,
+            self.join_feature_description(self.description),
+            self.location,
+            self.qualifiers))
         
     def add_feature_qualifier(self, fq):
         self.qualifiers.append(fq)
 
-    def add_location(self, location):
-        self.location = location
+    def add_location(self, style, location_info):
+        self.location = (style, location_info)
 
-### XXX "text" or "string" ?
-decode_text = {
-    None: str,
-    }
+add_text_handler(Handle_features, "feature_name", "name")
 
-class Text(Dispatch.DispatchHandler):
-    def __init__(self, obj, attrname, verify_none = 1):
-        Dispatch.DispatchHandler.__init__(self)
-        self.obj = obj
-        self.attrname = attrname
-        self.verify_none = verify_none
-    def start_(self, tag, attrs):  # yes, this an empty tag
-        self.save_characters()     # it expects everything from the prefix
-    def end_(self, tag):
-        assert self.verify_none == 0 or\
-               getattr(self.obj, self.attrname, None) is None, \
-               "%s %r must be None (it is %s); or set verify_none to 0" % \
-               (self.obj, self.attrname, getattr(self.obj, self.attrname))
-        setattr(self.obj, self.attrname, self.get_characters())
-
-join_text = {
-    None: lambda lines: " ".join((" ".join(lines)).split()).strip(),
-    "space": lambda lines: " ".join(lines),
-    "concat": lambda lines: "".join(lines),
-    }
-        
-class TextBlock(Dispatch.DispatchHandler):
-    def __init__(self, obj, attrname, verify_none = 1):
-        Dispatch.DispatchHandler.__init__(self)
-        self.obj = obj
-        self.attrname = attrname
-        self.verify_none = verify_none
-    def start__block(self, tag, attrs):
-        self.join_func = join_text[attrs.get("join", "space")]
-        self.lines = []
-    def start_(self, tag, attrs):  # yes, this an empty tag
-        self.save_characters()     # it expects everything from the prefix
-    def end_(self, tag):
-        s = self.get_characters()
-        self.lines.append(s)
-
-    def end__block(self, tag):
-        s = self.join_func(self.lines)
-        
-        assert self.verify_none == 0 or\
-               getattr(self.obj, self.attrname, None) is None, \
-               "%s %r must be None (it is %s); or set verify_none to 0" % \
-               (self.obj, self.attrname, getattr(self.obj, self.attrname))
-        setattr(self.obj, self.attrname, s)
-
-class AppendText(Dispatch.DispatchHandler):
-    def __init__(self, obj, attrname):
-        Dispatch.DispatchHandler.__init__(self)
-        self.obj = obj
-        self.attrname = attrname
-    def start_(self, tag, attrs):
-        self.save_characters()
-    def end_(self, tag):
-        getattr(self.obj, self.attrname).append(self.get_characters())
-
-def safe_int(s):
-    try:
-        return int(s)
-    except ValueError:
-        return long(s)
-
-decode_int = {
-    None: safe_int,
-    "digits": safe_int,
-    "comma": lambda s: int(s.replace(",", "")),
-    }
-
-class Int(Dispatch.DispatchHandler):
-    def __init__(self, obj, attrname, verify_none = 1):
-        Dispatch.DispatchHandler.__init__(self)
-        self.obj = obj
-        self.attrname = attrname
-        self.verify_none = verify_none
-    def start_(self, tag, attrs):  # yes, this an empty tag
-        self.decode_func = decode_int[attrs.get("bioformat:encoding",
-                                                "digits")]
-        self.save_characters()     # it expects everything from the prefix
-    def end_(self, tag):
-        s = self.get_characters()
-        n = self.decode_func(s)
-        assert self.verify_none == 0 or\
-               getattr(self.obj, self.attrname, None) is None, \
-               "%s %r must be None (it is %s); or set verify_none to 0" % \
-               (self.obj, self.attrname, getattr(self.obj, self.attrname))
-        setattr(self.obj, self.attrname, n)
-
-decode_float = {
-    None: float,
-    }
-
-class Float(Dispatch.DispatchHandler):
-    def __init__(self, obj, attrname, verify_none = 1):
-        Dispatch.DispatchHandler.__init__(self)
-        self.obj = obj
-        self.attrname = attrname
-        self.verify_none = verify_none
-    def start_(self, tag, attrs):  # yes, this an empty tag
-        self.save_characters()     # it expects everything from the prefix
-    def end_(self, tag):
-        s = self.get_characters()
-        x = float(s)   # FIXME to handle various encodings ... What encodings?
-        assert self.verify_none == 0 or\
-               getattr(self.obj, self.attrname, None) is None, \
-               "%s %r must be None (it is %s); or set verify_none to 0" % \
-               (self.obj, self.attrname, getattr(self.obj, self.attrname))
-        setattr(self.obj, self.attrname, x)
-
-decoding_tables = {
-    "int": decode_int,
-    "string": decode_text,
-    "float": decode_float,
-    }
-
-class Value(Dispatch.DispatchHandler):
-    def __init__(self, obj, attrname, verify_none = 1):
-        Dispatch.DispatchHandler.__init__(self)
-        self.obj = obj
-        self.attrname = attrname
-        self.verify_none = verify_none
-    def start_(self, tag, attrs):  # yes, this an empty tag
-        self.name = attrs["name"]
-        datatype = attrs.get("bioformat:type", "string")
-        encoding = attrs.get("bioformat:encoding", None)
-        self.f = decoding_tables[datatype][encoding]
-        self._attrs = attrs
-        self.save_characters()     # it expects everything from the prefix
-    def end_(self, tag):
-        s = self.get_characters()
-        x = self.f(s)
-        dict = getattr(self.obj, self.attrname)
-        assert self.verify_none == 0 or not dict.has_key(self.name), \
-               "%s.%s[%r] already exists (it is %s); or set verify_none to 0" % \
-               (self.obj, self.attrname, self.name, dict[self.name])
-        dict[self.name] = x
 
 ############## Search handlers
 
 class Handle_hsp_seqalign(Dispatch.Callback):
-    def __init__(self, callback):
-        Dispatch.Callback.__init__(self, callback)
-        self.acquire(Text(self, "_name"), "hsp_seqalign_name")
-        self.acquire(Text(self, "_line"), "hsp_seqalign_line")
-        self.acquire(Text(self, "_leader"), "hsp_seqalign_leader")
-        self.acquire(Text(self, "_seq"), "hsp_seqalign_seq")
-        self.acquire(Text(self, "_start"), "hsp_seqalign_start")
-        self.acquire(Text(self, "_end"), "hsp_seqalign_end")
-
     def start_hsp(self, tag, attrs):
-        self.names = {}    # "Query", "Sbjct"
-        self.seqs = {"query": "",     # the actual text of the sequence
-                     "homology": "",
-                     "subject": ""}
-        self.start_locs = {}
-        self.end_locs = {}
+        self.query_name = None     # "Query"
+        self.subject_name = None   # "Sbjct"
+        
+        self.query_seq = ""        # the actual text of the sequence
+        self.homology_seq = ""
+        self.subject_seq = ""
+        
+        self.query_start_loc = None
+        self.query_end_loc = None
+        
+        self.subject_start_loc = None
+        self.subject_end_loc = None
 
     def end_hsp(self, tag):
-        self.callback(self.names, self.seqs, self.start_locs, self.end_locs)
+        self.callback(self)
 
     def start_hsp_seqalign(self, tag, attrs):
-        self.sub_names = {}
-        self.sub_seqs = {}
-        self.sub_lines = {}
-        self.sub_leaders = {}   # the text up to the sequence
-        self.sub_starts = {}
-        self.sub_ends = {}
+        self.sub_leader = None
 
-    def start_hsp_seqalign_line(self, tag, attrs):
-        self.getting_hsp = which = attrs["which"]
-        assert which in ["subject", "query", "homology"], which
-        self._name = self._line = self._seq = self._leader = None
-        self._start = self._end = None
+    def start_hsp_seqalign_query_seq(self, tag, attrs):
+        self.save_characters()
+    def end_hsp_seqalign_query_seq(self, tag):
+        s = self.get_characters()
+        self.query_seq += s
+        self.sub_query_seq_len = len(s)
 
-    def end_hsp_seqalign_line(self, tag):
-        self.sub_names[self.getting_hsp] = self._name
-        self.sub_lines[self.getting_hsp] = self._line
-        self.sub_seqs[self.getting_hsp] = self._seq
-        self.sub_leaders[self.getting_hsp] = self._leader
-        self.sub_starts[self.getting_hsp] = self._start
-        self.sub_ends[self.getting_hsp] = self._end
+    def start_hsp_seqalign_homology_seq(self, tag, attrs):
+        self.save_characters()
+    def end_hsp_seqalign_homology_seq(self, tag):
+        query_leader = self.leader_size
+        query_seq_len = self.sub_query_seq_len
+        line = self.get_characters()
+        s = line[query_leader:query_leader+query_seq_len]
+        assert len(s) == query_seq_len, (len(s), query_seq_len, line)
+        self.homology_seq += s
 
-    def end_hsp_seqalign(self, tag):
-        # All three lines (should have been) read.
-        if not self.names:
-            self.names.update(self.sub_names)
-            self.start_locs.update(self.sub_starts)
+    def start_hsp_seqalign_subject_seq(self, tag, attrs):
+        self.save_characters()
+    def end_hsp_seqalign_subject_seq(self, tag):
+        self.subject_seq += self.get_characters()
+    
+    def start_hsp_seqalign_query_leader(self, tag, attrs):
+        self.save_characters()
+    def end_hsp_seqalign_query_leader(self, tag):
+        self.leader_size = len(self.get_characters())
 
-        # Always update the end locations
-        self.end_locs.update(self.sub_ends)
+add_first_text_handler(Handle_hsp_seqalign, "hsp_seqalign_query_name",
+                         "query_name")
 
-        # Need to match up the homology line to the other lines
-        query_seq = self.sub_seqs["query"]
-        query_leader = self.sub_leaders["query"]
-        subj_seq = self.sub_seqs["subject"]
-        subj_leader = self.sub_leaders["subject"]
-        h_seq = self.sub_seqs["homology"]
+add_first_text_handler(Handle_hsp_seqalign, "hsp_seqalign_subject_name",
+                         "subject_name")
 
-        assert len(query_seq) == len(subj_seq), \
-               (query_seq, subj_seq)
-        assert len(query_leader) == len(subj_leader), \
-               (query_leader, subj_leader)
+add_first_text_handler(Handle_hsp_seqalign, "hsp_seqalign_query_start",
+                         "query_start_loc")
+add_text_handler(Handle_hsp_seqalign, "hsp_seqalign_query_end",
+                 "query_end_loc")
 
-        h_seq = h_seq[len(query_leader):][:len(query_seq)]
-
-        assert len(h_seq) == len(query_seq), (h_seq, query_seq)
-
-        self.seqs["query"] += query_seq
-        self.seqs["homology"] += h_seq
-        self.seqs["subject"] += subj_seq
+add_first_text_handler(Handle_hsp_seqalign, "hsp_seqalign_subject_start",
+                         "subject_start_loc")
+add_text_handler(Handle_hsp_seqalign, "hsp_seqalign_subject_end",
+                 "subject_end_loc")
 
 
+
+
+#############################
 
 class Handle_hsp(Dispatch.Callback):
     def __init__(self, callback):
         Dispatch.Callback.__init__(self, callback)
         self.acquire(Handle_hsp_seqalign(self.add_hsp_seqs))
 
-        self.acquire(Value(self, "hsp_values"), "hsp_value")
-        
     def start_hsp(self, tag, attrs):
         self.hsp_values = {}      # expect, p, identities, ...
         self.strands = {}
@@ -524,7 +631,7 @@ class Handle_hsp(Dispatch.Callback):
 
     def end_hsp(self, tag):
         self.callback(self.hsp_values,
-                      self.names, self.seqs, self.start_locs, self.end_locs,
+                      self.hsp_info,
                       self.strands, self.frames,
                       )
         
@@ -539,18 +646,42 @@ class Handle_hsp(Dispatch.Callback):
         self.frames[self.getting_frame] = self.get_characters()
         self.getting_frame = None
 
-    def add_hsp_seqs(self, names, seqs, start_locs, end_locs):
-        self.names = names
-        self.seqs = seqs
-        self.start_locs = start_locs
-        self.end_locs = end_locs
+    def add_hsp_seqs(self, hsp_info):
+        self.hsp_info = hsp_info
+
+    def start_hsp_value(self, tag, attrs):
+        self.value_convert = attrs.get("bioformat:decode", None)
+        self.value_name = attrs["name"]
+        self.save_characters()
+
+    def end_hsp_value(self, tag):
+        s = self.get_characters()
+        if self.value_name is not None:
+            if self.value_name == "float":
+                s = float(s)
+            else:
+                s = Decode.make_decoder(self.value_convert)(s)
+        self.hsp_values[self.value_name] = s
+
+#############################
+
 
 class Handle_search_table(Dispatch.Callback):
-    def __init__(self, callback):
-        Dispatch.Callback.__init__(self, callback)
-        self.acquire(Text(self, "description"), "search_table_description")
-        self.acquire(Value(self, "values"), "search_table_value")
-        
+    def start_search_table_value(self, tag, attrs):
+        self.value_name = attrs["name"]
+        self.value_decode = attrs.get("bioformat:decode", None)
+        self.save_characters()
+    def end_search_table_value(self, tag):
+        s = self.get_characters()
+        if self.value_decode is not None:
+            x = self.value_decode
+            if x == "int":
+                s = int(s)
+            elif x == "float":
+                s = float(s)
+            else:
+                s = Decode.make_decoder(x)(s)
+        self.values[self.value_name] = s
 
     def start_search_table(self, tag, attrs):
         self.data = []
@@ -565,59 +696,49 @@ class Handle_search_table(Dispatch.Callback):
     def end_search_table_entry(self, tag):
         self.data.append( (self.description, self.values) )
         self.description = self.values = None
+
+add_text_handler(Handle_search_table, "search_table_description",
+                 "description")
+
+#############################
     
 class Handle_search_header(Dispatch.Callback):
-    def __init__(self, callback):
-        Dispatch.Callback.__init__(self, callback)
-        self.acquire(Text(self, "appname"),
-                     "application_name")
-        
-        self.acquire(Text(self, "appversion"),
-                     "application_version")
-                                     
-        self.acquire(Text(self, "dbname"),
-                     "database_name")
-        
-        self.acquire(Int(self, "db_num_sequences"),
-                     "database_num_sequences")
-                                    
-        self.acquire(Int(self, "db_num_letters"),
-                     "database_num_letters")
-                                    
-        self.acquire(AppendText(self, "query_description"),
-                     "query_description")
-
-        self.acquire(Text(self, "query_size"),
-                     "query_size")
-        
     def start_(self, tag, attrs):
-        self.appname = None
-        self.appversion = None
-        self.dbname = None
-        self.db_num_sequences = None
-        self.db_num_letters = None
-        self.query_description = []
-        self.query_size = None
+        self.dict = {}
+        self.query_description = None
 
     def end_search_header(self, tag):
-        query_description = join_text[None](self.query_description)
-        self.callback({"appname": self.appname,
-                       "appversion": self.appversion,
-                       "dbname": self.dbname,
-                       "db_num_sequences": self.db_num_sequences,
-                       "db_num_letters": self.db_num_letters,
-                       "query_description": query_description,
-                       "query_size": self.query_size})
-    
-class Handle_search_info(Dispatch.Callback):
-    def __init__(self, callback):
-        Dispatch.Callback.__init__(self, callback)
-        self.acquire(Value(self, "parameters"), "search_parameter")
-        self.acquire(Value(self, "statistics"), "search_statistic")
+        d = self.dict
+        d["query_description"] = self.query_description
+        self.callback(d)
 
+add_text_block_handler(Handle_search_header, "query_description",
+                       "join-query", "join|fixspaces", "query_description")
+
+add_text_dict_handler(Handle_search_header, "application_name",
+                      "dict", "appname")
+add_text_dict_handler(Handle_search_header, "application_version",
+                      "dict", "appversion")
+add_text_dict_handler(Handle_search_header, "database_name",
+                      "dict", "dbname")
+add_text_dict_handler(Handle_search_header, "database_num_sequences",
+                      "dict", "db_num_sequences")
+add_text_dict_handler(Handle_search_header, "database_num_letters",
+                      "dict", "db_num_letters")
+add_text_dict_handler(Handle_search_header, "query_size",
+                      "dict", "query_size")
+
+
+#############################
+
+class Handle_search_info(Dispatch.Callback):
     def start_(self, tag, attrs):
         self.parameters = {}
         self.statistics = {}
         
     def end_(self, tag):
+        print self.statistics
         self.callback(self.parameters, self.statistics)
+
+add_value_handler(Handle_search_info, "search_parameter", "parameters")
+add_value_handler(Handle_search_info, "search_statistic", "statistics")
