@@ -62,8 +62,8 @@ class Record:
     nr_total       Number of hits in Swiss-Prot.  tuple of (hits, seqs)
     nr_positive    True positives.  tuple of (hits, seqs)
     nr_unknown     Could be positives.  tuple of (hits, seqs)
-    nr_false_pos   tuple of (hits, seqs)
-    nr_false_neg   tuple of (hits, seqs)
+    nr_false_pos   False positives.  tuple of (hits, seqs)
+    nr_false_neg   False negatives.  (int)
     nr_partial     False negatives, because they are fragments. (int)
 
     COMMENTS
@@ -104,8 +104,8 @@ class Record:
         self.nr_positive = (None, None)
         self.nr_unknown = (None, None)
         self.nr_false_pos = (None, None)
-        self.nr_false_neg = (None, None)
-        self.nr_partial = (None, None)
+        self.nr_false_neg = None
+        self.nr_partial = None
 
         self.cc_taxo_range = ''
         self.cc_max_repeat = ''
