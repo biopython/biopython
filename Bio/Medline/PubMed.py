@@ -188,7 +188,8 @@ def search_for(search, batchsize=10000, delay=2, callback_fn=None,
 def find_related(pmid):
     """find_related(pmid) -> ids
 
-    Search PubMed for a list of citations related to pmid.
+    Search PubMed for a list of citations related to pmid.  pmid can
+    be a PubMed ID, a MEDLINE UID, or a list of those.
 
     """
     class ResultParser(sgmllib.SGMLParser):
@@ -222,6 +223,8 @@ def find_related(pmid):
             self.ids.append(data)
 
     parser = ResultParser()
+    if type(pmid) is type([]):
+        pmid = string.join(pmid, ',')
     h = NCBI.pmneighbor(pmid, 'pmid')
     parser.feed(h.read())
     return parser.ids
