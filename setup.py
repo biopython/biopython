@@ -216,9 +216,6 @@ setup(name='biopython',
                      Extension('Bio.Tools.cstringfns',
                                ['Bio/Tools/cstringfnsmodule.c']
                                )
-                     Extension('Bio.Tools.Statistics.cstathelper',
-                               ['Bio/Tools/Statistics/cstathelpermodule.c']
-                               )
                      ]
       )
 
