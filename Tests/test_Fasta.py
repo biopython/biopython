@@ -43,7 +43,7 @@ for test in tests:
     modelfile = datafile + ".tagged"
     tc = ParserSupport.TaggingConsumer(handle=TestHandle(open(modelfile)))
     try:
-        scanner.feed(File.open(datafile), tc)
+        scanner.feed(open(datafile), tc)
     except:
         raise TestFailed, "Scanner (%s)" % test
 
@@ -76,12 +76,12 @@ except Exception, x:
 if verbose:
     print "Running tests on Iterator"
 
-i = Fasta.Iterator(File.open(os.path.join('Fasta', 'f002')))
+i = Fasta.Iterator(open(os.path.join('Fasta', 'f002')))
 try:
-    assert i.next().title[:10] == 'gi|1348912', "sequence 1"
-    assert i.next().title[:10] == 'gi|1348917', "sequence 2"
-    assert i.next().title[:10] == 'gi|1592936', "sequence 3"
-    assert i.next() is None, "no more sequences"
+    assert i.next()[:11] == '>gi|1348912', "sequence 1"
+    assert i.next()[:11] == '>gi|1348917', "sequence 2"
+    assert i.next()[:11] == '>gi|1592936', "sequence 3"
+    assert not i.next(), "no more sequences"
 except Exception, x:
     raise TestFailed, "Iterator (%s)" % x
 
@@ -93,7 +93,7 @@ if verbose:
 
 try:
     datafile = os.path.join("Fasta", 'f002')
-    f = Fasta.parse(File.open(datafile))
+    f = Fasta.parse(open(datafile))
 
     assert len(f) == 3, "Should have 3 records"
     assert str(f[2]) == '>gi|1592936|gb|G29385|G29385 human STS SHGC-32652\012GATCAAATCTGCACTGTGTCTACATATAGGAAAGGTCCTGGTGTGTGCTAATGTTCCCAATGCAGGACTTGAGGAAGAGC\012TCTGTTATATGTTTCCATTTCTCTTTATCAAAGATAACCAAACCTTATGGCCCTTATAACAATGGAGGCACTGGCTGCCT\012CTTAATTTTCAATCATGGACCTAAAGAAGTACTCTGAAGGGTCTCAACAATGCCAGGTGGGGACAGATATACTCAGAGAT\012TATCCAGGTCTGCCTCCCAGCGAGCCTGGAGTACACCAGACCCTCCTAGAGAAATCTGTTATAATTTACCACCCACTTAT\012CCACCTTTAAACTTGGGGAAGGNNGCNTTTCAAATTAAATTTAATCNTNGGGGGNTTTTAAACTTTAACCCTTTTNCCNT\012TNTNGGGGTNGGNANTTGNCCCCNTTAAAGGGGGNNCCCCTNCNNGGGGGAATAAAACAANTTNNTTTTTT', "__str__ isn't working correctly"

@@ -10,6 +10,27 @@ from Bio import File
 
 
 
+### StringHandle
+
+if verbose:
+    print "Running tests on StringHandle"
+
+data = """This
+is
+a multi-line
+file"""
+
+h = File.StringHandle(data)
+try:
+    assert string.rstrip(h.readline()) == 'This', "readline"
+    assert len(h.readlines()) == 3, "readlines"
+    assert h.readline() == ''
+    h.close()
+except Exception, x:
+    raise TestFailed, "StringHandle (%s)" % x
+
+
+
 ### UndoHandle
 
 if verbose:
@@ -53,18 +74,3 @@ try:
     h.close()  # should pass this to the original handle
 except Exception, x:
     raise TestFailed, "UndoHandle (%s)" % x
-
-
-
-### open
-
-if verbose:
-    print "Running tests on open"
-
-try:
-    h = File.open('test_File.py', 'r')
-    assert isinstance(h, File.UndoHandle), "h is not an UndoHandle"
-    h = File.open('test_File.py', 'r', 1000)
-except Exception, x:
-    raise TestFailed, "open (%s)" % x
-

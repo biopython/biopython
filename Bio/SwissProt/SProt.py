@@ -26,17 +26,19 @@ class Scanner:
     Release 38
     """
 
-    def feed(self, uhandle, consumer):
-        """feed(self, uhandle, consumer)
+    def feed(self, handle, consumer):
+        """feed(self, handle, consumer)
 
-        Feed in SwissProt data for scanning.  uhandle must be an
-        UndoHandle that contains the keyword information.  consumer is a
+        Feed in SwissProt data for scanning.  handle is a file-like
+        object that contains swissprot data.  consumer is a
         Consumer object that will receive events as the report is scanned.
 
         """
-        assert isinstance(uhandle, File.UndoHandle), \
-               "uhandle must be an instance of Bio.File.UndoHandle"
-
+        if isinstance(handle, File.UndoHandle):
+            uhandle = handle
+        else:
+            uhandle = File.UndoHandle(handle)
+        
         while not is_blank_line(uhandle.peekline()):
             self._scan_record(uhandle, consumer)
 

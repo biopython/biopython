@@ -38,16 +38,18 @@ class Scanner:
     feed     Feed data into the scanner.
     """
     
-    def feed(self, uhandle, consumer):
-        """feed(self, uhandle, consumer)
+    def feed(self, handle, consumer):
+        """feed(self, handle, consumer)
 
-        Feed in a BLAST report for scanning.  uhandle must be an
-        UndoHandle that contains the BLAST report.  consumer is a Consumer
+        Feed in a BLAST report for scanning.  handle is a file-like
+        object that contains the BLAST report.  consumer is a Consumer
         object that will receive events as the report is scanned.
 
         """
-        assert isinstance(uhandle, File.UndoHandle), \
-               "uhandle must be an instance of Bio.File.UndoHandle"
+        if isinstance(handle, File.UndoHandle):
+            uhandle = handle
+        else:
+            uhandle = File.UndoHandle(handle)
         
         self._scan_header(uhandle, consumer)
 	self._scan_rounds(uhandle, consumer)

@@ -26,16 +26,18 @@ class Scanner:
     Release 38
     """
 
-    def feed(self, uhandle, consumer):
-        """feed(self, uhandle, consumer)
+    def feed(self, handle, consumer):
+        """feed(self, handle, consumer)
 
-        Feed in the keywlist.txt file for scanning.  uhandle must be
-        an Undohandle that contains keyword information.  consumer is a
+        Feed in the keywlist.txt file for scanning.  handle is a file-like
+        object that contains keyword information.  consumer is a
         Consumer object that will receive events as the report is scanned.
 
         """
-        assert isinstance(uhandle, File.UndoHandle), \
-               "uhandle must be an instance of Bio.File.UndoHandle"
+        if isinstance(handle, File.UndoHandle):
+            uhandle = handle
+        else:
+            uhandle = File.UndoHandle(handle)
         
         self._scan_header(uhandle, consumer)
         self._scan_keywords(uhandle, consumer)

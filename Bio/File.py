@@ -8,13 +8,11 @@
 
 Classes:
 UndoHandle     File object decorator with support for undo-like operations.
-
-Functions:
-open           Open a file and return an UndoHandle.
-urlopen        Open a url and return an UndoHandle.
+StringHandle   Wraps a file object around a string.
 """
 
-import urllib
+import urllib  # XXX remove this
+import os
 
 class UndoHandle:
     """A Python handle that adds functionality for saving lines.
@@ -61,9 +59,31 @@ class UndoHandle:
     def __getattr__(self, attr):
         return getattr(self._handle, attr)
 
+class StringHandle:
+    def __init__(self, str):
+        r, w = os.pipe()
+        os.fdopen(w, 'w').write(str)
+        self._handle = os.fdopen(r, 'r')
 
+    def __getattr__(self, name):
+        if name == '_handle':
+            return self.__dict__[name]
+        return getattr(self._handle, name)
+        
+    def __setattr__(self, name, value):
+        if name == '_handle':
+            self.__dict__[name] = value
+        else:
+            setattr(self._handle, name, value)
+
+
+
+
+### THESE ARE DEPRECATED
+
+# XXX to be removed
 fileopen = open
-def open(*args):
+def _open(*args):
     """open(*args) -> UndoHandle
 
     Open a file.  The arguments are the same as the standard open function.
@@ -71,7 +91,8 @@ def open(*args):
     """
     return UndoHandle(apply(fileopen, args))
 
-def urlopen(*args):
+# XXX to be removed
+def _urlopen(*args):
     """urlopen(*args) -> UndoHandle
 
     Open a URL.  The arguments are the same as urllib.urlopen.

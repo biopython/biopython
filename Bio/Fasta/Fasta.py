@@ -11,8 +11,8 @@ This module provides code to work with FASTA-formatted sequences.
 Classes:
 Record     Holds information from a FASTA record.
 Scanner    Scans a FASTA-format stream.
-Consumer   Standard consumer that converts a FASTA stream to a list of Records.
-Iterator   An iterator that returns Records from a FASTA stream.
+Consumer   Standard consumer that converts a FASTA record into a Record object.
+Iterator   An iterator over records in a FASTA file.
 
 Functions:
 parse      Parse a handle with FASTA-formatted data into a list of Records.
@@ -62,17 +62,18 @@ class Scanner:
 
     """
 
-    def feed(self, uhandle, consumer):
-        """feed(self, uhandle, consumer)
+    def feed(self, handle, consumer):
+        """feed(self, handle, consumer)
 
-        Feed in FASTA data for scanning.  Only consumes a single
-        record.  uhandle must be an UndoHandle.  consumer is a
-        Consumer object that will recieve events as the record
-        is scanned.
+        Feed in FASTA data for scanning.  handle is a file-like object
+        containing FASTA data.  consumer is a Consumer object that will
+        recieve events as the FASTA data is scanned.
 
         """
-        assert isinstance(uhandle, File.UndoHandle), \
-               "uhandle must be an instance of Bio.File.UndoHandle"
+        if isinstance(handle, File.UndoHandle):
+            uhandle = handle
+        else:
+            uhandle = File.UndoHandle(handle)
         
         if not is_blank_line(uhandle.peekline()):
             self._scan_record(uhandle, consumer)
@@ -97,7 +98,7 @@ class Scanner:
             consumer.sequence(line)
 
 class Consumer(AbstractConsumer):
-    """Standard consumer that converts a FASTA stream to a list of Records.
+    """Standard consumer that converts a FASTA record to a Record object.
 
     Members:
     record    Record with FASTA data.
@@ -122,29 +123,39 @@ class Consumer(AbstractConsumer):
         self.record.sequence = self.record.sequence + seq
 
 class Iterator:
-    """An iterator that returns Records from a FASTA stream.
+    """An iterator that returns one record at a time from a FASTA file.
 
     Methods:
-    next   Return the next Record from the stream, or None.
+    next   Return the next record from the stream, or None.
 
     """
-    def __init__(self, uhandle):
-        assert isinstance(uhandle, File.UndoHandle), \
-               "uhandle must be an instance of Bio.File.UndoHandle"
-
-        self._uhandle = uhandle
+    def __init__(self, handle):
+        # XXX quick hack to check my code
+        assert not isinstance(handle, File.UndoHandle), "oops, legacy stuff"
+            
+        self._uhandle = File.UndoHandle(handle)
         self._scanner = Scanner()
 
     def next(self):
-        """next(self) -> Record or None"""
-        c = Consumer()
-        self._scanner.feed(self._uhandle, c)
-        if c.record is None:
-            return None
-        return c.record
+        """next(self) -> string
 
-def parse(uhandle):
-    """parse(uhandle) -> list of Records
+        Return the next FASTA record from the file.  If no more records,
+        return the empty string.
+
+        """
+        lines = []
+        while 1:
+            line = self._uhandle.readline()
+            if not line:
+                break
+            if line[0] == '>' and lines:
+                self._uhandle.saveline(line)
+                break
+            lines.append(line)
+        return string.join(lines, '')
+
+def parse(handle):
+    """parse(handle) -> list of Records
 
     Parse FASTA-formatted data from handle to a list of Records.
     Warning: this will convert all the data in handle into an in-memory
@@ -152,11 +163,15 @@ def parse(uhandle):
     exceed the amount of memory in your machine!
 
     """
-    iter = Iterator(uhandle)
+    scanner = Scanner()
+    consumer = Consumer()
+
+    iter = Iterator(handle)
     records = []
     while 1:
         r = iter.next()
-        if r is None:
+        if not r:
             break
-        records.append(r)
+        scanner.feed(File.StringHandle(r), consumer)
+        records.append(consumer.record)
     return records
