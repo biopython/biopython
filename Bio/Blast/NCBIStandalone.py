@@ -132,7 +132,7 @@ class _Scanner:
         while 1:
             line = safe_peekline(uhandle)
             if line[:9] != 'Searching' and \
-               string.find(line, 'Score     E') < 0 and \
+               re.search(r"Score +E", line) is None and \
                string.find(line, 'No hits found') < 0:
                 break
 
