@@ -35,6 +35,7 @@ from distutils.command.install_data import install_data
 from distutils.command.build_py import build_py
 from distutils.command.build_ext import build_ext
 from distutils.extension import Extension
+from distutils import sysconfig
 
 def get_yes_or_no(question, default):
     if default:
@@ -102,8 +103,8 @@ you see ImportErrors."""
         print "You can find %s at %s." % (name, url)
         print
         # exit automatically if required packages not installed
-        if not(default):
-            sys.exit(-1)
+        #if not(default):
+        #    sys.exit(-1)
 
         if not get_yes_or_no(
             "Do you want to continue this installation?", default):
@@ -135,14 +136,40 @@ class build_py_biopython(build_py):
             self.packages.append("Bio.Cluster")
         build_py.run(self)
 
+class CplusplusExtension(Extension):
+    """Hack-y wrapper around Extension to support C++ and Python2.2.
+
+    Python2.3 defines an extension attribute, which can be used in
+    'build_extension' to work around problems Python has with always
+    using the C++ compiler to compile C++ code.
+
+    This should be able to be removed once we move to requiring Python 2.3 or
+    better.
+    """
+    def __init__(self, *args, **kw):
+        # fix the language
+        if sys.version_info[1] < 3:
+            try:
+                self.language = kw['language']
+                del kw['language']
+            except KeyError:
+                pass
+        Extension.__init__(self, *args, **kw)
+
+        # fix the compiler -- 2.2 doesn't have C++ compilers
+        if sys.version_info[1] < 3 and self.language == "c++":
+            cxx = sysconfig.get_config_vars("CXX")
+            if os.environ.has_key("CXX"):
+                cxx = os.environ["CXX"]
+            self.cxx = cxx
+
 class build_ext_biopython(build_ext):
     def run(self):
         if not check_dependencies_once():
             return
-        # Only install the clustering software if Numpy is installed.
-        # Otherwise, it will not compile.
+        # add software that requires NumPy to install
         if is_Numpy_installed():
-            self.extensions.append(
+            self.extensions.extend((
                 Extension('Bio.Cluster.cluster',
                           ['Bio/Cluster/clustermodule.c',
                            'Bio/Cluster/cluster.c',
@@ -150,8 +177,14 @@ class build_ext_biopython(build_ext):
                            'Bio/Cluster/com.c',
                            'Bio/Cluster/linpack.c'],
                           include_dirs=["Bio/Cluster"]
-                          )
-                )
+                          ),
+                CplusplusExtension('Bio.KDTree._CKDTree',
+                          ["Bio/KDTree/KDTree.cpp",
+                           "Bio/KDTree/KDTree.swig.cpp"],
+                          libraries=["stdc++"],
+                          language="c++"
+                          ),
+                ))
         build_ext.run(self)
 
     def build_extensions(self):
@@ -160,8 +193,15 @@ class build_ext_biopython(build_ext):
         build_ext.build_extensions(self)
 
     def build_extension(self, ext):
-        if ext.language == "c++":
-            self.compiler.compiler_so = self.compiler.compiler_cxx
+        """Work around distutils bug which uses the C compiler for C++ code.
+        """
+        if hasattr(ext, "language") and ext.language == "c++":
+            # fix for before 2.2 only -- need to set the compiler to C++
+            if hasattr(ext, "cxx"):
+                self.compiler.compiler = ext.cxx
+                self.compiler.compiler_so = ext.cxx
+            else: # fix for 2.3
+                self.compiler.compiler_so = self.compiler.compiler_cxx
         else:
             self.compiler.compiler_so = self._original_compiler_so
 
@@ -384,12 +424,6 @@ EXTENSIONS = [
                'Bio/PDB/mmCIF/MMCIFlexmodule.c'],
               include_dirs=["Bio"],
               libraries=["fl"]
-              ),
-    Extension('Bio.KDTree._CKDTree',
-              ["Bio/KDTree/KDTree.cpp",
-               "Bio/KDTree/KDTree.swig.cpp"],
-              libraries=["stdc++"],
-              language="c++"
               ),
     ]
 
