@@ -1,0 +1,115 @@
+/* Copyright 2000 by Jeffrey Chang.  All rights reserved.
+ * This code is part of the Biopython distribution and governed by its
+ * license.  Please see the LICENSE file that should have been included
+ * as part of this package.
+ *
+ * cstringfnsmodule.c
+ * Created 7 Jun 2000
+ */
+
+#include "Python.h"
+#include <string.h>  /* memset */
+
+
+/* Functions in this module. */
+
+static char cstringfns_split__doc__[] = 
+"split(str [,sep [,maxsplit]]) -> list of strings\n\
+\n\
+Split a string.  Similar to string.split, except that this considers\n\
+any one of the characters in sep to be a delimiter.\n\
+\n\
+";
+
+static PyObject *
+cstringfns_split(self, args, keywds)
+     PyObject *self;
+     PyObject *args;
+     PyObject *keywds;
+{
+    int i, prev;
+    int nsplit, maxsplit=0;
+    PyObject *strlist, *newstr;
+    char *str, 
+	*sep=" \011\012\013\014\015";  /* whitespace */
+    char tosplit[256];
+
+    static char *kwlist[] = {"str", "sep", "maxsplit", NULL};
+
+    if(!PyArg_ParseTupleAndKeywords(args, keywds, "s|si", kwlist, 
+				    &str, &sep, &maxsplit))
+	return NULL;
+    if(maxsplit < 0)
+	maxsplit = 1;
+
+    /* Set the tosplit array to 1 for characters to split on. */
+    memset(tosplit, 0, 256);
+    while(*sep) {
+	tosplit[(unsigned char)*sep++] = 1;
+	}
+
+    /* Create a new list to store the variables. */
+    if(!(strlist = PyList_New(0))) {
+	PyErr_SetString(PyExc_SystemError, "I could not create a new list");
+	return NULL;
+    }
+
+    prev = 0;
+    nsplit = 0;
+    for(i=0; str[i] && (maxsplit == 0 || nsplit < maxsplit); i++) {
+	if(!tosplit[str[i]])
+	    continue;
+
+	/* Split the string here. */
+	if(!(newstr = PyString_FromStringAndSize(&str[prev], i-prev))) {
+	    PyErr_SetString(PyExc_SystemError, 
+			    "I could not create a new string");
+	    break;
+	}
+	if(PyList_Append(strlist, newstr) == -1) {
+	    Py_DECREF(newstr);
+	    break;
+	}
+	Py_DECREF(newstr);
+	prev = i+1;
+	nsplit++;
+    }
+    if(!PyErr_Occurred()) {
+	i = strlen(str);
+	/* Add the last one. */
+	if(!(newstr = PyString_FromStringAndSize(&str[prev], i-prev))) {
+	    PyErr_SetString(PyExc_SystemError, 
+			    "I could not create a new string");
+	} else {
+	    PyList_Append(strlist, newstr);
+	    Py_DECREF(newstr);
+	}
+    } else {
+	Py_DECREF(strlist);
+	return NULL;
+    }
+
+
+    return strlist;
+}
+
+
+
+/* Module definition stuff */
+
+static PyMethodDef cstringfnsMethods[] = {
+  {"split", (PyCFunction)cstringfns_split, METH_VARARGS|METH_KEYWORDS, 
+   cstringfns_split__doc__},
+  {NULL, NULL}
+};
+
+static char cstringfns__doc__[] =
+"This provides helper functions for the stringfns module.\n\
+You should never import this module on its own.\n\
+\n\
+";
+
+void initcstringfns()
+{
+  (void) Py_InitModule3("cstringfns", cstringfnsMethods, cstringfns__doc__);
+}
