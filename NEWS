@@ -4,6 +4,18 @@ News for the Biopython Project
 This file contains release notes and general news
 about the biopython project.
 
+
+Nov 10, 2000: Biopython 0.90d04
+  Added support for multiple alignments, ClustalW
+  BLAST updates, bug fixes, and BlastErrorParser
+  Fixes for PSI-BLAST in master-slave mode
+  Minor update in stringfns, split separators can be negated
+  Added download_many function to PubMed
+  xbbtools updates
+  Prodoc parser now accepts a copyright at the end of a record
+  Swiss-Prot parser now handles taxonomy ID tag
+
+
 Sept 6, 2000: Biopython 0.90d03
   Blast updates:
     - bug fixes in NCBIStandalone, NCBIWWW

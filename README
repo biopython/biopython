@@ -18,13 +18,16 @@ see the LICENSE file for further details.
 **System Requirements**
 
 
-o "Python 1.52":http://www.python.org/ or above
-
-o "Distutils 0.8.2":http://www.python.org/sigs/distutils-sig/
+o "Python 2.0":http://www.python.org/ or above
 
 o "Numerical Python 15.3":http://numpy.sourceforge.net/ (optional)
 This is only required if you want to use the classification tools.
 
+o "Martel":http://numpy.sourceforge.net/ (optional)
+This is required for the ClustalW stuff.
+
+o "mxTextTools":http://starship.python.net/~lemburg/mxTextTools.html (optional)
+This is only required if you use Martel.
 
 
 **Installation**
@@ -59,8 +62,7 @@ Biopython available in the ports tree.  According to Johann:
 
 Biopython includes a suite of regression tests to check if
 everything's running correctly.  To do the tests, go to the Tests/
-die
-rectory in the distribution and run 'br_regrtest.py'::
+directory in the distribution and run 'br_regrtest.py'::
 
  drevil:~/biopython/Tests> python br_regrtest.py
   test_Enzyme
@@ -71,8 +73,9 @@ rectory in the distribution and run 'br_regrtest.py'::
   5 tests OK.
   drevil:~/biopython/Tests>
 
-XXX We need to get this more closely integrated with the installation
-process.
+In this release, test_prodoc, test_rebase, and test_gobase are
+failing.  We know about the problem and are trying to fix it.
+
 
 
 **Contributing, Bug Reports**
@@ -137,6 +140,8 @@ setup.py --     Installation file.
     - needs to be done
 
     - build on Andrew's UPDB?
+  o Prosite
+    - WWW access
 
   o Genbank
 
@@ -144,9 +149,7 @@ setup.py --     Installation file.
 
 - generalize parsers
 
-- regression tests
-
-- documentation(!!)
+- more regression tests
 
 - look into Zope-ifying the web site
 
