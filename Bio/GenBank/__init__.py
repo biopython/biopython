@@ -1584,8 +1584,9 @@ def search_for(search, database='nucleotide',
     index of the first id to retrieve and max_ids specifies the
     maximum number of id's to retrieve.
 
-    XXX The date parameters don't seem to be working with NCBI's
-    script.  Please let me know if you can get it to work.
+    XXX NCBI's esearch script does not seem to respect the date
+    parameters.  Please let me know if you figure out how to get it to
+    work.
 
     """
     class ResultParser(sgmllib.SGMLParser):
