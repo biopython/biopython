@@ -4,7 +4,34 @@ News for the Biopython Project
 This file contains release notes and general news
 about the biopython project.
 
-Biopython1.00a4
+Biopython 1.10
+  Python requirement bumped up to 2.2
+  hierarchy reorg, many things moved upwards into Bio namespace
+  pairwise2 replaces fastpairwise and pairwise
+  removed deprecated Sequence.py package
+  minor bug fix in File.SGMLStripper
+  added Scripts/debug/debug_blast_parser.py to diagnoze blast parsing errors
+  IPI supported by SwissProt/SProt.py parser
+  large speedup for kmeans
+  new registry framework for generic access to databases and parsers
+  small bug fix in stringfns.split
+  scripts that access NCBI moved over to new EUtils system
+  new crc module
+  biblio.py supports the EBI Bibliographic database
+  new CDD parser
+  new Ndb parser
+  new ECell parser
+  new Geo parser
+  access to GFF databases
+  new KDTree data structure
+  new LocusLink parser
+  new MarkovModel algorithm
+  new Saf parser
+  miscellaneous sequence handling functions in sequtils
+  new SVDSuperimpose algorithm
+
+
+Dec 18, 2001: Biopython1.00a4
   minor bug fix in NCBIStandalone.blastall
   optimization in dynamic programming code
   new modules for logistic regression and maximum entropy
