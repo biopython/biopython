@@ -4,10 +4,39 @@
 from Bio.PropertyManager import default_manager
 from Bio import Alphabet
 from Bio.Alphabet import IUPAC
+from Bio.Data import IUPACData
 
 from Bio.Tools import Transcribe, Translate
 
 set_prop = default_manager.class_property
+
+# weight tables
+set_prop[IUPAC.IUPACUnambiguousDNA]["weight_table"] = \
+             IUPACData.unambiguous_dna_weights
+set_prop[IUPAC.IUPACAmbiguousDNA]["weight_table"] = \
+             IUPACData.avg_ambiguous_dna_weights
+set_prop[IUPAC.IUPACUnambiguousRNA]["weight_table"] = \
+             IUPACData.unambiguous_rna_weights
+set_prop[IUPAC.IUPACAmbiguousRNA]["weight_table"] = \
+             IUPACData.avg_ambiguous_rna_weights
+set_prop[IUPAC.IUPACProtein]["weight_table"] = \
+             IUPACData.protein_weights
+set_prop[IUPAC.ExtendedIUPACProtein]["weight_table"] = \
+             IUPACData.avg_extended_protein_weights
+
+set_prop[IUPAC.IUPACUnambiguousDNA]["weight_range_table"] = \
+             IUPACData.unambiguous_dna_weight_ranges
+set_prop[IUPAC.IUPACAmbiguousDNA]["weight_range_table"] = \
+             IUPACData.ambiguous_dna_weight_ranges
+set_prop[IUPAC.IUPACUnambiguousRNA]["weight_range_table"] = \
+             IUPACData.unambiguous_rna_weight_ranges
+set_prop[IUPAC.IUPACAmbiguousRNA]["weight_range_table"] = \
+             IUPACData.ambiguous_rna_weight_ranges
+set_prop[IUPAC.IUPACProtein]["weight_range_table"] = \
+             IUPACData.protein_weight_ranges
+set_prop[IUPAC.ExtendedIUPACProtein]["weight_range_table"] = \
+             IUPACData.extended_protein_weight_ranges
+
 
 
 #  transcriber objects
