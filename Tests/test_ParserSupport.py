@@ -226,7 +226,26 @@ class EventGeneratorTest(unittest.TestCase):
                "Single tag parsing failed: %s" % consumer.info["single_tag"]
         assert consumer.info["multiple_tags"] == "Lots of Spam,Lots of Spam", \
                "Multiple tag parsing failed: %s" % \
-               consumer.info["multiple_tags"]     
+               consumer.info["multiple_tags"]
+
+    def t_exempt_finalizer_callback(self):
+        """Test the ability to exempt tags from being processed by a finalizer.
+        """
+        consumer = TestConsumer()
+        event_gen = ParserSupport.EventGenerator(consumer, self.interest_tags,
+                                                 strip_and_combine,
+                                                 ["multiple_tags"])
+        self.test_parser.setContentHandler(event_gen)
+        self.test_parser.parseString("Spam" + "  Lots of Spam" +
+                                     "  Lots of Spam")
+
+        assert consumer.info["single_tag"] == "Spam", \
+               "Single tag parsing failed: %s" % consumer.info["single_tag"]
+        assert consumer.info["multiple_tags"] == \
+               ["  Lots of Spam", "  Lots of Spam"], \
+               "Multiple tag parsing failed: %s" % \
+               consumer.info["multiple_tags"]
+        
 
 all_tests = [EventGeneratorTest]
 
