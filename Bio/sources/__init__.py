@@ -16,6 +16,7 @@ from Bio.Tools.MultiProc.copen import copen_fn
 from Bio.ReseekFile import ReseekFile
 from Bio.WWW import RequestLimiter
 from Bio import SeqRecord
+from BioSQL import BioSeqDatabase
 
 from Martel import Parser
 
@@ -61,6 +62,9 @@ class Source:
             raise IOError, "timed out"
         return handle
     def __check_for_errors(self, handle, more_failure_cases):
+        # don't put it inside a RessekFile handle unless needed
+        if len(self.failure_cases + more_failure_cases) == 0:
+            return handle
         handle = ReseekFile(handle)
         pos = handle.tell()
         # XXX I can optimize this by precompiling the expressions.
@@ -128,7 +132,7 @@ class CGI(Source):
         handle itself is returned.
         """
         try:
-            records = SeqRecord.io.read(f)
+            records = SeqRecord.io.read(handle)
             # don't do this check now; not really a list, an Iterator
             # assert len(records) == 1, "Expected one record, got %s" \
             #                           % (str(records))
@@ -156,7 +160,15 @@ class BioSQL(Source):
         self.namespace_db = namespace_db
     
     def _rawget(self, params):
-        print params # what will I get here?
+        # for params, we expect to get something like
+        # [('accession', 'AB030760')]. We don't worry about what the id
+        # is called right now, and just try to find it in the database
+        # any way we can
+        assert len(params) == 1, "Expected only one parameter, got %s" % \
+                                 (str(params))
+        assert len(params[0]) == 2, "Expected two item parameter got %s" % \
+                                    (str(params[0]))
+        find_id = params[0][1]
         server = BioSeqDatabase.open_database(user = self.db_user,
                    passwd = self.db_passwd, host = self.db_host,
                    db = self.sql_db)
@@ -165,7 +177,7 @@ class BioSQL(Source):
         item = None
         for possible_id_type in ["accession", "display_id"]:
             try:
-                item = apply(self.db.lookup, (), {possible_id_type : find_id})
+                item = apply(db.lookup, (), {possible_id_type : find_id})
             except IndexError:
                 pass
         if item is None:
@@ -178,14 +190,76 @@ class BioCorba(Source):
 
     XXX This has the same SeqRecord-returning style as BioSQL.
     """
-    def __init__(self, name, doc = "", ior_ref = None):
+    def __init__(self, name, doc = "", ior_ref = None, server_type = None):
         """Intialize with IOR reference for a BioCorba Collection.
         
         ior_ref is a URL or file reference to an IOR string. The IOR
         should reference a BioSequenceCollection. This is the top level
         BioCorba object we should use for making objects available.
+
+        server_type is a hack parameter which might be necessary if there
+        are server/client issues (ie. as with Perl ORBit) that we need
+        to muck around with. If not set, we just use a standard retriever.
         """
         Source.__init__(self, name, None, None, doc, None)
+        retriever = self._get_retriever(server_type)
+        self.corba_dict = self._get_corba_client(ior_ref, retriever)
+
+    def _get_retriever(self, server_type):
+        """Return a BioCorba retriever object based on the specified server.
+
+        This returns a ready-to-go client retriever which can be used to
+        connect to a BioCorba server.
+        """
+        # do the BioCorba imports here, so we don't have to have it
+        # installed to use this module
+        from BioCorba.Client.BiocorbaConnect import PerlCorbaClient, \
+          PythonCorbaClient, JavaCorbaClient, GenericCorbaClient
+        from BioCorba.Client.Seqcore.CorbaCollection import \
+          BioSequenceCollection
+
+        if server_type is None:
+            client_type = GenericCorbaClient
+        else:
+            server_type = server_type.lower()
+            if server_type.find("python") >= 0:
+                client_type = PythonCorbaClient
+            elif server_type.find("java") >= 0:
+                client_type = JavaCorbaClient
+            elif server_type.find("perl") >= 0:
+                client_type = PerlCorbaClient
+            else:
+                raise ValueError("Unexpected server type specified: %s" % 
+                                 server_type)
+
+        retriever = client_type(BioSequenceCollection)
+        return retriever
+
+    def _get_corba_client(self, ior_ref, retriever):
+        """Get a connection to the CORBA server based on the ior_ref
+        """
+        # do the imports here so we don't need BioCorba for whole module
+        from BioCorba.Bio import GenBank
+        
+        if ior_ref.find("http") >= 0: # assume it is a url
+            client = retriever.from_url_ior(ior_ref)
+        else: # assume it is a file
+            client = retriever.from_file_ior(ior_ref)
+
+        return GenBank.Dictionary(client, GenBank.FeatureParser())
+
+    def _rawget(self, params):
+        # for params, we expect to get something like
+        # [('accession', 'AB030760')]. We don't worry about what the id
+        # is called right now, and just try to find it in the database
+        # any way we can
+        assert len(params) == 1, "Expected only one parameter, got %s" % \
+                                 (str(params))
+        assert len(params[0]) == 2, "Expected two item parameter got %s" % \
+                                    (str(params[0]))
+        find_id = params[0][1]
+
+        return self.corba_dict[find_id]
 
 ##class PythonFunction:
 ##    function name
@@ -198,13 +272,6 @@ class BioCorba(Source):
 
 ##class FlatIndex:
 ##    filename
-
-##class SQL:
-##    pass
-
-
-
-
 
 def _my_urlencode(params):
     # urllib only handles key=value pairs.  However, some CGI
