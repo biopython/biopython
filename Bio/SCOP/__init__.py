@@ -33,8 +33,6 @@ nodeCodeDict  -- A mapping between known 2 letter node codes and a longer
 
 __all__ = [
     'Dom',
-    'Lin',
-    'Location',
     'Cla',
     'Hie',
     'Des',
