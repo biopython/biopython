@@ -34,9 +34,7 @@ blastpgp        Execute blastpgp.
 """
 
 import os
-import string
 import re
-from types import *
 
 from Bio import File
 from Bio.ParserSupport import *
@@ -145,9 +143,9 @@ class _Scanner:
 
         while 1:
             line = safe_peekline(uhandle)
-            if line[:9] != 'Searching' and \
-               re.search(r"Score +E", line) is None and \
-               string.find(line, 'No hits found') < 0:
+            if (not line.startswith('Searching') and
+                re.search(r"Score +E", line) is None and
+                line.find('No hits found') == -1):
                 break
 
             self._scan_descriptions(uhandle, consumer)
@@ -197,7 +195,7 @@ class _Scanner:
         # Check for these error lines and ignore them for now.  Let
         # the BlastErrorParser deal with them.
         line = uhandle.peekline()
-        if line.find("ERROR:") >= 0 or line.startswith("done"):
+        if line.find("ERROR:") != -1 or line.startswith("done"):
             read_and_call_while(uhandle, consumer.noevent, contains="ERROR:")
             read_and_call(uhandle, consumer.noevent, start="done")
 
@@ -256,7 +254,7 @@ class _Scanner:
 
         # Read the descriptions and the following blank lines, making
         # sure that there are descriptions.
-        if uhandle.peekline()[:19] != 'Sequences not found':
+        if not uhandle.peekline().startswith('Sequences not found'):
             read_and_call_until(uhandle, consumer.description, blank=1)
             read_and_call_while(uhandle, consumer.noevent, blank=1)
 
@@ -269,7 +267,7 @@ class _Scanner:
             # Read the descriptions and the following blank lines.
             read_and_call_while(uhandle, consumer.noevent, blank=1)
             l = safe_peekline(uhandle)
-            if l[:9] != 'CONVERGED' and l[0] != '>':
+            if not l.startswith('CONVERGED') and l[0] != '>':
                 read_and_call_until(uhandle, consumer.description, blank=1)
                 read_and_call_while(uhandle, consumer.noevent, blank=1)
 
@@ -281,7 +279,7 @@ class _Scanner:
     def _scan_alignments(self, uhandle, consumer):
         # First, check to see if I'm at the database report.
         line = safe_peekline(uhandle)
-        if line[:10] == '  Database':
+        if line.startswith('  Database'):
             return
         elif line[0] == '>':
             # XXX make a better check here between pairwise and masterslave
@@ -305,7 +303,7 @@ class _Scanner:
         # Scan a bunch of score/alignment pairs.
         while 1:
             line = safe_peekline(uhandle)
-            if line[:6] != ' Score':
+            if not line.startswith(' Score'):
                 break
             self._scan_hsp(uhandle, consumer)
         consumer.end_alignment()
@@ -318,7 +316,7 @@ class _Scanner:
         read_and_call(uhandle, consumer.title, start='>')
         while 1:
             line = safe_readline(uhandle)
-            if string.lstrip(line)[:8] == 'Length =':
+            if line.lstrip().startswith('Length ='):
                 consumer.length(line)
                 break
             elif is_blank_line(line):
@@ -372,7 +370,7 @@ class _Scanner:
             read_and_call_while(uhandle, consumer.noevent, blank=1)
             line = safe_peekline(uhandle)
             # Alignment continues if I see a 'Query' or the spaces for Blastn.
-            if line[:5] != 'Query' and line[:5] != '     ':
+            if not (line.startswith('Query') or line.startswith('     ')):
                 break
  
     def _scan_masterslave_alignment(self, uhandle, consumer):
@@ -382,10 +380,10 @@ class _Scanner:
             # Check to see whether I'm finished reading the alignment.
             # This is indicated by 1) database section, 2) next psi-blast round
             # patch by chapmanb
-            if line[:9] == 'Searching':
+            if line.startswith('Searching'):
                 uhandle.saveline(line)
                 break
-            elif line[:10] == '  Database':
+            elif line.startswith('  Database'):
                 uhandle.saveline(line)
                 break
             elif is_blank_line(line):
@@ -423,7 +421,7 @@ class _Scanner:
 
 	    line = safe_readline(uhandle)
 	    uhandle.saveline(line)
-            if string.find(line, 'Lambda') >= 0:
+            if line.find('Lambda') != -1:
 		break
 
 	read_and_call(uhandle, consumer.noevent, start='Lambda')
@@ -577,22 +575,22 @@ class _HeaderConsumer:
         self._header = Record.Header()
         
     def version(self, line):
-        c = string.split(line)
+        c = line.split()
         self._header.application = c[0]
         self._header.version = c[1]
         self._header.date = c[2][1:-1]
 
     def reference(self, line):
-        if line[:11] == 'Reference: ':
+        if line.startswith('Reference: '):
             self._header.reference = line[11:]
         else:
             self._header.reference = self._header.reference + line
             
     def query_info(self, line):
-        if line[:7] == 'Query= ':
+        if line.startswith('Query= '):
             self._header.query = line[7:]
-        elif line[:7] != '       ':  # continuation of query_info
-            self._header.query = self._header.query + line
+        elif not line.startswith('       '):  # continuation of query_info
+            self._header.query = "%s%s" % (self._header.query, line)
         else:
             letters, = _re_search(
                 r"([0-9,]+) letters", line,
@@ -600,11 +598,11 @@ class _HeaderConsumer:
             self._header.query_letters = _safe_int(letters)
                 
     def database_info(self, line):
-        line = string.rstrip(line)
-        if line[:10] == 'Database: ':
+        line = line.rstrip()
+        if line.startswith('Database: '):
             self._header.database = line[10:]
-	elif not line[-13:] == 'total letters':
-            self._header.database = self._header.database + string.strip(line)
+	elif not line.endswith('total letters'):
+            self._header.database = self._header.database + line.strip()
         else:
             sequences, letters =_re_search(
                 r"([0-9,]+) sequences; ([0-9,]+) total letters", line,
@@ -614,8 +612,8 @@ class _HeaderConsumer:
 
     def end_header(self):
         # Get rid of the trailing newlines
-        self._header.reference = string.rstrip(self._header.reference)
-        self._header.query = string.rstrip(self._header.query)
+        self._header.reference = self._header.reference.rstrip()
+        self._header.query = self._header.query.rstrip()
 
 class _DescriptionConsumer:
     def start_descriptions(self):
@@ -629,8 +627,8 @@ class _DescriptionConsumer:
         self.__has_n = 0   # Does the description line contain an N value?
 
     def description_header(self, line):
-        if line[:19] == 'Sequences producing':
-            cols = string.split(line)
+        if line.startswith('Sequences producing'):
+            cols = line.split()
             if cols[-1] == 'N':
                 self.__has_n = 1
     
@@ -656,9 +654,9 @@ class _DescriptionConsumer:
         pass
 
     def round(self, line):
-        if line[:18] != 'Results from round':
+        if not line.startswith('Results from round'):
             raise SyntaxError, "I didn't understand the round line\n%s" % line
-        self._roundnum = _safe_int(string.strip(line[18:]))
+        self._roundnum = _safe_int(line[18:].strip())
 
     def end_descriptions(self):
         pass
@@ -674,23 +672,23 @@ class _DescriptionConsumer:
         #   - title must be preserved exactly (including whitespaces)
         #   - score could be equal to e-value (not likely, but what if??)
         #   - sometimes there's an "N" score of '1'.
-        cols = string.split(line)
+        cols = line.split()
         if len(cols) < 3:
             raise SyntaxError, \
                   "Line does not appear to contain description:\n%s" % line
         if self.__has_n:
-            i = string.rfind(line, cols[-1])        # find start of N
-            i = string.rfind(line, cols[-2], 0, i)  # find start of p-value
-            i = string.rfind(line, cols[-3], 0, i)  # find start of score
+            i = line.rfind(cols[-1])        # find start of N
+            i = line.rfind(cols[-2], 0, i)  # find start of p-value
+            i = line.rfind(cols[-3], 0, i)  # find start of score
         else:
-            i = string.rfind(line, cols[-1])        # find start of p-value
-            i = string.rfind(line, cols[-2], 0, i)  # find start of score
+            i = line.rfind(cols[-1])        # find start of p-value
+            i = line.rfind(cols[-2], 0, i)  # find start of score
         if self.__has_n:
             dh.title, dh.score, dh.e, dh.num_alignments = \
-                      string.rstrip(line[:i]), cols[-3], cols[-2], cols[-1]
+                      line[:i].rstrip(), cols[-3], cols[-2], cols[-1]
         else:
             dh.title, dh.score, dh.e, dh.num_alignments = \
-                      string.rstrip(line[:i]), cols[-2], cols[-1], 1
+                      line[:i].rstrip(), cols[-2], cols[-1], 1
         dh.num_alignments = _safe_int(dh.num_alignments)
         dh.score = _safe_int(dh.score)
         dh.e = _safe_float(dh.e)
@@ -706,52 +704,52 @@ class _AlignmentConsumer:
         self._multiple_alignment = Record.MultipleAlignment()
 
     def title(self, line):
-        self._alignment.title = self._alignment.title + string.lstrip(line)
+        self._alignment.title = "%s%s" % (self._alignment.title,
+                                           line.lstrip())
 
     def length(self, line):
-        self._alignment.length = string.split(line)[2]
+        self._alignment.length = line.split()[2]
         self._alignment.length = _safe_int(self._alignment.length)
 
     def multalign(self, line):
         # Standalone version uses 'QUERY', while WWW version uses blast_tmp.
-        if line[:5] == 'QUERY' or line[:9] == 'blast_tmp':
+        if line.startswith('QUERY') or line.startswith('blast_tmp'):
             # If this is the first line of the multiple alignment,
             # then I need to figure out how the line is formatted.
             
             # Format of line is:
             # QUERY 1   acttg...gccagaggtggtttattcagtctccataagagaggggacaaacg 60
             try:
-                name, start, seq, end = string.split(line)
+                name, start, seq, end = line.split()
             except ValueError:
                 raise SyntaxError, "I do not understand the line\n%s" \
                       % line
-            self._start_index = string.index(line, start, len(name))
-            self._seq_index = string.index(line, seq,
-                                           self._start_index+len(start))
+            self._start_index = line.index(start, len(name))
+            self._seq_index = line.index(seq,
+                                         self._start_index+len(start))
             # subtract 1 for the space
             self._name_length = self._start_index - 1
             self._start_length = self._seq_index - self._start_index - 1
-            self._seq_length = string.rfind(line, end) - self._seq_index - 1
+            self._seq_length = line.rfind(end) - self._seq_index - 1
             
-            #self._seq_index = string.index(line, seq)
+            #self._seq_index = line.index(seq)
             ## subtract 1 for the space
-            #self._seq_length = string.rfind(line, end) - self._seq_index - 1
-            #self._start_index = string.index(line, start)
+            #self._seq_length = line.rfind(end) - self._seq_index - 1
+            #self._start_index = line.index(start)
             #self._start_length = self._seq_index - self._start_index - 1
             #self._name_length = self._start_index
 
         # Extract the information from the line
-        name = string.rstrip(line[:self._name_length])
-        start = string.rstrip(
-            line[self._start_index:self._start_index+self._start_length])
+        name = line[:self._name_length]
+        name = name.rstrip()
+        start = line[self._start_index:self._start_index+self._start_length]
+        start = start.rstrip()
         if start:
             start = _safe_int(start)
-        end = string.rstrip(
-            line[self._seq_index+self._seq_length:])
+        end = line[self._seq_index+self._seq_length:].rstrip()
         if end:
             end = _safe_int(end)
-        seq = string.rstrip(
-            line[self._seq_index:self._seq_index+self._seq_length])
+        seq = line[self._seq_index:self._seq_index+self._seq_length].rstrip()
         # right pad the sequence with spaces if necessary
         if len(seq) < self._seq_length:
             seq = seq + ' '*(self._seq_length-len(seq))
@@ -826,7 +824,7 @@ class _AlignmentConsumer:
     def end_alignment(self):
         # Remove trailing newlines
         if self._alignment:
-            self._alignment.title = string.rstrip(self._alignment.title)
+            self._alignment.title = self._alignment.title.rstrip()
 
         # This code is also obsolete.  See note above.
         # If there's a multiple alignment, I will need to make sure
@@ -883,16 +881,16 @@ class _HSPConsumer:
             "I could not find the identities in line\n%s" % line)
         self._hsp.identities = _safe_int(x), _safe_int(y)
 
-        if string.find(line, 'Positives') >= 0:
+        if line.find('Positives') != -1:
             x, y = _re_search(
                 r"Positives = (\d+)\/(\d+)", line,
                 "I could not find the positives in line\n%s" % line)
             self._hsp.positives = _safe_int(x), _safe_int(y)
 
-        if string.find(line, 'Gaps') >= 0:
+        if line.find('Gaps') != -1:
             x, y = _re_search(
                 r"Gaps = (\d+)\/(\d+)", line,
-                "I could not find the positives in line\n%s" % line)
+                "I could not find the gaps in line\n%s" % line)
             self._hsp.gaps = _safe_int(x), _safe_int(y)
 
         
@@ -905,7 +903,7 @@ class _HSPConsumer:
         # Frame can be in formats:
         # Frame = +1
         # Frame = +2 / +2
-        if string.find(line, '/') >= 0:
+        if line.find('/') != -1:
             self._hsp.frame = _re_search(
                 r"Frame = ([-+][123]) / ([-+][123])", line,
                 "I could not find the frame in line\n%s" % line)
@@ -931,7 +929,7 @@ class _HSPConsumer:
         self._query_len = len(seq)
 
     def align(self, line):
-        seq = string.rstrip(line[self._query_start_index:])
+        seq = line[self._query_start_index:].rstrip()
         if len(seq) < self._query_len:
             # Make sure the alignment is the same length as the query
             seq = seq + ' ' * (self._query_len-len(seq))
@@ -948,7 +946,7 @@ class _HSPConsumer:
 	#On occasion, there is a blast hit with no subject match
 	#so far, it only occurs with 1-line short "matches"
 	#I have decided to let these pass as they appear
-	if not string.strip(seq):
+	if not seq.strip():
             seq = ' ' * self._query_len
         self._hsp.sbjct = self._hsp.sbjct + seq
         if self._hsp.sbjct_start is None:
@@ -976,8 +974,8 @@ class _DatabaseReportConsumer:
             self._dr.database_name.append(m.group(1))
         elif self._dr.database_name:
             # This must be a continuation of the previous name.
-            x = self._dr.database_name[-1] + string.strip(line)
-            self._dr.database_name[-1] = x
+            self._dr.database_name[-1] = "%s%s" % (self._dr.database_name[-1],
+                                                   line.strip())
 
     def posted_date(self, line):
         self._dr.posted_date.append(_re_search(
@@ -995,14 +993,14 @@ class _DatabaseReportConsumer:
         self._dr.num_sequences_in_database.append(_safe_int(sequences))
 
     def ka_params(self, line):
-        x = string.split(line)
+        x = line.split()
         self._dr.ka_params = map(_safe_float, x)
 
     def gapped(self, line):
         self._dr.gapped = 1
 
     def ka_params_gap(self, line):
-        x = string.split(line)
+        x = line.split()
         self._dr.ka_params_gap = map(_safe_float, x)
 
     def end_database_report(self):
@@ -1013,7 +1011,7 @@ class _ParametersConsumer:
         self._params = Record.Parameters()
 
     def matrix(self, line):
-        self._params.matrix = string.rstrip(line[8:])
+        self._params.matrix = line[8:].rstrip()
 
     def gap_penalties(self, line):
         x = _get_cols(
@@ -1021,7 +1019,7 @@ class _ParametersConsumer:
         self._params.gap_penalties = map(_safe_float, x)
 
     def num_hits(self, line):
-        if string.find(line, '1st pass') >= 0:
+        if line.find('1st pass') != -1:
             x, = _get_cols(line, (-4,), ncols=11, expected={2:"Hits"})
             self._params.num_hits = _safe_int(x)
         else:
@@ -1029,7 +1027,7 @@ class _ParametersConsumer:
             self._params.num_hits = _safe_int(x)
 
     def num_sequences(self, line):
-        if string.find(line, '1st pass') >= 0:
+        if line.find('1st pass') != -1:
             x, = _get_cols(line, (-4,), ncols=9, expected={2:"Sequences:"})
             self._params.num_sequences = _safe_int(x)
         else:
@@ -1037,7 +1035,7 @@ class _ParametersConsumer:
             self._params.num_sequences = _safe_int(x)
 
     def num_extends(self, line):
-        if string.find(line, '1st pass') >= 0:
+        if line.find('1st pass') != -1:
             x, = _get_cols(line, (-4,), ncols=9, expected={2:"extensions:"})
             self._params.num_extends = _safe_int(x)
         else:
@@ -1045,7 +1043,7 @@ class _ParametersConsumer:
             self._params.num_extends = _safe_int(x)
 
     def num_good_extends(self, line):
-        if string.find(line, '1st pass') >= 0:
+        if line.find('1st pass') != -1:
             x, = _get_cols(line, (-4,), ncols=10, expected={3:"extensions:"})
             self._params.num_good_extends = _safe_int(x)
         else:
@@ -1297,8 +1295,12 @@ class Iterator:
         If set to None, then the raw contents of the file will be returned.
 
         """
-        if type(handle) is not FileType and type(handle) is not InstanceType:
-            raise ValueError, "I expected a file handle or file-like object"
+        try:
+            handle.readline
+        except AttributeError:
+            raise ValueError(
+                "I expected a file handle or file-like object, got %s"
+                % type(handle))
         self._uhandle = File.UndoHandle(handle)
         self._parser = parser
 
@@ -1315,7 +1317,8 @@ class Iterator:
             if not line:
                 break
             # If I've reached the next one, then put the line back and stop.
-            if lines and (line[:5] == 'BLAST' or line[1:6] == 'BLAST'):
+            if lines and (line.startswith('BLAST')
+                          or line.startswith('BLAST', start = 1)):
                 self._uhandle.saveline(line)
                 break
             lines.append(line)
@@ -1323,7 +1326,7 @@ class Iterator:
         if not lines:
             return None
             
-        data = string.join(lines, '')
+        data = ''.join(lines)
         if self._parser is not None:
             return self._parser.parse(File.StringHandle(data))
         return data
@@ -1559,7 +1562,7 @@ def _re_search(regex, line, error_msg):
     return m.groups()
 
 def _get_cols(line, cols_to_get, ncols=None, expected={}):
-    cols = string.split(line)
+    cols = line.split()
 
     # Check to make sure number of columns is correct
     if ncols is not None and len(cols) != ncols:
@@ -1584,13 +1587,14 @@ def _safe_int(str):
     except ValueError:
         # Something went wrong.  Try to clean up the string.
         # Remove all commas from the string
-        str = string.replace(str, ',', '')
+        str = str.replace(',', '')
     try:
         # try again.
         return int(str)
     except ValueError:
         pass
     # If it fails again, maybe it's too long?
+    # XXX why converting to float?
     return long(float(str))
 
 def _safe_float(str):
@@ -1599,13 +1603,13 @@ def _safe_float(str):
     # we need to check the string for this condition.
     
     # Sometimes BLAST leaves of the '1' in front of an exponent.
-    if str[0] in ['E', 'e']:
+    if str and str[0] in ['E', 'e']:
         str = '1' + str
     try:
         return float(str)
     except ValueError:
         # Remove all commas from the string
-        str = string.replace(str, ',', '')
+        str = str.replace(',', '')
     # try again.
     return float(str)
 
@@ -1613,7 +1617,7 @@ class _BlastErrorConsumer(_BlastConsumer):
     def __init__(self):
         _BlastConsumer.__init__(self)
     def noevent(self, line):
-        if line.find("Query must be at least wordsize") >= 0:
+        if line.find("Query must be at least wordsize") != -1:
             raise ShortQueryBlastError, "Query must be at least wordsize"
         # Now pass the line back up to the superclass.
         method = getattr(_BlastConsumer, 'noevent',
@@ -1687,7 +1691,7 @@ class BlastErrorParser(AbstractParser):
             # 'Searchingdone' instead of 'Searching......done' seems
             # to indicate a failure to perform the BLAST due to
             # low quality sequence
-            if line[:13] == 'Searchingdone':
+            if line.startswith('Searchingdone'):
                 raise LowQualityBlastError("Blast failure occured on query: ",
                                            data_record.query)
             line = handle.readline()
