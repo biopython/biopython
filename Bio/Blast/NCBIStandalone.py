@@ -197,9 +197,11 @@ class _Scanner:
                               start='Sequences used in model')
         read_and_call_while(uhandle, consumer.noevent, blank=1)
 
-        # Read the descriptions and the following blank lines.
-        read_and_call_until(uhandle, consumer.description, blank=1)
-        read_and_call_while(uhandle, consumer.noevent, blank=1)
+        # Read the descriptions and the following blank lines, making
+        # sure that there are descriptions.
+        if uhandle.peekline()[:19] != 'Sequences not found':
+            read_and_call_until(uhandle, consumer.description, blank=1)
+            read_and_call_while(uhandle, consumer.noevent, blank=1)
 
         # If PSI-BLAST, read the 'Sequences not found' line followed
         # by more descriptions.  However, I need to watch out for the
