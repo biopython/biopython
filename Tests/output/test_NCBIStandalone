@@ -12555,3 +12555,839 @@ gap_x_dropoff_f: X3: 64 (24.9 bits)
 gap_trigger    : S1: 41 (21.7 bits)
 blast_cutoff   : S2: 61 (28.2 bits)
 *************** end_parameters
+************************************************** TESTING bt059
+*************** start_header
+version        : BLASTP 2.0.11 [Jan-20-2000]
+noevent        : 
+noevent        : 
+reference      : Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A.
+reference      : Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1
+reference      : "Gapped BLAST and PSI-BLAST: a new generation of protein databa
+reference      : programs",  Nucleic Acids Res. 25:3389-3402.
+noevent        : 
+query_info     : Query= gi|129628|sp|P07175|PARA_AGRTU PARA PROTEIN
+query_info     :          (222 letters)
+noevent        : 
+database_info  : Database: /taiyang/jchang/parsers/swissprot
+database_info  :            82,258 sequences; 29,652,561 total letters
+noevent        : 
+*************** end_header
+*************** start_descriptions
+noevent        : Searching..................................................done
+noevent        : 
+noevent        : 
+noevent        : 
+noevent        : 
+noevent        : Sequences producing significant alignments:
+noevent        : 
+description    : gi|129628|sp|P07175|PARA_AGRTU PARA PROTEIN
+description    : gi|138456|sp|P06665|VIC1_AGRT6 VIRC1 PROTEIN
+description    : gi|138454|sp|P13459|VIC1_AGRRA VIRC1 PROTEIN
+description    : gi|138455|sp|P07165|VIC1_AGRT5 VIRC1 PROTEIN
+description    : gi|2497977|sp|P72190|YCAB_PSEFR HYPOTHETICAL 30.2 KD PROTEIN IN
+description    : gi|586852|sp|P37522|SOJ_BACSU SOJ PROTEIN
+description    : gi|132348|sp|P05682|REPA_AGRRA POSSIBLE REPLICATION PROTEIN A
+description    : gi|120545|sp|P28373|CHLL_SYNY3 PROTOCHLOROPHYLLIDE REDUCTASE IR
+description    : gi|2496226|sp|Q60283|YZ24_METJA HYPOTHETICAL PROTEIN MJECL24
+description    : gi|3024144|sp|Q55900|MIND_SYNY3 SEPTUM SITE-DETERMINING PROTEIN
+description    : gi|1709100|sp|P53382|MRP_MYCLE MRP PROTEIN HOMOLOG
+description    : gi|462615|sp|P21590|MRP_ECOLI MRP PROTEIN
+description    : gi|3024135|sp|P56346|MIND_CHLVU PUTATIVE SEPTUM SITE-DETERMININ
+description    : gi|1709101|sp|P53383|MRP_SYNY3 MRP PROTEIN HOMOLOG
+description    : gi|127097|sp|P18197|MIND_ECOLI SEPTUM SITE-DETERMINING PROTEIN
+description    : gi|3183081|sp|O24999|MRP_HELPY MRP PROTEIN HOMOLOG
+description    : gi|1345782|sp|P48110|CHLL_CYAPA PROTOCHLOROPHYLLIDE REDUCTASE I
+description    : gi|400260|sp|Q01464|MIND_BACSU SEPTUM SITE-DETERMINING PROTEIN
+description    : gi|3913244|sp|O47041|CHLL_PICAB PROTOCHLOROPHYLLIDE REDUCTASE I
+description    : gi|1168937|sp|P41645|CHLL_PINTH PROTOCHLOROPHYLLIDE REDUCTASE I
+description    : gi|120543|sp|P26181|CHLL_PINCO PROTOCHLOROPHYLLIDE REDUCTASE IR
+description    : gi|401555|sp|P31856|YGI1_PSEPU HYPOTHETICAL 28.9 KD PROTEIN IN
+description    : gi|120544|sp|Q00237|CHLL_PLEBO PROTOCHLOROPHYLLIDE REDUCTASE IR
+description    : gi|6225723|sp|O33225|MRP_MYCTU MRP PROTEIN HOMOLOG
+description    : gi|2496603|sp|P55393|Y4CK_RHISN PUTATIVE REPLICATION PROTEIN A
+description    : gi|120542|sp|P06267|CHLL_MARPO PROTOCHLOROPHYLLIDE REDUCTASE IR
+description    : gi|1705820|sp|P54207|CHLL_SYNP7 PROTOCHLOROPHYLLIDE REDUCTASE I
+description    : gi|124472|sp|P07673|INC2_ECOLI INCC PROTEIN
+description    : gi|3023485|sp|P56291|CHLL_CHLVU PROTOCHLOROPHYLLIDE REDUCTASE I
+description    : gi|6016572|sp|O78436|MIND_GUITH PUTATIVE SEPTUM SITE-DETERMININ
+description    : gi|6225722|sp|O66946|MRP_AQUAE MRP PROTEIN HOMOLOG
+description    : gi|1723296|sp|P50863|MRP_BACSU MRP PROTEIN HOMOLOG
+description    : gi|128211|sp|P08625|NIF2_METTL NITROGENASE IRON PROTEIN 2 (NITR
+description    : gi|120541|sp|Q00469|CHLL_CHLRE PROTOCHLOROPHYLLIDE REDUCTASE IR
+description    : gi|585623|sp|Q07733|OPPD_LACLA OLIGOPEPTIDE TRANSPORT ATP-BINDI
+description    : gi|1705819|sp|P51187|CHLL_PORPU PROTOCHLOROPHYLLIDE REDUCTASE I
+description    : gi|6226409|sp|O58667|Y949_PYRHO HYPOTHETICAL PROTEIN PH0949
+description    : gi|6226573|sp|P31897|COOC_RHORU CARBON MONOXIDE DEHYDROGENASE A
+description    : gi|544021|sp|P36439|CHLL_POLAC PROTOCHLOROPHYLLIDE REDUCTASE IR
+description    : gi|2499207|sp|Q58289|NIFH_METJA NITROGENASE IRON PROTEIN (NITRO
+description    : gi|2495840|sp|Q57633|Y169_METJA HYPOTHETICAL ATP-BINDING PROTEI
+description    : gi|2496129|sp|Q58233|Y823_METJA HYPOTHETICAL ATP-BINDING PROTEI
+description    : gi|1171022|sp|P45135|MRP_HAEIN MRP PROTEIN HOMOLOG
+description    : gi|132518|sp|P22670|RFX1_HUMAN MHC CLASS II REGULATORY FACTOR R
+description    : gi|113780|sp|P08144|AMYA_DROME ALPHA-AMYLASE A PRECURSOR (1,4-A
+description    : gi|1709471|sp|P50980|OPPD_LACLC OLIGOPEPTIDE TRANSPORT ATP-BIND
+description    : gi|6225724|sp|Q9ZE27|MRP_RICPR MRP PROTEIN HOMOLOG
+description    : gi|2496034|sp|Q57967|Y547_METJA HYPOTHETICAL ATP-BINDING PROTEI
+description    : gi|128215|sp|P22548|NIF4_CLOPA NITROGENASE IRON PROTEIN (NITROG
+description    : gi|1706104|sp|Q04663|CPSC_STRAG CPSC PROTEIN
+description    : gi|548362|sp|P26248|NIF1_AZOCH NITROGENASE IRON PROTEIN (NITROG
+description    : gi|128203|sp|P00459|NIF1_AZOVI NITROGENASE IRON PROTEIN (NITROG
+description    : gi|2497979|sp|Q57731|Y283_METJA HYPOTHETICAL PROTEIN MJ0283
+description    : gi|2499205|sp|Q44044|NIFH_ALCFA NITROGENASE IRON PROTEIN (NITRO
+description    : gi|1703363|sp|P52145|ARA2_ECOLI ARSENICAL PUMP-DRIVING ATPASE
+description    : gi|132821|sp|P27683|RK24_SPIOL 50S RIBOSOMAL PROTEIN L24, CHLOR
+description    : gi|399100|sp|Q02431|BCHX_RHOSH CHLOROPHYLLIDE REDUCTASE 35.5 KD
+description    : gi|128207|sp|P06118|NIF2_AZOCH NITROGENASE IRON PROTEIN (NITROG
+description    : gi|128267|sp|P00458|NIFH_KLEPN NITROGENASE IRON PROTEIN (NITROG
+description    : gi|128208|sp|P15335|NIF2_AZOVI NITROGENASE IRON PROTEIN (NITROG
+description    : gi|1703299|sp|P54215|AMYA_DROMA ALPHA-AMYLASE A PRECURSOR (1,4-
+description    : gi|114867|sp|P26177|BCHX_RHOCA CHLOROPHYLLIDE REDUCTASE 35.5 KD
+description    : gi|128217|sp|P09555|NIF6_CLOPA NITROGENASE IRON PROTEIN (NITROG
+description    : gi|128277|sp|P06661|NIFH_THIFE NITROGENASE IRON PROTEIN (NITROG
+description    : gi|1709270|sp|P54800|NIF2_METBA NITROGENASE IRON PROTEIN 2 (NIT
+description    : gi|6014740|sp|O33946|CTB1_ACILW MUCONATE CYCLOISOMERASE I 1 (CI
+description    : gi|134731|sp|P08866|SOPA_ECOLI SOPA PROTEIN (PROTEIN A)
+description    : gi|114220|sp|P08690|ARA1_ECOLI ARSENICAL PUMP-DRIVING ATPASE
+description    : gi|3334342|sp|O29633|SR54_ARCFU PROBABLE SIGNAL RECOGNITION 54
+description    : gi|2499206|sp|Q59270|NIFH_CLOCB NITROGENASE IRON PROTEIN (NITRO
+description    : gi|2842582|sp|Q58334|Y924_METJA HYPOTHETICAL ATP-BINDING PROTEI
+description    : gi|128264|sp|P00463|NIFH_BRASP NITROGENASE IRON PROTEIN (NITROG
+description    : gi|128268|sp|P06119|NIFH_METVO NITROGENASE IRON PROTEIN (NITROG
+description    : gi|128263|sp|P06117|NIFH_BRAJA NITROGENASE IRON PROTEIN (NITROG
+description    : gi|2833531|sp|Q58098|Y685_METJA HYPOTHETICAL ATP-BINDING PROTEI
+description    : gi|1709997|sp|P53692|RA18_SCHPO DNA REPAIR PROTEIN RAD18
+description    : gi|127221|sp|P22900|MOBD_THIFE MOBD PROTEIN
+description    : gi|114863|sp|P26237|BCHL_RHOCA PROTOCHLOROPHILLIDE REDUCTASE 33
+description    : gi|128216|sp|P09554|NIF5_CLOPA NITROGENASE IRON PROTEIN (NITROG
+description    : gi|128204|sp|P00456|NIF1_CLOPA NITROGENASE IRON PROTEIN (NITROG
+description    : gi|128209|sp|P09552|NIF2_CLOPA NITROGENASE IRON PROTEIN (NITROG
+description    : gi|128261|sp|P00457|NIFH_ANASP NITROGENASE IRON PROTEIN (NITROG
+description    : gi|266624|sp|Q00240|NIFH_PLEBO NITROGENASE IRON PROTEIN (NITROG
+description    : gi|6225393|sp|O67066|FTSY_AQUAE CELL DIVISION PROTEIN FTSY HOMO
+description    : gi|6166125|sp|O14936|CSKP_HUMAN PERIPHERAL PLASMA MEMBRANE PROT
+description    : gi|1709099|sp|P53381|MRP_CLOPE MRP PROTEIN HOMOLOG
+description    : gi|1171710|sp|P46034|NIFH_FRASP NITROGENASE IRON PROTEIN (NITRO
+description    : gi|128212|sp|P26252|NIF2_RHISO NITROGENASE IRON PROTEIN (NITROG
+description    : gi|128206|sp|P26251|NIF1_RHISO NITROGENASE IRON PROTEIN (NITROG
+description    : gi|2495787|sp|Q60392|Y084_METJA HYPOTHETICAL ATP-BINDING PROTEI
+description    : gi|1709283|sp|P52336|NIFH_NOSSN NITROGENASE IRON PROTEIN (NITRO
+description    : gi|731773|sp|P40558|YIA3_YEAST HYPOTHETICAL 31.9 KD PROTEIN IN
+description    : gi|128266|sp|P08925|NIFH_FRAAL NITROGENASE IRON PROTEIN (NITROG
+description    : gi|732146|sp|P40742|YLXH_BACSU HYPOTHETICAL 33.2 KD PROTEIN IN
+description    : gi|417362|sp|P33178|NIFH_ANASL NITROGENASE IRON PROTEIN (NITROG
+description    : gi|1709281|sp|P26250|NIFH_NOSCO NITROGENASE IRON PROTEIN (NITRO
+description    : gi|6225290|sp|Q9Z900|EFP_CHLPN ELONGATION FACTOR P (EF-P)
+description    : gi|3183458|sp|P75796|YLIA_ECOLI HYPOTHETICAL ABC TRANSPORTER AT
+description    : gi|2499682|sp|Q52312|INC1_ECOLI INCC PROTEIN
+description    : gi|1345941|sp|P15555|DAC_STRSQ D-ALANYL-D-ALANINE CARBOXYPEPTID
+description    : gi|128275|sp|P08718|NIF1_RHOCA NITROGENASE IRON PROTEIN (NITROG
+description    : gi|267440|sp|P29811|YAC3_PSEAE HYPOTHETICAL 23.9 KD PROTEIN IN
+description    : gi|732050|sp|P39342|YJGR_ECOLI HYPOTHETICAL 54.3 KD PROTEIN IN
+description    : gi|2833520|sp|Q58000|Y580_METJA HYPOTHETICAL PROTEIN MJ0580
+description    : gi|128272|sp|P00460|NIFH_RHIME NITROGENASE IRON PROTEIN (NITROG
+description    : gi|128271|sp|P00461|NIFH_RHILT NITROGENASE IRON PROTEIN (NITROG
+description    : gi|128276|sp|P22921|NIFH_RHORU NITROGENASE IRON PROTEIN (NITROG
+noevent        : 
+*************** end_descriptions
+*************** start_alignment
+multalign      : QUERY 1   MPVVVVASSKGGAGKSTTAVVLGTELAHKGVPVTMLD-CD---P--NR-S---
+multalign      : 1     1   MPVVVVASSKGGAGKSTTAVVLGTELAHKGVPVTMLD-CD---P--NR-S---
+multalign      : 6884  1   MQLLTFCSFKGGAGKTTALMGLCAALANDGKRVALFD-AD---E--NR-P---
+multalign      : 7768  1   MKLLTFCSFKGGAGKTTALMGLCAALASDGRRVALFD-AD---E--NR-P---
+multalign      : 6886  1   MKLLTFCSFKGGAGKTTALMGLCAAFASDGKRLALFD-AD---E--NR-P---
+multalign      : 65184 41  --IVAVASGKGGVGKSTTAANLALALAREGARVGILD-AD-------------
+multalign      : 1947  4   --IIAITNQKGGVGKTTTSVNLGACLAYIGKRVLLVD-ID---P--QG-N---
+multalign      : 7808  119 LQVISVMNFKGGSGKTTTAAHLAQYLAMRGYRVLAID-LD---P--QA-S---
+multalign      : 358   1   MTLTLAVYGKGGIGKSTTSCNISTALAKRGKKVLQIG-CD---P--KH-D---
+multalign      : 65336 1   MVVISIANQKGGVGKTTIALNLSFTLAEKGYDTLVID-LD---P--QF-N---
+multalign      : 55107 4   --IIVVTSGKGGVGKTTTTANLGAALARLGKKVVLID-AD-------------
+multalign      : 48717 173 --VYTVASGKGGVGKSTVTVNLATAIAARGLAVGVLD-AD-------------
+multalign      : 1369  119 --IIAVSSGKGGVGKSSTAVNLALALAAEGAKVGILD-AD-------------
+multalign      : 72987 18  --VIVITSGKGGVGKTTTTANLGMSIARLGYRVALID-AD-------------
+multalign      : 54965 99  --IIAISSGKGGVGKSTVAVNVAVALAQTGAAVGLLD-AD-------------
+multalign      : 4482  4   --IIVVTSGKGGVGKTTSSAAIATGLAQKGKKTVVID-FD-------------
+multalign      : 73660 143 --VVMISSGKGGVGKSTTSVNLSIALANLNQKVGLLD-AD-------------
+multalign      : 55620 8   ---------KGGIGKSTTSCNISVALAKRGKKVLQIG-CD---P--KH-D---
+multalign      : 3472  5   ---IVITSGKGGVGKTTTSANLGTALAILGKRVCLVD-TD-------------
+multalign      : 81164 3   ----IAVYGKGGIGKSTTSCNISVALARRGQKVLQIG-CD---P--KH-D---
+multalign      : 58889 3   ----IAVYGKGGIGKSTTSCNISVALARRGQKVLQIG-CD---P--KH-D---
+multalign      : 34485 3   ----IAVYGKGGIGKSTTSCNISVALARRGQKVLQIG-CD---P--KH-D---
+multalign      : 9850  4   --VFAIANQKGGVGKTTTCINLAASLAATKRRVLLID-LD---P--QG-N---
+multalign      : 1171  8   ---------KGGIGKSTTSCNISVALAKRGKKVLQIG-CD---P--KH-D---
+multalign      : 79637 128 --VYAVASGKGGVGKSTVTVNLAAAMAVRGLSIGVLD-AD-------------
+multalign      : 72472 121 LQVIAVVNFKGGSGKTTTAAHLAQYMALTGHRVLAVD-LD---P--QA-S---
+multalign      : 23421 3   ----IAVYGKGGIGKSTTSCNISIALARRGKKVLQIG-CD---P--KH-D---
+multalign      : 10413 8   ---------KGGIGKSTTSCNISVALARRGKKVLQIG-CD---P--KH-D---
+multalign      : 9878  106 MKTLVTANQKGGVGKTSTLVHLAFDFFERGLRVAVID-LD---PQGNA-S---
+multalign      : 72398 8   ---------KGGIGKSTTSCNISIALARRGKKVLQIG-CD---P--KH-D---
+multalign      : 80496 4   --IVVITSGKGGVGKTTVTANLGMALAQLGYRTALID-AD-------------
+multalign      : 78343 114 --IIAVGSGKGGVGKSTVAANLAVALSQLGYKVGLLD-AD-------------
+multalign      : 58694 109 ---LAVASGKGGVGKSTVSVNLAISLARLGKKVGLID-AD-------------
+multalign      : 33344 9   ---------KGGIGKSTTVCNIAAALADQGKKVMVVG-CD---P--KH-D---
+multalign      : 26797 8   ---------KGGIGKSTTSCNISIALRKRGKKVLQIG-CD---P--KH-D---
+multalign      : 1271  90  ----------------------------RGSKVGMIF-QN---P--LT-A---
+multalign      : 61120 8   ---------KGGIGKSTTSCNISVALSKRGKKVLQIG-CD---P--KH-D---
+multalign      : 79149 33  ---IAVLSGKGGVGKSTVAVNLTAALAKMGYFVGILD-ADIHGP--NV-A---
+multalign      : 64610 3   ----IAVTGKGGVGKSTIVGMLARALSDEGWRVMAID-AD---P--DA-N---
+multalign      : 20889 8   ----VAVYGKGGIGKSTTSCNTSIALARRGRRILQIG-CD---P--KH-D---
+multalign      : 66300 9   ---------KGGIGKSTTVSNIAAALAEDGKKVLVVG-CD---P--KA-D---
+multalign      : 65944 5   --IITIASGKGGVGKTTTSASLAVALAKLGKKVLAID-GD-------------
+multalign      : 64974 3   ----IAITGKGGVGKTFIASTLMRLFEKNGFKVIGVD-CD---P--NP-T---
+multalign      : 53555 125 --IIAVSSGKGGVGKSSVSVNLALALQAQGARVGILD-AD-------------
+multalign      : 29083 178 --LVVQSAAPGSKGGQVSLTVHGTQQVHSPPEQSPVQ-AN---S--SS-S---
+multalign      : 12332 126 -----------GTGGSTASP---SSKSYPGVPYSSLD-FN---P--TC-A---
+multalign      : 2091  90  ----------------------------RGSKVGMIF-QN---P--LT-A---
+multalign      : 80860 99  --IILVASGKGGVGKSTISALIAQQLSLENYRVGIVD-AD-------------
+multalign      : 66127 9   ---IAIASGKGGTGKTTISANLAVALAKFGKKVAVLD-AD-------------
+multalign      : 8467  4   ----VAIYGKGGIGKSTTTQNLTAGLAERGNKIMVVG-CD---P--KA-D---
+multalign      : 62426 37  --ILAIASVREGEGKSTTSTSLALSLAQAGFKTLLID-AD---T--RN-S---
+multalign      : 41943 11  ---------KGGIGKSTTTQNLVAALAEMGKKVMIVG-CD---P--KA-D---
+multalign      : 41943     -----------------------------------------------------
+multalign      : 3227  11  ---------KGGIGKSTTTQNLVAALAEMGKKVMIVG-CD---P--KA-D---
+multalign      : 66001 42  ---IVILSGKGGVGKSTVTVNLAAALNLMGKKVGVLD-AD-------------
+multalign      : 60429 11  ---------KGGIGKSTTTQNLVAALAELGKKVMIVG-CD---P--KA-D---
+multalign      : 56923 329 ---LIMLMGKGGVGKTTMAAAIAVSLADKGFNVHLTT-SD---P--AA-H---
+multalign      : 22305 55  ------------------------------------D-CK---P--NS-L---
+multalign      : 10218 37  ---VIAIYGKGGIGKSFTLANLSYMMAQIGKRVLLIG-CD---P--KS-D---
+multalign      : 7672  11  ---------KGGIGKSTTTQNLVAALAEAGKKVMIVG-CD---P--KA-D---
+multalign      : 5004  11  ---------KGGIGKSTTTQNLVAALAEMGKKVMIVG-CD---P--KA-D---
+multalign      : 3245  11  ---------KGGIGKSTTTQNLVAALAEAGKKVMIVG-CD---P--KA-D---
+multalign      : 11572 126 -----------GTGGSTASP---SSKSYPGVPYSSLD-FN---P--TC-A---
+multalign      : 10065 37  ---IIAIYGKGGSGKSFTLANLSHMMAEMGKRVLLIG-CD---P--KS-D---
+multalign      : 8469  9   ---------KGGIGKSTTTQNLTAGLVERGNKIMVVG-CD---P--KA-D---
+multalign      : 6845  15  ---------KGGIGKSTTSQKHLAALAEMGQKILIVG-CD---P--KA-D---
+multalign      : 68845 9   ---------KGGIGKSTTTQNLTASLSTMGNKIMLVG-CD---P--KA-D---
+multalign      : 75780     -----------------------------------------------------
+multalign      : 8899  107 -PVIGVAAHKGGVYKTSVSVHLAQDLALKGLRVLLVEGND---P--QG-T---
+multalign      : 2560  329 ---LIMLMGKGGVGKTTMAAAIAVRLADMGFDVHLTT-SD---P--AA-H---
+multalign      : 76603 103 -----------GSGKTTTTAKMAKYFKDRGMKVAVVA-AD---T--WR-P---
+multalign      : 63312 4   ----VAIYGKGGIGKSTTTQNLTAGLGEMGKKIMIVG-CD---P--KA-D---
+multalign      : 66320 8   MKVITFSIAKGGTGKTIITANAAAALAKKGKKILLID-GDV--G--SK-S---
+multalign      : 16817 12  ---------KGGIGKSTTSQNTLAALAEMGQKILIVG-CD---P--KA-D---
+multalign      : 9565  9   ---------KGGIGKSTNVGNMAAALAEDGKKVLVVG-CD---P--KA-D---
+multalign      : 6080  12  ---------KGGIGKSTTSQNTLAALAEMGQKILIVG-CD---P--KA-D---
+multalign      : 66208 1   --MIIAVSGKGGVGKTAFTTLLIKALSKKTNSILVVD-AD---P--DS-N---
+multalign      : 58223     -----------------------------------------------------
+multalign      : 6856  5   --IYLIGGSKGGVGKSLVTMATVDYLQERGESVLLIE-SD---T--SN-P---
+multalign      : 10049 44  ---------KGGIGKSTTSSNLSAAFSLLGKRVLQIG-CD---P--KH-D---
+multalign      : 8468  4   ----VAIYGKGGIGKSTTTQNLTSGLHAMGKTIMVVG-CD---P--KA-D---
+multalign      : 4104  4   ----VAIYGKGGIGKSTTTQNLTSGLHAMGKTIMVVG-CD---P--KA-D---
+multalign      : 4103  9   ---------KGGIAKSTTTQNLTAGLVERGNKIMVVG-CD---P--KA-D---
+multalign      : 3120  14  ---------KGGIGKSTTSQNTLAAMAEMGQRIMIVG-CD---P--KA-D---
+multalign      : 1177  14  ---------KGGIGKSTTSQNTIAALAEMGERIMIVG-CD---P--KA-D---
+multalign      : 78362 270 -----------GSGKTTTIGKLAHQLKQKGKKVLLVA-GD---T--FR-AAAI
+multalign      : 76342     -----------------------------------------------------
+multalign      : 58184 2   -------------GKSTVTGILATQLAKKGYKVGVLD-AD-------------
+multalign      : 9095  9   ---------KGGIGKSTTQQNTMAAMAEMGKKVMIVG-CD---P--KA-D---
+multalign      : 6078  12  ---------KGGIGKSTTSQNTLAALAEMGHRILIVG-CD---P--KA-D---
+multalign      : 6077  12  ---------KGGIGKSTTSQNTLAALAEMGHRILIVG-CD---P--KA-D---
+multalign      : 65910 8   ---------KGGCGKSSITTLLAKEFAKKGHNVLVID-GD-------------
+multalign      : 57497 14  ---------KGGIGKSTTSQNTLAAMAEMGQRILIVG-CD---P--KA-D---
+multalign      : 47656 19  --IILILSGKGGVGKSSVTTQTALTLCSMGFKVGVLD-ID-------------
+multalign      : 9099  9   ---------KGGIGKSTTQQNTMAAMAEMGQRVMIVG-CD---P--KA-D---
+multalign      : 8246  34  ---LAVISGKGGVGKSNITLNMALALQDKGKKVLLID-LD-------------
+multalign      : 3122  14  ---------KGGIGKSTTSQNTLAAMAEMGQRIMIVG-CD---P--KA-D---
+multalign      : 2981  14  ---------KGGIGKSTTSQNTLAAMAEMGQRILIVG-CD---P--KA-D---
+multalign      : 81598     -----------------------------------------------------
+multalign      : 69986 91  ----------------------------RGADMAMIF-QE---P--MT-S---
+multalign      : 60326 105 MKTLVTAIQKGGQGKTFATCHLAFDFLERGLRVAVID-LD---TQGNA-S---
+multalign      : 10467 20  -----------------------------------------------------
+multalign      : 10025 12  ---------KGGIGKSTTSQNTLAALVEMGQKILIVG-CD---P--KA-D---
+multalign      : 7559  16  -----------GAGKTTIAVALENQLRARGIRIERLD-GD---T--VRQS---
+multalign      : 2750  33  -----------GTGKTVTLQKLAESLSEIGVPVFM---AD---V--KG-D---
+multalign      : 64886     -----------------------------------------------------
+multalign      : 33347 12  ---------KGGIGKSTTSQNTLAALVDLGQKILIVG-CD---P--KA-D---
+multalign      : 16815 12  ---------KGGIGKSTTSQNTLAALVELGQKILIVG-CD---P--KA-D---
+multalign      : 6168  12  ---------KGGIGKSTTSQNTLAALVEMGQRILIVG-CD---P--KA-D---
+noevent        : 
+multalign      : QUERY 47  WANAG-E-VP-E--NI------TAL-----SDVT-----ESS----IVKTIK-
+multalign      : 1     47  WANAG-E-VP-E--NI------TAL-----SDVT-----ESS----IVKTIK-
+multalign      : 6884  47  WRENA-L-QS-S--TW------DPR-----CEVY-----SADEMPLLEAAYE-
+multalign      : 7768  47  WKENA-L-RS-N--TW------DSF-----CEVY-----AAE----EMSLLE-
+multalign      : 6886  47  WKENA-L-RS-N--TW------GSF-----CEVY-----AAE----EMALLE-
+multalign      : 65184 76  -----------------------------------------------------
+multalign      : 1947  50  GIEKA-D-VE-Q--CVYD----ILV-----DDAD-----VID----IIKATT-
+multalign      : 7808  164 -ALFG-S-QP-E------------------TDVG-----PNE----TLY----
+multalign      : 358   47  TLTGF-L-IP-T--II------DTL-----QE---------------------
+multalign      : 65336 44  -----------------------------------------------------
+multalign      : 55107 39  -----------------------------------------------------
+multalign      : 48717 208 -----------------------------------------------------
+multalign      : 1369  154 -----------------------------------------------------
+multalign      : 72987 53  -----------------------------------------------------
+multalign      : 54965 134 -----------------------------------------------------
+multalign      : 4482  39  -----------------------------------------------------
+multalign      : 73660 178 -----------------------------------------------------
+multalign      : 55620 45  TLTGH-L-IP-T--II------DTL-----QE---------------------
+multalign      : 3472  39  -----------------------------------------------------
+multalign      : 81164 45  TLTGF-L-IP-T--II------DTL----------------------------
+multalign      : 58889 45  TLTGF-L-IP-T--II------DTL----------------------------
+multalign      : 34485 45  TLTGF-L-IP-T--II------DTL----------------------------
+multalign      : 9850  48  GSGVD-K-----------------------HELE-----HSV----YDLLIG-
+multalign      : 1171  45  TLTGF-L-IP-T--II------DTL-----QE---------------------
+multalign      : 79637 163 -----------------------------------------------------
+multalign      : 72472 164 -----------------------------------------------------
+multalign      : 23421 45  TLTGF-L-IP-T--II------DTL----------------------------
+multalign      : 10413 45  TLTGF-L-IP-T--II------DTL----------------------------
+multalign      : 9878  152 -----------------------------------------------------
+multalign      : 72398 45  TLTGF-L-IP-T--II------DTL----------------------------
+multalign      : 80496 39  -----------------------------------------------------
+multalign      : 78343 149 -----------------------------------------------------
+multalign      : 58694 143 -----------------------------------------------------
+multalign      : 33344 46  NLRGGQE-IP-T--VL------DIL-----RE---------------------
+multalign      : 26797 45  TLTGF-L-IP-T--II------DTL-----S----------------------
+multalign      : 1271  108 LMKIG-Q-QI-K--EM------LAV-----HDVYPENQYESR----IFQLLE-
+multalign      : 61120 45  TLTGF-L-IP-T--II------DTL----------------------------
+multalign      : 79149 79  GVDKE-E-V--------------------------------------------
+multalign      : 64610 43  -ASAI-G-VPAE--RL------SAL-----LPIS-----K-------------
+multalign      : 20889 50  TPTGF-S-IP-------------------------------------------
+multalign      : 66300 45  ---RN-L-VG-R--KI------PTV-----LDVF-----RKK----GAENMK-
+multalign      : 65944 40  -----------------------------------------------------
+multalign      : 64974 43  -----------------------AL-----AFGV-----EEE----IVPLSK-
+multalign      : 53555 160 -----------------------------------------------------
+multalign      : 29083 222 GAPTG-T-VP-Q--QLQVHGVQQSV-----PVTQ-----ERS----VVQATP-
+multalign      : 12332 158 YNDAN-E-VR-NC-EL------VGL-----RDLN-----QGN------SYVQ-
+multalign      : 2091  108 LMKIG-Q-QI-K--EM------LAV-----HDVYPENQYESR----IFQLLE-
+multalign      : 80860 134 -----------------------------------------------------
+multalign      : 66127 43  -----------------------------------------------------
+multalign      : 8467  43  -----------------------------------------------------
+multalign      : 62426 77  -----------------------------------------------------
+multalign      : 41943 48  LILHS-K-AQ-N--TI------MEM-----A--A-----EAG----TVEDLE-
+multalign      : 41943     -----------------------------------------------------
+multalign      : 3227  48  LILHS-K-AQ-N--TI------MEM-----A--A-----EAG----TVEDLE-
+multalign      : 66001 76  -----------------------------------------------------
+multalign      : 60429 48  LILHS-K-AQ-N--TI------MEM-----A--A-----EAG----TVEDLE-
+multalign      : 56923 372 TLN--------------------------------------------------
+multalign      : 22305 65  HKRHV-K-VG-D--TV------KVI-----SGGE-----KGK----IGEISK-
+multalign      : 10218 80  LLFGG-K----------------AC-----PTII-----ETS----ARKKLA-
+multalign      : 7672  45  -----------------------------------------------------
+multalign      : 5004  45  -----------------------------------------------------
+multalign      : 3245  45  -----------------------------------------------------
+multalign      : 11572 158 YNDAN-Q-VR-NC-EL------VGL-----RDLN-----QGN------SYVQ-
+multalign      : 10065 77  -----------------------------------------------------
+multalign      : 8469  46  LLLGG-L-AQ-K--TV------LDTLREEGEDVE-----LDS----ILKT---
+multalign      : 6845  52  LILHS-K-AQ-D----------TVL-----SLAA-----EAG----SVEDLE-
+multalign      : 68845 45  ---------------R------MLL-----GGLN-----QKT----VLDTLR-
+multalign      : 75780     -----------------------------------------------------
+multalign      : 8899  153 Y--HG-W-VP-D-----------------------------------------
+multalign      : 2560  372 TLN--------------------------------------------------
+multalign      : 76603 137 YEQLR-Q-LA-EEYGI------TFY-----GEKG-----EKD----AVKIVKN
+multalign      : 63312 43  -----------------------------------------------------
+multalign      : 66320 55  LLN-----VK-S--NI-------FL-----ADII-----E-----------E-
+multalign      : 16817 49  LILHA-K-AQ-D--TI------LSL-----A--A-----SAG----SVEDLE-
+multalign      : 9565  43  -----------------------------------------------------
+multalign      : 6080  49  LILHA-K-AQ-D--TI------LSL-----A--A-----SAG----SVEDLE-
+multalign      : 66208 41  -----------------------------------------------------
+multalign      : 58223     -----------------------------------------------------
+multalign      : 6856  48  WKAYK-E-ST-E--TE------LIN-----LDEA-----DGW----IQLVNL-
+multalign      : 10049 78  -----------------------------------------------------
+multalign      : 8468  43  -----------------------------------------------------
+multalign      : 4104  43  -----------------------------------------------------
+multalign      : 4103  46  LLLGG-L-AQ-K--TV------LDTLREEGEDVE-----LDS----ILKT---
+multalign      : 3120  51  LMLHS-K-A-----QT------TVL-----HLAA-----ERG----AVEDLE-
+multalign      : 1177  48  -----------------------------------------------------
+multalign      : 78362 310 WAKRA-G-VD-I--VK------KEE-----GSDP-----GAV----VYEGMK-
+multalign      : 76342 808 -------------------------------DAM-----YGT----KLETIR-
+multalign      : 58184 26  -----------------------------------------------------
+multalign      : 9095  43  -----------------------------------------------------
+multalign      : 6078  46  -----------------------------------------------------
+multalign      : 6077  46  -----------------------------------------------------
+multalign      : 65910 36  -----------------------------------------------------
+multalign      : 57497 48  -----------------------------------------------------
+multalign      : 47656 54  -----------------------------------------------------
+multalign      : 9099  43  -----------------------------------------------------
+multalign      : 8246  68  -----------------------------------------------------
+multalign      : 3122  48  -----------------------------------------------------
+multalign      : 2981  48  -----------------------------------------------------
+multalign      : 81598     -----------------------------------------------------
+multalign      : 69986 109 VFTVG-EQIA-E--SI------RLH-----QNASR----EEA----MVEAKR-
+multalign      : 60326 153 SA---------------------------------------------------
+multalign      : 10467 23  PAQAG-T-AA-AA-DL------PAP-----DDTG-----LQA----VLHTAL-
+multalign      : 10025 46  -----------------------------------------------------
+multalign      : 7559  49  -----------------------------------------------------
+multalign      : 2750  66  VAQAG-T-VS-E--KL------LA-----------------------------
+multalign      : 64886     -----------------------------------------------------
+multalign      : 33347 49  LILNA-K-AQ-D--TV------LHL-----A-AT-----EGS----V------
+multalign      : 16815 46  -----------------------------------------------------
+multalign      : 6168  46  -----------------------------------------------------
+noevent        : 
+multalign      : QUERY 79  G-AV-----VIVD--------LEG---VAS---------R-------------
+multalign      : 1     79  G-AV-----VIVD--------LEG---VAS---------R-------------
+multalign      : 6884  83  GFDY-----ALAD--------TRG---GSS---------E-------------
+multalign      : 7768  79  A-ELQGFDYALAD--------THG---GSS---------E-------------
+multalign      : 6886  79  A-ELQGFDYALAD--------THG---GSS---------E-------------
+multalign      : 65184 76  -----------------------------------------------------
+multalign      : 1947  84  V-IP-----ATIQ--------LAG---AEI---------E-------------
+multalign      : 7808  182 --GA-----IRYD--------DEQ---VAI---------E-------------
+multalign      : 358   61  -----------------------------------------------------
+multalign      : 65336 44  -----------------------------------------------------
+multalign      : 55107 39  -----------------------------------------------------
+multalign      : 48717 208 -----------------------------------------------------
+multalign      : 1369  154 -----------------------------------------------------
+multalign      : 72987 53  -----------------------------------------------------
+multalign      : 54965 134 -----------------------------------------------------
+multalign      : 4482  39  -----------------------------------------------------
+multalign      : 73660 178 -----------------------------------------------------
+multalign      : 55620 59  -----------------------------------------------------
+multalign      : 3472  39  -----------------------------------------------------
+multalign      : 81164 57  -----------------------------------------------------
+multalign      : 58889 57  -----------------------------------------------------
+multalign      : 34485 57  -----------------------------------------------------
+multalign      : 9850  72  Q-AM-----HYSE--------HGG---FQL---------L-------------
+multalign      : 1171  59  -----------------------------------------------------
+multalign      : 79637 163 -----------------------------------------------------
+multalign      : 72472 164 -----------------------------------------------------
+multalign      : 23421 57  -----------------------------------------------------
+multalign      : 10413 57  -----------------------------------------------------
+multalign      : 9878  152 -----------------------------------------------------
+multalign      : 72398 57  -----------------------------------------------------
+multalign      : 80496 39  -----------------------------------------------------
+multalign      : 78343 149 -----------------------------------------------------
+multalign      : 58694 143 -----------------------------------------------------
+multalign      : 33344 61  -----------------------------------------------------
+multalign      : 26797 58  -----------------------------------------------------
+multalign      : 1271  145 N-PK-----RVVNQFPHQ---LSG---GMR---------Q-------------
+multalign      : 61120 57  -----------------------------------------------------
+multalign      : 79149 84  -----------------------------------------------------
+multalign      : 64610 60  -----------------------------------------------------
+multalign      : 20889 56  -----------------------------------------------------
+multalign      : 66300 71  -----------------------------------------------------
+multalign      : 65944 40  -----------------------------------------------------
+multalign      : 64974 60  -----------------------------------------------------
+multalign      : 53555 160 -----------------------------------------------------
+multalign      : 29083 260 G-PV-----QPLT--------VQG---LQP---------V-------------
+multalign      : 12332 189 F-LD-----HLID--------L-G---VAG---------F-------------
+multalign      : 2091  145 N-PK-----RVVNQFPHQ---LSG---GMR---------Q-------------
+multalign      : 80860 134 -----------------------------------------------------
+multalign      : 66127 43  -----------------------------------------------------
+multalign      : 8467  43  -----------------------------------------------------
+multalign      : 62426 77  -----------------------------------------------------
+multalign      : 41943 75  -----------------------------------------------------
+multalign      : 41943     -----------------------------------------------------
+multalign      : 3227  75  -----------------------------------------------------
+multalign      : 66001 76  -----------------------------------------------------
+multalign      : 60429 75  -----------------------------------------------------
+multalign      : 56923 373 -----------------------------------------------------
+multalign      : 22305 97  S-TV-----IIKD--------LNF---KTK---------H-------------
+multalign      : 10218 106 I-GD-----VCFK--------RDG---V-------------------------
+multalign      : 7672  45  -----------------------------------------------------
+multalign      : 5004  45  -----------------------------------------------------
+multalign      : 3245  45  -----------------------------------------------------
+multalign      : 11572 189 F-LD-----HLID--------L-G---VAG---------F-------------
+multalign      : 10065 77  -----------------------------------------------------
+multalign      : 8469  74  -----------------------------------------------------
+multalign      : 6845  79  -----------------------------------------------------
+multalign      : 68845 67  G----------VD--------LDV---VMQ---------R-------------
+multalign      : 75780 142 ---------------------------LAS---------G-------------
+multalign      : 8899  158 -----------------------------------------------------
+multalign      : 2560  373 -----------------------------------------------------
+multalign      : 76603 174 H-DM-----IIID--------TAGRHALED---------E-------------
+multalign      : 63312 43  -----------------------------------------------------
+multalign      : 66320 76  D-AI-----VNTP--------IEN---IEL---------L-------------
+multalign      : 16817 76  -----------------------------------------------------
+multalign      : 9565  43  -----------------------------------------------------
+multalign      : 6080  76  -----------------------------------------------------
+multalign      : 66208 41  -----------------------------------------------------
+multalign      : 58223     -----------------------------------------------------
+multalign      : 6856  80  D-SV-----VVIN--------AAA---RNN---------K-------------
+multalign      : 10049 78  -----------------------------------------------------
+multalign      : 8468  43  -----------------------------------------------------
+multalign      : 4104  43  -----------------------------------------------------
+multalign      : 4103  74  -----------------------------------------------------
+multalign      : 3120  78  -----------------------------------------------------
+multalign      : 1177  48  -----------------------------------------------------
+multalign      : 78362 342 GYEV-----VLVD--------TAG---RLHTKEPLINELR-------------
+multalign      : 76342 825 G-LI-----AILD--------VEP---QAL---------K-------------
+multalign      : 58184 26  -----------------------------------------------------
+multalign      : 9095  43  -----------------------------------------------------
+multalign      : 6078  46  -----------------------------------------------------
+multalign      : 6077  46  -----------------------------------------------------
+multalign      : 65910 36  -----------------------------------------------------
+multalign      : 57497 48  -----------------------------------------------------
+multalign      : 47656 54  -----------------------------------------------------
+multalign      : 9099  43  -----------------------------------------------------
+multalign      : 8246  68  -----------------------------------------------------
+multalign      : 3122  48  -----------------------------------------------------
+multalign      : 2981  48  -----------------------------------------------------
+multalign      : 81598     -----------------------------------------------------
+multalign      : 69986 141 --QV-----RIPE--------AQT---ILS---------RYPHQLSGGMRQRV
+multalign      : 60326 153 -----------------------------------------------------
+multalign      : 10467 56  G-AM-----VRVDDNGTIHQLSEG---VAD---------R-------------
+multalign      : 10025 46  -----------------------------------------------------
+multalign      : 7559  49  -----------------------------------------------------
+multalign      : 2750  77  -----------------------------------------------------
+multalign      : 64886     -----------------------------------------------------
+multalign      : 33347 68  -----------------------------------------------------
+multalign      : 16815 46  -----------------------------------------------------
+multalign      : 6168  46  -----------------------------------------------------
+noevent        : 
+multalign      : QUERY 98  ISQA---DLVLIPMRPK-ALDATI---GAQSLQLIAEEEEAIDRKIA-HAVVF
+multalign      : 1     98  ISQA---DLVLIPMRPK-ALDATI---GAQSLQLIAEEEEAIDRKIA-HAVVF
+multalign      : 6884  103 IASS---NLLLIPTMLT-PLDIDE---ALSTYRYVIELMLSENLAIP-TAVLR
+multalign      : 7768  103 IASS---NLLLIPTMLT-PLDIDE---ALSTYRYVIELLLSENLAIP-TAVLR
+multalign      : 6886  103 IASS---NLLLIPTMLT-PLDIDE---ALSTYRYVIELLLSENLAIP-TAVLR
+multalign      : 65184 76  -----------------------------------------------------
+multalign      : 1947  98  -----------------------------------------------------
+multalign      : 7808  200 TYIP---DLHLIP----------------------------------------
+multalign      : 358   61  -----------------------------------------------------
+multalign      : 65336 44  -----------------------------------------------------
+multalign      : 55107 39  -----------------------------------------------------
+multalign      : 48717 208 -----------------------------------------------------
+multalign      : 1369  154 -----------------------------------------------------
+multalign      : 72987 53  -----------------------------------------------------
+multalign      : 54965 134 -----------------------------------------------------
+multalign      : 4482  39  -----------------------------------------------------
+multalign      : 73660 178 -----------------------------------------------------
+multalign      : 55620 59  -----------------------------------------------------
+multalign      : 3472  39  -----------------------------------------------------
+multalign      : 81164 57  -----------------------------------------------------
+multalign      : 58889 57  -----------------------------------------------------
+multalign      : 34485 57  -----------------------------------------------------
+multalign      : 9850  91  LTAA---EVVLLEMQVK------------------------------------
+multalign      : 1171  59  -----------------------------------------------------
+multalign      : 79637 163 -----------------------------------------------------
+multalign      : 72472 164 -----------------------------------------------------
+multalign      : 23421 57  -----------------------------------------------------
+multalign      : 10413 57  -----------------------------------------------------
+multalign      : 9878  152 -----------------------------------------------------
+multalign      : 72398 57  -----------------------------------------------------
+multalign      : 80496 39  -----------------------------------------------------
+multalign      : 78343 149 -----------------------------------------------------
+multalign      : 58694 143 -----------------------------------------------------
+multalign      : 33344 61  -----------------------------------------------------
+multalign      : 26797 58  -----------------------------------------------------
+multalign      : 1271  169 IAIANDPDLIIADEPTT-ALDVTI---QAQILDLILEIQK---KKNA-GVILI
+multalign      : 61120 57  -----------------------------------------------------
+multalign      : 79149 84  -----------------------------------------------------
+multalign      : 64610 60  -----------------------------------------------------
+multalign      : 20889 56  -----------------------------------------------------
+multalign      : 66300 71  -----------------------------------------------------
+multalign      : 65944 40  -----------------------------------------------------
+multalign      : 64974 60  -----------------------------------------------------
+multalign      : 53555 160 -----------------------------------------------------
+multalign      : 29083 279 VQQL---QQVPVP----------------------------------------
+multalign      : 12332 209 MWPA---DLAVIYGRLK-NLNTDH---GFASGSKAYIVQEVID----------
+multalign      : 2091  169 IAIANDPDLIIADEPTT-ALDVTI---QAQILDLILEIQK---KKNA-GVILI
+multalign      : 80860 134 -----------------------------------------------------
+multalign      : 66127 43  -----------------------------------------------------
+multalign      : 8467  43  -----------------------------------------------------
+multalign      : 62426 77  -----------------------------------------------------
+multalign      : 41943 75  -----------------------------------------------------
+multalign      : 41943 199 ------------------ALAAKL---GTQMIHFVPRDNVVQRAEIR-RMTVI
+multalign      : 3227  75  -----------------------------------------------------
+multalign      : 66001 76  -----------------------------------------------------
+multalign      : 60429 75  -----------------------------------------------------
+multalign      : 56923 373 -----------------------------------------------------
+multalign      : 22305 116 EGEQ---GQII-------KIEAAI---HSSNVMLILKEQEVADR-VG-HKIL-
+multalign      : 10218 115 -----------------------------------------------------
+multalign      : 7672  45  -----------------------------------------------------
+multalign      : 5004  45  -----------------------------------------------------
+multalign      : 3245  45  -----------------------------------------------------
+multalign      : 11572 209 MWPA---DLAVIYGRLK-NLNTDH---GFASGSKAYIVQEVID----------
+multalign      : 10065 77  -----------------------------------------------------
+multalign      : 8469  74  -----------------------------------------------------
+multalign      : 6845  79  -----------------------------------------------------
+multalign      : 68845 75  -----------------------------------------------------
+multalign      : 75780 151 IAEA---EQMIEVRRHN-VFKLKI---GAKELKTDIKHVAEIKRVVGEHAAVR
+multalign      : 8899  158 -----------------------------------------------------
+multalign      : 2560  373 -----------------------------------------------------
+multalign      : 76603 196 IKIA---EVARPDYKLL-VLDAAI---G----QLASKQAQAFHEAIGINGIII
+multalign      : 63312 43  -----------------------------------------------------
+multalign      : 66320 95  LA---------------------------------------------------
+multalign      : 16817 76  -----------------------------------------------------
+multalign      : 9565  43  -----------------------------------------------------
+multalign      : 6080  76  -----------------------------------------------------
+multalign      : 66208 41  -----------------------------------------------------
+multalign      : 58223     -----------------------------------------------------
+multalign      : 6856  99  GETL---NSTLAELKRK-LVTLWVINRQRDSLELLKEYMDAIPNADV-HVV--
+multalign      : 10049 78  -----------------------------------------------------
+multalign      : 8468  43  -----------------------------------------------------
+multalign      : 4104  43  -----------------------------------------------------
+multalign      : 4103  74  -----------------------------------------------------
+multalign      : 3120  78  -----------------------------------------------------
+multalign      : 1177  48  -----------------------------------------------------
+multalign      : 78362 371 IQKF---DKEEPSETLL-VIDATT---GQNAIQQAKVFKEAVD----------
+multalign      : 76342 843 AEFA---PFVVFIAAPT-ITPGLN---EDESLQRLQKESDILQRTYA-HYFDL
+multalign      : 58184 26  -----------------------------------------------------
+multalign      : 9095  43  -----------------------------------------------------
+multalign      : 6078  46  -----------------------------------------------------
+multalign      : 6077  46  -----------------------------------------------------
+multalign      : 65910 36  -----------------------------------------------------
+multalign      : 57497 48  -----------------------------------------------------
+multalign      : 47656 54  -----------------------------------------------------
+multalign      : 9099  43  -----------------------------------------------------
+multalign      : 8246  68  -----------------------------------------------------
+multalign      : 3122  48  -----------------------------------------------------
+multalign      : 2981  48  -----------------------------------------------------
+multalign      : 81598     -----------------------------------------------------
+multalign      : 69986 172 LSCR---PAVLIADEPTTALDVTI---QAQILQLI----KVLQKEMS-MGVIF
+multalign      : 60326 153 -----------------------------------------------------
+multalign      : 10467 83  ITTT---DRFRVGSVTK-SFSAVV------LLQLVDEGKLDLDASV-------
+multalign      : 10025 46  -----------------------------------------------------
+multalign      : 7559  49  -----------------------------------------------------
+multalign      : 2750  77  -----------------------------------------------------
+multalign      : 64886     -----------------------------------------------------
+multalign      : 33347 68  -----------------------------------------------------
+multalign      : 16815 46  -----------------------------------------------------
+multalign      : 6168  46  -----------------------------------------------------
+noevent        : 
+multalign      : QUERY 146 --SPAIRSHEYTGIKASLIENGVEIIEPPLVERTAYSALF-QFG---------
+multalign      : 1     146 --SPAIRSHEYTGIKASLIENGVEIIEPPLVERTAYSALF-QFG---------
+multalign      : 6884  151 ---PVGRLTTSQRRMSEMLES-LPVVPSPMHERDAFSAMK-ERGMLHLTLLNM
+multalign      : 7768  151 --PVGRLTTSQRAMSDMLA--SLPVVQSPMHERDAFAAMK-E-R---------
+multalign      : 6886  151 --PVGRLTTSQRAMSDMLA--SLPVVQSPMHERDAFAAMK-E-R---------
+multalign      : 65184 76  -----------------------------------------------------
+multalign      : 1947  98  -----------------------------------------------------
+multalign      : 7808  208 -----------------------------------------------------
+multalign      : 358   61  -----------------------------------------------------
+multalign      : 65336 44  -----------------------------------------------------
+multalign      : 55107 39  -----------------------------------------------------
+multalign      : 48717 208 -----------------------------------------------------
+multalign      : 1369  154 -----------------------------------------------------
+multalign      : 72987 53  -----------------------------------------------------
+multalign      : 54965 134 -----------------------------------------------------
+multalign      : 4482  39  -----------------------------------------------------
+multalign      : 73660 178 -----------------------------------------------------
+multalign      : 55620 59  -----------------------------------------------------
+multalign      : 3472  39  -----------------------------------------------------
+multalign      : 81164 57  -----------------------------------------------------
+multalign      : 58889 57  -----------------------------------------------------
+multalign      : 34485 57  -----------------------------------------------------
+multalign      : 9850  103 -----------------------------------------------------
+multalign      : 1171  59  -----------------------------------------------------
+multalign      : 79637 163 -----------------------------------------------------
+multalign      : 72472 164 -----------------------------------------------------
+multalign      : 23421 57  -----------------------------------------------------
+multalign      : 10413 57  -----------------------------------------------------
+multalign      : 9878  152 -----------------------------------------------------
+multalign      : 72398 57  -----------------------------------------------------
+multalign      : 80496 39  -----------------------------------------------------
+multalign      : 78343 149 -----------------------------------------------------
+multalign      : 58694 143 -----------------------------------------------------
+multalign      : 33344 61  -----------------------------------------------------
+multalign      : 26797 58  -----------------------------------------------------
+multalign      : 1271  215 --------HD-LGVVAEVADTVAVMYAGQLVEKTSVEELF-Q-----------
+multalign      : 61120 57  -----------------------------------------------------
+multalign      : 79149 84  -----------------------------------------------------
+multalign      : 64610 60  -----------------------------------------------------
+multalign      : 20889 56  -----------------------------------------------------
+multalign      : 66300 71  -----------------------------------------------------
+multalign      : 65944 40  -----------------------------------------------------
+multalign      : 64974 60  -----------------------------------------------------
+multalign      : 53555 160 -----------------------------------------------------
+multalign      : 29083 287 -----------------------------------------------------
+multalign      : 12332 247 --GEAISKSEYTGLGA-------------------------------------
+multalign      : 2091  215 --------HD-LGVVAEVADTVAVMYAGQLVEKASVEELF-Q-----------
+multalign      : 80860 134 -----------------------------------------------------
+multalign      : 66127 43  -----------------------------------------------------
+multalign      : 8467  43  -----------------------------------------------------
+multalign      : 62426 77  -----------------------------------------------------
+multalign      : 41943 75  -----------------------------------------------------
+multalign      : 41943 233 --PTAKQADEYRTLARKVVENKMLIIPNPITMDELEALLM-EFG---------
+multalign      : 3227  75  -----------------------------------------------------
+multalign      : 66001 76  -----------------------------------------------------
+multalign      : 60429 75  -----------------------------------------------------
+multalign      : 56923 373 -----------------------------------------------------
+multalign      : 22305 151 -----------------------------------------------------
+multalign      : 10218 115 -----------------------------------------------------
+multalign      : 7672  45  -----------------------------------------------------
+multalign      : 5004  45  -----------------------------------------------------
+multalign      : 3245  45  -----------------------------------------------------
+multalign      : 11572 247 --GEAISKSEYTGLGA-------------------------------------
+multalign      : 10065 77  -----------------------------------------------------
+multalign      : 8469  74  -----------------------------------------------------
+multalign      : 6845  79  -----------------------------------------------------
+multalign      : 68845 75  -----------------------------------------------------
+multalign      : 75780 200 --NMAWSETQAAWAIPALADAGCELVEQPVASAAALARLMRRFP---------
+multalign      : 8899  158 -----------------------------------------------------
+multalign      : 2560  373 -----------------------------------------------------
+multalign      : 76603 245 KGGGALSAARQIGIPIAFIGTGEKVEDFERFDPAGFVSRL-LGM---------
+multalign      : 63312 43  -----------------------------------------------------
+multalign      : 66320 95  -----------------------------------------------------
+multalign      : 16817 76  -----------------------------------------------------
+multalign      : 9565  43  -----------------------------------------------------
+multalign      : 6080  76  -----------------------------------------------------
+multalign      : 66208 41  -----------------------------------------------------
+multalign      : 58223 454 ------RANESNNLQREIADLSEQIVELESKRNDLHSALL-EMG---------
+multalign      : 6856  143 -----------------------------------------------------
+multalign      : 10049 78  -----------------------------------------------------
+multalign      : 8468  43  -----------------------------------------------------
+multalign      : 4104  43  -----------------------------------------------------
+multalign      : 4103  74  -----------------------------------------------------
+multalign      : 3120  78  -----------------------------------------------------
+multalign      : 1177  48  -----------------------------------------------------
+multalign      : 78362 405 -----------------------------------------------------
+multalign      : 76342 891 --NNEI-----------------------------------------------
+multalign      : 58184 26  -----------------------------------------------------
+multalign      : 9095  43  -----------------------------------------------------
+multalign      : 6078  46  -----------------------------------------------------
+multalign      : 6077  46  -----------------------------------------------------
+multalign      : 65910 36  -----------------------------------------------------
+multalign      : 57497 48  -----------------------------------------------------
+multalign      : 47656 54  -----------------------------------------------------
+multalign      : 9099  43  -----------------------------------------------------
+multalign      : 8246  68  -----------------------------------------------------
+multalign      : 3122  48  -----------------------------------------------------
+multalign      : 2981  48  -----------------------------------------------------
+multalign      : 81598 148 ------------GVKKALLETGIEVMVPPFVE---------------------
+multalign      : 69986 212 -----------------------------------------------------
+multalign      : 60326 153 -----------------------------------------------------
+multalign      : 10467 117 -----------------------------------------------------
+multalign      : 10025 46  -----------------------------------------------------
+multalign      : 7559  49  -----------------------------------------------------
+multalign      : 2750  77  -----------------------------------------------------
+multalign      : 64886 36  ------------------IENG-EIKNKEIIENTARNGMH-GVG---------
+multalign      : 33347 68  -----------------------------------------------------
+multalign      : 16815 46  -----------------------------------------------------
+multalign      : 6168  46  -----------------------------------------------------
+noevent        : 
+multalign      : QUERY 191 -------SMKSKQGN----MAAAIE-NAEAFAMAIFKKLTEALR 222
+multalign      : 1     191 -------SMKSKQGN----MAAAIE-NAEAFAMAIFKKLTEALR 222
+multalign      : 6884  203 -------TMRLIERN----LRIAME-EVVVISKLISKIL----- 229
+multalign      : 7768  196 LNMRTDPSMRLLERN----LRIAME-E----LVTISKLVGEAL- 229
+multalign      : 6886  196 LNMRTDPTMRLLERN----LRIAME-E----LVTISKLVSEAL- 229
+multalign      : 65184 76  -------------------------------------------- 77
+multalign      : 1947  98  -------------------------------------------- 99
+multalign      : 7808  208 -------------------------------------------- 209
+multalign      : 358   61  -------------------------------------------- 62
+multalign      : 65336 44  -------------------------------------------- 45
+multalign      : 55107 39  -------------------------------------------- 40
+multalign      : 48717 208 -------------------------------------------- 209
+multalign      : 1369  154 -------------------------------------------- 155
+multalign      : 72987 53  -------------------------------------------- 54
+multalign      : 54965 134 -------------------------------------------- 135
+multalign      : 4482  39  -------------------------------------------- 40
+multalign      : 73660 178 -------------------------------------------- 179
+multalign      : 55620 59  -------------------------------------------- 60
+multalign      : 3472  39  -------------------------------------------- 40
+multalign      : 81164 57  -------------------------------------------- 58
+multalign      : 58889 57  -------------------------------------------- 58
+multalign      : 34485 57  -------------------------------------------- 58
+multalign      : 9850  103 -------------------------------------------- 104
+multalign      : 1171  59  -------------------------------------------- 60
+multalign      : 79637 163 -------------------------------------------- 164
+multalign      : 72472 164 -------------------------------------------- 165
+multalign      : 23421 57  -------------------------------------------- 58
+multalign      : 10413 57  -------------------------------------------- 58
+multalign      : 9878  152 -------------------------------------------- 153
+multalign      : 72398 57  -------------------------------------------- 58
+multalign      : 80496 39  -------------------------------------------- 40
+multalign      : 78343 149 -------------------------------------------- 150
+multalign      : 58694 143 -------------------------------------------- 144
+multalign      : 33344 61  -------------------------------------------- 62
+multalign      : 26797 58  -------------------------------------------- 59
+multalign      : 1271  245 -------------------------------------------- 246
+multalign      : 61120 57  -------------------------------------------- 58
+multalign      : 79149 84  -------------------------------------------- 85
+multalign      : 64610 60  -------------------------------------------- 61
+multalign      : 20889 56  -------------------------------------------- 57
+multalign      : 66300 71  -------------------------------------------- 72
+multalign      : 65944 40  -------------------------------------------- 41
+multalign      : 64974 60  -------------------------------------------- 61
+multalign      : 53555 160 -------------------------------------------- 161
+multalign      : 29083 287 -------------------------------------------- 288
+multalign      : 12332 259 -------------------------------------------- 260
+multalign      : 2091  245 -------------------------------------------- 246
+multalign      : 80860 134 -------------------------------------------- 135
+multalign      : 66127 43  -------------------------------------------- 44
+multalign      : 8467  43  -------------------------------------------- 44
+multalign      : 62426 77  -------------------------------------------- 78
+multalign      : 41943 75  -------------------------------------------- 76
+multalign      : 41943 278 -------EDESIVGK----AAAAEE------------------- 291
+multalign      : 3227  75  -------------------------------------------- 76
+multalign      : 66001 76  -------------------------------------------- 77
+multalign      : 60429 75  -------------------------------------------- 76
+multalign      : 56923 373 -------------------------------------------- 374
+multalign      : 22305 151 -------------------------------------------- 152
+multalign      : 10218 115 -------------------------------------------- 116
+multalign      : 7672  45  -------------------------------------------- 46
+multalign      : 5004  45  -------------------------------------------- 46
+multalign      : 3245  45  -------------------------------------------- 46
+multalign      : 11572 259 -------------------------------------------- 260
+multalign      : 10065 77  -------------------------------------------- 78
+multalign      : 8469  74  -------------------------------------------- 75
+multalign      : 6845  79  -------------------------------------------- 80
+multalign      : 68845 75  -------------------------------------------- 76
+multalign      : 75780 246 -------ADEILQGPDNAFEIARVN-GADVFAIKI--------- 272
+multalign      : 8899  158 -------------------------------------------- 159
+multalign      : 2560  373 -------------------------------------------- 374
+multalign      : 76603 292 -------ALMEKIER----IASEEELDPEAFLKGTF-------- 316
+multalign      : 63312 43  -------------------------------------------- 44
+multalign      : 66320 95  -------------------------------------------- 96
+multalign      : 16817 76  -------------------------------------------- 77
+multalign      : 9565  43  -------------------------------------------- 44
+multalign      : 6080  76  -------------------------------------------- 77
+multalign      : 66208 41  -------------------------------------------- 42
+multalign      : 58223 495 -------SLLTKKDS----IANKIS-D----------------- 509
+multalign      : 6856  143 -------------------------------------------- 144
+multalign      : 10049 78  -------------------------------------------- 79
+multalign      : 8468  43  -------------------------------------------- 44
+multalign      : 4104  43  -------------------------------------------- 44
+multalign      : 4103  74  -------------------------------------------- 75
+multalign      : 3120  78  -------------------------------------------- 79
+multalign      : 1177  48  -------------------------------------------- 49
+multalign      : 78362 405 -------------------------------------------- 406
+multalign      : 76342 893 -------------------------------------------- 894
+multalign      : 58184 26  -------------------------------------------- 27
+multalign      : 9095  43  -------------------------------------------- 44
+multalign      : 6078  46  -------------------------------------------- 47
+multalign      : 6077  46  -------------------------------------------- 47
+multalign      : 65910 36  -------------------------------------------- 37
+multalign      : 57497 48  -------------------------------------------- 49
+multalign      : 47656 54  -------------------------------------------- 55
+multalign      : 9099  43  -------------------------------------------- 44
+multalign      : 8246  68  -------------------------------------------- 69
+multalign      : 3122  48  -------------------------------------------- 49
+multalign      : 2981  48  -------------------------------------------- 49
+multalign      : 81598 166 -------------------------------------------- 167
+multalign      : 69986 212 -------------------------------------------- 213
+multalign      : 60326 153 -------------------------------------------- 154
+multalign      : 10467 117 -------------------------------------------- 118
+multalign      : 10025 46  -------------------------------------------- 47
+multalign      : 7559  49  -------------------------------------------- 50
+multalign      : 2750  77  -------------------------------------------- 78
+multalign      : 64886 64  -------SLIANMGV----NAIIVQ-NIGPKAYSVFKQL----- 90
+multalign      : 33347 68  -------------------------------------------- 69
+multalign      : 16815 46  -------------------------------------------- 47
+multalign      : 6168  46  -------------------------------------------- 47
+*************** end_alignment
+*************** start_database_report
+database       :   Database: /taiyang/jchang/parsers/swissprot
+posted_date    :     Posted date:  May 12, 2000 11:25 AM
+num_letters_in_:   Number of letters in database: 29,652,561
+num_sequences_i:   Number of sequences in database:  82,258
+noevent        : 
+noevent        : Lambda     K      H
+ka_params      :    0.315    0.130    0.349
+noevent        : 
+noevent        : Lambda     K      H
+ka_params_gap  :    0.270   0.0470    0.230
+noevent        : 
+noevent        : 
+*************** end_database_report
+*************** start_parameters
+matrix         : Matrix: BLOSUM62
+gap_penalties  : Gap Penalties: Existence: 11, Extension: 1
+num_hits       : Number of Hits to DB: 11011949
+num_sequences  : Number of Sequences: 82258
+num_extends    : Number of extensions: 406641
+num_good_extend: Number of successful extensions: 1349
+num_seqs_better: Number of sequences better than 10.0: 107
+hsps_no_gap    : Number of HSP's better than 10.0 without gapping: 89
+hsps_prelim_gap: Number of HSP's successfully gapped in prelim test: 18
+hsps_prelim_gap: Number of HSP's that attempted gapping in prelim test: 1236
+hsps_gapped    : Number of HSP's gapped (non-prelim): 131
+query_length   : length of query: 222
+database_length: length of database: 29,652,561
+effective_hsp_l: effective HSP length: 57
+effective_query: effective length of query: 165
+effective_datab: effective length of database: 24,963,855
+effective_searc: effective search space: 4119036075
+effective_searc: effective search space used: 4119036075
+threshold      : T: 11
+window_size    : A: 40
+dropoff_1st_pas: X1: 16 ( 7.3 bits)
+gap_x_dropoff  : X2: 38 (14.8 bits)
+gap_x_dropoff_f: X3: 64 (24.9 bits)
+gap_trigger    : S1: 41 (21.6 bits)
+blast_cutoff   : S2: 63 (29.0 bits)
+*************** end_parameters
