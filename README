@@ -128,8 +128,6 @@ setup.py --     Installation file.
 
 - more regression tests
 
-- Zope-ify the web site
-
 - microarray data
 
 If you see something here you would like to work on, please send mail

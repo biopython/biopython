@@ -4,6 +4,30 @@ News for the Biopython Project
 This file contains release notes and general news
 about the biopython project.
 
+Biopython1.00a4
+  minor bug fix in NCBIStandalone.blastall
+  optimization in dynamic programming code
+  new modules for logistic regression and maximum entropy
+  minor bug fix in ParserSupport
+  minor bug fixes in SCOP package
+  minor updates in the kMeans cluster selection code
+  minor bug fixes in SubsMat code
+  support for XML-formatted MEDLINE files
+  added MultiProc.run to simplify splitting code across processors
+  listfns.items now supports lists with unhashable items
+  new data type for pathways
+  new support for intelligenetics format
+  new support for metatool format
+  new support for NBRF format
+  new support for generalized launching of applications
+  new support for genetic algorithms
+  minor bug fixes in GenBank parsing
+  new support for Primer in the Emboss package
+  new support for chromosome graphics
+  new support for HMMs
+  new support for NeuralNetwork
+  slew of Martel fixes (see Martel docs)
+
 Sept 3, 2001: Biopython1.00a3
   added package to support KEGG
   added sequtils module for computations on sequences
