@@ -17,15 +17,18 @@ LinParser   Parse one record from a 'lin' file.
 import string
 from types import *
 
+from Bio import File
+from Bio.ParserSupport import *
 import Location
 
 class Lin:
     """Holds information from a 'lin' file.
+    XXX rename id to hierarchy
 
     Members:
     pdb          The PDB name for the sequence, e.g. 3sdh
     domain       The SCOP domain name for the sequence, e.g. d3sdha_
-    id           The SCOP id for the sequence, e.g. 1.001.001.001.001.001
+    hierarchy    The SCOP hierarchy, e.g. 1.001.001.001.001.001
     locations    A list of tuples (chain, start, end) describing the location.
     klass        SCOP class.
     fold         SCOP fold.
@@ -38,7 +41,7 @@ class Lin:
     def __init__(self):
         self.pdb = ''
         self.domain = ''
-        self.id = ''
+        self.hierarchy = ''
         self.locations = []
         self.klass = ''
         self.fold = ''
@@ -52,7 +55,7 @@ class Lin:
         lines.append("%s " % self.domain)
         lines.append("%s\t" % self.pdb)
         lines.append("%s\t" % Location.str(self.locations))
-        lines.append("%s\t" % self.id)
+        lines.append("%s\t" % self.hierarchy)
         lines.append("Class: %s| " % self.klass)
         lines.append("Fold: %s| " % self.fold)
         lines.append("Superfamily: %s| " % self.superfamily)
@@ -79,13 +82,34 @@ class Iterator:
         """
         if type(handle) is not FileType and type(handle) is not InstanceType:
             raise ValueError, "I expected a file handle or file-like object"
-        self._handle = handle
+        self._handle = File.UndoHandle(handle)
         self._parser = parser
 
     def next(self):
-        line = self._handle.readline()
-        if not line:
+        """S.next() -> obj or None"""
+        # Return each record as a single line.
+        lines = []
+        while 1:
+            line = self._handle.readline()
+            if not line:
+                break
+            # If this is the first line I've read, make sure I'm at the
+            # beginning of a record.
+            if not lines:
+                if string.find(line, 'Class:') < 0:
+                    raise SyntaxError, "I don't see a record:\n%s" % line
+            # If I'm at the beginning of the next record, then save the
+            # line and stop reading.
+            if lines and string.find(line, 'Class:') >= 0:
+                self._handle.saveline(line)
+                break
+            # Strip off EOL characters.  XXX should optimize this.
+            while line and line[-1] in ['\n', '\r']:
+                line = line[:-1]
+            lines.append(line)
+        if not lines:
             return None
+        line = string.join(lines, '')
         if self._parser is not None:
             return self._parser.parse(line)
         return line
@@ -121,7 +145,7 @@ class LinParser:
     def _parse_info(self, data, rec):
         cols = string.split(data)
         try:
-            rec.domain, rec.pdb, locstr, rec.id = cols
+            rec.domain, rec.pdb, locstr, rec.hierarchy = cols
         except ValueError:
             raise SyntaxError, "I expected 4 columns in %s" % data
         rec.locations = Location.parse(locstr)
