@@ -92,6 +92,8 @@ class Vector:
     def norm(self):
         "Return vector norm"
         if self._norm is None:
+            # Avoid expensive sqrts in future
+            # calls of norm
             self._norm=sqrt(sum(self._ar*self._ar))
         return self._norm
 
