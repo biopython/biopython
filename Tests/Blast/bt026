@@ -1,0 +1,255 @@
+<HTML>
+<HEAD>
+<TITLE>BLAST Search Results </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" LINK="#0000FF" VLINK="#660099" ALINK="#660099">
+<A HREF="http://www.ncbi.nlm.nih.gov/BLAST/blast_form.map"> <IMG SRC="http://www.ncbi.nlm.nih.gov/BLAST/blast_results.gif" BORDER=0 ISMAP></A>
+<BR><BR><PRE>
+<b>BLASTN 2.0.10 [Aug-26-1999]</b>
+
+
+<b><a href="http://www.ncbi.nlm.nih.gov/htbin-
+post/Entrez/query?uid=9254694&form=6&db=m&Dopt=r">Reference</a>:</b>
+Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch&auml;ffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+<p>
+<b>Query=</b> gi|1347201|gb|G24969.1|G24969 human STS EST21946.
+         (331 letters)
+
+<b>Database:</b> Non-redundant Database of GenBank STS Division
+           89,405 sequences; 32,867,852 total letters
+
+<p> <p>If you have any problems or questions with the results of this search <br>please refer to the <b><a href=http://www.ncbi.nlm.nih.gov/BLAST/blast_FAQs.html>BLAST FAQs</a></b><br><p>
+<FORM NAME="BLASTFORM">
+</PRE>
+<CENTER>
+<H3><a href="/BLAST/newoptions.html#graphical-overview"> Distribution of 9 Blast Hits on the Query Sequence</a></H3>
+<input name=defline size=80 value="Mouse-over to show defline and scores. Click to show alignments">
+</CENTER>
+<map name=img_map>
+<area shape=rect coords=69,101,523,106 href="#1347201" ONMOUSEOVER='document.BLASTFORM.defline.value="G24969  human STS EST21946.  gi|1375315|gb|G27065|G27065 human STS..S= 656 E=0.0"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=237,108,259,113 href="#2665277" ONMOUSEOVER='document.BLASTFORM.defline.value="AL010115  H.sapiens flow-sorted chromosome 1 HindIII fragment, SC..S=34.2 E=0.50"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=132,108,153,113 href="#1342139" ONMOUSEOVER='document.BLASTFORM.defline.value="G21813  human STS WI-12408...S=32.2 E=2.0"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=133,115,154,120 href="#4493602" ONMOUSEOVER='document.BLASTFORM.defline.value="G47248  Z17392_1 Zebrafish AB Danio rerio STS genomic clone Z17392..S=32.2 E=2.0"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=201,108,221,113 href="#1235411" ONMOUSEOVER='document.BLASTFORM.defline.value="Z53965  H.sapiens (D2S2321) DNA segment containing (CA) repeat; cl..S=32.2 E=2.0"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=204,115,224,120 href="#6120731" ONMOUSEOVER='document.BLASTFORM.defline.value="G55412  SHGC-100745 Human Homo sapiens STS genomic, sequence tagge..S=32.2 E=2.0"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=205,122,226,127 href="#939357" ONMOUSEOVER='document.BLASTFORM.defline.value="G08807  human STS CHLC.GATA70E11.P18111 clone GATA70E11..S=32.2 E=2.0"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=221,129,253,134 href="#4757440" ONMOUSEOVER='document.BLASTFORM.defline.value="G49267  stbK343C1_96809 chromosome 22 genomic clone Homo sapiens S..S=32.2 E=2.0"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=461,108,482,113 href="#719782" ONMOUSEOVER='document.BLASTFORM.defline.value="G02824  human STS WI-1312...S=32.2 E=2.0"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+</map>
+<CENTER>
+<IMG WIDTH=529 HEIGHT=136 USEMAP=#img_map BORDER=1 SRC="nph-getgif.cgi?iblast0&207891705326625.gif" ISMAP></CENTER>
+<HR>
+<PRE>
+
+
+<PRE>
+<a name = 1347201> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=01347201&dopt=GenBank">gb|G24969|G24969</a> human STS EST21946. >gi|1375315|gb|G27065|G27065 human STS
+           SHGC-31731.
+           Length = 331
+           
+ Score =  656 bits (331), Expect = 0.0
+ Identities = 331/331 (100%)
+ Strand = Plus / Plus
+
+                                                                       
+Query: 1   cctccaccctctcatgagcaacaggatatgtgaaagtacttgcagccagaagcaaaacca 60
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Sbjct: 1   cctccaccctctcatgagcaacaggatatgtgaaagtacttgcagccagaagcaaaacca 60
+
+                                                                       
+Query: 61  caatcctcgggtgctagatggagctccccaaggagcagagaggaaaaggcaggaggagag 120
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Sbjct: 61  caatcctcgggtgctagatggagctccccaaggagcagagaggaaaaggcaggaggagag 120
+
+                                                                       
+Query: 121 ggccaggcagcagggatggagactaagtttggcccaaggctgcccgcaagcactgatgcc 180
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Sbjct: 121 ggccaggcagcagggatggagactaagtttggcccaaggctgcccgcaagcactgatgcc 180
+
+                                                                       
+Query: 181 atcatgccctctggtaggtgtctatttctgtctgaaccagaaatacaccaagctccacac 240
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Sbjct: 181 atcatgccctctggtaggtgtctatttctgtctgaaccagaaatacaccaagctccacac 240
+
+                                                                       
+Query: 241 atgggggctttgctggcttcgacatcactggttcaactatgtcactgctttgttatattt 300
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Sbjct: 241 atgggggctttgctggcttcgacatcactggttcaactatgtcactgctttgttatattt 300
+
+                                          
+Query: 301 agtgctccagaacctcaggttccttcagatt 331
+           |||||||||||||||||||||||||||||||
+Sbjct: 301 agtgctccagaacctcaggttccttcagatt 331
+</PRE>
+
+
+<PRE>
+<a name = 2665277> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=02665277&dopt=GenBank">emb|AL010115|HSPE77H4</a> H.sapiens flow-sorted chromosome 1 HindIII fragment, SC1pE77H4,
+           sequence tagged site [Homo sapiens]
+           Length = 554
+           
+ Score = 34.2 bits (17), Expect = 0.50
+ Identities = 17/17 (100%)
+ Strand = Plus / Minus
+
+                            
+Query: 123 ccaggcagcagggatgg 139
+           |||||||||||||||||
+Sbjct: 434 ccaggcagcagggatgg 418
+</PRE>
+
+
+<PRE>
+<a name = 4757440> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=04757440&dopt=GenBank">gb|G49267.1|G49267</a> stbK343C1_96809 chromosome 22 genomic clone Homo sapiens STS
+           genomic clone 343C1, sequence tagged site
+           Length = 360
+           
+ Score = 32.2 bits (16), Expect = 2.0
+ Identities = 22/24 (91%)
+ Strand = Plus / Minus
+
+                                   
+Query: 112 ggaggagagggccaggcagcaggg 135
+           ||||||||||| | ||||||||||
+Sbjct: 287 ggaggagaggggctggcagcaggg 264
+</PRE>
+
+
+<PRE>
+<a name = 4493602> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=04493602&dopt=GenBank">gb|G47248.1|G47248</a> Z17392_1 Zebrafish AB Danio rerio STS genomic clone Z17392 5',
+           sequence tagged site
+           Length = 454
+           
+ Score = 32.2 bits (16), Expect = 2.0
+ Identities = 16/16 (100%)
+ Strand = Plus / Plus
+
+                           
+Query: 48  agaagcaaaaccacaa 63
+           ||||||||||||||||
+Sbjct: 434 agaagcaaaaccacaa 449
+</PRE>
+
+
+<PRE>
+<a name = 6120731> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=06120731&dopt=GenBank">gb|G55412.1|G55412</a> SHGC-100745 Human Homo sapiens STS genomic, sequence tagged site
+           Length = 652
+           
+ Score = 32.2 bits (16), Expect = 2.0
+ Identities = 16/16 (100%)
+ Strand = Plus / Minus
+
+                           
+Query: 99  agaggaaaaggcagga 114
+           ||||||||||||||||
+Sbjct: 431 agaggaaaaggcagga 416
+</PRE>
+
+
+<PRE>
+<a name = 1235411> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=01235411&dopt=GenBank">emb|Z53965|HSC009WH1</a> H.sapiens (D2S2321) DNA segment containing (CA) repeat; clone
+           AFMc009wh1; single read, sequence tagged site [Homo
+           sapiens]
+           Length = 382
+           
+ Score = 32.2 bits (16), Expect = 2.0
+ Identities = 16/16 (100%)
+ Strand = Plus / Plus
+
+                           
+Query: 97  agagaggaaaaggcag 112
+           ||||||||||||||||
+Sbjct: 107 agagaggaaaaggcag 122
+</PRE>
+
+
+<PRE>
+<a name = 939357> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=00939357&dopt=GenBank">gb|G08807|G08807</a> human STS CHLC.GATA70E11.P18111 clone GATA70E11
+           Length = 643
+           
+ Score = 32.2 bits (16), Expect = 2.0
+ Identities = 16/16 (100%)
+ Strand = Plus / Minus
+
+                           
+Query: 100 gaggaaaaggcaggag 115
+           ||||||||||||||||
+Sbjct: 482 gaggaaaaggcaggag 467
+</PRE>
+
+
+<PRE>
+<a name = 1342139> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=01342139&dopt=GenBank">gb|G21813|G21813</a> human STS WI-12408.
+           Length = 418
+           
+ Score = 32.2 bits (16), Expect = 2.0
+ Identities = 16/16 (100%)
+ Strand = Plus / Minus
+
+                           
+Query: 47  cagaagcaaaaccaca 62
+           ||||||||||||||||
+Sbjct: 193 cagaagcaaaaccaca 178
+</PRE>
+
+
+<PRE>
+<a name = 719782> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=00719782&dopt=GenBank">gb|G02824|G02824</a> human STS WI-1312.
+           Length = 349
+           
+ Score = 32.2 bits (16), Expect = 2.0
+ Identities = 16/16 (100%)
+ Strand = Plus / Plus
+
+                           
+Query: 286 tgctttgttatattta 301
+           ||||||||||||||||
+Sbjct: 111 tgctttgttatattta 126
+</PRE>
+
+
+
+<PRE>
+  Database: Non-redundant Database of GenBank STS Division
+    Posted date:  Dec 18, 1999  7:45 PM
+  Number of letters in database: 32,867,852
+  Number of sequences in database:  89,405
+  
+Lambda     K      H
+    1.37    0.711     1.31 
+
+Gapped
+Lambda     K      H
+    1.37    0.711     1.31 
+
+
+Matrix: blastn matrix:1 -3
+Gap Penalties: Existence: 5, Extension: 2
+Number of Hits to DB: 7042
+Number of Sequences: 89405
+Number of extensions: 7042
+Number of successful extensions: 1951
+Number of sequences better than 10.0: 13
+length of query: 331
+length of database: 32,867,852
+effective HSP length: 17
+effective length of query: 314
+effective length of database: 31,347,967
+effective search space: 9843261638
+effective search space used: 9843261638
+T: 0
+A: 0
+X1: 6 (11.9 bits)
+X2: 10 (19.8 bits)
+S1: 12 (24.3 bits)
+S2: 15 (30.2 bits)
+
+</PRE>
+
+</BODY>
+</HTML>
+</BODY>
+</HTML>

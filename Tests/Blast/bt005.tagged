@@ -1,0 +1,166 @@
+*************** start_header
+version        : BLASTP 2.0.10 [Aug-26-1999]
+noevent        : 
+noevent        : 
+reference      : Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. S
+reference      : Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (199
+reference      : "Gapped BLAST and PSI-BLAST: a new generation of protein database
+reference      : programs",  Nucleic Acids Res. 25:3389-3402.
+noevent        : 
+query_info     : Query= gi|132349|sp|P15394|REPA_AGRTU REPLICATING PROTEIN
+query_info     :          (250 letters)
+noevent        : 
+database_info  : Database: data/swissprot
+database_info  :            82,258 sequences; 29,652,561 total letters
+noevent        : 
+*************** end_header
+*************** start_descriptions
+noevent        : Searching..................................................done
+noevent        : 
+noevent        : 
+noevent        : Sequences producing significant alignments:
+noevent        : 
+description    : gi|132349|sp|P15394|REPA_AGRTU REPLICATING PROTEIN
+description    : gi|123932|sp|P19922|HYIN_BRAJA INDOLEACETAMIDE HYDROLASE (IAH) ..
+description    : gi|137670|sp|P06422|VE2_HPV08 REGULATORY PROTEIN E2
+description    : gi|5921693|sp|Q05152|CCAB_RABIT VOLTAGE-DEPENDENT N-TYPE CALCIU..
+description    : gi|121952|sp|P02256|H1_PARAN HISTONE H1, GONADAL
+description    : gi|124141|sp|P08392|ICP4_HSV11 TRANS-ACTING TRANSCRIPTIONAL PRO..
+description    : gi|3915729|sp|P51592|HYDP_DROME HYPERPLASTIC DISCS PROTEIN (HYD..
+description    : gi|462182|sp|P33438|GLT_DROME GLUTACTIN PRECURSOR
+description    : gi|731294|sp|P39713|YAG1_YEAST HYPOTHETICAL ZINC-TYPE ALCOHOL D..
+description    : gi|1708851|sp|P55268|LMB2_HUMAN LAMININ BETA-2 CHAIN PRECURSOR ..
+description    : gi|2495137|sp|Q24704|H1_DROVI HISTONE H1
+description    : gi|1172635|sp|P46466|PRS4_ORYSA 26S PROTEASE REGULATORY SUBUNIT..
+description    : gi|6093970|sp|Q61085|RHOP_MOUSE GTP-RHO BINDING PROTEIN 1 (RHOP..
+description    : gi|547963|sp|Q01989|MYS9_DROME MYOSIN HEAVY CHAIN 95F (95F MHC)
+description    : gi|6226905|sp|Q59567|TOP1_MYCTU DNA TOPOISOMERASE I (OMEGA-PROT..
+noevent        : 
+*************** end_descriptions
+*************** start_alignment
+multalign      : QUERY 1    MFQQIGAVQAKSGTDEPAHPCEKFPPERKCEAVFWKPLPRHEAREILLAARKYE
+multalign      : 0     1    MFQQIGAVQAKSGTDEPAHPCEKFPPERKCEAVFWKPLPRHEAREILLAARKYE
+multalign      : 6011       ------------------------------------------------------
+multalign      : 42735      ------------------------------------------------------
+multalign      : 14903      ------------------------------------------------------
+multalign      : 36499      ------------------------------------------------------
+multalign      : 36850      ------------------------------------------------------
+multalign      : 76818      ------------------------------------------------------
+multalign      : 14245      ------------------------------------------------------
+multalign      : 47667 228  -----------------------------------------------------E
+multalign      : 57583      ------------------------------------------------------
+multalign      : 59981      ------------------------------------------------------
+multalign      : 23110      ------------------------------------------------------
+multalign      : 58685      ------------------------------------------------------
+multalign      : 14284      ------------------------------------------------------
+multalign      : 72095      ------------------------------------------------------
+noevent        : 
+multalign      : QUERY 61   GKRTGPLGHVALEVLDYLTNLVDFGNGRLDPSISTIMEKIGRAESCMSALYPNR
+multalign      : 0     61   GKRTGPLGHVALEVLDYLTNLVDFGNGRLDPSISTIMEKIGRAESCMSALYPNR
+multalign      : 6011       ------------------------------------------------------
+multalign      : 42735      ------------------------------------------------------
+multalign      : 14903 822  ---------------------------------------------------PGR
+multalign      : 36499      ------------------------------------------------------
+multalign      : 36850 59   -----------------------------------------------------R
+multalign      : 76818      ------------------------------------------------------
+multalign      : 14245 644  -------------------------------------EYVRAQEARQQEFIRER
+multalign      : 47667 235  ARVYDPTAHAAKESIDYLRSIADGGDG---------------------------
+multalign      : 57583 1671 --------------------------------------KLKRAGNSLAASTAEE
+multalign      : 59981      ------------------------------------------------------
+multalign      : 23110 19   ------------------------------------------------------
+multalign      : 58685      ------------------------------------------------------
+multalign      : 14284      ------------------------------------------------------
+multalign      : 72095 842  -----------------------------------------------------K
+noevent        : 
+multalign      : QUERY 121  AGAADKQRLPLEPAGARPRALLGKYVRK------AA---PL---PDDAAQAR--
+multalign      : 0     121  AGAADKQRLPLEPAGARPRALLGKYVRK------AA---PL---PDDAAQAR--
+multalign      : 6011       ------------------------------------------------------
+multalign      : 42735 258  --------------------------------------------PQKEQRRS--
+multalign      : 14903 831  PGGKSRPDGSEAPEGADPPRRHHRHRDK------DK---AP---ATVPSAGE--
+multalign      : 36499 147  AAAKRKAALAKKKAAAAKRKAAAKAKKA------KK---PK---KKAAKKAK--
+multalign      : 36850 66   AAGTDAGEDAGDAVSPRQLALLASMVEE------AVRTIPT---PDPAASPP--
+multalign      : 76818      ------------------------------------------------------
+multalign      : 14245 667  QQLRDQQRYPQQ----EPREQQDERIRQ------QR---EQ---EERLRQQR--
+multalign      : 47667 260  ------------------------------------------------------
+multalign      : 57583 1693 GRAQEAEQLLRGPLGDQYQTVKALAERK------AQ---GVLAAQARAEQLR--
+multalign      : 59981 124  ---------------AKPKA--SAVEKK------TK---KV---NASAARAT--
+multalign      : 23110 22   GGDGDKKDRKFEPSAAPSR--VGRKQRKQKGPEAAA---RL---PNVAPLSKCR
+multalign      : 58685      ------------------------------------------------------
+multalign      : 14284 936  ---------------------------R------AA---KE---AEEQRQRE--
+multalign      : 72095 849  ASAPPLRELGTDPASGKPMVI--KDGRF------GP---YV---TDGETNAS--
+noevent        : 
+multalign      : QUERY 161  Q----ERHDTIKAHMDS---LSPADRLR----ET--VEDRTRAEQLAG-YVE-R
+multalign      : 0     161  Q----ERHDTIKAHMDS---LSPADRLR----ET--VEDRTRAEQLAG-YVE-R
+multalign      : 6011  12   -----QRRDLRGRDRRS---ASRTDARR----QS--AAERGCRRSQRG-SAE-G
+multalign      : 42735 266  R----SRHRT-RSRSRS---LSRVRAVG----ST--TVSRSRSSSLTK-AVR-P
+multalign      : 14903 871  Q----DRAEALRAEGGE---LGPREERG----RP----RRSRSKEAPG-APEVR
+multalign      : 36499 187  K----PAKKSPKKAKKP---AKKSPKKK----KA--KRSPKKAKKAAG-KRK-P
+multalign      : 36850 109  RTPAFRADDDDGDEYDD---AADAAGDR----AP--ARGREREAPLRGAYPD-P
+multalign      : 76818 1967 -----DKQDSISGRINN---LSPMTESY----DT--DDELANLEEFNA-DVQ-M
+multalign      : 14245 703  E----QE-----------------ERLR----QQRELEERIRQQQERE-QYE-R
+multalign      : 47667 260  ------------------------------------------------------
+multalign      : 57583 1736 D----EARDLLQAAQDK---LQRLQELE----GT--YEENERA-----------
+multalign      : 59981 147  K----SKSSTSTTKKAA---GAADKKLS----KS--AAAKKNVEKKKA-DKE-K
+multalign      : 23110 74   E----RVKDYLLMEEEF---VAAQERLRPTEDKT--EEDRSKVDDLRG------
+multalign      : 58685 584  ------------------------------------------------------
+multalign      : 14284 949  E----IENKRLKAEMETRRKAAEAQRLR----QE--EEDRRAALALQE-QLE-K
+multalign      : 72095 887  L----RKGDDVASITD--------ERAA----EL--LADRRARGPAKR-PAR-K
+noevent        : 
+multalign      : QUERY 205  --PSGPRKAARRRQQSRCSFTTPNRPRRTLPS------SHPQKFG---GTKGRK
+multalign      : 0     205  --PSGPRKAARRRQQSRCSFTTPNRPRRTLPS------SHPQKFG---GTKGRK
+multalign      : 6011  55   --QTGPRAA-----RSACCTACPSRSRRMSTT------EGRPNFN---GVPANK
+multalign      : 42735 309  --SRGRATATSRRRAGRGS---PRRRRSTSRSPSTNTFKRSQRGG---GRRGR-
+multalign      : 14903 915  PCPEGGRRHHRRGSPEEAAEREPRRHRAHRHG------PDPGKEGPASGTRGER
+multalign      : 36499 231  --RRSPRKAGKRRSPKK-------------------------------------
+multalign      : 36850 158  --PRPPAQPPRRRRHGR-------------------------------------
+multalign      : 76818 2010 --PSGSQGTRRH------AFFARSESTLTLGC------SAPEGF----------
+multalign      : 14245 735  --EQREREELERQQRER-------------------------------------
+multalign      : 47667 260  ------------------------------------------------------
+multalign      : 57583 1764 ------------------------------------------------------
+multalign      : 59981 191  --KTGTIKAKPTTAKAKSSATKPKTPKPKTTS------AKPKK-----------
+multalign      : 23110 111  ------------------------------------------------------
+multalign      : 58685 585  --GTGPRRAALLWNQRECGFETP-MPTRTRP-----------------------
+multalign      : 14284 996  --AKYRQQLEQERRDHELALRLANESNGQVED------SPP-------------
+multalign      : 72095 926  --PA--KKAAKR------------------------------------------
+*************** end_alignment
+*************** start_database_report
+database       :   Database: data/swissprot
+posted_date    :     Posted date:  Nov 15, 1999  2:55 PM
+num_letters_in_:   Number of letters in database: 29,652,561
+num_sequences_i:   Number of sequences in database:  82,258
+noevent        : 
+noevent        : Lambda     K      H
+ka_params      :    0.317    0.133    0.395
+noevent        : 
+noevent        : Lambda     K      H
+ka_params_gap  :    0.270   0.0470    0.230
+noevent        : 
+*************** end_database_report
+noevent        : 
+*************** start_parameters
+matrix         : Matrix: BLOSUM62
+gap_penalties  : Gap Penalties: Existence: 11, Extension: 1
+num_hits       : Number of Hits to DB: 14679054
+num_sequences  : Number of Sequences: 82258
+num_extends    : Number of extensions: 599117
+num_good_extend: Number of successful extensions: 1508
+num_seqs_better: Number of sequences better than 10.0: 15
+hsps_no_gap    : Number of HSP's better than 10.0 without gapping: 4
+hsps_prelim_gap: Number of HSP's successfully gapped in prelim test: 11
+hsps_prelim_gap: Number of HSP's that attempted gapping in prelim test: 1504
+hsps_gapped    : Number of HSP's gapped (non-prelim): 15
+query_length   : length of query: 250
+database_length: length of database: 29,652,561
+effective_hsp_l: effective HSP length: 51
+effective_query: effective length of query: 199
+effective_datab: effective length of database: 25,457,403
+effective_searc: effective search space: 5066023197
+effective_searc: effective search space used: 5066023197
+threshold      : T: 11
+window_size    : A: 40
+dropoff_1st_pas: X1: 16 ( 7.3 bits)
+gap_x_dropoff  : X2: 38 (14.8 bits)
+gap_x_dropoff_f: X3: 64 (24.9 bits)
+gap_trigger    : S1: 41 (21.7 bits)
+blast_cutoff   : S2: 63 (29.0 bits)
+*************** end_parameters

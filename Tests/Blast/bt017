@@ -1,0 +1,58 @@
+TBLASTN 2.0.10 [Aug-26-1999]
+
+
+Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+
+Query= gi|127420|sp|P19888|MTBA_BACAR MODIFICATION METHYLASE BANI
+(CYTOSINE-SPECIFIC METHYLTRANSFERASE BANI) (M.BANI)
+         (428 letters)
+
+Database: data/sts
+           87,792 sequences; 31,998,854 total letters
+
+Searching..................................................done
+
+ ***** No hits found ******
+
+  Database: data/sts
+    Posted date:  Nov 26, 1999  5:52 PM
+  Number of letters in database: 31,998,854
+  Number of sequences in database:  87,792
+  
+Lambda     K      H
+   0.320    0.140    0.403 
+
+Gapped
+Lambda     K      H
+   0.270   0.0470    0.230 
+
+
+Matrix: BLOSUM62
+Gap Penalties: Existence: 11, Extension: 1
+Number of Hits to DB: 13588598
+Number of Sequences: 87792
+Number of extensions: 162273
+Number of successful extensions: 546
+Number of sequences better than 10.0: 0
+Number of HSP's better than 10.0 without gapping: 0
+Number of HSP's successfully gapped in prelim test: 0
+Number of HSP's that attempted gapping in prelim test: 546
+Number of HSP's gapped (non-prelim): 0
+length of query: 428
+length of database: 10,666,284
+effective HSP length: 48
+effective length of query: 380
+effective length of database: 6,452,268
+effective search space: 2451861840
+effective search space used: 2451861840
+frameshift window, decay const: 50,  0.1
+T: 13
+A: 40
+X1: 16 ( 7.4 bits)
+X2: 38 (14.8 bits)
+X3: 64 (24.9 bits)
+S1: 41 (21.8 bits)
+S2: 61 (28.2 bits)

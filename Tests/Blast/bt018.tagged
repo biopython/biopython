@@ -1,0 +1,648 @@
+*************** start_header
+version        : TBLASTX 2.0.10 [Aug-26-1999]
+noevent        : 
+noevent        : 
+reference      : Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. S
+reference      : Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (199
+reference      : "Gapped BLAST and PSI-BLAST: a new generation of protein database
+reference      : programs",  Nucleic Acids Res. 25:3389-3402.
+noevent        : 
+query_info     : Query= gi|1348853|gb|G26621|G26621 human STS
+query_info     : STS_D12006.gi|1396339|gb|G27620|G27620 human STS SHGC-32705.
+query_info     :          (615 letters)
+noevent        : 
+database_info  : Database: data/sts
+database_info  :            87,792 sequences; 31,998,854 total letters
+noevent        : 
+*************** end_header
+*************** start_descriptions
+noevent        : Searching..................................................done
+noevent        : 
+noevent        : 
+noevent        : Sequences producing significant alignments:
+noevent        : 
+description    : gi|1348853|gb|G26621|G26621 human STS STS_D12006. >gi|1396339|g..
+description    : gi|1348016|gb|G25784|G25784 human STS EST47998.
+description    : gi|3403105|gb|G41148|G41148 Z7324 Zebrafish AB Danio rerio STS ..
+description    : gi|1234967|emb|Z53521|HSB316XA9 H.sapiens (D22S1166) DNA segmen..
+description    : gi|4185670|gb|G42865|G42865 Xq3845 KWOK Homo sapiens STS genomi..
+description    : gi|4757419|gb|G49246.1|G49246 stbK116F5_30376 chromosome 22 gen..
+description    : gi|6120694|gb|G55375.1|G55375 SHGC-100697 Human Homo sapiens ST..
+description    : gi|5225124|gb|G53947.1|G53947 SHGC-85304 Human Homo sapiens STS..
+description    : gi|1311530|gb|L77996|HUMSWX945 Human chromosome X STS sWXD945, ..
+description    : gi|2734624|gb|G36957|G36957 SHGC-56642 Human Homo sapiens STS cDN
+description    : gi|4631600|dbj|AU046965.1|AU046965 Rattus norvegicus, OTSUKA cl..
+description    : gi|4631518|dbj|AU046883.1|AU046883 Rattus norvegicus, OTSUKA cl..
+description    : gi|2226478|gb|G33174|G33174 human STS SHGC-6097 clone pG-2470
+description    : gi|938611|gb|G08061|G08061 human STS CHLC.GGAA7E02.P7438 clone ..
+description    : gi|307789|gb|L18105|HUMUT1736 Human STS UT1736.
+description    : gi|859804|gb|G06559|G06559 human STS WI-7401.
+description    : gi|4493143|gb|G46852.1|G46852 Z14841_1 Zebrafish AB Danio rerio..
+description    : gi|4492122|gb|G45831.1|G45831 Z4588_1 Zebrafish AB Danio rerio ..
+description    : gi|6121804|gb|G56635.1|G56635 SHGC-102032 Human Homo sapiens ST..
+noevent        : 
+*************** end_descriptions
+*************** start_alignment
+title          : >gi|1348853|gb|G26621|G26621 human STS STS_D12006.
+title          :            >gi|1396339|gb|G27620|G27620 human STS SHGC-32705.
+length         :            Length = 615
+noevent        : 
+score          :  Score =  367 bits (796), Expect = e-102
+identities     :  Identities = 192/200 (96%), Positives = 192/200 (96%)
+frame          :  Frame = +2 / +2
+noevent        : 
+noevent        : 
+query          : Query: 2   IRMPLHS*DSSFCPL*QEKWECMXXXXXXXXRPKRCLQPHPLNWP*LGLNALMQ
+align          :            IRMPLHS*DSSFCPL*QEKWECM        RPKRCLQPHPLNWP*LGLNALMQ
+sbjct          : Sbjct: 2   IRMPLHS*DSSFCPL*QEKWECMQSSQKKQKRPKRCLQPHPLNWP*LGLNALMQ
+noevent        : 
+noevent        : 
+query          : Query: 182 HRLFQTSIVFYVTCFTASSQQLLTTAQFSPLQPLFWWTNNLGTPNPGRKNIQHY
+align          :            HRLFQTSIVFYVTCFTASSQQLLTTAQFSPLQPLFWWTNNLGTPNPGRKNIQHY
+sbjct          : Sbjct: 182 HRLFQTSIVFYVTCFTASSQQLLTTAQFSPLQPLFWWTNNLGTPNPGRKNIQHY
+noevent        : 
+noevent        : 
+query          : Query: 362 S*NGFPKLVTHGPGXVXLXLXGLSSFQEFXSTVANPWGX*XXXXXXXXXFXXGX
+align          :            S*NGFPKLVTHGPG V L L GLSSFQEF STVANPWG *         F  G
+sbjct          : Sbjct: 362 S*NGFPKLVTHGPGXVXLXLXGLSSFQEFXSTVANPWGX*XXXXXXXXXFXXGX
+noevent        : 
+noevent        : 
+query          : Query: 542 XXXGGCXXVXXVXXXWXXXF 601
+align          :               GGC  V  V   W   F
+sbjct          : Sbjct: 542 XXXGGCXXVXXVXXXWXXXF 601
+noevent        : 
+noevent        : 
+score          :  Score =  350 bits (759), Expect = 3e-97
+identities     :  Identities = 195/205 (95%), Positives = 195/205 (95%)
+frame          :  Frame = +1 / +1
+noevent        : 
+noevent        : 
+query          : Query: 1   DQNAPPLMRLFILSTLTGKVGMYAELSKETKKAKTVPSATSSELALTWTKCTNA
+align          :            DQNAPPLMRLFILSTLTGKVGMYAELSKETKKAKTVPSATSSELALTWTKCTNA
+sbjct          : Sbjct: 1   DQNAPPLMRLFILSTLTGKVGMYAELSKETKKAKTVPSATSSELALTWTKCTNA
+noevent        : 
+noevent        : 
+query          : Query: 181 A*VISNQHCFLCNLFYRIFSAASDHCSIFSFTAIVLVDK*PRYSKSWQEKYTAL
+align          :            A*VISNQHCFLCNLFYRIFSAASDHCSIFSFTAIVLVDK*PRYSKSWQEKYTAL
+sbjct          : Sbjct: 181 A*VISNQHCFLCNLFYRIFSAASDHCSIFSFTAIVLVDK*PRYSKSWQEKYTAL
+noevent        : 
+noevent        : 
+query          : Query: 361 ILKWISKAGYTWPWXXXIXFXXAFFXXXXXXXXXXXXXXLXGXVX*XXXXSXGP
+align          :            ILKWISKAGYTWPW   I F  AFF              L G V *    S GP
+sbjct          : Sbjct: 361 ILKWISKAGYTWPWXXXIXFXXAFFXSGVXVNGGKSXGXLXGXVX*XXXXSXGP
+noevent        : 
+noevent        : 
+query          : Query: 541 XPXGWVXXGXFXFXXXXXXFXXXLG 615
+align          :             P GWV  G F F      F   LG
+sbjct          : Sbjct: 541 XPXGWVXXGXFXFXXXXXXFXXXLG 615
+noevent        : 
+noevent        : 
+score          :  Score =  180 bits (387), Expect(2) = 9e-91
+identities     :  Identities = 74/74 (100%), Positives = 74/74 (100%)
+frame          :  Frame = +3 / +3
+noevent        : 
+noevent        : 
+query          : Query: 3   SECPSTHETLHFVHFDRKSGNVCRALKRNKKGQNGAFSHIL*IGPDLD*MH*CK
+align          :            SECPSTHETLHFVHFDRKSGNVCRALKRNKKGQNGAFSHIL*IGPDLD*MH*CK
+sbjct          : Sbjct: 3   SECPSTHETLHFVHFDRKSGNVCRALKRNKKGQNGAFSHIL*IGPDLD*MH*CK
+noevent        : 
+noevent        : 
+query          : Query: 183 IGYFKPALFFM*PV 224
+align          :            IGYFKPALFFM*PV
+sbjct          : Sbjct: 183 IGYFKPALFFM*PV 224
+noevent        : 
+noevent        : 
+score          :  Score =  171 bits (368), Expect(2) = 9e-91
+identities     :  Identities = 114/114 (100%), Positives = 114/114 (100%)
+frame          :  Frame = +3 / +3
+noevent        : 
+noevent        : 
+query          : Query: 273 YSHCSGGQIT*VLQILAGKIYSIMXQHSXNPKMDFQSWLHMALXXSY*XXXGFL
+align          :            YSHCSGGQIT*VLQILAGKIYSIM QHS NPKMDFQSWLHMAL  SY*   GFL
+sbjct          : Sbjct: 273 YSHCSGGQIT*VLQILAGKIYSIMXQHSXNPKMDFQSWLHMALXXSY*XXXGFL
+noevent        : 
+noevent        : 
+query          : Query: 453 QRWQIXGVXXWXGXLXXXXFXGAXGGXGXXSXXVGAXGXXXFXXXGXXXXXXXW
+align          :            QRWQI GV  W G L    F GA GG G  S  VGA G   F   G       W
+sbjct          : Sbjct: 453 QRWQIXGVXXWXGXLXXXXFXGAXGGXGXXSXXVGAXGXXXFXXXGXXXXXXXW
+noevent        : 
+noevent        : 
+score          :  Score =  398 bits (864), Expect = e-111
+identities     :  Identities = 205/205 (100%), Positives = 205/205 (100%)
+frame          :  Frame = -1 / -1
+noevent        : 
+noevent        : 
+query          : Query: 615 PKXXXKXXXXXXKTKXTXXHPPXWXXNXXXLWPXXXXXXLXNXXX*XPXGFATV
+align          :            PK   K      KTK T  HPP W  N   LWP      L N   * P GFATV
+sbjct          : Sbjct: 615 PKXXXKXXXXXXKTKXTXXHPPXWXXNXXXLWPXXXXXXLXNXXX*XPXGFATV
+noevent        : 
+noevent        : 
+query          : Query: 435 EESPXKXNXTXPGPCVTSFGNPF*DYXSAXS*CCIFFLPGFGVPRLFVHQNNGC
+align          :            EESP K N T PGPCVTSFGNPF*DY SA S*CCIFFLPGFGVPRLFVHQNNGC
+sbjct          : Sbjct: 435 EESPXKXNXTXPGPCVTSFGNPF*DYXSAXS*CCIFFLPGFGVPRLFVHQNNGC
+noevent        : 
+noevent        : 
+query          : Query: 255 VVRSC*EDAVKQVT*KTMLV*NNLCAFVKGFCISAFSPSQGQFRGCG*RHRFGL
+align          :            VVRSC*EDAVKQVT*KTMLV*NNLCAFVKGFCISAFSPSQGQFRGCG*RHRFGL
+sbjct          : Sbjct: 255 VVRSC*EDAVKQVT*KTMLV*NNLCAFVKGFCISAFSPSQGQFRGCG*RHRFGL
+noevent        : 
+noevent        : 
+query          : Query: 75  LCIHSHFSCQSGQNEESHEWRGILI 1
+align          :            LCIHSHFSCQSGQNEESHEWRGILI
+sbjct          : Sbjct: 75  LCIHSHFSCQSGQNEESHEWRGILI 1
+noevent        : 
+noevent        : 
+score          :  Score =  390 bits (846), Expect = e-109
+identities     :  Identities = 196/196 (100%), Positives = 196/196 (100%)
+frame          :  Frame = -3 / -3
+noevent        : 
+noevent        : 
+query          : Query: 589 PXXXNXXNPXAPTXXXX*PXPPXAPXKXXXXXXPXXLXTPXICHR*PKLLKXRK
+align          :            P   N  NP APT    *P PP AP K      P  L TP ICHR*PKLLK RK
+sbjct          : Sbjct: 589 PXXXNXXNPXAPTXXXX*PXPPXAPXKXXXXXXPXXLXTPXICHR*PKLLKXRK
+noevent        : 
+noevent        : 
+query          : Query: 409 DXXRAMCNQLWKSILGLXECXFIMLYIFPARIWST*VICPPEQWL*RRKLSSGQ
+align          :            D  RAMCNQLWKSILGL EC FIMLYIFPARIWST*VICPPEQWL*RRKLSSGQ
+sbjct          : Sbjct: 409 DXXRAMCNQLWKSILGLXECXFIMLYIFPARIWST*VICPPEQWL*RRKLSSGQ
+noevent        : 
+noevent        : 
+query          : Query: 229 GKTGYIKNNAGLK*PMRFCQGILH*CI*SKSGPIQRMWLKAPFWPFLFLLRALH
+align          :            GKTGYIKNNAGLK*PMRFCQGILH*CI*SKSGPIQRMWLKAPFWPFLFLLRALH
+sbjct          : Sbjct: 229 GKTGYIKNNAGLK*PMRFCQGILH*CI*SKSGPIQRMWLKAPFWPFLFLLRALH
+noevent        : 
+noevent        : 
+query          : Query: 49  SKWTK*RVS*VEGHSD 2
+align          :            SKWTK*RVS*VEGHSD
+sbjct          : Sbjct: 49  SKWTK*RVS*VEGHSD 2
+noevent        : 
+noevent        : 
+score          :  Score =  316 bits (684), Expect = 7e-87
+identities     :  Identities = 146/146 (100%), Positives = 146/146 (100%)
+frame          :  Frame = -2 / -2
+noevent        : 
+noevent        : 
+query          : Query: 440 EXKKAXXXSIXXXQGHV*PALEIHFRIT*VLXHNAVYFSCQDLEYLGYLSTRTM
+align          :            E KKA   SI   QGHV*PALEIHFRIT*VL HNAVYFSCQDLEYLGYLSTRTM
+sbjct          : Sbjct: 440 EXKKAXXXSIXXXQGHV*PALEIHFRIT*VLXHNAVYFSCQDLEYLGYLSTRTM
+noevent        : 
+noevent        : 
+query          : Query: 260 EQWSEAAEKMR*NRLHKKQCWFEITYALLSRDFALVHLVQVRANSEDVAEGTVL
+align          :            EQWSEAAEKMR*NRLHKKQCWFEITYALLSRDFALVHLVQVRANSEDVAEGTVL
+sbjct          : Sbjct: 260 EQWSEAAEKMR*NRLHKKQCWFEITYALLSRDFALVHLVQVRANSEDVAEGTVL
+noevent        : 
+noevent        : 
+query          : Query: 80  ESSAYIPTFPVKVDKMKSLMSGGAF* 3
+align          :            ESSAYIPTFPVKVDKMKSLMSGGAF*
+sbjct          : Sbjct: 80  ESSAYIPTFPVKVDKMKSLMSGGAF* 3
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|1348016|gb|G25784|G25784 human STS EST47998.
+length         :            Length = 617
+noevent        : 
+score          :  Score =  170 bits (366), Expect(2) = 3e-63
+identities     :  Identities = 71/74 (95%), Positives = 71/74 (95%)
+frame          :  Frame = +3 / +3
+noevent        : 
+noevent        : 
+query          : Query: 3   SECPSTHETLHFVHFDRKSGNVCRALKRNKKGQNGAFSHIL*IGPDLD*MH*CK
+align          :            S CPSTHETLHFVHFDRKSGNVCRALKRNKKGQNGAFSHIL*IGPDLD*  *CK
+sbjct          : Sbjct: 3   SXCPSTHETLHFVHFDRKSGNVCRALKRNKKGQNGAFSHIL*IGPDLD*XX*CK
+noevent        : 
+noevent        : 
+query          : Query: 183 IGYFKPALFFM*PV 224
+align          :            IGYFKPALFFM*PV
+sbjct          : Sbjct: 183 IGYFKPALFFM*PV 224
+noevent        : 
+noevent        : 
+score          :  Score = 89.0 bits (188), Expect(2) = 3e-63
+identities     :  Identities = 42/67 (62%), Positives = 43/67 (63%)
+frame          :  Frame = +3 / +3
+noevent        : 
+noevent        : 
+query          : Query: 273 YSHCSGGQIT*VLQILAGKIYSIMXQHSXNPKMDFQSWLHMALXXSY*XXXGFL
+align          :            YSHCSGGQIT*VLQILAGKIYSIM QHS   K  FQSWLHM     +     F
+sbjct          : Sbjct: 273 YSHCSGGQIT*VLQILAGKIYSIMKQHSVILKWIFQSWLHMXCKVLFKFKRPFS
+noevent        : 
+noevent        : 
+query          : Query: 453 QRWQIXG 473
+align          :            QR Q  G
+sbjct          : Sbjct: 453 QRXQTPG 473
+noevent        : 
+noevent        : 
+score          :  Score =  273 bits (590), Expect = 7e-74
+identities     :  Identities = 121/133 (90%), Positives = 121/133 (90%)
+frame          :  Frame = +1 / +1
+noevent        : 
+noevent        : 
+query          : Query: 1   DQNAPPLMRLFILSTLTGKVGMYAELSKETKKAKTVPSATSSELALTWTKCTNA
+align          :            DQ APPLMRLFILSTLTGKVGMYAELSKETKKAKTVPSATSSELALTWTK  NA
+sbjct          : Sbjct: 1   DQXAPPLMRLFILSTLTGKVGMYAELSKETKKAKTVPSATSSELALTWTKXXNA
+noevent        : 
+noevent        : 
+query          : Query: 181 A*VISNQHCFLCNLFYRIFSAASDHCSIFSFTAIVLVDK*PRYSKSWQEKYTAL
+align          :            A*VISNQHCFLCNLFYRIFSAASDHCSIFSFTAIVLVDK*PRYSKSWQEKYTAL
+sbjct          : Sbjct: 181 A*VISNQHCFLCNLFYRIFSAASDHCSIFSFTAIVLVDK*PRYSKSWQEKYTAL
+noevent        : 
+noevent        : 
+query          : Query: 361 ILKWISKAGYTWP 399
+align          :                 SKAGYT P
+sbjct          : Sbjct: 361 S*NGFSKAGYTXP 399
+noevent        : 
+noevent        : 
+score          :  Score =  274 bits (593), Expect(2) = 8e-76
+identities     :  Identities = 112/131 (85%), Positives = 112/131 (85%)
+frame          :  Frame = +2 / +2
+noevent        : 
+noevent        : 
+query          : Query: 2   IRMPLHS*DSSFCPL*QEKWECMXXXXXXXXRPKRCLQPHPLNWP*LGLNALMQ
+align          :            IR PLHS*DSSFCPL*QEKWECM        RPKRCLQPHPLNWP*LGL  LMQ
+sbjct          : Sbjct: 2   IRXPLHS*DSSFCPL*QEKWECMQSSQKKQKRPKRCLQPHPLNWP*LGLXPLMQ
+noevent        : 
+noevent        : 
+query          : Query: 182 HRLFQTSIVFYVTCFTASSQQLLTTAQFSPLQPLFWWTNNLGTPNPGRKNIQHY
+align          :            HRLFQTSIVFYVTCFTASSQQLLTTAQF PLQPLFWWTNNLGTPNPGRKNIQHY
+sbjct          : Sbjct: 182 HRLFQTSIVFYVTCFTASSQQLLTTAQFFPLQPLFWWTNNLGTPNPGRKNIQHY
+noevent        : 
+noevent        : 
+query          : Query: 362 S*NGFPKLVTH 394
+align          :                FPKLVTH
+sbjct          : Sbjct: 362 PKMDFPKLVTH 394
+noevent        : 
+noevent        : 
+score          :  Score = 27.2 bits (53), Expect(2) = 8e-76
+identities     :  Identities = 9/13 (69%), Positives = 10/13 (76%)
+frame          :  Frame = +2 / +2
+noevent        : 
+noevent        : 
+query          : Query: 437 FQEFXSTVANPWG 475
+align          :            +Q F ST ANPWG
+sbjct          : Sbjct: 437 YQGFRSTXANPWG 475
+noevent        : 
+noevent        : 
+score          :  Score =  302 bits (653), Expect = 1e-82
+identities     :  Identities = 128/157 (81%), Positives = 132/157 (83%)
+frame          :  Frame = -3 / -2
+noevent        : 
+noevent        : 
+query          : Query: 472 PXICHR*PKLLKXRKPX*XQXDXXRAMCNQLWKSILGLXECXFIMLYIFPARIW
+align          :            P +C R*PK L   K         + MCNQLWK    + EC FIMLYIFPARIW
+sbjct          : Sbjct: 472 PGVCXR*PKPLVNEKGLLNLNKTLQXMCNQLWKIHFRITECCFIMLYIFPARIW
+noevent        : 
+noevent        : 
+query          : Query: 292 PPEQWL*RRKLSSGQKLLRRCGKTGYIKNNAGLK*PMRFCQGILH*CI*SKSGP
+align          :            PPEQWL*R+KLSSGQKLLRRCGKTGYIKNNAGLK*PMRFCQGILH*  *SKSGP
+sbjct          : Sbjct: 292 PPEQWL*RKKLSSGQKLLRRCGKTGYIKNNAGLK*PMRFCQGILH*XX*SKSGP
+noevent        : 
+noevent        : 
+query          : Query: 112 KAPFWPFLFLLRALHTFPLFLSKWTK*RVS*VEGHSD 2
+align          :            KAPFWPFLFLLRALHTFPLFLSKWTK*RVS*VEG SD
+sbjct          : Sbjct: 112 KAPFWPFLFLLRALHTFPLFLSKWTK*RVS*VEGXSD 2
+noevent        : 
+noevent        : 
+score          :  Score =  276 bits (598), Expect = 5e-75
+identities     :  Identities = 122/130 (93%), Positives = 122/130 (93%)
+frame          :  Frame = -2 / -1
+noevent        : 
+noevent        : 
+query          : Query: 398 GHV*PALEIHFRIT*VLXHNAVYFSCQDLEYLGYLSTRTMAVKEKIEQWSEAAE
+align          :            GHV*PALE  F   *VL HNAVYFSCQDLEYLGYLSTRTMAVKEKIEQWSEAAE
+sbjct          : Sbjct: 398 GHV*PALENPF*DY*VLFHNAVYFSCQDLEYLGYLSTRTMAVKEKIEQWSEAAE
+noevent        : 
+noevent        : 
+query          : Query: 218 LHKKQCWFEITYALLSRDFALVHLVQVRANSEDVAEGTVLAFFVSFESSAYIPT
+align          :            LHKKQCWFEITYALLSRDFAL  LVQVRANSEDVAEGTVLAFFVSFESSAYIPT
+sbjct          : Sbjct: 218 LHKKQCWFEITYALLSRDFALXXLVQVRANSEDVAEGTVLAFFVSFESSAYIPT
+noevent        : 
+noevent        : 
+query          : Query: 38  KMKSLMSGGA 9
+align          :            KMKSLMSGGA
+sbjct          : Sbjct: 38  KMKSLMSGGA 9
+noevent        : 
+noevent        : 
+score          :  Score =  290 bits (628), Expect = 4e-79
+identities     :  Identities = 119/131 (90%), Positives = 120/131 (90%)
+frame          :  Frame = -1 / -3
+noevent        : 
+noevent        : 
+query          : Query: 393 CVTSFGNPF*DYXSAXS*CCIFFLPGFGVPRLFVHQNNGCKGEN*AVVRSC*ED
+align          :            CVTSFG       SA S*CCIFFLPGFGVPRLFVHQNNGCKG+N*AVVRSC*ED
+sbjct          : Sbjct: 393 CVTSFGKSILGLLSAVS*CCIFFLPGFGVPRLFVHQNNGCKGKN*AVVRSC*ED
+noevent        : 
+noevent        : 
+query          : Query: 213 *KTMLV*NNLCAFVKGFCISAFSPSQGQFRGCG*RHRFGLFCFF*ELCIHSHFS
+align          :            *KTMLV*NNLCAFVKGFCI  FSPSQGQFRGCG*RHRFGLFCFF*ELCIHSHFS
+sbjct          : Sbjct: 213 *KTMLV*NNLCAFVKGFCIXGFSPSQGQFRGCG*RHRFGLFCFF*ELCIHSHFS
+noevent        : 
+noevent        : 
+query          : Query: 33  EESHEWRGILI 1
+align          :            EESHEWRG LI
+sbjct          : Sbjct: 33  EESHEWRGXLI 1
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|3403105|gb|G41148|G41148 Z7324 Zebrafish AB Danio rerio STS
+title          :            genomic
+length         :            Length = 351
+noevent        : 
+score          :  Score = 30.8 bits (61), Expect = 0.60
+identities     :  Identities = 11/27 (40%), Positives = 18/27 (65%)
+frame          :  Frame = +1 / +2
+noevent        : 
+noevent        : 
+query          : Query: 211 LCNLFYRIFSAASDHCSIFSFTAIVLV 291
+align          :            L NL +R+F++  DHCS+  F   V++
+sbjct          : Sbjct: 2   LTNLIFRLFTSK*DHCSLKQFNNKVVI 82
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|1234967|emb|Z53521|HSB316XA9 H.sapiens (D22S1166) DNA segment
+title          :            containing (CA) repeat; clone AFMb316xa9; single read,
+title          :            sequence tagged site [Homo sapiens]
+length         :            Length = 345
+noevent        : 
+score          :  Score = 30.4 bits (60), Expect = 0.83
+identities     :  Identities = 10/19 (52%), Positives = 13/19 (67%)
+frame          :  Frame = -3 / +1
+noevent        : 
+noevent        : 
+query          : Query: 316 IWST*VICPPEQWL*RRKL 260
+align          :            +W T  +CPP  W *RR+L
+sbjct          : Sbjct: 226 LWGTAPLCPPVPWA*RRQL 282
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|4185670|gb|G42865|G42865 Xq3845 KWOK Homo sapiens STS genomic
+title          :            sequence tagged site [Homo sapiens]
+length         :            Length = 1200
+noevent        : 
+score          :  Score = 29.9 bits (59), Expect = 1.1
+identities     :  Identities = 10/24 (41%), Positives = 14/24 (57%)
+frame          :  Frame = -3 / -2
+noevent        : 
+noevent        : 
+query          : Query: 106 PFWPFLFLLRALHTFPLFLSKWTK 35
+align          :            P WP + LL  +H+FP  +  W K
+sbjct          : Sbjct: 716 PEWPSINLLPGMHSFPRVIPCWEK 645
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|4757419|gb|G49246.1|G49246 stbK116F5_30376 chromosome 22 geno
+title          :            clone Homo sapiens STS genomic clone 116F5, sequence
+title          :            tagged site
+length         :            Length = 375
+noevent        : 
+score          :  Score = 29.5 bits (58), Expect = 1.6
+identities     :  Identities = 15/34 (44%), Positives = 17/34 (49%)
+frame          :  Frame = -3 / -2
+noevent        : 
+noevent        : 
+query          : Query: 106 PFWPFLFLLRALHTFPLFLSKWTK*RVS*VEGHS 5
+align          :            P W   FLLR LHT P    K+    V+  EG S
+sbjct          : Sbjct: 176 PGWTLRFLLRGLHTPPKAAEKFPSQGVAEPEGFS 75
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|6120694|gb|G55375.1|G55375 SHGC-100697 Human Homo sapiens STS
+title          :            genomic, sequence tagged site
+length         :            Length = 460
+noevent        : 
+score          :  Score = 28.6 bits (56), Expect = 3.0
+identities     :  Identities = 9/28 (32%), Positives = 16/28 (57%)
+frame          :  Frame = +3 / +1
+noevent        : 
+noevent        : 
+query          : Query: 15  STHETLHFVHFDRKSGNVCRALKRNKKG 98
+align          :            +TH    F+H  +K  N+C  +  N++G
+sbjct          : Sbjct: 82  TTHSMTVFLHVKKKLSNICIYMPENREG 165
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|5225124|gb|G53947.1|G53947 SHGC-85304 Human Homo sapiens STS
+title          :            genomic, sequence tagged site
+length         :            Length = 444
+noevent        : 
+score          :  Score = 28.6 bits (56), Expect = 3.0
+identities     :  Identities = 10/24 (41%), Positives = 15/24 (61%)
+frame          :  Frame = +1 / -2
+noevent        : 
+noevent        : 
+query          : Query: 202 HCFLCNLFYRIFSAASDHCSIFSF 273
+align          :            HC L ++F RIF    +  S+F+F
+sbjct          : Sbjct: 443 HCHLSSVFCRIFFTLEESLSLFAF 372
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|1311530|gb|L77996|HUMSWX945 Human chromosome X STS sWXD945,
+title          :            single read.
+length         :            Length = 196
+noevent        : 
+score          :  Score = 28.1 bits (55), Expect = 4.1
+identities     :  Identities = 9/33 (27%), Positives = 19/33 (57%)
+frame          :  Frame = +3 / -2
+noevent        : 
+noevent        : 
+query          : Query: 24  ETLHFVHFDRKSGNVCRALKRNKKGQNGAFSHI 122
+align          :            E +H+V F +  G +  + ++ ++ QN   SH+
+sbjct          : Sbjct: 141 EKIHYVLF*KNCGKIMTS*RQRQENQNNLLSHV 43
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|2734624|gb|G36957|G36957 SHGC-56642 Human Homo sapiens STS cD
+length         :            Length = 466
+noevent        : 
+score          :  Score = 28.1 bits (55), Expect = 4.1
+identities     :  Identities = 10/15 (66%), Positives = 11/15 (72%)
+frame          :  Frame = -3 / -3
+noevent        : 
+noevent        : 
+query          : Query: 115 LKAPFWPFLFLLRAL 71
+align          :            L  PFW FLF L+AL
+sbjct          : Sbjct: 242 LSVPFWKFLFYLQAL 198
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|4631600|dbj|AU046965.1|AU046965 Rattus norvegicus, OTSUKA clo
+title          :            108a02, microsatellite sequence, sequence tagged site
+length         :            Length = 330
+noevent        : 
+score          :  Score = 28.1 bits (55), Expect = 4.1
+identities     :  Identities = 12/39 (30%), Positives = 19/39 (47%)
+frame          :  Frame = +2 / -3
+noevent        : 
+noevent        : 
+query          : Query: 167 PLTKAHRLFQTSIVFYVTCFTASSQQLLTTAQFSPLQPL 283
+align          :            PL    RLF + +  ++ C T     L  +  F P++PL
+sbjct          : Sbjct: 211 PLKTQGRLFYSKVSLFLKCRTTLCLFLNVSEGFXPIEPL 95
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|4631518|dbj|AU046883.1|AU046883 Rattus norvegicus, OTSUKA clo
+title          :            085f03, microsatellite sequence, sequence tagged site
+length         :            Length = 351
+noevent        : 
+score          :  Score = 28.1 bits (55), Expect = 4.1
+identities     :  Identities = 8/26 (30%), Positives = 15/26 (56%)
+frame          :  Frame = +1 / +3
+noevent        : 
+noevent        : 
+query          : Query: 205 CFLCNLFYRIFSAASDHCSIFSFTAI 282
+align          :            CF+C L  +I+  A +   +  FT++
+sbjct          : Sbjct: 249 CFICKLVLKIYLRAEERTQLIEFTSL 326
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|2226478|gb|G33174|G33174 human STS SHGC-6097 clone pG-2470
+length         :            Length = 299
+noevent        : 
+score          :  Score = 28.1 bits (55), Expect = 4.1
+identities     :  Identities = 13/38 (34%), Positives = 19/38 (49%)
+frame          :  Frame = +1 / +2
+noevent        : 
+noevent        : 
+query          : Query: 175 KSA*VISNQHCFLCNLFYRIFSAASDHCSIFSFTAIVL 288
+align          :            +SA +I   HC    +   +FS ASD  S    T ++L
+sbjct          : Sbjct: 119 QSAWIIGMSHCAWAVIHCLLFSTASDEKSAVDLTGVLL 232
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|938611|gb|G08061|G08061 human STS CHLC.GGAA7E02.P7438 clone
+title          :            GGAA7E02
+length         :            Length = 338
+noevent        : 
+score          :  Score = 27.2 bits (53), Expect = 7.7
+identities     :  Identities = 12/24 (50%), Positives = 13/24 (54%)
+frame          :  Frame = -3 / +3
+noevent        : 
+noevent        : 
+query          : Query: 118 WLKAPFWPFLFLLRALHTFPLFLS 47
+align          :            WL  PF PFL  L +L   P  LS
+sbjct          : Sbjct: 153 WLLFPFLPFLPFLPSLPFLPFLLS 224
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|307789|gb|L18105|HUMUT1736 Human STS UT1736.
+length         :            Length = 355
+noevent        : 
+score          :  Score = 27.2 bits (53), Expect = 7.7
+identities     :  Identities = 12/24 (50%), Positives = 13/24 (54%)
+frame          :  Frame = -3 / -1
+noevent        : 
+noevent        : 
+query          : Query: 118 WLKAPFWPFLFLLRALHTFPLFLS 47
+align          :            WL  PF PFL  L +L   P  LS
+sbjct          : Sbjct: 235 WLLFPFLPFLPFLPSLPFLPFLLS 164
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|859804|gb|G06559|G06559 human STS WI-7401.
+length         :             Length = 3280
+noevent        : 
+score          :  Score = 27.2 bits (53), Expect = 7.7
+identities     :  Identities = 9/21 (42%), Positives = 13/21 (61%)
+frame          :  Frame = -1 / -1
+noevent        : 
+noevent        : 
+query          : Query: 339  CCIFFLPGFGVPRLFVHQNNG 277
+align          :             C IF++P F    LF+H+  G
+sbjct          : Sbjct: 1396 CFIFYVPDFPWSNLFLHRGRG 1334
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|4493143|gb|G46852.1|G46852 Z14841_1 Zebrafish AB Danio rerio
+title          :            genomic clone Z14841 5', sequence tagged site
+length         :            Length = 291
+noevent        : 
+score          :  Score = 27.2 bits (53), Expect = 7.7
+identities     :  Identities = 8/20 (40%), Positives = 13/20 (65%)
+frame          :  Frame = -3 / +1
+noevent        : 
+noevent        : 
+query          : Query: 388 NQLWKSILGLXECXFIMLYI 329
+align          :            NQ+WK  L +  C F+ +Y+
+sbjct          : Sbjct: 37  NQMWKHSLEVCMCVFVYIYV 96
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|4492122|gb|G45831.1|G45831 Z4588_1 Zebrafish AB Danio rerio S
+title          :            genomic clone Z4588 5', sequence tagged site
+length         :            Length = 398
+noevent        : 
+score          :  Score = 27.2 bits (53), Expect = 7.7
+identities     :  Identities = 7/22 (31%), Positives = 13/22 (58%)
+frame          :  Frame = +1 / +1
+noevent        : 
+noevent        : 
+query          : Query: 205 CFLCNLFYRIFSAASDHCSIFS 270
+align          :            CF   + +R+F+    HC+ F+
+sbjct          : Sbjct: 13  CFALTVIWRVFAGCRPHCATFT 78
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|6121804|gb|G56635.1|G56635 SHGC-102032 Human Homo sapiens STS
+title          :            genomic, sequence tagged site
+length         :            Length = 541
+noevent        : 
+score          :  Score = 27.2 bits (53), Expect = 7.7
+identities     :  Identities = 9/20 (45%), Positives = 13/20 (65%)
+frame          :  Frame = -1 / +2
+noevent        : 
+noevent        : 
+query          : Query: 174 VKGFCISAFSPSQGQFRGCG 115
+align          :            V GFC+++FSP +    G G
+sbjct          : Sbjct: 125 VDGFCVTSFSPKKDTHPGSG 184
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_database_report
+database       :   Database: data/sts
+posted_date    :     Posted date:  Nov 26, 1999  5:52 PM
+num_letters_in_:   Number of letters in database: 31,998,854
+num_sequences_i:   Number of sequences in database:  87,792
+noevent        : 
+noevent        : Lambda     K      H
+ka_params      :    0.318    0.135    0.401
+noevent        : 
+*************** end_database_report
+noevent        : 
+*************** start_parameters
+matrix         : Matrix: BLOSUM62
+num_hits       : Number of Hits to DB: 40473548
+num_sequences  : Number of Sequences: 87792
+num_extends    : Number of extensions: 487631
+num_good_extend: Number of successful extensions: 13175
+num_seqs_better: Number of sequences better than 10.0: 38
+query_length   : length of query: 205
+database_length: length of database: 10,666,284
+effective_hsp_l: effective HSP length: 46
+effective_query: effective length of query: 158
+effective_datab: effective length of database: 6,627,852
+effective_searc: effective search space: 1047200616
+effective_searc: effective search space used: 1047200616
+frameshift     : frameshift window, decay const: 50,  0.1
+threshold      : T: 13
+window_size    : A: 40
+dropoff_1st_pas: X1: 16 ( 7.3 bits)
+gap_x_dropoff  : X2: 0 ( 0.0 bits)
+gap_trigger    : S1: 41 (21.7 bits)
+blast_cutoff   : S2: 52 (26.7 bits)
+*************** end_parameters

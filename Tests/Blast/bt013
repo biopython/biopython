@@ -1,0 +1,75 @@
+BLASTN 2.0.10 [Aug-26-1999]
+
+
+Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+
+Query= gi|859351|gb|G06106|G06106 human STS WI-6344.
+         (183 letters)
+
+Database: data/sts
+           87,792 sequences; 31,998,854 total letters
+
+Searching..................................................done
+
+                                                                   Score     E
+Sequences producing significant alignments:                        (bits)  Value
+
+gi|859351|gb|G06106|G06106 human STS WI-6344.                        327  1e-89
+gi|1341350|gb|G21024|G21024 human STS WI-30979.                       32  1.0
+gi|6126285|gb|G60966.1|G60966 SHGC-84377 Human Homo sapiens STS...    30  4.1
+gi|1340656|gb|G20319|G20319 human STS A005L39.                        30  4.1
+gi|5222421|gb|G51244.1|G51244 SHGC-80725 Human Homo sapiens STS...    30  4.1
+gi|860526|gb|G07281|G07281 human STS WI-9430.                         30  4.1
+
+QUERY 1   acttgggnctacatgggccagaggtggtttattcagtctccataagagaggggacaaacg 60
+558   1   ............................................................ 60
+64020 49                                       ...............         63
+41022 53                    ...............                            39
+1005  172                   ...............                            158
+
+QUERY 61  gcacagttgggtccgtgaagaggagggtccaagagctnacaagagagcctctctgagatt 120
+558   61  ............................................................ 120
+27080 33           .............a......                                14
+
+QUERY 121 tgacccctncatcccctnctcagggnggttgtggagtcactgggcctcatgggntaggcc 180
+558   121 ............................................................ 180
+63702 184                                     ...............          198
+
+QUERY 181 cag 183
+558   181 ... 183
+  Database: data/sts
+    Posted date:  Nov 26, 1999  5:52 PM
+  Number of letters in database: 31,998,854
+  Number of sequences in database:  87,792
+  
+Lambda     K      H
+    1.37    0.711     1.31 
+
+Gapped
+Lambda     K      H
+    1.37    0.711     1.31 
+
+
+Matrix: blastn matrix:1 -3
+Gap Penalties: Existence: 5, Extension: 2
+Number of Hits to DB: 1902
+Number of Sequences: 87792
+Number of extensions: 1902
+Number of successful extensions: 481
+Number of sequences better than 10.0: 8
+length of query: 183
+length of database: 31,998,854
+effective HSP length: 16
+effective length of query: 167
+effective length of database: 30,594,182
+effective search space: 5109228394
+effective search space used: 5109228394
+T: 0
+A: 0
+X1: 6 (11.9 bits)
+X2: 25 (49.6 bits)
+S1: 12 (24.3 bits)
+S2: 15 (30.2 bits)

@@ -1,0 +1,73 @@
+<HTML>
+<HEAD>
+<TITLE>BLAST Search Results </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" LINK="#0000FF" VLINK="#660099" ALINK="#660099">
+<A HREF="http://www.ncbi.nlm.nih.gov/BLAST/blast_form.map"> <IMG SRC="http://www.ncbi.nlm.nih.gov/BLAST/blast_results.gif" BORDER=0 ISMAP></A>
+<BR><BR><PRE>
+<b>TBLASTN 2.0.10 [Aug-26-1999]</b>
+
+
+<b><a href="http://www.ncbi.nlm.nih.gov/htbin-
+post/Entrez/query?uid=9254694&form=6&db=m&Dopt=r">Reference</a>:</b>
+Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch&auml;ffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+<p>
+<b>Query=</b> gi|127420|sp|P19888|MTBA_BACAR MODIFICATION METHYLASE
+BANI (CYTOSINE-SPECIFIC METHYLTRANSFERASE BANI) (M.BANI).
+         (428 letters)
+
+<b>Database:</b> Non-redundant Database of GenBank STS Division
+           89,405 sequences; 32,867,852 total letters
+
+<p> <p>If you have any problems or questions with the results of this search <br>please refer to the <b><a href=http://www.ncbi.nlm.nih.gov/BLAST/blast_FAQs.html>BLAST FAQs</a></b><br><p>
+<b>No significant similarity found.</b> For reasons why, <A HREF = "/BLAST/blast_FAQs.html#no hits"><b>click here</A>.</b><br><br>
+<PRE>
+  Database: Non-redundant Database of GenBank STS Division
+    Posted date:  Dec 18, 1999  7:45 PM
+  Number of letters in database: 32,867,852
+  Number of sequences in database:  89,405
+  
+Lambda     K      H
+   0.320    0.140    0.403 
+
+Gapped
+Lambda     K      H
+   0.270   0.0470    0.230 
+
+
+Matrix: BLOSUM62
+Gap Penalties: Existence: 11, Extension: 1
+Number of Hits to DB: 13963789
+Number of Sequences: 89405
+Number of extensions: 167216
+Number of successful extensions: 569
+Number of sequences better than 10.0: 0
+Number of HSP's better than 10.0 without gapping: 0
+Number of HSP's successfully gapped in prelim test: 0
+Number of HSP's that attempted gapping in prelim test: 569
+Number of HSP's gapped (non-prelim): 0
+length of query: 428
+length of database: 10,955,950
+effective HSP length: 48
+effective length of query: 380
+effective length of database: 6,664,510
+effective search space: 2532513800
+effective search space used: 2532513800
+frameshift window, decay const: 50,  0.1
+T: 13
+A: 40
+X1: 16 ( 7.4 bits)
+X2: 38 (14.8 bits)
+X3: 64 (24.9 bits)
+S1: 41 (21.8 bits)
+S2: 61 (28.2 bits)
+
+</PRE>
+
+</BODY>
+</HTML>
+</BODY>
+</HTML>

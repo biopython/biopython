@@ -1,0 +1,190 @@
+<HTML>
+<HEAD>
+<TITLE>BLAST Search Results </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" LINK="#0000FF" VLINK="#660099" ALINK="#660099">
+<A HREF="http://www.ncbi.nlm.nih.gov/BLAST/blast_form.map"> <IMG SRC="http://www.ncbi.nlm.nih.gov/BLAST/blast_results.gif" BORDER=0 ISMAP></A>
+<BR><BR><PRE>
+<b>BLASTP 2.0.10 [Aug-26-1999]</b>
+
+
+<b><a href="http://www.ncbi.nlm.nih.gov/htbin-
+post/Entrez/query?uid=9254694&form=6&db=m&Dopt=r">Reference</a>:</b>
+Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch&auml;ffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+<p>
+<b>Query=</b> gi|1718062|sp|P16153|UTXA_CLODI UTXA PROTEIN.
+         (166 letters)
+
+<b>Database:</b> Non-redundant SwissProt sequences
+           82,258 sequences; 29,652,561 total letters
+
+<p> <p>If you have any problems or questions with the results of this search <br>please refer to the <b><a href=http://www.ncbi.nlm.nih.gov/BLAST/blast_FAQs.html>BLAST FAQs</a></b><br><p>
+<FORM NAME="BLASTFORM">
+</PRE>
+<CENTER>
+<H3><a href="/BLAST/newoptions.html#graphical-overview"> Distribution of 6 Blast Hits on the Query Sequence</a></H3>
+<input name=defline size=80 value="Mouse-over to show defline and scores. Click to show alignments">
+</CENTER>
+<map name=img_map>
+<area shape=rect coords=69,101,522,106 href="#1718062" ONMOUSEOVER='document.BLASTFORM.defline.value="P16153  UTXA PROTEIN..S= 332 E=2e-91"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=167,108,519,113 href="#140528" ONMOUSEOVER='document.BLASTFORM.defline.value="P24811  HYPOTHETICAL 15.7 KD PROTEIN IN SPOIIIC-CWLA INTERGENIC ..S=39.5 E=0.004"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=178,115,475,120 href="#141088" ONMOUSEOVER='document.BLASTFORM.defline.value="P26835  HYPOTHETICAL 14.9 KD PROTEIN IN NAGH 3-REGION (ORFD)..S=38.7 E=0.007"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=286,122,439,127 href="#6014830" ONMOUSEOVER='document.BLASTFORM.defline.value="O78935  CYTOCHROME B..S=29.3 E=4.6"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=313,129,431,134 href="#1351589" ONMOUSEOVER='document.BLASTFORM.defline.value="P47694  HYPOTHETICAL PROTEIN MG456..S=29.0 E=6.0"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=357,136,475,141 href="#2496246" ONMOUSEOVER='document.BLASTFORM.defline.value="Q57881  HYPOTHETICAL ATP-BINDING PROTEIN MJ0439..S=28.6 E=7.8"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+</map>
+<CENTER>
+<IMG WIDTH=529 HEIGHT=143 USEMAP=#img_map BORDER=1 SRC="nph-getgif.cgi?miles&207891705325364.gif" ISMAP></CENTER>
+<HR>
+<PRE>
+
+
+<PRE>
+<a name = 1718062> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=01718062&dopt=GenPept">sp|P16153|UTXA_CLODI</a> UTXA PROTEIN
+           Length = 166
+           
+ Score =  332 bits (843), Expect = 2e-91
+ Identities = 166/166 (100%), Positives = 166/166 (100%)
+
+Query: 1   MHSSSPFYISNGNKIFFYINLGGVMNMTISFLSEHIFIKLVILTISFDTLLGCLSAIKSR 60
+           MHSSSPFYISNGNKIFFYINLGGVMNMTISFLSEHIFIKLVILTISFDTLLGCLSAIKSR
+Sbjct: 1   MHSSSPFYISNGNKIFFYINLGGVMNMTISFLSEHIFIKLVILTISFDTLLGCLSAIKSR 60
+
+Query: 61  KFNSSFGIDGGIRKVAMIACIFFLSVVDILTKFNFLFMLPQDCINFLRLKHLGISEFFSI 120
+           KFNSSFGIDGGIRKVAMIACIFFLSVVDILTKFNFLFMLPQDCINFLRLKHLGISEFFSI
+Sbjct: 61  KFNSSFGIDGGIRKVAMIACIFFLSVVDILTKFNFLFMLPQDCINFLRLKHLGISEFFSI 120
+
+Query: 121 LFILYESVSILKNMCLCGLPVPKRLKEKIAILLDAMTDEMNAKDEK 166
+           LFILYESVSILKNMCLCGLPVPKRLKEKIAILLDAMTDEMNAKDEK
+Sbjct: 121 LFILYESVSILKNMCLCGLPVPKRLKEKIAILLDAMTDEMNAKDEK 166
+</PRE>
+
+
+<PRE>
+<a name = 140528> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00140528&dopt=GenPept">sp|P24811|YQXH_BACSU</a> HYPOTHETICAL 15.7 KD PROTEIN IN SPOIIIC-CWLA INTERGENIC REGION
+           (ORF2)
+           Length = 140
+           
+ Score = 39.5 bits (90), Expect = 0.004
+ Identities = 27/130 (20%), Positives = 55/130 (41%), Gaps = 19/130 (14%)
+
+Query: 37  FIKLVILTISFDTLLGCLSAIKSRKFNSSFGIDGGIRKVAMIACIFFLSVVDILTKFNFL 96
+           ++ L+++    D L G + A K +K  S     G +RK+     +   +V+D +   N  
+Sbjct: 26  YLDLLLVLSIIDVLTGVIKAWKFKKLRSRSAWFGYVRKLLNFFAVILANVIDTVLNLN-- 83
+
+Query: 97  FMLPQDCINFLRLKHLGISEFFSILF-ILYESVSILKNMCLCGLPVPKRLKEKIAILLDA 155
+                           G+  F ++LF I  E +SI +N+   G+ +P  + +++  + + 
+Sbjct: 84  ----------------GVLTFGTVLFYIANEGLSITENLAQIGVKIPSSITDRLQTIENE 127
+
+Query: 156 MTDEMNAKDE 165
+                N  D+
+Sbjct: 128 KEQSKNNADK 137
+</PRE>
+
+
+<PRE>
+<a name = 141088> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00141088&dopt=GenPept">sp|P26835|YNGD_CLOPE</a> HYPOTHETICAL 14.9 KD PROTEIN IN NAGH 3'REGION (ORFD)
+           Length = 132
+           
+ Score = 38.7 bits (88), Expect = 0.007
+ Identities = 24/110 (21%), Positives = 52/110 (46%), Gaps = 18/110 (16%)
+
+Query: 41  VILTISFDTLLGCLSAIKSRKFNSSFGIDGGIRKVAMIACIFFLSVVD-ILTKFNFLFML 99
+           +++ I  D L G +   KS++  S+ G+ G  +K  ++  +    ++D +L    ++F  
+Sbjct: 33  LLVFIFLDYLTGVIKGCKSKELCSNIGLRGITKKGLILVVLLVAVMLDRLLDNGTWMFRT 92
+
+Query: 100 PQDCINFLRLKHLGISEFFSILFILYESVSILKNMCLCGLPVPKRLKEKI 149
+                              +  +I+ E +SIL+N    G+P+P++LK+ +
+Sbjct: 93  -----------------LIAYFYIMNEGISILENCAALGVPIPEKLKQAL 125
+</PRE>
+
+
+<PRE>
+<a name = 6014830> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=06014830&dopt=GenPept">sp|O78935|CYB_MARAM</a> CYTOCHROME B
+           Length = 379
+           
+ Score = 29.3 bits (64), Expect = 4.6
+ Identities = 19/57 (33%), Positives = 33/57 (57%), Gaps = 2/57 (3%)
+
+Query: 80  CIFFLSVVDILTKFNFLFMLPQDCINFLRLKHLGISEFFSILFILYESVSILKNMCL 136
+           C+F+L V D+LT   ++   P +   F+ +  L    +F+IL IL  ++SI++N  L
+Sbjct: 323 CLFWLLVADLLT-LTWIGGQPVEH-PFITIGQLASILYFAILLILMPAISIIENNLL 377
+</PRE>
+
+
+<PRE>
+<a name = 1351589> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=01351589&dopt=GenPept">sp|P47694|Y456_MYCGE</a> HYPOTHETICAL PROTEIN MG456
+           Length = 334
+           
+ Score = 29.0 bits (63), Expect = 6.0
+ Identities = 16/44 (36%), Positives = 24/44 (54%), Gaps = 2/44 (4%)
+
+Query: 90  LTKFNFLFMLPQDCINFLRLKHLGISEFFSILFILYESVSILKN 133
+           LTKFN  F+ P     FLR+  +G+   FS++ I +   S  +N
+Sbjct: 4   LTKFNKFFLTPNKLNAFLRV--IGLCGLFSVIAISFGIYSYTRN 45
+</PRE>
+
+
+<PRE>
+<a name = 2496246> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=02496246&dopt=GenPept">sp|Q57881|Y439_METJA</a> HYPOTHETICAL ATP-BINDING PROTEIN MJ0439
+           Length = 361
+           
+ Score = 28.6 bits (62), Expect = 7.8
+ Identities = 19/56 (33%), Positives = 30/56 (52%), Gaps = 12/56 (21%)
+
+Query: 106 FLRLKHLGIS---EFFSILFILYES----VSILKNMC-----LCGLPVPKRLKEKI 149
+           ++ L+ + IS   +F  +LF  YE     V I+K++      LCG+P PK   E+I
+Sbjct: 68  YINLRGIFISKYKDFIEVLFEEYEEDRKPVEIIKSLIKDVPSLCGIPTPKNTLEEI 123
+</PRE>
+
+
+
+<PRE>
+  Database: Non-redundant SwissProt sequences
+    Posted date:  Dec 18, 1999  8:26 PM
+  Number of letters in database: 29,652,561
+  Number of sequences in database:  82,258
+  
+Lambda     K      H
+   0.331    0.146    0.428 
+
+Gapped
+Lambda     K      H
+   0.270   0.0470    0.230 
+
+
+Matrix: BLOSUM62
+Gap Penalties: Existence: 11, Extension: 1
+Number of Hits to DB: 8801581
+Number of Sequences: 82258
+Number of extensions: 320828
+Number of successful extensions: 892
+Number of sequences better than 10.0: 6
+Number of HSP's better than 10.0 without gapping: 3
+Number of HSP's successfully gapped in prelim test: 3
+Number of HSP's that attempted gapping in prelim test: 888
+Number of HSP's gapped (non-prelim): 6
+length of query: 166
+length of database: 29,652,561
+effective HSP length: 46
+effective length of query: 120
+effective length of database: 25,868,693
+effective search space: 3104243160
+effective search space used: 3104243160
+T: 11
+A: 40
+X1: 15 ( 7.2 bits)
+X2: 38 (14.8 bits)
+X3: 64 (24.9 bits)
+S1: 40 (21.9 bits)
+S2: 62 (28.6 bits)
+
+</PRE>
+
+</BODY>
+</HTML>
+</BODY>
+</HTML>

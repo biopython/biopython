@@ -1,0 +1,134 @@
+BLASTN 2.0.10 [Aug-26-1999]
+
+
+Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+
+Query= gi|1348916|gb|G26684|G26684 human STS
+STS_D11570.gi|1375195|gb|G26945|G26945 human STS SHGC-32699.
+         (285 letters)
+
+Database: data/sts
+           87,792 sequences; 31,998,854 total letters
+
+Searching..................................................done
+
+                                                                   Score     E
+Sequences producing significant alignments:                        (bits)  Value
+
+gi|1348916|gb|G26684|G26684 human STS STS_D11570. >gi|1375195|g...   517  e-146
+gi|720683|gb|G03725|G03725 human STS WI-344.                          32  1.6
+gi|4516686|dbj|AU026763.1|AU026763 Rattus norvegicus, OTSUKA cl...    32  1.6
+gi|6120827|gb|G55508.1|G55508 SHGC-100856 Human Homo sapiens ST...    32  1.6
+
+>gi|1348916|gb|G26684|G26684 human STS STS_D11570.
+           >gi|1375195|gb|G26945|G26945 human STS SHGC-32699.
+           Length = 285
+           
+ Score =  517 bits (261), Expect = e-146
+ Identities = 285/285 (100%)
+ Strand = Plus / Plus
+
+                                                                       
+Query: 1   gatccctacccttnccgttggtctctntcgctgactcgaggcacctaacatccattcaca 60
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Sbjct: 1   gatccctacccttnccgttggtctctntcgctgactcgaggcacctaacatccattcaca 60
+
+                                                                       
+Query: 61  cccaacacaggccagcgacttctggggctcagccacagacatggtttgtnactnttgagc 120
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Sbjct: 61  cccaacacaggccagcgacttctggggctcagccacagacatggtttgtnactnttgagc 120
+
+                                                                       
+Query: 121 ttctgttcctagagaatcctagaggcttgattggcccaggctgctgtntgtnctggaggc 180
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Sbjct: 121 ttctgttcctagagaatcctagaggcttgattggcccaggctgctgtntgtnctggaggc 180
+
+                                                                       
+Query: 181 aaagaatccctacctcctaggggtgaaaggaaatnaaaatggaaagttcttgtagcgcaa 240
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Sbjct: 181 aaagaatccctacctcctaggggtgaaaggaaatnaaaatggaaagttcttgtagcgcaa 240
+
+                                                        
+Query: 241 ggcctgacatgggtagctgctcaataaatgctagtntgttatttc 285
+           |||||||||||||||||||||||||||||||||||||||||||||
+Sbjct: 241 ggcctgacatgggtagctgctcaataaatgctagtntgttatttc 285
+
+
+>gi|720683|gb|G03725|G03725 human STS WI-344.
+           Length = 246
+           
+ Score = 32.2 bits (16), Expect = 1.6
+ Identities = 16/16 (100%)
+ Strand = Plus / Minus
+
+                           
+Query: 260 ctcaataaatgctagt 275
+           ||||||||||||||||
+Sbjct: 178 ctcaataaatgctagt 163
+
+
+>gi|4516686|dbj|AU026763.1|AU026763 Rattus norvegicus, OTSUKA clone,
+           OT33.16/752f07, microsatellite sequence, sequence tagged
+           site
+           Length = 307
+           
+ Score = 32.2 bits (16), Expect = 1.6
+ Identities = 16/16 (100%)
+ Strand = Plus / Plus
+
+                           
+Query: 221 ggaaagttcttgtagc 236
+           ||||||||||||||||
+Sbjct: 32  ggaaagttcttgtagc 47
+
+
+>gi|6120827|gb|G55508.1|G55508 SHGC-100856 Human Homo sapiens STS
+           genomic, sequence tagged site
+           Length = 711
+           
+ Score = 32.2 bits (16), Expect = 1.6
+ Identities = 18/19 (94%)
+ Strand = Plus / Plus
+
+                              
+Query: 210 gaaatnaaaatggaaagtt 228
+           ||||| |||||||||||||
+Sbjct: 588 gaaataaaaatggaaagtt 606
+
+
+  Database: data/sts
+    Posted date:  Nov 26, 1999  5:52 PM
+  Number of letters in database: 31,998,854
+  Number of sequences in database:  87,792
+  
+Lambda     K      H
+    1.37    0.711     1.31 
+
+Gapped
+Lambda     K      H
+    1.37    0.711     1.31 
+
+
+Matrix: blastn matrix:1 -3
+Gap Penalties: Existence: 5, Extension: 2
+Number of Hits to DB: 3835
+Number of Sequences: 87792
+Number of extensions: 3835
+Number of successful extensions: 1155
+Number of sequences better than 10.0: 4
+length of query: 285
+length of database: 31,998,854
+effective HSP length: 17
+effective length of query: 268
+effective length of database: 30,506,390
+effective search space: 8175712520
+effective search space used: 8175712520
+T: 0
+A: 0
+X1: 6 (11.9 bits)
+X2: 25 (49.6 bits)
+S1: 12 (24.3 bits)
+S2: 15 (30.2 bits)

@@ -1,0 +1,127 @@
+<HTML>
+<HEAD>
+<TITLE>BLAST Search Results </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" LINK="#0000FF" VLINK="#660099" ALINK="#660099">
+<A HREF="http://www.ncbi.nlm.nih.gov/BLAST/blast_form.map"> <IMG SRC="http://www.ncbi.nlm.nih.gov/BLAST/blast_results.gif" BORDER=0 ISMAP></A>
+<BR><BR><PRE>
+<b>BLASTP 2.0.10 [Aug-26-1999]</b>
+
+
+<b><a href="http://www.ncbi.nlm.nih.gov/htbin-
+post/Entrez/query?uid=9254694&form=6&db=m&Dopt=r">Reference</a>:</b>
+Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch&auml;ffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+<p>
+<b>Query=</b> gi|120291|sp|P21297|FLBT_CAUCR FLBT PROTEIN.
+         (141 letters)
+
+<b>Database:</b> Non-redundant SwissProt sequences
+           82,258 sequences; 29,652,561 total letters
+
+<p> <p>If you have any problems or questions with the results of this search <br>please refer to the <b><a href=http://www.ncbi.nlm.nih.gov/BLAST/blast_FAQs.html>BLAST FAQs</a></b><br><p>
+<FORM NAME="BLASTFORM">
+</PRE>
+<CENTER>
+<H3><a href="/BLAST/newoptions.html#graphical-overview"> Distribution of 2 Blast Hits on the Query Sequence</a></H3>
+<input name=defline size=80 value="Mouse-over to show defline and scores. Click to show alignments">
+</CENTER>
+<map name=img_map>
+<area shape=rect coords=69,101,476,106 href="#120291" ONMOUSEOVER='document.BLASTFORM.defline.value="P21297  FLBT PROTEIN..S= 256 E=2e-68"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=156,108,305,113 href="#3024946" ONMOUSEOVER='document.BLASTFORM.defline.value="Q58368  HYPOTHETICAL PROTEIN MJ0958 PRECURSOR..S=29.3 E=3.4"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+</map>
+<CENTER>
+<IMG WIDTH=529 HEIGHT=115 USEMAP=#img_map BORDER=1 SRC="nph-getgif.cgi?miles&207891705314796.gif" ISMAP></CENTER>
+<HR>
+<PRE>
+<PRE>
+
+                                                                   Score     E
+Sequences producing significant alignments:                        (bits)  Value
+
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00120291&dopt=GenPept">sp|P21297|FLBT_CAUCR</a>  FLBT PROTEIN                                <a href = #120291>256</a>  2e-68
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=03024946&dopt=GenPept">sp|Q58368|Y958_METJA</a>  HYPOTHETICAL PROTEIN MJ0958 PRECURSOR       <a href = #3024946> 29</a>  3.4
+
+<PRE>
+<a name = 120291> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00120291&dopt=GenPept">sp|P21297|FLBT_CAUCR</a> FLBT PROTEIN
+           Length = 141
+           
+ Score =  256 bits (646), Expect = 2e-68
+ Identities = 127/127 (100%), Positives = 127/127 (100%)
+
+Query: 1   MPLKLSLKPGEKFVLNGAVVQNGDRRGVLVLQNKASVLREKDIMQPDQVTTPARHIYFPV 60
+           MPLKLSLKPGEKFVLNGAVVQNGDRRGVLVLQNKASVLREKDIMQPDQVTTPARHIYFPV
+Sbjct: 1   MPLKLSLKPGEKFVLNGAVVQNGDRRGVLVLQNKASVLREKDIMQPDQVTTPARHIYFPV 60
+
+Query: 61  MMMYLDEVGAEKFYEEFATRLNEFMGVVRNPVVLQDCIAISKHVMAREYYKALMLSRKLI 120
+           MMMYLDEVGAEKFYEEFATRLNEFMGVVRNPVVLQDCIAISKHVMAREYYKALMLSRKLI
+Sbjct: 61  MMMYLDEVGAEKFYEEFATRLNEFMGVVRNPVVLQDCIAISKHVMAREYYKALMLSRKLI 120
+
+Query: 121 EYEDERL 127
+           EYEDERL
+Sbjct: 121 EYEDERL 127
+</PRE>
+
+
+<PRE>
+<a name = 3024946> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=03024946&dopt=GenPept">sp|Q58368|Y958_METJA</a> HYPOTHETICAL PROTEIN MJ0958 PRECURSOR
+           Length = 426
+           
+ Score = 29.3 bits (64), Expect = 3.4
+ Identities = 15/47 (31%), Positives = 23/47 (48%)
+
+Query: 28  VLVLQNKASVLREKDIMQPDQVTTPARHIYFPVMMMYLDEVGAEKFY 74
+           +LVL N  ++   K     D  TT   +IY P+ +    +  A+KFY
+Sbjct: 169 ILVLINNTNITELKKFEDDDYYTTFQHYIYQPIFIFTTYDSKAKKFY 215
+</PRE>
+
+
+
+<PRE>
+  Database: Non-redundant SwissProt sequences
+    Posted date:  Dec 16, 1999  7:53 PM
+  Number of letters in database: 29,652,561
+  Number of sequences in database:  82,258
+  
+Lambda     K      H
+   0.323    0.139    0.392 
+
+Gapped
+Lambda     K      H
+   0.270   0.0470    0.230 
+
+
+Matrix: BLOSUM62
+Gap Penalties: Existence: 11, Extension: 1
+Number of Hits to DB: 6932673
+Number of Sequences: 82258
+Number of extensions: 246623
+Number of successful extensions: 486
+Number of sequences better than 10.0: 2
+Number of HSP's better than 10.0 without gapping: 2
+Number of HSP's successfully gapped in prelim test: 0
+Number of HSP's that attempted gapping in prelim test: 484
+Number of HSP's gapped (non-prelim): 2
+length of query: 141
+length of database: 29,652,561
+effective HSP length: 50
+effective length of query: 91
+effective length of database: 25,539,661
+effective search space: 2324109151
+effective search space used: 2324109151
+T: 11
+A: 40
+X1: 16 ( 7.5 bits)
+X2: 38 (14.8 bits)
+X3: 64 (24.9 bits)
+S1: 41 (21.9 bits)
+S2: 61 (28.2 bits)
+
+</PRE>
+
+</BODY>
+</HTML>
+</BODY>
+</HTML>

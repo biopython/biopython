@@ -1,0 +1,72 @@
+<HTML>
+<HEAD>
+<TITLE>BLAST Search Results </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" LINK="#0000FF" VLINK="#660099" ALINK="#660099">
+<A HREF="http://www.ncbi.nlm.nih.gov/BLAST/blast_form.map"> <IMG SRC="http://www.ncbi.nlm.nih.gov/BLAST/blast_results.gif" BORDER=0 ISMAP></A>
+<BR><BR><PRE>
+<b>BLASTX 2.0.10 [Aug-26-1999]</b>
+
+
+<b><a href="http://www.ncbi.nlm.nih.gov/htbin-
+post/Entrez/query?uid=9254694&form=6&db=m&Dopt=r">Reference</a>:</b>
+Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch&auml;ffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+<p>
+<b>Query=</b> gi|1347782|gb|G25550.1|G25550 human STS EST47652.
+         (379 letters)
+
+<b>Database:</b> Non-redundant SwissProt sequences
+           82,258 sequences; 29,652,561 total letters
+
+<p> <p>If you have any problems or questions with the results of this search <br>please refer to the <b><a href=http://www.ncbi.nlm.nih.gov/BLAST/blast_FAQs.html>BLAST FAQs</a></b><br><p>
+<b>No significant similarity found.</b> For reasons why, <A HREF = "/BLAST/blast_FAQs.html#no hits"><b>click here</A>.</b><br><br>
+<PRE>
+  Database: Non-redundant SwissProt sequences
+    Posted date:  Dec 18, 1999  8:26 PM
+  Number of letters in database: 29,652,561
+  Number of sequences in database:  82,258
+  
+Lambda     K      H
+   0.318    0.135    0.401 
+
+Gapped
+Lambda     K      H
+   0.270   0.0470    0.230 
+
+
+Matrix: BLOSUM62
+Gap Penalties: Existence: 11, Extension: 1
+Number of Hits to DB: 14686001
+Number of Sequences: 82258
+Number of extensions: 235383
+Number of successful extensions: 396
+Number of sequences better than 10.0: 0
+Number of HSP's better than 10.0 without gapping: 0
+Number of HSP's successfully gapped in prelim test: 0
+Number of HSP's that attempted gapping in prelim test: 396
+Number of HSP's gapped (non-prelim): 0
+length of query: 126
+length of database: 29,652,561
+effective HSP length: 48
+effective length of query: 77
+effective length of database: 25,704,177
+effective search space: 1979221629
+effective search space used: 1979221629
+frameshift window, decay const: 50,  0.1
+T: 12
+A: 40
+X1: 16 ( 7.3 bits)
+X2: 38 (14.8 bits)
+X3: 64 (24.9 bits)
+S1: 41 (21.7 bits)
+S2: 60 (27.8 bits)
+
+</PRE>
+
+</BODY>
+</HTML>
+</BODY>
+</HTML>

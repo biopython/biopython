@@ -1,0 +1,214 @@
+<HTML>
+<HEAD>
+<TITLE>BLAST Search Results </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" LINK="#0000FF" VLINK="#660099" ALINK="#660099">
+<A HREF="http://www.ncbi.nlm.nih.gov/BLAST/blast_form.map"> <IMG SRC="http://www.ncbi.nlm.nih.gov/BLAST/blast_results.gif" BORDER=0 ISMAP></A>
+<BR><BR><PRE>
+<b>TBLASTN 2.0.10 [Aug-26-1999]</b>
+
+
+<b><a href="http://www.ncbi.nlm.nih.gov/htbin-
+post/Entrez/query?uid=9254694&form=6&db=m&Dopt=r">Reference</a>:</b>
+Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch&auml;ffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+<p>
+<b>Query=</b> gi|729325|sp|P39483|DHG2_BACME GLUCOSE 1-DEHYDROGENASE
+II (GLCDH-II).
+         (261 letters)
+
+<b>Database:</b> Non-redundant Database of GenBank STS Division
+           89,405 sequences; 32,867,852 total letters
+
+<p> <p>If you have any problems or questions with the results of this search <br>please refer to the <b><a href=http://www.ncbi.nlm.nih.gov/BLAST/blast_FAQs.html>BLAST FAQs</a></b><br><p>
+<FORM NAME="BLASTFORM">
+</PRE>
+<CENTER>
+<H3><a href="/BLAST/newoptions.html#graphical-overview"> Distribution of 7 Blast Hits on the Query Sequence</a></H3>
+<input name=defline size=80 value="Mouse-over to show defline and scores. Click to show alignments">
+</CENTER>
+<map name=img_map>
+<area shape=rect coords=255,101,379,106 href="#3820341" ONMOUSEOVER='document.BLASTFORM.defline.value="AJ229891  Kluyveromyces lactis DNA fragment for sequence tagged ..S=46.9 E=1e-05"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=376,108,502,113 href="#1375419" ONMOUSEOVER='document.BLASTFORM.defline.value="G27169  human STS SHGC-31983...S=43.4 E=1e-04"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=416,101,500,106 href="#3819804" ONMOUSEOVER='document.BLASTFORM.defline.value="AJ230012  Kluyveromyces lactis DNA fragment for sequence tagged ..S=39.5 E=0.002"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=441,115,504,120 href="#1375215" ONMOUSEOVER='document.BLASTFORM.defline.value="G26965  human STS SHGC-31083...S=30.9 E=0.76"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=79,101,137,106 href="#177714" ONMOUSEOVER='document.BLASTFORM.defline.value="L09988  Human Chromosome 4 (clone p4-1095) STS4-889...S=29.3 E=2.2"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=315,115,409,120 href="#5714409" ONMOUSEOVER='document.BLASTFORM.defline.value="AF106665  Mus musculus chromosome 6 clone D6wum9 map between Nkrp1..S=29.3 E=2.2"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=238,108,304,113 href="#1341648" ONMOUSEOVER='document.BLASTFORM.defline.value="G21322  human STS WI-12250...S=28.6 E=3.8"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+</map>
+<CENTER>
+<IMG WIDTH=529 HEIGHT=122 USEMAP=#img_map BORDER=1 SRC="nph-getgif.cgi?miles&20789170534635.gif" ISMAP></CENTER>
+<HR>
+<PRE>
+<PRE>
+
+                                                                   Score     E
+Sequences producing significant alignments:                        (bits)  Value
+
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=03820341&dopt=GenBank">emb|AJ229891|KLAJ9891</a>  Kluyveromyces lactis DNA fragment for...   <a href = #3820341> 47</a>  1e-05
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=01375419&dopt=GenBank">gb|G27169|G27169</a>  human STS SHGC-31983.                           <a href = #1375419> 43</a>  1e-04
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=03819804&dopt=GenBank">emb|AJ230012|KLAJ0012</a>  Kluyveromyces lactis DNA fragment for...   <a href = #3819804> 39</a>  0.002
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=01375215&dopt=GenBank">gb|G26965|G26965</a>  human STS SHGC-31083.                           <a href = #1375215> 31</a>  0.76
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=05714409&dopt=GenBank">gb|AF106665.1|AF106665</a>  Mus musculus chromosome 6 clone D6wu...   <a href = #5714409> 29</a>  2.2
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=00177714&dopt=GenBank">gb|L09988|HUM4STS889</a>  Human Chromosome 4 (clone p4-1095) STS...   <a href = #177714> 29</a>  2.2
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=01341648&dopt=GenBank">gb|G21322|G21322</a>  human STS WI-12250.                             <a href = #1341648> 29</a>  3.8
+
+<PRE>
+<a name = 3820341> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=03820341&dopt=GenBank">emb|AJ229891|KLAJ9891</a> Kluyveromyces lactis DNA fragment for sequence tagged site, clone
+           okam5d07r [Kluyveromyces lactis]
+           Length = 230
+           
+ Score = 46.9 bits (109), Expect = 1e-05
+ Identities = 25/72 (34%), Positives = 44/72 (60%), Gaps = 3/72 (4%)
+ Frame = +1
+
+Query: 108 NWNQVIDTNLTGAFLGSREAIKYFVEN---DIKGNVINMSSVHEMIPWPLFVHYAASKGG 164
+           +W QVIDTN+ G F   + A+     +   D +  V+N+S+V+ ++  P    Y A+K  
+Sbjct: 1   SWRQVIDTNINGTFYTLKYALPLMESSSSPDSEAAVVNLSAVNGLVGIPGISPYTATKHA 180
+
+Query: 165 MKLMTETLALEYAPK 179
+           +  +T+++ALEYA +
+Sbjct: 181 VIGITQSVALEYAER 225
+</PRE>
+
+
+<PRE>
+<a name = 1375419> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=01375419&dopt=GenBank">gb|G27169|G27169</a> human STS SHGC-31983.
+           Length = 594
+           
+ Score = 43.4 bits (100), Expect = 1e-04
+ Identities = 21/73 (28%), Positives = 34/73 (45%)
+ Frame = -1
+
+Query: 177 APKGIRVNNIGPGAIDTPINAEKFADPEQRADVESMIPMGYIGKPEEIASVAAFLASSQA 236
+           AP   RVN + P  + T +    + DP +   + +  P+G   + E +     FL S ++
+Sbjct: 312 APXRXRVNAVXPXVVMTSMGQATWXDPXKAXTMLNRXPLGXFAEVEHVVKAILFLLSDRS 133
+
+Query: 237 SYVTGITLFADGG 249
+              TG TL  +GG
+Sbjct: 132 GMTTGSTLPVEGG 94
+</PRE>
+
+
+<PRE>
+<a name = 3819804> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=03819804&dopt=GenBank">emb|AJ230012|KLAJ0012</a> Kluyveromyces lactis DNA fragment for sequence tagged site, clone
+           okam6d01d [Kluyveromyces lactis]
+           Length = 199
+           
+ Score = 39.5 bits (90), Expect = 0.002
+ Identities = 18/49 (36%), Positives = 26/49 (52%)
+ Frame = -1
+
+Query: 200 FADPEQRADVESMIPMGYIGKPEEIASVAAFLASSQASYVTGITLFADG 248
+           F D + +    S+IPMG  G P+E+     + AS  ++Y TG  L  DG
+Sbjct: 157 FVDEDLKNKWHSLIPMGREGLPQELVGAYLYFASDASTYTTGSDLLVDG 11
+</PRE>
+
+
+<PRE>
+<a name = 1375215> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=01375215&dopt=GenBank">gb|G26965|G26965</a> human STS SHGC-31083.
+           Length = 268
+           
+ Score = 30.9 bits (68), Expect = 0.76
+ Identities = 12/37 (32%), Positives = 19/37 (50%)
+ Frame = -1
+
+Query: 214 PMGYIGKPEEIASVAAFLASSQASYVTGITLFADGGM 250
+           PMG  G PE++  V A      +  +TG ++   GG+
+Sbjct: 268 PMGXXGDPEDVXDVXAXXXXEXSGXITGTSVEVTGGL 158
+</PRE>
+
+
+<PRE>
+<a name = 5714409> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=05714409&dopt=GenBank">gb|AF106665.1|AF106665</a> Mus musculus chromosome 6 clone D6wum9 map between Nkrp1 and Prp
+           strain C57BL/6J, sequence tagged site
+           Length = 299
+           
+ Score = 29.3 bits (64), Expect = 2.2
+ Identities = 17/55 (30%), Positives = 32/55 (57%), Gaps = 2/55 (3%)
+ Frame = -2
+
+Query: 142 NMSSVHEMIPWPLFVHYAASKGGMKLMTETL--ALEYAPKGIRVNNIGPGAIDTPIN 196
+           ++S    +I +P F+    S  G  L+  +L  A+ + P GI V+++GP ++ T +N
+Sbjct: 172 SLSPTQYLIMFPSFLPCPLSHPGPFLLPSSLVIAVFFLPNGIEVSSLGPFSLRTLLN 2
+</PRE>
+
+
+<PRE>
+<a name = 177714> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=00177714&dopt=GenBank">gb|L09988|HUM4STS889</a> Human Chromosome 4 (clone p4-1095) STS4-889.
+           Length = 412
+           
+ Score = 29.3 bits (64), Expect = 2.2
+ Identities = 14/34 (41%), Positives = 22/34 (64%)
+ Frame = -1
+
+Query: 7   DKVVVVTGGSKGLGRAMAVRFGQEQSKVVVNYRS 40
+           DKV  V GGS+G+GRA+A    ++  ++ V  R+
+Sbjct: 316 DKVCAVFGGSRGIGRAVAQLMARKGYRLAVIARN 215
+</PRE>
+
+
+<PRE>
+<a name = 1341648> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=01341648&dopt=GenBank">gb|G21322|G21322</a> human STS WI-12250.
+           Length = 586
+           
+ Score = 28.6 bits (62), Expect = 3.8
+ Identities = 16/39 (41%), Positives = 20/39 (51%), Gaps = 1/39 (2%)
+ Frame = +1
+
+Query: 98  PVPSHELSLENWNQ-VIDTNLTGAFLGSREAIKYFVENDI 136
+           PVP  ELS  +W+Q  + T+ T  F  S     YF  N I
+Sbjct: 220 PVPMQELSKVHWSQFFLTTSPTMTFFFSHYLANYFFRNSI 339
+</PRE>
+
+
+
+<PRE>
+  Database: Non-redundant Database of GenBank STS Division
+    Posted date:  Dec 18, 1999  7:45 PM
+  Number of letters in database: 32,867,852
+  Number of sequences in database:  89,405
+  
+Lambda     K      H
+   0.315    0.134    0.378 
+
+Gapped
+Lambda     K      H
+   0.270   0.0470    0.230 
+
+
+Matrix: BLOSUM62
+Gap Penalties: Existence: 11, Extension: 1
+Number of Hits to DB: 6334151
+Number of Sequences: 89405
+Number of extensions: 57201
+Number of successful extensions: 152
+Number of sequences better than 10.0: 14
+Number of HSP's better than 10.0 without gapping: 5
+Number of HSP's successfully gapped in prelim test: 2
+Number of HSP's that attempted gapping in prelim test: 146
+Number of HSP's gapped (non-prelim): 7
+length of query: 261
+length of database: 10,955,950
+effective HSP length: 50
+effective length of query: 211
+effective length of database: 6,485,700
+effective search space: 1368482700
+effective search space used: 1368482700
+frameshift window, decay const: 50,  0.1
+T: 13
+A: 40
+X1: 16 ( 7.3 bits)
+X2: 38 (14.8 bits)
+X3: 64 (24.9 bits)
+S1: 42 (22.0 bits)
+S2: 59 (27.4 bits)
+
+</PRE>
+
+</BODY>
+</HTML>
+</BODY>
+</HTML>

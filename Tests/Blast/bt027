@@ -1,0 +1,114 @@
+<HTML>
+<HEAD>
+<TITLE>BLAST Search Results </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" LINK="#0000FF" VLINK="#660099" ALINK="#660099">
+<A HREF="http://www.ncbi.nlm.nih.gov/BLAST/blast_form.map"> <IMG SRC="http://www.ncbi.nlm.nih.gov/BLAST/blast_results.gif" BORDER=0 ISMAP></A>
+<BR><BR><PRE>
+<b>BLASTN 2.0.10 [Aug-26-1999]</b>
+
+
+<b><a href="http://www.ncbi.nlm.nih.gov/htbin-
+post/Entrez/query?uid=9254694&form=6&db=m&Dopt=r">Reference</a>:</b>
+Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch&auml;ffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+<p>
+<b>Query=</b> gi|859351|gb|G06106.1|G06106 human STS WI-6344.
+         (183 letters)
+
+<b>Database:</b> Non-redundant Database of GenBank STS Division
+           89,405 sequences; 32,867,852 total letters
+
+<p> <p>If you have any problems or questions with the results of this search <br>please refer to the <b><a href=http://www.ncbi.nlm.nih.gov/BLAST/blast_FAQs.html>BLAST FAQs</a></b><br><p>
+<FORM NAME="BLASTFORM">
+</PRE>
+<CENTER>
+<H3><a href="/BLAST/newoptions.html#graphical-overview"> Distribution of 6 Blast Hits on the Query Sequence</a></H3>
+<input name=defline size=80 value="Mouse-over to show defline and scores. Click to show alignments">
+</CENTER>
+<map name=img_map>
+<area shape=rect coords=69,101,522,106 href="#859351" ONMOUSEOVER='document.BLASTFORM.defline.value="G06106  human STS WI-6344...S= 327 E=1e-89"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=240,108,288,113 href="#1341350" ONMOUSEOVER='document.BLASTFORM.defline.value="G21024  human STS WI-30979...S=32.2 E=1.1"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=113,108,148,113 href="#860526" ONMOUSEOVER='document.BLASTFORM.defline.value="G07281  human STS WI-9430...S=30.2 E=4.2"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=113,115,148,120 href="#1340656" ONMOUSEOVER='document.BLASTFORM.defline.value="G20319  human STS A005L39...S=30.2 E=4.2"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=161,108,196,113 href="#6126285" ONMOUSEOVER='document.BLASTFORM.defline.value="G60966  SHGC-84377 Human Homo sapiens STS genomic, sequence tagged..S=30.2 E=4.2"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=457,108,492,113 href="#5222421" ONMOUSEOVER='document.BLASTFORM.defline.value="G51244  SHGC-80725 Human Homo sapiens STS genomic, sequence tagged..S=30.2 E=4.2"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+</map>
+<CENTER>
+<IMG WIDTH=529 HEIGHT=122 USEMAP=#img_map BORDER=1 SRC="nph-getgif.cgi?iblast0&207891705326833.gif" ISMAP></CENTER>
+<HR>
+<PRE>
+<PRE>
+
+                                                                   Score     E
+Sequences producing significant alignments:                        (bits)  Value
+
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=00859351&dopt=GenBank">gb|G06106|G06106</a>  human STS WI-6344.                              <a href = #859351>327</a>  1e-89
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=01341350&dopt=GenBank">gb|G21024|G21024</a>  human STS WI-30979.                             <a href = #1341350> 32</a>  1.1
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=06126285&dopt=GenBank">gb|G60966.1|G60966</a>  SHGC-84377 Human Homo sapiens STS genomi...   <a href = #6126285> 30</a>  4.2
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=05222421&dopt=GenBank">gb|G51244.1|G51244</a>  SHGC-80725 Human Homo sapiens STS genomi...   <a href = #5222421> 30</a>  4.2
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=01340656&dopt=GenBank">gb|G20319|G20319</a>  human STS A005L39.                              <a href = #1340656> 30</a>  4.2
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=00860526&dopt=GenBank">gb|G07281|G07281</a>  human STS WI-9430.                              <a href = #860526> 30</a>  4.2
+
+<PRE>
+blast_tmp 1   acttgggnctacatgggccagaggtggtttattcagtctccataagagaggggacaaacg 60
+<a name = 859351></a><a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=00859351&dopt=GenBank>G06106</a>    1   ............................................................ 60
+<a name = 6126285></a><a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=06126285&dopt=GenBank>G60966</a>    49                                       ...............         63
+<a name = 1340656></a><a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=01340656&dopt=GenBank>G20319</a>    53                    ...............                            39
+<a name = 860526></a><a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=00860526&dopt=GenBank>G07281</a>    172                   ...............                            158
+
+blast_tmp 61  gcacagttgggtccgtgaagaggagggtccaagagctnacaagagagcctctctgagatt 120
+<a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=00859351&dopt=GenBank>G06106</a>    61  ............................................................ 120
+<a name = 1341350></a><a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=01341350&dopt=GenBank>G21024</a>    33           .............a......                                14
+
+blast_tmp 121 tgacccctncatcccctnctcagggnggttgtggagtcactgggcctcatgggntaggcc 180
+<a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=00859351&dopt=GenBank>G06106</a>    121 ............................................................ 180
+<a name = 5222421></a><a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=05222421&dopt=GenBank>G51244</a>    184                                     ...............          198
+
+blast_tmp 181 cag 183
+<a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=00859351&dopt=GenBank>G06106</a>    181 ... 183
+</PRE>
+
+<PRE>
+  Database: Non-redundant Database of GenBank STS Division
+    Posted date:  Dec 18, 1999  7:45 PM
+  Number of letters in database: 32,867,852
+  Number of sequences in database:  89,405
+  
+Lambda     K      H
+    1.37    0.711     1.31 
+
+Gapped
+Lambda     K      H
+    1.37    0.711     1.31 
+
+
+Matrix: blastn matrix:1 -3
+Gap Penalties: Existence: 5, Extension: 2
+Number of Hits to DB: 1988
+Number of Sequences: 89405
+Number of extensions: 1988
+Number of successful extensions: 517
+Number of sequences better than 10.0: 8
+length of query: 183
+length of database: 32,867,852
+effective HSP length: 16
+effective length of query: 167
+effective length of database: 31,437,372
+effective search space: 5250041124
+effective search space used: 5250041124
+T: 0
+A: 0
+X1: 6 (11.9 bits)
+X2: 10 (19.8 bits)
+S1: 12 (24.3 bits)
+S2: 15 (30.2 bits)
+
+</PRE>
+
+</BODY>
+</HTML>
+</BODY>
+</HTML>

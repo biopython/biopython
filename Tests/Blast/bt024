@@ -1,0 +1,174 @@
+<HTML>
+<HEAD>
+<TITLE>BLAST Search Results </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" LINK="#0000FF" VLINK="#660099" ALINK="#660099">
+<A HREF="http://www.ncbi.nlm.nih.gov/BLAST/blast_form.map"> <IMG SRC="http://www.ncbi.nlm.nih.gov/BLAST/blast_results.gif" BORDER=0 ISMAP></A>
+<BR><BR><PRE>
+<b>BLASTN 2.0.10 [Aug-26-1999]</b>
+
+
+<b><a href="http://www.ncbi.nlm.nih.gov/htbin-
+post/Entrez/query?uid=9254694&form=6&db=m&Dopt=r">Reference</a>:</b>
+Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch&auml;ffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+<p>
+<b>Query=</b> gi|1348916|gb|G26684.1|G26684 human STS STS_D11570.
+         (285 letters)
+
+<b>Database:</b> Non-redundant Database of GenBank STS Division
+           89,405 sequences; 32,867,852 total letters
+
+<p> <p>If you have any problems or questions with the results of this search <br>please refer to the <b><a href=http://www.ncbi.nlm.nih.gov/BLAST/blast_FAQs.html>BLAST FAQs</a></b><br><p>
+<FORM NAME="BLASTFORM">
+</PRE>
+<CENTER>
+<H3><a href="/BLAST/newoptions.html#graphical-overview"> Distribution of 4 Blast Hits on the Query Sequence</a></H3>
+<input name=defline size=80 value="Mouse-over to show defline and scores. Click to show alignments">
+</CENTER>
+<map name=img_map>
+<area shape=rect coords=69,101,523,106 href="#1348916" ONMOUSEOVER='document.BLASTFORM.defline.value="G26684  human STS STS_D11570.  gi|1375195|gb|G26945|G26945 huma..S= 517 E=1e-146"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=403,108,432,113 href="#6120827" ONMOUSEOVER='document.BLASTFORM.defline.value="G55508  SHGC-100856 Human Homo sapiens STS genomic, sequence tagge..S=32.2 E=1.7"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=421,115,445,120 href="#4516686" ONMOUSEOVER='document.BLASTFORM.defline.value="AU026763  Rattus norvegicus, OTSUKA clone, OT33.16/752f07, microsa..S=32.2 E=1.7"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=483,108,507,113 href="#720683" ONMOUSEOVER='document.BLASTFORM.defline.value="G03725  human STS WI-344...S=32.2 E=1.7"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+</map>
+<CENTER>
+<IMG WIDTH=529 HEIGHT=122 USEMAP=#img_map BORDER=1 SRC="nph-getgif.cgi?iblast0&207891705325813.gif" ISMAP></CENTER>
+<HR>
+<PRE>
+<PRE>
+
+                                                                   Score     E
+Sequences producing significant alignments:                        (bits)  Value
+
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=01348916&dopt=GenBank">gb|G26684|G26684</a>  human STS STS_D11570. >gi|1375195|gb|G2694...   <a href = #1348916>517</a>  e-146
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=04516686&dopt=GenBank">dbj|AU026763.1|AU026763</a>  Rattus norvegicus, OTSUKA clone, OT...   <a href = #4516686> 32</a>  1.7
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=06120827&dopt=GenBank">gb|G55508.1|G55508</a>  SHGC-100856 Human Homo sapiens STS genom...   <a href = #6120827> 32</a>  1.7
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=00720683&dopt=GenBank">gb|G03725|G03725</a>  human STS WI-344.                               <a href = #720683> 32</a>  1.7
+
+<PRE>
+<a name = 1348916> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=01348916&dopt=GenBank">gb|G26684|G26684</a> human STS STS_D11570. >gi|1375195|gb|G26945|G26945 human STS
+           SHGC-32699.
+           Length = 285
+           
+ Score =  517 bits (261), Expect = e-146
+ Identities = 285/285 (100%)
+ Strand = Plus / Plus
+
+                                                                       
+Query: 1   gatccctacccttnccgttggtctctntcgctgactcgaggcacctaacatccattcaca 60
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Sbjct: 1   gatccctacccttnccgttggtctctntcgctgactcgaggcacctaacatccattcaca 60
+
+                                                                       
+Query: 61  cccaacacaggccagcgacttctggggctcagccacagacatggtttgtnactnttgagc 120
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Sbjct: 61  cccaacacaggccagcgacttctggggctcagccacagacatggtttgtnactnttgagc 120
+
+                                                                       
+Query: 121 ttctgttcctagagaatcctagaggcttgattggcccaggctgctgtntgtnctggaggc 180
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Sbjct: 121 ttctgttcctagagaatcctagaggcttgattggcccaggctgctgtntgtnctggaggc 180
+
+                                                                       
+Query: 181 aaagaatccctacctcctaggggtgaaaggaaatnaaaatggaaagttcttgtagcgcaa 240
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Sbjct: 181 aaagaatccctacctcctaggggtgaaaggaaatnaaaatggaaagttcttgtagcgcaa 240
+
+                                                        
+Query: 241 ggcctgacatgggtagctgctcaataaatgctagtntgttatttc 285
+           |||||||||||||||||||||||||||||||||||||||||||||
+Sbjct: 241 ggcctgacatgggtagctgctcaataaatgctagtntgttatttc 285
+</PRE>
+
+
+<PRE>
+<a name = 4516686> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=04516686&dopt=GenBank">dbj|AU026763.1|AU026763</a> Rattus norvegicus, OTSUKA clone, OT33.16/752f07, microsatellite
+           sequence, sequence tagged site
+           Length = 307
+           
+ Score = 32.2 bits (16), Expect = 1.7
+ Identities = 16/16 (100%)
+ Strand = Plus / Plus
+
+                           
+Query: 221 ggaaagttcttgtagc 236
+           ||||||||||||||||
+Sbjct: 32  ggaaagttcttgtagc 47
+</PRE>
+
+
+<PRE>
+<a name = 6120827> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=06120827&dopt=GenBank">gb|G55508.1|G55508</a> SHGC-100856 Human Homo sapiens STS genomic, sequence tagged site
+           Length = 711
+           
+ Score = 32.2 bits (16), Expect = 1.7
+ Identities = 18/19 (94%)
+ Strand = Plus / Plus
+
+                              
+Query: 210 gaaatnaaaatggaaagtt 228
+           ||||| |||||||||||||
+Sbjct: 588 gaaataaaaatggaaagtt 606
+</PRE>
+
+
+<PRE>
+<a name = 720683> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=00720683&dopt=GenBank">gb|G03725|G03725</a> human STS WI-344.
+           Length = 246
+           
+ Score = 32.2 bits (16), Expect = 1.7
+ Identities = 16/16 (100%)
+ Strand = Plus / Minus
+
+                           
+Query: 260 ctcaataaatgctagt 275
+           ||||||||||||||||
+Sbjct: 178 ctcaataaatgctagt 163
+</PRE>
+
+
+
+<PRE>
+  Database: Non-redundant Database of GenBank STS Division
+    Posted date:  Dec 18, 1999  7:45 PM
+  Number of letters in database: 32,867,852
+  Number of sequences in database:  89,405
+  
+Lambda     K      H
+    1.37    0.711     1.31 
+
+Gapped
+Lambda     K      H
+    1.37    0.711     1.31 
+
+
+Matrix: blastn matrix:1 -3
+Gap Penalties: Existence: 5, Extension: 2
+Number of Hits to DB: 3932
+Number of Sequences: 89405
+Number of extensions: 3932
+Number of successful extensions: 1177
+Number of sequences better than 10.0: 4
+length of query: 285
+length of database: 32,867,852
+effective HSP length: 17
+effective length of query: 268
+effective length of database: 31,347,967
+effective search space: 8401255156
+effective search space used: 8401255156
+T: 0
+A: 0
+X1: 6 (11.9 bits)
+X2: 10 (19.8 bits)
+S1: 12 (24.3 bits)
+S2: 15 (30.2 bits)
+
+</PRE>
+
+</BODY>
+</HTML>
+</BODY>
+</HTML>

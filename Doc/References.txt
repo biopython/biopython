@@ -1,0 +1,15 @@
+References.txt
+==============
+
+Miscellaneous references that may be useful.
+
+
+
+BLAST (Basic Local Alignment Search Tool) is in the public domain and
+made available by the NCBI (National Center for Biotechnology
+Information) at:
+http://www.ncbi.nlm.nih.gov/BLAST/
+
+
+FASTA format description:
+http://www.ncbi.nlm.nih.gov/BLAST/fasta.html

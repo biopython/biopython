@@ -1,0 +1,228 @@
+*************** start_header
+version        : BLASTN 2.0.10 [Aug-26-1999]
+noevent        : 
+noevent        : 
+reference      : Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. S
+reference      : Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (199
+reference      : "Gapped BLAST and PSI-BLAST: a new generation of protein database
+reference      : programs",  Nucleic Acids Res. 25:3389-3402.
+noevent        : 
+query_info     : Query= gi|1347201|gb|G24969|G24969 human STS
+query_info     : EST21946.gi|1375315|gb|G27065|G27065 human STS SHGC-31731.
+query_info     :          (331 letters)
+noevent        : 
+database_info  : Database: data/sts
+database_info  :            87,792 sequences; 31,998,854 total letters
+noevent        : 
+*************** end_header
+*************** start_descriptions
+noevent        : Searching..................................................done
+noevent        : 
+*************** end_descriptions
+*************** start_alignment
+title          : >gi|1347201|gb|G24969|G24969 human STS EST21946.
+title          :            >gi|1375315|gb|G27065|G27065 human STS SHGC-31731.
+length         :            Length = 331
+noevent        : 
+score          :  Score =  656 bits (331), Expect = 0.0
+identities     :  Identities = 331/331 (100%)
+strand         :  Strand = Plus / Plus
+noevent        : 
+noevent        : 
+query          : Query: 1   cctccaccctctcatgagcaacaggatatgtgaaagtacttgcagccagaagca
+align          :            ||||||||||||||||||||||||||||||||||||||||||||||||||||||
+sbjct          : Sbjct: 1   cctccaccctctcatgagcaacaggatatgtgaaagtacttgcagccagaagca
+noevent        : 
+noevent        : 
+query          : Query: 61  caatcctcgggtgctagatggagctccccaaggagcagagaggaaaaggcagga
+align          :            ||||||||||||||||||||||||||||||||||||||||||||||||||||||
+sbjct          : Sbjct: 61  caatcctcgggtgctagatggagctccccaaggagcagagaggaaaaggcagga
+noevent        : 
+noevent        : 
+query          : Query: 121 ggccaggcagcagggatggagactaagtttggcccaaggctgcccgcaagcact
+align          :            ||||||||||||||||||||||||||||||||||||||||||||||||||||||
+sbjct          : Sbjct: 121 ggccaggcagcagggatggagactaagtttggcccaaggctgcccgcaagcact
+noevent        : 
+noevent        : 
+query          : Query: 181 atcatgccctctggtaggtgtctatttctgtctgaaccagaaatacaccaagct
+align          :            ||||||||||||||||||||||||||||||||||||||||||||||||||||||
+sbjct          : Sbjct: 181 atcatgccctctggtaggtgtctatttctgtctgaaccagaaatacaccaagct
+noevent        : 
+noevent        : 
+query          : Query: 241 atgggggctttgctggcttcgacatcactggttcaactatgtcactgctttgtt
+align          :            ||||||||||||||||||||||||||||||||||||||||||||||||||||||
+sbjct          : Sbjct: 241 atgggggctttgctggcttcgacatcactggttcaactatgtcactgctttgtt
+noevent        : 
+noevent        : 
+query          : Query: 301 agtgctccagaacctcaggttccttcagatt 331
+align          :            |||||||||||||||||||||||||||||||
+sbjct          : Sbjct: 301 agtgctccagaacctcaggttccttcagatt 331
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|2665277|emb|AL010115|HSPE77H4 H.sapiens flow-sorted chromosom
+title          :            HindIII fragment, SC1pE77H4, sequence tagged site [Hom
+title          :            sapiens]
+length         :            Length = 554
+noevent        : 
+score          :  Score = 34.2 bits (17), Expect = 0.49
+identities     :  Identities = 17/17 (100%)
+strand         :  Strand = Plus / Minus
+noevent        : 
+noevent        : 
+query          : Query: 123 ccaggcagcagggatgg 139
+align          :            |||||||||||||||||
+sbjct          : Sbjct: 434 ccaggcagcagggatgg 418
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|6120731|gb|G55412.1|G55412 SHGC-100745 Human Homo sapiens STS
+title          :            genomic, sequence tagged site
+length         :            Length = 652
+noevent        : 
+score          :  Score = 32.2 bits (16), Expect = 1.9
+identities     :  Identities = 16/16 (100%)
+strand         :  Strand = Plus / Minus
+noevent        : 
+noevent        : 
+query          : Query: 99  agaggaaaaggcagga 114
+align          :            ||||||||||||||||
+sbjct          : Sbjct: 431 agaggaaaaggcagga 416
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|4493602|gb|G47248.1|G47248 Z17392_1 Zebrafish AB Danio rerio
+title          :            genomic clone Z17392 5', sequence tagged site
+length         :            Length = 454
+noevent        : 
+score          :  Score = 32.2 bits (16), Expect = 1.9
+identities     :  Identities = 16/16 (100%)
+strand         :  Strand = Plus / Plus
+noevent        : 
+noevent        : 
+query          : Query: 48  agaagcaaaaccacaa 63
+align          :            ||||||||||||||||
+sbjct          : Sbjct: 434 agaagcaaaaccacaa 449
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|1342139|gb|G21813|G21813 human STS WI-12408.
+length         :            Length = 418
+noevent        : 
+score          :  Score = 32.2 bits (16), Expect = 1.9
+identities     :  Identities = 16/16 (100%)
+strand         :  Strand = Plus / Minus
+noevent        : 
+noevent        : 
+query          : Query: 47  cagaagcaaaaccaca 62
+align          :            ||||||||||||||||
+sbjct          : Sbjct: 193 cagaagcaaaaccaca 178
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|1235411|emb|Z53965|HSC009WH1 H.sapiens (D2S2321) DNA segment
+title          :            containing (CA) repeat; clone AFMc009wh1; single read,
+title          :            sequence tagged site [Homo sapiens]
+length         :            Length = 382
+noevent        : 
+score          :  Score = 32.2 bits (16), Expect = 1.9
+identities     :  Identities = 16/16 (100%)
+strand         :  Strand = Plus / Plus
+noevent        : 
+noevent        : 
+query          : Query: 97  agagaggaaaaggcag 112
+align          :            ||||||||||||||||
+sbjct          : Sbjct: 107 agagaggaaaaggcag 122
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|4757440|gb|G49267.1|G49267 stbK343C1_96809 chromosome 22 geno
+title          :            clone Homo sapiens STS genomic clone 343C1, sequence
+title          :            tagged site
+length         :            Length = 360
+noevent        : 
+score          :  Score = 32.2 bits (16), Expect = 1.9
+identities     :  Identities = 22/24 (91%)
+strand         :  Strand = Plus / Minus
+noevent        : 
+noevent        : 
+query          : Query: 112 ggaggagagggccaggcagcaggg 135
+align          :            ||||||||||| | ||||||||||
+sbjct          : Sbjct: 287 ggaggagaggggctggcagcaggg 264
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|719782|gb|G02824|G02824 human STS WI-1312.
+length         :            Length = 349
+noevent        : 
+score          :  Score = 32.2 bits (16), Expect = 1.9
+identities     :  Identities = 16/16 (100%)
+strand         :  Strand = Plus / Plus
+noevent        : 
+noevent        : 
+query          : Query: 286 tgctttgttatattta 301
+align          :            ||||||||||||||||
+sbjct          : Sbjct: 111 tgctttgttatattta 126
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|939357|gb|G08807|G08807 human STS CHLC.GATA70E11.P18111 clone
+title          :            GATA70E11
+length         :            Length = 643
+noevent        : 
+score          :  Score = 32.2 bits (16), Expect = 1.9
+identities     :  Identities = 16/16 (100%)
+strand         :  Strand = Plus / Minus
+noevent        : 
+noevent        : 
+query          : Query: 100 gaggaaaaggcaggag 115
+align          :            ||||||||||||||||
+sbjct          : Sbjct: 482 gaggaaaaggcaggag 467
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_database_report
+database       :   Database: data/sts
+posted_date    :     Posted date:  Nov 26, 1999  5:52 PM
+num_letters_in_:   Number of letters in database: 31,998,854
+num_sequences_i:   Number of sequences in database:  87,792
+noevent        : 
+noevent        : Lambda     K      H
+ka_params      :     1.37    0.711     1.31
+noevent        : 
+gapped         : Gapped
+noevent        : Lambda     K      H
+ka_params_gap  :     1.37    0.711     1.31
+noevent        : 
+*************** end_database_report
+noevent        : 
+*************** start_parameters
+matrix         : Matrix: blastn matrix:1 -3
+gap_penalties  : Gap Penalties: Existence: 5, Extension: 2
+num_hits       : Number of Hits to DB: 6844
+num_sequences  : Number of Sequences: 87792
+num_extends    : Number of extensions: 6844
+num_good_extend: Number of successful extensions: 1887
+num_seqs_better: Number of sequences better than 10.0: 14
+query_length   : length of query: 331
+database_length: length of database: 31,998,854
+effective_hsp_l: effective HSP length: 17
+effective_query: effective length of query: 314
+effective_datab: effective length of database: 30,506,390
+effective_searc: effective search space: 9579006460
+effective_searc: effective search space used: 9579006460
+threshold      : T: 0
+window_size    : A: 0
+dropoff_1st_pas: X1: 6 (11.9 bits)
+gap_x_dropoff  : X2: 25 (49.6 bits)
+gap_trigger    : S1: 12 (24.3 bits)
+blast_cutoff   : S2: 15 (30.2 bits)
+*************** end_parameters

@@ -1,0 +1,1812 @@
+*************** start_header
+version        : BLASTP 2.0.10 [Aug-26-1999]
+noevent        : 
+noevent        : 
+reference      : Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. S
+reference      : Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (199
+reference      : "Gapped BLAST and PSI-BLAST: a new generation of protein database
+reference      : programs",  Nucleic Acids Res. 25:3389-3402.
+noevent        : 
+query_info     : Query= gi|126343|sp|P17216|LIVK_SALTY LEUCINE-SPECIFIC BINDING PR
+query_info     : PRECURSOR (LS-BP) (L-BP)
+query_info     :          (369 letters)
+noevent        : 
+database_info  : Database: data/swissprot
+database_info  :            82,258 sequences; 29,652,561 total letters
+noevent        : 
+*************** end_header
+*************** start_descriptions
+noevent        : Searching..................................................done
+round          : Results from round 1
+noevent        : 
+noevent        : 
+noevent        : 
+noevent        : Sequences producing significant alignments:
+noevent        : 
+description    : gi|126343|sp|P17216|LIVK_SALTY LEUCINE-SPECIFIC BINDING PROTEIN..
+description    : gi|126349|sp|P04816|LIVK_ECOLI LEUCINE-SPECIFIC BINDING PROTEIN..
+description    : gi|126348|sp|P02917|LIVJ_ECOLI LEU/ILE/VAL-BINDING PROTEIN PREC..
+description    : gi|126342|sp|P17215|LIVJ_SALTY LEU/ILE/VAL/THR-BINDING PROTEIN ..
+description    : gi|126347|sp|P25399|LIVJ_CITFR LEU/ILE/VAL-BINDING PROTEIN PREC..
+description    : gi|115120|sp|P21175|BRAC_PSEAE LEUCINE-, ISOLEUCINE-, VALINE-, ..
+description    : gi|113709|sp|P27017|AMIC_PSEAE ALIPHATIC AMIDASE EXPRESSION-REG..
+description    : gi|127751|sp|P02567|MYSD_CAEEL MYOSIN HEAVY CHAIN D (MHC D)
+description    : gi|131068|sp|P23596|PRTD_ERWCH PROTEASES SECRETION ATP-BINDING ..
+description    : gi|2495081|sp|Q09630|MGR1_CAEEL PROBABLE METABOTROPIC GLUTAMATE..
+description    : gi|2506848|sp|P80040|MDH_CHLAU MALATE DEHYDROGENASE
+description    : gi|3915245|sp|Q38394|VG37_BPK3 TAIL FIBER PROTEIN GP37 (RECEPTO..
+description    : gi|1351210|sp|P47209|TCPE_CAEEL T-COMPLEX PROTEIN 1, EPSILON SU..
+description    : gi|1351310|sp|P43496|TRXB_PENCH THIOREDOXIN REDUCTASE
+noevent        : 
+*************** end_descriptions
+*************** start_alignment
+title          : >gi|126343|sp|P17216|LIVK_SALTY LEUCINE-SPECIFIC BINDING PROTEIN
+title          :            PRECURSOR (LS-BP) (L-BP)
+length         :            Length = 369
+noevent        : 
+score          :  Score =  743 bits (1897), Expect = 0.0
+identities     :  Identities = 369/369 (100%), Positives = 369/369 (100%)
+noevent        : 
+query          : Query: 1   MKRKAKTIIAGIVALAVSQGAMADDIKVAIVGAMSGPVAQWGDMEFNGARQAIK
+align          :            MKRKAKTIIAGIVALAVSQGAMADDIKVAIVGAMSGPVAQWGDMEFNGARQAIK
+sbjct          : Sbjct: 1   MKRKAKTIIAGIVALAVSQGAMADDIKVAIVGAMSGPVAQWGDMEFNGARQAIK
+noevent        : 
+query          : Query: 61  GIKGDKLVGVEYDDACDPKQAVAVANKIVNDGIQYVIGHLCSSSTQPASDIYED
+align          :            GIKGDKLVGVEYDDACDPKQAVAVANKIVNDGIQYVIGHLCSSSTQPASDIYED
+sbjct          : Sbjct: 61  GIKGDKLVGVEYDDACDPKQAVAVANKIVNDGIQYVIGHLCSSSTQPASDIYED
+noevent        : 
+query          : Query: 121 SPGATNPELTQRGYQYIMRTAGLDSSQGPTAAKYILETVKPQRIAIIHDKQQYG
+align          :            SPGATNPELTQRGYQYIMRTAGLDSSQGPTAAKYILETVKPQRIAIIHDKQQYG
+sbjct          : Sbjct: 121 SPGATNPELTQRGYQYIMRTAGLDSSQGPTAAKYILETVKPQRIAIIHDKQQYG
+noevent        : 
+query          : Query: 181 VQDGLKQGNANIVFFDGITAGEKDFSALIARLQKENIDFVYYGGYYPEMGQIVR
+align          :            VQDGLKQGNANIVFFDGITAGEKDFSALIARLQKENIDFVYYGGYYPEMGQIVR
+sbjct          : Sbjct: 181 VQDGLKQGNANIVFFDGITAGEKDFSALIARLQKENIDFVYYGGYYPEMGQIVR
+noevent        : 
+query          : Query: 241 LKTQFMGPEGVGNASLSNIAGGAAEGMLVTMPKRYDQDPANKAIVEALKADKKD
+align          :            LKTQFMGPEGVGNASLSNIAGGAAEGMLVTMPKRYDQDPANKAIVEALKADKKD
+sbjct          : Sbjct: 241 LKTQFMGPEGVGNASLSNIAGGAAEGMLVTMPKRYDQDPANKAIVEALKADKKD
+noevent        : 
+query          : Query: 301 WITYAAVQSLATAMTRSASHRPLDLVKDLKANGADTVIGPLKWDEKGDLKGFEF
+align          :            WITYAAVQSLATAMTRSASHRPLDLVKDLKANGADTVIGPLKWDEKGDLKGFEF
+sbjct          : Sbjct: 301 WITYAAVQSLATAMTRSASHRPLDLVKDLKANGADTVIGPLKWDEKGDLKGFEF
+noevent        : 
+query          : Query: 361 ADGSSTVAK 369
+align          :            ADGSSTVAK
+sbjct          : Sbjct: 361 ADGSSTVAK 369
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|126349|sp|P04816|LIVK_ECOLI LEUCINE-SPECIFIC BINDING PROTEIN
+title          :            PRECURSOR (LS-BP) (L-BP)
+length         :            Length = 369
+noevent        : 
+score          :  Score =  679 bits (1733), Expect = 0.0
+identities     :  Identities = 333/369 (90%), Positives = 351/369 (94%)
+noevent        : 
+query          : Query: 1   MKRKAKTIIAGIVALAVSQGAMADDIKVAIVGAMSGPVAQWGDMEFNGARQAIK
+align          :            MKR AKTIIAG++ALA+S  AMADDIKVA+VGAMSGP+AQWG MEFNGA QAIK
+sbjct          : Sbjct: 1   MKRNAKTIIAGMIALAISHTAMADDIKVAVVGAMSGPIAQWGIMEFNGAEQAIK
+noevent        : 
+query          : Query: 61  GIKGDKLVGVEYDDACDPKQAVAVANKIVNDGIQYVIGHLCSSSTQPASDIYED
+align          :            GIKGDKLVGVEYDDACDPKQAVAVANKIVNDGI+YVIGHLCSSSTQPASDIYED
+sbjct          : Sbjct: 61  GIKGDKLVGVEYDDACDPKQAVAVANKIVNDGIKYVIGHLCSSSTQPASDIYED
+noevent        : 
+query          : Query: 121 SPGATNPELTQRGYQYIMRTAGLDSSQGPTAAKYILETVKPQRIAIIHDKQQYG
+align          :            SPGAT PELTQRGYQ+IMRTAGLDSSQGPTAAKYILETVKPQRIAIIHDKQQYG
+sbjct          : Sbjct: 121 SPGATAPELTQRGYQHIMRTAGLDSSQGPTAAKYILETVKPQRIAIIHDKQQYG
+noevent        : 
+query          : Query: 181 VQDGLKQGNANIVFFDGITAGEKDFSALIARLQKENIDFVYYGGYYPEMGQIVR
+align          :            VQDGLK  NAN+VFFDGITAGEKDFSALIARL+KENIDFVYYGGYYPEMGQ++R
+sbjct          : Sbjct: 181 VQDGLKAANANVVFFDGITAGEKDFSALIARLKKENIDFVYYGGYYPEMGQMLR
+noevent        : 
+query          : Query: 241 LKTQFMGPEGVGNASLSNIAGGAAEGMLVTMPKRYDQDPANKAIVEALKADKKD
+align          :            LKTQFMGPEGVGNASLSNIAG AAEGMLVTMPKRYDQDPAN+ IV+ALKADKKD
+sbjct          : Sbjct: 241 LKTQFMGPEGVGNASLSNIAGDAAEGMLVTMPKRYDQDPANQGIVDALKADKKD
+noevent        : 
+query          : Query: 301 WITYAAVQSLATAMTRSASHRPLDLVKDLKANGADTVIGPLKWDEKGDLKGFEF
+align          :            WITYAAVQSLATA+ R+ S  PL LVKDLKANGA+TVIGPL WDEKGDLKGF+F
+sbjct          : Sbjct: 301 WITYAAVQSLATALERTGSDEPLALVKDLKANGANTVIGPLNWDEKGDLKGFDF
+noevent        : 
+query          : Query: 361 ADGSSTVAK 369
+align          :            ADGSST AK
+sbjct          : Sbjct: 361 ADGSSTAAK 369
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|126348|sp|P02917|LIVJ_ECOLI LEU/ILE/VAL-BINDING PROTEIN
+title          :            PRECURSOR (LIV-BP)
+length         :            Length = 367
+noevent        : 
+score          :  Score =  581 bits (1482), Expect = e-166
+identities     :  Identities = 282/369 (76%), Positives = 320/369 (86%), Gaps = 2/
+noevent        : 
+query          : Query: 1   MKRKAKTIIAGIVALAVSQGAMADDIKVAIVGAMSGPVAQWGDMEFNGARQAIK
+align          :            M  K K ++AG++ALA S  A+A+DIKVA+VGAMSGPVAQ+GD EF GA QA+
+sbjct          : Sbjct: 1   MNTKGKALLAGLIALAFSNMALAEDIKVAVVGAMSGPVAQYGDQEFTGAEQAVA
+noevent        : 
+query          : Query: 61  GIKGDKLVGVEYDDACDPKQAVAVANKIVNDGIQYVIGHLCSSSTQPASDIYED
+align          :            GIKG+KL   +YDDACDPKQAVAVANK+VNDGI+YVIGHLCSSSTQPASDIYED
+sbjct          : Sbjct: 61  GIKGNKLQIAKYDDACDPKQAVAVANKVVNDGIKYVIGHLCSSSTQPASDIYED
+noevent        : 
+query          : Query: 121 SPGATNPELTQRGYQYIMRTAGLDSSQGPTAAKYILETVKPQRIAIIHDKQQYG
+align          :            +P AT PELT RGYQ I+RT GLDS QGPTAAKYILE VKPQRIAI+HDKQQYG
+sbjct          : Sbjct: 121 TPAATAPELTARGYQLILRTTGLDSDQGPTAAKYILEKVKPQRIAIVHDKQQYG
+noevent        : 
+query          : Query: 181 VQDGLKQGNANIVFFDGITAGEKDFSALIARLQKENIDFVYYGGYYPEMGQIVR
+align          :            VQDGLK+GNAN+VFFDGITAGEKDFS L+ARL+KENIDFVYYGGY+PEMGQI+R
+sbjct          : Sbjct: 181 VQDGLKKGNANVVFFDGITAGEKDFSTLVARLKKENIDFVYYGGYHPEMGQILR
+noevent        : 
+query          : Query: 241 LKTQFMGPEGVGNASLSNIAGGAAEGMLVTMPKRYDQDPANKAIVEALKADKKD
+align          :            LKTQFMGPEGV N SLSNIAG +AEG+LVT PK YDQ PANK IV+A+KA K+D
+sbjct          : Sbjct: 241 LKTQFMGPEGVANVSLSNIAGESAEGLLVTKPKNYDQVPANKPIVDAIKAKKQD
+noevent        : 
+query          : Query: 301 WITYAAVQSLATAMTRSASHRPLDLVKDLKANGADTVIGPLKWDEKGDLKGFEF
+align          :            W TYAA+QSL   + +S    P ++ K LKAN  DTV+GPL WDEKGDLKGFEF
+sbjct          : Sbjct: 301 WTTYAALQSLQAGLNQSDD--PAEIAKYLKANSVDTVMGPLTWDEKGDLKGFEF
+noevent        : 
+query          : Query: 361 ADGSSTVAK 369
+align          :            A+G++T AK
+sbjct          : Sbjct: 359 ANGTATDAK 367
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|126342|sp|P17215|LIVJ_SALTY LEU/ILE/VAL/THR-BINDING PROTEIN
+title          :            PRECURSOR (LIVT-BP)
+length         :            Length = 365
+noevent        : 
+score          :  Score =  577 bits (1470), Expect = e-164
+identities     :  Identities = 280/366 (76%), Positives = 316/366 (85%), Gaps = 2/
+noevent        : 
+query          : Query: 4   KAKTIIAGIVALAVSQGAMADDIKVAIVGAMSGPVAQWGDMEFNGARQAIKDIN
+align          :            K KT++AG +AL++S  A ADDIKVA+VGAMSGPVAQ+GD EF GA QAI DIN
+sbjct          : Sbjct: 2   KGKTLLAGCIALSLSHMAFADDIKVAVVGAMSGPVAQYGDQEFTGAEQAIADIN
+noevent        : 
+query          : Query: 64  GDKLVGVEYDDACDPKQAVAVANKIVNDGIQYVIGHLCSSSTQPASDIYEDEGI
+align          :            GDKLV V+YDDACDPKQAVAVANK+VNDGI+YVIGHLCSSSTQPASDIYEDEGI
+sbjct          : Sbjct: 62  GDKLVAVKYDDACDPKQAVAVANKVVNDGIKYVIGHLCSSSTQPASDIYEDEGI
+noevent        : 
+query          : Query: 124 ATNPELTQRGYQYIMRTAGLDSSQGPTAAKYILETVKPQRIAIIHDKQQYGEGL
+align          :            AT PELT RGY+ ++RT GLDS QGPTAAKYILE VKPQRIAIIHDKQQYGEGL
+sbjct          : Sbjct: 122 ATAPELTARGYKLVLRTTGLDSDQGPTAAKYILEKVKPQRIAIIHDKQQYGEGL
+noevent        : 
+query          : Query: 184 GLKQGNANIVFFDGITAGEKDFSALIARLQKENIDFVYYGGYYPEMGQIVRQAR
+align          :            GLK+G  N+VFFDGITAGEKDFS L+ARL+KENIDFVYYGGY+PEMGQI+RQ+R
+sbjct          : Sbjct: 182 GLKKGGVNVVFFDGITAGEKDFSTLVARLKKENIDFVYYGGYHPEMGQILRQSR
+noevent        : 
+query          : Query: 244 QFMGPEGVGNASLSNIAGGAAEGMLVTMPKRYDQDPANKAIVEALKADKKDPSG
+align          :            QFMGPEGV N SLSNIAG +AEG+LVT PK YDQ PANK IV+A+KA K+DPSG
+sbjct          : Sbjct: 242 QFMGPEGVANVSLSNIAGESAEGLLVTKPKNYDQVPANKPIVDAIKAKKQDPSG
+noevent        : 
+query          : Query: 304 YAAVQSLATAMTRSASHRPLDLVKDLKANGADTVIGPLKWDEKGDLKGFEFGVF
+align          :            YAA+QSL   +  S    P ++ K LK    DTV+GPL WDEKGDLKGFEFGVF
+sbjct          : Sbjct: 302 YAALQSLQAGLNHSDD--PAEIAKYLKGATVDTVMGPLSWDEKGDLKGFEFGVF
+noevent        : 
+query          : Query: 364 SSTVAK 369
+align          :            ++T AK
+sbjct          : Sbjct: 360 TATDAK 365
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|126347|sp|P25399|LIVJ_CITFR LEU/ILE/VAL-BINDING PROTEIN
+title          :            PRECURSOR (LIV-BP)
+length         :            Length = 367
+noevent        : 
+score          :  Score =  570 bits (1453), Expect = e-162
+identities     :  Identities = 276/369 (74%), Positives = 316/369 (84%), Gaps = 2/
+noevent        : 
+query          : Query: 1   MKRKAKTIIAGIVALAVSQGAMADDIKVAIVGAMSGPVAQWGDMEFNGARQAIK
+align          :            M  K K ++AG +AL++S  A A DIKVA+VGAMSGPVAQ+GD EF GA QAI
+sbjct          : Sbjct: 1   MNMKGKALLAGCIALSLSNMAFAKDIKVAVVGAMSGPVAQYGDQEFTGAEQAIA
+noevent        : 
+query          : Query: 61  GIKGDKLVGVEYDDACDPKQAVAVANKIVNDGIQYVIGHLCSSSTQPASDIYED
+align          :            G+KGDKLV V+YDDACDPKQAVAVANK+VNDGI+YVIGHLCSSSTQPASDIYED
+sbjct          : Sbjct: 61  GVKGDKLVMVKYDDACDPKQAVAVANKVVNDGIKYVIGHLCSSSTQPASDIYED
+noevent        : 
+query          : Query: 121 SPGATNPELTQRGYQYIMRTAGLDSSQGPTAAKYILETVKPQRIAIIHDKQQYG
+align          :            +P AT PELT RGY  ++RT GLDS QGPTAAKYI+E VKP+RIAI+HDKQQYG
+sbjct          : Sbjct: 121 TPAATAPELTARGYNLVLRTTGLDSDQGPTAAKYIVEKVKPKRIAIVHDKQQYG
+noevent        : 
+query          : Query: 181 VQDGLKQGNANIVFFDGITAGEKDFSALIARLQKENIDFVYYGGYYPEMGQIVR
+align          :            VQD LK+ NA++VFFDGITAGEKDFS L+ARL+KENIDFVYYGGY+PEMGQI+R
+sbjct          : Sbjct: 181 VQDNLKKANADVVFFDGITAGEKDFSTLVARLKKENIDFVYYGGYHPEMGQILR
+noevent        : 
+query          : Query: 241 LKTQFMGPEGVGNASLSNIAGGAAEGMLVTMPKRYDQDPANKAIVEALKADKKD
+align          :            LKTQFMGPEGV N SLSNIAG +AEG+LVT PK YDQ PANK IV+A+KA K+D
+sbjct          : Sbjct: 241 LKTQFMGPEGVANVSLSNIAGESAEGLLVTKPKNYDQVPANKPIVDAIKAKKQD
+noevent        : 
+query          : Query: 301 WITYAAVQSLATAMTRSASHRPLDLVKDLKANGADTVIGPLKWDEKGDLKGFEF
+align          :            W TYAA+QSL   + +S    P ++ K LKAN  +TV+GPL WD KGDLKGFEF
+sbjct          : Sbjct: 301 WTTYAALQSLQAGLNQSDD--PAEIAKYLKANSVETVMGPLSWDAKGDLKGFEF
+noevent        : 
+query          : Query: 361 ADGSSTVAK 369
+align          :            A+G++T AK
+sbjct          : Sbjct: 359 ANGTATDAK 367
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|115120|sp|P21175|BRAC_PSEAE LEUCINE-, ISOLEUCINE-, VALINE-,
+title          :            THREONINE-, AND ALANINE-BINDING PROTEIN PRECURSOR
+title          :            (LIVAT-BP) (LEU/ILE/VAL/THR/ALA-BINDING PROTEIN)
+length         :            Length = 373
+noevent        : 
+score          :  Score =  413 bits (1050), Expect = e-115
+identities     :  Identities = 193/368 (52%), Positives = 268/368 (72%)
+noevent        : 
+query          : Query: 2   KRKAKTIIAGIVALAVSQGAMADDIKVAIVGAMSGPVAQWGDMEFNGARQAIKD
+align          :            +R ++   A  +A   S    AD IK+A+ G ++GPVAQ+GDM+  GA  AI+
+sbjct          : Sbjct: 6   QRLSRLFAAMAIAGFASYSMAADTIKIALAGPVTGPVAQYGDMQRAGALMAIEQ
+noevent        : 
+query          : Query: 62  IKGDKLVGVEYDDACDPKQAVAVANKIVNDGIQYVIGHLCSSSTQPASDIYEDE
+align          :            + G +L GV YDDACDPKQAVAVANK+VNDG+++V+GH+CSSSTQPA+DIYEDE
+sbjct          : Sbjct: 66  VNGAQLEGVIYDDACDPKQAVAVANKVVNDGVKFVVGHVCSSSTQPATDIYEDE
+noevent        : 
+query          : Query: 122 PGATNPELTQRGYQYIMRTAGLDSSQGPTAAKYILETVKPQRIAIIHDKQQYGE
+align          :            P AT PE+T RGY+ I RT GLD+ QGP A K+I E  K + IA++HDKQQYGE
+sbjct          : Sbjct: 126 PSATAPEITSRGYKLIFRTIGLDNMQGPVAGKFIAERYKVKTIAVLHDKQQYGE
+noevent        : 
+query          : Query: 182 QDGLKQGNANIVFFDGITAGEKDFSALIARLQKENIDFVYYGGYYPEMGQIVRQ
+align          :            +  ++     +  F+G+ AG+KDF+ALI++L+K  + FVY+GGY+PEMG ++RQ
+sbjct          : Sbjct: 186 KKTVEDAGIKVAVFEGLNAGDKDFNALISKLKKAGVQFVYFGGYHPEMGLLLRQ
+noevent        : 
+query          : Query: 242 KTQFMGPEGVGNASLSNIAGGAAEGMLVTMPKRYDQDPANKAIVEALKADKKDP
+align          :              +FMGPEGVGN+ ++ IAG A+EGML T+P+ ++QDP NKA+++A KA  +DP
+sbjct          : Sbjct: 246 DARFMGPEGVGNSEITAIAGDASEGMLATLPRAFEQDPKNKALIDAFKAKNQDP
+noevent        : 
+query          : Query: 302 ITYAAVQSLATAMTRSASHRPLDLVKDLKANGADTVIGPLKWDEKGDLKGFEFG
+align          :              Y+AV  +A  + ++    P  + + L+AN  +T  G L +DEKGDLK F+F
+sbjct          : Sbjct: 306 PAYSAVTVIAKGIEKAGEADPEKVAEALRANTFETPTGNLGFDEKGDLKNFDFT
+noevent        : 
+query          : Query: 362 DGSSTVAK 369
+align          :            D + T  K
+sbjct          : Sbjct: 366 DATRTEVK 373
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|113709|sp|P27017|AMIC_PSEAE ALIPHATIC AMIDASE
+title          :            EXPRESSION-REGULATING PROTEIN
+length         :            Length = 385
+noevent        : 
+score          :  Score = 40.2 bits (92), Expect = 0.006
+identities     :  Identities = 60/334 (17%), Positives = 130/334 (37%), Gaps = 23/
+noevent        : 
+query          : Query: 30  IVGAMSGPVAQWGDMEFN---GARQAIKDINAKGGIKGDKLVGVEYDDACDP-K
+align          :            ++G +        D+E +   GA  A++ +N +GG+ G  +  +  D   DP +
+sbjct          : Sbjct: 9   LIGLLFSETGVTADIERSHAYGALLAVEQLNREGGVGGRPIETLSQDPGGDPDR
+noevent        : 
+query          : Query: 86  NKIVNDGIQYVIGHLCSSSTQPASDIYEDEGILMISPGATNPELTQRGYQY---
+align          :            + I N G+++++G   S + +    + E    L+  P          G++Y
+sbjct          : Sbjct: 69  DFIRNRGVRFLVGCYMSHTRKAVMPVVERADALLCYP------TPYEGFEYSPN
+noevent        : 
+query          : Query: 143 LDSSQGPTAAKYILETVKPQRIAIIHDKQQYGEGLARSVQDGLKQGNANIV--F
+align          :              +      A Y++     +R+  I     Y       ++   +Q    ++
+sbjct          : Sbjct: 123 APNQNSAPLAAYLIRHY-GERVVFIGSDYIYPRESNHVMRHLYRQHGGTVLEEI
+noevent        : 
+query          : Query: 201 GEKDFSALIARLQKENIDFVY---YGGYYPEMGQIVRQARANGLKTQFMGPEGV
+align          :             + D    + R+ +   D V+    G    E+ + + +   +G +   +
+sbjct          : Sbjct: 182 SDDDLQRAVERIYQARADVVFSTVVGTGTAELYRAIARRYGDGRRPP-IASLTT
+noevent        : 
+query          : Query: 258 NIAGGAAEGMLVTMPKRYDQD-PANKAIVEALKADKKDPSGPYVWITYAAVQS-
+align          :             +    AEG +V  P     D PA++A V+A      + +    W   A  Q+
+sbjct          : Sbjct: 241 KMESDVAEGQVVVAPYFSSIDTPASRAFVQACHGFFPENATITAWAEAAYWQTL
+noevent        : 
+query          : Query: 315 TRSASHRPLDLVKDLKANGADTVIGPLKWDEKGD 348
+align          :              + + R  D+ + L     D   GP++ + + +
+sbjct          : Sbjct: 301 QAAGNWRVEDVQRHLYDIDIDAPQGPVRVERQNN 334
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|127751|sp|P02567|MYSD_CAEEL MYOSIN HEAVY CHAIN D (MHC D)
+length         :            Length = 1938
+noevent        : 
+score          :  Score = 32.5 bits (72), Expect = 1.4
+identities     :  Identities = 18/67 (26%), Positives = 32/67 (46%), Gaps = 2/67 (
+noevent        : 
+query          : Query: 247 GPEGVGNASLSNIAGGAAEGMLVTMPKRYDQDPANKAIVEALKADKKDPSGPYV
+align          :            G +G  + ++ + AG     +L  + K  ++DP N  +V  +KA KK+     +
+sbjct          : Sbjct: 570 GKQGEAHLAMRHYAGTVRYNVLNWLEK--NKDPLNDTVVSVMKASKKNDLLVEI
+noevent        : 
+query          : Query: 307 VQSLATA 313
+align          :             +  A A
+sbjct          : Sbjct: 628 QEEAAAA 634
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|131068|sp|P23596|PRTD_ERWCH PROTEASES SECRETION ATP-BINDING
+title          :            PROTEIN PRTD
+length         :            Length = 575
+noevent        : 
+score          :  Score = 32.1 bits (71), Expect = 1.8
+identities     :  Identities = 28/89 (31%), Positives = 42/89 (46%), Gaps = 11/89
+noevent        : 
+query          : Query: 108 ASDIYEDEGILMISPGATNPELTQRGYQYIMRTAGLDSSQGPTAAKYILETVKP
+align          :            A  +Y D  +L++     N  L   G Q +M+       +G T    +L T +P
+sbjct          : Sbjct: 478 ARAMYGDPCLLILDE--PNASLDSEGDQALMQAIVALQKRGATV---VLITHRP
+noevent        : 
+query          : Query: 162 QRIAIIHDKQQYGEGLARSVQDGLKQGNA 190
+align          :            Q+I I+H+ QQ   GLAR V   L+Q +A
+sbjct          : Sbjct: 533 QKILILHEGQQQRMGLARDVLTELQQRSA 561
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|2495081|sp|Q09630|MGR1_CAEEL PROBABLE METABOTROPIC GLUTAMATE
+title          :            RECEPTOR MGL-1
+length         :            Length = 999
+noevent        : 
+score          :  Score = 32.1 bits (71), Expect = 1.8
+identities     :  Identities = 29/125 (23%), Positives = 57/125 (45%), Gaps = 6/12
+noevent        : 
+query          : Query: 96  VIGHLCSSSTQPASDIYEDEGILMISPGATNPELTQRG-YQYIMRTAGLDSSQG
+align          :            V+G   SS +   +++     I  +SP +TN +L+ +  ++Y  RT   D  Q
+sbjct          : Sbjct: 196 VVGGSYSSVSVQLANLLRLFRIAQVSPASTNADLSDKNRFEYFARTVPSDDYQA
+noevent        : 
+query          : Query: 155 ILETVKPQRIAIIHDKQQYGEGLARSVQDGLKQGNANIVFFDGITAGEKDFSA-
+align          :            I    K   +++++   +YGE  A + +   ++    I   + I   ++ F+
+sbjct          : Sbjct: 255 IAVKFKWSYVSLVYSADEYGELGADAFKKEARKKGICIALEERIQNKKESFTES
+noevent        : 
+query          : Query: 211 RLQKE 215
+align          :            +LQ E
+sbjct          : Sbjct: 315 KLQPE 319
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|2506848|sp|P80040|MDH_CHLAU MALATE DEHYDROGENASE
+length         :            Length = 309
+noevent        : 
+score          :  Score = 32.1 bits (71), Expect = 1.8
+identities     :  Identities = 24/93 (25%), Positives = 44/93 (46%), Gaps = 2/93 (
+noevent        : 
+query          : Query: 203 KDFSALIARLQKENIDFVYYGGYYPEMGQIVRQARANGLK-TQFMGPEGVGN-A
+align          :            + F A+ A +  E++  +  GG+  EM  + R +  +G+  ++F+ P+ +
+sbjct          : Sbjct: 153 RTFIAMEAGVSVEDVQAMLMGGHGDEMVPLPRFSTISGIPVSEFIAPDRLAQIV
+noevent        : 
+query          : Query: 261 GGAAEGMLVTMPKRYDQDPANKAIVEALKADKK 293
+align          :            GG    +L T    Y    A   +VEA+  DKK
+sbjct          : Sbjct: 213 GGEIVNLLKTGSAYYAPAAATAQMVEAVLKDKK 245
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|3915245|sp|Q38394|VG37_BPK3 TAIL FIBER PROTEIN GP37 (RECEPTOR
+title          :            RECOGNIZING PROTEIN)
+length         :            Length = 1243
+noevent        : 
+score          :  Score = 30.9 bits (68), Expect = 4.0
+identities     :  Identities = 24/65 (36%), Positives = 31/65 (46%), Gaps = 9/65 (
+noevent        : 
+query          : Query: 171 QQYGEGLARS-----VQDGLKQGNANIVFFDGITAGEKDFSALIARL-QKENID
+align          :            Q YG GL  S     +   LK GNA +     IT G  +F+ L   L +K N
+sbjct          : Sbjct: 716 QSYGHGLVISDNFVSISKPLKVGNAQLGTDGNITGGSGNFANLNTTLNRKVNSG
+noevent        : 
+query          : Query: 224 --GYY 226
+align          :              G+Y
+sbjct          : Sbjct: 776 TSGWY 780
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|1351210|sp|P47209|TCPE_CAEEL T-COMPLEX PROTEIN 1, EPSILON
+title          :            SUBUNIT (TCP-1-EPSILON) (CCT-EPSILON)
+length         :            Length = 542
+noevent        : 
+score          :  Score = 30.9 bits (68), Expect = 4.0
+identities     :  Identities = 18/55 (32%), Positives = 31/55 (55%), Gaps = 1/55 (
+noevent        : 
+query          : Query: 283 AIVEALKADKKDPSGPYVWITYA-AVQSLATAMTRSASHRPLDLVKDLKANGAD
+align          :            AI  A +AD+ D    Y +  +A A++S+  A+  ++   P+D + DLKA   +
+sbjct          : Sbjct: 429 AIQVAKEADRIDGIEQYAFRAFADALESIPMALAENSGLAPIDALSDLKAKQIE
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|1351310|sp|P43496|TRXB_PENCH THIOREDOXIN REDUCTASE
+length         :            Length = 334
+noevent        : 
+score          :  Score = 30.5 bits (67), Expect = 5.2
+identities     :  Identities = 24/90 (26%), Positives = 41/90 (44%), Gaps = 10/90
+noevent        : 
+query          : Query: 79  KQAVAVANKIVN-DGIQYVIGHLCSSSTQPASDIYEDEGILMISPGA--TNPE-
+align          :            K  ++ A ++V  +G+ Y +GH  +S         +DEG ++  PG   TN E
+sbjct          : Sbjct: 235 KDVLSNAEEVVEANGLFYAVGHDPASGLVKGQVELDDEGYIITKPGTSFTNVEG
+noevent        : 
+query          : Query: 129 LTQRGYQYIMRTAGLDSSQGPTAAKYILET 158
+align          :            +  + Y+  + +AG        A K+I ET
+sbjct          : Sbjct: 295 VQDKRYRQAITSAGSGCVAALEAEKFIAET 324
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_descriptions
+noevent        : Searching..................................................done
+round          : Results from round 2
+noevent        : 
+noevent        : 
+noevent        : 
+noevent        : Sequences producing significant alignments:
+model_sequences: Sequences used in model and found again:
+noevent        : 
+description    : gi|126349|sp|P04816|LIVK_ECOLI LEUCINE-SPECIFIC BINDING PROTEIN..
+description    : gi|126342|sp|P17215|LIVJ_SALTY LEU/ILE/VAL/THR-BINDING PROTEIN ..
+description    : gi|126347|sp|P25399|LIVJ_CITFR LEU/ILE/VAL-BINDING PROTEIN PREC..
+description    : gi|126343|sp|P17216|LIVK_SALTY LEUCINE-SPECIFIC BINDING PROTEIN..
+description    : gi|126348|sp|P02917|LIVJ_ECOLI LEU/ILE/VAL-BINDING PROTEIN PREC..
+description    : gi|115120|sp|P21175|BRAC_PSEAE LEUCINE-, ISOLEUCINE-, VALINE-, ..
+noevent        : 
+nonmodel_sequen: Sequences not found previously or not previously below threshold:
+noevent        : 
+description    : gi|113709|sp|P27017|AMIC_PSEAE ALIPHATIC AMIDASE EXPRESSION-REG..
+description    : gi|3024131|sp|P91685|MGR_DROME METABOTROPIC GLUTAMATE RECEPTOR ..
+description    : gi|121300|sp|P23385|MGR1_RAT METABOTROPIC GLUTAMATE RECEPTOR 1 ..
+description    : gi|2495074|sp|Q13255|MGR1_HUMAN METABOTROPIC GLUTAMATE RECEPTOR..
+description    : gi|1170947|sp|P31424|MGR5_RAT METABOTROPIC GLUTAMATE RECEPTOR 5..
+description    : gi|1709020|sp|P41594|MGR5_HUMAN METABOTROPIC GLUTAMATE RECEPTOR..
+description    : gi|2495081|sp|Q09630|MGR1_CAEEL PROBABLE METABOTROPIC GLUTAMATE..
+description    : gi|6014748|sp|Q10900|CTPI_MYCTU PROBABLE CATION-TRANSPORTING AT..
+description    : gi|2833574|sp|Q58178|Y768_METJA HYPOTHETICAL PROTEIN MJ0768
+description    : gi|1169299|sp|P45513|DHAT_CITFR 1,3-PROPANEDIOL DEHYDROGENASE (..
+description    : gi|2495080|sp|P70579|MGR8_RAT METABOTROPIC GLUTAMATE RECEPTOR 8..
+description    : gi|2495079|sp|O00222|MGR8_HUMAN METABOTROPIC GLUTAMATE RECEPTOR..
+description    : gi|1346533|sp|P47743|MGR8_MOUSE METABOTROPIC GLUTAMATE RECEPTOR..
+description    : gi|113381|sp|P06758|ADH2_ZYMMO ALCOHOL DEHYDROGENASE II (ADH II)
+description    : gi|127751|sp|P02567|MYSD_CAEEL MYOSIN HEAVY CHAIN D (MHC D)
+description    : gi|1346321|sp|P23897|HSER_RAT HEAT-STABLE ENTEROTOXIN RECEPTOR ..
+description    : gi|1175674|sp|P45116|YCIH_HAEIN HYPOTHETICAL PROTEIN HI1225
+description    : gi|3025270|sp|P77269|YPHF_ECOLI ABC TRANSPORTER PERIPLASMIC BIN..
+noevent        : 
+*************** end_descriptions
+*************** start_alignment
+title          : >gi|126349|sp|P04816|LIVK_ECOLI LEUCINE-SPECIFIC BINDING PROTEIN
+title          :            PRECURSOR (LS-BP) (L-BP)
+length         :            Length = 369
+noevent        : 
+score          :  Score =  660 bits (1683), Expect = 0.0
+identities     :  Identities = 333/369 (90%), Positives = 351/369 (94%)
+noevent        : 
+query          : Query: 1   MKRKAKTIIAGIVALAVSQGAMADDIKVAIVGAMSGPVAQWGDMEFNGARQAIK
+align          :            MKR AKTIIAG++ALA+S  AMADDIKVA+VGAMSGP+AQWG MEFNGA QAIK
+sbjct          : Sbjct: 1   MKRNAKTIIAGMIALAISHTAMADDIKVAVVGAMSGPIAQWGIMEFNGAEQAIK
+noevent        : 
+query          : Query: 61  GIKGDKLVGVEYDDACDPKQAVAVANKIVNDGIQYVIGHLCSSSTQPASDIYED
+align          :            GIKGDKLVGVEYDDACDPKQAVAVANKIVNDGI+YVIGHLCSSSTQPASDIYED
+sbjct          : Sbjct: 61  GIKGDKLVGVEYDDACDPKQAVAVANKIVNDGIKYVIGHLCSSSTQPASDIYED
+noevent        : 
+query          : Query: 121 SPGATNPELTQRGYQYIMRTAGLDSSQGPTAAKYILETVKPQRIAIIHDKQQYG
+align          :            SPGAT PELTQRGYQ+IMRTAGLDSSQGPTAAKYILETVKPQRIAIIHDKQQYG
+sbjct          : Sbjct: 121 SPGATAPELTQRGYQHIMRTAGLDSSQGPTAAKYILETVKPQRIAIIHDKQQYG
+noevent        : 
+query          : Query: 181 VQDGLKQGNANIVFFDGITAGEKDFSALIARLQKENIDFVYYGGYYPEMGQIVR
+align          :            VQDGLK  NAN+VFFDGITAGEKDFSALIARL+KENIDFVYYGGYYPEMGQ++R
+sbjct          : Sbjct: 181 VQDGLKAANANVVFFDGITAGEKDFSALIARLKKENIDFVYYGGYYPEMGQMLR
+noevent        : 
+query          : Query: 241 LKTQFMGPEGVGNASLSNIAGGAAEGMLVTMPKRYDQDPANKAIVEALKADKKD
+align          :            LKTQFMGPEGVGNASLSNIAG AAEGMLVTMPKRYDQDPAN+ IV+ALKADKKD
+sbjct          : Sbjct: 241 LKTQFMGPEGVGNASLSNIAGDAAEGMLVTMPKRYDQDPANQGIVDALKADKKD
+noevent        : 
+query          : Query: 301 WITYAAVQSLATAMTRSASHRPLDLVKDLKANGADTVIGPLKWDEKGDLKGFEF
+align          :            WITYAAVQSLATA+ R+ S  PL LVKDLKANGA+TVIGPL WDEKGDLKGF+F
+sbjct          : Sbjct: 301 WITYAAVQSLATALERTGSDEPLALVKDLKANGANTVIGPLNWDEKGDLKGFDF
+noevent        : 
+query          : Query: 361 ADGSSTVAK 369
+align          :            ADGSST AK
+sbjct          : Sbjct: 361 ADGSSTAAK 369
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|126342|sp|P17215|LIVJ_SALTY LEU/ILE/VAL/THR-BINDING PROTEIN
+title          :            PRECURSOR (LIVT-BP)
+length         :            Length = 365
+noevent        : 
+score          :  Score =  656 bits (1673), Expect = 0.0
+identities     :  Identities = 280/367 (76%), Positives = 316/367 (85%), Gaps = 2/
+noevent        : 
+query          : Query: 3   RKAKTIIAGIVALAVSQGAMADDIKVAIVGAMSGPVAQWGDMEFNGARQAIKDI
+align          :             K KT++AG +AL++S  A ADDIKVA+VGAMSGPVAQ+GD EF GA QAI DI
+sbjct          : Sbjct: 1   MKGKTLLAGCIALSLSHMAFADDIKVAVVGAMSGPVAQYGDQEFTGAEQAIADI
+noevent        : 
+query          : Query: 63  KGDKLVGVEYDDACDPKQAVAVANKIVNDGIQYVIGHLCSSSTQPASDIYEDEG
+align          :            KGDKLV V+YDDACDPKQAVAVANK+VNDGI+YVIGHLCSSSTQPASDIYEDEG
+sbjct          : Sbjct: 61  KGDKLVAVKYDDACDPKQAVAVANKVVNDGIKYVIGHLCSSSTQPASDIYEDEG
+noevent        : 
+query          : Query: 123 GATNPELTQRGYQYIMRTAGLDSSQGPTAAKYILETVKPQRIAIIHDKQQYGEG
+align          :             AT PELT RGY+ ++RT GLDS QGPTAAKYILE VKPQRIAIIHDKQQYGEG
+sbjct          : Sbjct: 121 AATAPELTARGYKLVLRTTGLDSDQGPTAAKYILEKVKPQRIAIIHDKQQYGEG
+noevent        : 
+query          : Query: 183 DGLKQGNANIVFFDGITAGEKDFSALIARLQKENIDFVYYGGYYPEMGQIVRQA
+align          :            DGLK+G  N+VFFDGITAGEKDFS L+ARL+KENIDFVYYGGY+PEMGQI+RQ+
+sbjct          : Sbjct: 181 DGLKKGGVNVVFFDGITAGEKDFSTLVARLKKENIDFVYYGGYHPEMGQILRQS
+noevent        : 
+query          : Query: 243 TQFMGPEGVGNASLSNIAGGAAEGMLVTMPKRYDQDPANKAIVEALKADKKDPS
+align          :            TQFMGPEGV N SLSNIAG +AEG+LVT PK YDQ PANK IV+A+KA K+DPS
+sbjct          : Sbjct: 241 TQFMGPEGVANVSLSNIAGESAEGLLVTKPKNYDQVPANKPIVDAIKAKKQDPS
+noevent        : 
+query          : Query: 303 TYAAVQSLATAMTRSASHRPLDLVKDLKANGADTVIGPLKWDEKGDLKGFEFGV
+align          :            TYAA+QSL   +  S    P ++ K LK    DTV+GPL WDEKGDLKGFEFGV
+sbjct          : Sbjct: 301 TYAALQSLQAGLNHSD--DPAEIAKYLKGATVDTVMGPLSWDEKGDLKGFEFGV
+noevent        : 
+query          : Query: 363 GSSTVAK 369
+align          :            G++T AK
+sbjct          : Sbjct: 359 GTATDAK 365
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|126347|sp|P25399|LIVJ_CITFR LEU/ILE/VAL-BINDING PROTEIN
+title          :            PRECURSOR (LIV-BP)
+length         :            Length = 367
+noevent        : 
+score          :  Score =  655 bits (1672), Expect = 0.0
+identities     :  Identities = 276/369 (74%), Positives = 316/369 (84%), Gaps = 2/
+noevent        : 
+query          : Query: 1   MKRKAKTIIAGIVALAVSQGAMADDIKVAIVGAMSGPVAQWGDMEFNGARQAIK
+align          :            M  K K ++AG +AL++S  A A DIKVA+VGAMSGPVAQ+GD EF GA QAI
+sbjct          : Sbjct: 1   MNMKGKALLAGCIALSLSNMAFAKDIKVAVVGAMSGPVAQYGDQEFTGAEQAIA
+noevent        : 
+query          : Query: 61  GIKGDKLVGVEYDDACDPKQAVAVANKIVNDGIQYVIGHLCSSSTQPASDIYED
+align          :            G+KGDKLV V+YDDACDPKQAVAVANK+VNDGI+YVIGHLCSSSTQPASDIYED
+sbjct          : Sbjct: 61  GVKGDKLVMVKYDDACDPKQAVAVANKVVNDGIKYVIGHLCSSSTQPASDIYED
+noevent        : 
+query          : Query: 121 SPGATNPELTQRGYQYIMRTAGLDSSQGPTAAKYILETVKPQRIAIIHDKQQYG
+align          :            +P AT PELT RGY  ++RT GLDS QGPTAAKYI+E VKP+RIAI+HDKQQYG
+sbjct          : Sbjct: 121 TPAATAPELTARGYNLVLRTTGLDSDQGPTAAKYIVEKVKPKRIAIVHDKQQYG
+noevent        : 
+query          : Query: 181 VQDGLKQGNANIVFFDGITAGEKDFSALIARLQKENIDFVYYGGYYPEMGQIVR
+align          :            VQD LK+ NA++VFFDGITAGEKDFS L+ARL+KENIDFVYYGGY+PEMGQI+R
+sbjct          : Sbjct: 181 VQDNLKKANADVVFFDGITAGEKDFSTLVARLKKENIDFVYYGGYHPEMGQILR
+noevent        : 
+query          : Query: 241 LKTQFMGPEGVGNASLSNIAGGAAEGMLVTMPKRYDQDPANKAIVEALKADKKD
+align          :            LKTQFMGPEGV N SLSNIAG +AEG+LVT PK YDQ PANK IV+A+KA K+D
+sbjct          : Sbjct: 241 LKTQFMGPEGVANVSLSNIAGESAEGLLVTKPKNYDQVPANKPIVDAIKAKKQD
+noevent        : 
+query          : Query: 301 WITYAAVQSLATAMTRSASHRPLDLVKDLKANGADTVIGPLKWDEKGDLKGFEF
+align          :            W TYAA+QSL   + +S    P ++ K LKAN  +TV+GPL WD KGDLKGFEF
+sbjct          : Sbjct: 301 WTTYAALQSLQAGLNQSD--DPAEIAKYLKANSVETVMGPLSWDAKGDLKGFEF
+noevent        : 
+query          : Query: 361 ADGSSTVAK 369
+align          :            A+G++T AK
+sbjct          : Sbjct: 359 ANGTATDAK 367
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|126343|sp|P17216|LIVK_SALTY LEUCINE-SPECIFIC BINDING PROTEIN
+title          :            PRECURSOR (LS-BP) (L-BP)
+length         :            Length = 369
+noevent        : 
+score          :  Score =  655 bits (1671), Expect = 0.0
+identities     :  Identities = 369/369 (100%), Positives = 369/369 (100%)
+noevent        : 
+query          : Query: 1   MKRKAKTIIAGIVALAVSQGAMADDIKVAIVGAMSGPVAQWGDMEFNGARQAIK
+align          :            MKRKAKTIIAGIVALAVSQGAMADDIKVAIVGAMSGPVAQWGDMEFNGARQAIK
+sbjct          : Sbjct: 1   MKRKAKTIIAGIVALAVSQGAMADDIKVAIVGAMSGPVAQWGDMEFNGARQAIK
+noevent        : 
+query          : Query: 61  GIKGDKLVGVEYDDACDPKQAVAVANKIVNDGIQYVIGHLCSSSTQPASDIYED
+align          :            GIKGDKLVGVEYDDACDPKQAVAVANKIVNDGIQYVIGHLCSSSTQPASDIYED
+sbjct          : Sbjct: 61  GIKGDKLVGVEYDDACDPKQAVAVANKIVNDGIQYVIGHLCSSSTQPASDIYED
+noevent        : 
+query          : Query: 121 SPGATNPELTQRGYQYIMRTAGLDSSQGPTAAKYILETVKPQRIAIIHDKQQYG
+align          :            SPGATNPELTQRGYQYIMRTAGLDSSQGPTAAKYILETVKPQRIAIIHDKQQYG
+sbjct          : Sbjct: 121 SPGATNPELTQRGYQYIMRTAGLDSSQGPTAAKYILETVKPQRIAIIHDKQQYG
+noevent        : 
+query          : Query: 181 VQDGLKQGNANIVFFDGITAGEKDFSALIARLQKENIDFVYYGGYYPEMGQIVR
+align          :            VQDGLKQGNANIVFFDGITAGEKDFSALIARLQKENIDFVYYGGYYPEMGQIVR
+sbjct          : Sbjct: 181 VQDGLKQGNANIVFFDGITAGEKDFSALIARLQKENIDFVYYGGYYPEMGQIVR
+noevent        : 
+query          : Query: 241 LKTQFMGPEGVGNASLSNIAGGAAEGMLVTMPKRYDQDPANKAIVEALKADKKD
+align          :            LKTQFMGPEGVGNASLSNIAGGAAEGMLVTMPKRYDQDPANKAIVEALKADKKD
+sbjct          : Sbjct: 241 LKTQFMGPEGVGNASLSNIAGGAAEGMLVTMPKRYDQDPANKAIVEALKADKKD
+noevent        : 
+query          : Query: 301 WITYAAVQSLATAMTRSASHRPLDLVKDLKANGADTVIGPLKWDEKGDLKGFEF
+align          :            WITYAAVQSLATAMTRSASHRPLDLVKDLKANGADTVIGPLKWDEKGDLKGFEF
+sbjct          : Sbjct: 301 WITYAAVQSLATAMTRSASHRPLDLVKDLKANGADTVIGPLKWDEKGDLKGFEF
+noevent        : 
+query          : Query: 361 ADGSSTVAK 369
+align          :            ADGSSTVAK
+sbjct          : Sbjct: 361 ADGSSTVAK 369
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|126348|sp|P02917|LIVJ_ECOLI LEU/ILE/VAL-BINDING PROTEIN
+title          :            PRECURSOR (LIV-BP)
+length         :            Length = 367
+noevent        : 
+score          :  Score =  655 bits (1670), Expect = 0.0
+identities     :  Identities = 282/369 (76%), Positives = 320/369 (86%), Gaps = 2/
+noevent        : 
+query          : Query: 1   MKRKAKTIIAGIVALAVSQGAMADDIKVAIVGAMSGPVAQWGDMEFNGARQAIK
+align          :            M  K K ++AG++ALA S  A+A+DIKVA+VGAMSGPVAQ+GD EF GA QA+
+sbjct          : Sbjct: 1   MNTKGKALLAGLIALAFSNMALAEDIKVAVVGAMSGPVAQYGDQEFTGAEQAVA
+noevent        : 
+query          : Query: 61  GIKGDKLVGVEYDDACDPKQAVAVANKIVNDGIQYVIGHLCSSSTQPASDIYED
+align          :            GIKG+KL   +YDDACDPKQAVAVANK+VNDGI+YVIGHLCSSSTQPASDIYED
+sbjct          : Sbjct: 61  GIKGNKLQIAKYDDACDPKQAVAVANKVVNDGIKYVIGHLCSSSTQPASDIYED
+noevent        : 
+query          : Query: 121 SPGATNPELTQRGYQYIMRTAGLDSSQGPTAAKYILETVKPQRIAIIHDKQQYG
+align          :            +P AT PELT RGYQ I+RT GLDS QGPTAAKYILE VKPQRIAI+HDKQQYG
+sbjct          : Sbjct: 121 TPAATAPELTARGYQLILRTTGLDSDQGPTAAKYILEKVKPQRIAIVHDKQQYG
+noevent        : 
+query          : Query: 181 VQDGLKQGNANIVFFDGITAGEKDFSALIARLQKENIDFVYYGGYYPEMGQIVR
+align          :            VQDGLK+GNAN+VFFDGITAGEKDFS L+ARL+KENIDFVYYGGY+PEMGQI+R
+sbjct          : Sbjct: 181 VQDGLKKGNANVVFFDGITAGEKDFSTLVARLKKENIDFVYYGGYHPEMGQILR
+noevent        : 
+query          : Query: 241 LKTQFMGPEGVGNASLSNIAGGAAEGMLVTMPKRYDQDPANKAIVEALKADKKD
+align          :            LKTQFMGPEGV N SLSNIAG +AEG+LVT PK YDQ PANK IV+A+KA K+D
+sbjct          : Sbjct: 241 LKTQFMGPEGVANVSLSNIAGESAEGLLVTKPKNYDQVPANKPIVDAIKAKKQD
+noevent        : 
+query          : Query: 301 WITYAAVQSLATAMTRSASHRPLDLVKDLKANGADTVIGPLKWDEKGDLKGFEF
+align          :            W TYAA+QSL   + +S    P ++ K LKAN  DTV+GPL WDEKGDLKGFEF
+sbjct          : Sbjct: 301 WTTYAALQSLQAGLNQSD--DPAEIAKYLKANSVDTVMGPLTWDEKGDLKGFEF
+noevent        : 
+query          : Query: 361 ADGSSTVAK 369
+align          :            A+G++T AK
+sbjct          : Sbjct: 359 ANGTATDAK 367
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|115120|sp|P21175|BRAC_PSEAE LEUCINE-, ISOLEUCINE-, VALINE-,
+title          :            THREONINE-, AND ALANINE-BINDING PROTEIN PRECURSOR
+title          :            (LIVAT-BP) (LEU/ILE/VAL/THR/ALA-BINDING PROTEIN)
+length         :            Length = 373
+noevent        : 
+score          :  Score =  615 bits (1569), Expect = e-176
+identities     :  Identities = 193/368 (52%), Positives = 268/368 (72%)
+noevent        : 
+query          : Query: 2   KRKAKTIIAGIVALAVSQGAMADDIKVAIVGAMSGPVAQWGDMEFNGARQAIKD
+align          :            +R ++   A  +A   S    AD IK+A+ G ++GPVAQ+GDM+  GA  AI+
+sbjct          : Sbjct: 6   QRLSRLFAAMAIAGFASYSMAADTIKIALAGPVTGPVAQYGDMQRAGALMAIEQ
+noevent        : 
+query          : Query: 62  IKGDKLVGVEYDDACDPKQAVAVANKIVNDGIQYVIGHLCSSSTQPASDIYEDE
+align          :            + G +L GV YDDACDPKQAVAVANK+VNDG+++V+GH+CSSSTQPA+DIYEDE
+sbjct          : Sbjct: 66  VNGAQLEGVIYDDACDPKQAVAVANKVVNDGVKFVVGHVCSSSTQPATDIYEDE
+noevent        : 
+query          : Query: 122 PGATNPELTQRGYQYIMRTAGLDSSQGPTAAKYILETVKPQRIAIIHDKQQYGE
+align          :            P AT PE+T RGY+ I RT GLD+ QGP A K+I E  K + IA++HDKQQYGE
+sbjct          : Sbjct: 126 PSATAPEITSRGYKLIFRTIGLDNMQGPVAGKFIAERYKVKTIAVLHDKQQYGE
+noevent        : 
+query          : Query: 182 QDGLKQGNANIVFFDGITAGEKDFSALIARLQKENIDFVYYGGYYPEMGQIVRQ
+align          :            +  ++     +  F+G+ AG+KDF+ALI++L+K  + FVY+GGY+PEMG ++RQ
+sbjct          : Sbjct: 186 KKTVEDAGIKVAVFEGLNAGDKDFNALISKLKKAGVQFVYFGGYHPEMGLLLRQ
+noevent        : 
+query          : Query: 242 KTQFMGPEGVGNASLSNIAGGAAEGMLVTMPKRYDQDPANKAIVEALKADKKDP
+align          :              +FMGPEGVGN+ ++ IAG A+EGML T+P+ ++QDP NKA+++A KA  +DP
+sbjct          : Sbjct: 246 DARFMGPEGVGNSEITAIAGDASEGMLATLPRAFEQDPKNKALIDAFKAKNQDP
+noevent        : 
+query          : Query: 302 ITYAAVQSLATAMTRSASHRPLDLVKDLKANGADTVIGPLKWDEKGDLKGFEFG
+align          :              Y+AV  +A  + ++    P  + + L+AN  +T  G L +DEKGDLK F+F
+sbjct          : Sbjct: 306 PAYSAVTVIAKGIEKAGEADPEKVAEALRANTFETPTGNLGFDEKGDLKNFDFT
+noevent        : 
+query          : Query: 362 DGSSTVAK 369
+align          :            D + T  K
+sbjct          : Sbjct: 366 DATRTEVK 373
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|113709|sp|P27017|AMIC_PSEAE ALIPHATIC AMIDASE
+title          :            EXPRESSION-REGULATING PROTEIN
+length         :            Length = 385
+noevent        : 
+score          :  Score = 48.6 bits (113), Expect = 2e-05
+identities     :  Identities = 60/314 (19%), Positives = 114/314 (36%), Gaps = 12/
+noevent        : 
+query          : Query: 35  SGPVAQWGDMEFNGARQAIKDINAKGGIKGDKLVGVEYDDACDPKQAVAVANKI
+align          :            +G  A        GA  A++ +N +GG+ G  +  +  D   DP +    A
+sbjct          : Sbjct: 17  TGVTADIERSHAYGALLAVEQLNREGGVGGRPIETLSQDPGGDPDRYRLCAEDF
+noevent        : 
+query          : Query: 94  QYVIGHLCSSSTQPASDIYEDEGILMISPGATNPELTQRGYQYIMRTAGLDSSQ
+align          :            ++++G   S + +    + E    L+  P  T  E  +     +      + +
+sbjct          : Sbjct: 77  RFLVGCYMSHTRKAVMPVVERADALLCYP--TPYEGFEYSPNIVYGGPAPNQNS
+noevent        : 
+query          : Query: 154 YILETVKPQRIAIIHDKQQYGEGLARSVQDGLKQGNANIV--FFDGITAGEKDF
+align          :             I      +R+  I     Y       ++   +Q    ++   +  +   + D
+sbjct          : Sbjct: 135 LI--RHYGERVVFIGSDYIYPRESNHVMRHLYRQHGGTVLEEIYIPLYPSDDDL
+noevent        : 
+query          : Query: 212 LQKENIDFVYYGGYYPEMGQIVRQ-ARANGLKTQ-FMGPEGVGNASLSNIAGGA
+align          :            + +   D V+         ++ R  AR  G   +  +       A ++ +
+sbjct          : Sbjct: 193 IYQARADVVFSTVVGTGTAELYRAIARRYGDGRRPPIASLTTSEAEVAKMESDV
+noevent        : 
+query          : Query: 270 TMPKRYDQD-PANKAIVEALKADKKDPSGPYVW--ITYAAVQSLATAMTRSASH
+align          :              P     D PA++A V+A      + +    W    Y     L  A   + +
+sbjct          : Sbjct: 253 VAPYFSSIDTPASRAFVQACHGFFPENATITAWAEAAYWQTLLLGRAAQAAGNW
+noevent        : 
+query          : Query: 327 KDLKANGADTVIGP 340
+align          :            + L     D   GP
+sbjct          : Sbjct: 313 RHLYDIDIDAPQGP 326
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|3024131|sp|P91685|MGR_DROME METABOTROPIC GLUTAMATE RECEPTOR
+title          :            PRECURSOR
+length         :            Length = 976
+noevent        : 
+score          :  Score = 41.2 bits (94), Expect = 0.003
+identities     :  Identities = 36/154 (23%), Positives = 66/154 (42%), Gaps = 5/15
+noevent        : 
+query          : Query: 96  VIGHLCSSSTQPASDIYEDEGILMISPGATNPELTQRG-YQYIMRTAGLDSSQG
+align          :            VIG   SS +   +++     I  +SP +T   L+ +  +    RT   D+ Q
+sbjct          : Sbjct: 152 VIGGSYSSVSLQVANLLRLFHIPQVSPASTAKTLSDKTRFDLFARTVPPDTFQS
+noevent        : 
+query          : Query: 155 ILETVKPQRIAIIHDKQQYGEGLARSVQDGLKQGNANIVFFDGI--TAGEKDFS
+align          :            IL+      ++ IH +  YGE    ++     + N  I   + +   A +K F
+sbjct          : Sbjct: 211 ILKNFNWSYVSTIHSEGSYGEYGIEALHKEATERNVCIAVAEKVPSAADDKVFD
+noevent        : 
+query          : Query: 213 -QKENIDFVYYGGYYPEMGQIVRQARANGLKTQF 245
+align          :             +K N   V       +  +I++ A+   L   F
+sbjct          : Sbjct: 271 QKKPNARGVVLFTRAEDARRILQAAKRANLSQPF 304
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|121300|sp|P23385|MGR1_RAT METABOTROPIC GLUTAMATE RECEPTOR 1
+title          :            PRECURSOR
+length         :            Length = 1199
+noevent        : 
+score          :  Score = 39.2 bits (89), Expect = 0.012
+identities     :  Identities = 32/121 (26%), Positives = 55/121 (45%), Gaps = 4/12
+noevent        : 
+query          : Query: 96  VIGHLCSSSTQPASDIYEDEGILMISPGATNPELTQRG-YQYIMRTAGLDSSQG
+align          :            VIG   SS      ++ +   I  I+  AT+ +L+ +  Y+Y +R    D+ Q
+sbjct          : Sbjct: 159 VIGPGSSSVAIQVQNLLQLFDIPQIAYSATSIDLSDKTLYKYFLRVVPSDTLQA
+noevent        : 
+query          : Query: 155 ILETVKPQRIAIIHDKQQYGEGLARSVQDGLKQGNANIVFFDGI--TAGEKDFS
+align          :            I++      ++ +H +  YGE    + ++   Q    I   D I   AGEK F
+sbjct          : Sbjct: 218 IVKRYNWTYVSAVHTEGNYGESGMDAFKELAAQEGLCIAHSDKIYSNAGEKSFD
+noevent        : 
+query          : Query: 213 Q 213
+align          :            +
+sbjct          : Sbjct: 278 R 278
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|2495074|sp|Q13255|MGR1_HUMAN METABOTROPIC GLUTAMATE RECEPTOR
+title          :            PRECURSOR
+length         :            Length = 1194
+noevent        : 
+score          :  Score = 39.2 bits (89), Expect = 0.012
+identities     :  Identities = 32/121 (26%), Positives = 55/121 (45%), Gaps = 4/12
+noevent        : 
+query          : Query: 96  VIGHLCSSSTQPASDIYEDEGILMISPGATNPELTQRG-YQYIMRTAGLDSSQG
+align          :            VIG   SS      ++ +   I  I+  AT+ +L+ +  Y+Y +R    D+ Q
+sbjct          : Sbjct: 159 VIGPGSSSVAIQVQNLLQLFDIPQIAYSATSIDLSDKTLYKYFLRVVPSDTLQA
+noevent        : 
+query          : Query: 155 ILETVKPQRIAIIHDKQQYGEGLARSVQDGLKQGNANIVFFDGI--TAGEKDFS
+align          :            I++      ++ +H +  YGE    + ++   Q    I   D I   AGEK F
+sbjct          : Sbjct: 218 IVKRYNWTYVSAVHTEGNYGESGMDAFKELAAQEGLCIAHSDKIYSNAGEKSFD
+noevent        : 
+query          : Query: 213 Q 213
+align          :            +
+sbjct          : Sbjct: 278 R 278
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|1170947|sp|P31424|MGR5_RAT METABOTROPIC GLUTAMATE RECEPTOR 5
+title          :            PRECURSOR
+length         :            Length = 1203
+noevent        : 
+score          :  Score = 36.1 bits (81), Expect = 0.11
+identities     :  Identities = 30/121 (24%), Positives = 54/121 (43%), Gaps = 4/12
+noevent        : 
+query          : Query: 96  VIGHLCSSSTQPASDIYEDEGILMISPGATNPELTQRG-YQYIMRTAGLDSSQG
+align          :            VIG   SS      ++ +   I  I+  AT+ +L+ +  ++Y MR    D+ Q
+sbjct          : Sbjct: 145 VIGPGSSSVAIQVQNLLQLFNIPQIAYSATSMDLSDKTLFKYFMRVVPSDAQQA
+noevent        : 
+query          : Query: 155 ILETVKPQRIAIIHDKQQYGEGLARSVQDGLKQGNANIVFFDGI--TAGEKDFS
+align          :            I++      ++ +H +  YGE    + +D   +    I     I   AGE+ F
+sbjct          : Sbjct: 204 IVKRYNWTYVSAVHTEGNYGESGMEAFKDMSAKEGICIAHSYKIYSNAGEQSFD
+noevent        : 
+query          : Query: 213 Q 213
+align          :            +
+sbjct          : Sbjct: 264 R 264
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|1709020|sp|P41594|MGR5_HUMAN METABOTROPIC GLUTAMATE RECEPTOR
+title          :            PRECURSOR
+length         :            Length = 1212
+noevent        : 
+score          :  Score = 35.7 bits (80), Expect = 0.14
+identities     :  Identities = 30/120 (25%), Positives = 53/120 (44%), Gaps = 4/12
+noevent        : 
+query          : Query: 96  VIGHLCSSSTQPASDIYEDEGILMISPGATNPELTQRG-YQYIMRTAGLDSSQG
+align          :            VIG   SS      ++ +   I  I+  AT+ +L+ +  ++Y MR    D+ Q
+sbjct          : Sbjct: 146 VIGPGSSSVAIQVQNLLQLFNIPQIAYSATSMDLSDKTLFKYFMRVVPSDAQQA
+noevent        : 
+query          : Query: 155 ILETVKPQRIAIIHDKQQYGEGLARSVQDGLKQGNANIVFFDGI--TAGEKDFS
+align          :            I++      ++ +H +  YGE    + +D   +    I     I   AGE+ F
+sbjct          : Sbjct: 205 IVKRYNWTYVSAVHTEGNYGESGMEAFKDMSAKEGICIAHSYKIYSNAGEQSFD
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|2495081|sp|Q09630|MGR1_CAEEL PROBABLE METABOTROPIC GLUTAMATE
+title          :            RECEPTOR MGL-1
+length         :            Length = 999
+noevent        : 
+score          :  Score = 35.3 bits (79), Expect = 0.18
+identities     :  Identities = 29/125 (23%), Positives = 57/125 (45%), Gaps = 6/12
+noevent        : 
+query          : Query: 96  VIGHLCSSSTQPASDIYEDEGILMISPGATNPELTQRG-YQYIMRTAGLDSSQG
+align          :            V+G   SS +   +++     I  +SP +TN +L+ +  ++Y  RT   D  Q
+sbjct          : Sbjct: 196 VVGGSYSSVSVQLANLLRLFRIAQVSPASTNADLSDKNRFEYFARTVPSDDYQA
+noevent        : 
+query          : Query: 155 ILETVKPQRIAIIHDKQQYGEGLARSVQDGLKQGNANIVFFDGITAGEKDF---
+align          :            I    K   +++++   +YGE  A + +   ++    I   + I   ++ F
+sbjct          : Sbjct: 255 IAVKFKWSYVSLVYSADEYGELGADAFKKEARKKGICIALEERIQNKKESFTES
+noevent        : 
+query          : Query: 211 RLQKE 215
+align          :            +LQ E
+sbjct          : Sbjct: 315 KLQPE 319
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|6014748|sp|Q10900|CTPI_MYCTU PROBABLE CATION-TRANSPORTING ATP
+title          :            I
+length         :            Length = 1632
+noevent        : 
+score          :  Score = 33.4 bits (74), Expect = 0.71
+identities     :  Identities = 20/68 (29%), Positives = 26/68 (37%), Gaps = 7/68 (
+noevent        : 
+query          : Query: 10  AGIVALAVSQGAMADDIKVAI---VGAMSGPVAQWGDMEFNGARQAIKDINAKG
+align          :            A   A   S   +   I  AI    G+ +GPV Q+ +   NG+  A       G
+sbjct          : Sbjct: 315 AAAAAGEASHVVVGGSIDAAIDTAKGSRAGPVEQYVNQAANGSLIAAASALVAG
+noevent        : 
+query          : Query: 63  KGDKLVGV 70
+align          :             G  L GV
+sbjct          : Sbjct: 375 AGAILAGV 382
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|2833574|sp|Q58178|Y768_METJA HYPOTHETICAL PROTEIN MJ0768
+length         :            Length = 249
+noevent        : 
+score          :  Score = 32.2 bits (71), Expect = 1.6
+identities     :  Identities = 33/171 (19%), Positives = 67/171 (38%), Gaps = 10/1
+noevent        : 
+query          : Query: 52  AIKDINAKGGIKGDKLVGVEYDDACDPKQAVAVANKIVNDGIQYVIGHLCSSST
+align          :            AI+     G  K  K+V V  D+A   K+ V V    +    ++  G +C++S
+sbjct          : Sbjct: 67  AIELAKKTG--KDPKVVQVILDEA---KEIVKVGKNFIITETKH--GFVCANSG
+noevent        : 
+query          : Query: 112 YEDEGILMISPGATNPELTQRGYQYIMRTAGL---DSSQGPTAAKYILETVKPQ
+align          :            Y+   IL  +P  +  ++ +   +   +  G+   DS   P     +   +
+sbjct          : Sbjct: 120 YKGIKILPKNPDESAEKIRKEIEKLTGKRVGVIISDSVGRPFRKGAVGIAIGVS
+noevent        : 
+query          : Query: 169 DKQQYGEGLARSVQDGLKQGNANIVFFDGITAGEKDFSALIARLQKENIDF 21
+align          :            D++   +   R ++         +     +  GE D    +  ++  N+ F
+sbjct          : Sbjct: 180 DRKGEKDLFGRELKTTEVAIADELASMANVVMGEADEGIPVVIIRGANVPF 23
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|1169299|sp|P45513|DHAT_CITFR 1,3-PROPANEDIOL DEHYDROGENASE
+title          :            (3-HYDROXYPROPIONALDEHYDE REDUCTASE) (1,3-PROPANEDIOL
+title          :            OXIDOREDUCTASE)
+length         :            Length = 387
+noevent        : 
+score          :  Score = 31.1 bits (68), Expect = 3.6
+identities     :  Identities = 22/88 (25%), Positives = 38/88 (43%), Gaps = 8/88 (
+noevent        : 
+query          : Query: 148 GPTAAKYILETVKP---QRIAIIHDK--QQYGEGLARSVQDGLKQGNANIVFFD
+align          :            GP A   + E  K    ++  ++ DK  +   +G        L++   ++V FD
+sbjct          : Sbjct: 17  GPNAISVVGERCKLLGGKKALLVTDKGLRAIKDGAVDKTLTHLREAGIDVVVFD
+noevent        : 
+query          : Query: 203 KDFSAL--IARLQKENID-FVYYGGYYP 227
+align          :            KD +    +   +KE+ D  V  GG  P
+sbjct          : Sbjct: 77  KDTNVRDGLEVFRKEHCDIIVTVGGGSP 104
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|2495080|sp|P70579|MGR8_RAT METABOTROPIC GLUTAMATE RECEPTOR 8
+title          :            PRECURSOR
+length         :            Length = 908
+noevent        : 
+score          :  Score = 31.1 bits (68), Expect = 3.6
+identities     :  Identities = 50/196 (25%), Positives = 77/196 (38%), Gaps = 17/1
+noevent        : 
+query          : Query: 91  DGIQYVIGHLCSSSTQPASDIYEDEGILMISPGATNPELTQR-GYQYIMRTAGL
+align          :            D I  VIG   SS +   ++I     I  IS  +T PEL+    Y +  R
+sbjct          : Sbjct: 145 DKISGVIGAAASSVSIMVANILRLFKIPQISYASTAPELSDNTRYDFFSRVVPP
+noevent        : 
+query          : Query: 150 TAAKYILETVKPQRIAIIHDKQQYGE-GLARSVQDGLKQGNANIVFFDGITAGE
+align          :             A   I+  +    ++ +  +  YGE G+    Q   + G   I     I
+sbjct          : Sbjct: 204 QAMVDIVTALGWNYVSTLASEGNYGESGVEAFTQISREIGGVCIAQSQKIPREP
+noevent        : 
+query          : Query: 207 ALIAR-LQKENIDFVYYGGYYPEMGQIVRQARANGLKTQFM--GPEGVGNASLS
+align          :             +I R L+  N   V       ++ +I+  A+       F+  G +  G    S
+sbjct          : Sbjct: 264 KIIKRLLETPNARAVIMFANEDDIRRILEAAKKLNQSGHFLWIGSDSWG----S
+noevent        : 
+query          : Query: 261 --GGAAEGMLVTMPKR 274
+align          :                 AEG +  +PKR
+sbjct          : Sbjct: 320 QQEEIAEGAVTILPKR 335
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|2495079|sp|O00222|MGR8_HUMAN METABOTROPIC GLUTAMATE RECEPTOR
+title          :            PRECURSOR
+length         :            Length = 908
+noevent        : 
+score          :  Score = 31.1 bits (68), Expect = 3.6
+identities     :  Identities = 50/196 (25%), Positives = 77/196 (38%), Gaps = 17/1
+noevent        : 
+query          : Query: 91  DGIQYVIGHLCSSSTQPASDIYEDEGILMISPGATNPELTQR-GYQYIMRTAGL
+align          :            D I  VIG   SS +   ++I     I  IS  +T PEL+    Y +  R
+sbjct          : Sbjct: 145 DKISGVIGAAASSVSIMVANILRLFKIPQISYASTAPELSDNTRYDFFSRVVPP
+noevent        : 
+query          : Query: 150 TAAKYILETVKPQRIAIIHDKQQYGE-GLARSVQDGLKQGNANIVFFDGITAGE
+align          :             A   I+  +    ++ +  +  YGE G+    Q   + G   I     I
+sbjct          : Sbjct: 204 QAMVDIVTALGWNYVSTLASEGNYGESGVEAFTQISREIGGVCIAQSQKIPREP
+noevent        : 
+query          : Query: 207 ALIAR-LQKENIDFVYYGGYYPEMGQIVRQARANGLKTQFM--GPEGVGNASLS
+align          :             +I R L+  N   V       ++ +I+  A+       F+  G +  G    S
+sbjct          : Sbjct: 264 KIIKRLLETPNARAVIMFANEDDIRRILEAAKKLNQSGHFLWIGSDSWG----S
+noevent        : 
+query          : Query: 261 --GGAAEGMLVTMPKR 274
+align          :                 AEG +  +PKR
+sbjct          : Sbjct: 320 QQEEIAEGAVTILPKR 335
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|1346533|sp|P47743|MGR8_MOUSE METABOTROPIC GLUTAMATE RECEPTOR
+title          :            PRECURSOR
+length         :            Length = 908
+noevent        : 
+score          :  Score = 30.3 bits (66), Expect = 6.2
+identities     :  Identities = 50/196 (25%), Positives = 76/196 (38%), Gaps = 17/1
+noevent        : 
+query          : Query: 91  DGIQYVIGHLCSSSTQPASDIYEDEGILMISPGATNPELTQR-GYQYIMRTAGL
+align          :            D I  VIG   SS +   ++I     I  IS  +T PEL+    Y +  R
+sbjct          : Sbjct: 145 DKISGVIGAAASSVSIMVANILRLFKIPQISYASTAPELSDNTRYDFFSRVVPP
+noevent        : 
+query          : Query: 150 TAAKYILETVKPQRIAIIHDKQQYGE-GLARSVQDGLKQGNANIVFFDGITAGE
+align          :             A   I+  +    ++ +  +  YGE G+    Q   + G   I     I
+sbjct          : Sbjct: 204 QAMVDIVTALGWNYVSTLASEGNYGESGVEAFTQISREIGGVCIAQSQKIPREP
+noevent        : 
+query          : Query: 207 ALIAR-LQKENIDFVYYGGYYPEMGQIVRQARANGLKTQFM--GPEGVGNASLS
+align          :             +I R L+  N   V       ++  I+  A+       F+  G +  G    S
+sbjct          : Sbjct: 264 KIIKRLLETPNARAVIMFANEDDIRGILEAAKKLNQSGHFLWIGSDSWG----S
+noevent        : 
+query          : Query: 261 --GGAAEGMLVTMPKR 274
+align          :                 AEG +  +PKR
+sbjct          : Sbjct: 320 QQEEIAEGAVTILPKR 335
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|113381|sp|P06758|ADH2_ZYMMO ALCOHOL DEHYDROGENASE II (ADH II)
+length         :            Length = 383
+noevent        : 
+score          :  Score = 29.9 bits (65), Expect = 8.1
+identities     :  Identities = 19/69 (27%), Positives = 28/69 (40%), Gaps = 3/69 (
+noevent        : 
+query          : Query: 162 QRIAIIHDKQQYGEGLARSVQDGLKQGNANIVFFDGITAGEKDFSAL--IARLQ
+align          :            +   I+ D      G+ + V D LK    N   +DG+       + L  +  L+
+sbjct          : Sbjct: 32  KNALIVSDAFMNKSGVVKQVADLLKAQGINSAVYDGVMPNPTVTAVLEGLKILK
+noevent        : 
+query          : Query: 220 VY-YGGYYP 227
+align          :            V   GG  P
+sbjct          : Sbjct: 92  VISLGGGSP 100
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|127751|sp|P02567|MYSD_CAEEL MYOSIN HEAVY CHAIN D (MHC D)
+length         :            Length = 1938
+noevent        : 
+score          :  Score = 29.9 bits (65), Expect = 8.1
+identities     :  Identities = 18/72 (25%), Positives = 31/72 (43%), Gaps = 2/72 (
+noevent        : 
+query          : Query: 247 GPEGVGNASLSNIAGGAAEGMLVTMPKRYDQDPANKAIVEALKADKKDPSGPYV
+align          :            G +G  + ++ + AG     +L  + K   +DP N  +V  +KA KK+     +
+sbjct          : Sbjct: 570 GKQGEAHLAMRHYAGTVRYNVLNWLEKN--KDPLNDTVVSVMKASKKNDLLVEI
+noevent        : 
+query          : Query: 307 VQSLATAMTRSA 318
+align          :             +  A A
+sbjct          : Sbjct: 628 QEEAAAAAKAGG 639
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|1346321|sp|P23897|HSER_RAT HEAT-STABLE ENTEROTOXIN RECEPTOR
+title          :            PRECURSOR (GC-C) (INTESTINAL GUANYLATE CYCLASE) (STA
+title          :            RECEPTOR)
+length         :            Length = 1072
+noevent        : 
+score          :  Score = 29.9 bits (65), Expect = 8.1
+identities     :  Identities = 16/85 (18%), Positives = 35/85 (40%), Gaps = 2/85 (
+noevent        : 
+query          : Query: 267 MLVTMPKRYDQDPANKAIVEALKADKKDPSGPYVWITYAAVQSLATAMTRSASH
+align          :            +++T+P   ++  AN ++     +++ D S  Y+  T      L T +    S
+sbjct          : Sbjct: 294 LVLTLPP--EKFIANASVSGRFPSERSDFSLAYLEGTLLFGHMLQTFLENGESV
+noevent        : 
+query          : Query: 327 KDLKANGADTVIGPLKWDEKGDLKG 351
+align          :            +  +      + GP+  D+ GD+
+sbjct          : Sbjct: 352 RAFRNLTFQGLEGPVTLDDSGDIDN 376
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|1175674|sp|P45116|YCIH_HAEIN HYPOTHETICAL PROTEIN HI1225
+length         :            Length = 106
+noevent        : 
+score          :  Score = 29.9 bits (65), Expect = 8.1
+identities     :  Identities = 11/57 (19%), Positives = 27/57 (47%), Gaps = 3/57 (
+noevent        : 
+query          : Query: 158 TVKPQRIAIIHDKQQYGEGLARSVQDGLKQGNANIVFFDGITAGEKDFSALIAR
+align          :             +K ++ +++  K   G+G+ R  +    +  A +    G+   +++   L A
+sbjct          : Sbjct: 14  RIKEEKASVVRPK---GDGVVRIQKQTSGRKGAGVSVITGLDLSDEELKKLAAE
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|3025270|sp|P77269|YPHF_ECOLI ABC TRANSPORTER PERIPLASMIC BIND
+title          :            PROTEIN YPHF PRECURSOR
+length         :            Length = 327
+noevent        : 
+score          :  Score = 29.9 bits (65), Expect = 8.1
+identities     :  Identities = 19/79 (24%), Positives = 31/79 (39%), Gaps = 2/79 (
+noevent        : 
+query          : Query: 165 AIIHDKQQYGEGLARSVQDGLKQGNANIVFFDGITAGE-KDFSALIARLQKENI
+align          :            AI  D Q Y  G+ + VQD  K  +  +   +    G+    S  +  L   N+
+sbjct          : Sbjct: 35  AIYLDTQGYYAGVRQGVQDAAKDSSVQVQLIETNAQGDISKESTFVDTLVARNV
+noevent        : 
+query          : Query: 224 GYYPE-MGQIVRQARANGL 241
+align          :                    + VR+A   G+
+sbjct          : Sbjct: 95  AVSENGSSRTVRRASEAGI 113
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_descriptions
+noevent        : Searching..................................................done
+round          : Results from round 3
+noevent        : 
+noevent        : 
+noevent        : 
+noevent        : Sequences producing significant alignments:
+model_sequences: Sequences used in model and found again:
+noevent        : 
+description    : gi|126342|sp|P17215|LIVJ_SALTY LEU/ILE/VAL/THR-BINDING PROTEIN ..
+description    : gi|126349|sp|P04816|LIVK_ECOLI LEUCINE-SPECIFIC BINDING PROTEIN..
+description    : gi|126348|sp|P02917|LIVJ_ECOLI LEU/ILE/VAL-BINDING PROTEIN PREC..
+description    : gi|126347|sp|P25399|LIVJ_CITFR LEU/ILE/VAL-BINDING PROTEIN PREC..
+description    : gi|126343|sp|P17216|LIVK_SALTY LEUCINE-SPECIFIC BINDING PROTEIN..
+description    : gi|115120|sp|P21175|BRAC_PSEAE LEUCINE-, ISOLEUCINE-, VALINE-, ..
+description    : gi|113709|sp|P27017|AMIC_PSEAE ALIPHATIC AMIDASE EXPRESSION-REG..
+noevent        : 
+nonmodel_sequen: Sequences not found previously or not previously below threshold:
+noevent        : 
+description    : gi|3024134|sp|O15303|MGR6_HUMAN METABOTROPIC GLUTAMATE RECEPTOR..
+description    : gi|2495077|sp|Q14833|MGR4_HUMAN METABOTROPIC GLUTAMATE RECEPTOR..
+description    : gi|3024131|sp|P91685|MGR_DROME METABOTROPIC GLUTAMATE RECEPTOR ..
+description    : gi|400255|sp|P31423|MGR4_RAT METABOTROPIC GLUTAMATE RECEPTOR 4 ..
+description    : gi|547903|sp|P35349|MGR6_RAT METABOTROPIC GLUTAMATE RECEPTOR 6 ..
+description    : gi|2495080|sp|P70579|MGR8_RAT METABOTROPIC GLUTAMATE RECEPTOR 8..
+description    : gi|2495079|sp|O00222|MGR8_HUMAN METABOTROPIC GLUTAMATE RECEPTOR..
+description    : gi|1346533|sp|P47743|MGR8_MOUSE METABOTROPIC GLUTAMATE RECEPTOR..
+description    : gi|400402|sp|P13595|NCA1_MOUSE NEURAL CELL ADHESION MOLECULE, L..
+description    : gi|1170947|sp|P31424|MGR5_RAT METABOTROPIC GLUTAMATE RECEPTOR 5..
+description    : gi|1706242|sp|P51840|CYGE_RAT GUANYLYL CYCLASE GC-E PRECURSOR (..
+description    : gi|1709020|sp|P41594|MGR5_HUMAN METABOTROPIC GLUTAMATE RECEPTOR..
+description    : gi|549451|sp|Q06278|ADO_HUMAN ALDEHYDE OXIDASE
+description    : gi|6014748|sp|Q10900|CTPI_MYCTU PROBABLE CATION-TRANSPORTING AT..
+description    : gi|127861|sp|P13594|NCA2_MOUSE NEURAL CELL ADHESION MOLECULE, P..
+description    : gi|127971|sp||NCPR_SALTR_1 [Segment 1 of 3] NADPH-CYTOCHROME P4..
+noevent        : 
+noevent        : 
+converged      : CONVERGED!
+*************** end_descriptions
+*************** start_alignment
+title          : >gi|126342|sp|P17215|LIVJ_SALTY LEU/ILE/VAL/THR-BINDING PROTEIN
+title          :            PRECURSOR (LIVT-BP)
+length         :            Length = 365
+noevent        : 
+score          :  Score =  580 bits (1478), Expect = e-165
+identities     :  Identities = 280/367 (76%), Positives = 316/367 (85%), Gaps = 2/
+noevent        : 
+query          : Query: 3   RKAKTIIAGIVALAVSQGAMADDIKVAIVGAMSGPVAQWGDMEFNGARQAIKDI
+align          :             K KT++AG +AL++S  A ADDIKVA+VGAMSGPVAQ+GD EF GA QAI DI
+sbjct          : Sbjct: 1   MKGKTLLAGCIALSLSHMAFADDIKVAVVGAMSGPVAQYGDQEFTGAEQAIADI
+noevent        : 
+query          : Query: 63  KGDKLVGVEYDDACDPKQAVAVANKIVNDGIQYVIGHLCSSSTQPASDIYEDEG
+align          :            KGDKLV V+YDDACDPKQAVAVANK+VNDGI+YVIGHLCSSSTQPASDIYEDEG
+sbjct          : Sbjct: 61  KGDKLVAVKYDDACDPKQAVAVANKVVNDGIKYVIGHLCSSSTQPASDIYEDEG
+noevent        : 
+query          : Query: 123 GATNPELTQRGYQYIMRTAGLDSSQGPTAAKYILETVKPQRIAIIHDKQQYGEG
+align          :             AT PELT RGY+ ++RT GLDS QGPTAAKYILE VKPQRIAIIHDKQQYGEG
+sbjct          : Sbjct: 121 AATAPELTARGYKLVLRTTGLDSDQGPTAAKYILEKVKPQRIAIIHDKQQYGEG
+noevent        : 
+query          : Query: 183 DGLKQGNANIVFFDGITAGEKDFSALIARLQKENIDFVYYGGYYPEMGQIVRQA
+align          :            DGLK+G  N+VFFDGITAGEKDFS L+ARL+KENIDFVYYGGY+PEMGQI+RQ+
+sbjct          : Sbjct: 181 DGLKKGGVNVVFFDGITAGEKDFSTLVARLKKENIDFVYYGGYHPEMGQILRQS
+noevent        : 
+query          : Query: 243 TQFMGPEGVGNASLSNIAGGAAEGMLVTMPKRYDQDPANKAIVEALKADKKDPS
+align          :            TQFMGPEGV N SLSNIAG +AEG+LVT PK YDQ PANK IV+A+KA K+DPS
+sbjct          : Sbjct: 241 TQFMGPEGVANVSLSNIAGESAEGLLVTKPKNYDQVPANKPIVDAIKAKKQDPS
+noevent        : 
+query          : Query: 303 TYAAVQSLATAMTRSASHRPLDLVKDLKANGADTVIGPLKWDEKGDLKGFEFGV
+align          :            TYAA+QSL   +  S    P ++ K LK    DTV+GPL WDEKGDLKGFEFGV
+sbjct          : Sbjct: 301 TYAALQSLQAGLNHSD--DPAEIAKYLKGATVDTVMGPLSWDEKGDLKGFEFGV
+noevent        : 
+query          : Query: 363 GSSTVAK 369
+align          :            G++T AK
+sbjct          : Sbjct: 359 GTATDAK 365
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|126349|sp|P04816|LIVK_ECOLI LEUCINE-SPECIFIC BINDING PROTEIN
+title          :            PRECURSOR (LS-BP) (L-BP)
+length         :            Length = 369
+noevent        : 
+score          :  Score =  579 bits (1477), Expect = e-165
+identities     :  Identities = 333/369 (90%), Positives = 351/369 (94%)
+noevent        : 
+query          : Query: 1   MKRKAKTIIAGIVALAVSQGAMADDIKVAIVGAMSGPVAQWGDMEFNGARQAIK
+align          :            MKR AKTIIAG++ALA+S  AMADDIKVA+VGAMSGP+AQWG MEFNGA QAIK
+sbjct          : Sbjct: 1   MKRNAKTIIAGMIALAISHTAMADDIKVAVVGAMSGPIAQWGIMEFNGAEQAIK
+noevent        : 
+query          : Query: 61  GIKGDKLVGVEYDDACDPKQAVAVANKIVNDGIQYVIGHLCSSSTQPASDIYED
+align          :            GIKGDKLVGVEYDDACDPKQAVAVANKIVNDGI+YVIGHLCSSSTQPASDIYED
+sbjct          : Sbjct: 61  GIKGDKLVGVEYDDACDPKQAVAVANKIVNDGIKYVIGHLCSSSTQPASDIYED
+noevent        : 
+query          : Query: 121 SPGATNPELTQRGYQYIMRTAGLDSSQGPTAAKYILETVKPQRIAIIHDKQQYG
+align          :            SPGAT PELTQRGYQ+IMRTAGLDSSQGPTAAKYILETVKPQRIAIIHDKQQYG
+sbjct          : Sbjct: 121 SPGATAPELTQRGYQHIMRTAGLDSSQGPTAAKYILETVKPQRIAIIHDKQQYG
+noevent        : 
+query          : Query: 181 VQDGLKQGNANIVFFDGITAGEKDFSALIARLQKENIDFVYYGGYYPEMGQIVR
+align          :            VQDGLK  NAN+VFFDGITAGEKDFSALIARL+KENIDFVYYGGYYPEMGQ++R
+sbjct          : Sbjct: 181 VQDGLKAANANVVFFDGITAGEKDFSALIARLKKENIDFVYYGGYYPEMGQMLR
+noevent        : 
+query          : Query: 241 LKTQFMGPEGVGNASLSNIAGGAAEGMLVTMPKRYDQDPANKAIVEALKADKKD
+align          :            LKTQFMGPEGVGNASLSNIAG AAEGMLVTMPKRYDQDPAN+ IV+ALKADKKD
+sbjct          : Sbjct: 241 LKTQFMGPEGVGNASLSNIAGDAAEGMLVTMPKRYDQDPANQGIVDALKADKKD
+noevent        : 
+query          : Query: 301 WITYAAVQSLATAMTRSASHRPLDLVKDLKANGADTVIGPLKWDEKGDLKGFEF
+align          :            WITYAAVQSLATA+ R+ S  PL LVKDLKANGA+TVIGPL WDEKGDLKGF+F
+sbjct          : Sbjct: 301 WITYAAVQSLATALERTGSDEPLALVKDLKANGANTVIGPLNWDEKGDLKGFDF
+noevent        : 
+query          : Query: 361 ADGSSTVAK 369
+align          :            ADGSST AK
+sbjct          : Sbjct: 361 ADGSSTAAK 369
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|126348|sp|P02917|LIVJ_ECOLI LEU/ILE/VAL-BINDING PROTEIN
+title          :            PRECURSOR (LIV-BP)
+length         :            Length = 367
+noevent        : 
+score          :  Score =  579 bits (1475), Expect = e-165
+identities     :  Identities = 282/369 (76%), Positives = 320/369 (86%), Gaps = 2/
+noevent        : 
+query          : Query: 1   MKRKAKTIIAGIVALAVSQGAMADDIKVAIVGAMSGPVAQWGDMEFNGARQAIK
+align          :            M  K K ++AG++ALA S  A+A+DIKVA+VGAMSGPVAQ+GD EF GA QA+
+sbjct          : Sbjct: 1   MNTKGKALLAGLIALAFSNMALAEDIKVAVVGAMSGPVAQYGDQEFTGAEQAVA
+noevent        : 
+query          : Query: 61  GIKGDKLVGVEYDDACDPKQAVAVANKIVNDGIQYVIGHLCSSSTQPASDIYED
+align          :            GIKG+KL   +YDDACDPKQAVAVANK+VNDGI+YVIGHLCSSSTQPASDIYED
+sbjct          : Sbjct: 61  GIKGNKLQIAKYDDACDPKQAVAVANKVVNDGIKYVIGHLCSSSTQPASDIYED
+noevent        : 
+query          : Query: 121 SPGATNPELTQRGYQYIMRTAGLDSSQGPTAAKYILETVKPQRIAIIHDKQQYG
+align          :            +P AT PELT RGYQ I+RT GLDS QGPTAAKYILE VKPQRIAI+HDKQQYG
+sbjct          : Sbjct: 121 TPAATAPELTARGYQLILRTTGLDSDQGPTAAKYILEKVKPQRIAIVHDKQQYG
+noevent        : 
+query          : Query: 181 VQDGLKQGNANIVFFDGITAGEKDFSALIARLQKENIDFVYYGGYYPEMGQIVR
+align          :            VQDGLK+GNAN+VFFDGITAGEKDFS L+ARL+KENIDFVYYGGY+PEMGQI+R
+sbjct          : Sbjct: 181 VQDGLKKGNANVVFFDGITAGEKDFSTLVARLKKENIDFVYYGGYHPEMGQILR
+noevent        : 
+query          : Query: 241 LKTQFMGPEGVGNASLSNIAGGAAEGMLVTMPKRYDQDPANKAIVEALKADKKD
+align          :            LKTQFMGPEGV N SLSNIAG +AEG+LVT PK YDQ PANK IV+A+KA K+D
+sbjct          : Sbjct: 241 LKTQFMGPEGVANVSLSNIAGESAEGLLVTKPKNYDQVPANKPIVDAIKAKKQD
+noevent        : 
+query          : Query: 301 WITYAAVQSLATAMTRSASHRPLDLVKDLKANGADTVIGPLKWDEKGDLKGFEF
+align          :            W TYAA+QSL   + +S    P ++ K LKAN  DTV+GPL WDEKGDLKGFEF
+sbjct          : Sbjct: 301 WTTYAALQSLQAGLNQSD--DPAEIAKYLKANSVDTVMGPLTWDEKGDLKGFEF
+noevent        : 
+query          : Query: 361 ADGSSTVAK 369
+align          :            A+G++T AK
+sbjct          : Sbjct: 359 ANGTATDAK 367
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|126347|sp|P25399|LIVJ_CITFR LEU/ILE/VAL-BINDING PROTEIN
+title          :            PRECURSOR (LIV-BP)
+length         :            Length = 367
+noevent        : 
+score          :  Score =  578 bits (1474), Expect = e-165
+identities     :  Identities = 276/369 (74%), Positives = 316/369 (84%), Gaps = 2/
+noevent        : 
+query          : Query: 1   MKRKAKTIIAGIVALAVSQGAMADDIKVAIVGAMSGPVAQWGDMEFNGARQAIK
+align          :            M  K K ++AG +AL++S  A A DIKVA+VGAMSGPVAQ+GD EF GA QAI
+sbjct          : Sbjct: 1   MNMKGKALLAGCIALSLSNMAFAKDIKVAVVGAMSGPVAQYGDQEFTGAEQAIA
+noevent        : 
+query          : Query: 61  GIKGDKLVGVEYDDACDPKQAVAVANKIVNDGIQYVIGHLCSSSTQPASDIYED
+align          :            G+KGDKLV V+YDDACDPKQAVAVANK+VNDGI+YVIGHLCSSSTQPASDIYED
+sbjct          : Sbjct: 61  GVKGDKLVMVKYDDACDPKQAVAVANKVVNDGIKYVIGHLCSSSTQPASDIYED
+noevent        : 
+query          : Query: 121 SPGATNPELTQRGYQYIMRTAGLDSSQGPTAAKYILETVKPQRIAIIHDKQQYG
+align          :            +P AT PELT RGY  ++RT GLDS QGPTAAKYI+E VKP+RIAI+HDKQQYG
+sbjct          : Sbjct: 121 TPAATAPELTARGYNLVLRTTGLDSDQGPTAAKYIVEKVKPKRIAIVHDKQQYG
+noevent        : 
+query          : Query: 181 VQDGLKQGNANIVFFDGITAGEKDFSALIARLQKENIDFVYYGGYYPEMGQIVR
+align          :            VQD LK+ NA++VFFDGITAGEKDFS L+ARL+KENIDFVYYGGY+PEMGQI+R
+sbjct          : Sbjct: 181 VQDNLKKANADVVFFDGITAGEKDFSTLVARLKKENIDFVYYGGYHPEMGQILR
+noevent        : 
+query          : Query: 241 LKTQFMGPEGVGNASLSNIAGGAAEGMLVTMPKRYDQDPANKAIVEALKADKKD
+align          :            LKTQFMGPEGV N SLSNIAG +AEG+LVT PK YDQ PANK IV+A+KA K+D
+sbjct          : Sbjct: 241 LKTQFMGPEGVANVSLSNIAGESAEGLLVTKPKNYDQVPANKPIVDAIKAKKQD
+noevent        : 
+query          : Query: 301 WITYAAVQSLATAMTRSASHRPLDLVKDLKANGADTVIGPLKWDEKGDLKGFEF
+align          :            W TYAA+QSL   + +S    P ++ K LKAN  +TV+GPL WD KGDLKGFEF
+sbjct          : Sbjct: 301 WTTYAALQSLQAGLNQSD--DPAEIAKYLKANSVETVMGPLSWDAKGDLKGFEF
+noevent        : 
+query          : Query: 361 ADGSSTVAK 369
+align          :            A+G++T AK
+sbjct          : Sbjct: 359 ANGTATDAK 367
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|126343|sp|P17216|LIVK_SALTY LEUCINE-SPECIFIC BINDING PROTEIN
+title          :            PRECURSOR (LS-BP) (L-BP)
+length         :            Length = 369
+noevent        : 
+score          :  Score =  577 bits (1472), Expect = e-165
+identities     :  Identities = 369/369 (100%), Positives = 369/369 (100%)
+noevent        : 
+query          : Query: 1   MKRKAKTIIAGIVALAVSQGAMADDIKVAIVGAMSGPVAQWGDMEFNGARQAIK
+align          :            MKRKAKTIIAGIVALAVSQGAMADDIKVAIVGAMSGPVAQWGDMEFNGARQAIK
+sbjct          : Sbjct: 1   MKRKAKTIIAGIVALAVSQGAMADDIKVAIVGAMSGPVAQWGDMEFNGARQAIK
+noevent        : 
+query          : Query: 61  GIKGDKLVGVEYDDACDPKQAVAVANKIVNDGIQYVIGHLCSSSTQPASDIYED
+align          :            GIKGDKLVGVEYDDACDPKQAVAVANKIVNDGIQYVIGHLCSSSTQPASDIYED
+sbjct          : Sbjct: 61  GIKGDKLVGVEYDDACDPKQAVAVANKIVNDGIQYVIGHLCSSSTQPASDIYED
+noevent        : 
+query          : Query: 121 SPGATNPELTQRGYQYIMRTAGLDSSQGPTAAKYILETVKPQRIAIIHDKQQYG
+align          :            SPGATNPELTQRGYQYIMRTAGLDSSQGPTAAKYILETVKPQRIAIIHDKQQYG
+sbjct          : Sbjct: 121 SPGATNPELTQRGYQYIMRTAGLDSSQGPTAAKYILETVKPQRIAIIHDKQQYG
+noevent        : 
+query          : Query: 181 VQDGLKQGNANIVFFDGITAGEKDFSALIARLQKENIDFVYYGGYYPEMGQIVR
+align          :            VQDGLKQGNANIVFFDGITAGEKDFSALIARLQKENIDFVYYGGYYPEMGQIVR
+sbjct          : Sbjct: 181 VQDGLKQGNANIVFFDGITAGEKDFSALIARLQKENIDFVYYGGYYPEMGQIVR
+noevent        : 
+query          : Query: 241 LKTQFMGPEGVGNASLSNIAGGAAEGMLVTMPKRYDQDPANKAIVEALKADKKD
+align          :            LKTQFMGPEGVGNASLSNIAGGAAEGMLVTMPKRYDQDPANKAIVEALKADKKD
+sbjct          : Sbjct: 241 LKTQFMGPEGVGNASLSNIAGGAAEGMLVTMPKRYDQDPANKAIVEALKADKKD
+noevent        : 
+query          : Query: 301 WITYAAVQSLATAMTRSASHRPLDLVKDLKANGADTVIGPLKWDEKGDLKGFEF
+align          :            WITYAAVQSLATAMTRSASHRPLDLVKDLKANGADTVIGPLKWDEKGDLKGFEF
+sbjct          : Sbjct: 301 WITYAAVQSLATAMTRSASHRPLDLVKDLKANGADTVIGPLKWDEKGDLKGFEF
+noevent        : 
+query          : Query: 361 ADGSSTVAK 369
+align          :            ADGSSTVAK
+sbjct          : Sbjct: 361 ADGSSTVAK 369
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|115120|sp|P21175|BRAC_PSEAE LEUCINE-, ISOLEUCINE-, VALINE-,
+title          :            THREONINE-, AND ALANINE-BINDING PROTEIN PRECURSOR
+title          :            (LIVAT-BP) (LEU/ILE/VAL/THR/ALA-BINDING PROTEIN)
+length         :            Length = 373
+noevent        : 
+score          :  Score =  530 bits (1351), Expect = e-150
+identities     :  Identities = 193/368 (52%), Positives = 268/368 (72%)
+noevent        : 
+query          : Query: 2   KRKAKTIIAGIVALAVSQGAMADDIKVAIVGAMSGPVAQWGDMEFNGARQAIKD
+align          :            +R ++   A  +A   S    AD IK+A+ G ++GPVAQ+GDM+  GA  AI+
+sbjct          : Sbjct: 6   QRLSRLFAAMAIAGFASYSMAADTIKIALAGPVTGPVAQYGDMQRAGALMAIEQ
+noevent        : 
+query          : Query: 62  IKGDKLVGVEYDDACDPKQAVAVANKIVNDGIQYVIGHLCSSSTQPASDIYEDE
+align          :            + G +L GV YDDACDPKQAVAVANK+VNDG+++V+GH+CSSSTQPA+DIYEDE
+sbjct          : Sbjct: 66  VNGAQLEGVIYDDACDPKQAVAVANKVVNDGVKFVVGHVCSSSTQPATDIYEDE
+noevent        : 
+query          : Query: 122 PGATNPELTQRGYQYIMRTAGLDSSQGPTAAKYILETVKPQRIAIIHDKQQYGE
+align          :            P AT PE+T RGY+ I RT GLD+ QGP A K+I E  K + IA++HDKQQYGE
+sbjct          : Sbjct: 126 PSATAPEITSRGYKLIFRTIGLDNMQGPVAGKFIAERYKVKTIAVLHDKQQYGE
+noevent        : 
+query          : Query: 182 QDGLKQGNANIVFFDGITAGEKDFSALIARLQKENIDFVYYGGYYPEMGQIVRQ
+align          :            +  ++     +  F+G+ AG+KDF+ALI++L+K  + FVY+GGY+PEMG ++RQ
+sbjct          : Sbjct: 186 KKTVEDAGIKVAVFEGLNAGDKDFNALISKLKKAGVQFVYFGGYHPEMGLLLRQ
+noevent        : 
+query          : Query: 242 KTQFMGPEGVGNASLSNIAGGAAEGMLVTMPKRYDQDPANKAIVEALKADKKDP
+align          :              +FMGPEGVGN+ ++ IAG A+EGML T+P+ ++QDP NKA+++A KA  +DP
+sbjct          : Sbjct: 246 DARFMGPEGVGNSEITAIAGDASEGMLATLPRAFEQDPKNKALIDAFKAKNQDP
+noevent        : 
+query          : Query: 302 ITYAAVQSLATAMTRSASHRPLDLVKDLKANGADTVIGPLKWDEKGDLKGFEFG
+align          :              Y+AV  +A  + ++    P  + + L+AN  +T  G L +DEKGDLK F+F
+sbjct          : Sbjct: 306 PAYSAVTVIAKGIEKAGEADPEKVAEALRANTFETPTGNLGFDEKGDLKNFDFT
+noevent        : 
+query          : Query: 362 DGSSTVAK 369
+align          :            D + T  K
+sbjct          : Sbjct: 366 DATRTEVK 373
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|113709|sp|P27017|AMIC_PSEAE ALIPHATIC AMIDASE
+title          :            EXPRESSION-REGULATING PROTEIN
+length         :            Length = 385
+noevent        : 
+score          :  Score =  384 bits (976), Expect = e-106
+identities     :  Identities = 60/314 (19%), Positives = 114/314 (36%), Gaps = 12/
+noevent        : 
+query          : Query: 35  SGPVAQWGDMEFNGARQAIKDINAKGGIKGDKLVGVEYDDACDPKQAVAVANKI
+align          :            +G  A        GA  A++ +N +GG+ G  +  +  D   DP +    A
+sbjct          : Sbjct: 17  TGVTADIERSHAYGALLAVEQLNREGGVGGRPIETLSQDPGGDPDRYRLCAEDF
+noevent        : 
+query          : Query: 94  QYVIGHLCSSSTQPASDIYEDEGILMISPGATNPELTQRGYQYIMRTAGLDSSQ
+align          :            ++++G   S + +    + E    L+  P  T  E  +     +      + +
+sbjct          : Sbjct: 77  RFLVGCYMSHTRKAVMPVVERADALLCYP--TPYEGFEYSPNIVYGGPAPNQNS
+noevent        : 
+query          : Query: 154 YILETVKPQRIAIIHDKQQYGEGLARSVQDGLKQGNANIV--FFDGITAGEKDF
+align          :             I      +R+  I     Y       ++   +Q    ++   +  +   + D
+sbjct          : Sbjct: 135 LI--RHYGERVVFIGSDYIYPRESNHVMRHLYRQHGGTVLEEIYIPLYPSDDDL
+noevent        : 
+query          : Query: 212 LQKENIDFVYYGGYYPEMGQIVRQ-ARANGLKTQ-FMGPEGVGNASLSNIAGGA
+align          :            + +   D V+         ++ R  AR  G   +  +       A ++ +
+sbjct          : Sbjct: 193 IYQARADVVFSTVVGTGTAELYRAIARRYGDGRRPPIASLTTSEAEVAKMESDV
+noevent        : 
+query          : Query: 270 TMPKRYDQD-PANKAIVEALKADKKDPSGPYVW--ITYAAVQSLATAMTRSASH
+align          :              P     D PA++A V+A      + +    W    Y     L  A   + +
+sbjct          : Sbjct: 253 VAPYFSSIDTPASRAFVQACHGFFPENATITAWAEAAYWQTLLLGRAAQAAGNW
+noevent        : 
+query          : Query: 327 KDLKANGADTVIGP 340
+align          :            + L     D   GP
+sbjct          : Sbjct: 313 RHLYDIDIDAPQGP 326
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|3024134|sp|O15303|MGR6_HUMAN METABOTROPIC GLUTAMATE RECEPTOR
+title          :            PRECURSOR
+length         :            Length = 877
+noevent        : 
+score          :  Score = 41.6 bits (95), Expect = 0.002
+identities     :  Identities = 47/266 (17%), Positives = 90/266 (33%), Gaps = 20/2
+noevent        : 
+query          : Query: 47  NGARQAIKDINAKGGIKGDKLVGVEYDDACDPKQAVAVANKIVNDGIQYVIGHL
+align          :                QA+  + A    +GD            P    A   ++V      V+G
+sbjct          : Sbjct: 104 YALEQALSFVQALIRGRGDGDEVGVRCPGGVPPLRPAPPERVVA-----VVGAS
+noevent        : 
+query          : Query: 107 PASDIYEDEGILMISPGATNPELT-QRGYQYIMRTAGLDSSQGPTAAKYILETV
+align          :              +++     I  IS  +T PEL+    Y +  R    DS Q   A   I+  +
+sbjct          : Sbjct: 159 MVANVLRLFAIPQISYASTAPELSDSTRYDFFSRVVPPDSYQA-QAMVDIVRAL
+noevent        : 
+query          : Query: 166 IIHDKQQYGEGLARSVQDGLKQGNANIV---FFDGITAGEKDFSALIARLQKE-
+align          :             +  +  YGE    +     ++     +             +FS +I RL +
+sbjct          : Sbjct: 218 TLASEGNYGESGVEAFVQISREAGGVCIAQSIKIPREPKPGEFSKVIRRLMETP
+noevent        : 
+query          : Query: 222 YGGYYPEMGQIVRQARANGLKTQFM----GPEGVGNASLSNIAGGAAEGMLVTM
+align          :                  ++ +++  AR   L   F+       G   + + ++    A G +  +
+sbjct          : Sbjct: 278 IFANEDDIRRVLEAARQANLTGHFLWVGSDSWGAKTSPILSLE-DVAVGAITIL
+noevent        : 
+query          : Query: 278 DPANKAIVEALKADKKDPSGPYVWIT 303
+align          :            D       +       + +   +W
+sbjct          : Sbjct: 337 D----GFDQYFMTRSLENNRRNIWFA 358
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|2495077|sp|Q14833|MGR4_HUMAN METABOTROPIC GLUTAMATE RECEPTOR
+title          :            PRECURSOR
+length         :            Length = 912
+noevent        : 
+score          :  Score = 39.3 bits (89), Expect = 0.012
+identities     :  Identities = 43/216 (19%), Positives = 78/216 (35%), Gaps = 13/2
+noevent        : 
+query          : Query: 96  VIGHLCSSSTQPASDIYEDEGILMISPGATNPELTQRGYQYIMRTAGLDSSQGP
+align          :            VIG   SS +   ++I     I  IS  +T P+L+               +
+sbjct          : Sbjct: 153 VIGASGSSVSIMVANILRLFKIPQISYASTAPDLSDNSRYDFFSRVVPSDTYQA
+noevent        : 
+query          : Query: 156 LETVKPQRIAIIHDKQQYGE-GLARSVQDGLKQGNANIV--FFDGITAGEKDFS
+align          :            +  +K   ++ +  +  YGE G+   +Q   + G   I             +F
+sbjct          : Sbjct: 213 VRALKWNYVSTVASEGSYGESGVEAFIQKSREDGGVCIAQSVKIPREPKAGEFD
+noevent        : 
+query          : Query: 212 LQKENIDFVYYGGYYPEMGQIVRQARANGLKTQF--MGPEGVGN--ASLSNIAG
+align          :            L+  N   V       ++ +++  AR       F  MG +  G+  A + ++
+sbjct          : Sbjct: 273 LETSNARAVIIFANEDDIRRVLEAARRANQTGHFFWMGSDSWGSKIAPVLHLE-
+noevent        : 
+query          : Query: 268 LVTMPKRYDQDPANKAIVEALKADKKDPSGPYVWIT 303
+align          :            +  +PKR       +       +   D +   +W
+sbjct          : Sbjct: 332 VTILPKRMSV----RGFDRYFSSRTLDNNRRNIWFA 363
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|3024131|sp|P91685|MGR_DROME METABOTROPIC GLUTAMATE RECEPTOR
+title          :            PRECURSOR
+length         :            Length = 976
+noevent        : 
+score          :  Score = 38.5 bits (87), Expect = 0.021
+identities     :  Identities = 42/182 (23%), Positives = 74/182 (40%), Gaps = 8/18
+noevent        : 
+query          : Query: 96  VIGHLCSSSTQPASDIYEDEGILMISPGATNPELTQRG-YQYIMRTAGLDSSQG
+align          :            VIG   SS +   +++     I  +SP +T   L+ +  +    RT   D+ Q
+sbjct          : Sbjct: 152 VIGGSYSSVSLQVANLLRLFHIPQVSPASTAKTLSDKTRFDLFARTVPPDTFQS
+noevent        : 
+query          : Query: 155 ILETVKPQRIAIIHDKQQYGEGLARSVQDGLKQGNANIVFFD--GITAGEKDFS
+align          :            IL+      ++ IH +  YGE    ++     + N  I   +     A +K F
+sbjct          : Sbjct: 211 ILKNFNWSYVSTIHSEGSYGEYGIEALHKEATERNVCIAVAEKVPSAADDKVFD
+noevent        : 
+query          : Query: 213 -QKENIDFVYYGGYYPEMGQIVRQARANGLKTQF--MGPEGVG-NASLSNIAGG
+align          :             +K N   V       +  +I++ A+   L   F  +  +G G    L
+sbjct          : Sbjct: 271 QKKPNARGVVLFTRAEDARRILQAAKRANLSQPFHWIASDGWGKQQKLLEGLED
+noevent        : 
+query          : Query: 269 VT 270
+align          : 
+sbjct          : Sbjct: 331 TV 332
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|400255|sp|P31423|MGR4_RAT METABOTROPIC GLUTAMATE RECEPTOR 4
+title          :            PRECURSOR
+length         :            Length = 912
+noevent        : 
+score          :  Score = 37.7 bits (85), Expect = 0.036
+identities     :  Identities = 42/215 (19%), Positives = 76/215 (34%), Gaps = 11/2
+noevent        : 
+query          : Query: 96  VIGHLCSSSTQPASDIYEDEGILMISPGATNPELTQRGYQYIMRTAGLDSSQGP
+align          :            VIG   SS +   ++I     I  IS  +T P+L+               +
+sbjct          : Sbjct: 153 VIGASGSSVSIMVANILRLFKIPQISYASTAPDLSDNSRYDFFSRVVPSDTYQA
+noevent        : 
+query          : Query: 156 LETVKPQRIAIIHDKQQYGE-GLARSVQDGLKQGNANIV--FFDGITAGEKDFS
+align          :            +  +K   ++ +  +  YGE G+   +Q   + G   I             +F
+sbjct          : Sbjct: 213 VRALKWNYVSTLASEGSYGESGVEAFIQKSRENGGVCIAQSVKIPREPKTGEFD
+noevent        : 
+query          : Query: 212 LQKENIDFVYYGGYYPEMGQIVRQARANGLKTQF--MGPEGVGNASLSNIA-GG
+align          :            L+  N   +       ++ +++  AR       F  MG +  G+ S   +
+sbjct          : Sbjct: 273 LETSNARGIIIFANEDDIRRVLEAARRANQTGHFFWMGSDSWGSKSAPVLRLEE
+noevent        : 
+query          : Query: 269 VTMPKRYDQDPANKAIVEALKADKKDPSGPYVWIT 303
+align          :              +PKR       +       +   D +   +W
+sbjct          : Sbjct: 333 TILPKRMSV----RGFDRYFSSRTLDNNRRNIWFA 363
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|547903|sp|P35349|MGR6_RAT METABOTROPIC GLUTAMATE RECEPTOR 6
+title          :            PRECURSOR
+length         :            Length = 871
+noevent        : 
+score          :  Score = 37.3 bits (84), Expect = 0.047
+identities     :  Identities = 46/266 (17%), Positives = 88/266 (32%), Gaps = 20/2
+noevent        : 
+query          : Query: 47  NGARQAIKDINAKGGIKGDKLVGVEYDDACDPKQAVAVANKIVNDGIQYVIGHL
+align          :                QA+  + A    +GD            P    A   ++V      V+G
+sbjct          : Sbjct: 98  YALEQALSFVQALIRGRGDGDEASVRCPGGVPPLRSAPPERVVA-----VVGAS
+noevent        : 
+query          : Query: 107 PASDIYEDEGILMISPGATNPELT-QRGYQYIMRTAGLDSSQGPTAAKYILETV
+align          :              +++     I  IS  +T PEL+    Y +  R    DS Q   A   I+  +
+sbjct          : Sbjct: 153 MVANVLRLFAIPQISYASTAPELSDSTRYDFFSRVVPPDSYQA-QAMVDIVRAL
+noevent        : 
+query          : Query: 166 IIHDKQQYGEGLARSVQDGLKQGNANIV---FFDGITAGEKDFSALIARLQKE-
+align          :             +  +  YGE    +     ++     +             +F  +I RL +
+sbjct          : Sbjct: 212 TLASEGNYGESGVEAFVQISREAGGVCIAQSIKIPREPKPGEFHKVIRRLMETP
+noevent        : 
+query          : Query: 222 YGGYYPEMGQIVRQARANGLKTQFM----GPEGVGNASLSNIAGGAAEGMLVTM
+align          :                  ++ +++   R   L   F+       G   + + N+    A G +  +
+sbjct          : Sbjct: 272 IFANEDDIRRVLEATRQANLTGHFLWVGSDSWGSKISPILNLE-EEAVGAITIL
+noevent        : 
+query          : Query: 278 DPANKAIVEALKADKKDPSGPYVWIT 303
+align          :            D       +       + +   +W
+sbjct          : Sbjct: 331 D----GFDQYFMTRSLENNRRNIWFA 352
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|2495080|sp|P70579|MGR8_RAT METABOTROPIC GLUTAMATE RECEPTOR 8
+title          :            PRECURSOR
+length         :            Length = 908
+noevent        : 
+score          :  Score = 36.1 bits (81), Expect = 0.10
+identities     :  Identities = 46/222 (20%), Positives = 82/222 (36%), Gaps = 15/2
+noevent        : 
+query          : Query: 91  DGIQYVIGHLCSSSTQPASDIYEDEGILMISPGATNPELTQRG-YQYIMRTAGL
+align          :            D I  VIG   SS +   ++I     I  IS  +T PEL+    Y +  R
+sbjct          : Sbjct: 145 DKISGVIGAAASSVSIMVANILRLFKIPQISYASTAPELSDNTRYDFFSRVVPP
+noevent        : 
+query          : Query: 150 TAAKYILETVKPQRIAIIHDKQQYGEGLARSVQDGLKQGNANIVFF---DGITA
+align          :             A   I+  +    ++ +  +  YGE    +     ++     +
+sbjct          : Sbjct: 204 QAMVDIVTALGWNYVSTLASEGNYGESGVEAFTQISREIGGVCIAQSQKIPREP
+noevent        : 
+query          : Query: 207 ALIAR-LQKENIDFVYYGGYYPEMGQIVRQARANGLKTQF--MGPEGVGNASLS
+align          :             +I R L+  N   V       ++ +I+  A+       F  +G +  G + ++
+sbjct          : Sbjct: 264 KIIKRLLETPNARAVIMFANEDDIRRILEAAKKLNQSGHFLWIGSDSWG-SKIA
+noevent        : 
+query          : Query: 262 GAAEGMLVTMPKRYDQDPANKAIVEALKADKKDPSGPYVWIT 303
+align          :              AEG +  +PKR   D  ++       A+ +      VW
+sbjct          : Sbjct: 323 EIAEGAVTILPKRASIDGFDRYFRSRTLANNRRN----VWFA 360
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|2495079|sp|O00222|MGR8_HUMAN METABOTROPIC GLUTAMATE RECEPTOR
+title          :            PRECURSOR
+length         :            Length = 908
+noevent        : 
+score          :  Score = 36.1 bits (81), Expect = 0.10
+identities     :  Identities = 46/222 (20%), Positives = 82/222 (36%), Gaps = 15/2
+noevent        : 
+query          : Query: 91  DGIQYVIGHLCSSSTQPASDIYEDEGILMISPGATNPELTQRG-YQYIMRTAGL
+align          :            D I  VIG   SS +   ++I     I  IS  +T PEL+    Y +  R
+sbjct          : Sbjct: 145 DKISGVIGAAASSVSIMVANILRLFKIPQISYASTAPELSDNTRYDFFSRVVPP
+noevent        : 
+query          : Query: 150 TAAKYILETVKPQRIAIIHDKQQYGEGLARSVQDGLKQGNANIVFF---DGITA
+align          :             A   I+  +    ++ +  +  YGE    +     ++     +
+sbjct          : Sbjct: 204 QAMVDIVTALGWNYVSTLASEGNYGESGVEAFTQISREIGGVCIAQSQKIPREP
+noevent        : 
+query          : Query: 207 ALIAR-LQKENIDFVYYGGYYPEMGQIVRQARANGLKTQF--MGPEGVGNASLS
+align          :             +I R L+  N   V       ++ +I+  A+       F  +G +  G + ++
+sbjct          : Sbjct: 264 KIIKRLLETPNARAVIMFANEDDIRRILEAAKKLNQSGHFLWIGSDSWG-SKIA
+noevent        : 
+query          : Query: 262 GAAEGMLVTMPKRYDQDPANKAIVEALKADKKDPSGPYVWIT 303
+align          :              AEG +  +PKR   D  ++       A+ +      VW
+sbjct          : Sbjct: 323 EIAEGAVTILPKRASIDGFDRYFRSRTLANNRRN----VWFA 360
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|1346533|sp|P47743|MGR8_MOUSE METABOTROPIC GLUTAMATE RECEPTOR
+title          :            PRECURSOR
+length         :            Length = 908
+noevent        : 
+score          :  Score = 35.4 bits (79), Expect = 0.18
+identities     :  Identities = 46/222 (20%), Positives = 81/222 (35%), Gaps = 15/2
+noevent        : 
+query          : Query: 91  DGIQYVIGHLCSSSTQPASDIYEDEGILMISPGATNPELTQRG-YQYIMRTAGL
+align          :            D I  VIG   SS +   ++I     I  IS  +T PEL+    Y +  R
+sbjct          : Sbjct: 145 DKISGVIGAAASSVSIMVANILRLFKIPQISYASTAPELSDNTRYDFFSRVVPP
+noevent        : 
+query          : Query: 150 TAAKYILETVKPQRIAIIHDKQQYGEGLARSVQDGLKQGNANIVFF---DGITA
+align          :             A   I+  +    ++ +  +  YGE    +     ++     +
+sbjct          : Sbjct: 204 QAMVDIVTALGWNYVSTLASEGNYGESGVEAFTQISREIGGVCIAQSQKIPREP
+noevent        : 
+query          : Query: 207 ALIAR-LQKENIDFVYYGGYYPEMGQIVRQARANGLKTQF--MGPEGVGNASLS
+align          :             +I R L+  N   V       ++  I+  A+       F  +G +  G + ++
+sbjct          : Sbjct: 264 KIIKRLLETPNARAVIMFANEDDIRGILEAAKKLNQSGHFLWIGSDSWG-SKIA
+noevent        : 
+query          : Query: 262 GAAEGMLVTMPKRYDQDPANKAIVEALKADKKDPSGPYVWIT 303
+align          :              AEG +  +PKR   D  ++       A+ +      VW
+sbjct          : Sbjct: 323 EIAEGAVTILPKRASIDGFDRYFRSRTLANNRRN----VWFA 360
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|400402|sp|P13595|NCA1_MOUSE NEURAL CELL ADHESION MOLECULE, LA
+title          :            ISOFORM PRECURSOR (N-CAM 180) (NCAM-180) [CONTAINS:
+title          :            N-CAM 140 (NCAM-140)]
+length         :            Length = 1115
+noevent        : 
+score          :  Score = 33.4 bits (74), Expect = 0.69
+identities     :  Identities = 46/221 (20%), Positives = 73/221 (32%), Gaps = 24/2
+noevent        : 
+query          : Query: 91  DGIQYVIGHLCSSSTQPASDIYEDEGILMISPGATNPELTQRGYQYIMRTAGLD
+align          :            DG   V  H   SS    S  Y D G  M +   T   + Q      +
+sbjct          : Sbjct: 357 DGHMVVRSHARVSSLTLKSIQYRDAGEYMCTASNT---IGQDSQSIDLEFQYAP
+noevent        : 
+query          : Query: 151 AAKYILETVKPQRIAIIHDKQQYGEGLARSVQDG----------LKQGNANIVF
+align          :            A      T +  ++ I  +   Y        +DG          +K  N
+sbjct          : Sbjct: 414 AVY----TWEGNQVNITCEVFAYPSATISWFRDGQLLPSSNYSNIKIYNTPSAS
+noevent        : 
+query          : Query: 201 -GEKDFS----ALIARLQKENIDFVYYGGYYPEMGQIVR-QARANGLKTQFMGP
+align          :              E DF       + R+ +E+++F+      P    I R +  ++  + QF  P
+sbjct          : Sbjct: 470 DSENDFGNYNCTAVNRIGQESLEFILVQADTPSSPSIDRVEPYSSTAQVQFDEP
+noevent        : 
+query          : Query: 255 SLSNIAGG-AAEGMLVTMPKRYDQDPANKAIVEALKADKKD 294
+align          :             +        + G      K YD   AN   +  +   K +
+sbjct          : Sbjct: 530 PILKYKAEWKSLGEESWHFKWYDAKEANMEGIVTIMGLKPE 570
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|1170947|sp|P31424|MGR5_RAT METABOTROPIC GLUTAMATE RECEPTOR 5
+title          :            PRECURSOR
+length         :            Length = 1203
+noevent        : 
+score          :  Score = 33.4 bits (74), Expect = 0.69
+identities     :  Identities = 31/155 (20%), Positives = 58/155 (37%), Gaps = 4/15
+noevent        : 
+query          : Query: 96  VIGHLCSSSTQPASDIYEDEGILMISPGATNPELTQRGYQYIMRTAGLDSSQGP
+align          :            VIG   SS      ++ +   I  I+  AT+ +L+ +             +Q
+sbjct          : Sbjct: 145 VIGPGSSSVAIQVQNLLQLFNIPQIAYSATSMDLSDKTLFKYFMRVVPSDAQQA
+noevent        : 
+query          : Query: 156 LETVKPQRIAIIHDKQQYGEGLARSVQDGLKQGNANIVFFDGIT--AGEKDFSA
+align          :            ++      ++ +H +  YGE    + +D   +    I     I   AGE+ F
+sbjct          : Sbjct: 205 VKRYNWTYVSAVHTEGNYGESGMEAFKDMSAKEGICIAHSYKIYSNAGEQSFDK
+noevent        : 
+query          : Query: 214 K--ENIDFVYYGGYYPEMGQIVRQARANGLKTQFM 246
+align          :                    V        +  ++   R  GL  +F+
+sbjct          : Sbjct: 265 SHLPKARVVACFCEGMTVRGLLMAMRRLGLAGEFL 299
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|1706242|sp|P51840|CYGE_RAT GUANYLYL CYCLASE GC-E PRECURSOR
+title          :            (GUANYLATE CYCLASE 2E)
+length         :            Length = 1108
+noevent        : 
+score          :  Score = 33.0 bits (73), Expect = 0.91
+identities     :  Identities = 29/193 (15%), Positives = 67/193 (34%), Gaps = 12/1
+noevent        : 
+query          : Query: 12  IVALAVSQGAMADDIKVAIVGAMSGPVAQWGDMEFNGARQAIKDINAKGGIKGD
+align          :            ++ L  S  A +   KV ++G  +             AR A   +N    + G
+sbjct          : Sbjct: 43  LLLLLPSPSAFSAVFKVGVLGPWACDPIFARARPDLAARLATDRLNRDLALDGG
+noevent        : 
+query          : Query: 70  VEYDDACDPKQAVAVANKIVNDGIQYVIGHLCSSSTQPASDIYEDEGILMISPG
+align          :            +  +    P    AV++ +    +  ++G +  ++ +PA  + ++ G+ ++  G
+sbjct          : Sbjct: 103 LLPEPCLTPGSLGAVSSALTR--VSGLVGPVNPAACRPAELLAQEAGVALVPWG
+noevent        : 
+query          : Query: 130 TQRGYQYIMRTAGLDSSQGPTAAKYILETVKPQRIAIIHDKQQYGEGLARSVQD
+align          :                      T     +    A   +L+  +  R+A+I   Q       R++
+sbjct          : Sbjct: 161 A--------GTTAPAVTPAADALYVLLKAFRWARVALITAPQDLWVEAGRALST
+noevent        : 
+query          : Query: 190 ANIVFFDGITAGE 202
+align          :              +     +   +
+sbjct          : Sbjct: 213 LPVALVTSMVPSD 225
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|1709020|sp|P41594|MGR5_HUMAN METABOTROPIC GLUTAMATE RECEPTOR
+title          :            PRECURSOR
+length         :            Length = 1212
+noevent        : 
+score          :  Score = 33.0 bits (73), Expect = 0.91
+identities     :  Identities = 31/155 (20%), Positives = 57/155 (36%), Gaps = 4/15
+noevent        : 
+query          : Query: 96  VIGHLCSSSTQPASDIYEDEGILMISPGATNPELTQRGYQYIMRTAGLDSSQGP
+align          :            VIG   SS      ++ +   I  I+  AT+ +L+ +             +Q
+sbjct          : Sbjct: 146 VIGPGSSSVAIQVQNLLQLFNIPQIAYSATSMDLSDKTLFKYFMRVVPSDAQQA
+noevent        : 
+query          : Query: 156 LETVKPQRIAIIHDKQQYGEGLARSVQDGLKQGNANIVFFDGIT--AGEKDFSA
+align          :            ++      ++ +H +  YGE    + +D   +    I     I   AGE+ F
+sbjct          : Sbjct: 206 VKRYNWTYVSAVHTEGNYGESGMEAFKDMSAKEGICIAHSYKIYSNAGEQSFDK
+noevent        : 
+query          : Query: 214 K--ENIDFVYYGGYYPEMGQIVRQARANGLKTQFM 246
+align          :                    V        +  ++   R  GL  +F+
+sbjct          : Sbjct: 266 SHLPKARVVACFCEGMTVRGLLMAMRRLGLAGEFL 300
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|549451|sp|Q06278|ADO_HUMAN ALDEHYDE OXIDASE
+length         :             Length = 1338
+noevent        : 
+score          :  Score = 31.9 bits (70), Expect = 2.0
+identities     :  Identities = 26/105 (24%), Positives = 37/105 (34%), Gaps = 3/10
+noevent        : 
+query          : Query: 55   DINAKGGIKGDKLVGVEYDDACDPKQAVAVANKIVNDGIQYVIGHLCSSSTQP
+align          :             D+N + G +G       Y  AC   +   +     N     V+   CS +  P
+sbjct          : Sbjct: 1148 DMNWEKG-EGQPFEYFVYGAACSEVEIDCLTGDHKNIRTDIVMDVGCSIN--P
+noevent        : 
+query          : Query: 115  EGILMISPGATNPELTQRGYQYIMRTAGLDSSQGPTAAKYILETV 159
+align          :             EG  +   G    E      Q I+ T G D  + P       E
+sbjct          : Sbjct: 1205 EGAFIQGMGLYTIEELNYSPQGILHTRGPDQYKIPAICDMPTELH 1249
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|6014748|sp|Q10900|CTPI_MYCTU PROBABLE CATION-TRANSPORTING ATP
+title          :            I
+length         :            Length = 1632
+noevent        : 
+score          :  Score = 31.9 bits (70), Expect = 2.0
+identities     :  Identities = 16/55 (29%), Positives = 22/55 (39%), Gaps = 3/55 (
+noevent        : 
+query          : Query: 10  AGIVALAVSQGAMADDIKVAI---VGAMSGPVAQWGDMEFNGARQAIKDINAKG
+align          :            A   A   S   +   I  AI    G+ +GPV Q+ +   NG+  A       G
+sbjct          : Sbjct: 315 AAAAAGEASHVVVGGSIDAAIDTAKGSRAGPVEQYVNQAANGSLIAAASALVAG
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|127861|sp|P13594|NCA2_MOUSE NEURAL CELL ADHESION MOLECULE,
+title          :            PHOSPHATIDYLINOSITOL-LINKED ISOFORM PRECURSOR (N-CAM
+title          :            120) (NCAM-120)
+length         :            Length = 725
+noevent        : 
+score          :  Score = 31.5 bits (69), Expect = 2.7
+identities     :  Identities = 39/188 (20%), Positives = 62/188 (32%), Gaps = 23/1
+noevent        : 
+query          : Query: 91  DGIQYVIGHLCSSSTQPASDIYEDEGILMISPGATNPELTQRGYQYIMRTAGLD
+align          :            DG   V  H   SS    S  Y D G  M +   T   + Q      +
+sbjct          : Sbjct: 357 DGHMVVRSHARVSSLTLKSIQYRDAGEYMCTASNT---IGQDSQSIDLEFQYAP
+noevent        : 
+query          : Query: 151 AAKYILETVKPQRIAIIHDKQQYGEGLARSVQDG----------LKQGNANIVF
+align          :            A      T +  ++ I  +   Y        +DG          +K  N
+sbjct          : Sbjct: 414 AVY----TWEGNQVNITCEVFAYPSATISWFRDGQLLPSSNYSNIKIYNTPSAS
+noevent        : 
+query          : Query: 201 -GEKDFS----ALIARLQKENIDFVYYGGYYPEMGQIVR-QARANGLKTQFMGP
+align          :              E DF       + R+ +E+++F+      P    I R +  ++  + QF  P
+sbjct          : Sbjct: 470 DSENDFGNYNCTAVNRIGQESLEFILVQADTPSSPSIDRVEPYSSTAQVQFDEP
+noevent        : 
+query          : Query: 255 SLSNIAGG 262
+align          :             +
+sbjct          : Sbjct: 530 PILKYKAE 537
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|127971|sp||NCPR_SALTR_1 [Segment 1 of 3] NADPH-CYTOCHROME P45
+title          :            REDUCTASE (CPR)
+length         :            Length = 426
+noevent        : 
+score          :  Score = 31.1 bits (68), Expect = 3.5
+identities     :  Identities = 28/146 (19%), Positives = 53/146 (36%), Gaps = 8/14
+noevent        : 
+query          : Query: 209 IARLQKENIDFVYYGGYYPEMGQ-----IVRQARANGLKTQFMGPEGVGNASLS
+align          :            I +++K   + V + G     G+     + + A   G+ +    PE    + LS
+sbjct          : Sbjct: 15  IEKMKKTGRNIVVFYGSQTGTGEEFANRLSKDAHRYGMGSMAADPEEYDMSELS
+noevent        : 
+query          : Query: 264 AEGMLVTMPKRYDQDPANKAIVEALKADKKDPSGPYVWITYAAVQSLATAMTRS
+align          :                +  M    + DP + A  +      ++  G    + Y  V +L
+sbjct          : Sbjct: 75  NSLAIFCMATYGEGDPTDNA--QDFYDWLQETDGQLSGVNY-PVFALGDKTYEH
+noevent        : 
+query          : Query: 324 DLVKDLKANGADTVIGPLKWDEKGDL 349
+align          :             + K L+  GA  V      D+ G+L
+sbjct          : Sbjct: 132 YVDKRLEELGAKRVFDLGMGDDDGNL 157
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_database_report
+database       :   Database: data/swissprot
+posted_date    :     Posted date:  Nov 15, 1999  2:55 PM
+num_letters_in_:   Number of letters in database: 29,652,561
+num_sequences_i:   Number of sequences in database:  82,258
+noevent        : 
+noevent        : Lambda     K      H
+ka_params      :    0.319    0.118    0.300
+noevent        : 
+noevent        : Lambda     K      H
+ka_params_gap  :    0.270   0.0413    0.230
+noevent        : 
+*************** end_database_report
+noevent        : 
+*************** start_parameters
+matrix         : Matrix: BLOSUM62
+gap_penalties  : Gap Penalties: Existence: 11, Extension: 1
+num_hits       : Number of Hits to DB: 51436041
+num_sequences  : Number of Sequences: 82258
+num_extends    : Number of extensions: 1847150
+num_good_extend: Number of successful extensions: 5653
+num_seqs_better: Number of sequences better than 10.0: 61
+hsps_no_gap    : Number of HSP's better than 10.0 without gapping: 21
+hsps_prelim_gap: Number of HSP's successfully gapped in prelim test: 40
+hsps_prelim_gap: Number of HSP's that attempted gapping in prelim test: 5607
+hsps_gapped    : Number of HSP's gapped (non-prelim): 65
+query_length   : length of query: 369
+database_length: length of database: 29,652,561
+effective_hsp_l: effective HSP length: 53
+effective_query: effective length of query: 316
+effective_datab: effective length of database: 25,292,887
+effective_searc: effective search space: 7992552292
+effective_searc: effective search space used: 7992552292
+threshold      : T: 11
+window_size    : A: 40
+dropoff_1st_pas: X1: 16 ( 7.4 bits)
+gap_x_dropoff  : X2: 38 (14.8 bits)
+gap_x_dropoff_f: X3: 64 (24.9 bits)
+gap_trigger    : S1: 41 (21.9 bits)
+blast_cutoff   : S2: 65 (29.9 bits)
+*************** end_parameters

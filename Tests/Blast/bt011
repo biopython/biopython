@@ -1,0 +1,73 @@
+BLASTN 2.0.10 [Aug-26-1999]
+
+
+Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+
+Query= gi|1348400|gb|G26168|G26168 human STS
+EST47274.gi|1375380|gb|G27130|G27130 human STS SHGC-32751.
+         (434 letters)
+
+Database: data/sts
+           87,792 sequences; 31,998,854 total letters
+
+Searching..................................................done
+
+                                                                   Score     E
+Sequences producing significant alignments:                        (bits)  Value
+
+gi|1348400|gb|G26168|G26168 human STS EST47274. >gi|1375380|gb|...   718  0.0
+gi|6121436|gb|G56117.1|G56117 SHGC-101583 Human Homo sapiens ST...    34  0.65
+gi|4632200|dbj|AU047565.1|AU047565 Rattus norvegicus, OTSUKA cl...    34  0.65
+gi|3249175|gb|G38401|G38401 SHGC-57345 Human Homo sapiens STS g...    34  0.65
+gi|605557|gb|L31312|HUMUT937B Human STS UT937, 3' primer bind.        34  0.65
+gi|720383|gb|G03425|G03425 human STS WI-5868.                         34  0.65
+gi|859592|gb|G06347|G06347 human STS WI-7005.                         32  2.6
+gi|6121347|gb|G56178.1|G56178 SHGC-101470 Human Homo sapiens ST...    32  2.6
+gi|1233216|emb|Z51916|HSA082WB5 H.sapiens (D1S2890) DNA segment...    32  2.6
+gi|1232198|emb|Z50898|HS038XD8 H.sapiens (D18S1106) DNA segment...    32  2.6
+gi|1348143|gb|G25911|G25911 human STS EST349382.                      32  2.6
+gi|6122805|gb|G57486.1|G57486 SHGC-103345 Human Homo sapiens ST...    32  2.6
+gi|1396897|gb|G28178|G28178 human STS SHGC-34170.                     32  2.6
+gi|3893806|emb|AL034156|HSPE59A01 H.sapiens flow-sorted chromos...    32  2.6
+gi|1161890|gb|G16001|G16001 human STS CHLC.GCT8D08.P11278 clone...    32  2.6
+gi|1017612|gb|G11520|G11520 human STS SHGC-14676.                     32  2.6
+gi|1130137|gb|G14398|G14398 human STS SHGC-9310 clone pG-5191.        32  2.6
+gi|5224295|gb|G52968.1|G52968 SHGC-86325 Human Homo sapiens STS...    32  2.6
+gi|6123581|gb|G58262.1|G58262 SHGC-104352 Human Homo sapiens ST...    32  2.6
+
+  Database: data/sts
+    Posted date:  Nov 26, 1999  5:52 PM
+  Number of letters in database: 31,998,854
+  Number of sequences in database:  87,792
+  
+Lambda     K      H
+    1.37    0.711     1.31 
+
+Gapped
+Lambda     K      H
+    1.37    0.711     1.31 
+
+
+Matrix: blastn matrix:1 -3
+Gap Penalties: Existence: 5, Extension: 2
+Number of Hits to DB: 8762
+Number of Sequences: 87792
+Number of extensions: 8762
+Number of successful extensions: 2655
+Number of sequences better than 10.0: 27
+length of query: 434
+length of database: 31,998,854
+effective HSP length: 17
+effective length of query: 417
+effective length of database: 30,506,390
+effective search space: 12721164630
+effective search space used: 12721164630
+T: 0
+A: 0
+X1: 6 (11.9 bits)
+X2: 25 (49.6 bits)
+S1: 12 (24.3 bits)
+S2: 16 (32.2 bits)

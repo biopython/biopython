@@ -1,0 +1,122 @@
+<HTML>
+<HEAD>
+<TITLE>BLAST Search Results </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" LINK="#0000FF" VLINK="#660099" ALINK="#660099">
+<A HREF="http://www.ncbi.nlm.nih.gov/BLAST/blast_form.map"> <IMG SRC="http://www.ncbi.nlm.nih.gov/BLAST/blast_results.gif" BORDER=0 ISMAP></A>
+<BR><BR><PRE>
+<b>BLASTN 2.0.10 [Aug-26-1999]</b>
+
+
+<b><a href="http://www.ncbi.nlm.nih.gov/htbin-
+post/Entrez/query?uid=9254694&form=6&db=m&Dopt=r">Reference</a>:</b>
+Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch&auml;ffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+<p>
+<b>Query=</b> gi|1348400|gb|G26168.1|G26168 human STS EST47274.
+         (434 letters)
+
+<b>Database:</b> Non-redundant Database of GenBank STS Division
+           89,405 sequences; 32,867,852 total letters
+
+<p> <p>If you have any problems or questions with the results of this search <br>please refer to the <b><a href=http://www.ncbi.nlm.nih.gov/BLAST/blast_FAQs.html>BLAST FAQs</a></b><br><p>
+<FORM NAME="BLASTFORM">
+</PRE>
+<CENTER>
+<H3><a href="/BLAST/newoptions.html#graphical-overview"> Distribution of 19 Blast Hits on the Query Sequence</a></H3>
+<input name=defline size=80 value="Mouse-over to show defline and scores. Click to show alignments">
+</CENTER>
+<map name=img_map>
+<area shape=rect coords=69,101,523,106 href="#1348400" ONMOUSEOVER='document.BLASTFORM.defline.value="G26168  human STS EST47274.  gi|1375380|gb|G27130|G27130 human STS..S= 718 E=0.0"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=114,108,130,113 href="#3249175" ONMOUSEOVER='document.BLASTFORM.defline.value="G38401  SHGC-57345 Human Homo sapiens STS genomic..S=34.2 E=0.67"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=337,108,363,113 href="#6121436" ONMOUSEOVER='document.BLASTFORM.defline.value="G56117  SHGC-101583 Human Homo sapiens STS genomic, sequence tagg..S=34.2 E=0.67"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=374,108,394,113 href="#720383" ONMOUSEOVER='document.BLASTFORM.defline.value="G03425  human STS WI-5868...S=34.2 E=0.67"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=438,108,455,113 href="#605557" ONMOUSEOVER='document.BLASTFORM.defline.value="L31312  Human STS UT937, 3- primer bind...S=34.2 E=0.67"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=455,115,472,120 href="#4632200" ONMOUSEOVER='document.BLASTFORM.defline.value="AU047565  Rattus norvegicus, OTSUKA clone, 209c01, microsatellite..S=34.2 E=0.67"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=166,108,182,113 href="#859592" ONMOUSEOVER='document.BLASTFORM.defline.value="G06347  human STS WI-7005...S=32.2 E=2.6"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=175,115,190,120 href="#3893806" ONMOUSEOVER='document.BLASTFORM.defline.value="AL034156  H.sapiens flow-sorted chromosome 1 HindIII fragment, SC1..S=32.2 E=2.6"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=231,108,251,113 href="#1233216" ONMOUSEOVER='document.BLASTFORM.defline.value="Z51916  H.sapiens (D1S2890) DNA segment containing (CA) repeat; cl..S=32.2 E=2.6"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=307,108,323,113 href="#5224295" ONMOUSEOVER='document.BLASTFORM.defline.value="G52968  SHGC-86325 Human Homo sapiens STS genomic, sequence tagged..S=32.2 E=2.6"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=322,115,337,120 href="#6123581" ONMOUSEOVER='document.BLASTFORM.defline.value="G58262  SHGC-104352 Human Homo sapiens STS genomic, sequence tagge..S=32.2 E=2.6"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=372,115,391,120 href="#1232198" ONMOUSEOVER='document.BLASTFORM.defline.value="Z50898  H.sapiens (D18S1106) DNA segment containing (CA) repeat; c..S=32.2 E=2.6"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=373,122,392,127 href="#1348143" ONMOUSEOVER='document.BLASTFORM.defline.value="G25911  human STS EST349382...S=32.2 E=2.6"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=373,129,392,134 href="#1396897" ONMOUSEOVER='document.BLASTFORM.defline.value="G28178  human STS SHGC-34170...S=32.2 E=2.6"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=374,136,397,141 href="#1161890" ONMOUSEOVER='document.BLASTFORM.defline.value="G16001  human STS CHLC.GCT8D08.P11278 clone GCT8D08...S=32.2 E=2.6"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=378,143,394,148 href="#6122805" ONMOUSEOVER='document.BLASTFORM.defline.value="G57486  SHGC-103345 Human Homo sapiens STS genomic, sequence tagge..S=32.2 E=2.6"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=380,150,395,155 href="#1130137" ONMOUSEOVER='document.BLASTFORM.defline.value="G14398  human STS SHGC-9310 clone pG-5191...S=32.2 E=2.6"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=443,122,458,127 href="#6121347" ONMOUSEOVER='document.BLASTFORM.defline.value="G56178  SHGC-101470 Human Homo sapiens STS genomic, sequence tagge..S=32.2 E=2.6"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=468,108,484,113 href="#1017612" ONMOUSEOVER='document.BLASTFORM.defline.value="G11520  human STS SHGC-14676...S=32.2 E=2.6"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+</map>
+<CENTER>
+<IMG WIDTH=529 HEIGHT=157 USEMAP=#img_map BORDER=1 SRC="nph-getgif.cgi?miles&2078917053497.gif" ISMAP></CENTER>
+<HR>
+<PRE>
+<PRE>
+
+                                                                   Score     E
+Sequences producing significant alignments:                        (bits)  Value
+
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=01348400&dopt=GenBank">gb|G26168|G26168</a>  human STS EST47274. >gi|1375380|gb|G27130|...   <a href = #1348400>718</a>  0.0
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=04632200&dopt=GenBank">dbj|AU047565.1|AU047565</a>  Rattus norvegicus, OTSUKA clone, 20...   <a href = #4632200> 34</a>  0.67
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=06121436&dopt=GenBank">gb|G56117.1|G56117</a>  SHGC-101583 Human Homo sapiens STS genom...   <a href = #6121436> 34</a>  0.67
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=03249175&dopt=GenBank">gb|G38401|G38401</a>  SHGC-57345 Human Homo sapiens STS genomic       <a href = #3249175> 34</a>  0.67
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=00720383&dopt=GenBank">gb|G03425|G03425</a>  human STS WI-5868.                              <a href = #720383> 34</a>  0.67
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=00605557&dopt=GenBank">gb|L31312|HUMUT937B</a>  Human STS UT937, 3' primer bind.             <a href = #605557> 34</a>  0.67
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=06123581&dopt=GenBank">gb|G58262.1|G58262</a>  SHGC-104352 Human Homo sapiens STS genom...   <a href = #6123581> 32</a>  2.6
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=06122805&dopt=GenBank">gb|G57486.1|G57486</a>  SHGC-103345 Human Homo sapiens STS genom...   <a href = #6122805> 32</a>  2.6
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=06121347&dopt=GenBank">gb|G56178.1|G56178</a>  SHGC-101470 Human Homo sapiens STS genom...   <a href = #6121347> 32</a>  2.6
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=03893806&dopt=GenBank">emb|AL034156|HSPE59A01</a>  H.sapiens flow-sorted chromosome 1 H...   <a href = #3893806> 32</a>  2.6
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=05224295&dopt=GenBank">gb|G52968.1|G52968</a>  SHGC-86325 Human Homo sapiens STS genomi...   <a href = #5224295> 32</a>  2.6
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=01348143&dopt=GenBank">gb|G25911|G25911</a>  human STS EST349382.                            <a href = #1348143> 32</a>  2.6
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=01233216&dopt=GenBank">emb|Z51916|HSA082WB5</a>  H.sapiens (D1S2890) DNA segment contai...   <a href = #1233216> 32</a>  2.6
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=01232198&dopt=GenBank">emb|Z50898|HS038XD8</a>  H.sapiens (D18S1106) DNA segment contai...   <a href = #1232198> 32</a>  2.6
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=01161890&dopt=GenBank">gb|G16001|G16001</a>  human STS CHLC.GCT8D08.P11278 clone GCT8D08.    <a href = #1161890> 32</a>  2.6
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=01130137&dopt=GenBank">gb|G14398|G14398</a>  human STS SHGC-9310 clone pG-5191.              <a href = #1130137> 32</a>  2.6
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=01017612&dopt=GenBank">gb|G11520|G11520</a>  human STS SHGC-14676.                           <a href = #1017612> 32</a>  2.6
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=01396897&dopt=GenBank">gb|G28178|G28178</a>  human STS SHGC-34170.                           <a href = #1396897> 32</a>  2.6
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=00859592&dopt=GenBank">gb|G06347|G06347</a>  human STS WI-7005.                              <a href = #859592> 32</a>  2.6
+
+
+<PRE>
+  Database: Non-redundant Database of GenBank STS Division
+    Posted date:  Dec 18, 1999  7:45 PM
+  Number of letters in database: 32,867,852
+  Number of sequences in database:  89,405
+  
+Lambda     K      H
+    1.37    0.711     1.31 
+
+Gapped
+Lambda     K      H
+    1.37    0.711     1.31 
+
+
+Matrix: blastn matrix:1 -3
+Gap Penalties: Existence: 5, Extension: 2
+Number of Hits to DB: 9023
+Number of Sequences: 89405
+Number of extensions: 9023
+Number of successful extensions: 2725
+Number of sequences better than 10.0: 27
+length of query: 434
+length of database: 32,867,852
+effective HSP length: 17
+effective length of query: 417
+effective length of database: 31,347,967
+effective search space: 13072102239
+effective search space used: 13072102239
+T: 0
+A: 0
+X1: 6 (11.9 bits)
+X2: 10 (19.8 bits)
+S1: 12 (24.3 bits)
+S2: 16 (32.2 bits)
+
+</PRE>
+
+</BODY>
+</HTML>
+</BODY>
+</HTML>
