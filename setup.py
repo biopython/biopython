@@ -188,7 +188,7 @@ class build_ext_biopython(build_ext):
             # fix for distutils where C++ is not handled well. This includes
             # Python 2.2.x -- need to find the C++ compiler
             cxx = None
-            if (sys.version_info[1] < 3): # Python 2.2
+            if (sys.version_info[1] < 3) and build: # Python 2.2
                 cxx = sysconfig.get_config_vars("CXX")
                 if os.environ.has_key("CXX"):
                     cxx = os.environ["CXX"]
@@ -198,7 +198,7 @@ class build_ext_biopython(build_ext):
                 self.compiler.set_executable("compiler_so", cxx)
                 self.compiler.set_executable("linker_so",
                         cxx + ["-shared"])
-            else: # fix for 2.3
+            elif build: # fix for 2.3, only if we are making C++ modules
                 self.compiler.compiler_so = self.compiler.compiler_cxx
         else:
             self.compiler.compiler_so = self._original_compiler_so
