@@ -116,7 +116,10 @@ class RecordParser(_MartelBaseFastaParser):
         """
         rec = Record()
         rec.title = "".join(result['bioformat:description'])
-        rec.sequence = "".join(result['bioformat:sequence'])
+        if 'bioformat:sequence' in result:
+            rec.sequence = "".join(result['bioformat:sequence'])
+        else:
+            rec.sequence = ""
         return rec
 
 class SequenceParser(_MartelBaseFastaParser):
