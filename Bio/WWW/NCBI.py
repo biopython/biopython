@@ -187,6 +187,7 @@ def _open(cgi, params={}, get=1):
         fullcgi = cgi
         if options:
             fullcgi = "%s?%s" % (cgi, options)
+        #print fullcgi
         handle = urllib.urlopen(fullcgi)
     else:    # do a POST
         handle = urllib.urlopen(cgi, options)
