@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # Created: Tue Aug  8 20:32:36 2000
-# Last changed: Time-stamp: <00/08/10 19:03:53 thomas>
+# Last changed: Time-stamp: <00/08/10 21:16:04 thomas>
 # thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas/index.html
 # File: nextorf.py
 
@@ -89,25 +89,27 @@ class NextORF:
           
        for i in range(0,l,3):
           codon = seq[i:i+3]
+          if len(codon) <3: codon = codon + '  '
           for pos in range(0,3):
              for nt in ['A','T','G','C']:
-                if codon[0] == nt: d[nt][pos] = d[nt][pos] +1
+                if codon[pos] == nt: d[nt][pos] = d[nt][pos] +1
 
 
        gc = {}
        gcall = 0
        nall = 0
        for i in range(0,3):
-          n = (d['G'][1] + d['C'][1] +d['T'][1] + d['A'][1])
-          nall = nall + n
-          if n == 0:
+          try:
+             n = d['G'][i] + d['C'][i] +d['T'][i] + d['A'][i]
+             gc[i] = (d['G'][i] + d['C'][i])*100.0/n
+          except:
              gc[i] = 0
-          else:
-             gc[i] = (d['G'][1] + d['C'][1])*100.0/n
-          gcall = gcall + gc[i]
+
+          gcall = gcall + d['G'][i] + d['C'][i]
+          nall = nall + n
 
        gcall = 100.0*gcall/nall
-       return '%.1f%%, %.1f%%, %.1f%%, %.1f%%' % (gcall, gc[0], gc[1], gc[1])
+       return '%.1f%%, %.1f%%, %.1f%%, %.1f%%' % (gcall, gc[0], gc[1], gc[2])
           
    
     def handle_record(self, rec):
