@@ -156,6 +156,34 @@ def test_ToEol():
     expect = "<SantaFe>This is a test.</SantaFe>\n"
     assert string.find(s, expect) != -1, ("Got: %s" % (repr(s),))
 
+def test_ToSep():
+    exp = Martel.Group("test",
+                       Martel.ToSep("colon", ":") + \
+                       Martel.ToSep("space", " ") + \
+                       Martel.ToSep("empty", "!"))
+    parser = exp.make_parser()
+
+    file = StringIO.StringIO()
+    parser.setContentHandler(saxutils.XMLGenerator(file))
+    parser.parseString("q:wxy !")
+    s = file.getvalue()
+    expect = "<test><colon>q</colon>:<space>wxy</space> <empty></empty>!</test>"
+    assert string.find(s, expect) != -1, ("Got: %s" % (repr(s),))
+    
+
+def test_DelimitedFields():
+    exp = Martel.Group("test", Martel.DelimitedFields("Field", "/"))
+    parser = exp.make_parser()
+
+    file = StringIO.StringIO()
+    parser.setContentHandler(saxutils.XMLGenerator(file))
+    parser.parseString("a/b/cde/f//\n")
+    s = file.getvalue()
+    expect = "<test><Field>a</Field>/<Field>b</Field>/<Field>cde</Field>/" \
+             "<Field>f</Field>/<Field></Field>/<Field></Field>\n</test>"
+    assert string.find(s, expect) != -1, ("Got: %s" % (repr(s),))
+
+
 def test():
     test_Digits()
     test_Float()
@@ -164,6 +192,8 @@ def test():
     test_Unprintable()
     test_Punctuation()
     test_ToEol()
+    test_ToSep()
+    test_DelimitedFields()
 
 if __name__ == "__main__":
     test()
