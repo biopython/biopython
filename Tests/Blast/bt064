@@ -1,0 +1,357 @@
+
+
+<p><!--
+QBlastInfoBegin
+	Status=READY
+QBlastInfoEnd
+--><p><TITLE>Results for RID 984887321-25017-7612 </TITLE>
+<HTML>
+<HEAD>
+<TITLE>BLAST Search Results </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" LINK="#0000FF" VLINK="#660099" ALINK="#660099">
+<A HREF="http://www.ncbi.nlm.nih.gov/BLAST/blast_form.map"> <IMG SRC="http://www.ncbi.nlm.nih.gov/BLAST/blast_results.gif" BORDER=0 ISMAP></A>
+<BR><BR><PRE>
+<b>BLASTN 2.1.2 [Nov-13-2000]</b>
+
+
+<b><a href="http://www.ncbi.nlm.nih.gov/htbin-
+post/Entrez/query?uid=9254694&form=6&db=m&Dopt=r">Reference</a>:</b>
+Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch&auml;ffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+<p>
+RID: 984887321-25017-7612
+<p>
+<p>
+<b>Database:</b> nt
+           816,659 sequences; 2,928,690,202 total letters
+
+<p> <p>If you have any problems or questions with the results of this search <br>please refer to the <b><a href=http://www.ncbi.nlm.nih.gov/blast/blast_FAQs.html>BLAST FAQs</a></b><br><p>
+<FORM NAME="BLASTFORM" METHOD="POST">
+<INPUT TYPE="hidden" NAME="PAGE" VALUE ="NUCLEOTIDES"><INPUT TYPE="hidden" NAME="EXPECT" VALUE ="10"><INPUT TYPE="hidden" NAME="DESCRIPTIONS" VALUE ="100"><INPUT TYPE="hidden" NAME="ALIGNMENTS" VALUE ="50"><INPUT TYPE="hidden" NAME="AUTO_FORMAT" VALUE ="yes"><a href="blast.cgi?RID=984887321-25017-7612&ALIGNMENT_VIEW=17" TARGET="Taxonomy BLAST Results for 984887321-25017-7612">Taxonomy reports</a>
+<BR>
+<b>Query=</b> gi|8332116|gb|BE037100.1|BE037100 MP14H09 MP
+Mesembryanthemum crystallinum cDNA 5' similar to cold acclimation
+protein, mRNA sequence
+         (1111 letters)
+
+<PRE>
+
+
+                                                                   Score     E
+Sequences producing significant alignments:                        (bits)  Value
+
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=10121840&dopt=GenBank">gb|AF283004.1|AF283004</a>  Arabidopsis thaliana cold acclimatio...   <a href = #10121840> 46</a>  0.042
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=06598567&dopt=GenBank">gb|AC006438.3|AC006438</a>  Arabidopsis thaliana chromosome II s...   <a href = #6598567> 46</a>  0.042
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=11127594&dopt=GenBank">dbj|AB044404.1|AB044404</a>  Arabidopsis thaliana FL3-5A3 mRNA f...   <a href = #11127594> 46</a>  0.042
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=04376087&dopt=GenBank">emb|Z99707.1|ATAP21</a>  Arabidopsis thaliana DNA chromosome 4, ...   <a href = #4376087> 44</a>  0.17
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=07270703&dopt=GenBank">emb|AL161591.2|ATCHRIV87</a>  Arabidopsis thaliana DNA chromosom...   <a href = #7270703> 44</a>  0.17
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=10121844&dopt=GenBank">gb|AF283006.1|AF283006</a>  Oryza sativa cold acclimation protei...   <a href = #10121844> 42</a>  0.66
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=11190569&dopt=GenBank">emb|AL359511.16|AL359511</a>  Human DNA sequence from clone RP1-...   <a href = #11190569> 42</a>  0.66
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=12545282&dopt=GenBank">gb|AC008529.4|AC008529</a>  Homo sapiens chromosome 5 clone CTC-...   <a href = #12545282> 40</a>  2.6
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=10727724&dopt=GenBank">gb|AE003837.2|AE003837</a>  Drosophila melanogaster genomic scaf...   <a href = #10727724> 40</a>  2.6
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=10121842&dopt=GenBank">gb|AF283005.1|AF283005</a>  Arabidopsis thaliana cold acclimatio...   <a href = #10121842> 40</a>  2.6
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=04165334&dopt=GenBank">gb|AC006421.1|AC006421</a>  Drosophila melanogaster, chromosome ...   <a href = #4165334> 40</a>  2.6
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=04140591&dopt=GenBank">gb|AF087457.1|AF087457</a>  Mesocricetus auratus N-acetylglucosa...   <a href = #4140591> 40</a>  2.6
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=04140589&dopt=GenBank">gb|AF087456.1|AF087456</a>  Mesocricetus auratus N-acetylglucosa...   <a href = #4140589> 40</a>  2.6
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=01531640&dopt=GenBank">gb|U65792.1|CGU65792</a>  Cricetulus griseus mutant N-acetylgluc...   <a href = #1531640> 40</a>  2.6
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=01531638&dopt=GenBank">gb|U65791.1|CGU65791</a>  Cricetulus griseus N-acetylglucoaminyl...   <a href = #1531638> 40</a>  2.6
+</PRE>
+<CENTER><b><FONT color="green">Alignments</FONT></b></CENTER>
+<PRE>
+><a name = 10121840></a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=10121840&dopt=GenBank">gb|AF283004.1|AF283004</a> Arabidopsis thaliana cold acclimation protein WCOR413-like protein
+           alpha form mRNA, complete cds
+          Length = 783
+
+ Score = 46.1 bits (23), Expect = 0.042
+ Identities = 68/83 (81%)
+ Strand = Plus / Plus
+
+                                                                       
+Query: 249 tacttgttgatattggatcgaacaaactggagaaccaacatgctcacgtcacttttagtc 308
+           ||||||||| | ||||||||||| || ||||  || || |||||||| |||||| |  | 
+Sbjct: 237 tacttgttggtgttggatcgaaccaattggaagacgaatatgctcacatcacttctcatt 296
+
+                                  
+Query: 309 ccttacatattcctcagtcttcc 331
+           |||||||| ||| ||||||||||
+Sbjct: 297 ccttacatcttcttcagtcttcc 319
+</PRE>
+
+
+<PRE>
+><a name = 6598567></a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=06598567&dopt=GenBank">gb|AC006438.3|AC006438</a> Arabidopsis thaliana chromosome II section 92 of 255 of the complete
+             sequence. Sequence from clones F19G14, F7H1
+          Length = 87803
+
+ Score = 46.1 bits (23), Expect = 0.042
+ Identities = 68/83 (81%)
+ Strand = Plus / Plus
+
+                                                                         
+Query: 249   tacttgttgatattggatcgaacaaactggagaaccaacatgctcacgtcacttttagtc 308
+             ||||||||| | ||||||||||| || ||||  || || |||||||| |||||| |  | 
+Sbjct: 85104 tacttgttggtgttggatcgaaccaattggaagacgaatatgctcacatcacttctcatt 85163
+
+                                    
+Query: 309   ccttacatattcctcagtcttcc 331
+             |||||||| ||| ||||||||||
+Sbjct: 85164 ccttacatcttcttcagtcttcc 85186
+</PRE>
+
+
+<PRE>
+><a name = 11127594></a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=11127594&dopt=GenBank">dbj|AB044404.1|AB044404</a> Arabidopsis thaliana FL3-5A3 mRNA for cold acclimation protein
+           homolog, complete cds
+          Length = 820
+
+ Score = 46.1 bits (23), Expect = 0.042
+ Identities = 68/83 (81%)
+ Strand = Plus / Plus
+
+                                                                       
+Query: 249 tacttgttgatattggatcgaacaaactggagaaccaacatgctcacgtcacttttagtc 308
+           ||||||||| | ||||||||||| || ||||  || || |||||||| |||||| |  | 
+Sbjct: 244 tacttgttggtgttggatcgaaccaattggaagacgaatatgctcacatcacttctcatt 303
+
+                                  
+Query: 309 ccttacatattcctcagtcttcc 331
+           |||||||| ||| ||||||||||
+Sbjct: 304 ccttacatcttcttcagtcttcc 326
+</PRE>
+
+
+<PRE>
+><a name = 4376087></a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=04376087&dopt=GenBank">emb|Z99707.1|ATAP21</a> Arabidopsis thaliana DNA chromosome 4, ESSA I AP2 contig fragment No. 1
+          Length = 206420
+
+ Score = 44.1 bits (22), Expect = 0.17
+ Identities = 31/34 (91%)
+ Strand = Plus / Minus
+
+                                               
+Query: 253   tgttgatattggatcgaacaaactggagaaccaa 286
+             |||||||||||||||| || ||||||| ||||||
+Sbjct: 52308 tgttgatattggatcgtaccaactggaaaaccaa 52275
+</PRE>
+
+
+<PRE>
+><a name = 7270703></a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=07270703&dopt=GenBank">emb|AL161591.2|ATCHRIV87</a> Arabidopsis thaliana DNA chromosome 4, contig fragment No. 87
+          Length = 196339
+
+ Score = 44.1 bits (22), Expect = 0.17
+ Identities = 31/34 (91%)
+ Strand = Plus / Plus
+
+                                              
+Query: 253  tgttgatattggatcgaacaaactggagaaccaa 286
+            |||||||||||||||| || ||||||| ||||||
+Sbjct: 9146 tgttgatattggatcgtaccaactggaaaaccaa 9179
+</PRE>
+
+
+<PRE>
+><a name = 10121844></a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=10121844&dopt=GenBank">gb|AF283006.1|AF283006</a> Oryza sativa cold acclimation protein WCOR413-like protein mRNA,
+           complete cds
+          Length = 1057
+
+ Score = 42.1 bits (21), Expect = 0.66
+ Identities = 33/37 (89%)
+ Strand = Plus / Plus
+
+                                                
+Query: 256 tgatattggatcgaacaaactggagaaccaacatgct 292
+           ||||||||||| | ||||||||||  |||||||||||
+Sbjct: 316 tgatattggataggacaaactggaagaccaacatgct 352
+</PRE>
+
+
+<PRE>
+><a name = 11190569></a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=11190569&dopt=GenBank">emb|AL359511.16|AL359511</a> Human DNA sequence from clone RP1-298M8 on chromosome 20, complete
+            sequence [Homo sapiens]
+          Length = 63264
+
+ Score = 42.1 bits (21), Expect = 0.66
+ Identities = 21/21 (100%)
+ Strand = Plus / Minus
+
+                                 
+Query: 61   agaaaatggggagagaaatga 81
+            |||||||||||||||||||||
+Sbjct: 9450 agaaaatggggagagaaatga 9430
+</PRE>
+
+
+<PRE>
+><a name = 12545282></a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=12545282&dopt=GenBank">gb|AC008529.4|AC008529</a> Homo sapiens chromosome 5 clone CTC-475P15, complete sequence
+          Length = 169557
+
+ Score = 40.1 bits (20), Expect = 2.6
+ Identities = 20/20 (100%)
+ Strand = Plus / Plus
+
+                                 
+Query: 207   ggcactcatttcctcaaatg 226
+             ||||||||||||||||||||
+Sbjct: 33167 ggcactcatttcctcaaatg 33186
+</PRE>
+
+
+<PRE>
+><a name = 10727724></a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=10727724&dopt=GenBank">gb|AE003837.2|AE003837</a> Drosophila melanogaster genomic scaffold 142000013386047 section 6 of
+             52, complete sequence
+          Length = 234905
+
+ Score = 40.1 bits (20), Expect = 2.6
+ Identities = 20/20 (100%)
+ Strand = Plus / Plus
+
+                                 
+Query: 156   gcaacaatgaggctcatcaa 175
+             ||||||||||||||||||||
+Sbjct: 20459 gcaacaatgaggctcatcaa 20478
+</PRE>
+
+
+<PRE>
+><a name = 10121842></a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=10121842&dopt=GenBank">gb|AF283005.1|AF283005</a> Arabidopsis thaliana cold acclimation protein WCOR413-like protein
+           beta form mRNA, complete cds
+          Length = 884
+
+ Score = 40.1 bits (20), Expect = 2.6
+ Identities = 47/56 (83%)
+ Strand = Plus / Plus
+
+                                                                   
+Query: 246 atttacttgttgatattggatcgaacaaactggagaaccaacatgctcacgtcact 301
+           ||||||||||| || |||||||| || || |||| |||||| ||||| || |||||
+Sbjct: 212 atttacttgttaattttggatcgtaccaattggaaaaccaagatgcttacatcact 267
+</PRE>
+
+
+<PRE>
+><a name = 4165334></a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=04165334&dopt=GenBank">gb|AC006421.1|AC006421</a> Drosophila melanogaster, chromosome 2R, region 44C1-44C5, P1 clones
+            DS08614 and DS00667, complete sequence
+          Length = 100575
+
+ Score = 40.1 bits (20), Expect = 2.6
+ Identities = 20/20 (100%)
+ Strand = Plus / Plus
+
+                                
+Query: 156  gcaacaatgaggctcatcaa 175
+            ||||||||||||||||||||
+Sbjct: 8902 gcaacaatgaggctcatcaa 8921
+</PRE>
+
+
+<PRE>
+><a name = 4140591></a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=04140591&dopt=GenBank">gb|AF087457.1|AF087457</a> Mesocricetus auratus N-acetylglucosaminyltransferase I mutant mRNA,
+           complete cds
+          Length = 1344
+
+ Score = 40.1 bits (20), Expect = 2.6
+ Identities = 23/24 (95%)
+ Strand = Plus / Plus
+
+                                   
+Query: 462 ctggtggtggcaccagacttcttt 485
+           |||| |||||||||||||||||||
+Sbjct: 640 ctggaggtggcaccagacttcttt 663
+</PRE>
+
+
+<PRE>
+><a name = 4140589></a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=04140589&dopt=GenBank">gb|AF087456.1|AF087456</a> Mesocricetus auratus N-acetylglucosaminyltransferase I mRNA,
+           complete cds
+          Length = 1344
+
+ Score = 40.1 bits (20), Expect = 2.6
+ Identities = 23/24 (95%)
+ Strand = Plus / Plus
+
+                                   
+Query: 462 ctggtggtggcaccagacttcttt 485
+           |||| |||||||||||||||||||
+Sbjct: 640 ctggaggtggcaccagacttcttt 663
+</PRE>
+
+
+<PRE>
+><a name = 1531640></a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=01531640&dopt=GenBank">gb|U65792.1|CGU65792</a> Cricetulus griseus mutant N-acetylglucosaminyltransferase I mRNA,
+           complete cds
+          Length = 1344
+
+ Score = 40.1 bits (20), Expect = 2.6
+ Identities = 23/24 (95%)
+ Strand = Plus / Plus
+
+                                   
+Query: 462 ctggtggtggcaccagacttcttt 485
+           |||| |||||||||||||||||||
+Sbjct: 640 ctggaggtggcaccagacttcttt 663
+</PRE>
+
+
+<PRE>
+><a name = 1531638></a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=01531638&dopt=GenBank">gb|U65791.1|CGU65791</a> Cricetulus griseus N-acetylglucoaminyltransferase I mRNA, complete
+           cds
+          Length = 1344
+
+ Score = 40.1 bits (20), Expect = 2.6
+ Identities = 23/24 (95%)
+ Strand = Plus / Plus
+
+                                   
+Query: 462 ctggtggtggcaccagacttcttt 485
+           |||| |||||||||||||||||||
+Sbjct: 640 ctggaggtggcaccagacttcttt 663
+</PRE>
+
+
+
+<PRE>
+  Database: nt
+    Posted date:  Mar 17, 2001  1:49 AM
+  Number of letters in database: 2,928,690,202
+  Number of sequences in database:  816,659
+  
+Lambda     K      H
+    1.37    0.711     1.31 
+
+Gapped
+Lambda     K      H
+    1.37    0.711     1.31 
+
+
+Matrix: blastn matrix:1 -3
+Gap Penalties: Existence: 5, Extension: 2
+Number of Hits to DB: 1106713
+Number of Sequences: 816659
+Number of extensions: 1106713
+Number of successful extensions: 5784
+Number of sequences better than 10.0: 15
+length of query: 1111
+length of database: 2,928,690,202
+effective HSP length: 21
+effective length of query: 1090
+effective length of database: 2,911,540,363
+effective search space: 3173578995670
+effective search space used: 3173578995670
+T: 0
+A: 30
+X1: 6 (11.9 bits)
+X2: 15 (29.7 bits)
+S1: 12 (24.3 bits)
+S2: 20 (40.1 bits)
+
+</PRE>
+
+</BODY>
+</HTML>
+</FORM>
+
+
