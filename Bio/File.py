@@ -45,9 +45,17 @@ class UndoHandle:
             line = apply(self._handle.readline, args, keywds)
         return line
 
-    def read(self, *args, **keywds):
-        saved = string.join(self._saved, '')
-        return saved + apply(self._handle.read, args, keywds)
+    def read(self, size=-1):
+        saved = ''
+        while size > 0 and self._saved:
+            if len(self._saved[0]) <= size:
+                size = size - len(self._saved[0])
+                saved = saved + self._saved.pop(0)
+            else:
+                saved = saved + self._saved[0][:size]
+                self._saved[0] = self._saved[0][size:]
+                size = 0
+        return saved + self._handle.read(size)
 
     def saveline(self, line):
         if line:
