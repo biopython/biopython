@@ -184,15 +184,15 @@ class BlastParser(_XMLparser):
 ##         """
 ##         pass # XXX TODO PSI
     
-##     def _end_Parameters_sc_match(self):
-##         """match score for nucleotide-nucleotide comparaison (-r)
-##         """
-##         pass # XXX MISSING in Record.Blast ?
+    def _end_Parameters_sc_match(self):
+        """match score for nucleotide-nucleotide comparaison (-r)
+        """
+        self._blast.sc_match = int(self._value)
 
-##     def _end_Parameters_sc_mismatch(self):
-##         """mismatch penalty for nucleotide-nucleotide comparaison (-r)
-##         """
-##         pass # XXX MISSING in Record.Blast ?
+    def _end_Parameters_sc_mismatch(self):
+        """mismatch penalty for nucleotide-nucleotide comparaison (-r)
+        """
+        self._blast.sc_mismatch = int(self._value)
 
     def _end_Parameters_gap_open(self):
         """gap existence cost (-G)

@@ -238,6 +238,8 @@ class Parameters:
     Members:
     matrix              Name of the matrix.
     gap_penalties       Tuple of (open, extend) penalties.  (floats)
+    sc_match            Match score for nucleotide-nucleotide comparison
+    sc_mismatch         Mismatch penalty for nucleotide-nucleotide comparison
     num_hits            Number of hits to the database.  (int)
     num_sequences       Number of sequences.  (int)
     num_good_extends    Number of extensions.  (int)
@@ -261,11 +263,12 @@ class Parameters:
     gap_x_dropoff_final Tuple of (score, bits).  (int, float)
     gap_trigger         Tuple of (score, bits).  (int, float)
     blast_cutoff        Tuple of (score, bits).  (int, float)
-    
     """
     def __init__(self):
         self.matrix = ''
         self.gap_penalties = (None, None)
+        self.sc_match = None
+        self.sc_mismatch = None
         self.num_hits = None
         self.num_sequences = None
         self.num_good_extends = None
