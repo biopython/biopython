@@ -687,6 +687,14 @@ title: "Isolation and characterization of monomeric and dimeric
 CP47-reaction center photosystem II complexes.";
 references: [('MEDLINE', '98298118'), ('PubMed', '9632665')]
 
+testing sp015...
+IPI00383150.2
+['IPI00383150']
+['Eukaryota', 'Metazoa', 'Chordata', 'Craniata', 'Vertebrata', 'Euteleostomi', 'Mammalia', 'Eutheria', 'Primates', 'Catarrhini', 'Hominidae', 'Homo']
+(457, 52856, '5C3151AAADBDE232')
+***Features:
+***References:
+
 testing sp001...
 Q13454
 N33_HUMAN
@@ -773,3 +781,9 @@ P12166
 PSBL_ORYSA
 PHOTOSYSTEM II REACTION CENTER L PROTEIN (PSII 5 KDA PROTEIN).
 Seq('TQSNPNEQNVELNRTSLYWGLLLIFVLAVLFSNYFFN', ProteinAlphabet())
+
+testing sp015...
+IPI00383150
+IPI00383150.2
+
+Seq('MSFQAPRRLLELAGQSLLRDQALAISVLDELPRELFPRLFVEAFTSRRCEVLKVMVQAWP ...', ProteinAlphabet())

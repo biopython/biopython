@@ -15,6 +15,12 @@ sprot40 = FormatObject(
     expression = "Bio.expressions.swissprot.sprot40.format",
 )
 
+ipi = FormatObject(
+        name = "ipi",
+        abbrev = "ipi",
+        expression = "Bio.expressions.swissprot.ipi.format"
+)
+
 
 swissprot = FormatGroup(
     name = "swissprot",
@@ -22,6 +28,7 @@ swissprot = FormatGroup(
 )
 swissprot.add(sprot38)
 swissprot.add_before(sprot40, sprot38)
+swissprot.add_before(ipi, sprot40)
 
 from Bio.formatdefs import sequence
 sequence.sequence.add(swissprot)

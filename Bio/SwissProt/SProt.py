@@ -377,10 +377,12 @@ class _Scanner:
     def _scan_dt(self, uhandle, consumer):
         self._scan_line('DT', uhandle, consumer.date, exactly_one=1)
         self._scan_line('DT', uhandle, consumer.date, exactly_one=1)
-        self._scan_line('DT', uhandle, consumer.date, exactly_one=1)
+        # IPI doesn't necessarily contain the third line about annotations
+        self._scan_line('DT', uhandle, consumer.date, up_to_one=1)
 
     def _scan_de(self, uhandle, consumer):
-        self._scan_line('DE', uhandle, consumer.description, one_or_more=1)
+        # IPI can be missing a DE line
+        self._scan_line('DE', uhandle, consumer.description, any_number=1)
     
     def _scan_gn(self, uhandle, consumer):
         self._scan_line('GN', uhandle, consumer.gene_name, any_number=1)
@@ -526,29 +528,38 @@ class _RecordConsumer(AbstractConsumer):
     
     def date(self, line):
         uprline = string.upper(line)
+        
+        # find where the version information will be located
+        # This is needed for when you have cases like IPI where
+        # the release verison is in a different spot:
+        # DT   08-JAN-2002 (IPI Human rel. 2.3, Created)
+        uprcols = uprline.split()
+        rel_index = -1
+        for index in range(len(uprcols)):
+            if uprcols[index].find("REL.") >= 0:
+                rel_index = index
+        assert rel_index >= 0, \
+                "Could not find Rel. in DT line: %s" % (line)
+        version_index = rel_index + 1
+        # get the version information
         cols = line.split()
+        str_version = self._chomp(cols[version_index])
+        # no version number
+        if str_version == '':
+            version = 0
+        # dot versioned
+        elif str_version.find(".") >= 0:
+            version = str_version
+        # integer versioned
+        else:
+            version = int(str_version)
+
         if uprline.find("CREATED") >= 0:
-            # ws:2001-12-05 prevent e.g. (IPIrel. , created)
-            # !no number given! from crashing
-            if self._chomp(cols[3]) == '':                            #<=
-                self.data.created = cols[1], 0                        #<=
-	    else:	                                              #<=
-                self.data.created = cols[1], int(self._chomp(cols[3]))
+            self.data.created = cols[1], version
         elif uprline.find('LAST SEQUENCE UPDATE') >= 0:
-            # ws:2001-12-05 prevent e.g. (IPIrel. , created)
-            # !no number given! from crashing
-            if self._chomp(cols[3]) == '':                            #<=
-                self.data.sequence_update = cols[1], 0                #<=
-	    else:                                                     #<=
-                self.data.sequence_update = cols[1], int(self._chomp(cols[3]))
+            self.data.sequence_update = cols[1], version
         elif uprline.find( 'LAST ANNOTATION UPDATE') >= 0:
-            # ws:2001-12-05 prevent e.g. (IPIrel. , created)
-            # !no number given! from crashing
-            if self._chomp(cols[3]) == '':                               #<=
-                self.data.annotation_update = cols[1], 0                 #<=
-	    else:                                                        #<=
-                self.data.annotation_update = cols[1], \
-                                              int(self._chomp(cols[3]))  #<=
+            self.data.annotation_update = cols[1], version
         else:
             raise SyntaxError, "I don't understand the date line %s" % line
     
