@@ -54,10 +54,13 @@ class BuildSeqRecord(Dispatch.Dispatcher):
         self.dbxrefs = []
 
     def add_dbid(self, text, attrs):
-        print "dbid", text, attrs
         if attrs.get("type") == "primary":
             self.dbname = attrs.get("dbname", "unknown")
             self.id_text = text
+        # use the first accession/secondary id as the name
+        # this should be equivalent to what Biopython does
+        elif attrs.get("type") in ["accession", "secondary"]:
+            self.name_text = text
 
     def add_dbxref_dbids(self, dbname_style, dbname, idtype, dbid, negate):
         """Handle setting name and id attributes from the dbxref ids.

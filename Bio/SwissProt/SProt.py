@@ -19,7 +19,7 @@ Iterator           Iterates over entries in a SwissProt file.
 Dictionary         Accesses a SwissProt file using a dictionary interface.
 ExPASyDictionary   Accesses SwissProt records from ExPASy.
 RecordParser       Parses a SwissProt record into a Record object.
-SequenceParser     Parses a SwissProt record into a Seq object.
+SequenceParser     Parses a SwissProt record into a SeqRecord object.
 
 _Scanner           Scans SwissProt-formatted data.
 _RecordConsumer    Consumes SwissProt data to a Record object.
@@ -291,11 +291,10 @@ class RecordParser(AbstractParser):
         return self._consumer.data
 
 class SequenceParser(AbstractParser):
-    """Parses SwissProt data into a Seq object.
-
+    """Parses SwissProt data into a standard SeqRecord object.
     """
     def __init__(self, alphabet = Alphabet.generic_protein):
-        """Initialize a RecordParser.
+        """Initialize a SequenceParser.
 
         Arguments:
         o alphabet - The alphabet to use for the generated Seq objects. If
@@ -826,12 +825,11 @@ class _RecordConsumer(AbstractConsumer):
             setattr(ref, m, attr.rstrip())
 
 class _SequenceConsumer(AbstractConsumer):
-    """Consumer that converts a SwissProt record to a Seq object.
+    """Consumer that converts a SwissProt record to a SeqRecord object.
 
     Members:
     data      Record with SwissProt data.
     alphabet  The alphabet the generated Seq objects will have.
-
     """
     def __init__(self, alphabet = Alphabet.generic_protein):
         """Initialize a Sequence Consumer
