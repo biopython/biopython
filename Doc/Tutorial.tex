@@ -21,7 +21,7 @@
 
 \title{Biopython Tutorial and Cookbook}
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg}
-\date{Last Update--10 November}
+\date{Last Update--11 November 2000}
 
 \maketitle
 \tableofcontents
@@ -103,7 +103,7 @@ Well, now you've gotten Biopython installed and running, you are probably ready 
 
 \subsection{FAQ}
 
-Hmmmm, don't have a FAQ yet since questions we've seen so far are hopefully covered in the info below. If you have anything that should definately be in a FAQ, please let us know!
+Hmmmm, don't have a FAQ yet since questions we've seen so far are hopefully covered in the info below. If you have anything that should be in a FAQ, please let us know!
 
 \section{Quick Start -- What can you do with Biopython?}
 
@@ -294,6 +294,7 @@ Seq('GCTGTTATGGGTCGTTGGAAGGGTGGTCGTGCTGCTGGT', IUPACUnambiguousDNA())
 This covers the basic features and uses of the Biopython sequence class. There is a more detailed description of the design ideas behind the sequence class in the Advanced section of this tutorial. This class is still under development and comments on the design and use are, of course, very welcome. Now that you've got some idea of what it is like to interact with the Biopython libraries, it's time to delve into the fun, fun world of dealing with biological file formats!
 
 \subsection{A usage example}
+\label{sec:orchids}
 
 Before we jump right into parsers and everything else to do with Biopython, let's set up an example to motivate everything we do and make life more interesting. After all, if there wasn't any biology in this tutorial, why would you want you read it?
 
@@ -361,6 +362,7 @@ So, events are being produced. Big deal, unless we are able to capture these eve
 An example should make it more clear how this works.
 
 \subsubsection{Writing your own consumer}
+\label{sec:writing_consumer}
 
 Now it's time to understand our parser framework, and also start looking at our friends, the lady slipper orchids. To start our search, let's just take a look through the nucleotide databases at NCBI, using an Entrez search (\ahrefurl{\url{lhttp://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?db=Nucleotide}}) for everything mentioning the text Cypripedioideae (this is the subfamily of lady slipper orchids). This search gives us 94 hits, which we save into a FASTA formatted text file.
 
@@ -629,6 +631,68 @@ Biopython has a lot of parsers, and each has its own little special niches based
 
 \subsection{Connecting with biological databases}
 
+One of the very common things that you need to do in bioinformatics is extract information from biological databases. It can be quite tedious to access these databases manually, especially if you have a lot of repetitive work to do. Biopython attempts to save you time and energy by making some on-line databases available from python scripts. Currently, Biopython has code to extract information from the following databases:
+
+\begin{itemize}
+  \item ExPASy -- \ahrefurl{\url{http://www.expasy.ch/}} See section~\ref{sec:swiss_prot} in the Cookbook for more information.
+  \item Entrez from NCBI -- \ahrefurl{\url{http://www.ncbi.nlm.nih.gov/Entrez/}}
+  \item PubMed from NCBI -- \ahrefurl{\url{http://www.ncbi.nlm.nih.gov/PubMed/}}. See section~\ref{sec:pub_med} in the Cookbook for example code detailing how to use this.
+  \item SCOP -- \ahrefurl{\url{http://scop.mrc-lmb.cam.ac.uk/scop/}}
+\end{itemize}
+
+The code is these modules basically makes it easy to write python code that interact with the CGI scripts on these pages, so that you can get results in an easy to deal with format. In some cases, the results can be tightly integrated with the Biopython parsers to make it even easier to extract information.
+
+
+Here we'll show a simple example of performing a remote Entrez query. More information on the other services is available in the Cookbook, which begins on page~\pageref{sec:cookbook}.
+
+
+In section~\ref{sec:writing_consumer} of the parsing examples, we talked about using Entrez to search the NCBI nucleotide databases for info on Cypripedioideae, our friends the lady slipper orchids. Now, we'll look at how to automate that process using a python script. For Entrez searching, this is more useful for displaying results then as a tool for getting sequences. The NCBI web site is mostly set up to allow remote queries so that you could write our own local cgi scripts that return information from NCBI pages. For this reason, the results are returned as HTML and it is pretty tough to get a flat file in a quick manner.
+
+
+In this example, we'll just show how to connect, get the results, and display them in a web browser. First, we'll start by defining our search and how to display the results:
+
+\begin{verbatim}
+search_command = 'Search'
+search_database = 'Nucleotide'
+return_format = 'FASTA'
+search_term = 'Cypripedioideae'
+
+my_browser = 'lynx'
+\end{verbatim}
+
+The first four terms define the search we are going to do. To use the Entrez module, you'll need to know a bit about how the remote CGI scripts at NCBI work, and you can find out more about this at \ahrefurl{\url{http://www.ncbi.nlm.nih.gov/entrez/query/static/linking.html}}. The final term just describes the browser to display the results in.
+
+
+Now that we've got this all set up, we can query Entrez and get a handle with the results. This is done with the following code:
+
+\begin{verbatim}
+from Bio.WWW import NCBI
+
+result_handle = NCBI.query(search_command, search_database, term = search_term,
+                           doptcmdl = return_format)
+\end{verbatim}
+
+The query function does all of the work of preparing the CGI script command line and rounding up the HTML results.
+
+
+Now that we've got the results, we are ready to save them to a file and display them in our browser, which we can do with code like:
+
+\begin{verbatim}
+import os
+
+result_file_name = os.path.join(os.getcwd(), 'results.html')
+result_file = open(result_file_name, 'w')
+result_file.write(result_handle.read())
+result_file.close()
+
+if my_browser == 'lynx':
+    os.system('lynx -force_html ' + result_file_name)
+elif my_browser == 'netscape':
+    os.system('netscape file:' + result_file_name)
+\end{verbatim}
+
+Snazzy! We can fetch things and display them automatically -- you could use this to quickly set up searches that you want to repeat on a daily basis and check by hand, or to set up a small CGI script to do queries and locally save the results before displaying them (as a kind of lab notebook of our search results). Hopefully whatever your task, the database connectivity code will make things lots easier for you!
+
 \subsection{Other nifty things}
 
 \subsubsection{Alignments}
@@ -659,6 +723,7 @@ If you know what you want to do, but can't figure out how to do it, please feel 
 Enjoy the code!
 
 \section{Cookbook -- Cool things to do with it}
+\label{sec:cookbook}
 
 \subsection{BLAST}
 
@@ -965,77 +1030,220 @@ The iterator allows you to deal with huge blast records without any memory probl
 One really ugly problem that happens to me is that I'll be parsing a huge blast file for a while, and the parser will bomb out with a SyntaxError. This is a serious problem, since you can't tell if the SyntaxError is due to a parser problem, or a problem with the BLAST. To make it even worse, you have no idea where the parse failed, so you can't just ignore the error, since this could be ignoring an important data point.
 
 
-The following script gets around this problem by catching SyntaxErrors and writing out the offending records to a separate file. First, we need to get setup to do this -- we define the files to parse and write the problem reports to:
+We used to have to make a little script to get around this problem, but the \verb|Bio.Blast| module now includes a \verb|BlastErrorParser| which really helps make this easier. The \verb|BlastErrorParser| works very similar to the regular \verb|BlastParser|, but it adds an extra layer of work by catching SyntaxErrors that are generated by the parser, and attempting to diagnose the errors.
+
+
+Let's take a look at using this parser -- first we define the file we are going to parse and the file to write the problem reports to:
 
 \begin{verbatim}
 import os
  
-b_file = os.path.join(os.curdir, 'blast_out', 'big_blast.out')
-error_file = os.path.join(os.curdir, 'blast_out', 'big_blast.problems')
+b_file = os.path.join(os.getcwd(), 'blast_out', 'big_blast.out')
+error_file = os.path.join(os.getcwd(), 'blast_out', 'big_blast.problems')
 \end{verbatim}
 
-Now we need to get a blast parser and an iterator:
+Now we want to get a \verb|BlastErrorParser|:
 
 \begin{verbatim}
 from Bio.Blast import NCBIStandalone
 
-b_parser = NCBIStandalone.BlastParser()
-b_iterator = NCBIStandalone.Iterator(open(b_file))
+error_handle = open(error_file, 'w')
 
-cur_info = b_iterator.next()
+b_error_parser = NCBIStandalone.BlastErrorParser(error_handle)
 \end{verbatim}
 
-Notice that we don't pass the iterator a second argument, so \verb|b_iterator.next()| will return the raw blast report, and not pre-parsed records in the variable \verb|cur_info|.
+Notice that the parser take an optional argument of a handle. If a handle is passed, then the parser will write any blast records which generate a SyntaxError to this handle. Otherwise, these records will not be recorded.
 
 
-Now that we've started getting BLAST reports we are ready to iterate over the entire file and start trying to parse them. To start with, the output we got back from the iterator is a BLAST record, so we need to conver it to a handle. We can do this using the String Handler helper class which is found in \verb|Bio.File|.
+Now we can use the \verb|BlastErrorParser| just like a regular blast parser. Specifically, we might want to make an iterator that goes through our blast records one at a time and parses them with the error parser:
 
 \begin{verbatim}
-from Bio import File
-
-# start iterating over all the files
-while cur_info:
-    cur_handle = File.StringHandle(cur_info)
+blast_out = open(b_file)
+iterator = NCBIStandalone.Iterator(blast_out, b_error_parser)
 \end{verbatim}
 
-Now that we've got a handle, we first need to make a copy of it. We'll need two copies so that we can pass one to the parser, and have a backup to write to a file if the parse fails. To do this, we use the copy module in the main library.
+Just like before, we can read these records one a time with, but now we can catch and deal with errors that are due to problems with Blast (and not with the parser itself):
 
 \begin{verbatim}
-import copy
-
-    copy_handle = copy.deepcopy(cur_handle)
+try:
+    next_record = iterator.next()
+except NCBIStandalone.LowQualityBlastError, info:
+    print "LowQualityBlastError detected in id %s" % info[1]
 \end{verbatim}
 
-Now we are ready to finish the while clause. What we go is attempt to parse the info in our parser. If we get a syntax error, then we write the copied handle to a file and proceed on:
+Right now the \verb|BlastErrorParser| can generate the following errors:
 
-\begin{verbatim}
-    try:
-        b_parser.parse(cur_handle)
-    except SyntaxError:
-        print 'SyntaxError detected.'
-        error_handle = open(error_file, 'a')
-        error_handle.write(copy_handle.read())
-        error_handle.close()
-            
-    # get a new record to loop again.
-    cur_info = b_iterator.next()
-\end{verbatim}
+\begin{itemize}
+  \item \verb|SyntaxError| -- This is the same error generated by the regular BlastParser, and is due to the parser not being able to parse a specific file. This is normally either due to a bug in the parser, or some kind of descrepency between the version of BLAST you are using and the versions the parser is able to handle.
 
-Doing this, we'll loop through the file and save every record that fails parsing to this separate file. You can then go ahead and look and these and deal with them as you see fit. Either you will be able to debug the parser with a single blast report, or will find out problems in your blast runs. Either way, it will definately be a useful experience!
+  \item \verb|LowQualityBlastError| -- When BLASTing a sequence that is of really bad quality (for example, a short sequence that is basically a stretch of one nucleotide), it seems that Blast ends up masking out the entire sequence and ending up with nothing to parse. In this case it will produce a truncated report that causes the parser to generate a SyntaxError. \verb|LowQualityBlastError| is reported in these cases. This error returns an info item with the following information:
+  \begin{itemize}
+    \item \verb|item[0]| -- The error message
+    \item \verb|item[1]| -- The id of the input record that caused the error. This is really useful if you want to record all of the records that are causing problems.
+  \end{itemize}
+\end{itemize}
+
+As mentioned, with each error generated, the BlastErrorParser will write the offending record to the specified \verb|error_handle|. You can then go ahead and look and these and deal with them as you see fit. Either you will be able to debug the parser with a single blast report, or will find out problems in your blast runs. Either way, it will definately be a useful experience!
+
+
+Hopefully the \verb|BlastErrorParser| will make it much easier to debug and deal with large Blast files.
 
 \subsubsection{Dealing with PSIBlast}
 
 We should write some stuff to make it easier to deal directly with PSIBlast from scripts (ie. output the align file in the proper format from an alignment). I need to look at PSIBlast more and come up with some good ways of going this...
 
 \subsection{SWISS-PROT}
+\label{sec:swiss_prot}
 
 \subsubsection{Retrieving a SWISS-PROT record}
 
+SwissProt (\ahrefurl{\url{http://www.expasy.ch/sprot/sprot-top.html}}) is a handcurated database of protein sequences. Let's look at how we connect with it from a script and parse SwissProt formatted results. 
+
+
+First, we need to retrieve some results to parse. Let's say we are looking at chalcone synthases for Orchids (see section~\ref{sec:orchids} for some justification for looking for interesting things about orchids). Chalcone synthase is involved in flavanoid biosynthesis in plants, and flavanoids make lots of cool things like pigment colors and UV protectants. 
+
+
+If you do a search on SwissProt, you can find three orchid proteins for Chalcone Synthase, id numbers O23729, O23730, O23731. Now, let's write a script which grabs these, and parses out some interesting information.
+
+
+First, we grab the records, using the \verb|get_sprot_raw()| function of \verb|Bio.WWW.Expasy|. This function is very nice since you can feed it an id and get back a raw text record (no html to mess with!). As we get the three records we are interested in, we'll just put them together into one big string, which we'll then use for parsing. The following code accomplishes what I just wrote:
+
+\begin{verbatim}
+from Bio.WWW import ExPASy
+
+ids = ['O23729', 'O23730', 'O23731']
+
+all_results = ''
+for id in ids:
+    results = ExPASy.get_sprot_raw(id)
+    all_results = all_results + results.read()
+\end{verbatim}
+
+Now that we've got the results, we are ready to parse them into interesting information. As with most parsers, we set up an iterator and parser. The parser we use here parses the SwissProt files into a Record object where the interesting features are attributes:
+
+\begin{verbatim}
+from Bio.SwissProt import SProt
+from Bio import File
+
+s_parser = SProt.RecordParser()
+s_iterator = SProt.Iterator(File.StringHandle(all_results), s_parser)
+\end{verbatim}
+
+Note that we convert \verb|all_results|, which is a string, into a handle before passing it. The iterator requires a handle to be passed so that it can read in everything one line at a time. The \verb|Bio.File| module has a nice StringHandle, which conveniently will convert a string into a handle. Very nice! Now we are ready to start extracting information.
+
+
+To get out the information, we'll go through everything record by record using the iterator. For each record, we'll just print out some summary information:
+
+\begin{verbatim}
+cur_record = s_iterator.next()
+
+while cur_record:
+    print "description:", cur_record.description
+    for ref in cur_record.references:
+        print "authors:", ref.authors
+        print "title:", ref.title
+
+    print "classification:", cur_record.organism_classification
+    print
+
+    cur_record = s_iterator.next()
+\end{verbatim}
+
+This prints out a summary like the following:
+
+\begin{verbatim}
+description: CHALCONE SYNTHASE 8 (EC 2.3.1.74) (NARINGENIN-CHALCONE SYNTHASE 8)
+authors: Liew C.F., Lim S.H., Loh C.S., Goh C.J.;
+title: "Molecular cloning and sequence analysis of chalcone synthase cDNAs of
+Bromheadia finlaysoniana.";
+classification: ['Eukaryota', 'Viridiplantae', 'Embryophyta', 'Tracheophyta', 
+'Spermatophyta', 'Magnoliophyta', 'Liliopsida', 'Asparagales', 'Orchidaceae', 
+'Bromheadia']
+\end{verbatim}
+
+It is equally easy to extract any kind of information you'd like from SwissProt records.
+
 \subsection{PubMed}
+\label{sec:pub_med}
 
 \subsubsection{Sending a query to PubMed}
 
+If you are in the Medical field or interested in human issues (and many times even if you are not!), PubMed (\ahrefurl{\url{http://www.ncbi.nlm.nih.gov/PubMed/}}) is an excellent source of all kinds of goodies. So like other things, we'd like to be able to grab information from it and use it in python scripts.
+
+
+Querying PubMed using Biopython is extremely painless. To get all of the article ids for articles having to do with orchids, we only need the following three lines of code:
+
+\begin{verbatim}
+from Bio.Medline import PubMed
+
+search_term = 'orchid'
+orchid_ids = PubMed.search_for(search_term)
+\end{verbatim}
+
+This returns a python list containing all of the orchid ids
+
+\begin{verbatim}
+['11070358', '11064040', '11028023', '10947239', '10938351', '10936520', 
+'10905611', '10899814', '10856762', '10854740', '10758893', '10716342', 
+...
+\end{verbatim}
+
+With this list of ids we are ready to start retrieving the records, so follow on ahead to the next section.
+
 \subsubsection{Retrieving a PubMed record}
+
+The previous section described how to get a bunch of article ids. Now that we've got them, we obviously want to get the corresponding Medline records and extract the information from them. 
+
+
+The interface for retrieving records from PubMed should be very intuitive to python programmers -- it models a python dictionary. To set up this interface, we need to set up a parser that will parse the results that we retrieve. The following lines of code get everything set up:
+
+\begin{verbatim}
+from Bio.Medline import PubMed
+from Bio.Medline import Medline
+
+rec_parser = Medline.RecordParser()
+medline_dict = PubMed.Dictionary(parser = rec_parser)
+\end{verbatim}
+
+What we've done is create a dictionary like object \verb|medline_dict|. To get an article we access it like \verb|medline_dict[id_to_get]|. What this does is connect with PubMed, get the article you ask for, parse it into a record object, and return it. Very cool! 
+
+
+Now let's look at how to use this nice dictionary to print out some information about some ids. We just need to loop through our ids (\verb|orchid_ids| from the previous section) and print out the information we are interested in:
+
+\begin{verbatim}
+for id in orchid_ids[0:5]:
+    cur_record = medline_dict[id]
+    print 'title:', string.rstrip(cur_record.title)
+    print 'authors:', cur_record.authors
+    print 'source:', string.strip(cur_record.source)
+    print
+\end{verbatim}
+
+The output for this looks like:
+
+\begin{verbatim}
+title: Sex pheromone mimicry in the early spider orchid (ophrys sphegodes):
+patterns of hydrocarbons as the key mechanism for pollination by sexual
+deception [In Process Citation]
+authors: ['Schiestl FP', 'Ayasse M', 'Paulus HF', 'Lofstedt C', 'Hansson BS', 
+'Ibarra F', 'Francke W']
+source: J Comp Physiol [A] 2000 Jun;186(6):567-74
+\end{verbatim}
+
+Especially interesting to note is the list of authors, which is returned as a standard python list. This makes it easy to manipulate and search using standard python tools. For instance, we could loop through a whole bunch of entries searching for a particular author with code like the following:
+
+\begin{verbatim}
+search_author = 'Waits T'
+
+for id in our_id_list:
+    cur_record = medline_dict[id]
+    
+    if search_author in cur_record.authors:
+        print "Author %s found: %s" % (search_author,
+                                       string.strip(cur_record.source))
+\end{verbatim} 
+
+The PubMed and Medline interfaces are very mature and nice to work with -- hopefully this section gave you an idea of the power of the interfaces and how they can be used.
 
 \subsection{Dealing with alignments}
 
