@@ -1,5 +1,5 @@
 import os.path
-import mmCIF_lex.MMCIFlex 
+import Bio.cMmCIF
 from UserDict import UserDict
 
 
