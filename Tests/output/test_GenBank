@@ -1,7 +1,7 @@
 test_GenBank
 Testing parsers...
 ***Record from the FeatureParser
-Seq: Seq('GGCAAGATGGCGCCGGTGGGGGTGGAGAAGAAGCTGCTGCTAGGTCCCAACGGGCCCGCG ...', RNAAlphabet())
+Seq: Seq('GGCAAGATGGCGCCGGTGGGGGTGGAGAAGAAGCTGCTGCTAGGTCCCAACGGGCCCGCG ...', IUPACAmbiguousRNA())
 Id: NM_006141.1
 Name: NM_006141
 Description Homo sapiens dynein, cytoplasmic, light intermediate polypeptide 2 (DNCLI2), mRNA.
@@ -68,7 +68,7 @@ qualifiers:
                      GVQSTAKKSGQKTVLSNVQEELDRMTRKPDSMVTNSSTENEA
 
 ***Record from the FeatureParser
-Seq: Seq('AACAAAACACACATCAAAAACGATTTTACAAGAAAAAAATATCTGAAAAATGTCAGAGAC ...', RNAAlphabet())
+Seq: Seq('AACAAAACACACATCAAAAACGATTTTACAAGAAAAAAATATCTGAAAAATGTCAGAGAC ...', IUPACAmbiguousRNA())
 Id: X55053.1
 Name: ATCOR66M
 Description A.thaliana cor6.6 mRNA.
@@ -139,7 +139,7 @@ qualifiers:
                      KSISDAAVGGVNFVKDKTGLNK
 
 ***Record from the FeatureParser
-Seq: Seq('ATTTGGCCTATAAATATAAACCCTTAAGCCCACATATCTTCTCAATCCATCACAAACAAA ...', DNAAlphabet())
+Seq: Seq('ATTTGGCCTATAAATATAAACCCTTAAGCCCACATATCTTCTCAATCCATCACAAACAAA ...', IUPACAmbiguousDNA())
 Id: X62281.1
 Name: ATKIN2
 Description A.thaliana kin2 gene.
@@ -328,7 +328,7 @@ strand: 1
 qualifiers: 
 
 ***Record from the FeatureParser
-Seq: Seq('AAAAAAACACAACAAAACTCAATAAATAAACAAATGGCAGACAACAAGCAGAGCTTCCAA ...', RNAAlphabet())
+Seq: Seq('AAAAAAACACAACAAAACTCAATAAATAAACAAATGGCAGACAACAAGCAGAGCTTCCAA ...', IUPACAmbiguousRNA())
 Id: M81224.1
 Name: BNAKINI
 Description Rapeseed Kin1 protein (kin1) mRNA, complete cds.
@@ -412,7 +412,7 @@ qualifiers:
 	Key: gene, Value: kin1
 
 ***Record from the FeatureParser
-Seq: Seq('GGACAAGGCCAAGGATGCTGCTGCTGCAGCTGGAGCTTCCGCGCAACAAGTAAACAGATA ...', DNAAlphabet())
+Seq: Seq('GGACAAGGCCAAGGATGCTGCTGCTGCAGCTGGAGCTTCCGCGCAACAAGTAAACAGATA ...', IUPACAmbiguousDNA())
 Id: AJ237582.1
 Name: ARU237582
 Description Armoracia rusticana csp14 gene (partial), exons 2-3.
@@ -535,7 +535,7 @@ qualifiers:
 	Key: number, Value: 3
 
 ***Record from the FeatureParser
-Seq: Seq('AACAAAACTCAATAAATAAACAAATGGCAGACAACAAGCAGAGCTTCCAAGCCGGTCAAG ...', RNAAlphabet())
+Seq: Seq('AACAAAACTCAATAAATAAACAAATGGCAGACAACAAGCAGAGCTTCCAAGCCGGTCAAG ...', IUPACAmbiguousRNA())
 Id: L31939.1
 Name: BRRBIF72
 Description Brassica rapa (clone bif72) kin mRNA, complete cds.
@@ -593,7 +593,7 @@ qualifiers:
                      KITEAAGGAVNLVKEKTGMNK
 
 ***Record from the FeatureParser
-Seq: Seq('ATGGCAGACAACAAGCAGAGCTTCCAAGCCGGTCAAGCCGCTGGTCGTGCTGAGGTCTCT ...', DNAAlphabet())
+Seq: Seq('ATGGCAGACAACAAGCAGAGCTTCCAAGCCGGTCAAGCCGCTGGTCGTGCTGAGGTCTCT ...', IUPACAmbiguousDNA())
 Id: AF297471.1
 Name: AF297471
 Description Brassica napus BN28a (BN28a) gene, complete cds.
@@ -708,7 +708,7 @@ qualifiers:
 
 
 ***Record from the FeatureParser
-Seq: Seq('CACAGGCCCAGAGCCACTCCTGCCTACAGGTTCTGAGGGCTCAGGGGACCTCCTGGGCCC ...', RNAAlphabet())
+Seq: Seq('CACAGGCCCAGAGCCACTCCTGCCTACAGGTTCTGAGGGCTCAGGGGACCTCCTGGGCCC ...', IUPACAmbiguousRNA())
 Id: AL109817.1
 Name: IRO125195
 Description Homo sapiens mRNA full length insert cDNA clone EUROIMAGE 125195.
@@ -807,7 +807,7 @@ qualifiers:
 	Key: number, Value: 2
 
 ***Record from the FeatureParser
-Seq: Seq('GATCATGCATGCACTCCAGCCTGGGACAAGAGCGAAACTCCGTCTCAAAAAAAAAAAAAA ...', DNAAlphabet())
+Seq: Seq('GATCATGCATGCACTCCAGCCTGGGACAAGAGCGAAACTCCGTCTCAAAAAAAAAAAAAA ...', IUPACAmbiguousDNA())
 Id: U05344.1
 Name: HUGLUT1
 Description Human fructose transporter (GLUT5) gene, promoter and exon 1.
@@ -889,7 +889,7 @@ qualifiers:
 	Key: product, Value: fructose transporter
 
 ***Record from the FeatureParser
-Seq: Seq('AAGCTTTGCTACGATCTACATTTGGGAATGTGAGTCTCTTATTGTAACCTTAGGGTTGGT ...', DNAAlphabet())
+Seq: Seq('AAGCTTTGCTACGATCTACATTTGGGAATGTGAGTCTCTTATTGTAACCTTAGGGTTGGT ...', IUPACAmbiguousDNA())
 Id: AC007323.5
 Name: AC007323
 Description Genomic sequence for Arabidopsis thaliana BAC T25K16 from chromosome I, complete sequence.
