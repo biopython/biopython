@@ -34,7 +34,9 @@ class Seq:
         i = max(i, 0); j = max(j, 0)
         return Seq(self.data[i:j], self.alphabet)
     def __add__(self, other):
-        if self.alphabet.contains(other.alphabet):
+        if type(other) == type(' '):
+            return self.__class__(self.data + other, self.alphabet)
+        elif self.alphabet.contains(other.alphabet):
             return self.__class__(self.data + other.data, self.alphabet)
         elif other.alphabet.contains(self.alphabet):
             return self.__class__(self.data + other.data, other.alphabet)
@@ -56,6 +58,9 @@ class Seq:
 
     def tomutable(self):   # Needed?  Or use a function?
         return MutableSeq(self.data, self.alphabet)
+    
+    def count(self, item):
+        return len([x for x in self.data if x == item])
 
 class MutableSeq:
     def __init__(self, data, alphabet = Alphabet.generic_alphabet):
