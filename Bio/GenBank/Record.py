@@ -127,12 +127,16 @@ class Record:
     GB_BASE_INDENT = 12
     GB_FEATURE_INDENT = 21
     GB_INTERNAL_INDENT = 2
+    GB_OTHER_INTERNAL_INDENT = 3
     GB_FEATURE_INTERNAL_INDENT = 5
     GB_SEQUENCE_INDENT = 9
 
     BASE_FORMAT = "%-" + str(GB_BASE_INDENT) + "s"
     INTERNAL_FORMAT = " " * GB_INTERNAL_INDENT + "%-" + \
                       str(GB_BASE_INDENT - GB_INTERNAL_INDENT) + "s"
+    OTHER_INTERNAL_FORMAT = " " * GB_OTHER_INTERNAL_INDENT + "%-" + \
+                            str(GB_BASE_INDENT - GB_OTHER_INTERNAL_INDENT) + \
+                            "s"
 
     BASE_FEATURE_FORMAT = "%-" + str(GB_FEATURE_INDENT) + "s"
     INTERNAL_FEATURE_FORMAT = " " * GB_FEATURE_INTERNAL_INDENT + "%-" + \
@@ -215,13 +219,13 @@ class Record:
         # second case: ss-DNA types of records
         elif self.residue_type.find("-") >= 0:
             output += "%7s" % self.residue_type
-            output += " " * 8 # spaces for circular
+            output += " " * 10 # spaces for circular
         else:
             output += " " * 3 # spaces for stuff like ss-
             output += "%-4s" % self.residue_type
-            output += " " * 8 # spaces for circular
+            output += " " * 10 # spaces for circular
 
-        output += " " * 4
+        output += " " * 2
         output += "%3s" % self.data_file_division
         output += " " * 7 # spaces for 56-63
         output += "%11s" % self.date
@@ -292,6 +296,7 @@ class Record:
         output = ""
         if self.segment:
             output += Record.BASE_FORMAT % "SEGMENT"
+            output += _wrapped_genbank(self.segment, Record.GB_BASE_INDENT)
         return output
 
     def _source_line(self):
@@ -476,8 +481,8 @@ class Reference:
         """
         output = ""
         if self.pubmed_id:
-            output += Record.INTERNAL_FORMAT % "PUBMED"
-            output += self.pubmed_id
+            output += Record.OTHER_INTERNAL_FORMAT % "PUBMED"
+            output += self.pubmed_id + "\n"
         return output
     
     def _remark_line(self):
@@ -485,7 +490,7 @@ class Reference:
         """
         output = ""
         if self.remark:
-            output += Record.INTERNAL_FORMAT % "RECORD"
+            output += Record.INTERNAL_FORMAT % "REMARK"
             output += _wrapped_genbank(self.remark, Record.GB_BASE_INDENT)
         return output
     
