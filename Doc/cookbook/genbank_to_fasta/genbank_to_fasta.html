@@ -1,0 +1,202 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+            "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD><TITLE></TITLE>
+
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="hevea 1.06">
+</HEAD>
+<BODY >
+<!--HEVEA command line is: hevea genbank_to_fasta.tex -->
+<!--HTMLHEAD-->
+<!--ENDHTML-->
+<!--PREFIX <ARG ></ARG>-->
+<!--CUT DEF section 1 -->
+<BR>
+<BR>
+
+
+
+<H1 ALIGN=center>Converting GenBank (or other formats) to Fasta</H1>
+
+<H3 ALIGN=center>Brad Chapman (chapmanb@uga.edu)</H3>
+<!--TOC section Table of Contents-->
+
+<H2>Table of Contents</H2><!--SEC END -->
+
+
+<!--TOC section Background and Purpose-->
+
+<H2><A NAME="htoc1">1</A>&nbsp;&nbsp;Background and Purpose</H2><!--SEC END -->
+
+One of the most common file formats used in biology is Fasta format,
+thus converting into this format for storage of sequences or preparation for
+input into a program is very common. Fasta format has become so
+popular because it is very simple. It consists of two parts, a title
+line which begins with a <CODE>&gt;</CODE> character, and then a number of
+sequence lines. Here's an example Fasta sequence:
+<PRE>
+&gt;gi|3318709|pdb|1A91|  Subunit C Of The F1fo Atp Synthase Of Escherichia Coli
+MENLNMDLLYMAAAVMMGLAAIGAAIGIGILGGKFLEGAARQPDLIPLLRTQFFIVMGLVDAIPMIAVGL
+GLYVMFAVA
+</PRE>
+This document will discuss ways in Biopython to convert a file of
+GenBank records into a file of Fasta sequences. Although Fasta format is
+simple, it can also be difficult to deal with because there are no
+standards for how information about a sequence will be presented on the
+title line. Because of this we'll discuss two ways to do conversions:
+<UL><LI>
+ A quick and easy way which assumes that you don't need specialized
+ control over the way output is produced on the title line.
+ <LI>A more controlled way which allows you to construct
+ title lines to your specifications.
+</UL>
+These examples assume some basic familiarity with constructing Biopython
+Parsers and Iterators, and some understanding of the <CODE>SeqRecord</CODE>
+object in Biopython.<BR>
+<BR>
+<!--TOC section Quick conversion using the FormatIO system-->
+
+<H2><A NAME="htoc2">2</A>&nbsp;&nbsp;Quick conversion using the FormatIO system</H2><!--SEC END -->
+
+If you only want a quick and easy to type way to convert GenBank to
+Fasta format with reasonable title names, Biopython has an
+in-development format conversion mechanism. If you've used BioPerl, this
+mechanism is similar to that used in their <CODE>SeqIO</CODE> system.
+Basically, it involves converting GenBank records into standard
+Biopython <CODE>SeqRecord</CODE> objects, and then converting these
+<CODE>SeqRecord</CODE> objects back into a Fasta record in a file. As we
+mentioned, this mechanism is easy, so all of this work is done
+internally within Biopython code.<BR>
+<BR>
+Now that we understand how things will be working internally, let's 
+write the code that drives the conversion process.
+First, we open up a handle to read from the GenBank file, and a handle
+to write to the output Fasta file. Assuming you've somehow defined
+<CODE>input_file</CODE>, which is an existing file of GenBank records, and
+<CODE>output_file</CODE>, the name of the output file, this is just standard python:
+<PRE>
+input_handle = open(input_file)
+output_handle = open(output_file, "w")
+</PRE>
+Now, we create a Biopython <CODE>FormatIO</CODE> object which will, using
+<CODE>SeqRecord</CODE> objects, be converting between GenBank format and Fasta
+format. First, we get the Biopython registry of formats:
+<PRE>
+from Bio import formats
+</PRE>
+The imported <CODE>formats</CODE> object contains a dictionary-like interface to
+biological file formats able to be dealt with through the
+<CODE>FormatIO</CODE> system. A simple <CODE>print formats</CODE> gives you a list
+of all the available formats:
+<PRE>
+formats, exporting 'blast', 'blastn', 'blastp', 'blastx', 'embl', 'embl/65', 
+'empty', 'fasta', 'genbank', 'genbank-records', 'genbank-release', 
+'ncbi-blastn', 'ncbi-blastp', 'ncbi-blastx', 'ncbi-tblastn', 'ncbi-tblastx', 
+'search', 'sequence', 'swissprot', 'swissprot/38', 'swissprot/40', 
+'tblastn', 'tblastx', 'wu-blastn', 'wu-blastp', 'wu-blastx'
+</PRE>
+The important thing to note is that we've got our <CODE>genbank</CODE> and
+<CODE>fasta</CODE> formats we want to deal with. With these formats, we can
+create a formatter with one line of code:
+<PRE>
+formatter = FormatIO("SeqRecord", formats["genbank"], formats["fasta"])
+</PRE>
+With the formatter in hand, the actual conversion is also a very simple
+single line of code, using our input and output handles defined above:
+<PRE>
+formatter.convert(input_handle, output_handle)
+</PRE>
+That's it -- we've done the conversion. Assuming we have a GenBank file
+beginning like:
+<PRE>
+LOCUS       ATCOR66M      513 bp    mRNA            PLN       02-MAR-1992
+DEFINITION  A.thaliana cor6.6 mRNA.
+ACCESSION   X55053
+VERSION     X55053.1  GI:16229
+</PRE>
+This will output Fasta that looks like:
+<PRE>
+&gt;X55053.1 A.thaliana cor6.6 mRNA.
+aacaaaacacacatcaaaaacgattttacaagaaaaaaatatctgaaaaatgtcagagaccaacaagaatgc
+</PRE>
+Thus, the id (accession number with versioning) and description are
+maintained in the final Fasta title.<BR>
+<BR>
+<!--TOC section Specialized conversion using Fasta Record objects-->
+
+<H2><A NAME="htoc3">3</A>&nbsp;&nbsp;Specialized conversion using Fasta Record objects</H2><!--SEC END -->
+
+If the generally useful scheme described above for retaining sequence 
+information in the Fasta title does not work for your purposes, it is
+always possible to hand create your own system for conversion between
+GenBank information and Fasta titles.<BR>
+<BR>
+This involves using the standard Fasta <CODE>Record</CODE> object. The
+important thing about this object, for our purposes, is that if you have
+a Fasta record object and get the string representation of it (by
+printing or calling <CODE>str</CODE> on the object) it will output nicely
+formatted Fasta. Thus, we need to only set the <CODE>title</CODE> and
+<CODE>sequence</CODE> attributes of the Fasta record, and we can write out
+nice Fasta.<BR>
+<BR>
+Now that the preliminaries are out of the way, we'll get down to doing
+the work. First, we create a GenBank Iterator which will read over the
+input file and return GenBank Record objects:
+<PRE>
+from Bio import GenBank
+
+iterator = GenBank.Iterator(input_handle, GenBank.RecordParser())
+</PRE>
+Now, using the information we learned above about Fasta Records, we can
+write out a Fasta file with complete control over how the tile looks. In
+this example case, we'll just store information about the GI number,
+LOCUS name, version, and description in the title line. We then loop
+over the GenBank records and write out the Fasta Records one at a time:
+<PRE>
+from Bio import Fasta
+
+for gb_rec in iterator:
+    fasta_rec = Fasta.Record()
+    fasta_rec.title = "%s|%s|%s %s" % \
+     (gb_rec.gi, gb_rec.locus, gb_rec.version, gb_rec.definition)
+    fasta_rec.sequence = gb_rec.sequence
+    output_handle.write(str(fasta_rec) + "\n")
+</PRE>
+This will produce an output file that, given the GenBank we showed
+above, looks like:
+<PRE>
+&gt;16229|ATCOR66M|X55053.1 A.thaliana cor6.6 mRNA.
+AACAAAACACACATCAAAAACGATTTTACAAGAAAAAAATATCTGAAAAATGTCAGAGAC
+</PRE>
+To adjust what is written on the title line, all we need to change from
+the code above is the line specifying what makes up
+<CODE>fasta_rec.title</CODE>.<BR>
+<BR>
+<!--TOC section Beyond GenBank to Fasta-->
+
+<H2><A NAME="htoc4">4</A>&nbsp;&nbsp;Beyond GenBank to Fasta</H2><!--SEC END -->
+
+Although this example describes converting GenBank to Fasta, other
+conversions are possible using the same frameworks.<BR>
+<BR>
+For the <CODE>FormatIO</CODE> system, conversions from Swissprot or EMBL
+format to Fasta should work just as easily by replacing the
+<CODE>formats["genbank"]</CODE> dictionary call above with <CODE>swissprot</CODE> or
+<CODE>embl</CODE>. Currently, the <CODE>FormatIO</CODE> system is still under
+development and writing other formats besides Fasta is not yet
+supported. Other output formats will hopefully be added in the future.<BR>
+<BR>
+For the Fasta Record system, any input format can be used that is
+supported by parsing in Biopython. For output, the GenBank Record class
+also supports string output in GenBank flat file format.<BR>
+<BR>
+<!--HTMLFOOT-->
+<!--ENDHTML-->
+<!--FOOTER-->
+<HR SIZE=2>
+<BLOCKQUOTE><EM>This document was translated from L<sup>A</sup>T<sub>E</sub>X by
+</EM><A HREF="http://pauillac.inria.fr/~maranget/hevea/index.html"><EM>H<FONT SIZE=2><sup>E</sup></FONT>V<FONT SIZE=2><sup>E</sup></FONT>A</EM></A><EM>.
+</EM></BLOCKQUOTE>
+</BODY>
+</HTML>
