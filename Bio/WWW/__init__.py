@@ -1,5 +1,7 @@
 # This is a Python module
 
+import time
+
 class RequestLimiter:
     # This class implements a simple countdown timer for delaying WWW
     # requests.
