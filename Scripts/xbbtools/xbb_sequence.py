@@ -1,11 +1,10 @@
 #!/usr/bin/env python
 # Created: Wed Jun 21 10:26:53 2000
-# Last changed: Time-stamp: <00/06/21 10:28:05 thomas>
+# Last changed: Time-stamp: <00/12/02 14:18:34 thomas>
 # Thomas.Sicheritz@molbio.uu.se, http://evolution.bmc.uu.se/~thomas
 # File: xbb_sequence.py
 
 import string, re, regsub
-import posixpath, posix
 import os, sys  # os.system, sys.argv
 sys.path.insert(0, '.')
 from Bio import Sequence

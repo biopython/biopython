@@ -1,17 +1,16 @@
 #!/usr/bin/env python
 # Created: Wed Jun 21 15:53:22 2000
-# Last changed: Time-stamp: <00/08/10 14:50:36 thomas>
-# Thomas.Sicheritz@molbio.uu.se, http://evolution.bmc.uu.se/~thomas
+# Last changed: Time-stamp: <00/12/02 15:56:27 thomas>
+# thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas
 # File: xbb_translations.py
 
 import string, re, regsub
-import posixpath, posix
 import os, sys  # os.system, sys.argv
 import time
 
 sys.path.insert(0, '.')
 from Tkinter import *
-sys.path.insert(0, os.path.expanduser('~thomas/cbs/python/biopython'))
+
 from Bio import Seq
 from Bio import Alphabet
 from Bio.Alphabet import IUPAC

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # Created: Tue Aug  8 20:32:36 2000
-# Last changed: Time-stamp: <00/08/11 10:06:40 thomas>
-# thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas/index.html
+# Last changed: Time-stamp: <00/12/02 15:58:45 thomas>
+# thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas
 # File: nextorf.py
 
 # Copyright 2000 by Thomas Sicheritz-Ponten.  All rights reserved.
@@ -9,8 +9,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-import string, re, regsub
-import posixpath, posix
+import string, re
 import os, sys, commands
 import getopt
 

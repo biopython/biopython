@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # Created: Wed Jun 21 10:28:14 2000
-# Last changed: Time-stamp: <00/08/11 10:06:55 thomas>
-# Thomas.Sicheritz@molbio.uu.se, http://evolution.bmc.uu.se/~thomas
+# Last changed: Time-stamp: <00/12/02 15:56:11 thomas>
+# thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas
 # File: xbb_widget.py
 
 # Copyright 2000 by Thomas Sicheritz-Ponten.  All rights reserved.
@@ -10,20 +10,17 @@
 # as part of this package.
 
 import string, re, regsub
-import posixpath, posix
-import os, sys  # os.system, sys.argv
+import os, sys
+import time
 
 from Tkinter import *
-import Pmw
 from tkFileDialog import askopenfilename, asksaveasfilename
 
 sys.path.insert(0, '.')
 import xbb_io
 from xbb_utils import *
 from xbb_translations import xbb_translations
-from xbb_blast import *
 
-sys.path.insert(0, os.path.expanduser('~thomas/cbs/python/biopython'))
 from Bio.Tools import Translate
 
 
@@ -59,6 +56,7 @@ class xbb_widget:
         self.create_seqfield(self.seq_frame)
 
         self.create_bindings()
+        self.blastit = 'xbb_blast.py'
         
     def init_variables(self):
         self.seqwidth = 60
@@ -128,6 +126,7 @@ class xbb_widget:
         menu = self.translation_menu
         menu.add_command(label='+1 Frame', command = self.translate)
         menu.add_command(label='6 Frames', command = self.gcframe)
+        menu.add_command(label='Extract to FASTA', command = self.extract)
 
         self.current_codon_table = StringVar()
         self.current_codon_table.set('Standard')
@@ -147,11 +146,13 @@ class xbb_widget:
 
         self.menubar.add_cascade(label="Translations", menu=self.translation_menu)
 
-        # Blast menu
-        self.blast_menu = Menu(self.menubar)
-        menu = self.blast_menu
+        # Tools menu
+        self.tools_menu = Menu(self.menubar)
+        menu = self.tools_menu
         menu.add_command(label='Blast', command = self.blast)
-        self.menubar.add_cascade(label="Tools", menu=self.blast_menu)
+        menu.add_command(label='Stats', command = self.statistics)
+        self.menubar.add_cascade(label="Tools", menu=self.tools_menu)
+        
 
         self.parent.config(menu = self.menubar)
 
@@ -244,7 +245,7 @@ class xbb_widget:
     def get_selection_or_sequence(self):
         w = self.sequence_id
         seq = self.get_selection()
-        if not seq:
+        if not len(seq):
             seq = self.sequence_id.get(1.0,END)
 
         seq = re.sub('[^A-Z]','',seq)    
@@ -252,6 +253,7 @@ class xbb_widget:
     
     def get_selection(self):
         w = self.sequence_id
+        #print w.selection_own()
         #w.selection_own()
         try:
             return w.selection_get()
@@ -342,22 +344,79 @@ class xbb_widget:
         tid = np.text_id()
         tid.insert(END, self.translator.frame_nice(seq, frame, self.current_codon_table_id))
 
+    def extract(self, frame = 1):
+        seq = self.get_selection_or_sequence()
+        if not seq: return
+        aa_seq = self.translator.frame(seq, frame, self.current_codon_table_id)
+        print '>%s<' % aa_seq
+        aa_seq = re.sub('(.{50})','\\1\n',aa_seq.data)
+        np = NotePad()
+        tid = np.text_id()
+        tid.insert(END,'>frame%d\n%s' % (frame,aa_seq))
+
+    def statistics(self):
+        seq = self.get_selection_or_sequence()
+        if not seq: return
+        seq = string.upper(seq)
+        aa = {'A':0,'C':0,'G':0,'T':0,'N':0}
+        for nt in seq:
+            if not aa.has_key(nt): nt = 'N'
+            aa[nt] = aa[nt] + 1
+
+        GC = (100.0*(aa['G'] + aa['C']))/len(seq)
+        
+        np = NotePad()
+        tid = np.text_id()
+
+        tid.insert(END,"""%s
+
+Length = %d
+A=%d C=%d G=%d T=%d other=%d
+GC=%f
+
+""" % (time.strftime('%y %b %d, %X\n', time.localtime(time.time())),
+               len(seq), aa['A'], aa['C'], aa['G'], aa['T'], aa['N'], GC)
+                   )
+        
     def show_blast(self, result):
         np = NotePad()
         tid = np.text_id()
         tid.insert(END, result)
 
     def blast(self):
-        blast_popup(self.get_selection_or_sequence, self.show_blast)
+        seq = self.get_selection_or_sequence()
+        os.system('%s %s &' % (self.blastit, seq))
 
     def reverse(self):
-        ""
+        w = self.sequence_id
+        w.selection_own()
+        try:
+            start, stop = w.tag_ranges(SEL)
+        except:
+            start, stop = 1.0, self.sequence_id.index(END)
+
+        seq = w.get(start, stop)
+        seq = map(None,re.sub('[^A-Z]','',seq))
+        seq.reverse()
+        seq = string.join(seq,'')
+
+        w.delete(start, stop)
+        w.insert(start, seq)
+        w.tag_remove(SEL, 1.0, start)
+        w.tag_add(SEL, start, stop)
+        w.tag_remove(SEL, stop, END)
+
     def complement(self):
         w = self.sequence_id
         w.selection_own()
-        #FIX FUCKING SELECTION !!!!
-        start, stop = w.tag_ranges(SEL)
+        try:
+            start, stop = w.tag_ranges(SEL)
+        except:
+            start, stop = 1.0, self.sequence_id.index(END)
+
         seq = w.get(start, stop)
+        seq = re.sub('[^A-Z]','',seq)    
+
         print 'seq >%s<' % seq
         complementary = self.translator.complement(seq)
         w.delete(start, stop)

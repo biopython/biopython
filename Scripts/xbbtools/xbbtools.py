@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # Created: Thu Jul 13 11:09:00 2000
-# Last changed: Time-stamp: <00/08/11 10:07:05 thomas>
-# Thomas.Sicheritz@molbio.uu.se, http://evolution.bmc.uu.se/~thomas
+# Last changed: Time-stamp: <00/12/02 15:57:45 thomas>
+# thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas
 # File: xbbtools.py
 
 # Copyright 2000 by Thomas Sicheritz-Ponten.  All rights reserved.
@@ -10,9 +10,8 @@
 # as part of this package.
 
 
-import string, re, regsub
-import posixpath, posix
-import os, sys  # os.system, sys.argv
+import string, re
+import os, sys
 sys.path.insert(0, '.')
 from Tkinter import *
 
@@ -22,7 +21,10 @@ win = Tk()
 xbbtools = xbb_widget()
 xbbtools.main_frame.option_add('*frame.background', 'dimgrey')
 
-xbbtools.open(sys.argv[1])
+try:
+    xbbtools.open(sys.argv[1])
+except:
+    pass
 
 win.mainloop()
 

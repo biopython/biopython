@@ -1,11 +1,10 @@
 #!/usr/bin/env python
 # Created: Wed Jun 21 13:46:35 2000
-# Last changed: Time-stamp: <00/08/08 23:30:40 thomas>
+# Last changed: Time-stamp: <00/12/02 14:18:23 thomas>
 # Thomas.Sicheritz@molbio.uu.se, http://evolution.bmc.uu.se/~thomas
 # File: xbb_io.py
 
 import string, re, regsub
-import posixpath, posix
 import os, sys  # os.system, sys.argv
 sys.path.insert(0, '.')
 sys.path.insert(0, os.path.expanduser('~thomas/cbs/python/biopython'))

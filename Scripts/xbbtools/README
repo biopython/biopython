@@ -8,6 +8,26 @@ BioWish. This is the start of a pure python re-implementation of xbbtools with
 biopython.
 Usage: xbbtools test.fas
 
+Whats available:
+      * open FASTA file
+      * display 1 or 6 frame translations ala DNA Strider
+      * all operations work on selection or complete sequence
+      * displays start, stop, length and composition of selection
+      * complement and reverse operations
+      * change genetic code 
+      * very simple blast run menus
+
+TODO:
+      * I'm waiting for a biopython modules for
+	    - reading and writing different sequence formats
+	    - spawning external programs/searches e.g. blast
+	      without freezing the whole Tk mainloop
+      * implement biowish's ORF Displayer
+      * add Pyphy's database grabber tool
+      * speedup DNA seq operations suitable for complete genomes
+      * add windows support (shudder)
+
+
 nextorf.py
 ==========
 nextorf.py is a python re-implementation of the Tcl script nextorf.tcl

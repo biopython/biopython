@@ -1,15 +1,13 @@
 #!/usr/bin/env python
 # Created: Thu Jul 13 12:09:58 2000
-# Last changed: Time-stamp: <00/07/13 12:52:49 thomas>
-# Thomas.Sicheritz@molbio.uu.se, http://evolution.bmc.uu.se/~thomas
+# Last changed: Time-stamp: <00/12/02 15:56:51 thomas>
+# thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas
 # File: xbb_utils.py
 
-import string, re, regsub
-import posixpath, posix
-import os, sys  # os.system, sys.argv
+import string, re
+import os, sys
 sys.path.insert(0, '.')
 from Tkinter import *
-import Pmw
 
 class NotePad(Toplevel):
     def __init__(self, master= None):
@@ -22,9 +20,12 @@ class NotePad(Toplevel):
     
 	self.menubar.add_cascade(label="File", menu=self.filemenu)
         self.configure(menu = self.menubar)
-        self.tid = Pmw.ScrolledText(self)
-        self.tid.pack(fill = BOTH, expand = 1)
-
+        self.yscroll = Scrollbar(self,orient=VERTICAL)
+        self.tid = Text(self, yscrollcommand = self.yscroll.set)
+        self.yscroll.configure(command = self.tid.yview)
+        self.tid.pack(side = LEFT, fill = BOTH, expand = 1)
+        self.yscroll.pack(side = RIGHT, fill = Y)
+        
 
     def text_id(self): return self.tid
     def insert(self,start, txt):
