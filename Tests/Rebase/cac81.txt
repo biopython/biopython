@@ -1,0 +1,34 @@
+RJR REBASE Enz 638 - Cac8ICac8I
+                  Type II restriction enzyme 
+
+
+
+      Recognition Sequence: 
+ G C N^N G C  C G N^N C G 
+                        REBASE enzyme #: 638
+                        Prototype: Cac8I
+                        Source: G. Reysett
+                        Microorganism: Clostridium acetobutylicum ABKn8 
+                        Growth Temperature: 37 °
+                        Entered: Jun 12 1991 ... Modified: Aug 6 1999 
+
+
+                  # sites on
+                  Adeno2: 285
+                  Lambda: 238
+                  pBR322: 31
+                  PhiX174: 19
+                  SV40: 8 
+
+
+
+            Related References...
+            (sorted by date) (sorted by authors)Commercially Available...
+
+                  07/9/2000
+                  Dr. Richard J. Roberts
+                  and Dana Macelis
+
+
+
+

@@ -1,0 +1,44 @@
+RJR REBASE Enz 185 - BamHIBamHI
+                  Type II restriction enzyme 
+
+
+
+      Recognition Sequence: 
+ G^G A T C C  C C T A G^G 
+                        REBASE enzyme #: 185
+                        Prototype: BamHI
+                        Source: ATCC 49763
+                        Microorganism: Bacillus amyloliquefaciens H 
+                        Growth Temperature: 37 °
+                        Exhibits star activity
+                        Single-stranded cleavage: n
+                        Enzyme gene cloned.
+                        Enzyme gene sequenced.
+                        Crystal data present.
+                        Entered: Jan 1 1975 ... Modified: Jan 17 2000 
+
+
+                  # sites on
+                  Adeno2: 3
+                  Lambda: 5
+                  pBR322: 1
+                  PhiX174: 0
+                  SV40: 1 
+
+                  Related Records:
+                  C.BamHI M.BamHI 
+
+
+            Related References...
+            (sorted by date) (sorted by authors)Commercially 
+            Available...Isoschizomers... 
+            (commercially available) Sequence Data... Methylation 
+            Sensistivity...Crystal Data...
+
+                  07/9/2000
+                  Dr. Richard J. Roberts
+                  and Dana Macelis
+
+
+
+

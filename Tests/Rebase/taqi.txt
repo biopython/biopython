@@ -1,0 +1,45 @@
+RJR REBASE Enz 3520 - M.TaqIM.TaqI
+                  Type II methylase 
+                  (subtype gamma) 
+
+
+
+      Recognition Sequence: 
+5'...  TCGA  ... 3'
+
+      Base (Type of methylation): 4 (6-methyladenosine)
+
+                        REBASE enzyme #: 3520
+                        Prototype: TaqI
+                        Source: J.I. Harris
+                        Microorganism: Thermus aquaticus YTI 
+                        Growth Temperature: 70 °
+                        Enzyme gene cloned.
+                        Enzyme gene sequenced.
+                        Crystal data present.
+                        Entered: Jan 1 1977 ... Modified: Jun 1 2000 
+
+
+                  # sites on
+                  Adeno2: 50
+                  Lambda: 121
+                  pBR322: 7
+                  PhiX174: 10
+                  SV40: 1 
+
+                  Related Records:
+                  TaqI 
+
+
+            Related References...
+            (sorted by date) (sorted by authors)Commercially 
+            Available...Isoschizomers... 
+            (commercially available) Sequence Data... Crystal Data...
+
+                  07/14/2000
+                  Dr. Richard J. Roberts
+                  and Dana Macelis
+
+
+
+

@@ -1,0 +1,45 @@
+RJR REBASE Enz 2540 - I-CreII-CreI
+                  Homing endonuclease 
+
+
+            NOTE: Homing endonucleases do not really have recognition sequences 
+            in the way that restriction enzymes do. The recognition sequence 
+            listed is one site that is known to be recognized and cleaved. In 
+            general, single base changes merely change the efficiency of 
+            cleavage and the precise boundary of required bases is not known. 
+
+
+      Recognition Sequence: 
+ C T G G G T T C A A A A C G T C G T G A^G A C A G T T T G G 0  G A C C C A A G T T T T G C A G^C A C T C T G T C A A A C C 0 
+                        REBASE enzyme #: 2540
+                        Prototype: I-CreI
+                        Source: J.-D. Rochaix
+                        Microorganism: Chlamydomonas reinhardtii 
+                        Growth Temperature: 26 °
+                        Enzyme gene cloned.
+                        Enzyme gene sequenced.
+                        Crystal data present.
+                        Comment: Insertion site CGT^CGT
+                        Entered: Jan 1 1979 ... Modified: Sep 9 1999 
+
+
+                  # sites on
+                  Adeno2: 0
+                  Lambda: 0
+                  pBR322: 0
+                  PhiX174: 0
+                  SV40: 0 
+
+
+
+            Related References...
+            (sorted by date) (sorted by authors)NOT commercially 
+            availableSequence Data... Crystal Data...
+
+                  07/13/2000
+                  Dr. Richard J. Roberts
+                  and Dana Macelis
+
+
+
+
