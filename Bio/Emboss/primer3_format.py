@@ -92,6 +92,6 @@ record = Martel.Group("primer3_record",
                                       reverse_line + blank_line,
                             # case 2b2, Forward primer
                                       forward_line + blank_line)) +
-                           blank_line + blank_line))
+                           blank_line + blank_line + Martel.Rep(blank_line)))
                         
                           
