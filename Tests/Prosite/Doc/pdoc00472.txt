@@ -1,0 +1,63 @@
+{PDOC00472}
+{PS00546; CYSTEINE_SWITCH}
+{BEGIN}
+*****************************
+* Matrixins cysteine switch *
+*****************************
+
+Mammalian extracellular matrix metalloproteinases (EC 3.4.24.-), also known as
+matrixins [1] (see <PDOC00129>), are zinc-dependent enzymes. They are secreted
+by cells  in an inactive form (zymogen) that differs from the mature enzyme by
+the presence  of  an  N-terminal propeptide. A highly conserved octapeptide is
+found two  residues  downstream  of the C-terminal end of the propeptide. This
+region has been shown to be  involved  in  autoinhibition  of matrixins [2,3];
+a cysteine  within the octapeptide chelates  the  active  site  zinc ion, thus
+inhibiting the  enzyme.  This  region has been called the 'cysteine switch' or
+'autoinhibitor region'.
+
+A cysteine switch has been found in the following zinc proteases:
+
+ - MMP-1 (EC 3.4.24.7) (interstitial collagenase).
+ - MMP-2 (EC 3.4.24.24) (72 Kd gelatinase).
+ - MMP-3 (EC 3.4.24.17) (stromelysin-1).
+ - MMP-7 (EC 3.4.24.23) (matrilysin).
+ - MMP-8 (EC 3.4.24.34) (neutrophil collagenase).
+ - MMP-9 (EC 3.4.24.35) (92 Kd gelatinase).
+ - MMP-10 (EC 3.4.24.22) (stromelysin-2).
+ - MMP-11 (EC 3.4.24.-) (stromelysin-3).
+ - MMP-12 (EC 3.4.24.65) (macrophage metalloelastase).
+ - MMP-13 (EC 3.4.24.-) (collagenase 3).
+ - MMP-14 (EC 3.4.24.-) (membrane-type matrix metalliproteinase 1).
+ - MMP-15 (EC 3.4.24.-) (membrane-type matrix metalliproteinase 2).
+ - MMP-16 (EC 3.4.24.-) (membrane-type matrix metalliproteinase 3).
+ - Sea urchin hatching enzyme (EC 3.4.24.12) (envelysin) [4].
+ - Chlamydomonas reinhardtii gamete lytic enzyme (GLE) [5].
+
+-Consensus pattern: P-R-C-[GN]-x-P-[DR]-[LIVSAPKQ]
+                    [C chelates the zinc ion]
+-Sequences known to belong to this class detected by the pattern: ALL,  except
+ for cat MMP-7 and mouse MMP-11.
+-Other sequence(s) detected in SWISS-PROT: NONE.
+-Last update: November 1997 / Pattern and text revised.
+
+[ 1] Woessner J. Jr.
+     FASEB J. 5:2145-2154(1991).
+[ 2] Sanchez-Lopez R., Nicholson R., Gesnel M.C., Matrisian L.M.,
+     Breathnach R.
+     J. Biol. Chem. 263:11892-11899(1988).
+[ 3] Park A.J., Matrisian L.M., Kells A.F., Pearson R., Yuan Z., Navre M.
+     J. Biol. Chem. 266:1584-1590(1991).
+[ 4] Lepage T., Gache C.
+     EMBO J. 9:3003-3012(1990).
+[ 5] Kinoshita T., Fukuzawa H., Shimada T., Saito T., Matsuda Y.
+     Proc. Natl. Acad. Sci. U.S.A. 89:4693-4697(1992).
+
++----------------------------------------------------------------------------+
+| This PROSITE entry  is copyright  by the Swiss Institute of Bioinformatics |
+| (SIB).  There are no restrictions on its use by non-profit institutions as |
+| long as its  content  is  in  no  way  modified  and this statement is not |
+| removed. Usage by and for commercial entities requires a license agreement |
+| (See http://www.isb-sib.ch/announce/ or email to license@isb-sib.ch).      |
++----------------------------------------------------------------------------+
+{END}
+

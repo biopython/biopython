@@ -1,1 +1,66 @@
+test_gobase
 testing G405967.htm
+Taxon division: Fungi 
+GeneRecord
+Gene class is orf242 
+Plasmid encoded is no
+Partial gene no 
+Pseudo no 
+Transpliced gene no 
+Chloroplast origin no
+Contains intron no
+ORF yes
+Included in an intron yes
+Genbank accession U41288
+Entrez record 1236403
+Product type protein 
+Product class unidentified protein 
+Allomyces macrogynus 
+Fungi
+
+
+testing G423945.htm
+Taxon division: Plants 
+GeneRecord
+Gene class is orf277 
+Plasmid encoded is no
+Partial gene no 
+Pseudo no 
+Transpliced gene no 
+Chloroplast origin no
+Contains intron no
+ORF yes
+Included in an intron yes
+Genbank accession AJ223423
+Entrez record 3288658
+Product type protein 
+Product class unidentified protein 
+Vinca rosea 
+Plants
+
+
+testing P2661406.htm
+Taxon division: Plants Gene 
+ProteinRecord
+Product class is cytochrome c oxidase subunit 1  
+Gene class is cox1  
+Partial protein yes  
+Plasmid no 
+Function electron transport  
+Entrez record 2661406
+Juniperus procera 
+Plants
+
+
+testing S4323016.htm
+Taxon division: Fungi 
+SequenceRecord
+modlecule type aa  
+is plasmid no  
+shape not set 
+Entrez Record 4323016 
+Genbank accession AAD16160 
+Agaricus californicus 
+Fungi
+
+

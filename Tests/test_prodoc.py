@@ -22,8 +22,15 @@ def print_list( list ):
     for item in list:
         print( '    ' + str( item ) )
 
+def print_references( list ):
+    for item in list:
+        text = item.number + ' ' + item.authors + ' ' + item.citation
+        while text:
+            print text[ :80 ]
+            text = text[ 80: ]
+
 for test in tests:
-    print "testing %s" % test
+#    print "testing %s" % test
     datafile = os.path.join( 'Prosite', 'Doc', test )
     src_handle = open( datafile )
     data = record_parser.parse( src_handle )
@@ -32,4 +39,5 @@ for test in tests:
     print_list( data.prosite_refs )
     print data.text
     print 'references'
-    print_list( data.references )
+    print_references( data.references )
+    src_handle.close()
