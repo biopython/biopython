@@ -4,7 +4,7 @@ News for the Biopython Project
 This file contains release notes and general news 
 about the biopython project.
 
-Jul 27, 3004: Biopython 1.20
+Jul 27, 2003: Biopython 1.20
   added Andrew Dalke's EUtils library
   added Michiel de Hoon's gene expression analysis package
   updates to setup code, now smarter about dependencies
