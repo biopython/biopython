@@ -262,6 +262,9 @@ def download_many(ids, callback_fn, broken_fn=None, delay=120.0, batchsize=500,
     # broken and move on.  If the request succeeds, I'll double the
     # number of records until I get back up to the batchsize.
     while ids:
+        if current_batchsize > len(ids):
+            current_batchsize = len(ids)
+        
         id_str = ','.join(ids[:current_batchsize])
 
         # Make sure enough time has passed before I do another query.
@@ -292,22 +295,24 @@ def download_many(ids, callback_fn, broken_fn=None, delay=120.0, batchsize=500,
         # the batchsize is large.
         iter = Medline.Iterator(File.StringHandle(results))
         num_ids = 0
-        while 1:
-            if iter.next() is None:
-                break
+        while iter.next() is not None:
             num_ids = num_ids + 1
-        if num_ids != current_batchsize and num_ids != len(ids):
-            raise SyntaxError, "I requested %d id's from PubMed but found %d" \
-                  % (current_batchsize, num_ids)
+        if num_ids != current_batchsize:
+            raise SyntaxError, \
+                  "I requested %d entries from PubMed but only found %d.  " \
+                  % (current_batchsize, num_ids) + \
+                  "Is there a broken ID somewhere?"
 
         # Iterate through the results and pass the records to the
         # callback.
         iter = Medline.Iterator(File.StringHandle(results), parser)
+        idnum = 0
         while 1:
             rec = iter.next()
             if rec is None:
                 break
             callback_fn(ids[idnum], rec)
+            idnum = idnum + 1
 
         ids = ids[current_batchsize:]
 
