@@ -44,7 +44,8 @@ concept similar to this.
 """
 
 
-import urllib
+import sys, urllib, traceback
+from xml.sax import saxutils
 import Parser
 try:
     from cStringIO import StringIO
@@ -54,7 +55,7 @@ except ImportError:
 class StoreEvents:
     def __init__(self):
         self.events = []
-
+        self.has_error = 0
         self.characters = lambda ch, append = self.events.append: \
                           append( ("characters", ch) )
 
@@ -72,8 +73,10 @@ class StoreEvents:
         self.events.append( ("endElement", args) )
 
     def error(self, *args):
+        self.has_error = 1
         self.events.append( ("error", args) )
     def fatalError(self, *args):
+        self.has_error = 1
         self.events.append( ("fatalError", args) )
 
 class EventStream:
@@ -102,8 +105,11 @@ class Iterator:
     def iterateFile(self, fileobj, cont_handler = None):
         return self.iterateString(fileobj.read(), cont_handler)
         
-    def iterate(self, systemId, cont_handler = None):
-        return self.iterateFile(urllib.urlopen(systemId), cont_handler)
+    def iterate(self, source, cont_handler = None):
+        """parse using the URL or file handle"""
+        source = saxutils.prepare_input_source(source)
+        file = source.getCharacterStream() or source.getByteStream()
+        return self.iterateFile(file, cont_handler)
     
 class RecordEventStream:
     def __init__(self, reader, parser):
@@ -135,8 +141,174 @@ class IteratorRecords:
         return Iterate(RecordEventStream(record_reader, self.record_parser),
                        self.marker_tag, cont_handler)
 
-    def iterate(self, systemId, cont_handler = None):
-        return self.iterateFile(urllib.urlopen(systemId), cont_handler)
+    def iterate(self, source, cont_handler = None):
+        """parse using the URL or file handle"""
+        source = saxutils.prepare_input_source(source)
+        file = source.getCharacterStream() or source.getByteStream()
+        return self.iterateFile(file, cont_handler)
+
+def _get_next_text(reader):
+    try:
+        return reader.next(), None
+    except (KeyboardInterrupt, SystemExit):
+        raise
+    except:
+        # Something unusual happened (couldn't find a record?)
+        # so call it a fatal error and stop
+        outfile = StringIO()
+        traceback.print_exc(file=outfile)
+        exc = Parser.ParserRecordException(
+            outfile.getvalue(), sys.exc_info()[1])
+        events = [ ("fatalError", (exc,)) ]
+        return None, events
+
+
+class HeaderFooterEventStream:
+    def __init__(self, fileobj, 
+                 header_parser, make_header_reader, header_args,
+                 record_parser, make_record_reader, record_args,
+                 footer_parser, make_footer_reader, footer_args):
+        self.fileobj = fileobj
+        
+        self.header_parser = header_parser
+        self.make_header_reader = make_header_reader
+        self.header_args = header_args
+        
+        self.record_parser = record_parser
+        self.make_record_reader = make_record_reader
+        self.record_args = record_args
+        
+        self.footer_parser = footer_parser
+        self.make_footer_reader = make_footer_reader
+        self.footer_args = footer_args
+
+        self._state = "header"
+        self._reader = None
+        self._lookahead = ""
+
+    def next(self):
+        if self._state == "header":
+            x = self._header_next()
+            self._state = "record"
+            if x is not None:
+                return x
+            
+        if self._state == "record":
+            x = self._record_next()
+            if x is not None:
+                return x
+            self._state = "footer"
+
+        if self._state == "footer":
+            x = self._footer_next()
+            self._state = "end"
+            if x is not None:
+                return x
+
+        if self._state == "end":
+            if self._lookahead:
+                return [ ("fatalError", Parser.ParserIncompleteException(0)) ]
+            return None
+        
+        raise AssertionError("Should not get here")
+
+    def _header_next(self):
+        assert self._reader is None
+        if self.header_parser is None:
+            return None
+        reader = apply(self.make_header_reader,
+                       (self.fileobj,) + self.header_args,
+                       {"lookahead": self._lookahead})
+        text, errors = _get_next_text(reader)
+        self.fileobj, self._lookahead = reader.remainder()
+        if text is None:
+            return errors
+        events = StoreEvents()
+        self.header_parser.setContentHandler(events)
+        self.header_parser.setErrorHandler(events)
+        self.header_parser.parseString(text)
+        return events.events
+        
+    def _record_next(self):
+        if self._reader is None:
+            assert self.record_parser is not None
+            reader = apply(self.make_record_reader,
+                           (self.fileobj,) + self.record_args,
+                           {"lookahead": self._lookahead})
+            self._lookahead = None
+            self._reader = reader
+        else:
+            reader = self._reader
+        text, errors = _get_next_text(reader)
+        if text is None:
+            self.fileobj, self._lookahead = reader.remainder()
+            self._reader = None
+            return errors
+        
+        events = StoreEvents()
+        self.record_parser.setContentHandler(events)
+        self.record_parser.setErrorHandler(events)
+        self.record_parser.parseString(text)
+
+        if events.has_error:
+            # Couldn't parse the record.
+            if self.footer_parser is not None:
+                # perhaps there's a footer here?
+                # We'll need to try reading that
+                self.fileobj, self._lookahead = reader.remainder()
+                self._lookahead = text + self._lookahead
+                self._reader = None
+                return None
+            # If no footer is possible, go on and pass
+            # back the error as normal
+            
+        return events.events
+            
+    def _footer_next(self):
+        assert self._reader is None
+        if self.footer_parser is None:
+            return None
+        reader = apply(self.make_footer_reader,
+                       (self.fileobj,) + self.footer_args,
+                       {"lookahead": self._lookahead})
+        text, errors = _get_next_text(reader)
+        self._lookahead = reader.remainder()
+        if text is None:
+            return errors
+        events = StoreEvents()
+        self.footer_parser.setContentHandler(events)
+        self.footer_parser.setErrorHandler(events)
+        self.footer_parser.parseString(text)
+        return events.events
+        
+            
+
+class IteratorHeaderFooter:
+    def __init__(self,
+                 header_parser, make_header_reader, header_args,
+                 record_parser, make_record_reader, record_args,
+                 footer_parser, make_footer_reader, footer_args,
+                 marker_tag):
+
+        self.args = header_parser, make_header_reader, header_args, \
+                    record_parser, make_record_reader, record_args, \
+                    footer_parser, make_footer_reader, footer_args
+        self.marker_tag = marker_tag
+
+    def iterateString(self, s, cont_handler = None):
+        return self.iterateFile(StringIO(s), cont_handler)
+        
+    def iterateFile(self, fileobj, cont_handler = None):
+        args = (fileobj,) + self.args
+        return Iterate(HeaderFooterEventStream(*args),
+                       self.marker_tag, cont_handler)
+    
+    def iterate(self, source, cont_handler = None):
+        """parse using the URL or file handle"""
+        source = saxutils.prepare_input_source(source)
+        file = source.getCharacterStream() or source.getByteStream()
+        return self.iterateFile(file, cont_handler)
+    
 
 class Iterate:
     def __init__(self, event_stream, tag, cont_handler = None):
