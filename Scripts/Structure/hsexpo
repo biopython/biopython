@@ -1,8 +1,27 @@
 #!/bin/user/python
 
+# Copyright (C) 2002, Thomas Hamelryck (thamelry@vub.ac.be)
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
 from optparse import OptionParser
 
 from Bio.PDB import *
+
+__doc__="""
+This program calculates solvent exposure for all amino
+acids in a PDB file using 5 different methods:
+
+    -DSSP (DSSP needs to be installed)
+    -Residue depth (MSMS needs to be installed)
+    -Coordination number (ie. number of CA atoms within a sphere)
+    -CA3 half sphere exposure
+    -CB half sphere exposure
+
+A PDB file can be written out with the exposure in the B factor field.
+See --help for all options.
+"""
 
 # Get the user's options
 parser=OptionParser()
