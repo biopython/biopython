@@ -4,6 +4,29 @@ News for the Biopython Project
 This file contains release notes and general news 
 about the biopython project.
 
+Feb 16, 2004: Biopython 1.24
+ New parsers for Phred and Ace format files -- thanks to Frank Kauff
+ New Code for dealing with NMR data -- thanks to Bob Bussell
+ New SeqUtils modules for codon usage, isoelectric points and other
+  protein properties -- thanks to Yair Benita
+ New code for dealing with Wise contributed by Michael
+ EZ-Retrieve sequence retrieval now supported thanks to Jeff
+ Bio.Cluster updated along with documentation by Michiel 
+ BioSQL fixed so it now works with the current SQL schema -- thanks to Yves
+  Bastide for patches
+ Patches to Bio/__init__ to make it compatible with py2exe -- thanks to 
+  Leighton Pritchard
+ Added __iter__ to all Biopython Iterators to make them Python 2.2 compatible
+ Fixes to NCBIWWW for retrieving from NCBI -- thanks to Chris Wroe
+ Retrieval of multiple alignment objects from BLAST records -- thanks to 
+  James Casbon
+ Fixes to GenBank format for new tags by Peter
+ Parsing fixes in clustalw parsed -- thanks to Greg Singer and Iddo
+ Fasta Indexes can have a specified filename -- thanks to Chunlei Wu
+ Fix to Prosite parser -- thanks to Mike Liang
+ Fix in GenBank parsing -- mRNAs now get strand information 
+
+
 Oct 18, 2003: Biopython 1.23
   Fixed distribution of files in Bio/Cluster
   Now distributing Bio/KDTree/_KDTree.swig.C

@@ -24,7 +24,7 @@ import os
 
 # Make sure I have the right Python version.
 if sys.version_info[:2] < (2, 2):
-    print "Biopython requires Python 2.2.  Python %d.%d detected" % \
+    print "Biopython requires Python 2.2 or better.  Python %d.%d detected" % \
           sys.version_info[:2]
     sys.exit(-1)
 
@@ -421,7 +421,7 @@ PACKAGES.append("BioSQL")
 
 setup(
     name='biopython',
-    version='1.23',
+    version='1.24',
     author='The Biopython Consortium',
     author_email='biopython@biopython.org',
     url='http://www.biopython.org/',

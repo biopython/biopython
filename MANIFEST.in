@@ -17,6 +17,8 @@ recursive-include Doc *.txt
 recursive-include Doc *.py
 recursive-include Doc *.html
 recursive-include Doc *.fasta
+recursive-include Doc/examples *.aln
+recursive-include Doc/examples *.xpk
 include Bio/KDTree/Makefile    # Include files for building KDTree.
 include Bio/KDTree/_KDTree.i
 include Bio/KDTree/_KDTree.C

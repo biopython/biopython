@@ -90,6 +90,8 @@ following lines in the setup.py file:
                                 "Bio/KDTree/_KDTree.swig.C"],
                                libraries=["stdc++"]
                                ),
+This module is commented out by default now -- so please uncomment if you
+want to install and use it.
 The rest of Biopython will build and run fine.
 
 
