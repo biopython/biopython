@@ -344,7 +344,7 @@ feature_block = Std.feature_block(Martel.Rep1(FT),
 SQ = Martel.Group("SQ",
    Martel.Re("SQ   SEQUENCE +(?P<sequence_length>\d+) AA;" \
              " +(?P<molecular_weight>\d+) MW;" \
-             " +(?P<crc32>\w+) CRC32;\R")
+             " +(?P<crc?type=32>\w+) CRC32;\R")
                   )
 ##SQ_data = Martel.Group("SQ_data",
 ##                       Martel.Re("     (?P<sequence>[^\R]*)\R"))
@@ -366,7 +366,7 @@ end = Martel.Group("END", Martel.Str("//") + Martel.AnyEol())
 
 record = Std.record(
     ID +
-    AC +
+    AC_block +
     DT_created +
     DT_seq_update +
     DT_ann_update +
@@ -375,6 +375,7 @@ record = Std.record(
     Martel.Opt(OS_block) +
     Martel.Opt(OG_block) +
     Martel.Opt(OC_block) +
+    Martel.Group("OX_block", Martel.NullOp()) +
     Martel.Group("reference_block", Martel.Rep(reference)) +
     comment +
     Martel.Opt(DR_block) +
