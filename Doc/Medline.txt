@@ -1,0 +1,60 @@
+PubMed.txt
+==========
+
+
+
+Medline
+-------
+
+The Online Services Reference Manual documents the MEDLINE format at:
+http://www.nlm.nih.gov/pubs/osrm_nlm.html
+
+The Medline scanner produces the following events:
+record
+    undefined
+    abstract_author
+    abstract
+    address
+    author
+    call_number
+    comments
+    class_update_date
+    country
+    entry_date
+    publication_date
+    english_abstract
+    entry_month
+    gene_symbol
+    identification
+    issue_part_supplement
+    issn
+    journal_title_code
+    language
+    special_list
+    last_revision_date
+    mesh_heading
+    mesh_tree_number
+    major_revision_date
+    no_author
+    substance_name
+    pagination
+    personal_name_as_subject
+    publication_type
+    number_of_references
+    cas_registry_number
+    record_originator
+    journal_subset
+    subheadings
+    secondary_source_id
+    source
+    title_abbreviation
+    title
+    transliterated_title
+    unique_identifier
+    volume_issue
+    year
+    pubmed_id
+    
+
+undefined is a special event that is called for every line with a
+qualifier not defined in the specification.
