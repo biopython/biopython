@@ -1,5 +1,6 @@
 import string
 import Seq
+import Alphabet
 
 from PropertyManager import default_manager
 
@@ -58,10 +59,19 @@ def verify_alphabet(seq):
 
 def count_monomers(seq):
     dict = {}
-    s = buffer(seq.data)  # works for strings and array.arrays
+#    bugfix: string.count(s,c) raises an AttributeError. Iddo Friedberg 16 Mar. 04
+#    s = buffer(seq.data)  # works for strings and array.arrays
     for c in seq.alphabet.letters:
-        dict[c] = string.count(s, c)
+        dict[c] = string.count(seq.data, c)
     return dict
+
+def percent_monomers(seq):
+   dict2 = {}
+   seq_len = len(seq)
+   dict = count_monomers(seq)
+   for m in dict:
+      dict2[m] = dict[m] * 100. / seq_len
+   return dict2
 
 def sum(seq, table, zero = 0.0):
     total = zero
@@ -88,3 +98,22 @@ def total_weight_range(seq, weight_table = None):
     if weight_table is None:
         weight_table = default_manager.resolve(seq.alphabet, "weight_range_table")
     return sum_2ple(seq, weight_table)
+
+def reduce_sequence(seq, reduction_table,new_alphabet=None):
+   """ given an amino-acid sequence, return it in reduced alphabet form based
+       on the letter-translation table passed
+       seq: a Seq.Seq type sequence
+       reduction_table: a dictionary whose keys are the "from" alphabet, and values
+       are the "to" alphabet"""
+   if new_alphabet is None:
+      new_alphabet = Alphabet.single_letter_alphabet
+      new_alphabet.letters = ''
+      for letter in reduction_table:
+         new_alphabet.letters += letter
+      new_alphabet.size = len(new_alphabet.letters)
+   new_seq = Seq.Seq('',new_alphabet)
+   for letter in seq:
+      new_seq += reduction_table[letter]
+   return new_seq
+
+
