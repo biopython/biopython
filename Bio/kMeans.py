@@ -30,7 +30,7 @@ def random_centroids(data, k):
 
     Return a list of data points to serve as the initial centroids.
     This is k randomly chosen data points.  Tries to avoid having
-    repeated centroies, if possible.
+    repeated centroids, if possible.
 
     """
     if k > len(data):
@@ -78,8 +78,18 @@ def _find_closest_centroid(vector, centroids, distance_fn):
             closest_index = i
     return closest_index
 
+def mean_of_vectors(vectors):
+    """mean_of_vectors(vectors) -> arithmetic mean of vectors"""
+    if not vectors:
+        return None
+    average = zeros(len(vectors[0]), Float)
+    for vec in vectors:
+        average = average + vec
+    return average / len(vectors)
+
 def cluster(data, k, distance_fn=distance.euclidean,
             init_centroids_fn=random_centroids,
+            calc_centroid_fn=mean_of_vectors,
             max_iterations=1000, update_fn=None):
     """cluster(data, k[, distance_fn][, max_iterations][, update_fn]) ->
     (centroids, clusters) or None
@@ -118,10 +128,10 @@ def cluster(data, k, distance_fn=distance.euclidean,
     clusters = [None] * len(data)
     centroids = init_centroids_fn(data, k)
 
-    for i in range(max_iterations):
+    for iter in range(max_iterations):
         # Call update_fn, if specified.
         if update_fn is not None:
-            update_fn(i, centroids, clusters)
+            update_fn(iter, centroids, clusters)
 
         # Assign the clusters.  Each data point is assigned to the
         # closest centroid.
@@ -139,14 +149,15 @@ def cluster(data, k, distance_fn=distance.euclidean,
         # the number of points.  This will result in a divide by zero
         # error and fail if a cluster is empty.  However, this should
         # not happen if the initial centroids were chosen carefully.
-        centroids = zeros((k, ndims), Float)
-        for j in range(len(data)):
-            c, d = clusters[j], data[j]
-            centroids[c] = centroids[c] + d
-        num_in_cluster = listfns.count(clusters)
-        for j in range(k):
-            if num_in_cluster.has_key(j):
-                centroids[j] = centroids[j] / num_in_cluster[j]
+
+        # Separate out each of the data points by the cluster
+        clusterdata = [[] for x in range(k)]  # cluster -> list of data points
+        for i in range(len(clusters)):
+            cluster, datapoint = clusters[i], data[i]
+            clusterdata[cluster].append(datapoint)
+
+        # Calculate the new centroids.
+        centroids = [calc_centroid_fn(x) for x in clusterdata]
     else:
         # The loop iterated without converging.
         return None
