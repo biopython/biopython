@@ -79,4 +79,86 @@ class PrimerSearchCommandline(Application.AbstractCommandline):
           _Option(["-mismatchpercent"], ["input"], None, 1,
                   "Allowed percentage mismatch.")]
 
+class EProtDistCommandline(Application.AbstractCommandline):
+    """Commandline object for the eprotdist program from EMBOSS.
 
+    This is an EMBOSS wrapper around protdist from PHYLIP.
+    """
+    def __init__(self, cmd = "eprotdist"):
+        Application.AbstractCommandline.__init__(self)
+        self.program_name = cmd
+
+        self.parameters = \
+         [_Option(["-msf"], ["input"], None, 1,
+                  "File containing sequences"),
+          _Option(["-outfile"], ["output"], None, 1,
+                  "Output file name"),
+          _Option(["-method"], ["input"], None, 1,
+                  "Choose the method to use"),
+          _Option(["-categ"], ["input"], None, 0,
+                  "Choose the categorie to use"),
+          _Option(["-gencode"], ["input"], None, 0,
+                  "Which genetic code"),
+          _Option(["-prob"], ["input"], None, 0,
+                  "Prob change category (1.0=easy)"),
+          _Option(["-tranrate"], ["input"], None, 0,
+                  "Transition/transversion ratio"),
+          _Option(["-freqa"], ["input"], None, 0,
+                  "Frequency for A"),
+          _Option(["-freqc"], ["input"], None, 0,
+                  "Frequency for C"),
+          _Option(["-freqg"], ["input"], None, 0,
+                  "Frequency for G"),
+          _Option(["-freqt"], ["input"], None, 0,
+                  "Frequency for T"),
+          _Option(["-printdata"], ["input"], None, 0,
+                  "Print out the data at start of run"),
+          _Option(["-progress"], ["input"], None, 0,
+                  "Print indications of progress of run"),
+          _Option(["-basefrequency"], ["input"], None, 0,
+                  "Use empirical base frequencies")]
+
+class ENeighborCommandline(Application.AbstractCommandline):
+    """Commandline object for the eneighbor program from EMBOSS.
+
+    This is an EMBOSS wrapper around neighbor from PHYLIP.
+    """
+    def __init__(self, cmd = "eneighbor"):
+        Application.AbstractCommandline.__init__(self)
+        self.program_name = cmd
+
+        self.parameters = \
+         [_Option(["-infile"], ["input"], None, 1,
+                  "infile value"),
+          _Option(["-outfile"], ["output"], None, 1,
+                  "Output file name"),
+          _Option(["-trout"], ["input"], None, 1,
+                  "Create a tree file"),
+          _Option(["-treefile"], ["input"], None, 1,
+                  "Tree file name"),
+          _Option(["-nj"], ["input"], None, 1,
+                  "Neighbor-joining"),
+          _Option(["-noog"], ["input"], None, 1,
+                  "Outgroup root"),
+          _Option(["-outgnum"], ["input"], None, 0,
+                  "number of the outgroup"),
+          _Option(["-randseed"], ["input"], None, 0,
+                  "Random number seed (must be odd)"),
+          _Option(["-datasets"], ["input"], None, 0,
+                  "How many data sets"),
+          _Option(["-drawtree"], ["input"], None, 0,
+                  "Draw tree"),
+          _Option(["-lt"], ["input"], None, 0,
+                  "Lower-triangular data matrix"),
+          _Option(["-ut"], ["input"], None, 0,
+                  "Upper-triangular data matrix"),
+          _Option(["-sr"], ["input"], None, 0,
+                  "Subreplicates"),
+          _Option(["-random"], ["input"], None, 0,
+                  "Randomize input order of species"),
+          _Option(["-multsets"], ["input"], None, 0,
+                  "Analyze multiple data sets"),
+          _Option(["-printdata"], ["input"], None, 0,
+                  "Print out the data at start of run"),
+          _Option(["-progress"], ["input"], None, 0,
+                  "Print indications of progress of run")]
