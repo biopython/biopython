@@ -73,3 +73,7 @@ Function('join', [AbsoluteLocation(Path(None, 'AB003599.1'), Range(HighBound(Int
 Function('join', [AbsoluteLocation(None, Range(HighBound(Integer(85)), Integer(194))), AbsoluteLocation(None, Range(Integer(296), Integer(458))), AbsoluteLocation(None, Range(Integer(547), LowBound(Integer(653))))])
 --> Trying 5.12
 AbsoluteLocation(None, TwoBound(Integer(5), Integer(12)))
+--> Trying one-of(1888,1901)..2200
+AbsoluteLocation(None, Range(Function('one-of', [AbsoluteLocation(None, Integer(1888)), AbsoluteLocation(None, Integer(1901))]), Integer(2200)))
+--> Trying 39..one-of(1956,2843)
+AbsoluteLocation(None, Range(Integer(39), Function('one-of', [AbsoluteLocation(None, Integer(1956)), AbsoluteLocation(None, Integer(2843))])))
