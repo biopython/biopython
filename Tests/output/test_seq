@@ -9,3 +9,27 @@ IUPACUnambiguousDNA()
 19
 expected error, and got it
 IUPACAmbiguousDNA()
+
+Testing MutableSeq
+Testing creating MutableSeqs in multiple ways
+MutableSeq('TCAAAAGGATGCATCATG', IUPACAmbiguousDNA())
+TCAAAAGGATGCATCATG
+18
+Seq('TCAAAAGGATGCATCATG', IUPACAmbiguousDNA())
+T
+MutableSeq('CAAA', IUPACAmbiguousDNA())
+Set slice with string: MutableSeq('TGATAAAGGATGCATCATG', IUPACAmbiguousDNA())
+Set slice with MutableSeq: MutableSeq('TAATAAAGGATGCATCATG', IUPACAmbiguousDNA())
+Set slice with array: MutableSeq('TGATTAAAGGATGCATCATG', IUPACAmbiguousDNA())
+Set item: MutableSeq('TGAGTAAAGGATGCATCATG', IUPACAmbiguousDNA())
+Delete slice: MutableSeq('TGAGAAAGGATGCATCATG', IUPACAmbiguousDNA())
+Delete item: MutableSeq('TGAAAAGGATGCATCATG', IUPACAmbiguousDNA())
+Append: MutableSeq('TGAAAAGGATGCATCATGC', IUPACAmbiguousDNA())
+Insert: MutableSeq('TGAAGAAGGATGCATCATGC', IUPACAmbiguousDNA())
+Pop off the last item: C
+Removed Gs: MutableSeq('TAAGAAGGATGCATCATG', IUPACAmbiguousDNA())
+Expected value error and got it
+A count: 7
+A index: 1
+Reversed Seq: MutableSeq('GTACTACGTAGGAAGAAT', IUPACAmbiguousDNA())
+Extended Seq: MutableSeq('GTACTACGTAGGAAGAATGATTTT', IUPACAmbiguousDNA())
