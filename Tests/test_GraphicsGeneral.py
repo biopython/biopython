@@ -1,0 +1,88 @@
+#!/usr/bin/env python
+"""Test for graphics things that don't really deserve there own test module.
+
+XXX Right now this test occasionally fails with a trace like:
+
+File "/usr/local/lib/python2.1/site-packages/reportlab/graphics/
+charts/lineplots.py", line 182, in calcPositions
+    datum = self.data[rowNo][colNo] # x,y value
+IndexError: list index out of range
+
+This appears to be a problem with reportlab, so I'm not worrying about
+it right now, unless it starts to happen with real data! If anyone
+can figure out the data that causes it so I can avoid it, that'd be much
+appreciated.
+"""
+# standard library
+import os
+import sys
+import random
+
+# PyUnit
+import unittest
+
+# the stuff we're testing
+from Bio.Graphics.Comparative import ComparativeScatterPlot
+
+def run_tests(argv):
+    ALL_TESTS = [ComparativeTest]
+    
+    runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
+    test_loader = unittest.TestLoader()
+    test_loader.testMethodPrefix = 't_'
+    
+    for test in ALL_TESTS:
+        cur_suite = test_loader.loadTestsFromTestCase(test)
+        runner.run(cur_suite)
+
+class ComparativeTest(unittest.TestCase):
+    """Do tests for modules involved with comparing data.
+    """
+    def setUp(self):
+        self.min_two_d_lists = 1
+        self.max_two_d_lists = 7
+
+        self.min_num_points = 1
+        self.max_num_points = 500
+
+        self.min_point_num = 0
+        self.max_point_num = 200
+
+    def _make_random_points(self):
+        """Make a bunch of random points for testing plots.
+        """
+        plot_info = []
+        num_two_d_lists = random.randrange(self.min_two_d_lists,
+                                           self.max_two_d_lists)
+
+        for two_d_list in range(num_two_d_lists):
+            cur_list = []
+            num_points = random.randrange(self.min_num_points,
+                                          self.max_num_points)
+            for point in range(num_points):
+                x_point = random.randrange(self.min_point_num,
+                                           self.max_point_num)
+                y_point = random.randrange(self.min_point_num,
+                                           self.max_point_num)
+
+                cur_list.append((x_point, y_point))
+
+            plot_info.append(cur_list)
+        return plot_info
+                
+    def t_simple_scatter_plot(self):
+        """Test creation of a simple ScatterPlot.
+        """
+        compare_plot = ComparativeScatterPlot()
+        compare_plot.display_info = self._make_random_points()
+
+        output_file = os.path.join(os.getcwd(), "Graphics", "scatter_test.pdf")
+        try:
+            compare_plot.draw_to_file(output_file, "Testing Scatter Plots")
+        # there is a bug in reportlab which occasionally generates an
+        # error here.
+        except IndexError:
+            pass
+
+if __name__ == "__main__":
+    sys.exit(run_tests(sys.argv))

@@ -100,6 +100,13 @@ def check_Numpy():
         return 1
     except ImportError:
         return 0
+
+def check_reportlab():
+    try:
+        import reportlab
+        return 1
+    except ImportError:
+        return 0
                   
 class my_install(install):
     """Override the standard install to check for dependencies.
@@ -121,6 +128,9 @@ class my_install(install):
 
         check_install("Numerical Python", check_Numpy,
                       "http://numpy.sourceforge.net/")
+
+        check_install("Reportlab", check_reportlab,
+                      "http://www.reportlab.com/download.html")
 
 class run_tests(Command):
     """Run all of the tests for the package.
@@ -174,6 +184,7 @@ biopython_packages = ['Bio',
                       'Bio.GA.Selection',
                       'Bio.GenBank',
                       'Bio.Gobase',
+                      'Bio.Graphics',
                       'Bio.HMM',
                       'Bio.InterPro',
                       'Bio.IntelliGenetics',
