@@ -105,7 +105,7 @@ class MutableSeq:
         elif isinstance(other, type(self.data)):
             self.data[i:j] = other
         else:
-            self.data[i:j] = array.array( ("c", str(other)) )
+            self.data[i:j] = array.array("c", str(other))
     def __delslice__(self, i, j):
         i = max(i, 0); j = max(j, 0)
         del self.data[i:j]
