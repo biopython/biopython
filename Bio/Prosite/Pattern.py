@@ -336,9 +336,9 @@ def pattern_mapping(prosite, mapping):
     
 prosite_term_re = re.compile(r"""
 (?:
-  ([A-Zx])|              # a character OR
-  \[(<?)([A-Z]+)(>?)\]|  # something in []s OR
-  \{([A-Z]+)\}           # something in {}s
+  ([ABCDEFGHIKLMNPQRSTVWXYZx])|              # a character OR
+  \[(<?)([ABCDEFGHIKLMNPQRSTVWXYZ]+)(>?)\]|  # something in []s OR
+  \{([ABCDEFGHIKLMNPQRSTVWXYZ]+)\}           # something in {}s
 )(?:\((\d+)(,\d+)?\))?   # optional count of the form "(i,j)", ",j" optional
 $
 """, re.VERBOSE)
@@ -424,15 +424,15 @@ def find_terms(pattern):
 prosite_re = re.compile(r"""
 ^<?                   # starts with an optional "<"
 (
-  [A-Zx]|             # a character OR
-  (\[<?[A-Z]+>?\])|   # something in []s OR
-  \{[A-Z]+\}          # something in {}s
+  [ABCDEFGHIKLMNPQRSTVWXYZx]|             # a character OR
+  (\[<?[ABCDEFGHIKLMNPQRSTVWXYZ]+>?\])|   # something in []s OR
+  \{[ABCDEFGHIKLMNPQRSTVWXYZ]+\}          # something in {}s
 )(\(\d+(,\d+)?\))?    # optional count of the form "(i,j)" (",j" is optional)
 (-                    # new terms seperated by a '-'
  (
-  [A-Zx]|             # a character OR
-  \[[A-Z]+>?\]|       # something in []s OR
-  \{[A-Z]+\}          # something in {}s
+  [ABCDEFGHIKLMNPQRSTVWXYZx]|             # a character OR
+  \[[ABCDEFGHIKLMNPQRSTVWXYZ]+>?\]|       # something in []s OR
+  \{[ABCDEFGHIKLMNPQRSTVWXYZ]+\}          # something in {}s
  )(\(\d+(,\d+)?\))?   # optional count
 )*                    # repeat until done
 >?                    # pattern ends with an optional ">"
@@ -467,7 +467,6 @@ def _verify_test(infile):
             try:
                 print "*" * 60
                 print pattern
-                pattern = fix_errors.get(pattern, pattern)
                 p = compile(pattern)
                 print prosite_to_re(pattern)
                 print repr(p.re)
