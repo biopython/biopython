@@ -70,7 +70,7 @@ class _PPBuilder:
         else:
             return 0
     
-    def build_peptides(self, structure, model_id=0, aa_only=1):
+    def build_peptides(self, entity, aa_only=1):
         """
         Build and return a list of Polypeptide objects.
         model_id --- only this model is examined
@@ -78,9 +78,19 @@ class _PPBuilder:
         """
         is_connected=self._is_connected
         accept=self._accept
-        model=structure[model_id]
+        level=entity.get_level()
+        # Decide wich entity we are dealing with
+        if level=="S":
+            model=entity[0]
+            chain_list=model.get_list()
+        elif level=="M":
+            chain_list=entity.get_list()
+        elif level=="C":
+            chain_list=[entity]
+        else:
+            raise PDBException, "Entity should be Structure, Model or Chain."
         pp_list=[]
-        for chain in model.get_list():
+        for chain in chain_list:
             prev=None
             pp=None
             for next in chain.get_list():
@@ -194,11 +204,19 @@ if __name__=="__main__":
     print "C-N"
     for pp in ppb.build_peptides(s):
         print pp.get_sequence()
+    for pp in ppb.build_peptides(s[0]):
+        print pp.get_sequence()
+    for pp in ppb.build_peptides(s[0]["A"]):
+        print pp.get_sequence()
 
     ppb=CaPPBuilder()
 
     print "CA-CA"
     for pp in ppb.build_peptides(s):
+        print pp.get_sequence()
+    for pp in ppb.build_peptides(s[0]):
+        print pp.get_sequence()
+    for pp in ppb.build_peptides(s[0]["A"]):
         print pp.get_sequence()
 
 

@@ -119,7 +119,7 @@ class HSExposure:
                 rotran_list.append((translation, rotation, ca, residue))
         return rotran_list
 
-    def _get_rotran_list_from_ca(self, structure):
+    def _get_rotran_list_from_ca(self, model):
         """
         Return a list of (translation, rotation, ca, residue)
         tuples (using CA). 
@@ -139,7 +139,7 @@ class HSExposure:
         # list of (translation, rotation, ca, residue) tuples
         rotran_list=[]
         ppb=PPBuilder()
-        for pp in ppb.build_peptides(structure):
+        for pp in ppb.build_peptides(model):
             ca_list=[]
             ca_list=pp.get_ca_list()
             for i in range(1, len(ca_list)-1):
@@ -187,23 +187,23 @@ class HSExposure:
             d[r1]=(hs_sidechain, hs_mainchain)
         return d
     
-    def calc_hs_exposure(self, structure, radius=12.0, option='CB'):
-        residue_list=Selection.unfold_entities(structure, 'R')
+    def calc_hs_exposure(self, model, radius=12.0, option='CB'):
+        residue_list=Selection.unfold_entities(model, 'R')
         if option=='CA3':
-            rotran_list=self._get_rotran_list_from_ca(structure)
+            rotran_list=self._get_rotran_list_from_ca(model)
         elif option=='CB':
             rotran_list=self._get_rotran_list_from_cb(residue_list)
         else:
             raise "Options: CA3 or CB"
         return self._calc_hs_exposure(rotran_list, residue_list, radius)
 
-    def calc_fs_exposure(self, structure, radius=12.0):
+    def calc_fs_exposure(self, model, radius=12.0):
         """
         A residue's exposure is defined as the number of CA atoms around 
         that residues CA atom. A dictionary is returned that uses a Residue
         object as key, and the residue exposure as corresponding value.
         """
-        residue_list=Selection.unfold_entities(structure, 'R')
+        residue_list=Selection.unfold_entities(model, 'R')
         ca_list=[]
         # Extract the CA coordinates
         for r in residue_list:
@@ -231,14 +231,24 @@ if __name__=="__main__":
     p=PDBParser()
     s=p.get_structure('X', sys.argv[1])
 
+    model=s[0]
+
+    # Neighbor sphere radius
     RADIUS=13.0
 
     hse=HSExposure()
-    exp_ca=hse.calc_hs_exposure(s, RADIUS, option='CA3')
-    exp_cb=hse.calc_hs_exposure(s, RADIUS, option='CB')
-    exp_fs=hse.calc_fs_exposure(s, RADIUS)
 
-    residue_list=Selection.unfold_entities(s, 'R')
+    # Calculate CA-CA-CA based HS-exposure
+    exp_ca=hse.calc_hs_exposure(model, RADIUS, option='CA3')
+
+    # Calculate CB based HS-exposure
+    exp_cb=hse.calc_hs_exposure(model, RADIUS, option='CB')
+
+    # Calculate classical coordination number
+    exp_fs=hse.calc_fs_exposure(model, RADIUS)
+
+    # All residues in the model
+    residue_list=Selection.unfold_entities(model, 'R')
 
     # Print accessibilities for each residue
     for r in residue_list:
