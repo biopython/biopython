@@ -28,6 +28,12 @@ import Bio.Alphabet
 import ecell_format
 import Record
 
+"""
+Ecell converts the ECell input from spreadsheet format to an intermediate format, decribed in
+http://www.e-cell.org/manual/chapter2E.html#3.2.  It provides an alternative to the perl script
+supplies with the Ecell2 distribution at http://bioinformatics.org/project/?group_id=49.
+"""
+
 __all__ = [
     'Record',
     'ecell_format'
@@ -57,7 +63,7 @@ class Iterator:
         """Initialize the iterator.
 
         Arguments:
-        o handle - A handle with Saf entries to iterate through.
+        o handle - A handle with ECell entries to iterate through.
         o parser - An optional parser to pass the entries through before
         returning them. If None, then the raw entry will be returned.
         """
@@ -387,7 +393,7 @@ class RecordParser:
         self._scanner = _Scanner(debug_level)
 
     def parse(self, handle):
-        """Parse the specified handle into an NBRF record.
+        """Parse the specified handle into an ECell record.
         """
         self._consumer = _RecordConsumer()
         self._scanner.feed(handle, self._consumer)

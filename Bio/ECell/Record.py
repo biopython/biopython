@@ -5,7 +5,7 @@
 
 """Martel based parser to read ECell formatted files.
 
-This is a huge regular regular expression for NBRF, built using
+This is a huge regular regular expression for Ecell, built using
 the 'regular expressiona on steroids' capabilities of Martel.
 
 #http://www.bioinformatics.org/ecell2/
@@ -31,17 +31,12 @@ import string
 """Hold ECell data in a straightforward format.
 
 classes:
-o Record - All of the information in an NBRF record.
+o Record - All of the information in an ECell record.
 """
 
 class Record:
     """Hold ECell information in a format similar to the original record.
 
-    The Record class is meant to make data easy to get to when you are
-    just interested in looking at Saf data.
-
-    Attributes:
-    alignment
 
     """
     def __init__(self):

@@ -37,7 +37,6 @@ from Martel import AnyBut
 from Martel import Expression
 
 
-from Bio.NBRF.ValSeq import valid_sequence_dict
 
 
 
