@@ -1,0 +1,21 @@
+test_GraphicsChromosome
+Generate an organism with random chromosome info. ... ok
+Test the basic functionality of drawing an organism. ... ok
+Output a simple organism to a postscript file. ... ok
+Try widget derived functionality. ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 8.500s
+
+OK
+Add counts to specific chromosome segments. ... ok
+Add labels to chromosome segments. ... ok
+Retrieve a color from a count number with the default color scheme. ... ok
+Test filling out the information on a chromosome. ... ok
+Test retrieval of segment information. ... ok
+Set the scale for a chromosome segment. ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.002s
+
+OK
