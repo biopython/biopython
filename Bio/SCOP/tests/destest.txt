@@ -1,0 +1,20 @@
+14984	px	a.1.1.2	d3sdha_	3sdh A:
+14985	px	a.1.1.2	d3sdhb_	3sdh B:
+14986	px	a.1.1.2	d3hbia_	3hbi A:
+14987	px	a.1.1.2	d3hbib_	3hbi B:
+14988	px	a.1.1.2	d4sdha_	4sdh A:
+14989	px	a.1.1.2	d4sdhb_	4sdh B:
+14990	px	a.1.1.2	d4hbia_	4hbi A:
+14991	px	a.1.1.2	d4hbib_	4hbi B:
+14992	px	a.1.1.2	d5hbia_	5hbi A:
+14993	px	a.1.1.2	d5hbib_	5hbi B:
+14994	px	a.1.1.2	d7hbia_	7hbi A:
+14995	px	a.1.1.2	d7hbib_	7hbi B:
+14996	px	a.1.1.2	d1hbia_	1hbi A:
+14997	px	a.1.1.2	d1hbib_	1hbi B:
+46456	cl	a	-	All alpha proteins
+46457	cf	a.1	-	Globin-like
+46458	sf	a.1.1	-	Globin-like
+46463	fa	a.1.1.2	-	Globins
+46464	dm	a.1.1.2	-	Hemoglobin I
+46465	sp	a.1.1.2	-	Ark clam (Scapharca inaequivalvis)
