@@ -21,6 +21,7 @@ is_blank_line    Test whether a line is blank.
 
 import sys
 import string
+import traceback
 
 from Bio import File
 
@@ -129,20 +130,26 @@ def attempt_read_and_call(ohandle, method, **keywds):
     arguments.
 
     """
-    
     # Delegate as much work as possible to read_and_call.  If the
     # line fails the test inside that function, I will need to catch
     # the SyntaxError exception and restore the state of the
     # buffer.  Thus, I will need to first take a peek at the next line
     # so I can restore it if necessary.
-    #
-    # XXX Bug here: If the method raises a SyntaxError, I will erroneously
-    # catch that too.  
     line = ohandle.peekline()
         
     try:
         apply(read_and_call, (ohandle, method), keywds)
     except SyntaxError:
+        # I only want to catch the exception if it was raised by
+        # the read_and_call method.  Thus, I will examine the traceback.
+        # If it contains more than 2 stack frames, then pass the exception on.
+        try:
+            tb = sys.exc_info()[2]
+            if len(traceback.extract_tb(tb)) > 2:
+                raise
+        finally:
+            del tb  # prevent circular reference to tb
+        
         # read_and_call has read out a line and failed.
         # Put the line back in the buffer.
         ohandle.saveline(line)
