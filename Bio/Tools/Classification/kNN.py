@@ -76,7 +76,7 @@ def train(xs, ys, k, typecode=None):
     
     """
     knn = kNN()
-    knn.classes = listfns.uniq(ys)
+    knn.classes = listfns.items(ys)
     knn.xs = asarray(xs, typecode)
     knn.ys = ys
     knn.k = k

@@ -7,7 +7,7 @@
 
 Functions:
 asdict        Make the list into a dictionary (for fast testing of membership).
-uniq          Find the unique items in a list.
+items         Get one of each item in a list.
 count         Count the number of times each item appears.
 contents      Calculate percentage each item appears in a list.
 itemindex     Make an index of the items in the list.
@@ -27,10 +27,10 @@ def asdict(l):
     """
     return count(l)
 
-def uniq(l):
-    """uniq(l) -> list of unique items
+def items(l):
+    """items(l) -> list of items
 
-    Generate a list of the unique items in l.  The items are returned
+    Generate a list of one of each item in l.  The items are returned
     in arbitrary order.
 
     """

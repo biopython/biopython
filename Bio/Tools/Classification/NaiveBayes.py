@@ -147,7 +147,7 @@ def train(training_set, results, priors=None, typecode=None):
     nb.dimensionality = dim
     
     # Get a list of all the classes.
-    nb.classes = listfns.uniq(results)
+    nb.classes = listfns.items(results)
     nb.classes.sort()   # keep it tidy
     
     # Estimate the prior probabilities for the classes.
