@@ -7,6 +7,7 @@
 from Numeric import array, sum, sqrt, arccos, matrixmultiply, transpose
 from LinearAlgebra import determinant
 from MLab import eye
+import sys
 
 
 def refmat(p,q):
@@ -129,6 +130,9 @@ class Vector:
         n1=self.norm()
         n2=other.norm()
         c=(self*other)/(n1*n2)
+        # Take care of roundoff errors
+        c=min(c, 1)
+        c=max(-1,c)
         return arccos(c)
 
     def get_array(self):
@@ -155,10 +159,10 @@ if __name__=="__main__":
         from math import pi
         from RandomArray import *
 
-        v1=Vector(0.5,0.5,1.3).normalize()
-        v2=Vector(0.1,0.1,0.1).normalize()
-        v3=Vector(1.9,0.8,0.6).normalize()
-        v4=Vector(1,-1,0).normalize()
+        v1=Vector(0.5,0.5,1.3)
+        v2=Vector(0.1,0.1,0.1)
+        v3=Vector(1.9,0.8,0.6)
+        v4=Vector(1,-1,0)
 
         angle(v1, v2, v3)
         dihedral(v1, v2, v3, v4)
