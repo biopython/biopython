@@ -49,8 +49,11 @@ print trieobj2.get_approximate("foa", 1)    # [("foo", 1, 1)]
 x = trieobj2.get_approximate("foa", 2)
 print "found %d matches" % len(x)           # 3
 x.sort()
-#print "[('foo', 1, 1), ('foo', 1, 2), ('foo', 1, 2)]"
 print x                       # [("foo", 1, 1), ("foo", 1, 2), ("foo", 1, 2)]
+# foo  foo-  foo-
+# foa  f-oa  fo-a
+
+
 #import sys; sys.exit(0)
 
 # mismatch a->o
@@ -73,3 +76,13 @@ k = trieobj3.keys()
 k.sort()
 for m in k:                       # foo 1
     print m, repr(trieobj3[m])    # hello '55a'
+
+
+# Found bug, doesn't handle insertions and deletions at end properly.
+trieobj = trie.trie()
+trieobj["hello"] = 1
+print trieobj.get_approximate('he', 2)        # []
+print trieobj.get_approximate('he', 3)        # [('hello', 1, 3)]
+print trieobj.get_approximate('hello me!', 3) # []
+print trieobj.get_approximate('hello me!', 4) # [('hello', 1, 4)]
+print trieobj.get_approximate('hello me!', 5) # [('hello', 1, 4)]
