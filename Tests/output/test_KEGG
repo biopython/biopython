@@ -30,47 +30,43 @@ PATHWAY     PATH: MAP00010  Glycolysis / Gluconeogenesis
             PATH: MAP00120  Bile acid biosynthesis
             PATH: MAP00350  Tyrosine metabolism
             PATH: MAP00561  Glycerolipid metabolism
-GENES       ECO: b0356(adhC) b1241(adhE) b1478(adhP) b3589(yiaY)
-            ECE: Z0456(adhC) Z2016(adhE) Z2232(adhP) Z5010(yiaY)
+GENES       ECO: b0356 b1241 b1478 b3589
+            ECE: Z0456 Z2016 Z2232 Z5010
             ECS: ECs0411 ECs1741 ECs2082 ECs4466
-            HIN: HI0185(adhC)
+            HIN: HI0185
             XFA: XF1746 XF2389
             VCH: VC1147 VC2033
-            PAE: PA2119 PA2158 PA2188 PA3629(adhC) PA5427(adhA)
-            PMU: PM1453(adh2)
+            PAE: PA2119 PA2158 PA2188 PA3629 PA5427
+            PMU: PM1453
             NME: NMB0546 NMB1304
-            NMA: NMA0725(adhA) NMA1518(adhC)
+            NMA: NMA0725 NMA1518
             MLO: mlr0872 mlr1136 mlr1178
             CCR: CC2516 CC3029
-            BSU: BS2776(adhB) BS3211(gbsB)
-            BHA: BH1829(adhB)
-            LLA: L13145(adhE) L55758(adhA)
-            SPY: SPy0044(adhA)
-            MTU: Rv0761c(adhB) Rv1862(adhA) Rv2259(adhE2)
-            MLE: ML1784(adhE2) ML2053
+            BSU: BS2776 BS3211
+            BHA: BH1829
+            LLA: L13145 L55758
+            SPY: SPy0044
+            MTU: Rv0761c Rv1862 Rv2259
+            MLE: ML1784 ML2053
             SYN: sll0990
-            AAE: aq_1240(adh2) aq_1362(adh1)
+            AAE: aq_1240 aq_1362
             TMA: TM0111 TM0920
             AFU: AF0024 AF0339 AF2019 AF2101
-            HAL: VNG1821G(adh4)
+            HAL: VNG1821G
             TAC: Ta0832 Ta0833 Ta0841
             TVO: TVG0387048 TVG0995648 TVG1348694
             PHO: PH0743
             PAB: PAB1511
             APE: APE1245 APE1557 APE1963 APE2239
-            SSO: SSO0472(adh-1) SSO0764(adh-2) SSO1220(adh-3) SSO1300(adh-4)
-                 SSO1646(adh-5) SSO2334(adh-6) SSO2441(adh-7) SSO2494(adh-8)
-                 SSO2501(adh-9) SSO2536(adh-10) SSO2717(adh-11) SSO2800(adh-12)
-                 SSO2878(adh-13)
-            SCE: YBR145W(ADH5) YDL168W(SFA1) YGL256W(ADH4) YMR083W(ADH3)
-                 YMR303C(ADH2) YOL086C(ADH1)
-            SPO: ADH1(adh1) SPAC5H10.06C(spac5h10.06c) SPCC13B11.04C
-            ATH: At1g77120(F22K20_19)
+            SSO: SSO0472 SSO0764 SSO1220 SSO1300 SSO1646 SSO2334 SSO2441
+                 SSO2494 SSO2501 SSO2536 SSO2717 SSO2800 SSO2878
+            SCE: YBR145W YDL168W YGL256W YMR083W YMR303C YOL086C
+            SPO: ADH1 SPAC5H10.06C SPCC13B11.04C
+            ATH: At1g77120
             CEL: K12G11.3 K12G11.4
-            DME: CG3425(T3dh) CG3481(Adh) CG6598(Fdh)
-            MMU: 1098256(Daq1) 87921(Adh1) 87926(Adh3) 87929(Adh5)
-            HSA: 124(ADH1) 125(ADH2) 126(ADH3) 127(ADH4) 128(ADH5) 130(ADH6)
-                 131(ADH7)
+            DME: CG3425 CG3481 CG6598
+            MMU: 1098256 87921 87926 87929
+            HSA: 124 125 126 127 128 130 131
 DISEASE     MIM: 103700  Alcohol dehydrogenase (class I), alpha polypeptide
             MIM: 103720  Alcohol dehydrogenase (class I), beta polypeptide
             MIM: 103730  Alcohol dehydrogenase (class I), gamma polypeptide
@@ -116,8 +112,7 @@ COMMENT     Also acts on (S)-20-hydroxypregn-4-en-3-one and related
 PATHWAY     PATH: MAP00150  Androgen and estrogen metabolism
 GENES       CEL: F11A5.12
             DME: CG1444 CG3415
-            HSA: 3292(HSD17B1) 3293(HSD17B3) 3294(HSD17B2) 3295(HSD17B4)
-                 3296(HSD17BP1) 51478(HSD17B7)
+            HSA: 3292 3293 3294 3295 3296 51478
 DISEASE     MIM: 109685  Hydroxysteroid (17-beta) dehydrogenase 2
             MIM: 264300  Hydroxysteroid (17-beta) dehydrogenase 3
 MOTIF       PS: PS00061  [LIVSPADNK]-x(12)-Y-[PSTAGNCV]-[STAGNQCIVM]-[STAGC]-K-
@@ -168,77 +163,55 @@ COMMENT     A flavoprotein (FAD) containing iron-sulfur contres. The complex,
             present in mitochondria, can be degraded to form EC 1.6.99.3.
 PATHWAY     PATH: MAP00130  Ubiquinone biosynthesis
             PATH: MAP00190  Oxidative phosphorylation
-GENES       ECO: b2276(nuoN) b2277(nuoM) b2278(nuoL) b2279(nuoK) b2280(nuoJ)
-                 b2281(nuoI) b2282(nuoH) b2283(nuoG) b2284(nuoF) b2285(nuoE)
-                 b2286 b2287(nuoB) b2288(nuoA)
-            ECE: Z3534(nuoN) Z3536(nuoM) Z3537(nuoL) Z3538(nuoK) Z3539(nuoJ)
-                 Z3540(nuoI) Z3541(nuoH) Z3542(nuoG) Z3543(nuoF) Z3544(nuoE)
-                 Z3545(nuoC) Z3546(nuoB) Z3547(nuoA)
+GENES       ECO: b2276 b2277 b2278 b2279 b2280 b2281 b2282 b2283 b2284 b2285
+                 b2286 b2287 b2288
+            ECE: Z3534 Z3536 Z3537 Z3538 Z3539 Z3540 Z3541 Z3542 Z3543 Z3544
+                 Z3545 Z3546 Z3547
             ECS: ECs3160 ECs3161 ECs3162 ECs3163 ECs3164 ECs3165 ECs3166
                  ECs3167 ECs3168 ECs3169 ECs3170 ECs3171 ECs3172
             XFA: XF0305 XF0306 XF0307 XF0308 XF0309 XF0310 XF0311 XF0312 XF0313
                  XF0314 XF0315 XF0316 XF0317 XF0318
             VCH: VC1581 VCA0155 VCA0157
-            PAE: PA1054 PA1056 PA1883 PA2637(nuoA) PA2638(nuoB) PA2639(nuoD)
-                 PA2640(nuoE) PA2641(nuoF) PA2642(nuoG) PA2643(nuoH)
-                 PA2644(nuoI) PA2645(nuoJ) PA2646(nuoK) PA2647(nuoL)
-                 PA2648(nuoM) PA2649(nuoN)
-            BUC: BU154(nuoA) BU155(nuoB) BU156(nuoCD) BU157(nuoE) BU158(nuoF)
-                 BU159(nuoG) BU160(nuoH) BU161(nuoI) BU162(nuoJ) BU163(nuoK)
-                 BU164(nuoL) BU165(nuoM) BU166(nuoN)
+            PAE: PA1054 PA1056 PA1883 PA2637 PA2638 PA2639 PA2640 PA2641 PA2642
+                 PA2643 PA2644 PA2645 PA2646 PA2647 PA2648 PA2649
+            BUC: BU154 BU155 BU156 BU157 BU158 BU159 BU160 BU161 BU162 BU163
+                 BU164 BU165 BU166
             NME: NMB0241 NMB0242 NMB0243 NMB0244 NMB0245 NMB0246 NMB0249
                  NMB0250 NMB0251 NMB0253 NMB0254 NMB0257 NMB0258 NMB0259
-            NMA: NMA0002(nuoL) NMA0005(nuoK) NMA0006(nuoJ) NMA0008(nuoI)
-                 NMA0009(nuoH) NMA0010(nuoG) NMA0014(nuoF) NMA0015(nuoE)
-                 NMA0016(nuoD) NMA0017(nuoC) NMA0018(nuoB) NMA0019(nuoA)
-                 NMA0747(nqrF) NMA2228(nuoN) NMA2229(nuoM)
-            HPY: HP1260(NQO7) HP1261(NQO6) HP1262(NQO5) HP1263 HP1264 HP1265
-                 HP1266(NQO3) HP1267(NQO8) HP1268(NQO9) HP1269(NQO10) HP1270
-                 HP1271(NQO12) HP1272(NQO13) HP1273(NQO14)
+            NMA: NMA0002 NMA0005 NMA0006 NMA0008 NMA0009 NMA0010 NMA0014
+                 NMA0015 NMA0016 NMA0017 NMA0018 NMA0019 NMA0747 NMA2228 NMA2229
+            HPY: HP1260 HP1261 HP1262 HP1263 HP1264 HP1265 HP1266 HP1267 HP1268
+                 HP1269 HP1270 HP1271 HP1272 HP1273
             HPJ: jhp1181 jhp1182 jhp1183 jhp1184 jhp1185 jhp1186 jhp1187
                  jhp1188 jhp1189 jhp1190 jhp1191 jhp1192 jhp1193 jhp1194
-            CJE: Cj1566c(nuoN) Cj1567c(nuoM) Cj1568c(nuoL) Cj1569c(nuoK)
-                 Cj1570c(nuoJ) Cj1571c(nuoI) Cj1572c(nuoH) Cj1573c(nuoG)
-                 Cj1574c Cj1575c Cj1576c(nuoD) Cj1577c(nuoC) Cj1578c(nuoB)
-                 Cj1579c(nuoA)
-            RPR: RP115(nuoF) RP282(nuoL3) RP283(nuoL2) RP284(nuoN2) RP353(nuoE)
-                 RP354(nuoD) RP355(nuoC) RP356(nuoB) RP357(nuoA) RP537(nuoN1)
-                 RP790(nuoJ) RP791(nuoK) RP792(nuoL1) RP793(nuoM) RP795(nuoI)
-                 RP796(nuoH) RP797(nuoG)
+            CJE: Cj1566c Cj1567c Cj1568c Cj1569c Cj1570c Cj1571c Cj1572c
+                 Cj1573c Cj1574c Cj1575c Cj1576c Cj1577c Cj1578c Cj1579c
+            RPR: RP115 RP282 RP283 RP284 RP353 RP354 RP355 RP356 RP357 RP537
+                 RP790 RP791 RP792 RP793 RP795 RP796 RP797
             MLO: mll1352 mll1354 mll1355 mll1357 mll1358 mll1359 mll1361
                  mll1362 mll1364 mll1365 mll1366 mll1367 mll1369 mll1371
                  mll1372 mll5193 mll5397 mll5398
             CCR: CC1937 CC1938 CC1939 CC1940 CC1941 CC1942 CC1945 CC1946 CC1947
                  CC1950 CC1952 CC1954 CC1955 CC1956
-            BSU: BS0231(ndhF)
-            MTU: Rv3145(nuoA) Rv3146(nuoB) Rv3147(nuoC) Rv3148(nuoD)
-                 Rv3149(nuoE) Rv3150(nuoF) Rv3151(nuoG) Rv3152(nuoH)
-                 Rv3153(nuoI) Rv3154(nuoJ) Rv3155(nuoK) Rv3156(nuoL)
-                 Rv3157(nuoM) Rv3158(nuoN)
-            SYN: sll0026(ndhF) sll0027(ndhD4) sll0223(ndhB) sll0519(ndhA)
-                 sll0520(ndhI) sll0521(ndhG) sll0522(ndhE) sll1220
-                 sll1221(hoxF) sll1223(hoxU) sll1732(ndhF) sll1733(ndhD3)
-                 slr0261(ndhH) slr0331(ndhD1) slr0844(ndhF) slr1279(ndhC)
-                 slr1280(psbg1) slr1281(ndhJ) slr1291(ndhD2) slr2007(ndhD5)
-                 slr2009(ndhD6)
+            BSU: BS0231
+            MTU: Rv3145 Rv3146 Rv3147 Rv3148 Rv3149 Rv3150 Rv3151 Rv3152 Rv3153
+                 Rv3154 Rv3155 Rv3156 Rv3157 Rv3158
+            SYN: sll0026 sll0027 sll0223 sll0519 sll0520 sll0521 sll0522
+                 sll1220 sll1221 sll1223 sll1732 sll1733 slr0261 slr0331
+                 slr0844 slr1279 slr1280 slr1281 slr1291 slr2007 slr2009
             DRA: DR0880 DR1492 DR1493 DR1494 DR1495 DR1496 DR1497 DR1498 DR1499
                  DR1500 DR1501 DR1503 DR1504 DR1505 DR1506
-            AAE: aq_1310(nuoA2) aq_1312(nuoB) aq_1314(nuoD2) aq_1315(nuoH1)
-                 aq_1317(nuoI1) aq_1318(nuoJ1) aq_1319(nuoK1) aq_1320(nuoL1)
-                 aq_1321(nuoM1) aq_1322(nuoN1) aq_135(nueM) aq_1373(nuoH2)
-                 aq_1374(nuoH3) aq_1375(nuoI2) aq_1377(nuoJ2) aq_1378(nuoK2)
-                 aq_1379(nuoL3) aq_1382(nuoM2) aq_1383(nuoN2) aq_1385(nuoA1)
-                 aq_437(nuoG) aq_551(nuoD1) aq_573(nuoF) aq_574(nuoE)
-                 aq_866(nuoL2)
+            AAE: aq_1310 aq_1312 aq_1314 aq_1315 aq_1317 aq_1318 aq_1319
+                 aq_1320 aq_1321 aq_1322 aq_135 aq_1373 aq_1374 aq_1375 aq_1377
+                 aq_1378 aq_1379 aq_1382 aq_1383 aq_1385 aq_437 aq_551 aq_573
+                 aq_574 aq_866
             TMA: TM0010 TM0011 TM0012 TM0201 TM0228 TM1105 TM1211 TM1212 TM1213
                  TM1214 TM1215 TM1216 TM1424 TM1425 TM1426
-            MJA: MJ0520 MJ1309(cooM) MJ1362
+            MJA: MJ0520 MJ1309 MJ1362
             MTH: MTH1237 MTH1246 MTH1548 MTH1549 MTH393
-            AFU: AF1823 AF1824 AF1825(nuoM) AF1826(nuoL) AF1827 AF1828 AF1829
-                 AF1830(nuoD) AF1831
-            HAL: VNG0635G(nolB) VNG0636G(ndhG1) VNG0637G(ndhG5) VNG0639G(ndhG4)
-                 VNG0640G(nolD) VNG0641C VNG0643G(nolC) VNG0646G(nuoL)
-                 VNG0647G(nuoM) VNG0648G(ndhG3)
+            AFU: AF1823 AF1824 AF1825 AF1826 AF1827 AF1828 AF1829 AF1830 AF1831
+            HAL: VNG0635G VNG0636G VNG0637G VNG0639G VNG0640G VNG0641C VNG0643G
+                 VNG0646G VNG0647G VNG0648G
             TAC: Ta0959 Ta0960 Ta0961 Ta0962 Ta0964 Ta0965 Ta0966 Ta0967 Ta0968
                  Ta0969 Ta0970
             TVO: TVG1157047 TVG1158465 TVG1160017 TVG1161017 TVG1162018
@@ -246,40 +219,28 @@ GENES       ECO: b2276(nuoN) b2277(nuoM) b2278(nuoL) b2279(nuoK) b2280(nuoJ)
                  TVG1165809 TVG1166270
             PHO: PH0941 PH0942 PH1431 PH1446 PH1447 PH1448 PH1449 PH1450 PH1451
                  PH1452 PH1453
-            PAB: PAB0488 PAB0490(nuoM) PAB0492(nuoH) PAB0493(nuoB)
-                 PAB0494(nuoC) PAB0495(nuoD) PAB0496(nuoI) PAB0805 PAB0806
-                 PAB1888 PAB2416(nuoN)
+            PAB: PAB0488 PAB0490 PAB0492 PAB0493 PAB0494 PAB0495 PAB0496
+                 PAB0805 PAB0806 PAB1888 PAB2416
             APE: APE1410 APE1411 APE1415 APE1417 APE1418 APE1419 APE1421
                  APE1422 APE1426 APE1428 APE1430
-            SSO: SSO0322(NuoA) SSO0323(NuoC) SSO0324(NuoD) SSO0325(NuoH)
-                 SSO0326(NuoI) SSO0327(NuoJ) SSO0328(NuoL) SSO0329(NuoN)
-                 SSO0665(NuoB)
-            SCE: YKL192C(ACP1)
-            SPO: SPAC11E3.12(spac11e3.12) SPAC4H3.09(spac4h3.09)
-                 SPBC18E5.10(spbc18e5.10)
-            ATH: AT4g02580(T10P11_14) AT5g08530(MAH20_9) AT5g11770(T22P22_160)
-                 AT5g37510(mpa22_p_40) At1g16700(F19K19_1) At1g65290(T8F5_6)
-                 At1g79010(YUP8H12R_21) At1g79200(YUP8H12R_37)
-                 At2g02050(F14H20.12) At2g20360(F11A3.9) At2g44620(F16B22.11)
+            SSO: SSO0322 SSO0323 SSO0324 SSO0325 SSO0326 SSO0327 SSO0328
+                 SSO0329 SSO0665
+            SCE: YKL192C
+            SPO: SPAC11E3.12 SPAC4H3.09 SPBC18E5.10
+            ATH: AT4g02580 AT5g08530 AT5g11770 AT5g37510 At1g16700 At1g65290
+                 At1g79010 At1g79200 At2g02050 At2g20360 At2g44620
             CEL: C09H10.3 C16A3.4 C18E9.4 C25A1.13 C33A12.1 D2030.4 F16B4.6
-                 F22D6.4 F37C12.3 F44G4.2 F53F4.10 F59C6.5 K04G7.4
-                 K09A9.5(gas-1) T10E9.7 T20H4.5 T26A5.3 W10D5.2 Y51H1A.3a
-                 Y51H1A.3b Y57G11C.12 Y63D3A.7
+                 F22D6.4 F37C12.3 F44G4.2 F53F4.10 F59C6.5 K04G7.4 K09A9.5
+                 T10E9.7 T20H4.5 T26A5.3 W10D5.2 Y51H1A.3a Y51H1A.3b Y57G11C.12
+                 Y63D3A.7
             DME: CG10320 CG11423 CG11913 CG12079 CG15328 CG15434 CG1970 CG2014
-                 CG2286(ND75) CG3192 CG3621(EG:152A3.7) CG3683 CG3944 CG5548
-                 CG5703 CG6020 CG6343(ND42) CG6463 CG6485 CG6914 CG7712 CG8102
-                 CG8844 CG9140 CG9160(mtacp1) CG9160_1(mtacp1) CG9172 CG9306
-                 CG9762
-            HSA: 4535(MTND1) 4536(MTND2) 4537(MTND3) 4538(MTND4) 4539(MTND4L)
-                 4540(MTND5) 4541(MTND6) 4694(NDUFA1) 4695(NDUFA2) 4696(NDUFA3)
-                 4697(NDUFA4) 4698(NDUFA5) 4700(NDUFA6) 4701(NDUFA7)
-                 4702(NDUFA8) 4704(NDUFA9) 4705(NDUFA10) 4706(NDUFAB1)
-                 4707(NDUFB1) 4708(NDUFB2) 4709(NDUFB3) 4710(NDUFB4)
-                 4711(NDUFB5) 4712(NDUFB6) 4713(NDUFB7) 4714(NDUFB8)
-                 4715(NDUFB9) 4716(NDUFB10) 4717(NDUFC1) 4718(NDUFC2)
-                 4719(NDUFS1) 4720(NDUFS2) 4722(NDUFS3) 4723(NDUFV1)
-                 4724(NDUFS4) 4725(NDUFS5) 4726(NDUFS6) 4727(NDUFS7)
-                 4728(NDUFS8) 4729(NDUFV2) 4731(NDUFV3)
+                 CG2286 CG3192 CG3621 CG3683 CG3944 CG5548 CG5703 CG6020 CG6343
+                 CG6463 CG6485 CG6914 CG7712 CG8102 CG8844 CG9140 CG9160
+                 CG9160_1 CG9172 CG9306 CG9762
+            HSA: 4535 4536 4537 4538 4539 4540 4541 4694 4695 4696 4697 4698
+                 4700 4701 4702 4704 4705 4706 4707 4708 4709 4710 4711 4712
+                 4713 4714 4715 4716 4717 4718 4719 4720 4722 4723 4724 4725
+                 4726 4727 4728 4729 4731
 DISEASE     MIM: 300078  NADH dehydrogenase (ubiquinone) 1 alpha subcomplex, 1,
                          7.5kD
             MIM: 601677  NADH dehydrogenase (ubiquinone) 1 alpha subcomplex, 5
@@ -379,7 +340,7 @@ SUBSTRATE   Acetic ester
             H2O
 PRODUCT     Alcohol
             Acetate
-GENES       MMU: 95428(Es17)
+GENES       MMU: 95428
 STRUCTURES  PDB: 1BS9  1G66  2AXE  
 DBLINKS     IUBMB Enzyme Nomenclature: 3.1.1.6
             ExPASy - ENZYME nomenclature database: 3.1.1.6
@@ -421,8 +382,8 @@ PATHWAY     PATH: MAP00350  Tyrosine metabolism
             PATH: MAP00940  Flavonoids, stilbene and lignin biosynthesis
             PATH: MAP00950  Alkaloid biosynthesis I
 GENES       DME: CG5779
-            MMU: 94856 98880(Tyr)
-            HSA: 7299(TYR)
+            MMU: 94856 98880
+            HSA: 7299
 DISEASE     MIM: 203100  Tyrosinase
 MOTIF       PS: PS00497  H-x(4,5)-F-[LIVMFTP]-x-[FW]-H-R-x(2)-[LVM]-x(3)-E
             PS: PS00498  D-P-x-F-[LIVMFYW]-x(2)-H-x(3)-D
