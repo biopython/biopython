@@ -3,8 +3,8 @@ from Bio import Seq
 from Bio import Alphabet
 from Bio.Alphabet import IUPAC
 from wxPython.wx import *
-from Bio.Tools import Translate
-from Bio.Tools import Transcribe
+from Bio import Translate
+from Bio import Transcribe
 
 ID_APPLY = 101
 ID_CLEAR  = 102
