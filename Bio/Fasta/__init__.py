@@ -99,6 +99,9 @@ class _MartelBaseFastaParser:
                 LAX(fields = ['bioformat:sequence', 'bioformat:description']))
         return self.convert_lax(iterator.next())
 
+    def parse_str(self, str):
+        return self.parse(cStringIO.StringIO(str))
+
     def convert_lax(self, result):
         raise NotImplementedError("Derived class must implement")
 
