@@ -263,6 +263,12 @@ class _BaseGenBankConsumer(AbstractConsumer):
     This just helps to eliminate some duplication in things that most
     GenBank consumers want to do.
     """
+    # Special keys in GenBank records that we should remove spaces from
+    # For instance, \translation keys have values which are proteins and
+    # should have spaces and newlines removed from them. This class
+    # attribute gives us more control over specific formatting problems.
+    remove_space_keys = ["translation"]
+
     def __init__(self):
         pass
 
@@ -324,7 +330,7 @@ class _BaseGenBankConsumer(AbstractConsumer):
 
         return text
 
-    def _remove_spaces(self, text):
+    def _normalize_spaces(self, text):
         """Replace multiple spaces in the passed text with single spaces.
         """
         # get rid of excessive spaces
@@ -332,6 +338,11 @@ class _BaseGenBankConsumer(AbstractConsumer):
         while '' in text_parts:
             text_parts.remove('')
         return string.join(text_parts)
+
+    def _remove_spaces(self, text):
+        """Remove all spaces from the passed text.
+        """
+        return text.replace(" ", "")
 
 class _FeatureConsumer(_BaseGenBankConsumer):
     """Create a SeqRecord object with Features to return.
@@ -968,8 +979,13 @@ class _RecordConsumer(_BaseGenBankConsumer):
         self._cur_qualifier.key = content
 
     def qualifier_value(self, content):
-        no_newline_content = self._remove_newlines(content)
-        self._cur_qualifier.value = self._remove_spaces(no_newline_content)
+        cur_content = self._remove_newlines(content)
+        # remove all spaces from the value if it is a type where spaces
+        # are not important
+        for remove_space_key in self.__class__.remove_space_keys:
+            if self._cur_qualifier.key.find(remove_space_key) >= 0:
+                cur_content = self._remove_spaces(cur_content)
+        self._cur_qualifier.value = self._normalize_spaces(cur_content)
 
     def base_count(self, content):
         self.data.base_counts = content
