@@ -436,10 +436,11 @@ s2_info = _bit_info("S2: ", "s2")
     
 
 blastn_ending = (db_stats +
-                 lambda_stats + 
+                 lambda_stats +
                  matrix_stats +
                  gap_penalties_stats +
                  generic_info1 +
+                 Opt(hsp_info) +
                  generic_info2 +
                  t_info +
                  a_info +
