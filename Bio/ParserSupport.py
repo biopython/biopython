@@ -17,6 +17,7 @@ safe_peekline    Peek at next line, with check for EOF.
 read_and_call    Read a line from a handle and pass it to a method.
 attempt_read_and_call  Like read_and_call, but forgiving of errors.
 is_blank_line    Test whether a line is blank.
+
 """
 
 import sys
@@ -78,12 +79,12 @@ class TaggingConsumer(AbstractConsumer):
             method = lambda x, a=attr, s=self: s._print_name(a, x)
         return method
 
-def read_and_call(ohandle, method,
+def read_and_call(uhandle, method,
                   start=None, end=None, contains=None, blank=None):
-    """_read_and_call(ohandle, method,
+    """_read_and_call(uhandle, method,
     start=None, end=None, contains=None, blank=None)
 
-    Read a line from ohandle, check it, and pass it to the method.
+    Read a line from uhandle, check it, and pass it to the method.
     Raises a SyntaxError if the line does not pass the checks.
 
     start, end, contains, and blank specify optional conditions that
@@ -94,7 +95,7 @@ def read_and_call(ohandle, method,
     to None if the check is not necessary.
 
     """
-    line = ohandle.readline()
+    line = uhandle.readline()
     if not line:
         raise SyntaxError, "Unexpected end of stream."
     if start:
@@ -119,8 +120,8 @@ def read_and_call(ohandle, method,
                 raise SyntaxError, "Expected non-blank line, but got a blank one"
     apply(method, (line,))
 
-def attempt_read_and_call(ohandle, method, **keywds):
-    """attempt_read_and_call(ohandle, method, **keywds) -> boolean
+def attempt_read_and_call(uhandle, method, **keywds):
+    """attempt_read_and_call(uhandle, method, **keywds) -> boolean
 
     Similar to read_and_call, but returns a boolean specifying
     whether the line has passed the checks.  Does not raise
@@ -135,10 +136,10 @@ def attempt_read_and_call(ohandle, method, **keywds):
     # the SyntaxError exception and restore the state of the
     # buffer.  Thus, I will need to first take a peek at the next line
     # so I can restore it if necessary.
-    line = ohandle.peekline()
+    line = uhandle.peekline()
         
     try:
-        apply(read_and_call, (ohandle, method), keywds)
+        apply(read_and_call, (uhandle, method), keywds)
     except SyntaxError:
         # I only want to catch the exception if it was raised by
         # the read_and_call method.  Thus, I will examine the traceback.
@@ -152,7 +153,7 @@ def attempt_read_and_call(ohandle, method, **keywds):
         
         # read_and_call has read out a line and failed.
         # Put the line back in the buffer.
-        ohandle.saveline(line)
+        uhandle.saveline(line)
         return 0
     return 1
 
