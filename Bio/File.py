@@ -46,15 +46,19 @@ class UndoHandle:
         return line
 
     def read(self, size=-1):
-        saved = ''
-        while size > 0 and self._saved:
-            if len(self._saved[0]) <= size:
-                size = size - len(self._saved[0])
-                saved = saved + self._saved.pop(0)
-            else:
-                saved = saved + self._saved[0][:size]
-                self._saved[0] = self._saved[0][size:]
-                size = 0
+        if size == -1:
+            saved = string.join(self._saved, "")
+            self._saved[:] = []
+        else:
+            saved = ''
+            while size > 0 and self._saved:
+                if len(self._saved[0]) <= size:
+                    size = size - len(self._saved[0])
+                    saved = saved + self._saved.pop(0)
+                else:
+                    saved = saved + self._saved[0][:size]
+                    self._saved[0] = self._saved[0][size:]
+                    size = 0
         return saved + self._handle.read(size)
 
     def saveline(self, line):
