@@ -40,7 +40,6 @@ def angle(v1, v2, v3):
     v3=v3-v2
     return v1.angle(v3)
 
-
 def dihedral(v1, v2, v3, v4):
     """
     Calculate the dihedral angle between 4 vectors
@@ -63,9 +62,8 @@ def dihedral(v1, v2, v3, v4):
         pass
     return angle
 
-
 class Vector:
-    "3D vector."
+    "3D vector"
 
     def __init__(self, x, y, z):
         self._ar=array((x, y, z), 'd')
@@ -131,7 +129,7 @@ class Vector:
         n2=other.norm()
         c=(self*other)/(n1*n2)
         # Take care of roundoff errors
-        c=min(c, 1)
+        c=min(c,1)
         c=max(-1,c)
         return arccos(c)
 
@@ -175,6 +173,3 @@ if __name__=="__main__":
         print v1.left_multiply(rot)
         print v1.right_multiply(transpose(rot))
 
-
-        
-        
