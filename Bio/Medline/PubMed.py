@@ -131,6 +131,7 @@ def search_for(search, batchsize=10000, delay=2, callback_fn=None,
         # [...]
         # </Body>
         # 5/30/2001: <Body> tag now missing.  Start in body by default.
+        # 8/28/2001: <Title> tags now missing.  Ignore QueryResult.
         def __init__(self):
             sgmllib.SGMLParser.__init__(self)
             self.ids = []
@@ -145,6 +146,9 @@ def search_for(search, batchsize=10000, delay=2, callback_fn=None,
             # then don't do anything.
             if not self.in_body:
                 return
+            # I have to ignore QueryResult.
+            if data == 'QueryResult':
+                return
             # If data is just whitespace, then ignore it.
             data = string.strip(data)
             if not data:
@@ -155,7 +159,7 @@ def search_for(search, batchsize=10000, delay=2, callback_fn=None,
             # meets a certain minimum length?
             if self._not_pmid_re.search(data):
                 raise SyntaxError, \
-                      "I expected an ID, but '%s' doesn't look like one." % \
+                      "I expected an ID, but %s doesn't look like one." % \
                       repr(data)
             self.ids.append(data)
 
