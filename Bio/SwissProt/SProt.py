@@ -33,7 +33,6 @@ index_file         Index a SwissProt file for a Dictionary.
 """
 from types import *
 import os
-import string
 from Bio import File
 from Bio import Index
 from Bio import Alphabet
@@ -163,7 +162,7 @@ class Iterator:
         if not lines:
             return None
             
-        data = string.join(lines, '')
+        data = ''.join(lines)
         if self._parser is not None:
             return self._parser.parse(File.StringHandle(data))
         return data
@@ -503,7 +502,7 @@ class _RecordConsumer(AbstractConsumer):
         self._clean_record(self.data)
 
     def identification(self, line):
-        cols = string.split(line)
+        cols = line.split()
         self.data.entry_name = cols[1]
         self.data.data_class = self._chomp(cols[2])    # don't want ';'
         self.data.molecule_type = self._chomp(cols[3]) # don't want ';'
@@ -520,30 +519,28 @@ class _RecordConsumer(AbstractConsumer):
                   (self.data.molecule_type, line)
     
     def accession(self, line):
-        cols = string.split(self._chomp(string.rstrip(line[5:])), ';')
+        cols = self._chomp(line[5:].rstrip()).split(';')
         for ac in cols:
-            self.data.accessions.append(string.lstrip(ac))
+            self.data.accessions.append(ac.lstrip())
     
     def date(self, line):
         uprline = string.upper(line)
-        if string.find(uprline, 'CREATED') >= 0:
-            cols = string.split(line)
+        cols = line.split()
+        if uprline.find("CREATED") >= 0:
             # ws:2001-12-05 prevent e.g. (IPIrel. , created)
             # !no number given! from crashing
             if self._chomp(cols[3]) == '':                            #<=
                 self.data.created = cols[1], 0                        #<=
 	    else:	                                              #<=
                 self.data.created = cols[1], int(self._chomp(cols[3]))
-        elif string.find(uprline, 'LAST SEQUENCE UPDATE') >= 0:
-            cols = string.split(line)
+        elif uprline.find('LAST SEQUENCE UPDATE') >= 0:
             # ws:2001-12-05 prevent e.g. (IPIrel. , created)
             # !no number given! from crashing
             if self._chomp(cols[3]) == '':                            #<=
                 self.data.sequence_update = cols[1], 0                #<=
 	    else:                                                     #<=
                 self.data.sequence_update = cols[1], int(self._chomp(cols[3]))
-        elif string.find(uprline, 'LAST ANNOTATION UPDATE') >= 0:
-            cols = string.split(line)
+        elif uprline.find( 'LAST ANNOTATION UPDATE') >= 0:
             # ws:2001-12-05 prevent e.g. (IPIrel. , created)
             # !no number given! from crashing
             if self._chomp(cols[3]) == '':                               #<=
@@ -567,10 +564,10 @@ class _RecordConsumer(AbstractConsumer):
         self.data.organelle = self.data.organelle + line[5:]
     
     def organism_classification(self, line):
-        line = self._chomp(string.rstrip(line[5:]))
-        cols = string.split(line, ';')
+        line = self._chomp(line[5:].rstrip())
+        cols = line.split(';')
         for col in cols:
-            self.data.organism_classification.append(string.lstrip(col))
+            self.data.organism_classification.append(col.lstrip())
 
     def taxonomy_id(self, line):
         # The OX line is in the format:
@@ -584,18 +581,18 @@ class _RecordConsumer(AbstractConsumer):
         # To parse this, I need to check to see whether I'm at the
         # first line.  If I am, grab the description and make sure
         # it's an NCBI ID.  Then, grab all the id's.
-        line = self._chomp(string.rstrip(line[5:]))
-        index = string.find(line, '=')
+        line = self._chomp(line[5:].rstrip())
+        index = line.find('=')
         if index >= 0:
             descr = line[:index]
             assert descr == "NCBI_TaxID", "Unexpected taxonomy type %s" % descr
-            ids = string.split(line[index+1:], ',')
+            ids = line[index+1:].split(',')
         else:
-            ids = string.split(line, ',')
-        self.data.taxonomy_id.extend(map(string.strip, ids))
+            ids = line.split(',')
+        self.data.taxonomy_id.extend([id.strip() for id in ids])
     
     def reference_number(self, line):
-        rn = string.rstrip(line[5:])
+        rn = line[5:].rstrip()
         assert rn[0] == '[' and rn[-1] == ']', "Missing brackets %s" % rn
         ref = Reference()
         ref.number = int(rn[1:-1])
@@ -603,17 +600,17 @@ class _RecordConsumer(AbstractConsumer):
     
     def reference_position(self, line):
         assert self.data.references, "RP: missing RN"
-        self.data.references[-1].positions.append(string.rstrip(line[5:]))
+        self.data.references[-1].positions.append(line[5:].rstrip())
     
     def reference_comment(self, line):
         assert self.data.references, "RC: missing RN"
-        cols = string.split(string.rstrip(line[5:]), ';')
+        cols = line[5:].rstrip().split( ';')
         ref = self.data.references[-1]
         for col in cols:
             if not col:  # last column will be the empty string
                 continue
             # The token is everything before the first '=' character.
-            index = string.find(col, '=')
+            index = col.find('=')
             token, text = col[:index], col[index+1:]
             # According to the spec, there should only be 1 '='
             # character.  However, there are too many exceptions to
@@ -631,7 +628,7 @@ class _RecordConsumer(AbstractConsumer):
             #    token, text = "STRAIN", "ISOLATE NO 27, ANNO 1987"
             #else:
             #    token, text = string.split(col, '=')
-            ref.comments.append((string.lstrip(token), text))
+            ref.comments.append((token.lstrip(), text))
     
     def reference_cross_reference(self, line):
         assert self.data.references, "RX: missing RN"
@@ -643,7 +640,7 @@ class _RecordConsumer(AbstractConsumer):
         # have extraneous information in the RX line.  Check for
         # this and chop it out of the line.
         # (noticed by katel@worldpath.net)
-        ind = string.find(line, '[NCBI, ExPASy, Israel, Japan]')
+        ind = line.find('[NCBI, ExPASy, Israel, Japan]')
         if ind >= 0:
             line = line[:ind]
 
@@ -653,12 +650,12 @@ class _RecordConsumer(AbstractConsumer):
         # and these can be more complicated like:
         # RX   MEDLINE=95385798; PubMed=7656980;
         # We look for these cases first and deal with them
-        if string.find(line, "=") != -1:
-            cols = string.split(line)
+        if line.find( "=") != -1:
+            cols = line.split()
             assert len(cols) > 1, "I don't understand RX line %s" % line
 
             for info_col in cols[1:]:
-                id_cols = string.split(info_col, "=")
+                id_cols = info_col.split("=")
                 if len(id_cols) == 2:
                     self.data.references[-1].references.append(
                         (self._chomp(id_cols[0]), self._chomp(id_cols[1])))
@@ -667,7 +664,7 @@ class _RecordConsumer(AbstractConsumer):
                                          % line)
         # otherwise we assume we have the type 'RX   MEDLINE; 85132727.'
         else:
-            cols = string.split(line)
+            cols = line.split()
             # normally we split into the three parts
             if len(cols) == 3:
                 self.data.references[-1].references.append(
@@ -716,42 +713,44 @@ class _RecordConsumer(AbstractConsumer):
         # DR   SWISS-2DPAGE; GET REGION ON 2D PAGE.
         line = line[5:]
         # Remove the comments at the end of the line
-        i = string.find(line, '[')
+        i = line.find('[')
         if i >= 0:
             line = line[:i]
-        cols = string.split(self._chomp(string.rstrip(line)), ';')
-        for i in range(len(cols)):
-            cols[i] = string.lstrip(cols[i])
+        cols = self._chomp(line.rstrip()).split(';')
+        cols = [col.lstrip() for col in cols]
         self.data.cross_references.append(tuple(cols))
     
     def keyword(self, line):
-        cols = string.split(self._chomp(string.rstrip(line[5:])), ';')
-        for col in cols:
-            self.data.keywords.append(string.lstrip(col))
-    
+        cols = self._chomp(line[5:].rstrip()).split(';')
+        self.data.keywords.extend([c.lstrip() for c in cols])
+
     def feature_table(self, line):
         line = line[5:]    # get rid of junk in front
-        name = string.rstrip(line[0:8])
+        name = line[0:8].rstrip()
         try:
             from_res = int(line[9:15])
         except ValueError:
-            from_res = string.lstrip(line[9:15])
+            from_res = line[9:15].lstrip()
         try:
             to_res = int(line[16:22])
         except ValueError:
-            to_res = string.lstrip(line[16:22])
-        description = string.rstrip(line[29:70])
-
+            to_res = line[16:22].lstrip()
+        description = line[29:70].rstrip()
+        #if there is a feature_id (FTId), store it away
+        if line[29:35]==r"/FTId=":
+            ft_id = line[35:70].rstrip()[:-1]
+        else:
+            ft_id =""
         if not name:  # is continuation of last one
             assert not from_res and not to_res
-            name, from_res, to_res, old_description = self.data.features[-1]
+            name, from_res, to_res, old_description,old_ft_id = self.data.features[-1]
             del self.data.features[-1]
             description = "%s %s" % (old_description, description)
             
             # special case -- VARSPLIC, reported by edvard@farmasi.uit.no
             if name == "VARSPLIC":
                 description = self._fix_varsplic_sequences(description)
-        self.data.features.append((name, from_res, to_res, description))
+        self.data.features.append((name, from_res, to_res, description,ft_id))
 
     def _fix_varsplic_sequences(self, description):
         """Remove unwanted spaces in sequences.
@@ -761,21 +760,21 @@ class _RecordConsumer(AbstractConsumer):
         'DISSTKLQALPSHGLESIQT -> PCRATGWSPFRRSSPC LPTH'
         We want to check for this case and correct it as it happens.
         """
-        descr_cols = string.split(description, " -> ")
+        descr_cols = description.split(" -> ")
         if len(descr_cols) == 2:
             first_seq = descr_cols[0]
             second_seq = descr_cols[1]
             extra_info = ''
             # we might have more information at the end of the
             # second sequence, which should be in parenthesis
-            extra_info_pos = string.find(second_seq, " (")
+            extra_info_pos = second_seq.find(" (")
             if extra_info_pos != -1:
                 extra_info = second_seq[extra_info_pos:]
                 second_seq = second_seq[:extra_info_pos]
 
             # now clean spaces out of the first and second string
-            first_seq = string.replace(first_seq, " ", "")
-            second_seq = string.replace(second_seq, " ", "")
+            first_seq = first_seq.replace(" ", "")
+            second_seq = second_seq.replace(" ", "")
 
             # reassemble the description
             description = first_seq + " -> " + second_seq + extra_info
@@ -783,18 +782,20 @@ class _RecordConsumer(AbstractConsumer):
         return description
     
     def sequence_header(self, line):
-        cols = string.split(line)
+        cols = line.split()
         assert len(cols) == 8, "I don't understand SQ line %s" % line
         # Do more checking here?
         self.data.seqinfo = int(cols[2]), int(cols[4]), cols[6]
     
     def sequence_data(self, line):
-        seq = string.rstrip(string.replace(line, " ", ""))
+        seq = line.replace(" ", "").rstrip()
         self.data.sequence = self.data.sequence + seq
     
     def terminator(self, line):
         pass
 
+    # from Python 2.2.2 could be replaced with word.rstrip(".,;")
+    # if there is always only one puctuation
     def _chomp(self, word, to_chomp='.,;'):
         # Remove the punctuation at the end of a word.
         if word[-1] in to_chomp:
@@ -811,7 +812,7 @@ class _RecordConsumer(AbstractConsumer):
         members = ['description', 'gene_name', 'organism', 'organelle']
         for m in members:
             attr = getattr(rec, m)
-            setattr(rec, m, string.rstrip(attr))
+            setattr(rec, m, attr.rstrip())
         for ref in rec.references:
             self._clean_references(ref)
 
@@ -820,7 +821,7 @@ class _RecordConsumer(AbstractConsumer):
         members = ['authors', 'title', 'location']
         for m in members:
             attr = getattr(ref, m)
-            setattr(ref, m, string.rstrip(attr))
+            setattr(ref, m, attr.rstrip())
 
 class _SequenceConsumer(AbstractConsumer):
     """Consumer that converts a SwissProt record to a Seq object.
@@ -846,22 +847,22 @@ class _SequenceConsumer(AbstractConsumer):
         self.data.description = ""
         
     def end_record(self):
-        self.data.description = string.rstrip(self.data.description)
+        self.data.description = self.data.description.rstrip()
 
     def identification(self, line):
-        cols = string.split(line)
+        cols = line.split()
         self.data.name = cols[1]
 
     def accession(self, line):
-        ids = string.split(string.rstrip(line[5:]), ';')
+        ids = line[5:].rstrip().split(';')
         self.data.id = ids[0]
 
     def description(self, line):
         self.data.description = self.data.description + \
-                                string.strip(line[5:]) + "\n"
+                                line[5:].strip() + "\n"
         
     def sequence_data(self, line):
-        seq = Seq.Seq(string.rstrip(string.replace(line, " ", "")),
+        seq = Seq.Seq(line.replace(" ", "").rstrip(),
                       self.alphabet)
         self.data.seq = self.data.seq + seq
 
