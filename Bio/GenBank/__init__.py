@@ -321,7 +321,13 @@ class _BaseGenBankConsumer(AbstractConsumer):
         else:
             tax_info = taxonomy_string
         tax_list = string.split(tax_info, ';')
-        clean_tax_list = map(string.strip, tax_list)
+        new_tax_list = []
+        for tax_item in tax_list:
+            new_items = tax_item.split("\n")
+            new_tax_list.extend(new_items)
+        while '' in new_tax_list:
+            new_tax_list.remove('')
+        clean_tax_list = map(string.strip, new_tax_list)
 
         return clean_tax_list
 
@@ -942,7 +948,7 @@ class _RecordConsumer(_BaseGenBankConsumer):
         self._cur_reference.pubmed_id = content
 
     def remark(self, content):
-        self._cur_reference.pubmed_id = content
+        self._cur_reference.remark = content
 
     def comment(self, content):
         self.data.comment = string.join(content, "\n")
