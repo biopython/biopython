@@ -6,7 +6,7 @@
 
 """InterPro
 
-This module provides code to work with htl files from
+This module provides code to work with html files from
 http://www.ebi.ac.uk/interpro/
 
 
