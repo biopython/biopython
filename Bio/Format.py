@@ -217,13 +217,13 @@ class Format:
         self.__dict__.update(kwargs)
         self._parents = []
 
-    def identifyFile(self, infile):
+    def identifyFile(self, infile, debug_level = 0):
         raise NotImplementedError("must be defined in subclass")
     
-    def identifyString(self, s):
+    def identifyString(self, s, debug_level = 0):
         raise NotImplementedError("must be defined in subclass")
     
-    def identify(self, source):
+    def identify(self, source, debug_level = 0):
         source = saxutils.prepare_input_source(source)
         # Is this correct?  Don't know - don't have Unicode exprerience
         f = source.getCharacterStream() or source.getByteStream()
@@ -231,7 +231,7 @@ class Format:
             f.tell()
         except (AttributeError, IOError):
             f = ReseekFile.ReseekFile(f)
-        return self.identifyFile(f)
+        return self.identifyFile(f, debug_level)
 
     def _get_parents_in_depth_order(self):
         # Return a list of self and all the parents, in a depth-first
