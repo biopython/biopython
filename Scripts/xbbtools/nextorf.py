@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # Created: Tue Aug  8 20:32:36 2000
-# Last changed: Time-stamp: <00/08/10 15:05:37 thomas>
+# Last changed: Time-stamp: <00/08/10 19:03:53 thomas>
 # thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas/index.html
 # File: nextorf.py
 
@@ -70,14 +70,46 @@ class NextORF:
             self.handle_record(rec)
 
     def toFasta(self, header, seq):
-        seq = re.sub('(............................................................)','\\1\n',seq)
-        return '>%s\n%s' % (header, seq)
+       seq = re.sub('(............................................................)','\\1\n',seq)
+       return '>%s\n%s' % (header, seq)
 
     def gc(self, seq):
-        gc = string.count(seq, 'G') + string.count(seq, 'C')
-        if gc == 0: return 0
-        return gc*100.0/len(seq)
-        
+       d = {}
+       for nt in ['A','T','G','C']:
+          d[nt] = string.count(seq, nt)
+       gc = d['G'] + d['C']
+       if gc == 0: return 0
+       return round(gc*100.0/(d['A'] +d['T'] + gc),1)
+
+    def gc2(self,seq):
+       l = len(seq)
+       d= {}
+       for nt in ['A','T','G','C']:
+          d[nt] = [0,0,0]
+          
+       for i in range(0,l,3):
+          codon = seq[i:i+3]
+          for pos in range(0,3):
+             for nt in ['A','T','G','C']:
+                if codon[0] == nt: d[nt][pos] = d[nt][pos] +1
+
+
+       gc = {}
+       gcall = 0
+       nall = 0
+       for i in range(0,3):
+          n = (d['G'][1] + d['C'][1] +d['T'][1] + d['A'][1])
+          nall = nall + n
+          if n == 0:
+             gc[i] = 0
+          else:
+             gc[i] = (d['G'][1] + d['C'][1])*100.0/n
+          gcall = gcall + gc[i]
+
+       gcall = 100.0*gcall/nall
+       return '%.1f%%, %.1f%%, %.1f%%, %.1f%%' % (gcall, gc[0], gc[1], gc[1])
+          
+   
     def handle_record(self, rec):
         plus, minus= 0,0
         if self.options['strand'] == 'both' or self.options['strand'] == 'plus': plus = 1
@@ -88,6 +120,7 @@ class NextORF:
             r = map(None,s)
             r.reverse()
             rseq = Seq(complement(r), IUPAC.ambiguous_dna)
+            length = len(s)
 
         n = 0
         if plus:
@@ -98,6 +131,7 @@ class NextORF:
                 for orf in orfs:
                     stop = start + 3*(len(orf) + 1)
                     subs = seq[frame-1:][start:stop]
+                    _start = start
                     start = stop
 
                     # ORF too small ?
@@ -109,8 +143,8 @@ class NextORF:
                     n = n + 1
                     # ORF just allright ...
                     out = self.options['output']
-                    head = 'orf_%s:%s:+%d:%d:%d' % (n, self.header, frame, start,stop)
-                    if self.options['gc']: head = '%s:%f%%' % (head, self.gc(subs.data))
+                    head = 'orf_%s:%s:+%d:%d:%d' % (n, self.header, frame, _start+1,stop+1)
+                    if self.options['gc']: head = '%s:%s' % (head, self.gc2(subs.data))
                     if out == 'aa':
                         print self.toFasta(head, orf)
                     elif out == 'nt':
@@ -128,6 +162,7 @@ class NextORF:
                 for orf in orfs:
                     stop = start + 3*(len(orf) + 1)
                     subs = rseq[frame-1:][start:stop]
+                    _start = start
                     start = stop
 
                     # ORF too small ?
@@ -137,8 +172,9 @@ class NextORF:
                        len(orf) > int(self.options['maxlength']): continue
                     # ORF just allright ...
                     n = n + 1
-                    head = 'orf_%s:%s:-%d:%d:%d' % (n, self.header, frame, start,stop)
-                    if self.options['gc']: head = '%s:%f%%' % (head, self.gc(subs.data))
+                    head = 'orf_%s:%s:-%d:%d:%d' % (n, self.header, frame, length - stop +2, length - _start)
+                    if self.options['gc']: head = '%s:%s' % (head, self.gc2(subs.data))
+                    out = self.options['output']
                     if out == 'aa':
                         print self.toFasta(head, orf)
                     elif out == 'nt':
