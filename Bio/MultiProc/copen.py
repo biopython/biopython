@@ -9,25 +9,9 @@ copen_sys     Open a file-like pipe to a system command.
 copen_fn      Open a file-like pipe to a python function.
 
 """
-
-# The pickle stuff has to be redone.  We shouldn't have a whole new
-# handle object to unpickle the results.  Instead, the pickling and
-# unpickling should be done by function wrappers.
-# e.g.
-#    call_and_pickle(fn, args, keywds)
-# _CommandHandle should take a function that processes the results,
-# e.g. unpickle
-
 import os
-import sys
-import traceback
 import time
 import signal
-import select
-try:
-    import cPickle as pickle
-except ImportError:
-    import pickle
 
 def copen_sys(syscmd, *args):
     """copen_sys(syscmd, *args) -> file-like object
@@ -50,6 +34,7 @@ def copen_sys(syscmd, *args):
         try:
             os.execvp(syscmd, args)  # execute it!
         except:
+            import sys
             sys.stderr.write("%s could not be executed\n" % syscmd)
             os._exit(-1)
         os._exit(0)
@@ -57,19 +42,23 @@ def copen_sys(syscmd, *args):
     # parent
     os.close(w)
     os.close(ew)
-    return _CommandHandle(pid, os.fdopen(r, 'r'), os.fdopen(er, 'r'))
+    return _ProcHandle(pid, os.fdopen(r, 'r'), os.fdopen(er, 'r'))
 
 def copen_fn(func, *args, **keywords):
     """copen_fn(func, *args, **keywords) -> file-like object
 
     Open a file-like object that returns the output from function
     call.  The object's 'read' method returns the return value from
-    the function.  The function is executed as a separate process, so
+    the function.  The function is executed as a separate process so
     any variables modified by the function does not affect the ones in
     the parent process.  The return value of the function must be
     pickle-able.
 
     """
+    try:
+        import cPickle as pickle
+    except ImportError:
+        import pickle
     r, w = os.pipe()
     er, ew = os.pipe()
 
@@ -78,12 +67,11 @@ def copen_fn(func, *args, **keywords):
         cwrite, errwrite = os.fdopen(w, 'w'), os.fdopen(ew, 'w')
         try:
             output = apply(func, args, keywords)
+            # Pickle may fail here is the object is not pickleable.
             s = pickle.dumps(output, 1)
         except:
-            etype, value, tb = sys.exc_info()   # get the traceback
-            tb = traceback.extract_tb(tb)
-            s = pickle.dumps((etype, value, tb), 1)
-            errwrite.write(s)
+            import traceback
+            traceback.print_exc(file=errwrite)
             errwrite.flush()
             os._exit(-1)
         cwrite.write(s)
@@ -99,16 +87,16 @@ def copen_fn(func, *args, **keywords):
 # Keep a list of all the active child processes.  If the process is
 # forcibly killed, e.g. by a SIGTERM, make sure the child processes
 # die too.
-_active = []   # list of _CommandHandle objects
+_active = []   # list of _ProcHandle objects
 
-class _CommandHandle:
-    """This file-like object is a wrapper around a command.
+class _ProcHandle:
+    """This object provides a file-like interface to a running
+    process.
 
     Members:
     pid         what is the PID of the subprocess?
     killsig     what signal killed the child process?
     status      what was the status of the command?
-    error       if an error occurred, this describes it.
 
     Methods:
     close       Close this process, killing it if necessary.
@@ -122,13 +110,10 @@ class _CommandHandle:
     
     """
     def __init__(self, pid, cread, errread=None):
-        """_CommandHandle(pid, cread[, errread]) -> instance
-
-        Create a wrapper around a command.  pid should be the process
-        ID of the command that was created, probably by a fork/exec.
-        cread should be a file object used to read from the child.  If
-        errread is given, then I will look there for messages
-        pertaining to error conditions.
+        """Create a wrapper around a running process.  pid is the
+        process ID.  cread is the file object used to read from the
+        child.  errread is an optional file object used to read errors
+        from the child.
 
         """
         _active.append(self)
@@ -147,20 +132,20 @@ class _CommandHandle:
         self.close()  # kill the process
 
     def _kill(self):
-        # return killsig
+        """Kill the process and return killsig"""
         try:
             pid, ind = os.waitpid(self.pid, os.WNOHANG)
             if pid == self.pid:   # died
                 return 0
             # First, try to kill it with a SIGTERM.
             os.kill(self.pid, signal.SIGTERM)
-            # Wait .5 seconds for the process to die.
+            # Wait .5 seconds for it to die.
             end = time.time() + 0.5
             while time.time() < end:
                 pid, ind = os.waitpid(self.pid, os.WNOHANG)
                 if pid == self.pid:
                     return ind & 0xff
-                time.sleep(0.1)
+                time.sleep(0.01)
             # It didn't die, so kill with a SIGKILL
             os.kill(self.pid, signal.SIGKILL)
             return signal.SIGKILL
@@ -168,11 +153,7 @@ class _CommandHandle:
             pass
         
     def close(self):
-        """S.close()
-
-        Close the process, killing it if I must.
-
-        """
+        """Close the process, killing it if it is still running."""
         # If this gets called in the middle of object initialization,
         # the _closed attribute will not exist.
         if not hasattr(self, '_closed') or self._closed:
@@ -190,19 +171,11 @@ class _CommandHandle:
         self._closed = 1
 
     def fileno(self):
-        """S.fileno() -> file descriptor
-
-        Return the file descriptor associated with the pipe.
-
-        """
+        """Return the file descriptor used to read from the process."""
         return self._cread.fileno()
         
     def readline(self):
-        """S.readline() -> string
-
-        Return the next line read, or '' if finished.
-
-        """
+        """Return the next line or '' if finished."""
         self.wait()
         if not self._output:
             return ''
@@ -211,33 +184,22 @@ class _CommandHandle:
         return line
 
     def readlines(self):
-        """S.readlines() -> list of strings
-
-        Return the output as a list of strings.
-
-        """
+        """Return the output of the process as a list of strings."""
         self.wait()
         output = self._output
         self._output = []
         return output
 
     def read(self):
-        """S.read() -> string
-
-        Return the output as a string.
-
-        """
+        """Return the output as a string."""
         self.wait()
         output = self._output
         self._output = []
         return "".join(output)
 
     def wait(self):
-        """S.wait()
-
-        Wait until the process is finished.
-
-        """
+        """Wait for the process to finish."""
+        import select
         if self._done:
             return
         # wait until stuff's ready to be read
@@ -245,11 +207,8 @@ class _CommandHandle:
         self._cleanup_child()
 
     def poll(self):
-        """S.poll() -> boolean
-
-        Is the process finished running?
-
-        """
+        """Return a boolean.  Is the process finished running?"""
+        import select
         if self._done:
             return 1
         # If I'm done, then read the results.
@@ -258,21 +217,13 @@ class _CommandHandle:
         return self._done
 
     def elapsed(self):
-        """S.elapsed() -> num seconds
-
-        How much time has elapsed since the process began?
-
-        """
+        """Return the number of seconds elapsed since the process began."""
         if self._end:  # if I've finished, return the total time
             return self._end - self._start
         return time.time() - self._start
 
     def _cleanup_child(self):
-        """S._cleanup_child()
-
-        Do necessary cleanup functions after child is finished running.
-
-        """
+        """Do necessary cleanup functions after child is finished running."""
         if self._done:
             return
 
@@ -283,12 +234,10 @@ class _CommandHandle:
             error = self._errread.read()
             self._errread.close()
             if error:
-                error = pickle.loads(error)
-                etype, value, tb = error
-                # tb gets lost, and the stack frame of the parent
-                # process is printed out instead.  I should find a way
-                # where the client can optionally get access to this.
-                raise etype, value
+                raise AssertionError, "Error in child process:\n\n%s" % error
+                # It would be nice to be able to save the exception
+                # and traceback somehow, and raise it in the parent.
+                #raise etype, value
         # Remove myself from the active list.
         if _active and self in _active:
             _active.remove(self)
@@ -299,15 +248,12 @@ class _CommandHandle:
         self._done = 1
 
 class _PickleHandle:
-    """This is a decorator around a _CommandHandle.
-    Instead of returning the results as a string, it returns a
-    python object.  The child process must pickle its output to the pipe!
+    """
 
     Members:
     pid         what is the PID of the subprocess?
     killsig     what signal killed the child process?
     status      what was the status of the command?
-    error       if an error occurred, this describes it.
 
     Methods:
     close       Close this process, killing it if necessary.
@@ -319,31 +265,27 @@ class _PickleHandle:
     
     """
     def __init__(self, pid, cread, errread=None):
-        """_PickleHandle(pid, cread[, errread])
-
-        Create a wrapper around a command.  pid should be the process ID
-        of the command that was created, probably by a fork/exec.
-        cread should be a file object used to read from the child.
-        If errread is given, then I will look there for messages pertaining to
-        error conditions.
+        """Create a wrapper around a running process.  pid is the
+        process ID.  cread is the file object used to read from the
+        child.  errread is an optional file object used to read errors
+        from the child.
 
         """
-        self._cmd_handle = _CommandHandle(pid, cread, errread)
+        self._phandle = _ProcHandle(pid, cread, errread)
 
     def __getattr__(self, attr):
         # This object does not support 'readline' or 'readlines'
         if attr.startswith('readline'):
             raise AttributeError, attr
-        return getattr(self._cmd_handle, attr)
+        return getattr(self._phandle, attr)
 
     def read(self):
-        """S.read() -> python object
-
-        Returns None on error.  Most likely, the function returned
-        an object that could not be pickled.
-
-        """
-        r = self._cmd_handle.read()
+        """Return a Python object or ''."""
+        try:
+            import cPickle as pickle
+        except ImportError:
+            import pickle
+        r = self._phandle.read()
         if not r:
             return r
         return pickle.loads(r)
