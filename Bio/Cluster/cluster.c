@@ -2650,7 +2650,7 @@ clustered, or the number of microarrays minus one if microarrays are clustered.
                             + distmatrix[j][jsaved]*number[jsaved];
       distmatrix[j][jsaved] /= sum;
     }
-    for (j = isaved+1; j < nNodes-1; j++)
+    for (j = isaved+1; j < nNodes; j++)
     { distmatrix[j][jsaved] = distmatrix[j][isaved]*number[isaved]
                             + distmatrix[j][jsaved]*number[jsaved];
       distmatrix[j][jsaved] /= sum;
