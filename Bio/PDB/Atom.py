@@ -25,6 +25,7 @@ class Atom:
 		o fullname - string, full atom name, including spaces, e.g. " CA ". Normally
 		these spaces are stripped from the atom name. 
 		"""
+		self.level=4
 		# Reference to the residue 
 		self.parent=None
 		# the atomic data

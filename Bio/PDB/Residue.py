@@ -21,6 +21,7 @@ class Residue(Entity):
 	Represents a residue. A Residue object stores atoms.
 	"""
 	def __init__(self, id, resname, segid):
+		self.level=3
 		self.disordered=0
 		self.resname=resname
 		self.segid=segid

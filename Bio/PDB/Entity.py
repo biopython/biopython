@@ -51,6 +51,17 @@ class Entity:
 
 	# Public methods	
 
+	def get_level(self):
+		"""Return level in hierarchy.
+
+		4 - atom
+		3 - residue
+		2 - chain
+		1 - model
+		0 - structure
+		"""
+		return self.level
+
 	def sort(self, sort_function=None):
 		"""Sort the children in the Entity object.
 
