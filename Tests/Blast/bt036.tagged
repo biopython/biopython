@@ -48,6 +48,7 @@ title          : <a name = 114879> </a><a href="http://www.ncbi.nlm.nih.gov:80/e
 title          :            MUTASE)
 length         :            Length = 313
 noevent        : 
+*************** start_hsp
 score          :  Score =  574 bits (1463), Expect = e-164
 identities     :  Identities = 280/313 (89%), Positives = 280/313 (89%)
 noevent        : 
@@ -77,6 +78,7 @@ sbjct          : Sbjct: 301 CYTQAPDLAAVQG 313
 noevent        : </PRE>
 noevent        : 
 noevent        : 
+*************** end_hsp
 *************** end_alignment
 *************** start_alignment
 noevent        : <PRE>
@@ -84,6 +86,7 @@ title          : <a name = 417464> </a><a href="http://www.ncbi.nlm.nih.gov:80/e
 title          :            MUTASE) (PEP MUTASE)
 length         :            Length = 300
 noevent        : 
+*************** start_hsp
 score          :  Score =  228 bits (574), Expect = 2e-59
 identities     :  Identities = 114/283 (40%), Positives = 164/283 (57%), Gaps =
 noevent        : 
@@ -109,12 +112,14 @@ sbjct          : Sbjct: 257 MQETSRRIYEDESLVNVEPKVAKVKEVFRLQGEDELKQADKKY 299
 noevent        : </PRE>
 noevent        : 
 noevent        : 
+*************** end_hsp
 *************** end_alignment
 *************** start_alignment
 noevent        : <PRE>
 title          : <a name = 1731059> </a><a href="http://www.ncbi.nlm.nih.gov:80/
 length         :            Length = 301
 noevent        : 
+*************** start_hsp
 score          :  Score = 88.5 bits (216), Expect = 2e-17
 identities     :  Identities = 79/289 (27%), Positives = 120/289 (41%), Gaps = 2
 noevent        : 
@@ -140,6 +145,7 @@ sbjct          : Sbjct: 248 AKA----CERMFGLMKEHGSQKEGLHDMQTR-KELYDTISYYDYEALDK 29
 noevent        : </PRE>
 noevent        : 
 noevent        : 
+*************** end_hsp
 *************** end_alignment
 *************** start_alignment
 noevent        : <PRE>
@@ -148,6 +154,7 @@ title          :            (CARBOXYPHOSPHONOENOLPYRUVATE PHOSPHONOMUTASE) (CPEP
 title          :            PHOSPHONOMUTASE)
 length         :            Length = 295
 noevent        : 
+*************** start_hsp
 score          :  Score = 64.4 bits (154), Expect = 3e-10
 identities     :  Identities = 47/152 (30%), Positives = 71/152 (45%), Gaps = 3/
 noevent        : 
@@ -165,6 +172,7 @@ sbjct          : Sbjct: 128 RLISTEEMTGKIEAAVEAREDEDFTIIARTDA 159
 noevent        : </PRE>
 noevent        : 
 noevent        : 
+*************** end_hsp
 *************** end_alignment
 *************** start_alignment
 noevent        : <PRE>
@@ -172,6 +180,7 @@ title          : <a name = 2498805> </a><a href="http://www.ncbi.nlm.nih.gov:80/
 title          :            PHOSPHONOMUTASE)
 length         :            Length = 295
 noevent        : 
+*************** start_hsp
 score          :  Score = 59.7 bits (142), Expect = 7e-09
 identities     :  Identities = 49/165 (29%), Positives = 80/165 (47%), Gaps = 14
 noevent        : 
@@ -189,6 +198,7 @@ sbjct          : Sbjct: 123 C-----GHRPNKAIVSKEEMVDRIRAAVDARTDPNFVIMARTDAL 162
 noevent        : </PRE>
 noevent        : 
 noevent        : 
+*************** end_hsp
 *************** end_alignment
 *************** start_alignment
 noevent        : <PRE>
@@ -196,6 +206,7 @@ title          : <a name = 2498804> </a><a href="http://www.ncbi.nlm.nih.gov:80/
 title          :            PHOSPHONOMUTASE)
 length         :            Length = 296
 noevent        : 
+*************** start_hsp
 score          :  Score = 58.9 bits (140), Expect = 1e-08
 identities     :  Identities = 50/165 (30%), Positives = 80/165 (48%), Gaps = 14
 noevent        : 
@@ -213,12 +224,14 @@ sbjct          : Sbjct: 123 C-----GHRPNKAIVSKEEMVDRIRAAVDAKTDPDFVIMARTDAL 162
 noevent        : </PRE>
 noevent        : 
 noevent        : 
+*************** end_hsp
 *************** end_alignment
 *************** start_alignment
 noevent        : <PRE>
 title          : <a name = 113033> </a><a href="http://www.ncbi.nlm.nih.gov:80/e
 length         :            Length = 557
 noevent        : 
+*************** start_hsp
 score          :  Score = 31.7 bits (70), Expect = 2.0
 identities     :  Identities = 21/84 (25%), Positives = 31/84 (36%), Gaps = 4/84
 noevent        : 
@@ -232,12 +245,14 @@ sbjct          : Sbjct: 235 LVTIRMCADIMHS-DLIVVARTDS 257
 noevent        : </PRE>
 noevent        : 
 noevent        : 
+*************** end_hsp
 *************** end_alignment
 *************** start_alignment
 noevent        : <PRE>
 title          : <a name = 113025> </a><a href="http://www.ncbi.nlm.nih.gov:80/e
 length         :            Length = 536
 noevent        : 
+*************** start_hsp
 score          :  Score = 30.1 bits (66), Expect = 5.8
 identities     :  Identities = 20/84 (23%), Positives = 34/84 (39%), Gaps = 4/84
 noevent        : 
@@ -251,12 +266,14 @@ sbjct          : Sbjct: 222 LVAIR-AQADIMGTDLLAIARTDS 244
 noevent        : </PRE>
 noevent        : 
 noevent        : 
+*************** end_hsp
 *************** end_alignment
 *************** start_alignment
 noevent        : <PRE>
 title          : <a name = 113031> </a><a href="http://www.ncbi.nlm.nih.gov:80/e
 length         :            Length = 547
 noevent        : 
+*************** start_hsp
 score          :  Score = 29.7 bits (65), Expect = 7.6
 identities     :  Identities = 21/84 (25%), Positives = 33/84 (39%), Gaps = 4/84
 noevent        : 
@@ -270,6 +287,7 @@ sbjct          : Sbjct: 233 LVAIR-AQADIMGSDLLCIARTDA 255
 noevent        : </PRE>
 noevent        : 
 noevent        : 
+*************** end_hsp
 *************** end_alignment
 *************** start_database_report
 noevent        : 

@@ -13,8 +13,6 @@ Classes:
 Scanner      Scans output from NCBI's BLAST WWW server.
 """
 
-# XXX use safe_peekline where appropriate
-
 
 import string
 
@@ -284,8 +282,7 @@ class Scanner:
             uhandle.saveline(line1)
             if line1[:6] != ' Score' and line2[:6] != ' Score':
                 break
-            self._scan_hsp_header(uhandle, consumer)
-            self._scan_hsp_alignment(uhandle, consumer)
+            self._scan_hsp(uhandle, consumer)
                 
         consumer.end_alignment()
 
@@ -306,6 +303,12 @@ class Scanner:
             consumer.title(line)
 
         read_and_call(uhandle, consumer.noevent, start='          ')
+
+    def _scan_hsp(self, uhandle, consumer):
+        consumer.start_hsp()
+        self._scan_hsp_header(uhandle, consumer)
+        self._scan_hsp_alignment(uhandle, consumer)
+        consumer.end_hsp()
 
     def _scan_hsp_header(self, uhandle, consumer):
         # If the HSP is not the first one within an alignment, includes:

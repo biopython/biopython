@@ -10,17 +10,18 @@ BLAST, either blastall or blastpgp, provided by the NCBI.
 http://www.ncbi.nlm.nih.gov/BLAST/
 
 Classes:
-Scanner     Scans output from standalone BLAST.
-HConsumer   Heavyweight consumer.
+Scanner        Scans output from standalone BLAST.
+HeavyConsumer  Heavyweight consumer.
 
 Functions:
-blastall    Execute and retrieve data from blastall.
-blastpgp    Execute and retrieve data from blastpgp.
+blastall       Execute blastall.
+blastpgp       Execute blastpgp.
 """
 
 
 import os
 import string
+import re
 import popen2
 
 from Bio import File
@@ -265,8 +266,7 @@ class Scanner:
             line = safe_peekline(uhandle)
             if line[:6] != ' Score':
                 break
-            self._scan_hsp_header(uhandle, consumer)
-            self._scan_hsp_alignment(uhandle, consumer)
+            self._scan_hsp(uhandle, consumer)
             read_and_call(uhandle, consumer.noevent, blank=1)
         consumer.end_alignment()
 
@@ -290,6 +290,12 @@ class Scanner:
 
         read_and_call(uhandle, consumer.noevent, start='          ')
 
+    def _scan_hsp(self, uhandle, consumer):
+        consumer.start_hsp()
+        self._scan_hsp_header(uhandle, consumer)
+        self._scan_hsp_alignment(uhandle, consumer)
+        consumer.end_hsp()
+        
     def _scan_hsp_header(self, uhandle, consumer):
         #  Score = 22.7 bits (47), Expect = 2.5
         #  Identities = 10/36 (27%), Positives = 18/36 (49%)
@@ -461,10 +467,9 @@ class Scanner:
 
         consumer.end_parameters()
 
-class HConsumer(AbstractConsumer):
+class HeavyConsumer(AbstractConsumer):
     def __init__(self):
         self.record = None
-
 
     ### header
         
@@ -481,7 +486,7 @@ class HConsumer(AbstractConsumer):
         if line[:11] == 'Reference: ':
             self.record.reference = line[11:]
         else:
-            self.record = self.record + line
+            self.record.reference = self.record.reference + line
             
     def query_info(self, line):
         if line[:7] == 'Query= ':
@@ -503,8 +508,50 @@ class HConsumer(AbstractConsumer):
 
     ### description
 
-    # XXX round
-                
+    def round(self, line):
+        # XXX Need a PSI-BLAST record
+        # m = re.search(r'round (\d+)', line)
+        pass
+
+    def model_sequences(self, line):
+        # XXX PSI-BLAST
+        pass
+
+    def nonmodel_sequences(self, line):
+        # XXX PSI-BLAST
+        pass
+
+    def converged(self, line):
+        # XXX PSI-BLAST
+        pass
+
+    def description(self, line):
+        dh = Record.DescriptionHit()
+        dh.title, dh.score, dh.p = strip.split(line)
+        self.record.descriptions.append(dh)
+
+    def no_hits(self, line):
+        pass
+
+
+    
+    ### alignment
+
+    def start_alignment(self):
+        self._align = Record.AlignmentHit()
+        self.record.alignments.append(self._align)
+
+    def title(self, line):
+        self._align.title = string.rstrip(line)
+
+    def length(self, line):
+        self._align.length = string.split(line)[2]
+
+    def end_alignment(self):
+        del self._align
+
+
+    
 
     
     

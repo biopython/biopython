@@ -30,6 +30,7 @@ noevent        :
 title          : >gi|1731448|sp|P54103|ZRF1_MOUSE ZUOTIN RELATED FACTOR-1
 length         :            Length = 514
 noevent        : 
+*************** start_hsp
 score          :  Score = 86.6 bits (211), Expect = 3e-17
 identities     :  Identities = 41/47 (87%), Positives = 44/47 (93%)
 frame          :  Frame = +1
@@ -38,6 +39,7 @@ query          : Query: 1   DLQLLIKAVNLFPAGTNSRWEVIANYMNIHSSSGVKRTAKDVIGKAK 141
 align          :            DLQLLIKAVNLFPAG NSRW+VIANYMNIHSSSGVKRTAKDVI + +
 sbjct          : Sbjct: 458 DLQLLIKAVNLFPAGRNSRWDVIANYMNIHSSSGVKRTAKDVISEVR 504
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -45,6 +47,7 @@ title          : >gi|465911|sp|P34454|YMA9_CAEEL HYPOTHETICAL 31.6 KD PROTEIN F5
 title          :            IN CHROMOSOME III
 length         :            Length = 275
 noevent        : 
+*************** start_hsp
 score          :  Score = 41.8 bits (96), Expect = 0.001
 identities     :  Identities = 30/122 (24%), Positives = 54/122 (43%)
 frame          :  Frame = +1
@@ -61,12 +64,14 @@ query          : Query: 394 KE 399
 align          :            K+
 sbjct          : Sbjct: 253 KK 254
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
 title          : >gi|2494160|sp|Q61712|MTJ1_MOUSE DNAJ PROTEIN HOMOLOG MTJ1
 length         :            Length = 552
 noevent        : 
+*************** start_hsp
 score          :  Score = 36.7 bits (83), Expect = 0.033
 identities     :  Identities = 17/36 (47%), Positives = 19/36 (52%)
 frame          :  Frame = +1
@@ -75,7 +80,9 @@ query          : Query: 292 TTEXQKLXEQALNTYPVNTXERWXXIAVAVPGRXKE 399
 align          :            T   QKL E AL  YP    +RW  IA  VP + KE
 sbjct          : Sbjct: 496 TQSQQKLLELALQQYPKGASDRWDKIAKCVPSKSKE 531
 noevent        : 
+*************** end_hsp
 noevent        : 
+*************** start_hsp
 score          :  Score = 31.3 bits (69), Expect = 1.5
 identities     :  Identities = 18/50 (36%), Positives = 26/50 (52%)
 frame          :  Frame = +1
@@ -84,6 +91,7 @@ query          : Query: 1   DLQLLIKAVNLFPAGTNSRWEVIANYMNIHSSSGVKRTAKDVIGKAKSLQ 1
 align          :            DL  L +++  FP GT  RW+ IA+ +         R+  DV  KAK L+
 sbjct          : Sbjct: 332 DLSQLTRSMVKFPGGTPGRWDKIAHELG--------RSVTDVTTKAKELK 3
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -91,6 +99,7 @@ title          : >gi|1730688|sp|P53745|YN8X_YEAST HYPOTHETICAL 68.1 KD PROTEIN I
 title          :            BIO3-FRE4 INTERGENIC REGION
 length         :            Length = 580
 noevent        : 
+*************** start_hsp
 score          :  Score = 29.0 bits (63), Expect = 7.4
 identities     :  Identities = 27/99 (27%), Positives = 41/99 (41%)
 frame          :  Frame = +1
@@ -103,6 +112,7 @@ query          : Query: 232 ADNATPSERFXGPYTDFTPXTTEXQKLXEQALNTYPVNT 348
 align          :                   E    PY +FT   +      EQ+ N +PV+T
 sbjct          : Sbjct: 124 -------ETKLFPYINFTALNS------EQSHNFWPVHT 149
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_database_report

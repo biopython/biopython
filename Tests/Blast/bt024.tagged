@@ -58,6 +58,7 @@ title          : <a name = 1348916> </a><a href="http://www.ncbi.nlm.nih.gov:80/
 title          :            SHGC-32699.
 length         :            Length = 285
 noevent        : 
+*************** start_hsp
 score          :  Score =  517 bits (261), Expect = e-146
 identities     :  Identities = 285/285 (100%)
 strand         :  Strand = Plus / Plus
@@ -89,6 +90,7 @@ sbjct          : Sbjct: 241 ggcctgacatgggtagctgctcaataaatgctagtntgttatttc 285
 noevent        : </PRE>
 noevent        : 
 noevent        : 
+*************** end_hsp
 *************** end_alignment
 *************** start_alignment
 noevent        : <PRE>
@@ -96,6 +98,7 @@ title          : <a name = 4516686> </a><a href="http://www.ncbi.nlm.nih.gov:80/
 title          :            sequence, sequence tagged site
 length         :            Length = 307
 noevent        : 
+*************** start_hsp
 score          :  Score = 32.2 bits (16), Expect = 1.7
 identities     :  Identities = 16/16 (100%)
 strand         :  Strand = Plus / Plus
@@ -107,12 +110,14 @@ sbjct          : Sbjct: 32  ggaaagttcttgtagc 47
 noevent        : </PRE>
 noevent        : 
 noevent        : 
+*************** end_hsp
 *************** end_alignment
 *************** start_alignment
 noevent        : <PRE>
 title          : <a name = 6120827> </a><a href="http://www.ncbi.nlm.nih.gov:80/
 length         :            Length = 711
 noevent        : 
+*************** start_hsp
 score          :  Score = 32.2 bits (16), Expect = 1.7
 identities     :  Identities = 18/19 (94%)
 strand         :  Strand = Plus / Plus
@@ -124,12 +129,14 @@ sbjct          : Sbjct: 588 gaaataaaaatggaaagtt 606
 noevent        : </PRE>
 noevent        : 
 noevent        : 
+*************** end_hsp
 *************** end_alignment
 *************** start_alignment
 noevent        : <PRE>
 title          : <a name = 720683> </a><a href="http://www.ncbi.nlm.nih.gov:80/e
 length         :            Length = 246
 noevent        : 
+*************** start_hsp
 score          :  Score = 32.2 bits (16), Expect = 1.7
 identities     :  Identities = 16/16 (100%)
 strand         :  Strand = Plus / Minus
@@ -141,6 +148,7 @@ sbjct          : Sbjct: 178 ctcaataaatgctagt 163
 noevent        : </PRE>
 noevent        : 
 noevent        : 
+*************** end_hsp
 *************** end_alignment
 *************** start_database_report
 noevent        : 

@@ -31,8 +31,10 @@ descriptions
     no_hits
 
 alignment
+    multalign                     master-slave
     title                         pairwise
     length                        pairwise
+  hsp
     score                         pairwise
     identities                    pairwise
     strand                        pairwise, blastn
@@ -40,7 +42,6 @@ alignment
     query                         pairwise
     align                         pairwise
     sbjct                         pairwise
-    multalign                     master-slave
 
 database_report
     database

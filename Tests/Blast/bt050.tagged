@@ -24,6 +24,7 @@ title          : >gi|1347201|gb|G24969|G24969 human STS EST21946.
 title          :            >gi|1375315|gb|G27065|G27065 human STS SHGC-31731.
 length         :            Length = 331
 noevent        : 
+*************** start_hsp
 score          :  Score =  656 bits (331), Expect = 0.0
 identities     :  Identities = 331/331 (100%)
 strand         :  Strand = Plus / Plus
@@ -58,6 +59,7 @@ query          : Query: 301 agtgctccagaacctcaggttccttcagatt 331
 align          :            |||||||||||||||||||||||||||||||
 sbjct          : Sbjct: 301 agtgctccagaacctcaggttccttcagatt 331
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -66,6 +68,7 @@ title          :            HindIII fragment, SC1pE77H4, sequence tagged site [H
 title          :            sapiens]
 length         :            Length = 554
 noevent        : 
+*************** start_hsp
 score          :  Score = 34.2 bits (17), Expect = 0.49
 identities     :  Identities = 17/17 (100%)
 strand         :  Strand = Plus / Minus
@@ -75,6 +78,7 @@ query          : Query: 123 ccaggcagcagggatgg 139
 align          :            |||||||||||||||||
 sbjct          : Sbjct: 434 ccaggcagcagggatgg 418
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -83,6 +87,7 @@ title          :            clone Homo sapiens STS genomic clone 343C1, sequence
 title          :            tagged site
 length         :            Length = 360
 noevent        : 
+*************** start_hsp
 score          :  Score = 32.2 bits (16), Expect = 1.9
 identities     :  Identities = 22/24 (91%)
 strand         :  Strand = Plus / Minus
@@ -92,6 +97,7 @@ query          : Query: 112 ggaggagagggccaggcagcaggg 135
 align          :            ||||||||||| | ||||||||||
 sbjct          : Sbjct: 287 ggaggagaggggctggcagcaggg 264
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -99,6 +105,7 @@ title          : >gi|4493602|gb|G47248.1|G47248 Z17392_1 Zebrafish AB Danio reri
 title          :            genomic clone Z17392 5', sequence tagged site
 length         :            Length = 454
 noevent        : 
+*************** start_hsp
 score          :  Score = 32.2 bits (16), Expect = 1.9
 identities     :  Identities = 16/16 (100%)
 strand         :  Strand = Plus / Plus
@@ -108,6 +115,7 @@ query          : Query: 48  agaagcaaaaccacaa 63
 align          :            ||||||||||||||||
 sbjct          : Sbjct: 434 agaagcaaaaccacaa 449
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -115,6 +123,7 @@ title          : >gi|6120731|gb|G55412.1|G55412 SHGC-100745 Human Homo sapiens S
 title          :            genomic, sequence tagged site
 length         :            Length = 652
 noevent        : 
+*************** start_hsp
 score          :  Score = 32.2 bits (16), Expect = 1.9
 identities     :  Identities = 16/16 (100%)
 strand         :  Strand = Plus / Minus
@@ -124,6 +133,7 @@ query          : Query: 99  agaggaaaaggcagga 114
 align          :            ||||||||||||||||
 sbjct          : Sbjct: 431 agaggaaaaggcagga 416
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -132,6 +142,7 @@ title          :            containing (CA) repeat; clone AFMc009wh1; single rea
 title          :            sequence tagged site [Homo sapiens]
 length         :            Length = 382
 noevent        : 
+*************** start_hsp
 score          :  Score = 32.2 bits (16), Expect = 1.9
 identities     :  Identities = 16/16 (100%)
 strand         :  Strand = Plus / Plus
@@ -141,6 +152,7 @@ query          : Query: 97  agagaggaaaaggcag 112
 align          :            ||||||||||||||||
 sbjct          : Sbjct: 107 agagaggaaaaggcag 122
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -148,6 +160,7 @@ title          : >gi|939357|gb|G08807|G08807 human STS CHLC.GATA70E11.P18111 clo
 title          :            GATA70E11
 length         :            Length = 643
 noevent        : 
+*************** start_hsp
 score          :  Score = 32.2 bits (16), Expect = 1.9
 identities     :  Identities = 16/16 (100%)
 strand         :  Strand = Plus / Minus
@@ -157,12 +170,14 @@ query          : Query: 100 gaggaaaaggcaggag 115
 align          :            ||||||||||||||||
 sbjct          : Sbjct: 482 gaggaaaaggcaggag 467
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
 title          : >gi|1342139|gb|G21813|G21813 human STS WI-12408.
 length         :            Length = 418
 noevent        : 
+*************** start_hsp
 score          :  Score = 32.2 bits (16), Expect = 1.9
 identities     :  Identities = 16/16 (100%)
 strand         :  Strand = Plus / Minus
@@ -172,12 +187,14 @@ query          : Query: 47  cagaagcaaaaccaca 62
 align          :            ||||||||||||||||
 sbjct          : Sbjct: 193 cagaagcaaaaccaca 178
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
 title          : >gi|719782|gb|G02824|G02824 human STS WI-1312.
 length         :            Length = 349
 noevent        : 
+*************** start_hsp
 score          :  Score = 32.2 bits (16), Expect = 1.9
 identities     :  Identities = 16/16 (100%)
 strand         :  Strand = Plus / Plus
@@ -187,6 +204,7 @@ query          : Query: 286 tgctttgttatattta 301
 align          :            ||||||||||||||||
 sbjct          : Sbjct: 111 tgctttgttatattta 126
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -194,6 +212,7 @@ title          : >gi|5902652|gb|G54536.1|G54536 Xq4072 KWOK Homo sapiens STS gen
 title          :            sequence tagged site
 length         :            Length = 997
 noevent        : 
+*************** start_hsp
 score          :  Score = 30.2 bits (15), Expect = 7.6
 identities     :  Identities = 15/15 (100%)
 strand         :  Strand = Plus / Minus
@@ -203,6 +222,7 @@ query          : Query: 1   cctccaccctctcat 15
 align          :            |||||||||||||||
 sbjct          : Sbjct: 618 cctccaccctctcat 604
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -210,6 +230,7 @@ title          : >gi|5566455|gb|AF167528.1|AF167528 Mus musculus chromosome 10 S
 title          :            D10Jhu41, sequence tagged site
 length         :            Length = 749
 noevent        : 
+*************** start_hsp
 score          :  Score = 30.2 bits (15), Expect = 7.6
 identities     :  Identities = 15/15 (100%)
 strand         :  Strand = Plus / Plus
@@ -219,6 +240,7 @@ query          : Query: 117 agagggccaggcagc 131
 align          :            |||||||||||||||
 sbjct          : Sbjct: 487 agagggccaggcagc 501
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -226,6 +248,7 @@ title          : >gi|5566418|gb|AF167504.1|AF167504 Mus musculus chromosome 10 S
 title          :            D10Jhu59, sequence tagged site
 length         :            Length = 550
 noevent        : 
+*************** start_hsp
 score          :  Score = 30.2 bits (15), Expect = 7.6
 identities     :  Identities = 15/15 (100%)
 strand         :  Strand = Plus / Minus
@@ -235,6 +258,7 @@ query          : Query: 81  gagctccccaaggag 95
 align          :            |||||||||||||||
 sbjct          : Sbjct: 278 gagctccccaaggag 264
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -242,6 +266,7 @@ title          : >gi|5565757|gb|AF096569.1|AF096569 Rattus norvegicus clone D5Uw
 title          :            sequence tagged site
 length         :            Length = 580
 noevent        : 
+*************** start_hsp
 score          :  Score = 30.2 bits (15), Expect = 7.6
 identities     :  Identities = 21/23 (91%)
 strand         :  Strand = Plus / Plus
@@ -251,6 +276,7 @@ query          : Query: 95  gcagagaggaaaaggcaggagga 117
 align          :            ||||| |||| ||||||||||||
 sbjct          : Sbjct: 84  gcagacaggagaaggcaggagga 106
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -259,6 +285,7 @@ title          :            clone Homo sapiens STS genomic clone 343C1, sequence
 title          :            tagged site
 length         :            Length = 359
 noevent        : 
+*************** start_hsp
 score          :  Score = 30.2 bits (15), Expect = 7.6
 identities     :  Identities = 15/15 (100%)
 strand         :  Strand = Plus / Minus
@@ -268,6 +295,7 @@ query          : Query: 125 aggcagcagggatgg 139
 align          :            |||||||||||||||
 sbjct          : Sbjct: 58  aggcagcagggatgg 44
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -276,6 +304,7 @@ title          :            OT10.41/02694, microsatellite sequence, sequence tag
 title          :            site
 length         :            Length = 465
 noevent        : 
+*************** start_hsp
 score          :  Score = 30.2 bits (15), Expect = 7.6
 identities     :  Identities = 15/15 (100%)
 strand         :  Strand = Plus / Minus
@@ -285,6 +314,7 @@ query          : Query: 184 atgccctctggtagg 198
 align          :            |||||||||||||||
 sbjct          : Sbjct: 114 atgccctctggtagg 100
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -292,6 +322,7 @@ title          : >gi|6123014|gb|G57845.1|G57845 SHGC-103599 Human Homo sapiens S
 title          :            genomic, sequence tagged site
 length         :            Length = 680
 noevent        : 
+*************** start_hsp
 score          :  Score = 30.2 bits (15), Expect = 7.6
 identities     :  Identities = 15/15 (100%)
 strand         :  Strand = Plus / Plus
@@ -301,6 +332,7 @@ query          : Query: 134 ggatggagactaagt 148
 align          :            |||||||||||||||
 sbjct          : Sbjct: 451 ggatggagactaagt 465
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -308,6 +340,7 @@ title          : >gi|6124406|gb|G59237.1|G59237 SHGC-110189 Human Homo sapiens S
 title          :            genomic, sequence tagged site
 length         :            Length = 505
 noevent        : 
+*************** start_hsp
 score          :  Score = 30.2 bits (15), Expect = 7.6
 identities     :  Identities = 15/15 (100%)
 strand         :  Strand = Plus / Minus
@@ -317,6 +350,7 @@ query          : Query: 128 cagcagggatggaga 142
 align          :            |||||||||||||||
 sbjct          : Sbjct: 163 cagcagggatggaga 149
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -324,6 +358,7 @@ title          : >gi|6121931|gb|G56612.1|G56612 SHGC-102181 Human Homo sapiens S
 title          :            genomic, sequence tagged site
 length         :            Length = 489
 noevent        : 
+*************** start_hsp
 score          :  Score = 30.2 bits (15), Expect = 7.6
 identities     :  Identities = 18/19 (94%)
 strand         :  Strand = Plus / Plus
@@ -333,6 +368,7 @@ query          : Query: 137 tggagactaagtttggccc 155
 align          :            ||||||||||||| |||||
 sbjct          : Sbjct: 302 tggagactaagttgggccc 320
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -340,6 +376,7 @@ title          : >gi|3599905|gb|G41846|G41846 Z1061 Zebrafish AB Danio rerio STS
 title          :            genomic, sequence tagged site [Danio rerio]
 length         :            Length = 410
 noevent        : 
+*************** start_hsp
 score          :  Score = 30.2 bits (15), Expect = 7.6
 identities     :  Identities = 15/15 (100%)
 strand         :  Strand = Plus / Plus
@@ -349,6 +386,7 @@ query          : Query: 265 tcactggttcaacta 279
 align          :            |||||||||||||||
 sbjct          : Sbjct: 185 tcactggttcaacta 199
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -356,6 +394,7 @@ title          : >gi|5224504|gb|G53327.1|G53327 SHGC-82321 Human Homo sapiens ST
 title          :            genomic, sequence tagged site
 length         :            Length = 421
 noevent        : 
+*************** start_hsp
 score          :  Score = 30.2 bits (15), Expect = 7.6
 identities     :  Identities = 18/19 (94%)
 strand         :  Strand = Plus / Plus
@@ -365,6 +404,7 @@ query          : Query: 90  aaggagcagagaggaaaag 108
 align          :            |||||| ||||||||||||
 sbjct          : Sbjct: 209 aaggagaagagaggaaaag 227
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -372,6 +412,7 @@ title          : >gi|5221389|gb|G50212.1|G50212 SHGC-82917 Human Homo sapiens ST
 title          :            genomic, sequence tagged site
 length         :            Length = 297
 noevent        : 
+*************** start_hsp
 score          :  Score = 30.2 bits (15), Expect = 7.6
 identities     :  Identities = 15/15 (100%)
 strand         :  Strand = Plus / Plus
@@ -381,6 +422,7 @@ query          : Query: 116 gagagggccaggcag 130
 align          :            |||||||||||||||
 sbjct          : Sbjct: 155 gagagggccaggcag 169
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -388,6 +430,7 @@ title          : >gi|3168757|gb|G38183|G38183 RPCI-6-164E4Sp6 Human Homo sapiens
 title          :            genomic
 length         :            Length = 395
 noevent        : 
+*************** start_hsp
 score          :  Score = 30.2 bits (15), Expect = 7.6
 identities     :  Identities = 15/15 (100%)
 strand         :  Strand = Plus / Plus
@@ -397,6 +440,7 @@ query          : Query: 42  gcagccagaagcaaa 56
 align          :            |||||||||||||||
 sbjct          : Sbjct: 259 gcagccagaagcaaa 273
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -404,6 +448,7 @@ title          : >gi|3150191|emb|AL023622|HS863J11T H.sapiens STS from genomic c
 title          :            863J11, sequence tagged site [Homo sapiens]
 length         :            Length = 558
 noevent        : 
+*************** start_hsp
 score          :  Score = 30.2 bits (15), Expect = 7.6
 identities     :  Identities = 15/15 (100%)
 strand         :  Strand = Plus / Plus
@@ -413,6 +458,7 @@ query          : Query: 199 tgtctatttctgtct 213
 align          :            |||||||||||||||
 sbjct          : Sbjct: 155 tgtctatttctgtct 169
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -421,6 +467,7 @@ title          :            determined from European Mapping Project cosmid,
 title          :            sequence tagged site [Drosophila melanogaster]
 length         :            Length = 600
 noevent        : 
+*************** start_hsp
 score          :  Score = 30.2 bits (15), Expect = 7.6
 identities     :  Identities = 15/15 (100%)
 strand         :  Strand = Plus / Plus
@@ -430,6 +477,7 @@ query          : Query: 225 acaccaagctccaca 239
 align          :            |||||||||||||||
 sbjct          : Sbjct: 163 acaccaagctccaca 177
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -438,6 +486,7 @@ title          :            1 HindIII fragment, SC1pE36B05, sequence tagged site
 title          :            [Homo sapiens]
 length         :            Length = 397
 noevent        : 
+*************** start_hsp
 score          :  Score = 30.2 bits (15), Expect = 7.6
 identities     :  Identities = 15/15 (100%)
 strand         :  Strand = Plus / Plus
@@ -447,6 +496,7 @@ query          : Query: 199 tgtctatttctgtct 213
 align          :            |||||||||||||||
 sbjct          : Sbjct: 244 tgtctatttctgtct 258
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -454,6 +504,7 @@ title          : >gi|2641969|dbj|AB004264|AB004264 Mus spretus genomic DNA, RLGS
 title          :            spot, D5Rik122, sequence tagged site [Mus spretus]
 length         :            Length = 237
 noevent        : 
+*************** start_hsp
 score          :  Score = 30.2 bits (15), Expect = 7.6
 identities     :  Identities = 15/15 (100%)
 strand         :  Strand = Plus / Minus
@@ -463,6 +514,7 @@ query          : Query: 115 ggagagggccaggca 129
 align          :            |||||||||||||||
 sbjct          : Sbjct: 53  ggagagggccaggca 39
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -470,6 +522,7 @@ title          : >gi|4529138|gb|G48478.1|G48478 SHGC-68947 Human Homo sapiens ST
 title          :            genomic, sequence tagged site
 length         :            Length = 415
 noevent        : 
+*************** start_hsp
 score          :  Score = 30.2 bits (15), Expect = 7.6
 identities     :  Identities = 15/15 (100%)
 strand         :  Strand = Plus / Plus
@@ -479,12 +532,14 @@ query          : Query: 262 acatcactggttcaa 276
 align          :            |||||||||||||||
 sbjct          : Sbjct: 331 acatcactggttcaa 345
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
 title          : >gi|2484048|gb|G36284|G36284   STS h14a2375 5
 length         :            Length = 305
 noevent        : 
+*************** start_hsp
 score          :  Score = 30.2 bits (15), Expect = 7.6
 identities     :  Identities = 15/15 (100%)
 strand         :  Strand = Plus / Plus
@@ -494,6 +549,7 @@ query          : Query: 121 ggccaggcagcaggg 135
 align          :            |||||||||||||||
 sbjct          : Sbjct: 108 ggccaggcagcaggg 122
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -501,6 +557,7 @@ title          : >gi|1871265|gb|G31295|G31295 sy625c11-R Human (A.Gnirke) Homo
 title          :            sapiens STS genomic, sequence tagged site [Homo sapi
 length         :            Length = 279
 noevent        : 
+*************** start_hsp
 score          :  Score = 30.2 bits (15), Expect = 7.6
 identities     :  Identities = 15/15 (100%)
 strand         :  Strand = Plus / Plus
@@ -510,6 +567,7 @@ query          : Query: 298 tttagtgctccagaa 312
 align          :            |||||||||||||||
 sbjct          : Sbjct: 261 tttagtgctccagaa 275
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -518,6 +576,7 @@ title          :            European Mapping Project cosmid, sequence tagged sit
 title          :            [Drosophila melanogaster]
 length         :            Length = 350
 noevent        : 
+*************** start_hsp
 score          :  Score = 30.2 bits (15), Expect = 7.6
 identities     :  Identities = 15/15 (100%)
 strand         :  Strand = Plus / Minus
@@ -527,12 +586,14 @@ query          : Query: 316 caggttccttcagat 330
 align          :            |||||||||||||||
 sbjct          : Sbjct: 323 caggttccttcagat 309
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
 title          : >gi|1244248|gb|G19461|G19461 human STS SHGC-11979.
 length         :            Length = 400
 noevent        : 
+*************** start_hsp
 score          :  Score = 30.2 bits (15), Expect = 7.6
 identities     :  Identities = 15/15 (100%)
 strand         :  Strand = Plus / Minus
@@ -542,6 +603,7 @@ query          : Query: 43  cagccagaagcaaaa 57
 align          :            |||||||||||||||
 sbjct          : Sbjct: 356 cagccagaagcaaaa 342
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -550,6 +612,7 @@ title          :            containing (CA) repeat; clone AFMa084xf1; single rea
 title          :            sequence tagged site [Homo sapiens]
 length         :            Length = 276
 noevent        : 
+*************** start_hsp
 score          :  Score = 30.2 bits (15), Expect = 7.6
 identities     :  Identities = 15/15 (100%)
 strand         :  Strand = Plus / Minus
@@ -559,6 +622,7 @@ query          : Query: 311 aacctcaggttcctt 325
 align          :            |||||||||||||||
 sbjct          : Sbjct: 54  aacctcaggttcctt 40
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -567,6 +631,7 @@ title          :           containing (CA) repeat; clone AFMa070wh1; single read
 title          :           sequence tagged site [Homo sapiens]
 length         :           Length = 363
 noevent        : 
+*************** start_hsp
 score          :  Score = 30.2 bits (15), Expect = 7.6
 identities     :  Identities = 15/15 (100%)
 strand         :  Strand = Plus / Plus
@@ -576,12 +641,14 @@ query          : Query: 1  cctccaccctctcat 15
 align          :           |||||||||||||||
 sbjct          : Sbjct: 59 cctccaccctctcat 73
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
 title          : >gi|1215106|gb|G17680|G17680 human STS SHGC-3112 clone pG-956.
 length         :            Length = 313
 noevent        : 
+*************** start_hsp
 score          :  Score = 30.2 bits (15), Expect = 7.6
 identities     :  Identities = 18/19 (94%)
 strand         :  Strand = Plus / Minus
@@ -591,12 +658,14 @@ query          : Query: 86  ccccaaggagcagagagga 104
 align          :            |||| ||||||||||||||
 sbjct          : Sbjct: 213 ccccgaggagcagagagga 195
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
 title          : >gi|1594113|gb|G30562|G30562 human STS SHGC-37420
 length         :            Length = 447
 noevent        : 
+*************** start_hsp
 score          :  Score = 30.2 bits (15), Expect = 7.6
 identities     :  Identities = 18/19 (94%)
 strand         :  Strand = Plus / Plus
@@ -606,12 +675,14 @@ query          : Query: 112 ggaggagagggccaggcag 130
 align          :            ||||||| |||||||||||
 sbjct          : Sbjct: 234 ggaggagggggccaggcag 252
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
 title          : >gi|1593022|gb|G29471|G29471 human STS SHGC-33749
 length         :            Length = 437
 noevent        : 
+*************** start_hsp
 score          :  Score = 30.2 bits (15), Expect = 7.6
 identities     :  Identities = 15/15 (100%)
 strand         :  Strand = Plus / Minus
@@ -621,6 +692,7 @@ query          : Query: 123 ccaggcagcagggat 137
 align          :            |||||||||||||||
 sbjct          : Sbjct: 320 ccaggcagcagggat 306
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -629,6 +701,7 @@ title          :            (CA) repeat; clone AFMa090wf9; single read, sequence
 title          :            tagged site [Homo sapiens]
 length         :            Length = 312
 noevent        : 
+*************** start_hsp
 score          :  Score = 30.2 bits (15), Expect = 7.6
 identities     :  Identities = 15/15 (100%)
 strand         :  Strand = Plus / Plus
@@ -638,12 +711,14 @@ query          : Query: 194 gtaggtgtctatttc 208
 align          :            |||||||||||||||
 sbjct          : Sbjct: 201 gtaggtgtctatttc 215
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
 title          : >gi|881858|gb|G07651|G07651 human STS SHGC-5830 clone pG-2175.
 length         :            Length = 336
 noevent        : 
+*************** start_hsp
 score          :  Score = 30.2 bits (15), Expect = 7.6
 identities     :  Identities = 15/15 (100%)
 strand         :  Strand = Plus / Plus
@@ -653,12 +728,14 @@ query          : Query: 121 ggccaggcagcaggg 135
 align          :            |||||||||||||||
 sbjct          : Sbjct: 86  ggccaggcagcaggg 100
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
 title          : >gi|1344417|gb|G24091|G24091 human STS WI-12544.
 length         :            Length = 452
 noevent        : 
+*************** start_hsp
 score          :  Score = 30.2 bits (15), Expect = 7.6
 identities     :  Identities = 18/19 (94%)
 strand         :  Strand = Plus / Minus
@@ -668,12 +745,14 @@ query          : Query: 104 aaaaggcaggaggagaggg 122
 align          :            |||||||||||| ||||||
 sbjct          : Sbjct: 234 aaaaggcaggagaagaggg 216
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
 title          : >gi|860391|gb|G07146|G07146 human STS WI-9143.
 length         :            Length = 1946
 noevent        : 
+*************** start_hsp
 score          :  Score = 30.2 bits (15), Expect = 7.6
 identities     :  Identities = 15/15 (100%)
 strand         :  Strand = Plus / Minus
@@ -683,12 +762,14 @@ query          : Query: 280 tgtcactgctttgtt 294
 align          :            |||||||||||||||
 sbjct          : Sbjct: 492 tgtcactgctttgtt 478
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
 title          : >gi|858959|gb|G05714|G05714 human STS WI-8961.
 length         :            Length = 1337
 noevent        : 
+*************** start_hsp
 score          :  Score = 30.2 bits (15), Expect = 7.6
 identities     :  Identities = 15/15 (100%)
 strand         :  Strand = Plus / Plus
@@ -698,12 +779,14 @@ query          : Query: 237 acacatgggggcttt 251
 align          :            |||||||||||||||
 sbjct          : Sbjct: 117 acacatgggggcttt 131
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
 title          : >gi|1341506|gb|G21180|G21180 human STS WI-14638.
 length         :            Length = 375
 noevent        : 
+*************** start_hsp
 score          :  Score = 30.2 bits (15), Expect = 7.6
 identities     :  Identities = 15/15 (100%)
 strand         :  Strand = Plus / Minus
@@ -713,12 +796,14 @@ query          : Query: 288 ctttgttatatttag 302
 align          :            |||||||||||||||
 sbjct          : Sbjct: 74  ctttgttatatttag 60
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
 title          : >gi|1341551|gb|G21225|G21225 human STS WI-11777.
 length         :            Length = 348
 noevent        : 
+*************** start_hsp
 score          :  Score = 30.2 bits (15), Expect = 7.6
 identities     :  Identities = 15/15 (100%)
 strand         :  Strand = Plus / Plus
@@ -728,12 +813,14 @@ query          : Query: 91  aggagcagagaggaa 105
 align          :            |||||||||||||||
 sbjct          : Sbjct: 216 aggagcagagaggaa 230
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
 title          : >gi|465219|gb|L29850|HUMUT50 Human STS UT50.
 length         :            Length = 382
 noevent        : 
+*************** start_hsp
 score          :  Score = 30.2 bits (15), Expect = 7.6
 identities     :  Identities = 15/15 (100%)
 strand         :  Strand = Plus / Minus
@@ -743,12 +830,14 @@ query          : Query: 125 aggcagcagggatgg 139
 align          :            |||||||||||||||
 sbjct          : Sbjct: 273 aggcagcagggatgg 259
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
 title          : >gi|860599|gb|G07354|G07354 human STS WI-9600.
 length         :            Length = 226
 noevent        : 
+*************** start_hsp
 score          :  Score = 30.2 bits (15), Expect = 7.6
 identities     :  Identities = 15/15 (100%)
 strand         :  Strand = Plus / Plus
@@ -758,6 +847,7 @@ query          : Query: 114 aggagagggccaggc 128
 align          :            |||||||||||||||
 sbjct          : Sbjct: 124 aggagagggccaggc 138
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_database_report

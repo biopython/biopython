@@ -53,6 +53,7 @@ noevent        : <PRE>
 title          : <a name = 120291> </a><a href="http://www.ncbi.nlm.nih.gov:80/e
 length         :            Length = 141
 noevent        : 
+*************** start_hsp
 score          :  Score =  256 bits (646), Expect = 2e-68
 identities     :  Identities = 127/127 (100%), Positives = 127/127 (100%)
 noevent        : 
@@ -70,12 +71,14 @@ sbjct          : Sbjct: 121 EYEDERL 127
 noevent        : </PRE>
 noevent        : 
 noevent        : 
+*************** end_hsp
 *************** end_alignment
 *************** start_alignment
 noevent        : <PRE>
 title          : <a name = 3024946> </a><a href="http://www.ncbi.nlm.nih.gov:80/
 length         :            Length = 426
 noevent        : 
+*************** start_hsp
 score          :  Score = 29.3 bits (64), Expect = 3.4
 identities     :  Identities = 15/47 (31%), Positives = 23/47 (48%)
 noevent        : 
@@ -85,6 +88,7 @@ sbjct          : Sbjct: 169 ILVLINNTNITELKKFEDDDYYTTFQHYIYQPIFIFTTYDSKAKKFY 215
 noevent        : </PRE>
 noevent        : 
 noevent        : 
+*************** end_hsp
 *************** end_alignment
 *************** start_database_report
 noevent        : 

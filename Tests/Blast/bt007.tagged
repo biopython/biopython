@@ -44,6 +44,7 @@ title          : >gi|126343|sp|P17216|LIVK_SALTY LEUCINE-SPECIFIC BINDING PROTEI
 title          :            PRECURSOR (LS-BP) (L-BP)
 length         :            Length = 369
 noevent        : 
+*************** start_hsp
 score          :  Score =  743 bits (1897), Expect = 0.0
 identities     :  Identities = 369/369 (100%), Positives = 369/369 (100%)
 noevent        : 
@@ -75,6 +76,7 @@ query          : Query: 361 ADGSSTVAK 369
 align          :            ADGSSTVAK
 sbjct          : Sbjct: 361 ADGSSTVAK 369
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -82,6 +84,7 @@ title          : >gi|126349|sp|P04816|LIVK_ECOLI LEUCINE-SPECIFIC BINDING PROTEI
 title          :            PRECURSOR (LS-BP) (L-BP)
 length         :            Length = 369
 noevent        : 
+*************** start_hsp
 score          :  Score =  679 bits (1733), Expect = 0.0
 identities     :  Identities = 333/369 (90%), Positives = 351/369 (94%)
 noevent        : 
@@ -113,6 +116,7 @@ query          : Query: 361 ADGSSTVAK 369
 align          :            ADGSST AK
 sbjct          : Sbjct: 361 ADGSSTAAK 369
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -120,6 +124,7 @@ title          : >gi|126348|sp|P02917|LIVJ_ECOLI LEU/ILE/VAL-BINDING PROTEIN
 title          :            PRECURSOR (LIV-BP)
 length         :            Length = 367
 noevent        : 
+*************** start_hsp
 score          :  Score =  581 bits (1482), Expect = e-166
 identities     :  Identities = 282/369 (76%), Positives = 320/369 (86%), Gaps =
 noevent        : 
@@ -151,6 +156,7 @@ query          : Query: 361 ADGSSTVAK 369
 align          :            A+G++T AK
 sbjct          : Sbjct: 359 ANGTATDAK 367
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -158,6 +164,7 @@ title          : >gi|126342|sp|P17215|LIVJ_SALTY LEU/ILE/VAL/THR-BINDING PROTEIN
 title          :            PRECURSOR (LIVT-BP)
 length         :            Length = 365
 noevent        : 
+*************** start_hsp
 score          :  Score =  577 bits (1470), Expect = e-164
 identities     :  Identities = 280/366 (76%), Positives = 316/366 (85%), Gaps =
 noevent        : 
@@ -189,6 +196,7 @@ query          : Query: 364 SSTVAK 369
 align          :            ++T AK
 sbjct          : Sbjct: 360 TATDAK 365
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -196,6 +204,7 @@ title          : >gi|126347|sp|P25399|LIVJ_CITFR LEU/ILE/VAL-BINDING PROTEIN
 title          :            PRECURSOR (LIV-BP)
 length         :            Length = 367
 noevent        : 
+*************** start_hsp
 score          :  Score =  570 bits (1453), Expect = e-162
 identities     :  Identities = 276/369 (74%), Positives = 316/369 (84%), Gaps =
 noevent        : 
@@ -227,6 +236,7 @@ query          : Query: 361 ADGSSTVAK 369
 align          :            A+G++T AK
 sbjct          : Sbjct: 359 ANGTATDAK 367
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -235,6 +245,7 @@ title          :            THREONINE-, AND ALANINE-BINDING PROTEIN PRECURSOR
 title          :            (LIVAT-BP) (LEU/ILE/VAL/THR/ALA-BINDING PROTEIN)
 length         :            Length = 373
 noevent        : 
+*************** start_hsp
 score          :  Score =  413 bits (1050), Expect = e-115
 identities     :  Identities = 193/368 (52%), Positives = 268/368 (72%)
 noevent        : 
@@ -266,6 +277,7 @@ query          : Query: 362 DGSSTVAK 369
 align          :            D + T  K
 sbjct          : Sbjct: 366 DATRTEVK 373
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -273,6 +285,7 @@ title          : >gi|113709|sp|P27017|AMIC_PSEAE ALIPHATIC AMIDASE
 title          :            EXPRESSION-REGULATING PROTEIN
 length         :            Length = 385
 noevent        : 
+*************** start_hsp
 score          :  Score = 40.2 bits (92), Expect = 0.006
 identities     :  Identities = 60/334 (17%), Positives = 130/334 (37%), Gaps = 2
 noevent        : 
@@ -300,12 +313,14 @@ query          : Query: 315 TRSASHRPLDLVKDLKANGADTVIGPLKWDEKGD 348
 align          :              + + R  D+ + L     D   GP++ + + +
 sbjct          : Sbjct: 301 QAAGNWRVEDVQRHLYDIDIDAPQGPVRVERQNN 334
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
 title          : >gi|127751|sp|P02567|MYSD_CAEEL MYOSIN HEAVY CHAIN D (MHC D)
 length         :            Length = 1938
 noevent        : 
+*************** start_hsp
 score          :  Score = 32.5 bits (72), Expect = 1.4
 identities     :  Identities = 18/67 (26%), Positives = 32/67 (46%), Gaps = 2/67
 noevent        : 
@@ -317,6 +332,7 @@ query          : Query: 307 VQSLATA 313
 align          :             +  A A
 sbjct          : Sbjct: 628 QEEAAAA 634
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -324,6 +340,7 @@ title          : >gi|131068|sp|P23596|PRTD_ERWCH PROTEASES SECRETION ATP-BINDING
 title          :            PROTEIN PRTD
 length         :            Length = 575
 noevent        : 
+*************** start_hsp
 score          :  Score = 32.1 bits (71), Expect = 1.8
 identities     :  Identities = 28/89 (31%), Positives = 42/89 (46%), Gaps = 11/8
 noevent        : 
@@ -335,6 +352,7 @@ query          : Query: 162 QRIAIIHDKQQYGEGLARSVQDGLKQGNA 190
 align          :            Q+I I+H+ QQ   GLAR V   L+Q +A
 sbjct          : Sbjct: 533 QKILILHEGQQQRMGLARDVLTELQQRSA 561
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -342,6 +360,7 @@ title          : >gi|2495081|sp|Q09630|MGR1_CAEEL PROBABLE METABOTROPIC GLUTAMAT
 title          :            RECEPTOR MGL-1
 length         :            Length = 999
 noevent        : 
+*************** start_hsp
 score          :  Score = 32.1 bits (71), Expect = 1.8
 identities     :  Identities = 29/125 (23%), Positives = 57/125 (45%), Gaps = 6/
 noevent        : 
@@ -357,12 +376,14 @@ query          : Query: 211 RLQKE 215
 align          :            +LQ E
 sbjct          : Sbjct: 315 KLQPE 319
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
 title          : >gi|2506848|sp|P80040|MDH_CHLAU MALATE DEHYDROGENASE
 length         :            Length = 309
 noevent        : 
+*************** start_hsp
 score          :  Score = 32.1 bits (71), Expect = 1.8
 identities     :  Identities = 24/93 (25%), Positives = 44/93 (46%), Gaps = 2/93
 noevent        : 
@@ -374,6 +395,7 @@ query          : Query: 261 GGAAEGMLVTMPKRYDQDPANKAIVEALKADKK 293
 align          :            GG    +L T    Y    A   +VEA+  DKK
 sbjct          : Sbjct: 213 GGEIVNLLKTGSAYYAPAAATAQMVEAVLKDKK 245
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -381,6 +403,7 @@ title          : >gi|3915245|sp|Q38394|VG37_BPK3 TAIL FIBER PROTEIN GP37 (RECEPT
 title          :            RECOGNIZING PROTEIN)
 length         :            Length = 1243
 noevent        : 
+*************** start_hsp
 score          :  Score = 30.9 bits (68), Expect = 4.0
 identities     :  Identities = 24/65 (36%), Positives = 31/65 (46%), Gaps = 9/65
 noevent        : 
@@ -392,6 +415,7 @@ query          : Query: 224 --GYY 226
 align          :              G+Y
 sbjct          : Sbjct: 776 TSGWY 780
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -399,6 +423,7 @@ title          : >gi|1351210|sp|P47209|TCPE_CAEEL T-COMPLEX PROTEIN 1, EPSILON
 title          :            SUBUNIT (TCP-1-EPSILON) (CCT-EPSILON)
 length         :            Length = 542
 noevent        : 
+*************** start_hsp
 score          :  Score = 30.9 bits (68), Expect = 4.0
 identities     :  Identities = 18/55 (32%), Positives = 31/55 (55%), Gaps = 1/55
 noevent        : 
@@ -406,12 +431,14 @@ query          : Query: 283 AIVEALKADKKDPSGPYVWITYA-AVQSLATAMTRSASHRPLDLVKDLKANG
 align          :            AI  A +AD+ D    Y +  +A A++S+  A+  ++   P+D + DLKA
 sbjct          : Sbjct: 429 AIQVAKEADRIDGIEQYAFRAFADALESIPMALAENSGLAPIDALSDLKAKQ
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
 title          : >gi|1351310|sp|P43496|TRXB_PENCH THIOREDOXIN REDUCTASE
 length         :            Length = 334
 noevent        : 
+*************** start_hsp
 score          :  Score = 30.5 bits (67), Expect = 5.2
 identities     :  Identities = 24/90 (26%), Positives = 41/90 (44%), Gaps = 10/9
 noevent        : 
@@ -423,6 +450,7 @@ query          : Query: 129 LTQRGYQYIMRTAGLDSSQGPTAAKYILET 158
 align          :            +  + Y+  + +AG        A K+I ET
 sbjct          : Sbjct: 295 VQDKRYRQAITSAGSGCVAALEAEKFIAET 324
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_descriptions
@@ -468,6 +496,7 @@ title          : >gi|126349|sp|P04816|LIVK_ECOLI LEUCINE-SPECIFIC BINDING PROTEI
 title          :            PRECURSOR (LS-BP) (L-BP)
 length         :            Length = 369
 noevent        : 
+*************** start_hsp
 score          :  Score =  660 bits (1683), Expect = 0.0
 identities     :  Identities = 333/369 (90%), Positives = 351/369 (94%)
 noevent        : 
@@ -499,6 +528,7 @@ query          : Query: 361 ADGSSTVAK 369
 align          :            ADGSST AK
 sbjct          : Sbjct: 361 ADGSSTAAK 369
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -506,6 +536,7 @@ title          : >gi|126342|sp|P17215|LIVJ_SALTY LEU/ILE/VAL/THR-BINDING PROTEIN
 title          :            PRECURSOR (LIVT-BP)
 length         :            Length = 365
 noevent        : 
+*************** start_hsp
 score          :  Score =  656 bits (1673), Expect = 0.0
 identities     :  Identities = 280/367 (76%), Positives = 316/367 (85%), Gaps =
 noevent        : 
@@ -537,6 +568,7 @@ query          : Query: 363 GSSTVAK 369
 align          :            G++T AK
 sbjct          : Sbjct: 359 GTATDAK 365
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -544,6 +576,7 @@ title          : >gi|126347|sp|P25399|LIVJ_CITFR LEU/ILE/VAL-BINDING PROTEIN
 title          :            PRECURSOR (LIV-BP)
 length         :            Length = 367
 noevent        : 
+*************** start_hsp
 score          :  Score =  655 bits (1672), Expect = 0.0
 identities     :  Identities = 276/369 (74%), Positives = 316/369 (84%), Gaps =
 noevent        : 
@@ -575,6 +608,7 @@ query          : Query: 361 ADGSSTVAK 369
 align          :            A+G++T AK
 sbjct          : Sbjct: 359 ANGTATDAK 367
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -582,6 +616,7 @@ title          : >gi|126343|sp|P17216|LIVK_SALTY LEUCINE-SPECIFIC BINDING PROTEI
 title          :            PRECURSOR (LS-BP) (L-BP)
 length         :            Length = 369
 noevent        : 
+*************** start_hsp
 score          :  Score =  655 bits (1671), Expect = 0.0
 identities     :  Identities = 369/369 (100%), Positives = 369/369 (100%)
 noevent        : 
@@ -613,6 +648,7 @@ query          : Query: 361 ADGSSTVAK 369
 align          :            ADGSSTVAK
 sbjct          : Sbjct: 361 ADGSSTVAK 369
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -620,6 +656,7 @@ title          : >gi|126348|sp|P02917|LIVJ_ECOLI LEU/ILE/VAL-BINDING PROTEIN
 title          :            PRECURSOR (LIV-BP)
 length         :            Length = 367
 noevent        : 
+*************** start_hsp
 score          :  Score =  655 bits (1670), Expect = 0.0
 identities     :  Identities = 282/369 (76%), Positives = 320/369 (86%), Gaps =
 noevent        : 
@@ -651,6 +688,7 @@ query          : Query: 361 ADGSSTVAK 369
 align          :            A+G++T AK
 sbjct          : Sbjct: 359 ANGTATDAK 367
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -659,6 +697,7 @@ title          :            THREONINE-, AND ALANINE-BINDING PROTEIN PRECURSOR
 title          :            (LIVAT-BP) (LEU/ILE/VAL/THR/ALA-BINDING PROTEIN)
 length         :            Length = 373
 noevent        : 
+*************** start_hsp
 score          :  Score =  615 bits (1569), Expect = e-176
 identities     :  Identities = 193/368 (52%), Positives = 268/368 (72%)
 noevent        : 
@@ -690,6 +729,7 @@ query          : Query: 362 DGSSTVAK 369
 align          :            D + T  K
 sbjct          : Sbjct: 366 DATRTEVK 373
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -697,6 +737,7 @@ title          : >gi|113709|sp|P27017|AMIC_PSEAE ALIPHATIC AMIDASE
 title          :            EXPRESSION-REGULATING PROTEIN
 length         :            Length = 385
 noevent        : 
+*************** start_hsp
 score          :  Score = 48.6 bits (113), Expect = 2e-05
 identities     :  Identities = 60/314 (19%), Positives = 114/314 (36%), Gaps = 1
 noevent        : 
@@ -724,6 +765,7 @@ query          : Query: 327 KDLKANGADTVIGP 340
 align          :            + L     D   GP
 sbjct          : Sbjct: 313 RHLYDIDIDAPQGP 326
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -731,6 +773,7 @@ title          : >gi|3024131|sp|P91685|MGR_DROME METABOTROPIC GLUTAMATE RECEPTOR
 title          :            PRECURSOR
 length         :            Length = 976
 noevent        : 
+*************** start_hsp
 score          :  Score = 41.2 bits (94), Expect = 0.003
 identities     :  Identities = 36/154 (23%), Positives = 66/154 (42%), Gaps = 5/
 noevent        : 
@@ -746,6 +789,7 @@ query          : Query: 213 -QKENIDFVYYGGYYPEMGQIVRQARANGLKTQF 245
 align          :             +K N   V       +  +I++ A+   L   F
 sbjct          : Sbjct: 271 QKKPNARGVVLFTRAEDARRILQAAKRANLSQPF 304
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -753,6 +797,7 @@ title          : >gi|121300|sp|P23385|MGR1_RAT METABOTROPIC GLUTAMATE RECEPTOR 1
 title          :            PRECURSOR
 length         :            Length = 1199
 noevent        : 
+*************** start_hsp
 score          :  Score = 39.2 bits (89), Expect = 0.012
 identities     :  Identities = 32/121 (26%), Positives = 55/121 (45%), Gaps = 4/
 noevent        : 
@@ -768,6 +813,7 @@ query          : Query: 213 Q 213
 align          :            +
 sbjct          : Sbjct: 278 R 278
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -775,6 +821,7 @@ title          : >gi|2495074|sp|Q13255|MGR1_HUMAN METABOTROPIC GLUTAMATE RECEPTO
 title          :            PRECURSOR
 length         :            Length = 1194
 noevent        : 
+*************** start_hsp
 score          :  Score = 39.2 bits (89), Expect = 0.012
 identities     :  Identities = 32/121 (26%), Positives = 55/121 (45%), Gaps = 4/
 noevent        : 
@@ -790,6 +837,7 @@ query          : Query: 213 Q 213
 align          :            +
 sbjct          : Sbjct: 278 R 278
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -797,6 +845,7 @@ title          : >gi|1170947|sp|P31424|MGR5_RAT METABOTROPIC GLUTAMATE RECEPTOR
 title          :            PRECURSOR
 length         :            Length = 1203
 noevent        : 
+*************** start_hsp
 score          :  Score = 36.1 bits (81), Expect = 0.11
 identities     :  Identities = 30/121 (24%), Positives = 54/121 (43%), Gaps = 4/
 noevent        : 
@@ -812,6 +861,7 @@ query          : Query: 213 Q 213
 align          :            +
 sbjct          : Sbjct: 264 R 264
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -819,6 +869,7 @@ title          : >gi|1709020|sp|P41594|MGR5_HUMAN METABOTROPIC GLUTAMATE RECEPTO
 title          :            PRECURSOR
 length         :            Length = 1212
 noevent        : 
+*************** start_hsp
 score          :  Score = 35.7 bits (80), Expect = 0.14
 identities     :  Identities = 30/120 (25%), Positives = 53/120 (44%), Gaps = 4/
 noevent        : 
@@ -830,6 +881,7 @@ query          : Query: 155 ILETVKPQRIAIIHDKQQYGEGLARSVQDGLKQGNANIVFFDGI--TAGEKD
 align          :            I++      ++ +H +  YGE    + +D   +    I     I   AGE+
 sbjct          : Sbjct: 205 IVKRYNWTYVSAVHTEGNYGESGMEAFKDMSAKEGICIAHSYKIYSNAGEQS
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -837,6 +889,7 @@ title          : >gi|2495081|sp|Q09630|MGR1_CAEEL PROBABLE METABOTROPIC GLUTAMAT
 title          :            RECEPTOR MGL-1
 length         :            Length = 999
 noevent        : 
+*************** start_hsp
 score          :  Score = 35.3 bits (79), Expect = 0.18
 identities     :  Identities = 29/125 (23%), Positives = 57/125 (45%), Gaps = 6/
 noevent        : 
@@ -852,6 +905,7 @@ query          : Query: 211 RLQKE 215
 align          :            +LQ E
 sbjct          : Sbjct: 315 KLQPE 319
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -859,6 +913,7 @@ title          : >gi|6014748|sp|Q10900|CTPI_MYCTU PROBABLE CATION-TRANSPORTING A
 title          :            I
 length         :            Length = 1632
 noevent        : 
+*************** start_hsp
 score          :  Score = 33.4 bits (74), Expect = 0.71
 identities     :  Identities = 20/68 (29%), Positives = 26/68 (37%), Gaps = 7/68
 noevent        : 
@@ -870,12 +925,14 @@ query          : Query: 63  KGDKLVGV 70
 align          :             G  L GV
 sbjct          : Sbjct: 375 AGAILAGV 382
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
 title          : >gi|2833574|sp|Q58178|Y768_METJA HYPOTHETICAL PROTEIN MJ0768
 length         :            Length = 249
 noevent        : 
+*************** start_hsp
 score          :  Score = 32.2 bits (71), Expect = 1.6
 identities     :  Identities = 33/171 (19%), Positives = 67/171 (38%), Gaps = 10
 noevent        : 
@@ -891,6 +948,7 @@ query          : Query: 169 DKQQYGEGLARSVQDGLKQGNANIVFFDGITAGEKDFSALIARLQKENIDF
 align          :            D++   +   R ++         +     +  GE D    +  ++  N+ F
 sbjct          : Sbjct: 180 DRKGEKDLFGRELKTTEVAIADELASMANVVMGEADEGIPVVIIRGANVPF
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -899,6 +957,7 @@ title          :            (3-HYDROXYPROPIONALDEHYDE REDUCTASE) (1,3-PROPANEDIO
 title          :            OXIDOREDUCTASE)
 length         :            Length = 387
 noevent        : 
+*************** start_hsp
 score          :  Score = 31.1 bits (68), Expect = 3.6
 identities     :  Identities = 22/88 (25%), Positives = 38/88 (43%), Gaps = 8/88
 noevent        : 
@@ -910,6 +969,7 @@ query          : Query: 203 KDFSAL--IARLQKENID-FVYYGGYYP 227
 align          :            KD +    +   +KE+ D  V  GG  P
 sbjct          : Sbjct: 77  KDTNVRDGLEVFRKEHCDIIVTVGGGSP 104
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -917,6 +977,7 @@ title          : >gi|2495080|sp|P70579|MGR8_RAT METABOTROPIC GLUTAMATE RECEPTOR
 title          :            PRECURSOR
 length         :            Length = 908
 noevent        : 
+*************** start_hsp
 score          :  Score = 31.1 bits (68), Expect = 3.6
 identities     :  Identities = 50/196 (25%), Positives = 77/196 (38%), Gaps = 17
 noevent        : 
@@ -936,6 +997,7 @@ query          : Query: 261 --GGAAEGMLVTMPKR 274
 align          :                 AEG +  +PKR
 sbjct          : Sbjct: 320 QQEEIAEGAVTILPKR 335
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -943,6 +1005,7 @@ title          : >gi|2495079|sp|O00222|MGR8_HUMAN METABOTROPIC GLUTAMATE RECEPTO
 title          :            PRECURSOR
 length         :            Length = 908
 noevent        : 
+*************** start_hsp
 score          :  Score = 31.1 bits (68), Expect = 3.6
 identities     :  Identities = 50/196 (25%), Positives = 77/196 (38%), Gaps = 17
 noevent        : 
@@ -962,6 +1025,7 @@ query          : Query: 261 --GGAAEGMLVTMPKR 274
 align          :                 AEG +  +PKR
 sbjct          : Sbjct: 320 QQEEIAEGAVTILPKR 335
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -969,6 +1033,7 @@ title          : >gi|1346533|sp|P47743|MGR8_MOUSE METABOTROPIC GLUTAMATE RECEPTO
 title          :            PRECURSOR
 length         :            Length = 908
 noevent        : 
+*************** start_hsp
 score          :  Score = 30.3 bits (66), Expect = 6.2
 identities     :  Identities = 50/196 (25%), Positives = 76/196 (38%), Gaps = 17
 noevent        : 
@@ -988,12 +1053,14 @@ query          : Query: 261 --GGAAEGMLVTMPKR 274
 align          :                 AEG +  +PKR
 sbjct          : Sbjct: 320 QQEEIAEGAVTILPKR 335
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
 title          : >gi|113381|sp|P06758|ADH2_ZYMMO ALCOHOL DEHYDROGENASE II (ADH I
 length         :            Length = 383
 noevent        : 
+*************** start_hsp
 score          :  Score = 29.9 bits (65), Expect = 8.1
 identities     :  Identities = 19/69 (27%), Positives = 28/69 (40%), Gaps = 3/69
 noevent        : 
@@ -1005,12 +1072,14 @@ query          : Query: 220 VY-YGGYYP 227
 align          :            V   GG  P
 sbjct          : Sbjct: 92  VISLGGGSP 100
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
 title          : >gi|127751|sp|P02567|MYSD_CAEEL MYOSIN HEAVY CHAIN D (MHC D)
 length         :            Length = 1938
 noevent        : 
+*************** start_hsp
 score          :  Score = 29.9 bits (65), Expect = 8.1
 identities     :  Identities = 18/72 (25%), Positives = 31/72 (43%), Gaps = 2/72
 noevent        : 
@@ -1022,6 +1091,7 @@ query          : Query: 307 VQSLATAMTRSA 318
 align          :             +  A A
 sbjct          : Sbjct: 628 QEEAAAAAKAGG 639
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -1030,6 +1100,7 @@ title          :            PRECURSOR (GC-C) (INTESTINAL GUANYLATE CYCLASE) (STA
 title          :            RECEPTOR)
 length         :            Length = 1072
 noevent        : 
+*************** start_hsp
 score          :  Score = 29.9 bits (65), Expect = 8.1
 identities     :  Identities = 16/85 (18%), Positives = 35/85 (40%), Gaps = 2/85
 noevent        : 
@@ -1041,12 +1112,14 @@ query          : Query: 327 KDLKANGADTVIGPLKWDEKGDLKG 351
 align          :            +  +      + GP+  D+ GD+
 sbjct          : Sbjct: 352 RAFRNLTFQGLEGPVTLDDSGDIDN 376
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
 title          : >gi|1175674|sp|P45116|YCIH_HAEIN HYPOTHETICAL PROTEIN HI1225
 length         :            Length = 106
 noevent        : 
+*************** start_hsp
 score          :  Score = 29.9 bits (65), Expect = 8.1
 identities     :  Identities = 11/57 (19%), Positives = 27/57 (47%), Gaps = 3/57
 noevent        : 
@@ -1054,6 +1127,7 @@ query          : Query: 158 TVKPQRIAIIHDKQQYGEGLARSVQDGLKQGNANIVFFDGITAGEKDFSALI
 align          :             +K ++ +++  K   G+G+ R  +    +  A +    G+   +++   L
 sbjct          : Sbjct: 14  RIKEEKASVVRPK---GDGVVRIQKQTSGRKGAGVSVITGLDLSDEELKKLA
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -1061,6 +1135,7 @@ title          : >gi|3025270|sp|P77269|YPHF_ECOLI ABC TRANSPORTER PERIPLASMIC BI
 title          :            PROTEIN YPHF PRECURSOR
 length         :            Length = 327
 noevent        : 
+*************** start_hsp
 score          :  Score = 29.9 bits (65), Expect = 8.1
 identities     :  Identities = 19/79 (24%), Positives = 31/79 (39%), Gaps = 2/79
 noevent        : 
@@ -1072,6 +1147,7 @@ query          : Query: 224 GYYPE-MGQIVRQARANGL 241
 align          :                    + VR+A   G+
 sbjct          : Sbjct: 95  AVSENGSSRTVRRASEAGI 113
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_descriptions
@@ -1118,6 +1194,7 @@ title          : >gi|126342|sp|P17215|LIVJ_SALTY LEU/ILE/VAL/THR-BINDING PROTEIN
 title          :            PRECURSOR (LIVT-BP)
 length         :            Length = 365
 noevent        : 
+*************** start_hsp
 score          :  Score =  580 bits (1478), Expect = e-165
 identities     :  Identities = 280/367 (76%), Positives = 316/367 (85%), Gaps =
 noevent        : 
@@ -1149,6 +1226,7 @@ query          : Query: 363 GSSTVAK 369
 align          :            G++T AK
 sbjct          : Sbjct: 359 GTATDAK 365
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -1156,6 +1234,7 @@ title          : >gi|126349|sp|P04816|LIVK_ECOLI LEUCINE-SPECIFIC BINDING PROTEI
 title          :            PRECURSOR (LS-BP) (L-BP)
 length         :            Length = 369
 noevent        : 
+*************** start_hsp
 score          :  Score =  579 bits (1477), Expect = e-165
 identities     :  Identities = 333/369 (90%), Positives = 351/369 (94%)
 noevent        : 
@@ -1187,6 +1266,7 @@ query          : Query: 361 ADGSSTVAK 369
 align          :            ADGSST AK
 sbjct          : Sbjct: 361 ADGSSTAAK 369
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -1194,6 +1274,7 @@ title          : >gi|126348|sp|P02917|LIVJ_ECOLI LEU/ILE/VAL-BINDING PROTEIN
 title          :            PRECURSOR (LIV-BP)
 length         :            Length = 367
 noevent        : 
+*************** start_hsp
 score          :  Score =  579 bits (1475), Expect = e-165
 identities     :  Identities = 282/369 (76%), Positives = 320/369 (86%), Gaps =
 noevent        : 
@@ -1225,6 +1306,7 @@ query          : Query: 361 ADGSSTVAK 369
 align          :            A+G++T AK
 sbjct          : Sbjct: 359 ANGTATDAK 367
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -1232,6 +1314,7 @@ title          : >gi|126347|sp|P25399|LIVJ_CITFR LEU/ILE/VAL-BINDING PROTEIN
 title          :            PRECURSOR (LIV-BP)
 length         :            Length = 367
 noevent        : 
+*************** start_hsp
 score          :  Score =  578 bits (1474), Expect = e-165
 identities     :  Identities = 276/369 (74%), Positives = 316/369 (84%), Gaps =
 noevent        : 
@@ -1263,6 +1346,7 @@ query          : Query: 361 ADGSSTVAK 369
 align          :            A+G++T AK
 sbjct          : Sbjct: 359 ANGTATDAK 367
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -1270,6 +1354,7 @@ title          : >gi|126343|sp|P17216|LIVK_SALTY LEUCINE-SPECIFIC BINDING PROTEI
 title          :            PRECURSOR (LS-BP) (L-BP)
 length         :            Length = 369
 noevent        : 
+*************** start_hsp
 score          :  Score =  577 bits (1472), Expect = e-165
 identities     :  Identities = 369/369 (100%), Positives = 369/369 (100%)
 noevent        : 
@@ -1301,6 +1386,7 @@ query          : Query: 361 ADGSSTVAK 369
 align          :            ADGSSTVAK
 sbjct          : Sbjct: 361 ADGSSTVAK 369
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -1309,6 +1395,7 @@ title          :            THREONINE-, AND ALANINE-BINDING PROTEIN PRECURSOR
 title          :            (LIVAT-BP) (LEU/ILE/VAL/THR/ALA-BINDING PROTEIN)
 length         :            Length = 373
 noevent        : 
+*************** start_hsp
 score          :  Score =  530 bits (1351), Expect = e-150
 identities     :  Identities = 193/368 (52%), Positives = 268/368 (72%)
 noevent        : 
@@ -1340,6 +1427,7 @@ query          : Query: 362 DGSSTVAK 369
 align          :            D + T  K
 sbjct          : Sbjct: 366 DATRTEVK 373
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -1347,6 +1435,7 @@ title          : >gi|113709|sp|P27017|AMIC_PSEAE ALIPHATIC AMIDASE
 title          :            EXPRESSION-REGULATING PROTEIN
 length         :            Length = 385
 noevent        : 
+*************** start_hsp
 score          :  Score =  384 bits (976), Expect = e-106
 identities     :  Identities = 60/314 (19%), Positives = 114/314 (36%), Gaps = 1
 noevent        : 
@@ -1374,6 +1463,7 @@ query          : Query: 327 KDLKANGADTVIGP 340
 align          :            + L     D   GP
 sbjct          : Sbjct: 313 RHLYDIDIDAPQGP 326
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -1381,6 +1471,7 @@ title          : >gi|3024134|sp|O15303|MGR6_HUMAN METABOTROPIC GLUTAMATE RECEPTO
 title          :            PRECURSOR
 length         :            Length = 877
 noevent        : 
+*************** start_hsp
 score          :  Score = 41.6 bits (95), Expect = 0.002
 identities     :  Identities = 47/266 (17%), Positives = 90/266 (33%), Gaps = 20
 noevent        : 
@@ -1404,6 +1495,7 @@ query          : Query: 278 DPANKAIVEALKADKKDPSGPYVWIT 303
 align          :            D       +       + +   +W
 sbjct          : Sbjct: 337 D----GFDQYFMTRSLENNRRNIWFA 358
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -1411,6 +1503,7 @@ title          : >gi|2495077|sp|Q14833|MGR4_HUMAN METABOTROPIC GLUTAMATE RECEPTO
 title          :            PRECURSOR
 length         :            Length = 912
 noevent        : 
+*************** start_hsp
 score          :  Score = 39.3 bits (89), Expect = 0.012
 identities     :  Identities = 43/216 (19%), Positives = 78/216 (35%), Gaps = 13
 noevent        : 
@@ -1430,6 +1523,7 @@ query          : Query: 268 LVTMPKRYDQDPANKAIVEALKADKKDPSGPYVWIT 303
 align          :            +  +PKR       +       +   D +   +W
 sbjct          : Sbjct: 332 VTILPKRMSV----RGFDRYFSSRTLDNNRRNIWFA 363
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -1437,6 +1531,7 @@ title          : >gi|3024131|sp|P91685|MGR_DROME METABOTROPIC GLUTAMATE RECEPTOR
 title          :            PRECURSOR
 length         :            Length = 976
 noevent        : 
+*************** start_hsp
 score          :  Score = 38.5 bits (87), Expect = 0.021
 identities     :  Identities = 42/182 (23%), Positives = 74/182 (40%), Gaps = 8/
 noevent        : 
@@ -1456,6 +1551,7 @@ query          : Query: 269 VT 270
 align          : 
 sbjct          : Sbjct: 331 TV 332
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -1463,6 +1559,7 @@ title          : >gi|400255|sp|P31423|MGR4_RAT METABOTROPIC GLUTAMATE RECEPTOR 4
 title          :            PRECURSOR
 length         :            Length = 912
 noevent        : 
+*************** start_hsp
 score          :  Score = 37.7 bits (85), Expect = 0.036
 identities     :  Identities = 42/215 (19%), Positives = 76/215 (34%), Gaps = 11
 noevent        : 
@@ -1482,6 +1579,7 @@ query          : Query: 269 VTMPKRYDQDPANKAIVEALKADKKDPSGPYVWIT 303
 align          :              +PKR       +       +   D +   +W
 sbjct          : Sbjct: 333 TILPKRMSV----RGFDRYFSSRTLDNNRRNIWFA 363
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -1489,6 +1587,7 @@ title          : >gi|547903|sp|P35349|MGR6_RAT METABOTROPIC GLUTAMATE RECEPTOR 6
 title          :            PRECURSOR
 length         :            Length = 871
 noevent        : 
+*************** start_hsp
 score          :  Score = 37.3 bits (84), Expect = 0.047
 identities     :  Identities = 46/266 (17%), Positives = 88/266 (32%), Gaps = 20
 noevent        : 
@@ -1512,6 +1611,7 @@ query          : Query: 278 DPANKAIVEALKADKKDPSGPYVWIT 303
 align          :            D       +       + +   +W
 sbjct          : Sbjct: 331 D----GFDQYFMTRSLENNRRNIWFA 352
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -1519,6 +1619,7 @@ title          : >gi|2495080|sp|P70579|MGR8_RAT METABOTROPIC GLUTAMATE RECEPTOR
 title          :            PRECURSOR
 length         :            Length = 908
 noevent        : 
+*************** start_hsp
 score          :  Score = 36.1 bits (81), Expect = 0.10
 identities     :  Identities = 46/222 (20%), Positives = 82/222 (36%), Gaps = 15
 noevent        : 
@@ -1538,6 +1639,7 @@ query          : Query: 262 GAAEGMLVTMPKRYDQDPANKAIVEALKADKKDPSGPYVWIT 303
 align          :              AEG +  +PKR   D  ++       A+ +      VW
 sbjct          : Sbjct: 323 EIAEGAVTILPKRASIDGFDRYFRSRTLANNRRN----VWFA 360
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -1545,6 +1647,7 @@ title          : >gi|2495079|sp|O00222|MGR8_HUMAN METABOTROPIC GLUTAMATE RECEPTO
 title          :            PRECURSOR
 length         :            Length = 908
 noevent        : 
+*************** start_hsp
 score          :  Score = 36.1 bits (81), Expect = 0.10
 identities     :  Identities = 46/222 (20%), Positives = 82/222 (36%), Gaps = 15
 noevent        : 
@@ -1564,6 +1667,7 @@ query          : Query: 262 GAAEGMLVTMPKRYDQDPANKAIVEALKADKKDPSGPYVWIT 303
 align          :              AEG +  +PKR   D  ++       A+ +      VW
 sbjct          : Sbjct: 323 EIAEGAVTILPKRASIDGFDRYFRSRTLANNRRN----VWFA 360
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -1571,6 +1675,7 @@ title          : >gi|1346533|sp|P47743|MGR8_MOUSE METABOTROPIC GLUTAMATE RECEPTO
 title          :            PRECURSOR
 length         :            Length = 908
 noevent        : 
+*************** start_hsp
 score          :  Score = 35.4 bits (79), Expect = 0.18
 identities     :  Identities = 46/222 (20%), Positives = 81/222 (35%), Gaps = 15
 noevent        : 
@@ -1590,6 +1695,7 @@ query          : Query: 262 GAAEGMLVTMPKRYDQDPANKAIVEALKADKKDPSGPYVWIT 303
 align          :              AEG +  +PKR   D  ++       A+ +      VW
 sbjct          : Sbjct: 323 EIAEGAVTILPKRASIDGFDRYFRSRTLANNRRN----VWFA 360
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -1598,6 +1704,7 @@ title          :            ISOFORM PRECURSOR (N-CAM 180) (NCAM-180) [CONTAINS:
 title          :            N-CAM 140 (NCAM-140)]
 length         :            Length = 1115
 noevent        : 
+*************** start_hsp
 score          :  Score = 33.4 bits (74), Expect = 0.69
 identities     :  Identities = 46/221 (20%), Positives = 73/221 (32%), Gaps = 24
 noevent        : 
@@ -1617,6 +1724,7 @@ query          : Query: 255 SLSNIAGG-AAEGMLVTMPKRYDQDPANKAIVEALKADKKD 294
 align          :             +        + G      K YD   AN   +  +   K +
 sbjct          : Sbjct: 530 PILKYKAEWKSLGEESWHFKWYDAKEANMEGIVTIMGLKPE 570
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -1624,6 +1732,7 @@ title          : >gi|1170947|sp|P31424|MGR5_RAT METABOTROPIC GLUTAMATE RECEPTOR
 title          :            PRECURSOR
 length         :            Length = 1203
 noevent        : 
+*************** start_hsp
 score          :  Score = 33.4 bits (74), Expect = 0.69
 identities     :  Identities = 31/155 (20%), Positives = 58/155 (37%), Gaps = 4/
 noevent        : 
@@ -1639,6 +1748,7 @@ query          : Query: 214 K--ENIDFVYYGGYYPEMGQIVRQARANGLKTQFM 246
 align          :                    V        +  ++   R  GL  +F+
 sbjct          : Sbjct: 265 SHLPKARVVACFCEGMTVRGLLMAMRRLGLAGEFL 299
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -1646,6 +1756,7 @@ title          : >gi|1706242|sp|P51840|CYGE_RAT GUANYLYL CYCLASE GC-E PRECURSOR
 title          :            (GUANYLATE CYCLASE 2E)
 length         :            Length = 1108
 noevent        : 
+*************** start_hsp
 score          :  Score = 33.0 bits (73), Expect = 0.91
 identities     :  Identities = 29/193 (15%), Positives = 67/193 (34%), Gaps = 12
 noevent        : 
@@ -1665,6 +1776,7 @@ query          : Query: 190 ANIVFFDGITAGE 202
 align          :              +     +   +
 sbjct          : Sbjct: 213 LPVALVTSMVPSD 225
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -1672,6 +1784,7 @@ title          : >gi|1709020|sp|P41594|MGR5_HUMAN METABOTROPIC GLUTAMATE RECEPTO
 title          :            PRECURSOR
 length         :            Length = 1212
 noevent        : 
+*************** start_hsp
 score          :  Score = 33.0 bits (73), Expect = 0.91
 identities     :  Identities = 31/155 (20%), Positives = 57/155 (36%), Gaps = 4/
 noevent        : 
@@ -1687,12 +1800,14 @@ query          : Query: 214 K--ENIDFVYYGGYYPEMGQIVRQARANGLKTQFM 246
 align          :                    V        +  ++   R  GL  +F+
 sbjct          : Sbjct: 266 SHLPKARVVACFCEGMTVRGLLMAMRRLGLAGEFL 300
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
 title          : >gi|549451|sp|Q06278|ADO_HUMAN ALDEHYDE OXIDASE
 length         :             Length = 1338
 noevent        : 
+*************** start_hsp
 score          :  Score = 31.9 bits (70), Expect = 2.0
 identities     :  Identities = 26/105 (24%), Positives = 37/105 (34%), Gaps = 3/
 noevent        : 
@@ -1704,6 +1819,7 @@ query          : Query: 115  EGILMISPGATNPELTQRGYQYIMRTAGLDSSQGPTAAKYILETV 159
 align          :             EG  +   G    E      Q I+ T G D  + P       E
 sbjct          : Sbjct: 1205 EGAFIQGMGLYTIEELNYSPQGILHTRGPDQYKIPAICDMPTELH 1249
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -1711,6 +1827,7 @@ title          : >gi|6014748|sp|Q10900|CTPI_MYCTU PROBABLE CATION-TRANSPORTING A
 title          :            I
 length         :            Length = 1632
 noevent        : 
+*************** start_hsp
 score          :  Score = 31.9 bits (70), Expect = 2.0
 identities     :  Identities = 16/55 (29%), Positives = 22/55 (39%), Gaps = 3/55
 noevent        : 
@@ -1718,6 +1835,7 @@ query          : Query: 10  AGIVALAVSQGAMADDIKVAI---VGAMSGPVAQWGDMEFNGARQAIKDINA
 align          :            A   A   S   +   I  AI    G+ +GPV Q+ +   NG+  A
 sbjct          : Sbjct: 315 AAAAAGEASHVVVGGSIDAAIDTAKGSRAGPVEQYVNQAANGSLIAAASALV
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -1726,6 +1844,7 @@ title          :            PHOSPHATIDYLINOSITOL-LINKED ISOFORM PRECURSOR (N-CAM
 title          :            120) (NCAM-120)
 length         :            Length = 725
 noevent        : 
+*************** start_hsp
 score          :  Score = 31.5 bits (69), Expect = 2.7
 identities     :  Identities = 39/188 (20%), Positives = 62/188 (32%), Gaps = 23
 noevent        : 
@@ -1745,6 +1864,7 @@ query          : Query: 255 SLSNIAGG 262
 align          :             +
 sbjct          : Sbjct: 530 PILKYKAE 537
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -1752,6 +1872,7 @@ title          : >gi|127971|sp||NCPR_SALTR_1 [Segment 1 of 3] NADPH-CYTOCHROME P
 title          :            REDUCTASE (CPR)
 length         :            Length = 426
 noevent        : 
+*************** start_hsp
 score          :  Score = 31.1 bits (68), Expect = 3.5
 identities     :  Identities = 28/146 (19%), Positives = 53/146 (36%), Gaps = 8/
 noevent        : 
@@ -1767,6 +1888,7 @@ query          : Query: 324 DLVKDLKANGADTVIGPLKWDEKGDL 349
 align          :             + K L+  GA  V      D+ G+L
 sbjct          : Sbjct: 132 YVDKRLEELGAKRVFDLGMGDDDGNL 157
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_database_report

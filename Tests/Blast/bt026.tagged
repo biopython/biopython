@@ -55,6 +55,7 @@ title          : <a name = 1347201> </a><a href="http://www.ncbi.nlm.nih.gov:80/
 title          :            SHGC-31731.
 length         :            Length = 331
 noevent        : 
+*************** start_hsp
 score          :  Score =  656 bits (331), Expect = 0.0
 identities     :  Identities = 331/331 (100%)
 strand         :  Strand = Plus / Plus
@@ -91,6 +92,7 @@ sbjct          : Sbjct: 301 agtgctccagaacctcaggttccttcagatt 331
 noevent        : </PRE>
 noevent        : 
 noevent        : 
+*************** end_hsp
 *************** end_alignment
 *************** start_alignment
 noevent        : <PRE>
@@ -98,6 +100,7 @@ title          : <a name = 2665277> </a><a href="http://www.ncbi.nlm.nih.gov:80/
 title          :            sequence tagged site [Homo sapiens]
 length         :            Length = 554
 noevent        : 
+*************** start_hsp
 score          :  Score = 34.2 bits (17), Expect = 0.50
 identities     :  Identities = 17/17 (100%)
 strand         :  Strand = Plus / Minus
@@ -109,6 +112,7 @@ sbjct          : Sbjct: 434 ccaggcagcagggatgg 418
 noevent        : </PRE>
 noevent        : 
 noevent        : 
+*************** end_hsp
 *************** end_alignment
 *************** start_alignment
 noevent        : <PRE>
@@ -116,6 +120,7 @@ title          : <a name = 4757440> </a><a href="http://www.ncbi.nlm.nih.gov:80/
 title          :            genomic clone 343C1, sequence tagged site
 length         :            Length = 360
 noevent        : 
+*************** start_hsp
 score          :  Score = 32.2 bits (16), Expect = 2.0
 identities     :  Identities = 22/24 (91%)
 strand         :  Strand = Plus / Minus
@@ -127,6 +132,7 @@ sbjct          : Sbjct: 287 ggaggagaggggctggcagcaggg 264
 noevent        : </PRE>
 noevent        : 
 noevent        : 
+*************** end_hsp
 *************** end_alignment
 *************** start_alignment
 noevent        : <PRE>
@@ -134,6 +140,7 @@ title          : <a name = 4493602> </a><a href="http://www.ncbi.nlm.nih.gov:80/
 title          :            sequence tagged site
 length         :            Length = 454
 noevent        : 
+*************** start_hsp
 score          :  Score = 32.2 bits (16), Expect = 2.0
 identities     :  Identities = 16/16 (100%)
 strand         :  Strand = Plus / Plus
@@ -145,12 +152,14 @@ sbjct          : Sbjct: 434 agaagcaaaaccacaa 449
 noevent        : </PRE>
 noevent        : 
 noevent        : 
+*************** end_hsp
 *************** end_alignment
 *************** start_alignment
 noevent        : <PRE>
 title          : <a name = 6120731> </a><a href="http://www.ncbi.nlm.nih.gov:80/
 length         :            Length = 652
 noevent        : 
+*************** start_hsp
 score          :  Score = 32.2 bits (16), Expect = 2.0
 identities     :  Identities = 16/16 (100%)
 strand         :  Strand = Plus / Minus
@@ -162,6 +171,7 @@ sbjct          : Sbjct: 431 agaggaaaaggcagga 416
 noevent        : </PRE>
 noevent        : 
 noevent        : 
+*************** end_hsp
 *************** end_alignment
 *************** start_alignment
 noevent        : <PRE>
@@ -170,6 +180,7 @@ title          :            AFMc009wh1; single read, sequence tagged site [Homo
 title          :            sapiens]
 length         :            Length = 382
 noevent        : 
+*************** start_hsp
 score          :  Score = 32.2 bits (16), Expect = 2.0
 identities     :  Identities = 16/16 (100%)
 strand         :  Strand = Plus / Plus
@@ -181,12 +192,14 @@ sbjct          : Sbjct: 107 agagaggaaaaggcag 122
 noevent        : </PRE>
 noevent        : 
 noevent        : 
+*************** end_hsp
 *************** end_alignment
 *************** start_alignment
 noevent        : <PRE>
 title          : <a name = 939357> </a><a href="http://www.ncbi.nlm.nih.gov:80/e
 length         :            Length = 643
 noevent        : 
+*************** start_hsp
 score          :  Score = 32.2 bits (16), Expect = 2.0
 identities     :  Identities = 16/16 (100%)
 strand         :  Strand = Plus / Minus
@@ -198,12 +211,14 @@ sbjct          : Sbjct: 482 gaggaaaaggcaggag 467
 noevent        : </PRE>
 noevent        : 
 noevent        : 
+*************** end_hsp
 *************** end_alignment
 *************** start_alignment
 noevent        : <PRE>
 title          : <a name = 1342139> </a><a href="http://www.ncbi.nlm.nih.gov:80/
 length         :            Length = 418
 noevent        : 
+*************** start_hsp
 score          :  Score = 32.2 bits (16), Expect = 2.0
 identities     :  Identities = 16/16 (100%)
 strand         :  Strand = Plus / Minus
@@ -215,12 +230,14 @@ sbjct          : Sbjct: 193 cagaagcaaaaccaca 178
 noevent        : </PRE>
 noevent        : 
 noevent        : 
+*************** end_hsp
 *************** end_alignment
 *************** start_alignment
 noevent        : <PRE>
 title          : <a name = 719782> </a><a href="http://www.ncbi.nlm.nih.gov:80/e
 length         :            Length = 349
 noevent        : 
+*************** start_hsp
 score          :  Score = 32.2 bits (16), Expect = 2.0
 identities     :  Identities = 16/16 (100%)
 strand         :  Strand = Plus / Plus
@@ -232,6 +249,7 @@ sbjct          : Sbjct: 111 tgctttgttatattta 126
 noevent        : </PRE>
 noevent        : 
 noevent        : 
+*************** end_hsp
 *************** end_alignment
 *************** start_database_report
 noevent        : 

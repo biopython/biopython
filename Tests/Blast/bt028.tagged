@@ -57,6 +57,7 @@ noevent        : <PRE>
 title          : <a name = 1731448> </a><a href="http://www.ncbi.nlm.nih.gov:80/
 length         :            Length = 514
 noevent        : 
+*************** start_hsp
 score          :  Score = 86.6 bits (211), Expect = 3e-17
 identities     :  Identities = 41/47 (87%), Positives = 44/47 (93%)
 frame          :  Frame = +1
@@ -67,12 +68,14 @@ sbjct          : Sbjct: 458 DLQLLIKAVNLFPAGRNSRWDVIANYMNIHSSSGVKRTAKDVISEVR 504
 noevent        : </PRE>
 noevent        : 
 noevent        : 
+*************** end_hsp
 *************** end_alignment
 *************** start_alignment
 noevent        : <PRE>
 title          : <a name = 465911> </a><a href="http://www.ncbi.nlm.nih.gov:80/e
 length         :            Length = 275
 noevent        : 
+*************** start_hsp
 score          :  Score = 41.8 bits (96), Expect = 0.001
 identities     :  Identities = 30/122 (24%), Positives = 54/122 (43%)
 frame          :  Frame = +1
@@ -91,12 +94,14 @@ sbjct          : Sbjct: 253 KK 254
 noevent        : </PRE>
 noevent        : 
 noevent        : 
+*************** end_hsp
 *************** end_alignment
 *************** start_alignment
 noevent        : <PRE>
 title          : <a name = 2494160> </a><a href="http://www.ncbi.nlm.nih.gov:80/
 length         :            Length = 552
 noevent        : 
+*************** start_hsp
 score          :  Score = 36.7 bits (83), Expect = 0.033
 identities     :  Identities = 17/36 (47%), Positives = 19/36 (52%)
 frame          :  Frame = +1
@@ -107,6 +112,8 @@ sbjct          : Sbjct: 496 TQSQQKLLELALQQYPKGASDRWDKIAKCVPSKSKE 531
 noevent        : </PRE>
 noevent        : 
 noevent        : 
+*************** end_hsp
+*************** start_hsp
 noevent        : <PRE>
 score          :  Score = 31.3 bits (69), Expect = 1.5
 identities     :  Identities = 18/50 (36%), Positives = 26/50 (52%)
@@ -118,12 +125,14 @@ sbjct          : Sbjct: 332 DLSQLTRSMVKFPGGTPGRWDKIAHELG--------RSVTDVTTKAKELK 3
 noevent        : </PRE>
 noevent        : 
 noevent        : 
+*************** end_hsp
 *************** end_alignment
 *************** start_alignment
 noevent        : <PRE>
 title          : <a name = 1730688> </a><a href="http://www.ncbi.nlm.nih.gov:80/
 length         :            Length = 580
 noevent        : 
+*************** start_hsp
 score          :  Score = 29.0 bits (63), Expect = 7.4
 identities     :  Identities = 27/99 (27%), Positives = 41/99 (41%)
 frame          :  Frame = +1
@@ -138,6 +147,7 @@ sbjct          : Sbjct: 124 -------ETKLFPYINFTALNS------EQSHNFWPVHT 149
 noevent        : </PRE>
 noevent        : 
 noevent        : 
+*************** end_hsp
 *************** end_alignment
 *************** start_database_report
 noevent        : 

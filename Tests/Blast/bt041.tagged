@@ -28,6 +28,7 @@ noevent        :
 title          : >gi|120291|sp|P21297|FLBT_CAUCR FLBT PROTEIN
 length         :            Length = 141
 noevent        : 
+*************** start_hsp
 score          :  Score =  256 bits (646), Expect = 2e-68
 identities     :  Identities = 127/127 (100%), Positives = 127/127 (100%)
 noevent        : 
@@ -43,6 +44,7 @@ query          : Query: 121 EYEDERL 127
 align          :            EYEDERL
 sbjct          : Sbjct: 121 EYEDERL 127
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -50,6 +52,7 @@ title          : >gi|3024946|sp|Q58368|Y958_METJA HYPOTHETICAL PROTEIN MJ0958
 title          :            PRECURSOR
 length         :            Length = 426
 noevent        : 
+*************** start_hsp
 score          :  Score = 29.3 bits (64), Expect = 3.4
 identities     :  Identities = 15/47 (31%), Positives = 23/47 (48%)
 noevent        : 
@@ -57,6 +60,7 @@ query          : Query: 28  VLVLQNKASVLREKDIMQPDQVTTPARHIYFPVMMMYLDEVGAEKFY 74
 align          :            +LVL N  ++   K     D  TT   +IY P+ +    +  A+KFY
 sbjct          : Sbjct: 169 ILVLINNTNITELKKFEDDDYYTTFQHYIYQPIFIFTTYDSKAKKFY 215
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_database_report

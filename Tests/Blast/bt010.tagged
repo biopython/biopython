@@ -32,6 +32,7 @@ title          : >gi|1348916|gb|G26684|G26684 human STS STS_D11570.
 title          :            >gi|1375195|gb|G26945|G26945 human STS SHGC-32699.
 length         :            Length = 285
 noevent        : 
+*************** start_hsp
 score          :  Score =  517 bits (261), Expect = e-146
 identities     :  Identities = 285/285 (100%)
 strand         :  Strand = Plus / Plus
@@ -61,12 +62,14 @@ query          : Query: 241 ggcctgacatgggtagctgctcaataaatgctagtntgttatttc 285
 align          :            |||||||||||||||||||||||||||||||||||||||||||||
 sbjct          : Sbjct: 241 ggcctgacatgggtagctgctcaataaatgctagtntgttatttc 285
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
 title          : >gi|720683|gb|G03725|G03725 human STS WI-344.
 length         :            Length = 246
 noevent        : 
+*************** start_hsp
 score          :  Score = 32.2 bits (16), Expect = 1.6
 identities     :  Identities = 16/16 (100%)
 strand         :  Strand = Plus / Minus
@@ -76,6 +79,7 @@ query          : Query: 260 ctcaataaatgctagt 275
 align          :            ||||||||||||||||
 sbjct          : Sbjct: 178 ctcaataaatgctagt 163
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -84,6 +88,7 @@ title          :            OT33.16/752f07, microsatellite sequence, sequence ta
 title          :            site
 length         :            Length = 307
 noevent        : 
+*************** start_hsp
 score          :  Score = 32.2 bits (16), Expect = 1.6
 identities     :  Identities = 16/16 (100%)
 strand         :  Strand = Plus / Plus
@@ -93,6 +98,7 @@ query          : Query: 221 ggaaagttcttgtagc 236
 align          :            ||||||||||||||||
 sbjct          : Sbjct: 32  ggaaagttcttgtagc 47
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -100,6 +106,7 @@ title          : >gi|6120827|gb|G55508.1|G55508 SHGC-100856 Human Homo sapiens S
 title          :            genomic, sequence tagged site
 length         :            Length = 711
 noevent        : 
+*************** start_hsp
 score          :  Score = 32.2 bits (16), Expect = 1.6
 identities     :  Identities = 18/19 (94%)
 strand         :  Strand = Plus / Plus
@@ -109,6 +116,7 @@ query          : Query: 210 gaaatnaaaatggaaagtt 228
 align          :            ||||| |||||||||||||
 sbjct          : Sbjct: 588 gaaataaaaatggaaagtt 606
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_database_report

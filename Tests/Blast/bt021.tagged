@@ -51,6 +51,7 @@ noevent        : <PRE>
 title          : <a name = 1718062> </a><a href="http://www.ncbi.nlm.nih.gov:80/
 length         :            Length = 166
 noevent        : 
+*************** start_hsp
 score          :  Score =  332 bits (843), Expect = 2e-91
 identities     :  Identities = 166/166 (100%), Positives = 166/166 (100%)
 noevent        : 
@@ -68,6 +69,7 @@ sbjct          : Sbjct: 121 LFILYESVSILKNMCLCGLPVPKRLKEKIAILLDAMTDEMNAKDEK 166
 noevent        : </PRE>
 noevent        : 
 noevent        : 
+*************** end_hsp
 *************** end_alignment
 *************** start_alignment
 noevent        : <PRE>
@@ -75,6 +77,7 @@ title          : <a name = 140528> </a><a href="http://www.ncbi.nlm.nih.gov:80/e
 title          :            (ORF2)
 length         :            Length = 140
 noevent        : 
+*************** start_hsp
 score          :  Score = 39.5 bits (90), Expect = 0.004
 identities     :  Identities = 27/130 (20%), Positives = 55/130 (41%), Gaps = 19
 noevent        : 
@@ -92,12 +95,14 @@ sbjct          : Sbjct: 128 KEQSKNNADK 137
 noevent        : </PRE>
 noevent        : 
 noevent        : 
+*************** end_hsp
 *************** end_alignment
 *************** start_alignment
 noevent        : <PRE>
 title          : <a name = 141088> </a><a href="http://www.ncbi.nlm.nih.gov:80/e
 length         :            Length = 132
 noevent        : 
+*************** start_hsp
 score          :  Score = 38.7 bits (88), Expect = 0.007
 identities     :  Identities = 24/110 (21%), Positives = 52/110 (46%), Gaps = 18
 noevent        : 
@@ -111,12 +116,14 @@ sbjct          : Sbjct: 93  -----------------LIAYFYIMNEGISILENCAALGVPIPEKLKQAL 1
 noevent        : </PRE>
 noevent        : 
 noevent        : 
+*************** end_hsp
 *************** end_alignment
 *************** start_alignment
 noevent        : <PRE>
 title          : <a name = 6014830> </a><a href="http://www.ncbi.nlm.nih.gov:80/
 length         :            Length = 379
 noevent        : 
+*************** start_hsp
 score          :  Score = 29.3 bits (64), Expect = 4.6
 identities     :  Identities = 19/57 (33%), Positives = 33/57 (57%), Gaps = 2/57
 noevent        : 
@@ -126,12 +133,14 @@ sbjct          : Sbjct: 323 CLFWLLVADLLT-LTWIGGQPVEH-PFITIGQLASILYFAILLILMPAISII
 noevent        : </PRE>
 noevent        : 
 noevent        : 
+*************** end_hsp
 *************** end_alignment
 *************** start_alignment
 noevent        : <PRE>
 title          : <a name = 1351589> </a><a href="http://www.ncbi.nlm.nih.gov:80/
 length         :            Length = 334
 noevent        : 
+*************** start_hsp
 score          :  Score = 29.0 bits (63), Expect = 6.0
 identities     :  Identities = 16/44 (36%), Positives = 24/44 (54%), Gaps = 2/44
 noevent        : 
@@ -141,12 +150,14 @@ sbjct          : Sbjct: 4   LTKFNKFFLTPNKLNAFLRV--IGLCGLFSVIAISFGIYSYTRN 45
 noevent        : </PRE>
 noevent        : 
 noevent        : 
+*************** end_hsp
 *************** end_alignment
 *************** start_alignment
 noevent        : <PRE>
 title          : <a name = 2496246> </a><a href="http://www.ncbi.nlm.nih.gov:80/
 length         :            Length = 361
 noevent        : 
+*************** start_hsp
 score          :  Score = 28.6 bits (62), Expect = 7.8
 identities     :  Identities = 19/56 (33%), Positives = 30/56 (52%), Gaps = 12/5
 noevent        : 
@@ -156,6 +167,7 @@ sbjct          : Sbjct: 68  YINLRGIFISKYKDFIEVLFEEYEEDRKPVEIIKSLIKDVPSLCGIPTPKNT
 noevent        : </PRE>
 noevent        : 
 noevent        : 
+*************** end_hsp
 *************** end_alignment
 *************** start_database_report
 noevent        : 

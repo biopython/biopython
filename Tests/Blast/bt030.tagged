@@ -65,6 +65,7 @@ title          : <a name = 3820341> </a><a href="http://www.ncbi.nlm.nih.gov:80/
 title          :            okam5d07r [Kluyveromyces lactis]
 length         :            Length = 230
 noevent        : 
+*************** start_hsp
 score          :  Score = 46.9 bits (109), Expect = 1e-05
 identities     :  Identities = 25/72 (34%), Positives = 44/72 (60%), Gaps = 3/72
 frame          :  Frame = +1
@@ -79,12 +80,14 @@ sbjct          : Sbjct: 181 VIGITQSVALEYAER 225
 noevent        : </PRE>
 noevent        : 
 noevent        : 
+*************** end_hsp
 *************** end_alignment
 *************** start_alignment
 noevent        : <PRE>
 title          : <a name = 1375419> </a><a href="http://www.ncbi.nlm.nih.gov:80/
 length         :            Length = 594
 noevent        : 
+*************** start_hsp
 score          :  Score = 43.4 bits (100), Expect = 1e-04
 identities     :  Identities = 21/73 (28%), Positives = 34/73 (45%)
 frame          :  Frame = -1
@@ -99,6 +102,7 @@ sbjct          : Sbjct: 132 GMTTGSTLPVEGG 94
 noevent        : </PRE>
 noevent        : 
 noevent        : 
+*************** end_hsp
 *************** end_alignment
 *************** start_alignment
 noevent        : <PRE>
@@ -106,6 +110,7 @@ title          : <a name = 3819804> </a><a href="http://www.ncbi.nlm.nih.gov:80/
 title          :            okam6d01d [Kluyveromyces lactis]
 length         :            Length = 199
 noevent        : 
+*************** start_hsp
 score          :  Score = 39.5 bits (90), Expect = 0.002
 identities     :  Identities = 18/49 (36%), Positives = 26/49 (52%)
 frame          :  Frame = -1
@@ -116,12 +121,14 @@ sbjct          : Sbjct: 157 FVDEDLKNKWHSLIPMGREGLPQELVGAYLYFASDASTYTTGSDLLVDG 11
 noevent        : </PRE>
 noevent        : 
 noevent        : 
+*************** end_hsp
 *************** end_alignment
 *************** start_alignment
 noevent        : <PRE>
 title          : <a name = 1375215> </a><a href="http://www.ncbi.nlm.nih.gov:80/
 length         :            Length = 268
 noevent        : 
+*************** start_hsp
 score          :  Score = 30.9 bits (68), Expect = 0.76
 identities     :  Identities = 12/37 (32%), Positives = 19/37 (50%)
 frame          :  Frame = -1
@@ -132,6 +139,7 @@ sbjct          : Sbjct: 268 PMGXXGDPEDVXDVXAXXXXEXSGXITGTSVEVTGGL 158
 noevent        : </PRE>
 noevent        : 
 noevent        : 
+*************** end_hsp
 *************** end_alignment
 *************** start_alignment
 noevent        : <PRE>
@@ -139,6 +147,7 @@ title          : <a name = 5714409> </a><a href="http://www.ncbi.nlm.nih.gov:80/
 title          :            strain C57BL/6J, sequence tagged site
 length         :            Length = 299
 noevent        : 
+*************** start_hsp
 score          :  Score = 29.3 bits (64), Expect = 2.2
 identities     :  Identities = 17/55 (30%), Positives = 32/55 (57%), Gaps = 2/55
 frame          :  Frame = -2
@@ -149,12 +158,14 @@ sbjct          : Sbjct: 172 SLSPTQYLIMFPSFLPCPLSHPGPFLLPSSLVIAVFFLPNGIEVSSLGPFSL
 noevent        : </PRE>
 noevent        : 
 noevent        : 
+*************** end_hsp
 *************** end_alignment
 *************** start_alignment
 noevent        : <PRE>
 title          : <a name = 177714> </a><a href="http://www.ncbi.nlm.nih.gov:80/e
 length         :            Length = 412
 noevent        : 
+*************** start_hsp
 score          :  Score = 29.3 bits (64), Expect = 2.2
 identities     :  Identities = 14/34 (41%), Positives = 22/34 (64%)
 frame          :  Frame = -1
@@ -165,12 +176,14 @@ sbjct          : Sbjct: 316 DKVCAVFGGSRGIGRAVAQLMARKGYRLAVIARN 215
 noevent        : </PRE>
 noevent        : 
 noevent        : 
+*************** end_hsp
 *************** end_alignment
 *************** start_alignment
 noevent        : <PRE>
 title          : <a name = 1341648> </a><a href="http://www.ncbi.nlm.nih.gov:80/
 length         :            Length = 586
 noevent        : 
+*************** start_hsp
 score          :  Score = 28.6 bits (62), Expect = 3.8
 identities     :  Identities = 16/39 (41%), Positives = 20/39 (51%), Gaps = 1/39
 frame          :  Frame = +1
@@ -181,6 +194,7 @@ sbjct          : Sbjct: 220 PVPMQELSKVHWSQFFLTTSPTMTFFFSHYLANYFFRNSI 339
 noevent        : </PRE>
 noevent        : 
 noevent        : 
+*************** end_hsp
 *************** end_alignment
 *************** start_database_report
 noevent        : 

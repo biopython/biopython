@@ -60,6 +60,7 @@ title          : >gi|399896|sp|Q02134|HIS7_LACLA IMIDAZOLEGLYCEROL-PHOSPHATE
 title          :            DEHYDRATASE (IGPD)
 length         :            Length = 200
 noevent        : 
+*************** start_hsp
 score          :  Score =  409 bits (1040), Expect = e-114
 identities     :  Identities = 200/200 (100%), Positives = 200/200 (100%)
 noevent        : 
@@ -79,6 +80,7 @@ query          : Query: 181 QAVSIDESKVGEIPSSKGVL 200
 align          :            QAVSIDESKVGEIPSSKGVL
 sbjct          : Sbjct: 181 QAVSIDESKVGEIPSSKGVL 200
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -86,6 +88,7 @@ title          : >gi|462273|sp|P34047|HIS7_ARATH IMIDAZOLEGLYCEROL-PHOSPHATE
 title          :            DEHYDRATASE (IGPD)
 length         :            Length = 270
 noevent        : 
+*************** start_hsp
 score          :  Score =  198 bits (499), Expect = 6e-51
 identities     :  Identities = 99/198 (50%), Positives = 135/198 (68%), Gaps = 4
 noevent        : 
@@ -105,6 +108,7 @@ query          : Query: 183 VSIDESKVGEIPSSKGVL 200
 align          :               D  + G IPSSKGVL
 sbjct          : Sbjct: 250 TETDPRRGGTIPSSKGVL 267
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -112,6 +116,7 @@ title          : >gi|2495230|sp|Q43072|HIS7_PEA IMIDAZOLEGLYCEROL-PHOSPHATE
 title          :            DEHYDRATASE (IGPD)
 length         :            Length = 281
 noevent        : 
+*************** start_hsp
 score          :  Score =  196 bits (492), Expect = 4e-50
 identities     :  Identities = 96/199 (48%), Positives = 136/199 (68%), Gaps = 4
 noevent        : 
@@ -131,6 +136,7 @@ query          : Query: 182 AVSIDESKVGEIPSSKGVL 200
 align          :            A   D  + G +PSSKGVL
 sbjct          : Sbjct: 260 ATEYDPRRRGSVPSSKGVL 278
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -138,6 +144,7 @@ title          : >gi|123157|sp|P18787|HIS7_AZOBR IMIDAZOLEGLYCEROL-PHOSPHATE
 title          :            DEHYDRATASE (IGPD)
 length         :            Length = 207
 noevent        : 
+*************** start_hsp
 score          :  Score =  185 bits (465), Expect = 5e-47
 identities     :  Identities = 91/194 (46%), Positives = 126/194 (64%), Gaps = 4
 noevent        : 
@@ -157,6 +164,7 @@ query          : Query: 187 ESKVGEIPSSKGVL 200
 align          :              K   +PS+KG L
 sbjct          : Sbjct: 190 PRKRDAVPSTKGTL 203
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -164,6 +172,7 @@ title          : >gi|462275|sp|P34048|HIS7_WHEAT IMIDAZOLEGLYCEROL-PHOSPHATE
 title          :            DEHYDRATASE (IGPD)
 length         :            Length = 195
 noevent        : 
+*************** start_hsp
 score          :  Score =  181 bits (455), Expect = 8e-46
 identities     :  Identities = 93/194 (47%), Positives = 128/194 (65%), Gaps = 4
 noevent        : 
@@ -183,6 +192,7 @@ query          : Query: 187 ESKVGEIPSSKGVL 200
 align          :              + G +PSSKGVL
 sbjct          : Sbjct: 179 LRRQGTMPSSKGVL 192
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -190,6 +200,7 @@ title          : >gi|123161|sp|P16247|HIS7_STRCO IMIDAZOLEGLYCEROL-PHOSPHATE
 title          :            DEHYDRATASE (IGPD)
 length         :            Length = 197
 noevent        : 
+*************** start_hsp
 score          :  Score =  178 bits (447), Expect = 7e-45
 identities     :  Identities = 89/200 (44%), Positives = 124/200 (61%), Gaps = 3
 noevent        : 
@@ -209,6 +220,7 @@ query          : Query: 181 QAVSIDESKVGEIPSSKGVL 200
 align          :             A   D    G +PS+KG L
 sbjct          : Sbjct: 178 YASERDPRAAGILPSTKGAL 197
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -216,6 +228,7 @@ title          : >gi|462272|sp|Q05068|HIS7_ANASP IMIDAZOLEGLYCEROL-PHOSPHATE
 title          :            DEHYDRATASE (IGPD)
 length         :            Length = 209
 noevent        : 
+*************** start_hsp
 score          :  Score =  178 bits (447), Expect = 7e-45
 identities     :  Identities = 91/198 (45%), Positives = 131/198 (65%), Gaps = 4
 noevent        : 
@@ -235,6 +248,7 @@ query          : Query: 183 VSIDESKVGEIPSSKGVL 200
 align          :            + +D  + G IPSSKGVL
 sbjct          : Sbjct: 192 IEVDPRRAGTIPSSKGVL 209
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -243,6 +257,7 @@ title          :            PROTEIN HISB [INCLUDES: IMIDAZOLEGLYCEROL-PHOSPHATE
 title          :            DEHYDRATASE (IGPD); HISTIDINOL-PHOSPHATASE ]
 length         :            Length = 355
 noevent        : 
+*************** start_hsp
 score          :  Score =  175 bits (438), Expect = 8e-44
 identities     :  Identities = 91/198 (45%), Positives = 130/198 (64%), Gaps = 9
 noevent        : 
@@ -262,6 +277,7 @@ query          : Query: 183 VSIDESKVGEIPSSKGVL 200
 align          :            + ++      +PSSKGVL
 sbjct          : Sbjct: 341 IRVEGD---TLPSSKGVL 355
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -269,6 +285,7 @@ title          : >gi|1346293|sp|P48054|HIS7_SYNY3 IMIDAZOLEGLYCEROL-PHOSPHATE
 title          :            DEHYDRATASE (IGPD)
 length         :            Length = 210
 noevent        : 
+*************** start_hsp
 score          :  Score =  174 bits (437), Expect = 1e-43
 identities     :  Identities = 88/198 (44%), Positives = 129/198 (64%), Gaps = 4
 noevent        : 
@@ -288,6 +305,7 @@ query          : Query: 183 VSIDESKVGEIPSSKGVL 200
 align          :            + +D  +   IPSSKGVL
 sbjct          : Sbjct: 193 IEVDPRRADTIPSSKGVL 210
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -296,6 +314,7 @@ title          :            PROTEIN HISB [INCLUDES: IMIDAZOLEGLYCEROL-PHOSPHATE
 title          :            DEHYDRATASE (IGPD); HISTIDINOL-PHOSPHATASE ]
 length         :            Length = 362
 noevent        : 
+*************** start_hsp
 score          :  Score =  168 bits (421), Expect = 8e-42
 identities     :  Identities = 89/198 (44%), Positives = 127/198 (63%), Gaps = 9
 noevent        : 
@@ -315,6 +334,7 @@ query          : Query: 183 VSIDESKVGEIPSSKGVL 200
 align          :            + I+ +   E+PSSKGVL
 sbjct          : Sbjct: 348 IRIEGN---EMPSSKGVL 362
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -322,6 +342,7 @@ title          : >gi|2495224|sp|O06590|HIS7_MYCTU IMIDAZOLEGLYCEROL-PHOSPHATE
 title          :            DEHYDRATASE (IGPD)
 length         :            Length = 210
 noevent        : 
+*************** start_hsp
 score          :  Score =  167 bits (418), Expect = 2e-41
 identities     :  Identities = 92/207 (44%), Positives = 125/207 (59%), Gaps = 1
 noevent        : 
@@ -341,6 +362,7 @@ query          : Query: 174 STARALKQAVSIDESKVGEIPSSKGVL 200
 align          :            + ARAL+QAV  D  +V  +PS+KG L
 sbjct          : Sbjct: 185 AVARALRQAVEPD-PRVSGVPSTKGAL 210
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -349,6 +371,7 @@ title          :            PROTEIN HISB [INCLUDES: IMIDAZOLEGLYCEROL-PHOSPHATE
 title          :            DEHYDRATASE (IGPD); HISTIDINOL-PHOSPHATASE ]
 length         :            Length = 354
 noevent        : 
+*************** start_hsp
 score          :  Score =  166 bits (417), Expect = 2e-41
 identities     :  Identities = 89/198 (44%), Positives = 129/198 (64%), Gaps = 1
 noevent        : 
@@ -368,6 +391,7 @@ query          : Query: 183 VSIDESKVGEIPSSKGVL 200
 align          :            + ++      +PSSKGVL
 sbjct          : Sbjct: 340 IRVEGD---TLPSSKGVL 354
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -375,6 +399,7 @@ title          : >gi|2495226|sp|Q50504|HIS7_METTH PROBABLE
 title          :            IMIDAZOLEGLYCEROL-PHOSPHATE DEHYDRATASE (IGPD)
 length         :            Length = 194
 noevent        : 
+*************** start_hsp
 score          :  Score =  153 bits (382), Expect = 3e-37
 identities     :  Identities = 81/198 (40%), Positives = 122/198 (60%), Gaps = 8
 noevent        : 
@@ -394,6 +419,7 @@ query          : Query: 183 VSIDESKVGEIPSSKGVL 200
 align          :            V ++    GEIPS+KG L
 sbjct          : Sbjct: 180 VRVEH---GEIPSTKGKL 194
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -401,6 +427,7 @@ title          : >gi|729718|sp|P40919|HIS7_CRYNE IMIDAZOLEGLYCEROL-PHOSPHATE
 title          :            DEHYDRATASE (IGPD)
 length         :            Length = 202
 noevent        : 
+*************** start_hsp
 score          :  Score =  152 bits (379), Expect = 7e-37
 identities     :  Identities = 83/203 (40%), Positives = 120/203 (58%), Gaps = 1
 noevent        : 
@@ -420,6 +447,7 @@ query          : Query: 178 ALKQAVSIDESKVGEIPSSKGVL 200
 align          :            A++ A+S   +   ++PS+KGVL
 sbjct          : Sbjct: 180 AIRMAIS--RTGGDDVPSTKGVL 200
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -427,6 +455,7 @@ title          : >gi|3334215|sp|O33773|HIS7_SULSO PROBABLE
 title          :            IMIDAZOLEGLYCEROL-PHOSPHATE DEHYDRATASE (IGPD)
 length         :            Length = 193
 noevent        : 
+*************** start_hsp
 score          :  Score =  151 bits (378), Expect = 9e-37
 identities     :  Identities = 88/201 (43%), Positives = 128/201 (62%), Gaps = 9
 noevent        : 
@@ -446,6 +475,7 @@ query          : Query: 180 KQAVSIDESKVGEIPSSKGVL 200
 align          :             +A  I ++   EI S+KG++
 sbjct          : Sbjct: 176 YEATRIVDN---EIRSTKGII 193
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -453,6 +483,7 @@ title          : >gi|123159|sp|P28624|HIS7_PHYPR IMIDAZOLEGLYCEROL-PHOSPHATE
 title          :            DEHYDRATASE (IGPD)
 length         :            Length = 452
 noevent        : 
+*************** start_hsp
 score          :  Score =  149 bits (373), Expect = 3e-36
 identities     :  Identities = 86/198 (43%), Positives = 120/198 (60%), Gaps = 6
 noevent        : 
@@ -472,6 +503,7 @@ query          : Query: 183 VSIDESKVGEIPSSKGVL 200
 align          :            V  D +    +PS+KGVL
 sbjct          : Sbjct: 436 VKHDAT--AGVPSTKGVL 451
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -479,6 +511,7 @@ title          : >gi|729719|sp|P40374|HIS7_SCHPO IMIDAZOLEGLYCEROL-PHOSPHATE
 title          :            DEHYDRATASE (IGPD)
 length         :            Length = 216
 noevent        : 
+*************** start_hsp
 score          :  Score =  136 bits (339), Expect = 3e-32
 identities     :  Identities = 84/221 (38%), Positives = 114/221 (51%), Gaps = 2
 noevent        : 
@@ -498,6 +531,7 @@ query          : Query: 160 YGQNTHHIIEGMFKSTARALKQAVSIDESKVGEIPSSKGVL 200
 align          :            YG N HH  E  FKS A A++ A S+  S   E+PS+KGVL
 sbjct          : Sbjct: 178 YGSNDHHRAESAFKSLAVAMRAATSLTGS--SEVPSTKGVL 216
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -505,6 +539,7 @@ title          : >gi|2495227|sp|P56090|HIS7_CANAL IMIDAZOLEGLYCEROL-PHOSPHATE
 title          :            DEHYDRATASE (IGPD)
 length         :            Length = 223
 noevent        : 
+*************** start_hsp
 score          :  Score =  128 bits (318), Expect = 9e-30
 identities     :  Identities = 81/227 (35%), Positives = 119/227 (51%), Gaps = 3
 noevent        : 
@@ -524,6 +559,7 @@ query          : Query: 154 LHLNEHYGQNTHHIIEGMFKSTARALKQAVSIDESKVGEIPSSKGVL 200
 align          :            +H++   G N HH  E  FK+ A A+K+A+S  ++   +IPS+KGVL
 sbjct          : Sbjct: 177 IHVDCLRGFNDHHRAESAFKALAIAIKEAIS--KTGKNDIPSTKGVL 221
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -531,6 +567,7 @@ title          : >gi|2495225|sp|Q58109|HIS7_METJA PROBABLE
 title          :            IMIDAZOLEGLYCEROL-PHOSPHATE DEHYDRATASE (IGPD)
 length         :            Length = 197
 noevent        : 
+*************** start_hsp
 score          :  Score =  126 bits (313), Expect = 4e-29
 identities     :  Identities = 80/196 (40%), Positives = 107/196 (53%), Gaps = 9
 noevent        : 
@@ -550,6 +587,7 @@ query          : Query: 183 VSIDESKVGEIPSSKG 198
 align          :              IDE K   + S+KG
 sbjct          : Sbjct: 180 TKIDERK--GVISTKG 193
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -557,6 +595,7 @@ title          : >gi|399897|sp|Q02986|HIS7_SACKL IMIDAZOLEGLYCEROL-PHOSPHATE
 title          :            DEHYDRATASE (IGPD)
 length         :            Length = 232
 noevent        : 
+*************** start_hsp
 score          :  Score =  125 bits (311), Expect = 6e-29
 identities     :  Identities = 81/222 (36%), Positives = 119/222 (53%), Gaps = 3
 noevent        : 
@@ -576,6 +615,7 @@ query          : Query: 159 HYGQNTHHIIEGMFKSTARALKQAVSIDESKVGEIPSSKGVL 200
 align          :              G N HH  E  FK+ A A+++A+S   +   ++PS+KGVL
 sbjct          : Sbjct: 192 LRGFNDHHRSESAFKALAVAIREAIS--SNGTNDVPSTKGVL 231
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -583,6 +623,7 @@ title          : >gi|2495229|sp|Q92447|HIS7_PICPA IMIDAZOLEGLYCEROL-PHOSPHATE
 title          :            DEHYDRATASE (IGPD)
 length         :            Length = 224
 noevent        : 
+*************** start_hsp
 score          :  Score =  125 bits (311), Expect = 6e-29
 identities     :  Identities = 84/223 (37%), Positives = 116/223 (51%), Gaps = 3
 noevent        : 
@@ -602,6 +643,7 @@ query          : Query: 158 EHYGQNTHHIIEGMFKSTARALKQAVSIDESKVGEIPSSKGVL 200
 align          :               G N HH  E  FK+ A A+K+A+S   +   +IPS+KGVL
 sbjct          : Sbjct: 183 CLRGFNDHHRAESAFKALAIAIKEAIS--SNGTDDIPSTKGVL 223
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -609,6 +651,7 @@ title          : >gi|2495228|sp|Q12578|HIS7_CANGA IMIDAZOLEGLYCEROL-PHOSPHATE
 title          :            DEHYDRATASE (IGPD)
 length         :            Length = 210
 noevent        : 
+*************** start_hsp
 score          :  Score =  123 bits (306), Expect = 2e-28
 identities     :  Identities = 78/215 (36%), Positives = 116/215 (53%), Gaps = 2
 noevent        : 
@@ -628,6 +671,7 @@ query          : Query: 166 HIIEGMFKSTARALKQAVSIDESKVGEIPSSKGVL 200
 align          :            H  E  FK+ A A+++A +   +   ++PS+KGVL
 sbjct          : Sbjct: 177 HRSESGFKALAIAIREART--PTGRDDVPSTKGVL 209
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -635,6 +679,7 @@ title          : >gi|2506514|sp|P06633|HIS7_YEAST IMIDAZOLEGLYCEROL-PHOSPHATE
 title          :            DEHYDRATASE (IGPD)
 length         :            Length = 220
 noevent        : 
+*************** start_hsp
 score          :  Score =  122 bits (304), Expect = 4e-28
 identities     :  Identities = 79/218 (36%), Positives = 114/218 (52%), Gaps = 3
 noevent        : 
@@ -654,6 +699,7 @@ query          : Query: 163 NTHHIIEGMFKSTARALKQAVSIDESKVGEIPSSKGVL 200
 align          :            N HH  E  FK+ A A+++A S   +   ++PS+KGVL
 sbjct          : Sbjct: 184 NDHHRSESAFKALAVAIREATS--PNGTNDVPSTKGVL 219
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -661,6 +707,7 @@ title          : >gi|462274|sp|P34041|HIS7_TRIHA IMIDAZOLEGLYCEROL-PHOSPHATE
 title          :            DEHYDRATASE (IGPD)
 length         :            Length = 208
 noevent        : 
+*************** start_hsp
 score          :  Score =  106 bits (263), Expect = 3e-23
 identities     :  Identities = 68/202 (33%), Positives = 102/202 (49%), Gaps = 2
 noevent        : 
@@ -680,12 +727,14 @@ query          : Query: 159 HYGQNTHHIIEGMFKSTARALK 180
 align          :              G N HH  E  FK+ A A++
 sbjct          : Sbjct: 184 LRGDNDHHRAESAFKALAVAVR 205
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
 title          : >gi|1345641|sp|P49264|C7B1_THLAR CYTOCHROME P450 71B1 (CYPLXXIB
 length         :            Length = 496
 noevent        : 
+*************** start_hsp
 score          :  Score = 34.8 bits (78), Expect = 0.13
 identities     :  Identities = 34/134 (25%), Positives = 60/134 (44%), Gaps = 11
 noevent        : 
@@ -701,12 +750,14 @@ query          : Query: 175 TARALKQAVSIDES 188
 align          :              R  KQA S +E+
 sbjct          : Sbjct: 152 FVRFNKQAASSEET 165
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
 title          : >gi|1731346|sp|Q10698|YY29_MYCTU PROBABLE DIPEPTIDASE CY49.29C
 length         :            Length = 375
 noevent        : 
+*************** start_hsp
 score          :  Score = 31.7 bits (70), Expect = 1.1
 identities     :  Identities = 16/45 (35%), Positives = 21/45 (46%), Gaps = 3/45
 noevent        : 
@@ -714,6 +765,7 @@ query          : Query: 47  HSDFDLKIIGHGDHETVGMDPHHLIEDVAIALGKCISEDLGNKLG 91
 align          :            HS+    I+G G H   G DPHH   D  +  G  +  D+G   G
 sbjct          : Sbjct: 195 HSEVAFVIVGSGPH---GADPHHGYSDRELREGDIVVVDIGGTYG 236
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -721,6 +773,7 @@ title          : >gi|3287839|sp|Q01812|GLK4_RAT GLUTAMATE RECEPTOR, IONOTROPIC
 title          :            KAINATE 4 PRECURSOR (GLUTAMATE RECEPTOR KA-1) (KA1)
 length         :            Length = 956
 noevent        : 
+*************** start_hsp
 score          :  Score = 30.1 bits (66), Expect = 3.3
 identities     :  Identities = 17/48 (35%), Positives = 24/48 (49%), Gaps = 3/48
 noevent        : 
@@ -728,12 +781,14 @@ query          : Query: 117 PYLVF---HADLSGNQKLGGYDTEMTEEFFRALAFNAGITLHLNEHYG 161
 align          :            PYL+    H D+ GN +  G+  +M +E    L FN  I L  +  YG
 sbjct          : Sbjct: 427 PYLMLKGNHQDMEGNDRYEGFCVDMLKELAEILRFNYKIRLVGDGVYG 474
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
 title          : >gi|3123025|sp|Q94637|VIT6_OSCBR VITELLOGENIN 6 PRECURSOR
 length         :             Length = 1660
 noevent        : 
+*************** start_hsp
 score          :  Score = 29.3 bits (64), Expect = 5.6
 identities     :  Identities = 25/70 (35%), Positives = 32/70 (45%), Gaps = 5/70
 noevent        : 
@@ -745,6 +800,7 @@ query          : Query: 136  TEMTEEFFRA 145
 align          :              E T EF RA
 sbjct          : Sbjct: 1494 GEKTNEFRRA 1503
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -753,6 +809,7 @@ title          :            KAINATE 4 PRECURSOR (GLUTAMATE RECEPTOR KA-1) (KA1)
 title          :            (EXCITATORY AMINO ACID RECEPTOR 1) (EAA1)
 length         :            Length = 956
 noevent        : 
+*************** start_hsp
 score          :  Score = 28.6 bits (62), Expect = 9.7
 identities     :  Identities = 16/48 (33%), Positives = 24/48 (49%), Gaps = 3/48
 noevent        : 
@@ -760,6 +817,7 @@ query          : Query: 117 PYLVF---HADLSGNQKLGGYDTEMTEEFFRALAFNAGITLHLNEHYG 161
 align          :            PYL+    H ++ GN +  G+  +M +E    L FN  I L  +  YG
 sbjct          : Sbjct: 427 PYLMLKGNHQEMEGNDRYEGFCVDMLKELAEILRFNYKIRLVGDGVYG 474
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -769,6 +827,7 @@ title          :             PHOSPHOLIPASE D1) (MEIOSIS-SPECIFIC SPORULATION PRO
 title          :             SPO14)
 length         :             Length = 1380
 noevent        : 
+*************** start_hsp
 score          :  Score = 28.6 bits (62), Expect = 9.7
 identities     :  Identities = 20/65 (30%), Positives = 31/65 (46%), Gaps = 7/65
 noevent        : 
@@ -780,6 +839,7 @@ query          : Query: 147  AFNAG 151
 align          :              FN+G
 sbjct          : Sbjct: 1201 NFNSG 1205
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_descriptions
@@ -826,6 +886,7 @@ title          : >gi|2495230|sp|Q43072|HIS7_PEA IMIDAZOLEGLYCEROL-PHOSPHATE
 title          :            DEHYDRATASE (IGPD)
 length         :            Length = 281
 noevent        : 
+*************** start_hsp
 score          :  Score =  323 bits (820), Expect = 1e-88
 identities     :  Identities = 96/199 (48%), Positives = 136/199 (68%), Gaps = 4
 noevent        : 
@@ -845,6 +906,7 @@ query          : Query: 182 AVSIDESKVGEIPSSKGVL 200
 align          :            A   D  + G +PSSKGVL
 sbjct          : Sbjct: 260 ATEYDPRRRGSVPSSKGVL 278
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -852,6 +914,7 @@ title          : >gi|462273|sp|P34047|HIS7_ARATH IMIDAZOLEGLYCEROL-PHOSPHATE
 title          :            DEHYDRATASE (IGPD)
 length         :            Length = 270
 noevent        : 
+*************** start_hsp
 score          :  Score =  322 bits (817), Expect = 3e-88
 identities     :  Identities = 99/198 (50%), Positives = 135/198 (68%), Gaps = 4
 noevent        : 
@@ -871,6 +934,7 @@ query          : Query: 183 VSIDESKVGEIPSSKGVL 200
 align          :               D  + G IPSSKGVL
 sbjct          : Sbjct: 250 TETDPRRGGTIPSSKGVL 267
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -878,6 +942,7 @@ title          : >gi|399896|sp|Q02134|HIS7_LACLA IMIDAZOLEGLYCEROL-PHOSPHATE
 title          :            DEHYDRATASE (IGPD)
 length         :            Length = 200
 noevent        : 
+*************** start_hsp
 score          :  Score =  318 bits (808), Expect = 4e-87
 identities     :  Identities = 200/200 (100%), Positives = 200/200 (100%)
 noevent        : 
@@ -897,6 +962,7 @@ query          : Query: 181 QAVSIDESKVGEIPSSKGVL 200
 align          :            QAVSIDESKVGEIPSSKGVL
 sbjct          : Sbjct: 181 QAVSIDESKVGEIPSSKGVL 200
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -904,6 +970,7 @@ title          : >gi|1346293|sp|P48054|HIS7_SYNY3 IMIDAZOLEGLYCEROL-PHOSPHATE
 title          :            DEHYDRATASE (IGPD)
 length         :            Length = 210
 noevent        : 
+*************** start_hsp
 score          :  Score =  315 bits (798), Expect = 5e-86
 identities     :  Identities = 88/198 (44%), Positives = 129/198 (64%), Gaps = 4
 noevent        : 
@@ -923,6 +990,7 @@ query          : Query: 183 VSIDESKVGEIPSSKGVL 200
 align          :            + +D  +   IPSSKGVL
 sbjct          : Sbjct: 193 IEVDPRRADTIPSSKGVL 210
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -930,6 +998,7 @@ title          : >gi|462272|sp|Q05068|HIS7_ANASP IMIDAZOLEGLYCEROL-PHOSPHATE
 title          :            DEHYDRATASE (IGPD)
 length         :            Length = 209
 noevent        : 
+*************** start_hsp
 score          :  Score =  313 bits (795), Expect = 1e-85
 identities     :  Identities = 91/198 (45%), Positives = 131/198 (65%), Gaps = 4
 noevent        : 
@@ -949,6 +1018,7 @@ query          : Query: 183 VSIDESKVGEIPSSKGVL 200
 align          :            + +D  + G IPSSKGVL
 sbjct          : Sbjct: 192 IEVDPRRAGTIPSSKGVL 209
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -956,6 +1026,7 @@ title          : >gi|462275|sp|P34048|HIS7_WHEAT IMIDAZOLEGLYCEROL-PHOSPHATE
 title          :            DEHYDRATASE (IGPD)
 length         :            Length = 195
 noevent        : 
+*************** start_hsp
 score          :  Score =  313 bits (793), Expect = 2e-85
 identities     :  Identities = 93/196 (47%), Positives = 128/196 (64%), Gaps = 4
 noevent        : 
@@ -975,6 +1046,7 @@ query          : Query: 185 IDESKVGEIPSSKGVL 200
 align          :             D  + G +PSSKGVL
 sbjct          : Sbjct: 177 YDLRRQGTMPSSKGVL 192
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -982,6 +1054,7 @@ title          : >gi|123161|sp|P16247|HIS7_STRCO IMIDAZOLEGLYCEROL-PHOSPHATE
 title          :            DEHYDRATASE (IGPD)
 length         :            Length = 197
 noevent        : 
+*************** start_hsp
 score          :  Score =  306 bits (776), Expect = 2e-83
 identities     :  Identities = 89/200 (44%), Positives = 124/200 (61%), Gaps = 3
 noevent        : 
@@ -1001,6 +1074,7 @@ query          : Query: 181 QAVSIDESKVGEIPSSKGVL 200
 align          :             A   D    G +PS+KG L
 sbjct          : Sbjct: 178 YASERDPRAAGILPSTKGAL 197
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -1008,6 +1082,7 @@ title          : >gi|2506514|sp|P06633|HIS7_YEAST IMIDAZOLEGLYCEROL-PHOSPHATE
 title          :            DEHYDRATASE (IGPD)
 length         :            Length = 220
 noevent        : 
+*************** start_hsp
 score          :  Score =  304 bits (772), Expect = 6e-83
 identities     :  Identities = 78/220 (35%), Positives = 115/220 (51%), Gaps = 3
 noevent        : 
@@ -1027,6 +1102,7 @@ query          : Query: 161 GQNTHHIIEGMFKSTARALKQAVSIDESKVGEIPSSKGVL 200
 align          :            G+N HH  E  FK+ A A+++A S   +   ++PS+KGVL
 sbjct          : Sbjct: 182 GKNDHHRSESAFKALAVAIREATS--PNGTNDVPSTKGVL 219
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -1034,6 +1110,7 @@ title          : >gi|2495227|sp|P56090|HIS7_CANAL IMIDAZOLEGLYCEROL-PHOSPHATE
 title          :            DEHYDRATASE (IGPD)
 length         :            Length = 223
 noevent        : 
+*************** start_hsp
 score          :  Score =  304 bits (771), Expect = 8e-83
 identities     :  Identities = 81/227 (35%), Positives = 119/227 (51%), Gaps = 3
 noevent        : 
@@ -1053,6 +1130,7 @@ query          : Query: 154 LHLNEHYGQNTHHIIEGMFKSTARALKQAVSIDESKVGEIPSSKGVL 200
 align          :            +H++   G N HH  E  FK+ A A+K+A+S  ++   +IPS+KGVL
 sbjct          : Sbjct: 177 IHVDCLRGFNDHHRAESAFKALAIAIKEAIS--KTGKNDIPSTKGVL 221
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -1060,6 +1138,7 @@ title          : >gi|399897|sp|Q02986|HIS7_SACKL IMIDAZOLEGLYCEROL-PHOSPHATE
 title          :            DEHYDRATASE (IGPD)
 length         :            Length = 232
 noevent        : 
+*************** start_hsp
 score          :  Score =  304 bits (770), Expect = 1e-82
 identities     :  Identities = 79/222 (35%), Positives = 118/222 (52%), Gaps = 3
 noevent        : 
@@ -1079,6 +1158,7 @@ query          : Query: 159 HYGQNTHHIIEGMFKSTARALKQAVSIDESKVGEIPSSKGVL 200
 align          :              G N HH  E  FK+ A A+++A+S   +   ++PS+KGVL
 sbjct          : Sbjct: 192 LRGFNDHHRSESAFKALAVAIREAIS--SNGTNDVPSTKGVL 231
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -1086,6 +1166,7 @@ title          : >gi|2495228|sp|Q12578|HIS7_CANGA IMIDAZOLEGLYCEROL-PHOSPHATE
 title          :            DEHYDRATASE (IGPD)
 length         :            Length = 210
 noevent        : 
+*************** start_hsp
 score          :  Score =  303 bits (767), Expect = 2e-82
 identities     :  Identities = 76/214 (35%), Positives = 113/214 (52%), Gaps = 2
 noevent        : 
@@ -1105,6 +1186,7 @@ query          : Query: 167 IIEGMFKSTARALKQAVSIDESKVGEIPSSKGVL 200
 align          :              E  FK+ A A+++A     +   ++PS+KGVL
 sbjct          : Sbjct: 178 RSESGFKALAIAIREA--RTPTGRDDVPSTKGVL 209
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -1113,6 +1195,7 @@ title          :            PROTEIN HISB [INCLUDES: IMIDAZOLEGLYCEROL-PHOSPHATE
 title          :            DEHYDRATASE (IGPD); HISTIDINOL-PHOSPHATASE ]
 length         :            Length = 355
 noevent        : 
+*************** start_hsp
 score          :  Score =  302 bits (765), Expect = 4e-82
 identities     :  Identities = 91/198 (45%), Positives = 130/198 (64%), Gaps = 9
 noevent        : 
@@ -1132,6 +1215,7 @@ query          : Query: 183 VSIDESKVGEIPSSKGVL 200
 align          :            + ++      +PSSKGVL
 sbjct          : Sbjct: 341 IRVEG---DTLPSSKGVL 355
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -1139,6 +1223,7 @@ title          : >gi|123157|sp|P18787|HIS7_AZOBR IMIDAZOLEGLYCEROL-PHOSPHATE
 title          :            DEHYDRATASE (IGPD)
 length         :            Length = 207
 noevent        : 
+*************** start_hsp
 score          :  Score =  301 bits (762), Expect = 9e-82
 identities     :  Identities = 91/196 (46%), Positives = 127/196 (64%), Gaps = 4
 noevent        : 
@@ -1158,6 +1243,7 @@ query          : Query: 185 IDESKVGEIPSSKGVL 200
 align          :            ID  K   +PS+KG L
 sbjct          : Sbjct: 188 IDPRKRDAVPSTKGTL 203
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -1165,6 +1251,7 @@ title          : >gi|729718|sp|P40919|HIS7_CRYNE IMIDAZOLEGLYCEROL-PHOSPHATE
 title          :            DEHYDRATASE (IGPD)
 length         :            Length = 202
 noevent        : 
+*************** start_hsp
 score          :  Score =  299 bits (759), Expect = 2e-81
 identities     :  Identities = 83/203 (40%), Positives = 120/203 (58%), Gaps = 1
 noevent        : 
@@ -1184,6 +1271,7 @@ query          : Query: 178 ALKQAVSIDESKVGEIPSSKGVL 200
 align          :            A++ A+S   +   ++PS+KGVL
 sbjct          : Sbjct: 180 AIRMAIS--RTGGDDVPSTKGVL 200
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -1191,6 +1279,7 @@ title          : >gi|2495229|sp|Q92447|HIS7_PICPA IMIDAZOLEGLYCEROL-PHOSPHATE
 title          :            DEHYDRATASE (IGPD)
 length         :            Length = 224
 noevent        : 
+*************** start_hsp
 score          :  Score =  298 bits (756), Expect = 5e-81
 identities     :  Identities = 82/223 (36%), Positives = 115/223 (50%), Gaps = 3
 noevent        : 
@@ -1210,6 +1299,7 @@ query          : Query: 158 EHYGQNTHHIIEGMFKSTARALKQAVSIDESKVGEIPSSKGVL 200
 align          :               G N HH  E  FK+ A A+K+A+S   +   +IPS+KGVL
 sbjct          : Sbjct: 183 CLRGFNDHHRAESAFKALAIAIKEAIS--SNGTDDIPSTKGVL 223
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -1218,6 +1308,7 @@ title          :            PROTEIN HISB [INCLUDES: IMIDAZOLEGLYCEROL-PHOSPHATE
 title          :            DEHYDRATASE (IGPD); HISTIDINOL-PHOSPHATASE ]
 length         :            Length = 362
 noevent        : 
+*************** start_hsp
 score          :  Score =  292 bits (741), Expect = 3e-79
 identities     :  Identities = 89/198 (44%), Positives = 127/198 (63%), Gaps = 9
 noevent        : 
@@ -1237,6 +1328,7 @@ query          : Query: 183 VSIDESKVGEIPSSKGVL 200
 align          :            + I+ +   E+PSSKGVL
 sbjct          : Sbjct: 348 IRIEGN---EMPSSKGVL 362
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -1244,6 +1336,7 @@ title          : >gi|729719|sp|P40374|HIS7_SCHPO IMIDAZOLEGLYCEROL-PHOSPHATE
 title          :            DEHYDRATASE (IGPD)
 length         :            Length = 216
 noevent        : 
+*************** start_hsp
 score          :  Score =  290 bits (734), Expect = 2e-78
 identities     :  Identities = 83/221 (37%), Positives = 114/221 (51%), Gaps = 2
 noevent        : 
@@ -1263,6 +1356,7 @@ query          : Query: 160 YGQNTHHIIEGMFKSTARALKQAVSIDESKVGEIPSSKGVL 200
 align          :            YG N HH  E  FKS A A++ A S+  +   E+PS+KGVL
 sbjct          : Sbjct: 178 YGSNDHHRAESAFKSLAVAMRAATSL--TGSSEVPSTKGVL 216
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -1270,6 +1364,7 @@ title          : >gi|123159|sp|P28624|HIS7_PHYPR IMIDAZOLEGLYCEROL-PHOSPHATE
 title          :            DEHYDRATASE (IGPD)
 length         :            Length = 452
 noevent        : 
+*************** start_hsp
 score          :  Score =  290 bits (734), Expect = 2e-78
 identities     :  Identities = 86/199 (43%), Positives = 121/199 (60%), Gaps = 8
 noevent        : 
@@ -1289,6 +1384,7 @@ query          : Query: 182 AVSIDESKVGEIPSSKGVL 200
 align          :            AV  D +    +PS+KGVL
 sbjct          : Sbjct: 435 AVKHDAT--AGVPSTKGVL 451
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -1297,6 +1393,7 @@ title          :            PROTEIN HISB [INCLUDES: IMIDAZOLEGLYCEROL-PHOSPHATE
 title          :            DEHYDRATASE (IGPD); HISTIDINOL-PHOSPHATASE ]
 length         :            Length = 354
 noevent        : 
+*************** start_hsp
 score          :  Score =  287 bits (726), Expect = 1e-77
 identities     :  Identities = 89/198 (44%), Positives = 129/198 (64%), Gaps = 1
 noevent        : 
@@ -1316,6 +1413,7 @@ query          : Query: 183 VSIDESKVGEIPSSKGVL 200
 align          :            + ++      +PSSKGVL
 sbjct          : Sbjct: 340 IRVEG---DTLPSSKGVL 354
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -1323,6 +1421,7 @@ title          : >gi|2495224|sp|O06590|HIS7_MYCTU IMIDAZOLEGLYCEROL-PHOSPHATE
 title          :            DEHYDRATASE (IGPD)
 length         :            Length = 210
 noevent        : 
+*************** start_hsp
 score          :  Score =  283 bits (716), Expect = 2e-76
 identities     :  Identities = 92/207 (44%), Positives = 124/207 (59%), Gaps = 1
 noevent        : 
@@ -1342,6 +1441,7 @@ query          : Query: 174 STARALKQAVSIDESKVGEIPSSKGVL 200
 align          :            + ARAL+QAV  D   V  +PS+KG L
 sbjct          : Sbjct: 185 AVARALRQAVEPDPR-VSGVPSTKGAL 210
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -1349,6 +1449,7 @@ title          : >gi|2495226|sp|Q50504|HIS7_METTH PROBABLE
 title          :            IMIDAZOLEGLYCEROL-PHOSPHATE DEHYDRATASE (IGPD)
 length         :            Length = 194
 noevent        : 
+*************** start_hsp
 score          :  Score =  274 bits (695), Expect = 6e-74
 identities     :  Identities = 81/198 (40%), Positives = 122/198 (60%), Gaps = 8
 noevent        : 
@@ -1368,6 +1469,7 @@ query          : Query: 183 VSIDESKVGEIPSSKGVL 200
 align          :            V ++    GEIPS+KG L
 sbjct          : Sbjct: 180 VRVEH---GEIPSTKGKL 194
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -1375,6 +1477,7 @@ title          : >gi|2495225|sp|Q58109|HIS7_METJA PROBABLE
 title          :            IMIDAZOLEGLYCEROL-PHOSPHATE DEHYDRATASE (IGPD)
 length         :            Length = 197
 noevent        : 
+*************** start_hsp
 score          :  Score =  271 bits (685), Expect = 1e-72
 identities     :  Identities = 79/196 (40%), Positives = 106/196 (53%), Gaps = 9
 noevent        : 
@@ -1394,6 +1497,7 @@ query          : Query: 183 VSIDESKVGEIPSSKG 198
 align          :              IDE K   + S+KG
 sbjct          : Sbjct: 180 TKIDERK--GVISTKG 193
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -1401,6 +1505,7 @@ title          : >gi|462274|sp|P34041|HIS7_TRIHA IMIDAZOLEGLYCEROL-PHOSPHATE
 title          :            DEHYDRATASE (IGPD)
 length         :            Length = 208
 noevent        : 
+*************** start_hsp
 score          :  Score =  269 bits (680), Expect = 4e-72
 identities     :  Identities = 68/202 (33%), Positives = 102/202 (49%), Gaps = 2
 noevent        : 
@@ -1420,6 +1525,7 @@ query          : Query: 159 HYGQNTHHIIEGMFKSTARALK 180
 align          :              G N HH  E  FK+ A A++
 sbjct          : Sbjct: 184 LRGDNDHHRAESAFKALAVAVR 205
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -1427,6 +1533,7 @@ title          : >gi|3334215|sp|O33773|HIS7_SULSO PROBABLE
 title          :            IMIDAZOLEGLYCEROL-PHOSPHATE DEHYDRATASE (IGPD)
 length         :            Length = 193
 noevent        : 
+*************** start_hsp
 score          :  Score =  262 bits (662), Expect = 5e-70
 identities     :  Identities = 83/200 (41%), Positives = 124/200 (61%), Gaps = 7
 noevent        : 
@@ -1446,6 +1553,7 @@ query          : Query: 181 QAVSIDESKVGEIPSSKGVL 200
 align          :            +A  I ++   EI S+KG++
 sbjct          : Sbjct: 177 EATRIVDN---EIRSTKGII 193
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_database_report

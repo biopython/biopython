@@ -41,6 +41,7 @@ title          : >gi|585505|sp|Q08386|MOPB_RHOCA MOLYBDENUM-PTERIN BINDING PROTE
 title          :            MOPB
 length         :            Length = 270
 noevent        : 
+*************** start_hsp
 score          :  Score =  467 bits (1189), Expect = e-131
 identities     :  Identities = 247/270 (91%), Positives = 247/270 (91%)
 noevent        : 
@@ -64,6 +65,7 @@ query          : Query: 241 TRDSAEMLDLHPGVETTALIKSSHVILALP 270
 align          :            TRDSAEMLDLHPGVETTALIKSSHVILALP
 sbjct          : Sbjct: 241 TRDSAEMLDLHPGVETTALIKSSHVILALP 270
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -71,6 +73,7 @@ title          : >gi|585504|sp|Q08385|MOPA_RHOCA MOLYBDENUM-PTERIN BINDING PROTE
 title          :            MOPA
 length         :            Length = 265
 noevent        : 
+*************** start_hsp
 score          :  Score =  207 bits (521), Expect = 2e-53
 identities     :  Identities = 123/259 (47%), Positives = 155/259 (59%), Gaps =
 noevent        : 
@@ -94,12 +97,14 @@ query          : Query: 252 PGVETTALIKSSHVILALP 270
 align          :            PGV  TAL K+SHVILA+P
 sbjct          : Sbjct: 247 PGVPATALFKASHVILAMP 265
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
 title          : >gi|585492|sp|P37733|MODA_AZOVI MOLYBDENUM TRANSPORT PROTEIN MO
 length         :            Length = 270
 noevent        : 
+*************** start_hsp
 score          :  Score =  145 bits (362), Expect = 9e-35
 identities     :  Identities = 93/253 (36%), Positives = 132/253 (51%), Gaps = 8
 noevent        : 
@@ -123,7 +128,9 @@ query          : Query: 257 TALIKSSHVILAL 269
 align          :             A  KSS VILA+
 sbjct          : Sbjct: 256 CAFFKSSSVILAV 268
 noevent        : 
+*************** end_hsp
 noevent        : 
+*************** start_hsp
 score          :  Score = 42.6 bits (98), Expect = 8e-04
 identities     :  Identities = 33/99 (33%), Positives = 47/99 (47%), Gaps = 7/99
 noevent        : 
@@ -135,12 +142,14 @@ query          : Query: 161 GQDLTAVITARSAAEMRLAPGSEVLALVKSNFVLLAGAG 199
 align          :            G+ +T V+TA S   + LAPG    A  KS+ V+LA  G
 sbjct          : Sbjct: 232 GRSVTCVVTADSCKALGLAPGVAACAFFKSSSVILAVYG 270
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
 title          : >gi|1709070|sp|P46930|MODE_ECOLI MOLYBDENUM TRANSPORT PROTEIN M
 length         :            Length = 262
 noevent        : 
+*************** start_hsp
 score          :  Score = 86.6 bits (211), Expect = 5e-17
 identities     :  Identities = 76/247 (30%), Positives = 114/247 (45%), Gaps = 1
 noevent        : 
@@ -164,6 +173,7 @@ query          : Query: 262 SSHVILA 268
 align          :            +  VI+A
 sbjct          : Sbjct: 253 ADSVIIA 259
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -171,6 +181,7 @@ title          : >gi|1709071|sp|P45324|MODE_HAEIN MOLYBDENUM TRANSPORT PROTEIN M
 title          :            HOMOLOG
 length         :            Length = 255
 noevent        : 
+*************** start_hsp
 score          :  Score = 54.3 bits (128), Expect = 2e-07
 identities     :  Identities = 46/170 (27%), Positives = 76/170 (44%), Gaps = 3/
 noevent        : 
@@ -186,12 +197,14 @@ query          : Query: 148 DDVAAQVRMRL-GEGQDLTAVITARSAAEMRLAPGSEVLALVKSNFVLLA 1
 align          :             D    V + + G    L   IT +S+A ++L    EV+ + K+ +V ++
 sbjct          : Sbjct: 141 IDSRCVVDVNVQGLPTPLQVSITTKSSARLKLITEKEVMLMFKAPWVKIS 1
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
 title          : >gi|585502|sp|P04952|MOP1_CLOPA MOLYBDENUM-PTERIN BINDING PROTE
 length         :            Length = 68
 noevent        : 
+*************** start_hsp
 score          :  Score = 53.1 bits (125), Expect = 6e-07
 identities     :  Identities = 25/64 (39%), Positives = 43/64 (67%)
 noevent        : 
@@ -203,7 +216,9 @@ query          : Query: 264 HVIL 267
 align          :             V++
 sbjct          : Sbjct: 63  DVMI 66
 noevent        : 
+*************** end_hsp
 noevent        : 
+*************** start_hsp
 score          :  Score = 37.1 bits (84), Expect = 0.036
 identities     :  Identities = 19/63 (30%), Positives = 36/63 (56%)
 noevent        : 
@@ -215,12 +230,14 @@ query          : Query: 193 VLL 195
 align          :            V++
 sbjct          : Sbjct: 64  VMI 66
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
 title          : >gi|127241|sp|P08854|MOP2_CLOPA MOLYBDENUM-PTERIN BINDING PROTE
 length         :            Length = 68
 noevent        : 
+*************** start_hsp
 score          :  Score = 52.3 bits (123), Expect = 1e-06
 identities     :  Identities = 24/64 (37%), Positives = 43/64 (66%)
 noevent        : 
@@ -232,7 +249,9 @@ query          : Query: 264 HVIL 267
 align          :             V++
 sbjct          : Sbjct: 63  DVMI 66
 noevent        : 
+*************** end_hsp
 noevent        : 
+*************** start_hsp
 score          :  Score = 37.9 bits (86), Expect = 0.021
 identities     :  Identities = 21/63 (33%), Positives = 36/63 (56%)
 noevent        : 
@@ -244,6 +263,7 @@ query          : Query: 193 VLL 195
 align          :            V++
 sbjct          : Sbjct: 64  VMI 66
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -251,6 +271,7 @@ title          : >gi|585503|sp|P38366|MOP3_CLOPA MOLYBDENUM-PTERIN BINDING PROTE
 title          :            III
 length         :            Length = 68
 noevent        : 
+*************** start_hsp
 score          :  Score = 50.8 bits (119), Expect = 3e-06
 identities     :  Identities = 24/64 (37%), Positives = 43/64 (66%)
 noevent        : 
@@ -262,7 +283,9 @@ query          : Query: 264 HVIL 267
 align          :             V++
 sbjct          : Sbjct: 63  DVMI 66
 noevent        : 
+*************** end_hsp
 noevent        : 
+*************** start_hsp
 score          :  Score = 36.7 bits (83), Expect = 0.047
 identities     :  Identities = 20/63 (31%), Positives = 37/63 (57%)
 noevent        : 
@@ -274,6 +297,7 @@ query          : Query: 193 VLL 195
 align          :            V++
 sbjct          : Sbjct: 64  VMI 66
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -281,6 +305,7 @@ title          : >gi|1170996|sp|P45183|MOP_HAEIN PROBABLE MOLYBDENUM-PTERIN BIND
 title          :            PROTEIN
 length         :            Length = 69
 noevent        : 
+*************** start_hsp
 score          :  Score = 46.5 bits (108), Expect = 5e-05
 identities     :  Identities = 19/67 (28%), Positives = 46/67 (68%)
 noevent        : 
@@ -292,6 +317,7 @@ query          : Query: 263 SHVILAL 269
 align          :            + V++ +
 sbjct          : Sbjct: 62  TSVMVGV 68
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -299,6 +325,7 @@ title          : >gi|1709069|sp|P09833|MODC_ECOLI MOLYBDENUM TRANSPORT ATP-BINDI
 title          :            PROTEIN MODC
 length         :            Length = 352
 noevent        : 
+*************** start_hsp
 score          :  Score = 37.9 bits (86), Expect = 0.021
 identities     :  Identities = 23/62 (37%), Positives = 37/62 (59%), Gaps = 1/62
 noevent        : 
@@ -310,6 +337,7 @@ query          : Query: 261 KS 262
 align          :            KS
 sbjct          : Sbjct: 346 KS 347
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -317,6 +345,7 @@ title          : >gi|585500|sp|P37732|MODD_AZOVI MOLYBDENUM TRANSPORT ATP-BINDIN
 title          :            PROTEIN MODD
 length         :            Length = 380
 noevent        : 
+*************** start_hsp
 score          :  Score = 33.2 bits (74), Expect = 0.53
 identities     :  Identities = 41/143 (28%), Positives = 62/143 (42%), Gaps = 12
 noevent        : 
@@ -332,6 +361,7 @@ query          : Query: 240 ITRDSAEMLDLHPGVETTALIKS 262
 align          :            ITR S + L + PG    A IK+
 sbjct          : Sbjct: 353 ITRRSCDQLGIAPGRRMWAQIKA 375
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
@@ -339,6 +369,7 @@ title          : >gi|2507168|sp|P08838|PT1_BACSU PHOSPHOENOLPYRUVATE-PROTEIN
 title          :            PHOSPHOTRANSFERASE (PHOSPHOTRANSFERASE SYSTEM, ENZYM
 length         :            Length = 570
 noevent        : 
+*************** start_hsp
 score          :  Score = 30.1 bits (66), Expect = 4.6
 identities     :  Identities = 32/141 (22%), Positives = 61/141 (42%), Gaps = 6/
 noevent        : 
@@ -354,12 +385,14 @@ query          : Query: 216 ERIDAPLSSEVTLDLGGGKTI 236
 align          :            ER++       TLD+GG K +
 sbjct          : Sbjct: 322 ERMEGKSVVVRTLDIGGDKEL 342
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_alignment
 title          : >gi|729786|sp|Q05355|HYDL_STRHA PUTATIVE POLYKETIDE HYDROXYLASE
 length         :            Length = 555
 noevent        : 
+*************** start_hsp
 score          :  Score = 29.3 bits (64), Expect = 7.9
 identities     :  Identities = 21/62 (33%), Positives = 29/62 (45%)
 noevent        : 
@@ -371,6 +404,7 @@ query          : Query: 161 GQ 162
 align          :            GQ
 sbjct          : Sbjct: 196 GQ 197
 noevent        : 
+*************** end_hsp
 noevent        : 
 *************** end_alignment
 *************** start_database_report
