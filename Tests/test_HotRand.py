@@ -6,6 +6,7 @@ import sys
 import random
 
 # local stuff
+import requires_internet
 
 # PyUnit
 import unittest

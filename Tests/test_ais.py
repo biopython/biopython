@@ -7,6 +7,7 @@ import random
 import string
 
 # local stuff
+import requires_internet
 
 # PyUnit
 import unittest
