@@ -1,0 +1,42 @@
+SGMLExtractor
+=============
+
+
+SGMLExtractor
+-------------
+
+
+Classes:
+SGMLExtractorHandle     File object that strips tags and returns content from specified
+tags blocks.
+
+SGMLExtractor File handle decorator that scans for specified SGML tag pairs, removes
+any inner tags and returns the raw content.
+
+For example:
+        handle = open( filename )
+        record_handle = SGMLExtractorHandle( handle, [ 'h1', ] )
+would return
+"House that Jack built'
+
+        handle = open( filename )
+        record_handle = SGMLExtractorHandle( handle, [ 'dt', ] )
+would return 'ratcatdogcowmaiden'
+
+        handle = open( filename )
+        record_handle = SGMLExtractorHandle( handle, [ 'dt', 'dd'  ] )
+would return 'rat that ate the malttcat ate  the rat' etc
+
+<h1>House that Jack Built</h1>
+<dl>
+  <dt><big>rat</big></dt>
+    <dd><big>ate the malt</big></dd>
+  <dt><big>cat</big></dt>
+    <dd><big>that ate the rat</big></dd>
+  <dt><big>dog</big></dt>
+    <dd><big>that worried the dats</big></dd>
+  <dt><big>cow</big></dt>
+    <dd><big>with crumpled horn</big></dd>
+  <dt><big>maiden</big></dt>
+    <dd><big>all forlorns</big></dd>
+</dl>
