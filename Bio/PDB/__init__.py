@@ -27,6 +27,9 @@ from PDBIO import PDBIO
 # from a list of Atoms.
 import Selection
 
+# Superimpose atom sets
+from Superimposer import Superimposer
+
 # Fast atom neighbor search
 # Depends on KDTree C++ module
 try:

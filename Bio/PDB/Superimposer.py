@@ -9,6 +9,12 @@ class Superimposer:
         self.rms=None
 
     def set_atoms(self, fixed, moving):
+        """
+        fixed --- lost of atoms
+        moving --- list of atoms
+
+        Moving will be translated/rotated on fixed.
+        """
         if not (len(fixed)==len(moving)):
             raise PDBError, "Fixed and moving atom lists differ in size"
         l=len(fixed)
@@ -24,6 +30,9 @@ class Superimposer:
         self.rotran=sup.get_rotran()
 
     def apply(self, atom_list):
+        """
+        Rotate/translate a list of atoms.
+        """
         if self.rotran is None:
             raise DBNError, "No transformation has been calculated yet"
         rot, tran=self.rotran
@@ -61,6 +70,7 @@ if __name__=="__main__":
     print sup.rms
 
     sup.apply(moving)
+
 
 
 
