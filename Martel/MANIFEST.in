@@ -1,7 +1,7 @@
 include *.py
 include test/*.py
-include test/examples/sample.*
-include test/formats/*.py
+include test/samples/sample.*
+include test/testformats/*.py
 
 include README
 include TODO
