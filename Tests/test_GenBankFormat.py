@@ -584,11 +584,11 @@ add_test("record 3", record, record_s3)
 add_test("multirecord", multirecord, record_s1+record_s2+record_s3)
 add_test("format", format, header_s + record_s1+record_s2+record_s3)
 
-def test():
+def run_tests(args):
     test_list.test()
 
 def dump():
     test_list.dump()
 
 if __name__ == "__main__":
-    test()
+    tests([])
