@@ -313,16 +313,15 @@ int Region::test_intersection(Region *query_region, float radius)
 
 // KDTree
 
-int KDTree::dim=3;
-
 KDTree::KDTree(int dim, int bucket_size)
 {
 	// set dimension
-	KDTree::dim=dim;
+	this->dim=dim;
+
 	DataPoint::dim=dim;
 	Region::dim=dim;
 
-	_center_coord=new float[KDTree::dim];
+	_center_coord=new float[dim];
 	_query_region=NULL;
 	_root=NULL;
 	_coords=NULL;
@@ -342,25 +341,25 @@ KDTree::~KDTree()
 
 Node *KDTree::_build_tree(long int offset_begin, long int offset_end, int depth)
 {
-	int dim;
+	int localdim;
 
 	if (depth==0)
 	{
 		// start with [begin, end+1[
 		offset_begin=0;
 		offset_end=_data_point_list.size();
-		dim=0;
+		localdim=0;
 	}
 	else
 	{
-		dim=depth%KDTree::dim;
+		localdim=depth%dim;
 	}
 
 	if ((offset_end-offset_begin)<=_bucket_size) 
 	{
 		// leaf node
 
-		return new Node(-1, dim, offset_begin, offset_end);
+		return new Node(-1, localdim, offset_begin, offset_end);
 	}
 	else
 	{
@@ -373,7 +372,7 @@ Node *KDTree::_build_tree(long int offset_begin, long int offset_end, int depth)
 		Node *left_node, *right_node, *new_node;
 
 		// set sort dimension
-		DataPoint::current_dim=dim;
+		DataPoint::current_dim=localdim;
 
 		// sort method sorts [first, last[
 		sort(_data_point_list.begin()+offset_begin, _data_point_list.begin()+offset_end);
@@ -383,10 +382,10 @@ Node *KDTree::_build_tree(long int offset_begin, long int offset_end, int depth)
 		offset_split=d/2+d%2;
 
 		data_point=_data_point_list[offset_begin+offset_split-1];
-		cut_value=(data_point.get_coord())[dim];
+		cut_value=(data_point.get_coord())[localdim];
 		
 		// create new node and bind to left & right nodes
-		new_node=new Node(cut_value, dim, offset_begin, offset_end);
+		new_node=new Node(cut_value, localdim, offset_begin, offset_end);
 
 		// left
 		left_offset_begin=offset_begin;
@@ -434,7 +433,7 @@ void KDTree::_search(Region *region, Node *node, int depth)
 		node=_root;
 	}
 
-	current_dim=depth%KDTree::dim;
+	current_dim=depth%dim;
 
 	if(node->is_leaf())
 	{
@@ -465,7 +464,11 @@ void KDTree::_search(Region *region, Node *node, int depth)
 		// new region
 		left_region=region->intersect_left(node->get_cut_value(), current_dim);
 
-		_test_region(left_node, left_region, depth);
+        // left_region is NULL if no overlap
+        if(left_region)
+        {
+		    _test_region(left_node, left_region, depth);
+        }
 
 		// RIGHT HALF PLANE
 
@@ -474,8 +477,12 @@ void KDTree::_search(Region *region, Node *node, int depth)
 		// new region
 		right_region=region->intersect_right(node->get_cut_value(), current_dim);
 
-		// test for overlap/inside/outside & do recursion/report/stop
-		_test_region(right_node, right_region, depth);
+        // right_region is NULL if no overlap
+        if(right_region)
+        {
+            // test for overlap/inside/outside & do recursion/report/stop
+            _test_region(right_node, right_region, depth);
+        }
 	}
 
 	delete region;
@@ -556,6 +563,9 @@ void KDTree::set_data(float *coords, long int nr_points)
 {
 	long int i;
 
+	DataPoint::dim=dim;
+	Region::dim=dim;
+
 	// clean up stuff from previous use
 	delete _root;
 	delete [] _coords;
@@ -567,7 +577,7 @@ void KDTree::set_data(float *coords, long int nr_points)
 		
 	for (i=0; i<nr_points; i++)
 	{
-		_add_point(i, coords+i*KDTree::dim);
+		_add_point(i, coords+i*dim);
 	}
 
 	// build KD tree
@@ -578,7 +588,10 @@ void KDTree::set_data(float *coords, long int nr_points)
 void KDTree::search_center_radius(float *coord, float radius)
 {
 	int i;
-	float left[KDTree::dim], right[KDTree::dim];
+	float left[dim], right[dim];
+
+	DataPoint::dim=dim;
+	Region::dim=dim;
 
 	_index_list.clear();
 	_radius_list.clear();
@@ -588,7 +601,7 @@ void KDTree::search_center_radius(float *coord, float radius)
 	// use of r^2 to avoid sqrt use
 	_radius_sq=radius*radius;
 
-	for (i=0; i<KDTree::dim; i++)
+	for (i=0; i<dim; i++)
 	{
 		left[i]=coord[i]-radius;
 		right[i]=coord[i]+radius;
@@ -678,6 +691,9 @@ void KDTree::neighbor_search(float neighbor_radius)
 {
 	Region *region;
 
+	DataPoint::dim=dim;
+	Region::dim=dim;
+
 	_neighbor_index_list.clear();
 	_neighbor_radius_list.clear();
 	// note the use of r^2 to avoid use of sqrt
@@ -706,16 +722,16 @@ void KDTree::_neighbor_search(Node *node, Region *region, int depth)
 {
 	Node *left, *right;
 	Region *left_region, *right_region; 
-	int dim;
+	int localdim;
 
-	dim=depth%KDTree::dim;
+	localdim=depth%dim;
 
 	left=node->get_left_node();
 	right=node->get_right_node();
 
 	// planes of left and right nodes
-	left_region=region->intersect_left(node->get_cut_value(), dim);
-	right_region=region->intersect_right(node->get_cut_value(), dim);
+	left_region=region->intersect_left(node->get_cut_value(), localdim);
+	right_region=region->intersect_right(node->get_cut_value(), localdim);
 
 	if (!left->is_leaf())
 	{
@@ -749,7 +765,7 @@ void KDTree::_test_neighbors(DataPoint &p1, DataPoint &p2)
 {
 	float r;
 
-	r=KDTREE_dist(p1.get_coord(), p2.get_coord(), KDTree::dim);
+	r=KDTREE_dist(p1.get_coord(), p2.get_coord(), dim);
 
 	if(r<=_neighbor_radius_sq)
 	{
@@ -810,7 +826,7 @@ void KDTree::_neighbor_search_pairs(Node *down, Region *down_region,
 		Node *up, Region *up_region, int depth)
 {
 	int down_is_leaf, up_is_leaf;
-	int dim;
+	int localdim;
 
 	// if regions do not overlap - STOP
 	if (!down || !up || !down_region || !up_region) 
@@ -826,7 +842,7 @@ void KDTree::_neighbor_search_pairs(Node *down, Region *down_region,
 	}
 
 	// dim
-	dim=depth%KDTree::dim;
+	localdim=depth%dim;
 
 	// are they leaves?
 	up_is_leaf=up->is_leaf();
@@ -861,8 +877,8 @@ void KDTree::_neighbor_search_pairs(Node *down, Region *down_region,
 
 			down_left=down->get_left_node();
 			down_right=down->get_right_node();
-			down_left_region=down_region->intersect_left(cut_value, dim); 
-			down_right_region=down_region->intersect_right(cut_value, dim); 
+			down_left_region=down_region->intersect_left(cut_value, localdim); 
+			down_right_region=down_region->intersect_right(cut_value, localdim); 
 		}
 
 		if (up_is_leaf)
@@ -881,8 +897,8 @@ void KDTree::_neighbor_search_pairs(Node *down, Region *down_region,
 
 			up_left=up->get_left_node();
 			up_right=up->get_right_node();
-			up_left_region=up_region->intersect_left(cut_value, dim); 
-			up_right_region=up_region->intersect_right(cut_value, dim); 
+			up_left_region=up_region->intersect_left(cut_value, localdim); 
+			up_right_region=up_region->intersect_right(cut_value, localdim); 
 		}
 
 		_neighbor_search_pairs(up_left, up_left_region, down_left, down_left_region, depth+1);
@@ -900,6 +916,9 @@ void KDTree::_neighbor_search_pairs(Node *down, Region *down_region,
 void KDTree::neighbor_simple_search(float radius)
 {
 	long int i;
+
+	DataPoint::dim=dim;
+	Region::dim=dim;
 
 	_neighbor_radius=radius;
 	_neighbor_radius_sq=radius*radius;

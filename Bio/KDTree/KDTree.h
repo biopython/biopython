@@ -105,7 +105,7 @@ class KDTree
 		void _search_neighbors_in_bucket(Node *node);
 		void _test_neighbors(DataPoint &p1, DataPoint &p2);
 	public:
-		static int dim;
+		int dim;
 		KDTree(int dim, int bucket_size);
 		~KDTree();
 		void set_data(float *coords, long int nr_points);

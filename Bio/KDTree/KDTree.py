@@ -232,7 +232,7 @@ if __name__=="__main__":
     nr_points=100000
     dim=3
     bucket_size=10
-    query_radius=1
+    query_radius=10
 
     coords=(200*random((nr_points, dim))).astype("f")
 
