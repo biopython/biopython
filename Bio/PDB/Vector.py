@@ -125,7 +125,7 @@ def calc_dihedral(v1, v2, v3, v4):
     angle=u.angle(v)
     # Determine sign of angle
     try:
-        if cb.angle(w)>0.001:
+        if cb.angle(w)<0.001:
             angle=-angle
     except ZeroDivisionError:
         # dihedral=pi
@@ -242,7 +242,7 @@ if __name__=="__main__":
         print v4
 
         print calc_angle(v1, v2, v3)
-        print calc_dihedral(v1, v2, v3, v4)
+        print "DIHEDRAL ", calc_dihedral(v1, v2, v3, v4)
 
         ref=refmat(v1, v3)
         rot=rotmat(v1, v3)
