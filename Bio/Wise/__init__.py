@@ -1,9 +1,11 @@
 #!/usr/bin/env python2.3
 
-__version__ = "$Revision: 1.6 $"
+__version__ = "$Revision: 1.7 $"
 
 import os
 import sys
+
+from Bio.SeqIO.FASTA import FastaReader, FastaWriter
 
 try:
     import poly
@@ -55,23 +57,36 @@ def align(cmdline, pair, kbyte=None, force_type=None, dry_run=False, quiet=False
     """
     Returns a filehandle
     """
-    temp_file = _NamedTemporaryFile(mode='r')
+    output_file = _NamedTemporaryFile(mode='r')
+    input_files = _NamedTemporaryFile(mode="w"), _NamedTemporaryFile(mode="w")
+
+    if dry_run:
+        print _build_align_cmdline(cmdline,
+                                   pair,
+                                   output_file.name,
+                                   kbyte,
+                                   force_type,
+                                   quiet)
+        return
+
+    for filename, input_file in zip(pair, input_files):
+        input_file.close()
+        FastaWriter(file(input_file.name, "w")).write(FastaReader(file(filename)).next())
+
+    input_file_names = [input_file.name for input_file in input_files]
+    
     cmdline_str = _build_align_cmdline(cmdline,
-                                       pair,
-                                       temp_file.name,
+                                       input_file_names,
+                                       output_file.name,
                                        kbyte,
                                        force_type,
                                        quiet)
-
-    if dry_run:
-        print cmdline_str
-        return
 
     if debug:
         print >>sys.stderr, cmdline_str
         
     os.system(cmdline_str)
-    return temp_file
+    return output_file
 
 def all_pairs(singles):
     """
