@@ -35,45 +35,47 @@ clistfns_count(self, args)
     if(!PyArg_ParseTuple(args, "O", &items))
 	return NULL;
     if(!PySequence_Check(items)) {
-	PyErr_SetString(PyExc_TypeError, "expected mapping type");
+	PyErr_SetString(PyExc_TypeError, "expected sequence type");
 	return NULL;
     }
-    
+
     if(!(counts = PyDict_New()))
 	return NULL;
     
     /* Go through the loop, counting how often each item appears. */
     i = 0;
     while(1) {
-	if(!(item = PySequence_GetItem(items, i))) 
-	    break; /* no more numbers */
+	if(!(item = PySequence_GetItem(items, i)))  {
+            PyErr_Clear(); /* clear the exception set by PySequence_GetItem */
+	    break;         /* no more numbers */
+	}
 
+	/* item needs to be Py_DECREF'd */
 	if(!(count = PyDict_GetItem(counts, item))) {
 	    /* This is a new item.  Set count to 1. */
 	    count = PyInt_FromLong(1);
 	    PyDict_SetItem(counts, item, count);
 	    Py_DECREF(count);
+            Py_DECREF(item);
 	    if(PyErr_Occurred()) 
 		/* item not hashable? */
 		return NULL;
 	} else {
 	    if(!PyInt_Check(count)) {
+                Py_DECREF(item);
 		PyErr_SetString(PyExc_SystemError, "non-int in dictionary");
 		return NULL;
 	    }
 	    current = PyInt_AsLong(count);
 	    count = PyInt_FromLong(current+1);
-	    if(PyErr_Occurred()) 
-		return NULL;
 	    PyDict_SetItem(counts, item, count);
-	    Py_DECREF(count);
+            Py_DECREF(item);
 	    if(PyErr_Occurred()) 
 		return NULL;
 	}
 
 	i++;
     }
-    PyErr_Clear(); /* clear the exception set by PySequence_GetItem */
     
     return counts;
 }
@@ -99,7 +101,6 @@ clistfns_contents(self, args)
     PyObject *keys, *key;
     long c;
     double total;
-    int real_error;
 
     if(!PyArg_ParseTuple(args, "O", &items))
 	return NULL;
@@ -124,39 +125,40 @@ clistfns_contents(self, args)
     /* Loop through every element in counts, calculating the probabilities. */
     if(!(keys = PyMapping_Keys(counts))) {
 	Py_DECREF(counts);
+        Py_DECREF(percentages);
 	return NULL;
     }
 
     /* Go through the loop, counting how often each item appears. */
-    real_error = 0;
     i = 0;
     while(1) {
-	if(!(key = PySequence_GetItem(keys, i))) 
-	    break; /* no more numbers */
+	if(!(key = PySequence_GetItem(keys, i))) {
+	    PyErr_Clear(); /* clear the exception set by PySequence_GetItem */
+	    break;         /* no more numbers */
+        }
 	if(!(count = PyDict_GetItem(counts, key))) {
-	    real_error = 1;
+            Py_DECREF(key);
 	    break;
 	}
 	if(!PyInt_Check(count)) {
-	    real_error = 1;
+            Py_DECREF(key);
 	    PyErr_SetString(PyExc_SystemError, "non-int in dictionary");
+            break;
 	}
 	c = PyInt_AsLong(count);
 	perc = PyFloat_FromDouble((double)c / total);
 	PyDict_SetItem(percentages, key, perc);
+        Py_DECREF(key);
 	Py_DECREF(perc);
 	if(PyErr_Occurred()) {
-	    real_error = 1;
 	    break;
 	}
 	i++;
     }
-    if(real_error) {
+    if(PyErr_Occurred()) {
 	Py_DECREF(percentages);
 	percentages = NULL;
     }
-    else PyErr_Clear(); /* clear the exception set by PySequence_GetItem */
-    
     Py_DECREF(counts);
     Py_DECREF(keys);
     
