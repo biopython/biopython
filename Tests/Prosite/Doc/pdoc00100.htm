@@ -1,0 +1,133 @@
+<head>
+<title>PROSITE: PDOC00100 (documentation file)</title>
+</head>
+<body bgcolor=#FFFFFF text=#000000>
+<hr SIZE=2 shade><center><table width="70%" border=2 cellspacing=0 cellpadding=2 align=center><tr>
+<td bgcolor="#FFFFFF" align=center> <b><a TARGET="_top" href="/">ExPASy Home page</a></b></td>
+<td bgcolor="#FF9999" align=center> <b><a TARGET="_top" href="/sitemap.html">Site Map</a></b></td>
+<td bgcolor="#C0EAC0" align=center> <b><a TARGET="_top" href="/ExpasyHunt/">Search ExPASy</a></b></td>
+<td bgcolor="#CCCCFF" align=center> <b><a TARGET="_top" href="/contact.html">Contact us</a></b></td>
+<td bgcolor="#33CCFF" align=center> <b><a TARGET="_top" href="/prosite/">PROSITE</a></b></td>
+</tr></table></center><center><table border=1><tr><td>Mirror sites:</td><td><A HREF="http://expasy.proteome.org.au/cgi-bin/get-prodoc-entry?PDOC00100">Australia</A></td> <td><A HREF="http://expasy.cbr.nrc.ca/cgi-bin/get-prodoc-entry?PDOC00100">Canada</A></td> <td><A HREF="http://expasy.pku.edu.cn/cgi-bin/get-prodoc-entry?PDOC00100">China</A></td> <td><A HREF="http://expasy.nhri.org.tw/cgi-bin/get-prodoc-entry?PDOC00100">Taiwan</A></td> </tr></table></center><hr SIZE=2 shade>
+
+<h1>PROSITE: PDOC00100 (documentation)</h1>
+<p><Address><A HREF="/cgi-bin/nicedoc.pl?PDOC00100">View entry in NiceSite format</A></Address>
+<pre>
+{PDOC00100}
+<A HREF="/cgi-bin/get-prosite-entry?PS00107">{PS00107; PROTEIN_KINASE_ATP}
+</A><A HREF="/cgi-bin/get-prosite-entry?PS00108">{PS00108; PROTEIN_KINASE_ST}
+</A><A HREF="/cgi-bin/get-prosite-entry?PS00109">{PS00109; PROTEIN_KINASE_TYR}
+</A><A HREF="/cgi-bin/get-prosite-entry?PS50011">{PS50011; PROTEIN_KINASE_DOM}
+</A>{BEGIN}
+******************************************
+* Protein kinases signatures and profile *
+******************************************
+
+Eukaryotic  protein kinases [1 to 5]  are  enzymes  that   belong  to  a  very
+extensive family of  proteins which share a conserved catalytic core common to
+both serine/threonine and  tyrosine protein kinases.  There  are  a  number of
+conserved regions in the catalytic domain of protein kinases. We have selected
+two of these regions to build signature patterns.  The  first region, which is
+located in the N-terminal extremity of the catalytic domain, is a glycine-rich
+stretch of residues in the vicinity  of a lysine residue, which has been shown
+to be involved in ATP binding.   The second  region,  which is  located in the
+central part of the  catalytic  domain,  contains  a  conserved  aspartic acid
+residue  which is important for the catalytic activity  of  the enzyme [6]; we
+have derived  two signature patterns for that region: one specific for serine/
+threonine kinases  and  the  other  for  tyrosine kinases. We also developed a
+profile which is based on the alignment in [1] and covers the entire catalytic
+domain.
+
+-Consensus pattern: [LIV]-G-{P}-G-{P}-[FYWMGSTNH]-[SGA]-{PW}-[LIVCAT]-{PD}-x-
+                    [GSTACLIVMFY]-x(5,18)-[LIVMFYWCSTAR]-[AIVP]-[LIVMFAGCKR]-K
+                    [K binds ATP]
+-Sequences known to belong to this class detected by the pattern: the majority
+ of known  protein  kinases  but it fails to find a number of them, especially
+ viral kinases  which  are  quite  divergent in this region and are completely
+ missed bythis pattern.
+-Other sequence(s) detected in SWISS-PROT: 35.
+
+-Consensus pattern: [LIVMFYC]-x-[HY]-x-D-[LIVMFY]-K-x(2)-N-[LIVMFYCT](3)
+                    [D is an active site residue]
+-Sequences known to belong to this class detected by the pattern: Most serine/
+ threonine  specific protein  kinases  with  10 exceptions (half of them viral
+ kinases) and  also  Epstein-Barr  virus BGLF4 and Drosophila ninaC which have
+ respectively Ser and Arg instead of the conserved Lys and which are therefore
+ detected by the tyrosine kinase specific pattern described below.
+-Other sequence(s) detected in SWISS-PROT: 1.
+
+-Consensus pattern: [LIVMFYC]-x-[HY]-x-D-[LIVMFY]-[RSTAC]-x(2)-N-[LIVMFYC](3)
+                    [D is an active site residue]
+-Sequences known to belong to this class detected by the pattern: ALL tyrosine
+ specific protein  kinases  with  the  exception of human ERBB3 and mouse blk.
+ This pattern    will    also    detect    most    bacterial    aminoglycoside
+ phosphotransferases [8,9]  and  herpesviruses ganciclovir kinases [10]; which
+ are proteins structurally and evolutionary related to protein kinases.
+-Other sequence(s) detected in SWISS-PROT: 15.
+
+-Sequences known to belong to this class detected by the profile: ALL,  except
+ for three  viral  kinases.  This  profile  also  detects  receptor  guanylate
+ cyclases (see   &lt;<A HREF= "/cgi-bin/get-prodoc-entry?PDOC00430">PDOC00430</A>&gt;)  and  2-5A-dependent  ribonucleases.    Sequence
+ similarities between  these  two  families  and the eukaryotic protein kinase
+ family have been noticed before. It also detects Arabidopsis thaliana kinase-
+ like protein TMKL1 which seems to have lost its catalytic activity.
+-Other sequence(s) detected in SWISS-PROT: 4.
+
+-Note: if a protein  analyzed  includes the two protein kinase signatures, the
+ probability of it being a protein kinase is close to 100%
+-Note: eukaryotic-type protein  kinases  have  also  been found in prokaryotes
+ such as Myxococcus xanthus [11] and Yersinia pseudotuberculosis.
+-Note: the  patterns  shown  above has been updated since their publication in
+ [7].
+-Note: this  documentation  entry  is linked  to both signature patterns and a
+ profile. As  the profile is much more sensitive than the patterns, you should
+ use it if you have access to the necessary software tools to do so.
+
+-Expert(s) to contact by email:
+                   Hunter T.; <A HREF= "/cgi-bin/mailform/exp?___________Hunter_T.&Protein_kinases_signatures_and_profile&hunter@salk-sc2.sdsc.edu
+">hunter@salk-sc2.sdsc.edu
+</A>                   Quinn A.M.; <A HREF= "/cgi-bin/mailform/exp?___________Quinn_A.M.&Protein_kinases_signatures_and_profile&quinn@biomed.med.yale.edu
+">quinn@biomed.med.yale.edu
+</A>
+-Last update: November 1995 / Patterns and text revised; profile added.
+
+[ 1] Hanks S.K., Hunter T.
+     FASEB J. 9:576-596(1995).
+[ 2] Hunter T.
+     Meth. Enzymol. 200:3-37(1991).
+[ 3] Hanks S.K., Quinn A.M.
+     Meth. Enzymol. 200:38-62(1991).
+[ 4] Hanks S.K.
+     Curr. Opin. Struct. Biol. 1:369-383(1991).
+[ 5] Hanks S.K., Quinn A.M., Hunter T.
+     Science 241:42-52(1988).
+[ 6] Knighton D.R., Zheng J., Ten Eyck L.F., Ashford V.A., Xuong N.-H.,
+     Taylor S.S., Sowadski J.M.
+     Science 253:407-414(1991).
+[ 7] Bairoch A., Claverie J.-M.
+     Nature 331:22(1988).
+[ 8] Benner S.
+     Nature 329:21-21(1987).
+[ 9] Kirby R.
+     J. Mol. Evol. 30:489-492(1992).
+[10] Littler E., Stuart A.D., Chee M.S.
+     Nature 358:160-162(1992).
+[11] Munoz-Dorado J., Inouye S., Inouye M.
+     <A HREF="http://www.cell.com/cgi/lookup?vol=67&fp=995&view=abstract" >Cell 67:995-1006(1991).
+</A>
++----------------------------------------------------------------------------+
+| This PROSITE entry  is copyright  by the Swiss Institute of Bioinformatics |
+| (SIB).  There are no restrictions on its use by non-profit institutions as |
+| long as its  content  is  in  no  way  modified  and this statement is not |
+| removed. Usage by and for commercial entities requires a license agreement |
+| (See <A HREF="http://www.isb-sib.ch/announce/" >http://www.isb-sib.ch/announce/</A> or email to <A HREF="mailto:license@isb-sib.ch">license@isb-sib.ch</A>).      |
++----------------------------------------------------------------------------+
+{END}
+</PRE><hr SIZE=2 shade><center><table width="70%" border=2 cellspacing=0 cellpadding=2 align=center><tr>
+<td bgcolor="#FFFFFF" align=center> <b><a TARGET="_top" href="/">ExPASy Home page</a></b></td>
+<td bgcolor="#FF9999" align=center> <b><a TARGET="_top" href="/sitemap.html">Site Map</a></b></td>
+<td bgcolor="#C0EAC0" align=center> <b><a TARGET="_top" href="/ExpasyHunt/">Search ExPASy</a></b></td>
+<td bgcolor="#CCCCFF" align=center> <b><a TARGET="_top" href="/contact.html">Contact us</a></b></td>
+<td bgcolor="#33CCFF" align=center> <b><a TARGET="_top" href="/prosite/">PROSITE</a></b></td>
+</tr></table></center><center><table border=1><tr><td>Mirror sites:</td><td><A HREF="http://expasy.proteome.org.au/cgi-bin/get-prodoc-entry?PDOC00100">Australia</A></td> <td><A HREF="http://expasy.cbr.nrc.ca/cgi-bin/get-prodoc-entry?PDOC00100">Canada</A></td> <td><A HREF="http://expasy.pku.edu.cn/cgi-bin/get-prodoc-entry?PDOC00100">China</A></td> <td><A HREF="http://expasy.nhri.org.tw/cgi-bin/get-prodoc-entry?PDOC00100">Taiwan</A></td> </tr></table></center><hr SIZE=2 shade>
+

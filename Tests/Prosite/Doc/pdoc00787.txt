@@ -1,0 +1,44 @@
+{PDOC00787}
+{PS01027; GLYCOSYL_HYDROL_F39}
+{BEGIN}
+******************************************************
+* Glycosyl hydrolases family 39 putative active site *
+******************************************************
+
+It has  been  shown  [1,E1]  that  the  following  glycosyl  hydrolases can be
+classified into a single family on the basis of sequence similarities:
+
+ - Mammalian lysosomal alpha-L-iduronidase (EC 3.2.1.76).
+ - Caldocellum  saccharolyticum  and  Thermoanaerobacter saccharolyticum beta-
+   xylosidase (EC 3.2.1.37) (gene xynB).
+
+The best  conserved  regions  in  these  enzymes is  located in the N-terminal
+section. It   contains  a  glutamic  acid  residue  which,  on  the  basis  of
+similarities with other  families of glycosyl hydrolases [2], probably acts as
+the proton donor in the catalytic mechanism. We use this region as a signature
+pattern.
+
+-Consensus pattern: W-x-F-E-x-W-N-E-P-[DN]
+                    [The second E is the putative active site residue]
+-Sequences known to belong to this class detected by the pattern: ALL.
+-Other sequence(s) detected in SWISS-PROT: NONE.
+
+-Expert(s) to contact by email:
+                   Henrissat B.; bernie@afmb.cnrs-mrs.fr
+
+-Last update: November 1997 / Text revised.
+
+[ 1] Henrissat B., Bairoch A.
+     Biochem. J. 293:781-788(1993).
+[ 2] Henrissat B., Callebaut I., Fabrega S., Lehn P., Mornon J.-P., Davies G.
+     Proc. Natl. Acad. Sci. U.S.A. 92:7090-7094(1995).
+[E1] http://www.expasy.ch/cgi-bin/lists?glycosid.txt
+
++----------------------------------------------------------------------------+
+| This PROSITE entry  is copyright  by the Swiss Institute of Bioinformatics |
+| (SIB).  There are no restrictions on its use by non-profit institutions as |
+| long as its  content  is  in  no  way  modified  and this statement is not |
+| removed. Usage by and for commercial entities requires a license agreement |
+| (See http://www.isb-sib.ch/announce/ or email to license@isb-sib.ch).      |
++----------------------------------------------------------------------------+
+{END}

@@ -1,0 +1,49 @@
+{PDOC00144}
+{PS00159; ALDOLASE_KDPG_KHG_1}
+{PS00160; ALDOLASE_KDPG_KHG_2}
+{BEGIN}
+*************************************************
+* KDPG and KHG aldolases active site signatures *
+*************************************************
+
+4-hydroxy-2-oxoglutarate aldolase (EC 4.1.3.16)  (KHG-aldolase)  catalyzes the
+interconversion of  4-hydroxy-2-oxoglutarate  into  pyruvate  and  glyoxylate.
+Phospho-2-dehydro-3-deoxygluconate  aldolase   (EC 4.1.2.14)   (KDPG-aldolase)
+catalyzes the interconversion of  6-phospho-2-dehydro-3-deoxy-D-gluconate into
+pyruvate and glyceraldehyde 3-phosphate.
+
+These two enzymes are structurally and functionally related [1]. They are both
+homotrimeric proteins of approximately 220 amino-acid residues. They are class
+I aldolases whose catalytic mechanism involves  the formation of a Schiff-base
+intermediate  between  the  substrate  and the epsilon-amino group of a lysine
+residue. In both enzymes, an arginine is required for catalytic activity.
+
+We developed  two signature patterns for these enzymes. The first one contains
+the active  site  arginine  and the second, the lysine involved in the Schiff-
+base formation.
+
+-Consensus pattern: G-[LIVM]-x(3)-E-[LIV]-T-[LF]-R
+                    [R is the active site residue]
+-Sequences known to belong to this class detected by the pattern: ALL,  except
+ for Bacillus  subtilis  KDPG-aldolase  which  has  Thr  instead of Arg in the
+ active site.
+-Other sequence(s) detected in SWISS-PROT: NONE.
+
+-Consensus pattern: G-x(3)-[LIVMF]-K-[LF]-F-P-[SA]-x(3)-G
+                    [K is involved in Schiff-base formation]
+-Sequences known to belong to this class detected by the pattern: ALL.
+-Other sequence(s) detected in SWISS-PROT: NONE.
+
+-Last update: November 1997 / Patterns and text revised.
+
+[ 1] Vlahos C J., Dekker E.E.
+     J. Biol. Chem. 263:11683-11691(1988).
+
++----------------------------------------------------------------------------+
+| This PROSITE entry  is copyright  by the Swiss Institute of Bioinformatics |
+| (SIB).  There are no restrictions on its use by non-profit institutions as |
+| long as its  content  is  in  no  way  modified  and this statement is not |
+| removed. Usage by and for commercial entities requires a license agreement |
+| (See http://www.isb-sib.ch/announce/ or email to license@isb-sib.ch).      |
++----------------------------------------------------------------------------+
+{END}

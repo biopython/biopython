@@ -1,0 +1,43 @@
+{PDOC00933}
+{PS01213; GLOBIN_FAM_2}
+{BEGIN}
+**********************************************
+* Protozoan/cyanobacterial globins signature *
+**********************************************
+
+Globins are heme-containing  proteins involved in  binding and/or transporting
+oxygen [1]. Almost all globins belong to a large family (see <PDOC00793>), the
+only exceptions  are  the  following proteins which form a family of their own
+[2,3]:
+
+ - Monomeric  hemoglobins  from the protozoan Paramecium caudatum, Tetrahymena
+   pyriformis and Tetrahymena thermophila.
+ - Cyanoglobin from the cyanobacteria Nostoc commune.
+ - Globins  LI637  and  LI410  from  the chloroplast of the alga Chlamydomonas
+   eugametos.
+ - Mycobacterium tuberculosis hypothetical protein MtCY48.23.
+
+These proteins  contain a conserved histidine which could be involved in heme-
+binding. As a signature pattern, we use a conserved region that ends with this
+residue.
+
+-Consensus pattern: F-[LF]-x(5)-G-[PA]-x(4)-G-[KRA]-x-[LIVM]-x(3)-H
+-Sequences known to belong to this class detected by the pattern: ALL.
+-Other sequence(s) detected in SWISS-PROT: NONE.
+-Last update: November 1997 / First entry.
+
+[ 1] Concise Encyclopedia Biochemistry, Second Edition, Walter de Gruyter,
+     Berlin New-York (1988).
+[ 2] Takagi T.
+     Curr. Opin. Struct. Biol. 3:413-418(1993).
+[ 3] Couture M., Chamberland H., St-Pierre B., Lafontaine J., Guertin M.;
+     Mol. Gen. Genet. 243:185-197(1994).
+
++----------------------------------------------------------------------------+
+| This PROSITE entry  is copyright  by the Swiss Institute of Bioinformatics |
+| (SIB).  There are no restrictions on its use by non-profit institutions as |
+| long as its  content  is  in  no  way  modified  and this statement is not |
+| removed. Usage by and for commercial entities requires a license agreement |
+| (See http://www.isb-sib.ch/announce/ or email to license@isb-sib.ch).      |
++----------------------------------------------------------------------------+
+{END}
