@@ -1,0 +1,15 @@
+test_BioSQL
+Load SeqRecord objects into a BioSQL database. ... ok
+Get a list of all items in the database. ... ok
+Test retrieval of items using various ids. ... ok
+Make sure Seqs from BioSQL implement the right interface. ... ok
+Check SeqFeatures of a sequence. ... ok
+Make sure SeqRecords from BioSQL implement the right interface. ... ok
+Check that slices of sequences are retrieved properly. ... ok
+Make sure all records are correctly loaded. ... ok
+Indepth check that SeqFeatures are transmitted through the db. ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 30.244s
+
+OK
