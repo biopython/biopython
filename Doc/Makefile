@@ -11,6 +11,9 @@ doc:
 	
 
 clean:
-	- rm -f Doc/Tutorial.ps Doc/Tutorial.log Doc/Tutorial.dvi \
-	Doc/Tutorial.aux
-	- rm -rf Doc/api
+	- rm -f Tutorial.ps Tutorial.log Tutorial.dvi \
+	Tutorial.aux index.html Tutorial*.html Tutorial.pdf
+	- rm -rf api
+html:
+	- hevea -fix Tutorial.tex
+	- hacha Tutorial.html
