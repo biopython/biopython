@@ -47,30 +47,19 @@ class Atom:
 	def __repr__(self):
 		return "<Atom %s>" % self.get_id()
 
-	# Public methods	
+	# set methods
 
-	def flag_disorder(self):
-		"""Set the disordered flag to 1.
+	def set_bfactor(self, bfactor):
+		self.bfactor=bfactor
 
-		The disordered flag indicates whether the atom is disordered or not.
-		"""
-		self.disordered_flag=1
+	def set_coord(self, coord):
+		self.coord=coord
 
-	def is_disordered(self):
-		"Return the disordered flag (1 if disordered, 0 otherwise)."
-		return self.disordered_flag 
+	def set_altloc(self, altloc):
+		self.altloc=altloc
 
-	def set_parent(self, parent):
-		"""Set the parent residue.
-
-		Arguments:
-		o parent - Residue object
-		"""
-		self.parent=parent
-	
-	def detach_parent(self):
-		"Remove reference to parent."
-		self.parent=None
+	def set_occupancy(self, occupancy):
+		self.occupancy=occupancy
 
 	def set_sigatm(self, sigatm_array):
 		"""Set standard deviation of atomic parameters.
@@ -101,6 +90,32 @@ class Atom:
 		o anisou_array -  Numpy array (length 6), anisotropic B factor.
 		"""
 		self.anisou_array=anisou_array
+
+
+	# Public methods	
+
+	def flag_disorder(self):
+		"""Set the disordered flag to 1.
+
+		The disordered flag indicates whether the atom is disordered or not.
+		"""
+		self.disordered_flag=1
+
+	def is_disordered(self):
+		"Return the disordered flag (1 if disordered, 0 otherwise)."
+		return self.disordered_flag 
+
+	def set_parent(self, parent):
+		"""Set the parent residue.
+
+		Arguments:
+		o parent - Residue object
+		"""
+		self.parent=parent
+	
+	def detach_parent(self):
+		"Remove reference to parent."
+		self.parent=None
 
 	def get_sigatm(self):
 		"Return standard deviation of atomic parameters."
