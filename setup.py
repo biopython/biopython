@@ -195,7 +195,7 @@ if INSTALL_MARTEL:
     all_packages.extend(martel_packages)
 
 setup(name='biopython', 
-      version='0.95d01',
+      version='1.00a1',
       author='The Biopython Consortium',
       author_email='biopython@biopython.org',
       url='http://www.biopython.org/',
