@@ -270,13 +270,6 @@ def load_seq_features(adaptor, primary_id):
     sql = r"SELECT seqfeature_id, seqfeature_rank, seqfeature_key_id " \
           r"FROM seqfeature WHERE bioentry_id = %s"
     results = adaptor.execute_and_fetchall(sql, (primary_id,))
-    
-    #results = adaptor.execute_and_fetchall(
-    #    """select sf.seqfeature_id, sf.seqfeature_rank, sfkey.key_name
-    #           from seqfeature sf, seqfeature_key sfkey
-    #           where sf.seqfeature_key_id = sfkey.seqfeature_key_id and
-    #                 sf.bioentry_id = %s""",
-    #    (primary_id,))
 
     seq_feature_list = []
 
@@ -293,12 +286,6 @@ def load_seq_features(adaptor, primary_id):
               r"WHERE ot.ontology_term_id = sqv.ontology_term_id AND " \
               r"sqv.seqfeature_id = %s"
         results = adaptor.execute_and_fetchall(sql, (seqfeature_id,))
-        #results = adaptor.execute_and_fetchall("""
-        #  select sq.qualifier_name, sqv.qualifier_value
-        #    from seqfeature_qualifier sq, seqfeature_qualifier_value sqv
-        #    where sq.seqfeature_qualifier_id = sqv.seqfeature_qualifier_id and
-        #          sqv.seqfeature_id = %s""",
-        #                             (seqfeature_id,))
 
         for key, value in results:
             if qualifiers.has_key(key):
