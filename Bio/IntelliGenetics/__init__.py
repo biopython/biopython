@@ -106,7 +106,7 @@ class _RecordConsumer:
 
 
     def title_line(self, title):
-        self.data.title = title
+        self.data.title = title[ 0 ]
 
     def comment(self, comments ):
         for comment in comments:
