@@ -59,8 +59,8 @@ try:
     h.saveline("saved")
     assert h.peekline() == 'saved'
     h.saveline("another")
-    assert h.readline() == 'saved'
     assert h.readline() == 'another'
+    assert h.readline() == 'saved'
     assert len(h.readlines()) == 2  # ['a multi-line\n', 'file']
     h.saveline("save after empty")
     assert h.readline() == 'save after empty'

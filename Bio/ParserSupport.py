@@ -65,7 +65,7 @@ class TaggingConsumer(Consumer):
 	    # Write the tag and line.
             self._handle.write("%-*s: %s\n" % (
                 self._colwidth, name[:self._colwidth],
-                string.rstrip(data[:self._maxwidth-self._colwidth])))
+                string.rstrip(data[:self._maxwidth-self._colwidth-2])))
 
     def __getattr__(self, attr):
         if attr[:6] == 'start_' or attr[:4] == 'end_':
@@ -106,14 +106,14 @@ class OopsHandle:
         return line
 
     def saveline(self, line):
-        self._saved.append(line)
+        self._saved = [line] + self._saved
 
     def peekline(self):
         if self._saved:
             line = self._saved[0]
         else:
             line = self._handle.readline()
-            self._saved.append(line)
+            self.saveline(line)
         return line
 
     def __getattr__(self, attr):
