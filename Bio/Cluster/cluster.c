@@ -52,7 +52,7 @@ clusterdll_init (HANDLE h, DWORD reason, void* foo)
 double CALL mean(int n, double x[])
 { double result = 0.;
   int i;
-  for (i = 0; i < n; i++) result = result + x[i];
+  for (i = 0; i < n; i++) result += x[i];
   result /= n;
   return result;
 }
@@ -566,8 +566,6 @@ double harmonic(int n, double** data1, double** data2, int** mask1, int** mask2,
   const double weight[], int index1, int index2, int transpose)
  
 /*
--- harmonic routine --
-
 Purpose
 =======
 
@@ -648,8 +646,6 @@ double cityblock (int n, double** data1, double** data2, int** mask1,
   int** mask2, const double weight[], int index1, int index2, int transpose)
 
 /*
--- cityblock routine --
-
 Purpose
 =======
 
@@ -726,8 +722,6 @@ static
 double correlation (int n, double** data1, double** data2, int** mask1,
   int** mask2, const double weight[], int index1, int index2, int transpose)
 /*
--- correlation routine --
-
 Purpose
 =======
 
@@ -828,8 +822,6 @@ static
 double acorrelation (int n, double** data1, double** data2, int** mask1,
   int** mask2, const double weight[], int index1, int index2, int transpose)
 /*
--- acorrelation routine --
-
 Purpose
 =======
 
@@ -929,8 +921,6 @@ static
 double ucorrelation (int n, double** data1, double** data2, int** mask1,
   int** mask2, const double weight[], int index1, int index2, int transpose)
 /*
--- ucorrelation routine --
-
 Purpose
 =======
 
@@ -1026,8 +1016,6 @@ static
 double uacorrelation (int n, double** data1, double** data2, int** mask1,
   int** mask2, const double weight[], int index1, int index2, int transpose)
 /*
--- uacorrelation routine --
-
 Purpose
 =======
 
@@ -1123,8 +1111,6 @@ static
 double spearman (int n, double** data1, double** data2, int** mask1,
   int** mask2, const double weight[], int index1, int index2, int transpose)
 /*
--- spearman routine --
-
 Purpose
 =======
 
@@ -1205,8 +1191,8 @@ Otherwise, the distance between two columns in the matrix is calculated.
   free(tdata2);
   avgrank = 0.5*(m-1); /* Average rank */
   for (i = 0; i < m; i++)
-  { double value1 = rank1[i];
-    double value2 = rank2[i];
+  { const double value1 = rank1[i];
+    const double value2 = rank2[i];
     result += value1 * value2;
     denom1 += value1 * value1;
     denom2 += value2 * value2;
@@ -1234,8 +1220,6 @@ static
 double kendall (int n, double** data1, double** data2, int** mask1, int** mask2,
   const double weight[], int index1, int index2, int transpose)
 /*
--- kendall routine --
-
 Purpose
 =======
 
@@ -1366,8 +1350,6 @@ void setmetric (char dist,
 
 void CALL initran(void)
 /*
--- initran routine --
-
 Purpose
 =======
 
@@ -1396,8 +1378,6 @@ ranlib.h:   setall
 
 void CALL randomassign (int nclusters, int nelements, int clusterid[])
 /*
--- randomassign routine --
-
 Purpose
 =======
 
@@ -1449,8 +1429,6 @@ void getclustermean(int nclusters, int nrows, int ncolumns,
   double** data, int** mask, int clusterid[], double** cdata, int** cmask,
   int transpose)
 /*
--- getclustermean routine --
-
 Purpose
 =======
 
@@ -1505,11 +1483,8 @@ columns (microarrays) are specified.
   if (transpose==0)
   { int** count = malloc(nclusters*sizeof(int*));
     for (i = 0; i < nclusters; i++)
-    { count[i] = malloc(ncolumns*sizeof(int));
-      for (j = 0; j < ncolumns; j++)
-      { count[i][j] = 0;
-        cdata[i][j] = 0.;
-      }
+    { count[i] = calloc(ncolumns,sizeof(int));
+      for (j = 0; j < ncolumns; j++) cdata[i][j] = 0.;
     }
     for (k = 0; k < nrows; k++)
     { i = clusterid[k];
@@ -1535,11 +1510,8 @@ columns (microarrays) are specified.
   else
   { int** count = malloc(nrows*sizeof(int*));
     for (i = 0; i < nrows; i++)
-    { count[i] = malloc(nclusters*sizeof(int));
-      for (j = 0; j < nclusters; j++)
-      { count[i][j] = 0;
-        cdata[i][j] = 0.;
-      }
+    { count[i] = calloc(nclusters,sizeof(int));
+      for (j = 0; j < nclusters; j++) cdata[i][j] = 0.;
     }
     for (k = 0; k < ncolumns; k++)
     { i = clusterid[k];
@@ -1739,7 +1711,7 @@ void emalg (int nclusters, int nrows, int ncolumns,
 { const int nobjects = (transpose==0) ? nrows : ncolumns;
   const int ndata = (transpose==0) ? ncolumns : nrows;
 
-  int* cn = malloc(nclusters*sizeof(int));
+  int* cn = calloc(nclusters,sizeof(int));
   /* This will contain the number of elements in each cluster. This is needed
    * to check for empty clusters.
    */
@@ -1757,7 +1729,6 @@ void emalg (int nclusters, int nrows, int ncolumns,
 
   if(!init_given) randomassign (nclusters, nobjects, clusterid);
 
-  for (jj = 0; jj < nclusters; jj++) cn[jj] = 0;
   for (jj = 0; jj < nobjects; jj++)
   { int ii = clusterid[jj];
     cn[ii]++;
@@ -1885,7 +1856,7 @@ If npass==0, then the clustering algorithm will be run once, where the initial
 assignment of elements to clusters is taken from the clusterid array.
 
 method     (input) char
-Defines whether the arithmic mean (method=='a') or the median
+Defines whether the arithmetic mean (method=='a') or the median
 (method=='m') is used to calculate the cluster center.
 
 dist       (input) char
@@ -2076,8 +2047,6 @@ found. The value of ifound is at least 1; its maximum value is npass.
 void CALL kmedoids (int nclusters, int nelements, double** distance,
   int npass, int clusterid[], double* error, int* ifound)
 /*
--- kmedoids routine --
-
 Purpose
 =======
 
@@ -2156,7 +2125,8 @@ found. The value of ifound is at least 1; its maximum value is npass.
   /* Find out if the user specified an initial clustering */
   if (npass)
   { initran(); /* First initialize the random number generator */
-    randomassign (nclusters, nelements, clusterid); /* Ready for the first run */
+    randomassign (nclusters, nelements, clusterid);
+    /* Ready for the first run */
   }
 
   *error = 0.;
@@ -2300,8 +2270,6 @@ double** CALL distancematrix (int nrows, int ncolumns, double** data,
   int** mask, double weights[], char dist, int transpose)
               
 /*
--- distancematrix routine --
-
 Purpose
 =======
 
@@ -2393,8 +2361,6 @@ static
 double getscale(int nelements, double** distmatrix, char dist)
 
 /*
--- getscale routine --
-
 Purpose
 =======
 
@@ -2437,6 +2403,7 @@ For other values of dist, no scaling is done.
       return 0.5;
     case 'e':
     case 'h':
+    case 'b':
     { int i,j;
       double maxvalue = 0.;
       for (i = 0; i < nelements; i++)
@@ -2622,7 +2589,7 @@ clustered, or the number of microarrays minus one if microarrays are clustered.
   /* Set the metric function as indicated by dist */
   setmetric (dist, &metric);
 
-  for (i = 0; i < nelements; i++) distid[i] =i;
+  for (i = 0; i < nelements; i++) distid[i] = i;
   /* To remember which row/column in the distance matrix contains what */
 
   /* Storage for node data */
@@ -3195,7 +3162,7 @@ void somworker (int nrows, int ncolumns, double** data, int** mask,
   double (*metric)
     (int,double**,double**,int**,int**,const double[],int,int,int);
   int i, j;
-  double* stddata = malloc(nelements*sizeof(double));
+  double* stddata = calloc(nelements,sizeof(double));
   int** dummymask;
   int ix, iy;
   long* index;
@@ -3212,8 +3179,7 @@ void somworker (int nrows, int ncolumns, double** data, int** mask,
   /* Calculate the standard deviation for each row or column */
   if (transpose==0)
   { for (i = 0; i < nelements; i++)
-    { stddata[i] = 0.;
-      for (j = 0; j < ndata; j++)
+    { for (j = 0; j < ndata; j++)
       { double term = data[i][j];
         term = term * term;
         stddata[i] += term;
@@ -3224,8 +3190,7 @@ void somworker (int nrows, int ncolumns, double** data, int** mask,
   }
   else
   { for (i = 0; i < nelements; i++)
-    { stddata[i] = 0.;
-      for (j = 0; j < ndata; j++)
+    { for (j = 0; j < ndata; j++)
       { double term = data[j][i];
         term = term * term;
         stddata[i] += term;
@@ -3573,8 +3538,6 @@ double CALL clusterdistance (int nrows, int ncolumns, double** data,
   char dist, char method, int transpose)
               
 /*
--- clusterdistance routine --
-
 Purpose
 =======
 
@@ -3636,7 +3599,7 @@ For other values of dist, the default (Euclidean distance) is used.
 method     (input) char
 Defines how the distance between two clusters is defined, given which genes
 belong to which cluster:
-method=='a': the distance between the arithmic means of the two clusters
+method=='a': the distance between the arithmetic means of the two clusters
 method=='m': the distance between the medians of the two clusters
 method=='s': the smallest pairwise distance between members of the two clusters
 method=='x': the largest pairwise distance between members of the two clusters
@@ -3688,17 +3651,12 @@ when microarrays are being clustered.
         double* cdata[2];
         int* cmask[2];
         int* count[2];
-        count[0] = malloc(ncolumns*sizeof(int));
-        count[1] = malloc(ncolumns*sizeof(int));
-        cdata[0] = malloc(ncolumns*sizeof(double));
-        cdata[1] = malloc(ncolumns*sizeof(double));
+        count[0] = calloc(ncolumns,sizeof(int));
+        count[1] = calloc(ncolumns,sizeof(int));
+        cdata[0] = calloc(ncolumns,sizeof(double));
+        cdata[1] = calloc(ncolumns,sizeof(double));
         cmask[0] = malloc(ncolumns*sizeof(int));
         cmask[1] = malloc(ncolumns*sizeof(int));
-        for (i = 0; i < 2; i++)
-          for (j = 0; j < ncolumns; j++)
-          { count[i][j] = 0;
-            cdata[i][j] = 0.;
-          }
         for (i = 0; i < n1; i++)
         { k = index1[i];
           for (j = 0; j < ncolumns; j++)
@@ -3739,15 +3697,9 @@ when microarrays are being clustered.
         double** cdata = malloc(nrows*sizeof(double*));
         int** cmask = malloc(nrows*sizeof(int*));
         for (i = 0; i < nrows; i++)
-        { count[i] = malloc(2*sizeof(int));
-          cdata[i] = malloc(2*sizeof(double));
+        { count[i] = calloc(2,sizeof(int));
+          cdata[i] = calloc(2,sizeof(double));
           cmask[i] = malloc(2*sizeof(int));
-        }
-        for (i = 0; i < nrows; i++)
-        { for (j = 0; j < 2; j++)
-          { count[i][j] = 0;
-            cdata[i][j] = 0.;
-          }
         }
         for (i = 0; i < n1; i++)
         { k = index1[i];
