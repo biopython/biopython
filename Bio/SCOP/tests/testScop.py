@@ -50,6 +50,9 @@ class ScopTests(unittest.TestCase):
         domain = scop.getDomainBySid("d1hbia_")
         assert domain.sunid == '14996'
 
+        domains = scop.getDomains()
+        assert len(domains)==14
+        assert domains[4].sunid == '14988'
 
     def testSccsOrder(self) :
         assert cmp_sccs("a.1.1.1", "a.1.1.1") == 0

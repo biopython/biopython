@@ -134,6 +134,7 @@ class Scop:
 
         #Build the root node
         root = Node()
+        domains = []
         root.sunid='0'
         sunidDict[root.sunid] = root
         self.root = root
@@ -147,6 +148,7 @@ class Scop:
             if rec.nodetype =='px' :
                 n = Domain()
                 n.sid = rec.name
+                domains.append(n)
             else : 
                 n = Node()
             n.sunid = rec.sunid
@@ -193,11 +195,22 @@ class Scop:
         # Clean up
         self._sunidDict = sunidDict
         self._sidDict = sidDict
+        self._domains = tuple(domains)
+
 
 
 
     def getDomainBySid(self, sid) :
         return self._sidDict[sid]
+
+
+    def getDomains(self) :
+        """Returns an ordered tuple of all SCOP Domains"""
+        return self._domains
+
+
+
+
 
 
     def write_hie(self, handle) :
