@@ -1,0 +1,59 @@
+test_Phd
+Test to check that record parser parses all records of a contig. ... 
+---- Record 1 ----
+Filename: 34_222_(80-A03-19).b.ab1
+abi_thumbprint: 0
+call_method: phred
+chem: term
+chromat_file: 34_222_(80-A03-19).b.ab1
+dye: big
+phred_version: 0.020425.c
+quality_levels: 99
+time: Fri Feb 13 09:16:11 2004
+trace_array_max_index: 10867
+trace_array_min_index: 0
+trace_peak_area_ratio: 0.1467
+trim: (3, 391, 0.050000000000000003)
+['c-9-6', 't-9-18', 'c-10-26', 'c-19-38', 'g-22-49', 't-37-65', 'c-28-76', 'g-28-87', 'g-24-100', 'a-22-108'] ... ['c-11-5259', 'c-11-5273', 't-9-5286', 'g-10-5300', 'a-10-5316', 't-8-5323', 'c-8-5343', 'g-8-5352', 'c-8-5366', 'c-8-5378'] ... ['c-8-10756', 'c-8-10764', 'a-8-10769', 'a-8-10788', 'a-8-10803', 'g-10-10816', 'c-11-10826', 'g-11-10840', 't-11-10855', 'g-11-10864']
+ctccgtcgga ccaaagcgtg
+cgtcggaaca tatttcggag
+---- Record 2 ----
+Filename: 425_103_(81-A03-19).g.ab1
+abi_thumbprint: 0
+call_method: phred
+chem: term
+chromat_file: 425_103_(81-A03-19).g.ab1
+dye: big
+phred_version: 0.020425.c
+quality_levels: 99
+time: Tue Feb 17 10:31:15 2004
+trace_array_max_index: 10606
+trace_array_min_index: 0
+trace_peak_area_ratio: 0.0226
+trim: (10, 432, 0.050000000000000003)
+['c-14-3', 'g-17-11', 'g-22-23', 'g-10-35', 'a-10-53', 't-10-68', 'c-15-75', 'c-8-85', 'c-8-94', 'a-9-115'] ... ['c-33-5140', 'c-28-5156', 'g-25-5167', 'c-28-5178', 'c-18-5193', 'a-16-5204', 'a-15-5213', 'a-10-5230', 'a-10-5242', 't-8-5249'] ... ['c-8-10489', 'c-8-10503', 'c-8-10514', 'a-8-10516', 'g-8-10530', 'c-8-10550', 'c-10-10566', 'a-8-10574', 'a-7-10584', 'g-7-10599']
+cgggatccca cccagccaag
+cctgatccga ggggccgcca
+---- Record 3 ----
+Filename: 425_7_(71-A03-19).b.ab1
+abi_thumbprint: 0
+call_method: phred
+chem: term
+chromat_file: 425_7_(71-A03-19).b.ab1
+dye: big
+phred_version: 0.020425.c
+quality_levels: 99
+time: Thu Jan 29 11:46:14 2004
+trace_array_max_index: 9513
+trace_array_min_index: 0
+trace_peak_area_ratio: 100.0
+trim: (-1, -1, 0.050000000000000003)
+['a-10-7', 'c-10-13', 'a-10-21', 't-10-28', 'a-8-33', 'a-8-40', 'a-6-50', 't-6-53', 'c-6-66', 'a-6-68'] ... ['a-6-4728', 't-10-4737', 'a-10-4746', 'a-8-4756', 't-8-4759', 't-8-4768', 'a-8-4775', 'g-10-4783', 't-8-4788', 'g-8-4794'] ... ['a-8-9445', 't-6-9453', 'c-6-9462', 't-6-9465', 'g-6-9478', 'c-6-9483', 't-6-9485', 't-8-9495', 't-3-9504', 'n-0-9511']
+acataaatca atctgctttn
+ 
+ok
+
+----------------------------------------------------------------------
+Ran 1 tests in 0.073s
+
+OK
