@@ -231,17 +231,17 @@ class _AlignCreator(handler.ContentHandler):
             self.in_stars = 1
             self.star_info = ''
 
-    def characters(self, text, pos, size):
+    def characters(self, content):
         if self.in_version:
-            self.version_info = self.version_info + text[pos:pos+size]
+            self.version_info = self.version_info + content
         elif self.in_seq_id:
-            self.seq_id_info = self.seq_id_info + text[pos:pos+size]
+            self.seq_id_info = self.seq_id_info + content
         elif self.in_space:
-            self.space_info = self.space_info + text[pos:pos+size]
+            self.space_info = self.space_info + content
         elif self.in_seq:
-            self.seq_info = self.seq_info + text[pos:pos+size]
+            self.seq_info = self.seq_info + content
         elif self.in_stars:
-            self.star_info = self.star_info + text[pos:pos+size]
+            self.star_info = self.star_info + content
 
     def endElement(self, name):
         if name == "version":
