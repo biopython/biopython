@@ -10,6 +10,8 @@ Functions:
 rint     Round a floating point up a few digits.
 
 calc_affine_penalty  Calculate an affine gap penalty.
+find_global_start    Find the starting positions for a global alignment.
+find_local_start     Find the starting positions for a local alignment.
 find_global_best     Find the best score from a global alignment.
 find_local_best      Find the best score from a local alignment.
 
@@ -25,11 +27,18 @@ affine_penalty    Calculate a linear gap penalty.
 no_penalty        No gap penalty.
 
 """
+from types import *
 from Bio.Tools import listfns
 
 _PRECISION = 1000
 def rint(x, precision=_PRECISION):
     return int(x * precision + 0.5)
+
+def safe_rint(x, precision=_PRECISION):
+    # Same as rint, but returns None if x is None.
+    if x is None:
+        return None
+    return rint(x, precision)
 
 class identity_match:
     """identity_match([match][, mismatch]) -> match_fn
@@ -122,56 +131,64 @@ def calc_affine_penalty(length, open, extend, count_first):
         penalty -= extend
     return penalty
 
-def find_global_best(sequenceA, sequenceB, 
+def find_global_start(sequenceA, sequenceB,
                      score_matrix, penalize_end_gaps, gap_A_fn, gap_B_fn):
+    # Return a list of (score, (row, col))
     # gap_A_fn and gap_B_fn only necessary if penalize_end_gaps
     nrows, ncols = len(score_matrix), len(score_matrix[0])
-    best_score = best_score_rint = None
-    best_indexes = []
-    
+    positions = []
     # Search all rows in the last column.
     for row in range(nrows):
         # Find the score, penalizing end gaps if necessary.
         score = score_matrix[row][ncols-1]
         if penalize_end_gaps:
             score += gap_B_fn(nrows-row-1, sequenceB, ncols)
-        # Check to see whether this score exceeds the previous best.
-        score_rint = rint(score)
-        if best_score_rint is None or score_rint > best_score_rint:
-            best_score, best_score_rint = score, score_rint
-            best_indexes = [(row, ncols-1)]
-        elif best_score_rint == score_rint:
-            best_indexes.append((row, ncols-1))
-
+        positions.append((score, (row, ncols-1)))
     # Search all columns in the last row.
     for col in range(ncols-1):
         score = score_matrix[nrows-1][col]
         if penalize_end_gaps:
             score += gap_A_fn(ncols-col-1, sequenceA, nrows)
-        score_rint = rint(score)
-        if best_score_rint is None or score_rint > best_score_rint:
-            best_score, best_score_rint = score, score_rint
-            best_indexes = [(nrows-1, col)]
-        elif best_score_rint == score_rint:
-            best_indexes.append((nrows-1, col))
+        positions.append((score, (nrows-1, col)))
+    return positions
 
-    return best_score, best_indexes
+def _find_best(positions):
+    # Return score, list of best indexes
+    positions.sort()     # changes the positions!
+    positions.reverse()
 
-def find_local_best(score_matrix):
+    score, indexes = positions[-1]
+    score_rint = rint(score)
+    indexes = [indexes]
+    i = len(positions)-2
+    while i > 0:
+        s, ind = positions[i]
+        if rint(s) < score_rint:
+            break
+        indexes.append(ind)
+        i -= 1
+    return score, indexes
+
+def find_global_best(sequenceA, sequenceB, 
+                     score_matrix, penalize_end_gaps, gap_A_fn, gap_B_fn):
+    positions = find_global_start(
+        sequenceA, sequenceB,
+        score_matrix, penalize_end_gaps, gap_A_fn, gap_B_fn)
+    return _find_best(positions)
+
+def find_local_start(score_matrix):
     # local alignment looks everywhere
+    positions = []
     nrows, ncols = len(score_matrix), len(score_matrix[0])
-    best_score = best_score_rint = None
-    best_indexes = []
     for row in range(nrows):
         for col in range(ncols):
             score = score_matrix[row][col]
-            score_rint = rint(score)
-            if best_score_rint is None or score_rint > best_score_rint:
-                best_score, best_score_rint = score, score_rint
-                best_indexes = [(row, col)]
-            elif score_rint == best_score_rint:
-                best_indexes.append((row, col))
-    return best_score, best_indexes
+            positions.append((score, (row, col)))
+    return positions
+
+def find_local_best(score_matrix):
+    positions = find_local_start(score_matrix)
+    return _find_best(positions)
 
 def clean_alignments(alignments):
     alignments.sort()
@@ -183,7 +200,7 @@ def clean_alignments(alignments):
             continue
         seqA, seqB, score, begin, end = alignments[i]
         # Make sure end is set reasonably.
-        if end == None:
+        if end == None:   # global alignment
             end = len(seqA)
         elif end < 0:
             end = end + len(seqA)
@@ -194,3 +211,12 @@ def clean_alignments(alignments):
         alignments[i] = seqA, seqB, score, begin, end
         i += 1
     return alignments
+
+# Try and load C implementations of functions.  If I can't,
+# then just ignore and use the pure python implementations.
+try:
+    import csupport
+except ImportError:
+    pass
+else:
+    rint = csupport.rint

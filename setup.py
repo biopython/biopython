@@ -223,6 +223,12 @@ setup(name='biopython',
                      Extension('Bio.Tools.cstringfns',
                                ['Bio/Tools/cstringfnsmodule.c']
                                )
+                     Extension('Bio.Align.csupport',
+                               ['Bio.Align.csupportmodule.c']
+                               )
+                     Extension('Bio.Align.cfastpairwise',
+                               ['Bio.Align.cfastpairwisemodule.c']
+                               )
                      ]
       )
 
