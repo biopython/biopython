@@ -46,6 +46,4 @@ class KDTreePtr(KDTree):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = KDTree
 _KDTreec.KDTree_swigregister(KDTreePtr)
-KDTREE_dist = _KDTreec.KDTREE_dist
-
 

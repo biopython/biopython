@@ -834,92 +834,6 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 #ifdef __cplusplus
 extern "C" {
 #endif
-static PyObject *_wrap_KDTREE_dist(PyObject *self, PyObject *args) {
-    PyObject *resultobj;
-    float *arg1 ;
-    float *arg2 ;
-    int arg3 ;
-    float result;
-    PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
-    
-    if(!PyArg_ParseTuple(args,(char *)"OOi:KDTREE_dist",&obj0,&obj1,&arg3)) return NULL;
-    {
-        float *coord_data;
-        PyArrayObject *array;
-        long int n, i;
-        
-        array=(PyArrayObject *) obj0;
-        
-        /* Check if it is an array */
-        if (PyArray_Check(obj0))
-        {
-            if(array->nd!=1)
-            {
-                PyErr_SetString(PyExc_ValueError, "Array must be one dimensional.");
-                return NULL;
-            }
-            
-            n=array->dimensions[0];
-            
-            // coord_data is deleted by the KDTree object
-            coord_data=new float [n];
-            
-            for (i=0; i<n; i++)
-            {
-                coord_data[i]=*(float *) (array->data+i*array->strides[0]);
-            }
-            arg1=coord_data;
-        }
-        else
-        {
-            return NULL;
-        }
-    }
-    {
-        float *coord_data;
-        PyArrayObject *array;
-        long int n, i;
-        
-        array=(PyArrayObject *) obj1;
-        
-        /* Check if it is an array */
-        if (PyArray_Check(obj1))
-        {
-            if(array->nd!=1)
-            {
-                PyErr_SetString(PyExc_ValueError, "Array must be one dimensional.");
-                return NULL;
-            }
-            
-            n=array->dimensions[0];
-            
-            // coord_data is deleted by the KDTree object
-            coord_data=new float [n];
-            
-            for (i=0; i<n; i++)
-            {
-                coord_data[i]=*(float *) (array->data+i*array->strides[0]);
-            }
-            arg2=coord_data;
-        }
-        else
-        {
-            return NULL;
-        }
-    }
-    {
-        if (arg3 <= 0) {
-            SWIG_exception(SWIG_ValueError,"Expected a positive value.");
-        }
-    }
-    result = (float )KDTREE_dist(arg1,arg2,arg3);
-    
-    resultobj = PyFloat_FromDouble(result);
-    return resultobj;
-}
-
-
 static PyObject *_wrap_new_KDTree(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     int arg1 ;
@@ -1221,7 +1135,6 @@ static PyObject * KDTree_swigregister(PyObject *self, PyObject *args) {
     return Py_BuildValue((char *)"");
 }
 static PyMethodDef SwigMethods[] = {
-	 { (char *)"KDTREE_dist", _wrap_KDTREE_dist, METH_VARARGS },
 	 { (char *)"new_KDTree", _wrap_new_KDTree, METH_VARARGS },
 	 { (char *)"delete_KDTree", _wrap_delete_KDTree, METH_VARARGS },
 	 { (char *)"KDTree_set_data", _wrap_KDTree_set_data, METH_VARARGS },

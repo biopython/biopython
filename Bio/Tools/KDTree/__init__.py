@@ -1,10 +1,15 @@
 try:
 	import Numeric
+	from Numeric import sum, sqrt
 	from RandomArray import *
 except ImportError:
 	raise ImportError, "This module requires NumPy"
 
 from Bio.Tools.KDTree import _KDTree 
+
+def _dist(p, q):
+	diff=p-q
+	return sqrt(sum(diff*diff))
 
 def _neighbor_test(nr_points, dim, bucket_size, radius):
 		""" Test all fixed radius neighbor search.
@@ -27,7 +32,8 @@ def _neighbor_test(nr_points, dim, bucket_size, radius):
 		kdt.neighbor_simple_search(radius)
 		l2=len(kdt.neighbor_get_radii())
 		if l1==l2:
-			print "Passed."
+			#print "Passed."
+			pass
 		else:
 			print "Not passed: %i <> %i." % (l1, l2)
 
@@ -41,7 +47,6 @@ def _test(nr_points, dim, bucket_size, radius):
 	o bucket_size - nr of points per tree node
 	o radius - radius of search (typically 0.05 or so) 
 	"""
-	radius_sq=radius*radius
 	# kd tree search
 	kdt=_KDTree.KDTree(dim, bucket_size)
 	coords=random((nr_points, dim)).astype("f")
@@ -53,10 +58,11 @@ def _test(nr_points, dim, bucket_size, radius):
 	# now do a manual search to compare results
 	for i in range(0, nr_points):
 		p=coords[i]
-		if _KDTree.KDTREE_dist(p, center, dim)<=radius_sq:
+		if _dist(p, center)<=radius:
 			l2=l2+1
 	if l1==l2:
-		print "Passed."
+		#print "Passed."
+		pass
 	else:
 		print "Not passed: %i <> %i." % (l1, l2)
 
@@ -198,7 +204,7 @@ if __name__=="__main__":
 	bucket_size=10
 	radius=0.05
 
-	for i in range(0, 1000):
+	while 1:
  		 _neighbor_test(nr_points, dim, bucket_size, radius)
 		 _test(nr_points, dim, bucket_size, radius)
 
