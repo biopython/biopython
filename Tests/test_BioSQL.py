@@ -69,25 +69,11 @@ def load_database(gb_handle):
     sql = r"CREATE DATABASE " + TESTDB
     server.adaptor.execute_one(sql, ())
     
-    # grab the SQL file with the schema
-    sql_handle = open(SQL_FILE, "rb")
-    sql = r""
-    for line in sql_handle.xreadlines():
-        if line.find("#") == 0: # don't include comment lines
-            pass
-        elif line.strip(): # only include non-blank lines
-            sql += line.strip()
-            sql += ' '
-    sql_parts = sql.split(";") # one line per sql command
-
-
     # now open a connection to load the database
     db_name = "biosql-test"
     server = BioSeqDatabase.open_database(user = DBUSER, passwd = DBPASSWD,
                                           host = DBHOST, db = TESTDB)
-    # create the schema
-    for sql_line in sql_parts[:-1]: # don't use the last item, it's blank
-        server.adaptor.cursor.execute(sql_line, ())
+    server.load_database_sql(SQL_FILE)
     db = server.new_database(db_name)
     
     # get the GenBank file we are going to put into it
