@@ -1,0 +1,51 @@
+BLASTN 2.1.2 [Nov-13-2000]
+
+
+Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+
+Query= Ctg37691 2325 bp
+         (2325 letters)
+
+Database: .\database\hum.nt
+           136,626 sequences; 447,887,382 total letters
+
+
+
+ ***** No hits found ******
+
+  Database: .\database\hum.nt
+    Posted date:  May 14, 2001  8:53 PM
+  Number of letters in database: 447,887,382
+  Number of sequences in database:  136,626
+  
+Lambda     K      H
+    1.37    0.711     1.31 
+
+Gapped
+Lambda     K      H
+    1.37    0.711     1.31 
+
+
+Matrix: blastn matrix:1 -3
+Gap Penalties: Existence: 5, Extension: 2
+Number of Hits to DB: 832554
+Number of Sequences: 136626
+Number of extensions: 832554
+Number of successful extensions: 69972
+Number of sequences better than 10.0: 130
+length of query: 2325
+length of database: 447,887,382
+effective HSP length: 20
+effective length of query: 2305
+effective length of database: 445,154,862
+effective search space: 1026081956910
+effective search space used: 1026081956910
+T: 0
+A: 0
+X1: 6 (11.9 bits)
+X2: 10 (19.8 bits)
+S1: 12 (24.3 bits)
+S2: 19 (38.2 bits)

@@ -1,0 +1,361 @@
+<form action="Blast.cgi" enctype="application/x-www-form-urlencoded" method="POST"><input name="ALIGNMENTS" type="hidden" value="50"><input name="AUTO_FORMAT" type="hidden" value="on"><input name="CLIENT" type="hidden" value="web"><input name="DESCRIPTIONS" type="hidden" value="100"><input name="EXPECT" type="hidden" value="10"><input name="HITLIST_SIZE" type="hidden" value="500"><input name="I_THRESH" type="hidden" value="0.001"><input name="LAYOUT" type="hidden" value="OneWindow"><input name="NCBI_GI" type="hidden" value="checked"><input name="PAGE" type="hidden" value="Proteins"><input name="RID" type="hidden" value="991617086-13184-28031"><input name="RTOE" type="hidden" value="25"><input name="SHOW_OVERVIEW" type="hidden" value="checked"><input name="STEP_NUMBER" type="hidden" value="1"><input name="CMD" type="hidden" value="Get"></form>
+<form action="Blast.cgi" enctype="application/x-www-form-urlencoded" method="POST" TARGET=""><input name="ALIGNMENTS" type="hidden" value="50"><input name="AUTO_FORMAT" type="hidden" value="on"><input name="CLIENT" type="hidden" value="web"><input name="DESCRIPTIONS" type="hidden" value="100"><input name="EXPECT" type="hidden" value="10"><input name="HITLIST_SIZE" type="hidden" value="500"><input name="I_THRESH" type="hidden" value="0.001"><input name="LAYOUT" type="hidden" value="OneWindow"><input name="NCBI_GI" type="hidden" value="checked"><input name="PAGE" type="hidden" value="Proteins"><input name="RID" type="hidden" value="991617086-13184-28031"><input name="RTOE" type="hidden" value="25"><input name="SHOW_OVERVIEW" type="hidden" value="checked"><input name="STEP_NUMBER" type="hidden" value="1"><input name="CMD" type="hidden" value="Put">
+
+<p><!--
+QBlastInfoBegin
+	Status=READY
+QBlastInfoEnd
+--><p><b>BLASTP 2.1.3 [Apr-11-2001]</b>
+
+<pre>
+<b><a href="http://www.ncbi.nlm.nih.gov/htbin-
+post/Entrez/query?uid=9254694&form=6&db=m&Dopt=r">Reference</a>:</b>
+Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch&auml;ffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+<p>
+RID: 991617086-13184-28031
+<p>
+<b>Query=</b> gi|1174726|sp|P12921|TMRB_BACSU TUNICAMYCIN RESISTANCE
+PROTEIN
+         (197 letters)
+
+<p>
+<b>Database:</b> nr
+           693,878 sequences; 218,617,282 total letters
+
+<p> <p>If you have any problems or questions with the results of this search <br>please refer to the <b><a href=http://www.ncbi.nlm.nih.gov/blast/blast_FAQs.html>BLAST FAQs</a></b><br><p>
+<a href="Blast.cgi?CMD=Get&RID=991617086-13184-28031&FORMAT_OBJECT=TaxBlast" TARGET="Taxonomy BLAST Results for 991617086-13184-28031">Taxonomy reports</a>
+<BR>
+<PRE>
+
+
+                                                                   Score     E
+Sequences producing significant alignments:                        (bits)  Value
+
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00216351&dopt=GenPept" >dbj|BAA02945.1|</a>  (D13793) ORF [Bacillus subtilis]                 <a href = #216351>397</a>  e-110
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00216350&dopt=GenPept" >dbj|BAA02944.1|</a>  (D13793) ORF [Bacillus subtilis] >gi|226067...   <a href = #216350>397</a>  e-110
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00216352&dopt=GenPept" >dbj|BAA02946.1|</a>  (D13793) ORF [Bacillus subtilis]                 <a href = #216352>397</a>  e-110
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=07531279&dopt=GenPept" >sp|P12921|TMRB_BACSU</a>  TUNICAMYCIN RESISTANCE PROTEIN >gi|742...   <a href = #7531279>396</a>  e-109
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=07481802&dopt=GenPept" >pir||T36076</a>  tmrB-like protein - Streptomyces coelicolor >gi...   <a href = #7481802>144</a>  1e-33
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=07471142&dopt=GenPept" >pir||F75399</a>  antibiotic resistance protein - Deinococcus rad...   <a href = #7471142>114</a>  1e-24
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00045945&dopt=GenPept" >emb|CAA31896.1|</a>  (X13543) unidentified peptide (AA 1-92) (13...   <a href = #45945> 90</a>  3e-17
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=08744968&dopt=GenPept" >emb|CAB95294.1|</a>  (AL359779) putative bifunctional protein (A...   <a href = #8744968> 87</a>  2e-16
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00423877&dopt=GenPept" >pir||S06033</a>  hypothetical protein - Enterobacteriaceae plasm...   <a href = #423877> 86</a>  5e-16
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=07479146&dopt=GenPept" >pir||T36817</a>  ATP/GTP-binding protein - Streptomyces coelicol...   <a href = #7479146> 86</a>  5e-16
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00423876&dopt=GenPept" >pir||S06031</a>  hypothetical protein - Enterobacteriaceae plasm...   <a href = #423876> 83</a>  4e-15
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00096587&dopt=GenPept" >pir||S06034</a>  hypothetical protein - Klebsiella pneumoniae pl...   <a href = #96587> 82</a>  9e-15
+</PRE>
+<CENTER><b><FONT color="green">Alignments</FONT></b></CENTER>
+<PRE>
+><a name = 216351></a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00216351&dopt=GenPept" >dbj|BAA02945.1|</a> (D13793) ORF [Bacillus subtilis]
+          Length = 199
+
+ Score =  397 bits (1021), Expect = e-110
+ Identities = 197/197 (100%), Positives = 197/197 (100%)
+
+Query: 1   MIIWINGAFGSGKTQTAFELHRRLNPSYVYDPEKMGFALRSMVPQEIAKDDFQSYPLWRA 60
+           MIIWINGAFGSGKTQTAFELHRRLNPSYVYDPEKMGFALRSMVPQEIAKDDFQSYPLWRA
+Sbjct: 3   MIIWINGAFGSGKTQTAFELHRRLNPSYVYDPEKMGFALRSMVPQEIAKDDFQSYPLWRA 62
+
+Query: 61  FNYSLLASLTDTYRGILIVPMTIVHPEYFNEIIGRLRQEGRIVHHFTLMASKETLLKRLR 120
+           FNYSLLASLTDTYRGILIVPMTIVHPEYFNEIIGRLRQEGRIVHHFTLMASKETLLKRLR
+Sbjct: 63  FNYSLLASLTDTYRGILIVPMTIVHPEYFNEIIGRLRQEGRIVHHFTLMASKETLLKRLR 122
+
+Query: 121 TRAEGKNSWAAKQIDRCVEGLSSPIFEDHIQTDNLSIQDVAENIAARAELPLDPDTRGSL 180
+           TRAEGKNSWAAKQIDRCVEGLSSPIFEDHIQTDNLSIQDVAENIAARAELPLDPDTRGSL
+Sbjct: 123 TRAEGKNSWAAKQIDRCVEGLSSPIFEDHIQTDNLSIQDVAENIAARAELPLDPDTRGSL 182
+
+Query: 181 RRFADRLMVKLNHIRIK 197
+           RRFADRLMVKLNHIRIK
+Sbjct: 183 RRFADRLMVKLNHIRIK 199
+</PRE>
+
+
+<PRE>
+><a name = 216350></a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00216350&dopt=GenPept" >dbj|BAA02944.1|</a> (D13793) ORF [Bacillus subtilis]
+ <a name = 226067></a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00226067&dopt=GenPept" >prf||1410166A</a> tunicamycin resistance gene tmrB [Escherichia coli]
+          Length = 206
+
+ Score =  397 bits (1021), Expect = e-110
+ Identities = 197/197 (100%), Positives = 197/197 (100%)
+
+Query: 1   MIIWINGAFGSGKTQTAFELHRRLNPSYVYDPEKMGFALRSMVPQEIAKDDFQSYPLWRA 60
+           MIIWINGAFGSGKTQTAFELHRRLNPSYVYDPEKMGFALRSMVPQEIAKDDFQSYPLWRA
+Sbjct: 10  MIIWINGAFGSGKTQTAFELHRRLNPSYVYDPEKMGFALRSMVPQEIAKDDFQSYPLWRA 69
+
+Query: 61  FNYSLLASLTDTYRGILIVPMTIVHPEYFNEIIGRLRQEGRIVHHFTLMASKETLLKRLR 120
+           FNYSLLASLTDTYRGILIVPMTIVHPEYFNEIIGRLRQEGRIVHHFTLMASKETLLKRLR
+Sbjct: 70  FNYSLLASLTDTYRGILIVPMTIVHPEYFNEIIGRLRQEGRIVHHFTLMASKETLLKRLR 129
+
+Query: 121 TRAEGKNSWAAKQIDRCVEGLSSPIFEDHIQTDNLSIQDVAENIAARAELPLDPDTRGSL 180
+           TRAEGKNSWAAKQIDRCVEGLSSPIFEDHIQTDNLSIQDVAENIAARAELPLDPDTRGSL
+Sbjct: 130 TRAEGKNSWAAKQIDRCVEGLSSPIFEDHIQTDNLSIQDVAENIAARAELPLDPDTRGSL 189
+
+Query: 181 RRFADRLMVKLNHIRIK 197
+           RRFADRLMVKLNHIRIK
+Sbjct: 190 RRFADRLMVKLNHIRIK 206
+</PRE>
+
+
+<PRE>
+><a name = 216352></a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00216352&dopt=GenPept" >dbj|BAA02946.1|</a> (D13793) ORF [Bacillus subtilis]
+          Length = 197
+
+ Score =  397 bits (1021), Expect = e-110
+ Identities = 197/197 (100%), Positives = 197/197 (100%)
+
+Query: 1   MIIWINGAFGSGKTQTAFELHRRLNPSYVYDPEKMGFALRSMVPQEIAKDDFQSYPLWRA 60
+           MIIWINGAFGSGKTQTAFELHRRLNPSYVYDPEKMGFALRSMVPQEIAKDDFQSYPLWRA
+Sbjct: 1   MIIWINGAFGSGKTQTAFELHRRLNPSYVYDPEKMGFALRSMVPQEIAKDDFQSYPLWRA 60
+
+Query: 61  FNYSLLASLTDTYRGILIVPMTIVHPEYFNEIIGRLRQEGRIVHHFTLMASKETLLKRLR 120
+           FNYSLLASLTDTYRGILIVPMTIVHPEYFNEIIGRLRQEGRIVHHFTLMASKETLLKRLR
+Sbjct: 61  FNYSLLASLTDTYRGILIVPMTIVHPEYFNEIIGRLRQEGRIVHHFTLMASKETLLKRLR 120
+
+Query: 121 TRAEGKNSWAAKQIDRCVEGLSSPIFEDHIQTDNLSIQDVAENIAARAELPLDPDTRGSL 180
+           TRAEGKNSWAAKQIDRCVEGLSSPIFEDHIQTDNLSIQDVAENIAARAELPLDPDTRGSL
+Sbjct: 121 TRAEGKNSWAAKQIDRCVEGLSSPIFEDHIQTDNLSIQDVAENIAARAELPLDPDTRGSL 180
+
+Query: 181 RRFADRLMVKLNHIRIK 197
+           RRFADRLMVKLNHIRIK
+Sbjct: 181 RRFADRLMVKLNHIRIK 197
+</PRE>
+
+
+<PRE>
+><a name = 7531279></a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=07531279&dopt=GenPept" >sp|P12921|TMRB_BACSU</a> TUNICAMYCIN RESISTANCE PROTEIN
+ <a name = 7428961></a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=07428961&dopt=GenPept" >pir||YTBST</a> tunicamycin resistance protein - Bacillus subtilis
+ <a name = 1805386></a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=01805386&dopt=GenPept" >dbj|BAA08948.1|</a> (D50453) tunicamycin resistance protein [Bacillus subtilis]
+ <a name = 2632600></a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=02632600&dopt=GenPept" >emb|CAB12108.1|</a> (Z99105) ATP-binding membrane protein [Bacillus subtilis]
+          Length = 197
+
+ Score =  396 bits (1018), Expect = e-109
+ Identities = 196/197 (99%), Positives = 197/197 (99%)
+
+Query: 1   MIIWINGAFGSGKTQTAFELHRRLNPSYVYDPEKMGFALRSMVPQEIAKDDFQSYPLWRA 60
+           MIIWINGAFGSGKTQTAFELHRRLNPSYVYDP+KMGFALRSMVPQEIAKDDFQSYPLWRA
+Sbjct: 1   MIIWINGAFGSGKTQTAFELHRRLNPSYVYDPQKMGFALRSMVPQEIAKDDFQSYPLWRA 60
+
+Query: 61  FNYSLLASLTDTYRGILIVPMTIVHPEYFNEIIGRLRQEGRIVHHFTLMASKETLLKRLR 120
+           FNYSLLASLTDTYRGILIVPMTIVHPEYFNEIIGRLRQEGRIVHHFTLMASKETLLKRLR
+Sbjct: 61  FNYSLLASLTDTYRGILIVPMTIVHPEYFNEIIGRLRQEGRIVHHFTLMASKETLLKRLR 120
+
+Query: 121 TRAEGKNSWAAKQIDRCVEGLSSPIFEDHIQTDNLSIQDVAENIAARAELPLDPDTRGSL 180
+           TRAEGKNSWAAKQIDRCVEGLSSPIFEDHIQTDNLSIQDVAENIAARAELPLDPDTRGSL
+Sbjct: 121 TRAEGKNSWAAKQIDRCVEGLSSPIFEDHIQTDNLSIQDVAENIAARAELPLDPDTRGSL 180
+
+Query: 181 RRFADRLMVKLNHIRIK 197
+           RRFADRLMVKLNHIRIK
+Sbjct: 181 RRFADRLMVKLNHIRIK 197
+</PRE>
+
+
+<PRE>
+><a name = 7481802></a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=07481802&dopt=GenPept" >pir||T36076</a> tmrB-like protein - Streptomyces coelicolor
+ <a name = 4585834></a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=04585834&dopt=GenPept" >emb|CAB40928.1|</a> (AL049630) TmrB-like protein [Streptomyces coelicolor A3(2)]
+          Length = 213
+
+ Score =  144 bits (363), Expect = 1e-33
+ Identities = 78/197 (39%), Positives = 112/197 (56%), Gaps = 18/197 (9%)
+
+Query: 17  AFELHRRLNPSYVYDPEKMGFALRSMVPQEIAKDDFQSYPLWRAFNYSLLASLTDTYRGI 76
+           A E+ RRL  S V DPE  GF LR M+P E+ ++DFQ    WR     +L      + G+
+Sbjct: 17  AHEIRRRLPGSVVCDPEHAGFGLRRMLPPEL-REDFQDLVSWRQGVVEVLDLALTRHDGV 75
+
+Query: 77  LIVPMTIVHPEYFNEIIGRLRQEGRIVHHFTLMASKETLLKRLRTRAEG----------- 125
+           +I PMT+  P YF E +GRLR+ G  VHHF+L+A++ET+L+RLR R  G           
+Sbjct: 76  VIAPMTVTDPGYFAETVGRLRELGHDVHHFSLLAARETVLRRLRERGPGHALRYVTGKAG 135
+
+Query: 126 ------KNSWAAKQIDRCVEGLSSPIFEDHIQTDNLSIQDVAENIAARAELPLDPDTRGS 179
+                 + SWA +Q+D C+E L+ P F +H+ TD+ ++   A+ IA  A L L P+  G+
+Sbjct: 136 QGSGPRRESWAVRQLDHCLERLAEPEFAEHLWTDHTTVPKTADRIAVLAGLTLKPNNEGA 195
+
+Query: 180 LRRFADRLMVKLNHIRI 196
+           LR    +  V + HIR+
+Sbjct: 196 LRTRMRQAGVGIRHIRV 212
+</PRE>
+
+
+<PRE>
+><a name = 7471142></a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=07471142&dopt=GenPept" >pir||F75399</a> antibiotic resistance protein - Deinococcus radiodurans  (strain
+           R1)
+ <a name = 6459170></a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=06459170&dopt=GenPept" >gb|AAF10983.1|AE001986_8</a> (AE001986) antibiotic resistance protein [Deinococcus radiodurans]
+          Length = 195
+
+ Score =  114 bits (286), Expect = 1e-24
+ Identities = 70/179 (39%), Positives = 95/179 (52%), Gaps = 4/179 (2%)
+
+Query: 2   IIWINGAFGSGKTQTAFELHRRLNPSYVYDPEKMGFALRSMVPQEIAKDDFQSYPLWRAF 61
+           IIWING FG GKT TA  LH RL  S+V++PE+MG ALR + P      D Q +P+W   
+Sbjct: 8   IIWINGPFGVGKTHTAHTLHERLPGSFVFEPEEMGQALRKLTPG--FSGDPQEHPMWIPL 65
+
+Query: 62  NYSLLASLTDTYRGILIVPMTIVHPEYFNEIIGRLRQEGRIVHHFTLMASKETLLKRLRT 121
+               L   +    G LIVP++I        ++  L+  G  VHHFTL+A    +L+RL  
+Sbjct: 66  MLDALQYASREAAGPLIVPVSISDTARHRRLMSGLKDRGLSVHHFTLIAPLNVVLERL-- 123
+
+Query: 122 RAEGKNSWAAKQIDRCVEGLSSPIFEDHIQTDNLSIQDVAENIAARAELPLDPDTRGSL 180
+           R +G+       ++  +  L    F+ HI T  L  Q VAE IAA+  L L P  +G+L
+Sbjct: 124 RRDGQPQVNVGTVEDRLNELRGEQFQTHIDTAGLGTQQVAEQIAAQVGLTLAPPPQGAL 182
+</PRE>
+
+
+<PRE>
+><a name = 45945></a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00045945&dopt=GenPept" >emb|CAA31896.1|</a> (X13543) unidentified peptide (AA 1-92) (1336 is 2nd base in
+          codon) [Enterobacteriaceae]
+          Length = 92
+
+ Score = 90.1 bits (222), Expect = 3e-17
+ Identities = 41/93 (44%), Positives = 58/93 (62%), Gaps = 1/93 (1%)
+
+Query: 1  MIIWINGAFGSGKTQTAFELHRRLNPSYVYDPEKMGFALRSMVPQEIAKDDFQSYPLWRA 60
+          MIIWING FG+GKT  A  L  R + S ++DPE++GF ++  VP   A  D+Q  PLWR 
+Sbjct: 1  MIIWINGPFGAGKTTLAERLRDRRSKSLIFDPEEIGFVVKETVPMP-ASGDYQDLPLWRG 59
+
+Query: 61 FNYSLLASLTDTYRGILIVPMTIVHPEYFNEII 93
+             + +  +   Y   +I+PMT+VHP+Y  EI+
+Sbjct: 60 LTIAAVREIRRNYSQDIIIPMTLVHPDYLTEIL 92
+</PRE>
+
+
+<PRE>
+><a name = 8744968></a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=08744968&dopt=GenPept" >emb|CAB95294.1|</a> (AL359779) putative bifunctional protein (ATP/GTP binding
+           protein/MutT-like) [Streptomyces coelicolor A3(2)]
+          Length = 347
+
+ Score = 87.4 bits (215), Expect = 2e-16
+ Identities = 48/123 (39%), Positives = 70/123 (56%), Gaps = 2/123 (1%)
+
+Query: 2   IIWINGAFGSGKTQTAFELHRRLNPSYVYDPEKMGFALRSMVPQEIAKD--DFQSYPLWR 59
+           ++WINGAFG+GKT TA EL   +  S ++DPE +G AL  ++P +   +  DFQ  P+WR
+Sbjct: 3   VVWINGAFGAGKTTTARELIELIPNSTLFDPEVVGGALAHLLPPKRLAEVGDFQDLPIWR 62
+
+Query: 60  AFNYSLLASLTDTYRGILIVPMTIVHPEYFNEIIGRLRQEGRIVHHFTLMASKETLLKRL 119
+                  A+L     G L+VPMT++  EY +EI G L      V H  L  ++  L +R+
+Sbjct: 63  RLVIDTAAALLADLGGTLVVPMTLLRQEYRDEIFGGLAARRIEVRHILLAPAETILRERI 122
+
+Query: 120 RTR 122
+            +R
+Sbjct: 123 ASR 125
+</PRE>
+
+
+<PRE>
+><a name = 423877></a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00423877&dopt=GenPept" >pir||S06033</a> hypothetical protein - Enterobacteriaceae plasmid pWP14a
+          (fragment)
+ <a name = 45942></a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00045942&dopt=GenPept" >emb|CAA31894.1|</a> (X13542) hypothetical protein [Plasmid pWP14a]
+          Length = 92
+
+ Score = 86.3 bits (212), Expect = 5e-16
+ Identities = 40/93 (43%), Positives = 58/93 (62%), Gaps = 1/93 (1%)
+
+Query: 1  MIIWINGAFGSGKTQTAFELHRRLNPSYVYDPEKMGFALRSMVPQEIAKDDFQSYPLWRA 60
+          MIIWING FG+GKT  A  L  R   S ++DPE++GF ++  VP   A  D+Q  PLWR 
+Sbjct: 1  MIIWINGPFGAGKTTLAERLRDRRPKSLIFDPEEIGFVVKETVPIP-ASGDYQDLPLWRG 59
+
+Query: 61 FNYSLLASLTDTYRGILIVPMTIVHPEYFNEII 93
+             + ++ +   Y   +I+PMT+V+P+Y  EI+
+Sbjct: 60 LTIAAVSEIRRNYSQDIIIPMTLVYPDYLTEIL 92
+</PRE>
+
+
+<PRE>
+><a name = 7479146></a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=07479146&dopt=GenPept" >pir||T36817</a> ATP/GTP-binding protein - Streptomyces coelicolor
+ <a name = 3581837></a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=03581837&dopt=GenPept" >emb|CAA20793.1|</a> (AL031541) ATP/GTP binding protein [Streptomyces coelicolor A3(2)]
+          Length = 174
+
+ Score = 86.3 bits (212), Expect = 5e-16
+ Identities = 47/119 (39%), Positives = 64/119 (53%)
+
+Query: 1   MIIWINGAFGSGKTQTAFELHRRLNPSYVYDPEKMGFALRSMVPQEIAKDDFQSYPLWRA 60
+           MI+W+NG  G+GKT T   + R L  S V+D EK+G  L  + P     D+FQ +  WR 
+Sbjct: 1   MIVWLNGTHGAGKTTTGALVQRLLPDSRVFDAEKVGETLMDITPGLPDTDNFQHWAPWRP 60
+
+Query: 61  FNYSLLASLTDTYRGILIVPMTIVHPEYFNEIIGRLRQEGRIVHHFTLMASKETLLKRL 119
+                   + D   G L++PMT++  EY+ EI G L   G  V HF L A +ETL  R+
+Sbjct: 61  LVVETARRVLDYTGGTLVMPMTVLVEEYWREIAGGLAAHGVPVRHFVLHADQETLRGRI 119
+</PRE>
+
+
+<PRE>
+><a name = 423876></a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00423876&dopt=GenPept" >pir||S06031</a> hypothetical protein - Enterobacteriaceae plasmid pWP113a
+          (fragment)
+          Length = 86
+
+ Score = 83.2 bits (204), Expect = 4e-15
+ Identities = 38/87 (43%), Positives = 54/87 (61%), Gaps = 1/87 (1%)
+
+Query: 1  MIIWINGAFGSGKTQTAFELHRRLNPSYVYDPEKMGFALRSMVPQEIAKDDFQSYPLWRA 60
+          MIIWING FG+GKT  A  L  R + S ++DPE++GF ++  VP   A  D+Q  PLWR 
+Sbjct: 1  MIIWINGPFGAGKTTLAERLRDRRSKSLIFDPEEIGFVVKETVPMP-ASGDYQDLPLWRG 59
+
+Query: 61 FNYSLLASLTDTYRGILIVPMTIVHPE 87
+             + +  +   Y   +I+PMT+VHP+
+Sbjct: 60 LTIAAVREIRRNYSQDIIIPMTLVHPD 86
+</PRE>
+
+
+<PRE>
+><a name = 96587></a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00096587&dopt=GenPept" >pir||S06034</a> hypothetical protein - Klebsiella pneumoniae plasmid pWP116a
+          (fragment)
+ <a name = 45939></a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00045939&dopt=GenPept" >emb|CAA31892.1|</a> (X13541) hypothetical protein [Plasmid pWP116a]
+          Length = 92
+
+ Score = 82.0 bits (201), Expect = 9e-15
+ Identities = 38/88 (43%), Positives = 55/88 (62%), Gaps = 1/88 (1%)
+
+Query: 1  MIIWINGAFGSGKTQTAFELHRRLNPSYVYDPEKMGFALRSMVPQEIAKDDFQSYPLWRA 60
+          MIIWING FG+GKT  A  L  R   S ++DPE++GF ++  VP   A  D+Q  PLWR 
+Sbjct: 1  MIIWINGPFGAGKTTLAERLRDRRPKSLIFDPEEIGFVVKETVPIP-ASGDYQDLPLWRG 59
+
+Query: 61 FNYSLLASLTDTYRGILIVPMTIVHPEY 88
+             + ++ +   Y   +I+PMT+V+P+Y
+Sbjct: 60 LTIAAVSEIRRNYSQDIIIPMTLVYPDY 87
+</PRE>
+
+
+
+<PRE>
+  Database: nr
+    Posted date:  May 30, 2001  5:08 AM
+  Number of letters in database: 218,617,282
+  Number of sequences in database:  693,878
+  
+Lambda     K      H
+   0.323    0.138    0.411 
+
+Gapped
+Lambda     K      H
+   0.267   0.0410    0.140 
+
+
+Matrix: BLOSUM62
+Gap Penalties: Existence: 11, Extension: 1
+Number of Hits to DB: 83284981
+Number of Sequences: 693878
+Number of extensions: 3200855
+Number of successful extensions: 6684
+Number of sequences better than 10.0: 12
+Number of HSP's better than 10.0 without gapping: 12
+Number of HSP's successfully gapped in prelim test: 0
+Number of HSP's that attempted gapping in prelim test: 6663
+Number of HSP's gapped (non-prelim): 12
+length of query: 197
+length of database: 218,617,282
+effective HSP length: 0
+effective length of query: 197
+effective length of database: 218,617,282
+effective search space: 43067604554
+effective search space used: 43067604554
+T: 11
+A: 40
+X1: 16 ( 7.5 bits)
+X2: 38 (14.6 bits)
+X3: 64 (24.7 bits)
+S1: 41 (22.0 bits)
+S2: 72 (32.3 bits)
+
+</form>
+
+

@@ -73,6 +73,9 @@ bt060 blastpgp 2.0.12                                     multiple db, Mike Poid
 bt061 NCBI WWW 2.0.14 sp:P06563  swissprot blastp
 bt062 blastall 2.0.14 gi:1348916 sts       -p blastn
 bt063 blastpgp 2.0.14 ad-hoc                              from Mike Poidinger, no model sequences found
+bt064 NCBIWWW  2.1.12 ad-hoc                              from Brad Chapman
+bt065 blastn   2.1.2  ad-hoc                              no hits found
+bt066 NCBIWWW  2.1.3  ad-hoc                              6/3/01 new format
 
 
 * bt008 is not included because the file is too big (>15Mb).
