@@ -22,7 +22,7 @@ Bio.DocSQL: easy access to DB API databases
 CreatePeople(message=Success)
 """
 
-__version__ = "$Revision: 1.2 $"
+__version__ = "$Revision: 1.3 $"
 # $Source: /home/bartek/cvs2bzr/biopython_fastimport/cvs_repo/biopython/Bio/DocSQL.py,v $
 
 import exceptions
@@ -125,15 +125,16 @@ class QuerySingle(Query, QueryRow):
         return self.single_cursor
 
 class QueryAll(list, Query):
-    """
-    not implemented
-    """
-    pass
-
-class QueryAllFirstItem(QueryAll):
     def __init__(self, *args, **keywds):
         Query.__init__(self, *args, **keywds)
-        list.__init__(self, map(lambda x: x[0], self.cursor().fetchall()))
+        list.__init__(self, map(self.process_row, self.cursor().fetchall()))
+
+    def process_row(self, row):
+        return row
+
+class QueryAllFirstItem(QueryAll):
+    def process_row(self, row):
+        return row[0]
 
 class Create(QuerySingle):
     def __init__(self, *args, **keywds):
@@ -141,6 +142,9 @@ class Create(QuerySingle):
             QuerySingle.__init__(self, *args, **keywds)
         except StopIteration:
             self.message = self.MSG_SUCCESS
+
+class Update(Create):
+    pass
 
 class Insert(Create):
     MSG_INTEGRITY_ERROR = "Couldn't insert: %s. "
