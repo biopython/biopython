@@ -176,6 +176,8 @@ class KDTree:
         Return the list of indices after a neighbor search.
         The indices refer to the original coords Numpy array. The
         coordinates with these indices were within radius of center.
+
+        For an index pair, the first index<second index. 
         """
         a=self.kdt.get_indices()
         if a is None:
