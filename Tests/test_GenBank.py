@@ -202,7 +202,7 @@ def t_bioformat():
     test_file = os.path.join("GenBank", "iro.gb")
     test_handle = open(test_file)
     format = formats["sequence"].identify(test_handle)
-    assert format.name == "genbank", \
+    assert format.name == "genbank-records", \
       "Identified format incorrectly: %s" % format.name
 
     all_records = []

@@ -37,6 +37,7 @@ LOCUS       S40706        895 bp                    PRI       08-MAY-1993
 LOCUS       HUMMTTSF1    1040 bp    mRNA  circular  PRI       26-JUL-1995
 LOCUS       18_Char_LOCUS_Name 99999999999 bp ss-snRNA circular HTC DD-MMM-YYYY
 LOCUS       AB000383                  5423 bp    DNA   circular VRL 05-FEB-1999
+LOCUS       NM_007355               2459 bp    mRNA    linear   PRI 02-NOV-2000
 LOCUS       AL123456  4411529 bp          circular  BCT       07-JUL-1998
 """)
 
