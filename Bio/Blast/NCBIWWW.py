@@ -517,21 +517,21 @@ class _Scanner:
             read_and_call(uhandle, consumer.hsps_gapped,
                           start="Number of HSP's gapped")
 
-        read_and_call(uhandle, consumer.query_length,
-                      start='length of query')
+        attempt_read_and_call(uhandle, consumer.query_length,
+                              start='length of query')
         read_and_call(uhandle, consumer.database_length,
                       start='length of database')
 
         read_and_call(uhandle, consumer.effective_hsp_length,
                       start='effective HSP')
-        read_and_call(uhandle, consumer.effective_query_length,
-                      start='effective length of query')
+        attempt_read_and_call(uhandle, consumer.effective_query_length,
+                              start='effective length of query')
         read_and_call(uhandle, consumer.effective_database_length,
                       start='effective length of database')
-        read_and_call(uhandle, consumer.effective_search_space,
-                      start='effective search space')
-        read_and_call(uhandle, consumer.effective_search_space_used,
-                      start='effective search space used')
+        attempt_read_and_call(uhandle, consumer.effective_search_space,
+                              start='effective search space:')
+        attempt_read_and_call(uhandle, consumer.effective_search_space_used,
+                              start='effective search space used')
 
         # BLASTX, TBLASTN, TBLASTX
         attempt_read_and_call(uhandle, consumer.frameshift, start='frameshift')
@@ -543,7 +543,7 @@ class _Scanner:
         attempt_read_and_call(uhandle, consumer.gap_x_dropoff_final,
                               start='X3')
         read_and_call(uhandle, consumer.gap_trigger, start='S1')
-        read_and_call(uhandle, consumer.blast_cutoff, start='S2')
+        attempt_read_and_call(uhandle, consumer.blast_cutoff, start='S2')
 
         read_and_call(uhandle, consumer.noevent, blank=1)
         attempt_read_and_call(uhandle, consumer.noevent, start="</PRE>")
