@@ -401,10 +401,26 @@ class ETandemCommandline(Application.AbstractCommandline):
                  "Output report file name"),
          _Option(["-threshold"], ["input"], None, 0,
                  "Threshold score"),
-         _Argument(["-mismatch"], ["input"], None, 0,
+         _Option(["-mismatch"], ["input"], None, 0,
                    "Allow N as a mismatch"),
-         _Argument(["-uniform"], ["input"], None, 0,
+         _Option(["-uniform"], ["input"], None, 0,
                    "Allow uniform consensus"),
          _Option(["-rformat"], ["output"], None, 0,
                  "Output report format")]
 
+class TranalignCommandline(Application.AbstractCommandline):
+    """Commandline object for the tranalign program from EMBOSS.
+    """
+    def __init__(self, cmd = "tranalign"):
+        Application.AbstractCommandline.__init__(self)
+        self.program_name = cmd
+
+        self.parameters = [
+         _Option(["-nsequence"], ["input", "file"], None, 1,
+                 "Nucleotide sequences to be aligned."),
+         _Option(["-psequence"], ["input", "file"], None, 1,
+                 "Protein sequence alignment"),
+         _Option(["-outseq"], ["output", "file"], None, 1,
+                 "Output sequence file."),
+         _Option(["-table"], ["input"], None, 0,
+                 "Code to use")]
