@@ -1461,26 +1461,26 @@ class NCBIDictionary:
     Methods:
     
     """
-    def __init__(self, database='Nucleotide', delay=5.0, parser=None):
+    def __init__(self, database='sequences', delay=5.0, parser=None):
         """NCBIDictionary([database][, delay][, parser])
 
-        Create a new Dictionary to access GenBank.  database should be
-        either 'Nucleotide' or 'Protein'.  delay is the number of
-        seconds to wait between each query (5 default).  parser is an
-        optional parser object to change the results into another
-        form.  If unspecified, then the raw contents of the file will
-        be returned.
+        Create a new Dictionary to access GenBank.  Valid values for
+        database are 'genome', 'nucleotide', 'protein', 'popset', and
+        'sequences'.  delay is the number of seconds to wait between
+        each query (5 default).  parser is an optional parser object
+        to change the results into another form.  If unspecified, then
+        the raw contents of the file will be returned.
 
         """
         self.parser = parser
         self.limiter = RequestLimiter(delay)
-        if database == 'Nucleotide':
-            self.format = 'GenBank'
-        elif database == 'Protein':
-            self.format = 'GenPept'
-        else:
-            raise ValueError, "database should be 'Nucleotide' or 'Protein'."
         self.database = database
+        if self.database == 'nucleotide':
+            self.format = 'gb'
+        elif self.database == 'protein' or self.database == 'popset':
+            self.format = 'gp'
+        else:
+            self.format = 'native'
 
     def __len__(self):
         raise NotImplementedError, "GenBank contains lots of entries"
@@ -1526,8 +1526,8 @@ class NCBIDictionary:
         self.limiter.wait()
         
         try:
-            handle = NCBI.query(
-                'Text', self.database, dopt=self.format, uid=id)
+            handle = NCBI.efetch(
+                self.database, rettype=self.format, id=id)
         except IOError, x:
             # raise a KeyError instead of an IOError
             # XXX I really should distinguish between a real IOError and
@@ -1557,118 +1557,203 @@ class NCBIDictionary:
             return self.parser.parse(handle)
         return handle.read()
 
-def search_for(search, database='Nucleotide', max_ids=500):
-    """search_for(search[, database][, max_ids])
+def search_for(search, database='nucleotide',
+               reldate=None, mindate=None, maxdate=None,
+               batchsize=100, delay=2, callback_fn=None,
+               start_id=0, max_ids=None):
+    """search_for(search[, reldate][, mindate][, maxdate]
+    [, batchsize][, delay][, callback_fn][, start_id][, max_ids]) -> ids
 
-    Search GenBank and return a list of GenBank identifiers (gi's).
-    search is the search string used to search the database.  database
-    should be either 'Nucleotide' or 'Protein'.  max_ids is the maximum
-    number of ids to retrieve (default 500).
-    
+    Search GenBank and return a list of the GenBank identifiers (gi's)
+    that match the criteria.  search is the search string used to
+    search the database.  Valid values for database are 'genome',
+    'nucleotide', 'protein', 'popset', and 'sequences'.  reldate is
+    the number of dates prior to the current date to restrict the
+    search.  mindate and maxdate are the dates to restrict the search,
+    e.g. 2002/01/01.  batchsize specifies the number of ids to return
+    at one time.  By default, it is set to 10000, the maximum.  delay
+    is the number of seconds to wait between queries (default 2).
+    callback_fn is an optional callback function that will be called
+    and passed a gi as results are retrieved.  start_id specifies the
+    index of the first id to retrieve and max_ids specifies the
+    maximum number of id's to retrieve.
+
+    XXX The date parameters don't seem to be working with NCBI's
+    script.  Please let me know if you can get it to work.
+
     """
-    if database not in ['Nucleotide', 'Protein']:
-        raise ValueError, "database must be 'Nucleotide' or 'Protein'"
-    
     class ResultParser(sgmllib.SGMLParser):
-        # GenBank returns an HTML formatted page with lots of pretty stuff.
-        # I want to rip out all the genbank id's from the page.  I'm going
-        # to do this by looking for links that retrieve records using
-        # the query.fcgi script.
-        # <a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?
-        # cmd=Retrieve&amp;db=Nucleotide&amp;list_uids=5174616&amp;
-        # dopt=GenBank">NM_006092</a>
+        # Parse the ID's out of the XML-formatted page that PubMed
+        # returns.  The format of the page is:
+        # [...]
+        #    <Id>...</Id>
+        # [...]
         def __init__(self):
             sgmllib.SGMLParser.__init__(self)
             self.ids = []
-        def start_a(self, attrs):
-            # If I see a href back to the Nucleotide database from
-            # Entrez, then keep it.
-            href = None
-            for name, value in attrs:
-                if name == 'href':
-                    href = value
-            if not href:
+            self.in_id = 0
+        def start_id(self, attributes):
+            self.in_id = 1
+        def end_id(self):
+            self.in_id = 0
+        _not_pmid_re = re.compile(r'\D')
+        def handle_data(self, data):
+            if not self.in_id:
                 return
-            scheme, netloc, path, params, query, frag = urlparse.urlparse(href)
-            if path[-10:] != 'query.fcgi':   # only want links to query.fcgi
+            # If data is just whitespace, then ignore it.
+            data = string.strip(data)
+            if not data:
                 return
-            # Valid queries look like (truncated):
-            # cmd=Retrieve&amp;db=Nucleotide&amp;list_uids=4503354&amp;dopt=Gen
-            # I have to first split on '&amp;' and then on '='.
-            params = query.split('&amp;')
-            params = [x.split('=') for x in params]
-            list_uids = None
-            db = None
-            for name, value in params:
-                if name == 'list_uids':
-                    list_uids = value
-            if list_uids is not None:
-                self.ids.append(list_uids)
+            # Everything here should be a PMID.  Check and make sure
+            # data really is one.  A PMID should be a string consisting
+            # of only integers.  Should I check to make sure it
+            # meets a certain minimum length?
+            if self._not_pmid_re.search(data):
+                raise SyntaxError, \
+                      "I expected an ID, but %s doesn't look like one." % \
+                      repr(data)
+            self.ids.append(data)
 
-    parser = ResultParser()
-    handle = NCBI.query("Search", database, term=search, doptcmdl='DocSum',
-                        dispmax=max_ids)
-    parser.feed(handle.read())
-    return parser.ids
+    params = {
+        'db' : database,
+        'term' : search,
+        'reldate' : reldate,
+        'mindate' : mindate,
+        'maxdate' : maxdate
+        }
+    for k, v in params.items():
+        if v is None:
+            del params[k]
 
-def download_many(gis, callback_fn, broken_fn=None, db='Nucleotide',
-                  delay=127.0, batchsize=500,  parser=None):
-    """download_many(gis, callback_fn[, delay][, batchsize])
+    limiter = RequestLimiter(delay)
+    ids = []
+    while max_ids is None or len(ids) < max_ids:
+        parser = ResultParser()
+        
+        # Check to make sure enough time has passed before my
+        # last search.  If not, then wait.
+        limiter.wait()
 
-    Download many records from GenBank.  gis is a list of Genbank
-    Gi's.  Each time a record is downloaded, callback_fn is called
-    with the text of the record.  delay is the number of seconds to
-    wait between requests.  Waits 127 seconds by default.  abatchsize
-    is the number of records to request each time.  Default is 500
-    records, which is the maximum NCBI can handle.
+        start = start_id + len(ids)
+        max = batchsize
+        if max_ids is not None and max > max_ids - len(ids):
+            max = max_ids - len(ids)
 
-    This does not check to make sure all gi's are returned.  The
-    client must make sure that the gi's are valid.  This may be
-    implemented in the future.
+        params['retstart'] = start
+        params['retmax'] = max
+        h = NCBI.esearch(**params)
+        parser.feed(h.read())
+        ids.extend(parser.ids)
+        if callback_fn is not None:
+            # Call the callback function with each of the new ID's.
+            for id in parser.ids:
+                callback_fn(id)
+        if len(parser.ids) < max or not parser.ids:  # no more id's to read
+            break
+    return ids
+
+def download_many(ids, callback_fn, database='nucleotide',
+                  broken_fn=None, delay=120.0, faildelay=5.0,
+                  batchsize=500, parser=None):
+    """download_many(ids, callback_fn[, broken_fn][, delay][, faildelay][, batchsize])
+
+    Download many records from GenBank.  ids is a list of gis or
+    accessions.  Each time a record is downloaded, callback_fn is
+    called with the text of the record.  broken_fn is an optional
+    function that is called with the id of records that were not able
+    to be downloaded.  delay is the number of seconds to wait between
+    requests.  batchsize is the number of records to request each
+    time.
 
     """
-    class _RecordExtractor(sgmllib.SGMLParser):
-        def __init__(self):
-            sgmllib.SGMLParser.__init__(self)
-            self.records = []
-            self._in_record = 0
-        def start_pre(self, attributes):
-            self._in_record = 1
-            self._current_record = []
-        def end_pre(self):
-            self.records.append(''.join(self._current_record))
-            self._in_record = 0
-        def handle_data(self, data):
-            if self._in_record:
-                self._current_record.append(data)
-    
     # parser is an undocumented parameter that allows people to
     # specify an optional parser to handle each record.  This is
     # dangerous because the results may be malformed, and exceptions
     # in the parser may disrupt the whole download process.
+    if batchsize > 500 or batchsize < 1:
+        raise ValueError, "batchsize must be between 1 and 500"
+
+    if database == 'nucleotide':
+        format = 'gb'
+    elif database == 'protein' or database == 'popset':
+        format = 'gp'
+    else:
+        format = 'native'
+
     limiter = RequestLimiter(delay)
+    current_batchsize = batchsize
     
-    # Loop until all the gis are processed.
-    while gis:
-        gi_str = ','.join(gis[:batchsize])
+    # Loop until all the ids are processed.  We want to process as
+    # many as possible with each request.  Unfortunately, errors can
+    # occur.  Some id may be incorrect, or the server may be
+    # unresponsive.  In addition, one broken id out of a list of id's
+    # can cause a non-specific error.  Thus, the strategy I'm going to
+    # take, is to start by downloading as many as I can.  If the
+    # request fails, I'm going to half the number of records I try to
+    # get.  If there's only one more record, then I'll report it as
+    # broken and move on.  If the request succeeds, I'll double the
+    # number of records until I get back up to the batchsize.
+    nsuccesses = 0
+    while ids:
+        if current_batchsize > len(ids):
+            current_batchsize = len(ids)
+        
+        id_str = ','.join(ids[:current_batchsize])
 
         # Make sure enough time has passed before I do another query.
-        limiter.wait()
-        
-        # Query GenBank.  This results in a HTML page that contains
-        # GenBank formatted records.  If an ID is broken, this will
-        # return no data.
-        handle = NCBI.query('Retrieve', db, list_uids=gi_str,
-                            dopt='GenBank', txt='on', dispmax=batchsize)
-        results = handle.read()
+        if not nsuccesses:
+            limiter.wait(faildelay)
+        else:
+            limiter.wait()
+        try:
+            # If one or more of the id's are broken, this will raise
+            # an IOError.
+            handle = NCBI.efetch(
+                db=database, id=id_str, retmode='text', rettype=format)
+
+            # I'm going to check to make sure PubMed returned the same
+            # number of id's as I requested.  If it didn't then I'm going
+            # to raise an exception.  This could take a lot of memory if
+            # the batchsize is large.
+            results = handle.read()
+            iter = Iterator(File.StringHandle(results))
+            num_ids = 0
+            while iter.next() is not None:
+                num_ids = num_ids + 1
+            if num_ids != current_batchsize:
+                raise IOError
+            handle = File.StringHandle(results)
+        except IOError:   # Query did not work.
+            if current_batchsize == 1:
+                # There was only 1 id in the query.  Report it as
+                # broken and move on.
+                id = ids.pop(0)
+                if broken_fn is not None:
+                    broken_fn(id)
+            else:
+                # I don't know which one is broken.  Try again with
+                # fewer id's.
+                current_batchsize = current_batchsize / 2
+            nsuccesses = 0
+            continue
+        nsuccesses = nsuccesses + 1
 
         # Iterate through the results and pass the records to the
-        # callback.  The GenBank records are between the <pre></pre>
-        # tags.
-        extractor = _RecordExtractor()
-        extractor.feed(results)
+        # callback.
+        iter = Iterator(handle, parser)
+        idnum = 0
+        while 1:
+            rec = iter.next()
+            if rec is None:
+                break
+            callback_fn(ids[idnum], rec)
+            idnum = idnum + 1
 
-        for rec in extractor.records:
-            callback_fn(rec)
+        ids = ids[current_batchsize:]
 
-        gis = gis[batchsize:]
+        # If I'm not downloading the maximum number of articles,
+        # double the number for next time.
+        if nsuccesses >= 2 and current_batchsize < batchsize:
+            current_batchsize = current_batchsize * 2
+            if current_batchsize > batchsize:
+                current_batchsize = batchsize

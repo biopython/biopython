@@ -125,6 +125,9 @@ def search_for(search, reldate=None, mindate=None, maxdate=None,
     retrieve and max_ids specifies the maximum number of id's to
     retrieve.
 
+    XXX The date parameters don't seem to be working with NCBI's
+    script.  Please let me know if you can get it to work.
+    
     """
     class ResultParser(sgmllib.SGMLParser):
         # Parse the ID's out of the XML-formatted page that PubMed
@@ -249,7 +252,7 @@ def find_related(pmid):
 
 def download_many(ids, callback_fn, broken_fn=None, delay=120.0, faildelay=5.0,
                   batchsize=500, parser=None):
-    """download_many(ids, callback_fn, broken_fn=None, delay=120.0, batchsize=500)
+    """download_many(ids, callback_fn[, broken_fn][, delay][, faildelay][, batchsize])
 
     Download many records from PubMed.  ids is a list of either the
     Medline Unique ID or the PubMed ID's of the articles.  Each time a
