@@ -40,14 +40,10 @@ __all__ = [
     "utils"
     ]
 
-try:
+import sys
+if getattr(sys, "version_info", (1, 5))[:2] >= (2, 1):
   import FormatRegistry
   formats = FormatRegistry.FormatRegistry("Bio")
   register_format = formats.register_format
   link_format = formats.link
-except ImportError:
-  # The format code needs at least Python 2.1
-  import sys
-  if getattr(sys, "version_info", (1, 5)) >= (2, 1):
-    raise
-  del sys
+del sys
