@@ -1,0 +1,13 @@
+test_HotRand
+Test conversion of hex strings. ... ok
+
+----------------------------------------------------------------------
+Ran 1 tests in 0.000s
+
+OK
+Get a sequence of random numbers. ... ok
+
+----------------------------------------------------------------------
+Ran 1 tests in 11.760s
+
+OK
