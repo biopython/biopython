@@ -20,6 +20,10 @@
 #
 # Last modified on Tue, Oct 21st 2003, Berlin
 #
+# Removed 'write' options from retrieve_pdb_file method: it is not used.
+# Also added a 'dir' options (pdb file is put in this directory if given).
+#
+# -Thomas, 1/06/04
 
 __doc__="Access the PDB over the internet (for example to download structures)."
 
@@ -153,14 +157,15 @@ OBSLTE     26-SEP-03 1DYV      1UN2
         tw.append(self.get_list(urls[2]))
         return tw
 
-    def retrieve_pdb_file(self,pdb_code, compression='.Z', uncompress="gunzip", write=1, here=0):
+    def retrieve_pdb_file(self,pdb_code, compression='.Z', uncompress="gunzip", dir=None):
         """Retrieves a PDB structure file from the PDB server and
-        stores it in a local file tree (if 'write' is set true).
+        stores it in a local file tree.
         The PDB structure is returned as a single string.
         The compression should be '.Z' or '.gz'. 'uncompress' is
         the command called to uncompress the files.
 
-        here : put in local directory if this is 1
+        @param dir: put the file in this directory (default: create a PDB-style directory tree) 
+        @type dir: string
         """
         # get the structure
         code=string.lower(pdb_code)
@@ -169,12 +174,14 @@ OBSLTE     26-SEP-03 1DYV      1UN2
 
         # save the structure
         filename="pdb%s.ent%s"%(code,compression)
-        if not here:
+        if not dir is None:
             # Put in directory 
             path=self.local_pdb+os.sep+code[1:3]
             if not os.access(path,os.F_OK):
                 os.mkdir(path)
             filename=path+os.sep+filename
+        else:
+            filename=dir+os.sep+filename
         open(filename,'w').write(lines)
         # uncompress the file
         os.system("%s %s" % (uncompress, filename))
