@@ -1,16 +1,15 @@
-from Bio import register_format, link_format
+from Bio.config.FormatRegistry import FormatObject, FormatGroup
 
-import sequence
-
-register_format(
-    name = "embl",
-    )
-
-register_format(
+embl65 = FormatObject(
     name = "embl/65",
     abbrev = "embl65",
     expression = "Bio.expressions.embl.embl65.format",
     )
 
-link_format("embl", "embl/65")
-link_format("sequence", "embl")
+embl = FormatGroup(
+    name = "embl",
+    )
+embl.add(embl65)
+
+from Bio.formatdefs import sequence
+sequence.sequence.add(embl)

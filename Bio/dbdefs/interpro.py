@@ -3,15 +3,14 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-from Bio import register_db
-from Bio.sources import EBI
-
+from Bio.config.DBRegistry import CGIDB, DBGroup
 from _support import *
 
-
-register_db(
+interpro_ebi_cgi = CGIDB(
     name="interpro-ebi-cgi",
-    source=EBI.IEntry,
+    cgi='http://www.ebi.ac.uk/interpro/IEntry',
+    doc="Retrieve an InterPro entry",
+    delay=5.0,
     key="ac",
-    failure=[(has_str("No InterPro entry"), "No InterPro entry")]
+    failure_cases=[(has_str("No InterPro entry"), "No InterPro entry")]
     )

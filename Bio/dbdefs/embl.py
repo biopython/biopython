@@ -3,55 +3,61 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-from Bio import register_db, group_db
-from Bio.sources import EBI
-
+from Bio.config.DBRegistry import CGIDB, DBGroup
 from _support import *
 
-register_db(
+embl_xembl_cgi = CGIDB(
     name="embl-xembl-cgi",
-    source=EBI.XEMBL,
+    doc="Query XEMBL for EMBL sequence data in XML format.",
+    cgi="http://www.ebi.ac.uk/cgi-bin/xembl/XEMBL.pl",
+    url="http://www.ebi.ac.uk/xembl/",
+    delay=5.0,
     params=[("format", "Bsml")],
     key="id",
-    failure=[(has_str("NOT EXIST"), "id does not exist")],
+    failure_cases=[(has_str("NOT EXIST"), "id does not exist")],
     )
 
-register_db(
+embl_dbfetch_cgi = CGIDB(
     name="embl-dbfetch-cgi",
-    source=EBI.dbfetch,
+    cgi="http://www.ebi.ac.uk/cgi-bin/dbfetch",
+    doc="dbfetch provides EMBL, Genbank, and SWALL sequences",
+    delay=5.0,
     params=[("db", "embl"),
             ("style", "raw"),
             ("format", "embl"),
             ],
     key="id",
-    failure=[(has_str("not found in database"), "id does not exist")]
+    failure_cases=[(has_str("not found in database"), "id does not exist")]
     )
 
-register_db(
+embl_ebi_cgi = CGIDB(
     name="embl-ebi-cgi",
-    source=EBI.emblfetch,
+    cgi="http://www.ebi.ac.uk/cgi-bin/emblfetch",
+    url="http://www.ebi.ac.uk/cgi-bin/emblfetch",
+    doc="Retrieve many kinds of sequences from EBI",
+    delay=5.0,
     params=[("db", "EMBL"),
             ("format", "default"),   # also Fasta, bsml, agave available
             ("style", "raw")
             ],
     key="id",
-    failure=[(blank_expr, "No results returned")]
+    failure_cases=[(blank_expr, "No results returned")]
     )
 
-register_db(
+embl = DBGroup(
     name="embl",
     behavior="serial",
 ##    cache="XXX"
     )
-group_db("embl", "embl-dbfetch-cgi")
-group_db("embl", "embl-xembl-cgi")
-group_db("embl", "embl-ebi-cgi")
+embl.add(embl_dbfetch_cgi)
+embl.add(embl_xembl_cgi)
+embl.add(embl_ebi_cgi)
 
 
-register_db(
+embl_fast = DBGroup(
     name="embl-fast",
     behavior="concurrent",
     )
-group_db("embl-fast", "embl-dbfetch-cgi")
-group_db("embl-fast", "embl-xembl-cgi")
-group_db("embl-fast", "embl-ebi-cgi")
+embl_fast.add(embl_dbfetch_cgi)
+embl_fast.add(embl_xembl_cgi)
+embl_fast.add(embl_ebi_cgi)

@@ -39,21 +39,34 @@ __all__ = [
     "utils"
     ]
 
-import sys
-if getattr(sys, "version_info", (1, 5))[:2] >= (2, 1):
-  import FormatRegistry
-  formats = FormatRegistry.FormatRegistry("Bio")
-  register_format = formats.register_format
-  link_format = formats.link
+def _load_registries():
+    import sys, os
+    from Bio.config.Registry import Registry
+    
+    if getattr(sys, "version_info", (1, 5))[:2] < (2, 1):
+        return
+    
+    self = sys.modules[__name__]        # self refers to this module.
+    # Load the registries.  Look in all the '.py' files in Bio.config
+    # for Registry objects.  Save them all into the local namespace.
+    x = os.listdir(
+        os.path.dirname(__import__("Bio.config", {}, {}, ["Bio"]).__file__))
+    x = filter(lambda x: not x.startswith("_") and x.endswith(".py"), x)
+    x = map(lambda x: x[:-3], x)            # chop off '.py'
+    for module in x:
+        module = __import__("Bio.config.%s" % module, {}, {}, ["Bio","config"])
+        for name, obj in module.__dict__.items():
+            if name.startswith("_") or not isinstance(obj, Registry):
+                continue
+            setattr(self, name, obj)
 
-  import DBRegistry
-  db = DBRegistry.DBRegistry("Bio")
-  register_db = db.register_db
-  group_db = db.group
-  del DBRegistry
+# Put the registry loading code in a function so we don't polute the
+# module namespace with local variables.
+_load_registries()
 
-  import config
-  seqdatabase = config.SeqDatabase()
-  del config
-  
-del sys
+
+def _load_seqdatabase():
+    from Bio.config import seqdatabase
+    seqdatabase.init()
+
+_load_seqdatabase()

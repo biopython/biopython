@@ -3,15 +3,16 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-from Bio import register_db
-from Bio.sources import ExPASy
-
+from Bio.config.DBRegistry import CGIDB, DBGroup
 from _support import *
 
-register_db(
+prosite_expasy_cgi = CGIDB(
     name="prosite-expasy-cgi",
-    source=ExPASy.get_prosite_entry,
+    doc="Retrieve a prosite entry by ID",
+    cgi='http://www.expasy.ch/cgi-bin/get-prosite-entry',
+    delay=5.0,
+    params=[],
     key="",
-    failure=[(has_str("There is currently no PROSITE entry"),
+    failure_cases=[(has_str("There is currently no PROSITE entry"),
               "No PROSITE entry")],
     )

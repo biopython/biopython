@@ -1,16 +1,15 @@
-from Bio import register_format, link_format
+from Bio.config.FormatRegistry import FormatObject, FormatGroup
 
-register_format(
-    name = "sequence",
-)
+fasta = FormatObject(
+    name="fasta",
+    expression="Bio.expressions.fasta.format",
+    )
 
-register_format(
-    name = "fasta",
-    expression = "Bio.expressions.fasta.format",
-)
+empty = FormatGroup(
+    name="empty"
+    )
 
-link_format("sequence", "fasta")
-
-register_format(
-    name = "empty",
-)
+sequence = FormatGroup(
+    name="sequence",
+    )
+sequence.add(fasta)

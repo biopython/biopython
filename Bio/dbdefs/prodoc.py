@@ -3,13 +3,13 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-from Bio import register_db
-from Bio.sources import ExPASy
+from Bio.config.DBRegistry import CGIDB, DBGroup
 
-from Martel import *
-
-register_db(
+prodoc_expasy_cgi = CGIDB(
     name="prodoc-expasy-cgi",
-    source=ExPASy.get_prodoc_entry,
+    doc="Retrieve a prodoc entry by ID",
+    cgi='http://www.expasy.ch/cgi-bin/get-prodoc-entry',
+    delay=5.0,
+    params=[],
     key="",
     )

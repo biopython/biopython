@@ -1,28 +1,27 @@
 # Define the various SWISS-PROT formats
 
-from Bio import register_format, link_format
+from Bio.config.FormatRegistry import FormatObject, FormatGroup
 
-import sequence
 
-register_format(
-    name = "swissprot",
-#    filter = "Bio.expressions.swissprot.filter",
-)
-
-register_format(
+sprot38 = FormatObject(
     name = "swissprot/38",
     abbrev = "sprot38",
     expression = "Bio.expressions.swissprot.sprot38.format",
 )
 
-register_format(
+sprot40 = FormatObject(
     name = "swissprot/40",
     abbrev = "sprot40",
     expression = "Bio.expressions.swissprot.sprot40.format",
 )
 
 
-link_format("swissprot", "swissprot/38")
-link_format("swissprot", "swissprot/40", before = "swissprot/38")
+swissprot = FormatGroup(
+    name = "swissprot",
+#    filter = "Bio.expressions.swissprot.filter",
+)
+swissprot.add(sprot38)
+swissprot.add_before(sprot40, sprot38)
 
-link_format("sequence", "swissprot")
+from Bio.formatdefs import sequence
+sequence.sequence.add(swissprot)

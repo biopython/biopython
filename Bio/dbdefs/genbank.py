@@ -3,14 +3,19 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-from Bio import register_db
-from Bio.sources import NCBI, EBI
+from Bio.config.DBRegistry import CGIDB, DBGroup
+from _support import *
 
 from Martel import *
 
-from _support import *
+proxy_error_expr = has_expr(Alt(Str("500"), Str("502")) + Str(" Proxy Error"))
+diagnostic_error_expr = has_str("WWW Error 500 Diagnostic")
+error_expr = Str("ERROR")
 
 ncbi_failures=[
+    (proxy_error_expr, "proxy error"),
+    (diagnostic_error_expr, "diagnostic error"),
+    (error_expr, "ERROR"),
     (html_expr, "I got HTML and shouldn't have"),
     (Str("Please try again later"), "Please try again later"),
     (Str("The sequence has been intentionally withdrawn"),
@@ -19,15 +24,18 @@ ncbi_failures=[
     ]
 
     
-register_db(
+nucleotide_genbank_cgi = CGIDB(
     name="nucleotide-genbank-cgi",
-    source=NCBI.query,
+    cgi="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi",
+    url="http://www.ncbi.nlm.nih.gov/entrez/query/static/linking.html",
+    doc="Query Entrez",
+    delay=5.0,
     params=[("cmd", "Text"),
             ("db", "Nucleotide"),
             ("dopt", "GenBank")
             ],
     key="uid",
-    failure=ncbi_failures
+    failure_cases=ncbi_failures
     )
 
 
@@ -35,20 +43,25 @@ register_db(
 # ERROR : GenPept does not exist for gi = 433174
 not_exist_expr = Str("ERROR") + Re("[^d]*") + Str("does not exist for gi")
 
-register_db(
+protein_genbank_cgi = CGIDB(
     name="protein-genbank-cgi",
-    source=NCBI.query,
+    cgi="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi",
+    url="http://www.ncbi.nlm.nih.gov/entrez/query/static/linking.html",
+    doc="Query Entrez",
+    delay=5.0,
     params=[("cmd", "Text"),
             ("db", "Protein"),
             ("dopt", "GenPept")
             ],
     key="uid",
-    failure=ncbi_failures+[(not_exist_expr, "GI does not exist")]
+    failure_cases=ncbi_failures+[(not_exist_expr, "GI does not exist")]
     )
 
-register_db(
+nucleotide_dbfetch_cgi = CGIDB(
     name="nucleotide-dbfetch-cgi",
-    source=EBI.dbfetch,
+    cgi="http://www.ebi.ac.uk/cgi-bin/dbfetch",
+    doc="dbfetch provides EMBL, Genbank, and SWALL sequences",
+    delay=5.0,
     params=[("db", "genbank"),
             ("style", "raw"),
             ("format", "embl"),

@@ -3,20 +3,22 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-from Bio import register_db, group_db
-from Bio.sources import ExPASy
-
+from Bio.config.DBRegistry import CGIDB, DBGroup
 from _support import *
 
-register_db(
+swissprot_expasy_cgi = CGIDB(
     name="swissprot-expasy-cgi",
-    source=ExPASy.get_sprot_raw,
+    doc="Retrieve a swiss-prot entry by ID",
+    cgi="http://www.expasy.ch/cgi-bin/get-sprot-raw.pl",
+    delay=5.0,
+    timeout=10,
+    params=[],
     key="",
-    failure=[(blank_expr, "no results")]
+    failure_cases=[(blank_expr, "no results")]
     )
 
-register_db(
+swissprot = DBGroup(
     name="swissprot",
     behavior="serial",
     )
-group_db("swissprot", "swissprot-expasy-cgi")
+swissprot.add(swissprot_expasy_cgi)

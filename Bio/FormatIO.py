@@ -1,7 +1,10 @@
 import sys, urllib
 from xml.sax import saxutils
+import StringIO
+
 import ReseekFile
 from Martel import Dispatch
+from Bio.config.FormatRegistry import FormatObject
 
 class FormatIOIterator:
     def __init__(self, obj):
@@ -58,20 +61,10 @@ class FormatIO:
         self.default_output_format = default_output_format
         self.registery = registery
 
-    def _find_builder(self, builder, resolver):
-        if builder is None:
-            builder = self.registery.find_builder(resolver, self)
-##            if builder is None:
-##                raise TypeError(
-##                    "Could not find a %r builder for %r types" % \
-##                    (self.name, resolver.format.name))
-        return builder
-
     def _get_file_format(self, format, source):
-        import Format        
         # By construction, this is the lowest we can go, so don't try
-        if isinstance(format, Format.FormatDef):
-            return format
+        if isinstance(format, FormatObject):
+            return format, source
 
         source = saxutils.prepare_input_source(source)
         infile = source.getCharacterStream() or source.getByteStream()
@@ -91,18 +84,19 @@ class FormatIO:
         # returned file could be a ReseekFile!
         return format, infile
         
-
     def readFile(self, infile, format = None, builder = None, debug_level = 0):
         if format is None:
             format = self.default_input_format
+            if format is None:
+                raise ValueError, "No format specified"
         format = self.registery.normalize(format)
-
+        if builder is None:
+            builder = self.registery.find_builder(format, self)
         format, infile = self._get_file_format(format, infile)
             
         if format is None:
             raise TypeError("Could not determine file type")
 
-        builder = self._find_builder(builder, format)
         select_names = _get_selected_names(builder, format)
 
         if format.multirecord == 1:
@@ -119,37 +113,9 @@ class FormatIO:
         else:
             raise AssertionError(format.multirecord)
 
-
-    def readString(self, s, format = None, builder = None, debug_level = 0):
-        if format is None:
-            format = self.default_input_format
-        format = self.registery.normalize(format)
-
-        # Check to see if we need to do further identification.
-        # (FormatDef is the leaf, so we don't need to go further than that.)
-        import Format
-        if not isinstance(format, Format.FormatDef):
-            format = format.identifyString(s)
-            if format is None:
-                raise TypeError("Could not determine file type")
-
-        builder = self._find_builder(builder, format)
-        select_names = _get_selected_names(builder, format)
-        
-        if format.multirecord == 1:
-            iterator = format.make_iterator("record",
-                                            select_names = select_names,
-                                            debug_level = debug_level)
-            return FormatIOIterator(iterator.iterateString(s, builder))
-        elif format.multirecord == 0:
-            parser = format.make_parser(select_names = select_names,
-                                        debug_level = debug_level)
-            parser.setContentHandler(builder)
-            parser.parseString(infile)
-            return builder.document
-        else:
-            raise AssertionError(format.multirecord)
-      
+    def readString(self, s, *args, **keywds):
+        infile = StringIO.StringIO(s)
+        return self.readFile(infile, *args, **keywds)
                   
     def read(self, systemID, format = None, builder = None, debug_level = 0):
         if isinstance(systemID, type("")):
@@ -174,8 +140,7 @@ class FormatIO:
         input_format, infile = self._get_file_format(input_format, infile)
         if input_format is None:
             raise TypeError("Could not not determine file type")
-
-        builder = self._find_builder(None, input_format)
+        builder = self.registery.find_builder(input_format, self)
 
         writer = self.make_writer(outfile, output_format)
 
@@ -188,8 +153,8 @@ class FormatIO:
             cont_h = StdHandler.ConvertDispatchHandler(builder, writer)
         else:
             cont_h = StdHandler.ConvertHandler(builder, writer)
-        parser.setContentHandler(cont_h)
 
         writer.writeHeader()
+        parser.setContentHandler(cont_h)
         parser.parseFile(infile)
         writer.writeFooter()

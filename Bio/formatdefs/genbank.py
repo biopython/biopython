@@ -1,11 +1,8 @@
-from Bio import register_format, link_format
+from Bio.config.FormatRegistry import FormatObject, FormatGroup
 
-register_format(
-    name = "genbank",
-    )
 
 # This is a sequence of genbank records
-register_format(
+genbank_records = FormatObject(
     name = "genbank-records",
     abbrev = "genbank_records",
     expression = "Bio.expressions.genbank.multirecord",
@@ -13,14 +10,18 @@ register_format(
 
 # This is the format as released by NCBI.  It includes
 # the header information.
-register_format(
+genbank_release = FormatObject(
     name = "genbank-release",
     abbrev = "genbank_release",
     expression = "Bio.expressions.genbank.format",
     )
 
 
-link_format("sequence", "genbank")
-link_format("genbank", "genbank-records")
-link_format("genbank", "genbank-release")
+genbank = FormatGroup(
+    name = "genbank",
+    )
+genbank.add(genbank_records)
+genbank.add(genbank_release)
 
+from Bio.formatdefs import sequence
+sequence.sequence.add(genbank)
