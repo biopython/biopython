@@ -140,10 +140,13 @@ class _Scanner:
         # Each round begins with either a "Searching......" line
         # or a 'Score     E' line followed by descriptions and alignments.
         # The email server doesn't give the "Searching....." line.
+        # If there is no 'Searching.....' line then you'll first see a 
+        # 'Results from round' line
 
         while 1:
             line = safe_peekline(uhandle)
             if (not line.startswith('Searching') and
+                not line.startswith('Results from round') and
                 re.search(r"Score +E", line) is None and
                 line.find('No hits found') == -1):
                 break
@@ -383,9 +386,12 @@ class _Scanner:
         while 1:
             line = safe_readline(uhandle)
             # Check to see whether I'm finished reading the alignment.
-            # This is indicated by 1) database section, 2) next psi-blast round
+            # This is indicated by 1) database section, 2) next psi-blast
+            # round, which can also be a 'Results from round' if no 
+            # searching line is present
             # patch by chapmanb
-            if line.startswith('Searching'):
+            if line.startswith('Searching') or \
+                    line.startswith('Results from round'):
                 uhandle.saveline(line)
                 break
             elif line.startswith('  Database'):
@@ -424,8 +430,8 @@ class _Scanner:
                        start='  Number of sequences')
             read_and_call(uhandle, consumer.noevent, start='  ')
 
-	    line = safe_readline(uhandle)
-	    uhandle.saveline(line)
+            line = safe_readline(uhandle)
+            uhandle.saveline(line)
             if line.find('Lambda') != -1:
 		break
 

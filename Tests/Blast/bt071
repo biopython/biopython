@@ -1,0 +1,81 @@
+BLASTP 2.2.8 [Jan-05-2004]
+
+
+Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+
+Query= gi|16130963|ref|NP_417539.1| RNA polymerase sigma(70)
+[Escherichia coli K12]
+         (613 letters)
+
+Database: NC_000913 
+           4311 sequences; 1,350,842 total letters
+
+
+Results from round 1
+
+
+                                                                 Score    E
+Sequences producing significant alignments:                      (bits) Value
+
+gi|16130963|ref|NP_417539.1| RNA polymerase sigma(70) [Escherich...  1032   0.0  
+gi|16130648|ref|NP_417221.1| sigma S factor [Escherichia coli K12]    189   3e-049
+gi|16131333|ref|NP_417918.1| sigma(32) factor [Escherichia coli ...    84   2e-017
+gi|33347603|ref|NP_416432.2| sigma factor 28 [Escherichia coli K12]    63   5e-011
+
+
+Results from round 2
+
+
+                                                                 Score    E
+Sequences producing significant alignments:                      (bits) Value
+Sequences used in model and found again:
+
+gi|16130963|ref|NP_417539.1| RNA polymerase sigma(70) [Escherich...  1016   0.0  
+gi|16130648|ref|NP_417221.1| sigma S factor [Escherichia coli K12]    358   e-100
+gi|16131333|ref|NP_417918.1| sigma(32) factor [Escherichia coli ...   290   2e-079
+gi|33347603|ref|NP_416432.2| sigma factor 28 [Escherichia coli K12]   237   2e-063
+
+Sequences not found previously or not previously below threshold:
+
+
+CONVERGED!
+  Database: NC_000913
+    Posted date:  Apr 8, 2004 12:56 AM
+  Number of letters in database: 1,350,842
+  Number of sequences in database:  4311
+  
+Lambda     K      H
+   0.313    0.141    0.379 
+
+Lambda     K      H
+   0.267   0.0431    0.140 
+
+
+Matrix: BLOSUM62
+Gap Penalties: Existence: 11, Extension: 1
+Number of Hits to DB: 2,949,500
+Number of Sequences: 4311
+Number of extensions: 123966
+Number of successful extensions: 504
+Number of sequences better than  1.0: 6
+Number of HSP's better than  1.0 without gapping: 9
+Number of HSP's successfully gapped in prelim test: 5
+Number of HSP's that attempted gapping in prelim test: 445
+Number of HSP's gapped (non-prelim): 23
+length of query: 613
+length of database: 1,350,842
+effective HSP length: 90
+effective length of query: 523
+effective length of database: 962,852
+effective search space: 503571596
+effective search space used: 503571596
+T: 11
+A: 40
+X1: 16 ( 7.2 bits)
+X2: 38 (14.6 bits)
+X3: 64 (24.7 bits)
+S1: 41 (21.3 bits)
+S2: 64 (29.2 bits)

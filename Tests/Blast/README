@@ -80,5 +80,6 @@ bt067 blastall 2.2.1  ad-hoc              -p blastx       No 'length of query'
 bt068 NCBIWWW  2.2.4  ad-hoc
 bt069 NCBIWWW  2.2.4  ad-hoc   Confusing sequences line in the database
 bt070 NCBIWWW  2.2.4  ad-hoc              -p blastp       nov 2002 new format
+bt071 blastpgp 2.2.8  ad-hoc from Jer-Yee John Chuang, no Searching... lines 
 
 * bt008 is not included because the file is too big (>15Mb).
