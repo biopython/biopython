@@ -12,7 +12,7 @@ Command line options:
 --no-gui      -- do not use a GUI to run the tests
 --help        -- show usage info
 <test_name>   -- supply the name of one (or more) tests to be run. Supplying
-                 the name of tests automatically switched to non-gui mode.
+                 the name of tests automatically switches to non-gui mode.
 """
 # standard modules
 import sys
@@ -24,7 +24,6 @@ import getopt
 
 # PyUnit
 import unittest
-import unittestgui
 
 def main(argv):
     # start off using the GUI
@@ -32,6 +31,7 @@ def main(argv):
     
     if use_gui:
         try:
+            import unittestgui
             import Tkinter as tk
         except ImportError:
             use_gui = 0
