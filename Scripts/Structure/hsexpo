@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/bin/user/python
 
 from optparse import OptionParser
 
@@ -10,9 +10,6 @@ parser=OptionParser()
 parser.add_option("-t", "--type", dest="exp", 
                   help="exposure type (CA3, CB, FS, DSSP, RD)",
                   default="CA3")
-
-parser.add_option("-i", "--in", dest="infile", 
-                  help="input PDB file")
 
 parser.add_option("-o", "--out", dest="outfile", 
                   help="output to PDB file (B factor=exposure)")
@@ -34,9 +31,11 @@ parser.add_option("-s", "--offset", dest="offset", type="float",
 
 (options, args)=parser.parse_args()
 
+pdbfile=args[0]
+
 # Get the structure
 p=PDBParser()
-s=p.get_structure('X', options.infile)
+s=p.get_structure('X', pdbfile)
 
 # First model by default
 m=s[options.model]
@@ -72,14 +71,14 @@ elif options.exp=="ANGLE":
     k=0
     format="%4.1f"
 elif options.exp=="DSSP":
-    d=DSSP(m, options.infile)
+    d=DSSP(m, pdbfile)
     k=1
 elif options.exp=="RD":
-    d=ResidueDepth(m, options.infile)
+    d=ResidueDepth(m, pdbfile)
     k=0
     format="%4.1f"
 elif options.exp=="RD_CA":
-    d=ResidueDepth(m, options.infile)
+    d=ResidueDepth(m, pdbfile)
     k=1
     format="%4.1f"
 
