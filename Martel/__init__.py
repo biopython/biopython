@@ -243,52 +243,89 @@ def ToEol(name = None, attrs = None):
     else:
         return Group(name, Re(r"[^\R]*"), attrs) + AnyEol()
 
-def ToSep(name = None, delimiter = None, attrs = None):
-    """match all characters up to the given delimiter(s)
+def UntilEol(name = None, attrs = None):
+    """match everything up to but not including the end of line
+
+    If 'name' is not None, the matching text, except for the newline,
+    will be put inside a group of the given name.  You can optionally
+    include group attributes.    
+    """
+    if name is None:
+        assert not attrs, "Attributes (%s) require a group name" % (attrs,)
+        return Re(r"[^\R]*")
+    else:
+        return Group(name, Re(r"[^\R]*"), attrs)
+
+def ToSep(name = None, sep = None, attrs = None):
+    """match all characters up to the given seperator(s)
 
     This is useful for parsing space, tab, color, or other character
-    delimited fields.  There is no default delimiter.
+    delimited fields.  There is no default seperator character.
     
-    If 'name' is not None, the matching text, except for the delimiter
+    If 'name' is not None, the matching text, except for the seperator
     will be put inside a group of the given name.  You can optionally
-    include group attributes.  The delimiter character will also be
+    include group attributes.  The seperator character will also be
     consumed.
 
-    Neither "\\r" nor "\\n" may be used as a delimiter.
+    Neither "\\r" nor "\\n" may be used as a seperator
     """
-    if delimiter is None:
+    if sep is None:
         # I found it was too easy to make a mistake with a default
-        raise TypeError("Must specify a delimiter")
+        raise TypeError("Must specify a seperator (the 'sep' parameter)")
 
-    assert "\r" not in delimiter and "\n" not in delimiter, \
-           "cannot use %s as a delimiter" % (repr(delimiter),)
+    assert "\r" not in sep and "\n" not in sep, \
+           "cannot use %s as a seperator" % (repr(seperator),)
 
-    exp = Rep(AnyBut(delimiter + "\r\n"))
-    return _group(name, exp, attrs) + Str(delimiter)
+    exp = Rep(AnyBut(sep + "\r\n"))
+    return _group(name, exp, attrs) + Str(sep)
 
-def DelimitedFields(name = None, delimiter = None, attrs = None):
-    """match 0 or more fields seperated by the given delimiter(s)
+def UntilSep(name = None, sep = None, attrs = None):
+    """match all characters up to the given seperators(s)
 
     This is useful for parsing space, tab, color, or other character
-    delimited fields.  There is no default delimiter.
+    delimited fields.  There is no default seperator.
+    
+    If 'name' is not None, the matching text, except for the seperator
+    will be put inside a group of the given name.  You can optionally
+    include group attributes.  The seperator character will not be
+    consumed.
 
-    If 'name' is not None, the delimited text, excluding the delimiter,
+    Neither "\\r" nor "\\n" may be used as a seperator.
+    """
+    if sep is None:
+        # I found it was too easy to make a mistake with a default
+        raise TypeError("Must specify a seperator (the 'sep' parameter)")
+
+    assert "\r" not in sep and "\n" not in sep, \
+           "cannot use %s as a seperator" % (repr(sep),)
+
+    exp = Rep(AnyBut(sep + "\r\n"))
+    return _group(name, exp, attrs)
+
+
+def DelimitedFields(name = None, sep = None, attrs = None):
+    """match 0 or more fields seperated by the given seperator(s)
+
+    This is useful for parsing space, tab, color, or other character
+    delimited fields.  There is no default seperator.
+
+    If 'name' is not None, the delimited text, excluding the seperator,
     will be put inside groups of the given name.  You can optionally
-    include group attributes.  The delimiter character is consumed,
+    include group attributes.  The seperator character is consumed,
     but not accessible using a group.
 
-    Neither "\\r" nor "\\n" may be used as a delimiter.
+    Neither "\\r" nor "\\n" may be used as a seperator.
     The line as a whole is not included in a group.
     """
-    if delimiter is None:
+    if sep is None:
         # I found it was too easy to make a mistake with a default
-        raise TypeError("Must specify a delimiter")
+        raise TypeError("Must specify a sep (via the 'sep' parameter)")
 
-    assert "\r" not in delimiter and "\n" not in delimiter, \
-           "cannot use %s as a delimiter" % (repr(delimiter),)
+    assert "\r" not in sep and "\n" not in sep, \
+           "cannot use %s as a seperator" % (repr(sep),)
 
-    term = _group(name, Rep(AnyBut(delimiter + "\r\n")), attrs)
-    rep = Rep(Any(delimiter) + term)
+    term = _group(name, Rep(AnyBut(sep + "\r\n")), attrs)
+    rep = Rep(Any(sep) + term)
     return term + rep + AnyEol()
     
 
