@@ -10,7 +10,10 @@ __doc__="Half sphere exposure and coordination number calculation."
 
 class HSExposure:
     """
-    Calculates the Half-Sphere Exposure (HSE).
+    Calculates the Half-Sphere Exposure (HSE). The HSE can be 
+    calculated based on the CA-CB vector, or the pseudo CB-CA vector
+    based on three consecutive CA atoms. In addition, the coordination
+    number (number of CA atoms within a sphere) can be calculated.
     """
     # unit vector along z
     # CA-CB vectors or the CA-CA-CA approximation will
@@ -18,6 +21,11 @@ class HSExposure:
     _unit_z=Vector(0.0, 0.0, 1.0)
 
     def __init__(self, OFFSET=0.0):
+        """
+        @param OFFSET: the dividing plane will be shifted 
+            by OFFSET in the direction of the CB atom (in angstrom)
+        @type OFFSET: float
+        """
         # List of CA-CB direction calculated from CA-CA-CA
         # Used for the PyMol script
         self.ca_cb_list=[]
@@ -29,6 +37,9 @@ class HSExposure:
         """
         Write a PyMol script that visualizes the pseudo CB-CA directions 
         at the CA coordinates.
+
+        @param filename: the name of the pymol script file
+        @type filename: string
         """
         if len(self.ca_cb_list)==0:
             sys.stderr.write("Nothing to draw.\n")
@@ -222,6 +233,27 @@ class HSExposure:
         return d
     
     def calc_hs_exposure(self, model, radius=12.0, option='CB'):
+        """
+        Calculate the half sphere exposure. A dictionary is returned that uses 
+        a L{Residue} object as key, and the residue exposure (a tuple of two ints)
+        as corresponding value. The first number in the tuple is the number of CA
+        atoms in the half sphere in the CB direction, the second number is the 
+        number of CA atoms in the opposite sphere.
+
+        @param model: the model that contains the residues
+        @type model: L{Model}
+
+        @param radius: radius of the sphere (centred at the CA atom)
+        @type radius: float
+
+        @param option: CB (using the CB-CA vector) or CA3 (using the pseudo CB-CA
+            vector, based on three consecutive CA atoms).
+        @type option: string
+
+        @return: a dictionary that uses a L{Residue} object as key, 
+            and the residue exposure as corresponding value.
+        @rtype: {L{Residue}:(int, int), L{Residue}:(int, int),...}
+        """
         residue_list=Selection.unfold_entities(model, 'R')
         if option=='CA3':
             rotran_list=self._get_rotran_list_from_ca(model)
@@ -234,8 +266,18 @@ class HSExposure:
     def calc_fs_exposure(self, model, radius=12.0):
         """
         A residue's exposure is defined as the number of CA atoms around 
-        that residues CA atom. A dictionary is returned that uses a Residue
+        that residues CA atom. A dictionary is returned that uses a L{Residue}
         object as key, and the residue exposure as corresponding value.
+
+        @param model: the model that contains the residues
+        @type model: L{Model}
+
+        @param radius: radius of the sphere (centred at the CA atom)
+        @type radius: float
+
+        @return: a dictionary that uses a L{Residue} object as key, 
+            and the residue exposure as corresponding value.
+        @rtype: {L{Residue}:int, L{Residue}:int,...}
         """
         residue_list=Selection.unfold_entities(model, 'R')
         ca_list=[]
@@ -260,6 +302,10 @@ class HSExposure:
     def get_angles(self):
         """
         Return delta angle between CA-CB and pseudoCB-CA
+
+        @return: a dictionary that uses a L{Residue} object as key, 
+            and the angle as corresponding value.
+        @rtype: {L{Residue}:float, L{Residue}:float,...}
         """
         return self.angles
 
