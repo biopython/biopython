@@ -123,7 +123,8 @@ class SeqMapIndex(FileIndex) :
             if chainid=='' or chainid=='-' or chainid==' ' or chainid=='_':
                 chainid = '_'
             id = pdbid + chainid
-                
+            
+            
             sm = self[id]
             
             #Cut out fragment of interest
@@ -226,7 +227,7 @@ class SeqMap :
         
         out_handle -- All output is written to this file like object.
         """
-        #This code should be refactored when (if?) biopython gets a PDB parser. 
+        #This code should be refactored when (if?) biopython gets a PDB parser 
 
         #The set of residues that I have to find records for. 
         resSet = {}
@@ -329,7 +330,9 @@ class Parser:
         chainid = line[4:5]
         
         seqMap.version = line[6:10]
-        if(seqMap.version != "0.01") :
+
+        #Raf format versions 0.01 and 0.02 are identical for practical purposes
+        if(seqMap.version != "0.01" and  seqMap.version !="0.02") :
             raise SyntaxError, "Incompatible RAF version: "+seqMap.version 
 
         seqMap.pdb_datestamp = line[14:20]
