@@ -75,6 +75,36 @@ cmathfns_intd(self, args, keywds)
     return PyFloat_FromDouble(x);
 }
 
+
+
+
+static char cmathfns_fcmp__doc__[] = 
+"fcmp(x, y, precision) -> -1, 0, or 1";
+
+static PyObject *
+cmathfns_fcmp(self, args, keywds)
+     PyObject *self;
+     PyObject *args;
+     PyObject *keywds;
+{
+    double x, y, precision;
+    int result;
+
+    static char *kwlist[] = {"x", "y", "precision", NULL};
+    if(!PyArg_ParseTupleAndKeywords(args, keywds, "ddd", kwlist, 
+				    &x, &y, &precision))
+	return NULL;
+
+    if(fabs(x-y) < precision)
+	result = 0;
+    else if(x < y)
+	result = -1;
+    else result = 1;
+    return PyInt_FromLong(result);
+}
+
+
+
 static char cmathfns_safe_log__doc__[] = 
 "safe_log(n, zero=None, neg=None) -> log(n)\n\
 \n\
@@ -116,10 +146,12 @@ cmathfns_safe_log(self, args, keywds)
 /************************************** Module definition stuff ******/
 
 static PyMethodDef cmathfnsMethods[] = {
-    {"safe_log", (PyCFunction)cmathfns_safe_log, METH_VARARGS|METH_KEYWORDS, 
-     cmathfns_safe_log__doc__},
+    {"fcmp", (PyCFunction)cmathfns_fcmp, METH_VARARGS|METH_KEYWORDS, 
+     cmathfns_fcmp__doc__},
     {"intd", (PyCFunction)cmathfns_intd, METH_VARARGS|METH_KEYWORDS, 
      cmathfns_intd__doc__},
+    {"safe_log", (PyCFunction)cmathfns_safe_log, METH_VARARGS|METH_KEYWORDS, 
+     cmathfns_safe_log__doc__},
     {NULL, NULL}
 };
 

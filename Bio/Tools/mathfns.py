@@ -6,12 +6,21 @@
 """This provides useful general math tools.
 
 Functions:
+fcmp       Compare two floating point numbers, up to a specified precision.
 intd       Represent a floating point number as an integer.
 safe_log   log, but returns an arbitrarily small number for log(0).
 safe_exp   exp, but returns a large or small number instead of overflows.
 
 """
 import math
+
+def fcmp(x, y, precision):
+    """fcmp(x, y, precision) -> -1, 0, or 1"""
+    if math.fabs(x-y) < precision:
+        return 0
+    elif x < y:
+        return -1
+    return 1
 
 def intd(x, digits_after_decimal=0):
     """intd(x[, digits_after_decimal]) -> int x, rounded
