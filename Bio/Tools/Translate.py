@@ -11,16 +11,13 @@ class Translator:
         assert seq.alphabet == self.table.nucleotide_alphabet, \
                "cannot translate from the given alphabet (%s)" % seq.alphabet
         s = seq.data
-        x = len(seq)/3
-        letters = [' '] * x
+        letters = []
         append = letters.append
         table = self.table
         get = table.forward_table.get
         n = len(seq)
-        j=0
         for i in range(0, n-n%3, 3):
-            letters[j] = get(s[i:i+3], stop_symbol)
-            j=j+1
+            append(get(s[i:i+3], stop_symbol))
 
         # return with the correct alphabet encoding (cache the encoding)
         try:
