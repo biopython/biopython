@@ -64,12 +64,12 @@ c.sequence('ABCD\n')
 c.sequence('EFG\n')
 c.end_sequence()
 
-print c.data.name         # "This is a title"
-print c.data.seq          # "ABCDEFG"
+print c.data.description  # "This is a title"
+print c.data.seq          # "Seq('ABCDEFG', Alphabet())"
 # clear the record
 c.start_sequence()   
 c.end_sequence()
-print repr(c.data.name)   # ''
+print repr(c.data.name)   # '<unknown name>'
 
 
 

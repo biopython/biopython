@@ -29,8 +29,8 @@ ABCDEFG
 ''
 Running tests on _SequenceConsumer
 This is a title
-ABCDEFG
-''
+Seq('ABCDEFG', Alphabet())
+'<unknown name>'
 Running tests on Iterator
 >gi|1348912|gb|G26680|G26680 human STS STS_D11729.^Agi|1396336|gb|G27617|G27617 human STS SHGC-32648.
 CGGACCAGACGGACACAGGGAGAAGCTAGTTTCTTTCATGTGATTGANATNATGACTCTACTCCTAAAAG

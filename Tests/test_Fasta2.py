@@ -28,7 +28,7 @@ for test in tests:
     datafile = os.path.join( 'Nucleic', test )
     src_handle = open( datafile )
     data = sequence_parser.parse( src_handle )
-    print data.name
+    print data.description
     print data.seq
 
 tests = [ 'aster.pro', 'rosemary.pro', 'rose.pro', 'loveliesbleeding.pro' ]
@@ -44,5 +44,5 @@ for test in tests:
     datafile = os.path.join( 'Amino', test )
     src_handle = open( datafile )
     data = sequence_parser.parse( src_handle )
-    print data.name
+    print data.description
     print data.seq[ :60]
