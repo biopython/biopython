@@ -29,7 +29,7 @@ from Bio.Tools import listfns
 
 # Import the euclidean distance function in the kNN class.  This
 # should probably be pulled out in a separate module.
-from Bio.Tools.Classification.kNN import euclidean_dist
+from Bio.Tools.Classification.kNN import euclidean_dist, euclidean_dist_py
 
 def random_centroids(data, k):
     """random_centroids(data, k) -> list of centroids

@@ -60,6 +60,18 @@ def euclidean_dist(x, y):
         raise ValueError, "vectors must be same length"
     return math.sqrt(sum((x-y)**2))
 
+def euclidean_dist_py(x, y):
+    """euclidean_dist_py(x, y) -> euclidean distance between x and y"""
+    # lightly modified from implementation by Thomas Sicheritz-Ponten.
+    # This works faster than the Numeric implementation on shorter
+    # vectors.
+    if len(x) != len(y):
+        raise ValueError, "vectors must be same length"
+    sum = 0
+    for i in range(len(x)):
+        sum += (x[i]-y[i])**2
+    return math.sqrt(sum)
+
 def equal_weight(x, y):
     """equal_weight(x, y) -> 1"""
     # everything gets 1 vote
