@@ -1,13 +1,6 @@
 # Stores data about the sequence
 
-# I HAVEN'T REALLY THOUGHT ABOUT THIS DESIGN!!!
-
-# There's only enough here for me to bootstrap reading FASTA
-# sequences.
-
-# There will probably be a restricted vocabulary on the features and
-# annotations, and one of them will be a "vocabulary" to distinguish
-# between differences in vocabulary. :)
+# NEEDS TO BE SYNCH WITH THE REST OF BIOPYTHON AND BIOPERL
 
 from Bio import FormatIO
 
