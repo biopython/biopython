@@ -64,8 +64,13 @@ class DatabaseLoader:
     def _load_bioentry_table(self, record):
         """Fill the bioentry table with sequence information.
         """
-        # get the pertinet info and insert it
-        accession, version = record.id.split('.')
+        # get the pertinent info and insert it
+        
+        if record.id.find('.') >= 0: # try to get a version from the id
+            accession, version = record.id.split('.')
+        else: # otherwise just use a null version
+            accession = record.id
+            version = 0
         try:
             division = record.annotations["data_file_divison"]
         except KeyError:
