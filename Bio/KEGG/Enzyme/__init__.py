@@ -313,6 +313,8 @@ class _Consumer(AbstractConsumer):
     def organism(self, organism):
         self._current_organism = organism[0]
     def gene_id(self, gene_id):
+        # Keep just the id, without the name
+        gene_id = map(lambda x: (x.split("("))[0], gene_id)
         self.data.genes.append((self._current_organism, gene_id))
         self._current_organism = ""
     def disease_db(self, disease_db):

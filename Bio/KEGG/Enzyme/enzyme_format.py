@@ -10,8 +10,8 @@ from the Ligand distribution, available from:
  http://www.genome.ad.jp/kegg
 
 (Note that as of KEGG release 19.0, the 'enzyme' file that comes
-as part of the Ligand ditribution does not conform 100% to this
-description. In particular, a few entries contain data items that
+as part of the Ligand distribution does not conform 100% to this
+description. In particular, some entries contain data items that
 are not ordered as they should be according the description. This
 Biopython format description has been weakened to accomodate parsing
 of these irregular entries.)
