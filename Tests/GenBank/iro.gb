@@ -1,0 +1,87 @@
+LOCUS       IRO125195    1326 bp    mRNA            PRI       11-AUG-1999
+DEFINITION  Homo sapiens mRNA full length insert cDNA clone EUROIMAGE 125195.
+ACCESSION   AL109817
+VERSION     AL109817.1  GI:5731880
+KEYWORDS    FLI_CDNA.
+SOURCE      human.
+  ORGANISM  Homo sapiens
+            Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Mammalia;
+            Eutheria; Primates; Catarrhini; Hominidae; Homo.
+REFERENCE   1  (bases 1 to 1326)
+  AUTHORS   Auffray,C., Ansorge,W., Ballabio,A., Estivill,X., Gibson,K.,
+            Lehrach,H., Poustka,A. and Lundeberg,J.
+  TITLE     The European IMAGE consortium for integrated Molecular analysis of
+            human gene transcripts
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 1326)
+  AUTHORS   Carim,L., Estivill,X., Sumoy,L. and Escarceller,M.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (11-AUG-1999) Dept. Genetica Molecular, Institut de
+            Recerca Oncologica (IRO), Hospital Duran i Reynals, Autovia de
+            Castelldefels Km 2,7 L'Hospitalet de Llobregat, 08907 Barcelona,
+            Catalunya, SPAIN. Tel: ++34-93-260-7775 Fax: ++34-93-260-7776 WWW
+            site: http://www.iro.es e-mail enquiries: lsumoy@iro.es,
+            mescarceller@iro.es
+COMMENT     EURO-IMAGE Consortium Contact: Auffray C
+            CNRS UPR 420 - Genetique Moleculaire et Biologie du Developement
+            IFR 1221 - Rue Guy Moquet 19, Batiment G - BP 8
+            94801 Villejuif  Cedex, FRANCE
+            Tel: ++33-1-49 58 34 98
+            Fax: ++33-1-49 58 35 09
+            e-mail: auffray@infobiogen.fr
+            This clone is available royalty-free through IMAGE Consortium
+            Distributors.
+            IMPORTANT: This sequence represents the full insert of this IMAGE
+            cDNA clone. No attempt has been made to verify whether this
+            corresponds to the full-length of the original mRNA from which it
+            was derived.
+FEATURES             Location/Qualifiers
+     source          1..1326
+                     /organism="Homo sapiens"
+                     /db_xref="taxon:9606"
+                     /chromosome="21"
+                     /clone="IMAGE cDNA clone 125195"
+                     /clone_lib="Soares fetal liver spleen 1NFLS"
+                     /note="contains Alu repeat; likely to be be derived from
+                     unprocessed nuclear RNA or genomic DNA; encodes putative
+                     exons identical to FTCD; formimino transferase
+                     cyclodeaminase; formimino transferase (EC 2.1.2.5)
+                     /formimino tetrahydro folate cyclodeaminase (EC 4.3.1.4)"
+     gene            341..756
+                     /gene="FTCD"
+     exon            341..384
+                     /gene="FTCD"
+                     /number=1
+     intron          385..617
+                     /gene="FTCD"
+                     /number=1
+     exon            618..756
+                     /gene="FTCD"
+                     /number=2
+BASE COUNT      258 a    404 c    400 g    264 t
+ORIGIN      
+        1 cacaggccca gagccactcc tgcctacagg ttctgagggc tcaggggacc tcctgggccc
+       61 tcaggctctt tagctgagaa taagggccct gagggaacta cctgcttctc acatccccgg
+      121 gtctctgacc atctgctgtg tgccccgacc ccccctaccc tgctcctcca ccaagcctga
+      181 tgccaagggc tataaaccac tggcccaaca gaagcttggt tcccagagaa ctggtccctg
+      241 cctgggacat gctccttgct acagcccctt gtgggagctc agagggcatg gctgctcccc
+      301 ctacggtccc tcgcccagtg gttctgtctc tttatggcag gaagcaatga ggctccccaa
+      361 gaacacacct gaggaaaagg acaggtgagc ctggagggcc ggccgcaccg tgggcctctg
+      421 tgtctgggga gttggtggcc aggatcccga gtacctgggt gctgtgacgg ggcgtggttg
+      481 gcctgggcgt gctgggtgtt tgggaatgac ttcccatcgc ccgcttctgc agcctgctca
+      541 gccctgttgg ggtgcagtgt gtccactgcc tgcctgtgtg tgccgctgtg ctcaggctct
+      601 cctcttgctc ctttcaggcg cacggcggcc ctacaggagg gtctgaggcg ggcagtctct
+      661 gtgccgctga cgctggcgga gacggtggcc tcgctgtggc cggccctgca ggaactggcc
+      721 cggtgtggga acctggcctg ccggtcagac ctccaggtag gggggcccgg gggaccccag
+      781 gcctcctgcc gcaaagcagg aagcagctgt tggggctgag ttgctggaga gcacggtggt
+      841 tggctgggct gagccaggta gggagacctc acttcacggg cagttcccgg ggctttggcc
+      901 tcctccaaca gggccggggt gtccgctgcc ttctaagatc tcgctcacgg cggcaccaca
+      961 gacggagacc caaatgtgtc tgcagagccc accctgacca ctgtataagt gtatactccc
+     1021 ccaagacccc ttgtatcacc cccactgtcg tgttctagaa aacacctatg tcagcccagg
+     1081 cacaatggtt ctcgcctgtg gtcccagcac tttgggaggc tgaggcggga ggatcacttg
+     1141 aatagaggag gtcgagacca gcctgggcaa catagtggga ccctggctgt acaatagata
+     1201 catatgagcc aggcacggtg gtgcctgtgg tcccagctcc ctgcccagcc agcctcctgt
+     1261 ctccagagaa gttctccatt aaaaaataat ttagcaaaaa aaaaaaaaaa aaaaaaaaaa
+     1321 aaaaaa
+//
+

@@ -1,0 +1,320 @@
+LOCUS       ATCOR66M      513 bp    mRNA            PLN       02-MAR-1992
+DEFINITION  A.thaliana cor6.6 mRNA.
+ACCESSION   X55053
+VERSION     X55053.1  GI:16229
+KEYWORDS    antifreeze protein homology; cold-regulated gene; cor6.6 gene; KIN1
+            homology.
+SOURCE      thale cress.
+  ORGANISM  Arabidopsis thaliana
+            Eukaryota; Viridiplantae; Streptophyta; Embryophyta; Tracheophyta;
+            euphyllophytes; Spermatophyta; Magnoliophyta; eudicotyledons;
+            Rosidae; Capparales; Brassicaceae; Arabidopsis.
+REFERENCE   1  (bases 1 to 513)
+  AUTHORS   Thomashow,M.F.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (01-FEB-1991) M.F. Thomashow, Dept. Crop and Soil
+            Sciences, Dept. Microbiology, Michigan State University, East
+            Lansing, Michigan 48824, USA
+REFERENCE   2  (bases 1 to 513)
+  AUTHORS   Gilmour,S.J., Artus,N.N. and Thomashow,M.F.
+  TITLE     cDNA sequence analysis and expression of two cold-regulated genes
+            of Arabidopsis thaliana
+  JOURNAL   Plant Mol. Biol. 18 (1), 13-21 (1992)
+  MEDLINE   92119220
+COMMENT     Cor6.6 homologous to KIN1. KIN1 is a cold-regulated Arabidopsis
+            gene with suggested similarity to type I fish antifreeze proteins.
+FEATURES             Location/Qualifiers
+     source          1..513
+                     /organism="Arabidopsis thaliana"
+                     /strain="Columbia"
+                     /db_xref="taxon:3702"
+     gene            50..250
+                     /gene="cor6.6"
+     CDS             50..250
+                     /gene="cor6.6"
+                     /note="cold regulated"
+                     /codon_start=1
+                     /protein_id="CAA38894.1"
+                     /db_xref="GI:16230"
+                     /db_xref="SWISS-PROT:P31169"
+                     /translation="MSETNKNAFQAGQAAGKAEEKSNVLLDKAKDAAAAAGASAQQAG
+                     KSISDAAVGGVNFVKDKTGLNK"
+BASE COUNT      194 a     82 c    104 g    133 t
+ORIGIN      
+        1 aacaaaacac acatcaaaaa cgattttaca agaaaaaaat atctgaaaaa tgtcagagac
+       61 caacaagaat gccttccaag ccggtcaggc cgctggcaaa gctgaggaga agagcaatgt
+      121 tctgctggac aaggccaagg atgctgctgc tgcagctgga gcttccgcgc aacaggcggg
+      181 aaagagtata tcggatgcgg cagtgggagg tgttaacttc gtgaaggaca agaccggcct
+      241 gaacaagtag cgatccgagt caactttggg agttataatt tcccttttct aattaattgt
+      301 tgggattttc aaataaaatt tgggagtcat aattgattct cgtactcatc gtacttgttg
+      361 ttgtttttag tgttgtaatg ttttaatgtt tcttctccct ttagatgtac tacgtttgga
+      421 actttaagtt taatcaacaa aatctagttt aagttctaaa aaaaaaaaaa aaaaaaaaaa
+      481 aaaaaaaaaa aaaaaaaaaa aaaaaaaaaa aaa
+//
+LOCUS       ATKIN2        880 bp    DNA             PLN       23-JUL-1992
+DEFINITION  A.thaliana kin2 gene.
+ACCESSION   X62281
+VERSION     X62281.1  GI:16353
+KEYWORDS    kin2 gene.
+SOURCE      thale cress.
+  ORGANISM  Arabidopsis thaliana
+            Eukaryota; Viridiplantae; Streptophyta; Embryophyta; Tracheophyta;
+            euphyllophytes; Spermatophyta; Magnoliophyta; eudicotyledons;
+            Rosidae; Capparales; Brassicaceae; Arabidopsis.
+REFERENCE   1  (bases 1 to 880)
+  AUTHORS   Borg-Franck,M.E.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (27-SEP-1991) M.E. Borg-Franck, Inst of Biotechnology,
+            University of Helsinki, Karvaamokuja 3, SF-00380 Helsinki, FINLAND
+REFERENCE   2  (bases 1 to 880)
+  AUTHORS   Kurkela,S. and Borg-Franck,M.
+  TITLE     Structure and expression of kin2, one of two cold- and ABA-induced
+            genes of Arabidopsis thaliana
+  JOURNAL   Plant Mol. Biol. 19 (4), 689-692 (1992)
+  MEDLINE   92329728
+FEATURES             Location/Qualifiers
+     source          1..880
+                     /organism="Arabidopsis thaliana"
+                     /strain="ssp. L. Heynh, Colombia"
+                     /db_xref="taxon:3702"
+     TATA_signal     9..20
+     exon            44..160
+                     /gene="kin2"
+                     /number=1
+     prim_transcript 44..>579
+                     /gene="kin2"
+     mRNA            join(44..160,320..390,504..>579)
+                     /gene="kin2"
+     gene            44..579
+                     /gene="kin2"
+     CDS             join(104..160,320..390,504..579)
+                     /gene="kin2"
+                     /codon_start=1
+                     /protein_id="CAA44171.1"
+                     /db_xref="GI:16354"
+                     /db_xref="SWISS-PROT:P31169"
+                     /translation="MSETNKNAFQAGQAAGKAERRRAMFCWTRPRMLLLQLELPRNRA
+                     GKSISDAAVGGVNFVKDKTGLNK"
+     intron          161..319
+                     /gene="kin2"
+                     /number=1
+     exon            320..390
+                     /gene="kin2"
+                     /number=2
+     intron          391..503
+                     /gene="kin2"
+                     /number=2
+     exon            504..>579
+                     /gene="kin2"
+                     /number=3
+     polyA_signal    620..625
+     polyA_signal    641..646
+     polyA_site      785
+     polyA_site      800
+BASE COUNT      263 a    155 c    160 g    302 t
+ORIGIN      
+        1 atttggccta taaatataaa cccttaagcc cacatatctt ctcaatccat cacaaacaaa
+       61 acacacatca aaaacgattt tacaagaaaa aaatatctga aaaatgtcag agaccaacaa
+      121 gaatgccttc caagccggtc aggccgctgg caaagctgag gtactctttc tctcttagaa
+      181 cagagtactg atagattgtt caagttataa ctctttgaaa acagttgaaa cttgatcact
+      241 cctagaactt ccattttctt gtttaattta gtttgtcgta attatgtaat tgattttgtg
+      301 ttgaccatgg ttgttatata ggagaagagc aatgttctgc tggacaaggc caaggatgct
+      361 gctgctgcag ctggagcttc cgcgcaacag gtaaacgatc tatacacaca ttatgacatt
+      421 tatgtaaaga atgaaaagtc ttcttagagc atacatttac gcagatttct gatattttca
+      481 tatggtttga tgtaaatgtt ataggcggga aagagtatat cggatgcggc agtgggaggt
+      541 gttaacttcg tgaaggacaa gaccggcctg aacaagtagc gatccgagtc aactttggga
+      601 gttataattt cccttttcta attaattgtt gggattttca aataaaattt gggagtcata
+      661 attgattctc gtactcatcg tacttgttgt tgtttttagt gttgtaatgt tttaatgttt
+      721 cttctccctt tagatgtact acgtttggaa ctttaagttt aatcaacaaa atctagttta
+      781 agttctaaga actttgtttt accatcctct tttttattgc acttaatgct tatagacttt
+      841 tatctccatc catttctcaa ttcggctacg ttgaattata 
+//
+LOCUS       BNAKINI       441 bp    mRNA            PLN       27-APR-1993
+DEFINITION  Rapeseed Kin1 protein (kin1) mRNA, complete cds.
+ACCESSION   M81224
+VERSION     M81224.1  GI:167145
+KEYWORDS    .
+SOURCE      Brassica napus (cultivar Jet neuf) cold induced leaf cDNA to mRNA.
+  ORGANISM  Brassica napus
+            Eukaryota; Viridiplantae; Embryophyta; Tracheophyta; Spermatophyta;
+            Magnoliophyta; eudicotyledons; core eudicots; Rosidae; eurosids II;
+            Brassicales; Brassicaceae; Brassica.
+REFERENCE   1  (bases 1 to 441)
+  AUTHORS   Orr,W., Iu,B., White,T., Robert,L.S. and Singh,J.
+  TITLE     Nucleotide sequence of a winter B. napus Kin 1 cDNA
+  JOURNAL   Plant Physiol. 98, 1532-1534 (1992)
+FEATURES             Location/Qualifiers
+     source          1..441
+                     /organism="Brassica napus"
+                     /cultivar="Jet neuf"
+                     /db_xref="taxon:3708"
+                     /dev_stage="cold induced"
+                     /tissue_type="leaf"
+     gene            34..300
+                     /gene="kin1"
+     CDS             34..231
+                     /gene="kin1"
+                     /codon_start=1
+                     /evidence=experimental
+                     /protein_id="AAA32993.1"
+                     /db_xref="GI:167146"
+                     /translation="MADNKQSFQAGQASGRAEEKGNVLMDKVKDAATAAGASAQTAGQ
+                     KITEAAGGAVNLVKEKTGMNK"
+     polyA_signal    241..247
+                     /gene="kin1"
+                     /note="putative"
+     polyA_signal    294..300
+                     /gene="kin1"
+                     /note="putative"
+     polyA_site      441
+                     /gene="kin1"
+BASE COUNT      129 a     76 c    110 g    126 t
+ORIGIN      
+        1 aaaaaaacac aacaaaactc aataaataaa caaatggcag acaacaagca gagcttccaa
+       61 gccggtcaag cctctggtcg tgctgaggag aagggtaatg tgctgatgga caaggtcaag
+      121 gatgctgcta ccgcagctgg agcgtctgcg caaaccgcgg gacagaagat aacggaggcg
+      181 gcagggggag ccgttaatct cgtgaaggag aagaccggca tgaacaagta gccccattgg
+      241 aaataaaatt gggagttata gtttcccttt ttaatgttaa tcgttgtggt tttaaataaa
+      301 aattgggtgt tctaattgat cttcaccgta gttgttgttg ttgttgtttt tagtgtttga
+      361 agtaatgttt tcaaccttta ggtgtatgtc ttgatgttta tgtacttagt tcccccttaa
+      421 tgaacatctg atttaagctt c
+//
+LOCUS       ARU237582     206 bp    DNA             PLN       24-MAR-1999
+DEFINITION  Armoracia rusticana csp14 gene (partial), exons 2-3.
+ACCESSION   AJ237582
+VERSION     AJ237582.1  GI:4538892
+KEYWORDS    cold shock protein; csp14 gene.
+SOURCE      horseradish.
+  ORGANISM  Armoracia rusticana
+            Eukaryota; Viridiplantae; Streptophyta; Embryophyta; Tracheophyta;
+            euphyllophytes; Spermatophyta; Magnoliophyta; eudicotyledons;
+            Rosidae; Capparales; Brassicaceae; Armoracia.
+REFERENCE   1  (bases 1 to 206)
+  AUTHORS   Baymiev,A.K., Gimalov,F.R. and Vakhitov,V.A.
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 206)
+  AUTHORS   Baymiev,A.K.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (20-MAR-1999) Baymiev A.K., Departament of Biochemistry
+            and Cytochemistry, Ufa Scientific Centre, pr. Oktyabrya 69, Ufa,
+            Bashkortostan, Russia, 450054, RUSSIA
+FEATURES             Location/Qualifiers
+     source          1..206
+                     /organism="Armoracia rusticana"
+                     /db_xref="taxon:3704"
+                     /country="Russia:Bashkortostan"
+     mRNA            join(<1..48,143..>206)
+                     /gene="csp14"
+     exon            1..48
+                     /gene="csp14"
+                     /number=2
+     gene            1..206
+                     /gene="csp14"
+     CDS             join(<1..48,143..>206)
+                     /gene="csp14"
+                     /codon_start=2
+                     /product="cold shock protein"
+                     /protein_id="CAB39890.1"
+                     /db_xref="GI:4538893"
+                     /translation="DKAKDAAAAAGASAQQAGKNISDAAAGGVNFVKEKTG"
+     intron          49..142
+                     /gene="csp14"
+                     /number=2
+     exon            143..206
+                     /gene="csp14"
+                     /number=3
+BASE COUNT       65 a     38 c     53 g     48 t      2 others
+ORIGIN      
+        1 ggacaaggcc aaggatgctg ctgctgcagc tggagcttcc gcgcaacaag taaacagata
+       61 cacacacatg acacatatat aantacatat cacaagtagg tcgtagattt ctgatatntt
+      121 tgtattgtgt attacgtata taggcgggaa agaacatatc ggatgcagca gctggaggtg
+      181 ttaacttcgt gaaggagaag accggc
+//
+LOCUS       BRRBIF72      282 bp    mRNA            PLN       01-MAR-1996
+DEFINITION  Brassica rapa (clone bif72) kin mRNA, complete cds.
+ACCESSION   L31939
+VERSION     L31939.1  GI:1209261
+KEYWORDS    .
+SOURCE      Brassica rapa flower cDNA to mRNA.
+  ORGANISM  Brassica rapa
+            Eukaryota; Viridiplantae; Embryophyta; Tracheophyta; Spermatophyta;
+            Magnoliophyta; eudicotyledons; core eudicots; Rosidae; eurosids II;
+            Brassicales; Brassicaceae; Brassica.
+REFERENCE   1  (bases 1 to 282)
+  AUTHORS   Kim,J.-B., Kim,H.-U., Park,B.-S., Yun,C.-H., Cho,W.-S., Ryu,J.-C.
+            and Chung,T.-Y.
+  TITLE     Nucleotide sequences of kin gene in chinese cabbage
+  JOURNAL   Unpublished (1994)
+FEATURES             Location/Qualifiers
+     source          1..282
+                     /organism="Brassica rapa"
+                     /db_xref="taxon:3711"
+                     /dev_stage="flower"
+     gene            24..221
+                     /gene="kin"
+     CDS             24..221
+                     /gene="kin"
+                     /codon_start=1
+                     /protein_id="AAA91051.1"
+                     /db_xref="GI:1209262"
+                     /translation="MADNKQSFQAGQAAGRAEEKGNVLLMDKVKDAATAAGALQTAGQ
+                     KITEAAGGAVNLVKEKTGMNK"
+BASE COUNT       88 a     56 c     80 g     58 t
+ORIGIN      
+        1 aacaaaactc aataaataaa caaatggcag acaacaagca gagcttccaa gccggtcaag
+       61 ccgctggtcg tgctgaggag aagggtaatg tgctgctgat ggacaaggtc aaggatgctg
+      121 ctaccgcagc tggagctctc caaaccgcgg gacagaagat aacggaggcg gcagggggag
+      181 ccgttaatct cgtgaaggag aagaccggca tgaacaagta gccccattgg aaacaaaatt
+      241 gggagttata gtttcctttt taatattaat cgttgtggtt tt
+//
+LOCUS       AF297471      497 bp    DNA             PLN       14-SEP-2000
+DEFINITION  Brassica napus BN28a (BN28a) gene, complete cds.
+ACCESSION   AF297471
+VERSION     AF297471.1  GI:10121868
+KEYWORDS    .
+SOURCE      rape.
+  ORGANISM  Brassica napus
+            Eukaryota; Viridiplantae; Embryophyta; Tracheophyta; Spermatophyta;
+            Magnoliophyta; eudicotyledons; core eudicots; Rosidae; eurosids II;
+            Brassicales; Brassicaceae; Brassica.
+REFERENCE   1  (bases 1 to 497)
+  AUTHORS   Byass,L.J. and Flanagan,A.M.
+  TITLE     BN28a, a low temperature-induced gene of Brassica napus
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 497)
+  AUTHORS   Byass,L.J. and Flanagan,A.M.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (18-AUG-2000) AFNS, University of Alberta, 4-10
+            Agriculture/Forestry Centre, Edmonton, Alberta T6G 2P5, Canada
+FEATURES             Location/Qualifiers
+     source          1..497
+                     /organism="Brassica napus"
+                     /cultivar="Cascade"
+                     /db_xref="taxon:3708"
+     mRNA            join(<1..54,241..309,423..>497)
+                     /gene="BN28a"
+                     /product="BN28a"
+     gene            <1..>497
+                     /gene="BN28a"
+     CDS             join(1..54,241..309,423..497)
+                     /gene="BN28a"
+                     /note="low temperature-induced; similar to Brassica napus
+                     Kin1 in Accession Number M81224"
+                     /codon_start=1
+                     /product="BN28a"
+                     /protein_id="AAG13407.1"
+                     /db_xref="GI:10121869"
+                     /translation="MADNKQSFQAGQAAGRAEEKGNVLMDKVKDAATAAGASAQTAGQ
+                     KITEAAGGAVNLVKEKTGMNK"
+BASE COUNT      155 a     89 c    116 g    137 t
+ORIGIN      
+        1 atggcagaca acaagcagag cttccaagcc ggtcaagccg ctggtcgtgc tgaggtctct
+       61 ttctctcttt aactctctga tcaaatgcag ttgctgcggt taaacaatca cactttataa
+      121 aataaagaga agttatttat attttcttga accaagtaaa tgaatgtatt ttgaccaaaa
+      181 aaagaagaag taaatgaatg tattaattga tttcgtgtgg acaatggtgt gtaaatatag
+      241 gagaagggta atgtgctgat ggacaaggtc aaggatgctg ctaccgcagc tggagcgtct
+      301 gcgcaaaccg taagcgatct accccatgat atataaataa acatacgtct ctactctcta
+      361 ctgtacatgt tcgtagatct catatctttt tatgctgttc taacatgtat ttacgtttat
+      421 aggcgggaca gaagataacg gaggcggcag ggggagccgt taatctcgtg aaggagaaga
+      481 ccggcatgaa caagtag
+//

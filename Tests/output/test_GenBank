@@ -1,0 +1,1747 @@
+test_GenBank
+Testing parsers...
+***Record from the FeatureParser
+Seq: Seq('AACAAAACACACATCAAAAACGATTTTACAAGAAAAAAATATCTGAAAAATGTCAGAGAC ...', RNAAlphabet())
+Id: X55053.1
+Name: ATCOR66M
+Description A.thaliana cor6.6 mRNA.
+Annotations***
+Key: gi
+Value: 16229
+Key: organism
+Value: Arabidopsis thaliana
+Key: taxonomy
+Value: ['Eukaryota', 'Viridiplantae', 'Streptophyta', 'Embryophyta', 'Tracheophyta', 'euphyllophytes', 'Spermatophyta', 'Magnoliophyta', 'eudicotyledons', 'Rosidae', 'Capparales', 'Brassicaceae', 'Arabidopsis']
+Key: keywords
+Value: ['antifreeze protein homology', 'cold-regulated gene', 'cor6.6 gene', 'KIN1 homology']
+Key: data_file_division
+Value: PLN
+Key: date
+Value: 02-MAR-1992
+References*
+location: (1..513)
+authors: Thomashow,M.F.
+title: Direct Submission
+journal: Submitted (01-FEB-1991) M.F. Thomashow, Dept. Crop and Soil Sciences, Dept. Microbiology, Michigan State University, East Lansing, Michigan 48824, USA
+medline id: 
+pubmed id: 
+comment: 
+
+location: (1..513)
+authors: Gilmour,S.J., Artus,N.N. and Thomashow,M.F.
+title: cDNA sequence analysis and expression of two cold-regulated genes of Arabidopsis thaliana
+journal: Plant Mol. Biol. 18 (1), 13-21 (1992)
+medline id: 92119220
+pubmed id: 
+comment: 
+
+Key: source
+Value: thale cress
+Key: comment
+Value: Cor6.6 homologous to KIN1. KIN1 is a cold-regulated Arabidopsis gene with suggested similarity to type I fish antifreeze proteins.
+Feaures
+type: source
+location: (1..513)
+ref: None:None
+strand: 0
+qualifiers: {'db_xref': 'taxon:3702', 'strain': 'Columbia', 'organism': 'Arabidopsis thaliana'}
+
+type: gene
+location: (50..250)
+ref: None:None
+strand: 0
+qualifiers: {'gene': 'cor6.6'}
+
+type: CDS
+location: (50..250)
+ref: None:None
+strand: 0
+qualifiers: {'protein_id': 'CAA38894.1', 'codon_start': '1', 'translation': 'MSETNKNAFQAGQAAGKAEEKSNVLLDKAKDAAAAAGASAQQAG\012                     KSISDAAVGGVNFVKDKTGLNK', 'gene': 'cor6.6', 'db_xref1': 'SWISS-PROT:P31169', 'db_xref': 'GI:16230', 'note': 'cold regulated'}
+
+***Record from the FeatureParser
+Seq: Seq('ATTTGGCCTATAAATATAAACCCTTAAGCCCACATATCTTCTCAATCCATCACAAACAAA ...', DNAAlphabet())
+Id: X62281.1
+Name: ATKIN2
+Description A.thaliana kin2 gene.
+Annotations***
+Key: gi
+Value: 16353
+Key: organism
+Value: Arabidopsis thaliana
+Key: taxonomy
+Value: ['Eukaryota', 'Viridiplantae', 'Streptophyta', 'Embryophyta', 'Tracheophyta', 'euphyllophytes', 'Spermatophyta', 'Magnoliophyta', 'eudicotyledons', 'Rosidae', 'Capparales', 'Brassicaceae', 'Arabidopsis']
+Key: keywords
+Value: ['kin2 gene']
+Key: data_file_division
+Value: PLN
+Key: date
+Value: 23-JUL-1992
+References*
+location: (1..880)
+authors: Borg-Franck,M.E.
+title: Direct Submission
+journal: Submitted (27-SEP-1991) M.E. Borg-Franck, Inst of Biotechnology, University of Helsinki, Karvaamokuja 3, SF-00380 Helsinki, FINLAND
+medline id: 
+pubmed id: 
+comment: 
+
+location: (1..880)
+authors: Kurkela,S. and Borg-Franck,M.
+title: Structure and expression of kin2, one of two cold- and ABA-induced genes of Arabidopsis thaliana
+journal: Plant Mol. Biol. 19 (4), 689-692 (1992)
+medline id: 92329728
+pubmed id: 
+comment: 
+
+Key: source
+Value: thale cress
+Feaures
+type: source
+location: (1..880)
+ref: None:None
+strand: 1
+qualifiers: {'db_xref': 'taxon:3702', 'strain': 'ssp. L. Heynh, Colombia', 'organism': 'Arabidopsis thaliana'}
+
+type: TATA_signal
+location: (9..20)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+type: exon
+location: (44..160)
+ref: None:None
+strand: 1
+qualifiers: {'gene': 'kin2', 'number': '1'}
+
+type: prim_transcript
+location: (44..>579)
+ref: None:None
+strand: 1
+qualifiers: {'gene': 'kin2'}
+
+type: mRNA
+location: (44..>579)
+ref: None:None
+strand: 1
+qualifiers: {'gene': 'kin2'}
+Sub-Features
+type: mRNA_join
+location: (44..160)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+type: mRNA_join
+location: (320..390)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+type: mRNA_join
+location: (504..>579)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+
+type: gene
+location: (44..579)
+ref: None:None
+strand: 1
+qualifiers: {'gene': 'kin2'}
+
+type: CDS
+location: (104..579)
+ref: None:None
+strand: 1
+qualifiers: {'db_xref1': 'SWISS-PROT:P31169', 'protein_id': 'CAA44171.1', 'codon_start': '1', 'gene': 'kin2', 'translation': 'MSETNKNAFQAGQAAGKAERRRAMFCWTRPRMLLLQLELPRNRA\012                     GKSISDAAVGGVNFVKDKTGLNK', 'db_xref': 'GI:16354'}
+Sub-Features
+type: CDS_join
+location: (104..160)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+type: CDS_join
+location: (320..390)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+type: CDS_join
+location: (504..579)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+
+type: intron
+location: (161..319)
+ref: None:None
+strand: 1
+qualifiers: {'gene': 'kin2', 'number': '1'}
+
+type: exon
+location: (320..390)
+ref: None:None
+strand: 1
+qualifiers: {'gene': 'kin2', 'number': '2'}
+
+type: intron
+location: (391..503)
+ref: None:None
+strand: 1
+qualifiers: {'gene': 'kin2', 'number': '2'}
+
+type: exon
+location: (504..>579)
+ref: None:None
+strand: 1
+qualifiers: {'gene': 'kin2', 'number': '3'}
+
+type: polyA_signal
+location: (620..625)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+type: polyA_signal
+location: (641..646)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+type: polyA_site
+location: (785..785)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+type: polyA_site
+location: (800..800)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+***Record from the FeatureParser
+Seq: Seq('AAAAAAACACAACAAAACTCAATAAATAAACAAATGGCAGACAACAAGCAGAGCTTCCAA ...', RNAAlphabet())
+Id: M81224.1
+Name: BNAKINI
+Description Rapeseed Kin1 protein (kin1) mRNA, complete cds.
+Annotations***
+Key: gi
+Value: 167145
+Key: organism
+Value: Brassica napus
+Key: taxonomy
+Value: ['Eukaryota', 'Viridiplantae', 'Embryophyta', 'Tracheophyta', 'Spermatophyta', 'Magnoliophyta', 'eudicotyledons', 'core eudicots', 'Rosidae', 'eurosids II', 'Brassicales', 'Brassicaceae', 'Brassica']
+Key: keywords
+Value: ['']
+Key: data_file_division
+Value: PLN
+Key: date
+Value: 27-APR-1993
+References*
+location: (1..441)
+authors: Orr,W., Iu,B., White,T., Robert,L.S. and Singh,J.
+title: Nucleotide sequence of a winter B. napus Kin 1 cDNA
+journal: Plant Physiol. 98, 1532-1534 (1992)
+medline id: 
+pubmed id: 
+comment: 
+
+Key: source
+Value: Brassica napus (cultivar Jet neuf) cold induced leaf cDNA to mRNA
+Feaures
+type: source
+location: (1..441)
+ref: None:None
+strand: 0
+qualifiers: {'organism': 'Brassica napus', 'cultivar': 'Jet neuf', 'dev_stage': 'cold induced', 'tissue_type': 'leaf', 'db_xref': 'taxon:3708'}
+
+type: gene
+location: (34..300)
+ref: None:None
+strand: 0
+qualifiers: {'gene': 'kin1'}
+
+type: CDS
+location: (34..231)
+ref: None:None
+strand: 0
+qualifiers: {'evidence': 'experimental', 'codon_start': '1', 'gene': 'kin1', 'db_xref': 'GI:167146', 'protein_id': 'AAA32993.1', 'translation': 'MADNKQSFQAGQASGRAEEKGNVLMDKVKDAATAAGASAQTAGQ\012                     KITEAAGGAVNLVKEKTGMNK'}
+
+type: polyA_signal
+location: (241..247)
+ref: None:None
+strand: 0
+qualifiers: {'gene': 'kin1', 'note': 'putative'}
+
+type: polyA_signal
+location: (294..300)
+ref: None:None
+strand: 0
+qualifiers: {'gene': 'kin1', 'note': 'putative'}
+
+type: polyA_site
+location: (441..441)
+ref: None:None
+strand: 0
+qualifiers: {'gene': 'kin1'}
+
+***Record from the FeatureParser
+Seq: Seq('GGACAAGGCCAAGGATGCTGCTGCTGCAGCTGGAGCTTCCGCGCAACAAGTAAACAGATA ...', DNAAlphabet())
+Id: AJ237582.1
+Name: ARU237582
+Description Armoracia rusticana csp14 gene (partial), exons 2-3.
+Annotations***
+Key: gi
+Value: 4538892
+Key: organism
+Value: Armoracia rusticana
+Key: taxonomy
+Value: ['Eukaryota', 'Viridiplantae', 'Streptophyta', 'Embryophyta', 'Tracheophyta', 'euphyllophytes', 'Spermatophyta', 'Magnoliophyta', 'eudicotyledons', 'Rosidae', 'Capparales', 'Brassicaceae', 'Armoracia']
+Key: keywords
+Value: ['cold shock protein', 'csp14 gene']
+Key: data_file_division
+Value: PLN
+Key: date
+Value: 24-MAR-1999
+References*
+location: (1..206)
+authors: Baymiev,A.K., Gimalov,F.R. and Vakhitov,V.A.
+title: 
+journal: Unpublished
+medline id: 
+pubmed id: 
+comment: 
+
+location: (1..206)
+authors: Baymiev,A.K.
+title: Direct Submission
+journal: Submitted (20-MAR-1999) Baymiev A.K., Departament of Biochemistry and Cytochemistry, Ufa Scientific Centre, pr. Oktyabrya 69, Ufa, Bashkortostan, Russia, 450054, RUSSIA
+medline id: 
+pubmed id: 
+comment: 
+
+Key: source
+Value: horseradish
+Feaures
+type: source
+location: (1..206)
+ref: None:None
+strand: 1
+qualifiers: {'country': 'Russia:Bashkortostan', 'db_xref': 'taxon:3704', 'organism': 'Armoracia rusticana'}
+
+type: mRNA
+location: (<1..>206)
+ref: None:None
+strand: 1
+qualifiers: {'gene': 'csp14'}
+Sub-Features
+type: mRNA_join
+location: (<1..48)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+type: mRNA_join
+location: (143..>206)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+
+type: exon
+location: (1..48)
+ref: None:None
+strand: 1
+qualifiers: {'gene': 'csp14', 'number': '2'}
+
+type: gene
+location: (1..206)
+ref: None:None
+strand: 1
+qualifiers: {'gene': 'csp14'}
+
+type: CDS
+location: (<1..>206)
+ref: None:None
+strand: 1
+qualifiers: {'codon_start': '2', 'db_xref': 'GI:4538893', 'gene': 'csp14', 'product': 'cold shock protein', 'protein_id': 'CAB39890.1', 'translation': 'DKAKDAAAAAGASAQQAGKNISDAAAGGVNFVKEKTG'}
+Sub-Features
+type: CDS_join
+location: (<1..48)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+type: CDS_join
+location: (143..>206)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+
+type: intron
+location: (49..142)
+ref: None:None
+strand: 1
+qualifiers: {'gene': 'csp14', 'number': '2'}
+
+type: exon
+location: (143..206)
+ref: None:None
+strand: 1
+qualifiers: {'gene': 'csp14', 'number': '3'}
+
+***Record from the FeatureParser
+Seq: Seq('AACAAAACTCAATAAATAAACAAATGGCAGACAACAAGCAGAGCTTCCAAGCCGGTCAAG ...', RNAAlphabet())
+Id: L31939.1
+Name: BRRBIF72
+Description Brassica rapa (clone bif72) kin mRNA, complete cds.
+Annotations***
+Key: gi
+Value: 1209261
+Key: organism
+Value: Brassica rapa
+Key: taxonomy
+Value: ['Eukaryota', 'Viridiplantae', 'Embryophyta', 'Tracheophyta', 'Spermatophyta', 'Magnoliophyta', 'eudicotyledons', 'core eudicots', 'Rosidae', 'eurosids II', 'Brassicales', 'Brassicaceae', 'Brassica']
+Key: keywords
+Value: ['']
+Key: data_file_division
+Value: PLN
+Key: date
+Value: 01-MAR-1996
+References*
+location: (1..282)
+authors: Kim,J.-B., Kim,H.-U., Park,B.-S., Yun,C.-H., Cho,W.-S., Ryu,J.-C. and Chung,T.-Y.
+title: Nucleotide sequences of kin gene in chinese cabbage
+journal: Unpublished (1994)
+medline id: 
+pubmed id: 
+comment: 
+
+Key: source
+Value: Brassica rapa flower cDNA to mRNA
+Feaures
+type: source
+location: (1..282)
+ref: None:None
+strand: 0
+qualifiers: {'dev_stage': 'flower', 'db_xref': 'taxon:3711', 'organism': 'Brassica rapa'}
+
+type: gene
+location: (24..221)
+ref: None:None
+strand: 0
+qualifiers: {'gene': 'kin'}
+
+type: CDS
+location: (24..221)
+ref: None:None
+strand: 0
+qualifiers: {'protein_id': 'AAA91051.1', 'codon_start': '1', 'gene': 'kin', 'translation': 'MADNKQSFQAGQAAGRAEEKGNVLLMDKVKDAATAAGALQTAGQ\012                     KITEAAGGAVNLVKEKTGMNK', 'db_xref': 'GI:1209262'}
+
+***Record from the FeatureParser
+Seq: Seq('ATGGCAGACAACAAGCAGAGCTTCCAAGCCGGTCAAGCCGCTGGTCGTGCTGAGGTCTCT ...', DNAAlphabet())
+Id: AF297471.1
+Name: AF297471
+Description Brassica napus BN28a (BN28a) gene, complete cds.
+Annotations***
+Key: gi
+Value: 10121868
+Key: organism
+Value: Brassica napus
+Key: taxonomy
+Value: ['Eukaryota', 'Viridiplantae', 'Embryophyta', 'Tracheophyta', 'Spermatophyta', 'Magnoliophyta', 'eudicotyledons', 'core eudicots', 'Rosidae', 'eurosids II', 'Brassicales', 'Brassicaceae', 'Brassica']
+Key: keywords
+Value: ['']
+Key: data_file_division
+Value: PLN
+Key: date
+Value: 14-SEP-2000
+References*
+location: (1..497)
+authors: Byass,L.J. and Flanagan,A.M.
+title: BN28a, a low temperature-induced gene of Brassica napus
+journal: Unpublished
+medline id: 
+pubmed id: 
+comment: 
+
+location: (1..497)
+authors: Byass,L.J. and Flanagan,A.M.
+title: Direct Submission
+journal: Submitted (18-AUG-2000) AFNS, University of Alberta, 4-10 Agriculture/Forestry Centre, Edmonton, Alberta T6G 2P5, Canada
+medline id: 
+pubmed id: 
+comment: 
+
+Key: source
+Value: rape
+Feaures
+type: source
+location: (1..497)
+ref: None:None
+strand: 1
+qualifiers: {'db_xref': 'taxon:3708', 'cultivar': 'Cascade', 'organism': 'Brassica napus'}
+
+type: mRNA
+location: (<1..>497)
+ref: None:None
+strand: 1
+qualifiers: {'gene': 'BN28a', 'product': 'BN28a'}
+Sub-Features
+type: mRNA_join
+location: (<1..54)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+type: mRNA_join
+location: (241..309)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+type: mRNA_join
+location: (423..>497)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+
+type: gene
+location: (<1..>497)
+ref: None:None
+strand: 1
+qualifiers: {'gene': 'BN28a'}
+
+type: CDS
+location: (1..497)
+ref: None:None
+strand: 1
+qualifiers: {'protein_id': 'AAG13407.1', 'codon_start': '1', 'translation': 'MADNKQSFQAGQAAGRAEEKGNVLMDKVKDAATAAGASAQTAGQ\012                     KITEAAGGAVNLVKEKTGMNK', 'gene': 'BN28a', 'product': 'BN28a', 'db_xref': 'GI:10121869', 'note': 'low temperature-induced; similar to Brassica napus\012                     Kin1 in Accession Number M81224'}
+Sub-Features
+type: CDS_join
+location: (1..54)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+type: CDS_join
+location: (241..309)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+type: CDS_join
+location: (423..497)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+
+***Record from the FeatureParser
+Seq: Seq('CACAGGCCCAGAGCCACTCCTGCCTACAGGTTCTGAGGGCTCAGGGGACCTCCTGGGCCC ...', RNAAlphabet())
+Id: AL109817.1
+Name: IRO125195
+Description Homo sapiens mRNA full length insert cDNA clone EUROIMAGE 125195.
+Annotations***
+Key: gi
+Value: 5731880
+Key: organism
+Value: Homo sapiens
+Key: taxonomy
+Value: ['Eukaryota', 'Metazoa', 'Chordata', 'Craniata', 'Vertebrata', 'Mammalia', 'Eutheria', 'Primates', 'Catarrhini', 'Hominidae', 'Homo']
+Key: keywords
+Value: ['FLI_CDNA']
+Key: data_file_division
+Value: PRI
+Key: date
+Value: 11-AUG-1999
+References*
+location: (1..1326)
+authors: Auffray,C., Ansorge,W., Ballabio,A., Estivill,X., Gibson,K., Lehrach,H., Poustka,A. and Lundeberg,J.
+title: The European IMAGE consortium for integrated Molecular analysis of human gene transcripts
+journal: Unpublished
+medline id: 
+pubmed id: 
+comment: 
+
+location: (1..1326)
+authors: Carim,L., Estivill,X., Sumoy,L. and Escarceller,M.
+title: Direct Submission
+journal: Submitted (11-AUG-1999) Dept. Genetica Molecular, Institut de Recerca Oncologica (IRO), Hospital Duran i Reynals, Autovia de Castelldefels Km 2,7 L'Hospitalet de Llobregat, 08907 Barcelona, Catalunya, SPAIN. Tel: ++34-93-260-7775 Fax: ++34-93-260-7776 WWW site: http://www.iro.es e-mail enquiries: lsumoy@iro.es, mescarceller@iro.es
+medline id: 
+pubmed id: 
+comment: 
+
+Key: source
+Value: human
+Key: comment
+Value: EURO-IMAGE Consortium Contact: Auffray C CNRS UPR 420 - Genetique Moleculaire et Biologie du Developement IFR 1221 - Rue Guy Moquet 19, Batiment G - BP 8 94801 Villejuif  Cedex, FRANCE Tel: ++33-1-49 58 34 98 Fax: ++33-1-49 58 35 09 e-mail: auffray@infobiogen.fr This clone is available royalty-free through IMAGE Consortium Distributors. IMPORTANT: This sequence represents the full insert of this IMAGE cDNA clone. No attempt has been made to verify whether this corresponds to the full-length of the original mRNA from which it was derived.
+Feaures
+type: source
+location: (1..1326)
+ref: None:None
+strand: 0
+qualifiers: {'chromosome': '21', 'clone_lib': 'Soares fetal liver spleen 1NFLS', 'organism': 'Homo sapiens', 'clone': 'IMAGE cDNA clone 125195', 'db_xref': 'taxon:9606', 'note': 'contains Alu repeat; likely to be be derived from\012                     unprocessed nuclear RNA or genomic DNA; encodes putative\012                     exons identical to FTCD; formimino transferase\012                     cyclodeaminase; formimino transferase (EC 2.1.2.5)\012                     /formimino tetrahydro folate cyclodeaminase (EC 4.3.1.4)'}
+
+type: gene
+location: (341..756)
+ref: None:None
+strand: 0
+qualifiers: {'gene': 'FTCD'}
+
+type: exon
+location: (341..384)
+ref: None:None
+strand: 0
+qualifiers: {'gene': 'FTCD', 'number': '1'}
+
+type: intron
+location: (385..617)
+ref: None:None
+strand: 0
+qualifiers: {'gene': 'FTCD', 'number': '1'}
+
+type: exon
+location: (618..756)
+ref: None:None
+strand: 0
+qualifiers: {'gene': 'FTCD', 'number': '2'}
+
+***Record from the FeatureParser
+Seq: Seq('GATCATGCATGCACTCCAGCCTGGGACAAGAGCGAAACTCCGTCTCAAAAAAAAAAAAAA ...', DNAAlphabet())
+Id: U05344.1
+Name: HUGLUT1
+Description Human fructose transporter (GLUT5) gene, promoter and exon 1.
+Annotations***
+Key: gi
+Value: 452475
+Key: organism
+Value: Homo sapiens
+Key: taxonomy
+Value: ['Eukaryota', 'Metazoa', 'Chordata', 'Craniata', 'Vertebrata', 'Euteleostomi', 'Mammalia', 'Eutheria', 'Primates', 'Catarrhini', 'Hominidae', 'Homo']
+Key: keywords
+Value: ['']
+Key: data_file_division
+Value: PRI
+Key: date
+Value: 16-NOV-1994
+References*
+location: (1..741)
+authors: Mahraoui,L., Takeda,J., Mesonero,J., Chantret,I., Dussaulx,E., Bell,G.I. and Brot-Laroche,E.
+title: Regulation of expression of the human fructose transporter (GLUT5) by cyclic AMP
+journal: Biochem. J. 301 (Pt 1), 169-175 (1994)
+medline id: 94311827
+pubmed id: 
+comment: 
+
+location: (1..741)
+authors: Takeda,J.
+title: Direct Submission
+journal: Submitted (24-JAN-1994) Jun Takeda, Howard Hughes Medical Institute, The University of Chicago, 5841 S. Maryland Ave., Chicago, IL 60637, USA
+medline id: 
+pubmed id: 
+comment: 
+
+Key: source
+Value: human
+Feaures
+type: source
+location: (1..741)
+ref: None:None
+strand: 1
+qualifiers: {'chromosome': '1', 'clone_lib': 'partial Hae III/Alu I fetal human liver\012                     library in lambda Ch4A of Maniatis', 'organism': 'Homo sapiens', 'dev_stage': 'fetal', 'clone': 'lambda hGT5-157', 'map': '1p31', 'tissue_type': 'liver', 'db_xref': 'taxon:9606'}
+
+type: repeat_region
+location: (1..73)
+ref: None:None
+strand: 1
+qualifiers: {'rpt_family': 'Alu'}
+
+type: promoter
+location: (1..513)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+type: 5'UTR
+location: (514..609)
+ref: None:None
+strand: 1
+qualifiers: {'gene': 'GLUT5'}
+
+type: exon
+location: (514..642)
+ref: None:None
+strand: 1
+qualifiers: {'gene': 'GLUT5', 'product': 'fructose transporter', 'number': '1'}
+
+***Record from the FeatureParser
+Seq: Seq('AAGCTTTGCTACGATCTACATTTGGGAATGTGAGTCTCTTATTGTAACCTTAGGGTTGGT ...', DNAAlphabet())
+Id: AC007323.5
+Name: AC007323
+Description Genomic sequence for Arabidopsis thaliana BAC T25K16 from chromosome I, complete sequence.
+Annotations***
+Key: gi
+Value: 6587720
+Key: organism
+Value: Arabidopsis thaliana
+Key: taxonomy
+Value: ['Eukaryota', 'Viridiplantae', 'Embryophyta', 'Tracheophyta', 'Spermatophyta', 'Magnoliophyta', 'eudicotyledons', 'core eudicots', 'Rosidae', 'eurosids II', 'Brassicales', 'Brassicaceae', 'Arabidopsis']
+Key: keywords
+Value: ['HTG']
+Key: data_file_division
+Value: PLN
+Key: date
+Value: 19-JAN-2000
+References*
+location: (1..86436)
+authors: Dunn,P., Shinn,P., Brooks,S., Buehler,E., Chao,Q., Johnson-Hopson,C., Khan,S., Kim,C., Altafi,H., Bei,Q., Chin,C., Chiou,J., Choi,E., Conn,L., Conway,A., Gonzales,A., Hansen,N., Howing,B., Koo,T., Lam,B., Lee,J., Lenz,C., Li,J., Liu,A., Liu,K., Liu,S., Mukharsky,N., Nguyen,M., Palm,C., Pham,P., Sakano,H., Schwartz,J., Southwick,A., Thaveri,A., Toriumi,M., Vaysberg,M., Yu,G., Federspiel,N.A., Theologis,A. and Ecker,J.R.
+title: Genomic sequence for Arabidopsis thaliana BAC T25K16 from chromosome I
+journal: Unpublished
+medline id: 
+pubmed id: 
+comment: 
+
+location: (1..86436)
+authors: Ecker,J.R.
+title: Direct Submission
+journal: Submitted (17-APR-1999) Arabidopsis thaliana Genome Center, Department of Biology, University of Pennsylvania, 38th Street and Hamilton Walk, Philadelphia, Pennsylvania 19104-6018, USA
+medline id: 
+pubmed id: 
+comment: 
+
+location: (1..86436)
+authors: Ecker,J.R.
+title: Direct Submission
+journal: Submitted (11-AUG-1999) Arabidopsis thaliana Genome Center, Department of Biology, University of Pennsylvania, 38th Street and Hamilton Walk, Philadelphia, Pennsylvania 19104-6018, USA
+medline id: 
+pubmed id: 
+comment: 
+
+location: (1..86436)
+authors: Ecker,J.R.
+title: Direct Submission
+journal: Submitted (16-DEC-1999) Arabidopsis thaliana Genome Center, Department of Biology, University of Pennsylvania, 38th Street and Hamilton Walk, Philadelphia, Pennsylvania 19104-6018, USA
+medline id: 
+pubmed id: 
+comment: 
+
+location: (1..86436)
+authors: Chao,Q., Brooks,S., Buehler,E., Johnson-Hopson,C., Khan,S., Kim,C., Shinn,P., Altafi,H., Bei,B., Chin,C., Chiou,J., Choi,E., Conn,L., Conway,A., Gonzalez,A., Hansen,N., Howing,B., Koo,T., Lam,B., Lee,J., Lenz,C., Li,J., Liu,A., Liu,J., Liu,S., Mukharsky,N., Nguyen,M., Palm,C., Pham,P., Sakano,H., Schwartz,J., Southwick,A., Thaveri,A., Toriumi,M., Vaysberg,M., Yu,G., Davis,R., Federspiel,N., Theologis,A. and Ecker,J.
+title: Direct Submission
+journal: Submitted (19-JAN-2000) Arabidopsis thaliana Genome Center, Department of Biology, University of Pennsylvania, 38th and Hamilton Walk, Philadelphia, PA 19104-6018, USA
+medline id: 
+pubmed id: 
+comment: 
+
+Key: source
+Value: thale cress
+Key: comment
+Value: On Dec 16, 1999 this sequence version replaced gi:5729683.
+Feaures
+type: source
+location: (1..86436)
+ref: None:None
+strand: 1
+qualifiers: {'chromosome': '1', 'organism': 'Arabidopsis thaliana', 'clone': 'T25K16', 'db_xref': 'taxon:3702'}
+
+type: CDS
+location: (3462..5332)
+ref: None:None
+strand: 1
+qualifiers: {'evidence': 'not_experimental', 'protein_id': 'AAF26460.1', 'codon_start': '1', 'translation': 'MEDQVGFGFRPNDEELVGHYLRNKIEGNTSRDVEVAISEVNICS\012                     YDPWNLRFQSKYKSRDAMWYFFSRRENNKGNRQSRTTVSGKWKLTGESVEVKDQWGFC\012                     SEGFRGKIGHKRVLVFLDGRYPDKTKSDWVIHEFHYDLLPEHQKLCNVTLFRFSSYFR\012                     LSLLSPMFYTDELMCLPPEILQRTYVICRLEYKGDDADILSAYAIDPTPAFVPNMTSS\012                     AGSVVNQSRQRNSGSYNTYSEYDSANHGQQFNENSNIMQQQPLQGSFNPLLEYDFANH\012                     GGQWLSDYIDLQQQVPYLAPYENESEMIWKHVIEENFEFLVDERTSMQQHYSDHRPKK\012                     PVSGVLPDDSSDTETGSMIFEDTSSSTDSVGSSDEPGHTRIDDIPSLNIIEPLHNYKA\012                     QEQPKQQSKEKVISSQKSECEWKMAEDSIKIPPSTNTVKQSWIVLENAQWNYLKNMII\012                     GVLLFISVISWIILVG', 'product': 'T25K16.1', 'db_xref': 'GI:6715633', 'note': 'containing similarity to NAM-like proteins\012                     gi|3695378'}
+Sub-Features
+type: CDS_join
+location: (3462..3615)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+type: CDS_join
+location: (3698..3978)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+type: CDS_join
+location: (4077..4307)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+type: CDS_join
+location: (4408..4797)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+type: CDS_join
+location: (4876..5028)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+type: CDS_join
+location: (5141..5332)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+
+type: CDS
+location: (6617..8368)
+ref: None:None
+strand: -1
+qualifiers: {'evidence': 'not_experimental', 'protein_id': 'AAF26477.1', 'codon_start': '1', 'translation': 'MAASEHRCVGCGFRVKSLFIQYSPGNIRLMKCGNCKEVADEYIE\012                     CERMVCFNHFLSLFGPKVYRHVLYNAINPATVNIQVKNYFNSTSRCVVGEIHRQTYLK\012                     SPELIIDRSLLLRKSDEESSFSDSPVLLSIKVLIGVLSANAAFIISFAIATKGLLNEV\012                     SRESLLLQVWEFPMSVIFFVDILLLTSNSMALKGQTFKMFSMQIVFCCCYFGISQCKF\012                     VFKPVMTESTMTRCIAVCLIAHLIRFLVGQIFEPTIFLIQIGSLLQYMSYFFRIV', 'product': 'T25K16.2', 'db_xref': 'GI:6715650', 'note': 'hypothetical protein'}
+Sub-Features
+type: CDS_join
+location: (6617..6953)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+type: CDS_join
+location: (7266..7351)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+type: CDS_join
+location: (7464..7603)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+type: CDS_join
+location: (7916..7998)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+type: CDS_join
+location: (8087..8166)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+type: CDS_join
+location: (8273..8368)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+
+type: CDS
+location: (11566..12642)
+ref: None:None
+strand: -1
+qualifiers: {'evidence': 'not_experimental', 'protein_id': 'AAF26476.1', 'codon_start': '1', 'translation': 'MDLSLAPTTTTSSDQEQDRDQELTSNIGASSSSGPSGNNNNLPM\012                     MMIPPPEKEHMFDKVVTPSDVGKLNRLVIPKQHAERYFPLDSSNNQNGTLLNFQDRNG\012                     KMWRFRYSYWNSSQSYVMTKGWSRFVKEKKLDAGDIVSFQRGIGDESERSKLYIDWRH\012                     RPDMSLVQAHQFGNFGFNFNFPTTSQYSNRFHPLPEYNSVPIHRGLNIGNHQRSYYNT\012                     QRQEFVGYGYGNLAGRCYYTGSPLDHRNIVGSEPLVIDSVPVVPGRLTPVMLPPLPPP\012                     PSTAGKRLRLFGVNMECGNDYNQQEESWLVPRGEIGASSSSSSALRLNLSTDHDDDND\012                     DGDDGDDDQFAKKGKSSLSLNFNP', 'product': 'T25K16.3', 'db_xref': 'GI:6715649', 'note': 'putative RAP2.8 protein gi|3695373'}
+
+type: CDS
+location: (23221..30781)
+ref: None:None
+strand: 1
+qualifiers: {'evidence': 'not_experimental', 'protein_id': 'AAF26461.1', 'codon_start': '1', 'translation': 'MVMEDEPREATIKPSYWLDACEDISCDLIDDLVSEFDPSSVAVN\012                     ESTDENGVINDFFGGIDHILDSIKNGGGLPNNGVSDTNSQINEVTVTPQVIAKETVKE\012                     NGLQKNGGKRDEFSKEEGDKDRKRARVCSYQSERSNLSGRGHVNNSREGDRFMNRKRT\012                     RNWDEAGNNKKKRECNNYRRDGRDREVRGYWERDKVGSNELVYRSGTWEADHERDVKK\012                     VSGGNRECDVKAEENKSKPEERKEKVVEEQARRYQLDVLEQAKAKNTIAFLETGAGKT\012                     LIAILLIKSVHKDLMSQNRKMLSVFLVPKVPLVYQVPPNKKHQAEVIRNQTCFQVGHY\012                     CGEMGQDFWDSRRWQREFESKQFLKLTSFFLFSSTQVLVMTAQILLNILRHSIIRMET\012                     IDLLILDECHHAVKKHPYSLVMSEFYHTTPKDKRPAIFGMTASPVNLKGVSSQVDCAI\012                     KIRNLETKLDSTVCTIKDRKELEKHVPMPSEIVVEYDKAATMWSLHETIKQMIAAVEE\012                     AAQASSRKSKWQFMGARDAGAKDELRQVYGVSERTESDGAANLIHKLRAINYTLAELG\012                     QWCAYKVGQSFLSALQSDERVNFQVDVKFQESYLSEVVSLLQCELLEGAAAEKVAAEV\012                     GKPENGNAHDEMEEGELPDDPVVSGGEHVDEVIGAAVADGKVTPKVQSLIKLLLKYQH\012                     TADFRAIVFVERVVAALVLPKVRIKVFAELPSLSFIRCASMIGHNNSQEMKSSQMQDT\012                     ISKFRDGHVTLLVATSVAEEGLDIRQCNVVMRFDLAKTVLAYIQSRGRARKPGSDYIL\012                     MVERYIKSFKNYILIFVTTGHQISTDMSTCVTCRGNVSHAAFLRNARNSEETLRKEAI\012                     ERTDLSHLKDTSRLISIDAVPGTVYKVEATGAMVSLNSAVGLVHFYCSQLPGDRYAIL\012                     RPEFSMEKHEKPGGHTEYSCRLQLPCNAPFEILEGPVCSSMRLAQQVDIIVSACKKLH\012                     EMGAFTDMLLPDKGSGQDAEKADQDDEGEPVPGTARHREFYPEGVADVLKGEWVSSGK\012                     EVCESSKLFHLYMYNVRCVDFGSSKDPFLSEVSEFAILFGNELDAEVLSMSMDLYVAR\012                     AMITKASLAFKGSLDITENQLSSLKKFHVRLMSIVLDVDVEPSTTPWDPAKAYLFVPV\012                     TDNTSMEPIKGINWELVEKITKTTAWDNPLQRARPDVYLGTNERTLGGDRREYGFGKL\012                     RHNIVFGQKSHPTYGIRGAVASFDVVRASGLLPVRDAFEKEVEEDLSKGKLMMADGCM\012                     VAEDLIGKIVTAAHSGKRFYVDSICYDMSAETSFPRKEGYLGPLEYNTYADYYKQKIY\012                     VVQDRLFFYFLHNLRLLRLYKSSSIMLFIRYGVDLNCKQQPLIKGRGVSYCKNLLSPR\012                     FEQSGESETVLDKTYYVFLPPELCVVHPLSGSLIRGAQRLPSIMRRVESMLLAVQLKN\012                     LISYPIPTSKILEALTAASCQETFCYERAELLGDAYLKWVVSRFLFLKYPQKHEGQLT\012                     RMRQQMVSNMVLYQFALVKGLQSYIQADRFAPSRWSAPGVPPVFDEDTKDGGSSFFDE\012                     EQKPVSEENSDVFEDGEMEDGELEGDLSSYRVLSSKTLADVVEALIGVYYVEGGKIAA\012                     NHLMKWIGIHVEDDPDEVDGTLKNVNVPESVLKSIDFVGLERALKYEFKEKGLLVEAI\012                     THASRPSSGVSCYQRLEFVGDAVLDHLITRHLFFTYTSLPPGRLTDLRAAAVNNENFA\012                     RVAVKHKLHLYLRHGSSALEKQVNKIKKQSILFSKSFKCLTVWLLFVFQIREFVKEVQ\012                     TESSKPGFNSFGLGDCKAPKVLGDIVESIAGAIFLDSGKDTTAAWKVFQPLLQPMVTP\012                     ETLPMHPVRELQERCQQQAEGLEYKASRSGNTATVEVFIDGVQVGVAQNPQKKMAQKL\012                     AARNALAALKEKEIAESKEKHINNGNAGEDQGENENGNKKNGHQPFTRQTLNDICLRK\012                     NWPMPSYRCVKEGGPAHAKRFTFGVRVNTSDRGWTDECIGEPMPSVKKAKDSAAVLLL\012                     ELLNKTFS', 'product': 'T25K16.4', 'db_xref': 'GI:6715634', 'note': 'similar to UFD1 protein emb|CAB10321.1; similar to\012                     ESTs gb|H36434, gb|AI996152.1'}
+Sub-Features
+type: CDS_join
+location: (23221..24174)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+type: CDS_join
+location: (24244..24357)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+type: CDS_join
+location: (24412..24664)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+type: CDS_join
+location: (24743..25137)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+type: CDS_join
+location: (25226..25445)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+type: CDS_join
+location: (25527..25711)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+type: CDS_join
+location: (25783..25905)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+type: CDS_join
+location: (25994..26478)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+type: CDS_join
+location: (26564..26730)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+type: CDS_join
+location: (26814..26983)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+type: CDS_join
+location: (27074..27235)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+type: CDS_join
+location: (27320..27415)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+type: CDS_join
+location: (27505..28133)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+type: CDS_join
+location: (28314..28507)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+type: CDS_join
+location: (28592..28782)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+type: CDS_join
+location: (28862..30013)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+type: CDS_join
+location: (30112..30518)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+type: CDS_join
+location: (30604..30781)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+
+type: CDS
+location: (31084..32372)
+ref: None:None
+strand: -1
+qualifiers: {'evidence': 'not_experimental', 'protein_id': 'AAF26475.1', 'codon_start': '1', 'translation': 'MSEETKDNQRLQRPAPRLNERILSSLSRRSVAAHPWHDLEIGPG\012                     APQIFNVVVEITKGSKVKYELDKKTGLIKVDRILYSSVVYPHNYGFVPRTLCEDNDPI\012                     DVLVIMQEPVLPGCFLRARAIGLMPMIDQGEKDDKIIAVCVDDPEYKHYTDIKELPPH\012                     RLSEIRRFFEDCILFLQCSSLFISIDLSTNKKNENKEVAVNDFLPSESAVEAIQYSMD\012                     LYAEYILHTLRR', 'product': 'T25K16.5', 'db_xref': 'GI:6715648', 'note': 'putative inorganic pyrophosphatase gi|3510259;\012                     similar to ESTs gb|T42316, gb|AI994042.1, gb|AI994013.1,\012                     emb|Z29202'}
+Sub-Features
+type: CDS_join
+location: (31084..31126)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+type: CDS_join
+location: (31223..31304)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+type: CDS_join
+location: (31341..31515)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+type: CDS_join
+location: (31635..31700)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+type: CDS_join
+location: (31790..31897)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+type: CDS_join
+location: (31984..32049)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+type: CDS_join
+location: (32133..32161)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+type: CDS_join
+location: (32249..32372)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+
+type: CDS
+location: (33694..36763)
+ref: None:None
+strand: -1
+qualifiers: {'evidence': 'not_experimental', 'protein_id': 'AAF26474.1', 'codon_start': '1', 'translation': 'MDTNTSGEELLAKARKPYTITKQRERWTEDEHERFLEALRLYGR\012                     AWQRIEEHIGTKTAVQIRSHAQKFFTKFGKAHSFWFTFQLEKEAEVKGIPVCQALDIE\012                     IPPPRPKRKPNTPYPRKPGNNGTSSSQVSSAKDAKLVSSASSSQLNQAFLDLEKMPFS\012                     EKTSTGKENQDENCSGVSTVNKYPLPTKVSGDIETSKTSTVDNAVQDVPKKNKDKDGN\012                     DGTTVHSMQNYPWHFHADIVNGNIAKCPQNHPSGMVSQDFMFHPMREETHGHANLQAT\012                     TASATTTASHQAFPACHSQDDYRSFLQISSTFSNLIMSTLLQNPAAHAAATFAASVWP\012                     YASVGNSGDSSTPMSSSPPSITAIAAATVAAATAWWASHGLLPVCAPAPITCVPFSTV\012                     AVPTPAMTEMDTVENTQPFEKQNTALQDQNLASKSPASSSDDSDETGVTKLNADSKTN\012                     DDKIEEVVVTAAVHDSNTAQKKNLVDRSSCGSNTPSGSDAETDALDKMEKDKEDVKET\012                     DENQPDVIELNNRKIKMRDNNSNNNATTDSWKEVSEEGRIAFQALFARERLPQSFSPP\012                     QVAENVNRKQSDTSMPLAPNFKSQDSCAADQEGVVMIGVGTCKSLKTRQTGFKPYKRC\012                     SMEVKESQVGNINNQSDEKVCKRLRLEGEAST', 'product': 'T25K16.6', 'db_xref': 'GI:6715647', 'note': 'putative late elongated hypocotyl emb|CAA07004;\012                     similar to ESTS gb|AI993521.1, gb|AA650979'}
+Sub-Features
+type: CDS_join
+location: (33694..34029)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+type: CDS_join
+location: (34103..35173)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+type: CDS_join
+location: (35269..35349)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+type: CDS_join
+location: (35432..35701)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+type: CDS_join
+location: (36326..36387)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+type: CDS_join
+location: (36512..36623)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+type: CDS_join
+location: (36725..36763)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+
+type: CDS
+location: (38600..40579)
+ref: None:None
+strand: -1
+qualifiers: {'evidence': 'not_experimental', 'protein_id': 'AAF26473.1', 'codon_start': '1', 'translation': 'MAGDMQGVRVVEKYSPVIVMVMSNVAMGSVNALVKKALDVGVNH\012                     MVIGAYRMAISALILVPFAYVLERASLMQFFFLLGLSYTSATVSCALVSMLPAITFAL\012                     ALIFRTENVKILKTKAGMLKVIGTLICISGALFLTFYKGPQISNSHSHSHGGASHNNN\012                     DQDKANNWLLGCLYLTIGTVLLSLWMLFQGTLSIKYPCKYSSTCLMSIFAAFQCALLS\012                     LYKSRDVNDWIIDDRFVITVIIYAGVVGQAMTTVATTWGIKKLGAVFASAFFPLTLIS\012                     ATLFDFLILHTPLYLGSVIGSLVTITGLYMFLWGKNKETESSTALSSGMDNEAQYTTP\012                     NKDNDSKSPV', 'product': 'T25K16.7', 'db_xref': 'GI:6715646', 'note': 'similar to Medicago truncatula MtN2 gi|3193308;\012                     similar to EST gb|H77065'}
+Sub-Features
+type: CDS_join
+location: (38600..38756)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+type: CDS_join
+location: (38838..38989)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+type: CDS_join
+location: (39111..39516)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+type: CDS_join
+location: (39915..40031)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+type: CDS_join
+location: (40377..40579)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+
+type: CDS
+location: (45150..48868)
+ref: None:None
+strand: -1
+qualifiers: {'evidence': 'not_experimental', 'protein_id': 'AAF26472.1', 'codon_start': '1', 'translation': 'MATAFAPTKLTATVPLHGSHENRLLLPIRLAPPSSFLGSTRSLS\012                     LRRLNHSNATRRSPVVSVQEVVKEKQSTNNTSLLITKEEGLELYEDMILGRSFEDMCA\012                     QMYYRGKMFGFVHLYNGQEAVSTGFIKLLTKSDSVVSTYRDHVHALSKGVSARAVMSE\012                     LFGKVTGCCRGQGGSMHMFSKEHNMLGGFAFIGEGIPVATGAAFSSKYRREVLKQDCD\012                     DVTVAFFGDGTCNNGQFFECLNMAALYKLPIIFVVENNLWAIGMSHLRATSDPEIWKK\012                     GPAFGMPGVHVDGMDVLKVREVAKEAVTRARRGEGPTLVECETYRFRGHSLADPDELR\012                     DAAEKAKYAARDPIAALKKYLIENKLAKEAELKSIEKKIDELVEEAVEFADASPQPGR\012                     SQLLENVFADPKGFGIGPDGRYRSQPLQIKVSSSELSVLDEEKEEEVVKGEAEPNKDS\012                     VVSKAEPVKKPRPCELYVCNIPRSYDIAQLLDMFQPFGTVISVEVVSRNPQTGESRGS\012                     GYVTMGSINSAKIAIASLDGTVRARETKKQEVGGREMRVRYSVDMNPGTRRNPEVLNS\012                     TPKKILMYESQHKVYVGNLPWFTQPDGLRNHFSKFGTIVSTRVLHDRKTGRNRVFAFL\012                     SFTSGEERDAALSFNGTVNNMKVAESSSEKVSRRVSRKPTVLLLLQRHLLDTNNV', 'product': 'T25K16.8', 'db_xref': 'GI:6715645', 'note': 'putative pyruvate dehydrogenase E1 alpha subunit\012                     gi|2454182; similar to ESTs emb|Z48417, gb|AW039459.1,\012                     gb|T15146, emb|Z48416, gb|AF066871, gb|T76832,\012                     gb|AI996061.1'}
+Sub-Features
+type: CDS_join
+location: (45150..45261)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+type: CDS_join
+location: (45343..45656)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+type: CDS_join
+location: (45719..45847)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+type: CDS_join
+location: (46075..46313)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+type: CDS_join
+location: (47448..47684)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+type: CDS_join
+location: (47777..48554)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+type: CDS_join
+location: (48638..48868)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+
+type: CDS
+location: (49986..50656)
+ref: None:None
+strand: -1
+qualifiers: {'evidence': 'not_experimental', 'protein_id': 'AAF26471.1', 'codon_start': '1', 'translation': 'MSTVGELACSYAVMILEDEGIAITADKIATLVKAAGVSIESYWP\012                     MLFAKMAEKRNVTDLIMNVGAGGGGGAPVAAAAPAAGGGAAAAPAAEEKKKDEPAEES\012                     DGDLGFGLFD', 'product': 'T25K16.9', 'db_xref': 'GI:6715644', 'note': 'similar to acidic ribosomal protein p1 gi|2252857;\012                     similar to ESTs gb|T42111, gb|AI099979, gb|AA728491'}
+Sub-Features
+type: CDS_join
+location: (49986..50039)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+type: CDS_join
+location: (50121..50333)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+type: CDS_join
+location: (50585..50656)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+
+type: CDS
+location: (51941..54196)
+ref: None:None
+strand: 1
+qualifiers: {'evidence': 'not_experimental', 'protein_id': 'AAF26462.1', 'codon_start': '1', 'translation': 'MGKKNGSSSWLTAVKRAFRSPTKKDHSNDVEEDEEKKREKRRWF\012                     RKPATQESPVKSSGISPPAPQEDSLNVNSKPSPETAPSYATTTPPSNAGKPPSAVVPI\012                     ATSASKTLAPRRIYYARENYAAVVIQTSFRGYLARRALRALKGLVKLQALVRGHNVRK\012                     QAKMTLRCMQALVRVQSRVLDQRKRLSHDGSRKSAFSDSHAVFESRYLQDLSDRQSMS\012                     REGSSAAEDWDDRPHTIDAVKVMLQRRRDTALRHDKTNLSQAFSQKMWRTVGNQSTEG\012                     HHEVELEEERPKWLDRWMATRPWDKRASSRASVDQRVSVKTVEIDTSQPYSRTGAGSP\012                     SRGQRPSSPSRTSHHYQSRNNFSATPSPAKSRPILIRSASPRCQRDPREDRDRAAYSY\012                     TSNTPSLRSNYSFTARSGCSISTTMVNNASLLPNYMASTESAKARIRSHSAPRQRPST\012                     PERDRAGLVKKRLSYPVPPPAEYEDNNSLRSPSFKSVAGSHFGGMLEQQSNYSSCCTE\012                     SNGVEISPASTSDFRNWLR', 'product': 'T25K16.10', 'db_xref': 'GI:6715635', 'note': 'hypothetical protein'}
+Sub-Features
+type: CDS_join
+location: (51941..52048)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+type: CDS_join
+location: (52136..52432)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+type: CDS_join
+location: (52640..52885)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+type: CDS_join
+location: (53186..53326)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+type: CDS_join
+location: (53405..54196)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+
+type: CDS
+location: (57094..58680)
+ref: None:None
+strand: -1
+qualifiers: {'evidence': 'not_experimental', 'protein_id': 'AAF26470.1', 'codon_start': '1', 'translation': 'MERTNSIEMDRERLTAEMAFRDSSSAVIRIRRRLPDLLTSVKLK\012                     YVKLGLHNSCNVTTILFFLIILPLTGTVLVQLTGLTFDTFSELWSNQAVQLDTATRLT\012                     CLVFLSFVLTLYVANRSKPVYLVDFSCYKPEDERKISVDSFLTMTEENGSFTDDTVQF\012                     QQRISNRAGLGDETYLPRGITSTPPKLNMSEARAEAEAVMFGALDSLFEKTGIKPAEV\012                     GILIVNCSLFNPTPSLSAMIVNHYKMREDIKSYNLGGMGCSAGLISIDLANNLLKANP\012                     NSYAVVVSTENITLNWYFGNDRSMLLCNCIFRMGGAAILLSNRRQDRKKSKYSLVNVV\012                     RTHKGSDDKNYNCVYQKEDERGTIGVSLARELMSVAGDALKTNITTLGPMVLPLSEQL\012                     MFLISLVKRKMFKLKVKPYIPDFKLAFEHFCIHAGGRAVLDEVQKNLDLKDWHMEPSR\012                     MTLHRFGNTSSSSLWYEMAYTEAKGRVKAGDRLWQIAFGSGFKCNSAVWKALRPVSTE\012                     EMTGNAWAGSIDQYPVKVVQ', 'product': 'T25K16.11', 'db_xref': 'GI:6715643', 'note': 'putative fatty acid elongase 3-ketoacyl-coA\012                     synthase 1 gi|4091810; similar to ESTs gb|T42377,\012                     gb|N96054, gb|T44368, gb|AI999379.1, emb|Z26005'}
+
+type: CDS
+location: (59508..63513)
+ref: None:None
+strand: -1
+qualifiers: {'evidence': 'not_experimental', 'protein_id': 'AAF26469.1', 'codon_start': '1', 'translation': 'MEKRSDSESVEILGDWDSPPPEERIVMVSVPTSPESDYARSNQP\012                     KEIESRVSDKETASASGEVAARRVLPPWMDPSYEWGGGKWKVDGRKNKNKKEKEKEKE\012                     EIIPFKEIIEALLGNSGDKVQQDNKVFEVAPSLHVVELRKTGDDTLEFHKVYFRFNLY\012                     QPVQLPLILFVVIRFSMLKIIHYHQFTMAHIKEFVCMWDTHLYKEITNLNIWDTLSST\012                     LVLAIWTVNASHE', 'product': 'T25K16.12', 'db_xref': 'GI:6715642', 'note': 'hypothetical protein'}
+Sub-Features
+type: CDS_join
+location: (59508..59665)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+type: CDS_join
+location: (61670..61826)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+type: CDS_join
+location: (63133..63513)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+
+type: CDS
+location: (64100..67214)
+ref: None:None
+strand: -1
+qualifiers: {'evidence': 'not_experimental', 'protein_id': 'AAF26468.1', 'codon_start': '1', 'translation': 'MSGSRRKATPASRTRVGNYEMGRTLGEGSFAKVKYAKNTVTGDQ\012                     AAIKILDREKVFRHKMVEQLKREISTMKLIKHPNVVEIIEVMASKTKIYIVLELVNGG\012                     ELFDKIAQQGRLKEDEARRYFQQLINAVDYCHSRGVYHRDLKPENLILDANGVLKVSD\012                     FGLSAFSRQVREDGLLHTACGTPNYVAPEVLSDKGYDGAAADVWSCGVILFVLMAGYL\012                     PFDEPNLMTLYKRVRICKAEFSCPPWFSQGAKRVIKRILEPNPITRISIAELLEDEWF\012                     KKGYKPPSFDQDDEDITIDDVDAAFSNSKECLVTEKKEKPVSMNAFELISSSSEFSLE\012                     NLFEKQAQLVKKETRFTSQRSASEIMSKMEETAKPLGFNVRKDNYKIKMKGDKSGRKG\012                     QLSVATEVFEVAPSLHVVELRKTGGDTLEFHKVCDSFYKNFSSGLKDVVWNTDAAAEE\012                     QKQ', 'product': 'T25K16.13', 'db_xref': 'GI:6715641', 'note': 'similar to wpk4 protein kinase dbj|BAA34675;\012                     similar to ESTs dbj|AB015122, gb|AI997157.1'}
+Sub-Features
+type: CDS_join
+location: (64100..64177)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+type: CDS_join
+location: (64272..64358)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+type: CDS_join
+location: (64453..64509)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+type: CDS_join
+location: (64603..64719)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+type: CDS_join
+location: (64812..64919)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+type: CDS_join
+location: (65033..65158)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+type: CDS_join
+location: (65265..65354)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+type: CDS_join
+location: (65435..65566)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+type: CDS_join
+location: (65809..65862)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+type: CDS_join
+location: (65964..66044)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+type: CDS_join
+location: (66152..66259)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+type: CDS_join
+location: (66380..66451)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+type: CDS_join
+location: (66537..66599)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+type: CDS_join
+location: (67026..67214)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+
+type: CDS
+location: (69831..71700)
+ref: None:None
+strand: -1
+qualifiers: {'evidence': 'not_experimental', 'protein_id': 'AAF26467.1', 'codon_start': '1', 'translation': 'MVSDLPLDEDDIALLKSPYCDDGGDEDVNSAPNIFTYDNVPLKK\012                     RHYLGTSDTFRSFEPLNEHACIVCDIADDGVVPCSGNECPLAVHRKCVELDCEDPATF\012                     YCPYCWFKEQATRSTALRTRGVAAAKTLVQYGCSELRSGDIVMTRENSQLENGSDNSL\012                     PMQLHENLHQLQELVKHLKARNSQLDESTDQFIDMEKSCGEAYAVVNDQPKRVLWTVN\012                     EEKMLREGVEKFSDTINKNMPWKKILEMGKGIFHTTRNSSDLKDKWRNMVRIIILIWL\012                     RSRLTSSSSSQRSEIKMERERNAGVMKKMSPTGTIQRLEFVGWYL', 'product': 'T25K16.14', 'db_xref': 'GI:6715640', 'note': 'similar to ataxia-telangiectasia group D protein\012                     pir|A49618'}
+Sub-Features
+type: CDS_join
+location: (69831..69987)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+type: CDS_join
+location: (70534..70670)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+type: CDS_join
+location: (70743..71357)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+type: CDS_join
+location: (71644..71700)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+
+type: CDS
+location: (72285..73585)
+ref: None:None
+strand: 1
+qualifiers: {'evidence': 'not_experimental', 'protein_id': 'AAF26463.1', 'codon_start': '1', 'translation': 'MQQQQSPQMFPMVPSIPPANNITTEQIQKYLDENKKLIMAIMEN\012                     QNLGKLAECAQYQALLQKNLMYLAAIADAQPPPPTPGPSPSTAVAAQMATPHSGMQPP\012                     SYFMQHPQASPAGIFAPRGPLQFGSPLQFQDPQQQQQIHQQAMQGHMGIRPMGMTNNG\012                     MQHAMQQPETGLGGNVGLRGGKQDGADGQGKDDGK', 'product': 'T25K16.15', 'db_xref': 'GI:6715636', 'note': 'similar to SYT gi|2252866; similar to ESTs\012                     emb|F14390, gb|H36066, emb|F14391'}
+Sub-Features
+type: CDS_join
+location: (72285..72371)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+type: CDS_join
+location: (72789..72865)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+type: CDS_join
+location: (72989..73097)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+type: CDS_join
+location: (73190..73442)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+type: CDS_join
+location: (73524..73585)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+
+type: CDS
+location: (73807..74145)
+ref: None:None
+strand: -1
+qualifiers: {'evidence': 'not_experimental', 'protein_id': 'AAF26466.1', 'codon_start': '1', 'translation': 'MASGGKAKYIIGALIGSFGISYIFDKVISDNKIFGGKDDLNGYL\012                     LVKISGTTPGTVSNKEWWAATDEKFQAWPRTAGPPVVMNPISRQNFIVKTRPE', 'product': 'T25K16.16', 'db_xref': 'GI:6715639', 'note': 'similar to stress-induced protein OZI1 precursor\012                     pir|S59544; similar to EST gb|AI995719.1'}
+Sub-Features
+type: CDS_join
+location: (73807..73990)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+type: CDS_join
+location: (74036..74145)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+
+type: CDS
+location: (75335..77148)
+ref: None:None
+strand: 1
+qualifiers: {'evidence': 'not_experimental', 'protein_id': 'AAF26464.1', 'codon_start': '1', 'translation': 'MKEDRRLPHKRDAFQFLKTKAAYVIVIVLTYAFGYFSAYHYHQP\012                     LQQQLPPSTTAVETTKPQVCSIDNFRVTTPCGNLVPPELIRQTVIDRIFNGTSPYIDF\012                     PPPHAKKFLRPKRIKGWGSYGAVFENLIRRVKPKTIVEVGSFLGASAIHMANLTRRLG\012                     LEETQILCVDDFRGWPGFRDRFKDMALVNGDVLLMYQFMQNVVISDFSGSILPVPFST\012                     GSALEKLCEWGVTADLVEIDAGHDFNSAWADINRAVRILRPGGVIFGHDYFTAADNRG\012                     VRRAVNLFAEINRLKVKTDGQHWVIDSVKVINKGTRFAISKTVAKIKEDANQWFFAQV\012                     LENQDLVNEQAVHISVKVLRGFLRDEHGKVLIHARRSFASVHSKLDATFLCWQWAMES\012                     MKSLRVDKIIFASEDNDLIGAVTRLPSWPSYKFQIHFLLGELIRSSNLGAHLIAKSVT\012                     MEDRRQSYVATGFPFWLKHLFEKERSIA', 'product': 'T25K16.17', 'db_xref': 'GI:6715637', 'note': 'putative reverse transcriptase gb|AAD17395'}
+Sub-Features
+type: CDS_join
+location: (75335..76249)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+type: CDS_join
+location: (76516..76653)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+type: CDS_join
+location: (76733..76982)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+type: CDS_join
+location: (77015..77148)
+ref: None:None
+strand: 1
+qualifiers: {}
+
+
+type: CDS
+location: (82723..84581)
+ref: None:None
+strand: -1
+qualifiers: {'evidence': 'not_experimental', 'protein_id': 'AAF26465.1', 'codon_start': '1', 'translation': 'MFSLNMRTEIESLWVFALASKFNIYMQQHFASLLVAIAITWFTI\012                     TIVFWSTPGGPAWGKYFFTRRFISLDYNRKYKNLIPGPRGFPLVGSMSLRSSHVAHQR\012                     IASVAEMSNAKRLMAFSLGDTKVVVTCHPAVAKEILNSSVFADRPVDETAYGLMFNRA\012                     MGFAPNGTYWRTLRRLGSNHLFNPKQIKQSEDQRRVIATQMVNAFARNPKSACAVRDL\012                     LKTASLCNMMGLVFGREYELESNNNLESECLKGLVEEGYDLLGTLNWTDHLPWLAGLD\012                     FQQIRFRCSQLVPKVNLLLSRIIHEQRAATGNFLDMLLSLQGSEKLSESDMVAVLWEM\012                     IFRGTDTVAVLVEWVLARIVMHPKVQLTVHDELDRVVGRSRTVDESDLPSLTYLTAMI\012                     KEVLRLHPPGPLLSWARLSITDTSVDGYHVPAGTTAMVNMWAIARDPHVWEDPLEFKP\012                     ERFVAKEGEAEFSVFGSDLRLAPFGSGKRVCPGKNLGLTTVSFWVATLLHEFEWLPSV\012                     EANPPDLSEVLRLSCEMACPLIVNVSSRRKIIAWMF', 'product': 'T25K16.18', 'db_xref': 'GI:6715638', 'note': 'putative cytochrome P450 gi|3831440'}
+Sub-Features
+type: CDS_join
+location: (82723..82738)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+type: CDS_join
+location: (82751..83373)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+type: CDS_join
+location: (83586..84581)
+ref: None:None
+strand: -1
+qualifiers: {}
+
+
+***Record from the RecordParser
+locus: ATCOR66M
+definition: A.thaliana cor6.6 mRNA.
+accession: ['X55053']
+reference title: Direct Submission
+reference title: cDNA sequence analysis and expression of two cold-regulated genes of Arabidopsis thaliana
+feature key: source
+location: 1..513
+num qualifiers: 3
+feature key: gene
+location: 50..250
+num qualifiers: 1
+feature key: CDS
+location: 50..250
+num qualifiers: 7
+***Record from the RecordParser
+locus: ATKIN2
+definition: A.thaliana kin2 gene.
+accession: ['X62281']
+reference title: Direct Submission
+reference title: Structure and expression of kin2, one of two cold- and ABA-induced genes of Arabidopsis thaliana
+feature key: source
+location: 1..880
+num qualifiers: 3
+feature key: TATA_signal
+location: 9..20
+num qualifiers: 0
+feature key: exon
+location: 44..160
+num qualifiers: 2
+feature key: prim_transcript
+location: 44..>579
+num qualifiers: 1
+feature key: mRNA
+location: join(44..160,320..390,504..>579)
+num qualifiers: 1
+feature key: gene
+location: 44..579
+num qualifiers: 1
+feature key: CDS
+location: join(104..160,320..390,504..579)
+num qualifiers: 6
+feature key: intron
+location: 161..319
+num qualifiers: 2
+feature key: exon
+location: 320..390
+num qualifiers: 2
+feature key: intron
+location: 391..503
+num qualifiers: 2
+feature key: exon
+location: 504..>579
+num qualifiers: 2
+feature key: polyA_signal
+location: 620..625
+num qualifiers: 0
+feature key: polyA_signal
+location: 641..646
+num qualifiers: 0
+feature key: polyA_site
+location: 785
+num qualifiers: 0
+feature key: polyA_site
+location: 800
+num qualifiers: 0
+***Record from the RecordParser
+locus: BNAKINI
+definition: Rapeseed Kin1 protein (kin1) mRNA, complete cds.
+accession: ['M81224']
+reference title: Nucleotide sequence of a winter B. napus Kin 1 cDNA
+feature key: source
+location: 1..441
+num qualifiers: 5
+feature key: gene
+location: 34..300
+num qualifiers: 1
+feature key: CDS
+location: 34..231
+num qualifiers: 6
+feature key: polyA_signal
+location: 241..247
+num qualifiers: 2
+feature key: polyA_signal
+location: 294..300
+num qualifiers: 2
+feature key: polyA_site
+location: 441
+num qualifiers: 1
+***Record from the RecordParser
+locus: ARU237582
+definition: Armoracia rusticana csp14 gene (partial), exons 2-3.
+accession: ['AJ237582']
+reference title: 
+reference title: Direct Submission
+feature key: source
+location: 1..206
+num qualifiers: 3
+feature key: mRNA
+location: join(<1..48,143..>206)
+num qualifiers: 1
+feature key: exon
+location: 1..48
+num qualifiers: 2
+feature key: gene
+location: 1..206
+num qualifiers: 1
+feature key: CDS
+location: join(<1..48,143..>206)
+num qualifiers: 6
+feature key: intron
+location: 49..142
+num qualifiers: 2
+feature key: exon
+location: 143..206
+num qualifiers: 2
+***Record from the RecordParser
+locus: BRRBIF72
+definition: Brassica rapa (clone bif72) kin mRNA, complete cds.
+accession: ['L31939']
+reference title: Nucleotide sequences of kin gene in chinese cabbage
+feature key: source
+location: 1..282
+num qualifiers: 3
+feature key: gene
+location: 24..221
+num qualifiers: 1
+feature key: CDS
+location: 24..221
+num qualifiers: 5
+***Record from the RecordParser
+locus: AF297471
+definition: Brassica napus BN28a (BN28a) gene, complete cds.
+accession: ['AF297471']
+reference title: BN28a, a low temperature-induced gene of Brassica napus
+reference title: Direct Submission
+feature key: source
+location: 1..497
+num qualifiers: 3
+feature key: mRNA
+location: join(<1..54,241..309,423..>497)
+num qualifiers: 2
+feature key: gene
+location: <1..>497
+num qualifiers: 1
+feature key: CDS
+location: join(1..54,241..309,423..497)
+num qualifiers: 7
+***Record from the RecordParser
+locus: IRO125195
+definition: Homo sapiens mRNA full length insert cDNA clone EUROIMAGE 125195.
+accession: ['AL109817']
+reference title: The European IMAGE consortium for integrated Molecular analysis of human gene transcripts
+reference title: Direct Submission
+feature key: source
+location: 1..1326
+num qualifiers: 6
+feature key: gene
+location: 341..756
+num qualifiers: 1
+feature key: exon
+location: 341..384
+num qualifiers: 2
+feature key: intron
+location: 385..617
+num qualifiers: 2
+feature key: exon
+location: 618..756
+num qualifiers: 2
+***Record from the RecordParser
+locus: HUGLUT1
+definition: Human fructose transporter (GLUT5) gene, promoter and exon 1.
+accession: ['U05344']
+reference title: Regulation of expression of the human fructose transporter (GLUT5) by cyclic AMP
+reference title: Direct Submission
+feature key: source
+location: 1..741
+num qualifiers: 8
+feature key: repeat_region
+location: 1..73
+num qualifiers: 1
+feature key: promoter
+location: 1..513
+num qualifiers: 0
+feature key: 5'UTR
+location: 514..609
+num qualifiers: 1
+feature key: exon
+location: 514..642
+num qualifiers: 3
+***Record from the RecordParser
+locus: AC007323
+definition: Genomic sequence for Arabidopsis thaliana BAC T25K16 from chromosome I, complete sequence.
+accession: ['AC007323']
+reference title: Genomic sequence for Arabidopsis thaliana BAC T25K16 from chromosome I
+reference title: Direct Submission
+reference title: Direct Submission
+reference title: Direct Submission
+reference title: Direct Submission
+feature key: source
+location: 1..86436
+num qualifiers: 4
+feature key: CDS
+location: join(3462..3615,3698..3978,4077..4307,4408..4797,4876..5028,5141..5332)
+num qualifiers: 7
+feature key: CDS
+location: complement(join(6617..6953,7266..7351,7464..7603,7916..7998,8087..8166,8273..8368))
+num qualifiers: 7
+feature key: CDS
+location: complement(11566..12642)
+num qualifiers: 7
+feature key: CDS
+location: join(23221..24174,24244..24357,24412..24664,24743..25137,25226..25445,25527..25711,25783..25905,25994..26478,26564..26730,26814..26983,27074..27235,27320..27415,27505..28133,28314..28507,28592..28782,28862..30013,30112..30518,30604..30781)
+num qualifiers: 7
+feature key: CDS
+location: complement(join(31084..31126,31223..31304,31341..31515,31635..31700,31790..31897,31984..32049,32133..32161,32249..32372))
+num qualifiers: 7
+feature key: CDS
+location: complement(join(33694..34029,34103..35173,35269..35349,35432..35701,36326..36387,36512..36623,36725..36763))
+num qualifiers: 7
+feature key: CDS
+location: complement(join(38600..38756,38838..38989,39111..39516,39915..40031,40377..40579))
+num qualifiers: 7
+feature key: CDS
+location: complement(join(45150..45261,45343..45656,45719..45847,46075..46313,47448..47684,47777..48554,48638..48868))
+num qualifiers: 7
+feature key: CDS
+location: complement(join(49986..50039,50121..50333,50585..50656))
+num qualifiers: 7
+feature key: CDS
+location: join(51941..52048,52136..52432,52640..52885,53186..53326,53405..54196)
+num qualifiers: 7
+feature key: CDS
+location: complement(57094..58680)
+num qualifiers: 7
+feature key: CDS
+location: complement(join(59508..59665,61670..61826,63133..63513))
+num qualifiers: 7
+feature key: CDS
+location: complement(join(64100..64177,64272..64358,64453..64509,64603..64719,64812..64919,65033..65158,65265..65354,65435..65566,65809..65862,65964..66044,66152..66259,66380..66451,66537..66599,67026..67214))
+num qualifiers: 7
+feature key: CDS
+location: complement(join(69831..69987,70534..70670,70743..71357,71644..71700))
+num qualifiers: 7
+feature key: CDS
+location: join(72285..72371,72789..72865,72989..73097,73190..73442,73524..73585)
+num qualifiers: 7
+feature key: CDS
+location: complement(join(73807..73990,74036..74145))
+num qualifiers: 7
+feature key: CDS
+location: join(75335..76249,76516..76653,76733..76982,77015..77148)
+num qualifiers: 7
+feature key: CDS
+location: complement(join(82723..82738,82751..83373,83586..84581))
+num qualifiers: 7
+Testing dictionaries...
+Indexing /home/chapmanb/bioppjx/biopython/Tests/GenBank/cor6_6.gb to serve as a dictionary...
+len: 7
+keys: ['L31939', 'AJ237582', 'X62281', 'AF297471', 'M81224', 'X55053']
+Retrieving record with key L31939
+description: Brassica rapa (clone bif72) kin mRNA, complete cds.
+id: L31939.1
+Retrieving record with key AJ237582
+description: Armoracia rusticana csp14 gene (partial), exons 2-3.
+id: AJ237582.1
+Retrieving record with key X62281
+description: A.thaliana kin2 gene.
+id: X62281.1

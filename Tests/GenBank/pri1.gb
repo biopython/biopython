@@ -1,0 +1,59 @@
+LOCUS       HUGLUT1       741 bp    DNA             PRI       16-NOV-1994
+DEFINITION  Human fructose transporter (GLUT5) gene, promoter and exon 1.
+ACCESSION   U05344
+VERSION     U05344.1  GI:452475
+KEYWORDS    .
+SOURCE      human.
+  ORGANISM  Homo sapiens
+            Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+            Mammalia; Eutheria; Primates; Catarrhini; Hominidae; Homo.
+REFERENCE   1  (bases 1 to 741)
+  AUTHORS   Mahraoui,L., Takeda,J., Mesonero,J., Chantret,I., Dussaulx,E.,
+            Bell,G.I. and Brot-Laroche,E.
+  TITLE     Regulation of expression of the human fructose transporter (GLUT5)
+            by cyclic AMP
+  JOURNAL   Biochem. J. 301 (Pt 1), 169-175 (1994)
+  MEDLINE   94311827
+REFERENCE   2  (bases 1 to 741)
+  AUTHORS   Takeda,J.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (24-JAN-1994) Jun Takeda, Howard Hughes Medical
+            Institute, The University of Chicago, 5841 S. Maryland Ave.,
+            Chicago, IL 60637, USA
+FEATURES             Location/Qualifiers
+     source          1..741
+                     /organism="Homo sapiens"
+                     /db_xref="taxon:9606"
+                     /chromosome="1"
+                     /map="1p31"
+                     /clone="lambda hGT5-157"
+                     /tissue_type="liver"
+                     /clone_lib="partial Hae III/Alu I fetal human liver
+                     library in lambda Ch4A of Maniatis"
+                     /dev_stage="fetal"
+     repeat_region   1..73
+                     /rpt_family="Alu"
+     promoter        1..513
+     5'UTR           514..609
+                     /gene="GLUT5"
+     exon            514..642
+                     /gene="GLUT5"
+                     /number=1
+                     /product="fructose transporter"
+BASE COUNT      206 a    172 c    195 g    168 t
+ORIGIN      
+        1 gatcatgcat gcactccagc ctgggacaag agcgaaactc cgtctcaaaa aaaaaaaaaa
+       61 aaaaaaaaaa aaacagaaaa tgagaaactt tccccaaaca gtattacacg gtgacttggg
+      121 caaaactgac tctccaccaa gagacacttg actgtagttt tcctggcagg gagagcatct
+      181 ttgaggtctc tagtggccca atctgttgcc ctcagattac ctggtgtcat gtagggtgga
+      241 ggacagctgt tgtttgccat gcgttcctga cagaaataac ccttccagtc attcaccatg
+      301 agcctgactg gtagagactt tagcaatggg gaaataccgt agactgttcc atcaggacaa
+      361 tgctgggcct gcagtcccca gggggcaccc acttacttag ccaaacccca gacgtttcat
+      421 ttaaaagcag aagtgaaagg aagaccaggt tcctgaaagg gttattctga cttaatctgg
+      481 ctataaaaat gctattggct gttatttggc atggccaaag tgcacccaga atgtcttctc
+      541 tctccattca gtgcacgcgt tactttggct aaaaggaggt gagcggcact ctgcccttcc
+      601 agagcaagca tggagcaaca ggatcagagc atgaaggaag gggtgagtgt gttgctcagg
+      661 gagaggggcc aagagcaggc ttggctgcca gggcctgtgc agccttcctg gagagtcgct
+      721 ggggggctcc tggtgtttgc a
+//
+
