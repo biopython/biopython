@@ -166,7 +166,12 @@ class build_ext_biopython(build_ext):
         build_ext.run(self)
 
     def build_extensions(self):
-        self._original_compiler_so = self.compiler.compiler_so
+        # Unix C compiler plus others
+        if hasattr(self.compiler, "compiler_so"):
+            self._original_compiler_so = self.compiler.compiler_so
+        # MSVC -- others?
+        else:
+            self._original_compiler_so = self.compiler.cc
 
         build_ext.build_extensions(self)
 
@@ -177,10 +182,9 @@ class build_ext_biopython(build_ext):
         build = 1
         if hasattr(ext, "language") and ext.language == "c++":
             # places where C++ just won't build right now:
-            # mingw32
-            if self.compiler.compiler_type in ["mingw32"]:
+            # mingw32, msvc -- windows just needs work in general
+            if self.compiler.compiler_type in ["mingw32", "msvc"]:
                 build = 0
-            
             # fix for distutils where C++ is not handled well. This includes
             # Python 2.2.x -- need to find the C++ compiler
             cxx = None
