@@ -16,8 +16,6 @@ difference    Get the items in 1 list, but not the other.
 
 """
 
-from clistfns import *
-
 def asdict(l):
     """asdict(l) -> dictionary
 
@@ -35,6 +33,32 @@ def items(l):
 
     """
     return asdict(l).keys()
+
+def count(items):
+    """count(items) -> dict of counts of each item
+
+    Count the number of times each item appears in a list of data.
+
+    """
+    c = {}
+    for i in items:
+        c[i] = c.get(i, 0) + 1
+    return c
+
+def contents(items):
+    """contents(items) -> dict of item:percentage
+
+    Summarize the contents of the list in terms of the percentages of each
+    item.  For example, if an item appears 3 times in a list with 10 items,
+    it is in 0.3 of the list.
+
+    """
+    counts = count(items)
+    l = float(len(items))
+    contents = {}
+    for i, c in counts.items():
+        contents[i] = c / l
+    return contents
 
 def intersection(l1, l2):
     """intersection(l1, l2) -> list of common items
@@ -79,3 +103,10 @@ def itemindex(l):
         if not dict.has_key(l[i]):
             dict[l[i]] = i
     return dict
+
+# Try and load C implementations of functions.  If I can't,
+# then just ignore and use the pure python implementations.
+try:
+    from clistfns import *
+except ImportError:
+    pass

@@ -12,7 +12,19 @@ safe_exp   exp, but returns a large or small number instead of overflows.
 """
 
 import math
-from cmathfns import *
+
+def safe_log(n, zero=None, neg=None):
+    """safe_log(n, zero=None, neg=None) -> log(n)
+
+    Calculate the log of n.  If n is 0, returns the value of zero.  If n is
+    negative, returns the value of neg.
+
+    """
+    if n < 0:
+        return neg
+    elif n < 1E-100:
+        return zero
+    return math.log(n)
 
 def safe_exp(n, under=None, over=None):
     """safe_exp(n, under=None, over=None) -> e**n
@@ -28,3 +40,10 @@ def safe_exp(n, under=None, over=None):
             return under
         return over
     raise "How did I get here?"
+
+# Try and load C implementations of functions.  If I can't,
+# then just ignore and use the pure python implementations.
+try:
+    from cmathfns import *
+except ImportError:
+    pass

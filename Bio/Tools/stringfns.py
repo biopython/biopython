@@ -6,10 +6,42 @@
 """This provides useful general functions for working with strings.
 
 Functions:
-split    Split a string using many delimiters.
+split        Split a string using many delimiters.
+starts_with  Check whether a string starts with another string.
 
 """
 
 # XXX allow split separators to be negated
 
-from cstringfns import *
+def split(s, sep=" \011\012\013\014\015", maxsplit=None):
+    """split(str [,sep [,maxsplit]]) -> list of strings
+
+    Split a string.  Similar to string.split, except that this considers
+    any one of the characters in sep to be a delimiter.
+
+    """
+    strlist = []
+    prev = 0
+    for i in range(len(s)):
+        if maxsplit is not None and len(strlist) >= maxsplit:
+            break
+        if s[i] in sep:
+            strlist.append(s[prev:i])
+            prev = i+1
+    strlist.append(s[prev:])
+    return strlist
+
+def starts_with(s, start):
+    """starts_with(s, start) -> 1/0
+
+    Return whether s begins with start.
+
+    """
+    return s[:len(start)] == start
+
+# Try and load C implementations of functions.  If I can't,
+# then just ignore and use the pure python implementations.
+try:
+    from cstringfns import *
+except ImportError:
+    pass
