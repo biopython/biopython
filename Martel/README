@@ -212,11 +212,15 @@ from xml.sax import saxutils
 def ToColon(name):
     return Martel.ToSep(name, ":")
 
-format =  Martel.Rep(
-            Martel.Group("record",
+comment = Martel.Rep(Martel.Re("^#") +Martel.ToEol())
+
+passwd =  Martel.Rep(
+              Martel.Group("record",
               ToColon("account") + ToColon("password") + ToColon("UID") + \
               ToColon("GID") + ToColon("GECOS") + ToColon("directory") + \
               Martel.ToEol("shell")))
+
+format = comment + passwd
 
 parser = format.make_parser()
 parser.setContentHandler(saxutils.XMLGenerator())
@@ -280,12 +284,7 @@ print the account name and shell.
 
 # Hmmm, DOM requires there be only a single top-level element.
 # XXX fixup documentation to reflect this requirement
-format =  Martel.Group("passwd",
-            Martel.Rep(
-              Martel.Group("record",
-                ToColon("account") + ToColon("password") + ToColon("UID") + \
-                ToColon("GID") + ToColon("GECOS") + ToColon("directory") + \
-                Martel.ToEol("shell"))))
+format = Martel.Group("passwd", comment + passwd)
 
 parser = format.make_parser()
 
