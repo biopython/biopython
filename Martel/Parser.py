@@ -197,7 +197,7 @@ def _parse_elements(s, tagtable, cont_handler, debug_level, attrlookup):
 class Parser(xmlreader.XMLReader):
     """Parse the input data all in memory"""
 
-    def __init__(self, tagtable, (want_groupref_names, debug_level, attrlookup) = (0, 1)):
+    def __init__(self, tagtable, (want_groupref_names, debug_level, attrlookup) = (0, 1, {})):
         xmlreader.XMLReader.__init__(self)
 
         assert type(tagtable) == type( () ), "mxTextTools only allows a tuple tagtable"
@@ -933,7 +933,8 @@ class HeaderFooterParser(xmlreader.XMLReader):
         if footer is None:
             footer = ""
         result = _parse_elements(footer, self.footer_tagtable,
-                                 self._cont_handler, self.debug_level)
+                                 self._cont_handler, self.debug_level,
+                                 self.attrlookup)
         if result is None:
             # parsed the footer, but need to check that it's
             # at EOF

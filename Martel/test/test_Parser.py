@@ -54,7 +54,7 @@ def test_record_parser():
     record = Martel.Group("A", Martel.Str("X\n") + Martel.Re("a*\n"))
     p = record.make_parser()
 
-    parser = Parser.RecordParser("blah", p.tagtable, (0, 1),
+    parser = Parser.RecordParser("blah", p.tagtable, (0, 1, {}),
                                  RecordReader.StartsWith, ("X",))
 
     err = CountErrors()
@@ -109,7 +109,7 @@ XX
         RecordReader.EndsWith, ("XX\n", ), header.tagtable,
         RecordReader.EndsWith, ("//\n", ), record.tagtable,
         RecordReader.StartsWith, ("f", ), footer.tagtable,
-        (0, debug_level))
+        (0, debug_level, {}))
 
     outfile = StringIO()
     hf.setContentHandler(saxutils.XMLGenerator(outfile))
@@ -153,7 +153,7 @@ This is some more data
         RecordReader.Until, ("ID", ), header.tagtable,
         RecordReader.StartsWith, ("ID", ), record.tagtable,
         RecordReader.Nothing, (), (),
-        (0, 1))
+        (0, 1, {}))
 
     outfile = StringIO()
     hf.setContentHandler(saxutils.XMLGenerator(outfile))
@@ -198,7 +198,7 @@ This is some more data
         RecordReader.Nothing, (), (),
         RecordReader.EndsWith, ("//\n", ), record.tagtable,
         RecordReader.Everything, (), footer.tagtable,
-        (0, 1))
+        (0, 1, {}))
 
     outfile = StringIO()
     hf.setContentHandler(saxutils.XMLGenerator(outfile))
@@ -241,7 +241,7 @@ This is some more data
         RecordReader.Until, ("ID", ), header.tagtable,
         RecordReader.StartsWith, ("ID", ), record.tagtable,
         None, (), (),
-        (0, 1))
+        (0, 1, {}))
     outfile = StringIO()
     hf.setContentHandler(saxutils.XMLGenerator(outfile))
     hf.setErrorHandler(handler.ErrorHandler())
@@ -281,7 +281,7 @@ Or not to be
         RecordReader.Until, ("ID", ), header.tagtable,
         RecordReader.StartsWith, ("ID", ), record.tagtable,
         None, (), (),
-        (0, 1))
+        (0, 1, {}))
     count = CountRecords("record")
     hf.setContentHandler(count)
     err = CountErrors()
@@ -333,7 +333,7 @@ FOOTER
         RecordReader.Until, ("ID", ), header.tagtable,
         RecordReader.EndsWith, ("//", ), record.tagtable,
         RecordReader.StartsWith, ("FOOTER", ), footer.tagtable,
-        (0, 1))
+        (0, 1, {}))
     count = CountRecords("record")
     hf.setContentHandler(count)
     err = CountErrors()
@@ -364,7 +364,7 @@ FOOTER
         RecordReader.CountLines, (2, ), header.tagtable,
         RecordReader.EndsWith, ("//", ), record.tagtable,
         RecordReader.StartsWith, ("FOOTER", ), footer.tagtable,
-        (0, 1))
+        (0, 1, {}))
     count = CountRecords("record")
     hf.setContentHandler(count)
     err = CountErrors()
@@ -429,7 +429,7 @@ FOOTER Abc
         RecordReader.CountLines, (2, ), header.tagtable,
         RecordReader.CountLines, (1, ), record.tagtable,
         RecordReader.CountLines, (1, ), footer.tagtable,
-        (0, 1))
+        (0, 1, {}))
     for s, rec_count, err_count, fatal_count in dataset:
         count = CountRecords("record")
         hf.setContentHandler(count)

@@ -142,7 +142,11 @@ def convert_subpattern(group_names, name, (id, terms)):
 
     # The name in the ?P<group> may contain attr information
     # serialized in a URL-encoded form; if present, deconvolute.
-    pos = string.find(pattern_name, "?")
+    pos = -1
+    attrs = {}
+    if pattern_name is not None:
+        pos = string.find(pattern_name, "?")
+    
     if pos != -1:
         import cgi
         qs = pattern_name[pos+1:]
@@ -162,8 +166,6 @@ def convert_subpattern(group_names, name, (id, terms)):
             (repr(k), len(v), repr(pattern_name)))
 
             attrs[k] = v[0]
-    else:
-        attrs = {}
     
     return Expression.Group(pattern_name, convert_list(group_names, terms),
                             attrs)
