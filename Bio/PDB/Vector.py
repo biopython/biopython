@@ -80,6 +80,8 @@ def refmat(p,q):
     @type p,q: L{Vector}
     @return: The mirror operation, a 3x3 Numpy array. 
     """
+    p=Vector(p)
+    q=Vector(q)
     p.normalize()
     q.normalize()
     pq=p-q
