@@ -273,7 +273,7 @@ float *Region::get_right(void)
 	return _right;
 }
 
-int Region::test_intersection(Region *query_region, float radius=0)
+int Region::test_intersection(Region *query_region, float radius)
 {
 	int status=2;
 
