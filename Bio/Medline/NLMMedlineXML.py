@@ -37,6 +37,7 @@ def choose_format(data):
         ("nlmmedline_001211", "nlmmedline_001211_format"),
         ("nlmmedline_010319", "nlmmedline_010319_format"),
         ("nlmmedline_011101", "nlmmedline_011101_format"),
+        ("nlmmedline_031101", "nlmmedline_031101_format"),
         ]
     for identifier, format_module in formats:
         if data.find(identifier) >= 0:
