@@ -1,23 +1,26 @@
 """
 Classes that deal with macromolecular crystal structures (eg.
-PDB and mmCIF parsers and a Structure class).
+PDB and mmCIF parsers, a Structure class, a module to keep 
+a local copy of the PDB up-to-date, selective IO of PDB files,
+etc.). Author: Thomas Hamelryck.  Additional code by Kristian 
+Rother.
 """
 
-# PDB directory
+# Get a Structure object from a PDB file
+from PDBParser import PDBParser
 
-__all__=[
-"Atom",
-"Chain",
-"Entity",
-"MMCIFParser",
-"Model",
-#"NeighborSearch", # This is commented out - it uses KDTRee!
-"PDBExceptions",
-"PDBIO",
-"PDBParser",
-"PDBList",
-"Polypeptide",
-"Residue",
-"Selection",
-"Structure",
-"StructureBuilder"]
+# Get a Structure object from an mmCIF file
+from MMCIFParser import MMCIFParser
+
+# Download from the PDB
+from PDBList import PDBList 
+
+# Find connected polypeptides in a Structure
+from Polypeptide import PPBuilder, CaPPBuilder
+
+# IO of PDB files (including flexible selective output)
+from PDBIO import PDBIO
+
+# Some methods to eg. get a list of Residues
+# from a list of Atoms.
+import Selection
