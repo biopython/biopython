@@ -14,10 +14,11 @@
 /* Functions in this module. */
 
 static char cstringfns_split__doc__[] = 
-"split(str [,sep [,maxsplit]]) -> list of strings\n\
+"split(str [,sep [,maxsplit [,negate]]]) -> list of strings\n\
 \n\
 Split a string.  Similar to string.split, except that this considers\n\
-any one of the characters in sep to be a delimiter.\n\
+any one of the characters in sep to be a delimiter.  If negate is\n\
+true, then everything but sep will be a separator.\n\
 \n\
 ";
 
@@ -29,18 +30,20 @@ cstringfns_split(self, args, keywds)
 {
     int i, prev;
     int nsplit, maxsplit=0;
+    int negate=0;
+    PyObject *py_negate=NULL;
     PyObject *strlist, *newstr;
     char *str, 
 	*sep=" \011\012\013\014\015";  /* whitespace */
     char tosplit[256];
+    static char *kwlist[] = {"str", "sep", "maxsplit", "negate", NULL};
 
-    static char *kwlist[] = {"str", "sep", "maxsplit", NULL};
-
-    if(!PyArg_ParseTupleAndKeywords(args, keywds, "s|si", kwlist, 
-				    &str, &sep, &maxsplit))
+    if(!PyArg_ParseTupleAndKeywords(args, keywds, "s|siO", kwlist, 
+				    &str, &sep, &maxsplit, &py_negate))
 	return NULL;
     if(maxsplit < 0)
 	maxsplit = 1;
+    negate = (py_negate && PyObject_IsTrue(py_negate));
 
     /* Set the tosplit array to 1 for characters to split on. */
     memset(tosplit, 0, 256);
@@ -57,7 +60,7 @@ cstringfns_split(self, args, keywds)
     prev = 0;
     nsplit = 0;
     for(i=0; str[i] && (maxsplit == 0 || nsplit < maxsplit); i++) {
-	if(!tosplit[str[i]])
+	if(!(tosplit[str[i]] == !negate))
 	    continue;
 
 	/* Split the string here. */

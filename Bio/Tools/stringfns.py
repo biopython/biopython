@@ -11,13 +11,12 @@ starts_with  Check whether a string starts with another string.
 
 """
 
-# XXX allow split separators to be negated
-
-def split(s, sep=" \011\012\013\014\015", maxsplit=None):
-    """split(str [,sep [,maxsplit]]) -> list of strings
+def split(s, sep=" \011\012\013\014\015", maxsplit=None, negate=0):
+    """split(str [,sep [,maxsplit [,negate]]]) -> list of strings
 
     Split a string.  Similar to string.split, except that this considers
-    any one of the characters in sep to be a delimiter.
+    any one of the characters in sep to be a delimiter.  If negate is
+    true, then everything but sep will be a separator.
 
     """
     strlist = []
@@ -25,7 +24,7 @@ def split(s, sep=" \011\012\013\014\015", maxsplit=None):
     for i in range(len(s)):
         if maxsplit is not None and len(strlist) >= maxsplit:
             break
-        if s[i] in sep:
+        if (s[i] in sep) == (not negate):
             strlist.append(s[prev:i])
             prev = i+1
     strlist.append(s[prev:])
