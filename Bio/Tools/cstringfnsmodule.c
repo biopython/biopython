@@ -60,7 +60,7 @@ cstringfns_split(self, args, keywds)
     prev = 0;
     nsplit = 0;
     for(i=0; str[i] && (maxsplit == 0 || nsplit < maxsplit); i++) {
-	if(!(tosplit[str[i]] == !negate))
+	if(!(tosplit[(int)str[i]] == !negate))
 	    continue;
 
 	/* Split the string here. */
