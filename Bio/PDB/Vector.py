@@ -12,12 +12,11 @@ from MLab import eye
 def refmat(p,q):
     """
     Return a (left multiplying) matrix that mirrors p onto q.
-    p and q should be unit vectors.
     """
-    p.normalize()
-    q.normalize()
+    p=p.normalize()
+    q=q.normalize()
     pq=p-q
-    pq.normalize()
+    pq=pq.normalize()
     b=pq.get_array()
     b.shape=(3, 1)
     i=eye(3)
@@ -29,8 +28,6 @@ def rotmat(p,q):
     Return a (left multiplying) matrix that rotates p onto q.
     p and q should be unit vectors.
     """
-    p.normalize()
-    q.normalize()
     rot=matrixmultiply(refmat(q, -p), refmat(p, -p))
     return rot
 
@@ -125,7 +122,8 @@ class Vector:
 
     def normalize(self):
         "Normalize the vector"
-        self._ar=self._ar/self.norm()
+        x,y,z=self._ar/self.norm()
+        return Vector(x,y,z)
 
     def angle(self, other):
         "Angle between two vectors"
@@ -158,13 +156,10 @@ if __name__=="__main__":
         from math import pi
         from RandomArray import *
 
-        v1=Vector(0.5,0.5,1.3)
-        v2=Vector(0.1,0.1,0.1)
-        v3=Vector(1.9,0.8,0.6)
-        v4=Vector(1,-1,0)
-
-        for v in [v1,v2,v3,v4]:
-            v.normalize()
+        v1=Vector(0.5,0.5,1.3).normalize()
+        v2=Vector(0.1,0.1,0.1).normalize()
+        v3=Vector(1.9,0.8,0.6).normalize()
+        v4=Vector(1,-1,0).normalize()
 
         angle(v1, v2, v3)
         dihedral(v1, v2, v3, v4)
@@ -172,7 +167,6 @@ if __name__=="__main__":
         ref=refmat(v1, v3)
         rot=rotmat(v1, v3)
 
-        print v1
         print v3
         print v1.left_multiply(ref)
         print v1.left_multiply(rot)
