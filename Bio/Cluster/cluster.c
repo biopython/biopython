@@ -52,14 +52,14 @@ clusterdll_init (HANDLE h, DWORD reason, void* foo)
 double CALL mean(int n, double x[])
 { double result = 0.;
   int i;
-  for (i = 0; i < n; i++) result = result + x[i]; 
+  for (i = 0; i < n; i++) result = result + x[i];
   result /= n;
   return result;
 }
 
 /* ************************************************************************ */
 
-double CALL median (int n, double x[])   
+double CALL median (int n, double x[])
 /*
 Find the median of X(1), ... , X(N), using as much of the quicksort
 algorithm as is needed to isolate it.
@@ -83,7 +83,7 @@ Based on Alan J. Miller's median.f90 routine.
   }
 
   /* Find median of 1st, middle & last values. */
-  do 
+  do
   { int loop;
     int mid = (lo + hi)/2;
     double result = x[mid];
@@ -491,10 +491,6 @@ double euclid (int n, double** data1, double** data2, int** mask1, int** mask2,
  
 /*
 -- euclid routine --
-Michiel de Hoon (mdehoon@ims.u-tokyo.ac.jp)
-Laboratory of DNA Information Analysis, Human Genome Center
-Institute of Medical Science, University of Tokyo
-January 3, 2003
 
 Purpose
 =======
@@ -516,11 +512,11 @@ data2  (input) double array
 The data array containing the second vector.
 
 mask1  (input) int array
-This array which elements in data1 are missing. If mask1[i][j]==0, then 
+This array which elements in data1 are missing. If mask1[i][j]==0, then
 data1[i][j] is missing.
 
 mask2  (input) int array
-This array which elements in data2 are missing. If mask2[i][j]==0, then 
+This array which elements in data2 are missing. If mask2[i][j]==0, then
 data2[i][j] is missing.
 
 weight (input) double array, dimension( n )
@@ -573,10 +569,6 @@ double harmonic(int n, double** data1, double** data2, int** mask1, int** mask2,
  
 /*
 -- harmonic routine --
-Michiel de Hoon (mdehoon@ims.u-tokyo.ac.jp)
-Laboratory of DNA Information Analysis, Human Genome Center
-Institute of Medical Science, University of Tokyo
-August 7, 2002
 
 Purpose
 =======
@@ -599,11 +591,11 @@ data2  (input) double array
 The data array containing the second vector.
 
 mask1  (input) int array
-This array which elements in data1 are missing. If mask1[i][j]==0, then 
+This array which elements in data1 are missing. If mask1[i][j]==0, then
 data1[i][j] is missing.
 
 mask2  (input) int array
-This array which elements in data2 are missing. If mask2[i][j]==0, then 
+This array which elements in data2 are missing. If mask2[i][j]==0, then
 data2[i][j] is missing.
 
 weight (input) double array, dimension( n )
@@ -654,14 +646,89 @@ Otherwise, the distance between two columns in the matrix is calculated.
 /* ********************************************************************* */
 
 static
+double cityblock (int n, double** data1, double** data2, int** mask1,
+  int** mask2, const double weight[], int index1, int index2, int transpose)
+
+/*
+-- cityblock routine --
+
+Purpose
+=======
+
+The cityblock routine calculates the weighted "City Block" distance between
+two rows or columns in a matrix. City Block distance is defined as the
+absolute value of X1-X2 plus the absolute value of Y1-Y2 plus..., which is
+equivalent to taking an "up and over" path.
+
+Arguments
+=========
+
+n      (input) int
+The number of elements in a row or column. If transpose==0, then n is the number
+of columns; otherwise, n is the number of rows.
+
+data1  (input) double array
+The data array containing the first vector.
+
+data2  (input) double array
+The data array containing the second vector.
+
+mask1  (input) int array
+This array which elements in data1 are missing. If mask1[i][j]==0, then
+data1[i][j] is missing.
+
+mask2  (input) int array
+This array which elements in data2 are missing. If mask2[i][j]==0, then
+data2[i][j] is missing.
+
+weight (input) double array, dimension( n )
+The weights that are used to calculate the distance.
+
+index1     (input) int
+Index of the first row or column.
+
+index2     (input) int
+Index of the second row or column.
+
+transpose (input) int
+If transpose==0, the distance between two rows in the matrix is calculated.
+Otherwise, the distance between two columns in the matrix is calculated.
+
+============================================================================ */
+{ double result = 0.;
+  double tweight = 0;
+  int i;
+  if (transpose==0) /* Calculate the distance between two rows */
+  { for (i = 0; i < n; i++)
+    { if (mask1[index1][i] && mask2[index2][i])
+      { double term = data1[index1][i] - data2[index2][i];
+        result = result + weight[i]*fabs(term);
+        tweight += weight[i];
+      }
+    }
+  }
+  else
+  { for (i = 0; i < n; i++)
+    { if (mask1[i][index1] && mask2[i][index2])
+      { double term = data1[i][index1] - data2[i][index2];
+        result = result + weight[i]*fabs(term);
+        tweight += weight[i];
+      }
+    }
+  }
+  if (!tweight) return 0; /* usually due to empty clusters */
+  result /= tweight;
+  result *= n;
+  return result;
+}
+
+/* ********************************************************************* */
+
+static
 double correlation (int n, double** data1, double** data2, int** mask1,
   int** mask2, const double weight[], int index1, int index2, int transpose)
 /*
 -- correlation routine --
-Michiel de Hoon (mdehoon@ims.u-tokyo.ac.jp)
-Laboratory of DNA Information Analysis, Human Genome Center
-Institute of Medical Science, University of Tokyo
-June 2, 2002
 
 Purpose
 =======
@@ -687,11 +754,11 @@ data2  (input) double array
 The data array containing the second vector.
 
 mask1  (input) int array
-This array which elements in data1 are missing. If mask1[i][j]==0, then 
+This array which elements in data1 are missing. If mask1[i][j]==0, then
 data1[i][j] is missing.
 
 mask2  (input) int array
-This array which elements in data2 are missing. If mask2[i][j]==0, then 
+This array which elements in data2 are missing. If mask2[i][j]==0, then
 data2[i][j] is missing.
 
 weight (input) double array, dimension( n )
@@ -764,10 +831,6 @@ double acorrelation (int n, double** data1, double** data2, int** mask1,
   int** mask2, const double weight[], int index1, int index2, int transpose)
 /*
 -- acorrelation routine --
-Michiel de Hoon (mdehoon@ims.u-tokyo.ac.jp)
-Laboratory of DNA Information Analysis, Human Genome Center
-Institute of Medical Science, University of Tokyo
-June 2, 2002
 
 Purpose
 =======
@@ -792,11 +855,11 @@ data2  (input) double array
 The data array containing the second vector.
 
 mask1  (input) int array
-This array which elements in data1 are missing. If mask1[i][j]==0, then 
+This array which elements in data1 are missing. If mask1[i][j]==0, then
 data1[i][j] is missing.
 
 mask2  (input) int array
-This array which elements in data2 are missing. If mask2[i][j]==0, then 
+This array which elements in data2 are missing. If mask2[i][j]==0, then
 data2[i][j] is missing.
 
 weight (input) double array, dimension( n )
@@ -869,10 +932,6 @@ double ucorrelation (int n, double** data1, double** data2, int** mask1,
   int** mask2, const double weight[], int index1, int index2, int transpose)
 /*
 -- ucorrelation routine --
-Michiel de Hoon (mdehoon@ims.u-tokyo.ac.jp)
-Laboratory of DNA Information Analysis, Human Genome Center
-Institute of Medical Science, University of Tokyo
-June 2, 2002
 
 Purpose
 =======
@@ -899,11 +958,11 @@ data2  (input) double array
 The data array containing the second vector.
 
 mask1  (input) int array
-This array which elements in data1 are missing. If mask1[i][j]==0, then 
+This array which elements in data1 are missing. If mask1[i][j]==0, then
 data1[i][j] is missing.
 
 mask2  (input) int array
-This array which elements in data2 are missing. If mask2[i][j]==0, then 
+This array which elements in data2 are missing. If mask2[i][j]==0, then
 data2[i][j] is missing.
 
 weight (input) double array, dimension( n )
@@ -970,10 +1029,6 @@ double uacorrelation (int n, double** data1, double** data2, int** mask1,
   int** mask2, const double weight[], int index1, int index2, int transpose)
 /*
 -- uacorrelation routine --
-Michiel de Hoon (mdehoon@ims.u-tokyo.ac.jp)
-Laboratory of DNA Information Analysis, Human Genome Center
-Institute of Medical Science, University of Tokyo
-June 2, 2002
 
 Purpose
 =======
@@ -1000,11 +1055,11 @@ data2  (input) double array
 The data array containing the second vector.
 
 mask1  (input) int array
-This array which elements in data1 are missing. If mask1[i][j]==0, then 
+This array which elements in data1 are missing. If mask1[i][j]==0, then
 data1[i][j] is missing.
 
 mask2  (input) int array
-This array which elements in data2 are missing. If mask2[i][j]==0, then 
+This array which elements in data2 are missing. If mask2[i][j]==0, then
 data2[i][j] is missing.
 
 weight (input) double array, dimension( n )
@@ -1071,10 +1126,6 @@ double spearman (int n, double** data1, double** data2, int** mask1,
   int** mask2, const double weight[], int index1, int index2, int transpose)
 /*
 -- spearman routine --
-Michiel de Hoon (mdehoon@ims.u-tokyo.ac.jp)
-Laboratory of DNA Information Analysis, Human Genome Center
-Institute of Medical Science, University of Tokyo
-June 2, 2002
 
 Purpose
 =======
@@ -1097,11 +1148,11 @@ data2  (input) double array
 The data array containing the second vector.
 
 mask1  (input) int array
-This array which elements in data1 are missing. If mask1[i][j]==0, then 
+This array which elements in data1 are missing. If mask1[i][j]==0, then
 data1[i][j] is missing.
 
 mask2  (input) int array
-This array which elements in data2 are missing. If mask2[i][j]==0, then 
+This array which elements in data2 are missing. If mask2[i][j]==0, then
 data2[i][j] is missing.
 
 weight (input) double array, dimension( n )
@@ -1186,16 +1237,12 @@ double kendall (int n, double** data1, double** data2, int** mask1, int** mask2,
   const double weight[], int index1, int index2, int transpose)
 /*
 -- kendall routine --
-Michiel de Hoon (mdehoon@ims.u-tokyo.ac.jp)
-Laboratory of DNA Information Analysis, Human Genome Center
-Institute of Medical Science, University of Tokyo
-June 2, 2002
 
 Purpose
 =======
 
 The kendall routine calculates the Kendall distance between two
-rows or columns. The Kendall distance is defined as one minus Kendall's tau. 
+rows or columns. The Kendall distance is defined as one minus Kendall's tau.
 
 Arguments
 =========
@@ -1211,11 +1258,11 @@ data2  (input) double array
 The data array containing the second vector.
 
 mask1  (input) int array
-This array which elements in data1 are missing. If mask1[i][j]==0, then 
+This array which elements in data1 are missing. If mask1[i][j]==0, then
 data1[i][j] is missing.
 
 mask2  (input) int array
-This array which elements in data2 are missing. If mask2[i][j]==0, then 
+This array which elements in data2 are missing. If mask2[i][j]==0, then
 data2[i][j] is missing.
 
 weight (input) double array, dimension( n )
@@ -1305,6 +1352,7 @@ void setmetric (char dist,
 { switch(dist)
   { case ('e'): *metric = &euclid; break;
     case ('h'): *metric = &harmonic; break;
+    case ('b'): *metric = &cityblock; break;
     case ('c'): *metric = &correlation; break;
     case ('a'): *metric = &acorrelation; break;
     case ('u'): *metric = &ucorrelation; break;
@@ -1321,10 +1369,6 @@ void setmetric (char dist,
 void CALL initran(void)
 /*
 -- initran routine --
-Michiel de Hoon (mdehoon@ims.u-tokyo.ac.jp)
-Laboratory of DNA Information Analysis, Human Genome Center
-Institute of Medical Science, University of Tokyo
-March 28, 2002
 
 Purpose
 =======
@@ -1355,10 +1399,6 @@ ranlib.h:   setall
 void CALL randomassign (int nclusters, int nelements, int clusterid[])
 /*
 -- randomassign routine --
-Michiel de Hoon (mdehoon@ims.u-tokyo.ac.jp)
-Laboratory of DNA Information Analysis, Human Genome Center
-Institute of Medical Science, University of Tokyo
-March 13, 2002
 
 Purpose
 =======
@@ -1387,7 +1427,7 @@ ranlib: int genprm
 ============================================================================
 */
 
-{ int i; 
+{ int i;
   long* map = (long*)malloc((size_t)nelements*sizeof(long));
   /* Initialize mapping */
   for (i = 0; i < nelements; i++) map[i] = i;
@@ -1412,10 +1452,6 @@ void getclustermean(int nclusters, int nrows, int ncolumns,
   int transpose)
 /*
 -- getclustermean routine --
-Michiel de Hoon (mdehoon@ims.u-tokyo.ac.jp)
-Laboratory of DNA Information Analysis, Human Genome Center
-Institute of Medical Science, University of Tokyo
-March 13, 2002
 
 Purpose
 =======
@@ -1539,10 +1575,6 @@ void getclustermedian(int nclusters, int nrows, int ncolumns,
   int transpose)
 /*
 -- getclustermedian routine --
-Michiel de Hoon (mdehoon@ims.u-tokyo.ac.jp)
-Laboratory of DNA Information Analysis, Human Genome Center
-Institute of Medical Science, University of Tokyo
-March 13, 2002
 
 Purpose
 =======
@@ -1752,13 +1784,9 @@ void emalg (int nclusters, int nrows, int ncolumns,
 void CALL kcluster (int nclusters, int nrows, int ncolumns,
   double** data, int** mask, double weight[], int transpose,
   int npass, char method, char dist,
-  int clusterid[], double** cdata, double* error, int* ifound) 
+  int clusterid[], double** cdata, double* error, int* ifound)
 /*
 -- kcluster routine --
-Michiel de Hoon (mdehoon@ims.u-tokyo.ac.jp)
-Laboratory of DNA Information Analysis, Human Genome Center
-Institute of Medical Science, University of Tokyo
-April 12, 2003
 
 Purpose
 =======
@@ -1810,6 +1838,7 @@ dist       (input) char
 Defines which distance measure is used, as given by the table:
 dist=='e': Euclidean distance
 dist=='h': Harmonically summed Euclidean distance
+dist=='b': City-block distance
 dist=='c': correlation
 dist=='a': absolute value of the correlation
 dist=='u': uncentered correlation
@@ -1891,7 +1920,7 @@ found. The value of ifound is at least 1; its maximum value is npass.
   }
   if (transpose==0)
     for (i = 0; i < nclusters; i++) free(cmask[i]);
-  else 
+  else
     for (i = 0; i < ndata; i++) free(cmask[i]);
   free(cmask);
 
@@ -1979,10 +2008,6 @@ double** CALL distancematrix (int nrows, int ncolumns, double** data,
               
 /*
 -- distancematrix routine --
-Michiel de Hoon (mdehoon@ims.u-tokyo.ac.jp)
-Laboratory of DNA Information Analysis, Human Genome Center
-Institute of Medical Science, University of Tokyo
-May 16, 2002
 
 Purpose
 =======
@@ -2025,6 +2050,7 @@ dist       (input) char
 Defines which distance measure is used, as given by the table:
 dist=='e': Euclidean distance
 dist=='h': Harmonically summed Euclidean distance
+dist=='b': City-block distance
 dist=='c': correlation
 dist=='a': absolute value of the correlation
 dist=='u': uncentered correlation
@@ -2076,10 +2102,6 @@ double getscale(int nelements, double** distmatrix, char dist)
 
 /*
 -- getscale routine --
-Michiel de Hoon (mdehoon@ims.u-tokyo.ac.jp)
-Laboratory of DNA Information Analysis, Human Genome Center
-Institute of Medical Science, University of Tokyo
-November 8, 2002
 
 Purpose
 =======
@@ -2106,6 +2128,7 @@ dist       (input) char
 Defines which distance measure is used, as given by the table:
 dist=='e': Euclidean distance
 dist=='h': Harmonically summed Euclidean distance
+dist=='b': City-block distance
 dist=='c': correlation
 dist=='a': absolute value of the correlation
 dist=='u': uncentered correlation
@@ -2126,7 +2149,7 @@ For other values of dist, no scaling is done.
       double maxvalue = 0.;
       for (i = 0; i < nelements; i++)
 	for (j = 0; j < i; j++)
-	  maxvalue = max(distmatrix[i][j], maxvalue);	
+	  maxvalue = max(distmatrix[i][j], maxvalue);
       return maxvalue/2.;
     }
   }
@@ -2179,6 +2202,7 @@ dist       (input) char
 Defines which distance measure is used, as given by the table:
 dist=='e': Euclidean distance
 dist=='h': Harmonically summed Euclidean distance
+dist=='b': City-block distance
 dist=='c': correlation
 dist=='a': absolute value of the correlation
 dist=='u': uncentered correlation
@@ -2195,7 +2219,7 @@ does not deallocate it.
 result  (output) int array, dimension( nelements,2 )
 The clustering solution. Each row in the matrix describes one linking event,
 with the two columns containing the name of the nodes that were joined.
-The original genes are numbered 0..ngenes-1, nodes are numbered 
+The original genes are numbered 0..ngenes-1, nodes are numbered
 -1..-(nelements-1), where nelements is nrows or ncolumns depending on whether
 genes (rows) or microarrays (columns) are being clustered.
 
@@ -2336,7 +2360,7 @@ clustered, or the number of microarrays minus one if microarrays are clustered.
     distid[jsaved] = -inode-1;
     for (i = 0; i < jsaved; i++)
     { if (distid[i]<0)
-      { distmatrix[jsaved][i] = 
+      { distmatrix[jsaved][i] =
           metric(ndata,nodedata,nodedata,nodecount,nodecount,
                  weight,inode,-distid[i]-1,transpose);
       }
@@ -2407,7 +2431,7 @@ zero. The distance matrix will be modified by this routine.
 result  (output) int array, dimension( nelements,2 )
 The clustering solution. Each row in the matrix describes one linking event,
 with the two columns containing the name of the nodes that were joined.
-The original elements are numbered 0..nelements-1, nodes are numbered 
+The original elements are numbered 0..nelements-1, nodes are numbered
 -1..-(nelements-1).
 
 linkdist (output) double array, dimension(nelements-1)
@@ -2490,7 +2514,7 @@ zero. The distance matrix will be modified by this routine.
 result  (output) int array, dimension( nelements,2 )
 The clustering solution. Each row in the matrix describes one linking event,
 with the two columns containing the name of the nodes that were joined.
-The original elements are numbered 0..nelements-1, nodes are numbered 
+The original elements are numbered 0..nelements-1, nodes are numbered
 -1..-(nelements-1).
 
 linkdist (output) double array, dimension(nelements-1)
@@ -2572,7 +2596,7 @@ zero. The distance matrix will be modified by this routine.
 result  (output) int array, dimension( nelements,2 )
 The clustering solution. Each row in the matrix describes one linking event,
 with the two columns containing the name of the nodes that were joined.
-The original elements are numbered 0..nelements-1, nodes are numbered 
+The original elements are numbered 0..nelements-1, nodes are numbered
 -1..-(nelements-1).
 
 linkdist (output) double array, dimension(nelements-1)
@@ -2697,6 +2721,7 @@ dist       (input) char
 Defines which distance measure is used, as given by the table:
 dist=='e': Euclidean distance
 dist=='h': Harmonically summed Euclidean distance
+dist=='b': City-block distance
 dist=='c': correlation
 dist=='a': absolute value of the correlation
 dist=='u': uncentered correlation
@@ -2719,7 +2744,7 @@ distance matrix itself is available.
 result  (output) int array, dimension( nelements-1,2 )
 The clustering solution. Each row in the matrix describes one linking event,
 with the two columns containing the name of the nodes that were joined.
-The original elements are numbered 0..nelements-1, nodes are numbered 
+The original elements are numbered 0..nelements-1, nodes are numbered
 -1..-(nelements-1), where nelements is nrows or ncolumns depending on whether
 genes (rows) or microarrays (columns) are being clustered.
 
@@ -2746,10 +2771,10 @@ routine should deallocate the distance matrix after the return from treecluster.
 
   /* Calculate the distance matrix if the user didn't give it */
   if(!ldistmatrix)
-    distmatrix = 
+    distmatrix =
       distancematrix (nrows, ncolumns, data, mask, weight, dist, transpose);
 
-  switch(method) 
+  switch(method)
   { case 's':
       pslcluster(nelements, distmatrix, result, linkdist);
       break;
@@ -2770,7 +2795,7 @@ routine should deallocate the distance matrix after the return from treecluster.
   { double scale = getscale(nelements, distmatrix, dist);
     for (i = 0; i < nelements-1; i++) linkdist[i] /= scale;
   }
- 
+
   /* Deallocate space for distance matrix, if it was allocated by treecluster */
   if (!ldistmatrix)
   { for (i = 1; i < nelements; i++) free(distmatrix[i]);
@@ -2918,14 +2943,14 @@ void somworker (int nrows, int ncolumns, double** data, int** mask,
       double tau = inittau * (1. - ((double)iter)/((double)niter));
 
       for (i = 0; i < ndata; i++)
-        celldatavector[i] = &(celldata[ixbest][iybest][i]); 
+        celldatavector[i] = &(celldata[ixbest][iybest][i]);
       closest = metric(ndata,data,celldatavector,
         mask,dummymask,weights,iobject,0,transpose);
       for (ix = 0; ix < nxgrid; ix++)
       { for (iy = 0; iy < nygrid; iy++)
         { double distance;
           for (i = 0; i < ndata; i++)
-            celldatavector[i] = &(celldata[ixbest][iybest][i]); 
+            celldatavector[i] = &(celldata[ixbest][iybest][i]);
           distance =
             metric (ndata,data,celldatavector,
               mask,dummymask,weights,iobject,0,transpose);
@@ -3025,14 +3050,14 @@ void somassign (int nrows, int ncolumns, double** data, int** mask,
     { double closest;
       int ix, iy;
       for (j = 0; j < ndata; j++)
-        celldatavector[j] = &(celldata[ixbest][iybest][j]); 
+        celldatavector[j] = &(celldata[ixbest][iybest][j]);
       closest = metric(ndata,data,celldatavector,
         mask,dummymask,weights,i,0,transpose);
       for (ix = 0; ix < nxgrid; ix++)
       { for (iy = 0; iy < nygrid; iy++)
         { double distance;
           for(j = 0; j < ndata; j++)
-            celldatavector[j] = &(celldata[ix][iy][j]); 
+            celldatavector[j] = &(celldata[ix][iy][j]);
           distance = metric(ndata,data,celldatavector,
             mask,dummymask,weights,i,0,transpose);
           if (distance < closest)
@@ -3107,6 +3132,7 @@ dist       (input) char
 Defines which distance measure is used, as given by the table:
 dist=='e': Euclidean distance
 dist=='h': Harmonically summed Euclidean distance
+dist=='b': City-block distance
 dist=='c': correlation
 dist=='a': absolute value of the correlation
 dist=='u': uncentered correlation
@@ -3174,10 +3200,6 @@ double CALL clusterdistance (int nrows, int ncolumns, double** data,
               
 /*
 -- clusterdistance routine --
-Michiel de Hoon (mdehoon@ims.u-tokyo.ac.jp)
-Laboratory of DNA Information Analysis, Human Genome Center
-Institute of Medical Science, University of Tokyo
-September 3, 2002
 
 Purpose
 =======
@@ -3228,6 +3250,7 @@ dist       (input) char
 Defines which distance measure is used, as given by the table:
 dist=='e': Euclidean distance
 dist=='h': Harmonically summed Euclidean distance
+dist=='b': City-block distance
 dist=='c': correlation
 dist=='a': absolute value of the correlation
 dist=='u': uncentered correlation

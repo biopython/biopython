@@ -22,6 +22,7 @@ method=='a': arithmic mean
 method=='m': median
 The character dist defines the distance function to be used:
 dist=='e': Euclidean distance
+dist=='b': City Block distance
 dist=='h': Harmonically summed Euclidean distance
 dist=='c': correlation
 dist=='a': absolute value of the correlation
@@ -43,13 +44,16 @@ nfound is the number of times the optimal solution was found."""
   if rank(data)!=2:
     print "Error in kcluster: data should be a two-dimensional array"
     return
+  if dist not in ['e','b','h','c','a','u','x','s','k']:
+    print "Error in kcluster: unknown distance function specified (dist='"+dist+"')"
+    return
   (n,m) = shape(data)
   if transpose: transpose = 1
   if not mask: mask = ones((n,m))
   if not weight:
     if transpose: weight=ones(n,'d')
     else: weight=ones(m,'d')
-  x = cluster.kcluster(nclusters,data,mask,weight,transpose,npass,method,dist) 
+  x = cluster.kcluster(nclusters,data,mask,weight,transpose,npass,method,dist)
   return x
 
 def treecluster(data,mask=None,weight=None,applyscale=0,transpose=0,dist='e',method='m'):
@@ -71,6 +75,7 @@ clustered. If transpose==0, then genes are clustered. If transpose==1,
 microarrays are clustered.
 The character dist defines the distance function to be used:
 dist=='e': Euclidean distance (default)
+dist=='b': City Block distance
 dist=='h': Harmonically summed Euclidean distance
 dist=='c': Pearson correlation
 dist=='a': absolute value of the Pearson correlation
@@ -94,7 +99,7 @@ tree is an (nobject x 2) array describing the hierarchical clustering
 linkdist is a vector with (nobjects-1) elements containing the distances
 between the two subnodes that are joined at each node."""
   (n,m) = shape(data)
-  if dist not in ['e','h','c','a','u','x','s','k']:
+  if dist not in ['e','b','h','c','a','u','x','s','k']:
     print "Error in treecluster: unknown distance function specified (dist='"+dist+"')"
     return
   if transpose: transpose = 1
@@ -124,6 +129,7 @@ The initial value of tau (the neighborbood function) is given by inittau.
 The number of iterations is given by niter.
 The character dist defines the distance function to be used:
 dist=='e': Euclidean distance
+dist=='b': City Block distance
 dist=='h': Harmonically summed Euclidean distance
 dist=='c': correlation
 dist=='a': absolute value of the correlation
@@ -145,6 +151,9 @@ celldata is an array with dimensions (nxgrid, nygrid, number of microarrays)
   a 1D vector containing the gene expression data for the centroid of the
   cluster in the SOM grid cell with coordinates (ix, iy)."""
 
+  if dist not in ['e','b','h','c','a','u','x','s','k']:
+    print "Error in somcluster: unknown distance function specified (dist='"+dist+"')"
+    return
   (n,m) = shape(data)
   if transpose: transpose = 1
   if not mask: mask = ones((n,m))
@@ -203,6 +212,7 @@ The vector index2 identifies which genes/microarrays belong to the second
 cluster.
 The character dist defines the distance function to be used:
 dist=='e': Euclidean distance
+dist=='b': City Block distance
 dist=='h': Harmonically summed Euclidean distance
 dist=='c': correlation
 dist=='a': absolute value of the correlation
@@ -223,6 +233,9 @@ method=='v': average of the pairwise distances between members of the
              clusters
 If transpose==0, then clusters of genes are considered. If transpose==1,
 clusters of microarrays are considered."""
+  if dist not in ['e','b','h','c','a','u','x','s','k']:
+    print "Error in clusterdistance: unknown distance function specified (dist='"+dist+"')"
+    return
   (n,m) = shape(data)
   if transpose: transpose = 1
   if not mask: mask = ones((n,m))
@@ -231,4 +244,5 @@ clusters of microarrays are considered."""
     else: weight=ones(m,'d')
   x = cluster.clusterdistance(data,mask,weight,index1,index2,dist,method,transpose)
   return x
+
 
