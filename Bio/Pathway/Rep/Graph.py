@@ -1,4 +1,4 @@
-# Copyright 2001 by Tarjei Mikkelsen.  All rights reserved.
+# Copyright 2002 by Tarjei Mikkelsen.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -6,21 +6,23 @@
 # get set abstraction for graph representation
 from Bio.Pathway.Rep.HashSet import *
 
-class MultiGraph:
-    """A directed multigraph abstraction with labeled edges."""
+class Graph:
+    """A directed graph abstraction with labeled edges."""
 
     def __init__(self, nodes = []):
-        """Initializes a new MultiGraph object."""
-        self.__adjacency_list = {}    # maps parent -> set of (child, label) pairs
+        """Initializes a new Graph object."""
+        self.__adjacency_list = {}    # maps parent -> set of child objects
         for n in nodes:
             self.__adjacency_list[n] = HashSet()
         self.__label_map = {}         # maps label -> set of (parent, child) pairs
+        self.__edge_map = {}          # maps (parent, child) pair -> label
 
     def __eq__(self, g):
         """Returns true if g is equal to this graph."""
-        return isinstance(g, MultiGraph) and \
+        return isinstance(g, Graph) and \
                (self.__adjacency_list == g.__adjacency_list) and \
-               (self.__label_map == g.__label_map)
+               (self.__label_map == g.__label_map) and \
+               (self.__edge_map == g.__edge_map)
 
     def __ne__(self, g):
         """Returns true if g is not equal to this graph."""
@@ -28,11 +30,12 @@ class MultiGraph:
 
     def __repr__(self):
         """Returns an unique string representation of this graph."""
-        s = "<MultiGraph: "
+        s = "<Graph: "
         keys = self.__adjacency_list.keys()
         keys.sort()
         for key in keys:
-            values = self.__adjacency_list[key].list()
+            values = [(x,self.__edge_map[(key,x)]) \
+                      for x in self.__adjacency_list[key].list()]
             values.sort()
             s = s + "(" + repr(key) + ": " + ",".join(map(repr, values)) + ")" 
         return s + ">"
@@ -43,7 +46,7 @@ class MultiGraph:
         edgenum = reduce(lambda x,y: x+y,
                          map(len, self.__adjacency_list.values()))
         labelnum = len(self.__label_map.keys())
-        return "<MultiGraph: " + \
+        return "<Graph: " + \
                str(nodenum) + " node(s), " + \
                str(edgenum) + " edge(s), " + \
                str(labelnum) + " unique label(s)>"
@@ -59,22 +62,24 @@ class MultiGraph:
             raise ValueError, "Unknown <from> node: " + str(source)
         if not self.__adjacency_list.has_key(to):
             raise ValueError, "Unknown <to> node: " + str(to)
-        edge = (to, label)
-        self.__adjacency_list[source].add(edge)
+        if self.__edge_map.has_key((source,to)):
+            raise ValueError, str(source) + " -> " + str(to) + " exists"
+        self.__adjacency_list[source].add(to)
         if not self.__label_map.has_key(label):
             self.__label_map[label] = HashSet()
         self.__label_map[label].add((source,to))
+        self.__edge_map[(source,to)] = label
 
     def child_edges(self, parent):
         """Returns a list of (child, label) pairs for parent."""
         if not self.__adjacency_list.has_key(parent):
             raise ValueError, "Unknown <parent> node: " + str(parent)
-        return self.__adjacency_list[parent].list()
+        return [(x, self.__edge_map[(parent,x)]) \
+                for x in self.__adjacency_list[parent].list()]
 
     def children(self, parent):
         """Returns a list of unique children for parent."""
-        s = HashSet([x[0] for x in self.child_edges(parent)])
-        return s.list()
+        return self.__adjacency_list[parent].list()
 
     def edges(self, label):
         """Returns a list of all the edges with this label."""
@@ -98,8 +103,8 @@ class MultiGraph:
         for parent in self.__adjacency_list.keys():
             children = self.__adjacency_list[parent]
             for x in children.list():
-                if x[0] is child:
-                    parents.append((parent, x[1]))
+                if x is child:
+                    parents.append((parent, self.__edge_map[(parent, child)]))
         return parents
 
     def parents(self, child):
@@ -115,7 +120,7 @@ class MultiGraph:
         del self.__adjacency_list[node]
         # remove all in-edges from adjacency list
         for n in self.__adjacency_list.keys():
-            self.__adjacency_list[n] = HashSet(filter(lambda x,node=node: x[0] is not node,
+            self.__adjacency_list[n] = HashSet(filter(lambda x,node=node: x is not node,
                                                       self.__adjacency_list[n].list()))
         # remove all refering pairs in label map
         for label in self.__label_map.keys():
@@ -127,65 +132,15 @@ class MultiGraph:
                 del self.__label_map[label]
             else:
                 self.__label_map[label] = lm
-
+        # remove all refering entries in edge map
+        for edge in self.__edge_map.keys():
+            if edge[0] is node or edge[1] is node:
+                del self.__edge_map[edge]
+        
     def remove_edge(self, parent, child, label):
         """Removes edge. -- NOT IMPLEMENTED"""
         # hm , this is a multigraph - how should this be implemented?
         raise NotImplementedError, "remove_edge is not yet implemented"
-
-# auxilliary graph functions
-
-def df_search(graph, root = None):
-    """Depth first search of g.
-
-    Returns a list of all nodes that can be reached from the root node
-    in depth-first order.
-
-    If root is not given, the search will be rooted at an arbitrary node.
-    """
-    seen = {}
-    search = []
-    if len(g.nodes()) < 1:
-        return search
-    if root is None:
-        root = (g.nodes())[0]
-    seen[root] = 1
-    search.append(root)
-    current = g.children(root)
-    while len(current) > 0:
-        node = current[0]
-        current = current[1:]
-        if not seen.has_key(node):
-            search.append(node)
-            seen[node] = 1
-            current = g.children(node) + current
-    return search   
-
-def bf_search(graph, root = None):
-    """Breadth first search of g.
-
-    Returns a list of all nodes that can be reached from the root node
-    in breadth-first order.
-
-    If root is not given, the search will be rooted at an arbitrary node.
-    """
-    seen = {}
-    search = []
-    if len(g.nodes()) < 1:
-        return search
-    if root is None:
-        root = (g.nodes())[0]
-    seen[root] = 1
-    search.append(root)
-    current = g.children(root)
-    while len(current) > 0:
-        node = current[0]
-        current = current[1:]
-        if not seen.has_key(node):
-            search.append(node)
-            seen[node] = 1
-            current.extend(g.children(node))
-    return search
 
 
 
