@@ -72,13 +72,14 @@ To Do
 
 (In no particular order...)
 
-- how to deal with unsupported (not core) code
-- Sequence class
+- NamedSequence class
+- Annotations on sequences
 - BLAST additions
   o scripting front end
   o heavyweight/lightweight data structure
   o consumers to fill data structures
   o PSI-BLAST for WWW
+  o support for 2.0.11
 - more parsers
   o FASTA
   o SWISSPROT
@@ -88,3 +89,5 @@ To Do
   o Prodoc
   o Genbank
 - bug database
+- testing code
+- documentation

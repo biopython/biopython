@@ -6,6 +6,7 @@
 import os
 import string
 from TestSupport import verbose, TestFailed
+from Bio import File
 from Bio import ParserSupport
 
 
@@ -33,51 +34,6 @@ try:
 except:
     raise TestFailed, "TaggingConsumer"
 
-
-
-### OopsHandle
-
-if verbose:
-    print "Running tests on OopsHandle"
-
-data = """This
-is
-a multi-line
-file"""
-
-# os.pipe is not available on MS-DOS.  If DOS compatibility turns
-# out to be important, we may have to save the data to a temporary
-# file and make a real file handle.
-r, w = os.pipe()
-os.fdopen(w, 'w').write(data)
-h = ParserSupport.OopsHandle(os.fdopen(r, 'r'))
-
-try:
-    assert string.rstrip(h.readline()) == 'This'
-    assert string.rstrip(h.peekline()) == 'is'
-    assert string.rstrip(h.readline()) == 'is'
-    h.saveline("saved")
-    assert h.peekline() == 'saved'
-    h.saveline("another")
-    assert h.readline() == 'another'
-    assert h.readline() == 'saved'
-
-    # Test readlines after saveline
-    h.saveline("saved again")
-    lines = h.readlines()
-    assert string.strip(lines[0]) == 'saved again'
-    assert string.strip(lines[1]) == 'a multi-line'
-    assert string.strip(lines[2]) == 'file'
-    
-    # should be empty now
-    assert h.readline() == ''
-    
-    h.saveline("save after empty")
-    assert h.readline() == 'save after empty'
-    assert h.readline() == ''
-    h.close()  # should pass this to the original handle
-except:
-    raise TestFailed, "OopsHandle"
 
 
 
@@ -114,7 +70,7 @@ file"""
 
 r, w = os.pipe()
 os.fdopen(w, 'w').write(data)
-h = ParserSupport.OopsHandle(os.fdopen(r, 'r'))
+h = File.UndoHandle(os.fdopen(r, 'r'))
 
 safe_readline = ParserSupport.safe_readline
 try:
@@ -137,7 +93,7 @@ file"""
 
 r, w = os.pipe()
 os.fdopen(w, 'w').write(data)
-h = ParserSupport.OopsHandle(os.fdopen(r, 'r'))
+h = File.UndoHandle(os.fdopen(r, 'r'))
 
 safe_peekline = ParserSupport.safe_peekline
 try:
@@ -171,7 +127,7 @@ GTAEVI
 
 r, w = os.pipe()
 os.fdopen(w, 'w').write(data)
-h = ParserSupport.OopsHandle(os.fdopen(r, 'r'))
+h = File.UndoHandle(os.fdopen(r, 'r'))
 
 rac = ParserSupport.read_and_call
 lines = []
@@ -219,7 +175,7 @@ GTAEVI"""
 
 r, w = os.pipe()
 os.fdopen(w, 'w').write(data)
-h = ParserSupport.OopsHandle(os.fdopen(r, 'r'))
+h = File.UndoHandle(os.fdopen(r, 'r'))
 
 arac = ParserSupport.attempt_read_and_call
 lines = []

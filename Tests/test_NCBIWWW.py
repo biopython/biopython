@@ -5,6 +5,7 @@
 
 import os
 from TestSupport import verbose, TestFailed
+from Bio import File
 from Bio import ParserSupport
 from Bio.Blast import NCBIWWW
 
@@ -31,6 +32,6 @@ for test in tests:
     modelfile = datafile + ".tagged"
     tc = ParserSupport.TaggingConsumer(handle=TestHandle(open(modelfile)))
     try:
-        scanner.feed(open(datafile), tc)
+        scanner.feed(File.open(datafile), tc)
     except:
         raise TestFailed, "Scanner (%s)" % test

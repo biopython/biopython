@@ -23,6 +23,7 @@ parse      Parse a handle with FASTA-formatted data into a list of Records.
 # Random access for FASTA entries
 # index file?
 
+from Bio import File
 from Bio.ParserSupport import *
 
 class Record:
@@ -62,51 +63,48 @@ class Scanner:
 
     """
 
-    def feed(self, handle, consumer):
-        """feed(self, handle, consumer)
+    def feed(self, uhandle, consumer):
+        """feed(self, uhandle, consumer)
 
-        Feed in FASTA data for scanning.  handle is a file-like object
+        Feed in FASTA data for scanning.  uhandle must be an UndoHandle
         that contains the keyword information.  consumer is a Consumer
         object that will receive events as the record is scanned.
 
         """
-        # Make an OopsHandle from handle, if it's not one already.
-        if isinstance(handle, OopsHandle):
-            ohandle = handle
-        else:
-            ohandle = OopsHandle(handle)
+        assert isinstance(uhandle, File.UndoHandle), \
+               "uhandle must be an instance of Bio.File.UndoHandle"
             
-        while not is_blank_line(ohandle.peekline()):   # Am I done yet?
-            self.feed_one(ohandle, consumer)
+        while not is_blank_line(uhandle.peekline()):   # Am I done yet?
+            self.feed_one(uhandle, consumer)
 
-    def feed_one(self, ohandle, consumer):
-        """feed_one(self, ohandle, consumer)
+    def feed_one(self, uhandle, consumer):
+        """feed_one(self, uhandle, consumer)
 
         Feed in FASTA data for scanning.  Only consumes a single
-        record.  ohandle must be an OopsHandle.  consumer is a
+        record.  uhandle must be an UndoHandle.  consumer is a
         Consumer object that will recieve events as the record
         is scanned.
 
         """
-        if not is_blank_line(ohandle.peekline()):
-            self._scan_record(ohandle, consumer)
+        if not is_blank_line(uhandle.peekline()):
+            self._scan_record(uhandle, consumer)
 
-    def _scan_record(self, ohandle, consumer):
+    def _scan_record(self, uhandle, consumer):
         consumer.start_sequence()
-        self._scan_title(ohandle, consumer)
-        self._scan_sequence(ohandle, consumer)
+        self._scan_title(uhandle, consumer)
+        self._scan_sequence(uhandle, consumer)
         consumer.end_sequence()
 
-    def _scan_title(self, ohandle, consumer):
-        read_and_call(ohandle, consumer.title, start='>')
+    def _scan_title(self, uhandle, consumer):
+        read_and_call(uhandle, consumer.title, start='>')
 
-    def _scan_sequence(self, ohandle, consumer):
+    def _scan_sequence(self, uhandle, consumer):
         while 1:
-            line = ohandle.readline()
+            line = uhandle.readline()
             if is_blank_line(line):
                 break
             elif line[0] == '>':
-                ohandle.saveline(line)
+                uhandle.saveline(line)
                 break
             consumer.sequence(line)
 
@@ -142,20 +140,23 @@ class Iterator:
     next   Return the next Record from the stream, or None.
 
     """
-    def __init__(self, handle):
-        self._ohandle = OopsHandle(handle)
+    def __init__(self, uhandle):
+        assert isinstance(uhandle, File.UndoHandle), \
+               "uhandle must be an instance of Bio.File.UndoHandle"
+
+        self._uhandle = uhandle
         self._scanner = Scanner()
 
     def next(self):
         """next(self) -> Record or None"""
         c = Consumer()
-        self._scanner.feed_one(self._ohandle, c)
+        self._scanner.feed_one(self._uhandle, c)
         if c.records:
             return c.records[0]
         return None
 
-def parse(handle):
-    """parse(handle) -> list of Records
+def parse(uhandle):
+    """parse(uhandle) -> list of Records
 
     Parse FASTA-formatted data from handle to a list of Records.
     Warning: this will convert all the data in handle into an in-memory
@@ -164,5 +165,5 @@ def parse(handle):
 
     """
     c = Consumer()
-    Scanner().feed(handle, c)
+    Scanner().feed(uhandle, c)
     return c.records

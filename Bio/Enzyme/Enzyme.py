@@ -15,6 +15,7 @@ Scanner     Scans Enzyme data.
 
 """
 
+from Bio import File
 from Bio.ParserSupport import *
 
 class Scanner:
@@ -24,33 +25,35 @@ class Scanner:
     XXX ??
     """
 
-    def feed(self, handle, consumer):
-        """feed(self, handle, consumer)
+    def feed(self, uhandle, consumer):
+        """feed(self, uhandle, consumer)
 
-        Feed in Enzyme data for scanning.  handle is a file-like object
-        that contains the keyword information.  consumer is a Consumer
+        Feed in Enzyme data for scanning.  uhandle must be an
+        UndoHandle that contains keyword information.  consumer is a Consumer
         object that will receive events as the report is scanned.
 
         """
-        ohandle = OopsHandle(handle)
-        while not is_blank_line(ohandle.peekline()):   # Am I done yet?
-            self._scan_record(ohandle, consumer)
+        assert isinstance(uhandle, File.UndoHandle), \
+               "uhandle must be an instance of Bio.File.UndoHandle"
+        
+        while not is_blank_line(uhandle.peekline()):   # Am I done yet?
+            self._scan_record(uhandle, consumer)
 
-    def _scan_record(self, ohandle, consumer):
+    def _scan_record(self, uhandle, consumer):
         # The first record is just copyright information embedded in
         # comments.  Check to see if I'm at the first record.  If so,
         # then just scan the comments and the terminator.
         consumer.start_record()
-        line = ohandle.peekline()
+        line = uhandle.peekline()
         if line[:2] == 'CC':
-            self._scan_cc(ohandle, consumer)
-            self._scan_terminator(ohandle, consumer)
+            self._scan_cc(uhandle, consumer)
+            self._scan_terminator(uhandle, consumer)
         else:
             for fn in self._scan_fns:
-                fn(self, ohandle, consumer)
+                fn(self, uhandle, consumer)
         consumer.end_record()
 
-    def _scan_line(self, line_type, ohandle, event_fn,
+    def _scan_line(self, line_type, uhandle, event_fn,
                    exactly_one=None, one_or_more=None, any_number=None,
                    up_to_one=None):
         # Callers must set exactly one of exactly_one, one_or_more, or
@@ -62,47 +65,47 @@ class Scanner:
         # parameters min_lines, max_lines.
         
         if exactly_one or one_or_more:
-            read_and_call(ohandle, event_fn, start=line_type)
+            read_and_call(uhandle, event_fn, start=line_type)
         if one_or_more or any_number:
             while 1:
-                if not attempt_read_and_call(ohandle, event_fn,
+                if not attempt_read_and_call(uhandle, event_fn,
                                              start=line_type):
                     break
         if up_to_one:
-            attempt_read_and_call(ohandle, event_fn, start=line_type)
+            attempt_read_and_call(uhandle, event_fn, start=line_type)
 
-    def _scan_id(self, ohandle, consumer):
-        self._scan_line('ID', ohandle, consumer.identification, exactly_one=1)
+    def _scan_id(self, uhandle, consumer):
+        self._scan_line('ID', uhandle, consumer.identification, exactly_one=1)
 
-    def _scan_de(self, ohandle, consumer):
-        self._scan_line('DE', ohandle, consumer.description, one_or_more=1)
+    def _scan_de(self, uhandle, consumer):
+        self._scan_line('DE', uhandle, consumer.description, one_or_more=1)
     
-    def _scan_an(self, ohandle, consumer):
-        self._scan_line('AN', ohandle, consumer.alternate_name, any_number=1)
+    def _scan_an(self, uhandle, consumer):
+        self._scan_line('AN', uhandle, consumer.alternate_name, any_number=1)
     
-    def _scan_ca(self, ohandle, consumer):
-        self._scan_line('CA', ohandle, consumer.catalytic_activity,
+    def _scan_ca(self, uhandle, consumer):
+        self._scan_line('CA', uhandle, consumer.catalytic_activity,
                         any_number=1)
     
-    def _scan_cf(self, ohandle, consumer):
-        self._scan_line('CF', ohandle, consumer.cofactor, any_number=1)
+    def _scan_cf(self, uhandle, consumer):
+        self._scan_line('CF', uhandle, consumer.cofactor, any_number=1)
 
-    def _scan_cc(self, ohandle, consumer):
-        self._scan_line('CC', ohandle, consumer.comment, any_number=1)
+    def _scan_cc(self, uhandle, consumer):
+        self._scan_line('CC', uhandle, consumer.comment, any_number=1)
     
-    def _scan_di(self, ohandle, consumer):
-        self._scan_line('DI', ohandle, consumer.disease, any_number=1)
+    def _scan_di(self, uhandle, consumer):
+        self._scan_line('DI', uhandle, consumer.disease, any_number=1)
     
-    def _scan_pr(self, ohandle, consumer):
-        self._scan_line('PR', ohandle, consumer.prosite_reference,
+    def _scan_pr(self, uhandle, consumer):
+        self._scan_line('PR', uhandle, consumer.prosite_reference,
                         any_number=1)
     
-    def _scan_dr(self, ohandle, consumer):
-        self._scan_line('DR', ohandle, consumer.databank_reference,
+    def _scan_dr(self, uhandle, consumer):
+        self._scan_line('DR', uhandle, consumer.databank_reference,
                         any_number=1)
 
-    def _scan_terminator(self, ohandle, consumer):
-        self._scan_line('//', ohandle, consumer.terminator, exactly_one=1)
+    def _scan_terminator(self, uhandle, consumer):
+        self._scan_line('//', uhandle, consumer.terminator, exactly_one=1)
     
     _scan_fns = [
         _scan_id,

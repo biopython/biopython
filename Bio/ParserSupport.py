@@ -10,7 +10,6 @@
 Classes:
 AbstractConsumer Base class of all Consumers.
 TaggingConsumer  Consumer that tags output with its event.
-OopsHandle       File object decorator with support for undo-like things.
 
 Functions:
 safe_readline    Read a line from a handle, with check for EOF.
@@ -22,6 +21,8 @@ is_blank_line    Test whether a line is blank.
 
 import sys
 import string
+
+from Bio import File
 
 
 class AbstractConsumer:
@@ -75,49 +76,6 @@ class TaggingConsumer(AbstractConsumer):
         else:
             method = lambda x, a=attr, s=self: s._print_name(a, x)
         return method
-
-class OopsHandle:
-    """A Python handle that adds functionality for saving lines.
-
-    XXX Bug: I don't handle the arguments to readline or readlines
-    correctly, since their behavior isn't documented anywhere.
-    I'll just pass the arguments along, and hope I don't do anything
-    too bad...
-
-    Added methods:
-    saveline    Save a line to be returned next time.
-    peekline    Peek at the next line without consuming it.
-
-    """
-    def __init__(self, handle):
-        self._handle = handle
-        self._saved = []
-
-    def readlines(self, *args, **keywds):
-        lines = self._saved + apply(self._handle.readlines, args, keywds)
-        self._saved = []
-        return lines
-
-    def readline(self, *args, **keywds):
-        if self._saved:
-            line = self._saved.pop(0)
-        else:
-            line = apply(self._handle.readline, args, keywds)
-        return line
-
-    def saveline(self, line):
-        self._saved = [line] + self._saved
-
-    def peekline(self):
-        if self._saved:
-            line = self._saved[0]
-        else:
-            line = self._handle.readline()
-            self.saveline(line)
-        return line
-
-    def __getattr__(self, attr):
-        return getattr(self._handle, attr)
 
 def read_and_call(ohandle, method,
                   start=None, end=None, contains=None, blank=None):
@@ -209,7 +167,7 @@ def is_blank_line(line, allow_spaces=0):
 def safe_readline(handle):
     """safe_readline(handle) -> line
 
-    Read a line from an OopsHandle and return it.  If there are no more
+    Read a line from an UndoHandle and return it.  If there are no more
     lines to read, I will raise a SyntaxError.
 
     """
@@ -221,7 +179,7 @@ def safe_readline(handle):
 def safe_peekline(handle):
     """safe_peekline(handle) -> line
 
-    Peek at the next line in an OopsHandle and return it.  If there are no
+    Peek at the next line in an UndoHandle and return it.  If there are no
     more lines to peek, I will raise a SyntaxError.
     
     """
