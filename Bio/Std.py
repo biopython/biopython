@@ -128,6 +128,12 @@ _settag(description, NS + "description")
 def description_line(expr, attrs = {}):
     return description_block(description(expr, attrs))
 
+def fast_dbxref(expr, attrs = {}):
+    attrs = _check_attrs(attrs, ("style",))
+    d = {}
+    _set_if_given(attrs, "style", d, ("sp-general", "sp-prosite", "sp-embl"))
+    return Group(NS + "fast_dbxref", expr, d)
+
 def dbxref(expr, attrs = {}):
     attrs = _check_attrs(attrs, ("style",))
     _must_have(expr, dbxref_dbid)
@@ -139,7 +145,7 @@ _settag(dbxref, NS + "dbxref")
 def dbxref_dbname(expr, attrs = {}):
     attrs = _check_attrs(attrs, ("style",))
     d = {}
-    _complain_if_given(attrs, "style")
+    _set_if_given(attrs, "style", d)
     return Group(NS + "dbxref_dbname", expr, d)
 _settag(dbxref_dbname, NS + "dbxref_dbname")
 
@@ -334,11 +340,13 @@ def search_table(expr, attrs = {}):
     return Group("bioformat:search_table", expr, attrs)
 
 def search_table_description(expr, attrs = {}):
-    attrs = _check_attrs(attrs, ())
-    return Group("bioformat:search_table_description", expr, attrs)
+    attrs = _check_attrs(attrs, ("bioformat:decode",))
+    d = {"bioformat:decode": "strip"}
+    _set_if_given(attrs, "bioformat:decode", d)
+    return Group("bioformat:search_table_description", expr, d)
 
 def search_table_value(expr, attrs = {}):
-    attrs = _check_attrs(attrs, ("name", "bioformat:type"))
+    attrs = _check_attrs(attrs, ("name", "bioformat:decode"))
     return Group("bioformat:search_table_value", expr, attrs)
 
 def search_table_entry(expr, attrs = {}):
@@ -346,12 +354,16 @@ def search_table_entry(expr, attrs = {}):
     return Group("bioformat:search_table_entry", expr, attrs)
 
 def query_description_block(expr, attrs = {}):
-    attrs = _check_attrs(attrs, ())
-    return Group("bioformat:query_description_block", expr)
+    attrs = _check_attrs(attrs, ("join-query",))
+    d = {"join-query": "join|fixspaces"}
+    _set_if_given(attrs, "join-query", d)
+    return Group("bioformat:query_description_block", expr, d)
 
 def query_description(expr, attrs = {}):
-    attrs = _check_attrs(attrs, ())
-    return Group("bioformat:query_description", expr)
+    attrs = _check_attrs(attrs, ("bioformat:decode"))
+    d = {}
+    _set_if_given(attrs, "bioformat:decode", d)
+    return Group("bioformat:query_description", expr, d)
 
 def query_size(expr, attrs = {}):
     attrs = _check_attrs(attrs, ())
@@ -362,31 +374,35 @@ def database_name(expr, attrs = {}):
     return Group("bioformat:database_name", expr, attrs)
 
 def database_num_sequences(expr, attrs = {}):
-    attrs = _check_attrs(attrs, ("bioformat:encoding",))
+    attrs = _check_attrs(attrs, ("bioformat:decode",))
     return Group("bioformat:database_num_sequences", expr, attrs)
 
 def database_num_letters(expr, attrs = {}):
-    attrs = _check_attrs(attrs, ("bioformat:encoding",))
+    attrs = _check_attrs(attrs, ("bioformat:decode",))
     return Group("bioformat:database_num_letters", expr, attrs)
 
 def hit(expr, attrs = {}):
-    attrs = _check_attrs(attrs, ())
-    return Group("bioformat:hit", expr, attrs)
+    attrs = _check_attrs(attrs, ("join-description",))
+    d = {"join-description": "join|fixspaces"}
+    _set_if_given(attrs, "join-description", d)
+    return Group("bioformat:hit", expr, d)
 
 def hit_length(expr, attrs = {}):
     attrs = _check_attrs(attrs, ())
     return Group("bioformat:hit_length", expr, attrs)
 
 def hit_description(expr, attrs = {}):
-    attrs = _check_attrs(attrs, ())
-    return Group("bioformat:hit_description", expr, attrs)
+    attrs = _check_attrs(attrs, ("bioformat:decode"))
+    d = {}
+    _set_if_given(attrs, "bioformat:decode", d)
+    return Group("bioformat:hit_description", expr, d)
 
 def hsp(expr, attrs = {}):
     attrs = _check_attrs(attrs, ())
     return Group("bioformat:hsp", expr, attrs)
 
 def hsp_value(expr, attrs = {}):
-    attrs = _check_attrs(attrs, ("name", "bioformat:type"))
+    attrs = _check_attrs(attrs, ("name", "bioformat:decode"))
     return Group("bioformat:hsp_value", expr, attrs)
 
 def hsp_frame(expr, attrs = {}):
@@ -402,54 +418,62 @@ def hsp_strand(expr, attrs = {}):
     _set_if_given(attrs, "strand", d, valid = ("+1", "0", "-1", ""))
     return Group("bioformat:hsp_strand", expr, d)
 
-def hsp_seqalign_seq(expr, attrs = {}):
+def hsp_seqalign_query_seq(expr, attrs = {}):
     attrs = _check_attrs(attrs, ())
-    return Group("bioformat:hsp_seqalign_seq", expr, attrs)
+    return Group("bioformat:hsp_seqalign_query_seq", expr, attrs)
 
-def hsp_seqalign_line(expr, attrs = {}):
-    attrs = _check_attrs(attrs, ("which",))
-    d = {}
-    _set_if_given(attrs, "which", d, valid = ("query", "homology", "subject"))
-    return Group("bioformat:hsp_seqalign_line", expr, d)
-
-def hsp_seqalign_leader(expr, attrs = {}):
+def hsp_seqalign_homology_seq(expr, attrs = {}):
     attrs = _check_attrs(attrs, ())
-    return Group("bioformat:hsp_seqalign_leader", expr, attrs)
+    return Group("bioformat:hsp_seqalign_homology_seq", expr, attrs)
+
+def hsp_seqalign_subject_seq(expr, attrs = {}):
+    attrs = _check_attrs(attrs, ())
+    return Group("bioformat:hsp_seqalign_subject_seq", expr, attrs)
+
+def hsp_seqalign_query_leader(expr, attrs = {}):
+    attrs = _check_attrs(attrs, ())
+    return Group("bioformat:hsp_seqalign_query_leader", expr, attrs)
     
 
-def hsp_seqalign_name(expr, attrs = {}):
+def hsp_seqalign_query_name(expr, attrs = {}):
     attrs = _check_attrs(attrs, ())
-    return Group("bioformat:hsp_seqalign_name", expr, attrs)
+    return Group("bioformat:hsp_seqalign_query_name", expr, attrs)
+
+def hsp_seqalign_subject_name(expr, attrs = {}):
+    attrs = _check_attrs(attrs, ())
+    return Group("bioformat:hsp_seqalign_subject_name", expr, attrs)
 
 def hsp_seqalign(expr, attrs = {}):
     attrs = _check_attrs(attrs, ())
     return Group("bioformat:hsp_seqalign", expr, attrs)
 
-def hsp_seqalign_start(expr, attrs = {}):
+def hsp_seqalign_query_start(expr, attrs = {}):
     attrs = _check_attrs(attrs, ())
-    return Group("bioformat:hsp_seqalign_start", expr, attrs)
+    return Group("bioformat:hsp_seqalign_query_start", expr, attrs)
 
-def hsp_seqalign_end(expr, attrs = {}):
+def hsp_seqalign_query_end(expr, attrs = {}):
     attrs = _check_attrs(attrs, ())
-    return Group("bioformat:hsp_seqalign_end", expr, attrs)
+    return Group("bioformat:hsp_seqalign_query_end", expr, attrs)
+
+def hsp_seqalign_subject_start(expr, attrs = {}):
+    attrs = _check_attrs(attrs, ())
+    return Group("bioformat:hsp_seqalign_subject_start", expr, attrs)
+
+def hsp_seqalign_subject_end(expr, attrs = {}):
+    attrs = _check_attrs(attrs, ())
+    return Group("bioformat:hsp_seqalign_subject_end", expr, attrs)
 
 def search_parameter(expr, attrs = {}):
-    attrs = _check_attrs(attrs, ("name", "bioformat:type",
-                                 "bioformat:encoding"))
+    attrs = _check_attrs(attrs, ("name", "bioformat:decode"))
     d = {}
     _set_if_given(attrs, "name", d)
-    _set_if_given(attrs, "bioformat:encoding", d)
-    _set_if_given(attrs, "bioformat:type", d,
-                  valid = ("int", "float", "text"))
+    _set_if_given(attrs, "bioformat:decode", d)
     return Group("bioformat:search_parameter", expr, d)
 
 def search_statistic(expr, attrs = {}):
-    attrs = _check_attrs(attrs, ("name", "bioformat:type",
-                                 "bioformat:encoding"))
+    attrs = _check_attrs(attrs, ("name", "bioformat:decode"))
     d = {}
     _set_if_given(attrs, "name", d)
-    _set_if_given(attrs, "bioformat:encoding", d)
-    _set_if_given(attrs, "bioformat:type", d,
-                  valid = ("int", "float", "text"))
+    _set_if_given(attrs, "bioformat:decode", d)
     return Group("bioformat:search_statistic", expr, d)
 
