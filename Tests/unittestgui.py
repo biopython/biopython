@@ -25,7 +25,7 @@ SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
 """
 
 __author__ = "Steve Purcell (stephen_purcell@yahoo.com)"
-__version__ = "$Revision: 1.1 $"[11:-2]
+__version__ = "$Revision: 1.2 $"[11:-2]
 
 import unittest
 import sys
@@ -72,7 +72,7 @@ class BaseGUITestRunner:
             self.__rollbackImporter.rollbackImports()
         self.__rollbackImporter = RollbackImporter()
         try:
-            test = unittest.createTestInstance(testName)
+            test = unittest.defaultTestLoader.loadTestsFromName(testName)
         except:
             exc_type, exc_value, exc_tb = sys.exc_info()
             apply(traceback.print_exception,sys.exc_info())
@@ -230,7 +230,7 @@ class TkTestRunner(BaseGUITestRunner):
 
         # Progress bar
         progressFrame = tk.Frame(leftFrame, relief=tk.GROOVE, borderwidth=2)
-        progressFrame.pack(fill=tk.X, expand=1, anchor=tk.NW)
+        progressFrame.pack(fill=tk.X, expand=0, anchor=tk.NW)
         tk.Label(progressFrame, text="Progress:").pack(anchor=tk.W)
         self.progressBar = ProgressBar(progressFrame, relief=tk.SUNKEN,
                                        borderwidth=2)
