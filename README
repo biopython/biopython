@@ -14,20 +14,27 @@ This Biopython package is made available under generous terms.  Please
 see the LICENSE file for further details.
 
 
+**For the impatient**
+
+To build and install Biopython, type:
+python setup.py build
+python setup.py test
+python setup.py install
+
+
+
 
 **System Requirements**
 
 
 o "Python 2.0":http://www.python.org/ or above
 
-o "Numerical Python 15.3":http://numpy.sourceforge.net/ (optional)
+o "Martel":http://www.biopython.org/~dalke/Martel/
+  (requires "mxTextTools":http://starship.python.net/~lemburg/mxTextTools.html)
+
+o "Numerical Python 15.3 or above":http://numpy.sourceforge.net/ (optional)
 This is only required if you want to use the classification tools.
 
-o "Martel":http://numpy.sourceforge.net/ (optional)
-This is required for the ClustalW stuff.
-
-o "mxTextTools":http://starship.python.net/~lemburg/mxTextTools.html (optional)
-This is only required if you use Martel.
 
 
 **Installation**
@@ -58,23 +65,16 @@ Biopython available in the ports tree.  According to Johann:
   Fetching of the package as well as installation of all dependencies
   (Python itself as well as Distutils) will be handled automagically.
 
+
 **Testing**
 
 Biopython includes a suite of regression tests to check if
-everything's running correctly.  To do the tests, go to the Tests/
-directory in the distribution and run 'br_regrtest.py'::
+everything's running correctly.  To do the tests, type:
+drevil:~biopython/> python setup.py test
 
- drevil:~/biopython/Tests> python br_regrtest.py
-  test_Enzyme
-  test_Fasta
-  test_Fasta2
-  test_File
-  test_KeyWList
-  5 tests OK.
-  drevil:~/biopython/Tests>
-
-In this release, test_prodoc, test_rebase, and test_gobase are
-failing.  We know about the problem and are trying to fix it.
+If you have Tk installed, this will run a nice GUI that displays the
+results of the tests.  Otherwise, you will see results on the command
+line.
 
 
 
@@ -123,43 +123,17 @@ setup.py --     Installation file.
 
 (In no particular order...)
 
-- Annotations on sequences
-
-- BLAST additions
-
-  o PSI-BLAST on WWW
-
-- parsers
-
-  o Enzyme
-
-    - add parsers, iterator, dictionary, etc.
-
-  o PDB
-
-    - needs to be done
-
-    - build on Andrew's UPDB?
-  o Prosite
-    - WWW access
-
-  o Genbank
-
-    - Chris Fenton chrisf@fagmed.uit.no
-
-- generalize parsers
+- PDB parser
 
 - more regression tests
 
-- look into Zope-ifying the web site
-
-- deprecate Sequence.py
+- Zope-ify the web site
 
 - microarray data
 
+- deprecate Sequence.py
 
-If you see something here you would like to work on, please let me
-know!
+If you see something here you would like to work on, please send mail
+to biopython@biopython.org!
 
-Thanks,
-Jeff (jchang@smi.stanford.edu)
+Thanks
