@@ -12,7 +12,7 @@ doc:
 
 clean:
 	- rm -f Tutorial.ps Tutorial.log Tutorial.dvi \
-	Tutorial.aux index.html Tutorial*.html Tutorial.pdf
+	Tutorial.aux 
 	- rm -rf api
 html:
 	- hevea -fix Tutorial.tex
