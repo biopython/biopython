@@ -8,6 +8,9 @@ a database object.
 # standard modules
 from time import gmtime, strftime
 
+# biopython
+from Bio import Alphabet
+
 class DatabaseLoader:
     """Load a database with biopython objects.
     """
@@ -82,4 +85,29 @@ class DatabaseLoader:
             self.adapter.execute_one(sql, (bioentry_id, taxa))
         except KeyError:
             pass
+
+    def _load_biosequence(self, record, bioentry_id):
+        """Load the biosequence table in the database.
+        """
+        accession, version = record.id.split(".")
+        # determine the string representation of the alphabet
+        if isinstance(record.seq.alphabet, Alphabet.DNAAlphabet):
+            mol_type = "DNA"
+        elif isinstance(record.seq.alphabet, Alphabet.RNAAlphabet):
+            mol_type = "RNA"
+        elif isinstance(record.seq.alphabet, Alphabet.ProteinAlphabet):
+            mol_type = "PROTEIN"
+        else:
+            mol_type = "UNKNOWN"
+        
+        sql = r"INSERT INTO biosequence (bioentry_id, seq_version, " \
+              r"biosequence_str, molecule) VALUES (%s, %s, %s, %s)"
+        self.adapter.execute_one(sql, (bioentry_id, version, record.seq.data,
+                                       mol_type))
+
+    def _load_bioentry_description(self, record, bioentry_id):
+        """Load the description table.
+        """
+        sql = r"INSERT INTO bioentry_description VALUES (%s, %s)"
+        self.adapter.execute_one(sql, (bioentry_id, record.description))
         
