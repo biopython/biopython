@@ -25,6 +25,7 @@ import os
 try:
     from distutils.core import setup
     from distutils.command.install import install
+    from distutils.core import Command
 except ImportError:
     print "Biopython installation requires distutils, avaiable with python 2.0"
     print "or better, or from:"
@@ -121,6 +122,37 @@ class my_install(install):
         check_install("Numerical Python", check_Numpy,
                       "http://numpy.sourceforge.net/")
 
+class run_tests(Command):
+    """Run all of the tests for the package.
+
+    This is a automatic test run class to make distutils kind of act like
+    perl. With this you can do:
+
+    python setup.py build
+    python setup.py install
+    python setup.py test
+    """
+    description = "Automatically run the test suite for the package."
+
+    user_options = []
+
+    def initialize_options(self):
+        pass
+
+    def finalize_options(self):
+        pass
+
+    def run(self):
+        this_dir = os.getcwd()
+
+        # change to the test dir and run the tests
+        os.chdir("Tests")
+        import run_tests
+        run_tests.main([])
+
+        # change back to the current directory
+        os.chdir(this_dir)
+
 # --- set up the packages we are going to install
 # standard biopython packages
 biopython_packages = ['Bio',
@@ -168,7 +200,8 @@ setup(name='biopython',
       author_email='biopython@biopython.org',
       url='http://www.biopython.org/',
 
-      cmdclass = {"install" : my_install},
+      cmdclass = {"install" : my_install,
+                  "test" : run_tests},
       
       packages = all_packages,
       
