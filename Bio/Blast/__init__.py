@@ -3,4 +3,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-__all__ = ['NCBIStandalone', 'NCBIWWW', 'Record']
+__all__ = [
+    'NCBIStandalone',
+    'NCBIWWW',
+    'Record',
+    ]

@@ -7,3 +7,6 @@
 # Note that once a parser is given an input string, it is free to read
 # as much of the data as it wants to read, unless otherwise mentioned.
 
+__all__ = [
+    'FASTA'
+    ]

@@ -34,6 +34,11 @@ search_for            Do a query against GenBank.
 download_many         Download many GenBank records.
 
 """
+__all__ = [
+    'LocationParser',
+    'Record',
+    'genbank_format',
+    ]
 # standard library
 import string
 import os

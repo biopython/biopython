@@ -38,7 +38,10 @@ _extract_record       Extract Prosite data from a web page.
 _extract_pattern_hits Extract Prosite patterns from a web page.
 
 """
-__all__ = ['Prodoc', 'Pattern']
+__all__ = [
+    'Pattern',
+    'Prodoc',
+    ]
 from types import *
 import string
 import re

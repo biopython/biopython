@@ -1,5 +1,11 @@
 # This is a Python module
 
+__all__ = [
+    'ExPASy',
+    'NCBI,
+    'SCOP',
+    ]
+
 import time
 
 class RequestLimiter:

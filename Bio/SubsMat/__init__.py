@@ -1,3 +1,8 @@
+__all__ = [
+   'FreqTable',
+   'MatrixInfo'
+   ]
+
 import re
 import string
 import sys

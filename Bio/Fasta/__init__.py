@@ -28,6 +28,10 @@ from types import *
 import string
 import os
 
+__all__ = [
+    'FastaAlign',
+    ]
+
 
 from Bio import File
 from Bio import Index

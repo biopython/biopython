@@ -131,8 +131,6 @@ setup.py --     Installation file.
 
 - microarray data
 
-- deprecate Sequence.py
-
 If you see something here you would like to work on, please send mail
 to biopython@biopython.org!
 

@@ -20,6 +20,13 @@ recursive-include Tests *
 global-exclude CVS
 global-exclude CVS/*
 
+# Don't include obsolete regression testing frameworks.
+exclude Tests/br_regrtest.py
+recursive-exclude Tests/UnitTests *
+
+# Don't include obsolete Sequence.py
+exclude Bio/Sequence.py
+
 exclude Tests/Amino
 exclude Tests/Blast
 exclude Tests/Enzymes
@@ -30,9 +37,6 @@ exclude Tests/Prosite
 exclude Tests/Prosite/Doc
 exclude Tests/Rebase
 exclude Tests/SwissProt
-exclude Tests/UnitTests
-exclude Tests/UnitTests/Prosite
-exclude Tests/UnitTests/Save
-exclude Tests/UnitTests/Seq
 exclude Tests/output
 exclude Tests/Blast/bt008*    # file too large
+
