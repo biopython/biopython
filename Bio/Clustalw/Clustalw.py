@@ -59,7 +59,7 @@ def parse_file(file_name, type = 'DNA'):
     parser.setErrorHandler(handler.ErrorHandler())
 
     to_parse = open(file_name, 'r')
-    parser.parse(to_parse.read())
+    parser.parseFile(to_parse)
     to_parse.close()
 
     return align_handler.align
