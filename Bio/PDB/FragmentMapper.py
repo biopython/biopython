@@ -222,7 +222,7 @@ class FragmentMapper:
     """
     Map polypeptides in a model to lists of representative fragments.
     """
-    def __init__(self, lsize, flength=5, fdir="."):
+    def __init__(self, model, lsize=20, flength=5, fdir="."):
         """
         @param lsize: number of fragments in the library
         @type lsize: int
@@ -242,8 +242,10 @@ class FragmentMapper:
         self.flength=flength
         self.lsize=lsize
         self.reflist=_read_fragments(lsize, flength, fdir)
+        self.model=model
+        self.fd=self._map(self.model)
 
-    def map(self, model):
+    def _map(self, model):
         """
         @param model: the model that will be mapped
         @type model: L{Model}
@@ -273,7 +275,7 @@ class FragmentMapper:
             except "CHAINBREAK":
                 # Funny polypeptide - skip
                 pass
-        self.fd=fd
+        return fd
 
     def has_key(self, res):
         """
@@ -298,11 +300,9 @@ if __name__=="__main__":
     p=PDBParser()
     s=p.get_structure("X", sys.argv[1])
 
-    fm=FragmentMapper(10, 5, "levitt_data")
-
     m=s[0]
+    fm=FragmentMapper(m, 10, 5, "levitt_data")
 
-    fm.map(m)
 
     for r in Selection.unfold_entities(m, "R"):
 
