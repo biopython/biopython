@@ -178,6 +178,7 @@ def strip_and_combine(line_list):
     stripped_line_list = map(string.strip, line_list)
     return string.join(stripped_line_list, ',')
 
+import unittest
 class EventGeneratorTest(unittest.TestCase):
     """Test the EventGenerator class to be sure callbacks are correct.
     """
