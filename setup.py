@@ -224,9 +224,9 @@ def is_Martel_installed():
         old_martel_version = None
 
     installed = 0
-    # If the bundled one is the same or older, then ignore it
+    # If the bundled one is the older, then ignore it
     if old_martel_version and bundled_martel_version and \
-           bundled_martel_version <= old_martel_version:
+           bundled_martel_version < old_martel_version:
         installed = 1
     return installed
 
