@@ -100,11 +100,10 @@ class NeighborSearch:
 		indices=self.kdt.all_get_indices()
 		atom_list=self.atom_list
 		atom_pair_list=[]
-		for i in indices.shape[0]:
-			i1, i2=indices[i]
+		for i1, i2 in indices:
 			a1=atom_list[i1]
 			a2=atom_list[i2]
-			n_atom_pair_list.append((a1, a2))
+			atom_pair_list.append((a1, a2))
 		if level=="A":
 			# return atoms
 			return atom_pair_list
