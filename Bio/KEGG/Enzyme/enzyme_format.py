@@ -257,20 +257,20 @@ record = Group("KEGG_Enzyme_record",
                entry_line +
                Rep1(name_block) +
                Rep(Alt(class_block,
-                       sysname_block)) +
-               Rep(Alt(reaction_block,
+                       sysname_block,
+                       reaction_block,
                        substrate_block,
                        product_block,
                        inhibitor_block,
                        cofactor_block,
-                       effector_block)) +
-               Rep(comment_block) +
-               Opt(pathway_block) +
-               Opt(genes_block) +
-               Opt(disease_block) +
-               Opt(motif_block) +
-               Opt(structures_block) +
-               Opt(dblinks_block) +
+                       effector_block,
+                       comment_block,
+                       pathway_block,
+                       genes_block,
+                       disease_block,
+                       motif_block,
+                       structures_block,
+                       dblinks_block)) +
                record_end)
 
 record_format = ParseRecords("KEGG_Enzyme_file",
