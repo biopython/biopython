@@ -198,8 +198,10 @@ class build_ext_biopython(build_ext):
         if hasattr(ext, "language") and ext.language == "c++":
             # fix for before 2.2 only -- need to set the compiler to C++
             if hasattr(ext, "cxx"):
-                self.compiler.compiler = ext.cxx
-                self.compiler.compiler_so = ext.cxx
+                self.compiler.set_executable("compiler", ext.cxx)
+                self.compiler.set_executable("compiler_so", ext.cxx)
+                self.compiler.set_executable("linker_so",
+                        ext.cxx + ["-shared"])
             else: # fix for 2.3
                 self.compiler.compiler_so = self.compiler.compiler_cxx
         else:
