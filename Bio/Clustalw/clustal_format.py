@@ -8,13 +8,7 @@ let Martel know what the file looks like."""
 # standard library
 import sys
 
-# Martel stuff
-try:
-    import Martel
-except ImportError:
-    print "Ooops, Clustalw parsing requires Martel, available from:"
-    print "http://www.biopython.org/~dalke/Martel/"
-    sys.exit(0)
+import Martel
     
 
 # define everything we will parse at a ton of regular expressions with
