@@ -4,7 +4,6 @@
 # didn't know where else to put them.
 
 import string, sys, os
-from Martel import Expression
 
 def load_module(modulename):
     try:
@@ -60,6 +59,7 @@ def load_object(path):
     return x
 
 def load_expression(path):
+    from Martel import Expression
     x = load_object(path)
     if x is not None:
         if not isinstance(x, Expression.Expression):

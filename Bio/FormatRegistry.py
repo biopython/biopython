@@ -1,5 +1,5 @@
 import weakref, os, sys
-import Format, _FmtUtils
+import _FmtUtils
 
 def _issubtype(child, parent):
     if child.name == parent.name:
@@ -38,6 +38,7 @@ class FormatRegistry:
         
     def register_format(self, **kwargs):
         self._autoload()
+        import Format
         if kwargs.has_key("expression"):
             format = Format.FormatDef(**kwargs)
         else:
