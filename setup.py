@@ -114,29 +114,11 @@ class install_biopython(install):
     This will just run the normal install, and then print warning messages
     if packages are missing.
 
-    This also has a hack to install DTDs needed for EUtils into
-    Bio.EUtils.DTDs. This is not a pretty thing since we should 
-    really only have pure python modules installed.
     """
-    def install_eutils_dtds(self):
-        """This is a hack to install DTDs needed for EUtils into Bio.
-        """
-        import shutil
-        dtds_dir = os.path.join(os.getcwd(), "Bio", "EUtils", "DTDs")
-        install_dir = os.path.join(self.install_purelib, "Bio", "EUtils",
-                                   "DTDs")
-        potential_dtds = os.listdir(dtds_dir)
-        for potential_dtd in potential_dtds:
-            name, ext = os.path.splitext(potential_dtd)
-            if ext == ".dtd":
-                shutil.copy(os.path.join(dtds_dir, potential_dtd),
-                            install_dir)
-         
     def run(self):
         if check_dependencies_once():
             # Run the normal install.
             install.run(self)
-            self.install_eutils_dtds()
 
 class build_py_biopython(build_py):
     def run(self):
@@ -384,6 +366,28 @@ EXTENSIONS = [
     #          ),
     ]
 
+DATA_FILES=[
+    ]
+
+# The Bio/EUtils/DTDs contains many ".dtd" files that need to be
+# installed as well.  Get a list of these files and append them to
+# DATA_FILES, which is passed into distutils as data_files.
+# data_files is a list of (path, files) where path is where the data
+# files should be installed.  path can be a full path or relative.  If
+# it is relative, Distutils behavior is different on Windows and Unix.
+# Thus, we have to add a hack to make it work on both platforms.
+dtd_path = os.path.join("Bio", "EUtils", "DTDs")
+if sys.platform == 'win32':
+    path = dtd_path
+else:
+    path = os.path.join(
+        os.path.split(os.__file__)[0], "site-packages", dtd_path)
+x = os.listdir(os.path.join(os.getcwd(), dtd_path))
+x = [os.path.join(dtd_path, x) for x in x if x.endswith(".dtd")]
+DATA_FILES.append((path, x))
+del dtd_path, path, x
+
+
 
 # Install BioSQL.
 PACKAGES.append("BioSQL")
@@ -402,4 +406,5 @@ setup(
         },
     packages=PACKAGES,
     ext_modules=EXTENSIONS,
+    data_files=DATA_FILES,
     )
