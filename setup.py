@@ -374,9 +374,9 @@ EXTENSIONS = [
               include_dirs=["Bio"],
               libraries=["fl"]
               ),
-    #Extension('Bio.KDTree._KDTreecmodule',
-    #          ["Bio/KDTree/_KDTree.C",
-    #           "Bio/KDTree/_KDTree.swig.C"],
+    #Extension('Bio.KDTree._CKDTree',
+    #          ["Bio/KDTree/KDTree.C",
+    #           "Bio/KDTree/KDTree.swig.C"],
     #          libraries=["stdc++"]
     #          ),
     ]
