@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # Created: Wed Jun 21 10:28:14 2000
-# Last changed: Time-stamp: <00/08/08 23:30:14 thomas>
+# Last changed: Time-stamp: <00/08/09 19:56:09 thomas>
 # Thomas.Sicheritz@molbio.uu.se, http://evolution.bmc.uu.se/~thomas
 # File: xbb_widget.py
 
@@ -38,7 +38,6 @@ class xbb_widget:
             self.parent = self.main_frame.master
             
         self.main_frame.pack(fill = BOTH, expand = 1)
-        #self.main_frame.master.wm_geometry()
         
         # sequence info (GC%, positins etc.)
         self.info_frame = Frame(self.main_frame)
@@ -83,8 +82,16 @@ class xbb_widget:
                          'entry':'black',
                          'menu':'black',
                          'menubutton':'lightblue'}
+        self.colorsNT = {'A':'green',
+                         'C':'lightblue',
+                         'G':'orange',
+                         'T':'tomato'
+                         }
+
 
     def init_optionsdb(self):
+        # does anybody know a better way of defining colors ?
+        # how would one implement Tk's -class ?
         tk = self.main_frame.master
         for k,v in self.colorsbg.items():
             name = '*' + string.upper(k[0]) + k[1:] + '.background'
@@ -145,16 +152,16 @@ class xbb_widget:
 
     def set_codon_table(self):
         self.current_codon_table_id = self.translation_tables[self.current_codon_table.get()]
-        print self.current_codon_table_id
         
     def exit(self, *args):
-        print 'exit'
+        # depending on if this widget is the first created or a child widget
         if self.is_a_master:
             sys.exit(0)
         else:
             self.main_frame.destroy()
             
     def create_seqinfo(self, parent):
+        # all the sequence information in the top labels
         self.seq_info1 = Frame(parent, relief = RIDGE,
                                borderwidth = 5, height = 30)
         self.seq_info1.pack(fill = BOTH, expand = 1, side = TOP)
@@ -168,11 +175,22 @@ class xbb_widget:
         d['label'] = Label(self.seq_info1, width = 10)
         for i in ['id', 'from_id', 'to_id', 'length_id', 'label']:
             d[i].pack(side = LEFT, fill = BOTH, expand = 1)
-            
+
+
+        
         self.seq_info2 = Frame(parent, relief = RIDGE,
                                borderwidth = 5, height = 30)
         self.seq_info2.pack(fill = BOTH, expand = 1, side = TOP)
+        self.statistics_ids = {}
+        d = self.statistics_ids
+        d['length_id'] = Label(self.seq_info2, width = 10)
+        d['length_id'].pack(side = LEFT, fill = BOTH, expand = 1)
+        for nt in ['A','C','G','T']:
+            d[nt] = Label(self.seq_info2, width = 10, fg = self.colorsNT[nt])
+            d[nt].pack(side = LEFT, fill = BOTH, expand = 1)
+            
 
+        
     def create_buttons(self, parent):
         self.button_frame = Frame(parent)
         self.button_frame.pack(fill = Y, side = LEFT)
@@ -238,10 +256,11 @@ class xbb_widget:
         
     def get_self_selection(self):
         w = self.sequence_id
-        w.selection_own()
+        #w.selection_own()
         try:
-            #return w.selection_get()
-            return string.upper(w.get(sel.first, sel.last))
+            return w.selection_get()
+            #return string.upper(w.get(sel.first, sel.last))
+            #return string.upper(w.selection_own_get())
         except:
             return ''
         
@@ -256,6 +275,14 @@ class xbb_widget:
             self.position_ids['from_id'].configure(text = 'Start:%d'% a)
             self.position_ids['to_id'].configure(text = 'Stop:%d'% b)
             self.position_ids['length_id'].configure(text = '%d nt' % length)
+
+            self.statistics_ids['length_id'].configure(text = 'Length=%d' % length)
+            seq = self.get_self_selection()
+            for nt in ['A','C','G','T']:
+                n = string.count(seq,nt)
+                self.statistics_ids[nt].configure(text = '%s=%d' % (nt,n))
+                
+            
         except:
             pass
         
@@ -293,7 +320,9 @@ class xbb_widget:
         self.position_ids['label'].configure(text = name)
         
     def export(self):
-        ""
+        seq = self.get_self_selection()
+        print seq, len(seq)
+        
     def gcframe(self):
         seq = self.get_selection_or_sequence()
         if not seq: return
@@ -322,21 +351,16 @@ class xbb_widget:
         w = self.sequence_id
         w.selection_own()
         #FIX FUCKING SELECTION !!!!
-        print w.selection_range
-        ()
-        if 1:
-        #try:
-            start, stop = sel.first, sel.last
-            
-        #except:
-            #start, stop = 0.0, END
-
+        start, stop = w.tag_ranges(SEL)
         seq = w.get(start, stop)
         print 'seq >%s<' % seq
         complementary = self.translator.complement(seq)
         w.delete(start, stop)
         w.insert(start, complementary)
-        
+        w.tag_remove(SEL, 1.0, start)
+        w.tag_add(SEL, start, stop)
+        w.tag_remove(SEL, stop, END)
+             
         
         
 if __name__ == '__main__':

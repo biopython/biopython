@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # Created: Tue Aug  8 20:32:36 2000
-# Last changed: Time-stamp: <00/08/09 17:16:46 thomas>
+# Last changed: Time-stamp: <00/08/09 20:21:28 thomas>
 # thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas/index.html
 # File: nextorf.py
 
@@ -9,7 +9,7 @@ import string, re, regsub
 import posixpath, posix
 import os, sys, commands
 import getopt
-sys.path.insert(0, os.path.expanduser('~thomas/cbs/python/biopython'))
+
 from Bio.Fasta import Fasta
 from Bio.Tools import Translate
 from Bio.Seq import Seq
@@ -24,7 +24,7 @@ class NextORF:
         self.code = 1
         self.file = file
         self.options = options
-        self.translator = Translate.unambiguous_dna_by_id[self.options['table']]
+        self.translator = Translate.unambiguous_dna_by_id[int(self.options['table'])]
         
     def read_file(self):
         self.parser = Fasta.RecordParser()
@@ -58,8 +58,11 @@ class NextORF:
             for frame in self.options['frames']:
                 orf = self.translator.translate(seq[frame-1:])
                 orfs = string.split(orf.data,'*')
-                orfs = filter(lambda x,o = self.options: len(x) > o['minlength'], orfs)
-                orfs = filter(lambda x,o = self.options: len(x) < o['maxlength'], orfs)
+                l = int(self.options['minlength'])
+                orfs = filter(lambda x,l=l: len(x) >= l, orfs)
+                if self.options['maxlength']:
+                    l = int(self.options['maxlength'])
+                    orfs = filter(lambda x,l=l: len(x) <= l, orfs)
                 for orf in orfs:
                     n = n + 1
                     print self.toFasta('orf_%s:%s:+%d' % (n, self.header,frame), orf)
@@ -69,8 +72,12 @@ class NextORF:
             for frame in self.options['frames']:
                 orf = self.translator.translate(rseq[frame-1:])
                 orfs = string.split(orf.data,'*')
-                orfs = filter(lambda x,o = self.options: len(x) > o['minlength'], orfs)
-                orfs = filter(lambda x,o = self.options: len(x) < o['maxlength'], orfs)
+
+                l = int(self.options['minlength'])
+                orfs = filter(lambda x,l=l: len(x) >= l, orfs)
+                if self.options['maxlength']:
+                    l = int(self.options['maxlength'])
+                    orfs = filter(lambda x,l=l: len(x) <= l, orfs)
                 for orf in orfs:
                     n = n + 1
                     print self.toFasta('orf_%s:%s:-%d' % (n, self.header,frame), orf)
@@ -107,22 +114,23 @@ options = {
 if __name__ == '__main__':
 
     args = sys.argv[1:]
+
     show_help = len(sys.argv)<=1
 
     shorts = 'h'
     longs = map(lambda x: x +'=', options.keys())
     optlist, args = getopt.getopt(args,shorts, longs)
-
     if show_help: help()
     for arg in optlist:
-        print arg
         if arg[0] == '-h' or arg[0] == '--help':
             help()
             sys.exit(0)
         for key in options.keys():
-            if arg[0] == key: options[key] = arg[0]
+            if arg[0][2:] == key:
+                options[key] = arg[1]
 
-    file = sys.argv[1]
+    file = args[0]
+
     nextorf = NextORF(file, options)
     nextorf.read_file()
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # Created: Wed Jun 21 15:53:22 2000
-# Last changed: Time-stamp: <00/08/08 23:30:27 thomas>
+# Last changed: Time-stamp: <00/08/09 19:55:59 thomas>
 # Thomas.Sicheritz@molbio.uu.se, http://evolution.bmc.uu.se/~thomas
 # File: xbb_translations.py
 
@@ -95,9 +95,9 @@ class xbb_translations:
         frames = {}
         for i in range(0,3):
             #print i+1, seq[i:]
-            frames[i+1]  = self.frame1(seq[i:])
+            frames[i+1]  = self.frame1(seq[i:], translation_table)
             #print -(i+1), anti[i:]
-            frames[-(i+1)] = self.reverse(self.frame1(anti[i:]))
+            frames[-(i+1)] = self.reverse(self.frame1(anti[i:], translation_table))
             #print len(frames[i+1])
 
         res = self.header_nice('GCFrame', seq)
