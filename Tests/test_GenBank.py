@@ -20,7 +20,7 @@ gb_file_dir = os.path.join(os.getcwd(), 'GenBank')
 
 test_files = ['noref.gb', 'cor6_6.gb', 'iro.gb', 'pri1.gb', 'arab1.gb',
               'protein_refseq.gb', 'extra_keywords.gb']
-test_files += ['one_of.gb', 'NT_019265.gb']
+test_files += ['one_of.gb', 'NT_019265.gb', 'origin_line.gb']
 
 write_format_files = test_files[:]
 # don't test writing on protein_refseq, since it is horribly nasty

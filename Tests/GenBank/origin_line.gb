@@ -1,0 +1,40 @@
+LOCUS       NC_002678 7036074 bp    DNA   circular  BCT       28-MAR-2001
+DEFINITION  Mesorhizobium loti, complete genome.
+ACCESSION   NC_002678
+VERSION     NC_002678.1  GI:13470324
+KEYWORDS    .
+SOURCE      Mesorhizobium loti.
+  ORGANISM  Mesorhizobium loti
+            Bacteria; Proteobacteria; alpha subdivision; Rhizobiaceae group;
+            Phyllobacteriaceae; Mesorhizobium.
+REFERENCE   1  (sites)
+  AUTHORS   Kaneko,T., Nakamura,Y., Sato,S., Asamizu,E., Kato,T., Sasamoto,S.,
+            Watanabe,A., Idesawa,K., Ishikawa,A., Kawashima,K., Kimura,T.,
+            Kishida,Y., Kiyokawa,C., Kohara,M., Matsumoto,M., Matsuno,A.,
+            Mochizuki,Y., Nakayama,S., Nakazaki,N., Shimpo,S., Sugimoto,M.,
+            Takeuchi,C., Yamada,M. and Tabata,S.
+  TITLE     Complete genome structure of the nitrogen-fixing symbiotic
+            bacterium Mesorhizobium loti
+  JOURNAL   DNA Res. 7, 331-338 (2000)
+REFERENCE   2  (bases 1 to 7036074)
+  AUTHORS   Kaneko,T.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (05-DEC-2000) Takakazu Kaneko, Kazusa DNA Research
+            Institute, The First Laboratory for Plant Gene Research; Yana
+            1532-3, Kisarazu, Chiba 292-0812, Japan
+            (E-mail:kaneko@kazusa.or.jp,
+            URL:http://www.kazusa.or.jp/rhizobase/, Tel:81-438-52-3935,
+            Fax:81-438-52-3934)
+FEATURES             Location/Qualifiers
+     source          1..7036074
+                     /organism="Mesorhizobium loti"
+                     /strain="MAFF303099"
+                     /db_xref="taxon:381"
+     gene            287..1084
+                     /gene="mlr0002"
+BASE COUNT  1311257 a2224835 c2190093 g1309889 t
+ORIGIN      
+        1 ttaattaact gtcttcgatt gcgtttaatt gacggttttc gattaaaagc ggtaccgggg
+       61 tttgggaggt actatggcgg caggaatgct gggcgatctg gttggcaaga tcctcgacaa
+      121 gatatcgggc accagtttgc tggcgaccgg gcttttgctg ctgactgcct ttgtcagcgc
+//
