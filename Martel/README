@@ -1,37 +1,372 @@
-                          Martel
-                       version 0.6
+                     Martel --  version 0.8
+
+                   XML parsing of flat-files
 
                Life's too short to (re)write parsers
 
-             A scanner generator for regular grammars
-               supporting a SAX-like output interface
+SYNOPSIS:
 
-             THIS DOCUMENT IS  NO LONGER VALID!
+Martel uses regular expression format definition to generate a parser
+for flat- and semi-structured files.  The parse tree information is
+passed back to the caller using XML SAX events.  In other words,
+Martel lets you parse flat files as if they are in XML.
 
-        Martel is being moved into CVS and non-core code moved
-                  into other parts of biopython.
-         
 
-- To see output right away
+INSTALLATION:
 
-Make sure your PYTHONPATH includes the parent of this directory (so
-you can do an 'import Martel')
+Martel uses the standard Python 'distutils' installation method.
+To install it:
 
- cd examples
- python swissprot2html.py < sample.swissprot > sample.html
+  python setup.py install
 
-Then view the HTML output.  Look at the README in that file for a
-slightly better description than this.
+You can install into somewhere other than the default location by
+using the --prefix option.  For example, to install under your home
+directory you can use:
 
-- To run the regression tests
+  python setup.py install --prefix $HOME
 
-Again, make sure your PYTHONPATH includes Martel From the 'Martel'
-directory:
+Make sure your PYTHONPATH includes the correct site-packages under the
+prefix directory.  For example, with Python 2.2 and a prefix of
+"/usr/local", your PYTHONPATH needs to include
 
-  cd test
-  python __init__.py
+       /usr/local/lib/python2.2/site-packages
 
-===
+(The setup.py program will warn you if the correct directory is not in
+your path.)
+
+
+REQUIREMENTS:
+
+Martel should work with Python 2.0 or newer.  It has been tested with
+2.1 and 2.2.  Python is available from http://www.python.org/ .
+
+You will need mxTextTools, which is available from
+  http://www.lemburg.com/files/python/mxTextTools.html
+
+Martel should work find with versions 1.1.0 and later.  If you use
+eGenix 2.0.2 with Python 2.2 you will need to change
+  mx/Tools/mxTools/xmap.c
+so the '#include "config.h"' becomes '#include "pyconfig.h"' and you
+will need to comment out the '__debug__ = 0' and '__debug__ = 1'
+statements in some of the Python files.  (Assignment to __debug__ is
+illegal, and Python 2.2 is strict about that.)
+
+Martel could be made to work under Python 1.5.2.  First, why?  Python
+2.x has been available for a while and there are very few problems in
+upgrading.  Still, with a bit of work you could make Martel work with
+that version.  Besided modifying some Python 2 specific syntax, you
+will need to install the 'xml' package distributed by the Python
+XML-SIG.
+
+
+TESTING:
+
+Martel includes a pretty complete regression test.  To run the tests
+on the module without installing the package:
+
+  python setup.py test
+
+To test out the installed package:
+
+  python setup.py installtest
+
+
+EXAMPLES:
+
+Here are some examples to get you started.  More documentation is
+being written.
+
+Example 1: Parsing /etc/passwd
+
+Suppose you want to parse the /etc/password file.  This is a line
+oriented file with one record on each line.  A record contains fields
+seperated by a ":", and the field names and order is
+ 
+   account:password:UID:GID:GECOS:directory:shell
+
+For example, one record may look like this
+
+   dalke:oPA4ic39X3:14488:100::/home/dalke:/bin/tcsh
+
+which says that
+     account = dalke
+    password = oPA4ic39X3  (and no, this isn't a real password)
+         UID = 14488
+         GID = 100
+       GECOS = 
+   directory = /home/dalke
+       shell = /bin/tcsh
+
+
+Suppose you want to print the shell used by each account.  Here's one
+way to do it.
+
+==========================
+import Martel
+
+def ToColon(name):
+    return Martel.ToSep(name, ":")
+
+format =  Martel.Rep(
+            Martel.Group("record",
+              ToColon("account") + ToColon("password") + ToColon("UID") + \
+              ToColon("GID") + ToColon("GECOS") + ToColon("directory") + \
+              Martel.ToEol("shell")))
+
+for record in format.make_iterator("record").iterateFile(open("/etc/passwd")):
+    print record["account"][0], "uses", record["shell"][0]
+==========================
+
+When run on my machine, this produces output including
+
+root uses /bin/bash
+bin uses
+sync uses /bin/sync
+shutdown uses /sbin/shutdown
+halt uses /sbin/halt
+xfs uses /bin/false
+dalke uses /bin/tcsh
+apache uses /bin/bash
+
+
+Or you could use this variation
+
+==========================
+import Martel
+
+format = Martel.Rep(
+           Martel.Group("record",
+               Martel.Re(r"(?P<field>[^:\R]*)(:(?P<field>[^:\R]*))*\R")))
+
+for record in format.make_iterator("record").iterateFile(open("/etc/passwd")):
+    print record["field"][0], "uses", record["field"][-1]
+==========================
+
+
+Compare these to the standard way to parse that file in Python 2.0,
+which is
+
+==========================
+infile = open("/etc/passwd")
+while 1:
+    line = infile.readline()
+    if not line:
+        break
+
+    line = line[:-1]         # remove the newline character
+    fields = line.split(":") # get the fields
+    assert len(fields) == 7, "wrong field count"
+
+    print fields[0], "uses", fields[-1]
+==========================
+
+Using the features in Python 2.2, and removing the need to use special
+variables like "0", "7", and "-1"
+
+==========================
+names = ("account", "password", "UID", "GID", "GECOS", "directory", "shell")
+for line in open("/etc/passwd"):
+    line = line[:-1]
+    fields = line.split(":")
+    assert len(fields) == len(names), "wrong field count"
+    d = dict(zip(names, fields))
+    
+    print d["account"], "uses", d["shell"]
+==========================
+
+
+Finally, since delimited fields are very common, Martel has a built-in
+function to parse them:
+
+==========================
+import Martel
+
+format = Martel.Rep(Martel.Group("record",
+                       Martel.DelimitedFields("field", ":")))
+
+for record in format.make_iterator("record").iterateFile(open("/etc/passwd")):
+    print record["field"][0], "uses", record["field"][-1]
+==========================
+
+
+(Note: the first Martel solution allows a ":" in the directory name,
+which the other solutions do not allow.)
+
+
+Where does the XML come in?  The examples above use "make_iterator",
+which builds on the underlying parser, which generates SAX events, and
+LAX, the default SAX ContentHandler used by make_iterator.  To see how
+things work at the SAX level, here's how to convert the SAX events
+into XML text.
+
+
+==========================
+import Martel
+from xml.sax import saxutils
+
+def ToColon(name):
+    return Martel.ToSep(name, ":")
+
+format =  Martel.Rep(
+            Martel.Group("record",
+              ToColon("account") + ToColon("password") + ToColon("UID") + \
+              ToColon("GID") + ToColon("GECOS") + ToColon("directory") + \
+              Martel.ToEol("shell")))
+
+parser = format.make_parser()
+parser.setContentHandler(saxutils.XMLGenerator())
+
+parser.parseFile(open("/etc/passwd"))
+==========================
+
+When run, the code above produces output like this (some newlines added
+to make it the results fold nicely).
+
+<?xml version="1.0" encoding="iso-8859-1"?>
+<record><account>root</account>:<password>x</password>:<UID>0</UID>:
+<GID>0</GID>:<GECOS>root</GECOS>:<directory>/root</directory>:<shell
+>/bin/bash</shell>
+</record><record><account>bin</account>:<password>x</password>:<UID>
+1</UID>:<GID>1</GID>:<GECOS>bin</GECOS>:<directory>/bin</directory>:
+<shell></shell>
+</record><record><account>dalke</account>:<password>x</password>:<UI
+D>14488</UID>:<GID>100</GID>:<GECOS></GECOS>:<directory>/home/dalke<
+/directory>:<shell>/bin/tcsh</shell>
+</record>
+
+==========================
+from xml.sax import handler
+
+class PrintShell(handler.ContentHandler):
+    def startDocument(self):
+        self.capture = 0
+    def startElement(self, name, attrs):
+        if name == "record":
+            self.account = ""
+            self.shell = ""
+            self.s = ""
+        elif name in ("account", "shell"):
+            self.capture = 1
+    def characters(self, s):
+        if self.capture:
+            self.s = self.s + s
+    def endElement(self, name):
+        if name == "account":
+            self.account = self.s
+        elif name == "shell":
+            self.shell = self.s
+            print self.account, "uses", self.shell
+        self.capture = 0
+
+#  assuming 'parser' is defined as above
+parser.setContentHandler(PrintShell())
+parser.parseFile(open("/etc/passwd"))
+==========================
+
+This prints exactly the same results - it's just harder to write
+because it's uses a lower level interface.
+
+
+However, Python includes a way to convert this low-level interface to
+a higher level data XML structure called DOM.  Suppose you wanted to
+print the account name and shell.
+
+==========================
+
+# Hmmm, DOM requires there be only a single top-level element.
+# XXX fixup documentation to reflect this requirement
+format =  Martel.Group("passwd",
+            Martel.Rep(
+              Martel.Group("record",
+                ToColon("account") + ToColon("password") + ToColon("UID") + \
+                ToColon("GID") + ToColon("GECOS") + ToColon("directory") + \
+                Martel.ToEol("shell"))))
+
+parser = format.make_parser()
+
+from xml.dom import pulldom
+sax2dom = pulldom.SAX2DOM()
+parser.setContentHandler(sax2dom)
+doc = sax2dom.document
+doc.normalize()
+for record in doc.getElementsByTagName("record"):
+    account = record.getElementsByTagName("account")[0].firstChild.nodeValue
+    shell = record.getElementsByTagName("shell")[0].firstChild.nodeValue
+    print account, "uses", shell
+
+==========================
+
+(There's probably better ways to do this, but I have little experience
+with DOM.  I would like to have an example where fields are changed,
+if I can find an easy way to write a minidom without the tags.)
+
+
+Example 2: parse INI file
+
+Martel's strength starts to show when parsing multi-line formats.
+Consider parsing a ".ini" file, which is a configuration file format
+popular under MS Windows.  There are multiple section definitions in a
+file, and each section can have 0 or more key=value lines.  Comments
+start with a ';'.
+
+For example, here is part of my 'system.ini' definition, with a few
+changes to show some of the variations allowed.
+
+==========================
+; Keyboard driver
+[keyboard]
+keyboard.dll=
+oemansi.bin=
+subtype=
+type=4
+
+[boot.description]
+system.drv=Standard PC
+keyboard.typ=Standard 101/102-Key or Microsoft Natural Keyboard
+mouse.drv=Standard mouse
+aspect=100,96,96
+display.drv=NeoMagic MagicMedia 256AV
+
+[Password Lists]
+UNKNOWN USER=C:\WINDOWS\UNKNOWNU.PWL  ; See the space in the key name?
+DALKE=C:\WINDOWS\DALKE.PWL
+==========================
+
+==========================
+import Martel
+comment = Martel.Str(";") + Martel.ToEol()
+blank = Martel.AnyEol()
+
+# [Password Lists]
+section_title = Martel.Re(r"\[(?P<section_title>[^\]\R]+)\]\R")
+
+# keyboard.typ=Standard 101/102-Key or Microsoft Natural Keyboard
+key_value = Martel.Re(r"\s*(?P<key>[^;=\R]+)\s*=\s*(?P<value>[^;\R]+)") + \
+            (Martel.AnyEol() | comment)
+
+# Section can include blank and comment lines, and can be empty
+section = Martel.Group("section",
+                       section_title + \
+                       Martel.Rep(Martel.Group("key_value", key_value) |
+                                  blank | comment))
+
+format = Martel.Rep(comment | blank | section)
+
+infile = open("/mnt/windows/windows/system.ini")
+for record in format.make_iterator("section").iterateFile(infile):
+    print "[%s]" % record["section_title"][0]
+    for name, value in zip(record.get("key", []), record.get("value", [])):
+        print "%s=%s" % (name, value)
+    print
+
+==========================
+
+#### XXX Need to fix up things beyond here so they aren't as
+#### bioinformatics specific.  Perhaps for 0.9 release.
+
+BACKGROUND:
+
+  
 
   There are a lot of bioinformatics file formats.  It's annoying to
 have to write parsers for them all the time, and when you do they
@@ -139,56 +474,6 @@ calls of the callback object (which SAX calls a handler):
   characters(";")
 
 
-Prerequisites:
-
-  These are the two Python packages you will need to install
-     mxTextTools
-     xml
-
-  My copy of the XML module is version v0.5.2.  I tried the xml
-in the Python 1.6 alpha distribution, and the API has changed.
-(Eg, there are some modules changes and they are using SAX 2.0
-instead of 1.0.  (Namespaces?))
-
-Available Formats:
-
-  These formats will migrate to the biopython code distribution.
-Until then, the ones supported so far are:
-
-  GenBank - incomplete support for release 119 (does not parse some records)
-  MDL_10_1996 - MDL's .mol format, as described in documentation
-                    dated 10/1996 and tested against WDI and ACD
-                    (thanks Daylight!)
-
-  PDB_2_1  - tested against 1PLM and will fail against most PDB files.
-  PIR_3_0  - tested against all of PIR
-  blastall_2_0_10 - tested against the non-master-slave 'blastall 2.0.10
-                    records from biopython.Bio.Tests.Blast (thanks Jeff!)
-  blocks_12  - tested against Blocks 12.0 format
-  blocksplus - tested against Blocks+ 15Nov00 format
-  embl65   - tested against hum7 from EMBL Release 65, December 2000
-  enzyme26  - ENZYME nomenclature database, release 26 of May 2000
-  primers  - PCR primers from EBI; database date is from 1997
-  prodoc16  - the format version is 16, tested against Prosite release 39
-  prosite16  - the format version is 16, tested against Prosite release 39
-  swissprot38 - tested against all of SWISS-PROT 38.  Pretty complete.
-  taxonomy  - NCBI's taxonomy database, dated 05-NOV-1998
-  trembl14  - tested against hum and mam of TrEMBL release 14, June 2000
-
-These formats are in various states of support.  Most are pretty
-complete in that they can parse quite a bit of information from the
-records.  They haven't been used for anything yet so things will
-likely need to be tweaked.
-
-Building your own formats:
-
-  Go ahead and try it out.  There's some beginning documentation under
-the doc directory and there are working examples.  Doing everything
-with regular expression strings is a mess so I'm using a function
-syntax similar to Greg Ewing's Plex.  I use regular expressions to
-describe parts of a line, then convert those into expression trees.
-The Plex-like functions then operate on expression trees.
-
 Debugging:
 
   Debugging large patterns is very hard.  It's best to break things
@@ -202,7 +487,7 @@ internal characters are sent to the callback.  If there is a failure
 somewhere inside the group, you won't be told how far it went, but
 only that it stopped at the start of the group.
 
-When debugging fails at a named group, try commenting it out so you
+  When debugging fails at a named group, try commenting it out so you
 can see what happened inside.  You might also use Martel.select_names
 to create a new expression with no named groups. Or copy the text that
 failed and try just that subpattern.  Also, the make_parser method has
@@ -250,178 +535,6 @@ the different parts to be in a named group
 always work.  It's a debugging tool and isn't yet needed for normal
 operation.
 
-Future Plans:
-
-  More formats.
-
-  Example output converters (eg, for HTML)
-
-  The patterns are useable for other langauges, so would it to
-generate parsers for perl, C, etc.  Probably write something in C
-which is a SWIGged engine for use by everyone else.
-
-  Need standard names for things For example, NCBI has a DTD for BLAST
-output, but that's just the semantic data.  There is extra
-organization of the BLAST output, so I need names for them.
-
-  Even better, the names and meanings should by consistent across
-different formats (eg, "sequence") and consistent with XML usage (like
-'*_list' for a list of items (?))
-
-  Would be interested to rewrite the SWISS-PROT to HTML converter (in
-examples/swissprot2html) using DOM since it should be a lot easier to
-write.
-
-  If I have access to a description of the datatype for each named
-group, I can likely make a DTD for it.  Hmm, but the DTD only allows
-one tag lookaheads so perhaps now
-
-  Still want to include "lenient" parsers which skip data they
-assume is correct.
-
-  I want to make an example for how to index files.  It might be
-called like:
-  make_index --record <record tag> --id <id tag> [--aliases <alias tag>]*
-             [--format <format name>] --dbm <filename> files...
-where:
-  <record tag> is the outermost name for the record (like 'swissprot38_record')
-  <id tag> is the unique id for the record (like 'entry_name')
-  <alias tag> is a set of tags listing aliases for the record (like 'ac_number')
-  <format name> is the (optional) format name for the data file
-  <filename> is the name for the DBM file
-  files... is the file or files to parse to generate the index
-
-The index will contain mappings from aliases to primary id, and from primary
-id to filename and character ranges.  The data is stored in a dbm file
-(probably Berkeley DBM from Sleepycat).
-
-Using the index could be something like:
-  lookup --dbm <filename> [--primary | --alias | --either ] [--show] identifier
-where
-  <filename> is the name of the DBM file
-  --primary means the identifier is a primary key name
-  --alias means the identifier is an alias
-  --either means it's either; returns all unique matches
-
-By default, the output is the list of matching records as (filename,
-start byte, end byte).  When --show is used, the matching records are
-displayed as a stream to stdout.
-
-  Add keyword searching by adding a list of fields which should be
-indexed.  This would allow searching for all records from Spam and
-Eggs which didn't have Vikings for a gene name.
 
 
 
-===
-- Changes between 0.5 and 0.4
-
-Bug fix where HeaderFooter and ParseRecords weren't copying their
-subexpressions when making a .copy()
-
-Added SignedInteger and Float definitions.
-
-Fixed some problems with the error reporting. (Status message,
-location offset, rewrote HeaderFooterParser.)
-
-Replaced \n with \R in the various format definitions.
-
-Added a lot of formats, although most are incomplete in that
-additional fields could be parsed.
-
-Fixed swissprot parsing so non-existant fields don't generate empty
-tags.
-
-- Changes between version 0.35 and 0.4
-
-Allow Unix, Mac and DOS newline conventions in a file.  Can even be
-mixed in the same file (which does happen in real life).
-
-RecordReaders use mxTextTools to find the record begin & end
-locations.  Gives about a 50% performance boost because it doesn't
-need to split and rejoin the lines and because it can use Boyer-Moore.
-
-RecordReader's constructor and 'remainder' method use/return a
-lookahead buffer as a string rather than a list of lines.
-
-
-- Changes between version 0.3 and 0.35
-
-Migrated to Python 2.0 and its xml package.  No longer runs under
-older (1.x) Pythons.
-
-Added more RecordReaders (Until, CountLines, Nothing, Everything).
-
-Changed the RecordReader protocol to seed the line buffer (in the
-constructor) and to get the final state for the input file and line
-buffer (using remainder()).  Needed to allow chaining of different
-reader types as with headers and footers.
-
-Added a HeaderFooter Parser for formats like Prosite and PIR which
-have a header and/or a footer with records in between.
-
-Renamed the StateTable exception to Parser exceptions and removed the
-EOF exception.
-
-Experimental Iterator support ("make_iterator") as an alternate for
-the pure SAX callback method.
-
-Improved error reporting.  make_parser and make_iterator takes an
-optional "debug_level".  Better error location is available with
-debug_level == 1 and if it == 2, print current match information to
-stdout.  Warning: debug_level == 1 is about 11 times slower than
-debug_level == 0, which is why it is off by default.
-
-Support for both the 1.1 and 1.2 mxTextTools.
-
-- Changes between version 0.25 and 0.3
-
-Added documentation on the internals and on how to write a parser.
-
-Renamed and moved Generate.StateTable to Parser.Parser
-
-Renamed the various "ContentHandler" to "DocumentHandler."
-ContentHandler was flat out the wrong method name for SAX.
-
-The parser and exceptions now inherit from the xml.sax.saxlib classes.
-
-To parse a string, use the "parseString" method.  The old "parse"
-method now takes a system identifier string.  A system identifier is
-the SAX way of saying URL.  (Note: this will change again with Python
-2.0 and the InputSource class.)
-
-The "generate_*" commands now manipulate lists directly instead of
-passing around 'Parser' objects.
-
-Added parsers which can read a record at a time (ParseRecord and the
-RecordReader classes.)
-
-Added the optimize module, which does some limited regexp expression
-cleanups and optimizations.  Haven't tested the performance
-differences yet.
-
-Started a Prosite 16.0 parser.
-
-- Changes between 0.2 to 0.25
-
-Consistent naming schemes to distinguish between a regexp written as a
-string (a "pattern"), a parse tree (an "expression") or an mxTextTools
-table (a "tagtable").
-  
-The "Subpattern" Node was renamed to "Group" for naming consistency
-with Plex.  "Any" was renamed "Dot".  "In" was renamed "Any.
-
-Fixed several bugs when translating from an expression tree back to a
-pattern string.
-
-Added docstrings and comments.
-
-Added type check for the external Plex-like functions, since I was
-getting annoyed that the error for doing 'Opt("text")' instead of
-'Opt(Str("text"))' occured during tagtable generation and was hard to
-track down.
-
-Moved self test code from the modules into the test/ directory.
-
-Changed the regression code to raise an Assertion error when there was
-a problem rather than just printing the error and continueing.
