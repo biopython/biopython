@@ -6,6 +6,7 @@ from Bio.Seq import Seq
 from Bio.SCOP.Raf import to_one_letter_code
 from Bio.PDB.PDBExceptions import PDBException
 from Bio.PDB.Residue import Residue, DisorderedResidue
+from Vector import calc_dihedral, calc_angle
 
 __doc__="""
 Polypeptide related classes (construction and representation).
@@ -75,7 +76,7 @@ class Polypeptide(list):
             atom_list=[ca_list[i], ca_list[i+1], ca_list[i+2]]
             vector_list=map(lambda a: a.get_vector(), atom_list)
             v1, v2, v3=vector_list
-            omage=calc_angle(v1, v2, v3)
+            omega=calc_angle(v1, v2, v3)
             omega_list.append(omega)
         return omega_list
 
