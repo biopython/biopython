@@ -12,8 +12,8 @@ tags blocks.
 
 SGMLExtractor   Object that scans for specified SGML tag pairs, removes any inner tags
 and returns the raw content.
-For example the object SGMLExtractor( [ 'h1' ] on the following html file would return
-"House that Jack built'
+For example the object SGMLExtractor( [ 'h1' ] )on the following html file would return
+'House that Jack built'
 SGMLExtractor( [ 'dt' ] ) would return 'ratcatdogcowmaiden'
 SGMLExtractor( [ 'dt', 'dd' ] ) would return 'rat that ate the malttcat ate  the rat' etc
 
@@ -30,7 +30,6 @@ SGMLExtractor( [ 'dt', 'dd' ] ) would return 'rat that ate the malttcat ate  the
   <dt><big>maiden</big></dt>
     <dd><big>all forlorns</big></dd>
 </dl>
-
 """
 import os
 import string
