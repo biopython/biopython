@@ -1,0 +1,69 @@
+Biopython README file
+=====================
+
+The Biopython Project (http://www.biopython.org/) is an international
+association of developers of freely available Python tools for
+computational molecular biology.
+
+biopython.org provides an online resource for modules, scripts, and
+web links for developers of Python-based software for life science
+research.  Thanks to bioperl, we can also provide web, FTP and CVS
+space for individuals and organizations wishing to distribute or
+otherwise make available standalone scripts & code.
+
+
+
+License
+-------
+
+Biopython is made available under generous terms.  Please see the
+LICENSE file for further details.
+
+
+
+System Requirements
+-------------------
+
+o Python 1.52 or above
+
+
+
+Installation
+------------
+
+Hmmm...  No code yet.
+
+
+
+Bug Reports
+-----------
+
+Ditto the "no code" comment.
+
+
+
+Distribution Structure
+----------------------
+
+Bio/          The python package that makes up biopython
+Doc/          Documentation
+LICENSE       License information for this package
+NEWS          Release notes and news
+README        This file
+Scripts/      Miscellaneous, possibly useful, standalone scripts
+Tests/        Regression testing code
+
+
+
+Contributing
+------------
+
+Biopython is run by volunteers from all over the world, with many
+types of backgrounds. We are always looking for people interested in
+helping with code development, web-site management, technical
+administration, and whatever else comes up.
+
+If you wish to contribute, please visit the web site and join our
+mailing list.
+http://www.biopython.org/
+http://www.biopython.org/MailList.shtml

@@ -1,0 +1,33 @@
+News for the Biopython Project
+==============================
+
+This file contains release notes and general news
+about the biopython project.
+
+
+
+August 1999
+
+- Call for Participation sent out to relevant mailing lists, news
+groups.
+
+The Biopython Project (http://www.biopython.org/) is a new open
+collaborative effort to develop freely available Python libraries and
+applications that address the needs of current and future work in
+bioinformatics, including sequence analysis, structural biology,
+pathways, expression data, etc.  When available, the source code will
+be released as open source (http://www.biopython.org/License.shtml)
+under terms similar to Python.
+
+This is a Call for Participation for interested people to join the
+project.  We are hoping to attract people from a diverse set of
+backgrounds to help with code development, site maintenance,
+scientific discussion, etc.  This project is open to everyone.  If
+you're interested, please visit the web page, join the biopython
+mailing list, and let us know what you think!
+
+Jeffrey Chang <jchang@smi.stanford.edu>
+Andrew Dalke <dalke@bioreason.com>
+
+
+- Biopython project founded.
