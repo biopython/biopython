@@ -65,3 +65,19 @@ record
 
 undefined is a special event that is called for every line with a
 qualifier not defined in the specification.
+
+
+
+
+
+Retrieval Errors from NCBI
+--------------------------
+
+
+Entrez Reports
+----------------
+<P><B>The record you requested, [98114512], was not found in the database.</B><B
+R>
+Please contact the <A HREF="mailto:pubmed@ncbi.nlm.nih.gov">Help Desk</A> if you
+ have further questions*** No Documents Found ***
+Your request produced no documents.
