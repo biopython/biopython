@@ -1,0 +1,498 @@
+testing pdoc00100.txt
+PDOC00100
+prosite_refs
+    ('PS00107', 'PROTEIN_KINASE_ATP')
+    ('PS00108', 'PROTEIN_KINASE_ST')
+    ('PS00109', 'PROTEIN_KINASE_TYR')
+    ('PS50011', 'PROTEIN_KINASE_DOM')
+******************************************
+* Protein kinases signatures and profile *
+******************************************
+
+Eukaryotic  protein kinases [1 to 5]  are  enzymes  that   belong  to  a  very
+extensive family of  proteins which share a conserved catalytic core common to
+both serine/threonine and  tyrosine protein kinases.  There  are  a  number of
+conserved regions in the catalytic domain of protein kinases. We have selected
+two of these regions to build signature patterns.  The  first region, which is
+located in the N-terminal extremity of the catalytic domain, is a glycine-rich
+stretch of residues in the vicinity  of a lysine residue, which has been shown
+to be involved in ATP binding.   The second  region,  which is  located in the
+central part of the  catalytic  domain,  contains  a  conserved  aspartic acid
+residue  which is important for the catalytic activity  of  the enzyme [6]; we
+have derived  two signature patterns for that region: one specific for serine/
+threonine kinases  and  the  other  for  tyrosine kinases. We also developed a
+profile which is based on the alignment in [1] and covers the entire catalytic
+domain.
+
+-Consensus pattern: [LIV]-G-{P}-G-{P}-[FYWMGSTNH]-[SGA]-{PW}-[LIVCAT]-{PD}-x-
+                    [GSTACLIVMFY]-x(5,18)-[LIVMFYWCSTAR]-[AIVP]-[LIVMFAGCKR]-K
+                    [K binds ATP]
+-Sequences known to belong to this class detected by the pattern: the majority
+ of known  protein  kinases  but it fails to find a number of them, especially
+ viral kinases  which  are  quite  divergent in this region and are completely
+ missed bythis pattern.
+-Other sequence(s) detected in SWISS-PROT: 35.
+
+-Consensus pattern: [LIVMFYC]-x-[HY]-x-D-[LIVMFY]-K-x(2)-N-[LIVMFYCT](3)
+                    [D is an active site residue]
+-Sequences known to belong to this class detected by the pattern: Most serine/
+ threonine  specific protein  kinases  with  10 exceptions (half of them viral
+ kinases) and  also  Epstein-Barr  virus BGLF4 and Drosophila ninaC which have
+ respectively Ser and Arg instead of the conserved Lys and which are therefore
+ detected by the tyrosine kinase specific pattern described below.
+-Other sequence(s) detected in SWISS-PROT: 1.
+
+-Consensus pattern: [LIVMFYC]-x-[HY]-x-D-[LIVMFY]-[RSTAC]-x(2)-N-[LIVMFYC](3)
+                    [D is an active site residue]
+-Sequences known to belong to this class detected by the pattern: ALL tyrosine
+ specific protein  kinases  with  the  exception of human ERBB3 and mouse blk.
+ This pattern    will    also    detect    most    bacterial    aminoglycoside
+ phosphotransferases [8,9]  and  herpesviruses ganciclovir kinases [10]; which
+ are proteins structurally and evolutionary related to protein kinases.
+-Other sequence(s) detected in SWISS-PROT: 15.
+
+-Sequences known to belong to this class detected by the profile: ALL,  except
+ for three  viral  kinases.  This  profile  also  detects  receptor  guanylate
+ cyclases (see   <PDOC00430>)  and  2-5A-dependent  ribonucleases.    Sequence
+ similarities between  these  two  families  and the eukaryotic protein kinase
+ family have been noticed before. It also detects Arabidopsis thaliana kinase-
+ like protein TMKL1 which seems to have lost its catalytic activity.
+-Other sequence(s) detected in SWISS-PROT: 4.
+
+-Note: if a protein  analyzed  includes the two protein kinase signatures, the
+ probability of it being a protein kinase is close to 100%
+-Note: eukaryotic-type protein  kinases  have  also  been found in prokaryotes
+ such as Myxococcus xanthus [11] and Yersinia pseudotuberculosis.
+-Note: the  patterns  shown  above has been updated since their publication in
+ [7].
+-Note: this  documentation  entry  is linked  to both signature patterns and a
+ profile. As  the profile is much more sensitive than the patterns, you should
+ use it if you have access to the necessary software tools to do so.
+
+-Expert(s) to contact by email:
+                   Hunter T.; hunter@salk-sc2.sdsc.edu
+                   Quinn A.M.; quinn@biomed.med.yale.edu
+
+-Last update: November 1995 / Patterns and text revised; profile added.
+
+
+references
+    <Bio.Prosite.Prodoc.Reference instance at 007FEF2C>
+    <Bio.Prosite.Prodoc.Reference instance at 007FD19C>
+    <Bio.Prosite.Prodoc.Reference instance at 007FD12C>
+    <Bio.Prosite.Prodoc.Reference instance at 007FEC6C>
+    <Bio.Prosite.Prodoc.Reference instance at 007FEBBC>
+    <Bio.Prosite.Prodoc.Reference instance at 007FEA4C>
+    <Bio.Prosite.Prodoc.Reference instance at 007FE83C>
+    <Bio.Prosite.Prodoc.Reference instance at 007FE66C>
+    <Bio.Prosite.Prodoc.Reference instance at 007FE4BC>
+    <Bio.Prosite.Prodoc.Reference instance at 007FE36C>
+    <Bio.Prosite.Prodoc.Reference instance at 007FFFDC>
+testing pdoc00113.txt
+PDOC00113
+prosite_refs
+    ('PS00123', 'ALKALINE_PHOSPHATASE')
+************************************
+* Alkaline phosphatase active site *
+************************************
+
+Alkaline phosphatase (EC 3.1.3.1) (ALP) [1] is a zinc and magnesium-containing
+metalloenzyme  which hydrolyzes phosphate esters, optimally at high pH.  It is
+found in nearly  all living organisms,  with the exception of some plants.  In
+Escherichia coli, ALP (gene phoA) is found in the periplasmic space.  In yeast
+it (gene  PHO8)  is  found  in  lysosome-like vacuoles and in mammals, it is a
+glycoprotein attached to the membrane by a GPI-anchor.
+
+In mammals, four different isozymes are currently known [2]. Three of them are
+tissue-specific:  the  placental,  placental-like (germ cell)   and intestinal
+isozymes.  The fourth form is  tissue non-specific and was previously known as
+the liver/bone/kidney isozyme.
+
+Streptomyces' species  involved  in  the  synthesis  of  streptomycin (SM), an
+antibiotic, express  a  phosphatase (EC 3.1.3.39) (gene strK) which is  highly
+related to ALP.   It specifically cleaves  both  streptomycin-6-phosphate and,
+more slowly, streptomycin-3"-phosphate.
+
+A serine is involved   in the catalytic activity of ALP. The region around the
+active site serine is relatively well conserved and can be used as a signature
+pattern.
+
+-Consensus pattern: [IV]-x-D-S-[GAS]-[GASC]-[GAST]-[GA]-T
+                    [S is the active site residue]
+-Sequences known to belong to this class detected by the pattern: ALL.
+-Other sequence(s) detected in SWISS-PROT: 3.
+-Last update: June 1994 / Text revised.
+
+
+references
+    <Bio.Prosite.Prodoc.Reference instance at 007FFC1C>
+    <Bio.Prosite.Prodoc.Reference instance at 007FFCCC>
+    <Bio.Prosite.Prodoc.Reference instance at 007FF99C>
+testing pdoc00144.txt
+PDOC00144
+prosite_refs
+    ('PS00159', 'ALDOLASE_KDPG_KHG_1')
+    ('PS00160', 'ALDOLASE_KDPG_KHG_2')
+*************************************************
+* KDPG and KHG aldolases active site signatures *
+*************************************************
+
+4-hydroxy-2-oxoglutarate aldolase (EC 4.1.3.16)  (KHG-aldolase)  catalyzes the
+interconversion of  4-hydroxy-2-oxoglutarate  into  pyruvate  and  glyoxylate.
+Phospho-2-dehydro-3-deoxygluconate  aldolase   (EC 4.1.2.14)   (KDPG-aldolase)
+catalyzes the interconversion of  6-phospho-2-dehydro-3-deoxy-D-gluconate into
+pyruvate and glyceraldehyde 3-phosphate.
+
+These two enzymes are structurally and functionally related [1]. They are both
+homotrimeric proteins of approximately 220 amino-acid residues. They are class
+I aldolases whose catalytic mechanism involves  the formation of a Schiff-base
+intermediate  between  the  substrate  and the epsilon-amino group of a lysine
+residue. In both enzymes, an arginine is required for catalytic activity.
+
+We developed  two signature patterns for these enzymes. The first one contains
+the active  site  arginine  and the second, the lysine involved in the Schiff-
+base formation.
+
+-Consensus pattern: G-[LIVM]-x(3)-E-[LIV]-T-[LF]-R
+                    [R is the active site residue]
+-Sequences known to belong to this class detected by the pattern: ALL,  except
+ for Bacillus  subtilis  KDPG-aldolase  which  has  Thr  instead of Arg in the
+ active site.
+-Other sequence(s) detected in SWISS-PROT: NONE.
+
+-Consensus pattern: G-x(3)-[LIVMF]-K-[LF]-F-P-[SA]-x(3)-G
+                    [K is involved in Schiff-base formation]
+-Sequences known to belong to this class detected by the pattern: ALL.
+-Other sequence(s) detected in SWISS-PROT: NONE.
+
+-Last update: November 1997 / Patterns and text revised.
+
+
+references
+    <Bio.Prosite.Prodoc.Reference instance at 007FECBC>
+testing pdoc00149.txt
+PDOC00149
+prosite_refs
+    ('PS00165', 'DEHYDRATASE_SER_THR')
+**********************************************************************
+* Serine/threonine dehydratases pyridoxal-phosphate attachment site  *
+**********************************************************************
+
+Serine and threonine  dehydratases [1,2]  are  functionally  and  structurally
+related pyridoxal-phosphate dependent enzymes:
+
+ - L-serine dehydratase (EC 4.2.1.13) and D-serine  dehydratase  (EC 4.2.1.14)
+   catalyze the dehydratation of L-serine (respectively D-serine) into ammonia
+   and pyruvate.
+ - Threonine dehydratase  (EC 4.2.1.16) (TDH) catalyzes  the  dehydratation of
+   threonine into  alpha-ketobutarate  and  ammonia.  In Escherichia coli  and
+   other microorganisms,  two  classes  of  TDH  are  known  to  exist. One is
+   involved in  the  biosynthesis of isoleucine, the other in hydroxamino acid
+   catabolism.
+
+Threonine synthase  (EC 4.2.99.2) is  also  a pyridoxal-phosphate  enzyme,  it
+catalyzes the  transformation of  homoserine-phosphate into threonine.  It has
+been shown [3] that  threonine  synthase  is  distantly related to the serine/
+threonine dehydratases.
+
+In all these enzymes, the pyridoxal-phosphate group is  attached  to a  lysine
+residue.  The sequence around  this residue is sufficiently conserved to allow
+the derivation  of  a  pattern  specific  to serine/threonine dehydratases and
+threonine synthases.
+
+-Consensus pattern: [DESH]-x(4,5)-[STVG]-x-[AS]-[FYI]-K-[DLIFSA]-[RVMF]-[GA]-
+                    [LIVMGA]
+                    [The K is the pyridoxal-P attachment site]
+-Sequences known to belong to this class detected by the pattern: ALL.
+-Other sequence(s) detected in SWISS-PROT: 12.
+
+-Note: some   bacterial L-serine dehydratases - such as those from Escherichia
+ coli - are iron-sulfur proteins [4] and do not belong to this family.
+
+-Last update: November 1995 / Pattern and text revised.
+
+
+references
+    <Bio.Prosite.Prodoc.Reference instance at 007FEB9C>
+    <Bio.Prosite.Prodoc.Reference instance at 007FD3EC>
+    <Bio.Prosite.Prodoc.Reference instance at 007FD4FC>
+    <Bio.Prosite.Prodoc.Reference instance at 007FD36C>
+testing pdoc00340.txt
+PDOC00340
+prosite_refs
+    ('PS00406', 'ACTINS_1')
+    ('PS00432', 'ACTINS_2')
+    ('PS01132', 'ACTINS_ACT_LIKE')
+*********************
+* Actins signatures *
+*********************
+
+Actins [1 to 4] are highly conserved contractile  proteins that are present in
+all eukaryotic cells. In vertebrates there are three groups of actin isoforms:
+alpha, beta and gamma.  The alpha actins are found in muscle tissues and are a
+major constituent of the contractile apparatus.  The beta and gamma actins co-
+exists in most cell  types as  components of the cytoskeleton and as mediators
+of internal cell motility.  In plants [5]  there  are  many isoforms which are
+probably involved  in  a  variety of  functions such as cytoplasmic streaming,
+cell shape determination,  tip growth,  graviperception, cell wall deposition,
+etc.
+
+Actin exists either in a monomeric form (G-actin) or in a polymerized form (F-
+actin). Each actin monomer  can  bind a molecule of ATP;  when  polymerization
+occurs, the ATP is hydrolyzed.
+
+Actin is a protein of from 374 to 379 amino acid  residues.  The  structure of
+actin has been highly conserved in the course of evolution.
+
+Recently some  divergent  actin-like  proteins have been identified in several
+species. These proteins are:
+
+ - Centractin  (actin-RPV)  from mammals, fungi (yeast ACT5, Neurospora crassa
+   ro-4) and  Pneumocystis  carinii  (actin-II).  Centractin  seems  to  be  a
+   component of  a  multi-subunit  centrosomal complex involved in microtubule
+   based vesicle motility. This subfamily is also known as ARP1.
+ - ARP2  subfamily  which  includes  chicken ACTL, yeast ACT2, Drosophila 14D,
+   C.elegans actC.
+ - ARP3  subfamily  which includes actin 2 from mammals, Drosophila 66B, yeast
+   ACT4 and fission yeast act2.
+ - ARP4  subfamily  which includes yeast ACT3 and Drosophila 13E.
+
+We developed  three  signature  patterns. The first two are specific to actins
+and span  positions  54 to 64 and 357 to 365. The last signature picks up both
+actins and  the actin-like proteins and corresponds to positions 106 to 118 in
+actins.
+
+-Consensus pattern: [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
+-Sequences known to belong to this class detected by the pattern: ALL,  except
+ for the actin-like proteins and 10 actins.
+-Other sequence(s) detected in SWISS-PROT: NONE.
+
+-Consensus pattern: W-[IV]-[STA]-[RK]-x-[DE]-Y-[DNE]-[DE]
+-Sequences known to belong to this class detected by the pattern: ALL,  except
+ for the actin-like proteins and 9 actins.
+-Other sequence(s) detected in SWISS-PROT: NONE.
+
+-Consensus pattern: [LM]-[LIVM]-T-E-[GAPQ]-x-[LIVMFYWHQ]-N-[PSTAQ]-x(2)-N-[KR]
+-Sequences known to belong to this class detected by the pattern: ALL,  except
+ for 5 actins.
+-Other sequence(s) detected in SWISS-PROT: NONE.
+
+-Last update: November 1997 / Text revised.
+
+
+references
+    <Bio.Prosite.Prodoc.Reference instance at 007FE78C>
+    <Bio.Prosite.Prodoc.Reference instance at 007FEEAC>
+    <Bio.Prosite.Prodoc.Reference instance at 007FE5BC>
+    <Bio.Prosite.Prodoc.Reference instance at 007FE44C>
+    <Bio.Prosite.Prodoc.Reference instance at 007FE32C>
+testing pdoc00424.txt
+PDOC00424
+prosite_refs
+    ('PS00488', 'PAL_HISTIDASE')
+**********************************************************
+* Phenylalanine and histidine ammonia-lyases active site *
+**********************************************************
+
+Phenylalanine ammonia-lyase (EC 4.3.1.5) (PAL) is  a  key  enzyme of plant and
+fungi  phenylpropanoid  metabolism  which is involved in the biosynthesis of a
+wide  variety  of secondary metabolites such  as  flavanoids,   furanocoumarin
+phytoalexins and  cell  wall  components.  These compounds have many important
+roles in plants during normal growth and in responses to environmental stress.
+PAL catalyzes  the  removal  of  an  ammonia  group from phenylalanine to form
+trans-cinnamate.
+
+Histidine ammonia-lyase (EC 4.3.1.3) (histidase)  catalyzes  the first step in
+histidine degradation, the removal of  an  ammonia  group  from  histidine  to
+produce urocanic acid.
+
+The two types of enzymes are functionally and  structurally related [1].  They
+are the only enzymes  which are known to have the modified amino acid dehydro-
+alanine (DHA) in their active site. A serine residue has been shown [2,3,4] to
+be the  precursor  of  this  essential electrophilic moiety. The region around
+this active  site  residue  is  well  conserved and can be used as a signature
+pattern.
+
+-Consensus pattern: G-[STG]-[LIVM]-[STG]-[AC]-S-G-[DH]-L-x-P-L-[SA]-x(2)-[SA]
+                    [S is the active site residue]
+-Sequences known to belong to this class detected by the pattern: ALL.
+-Other sequence(s) detected in SWISS-PROT: NONE.
+-Last update: November 1995 / Pattern and text revised.
+
+
+references
+    <Bio.Prosite.Prodoc.Reference instance at 007FEE3C>
+    <Bio.Prosite.Prodoc.Reference instance at 007FD4BC>
+    <Bio.Prosite.Prodoc.Reference instance at 007FE98C>
+    <Bio.Prosite.Prodoc.Reference instance at 007FE95C>
+testing pdoc00472.txt
+PDOC00472
+prosite_refs
+    ('PS00546', 'CYSTEINE_SWITCH')
+*****************************
+* Matrixins cysteine switch *
+*****************************
+
+Mammalian extracellular matrix metalloproteinases (EC 3.4.24.-), also known as
+matrixins [1] (see <PDOC00129>), are zinc-dependent enzymes. They are secreted
+by cells  in an inactive form (zymogen) that differs from the mature enzyme by
+the presence  of  an  N-terminal propeptide. A highly conserved octapeptide is
+found two  residues  downstream  of the C-terminal end of the propeptide. This
+region has been shown to be  involved  in  autoinhibition  of matrixins [2,3];
+a cysteine  within the octapeptide chelates  the  active  site  zinc ion, thus
+inhibiting the  enzyme.  This  region has been called the 'cysteine switch' or
+'autoinhibitor region'.
+
+A cysteine switch has been found in the following zinc proteases:
+
+ - MMP-1 (EC 3.4.24.7) (interstitial collagenase).
+ - MMP-2 (EC 3.4.24.24) (72 Kd gelatinase).
+ - MMP-3 (EC 3.4.24.17) (stromelysin-1).
+ - MMP-7 (EC 3.4.24.23) (matrilysin).
+ - MMP-8 (EC 3.4.24.34) (neutrophil collagenase).
+ - MMP-9 (EC 3.4.24.35) (92 Kd gelatinase).
+ - MMP-10 (EC 3.4.24.22) (stromelysin-2).
+ - MMP-11 (EC 3.4.24.-) (stromelysin-3).
+ - MMP-12 (EC 3.4.24.65) (macrophage metalloelastase).
+ - MMP-13 (EC 3.4.24.-) (collagenase 3).
+ - MMP-14 (EC 3.4.24.-) (membrane-type matrix metalliproteinase 1).
+ - MMP-15 (EC 3.4.24.-) (membrane-type matrix metalliproteinase 2).
+ - MMP-16 (EC 3.4.24.-) (membrane-type matrix metalliproteinase 3).
+ - Sea urchin hatching enzyme (EC 3.4.24.12) (envelysin) [4].
+ - Chlamydomonas reinhardtii gamete lytic enzyme (GLE) [5].
+
+-Consensus pattern: P-R-C-[GN]-x-P-[DR]-[LIVSAPKQ]
+                    [C chelates the zinc ion]
+-Sequences known to belong to this class detected by the pattern: ALL,  except
+ for cat MMP-7 and mouse MMP-11.
+-Other sequence(s) detected in SWISS-PROT: NONE.
+-Last update: November 1997 / Pattern and text revised.
+
+
+references
+    <Bio.Prosite.Prodoc.Reference instance at 007FEF4C>
+    <Bio.Prosite.Prodoc.Reference instance at 007FEFAC>
+    <Bio.Prosite.Prodoc.Reference instance at 007FEF7C>
+    <Bio.Prosite.Prodoc.Reference instance at 007FEE7C>
+    <Bio.Prosite.Prodoc.Reference instance at 007FE35C>
+testing pdoc00640.txt
+PDOC00640
+prosite_refs
+    ('PS00812', 'GLYCOSYL_HYDROL_F8')
+******************************************
+* Glycosyl hydrolases family 8 signature *
+******************************************
+
+The microbial degradation  of cellulose and  xylans requires  several types of
+enzymes such as endoglucanases (EC 3.2.1.4),  cellobiohydrolases (EC 3.2.1.91)
+(exoglucanases), or xylanases (EC 3.2.1.8) [1,2].  Fungi and bacteria produces
+a spectrum of cellulolytic  enzymes (cellulases)  and  xylanases which, on the
+basis of sequence similarities,  can be classified into families. One of these
+families is known as the cellulase family D [3] or as  the glycosyl hydrolases
+family 8  [4,E1].  The  enzymes  which  are  currently known to belong to this
+family are listed below.
+
+ - Acetobacter xylinum endonuclease cmcAX.
+ - Bacillus strain KSM-330 acidic endonuclease K (Endo-K).
+ - Cellulomonas josui endoglucanase 2 (celB).
+ - Cellulomonas uda endoglucanase.
+ - Clostridium cellulolyticum endoglucanases C (celcCC).
+ - Clostridium thermocellum endoglucanases A (celA).
+ - Erwinia chrysanthemi minor endoglucanase y (celY).
+ - Bacillus circulans beta-glucanase (EC 3.2.1.73).
+ - Escherichia coli hypothetical protein yhjM.
+
+The most conserved region in  these enzymes is  a stretch of about 20 residues
+that contains  two conserved aspartate. The first asparatate is thought [5] to
+act as the nucleophile in the catalytic mechanism. We have used this region as
+a signature pattern.
+
+-Consensus pattern: A-[ST]-D-[AG]-D-x(2)-[IM]-A-x-[SA]-[LIVM]-[LIVMG]-x-A-
+                    x(3)-[FW]
+                    [The first D is an active site residue]
+-Sequences known to belong to this class detected by the pattern: ALL.
+-Other sequence(s) detected in SWISS-PROT: NONE.
+
+-Expert(s) to contact by email:
+                   Henrissat B.; bernie@afmb.cnrs-mrs.fr
+
+-Last update: November 1997 / Text revised.
+
+
+references
+    <Bio.Prosite.Prodoc.Reference instance at 007FE18C>
+    <Bio.Prosite.Prodoc.Reference instance at 007FE93C>
+    <Bio.Prosite.Prodoc.Reference instance at 007FEA9C>
+    <Bio.Prosite.Prodoc.Reference instance at 007FE9EC>
+    <Bio.Prosite.Prodoc.Reference instance at 007FD1FC>
+    <Bio.Prosite.Prodoc.Reference instance at 007FFFDC>
+testing pdoc00787.txt
+PDOC00787
+prosite_refs
+    ('PS01027', 'GLYCOSYL_HYDROL_F39')
+******************************************************
+* Glycosyl hydrolases family 39 putative active site *
+******************************************************
+
+It has  been  shown  [1,E1]  that  the  following  glycosyl  hydrolases can be
+classified into a single family on the basis of sequence similarities:
+
+ - Mammalian lysosomal alpha-L-iduronidase (EC 3.2.1.76).
+ - Caldocellum  saccharolyticum  and  Thermoanaerobacter saccharolyticum beta-
+   xylosidase (EC 3.2.1.37) (gene xynB).
+
+The best  conserved  regions  in  these  enzymes is  located in the N-terminal
+section. It   contains  a  glutamic  acid  residue  which,  on  the  basis  of
+similarities with other  families of glycosyl hydrolases [2], probably acts as
+the proton donor in the catalytic mechanism. We use this region as a signature
+pattern.
+
+-Consensus pattern: W-x-F-E-x-W-N-E-P-[DN]
+                    [The second E is the putative active site residue]
+-Sequences known to belong to this class detected by the pattern: ALL.
+-Other sequence(s) detected in SWISS-PROT: NONE.
+
+-Expert(s) to contact by email:
+                   Henrissat B.; bernie@afmb.cnrs-mrs.fr
+
+-Last update: November 1997 / Text revised.
+
+
+references
+    <Bio.Prosite.Prodoc.Reference instance at 007FE82C>
+    <Bio.Prosite.Prodoc.Reference instance at 007FE4CC>
+    <Bio.Prosite.Prodoc.Reference instance at 007FEFDC>
+testing pdoc00933.txt
+PDOC00933
+prosite_refs
+    ('PS01213', 'GLOBIN_FAM_2')
+**********************************************
+* Protozoan/cyanobacterial globins signature *
+**********************************************
+
+Globins are heme-containing  proteins involved in  binding and/or transporting
+oxygen [1]. Almost all globins belong to a large family (see <PDOC00793>), the
+only exceptions  are  the  following proteins which form a family of their own
+[2,3]:
+
+ - Monomeric  hemoglobins  from the protozoan Paramecium caudatum, Tetrahymena
+   pyriformis and Tetrahymena thermophila.
+ - Cyanoglobin from the cyanobacteria Nostoc commune.
+ - Globins  LI637  and  LI410  from  the chloroplast of the alga Chlamydomonas
+   eugametos.
+ - Mycobacterium tuberculosis hypothetical protein MtCY48.23.
+
+These proteins  contain a conserved histidine which could be involved in heme-
+binding. As a signature pattern, we use a conserved region that ends with this
+residue.
+
+-Consensus pattern: F-[LF]-x(5)-G-[PA]-x(4)-G-[KRA]-x-[LIVM]-x(3)-H
+-Sequences known to belong to this class detected by the pattern: ALL.
+-Other sequence(s) detected in SWISS-PROT: NONE.
+-Last update: November 1997 / First entry.
+
+
+references
+    <Bio.Prosite.Prodoc.Reference instance at 007FE1DC>
+    <Bio.Prosite.Prodoc.Reference instance at 007FE85C>
+    <Bio.Prosite.Prodoc.Reference instance at 007FE88C>
