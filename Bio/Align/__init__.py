@@ -3,5 +3,8 @@
 __all__ = [
     'AlignInfo',
     'FormatConvert',
-    'Generic'
+    'Generic',
+    'fastpairwise',
+    'pairwise',
+    'support'
     ]
