@@ -51,7 +51,7 @@ class BioSQLAdapterDictionary:
         elif type(key) == type(""):
             for fetch_type in ["display_id", "accession"]:
                 try: # do the actual lookups
-                    return apply(self.sql_db.lookup, (), {fetch_type : key})
+                    return self.sql_db.lookup( *(), **{fetch_type : key})
                 except IndexError:
                     pass
             # if we got here we didn't fetch it

@@ -140,8 +140,8 @@ class IteratorRecords:
         return self.iterateFile(StringIO(s), cont_handler)
 
     def iterateFile(self, fileobj, cont_handler = None):
-        record_reader = apply(self.make_reader,
-                              (fileobj,) + self.reader_args)
+        record_reader = self.make_reader(
+                              *(fileobj,) + self.reader_args)
         return Iterate(self,
                        RecordEventStream(record_reader, self.record_parser),
                        self.marker_tag, cont_handler)
@@ -222,9 +222,9 @@ class HeaderFooterEventStream:
         assert self._reader is None
         if self.header_parser is None:
             return None
-        reader = apply(self.make_header_reader,
-                       (self.fileobj,) + self.header_args,
-                       {"lookahead": self._lookahead})
+        reader = self.make_header_reader(
+                       *(self.fileobj,) + self.header_args,
+                       **{"lookahead": self._lookahead})
         text, errors = _get_next_text(reader)
         self.fileobj, self._lookahead = reader.remainder()
         if text is None:
@@ -238,9 +238,9 @@ class HeaderFooterEventStream:
     def _record_next(self):
         if self._reader is None:
             assert self.record_parser is not None
-            reader = apply(self.make_record_reader,
-                           (self.fileobj,) + self.record_args,
-                           {"lookahead": self._lookahead})
+            reader = self.make_record_reader(
+                           *(self.fileobj,) + self.record_args,
+                           **{"lookahead": self._lookahead})
             self._lookahead = None
             self._reader = reader
         else:
@@ -274,9 +274,9 @@ class HeaderFooterEventStream:
         assert self._reader is None
         if self.footer_parser is None:
             return None
-        reader = apply(self.make_footer_reader,
-                       (self.fileobj,) + self.footer_args,
-                       {"lookahead": self._lookahead})
+        reader = self.make_footer_reader(
+                       *(self.fileobj,) + self.footer_args,
+                       **{"lookahead": self._lookahead})
         text, errors = _get_next_text(reader)
         self.fileobj, self._lookahead = reader.remainder()
         if text is None:
@@ -402,7 +402,7 @@ class Iterate:
                             exc += self.parent.start_position
                         raise args[0]
                     else:
-                        apply(getattr(cont_handler, name), args)
+                        getattr(cont_handler, name)(*args)
                         if name == "endElement" and args[0] == self.tag:
                             self.parent.end_position = self.current_position
                             del self.events[:i+1]

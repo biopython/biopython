@@ -92,7 +92,7 @@ else:
         def __init__(self, func):
             self._func = func
         def __call__(self, *args, **kwargs):
-            return apply(self._func, args, kwargs)
+            return self._func( *args, **kwargs)
 
     def _settag(f, tag):
         _check_name(f, tag)

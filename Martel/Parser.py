@@ -421,7 +421,7 @@ class RecordParser(xmlreader.XMLReader):
         self._cont_handler.startDocument()
         
         try:
-            reader = apply(self.make_reader, (fileobj,) + self.reader_args)
+            reader = self.make_reader( *(fileobj,) + self.reader_args)
         except (KeyboardInterrupt, SystemExit):
             raise
         except:
@@ -562,8 +562,8 @@ class HeaderFooterParser(xmlreader.XMLReader):
         lookahead = ""
         if self.make_header_reader is not None:
             try:
-                header_reader = apply(self.make_header_reader,
-                                      (fileobj,) + self.header_reader_args)
+                header_reader = self.make_header_reader(
+                                     *(fileobj,) + self.header_reader_args)
                 header = header_reader.next()
             except (KeyboardInterrupt, SystemExit):
                 raise
@@ -611,8 +611,8 @@ class HeaderFooterParser(xmlreader.XMLReader):
         if self.make_footer_reader is None:
             # Only records - no footer
             try:
-                reader = apply(self.make_reader, (fileobj,) + self.reader_args,
-                               {"lookahead": lookahead})
+                reader = self.make_reader( *(fileobj,) + self.reader_args,
+                             **{"lookahead": lookahead})
             except (KeyboardInterrupt, SystemExit):
                 raise
             except:
@@ -671,8 +671,8 @@ class HeaderFooterParser(xmlreader.XMLReader):
         # skip the record and try again
         record_exc = None
         try:
-            reader = apply(self.make_reader, (fileobj,) + self.reader_args,
-                           {"lookahead": lookahead})
+            reader = self.make_reader( *(fileobj,) + self.reader_args,
+                         **{"lookahead": lookahead})
         except (KeyboardInterrupt, SystemExit):
             raise
         except:
@@ -721,9 +721,9 @@ class HeaderFooterParser(xmlreader.XMLReader):
                 try:
                     footer = ""
                     x, lookahead = reader.remainder()
-                    footer_reader = apply(self.make_footer_reader,
-                                          (fileobj,) + self.footer_reader_args,
-                                          {"lookahead": record + lookahead})
+                    footer_reader = self.make_footer_reader(
+                                         *(fileobj,) + self.footer_reader_args,
+                                        **{"lookahead": record + lookahead})
                     footer = footer_reader.next()
                 except (KeyboardInterrupt, SystemExit):
                     raise
@@ -736,9 +736,9 @@ class HeaderFooterParser(xmlreader.XMLReader):
                     # But that means I need to reset the record reader(!)
                     x, lookahead = footer_reader.remainder()
                     try:
-                        reader = apply(self.make_reader,
-                                       (fileobj,) + self.reader_args,
-                                       {"lookahead": footer + lookahead})
+                        reader = self.make_reader(
+                                      *(fileobj,) + self.reader_args,
+                                     **{"lookahead": footer + lookahead})
                     except (KeyboardInterrupt, SystemExit):
                         raise
                     except:
@@ -777,9 +777,9 @@ class HeaderFooterParser(xmlreader.XMLReader):
                     # Wasn't a footer, so reset the reader stream and skip
                     # past the record which I know I can read.
                     x, remainder = footer_reader.remainder()
-                    reader = apply(self.make_reader,
-                                   (fileobj, ) + self.reader_args,
-                                   {"lookahead": footer + remainder})
+                    reader = self.make_reader(
+                                  *(fileobj, ) + self.reader_args,
+                                 **{"lookahead": footer + remainder})
                     record = reader.next()
                     self._err_handler.error(record_exc)
                     record_exc = None
@@ -790,9 +790,9 @@ class HeaderFooterParser(xmlreader.XMLReader):
         # trailer
         x, remainder = reader.remainder()
         try:
-            footer_reader = apply(self.make_footer_reader,
-                                  (fileobj,) + self.footer_reader_args,
-                                  {"lookahead": remainder})
+            footer_reader = self.make_footer_reader(
+                                 *(fileobj,) + self.footer_reader_args,
+                                **{"lookahead": remainder})
             footer = footer_reader.next()
         except (KeyboardInterrupt, SystemExit):
             raise

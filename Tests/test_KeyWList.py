@@ -16,7 +16,7 @@ tests = ['kw001', 'kw002']
 
 class MyConsumer(ParserSupport.TaggingConsumer):
     def __init__(self, *args, **keywds):
-        apply(ParserSupport.TaggingConsumer.__init__, (self,) + args, keywds)
+        ParserSupport.TaggingConsumer.__init__( *(self,) + args, **keywds)
         self._keywd = 0
 
     # Only print the first keyword, so I don't generate a bunch of

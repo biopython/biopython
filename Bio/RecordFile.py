@@ -72,7 +72,7 @@ class RecordFile:
 
 
     def close(self, *args, **keywds ):
-        return apply(self._handle.close, args, keywds)
+        return self._handle.close( *args, **keywds)
 
     def read( self, *args, **keywds ):
         line = ''

@@ -219,7 +219,7 @@ def convert_list(group_names, terms):
             raise AssertionError, "Do not understand sre expression %s" % \
                   repr(name)
                   
-        results.append( apply(func, (group_names,) + term) )
+        results.append( func(*(group_names,) + term) )
     if len(results) == 1:
         return results[0]
     return Expression.Seq(tuple(results))

@@ -53,15 +53,15 @@ class SGMLExtractorHandle:
         self._stripper = SGMLExtractor( tags_of_interest )
 
     def read(self, *args, **keywds):
-        data = apply(self._handle.read, args, keywds)
+        data = self._handle.read( *args, **keywds)
         return self._stripper.strip(data)
 
     def readline(self, *args, **keywds):
-        line = apply(self._handle.readline, args, keywds)
+        line = self._handle.readline( *args, **keywds)
         return self._stripper.strip(line)
 
     def readlines(self, *args, **keywds):
-        lines = apply(self._handle.readlines, args, keywds)
+        lines = self._handle.readlines( *args, **keywds)
         for i in range(len(lines)):
             lines[i] = self._stripper.strip(str)
         return lines

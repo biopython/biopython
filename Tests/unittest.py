@@ -46,7 +46,7 @@ SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
 
 __author__ = "Steve Purcell"
 __email__ = "stephen_purcell at yahoo dot com"
-__version__ = "$Revision: 1.2 $"[11:-2]
+__version__ = "$Revision: 1.3 $"[11:-2]
 
 import time
 import sys
@@ -257,7 +257,7 @@ class TestCase:
            unexpected exception.
         """
         try:
-            apply(callableObj, args, kwargs)
+            callableObj( *args, **kwargs)
         except excClass:
             return
         else:
@@ -509,7 +509,7 @@ class _WritelnDecorator:
         return getattr(self.stream,attr)
 
     def writeln(self, *args):
-        if args: apply(self.write, args)
+        if args: self.write(*args)
         self.write('\n') # text-mode streams translate to \r\n if needed
 
 
@@ -574,7 +574,7 @@ class _TextTestResult(TestResult):
             self.stream.writeln(self.separator1)
             self.stream.writeln("%s: %s" % (flavour,self.getDescription(test)))
             self.stream.writeln(self.separator2)
-            for line in apply(traceback.format_exception, err):
+            for line in traceback.format_exception(*err):
                 for l in string.split(line,"\n")[:-1]:
                     self.stream.writeln("%s" % l)
 

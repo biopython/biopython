@@ -322,7 +322,7 @@ class PrositeMatch:
             result.append( Seq.Seq(g, alphabet) )
         return tuple(result)
     def group(self, *groups):
-        result = apply(self.match.group, groups)
+        result = self.match.group(*groups)
         if result == ():
             return result
         if len(result) == 1:

@@ -300,7 +300,7 @@ def apply_on_multi_fasta(file, function, *args):
       if not record: break
       arguments = [record.sequence]
       for arg in args: arguments.append(arg)
-      result = apply(f, arguments)
+      result = f(*arguments)
       if result:
          results.append('>%s\n%s' % (record.title, result))
    return results
@@ -317,7 +317,7 @@ def quicker_apply_on_multi_fasta(file, function, *args):
    for name, seq in entries:
       arguments = [seq]
       for arg in args: arguments.append(arg)
-      result = apply(f, arguments)
+      result = f(*arguments)
       if result:
          results.append('>%s\n%s' % (record.title, result))
    return results

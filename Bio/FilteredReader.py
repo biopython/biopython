@@ -86,7 +86,7 @@ class FilteredReader:
 
 
     def close(self, *args, **keywds ):
-        return apply(self._handle.close, args, keywds)
+        return self._handle.close( *args, **keywds)
 
     def read( self, *args, **keywds ):
         line = ''
@@ -148,7 +148,7 @@ class FilteredReader:
         filtered_text = ''
         for line in lines:
             for filter in filter_chain:
-                line = apply( filter, ( line, ) )
+                line = filter( *( line, ) )
             filtered_text = filtered_text + line
 
         return filtered_text

@@ -239,7 +239,7 @@ class ElementNode:
 		self._children.insert(index, obj)
 
 	def add(self, klass, **kwargs):
-		obj = apply(klass, (), kwargs)
+		obj = klass( *(), **kwargs)
 		self.append(obj)
 		return obj
 
@@ -755,7 +755,7 @@ class ObjectParserHandler:
 		def fixatts(t):
 			attr[str(t[0])] = unescape(str(t[1]))
 		map(fixatts, atts.items())
-		obj = apply (klass, (), attr)
+		obj = klass( *(), **attr)
 		obj.set_level(len(self.stack))
 		self.stack.append(obj)
 
@@ -1108,7 +1108,7 @@ def _construct_node(name, modules):
 			for att in attribs:                  # dict elememnts are name and vaue
 				name, val = att.split("=")
 				attdict[name[1:]] = val[1:-1]
-		return apply(nc, (), attdict)
+		return nc( *(), **attdict)
 
 
 

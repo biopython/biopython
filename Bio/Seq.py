@@ -160,7 +160,7 @@ class MutableSeq:
         self.data.reverse()
 
     ## Sorting a sequence makes no sense.
-    # def sort(self, *args): apply(self.data.sort, args)
+    # def sort(self, *args): self.data.sort(*args)
     
     def extend(self, other):
         if isinstance(other, MutableSeq):

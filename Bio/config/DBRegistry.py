@@ -377,13 +377,13 @@ class BioSQLDB(DBObject):
                      "driver" : db_driver}
         if self.db_port:
             open_args["port"] = self.db_port
-        server = apply(BioSeqDatabase.open_database, (), open_args)
+        server = BioSeqDatabase.open_database( *(), **open_args)
         db = server[self.namespace_db]
         # try our different id choices to test the query
         item = None
         for possible_id_type in ["accession", "display_id"]:
             try:
-                item = apply(db.lookup, (), {possible_id_type : find_id})
+                item = db.lookup( *(), **{possible_id_type : find_id})
             except IndexError:
                 pass
         if item is None:
@@ -527,7 +527,7 @@ class IndexedFileDB(DBObject):
         namespace, key = key
         names_to_check = self._get_check_names(namespace, self.db)
         for check_name in names_to_check:
-            location = apply(self.db.lookup, (), {check_name : key})
+            location = self.db.lookup( *(), **{check_name : key})
             if len(location) >= 1:
                 break
         assert len(location) == 1, "Got multiple hits: %s" % location
