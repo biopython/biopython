@@ -3,7 +3,6 @@ from xml.sax import saxutils
 import StringIO
 
 import ReseekFile
-from Martel import Dispatch
 from Bio.config.FormatRegistry import FormatObject
 
 class FormatIOIterator:
@@ -137,6 +136,7 @@ class FormatIO:
         infile = infile or sys.stdin
         outfile = outfile or sys.stdout
         
+        from Martel import Dispatch
         if input_format is None:
             input_format = self.default_input_format
         input_format = self.registery.normalize(input_format)
