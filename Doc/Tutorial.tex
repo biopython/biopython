@@ -9,7 +9,10 @@
 \title{Biopython
 Tutorial and Cookbook}
 \author{Jeff Chang and Brad Chapman}
-\date{Last Update--4 August 00}
+\date{Last Update--10 September 00}
+
+\maketitle
+\tableofcontents
 
 \section{Introduction}
 
@@ -62,7 +65,7 @@ First, we'll just do a quick test to make sure python. The most important thing 
 
 \begin{verbatim}
 
-[chapmanb@taxus chapmanb]$ python
+[chapmanb@taxus chapmanb]# python
 Python 1.6a2 (#1, Jul 31 2000, 09:04:26)  [GCC 2.95.2 19991024 (release/franzo)] on linux2
 Copyright 1991-1995 Stichting Mathematisch Centrum, Amsterdam
 >>> from Bio.Seq import Seq
@@ -75,7 +78,7 @@ Seq('GA', Alphabet())
 If this worked properly, then it looks like Biopython is in a happy place where python can find it, so now you might want to do some more rigorous tests. The \verb|Tests| directory inside the distribution contains a number of tests you can run to make sure all of the different parts of biopython are working. These should all work just by running \verb|python test_WhateverTheTestIs.py|. You can also do a run of all of the tests py typing \verb|python br_regrtest.py| in the Tests directory:
 
 \begin{verbatim}
-[chapmanb@taxus Tests]$ python br_regrtest.py
+[chapmanb@taxus Tests]# python br_regrtest.py
 test_Enzyme
 test_Fasta
 test_Fasta2
@@ -352,6 +355,266 @@ Now it's time to understand our parser framework, and also start looking at our 
 
 Now, let's try and use a parser to summarize the type of information we got. To take a simple example, why don't we go through and grab all of the organism names mentioned, to see how many different species of lady slipper orchids are represented in this data.
 
+
+To do this kind of useful work, we need to do get our hands dirty and write the solution to all of our problems -- a consumer. This is what our consumer implementation to extract the organisms will look like:
+
+\begin{verbatim}
+import string
+from Bio.ParserSupport import AbstractConsumer
+
+class SpeciesExtractor(AbstractConsumer):
+
+    def __init__(self):
+        self.species_list = []
+
+    def title(self, title_info):
+        title_atoms = string.split(title_info)
+        new_species = title_atoms[1]
+
+        if new_species not in self.species_list:
+            self.species_list.append(new_species)
+\end{verbatim}
+
+The first thing we do is import the base class which Consumers should derive from, \verb|AbstractConsumer|. This base class does nice things for us like take care of all the sections we aren't interested in. Then we create our personal consumer class by deriving from this base AbstractConsumer class.
+
+
+Just like any other python class, we define a \verb|__init__| function that will be called when a new instance of the class is created. In the initialization we set a \verb|species_list| class attribute. This will store the species information as the file is parsed, and will allow us to extract this information later on.
+
+
+Now we come to the function that is really nifty, the \verb|title| function. This function will be called by the Scanner everytime a 'title' event is generated. So, when the Scanner comes to the first line in our example FASTA file:
+
+\begin{verbatim}
+>gi|2765658|emb|Z78533.1|CIZ78533 C.irapeanum 5.8S rRNA gene and ITS1 and ITS2 DNA
+\end{verbatim}
+
+It will recognize this as a title, and call the \verb|title| function with the \verb|title_info| argument set as the value of the title.
+
+
+Now that we've captured the title, we want to extract the information from it we are interested in. Looking at the FASTA title info, we notice that the second item in the info string is the organism name. To get this out we can just use the builtin python function \verb|string.split| to split the string at every space, creating the list \verb|title_atoms|. Since the second element of this list is the species name, we then grab this out of the list. Then we simply check to see if the species is already in our current list of organisms, and if not, we add it.
+
+
+Okay, well that was easy enough -- so now we need to call the Scanner and actual do this work. To do this, we write a little function:
+
+\begin{verbatim}
+
+from Bio.Fasta import Fasta
+
+def extract_organisms(file, num_records):
+    scanner = Fasta._Scanner()
+    consumer = SpeciesExtractor()
+
+    file_to_parse = open(file, 'r')
+
+    for fasta_record in range(num_records):
+        scanner.feed(file_to_parse, consumer)
+
+    file_to_parse.close()
+
+    return handler.species_list
+
+\end{verbatim}
+
+Let's walk though the function step by step. First, we import the Fasta parser from the Biopython library, then we proceed to define our function. It takes two arguments, the FASTA formatted file to parse, and the number of records in the file. It then creates a Scanner for scanning through FASTA files, and a SpeciesExtractor consumer which will get all of the organisms, as we described above.
+
+We then open our file to parse and get it ready to go. All of the Biopython parsers take file handles as inputs. This means that you can pass them any kind of ``file-like'' object. For instance, the \verb|url| library allows to you work with a document on a remote URL as if it was a local file, so you could use this to pass the parser a document somewhere on the net.
+
+
+Now that we've got the open file, it's time to parse it. The way the parser works is that you call \verb|feed| for every item in the file you want to parse, passing it the file-like object to parse, and the consumer to call back to. So we loop through all records in the file, and scan them, relying on the consumer to deal with the files as appropriate. Finally, once that is all done, we get the \verb|species_list| attribute of the consumer class, containing all of the information extracted and return that.
+
+
+Whew, with all of that work out of the way, parsing the file will be really easy:
+
+\begin{verbatim}
+all_species = extract_organisms("ls_orchid.fasta", 94)
+print "number of species:", len(all_species)
+print 'species names:', all_species
+\end{verbatim}
+
+Running this all as one big program (the program is available as \verb|fasta_consumer.py| in the \verb|Doc/examples| directory) give us the information we desire:
+
+\begin{verbatim}
+[chapmanb@taxus examples]# python fasta_consumer.py
+number of species: 92
+species names: ['C.irapeanum', 'C.californicum', 'C.fasciculatum', 
+'C.margaritaceum', 'C.lichiangense', 'C.yatabeanum', 'C.guttatum',
+...
+\end{verbatim}
+
+\subsubsection{Making it easier}
+
+The last section explained all of the nitty gritty of writing a specialized consumer. The flexibility of being able to write your own consumer is very nice, however for many applications it can be overkill. For a simple application, the nice Biopython folks have provided some useful classes that act more like full parsers. So, for quick and dirty applications, these are what you want to look at. 
+
+
+One big problem with the parser we used above was that we were required to know the number of elements in the file. This can be pretty impractical for a lot of applications when you just want to parse through a file and look for something. To help deal with this problem, we can use the \verb|Iterator| interface for FASTA files. This interface allows you to not worry about consumers and scanners and all of that jazz, and just march through a file one record at a time. However, doing this requires that the Iterator return some kind of object that you can manipulate to extract the info you want.
+
+
+To deal with this problem, a very useful class was written into many of the Biopython parsers -- a \verb|RecordParser|, which parses a file into a python class that represents it. For instance, for FASTA files, the Record class is just an object with \verb|title| and \verb|sequence| attributes. 
+
+
+Let's make all of this talk more concrete by using the Iterator and Record interefaces to do what we did before -- extract a unique list of all species in our FASTA file. First we need to set up our parser and iterator:
+
+\begin{verbatim}
+>>> from Bio.Fasta import Fasta
+>>> parser = Fasta.RecordParser()
+>>> file = open("ls_orchid.fasta")
+>>> iterator = Fasta.Iterator(file, parser)
+\end{verbatim}
+
+First we create our parser -- a RecordParser that parses a FASTA entry into the Record class representing it. Then we open the file, and create an iterator, and we are ready to start parsing.
+
+
+Like most iterator interfaces, we retrieve the objects by calling \verb|next()|. When there are no sequences left to parse, \verb|next()| will return \verb|None|, so we know that it is time to stop. To get our first record:
+
+\begin{verbatim}
+>>> cur_record = iterator.next()
+\end{verbatim}
+
+Let's take a look at the record object. It has sequence and title attributes that we can easily get at:
+
+\begin{verbatim}
+>>> dir(cur_record)
+['_colwidth', 'sequence', 'title']
+>>> print cur_record.title
+gi|2765658|emb|Z78533.1|CIZ78533 C.irapeanum 5.8S rRNA gene and ITS1 and ITS2 DN>>> print cur_record.sequence
+CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGGAATAAACGATCGAGTGAATCCGGA
+...
+\end{verbatim}
+
+In my opinion, the coolest thing is how easy it is to get the FASTA record right back:
+
+\begin{verbatim}
+>>> print cur_record
+>gi|2765658|emb|Z78533.1|CIZ78533 C.irapeanum 5.8S rRNA gene and ITS1 and ITS2 DNA
+CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGGAATAAA
+CGATCGAGTGAATCCGGAGGACCGGTGTACTCAGCTCACCGGGGGCATTGCTCCCGTGGT
+GACCCTGATTTGTTGTTGGGCCGCCTCGGGAGCGTCCATGGCGGGTTTGAACCTCTAGCC
+CGGCGCAGTTTGGGCGCCAAGCCATATGAAAGCATCACCGGCGAATGGCATTGTCTTCCC
+CAAAACCCGGAGCGGCGGCGTGCTGTCGCGTGCCCAATGAATTTTGATGACTCTCGCAAA
+CGGGAATCTTGGCTCTTTGCATCGGATGGAAGGACGCAGCGAAATGCGATAAGTGGTGTG
+AATTGCAAGATCCCGTGAACCATCGAGTCTTTTGAACGCAAGTTGCGCCCGAGGCCATCA
+GGCTAAGGGCACGCCTGCTTGGGCGTCGCGCTTCGTCTCTCTCCTGCCAATGCTTGCCCG
+GCATACAGCCAGGCCGGCGTGGTGCGGATGTGAAAGATTGGCCCCTTGTGCCTAGGTGCG
+GCGGGTCCAAGAGCTGGTGTTTTGATGGCCCGGAACCCGGCAAGAGGTGGACGGATGCTG
+GCAGCAGCTGCCGTGCGAATCCCCCATGTTGTCGTGCTTGTCGGACAGGCAGGAGAACCC
+TTCCGAACCCCAATGGAGGGCGGTTGACCGCCATTCGGATGTGACCCCAGGTCAGGCGGG
+GGCACCCGCTGAGTTTACGC
+\end{verbatim}
+
+We can use all of this to do a rewrite of our \verb|extract_organisms| function:
+
+\begin{verbatim}
+def extract_organisms(file_to_parse):
+
+    parser = Fasta.RecordParser()
+    file = open(file_to_parse, 'r')
+    iterator = Fasta.Iterator(file, parser)
+
+    all_species = []
+    cur_record = iterator.next()
+
+    while cur_record:
+        # extract the info from the title
+        title_atoms = string.split(cur_record.title)
+        new_species = title_atoms[1]
+
+        # append the new species to the list if it isn't there
+        if new_species not in all_species:
+            all_species.append(new_species)
+
+        # advance to the next record
+        cur_record = iterator.next()
+
+    return all_species
+\end{verbatim}
+
+Running this will give us identical results to what we saw earlier. Whether you choose to use this interface or the previous one depends on your needs and what you feel most comfortable with. Hey, Perl isn't the only place where there's more that one way to do things!
+
+\subsubsection{FASTA files as Dictionaries}
+
+The final thing that we'll do with our ubiquitous orchid fasta file is to show how to index it and access it like a database. This is very useful for large files where you only need to access certain elements of the file, and makes for a nice quick 'n dirty database.
+
+
+Let's index our record via their GenBank accession number, which seems like a useful way to get track of them. To do this, we first need to write a small function which returns accession numbers from a FASTA record (this is the Record class we discussed earlier):
+
+\begin{verbatim}
+import string
+
+def get_accession_num(fasta_record):
+    title_atoms = string.split(fasta_record.title)
+
+    # all of the accession number information is stuck in the first element
+    # and separated by '|'s
+    accession_atoms = string.split(title_atoms[0], '|')
+ 
+    # the accession number is the 4th element
+    gb_name = accession_atoms[3]
+
+    # strip the version info before returning
+    return gb_name[:-2]
+\end{verbatim}
+
+Now we need to create an index from this file, which will show us why writing this function was important. The general format for indexing a file is:
+
+\begin{verbatim}
+index_file(file_to_index, index_file_to_create, function_to_get_index_key)
+\end{verbatim}
+
+The tricky argument is the \verb|function_to_get_index_key|. Basically, this is a reference to a function that can get called and return an element to use as a key. The idea here is that the \verb|index_file| should be general purpose, and there isn't any good way for the Biopython developers to read your mind and know how you want to index your files. So now the \verb|get_accession_num| function above makes a lot of sense!
+
+
+Using all of this, we can now create an index file and see how it works. First, let's create the index file:
+
+\begin{verbatim}
+>>> from Bio.Fasta import Fasta 
+>>> Fasta.index_file("ls_orchid.fasta", "my_orchid_dict.idx", get_accession_num)
+\end{verbatim}
+
+This creates an index file \verb|my_orchid_dict.idx| based on the input from \verb|ls_orchid.fasta| and indexed by the values returned by our \verb|get_accession_number| function.
+
+
+Now that we've got the index, we can create an in-memory dictionary to access the file contents using the index:
+
+\begin{verbatim}
+>>> from Bio.Fasta import IUPAC
+>>> dna_parser = Fasta.SequenceParser(IUPAC.ambiguous_dna)
+>>> orchid_dict = Fasta.Dictionary("my_orchid_dict.idx", dna_parser)
+\end{verbatim} 
+
+The dictionary is created from our \verb|my_orchid_dict.idx| file, and returns Sequence objects. The type of objects returned by the index file are based on the second argument passed. This argument should be a parser that the index file will pass the information through before returning it. If no parser is passed, then the dictionary will just return the raw object (ie. exactly as it appears in the file). 
+
+
+The parser that we pass here is a \verb|SequenceParser| which converts FASTA files into \verb|SeqRecord| objects. The \verb|SequenceParser| takes an argument of the alphabet we should be using for the sequences. Since the parser can't be smart enough to know exactly what it will be parsing, we need to tell it. If no alphabet is provided, then the parser will default to \verb|Alphabet.generic_alphabet|.
+
+
+Since this is a dictionary, we can look at all of the keys we have available:
+
+\begin{verbatim}
+>>> print orchid_dict.keys()
+['Z78475', 'Z78519', 'Z78516', 'Z78517', 'Z78514', 'Z78515', 'Z78512', 
+ 'Z78513', 'Z78510', 'Z78511', 'Z78457', 'Z78456', 'Z78455', 'Z78454', 
+...
+\end{verbatim} 
+
+We can access a single sequence object via the keys and manipulate the object as a normal \verb|SeqRecord| object:
+
+\begin{verbatim}
+>>> seq_record = orchid_dict['Z78475']
+>>> print seq_record
+<Bio.SeqRecord.SeqRecord instance at 0x102c1f2c>
+>>> print seq_record.description
+gi|2765600|emb|Z78475.1|PSZ78475 P.supardii 5.8S rRNA gene and ITS1 and ITS2 DNA
+>>> print seq_record.seq
+Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGTTGAGATCACATAATAAT ...', IUPACAmbiguousDNA())
+\end{verbatim}
+
+That easily, we have created a database of our FASTA file that will spit out sequence objects. 
+
+
+\subsubsection{I love parsing -- please don't stop talking about it!}
+
+Biopython has a lot of parsers, and each has its own little special niches based on the sequence format it is parsing and all of that. The best place to look for information about specific parsers and how to do cool things with them is in the Cookbook section of the Tutorial. If you don't find the information you are looking for, please consider helping out your poor overworked documentors and submitting a cookbook entry about it! (once you figure out how to do it, that is!)
+
+
 \subsection{Connecting with biological databases}
 
 \subsection{Other nifty things}
@@ -396,10 +659,7 @@ Now, let's try and use a parser to summarize the type of information we got. To 
 
 \subsection{Parser Design}
 
-
-Design Overview
----------------
-
+\subsubsection{Design Overview}
 
 Parsers are built around an event-oriented design that includes
 Scanner and Consumer objects.
@@ -417,11 +677,7 @@ Following the previous example, the consumer receives the
 \verb|organism_name| event, and the processes it in whatever manner
 necessary in the current application.
 
-
-
-Events
-------
-
+\subsubsection{Events}
 
 There are two types of events: info events that tag the location of
 information within a data stream, and section events that mark
@@ -464,10 +720,7 @@ The events a scanner can send must be specifically defined for each
 data format.
 
 
-
-'noevent' EVENT
------------------
-
+\subsubsection{'noevent' EVENT}
 
 A data file can contain lines that have no meaningful information,
 such as blank lines.  By convention, a scanner should generate the
@@ -476,9 +729,7 @@ such as blank lines.  By convention, a scanner should generate the
 
 
 
-Scanners
---------
-
+\subsubsection{Scanners}
 
 \begin{verbatim}
 class Scanner:
@@ -491,10 +742,7 @@ Scanners should implement a method named 'feed' that takes a file
 handle and a consumer.  The scanner should read data from the file
 handle and generate appropriate events for the consumer.
 
-
-
-Consumers
----------
+\subsubsection{Consumers}
 
 \begin{verbatim}
 class Consumer:
@@ -619,15 +867,6 @@ record
     databank_reference
     terminator
 \end{verbatim}
-
-\subsubsection{Fasta}
-The Fasta Scanner produces the following events:
-\begin{verbatim}
-sequence
-    title
-    sequence
-\end{verbatim}
-
 
 \subsubsection{Fasta}
 The Fasta Scanner produces the following events:
@@ -767,7 +1006,6 @@ footer
 
 Just a quick introduction and a pointer to the
 Biocorba documentation.
-
 
 \section{Where to go from here -- contributing to
 Biopython}
