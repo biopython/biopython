@@ -17,7 +17,7 @@ CONTEXT = 5   # show 5 lines of context around the error in the format file
 
 USAGE = """%s [-h] [-v] [-p] [-n] [-o] <testfile>
 
-This script help diagnose problems with the BLAST parser.
+This script helps diagnose problems with the BLAST parser.
 
 OPTIONS:
 
