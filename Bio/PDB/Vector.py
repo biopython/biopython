@@ -17,11 +17,8 @@ def refmat(p,q):
     p.normalize()
     q.normalize()
     pq=p-q
-    npq=pq.norm()
-    p=p.get_array()
-    q=q.get_array()
-    pq=pq.get_array()
-    b=pq/npq
+    pq.normalize()
+    b=pq.get_array()
     b.shape=(3, 1)
     i=eye(3)
     ref=i-2*matrixmultiply(b, transpose(b))
@@ -75,7 +72,6 @@ class Vector:
 
     def __init__(self, x, y, z):
         self._ar=array((x, y, z), 'd')
-        self._norm=None
 
     def __neg__(self):
         "Return Vector(-x, -y, -z)"
@@ -125,11 +121,7 @@ class Vector:
 
     def norm(self):
         "Return vector norm"
-        if self._norm is None:
-            # Avoid expensive sqrts in future
-            # calls of norm
-            self._norm=sqrt(sum(self._ar*self._ar))
-        return self._norm
+        return sqrt(sum(self._ar*self._ar))
 
     def normalize(self):
         "Normalize the vector"
@@ -143,8 +135,8 @@ class Vector:
         return arccos(c)
 
     def get_array(self):
-        "Return array of coordinates"
-        return self._ar
+        "Return (a copy of) the array of coordinates"
+        return array(self._ar)
 
     def left_multiply(self, matrix):
         "Return Vector=Matrix x Vector"
@@ -156,21 +148,35 @@ class Vector:
         x,y,z=matrixmultiply(self._ar, matrix)
         return Vector(x,y,z)
 
+    def copy(self):
+        "Deep copy"
+        x,y,z=self._ar
+        return Vector(x,y,z)
+
 if __name__=="__main__":
 
         from math import pi
+        from RandomArray import *
 
-        v1=Vector(0,0,1)
-        v2=Vector(0,0,0)
-        v3=Vector(1,0,0)
+        v1=Vector(0.5,0.5,1.3)
+        v2=Vector(0.1,0.1,0.1)
+        v3=Vector(1.9,0.8,0.6)
         v4=Vector(1,-1,0)
 
-        print angle(v1, v2, v3)
-        print dihedral(v1, v2, v3, v4)
+        for v in [v1,v2,v3,v4]:
+            v.normalize()
 
-        print v1, v3
-        print refmat(v1, v3)
-        print rotmat(v1, v3)
+        angle(v1, v2, v3)
+        dihedral(v1, v2, v3, v4)
+
+        ref=refmat(v1, v3)
+        rot=rotmat(v1, v3)
+
+        print v1
+        print v3
+        print v1.left_multiply(ref)
+        print v1.left_multiply(rot)
+        print v1.right_multiply(transpose(rot))
 
 
         
