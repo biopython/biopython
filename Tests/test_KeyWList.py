@@ -6,15 +6,15 @@
 import os
 from TestSupport import verbose, TestFailed
 from Bio import ParserSupport
-from Bio.SwissProt import Parser
+from Bio.SwissProt import KeyWList
 
 if verbose:
     print """No tests yet.  I'm not sure if we can include SwissProt files
 for testing purposes."""
 
 
-### KeyWListScanner
+### Scanner
 
 #if verbose:
-#    print "Running tests on KeyWListScanner"
+#    print "Running tests on Scanner"
 

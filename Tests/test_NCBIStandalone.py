@@ -6,13 +6,13 @@
 import os
 from TestSupport import verbose, TestFailed
 from Bio import ParserSupport
-from Bio.Blast import Parser
+from Bio.Blast import NCBIStandalone
 
 
-### StandaloneScanner
+### Scanner
 
 if verbose:
-    print "Running tests on StandaloneScanner"
+    print "Running tests on Scanner"
 
 tests = ['bt001', 'bt002', 'bt003', 'bt004', 'bt005',
          'bt006', 'bt007', 'bt009', 'bt010', 'bt011',
@@ -26,7 +26,7 @@ class TestHandle:
     def write(self, s):
         assert self._h.readline() == s
 
-scanner = Parser.StandaloneScanner()
+scanner = NCBIStandalone.Scanner()
 for test in tests:
     datafile = os.path.join("Blast", test)
     modelfile = datafile + ".tagged"
@@ -34,25 +34,6 @@ for test in tests:
     try:
         scanner.feed(open(datafile), tc)
     except:
-        raise TestFailed, "StandaloneScanner (%s)" % test
+        raise TestFailed, "Scanner (%s)" % test
 
 
-### NCBIWWWScanner
-
-if verbose:
-    print "Running tests on NCBIWWWScanner"
-    
-tests = ['bt019', 'bt021', 'bt023', 'bt024', 'bt025',
-         'bt026', 'bt027', 'bt028', 'bt029', 'bt030',
-         'bt031', 'bt032', 'bt033', 'bt034', 'bt035',
-         'bt036', 'bt037', 'bt038', 'bt020']
-
-scanner = Parser.NCBIWWWScanner()
-for test in tests:
-    datafile = os.path.join("Blast", test)
-    modelfile = datafile + ".tagged"
-    tc = ParserSupport.TaggingConsumer(handle=TestHandle(open(modelfile)))
-    try:
-        scanner.feed(open(datafile), tc)
-    except:
-        raise TestFailed, "NCBIWWWScanner (%s)" % test

@@ -1,0 +1,18 @@
+SwissProt.txt
+=============
+
+
+KeyWList
+--------
+
+The KeyWList.py modules works with the keywlist.txt file included in
+the SwissProt distribution.
+
+
+The KeyWList scanner produces the following events:
+    header
+    keywords
+        keyword
+    footer
+        copyright
+

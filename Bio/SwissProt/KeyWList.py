@@ -3,28 +3,22 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""SwissProt Parser
+"""KeyWList.py
 
-This module provides code to parse file from SwissProt.
+This module provides code to work with the keywlist.txt file from
+SwissProt.
 http://www.expasy.ch/sprot/sprot-top.html
 
 
 Classes:
-KeyWListScanner   Scans the keywlist.txt file.
+Scanner   Scans the keywlist.txt file.
 
 """
 
 from Bio.ParserSupport import *
 
-class KeyWListScanner:
+class Scanner:
     """Scan the keywlist.txt file included with the SwissProt distribution.
-
-    This scanner produces the following events:
-    header
-    keywords
-        keyword
-    footer
-        copyright
 
     Tested with:
     Release 37
