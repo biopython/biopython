@@ -27,7 +27,7 @@ try:
     from distutils.command.install import install
     from distutils.core import Command
 except ImportError:
-    print "Biopython installation requires distutils, avaiable with python 2.0"
+    print "Biopython installation requires distutils, available with python 2.0"
     print "or better, or from:"
     print "http://python.org/sigs/distutils-sig/download.html"
     sys.exit(0)
@@ -173,8 +173,11 @@ biopython_packages = ['Bio',
                       'Bio.KEGG',
                       'Bio.KEGG.Compound',
                       'Bio.KEGG.Enzyme',
+                      'Bio.KEGG.Map',
                       'Bio.Medline',
                       'Bio.MetaTool',
+                      'Bio.Pathway',
+                      'Bio.Pathway.Rep',
                       'Bio.PDB',
                       'Bio.Prosite',
                       'Bio.Rebase',
