@@ -182,11 +182,15 @@ class _Option(_AbstractParameter):
             output = "%s" % self.names[0]
             if self.value is not None:
                 output += "=%s " % self.value
+            else:
+                output += " "
         # now short options
         elif self.names[0].find("-") >= 0:
             output = "%s " % self.names[0]
             if self.value is not None:
                 output += "%s " % self.value
+            else:
+                output += " "
         else:
             raise ValueError("Unrecognized option type: %s" % self.names[0])
 
