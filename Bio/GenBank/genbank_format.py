@@ -195,12 +195,13 @@ version_line = Martel.Group("version_line",
                             Martel.AnyEol())
 
 # DBSOURCE    REFSEQ: accession NM_010510.1
-db_source = Martel.Group("db_source",
-                         Martel.ToEol())
-db_source_line = Martel.Group("db_source_line",
-                              Martel.Str("DBSOURCE") +
-                              blank_space +
-                              db_source) 
+# db_source = Martel.Group("db_source",
+#                          Martel.ToEol())
+# db_source_line = Martel.Group("db_source_line",
+#                              Martel.Str("DBSOURCE") +
+#                              blank_space +
+#                              db_source) 
+db_source_block = define_block("DBSOURCE", "db_source_block", "db_source")
 
 # keywords line
 # KEYWORDS    antifreeze protein homology; cold-regulated gene; cor6.6 gene;
@@ -312,6 +313,7 @@ features_line = Martel.Group("features_line",
 feature_key_names = (
     "allele",           # Obsolete; see variation feature key
     "attenuator",       # Sequence related to transcription termination
+    "Bond",             # found in GenBank protein files
     "C_region",         # Span of the C immunological feature
     "CAAT_signal",      # 'CAAT box' in eukaryotic promoters
     "CDS",              # Sequence coding for amino acids in protein (includes
@@ -460,6 +462,7 @@ feature_qualifier_names = (
     "allele",         # Name of the allele for the a given gene
     "anticodon",      # Location of the anticodon of tRNA and the amino
                       #   acid for which it codes
+    "bond_type",      # refseq qualifier for bond information
     "bound_moiety",   # Moiety bound
     "cell_line",      # Cell line from which the sequence was obtained
     "cell_type",      # Cell type from which the sequence was obtained
@@ -701,7 +704,7 @@ record = Martel.Group("genbank_record",
                       Martel.Opt(nid_line) + \
                       Martel.Opt(pid_line) + \
                       Martel.Opt(version_line) + \
-                      Martel.Opt(db_source_line) + \
+                      Martel.Opt(db_source_block) + \
                       keywords_block + \
                       Martel.Opt(segment_line) + \
                       source_block + \

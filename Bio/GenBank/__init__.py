@@ -701,8 +701,10 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         # join and order are current documented functions.
         # one-of is something I ran across in old files. Treating it
         # as a sub sequence feature seems appropriate to me.
+        # bond is some piece of junk I found in RefSeq files. I have
+        # no idea how to interpret it, so I jam it in here
         elif (function.name == "join" or function.name == "order" or
-              function.name == "one-of"):
+              function.name == "one-of" or function.name == "bond"):
             self._set_ordering_info(function, cur_feature)
         elif (function.name == "gap"):
             assert len(function.args) == 1, \

@@ -1,0 +1,54 @@
+LOCUS       SCX3_BUTOC                64 aa            linear   INV 16-OCT-2001
+DEFINITION  Neurotoxin III.
+ACCESSION   P01485
+PID         g134354
+VERSION     P01485  GI:134354
+DBSOURCE    swissprot: locus SCX3_BUTOC, accession P01485;
+            class: standard.
+            created: Jul 21, 1986.
+            sequence updated: Jul 21, 1986.
+            annotation updated: Oct 16, 2001.
+            xrefs: gi: gi: 69530
+            xrefs (non-sequence databases): HSSP P01484, InterPro IPR003614,
+            InterPro IPR002061, InterPro IPR001219, Pfam PF00537, PRINTS
+            PR00284, ProDom PD000908, SMART SM00505
+KEYWORDS    Neurotoxin; Sodium channel inhibitor; Amidation.
+SOURCE      Tunisian scorpion.
+  ORGANISM  Buthus occitanus tunetanus
+            Eukaryota; Metazoa; Arthropoda; Chelicerata; Arachnida; Scorpiones;
+            Buthoidea; Buthidae; Buthus.
+REFERENCE   1  (residues 1 to 64)
+  AUTHORS   Vargas,O., Gregoire,J., Martin,M.-F., Bechis,G. and Rochat,H.
+  TITLE     Neurotoxins from the venoms of two scorpions: Buthus occitanus
+            tunetanus and Buthus occitanus mardochei
+  JOURNAL   Toxicon 20, 79-79 (1982)
+  REMARK    SEQUENCE.
+COMMENT     [FUNCTION] BINDS TO SODIUM CHANNELS AND INHIBITS THE INACTIVATION
+            OF THE ACTIVATED CHANNELS, THEREBY BLOCKING NEURONAL TRANSMISSION.
+            [SUBCELLULAR LOCATION] SECRETED.
+            [SIMILARITY] BELONGS TO THE ALPHA/BETA-SCORPION TOXIN FAMILY.
+            ALPHA-TOXIN SUBFAMILY.
+FEATURES             Location/Qualifiers
+     source          1..64
+                     /organism="Buthus occitanus tunetanus"
+                     /db_xref="taxon:6871"
+     Protein         1..64
+                     /product="Neurotoxin III"
+     Bond            bond(12,63)
+                     /bond_type="disulfide"
+                     /note="BY SIMILARITY."
+     Bond            bond(16,36)
+                     /bond_type="disulfide"
+                     /note="BY SIMILARITY."
+     Bond            bond(22,46)
+                     /bond_type="disulfide"
+                     /note="BY SIMILARITY."
+     Bond            bond(26,48)
+                     /bond_type="disulfide"
+                     /note="BY SIMILARITY."
+     Site            64
+                     /site_type="amidation"
+ORIGIN      
+        1 vkdgyivddr nctyfcgrna ycneectklk gesgycqwas pygnacycyk vpdhvrtkgp
+       61 grcn
+//

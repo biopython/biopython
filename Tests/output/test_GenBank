@@ -3490,6 +3490,152 @@ qualifiers:
 	Key: db_xref, Value: ['LocusID:1269', 'MIM:605051']
 	Key: gene, Value: ['CNR2']
 
+***Record from the FeatureParser
+Seq: Seq('VKDGYIVDDRNCTYFCGRNAYCNEECTKLKGESGYCQWASPYGNACYCYKVPDHVRTKGP ...', Alphabet())
+Id: P01485
+Name: SCX3_BUTOC
+Description Neurotoxin III.
+Annotations***
+Key: comment
+Value: [FUNCTION] BINDS TO SODIUM CHANNELS AND INHIBITS THE INACTIVATION
+OF THE ACTIVATED CHANNELS, THEREBY BLOCKING NEURONAL TRANSMISSION.
+[SUBCELLULAR LOCATION] SECRETED.
+[SIMILARITY] BELONGS TO THE ALPHA/BETA-SCORPION TOXIN FAMILY.
+ALPHA-TOXIN SUBFAMILY.
+Key: data_file_division
+Value: INV
+Key: date
+Value: 16-OCT-2001
+Key: db_source
+Value: swissprot: locus SCX3_BUTOC, accession P01485; class: standard. created: Jul 21, 1986. sequence updated: Jul 21, 1986. annotation updated: Oct 16, 2001. xrefs: gi: gi: 69530 xrefs (non-sequence databases): HSSP P01484, InterPro IPR003614, InterPro IPR002061, InterPro IPR001219, Pfam PF00537, PRINTS PR00284, ProDom PD000908, SMART SM00505
+Key: gi
+Value: 134354
+Key: keywords
+Value: ['Neurotoxin', 'Sodium channel inhibitor', 'Amidation']
+Key: organism
+Value: Buthus occitanus tunetanus
+Key: pid
+Value: g134354
+References*
+location: (0..64)
+authors: Vargas,O., Gregoire,J., Martin,M.-F., Bechis,G. and Rochat,H.
+title: Neurotoxins from the venoms of two scorpions: Buthus occitanus tunetanus and Buthus occitanus mardochei
+journal: Toxicon 20, 79-79 (1982)
+medline id: 
+pubmed id: 
+comment: SEQUENCE.
+
+Key: source
+Value: Tunisian scorpion
+Key: taxonomy
+Value: ['Eukaryota', 'Metazoa', 'Arthropoda', 'Chelicerata', 'Arachnida', 'Scorpiones', 'Buthoidea', 'Buthidae', 'Buthus']
+Feaures
+type: source
+location: (0..64)
+ref: None:None
+strand: None
+qualifiers: 
+	Key: db_xref, Value: ['taxon:6871']
+	Key: organism, Value: ['Buthus occitanus tunetanus']
+
+type: Protein
+location: (0..64)
+ref: None:None
+strand: None
+qualifiers: 
+	Key: product, Value: ['Neurotoxin III']
+
+type: Bond
+location: (11..62)
+ref: None:None
+strand: None
+qualifiers: 
+	Key: bond_type, Value: ['disulfide']
+	Key: note, Value: ['BY SIMILARITY.']
+Sub-Features
+type: Bond
+location: (11..11)
+ref: None:None
+strand: None
+qualifiers: 
+
+type: Bond
+location: (62..62)
+ref: None:None
+strand: None
+qualifiers: 
+
+
+type: Bond
+location: (15..35)
+ref: None:None
+strand: None
+qualifiers: 
+	Key: bond_type, Value: ['disulfide']
+	Key: note, Value: ['BY SIMILARITY.']
+Sub-Features
+type: Bond
+location: (15..15)
+ref: None:None
+strand: None
+qualifiers: 
+
+type: Bond
+location: (35..35)
+ref: None:None
+strand: None
+qualifiers: 
+
+
+type: Bond
+location: (21..45)
+ref: None:None
+strand: None
+qualifiers: 
+	Key: bond_type, Value: ['disulfide']
+	Key: note, Value: ['BY SIMILARITY.']
+Sub-Features
+type: Bond
+location: (21..21)
+ref: None:None
+strand: None
+qualifiers: 
+
+type: Bond
+location: (45..45)
+ref: None:None
+strand: None
+qualifiers: 
+
+
+type: Bond
+location: (25..47)
+ref: None:None
+strand: None
+qualifiers: 
+	Key: bond_type, Value: ['disulfide']
+	Key: note, Value: ['BY SIMILARITY.']
+Sub-Features
+type: Bond
+location: (25..25)
+ref: None:None
+strand: None
+qualifiers: 
+
+type: Bond
+location: (47..47)
+ref: None:None
+strand: None
+qualifiers: 
+
+
+type: Site
+location: (63..63)
+ref: None:None
+strand: None
+qualifiers: 
+	Key: site_type, Value: ['amidation']
+
 ***Record from the RecordParser
 locus: NM_006141
 definition: Homo sapiens dynein, cytoplasmic, light intermediate polypeptide 2 (DNCLI2), mRNA.
@@ -4383,6 +4529,44 @@ key: /gene= value: "CNR2"
 key: /db_xref= value: "LocusID:1269"
 key: /db_xref= value: "MIM:605051"
 key: /coded_by= value: "NM_001841.1:127..1209"
+***Record from the RecordParser
+locus: SCX3_BUTOC
+definition: Neurotoxin III.
+accession: ['P01485']
+reference title: Neurotoxins from the venoms of two scorpions: Buthus occitanus tunetanus and Buthus occitanus mardochei
+feature key: source
+location: 1..64
+num qualifiers: 2
+key: /organism= value: "Buthus occitanus tunetanus"
+key: /db_xref= value: "taxon:6871"
+feature key: Protein
+location: 1..64
+num qualifiers: 1
+key: /product= value: "Neurotoxin III"
+feature key: Bond
+location: bond(12,63)
+num qualifiers: 2
+key: /bond_type= value: "disulfide"
+key: /note= value: "BY SIMILARITY."
+feature key: Bond
+location: bond(16,36)
+num qualifiers: 2
+key: /bond_type= value: "disulfide"
+key: /note= value: "BY SIMILARITY."
+feature key: Bond
+location: bond(22,46)
+num qualifiers: 2
+key: /bond_type= value: "disulfide"
+key: /note= value: "BY SIMILARITY."
+feature key: Bond
+location: bond(26,48)
+num qualifiers: 2
+key: /bond_type= value: "disulfide"
+key: /note= value: "BY SIMILARITY."
+feature key: Site
+location: 64
+num qualifiers: 1
+key: /site_type= value: "amidation"
 Testing dictionaries...
 Indexing file to serve as a dictionary...
 len: 7
