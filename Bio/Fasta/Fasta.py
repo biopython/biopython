@@ -177,15 +177,19 @@ class SequenceParser:
     """Parses FASTA sequence data into a Sequence object.
 
     """
-    def __init__(self, alphabet = Alphabet.generic_alphabet):
+    def __init__(self, alphabet = Alphabet.generic_alphabet, title2ids = None):
         """Initialize a Scanner and Sequence Consumer.
 
         Arguments:
         o alphabet - The alphabet of the sequences to be parsed. If not
         passed, this will be set as generic_alphabet.
+        o title2ids - A function that, when given the title of the FASTA
+        file (without the beginning >), will return the name, id and
+        description (in that order) for the record. If this is not given,
+        then the entire title line will be used as the description.
         """
         self._scanner = _Scanner()
-        self._consumer = _SequenceConsumer(alphabet)
+        self._consumer = _SequenceConsumer(alphabet, title2ids)
 
     def parse(self, handle):
         self._scanner.feed(handle, self._consumer)
@@ -266,14 +270,17 @@ class _SequenceConsumer(AbstractConsumer):
     data    Sequence with FASTA data.
 
     """
-    def __init__(self, alphabet = Alphabet.generic_alphabet):
+    def __init__(self, alphabet = Alphabet.generic_alphabet, title2ids = None):
         """Initialize the Consumer.
 
         Arguments:
-        o Alphabet - The alphabet of the sequences we will be creating.
+        o alphabet - The alphabet of the sequences we will be creating.
+        o title2ids - A function that will convert the title of a FASTA
+        record into the id, name and description information.
         """
         self.data = None
         self.alphabet = alphabet
+        self.title2ids = title2ids
     
     def start_sequence(self):
         seq = Seq.Seq('', self.alphabet)
@@ -284,7 +291,13 @@ class _SequenceConsumer(AbstractConsumer):
     
     def title(self, line):
         assert line[0] == '>'
-        self.data.description = string.rstrip(line[1:])
+        if self.title2ids:
+            id, name, descr = self.title2ids(string.rstrip(line[1:]))
+            self.data.id = id
+            self.data.name = name
+            self.data.description = descr
+        else:
+            self.data.description = string.rstrip(line[1:])
 
     def sequence(self, line):
         # This can be optimized
