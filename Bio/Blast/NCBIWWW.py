@@ -1037,6 +1037,7 @@ def qblast(program, database, sequence,
            ncbi_gi=None, descriptions=None, alignments=None,
            expect=None, matrix=None,
            filter=None, format_type=None,
+           entrez_query='(none)',
            ):
     """Do a BLAST search using the QBLAST server at NCBI.
     program        BLASTP, BLASTN, BLASTX, TBLASTN, or TBLASTX.
@@ -1049,6 +1050,7 @@ def qblast(program, database, sequence,
     matrix         Specify an alt. matrix (PAM30, PAM70, BLOSUM80, BLOSUM45).
     filter         "none" turns off filtering.  Default uses 'seg' or 'dust'.
     format_type    "HTML", "Text", "ASN.1", or "XML".  Def. "HTML".
+    entrez_query   Entrez query to limit Blast search
 
     This function does no checking of the validity of the parameters
     and passes the values to the server as is.  More help is available at:
@@ -1065,6 +1067,7 @@ def qblast(program, database, sequence,
     parameters = [
         ('QUERY', sequence),
         ('PROGRAM', program),
+        ('ENTREZ_QUERY', entrez_query),
         ('DATABASE', database),
         ('EXPECT', expect),
         ('MATRIX_NAME', matrix),
