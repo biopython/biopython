@@ -1,0 +1,15 @@
+ECell
+========
+
+
+ECell
+---------------
+
+Ecell converts the ECell input from spreadsheet format to an intermediate format, described in
+http://www.e-cell.org/manual/chapter2E.html#3.2.  It provides an alternative to the perl script
+supplied with the Ecell2 distribution at http://bioinformatics.org/project/?group_id=49.
+
+ECell expects a spreadsheet exported in delimited text format. The file should be read with
+FilteredReader using the default filter chain to remove extraneous characters.
+
+
