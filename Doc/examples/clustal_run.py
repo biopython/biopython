@@ -8,8 +8,8 @@ import os
 
 # biopython
 from Bio.Alphabet import IUPAC
-from Bio.Clustalw import Clustalw
-from Bio.Clustalw.Clustalw import MultipleAlignCL
+from Bio import Clustalw
+from Bio.Clustalw import MultipleAlignCL
 from Bio.Align import AlignInfo
 from Bio.SubsMat import FreqTable
 

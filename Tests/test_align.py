@@ -13,7 +13,7 @@ import os
 
 # biopython
 from Bio.Alphabet import IUPAC
-from Bio.Clustalw import Clustalw
+from Bio import Clustalw
 from Bio.Align.FormatConvert import FormatConverter
 from Bio.Align import AlignInfo
 from Bio.Fasta import FastaAlign

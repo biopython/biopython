@@ -7,7 +7,7 @@ FormatConverter"""
 
 # biopython
 from Bio.Fasta.FastaAlign import FastaAlignment
-from Bio.Clustalw.Clustalw import ClustalAlignment
+from Bio.Clustalw import ClustalAlignment
 
 
 class FormatConverter:

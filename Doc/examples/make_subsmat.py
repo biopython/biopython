@@ -7,7 +7,7 @@ import sys
 
 # Biopython
 from Bio.SubsMat import SubsMat
-from Bio.Clustalw import Clustalw
+from Bio import Clustalw
 from Bio.Alphabet import IUPAC
 from Bio.Align import AlignInfo
 
