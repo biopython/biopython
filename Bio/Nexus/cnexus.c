@@ -99,15 +99,3 @@ PyMODINIT_FUNC initcnexus(void)
     (void) Py_InitModule("cnexus",cNexusMethods);
 }
 
-int main(int argc, char *argv[])
-{
-    Py_SetProgramName(argv[0]);
-
-    /* Initialize the Python interpreter.  Required. */
-    Py_Initialize();
-
-    /* Add a static module */
-    initcnexus();
-}
-
-
