@@ -1,0 +1,145 @@
+<HTML>
+<HEAD>
+<TITLE>BLAST Search Results </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" LINK="#0000FF" VLINK="#660099" ALINK="#660099">
+<A HREF="http://www.ncbi.nlm.nih.gov/BLAST/blast_form.map"> <IMG SRC="http://www.ncbi.nlm.nih.gov/BLAST/blast_results.gif" BORDER=0 ISMAP></A>
+<BR><BR><PRE>
+<b>BLASTX 2.0.10 [Aug-26-1999]</b>
+
+
+<b><a href="http://www.ncbi.nlm.nih.gov/htbin-
+post/Entrez/query?uid=9254694&form=6&db=m&Dopt=r">Reference</a>:</b>
+Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch&auml;ffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+<p>
+<b>Query=</b> gi|1347369|gb|G25137.1|G25137 human STS EST48004.
+         (556 letters)
+
+<b>Database:</b> Non-redundant SwissProt sequences
+           82,258 sequences; 29,652,561 total letters
+
+<p> <p>If you have any problems or questions with the results of this search <br>please refer to the <b><a href=http://www.ncbi.nlm.nih.gov/BLAST/blast_FAQs.html>BLAST FAQs</a></b><br><p>
+<FORM NAME="BLASTFORM">
+</PRE>
+<CENTER>
+<H3><a href="/BLAST/newoptions.html#graphical-overview"> Distribution of 5 Blast Hits on the Query Sequence</a></H3>
+<input name=defline size=80 value="Mouse-over to show defline and scores. Click to show alignments">
+</CENTER>
+<map name=img_map>
+<area shape=rect coords=69,101,183,106 href="#1731448" ONMOUSEOVER='document.BLASTFORM.defline.value="P54103  ZUOTIN RELATED FACTOR-1..S=86.6 E=3e-17"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=96,108,395,113 href="#465911" ONMOUSEOVER='document.BLASTFORM.defline.value="P34454  HYPOTHETICAL 31.6 KD PROTEIN F54F2.9 IN CHROMOSOME III..S=41.8 E=0.001"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=69,115,395,120 href="#2494160" ONMOUSEOVER='document.BLASTFORM.defline.value="Q61712  DNAJ PROTEIN HOMOLOG MTJ1..S=36.7 E=0.033"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=110,122,353,127 href="#1730688" ONMOUSEOVER='document.BLASTFORM.defline.value="P53745  HYPOTHETICAL 68.1 KD PROTEIN IN BIO3-FRE4 INTERGENIC REGIO..S=29.0 E=7.4"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+</map>
+<CENTER>
+<IMG WIDTH=529 HEIGHT=129 USEMAP=#img_map BORDER=1 SRC="nph-getgif.cgi?miles&20789170532542.gif" ISMAP></CENTER>
+<HR>
+<PRE>
+<PRE>
+
+                                                                   Score     E
+Sequences producing significant alignments:                        (bits)  Value
+
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=01731448&dopt=GenPept">sp|P54103|ZRF1_MOUSE</a>  ZUOTIN RELATED FACTOR-1                     <a href = #1731448> 87</a>  3e-17
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00465911&dopt=GenPept">sp|P34454|YMA9_CAEEL</a>  HYPOTHETICAL 31.6 KD PROTEIN F54F2.9 I...   <a href = #465911> 42</a>  0.001
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=02494160&dopt=GenPept">sp|Q61712|MTJ1_MOUSE</a>  DNAJ PROTEIN HOMOLOG MTJ1                   <a href = #2494160> 37</a>  0.033
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=01730688&dopt=GenPept">sp|P53745|YN8X_YEAST</a>  HYPOTHETICAL 68.1 KD PROTEIN IN BIO3-F...   <a href = #1730688> 29</a>  7.4
+
+<PRE>
+Query: 1   DLQLLIKAVNLFPAGTNSRWEVIANYMNIHSSSGVKRTAKDVIGKAK 141
+           DLQLLIKAVNLFPAG NSRW+VIANYMNIHSSSGVKRTAKDVI + +
+Sbjct: 458 DLQLLIKAVNLFPAGRNSRWDVIANYMNIHSSSGVKRTAKDVISEVR 504
+</PRE>
+
+
+<PRE>
+Query: 34  FPAGTNSRWEVIANYMNIHSSSGVKRTAKDVIGKAKSLQKLDPHQKDDINKKAFDKFKKE 213
+           +PAGT +RWE +   +N        R+A+DVI  A  ++++   +++D  K      ++ 
+Sbjct: 159 YPAGTPNRWEQMGRVLN--------RSAEDVIAMAGKMKQM---KQEDYTKLLMTTIQQS 207
+
+Query: 214 HGVVPQADNATPSERFXGPYTDFTPXTTEXQKLXEQALNTYPVNTXERWXXIAVAVPGRX 393
+             V  ++++                 +   QK  E AL  YP  T ERW  I+  +  + 
+Sbjct: 208 VPVEEKSED---------------DWSQAEQKAFETALQKYPKGTDERWERISEEIGSKT 252
+
+Query: 394 KE 399
+           K+
+Sbjct: 253 KK 254
+</PRE>
+
+
+<PRE>
+Query: 292 TTEXQKLXEQALNTYPVNTXERWXXIAVAVPGRXKE 399
+           T   QKL E AL  YP    +RW  IA  VP + KE
+Sbjct: 496 TQSQQKLLELALQQYPKGASDRWDKIAKCVPSKSKE 531
+</PRE>
+
+
+<PRE>
+Query: 1   DLQLLIKAVNLFPAGTNSRWEVIANYMNIHSSSGVKRTAKDVIGKAKSLQ 150
+           DL  L +++  FP GT  RW+ IA+ +         R+  DV  KAK L+
+Sbjct: 332 DLSQLTRSMVKFPGGTPGRWDKIAHELG--------RSVTDVTTKAKELK 373
+</PRE>
+
+
+<PRE>
+Query: 52  SRWEVIANYMNIHSSSGVKRTAKDVIGKAKSLQKLDPHQKDDINKKAFDKFKKEHGVVPQ 231
+           +RW+   +Y        V R+ KDV   ++SL  LD +QK     +A       H +   
+Sbjct: 75  NRWKSFISY--------VTRSRKDVKTVSRSLSNLDLYQKCSKEIRADQDISLLHSI--- 123
+
+Query: 232 ADNATPSERFXGPYTDFTPXTTEXQKLXEQALNTYPVNT 348
+                  E    PY +FT   +      EQ+ N +PV+T
+Sbjct: 124 -------ETKLFPYINFTALNS------EQSHNFWPVHT 149
+</PRE>
+
+
+
+<PRE>
+  Database: Non-redundant SwissProt sequences
+    Posted date:  Dec 18, 1999  8:26 PM
+  Number of letters in database: 29,652,561
+  Number of sequences in database:  82,258
+  
+Lambda     K      H
+   0.318    0.135    0.401 
+
+Gapped
+Lambda     K      H
+   0.270   0.0470    0.230 
+
+
+Matrix: BLOSUM62
+Gap Penalties: Existence: 11, Extension: 1
+Number of Hits to DB: 23174157
+Number of Sequences: 82258
+Number of extensions: 387821
+Number of successful extensions: 980
+Number of sequences better than 10.0: 8
+Number of HSP's better than 10.0 without gapping: 3
+Number of HSP's successfully gapped in prelim test: 1
+Number of HSP's that attempted gapping in prelim test: 973
+Number of HSP's gapped (non-prelim): 7
+length of query: 185
+length of database: 29,652,561
+effective HSP length: 49
+effective length of query: 135
+effective length of database: 25,621,919
+effective search space: 3458959065
+effective search space used: 3458959065
+frameshift window, decay const: 50,  0.1
+T: 12
+A: 40
+X1: 16 ( 7.3 bits)
+X2: 38 (14.8 bits)
+X3: 64 (24.9 bits)
+S1: 41 (21.7 bits)
+S2: 62 (28.6 bits)
+
+</PRE>
+
+</BODY>
+</HTML>
+</BODY>
+</HTML>

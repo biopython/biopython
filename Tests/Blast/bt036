@@ -1,0 +1,298 @@
+<HTML>
+<HEAD>
+<TITLE>BLAST Search Results </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" LINK="#0000FF" VLINK="#660099" ALINK="#660099">
+<A HREF="http://www.ncbi.nlm.nih.gov/BLAST/blast_form.map"> <IMG SRC="http://www.ncbi.nlm.nih.gov/BLAST/blast_results.gif" BORDER=0 ISMAP></A>
+<BR><BR><PRE>
+<b>BLASTP 2.0.10 [Aug-26-1999]</b>
+
+
+<b><a href="http://www.ncbi.nlm.nih.gov/htbin-
+post/Entrez/query?uid=9254694&form=6&db=m&Dopt=r">Reference</a>:</b>
+Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch&auml;ffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+<p>
+<b>Query=</b> gi|114879|sp|P29247|BCPB_STRHY PHOSPHOENOLPYRUVATE
+PHOSPHOMUTASE (PHOSPHOENOLPYRUVATE MUTASE) (PEP MUTASE).
+         (313 letters)
+
+<b>Database:</b> Non-redundant SwissProt sequences
+           82,258 sequences; 29,652,561 total letters
+
+<p> <p>If you have any problems or questions with the results of this search <br>please refer to the <b><a href=http://www.ncbi.nlm.nih.gov/BLAST/blast_FAQs.html>BLAST FAQs</a></b><br><p>
+<PRE>
+
+                                                                   Score     E
+Sequences producing significant alignments:                        (bits)  Value
+
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00114879&dopt=GenPept">sp|P29247|BCPB_STRHY</a>  PHOSPHOENOLPYRUVATE PHOSPHOMUTASE (PHO...   <a href = #114879>574</a>  e-164
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00417464&dopt=GenPept">sp|P33182|PEPM_TETPY</a>  PHOSPHOENOLPYRUVATE PHOSPHOMUTASE PREC...   <a href = #417464>228</a>  2e-59
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=01731059&dopt=GenPept">sp|P54528|YQIQ_BACSU</a>  HYPOTHETICAL 33.1 KD PROTEIN IN MMGE-B...   <a href = #1731059> 89</a>  2e-17
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00114878&dopt=GenPept">sp|P11435|BCPA_STRHY</a>  CARBOXYVINYL-CARBOXYPHOSPHONATE PHOSPH...   <a href = #114878> 64</a>  3e-10
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=02498805&dopt=GenPept">sp|Q56062|CPPM_SALTY</a>  PUTATIVE CARBOXYPHOSPHONOENOLPYRUVATE ...   <a href = #2498805> 60</a>  7e-09
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=02498804&dopt=GenPept">sp|P77541|CPPM_ECOLI</a>  PUTATIVE CARBOXYPHOSPHONOENOLPYRUVATE ...   <a href = #2498804> 59</a>  1e-08
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00113033&dopt=GenPept">sp|P28240|ACEA_YEAST</a>  ISOCITRATE LYASE (ISOCITRASE) (ISOCITR...   <a href = #113033> 32</a>  2.0
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00113025&dopt=GenPept">sp|P28298|ACEA_EMENI</a>  ISOCITRATE LYASE (ISOCITRASE) (ISOCITR...   <a href = #113025> 30</a>  5.8
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00113031&dopt=GenPept">sp|P28299|ACEA_NEUCR</a>  ISOCITRATE LYASE (ISOCITRASE) (ISOCITR...   <a href = #113031> 30</a>  7.6
+
+<PRE>
+<a name = 114879> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00114879&dopt=GenPept">sp|P29247|BCPB_STRHY</a> PHOSPHOENOLPYRUVATE PHOSPHOMUTASE (PHOSPHOENOLPYRUVATE MUTASE) (PEP
+           MUTASE)
+           Length = 313
+           
+ Score =  574 bits (1463), Expect = e-164
+ Identities = 280/313 (89%), Positives = 280/313 (89%)
+
+Query: 1   MNATEQAANGDRGTTRSAGGRLRYLLHAPGACQLMGVHDGLSARIAVAEGFEALWASGLC 60
+           MNATEQAANGDRGTTRSAGGRLRYLLHAPGACQLMGVHDGLSARIAVAEGFEALWASGLC
+Sbjct: 1   MNATEQAANGDRGTTRSAGGRLRYLLHAPGACQLMGVHDGLSARIAVAEGFEALWASGLC 60
+
+Query: 61  MSTARGVRDSDEASWTELLTLVGTMTDAVPGVPVLVDGDTGYGNFNTXXXXXXXXXXXXX 120
+           MSTARGVRDSDEASWTELLTLVGTMTDAVPGVPVLVDGDTGYGNFNT             
+Sbjct: 61  MSTARGVRDSDEASWTELLTLVGTMTDAVPGVPVLVDGDTGYGNFNTARRFAGRAERVGA 120
+
+Query: 121 XXVCFEDKVFPKMNSFFGDGHQLAPVAEFCGKIRACKDAQRDPDFVVVARTEALISKLPM 180
+             VCFEDKVFPKMNSFFGDGHQLAPVAEFCGKIRACKDAQRDPDFVVVARTEALISKLPM
+Sbjct: 121 AGVCFEDKVFPKMNSFFGDGHQLAPVAEFCGKIRACKDAQRDPDFVVVARTEALISKLPM 180
+
+Query: 181 XXXXXXXXXXXXXXXXXXFIHSRMNTPQQIATFMERWEGSTPVLIAPTTYHTPSVDDFAA 240
+                             FIHSRMNTPQQIATFMERWEGSTPVLIAPTTYHTPSVDDFAA
+Sbjct: 181 EEALDRAAAYAEAGADALFIHSRMNTPQQIATFMERWEGSTPVLIAPTTYHTPSVDDFAA 240
+
+Query: 241 LGIAGCIWANHSMRAAFAAMRDVCQRIRTDRGIYGIEDQVAPLKEIFGLFDYEGLEKDEN 300
+           LGIAGCIWANHSMRAAFAAMRDVCQRIRTDRGIYGIEDQVAPLKEIFGLFDYEGLEKDEN
+Sbjct: 241 LGIAGCIWANHSMRAAFAAMRDVCQRIRTDRGIYGIEDQVAPLKEIFGLFDYEGLEKDEN 300
+
+Query: 301 CYTQAPDLAAVQG 313
+           CYTQAPDLAAVQG
+Sbjct: 301 CYTQAPDLAAVQG 313
+</PRE>
+
+
+<PRE>
+<a name = 417464> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00417464&dopt=GenPept">sp|P33182|PEPM_TETPY</a> PHOSPHOENOLPYRUVATE PHOSPHOMUTASE PRECURSOR (PHOSPHOENOLPYRUVATE
+           MUTASE) (PEP MUTASE)
+           Length = 300
+           
+ Score =  228 bits (574), Expect = 2e-59
+ Identities = 114/283 (40%), Positives = 164/283 (57%), Gaps = 2/283 (0%)
+
+Query: 21  RLRYLLHAPGACQLMGVHDGLSARIAVAEGFEALWASGLCMSTARGVRDSDEASWTELLT 80
+           +L+ ++ +     +M  H+GLSA I    GF+ +W SGL +S A GVRDS+EAS+T++L 
+Sbjct: 18  QLKNMIQSKDLSFIMEAHNGLSAAIVEETGFKGIWGSGLSISAAMGVRDSNEASYTQVLE 77
+
+Query: 81  LVGTMTDAVPGVPVLVDGDTGYGNFNTXXXXXXXXXXXXXXXVCFEDKVFPKMNSFFGDG 140
+           ++  M+D    +P+L+DGDTGYGN+N                VC EDK+FPK NS   DG
+Sbjct: 78  VLEFMSDRTK-IPILLDGDTGYGNYNNARRLVKKLEQRSIAGVCLEDKIFPKRNSLLDDG 136
+
+Query: 141 HQ-LAPVAEFCGKIRACKDAQRDPDFVVVARTEALISKLPMXXXXXXXXXXXXXXXXXXF 199
+            Q LAP+ EF  KI+ACKD Q+D DF VVAR EA I+   +                   
+Sbjct: 137 RQELAPINEFVAKIKACKDTQQDADFQVVARVEAFIAGWGLEEALKRAEAYRNAGADAIL 196
+
+Query: 200 IHSRMNTPQQIATFMERWEGSTPVLIAPTTYHTPSVDDFAALGIAGCIWANHSMRAAFAA 259
+           +HS++  P +I  FM+ W+  +PV+I PT YHT   D F   G+   IWANH+MRA  +A
+Sbjct: 197 MHSKLKEPSEIEAFMKEWKNRSPVIIVPTNYHTVPTDTFRKWGVNMVIWANHNMRACVSA 256
+
+Query: 260 MRDVCQRIRTDRGIYGIEDQVAPLKEIFGLFDYEGLEKDENCY 302
+           M++  +RI  D  +  +E +VA +KE+F L   + L++ +  Y
+Sbjct: 257 MQETSRRIYEDESLVNVEPKVAKVKEVFRLQGEDELKQADKKY 299
+</PRE>
+
+
+<PRE>
+<a name = 1731059> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=01731059&dopt=GenPept">sp|P54528|YQIQ_BACSU</a> HYPOTHETICAL 33.1 KD PROTEIN IN MMGE-BFMBAA INTERGENIC REGION
+           Length = 301
+           
+ Score = 88.5 bits (216), Expect = 2e-17
+ Identities = 79/289 (27%), Positives = 120/289 (41%), Gaps = 24/289 (8%)
+
+Query: 20  GRLRYLLHAPGACQLMGVHDGLSARIAVAEGFEALWASGLCMSTARGVRDSDEASWTELL 79
+           GR R L+ AP   Q+ G HDG++A +A   GF A++ SG   + +RG+ D    +  E+ 
+Sbjct: 16  GRFRKLMSAPDILQIPGAHDGMAALLAKEAGFSAIYLSGAAYTASRGLPDLGIITSAEIA 75
+
+Query: 80  TLVGTMTDAVPGVPVLVDGDTGYGNFNTXXXXXXXXXXXXXXXVCFEDKVFPKMNSFFGD 139
+                +  A   +P+LVD DTG+G                   V  ED+  PK      +
+Sbjct: 76  ERAKDLVRAA-DLPLLVDIDTGFGGVLNAARTAREMLEARVAAVQMEDQQLPKKCGHL-N 133
+
+Query: 140 GHQLAPVAEFCGKIRACKDAQRDPDFVVVARTEALISKLPMXXXXXXXXXXXXXXXXXXF 199
+           G QL P+ E   KI+A K A   P  +VVART+A   +                      
+Sbjct: 134 GKQLVPIKEMAQKIKAIKQAA--PSLIVVARTDARAQE--GLDAAIKRSEAYIEAGADAI 189
+
+Query: 200 IHSRMNTPQQIATFMERWEGSTPVLIAPTTY-HTP--SVDDFAALGIAGCIWANHSMRAA 256
+               +    +   F ER     P+L   T +  TP    D+F  +G    I+   S+RAA
+Sbjct: 190 FPEALQAENEFRQFAERI--PVPLLANMTEFGKTPYYRADEFEDMGFHMVIYPVTSLRAA 247
+
+Query: 257 FAAMRDVCQRI--------RTDRGIYGIEDQVAPLKEIFGLFDYEGLEK 297
+             A    C+R+            G++ ++ +   L +    +DYE L+K
+Sbjct: 248 AKA----CERMFGLMKEHGSQKEGLHDMQTR-KELYDTISYYDYEALDK 291
+</PRE>
+
+
+<PRE>
+<a name = 114878> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00114878&dopt=GenPept">sp|P11435|BCPA_STRHY</a> CARBOXYVINYL-CARBOXYPHOSPHONATE PHOSPHORYLMUTASE
+           (CARBOXYPHOSPHONOENOLPYRUVATE PHOSPHONOMUTASE) (CPEP
+           PHOSPHONOMUTASE)
+           Length = 295
+           
+ Score = 64.4 bits (154), Expect = 3e-10
+ Identities = 47/152 (30%), Positives = 71/152 (45%), Gaps = 3/152 (1%)
+
+Query: 23  RYLLHAPGACQLMGVHDGLSARIAVAEGFEALWASGLCMSTAR-GVRDSDEASWTELLTL 81
+           R L++AP    +   +D LSA++    GF A+  +G   S +  G+ D    S +E    
+Sbjct: 10  RELMNAPEILVVPSAYDALSAKVIQQAGFPAVHMTGSGTSASMLGLPDLGFTSVSEQAIN 69
+
+Query: 82  VGTMTDAVPGVPVLVDGDTGYGNFNTXXXXXXXXXXXXXXXVCFEDKVFPKMNSFFGDGH 141
+           +  +   V  VPV++D D GYGN  +                  ED+V PK      +G 
+Sbjct: 70  LKNIVLTVD-VPVIMDADAGYGNAMSVWRATREFERVGIVGYHLEDQVNPKRCGHL-EGK 127
+
+Query: 142 QLAPVAEFCGKIRACKDAQRDPDFVVVARTEA 173
+           +L    E  GKI A  +A+ D DF ++ART+A
+Sbjct: 128 RLISTEEMTGKIEAAVEAREDEDFTIIARTDA 159
+</PRE>
+
+
+<PRE>
+<a name = 2498805> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=02498805&dopt=GenPept">sp|Q56062|CPPM_SALTY</a> PUTATIVE CARBOXYPHOSPHONOENOLPYRUVATE PHOSPHONOMUTASE (CPEP
+           PHOSPHONOMUTASE)
+           Length = 295
+           
+ Score = 59.7 bits (142), Expect = 7e-09
+ Identities = 49/165 (29%), Positives = 80/165 (47%), Gaps = 14/165 (8%)
+
+Query: 17  SAGGRLRYLLHAPGACQLMGVHDGLSARIAVAEGFEALWASGLCMSTAR-GVRDSDEASW 75
+           S G   R  L      Q++G  +   A +A   G++A++ SG  ++    G+ D   ++ 
+Sbjct: 5   SPGQAFRAALAKENPLQIVGAINANHALLAQRAGYQAIYLSGGGVAAGSLGLPDLGISTL 64
+
+Query: 76  TELLTLVGTMTDAVPGVPVLVDGDTGYGN--FNTXXXXXXXXXXXXXXXVCFEDKVFPKM 133
+            ++LT +  +TD  P +P+LVD D G+G+  FN                +  ED+V  K 
+Sbjct: 65  DDVLTDIRRITDVCP-LPLLVDADIGFGSSAFNVARTVKSIAKAGAAA-LHIEDQVGAKR 122
+
+Query: 134 NSFFGDGHQ----LAPVAEFCGKIRACKDAQRDPDFVVVARTEAL 174
+                 GH+    +    E   +IRA  DA+ DP+FV++ART+AL
+Sbjct: 123 C-----GHRPNKAIVSKEEMVDRIRAAVDARTDPNFVIMARTDAL 162
+</PRE>
+
+
+<PRE>
+<a name = 2498804> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=02498804&dopt=GenPept">sp|P77541|CPPM_ECOLI</a> PUTATIVE CARBOXYPHOSPHONOENOLPYRUVATE PHOSPHONOMUTASE (CPEP
+           PHOSPHONOMUTASE)
+           Length = 296
+           
+ Score = 58.9 bits (140), Expect = 1e-08
+ Identities = 50/165 (30%), Positives = 80/165 (48%), Gaps = 14/165 (8%)
+
+Query: 17  SAGGRLRYLLHAPGACQLMGVHDGLSARIAVAEGFEALWASGLCMSTAR-GVRDSDEASW 75
+           S G   R  L      Q++G  +   A +A   G++A++ SG  ++    G+ D   ++ 
+Sbjct: 5   SPGKAFRAALTKENPLQIVGTINANHALLAQRAGYQAIYLSGGGVAAGSLGLPDLGISTL 64
+
+Query: 76  TELLTLVGTMTDAVPGVPVLVDGDTGYGN--FNTXXXXXXXXXXXXXXXVCFEDKVFPKM 133
+            ++LT +  +TD V  +P+LVD D G+G+  FN                +  ED+V  K 
+Sbjct: 65  DDVLTDIRRITD-VCSLPLLVDADIGFGSSAFNVARTVKSMIKAGAAG-LHIEDQVGAKR 122
+
+Query: 134 NSFFGDGHQ----LAPVAEFCGKIRACKDAQRDPDFVVVARTEAL 174
+                 GH+    +    E   +IRA  DA+ DPDFV++ART+AL
+Sbjct: 123 C-----GHRPNKAIVSKEEMVDRIRAAVDAKTDPDFVIMARTDAL 162
+</PRE>
+
+
+<PRE>
+<a name = 113033> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00113033&dopt=GenPept">sp|P28240|ACEA_YEAST</a> ISOCITRATE LYASE (ISOCITRASE) (ISOCITRATASE) (ICL)
+           Length = 557
+           
+ Score = 31.7 bits (70), Expect = 2.0
+ Identities = 21/84 (25%), Positives = 31/84 (36%), Gaps = 4/84 (4%)
+
+Query: 93  PVLVDGDTGYGNFNTXXXXXXXXXXXXXXXVCFEDKVFPKMNSFFGDGHQLAPVAEFCGK 152
+           P++ D D G+G                   +  ED+           G  + PV E   +
+Sbjct: 175 PIVADADAGHGGLTAVFKLTKMFIERGAAGIHMEDQTSTNKKCGHMAGRCVIPVQEHVNR 234
+
+Query: 153 ---IRACKDAQRDPDFVVVARTEA 173
+              IR C D     D +VVART++
+Sbjct: 235 LVTIRMCADIMHS-DLIVVARTDS 257
+</PRE>
+
+
+<PRE>
+<a name = 113025> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00113025&dopt=GenPept">sp|P28298|ACEA_EMENI</a> ISOCITRATE LYASE (ISOCITRASE) (ISOCITRATASE) (ICL)
+           Length = 536
+           
+ Score = 30.1 bits (66), Expect = 5.8
+ Identities = 20/84 (23%), Positives = 34/84 (39%), Gaps = 4/84 (4%)
+
+Query: 93  PVLVDGDTGYGNFNTXXXXXXXXXXXXXXXVCFEDKVFPKMNSFFGDGHQLAPVAEFCGK 152
+           P++ D DTG+G                   +  ED+           G  L P++E   +
+Sbjct: 162 PIIADADTGHGGLTAVMKLTKLFVERGAAGIHIEDQAPGTKKCGHMAGKVLVPISEHINR 221
+
+Query: 153 IRACKDAQRD---PDFVVVARTEA 173
+           + A + AQ D    D + +ART++
+Sbjct: 222 LVAIR-AQADIMGTDLLAIARTDS 244
+</PRE>
+
+
+<PRE>
+<a name = 113031> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00113031&dopt=GenPept">sp|P28299|ACEA_NEUCR</a> ISOCITRATE LYASE (ISOCITRASE) (ISOCITRATASE) (ICL)
+           Length = 547
+           
+ Score = 29.7 bits (65), Expect = 7.6
+ Identities = 21/84 (25%), Positives = 33/84 (39%), Gaps = 4/84 (4%)
+
+Query: 93  PVLVDGDTGYGNFNTXXXXXXXXXXXXXXXVCFEDKVFPKMNSFFGDGHQLAPVAEFCGK 152
+           P++ D DTG+G                   +  ED+           G  L P+ E   +
+Sbjct: 173 PIVADADTGHGGLTAVMKLTKLFIEKGAAGIHIEDQAPGTKKCGHMAGKVLVPIQEHINR 232
+
+Query: 153 IRACKDAQRD---PDFVVVARTEA 173
+           + A + AQ D    D + +ART+A
+Sbjct: 233 LVAIR-AQADIMGSDLLCIARTDA 255
+</PRE>
+
+
+
+<PRE>
+  Database: Non-redundant SwissProt sequences
+    Posted date:  Dec 28, 1999  4:33 PM
+  Number of letters in database: 29,652,561
+  Number of sequences in database:  82,258
+  
+Lambda     K      H
+   0.322    0.137    0.422 
+
+Gapped
+Lambda     K      H
+   0.270   0.0470    0.230 
+
+
+Matrix: BLOSUM62
+Gap Penalties: Existence: 11, Extension: 1
+Number of Hits to DB: 17065937
+Number of Sequences: 82258
+Number of extensions: 635594
+Number of successful extensions: 1159
+Number of sequences better than 10.0: 9
+Number of HSP's better than 10.0 without gapping: 6
+Number of HSP's successfully gapped in prelim test: 3
+Number of HSP's that attempted gapping in prelim test: 1143
+Number of HSP's gapped (non-prelim): 10
+length of query: 313
+length of database: 29,652,561
+effective HSP length: 48
+effective length of query: 265
+effective length of database: 25,704,177
+effective search space: 6811606905
+effective search space used: 6811606905
+T: 11
+A: 40
+X1: 16 ( 7.4 bits)
+X2: 38 (14.8 bits)
+X3: 64 (24.9 bits)
+S1: 41 (21.9 bits)
+S2: 65 (29.7 bits)
+
+</PRE>
+
+</BODY>
+</HTML>
+</BODY>
+</HTML>

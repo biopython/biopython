@@ -19,7 +19,7 @@ programs",  Nucleic Acids Res. 25:3389-3402.
          (615 letters)
 
 <b>Database:</b> Non-redundant Database of GenBank STS Division
-           89,405 sequences; 32,867,852 total letters
+           89,526 sequences; 32,906,604 total letters
 
 <p> <p>If you have any problems or questions with the results of this search <br>please refer to the <b><a href=http://www.ncbi.nlm.nih.gov/BLAST/blast_FAQs.html>BLAST FAQs</a></b><br><p>
 <FORM NAME="BLASTFORM">
@@ -43,7 +43,7 @@ programs",  Nucleic Acids Res. 25:3389-3402.
 <area shape=rect coords=220,130,277,135 href="#4631518" ONMOUSEOVER='document.BLASTFORM.defline.value="AU046883  Rattus norvegicus, OTSUKA clone, 085f03, microsatellite ..S=28.1 E=7.5"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
 </map>
 <CENTER>
-<IMG WIDTH=529 HEIGHT=137 USEMAP=#img_map BORDER=1 SRC="nph-getgif.cgi?iblast0&207891705328460.gif" ISMAP></CENTER>
+<IMG WIDTH=529 HEIGHT=137 USEMAP=#img_map BORDER=1 SRC="nph-getgif.cgi?miles&207891705328584.gif" ISMAP></CENTER>
 <HR>
 <PRE>
 <PRE>
@@ -57,12 +57,12 @@ Sequences producing significant alignments:                    (bits)  Value  N
 <a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=01234967&dopt=GenBank">emb|Z53521|HSB316XA9</a>  H.sapiens (D22S1166) DNA segment c...   <a href = #1234967> 30</a>  1.5  1
 <a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=04185670&dopt=GenBank">gb|G42865.1|G42865</a>  Xq3845 KWOK Homo sapiens STS genomic...   <a href = #4185670> 30</a>  2.1  1
 <a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=04757419&dopt=GenBank">gb|G49246.1|G49246</a>  stbK116F5_30376 chromosome 22 genomi...   <a href = #4757419> 29</a>  2.9  1
-<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=06120694&dopt=GenBank">gb|G55375.1|G55375</a>  SHGC-100697 Human Homo sapiens STS g...   <a href = #6120694> 29</a>  5.5  1
 <a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=05225124&dopt=GenBank">gb|G53947.1|G53947</a>  SHGC-85304 Human Homo sapiens STS ge...   <a href = #5225124> 29</a>  5.5  1
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=06120694&dopt=GenBank">gb|G55375.1|G55375</a>  SHGC-100697 Human Homo sapiens STS g...   <a href = #6120694> 29</a>  5.5  1
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=02226478&dopt=GenBank">gb|G33174|G33174</a>  human STS SHGC-6097 clone pG-2470           <a href = #2226478> 28</a>  7.5  1
 <a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=01311530&dopt=GenBank">gb|L77996|HUMSWX945</a>  Human chromosome X STS sWXD945, sin...   <a href = #1311530> 28</a>  7.5  1
 <a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=04631518&dopt=GenBank">dbj|AU046883.1|AU046883</a>  Rattus norvegicus, OTSUKA clone...   <a href = #4631518> 28</a>  7.5  1
 <a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=02734624&dopt=GenBank">gb|G36957|G36957</a>  SHGC-56642 Human Homo sapiens STS cDNA      <a href = #2734624> 28</a>  7.5  1
-<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=02226478&dopt=GenBank">gb|G33174|G33174</a>  human STS SHGC-6097 clone pG-2470           <a href = #2226478> 28</a>  7.5  1
 
 <PRE>
 <a name = 1348853> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=01348853&dopt=GenBank">gb|G26621|G26621</a> human STS STS_D12006. >gi|1396339|gb|G27620|G27620 human STS
@@ -424,6 +424,21 @@ Sbjct: 176 PGWTLRFLLRGLHTPPKAAEKFPSQGVAEPEGFS 75
 
 
 <PRE>
+<a name = 5225124> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=05225124&dopt=GenBank">gb|G53947.1|G53947</a> SHGC-85304 Human Homo sapiens STS genomic, sequence tagged site
+           Length = 444
+           
+ Score = 28.6 bits (56), Expect = 5.5
+ Identities = 10/24 (41%), Positives = 15/24 (61%)
+ Frame = +1 / -2
+
+                                   
+Query: 202 HCFLCNLFYRIFSAASDHCSIFSF 273
+           HC L ++F RIF    +  S+F+F
+Sbjct: 443 HCHLSSVFCRIFFTLEESLSLFAF 372
+</PRE>
+
+
+<PRE>
 <a name = 6120694> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=06120694&dopt=GenBank">gb|G55375.1|G55375</a> SHGC-100697 Human Homo sapiens STS genomic, sequence tagged site
            Length = 460
            
@@ -439,17 +454,17 @@ Sbjct: 82  TTHSMTVFLHVKKKLSNICIYMPENREG 165
 
 
 <PRE>
-<a name = 5225124> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=05225124&dopt=GenBank">gb|G53947.1|G53947</a> SHGC-85304 Human Homo sapiens STS genomic, sequence tagged site
-           Length = 444
+<a name = 2226478> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=02226478&dopt=GenBank">gb|G33174|G33174</a> human STS SHGC-6097 clone pG-2470
+           Length = 299
            
- Score = 28.6 bits (56), Expect = 5.5
- Identities = 10/24 (41%), Positives = 15/24 (61%)
- Frame = +1 / -2
+ Score = 28.1 bits (55), Expect = 7.5
+ Identities = 13/38 (34%), Positives = 19/38 (49%)
+ Frame = +1 / +2
 
-                                   
-Query: 202 HCFLCNLFYRIFSAASDHCSIFSF 273
-           HC L ++F RIF    +  S+F+F
-Sbjct: 443 HCHLSSVFCRIFFTLEESLSLFAF 372
+                                                 
+Query: 175 KSA*VISNQHCFLCNLFYRIFSAASDHCSIFSFTAIVL 288
+           +SA +I   HC    +   +FS ASD  S    T ++L
+Sbjct: 119 QSAWIIGMSHCAWAVIHCLLFSTASDEKSAVDLTGVLL 232
 </PRE>
 
 
@@ -499,45 +514,30 @@ Sbjct: 242 LSVPFWKFLFYLQAL 198
 </PRE>
 
 
-<PRE>
-<a name = 2226478> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Nucleotide&list_uids=02226478&dopt=GenBank">gb|G33174|G33174</a> human STS SHGC-6097 clone pG-2470
-           Length = 299
-           
- Score = 28.1 bits (55), Expect = 7.5
- Identities = 13/38 (34%), Positives = 19/38 (49%)
- Frame = +1 / +2
-
-                                                 
-Query: 175 KSA*VISNQHCFLCNLFYRIFSAASDHCSIFSFTAIVL 288
-           +SA +I   HC    +   +FS ASD  S    T ++L
-Sbjct: 119 QSAWIIGMSHCAWAVIHCLLFSTASDEKSAVDLTGVLL 232
-</PRE>
-
-
 
 <PRE>
   Database: Non-redundant Database of GenBank STS Division
-    Posted date:  Dec 18, 1999  7:45 PM
-  Number of letters in database: 32,867,852
-  Number of sequences in database:  89,405
+    Posted date:  Dec 28, 1999  3:49 PM
+  Number of letters in database: 32,906,604
+  Number of sequences in database:  89,526
   
 Lambda     K      H
    0.318    0.135    0.401 
 
 
 Matrix: BLOSUM62
-Number of Hits to DB: 1st pass: 41542626, 2nd pass: 9765
-Number of Sequences: 1st pass: 89405, 2nd pass: 84
-Number of extensions: 1st pass: 500847, 2nd pass: 6747
+Number of Hits to DB: 1st pass: 41589935, 2nd pass: 9765
+Number of Sequences: 1st pass: 89526, 2nd pass: 84
+Number of extensions: 1st pass: 501394, 2nd pass: 6747
 Number of successful extensions: 1st pass: 14, 2nd pass: 49
 Number of sequences better than 10.0: 20
 length of query: 205
-length of database: 10,955,950
+length of database: 10,968,868
 effective HSP length: 46
 effective length of query: 158
-effective length of database: 6,843,320
-effective search space: 1081244560
-effective search space used: 1081244560
+effective length of database: 6,850,672
+effective search space: 1082406176
+effective search space used: 1082406176
 frameshift window, decay const: 50,  0.5
 T: 13
 A: 40

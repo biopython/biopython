@@ -35,7 +35,7 @@ programs",  Nucleic Acids Res. 25:3389-3402.
 <area shape=rect coords=110,122,353,127 href="#1730688" ONMOUSEOVER='document.BLASTFORM.defline.value="P53745  HYPOTHETICAL 68.1 KD PROTEIN IN BIO3-FRE4 INTERGENIC REGIO..S=29.0 E=7.4"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
 </map>
 <CENTER>
-<IMG WIDTH=529 HEIGHT=129 USEMAP=#img_map BORDER=1 SRC="nph-getgif.cgi?miles&20789170532542.gif" ISMAP></CENTER>
+<IMG WIDTH=529 HEIGHT=129 USEMAP=#img_map BORDER=1 SRC="nph-getgif.cgi?miles&207891705327933.gif" ISMAP></CENTER>
 <HR>
 <PRE>
 <PRE>
@@ -49,6 +49,13 @@ Sequences producing significant alignments:                        (bits)  Value
 <a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=01730688&dopt=GenPept">sp|P53745|YN8X_YEAST</a>  HYPOTHETICAL 68.1 KD PROTEIN IN BIO3-F...   <a href = #1730688> 29</a>  7.4
 
 <PRE>
+<a name = 1731448> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=01731448&dopt=GenPept">sp|P54103|ZRF1_MOUSE</a> ZUOTIN RELATED FACTOR-1
+           Length = 514
+           
+ Score = 86.6 bits (211), Expect = 3e-17
+ Identities = 41/47 (87%), Positives = 44/47 (93%)
+ Frame = +1
+
 Query: 1   DLQLLIKAVNLFPAGTNSRWEVIANYMNIHSSSGVKRTAKDVIGKAK 141
            DLQLLIKAVNLFPAG NSRW+VIANYMNIHSSSGVKRTAKDVI + +
 Sbjct: 458 DLQLLIKAVNLFPAGRNSRWDVIANYMNIHSSSGVKRTAKDVISEVR 504
@@ -56,6 +63,13 @@ Sbjct: 458 DLQLLIKAVNLFPAGRNSRWDVIANYMNIHSSSGVKRTAKDVISEVR 504
 
 
 <PRE>
+<a name = 465911> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00465911&dopt=GenPept">sp|P34454|YMA9_CAEEL</a> HYPOTHETICAL 31.6 KD PROTEIN F54F2.9 IN CHROMOSOME III
+           Length = 275
+           
+ Score = 41.8 bits (96), Expect = 0.001
+ Identities = 30/122 (24%), Positives = 54/122 (43%)
+ Frame = +1
+
 Query: 34  FPAGTNSRWEVIANYMNIHSSSGVKRTAKDVIGKAKSLQKLDPHQKDDINKKAFDKFKKE 213
            +PAGT +RWE +   +N        R+A+DVI  A  ++++   +++D  K      ++ 
 Sbjct: 159 YPAGTPNRWEQMGRVLN--------RSAEDVIAMAGKMKQM---KQEDYTKLLMTTIQQS 207
@@ -71,6 +85,13 @@ Sbjct: 253 KK 254
 
 
 <PRE>
+<a name = 2494160> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=02494160&dopt=GenPept">sp|Q61712|MTJ1_MOUSE</a> DNAJ PROTEIN HOMOLOG MTJ1
+           Length = 552
+           
+ Score = 36.7 bits (83), Expect = 0.033
+ Identities = 17/36 (47%), Positives = 19/36 (52%)
+ Frame = +1
+
 Query: 292 TTEXQKLXEQALNTYPVNTXERWXXIAVAVPGRXKE 399
            T   QKL E AL  YP    +RW  IA  VP + KE
 Sbjct: 496 TQSQQKLLELALQQYPKGASDRWDKIAKCVPSKSKE 531
@@ -78,6 +99,10 @@ Sbjct: 496 TQSQQKLLELALQQYPKGASDRWDKIAKCVPSKSKE 531
 
 
 <PRE>
+ Score = 31.3 bits (69), Expect = 1.5
+ Identities = 18/50 (36%), Positives = 26/50 (52%)
+ Frame = +1
+
 Query: 1   DLQLLIKAVNLFPAGTNSRWEVIANYMNIHSSSGVKRTAKDVIGKAKSLQ 150
            DL  L +++  FP GT  RW+ IA+ +         R+  DV  KAK L+
 Sbjct: 332 DLSQLTRSMVKFPGGTPGRWDKIAHELG--------RSVTDVTTKAKELK 373
@@ -85,6 +110,13 @@ Sbjct: 332 DLSQLTRSMVKFPGGTPGRWDKIAHELG--------RSVTDVTTKAKELK 373
 
 
 <PRE>
+<a name = 1730688> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=01730688&dopt=GenPept">sp|P53745|YN8X_YEAST</a> HYPOTHETICAL 68.1 KD PROTEIN IN BIO3-FRE4 INTERGENIC REGION
+           Length = 580
+           
+ Score = 29.0 bits (63), Expect = 7.4
+ Identities = 27/99 (27%), Positives = 41/99 (41%)
+ Frame = +1
+
 Query: 52  SRWEVIANYMNIHSSSGVKRTAKDVIGKAKSLQKLDPHQKDDINKKAFDKFKKEHGVVPQ 231
            +RW+   +Y        V R+ KDV   ++SL  LD +QK     +A       H +   
 Sbjct: 75  NRWKSFISY--------VTRSRKDVKTVSRSLSNLDLYQKCSKEIRADQDISLLHSI--- 123
@@ -98,7 +130,7 @@ Sbjct: 124 -------ETKLFPYINFTALNS------EQSHNFWPVHT 149
 
 <PRE>
   Database: Non-redundant SwissProt sequences
-    Posted date:  Dec 18, 1999  8:26 PM
+    Posted date:  Dec 28, 1999  4:33 PM
   Number of letters in database: 29,652,561
   Number of sequences in database:  82,258
   

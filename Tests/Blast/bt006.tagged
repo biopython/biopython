@@ -2,12 +2,12 @@
 version        : BLASTP 2.0.10 [Aug-26-1999]
 noevent        : 
 noevent        : 
-reference      : Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. S
-reference      : Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (199
-reference      : "Gapped BLAST and PSI-BLAST: a new generation of protein database
+reference      : Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A.
+reference      : Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1
+reference      : "Gapped BLAST and PSI-BLAST: a new generation of protein databa
 reference      : programs",  Nucleic Acids Res. 25:3389-3402.
 noevent        : 
-query_info     : Query= gi|1174726|sp|P12921|TMRB_BACSU TUNICAMYCIN RESISTANCE PRO
+query_info     : Query= gi|1174726|sp|P12921|TMRB_BACSU TUNICAMYCIN RESISTANCE P
 query_info     :          (197 letters)
 noevent        : 
 database_info  : Database: data/swissprot
@@ -23,9 +23,9 @@ noevent        :
 noevent        : Sequences producing significant alignments:
 noevent        : 
 description    : gi|1174726|sp|P12921|TMRB_BACSU TUNICAMYCIN RESISTANCE PROTEIN
-description    : gi|1352934|sp|P47169|YJ9F_YEAST HYPOTHETICAL 161.2 KD PROTEIN I..
+description    : gi|1352934|sp|P47169|YJ9F_YEAST HYPOTHETICAL 161.2 KD PROTEIN I
 description    : gi|3915741|sp|P04407|KITH_HSV23 THYMIDINE KINASE
-description    : gi|3334489|sp|P15398|RPA1_SCHPO DNA-DIRECTED RNA POLYMERASE I 1..
+description    : gi|3334489|sp|P15398|RPA1_SCHPO DNA-DIRECTED RNA POLYMERASE I 1
 noevent        : 
 noevent        : 
 converged      : CONVERGED!
@@ -37,17 +37,17 @@ noevent        :
 score          :  Score =  402 bits (1021), Expect = e-112
 identities     :  Identities = 197/197 (100%), Positives = 197/197 (100%)
 noevent        : 
-query          : Query: 1   MIIWINGAFGSGKTQTAFELHRRLNPSYVYDPEKMGFALRSMVPQEIAKDDFQS
-align          :            MIIWINGAFGSGKTQTAFELHRRLNPSYVYDPEKMGFALRSMVPQEIAKDDFQS
-sbjct          : Sbjct: 1   MIIWINGAFGSGKTQTAFELHRRLNPSYVYDPEKMGFALRSMVPQEIAKDDFQS
+query          : Query: 1   MIIWINGAFGSGKTQTAFELHRRLNPSYVYDPEKMGFALRSMVPQEIAKDDF
+align          :            MIIWINGAFGSGKTQTAFELHRRLNPSYVYDPEKMGFALRSMVPQEIAKDDF
+sbjct          : Sbjct: 1   MIIWINGAFGSGKTQTAFELHRRLNPSYVYDPEKMGFALRSMVPQEIAKDDF
 noevent        : 
-query          : Query: 61  FNYSLLASLTDTYRGILIVPMTIVHPEYFNEIIGRLRQEGRIVHHFTLMASKET
-align          :            FNYSLLASLTDTYRGILIVPMTIVHPEYFNEIIGRLRQEGRIVHHFTLMASKET
-sbjct          : Sbjct: 61  FNYSLLASLTDTYRGILIVPMTIVHPEYFNEIIGRLRQEGRIVHHFTLMASKET
+query          : Query: 61  FNYSLLASLTDTYRGILIVPMTIVHPEYFNEIIGRLRQEGRIVHHFTLMASK
+align          :            FNYSLLASLTDTYRGILIVPMTIVHPEYFNEIIGRLRQEGRIVHHFTLMASK
+sbjct          : Sbjct: 61  FNYSLLASLTDTYRGILIVPMTIVHPEYFNEIIGRLRQEGRIVHHFTLMASK
 noevent        : 
-query          : Query: 121 TRAEGKNSWAAKQIDRCVEGLSSPIFEDHIQTDNLSIQDVAENIAARAELPLDP
-align          :            TRAEGKNSWAAKQIDRCVEGLSSPIFEDHIQTDNLSIQDVAENIAARAELPLDP
-sbjct          : Sbjct: 121 TRAEGKNSWAAKQIDRCVEGLSSPIFEDHIQTDNLSIQDVAENIAARAELPLDP
+query          : Query: 121 TRAEGKNSWAAKQIDRCVEGLSSPIFEDHIQTDNLSIQDVAENIAARAELPL
+align          :            TRAEGKNSWAAKQIDRCVEGLSSPIFEDHIQTDNLSIQDVAENIAARAELPL
+sbjct          : Sbjct: 121 TRAEGKNSWAAKQIDRCVEGLSSPIFEDHIQTDNLSIQDVAENIAARAELPL
 noevent        : 
 query          : Query: 181 RRFADRLMVKLNHIRIK 197
 align          :            RRFADRLMVKLNHIRIK
@@ -56,16 +56,16 @@ noevent        :
 noevent        : 
 *************** end_alignment
 *************** start_alignment
-title          : >gi|1352934|sp|P47169|YJ9F_YEAST HYPOTHETICAL 161.2 KD PROTEIN IN
+title          : >gi|1352934|sp|P47169|YJ9F_YEAST HYPOTHETICAL 161.2 KD PROTEIN
 title          :            NMD5-HOM6 INTERGENIC REGION
 length         :            Length = 1442
 noevent        : 
 score          :  Score = 30.1 bits (66), Expect = 3.3
-identities     :  Identities = 23/70 (32%), Positives = 35/70 (49%), Gaps = 10/70
+identities     :  Identities = 23/70 (32%), Positives = 35/70 (49%), Gaps = 10/7
 noevent        : 
-query          : Query: 107 TLMASKETLLKR--------LRTRAEGKNSWAAKQIDRCVEGLSSPIFEDHIQT
-align          :            TL+  K+  L R          TR + K S AA   D+ +EGLS P    +  +
-sbjct          : Sbjct: 637 TLLTRKDPSLSRNLKQSAGDALTRKQEKRSKAA--FDQLLEGLSGPPLHVYYAS
+query          : Query: 107 TLMASKETLLKR--------LRTRAEGKNSWAAKQIDRCVEGLSSPIFEDHI
+align          :            TL+  K+  L R          TR + K S AA   D+ +EGLS P    +
+sbjct          : Sbjct: 637 TLLTRKDPSLSRNLKQSAGDALTRKQEKRSKAA--FDQLLEGLSGPPLHVYY
 noevent        : 
 query          : Query: 159 DVAENIAARA 168
 align          :            ++A+ +AARA
@@ -78,7 +78,7 @@ title          : >gi|3915741|sp|P04407|KITH_HSV23 THYMIDINE KINASE
 length         :           Length = 376
 noevent        : 
 score          :  Score = 29.0 bits (63), Expect = 7.4
-identities     :  Identities = 15/37 (40%), Positives = 22/37 (58%), Gaps = 2/37 (
+identities     :  Identities = 15/37 (40%), Positives = 22/37 (58%), Gaps = 2/37
 noevent        : 
 query          : Query: 3  IWINGAFGSGKTQTAFELHRRLNP--SYVYDPEKMGF 37
 align          :           ++I+G  G GKT T+ +L   L P  + VY PE M +
@@ -87,7 +87,7 @@ noevent        :
 noevent        : 
 *************** end_alignment
 *************** start_alignment
-title          : >gi|3334489|sp|P15398|RPA1_SCHPO DNA-DIRECTED RNA POLYMERASE I 19
+title          : >gi|3334489|sp|P15398|RPA1_SCHPO DNA-DIRECTED RNA POLYMERASE I
 title          :            KD POLYPEPTIDE
 length         :            Length = 1689
 noevent        : 

@@ -1,0 +1,278 @@
+<HTML>
+<HEAD>
+<TITLE>BLAST Search Results </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" LINK="#0000FF" VLINK="#660099" ALINK="#660099">
+<A HREF="http://www.ncbi.nlm.nih.gov/BLAST/blast_form.map"> <IMG SRC="http://www.ncbi.nlm.nih.gov/BLAST/blast_results.gif" BORDER=0 ISMAP></A>
+<BR><BR><PRE>
+<b>BLASTX 2.0.10 [Aug-26-1999]</b>
+
+
+<b><a href="http://www.ncbi.nlm.nih.gov/htbin-
+post/Entrez/query?uid=9254694&form=6&db=m&Dopt=r">Reference</a>:</b>
+Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch&auml;ffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+<p>
+<b>Query=</b> gi|1593528|gb|G29977.1|G29977 human STS SHGC-35896.
+         (608 letters)
+
+<b>Database:</b> Non-redundant SwissProt sequences
+           82,258 sequences; 29,652,561 total letters
+
+<p> <p>If you have any problems or questions with the results of this search <br>please refer to the <b><a href=http://www.ncbi.nlm.nih.gov/BLAST/blast_FAQs.html>BLAST FAQs</a></b><br><p>
+<FORM NAME="BLASTFORM">
+</PRE>
+<CENTER>
+<H3><a href="/BLAST/newoptions.html#graphical-overview"> Distribution of 12 Blast Hits on the Query Sequence</a></H3>
+<input name=defline size=80 value="Mouse-over to show defline and scores. Click to show alignments">
+</CENTER>
+<map name=img_map>
+<area shape=rect coords=413,53,507,58 href="#461675" ONMOUSEOVER='document.BLASTFORM.defline.value="P29400  COLLAGEN ALPHA 5(IV) CHAIN PRECURSOR..S=31.3 E=1.6"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=413,60,507,65 href="#728997" ONMOUSEOVER='document.BLASTFORM.defline.value="Q07092  COLLAGEN ALPHA 1(XVI) CHAIN PRECURSOR..S=30.5 E=2.8"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=429,67,520,72 href="#115405" ONMOUSEOVER='document.BLASTFORM.defline.value="P20630  CUTICLE COLLAGEN 12 PRECURSOR..S=30.5 E=2.8"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=429,74,520,79 href="#115406" ONMOUSEOVER='document.BLASTFORM.defline.value="P20631  CUTICLE COLLAGEN 13 PRECURSOR..S=30.5 E=2.8"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=440,81,500,86 href="#2493777" ONMOUSEOVER='document.BLASTFORM.defline.value="Q09455  PUTATIVE CUTICLE COLLAGEN C09G5.4..S=30.5 E=2.8"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=440,88,507,93 href="#465855" ONMOUSEOVER='document.BLASTFORM.defline.value="P34391  PUTATIVE CUTICLE COLLAGEN F09G8.6..S=30.1 E=3.7"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=413,95,520,100 href="#584868" ONMOUSEOVER='document.BLASTFORM.defline.value="P17140  COLLAGEN ALPHA 2(IV) CHAIN PRECURSOR..S=29.7 E=4.8"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=440,102,507,107 href="#728999" ONMOUSEOVER='document.BLASTFORM.defline.value="P39061  COLLAGEN ALPHA 1(XVIII) CHAIN PRECURSOR [CONTAINS: ENDOSTA..S=29.3 E=6.3"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=413,109,520,114 href="#543912" ONMOUSEOVER='document.BLASTFORM.defline.value="P13941  COLLAGEN ALPHA 1(III) CHAIN..S=29.0 E=8.3"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=413,116,495,121 href="#1345650" ONMOUSEOVER='document.BLASTFORM.defline.value="Q02388  COLLAGEN ALPHA 1(VII) CHAIN PRECURSOR (LONG-CHAIN COLLAGEN..S=29.0 E=8.3"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=435,123,507,128 href="#115306" ONMOUSEOVER='document.BLASTFORM.defline.value="P02461  COLLAGEN ALPHA 1(III) CHAIN PRECURSOR..S=29.0 E=8.3"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+</map>
+<CENTER>
+<IMG WIDTH=535 HEIGHT=130 USEMAP=#img_map BORDER=1 SRC="nph-getgif.cgi?iblast0&20789170532578.gif" ISMAP></CENTER>
+<HR>
+<PRE>
+<PRE>
+
+                                                                   Score     E
+Sequences producing significant alignments:                        (bits)  Value
+
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00461675&dopt=GenPept">sp|P29400|CA54_HUMAN</a>  COLLAGEN ALPHA 5(IV) CHAIN PRECURSOR        <a href = #461675> 31</a>  1.6
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=02493777&dopt=GenPept">sp|Q09455|YQ34_CAEEL</a>  PUTATIVE CUTICLE COLLAGEN C09G5.4           <a href = #2493777> 31</a>  2.8
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00728997&dopt=GenPept">sp|Q07092|CA1F_HUMAN</a>  COLLAGEN ALPHA 1(XVI) CHAIN PRECURSOR       <a href = #728997> 31</a>  2.8
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00115406&dopt=GenPept">sp|P20631|CC13_CAEEL</a>  CUTICLE COLLAGEN 13 PRECURSOR               <a href = #115406> 31</a>  2.8
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00115405&dopt=GenPept">sp|P20630|CC12_CAEEL</a>  CUTICLE COLLAGEN 12 PRECURSOR               <a href = #115405> 31</a>  2.8
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00465855&dopt=GenPept">sp|P34391|YLS6_CAEEL</a>  PUTATIVE CUTICLE COLLAGEN F09G8.6           <a href = #465855> 30</a>  3.7
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00584868&dopt=GenPept">sp|P17140|CA24_CAEEL</a>  COLLAGEN ALPHA 2(IV) CHAIN PRECURSOR        <a href = #584868> 30</a>  4.8
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00728999&dopt=GenPept">sp|P39061|CA1H_MOUSE</a>  COLLAGEN ALPHA 1(XVIII) CHAIN PRECURSO...   <a href = #728999> 29</a>  6.3
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=01345650&dopt=GenPept">sp|Q02388|CA17_HUMAN</a>  COLLAGEN ALPHA 1(VII) CHAIN PRECURSOR ...   <a href = #1345650> 29</a>  8.3
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00543912&dopt=GenPept">sp|P13941|CA13_RAT</a>  COLLAGEN ALPHA 1(III) CHAIN                   <a href = #543912> 29</a>  8.3
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00115306&dopt=GenPept">sp|P02461|CA13_HUMAN</a>  COLLAGEN ALPHA 1(III) CHAIN PRECURSOR       <a href = #115306> 29</a>  8.3
+
+<PRE>
+<a name = 461675> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00461675&dopt=GenPept">sp|P29400|CA54_HUMAN</a> COLLAGEN ALPHA 5(IV) CHAIN PRECURSOR
+            Length = 1685
+            
+ Score = 31.3 bits (69), Expect = 1.6
+ Identities = 16/42 (38%), Positives = 19/42 (45%)
+ Frame = +1
+
+Query: 460  PQNKGEVSKXSXGRPXIPGKGGXNXXGXPQGKXGXXGAPXGP 585
+            P  +  + K   G P IPG+ G      PQG  G  G P GP
+Sbjct: 1364 PSGQSIIIKGDAGPPGIPGQPGLKGLPGPQGPQGLPG-PTGP 1404
+</PRE>
+
+
+<PRE>
+<a name = 2493777> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=02493777&dopt=GenPept">sp|Q09455|YQ34_CAEEL</a> PUTATIVE CUTICLE COLLAGEN C09G5.4
+           Length = 323
+           
+ Score = 30.5 bits (67), Expect = 2.8
+ Identities = 12/27 (44%), Positives = 15/27 (55%)
+ Frame = +1
+
+Query: 496 GRPXIPGKGGXNXXGXPQGKXGXXGAP 576
+           G+P  PG+GG      P+G  G  GAP
+Sbjct: 156 GQPGHPGQGGSQGPAGPRGPAGDAGAP 182
+</PRE>
+
+
+<PRE>
+<a name = 728997> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00728997&dopt=GenPept">sp|Q07092|CA1F_HUMAN</a> COLLAGEN ALPHA 1(XVI) CHAIN PRECURSOR
+           Length = 1603
+           
+ Score = 30.5 bits (67), Expect = 2.8
+ Identities = 16/42 (38%), Positives = 17/42 (40%)
+ Frame = +1
+
+Query: 460 PQNKGEVSKXSXGRPXIPGKGGXNXXGXPQGKXGXXGAPXGP 585
+           P  KGE      GRP  PG+ G      P G  G  G P  P
+Sbjct: 743 PGPKGEQGPEGVGRPGKPGQPGLPGVQGPPGLKGVQGEPGPP 784
+</PRE>
+
+
+<PRE>
+<a name = 115406> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00115406&dopt=GenPept">sp|P20631|CC13_CAEEL</a> CUTICLE COLLAGEN 13 PRECURSOR
+           Length = 316
+           
+ Score = 30.5 bits (67), Expect = 2.8
+ Identities = 16/41 (39%), Positives = 18/41 (43%), Gaps = 2/41 (4%)
+ Frame = +1
+
+Query: 481 SKXSXGRPXIPGKGGXNXXGXP--QGKXGXXGAPXGPXXXXXP 603
+           S    G P  PG+ G +  G P  QG  G  GAP  P     P
+Sbjct: 250 SPGPAGAPGQPGQAGSSQPGGPGPQGDAGAPGAPGAPGQAGAP 292
+</PRE>
+
+
+<PRE>
+<a name = 115405> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00115405&dopt=GenPept">sp|P20630|CC12_CAEEL</a> CUTICLE COLLAGEN 12 PRECURSOR
+           Length = 316
+           
+ Score = 30.5 bits (67), Expect = 2.8
+ Identities = 16/41 (39%), Positives = 18/41 (43%), Gaps = 2/41 (4%)
+ Frame = +1
+
+Query: 481 SKXSXGRPXIPGKGGXNXXGXP--QGKXGXXGAPXGPXXXXXP 603
+           S    G P  PG+ G +  G P  QG  G  GAP  P     P
+Sbjct: 250 SPGPAGAPGQPGQAGSSQPGGPGPQGDAGAPGAPGAPGQAGAP 292
+</PRE>
+
+
+<PRE>
+<a name = 465855> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00465855&dopt=GenPept">sp|P34391|YLS6_CAEEL</a> PUTATIVE CUTICLE COLLAGEN F09G8.6
+           Length = 278
+           
+ Score = 30.1 bits (66), Expect = 3.7
+ Identities = 12/30 (40%), Positives = 15/30 (50%)
+ Frame = +1
+
+Query: 496 GRPXIPGKGGXNXXGXPQGKXGXXGAPXGP 585
+           G+P   G+GG      P+G  G  GAP  P
+Sbjct: 155 GQPGADGQGGAPGPAGPEGPAGDAGAPGAP 184
+</PRE>
+
+
+<PRE>
+<a name = 584868> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00584868&dopt=GenPept">sp|P17140|CA24_CAEEL</a> COLLAGEN ALPHA 2(IV) CHAIN PRECURSOR
+            Length = 1758
+            
+ Score = 29.7 bits (65), Expect = 4.8
+ Identities = 19/48 (39%), Positives = 21/48 (43%)
+ Frame = +1
+
+Query: 460  PQNKGEVSKXSXGRPXIPGKGGXNXXGXPQGKXGXXGAPXGPXXXXXP 603
+            P  KGE      G+P  PG+ G    G P GK G  GAP  P     P
+Sbjct: 1059 PGFKGETGLPGYGQPGQPGEKG--LPGIP-GKAGRQGAPGSPGQDGLP 1103
+</PRE>
+
+
+<PRE>
+ Score = 29.7 bits (65), Expect = 4.8
+ Identities = 18/42 (42%), Positives = 19/42 (44%), Gaps = 1/42 (2%)
+ Frame = +1
+
+Query: 460 PQNKGEVSKXSXGRPXIPG-KGGXNXXGXPQGKXGXXGAPXGP 585
+           P NKGE      G+P  PG KG     G P G  G  G P  P
+Sbjct: 675 PGNKGEAGYGQPGQPGFPGAKGDGGLPGLP-GTPGLQGMPGEP 716
+</PRE>
+
+
+<PRE>
+<a name = 728999> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00728999&dopt=GenPept">sp|P39061|CA1H_MOUSE</a> COLLAGEN ALPHA 1(XVIII) CHAIN PRECURSOR [CONTAINS: ENDOSTATIN]
+           Length = 1315
+           
+ Score = 29.3 bits (64), Expect = 6.3
+ Identities = 12/30 (40%), Positives = 15/30 (50%)
+ Frame = +1
+
+Query: 496 GRPXIPGKGGXNXXGXPQGKXGXXGAPXGP 585
+           GRP +PG+ G      P+G  G  G P  P
+Sbjct: 842 GRPGLPGQQGVQGPSGPKGDKGEVGPPGPP 871
+</PRE>
+
+
+<PRE>
+<a name = 1345650> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=01345650&dopt=GenPept">sp|Q02388|CA17_HUMAN</a> COLLAGEN ALPHA 1(VII) CHAIN PRECURSOR (LONG-CHAIN COLLAGEN) (LC
+            COLLAGEN)
+            Length = 2944
+            
+ Score = 29.0 bits (63), Expect = 8.3
+ Identities = 13/37 (35%), Positives = 16/37 (43%)
+ Frame = +1
+
+Query: 460  PQNKGEVSKXSXGRPXIPGKGGXNXXGXPQGKXGXXG 570
+            P  KGE      G P +PG+ G      P+G  G  G
+Sbjct: 1441 PGKKGEKGDSEDGAPGLPGQPGSPGEQGPRGPPGAIG 1477
+</PRE>
+
+
+<PRE>
+<a name = 543912> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00543912&dopt=GenPept">sp|P13941|CA13_RAT</a> COLLAGEN ALPHA 1(III) CHAIN
+           Length = 636
+           
+ Score = 29.0 bits (63), Expect = 8.3
+ Identities = 17/48 (35%), Positives = 18/48 (37%)
+ Frame = +1
+
+Query: 460 PQNKGEVSKXSXGRPXIPGKGGXNXXGXPQGKXGXXGAPXGPXXXXXP 603
+           P  KGE        P  PG  G      PQG  G  G+P GP     P
+Sbjct: 2   PGEKGEGGPPGAAGP--PGGSGPAGPPGPQGVKGERGSPGGPGAAGFP 47
+</PRE>
+
+
+<PRE>
+<a name = 115306> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00115306&dopt=GenPept">sp|P02461|CA13_HUMAN</a> COLLAGEN ALPHA 1(III) CHAIN PRECURSOR
+           Length = 1466
+           
+ Score = 29.0 bits (63), Expect = 8.3
+ Identities = 13/32 (40%), Positives = 13/32 (40%)
+ Frame = +1
+
+Query: 490 SXGRPXIPGKGGXNXXGXPQGKXGXXGAPXGP 585
+           S G P  PG  G      P G  G  GAP  P
+Sbjct: 886 SNGNPGPPGPSGSPGKDGPPGPAGNTGAPGSP 917
+</PRE>
+
+
+
+<PRE>
+  Database: Non-redundant SwissProt sequences
+    Posted date:  Dec 28, 1999  4:33 PM
+  Number of letters in database: 29,652,561
+  Number of sequences in database:  82,258
+  
+Lambda     K      H
+   0.318    0.135    0.401 
+
+Gapped
+Lambda     K      H
+   0.270   0.0470    0.230 
+
+
+Matrix: BLOSUM62
+Gap Penalties: Existence: 11, Extension: 1
+Number of Hits to DB: 27301044
+Number of Sequences: 82258
+Number of extensions: 501818
+Number of successful extensions: 2382
+Number of sequences better than 10.0: 22
+Number of HSP's better than 10.0 without gapping: 10
+Number of HSP's successfully gapped in prelim test: 3
+Number of HSP's that attempted gapping in prelim test: 2052
+Number of HSP's gapped (non-prelim): 298
+length of query: 202
+length of database: 29,652,561
+effective HSP length: 50
+effective length of query: 152
+effective length of database: 25,539,661
+effective search space: 3882028472
+effective search space used: 3882028472
+frameshift window, decay const: 50,  0.1
+T: 12
+A: 40
+X1: 16 ( 7.3 bits)
+X2: 38 (14.8 bits)
+X3: 64 (24.9 bits)
+S1: 41 (21.7 bits)
+S2: 62 (28.6 bits)
+
+</PRE>
+
+</BODY>
+</HTML>
+</BODY>
+</HTML>

@@ -1,0 +1,80 @@
+noevent        : <HTML>
+noevent        : <HEAD>
+noevent        : <TITLE>BLAST Search Results </TITLE>
+noevent        : </HEAD>
+noevent        : <BODY BGCOLOR="#FFFFFF" LINK="#0000FF" VLINK="#660099" ALINK="#
+noevent        : <A HREF="http://www.ncbi.nlm.nih.gov/BLAST/blast_form.map"> <IM
+*************** start_header
+noevent        : <BR><BR><PRE>
+version        : <b>BLASTX 2.0.10 [Aug-26-1999]</b>
+noevent        : 
+noevent        : 
+reference      : <b><a href="http://www.ncbi.nlm.nih.gov/htbin-
+reference      : post/Entrez/query?uid=9254694&form=6&db=m&Dopt=r">Reference</a>
+reference      : Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch&auml;f
+reference      : Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1
+reference      : "Gapped BLAST and PSI-BLAST: a new generation of protein databa
+reference      : programs",  Nucleic Acids Res. 25:3389-3402.
+noevent        : <p>
+query_info     : <b>Query=</b> gi|1347782|gb|G25550.1|G25550 human STS EST47652.
+query_info     :          (379 letters)
+noevent        : 
+database_info  : <b>Database:</b> Non-redundant SwissProt sequences
+database_info  :            82,258 sequences; 29,652,561 total letters
+noevent        : 
+noevent        : <p> <p>If you have any problems or questions with the results o
+*************** end_header
+*************** start_descriptions
+no_hits        : <b>No significant similarity found.</b> For reasons why, <A HRE
+*************** end_descriptions
+*************** start_database_report
+noevent        : <PRE>
+database       :   Database: Non-redundant SwissProt sequences
+posted_date    :     Posted date:  Dec 18, 1999  8:26 PM
+num_letters_in_:   Number of letters in database: 29,652,561
+num_sequences_i:   Number of sequences in database:  82,258
+noevent        : 
+noevent        : Lambda     K      H
+ka_params      :    0.318    0.135    0.401
+noevent        : 
+gapped         : Gapped
+noevent        : Lambda     K      H
+ka_params_gap  :    0.270   0.0470    0.230
+noevent        : 
+*************** end_database_report
+noevent        : 
+*************** start_parameters
+matrix         : Matrix: BLOSUM62
+gap_penalties  : Gap Penalties: Existence: 11, Extension: 1
+num_hits       : Number of Hits to DB: 14686001
+num_sequences  : Number of Sequences: 82258
+num_extends    : Number of extensions: 235383
+num_good_extend: Number of successful extensions: 396
+num_seqs_better: Number of sequences better than 10.0: 0
+hsps_no_gap    : Number of HSP's better than 10.0 without gapping: 0
+hsps_prelim_gap: Number of HSP's successfully gapped in prelim test: 0
+hsps_prelim_gap: Number of HSP's that attempted gapping in prelim test: 396
+hsps_gapped    : Number of HSP's gapped (non-prelim): 0
+query_length   : length of query: 126
+database_length: length of database: 29,652,561
+effective_hsp_l: effective HSP length: 48
+effective_query: effective length of query: 77
+effective_datab: effective length of database: 25,704,177
+effective_searc: effective search space: 1979221629
+effective_searc: effective search space used: 1979221629
+frameshift     : frameshift window, decay const: 50,  0.1
+threshold      : T: 12
+window_size    : A: 40
+dropoff_1st_pas: X1: 16 ( 7.3 bits)
+gap_x_dropoff  : X2: 38 (14.8 bits)
+gap_x_dropoff_f: X3: 64 (24.9 bits)
+gap_trigger    : S1: 41 (21.7 bits)
+blast_cutoff   : S2: 60 (27.8 bits)
+noevent        : 
+noevent        : </PRE>
+*************** end_parameters
+noevent        : 
+noevent        : </BODY>
+noevent        : </HTML>
+noevent        : </BODY>
+noevent        : </HTML>

@@ -1,0 +1,210 @@
+noevent        : <HTML>
+noevent        : <HEAD>
+noevent        : <TITLE>BLAST Search Results </TITLE>
+noevent        : </HEAD>
+noevent        : <BODY BGCOLOR="#FFFFFF" LINK="#0000FF" VLINK="#660099" ALINK="#
+noevent        : <A HREF="http://www.ncbi.nlm.nih.gov/BLAST/blast_form.map"> <IM
+*************** start_header
+noevent        : <BR><BR><PRE>
+version        : <b>BLASTP 2.0.10 [Aug-26-1999]</b>
+noevent        : 
+noevent        : 
+reference      : <b><a href="http://www.ncbi.nlm.nih.gov/htbin-
+reference      : post/Entrez/query?uid=9254694&form=6&db=m&Dopt=r">Reference</a>
+reference      : Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch&auml;f
+reference      : Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1
+reference      : "Gapped BLAST and PSI-BLAST: a new generation of protein databa
+reference      : programs",  Nucleic Acids Res. 25:3389-3402.
+noevent        : <p>
+query_info     : <b>Query=</b> gi|1718062|sp|P16153|UTXA_CLODI UTXA PROTEIN.
+query_info     :          (166 letters)
+noevent        : 
+database_info  : <b>Database:</b> Non-redundant SwissProt sequences
+database_info  :            82,258 sequences; 29,652,561 total letters
+noevent        : 
+noevent        : <p> <p>If you have any problems or questions with the results o
+noevent        : <FORM NAME="BLASTFORM">
+noevent        : </PRE>
+noevent        : <CENTER>
+noevent        : <H3><a href="/BLAST/newoptions.html#graphical-overview"> Distri
+noevent        : <input name=defline size=80 value="Mouse-over to show defline a
+noevent        : </CENTER>
+noevent        : <map name=img_map>
+noevent        : <area shape=rect coords=69,101,522,106 href="#1718062" ONMOUSEO
+noevent        : <area shape=rect coords=167,108,519,113 href="#140528" ONMOUSEO
+noevent        : <area shape=rect coords=178,115,475,120 href="#141088" ONMOUSEO
+noevent        : <area shape=rect coords=286,122,439,127 href="#6014830" ONMOUSE
+noevent        : <area shape=rect coords=313,129,431,134 href="#1351589" ONMOUSE
+noevent        : <area shape=rect coords=357,136,475,141 href="#2496246" ONMOUSE
+noevent        : </map>
+noevent        : <CENTER>
+noevent        : <IMG WIDTH=529 HEIGHT=143 USEMAP=#img_map BORDER=1 SRC="nph-get
+noevent        : <HR>
+noevent        : <PRE>
+*************** end_header
+*************** start_descriptions
+noevent        : 
+noevent        : 
+*************** end_descriptions
+*************** start_alignment
+noevent        : <PRE>
+title          : <a name = 1718062> </a><a href="http://www.ncbi.nlm.nih.gov:80/
+length         :            Length = 166
+noevent        : 
+score          :  Score =  332 bits (843), Expect = 2e-91
+identities     :  Identities = 166/166 (100%), Positives = 166/166 (100%)
+noevent        : 
+query          : Query: 1   MHSSSPFYISNGNKIFFYINLGGVMNMTISFLSEHIFIKLVILTISFDTLLG
+align          :            MHSSSPFYISNGNKIFFYINLGGVMNMTISFLSEHIFIKLVILTISFDTLLG
+sbjct          : Sbjct: 1   MHSSSPFYISNGNKIFFYINLGGVMNMTISFLSEHIFIKLVILTISFDTLLG
+noevent        : 
+query          : Query: 61  KFNSSFGIDGGIRKVAMIACIFFLSVVDILTKFNFLFMLPQDCINFLRLKHL
+align          :            KFNSSFGIDGGIRKVAMIACIFFLSVVDILTKFNFLFMLPQDCINFLRLKHL
+sbjct          : Sbjct: 61  KFNSSFGIDGGIRKVAMIACIFFLSVVDILTKFNFLFMLPQDCINFLRLKHL
+noevent        : 
+query          : Query: 121 LFILYESVSILKNMCLCGLPVPKRLKEKIAILLDAMTDEMNAKDEK 166
+align          :            LFILYESVSILKNMCLCGLPVPKRLKEKIAILLDAMTDEMNAKDEK
+sbjct          : Sbjct: 121 LFILYESVSILKNMCLCGLPVPKRLKEKIAILLDAMTDEMNAKDEK 166
+noevent        : </PRE>
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+noevent        : <PRE>
+title          : <a name = 140528> </a><a href="http://www.ncbi.nlm.nih.gov:80/e
+title          :            (ORF2)
+length         :            Length = 140
+noevent        : 
+score          :  Score = 39.5 bits (90), Expect = 0.004
+identities     :  Identities = 27/130 (20%), Positives = 55/130 (41%), Gaps = 19
+noevent        : 
+query          : Query: 37  FIKLVILTISFDTLLGCLSAIKSRKFNSSFGIDGGIRKVAMIACIFFLSVVD
+align          :            ++ L+++    D L G + A K +K  S     G +RK+     +   +V+D
+sbjct          : Sbjct: 26  YLDLLLVLSIIDVLTGVIKAWKFKKLRSRSAWFGYVRKLLNFFAVILANVID
+noevent        : 
+query          : Query: 97  FMLPQDCINFLRLKHLGISEFFSILF-ILYESVSILKNMCLCGLPVPKRLKE
+align          :                            G+  F ++LF I  E +SI +N+   G+ +P  + +
+sbjct          : Sbjct: 84  ----------------GVLTFGTVLFYIANEGLSITENLAQIGVKIPSSITD
+noevent        : 
+query          : Query: 156 MTDEMNAKDE 165
+align          :                 N  D+
+sbjct          : Sbjct: 128 KEQSKNNADK 137
+noevent        : </PRE>
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+noevent        : <PRE>
+title          : <a name = 141088> </a><a href="http://www.ncbi.nlm.nih.gov:80/e
+length         :            Length = 132
+noevent        : 
+score          :  Score = 38.7 bits (88), Expect = 0.007
+identities     :  Identities = 24/110 (21%), Positives = 52/110 (46%), Gaps = 18
+noevent        : 
+query          : Query: 41  VILTISFDTLLGCLSAIKSRKFNSSFGIDGGIRKVAMIACIFFLSVVD-ILT
+align          :            +++ I  D L G +   KS++  S+ G+ G  +K  ++  +    ++D +L
+sbjct          : Sbjct: 33  LLVFIFLDYLTGVIKGCKSKELCSNIGLRGITKKGLILVVLLVAVMLDRLLD
+noevent        : 
+query          : Query: 100 PQDCINFLRLKHLGISEFFSILFILYESVSILKNMCLCGLPVPKRLKEKI 1
+align          :                               +  +I+ E +SIL+N    G+P+P++LK+ +
+sbjct          : Sbjct: 93  -----------------LIAYFYIMNEGISILENCAALGVPIPEKLKQAL 1
+noevent        : </PRE>
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+noevent        : <PRE>
+title          : <a name = 6014830> </a><a href="http://www.ncbi.nlm.nih.gov:80/
+length         :            Length = 379
+noevent        : 
+score          :  Score = 29.3 bits (64), Expect = 4.6
+identities     :  Identities = 19/57 (33%), Positives = 33/57 (57%), Gaps = 2/57
+noevent        : 
+query          : Query: 80  CIFFLSVVDILTKFNFLFMLPQDCINFLRLKHLGISEFFSILFILYESVSIL
+align          :            C+F+L V D+LT   ++   P +   F+ +  L    +F+IL IL  ++SI+
+sbjct          : Sbjct: 323 CLFWLLVADLLT-LTWIGGQPVEH-PFITIGQLASILYFAILLILMPAISII
+noevent        : </PRE>
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+noevent        : <PRE>
+title          : <a name = 1351589> </a><a href="http://www.ncbi.nlm.nih.gov:80/
+length         :            Length = 334
+noevent        : 
+score          :  Score = 29.0 bits (63), Expect = 6.0
+identities     :  Identities = 16/44 (36%), Positives = 24/44 (54%), Gaps = 2/44
+noevent        : 
+query          : Query: 90  LTKFNFLFMLPQDCINFLRLKHLGISEFFSILFILYESVSILKN 133
+align          :            LTKFN  F+ P     FLR+  +G+   FS++ I +   S  +N
+sbjct          : Sbjct: 4   LTKFNKFFLTPNKLNAFLRV--IGLCGLFSVIAISFGIYSYTRN 45
+noevent        : </PRE>
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+noevent        : <PRE>
+title          : <a name = 2496246> </a><a href="http://www.ncbi.nlm.nih.gov:80/
+length         :            Length = 361
+noevent        : 
+score          :  Score = 28.6 bits (62), Expect = 7.8
+identities     :  Identities = 19/56 (33%), Positives = 30/56 (52%), Gaps = 12/5
+noevent        : 
+query          : Query: 106 FLRLKHLGIS---EFFSILFILYES----VSILKNMC-----LCGLPVPKRL
+align          :            ++ L+ + IS   +F  +LF  YE     V I+K++      LCG+P PK
+sbjct          : Sbjct: 68  YINLRGIFISKYKDFIEVLFEEYEEDRKPVEIIKSLIKDVPSLCGIPTPKNT
+noevent        : </PRE>
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_database_report
+noevent        : 
+noevent        : <PRE>
+database       :   Database: Non-redundant SwissProt sequences
+posted_date    :     Posted date:  Dec 18, 1999  8:26 PM
+num_letters_in_:   Number of letters in database: 29,652,561
+num_sequences_i:   Number of sequences in database:  82,258
+noevent        : 
+noevent        : Lambda     K      H
+ka_params      :    0.331    0.146    0.428
+noevent        : 
+gapped         : Gapped
+noevent        : Lambda     K      H
+ka_params_gap  :    0.270   0.0470    0.230
+noevent        : 
+*************** end_database_report
+noevent        : 
+*************** start_parameters
+matrix         : Matrix: BLOSUM62
+gap_penalties  : Gap Penalties: Existence: 11, Extension: 1
+num_hits       : Number of Hits to DB: 8801581
+num_sequences  : Number of Sequences: 82258
+num_extends    : Number of extensions: 320828
+num_good_extend: Number of successful extensions: 892
+num_seqs_better: Number of sequences better than 10.0: 6
+hsps_no_gap    : Number of HSP's better than 10.0 without gapping: 3
+hsps_prelim_gap: Number of HSP's successfully gapped in prelim test: 3
+hsps_prelim_gap: Number of HSP's that attempted gapping in prelim test: 888
+hsps_gapped    : Number of HSP's gapped (non-prelim): 6
+query_length   : length of query: 166
+database_length: length of database: 29,652,561
+effective_hsp_l: effective HSP length: 46
+effective_query: effective length of query: 120
+effective_datab: effective length of database: 25,868,693
+effective_searc: effective search space: 3104243160
+effective_searc: effective search space used: 3104243160
+threshold      : T: 11
+window_size    : A: 40
+dropoff_1st_pas: X1: 15 ( 7.2 bits)
+gap_x_dropoff  : X2: 38 (14.8 bits)
+gap_x_dropoff_f: X3: 64 (24.9 bits)
+gap_trigger    : S1: 40 (21.9 bits)
+blast_cutoff   : S2: 62 (28.6 bits)
+noevent        : 
+noevent        : </PRE>
+*************** end_parameters
+noevent        : 
+noevent        : </BODY>
+noevent        : </HTML>
+noevent        : </BODY>
+noevent        : </HTML>

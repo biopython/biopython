@@ -2,9 +2,9 @@
 version        : BLASTN 2.0.10 [Aug-26-1999]
 noevent        : 
 noevent        : 
-reference      : Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. S
-reference      : Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (199
-reference      : "Gapped BLAST and PSI-BLAST: a new generation of protein database
+reference      : Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A.
+reference      : Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1
+reference      : "Gapped BLAST and PSI-BLAST: a new generation of protein databa
 reference      : programs",  Nucleic Acids Res. 25:3389-3402.
 noevent        : 
 query_info     : Query= gi|1348916|gb|G26684|G26684 human STS
@@ -21,10 +21,10 @@ noevent        :
 noevent        : 
 noevent        : Sequences producing significant alignments:
 noevent        : 
-description    : gi|1348916|gb|G26684|G26684 human STS STS_D11570. >gi|1375195|g..
+description    : gi|1348916|gb|G26684|G26684 human STS STS_D11570. >gi|1375195|g
 description    : gi|720683|gb|G03725|G03725 human STS WI-344.
-description    : gi|4516686|dbj|AU026763.1|AU026763 Rattus norvegicus, OTSUKA cl..
-description    : gi|6120827|gb|G55508.1|G55508 SHGC-100856 Human Homo sapiens ST..
+description    : gi|4516686|dbj|AU026763.1|AU026763 Rattus norvegicus, OTSUKA cl
+description    : gi|6120827|gb|G55508.1|G55508 SHGC-100856 Human Homo sapiens ST
 noevent        : 
 *************** end_descriptions
 *************** start_alignment
@@ -37,24 +37,24 @@ identities     :  Identities = 285/285 (100%)
 strand         :  Strand = Plus / Plus
 noevent        : 
 noevent        : 
-query          : Query: 1   gatccctacccttnccgttggtctctntcgctgactcgaggcacctaacatcca
-align          :            ||||||||||||||||||||||||||||||||||||||||||||||||||||||
-sbjct          : Sbjct: 1   gatccctacccttnccgttggtctctntcgctgactcgaggcacctaacatcca
+query          : Query: 1   gatccctacccttnccgttggtctctntcgctgactcgaggcacctaacatc
+align          :            ||||||||||||||||||||||||||||||||||||||||||||||||||||
+sbjct          : Sbjct: 1   gatccctacccttnccgttggtctctntcgctgactcgaggcacctaacatc
 noevent        : 
 noevent        : 
-query          : Query: 61  cccaacacaggccagcgacttctggggctcagccacagacatggtttgtnactn
-align          :            ||||||||||||||||||||||||||||||||||||||||||||||||||||||
-sbjct          : Sbjct: 61  cccaacacaggccagcgacttctggggctcagccacagacatggtttgtnactn
+query          : Query: 61  cccaacacaggccagcgacttctggggctcagccacagacatggtttgtnac
+align          :            ||||||||||||||||||||||||||||||||||||||||||||||||||||
+sbjct          : Sbjct: 61  cccaacacaggccagcgacttctggggctcagccacagacatggtttgtnac
 noevent        : 
 noevent        : 
-query          : Query: 121 ttctgttcctagagaatcctagaggcttgattggcccaggctgctgtntgtnct
-align          :            ||||||||||||||||||||||||||||||||||||||||||||||||||||||
-sbjct          : Sbjct: 121 ttctgttcctagagaatcctagaggcttgattggcccaggctgctgtntgtnct
+query          : Query: 121 ttctgttcctagagaatcctagaggcttgattggcccaggctgctgtntgtn
+align          :            ||||||||||||||||||||||||||||||||||||||||||||||||||||
+sbjct          : Sbjct: 121 ttctgttcctagagaatcctagaggcttgattggcccaggctgctgtntgtn
 noevent        : 
 noevent        : 
-query          : Query: 181 aaagaatccctacctcctaggggtgaaaggaaatnaaaatggaaagttcttgta
-align          :            ||||||||||||||||||||||||||||||||||||||||||||||||||||||
-sbjct          : Sbjct: 181 aaagaatccctacctcctaggggtgaaaggaaatnaaaatggaaagttcttgta
+query          : Query: 181 aaagaatccctacctcctaggggtgaaaggaaatnaaaatggaaagttcttg
+align          :            ||||||||||||||||||||||||||||||||||||||||||||||||||||
+sbjct          : Sbjct: 181 aaagaatccctacctcctaggggtgaaaggaaatnaaaatggaaagttcttg
 noevent        : 
 noevent        : 
 query          : Query: 241 ggcctgacatgggtagctgctcaataaatgctagtntgttatttc 285
@@ -79,8 +79,8 @@ noevent        :
 noevent        : 
 *************** end_alignment
 *************** start_alignment
-title          : >gi|4516686|dbj|AU026763.1|AU026763 Rattus norvegicus, OTSUKA clo
-title          :            OT33.16/752f07, microsatellite sequence, sequence tagg
+title          : >gi|4516686|dbj|AU026763.1|AU026763 Rattus norvegicus, OTSUKA c
+title          :            OT33.16/752f07, microsatellite sequence, sequence ta
 title          :            site
 length         :            Length = 307
 noevent        : 
@@ -96,7 +96,7 @@ noevent        :
 noevent        : 
 *************** end_alignment
 *************** start_alignment
-title          : >gi|6120827|gb|G55508.1|G55508 SHGC-100856 Human Homo sapiens STS
+title          : >gi|6120827|gb|G55508.1|G55508 SHGC-100856 Human Homo sapiens S
 title          :            genomic, sequence tagged site
 length         :            Length = 711
 noevent        : 

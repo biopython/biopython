@@ -6,7 +6,6 @@ BLAST-related code in Biopython.
 
 
 
-
 BLAST OUTPUT FILES
 ------------------
 
@@ -15,35 +14,41 @@ bt001 blastall 2.0.10 sp:P21297  swissprot -p blastp
 bt002 blastall 2.0.10 sp:Q02112  pdbaa     -p blastp      no hits
 bt003 blastall 2.0.10 sp:P16153  swissprot -p blastp -v 0 no descriptions 
 bt004 blastall 2.0.10 sp:P16153  swissprot -p blastp -b 0 no alignments
-bt005 blastall 2.0.10 sp:P15394  swissprot -p blastp -m 6 master slave alignments
+bt005 blastall 2.0.10 sp:P15394  swissprot -p blastp -m 6 master-slave
 bt006 blastpgp 2.0.10 sp:P12921  swissprot -j 10          converges in 1 round
 bt007 blastpgp 2.0.10 sp:P17216  swissprot -j 10          converges in 3 rounds
-bt008 blastpgp 2.0.10 sp:P33654  swissprot -j 10          doesn't converge
+*bt008 blastpgp 2.0.10 sp:P33654  swissprot -j 10          doesn't converge
 bt009 blastpgp 2.0.10 sp:Q02134  swissprot -j 10          no new sequences before CONVERGED! message
 bt010 blastall 2.0.10 gi:1348916 sts       -p blastn
-bt011 blastall 2.0.10 gi:1348400 sts       -p blastn -b 0 no alignments
+bt011 blastall 2.0.10 gi:1348400 sts       -p blastn -b 0 no alignment
 bt012 blastall 2.0.10 gi:1347201 sts       -p blastn -v 0 no descriptions
-bt013 blastall 2.0.10 gi:859351  sts       -p blastn -m 1 master slave alignments
+bt013 blastall 2.0.10 gi:859351  sts       -p blastn -m 1 master-slave
 bt014 blastall 2.0.10 gi:1347369 swissprot -p blastx
 bt015 blastall 2.0.10 gi:1347782 swissprot -p blastx      no hits
 bt016 blastall 2.0.10 sp:P39483  sts       -p tblastn
 bt017 blastall 2.0.10 sp:P19888  sts       -p tblastn     no hits
 bt018 blastall 2.0.10 gi:1348853 sts       -p tblastx
 bt019 NCBI WWW 2.0.10 sp:P21297  swissprot blastp
-bt020
+bt020 RESERVED
 bt021 NCBI WWW 2.0.10 sp:P16153  swissprot blastp descriptions=0
 bt022 NCBI WWW 2.0.10 sp:P16153  swissprot blastp alignments=0
 bt023 NCBI WWW 2.0.10 sp:P15394  swissprot blastp flat master-slave without identities
 bt024 NCBI WWW 2.0.10 gi:1348916 dbsts     blastn
 bt025 NCBI WWW 2.0.10 gi:1348400 dbsts     blastn alignments=0
 bt026 NCBI WWW 2.0.10 gi:1347201 dbsts     blastn descriptions=0
-bt027 NCBI WWW 2.0.10 gi:859351  dbsts     blastn master slave with identities
+bt027 NCBI WWW 2.0.10 gi:859351  dbsts     blastn master-slave with identities
 bt028 NCBI WWW 2.0.10 gi:1347369 swissprot blastx
 bt029 NCBI WWW 2.0.10 gi:1347782 swissprot blastx         no hits
 bt030 NCBI WWW 2.0.10 sp:P39483  dbsts     tblastn
 bt031 NCBI WWW 2.0.10 sp:P19888  dbsts     tblastn        no hits
 bt032 NCBI WWW 2.0.10 gi:1348853 dbsts     tblastx
+bt033 NCBI WWW 2.0.10 gi:1593528 dbsts     blastx         >1 HSP in alignment
+bt034 NCBI WWW 2.0.10 gi:1347369 swissprot blastx         no header info
+bt035 NCBI WWW 2.0.10 sp:P23832  swissprot blastp         >1 HSP in alignment
+bt036 NCBI WWW 2.0.10 sp:P29247  swissprot blastp no graphical overview
+bt037 NCBI WWW 2.0.10 sp:Q06110  swissprot blastp no graphical overview descriptions=0
+bt038 NCBI WWW 2.0.10 sp:Q06110  swissprot blastp descriptions=0 master-slave without identities
+bt039 blastall 2.0.10 sp:Q08386  swissprot -p blastp      >1 HSP in alignment
+bt040 blastall 2.0.10 sp:Q05362  swissprot -p blastp -v 0 -m 4 no descriptions, master-slave
 
-
-NOTES:
-- bt008 is not included because the file is too big (>15Mb).
+* bt008 is not included because the file is too big (>15Mb).

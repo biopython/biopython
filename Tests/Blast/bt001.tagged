@@ -2,9 +2,9 @@
 version        : BLASTP 2.0.10 [Aug-26-1999]
 noevent        : 
 noevent        : 
-reference      : Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. S
-reference      : Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (199
-reference      : "Gapped BLAST and PSI-BLAST: a new generation of protein database
+reference      : Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A.
+reference      : Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1
+reference      : "Gapped BLAST and PSI-BLAST: a new generation of protein databa
 reference      : programs",  Nucleic Acids Res. 25:3389-3402.
 noevent        : 
 query_info     : Query= gi|120291|sp|P21297|FLBT_CAUCR FLBT PROTEIN
@@ -21,7 +21,7 @@ noevent        :
 noevent        : Sequences producing significant alignments:
 noevent        : 
 description    : gi|120291|sp|P21297|FLBT_CAUCR FLBT PROTEIN
-description    : gi|3024946|sp|Q58368|Y958_METJA HYPOTHETICAL PROTEIN MJ0958 PRE..
+description    : gi|3024946|sp|Q58368|Y958_METJA HYPOTHETICAL PROTEIN MJ0958 PRE
 description    : gi|3024745|sp|O26320|THSA_METTH PROBABLE THERMOSOME SUBUNIT A
 noevent        : 
 *************** end_descriptions
@@ -32,13 +32,13 @@ noevent        :
 score          :  Score =  284 bits (718), Expect = 7e-77
 identities     :  Identities = 141/141 (100%), Positives = 141/141 (100%)
 noevent        : 
-query          : Query: 1   MPLKLSLKPGEKFVLNGAVVQNGDRRGVLVLQNKASVLREKDIMQPDQVTTPAR
-align          :            MPLKLSLKPGEKFVLNGAVVQNGDRRGVLVLQNKASVLREKDIMQPDQVTTPAR
-sbjct          : Sbjct: 1   MPLKLSLKPGEKFVLNGAVVQNGDRRGVLVLQNKASVLREKDIMQPDQVTTPAR
+query          : Query: 1   MPLKLSLKPGEKFVLNGAVVQNGDRRGVLVLQNKASVLREKDIMQPDQVTTP
+align          :            MPLKLSLKPGEKFVLNGAVVQNGDRRGVLVLQNKASVLREKDIMQPDQVTTP
+sbjct          : Sbjct: 1   MPLKLSLKPGEKFVLNGAVVQNGDRRGVLVLQNKASVLREKDIMQPDQVTTP
 noevent        : 
-query          : Query: 61  MMMYLDEVGAEKFYEEFATRLNEFMGVVRNPVVLQDCIAISKHVMAREYYKALM
-align          :            MMMYLDEVGAEKFYEEFATRLNEFMGVVRNPVVLQDCIAISKHVMAREYYKALM
-sbjct          : Sbjct: 61  MMMYLDEVGAEKFYEEFATRLNEFMGVVRNPVVLQDCIAISKHVMAREYYKALM
+query          : Query: 61  MMMYLDEVGAEKFYEEFATRLNEFMGVVRNPVVLQDCIAISKHVMAREYYKA
+align          :            MMMYLDEVGAEKFYEEFATRLNEFMGVVRNPVVLQDCIAISKHVMAREYYKA
+sbjct          : Sbjct: 61  MMMYLDEVGAEKFYEEFATRLNEFMGVVRNPVVLQDCIAISKHVMAREYYKA
 noevent        : 
 query          : Query: 121 EYEDERLGHVSSGVSAGGDAG 141
 align          :            EYEDERLGHVSSGVSAGGDAG
@@ -65,11 +65,11 @@ title          : >gi|3024745|sp|O26320|THSA_METTH PROBABLE THERMOSOME SUBUNIT A
 length         :            Length = 542
 noevent        : 
 score          :  Score = 29.0 bits (63), Expect = 4.5
-identities     :  Identities = 31/107 (28%), Positives = 46/107 (42%), Gaps = 9/10
+identities     :  Identities = 31/107 (28%), Positives = 46/107 (42%), Gaps = 9/
 noevent        : 
-query          : Query: 34  KASVLREKDIMQPDQVTTPARHIYFPVMMMYLDEVGAEKFYEEFATRLNEFMGV
-align          :            +A V+ EK I   D+V T       P  +  +     +   EE    L + +GV
-sbjct          : Sbjct: 339 EAGVIYEKKIF--DEVLTFIEECRDPKAISIILRGSTKHVAEEMERALEDAIGV
+query          : Query: 34  KASVLREKDIMQPDQVTTPARHIYFPVMMMYLDEVGAEKFYEEFATRLNEFM
+align          :            +A V+ EK I   D+V T       P  +  +     +   EE    L + +
+sbjct          : Sbjct: 339 EAGVIYEKKIF--DEVLTFIEECRDPKAISIILRGSTKHVAEEMERALEDAI
 noevent        : 
 query          : Query: 94  LQDCIAISKHVMAREYYKALMLSRKLIEYEDERLGHVSSGVSAGGDA 140
 align          :            L+D     + V+A      + ++RKL EY D   G     VSA  DA

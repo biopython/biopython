@@ -1,0 +1,295 @@
+<HTML>
+<HEAD>
+<TITLE>BLAST Search Results </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" LINK="#0000FF" VLINK="#660099" ALINK="#660099">
+<A HREF="http://www.ncbi.nlm.nih.gov/BLAST/blast_form.map"> <IMG SRC="http://www.ncbi.nlm.nih.gov/BLAST/blast_results.gif" BORDER=0 ISMAP></A>
+<BR><BR><PRE>
+<b>BLASTP 2.0.10 [Aug-26-1999]</b>
+
+
+<b><a href="http://www.ncbi.nlm.nih.gov/htbin-
+post/Entrez/query?uid=9254694&form=6&db=m&Dopt=r">Reference</a>:</b>
+Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch&auml;ffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+<p>
+<b>Query=</b> gi|729002|sp|Q06110|CAGA_STRGL ANTITUMOR ANTIBIOTIC
+C-1027 APOPROTEIN PRECURSOR (C-1027-AG).
+         (143 letters)
+
+<b>Database:</b> Non-redundant SwissProt sequences
+           82,258 sequences; 29,652,561 total letters
+
+<p> <p>If you have any problems or questions with the results of this search <br>please refer to the <b><a href=http://www.ncbi.nlm.nih.gov/BLAST/blast_FAQs.html>BLAST FAQs</a></b><br><p>
+
+
+<PRE>
+<a name = 729002> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00729002&dopt=GenPept">sp|Q06110|CAGA_STRGL</a> ANTITUMOR ANTIBIOTIC C-1027 APOPROTEIN PRECURSOR (C-1027-AG)
+           Length = 143
+           
+ Score =  187 bits (471), Expect = 7e-48
+ Identities = 95/143 (66%), Positives = 95/143 (66%)
+
+Query: 1   MSLRHMSRRASRFXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX 60
+           MSLRHMSRRASRF                                               
+Sbjct: 1   MSLRHMSRRASRFGVVAVASIGLAAAAQSVAFAAPAFSVSPASGLSDGQSVSVSVSGAAA 60
+
+Query: 61  XETYYIAQCAPVGGQDACNPATATSFTTDASGAASFSFVVRKSYTGSTPEGTPVGSVDCA 120
+            ETYYIAQCAPVGGQDACNPATATSFTTDASGAASFSFVVRKSYTGSTPEGTPVGSVDCA
+Sbjct: 61  GETYYIAQCAPVGGQDACNPATATSFTTDASGAASFSFVVRKSYTGSTPEGTPVGSVDCA 120
+
+Query: 121 TAACNLGAGNSGLDLGHVALTFG 143
+           TAACNLGAGNSGLDLGHVALTFG
+Sbjct: 121 TAACNLGAGNSGLDLGHVALTFG 143
+</PRE>
+
+
+<PRE>
+<a name = 728936> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00728936&dopt=GenPept">sp|P01551|ATXA_STRGL</a> ACTINOXANTHIN PRECURSOR (AXN)
+           Length = 143
+           
+ Score =  183 bits (460), Expect = 1e-46
+ Identities = 93/143 (65%), Positives = 93/143 (65%)
+
+Query: 1   MSLRHMSRRASRFXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX 60
+           MSLRHMSRRASRF                                               
+Sbjct: 1   MSLRHMSRRASRFGVVAVASIGLAAAAQSVAFAAPAFSVSPASGLSDGQSVSVSVSGAAA 60
+
+Query: 61  XETYYIAQCAPVGGQDACNPATATSFTTDASGAASFSFVVRKSYTGSTPEGTPVGSVDCA 120
+            ETYYIAQCAPVGGQDACNPATATSFTTDASGAASFSFVVRKSY GSTPEGTPVGSVDCA
+Sbjct: 61  GETYYIAQCAPVGGQDACNPATATSFTTDASGAASFSFVVRKSYAGSTPEGTPVGSVDCA 120
+
+Query: 121 TAACNLGAGNSGLDLGHVALTFG 143
+           T ACNLGAGNSGLDLGHVALTFG
+Sbjct: 121 TDACNLGAGNSGLDLGHVALTFG 143
+</PRE>
+
+
+<PRE>
+<a name = 462689> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00462689&dopt=GenPept">sp|P01550|NCZS_STRCZ</a> NEOCARZINOSTATIN PRECURSOR (NCS) (MITOMALCIN) (MMC)
+           Length = 147
+           
+ Score = 65.2 bits (156), Expect = 6e-11
+ Identities = 37/72 (51%), Positives = 46/72 (63%), Gaps = 5/72 (6%)
+
+Query: 64  YYIAQCAPVG-GQDACNPATATSFTTDASGAASFSFVVRKSYTGSTPEGTPVGSVDCATA 122
+           Y + QCA V  G  ACNPA  +S T DA+G+AS S  VR+S+ G   +GT  G+VDC TA
+Sbjct: 66  YDVGQCAWVDTGVLACNPADFSSVTADANGSASTSLTVRRSFEGFLFDGTRWGTVDCTTA 125
+
+Query: 123 ACNLG----AGN 130
+           AC +G    AGN
+Sbjct: 126 ACQVGLSDAAGN 137
+</PRE>
+
+
+<PRE>
+<a name = 729892> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00729892&dopt=GenPept">sp|P41249|KEDA_ACTSL</a> APOKEDARCIDIN
+           Length = 114
+           
+ Score = 51.2 bits (120), Expect = 9e-07
+ Identities = 32/80 (40%), Positives = 47/80 (58%), Gaps = 5/80 (6%)
+
+Query: 68  QCAPVG-GQDACNPATATSFTTDASGAASFSFVVRKSYTGST-PEGTPVGSVDCATA--A 123
+           QCA +  G+ ACN A    F+  + G  + S VVR+S+TG   P+G  VG+VDC TA   
+Sbjct: 36  QCAILADGRGACNVAEFHDFSL-SGGEGTTSVVVRRSFTGYVMPDGPEVGAVDCDTAPGG 94
+
+Query: 124 CNLGAGNSGLDLGHVALTFG 143
+           C +  G +  + G+ A++FG
+Sbjct: 95  CEIVVGGNTGEYGNAAISFG 114
+</PRE>
+
+
+<PRE>
+<a name = 126681> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00126681&dopt=GenPept">sp|P01549|MACM_STRMA</a> MACROMOMYCIN PRECURSOR (MCR) (AUROMOMYCIN APOPROTEIN)
+           Length = 144
+           
+ Score = 48.8 bits (114), Expect = 5e-06
+ Identities = 27/81 (33%), Positives = 41/81 (50%), Gaps = 2/81 (2%)
+
+Query: 64  YYIAQCAPVG-GQDACNPATATSFTTDASGAASFSFVVRKSYTGST-PEGTPVGSVDCAT 121
+           Y++ QCA V  G   C+  T+T  T DA+G  +    V  S+       GTP G+V+C  
+Sbjct: 63  YHVGQCAVVEPGVIGCDATTSTDVTADAAGKITAQLKVHSSFQAVVGANGTPWGTVNCKV 122
+
+Query: 122 AACNLGAGNSGLDLGHVALTF 142
+            +C+ G G+   +    A+TF
+Sbjct: 123 VSCSAGLGSDSGEGAAQAITF 143
+</PRE>
+
+
+<PRE>
+<a name = 1705737> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=01705737&dopt=GenPept">sp|P53565|CDP_RAT</a> CCAAT DISPLACEMENT PROTEIN (CDP) (CDP2)
+           Length = 862
+           
+ Score = 31.3 bits (69), Expect = 0.91
+ Identities = 17/39 (43%), Positives = 20/39 (50%)
+
+Query: 70  APVGGQDACNPATATSFTTDASGAASFSFVVRKSYTGST 108
+           AP  G+DA   ATA +  T+A GAA      R S   ST
+Sbjct: 764 APAAGEDAATSATAPAMATEAPGAARAGPAERSSALPST 802
+</PRE>
+
+
+<PRE>
+<a name = 1730508> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=01730508&dopt=GenPept">sp|P98160|PGBM_HUMAN</a> BASEMENT MEMBRANE-SPECIFIC HEPARAN SULFATE PROTEOGLYCAN CORE PROTEIN
+            PRECURSOR (HSPG) (PERLECAN) (PLC)
+            Length = 4393
+            
+ Score = 31.3 bits (69), Expect = 0.91
+ Identities = 18/58 (31%), Positives = 21/58 (36%), Gaps = 3/58 (5%)
+
+Query: 69   CAPVGGQDACNPATATSFTTDASGAASFSFVVRKSYTGSTPEGTPVGSVDCATAACNL 126
+            C   G  D C+P T        + A  F  +    Y G    GTP    DC   AC L
+Sbjct: 1565 CECNGHSDLCHPETGACSQCQHNAAGEFCELCAPGYYGDATAGTP---EDCQPCACPL 1619
+</PRE>
+
+
+<PRE>
+<a name = 1172451> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=01172451&dopt=GenPept">sp|Q05793|PGBM_MOUSE</a> BASEMENT MEMBRANE-SPECIFIC HEPARAN SULFATE PROTEOGLYCAN CORE PROTEIN
+            PRECURSOR (HSPG) (PERLECAN) (PLC)
+            Length = 3707
+            
+ Score = 31.3 bits (69), Expect = 0.91
+ Identities = 20/65 (30%), Positives = 24/65 (36%), Gaps = 6/65 (9%)
+
+Query: 65   YIAQCAPV---GGQDACNPATATSFTTDASGAASFSFVVRKSYTGSTPEGTPVGSVDCAT 121
+            Y+ QC      G  D C+P T        + A  F  +    Y G    GTP    DC  
+Sbjct: 1556 YLGQCELCECNGHSDLCHPETGACSRCQHNTAGEFCELCATGYYGDATAGTP---EDCQP 1612
+
+Query: 122  AACNL 126
+             AC L
+Sbjct: 1613 CACPL 1617
+</PRE>
+
+
+<PRE>
+<a name = 1705736> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=01705736&dopt=GenPept">sp|P53564|CDP_MOUSE</a> CCAAT DISPLACEMENT PROTEIN (CDP) (HOMEOBOX PROTEIN CUX)
+            Length = 1332
+            
+ Score = 30.5 bits (67), Expect = 1.6
+ Identities = 17/39 (43%), Positives = 20/39 (50%)
+
+Query: 70   APVGGQDACNPATATSFTTDASGAASFSFVVRKSYTGST 108
+            AP  G+DA   ATA +  T+A GAA      R S   ST
+Sbjct: 1234 APAAGEDAATSATAPATATEAPGAARAGPAERSSALPST 1272
+</PRE>
+
+
+<PRE>
+<a name = 6174903> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=06174903&dopt=GenPept">sp|P13608|PGCA_BOVIN</a> AGGRECAN CORE PROTEIN PRECURSOR (CARTILAGE-SPECIFIC PROTEOGLYCAN CORE
+            PROTEIN) (CSPCP)
+            Length = 2364
+            
+ Score = 29.0 bits (63), Expect = 4.6
+ Identities = 17/49 (34%), Positives = 26/49 (52%), Gaps = 1/49 (2%)
+
+Query: 87   TTDASGAASFSFVVRKSYTGSTPEGTPVGSVDCATAACNLGAGNSGLDL 135
+            T + SG ++ +F V    +GS P  TP+ S D    + +L    SGLD+
+Sbjct: 1999 TPEVSGESTTAFDVSVEASGS-PSATPLASGDRTDTSGDLSGHTSGLDI 2046
+</PRE>
+
+
+<PRE>
+<a name = 113928> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00113928&dopt=GenPept">sp|P24856|ANP_NOTCO</a> ANTIFREEZE GLYCOPEPTIDE POLYPROTEIN AFGP7/AFGP8 PRECURSOR
+           Length = 822
+           
+ Score = 29.0 bits (63), Expect = 4.6
+ Identities = 18/52 (34%), Positives = 24/52 (45%), Gaps = 4/52 (7%)
+
+Query: 81  ATATSFTTDASGAASFSFVVRKSYTGSTP----EGTPVGSVDCATAACNLGA 128
+           ATA +  T A+ A +F+       T +TP      T   +   ATAACN  A
+Sbjct: 260 ATAATAATPATAACNFAATAATPATAATPALIFAATAATAATPATAACNFAA 311
+</PRE>
+
+
+<PRE>
+<a name = 2494281> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=02494281&dopt=GenPept">sp|Q90404|AGRI_DISOM</a> AGRIN
+           Length = 1328
+           
+ Score = 28.6 bits (62), Expect = 6.0
+ Identities = 23/75 (30%), Positives = 33/75 (43%), Gaps = 6/75 (8%)
+
+Query: 65  YIAQCAPVGGQDACNPAT-ATSFTTDASGAASFSFVVRKSYTGSTP-EGTPVGSV--DC- 119
+           Y   C+P  GQ +C P            G  +F  +V    +G TP    P+G+V  DC 
+Sbjct: 87  YSKTCSPSSGQCSCKPGVGGLKCDRCEPGFWNFRGIVTDEKSGCTPCNCYPLGAVRDDCE 146
+
+Query: 120 -ATAACNLGAGNSGL 133
+             +  C+  AG SG+
+Sbjct: 147 QMSGLCSCKAGISGM 161
+</PRE>
+
+
+<PRE>
+<a name = 1174824> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=01174824&dopt=GenPept">sp|Q04974|TVID_SALTI</a> VI POLYSACCHARIDE BIOSYNTHESIS PROTEIN TVID
+           Length = 831
+           
+ Score = 28.6 bits (62), Expect = 6.0
+ Identities = 13/28 (46%), Positives = 15/28 (53%)
+
+Query: 113 PVGSVDCATAACNLGAGNSGLDLGHVAL 140
+           PVG+V CA    NLGA      L H+ L
+Sbjct: 614 PVGTVYCARTLVNLGAWKDACTLAHMTL 641
+</PRE>
+
+
+<PRE>
+<a name = 1709249> </a><a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=01709249&dopt=GenPept">sp|Q03173|NDPP_MOUSE</a> NPC DERIVED PROLINE RICH PROTEIN 1 (NDPP-1)
+           Length = 389
+           
+ Score = 28.2 bits (61), Expect = 7.9
+ Identities = 14/31 (45%), Positives = 17/31 (54%)
+
+Query: 106 GSTPEGTPVGSVDCATAACNLGAGNSGLDLG 136
+           GS P G   GSV  A++  + G GN  L LG
+Sbjct: 229 GSFPGGGNTGSVSLASSKADAGRGNGPLPLG 259
+</PRE>
+
+
+
+<PRE>
+  Database: Non-redundant SwissProt sequences
+    Posted date:  Dec 28, 1999  4:33 PM
+  Number of letters in database: 29,652,561
+  Number of sequences in database:  82,258
+  
+Lambda     K      H
+   0.317    0.129    0.388 
+
+Gapped
+Lambda     K      H
+   0.270   0.0470    0.230 
+
+
+Matrix: BLOSUM62
+Gap Penalties: Existence: 11, Extension: 1
+Number of Hits to DB: 5349407
+Number of Sequences: 82258
+Number of extensions: 186930
+Number of successful extensions: 531
+Number of sequences better than 10.0: 14
+Number of HSP's better than 10.0 without gapping: 11
+Number of HSP's successfully gapped in prelim test: 3
+Number of HSP's that attempted gapping in prelim test: 502
+Number of HSP's gapped (non-prelim): 27
+length of query: 143
+length of database: 29,652,561
+effective HSP length: 50
+effective length of query: 93
+effective length of database: 25,539,661
+effective search space: 2375188473
+effective search space used: 2375188473
+T: 11
+A: 40
+X1: 16 ( 7.3 bits)
+X2: 38 (14.8 bits)
+X3: 64 (24.9 bits)
+S1: 41 (21.7 bits)
+S2: 61 (28.2 bits)
+
+</PRE>
+
+</BODY>
+</HTML>
+</BODY>
+</HTML>

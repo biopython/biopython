@@ -2,12 +2,12 @@
 version        : BLASTP 2.0.10 [Aug-26-1999]
 noevent        : 
 noevent        : 
-reference      : Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. S
-reference      : Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (199
-reference      : "Gapped BLAST and PSI-BLAST: a new generation of protein database
+reference      : Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A.
+reference      : Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1
+reference      : "Gapped BLAST and PSI-BLAST: a new generation of protein databa
 reference      : programs",  Nucleic Acids Res. 25:3389-3402.
 noevent        : 
-query_info     : Query= gi|400206|sp|Q02112|LYTA_BACSU MEMBRANE-BOUND PROTEIN LYTA
+query_info     : Query= gi|400206|sp|Q02112|LYTA_BACSU MEMBRANE-BOUND PROTEIN LY
 query_info     : PRECURSOR
 query_info     :          (102 letters)
 noevent        : 

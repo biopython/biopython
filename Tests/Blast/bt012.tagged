@@ -2,9 +2,9 @@
 version        : BLASTN 2.0.10 [Aug-26-1999]
 noevent        : 
 noevent        : 
-reference      : Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. S
-reference      : Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (199
-reference      : "Gapped BLAST and PSI-BLAST: a new generation of protein database
+reference      : Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A.
+reference      : Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1
+reference      : "Gapped BLAST and PSI-BLAST: a new generation of protein databa
 reference      : programs",  Nucleic Acids Res. 25:3389-3402.
 noevent        : 
 query_info     : Query= gi|1347201|gb|G24969|G24969 human STS
@@ -29,29 +29,29 @@ identities     :  Identities = 331/331 (100%)
 strand         :  Strand = Plus / Plus
 noevent        : 
 noevent        : 
-query          : Query: 1   cctccaccctctcatgagcaacaggatatgtgaaagtacttgcagccagaagca
-align          :            ||||||||||||||||||||||||||||||||||||||||||||||||||||||
-sbjct          : Sbjct: 1   cctccaccctctcatgagcaacaggatatgtgaaagtacttgcagccagaagca
+query          : Query: 1   cctccaccctctcatgagcaacaggatatgtgaaagtacttgcagccagaag
+align          :            ||||||||||||||||||||||||||||||||||||||||||||||||||||
+sbjct          : Sbjct: 1   cctccaccctctcatgagcaacaggatatgtgaaagtacttgcagccagaag
 noevent        : 
 noevent        : 
-query          : Query: 61  caatcctcgggtgctagatggagctccccaaggagcagagaggaaaaggcagga
-align          :            ||||||||||||||||||||||||||||||||||||||||||||||||||||||
-sbjct          : Sbjct: 61  caatcctcgggtgctagatggagctccccaaggagcagagaggaaaaggcagga
+query          : Query: 61  caatcctcgggtgctagatggagctccccaaggagcagagaggaaaaggcag
+align          :            ||||||||||||||||||||||||||||||||||||||||||||||||||||
+sbjct          : Sbjct: 61  caatcctcgggtgctagatggagctccccaaggagcagagaggaaaaggcag
 noevent        : 
 noevent        : 
-query          : Query: 121 ggccaggcagcagggatggagactaagtttggcccaaggctgcccgcaagcact
-align          :            ||||||||||||||||||||||||||||||||||||||||||||||||||||||
-sbjct          : Sbjct: 121 ggccaggcagcagggatggagactaagtttggcccaaggctgcccgcaagcact
+query          : Query: 121 ggccaggcagcagggatggagactaagtttggcccaaggctgcccgcaagca
+align          :            ||||||||||||||||||||||||||||||||||||||||||||||||||||
+sbjct          : Sbjct: 121 ggccaggcagcagggatggagactaagtttggcccaaggctgcccgcaagca
 noevent        : 
 noevent        : 
-query          : Query: 181 atcatgccctctggtaggtgtctatttctgtctgaaccagaaatacaccaagct
-align          :            ||||||||||||||||||||||||||||||||||||||||||||||||||||||
-sbjct          : Sbjct: 181 atcatgccctctggtaggtgtctatttctgtctgaaccagaaatacaccaagct
+query          : Query: 181 atcatgccctctggtaggtgtctatttctgtctgaaccagaaatacaccaag
+align          :            ||||||||||||||||||||||||||||||||||||||||||||||||||||
+sbjct          : Sbjct: 181 atcatgccctctggtaggtgtctatttctgtctgaaccagaaatacaccaag
 noevent        : 
 noevent        : 
-query          : Query: 241 atgggggctttgctggcttcgacatcactggttcaactatgtcactgctttgtt
-align          :            ||||||||||||||||||||||||||||||||||||||||||||||||||||||
-sbjct          : Sbjct: 241 atgggggctttgctggcttcgacatcactggttcaactatgtcactgctttgtt
+query          : Query: 241 atgggggctttgctggcttcgacatcactggttcaactatgtcactgctttg
+align          :            ||||||||||||||||||||||||||||||||||||||||||||||||||||
+sbjct          : Sbjct: 241 atgggggctttgctggcttcgacatcactggttcaactatgtcactgctttg
 noevent        : 
 noevent        : 
 query          : Query: 301 agtgctccagaacctcaggttccttcagatt 331
@@ -61,8 +61,8 @@ noevent        :
 noevent        : 
 *************** end_alignment
 *************** start_alignment
-title          : >gi|2665277|emb|AL010115|HSPE77H4 H.sapiens flow-sorted chromosom
-title          :            HindIII fragment, SC1pE77H4, sequence tagged site [Hom
+title          : >gi|2665277|emb|AL010115|HSPE77H4 H.sapiens flow-sorted chromos
+title          :            HindIII fragment, SC1pE77H4, sequence tagged site [H
 title          :            sapiens]
 length         :            Length = 554
 noevent        : 
@@ -78,7 +78,7 @@ noevent        :
 noevent        : 
 *************** end_alignment
 *************** start_alignment
-title          : >gi|6120731|gb|G55412.1|G55412 SHGC-100745 Human Homo sapiens STS
+title          : >gi|6120731|gb|G55412.1|G55412 SHGC-100745 Human Homo sapiens S
 title          :            genomic, sequence tagged site
 length         :            Length = 652
 noevent        : 
@@ -94,7 +94,7 @@ noevent        :
 noevent        : 
 *************** end_alignment
 *************** start_alignment
-title          : >gi|4493602|gb|G47248.1|G47248 Z17392_1 Zebrafish AB Danio rerio
+title          : >gi|4493602|gb|G47248.1|G47248 Z17392_1 Zebrafish AB Danio reri
 title          :            genomic clone Z17392 5', sequence tagged site
 length         :            Length = 454
 noevent        : 
@@ -125,8 +125,8 @@ noevent        :
 noevent        : 
 *************** end_alignment
 *************** start_alignment
-title          : >gi|1235411|emb|Z53965|HSC009WH1 H.sapiens (D2S2321) DNA segment
-title          :            containing (CA) repeat; clone AFMc009wh1; single read,
+title          : >gi|1235411|emb|Z53965|HSC009WH1 H.sapiens (D2S2321) DNA segmen
+title          :            containing (CA) repeat; clone AFMc009wh1; single rea
 title          :            sequence tagged site [Homo sapiens]
 length         :            Length = 382
 noevent        : 
@@ -142,7 +142,7 @@ noevent        :
 noevent        : 
 *************** end_alignment
 *************** start_alignment
-title          : >gi|4757440|gb|G49267.1|G49267 stbK343C1_96809 chromosome 22 geno
+title          : >gi|4757440|gb|G49267.1|G49267 stbK343C1_96809 chromosome 22 ge
 title          :            clone Homo sapiens STS genomic clone 343C1, sequence
 title          :            tagged site
 length         :            Length = 360
@@ -174,7 +174,7 @@ noevent        :
 noevent        : 
 *************** end_alignment
 *************** start_alignment
-title          : >gi|939357|gb|G08807|G08807 human STS CHLC.GATA70E11.P18111 clone
+title          : >gi|939357|gb|G08807|G08807 human STS CHLC.GATA70E11.P18111 clo
 title          :            GATA70E11
 length         :            Length = 643
 noevent        : 

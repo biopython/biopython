@@ -2,9 +2,9 @@
 version        : BLASTN 2.0.10 [Aug-26-1999]
 noevent        : 
 noevent        : 
-reference      : Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. S
-reference      : Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (199
-reference      : "Gapped BLAST and PSI-BLAST: a new generation of protein database
+reference      : Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A.
+reference      : Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1
+reference      : "Gapped BLAST and PSI-BLAST: a new generation of protein databa
 reference      : programs",  Nucleic Acids Res. 25:3389-3402.
 noevent        : 
 query_info     : Query= gi|859351|gb|G06106|G06106 human STS WI-6344.
@@ -22,25 +22,25 @@ noevent        : Sequences producing significant alignments:
 noevent        : 
 description    : gi|859351|gb|G06106|G06106 human STS WI-6344.
 description    : gi|1341350|gb|G21024|G21024 human STS WI-30979.
-description    : gi|6126285|gb|G60966.1|G60966 SHGC-84377 Human Homo sapiens STS..
+description    : gi|6126285|gb|G60966.1|G60966 SHGC-84377 Human Homo sapiens STS
 description    : gi|1340656|gb|G20319|G20319 human STS A005L39.
-description    : gi|5222421|gb|G51244.1|G51244 SHGC-80725 Human Homo sapiens STS..
+description    : gi|5222421|gb|G51244.1|G51244 SHGC-80725 Human Homo sapiens STS
 description    : gi|860526|gb|G07281|G07281 human STS WI-9430.
 noevent        : 
 *************** end_descriptions
 *************** start_alignment
-multalign      : QUERY 1   acttgggnctacatgggccagaggtggtttattcagtctccataagagaggggac
-multalign      : 558   1   .......................................................
+multalign      : QUERY 1   acttgggnctacatgggccagaggtggtttattcagtctccataagagagggg
+multalign      : 558   1   .....................................................
 multalign      : 64020 49                                       ...............
 multalign      : 41022 53                    ...............
 multalign      : 1005  172                   ...............
 noevent        : 
-multalign      : QUERY 61  gcacagttgggtccgtgaagaggagggtccaagagctnacaagagagcctctctg
-multalign      : 558   61  .......................................................
+multalign      : QUERY 61  gcacagttgggtccgtgaagaggagggtccaagagctnacaagagagcctctc
+multalign      : 558   61  .....................................................
 multalign      : 27080 33           .............a......
 noevent        : 
-multalign      : QUERY 121 tgacccctncatcccctnctcagggnggttgtggagtcactgggcctcatgggnt
-multalign      : 558   121 .......................................................
+multalign      : QUERY 121 tgacccctncatcccctnctcagggnggttgtggagtcactgggcctcatggg
+multalign      : 558   121 .....................................................
 multalign      : 63702 184                                     ...............
 noevent        : 
 multalign      : QUERY 181 cag 183

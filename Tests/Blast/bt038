@@ -1,0 +1,161 @@
+<HTML>
+<HEAD>
+<TITLE>BLAST Search Results </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" LINK="#0000FF" VLINK="#660099" ALINK="#660099">
+<A HREF="http://www.ncbi.nlm.nih.gov/BLAST/blast_form.map"> <IMG SRC="http://www.ncbi.nlm.nih.gov/BLAST/blast_results.gif" BORDER=0 ISMAP></A>
+<BR><BR><PRE>
+<b>BLASTP 2.0.10 [Aug-26-1999]</b>
+
+
+<b><a href="http://www.ncbi.nlm.nih.gov/htbin-
+post/Entrez/query?uid=9254694&form=6&db=m&Dopt=r">Reference</a>:</b>
+Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch&auml;ffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+<p>
+<b>Query=</b> gi|128372|sp|P04846|NLPA_ECOLI LIPOPROTEIN-28 PRECURSOR.
+         (272 letters)
+
+<b>Database:</b> Non-redundant SwissProt sequences
+           82,258 sequences; 29,652,561 total letters
+
+<p> <p>If you have any problems or questions with the results of this search <br>please refer to the <b><a href=http://www.ncbi.nlm.nih.gov/BLAST/blast_FAQs.html>BLAST FAQs</a></b><br><p>
+<FORM NAME="BLASTFORM">
+</PRE>
+<CENTER>
+<H3><a href="/BLAST/newoptions.html#graphical-overview"> Distribution of 9 Blast Hits on the Query Sequence</a></H3>
+<input name=defline size=80 value="Mouse-over to show defline and scores. Click to show alignments">
+</CENTER>
+<map name=img_map>
+<area shape=rect coords=107,101,523,106 href="#128372" ONMOUSEOVER='document.BLASTFORM.defline.value="P04846  LIPOPROTEIN-28 PRECURSOR..S= 439 E=3e-123"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=107,108,523,113 href="#401469" ONMOUSEOVER='document.BLASTFORM.defline.value="P28635  HYPOTHETICAL 29.4 KD LIPOPROTEIN IN RCSF-ABC INTERGENIC ..S= 291 E=1e-78"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=119,115,523,120 href="#1170788" ONMOUSEOVER='document.BLASTFORM.defline.value="Q08870  OUTER MEMBRANE LIPOPROTEIN 3 PRECURSOR (PLP3)..S= 226 E=4e-59"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=124,122,523,127 href="#1170786" ONMOUSEOVER='document.BLASTFORM.defline.value="Q08868  OUTER MEMBRANE LIPOPROTEIN 1 PRECURSOR (PLP1)..S= 219 E=4e-57"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=124,129,523,134 href="#1171732" ONMOUSEOVER='document.BLASTFORM.defline.value="P31728  28 KD OUTER MEMBRANE PROTEIN PRECURSOR..S= 218 E=8e-57"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=124,136,523,141 href="#1170787" ONMOUSEOVER='document.BLASTFORM.defline.value="Q08869  OUTER MEMBRANE LIPOPROTEIN 2 PRECURSOR (PLP2)..S= 206 E=3e-53"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=114,143,518,148 href="#1724004" ONMOUSEOVER='document.BLASTFORM.defline.value="P54594  HYPOTHETICAL 29.2 KD LIPOPROTEIN IN CSPB-GLPP INTERGENIC..S=77.3 E=3e-14"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=412,150,494,155 href="#1706875" ONMOUSEOVER='document.BLASTFORM.defline.value="P51887  FIBROMODULIN PRECURSOR (FM)..S=30.5 E=3.6"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+<area shape=rect coords=421,157,511,162 href="#1172496" ONMOUSEOVER='document.BLASTFORM.defline.value="P42499  PHYTOCHROME B..S=30.5 E=3.6"' ONMOUSEOUT='document.BLASTFORM.defline.value="Mouse-over to show defline and scores. Click to show alignments"' >
+</map>
+<CENTER>
+<IMG WIDTH=529 HEIGHT=164 USEMAP=#img_map BORDER=1 SRC="nph-getgif.cgi?iblast0&207891705311784.gif" ISMAP></CENTER>
+<HR>
+<PRE>
+
+
+<PRE>
+blast_tmp 24  CDQSSSDAKHIKVGVINGAEQDXXXXXXXXXXXXYGLDVELVGFSGSLLPNDATNHGELD 83
+<a name = 128372></a><a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00128372&dopt=GenPept>P04846</a>    24  CDQSSSDAKHIKVGVINGAEQDVAEVAKKVAKEKYGLDVELVGFSGSLLPNDATNHGELD 83
+<a name = 401469></a><a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00401469&dopt=GenPept>P28635</a>    23  CGQDEKDPNHIKVGVIVGAEQQVAEVAQKVAKDKYGLDVELVTFNDYVLPNEALSKGDID 82
+<a name = 1170788></a><a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=01170788&dopt=GenPept>Q08870</a>    24         AEKLKVGVISGPEHKVMEVAAKIAKEKYNRDVELVVFTDYATPNAALDKGDLD 76
+<a name = 1170786></a><a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=01170786&dopt=GenPept>Q08868</a>    40            IKVGVMSGPEHTVAERAAQIAKEKYGLEVEFVLFNDYALPNTAVSKGDLD 89
+<a name = 1171732></a><a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=01171732&dopt=GenPept>P31728</a>    36            IKVGVMSGPEHQVAEIAAKVAKEKYGLDVQFVEFNDYALPNEAVSKGDLD 85
+<a name = 1170787></a><a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=01170787&dopt=GenPept>Q08869</a>    40            LKVGVMTGPEAQMTEVAVKIAKEKYGLDVELVQFTEYTQPNAALHSKDLD 89
+<a name = 1724004></a><a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=01724004&dopt=GenPept>P54594</a>    23      SAEHESIKIGI---AESDGAINYIAQKAEEAGLDIQLIPFSDYAESDIALANKEID 76
+                                       \                                  
+                                       |
+                                       W                                  
+
+blast_tmp 84  ANVFQHRPFLEQDNQAHGYKLVAVGNTFVFPMAGYSKKIKTVAQIKEGATVAIPNDPTNX 143
+<a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00128372&dopt=GenPept>P04846</a>    84  ANVFQHRPFLEQDNQAHGYKLVAVGNTFVFPMAGYSKKIKTVAQIKEGATVAIPNDPTNL 143
+<a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00401469&dopt=GenPept>P28635</a>    83  ANAFQHKPYLDQQLKDRGYKLVAVGNTFVYPIAGYSKKIKSLDELQDGSQVAVPNDPTNL 142
+<a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=01170788&dopt=GenPept>Q08870</a>    77  LNAFQHKPYLDNQIQEKGYKLVPVGNTFVYPIAAYSKKIKSLAELKDGDTIAVPNDPTNL 136
+<a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=01170786&dopt=GenPept>Q08868</a>    90  ANAFQHKPYLDKDSQSKGLNLVIVGNTFVYPLAGYSKKVKNVSELAEGAVIAVPNDPSNL 150
+                                  \                                       
+                                  |
+                                  N                                       
+<a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=01171732&dopt=GenPept>P31728</a>    86  ANAMQHKPYLDEDAKAKNLNLVIVGNTFVYPLAGYSKKIKNVNELQDGAKVVVPNDPTNR 146
+                                  \                                       
+                                  |
+                                  N                                       
+<a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=01170787&dopt=GenPept>Q08869</a>    90  ANAFQTVPYLEQEVKDRGYKLAIIGNTLVWPIAAYSKKIKNISELKDGATVAIPNNASNT 149
+<a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=01724004&dopt=GenPept>P54594</a>    77  ANAFQTISYFQSFTEKYKLNLAPLGTTYITPMGIYSKRYERIRDISRGAVVSVPDKAFDF 136
+
+blast_tmp 144 XXXXXXXXXXXXXXXXEGKGLLPTALDITDNPRHLQIMELEGAQLPRVLDDPKVDVAIIS 203
+<a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00128372&dopt=GenPept>P04846</a>    144 GRALLLLQKEKLITLKEGKGLLPTALDITDNPRHLQIMELEGAQLPRVLDDPKVDVAIIS 203
+<a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00401469&dopt=GenPept>P28635</a>    143 GRSLLLLQKVGLIKLKDGVGLLPTVLDVVENPKNLKIVELEAPQLPRSLDDAQIALAVIN 202
+<a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=01170788&dopt=GenPept>Q08870</a>    137 ARALILLEKQDLIKLRADAGLKATSVDIIENPRKLVIQEIEAPLLPRTLDD--VAFSIIN 194
+<a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=01170786&dopt=GenPept>Q08868</a>    151 ARALILLEKQGLIKLKDNTNLFSTSVDIIENPKNLKIKEVDTSIAAKALDD--VDLAVVN 208
+<a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=01171732&dopt=GenPept>P31728</a>    147 GRALILLEKQGLIKLKDANNLLSTVLDIVENPKKLNITEVDTSVAARALDD--VDLAVVN 204
+<a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=01170787&dopt=GenPept>Q08869</a>    150 ARALLLLQAHGLLKLKDPKNVFATENDIIENPKNIKIVQADTSLLTRMLDD--VELAVIN 207
+<a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=01724004&dopt=GenPept>P54594</a>    137 GRALTVLQEAGLLTLKNGFNGTGSVDMIKDNPRHLKLKAVRQQDAV-----SGADVFVMK 191
+
+blast_tmp 204 TTYIQQTGLSPVHDSVFIEDKNSPYVNILVAREDNKNAENVKEFLQSYQSPEVAKAAETI 263
+<a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00128372&dopt=GenPept>P04846</a>    204 TTYIQQTGLSPVHDSVFIEDKNSPYVNILVAREDNKNAENVKEFLQSYQSPEVAKAAETI 263
+<a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00401469&dopt=GenPept>P28635</a>    203 TTYASQIGLTPAKDGIFVEDKESPYVNLIVTREDNKDAENVKKFVQAYQSDEVYEAANKV 262
+<a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=01170788&dopt=GenPept>Q08870</a>    195 TTYAGQNGLTPTKDGIFVEDKDSPYVNLIVARENNQHSEAVKDLVKAYQTEEVYNKANEE 254
+<a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=01170786&dopt=GenPept>Q08868</a>    209 NTYAGQVGLNTQDHGVFVESKDSPYVNIIVARQDNKDAANVQNFIKSYQTEEVYQEAQKH 268
+<a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=01171732&dopt=GenPept>P31728</a>    205 NTYAGQVGLNAQDDGVFVEDKDSPYVNIIVSRTDNKDSKAVQDFIKSYQTEEVYQEAQKH 264
+<a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=01170787&dopt=GenPept>Q08869</a>    208 NTYAGQAGLSPDKDGIIVESKDSPYVNLVVSREDNKDDPRLQTFVKSFQTEEVFQEALKL 267
+<a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=01724004&dopt=GenPept>P54594</a>    192 PSEAKKAGLNPKKHTLKSGGMSEEEMNLIVVRAEDQDREALQTILELYQADDTAAFIEKE 252
+                                  \                                       
+                                  |
+                                  L                                       
+<a name = 1706875></a><a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=01706875&dopt=GenPept>P51887</a>    32    YMRQSRMSSYNYMPYYEDENSPYVYSYVPAPDTE-AEPVPEAQQSWQCPQ         82
+                                                            \             
+                                                            |
+                                                           AS             
+<a name = 1172496></a><a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=01172496&dopt=GenPept>P42499</a>    690        GKSLVHDLVFKESEET--VNKLLSREEDKNVEKMRTFGKEHQN----KAAFLV 737
+                                                     \                    
+                                                     |
+                                                     T                    
+
+blast_tmp 264 FNGGAVPGW 272
+<a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00128372&dopt=GenPept>P04846</a>    264 FNGGAVPGW 272
+<a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=00401469&dopt=GenPept>P28635</a>    263 FNGGAVKGW 271
+<a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=01170788&dopt=GenPept>Q08870</a>    255 FKGAMIKGW 263
+<a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=01170786&dopt=GenPept>Q08868</a>    269 FKDGVVKGW 277
+<a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=01171732&dopt=GenPept>P31728</a>    265 FKDGVVKGW 273
+<a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=01170787&dopt=GenPept>Q08869</a>    268 FNGGVVKGW 276
+<a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=01724004&dopt=GenPept>P54594</a>    253 YQGDLV    258
+<a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=01172496&dopt=GenPept>P42499</a>    738 VN        739
+</PRE>
+
+<PRE>
+  Database: Non-redundant SwissProt sequences
+    Posted date:  Dec 28, 1999  4:33 PM
+  Number of letters in database: 29,652,561
+  Number of sequences in database:  82,258
+  
+Lambda     K      H
+   0.313    0.134    0.381 
+
+Gapped
+Lambda     K      H
+   0.270   0.0470    0.230 
+
+
+Matrix: BLOSUM62
+Gap Penalties: Existence: 11, Extension: 1
+Number of Hits to DB: 12949026
+Number of Sequences: 82258
+Number of extensions: 482987
+Number of successful extensions: 844
+Number of sequences better than 10.0: 9
+Number of HSP's better than 10.0 without gapping: 7
+Number of HSP's successfully gapped in prelim test: 2
+Number of HSP's that attempted gapping in prelim test: 827
+Number of HSP's gapped (non-prelim): 9
+length of query: 272
+length of database: 29,652,561
+effective HSP length: 53
+effective length of query: 219
+effective length of database: 25,292,887
+effective search space: 5539142253
+effective search space used: 5539142253
+T: 11
+A: 40
+X1: 16 ( 7.2 bits)
+X2: 38 (14.8 bits)
+X3: 64 (24.9 bits)
+S1: 42 (21.9 bits)
+S2: 64 (29.3 bits)
+
+</PRE>
+
+</BODY>
+</HTML>
+</BODY>
+</HTML>

@@ -1,0 +1,417 @@
+*************** start_header
+version        : BLASTP 2.0.10 [Aug-26-1999]
+noevent        : 
+noevent        : 
+reference      : Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A.
+reference      : Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1
+reference      : "Gapped BLAST and PSI-BLAST: a new generation of protein databa
+reference      : programs",  Nucleic Acids Res. 25:3389-3402.
+noevent        : 
+query_info     : Query= gi|585505|sp|Q08386|MOPB_RHOCA MOLYBDENUM-PTERIN BINDING
+query_info     : PROTEIN MOPB
+query_info     :          (270 letters)
+noevent        : 
+database_info  : Database: data/swissprot
+database_info  :            82,258 sequences; 29,652,561 total letters
+noevent        : 
+*************** end_header
+*************** start_descriptions
+noevent        : Searching..................................................done
+noevent        : 
+noevent        : 
+noevent        : Sequences producing significant alignments:
+noevent        : 
+description    : gi|585505|sp|Q08386|MOPB_RHOCA MOLYBDENUM-PTERIN BINDING PROTEI
+description    : gi|585504|sp|Q08385|MOPA_RHOCA MOLYBDENUM-PTERIN BINDING PROTEI
+description    : gi|585492|sp|P37733|MODA_AZOVI MOLYBDENUM TRANSPORT PROTEIN MOD
+description    : gi|1709070|sp|P46930|MODE_ECOLI MOLYBDENUM TRANSPORT PROTEIN MO
+description    : gi|1709071|sp|P45324|MODE_HAEIN MOLYBDENUM TRANSPORT PROTEIN MO
+description    : gi|585502|sp|P04952|MOP1_CLOPA MOLYBDENUM-PTERIN BINDING PROTEI
+description    : gi|127241|sp|P08854|MOP2_CLOPA MOLYBDENUM-PTERIN BINDING PROTEI
+description    : gi|585503|sp|P38366|MOP3_CLOPA MOLYBDENUM-PTERIN BINDING PROTEI
+description    : gi|1170996|sp|P45183|MOP_HAEIN PROBABLE MOLYBDENUM-PTERIN BINDI
+description    : gi|1709069|sp|P09833|MODC_ECOLI MOLYBDENUM TRANSPORT ATP-BINDIN
+description    : gi|585500|sp|P37732|MODD_AZOVI MOLYBDENUM TRANSPORT ATP-BINDING
+description    : gi|2507168|sp|P08838|PT1_BACSU PHOSPHOENOLPYRUVATE-PROTEIN PHOS
+description    : gi|729786|sp|Q05355|HYDL_STRHA PUTATIVE POLYKETIDE HYDROXYLASE
+noevent        : 
+*************** end_descriptions
+*************** start_alignment
+title          : >gi|585505|sp|Q08386|MOPB_RHOCA MOLYBDENUM-PTERIN BINDING PROTE
+title          :            MOPB
+length         :            Length = 270
+noevent        : 
+score          :  Score =  467 bits (1189), Expect = e-131
+identities     :  Identities = 247/270 (91%), Positives = 247/270 (91%)
+noevent        : 
+query          : Query: 1   MAATKQGGGDDGRCARGVVLERTGARMGAERVALLAAIGRTGSISAAAREVG
+align          :            MAATKQGGGDDGRCARGVVLERTGARMGAERVALLAAIGRTGSISAAAREVG
+sbjct          : Sbjct: 1   MAATKQGGGDDGRCARGVVLERTGARMGAERVALLAAIGRTGSISAAAREVG
+noevent        : 
+query          : Query: 61  GVQAMNNXXXXXXXXXXXXXXXXXXXXXXXAGEKLIAAYGAIEAGVAKLLSS
+align          :            GVQAMNN                       AGEKLIAAYGAIEAGVAKLLSS
+sbjct          : Sbjct: 61  GVQAMNNLLAAPVVTAAPGGKAGGGAVLTPAGEKLIAAYGAIEAGVAKLLSS
+noevent        : 
+query          : Query: 121 PAEVLRGLSLRTSARNAWACKVWSVAADDVAAQVRMRLGEGQDLTAVITARS
+align          :            PAEVLRGLSLRTSARNAWACKVWSVAADDVAAQVRMRLGEGQDLTAVITARS
+sbjct          : Sbjct: 121 PAEVLRGLSLRTSARNAWACKVWSVAADDVAAQVRMRLGEGQDLTAVITARS
+noevent        : 
+query          : Query: 181 GSEVLALVKSNFVLLAGAGVPERLSVRNRVRGRVIERIDAPLSSEVTLDLGG
+align          :            GSEVLALVKSNFVLLAGAGVPERLSVRNRVRGRVIERIDAPLSSEVTLDLGG
+sbjct          : Sbjct: 181 GSEVLALVKSNFVLLAGAGVPERLSVRNRVRGRVIERIDAPLSSEVTLDLGG
+noevent        : 
+query          : Query: 241 TRDSAEMLDLHPGVETTALIKSSHVILALP 270
+align          :            TRDSAEMLDLHPGVETTALIKSSHVILALP
+sbjct          : Sbjct: 241 TRDSAEMLDLHPGVETTALIKSSHVILALP 270
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|585504|sp|Q08385|MOPA_RHOCA MOLYBDENUM-PTERIN BINDING PROTE
+title          :            MOPA
+length         :            Length = 265
+noevent        : 
+score          :  Score =  207 bits (521), Expect = 2e-53
+identities     :  Identities = 123/259 (47%), Positives = 155/259 (59%), Gaps =
+noevent        : 
+query          : Query: 20  LERTGA-RMGAERVALLAAIGRTGSISAAAREVGLSYKAAWDGVQAMNNXXX
+align          :            L+R GA R+G +R+ LL AI R G+I+ AAREVGLSYK AWD V  +NN
+sbjct          : Sbjct: 12  LQRAGAPRVGGDRIRLLEAIARHGTIAGAAREVGLSYKTAWDAVGTLNNLFE
+noevent        : 
+query          : Query: 79  XXXXXXXXXXXXAGEKLIAAYGAIEAGVAKLL-------SSFEKSLNLDPAE
+align          :                        AG+ LIA +G +E  + K L       S+ EK+LN
+sbjct          : Sbjct: 72  GGRTGGNARVTEAGQALIAGFGLLEGALTKALGVLEGGVSAPEKALN-----
+noevent        : 
+query          : Query: 132 TSARNAWACKVWSVAADDVAAQVRMRLGEGQDLTAVITARSAAEMRLAPGSE
+align          :            TS RN   C V  V    V A+V + L +G  LTAVIT RSA EM LAPG E
+sbjct          : Sbjct: 127 TSNRNTLRCTVTRVTLGAVNAEVELALTDGHSLTAVITERSATEMGLAPGVE
+noevent        : 
+query          : Query: 192 FVLLAGAGVPERLSVRNRVRGRVIERIDAPLSSEVTLDLGGGKTITATITRD
+align          :            FV+LA  G P R+S  NR+ G V  R D P+++E+ LDLG  K+ITA IT
+sbjct          : Sbjct: 187 FVMLAAGGDPGRISACNRLTGIVAARTDGPVNTEIILDLGNCKSITAVITHT
+noevent        : 
+query          : Query: 252 PGVETTALIKSSHVILALP 270
+align          :            PGV  TAL K+SHVILA+P
+sbjct          : Sbjct: 247 PGVPATALFKASHVILAMP 265
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|585492|sp|P37733|MODA_AZOVI MOLYBDENUM TRANSPORT PROTEIN MO
+length         :            Length = 270
+noevent        : 
+score          :  Score =  145 bits (362), Expect = 9e-35
+identities     :  Identities = 93/253 (36%), Positives = 132/253 (51%), Gaps = 8
+noevent        : 
+query          : Query: 24  GARMGAERVALLAAIGRTGSISAAAREVGLSYKAAWDGVQAMNNXXXXXXXX
+align          :            G  +   R+ LL AI R GSI+ AA+ V LSYKAAWD +  MNN
+sbjct          : Sbjct: 17  GTALSDTRIRLLEAIEREGSINRAAKVVPLSYKAAWDAIDTMNNLAPEPLVV
+noevent        : 
+query          : Query: 84  XXXXXXXAGEKLIAAYGAIEAGVAKLLSSFEKSLNLDPA-------EVLRGL
+align          :                    G +++A Y A+E      L    + LN            ++  +
+sbjct          : Sbjct: 77  GGTQLTDYGRRIVAMYRALEIEYQSALDRLSERLNEVTGGDIQAFQRLMHSM
+noevent        : 
+query          : Query: 137 AWACKVWSVAADDVAAQVRMRLGEGQDLTAVITARSAAEMRLAPGSEVLALV
+align          :             +A  V  +    V  +VR+RL    ++ AVIT  SA  + LA G EV ALV
+sbjct          : Sbjct: 137 QFAGIVTGLRVGGVDYEVRIRLDAENEIAAVITKASAENLELAIGKEVFALV
+noevent        : 
+query          : Query: 197 GAGVPERLSVRNRVRGRVIERIDAPLSSEVTLDLGGGKTITATITRDSAEML
+align          :                  +L+ RN++ G VI+  + P+++EVTL L  G+++T  +T DS + L
+sbjct          : Sbjct: 197 -TEPSLKLTARNQLWGEVIDIHEGPVNNEVTLALPSGRSVTCVVTADSCKAL
+noevent        : 
+query          : Query: 257 TALIKSSHVILAL 269
+align          :             A  KSS VILA+
+sbjct          : Sbjct: 256 CAFFKSSSVILAV 268
+noevent        : 
+noevent        : 
+score          :  Score = 42.6 bits (98), Expect = 8e-04
+identities     :  Identities = 33/99 (33%), Positives = 47/99 (47%), Gaps = 7/99
+noevent        : 
+query          : Query: 101 AIEAGVAKLLSSFEKSLNLDPAEVLRGLSLRTSARNAWACKVWSVAADDVAA
+align          :            AI   V  L+ S    L  +P       SL+ +ARN    +V  +    V
+sbjct          : Sbjct: 179 AIGKEVFALVKSSSVMLTTEP-------SLKLTARNQLWGEVIDIHEGPVNN
+noevent        : 
+query          : Query: 161 GQDLTAVITARSAAEMRLAPGSEVLALVKSNFVLLAGAG 199
+align          :            G+ +T V+TA S   + LAPG    A  KS+ V+LA  G
+sbjct          : Sbjct: 232 GRSVTCVVTADSCKALGLAPGVAACAFFKSSSVILAVYG 270
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|1709070|sp|P46930|MODE_ECOLI MOLYBDENUM TRANSPORT PROTEIN M
+length         :            Length = 262
+noevent        : 
+score          :  Score = 86.6 bits (211), Expect = 5e-17
+identities     :  Identities = 76/247 (30%), Positives = 114/247 (45%), Gaps = 1
+noevent        : 
+query          : Query: 31  RVALLAAIGRTGSISAAAREVGLSYKAAWDGVQAMNNXXXXXXXXXXXXXXX
+align          :            R++LL  I  +GSIS  A++ G+SYK+AWD +  MN
+sbjct          : Sbjct: 21  RISLLKHIALSGSISQGAKDAGISYKSAWDAINEMNQLSEHILVERATGGKG
+noevent        : 
+query          : Query: 91  AGEKLIAAY---GAIEAGVAKLLSSFEK-SLNLDPAEVLRGLSLRTSARNAW
+align          :             G++LI  Y     I+     +LS  +   LN   A + R  SL+TSARN W
+sbjct          : Sbjct: 81  YGQRLIQLYDLLAQIQQKAFDVLSDDDALPLNSLLAAISR-FSLQTSARNQW
+noevent        : 
+query          : Query: 147 ADDVAAQVRMRLGEGQD-LTAVITARSAAEMRLAPGSEVLALVKSNFVLLAG
+align          :             DDV   V + L +G+  L   ITA+S A + L  G EVL L+K+ +V
+sbjct          : Sbjct: 140 HDDVQQHVDVLLADGKTRLKVAITAQSGARLGLDEGKEVLILLKAPWV----
+noevent        : 
+query          : Query: 206 VR----NRVRGRVIERIDAPLSSEVTLDLGGGKTITATITRDSAEMLDLHPG
+align          :            V     N++ G +          EV + L  G+T+ AT+  +  E   L  G
+sbjct          : Sbjct: 195 VAQNADNQLPGIISHIERGAEQCEVLMALPDGQTLCATVPVN--EATSLQQG
+noevent        : 
+query          : Query: 262 SSHVILA 268
+align          :            +  VI+A
+sbjct          : Sbjct: 253 ADSVIIA 259
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|1709071|sp|P45324|MODE_HAEIN MOLYBDENUM TRANSPORT PROTEIN M
+title          :            HOMOLOG
+length         :            Length = 255
+noevent        : 
+score          :  Score = 54.3 bits (128), Expect = 2e-07
+identities     :  Identities = 46/170 (27%), Positives = 76/170 (44%), Gaps = 3/
+noevent        : 
+query          : Query: 30  ERVALLAAIGRTGSISAAAREVGLSYKAAWDGVQAMNNXXXXXXXXXXXXXX
+align          :            +RV LL  I + GSI+ AA+   +SYK+AWD ++AMN
+sbjct          : Sbjct: 21  KRVRLLKEIQQCGSINQAAKNAKVSYKSAWDHLEAMNKISPRPLLERNTGGK
+noevent        : 
+query          : Query: 90  XAGEKLIAAYGAIEAGVAKLLSSF-EKSLNLDP-AEVLRGLSLRTSARNAWA
+align          :               E+L+  Y  +E           ++S+ LD         SL++SARN +
+sbjct          : Sbjct: 81  TYAERLLQLYDLLERTQEHAFHILQDESVPLDSLLTATARFSLQSSARNQFF
+noevent        : 
+query          : Query: 148 DDVAAQVRMRL-GEGQDLTAVITARSAAEMRLAPGSEVLALVKSNFVLLA 1
+align          :             D    V + + G    L   IT +S+A ++L    EV+ + K+ +V ++
+sbjct          : Sbjct: 141 IDSRCVVDVNVQGLPTPLQVSITTKSSARLKLITEKEVMLMFKAPWVKIS 1
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|585502|sp|P04952|MOP1_CLOPA MOLYBDENUM-PTERIN BINDING PROTE
+length         :            Length = 68
+noevent        : 
+score          :  Score = 53.1 bits (125), Expect = 6e-07
+identities     :  Identities = 25/64 (39%), Positives = 43/64 (67%)
+noevent        : 
+query          : Query: 204 LSVRNRVRGRVIERIDAPLSSEVTLDLGGGKTITATITRDSAEMLDLHPGVE
+align          :            +S RN+++G+V+      +++EV L++ GG  IT+ I+ DS E L +  G E
+sbjct          : Sbjct: 3   ISARNQLKGKVVGLKKGVITAEVVLEIAGGNKITSIISLDSVEELGVKEGAE
+noevent        : 
+query          : Query: 264 HVIL 267
+align          :             V++
+sbjct          : Sbjct: 63  DVMI 66
+noevent        : 
+noevent        : 
+score          :  Score = 37.1 bits (84), Expect = 0.036
+identities     :  Identities = 19/63 (30%), Positives = 36/63 (56%)
+noevent        : 
+query          : Query: 133 SARNAWACKVWSVAADDVAAQVRMRLGEGQDLTAVITARSAAEMRLAPGSEV
+align          :            SARN    KV  +    + A+V + +  G  +T++I+  S  E+ +  G+E+
+sbjct          : Sbjct: 4   SARNQLKGKVVGLKKGVITAEVVLEIAGGNKITSIISLDSVEELGVKEGAEL
+noevent        : 
+query          : Query: 193 VLL 195
+align          :            V++
+sbjct          : Sbjct: 64  VMI 66
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|127241|sp|P08854|MOP2_CLOPA MOLYBDENUM-PTERIN BINDING PROTE
+length         :            Length = 68
+noevent        : 
+score          :  Score = 52.3 bits (123), Expect = 1e-06
+identities     :  Identities = 24/64 (37%), Positives = 43/64 (66%)
+noevent        : 
+query          : Query: 204 LSVRNRVRGRVIERIDAPLSSEVTLDLGGGKTITATITRDSAEMLDLHPGVE
+align          :            +S RN+++G+V+      +++EV L++ GG  IT+ I+ DS E L +  G E
+sbjct          : Sbjct: 3   ISARNQLKGKVVGLKKGVVTAEVVLEIAGGNKITSIISLDSVEELGVKEGAE
+noevent        : 
+query          : Query: 264 HVIL 267
+align          :             V++
+sbjct          : Sbjct: 63  DVMI 66
+noevent        : 
+noevent        : 
+score          :  Score = 37.9 bits (86), Expect = 0.021
+identities     :  Identities = 21/63 (33%), Positives = 36/63 (56%)
+noevent        : 
+query          : Query: 133 SARNAWACKVWSVAADDVAAQVRMRLGEGQDLTAVITARSAAEMRLAPGSEV
+align          :            SARN    KV  +    V A+V + +  G  +T++I+  S  E+ +  G+E+
+sbjct          : Sbjct: 4   SARNQLKGKVVGLKKGVVTAEVVLEIAGGNKITSIISLDSVEELGVKEGAEL
+noevent        : 
+query          : Query: 193 VLL 195
+align          :            V++
+sbjct          : Sbjct: 64  VMI 66
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|585503|sp|P38366|MOP3_CLOPA MOLYBDENUM-PTERIN BINDING PROTE
+title          :            III
+length         :            Length = 68
+noevent        : 
+score          :  Score = 50.8 bits (119), Expect = 3e-06
+identities     :  Identities = 24/64 (37%), Positives = 43/64 (66%)
+noevent        : 
+query          : Query: 204 LSVRNRVRGRVIERIDAPLSSEVTLDLGGGKTITATITRDSAEMLDLHPGVE
+align          :            +S RN+++G+V+      +++EV L++ GG  +T+ I+ DS E L +  G E
+sbjct          : Sbjct: 3   ISARNQLKGKVVAVKKGLVTAEVVLEIAGGDKVTSIISLDSIEDLGVKEGTE
+noevent        : 
+query          : Query: 264 HVIL 267
+align          :             V++
+sbjct          : Sbjct: 63  DVMI 66
+noevent        : 
+noevent        : 
+score          :  Score = 36.7 bits (83), Expect = 0.047
+identities     :  Identities = 20/63 (31%), Positives = 37/63 (57%)
+noevent        : 
+query          : Query: 133 SARNAWACKVWSVAADDVAAQVRMRLGEGQDLTAVITARSAAEMRLAPGSEV
+align          :            SARN    KV +V    V A+V + +  G  +T++I+  S  ++ +  G+E+
+sbjct          : Sbjct: 4   SARNQLKGKVVAVKKGLVTAEVVLEIAGGDKVTSIISLDSIEDLGVKEGTEL
+noevent        : 
+query          : Query: 193 VLL 195
+align          :            V++
+sbjct          : Sbjct: 64  VMI 66
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|1170996|sp|P45183|MOP_HAEIN PROBABLE MOLYBDENUM-PTERIN BIND
+title          :            PROTEIN
+length         :            Length = 69
+noevent        : 
+score          :  Score = 46.5 bits (108), Expect = 5e-05
+identities     :  Identities = 19/67 (28%), Positives = 46/67 (68%)
+noevent        : 
+query          : Query: 203 RLSVRNRVRGRVIERIDAPLSSEVTLDLGGGKTITATITRDSAEMLDLHPGV
+align          :            ++S RN+++G+V+   +  +++ V +D+GGG  +++T++  + + L+L  G
+sbjct          : Sbjct: 2   KISARNQLKGKVVSIENGSVNAIVHIDIGGGNVLSSTVSLAAVKELNLEVGK
+noevent        : 
+query          : Query: 263 SHVILAL 269
+align          :            + V++ +
+sbjct          : Sbjct: 62  TSVMVGV 68
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|1709069|sp|P09833|MODC_ECOLI MOLYBDENUM TRANSPORT ATP-BINDI
+title          :            PROTEIN MODC
+length         :            Length = 352
+noevent        : 
+score          :  Score = 37.9 bits (86), Expect = 0.021
+identities     :  Identities = 23/62 (37%), Positives = 37/62 (59%), Gaps = 1/62
+noevent        : 
+query          : Query: 201 PERLSVRNRVRGRVIERIDAPLSSEVTLDLGGGKTITATITRDSAEMLDLHP
+align          :            P++ S+RN +R +V+   D     EV L++ GGKT+ A I+  + + L + P
+sbjct          : Sbjct: 287 PQQTSIRNVLRAKVVNSYDDNGQVEVELEV-GGKTLWARISPWARDELAIKP
+noevent        : 
+query          : Query: 261 KS 262
+align          :            KS
+sbjct          : Sbjct: 346 KS 347
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|585500|sp|P37732|MODD_AZOVI MOLYBDENUM TRANSPORT ATP-BINDIN
+title          :            PROTEIN MODD
+length         :            Length = 380
+noevent        : 
+score          :  Score = 33.2 bits (74), Expect = 0.53
+identities     :  Identities = 41/143 (28%), Positives = 62/143 (42%), Gaps = 12
+noevent        : 
+query          : Query: 123 EVLRGLSLRTSARNAWACKVWSVAA--DDVAAQVRMRLGEGQDLTAVITARS
+align          :            +++  L L T+        + SV A  DD     R+    G    AV+ AR
+sbjct          : Sbjct: 242 DIMARLDLPTAFHEDAGVVIESVVAEHDDHYHLTRLAFPGG----AVLVARR
+noevent        : 
+query          : Query: 181 GSEVLALVKSNFVLLAGAGVPERLSVRNRVRGRVIERIDAPLSSEVTLDLGG
+align          :            G  +   V +  V LA + + E  S+ N +   V E ++A   + V + L
+sbjct          : Sbjct: 294 GQRLRLRVHARDVSLANSRI-EDSSITNVLPATVREVVEADTPAHVLVRLEA
+noevent        : 
+query          : Query: 240 ITRDSAEMLDLHPGVETTALIKS 262
+align          :            ITR S + L + PG    A IK+
+sbjct          : Sbjct: 353 ITRRSCDQLGIAPGRRMWAQIKA 375
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|2507168|sp|P08838|PT1_BACSU PHOSPHOENOLPYRUVATE-PROTEIN
+title          :            PHOSPHOTRANSFERASE (PHOSPHOTRANSFERASE SYSTEM, ENZYM
+length         :            Length = 570
+noevent        : 
+score          :  Score = 30.1 bits (66), Expect = 4.6
+identities     :  Identities = 32/141 (22%), Positives = 61/141 (42%), Gaps = 6/
+noevent        : 
+query          : Query: 97  AAYGAIEAGVAKLLSSFEKSLNLDP-AEVLRGLSLRTSARNAWACKVWSVAA
+align          :            AA G I+ GV  ++      + +DP AE ++    + +A  A   + W+
+sbjct          : Sbjct: 207 AATGTIQNGVTVIVDGINGDVIIDPSAETVKEYEEKHNAYLAQKAE-WAKLV
+noevent        : 
+query          : Query: 156 MRLGEGQDLTAVITARSAAEMRLAPGSEVLALVKSNFVLLAGAGVPERLSVR
+align          :             + G   +L A I      +  L  G E + L ++ F+ +    +P
+sbjct          : Sbjct: 264 -KDGHHVELAANIGTPDDVKGVLENGGEAVGLYRTEFLYMGRDQLPTEDEQF
+noevent        : 
+query          : Query: 216 ERIDAPLSSEVTLDLGGGKTI 236
+align          :            ER++       TLD+GG K +
+sbjct          : Sbjct: 322 ERMEGKSVVVRTLDIGGDKEL 342
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_alignment
+title          : >gi|729786|sp|Q05355|HYDL_STRHA PUTATIVE POLYKETIDE HYDROXYLASE
+length         :            Length = 555
+noevent        : 
+score          :  Score = 29.3 bits (64), Expect = 7.9
+identities     :  Identities = 21/62 (33%), Positives = 29/62 (45%)
+noevent        : 
+query          : Query: 101 AIEAGVAKLLSSFEKSLNLDPAEVLRGLSLRTSARNAWACKVWSVAADDVAA
+align          :            A+E G     S+  +S   DPA V   +  R S  +      + VAAD   +
+sbjct          : Sbjct: 136 AVELGGEIRFSTELQSFEQDPAGVTAVIKSRRSGEHTTVRADYLVAADGPRS
+noevent        : 
+query          : Query: 161 GQ 162
+align          :            GQ
+sbjct          : Sbjct: 196 GQ 197
+noevent        : 
+noevent        : 
+*************** end_alignment
+*************** start_database_report
+database       :   Database: data/swissprot
+posted_date    :     Posted date:  Nov 29, 1999  4:39 PM
+num_letters_in_:   Number of letters in database: 29,652,561
+num_sequences_i:   Number of sequences in database:  82,258
+noevent        : 
+noevent        : Lambda     K      H
+ka_params      :    0.316    0.131    0.361
+noevent        : 
+gapped         : Gapped
+noevent        : Lambda     K      H
+ka_params_gap  :    0.270   0.0470    0.230
+noevent        : 
+*************** end_database_report
+noevent        : 
+*************** start_parameters
+matrix         : Matrix: BLOSUM62
+gap_penalties  : Gap Penalties: Existence: 11, Extension: 1
+num_hits       : Number of Hits to DB: 12068104
+num_sequences  : Number of Sequences: 82258
+num_extends    : Number of extensions: 396723
+num_good_extend: Number of successful extensions: 1066
+num_seqs_better: Number of sequences better than 10.0: 13
+hsps_no_gap    : Number of HSP's better than 10.0 without gapping: 10
+hsps_prelim_gap: Number of HSP's successfully gapped in prelim test: 3
+hsps_prelim_gap: Number of HSP's that attempted gapping in prelim test: 1038
+hsps_gapped    : Number of HSP's gapped (non-prelim): 18
+query_length   : length of query: 270
+database_length: length of database: 29,652,561
+effective_hsp_l: effective HSP length: 56
+effective_query: effective length of query: 214
+effective_datab: effective length of database: 25,046,113
+effective_searc: effective search space: 5359868182
+effective_searc: effective search space used: 5359868182
+threshold      : T: 11
+window_size    : A: 40
+dropoff_1st_pas: X1: 16 ( 7.3 bits)
+gap_x_dropoff  : X2: 38 (14.8 bits)
+gap_x_dropoff_f: X3: 64 (24.9 bits)
+gap_trigger    : S1: 41 (21.6 bits)
+blast_cutoff   : S2: 64 (29.3 bits)
+*************** end_parameters

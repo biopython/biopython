@@ -1,0 +1,187 @@
+noevent        : <HTML>
+noevent        : <HEAD>
+noevent        : <TITLE>BLAST Search Results </TITLE>
+noevent        : </HEAD>
+noevent        : <BODY BGCOLOR="#FFFFFF" LINK="#0000FF" VLINK="#660099" ALINK="#
+noevent        : <A HREF="http://www.ncbi.nlm.nih.gov/BLAST/blast_form.map"> <IM
+*************** start_header
+noevent        : <BR><BR><PRE>
+version        : <b>BLASTP 2.0.10 [Aug-26-1999]</b>
+noevent        : 
+noevent        : 
+reference      : <b><a href="http://www.ncbi.nlm.nih.gov/htbin-
+reference      : post/Entrez/query?uid=9254694&form=6&db=m&Dopt=r">Reference</a>
+reference      : Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch&auml;f
+reference      : Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1
+reference      : "Gapped BLAST and PSI-BLAST: a new generation of protein databa
+reference      : programs",  Nucleic Acids Res. 25:3389-3402.
+noevent        : <p>
+query_info     : <b>Query=</b> gi|132349|sp|P15394|REPA_AGRTU REPLICATING PROTEI
+query_info     :          (250 letters)
+noevent        : 
+database_info  : <b>Database:</b> Non-redundant SwissProt sequences
+database_info  :            82,258 sequences; 29,652,561 total letters
+noevent        : 
+noevent        : <p> <p>If you have any problems or questions with the results o
+noevent        : <FORM NAME="BLASTFORM">
+noevent        : </PRE>
+noevent        : <CENTER>
+noevent        : <H3><a href="/BLAST/newoptions.html#graphical-overview"> Distri
+noevent        : <input name=defline size=80 value="Mouse-over to show defline a
+noevent        : </CENTER>
+noevent        : <map name=img_map>
+noevent        : <area shape=rect coords=69,101,523,106 href="#132349" ONMOUSEOV
+noevent        : <area shape=rect coords=362,108,521,113 href="#123932" ONMOUSEO
+noevent        : <area shape=rect coords=346,115,515,120 href="#137670" ONMOUSEO
+noevent        : <area shape=rect coords=271,122,517,127 href="#5921693" ONMOUSE
+noevent        : <area shape=rect coords=287,129,466,134 href="#121952" ONMOUSEO
+noevent        : <area shape=rect coords=245,136,466,141 href="#462182" ONMOUSEO
+noevent        : <area shape=rect coords=275,143,466,148 href="#124141" ONMOUSEO
+noevent        : <area shape=rect coords=362,150,504,155 href="#3915729" ONMOUSE
+noevent        : <area shape=rect coords=165,108,225,113 href="#731294" ONMOUSEO
+noevent        : <area shape=rect coords=247,157,413,162 href="#1708851" ONMOUSE
+noevent        : <area shape=rect coords=315,164,503,169 href="#2495137" ONMOUSE
+noevent        : <area shape=rect coords=275,171,457,176 href="#6226905" ONMOUSE
+noevent        : <area shape=rect coords=282,178,422,183 href="#1172635" ONMOUSE
+noevent        : <area shape=rect coords=337,185,499,190 href="#547963" ONMOUSEO
+noevent        : <area shape=rect coords=439,157,492,162 href="#6093970" ONMOUSE
+noevent        : </map>
+noevent        : <CENTER>
+noevent        : <IMG WIDTH=529 HEIGHT=192 USEMAP=#img_map BORDER=1 SRC="nph-get
+noevent        : <HR>
+noevent        : <PRE>
+*************** end_header
+*************** start_descriptions
+noevent        : <PRE>
+noevent        : 
+noevent        : 
+noevent        : Sequences producing significant alignments:
+noevent        : 
+description    : <a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=R
+description    : <a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=R
+description    : <a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=R
+description    : <a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=R
+description    : <a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=R
+description    : <a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=R
+description    : <a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=R
+description    : <a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=R
+description    : <a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=R
+description    : <a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=R
+description    : <a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=R
+description    : <a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=R
+description    : <a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=R
+description    : <a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=R
+description    : <a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=R
+noevent        : 
+*************** end_descriptions
+*************** start_alignment
+noevent        : <PRE>
+multalign      : blast_tmp 1    MFQQIGAVQAKSGTDEPAHPCEKFPPERKCEAVFWKPLPRHEAREILL
+multalign      : <a name = 132349></a><a href=http://www.ncbi.nlm.nih.gov:80/ent
+multalign      : <a name = 731294></a><a href=http://www.ncbi.nlm.nih.gov:80/ent
+noevent        : 
+multalign      : blast_tmp 61   GKRTGPLGHVALEVLDYLTNLVDFGNGRLDPSISTIMEKIGRAESCMS
+multalign      : <a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Re
+multalign      : <a name = 5921693></a><a href=http://www.ncbi.nlm.nih.gov:80/en
+multalign      : <a name = 124141></a><a href=http://www.ncbi.nlm.nih.gov:80/ent
+multalign      : <a name = 462182></a><a href=http://www.ncbi.nlm.nih.gov:80/ent
+multalign      : <a name = 1708851></a><a href=http://www.ncbi.nlm.nih.gov:80/en
+multalign      : <a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Re
+multalign      : <a name = 6226905></a><a href=http://www.ncbi.nlm.nih.gov:80/en
+multalign      : <a name = 1172635></a><a href=http://www.ncbi.nlm.nih.gov:80/en
+noevent        : 
+multalign      : blast_tmp 121  AGAADKQRLPLEPAGARPRALLGKYVRK------AA---PL---PDDA
+multalign      : <a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Re
+multalign      : <a name = 137670></a><a href=http://www.ncbi.nlm.nih.gov:80/ent
+multalign      : <a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Re
+multalign      : <a name = 121952></a><a href=http://www.ncbi.nlm.nih.gov:80/ent
+multalign      : <a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Re
+multalign      : <a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Re
+multalign      : <a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Re
+multalign      : <a name = 2495137></a><a href=http://www.ncbi.nlm.nih.gov:80/en
+multalign      : <a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Re
+multalign      : <a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Re
+multalign      : <a name = 547963></a><a href=http://www.ncbi.nlm.nih.gov:80/ent
+noevent        : 
+multalign      : blast_tmp 161  Q----ERHDTIKAHMDS---LSPADRLR----ET--VEDRTRAEQLAG
+multalign      : <a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Re
+multalign      : <a name = 123932></a><a href=http://www.ncbi.nlm.nih.gov:80/ent
+multalign      : <a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Re
+multalign      : <a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Re
+multalign      : <a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Re
+multalign      : <a name = 3915729></a><a href=http://www.ncbi.nlm.nih.gov:80/en
+multalign      : <a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Re
+multalign      : <a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Re
+multalign      : <a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Re
+multalign      : <a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Re
+multalign      : <a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Re
+multalign      : <a name = 6093970></a><a href=http://www.ncbi.nlm.nih.gov:80/en
+multalign      : <a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Re
+multalign      : <a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Re
+noevent        : 
+multalign      : blast_tmp 205  --PSGPRKAARRRQQSRCSFTTPNRPRRTLPS------SHPQKFG---
+multalign      : <a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Re
+multalign      : <a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Re
+multalign      : <a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Re
+multalign      : <a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Re
+multalign      : <a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Re
+multalign      : <a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Re
+multalign      : <a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Re
+multalign      : <a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Re
+multalign      : <a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Re
+multalign      : <a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Re
+multalign      : <a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Re
+multalign      : <a href=http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Re
+noevent        : </PRE>
+*************** end_alignment
+*************** start_database_report
+noevent        : 
+noevent        : <PRE>
+database       :   Database: Non-redundant SwissProt sequences
+posted_date    :     Posted date:  Dec 18, 1999  8:26 PM
+num_letters_in_:   Number of letters in database: 29,652,561
+num_sequences_i:   Number of sequences in database:  82,258
+noevent        : 
+noevent        : Lambda     K      H
+ka_params      :    0.317    0.133    0.395
+noevent        : 
+gapped         : Gapped
+noevent        : Lambda     K      H
+ka_params_gap  :    0.270   0.0470    0.230
+noevent        : 
+*************** end_database_report
+noevent        : 
+*************** start_parameters
+matrix         : Matrix: BLOSUM62
+gap_penalties  : Gap Penalties: Existence: 11, Extension: 1
+num_hits       : Number of Hits to DB: 14679054
+num_sequences  : Number of Sequences: 82258
+num_extends    : Number of extensions: 599117
+num_good_extend: Number of successful extensions: 1508
+num_seqs_better: Number of sequences better than 10.0: 15
+hsps_no_gap    : Number of HSP's better than 10.0 without gapping: 4
+hsps_prelim_gap: Number of HSP's successfully gapped in prelim test: 11
+hsps_prelim_gap: Number of HSP's that attempted gapping in prelim test: 1504
+hsps_gapped    : Number of HSP's gapped (non-prelim): 15
+query_length   : length of query: 250
+database_length: length of database: 29,652,561
+effective_hsp_l: effective HSP length: 51
+effective_query: effective length of query: 199
+effective_datab: effective length of database: 25,457,403
+effective_searc: effective search space: 5066023197
+effective_searc: effective search space used: 5066023197
+threshold      : T: 11
+window_size    : A: 40
+dropoff_1st_pas: X1: 16 ( 7.3 bits)
+gap_x_dropoff  : X2: 38 (14.8 bits)
+gap_x_dropoff_f: X3: 64 (24.9 bits)
+gap_trigger    : S1: 41 (21.7 bits)
+blast_cutoff   : S2: 63 (29.0 bits)
+noevent        : 
+noevent        : </PRE>
+*************** end_parameters
+noevent        : 
+noevent        : </BODY>
+noevent        : </HTML>
+noevent        : </BODY>
+noevent        : </HTML>

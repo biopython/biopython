@@ -2,12 +2,12 @@
 version        : TBLASTN 2.0.10 [Aug-26-1999]
 noevent        : 
 noevent        : 
-reference      : Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. S
-reference      : Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (199
-reference      : "Gapped BLAST and PSI-BLAST: a new generation of protein database
+reference      : Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A.
+reference      : Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1
+reference      : "Gapped BLAST and PSI-BLAST: a new generation of protein databa
 reference      : programs",  Nucleic Acids Res. 25:3389-3402.
 noevent        : 
-query_info     : Query= gi|729325|sp|P39483|DHG2_BACME GLUCOSE 1-DEHYDROGENASE II
+query_info     : Query= gi|729325|sp|P39483|DHG2_BACME GLUCOSE 1-DEHYDROGENASE I
 query_info     : (GLCDH-II)
 query_info     :          (261 letters)
 noevent        : 
@@ -21,28 +21,28 @@ noevent        :
 noevent        : 
 noevent        : Sequences producing significant alignments:
 noevent        : 
-description    : gi|3820341|emb|AJ229891|KLAJ9891 Kluyveromyces lactis DNA fragm..
+description    : gi|3820341|emb|AJ229891|KLAJ9891 Kluyveromyces lactis DNA fragm
 description    : gi|1375419|gb|G27169|G27169 human STS SHGC-31983.
-description    : gi|3819804|emb|AJ230012|KLAJ0012 Kluyveromyces lactis DNA fragm..
+description    : gi|3819804|emb|AJ230012|KLAJ0012 Kluyveromyces lactis DNA fragm
 description    : gi|1375215|gb|G26965|G26965 human STS SHGC-31083.
-description    : gi|177714|gb|L09988|HUM4STS889 Human Chromosome 4 (clone p4-109..
-description    : gi|5714409|gb|AF106665.1|AF106665 Mus musculus chromosome 6 clo..
+description    : gi|177714|gb|L09988|HUM4STS889 Human Chromosome 4 (clone p4-109
+description    : gi|5714409|gb|AF106665.1|AF106665 Mus musculus chromosome 6 clo
 description    : gi|1341648|gb|G21322|G21322 human STS WI-12250.
 noevent        : 
 *************** end_descriptions
 *************** start_alignment
-title          : >gi|3820341|emb|AJ229891|KLAJ9891 Kluyveromyces lactis DNA fragme
-title          :            for sequence tagged site, clone okam5d07r [Kluyveromyc
+title          : >gi|3820341|emb|AJ229891|KLAJ9891 Kluyveromyces lactis DNA frag
+title          :            for sequence tagged site, clone okam5d07r [Kluyverom
 title          :            lactis]
 length         :            Length = 230
 noevent        : 
 score          :  Score = 46.9 bits (109), Expect = 1e-05
-identities     :  Identities = 25/72 (34%), Positives = 44/72 (60%), Gaps = 3/72 (
+identities     :  Identities = 25/72 (34%), Positives = 44/72 (60%), Gaps = 3/72
 frame          :  Frame = +1
 noevent        : 
-query          : Query: 108 NWNQVIDTNLTGAFLGSREAIKYFVEN---DIKGNVINMSSVHEMIPWPLFVHY
-align          :            +W QVIDTN+ G F   + A+     +   D +  V+N+S+V+ ++  P    Y
-sbjct          : Sbjct: 1   SWRQVIDTNINGTFYTLKYALPLMESSSSPDSEAAVVNLSAVNGLVGIPGISPY
+query          : Query: 108 NWNQVIDTNLTGAFLGSREAIKYFVEN---DIKGNVINMSSVHEMIPWPLFV
+align          :            +W QVIDTN+ G F   + A+     +   D +  V+N+S+V+ ++  P
+sbjct          : Sbjct: 1   SWRQVIDTNINGTFYTLKYALPLMESSSSPDSEAAVVNLSAVNGLVGIPGIS
 noevent        : 
 query          : Query: 165 MKLMTETLALEYAPK 179
 align          :            +  +T+++ALEYA +
@@ -58,9 +58,9 @@ score          :  Score = 43.4 bits (100), Expect = 1e-04
 identities     :  Identities = 21/73 (28%), Positives = 34/73 (45%)
 frame          :  Frame = -1
 noevent        : 
-query          : Query: 177 APKGIRVNNIGPGAIDTPINAEKFADPEQRADVESMIPMGYIGKPEEIASVAAF
-align          :            AP   RVN + P  + T +    + DP +   + +  P+G   + E +     F
-sbjct          : Sbjct: 312 APXRXRVNAVXPXVVMTSMGQATWXDPXKAXTMLNRXPLGXFAEVEHVVKAILF
+query          : Query: 177 APKGIRVNNIGPGAIDTPINAEKFADPEQRADVESMIPMGYIGKPEEIASVA
+align          :            AP   RVN + P  + T +    + DP +   + +  P+G   + E +
+sbjct          : Sbjct: 312 APXRXRVNAVXPXVVMTSMGQATWXDPXKAXTMLNRXPLGXFAEVEHVVKAI
 noevent        : 
 query          : Query: 237 SYVTGITLFADGG 249
 align          :               TG TL  +GG
@@ -69,8 +69,8 @@ noevent        :
 noevent        : 
 *************** end_alignment
 *************** start_alignment
-title          : >gi|3819804|emb|AJ230012|KLAJ0012 Kluyveromyces lactis DNA fragme
-title          :            for sequence tagged site, clone okam6d01d [Kluyveromyc
+title          : >gi|3819804|emb|AJ230012|KLAJ0012 Kluyveromyces lactis DNA frag
+title          :            for sequence tagged site, clone okam6d01d [Kluyverom
 title          :            lactis]
 length         :            Length = 199
 noevent        : 
@@ -78,7 +78,7 @@ score          :  Score = 39.5 bits (90), Expect = 0.002
 identities     :  Identities = 18/49 (36%), Positives = 26/49 (52%)
 frame          :  Frame = -1
 noevent        : 
-query          : Query: 200 FADPEQRADVESMIPMGYIGKPEEIASVAAFLASSQASYVTGITLFADG 248
+query          : Query: 200 FADPEQRADVESMIPMGYIGKPEEIASVAAFLASSQASYVTGITLFADG 24
 align          :            F D + +    S+IPMG  G P+E+     + AS  ++Y TG  L  DG
 sbjct          : Sbjct: 157 FVDEDLKNKWHSLIPMGREGLPQELVGAYLYFASDASTYTTGSDLLVDG 11
 noevent        : 
@@ -99,7 +99,7 @@ noevent        :
 noevent        : 
 *************** end_alignment
 *************** start_alignment
-title          : >gi|177714|gb|L09988|HUM4STS889 Human Chromosome 4 (clone p4-1095
+title          : >gi|177714|gb|L09988|HUM4STS889 Human Chromosome 4 (clone p4-10
 title          :            STS4-889.
 length         :            Length = 412
 noevent        : 
@@ -114,18 +114,18 @@ noevent        :
 noevent        : 
 *************** end_alignment
 *************** start_alignment
-title          : >gi|5714409|gb|AF106665.1|AF106665 Mus musculus chromosome 6 clon
+title          : >gi|5714409|gb|AF106665.1|AF106665 Mus musculus chromosome 6 cl
 title          :            D6wum9 map between Nkrp1 and Prp strain C57BL/6J,
 title          :            sequence tagged site
 length         :            Length = 299
 noevent        : 
 score          :  Score = 29.3 bits (64), Expect = 2.2
-identities     :  Identities = 17/55 (30%), Positives = 32/55 (57%), Gaps = 2/55 (
+identities     :  Identities = 17/55 (30%), Positives = 32/55 (57%), Gaps = 2/55
 frame          :  Frame = -2
 noevent        : 
-query          : Query: 142 NMSSVHEMIPWPLFVHYAASKGGMKLMTETL--ALEYAPKGIRVNNIGPGAIDT
-align          :            ++S    +I +P F+    S  G  L+  +L  A+ + P GI V+++GP ++ T
-sbjct          : Sbjct: 172 SLSPTQYLIMFPSFLPCPLSHPGPFLLPSSLVIAVFFLPNGIEVSSLGPFSLRT
+query          : Query: 142 NMSSVHEMIPWPLFVHYAASKGGMKLMTETL--ALEYAPKGIRVNNIGPGAI
+align          :            ++S    +I +P F+    S  G  L+  +L  A+ + P GI V+++GP ++
+sbjct          : Sbjct: 172 SLSPTQYLIMFPSFLPCPLSHPGPFLLPSSLVIAVFFLPNGIEVSSLGPFSL
 noevent        : 
 noevent        : 
 *************** end_alignment
@@ -134,7 +134,7 @@ title          : >gi|1341648|gb|G21322|G21322 human STS WI-12250.
 length         :            Length = 586
 noevent        : 
 score          :  Score = 28.6 bits (62), Expect = 3.7
-identities     :  Identities = 16/39 (41%), Positives = 20/39 (51%), Gaps = 1/39 (
+identities     :  Identities = 16/39 (41%), Positives = 20/39 (51%), Gaps = 1/39
 frame          :  Frame = +1
 noevent        : 
 query          : Query: 98  PVPSHELSLENWNQ-VIDTNLTGAFLGSREAIKYFVENDI 136
