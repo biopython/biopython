@@ -1,0 +1,11 @@
+test_Wise
+test_dnal (test_Wise.TestWiseDryRun) ... ok
+test_psw (test_Wise.TestWiseDryRun) ... ok
+test_align (test_Wise.TestWise) ... ok
+doctest of Bio.Wise._build_align_cmdline ... ok
+doctest of Bio.Wise.all_pairs ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.010s
+
+OK

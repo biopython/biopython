@@ -317,6 +317,7 @@ PACKAGES = [
     'Bio.UniGene',
     'Bio.writers',
     'Bio.writers.SeqRecord',
+    'Bio.Wise',
     'Bio.WWW',
     ]
 
