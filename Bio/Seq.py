@@ -130,7 +130,7 @@ class MutableSeq:
         self.data.append(c)
     def insert(self, i, c):
         self.data.insert(i, c)
-    def pop(self, i=-1):
+    def pop(self, i = (-1)):
         c = self.data[i]
         del self.data[i]
         return c
