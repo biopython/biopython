@@ -215,6 +215,7 @@ biopython_packages = ['Bio',
                       'Bio.Tools.Clustering',
                       'Bio.Tools.MultiProc',
                       'Bio.Tools.Parsers',
+                      'Bio.Tools.KDTree',
                       'Bio.UniGene',
                       'Bio.WWW',
                       'Bio.builders',
@@ -287,6 +288,11 @@ setup(name='biopython',
                                ['Bio/Align/cfastpairwisemodule.c',
                                 'Bio/Tools/csupport.c'],
                                include_dirs=["Bio/Tools"]
+                               ),
+                     Extension('Bio.Tools.KDTree._KDTreecmodule',
+                               ["Bio/Tools/KDTree/_KDTree.C", 
+                                "Bio/Tools/KDTree/_KDTree.swig.C"],
+                               libraries=["stdc++"]
                                )
                      ]
       )
