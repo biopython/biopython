@@ -8,21 +8,23 @@
 
 
 Classes:
-AbstractConsumer Base class of all Consumers.
-TaggingConsumer  Consumer that tags output with its event.
+AbstractConsumer       Base class of all Consumers.
+TaggingConsumer        Consumer that tags output with its event.  For debugging
+SGMLStrippingConsumer  Consumer that strips SGML tags from output.
 
 Functions:
-safe_readline    Read a line from a handle, with check for EOF.
-safe_peekline    Peek at next line, with check for EOF.
-read_and_call    Read a line from a handle and pass it to a method.
+safe_readline          Read a line from a handle, with check for EOF.
+safe_peekline          Peek at next line, with check for EOF.
+read_and_call          Read a line from a handle and pass it to a method.
 attempt_read_and_call  Like read_and_call, but forgiving of errors.
-is_blank_line    Test whether a line is blank.
+is_blank_line          Test whether a line is blank.
 
 """
 
 import sys
 import string
 import traceback
+from types import *
 
 from Bio import File
 
@@ -85,6 +87,37 @@ class TaggingConsumer(AbstractConsumer):
         else:
             method = lambda x, a=attr, s=self: s._print_name(a, x)
         return method
+
+class SGMLStrippingConsumer:
+    """A consumer that strips off SGML tags.
+
+    This is meant to be used as a decorator for other consumers.
+
+    """
+    def __init__(self, consumer):
+        if type(consumer) is not InstanceType:
+            raise ValueError, "consumer should be an instance"
+        self._consumer = consumer
+        self._prev_attr = None
+        self._stripper = File.SGMLStripper()
+
+    def _apply_clean_data(self, data):
+        clean = self._stripper.strip(data)
+        self._prev_attr(clean)
+
+    def __getattr__(self, name):
+        if name in ['_prev_attr', '_stripper']:
+            return getattr(self, name)
+        attr = getattr(self._consumer, name)
+        # If this is not a method, then return it as is.
+        if type(attr) is not MethodType:
+            return attr
+        # If it's a section method, then return it.
+        if name[:6] == 'start_' or name[:4] == 'end_':
+            return attr
+        # Otherwise, it's an info event, and return my method.
+        self._prev_attr = attr
+        return self._apply_clean_data
 
 def read_and_call(uhandle, method, **keywds):
     """_read_and_call(uhandle, method,

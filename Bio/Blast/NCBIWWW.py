@@ -10,6 +10,7 @@ provided by the NCBI.
 http://www.ncbi.nlm.nih.gov/BLAST/
 
 Classes:
+BlastParser
 _Scanner      Scans output from NCBI's BLAST WWW server.
 
 Functions:
@@ -20,8 +21,22 @@ import string
 
 from Bio import File
 from Bio.ParserSupport import *
+import NCBIStandalone
 
+class BlastParser:
+    """Parses WWW BLAST data into a Record.Blast object.
 
+    """
+    def __init__(self):
+        """__init__(self)"""
+        self._scanner = _Scanner()
+        self._consumer = SGMLStrippingConsumer(NCBIStandalone._BlastConsumer())
+
+    def parse(self, handle):
+        """parse(self, handle)"""
+        self._scanner.feed(handle, self._consumer)
+        return self._consumer.data
+    
 class _Scanner:
     """Scan BLAST output from NCBI's web server at:
     http://www.ncbi.nlm.nih.gov/BLAST/
@@ -67,7 +82,8 @@ class _Scanner:
         else:
             uhandle = File.UndoHandle(handle)
         # Read HTML formatting up to the "BLAST" version line.
-        read_and_call_until(uhandle, consumer.noevent, start='<b>', contains='BLAST')
+        read_and_call_until(uhandle, consumer.noevent, start='<b>',
+                            contains='BLAST')
 
         self._scan_header(uhandle, consumer)
 	self._scan_rounds(uhandle, consumer)
@@ -233,10 +249,12 @@ class _Scanner:
         # hsp_alignment
 
         consumer.start_alignment()
+        consumer.start_hsp()
         read_and_call(uhandle, consumer.noevent, start='<PRE>')
         self._scan_hsp_alignment(uhandle, consumer)
+        consumer.end_hsp()
         consumer.end_alignment()
-            
+        
     def _scan_one_pairwise_alignment(self, uhandle, consumer):
         # Alignment format:
         # <PRE>

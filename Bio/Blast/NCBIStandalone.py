@@ -31,9 +31,6 @@ blastpgp        Execute blastpgp.
 
 """
 
-# To do:
-# optimize regex's
-
 import os
 import string
 import re
@@ -357,7 +354,7 @@ class _Scanner:
 
 	    line = safe_readline(uhandle)
 	    uhandle.saveline(line)
-	    if re.search('Lambda', line):
+            if string.find(line, 'Lambda') >= 0:
 		break
 
 	read_and_call(uhandle, consumer.noevent, start='Lambda')
@@ -513,9 +510,10 @@ class _HeaderConsumer:
             self._header.query_letters = _safe_int(letters)
                 
     def database_info(self, line):
+        line = string.rstrip(line)
         if line[:10] == 'Database: ':
-            self._header.database = string.rstrip(line[10:])
-	elif not re.search('total letters$', line):
+            self._header.database = line[10:]
+	elif not line[-13:] == 'total letters':
             self._header.database = self._header.database + string.strip(line)
         else:
             sequences, letters =_re_search(
@@ -572,11 +570,15 @@ class _DescriptionConsumer:
         dh = Record.Description()
         
         # I need to separate the score and p-value from the title.
-        # sp|P21297|FLBT_CAUCR FLBT PROTEIN     [snip]           284  7e-77
+        # sp|P21297|FLBT_CAUCR FLBT PROTEIN     [snip]         284  7e-77
+        # sp|P21297|FLBT_CAUCR FLBT PROTEIN     [snip]         284  7e-77  1
         # special cases to handle:
         #   - title must be preserved exactly (including whitespaces)
         #   - score could be equal to e-value (not likely, but what if??)
+        #   - sometimes there's an "N" score of '1'.  Ignore it.
         cols = string.split(line)
+        if cols[-1] == '1':  # ignore N.  XXX this is kinda broken.  N may
+            del cols[-1]     # not be 1.  I'm assuming e-value would be 1.0.
         i = string.rfind(line, cols[-1])        # find start of p-value
         i = string.rfind(line, cols[-2], 0, i)  # find start of score
         dh.title, dh.score, dh.e = string.rstrip(line[:i]), cols[-2], cols[-1]
@@ -590,25 +592,19 @@ class _AlignmentConsumer:
     # to know a-priori which one the blast record will contain, I'm going
     # to make one class that can parse both of them.
     def start_alignment(self):
-        self._alignment = None
-        self._multiple_alignment = None
+        self._alignment = Record.Alignment()
+        self._multiple_alignment = Record.MultipleAlignment()
 
     def title(self, line):
-        if self._alignment is None:
-            self._alignment = Record.Alignment()
         self._alignment.title = self._alignment.title + string.lstrip(line)
 
     def length(self, line):
-        if self._alignment is None:
-            raise SyntaxError, "I found a length before title in an alignment"
         self._alignment.length = string.split(line)[2]
         self._alignment.length = _safe_int(self._alignment.length)
 
     def multalign(self, line):
-        if self._multiple_alignment is None:
-            self._multiple_alignment = Record.MultipleAlignment()
-
-        if line[:5] == 'QUERY':
+        # Standalone version uses 'QUERY', while WWW version uses blast_tmp.
+        if line[:5] == 'QUERY' or line[:9] == 'blast_tmp':
             # If this is the first line of the multiple alignment,
             # then I need to figure out how the line is formatted.
             
@@ -797,8 +793,9 @@ class _HSPConsumer:
                 r"Frame = ([-+][123])", line,
                 "I could not find the frame in line\n%s" % line)
 
+    _query_re = re.compile(r"Query: (\d+)\s+(.+) \d")
     def query(self, line):
-        m = re.search(r"Query: (\d+)\s+(.+) \d", line)
+        m = self._query_re.search(line)
         if m is None:
             raise SyntaxError, "I could not find the query in line\n%s" % line
         start, seq = m.groups()
@@ -885,31 +882,41 @@ class _ParametersConsumer:
         self._params.matrix = string.rstrip(line[8:])
 
     def gap_penalties(self, line):
-        self._params.gap_penalties = _get_cols(
+        x = _get_cols(
             line, (3, 5), ncols=6, expected={2:"Existence:", 4:"Extension:"})
-        self._params.gap_penalties = map(
-            _safe_float, self._params.gap_penalties)
+        self._params.gap_penalties = map(_safe_float, x)
 
     def num_hits(self, line):
-        self._params.num_hits, = _get_cols(
-            line, (-1,), ncols=6, expected={2:"Hits"})
-        self._params.num_hits = _safe_int(self._params.num_hits)
+        if string.find(line, '1st pass') >= 0:
+            x, = _get_cols(line, (-4,), ncols=11, expected={2:"Hits"})
+            self._params.num_hits = _safe_int(x)
+        else:
+            x, = _get_cols(line, (-1,), ncols=6, expected={2:"Hits"})
+            self._params.num_hits = _safe_int(x)
 
     def num_sequences(self, line):
-        self._params.num_sequences, = _get_cols(
-            line, (-1,), ncols=4, expected={2:"Sequences:"})
-        self._params.num_sequences = _safe_int(self._params.num_sequences)
+        if string.find(line, '1st pass') >= 0:
+            x, = _get_cols(line, (-4,), ncols=9, expected={2:"Sequences:"})
+            self._params.num_sequences = _safe_int(x)
+        else:
+            x, = _get_cols(line, (-1,), ncols=4, expected={2:"Sequences:"})
+            self._params.num_sequences = _safe_int(x)
 
     def num_extends(self, line):
-        self._params.num_extends, = _get_cols(
-            line, (-1,), ncols=4, expected={2:"extensions:"})
-        self._params.num_extends = _safe_int(self._params.num_extends)
+        if string.find(line, '1st pass') >= 0:
+            x, = _get_cols(line, (-4,), ncols=9, expected={2:"extensions:"})
+            self._params.num_extends = _safe_int(x)
+        else:
+            x, = _get_cols(line, (-1,), ncols=4, expected={2:"extensions:"})
+            self._params.num_extends = _safe_int(x)
 
     def num_good_extends(self, line):
-        self._params.num_good_extends, = _get_cols(
-            line, (-1,), ncols=5, expected={3:"extensions:"})
-        self._params.num_good_extends = _safe_int(
-            self._params.num_good_extends)
+        if string.find(line, '1st pass') >= 0:
+            x, = _get_cols(line, (-4,), ncols=10, expected={3:"extensions:"})
+            self._params.num_good_extends = _safe_int(x)
+        else:
+            x, = _get_cols(line, (-1,), ncols=5, expected={3:"extensions:"})
+            self._params.num_good_extends = _safe_int(x)
         
     def num_seqs_better_e(self, line):
         self._params.num_seqs_better_e, = _get_cols(
@@ -1422,7 +1429,8 @@ def _get_cols(line, cols_to_get, ncols=None, expected={}):
 
     # Check to make sure number of columns is correct
     if ncols is not None and len(cols) != ncols:
-        raise SyntaxError, "I expected %d columns in line\n%s" % (ncols, line)
+        raise SyntaxError, "I expected %d columns (got %d) in line\n%s" % \
+              (ncols, len(cols), line)
 
     # Check to make sure columns contain the correct data
     for k in expected.keys():

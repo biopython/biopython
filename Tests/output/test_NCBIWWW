@@ -3139,6 +3139,7 @@ description    : <a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=R
 noevent        : 
 *************** end_descriptions
 *************** start_alignment
+*************** start_hsp
 noevent        : <PRE>
 query          : Query: 1   DLQLLIKAVNLFPAGTNSRWEVIANYMNIHSSSGVKRTAKDVIGKAK 141
 align          :            DLQLLIKAVNLFPAG NSRW+VIANYMNIHSSSGVKRTAKDVI + +
@@ -3146,8 +3147,10 @@ sbjct          : Sbjct: 458 DLQLLIKAVNLFPAGRNSRWDVIANYMNIHSSSGVKRTAKDVISEVR 504
 noevent        : </PRE>
 noevent        : 
 noevent        : 
+*************** end_hsp
 *************** end_alignment
 *************** start_alignment
+*************** start_hsp
 noevent        : <PRE>
 query          : Query: 34  FPAGTNSRWEVIANYMNIHSSSGVKRTAKDVIGKAKSLQKLDPHQKDDINKK
 align          :            +PAGT +RWE +   +N        R+A+DVI  A  ++++   +++D  K
@@ -3163,8 +3166,10 @@ sbjct          : Sbjct: 253 KK 254
 noevent        : </PRE>
 noevent        : 
 noevent        : 
+*************** end_hsp
 *************** end_alignment
 *************** start_alignment
+*************** start_hsp
 noevent        : <PRE>
 query          : Query: 292 TTEXQKLXEQALNTYPVNTXERWXXIAVAVPGRXKE 399
 align          :            T   QKL E AL  YP    +RW  IA  VP + KE
@@ -3172,8 +3177,10 @@ sbjct          : Sbjct: 496 TQSQQKLLELALQQYPKGASDRWDKIAKCVPSKSKE 531
 noevent        : </PRE>
 noevent        : 
 noevent        : 
+*************** end_hsp
 *************** end_alignment
 *************** start_alignment
+*************** start_hsp
 noevent        : <PRE>
 query          : Query: 1   DLQLLIKAVNLFPAGTNSRWEVIANYMNIHSSSGVKRTAKDVIGKAKSLQ 1
 align          :            DL  L +++  FP GT  RW+ IA+ +         R+  DV  KAK L+
@@ -3181,8 +3188,10 @@ sbjct          : Sbjct: 332 DLSQLTRSMVKFPGGTPGRWDKIAHELG--------RSVTDVTTKAKELK 3
 noevent        : </PRE>
 noevent        : 
 noevent        : 
+*************** end_hsp
 *************** end_alignment
 *************** start_alignment
+*************** start_hsp
 noevent        : <PRE>
 query          : Query: 52  SRWEVIANYMNIHSSSGVKRTAKDVIGKAKSLQKLDPHQKDDINKKAFDKFK
 align          :            +RW+   +Y        V R+ KDV   ++SL  LD +QK     +A
@@ -3195,6 +3204,7 @@ noevent        : </PRE>
 noevent        : 
 noevent        : 
 noevent        : 
+*************** end_hsp
 *************** end_alignment
 *************** start_database_report
 noevent        : <PRE>
@@ -4736,3 +4746,44 @@ noevent        : </BODY>
 noevent        : </HTML>
 noevent        : </BODY>
 noevent        : </HTML>
+Running tests on BlastParser
+************************************************** TESTING bt019
+parsed without exception
+************************************************** TESTING bt020
+parsed without exception
+************************************************** TESTING bt021
+parsed without exception
+************************************************** TESTING bt022
+parsed without exception
+************************************************** TESTING bt023
+parsed without exception
+************************************************** TESTING bt024
+parsed without exception
+************************************************** TESTING bt025
+parsed without exception
+************************************************** TESTING bt026
+parsed without exception
+************************************************** TESTING bt027
+parsed without exception
+************************************************** TESTING bt028
+parsed without exception
+************************************************** TESTING bt029
+parsed without exception
+************************************************** TESTING bt030
+parsed without exception
+************************************************** TESTING bt031
+parsed without exception
+************************************************** TESTING bt032
+parsed without exception
+************************************************** TESTING bt033
+parsed without exception
+************************************************** TESTING bt034
+parsed without exception
+************************************************** TESTING bt035
+parsed without exception
+************************************************** TESTING bt036
+parsed without exception
+************************************************** TESTING bt037
+parsed without exception
+************************************************** TESTING bt038
+parsed without exception
