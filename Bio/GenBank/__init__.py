@@ -971,8 +971,11 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         seq_alphabet = Alphabet.generic_alphabet
 
         if self._seq_type:
-            if string.find(self._seq_type, 'DNA') != -1:
+            # mRNA is really also DNA, since it is actually cDNA
+            if string.find(self._seq_type, 'DNA') != -1 or \
+               string.find(self._seq_type, 'mRNA') != -1:
                 seq_alphabet = IUPAC.ambiguous_dna
+            # are there every really RNA sequences in GenBank?
             elif string.find(self._seq_type, 'RNA') != -1:
                 seq_alphabet = IUPAC.ambiguous_rna
             elif self._seq_type == "PROTEIN":

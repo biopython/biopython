@@ -344,7 +344,7 @@ class InDepthLoadTest(unittest.TestCase):
         assert test_record.name == "ATCOR66M"
         assert test_record.id == "X55053"
         assert test_record.description == "A.thaliana cor6.6 mRNA."
-        assert isinstance(test_record.seq.alphabet, Alphabet.RNAAlphabet)
+        assert isinstance(test_record.seq.alphabet, Alphabet.DNAAlphabet)
         assert test_record.seq[:10].tostring() == 'AACAAAACAC'
 
         test_record = self.db.lookup(accession = "X62281")
