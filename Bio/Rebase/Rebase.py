@@ -1,5 +1,5 @@
 
-# Copyright 1999 by Jeffrey Chang.  All rights reserved.
+# Copyright 2000 by Katharine Lindner.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -218,7 +218,7 @@ class _Scanner:
         self._scan_source( text, consumer )
         self._scan_microorganism( text, consumer )
         self._scan_temperature( text, consumer)
-#        self._scan_date_entered(uhandle, consumer)
+        self._scan_date_entered( text, consumer)
 #        consumer.end_sequence()
 
 
@@ -266,8 +266,13 @@ class _Scanner:
         consumer.temperature( next_item )
 
 
-    def _scan_date_entered(self, uhandle, consumer):
-        self._scan_line('Date Entered:', uhandle, consumer.date, exactly_one=1)
+    def _scan_date_entered(self, text, consumer):
+        start = string.find( text, 'Entered:' )
+        end = start + 30
+        next_item = text[ start:end ]
+        print next_item
+        consumer.data_entered( next_item )
+
 
 class _RecordConsumer(AbstractConsumer):
     """Consumer that converts a rebase record to a Record object.
@@ -311,9 +316,12 @@ class _RecordConsumer(AbstractConsumer):
         cols = string.split( cols[ 1 ], ' ' )
         self.data.temperature = cols[ 1 ]
 
-    def date( self, line ):
-       pass
-
+    def data_entered( self, line ):
+        cols = string.split( line, ':' )
+        print cols[ 0 ]
+        cols = string.split( cols[ 1 ] )
+        print cols[ 0 ]
+        self.data.date_entered = string.join( cols[ :3 ] )
 
 def index_file(filename, indexname, rec2key=None):
     """index_file(filename, ind/exname, rec2key=None)
