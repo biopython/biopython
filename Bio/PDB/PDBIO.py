@@ -51,6 +51,7 @@ class PDBIO:
 								resseq, icode, chain_id)
 						fp.write(s)
 						atom_number=atom_number+1
+				fp.write("TER")
 			if model_flag:
 				fp.write("ENDMDL\n")
 		fp.close()
