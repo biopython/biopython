@@ -159,6 +159,7 @@ extended_protein_values = {
     "T": "T",
     "V": "V",
     "W": "W",
+    "X": "ACDEFGHIKLMNPQRSTVWY",
     "Y": "Y",
     "Z": "QE",
 }
