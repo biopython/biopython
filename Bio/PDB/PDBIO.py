@@ -1,25 +1,6 @@
 ATOM_FORMAT_STRING="%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f%6.2f%6.2f      %4s%2s%2s\n"
 
 
-def get_atom_line(atom, hetfield, segid, atom_number, resname, resseq, icode, chain_id, element="  ", charge="  "):
-	"""
-	Returns an ATOM PDB string.
-	"""
-	if hetfield!=" ":
-		record_type="HETATM"
-	else:
-		record_type="ATOM  "
-	name=atom.get_fullname()
-	altloc=atom.get_altloc()
-	x, y, z=atom.get_coord()
-	bfactor=atom.get_bfactor()
-	occupancy=atom.get_occupancy()
-	args=(record_type, atom_number, name, altloc, resname, chain_id,
-		resseq, icode, x, y, z, occupancy, bfactor, segid,
-		element, charge)
-	return ATOM_FORMAT_STRING % args
-
-
 class Select:
 	"""
 	Dummy class.
@@ -41,6 +22,27 @@ class Select:
 class PDBIO:
 	def __init__(self):
 		pass
+	
+	# private mathods
+
+	def _get_atom_line(self, atom, hetfield, segid, atom_number, resname, 
+		resseq, icode, chain_id, element="  ", charge="  "):
+		"""
+		Returns an ATOM PDB string.
+		"""
+		if hetfield!=" ":
+			record_type="HETATM"
+		else:
+			record_type="ATOM  "
+		name=atom.get_fullname()
+		altloc=atom.get_altloc()
+		x, y, z=atom.get_coord()
+		bfactor=atom.get_bfactor()
+		occupancy=atom.get_occupancy()
+		args=(record_type, atom_number, name, altloc, resname, chain_id,
+			resseq, icode, x, y, z, occupancy, bfactor, segid,
+			element, charge)
+		return ATOM_FORMAT_STRING % args
 
 	# Public methods
 
@@ -58,6 +60,7 @@ class PDBIO:
 			These methods should return 1 if the entity
 			is to be written out, 0 otherwise.
 		"""
+		get_atom_line=self._get_atom_line
 		fp=open(filename, "w")
 		# multiple models?
 		if len(self.structure)>1:
