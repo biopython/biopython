@@ -33,7 +33,7 @@ class GetObject:
 
 class UsePOMParser:
     def __init__(self, module_name):
-        self.module_name = "EUtils.DTDs." + module_name
+        self.module_name = "Bio.EUtils.DTDs." + module_name
 
     def parse_using_dtd(self, file):
         module = _load_module(self.module_name)

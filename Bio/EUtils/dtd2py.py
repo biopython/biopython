@@ -21,7 +21,7 @@ Options:
 import sys, os
 import getopt
 
-from EUtils import POM
+from Bio.EUtils import POM
 
 def compile_file(dtdfile, mixin, toupper):
 	outfilename = POM.get_mod_file(dtdfile)

@@ -9,7 +9,7 @@ python setup.py install
 For more in-depth instructions, see the installation section of the
 biopython manual, linked to from:
 
-http://biopython.org/wiki/html/BioPython/BiopythonCode.html
+http://www.biopython.org/documentation/
 
 Or for more details about the options available from distutils, look at
 the 'Installing Python Modules' distutils documentation, available from:
@@ -18,10 +18,10 @@ http://python.org/sigs/distutils-sig/doc/
 
 Or, if all else fails, feel free to write to the biopython list at
 biopython@biopython.org and ask for help.
-
 """
 import sys
 import os
+import shutil
 
 # Make sure I have the right Python version.
 if sys.version_info[:2] < (2, 2):
@@ -58,7 +58,10 @@ class install_biopython(install):
 
     This will just run the normal install, and then print warning messages
     if packages are missing.
-    
+
+    This also has a hack to install DTDs needed for EUtils into
+    Bio.EUtils.DTDs. This is not a pretty thing since we should 
+    really only have pure python modules installed.
     """
     def check_dependencies(self):
         """S.check_dependencies() -> boolean
@@ -109,11 +112,26 @@ you see ImportErrors."""
                 "Do you want to continue this installation?", default):
                 return 0
         return 1
+
+    def install_eutils_dtds(self):
+        """This is a hack to install DTDs needed for EUtils into Bio.
+        """
+        dtds_dir = os.path.join(os.getcwd(), "Bio", "EUtils", "DTDs")
+        install_dir = os.path.join(self.install_purelib, "Bio", "EUtils",
+                                   "DTDs")
+        potential_dtds = os.listdir(dtds_dir)
+        for potential_dtd in potential_dtds:
+            name, ext = os.path.splitext(potential_dtd)
+            if ext == ".dtd":
+                shutil.copy(os.path.join(dtds_dir, potential_dtd),
+                            install_dir)
+         
         
     def run(self):
         if self.check_dependencies():
             # Run the normal install.
             install.run(self)
+            self.install_eutils_dtds()
 
 class build_py_biopython(build_py):
     def run(self):
@@ -234,6 +252,8 @@ PACKAGES = [
     'Bio.expressions.blast',
     'Bio.expressions.embl',
     'Bio.expressions.swissprot',
+    'Bio.EUtils',
+    'Bio.EUtils.DTDs',
     'Bio.Fasta',
     'Bio.formatdefs',
     'Bio.FSSP',
