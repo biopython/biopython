@@ -8,7 +8,7 @@
 import sys
 import getopt
 
-from Bio.Medline import PubMed
+from Bio import PubMed
 
 DEFAULT_DELAY = 5
 
