@@ -37,9 +37,9 @@ lo_mat_prot = \
 SubsMat.make_log_odds_matrix(acc_rep_mat=acc_rep_mat,round_digit=1) #,ftab_prot
 f.write("\nLog odds matrix\n")
 f.write("\nLog odds half matrix\n")
-lo_mat_prot.print_mat(f=f,format=" %.2f",alphabet='AVILMCFWYHSTNQKRDEGP')
+lo_mat_prot.print_mat(f=f,format=" %.1f",alphabet='AVILMCFWYHSTNQKRDEGP')
 f.write("\nLog odds full matrix\n")
-lo_mat_prot.print_full_mat(f=f,format=" %.2f",alphabet='AVILMCFWYHSTNQKRDEGP')
+lo_mat_prot.print_full_mat(f=f,format=" %.1f",alphabet='AVILMCFWYHSTNQKRDEGP')
 
 f.write("\nTesting MatrixInfo\n")
 for i in MatrixInfo.available_matrices:
