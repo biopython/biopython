@@ -333,6 +333,10 @@ _fast_dbxref_parser_table = {
 }
 
 class Handle_dbxref(Dispatch.Callback):
+    def __init__(self, callback):
+        Dispatch.Callback.__init__(self, callback)
+        self.supported_features.append("fast-sp-dbxref")
+        self.slow_callback = self.callback
     def start_dbxref(self, tag, attrs):
         self.negate = 0
         self.dbname = None
@@ -364,19 +368,23 @@ class Handle_dbxref(Dispatch.Callback):
         self.negate = 1
 
     def end_dbxref(self, tag):
+        cb = self.slow_callback
+        if cb is None:
+            return
         negate = self.negate
         for ( (dbname_style, dbname, idtype), dbid) in zip(self.info,
                                                            self.dbids):
-            self.callback(dbname_style, dbname, idtype, dbid, negate)
+            self.slow_callback(dbname_style, dbname, idtype, dbid, negate)
 
-    # The performance hack code
     def start_fast_dbxref(self, tag, attrs):
         style = attrs["style"]
         self._fast_parser = _fast_dbxref_parser_table[style]
         self.save_characters()
+        self.slow_callback = None
     def end_fast_dbxref(self, tag):
         for info in self._fast_parser(self.get_characters()):
             self.callback(*info)
+        self.slow_callback = self.callback
 
 ##################
 class Handle_sequence(Dispatch.Callback):
@@ -446,10 +454,10 @@ class Handle_feature_location(Dispatch.Callback):
             if self.text_lines:
                 raise TypeError("Cannot have both location text and start/end")
             self.callback(self.location_style,
-                          (self.text_join_func(self.text_lines), None))
+                          (self.location_start, self.location_end))
         else:
             self.callback(self.location_style,
-                          (self.location_start, self.location_end))
+                          (self.text_join_func(self.text_lines), None))
     
     def start_feature_location(self, tag, attrs):
         self.save_characters()
@@ -737,7 +745,6 @@ class Handle_search_info(Dispatch.Callback):
         self.statistics = {}
         
     def end_(self, tag):
-        print self.statistics
         self.callback(self.parameters, self.statistics)
 
 add_value_handler(Handle_search_info, "search_parameter", "parameters")
