@@ -608,7 +608,7 @@ class _RecordConsumer(AbstractConsumer):
                 self.data.cc_max_repeat = data
             elif qual == '/SITE':
                 pos, desc = string.split(data, ',')
-                self.data.cc_site = (int(pos), desc)
+                self.data.cc_site.append((int(pos), desc))
             elif qual == '/SKIP-FLAG':
                 self.data.cc_skip_flag = data
             elif qual == '/MATRIX_TYPE':
