@@ -1,0 +1,10 @@
+ID   4.1.1.14
+DE   Valine decarboxylase.
+CA   L-valine = 2-methylpropanamine + CO(2).
+CF   Pyridoxal-phosphate.
+CC   -!- Also acts on L-leucine.
+DR   BRENDA; 4.1.1.14.
+DR   EMP/PUMA; 4.1.1.14.
+DR   WIT; 4.1.1.14.
+DR   KYOTO UNIVERSITY LIGAND CHEMICAL DATABASE; 4.1.1.14.
+//

@@ -1,0 +1,8 @@
+ID   5.1.1.4
+DE   Proline racemase.
+CA   L-proline = D-proline.
+DR   BRENDA; 5.1.1.4.
+DR   EMP/PUMA; 5.1.1.4.
+DR   WIT; 5.1.1.4.
+DR   KYOTO UNIVERSITY LIGAND CHEMICAL DATABASE; 5.1.1.4.
+//
