@@ -9,10 +9,11 @@ This module provides code to work with FASTA-formatted sequences.
 
 
 Classes:
-Record     Holds information from a FASTA record.
-Scanner    Scans a FASTA-format stream.
-Consumer   Standard consumer that converts a FASTA record into a Record object.
-Iterator   An iterator over records in a FASTA file.
+Record            Holds information from a FASTA record.
+Scanner           Scans a FASTA-format stream.
+StandardConsumer  Consumes FASTA data to a FASTA record.
+SequenceConsumer  Consumes FASTA data to a Sequence.
+Iterator          An iterator over records in a FASTA file.
 
 Functions:
 parse      Parse a handle with FASTA-formatted data into a list of Records.
@@ -24,6 +25,7 @@ parse      Parse a handle with FASTA-formatted data into a list of Records.
 # index file?
 
 from Bio import File
+from Bio import Sequence
 from Bio.ParserSupport import *
 
 class Record:
@@ -97,30 +99,55 @@ class Scanner:
                 break
             consumer.sequence(line)
 
-class Consumer(AbstractConsumer):
+class StandardConsumer(AbstractConsumer):
     """Standard consumer that converts a FASTA record to a Record object.
 
     Members:
-    record    Record with FASTA data.
+    data    Record with FASTA data.
 
     """
     def __init__(self):
-        self.record = None
+        self.data = None
     
     def start_sequence(self):
-        self.record = Record()
+        self.data = Record()
 
     def end_sequence(self):
         pass
     
     def title(self, line):
         assert line[0] == '>'
-        self.record.title = string.rstrip(line[1:])
+        self.data.title = string.rstrip(line[1:])
 
     def sequence(self, line):
         # This can be optimized
         seq = string.rstrip(line)
-        self.record.sequence = self.record.sequence + seq
+        self.data.sequence = self.data.sequence + seq
+
+class SequenceConsumer(AbstractConsumer):
+    """Consumer that converts a FASTA record to a Sequence object.
+
+    Members:
+    data    Sequence with FASTA data.
+
+    """
+    def __init__(self):
+        self.data = None
+    
+    def start_sequence(self):
+        self.data = Sequence.NamedSequence(Sequence.Sequence())
+
+    def end_sequence(self):
+        pass
+    
+    def title(self, line):
+        assert line[0] == '>'
+        self.data.name = string.rstrip(line[1:])
+
+    def sequence(self, line):
+        # This can be optimized
+        seq = string.rstrip(line)
+        self.data.seq = self.data.seq + seq
 
 class Iterator:
     """An iterator that returns one record at a time from a FASTA file.
@@ -154,17 +181,19 @@ class Iterator:
             lines.append(line)
         return string.join(lines, '')
 
-def parse(handle):
-    """parse(handle) -> list of Records
+def parse(handle, consumer=SequenceConsumer()):
+    """parse(handle, consumer=SequenceConsumer()) -> list of objects
 
-    Parse FASTA-formatted data from handle to a list of Records.
+    Parse FASTA-formatted data from handle to a list of objects.
+    The type of the object depends on the type of consumer object
+    passed into the function.
+    
     Warning: this will convert all the data in handle into an in-memory
     data structure.  Do not call this if the amount of data will
     exceed the amount of memory in your machine!
 
     """
     scanner = Scanner()
-    consumer = Consumer()
 
     iter = Iterator(handle)
     records = []
@@ -173,5 +202,5 @@ def parse(handle):
         if not r:
             break
         scanner.feed(File.StringHandle(r), consumer)
-        records.append(consumer.record)
+        records.append(consumer.data)
     return records

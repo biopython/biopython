@@ -48,12 +48,12 @@ for test in tests:
         raise TestFailed, "Scanner (%s)" % test
 
 
-### Consumer
+### StandardConsumer
 
 if verbose:
-    print "Running tests on Consumer"
+    print "Running tests on StandardConsumer"
 
-c = Fasta.Consumer()
+c = Fasta.StandardConsumer()
 try:
     c.start_sequence()
     c.title('>This is a title\n')
@@ -61,14 +61,37 @@ try:
     c.sequence('EFG\n')
     c.end_sequence()
 
-    assert c.record.title == "This is a title", "title is incorrect"
-    assert c.record.sequence == "ABCDEFG", "sequence is incorrect"
+    assert c.data.title == "This is a title", "title is incorrect"
+    assert c.data.sequence == "ABCDEFG", "sequence is incorrect"
 
     c.start_sequence()
     c.end_sequence()
-    assert c.record.title == '', "record should be cleared"
+    assert c.data.title == '', "record should be cleared"
 except Exception, x:
-    raise TestFailed, "Consumer (%s)" % x
+    raise TestFailed, "StandardConsumer (%s)" % x
+
+
+### SequenceConsumer
+
+if verbose:
+    print "Running tests on SequenceConsumer"
+
+c = Fasta.SequenceConsumer()
+try:
+    c.start_sequence()
+    c.title('>This is a title\n')
+    c.sequence('ABCD\n')
+    c.sequence('EFG\n')
+    c.end_sequence()
+
+    assert c.data.name == "This is a title", "title is incorrect"
+    assert c.data.seq == "ABCDEFG", "sequence is incorrect"
+
+    c.start_sequence()
+    c.end_sequence()
+    assert c.data.name == '', "record should be cleared"
+except Exception, x:
+    raise TestFailed, "SequenceConsumer (%s)" % x
 
 
 ### Iterator
@@ -93,7 +116,7 @@ if verbose:
 
 try:
     datafile = os.path.join("Fasta", 'f002')
-    f = Fasta.parse(open(datafile))
+    f = Fasta.parse(open(datafile), consumer=Fasta.StandardConsumer())
 
     assert len(f) == 3, "Should have 3 records"
     assert str(f[2]) == '>gi|1592936|gb|G29385|G29385 human STS SHGC-32652\012GATCAAATCTGCACTGTGTCTACATATAGGAAAGGTCCTGGTGTGTGCTAATGTTCCCAATGCAGGACTTGAGGAAGAGC\012TCTGTTATATGTTTCCATTTCTCTTTATCAAAGATAACCAAACCTTATGGCCCTTATAACAATGGAGGCACTGGCTGCCT\012CTTAATTTTCAATCATGGACCTAAAGAAGTACTCTGAAGGGTCTCAACAATGCCAGGTGGGGACAGATATACTCAGAGAT\012TATCCAGGTCTGCCTCCCAGCGAGCCTGGAGTACACCAGACCCTCCTAGAGAAATCTGTTATAATTTACCACCCACTTAT\012CCACCTTTAAACTTGGGGAAGGNNGCNTTTCAAATTAAATTTAATCNTNGGGGGNTTTTAAACTTTAACCCTTTTNCCNT\012TNTNGGGGTNGGNANTTGNCCCCNTTAAAGGGGGNNCCCCTNCNNGGGGGAATAAAACAANTTNNTTTTTT', "__str__ isn't working correctly"
