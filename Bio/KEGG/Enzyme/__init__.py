@@ -202,7 +202,7 @@ class Record:
         # this class similar to the Compound.Record class.
         s = []
         for entry in self.dblinks:
-            s.append(entry[0] + ": " + entry[1][0])
+            s.append(entry[0] + ": " + "  ".join(entry[1]))
         return _write_kegg("DBLINKS", s)
 
 

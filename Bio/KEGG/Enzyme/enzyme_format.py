@@ -239,7 +239,11 @@ dblinks_id = Group("dblinks_id", Re("[\S]+"))
 dblinks_line = dblinks_db + \
                Str1(":") + \
                blank_space + \
-               dblinks_id
+               Rep1(dblinks_id + Opt(blank_space)) + \
+               Rep(AnyEol() +
+                   Str1(" " * (INDENT + 1)) +
+                   blank_space +
+                   Rep1(dblinks_id + blank_space))
 
 dblinks_block = _define_block_seq("DBLINKS", "dblinks_line", dblinks_line)
 
