@@ -33,15 +33,16 @@ o Numerical Python 15.3 (optional)
 Installation
 ------------
 
-First, make sure Python and Distutils are installed correctly.
+*** Make sure Python and Distutils are installed correctly ***
 
-
-python setup.py build
-
-
-
+Installation should be as simple as going to the biopython directory,
+and typing:
 python setup.py install
 
+
+If you need to do additional configuration, e.g. changing the base
+directory, please type 'python setup.py', or see the documentation for
+Distutils.
 
 
 
@@ -53,14 +54,14 @@ everything's running correctly.  To do the tests, go to the Tests/
 die
 rectory in the distribution and run br_regrtest.py:
 
-  riboweb:~/biopython/Tests> python br_regrtest.py
+  drevil:~/biopython/Tests> python br_regrtest.py
   test_Enzyme
   test_Fasta
   test_Fasta2
   test_File
   test_KeyWList
   5 tests OK.
-  riboweb:~/biopython/Tests> 
+  drevil:~/biopython/Tests> 
 
 
 XXX We need to get this more closely integrated with the installation
@@ -82,8 +83,9 @@ mailing list.
 http://www.biopython.org/
 http://www.biopython.org/MailList.shtml
 
-We currently have no system set up for handling bug reports.  For now,
-please report bugs to biopython@biopython.org.
+If you wish to contribute a bug report, please submit them to the
+online bug reporting form at:
+http://www.biopython.org/biopython-bugs/
 
 
 
