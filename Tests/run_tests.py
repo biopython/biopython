@@ -236,9 +236,16 @@ def compare_output(test_name, output_handle, expected_handle):
         expected_line = convert_string_newlines(expected_line)
         output_line = convert_string_newlines(output_line)
 
-        # make sure the two lines are the same
-        assert expected_line == output_line, \
-               "\nOutput  : "+`output_line` + "\nExpected: "+`expected_line`
+        # if the line is a PyUnit time output like:
+        # Ran 2 tests in 0.285s
+        # ignore it, so we don't have problems with different running times
+        if expected_line[:3] == "Ran" and \
+           string.find(expected_line, " tests in ") >= 5:
+            pass
+        # otherwise make sure the two lines are the same
+        else:
+            assert expected_line == output_line, \
+                  "\nOutput  : "+`output_line` + "\nExpected: "+`expected_line`
 
 def convert_newlines(line):
     """Convert all end of line characters to '\n'
