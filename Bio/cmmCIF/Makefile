@@ -4,10 +4,10 @@ LEX=flex
  
 all:	MMCIFlexmodule.so mmcif_test
 
-MMCIFlexmodule.so: lex.yy.o MMCIFlex.o
+MMCIFlexmodule.so: lex.yy.o MMCIFlexmodule.o
 	$(CC) -fPIC -shared -o $@ $^ -lfl
 
-MMCIFlex.o: MMCIFlex.c
+MMCIFlexmodule.o: MMCIFlexmodule.c
 	$(CC) -c -fPIC $(PYTHON_INC_DIR) -o $@ $<
 
 #mmcifparser.o: mmcifparser.c
