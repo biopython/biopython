@@ -1,4 +1,4 @@
-all: cfastpairwise.so csupport.so
+all: cfastpairwise.so csupport.so cpairwise2.so
 .PHONY: all
 
 cfastpairwise.so: cfastpairwisemodule.o
