@@ -124,11 +124,19 @@ setup.py --     Installation file.
 
 (In no particular order...)
 
-- PDB parser
+- clean up the directory tree
 
-- more regression tests
+- make Registry for algorithms
 
-- microarray data
+- consolidate miscellaneous file handle code
+
+- smoother handling of dependencies
+
+- retrieval of search results
+
+- connect DB stuff to Format stuff
+
+- clean up the /etc/bioinformatics configuration files
 
 If you see something here you would like to work on, please send mail
 to biopython@biopython.org!
