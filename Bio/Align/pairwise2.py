@@ -222,10 +222,11 @@ alignment occurs.
 
             # Here are the default parameters for _align.  Assign
             # these to keywds, unless already specified.
+            pe = keywds.get('penalize_extend_when_opening', 0)
             default_params = [
                 ('match_fn', identity_match(1, 0)),
-                ('gap_A_fn', no_penalty()),
-                ('gap_B_fn', no_penalty()),
+                ('gap_A_fn', affine_penalty(0, 0, pe)),
+                ('gap_B_fn', affine_penalty(0, 0, pe)),
                 ('penalize_extend_when_opening', 0),
                 ('penalize_end_gaps', self.align_type == 'global'),
                 ('align_globally', self.align_type == 'global'),
@@ -247,7 +248,6 @@ def _align(sequenceA, sequenceB, match_fn, gap_A_fn, gap_B_fn,
         return []
 
     if (not force_generic) and \
-       type(sequenceA) is StringType and type(sequenceB) is StringType and \
        type(gap_A_fn) is InstanceType and \
        gap_A_fn.__class__ is affine_penalty and \
        type(gap_B_fn) is InstanceType and \
@@ -304,11 +304,6 @@ def _make_score_matrix_generic(
     for i in range(lenA):
         score_matrix.append([None] * lenB)
         trace_matrix.append([[None]] * lenB)
-
-    # If the sequences are empty, then just return now.  From now on,
-    # I can assume that each sequence is at least 1 long.
-    if not sequenceA or not sequenceB:
-        return score_matrix, trace_matrix
 
     # The top and left borders of the matrices are special cases
     # because there are no previously aligned characters.  To simplify
@@ -394,9 +389,6 @@ def _make_score_matrix_fast(
         score_matrix.append([None] * lenB)
         trace_matrix.append([[None]] * lenB)
 
-    if not sequenceA or not sequenceB:
-        return score_matrix, trace_matrix
-
     # The top and left borders of the matrices are special cases
     # because there are no previously aligned characters.  To simplify
     # the main loop, handle these separately.
@@ -467,7 +459,7 @@ def _make_score_matrix_fast(
                 score = col_cache_score[col-1]
                 score_rint = rint(score)
                 if score_rint == best_score_rint:
-                    best_index = col_cache_index[col-1] + best_index
+                    best_index = best_index + col_cache_index[col-1]
                 elif score_rint > best_score_rint:
                     best_score, best_score_rint = score, score_rint
                     best_index = col_cache_index[col-1]
@@ -509,10 +501,11 @@ def _make_score_matrix_fast(
                                              [(row-1, col-1)]
                     
             # Set the score and traceback matrices.
-            match = match_fn(sequenceA[row], sequenceB[col]) 
-            score_matrix[row][col] = best_score + match
-            if not align_globally and score_matrix[row][col] < 0:
+            score = best_score + match_fn(sequenceA[row], sequenceB[col]) 
+            if not align_globally and score < 0:
                 score_matrix[row][col] = 0
+            else:
+                score_matrix[row][col] = score
             trace_matrix[row][col] = best_index
     return score_matrix, trace_matrix
     
@@ -744,15 +737,6 @@ def calc_affine_penalty(length, open, extend, penalize_extend_when_opening):
         penalty -= extend
     return penalty
 
-class no_penalty:
-    """no_penalty() -> gap_fn
-
-    Create a gap function for use in an alignment.
-
-    """
-    def __call__(self, index, length):
-        return 0
-
 def print_matrix(matrix):
     """print_matrix(matrix)
 
@@ -783,3 +767,19 @@ def format_alignment(align1, align2, score, begin, end):
     s.append("%s\n" % align2)
     s.append("  Score=%g\n" % score)
     return ''.join(s)
+
+
+# Try and load C implementations of functions.  If I can't,
+# then just ignore and use the pure python implementations.
+try:
+    #raise ImportError
+    import cpairwise2
+except ImportError:
+    pass
+else:
+    import sys
+    this_module = sys.modules[__name__]
+    for name in cpairwise2.__dict__.keys():
+        if not name.startswith("__"):
+            this_module.__dict__[name] = cpairwise2.__dict__[name]
+
