@@ -4,6 +4,40 @@ News for the Biopython Project
 This file contains release notes and general news 
 about the biopython project.
 
+Feb 18, 2005: Biopython 1.40
+Major Changes since v1.30. For a full list of changes please see the CVS
+
+Bio.PDB -- thanks to Thomas Hamelryck
+
+Added atom serial number.
+Epydoc style documentation.
+Added secondary structure support (through DSSP)
+Added Accessible Surface Area support (through DSSP)
+Added Residue Depth support (through MSMS)
+Added Half Sphere Exposure.
+Added Fragment classification of the protein backbone (see Kolodny et al., 
+JMB, 2002)
+Corrected problem on Windows with PDBList (thanks to Matta Dimmic)
+Added StructureAlignment module to superimpose structures based on a FASTA 
+sequence alignment.
+Various additions to Polypeptide.
+Various bug corrections in Vector.
+Lots of smaller bug corrections and additional features
+
+MutableSeq -- thanks to Michiel De Hoon
+Added the functions 'complement' and 'reverse_complement' to Bio.Seq's Seq and
+MutableSeq objects. Similar functions previous existed in various locations in
+BioPython:
+- forward_complement, reverse_complement in Bio.GFF.easy
+- complement, antiparallel in Bio.SeqUtils
+These functions have now been deprecated, and will generate a DeprecationWarning
+when used.
+The functions complement and reverse_complement, when applied to a Seq object,
+will return a new Seq object. The same function applied to a MutableSeq object
+will modify the MutableSeq object itself, and don't return anything.
+
+===================================================================
+
 May 14, 2004: Biopython 1.30
  Affy package added for dealing with Affymetrix cel files -- thanks to Harry 
   Zuzan.
