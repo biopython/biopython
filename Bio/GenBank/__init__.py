@@ -374,6 +374,24 @@ class _BaseGenBankConsumer(AbstractConsumer):
         """
         return text.replace(" ", "")
 
+    def _convert_to_python_numbers(self, start, end):
+        """Convert a start and end range to python notation.
+
+        In GenBank, starts and ends are defined in "biological" coordinates,
+        where 1 is the first base and [i, j] means to include both i and j.
+
+        In python, 0 is the first base and [i, j] means to include i, but
+        not j. 
+
+        So, to convert "biological" to python coordinates, we need to 
+        subtract 1 from the start, and leave the end and things should
+        be converted happily.
+        """
+        new_start = start - 1
+        new_end = end
+
+        return new_start, new_end
+
 class _FeatureConsumer(_BaseGenBankConsumer):
     """Create a SeqRecord object with Features to return.
 
@@ -540,9 +558,10 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         new_locations = []
         for base_info in all_base_info:
             start, end = base_info.split('to')
-            this_location = \
-              SeqFeature.FeatureLocation(int(string.strip(start)),
-                                             int(string.strip(end)))
+            new_start, new_end = \
+              self._convert_to_python_numbers(int(start.strip()),
+                                              int(end.strip()))
+            this_location = SeqFeature.FeatureLocation(new_start, new_end)
             new_locations.append(this_location)
         return new_locations
 
@@ -688,8 +707,11 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         # current feature, then get the information for this feature
         for inner_element in function.args:
             new_sub_feature = SeqFeature.SeqFeature()
-            # add _join or _order to the name to make the type clear
-            new_sub_feature.type = cur_feature.type + '_' + function.name
+            # inherit the type from the parent
+            new_sub_feature.type = cur_feature.type 
+            # add the join or order info to the location_operator
+            cur_feature.location_operator = function.name
+            new_sub_feature.location_operator = function.name
             # inherit references and strand from the parent feature
             new_sub_feature.ref = cur_feature.ref
             new_sub_feature.ref_db = cur_feature.ref_db
@@ -704,6 +726,10 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         # set the location of the top -- this should be a combination of
         # the start position of the first sub_feature and the end position
         # of the last sub_feature
+
+        # these positions are already converted to python coordinates 
+        # (when the sub_features were added) so they don't need to
+        # be converted again
         feature_start = cur_feature.sub_features[0].location.start
         feature_end = cur_feature.sub_features[-1].location.end
         cur_feature.location = SeqFeature.FeatureLocation(feature_start,
@@ -762,13 +788,19 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         # check if we just have a single base
         if not(isinstance(range_info, LocationParser.Range)):
             pos = self._get_position(range_info)
-
+            # move the single position back one to be consistent with how
+            # python indexes numbers (starting at 0)
+            pos.position = pos.position  - 1
             return SeqFeature.FeatureLocation(pos, pos)
         # otherwise we need to get both sides of the range
         else:
             # get *Position objects for the start and end
             start_pos = self._get_position(range_info.low)
             end_pos = self._get_position(range_info.high)
+
+            start_pos.position, end_pos.position = \
+              self._convert_to_python_numbers(start_pos.position,
+                                              end_pos.position)
 
             return SeqFeature.FeatureLocation(start_pos, end_pos)
 
@@ -822,16 +854,14 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         # if we've got a key from before, add it to the dictionary of
         # qualifiers
         if self._cur_qualifier_key:
-            # get a unique name
-            unique_name = self._cur_qualifier_key
-            counter = 1
-            while self._cur_feature.qualifiers.has_key(unique_name):
-                unique_name = self._cur_qualifier_key + str(counter)
-                counter = counter + 1
-                
-                
-            self._cur_feature.qualifiers[unique_name] = \
-                                                      self._cur_qualifier_value
+            key = self._cur_qualifier_key
+            value = self._cur_qualifier_value
+            # if the qualifier name exists, append the value
+            if self._cur_feature.qualifiers.has_key(key):
+                self._cur_feature.qualifiers[key].append(value)
+            # otherwise start a new list of the key with its values
+            else:
+                self._cur_feature.qualifiers[key] = [value]
 
     def qualifier_key(self, content):
         """When we get a qualifier key, use it as a dictionary key.
