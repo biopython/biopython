@@ -983,7 +983,7 @@ class MartelTestCase( UnitTests.UnitTestCase.UnitTestCase ):
         print expression
         tagtable, want_flg = Bio.Martel.Generate.generate( expression )
         success = tag( "tij", tagtable )[ 0 ]
-	return ( self.assert_condition( success == 1, "Failed" ) )
+	return ( self.assert_condition( success == 0, "Failed" ) )
 
     """
     Title      test_f2()
@@ -1006,7 +1006,7 @@ class MartelTestCase( UnitTests.UnitTestCase.UnitTestCase ):
         print expression
         tagtable, want_flg = Bio.Martel.Generate.generate( expression )
         success = tag( "tij", tagtable )[ 0 ]
-	return ( self.assert_condition( success == 1, "Failed" ) )
+	return ( self.assert_condition( success == 0, "Failed" ) )
 
     """
     Title      test_g2()
@@ -1056,6 +1056,361 @@ class MartelTestCase( UnitTests.UnitTestCase.UnitTestCase ):
         success = tag( "tpQrsTabtPqRSt", tagtable )[ 0 ]
 	return ( self.assert_condition( success == 0, "Failed" ) )
 
+    """
+    Title      test_i2()
+    Usage
+    Function   Group, GroupRef
+
+    Returns    Results of the test
+    Argument   None
+    """
+
+    def test_i2( self ):
+
+        exp1 = Bio.Martel.Expression.Literal( 't' )
+        exp2 = Bio.Martel.Expression.Literal( 'T' )
+        exp3 = Bio.Martel.Alt( exp1, exp2 )
+        exp4 = Bio.Martel.Str( '01234' )
+
+        exp5 = Bio.Martel.Seq( exp3, exp4 )
+        exp6 = Bio.Martel.Group( 'item', exp5 )
+        exp7 = Bio.Martel.Str( '56789' )
+        exp8 = Bio.Martel.Expression.GroupRef( 'item' )
+        expression = Bio.Martel.Seq( exp6, exp7, exp8, exp7, exp8, exp7 )
+        print expression
+        tagtable, want_flg = Bio.Martel.Generate.generate( expression )
+        success = tag( "t0123456789T0123456789t0123456789", tagtable )[ 0 ]
+	return ( self.assert_condition( success == 0, "Failed" ) )
+
+    """
+    Title      test_j2()
+    Usage
+    Function   Overloaded plus
+
+    Returns    Results of the test
+    Argument   None
+    """
+
+    def test_j2( self ):
+
+        exp1 = Bio.Martel.Expression.Literal( 'P' )
+        exp2 = Bio.Martel.Any( 'ghijk' )
+        exp3 = Bio.Martel.Str( '!!!!!' )
+        expression = exp1 + exp2 + exp3
+        print expression
+        tagtable, want_flg = Bio.Martel.Generate.generate( expression )
+        success = tag( "Pk!!!!!", tagtable )[ 0 ]
+	return ( self.assert_condition( success == 1, "Failed" ) )
+
+    """
+    Title      test_k2()
+    Usage
+    Function   Overloaded plus
+
+    Returns    Results of the test
+    Argument   None
+    """
+
+    def test_k2( self ):
+
+        exp1 = Bio.Martel.Any( 'GHIjk' )
+        exp2 = Bio.Martel.Str( ':) :)' )
+        expression = exp1 + exp2
+        print expression
+        tagtable, want_flg = Bio.Martel.Generate.generate( expression )
+        success = tag( "G:) :)", tagtable )[ 0 ]
+	return ( self.assert_condition( success == 1, "Failed" ) )
+
+    """
+    Title      test_l2()
+    Usage
+    Function   Overloaded plus
+
+    Returns    Results of the test
+    Argument   None
+    """
+
+    def test_l2( self ):
+
+        exp1 = Bio.Martel.Any( 'GHIjk' )
+        exp2 = Bio.Martel.Str( ':) :)?' )
+        expression = exp1 + exp2
+        print expression
+        tagtable, want_flg = Bio.Martel.Generate.generate( expression )
+        success = tag( "K:) :)?", tagtable )[ 0 ]
+	return ( self.assert_condition( success == 0, "Failed" ) )
+
+    """
+    Title      test_m2()
+    Usage
+    Function   Overloaded plus
+
+    Returns    Results of the test
+    Argument   None
+    """
+
+    def test_m2( self ):
+
+        exp1 = Bio.Martel.Any( 'GHIjk' )
+        exp2 = Bio.Martel.Str( ':) :)' )
+        expression = exp1 + exp2
+        print expression
+        tagtable, want_flg = Bio.Martel.Generate.generate( expression )
+        success = tag( "G:):)", tagtable )[ 0 ]
+	return ( self.assert_condition( success == 0, "Failed" ) )
+
+    """
+    Title      test_n2()
+    Usage
+    Function   Overloaded plus
+
+    Returns    Results of the test
+    Argument   None
+    """
+
+    def test_n2( self ):
+
+        exp1 = Bio.Martel.Str( '$%@#/\\' )
+        exp2 = Bio.Martel.Any( 'GHIjk' )
+        exp3 = Bio.Martel.Str( '(*+_-=' )
+        expression = exp1 + exp2 + exp3
+        print expression
+        tagtable, want_flg = Bio.Martel.Generate.generate( expression )
+        success = tag( '$%@#/\\I*+_-=', tagtable )[ 0 ]
+	return ( self.assert_condition( success == 1, "Failed" ) )
+
+    """
+    Title      test_o2()
+    Usage
+    Function   Overloaded plus
+
+    Returns    Results of the test
+    Argument   None
+    """
+
+    def test_o2( self ):
+
+        exp1 = Bio.Martel.Str( '$%@#/\\' )
+        exp2 = Bio.Martel.Any( 'GHIjk' )
+        exp3 = Bio.Martel.Str( '(*+_-=' )
+        expression = exp1 + exp2 + exp3
+        print expression
+        tagtable, want_flg = Bio.Martel.Generate.generate( expression )
+        success = tag( "$%@#\\/I*+_-=", tagtable )[ 0 ]
+	return ( self.assert_condition( success == 0, "Failed" ) )
+
+
+    """
+    Title      test_p2()
+    Usage
+    Function   Overloaded plus
+
+    Returns    Results of the test
+    Argument   None
+    """
+
+    def test_p2( self ):
+
+        exp1 = Bio.Martel.Str( '$%@#/\\' )
+        exp2 = Bio.Martel.Any( 'GHIjk' )
+        exp3 = Bio.Martel.Str( '(*+_-=' )
+        expression = exp1 + exp2 + exp3
+        print expression
+        tagtable, want_flg = Bio.Martel.Generate.generate( expression )
+        success = tag( "$%@#/\\I*+-_=", tagtable )[ 0 ]
+	return ( self.assert_condition( success == 0, "Failed" ) )
+
+    """
+    Title      test_q2()
+    Usage
+    Function   Overloaded or
+
+    Returns    Results of the test
+    Argument   None
+    """
+
+    def test_q2( self ):
+
+        exp1 = Bio.Martel.Expression.Literal( 'P' )
+        exp2 = Bio.Martel.Any( 'gHiJk' )
+        exp3 = Bio.Martel.Str( '.<>,;' )
+        expression = exp1 | exp2 | exp3
+        print expression
+        tagtable, want_flg = Bio.Martel.Generate.generate( expression )
+        success = tag( ".<>,;", tagtable )[ 0 ]
+	return ( self.assert_condition( success == 1, "Failed" ) )
+
+    """
+    Title      test_r2()
+    Usage
+    Function   Overloaded or
+
+    Returns    Results of the test
+    Argument   None
+    """
+
+    def test_r2( self ):
+
+        exp1 = Bio.Martel.Expression.Literal( 'P' )
+        exp2 = Bio.Martel.Any( 'gHiJk' )
+        exp3 = Bio.Martel.Str( '.<>,;' )
+        expression = exp1 | exp2 | exp3
+        print expression
+        tagtable, want_flg = Bio.Martel.Generate.generate( expression )
+        success = tag( "H", tagtable )[ 0 ]
+	return ( self.assert_condition( success == 1, "Failed" ) )
+
+    """
+    Title      test_s2()
+    Usage
+    Function   Overloaded or
+
+    Returns    Results of the test
+    Argument   None
+    """
+
+    def test_s2( self ):
+
+        exp1 = Bio.Martel.Expression.Literal( 'P' )
+        exp2 = Bio.Martel.Any( 'gHiJk' )
+        exp3 = Bio.Martel.Str( '.<>,;' )
+        expression = exp1 | exp2 | exp3
+        print expression
+        tagtable, want_flg = Bio.Martel.Generate.generate( expression )
+        success = tag( "P", tagtable )[ 0 ]
+	return ( self.assert_condition( success == 1, "Failed" ) )
+
+    """
+    Title      test_t2()
+    Usage
+    Function   Overloaded or
+
+    Returns    Results of the test
+    Argument   None
+    """
+
+    def test_t2( self ):
+
+        exp1 = Bio.Martel.Expression.Literal( 'P' )
+        exp2 = Bio.Martel.Any( 'gHiJk' )
+        exp3 = Bio.Martel.Str( '.<>,;' )
+        expression = exp1 | exp2 | exp3
+        print expression
+        tagtable, want_flg = Bio.Martel.Generate.generate( expression )
+        success = tag( "j", tagtable )[ 0 ]
+	return ( self.assert_condition( success == 0, "Failed" ) )
+
+
+    """
+    Title      test_v2()
+    Usage
+    Function   Overloaded plus
+
+    Returns    Results of the test
+    Argument   None
+    """
+
+    def test_v2( self ):
+
+        exp1 = Bio.Martel.Any( 'GHIjk' )
+        exp2 = Bio.Martel.Str( '[]{}~' )
+        expression = exp1 | exp2
+        print expression
+        tagtable, want_flg = Bio.Martel.Generate.generate( expression )
+        success = tag( "[]{}~", tagtable )[ 0 ]
+	return ( self.assert_condition( success == 1, "Failed" ) )
+
+    """
+    Title      test_w2()
+    Usage
+    Function   Overloaded plus
+
+    Returns    Results of the test
+    Argument   None
+    """
+
+    def test_w2( self ):
+
+        exp1 = Bio.Martel.Any( 'GHIjk' )
+        exp2 = Bio.Martel.Str( '[]{}~' )
+        expression = exp1 | exp2
+        print expression
+        tagtable, want_flg = Bio.Martel.Generate.generate( expression )
+        success = tag( "[]{}", tagtable )[ 0 ]
+	return ( self.assert_condition( success == 0, "Failed" ) )
+
+
+    """
+    Title      test_x2()
+    Usage
+    Function   Alt
+
+    Returns    Results of the test
+    Argument   None
+    """
+
+    def test_x2( self ):
+
+        alt = Bio.Martel.Str( 'uvwx' )
+        expression = Bio.Martel.Alt( alt )
+        print expression
+        tagtable, want_flg = Bio.Martel.Generate.generate( expression )
+        success = tag( "uvwx", tagtable )[ 0 ]
+	return ( self.assert_condition( success == 1, "Failed" ) )
+
+    """
+    Title      test_y2()
+    Usage
+    Function   Alt
+
+    Returns    Results of the test
+    Argument   None
+    """
+
+    def test_y2( self ):
+
+        alt = Bio.Martel.Str( 'uvwx' )
+        expression = Bio.Martel.Alt( alt )
+        print expression
+        tagtable, want_flg = Bio.Martel.Generate.generate( expression )
+        success = tag( "Uvwx", tagtable )[ 0 ]
+	return ( self.assert_condition( success == 0, "Failed" ) )
+
+    """
+    Title      test_z2()
+    Usage
+    Function   Seq
+
+    Returns    Results of the test
+    Argument   None
+    """
+
+    def test_z2( self ):
+
+        exp = Bio.Martel.Expression.Literal( '9' )
+        expression = Bio.Martel.Seq( exp )
+        print expression
+        tagtable, want_flg = Bio.Martel.Generate.generate( expression )
+        success = tag( "9", tagtable )[ 0 ]
+	return ( self.assert_condition( success == 1, "Failed" ) )
+
+    """
+    Title      test_a3()
+    Usage
+    Function   Seq
+
+    Returns    Results of the test
+    Argument   None
+    """
+
+    def test_a3( self ):
+
+        exp = Bio.Martel.Expression.Literal( '9' )
+        expression = Bio.Martel.Seq( exp )
+        print expression
+        tagtable, want_flg = Bio.Martel.Generate.generate( expression )
+        success = tag( "8", tagtable )[ 0 ]
+	return ( self.assert_condition( success == 0, "Failed" ) )
 
 
 #invoke_suite
