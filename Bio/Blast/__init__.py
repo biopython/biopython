@@ -7,4 +7,5 @@ __all__ = [
     'NCBIStandalone',
     'NCBIWWW',
     'Record',
+    'ParseBlastTable'
     ]
