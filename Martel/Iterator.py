@@ -207,7 +207,8 @@ class HeaderFooterEventStream:
 
         if self._state == "end":
             if self._lookahead:
-                return [ ("fatalError", Parser.ParserIncompleteException(0)) ]
+                return [ ("fatalError",
+                          (Parser.ParserIncompleteException(0),)) ]
             return None
         
         raise AssertionError("Should not get here")
@@ -272,7 +273,7 @@ class HeaderFooterEventStream:
                        (self.fileobj,) + self.footer_args,
                        {"lookahead": self._lookahead})
         text, errors = _get_next_text(reader)
-        self._lookahead = reader.remainder()
+        self.fileobj, self._lookahead = reader.remainder()
         if text is None:
             return errors
         events = StoreEvents()
@@ -347,6 +348,10 @@ class Iterate:
             if name == "error" or name == "fatalError":
                 # at this level the error is unrecoverable
                 self.events = None
+                if isinstance(args[0], Parser.ParserPositionException):
+                    exc = args[0]
+                    exc.pos = 0
+                    exc += self.current_position
                 raise args[0]
 
             if name == "startElement" and args[0] == self.tag:
@@ -369,16 +374,26 @@ class Iterate:
                             name, args = events[i]
                             if name == "endElement" and args[0] == self.tag:
                                 del self.events[:i+1]
+                                if isinstance(exc, Parser.ParserPositionException):
+                                    exc.pos = 0
+                                    exc += self.current_position
                                 raise exc
                             elif name == "characters":
                                 self.current_position += len(args)
                             i = i + 1
                         # no end found, so not recoverable
                         self.events = None
+                        if isinstance(exc, Parser.ParserPositionException):
+                            exc.pos = 0
+                            exc += self.start_position
                         raise exc
                     elif name == "fatalError":
                         # not recoverable
                         self.events = None
+                        if isinstance(args[0], Parser.ParserPositionException):
+                            exc = args[0]
+                            exc = 0
+                            exc += self.start_position
                         raise args[0]
                     else:
                         apply(getattr(cont_handler, name), args)
