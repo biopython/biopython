@@ -1,7 +1,7 @@
 #!/usr/bin/env python
-"""Test the Martel-based genbank_format.
+"""Test the Martel-based genbank_format, now found in Bio.expressions.genbank
 """
-from Bio.GenBank.genbank_format import *
+from Bio.expressions.genbank import *
 
 import martel_support
 import Martel
