@@ -30,11 +30,7 @@ def unfold_entities(entity_list, target_level):
 	target_index=entity_levels.index(target_level)
 	level_index=entity_levels.index(level)
 	if level_index==target_index:
-		return [entity]
-	if target_index==level_index-1:
-		return entity.get_list()
-	if target_index==level_index+1:
-		return [entity.get_parent()]
+		return entity_list
 	if level_index>target_index:
 		for i in range(target_index, level_index):
 			new_entity_list=[]
