@@ -1,0 +1,444 @@
+METATOOL OUTPUT Version 3.5 (28.03.2001) C:\METATOOL\META35~1.EXE
+
+INPUT FILE: EXAMPLE9.TXT
+
+INTERNAL METABOLITES: 67
+REACTIONS: 34
+
+  9 external H2O
+  7 external ATP
+  6 external diphosphate
+  6 external ADP
+  5 int      AMP
+  4 int      phosphate
+  4 int      5-phospho-alpha-D-ribose_1-diphosphate
+  2 int      10-Formyltetrahydrofolate
+  2 int      tetrahydrofolate
+  2 int      D-ribose_5-phosphate
+  2 int      RNAn
+  2 int      RNAn+1
+  1 int      Inosine_5`-phosphate
+  1 int      NAD+
+  1 int      xanthosine_5`-phosphate
+  1 int      NADH
+  1 int      Ribonucleoside_diphosphate
+  1 int      reduced_thioredoxin
+  1 int      2`-deoxyribonucleoside_diphosphate
+  1 int      oxidized_thioredoxin
+  1 int      NADPH
+  1 int      guanosine_5`-phosphate
+  1 int      NADP+
+  1 int      inosine_5`-phosphate
+  1 int      5`-phosphoribosylglycinamide
+  1 int      5`-phosphoribosyl-N-formylglycinamide
+  1 int      5`-phosphoribosyl-5-amino-4-imidazolecarboxamide
+  1 int      5`-phosphoribosyl-5-formamido-4-imidazolecarboxamide
+  1 int      Purine_nucleoside
+  1 int      purine
+  1 int      alpha-D-ribose_1-phosphate
+  1 int      5-Phospho-beta-D-ribosylamine
+  1 int      L-glutamate
+  1 int      L-glutamine
+  1 int      5-Phospho-alpha-D-ribose_1-diphosphate
+  1 int      xanthine
+  1 int      (9-D-ribosylxanthine)-5`-phosphate
+  1 int      Thymidine
+  1 int      thymine
+  1 int      2-deoxy-D-ribose_1-phosphate
+  1 int      Adenine
+  1 int      Hypoxanthine
+  1 int      IMP
+  1 int      adenylylsulfate
+  1 int      3`-phosphoadenylylsulfate
+  1 int      dAMP
+  1 int      dADP
+  1 int      nucleoside_diphosphate
+  1 int      nucleoside_triphosphate
+  1 int      GMP
+  1 int      GDP
+  1 int      GTP
+  1 int      guanosine_3`-diphosphate_5`-triphosphate
+  1 int      Nucleoside_triphosphate
+  1 int      Deoxynucleoside_triphosphate
+  1 int      DNAn
+  1 int      DNAn+1
+  1 int      a_nucleoside_diphosphate
+  1 int      A_5`-ribonucleotide
+  1 int      a_ribonucleoside
+  1 int      Nucleoside_2`,3`-cyclic_phosphate
+  1 int      nucleoside_3`-phosphate
+  1 int      Nucleoside_3`,5`-cyclic_phosphate
+  1 int      nucleoside_5`-phosphate
+  1 int      dGTP
+  1 int      deoxyguanosine
+  1 int      triphosphate
+  1 int      Inosine
+  1 int      hypoxanthine
+  1 int      D-ribose
+  1 int      adenine
+ 71 metabolites, 110 is the summarized frequency
+
+edges	frequency of nodes
+  0	  0
+  1	 59
+  2	  5
+  3	  0
+  4	  2
+  5	  1
+  6	  2
+  7	  1
+  8	  0
+  9	  1
+
+STOICHIOMETRIC MATRIX
+ 
+ matrix dimension r67 x c34
+-1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+-1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 -1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 -1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 -1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 -1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0 -1 -1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0 -1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  1  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0 -1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0 -1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0 -1  0 -1  0  0  0  0  0  0  0  0  0  0 -1  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 -1  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 -1  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0 -1 -1  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0 -1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0 -1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0 -1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0 -1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  1  0  0  0 -1  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0 -1 
+ 0  0  0  0  0  0  0 -1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0 -1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0 -1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0 -1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0 -1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0 -1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 -1  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0 -1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0 -1  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0 -1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 -1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 -1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 -1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 -1  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 -1  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 -1  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 -1  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1 
+The following line indicates reversible (0) and irreversible reactions (1)
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1 
+rows and columns are sorted as declared in the inputfile
+
+NOT BALANCED INTERNAL METABOLITES
+Inosine_5`-phosphate	NAD+	xanthosine_5`-phosphate	NADH	Ribonucleoside_diphosphate	reduced_thioredoxin	2`-deoxyribonucleoside_diphosphate	oxidized_thioredoxin	NADPH	guanosine_5`-phosphate	NADP+	inosine_5`-phosphate	5`-phosphoribosylglycinamide	5`-phosphoribosyl-N-formylglycinamide	5`-phosphoribosyl-5-amino-4-imidazolecarboxamide	5`-phosphoribosyl-5-formamido-4-imidazolecarboxamide	Purine_nucleoside	purine	alpha-D-ribose_1-phosphate	5-Phospho-beta-D-ribosylamine	L-glutamate	L-glutamine	5-Phospho-alpha-D-ribose_1-diphosphate	xanthine	(9-D-ribosylxanthine)-5`-phosphate	Thymidine	thymine	2-deoxy-D-ribose_1-phosphate	Adenine	Hypoxanthine	IMP	adenylylsulfate	3`-phosphoadenylylsulfate	dAMP	dADP	nucleoside_diphosphate	nucleoside_triphosphate	GMP	GDP	GTP	guanosine_3`-diphosphate_5`-triphosphate	Nucleoside_triphosphate	Deoxynucleoside_triphosphate	DNAn	DNAn+1	a_nucleoside_diphosphate	A_5`-ribonucleotide	a_ribonucleoside	Nucleoside_2`,3`-cyclic_phosphate	nucleoside_3`-phosphate	Nucleoside_3`,5`-cyclic_phosphate	nucleoside_5`-phosphate	dGTP	deoxyguanosine	triphosphate	Inosine	hypoxanthine	D-ribose	adenine	
+
+KERNEL
+ 
+ matrix dimension r7 x c34
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0 
+34 reactions (columns) are sorted in the same order as in the ENZREV ENZIRREV section.
+
+ enzymes
+
+ 1:	 2.1.2.2 irreversible
+ 2:	 2.1.2.3 irreversible
+ 3:	 2.4.2.1 irreversible
+ 4:	 2.4.2.4 irreversible
+ 5:	 2.7.1.25 irreversible
+ 6:	 2.7.6.1 irreversible
+ 7:	 3.1.3.5 irreversible
+
+ overall reaction
+ - not found -
+
+
+The remaining overall reactions perform no net transformation of external metabolites.
+
+SUBSETS OF REACTIONS
+ 
+ matrix dimension r7 x c34
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0 
+34 reactions (columns) are sorted in the same order as in the ENZREV ENZIRREV section.
+
+ enzymes
+
+ 1:	 2.1.2.2 irreversible
+ 2:	 2.1.2.3 irreversible
+ 3:	 2.4.2.1 irreversible
+ 4:	 2.4.2.4 irreversible
+ 5:	 2.7.1.25 irreversible
+ 6:	 2.7.6.1 irreversible
+ 7:	 3.1.3.5 irreversible
+
+ overall reaction
+ - not found -
+
+
+The remaining overall reactions perform no net transformation of external metabolites.
+
+REDUCED SYSTEM with 67 branch point metabolites in 7 reactions (columns)
+ 
+ matrix dimension r0 x c7
+The following line indicates reversible (0) and irreversible reactions (1)
+ 1  1  1  1  1  1  1 
+
+-> Branch metabolites are : 
+met                 	cons	built	reactions
+
+-> No branch metabolites are : 
+met                 	cons	built	reactions
+Inosine_5`-phosphate	1	0	1	r
+NAD+                	1	0	1	r
+xanthosine_5`-phosphate	0	1	1	r
+NADH                	0	1	1	r
+Ribonucleoside_diphosphate	1	0	1	i
+reduced_thioredoxin 	1	0	1	i
+2`-deoxyribonucleoside_diphosphate	0	1	1	i
+oxidized_thioredoxin	0	1	1	i
+NADPH               	1	0	1	i
+guanosine_5`-phosphate	1	0	1	i
+NADP+               	0	1	1	i
+inosine_5`-phosphate	0	1	1	i
+10-Formyltetrahydrofolate	2	0	2	rr
+5`-phosphoribosylglycinamide	1	0	1	r
+tetrahydrofolate    	0	2	2	rr
+5`-phosphoribosyl-N-formylglycinamide	0	1	1	r
+5`-phosphoribosyl-5-amino-4-imidazolecarboxamide	1	0	1	r
+5`-phosphoribosyl-5-formamido-4-imidazolecarboxamide	0	1	1	r
+Purine_nucleoside   	1	0	1	r
+phosphate           	3	1	4	rrrr
+purine              	0	1	1	r
+alpha-D-ribose_1-phosphate	0	1	1	r
+5-Phospho-beta-D-ribosylamine	1	0	1	i
+L-glutamate         	1	0	1	i
+L-glutamine         	0	1	1	i
+5-phospho-alpha-D-ribose_1-diphosphate	2	2	4	irrr
+5-Phospho-alpha-D-ribose_1-diphosphate	1	0	1	r
+xanthine            	1	0	1	r
+(9-D-ribosylxanthine)-5`-phosphate	0	1	1	r
+Thymidine           	1	0	1	r
+thymine             	0	1	1	r
+2-deoxy-D-ribose_1-phosphate	0	1	1	r
+Adenine             	1	0	1	r
+AMP                 	2	3	5	rrrii
+Hypoxanthine        	1	0	1	r
+IMP                 	0	1	1	r
+adenylylsulfate     	1	0	1	r
+3`-phosphoadenylylsulfate	0	1	1	r
+dAMP                	1	0	1	r
+dADP                	0	1	1	r
+nucleoside_diphosphate	1	0	1	r
+nucleoside_triphosphate	0	1	1	r
+GMP                 	1	0	1	r
+GDP                 	0	1	1	r
+D-ribose_5-phosphate	1	1	2	ri
+GTP                 	1	0	1	i
+guanosine_3`-diphosphate_5`-triphosphate	0	1	1	i
+Nucleoside_triphosphate	1	0	1	r
+RNAn                	1	1	2	rr
+RNAn+1              	1	1	2	rr
+Deoxynucleoside_triphosphate	1	0	1	r
+DNAn                	1	0	1	r
+DNAn+1              	0	1	1	r
+a_nucleoside_diphosphate	0	1	1	r
+A_5`-ribonucleotide 	1	0	1	r
+a_ribonucleoside    	0	1	1	r
+Nucleoside_2`,3`-cyclic_phosphate	1	0	1	i
+nucleoside_3`-phosphate	0	1	1	i
+Nucleoside_3`,5`-cyclic_phosphate	1	0	1	i
+nucleoside_5`-phosphate	0	1	1	i
+dGTP                	1	0	1	i
+deoxyguanosine      	0	1	1	i
+triphosphate        	0	1	1	i
+Inosine             	1	0	1	i
+hypoxanthine        	0	1	1	i
+D-ribose            	0	1	1	i
+adenine             	0	1	1	i
+
+CONVEX BASIS
+ 
+ matrix dimension r7 x c34
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0 
+
+ enzymes
+
+ 1:	 2.1.2.2 irreversible
+ 2:	 2.1.2.3 irreversible
+ 3:	 2.4.2.1 irreversible
+ 4:	 2.4.2.4 irreversible
+ 5:	 2.7.1.25 irreversible
+ 6:	 2.7.6.1 irreversible
+ 7:	 3.1.3.5 irreversible
+
+ overall reaction
+ - not found -
+
+
+The remaining overall reactions perform no net transformation of external metabolites.
+
+CONSERVATION RELATIONS
+ 
+ matrix dimension r40 x c67
+ 1 -1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 1  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 1  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  1 -1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  1  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  1  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  1 -1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  1  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  1  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  1  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  1 -1  0  0 -1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0 -1  1  0  0  0 -1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1 -1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1 -1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1 -1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 -1  1  0  0  0  0 -1  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1 -1  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1 -1  0  0  0  0  0 -1  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 -1  1  0  0  0  0  0  0  0  0  0 -1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 -1  1  0  0  0  0  0  0 -1  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  1  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  1  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  1  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  1  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  1  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  1  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  1  0  0  0  0  0  0 -1  0 -1  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 -1 
+ 1 :	Inosine_5`-phosphate + NAD+ = const
+ 2 :	Inosine_5`-phosphate + xanthosine_5`-phosphate = const
+ 3 :	Inosine_5`-phosphate + NADH = const
+ 4 :	Ribonucleoside_diphosphate + reduced_thioredoxin = const
+ 5 :	Ribonucleoside_diphosphate + 2`-deoxyribonucleoside_diphosphate = const
+ 6 :	Ribonucleoside_diphosphate + oxidized_thioredoxin = const
+ 7 :	NADPH + guanosine_5`-phosphate = const
+ 8 :	NADPH + NADP+ = const
+ 9 :	NADPH + inosine_5`-phosphate = const
+10 :	10-Formyltetrahydrofolate + tetrahydrofolate = const
+11 :	5`-phosphoribosylglycinamide + 5`-phosphoribosyl-N-formylglycinamide = const
+12 :	10-Formyltetrahydrofolate + 5`-phosphoribosylglycinamide + 5`-phosphoribosyl-5-amino-4-imidazolecarboxamide = const
+13 :	10-Formyltetrahydrofolate + 5`-phosphoribosylglycinamide + 5`-phosphoribosyl-5-formamido-4-imidazolecarboxamide = const
+14 :	Purine_nucleoside + purine = const
+15 :	Purine_nucleoside + alpha-D-ribose_1-phosphate = const
+16 :	5-Phospho-beta-D-ribosylamine + L-glutamate = const
+17 :	5-Phospho-beta-D-ribosylamine + L-glutamine = const
+18 :	5-Phospho-alpha-D-ribose_1-diphosphate + xanthine = const
+19 :	5-Phospho-alpha-D-ribose_1-diphosphate + (9-D-ribosylxanthine)-5`-phosphate = const
+20 :	Thymidine + thymine = const
+21 :	Thymidine + 2-deoxy-D-ribose_1-phosphate = const
+22 :	Hypoxanthine + IMP = const
+23 :	adenylylsulfate + 3`-phosphoadenylylsulfate = const
+24 :	dAMP + dADP = const
+25 :	nucleoside_diphosphate + nucleoside_triphosphate = const
+26 :	GMP + GDP = const
+27 :	GTP + guanosine_3`-diphosphate_5`-triphosphate = const
+28 :	RNAn + RNAn+1 = const
+29 :	Deoxynucleoside_triphosphate + DNAn = const
+30 :	Deoxynucleoside_triphosphate + DNAn+1 = const
+31 :	Nucleoside_triphosphate + RNAn + a_nucleoside_diphosphate = const
+32 :	Purine_nucleoside + phosphate + Thymidine + Nucleoside_triphosphate + RNAn + A_5`-ribonucleotide = const
+33 :	Purine_nucleoside + phosphate + Thymidine + Nucleoside_triphosphate + RNAn + a_ribonucleoside = const
+34 :	Nucleoside_2`,3`-cyclic_phosphate + nucleoside_3`-phosphate = const
+35 :	Nucleoside_3`,5`-cyclic_phosphate + nucleoside_5`-phosphate = const
+36 :	dGTP + deoxyguanosine = const
+37 :	dGTP + triphosphate = const
+38 :	Inosine + hypoxanthine = const
+39 :	Inosine + D-ribose = const
+40 :	5-Phospho-beta-D-ribosylamine + 5-phospho-alpha-D-ribose_1-diphosphate + Adenine + Hypoxanthine + D-ribose_5-phosphate + adenine = const
+
+ELEMENTARY MODES
+ 
+ matrix dimension r7 x c34
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0 
+34 reactions (columns) are sorted in the same order as in the ENZREV ENZIRREV section.
+
+ enzymes
+
+ 1:	 2.1.2.2 irreversible
+ 2:	 2.1.2.3 irreversible
+ 3:	 2.4.2.1 irreversible
+ 4:	 2.4.2.4 irreversible
+ 5:	 2.7.1.25 irreversible
+ 6:	 2.7.6.1 irreversible
+ 7:	 3.1.3.5 irreversible
+
+ overall reaction
+ - not found -
+
+
+The remaining overall reactions perform no net transformation of external metabolites.
+
+The elementary modes ARE EQUAL to convex basis.
