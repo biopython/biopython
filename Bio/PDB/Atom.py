@@ -3,6 +3,9 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.           
 
+# Python stuff
+from Numeric import sum, sqrt
+
 # My stuff
 from Entity import DisorderedEntityWrapper
 
@@ -46,6 +49,11 @@ class Atom:
 
     def __repr__(self):
         return "<Atom %s>" % self.get_id()
+
+    def __sub__(self, other):
+        "Calculate distance between two atoms."
+        diff=self.coord-other.coord
+        return sqrt(sum(diff*diff))
 
     # set methods
 

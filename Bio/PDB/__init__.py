@@ -24,3 +24,10 @@ from PDBIO import PDBIO
 # Some methods to eg. get a list of Residues
 # from a list of Atoms.
 import Selection
+
+# Fast atom neighbor search
+# Depends on KDTree C++ module
+try:
+    from NeighborSearch import NeighborSearch
+except ImportError:
+    print 'NeighborSearch skipped --- KDTree not installed.'
