@@ -3,6 +3,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+# 2/2003: Iddo: replaced '\n' with os.linesep for compatibility along
+# platforms using different EOL characters
 """Fasta package
 
 This module provides code to work with FASTA-formatted sequences.
@@ -66,7 +68,7 @@ class Record:
         while i < len(self.sequence):
             s.append(self.sequence[i:i+self._colwidth])
             i = i + self._colwidth
-        return string.join(s, '\n')
+        return string.join(s, os.linesep)
 
 class Iterator:
     """Returns one record at a time from a FASTA file.
