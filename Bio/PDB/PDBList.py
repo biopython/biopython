@@ -153,12 +153,14 @@ OBSLTE     26-SEP-03 1DYV      1UN2
         tw.append(self.get_list(urls[2]))
         return tw
 
-    def retrieve_pdb_file(self,pdb_code, compression='.Z', uncompress="gunzip", write=1):
+    def retrieve_pdb_file(self,pdb_code, compression='.Z', uncompress="gunzip", write=1, here=0):
         """Retrieves a PDB structure file from the PDB server and
         stores it in a local file tree (if 'write' is set true).
         The PDB structure is returned as a single string.
         The compression should be '.Z' or '.gz'. 'uncompress' is
         the command called to uncompress the files.
+
+        here : put in local directory if this is 1
         """
         # get the structure
         code=string.lower(pdb_code)
@@ -166,12 +168,14 @@ OBSLTE     26-SEP-03 1DYV      1UN2
         lines = urllib.urlopen(url).read()
 
         # save the structure
-        path = self.local_pdb + os.sep + code[1:3]
-        filename = path + os.sep+"pdb%s.ent%s"%(code,compression)
-        if not os.access(path,os.F_OK):
-            os.mkdir(path)
+        filename="pdb%s.ent%s"%(code,compression)
+        if not here:
+            # Put in directory 
+            path=self.local_pdb+os.sep+code[1:3]
+            if not os.access(path,os.F_OK):
+                os.mkdir(path)
+            filename=path+os.sep+filename
         open(filename,'w').write(lines)
-
         # uncompress the file
         os.system("%s %s" % (uncompress, filename))
 
