@@ -1,4 +1,4 @@
-from Bio.PDB import Selection 
+from Bio.PDB import *
 
 
 __doc__="""
