@@ -132,7 +132,8 @@ class _Scanner:
         while 1:
             line = safe_peekline(uhandle)
             if line[:9] != 'Searching' and \
-               string.find(line, 'Score     E') < 0:
+               string.find(line, 'Score     E') < 0 and \
+               string.find(line, 'No hits found') < 0:
                 break
 
             self._scan_descriptions(uhandle, consumer)
@@ -164,6 +165,7 @@ class _Scanner:
         consumer.start_descriptions()
 
         # Read 'Searching'
+        # This line seems to be missing in BLASTN 2.1.2 (others?)
         attempt_read_and_call(uhandle, consumer.noevent, start='Searching')
 
         # blastpgp 2.0.10 from NCBI 9/19/99 for Solaris sometimes crashes here.
