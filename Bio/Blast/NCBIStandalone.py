@@ -2,6 +2,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+# Patches by Mike Poidinger to support multiple databases.
 
 """NCBIStandalone.py
 
@@ -103,7 +104,7 @@ class _Scanner:
         read_and_call_while(uhandle, consumer.noevent, blank=1)
 
         # Read the database lines and the following blank line.
-        read_and_call(uhandle, consumer.database_info, start='Database')
+        read_and_call_until(uhandle, consumer.database_info, end='total letters')
         read_and_call(uhandle, consumer.database_info, contains='sequences')
         read_and_call_while(uhandle, consumer.noevent, blank=1)
 
@@ -345,18 +346,23 @@ class _Scanner:
         #
 
         consumer.start_database_report()
-
-        read_and_call(uhandle, consumer.database, start='  Database')
-        read_and_call(uhandle, consumer.posted_date, start='    Posted')
-        read_and_call(uhandle, consumer.num_letters_in_database,
+	while 1:
+            read_and_call(uhandle, consumer.database, start='  Database')
+            read_and_call(uhandle, consumer.posted_date, start='    Posted')
+            read_and_call(uhandle, consumer.num_letters_in_database,
                        start='  Number of letters')
-        read_and_call(uhandle, consumer.num_sequences_in_database,
+            read_and_call(uhandle, consumer.num_sequences_in_database,
                        start='  Number of sequences')
-        read_and_call(uhandle, consumer.noevent, start='  ')
+            read_and_call(uhandle, consumer.noevent, start='  ')
 
-        read_and_call(uhandle, consumer.noevent, start='Lambda')
-        read_and_call(uhandle, consumer.ka_params)
-        read_and_call(uhandle, consumer.noevent, blank=1)
+	    line = safe_readline(uhandle)
+	    uhandle.saveline(line)
+	    if re.search('Lambda', line):
+		break
+
+	read_and_call(uhandle, consumer.noevent, start='Lambda')
+	read_and_call(uhandle, consumer.ka_params)
+	read_and_call(uhandle, consumer.noevent, blank=1)
 
         # not BLASTP
         attempt_read_and_call(uhandle, consumer.gapped, start='Gapped')
@@ -509,6 +515,8 @@ class _HeaderConsumer:
     def database_info(self, line):
         if line[:10] == 'Database: ':
             self._header.database = string.rstrip(line[10:])
+	elif not re.search('total letters$', line):
+            self._header.database = self._header.database + string.strip(line)
         else:
             sequences, letters =_re_search(
                 r"([0-9,]+) sequences; ([0-9,]+) total letters", line,
@@ -831,39 +839,40 @@ class _HSPConsumer:
         pass
 
 class _DatabaseReportConsumer:
+
     def start_database_report(self):
         self._dr = Record.DatabaseReport()
 
     def database(self, line):
-        self._dr.database_name, = _re_search(
+        self._dr.database_name.append(_re_search(
             r"Database: (.+)$", line,
-            "I could not find the database in line\n%s" % line)
+            "I could not find the database in line\n%s" % line))
 
     def posted_date(self, line):
-        self._dr.posted_date, = _re_search(
+        self._dr.posted_date.append(_re_search(
             r"Posted date:\s*(.+)$", line,
-            "I could not find the posted date in line\n%s" % line)
+            "I could not find the posted date in line\n%s" % line))
 
     def num_letters_in_database(self, line):
         letters, = _get_cols(
             line, (-1,), ncols=6, expected={2:"letters", 4:"database:"})
-        self._dr.num_letters_in_database = _safe_int(letters)
+        self._dr.num_letters_in_database.append(_safe_int(letters))
 
     def num_sequences_in_database(self, line):
         sequences, = _get_cols(
             line, (-1,), ncols=6, expected={2:"sequences", 4:"database:"})
-        self._dr.num_sequences_in_database = _safe_int(sequences)
+        self._dr.num_sequences_in_database.append(_safe_int(sequences))
 
     def ka_params(self, line):
-        self._dr.ka_params = string.split(line)
-        self._dr.ka_params = map(_safe_float, self._dr.ka_params)
+        x = string.split(line)
+        self._dr.ka_params = map(_safe_float, x)
 
     def gapped(self, line):
         self._dr.gapped = 1
 
     def ka_params_gap(self, line):
-        self._dr.ka_params_gap = string.split(line)
-        self._dr.ka_params_gap = map(_safe_float, self._dr.ka_params_gap)
+        x = string.split(line)
+        self._dr.ka_params_gap = map(_safe_float, x)
 
     def end_database_report(self):
         pass

@@ -69,6 +69,7 @@ bt056 blastall 2.0.11 gi:1348853 sts       -p tblastx
 bt057 blastall 2.0.11 sp:Q08386  swissprot -p blastp      >1 HSP in alignment
 bt058 blastall 2.0.11 sp:Q05362  swissprot -p blastp -v 0 -m 4 no descriptions, master-slave
 bt059 blastpgp 2.0.11 sp:P07175  swissprot -m 6           multiple HSP (41943)
+bt060 blastpgp 2.0.12                                     multiple db, Mike Poidinger
 
 
 * bt008 is not included because the file is too big (>15Mb).

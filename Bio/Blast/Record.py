@@ -174,10 +174,10 @@ class DatabaseReport:
 
     """
     def __init__(self):
-        self.database_name = ''
-        self.posted_date = ''
-        self.num_letters_in_database = None
-        self.num_sequences_in_database = None
+        self.database_name = []
+        self.posted_date = []
+        self.num_letters_in_database = []
+        self.num_sequences_in_database = []
         self.ka_params = (None, None, None)
         self.gapped = 0
         self.ka_params_gap = (None, None, None)

@@ -26,7 +26,10 @@ test_2011 = ['bt040', 'bt041', 'bt042', 'bt043', 'bt044',
              'bt055', 'bt056', 'bt057', 'bt058', 'bt059'
              ]
 
-tests = test_2010 + test_2011
+# BLAST v 2.0.12
+test_2012 = ['bt060']
+
+tests = test_2010 + test_2011 + test_2012
 
 scanner = NCBIStandalone._Scanner()
 for test in tests:
