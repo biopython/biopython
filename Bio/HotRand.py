@@ -4,7 +4,7 @@
 # as part of this package.
 
 """handles true random numbers supplied from the the web server of fourmilab. Based on
-radioactive decay.  The motivation is to support biosimulations that rely on random numbers.
+atmospheric noise.  The motivation is to support biosimulations that rely on random numbers.
 """
 
 import os
@@ -28,7 +28,8 @@ def hex_convert( text ):
 class HotCache:
 
     def __init__( self  ):
-        self.url = 'http://www.fourmilab.ch/cgi-bin/uncgi/Hotbits?'
+#        self.url = 'http://www.fourmilab.ch/cgi-bin/uncgi/Hotbits?num=5000&min=1&max=6&col=1'
+        self.url = 'http://www.random.org/cgi-bin/randbyte?nbytes=5000&format=h'
         self.query = { 'nbytes' : 128, 'fmt' : 'hex' }
         self.fill_hot_cache()
 
@@ -41,6 +42,7 @@ class HotCache:
         hot_cache = hot_rand_handle.read()
         lines = hot_cache.splitlines()
         hot_cache = ''.join( lines )
+        hot_cache = hot_cache.replace( ' ', '' )
         self.hot_cache = hot_cache.strip()
         fh.close()
         return self.hot_cache
