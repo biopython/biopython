@@ -5,7 +5,7 @@ import os
 from Bio.SwissProt import SProt
 
 test_files = ['sp001', 'sp002', 'sp003', 'sp004', 'sp005',
-              'sp006', 'sp007', 'sp008', 'sp009']
+              'sp006', 'sp007', 'sp008', 'sp009', 'sp010', 'sp011']
 
 record_parser = SProt.RecordParser()
 sequence_parser = SProt.SequenceParser()
@@ -22,8 +22,17 @@ for test_file in test_files:
     print record.entry_name
     print record.accessions
     print record.organism_classification
-    print record.features
     print record.seqinfo
+    
+    print "***Features:"
+    for feature in record.features:
+        print feature
+
+    print "***References:"
+    for ref in record.references:
+        print "authors:", ref.authors
+        print "title:", ref.title
+        print "references:", ref.references
 
     test_handle.close()
 

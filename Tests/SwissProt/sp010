@@ -1,0 +1,140 @@
+ID   5H4_HUMAN      STANDARD;      PRT;   388 AA.
+AC   Q13639; Q9UBM6; Q9UQR6; Q9UE22; Q9UE23; Q9UBT4; Q9NY73;
+DT   01-NOV-1997 (Rel. 35, Created)
+DT   01-OCT-2000 (Rel. 40, Last sequence update)
+DT   01-OCT-2000 (Rel. 40, Last annotation update)
+DE   5-HYDROXYTRYPTAMINE 4 RECEPTOR (5-HT-4) (SEROTONIN RECEPTOR) (5-HT4).
+GN   HTR4.
+OS   Homo sapiens (Human).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+OC   Mammalia; Eutheria; Primates; Catarrhini; Hominidae; Homo.
+OX   NCBI_TaxID=9606;
+RN   [1]
+RP   SEQUENCE FROM N.A. (ISOFORMS 5-HT4(A); 5-HT4(B); 5-HT4(C); 5-HT4(D)).
+RC   TISSUE=Gut;
+RX   PubMed=9603189;
+RA   Blondel O., Gastineau M., Dahmoune Y., Langlois M., Fischmeister R.;
+RT   "Cloning, expression, and pharmacology of four human 5-
+RT   hydroxytryptamine receptor isoforms produced by alternative splicing
+RT   in the carboxyl terminus.";
+RL   J. Neurochem. 70:2252-2261(1998).
+RN   [2]
+RP   SEQUENCE FROM N.A. (ISOFORMS 5-HT4(A) AND 5HT4(B)).
+RC   TISSUE=Brain;
+RA   Van den Wyngaert I., Gommeren W., Jurzak M., Verhasselt P., Gordon R.,
+RA   Leysen J., Luyten W., Bender E.;
+RT   "Cloning and expression of 5-HT4 receptor species and splice
+RT   variants.";
+RL   Submitted (JUN-1997) to the EMBL/GenBank/DDBJ databases.
+RN   [3]
+RP   SEQUENCE FROM N.A. (ISOFORM 5-HT4(A)).
+RC   TISSUE=Heart;
+RX   PubMed=9351641;
+RA   Claeysen S., Faye P., Sebben M., Lemaire S., Bockaert J., Dumuis A.;
+RT   "Cloning and expression of human 5-HT4S receptors. Effect of receptor
+RT   density on their coupling to adenylyl cyclase.";
+RL   NeuroReport 8:3189-3195(1997).
+RN   [4]
+RP   SEQUENCE FROM N.A. (ISOFORM 5-HT4(E)).
+RC   TISSUE=Brain;
+RA   Claeysen S., Sebben M., Becamel C., Bockaert J., Dumuis A.;
+RT   "Novel brain-specific 5-HT4 receptors splice variants show marked
+RT   constitutive activity: role of the c-terminal intracellular domain.";
+RL   Mol. Pharmacol. 55:0-0(1999).
+RN   [5]
+RP   SEQUENCE OF 10-388 FROM N.A. (ISOFORM 5-HT4(F)).
+RX   PubMed=10646498;
+RA   Bender E., Pindon A., van Oers I., Zhang Y.B., Gommeren W.,
+RA   Verhasselt P., Jurzak M., Leysen J., Luyten W.;
+RT   "Structure of the human serotonin 5-HT4 receptor gene and cloning of a
+RT   novel 5-HT4 splice variant.";
+RL   J. Neurochem. 74:478-489(2000).
+RN   [6]
+RP   SEQUENCE OF 112-255 FROM N.A.
+RC   TISSUE=Brain;
+RX   MEDLINE=95385798; PubMed=7656980;
+RA   Ullmer C., Schmuck K., Kalkman H.O., Lubbert H.;
+RT   "Expression of serotonin receptor mRNAs in blood vessels.";
+RL   FEBS Lett. 370:215-221(1995).
+CC   -!- FUNCTION: THIS IS ONE OF THE SEVERAL DIFFERENT RECEPTORS FOR
+CC       5-HYDROXYTRYPTAMINE (SEROTONIN), A BIOGENIC HORMONE THAT FUNCTION
+CC       AS A NEUROTRANSMITTER, A HORMONE, AND A MITOGEN. THE ACTIVITY OF
+CC       THIS RECEPTOR IS MEDIATED BY G PROTEINS THAT STIMULATES ADENYLATE
+CC       CYCLASE.
+CC   -!- SUBCELLULAR LOCATION: INTEGRAL MEMBRANE PROTEIN.
+CC   -!- ALTERNATIVE PRODUCTS: AT LEAST 6 ISOFORMS; 5-HT4(A)/5-HT4S, 5-
+CC       HT4(B) (SHOWN HERE), 5-HT4(C), 5-HT4(D); 5-HT4(E) AND 5-HT4(F);
+CC       ARE PRODUCED BY ALTERNATIVE SPLICING.
+CC   -!- TISSUE SPECIFICITY: ISOFORM 5-HT4(A)IS EXPRESSED IN ILEUM, BRAIN,
+CC       AND ATRIUM, BUT NOT IN THE VENTRICLE.
+CC   -!- SIMILARITY: BELONGS TO FAMILY 1 OF G-PROTEIN COUPLED RECEPTORS.
+CC   --------------------------------------------------------------------------
+CC   This SWISS-PROT entry is copyright. It is produced through a collaboration
+CC   between  the Swiss Institute of Bioinformatics  and the  EMBL outstation -
+CC   the European Bioinformatics Institute.  There are no  restrictions on  its
+CC   use  by  non-profit  institutions as long  as its content  is  in  no  way
+CC   modified and this statement is not removed.  Usage  by  and for commercial
+CC   entities requires a license agreement (See http://www.isb-sib.ch/announce/
+CC   or send an email to license@isb-sib.ch).
+CC   --------------------------------------------------------------------------
+DR   EMBL; Y12505; CAA73107.1; -.
+DR   EMBL; Y12506; CAA73108.1; -.
+DR   EMBL; Y12507; CAA73109.1; -.
+DR   EMBL; Y10437; CAA71462.1; -.
+DR   EMBL; Y08756; CAA70002.1; -.
+DR   EMBL; Y09586; CAA70774.1; -.
+DR   EMBL; Y13584; CAA73911.1; -.
+DR   EMBL; AJ011371; CAA09600.1; -.
+DR   EMBL; AJ243213; CAB71316.1; -.
+DR   EMBL; Z48150; CAA88167.1; -.
+DR   GCRDb; GCR_1064; -.
+DR   MIM; 602164; -.
+DR   InterPro; IPR000276; -.
+DR   InterPro; IPR001520; -.
+DR   InterPro; IPR002233; -.
+DR   Pfam; PF00001; 7tm_1; 1.
+DR   PRINTS; PR00237; GPCRRHODOPSN.
+DR   PRINTS; PR01059; 5HT4RECEPTR.
+DR   PRINTS; PR01103; ADRENERGICR.
+DR   PROSITE; PS00237; G_PROTEIN_RECEP_F1_1; 1.
+DR   PROSITE; PS50262; G_PROTEIN_RECEP_F1_2; 1.
+KW   G-protein coupled receptor; Transmembrane; Glycoprotein;
+KW   Multigene family; Lipoprotein; Palmitate; Alternative splicing.
+FT   DOMAIN        1     19       EXTRACELLULAR (POTENTIAL).
+FT   TRANSMEM     20     40       1 (POTENTIAL).
+FT   DOMAIN       41     58       CYTOPLASMIC (POTENTIAL).
+FT   TRANSMEM     59     79       2 (POTENTIAL).
+FT   DOMAIN       80     93       EXTRACELLULAR (POTENTIAL).
+FT   TRANSMEM     94    116       3 (POTENTIAL).
+FT   DOMAIN      117    137       CYTOPLASMIC (POTENTIAL).
+FT   TRANSMEM    138    158       4 (POTENTIAL).
+FT   DOMAIN      159    192       EXTRACELLULAR (POTENTIAL).
+FT   TRANSMEM    193    213       5 (POTENTIAL).
+FT   DOMAIN      214    260       CYTOPLASMIC (POTENTIAL).
+FT   TRANSMEM    261    281       6 (POTENTIAL).
+FT   DOMAIN      282    294       EXTRACELLULAR (POTENTIAL).
+FT   TRANSMEM    295    315       7 (POTENTIAL).
+FT   DOMAIN      316    388       CYTOPLASMIC (POTENTIAL).
+FT   CARBOHYD      7      7       N-LINKED (GLCNAC...) (POTENTIAL).
+FT   DISULFID     93    184       BY SIMILARITY.
+FT   LIPID       329    329       PALMITATE (BY SIMILARITY).
+FT   VARSPLIC    169    169       L -> LERSLNQGLGQDFHA (IN ISOFORM 5-
+FT                                HT4(F)).
+FT   VARSPLIC    359    388       RDAVECGGQWESQCHPPATSPLVAAQPSDT -> SGCSPVS
+FT                                SFLLLFCNRPVPV (IN ISOFORM 5-HT4(E)).
+FT   VARSPLIC    359    388       RDAVECGGQWESQCHPPATSPLVAAQPSDT -> SSGTETD
+FT                                RRNFGIRKRRLTKPS (IN ISOFORM 5-HT4(D)).
+FT   VARSPLIC    360    388       DAVECGGQWESQCHPPATSPLVAAQPSDT -> F (IN
+FT                                ISOFORM 5-HT4(C)).
+FT   VARSPLIC    360    388       DAVECGGQWESQCHPPATSPLVAAQPSDT -> YTVLHRGH
+FT                                HQELEKLPIHNDPESLESCF (IN ISOFORM 5-
+FT                                HT4(A)).
+SQ   SEQUENCE   388 AA;  43761 MW;  7FCFEC60E7BDF560 CRC64;
+     MDKLDANVSS EEGFGSVEKV VLLTFLSTVI LMAILGNLLV MVAVCWDRQL RKIKTNYFIV
+     SLAFADLLVS VLVMPFGAIE LVQDIWIYGE VFCLVRTSLD VLLTTASIFH LCCISLDRYY
+     AICCQPLVYR NKMTPLRIAL MLGGCWVIPT FISFLPIMQG WNNIGIIDLI EKRKFNQNSN
+     STYCVFMVNK PYAITCSVVA FYIPFLLMVL AYYRIYVTAK EHAHQIQMLQ RAGASSESRP
+     QSADQHSTHR MRTETKAAKT LCIIMGCFCL CWAPFFVTNI VDPFIDYTVP GQVWTAFLWL
+     GYINSGLNPF LYAFLNKSFR RAFLIILCCD DERYRRPSIL GQTVPCSTTT INGSTHVLRD
+     AVECGGQWES QCHPPATSPL VAAQPSDT
+//
