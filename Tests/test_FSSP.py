@@ -31,3 +31,11 @@ f.write("\nLet's Pickle this\n")
 time_1 = time.time()
 cPickle.dump((head_rec, sum_rec, align_rec),open('FSSP/mydump.pik','w'))
 f.write("Took me %.2f seconds to pickle\n" % (time.time() - time_1))
+
+f.write("\nFilter by name\n")
+name_list = ['2hvm0', '1hvq0', '1nar0', '2ebn0']
+f.write("\nname list %s\n" % str(name_list))
+sum_newnames, align_newnames = FSSPTools.name_filter(sum_rec, align_rec,
+                                                     name_list)
+f.write("\n%s\n" % sum_newnames)
+f.write("\n%s\n" % align_newnames['0P168'].pos_align_dict)
