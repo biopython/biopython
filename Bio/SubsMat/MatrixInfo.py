@@ -15,7 +15,7 @@ available_matrices = ['benner6', 'benner22', 'benner74', 'blosum100',
                       'ident', 'johnson', 'levin', 'mclach', 
                       'miyata', 'nwsgappep', 'pam120', 'pam180', 
                       'pam250', 'pam30', 'pam300', 'pam60', 
-                      'pam90', 'rao', 'risler', 'str'
+                      'pam90', 'rao', 'risler', 'structure'
                      ]
 
 # http://www.embl-heidelberg.de/~vogt/matrices/benner6.cmp
@@ -2567,7 +2567,7 @@ risler = {
 ('F', 'D') : -0.3, ('D', 'C') : -1.7
 }
 # http://www.embl-heidelberg.de/~vogt/matrices/str.cmp
-str = {
+structure = {
 ('W', 'F') : 2, ('L', 'R') : -3, ('I', 'I') : 6, ('Q', 'Q') : 6, 
 ('W', 'N') : -5, ('V', 'I') : 2, ('H', 'T') : -2, ('H', 'P') : -3, 
 ('W', 'V') : -4, ('Q', 'E') : 2, ('W', 'R') : -2, ('Q', 'A') : 0, 
