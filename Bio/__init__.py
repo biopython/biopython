@@ -46,4 +46,11 @@ if getattr(sys, "version_info", (1, 5))[:2] >= (2, 1):
   formats = FormatRegistry.FormatRegistry("Bio")
   register_format = formats.register_format
   link_format = formats.link
+
+if getattr(sys, "version_info", (1, 5))[:2] >= (2, 1):
+  import IORegistry
+  io = IORegistry.IORegistry("Bio")
+  register_io = io.register_io
+  group_io = io.group
+
 del sys
