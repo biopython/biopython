@@ -2,6 +2,7 @@
 # Biopython (http://biopython.org) license applies
 
 import ProtParamData, IsoelectricPoint
+from ProtParamData import kd  # Added by Iddo to enable the gravy method
 from Bio.Seq import Seq
 from Bio.Alphabet import IUPAC
 from Bio.Data import IUPACData
@@ -162,7 +163,7 @@ class ProteinAnalysis:
 			List.append(score/5.25)
 		return List
 
-	# calculate the garvy according to kyte and doolittle.
+	# calculate the gravy according to kyte and doolittle.
 	def gravy(self):
 		ProtGravy=0.0
 		for i in self.sequence:
