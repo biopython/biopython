@@ -1,0 +1,1624 @@
+#LyX 1.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 221
+\textclass article
+\begin_preamble
+% header
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\lhead{Bio.PDB}
+\rhead{FAQ}
+
+
+% make everything have section numbers
+% Make links between references
+\usepackage{hyperref}
+
+\newif\ifpdf
+\ifx\pdfoutput\undefined
+  \pdffalse
+\else
+  \pdfoutput=1
+  \pdftrue
+\fi
+\ifpdf
+  \hypersetup{colorlinks=true, hyperindex=true, citecolor=red, urlcolor=blue}
+\fi
+\end_preamble
+\language english
+\inputencoding auto
+\fontscheme bookman
+\graphics default
+\paperfontsize default
+\spacing single 
+\papersize a4paper
+\paperpackage a4
+\use_geometry 0
+\use_amsmath 0
+\use_natbib 0
+\use_numerical_citations 0
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\quotes_times 2
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+
+\layout Title
+
+The BioPython Structural Bioinformatics FAQ
+\layout Author
+
+Thomas Hamelryck
+\newline 
+Bioinformatics center
+\newline 
+Copenhagen University
+\newline 
+Universitetsparken 15, Bygning 10
+\newline 
+DK-2100 København Ø
+\newline 
+Denmark 
+\newline 
+thamelry@binf.ku.dk
+\newline 
+
+\begin_inset LatexCommand \url{http://www.binf.ku.dk/users/thamelry/}
+
+\end_inset 
+
+
+\layout Section
+
+Introduction
+\layout Standard
+
+The Biopython Project is an international association of developers of freely
+ available Python (
+\begin_inset LatexCommand \url{http://www.python.org}
+
+\end_inset 
+
+) tools for computational molecular biology.
+ Python is an object oriented, interpreted, flexible language that is becoming
+ increasingly popular for scientific computing.
+ Python is easy to learn, has a very clear syntax and can easily be extended
+ with modules written in C, C++ or FORTRAN.
+\layout Standard
+
+The Biopython web site (
+\begin_inset LatexCommand \url{http://www.biopython.org}
+
+\end_inset 
+
+) provides an online resource for modules, scripts, and web links for developers
+ of Python-based software for life science research.
+ Basically, we want to make it as easy as possible to use python for bioinformat
+ics by creating high-quality, reusable modules and scripts.
+ Biopython features include parsers for various Bioinformatics file formats
+ (BLAST, Clustalw, FASTA, Genbank, etc.), access to online services (NCBI,
+ Expasy), interfaces to common programs (eg.
+ Clustalw), a standard sequence class, various clustering modules, a 
+\family typewriter 
+KDTree
+\family default 
+ module etc.
+ and documentation.
+ 
+\layout Standard
+
+Bio.PDB is a biopython module that focuses on handling crystal structures
+ of biological macromolecules.
+ This document gives an overview of Bio.PDB.
+\layout Section
+
+Bio.PDB's installation
+\layout Standard
+
+Bio.PDB is automatically installed as part of Biopython.
+ Biopython can be obtained from 
+\begin_inset LatexCommand \url{http://www.biopython.org}
+
+\end_inset 
+
+.
+\layout Section
+
+What's the Bio.PDB license?
+\layout Standard
+
+The Biopython license, which is one of the most unrestricted Open Source
+ licenses around.
+\layout Section
+
+Who's using Bio.PDB?
+\layout Standard
+
+Bio.PDB was used in the construction of DISEMBL, a webserver that predicts
+ disordered regions in proteins (
+\begin_inset LatexCommand \url{http://dis.embl.de/}
+
+\end_inset 
+
+), and COLUMBA, a website that provides annotated protein structures (
+\begin_inset LatexCommand \url{http://www.columba-db.de/}
+
+\end_inset 
+
+).
+ Bio.PDB has also been used to perform a large scale search for active sites
+ similarities between protein structures in the PDB (see 
+\shape italic 
+Proteins Struct.
+ Func.
+ Gen.
+\shape default 
+, 
+\series bold 
+2003
+\series default 
+, 51, 96-108).
+ 
+\layout Standard
+
+Judging from requests for features and information, Bio.PDB is also used
+ by several LPC's (Large Pharmaceutical Companies :-).
+\layout Section
+
+Is there a Bio.PDB reference?
+\layout Standard
+
+Yes, and I'd appreciate it if you would refer to Bio.PDB in publications
+ that makes use of it.
+ The reference is:
+\layout Quote
+
+Hamelryck, T., Manderick, B.
+ (2003) PDB parser and structure class implemented in Python.
+ 
+\shape italic 
+Bioinformatics
+\shape default 
+, 
+\series bold 
+19
+\series default 
+, 2308-2310.
+ 
+\layout Standard
+
+The article can be freely downloaded via the Bioinformatics journal website
+ (
+\begin_inset LatexCommand \url{http://www.binf.ku.dk/users/thamelry/references.html}
+
+\end_inset 
+
+).
+\layout Section
+
+How well tested is Bio.PDB?
+\layout Standard
+
+Pretty well, actually.
+ Bio.PDB has been tested on nearly 5500 structures from the PDB and did not
+ crash once.
+ Moreover, all structures seemed to be parsed correctly.
+ More details can be found in the Bio.PDB Bioinformatics article.
+ Bio.PDB has been used/is being used in many research projects as a reliable
+ tool.
+ In fact, I'm using Bio.PDB almost daily for research purposes and continue
+ working on improving it.
+\layout Section
+
+Usage
+\layout Subsection
+
+General questions
+\layout Subsubsection
+
+Importing Bio.PDB
+\layout Standard
+
+That's simple:
+\layout LyX-Code
+
+from Bio.PDB import *
+\layout Subsubsection*
+
+Is there support for molecular graphics?
+\layout Standard
+
+Not directly, mostly since there are quite a few Python based solutions
+ already, that can potentially be used with Bio.PDB.
+ My choice is Pymol, BTW (I've used this successfully with Bio.PDB, and there
+ will probably be specific PyMol modules in Bio.PDB soon/some day).
+ Python based molecular graphics solutions include:
+\layout Itemize
+
+PyMol: 
+\begin_inset LatexCommand \url{http://pymol.sourceforge.net/}
+
+\end_inset 
+
+
+\layout Itemize
+
+Chimera: 
+\begin_inset LatexCommand \url{http://www.cgl.ucsf.edu/chimera/}
+
+\end_inset 
+
+
+\layout Itemize
+
+PMV: 
+\begin_inset LatexCommand \url{http://www.scripps.edu/~sanner/python/}
+
+\end_inset 
+
+
+\layout Itemize
+
+Coot: 
+\begin_inset LatexCommand \url{http://www.ysbl.york.ac.uk/~emsley/coot/}
+
+\end_inset 
+
+
+\layout Standard
+
+In addition, the CCP4 people are also working on a python based molecular
+ graphics program.
+ 
+\layout Subsection
+
+Input/output
+\layout Subsubsection*
+
+How do I create a structure object from a PDB file?
+\layout Standard
+
+First, create a
+\family typewriter 
+ PDBParser 
+\family default 
+object:
+\layout LyX-Code
+
+parser=PDBParser()
+\layout Standard
+
+Then, create a structure object from a PDB file in the following way (the
+ PDB file in this case is called '1FAT.pdb', 'PHA-L' is a user defined name
+ for the structure):
+\layout LyX-Code
+
+structure=p.get_structure('PHA-L', '1FAT.pdb')
+\layout Subsubsection*
+
+How do I create a structure object from an mmCIF file?
+\layout Standard
+
+Similarly to the case the case of PDB files, first create an 
+\family typewriter 
+MMCIFParser
+\family default 
+ object:
+\layout LyX-Code
+
+parser=MMCIFParser()
+\layout Standard
+
+Then use this parser to create a structure object from the mmCIF file:
+\layout LyX-Code
+
+structure=p.get_structure('PHA-L', '1FAT.cif')
+\layout Subsubsection*
+
+...and what about the new PDB XML format?
+\layout Standard
+
+That's not yet supported, but I'm definitely planning to support that in
+ the future.
+\layout Subsubsection*
+
+I'd like to have some more low level access to an mmCIF file...
+\layout Standard
+
+You got it.
+ You can create a python dictionary that maps all mmCIF tags in an mmCIF
+ file to their values.
+ If there are multiple values (like in the case of tag 
+\family typewriter 
+_atom_site.Cartn_y
+\family default 
+, which holds the y coordinates of all atoms), the tag is mapped to a list
+ of values.
+ The dictionary is created from the mmCIF file as follows:
+\layout LyX-Code
+
+mmcif_dict=MMCIF2Dict('1FAT.cif')
+\layout Standard
+
+Example: get the solvent content from an mmCIF file:
+\layout LyX-Code
+
+sc=mmcif_dict['_exptl_crystal.density_percent_sol']
+\layout Standard
+
+Example: get the list of the y coordinates of all atoms
+\layout LyX-Code
+
+y_list=mmcif_dict['_atom_site.Cartn_y']
+\layout Subsubsection*
+
+Can I access the header information?
+\layout Standard
+
+Thanks to Christian Rother you can.
+ The structure object has an attribute called 
+\family typewriter 
+header
+\family default 
+ which is a python dictionary that maps header records to their values.
+\layout Standard
+
+Example:
+\layout LyX-Code
+
+resolution=structure.header['resolution']
+\layout LyX-Code
+
+keywords=structure.header['keywords']
+\layout Standard
+
+The available keys are 
+\family typewriter 
+name, head, deposition_date, release_date, structure_method, resolution,
+ structure_reference 
+\family default 
+(maps to a list of references), 
+\family typewriter 
+journal_reference, author
+\family default 
+ and 
+\family typewriter 
+compound
+\family default 
+ (maps to a dictionary with various information about the crystallized compound).
+\layout Standard
+
+The dictionary can also be created without creating a 
+\family typewriter 
+Structure
+\family default 
+ object, ie.
+ directly from the PDB file:
+\layout LyX-Code
+
+file=open(filename,'r')
+\layout LyX-Code
+
+header_dict=parse_pdb_header(file)
+\layout LyX-Code
+
+file.close()
+\layout Subsubsection*
+
+Can I use Bio.PDB with NMR structures (ie.
+ with more than one model)?
+\layout Standard
+
+Sure.
+ Many PDB parsers assume that there is only one model, making them all but
+ useless for NMR structures.
+ The design of the Structure object makes it easy to handle PDB files with
+ more than one model (see section 
+\begin_inset LatexCommand \ref{sub:The-Structure-object}
+
+\end_inset 
+
+).
+ 
+\layout Subsubsection*
+
+How do I download structures from the PDB?
+\layout Standard
+
+This can be done using the 
+\family typewriter 
+PDBList
+\family default 
+ object, using the 
+\family typewriter 
+retrieve_pdb_file
+\family default 
+ method.
+ The argument for this method is the PDB identifier of the structure.
+\layout LyX-Code
+
+pdbl=PDBList()
+\layout LyX-Code
+
+pdbl.retrieve_pdb_file('1FAT')
+\layout Standard
+
+In this case, the downloaded file will be called 
+\family typewriter 
+pdb1fat.ent
+\family default 
+.
+ 
+\layout Standard
+
+The 
+\family typewriter 
+retrieve_pdb_file
+\family default 
+ method also has some options to specify the compression format used for
+ the download, and the program used for local decompression (default 
+\family typewriter 
+.Z
+\family default 
+ format and 
+\family typewriter 
+gunzip
+\family default 
+).
+ In addition, the PDB ftp site can be specified upon creation of the 
+\family typewriter 
+PDBList
+\family default 
+ object.
+ See the API documentation for more details.
+ Thanks again to Kristian Rother for donating this module.
+\layout Subsubsection*
+
+How do I keep a local copy of the PDB up-to-date?
+\layout Standard
+
+This can also be done using Kristian Rother's 
+\family typewriter 
+PDBList
+\family default 
+ object.
+ One simply creates a 
+\family typewriter 
+PDBList
+\family default 
+ object (specifying the directory where the local copy of the PDB is present)
+ and calls the 
+\family typewriter 
+update_pdb
+\family default 
+ method:
+\layout LyX-Code
+
+pl=PDBList(pdb='/data/pdb')
+\layout LyX-Code
+
+pl.update_pdb()
+\layout Standard
+
+One can of course make a weekly 
+\family typewriter 
+cronjob 
+\family default 
+out of this to keep the local copy automatically up-to-date.
+ The PDB ftp site can also be specified (see API documentation).
+\layout Standard
+
+
+\family typewriter 
+PDBList
+\family default 
+ has some additional methods that can be of use.
+ The 
+\family typewriter 
+get_all_obsolete
+\family default 
+ method can be used to get a list of all obsolete PDB entries.
+ The 
+\family typewriter 
+changed_this_week
+\family default 
+ method can be used to obtain the entries that were added, modified or obsoleted
+ during the current week.
+ For more info on the possibilities of 
+\family typewriter 
+PDBList
+\family default 
+, see the API documentation.
+\layout Subsubsection*
+
+What about all those buggy PDB files?
+\layout Standard
+
+It is well known that many PDB files contain semantic errors (I'm not talking
+ about the structures themselves know, but their representation in PDB files).
+ Bio.PDB tries to handle this in two ways.
+ The PDBParser object can behave in two ways: a restrictive way and a permissive
+ way (THIS IS NOW THE DEFAULT).
+ The restrictive way used to be the default, but people seemed to think
+ that Bio.PDB 'crashed' due to a bug, so I changed it.
+ If you ever encounter a real (!) bug, please tell me immediately!
+\layout Standard
+
+In the permissive state (DEFAULT), PDB files that obviously contain errors
+ are 'corrected' (ie.
+ some residues or atoms are left out).
+ These errors include:
+\layout Itemize
+
+Multiple residues with the same identifier
+\layout Itemize
+
+Multiple atoms with the same identifier (taking into account the altloc
+ identifier)
+\layout Standard
+
+These errors often indicate real problems in the PDB file (for details see
+ the Bioinformatics article).
+ 
+\layout Standard
+
+In the restrictive state, PDB files with errors cause an exception to occur.
+ This is good to find errors in PDB files.
+\layout Subsubsection*
+
+Can I write PDB files?
+\layout Standard
+
+Use the PDBIO class for this.
+ It's easy to write out specific parts of a structure too, of course.
+\layout Standard
+
+Example: saving a structure
+\layout LyX-Code
+
+io=PDBIO()
+\layout LyX-Code
+
+io.set_structure(s)
+\layout LyX-Code
+
+io.save("out.pdb")
+\layout Standard
+
+If you want to write out a part of the structure, make use of the 
+\family typewriter 
+Select 
+\family default 
+class (also in 
+\family typewriter 
+PDBIO
+\family default 
+).
+ Select has four methods:
+\layout LyX-Code
+
+accept_model(model)
+\layout LyX-Code
+
+accept_chain(chain)
+\layout LyX-Code
+
+accept_residue(residue)
+\layout LyX-Code
+
+accept_atom(atom)
+\layout Standard
+
+By default, every method returns 1 (which means the model/\SpecialChar \-
+chain/\SpecialChar \-
+residue/\SpecialChar \-
+atom
+ is included in the output).
+ By subclassing Select and returning 0 when appropriate you can exclude
+ models, chains, etc.
+ from the output.
+ Cumbersome maybe, but very powerful.
+ The following code only writes out glycine residues:
+\layout LyX-Code
+
+class GlySelect(Select):
+\layout LyX-Code
+
+    def accept_residue(self, residue):
+\layout LyX-Code
+
+        if residue.get_name()=='GLY':
+\layout LyX-Code
+
+            return 1
+\layout LyX-Code
+
+        else:
+\layout LyX-Code
+
+            return 0
+\layout LyX-Code
+
+\layout LyX-Code
+
+io=PDBIO()
+\layout LyX-Code
+
+io.set_structure(s)
+\layout LyX-Code
+
+io.save("out.pdb", GlySelect())
+\layout LyX-Code
+
+\layout Subsubsection*
+
+Can I write mmCIF files?
+\layout Standard
+
+No, and I also don't have plans to add that functionality soon (or ever
+ - I don't need it at all, and it's a lot of work, plus no-one has ever
+ asked for it).
+ People who want to add this can contact me.
+\layout Subsection
+
+The Structure object
+\begin_inset LatexCommand \label{sub:The-Structure-object}
+
+\end_inset 
+
+
+\layout Subsubsection*
+
+What's the overall layout of a Structure object?
+\layout Standard
+
+The 
+\family typewriter 
+Structure
+\family default 
+ object follows the so-called 
+\family typewriter 
+SMCRA
+\family default 
+ architecture: 
+\layout Itemize
+
+A structure consists of models
+\layout Itemize
+
+A model consists of chains
+\layout Itemize
+
+A chain consists of residues
+\layout Itemize
+
+A residue consists of atoms
+\layout Standard
+
+This is the way many structural biologists/bioinformaticians think about
+ structure, and provides a simple but complete way to deal with structure.
+ Additional stuff is essentially added when needed.
+ A UML diagram of the 
+\family typewriter 
+Structure
+\family default 
+ object (forget about the Disordered classes for now) is shown in Fig.
+ 
+\begin_inset LatexCommand \ref{cap:SMCRA}
+
+\end_inset 
+
+.
+\layout Standard
+
+
+\begin_inset Float figure
+placement tbh
+wide false
+collapsed false
+
+\layout Standard
+\align center 
+
+\begin_inset Graphics
+	filename /home/thamelry/Documents/biopython_manual/smcra.eps
+	lyxscale 50
+	width 100mm
+	keepAspectRatio
+
+\end_inset 
+
+
+\layout Caption
+
+
+\begin_inset LatexCommand \label{cap:SMCRA}
+
+\end_inset 
+
+UML diagram of SMCRA architecture of the 
+\family typewriter 
+Structure 
+\family default 
+object.
+ Diamonds denote aggregation, arrows denote reference, lines with arrows
+ denote inheritance and dotted lines denote interface realization.
+ 
+\end_inset 
+
+
+\layout Subsubsection*
+
+How do I iterate through a Structure object?
+\layout Standard
+
+The following code iterates through all atoms of a structure:
+\layout LyX-Code
+
+p=PDBParser()
+\layout LyX-Code
+
+s=p.get_structure('X', 'pdb1fat.ent')
+\layout LyX-Code
+
+for model in structure.get_iterator():
+\layout LyX-Code
+
+  for chain in model.get_iterator(): 
+\layout LyX-Code
+
+    for residue in chain.get_iterator():
+\layout LyX-Code
+
+      for atom in residue.get_iterator():
+\layout LyX-Code
+
+        print atom
+\layout Standard
+
+Structures, models, chains, residues and atoms are called 
+\family typewriter 
+Entities
+\family default 
+ in Biopython.
+ You can always get a parent 
+\family typewriter 
+Entity
+\family default 
+ from a child entity, eg:
+\layout LyX-Code
+
+residue=atom.get_parent()
+\layout Subsubsection*
+
+Can I do that a bit faster?
+\layout Standard
+
+You can use the 
+\family typewriter 
+Selection.unfold_entities
+\family default 
+ function:
+\layout LyX-Code
+
+# Get all residues from a structure
+\layout LyX-Code
+
+res_list=Selection.unfold_entities(structure, 'R')
+\layout LyX-Code
+
+# Get all atoms from a chain
+\layout LyX-Code
+
+atom_list=Selection.unfold_entities(chain, 'A')
+\layout Standard
+
+You can also use this to get a list of 
+\family typewriter 
+Residue
+\family default 
+ parents from a list of 
+\family typewriter 
+Atoms
+\family default 
+:
+\layout LyX-Code
+
+residue_list=Selection.unfold_entities(atom_list, 'R')
+\layout Standard
+
+For more info, see the API documentation.
+\layout Subsubsection*
+
+How do I extract a specific Atom/Residue/Chain/Model from a Structure?
+\layout Standard
+
+Easy.
+ Here are some examples:
+\layout LyX-Code
+
+atom=residue['CA']
+\layout LyX-Code
+
+residue=chain[100]
+\layout LyX-Code
+
+chain=model['A']
+\layout LyX-Code
+
+model=structure[0]
+\layout Standard
+
+Note that you can use shortcuts:
+\layout LyX-Code
+
+atom=structure[0]['A'][100]['CA']
+\layout Subsubsection*
+
+What is a model id?
+\layout Standard
+
+The model id is an integer which denotes the rank of the model in the PDB/mmCIF
+ file.
+ The model is starts at 0.
+ Crystal structures generally have only one model (with id 0), while NMR
+ files usually have several models.
+\layout Subsubsection*
+
+What is a chain id?
+\layout Standard
+
+The chain id is specified in the PDB/mmCIF file, and is a single character
+ (typically a letter).
+ 
+\layout Subsubsection*
+
+What is a residue id?
+\begin_inset LatexCommand \ref{residue id}
+
+\end_inset 
+
+
+\layout Standard
+
+This is a bit more complicated, due to the clumsy PDB format.
+ A residue id is a tuple with three elements:
+\layout Itemize
+
+The hetero-flag: this is
+\family typewriter 
+ 'H_'
+\family default 
+ plus the name of the hetero-residue (eg.
+
+\family typewriter 
+ 'H_GLC'
+\family default 
+ in the case of a glucose molecule), or 
+\family typewriter 
+'W'
+\family default 
+ in the case of a water molecule.
+\layout Itemize
+
+The sequence identifier in the chain, eg.
+ 100
+\layout Itemize
+
+The insertion code, eg, 'A'
+\layout Standard
+
+The id of the above glucose residue would thus be ('H_GLC', 100, 'A').
+ If the hetero-flag and insertion code are blanc, the sequence identifier
+ alone can be used:
+\layout LyX-Code
+
+# Full id
+\layout LyX-Code
+
+residue=chain[(' ', 100, ' ')]
+\layout LyX-Code
+
+# Shortcut id
+\layout LyX-Code
+
+residue=chain[100]
+\layout Standard
+
+The reason for the hetero-flag is that many, many PDB files use the same
+ sequence identifier for an amino acid and a hetero-residue or a water,
+ which would create obvious problems.
+ The insertion code is eg.
+ used to preserve sequence numbering among point mutants.
+\layout Standard
+
+The name of the residue can be obtained with the 
+\family typewriter 
+get_resname
+\family default 
+ method.
+\layout Subsubsection*
+
+What is an atom id?
+\layout Standard
+
+The atom id is simply the atom name (eg.
+ 
+\family typewriter 
+'CA'
+\family default 
+).
+ In practice, the atom name is created by stripping all spaces from the
+ atom name in the PDB file.
+ 
+\layout Standard
+
+However, in PDB files, a space can be part of an atom name.
+ Often, calcium atoms are called 
+\family typewriter 
+'CA..'
+\family default 
+ in order to distinguish them from C
+\begin_inset Formula $\alpha$
+\end_inset 
+
+ atoms (which are called 
+\family typewriter 
+'.CA.'
+\family default 
+).
+ In cases were stripping the spaces would create problems (ie.
+ two atoms called
+\family typewriter 
+ 'CA'
+\family default 
+ in the same residue) the spaces are kept.
+\layout Subsubsection*
+
+How is disorder handled?
+\layout Standard
+
+This is one of the strong points of Bio.PDB.
+ It can handle both disordered atoms and point mutations (ie.
+ a Gly and an Ala residue in the same position).
+ 
+\layout Standard
+
+Disorder should be dealt with from two points of view: the atom and the
+ residue points of view.
+ In general, I have tried to encapsulate all the complexity that arises
+ from disorder.
+ If you just want to loop over all C
+\begin_inset Formula $\alpha$
+\end_inset 
+
+ atoms, you do not care that some residues have a disordered side chain.
+ On the other hand it should also be possible to represent disorder completely
+ in the data structure.
+ Therefore, disordered atoms or residues are stored in special objects that
+ behave as if there is no disorder.
+ This is done by only representing a subset of the disordered atoms or residues.
+ Which subset is picked (e.g.
+ which of the two disordered OG side chain atom positions of a Ser residue
+ is used) can be specified by the user.
+\layout Standard
+
+
+\series bold 
+Disordered atoms
+\series default 
+ are represented by ordinary 
+\family typewriter 
+Atom
+\family default 
+ objects, but all 
+\family typewriter 
+Atom
+\family default 
+ objects that represent the same physical atom are stored in a 
+\family typewriter 
+DisorderedAtom
+\family default 
+ object.
+ Each 
+\family typewriter 
+Atom
+\family default 
+ object in a 
+\family typewriter 
+DisorderedAtom
+\family default 
+ object can be uniquely indexed using its altloc specifier.
+ The 
+\family typewriter 
+DisorderedAtom
+\family default 
+ object forwards all uncaught method calls to the selected Atom object,
+ by default the one that represents the atom with with the highest occupancy.
+ The user can of course change the selected 
+\family typewriter 
+Atom 
+\family default 
+object, making use of its altloc specifier.
+ In this way atom disorder is represented correctly without much additional
+ complexity.
+ In other words, if you are not interested in atom disorder, you will not
+ be bothered by it.
+\layout Standard
+
+Each disordered atom has a characteristic altloc identifier.
+ You can specify that a 
+\family typewriter 
+DisorderedAtom
+\family default 
+ object should behave like the 
+\family typewriter 
+Atom
+\family default 
+ object associated with a specific altloc identifier:
+\layout LyX-Code
+
+atom.disordered_select("A") # select altloc A atom
+\layout LyX-Code
+
+atom.disordered_select("B") # select altloc B atom 
+\layout Standard
+
+A special case arises when disorder is due to 
+\series bold 
+point mutation
+\series default 
+s, i.e.
+ when two or more point mutants of a polypeptide are present in the crystal.
+ An example of this can be found in PDB structure 1EN2.
+\layout Standard
+
+Since these residues belong to a different residue type (e.g.
+ let's say Ser 60 and Cys 60) they should not be stored in a single Residue
+ object as in the common case.
+ In this case, each residue is represented by one Residue object, and both
+ Residue objects are stored in a DisorderedResidue object.
+\layout Standard
+
+The DisorderedResidue object forwards all uncaught methods to the selected
+ Residue object (by default the last Residue object added), and thus behaves
+ like an ordinary residue.
+ Each Residue object in a DisorderedResidue object can be uniquely identified
+ by its residue name.
+ In the above example, residue Ser 60 would have id "SER" in the DisorderedResid
+ue object, while residue Cys 60 would have id "CYS".
+ The user can select the active Residue object in a DisorderedResidue object
+ via this id.
+\layout Standard
+
+Example: suppose that a chain has a point mutation at position 10, consisting
+ of a Ser and a Cys residue.
+ Make sure that residue 10 of this chain behaves as the Cys residue.
+\layout LyX-Code
+
+residue=chain[10]
+\layout LyX-Code
+
+residue.disordered_select("CYS")
+\layout Subsubsection*
+
+Can I sort residues in a chain somehow?
+\layout Standard
+
+Yes.
+ More info soon.
+\layout Subsubsection*
+
+How are ligands and solvent handled?
+\layout Standard
+
+See 'What is a residue id?'.
+\layout Subsubsection*
+
+What about B factors?
+\layout Standard
+
+Well, yes! Bio.PDB supports isotropic and anisotropic B factors, and also
+ deals with standard deviations of anisotropic B factor if present.
+\layout Subsubsection*
+
+What about standard deviation of atomic positions?
+\layout Standard
+
+Yup, supported.
+\layout Subsubsection*
+
+I think the SMCRA data structure is not flexible/\SpecialChar \-
+molecular/\SpecialChar \-
+sexy/\SpecialChar \-
+whatever
+ enough...
+\layout Standard
+
+Sure, sure.
+ Everybody is always coming up with data structures that handle all possible
+ situations and are extensible in all thinkable (and unthinkable) ways.
+ The prozaic truth however is that 99.9% of people using (and I mean really
+ using!) crystal structures think in terms of models, chains, residues and
+ atoms.
+ The philosophy of Bio.PDB is to provide a reasonably fast, clean, simple,
+ but complete data structure to access structure data.
+ 
+\layout Standard
+
+Moreover, it is quite easy to build more specialised data structures on
+ top of the 
+\family typewriter 
+Structure
+\family default 
+ class.
+ On the other hand, the Structure object is built using a Parser/Consumer
+ approach (called 
+\family typewriter 
+PDBParser/\SpecialChar \-
+MMCIFParser
+\family default 
+ and 
+\family typewriter 
+Structure\SpecialChar \-
+Builder
+\family default 
+, respectively).
+ One can easily re-use the PDB/mmCIF parsers by implementing a specialised
+ 
+\family typewriter 
+Structure\SpecialChar \-
+Builder
+\family default 
+ class.
+ It is of course also trivial to add support for new file formats by writing
+ new parsers.
+\layout Subsection
+
+Analysis
+\layout Subsubsection*
+
+How do I extract information from an Atom object?
+\layout Standard
+
+Using the following methods:
+\layout LyX-Code
+
+a.get_name() # atom name (spaces stripped, e.g.
+ 'CA') a.get_id() # id (equals atom name) 
+\layout LyX-Code
+
+a.get_coord() # atomic coordinates 
+\layout LyX-Code
+
+a.get_bfactor() # B factor 
+\layout LyX-Code
+
+a.get_occupancy() # occupancy 
+\layout LyX-Code
+
+a.get_altloc() # alternative location specifie a.get_sigatm() # std.
+ dev.
+ of atomic parameters a.get_siguij() # std.
+ dev.
+ of anisotropic B factor a.get_anisou() # anisotropic B factor 
+\layout LyX-Code
+
+a.get_fullname() # atom name (with spaces, e.g.
+ '.CA.')
+\layout Subsubsection*
+
+How do I measure distances?
+\layout Standard
+
+That's simple: the minus operator for atoms has been overloaded to return
+ the distance between two atoms.
+ 
+\layout Standard
+
+Example:
+\layout LyX-Code
+
+# Get some atoms
+\layout LyX-Code
+
+ca1=residue1['CA']
+\layout LyX-Code
+
+ca2=residue2['CA']
+\layout LyX-Code
+
+# Simply substract the atoms to get their distance
+\layout LyX-Code
+
+distance=ca1-ca2
+\layout Subsubsection*
+
+How do I measure angles?
+\layout Standard
+
+This can easily be done via the vector representation of the atomic coordinates,
+ and the 
+\family typewriter 
+calc_angle
+\family default 
+ function from the 
+\family typewriter 
+Vector
+\family default 
+ module:
+\layout LyX-Code
+
+vector1=atom1.get_vector()
+\layout LyX-Code
+
+vector2=atom2.get_vector()
+\layout LyX-Code
+
+vector3=atom3.get_vector()
+\layout LyX-Code
+
+angle=calc_angle(vector1, vector2, vector3)
+\layout Subsubsection*
+
+How do I measure torsion angles?
+\layout Standard
+
+Again, this can easily be done via the vector representation of the atomic
+ coordinates, this time using the 
+\family typewriter 
+calc_dihedral
+\family default 
+ function from the 
+\family typewriter 
+Vector
+\family default 
+ module:
+\layout LyX-Code
+
+vector1=atom1.get_vector()
+\layout LyX-Code
+
+vector2=atom2.get_vector()
+\layout LyX-Code
+
+vector3=atom3.get_vector()
+\layout LyX-Code
+
+vector4=atom4.get_vector()
+\layout LyX-Code
+
+angle=calc_dihedral(vector1, vector2, vector3, vector4)
+\layout Subsubsection*
+
+How do I determine atom-atom contacts?
+\layout Standard
+
+Use 
+\family typewriter 
+NeighborSearch
+\family default 
+.
+\layout Subsubsection*
+
+How do I extract polypeptides from a structure object?
+\layout Standard
+
+Use 
+\family typewriter 
+PolypeptideBuilder
+\family default 
+.
+\layout Subsubsection*
+
+How do I get the sequence of a structure?
+\layout Standard
+
+The first thing to do is to extract all polypeptides from the structure
+ (see previous entry).
+ The sequence of each polypeptide can then easily be obtained from the 
+\family typewriter 
+Polypeptide 
+\family default 
+objects.
+ The sequence is represented as a Biopython 
+\family typewriter 
+Seq 
+\family default 
+object, and its alphabet is defined by a 
+\family typewriter 
+ProteinAlphabet 
+\family default 
+object.
+\layout Standard
+
+Example:
+\layout LyX-Code
+
+>>> seq=polypeptide.get_sequence()
+\layout LyX-Code
+
+>>> print seq
+\layout LyX-Code
+
+Seq('SNVVAVE ...', <class Bio.Alphabet.ProteinAlphabet>)
+\layout Subsubsection*
+
+How do I determine secondary structure?
+\layout Standard
+
+For this functionality, you need to install DSSP (and obtain a license for
+ it - free for academic use).
+ Then use the 
+\family typewriter 
+DSSP
+\family default 
+ class.
+\layout Subsubsection*
+
+How do I calculate the solvent exposure of a residue?
+\layout Standard
+
+Use the 
+\family typewriter 
+DSSP 
+\family default 
+class.
+\layout Subsubsection*
+
+How do I calculate residue depth?
+\layout Standard
+
+For this functionality, you need to install Michel Sanner's MSMS program.
+ Then use the 
+\family typewriter 
+ResidueDepth
+\family default 
+ class.
+\layout Subsubsection*
+
+How do I put a virtual C
+\begin_inset Formula $\beta$
+\end_inset 
+
+ on a Gly residue?
+\layout Standard
+
+OK, I admit, this example is only present to show off the possibilities
+ of Bio.PDB's Vector module (though this code is actually used in the 
+\family typewriter 
+Exposure
+\family default 
+ module).
+ Suppose that you would like to find the position of a Gly residue's C
+\begin_inset Formula $\beta$
+\end_inset 
+
+ atom, if it had one.
+ How would you do that? Well, rotating the N atom of the Gly residue along
+ the C
+\begin_inset Formula $\alpha$
+\end_inset 
+
+-C bond over -120 degrees would roughly put it in the position of a C
+\begin_inset Formula $\beta$
+\end_inset 
+
+ atom.
+ Here's how to do it, making use of the 
+\family typewriter 
+rotaxis
+\family default 
+ method (which can be used to construct a rotation around a certain axis)
+ of the 
+\family typewriter 
+Vector
+\family default 
+ module:
+\layout LyX-Code
+
+n=residue['N'].get_vector() 
+\layout LyX-Code
+
+c=residue['C'].get_vector() 
+\layout LyX-Code
+
+ca=residue['CA'].get_vector()
+\layout LyX-Code
+
+# center at origin
+\layout LyX-Code
+
+n=n-ca 
+\layout LyX-Code
+
+c=c-ca 
+\layout LyX-Code
+
+# find rotation matrix that rotates -120 degrees
+\layout LyX-Code
+
+# along the ca-c vector
+\layout LyX-Code
+
+rot=rotaxis(-pi*120.0/180.0, c)
+\layout LyX-Code
+
+# apply rotation to ca-n vector
+\layout LyX-Code
+
+cb=n.left_multiply(rot)
+\layout LyX-Code
+
+# put on top of ca atom
+\layout LyX-Code
+
+cb=cb+ca
+\layout Standard
+
+This example shows that it's possible to do some quite nontrivial vector
+ operations on atomic data, which can be quite useful.
+ In addition to all the usual vector operations (cross and dot product,
+ angle, norm, etc.) and the above mentioned 
+\family typewriter 
+rotaxis
+\family default 
+ function, the 
+\family typewriter 
+Vector
+\family default 
+ module also has methods to rotate (
+\family typewriter 
+rotmat
+\family default 
+) or reflect (
+\family typewriter 
+refmat
+\family default 
+) one vector on top of another.
+\layout Subsection
+
+Manipulating the structure
+\layout Subsubsection*
+
+How do I superimpose two structures?
+\layout Standard
+
+Surprisingly, this is done using the 
+\family typewriter 
+Superimposer
+\family default 
+ object.
+ This object calculates the rotation and translation matrix that rotates
+ two lists of atoms on top of each other in such a way that their RMSD is
+ minimized.
+ Of course, the two lists need to contain the same amount of atoms.
+ The 
+\family typewriter 
+Superimposer
+\family default 
+ object can also apply the rotation/translation to a list of atoms.
+ The rotation and translation are stored as a tuple in the 
+\family typewriter 
+rotran
+\family default 
+ attribute of the 
+\family typewriter 
+Superimposer
+\family default 
+ object (note that the rotation is right multiplying!).
+ The RMSD is stored in the 
+\family typewriter 
+rmsd
+\family default 
+ attribute.
+\layout Standard
+
+The algorithm used by 
+\family typewriter 
+Superimposer
+\family default 
+ comes from 
+\shape italic 
+Matrix computations, 2nd ed.
+ Golub, G.
+ & Van Loan (1989)
+\shape default 
+, and makes use of singular value decomposition (as implemented in the general
+ 
+\family typewriter 
+Bio.\SpecialChar \-
+SVDSuperimposer
+\family default 
+ module).
+\layout Standard
+
+Example:
+\layout LyX-Code
+
+sup=Superimposer()
+\layout LyX-Code
+
+# Specify the atom lists
+\layout LyX-Code
+
+# 'fixed' and 'moving' are lists of Atom objects
+\layout LyX-Code
+
+# The moving atoms will be put on the fixed atoms
+\layout LyX-Code
+
+sup.set_atoms(fixed, moving)
+\layout LyX-Code
+
+# Print rotation/translation/rmsd
+\layout LyX-Code
+
+print sup.rotran
+\layout LyX-Code
+
+print sup.rms 
+\layout LyX-Code
+
+# Apply rotation/translation to the moving atoms
+\layout LyX-Code
+
+sup.apply(moving)
+\layout Subsubsection*
+
+How do I superimpose two structures based on their active sites?
+\layout Standard
+
+Pretty easily.
+ Use the active site atoms to calculate the rotation/translation matrices
+ (see above), and apply them to the whole molecule.
+\layout Subsubsection*
+
+Can I manipulate the atomic coordinates?
+\layout Standard
+
+Yes, using the 
+\family typewriter 
+transform
+\family default 
+ method of the Atom object, or directly using the 
+\family typewriter 
+set_coord
+\family default 
+ method.
+\layout Subsection
+
+You haven't answered my question yet!
+\layout Standard
+
+It's late and I'm tired, and a fresh beer is waiting for me in the fridge.
+ Just drop me a mail, and I'll answer you in the morning (with a bit of
+ luck...).
+\layout Section
+
+Contributors
+\layout Standard
+
+The main author/maintainer of Bio.PDB is yours truly.
+ Kristian Rother donated code to interact with the PDB database, and to
+ parse the PDB header.
+ Indraneel Majumdar sent in some bug reports and assisted in coding the
+ 
+\family typewriter 
+Polypeptide 
+\family default 
+module.
+ Many, many thanks to Brad Chapman, Jeffrey Chang, Andrew Dalke and Iddo
+ Friedberg for suggestions, comments and/or general support.
+\layout Section
+
+Can I contribute?
+\layout Standard
+
+Yes, yes, yes! Just send me an e-mail (thamelry@binf.ku.dk) if you have something
+ useful to contribute! 
+\the_end
