@@ -62,3 +62,36 @@ for id, obj in Translate.unambiguous_rna_by_id.items():
     if id == 1:
         set_prop[obj.table.nucleotide_alphabet.__class__]["translator"] = obj
         set_prop[obj.table.protein_alphabet.__class__]["rna_translator"] = obj
+
+# ambiguous translator objects
+for name, obj in Translate.ambiguous_dna_by_name.items():
+    property = "translator.name." + name
+    set_prop[obj.table.nucleotide_alphabet.__class__][property] = obj
+    property = "ambiguous_translator.name." + name
+    set_prop[obj.table.protein_alphabet.__class__][property] = obj
+
+for name, obj in Translate.ambiguous_rna_by_name.items():
+    property = "translator.name." + name
+    set_prop[obj.table.nucleotide_alphabet.__class__][property] = obj
+    property = "ambiguous_rna_translator.name." + name
+    set_prop[obj.table.protein_alphabet.__class__][property] = obj
+
+
+for id, obj in Translate.ambiguous_dna_by_id.items():
+    property = "translator.id.%d" % id
+    set_prop[obj.table.nucleotide_alphabet.__class__][property] = obj
+    property = "ambiguous_translator.id.%d" % id
+    set_prop[obj.table.protein_alphabet.__class__][property] = obj
+    if id == 1:
+        set_prop[obj.table.nucleotide_alphabet.__class__]["translator"] = obj
+        set_prop[obj.table.protein_alphabet.__class__]["ambiguous_translator"] = obj
+
+
+for id, obj in Translate.ambiguous_rna_by_id.items():
+    property = "translator.id.%d" % id
+    set_prop[obj.table.nucleotide_alphabet.__class__][property] = obj
+    property = "ambiguous_rna_translator.id.%d" % id
+    set_prop[obj.table.protein_alphabet.__class__][property] = obj
+    if id == 1:
+        set_prop[obj.table.nucleotide_alphabet.__class__]["translator"] = obj
+        set_prop[obj.table.protein_alphabet.__class__]["ambiguous_rna_translator"] = obj
