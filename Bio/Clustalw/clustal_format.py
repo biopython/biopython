@@ -51,7 +51,7 @@ seq_line = Martel.Group("seq_line", seq_id + seq_space + seq_info +
                         Martel.Str("\n"))
 
 match_stars = Martel.Group("match_stars",
-                           Martel.Re("[ \*]+") +
+                           Martel.Re("[ :\.\*]+") +
                            Martel.Opt(Martel.Str("\n")))
 
 # separator between blocks
