@@ -216,6 +216,19 @@ class Annotation:
         if f is None:
             raise AttributeError(name)
         return f()
+    
+    # functions to make this more like a dictionary
+    def __getitem__(self, key):
+        if key in ["comments", "dblinks", "references"]:
+            return getattr(self, key)
+        else:
+            raise KeyError("Unexpected item: %s")
+
+    def has_key(self, key):
+        if key in ["comments", "dblinks", "references"]:
+            return 1
+        else:
+            return 0
 
     def _get_comments(self):
         comments = self.adaptor.execute_and_fetch_col0(
