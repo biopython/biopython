@@ -1,12 +1,28 @@
+
+# Permission to use, copy, modify, and distribute this software and
+# its documentation with or without modifications and for any purpose
+# and without fee is hereby granted, provided that any copyright
+# notices appear in all copies and that both those copyright notices
+# and this permission notice appear in supporting documentation, and
+# that the names of the contributors or copyright holders not be used
+# in advertising or publicity pertaining to distribution of the software
+# without specific prior permission.
+#
+# THE CONTRIBUTORS AND COPYRIGHT HOLDERS OF THIS SOFTWARE DISCLAIM ALL
+# WARRANTIES WITH REGARD TO THIS SOFTWARE, INCLUDING ALL IMPLIED
+# WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT SHALL THE
+# CONTRIBUTORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY SPECIAL, INDIRECT
+# OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+# LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT,
+# NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION
+# WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
 import string
 import operator
 import urllib
 import sgmllib
 import UserDict
 import Bio.File
-import Martel
-from mx import TextTools
-import unigene_format
 
 
 
@@ -43,9 +59,10 @@ class UniGeneParser( sgmllib.SGMLParser ):
         text = ''
         while 1:
             line = uhandle.readline()
-            if( string.strip( line ) == '' ):
+            line = string.strip( line )
+            if( line == '' ):
                 break
-            text = text + line
+            text = text + ' ' + line
 
         sgmllib.SGMLParser.feed( self, text )
 
@@ -195,12 +212,10 @@ class UniGeneParser( sgmllib.SGMLParser ):
 
 
 if( __name__ == '__main__' ):
-#    handle = urllib.urlopen( 'http://www.ncbi.nlm.nih.gov/UniGene/clust.cgi?ORG=Mm&CID=28919&OPT=text')
     handle = open( 'Hs13225.htm')
     undo_handle = Bio.File.UndoHandle( handle )
     unigene_parser = UniGeneParser()
     unigene_parser.parse( handle )
     unigene_parser.print_tags()
-#    unigene_parser.print_data()
 
 
