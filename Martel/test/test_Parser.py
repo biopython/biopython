@@ -54,7 +54,7 @@ def test_record_parser():
     record = Martel.Group("A", Martel.Str("X\n") + Martel.Re("a*\n"))
     p = record.make_parser()
 
-    parser = Parser.RecordParser("blah", p.tagtable, (0, 1, {}),
+    parser = Parser.RecordParser("blah", {}, p.tagtable, (0, 1, {}),
                                  RecordReader.StartsWith, ("X",))
 
     err = CountErrors()
@@ -105,7 +105,7 @@ XX
     footer = footer.make_parser(debug_level = debug_level)
 
     hf = Parser.HeaderFooterParser(
-        "hf",
+        "hf", {},
         RecordReader.EndsWith, ("XX\n", ), header.tagtable,
         RecordReader.EndsWith, ("//\n", ), record.tagtable,
         RecordReader.StartsWith, ("f", ), footer.tagtable,
@@ -149,7 +149,7 @@ This is some more data
     record = record.make_parser()
 
     hf = Parser.HeaderFooterParser(
-        "hf",
+        "hf", {},
         RecordReader.Until, ("ID", ), header.tagtable,
         RecordReader.StartsWith, ("ID", ), record.tagtable,
         RecordReader.Nothing, (), (),
@@ -194,7 +194,7 @@ This is some more data
     footer = footer.make_parser()
 
     hf = Parser.HeaderFooterParser(
-        "hf",
+        "hf", {},
         RecordReader.Nothing, (), (),
         RecordReader.EndsWith, ("//\n", ), record.tagtable,
         RecordReader.Everything, (), footer.tagtable,
@@ -237,7 +237,7 @@ This is some more data
     record = record.make_parser()
 
     hf = Parser.HeaderFooterParser(
-        "hf",
+        "hf", {},
         RecordReader.Until, ("ID", ), header.tagtable,
         RecordReader.StartsWith, ("ID", ), record.tagtable,
         None, (), (),
@@ -277,7 +277,7 @@ Or not to be
     record = record.make_parser()
 
     hf = Parser.HeaderFooterParser(
-        "hf",
+        "hf", {},
         RecordReader.Until, ("ID", ), header.tagtable,
         RecordReader.StartsWith, ("ID", ), record.tagtable,
         None, (), (),
@@ -329,7 +329,7 @@ FOOTER
     footer = footer.make_parser()
 
     hf = Parser.HeaderFooterParser(
-        "hf",
+        "hf", {},
         RecordReader.Until, ("ID", ), header.tagtable,
         RecordReader.EndsWith, ("//", ), record.tagtable,
         RecordReader.StartsWith, ("FOOTER", ), footer.tagtable,
@@ -360,7 +360,7 @@ FOOTER
     footer = footer.make_parser()
 
     hf = Parser.HeaderFooterParser(
-        "hf",
+        "hf", {},
         RecordReader.CountLines, (2, ), header.tagtable,
         RecordReader.EndsWith, ("//", ), record.tagtable,
         RecordReader.StartsWith, ("FOOTER", ), footer.tagtable,
@@ -425,7 +425,7 @@ FOOTER Abc
     footer = footer.make_parser()
 
     hf = Parser.HeaderFooterParser(
-        "hf",
+        "hf", {},
         RecordReader.CountLines, (2, ), header.tagtable,
         RecordReader.CountLines, (1, ), record.tagtable,
         RecordReader.CountLines, (1, ), footer.tagtable,

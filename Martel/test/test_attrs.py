@@ -99,7 +99,7 @@ def test_record_parser():
     format = Martel.Re("(?P<term?field=first>...)"
                        "(?P<term?field=second>...)"
                        "(?P<last>.)\R")
-    format = Martel.ParseRecords("all", format,
+    format = Martel.ParseRecords("all", {"author": "guido"}, format,
                                  RecordReader.CountLines, (1,) )
     parser = format.make_parser()
     grab = GrabElements()
@@ -107,7 +107,7 @@ def test_record_parser():
     parser.parseString("aaabbbZ\ncccdddZ\n")
     elements = grab.elements
     assert len(elements) == 7
-    check_element(elements[0], ("all", {}))
+    check_element(elements[0], ("all", {"author": "guido"}))
     check_element(elements[1], ("term", {"field": "first"}))
     check_element(elements[2], ("term", {"field": "second"}))
     check_element(elements[3], ("last", {}))
@@ -125,7 +125,7 @@ def test_header_footer_parser():
     footer_format = Martel.Re("(?P<term?pos=footer>c+)\R")
 
     format = Martel.HeaderFooter(
-        "all",
+        "all", {"state": "New Mexico"},
         header_format, RecordReader.CountLines, (1,),
         record_format, RecordReader.CountLines, (1,),
         footer_format, RecordReader.CountLines, (1,),
@@ -137,7 +137,7 @@ def test_header_footer_parser():
     parser.parseString("a\nbb\nbb\nccc\n")
     elements = grab.elements
     assert len(elements) == 5, len(elements)
-    check_element(elements[0], ("all", {}))
+    check_element(elements[0], ("all", {"state": "New Mexico"}))
     check_element(elements[1], ("term", {"pos": "header"}))
     check_element(elements[2], ("term", {"pos": "body"}))
     check_element(elements[3], ("term", {"pos": "body"}))

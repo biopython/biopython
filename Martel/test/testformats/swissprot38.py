@@ -279,5 +279,5 @@ record = Martel.Group("swissprot38_record", \
 
 format_expression = Martel.Group("swissprot38", Martel.Rep1(record))
 
-format = Martel.ParseRecords("swissprot38", record,
+format = Martel.ParseRecords("swissprot38", {}, record,
                              RecordReader.EndsWith, ("//\n",) )

@@ -14,7 +14,7 @@ def delimiter(delim):
     line = field + Martel.Rep(Martel.Str(delim) + field) + Martel.AnyEol()
     record = Martel.Group("record", line)
 
-    format = Martel.ParseRecords("delimited", record,
+    format = Martel.ParseRecords("delimited", {}, record,
                                  RecordReader.CountLines, (1,))
     return format
 
