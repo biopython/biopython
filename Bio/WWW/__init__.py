@@ -1,11 +1,5 @@
-# This is a Python module
-
-__all__ = [
-    'ExPASy',
-    'NCBI',
-    'SCOP',
-    ]
-
+"""Deal with various biological databases and services on the web.
+"""
 import time
 
 class RequestLimiter:

@@ -7,15 +7,12 @@ from Martel import RecordReader
 from mx import TextTools
 from locus_format import locus_record
 
-"""
+"""Parser for NCBI's LocusLink, curated sequence and descriptive information 
+about genetic loci.
+
 The LocusLink site is:
 http://www.ncbi.nlm.nih.gov/LocusLink/
 """
-__all__ = [
-    'Record',
-    'locus_format'
-    'Iterator'
-    ]
 
 class Record( dict):
 
@@ -61,11 +58,6 @@ class Record( dict):
         else:
             out = out + '%s\n' % str( item )
         return out
-
-
-
-
-
 
 class Iterator:
     """Iterator interface to move over a file of LocusLink entries one at a time.
@@ -218,8 +210,6 @@ class _RecordConsumer( Dispatcher ):
             val.append( entry )
             self.data[ block_key ] = val
 
-
-
 class RecordParser:
     """Parse LocusLink files into Record objects
     """
@@ -240,8 +230,6 @@ class RecordParser:
         self._consumer = _RecordConsumer()
         self._scanner.feed(handle, self._consumer)
         return self._consumer.data
-
-
 
 if( __name__ == '__main__' ):
     handle = open( 'Hs13225.htm')

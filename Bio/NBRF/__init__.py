@@ -2,6 +2,10 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+"""Parser for the NBRF/PIR file format.
+
+http://www.psc.edu/general/software/packages/seq-intro/nbrffile.html
+"""
 
 # standard library
 import string
@@ -23,15 +27,6 @@ from Bio.ParserSupport import AbstractConsumer
 from Bio import File
 import nbrf_format
 import Record
-
-__all__ = [
-    'Record',
-    'nbrf_format'
-    'ValidSequenceTypes',
-    'Iterator'
-    ]
-
-
 
 class Iterator:
     """Iterator interface to move over a file of NBRF entries one at a time.
@@ -137,7 +132,6 @@ class _RecordConsumer:
         self._sequences.append("".join(parts))
         
         self.data.sequence.data = "".join(self._sequences)
-
 
 class RecordParser:
     """Parse NBRF files into Record objects

@@ -2,6 +2,10 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+"""Parser for files from NCBI's Gene Expression Omnibus (GEO).
+
+http://www.ncbi.nlm.nih.gov/geo/
+"""
 
 # standard library
 import string
@@ -27,11 +31,6 @@ from Bio.Align.Generic import Alignment
 import Bio.Alphabet
 import geo_format
 import Record
-
-__all__ = [
-    'Record',
-    'geo_format'
-    ]
 
 class Error( Exception ):
     """

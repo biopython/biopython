@@ -2,13 +2,12 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+"""Parser for output from MetaTool, a program which defines metabolic routes
+within networks.
 
-__all__ = [
-    'Record',
-    'metatool_format',
-    'RecordParser',
-    'Iterator'
-    ]
+http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&
+list_uids=10222413&dopt=Abstract
+"""
 
 # standard library
 import string
@@ -36,7 +35,6 @@ from Bio.SeqFeature import Reference
 from Bio import File
 import metatool_format
 import Record
-
 
 class Iterator:
     """Iterator interface to move over a file of MetaTool entries one at a time.
@@ -294,7 +292,6 @@ class _RecordConsumer:
             self.data.elementary_modes.enzymes.append( enzyme )
         for reaction in self._reactions:
             self.data.elementary_modes.reactions.append( reaction )
-
 
 class _Scanner:
     """Start up Martel to do the scanning of the file.

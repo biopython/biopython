@@ -1,8 +1,5 @@
-__all__ = [
-   'FreqTable',
-   'MatrixInfo'
-   ]
-
+"""Substitution matrices, log odds matrices, and operations on them.
+"""
 import re
 import string
 import sys

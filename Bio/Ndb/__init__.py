@@ -1,4 +1,3 @@
-
 # Copyright 2002 by Katharine Lindner.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -17,11 +16,6 @@ The algorithm is based on a state machine because the record has multiple
 sections and the handling of tags varies depending on the section.  
 Citations have their own state machine.
 """
-
-__all__ = [
-    'Record',
-    'NdbParser',
-    ]
 
 from types import *
 import string

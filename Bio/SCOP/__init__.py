@@ -3,7 +3,6 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-
 """ SCOP: Structural Classification of Proteins.
 
 The SCOP database aims to provide a manually constructed classification of
@@ -29,29 +28,12 @@ nodeCodeDict  -- A mapping between known 2 letter node codes and a longer
                   'sp' (species), 'px' (domain). Additional node types may
                   be added in the future.
 """
-
-
-__all__ = [
-    'Dom',
-    'Cla',
-    'Hie',
-    'Des',
-    'FileIndex',
-    'Residues',
-    'Raf',
-    'parse_domain',
-    'cmp_sccs',
-    'Scop'
-    ]
-
-
-
 from types import *
 
 import Des
 import Cla
 import Hie
-from Residues import * 
+from Residues import *
 
 
 nodeCodeDict = { 'cl':'class', 'cf':'fold', 'sf':'superfamily',

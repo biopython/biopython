@@ -2,6 +2,8 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+"""Deal with Conserved Domain Database (CDD) entries from NCBI.
+"""
 
 # standard library
 import string
@@ -28,14 +30,6 @@ from Bio.Seq import Seq
 from Martel.Dispatch import Dispatcher
 import cdd_format
 import Record
-
-__all__ = [
-    'Record',
-    'cdd_format'
-    'Iterator'
-    ]
-
-
 
 class Iterator:
     """Iterator interface to move over a file of CDD entries one at a time.

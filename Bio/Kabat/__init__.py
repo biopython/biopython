@@ -2,11 +2,10 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+"""Parser for the Kabat database of proteins of immunological interest.
 
-__all__ = [
-    'Record',
-    'kabat_format'
-    ]
+http://www.kabatdatabase.com/top.html
+"""
 
 # standard library
 import string
@@ -43,7 +42,6 @@ def remove_kabat_header_line( line ):
             return line[ : ]
     else:
         return line[ : ]
-
 
 class Iterator:
     """Iterator interface to move over a file of Kabat entries one at a time.
@@ -326,7 +324,6 @@ class _RecordConsumer( Dispatcher ):
                 val = self.data.annotation[ key ] + val
             self.data.annotation[ key ] = val
             self.pending_key = None
-
 
 class RecordParser:
     """Parse Kabat files into Record objects

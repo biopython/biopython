@@ -2,37 +2,15 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-
-"""Martel based parser to read NBRF formatted files.
-
-This is a huge regular regular expression for CDD, built using
-the 'regular expressiona on steroids' capabilities of Martel.
-
-
-http://www.ncbi.nlm.nih.gov/Structure/cdd/cdd.shtml
-
-
-Notes:
-Just so I remember -- the new end of line syntax is:
-  New regexp syntax - \R
-     \R    means "\n|\r\n?"
-     [\R]  means "[\n\r]"
-
-This helps us have endlines be consistent across platforms.
-
-"""
-# standard library
-import string
-
-
-from Bio.Seq import Seq
-
-
 """Hold CDD data in a straightforward format.
 
 classes:
 o Record - All of the information in a CDD record.
 """
+
+# standard library
+import string
+from Bio.Seq import Seq
 
 class Record( dict ):
     """Hold CDD information in a format similar to the original record.

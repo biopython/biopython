@@ -7,9 +7,8 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-
 """
-This module provides code to work with the prosite.dat file from
+This module provides code to work with the prosite dat file from
 Prosite.
 http://www.expasy.ch/prosite/
 
@@ -38,10 +37,6 @@ _extract_record       Extract Prosite data from a web page.
 _extract_pattern_hits Extract Prosite patterns from a web page.
 
 """
-__all__ = [
-    'Pattern',
-    'Prodoc',
-    ]
 from types import *
 import string
 import re

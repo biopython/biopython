@@ -37,11 +37,6 @@ ECell expects a spreadsheet exported in delimited text format. The file should b
 FilteredReader using the default filter chain to remove extraneous characters.
 """
 
-__all__ = [
-    'Record',
-    'ecell_format'
-    ]
-
 class Error( Exception ):
     """
     """

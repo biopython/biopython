@@ -1,6 +1,3 @@
 # This is a Python module
-
-__all__ = [
-    'CodonTable',
-    'IUPACData'
-    ]
+"""Collections of various bits of useful biological data.
+"""

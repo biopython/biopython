@@ -1,5 +1,2 @@
-# make files in this directory importable
-
-__all__ = [
-    'spark',
-    ]
+"""Third party and other parsers useful internally to Biopython.
+"""

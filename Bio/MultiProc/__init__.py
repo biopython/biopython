@@ -2,12 +2,8 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-
-__all__ = [
-    'Scheduler',
-    'Task',
-    'copen'
-    ]
+"""Code to schedule and run multiple processes.
+"""
 
 def run(nprocs, fn, fn_args=(), fn_keywds={},
         sleep=0.1, always_use_scheduler=0):

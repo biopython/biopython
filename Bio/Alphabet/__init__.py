@@ -1,10 +1,5 @@
 import string, re
 
-__all__ = [
-    'IUPAC',
-    'Reduced'
-    ]
-
 # This is used by sequences which contain a finite number of similar
 # words.
 

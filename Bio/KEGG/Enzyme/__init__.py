@@ -14,10 +14,7 @@ Parser               -- Parses KEGG Enzyme records into Record objects.
 
 _Scanner
 _Consumer
-
 """
-__all__ = ['enzyme_format']
-
 # XML from python
 from xml.sax import handler
 

@@ -13,12 +13,6 @@ Classes:
 Record             Holds interpro sequence data.
 InterProParser     Parses interpro sequence data into a Record object.
 """
-
-__all__ = [
-    'Record',
-    'InterProParser',
-    ]
-
 from types import *
 import string
 from Bio import File

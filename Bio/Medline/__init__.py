@@ -15,9 +15,6 @@ _Scanner         Scans a Medline record.
 _RecordConsumer  Consumes Medline data to a Record object.
 
 """
-
-__all__ = ['PubMed']
-
 from types import *
 
 from Bio import File

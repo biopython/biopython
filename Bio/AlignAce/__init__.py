@@ -2,7 +2,8 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+"""Parser and code for dealing with the standalone version of AlignAce, a
+motif search program.
 
-__all__ = [
-    'AlignAceStandalone',
-    ]
+http://atlas.med.harvard.edu/
+"""

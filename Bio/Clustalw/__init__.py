@@ -20,10 +20,6 @@ o ClustalAlignment
 o _AlignCreator
 o MultipleAlignCL"""
 
-__all__ = [
-    'clustal_format',
-    ]
-
 # standard library
 import os
 import string

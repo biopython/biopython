@@ -34,11 +34,6 @@ search_for            Do a query against GenBank.
 download_many         Download many GenBank records.
 
 """
-__all__ = [
-    'LocationParser',
-    'Record',
-    ]
-
 import cStringIO
 import warnings
 

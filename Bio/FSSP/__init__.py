@@ -1,4 +1,3 @@
-__all__ = ['fssp_rec','FSSPTools']
 import string
 import re
 import fssp_rec

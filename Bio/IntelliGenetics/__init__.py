@@ -2,11 +2,10 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+"""Parser for the MASE/Intelligenetics alignment file format.
 
-__all__ = [
-    'Record',
-    'intelligenetics_format'
-    ]
+http://pbil.univ-lyon1.fr/help/formats.html
+"""
 
 # standard library
 import string
@@ -61,7 +60,6 @@ class Iterator:
     
     def __iter__(self):
         return iter(self.next, None)
-
 
 class _Scanner:
     """Start up Martel to do the scanning of the file.
@@ -119,7 +117,6 @@ class _RecordConsumer:
     def sequence( self, sequences ):
         for sequence in sequences:
             self.data.sequence.data = self.data.sequence.data + sequence.strip()
-
 
 class RecordParser:
     """Parse IntelliGenetics files into Record objects

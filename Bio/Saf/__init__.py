@@ -2,6 +2,10 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+"""Parser for SAF (Simple Alignment Format).
+
+http://www.embl-heidelberg.de/predictprotein/Dexa/optin_safDes.html
+"""
 
 # standard library
 import string
@@ -29,10 +33,6 @@ import Bio.Alphabet
 import saf_format
 import Record
 
-__all__ = [
-    'Record',
-    'saf_format'
-    ]
 
 class Iterator:
     """Iterator interface to move over a file of Saf entries one at a time.
@@ -170,7 +170,6 @@ class _RecordConsumer( Dispatch.Dispatcher ):
             sequence = self._sequences[ name ]
             self.data.alignment.add_sequence( name, sequence )
         self._refresh()
-
 
 class RecordParser:
     """Parse Saf files into Record objects
