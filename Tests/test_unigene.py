@@ -12,7 +12,8 @@ from Bio import ParserSupport
 from Bio import UniGene
 
 
-tests = [ 'Bt145.htm', 'Dr20.htm', 'Hs28199.htm', 'Rn35.htm', 'Mm421.htm' ]
+tests = [ 'Bt145.htm', 'Dr20.htm', 'Hs28199.htm', 'Rn35.htm', 'Mm421.htm', \
+          'Rn35.htm', 'Rn20.htm', 'Hs13225.htm', 'Mm28919.htm', 'Hs227583.htm' ]
 record_parser = UniGene.UniGeneParser()
 
 

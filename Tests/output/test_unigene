@@ -1,67 +1,333 @@
 testing Bt145.htm
-
-TAGS
-
-EXPRESSION INFORMATION
-{'Note': 'Found only in library21: \012      MARC 3BOV'}
-EST SEQUENCE (1)
-{'BF653298': " cDNA clone (no-name)  5' read   "}
-UniGene Cluster
-Bt.145
-mRNA/GENE SEQUENCE (1)
-{'AF011357': ' Bos taurus regulator of G-protein signaling 9 (RGS9) mRNA, complete \012      cds  '}
+key EXPRESSION INFORMATION
+        key is Note
+            Found only in library21: MARC 3BOV
+key mRNA/GENE SEQUENCE
+        key is AF011357
+            Bos taurus regulator of G-protein signaling 9 (RGS9) mRNA, complete cds
+key UniGene Cluster
+        Bt.145
+key EST SEQUENCE
+        key is BF653298
+            cDNA clone (no-name) 5' read
 
 
 testing Dr20.htm
-
-TAGS
-
-EXPRESSION INFORMATION
-{'cDNA sources': 'heart'}
-UniGene Cluster
-Dr.20
-EST SEQUENCES (4)
-{'AI616857': " cDNA clone (no-name) heart 5' read   ", 'AA495266': " cDNA clone 2E18  3' read   ", 'AI722560': " cDNA clone 2352068  3' read   ", 'AI584287': " cDNA clone (no-name)  3' read   "}
+key EXPRESSION INFORMATION
+        key is cDNA sources
+            heart
+key UniGene Cluster
+        Dr.20
+key EST SEQUENCES
+        key is AI616857
+            cDNA clone (no-name) heart 5' read
+        key is AA495266
+            cDNA clone 2E18 3' read
+        key is AI722560
+            cDNA clone 2352068 3' read
+        key is AI584287
+            cDNA clone (no-name) 3' read
 
 
 testing Hs28199.htm
-
-TAGS
-
-UniGene Cluster
-Hs.28199
-EST SEQUENCES (6)
-{'D59854': " cDNA clone GEN-071B07 Brain 3' read   ", 'D59855': " cDNA clone GEN-071B07 Brain 5' read   ", 'D61454': " cDNA clone GEN-403B11 Brain 5' read   ", 'H19446': " cDNA clone IMAGE:51620 Brain 3' read 2.4 kb  ", 'F10922': " cDNA clone c-3lg05 Brain 3' read   ", 'D61065': " cDNA clone GEN-152B08 Brain 5' read   "}
-EXPRESSION 
-INFORMATION
-{'cDNA sources': 'Brain', 'SAGE': 'Gene to Tag \012      mapping', 'Note': 'Found only in libraries from Brain'}
+key EXPRESSION INFORMATION
+        key is cDNA sources
+            Brain
+        key is SAGE
+            Gene to Tag mapping
+        key is Note
+            Found only in libraries from Brain
+key UniGene Cluster
+        Hs.28199
+key EST SEQUENCES
+        key is D59854
+            cDNA clone GEN-071B07 Brain 3' read
+        key is D59855
+            cDNA clone GEN-071B07 Brain 5' read
+        key is D61454
+            cDNA clone GEN-403B11 Brain 5' read
+        key is H19446
+            cDNA clone IMAGE:51620 Brain 3' read 2.4 kb
+        key is F10922
+            cDNA clone c-3lg05 Brain 3' read
+        key is D61065
+            cDNA clone GEN-152B08 Brain 5' read
 
 
 testing Rn35.htm
-
-TAGS
-
-EST SEQUENCES (4)
-{'AA859652': " cDNA clone UI-R-E0-bs-b-06-0-UI Whole embryo 3' read   ", 'BF547995': " cDNA clone UI-R-E0-bs-b-06-0-UI Whole embryo 5' read   ", 'BE098081': " cDNA clone UI-R-BJ1-asw-f-07-0-UI  3' read   ", 'BE101172': " cDNA clone UI-R-BJ1-auh-h-09-0-UI  3' read   "}
-SEE ALSO
-{'HomoloGene': 'Rn.35'}
-UniGene Cluster
-Rn.35
-EXPRESSION 
-INFORMATION
-{'cDNA sources': 'Whole embryo'}
+key EXPRESSION INFORMATION
+        key is cDNA sources
+            Whole embryo
+key UniGene Cluster
+        Rn.35
+key SEE ALSO
+        key is HomoloGene
+            Rn.35
+key EST SEQUENCES
+        key is AA859652
+            cDNA clone UI-R-E0-bs-b-06-0-UI Whole embryo 3' read
+        key is BF547995
+            cDNA clone UI-R-E0-bs-b-06-0-UI Whole embryo 5' read
+        key is BE098081
+            cDNA clone UI-R-BJ1-asw-f-07-0-UI 3' read
+        key is BE101172
+            cDNA clone UI-R-BJ1-auh-h-09-0-UI 3' read
 
 
 testing Mm421.htm
+key EXPRESSION INFORMATION
+        key is Note
+            Found only in library376: Soares_thymus_2NbMT
+key UniGene Cluster
+        Mm.421
+key EST SEQUENCES
+        key is AI448660
+            cDNA clone IMAGE:574684 3' read
+        key is AA125262
+            cDNA clone IMAGE:574684 5' read
+        key is AI530483
+            cDNA clone IMAGE:574684 5' read
 
-TAGS
 
-EST SEQUENCES (3)
-{'AI448660': " cDNA clone IMAGE:574684  3' read   ", 'AA125262': " cDNA clone IMAGE:574684  5' read   ", 'AI530483': " cDNA clone IMAGE:574684  5' read   "}
-UniGene Cluster
-Mm.421
-EXPRESSION 
-INFORMATION
-{'Note': 'Found only in library376: \012      Soares_thymus_2NbMT'}
+testing Dr48.htm
+key EXPRESSION INFORMATION
+        key is cDNA sources
+            heart, kidney
+key SEE ALSO
+        key is LocusLink
+            30675
+        key is HomoloGene
+            Dr.48
+key MAPPING INFORMATION
+        key is Chromosome
+            LG 10
+key mRNA/GENE SEQUENCES
+        key is L77146
+            Danio rerio heat shock cognate (hsc70) mRNA, complete cds
+        key is Y11413
+            D.rerio hsc70 mRNA
+key UniGene Cluster
+        Dr.48
+key EST SEQUENCES
+        key is AI313707
+            cDNA clone ZAE39 3' read
+        key is AW116799
+            cDNA clone 2601688 3' read
+        key is AI331807
+            cDNA clone (no-name) 3' read
+        key is AI385065
+            cDNA clone (no-name) 3' read
+        key is AW232778
+            cDNA clone (no-name) 3' read
+        key is AI667629
+            cDNA clone 2351498 3' read
+        key is AW077180
+            cDNA clone (no-name) 3' read
+        key is AA658601
+            cDNA clone zbr1406 kidney 3' read
+        key is AW233742
+            cDNA clone (no-name) 3' read
+        key is AI330589
+            cDNA clone (no-name) 3' read
+key SELECTED MODEL
+        key is M. musculus
+            SP:P08109- HS7C_MOUSE HEAT SHOCK COGNATE 71 KDA PROTEIN93 % / 648 aa
+        key is C. elegans
+            PID:g3924750- similar to HSP-1 heat shock 70kd protein A83 % / 648 aa
+        key is D. melanogaster
+            SP:P11147- HS7D_DROME HEAT SHOCK 70 KDA PROTEIN COGNATE 483 % / 648 aa
+        key is S. cerevisiae
+            PID:g349747- Ssa1p: Heat shock protein of HSP70 family73 % / 648 aa
+        key is E. coli
+            PID:g1786196- chaperone Hsp7050 % / 566 aa
+        key is R. norvegicus
+            SP:P08109- HS7C_MOUSE HEAT SHOCK COGNATE 71 KDA PROTEIN93 % / 648 aa
+        key is H. sapiens
+            SP:P11142- HS7C_HUMAN HEAT SHOCK COGNATE 71 KD PROTEIN93 % / 648 aa
+
+
+testing Rn20.htm
+key EXPRESSION INFORMATION
+        key is cDNA sources
+            Other, Whole embryo
+key UniGene Cluster
+        Rn.20
+key SEE ALSO
+        key is HomoloGene
+            Rn.20
+key EST SEQUENCES
+        key is AA900408
+            cDNA clone UI-R-E0-dl-e-06-0-UI Whole embryo 3' read
+        key is AA859621
+            cDNA clone UI-R-E0-bs-g-09-0-UI Whole embryo 3' read
+        key is AW434735
+            cDNA clone UI-R-BJ0p-afz-e-09-0-UI 3' read
+        key is AA874913
+            cDNA clone UI-R-E0-ck-g-01-0-UI Whole embryo 3' read
+        key is BF281160
+            cDNA clone RGIAB89 3' read
+        key is AI177947
+            cDNA clone RPLCJ01 Other 3' read
+        key is BF286673
+            cDNA clone RGIFR89 3' read
+        key is AI171947
+            cDNA clone RMUBT01 Other 3' read
+        key is AW915101
+            cDNA clone RGICJ32 Other 5' read
+        key is AW535747
+            cDNA clone UI-R-BS0-aod-f-01-0-UI 3' read
+
+
+testing Hs13225.htm
+key EXPRESSION INFORMATION
+        key is SAGE
+            Gene to Tag mapping
+        key is cDNA sources
+            Brain, CNS, Colon, Germ Cell, Heart, Kidney, Lung, Muscle, Ovary, Pancreas, Parathyroid, Placenta, Pooled, Prostate, Stomach, Testis, Tonsil, Uterus, Whole embryo, cervix, colon, head_neck, lung, muscle, nervous_normal, ovary, pancreas, uterus
+key SEE ALSO
+        key is LocusLink
+            8702
+        key is OMIM
+            604015
+        key is HomoloGene
+            Hs.13225
+key MAPPING INFORMATION
+        key is Chromosome
+            3
+        key is Cytogenetic Position
+            3q13.3
+        key is UniSTS entries
+                1765
+                A004F36
+                stSG42984
+key SELECTED MODEL
+        key is M. musculus
+            PID:g3869131- beta-1,4-galactosyltransferase II51 % / 262 aa
+        key is R. norvegicus
+            PID:g3258653- UDP-Gal:glucosylceramide beta-1,4-galactosyltransferase43 % / 262 aa
+        key is H. sapiens
+            PID:g3132900- beta-1,4-galactosyltransferase100 % / 343 aa
+        key is C. elegans
+            PID:g3880435- similar to n-acetyllactosamine synthase39 % / 217 aa
+        key is D. melanogaster
+            PID:g4972702- unknown41 % / 277 aa
+key mRNA/GENE SEQUENCES
+        key is AB024436
+            Homo sapiens mRNA for beta-1,4-galactosyltransferase IV, complete cds
+        key is AK001006
+            Homo sapiens cDNA FLJ10144 fis, clone HEMBA1003286, highly similar to Homo sapiens mRNA for beta-1,4-galactosyltransferase IV
+        key is AF022367
+            Homo sapiens beta-1,4-galactosyltransferase mRNA, complete cds
+        key is AF038662
+            Homo sapiens chromosome 3q13 beta-1,4-galactosyltransferase mRNA, complete cds
+key UniGene Cluster
+        Hs.13225
+key EST SEQUENCES
+        key is R82654
+            cDNA clone IMAGE:149308 Placenta 3' read 2.4 kb
+        key is AI932475
+            cDNA clone IMAGE:2454109 Pancreas 3' read 2.3 kb
+        key is AI926907
+            cDNA clone IMAGE:2459767 Stomach 3' read 1.6 kb
+        key is AA938640
+            cDNA clone IMAGE:1574076 Kidney 3' read 1.8 kb
+        key is AI597740
+            cDNA clone IMAGE:2258389 Stomach 3' read 2.4 kb
+        key is AI095056
+            cDNA clone IMAGE:1686321 Brain 3' read 3.1 kb
+        key is AI689128
+            cDNA clone IMAGE:2277044 Uterus 3' read 3.5 kb
+        key is R82703
+            cDNA clone IMAGE:149308 Placenta 5' read 2.4 kb
+        key is AA102060
+            cDNA clone IMAGE:489768 Uterus 3' read 2.0 kb
+        key is AA101851
+            cDNA clone IMAGE:489768 Uterus 5' read 2.0 kb
+
+
+testing Mm28919.htm
+key EXPRESSION INFORMATION
+        key is cDNA sources
+            brain, Colon, colon, Embryo, Embryonal carcinoma, Heart, Kidney, kidney, Liver, lung, Lymph, Macrophage, mammary, mammary gland, Muscle, Pituitary gland, Spleen, uterus
+key SEE ALSO
+        key is LocusLink
+            56431
+        key is HomoloGene
+            Mm.28919
+key MAPPING INFORMATION
+        key is UniSTS entries
+            1014360,404112
+key SELECTED MODEL
+        key is M. musculus
+            PID:g5931561- sid23p100 % / 164 aa
+        key is S. cerevisiae
+            PID:g6322978- Cofilin, actin binding and severing protein36 % / 149 aa
+        key is D. melanogaster
+            SP:P45594- CADF_DROME COFILIN/ACTIN DEPOLYMERIZING FACTOR HOMOLOG38 % / 151 aa
+key mRNA/GENE SEQUENCES
+        key is NM_019771
+            Mus musculus Sid23p (Sid23p), mRNA
+        key is AB025406
+            Mus musculus mRNA for sid23p, complete cds
+key UniGene Cluster
+        Mm.28919
+key EST SEQUENCES
+        key is AU042046
+            cDNA clone J1013A02 3' read
+        key is BF099862
+            cDNA clone IMAGE:3979802 mammary 5' read
+        key is AI151864
+            cDNA clone IMAGE:1885520 Embryo 5' read
+        key is BF101139
+            cDNA clone IMAGE:3983666 mammary 5' read
+        key is BF120203
+            cDNA clone IMAGE:3985421 mammary 5' read
+        key is BF139481
+            cDNA clone IMAGE:4013393 lung 5' read
+        key is BF099761
+            cDNA clone IMAGE:3978984 mammary 5' read
+        key is BF168783
+            cDNA clone IMAGE:4017653 lung 5' read
+        key is BF152610
+            cDNA clone IMAGE:3671073 mammary 5' read
+        key is AA117830
+            cDNA clone IMAGE:537096 Embryo 5' read 0.3 kb
+
+
+testing Hs227583.htm
+key EXPRESSION INFORMATION
+        key is SAGE
+            Gene to Tag mapping
+        key is cDNA sources
+            Brain, Eye, Germ Cell, Kidney, Prostate, Uterus, lung
+key SEE ALSO
+        key is HomoloGene
+            Hs.227583
+key MAPPING INFORMATION
+        key is UniSTS entries
+            sts-R39879
+key UniGene Cluster
+        Hs.227583
+key EST SEQUENCES
+        key is H86980
+            cDNA clone IMAGE:223655 Eye 5' read 2.7 kb
+        key is H86966
+            cDNA clone IMAGE:223630 Eye 5' read 2.6 kb
+        key is H86192
+            cDNA clone IMAGE:222492 Eye 5' read 2.5 kb
+        key is H86716
+            cDNA clone IMAGE:223679 Eye 5' read 2.6 kb
+        key is H86729
+            cDNA clone IMAGE:223703 Eye 5' read 2.6 kb
+        key is H86750
+            cDNA clone IMAGE:223751 Eye 5' read 2.7 kb
+        key is H86972
+            cDNA clone IMAGE:223631 Eye 5' read 2.6 kb
+        key is H86742
+            cDNA clone IMAGE:223727 Eye 5' read 2.7 kb
+        key is H86970
+            cDNA clone IMAGE:223629 Eye 5' read 2.6 kb
+        key is H86721
+            cDNA clone IMAGE:223702 Eye 5' read 2.6 kb
 
 
