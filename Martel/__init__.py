@@ -75,8 +75,7 @@ def Rep1(expr):
 
 # These are in Plex, but I don't (yet?) implement them
 
-def NoCase(expr):
-    raise NotImplementedError
+NoCase = Expression.NoCase
 
 def Case(expr):
     raise NotImplementedError
@@ -140,6 +139,11 @@ def Re(pattern, fix_newlines = 0):
     return convert_re.make_expression(pattern)
 
 NullOp = Expression.NullOp
+def Assert(expression):
+    return Expression.Assert(expression)
+
+def AssertNot(expression):
+    return Expression.Assert(expression, invert = 1)
 
 # helper function
 def _group(name, exp, attrs):

@@ -74,6 +74,14 @@ class Expression:
         """create an iterator for this regexp; the 'tag' defines a record"""
         import Iterator
         return Iterator.Iterator(self.make_parser(debug_level), tag)
+
+    def _modify_leaves(self, func):
+        """internal function for manipulating the leaves of an expression
+
+        This really needs to be some sort of visit pattern, but I'm
+        not sure the best way to do it.  THIS METHOD MAY CHANGE.
+        """
+        return func(self)
     
 # Any character in a given set: '[abc]'
 class Any(Expression):
@@ -126,6 +134,11 @@ class Assert(Expression):
         else:
             return '(?=%s)' % str(self.expression)
 
+    def _modify_leaves(self, func):
+        exp = self.expression._modify_leaves(func)
+        assert exp is not None
+        self.expression = exp
+        return self
 
 # At the beginning of the string: '^' in multiline mode
 #
@@ -255,6 +268,12 @@ class Group(Expression):
             self.name = None
         self.expression._select_names(names)
 
+    def _modify_leaves(self, func):
+        exp = self.expression._modify_leaves(func)
+        assert exp is not None
+        self.expression = exp
+        return self
+
     def copy(self):
         """do a deep copy on this Expression tree"""
         return Group(self.name, self.expression.copy(), self.attrs.copy())
@@ -369,6 +388,12 @@ class MaxRepeat(Expression):
         """internal function: do not use"""
         self.expression._select_names(names)
         
+    def _modify_leaves(self, func):
+        exp = self.expression._modify_leaves(func)
+        assert exp is not None
+        self.expression = exp
+        return self
+    
     def __str__(self):
         """the corresponding pattern string"""
         min_count = self.min_count
@@ -461,6 +486,11 @@ class PassThrough(Expression):
         self.expression = expression
     def _select_names(self, names):
         self.expression._select_names(names)
+    def _modify_leaves(self, func):
+        exp = self.expression._modify_leaves(func)
+        assert exp is not None
+        self.expression = exp
+        return self
     def copy(self):
         """do a deep copy on this Expression tree"""
         return PassThrough(self.expression)
@@ -526,6 +556,24 @@ class HeaderFooter(PassThrough):
             record_exp, self.make_record_reader, self.record_args,
             footer_exp, self.make_footer_reader, self.footer_args)
 
+    def _modify_leaves(self, func):
+        header_exp = self.header_expression
+        if header_exp is not None:
+            header_exp = header_exp.modify_leaves(func)
+            assert header_exp is not None
+            self.header_expression = header_exp
+        record_exp = self.record_expression
+        if record_exp is not None:
+            record_exp = record_exp.modify_leaves(func)
+            assert record_exp is not None
+            self.record_expression = record_exp
+        footer_exp = self.footer_expression
+        if footer_exp is not None:
+            footer_exp = footer_exp.modify_leaves(func)
+            assert footer_exp is not None
+            self.footer_expression = footer_exp
+        return self
+            
     def make_parser(self, debug_level = 0):
         import Generate, RecordReader
         want = 0
@@ -633,6 +681,12 @@ class ParseRecords(PassThrough):
     def group_names(self):
         return self.expression.group_names()
 
+    def _modify_leaves(self, func):
+        exp = self.expression.modify_leaves(func)
+        assert exp is not None
+        return self
+    
+
 # A sequence of characters: 'abcdef'
 class Str(Expression):
     def __init__(self, s):
@@ -668,7 +722,13 @@ class ExpressionList(Expression):
     def copy(self):
         """do a deep copy on this Expression tree"""
         return self.__class__(map(lambda x: x.copy(), self.expressions))
-
+    def _modify_leaves(self, func):
+        new_expressions = []
+        for exp in self.expressions:
+            new_expressions.append(exp._modify_leaves(func))
+        assert None not in new_expressions
+        self.expressions = tuple(new_expressions)
+        return self
 
 # A set of expressions: 'a|b|c'
 class Alt(ExpressionList):
@@ -686,8 +746,10 @@ class Alt(ExpressionList):
         match exp3.  If *that* fails, the match failed.
 
         """
-        if type(expressions) == type( [] ):
+        if isinstance(expressions, type( [] )):
             expressions = tuple(expressions)
+        elif isinstance(expressions, Expression):
+            raise TypeError("Must pass in a list of expressions, not just a single one (put it inside of ()s")
         self.expressions = expressions
 
     def __or__(self, other):
@@ -717,9 +779,11 @@ class Seq(ExpressionList):
         expression starts matching at the point where the previous
         match finished.
         """
-        if type(expressions) == type( [] ):
+        if isinstance(expressions, type( [] )):
             # See 'Alt' for why I'm converting to tuples
             expressions = tuple(expressions)
+        elif isinstance(expressions, Expression):
+            raise TypeError("Must pass in a list of expressions, not just a single one (put it inside of ()s")
         self.expressions = expressions
         
     def __add__(self, other):
@@ -743,11 +807,11 @@ class Seq(ExpressionList):
 
 ########## Support code for making the pattern string for an expression
 
-# taken from re.escape, except also don't escape " "
+# taken from re.escape, except also don't escape " ="
 def escape(pattern):
     "Escape all non-alphanumeric characters in pattern."
     result = list(pattern)
-    alphanum=string.letters+'_'+string.digits+" "
+    alphanum=string.letters+'_'+string.digits+" ="
     for i in range(len(pattern)):
         char = pattern[i]
         if char not in alphanum:
@@ -874,4 +938,50 @@ def _minimize_any_range(s):
     
     return t
 
+def _make_no_case(node):
+    """modify an expression in place to remove case dependencies
 
+    may return a new top-level node
+    """
+    if isinstance(node, Str):
+        x = NullOp()
+        s = ""
+        for c in node.string:
+            up_c = string.upper(c)
+            low_c = string.lower(c)
+            assert c in (up_c, low_c), "how can this be?"
+            if up_c == low_c:
+                s = s + c
+            else:
+                if s:
+                    x = x + Str(s)
+                    s = ""
+                x = x + Any(up_c + low_c)
+        if s:
+            x = x + Str(s)
+        return x
+    
+    if isinstance(node, Any):
+        s = node.chars
+        chars = {}
+        for c in s:
+            chars[c] = 1
+        for c in string.upper(s) + string.lower(s):
+            if not chars.has_key(c):
+                chars[c] = 1
+                s = s + c
+        return Any(s, node.invert)
+
+    if isinstance(node, Literal):
+        c = node.char
+        up_c = string.upper(c)
+        low_c = string.lower(c)
+        if up_c == low_c:
+            return node
+        return Any(up_c + low_c, node.invert)
+
+    return node
+
+def NoCase(expr):
+    expr = expr.copy()
+    return expr._modify_leaves(_make_no_case)
