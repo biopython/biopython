@@ -121,3 +121,87 @@ class _Scanner:
         _scan_dr,
         _scan_terminator
         ]
+class DataRecord:
+	def __init__(self,tr_code='',sw_code=''):
+		self.tr_code = tr_code
+		self.sw_code = sw_code
+
+class EnzymeRecord:
+	def __init__(self):
+		self.ID = ''
+		self.DE = []
+		self.AN = []
+		self.CA = []
+		self.CF = []
+		self.CC = []   # one comment per line
+		self.DI = []
+		self.PR = []
+		self.DR = []
+		
+
+class RecordParser(AbstractParser):
+	def __init__(self):
+		self._scanner = _Scanner()
+		self._consumer = _RecordConsumer()
+
+	def parse(self, handle):
+		if isinstance(handle, File.UndoHandle):
+			uhandle = handle
+		else:
+			uhandle = File.UndoHandle(handle)
+			self._scanner.feed(uhandle, self._consumer)
+		return self._consumer.enzyme_record
+
+class Iterator:
+	def __init__(self, handle, parser=None):
+		self._uhandle = File.UndoHandle(handle)
+	def next(self):
+		self._parser = RecordParser()
+		lines = []
+		while 1:
+			line = self._uhandle.readline()
+			if not line: break
+			if line[:2] == '//':
+				break
+			lines.append(line)
+		if not lines:
+			return None
+		lines.append('//')
+		data = string.join(lines,'')
+		if self._parser is not None:
+			return self._parser.parse(File.StringHandle(data))
+		return data
+
+class _RecordConsumer(AbstractConsumer):
+	def __init__(self):
+		self.enzyme_record = EnzymeRecord()
+	def identification(self, id_info):
+		self.enzyme_record.ID = id_info.split()[1]
+	def description(self,de_info):
+		self.enzyme_record.DE.append(de_info.split()[1].strip())
+	def alternate_name(self,an_info):
+		for an in an_info:
+			self.enzyme_record.AN.append(an[2:].strip())
+	def catalytic_activity(self, ca_info):
+		for ca in ca_info:
+			self.enzyme_record.CA.append(ca[2:].strip())
+	def cofactor(self, cf_info):
+		for cf in cf_info:
+			self.enzyme_record.CF.append(cf[2:].strip())
+
+	def prosite_reference(self,pr_info):
+		self.enzyme_record.PR.append(pr_info.split(';')[1].strip())
+
+	def databank_reference(self,dr_info):
+		good_data = dr_info[2:].strip()
+		pair_data = good_data.split(';')
+		for pair in pair_data:
+			if not pair: continue
+			data_record = DataRecord()
+			t1, t2 = pair.split(',')
+			data_record.tr_code, data_record.sw_code = \
+					 t1.strip(), t2.strip()
+			self.enzyme_record.DR.append(data_record)
+
+	def terminator(self,schwarzenegger):
+		pass # Hasta la Vista, baby!
