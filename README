@@ -80,13 +80,8 @@ To Do
   o scripting front end to NCBIWWW
   o PSI-BLAST on WWW
 - parsers
-  o SWISSPROT
-    - add parser for Protein class
-    - WWW access
   o SCOP
     - needs to be done
-  o Medline
-    - WWW queries for PubMed
   o Enzyme
     - add parsers, iterator, dictionary, etc.
   o Prosite

@@ -178,7 +178,7 @@ class Dictionary:
 
         """
         self._index = Index.Index(indexname)
-        self._handle = open(self._index[Dictionary.__filename_key])
+        self._handle = open(self._index[self.__filename_key])
         self._parser = parser
 
     def __len__(self):
@@ -194,6 +194,12 @@ class Dictionary:
 
     def __getattr__(self, name):
         return getattr(self._index, name)
+
+    def keys(self):
+        # I only want to expose the keys for SwissProt.
+        k = self._index.keys()
+        k.remove(self.__filename_key)
+        return k
 
 class RecordParser:
     """Parses SwissProt data into a Record object.
