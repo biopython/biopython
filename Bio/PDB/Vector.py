@@ -126,7 +126,7 @@ def calc_dihedral(v1, v2, v3, v4):
     angle=u.angle(v)
     # Determine sign of angle
     try:
-        if cb.angle(w)<0.001:
+        if cb.angle(w)>0.001:
             angle=-angle
     except ZeroDivisionError:
         # dihedral=pi
