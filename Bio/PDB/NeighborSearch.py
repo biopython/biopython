@@ -27,6 +27,7 @@ class NeighborSearch:
 		coord_list=map(lambda a: a.get_coord(), atom_list) 
 		# to Nx3 array of type float
 		self.coords=array(coord_list).astype("f")
+		assert(bucket_size>1)
 		assert(self.coords.shape[1]==3)
 		assert(self.coords.typecode()=="f")
 		self.kdt=KDTree(3, bucket_size)
