@@ -25,7 +25,7 @@ XXX need to implement Locator
 """
 
 import urllib, pprint, traceback, sys, string
-from xml.sax import xmlreader, _exceptions, handler
+from xml.sax import xmlreader, _exceptions, handler, saxutils
 
 try:
     from mx import TextTools
@@ -246,10 +246,10 @@ class Parser(xmlreader.XMLReader):
         # Just parse as a string
         self.parseString(fileobj.read())
     
-    def parse(self, systemId):
-        """parse using the URL"""
-        # Just parse as a file ... which parses as a string
-        self.parseFile(urllib.urlopen(systemId))
+    def parse(self, source):
+        """parse using the URL or file handle"""
+        source = saxutils.prepare_input_source(source)
+        self.parseFile(source.getCharacterStream() or source.getByteStream())
         
     def parseString(self, s):
         """parse using the given string
@@ -395,10 +395,10 @@ class RecordParser(xmlreader.XMLReader):
         self._cont_handler.endElement(self.format_name)
         self._cont_handler.endDocument()
 
-    def parse(self, systemId):
-        """parse using the URL"""
-        # Just parse it as a file
-        self.parseFile(urllib.urlopen(systemId))
+    def parse(self, source):
+        """parse using the URL or file handle"""
+        source = saxutils.prepare_input_source(source)
+        self.parseFile(source.getCharacterStream() or source.getByteStream())
         
     def parseString(self, s):
         """parse using the given string
@@ -452,8 +452,10 @@ class obsolete_HeaderFooterParser(xmlreader.XMLReader):
         strfile = StringIO(s)
         self.parseFile(strfile)
 
-    def parse(self, systemID):
-        self.parseFile(urllib.urlopen(systemID))
+    def parse(self, source):
+        """parse using the URL or file handle"""
+        source = saxutils.prepare_input_source(source)
+        self.parseFile(source.getCharacterStream() or source.getByteStream())
 
     def parseFile(self, fileobj):
         self._cont_handler.startDocument()
@@ -706,7 +708,7 @@ class HeaderFooterParser(xmlreader.XMLReader):
                         self.footer_tagtable), x)
         return "header footer records: " + x.getvalue()
 
-    def __copy__(self):
+    def copy(self):
         parser = HeaderFooterParser(self.format_name, self.attrs,
     self.make_header_reader, self.header_reader_args, self.header_tagtable,
     self.make_reader, self.reader_args, self.record_tagtable,
@@ -723,8 +725,10 @@ class HeaderFooterParser(xmlreader.XMLReader):
         strfile = StringIO(s)
         self.parseFile(strfile)
 
-    def parse(self, systemID):
-        self.parseFile(urllib.urlopen(systemID))
+    def parse(self, source):
+        """parse using the URL or file handle"""
+        source = saxutils.prepare_input_source(source)
+        self.parseFile(source.getCharacterStream() or source.getByteStream())
 
     def parseFile(self, fileobj):
         self._cont_handler.startDocument()
