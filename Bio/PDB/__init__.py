@@ -39,10 +39,16 @@ from Vector import Vector, calc_angle, calc_dihedral, refmat, rotmat, rotaxis
 # Alignment module
 from StructureAlignment import StructureAlignment
 
-# DSSP handle
+# DSSP handle 
+# (secondary structure and solvent accessible area calculation)
 from DSSP import DSSP, make_dssp_dict
 
+# Residue depth: 
+# distance of residue atoms from solvent accessible surface
 from ResidueDepth import ResidueDepth, get_surface
+
+# My new solvent exposure method - article coming up
+from HSExposure import HSExposure
 
 # Fast atom neighbor search
 # Depends on KDTree C++ module
