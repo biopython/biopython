@@ -155,6 +155,7 @@ class RecordParser(AbstractParser):
 class Iterator:
 	def __init__(self, handle, parser=None):
 		self._uhandle = File.UndoHandle(handle)
+
 	def next(self):
 		self._parser = RecordParser()
 		lines = []
@@ -171,6 +172,9 @@ class Iterator:
 		if self._parser is not None:
 			return self._parser.parse(File.StringHandle(data))
 		return data
+    
+        def __iter__(self):
+                return iter(self.next, None)
 
 class _RecordConsumer(AbstractConsumer):
 	def __init__(self):

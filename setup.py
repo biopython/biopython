@@ -372,7 +372,7 @@ EXTENSIONS = [
               libraries=["fl"]
               ),
     #Extension('Bio.KDTree._KDTreecmodule',
-    #          ["Bio/KDTree/_KDTree.C", 
+    #          ["Bio/KDTree/_KDTree.C",
     #           "Bio/KDTree/_KDTree.swig.C"],
     #          libraries=["stdc++"]
     #          ),

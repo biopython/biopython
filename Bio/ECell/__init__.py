@@ -90,6 +90,9 @@ class Iterator:
 
         return data
 
+    def __iter__(self):
+        return iter(self.next, None)
+
 
 
 class _Scanner:

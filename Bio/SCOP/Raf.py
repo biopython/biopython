@@ -311,6 +311,9 @@ class Iterator:
         if self._parser is not None :    
             return self._parser.parse(line)
         return line
+    
+    def __iter__(self):
+        return iter(self.next, None)
 
 
 class Parser:

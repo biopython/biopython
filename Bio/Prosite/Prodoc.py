@@ -115,6 +115,9 @@ class Iterator:
             return self._parser.parse(File.StringHandle(data))
         return data
 
+    def __iter__(self):
+        return iter(self.next, None)
+
 class Dictionary:
     """Accesses a Prodoc file using a dictionary interface.
 

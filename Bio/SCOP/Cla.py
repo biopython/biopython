@@ -81,9 +81,12 @@ class Iterator:
             line = self._handle.readline()
             if not line: return None
             if line[0] !='#':  break  # Not a comment line
-        if self._parser is not None :    
+        if self._parser is not None :
             return self._parser.parse(line)
         return line
+    
+    def __iter__(self):
+        return iter(self.next, None)
 
 
 class Parser:

@@ -205,6 +205,9 @@ class Iterator:
         if self._parser is not None:
             return self._parser.parse(File.StringHandle(data))
         return data
+    
+    def __iter__(self):
+        return iter(self.next, None)
 
 class RecordParser(AbstractParser):
     """Parses ACE file data into a Record object

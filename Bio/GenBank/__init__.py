@@ -142,6 +142,9 @@ class Iterator:
                 return self._parser.parse(File.StringHandle(data))
 
         return data
+    
+    def __iter__(self):
+        return iter(self.next, None)
 
 class ParserFailureError(Exception):
     """Failure caused by some kind of problem in the parser.
