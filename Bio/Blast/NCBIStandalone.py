@@ -509,7 +509,7 @@ class _Scanner:
         # not in blastx 2.2.1
         # first we make sure we have additional lines to work with, if
         # not then the file is done and we don't have a final S2
-        if uhandle.peekline(): 
+        if not is_blank_line(uhandle.peekline(), allow_spaces=1):
             read_and_call(uhandle, consumer.blast_cutoff, start='S2')
 
         consumer.end_parameters()
