@@ -103,7 +103,7 @@ class Reference:
     positions   Describes extent of work.  list of strings.
     comments    Comments.  List of (token, text).
     references  References.  List of (dbname, identifier)
-    authors     The authors of the work.  string.
+    authors     The authors of the work.
     title       Title of the work.
     location    A citation for the work.
     
@@ -369,7 +369,7 @@ class _Scanner:
     
     def _scan_terminator(self, uhandle, consumer):
         self._scan_line('//', uhandle, consumer.terminator, exactly_one=1)
-    
+
     _scan_fns = [
         _scan_id,
         _scan_ac,
@@ -403,7 +403,7 @@ class _RecordConsumer(AbstractConsumer):
         self.data = Record()
         
     def end_record(self):
-        pass
+        self._clean_record(self.data)
 
     def identification(self, line):
         cols = string.split(line)
@@ -586,11 +586,27 @@ class _RecordConsumer(AbstractConsumer):
             return word[:-1]
         return word
 
-    def _clean(self, line, rstrip=1):
-        if rstrip:
-            return string.rstrip(line[5:])
-        return line[5:]
-            
+    #def _clean(self, line, rstrip=1):
+    #    if rstrip:
+    #        return string.rstrip(line[5:])
+    #    return line[5:]
+
+    def _clean_record(self, rec):
+        # Remove trailing newlines
+        members = ['description', 'gene_name', 'organism', 'organelle']
+        for m in members:
+            attr = getattr(rec, m)
+            setattr(rec, m, string.rstrip(attr))
+        for ref in rec.references:
+            self._clean_references(ref)
+
+    def _clean_references(self, ref):
+        # Remove trailing newlines
+        members = ['authors', 'title', 'location']
+        for m in members:
+            attr = getattr(ref, m)
+            setattr(ref, m, string.rstrip(attr))
+
 class _SequenceConsumer(AbstractConsumer):
     """Consumer that converts a SwissProt record to a Sequence object.
 
