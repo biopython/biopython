@@ -1,7 +1,7 @@
 """
 Parser for (new) ACE files output by PHRAP.
 
-version 1.2, 02/03/2004
+version 1.21, 03/09/2004
 Written by Frank Kauff (fkauff@duke.edu) and
 Cymon J. Cox (cymon@duke.edu)
 
@@ -570,5 +570,14 @@ class _RecordConsumer(AbstractConsumer):
         self.data.wr[-1].aligned=header[1]
         self.data.wr[-1].program=header[2]
         self.data.wr[-1].date=header[3]
+    
+    def wa_data(self,taglines):
+        if len(taglines)<1:
+            raise SyntaxError, 'Missing header line in CT tag'
+        header=taglines[0].split()
+        self.data.wa[-1].tag_type=header[0]
+        self.data.wa[-1].program=header[1]
+        self.data.wa[-1].date=header[2]
+        self.data.wa[-1].info=taglines[1:] 
 
     

@@ -4,7 +4,7 @@ CONSED
 
 Works fine with PHRED 0.020425.c
 
-Version 1.0,
+Version 1.1, 03/09/2004
 written by Cymon J. Cox (cymon@duke.edu) and Frank Kauff (fkauff@duke.edu)
 Comments, bugs, problems, suggestions to one uf us are welcome!
 
@@ -194,10 +194,10 @@ class _RecordConsumer(AbstractConsumer):
     def time(self, line):
         self.data.comments['time'] = line[5:-1].strip()
         
-    def min_index(self, line):
+    def trace_array_min_index(self, line):
         self.data.comments['trace_array_min_index'] = int(line[22:-1].strip())
         
-    def max_index(self, line):
+    def trace_array_max_index(self, line):
         self.data.comments['trace_array_max_index'] = int(line[22:-1].strip())
     
     def trim(self, line):
