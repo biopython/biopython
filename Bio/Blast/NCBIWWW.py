@@ -92,8 +92,8 @@ class _Scanner:
         else:
             uhandle = File.UndoHandle(handle)
         # Read HTML formatting up to the "BLAST" version line.
-        read_and_call_until(uhandle, consumer.noevent, start='<b>',
-                            contains='BLAST')
+        read_and_call_until(uhandle, consumer.noevent,
+                            has_re=re.compile(r'<b>.?BLAST'))
 
         self._scan_header(uhandle, consumer)
 	self._scan_rounds(uhandle, consumer)
@@ -137,8 +137,7 @@ class _Scanner:
         # <CENTER>
         # <IMG WIDTH=529 HEIGHT=115 USEMAP=#img_map BORDER=1 SRC="nph-getgif.cg
         # <HR>
-        # <PRE>
-
+        # <PRE>  XXX
         consumer.start_header()
 
         # Read the "BLAST" version line and the following blanks.
@@ -151,42 +150,18 @@ class _Scanner:
 
         # Read the RID line, for version 2.0.12 (2.0.11?) and above.
         attempt_read_and_call(uhandle, consumer.noevent, start='RID')
-
         # Brad Chapman noticed a '<p>' line in BLASTN 2.1.1
         attempt_read_and_call(uhandle, consumer.noevent, start='<p>')
 
-        # 2.1.2 has the database right and blastform after the RID
-        database_read = 0
-        if attempt_read_and_call(uhandle, consumer.noevent, start = '<p>'):
+        # Apparently, there's some discrepancy between whether the
+        # Query or database comes first.  Usually the Query does, but
+        # Brad noticed a case where the database came first.
+        if uhandle.peekline().find("Query=") >= 0:
+            self._scan_query_info(uhandle, consumer)
             self._scan_database_info(uhandle, consumer)
-            # Skip to the Query line.
-            read_and_call_until(uhandle, consumer.noevent, contains="Query=")
-            database_read = 1
-
-        # Read the Query lines and the following blank line.
-        read_and_call(uhandle, consumer.query_info, contains='Query=')
-        read_and_call_until(uhandle, consumer.query_info, blank=1)
-        read_and_call_while(uhandle, consumer.noevent, blank=1)
-
-        # Read the database lines and the following blank line, if it
-        # hasn't been read already.
-        if not database_read:
-            self._scan_database_info(uhandle, consumer)
-
-            # Read the blast form, if it exists. 
-            if attempt_read_and_call(uhandle, consumer.noevent,
-                                     contains='BLASTFORM'):
-                read_and_call_until(uhandle, consumer.noevent, blank=1)
-            elif attempt_read_and_call(uhandle, consumer.noevent,
-                                       start='<PRE>'):
-                read_and_call_until(uhandle, consumer.noevent, blank=1)
-        # otherwise we'll need to scan a <PRE> tag
         else:
-            read_and_call(uhandle, consumer.noevent, start = '<PRE>')
-
-        # Read the blank lines until the next section.
-        read_and_call_while(uhandle, consumer.noevent, blank=1)
-
+            self._scan_database_info(uhandle, consumer)
+            self._scan_query_info(uhandle, consumer)
         consumer.end_header()
 
     def _scan_database_info(self, uhandle, consumer):
@@ -196,7 +171,30 @@ class _Scanner:
         read_and_call(uhandle, consumer.noevent, blank=1)
         read_and_call(uhandle, consumer.noevent,
                       contains='problems or questions')
+        if attempt_read_and_call(uhandle, consumer.noevent,
+                                 contains="BLASTFORM"):
+            while 1:
+                line = uhandle.peekline()
+                if is_blank_line(line):
+                    break
+                elif string.find(line, "Query=") >= 0:
+                    break
+                consumer.noevent(uhandle.readline())
+        if attempt_read_and_call(uhandle, consumer.noevent,
+                                 contains="Taxonomy reports"):
+            read_and_call(uhandle, consumer.noevent, start="<BR>")
+        attempt_read_and_call(uhandle, consumer.noevent, start="<PRE>")
+        read_and_call_while(uhandle, consumer.noevent, blank=1)
 
+    def _scan_query_info(self, uhandle, consumer):
+        # Read the Query lines and the following blank line.
+        read_and_call(uhandle, consumer.query_info, contains='Query=')
+        read_and_call_until(uhandle, consumer.query_info, blank=1)
+        read_and_call_while(uhandle, consumer.noevent, blank=1)
+        if attempt_read_and_call(uhandle, consumer.noevent, start="<PRE>"):
+            read_and_call_while(uhandle, consumer.noevent, blank=1)
+            
+        
     def _scan_rounds(self, uhandle, consumer):
         self._scan_descriptions(uhandle, consumer)
         self._scan_alignments(uhandle, consumer)
@@ -488,6 +486,9 @@ class _Scanner:
         # S2: 52 (26.7 bits)
         # 
         # </PRE>
+        
+        # 6/3/2001, </PRE> is gone, replaced by </form>
+        
 
         consumer.start_parameters()
 
@@ -545,36 +546,39 @@ class _Scanner:
         read_and_call(uhandle, consumer.blast_cutoff, start='S2')
 
         read_and_call(uhandle, consumer.noevent, blank=1)
-        read_and_call(uhandle, consumer.noevent, start='</PRE>')
+        attempt_read_and_call(uhandle, consumer.noevent, start="</PRE>")
+        attempt_read_and_call(uhandle, consumer.noevent, start="</form>")
 
         consumer.end_parameters()
 
 def blast(program, database, query,
-          entrez_query = '(none)',
-          filter = 'L',
-          expect = '10',
-          word_size = None,
-          ungapped_alignment = 'no',
-          other_advanced = None,
-          cdd_search = 'on',
-          composition_based_statistics = None,
-          matrix_name = None,
-          run_psiblast = None,
-          i_thresh = '0.001',
-          genetic_code = '1',
-          show_overview = 'on',
-          ncbi_gi = 'on',
-          format_object = 'alignment',
-          format_type = 'html',
-          descriptions = '100',
-          alignments = '50',
-          alignment_view = 'Pairwise',
-          auto_format = 'on',
+          query_from='', query_to='',
+          entrez_query='(none)',
+          filter='L',
+          expect='10',
+          word_size='3',
+          ungapped_alignment='no',    # deprecated, not on webpage anymore
+          other_advanced=None,
+          cdd_search='on',
+          composition_based_statistics=None,
+          matrix_name=None,
+          run_psiblast=None,
+          i_thresh='0.001',
+          genetic_code='1',
+          show_overview='on',
+          ncbi_gi='on',
+          format_object='alignment',
+          format_type='html',
+          descriptions='100',
+          alignments='50',
+          alignment_view='Pairwise',
+          auto_format='on',
           cgi='http://www.ncbi.nlm.nih.gov/blast/Blast.cgi',
-          timeout = 20):
+          timeout=20):
     
-    """blast(program, database, query[, entrez_query][, filter][, expect]
-    [, word_size][, ungapped_alignment][, other_advanced][, cdd_search]
+    """blast(program, database, query[, query_from][, query_to]
+    [, entrez_query][, filter][, expect]
+    [, word_size][, other_advanced][, cdd_search]
     [, composition_based_statistics][, matrix_name][, run_psiblast]
     [, i_thresh][, genetic_code][, show_overview][, ncbi_gi]
     [, format_object][, format_type][, descriptions][, alignments]
@@ -607,6 +611,7 @@ def blast(program, database, query,
 
     Translated specific options:
     genetic code
+    
     """
     # NCBI Blast is hard to work with.  The user enters a query, and then
     # it returns a "reference" page which contains a button that the user
@@ -615,15 +620,17 @@ def blast(program, database, query,
     # search isn't done.
     # This function will send off the query and parse the reference
     # page to figure out how to retrieve the results.  Then, it needs to
-    # check the results to see if the search has been finished.
+    # periodically query the results to see if the search has finished.
+    # When it has, then it can retrieve the actual blast results.
     params = {'PROGRAM' : program,
+              'QUERY_FROM' : query_from,
+              'QUERY_TO' : query_to,
               'DATABASE' : database,
               'QUERY' : query,
               'ENTREZ_QUERY' : entrez_query,
               'FILTER' : filter,
               'EXPECT' : expect,
               'WORD_SIZE' : word_size,
-              'UNGAPPED_ALIGNMENT' : ungapped_alignment,
               'OTHER_ADVANCED': other_advanced,
               'CDD_SEARCH' : cdd_search,
               'COMPOSITION_BASED_STATISTICS' : composition_based_statistics,
@@ -647,6 +654,7 @@ def blast(program, database, query,
     variables['CLIENT'] = 'web'
     variables['SERVICE'] = 'plain'
     variables['CMD'] = 'Put'
+    variables['LAYOUT'] = 'OneWindow'
 
     if program.upper() == 'BLASTN':
         variables['PAGE'] = 'Nucleotides'
@@ -656,22 +664,25 @@ def blast(program, database, query,
         variables['PAGE'] = 'Translations'
     else:
         raise ValueError("Unexpected program name %s" % program)
-        
+
+    # These parameters are not yet implemented.
+    # LCASE_MASK=''
+    # GAPCOSTS=''
+    # PSSM=''
+    # PHI_PATTERN=''
+    # FORMAT_BLOCK_ON_RESPAGE='None'
+    # EMAIL_ADDRESS=''
+
     # This returns a handle to the HTML file that points to the results.
-    handle = NCBI._open(cgi, variables, get = 0)
+    handle = NCBI._open(cgi, variables, get=0)
     # Now parse the HTML from the handle and figure out how to retrieve
     # the results.
-    refcgi, params = _parse_blast_ref_page(handle, cgi)
+    ref_cgi, ref_params = _parse_blast_ref_page(handle)
+    ref_cgi = urlparse.urljoin(cgi, ref_cgi)  # convert to absolute URL
 
-    # start with the initial recommended delay. Otherwise we get hit with
-    # an extra long delay right away
-    if params.has_key("RTOE"):
-        refresh_delay = int(params["RTOE"]) + 1
-        del params["RTOE"]
-    else:
-        refresh_delay = 5
+    # Start with the initial recommended delay.
+    refresh_delay = int(ref_params.get("RTOE", 5))
 
-    cgi = refcgi
     start = time.time()
     while 1:
         # pause before trying to get the results
@@ -679,126 +690,109 @@ def blast(program, database, query,
         
         # Sometimes the BLAST results aren't done yet.  Look at the page
         # to see if the results are there.  If not, then try again later.
-        handle = NCBI._open(cgi, params, get=0)
-        ready, results, refresh_delay, cgi = _parse_blast_results_page(handle)
         
+        handle = NCBI._open(ref_cgi, ref_params, get=0)
+        ready, results_cgi, results_params = _parse_blast_results_page(handle)
+        results_cgi = urlparse.urljoin(cgi, results_cgi)    # to absolute URL
         if ready:
             break
         # Time out if it's not done after timeout minutes.
         if time.time() - start > timeout*60:
             raise IOError, "timed out after %d minutes" % timeout
 
-    # now get the results page and return it
-    # -- the "ready" page from before is just a check page
-    result_handle = NCBI._open(refcgi, params, get=0)
-    results = result_handle.read()
-    
-    return File.UndoHandle(File.StringHandle(results))
+    # Now query for the actual results.  To do this, the CGI script
+    # needs CMD="Get", which should already be in results_params.
+    # Also, for some reason, this fails if FORMAT_OBJECT is in
+    # results_params, so we need to get rid of it.
+    if results_params.has_key("FORMAT_OBJECT"):
+        del results_params["FORMAT_OBJECT"]
+    return NCBI._open(results_cgi, results_params, get=0)
 
-def _parse_blast_ref_page(handle, base_cgi):
+class _FormParser(sgmllib.SGMLParser):
+    """Parse a form in an HTML page.
+
+    Members:
+    forms   List of forms in the page.
+            Each form is a tuple of (action, params) where action
+            is a string to the CGI script and params is a dict of
+            keys and values to pass to the script.
+
+    """
+    def __init__(self):
+        sgmllib.SGMLParser.__init__(self)
+        self.forms = []
+        self._current_form = '', {}
+    def start_form(self, attributes):
+        # Parse the "FORM" tag to see where the CGI script is.
+        attr_dict = self._attr2dict(attributes)
+        self._current_form = (attr_dict.get('ACTION', self._current_form[0]),
+                              self._current_form[1])
+    def end_form(self):
+        self.forms.append(self._current_form)
+        self._current_form = '', {}
+    def do_input(self, attributes):
+        params = self._current_form[1]
+        attr_dict = self._attr2dict(attributes)
+        if attr_dict.has_key('NAME'):
+            # Get the value, handling check boxes.
+            value = attr_dict.get('VALUE', attr_dict.get('CHECKED', ''))
+            params[attr_dict['NAME']] = value
+    def _attr2dict(self, attributes):
+        attr_dict = {}
+        for name, value in attributes:
+            attr_dict[string.upper(name)] = value
+        return attr_dict
+    # XXX should handle SELECT, not implemented yet        
+
+def _parse_blast_ref_page(handle):
     """_parse_blast_ref_page(handle, base_cgi) -> cgi, parameters"""
-    # I can speed things up by putting the class declarations into the
-    # module scope, instead of recreating them in every function call.
-    # However, since the running time for the blast call will be dominated
-    # by NCBI's BLAST, it probably won't make much of a difference.
-    # This way, the implementation details are hidden in the function.
-    class RefPageParser(sgmllib.SGMLParser):
-        def __init__(self, cgi):
-            sgmllib.SGMLParser.__init__(self)
-            self.cgi = cgi
-            self.params = {}
-        def do_form(self, attributes):
-            # parse the "FORM" tag to see where the CGI script should be.
-            for attr, value in attributes:
-                attr = string.upper(attr)
-                if attr == 'ACTION':
-                    self.cgi = urlparse.urljoin(self.cgi, value)
-        def do_input(self, attributes):
-            # parse out all of the different inputs we are interested in
-            inputs = ["RID", "RTOE", "CLIENT", "CMD", "PAGE",
-                      "EXPECT", "DESCRIPTIONS", "ALIGNMENTS", "AUTO_FORMAT"]
-
-            cur_input = None
-            
-            for attr, value in attributes:
-                attr, value = string.upper(attr), string.upper(value)
-                if attr == 'NAME':
-                    if value in inputs:
-                        cur_input = value
-                    else:
-                        cur_input = None
-                elif attr == 'VALUE':
-                    if cur_input is not None and value:
-                        self.params[cur_input] = value
-                
-    parser = RefPageParser(base_cgi)
-    html_info = handle.read()
-    
-    parser.feed(html_info)
-    if not parser.params.has_key('RID'):
+    parser = _FormParser()
+    parser.feed(handle.read())
+    if len(parser.forms) != 1:
+        raise SyntaxError, "Form broken in BLAST reference page"
+    cgi, params = parser.forms[0]
+    if not params.has_key('RID'):
         raise SyntaxError, "Error getting BLAST results: RID not found"
-    return parser.cgi, parser.params
+    return cgi, params
     
 def _parse_blast_results_page(handle):
-    """_parse_blast_results_page(handle) -> ready, results, refresh_delay"""
-    class ResultsParser(sgmllib.SGMLParser):
+    """_parse_blast_results_page(handle) -> ready, cgi, params"""
+    class _ResultsParser(_FormParser):
         def __init__(self):
-            sgmllib.SGMLParser.__init__(self)
+            _FormParser.__init__(self)
             self.ready = 0
-            self.refresh_cgi = None
-            self.refresh = 5
-
+        #_refresh_re = re.compile(r",\s*(\d+)\s*\);")
         def handle_comment(self, comment):
-            # determine if it is ready
-            if string.find(comment.lower(), 'status=ready') >= 0:
+            # There is lots of information in the comments of the results
+            # page:
+            # <!--
+            # QBlastInfoBegin
+            #         Status=WAITING
+            # QBlastInfoEnd
+            # -->
+            # <SCRIPT LANGUAGE="JavaScript"><!--
+            # setTimeout('document.forms[0].submit();',15000);
+            # //--></SCRIPT>
+            comment = string.lower(comment)
+            if string.find(comment, 'status=ready') >= 0:
                 self.ready = 1
-            # otherwise, we need to parse for the delay and url
-            elif string.find(comment, 'location.href') >= 0:
-                self.refresh_cgi, self.refresh = self._find_cgi_info(comment)
-
-        _refresh_re = re.compile('REFRESH_DELAY=(\d+)', re.IGNORECASE)
-        def _find_cgi_info(self, comment):
-            """Find the refresh CGI string and refresh delay from a comment.
-
-            We are parsing a comment string like:
-            setTimeout('location.href =
-            "http://www.ncbi.nlm.nih.gov/blast/Blast.cgi?
-            CMD=Get&RID=984874645-19210-15659&CHECK_STATUS_ONLY=yes&
-            REFRESH_DELAY=106&AUTO_FORMAT=yes&KEY=20111";',106000);
-
-            Arguments:
-
-            o comment - A comment which is assumed to have been checked to
-            have the refresh delay cgi string in it.
-            """
-            # find where the cgi string starts
-            href_string = 'location.href = "'
-            cgi_start_pos = string.find(comment, href_string)
-            assert cgi_start_pos is not -1, \
-                   "Unable to parse the start of the refresh cgi."
-            # the cgi starts at the end of the location.href stuff
-            cgi_start_pos += len(href_string)
-
-            # find the end pos of the cgi string
-            cgi_end_pos = string.find(comment, '"', cgi_start_pos)
-            assert cgi_end_pos is not -1, \
-                   "Unable to parse end of refresh cgi."
-
-            refresh_cgi = comment[cgi_start_pos:cgi_end_pos]
-
-            # parse the refresh delay out of the comment
-            m = self._refresh_re.search(refresh_cgi)
-            assert m, "Failed to parse refresh time from %s" % refresh_cgi
-            refresh = int(m.group(1))
-
-            return refresh_cgi, refresh
-                    
-    results = handle.read()
-
-    parser = ResultsParser()
-    parser.feed(results)
-    return parser.ready, results, parser.refresh, parser.refresh_cgi
-
+            #elif string.find(comment, 'settimeout') >= 0:
+            #    # parse the refresh delay out of the comment
+            #    m = self._refresh_re.search(comment)
+            #    assert m, "Failed to parse refresh time from %s" % comment
+            #    self.refresh = int(m.group(1))/1000  # give in milliseconds
+    parser = _ResultsParser()
+    parser.feed(handle.read())
+    
+    # The results page has 2 forms.  The first one is used if the
+    # results are ready.  Otherwise, return the second one.
+    if len(parser.forms) != 2:
+        raise SyntaxError, "I expected 2 forms in the results page."
+    if parser.ready:
+        cgi, params = parser.forms[0]
+    else:
+        cgi, params = parser.forms[1]
+    return parser.ready, cgi, params
 
 def blasturl(program, datalib, sequence,
              ncbi_gi=None, descriptions=None, alignments=None,
