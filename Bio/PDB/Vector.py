@@ -243,7 +243,7 @@ if __name__=="__main__":
 
         v1=Vector(0,0,1)
         v2=Vector(0,0,0)
-        v3=Vector(1,0,0)
+        v3=Vector(0,1,0)
         v4=Vector(1,1,0)
 
         v4.normalize()
@@ -251,7 +251,10 @@ if __name__=="__main__":
         print v4
 
         print calc_angle(v1, v2, v3)
-        print "DIHEDRAL ", calc_dihedral(v1, v2, v3, v4)
+        dih=calc_dihedral(v1, v2, v3, v4)
+        # Test dihedral sign
+        assert(dih>0)
+        print "DIHEDRAL ", dih
 
         ref=refmat(v1, v3)
         rot=rotmat(v1, v3)
