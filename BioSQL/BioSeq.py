@@ -1,4 +1,8 @@
+"""Implementations of Biopython-like Seq objects on top of BioSQL.
 
+This allows retrival of items stored in a BioSQL database using
+a biopython-like Seq interface.
+"""
 class DBSeq:  # This implements the biopython Seq interface
     def __init__(self, primary_id, adaptor, alphabet, start, length):
         self.primary_id = primary_id
@@ -41,12 +45,17 @@ class DBSeq:  # This implements the biopython Seq interface
                                                  self.start,
                                                  self.start + self._length)
 
-class DBPrimarySeq:
+class DBInternalSeq:
+    """Intermediate database object for retrieving sequence and other info.
+
+    You should never need to deal directly with this object except when
+    debugging. This is basically the equivalent of bioperl's PrimarySeq
+    """
     def __init__(self, primary_id, adaptor):
         self.primary_id = primary_id
         self.adaptor = adaptor
 
-        self.display_id, self.accession, _length, self.moltype = \
+        self.name, self.id, _length, self.moltype = \
                          self.adaptor.execute_one(
             """select en.display_id, en.accession, length(bs.biosequence_str),
                                       bs.molecule
@@ -78,8 +87,9 @@ class DBPrimarySeq:
             raise AttributeError(name)
         return f()
 
-    def _get_desc(self):
-        pass
+    def _get_description(self):
+        # XXX This should actually do something
+        return ''
 
     def __len__(self):
         return self._length
@@ -328,9 +338,10 @@ def load_seq_features(adaptor, primary_id):
     # Get just the SeqFeature
     return [x[2] for x in seq_feature_list]
 
-
-class DBBioSeq:
-    _forward_getattr = ['seq', 'desc', 'display_id', 'accession']
+class DBSeqRecord:
+    """BioSQL equivalent of the biopython SeqRecord object.
+    """
+    _forward_getattr = ['seq', 'description', 'name', 'id']
 
     def __init__(self, adaptor, primary_id):
         self.adaptor = adaptor
@@ -359,15 +370,26 @@ class DBBioSeq:
         return f()
 
     def _get_primary_seq(self):
-        primary_seq = DBPrimarySeq(self.primary_id, self.adaptor)
+        primary_seq = DBInternalSeq(self.primary_id, self.adaptor)
         self.primary_seq = primary_seq
         return primary_seq
 
-    def _get_annotation(self):
+    # -- SeqRecord compatilibity attributes
+
+    def _get_annotations(self):
+        # XXX This should return a dictionary of annotations ala
+        # the actual SeqRecord object
         annotation = Annotation(self.adaptor, self.primary_id)
         self.annotation = annotation
         return annotation
 
+    def _get_features(self):
+        features = load_seq_features(self.adaptor, self.primary_id)
+        self.seq_features = features
+        return self.seq_features
+   
+    # -- BioSQL only attributes
+   
     def _get_dates(self):
         dates = self.adaptor.execute_and_fetch_col0(
             """select date from bioentry_date
@@ -386,11 +408,6 @@ class DBBioSeq:
         terms = full_lineage.split(":")
         species = Species(terms, common_name)
         return species
-
-    def _get_seq_features(self):
-        features = load_seq_features(self.adaptor, self.primary_id)
-        self.seq_features = features
-        return self.seq_features
 
     def _get_seq_version(self):
         version = self.accession + "." + self.version

@@ -146,7 +146,7 @@ class BioSeqDatabase:
         
         """
         seqid = self.adaptor.fetch_seqid_by_display_id(self.dbid, name)
-        return BioSeq.DBBioSeq(self.adaptor, seqid)
+        return BioSeq.DBSeqRecord(self.adaptor, seqid)
 
     def get_Seq_by_acc(self, name):
         """Gets a Bio::Seq object by accession number
@@ -155,7 +155,7 @@ class BioSeqDatabase:
 
         """
         seqid = self.adaptor.fetch_seqid_by_accession(self.dbid, name)
-        return BioSeq.DBBioSeq(self.adaptor, seqid)
+        return BioSeq.DBSeqRecord(self.adaptor, seqid)
 
     def get_PrimarySeq_stream(self):
         # my @array = $self->get_all_primary_ids;
@@ -174,7 +174,7 @@ class BioSeqDatabase:
         return self.adaptor.list_bioentry_ids(self.dbid)
 
     def __getitem__(self, key):
-        return BioSeq.DBBioSeq(self.adaptor, key)
+        return BioSeq.DBSeqRecord(self.adaptor, key)
     def keys(self):
         return self.get_all_primary_ids()
     def values(self):
@@ -192,7 +192,7 @@ class BioSeqDatabase:
         lookup_name = _allowed_lookups[k]
         lookup_func = getattr(self.adaptor, lookup_name)
         seqid = lookup_func(self.dbid, v)
-        return BioSeq.DBBioSeq(self.adaptor, seqid)
+        return BioSeq.DBSeqRecord(self.adaptor, seqid)
         
     def get_Seq_by_primary_id(self, seqid):
         """Gets a Bio::Seq object by the primary (internal) id.
