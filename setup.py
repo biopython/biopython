@@ -31,6 +31,7 @@ if sys.version_info[:2] < (2, 2):
 from distutils.core import setup
 from distutils.core import Command
 from distutils.command.install import install
+from distutils.command.install_data import install_data
 from distutils.command.build_py import build_py
 from distutils.command.build_ext import build_ext
 from distutils.extension import Extension
@@ -365,8 +366,8 @@ EXTENSIONS = [
               ['Bio/PDB/mmCIF/lex.yy.c',
                'Bio/PDB/mmCIF/MMCIFlexmodule.c'],
               include_dirs=["Bio"],
-			  libraries=["fl"]
-			  ),
+              libraries=["fl"]
+              ),
     #Extension('Bio.KDTree._KDTreecmodule',
     #          ["Bio/KDTree/_KDTree.C", 
     #           "Bio/KDTree/_KDTree.swig.C"],
@@ -375,26 +376,41 @@ EXTENSIONS = [
     ]
 
 DATA_FILES=[
+    "Bio/EUtils/DTDs/*.dtd",
     ]
 
-# The Bio/EUtils/DTDs contains many ".dtd" files that need to be
-# installed as well.  Get a list of these files and append them to
-# DATA_FILES, which is passed into distutils as data_files.
-# data_files is a list of (path, files) where path is where the data
-# files should be installed.  path can be a full path or relative.  If
-# it is relative, Distutils behavior is different on Windows and Unix.
-# Thus, we have to add a hack to make it work on both platforms.
-dtd_path = os.path.join("Bio", "EUtils", "DTDs")
-if sys.platform == 'win32':
-    path = os.path.join("Lib\\site-packages", dtd_path)
-else:
-    path = os.path.join(
-        os.path.split(os.__file__)[0], "site-packages", dtd_path)
-x = os.listdir(os.path.join(os.getcwd(), dtd_path))
-x = [os.path.join(dtd_path, x) for x in x if x.endswith(".dtd")]
-DATA_FILES.append((path, x))
-del dtd_path, path, x
+# EUtils contains dtd files that need to be installed in the same
+# directory as the python modules.  Distutils doesn't have a simple
+# way of handling this, and we need to subclass install_data.  This
+# code is adapted from the mx.TextTools distribution.
 
+class install_data_biopython(install_data):
+    def finalize_options(self):
+        if self.install_dir is None:
+            installobj = self.distribution.get_command_obj('install')
+            self.install_dir = installobj.install_platlib
+        install_data.finalize_options(self)
+
+    def run (self):
+        import glob
+        if not self.dry_run:
+            self.mkpath(self.install_dir)
+        data_files = self.get_inputs()
+        for entry in data_files:
+            if type(entry) is not type(""):
+                raise ValueError, "data_files must be strings"
+            # Unix- to platform-convention conversion
+            entry = os.sep.join(entry.split("/"))
+            filenames = glob.glob(entry)
+            for filename in filenames:
+                dst = os.path.join(self.install_dir, filename)
+                dstdir = os.path.split(dst)[0]
+                if not self.dry_run:
+                    self.mkpath(dstdir)
+                    outfile = self.copy_file(filename, dst)[0]
+                else:
+                    outfile = dst
+                self.outfiles.append(outfile)
 
 
 # Install BioSQL.
@@ -410,6 +426,7 @@ setup(
         "install" : install_biopython,
         "build_py" : build_py_biopython,
         "build_ext" : build_ext_biopython,
+        "install_data" : install_data_biopython,
         "test" : test_biopython,
         },
     packages=PACKAGES,
