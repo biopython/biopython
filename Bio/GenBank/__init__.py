@@ -155,20 +155,20 @@ class Iterator:
         then the iterator will be set up to return the first record in
         the file.
         """
+        if isinstance(handle, File.UndoHandle):
+            _handle = handle
+        else:
+            _handle = File.UndoHandle(handle)
+            
         if has_header:
-            first_line = handle.readline()
+            first_line = _handle.readline()
             assert first_line.find("Genetic Sequence Data Bank") >= 0, \
                    "Doesn't seem to have a GenBank header."
-            while 1:
-                cur_line = handle.readline()
-                if cur_line.find("reported sequences") >= 0:
-                    break
-
-            # read off two more lines and we are ready to go
-            handle.readline()
-            handle.readline()
+            # skip ahead until we find first record
+            while _handle.peekline().find("LOCUS") < 0:
+                _handle.readline()
             
-        self._reader = RecordReader.StartsWith(handle, "LOCUS")          
+        self._reader = RecordReader.StartsWith(_handle, "LOCUS")          
         self._parser = parser
 
     def next(self):
