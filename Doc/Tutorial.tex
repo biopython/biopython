@@ -3305,7 +3305,7 @@ Any one of the following may be done to geerate the frequency table (ftab):
 
 Biopython also allows you to explore the extensive realm of macromolecular structure. 
 Biopython comes with a PDBParser class that produces a Structure object. The Structure object 
-can be used to access the atomic data in the file in a convcenient manner. 
+can be used to access the atomic data in the file in a convenient manner. 
 
 \subsection{Structure representation}
 
@@ -3319,7 +3319,7 @@ file). If this hierarchy cannot represent the contents of a structure file, it
 is fairly certain that the file contains an error or at least does not describe
 the structure unambiguously. If a SMCRA data structure cannot be generated,
 there is reason to suspect a problem. Parsing a PDB file can thus be used to
-detect likely problems. I will give several examples of this in section
+detect likely problems. We will give several examples of this in section
 \ref{problem structures}. 
 
 \begin{figure}
@@ -3590,7 +3590,7 @@ arrays are used.
 \subsubsection{General approach\label{disorder problems}}
 
 Disorder should be dealt with from two points of view: the atom and the residue
-points of view. In general, I have tried to encapsulate all the complexity that
+points of view. In general, we have tried to encapsulate all the complexity that
 arises from disorder. If you just want to loop over all C\( \alpha  \) atoms,
 you do not care that some residues have a disordered side chain. On the other
 hand it should also be possible to represent disorder completely in the data
@@ -3777,22 +3777,21 @@ residue.disordered_select("CYS")
 
 \subsubsection{Examples\label{problem structures}}
 
-I tested the PDBParser/Structure class on about 800 structures (each belonging
+The PDBParser/Structure class was tested on about 800 structures (each belonging
 to a unique SCOP superfamily). This takes about 20 minutes, or on average 1.5
 seconds per structure. Parsing the structure of the large ribosomal subunit
 (1FKK), which contains about 64000 atoms, takes 10 seconds on a 1000 MHz PC.
-This is pretty reasonable, I think. 
 
 Three exceptions were generated in cases where an unambiguous data structure
 could not be built. In all three cases, the likely cause is an error in the
-PDB file that should be corrected. I believe that generating an exception in
-these cases is much better than running the chance of incorrectly describing
+PDB file that should be corrected. Generating an exception in these cases 
+is much better than running the chance of incorrectly describing
 the structure in a data structure. 
 
 
 \paragraph{Duplicate residues}
 
-This structure contains two amino acid residues in one chain with the same sequence
+One structure contains two amino acid residues in one chain with the same sequence
 identifier (resseq 3) and icode. Upon inspection it was found that this chain
 contains the residues Thr A3, \ldots{}, Gly A202, Leu A3, Glu A204. Clearly,
 Leu A3 should be Leu A203. A couple of similar situations exist for structure
@@ -3868,6 +3867,30 @@ All atoms in a residue should have a unique id. This id is generated based on:
 \end{itemize}
 If this does not lead to a unique id something is quite likely wrong, and an
 exception is generated.
+
+\subsection{Other features}
+
+There are also some tools to analyze a crystal structure. Tools
+exist to superimpose two coordinate sets (SVDSuperimposer), to extract 
+polypeptides from a structure (Polypeptide), to perform neighbor lookup
+(NeighborSearch) and to write out PDB files (PDBIO). The neighbor lookup
+is done using a KD tree module written in C++. It is very fast and also
+includes a fast method to find all point pairs within a certain distance 
+of each other.
+
+A Polypeptide object is simply a UserList of Residue objects. You can 
+construct a list of Polypeptide objects from a Structure object as follows:
+
+\begin{verbatim}
+model_nr=1
+polypeptide_list=build_peptides(structure, model_nr)
+
+for polypeptide in polypeptide_list:
+    print polypeptide
+\end{verbatim}
+
+The Polypeptide objects are always created from a single 
+Model (in this case model 1).
 
 
 
