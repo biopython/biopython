@@ -18,7 +18,7 @@ f_iterator = Fasta.Iterator(file_for_blast)
 f_record = f_iterator.next()
 
 print 'Doing the BLAST and retrieving the results...'
-result_handle = NCBIWWW.blast('blastn', 'nr', f_record)
+result_handle = NCBIWWW.qblast('blastn', 'nr', f_record)
 
 # save the results for later, in case we want to look at it
 save_file = open('m_cold_blast.out', 'w')
