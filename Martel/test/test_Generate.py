@@ -1,5 +1,6 @@
 # Test that the parser generation works.
 
+import Martel
 from Martel.Generate import *
 from Martel.Generate import _generate
 
@@ -62,11 +63,17 @@ def test():
          ("ab", "a", "a\n\nb\n", "a\nb", "a\r\nb")),
         (r"ID [^\R]+\R", ("ID A123\n", "ID A123\r", "ID A123\r\n"),
          ("ID A123\n\n", "ID A123\r\r", "ID A123", "ID \n")),
+
+        # named group backreference
+        (r"(?P<name>A+)B(?P=name)A", ("ABAA", "AABAAA", "AAABAAAA"),
+         ("ABA", "AB", "ABAAA", "AABA", "AABAA", "AABAAAA")),
+        # named group backreference which can be empty
+        (r"(?P<name>A*)B(?P=name)A", ("BA", "ABAA", "AABAAA", "AAABAAAA"),
+         ("BAA", "ABA", "AB", "ABAAA", "AABA", "AABAA", "AABAAAA")),
         )
     for re_pat, good_list, bad_list in patterns:
-        print "Testing", repr(re_pat)
-        tree = convert_re.make_expression(re_pat)
-        exp = Parser.Parser(tuple(_generate(tree, GeneratorState({}, 0))))
+        tree = Martel.Re(re_pat)
+        exp = tree.make_parser()
         exp.setContentHandler(cb)
         exp.setErrorHandler(cb)
         if string.find(re_pat, r"\R") == -1:  # \R is a Martel-specific flag
@@ -89,7 +96,8 @@ def test():
             assert m.end() == len(word), "Did not parse all of created %s: %d"\
                    % (repr(word), m.end())
             
-            assert cb.good_parse, "Problem not recognizing " + repr(word)
+            assert cb.good_parse, "Problem not recognizing %s with %s" % \
+                   (repr(word), repr(re_pat))
             
         for word in bad_list:
             exp.parseString(word)
