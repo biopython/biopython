@@ -1,4 +1,4 @@
-# Copyright 1999 by Jeffrey Chang.  All rights reserved.
+# Copyright 1999-2000 by Jeffrey Chang.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -10,13 +10,18 @@ BLAST, either blastall or blastpgp, provided by the NCBI.
 http://www.ncbi.nlm.nih.gov/BLAST/
 
 Classes:
-Scanner        Scans output from standalone BLAST.
-HeavyConsumer  Heavyweight consumer.
+_Scanner        Scans output from standalone BLAST.
+_HeavyConsumer  Heavyweight consumer.
 
 Functions:
 blastall       Execute blastall.
 blastpgp       Execute blastpgp.
+
 """
+
+# To do:
+# optimize regex's
+# Consumer to integers and floats where appropriate
 
 
 import os
@@ -29,7 +34,7 @@ from Bio.ParserSupport import *
 from Bio.Blast import Record
 
 
-class Scanner:
+class _Scanner:
     """Scan BLAST output from blastall or blastpgp.
 
     Tested with blastall and blastpgp v2.0.10, v2.0.11
@@ -469,97 +474,485 @@ class Scanner:
 
         consumer.end_parameters()
 
-class HeavyConsumer(AbstractConsumer):
-    def __init__(self):
-        self.record = None
+class ComprehensiveParser:
+    """Parses BLAST data into a Record.Comprehensive object.
 
-    ### header
-        
+    """
+    def __init__(self):
+        self._scanner = _Scanner()
+        self._consumer = _ComprehensiveConsumer()
+
+    def parse(self, handle):
+        self._scanner.feed(handle, self._consumer)
+        return self._consumer.data
+
+
+class _HeaderConsumer:
     def start_header(self):
-        self.record = Record.Heavyweight()
+        self._application = ''
+        self._version = ''
+        self._date = ''
+        self._reference = ''
+        self._query = ''
+        self._query_letters = ''
+        self._database = ''
+        self._database_sequences = ''
+        self._database_letters = ''
         
     def version(self, line):
         c = string.split(line)
-        self.record.application = c[0]
-        self.record.version = c[1]
-        self.record.date = c[2][1:-1]
+        self._application = c[0]
+        self._version = c[1]
+        self._date = c[2][1:-1]
         
     def reference(self, line):
         if line[:11] == 'Reference: ':
-            self.record.reference = line[11:]
+            self._reference = line[11:]
         else:
-            self.record.reference = self.record.reference + line
+            self._reference = self._reference + line
             
     def query_info(self, line):
         if line[:7] == 'Query= ':
-            self.record.query = string.rstrip(line[7:])
+            self._query = string.rstrip(line[7:])
         else:
-            m = re.search(r'(\d+) letters', line)
-            if m:
-                self.record.query_letters = m.group(1)
+            self._query_letters, = _re_search(
+                r"(\d+) letters", line,
+                "I could not find the number of letters in line\n%s" % line)
                 
     def database_info(self, line):
         if line[:10] == 'Database: ':
-            self.record.database = string.rstrip(line[10:])
+            self._database = string.rstrip(line[10:])
         else:
-            m = re.search(r'(\w+) sequences; (\w+) total letters', line)
-            if m:
-                self.record.database_sequences = m.group(1)
-                self.record.database_letters = m.group(2)
+            self._database_sequences, self._database_letters = _re_search(
+                r"([0-9,]+) sequences; ([0-9,]+) total letters", line,
+                "I could not find the sequences and letters in line\n%s" %line)
 
-
-    ### description
-
-    def round(self, line):
-        # XXX Need a PSI-BLAST record
-        # m = re.search(r'round (\d+)', line)
+    def end_header(self):
         pass
 
-    def model_sequences(self, line):
-        # XXX PSI-BLAST
-        pass
 
-    def nonmodel_sequences(self, line):
-        # XXX PSI-BLAST
-        pass
-
-    def converged(self, line):
-        # XXX PSI-BLAST
-        pass
-
+class _DescriptionConsumer:
+    def start_descriptions(self):
+        self._descriptions = []
+    
     def description(self, line):
-        dh = Record.DescriptionHit()
-        dh.title, dh.score, dh.p = strip.split(line)
-        self.record.descriptions.append(dh)
+        dh = Record.Description()
+        
+        # I need to separate the score and p-value from the title.
+        # sp|P21297|FLBT_CAUCR FLBT PROTEIN     [snip]           284  7e-77
+        # special cases to handle:
+        #   - title must be preserved exactly (including whitespaces)
+        #   - score could be equal to p-value (not likely, but what if??)
+        cols = string.split(line)
+        i = string.rfind(line, cols[-1])        # find start of p-value
+        i = string.rfind(line, cols[-2], 0, i)  # find start of score
+        dh.title, dh.score, dh.p = string.rstrip(line[:i]), cols[-2], cols[-1]
+        self._descriptions.append(dh)
 
     def no_hits(self, line):
         pass
 
+    def end_descriptions(self):
+        pass
 
-    
-    ### alignment
 
+class _AlignmentConsumer:
     def start_alignment(self):
-        self._align = Record.AlignmentHit()
-        self.record.alignments.append(self._align)
+        self._title = ''
+        self._length = ''
 
     def title(self, line):
-        self._align.title = string.rstrip(line)
+        self._title = string.rstrip(line)
 
     def length(self, line):
-        self._align.length = string.split(line)[2]
+        self._length = string.split(line)[2]
 
     def end_alignment(self):
-        del self._align
+        pass
 
 
+class _HSPConsumer:
+    def start_hsp(self):
+        self._score = ''
+        self._bits = ''
+        self._expect = ''
+        self._identities = ''
+        self._positives = ''
+        self._strand = None
+        self._frame = None
+        self._gaps = ''
+        self._query = []
+        self._query_start = []
+        self._match = []
+        self._sbjct = []
+        self._sbjct_start = []
+
+    def score(self, line):
+        self._score, self._bits = _re_search(
+            r"Score =\s*([0-9.]+) bits \(([0-9]+)\)", line,
+            "I could not find the score in line\n%s" % line)
+        self._score = _safe_float(self._score)
+        self._bits = _safe_float(self._bits)
+
+        self._expect, = _re_search(
+            r"Expect = ([0-9.e-]+)", line,
+            "I could not find the expect in line\n%s" % line)
+        self._expect = _safe_float(self._expect)
+
+    def identities(self, line):
+        self._identities, = _re_search(
+            r"Identities = (\d+)", line,
+            "I could not find the identities in line\n%s" % line)
+        self._identities = _safe_int(self._identities)
+
+        self._positives, = _re_search(
+            r"Positives = (\d+)", line,
+            "I could not find the positives in line\n%s" % line)
+        self._positives = _safe_int(self._positives)
+        
+    def strand(self, line):
+        self._strand = _re_search(
+            r"Strand = (\w+) / (\w+)", line,
+            "I could not find the strand in line\n%s" % line)
+
+    def frame(self, line):
+        # Frame can be in formats:
+        # Frame = +1
+        # Frame = +2 / +2
+        if string.find(line, '/') >= 0:
+            self._frame = _re_search(
+                r"Frame = ([-+][123])", line,
+                "I could not find the frame in line\n%s" % line)
+        else:
+            self._frame = _re_search(
+                r"Frame = ([-+][123]) / ([-+][123])", line,
+                "I could not find the frame in line\n%s" % line)
+
+    def query(self, line):
+        m = re.search(r"Query: (\d+)\s+(.+) \d", line)
+        if m is None:
+            raise SyntaxError, "I could not find the query in line\n%s" % line
+        start, seq = m.groups()
+        self._query.append(seq)
+        self._query_start.append(start)
+
+        self._query_start_index = m.start(1)
+        self._query_len = len(seq)
+
+    def align(self, line):
+        seq = string.rstrip(line[self._query_start_index:])
+        if len(seq) < self._query_len:
+            # Make sure the alignment is the same length as the query
+            seq = seq + ' ' * (self._query_len-len(seq))
+        elif len(seq) < self._query_len:
+            raise SyntaxError, "Match is longer than the query in line\n%s" % \
+                  line
+        self._match.append(seq)
+
+    def sbjct(self, line):
+        start, seq = _re_search(
+            r"Sbjct: (\d+)\s+(.+) \d", line,
+            "I could not find the sbjct in line\n%s" % line)
+        self._sbjct.append(seq)
+        self._sbjct_start.append(start)
+
+        if len(seq) != self._query_len:
+            raise SyntaxError, \
+                  "QUERY and SBJCT sequence lengths don't match in line\n%s" \
+                  % line
+
+        del self._query_start_index   # clean up unused variables
+        del self._query_len
+
+    def end_hsp(self):
+        pass
+
+class _DatabaseReportConsumer:
+    def start_database_report(self):
+        self._database = ''
+        self._posted_date = ''
+        self._num_letters_in_database = ''
+        self._num_sequences_in_database = ''
+        self._ka_params = ()
+        self._gapped = 0
+        self._ka_params_gap = ()
+
+    def database(self, line):
+        self._database, = _re_search(
+            r"Database: (.+)$", line,
+            "I could not find the database in line\n%s" % line)
+
+    def posted_date(self, line):
+        self._posted_date, = _re_search(
+            r"Posted date:\s*(.+)$", line,
+            "I could not find the posted date in line\n%s" % line)
+
+    def num_letters_in_database(self, line):
+        self._num_letters_in_database, = _get_cols(
+            line, (-1,), ncols=6, expected={2:"letters", 4:"database:"})
+
+    def num_sequences_in_database(self, line):
+        self._num_sequences_in_database, = _get_cols(
+            line, (-1,), ncols=6, expected={2:"sequences", 4:"database:"})
+
+    def ka_params(self, line):
+        self._ka_params = string.split(line)
+        self._ka_params = map(float, self._ka_params)
+
+    def gapped(self, line):
+        self._gapped = 1
+
+    def ka_params_gap(self, line):
+        self._ka_params_gap = string.split(line)
+        self._ka_params_gap = map(float, self._ka_params_gap)
+
+    def end_database_report(self):
+        pass
+    
+class _ParametersConsumer:
+    def start_parameters(self):
+        self._matrix = ''
+        self._gap_penalties = ()
+        self._num_hits = None
+        self._num_sequences = None
+        self._num_good_extends = None
+        self._num_seqs_better_e = None
+        self._hsps_no_gap = None
+        self._hsps_prelim_gapped = None
+        self._hsps_prelim_gapped_attemped = None
+        self._hsps_gapped = None
+        self._query_length = None
+        self._database_length = None
+        self._effective_hsp_length = None
+        self._effective_query_length = None
+        self._effective_database_length = None
+        self._effective_search_space = None
+        self._effective_search_space_used = None
+        self._frameshift = ()
+        self._threshold = None
+        self._window_size = None
+        self._dropoff_1st_pass = ()
+        self._gap_x_dropoff = ()
+        self._gap_x_dropoff_final = ()
+        self._gap_trigger = ()
+        self._blast_cutoff = ()
+
+    def matrix(self, line):
+        self._matrix, = _get_cols(
+            line, (-1,), ncols=2, expected={0:"Matrix:"})
+
+    def gap_penalties(self, line):
+        self._gap_penalties = _get_cols(
+            line, (3, 5), ncols=6, expected={2:"Existence:", 4:"Extension:"})
+        self._gap_penalties = map(_safe_int, self._gap_penalties)
+
+    def num_hits(self, line):
+        self._num_hits, = _get_cols(
+            line, (-1,), ncols=6, expected={2:"Hits"})
+
+    def num_sequences(self, line):
+        self._num_sequences, = _get_cols(
+            line, (-1,), ncols=4, expected={2:"Sequences:"})
+
+    def num_extends(self, line):
+        self._num_extends, = _get_cols(
+            line, (-1,), ncols=4, expected={2:"extensions:"})
+
+    def num_good_extends(self, line):
+        self._num_good_extends, = _get_cols(
+            line, (-1,), ncols=5, expected={3:"extensions:"})
+        
+    def num_seqs_better_e(self, line):
+        self._num_seqs_better_e, = _get_cols(
+            line, (-1,), ncols=7, expected={2:"sequences"})
+
+    def hsps_no_gap(self, line):
+        self._hsps_no_gap, = _get_cols(
+            line, (-1,), ncols=9, expected={3:"better", 7:"gapping:"})
+
+    def hsps_prelim_gapped(self, line):
+        self._hsps_prelim_gapped, = _get_cols(
+            line, (-1,), ncols=9, expected={4:"gapped", 6:"prelim"})
+
+    def hsps_prelim_gapped_attempted(self, line):
+        self._hsps_prelim_gapped_attempted, = _get_cols(
+            line, (-1,), ncols=10, expected={4:"attempted", 7:"prelim"})
+
+    def hsps_gapped(self, line):
+        self._hsps_gapped, = _get_cols(
+            line, (-1,), ncols=6, expected={3:"gapped"})
+        
+    def query_length(self, line):
+        self._query_length, = _get_cols(
+            line, (-1,), ncols=4, expected={0:"length", 2:"query:"})
+        
+    def database_length(self, line):
+        self._database_length, = _get_cols(
+            line, (-1,), ncols=4, expected={0:"length", 2:"database:"})
+
+    def effective_hsp_length(self, line):
+        self._effective_hsp_length, = _get_cols(
+            line, (-1,), ncols=4, expected={1:"HSP", 2:"length:"})
+
+    def effective_query_length(self, line):
+        self._effective_query_length, = _get_cols(
+            line, (-1,), ncols=5, expected={1:"length", 3:"query:"})
+
+    def effective_database_length(self, line):
+        self._effective_database_length, = _get_cols(
+            line, (-1,), ncols=5, expected={1:"length", 3:"database:"})
+        
+    def effective_search_space(self, line):
+        self._effective_search_space, = _get_cols(
+            line, (-1,), ncols=4, expected={1:"search"})
+
+    def effective_search_space_used(self, line):
+        self._effective_search_space_used, = _get_cols(
+            line, (-1,), ncols=5, expected={1:"search", 3:"used:"})
+
+    def frameshift(self, line):
+        self._frameshift, self._decay = _get_cols(
+            line, (4, 5), ncols=6, expected={0:"frameshift", 2:"decay"})
+
+    def threshold(self, line):
+        self._threshold, = _get_cols(
+            line, (1,), ncols=2, expected={0:"T:"})
+        
+    def window_size(self, line):
+        self._window_size, = _get_cols(
+            line, (1,), ncols=2, expected={0:"A:"})
+        
+    def dropoff_1st_pass(self, line):
+        self._dropoff_1st_pass = _re_search(
+            r"X1: (\d+) \(\s*([0-9,.]+) bits\)", line,
+            "I could not find the dropoff in line\n%s" % line)
+        
+    def gap_x_dropoff(self, line):
+        self._gap_x_dropoff = _re_search(
+            r"X2: (\d+) \(\s*([0-9,.]+) bits\)", line,
+            "I could not find the gap dropoff in line\n%s" % line)
+        
+    def gap_x_dropoff_final(self, line):
+        self._gap_x_dropoff_final = _re_search(
+            r"X3: (\d+) \(\s*([0-9,.]+) bits\)", line,
+            "I could not find the gap dropoff final in line\n%s" % line)
+
+    def gap_trigger(self, line):
+        self._gap_trigger = _re_search(
+            r"S1: (\d+) \(\s*([0-9,.]+) bits\)", line,
+            "I could not find the gap trigger in line\n%s" % line)
+        
+    def blast_cutoff(self, line):
+        self._blast_cutoff = _re_search(
+            r"S2: (\d+) \(\s*([0-9,.]+) bits\)", line,
+            "I could not find the blast cutoff in line\n%s" % line)
+        
+    def end_parameters(self):
+        pass
     
 
-    
-    
-    
+class _ComprehensiveConsumer(AbstractConsumer,
+                             _HeaderConsumer,
+                             _DescriptionConsumer,
+                             _AlignmentConsumer,
+                             _HSPConsumer,
+                             _DatabaseReportConsumer,
+                             _ParametersConsumer
+                             ):
+    # This Consumer is inherits from many other consumer classes that handle
+    # the actual dirty work.  An alternate way to do it is to create objects
+    # of those classes and then delegate the parsing tasks to them in a
+    # decorator-type pattern.  The disadvantage of that is that the method
+    # names will need to be resolved in this classes.  However, using
+    # a decorator will retain more control in this class (which may or
+    # may not be a bad thing).  In addition, having each sub-consumer as
+    # its own object prevents this object's dictionary from being cluttered
+    # with members and reduces the chance of member collisions.
+    def __init__(self):
+        self.data = None
 
+    def start_header(self):
+        self.data = Record.Comprehensive()
+        _HeaderConsumer.start_header(self)
 
+    def end_header(self):
+        _HeaderConsumer.end_header(self)
+        self.data.application = self._application
+        self.data.version = self._version
+        self.data.date = self._date
+        self.data.reference = self._reference
+        self.data.query = self._query
+        self.data.query_letters = self._query_letters
+        self.data.database = self._database
+        self.data.database_sequences = self._database_sequences
+        self.data.database_letters = self._database_letters
+
+    def start_alignment(self):
+        self.__alignment = Record.Alignment()
+        _AlignmentConsumer.start_alignment(self)
+
+    def end_alignment(self):
+        _AlignmentConsumer.end_alignment(self)
+        self.__alignment.title = self._title
+        self.__alignment.length = self._length
+        self.data.alignments.append(self.__alignment)
+        del self.__alignment
+
+    def end_hsp(self):
+        _HSPConsumer.end_hsp(self)
+        hsp = Record.HSP()
+        hsp.score = self._score
+        hsp.bits = self._bits
+        hsp.expect = self._expect
+        hsp.identities = self._identities
+        hsp.positives = self._positives
+        hsp.strand = self._strand
+        hsp.frame = self._frame
+        hsp.gaps = self._gaps
+        hsp.query = self._query
+        hsp.query_start = self._query_start
+        hsp.match = self._match
+        hsp.sbjct = self._sbjct
+        hsp.sbjct_start = self._sbjct_start
+        self.__alignment.hsps.append(hsp)
+
+    def end_database_report(self):
+        _DatabaseReportConsumer.end_database_report(self)
+        self.data.posted_date = self._posted_date
+        self.data.ka_params = self._ka_params
+        self.data.gapped = self._gapped
+        self.data.ka_params_gap = self._ka_params_gap
+
+    def end_parameters(self):
+        _ParametersConsumer.end_parameters(self)
+        self.data.matrix = self._matrix
+        self.data.gap_penalties = self._gap_penalties
+        self.data.num_hits = self._num_hits
+        self.data.num_sequences = self._num_sequences
+        self.data.num_good_extends = self._num_good_extends
+        self.data.num_seqs_better_e = self._num_seqs_better_e
+        self.data.hsps_no_gap = self._hsps_no_gap
+        self.data.hsps_prelim_gapped = self._hsps_prelim_gapped
+        self.data.hsps_prelim_gapped_attemped = \
+                                              self._hsps_prelim_gapped_attemped
+        self.data.hsps_gapped = self._hsps_gapped
+        self.data.query_length = self._query_length
+        self.data.database_length = self._database_length
+        self.data.effective_hsp_length = self._effective_hsp_length
+        self.data.effective_query_length = self._effective_query_length
+        self.data.effective_database_length = self._effective_database_length
+        self.data.effective_search_space = self._effective_search_space
+        self.data.effective_search_space_used = \
+                                              self._effective_search_space_used
+        self.data.frameshift = self._frameshift
+        self.data.threshold = self._threshold
+        self.data.window_size = self._window_size
+        self.data.dropoff_1st_pass = self._dropoff_1st_pass
+        self.data.gap_x_dropoff = self._gap_x_dropoff
+        self.data.gap_x_dropoff_final = self._gap_x_dropoff_final
+        self.data.gap_trigger = self._gap_trigger
+        self.data.blast_cutoff = self._blast_cutoff
+        
 
 def blastall(blastcmd, program, database, infile, **keywds):
     """blastall(blastcmd, program, database, infile, **keywds) ->
@@ -784,3 +1177,41 @@ def blastpgp(blastcmd, database, infile, **keywds):
     r, w, e = popen2.popen3([blastcmd] + params)
     w.close()
     return File.UndoHandle(r), File.UndoHandle(e)
+
+
+def _re_search(regex, line, error_msg):
+    m = re.search(regex, line)
+    if not m:
+        raise SyntaxError, error_msg
+    return m.groups()
+
+def _get_cols(line, cols_to_get, ncols=None, expected={}):
+    cols = string.split(line)
+
+    # Check to make sure number of columns is correct
+    if ncols is not None and len(cols) != ncols:
+        raise SyntaxError, "I expected %d columns in line\n%s" % (ncols, line)
+
+    # Check to make sure columns contain the correct data
+    for k in expected.keys():
+        if cols[k] != expected[k]:
+            raise SyntaxError, "I expected '%s' in column %d in line\n%s" % (
+                expected[k], k, line)
+
+    # Construct the answer tuple
+    results = []
+    for c in cols_to_get:
+        results.append(cols[c])
+    return tuple(results)
+
+def _safe_int(str):
+    try:
+        return int(str)
+    except ValueError:
+        # Remove all commas from the integer
+        str = string.replace(str, ',', '')
+        return int(str)
+    assert 0, "How did I get here?"
+
+def _safe_float(str):
+    return float(str)

@@ -1,4 +1,4 @@
-# Copyright 1999 by Jeffrey Chang.  All rights reserved.
+# Copyright 1999-2000 by Jeffrey Chang.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -6,20 +6,18 @@
 """Record.py
 
 Classes:
-Heavyweight
-Lightweight
+Comprehensive   Holds all the information from a BLAST record.
+Lightweight     Not implemented.
+PSIBlast        Not implemented.
+MasterSlave     Not implemented.
 
-PSIBlast
-MasterSlave
-
-DescriptionHit
-AlignmentHit
-HSP
+Description     Holds information about a hit description.
+Alignment       Holds information about an alignment hit.
+HSP             Holds information about 1 HSP.
 
 """
 
-
-class Heavyweight:
+class Comprehensive:
     """Saves the results from a blast search.
 
     Members:
@@ -35,8 +33,39 @@ class Heavyweight:
     database_sequences
     database_letters
 
-    descriptions  A list of DescriptionHit objects.
-    alignment     A list of AlignmentHit objects.
+    descriptions  A list of Description objects.
+    alignments    A list of Alignment objects.
+
+    posted_date
+    ka_params
+    gapped        # XXX this isn't set right!
+    ka_params_gap
+    
+    matrix
+    gap_penalties
+    num_hits
+    num_sequences
+    num_good_extends
+    num_seqs_better_e
+    hsps_no_gap
+    hsps_prelim_gapped
+    hsps_prelim_gapped_attemped
+    hsps_gapped
+    query_length
+    database_length
+    effective_hsp_length
+    effective_query_length
+    effective_database_length
+    effective_search_space
+    effective_search_space_used
+    frameshift
+    threshold
+    window_size
+    dropoff_1st_pass
+    gap_x_dropoff
+    gap_x_dropoff_final
+    gap_trigger
+    blast_cutoff
     
     """
     def __init__(self):
@@ -51,21 +80,52 @@ class Heavyweight:
         self.descriptions = []
         self.alignments = []
 
-class DescriptionHit:
+        self.posted_date = ''
+        self.ka_params = (None, None, None)
+        self.gapped = None # XXX ???
+        self.ka_params_gap = (None, None, None)
+
+        self._matrix = ''
+        self._gap_penalties = ()
+        self._num_hits = None
+        self._num_sequences = None
+        self._num_good_extends = None
+        self._num_seqs_better_e = None
+        self._hsps_no_gap = None
+        self._hsps_prelim_gapped = None
+        self._hsps_prelim_gapped_attemped = None
+        self._hsps_gapped = None
+        self._query_length = None
+        self._database_length = None
+        self._effective_hsp_length = None
+        self._effective_query_length = None
+        self._effective_database_length = None
+        self._effective_search_space = None
+        self._effective_search_space_used = None
+        self._frameshift = ()
+        self._threshold = None
+        self._window_size = None
+        self._dropoff_1st_pass = ()
+        self._gap_x_dropoff = ()
+        self._gap_x_dropoff_final = ()
+        self._gap_trigger = ()
+        self._blast_cutoff = ()
+
+class Description:
     """Stores information about one hit in the descriptions section.
 
     Members:
-    title
-    score       High Score.
-    p           P value.
+    title       Title of the hit.
+    score       Number of bits.  (integer)
+    p           P value.  (float)
     
     """
     def __init__(self):
-        self.name = None
+        self.title = None
         self.score = None
         self.p = None
 
-class AlignmentHit:
+class Alignment:
     """Stores information about one hit in the alignments section.
 
     Members:
@@ -75,7 +135,7 @@ class AlignmentHit:
 
     """
     def __init__(self):
-        self.name = None
+        self.title = None
         self.length = None
         self.hsps = []
 
@@ -89,12 +149,15 @@ class HSP:
     identities   number of identities
     positives    number of positives
     gaps         number of gaps (gapped BLAST only)
+    strand       tuple of (query, target) strand
+    frame        tuple of 1 or 2 frame shifts, depending on the flavor
 
-    query
-    query_start
-    match
-    sbjct
-    sbjct_start
+    # XXX change these to strings!
+    query        list of query sequences
+    query_start  list of where the query sequences start
+    match        list of the match sequences
+    sbjct        list of the sbjct sequences
+    sbjct_start  list of where the sbjct sequences start
     
     Not all flavors of BLAST return values for every attribute:
               score     expect     identities   positives    strand  frame
@@ -115,17 +178,17 @@ class HSP:
 
     """
     def __init__(self):
-        self.score = None
-        self.bits = None
-        self.expect = None
-        self.identities = None
-        self.positives = None
+        self.score = ''
+        self.bits = ''
+        self.expect = ''
+        self.identities = ''
+        self.positives = ''
         self.strand = None
         self.frame = None
-        self.gaps = None
+        self.gaps = ''
         
-        self.query = None
-        self.query_start = None
-        self.match = None
-        self.sbjct = None
-        self.sbjct_start = None
+        self.query = []
+        self.query_start = []
+        self.match = []
+        self.sbjct = []
+        self.sbjct_start = []
