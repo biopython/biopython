@@ -4,7 +4,6 @@ import sys
 import os
 import cPickle
 import time
-import pprint
 
 test_file = os.path.join('FSSP', '1cnv.fssp')
 f = sys.stdout
@@ -39,5 +38,13 @@ f.write("\nname list %s\n" % str(name_list))
 sum_newnames, align_newnames = FSSPTools.name_filter(sum_rec, align_rec,
                                                      name_list)
 
-pprint.pprint(sum_newnames, f)
-pprint.pprint(align_newnames['0P168'].pos_align_dict, f)
+ks = sum_newnames.keys()
+ks.sort()
+for key in ks:
+    f.write("%s : %s\n" % (key, sum_newnames[key]))
+    
+dict = align_newnames['0P168'].pos_align_dict
+ks = dict.keys()
+ks.sort()
+for key in ks:
+    f.write("%s : %s\n" % (key, dict[key]))

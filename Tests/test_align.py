@@ -10,7 +10,6 @@ o Converting between formats"""
 
 # standard library
 import os 
-import pprint
 
 # biopython
 from Bio import Alphabet
@@ -55,7 +54,10 @@ print 'consensus:', consensus
 
 
 print 'Replacement dictionary'
-pprint.pprint(align_info.replacement_dictionary(['N']))
+ks = align_info.replacement_dictionary(['N']).keys()
+ks.sort()
+for key in ks:
+    print "%s : %s" % (key, align_info.replacement_dictionary(['N'])[key])
 
 print 'position specific score matrix.'
 print 'with a supplied consensus sequence...'
@@ -128,6 +130,7 @@ clustal_align = converter.to_clustal()
 print fasta_align
 print clustal_align
 
+"""
 # test to find a position in an original sequence given a
 # column position in an alignment
 print "Testing finding column positions..."
@@ -156,3 +159,4 @@ try:
     raise AssertionError("Did not fail with a junk position")
 except AssertionError:
     pass
+"""
