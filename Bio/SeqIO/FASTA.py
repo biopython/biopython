@@ -30,7 +30,7 @@ class FastaReader:
         # Like bioperl, I assume the first word is the name/id and the
         # rest of the line (after the first whitespace) is a
         # description.  If there's only one word, it's the id.
-        x = string.split(line[1:-1], None, 1)
+        x = string.split(line[1:].rstrip(), None, 1)
         if len(x) == 1:
             id = x
             desc = ""
@@ -42,7 +42,7 @@ class FastaReader:
         while line:
             if line[0] == ">":
                 break
-            lines.append(line[:-1])
+            lines.append(line.rstrip())
             line = self.infile.readline()
             
         self._lookahead = line
