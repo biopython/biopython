@@ -54,6 +54,7 @@ class PathFinder:
 				# note that search alters edges, inverted_edges
 				fw_list=self._search(key, edges, inverted_edges)
 				bw_list=self._search(key, inverted_edges, edges)
+				bw_list.reverse()
 				if len(fw_list)+len(bw_list)>0:
 					node_list=bw_list+[key]+fw_list
 					path_list.append(node_list)
