@@ -556,7 +556,7 @@ def blast(program, database, query,
           entrez_query='(none)',
           filter='L',
           expect='10',
-          word_size='3',
+          word_size=None,
           ungapped_alignment='no',    # deprecated, not on webpage anymore
           other_advanced=None,
           cdd_search='on',
@@ -574,7 +574,7 @@ def blast(program, database, query,
           alignment_view='Pairwise',
           auto_format='on',
           cgi='http://www.ncbi.nlm.nih.gov/blast/Blast.cgi',
-          timeout=20):
+          timeout=20, output_fn=None):
     
     """blast(program, database, query[, query_from][, query_to]
     [, entrez_query][, filter][, expect]
@@ -646,6 +646,17 @@ def blast(program, database, query,
               'ALIGNMENTS' : alignments,
               'ALIGNMENT_VIEW' : alignment_view,
               'AUTO_FORMAT' : auto_format}
+
+    default_word_sizes = {
+        'blastp' : 3,
+        'blastn' : 11,
+        'blastx' : 3,
+        'tblastn' : 3,
+        'tblastx' : 3
+        }
+    if not params['WORD_SIZE']:
+        params['WORD_SIZE'] = default_word_sizes.get(params['PROGRAM'], 3)
+    
     variables = {}
     for k in params.keys():
         if params[k] is not None:
@@ -677,6 +688,10 @@ def blast(program, database, query,
     handle = NCBI._open(cgi, variables, get=0)
     # Now parse the HTML from the handle and figure out how to retrieve
     # the results.
+    if output_fn is not None:
+        results = handle.read()
+        output_fn(results)
+        handle = File.StringHandle(results)
     ref_cgi, ref_params = _parse_blast_ref_page(handle)
     ref_cgi = urlparse.urljoin(cgi, ref_cgi)  # convert to absolute URL
 
@@ -690,8 +705,11 @@ def blast(program, database, query,
         
         # Sometimes the BLAST results aren't done yet.  Look at the page
         # to see if the results are there.  If not, then try again later.
-        
         handle = NCBI._open(ref_cgi, ref_params, get=0)
+        if output_fn is not None:
+            results = handle.read()
+            output_fn(results)
+            handle = File.StringHandle(results)
         ready, results_cgi, results_params = _parse_blast_results_page(handle)
         results_cgi = urlparse.urljoin(cgi, results_cgi)    # to absolute URL
         if ready:
