@@ -278,7 +278,7 @@ class _Scanner:
     def _scan_record(self, uhandle, consumer):
         consumer.start_record()
 
-        prev_qualifier = ''
+        prev_qualifier = None
         while 1:
             line = uhandle.readline()
             if is_blank_line(line):
@@ -289,15 +289,18 @@ class _Scanner:
             #       tuberculosis).
             # 1) qualifier + '-' + data
             # 2) continuation, with just data
-           
+
+            # Check to see if it's a continuation line.
             qualifier = string.rstrip(line[:4])
-            if qualifier != '':   # has a qualifier
+            if line[0] == '\t' or qualifier == '':
+                if prev_qualifier is None:
+                    raise SyntaxError, "Continuation on first line\n%s" % line
+                qualifier = prev_qualifier
+            else:
                 # Make sure it contains a '-'
                 if line[4] != '-':
                     raise SyntaxError, \
                           "I don't understand the format of line %s" % line
-            else:                 # continuation line
-                qualifier = prev_qualifier
             prev_qualifier = qualifier
             
             try:
