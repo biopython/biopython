@@ -4,8 +4,7 @@
 # as part of this package.  
 
 
-from Bio.PDB.PDBParser import PDBParser 
-from Bio.PDB.Polypeptide import CaPPBuilder, PPBuilder
+from Bio.PDB import *
 
 
 # first make a PDB parser object
