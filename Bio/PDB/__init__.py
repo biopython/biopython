@@ -6,7 +6,6 @@ __all__=[
 "Entity",
 "Model",
 "NeighborSearch",
-"PathFinder",
 "PDBExceptions",
 "PDBIO",
 "PDBParser",
