@@ -132,16 +132,35 @@ def search_for(search, batchsize=10000, delay=2, callback_fn=None,
         # </Body>
         # 5/30/2001: <Body> tag now missing.  Start in body by default.
         # 8/28/2001: <Title> tags now missing.  Ignore QueryResult.
+
+        # 12/4/2001: If no results found, I get back:
+        # <QueryResult>
+        #         <ERROR>Can't run executor</ERROR>
+        #         <ErrorList>
+        #                 <PhraseNotFound>foobar[All Fields]</PhraseNotFound>
+        #         </ErrorList>
+        #         <WarningList>
+        #                 <OutputMessage>No items found.</OutputMessage>
+        #         </WarningList>
+        # </QueryResult>
         def __init__(self):
             sgmllib.SGMLParser.__init__(self)
             self.ids = []
             self.in_body = 1
+            self.in_queryresult = 0
+        def start_queryresult(self, attributes):
+            self.in_queryresult = 1
+        def end_queryresult(self):
+            self.in_queryresult = 0
         def start_body(self, attributes):
             self.in_body = 1
         def end_body(self):
             self.in_body = 0
         _not_pmid_re = re.compile(r'\D')
         def handle_data(self, data):
+            # If I'm in a QueryResult tag, ignore.
+            if self.in_queryresult:
+                return
             # The ID's only appear in the body.  If I'm not in the body,
             # then don't do anything.
             if not self.in_body:
