@@ -42,6 +42,8 @@ from StructureAlignment import StructureAlignment
 # DSSP handle
 from DSSP import DSSP, make_dssp_dict
 
+from ResidueDepth import ResidueDepth, get_surface
+
 # Fast atom neighbor search
 # Depends on KDTree C++ module
 try:
