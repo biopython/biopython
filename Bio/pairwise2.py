@@ -185,11 +185,12 @@ are indexes into seqA and seqB that indicate the where the
 alignment occurs.
 """)
             self.__doc__ = doc
-            
-        def __call__(self, *args, **keywds):
+
+        def decode(self, *args, **keywds):
             # Decode the arguments for the _align function.  keywds
             # will get passed to it, so translate the arguments to
             # this function into forms appropriate for _align.
+            keywds = keywds.copy()
             if len(args) != len(self.param_names):
                 raise TypeError, "%s takes exactly %d argument (%d given)" % (
                     self.function_name, len(self.param_names), len(args))
@@ -242,7 +243,12 @@ alignment occurs.
                 ]
             for name, default in default_params:
                 keywds[name] = keywds.get(name, default)
+            return keywds
+            
+        def __call__(self, *args, **keywds):
+            keywds = self.decode(*args, **keywds)
             return _align(**keywds)
+        
     def __getattr__(self, attr):
         return self.alignment_function(attr)
 align = align()

@@ -141,13 +141,21 @@ static void IndexList_extend(struct IndexList *il1, struct IndexList *il2)
 
 
 double _get_match_score(PyObject *py_sequenceA, PyObject *py_sequenceB, 
-			PyObject *py_match_fn, int i, int j)
+			PyObject *py_match_fn, int i, int j,
+			char *sequenceA, char *sequenceB, 
+			int use_sequence_cstring,
+			double match, double mismatch, 
+			int use_match_mismatch_scores)
 {
     PyObject *py_A=NULL, 
 	*py_B=NULL;
     PyObject *py_arglist=NULL, *py_result=NULL;
     double score = 0;
 
+    if(use_sequence_cstring && use_match_mismatch_scores) {
+	score = (sequenceA[i] == sequenceB[j]) ? match : mismatch;
+	return score;
+    }
     /* Calculate the match score. */
     if(!(py_A = PySequence_GetItem(py_sequenceA, i)))
 	goto _get_match_score_cleanup;
@@ -187,10 +195,14 @@ static PyObject *cpairwise2__make_score_matrix_fast(
     int row, col;
 
     PyObject *py_sequenceA, *py_sequenceB, *py_match_fn;
+    char *sequenceA=NULL, *sequenceB=NULL;
+    int use_sequence_cstring;
     double open_A, extend_A, open_B, extend_B;
     int penalize_extend_when_opening, penalize_end_gaps, align_globally;
 
     double first_A_gap, first_B_gap;
+    double match, mismatch;
+    int use_match_mismatch_scores;
     int lenA, lenB;
     double *score_matrix = (double *)NULL;
     struct IndexList *trace_matrix = (struct IndexList *)NULL;
@@ -213,9 +225,48 @@ static PyObject *cpairwise2__make_score_matrix_fast(
 			"py_sequenceA and py_sequenceB should be sequences.");
 	return NULL;
     }
+
+    /* Optimize for the common case.  Check to see if py_sequenceA and
+       py_sequenceB are strings.  If they are, use the c string
+       representation. */
+    use_sequence_cstring = 0;
+    if(PyString_Check(py_sequenceA) && PyString_Check(py_sequenceB)) {
+	sequenceA = PyString_AS_STRING(py_sequenceA);
+	sequenceB = PyString_AS_STRING(py_sequenceB);
+	use_sequence_cstring = 1;
+    }
+
     if(!PyCallable_Check(py_match_fn)) {
 	PyErr_SetString(PyExc_TypeError, "py_match_fn must be callable.");
 	return NULL;
+    }
+    /* Optimize for the common case.  Check to see if py_match_fn is
+       an identity_match.  If so, pull out the match and mismatch
+       member variables and calculate the scores myself. */
+    match = mismatch = 0;
+    use_match_mismatch_scores = 0;
+    if(PyInstance_Check(py_match_fn)) {
+	PyObject *py_match=NULL, *py_mismatch=NULL;
+	if(!(py_match = PyObject_GetAttrString(py_match_fn, "match")))
+	    goto cleanup_after_py_match_fn;
+	match = PyNumber_AsDouble(py_match);
+	if(PyErr_Occurred())
+	    goto cleanup_after_py_match_fn;
+	if(!(py_mismatch = PyObject_GetAttrString(py_match_fn, "mismatch")))
+	    goto cleanup_after_py_match_fn;
+	mismatch = PyNumber_AsDouble(py_mismatch);
+	if(PyErr_Occurred())
+	    goto cleanup_after_py_match_fn;
+	use_match_mismatch_scores = 1;
+    cleanup_after_py_match_fn:
+	if(PyErr_Occurred())
+	    PyErr_Clear();
+	if(py_match) {
+	    Py_DECREF(py_match);
+	}
+	if(py_mismatch) {
+	    Py_DECREF(py_mismatch);
+	}
     }
 
     /* Cache some commonly used gap penalties */
@@ -241,7 +292,11 @@ static PyObject *cpairwise2__make_score_matrix_fast(
     /* Initialize the first row and col of the score matrix. */
     for(i=0; i<lenA; i++) {
 	double score = _get_match_score(py_sequenceA, py_sequenceB, 
-					py_match_fn, i, 0);
+					py_match_fn, i, 0,
+					sequenceA, sequenceB,
+					use_sequence_cstring,
+					match, mismatch,
+					use_match_mismatch_scores);
 	if(PyErr_Occurred())
 	    goto _cleanup_make_score_matrix_fast;
 	if(penalize_end_gaps)
@@ -251,7 +306,11 @@ static PyObject *cpairwise2__make_score_matrix_fast(
     }
     for(i=0; i<lenB; i++) {
 	double score = _get_match_score(py_sequenceA, py_sequenceB, 
-					py_match_fn, 0, i);
+					py_match_fn, 0, i,
+					sequenceA, sequenceB,
+					use_sequence_cstring,
+					match, mismatch,
+					use_match_mismatch_scores);
 	if(PyErr_Occurred())
 	    goto _cleanup_make_score_matrix_fast;
 	if(penalize_end_gaps)
@@ -315,7 +374,11 @@ static PyObject *cpairwise2__make_score_matrix_fast(
 
 	    /* Set the score and traceback matrices. */
 	    score = best_score + _get_match_score(py_sequenceA, py_sequenceB, 
-						  py_match_fn, row, col);
+						  py_match_fn, row, col,
+						  sequenceA, sequenceB,
+						  use_sequence_cstring,
+						  match, mismatch,
+						  use_match_mismatch_scores);
 	    if(PyErr_Occurred())
 		goto _cleanup_make_score_matrix_fast;
 	    if(!align_globally && score < 0)
