@@ -1072,9 +1072,9 @@ class _BlastConsumer(AbstractConsumer,
 
     def end_alignment(self):
         _AlignmentConsumer.end_alignment(self)
-        if self._alignment is not None:
+        if self._alignment.hsps:
             self.data.alignments.append(self._alignment)
-        elif self._multiple_alignment is not None:
+        if self._multiple_alignment.alignment:
             self.data.multiple_alignment = self._multiple_alignment
 
     def end_hsp(self):
