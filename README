@@ -32,8 +32,9 @@ o "mxTextTools 2.0.3":http://starship.python.net/~lemburg/mxTextTools.html
 
 o "Numerical Python 15.3":http://numpy.sourceforge.net/ (optional)
   This package is only used in the computationally-oriented modules.
-  It is not required for most of the modules in Biopython.  You can
-  most likely skip this requirement.  Please install if you are seeing
+  It is required for Bio.Cluster and a few other modules.  If you
+  think you might need these modules, then please install Numeric
+  Python first.  Also, please install if you are seeing
   error messages such as:
   ImportError: No module named Numeric
 

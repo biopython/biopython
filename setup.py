@@ -21,7 +21,6 @@ biopython@biopython.org and ask for help.
 """
 import sys
 import os
-import shutil
 
 # Make sure I have the right Python version.
 if sys.version_info[:2] < (2, 2):
@@ -33,6 +32,7 @@ from distutils.core import setup
 from distutils.core import Command
 from distutils.command.install import install
 from distutils.command.build_py import build_py
+from distutils.command.build_ext import build_ext
 from distutils.extension import Extension
 
 def get_yes_or_no(question, default):
@@ -53,6 +53,61 @@ def get_yes_or_no(question, default):
         print "Please answer y or n."
     return response[0] == 'y'
 
+_CHECKED = None
+def check_dependencies_once():
+    # Call check_dependencies, but cache the result for subsequent
+    # calls.
+    global _CHECKED
+    if _CHECKED is None:
+        _CHECKED = check_dependencies()
+    return _CHECKED
+
+def check_dependencies():
+    """Return whether the installation should continue."""
+    # There should be some way for the user to tell specify not to
+    # check dependencies.  For example, it probably should not if
+    # the user specified "-q".  However, I'm not sure where
+    # distutils stores that information.  Also, install has a
+    # --force option that gets saved in self.user_options.  It
+    # means overwrite previous installations.  If the user has
+    # forced an installation, should we also ignore dependencies?
+    dependencies = [
+        ("mxTextTools", is_mxTextTools_installed, 1,
+         "http://www.lemburg.com/files/python/mxExtensions.html"),
+        #("Martel", is_Martel_installed, 1,
+        # "http://www.biopython.org/~dalke/Martel/"),
+        ("Numerical Python", is_Numpy_installed, 0,
+         "http://numpy.sourceforge.net/"),
+        ("Reportlab", is_reportlab_installed, 0,
+         "http://www.reportlab.com/download.html"),
+        ]
+
+    for name, is_installed_fn, is_required, url in dependencies:
+        if is_installed_fn():
+            continue
+
+        print "*** %s *** is either not installed or out of date." % name
+        if is_required:
+
+            print """
+This package is required for many Biopython features.  Please install
+it before you install Biopython."""
+            default = 0
+        else:
+            print """
+This package is optional, which means it is only used in a few
+specialized modules in Biopython.  You probably don't need this is you
+are unsure.  You can ignore this requirement, and install it later if
+you see ImportErrors."""
+            default = 1
+        print "You can find %s at %s." % (name, url)
+        print
+
+        if not get_yes_or_no(
+            "Do you want to continue this installation?", default):
+            return 0
+    return 1
+
 class install_biopython(install):
     """Override the standard install to check for dependencies.
 
@@ -63,59 +118,10 @@ class install_biopython(install):
     Bio.EUtils.DTDs. This is not a pretty thing since we should 
     really only have pure python modules installed.
     """
-    def check_dependencies(self):
-        """S.check_dependencies() -> boolean
-
-        Return whether the installation should continue.
-
-        """
-        # There should be some way for the user to tell specify not to
-        # check dependencies.  For example, it probably should not if
-        # the user specified "-q".  However, I'm not sure where
-        # distutils stores that information.  Also, install has a
-        # --force option that gets saved in self.user_options.  It
-        # means overwrite previous installations.  If the user has
-        # forced an installation, should we also ignore dependencies?
-        dependencies = [
-            ("mxTextTools", is_mxTextTools_installed, 1,
-             "http://www.lemburg.com/files/python/mxExtensions.html"),
-            ("Martel", is_Martel_installed, 1,
-             "http://www.biopython.org/~dalke/Martel/"),
-            ("Numerical Python", is_Numpy_installed, 0,
-             "http://numpy.sourceforge.net/"),
-            ("Reportlab", is_reportlab_installed, 0,
-             "http://www.reportlab.com/download.html"),
-            ]
-
-        for name, is_installed_fn, is_required, url in dependencies:
-            if is_installed_fn():
-                continue
-            
-            print "*** %s *** is either not installed or out of date." % name
-            if is_required:
-                
-                print """
-This package is required for many Biopython features.  Please install
-it before you install Biopython."""
-                default = 0
-            else:
-                print """
-This package is optional, which means it is only used in a few
-specialized modules in Biopython.  You probably don't need this is you
-are unsure.  You can ignore this requirement, and install it later if
-you see ImportErrors."""
-                default = 1
-            print "You can find %s at %s." % (name, url)
-            print
-
-            if not get_yes_or_no(
-                "Do you want to continue this installation?", default):
-                return 0
-        return 1
-
     def install_eutils_dtds(self):
         """This is a hack to install DTDs needed for EUtils into Bio.
         """
+        import shutil
         dtds_dir = os.path.join(os.getcwd(), "Bio", "EUtils", "DTDs")
         install_dir = os.path.join(self.install_purelib, "Bio", "EUtils",
                                    "DTDs")
@@ -126,20 +132,43 @@ you see ImportErrors."""
                 shutil.copy(os.path.join(dtds_dir, potential_dtd),
                             install_dir)
          
-        
     def run(self):
-        if self.check_dependencies():
+        if check_dependencies_once():
             # Run the normal install.
             install.run(self)
             self.install_eutils_dtds()
 
 class build_py_biopython(build_py):
     def run(self):
+        if not check_dependencies_once():
+            return
         # Check to see if Martel is installed.  If not, then install
         # it automatically.
         if not is_Martel_installed():
             self.packages.append("Martel")
+        # Only install the clustering software if Numpy is installed.
+        if is_Numpy_installed():
+            self.packages.append("Bio.Cluster")
         build_py.run(self)
+
+class build_ext_biopython(build_ext):
+    def run(self):
+        if not check_dependencies_once():
+            return
+        # Only install the clustering software if Numpy is installed.
+        # Otherwise, it will not compile.
+        if is_Numpy_installed():
+            self.extensions.append(
+                Extension('Bio.Cluster.cluster',
+                          ['Bio/Cluster/clustermodule.c',
+                           'Bio/Cluster/cluster.c',
+                           'Bio/Cluster/ranlib.c',
+                           'Bio/Cluster/com.c',
+                           'Bio/Cluster/linpack.c'],
+                          include_dirs=["Bio/Cluster"]
+                          )
+                )
+        build_ext.run(self)
 
 class test_biopython(Command):
     """Run all of the tests for the package.
@@ -240,7 +269,6 @@ PACKAGES = [
     'Bio.builders.SeqRecord',
     'Bio.CDD',
     'Bio.Clustalw',
-    'Bio.Cluster',
     'Bio.config',
     'Bio.Crystal',
     'Bio.Data',
@@ -349,14 +377,6 @@ EXTENSIONS = [
                'Bio/csupport.c'],
               include_dirs=["Bio"]
               ),
-    Extension('Bio.Cluster.cluster',
-              ['Bio/Cluster/clustermodule.c',
-               'Bio/Cluster/cluster.c',
-               'Bio/Cluster/ranlib.c',
-               'Bio/Cluster/com.c',
-               'Bio/Cluster/linpack.c'],
-              include_dirs=["Bio/Cluster"]
-              ),
     #Extension('Bio.KDTree._KDTreecmodule',
     #          ["Bio/KDTree/_KDTree.C", 
     #           "Bio/KDTree/_KDTree.swig.C"],
@@ -377,6 +397,7 @@ setup(
     cmdclass={
         "install" : install_biopython,
         "build_py" : build_py_biopython,
+        "build_ext" : build_ext_biopython,
         "test" : test_biopython,
         },
     packages=PACKAGES,
