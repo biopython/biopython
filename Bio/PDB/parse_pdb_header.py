@@ -79,17 +79,17 @@ def _format_date(pdb_date):
     return date
 
 
-def chop_end_codes(line):
+def _chop_end_codes(line):
     """Chops lines ending with  '     1CSA  14' and the like."""
     import re
     return re.sub("\s\s\s\s+[\w]{4}.\s+\d*\Z","",line)
 
-def chop_end_misc(line):
+def _chop_end_misc(line):
     """Chops lines ending with  '     14-JUL-97  1CSA' and the like."""
     import re
     return re.sub("\s\s\s\s+.*\Z","",line)
 
-def nice_case(line):
+def _nice_case(line):
     """Makes A Lowercase String With Capitals."""
     import string
     l=string.lower(line)
@@ -149,7 +149,7 @@ def _parse_pdb_header_list(header):
         
         # From here, all the keys from the header are being parsed
         if key=="TITLE":
-            name=string.lower(chop_end_codes(tail))
+            name=string.lower(_chop_end_codes(tail))
             if dict.has_key('name'):
                 dict['name'] += " "+name
             else:
@@ -157,11 +157,11 @@ def _parse_pdb_header_list(header):
         elif key=="HEADER":            
             rr=re.search("\d\d-\w\w\w-\d\d",tail)
             if rr!=None:
-                dict['deposition_date']=_format_date(nice_case(rr.group()))
-            head=string.lower(chop_end_misc(tail))
+                dict['deposition_date']=_format_date(_nice_case(rr.group()))
+            head=string.lower(_chop_end_misc(tail))
             dict['head']=head
         elif key=="COMPND":            
-            tt=string.lower(re.sub("\;\s*\Z","",chop_end_codes(tail)))
+            tt=string.lower(re.sub("\;\s*\Z","",_chop_end_codes(tail)))
             # look for E.C. numbers in COMPND lines
             rec = re.search('\d+\.\d+\.\d+\.\d+',tt)
             if rec:
@@ -181,7 +181,7 @@ def _parse_pdb_header_list(header):
             else:
                 dict['compound'][comp_molid][last_comp_key]+=tok[0]+" "
         elif key=="SOURCE":
-            tt=string.lower(re.sub("\;\s*\Z","",chop_end_codes(tail)))
+            tt=string.lower(re.sub("\;\s*\Z","",_chop_end_codes(tail)))
             tok=tt.split(":")
             # print tok
             if len(tok)>=2:
@@ -197,13 +197,13 @@ def _parse_pdb_header_list(header):
             else:
                 dict['source'][comp_molid][last_src_key]+=tok[0]+" "
         elif key=="KEYWDS":
-            kwd=string.lower(chop_end_codes(tail))
+            kwd=string.lower(_chop_end_codes(tail))
             if dict.has_key('keywords'):
                 dict['keywords']+=" "+kwd
             else:
                 dict['keywords']=kwd
         elif key=="EXPDTA":
-            expd=chop_end_codes(tail)
+            expd=_chop_end_codes(tail)
             # chop junk at end of lines for some structures
             expd=re.sub('\s\s\s\s\s\s\s.*\Z','',expd)
             # if re.search('\Anmr',expd,re.IGNORECASE): expd='nmr'
@@ -215,7 +215,7 @@ def _parse_pdb_header_list(header):
         elif key=="REVDAT":
             rr=re.search("\d\d-\w\w\w-\d\d",tail)
             if rr!=None:
-                dict['release_date']=_format_date(nice_case(rr.group()))
+                dict['release_date']=_format_date(_nice_case(rr.group()))
         elif key=="JRNL":
             # print key,tail
             if dict.has_key('journal'):
@@ -223,14 +223,14 @@ def _parse_pdb_header_list(header):
             else:
                 dict['journal']=tail
         elif key=="AUTHOR":
-            auth = nice_case(chop_end_codes(tail))
+            auth = _nice_case(_chop_end_codes(tail))
             if dict.has_key('author'):
                 dict['author']+=auth
             else:
                 dict['author']=auth
         elif key=="REMARK":
             if re.search("REMARK   2 RESOLUTION.",hh):
-                r=chop_end_codes(re.sub("REMARK   2 RESOLUTION.",'',hh))
+                r=_chop_end_codes(re.sub("REMARK   2 RESOLUTION.",'',hh))
                 r=re.sub("\s+ANGSTROMS.*","",r)
                 try:
                     dict['resolution']=float(r)
