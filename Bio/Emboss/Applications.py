@@ -5,7 +5,7 @@ programs.
 """
 
 from Bio import Application
-from Bio.Application import _Option
+from Bio.Application import _Option, _Argument
 
 class Primer3Commandline(Application.AbstractCommandline):
     """Commandline object for the Primer3 interface from EMBOSS.
@@ -382,3 +382,29 @@ class Est2GenomeCommandline(Application.AbstractCommandline):
          _Option(["-width"], ["input"], None, 0,
                  "Alignment width")
         ]
+
+class ETandemCommandline(Application.AbstractCommandline):
+    """Commandline object for the etandem program from EMBOSS.
+    """
+    def __init__(self, cmd = "etandem"):
+        Application.AbstractCommandline.__init__(self)
+        self.program_name = cmd
+
+        self.parameters = [
+         _Option(["-sequence"], ["input", "file"], None, 1,
+                 "Sequence"),
+         _Option(["-minrepeat"], ["input"], None, 1,
+                 "Minimum repeat size"),
+         _Option(["-maxrepeat"], ["input"], None, 1,
+                 "Maximum repeat size"),
+         _Option(["-outfile"], ["output", "file"] , None, 1,
+                 "Output report file name"),
+         _Option(["-threshold"], ["input"], None, 0,
+                 "Threshold score"),
+         _Argument(["-mismatch"], ["input"], None, 0,
+                   "Allow N as a mismatch"),
+         _Argument(["-uniform"], ["input"], None, 0,
+                   "Allow uniform consensus"),
+         _Option(["-rformat"], ["output"], None, 0,
+                 "Output report format")]
+
