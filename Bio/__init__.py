@@ -51,9 +51,9 @@ def _load_registries():
     # for Registry objects.  Save them all into the local namespace.
     # Import code changed to allow for compilation with py2exe from distutils
     # import Bio.config
-    config_imports = __import__("Bio.config", {}, {}, ["Bio"]).__file__)
+    config_imports = __import__("Bio.config", {}, {}, ["Bio"])
     # in a zipfile
-    if hasattr(config_imports, '__loader__':
+    if hasattr(config_imports, '__loader__'):
         zipfiles = __import__("Bio.config", {}, {}, ["Bio"]).__loader__.files
         # Get only Bio.config modules
         x = [zipfiles[file][0] for file in zipfiles.keys() \
@@ -62,7 +62,7 @@ def _load_registries():
         x = map(lamdba x: x[:-4], x) # chop off '.pyc'
     # not in a zipfile, get files normally
     else:
-        x = os.listdir(config_imports.__file__))
+        x = os.listdir(os.path.dirname(config_imports.__file__))
         x = filter(lambda x: not x.startswith("_") and x.endswith(".py"), x)
         x = map(lambda x: x[:-3], x)            # chop off '.py'
     for module in x:
