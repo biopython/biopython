@@ -1910,14 +1910,14 @@ where:
   \item $IC_{j}$ -- The information content for the jth column in an alignment.
   \item $N_{a}$ -- The number of letters in the alphabet.
   \item $P_{ij}$ -- The frequency of a particular letter in the column (ie. if G occured 3 out of 6 times in an aligment column, this would be 0.5)
-  \item $Q_{i}$ --  The expected frequency of a letter. This is an optional argument, usage of which is left at the user's discretion. Basically, the use of $Q_{i}$ is dependent on the context in which the information content analysis is performed. If the user has determined that a valid background frequency exists for each letter (say, the frequency of each residue type in an entire protein database), then use of the product $P_{i} / Q_{i}$ instead of just $P_i$ normalizes that residue's frequency. In this case \emph{relative information content} is being produced. However, in many cases the use of a background frequency may be wrong or impossible, in those cases only $P_{i}$ is used: \emph{absolute information content}.
+  \item $Q_{i}$ --  The expected frequency of a letter. This is an
+  optional argument, usage of which is left at the user's
+  discretion. By default, it is automatically assigned to 0.05 for a
+  protein alphabet, and 0.25 for a nucleic acid alphabet. This is for
+  geting the information content without any assumption of prior
+  distribtions. When assuming priors, or when using a non-standard
+  alphabet, user should supply the values for $Q_{i}$. 
 \end{itemize}
-
-Gap characters are a little more difficult to deal with for relative information content, because they do not have an expected frequency $Q_{i}$. We try to deal with this issue in the manner suggested by Hertz and Stormo (Lim and Cantor (eds), Proc. of the Third Int. Conf. on Bioinformatics and genome Res., pp. 201-216 -- \ahrefurl{\url{http://www.bionet.nsc.ru/bgrs/thesis/56/index.html}}). A nice concise explanation is available at \ahrefurl{\url{http://www.cbs.dtu.dk/services/MatrixPlot/introduction/}}. Basically, the gaps are added as the $N_{a + 1}$ letter of the alphabet, but we do not have expected frequencies for them, so the relative information content, with gaps included looks like:
-
-\begin{displaymath}
-IC_{j} = P_{'-'j} * log(P_{'-'j}) + \sum_{i=1}^{N_{a}} P_{ij} * log(\frac{P_{ij}}{Q_{i}}) 
-\end{displaymath}
 
 Well, now that we have an idea what information content is being calculated in Biopython, let's look at how to get it for a particular region of the alignment.
 
