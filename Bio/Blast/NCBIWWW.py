@@ -4,6 +4,7 @@
 # as part of this package.
 
 # Patched by Brad Chapman.
+# Chris Wroe added modifications for work in myGrid
 
 """NCBIWWW.py
 
@@ -778,6 +779,8 @@ def blast(program, database, query,
             output_fn(results)
             handle = File.StringHandle(results)
         ready, results_cgi, results_params = _parse_blast_results_page(handle)
+        results_params['FORMAT_TYPE']=format_type
+        results_params['NCBI_GI']='yes'
         results_cgi = urlparse.urljoin(cgi, results_cgi)    # to absolute URL
         if ready:
             break
