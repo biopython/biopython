@@ -63,3 +63,4 @@ def _load_registries():
 # Put the registry loading code in a function so we don't polute the
 # module namespace with local variables.
 _load_registries()
+del _load_registries
