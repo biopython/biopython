@@ -125,11 +125,11 @@ class FastaFormat(GenericFormat):
         id = record.id
         description = record.description
         
-        self.outstream.write(">%s %s\n" % (id, description))
+        self.outstream.write(">%s %s%s" % (id, description,os.linesep))
 
         data = record.seq.tostring()
         for i in range(0, len(data), 60):
-            self.outstream.write(data[i:i+60] + "\n")
+            self.outstream.write(data[i:i+60] + os.linesep)
 
 class LargeFastaFormat(GenericFormat):
     def __init__(self, instream=None, outstream=None, alphabet = Bio.Alphabet.generic_alphabet):
@@ -147,10 +147,10 @@ class LargeFastaFormat(GenericFormat):
 
         entry = self.entries[self._n]
         
-        name,seq= entry.split('\n',1)
+        name,seq= entry.split(os.linesep,1)
         name, desc = self.get_header(name)
         
-        seq = seq.replace('\n','')
+        seq = seq.replace(os.linesep,'')
         return SeqRecord(Seq(seq, self.alphabet), id = name,
                          name = name, description = desc)
 
@@ -159,11 +159,11 @@ class LargeFastaFormat(GenericFormat):
         id = record.id
         description = record.description
         
-        self.outstream.write(">%s %s\n" % (id, description))
+        self.outstream.write(">%s %s%s" % (id, description,os.linesep))
 
         data = record.seq.tostring()
         for i in range(0, len(data), 60):
-            self.outstream.write(data[i:i+60] + "\n")
+            self.outstream.write(data[i:i+60] + os.linesep)
 
 class PirFormat(GenericFormat):
     def __init__(self, instream=None, outstream=None, alphabet = Bio.Alphabet.generic_alphabet):
@@ -172,18 +172,18 @@ class PirFormat(GenericFormat):
 
     def write(self, record):
         id = record.id
-        assert "\n" not in id
+        assert os.linesep not in id
         description = record.description
-        assert "\n" not in description
+        assert os.linesep not in description
         
-        self.outstream.write(">P1;%s %s\n" % (id, description))
+        self.outstream.write(">P1;%s %s%s" % (id, description,os.linesep))
 
         data = record.seq.tostring()
         for i in range(0, len(data), 60):
-            self.outstream.write(data[i:i+60] + "\n")
+            self.outstream.write(data[i:i+60] + os.linesep)
 
         if data[-1] != '*':
-            self.outstream.write("*\n")
+            self.outstream.write("*" + os.linesep)
             
 class EMBLFormat(GenericFormat):
     order = ['AC', 'DT', 'DE', 'GN', 'OS', 'OC', 'DR']
@@ -225,8 +225,8 @@ class EMBLFormat(GenericFormat):
         id = record.id
 
         description = record.description
-        if description and not description[-1] == '\n':
-            description = description + '\n'
+        if description and not description[-1] == os.linesep:
+            description = description + os.linesep
 
         dataclass = 'STANDARD;'
         division = 'PRT;' # fix that to change for DNA sequence
@@ -238,7 +238,8 @@ class EMBLFormat(GenericFormat):
         if dict.has_key('ID'):
             put('ID   %s' % dict['ID'][0])
         else:
-            put('ID   %-12s%+12s%+10s% 6d AA.\n' % (id, dataclass, division, length))
+            put('ID   %-12s%+12s%+10s% 6d AA.%s' % (id, dataclass, division, length,
+                                                    os.linesep))
             
         features = record.annotations.keys()
         if 'ID' in features: features.remove('ID')
@@ -248,24 +249,25 @@ class EMBLFormat(GenericFormat):
             if not feature in features: continue
             features.remove(feature)
             for line in dict[feature]:
-                put('%s   %s\n' % (feature, line))
+                put('%s   %s%s' % (feature, line, os.linesep))
 
         for feature in features:
             if feature[0] == 'R': continue
             # TODO
             # fix the order of all R* features
             for line in dict[feature]:
-                put('%s   %s\n' % (feature, line))
+                put('%s   %s%s' % (feature, line, os.linesep))
 
         if dict.has_key('SQ'):
-            put('SQ   %s\n' % '\n     '.join(dict['SQ'][1:]))
+#            put('SQ   %s\n' % '\n     '.join(dict['SQ'][1:]))
+            put('SQ   %s' + os.linesep % os.linesep + '     '.join(dict['SQ'][1:]))
         else:
-            put('SQ   SEQUENCE%4d AA;\n' % length)
+            put('SQ   SEQUENCE%4d AA;' % (length,os.linesep))
             data = record.seq.tostring()
             for i in range(0, len(data), 60):
-                put(data[i:i+60] + "\n")
+                put(data[i:i+60] + os.linesep)
             
-        put('//\n')
+        put('//' + os.linesep)
             
 class GCGFormat(GenericFormat):
     def __init__(self, instream=None, outstream=None, alphabet = Bio.Alphabet.generic_alphabet):
@@ -301,15 +303,15 @@ class GCGFormat(GenericFormat):
 
         if not description: description = id
         put(description)
-        if description[-1] != '\n': put('\n')
+        if description[-1] != os.linesep : put(os.linesep)
 
         timestamp = time.strftime('%B %d, %Y %H:%M', time.localtime(time.time()))
-        put('%s Length: %d %s Type: P\n' % (id, len(record.seq), timestamp))
+        put('%s Length: %d %s Type: P%s' % (id, len(record.seq), timestamp, os.linesep))
         data = record.seq.tostring()
         for i in range(0, len(data), 60):
-            put('% 6d %s\n' % (i+1,data[i:i+60]))
+            put('% 6d %s%s' % (i+1,data[i:i+60],os.linesep))
 
-        put('\n')
+        put(os.linesep)
         
 class ClustalFormat(GenericFormat):
     def __init__(self, instream=None, outstream=None, alphabet = Bio.Alphabet.generic_alphabet):
@@ -463,7 +465,7 @@ if __name__ == '__main__':
         print >> sys.stderr, '\twhere "-" can be used for stdin resp. stdout'
         print >> sys.stderr, '\tKnown formats: %s' % ', '.join(readseq.fdict.keys())
 
-        print >> sys.stderr, '\n\te.g. %s eftu.fas fasta eftu.emb embl' % p 
+        print >> sys.stderr, '%s\te.g. %s eftu.fas fasta eftu.emb embl' % (os.linesep, p)
         print >> sys.stderr, '\tor   zcat test.aln.gz | %s - clustal - fasta' % p
         sys.exit(0)
 
