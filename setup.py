@@ -303,6 +303,7 @@ PACKAGES = [
     'Bio.builders',
     'Bio.builders.Search',
     'Bio.builders.SeqRecord',
+    'Bio.CAPS',
     'Bio.CDD',
     'Bio.Compass',
     'Bio.Clustalw',
