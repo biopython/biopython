@@ -3,12 +3,40 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-
 from Numeric import array, sum, sqrt, arccos, matrixmultiply, transpose
 from LinearAlgebra import determinant
 from MLab import eye
 import sys
 
+
+def rotaxis(theta, vector):
+    """
+    Left multiplying rotation matrix that rotates
+    theta along vector (which should be a unit 
+    vector).
+
+    ie. m=rotaxis(pi, Vector(1,0,0))
+        rotated_vector=any_vector.left_multiply(m)
+    """
+    vector=vector.normalize()
+    c=cos(theta)
+    s=sin(theta)
+    t=1-c
+    x,y,z=vector.get_array()
+    # 1st row
+    rot=zeros((3,3), "d")
+    rot[0,0]=t*x*x+c
+    rot[0,1]=t*x*y-s*z
+    rot[0,2]=t*x*z+s*y
+    # 2nd row
+    rot[1,0]=t*x*y+s*z
+    rot[1,1]=t*y*y+c
+    rot[1,2]=t*y*z-s*x
+    # 3rd row
+    rot[2,0]=t*x*z-s*y
+    rot[2,1]=t*y*z+s*x
+    rot[2,2]=t*z*z+c
+    return rot
 
 def refmat(p,q):
     """
