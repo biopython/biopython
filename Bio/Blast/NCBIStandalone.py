@@ -1318,7 +1318,7 @@ class Iterator:
                 break
             # If I've reached the next one, then put the line back and stop.
             if lines and (line.startswith('BLAST')
-                          or line.startswith('BLAST', start = 1)):
+                          or line.startswith('BLAST', 1)):
                 self._uhandle.saveline(line)
                 break
             lines.append(line)
