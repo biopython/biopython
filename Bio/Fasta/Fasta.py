@@ -39,8 +39,8 @@ class Record:
     sequence    The sequence.
     
     """
-    def __init__(self, colwidth=80):
-        """__init__(self, colwidth=80)
+    def __init__(self, colwidth=60):
+        """__init__(self, colwidth=60)
 
         Create a new Record.  colwidth specifies the number of residues
         to put on each line when generating FASTA format.
