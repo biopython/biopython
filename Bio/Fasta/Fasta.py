@@ -9,22 +9,23 @@ This module provides code to work with FASTA-formatted sequences.
 
 
 Classes:
-Record            Holds information from a FASTA record.
-Scanner           Scans a FASTA-format stream.
-StandardConsumer  Consumes FASTA data to a FASTA record.
-SequenceConsumer  Consumes FASTA data to a Sequence.
-Iterator          An iterator over records in a FASTA file.
+Record             Holds FASTA sequence data.
+Iterator           Iterates over sequence data in a FASTA file.
+Dictionary         Accesses a FASTA file using a dictionary interface.
+RecordParser       Parses FASTA sequence data into a Record object.
+SequenceParser     Parses FASTA sequence data into a Sequence object.
+
+_Scanner           Scans a FASTA-format stream.
+_RecordConsumer    Consumes FASTA data to a FASTA Record object.
+_SequenceConsumer  Consumes FASTA data to a Sequence object.
+
 
 Functions:
-parse      Parse a handle with FASTA-formatted data into a list of Records.
+index_file         Index a FASTA file for a Dictionary.
 
 """
-
-# To do:
-# Random access for FASTA entries
-# index file?
-
 from Bio import File
+from Bio import Index
 from Bio import Sequence
 from Bio.ParserSupport import *
 
@@ -56,7 +57,106 @@ class Record:
             i = i + self._colwidth
         return string.join(s, '\n')
 
-class Scanner:
+class Iterator:
+    """Returns one record at a time from a FASTA file.
+
+    Methods:
+    next   Return the next record from the stream, or None.
+
+    """
+    def __init__(self, handle, parser=None):
+        """__init__(self, handle, parser=None)
+
+        Create a new iterator.  handle is a file-like object.  parser
+        is an optional Parser object to change the results into another form.
+        If set to None, then the raw contents of the file will be returned.
+
+        """
+        self._uhandle = File.UndoHandle(handle)
+        self._parser = parser
+
+    def next(self):
+        """next(self) -> object
+
+        Return the next FASTA record from the file.  If no more records,
+        return None.
+
+        """
+        lines = []
+        while 1:
+            line = self._uhandle.readline()
+            if not line:
+                break
+            if line[0] == '>' and lines:
+                self._uhandle.saveline(line)
+                break
+            lines.append(line)
+            
+        if not lines:
+            return None
+            
+        data = string.join(lines, '')
+        if self._parser is not None:
+            return self._parser.parse(File.StringHandle(data))
+        return data
+
+class Dictionary:
+    __filename_key = '__filename'
+    
+    def __init__(self, indexname, parser=None):
+        """__init__(self, indexname, parser=None)
+
+        Create a new Fasta Dictionary.  indexname is the name of the
+        index for the dictionary.  The index should have been created
+        using the index_file function.  parser is an optional Parser
+        object to change the results into another form.  If set to None,
+        then the raw contents of the file will be returned.
+
+        """
+        self._index = Index.Index(indexname)
+        self._handle = open(self._index[Dictionary.__filename_key])
+        self._parser = parser
+
+    def __len__(self):
+        return len(self._index)
+
+    def __getitem__(self, key):
+        start, len = self._index[key]
+        self._handle.seek(start)
+        data = self._handle.read(len)
+        if self._parser is not None:
+            return self._parser.parse(File.StringHandle(data))
+        return data
+
+    def __getattr__(self, name):
+        return getattr(self._index, name)
+
+class RecordParser:
+    """Parses FASTA sequence data into a Record object.
+
+    """
+    def __init__(self):
+        self._scanner = _Scanner()
+        self._consumer = _RecordConsumer()
+
+    def parse(self, handle):
+        self._scanner.feed(handle, self._consumer)
+        return self._consumer.data
+
+class SequenceParser:
+    """Parses FASTA sequence data into a Sequence object.
+
+    """
+    def __init__(self):
+        self._scanner = _Scanner()
+        self._consumer = _SequenceConsumer()
+
+    def parse(self, handle):
+        self._scanner.feed(handle, self._consumer)
+        return self._consumer.data
+
+
+class _Scanner:
     """Scans a FASTA-formatted file.
 
     Methods:
@@ -69,7 +169,7 @@ class Scanner:
 
         Feed in FASTA data for scanning.  handle is a file-like object
         containing FASTA data.  consumer is a Consumer object that will
-        recieve events as the FASTA data is scanned.
+        receive events as the FASTA data is scanned.
 
         """
         if isinstance(handle, File.UndoHandle):
@@ -77,7 +177,7 @@ class Scanner:
         else:
             uhandle = File.UndoHandle(handle)
         
-        if not is_blank_line(uhandle.peekline()):
+        if uhandle.peekline():
             self._scan_record(uhandle, consumer)
 
     def _scan_record(self, uhandle, consumer):
@@ -99,8 +199,8 @@ class Scanner:
                 break
             consumer.sequence(line)
 
-class StandardConsumer(AbstractConsumer):
-    """Standard consumer that converts a FASTA record to a Record object.
+class _RecordConsumer(AbstractConsumer):
+    """Consumer that converts a FASTA record to a Record object.
 
     Members:
     data    Record with FASTA data.
@@ -124,7 +224,7 @@ class StandardConsumer(AbstractConsumer):
         seq = string.rstrip(line)
         self.data.sequence = self.data.sequence + seq
 
-class SequenceConsumer(AbstractConsumer):
+class _SequenceConsumer(AbstractConsumer):
     """Consumer that converts a FASTA record to a Sequence object.
 
     Members:
@@ -149,58 +249,35 @@ class SequenceConsumer(AbstractConsumer):
         seq = string.rstrip(line)
         self.data.seq = self.data.seq + seq
 
-class Iterator:
-    """An iterator that returns one record at a time from a FASTA file.
+def index_file(filename, indexname, rec2key=None):
+    """index_file(filename, indexname, rec2key=None)
 
-    Methods:
-    next   Return the next record from the stream, or None.
+    Index a FASTA file.  filename is the name of the file.
+    indexname is the name of the dictionary.  rec2key is an
+    optional callback that takes a Record and generates a unique key
+    (e.g. the accession number) for the record.  If not specified,
+    the sequence title will be used.
 
     """
-    def __init__(self, handle):
-        # XXX quick hack to check my code
-        assert not isinstance(handle, File.UndoHandle), "oops, legacy stuff"
-            
-        self._uhandle = File.UndoHandle(handle)
-        self._scanner = Scanner()
-
-    def next(self):
-        """next(self) -> string
-
-        Return the next FASTA record from the file.  If no more records,
-        return the empty string.
-
-        """
-        lines = []
-        while 1:
-            line = self._uhandle.readline()
-            if not line:
-                break
-            if line[0] == '>' and lines:
-                self._uhandle.saveline(line)
-                break
-            lines.append(line)
-        return string.join(lines, '')
-
-def parse(handle, consumer=SequenceConsumer()):
-    """parse(handle, consumer=SequenceConsumer()) -> list of objects
-
-    Parse FASTA-formatted data from handle to a list of objects.
-    The type of the object depends on the type of consumer object
-    passed into the function.
+    index = Index.Index(indexname, truncate=1)
+    index[Dictionary._Dictionary__filename_key] = filename
     
-    Warning: this will convert all the data in handle into an in-memory
-    data structure.  Do not call this if the amount of data will
-    exceed the amount of memory in your machine!
-
-    """
-    scanner = Scanner()
-
-    iter = Iterator(handle)
-    records = []
+    iter = Iterator(open(filename), parser=RecordParser())
     while 1:
-        r = iter.next()
-        if not r:
+        start = iter._uhandle.tell()
+        rec = iter.next()
+        length = iter._uhandle.tell() - start
+        
+        if rec is None:
             break
-        scanner.feed(File.StringHandle(r), consumer)
-        records.append(consumer.data)
-    return records
+        if rec2key is not None:
+            key = rec2key(rec)
+        else:
+            key = rec.title
+            
+        if not key:
+            raise KeyError, "empty sequence key was produced"
+        elif index.has_key(key):
+            raise KeyError, "duplicate key %s found" % key
+
+        index[key] = start, length

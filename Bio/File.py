@@ -19,11 +19,6 @@ class UndoHandle:
 
     Saves lines in a LIFO fashion.
 
-    XXX Bug: I don't handle the arguments to readline or readlines
-    correctly, since their behavior isn't documented anywhere.
-    I'll just pass the arguments along, and hope I don't do anything
-    too bad...
-
     Added methods:
     saveline    Save a line to be returned next time.
     peekline    Peek at the next line without consuming it.
@@ -56,6 +51,15 @@ class UndoHandle:
             self.saveline(line)
         return line
 
+    def tell(self):
+        lengths = map(len, self._saved)
+        sum = reduce(lambda x, y: x+y, lengths, 0)
+        return self._handle.tell() - sum
+
+    def seek(self, *args):
+        self._saved = []
+        apply(self._handle.seek, args)
+
     def __getattr__(self, attr):
         return getattr(self._handle, attr)
 
@@ -75,27 +79,3 @@ class StringHandle:
             self.__dict__[name] = value
         else:
             setattr(self._handle, name, value)
-
-
-
-
-### THESE ARE DEPRECATED
-
-# XXX to be removed
-fileopen = open
-def _open(*args):
-    """open(*args) -> UndoHandle
-
-    Open a file.  The arguments are the same as the standard open function.
-    
-    """
-    return UndoHandle(apply(fileopen, args))
-
-# XXX to be removed
-def _urlopen(*args):
-    """urlopen(*args) -> UndoHandle
-
-    Open a URL.  The arguments are the same as urllib.urlopen.
-
-    """
-    return UndoHandle(apply(urllib.urlopen, args))
