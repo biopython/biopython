@@ -96,13 +96,14 @@ def pmneighbor(pmid, display,
     Raises an IOError exception if there's a network error.
     
     """
-    # Warning: HUGE HACK HERE!  pmneighbor expects the display parameter
-    # to be passed as just a tag, with no value.  Unfortunately, _open
-    # doesn't support these types of parameters, so I'm tacking the display
-    # value onto the pmid tag.  This is really due to the limitations
-    # of urllib.urlencode.  We'll have to figure out a good workaround.
-    variables = {'%s&pmid' % display : pmid}
-    return _open(cgi, variables)
+    # Warning: HUGE HACK HERE!  pmneighbor expects the display
+    # parameter to be passed as just a tag, with no value.
+    # Unfortunately, _open doesn't support these types of parameters,
+    # so I'm building my own cgi string.  This is really due to the
+    # limitations of urllib.urlencode.  We'll have to figure out a
+    # good workaround.
+    fullcgi = "%s?pmid=%s&%s" % (cgi, pmid, display)
+    return _open(fullcgi)
 
 def _open(cgi, params={}, get=1):
     """_open(cgi, params={}, get=1) -> UndoHandle
