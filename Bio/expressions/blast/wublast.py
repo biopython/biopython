@@ -359,11 +359,10 @@ statistics = (
         Std.search_statistic(timestamp, {"name": "start_time"}) +
         Spaces() + Str("End:  ") +
         Std.search_statistic(timestamp, {"name": "end_time"})) +
-    spaces_line +
-
-        #WARNINGS ISSUED:  2
-    _nv("WARNINGS ISSUED:  ",
-        int_stat("num_warnings"))
+    Opt(spaces_line +
+            #WARNINGS ISSUED:  2
+        _nv("WARNINGS ISSUED:  ",
+            int_stat("num_warnings")))
     )
 
 blastp_ending = to_ending + parameters + statistics
