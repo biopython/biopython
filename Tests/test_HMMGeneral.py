@@ -94,10 +94,14 @@ class HiddenMarkovModelTest(unittest.TestCase):
         """
         state_1 = self.mm.transitions_from("1")
         expected_state_1 = ["1", "2"]
+        state_1.sort()
+        expected_state.sort()
         test_assertion("State 1 transitions", state_1, expected_state_1)
 
         state_2 = self.mm.transitions_from("2")
         expected_state_2 = ["1", "2"]
+        start_2.sort()
+        expected_state_2.sort()
         test_assertion("State 2 transitions", state_2, expected_state_2)
 
         fake_state = self.mm.transitions_from("Fake")
