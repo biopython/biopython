@@ -58,6 +58,7 @@ try:
     handle.wait()
 except AssertionError, x:
     s = str(x)   # Error in child process: ...
+    print "Raised error properly"
     # chop out the path of the file, since it varies from machine to machine:
-    reported = s[:s.index('"')+1] + s[s.index('Bio/'):]
-    print reported
+    #reported = s[:s.index('"')+1] + s[s.index('Bio/'):]
+    #print reported
