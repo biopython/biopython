@@ -43,7 +43,7 @@ class RecordFile:
         line = ''
         if( self._record_state == 'SEARCHING' ):
             line = self._search_start()
-            self._saved_text = line
+            self._saved_text = line + self._saved_text
         if( self._record_state == 'IN_RECORD' ):
             text = self._in_record_state( args, keywds )
 
