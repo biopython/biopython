@@ -1,0 +1,425 @@
+LOCUS       NC_001422               5386 bp ss-DNA     circular PHG 09-JUL-2002
+DEFINITION  Coliphage phiX174, complete genome.
+ACCESSION   NC_001422
+VERSION     NC_001422.1  GI:9626372
+KEYWORDS    .
+SOURCE      coliphage phiX174.
+  ORGANISM  coliphage phiX174
+            Viruses; ssDNA viruses; Microviridae; Microvirus.
+REFERENCE   1  (bases 1047 to 1094)
+  AUTHORS   Ziff,E.B., Sedat,J.W. and Galibert,F.
+  TITLE     Determination of the nucleotide sequence of a fragment of
+            bacteriophage phiX 174 DNA
+  JOURNAL   Nature New Biol. 241 (106), 34-37 (1973)
+  MEDLINE   73161741
+   PUBMED   4349156
+REFERENCE   2  (bases 2370 to 2421)
+  AUTHORS   Robertson,H.D., Barrell,B.G., Weith,H.L. and Donelson,J.E.
+  TITLE     Isolation and sequence analysis of a ribosome-protected fragment
+            from bacteriophage phiX 174 DNA
+  JOURNAL   Nature New Biol. 241 (106), 38-40 (1973)
+  MEDLINE   73161742
+   PUBMED   4572838
+REFERENCE   3  (bases 2370 to 2420)
+  AUTHORS   Barrell,B.G., Weith,H.L., Donelson,J.E. and Robertson,H.D.
+  TITLE     Sequence analysis of the ribosome-protected bacteriophase phiX174
+            DNA fragment containing the gene G initiation site
+  JOURNAL   J. Mol. Biol. 92 (3), 377-393 (1975)
+  MEDLINE   75192039
+   PUBMED   1095758
+REFERENCE   4  (bases 2365 to 2591)
+  AUTHORS   Air,G.M., Blackburn,E.H., Sanger,F. and Coulson,A.R.
+  TITLE     The nucleotide and amino acid sequences of the N (5') terminal
+            region of gene G of bacteriophage phiphiX 174
+  JOURNAL   J. Mol. Biol. 96 (4), 703-719 (1975)
+  MEDLINE   76072037
+   PUBMED   1081600
+REFERENCE   5  (bases 2263 to 2421)
+  AUTHORS   Fiddes,J.C.
+  TITLE     Nucleotide sequence of the intercistronic region between genes G
+            and F in bacteriophage phiX174 DNA
+  JOURNAL   J. Mol. Biol. 107 (1), 1-24 (1976)
+  MEDLINE   77074135
+   PUBMED   826639
+REFERENCE   6  (bases 4137 to 4207)
+  AUTHORS   Mansfeld,A.D., Vereijken,J.M. and Jansz,H.S.
+  TITLE     The nucleotide sequence of a DNA fragment, 71 base pairs in length,
+            near the origin of DNA replication of bacteriophage 0X174
+  JOURNAL   Nucleic Acids Res. 3 (10), 2827-2844 (1976)
+  MEDLINE   77057432
+   PUBMED   995652
+REFERENCE   7  (bases 730 to 903)
+  AUTHORS   Blackburn,E.H.
+  TITLE     Transcription and sequence analysis of a fragment of bacteriophage
+            phiX174 DNA
+  JOURNAL   J. Mol. Biol. 107 (4), 417-431 (1976)
+  MEDLINE   77074161
+   PUBMED   826641
+REFERENCE   8  (bases 1017 to 1081)
+  AUTHORS   Sedat,J., Ziff,E. and Galibert,F.
+  TITLE     Direct determination of DNA nucleotide sequences. Structure of
+            large specific fragments of bacteriophage phiX174 DNA
+  JOURNAL   J. Mol. Biol. 107 (4), 391-416 (1976)
+  MEDLINE   77074160
+   PUBMED   1003475
+REFERENCE   9  (bases 1017 to 1762)
+  AUTHORS   Air,G.M., Blackburn,E.H., Coulson,A.R., Galibert,F., Sanger,F.,
+            Sedat,J.W. and Ziff,E.B.
+  TITLE     Gene F of bacteriophage phiX174. Correlation of nucleotide
+            sequences from the DNA and amino acid sequences from the gene
+            product
+  JOURNAL   J. Mol. Biol. 107 (4), 445-458 (1976)
+  MEDLINE   77074163
+   PUBMED   1088826
+REFERENCE   10 (bases 2395 to 2922)
+  AUTHORS   Air,G.M., Sanger,F. and Coulson,A.R.
+  TITLE     Nucleotide and amino acid sequences of gene G of omegaX174
+  JOURNAL   J. Mol. Biol. 108 (3), 519-533 (1976)
+  MEDLINE   77121207
+   PUBMED   1088827
+REFERENCE   11 (bases 5022 to 5132)
+  AUTHORS   Brown,N.L. and Smith,M.
+  TITLE     DNA sequence of a region of the phi X174 genome coding for a
+            ribosome binding site
+  JOURNAL   Nature 265 (5596), 695-698 (1977)
+  MEDLINE   77171176
+   PUBMED   859573
+REFERENCE   12 (bases 5346 to 5386; 1 to 159)
+  AUTHORS   Smith,M., Brown,N.L., Air,G.M., Barrell,B.G., Coulson,A.R.,
+            Hutchison,C.A. III and Sanger,F.
+  TITLE     DNA sequence at the C termini of the overlapping genes A and B in
+            bacteriophage phi X174
+  JOURNAL   Nature 265 (5596), 702-705 (1977)
+  MEDLINE   77171178
+   PUBMED   859575
+REFERENCE   13 (bases 1 to 5375)
+  AUTHORS   Sanger,F., Air,G.M., Barrell,B.G., Brown,N.L., Coulson,A.R.,
+            Fiddes,C.A., Hutchison,C.A., Slocombe,P.M. and Smith,M.
+  TITLE     Nucliotide sequence of bacteriophage phi X174 DNA
+  JOURNAL   Nature 265 (5596), 687-695 (1977)
+  MEDLINE   77171175
+   PUBMED   870828
+REFERENCE   14 (bases 4505 to 5374)
+  AUTHORS   Brown,N.L. and Smith,M.
+  TITLE     The sequence of a region of bacteriophage phiX174 DNA coding for
+            parts of genes A and B
+  JOURNAL   J. Mol. Biol. 116 (1), 1-28 (1977)
+  MEDLINE   78069208
+   PUBMED   592379
+REFERENCE   15 (sites)
+  AUTHORS   Fiddes,J.C.
+  TITLE     The nucleotide sequence of a viral DNA
+  JOURNAL   Sci. Am. 237 (6), 54-67 (1977)
+  MEDLINE   78054683
+   PUBMED   929160
+REFERENCE   16 (bases 1 to 5386)
+  AUTHORS   Sanger,F., Coulson,A.R., Friedmann,T., Air,G.M., Barrell,B.G.,
+            Brown,N.L., Fiddes,J.C., Hutchison,C.A. III, Slocombe,P.M. and
+            Smith,M.
+  TITLE     The nucleotide sequence of bacteriophage phiX174
+  JOURNAL   J. Mol. Biol. 125 (2), 225-246 (1978)
+  MEDLINE   79091185
+   PUBMED   731693
+REFERENCE   17 (bases 1290 to 1302; 1340 to 1430; 1510 to 1570; 1600 to 1750)
+  AUTHORS   Air,G.M., Coulson,A.R., Fiddes,J.C., Friedmann,T., Hutchison,C.A.
+            III, Sanger,F., Slocombe,P.M. and Smith,A.J.
+  TITLE     Nucleotide sequence of the F protein coding region of bacteriophage
+            phiX174 and the amino acid sequence of its product
+  JOURNAL   J. Mol. Biol. 125 (2), 247-254 (1978)
+  MEDLINE   79091186
+   PUBMED   731694
+REFERENCE   18 (bases 4256 to 4317)
+  AUTHORS   Langeveld,S.A., van Mansfeld,A.D., de Winter,J.M. and Weisbeek,P.J.
+  TITLE     Cleavage of single-stranded DNA by the A and A* proteins of
+            bacteriophage phi X174
+  JOURNAL   Nucleic Acids Res. 7 (8), 2177-2188 (1979)
+  MEDLINE   80101074
+   PUBMED   160544
+REFERENCE   19 (bases 4248 to 4332)
+  AUTHORS   Heidekamp,F., Langeveld,S.A., Baas,P.D. and Jansz,H.S.
+  TITLE     Studies of the recognition sequence of phi X174 gene A protein.
+            Cleavage site of phi X gene A protein in St-1 RFI DNA
+  JOURNAL   Nucleic Acids Res. 8 (9), 2009-2021 (1980)
+  MEDLINE   81053861
+   PUBMED   6253953
+REFERENCE   20 (bases 436 to 490; 630 to 669; 930 to 979)
+  AUTHORS   Takeshita,M., Kappen,L.S., Grollman,A.P., Eisenberg,M. and
+            Goldberg,I.H.
+  TITLE     Strand scission of deoxyribonucleic acid by neocarzinostatin,
+            auromomycin, and bleomycin: studies on base release and nucleotide
+            sequence specificity
+  JOURNAL   Biochemistry (N.Y.) 20 (26), 7599-7606 (1981)
+  MEDLINE   82113627
+   PUBMED   6173064
+REFERENCE   21 (bases 449 to 482; 504 to 598; 1047 to 1111)
+  AUTHORS   Ueda,K., Morita,J. and Komano,T.
+  TITLE     Sequence specificity of heat-labile sites in DNA induced by
+            mitomycin C
+  JOURNAL   Biochemistry (N.Y.) 23 (8), 1634-1640 (1984)
+  MEDLINE   84203526
+   PUBMED   6232949
+REFERENCE   22 (bases 1064 to 1757)
+  AUTHORS   Merville,M.P., Piette,J., Lopez,M., Decuyper,J. and van de Vorst,A.
+  TITLE     Termination sites of the in vitro DNA synthesis on single-stranded
+            DNA photosensitized by promazines
+  JOURNAL   J. Biol. Chem. 259 (24), 15069-15077 (1984)
+  MEDLINE   85079985
+   PUBMED   6239864
+REFERENCE   23 (bases 2380 to 2512; 2593 to 2786; 2788 to 2947)
+  AUTHORS   Air,G.M., Els,M.C., Brown,L.E., Laver,W.G. and Webster,R.G.
+  TITLE     Location of antigenic sites on the three-dimensional structure of
+            the influenza N2 virus neuraminidase
+  JOURNAL   Virology 145 (2), 237-248 (1985)
+  MEDLINE   85274373
+   PUBMED   2411049
+COMMENT     REVIEWED REFSEQ: This record has been curated by NCBI staff. The
+            reference sequence was derived from J02482.
+            [8]  intermittent sequences.
+            [15]  review; discussion of complete genome.
+            Double checked with sumex tape.
+            Single-stranded circular DNA which codes for eleven proteins.
+            Replicative form is duplex, icosahedron, related to s13 & g4. [21]
+            indicates that mitomycin C reduced with sodium borohydride induced
+            heat-labile sites in DNA most preferentially at dinucleotide
+            sequence 'gt' (especially 'Pu-g-t').
+            Bacteriophage phi-X174 single stranded DNA molecules were
+            irradiated with near UV light in the presence of promazine
+            derivatives, after priming with restriction fragments or synthetic
+            primers [22].  The resulting DNA fragments were used as templates
+            for in vitro complementary chain synthesis by E.coli DNA polymerase
+            I [22].  More than 90% of the observed chain terminations were
+            mapped one nucleotide before a guanine residue [22].  Photoreaction
+            occurred more predominantly with guanine residues localized in
+            single-stranded parts of the genome [22].  These same guanine
+            residues could also be damaged when the reaction was performed in
+            the dark, in the presence of promazine cation radicals [22].
+FEATURES             Location/Qualifiers
+     source          1..5386
+                     /organism="coliphage phiX174"
+                     /specific_host="Escherichia coli"
+                     /db_xref="taxon:10847"
+     CDS             join(3981..5386,1..136)
+                     /codon_start=1
+                     /transl_table=11
+                     /product="rf replication, viral strand synthesis protein"
+                     /protein_id="NP_040703.1"
+                     /db_xref="GI:9626373"
+                     /translation="MVRSYYPSECHADYFDFERIEALKPAIEACGISTLSQSPMLGFH
+                     KQMDNRIKLLEEILSFRMQGVEFDNGDMYVDGHKAASDVRDEFVSVTEKLMDELAQCY
+                     NVLPQLDINNTIDHRPEGDEKWFLENEKTVTQFCRKLAAERPLKDIRDEYNYPKKKGI
+                     KDECSRLLEASTMKSRRGFAIQRLMNAMRQAHADGWFIVFDTLTLADDRLEAFYDNPN
+                     ALRDYFRDIGRMVLAAEGRKANDSHADCYQYFCVPEYGTANGRLHFHAVHFMRTLPTG
+                     SVDPNFGRRVRNRRQLNSLQNTWPYGYSMPIAVRYTQDAFSRSGWLWPVDAKGEPLKA
+                     TSYMAVGFYVAKYVNKKSDMDLAAKGLGAKEWNNSLKTKLSLLPKKLFRIRMSRNFGM
+                     KMLTMTNLSTECLIQLTKLGYDATPFNQILKQNAKREMRLRLGKVTVADVLAAQPVTT
+                     NLLKFMRASIKMIGVSNLQSFIASMTQKLTLSDISDESKNYLDKAGITTACLRIKSKW
+                     TAGGK"
+     CDS             join(4497..5386,1..136)
+                     /codon_start=1
+                     /transl_table=11
+                     /product="shut off host DNA synthesis protein"
+                     /protein_id="NP_040704.1"
+                     /db_xref="GI:9626374"
+                     /translation="MKSRRGFAIQRLMNAMRQAHADGWFIVFDTLTLADDRLEAFYDN
+                     PNALRDYFRDIGRMVLAAEGRKANDSHADCYQYFCVPEYGTANGRLHFHAVHFMRTLP
+                     TGSVDPNFGRRVRNRRQLNSLQNTWPYGYSMPIAVRYTQDAFSRSGWLWPVDAKGEPL
+                     KATSYMAVGFYVAKYVNKKSDMDLAAKGLGAKEWNNSLKTKLSLLPKKLFRIRMSRNF
+                     GMKMLTMTNLSTECLIQLTKLGYDATPFNQILKQNAKREMRLRLGKVTVADVLAAQPV
+                     TTNLLKFMRASIKMIGVSNLQSFIASMTQKLTLSDISDESKNYLDKAGITTACLRIKS
+                     KWTAGGK"
+     CDS             join(5075..5386,1..51)
+                     /codon_start=1
+                     /transl_table=11
+                     /product="capsid morphogenesis protein"
+                     /protein_id="NP_040705.1"
+                     /db_xref="GI:9626375"
+                     /translation="MEQLTKNQAVATSQEAVQNQNEPQLRDENAHNDKSVHGVLNPTY
+                     QAGLRRDAVQPDIEAERKKRDEIEAGKSYCSRRFGGATCDDKSAQIYARFDKNDWRIQ
+                     PAEFYRFHDAEVNTFGYF"
+     variation       23
+                     /note="c in wt; t in am18 and am35 [14]"
+     variation       25
+                     /note="g in wt; c in ts116 [14]"
+     CDS             51..221
+                     /codon_start=1
+                     /transl_table=11
+                     /product="gene K protein"
+                     /protein_id="NP_040706.1"
+                     /db_xref="GI:9626376"
+                     /translation="MSRKIILIKQELLLLVYELNRSGLLAENEKIRPILAQLEKLLLC
+                     DLSPSTNDSVKN"
+     variation       57
+                     /note="c in wt; t in am6 [14]"
+     variation       117
+                     /note="g in wt; a in am6 [14]"
+     CDS             133..393
+                     /codon_start=1
+                     /transl_table=11
+                     /product="DNA maturation protein"
+                     /protein_id="NP_040707.1"
+                     /db_xref="GI:9626377"
+                     /translation="MRKFDLSLRSSRSSYFATFRHQLTILSKTDALDEEKWLNMLGTF
+                     VKDWFRYESHFVHGRDSLVDILKERGLLSESDAVQPLIGKKS"
+     mRNA            358..3975
+                     /note="mRNA (major alt.)"
+     mRNA            358..991
+                     /note="mRNA (minor alt.)"
+     CDS             390..848
+                     /codon_start=1
+                     /transl_table=11
+                     /product="capsid morphogenesis protein"
+                     /protein_id="NP_040708.1"
+                     /db_xref="GI:9626378"
+                     /translation="MSQVTEQSVRFQTALASIKLIQASAVLDLTEDDFDFLTSNKVWI
+                     ATDRSRARRCVEACVYGTLDFVGYPRFPAPVEFIAAVIAYYVHPVNIQTACLIMEGAE
+                     FTENIINGVERPVKAAELFAFTLRVRAGNTDVLTDAEENVRQKLRAEGVM"
+     CDS             568..843
+                     /codon_start=1
+                     /transl_table=11
+                     /product="cell lysis protein"
+                     /protein_id="NP_040709.1"
+                     /db_xref="GI:9626379"
+                     /translation="MVRWTLWDTLAFLLLLSLLLPSLLIMFIPSTFKRPVSSWKALNL
+                     RKTLLMASSVRLKPLNCSRLPCVYAQETLTFLLTQKKTCVKNYVRKE"
+     CDS             848..964
+                     /codon_start=1
+                     /transl_table=11
+                     /product="core protein, DNA condensation protein"
+                     /protein_id="NP_040710.1"
+                     /db_xref="GI:9626380"
+                     /translation="MSKGKKRSGARPGRPQPLRGTKGKRKGARLWYVGGQQF"
+     CDS             1001..2284
+                     /codon_start=1
+                     /transl_table=11
+                     /product="major coat protein"
+                     /protein_id="NP_040711.1"
+                     /db_xref="GI:9626381"
+                     /translation="MSNIQTGAERMPHDLSHLGFLAGQIGRLITISTTPVIAGDSFEM
+                     DAVGALRLSPLRRGLAIDSTVDIFTFYVPHRHVYGEQWIKFMKDGVNATPLPTVNTTG
+                     YIDHAAFLGTINPDTNKIPKHLFQGYLNIYNNYFKAPWMPDRTEANPNELNQDDARYG
+                     FRCCHLKNIWTAPLPPETELSRQMTTSTTSIDIMGLQAAYANLHTDQERDYFMQRYHD
+                     VISSFGGKTSYDADNRPLLVMRSNLWASGYDVDGTDQTSLGQFSGRVQQTYKHSVPRF
+                     FVPEHGTMFTLALVRFPPTATKEIQYLNAKGALTYTDIAGDPVLYGNLPPREISMKDV
+                     FRSGDSSKKFKIAEGQWYRYAPSYVSPAYHLLEGFPFIQEPPSGDLQERVLIRHHDYD
+                     QCFQSVQLLQWNSQVKFNVTVYRNLPTTRDSIMTS"
+     CDS             2395..2922
+                     /codon_start=1
+                     /transl_table=11
+                     /product="major spike protein"
+                     /protein_id="NP_040712.1"
+                     /db_xref="GI:9626382"
+                     /translation="MFQTFISRHNSNFFSDKLVLTSVTPASSAPVLQTPKATSSTLYF
+                     DSLTVNAGNGGFLHCIQMDTSVNAANQVVSVGADIAFDADPKFFACLVRFESSSVPTT
+                     LPTAYDVYPLNGRHDGGYYTVKDCVTIDVLPRTPGNNVYVGFMVWSNFTATKCRGLVS
+                     LNQVIKEIICLQPLK"
+     CDS             2931..3917
+                     /codon_start=1
+                     /transl_table=11
+                     /product="minor spike protein, adsorption"
+                     /protein_id="NP_040713.1"
+                     /db_xref="GI:9626383"
+                     /translation="MFGAIAGGIASALAGGAMSKLFGGGQKAASGGIQGDVLATDNNT
+                     VGMGDAGIKSAIQGSNVPNPDEAAPSFVSGAMAKAGKGLLEGTLQAGTSAVSDKLLDL
+                     VGLGGKSAADKGKDTRDYLAAAFPELNAWERAGADASSAGMVDAGFENQKELTKMQLD
+                     NQKEIAEMQNETQKEIAGIQSATSRQNTKDQVYAQNEMLAYQQKESTARVASIMENTN
+                     LSKQQQVSEIMRQMLTQAQTAGQYFTNDQIKEMTRKVSAEVDLVHQQTQNQRYGSSHI
+                     GATAKDISNVVTDAASGVVDIFHGIDKAVADTWNNFWKDGKADGIGSNLSRK"
+     misc_feature    3962
+                     /note="transcription start site"
+     rep_origin      4306
+                     /note="origin of viral strand synthesis"
+     misc_feature    4899
+                     /note="transcription start site"
+BASE COUNT     1291 a   1157 c   1254 g   1684 t
+ORIGIN      
+        1 gagttttatc gcttccatga cgcagaagtt aacactttcg gatatttctg atgagtcgaa
+       61 aaattatctt gataaagcag gaattactac tgcttgttta cgaattaaat cgaagtggac
+      121 tgctggcgga aaatgagaaa attcgaccta tccttgcgca gctcgagaag ctcttacttt
+      181 gcgacctttc gccatcaact aacgattctg tcaaaaactg acgcgttgga tgaggagaag
+      241 tggcttaata tgcttggcac gttcgtcaag gactggttta gatatgagtc acattttgtt
+      301 catggtagag attctcttgt tgacatttta aaagagcgtg gattactatc tgagtccgat
+      361 gctgttcaac cactaatagg taagaaatca tgagtcaagt tactgaacaa tccgtacgtt
+      421 tccagaccgc tttggcctct attaagctca ttcaggcttc tgccgttttg gatttaaccg
+      481 aagatgattt cgattttctg acgagtaaca aagtttggat tgctactgac cgctctcgtg
+      541 ctcgtcgctg cgttgaggct tgcgtttatg gtacgctgga ctttgtggga taccctcgct
+      601 ttcctgctcc tgttgagttt attgctgccg tcattgctta ttatgttcat cccgtcaaca
+      661 ttcaaacggc ctgtctcatc atggaaggcg ctgaatttac ggaaaacatt attaatggcg
+      721 tcgagcgtcc ggttaaagcc gctgaattgt tcgcgtttac cttgcgtgta cgcgcaggaa
+      781 acactgacgt tcttactgac gcagaagaaa acgtgcgtca aaaattacgt gcggaaggag
+      841 tgatgtaatg tctaaaggta aaaaacgttc tggcgctcgc cctggtcgtc cgcagccgtt
+      901 gcgaggtact aaaggcaagc gtaaaggcgc tcgtctttgg tatgtaggtg gtcaacaatt
+      961 ttaattgcag gggcttcggc cccttacttg aggataaatt atgtctaata ttcaaactgg
+     1021 cgccgagcgt atgccgcatg acctttccca tcttggcttc cttgctggtc agattggtcg
+     1081 tcttattacc atttcaacta ctccggttat cgctggcgac tccttcgaga tggacgccgt
+     1141 tggcgctctc cgtctttctc cattgcgtcg tggccttgct attgactcta ctgtagacat
+     1201 ttttactttt tatgtccctc atcgtcacgt ttatggtgaa cagtggatta agttcatgaa
+     1261 ggatggtgtt aatgccactc ctctcccgac tgttaacact actggttata ttgaccatgc
+     1321 cgcttttctt ggcacgatta accctgatac caataaaatc cctaagcatt tgtttcaggg
+     1381 ttatttgaat atctataaca actattttaa agcgccgtgg atgcctgacc gtaccgaggc
+     1441 taaccctaat gagcttaatc aagatgatgc tcgttatggt ttccgttgct gccatctcaa
+     1501 aaacatttgg actgctccgc ttcctcctga gactgagctt tctcgccaaa tgacgacttc
+     1561 taccacatct attgacatta tgggtctgca agctgcttat gctaatttgc atactgacca
+     1621 agaacgtgat tacttcatgc agcgttacca tgatgttatt tcttcatttg gaggtaaaac
+     1681 ctcttatgac gctgacaacc gtcctttact tgtcatgcgc tctaatctct gggcatctgg
+     1741 ctatgatgtt gatggaactg accaaacgtc gttaggccag ttttctggtc gtgttcaaca
+     1801 gacctataaa cattctgtgc cgcgtttctt tgttcctgag catggcacta tgtttactct
+     1861 tgcgcttgtt cgttttccgc ctactgcgac taaagagatt cagtacctta acgctaaagg
+     1921 tgctttgact tataccgata ttgctggcga ccctgttttg tatggcaact tgccgccgcg
+     1981 tgaaatttct atgaaggatg ttttccgttc tggtgattcg tctaagaagt ttaagattgc
+     2041 tgagggtcag tggtatcgtt atgcgccttc gtatgtttct cctgcttatc accttcttga
+     2101 aggcttccca ttcattcagg aaccgccttc tggtgatttg caagaacgcg tacttattcg
+     2161 ccaccatgat tatgaccagt gtttccagtc cgttcagttg ttgcagtgga atagtcaggt
+     2221 taaatttaat gtgaccgttt atcgcaatct gccgaccact cgcgattcaa tcatgacttc
+     2281 gtgataaaag attgagtgtg aggttataac gccgaagcgg taaaaatttt aatttttgcc
+     2341 gctgaggggt tgaccaagcg aagcgcggta ggttttctgc ttaggagttt aatcatgttt
+     2401 cagactttta tttctcgcca taattcaaac tttttttctg ataagctggt tctcacttct
+     2461 gttactccag cttcttcggc acctgtttta cagacaccta aagctacatc gtcaacgtta
+     2521 tattttgata gtttgacggt taatgctggt aatggtggtt ttcttcattg cattcagatg
+     2581 gatacatctg tcaacgccgc taatcaggtt gtttctgttg gtgctgatat tgcttttgat
+     2641 gccgacccta aattttttgc ctgtttggtt cgctttgagt cttcttcggt tccgactacc
+     2701 ctcccgactg cctatgatgt ttatcctttg aatggtcgcc atgatggtgg ttattatacc
+     2761 gtcaaggact gtgtgactat tgacgtcctt ccccgtacgc cgggcaataa cgtttatgtt
+     2821 ggtttcatgg tttggtctaa ctttaccgct actaaatgcc gcggattggt ttcgctgaat
+     2881 caggttatta aagagattat ttgtctccag ccacttaagt gaggtgattt atgtttggtg
+     2941 ctattgctgg cggtattgct tctgctcttg ctggtggcgc catgtctaaa ttgtttggag
+     3001 gcggtcaaaa agccgcctcc ggtggcattc aaggtgatgt gcttgctacc gataacaata
+     3061 ctgtaggcat gggtgatgct ggtattaaat ctgccattca aggctctaat gttcctaacc
+     3121 ctgatgaggc cgcccctagt tttgtttctg gtgctatggc taaagctggt aaaggacttc
+     3181 ttgaaggtac gttgcaggct ggcacttctg ccgtttctga taagttgctt gatttggttg
+     3241 gacttggtgg caagtctgcc gctgataaag gaaaggatac tcgtgattat cttgctgctg
+     3301 catttcctga gcttaatgct tgggagcgtg ctggtgctga tgcttcctct gctggtatgg
+     3361 ttgacgccgg atttgagaat caaaaagagc ttactaaaat gcaactggac aatcagaaag
+     3421 agattgccga gatgcaaaat gagactcaaa aagagattgc tggcattcag tcggcgactt
+     3481 cacgccagaa tacgaaagac caggtatatg cacaaaatga gatgcttgct tatcaacaga
+     3541 aggagtctac tgctcgcgtt gcgtctatta tggaaaacac caatctttcc aagcaacagc
+     3601 aggtttccga gattatgcgc caaatgctta ctcaagctca aacggctggt cagtatttta
+     3661 ccaatgacca aatcaaagaa atgactcgca aggttagtgc tgaggttgac ttagttcatc
+     3721 agcaaacgca gaatcagcgg tatggctctt ctcatattgg cgctactgca aaggatattt
+     3781 ctaatgtcgt cactgatgct gcttctggtg tggttgatat ttttcatggt attgataaag
+     3841 ctgttgccga tacttggaac aatttctgga aagacggtaa agctgatggt attggctcta
+     3901 atttgtctag gaaataaccg tcaggattga caccctccca attgtatgtt ttcatgcctc
+     3961 caaatcttgg aggctttttt atggttcgtt cttattaccc ttctgaatgt cacgctgatt
+     4021 attttgactt tgagcgtatc gaggctctta aacctgctat tgaggcttgt ggcatttcta
+     4081 ctctttctca atccccaatg cttggcttcc ataagcagat ggataaccgc atcaagctct
+     4141 tggaagagat tctgtctttt cgtatgcagg gcgttgagtt cgataatggt gatatgtatg
+     4201 ttgacggcca taaggctgct tctgacgttc gtgatgagtt tgtatctgtt actgagaagt
+     4261 taatggatga attggcacaa tgctacaatg tgctccccca acttgatatt aataacacta
+     4321 tagaccaccg ccccgaaggg gacgaaaaat ggtttttaga gaacgagaag acggttacgc
+     4381 agttttgccg caagctggct gctgaacgcc ctcttaagga tattcgcgat gagtataatt
+     4441 accccaaaaa gaaaggtatt aaggatgagt gttcaagatt gctggaggcc tccactatga
+     4501 aatcgcgtag aggctttgct attcagcgtt tgatgaatgc aatgcgacag gctcatgctg
+     4561 atggttggtt tatcgttttt gacactctca cgttggctga cgaccgatta gaggcgtttt
+     4621 atgataatcc caatgctttg cgtgactatt ttcgtgatat tggtcgtatg gttcttgctg
+     4681 ccgagggtcg caaggctaat gattcacacg ccgactgcta tcagtatttt tgtgtgcctg
+     4741 agtatggtac agctaatggc cgtcttcatt tccatgcggt gcactttatg cggacacttc
+     4801 ctacaggtag cgttgaccct aattttggtc gtcgggtacg caatcgccgc cagttaaata
+     4861 gcttgcaaaa tacgtggcct tatggttaca gtatgcccat cgcagttcgc tacacgcagg
+     4921 acgctttttc acgttctggt tggttgtggc ctgttgatgc taaaggtgag ccgcttaaag
+     4981 ctaccagtta tatggctgtt ggtttctatg tggctaaata cgttaacaaa aagtcagata
+     5041 tggaccttgc tgctaaaggt ctaggagcta aagaatggaa caactcacta aaaaccaagc
+     5101 tgtcgctact tcccaagaag ctgttcagaa tcagaatgag ccgcaacttc gggatgaaaa
+     5161 tgctcacaat gacaaatctg tccacggagt gcttaatcca acttaccaag ctgggttacg
+     5221 acgcgacgcc gttcaaccag atattgaagc agaacgcaaa aagagagatg agattgaggc
+     5281 tgggaaaagt tactgtagcc gacgttttgg cggcgcaacc tgtgacgaca aatctgctca
+     5341 aatttatgcg cgcttcgata aaaatgattg gcgtatccaa cctgca
+//
