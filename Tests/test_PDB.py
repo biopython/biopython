@@ -3,6 +3,17 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.  
 
+import sys
+# Redirect stderr so user does not see warnings
+
+class TheVoid:
+    # Class to hide stderr output
+    def write(self, string):
+        pass
+
+# Hide stderr output for user
+sys.stderr=TheVoid()
+
 from Bio.PDB import *
 
 
