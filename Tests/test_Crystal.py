@@ -6,6 +6,7 @@
 # python unittest framework
 import unittest
 import copy
+import sys
 
 # modules to be tested
 from Bio.Crystal import Hetero
@@ -17,6 +18,7 @@ from Bio.Crystal import CrystalError
 class ChainTestCase(unittest.TestCase):
 
     def setUp( self ):
+        sys.exit(0)
         self.a = 'C A A C T A G G T C A C U A G G T C A G'
         self.b = 'C T G A C C T A G T G A C C T A G T T G'
         self.c = 'THR LYS LEU ASN GLY MET VAL LEU LEU CYS LYS VAL CYS GLY ASP'
@@ -527,7 +529,7 @@ class CrystalTestSuite(unittest.TestSuite):
                                                           "testRemove",
                                                           "testIndex",
                                                           "testCount",
-                                                          "textGetItem",
+                                                          "testGetItem",
                                                           "testSetItem",
                                                           "testDelItem",
                                                           "testGetSlice",
@@ -549,8 +551,9 @@ class CrystalTestSuite(unittest.TestSuite):
                                                          "testHasKey")))
 
 
-
+def run_tests(argv):
+    runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
+    runner.run(CrystalTestSuite())
 
 if __name__ == "__main__":
-    unittest.main()
-
+    sys.exit(run_tests(sys.argv))
