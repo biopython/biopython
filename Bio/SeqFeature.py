@@ -328,3 +328,55 @@ class AfterPosition(AbstractPosition):
 
     def __str__(self):
         return ">%s" % self.position
+
+class OneOfPosition(AbstractPosition):
+    """Specify a position where the location can be multiple positions.
+
+    This models the GenBank 'one-of(1888,1901)' function, and tries
+    to make this fit within the Biopython Position models. In our case
+    the position of the "one-of" is set as the lowest choice, and the
+    extension is the range to the highest choice.
+    """
+    def __init__(self, position_list):
+        """Initialie with a set of posssible positions.
+
+        position_list is a list of AbstractPosition derived objects,
+        specifying possible locations.
+        """
+        # unique attribute for this type of positions
+        self.position_choices = position_list
+        # find the smallest and largest position in the choices
+        smallest = None
+        largest = None
+        for position_choice in self.position_choices:
+            assert isinstance(position_choice, AbstractPosition), \
+              "Expected position objects, got %r" % position_choice
+            if smallest is None and largest is None:
+                smallest = position_choice.position
+                largest = position_choice.position
+            elif position_choice.position > largest:
+                largest = position_choice.position
+            elif position_choice.position < smallest:
+                smallest = position_choice.position
+        # initialize with our definition of position and extension
+        AbstractPosition.__init__(self, smallest, largest - smallest)
+
+    def __str__(self):
+        out = "one-of("
+        for position in self.position_choices:
+            out += "%s," % position
+        # replace the last comma with the closing parenthesis
+        out = out[:-1] + ")"
+        return out
+              
+class PositionGap:
+    """Simple class to hold information about a gap between positions.
+    """
+    def __init__(self, gap_size):
+        """Intialize with a position object containing the gap information.
+        """
+        self.gap_size = gap_size
+
+    def __str__(self):
+        out = "gap(%s)" % self.gap_size
+        return out
