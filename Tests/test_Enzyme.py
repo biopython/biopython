@@ -7,8 +7,7 @@ import os
 from types import *
 import Bio.File
 from Bio import ParserSupport
-#import Bio.Enzyme
-from Bio.Enzyme import *
+from Bio import Enzyme
 
 
 tests = [ 'lipoprotein.txt', 'proline.txt', 'valine.txt', 'lactate.txt' ]
@@ -18,7 +17,7 @@ for test in tests:
     datafile = os.path.join( 'Enzymes', test )
     enzyme_handle = open( datafile )
     enzyme_undo_handle = Bio.File.UndoHandle( enzyme_handle )
-    enzyme_consumer = Bio.ParserSupport.TaggingConsumer()
+    enzyme_consumer = ParserSupport.TaggingConsumer()
     enzyme_scanner = Enzyme._Scanner()
     enzyme_scanner.feed( enzyme_undo_handle, enzyme_consumer )
 
