@@ -123,7 +123,7 @@ class Iterator:
         else:
             _handle = File.UndoHandle(handle)
         # skip ahead until we find first record
-        while _handle.peekline().find("LOCUS") < 0:
+        while _handle.peekline() and _handle.peekline().find("LOCUS") < 0:
             _handle.readline()
 
         self._reader = RecordReader.StartsWith(_handle, "LOCUS")          
