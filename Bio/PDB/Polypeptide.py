@@ -22,6 +22,68 @@ standard_aa_names=["ALA", "CYS", "ASP", "GLU", "PHE", "GLY", "HIS", "ILE", "LYS"
                    "LEU", "MET", "ASN", "PRO", "GLN", "ARG", "SER", "THR", "VAL",
                    "TRP", "TYR"]
 
+
+aa1="ACDEFGHIKLMNPQRSTVWY"
+aa3=standard_aa_names
+
+d1_to_index={}
+dindex_to_1={}
+d3_to_index={}
+dindex_to_3={}
+
+# Create some lookup tables
+for i in range(0, 20):
+    n1=aa1[i]
+    n3=aa3[i]
+    d1_to_index[n1]=i
+    dindex_to_1[i]=n1
+    d3_to_index[n3]=i
+    dindex_to_3[i]=n3
+
+def index_to_one(index):
+    """
+    Index to corresponding one letter amino acid name.
+    For example: 0 to A.
+    """
+    return dindex_to_1[index]
+
+def one_to_index(s):
+    """
+    One letter code to index.
+    For example: A to 0.
+    """
+    return d1_to_index[s]
+
+def index_to_three(i):
+    """
+    Index to corresponding three letter amino acid name.
+    For example: 0 to ALA.
+    """
+    return dindex_to_3[i]
+
+def three_to_index(s):
+    """
+    Three letter code to index.
+    For example: ALA to 0.
+    """
+    return d3_to_index[s]
+
+def three_to_one(s):
+    """
+    Three letter code to one letter code.
+    For example: ALA to A.
+    """
+    i=d3_to_index[s]
+    return dindex_to_1[i]
+
+def one_to_three(s):
+    """
+    One letter code to three letter code.
+    For example: A to ALA.
+    """
+    i=d1_to_index[s]
+    return dindex_to_3[i]
+
 def is_aa(residue):
     """
     Return 1 if residue object/string is an amino acid.
