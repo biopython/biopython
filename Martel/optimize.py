@@ -1,3 +1,6 @@
+# Copyright 2000-2001, Dalke Scientific Software, LLC
+# Distributed under the Biopython License Agreement (see the LICENSE file).
+
 """Optimize an expression tree
 
   - remove Group nodes with no name

@@ -1,3 +1,6 @@
+# Copyright 2000-2001, Dalke Scientific Software, LLC
+# Distributed under the Biopython License Agreement (see the LICENSE file).
+
 """Iterate over records of a XML parse tree
 
 The standard parser is callback based over all the elements of a file.

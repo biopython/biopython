@@ -1,3 +1,6 @@
+# Copyright 2000-2001, Dalke Scientific Software, LLC
+# Distributed under the Biopython License Agreement (see the LICENSE file).
+
 # The existing parsers are in-memory.  For large data files, like
 # swissprot, that requires too much memory.
 

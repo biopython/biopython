@@ -5,8 +5,11 @@
 #
 # Copyright (c) 1998-2001 by Secret Labs AB.  All rights reserved.
 #
-# See the sre.py file for information on usage and redistribution.
+# See the sre.py file in Python 2.1 for information on usage and
+# redistribution.
 #
+# Changes for Martel Copyright 2000-2001 by Dalke Scientific Software, LLC
+# Distributed under the Biopython License Agreement (see the LICENSE file).
 
 # XXX: show string offset and offending character for all errors
 

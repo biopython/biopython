@@ -1,3 +1,6 @@
+# Copyright 2000-2001, Dalke Scientific Software, LLC
+# Distributed under the Biopython License Agreement (see the LICENSE file).
+
 # Create the tables needed for mxTextTools
 
 import string
