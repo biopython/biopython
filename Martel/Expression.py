@@ -624,8 +624,32 @@ class HeaderFooter(PassThrough):
             (want, debug_level, attrlookup))
 
     def make_iterator(self, tag, debug_level = 0):
-        raise NotImplementedError, "Need an IteratorHeaderFooter"
-        return self.expression.make_iterator(self, tag)
+        """create an iterator for this regexp; the 'tag' defines a record"""
+        import Iterator
+        if tag == self.format_name:
+            return self.expression.make_iterator(self, tag)
+
+        if self.header_expression is None:
+            header_parser = None
+        else:
+            header_parser = self.header_expression.make_parser(debug_level)
+
+        if self.record_expression is None:
+            record_parser = None
+        else:
+            record_parser = self.record_expression.make_parser(debug_level)
+
+        if self.footer_expression is None:
+            footer_parser = None
+        else:
+            footer_parser = self.footer_expression.make_parser(debug_level)
+            
+        return Iterator.IteratorHeaderFooter(
+            header_parser, self.make_header_reader, self.header_args,
+            record_parser, self.make_record_reader, self.record_args,
+            footer_parser, self.make_footer_reader, self.footer_args,
+            tag
+            )
 
     def group_names(self):
         return self.expression.group_names()
@@ -867,8 +891,7 @@ def _minimize_any_range(s):
 
     For example, passing in "0123456789" returns "\d".
 
-    This code isn't perfect.  For example, "_ABC...Zabc...z" should
-    convert to "\w".
+    This code isn't perfect.
     """
     if not s:
         return s
@@ -936,6 +959,12 @@ def _minimize_any_range(s):
     # Put the hyphen back on the end
     if has_hyphen:
         t = t + '-'
+
+    # Simple fixes for fields that annoy me a lot
+    conversions = {
+        "\\dA-Z_a-z\xc0-\xd6\xd8-\xf6\xf8-\xff": r"\w",
+        }
+    t = conversions.get(t, t)
     
     return t
 
