@@ -21,7 +21,8 @@
 # Last modified on Tue, Oct 21st 2003, Berlin
 #
 # Removed 'write' options from retrieve_pdb_file method: it is not used.
-# Also added a 'dir' options (pdb file is put in this directory if given).
+# Also added a 'dir' options (pdb file is put in this directory if given),
+# and an 'exist' option (test if the file is already there).
 #
 # -Thomas, 1/06/04
 
@@ -157,7 +158,7 @@ OBSLTE     26-SEP-03 1DYV      1UN2
         tw.append(self.get_list(urls[2]))
         return tw
 
-    def retrieve_pdb_file(self,pdb_code, compression='.Z', uncompress="gunzip", dir=None):
+    def retrieve_pdb_file(self,pdb_code, compression='.Z', uncompress="gunzip", dir=None, exist=0):
         """Retrieves a PDB structure file from the PDB server and
         stores it in a local file tree.
         The PDB structure is returned as a single string.
@@ -169,18 +170,23 @@ OBSLTE     26-SEP-03 1DYV      1UN2
         """
         # get the structure
         code=string.lower(pdb_code)
-        url = self.pdb_server+'/pub/pdb/data/structures/divided/pdb/%s/pdb%s.ent%s'%(code[1:3],code,compression)
-        lines = urllib.urlopen(url).read()
-
-        # save the structure
         filename="pdb%s.ent%s"%(code,compression)
+        if exist:
+            if os.path.exist(filename):
+                return 
+        url=(self.pdb_server+
+             '/pub/pdb/data/structures/divided/pdb/%s/pdb%s.ent%s'
+             % (code[1:3],code,compression))
+        lines = urllib.urlopen(url).read()
+        # save the structure
         if not dir is None:
-            # Put in directory 
+            # Put in PDB style directory tree
             path=self.local_pdb+os.sep+code[1:3]
             if not os.access(path,os.F_OK):
                 os.mkdir(path)
             filename=path+os.sep+filename
         else:
+            # Put in specified directory
             filename=dir+os.sep+filename
         open(filename,'w').write(lines)
         # uncompress the file
