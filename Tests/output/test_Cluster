@@ -1,0 +1,170 @@
+test_Cluster
+test_mean_median:
+data = [  34.300,   3.000,   2.000]
+mean is  13.100; median is   3.000
+data = [   5.000,  10.000,  15.000,  20.000]
+mean is  12.500; median is  12.500
+data = [   1.000,   2.000,   3.000,   5.000,   7.000,  11.000,  13.000,  17.000]
+mean is   7.375; median is   6.000
+data = [ 100.000,  19.000,   3.000,   1.500,   1.400,   1.000,   1.000,   1.000]
+mean is  15.988; median is   1.450
+
+test_matrix_parse:
+Read data1 (correct)
+Read data2 (correct)
+Refused incorrect matrix data3
+Refused incorrect matrix data4
+Refused incorrect matrix data5
+Refused incorrect matrix data6
+Refused incorrect matrix data7
+Refused incorrect matrix data8
+Refused incorrect matrix data9
+Refused incorrect matrix data10
+
+test_kcluster
+First data set
+Number of cluster ids is 4 (should be 4)
+Number of centroids is 3 (should be 3)
+Correct clustering solution found.
+Cluster centroids:
+  1.100    2.200    3.300    4.400    5.500 
+  3.600    2.700    0.800    3.900    1.000 
+ 12.100    2.000    0.000    5.000    0.000 
+Second data set
+Number of cluster ids is 13 (should be 13)
+Number of centroids is 3 (should be 3)
+Correct clustering solution found.
+Cluster centroids:
+  1.500    1.550 
+  5.333    5.550 
+  3.100    3.300 
+
+test_clusterdistance:
+First data set:
+[   1.100   2.200   3.300   4.400   5.500 ]
+[   3.100   3.200   1.300   2.400   1.500 ]
+[   4.100   2.200   0.300   5.400   0.500 ]
+[  12.100   2.000   0.000   5.000   0.000 ]
+Clusters are [0] [1, 2] [3]
+Distance between cluster [0] and [1, 2] is  33.250.
+Distance between cluster [0] and [3] is 162.540.
+Distance between cluster [1, 2] and [3] is  75.590.
+Second data set:
+[   1.100   1.200 ]
+[   1.400   1.300 ]
+[   1.100   1.500 ]
+[   2.000   1.500 ]
+[   1.700   1.900 ]
+[   1.700   1.900 ]
+[   5.700   5.900 ]
+[   5.700   5.900 ]
+[   3.100   3.300 ]
+[   5.400   5.300 ]
+[   5.100   5.500 ]
+[   5.000   5.500 ]
+[   5.100   5.200 ]
+Clusters are [0, 1, 2, 3] [4, 5, 6, 7] [8]
+Distance between cluster [0, 1, 2, 3] and [4, 5, 6, 7] is  11.666.
+Distance between cluster [0, 1, 2, 3] and [8] is   6.596.
+Distance between cluster [4, 5, 6, 7] and [8] is   0.720.
+
+test_treecluster:
+First data set:
+[   1.100   2.200   3.300   4.400   5.500 ]
+[   3.100   3.200   1.300   2.400   1.500 ]
+[   4.100   2.200   0.300   5.400   0.500 ]
+[  12.100   2.000   0.000   5.000   0.000 ]
+Pairwise average-linkage clustering
+Number of nodes is 3 (should be 3)
+Number of link distances is 3 (should be 3)
+Node   0 joins node   2 with node   1; link distance is  13.000
+Node   1 joins node  -1 with node   0; link distance is  36.500
+Node   2 joins node   3 with node  -2; link distance is 106.740
+Pairwise single-linkage clustering
+Number of nodes is 3 (should be 3)
+Number of link distances is 3 (should be 3)
+Node   0 joins node   2 with node   1; link distance is  13.000
+Node   1 joins node  -1 with node   0; link distance is  29.000
+Node   2 joins node   3 with node  -2; link distance is  64.540
+Pairwise centroid-linkage clustering
+Number of nodes is 3 (should be 3)
+Number of link distances is 3 (should be 3)
+Node   0 joins node   1 with node   2; link distance is  13.000
+Node   1 joins node   0 with node  -1; link distance is  33.250
+Node   2 joins node  -2 with node   3; link distance is  97.184
+Pairwise maximum-linkage clustering
+Number of nodes is 3 (should be 3)
+Number of link distances is 3 (should be 3)
+Node   0 joins node   2 with node   1; link distance is  13.000
+Node   1 joins node  -1 with node   0; link distance is  44.000
+Node   2 joins node   3 with node  -2; link distance is 162.540
+Second data set:
+Pairwise average-linkage clustering
+Number of nodes is 12 (should be 3)
+Number of link distances is 12 (should be 3)
+Node   0 joins node   5 with node   4; link distance is   0.006
+Node   1 joins node   9 with node  12; link distance is   0.058
+Node   2 joins node   2 with node   1; link distance is   0.121
+Node   3 joins node  11 with node  -2; link distance is   0.141
+Node   4 joins node  -4 with node  10; link distance is   0.256
+Node   5 joins node   7 with node  -5; link distance is   0.448
+Node   6 joins node  -3 with node   0; link distance is   0.508
+Node   7 joins node  -1 with node   3; link distance is   0.782
+Node   8 joins node  -8 with node  -7; link distance is   1.065
+Node   9 joins node   8 with node  -9; link distance is   6.468
+Node  10 joins node  -6 with node   6; link distance is   9.272
+Node  11 joins node -11 with node -10; link distance is  25.483
+Pairwise single-linkage clustering
+Number of nodes is 12 (should be 3)
+Number of link distances is 12 (should be 3)
+Node   0 joins node   5 with node   4; link distance is   0.006
+Node   1 joins node   9 with node  12; link distance is   0.058
+Node   2 joins node  11 with node  -2; link distance is   0.066
+Node   3 joins node   2 with node   1; link distance is   0.121
+Node   4 joins node  -3 with node  10; link distance is   0.154
+Node   5 joins node   7 with node  -5; link distance is   0.185
+Node   6 joins node  -4 with node   0; link distance is   0.484
+Node   7 joins node  -1 with node  -7; link distance is   0.491
+Node   8 joins node   3 with node  -8; link distance is   0.573
+Node   9 joins node   8 with node  -9; link distance is   3.872
+Node  10 joins node  -6 with node -10; link distance is   6.865
+Node  11 joins node   6 with node -11; link distance is   7.071
+Pairwise centroid-linkage clustering
+Number of nodes is 12 (should be 3)
+Number of link distances is 12 (should be 3)
+Node   0 joins node   4 with node   5; link distance is   0.006
+Node   1 joins node  12 with node   9; link distance is   0.058
+Node   2 joins node   1 with node   2; link distance is   0.121
+Node   3 joins node  -2 with node  11; link distance is   0.126
+Node   4 joins node  10 with node  -4; link distance is   0.218
+Node   5 joins node  -5 with node   7; link distance is   0.378
+Node   6 joins node   0 with node  -3; link distance is   0.477
+Node   7 joins node   3 with node  -1; link distance is   0.781
+Node   8 joins node  -7 with node  -8; link distance is   0.764
+Node   9 joins node  -9 with node   8; link distance is   6.126
+Node  10 joins node   6 with node  -6; link distance is   9.156
+Node  11 joins node -10 with node -11; link distance is  23.072
+Pairwise maximum-linkage clustering
+Number of nodes is 12 (should be 3)
+Number of link distances is 12 (should be 3)
+Node   0 joins node   5 with node   4; link distance is   0.006
+Node   1 joins node   9 with node  12; link distance is   0.058
+Node   2 joins node   2 with node   1; link distance is   0.121
+Node   3 joins node  11 with node  10; link distance is   0.154
+Node   4 joins node  -2 with node  -4; link distance is   0.432
+Node   5 joins node  -3 with node   0; link distance is   0.532
+Node   6 joins node  -5 with node   7; link distance is   0.605
+Node   7 joins node  -1 with node   3; link distance is   0.849
+Node   8 joins node  -8 with node  -6; link distance is   1.936
+Node   9 joins node   8 with node   6; link distance is   7.949
+Node  10 joins node -10 with node  -7; link distance is  11.511
+Node  11 joins node -11 with node  -9; link distance is  45.468
+
+test_somcluster:
+First data set:
+Number of cluster ids is 4 (should be 4)
+Grid is 2-dimensional (should be 2-dimensional)
+Second data set:
+Number of cluster ids is 13 (should be 13)
+Grid is 2-dimensional (should be 2-dimensional)
+
