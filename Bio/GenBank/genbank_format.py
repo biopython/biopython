@@ -103,7 +103,7 @@ size = Martel.Group("size",
 # deal with the different kinds of residues we can have
 valid_residue_prefixes = ["ss-", "ds-", "ms-"]
 valid_residue_types = ["DNA", "RNA", "mRNA", "tRNA", "rRNA", "uRNA",
-                       "snRNA", "snoRNA", "PROTEIN"]
+                       "scRNA", "snRNA", "snoRNA", "PROTEIN"]
 
 residue_prefixes = map(Martel.Str, valid_residue_prefixes)
 residue_types = map(Martel.Str, valid_residue_types)
@@ -502,6 +502,10 @@ feature_qualifier_names = (
     "direction",      # Direction of DNA replication
     "EC_number",      # Enzyme Commission number for the enzyme product
                       #   of the sequence
+    "environmental_sample", # Identifies sequences derived by direct molecular
+                      #   isolation (PCR, DGGE, or other anonymous methods)
+                      #   from an environmental sample with no reliable
+                      # identification of the source organism
     "evidence",       # Value indicating the nature of supporting evidence
     "exception",      # Indicates that the amino acid or RNA sequence
                       #   will not translate or agree with the DNA sequence
@@ -523,11 +527,14 @@ feature_qualifier_names = (
                       #   was obtained
     "isolate",        # Individual isolate from which the sequence was
                       #   obtained
-    "isolation_source",
+    "isolation_source", # Describes the physical, environmental and/or local
+                      #   geographical source of the biological sample from
+                      #   which the sequence was derived
     "kinetoplast",    # Organelle type from which the sequence was obtained
     "label",          # A label used to permanently identify a feature
     "lab_host",       # Laboratory host used to propagate the organism
                       #   from which the sequence was obtained
+    "locus_tag",      # Feature tag assigned for tracking purposes
     "macronuclear",   # If the sequence shown is DNA and from an organism
                       #   which undergoes chromosomal differentiation
                       #   between macronuclear and micronuclear stages,
@@ -537,6 +544,7 @@ feature_qualifier_names = (
     "map",            # Map position of the feature in free-format text
     "mitochondrion",  # Organelle type from which the sequence was obtained
     "mod_base",       # Abbreviation for a modified nucleotide base
+    "mol_type",       # In vivo molecule type
     "motif",
     "name",           # RefSeq specification for a Protein name
     "note",           # Any comment or additional information
@@ -578,9 +586,11 @@ feature_qualifier_names = (
     "rpt_unit",       # Identity of repeat unit that constitutes a
                       #   repeat_region
     "sec_str_type",   # RefSeq invention, no idea what it means
+    "segment",        # Name of viral or phage segment sequenced
     "sequenced_mol",  # Molecule from which the sequence was obtained
     "serotype",       # Variety of a species (usually bacteria or virus)
                       #   characterized by its antigenic properties
+    "serovar",        # Seriological variety of a species (prokaryote)
     "sex",            # Sex of the organism from which the sequence
                       #   was obtained
     "site_type",      # RefSeq invention for protein site
@@ -596,6 +606,8 @@ feature_qualifier_names = (
     "sub_strain",     # Sub_strain from which the sequence was obtained
     "tissue_lib",     # Tissue library from which the sequence was obtained
     "tissue_type",    # Tissue type from which the sequence was obtained
+    "transgenic",     # Identifies the source feature of the organism
+                      #   which was the recipient of transgenic DNA
     "translation",    # Amino acid translation of a coding region
     "transl_except",  # Translational exception: single codon, the
                       #   translation of which does not conform to the
@@ -633,16 +645,15 @@ qualifier_key = Martel.Group("qualifier_key",
 #                                          Martel.AnyBut("/") +
 #                                          Martel.ToEol()))
 
-qualifier_value = Martel.Group("qualifier_value",
-                               Martel.ToEol() +
-                               Martel.Rep(qualifier_space +
-                                          (Martel.AnyBut("/") |
-                                           (Martel.Str("/") +
-                                            Martel.Opt(blank_space) +
-                                            Martel.Re("[\w\-\,]+") +
-                                            blank_space)) + 
-                                          Martel.ToEol()))
-
+qualifier_value = Martel.Group(
+    "qualifier_value",
+    Martel.ToEol() +
+    Martel.Rep(qualifier_space +
+               ((Martel.AnyBut("/") + Martel.ToEol()) |
+                (Martel.Str("/") + Martel.Opt(blank_space) + Martel.Re("[\w\-\,]+") +
+                 blank_space + Martel.ToEol()) |
+                (Martel.Str("/") + Martel.Re("[\w\-\,\/]+\"\n"))
+                )))
 
 qualifier = Martel.Group("qualifier",
                          qualifier_key +
