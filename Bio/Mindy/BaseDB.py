@@ -8,31 +8,41 @@ def _int_str(i):
         return s[:-1]
     return s
 
-class CreateDB:
-    def __init__(self, dbname, unique, data_fields):
-        # Must define 'self.fileids' mapping from filename -> fileid
-        # Must define 'self.filemap' mapping from fileid -> filename \t size
-        raise NotImplementedError
+class WriteDB:
+    # Must define 'self.filename_map' mapping from filename -> fileid
+    # Must define 'self.fileid_info' mapping from fileid -> (filename,size)
 
     def add_filename(self, filename, size):
-        fileid = self.fileids.get(filename, None)
+        fileid = self.filename_map.get(filename, None)
         if fileid is not None:
             return fileid
-        s = str(len(self.fileids))
-        self.fileids[filename] = s
-        self.filemap[s] = "%s\t%s" % (filename, _int_str(size))
+        s = str(len(self.filename_map))
+        self.filename_map[filename] = s  # map from filename -> id
+        assert s not in fileid_info.keys(), "Duplicate entry! %s" % (s,)
+        self.fileid_info[s] = (filename, size)
         return s
 
-    def load(self, filename, builder, record_tag = "record",
-             format = "sequence"):
+    def load(self, filename, builder, record_tag = "record"):
+        formatname = self.formatname
         size = os.path.getsize(filename)
         filetag = self.add_filename(filename, size)
 
         source = compression.open_file(filename, "rb")
-        format = Bio.formats.normalize(format).identifyFile(source)
+        if formatname == "unknown":
+            formatname = "sequence"
+        
+        format = Bio.formats.normalize(formatname).identifyFile(source)
         if format is None:
             raise TypeError("Cannot identify file as a %s format" %
-                            (origformat,))
+                            (self.formatname,))
+        if self.formatname == "unknown":
+            expected_names = ["fasta", "embl", "swissprot", "genbank"]
+            for node in format._get_parents_in_depth_order():
+                if node.name in expected_names:
+                    self.formatname = node.name
+                    break
+            else:
+                self.formatname = format.name
         
         iterator = format.make_iterator(
             record_tag,
@@ -64,8 +74,34 @@ class DictLookup:
     
         
 class OpenDB(DictLookup):
-    def __init__(self, dbname):
+    def __init__(self, dbname, index_type):
         self.dbname = dbname
+
+        config = read_config(os.path.join(dbname, "config.dat"))
+        if config["index"] != index_type:
+            raise TypeError("FlatDB does not support %r index" %
+                            (config["index"],))
+        self.primary_namespace = config["primary_namespace"]
+        self.secondary_namespaces = config["secondary_namespaces"]
+        self.formatname = config["format"]
+
+        filename_map = {}
+        fileid_info = {}
+        for k, v in config.items():
+            if not k.startswith("fileid_"):
+                continue
+            fileid = k[7:]
+            filename, size = v
+            fileid_info[fileid] = v
+            filename_map[filename] = fileid
+            if os.path.getsize(filename) != size:
+                raise TypeError(
+                    "File %s has changed size from %d to %d bytes!" %
+                    (size, os.path.getsize(filename)))
+
+        self.filename_map = filename_map
+        self.fileid_info = fileid_info
+        
 
     def lookup(self, *args, **kwargs):
         if args:
@@ -73,7 +109,7 @@ class OpenDB(DictLookup):
                 raise TypeError("Cannot specify both args and kwargs")
             if len(args) != 1:
                 raise TypeError("Only one identifier handled")
-            namespace, name = self.unique, args[0]
+            namespace, name = self.primary_namespace, args[0]
         
         else:
             if len(kwargs) != 1:
@@ -87,4 +123,66 @@ class OpenDB(DictLookup):
 
     def keys(self):
         return [self.primary_namespace] + self.secondary_namespaces
+
+# Write the configuration
+def write_config(config_filename,
+                 index_type,
+                 primary_namespace,
+                 secondary_namespaces,
+                 fileid_info,
+                 formatname):
+    configfile = open(config_filename, "wb")
+
+    # Write the header
+    configfile.write("index\t" + index_type + "\n")
+
+    # Write the namespace information
+    configfile.write("primary_namespace\t%s\n" % primary_namespace)
+    keys = secondary_namespaces[:]
+    keys.sort()
+    configfile.write("secondary_namespaces\t")
+    configfile.write("\t".join(keys) + "\n")
+
+    # Format name
+    configfile.write("format\t" + formatname + "\n")
+
+    # Write the fileid table
+    items = fileid_info.items()
+    items.sort()
+    for fileid, (filename, size) in items:
+        configfile.write("fileid_%s\t%s\t%s\n" % \
+                         (fileid, filename, _int_str(size)))
+
+    configfile.close()
+
+
+def read_config(config_filename):
+    d = {}
+    for line in open(config_filename, "rb").read().split("\n"):
+        words = line.rstrip().split("\t")
+        assert not d.has_key(words[0]), \
+               "Duplicate key %r in config file: old = %r, new = %r" % \
+               (words[0], d[words[0]], line)
+        if words[0] in ("index", "primary_namespace", "format"):
+            if len(words) != 2:
+                raise AssertionError(
+                    "%s should only have one value, not %r" % \
+                    (words[0], words[1:]))
+            d[words[0]] = words[1]
+            
+        elif words[0].startswith("fileid_"):
+            if len(words) != 3:
+                raise AssertionError(
+                    "%s should only have two values, not %r" % \
+                    (words[0], words[1:]))
+            d[words[0]] = (words[1], long(words[2]))
         
+        elif words[0] in ("secondary_namespaces",):
+            # This can have 0 or more values
+            d[words[0]] = words[1:]
+        
+        else:
+            # Unknown word, save as-is
+            d[words[0]] = words[1:]
+    
+    return d

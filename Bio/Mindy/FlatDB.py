@@ -4,32 +4,7 @@ import BaseDB, Location
 import Bio
 
 _open = open
-
-# Write the configuration
-def _write_config(config_filename,
-                  primary_namespace,
-                  secondary_namespaces,
-                  filemap):
-    configfile = _open(os.path.join(self.dbname, "config.dat"), "wb")
-
-    # Write the header
-    configfile.write("index\tflat/1\n")
-
-    # Write the namespace information
-    configfile.write("primary_namespace\t%s\n" % self.primary_namespace)
-    keys = secondary_namespaces[:]
-    keys.sort()
-    configfile.write("secondary_namespaces\t")
-    configfile.write("\t".join(keys) + "\n")
-
-    # Write the fileid table
-    items = self.filemap.items()
-    items.sort()
-    for fileid, s in items:
-        configfile.write("fileid_%s\t%s\n" % (fileid, s))
-
-    configfile.close()
-        
+INDEX_TYPE = "flat/1"
 
 def _parse_primary_table_entry(s):
     name, filetag, startpos, length = s.rstrip().split("\t")
@@ -110,30 +85,7 @@ def _write_secondary_table(filename, table):
 
 class BaseFlatDB(BaseDB.OpenDB):
     def __init__(self, dbname):
-        BaseDB.OpenDB.__init__(self, dbname)
-
-        config = _read_tab_dict(os.path.join(dbname, "config.dat"))
-        if config["index"][0] != "flat/1":
-            raise TypeError("FlatDB does not support %r index" %
-                            (config["index"][0],))
-        self.primary_namespace = config["primary_namespace"][0]
-        self.secondary_namespaces = config["secondary_namespaces"]
-        fileids = {}
-        for k, v in config.items():
-            if not k.startswith("fileid_"):
-                continue
-            fileid = k[7:]
-            filename, size = v
-            size = long(size)
-            fileids[fileid] = filename, size
-            if os.path.getsize(filename) != size:
-                raise TypeError(
-                    "File %s has changed size from %d to %d bytes!" %
-                    (size, os.path.getsize(filename)))
-
-        self.fileids = fileids
-        self.dbname = dbname
-
+        BaseDB.OpenDB.__init__(self, dbname, INDEX_TYPE)
         self.key_filename = os.path.join(dbname,
                                          "key_%s.key" % self.primary_namespace)
         
@@ -146,7 +98,7 @@ class PrimaryTable(BaseDB.DictLookup):
         fileid, startpos, length = self.table[name]
         return [Location.Location(self.namespace,
                                   name,
-                                  self.db.fileids[fileid][0],
+                                  self.db.fileid_info[fileid][0],
                                   startpos,
                                   length)
                 ]
@@ -164,20 +116,18 @@ class SecondaryTable(BaseDB.DictLookup):
             fileid, startpos, length = self.db.primary_table[entry]
             data.append( Location.Location(self.namespace,
                                            name,
-                                           self.db.fileids[fileid][0],
+                                           self.db.fileid_info[fileid][0],
                                            startpos,
                                            length) )
         return data
     def keys(self):
         return self.table.keys()
 
-class MemoryFlatDB(BaseDB.CreateDB, BaseFlatDB):
+class MemoryFlatDB(BaseDB.WriteDB, BaseFlatDB):
     def __init__(self, dbname):
         self.__in_constructor = 1
         self._need_flush = 0
-        BaseFlatDB.__init__(self, dbname)
-
-        self.filemap = {}
+        BaseFlatDB.__init__(self, dbname, INDEX_TYPE)
 
         primary_filename = os.path.join(self.dbname,
                              "key_%s.key" % (self.primary_namespace,) )
@@ -191,7 +141,6 @@ class MemoryFlatDB(BaseDB.CreateDB, BaseFlatDB):
         self.__in_constructor = 0
 
     def add_record(self, filetag, startpos, length, table):
-        self._need_flush = 1
         key_list = table[self.primary_namespace]
         if len(key_list) != 1:
             raise TypeError(
@@ -205,22 +154,26 @@ class MemoryFlatDB(BaseDB.CreateDB, BaseFlatDB):
                                                   BaseDB._int_str(startpos),
                                                   BaseDB._int_str(length))
 
-        for namespace in secondary_namespaces:
+        for namespace in self.secondary_namespaces:
             lookup = self.secondary_tables[namespace]
             # Get the list of secondary identifiers for this identifier
             for val in table.get(namespace, ()):
                 # Go from secondary identifier to list of primary identifiers
                 lookup.setdefault(val, []).append(key)
+        self._need_flush = 1
 
     def flush(self):
         if not self._need_flush:
             return
 
         config_filename = os.path.join(self.dbname, "config.dat")
-        _write_config(config_filename = config_filename,
-                      primary_namespace = self.primary_namespace,
-                      secondary_namespaces = self.secondary_tables.keys(),
-                      filemap = self.filemap,
+        BaseDB.write_config(config_filename = config_filename,
+                            index_type = INDEX_TYPE,
+                            primary_namespace = self.primary_namespace,
+                            secondary_namespaces =
+                                    self.secondary_tables.keys(),
+                            fileid_info = self.fileid_info,
+                            formatname = self.formatname,
                       )
 
         primary_filename = os.path.join(self.dbname,
@@ -239,7 +192,8 @@ class MemoryFlatDB(BaseDB.CreateDB, BaseFlatDB):
 
     def close(self):
         self.flush()
-        self.primary_table = self.fileids = self.secondary_tables = None
+        self.primary_table = self.fileid_info = self.filename_map = \
+                             self.secondary_tables = None
 
     def __del__(self):
         if not self.__in_constructor:
@@ -252,13 +206,6 @@ class MemoryFlatDB(BaseDB.CreateDB, BaseFlatDB):
             return PrimaryTable(self, namespace, self.primary_table)
         return SecondaryTable(self, namespace, self.secondary_tables[namespace])
 
-
-def _read_tab_dict(filename):
-    d = {}
-    for line in _open(filename, "rb").read().split("\n"):
-        words = line.rstrip().split("\t")
-        d[words[0]] = words[1:]
-    return d
 
 class BisectFile:
     def __init__(self, infile, size):
@@ -324,14 +271,17 @@ def _lookup_alias(id_filename, word):
         primary_keys.append(primary_key)
     return primary_keys
 
-def create(dbname, primary_namespace, secondary_namespaces):
+def create(dbname, primary_namespace, secondary_namespaces,
+           formatname = "unknown"):
     os.mkdir(dbname)
     config_filename = os.path.join(dbname, "config.dat")
-    _write_config(config_filename = config_filename,
-                  primary_namespace = primary_namespace,
-                  secondary_namespaces = secondary_namespaces,
-                  filemap = {},
-                  )
+    BaseDB.write_config(config_filename = config_filename,
+                        index_type = INDEX_TYPE,
+                        primary_namespace = primary_namespace,
+                        secondary_namespaces = secondary_namespaces,
+                        fileid_info = {},
+                        formatname = formatname,
+                        )
 
     primary_filename = os.path.join(dbname,
                        "key_%s.key" % (primary_namespace,) )
@@ -341,7 +291,7 @@ def create(dbname, primary_namespace, secondary_namespaces):
 
     # Write the secondary identifier information
     for namespace in secondary_namespaces:
-        filename = os.path.join(self.dbname, "id_%s.index" % namespace)
+        filename = os.path.join(dbname, "id_%s.index" % namespace)
         _write_secondary_table(filename = filename,
                                table = {})
     return open(dbname, "rw")
@@ -382,7 +332,7 @@ class PrimaryNamespace(BaseDB.DictLookup):
         data = [
             Location.Location(self.namespace,
                               name,
-                              self.db.fileids[loc[0]][0],
+                              self.db.fileid_info[loc[0]][0],
                               loc[1],
                               loc[2])
         ]
@@ -409,7 +359,7 @@ class SecondaryNamespace(BaseDB.DictLookup):
                 raise AssertionError("Cannot find primary key %r -- "
                                      "lost database integrety" % (key,))
             data.append(Location.Location(self.namespace, name,
-                                          self.db.fileids[loc[0]][0],
+                                          self.db.fileid_info[loc[0]][0],
                                           loc[1],
                                           loc[2]))
         return data

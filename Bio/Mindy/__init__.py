@@ -2,15 +2,6 @@ import os, sys
 
 _open = open  # rename for internal use -- gets redefined below
 
-def create_berkeleydb(dbname, primary_namespace, data_fields,
-                      format = "sequence"):
-    import BerkeleyDB
-    return BerkeleyDB.create(dbname, primary_namespace, data_fields, format)
-
-def create_flatdb():
-    import FlatDB
-    return FlatDB.create(dbname, primary_namespace, data_fields, format)
-
 def open(dbname, mode = "r"):
     text = _open(os.path.join(dbname, "config.dat"), "rb").read()
     line = text.split("\n")[0]

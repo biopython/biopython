@@ -59,7 +59,7 @@ def xpath_index(dbname,
     builder = GrabXPathNodes(extract_info)
     for filename in filenames:
         creator.load(filename, builder = builder, record_tag = record_tag,
-                     format = format)
+                     formatname = format)
     creator.close()
 
 
