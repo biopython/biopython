@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # Created: Wed May 29 08:07:18 2002
-# Last changed: Time-stamp: <02/05/29 08:33:03 thomas>
+# Last changed: Time-stamp: <02/05/29 08:52:40 thomas>
 # thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas/index.html
 # File: /home/thomas/cbs/python/biopython/Bio/SeqUtils/sequtils.py
 
@@ -9,7 +9,7 @@ from Bio import Fasta
 from Bio.Tools import Translate
 from Bio.Seq import Seq
 from Bio import Alphabet
-from Bio.Alphabet import IUPAC, ProteinAlphabet, ThreeLetterProtein
+from Bio.Alphabet import IUPAC
 from Bio.Data import IUPACData, CodonTable
 
 #from PropertyManager import default_manager
@@ -157,6 +157,26 @@ def makeTableX(table):
 
 
 # end of hacks
+
+def seq3(seq):
+   """
+   Method that returns the amino acid sequence as a
+   list of three letter codes. Output follows the IUPAC standard plus 'Ter' for
+   terminator. Any unknown character, including the default
+   unknown character 'X', is changed into 'Xaa'. A noncoded
+   aminoacid selenocystein is recognized (Sel, U).
+   """
+   threecode = {'A':'Ala', 'B':'Asx', 'C':'Cys', 'D':'Asp',
+                'E':'Glu', 'F':'Phe', 'G':'Gly', 'H':'His',
+                'I':'Ile', 'K':'Lys', 'L':'Leu', 'M':'Met',
+                'N':'Asn', 'P':'Pro', 'Q':'Gln', 'R':'Arg',
+                'S':'Ser', 'T':'Thr', 'V':'Val', 'W':'Trp',
+                'Y':'Tyr', 'Z':'Glx', 'X':'Xaa', '*':'Ter',
+                'U':'Sel'
+                }
+
+   return ''.join([threecode.get(aa,'Xer') for aa in seq])
+
 
 # }}}
 
