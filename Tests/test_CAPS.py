@@ -130,4 +130,8 @@ def test_suite():
   suite.addTest(UnevenAlignment("test"))
   suite.addTest(TrivialExample("testCAPS"))
   suite.addTest(Example1("test"))
+
   return suite
+
+runner = unittest.TextTestRunner()
+runner.run(test_suite())
