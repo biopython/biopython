@@ -50,7 +50,7 @@ class Record:
         output =  'Title: %s\n' % self.title
         for comment in self.comments:
             output = output + '%s\n' % comment
-        output = output + out_sequence( self.sequence )
+        output = output + out_sequence( self.sequence.data )
         return output
 
 def out_sequence( seq ):
