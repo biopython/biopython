@@ -5,32 +5,10 @@ Test conversion of hex strings. ... ok
 Ran 1 tests in 0.000s
 
 OK
-t_compute_accum_weight (test_ais.ImmuneTest) ... ERROR
-t_search_accum_weight (test_ais.ImmuneTest) ... ERROR
+t_compute_accum_weight (test_ais.ImmuneTest) ... ok
+t_search_accum_weight (test_ais.ImmuneTest) ... ok
 
-======================================================================
-ERROR: t_compute_accum_weight (test_ais.ImmuneTest)
 ----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "test_ais.py", line 76, in setUp
-    self.immune = Immune( align, alphabet, 5 )
-  File "C:\BIOPYT~1.00A\Bio\Ais\__init__.py", line 81, in __init__
-    self.lymphocyte_factory( size )
-  File "C:\BIOPYT~1.00A\Bio\Ais\__init__.py", line 169, in lymphocyte_factory
-    summary_info = SummaryInfo( align )
-NameError: global name 'align' is not defined
-======================================================================
-ERROR: t_search_accum_weight (test_ais.ImmuneTest)
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "test_ais.py", line 76, in setUp
-    self.immune = Immune( align, alphabet, 5 )
-  File "C:\BIOPYT~1.00A\Bio\Ais\__init__.py", line 81, in __init__
-    self.lymphocyte_factory( size )
-  File "C:\BIOPYT~1.00A\Bio\Ais\__init__.py", line 169, in lymphocyte_factory
-    summary_info = SummaryInfo( align )
-NameError: global name 'align' is not defined
-----------------------------------------------------------------------
-Ran 2 tests in 2.860s
+Ran 2 tests in 3.020s
 
-FAILED (errors=2)
+OK
