@@ -155,5 +155,7 @@ class SGMLStripper:
             str = self._parser.data
         elif is_newline:
             str = '\n'
+        else:
+            str = ''
         return str
 
