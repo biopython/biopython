@@ -89,6 +89,11 @@ class FormatRegistry:
             raise TypeError("child (%s) not found in registery" % (child,))
         child = self._name_table[child]
 
+        if parent.multirecord != child.multirecord:
+            raise TypeError(
+                "multirecord must be the same for parent (%d) and child(%d)" %
+                (parent.multirecord, child.multirecord))
+
         if _issubtype(parent, child):
             raise TypeError("will not add a cycle between %r and %r" % \
                             (parent.name, child.name))
