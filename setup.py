@@ -34,6 +34,12 @@ setup(name='biopython',
       ext_modules = [('Bio.Tools.Classification.cSVM',
                       { 'sources' : ['Bio/Tools/Classification/cSVMmodule.c'] }
                       )
+                     ('Bio.Tools.clistfns',
+                      { 'sources' : ['Bio/Tools/clistfnsmodule.c'] }
+                      )
+                     ('Bio.Tools.cmathfns',
+                      { 'sources' : ['Bio/Tools/cmathfnsmodule.c'] }
+                      )
                      ]
       )
 

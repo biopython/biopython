@@ -5,67 +5,67 @@
 
 """This provides code for a general Naive Bayes learner.
 
-Naive Bayes is a supervised classification algorithm that is simple to
-implement and performs reasonably well in practice.  It is used to
-classify multi-dimensional observations into 1 of several classes, with
-the assumptions that the classes are mutually exclusive and comprehensive.
+Naive Bayes is a supervised classification algorithm that uses Bayes
+rule to compute the fit between a new observation and some previously
+observed data.  The observations are discrete feature vectors, with
+the Bayes assumption that the features are independent.  Although this
+is hardly ever true, the classifier works well enough in practice.
 
-In this file, an observation is represented as a list of discrete data
-points.  Discrete data is data that can be represented as one of a finite,
-usually small, number of values.  Examples include text words or bins in a
-bucket.  A class is a possible classification of an observation.  Since
-'class' is a reserved word in Python, variables are instead named
-'class_'.
+Glossary:
+observation  A feature vector of discrete data.
+class        A possible classification for an observation.
 
 
 Classes:
-NaiveBayes   Holds information for a naive bayes classifier.
+NaiveBayes   Holds information for a naive Bayes classifier.
 
 Functions:
-train        Train a new NaiveBayes classifier.
+train        Train a new naive Bayes classifier.
 calculate    Calculate the probabilities of each class, given an observation.
 classify     Classify an observation into a class.
-
-_estimate_probs  Estimate the probabilities for each value in a data set.
-_count           Count the number of occurrences of each value in a data set.
-_safe_log        Calculate a natural log, with some safety checks.
-_uniq            Return the unique members of a list
 
 """
 # To Do:
 # add code to help discretize data
+# use objects
 
-import math
+try:
+    from Numeric import *
+except ImportError, x:
+    raise ImportError, "This module requires NumPy"
+
+from Bio.Tools import mathfns, listfns
 
 class NaiveBayes:
     """Holds information for a NaiveBayes classifier.
 
     Members:
     classes         List of the possible classes of data.
-    p_conditional   Dict with keys (value, dim, class) -> P(value,dim|class).
-    p_prior         Dict with the class as the key and P(class) as value.
+    p_conditional   CLASS x DIM array of dicts of value -> P(value,dim|class)
+    p_prior         List of the prior probabilities for every class.
     dimensionality  Dimensionality of the data.
 
     """
     def __init__(self):
-        self.classes = {}
-        self.p_conditional = {}
-        self.p_prior = {}
+        self.classes = []
+        self.p_conditional = None
+        self.p_prior = []
         self.dimensionality = None
 
 def calculate(nb, observation, scale=0):
-    """calculate(nb, observation, scale=0) -> dict of probabilities
+    """calculate(nb, observation[, scale]) -> probability dict
 
     Calculate log P(class|observation) for each class.  nb is a NaiveBayes
     classifier that has been trained.  observation is a list representing
     the observed data.  scale is whether the probability should be
-    scaled by P(observation).  Returns a dictionary where the keys is the
-    class and the value is the log probability of the class.
+    scaled by P(observation).  By default, no scaling is done.  The return
+    value is a dictionary where the keys is the class and the value is the
+    log probability of the class.
 
     """
-    # P(observation|class) = P(class|observation)*P(observation)/P(class)
+    # P(class|observation) = P(observation|class)*P(class)/P(observation)
     # Taking the log:
-    # lP(observation|class) = lP(class|observation)+P(observation)-P(class)
+    # lP(class|observation) = lP(observation|class)+lP(class)-lP(observation)
 
     # Make sure the observation has the right dimensionality.
     if len(observation) != nb.dimensionality:
@@ -73,36 +73,34 @@ def calculate(nb, observation, scale=0):
               % (len(observation), nb.dimensionality)
 
     # Calculate log P(observation|class) for every class.
-    lp_observation_class = {}     # Dict of class : log P(observation|class)
-    for class_ in nb.classes:
+    lp_observation_class = []     # list of log P(observation|class)
+    for i in range(len(nb.classes)):
         # log P(observation|class) = SUM_i log P(observation_i|class)
-        lprob = 0.0
-        for dim in range(len(observation)):
-            value = observation[dim]
-            p = nb.p_conditional.get((value, dim, class_), 0.0)
-            lprob = lprob + _safe_log(p)
-        lp_observation_class[class_] = lprob
+        probs = [None] * len(observation)
+        for j in range(len(observation)):
+            probs[j] = nb.p_conditional[i][j].get(observation[j], 0)
+        lprobs = map(lambda x: mathfns.safe_log(x, -10000), probs)
+        lprob = sum(lprobs)
+        lp_observation_class.append(lprob)
 
     # Calculate log P(class).
-    lp_prior = {}                 # Dict of class : log P(class)
-    for class_ in nb.classes:
-        lp_prior[class_] = math.log(nb.p_prior[class_])
+    lp_prior = map(math.log, nb.p_prior)
 
     # Calculate log P(observation).
     lp_observation = 0.0          # P(observation)
     if scale:   # Only calculate this if requested.
         # log P(observation) = log SUM_i P(observation|class_i)P(class_i)
-        sum = 0.0
-        for class_ in nb.classes:
-            p = math.exp(lp_prior[class_] + lp_observation_class[class_])
-            sum = sum + p
-        lp_observation = math.log(sum)
+        obs = zeros(len(nb.classes), Float32)
+        for i in range(len(nb.classes)):
+            obs[i] = mathfns.safe_exp(lp_prior[i]+lp_observation_class[i],
+                                      under=1E-300)
+        lp_observation = math.log(sum(obs))
 
     # Calculate log P(class|observation).
     lp_class_observation = {}      # Dict of class : log P(class|observation)
-    for class_ in nb.classes:
-        lp_class_observation[class_] = \
-            lp_observation_class[class_] + lp_prior[class_] - lp_observation
+    for i in range(len(nb.classes)):
+        lp_class_observation[nb.classes[i]] = \
+            lp_observation_class[i] + lp_prior[i] - lp_observation
 
     return lp_class_observation
 
@@ -116,25 +114,28 @@ def classify(nb, observation):
     probs = calculate(nb, observation, scale=0)
     max_prob = None
     max_class = None
-    for class_ in nb.classes:
-        if max_prob is None or probs[class_] > max_prob:
-            max_prob = probs[class_]
-            max_class = class_
+    for klass in nb.classes:
+        if max_prob is None or probs[klass] > max_prob:
+            max_prob = probs[klass]
+            max_class = klass
     return max_class
 
-def train(training_set, results):
-    """train(training_set, results) -> NaiveBayes
+def train(training_set, results, priors=None, typecode=None):
+    """train(training_set, results[, priors]) -> NaiveBayes
 
     Train a naive bayes classifier on a training set.  training_set is a
     list of observations.  results is a list of the class assignments
     for each observation.  Thus, training_set and results must be the same
-    length.
+    length.  priors is an optional dictionary specifying the prior
+    probabilities for each type of result.  If not specified, the priors
+    will be estimated from the training results.
 
     """
     if not len(training_set):
         raise ValueError, "No data in the training set."
     if len(training_set) != len(results):
         raise ValueError, "training_set and results should be parallel lists."
+    
     dim = None
     for obs in training_set:
         if dim is None:
@@ -143,76 +144,45 @@ def train(training_set, results):
             raise ValueError, "observations have different dimensionality"
     
     nb = NaiveBayes()
-    nb.dimensionality = len(training_set[0])
+    nb.dimensionality = dim
     
     # Get a list of all the classes.
-    nb.classes = _uniq(results)
+    nb.classes = listfns.uniq(results)
+    nb.classes.sort()   # keep it tidy
     
     # Estimate the prior probabilities for the classes.
-    nb.p_prior = _estimate_probs(results)
+    if priors is not None:
+        percs = priors
+    else:
+        percs = listfns.contents(results)
+    nb.p_prior = zeros(len(nb.classes), Float16)
+    for i in range(len(nb.classes)):
+        nb.p_prior[i] = percs[nb.classes[i]]
+
+    # Collect all the observations in class.
+    index = {}         # next index into an array for each class
+    observations = []  # List of class by list of training instances
+    c2i = listfns.itemindex(nb.classes)   # class to index of class
+    class_counts = listfns.count(results)
+    for klass in nb.classes:
+        observations.append(
+            zeros((class_counts[klass], nb.dimensionality), typecode))
+        index[klass] = 0
+    for i in range(len(results)):
+        klass, instance = results[i], training_set[i]
+        ind = index[klass]
+        observations[c2i[klass]][ind] = instance
+        index[klass] = ind + 1
 
     # Calculate P(value,dim|class) for every class.
-    for class_ in nb.classes:
-        # Collect all the observations in class_.
-        observations = []
-        for i in range(len(results)):
-            if results[i] == class_:
-                observations.append(training_set[i])
-
-        for dim in range(nb.dimensionality):
+    # This is a good loop to optimize.
+    nb.p_conditional = []
+    for i in range(len(nb.classes)):
+        nb.p_conditional.append([None] * nb.dimensionality)
+        for j in range(nb.dimensionality):
             # Collect all the values in this dimension.
-            values = map(lambda x,dim=dim: x[dim], observations)
+            values = observations[i][:, j]
             # Estimate P(value,dim|class)
-            p_values = _estimate_probs(values)
-            for value in p_values.keys():
-                nb.p_conditional[(value, dim, class_)] = p_values[value]
+            nb.p_conditional[i][j] = listfns.contents(values)
     return nb
-
-def _count(values):
-    """_count(values) -> dict of counts 
-
-    Count the number of times each unique value appears in a list of data.
-
-    """
-    counts = {}
-    for value in values:
-        counts[value] = counts.get(value, 0) + 1
-    return counts
-
-def _estimate_probs(values):
-    """_estimate_probs(values) -> dict of probabilities
-
-    Calculate the major likelihood estimate of probability for each
-    unique value in a list of data.
-
-    """
-    # Divide the number of time an observation occurs by the total
-    # number of observations.
-    total = float(len(values))
-    counts = _count(values)
-    probs = {}
-    for value in counts.keys():
-        probs[value] = counts[value] / total
-    return probs
-
-def _safe_log(n):
-    """_safe_log(n) -> log of n
-
-    Calculate the natural log of n.  If n is 0, then calculates the log
-    of a really small number.
-
-    """
-    try:
-        return math.log(n)
-    except OverflowError:
-        # Return the log of an arbitrarily low number.
-        return math.log(1E-100)
-    assert 0, "How did I get here?"
-
-def _uniq(l):
-    """uniq(l) -> list of unique members of l"""
-    dict = {}
-    for i in l:
-        dict[i] = 1
-    return dict.keys()
 
