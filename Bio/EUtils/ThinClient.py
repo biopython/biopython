@@ -19,8 +19,8 @@ EUtils offers a structured way to query Entrez, get the results in
 various formats, and get information about related documents.  The way
 to start off is create an EUtils object.
 
->>> import EUtils
->>> from EUtils.ThinClient import ThinClient
+>>> from Bio import EUtils
+>>> from Bio.EUtils.ThinClient import ThinClient
 >>> eutils = ThinClient.ThinClient()
 >>> 
 

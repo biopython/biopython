@@ -8,7 +8,7 @@ large or an unknown number of identifiers.
 See DBIdsClient if you want to get information about a set of known
 database identifiers.
 
->>> from EUtils import HistoryClient
+>>> from Bio.EUtils import HistoryClient
 >>> client = HistoryClient.HistoryClient()
 >>> cancer = client.search("cancer")
 >>> print len(cancer)
@@ -53,6 +53,7 @@ PMID: 12520582 [PubMed - in process]
 
 Now refine the query to publications in the last day
 
+>>> from Bio import EUtils
 >>> recent_cancer = client.search("#%s" % (cancer.query_key,),
 ...                               daterange = EUtils.WithinNDays(1))
 >>> len(recent_cancer)

@@ -8,8 +8,8 @@ set of known database identifiers.
 See HistoryClient if you want to work with a large number of
 identifiers or potentially large search results.
 
->>> import EUtils
->>> from EUtils import DBIdsClient
+>>> from Bio import EUtils
+>>> from Bio.EUtils import DBIdsClient
 >>> client = DBIdsClient.DBIdsClient()
 >>> result = client.search("dalke", retmax = 100)
 >>> len(result)
