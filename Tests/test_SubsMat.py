@@ -1,17 +1,21 @@
 import cPickle
 import sys
+import os
 from Bio import SubsMat
 from Bio.SubsMat import FreqTable, MatrixInfo
 
 f = sys.stdout
-ftab_prot = FreqTable.read_count(open('SubsMat/protein_count.txt'))
-ctab_prot = FreqTable.read_freq(open('SubsMat/protein_freq.txt'))
+ftab_file = os.path.join('SubsMat', 'protein_count.txt')
+ftab_prot = FreqTable.read_count(open(ftab_file))
+ctab_file = os.path.join('SubsMat', 'protein_freq.txt')
+ctab_prot = FreqTable.read_freq(open(ctab_file))
 f.write("Check differences between derived and true frequencies for each\n")
 f.write("letter. Differences should be very small\n")
 for i in ftab_prot.alphabet.letters:
     f.write("%s %f\n" % (i, abs(ftab_prot[i] - ctab_prot[i])))
-    
-acc_rep_mat = cPickle.load(open('SubsMat/acc_rep_mat.pik'))
+
+pickle_file = os.path.join('SubsMat', 'acc_rep_mat.pik')
+acc_rep_mat = cPickle.load(open(pickle_file))
 acc_rep_mat = SubsMat.SeqMat(acc_rep_mat)
 obs_freq_mat = SubsMat._build_obs_freq_mat(acc_rep_mat)
 ftab_prot2 = SubsMat._exp_freq_table_from_obs_freq(obs_freq_mat)
