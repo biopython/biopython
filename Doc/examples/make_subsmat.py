@@ -7,7 +7,6 @@ import sys
 
 # Biopython
 from Bio.SubsMat import SubsMat
-from Bio.SubsMat import FreqTable
 from Bio.Clustalw import Clustalw
 from Bio.Alphabet import IUPAC
 from Bio.Align import AlignInfo
