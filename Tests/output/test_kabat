@@ -1,0 +1,127 @@
+test_kabat
+Kabat id: 000245
+Creation date: 11/12/94
+Last modification: 11/24/98
+IG HEAVY CHAIN VARIABLE REGION
+Species; human
+VH6-EB10
+
+VARADE,W.S.,MARIN,E.,KITTELBERGER,A.M. & INSEL,R.A. 
+J IMMUNOL 150: 4985-4995 (1993)
+8496600
+VARADE,W.S.,MARIN,E.,KITTELBERGER,A.M. & INSEL,R.A. 
+J IMMUNOL 150: 4985-4995 (1993)
+8496600
+SRCE: PCR AMPLIFIED cDNA FROM SPLEEN OF PATIENT WITH CHRONICMYELOGENOUS LEUKEMIA
+
+ccaagactggtgaagccctcgcagaccctctcactcacctgtgccatctccggggacagtgtctctaggaacagtgctgc
+ttggatcaggcagtccccatcgagaggccttgagtggctgggaaggacatactccaagtggtataatgattatgcagtat
+ctgtgaaaagtcgaataaccatcaacccagacacatccaagaaccagttctccctgcagctgactgagggcacggctgtg
+tattactgtgcaagagactccctggagtgggatgatatctggggcgggacaatggtcaccgttcttca
+
+PRLVKPSQTLSLTCAISGDSVSRNSAAWIRQSPSRGLEWLGRTYSKWYNDYAVSVKSRITINPDTSKNQFSLQLTEGTAV
+YYCARDSLEWDDIWGGTMVTVSS
+
+
+Kabat id: 000255
+Creation date: 11/12/94
+Last modification: 11/24/98
+IG HEAVY CHAIN VARIABLE REGION
+Species; human
+VH6-FF11
+
+VARADE,W.S.,MARIN,E.,KITTELBERGER,A.M. & INSEL,R.A. 
+J IMMUNOL 150: 4985-4995 (1993)
+8496600
+VARADE,W.S.,MARIN,E.,KITTELBERGER,A.M. & INSEL,R.A. 
+J IMMUNOL 150: 4985-4995 (1993)
+8496600
+SRCE: PCR AMPLIFIED cDNA FROM SPLEEN OF PATIENT WITH CHRONICMYELOGENOUS LEUKEMIA
+NNNT: FOR ALIGNMENT, THE CODONS ctt acc acc gtc tac tac aac WEREREPLACED BY A # AT POSITION 100H.
+NNIN: 100H:  ctt acc acc gtc tac tac aac
+AAIN: 100H:  LEU THR THR VAL TYR TYR ASN
+AANT: FOR ALIGNMENT, THE AMINO ACIDS LEU THR THR VAL TYR TYR ASN WEREREPLACED BY A # AT POSITION 100H.
+
+ccaggactggtgaagccctcgcagaccctctcactcacctgtgccatctccggggacagtgtctctgacaggagtgcttc
+ctggatcaggcagtccccttcgagaggccttgagtggctgggaaggacatactccaagtggtttagtgattatgcggact
+ctgttaaaggtcgaataatcgtcaacccggacacatccaccaaccagttctccctgcagttgactcccgaggacacggct
+gtatattactgtgcaagagctccgtgggcccgacgtgacgtctggggcccagggacctgggtcaccgtcttctca
+
+PGLVKPSQTLSLTCAISGDSVSDRSASWIRQSPSRGLEWLGRTYSKWFSDYADSVKGRIIVNPDTSTNQFSLQLTPEDTA
+VYYCARAPWARRDVWGPGTWVTVFS
+
+
+Kabat id: 000347
+Creation date: 11/12/94
+Last modification: 11/24/98
+IG HEAVY CHAIN VARIABLE REGION
+Species; human
+E55 4.A1
+
+CUISINIER,A.-M.,GAUTHIER,L.,BOUBLI,L.,FOUGEREAU,M. & TONNELLE,C. 
+EUR J IMMUNOL 23: 110-118 (1993)
+8419161
+CUISINIER,A.-M.,GAUTHIER,L.,BOUBLI,L.,FOUGEREAU,M. & TONNELLE,C. 
+EUR J IMMUNOL 23: 110-118 (1993)
+8419161
+SRCE: PCR AMPLIFIED cDNA FROM 8-WEEK-OLD EMBRYO MONONUCLEAR CELLS
+
+---caggtgcagctgcaggagtcgggcccaggactggtgaagccttcggagaccctgtccctcacctgcactgtctctgg
+tggctccatcagtagttactactggagctggatccggcagcccgccgggaagggactggagtggattgggcgtatctata
+ccagtgggagcaccaactacaacccctccctcaagagtcgagtcaccatgtcagtagacacgtccaagaaccagttctcc
+ctgaagctgaccgccgcggacacggccgtgtattactgtgcgagagatgcacctctgatg---gacgtctgg
+
+-QVQLQESGPGLVKPSETLSLTCTVSGGSISSYYWSWIRQPAGKGLEWIGRIYTSGSTNYNPSLKSRVTMSVDTSKNQFS
+LKLTAADTAVYYCARDAPLM-DVW
+
+
+Kabat id: 000397
+Creation date: 11/12/94
+Last modification: 11/24/98
+IG HEAVY CHAIN VARIABLE REGION
+Species; human
+E54 3.8
+
+CUISINIER,A.-M.,GAUTHIER,L.,BOUBLI,L.,FOUGEREAU,M. & TONNELLE,C. 
+EUR J IMMUNOL 23: 110-118 (1993)
+8419161
+CUISINIER,A.-M.,GAUTHIER,L.,BOUBLI,L.,FOUGEREAU,M. & TONNELLE,C. 
+EUR J IMMUNOL 23: 110-118 (1993)
+8419161
+SRCE: PCR AMPLIFIED cDNA FROM 13-WEEK-OLD EMBRYO MONONUCLEAR CELLS
+
+---gaggtgcagctgttggagtctgggggaggcttggtacagcctggggggtccctgagactctcctgtgcagcctctgg
+attcacctttagcagctatgccatgagctgggtccgccaggctccagggaaggggctggagtgggtctcagctattagta
+gtggtggtagcacatactactcagactccgtgaagggccggttcaccatctccagagacaattccaagaacacgctgtat
+ctgcaaatgagagccgaggacacggccgtatattactgtgcgaagtgccctttcgctgggggagactactgg
+
+-EVQLLESGGGLVQPGGSLRLSCAASGFTFSSYAMSWVRQAPGKGLEWVSAISSGGSTYYSDSVKGRFTISRDNSKNTLY
+LQMRAEDTAVYYCAKCPFAGGDYW
+
+
+Kabat id: 000456
+Creation date: 11/12/94
+Last modification: 11/24/98
+IG HEAVY CHAIN VARIABLE REGION
+Species; human
+N42P5
+
+MORTARI,F.,WANG,J.-Y. & SCHROEDER,JR.,H.W. 
+J IMMUNOL 150: 1348-1357 (1993)
+8381834
+MORTARI,F.,WANG,J.-Y. & SCHROEDER,JR.,H.W. 
+J IMMUNOL 150: 1348-1357 (1993)
+8381834
+SRCE: PCR AMPLIFIED cDNA FROM HUMAN CORD BLOOD MONONUCLEAR CELLS
+CLAS: IGA-
+
+---caggtgcagctggtggagtctgggggaggcttcgtcaagcctggagggtccctgagactctcctgtgcagcctctgg
+attcacctttagtgactactacatgagctggatccgccaggctccagggaaggggctggagtgggtttcatacattagta
+ctactggttacacaaactacgcagactctgtgaagggccgattcaccatctccagagacaacgccaagaactcactgtat
+ctgcaaatgagagccgaggacacggctgtgtattactgtgcgtgtgcgagattctatggttcggagtactggggccaggg
+aaccctggtcaccgtctcctca
+
+-QVQLVESGGGFVKPGGSLRLSCAASGFTFSDYYMSWIRQAPGKGLEWVSYISTTGYTNYADSVKGRFTISRDNAKNSLY
+LQMRAEDTAVYYCACARFYGSEYWGQGTLVTVSS
+
+

@@ -1,0 +1,150 @@
+KADBID      000397
+CREATD      11/12/94
+LMODIF      11/24/98
+DEFINI      IG HEAVY CHAIN VARIABLE REGION
+SPECIE      human
+AANAME      E54 3.8'CL
+NNNAME      E54 3.8
+AAREFA    1 CUISINIER,A.-M.,GAUTHIER,L.,BOUBLI,L.,FOUGEREAU,M. & TONNELLE,C. 
+AAREFJ    1 EUR J IMMUNOL 23: 110-118 (1993)
+AAPUBM      8419161
+NNREFA    1 CUISINIER,A.-M.,GAUTHIER,L.,BOUBLI,L.,FOUGEREAU,M. & TONNELLE,C. 
+NNREFJ    1 EUR J IMMUNOL 23: 110-118 (1993)
+NNPUBM      8419161
+ANNOTA SRCE PCR AMPLIFIED cDNA FROM 13-WEEK-OLD EMBRYO MONONUCLEAR CELLS
+SEQTPA          1     0 --- --- -
+SEQTPA          2     1 gag GLU E
+SEQTPA          3     2 gtg VAL V
+SEQTPA          4     3 cag GLN Q
+SEQTPA          5     4 ctg LEU L
+SEQTPA          6     5 ttg LEU L
+SEQTPA          7     6 gag GLU E
+SEQTPA          8     7 tct SER S
+SEQTPA          9     8 ggg GLY G
+SEQTPA         10     9 gga GLY G
+SEQTPA         11    10 ggc GLY G
+SEQTPA         12    11 ttg LEU L
+SEQTPA         13    12 gta VAL V
+SEQTPA         14    13 cag GLN Q
+SEQTPA         15    14 cct PRO P
+SEQTPA         16    15 ggg GLY G
+SEQTPA         17    16 ggg GLY G
+SEQTPA         18    17 tcc SER S
+SEQTPA         19    18 ctg LEU L
+SEQTPA         20    19 aga ARG R
+SEQTPA         21    20 ctc LEU L
+SEQTPA         22    21 tcc SER S
+SEQTPA         23    22 tgt CYS C
+SEQTPA         24    23 gca ALA A
+SEQTPA         25    24 gcc ALA A
+SEQTPA         26    25 tct SER S
+SEQTPA         27    26 gga GLY G
+SEQTPA         28    27 ttc PHE F
+SEQTPA         29    28 acc THR T
+SEQTPA         30    29 ttt PHE F
+SEQTPA         31    30 agc SER S
+SEQTPA         32    31 agc SER S
+SEQTPA         33    32 tat TYR Y
+SEQTPA         34    33 gcc ALA A
+SEQTPA         35    34 atg MET M
+SEQTPA         36    35 agc SER S
+SEQTPA         37   35A --- --- -
+SEQTPA         38   35B --- --- -
+SEQTPA         39    36 tgg TRP W
+SEQTPA         40    37 gtc VAL V
+SEQTPA         41    38 cgc ARG R
+SEQTPA         42    39 cag GLN Q
+SEQTPA         43    40 gct ALA A
+SEQTPA         44    41 cca PRO P
+SEQTPA         45    42 ggg GLY G
+SEQTPA         46    43 aag LYS K
+SEQTPA         47    44 ggg GLY G
+SEQTPA         48    45 ctg LEU L
+SEQTPA         49    46 gag GLU E
+SEQTPA         50    47 tgg TRP W
+SEQTPA         51    48 gtc VAL V
+SEQTPA         52    49 tca SER S
+SEQTPA         53    50 gct ALA A
+SEQTPA         54    51 att ILE I
+SEQTPA         55    52 agt SER S
+SEQTPA         56   52A ggt GLY G
+SEQTPA         57   52B --- --- -
+SEQTPA         58   52C --- --- -
+SEQTPA         59    53 agt SER S
+SEQTPA         60    54 ggt GLY G
+SEQTPA         61    55 ggt GLY G
+SEQTPA         62    56 agc SER S
+SEQTPA         63    57 aca THR T
+SEQTPA         64    58 tac TYR Y
+SEQTPA         65    59 tac TYR Y
+SEQTPA         66    60 tca SER S
+SEQTPA         67    61 gac ASP D
+SEQTPA         68    62 tcc SER S
+SEQTPA         69    63 gtg VAL V
+SEQTPA         70    64 aag LYS K
+SEQTPA         71    65 ggc GLY G
+SEQTPA         72    66 cgg ARG R
+SEQTPA         73    67 ttc PHE F
+SEQTPA         74    68 acc THR T
+SEQTPA         75    69 atc ILE I
+SEQTPA         76    70 tcc SER S
+SEQTPA         77    71 aga ARG R
+SEQTPA         78    72 gac ASP D
+SEQTPA         79    73 aat ASN N
+SEQTPA         80    74 tcc SER S
+SEQTPA         81    75 aag LYS K
+SEQTPA         82    76 aac ASN N
+SEQTPA         83    77 acg THR T
+SEQTPA         84    78 ctg LEU L
+SEQTPA         85    79 tat TYR Y
+SEQTPA         86    80 ctg LEU L
+SEQTPA         87    81 caa GLN Q
+SEQTPA         88    82 atg MET M
+SEQTPA         89   82A aac ASN N
+SEQTPA         90   82B agc SER S
+SEQTPA         91   82C ctg LEU L
+SEQTPA         92    83 aga ARG R
+SEQTPA         93    84 gcc ALA A
+SEQTPA         94    85 gag GLU E
+SEQTPA         95    86 gac ASP D
+SEQTPA         96    87 acg THR T
+SEQTPA         97    88 gcc ALA A
+SEQTPA         98    89 gta VAL V
+SEQTPA         99    90 tat TYR Y
+SEQTPA        100    91 tac TYR Y
+SEQTPA        101    92 tgt CYS C
+SEQTPA        102    93 gcg ALA A
+SEQTPA        103    94 aag LYS K
+SEQTPA        104    95 tgc CYS C
+SEQTPA        105    96 cct PRO P
+SEQTPA        106    97 ttc PHE F
+SEQTPA        107    98 gct ALA A
+SEQTPA        108    99 ggg GLY G
+SEQTPA        109   100 gga GLY G
+SEQTPA        110  100A tct SER S
+SEQTPA        111  100B ccg PRO P
+SEQTPA        112  100C tct SER S
+SEQTPA        113  100D --- --- -
+SEQTPA        114  100E --- --- -
+SEQTPA        115  100F --- --- -
+SEQTPA        116  100G --- --- -
+SEQTPA        117  100H --- --- -
+SEQTPA        118  100I --- --- -
+SEQTPA        119  100J --- --- -
+SEQTPA        120  100K ttt PHE F
+SEQTPA        121   101 gac ASP D
+SEQTPA        122   102 tac TYR Y
+SEQTPA        123   103 tgg TRP W
+SEQTPA        124   104          
+SEQTPA        125   105          
+SEQTPA        126   106          
+SEQTPA        127   107          
+SEQTPA        128   108          
+SEQTPA        129   109          
+SEQTPA        130   110          
+SEQTPA        131   111          
+SEQTPA        132   112          
+SEQTPA        133   113          
+RECEND|                                                                       
+
+ 
