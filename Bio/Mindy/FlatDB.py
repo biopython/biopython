@@ -330,13 +330,13 @@ def create(dbname, primary_namespace, secondary_namespaces):
     _write_config(config_filename = config_filename,
                   primary_namespace = primary_namespace,
                   secondary_namespaces = secondary_namespaces,
-                  filemap = filemap,
+                  filemap = {},
                   )
 
     primary_filename = os.path.join(dbname,
                        "key_%s.key" % (primary_namespace,) )
     _write_primary_table(filename = primary_filename,
-                         primary_table = primary_table)
+                         primary_table = {})
 
 
     # Write the secondary identifier information

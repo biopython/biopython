@@ -39,7 +39,7 @@ def main():
         ("entry", "//entry_name"),
         ("accession", "//%s[@type='accession']" % (Std.dbid.tag,)),
         ],
-        #creator_class = FlatDB.CreateFlatDB,
+        #creator_factory = FlatDB.CreateFlatDB,
         )
 
 
