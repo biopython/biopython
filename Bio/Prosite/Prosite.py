@@ -15,30 +15,33 @@ Release 16.0, July 1999
 
 
 Classes:
-Record             Holds Prosite data.
-Iterator           Iterates over entries in a Prosite file.
-Dictionary         Accesses a Prosite file using a dictionary interface.
-ExPASyDictionary   Accesses Prosite records from ExPASy.
-RecordParser       Parses a Prosite record into a Record object.
+Record                Holds Prosite data.
+PatternHit            Holds data from a hit against a Prosite pattern.
+Iterator              Iterates over entries in a Prosite file.
+Dictionary            Accesses a Prosite file using a dictionary interface.
+ExPASyDictionary      Accesses Prosite records from ExPASy.
+RecordParser          Parses a Prosite record into a Record object.
 
-_Scanner           Scans Prosite-formatted data.
-_RecordConsumer    Consumes Prosite data to a Record object.
+_Scanner              Scans Prosite-formatted data.
+_RecordConsumer       Consumes Prosite data to a Record object.
 
 
 Functions:
-index_file         Index a Prosite file for a Dictionary.
-_extract_record    Extract Prosite data from a web page.
+scan_sequence_expasy  Scan a sequence for occurrences of Prosite patterns.
+index_file            Index a Prosite file for a Dictionary.
+_extract_record       Extract Prosite data from a web page.
+_extract_pattern_hits Extract Prosite patterns from a web page.
 
 """
 from types import *
 import string
 import re
 import sgmllib
-import time
 from Bio import File
 from Bio import Index
 from Bio.ParserSupport import *
 from Bio.WWW import ExPASy
+from Bio.WWW import RequestLimiter
 
 class Record:
     """Holds information from a Prosite record.
@@ -121,6 +124,41 @@ class Record:
 
         self.pdb_structs = []
 
+class PatternHit:
+    """Holds information from a hit against a Prosite pattern.
+
+    Members:
+    name           ID of the record.  e.g. ADH_ZINC
+    accession      e.g. PS00387
+    pdoc           ID of the PROSITE DOCumentation.
+    description    Free-format description.
+    matches        List of tuples (start, end, sequence) where
+                   start and end are indexes of the match, and sequence is
+                   the sequence matched.
+
+    """
+    def __init__(self):
+        self.name = None
+        self.accession = None
+        self.pdoc = None
+        self.description = None
+        self.matches = []
+    def __str__(self):
+        lines = []
+        lines.append("%s %s %s" % (self.accession, self.pdoc, self.name))
+        lines.append(self.description)
+        lines.append('')
+        if len(self.matches) > 1:
+            lines.append("Number of matches: %s" % len(self.matches))
+        for i in range(len(self.matches)):
+            start, end, seq = self.matches[i]
+            range_str = "%d-%d" % (start, end)
+            if len(self.matches) > 1:
+                lines.append("%7d %10s %s" % (i+1, range_str, seq))
+            else:
+                lines.append("%7s %10s %s" % (' ', range_str, seq))
+        return string.join(lines, '\n')
+    
 class Iterator:
     """Returns one record at a time from a Prosite file.
 
@@ -226,9 +264,8 @@ class ExPASyDictionary:
         between each query.
 
         """
-        self.delay = delay
         self.parser = parser
-        self.last_query_time = None
+        self.limiter = RequestLimiter(delay)
 
     def __len__(self):
         raise NotImplementedError, "Prosite contains lots of entries"
@@ -271,11 +308,7 @@ class ExPASyDictionary:
         """
         # First, check to see if enough time has passed since my
         # last query.
-        if self.last_query_time is not None:
-            delay = self.last_query_time + self.delay - time.time()
-            if delay > 0.0:
-                time.sleep(delay)
-        self.last_query_time = time.time()
+        self.limiter.wait()
 
         try:
             handle = ExPASy.get_prosite_entry(id)
@@ -598,6 +631,88 @@ class _RecordConsumer(AbstractConsumer):
         if rstrip:
             return string.rstrip(line[5:])
         return line[5:]
+
+def scan_sequence_expasy(seq=None, id=None, exclude_frequent=None):
+    """scan_sequence_expasy(seq=None, id=None, exclude_frequent=None) ->
+    list of PatternHit's
+
+    Search a sequence for occurrences of Prosite patterns.  You can
+    specify either a sequence in seq or a SwissProt/trEMBL ID or accession
+    in id.  Only one of those should be given.  If exclude_frequent
+    is true, then the patterns with the high probability of occurring
+    will be excluded.
+
+    """
+    if (seq and id) or not (seq or id):
+        raise ValueError, "Please specify either a sequence or an id"
+    handle = ExPASy.scanprosite1(seq, id, exclude_frequent)
+    return _extract_pattern_hits(handle)
+
+def _extract_pattern_hits(handle):
+    """_extract_pattern_hits(handle) -> list of PatternHit's
+
+    Extract hits from a web page.  Raises a ValueError if there
+    was an error in the query.
+
+    """
+    class parser(sgmllib.SGMLParser):
+        def __init__(self):
+            sgmllib.SGMLParser.__init__(self)
+            self.hits = []
+            self.broken_message = 'Some error occurred'
+            self._in_pre = 0
+            self._current_hit = None
+            self._last_found = None   # Save state of parsing
+        def handle_data(self, data):
+            if string.find(data, 'try again') >= 0:
+                self.broken_message = data
+                return
+            elif data == 'illegal':
+                self.broken_message = 'Sequence contains illegal characters'
+                return
+            if not self._in_pre:
+                return
+            elif not string.strip(data):
+                return
+            if self._last_found is None and data[:4] == 'PDOC':
+                self._current_hit.pdoc = data
+                self._last_found = 'pdoc'
+            elif self._last_found == 'pdoc':
+                if data[:2] != 'PS':
+                    raise SyntaxError, "Expected accession but got:\n%s" % data
+                self._current_hit.accession = data
+                self._last_found = 'accession'
+            elif self._last_found == 'accession':
+                self._current_hit.name = data
+                self._last_found = 'name'
+            elif self._last_found == 'name':
+                self._current_hit.description = data
+                self._last_found = 'description'
+            elif self._last_found == 'description':
+                m = re.findall(r'(\d+)-(\d+) (\w+)', data)
+                for start, end, seq in m:
+                    self._current_hit.matches.append(
+                        (int(start), int(end), seq))
+            
+        def do_hr(self, attrs):
+            # <HR> inside a <PRE> section means a new hit.
+            if self._in_pre:
+                self._current_hit = PatternHit()
+                self.hits.append(self._current_hit)
+                self._last_found = None
+        def start_pre(self, attrs):
+            self._in_pre = 1
+            self.broken_message = None   # Probably not broken
+        def end_pre(self):
+            self._in_pre = 0
+    p = parser()
+    p.feed(handle.read())
+    if p.broken_message:
+        raise ValueError, p.broken_message
+    return p.hits
+
+
+        
     
 def index_file(filename, indexname, rec2key=None):
     """index_file(filename, indexname, rec2key=None)
@@ -665,3 +780,4 @@ def _extract_record(handle):
     if not p.data:
         raise ValueError, "No data found in web page."
     return string.join(p.data, '')
+
