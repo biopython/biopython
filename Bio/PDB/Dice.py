@@ -6,7 +6,7 @@ from Bio.PDB.PDBIO import PDBIO
 _hydrogen=re.compile("[123 ]*H.*")
 
 
-class Selector:
+class ChainSelector:
 	"""
 	Only accepts residues with right chainid
 	and between start and end. Remove hydrogens, waters and ligands.
@@ -54,7 +54,7 @@ def extract(structure, chain_id, start, end, filename):
 	"""
 	Write out selected portion to filename.
 	"""
-	sel=Selector(chain_id, start, end)
+	sel=ChainSelector(chain_id, start, end)
 	io=PDBIO()
 	io.set_structure(structure)
 	io.save(filename, sel)

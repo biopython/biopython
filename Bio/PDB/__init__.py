@@ -53,6 +53,9 @@ from HSExposure import HSExposure
 # Kolodny et al.'s backbone libraries
 from FragmentMapper import FragmentMapper
 
+# Write out chain(start-end) to PDB file
+from Dice import extract
+
 # Fast atom neighbor search
 # Depends on KDTree C++ module
 try:
