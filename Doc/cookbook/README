@@ -1,0 +1,13 @@
+This is a directory to hold "cookbook" style documentation -- small,
+single-purpose documents that describe a particular aspect of
+Biopython. This is meant as an alternative to the large Tutorial
+style documentation which can be daunting to maintain and keep up
+to date.
+
+Since these are all independent -- they can be written in any
+style you find convenient, as long as it can be used to produce
+something displayable on the web (HTML or PDF).
+
+We welcome contributions about any aspect of Biopython. Please feel
+free to discuss on our mailing list (biopython@biopython.org).
+
