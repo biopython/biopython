@@ -6,10 +6,10 @@ swig file for some reason just type "make".
 
 Structure of the module:
 
-KDTree.c++      C++ KDTree code
+KDTree.cpp      C++ KDTree code
 KDTree.h        C++ header for KDTree code 
 KDTree.i        SWIG input file for KDTree.C
-KDTree.swig.c++ SWIG generated wrapper for KDTree.C
+KDTree.swig.cpp SWIG generated wrapper for KDTree.C
 _CKDTree.so     SWIG generated KDTree shared library
 CKDTree.py      SWIG generated python code to access KDTree shared library
 KDTree.py       Hand implemented python module for public access to CKDTree.py       
