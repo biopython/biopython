@@ -9,14 +9,18 @@ from Bio import File
 from Bio import ParserSupport
 from Bio import Fasta
 
+def pbool(b):
+    if b:
+        return 1
+    return 0
 
 ### Record
 
 print "Running test on Record"
 
 r = Fasta.Record()
-print type(r.title) is StringType    # StringType
-print type(r.sequence) is StringType # StringType
+print pbool(type(r.title) is StringType)    # StringType
+print pbool(type(r.sequence) is StringType) # StringType
     
 
 ### _Scanner

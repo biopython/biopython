@@ -11,6 +11,10 @@ from Bio import ParserSupport
 
 # pyUnit
 
+def pb(b):
+    if b:
+        return 1
+    return 0
 
 ### TaggingConsumer
 
@@ -33,7 +37,9 @@ tc.end_section()    # '***** end_section\n'
 
 print "Running tests on is_blank_line"
 
-is_blank_line = ParserSupport.is_blank_line
+is_blank_line = lambda *args, **keywds: \
+                pb(ParserSupport.is_blank_line(*args, **keywds))
+
 print is_blank_line('\n')                              # 1
 print is_blank_line('\r\n')                            # 1
 print is_blank_line('\r')                              # 1
@@ -144,7 +150,8 @@ GTAEVI"""
 
 h = File.UndoHandle(File.StringHandle(data))
 
-arac = ParserSupport.attempt_read_and_call
+arac = lambda *args, **keywds: \
+       pb(ParserSupport.attempt_read_and_call(*args, **keywds))
 lines = []
 def m(line):
     lines.append(line)

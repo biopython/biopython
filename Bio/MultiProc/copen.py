@@ -68,7 +68,7 @@ def copen_fn(func, *args, **keywords):
     if pid == 0: # child process
         cwrite, errwrite = os.fdopen(w, 'w'), os.fdopen(ew, 'w')
         try:
-            output = apply(func, args, keywords)
+            output = func(*args, **keywords)
             # Pickle may fail here is the object is not pickleable.
             s = pickle.dumps(output, 1)
         except:

@@ -12,7 +12,7 @@ Error in child process:
 Traceback (most recent call last):
   File "Bio/MultiProc/copen.py", line 71, in copen_fn
     output = apply(func, args, keywords)
-  File "test_copen.py", line 54, in raise_error
+  File "/Users/jchang/remotecvs/biopython/Tests/test_copen.py", line 54, in raise_error
     raise AssertionError, "raised"
 AssertionError: raised
 
