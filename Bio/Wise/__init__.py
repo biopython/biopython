@@ -1,6 +1,6 @@
 #!/usr/bin/env python2.3
 
-__version__ = "$Revision: 1.4 $"
+__version__ = "$Revision: 1.5 $"
 
 import os
 import sys
@@ -35,6 +35,13 @@ def _build_align_cmdline(cmdline, pair, output_filename, kbyte=None, force_type=
             pass
     else:
         cmdline.extend(("-kbyte", str(kbyte)))
+
+    try:
+        import poly
+        if poly.jobid:
+            _CMDLINE_DNAL.extend(["-quiet"])
+    except ImportError:
+        pass
 
     cmdline.extend(pair)
     cmdline.extend((">", output_filename))

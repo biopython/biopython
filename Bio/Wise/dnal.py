@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-__version__ = "$Revision: 1.3 $"
+__version__ = "$Revision: 1.4 $"
 
 from __future__ import division
 
@@ -17,13 +17,6 @@ _PENALTY_GAP_EXTENSION = "1"
 _CMDLINE_DNAL = ["dnal", "-alb", "-nopretty",
                 "-match", _SCORE_MATCH, "-mis", _SCORE_MISMATCH,
                 "-gap", _PENALTY_GAP_START, "-ext", _PENALTY_GAP_EXTENSION]
-
-try:
-    import poly
-    if poly.jobid:
-        _CMDLINE_DNAL.extend(["-silent", "-quiet"])
-except ImportError:
-    pass
 
 _CMDLINE_FGREP_COUNT = "fgrep -c '%s' %s"
 def _fgrep_count(pattern, file):
