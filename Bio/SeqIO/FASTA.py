@@ -1,14 +1,14 @@
 import string
-import Alphabet
+import Bio.Alphabet
 
-from Seq import Seq
-from SeqRecord import SeqRecord
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
 
 # This can be made a lot faster by using infile.readlines!
 # (Alas, that's a bit complicated to write.)
 
 class FastaReader:
-    def __init__(self, infile, alphabet = Alphabet.generic_alphabet):
+    def __init__(self, infile, alphabet = Bio.Alphabet.generic_alphabet):
         self.infile = infile
         self.alphabet = alphabet
 
