@@ -61,6 +61,7 @@ class Record:
     organelle         The origin of the sequence.
     organism_classification  The taxonomy classification.  List of strings.
                              (http://www.ncbi.nlm.nih.gov/Taxonomy/)
+    taxonomy_id       NCBI taxonomy id
     references        List of Reference objects.
     comments          List of strings.
     cross_references  List of tuples (db, id1[, id2][, id3]).  See the docs.
@@ -89,6 +90,7 @@ class Record:
         self.organism = ''
         self.organelle = ''
         self.organism_classification = []
+        self.taxonomy_id = ''
         self.references = []
         self.comments = []
         self.cross_references = []
@@ -391,6 +393,10 @@ class _Scanner:
         self._scan_line('OC', uhandle, consumer.organism_classification,
                         one_or_more=1)
 
+    def _scan_ox(self, uhandle, consumer):
+        self._scan_line('OX', uhandle, consumer.taxonomy_id,
+                        one_or_more=1)
+
     def _scan_reference(self, uhandle, consumer):
         while 1:
             if safe_peekline(uhandle)[:2] != 'RN':
@@ -462,6 +468,7 @@ class _Scanner:
         _scan_os,
         _scan_og,
         _scan_oc,
+        _scan_ox,
         _scan_reference,
         _scan_cc,
         _scan_dr,
@@ -540,6 +547,11 @@ class _RecordConsumer(AbstractConsumer):
         cols = string.split(line, ';')
         for col in cols:
             self.data.organism_classification.append(string.lstrip(col))
+
+    def taxonomy_id(self, line):
+        line = self._chomp(string.rstrip(line[5:]))
+        descr, tax_id = string.split(line, '=')
+        self.data.taxonomy_id = tax_id
     
     def reference_number(self, line):
         rn = string.rstrip(line[5:])
