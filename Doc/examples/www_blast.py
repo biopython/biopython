@@ -2,7 +2,8 @@
 """Example showing how to deal with internet BLAST from Biopython.
 
 This code is described in great detail in the BLAST section of the Biopython
-documentation."""
+documentation.
+"""
 # standard library
 import copy
 
@@ -31,7 +32,7 @@ b_parser = NCBIWWW.BlastParser()
 b_record = b_parser.parse(b_results)
 
 # now get the alignment info for all e values greater than some threshold
-E_VALUE_THRESH = 0.04
+E_VALUE_THRESH = 0.1
 
 for alignment in b_record.alignments:
     for hsp in alignment.hsps:

@@ -25,9 +25,12 @@ b_parser = NCBIStandalone.BlastParser()
 
 b_iterator = NCBIStandalone.Iterator(blast_out, b_parser)
 
-b_record = b_iterator.next()
+while 1:
+    b_record = b_iterator.next()
 
-while b_record:
+    if b_record is None:
+        break
+    
     E_VALUE_THRESH = 0.04
     for alignment in b_record.alignments:
         for hsp in alignment.hsps:
@@ -45,7 +48,5 @@ while b_record:
                 print hsp.query[0:75] + dots
                 print hsp.match[0:75] + dots
                 print hsp.sbjct[0:75] + dots
-
-    b_record = b_iterator.next()
 
 

@@ -24,7 +24,7 @@
 
 \title{Biopython Tutorial and Cookbook}
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg}
-\date{Last Update--23 February 2001}
+\date{Last Update--3 March 2001}
 
 \maketitle
 \tableofcontents
@@ -54,6 +54,7 @@ The main biopython releases have lots of functionality, including:
     \item Expasy files, like Enzyme, Prodoc and Prosite
     \item SCOP, including 'dom' and 'lin' files
     \item Rebase
+    \item UniGene
     \item SwissProt
   \end{itemize}
 
@@ -80,6 +81,8 @@ The main biopython releases have lots of functionality, including:
   \item Code to perform classification of data using k Nearest Neighbors, Naive Bayes or Support Vector Machines.
 
   \item Code for dealing with alignments, including a standard way to create and deal with substitution matrices.
+
+  \item Code making it easy to split up parallelizable tasks into separate processes.
 
   \item GUI-based programs to do basic sequence manipulations, translations, BLASTing, etc.
 
@@ -110,24 +113,24 @@ Based on which way you choose, you'll need to follow one of the following instal
 \subsection{Installing from source on UNIX}
 \label{sec:unix_install}
 
-Biopython uses Distutils, which is the new standard python installation package. Copies are available at \ahrefurl{\url{http://www.python.org/sigs/distutils-sig/download.html}} and Distutils will also come standard with Python 1.6 and future versions (the version that is shipped with alpha versions of 1.6 should work just fine). Distutils will make installation a snap, as you will see in a second.
+Biopython uses Distutils, which is the new standard python installation package. Copies are available at \ahrefurl{\url{http://www.python.org/sigs/distutils-sig/download.html}} and also comes standard with Python 1.6 and beyond. Distutils will make installation a snap, as you will see in a second.
 
 
-Now that we've got what we need let's get into the installation:
+Now that we've got what we need, let's get into the installation:
 
 \begin{enumerate}
 
-\item First you need to unpack the distribution. If you got the CVS version, you are all set to go and can skip on ahead. Otherwise, you'll need to unpack it. On UN*X machines, a tar.gz package is provided, which you can unpack with \verb|tar -xzvpf biopython-X.X.tar.gz|. A zip file is also provided for other platforms. XXX Add stuff about rpms once we get them working.
+\item First you need to unpack the distribution. If you got the CVS version, you are all set to go and can skip on ahead. Otherwise, you'll need to unpack it. On UN*X machines, a tar.gz package is provided, which you can unpack with \verb|tar -xzvpf biopython-X.X.tar.gz|. A zip file is also provided for other platforms.
 
 \item Now that everything is unpacked, move into the \verb| biopython*| directory (this will just be \verb|biopython| for CVS users, and will be \verb|biopython-X.X| for those using a packaged download). 
 
-\item Now you are ready for your one step install -- \verb|python setup.py install|. This performs the default install, and will put Biopython into the \verb|site-packages| directory of your python library tree (on my machine this is \verb|/usr/local/python1.5/site-packages|). You will have to have permissions to write to this directory. 
+\item Now you are ready for your one step install -- \verb|python setup.py install|. This performs the default install, and will put Biopython into the \verb|site-packages| directory of your python library tree (on my machine this is \verb|/usr/local/python2.1/site-packages|). You will have to have permissions to write to this directory. 
 
 \begin{enumerate}
 
 \item This install requires that you have the python source available. You can check this by looking for \verb|Python.h| and \verb|config.h| in some place like \verb|/usr/local/include/python1.5|.
 
-\item The distutils setup process allows you to do some customization of your install so you don't have to stick everything in the default location (in case you don't have write permissions there, or just want to test Biopython out). You have quite a few choices, which are covered in detail in the distutils installation manual (http://www.python.org/sigs/distutils-sig/doc/inst/inst.html), specifically in the Alternative installation section.
+\item The distutils setup process allows you to do some customization of your install so you don't have to stick everything in the default location (in case you don't have write permissions there, or just want to test Biopython out). You have quite a few choices, which are covered in detail in the distutils installation manual (\ahrefurl{\url{http://www.python.org/sigs/distutils-sig/doc/inst/inst.html}}), specifically in the Alternative installation section.
 
 \end{enumerate}
 
@@ -147,7 +150,7 @@ Johann Visagie has been kind enough to create (and keep updated) a FreeBSD port 
 And voila! It's installed. 
 
 
-If you want more information on FreeBSD and things, Johann has written a nice primer for his FreeBSD EMBOSS port. This has lots of generally useful information, such as how to keep your ports tree up to do. If you are new to FreeBSD, you should definately check it out at \ahrefurl{\url{ftp://ftp.no.embnet.org/pub/EMBOSS-extras/EMBOSS-FreeBSD-HOWTO.txt}}.
+If you want more information on FreeBSD and things, Johann has written a nice primer for his FreeBSD EMBOSS port. This has lots of generally useful information, such as how to keep your ports tree up to date. If you are new to FreeBSD, you should definately check it out at \ahrefurl{\url{ftp://ftp.no.embnet.org/pub/EMBOSS-extras/EMBOSS-FreeBSD-HOWTO.txt}}.
 
 \subsection{Installing from source on Windows}
 \label{sec:windows_install}
@@ -162,7 +165,7 @@ I have successfully managed to use distutils to compile Biopython with Borland's
 
 \begin{itemize}
   \item First you need to install and setup Borland C++. There are instructions on the Borland page and on the web, so you should follow these.
-
+ 
   \item Now you have to get python, which is compiled with a microsoft compiler, able to live happily with Borland compiled extensions. Gordon Williams has an excellent page describing doing this (\ahrefurl{\url{http://www.cyberus.ca/~g_will/pyExtenDL.shtml}}), which is where I learned everything I know. Basically, what I did was run the Borland supplied tool \verb|COFF2OMF| on the python20.lib file:
 
 \begin{verbatim}
@@ -221,7 +224,7 @@ Biopython code should work like a charm on the Macintosh, using the MacPython di
 Basically, installation should be very easy. You need to download either the \verb|biopython-version.tar.gz| or \verb|biopython-version.zip| file from the download page, and unpack these. This can be done with tools such as Aladdin's Stuff-It expander. It will unpack into a directory called \verb|biopython-version|. If you open up this directory, you will find the main directory of modules, called \verb|Bio|. You should then open up your python installation (which should be in some place like \verb|Macintosh HD::Python2.0|) to the directory \verb|Lib::site-packages|, and copy the \verb|Bio| directory there by dragging it. Bam! You're done! By default, \verb|site-packages| is included in your PYTHONPATH, so you should be ready to use it.
 
 
-Some notes: Obviously this will not compile any of the C extensions in biopython. There are pure python implementations of all of these extensions, though, so you shouldn't need to worry about lack on functionality, only lack of speed. Jack Jansen (the MacPython god) has made patches to distutils which allow it to work on the Mac with the Metrowerks CodeWarrior compiler. I don't have this compiler (it costs money, oh no!), so I can't speak of how well it works. If anyone who codes more on the Mac has more information, I would be very happy to include it here.
+Some notes: Obviously this will not compile any of the C extensions in biopython. There are pure python implementations of all of these extensions, though, so you shouldn't need to worry about lack of functionality, only lack of speed. Jack Jansen (the MacPython god) has made patches to distutils which allow it to work on the Mac with the Metrowerks CodeWarrior compiler. I don't have this compiler (it costs money, oh no!), so I can't speak of how well it works. If anyone who codes more on the Mac has more information, I would be very happy to include it here.
 
 \section{Making sure it worked}
 \label{sec:is_working}
@@ -230,7 +233,7 @@ First, we'll just do a quick test to make sure python. The most important thing 
 
 \begin{verbatim}
 
-[chapmanb@taxus chapmanb]# python
+[chapmanb@taxus chapmanb]$ python
 Python 1.6a2 (#1, Jul 31 2000, 09:04:26)  [GCC 2.95.2 19991024 (release/franzo)] on linux2
 Copyright 1991-1995 Stichting Mathematisch Centrum, Amsterdam
 >>> from Bio.Seq import Seq
@@ -238,18 +241,18 @@ Copyright 1991-1995 Stichting Mathematisch Centrum, Amsterdam
 >>> new_seq[0:2]
 Seq('GA', Alphabet())
 
-\end{verbatim}
+\end{verbatim}%$
 
-If this worked properly, then it looks like Biopython is in a happy place where python can find it, so now you might want to do some more rigorous tests. The \verb|Tests| directory inside the distribution contains a number of tests you can run to make sure all of the different parts of biopython are working. These should all work just by running \verb|python test_WhateverTheTestIs.py|. You can also do a run of all of the tests py typing \verb|python br_regrtest.py| in the Tests directory:
+If this worked properly, then it looks like Biopython is in a happy place where python can find it, so now you might want to do some more rigorous tests. The \verb|Tests| directory inside the distribution contains a number of tests you can run to make sure all of the different parts of biopython are working. These should all work just by running \verb|python test_WhateverTheTestIs.py|. 
+
+
+You can also run all of the tests using a nice graphical interface supplied by using PyUnit. To do this, you just need to be in the installation directory and type:
 
 \begin{verbatim}
-[chapmanb@taxus Tests]# python br_regrtest.py
-test_Enzyme
-test_Fasta
-test_Fasta2
-test_File
-....
+python setup.py test
 \end{verbatim}
+
+This should start up a Tk based graphical user interface (or default to the command line if you don't have Tkinter installed), which you can run the tests from. You can also run them by typing \verb|python run_tests.py| in the Tests directory.
 
 
 Well, now you've gotten Biopython installed and running, you are probably ready to get working with it, so continue reading...
@@ -260,16 +263,19 @@ Well, now you've gotten Biopython installed and running, you are probably ready 
   \item \emph{I looked in a directory for code, but I couldn't seem to find the code that does something. Where's it hidden?} \\
   One thing to know is that we put code in \verb|__init__.py| files. If you are not used to looking for code in this file this can be confusing. The reason we do this is to make the imports easier for users. For instance, instead of having to do a ``repetitive'' import like \verb|from Bio.GenBank import GenBank|, you can just import like \verb|from Bio import GenBank|.
 
+  \item \emph{What happened to the} \verb|br_regrtest.py| \emph{regression tests?}
+  We updated the regression testing framework to use PyUnit, and also to fix newline problems. \verb|br_regrtest.py| is still there, but almost all of its functionality has been moved (well, copy and pasted) to \verb|run_tests.py|.
+
   \item \emph{Why do some of the tests fail when running the regression tests with output like}: \\
 \verb|Writing: '\012', expected: '\015'| \\
-  Right now the regression testing framework, which compares the output generated by running a test to the correct output, doesn't handle linebreaks across platforms correctly. Some of the test output is checked in by people working on Windows, so you might have problems on Unix machines with it, and vice versa. This is something we are working on -- but handling line-breaks across platforms is never fun. Suggestions or patches to fix the problems are very welcome!
+ This shouldn't happen any more! We updated the regression testing suite so that it uses PyUnit and we hopefully have fixed newline problems. Please let us know if any tests fail.
 \end{enumerate}
 
 \chapter{Quick Start -- What can you do with Biopython?}
 
-This section is designed to get you started quickly with Biopython, and to give a general overview of what is available and how to use it. All of the examples in this section assume that you have some general working knowledge of python, and that you have successfully installed biopython on your system. If you think you need to brush up on your python, the main python web site provides quick a bit of free documentation to get started with at \ahrefurl{\url{http://www.python.org/doc/}}. 
+This section is designed to get you started quickly with Biopython, and to give a general overview of what is available and how to use it. All of the examples in this section assume that you have some general working knowledge of python, and that you have successfully installed biopython on your system. If you think you need to brush up on your python, the main python web site provides quite a bit of free documentation to get started with (\ahrefurl{\url{http://www.python.org/doc/}}). 
 
-
+ 
 Since much biological work on the computer involves connecting with databases on the internet, some of the examples will also require a working internet connection in order to run. 
 
 
@@ -280,7 +286,7 @@ Now that that is all out of the way, let's get into what we can do with Biopytho
 As mentioned in the introduction, Biopython is a set of libraries to provide the ability to deal with ''things'' of interest to biologists working on the computer. In general this means that you will need to have at least some programming experience (in python, of course!) or at least an interest in learning to program. Biopython's job is to make your job easier as a programmer by supplying reusable libraries so that you can focus on answering your specific question of interest, instead of focusing on the internals of parsing a particular file format (of course, if you want to help by writing a parser that doesn't exist and contributing it to Biopython, please go ahead!). So Biopython's job is to make you happy!
 
 
-One thing to note about Biopython is that it often provides multiple ways of ``doing the same thing.'' To me, this can be frustrating since I  often way to just know the one right way to do something. However, this is also a real benefit because it gives you lots of flexibility and control over the libraries. The tutorial helps to show you the common or easy ways to do things so that you can just make things work. To learn more about the alternative possibilities, look into the Cookbook section (which tells you some cools tricks and tips) and the Advanced section (which provides you with as much detail as you'd ever want to know!). 
+One thing to note about Biopython is that it often provides multiple ways of ``doing the same thing.'' To me, this can be frustrating since I often way to just know the one right way to do something. However, this is also a real benefit because it gives you lots of flexibility and control over the libraries. The tutorial helps to show you the common or easy ways to do things so that you can just make things work. To learn more about the alternative possibilities, look into the Cookbook section (which tells you some cools tricks and tips) and the Advanced section (which provides you with as much detail as you'd ever want to know!). 
 
 \section{Working with sequences}
 \label{sec:sequences}
@@ -572,7 +578,7 @@ Okay, well that was easy enough -- so now we need to call the Scanner and actual
 
 \begin{verbatim}
 
-from Bio.Fasta import Fasta
+from Bio import Fasta
 
 def extract_organisms(file, num_records):
     scanner = Fasta._Scanner()
@@ -629,7 +635,7 @@ To deal with this problem, a very useful class was written into many of the Biop
 Let's make all of this talk more concrete by using the Iterator and Record interefaces to do what we did before -- extract a unique list of all species in our FASTA file. First we need to set up our parser and iterator:
 
 \begin{verbatim}
->>> from Bio.Fasta import Fasta
+>>> from Bio import Fasta
 >>> parser = Fasta.RecordParser()
 >>> file = open("ls_orchid.fasta")
 >>> iterator = Fasta.Iterator(file, parser)
@@ -685,9 +691,13 @@ def extract_organisms(file_to_parse):
     iterator = Fasta.Iterator(file, parser)
 
     all_species = []
-    cur_record = iterator.next()
 
-    while cur_record:
+    while 1:
+        cur_record = iterator.next()
+
+        if cur_record is None:
+            break
+
         # extract the info from the title
         title_atoms = string.split(cur_record.title)
         new_species = title_atoms[1]
@@ -695,9 +705,6 @@ def extract_organisms(file_to_parse):
         # append the new species to the list if it isn't there
         if new_species not in all_species:
             all_species.append(new_species)
-
-        # advance to the next record
-        cur_record = iterator.next()
 
     return all_species
 \end{verbatim}
@@ -740,7 +747,7 @@ The tricky argument is the \verb|function_to_get_index_key|. Basically, this is 
 Using all of this, we can now create an index file and see how it works. First, let's create the index file:
 
 \begin{verbatim}
->>> from Bio.Fasta import Fasta 
+>>> from Bio import Fasta 
 >>> Fasta.index_file("ls_orchid.fasta", "my_orchid_dict.idx", get_accession_num)
 \end{verbatim}
 
@@ -885,7 +892,7 @@ The first step in automating BLASTing is to make everything accessable from pyth
 The code to deal with the WWW version of BLAST is found in the \verb|Bio.Blast.NCBIWWW| module, and the \verb|blast| function. Let's say we want to BLAST info we have in a FASTA formatted file against the database. First, we need to get the info in the FASTA file. The easiest way to do this is to use the Fasta iterator to get a record:
 
 \begin{verbatim}
-from Bio.Fasta import Fasta
+from Bio import Fasta
 
 file_for_blast = open('m_cold.fasta', 'r')
 f_iterator = Fasta.Iterator(file_for_blast)
@@ -1143,7 +1150,12 @@ b_record = b_iterator.next()
 Each call to next will return a new record that we can deal with. Now we can iterate through this records and generate our old favorite, a nice little blast report:
 
 \begin{verbatim}
-while b_record:
+while 1:
+    b_record = b_iterator.next()
+
+    if b_record is None:
+        break
+
     E_VALUE_THRESH = 0.04
     for alignment in b_record.alignments:
         for hsp in alignment.hsps:
@@ -1161,8 +1173,6 @@ while b_record:
                 print hsp.query[0:75] + dots
                 print hsp.match[0:75] + dots
                 print hsp.sbjct[0:75] + dots
-
-    b_record = b_iterator.next()
 \end{verbatim}
 
 Notice that \verb|b_iterator.next()| will return \verb|None| when it runs out of records to parse, so it is easy to iterate through the entire file with a while loop that checks for the existance of a record.
@@ -1280,9 +1290,12 @@ Note that we convert \verb|all_results|, which is a string, into a handle before
 To get out the information, we'll go through everything record by record using the iterator. For each record, we'll just print out some summary information:
 
 \begin{verbatim}
-cur_record = s_iterator.next()
+while 1:
+    cur_record = s_iterator.next()
 
-while cur_record:
+    if cur_record is None:
+        break
+
     print "description:", cur_record.description
     for ref in cur_record.references:
         print "authors:", ref.authors
@@ -1290,8 +1303,6 @@ while cur_record:
 
     print "classification:", cur_record.organism_classification
     print
-
-    cur_record = s_iterator.next()
 \end{verbatim}
 
 This prints out a summary like the following:
@@ -1344,7 +1355,7 @@ The interface for retrieving records from PubMed should be very intuitive to pyt
 
 \begin{verbatim}
 from Bio.Medline import PubMed
-from Bio.Medline import Medline
+from Bio import Medline
 
 rec_parser = Medline.RecordParser()
 medline_dict = PubMed.Dictionary(parser = rec_parser)
@@ -1571,7 +1582,7 @@ clustalw ./opuntia.fasta -OUTFILE=test.aln
 Now that we've set up a simple command line, we now want to run the commandline and collect the results so we can deal with them. This can be done using the \verb|do_alignment| function of \verb|Clustalw| as follows:
 
 \begin{verbatim}
-from Bio.Clustalw import Clustalw
+from Bio import Clustalw
 
 alignment = Clustalw.do_alignment(cline)
 \end{verbatim}
@@ -1832,7 +1843,7 @@ One thing that you always end up having to do is convert between different forma
 
 \begin{verbatim}
 import os
-from Bio.Clustalw import Clustalw
+from Bio import Clustalw
 
 alignment = Clustalw.parse_file(os.path.join(os.curdir, 'test.aln'))
 \end{verbatim}
@@ -1881,7 +1892,7 @@ Biopython provides a ton of common substitution matrices, and also provides func
 A very cool thing that you can do easily with the substitution matrix classes is to create your own substitution matrix from an alignment. To do this, we first need to get a biopython alignment object and then get a summary object to calculate info about the alignment:
 
 \begin{verbatim}
-from Bio.Clustalw import Clustalw
+from Bio import Clustalw
 from Bio.Alphabet import IUPAC
 from Bio.Align import AlignInfo
 
@@ -1911,7 +1922,7 @@ This replacement information is represented as a python dictionary which will lo
 This information gives us our accepted number of replacements, or how often we expect different things to substitute for each other. It turns out, amazingly enough, that this is all of the information we need to go ahead and create a substitution matrix. First, we use the replacement dictionary information to create an Accepted Replacement Matrix (ARM):
 
 \begin{verbatim}
-from Bio.SubsMat import SubsMat
+from Bio import SubsMat
 my_arm = SubsMat.SeqMat(replace_info)
 \end{verbatim}
 
@@ -2155,11 +2166,11 @@ Biocorba does some cool stuff with CORBA. Basically, it allows you to easily int
 \section{Regression Testing Framework}
 \label{sec:regr_test}
 
-Biopython has a regression testing framework donated by AndrewDalke which helps us make sure the code is as bug-free as possible before going out.
+Biopython has a regression testing framework written Andrew Dalke and ported to PyUnit by Brad Chapman which helps us make sure the code is as bug-free as possible before going out.
 
 \subsection{Writing a Regression Test}
 
-Every module that goes into Biopython should have a test (and should also have documentation!) in the regression test. Let's say you've written a new module called Biospam -- here is what you should do to make a regression test:
+Every module that goes into Biopython should have a test (and should also have documentation!). Let's say you've written a new module called Biospam -- here is what you should do to make a regression test:
 
 \begin{enumerate}
   \item Write a script called \verb|test_Biospam.py|
@@ -2194,7 +2205,7 @@ Every module that goes into Biopython should have a test (and should also have d
    \item The quick way:
 
    \begin{itemize}
-      \item Run \verb|python br_regrtest.py -g test_Biospam.py|. The
+      \item Run \verb|python run_tests.py -g test_Biospam.py|. The
             regression testing framework is nifty enough that it'll put
             the output in the right place in just the way it likes it.   
        
@@ -2205,7 +2216,7 @@ Every module that goes into Biopython should have a test (and should also have d
  \end{enumerate}
        
  \item Now change to the Tests directory and run the regression tests
-       with \verb|python br_regrtest.py|. This will run all of the tests, and
+       with \verb|python run_tests.py|. This will run all of the tests, and
        you should see your test run (and pass!).
        
   \item That's it! Now you've got a nice test for your module.

@@ -8,9 +8,13 @@ def extract_organisms(file_to_parse):
     iterator = Fasta.Iterator(file, parser)
 
     all_species = []
-    cur_record = iterator.next()
 
-    while cur_record:
+    while 1:
+        cur_record = iterator.next()
+
+        if cur_record is None:
+            break
+        
         # extract the info from the title
         title_atoms = string.split(cur_record.title)
         new_species = title_atoms[1]
@@ -18,9 +22,6 @@ def extract_organisms(file_to_parse):
         # append the new species to the list if it isn't there
         if new_species not in all_species:
             all_species.append(new_species)
-
-        # advance to the next record
-        cur_record = iterator.next()
 
     return all_species
 

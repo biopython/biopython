@@ -19,9 +19,12 @@ for id in ids:
 s_parser = SProt.RecordParser()
 s_iterator = SProt.Iterator(File.StringHandle(all_results), s_parser)
 
-cur_record = s_iterator.next()
+while 1:
+    cur_record = s_iterator.next()
 
-while cur_record:
+    if cur_record is None:
+        break
+    
     print "description:", cur_record.description
     for ref in cur_record.references:
         print "authors:", ref.authors
@@ -29,6 +32,4 @@ while cur_record:
 
     print "classification:", cur_record.organism_classification
     print
-
-    cur_record = s_iterator.next()
 
