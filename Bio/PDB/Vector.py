@@ -11,6 +11,23 @@ import sys
 
 __doc__="Vector class, including rotation-related functions."
 
+def vector_to_axis(line, point):
+    """
+    Returns the vector between a point and
+    the closest point on a line (ie. the perpendicular
+    projection of the point on the line).
+
+    @type line: L{Vector}
+    @param line: vector defining a line
+
+    @type point: L{Vector}
+    @param point: vector defining the point
+    """
+    line=line.normalized()
+    np=point.norm()
+    angle=line.angle(point)
+    return point-line**(np*cos(angle))
+
 
 def rotaxis(theta, vector):
     """
