@@ -1,11 +1,32 @@
+"""Connect with a BioSQL database and load Biopython like objects from it.
+
+This provides interfaces for loading biological objects from a relational
+database, and is compatible with the BioSQL standards.
+"""
 import BioSeq
 
 def open_database(driver = "MySQLdb", *args, **kwargs):
+    """Main interface for loading an existing BioSQL-style database.
+
+    This function is the easiest way to retrieve a connection to a
+    database, doing something like:
+        
+        >>> from BioSeq import BioSeqDatabase
+        >>> server = BioSeqDatabase.open_database(user = "root", db="minidb")
+
+    the various options are:
+    driver -> The name of the database driver to use for connecting. The
+    driver should implement the python DB API. By default, the MySQLdb
+    driver is used.
+    user -> the username to connect to the database with.
+    passwd -> the password to connect with
+    host -> the hostname of the database
+    db -> the name of the database
+    """
     module = __import__(driver)
     connect = getattr(module, "connect")
     conn = connect(*args, **kwargs)
     return DBServer(conn)
-    
 
 class DBServer:
     def __init__(self, conn):
@@ -76,7 +97,6 @@ class Adaptor:
             r"select display_ids from bioentry where biodatabase_id = %s",
             (dbid,))
         return [field[0] for field in self.cursor.fetchall()]
-        
 
     def execute_one(self, sql, args):
         count = self.cursor.execute(sql, args)
