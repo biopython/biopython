@@ -8,5 +8,9 @@
 import commands
 import re
 
-if commands.getoutput("dnal").find("command not found") != -1:
-    raise ImportError
+not_found_types = ["command not found", "dnal: not found"]
+dnal_output = commands.getoutput("dnal")
+
+for not_found in not_found_types:
+    if dnal_output.find(not_found) != -1:
+        raise ImportError(dnal_output)
