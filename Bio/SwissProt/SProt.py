@@ -444,11 +444,10 @@ class _RecordConsumer(AbstractConsumer):
         self.data.organelle = self.data.organelle + line[5:]
     
     def organism_classification(self, line):
-        line = self._chomp(string.rstrip(line))
+        line = self._chomp(string.rstrip(line[5:]))
         cols = string.split(line, ';')
-        for col in cols[1:]:
-            if col:
-                self.data.organism_classification.append(string.lstrip(col))
+        for col in cols:
+            self.data.organism_classification.append(string.lstrip(col))
     
     def reference_number(self, line):
         rn = string.rstrip(line[5:])
