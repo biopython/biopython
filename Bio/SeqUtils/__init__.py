@@ -398,7 +398,7 @@ def quicker_apply_on_multi_fasta(file, function, *args):
       for arg in args: arguments.append(arg)
       result = f(*arguments)
       if result:
-         results.append('>%s\n%s' % (record.title, result))
+         results.append('>%s\n%s' % (name, result))
    return results
 
 # }}}
