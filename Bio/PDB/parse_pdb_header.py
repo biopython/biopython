@@ -26,6 +26,7 @@ __doc__="Parse the header of a PDB file."
 import sys
 import os,string,re
 import urllib
+import types
 
 
 def _get_journal(inl):
@@ -117,7 +118,10 @@ def parse_pdb_header(file):
     compound.
     """
     header=[]
-    f=open(filename,'r')
+    if type(file)==types.StringType:
+        f=open(filename,'r')
+    else:
+        f=file
     while f:
         l=f.readline()
         if not re.search("\AATOM",l):
