@@ -64,7 +64,7 @@ class FormatRegistry(Registry):
             return []
         format_list = [format]
         for child in getattr(format, 'objs', []):
-            format_list.extend(self._build_child_path(parent, visited))
+            format_list.extend(self._build_child_path(child, visited))
         return format_list
         
     def find_builder(self, from_format, to_io):
