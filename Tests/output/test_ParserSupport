@@ -30,12 +30,10 @@ file
 correctly failed
 hello
 Running tests on read_and_call
->gi|132871
-correctly failed
-correctly failed
-correctly failed
-correctly failed
-correctly failed
+>gi|132871|sp|P19947|RL30_BACSU 50S RIBOSOMAL PROTEIN L30 (BL27)
+MAKLEITLKRSVIGRPEDQRVTVRTLGLKKTNQTVVHEDNAAIRGMINKVSHLVSVKEQ
+>gi|132679|sp|P19946|RL15_BACSU 50S RIBOSOMAL PROTEIN L15
+MKLHELKPSEGSRKTRNRVGRGIGSGNGKTAGKGHKGQNARSGGGVRPGFEGGQMPLFQRLPKRGFTNIN
 Running tests on attempt_read_and_call
 1
 0
