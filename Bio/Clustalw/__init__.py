@@ -298,8 +298,6 @@ class _AlignCreator(handler.ContentHandler):
         for id in self.all_keys:
             self.align.add_sequence(id, self.all_info[id])
         
-            
-      
 class MultipleAlignCL:
     """Represent a clustalw multiple alignment command line.
 
@@ -313,7 +311,7 @@ class MultipleAlignCL:
     one to be broken for any reason, please let us know!
     """
     # set the valid options for different parameters
-    OUTPUT_TYPES = ['GCG', 'GDE', 'PHYLIP', 'PIR', 'NEXUS']
+    OUTPUT_TYPES = ['GCG', 'GDE', 'PHYLIP', 'PIR', 'NEXUS', 'FASTA']
     OUTPUT_ORDER = ['INPUT', 'ALIGNED']
     OUTPUT_CASE = ['LOWER', 'UPPER']
     OUTPUT_SEQNOS = ['OFF', 'ON']
