@@ -3,7 +3,6 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-# IO STUFF
 import time
 
 import _FmtUtils
@@ -19,7 +18,7 @@ from ReseekFile import ReseekFile
 ##    ]
 
 
-class IODef:
+class DBDef:
     # name
     # abbrev    (optional)
     # source    Source object
@@ -53,7 +52,7 @@ class IODef:
         params = self._normalize_params(args, keywds)
         self.source.set(self.key, handle)
 
-class IOGroup:
+class DBGroup:
     # name
     # abbrev
     # behavior
@@ -64,7 +63,7 @@ class IOGroup:
         self.abbrev = keywds.get("abbrev", self.name)
         self.behavior = keywds['behavior']
         self.cache = keywds.get("cache", None)
-        self.iodefs = []
+        self.dbdefs = []
     def __call__(self, *args, **keywds):
         # first, check the cache.  If the cache lookup works, then
         # don't look at anything else.
@@ -74,9 +73,9 @@ class IOGroup:
             except IOError:
                 pass
         if self.behavior.lower() == "concurrent":
-            handle = self._run_concurrent(self.iodefs, args, keywds)
+            handle = self._run_concurrent(self.dbdefs, args, keywds)
         elif self.behavior.lower() == "serial":
-            handle = self._run_serial(self.iodefs, args, keywds)
+            handle = self._run_serial(self.dbdefs, args, keywds)
         else:
             raise AssertionError, "Unknown grouping behavior (%s)" % \
                   self.behavior
@@ -87,14 +86,14 @@ class IOGroup:
             handle.seek(pos)
         return handle
 
-    def _serialize(self, iodef, args, keywds):
-        handle = iodef(*args, **keywds)
+    def _serialize(self, dbdef, args, keywds):
+        handle = dbdef(*args, **keywds)
         return handle.read()
 
-    def _run_concurrent(self, iodefs, args, keywds):
+    def _run_concurrent(self, dbdefs, args, keywds):
         fnhandles = []
-        for io in iodefs:
-            fnhandles.append(copen_fn(self._serialize, io, args, keywds))
+        for db in dbdefs:
+            fnhandles.append(copen_fn(self._serialize, db, args, keywds))
         i = 0
         # Check each of the function handles until one of the
         # finishes or they all fails.
@@ -121,10 +120,10 @@ class IOGroup:
             raise IOError, "I could not get any results."
         return handle
             
-    def _run_serial(self, iodefs, args, keywds):
-        for io in iodefs:
+    def _run_serial(self, dbdefs, args, keywds):
+        for db in dbdefs:
             try:
-                handle = io(*args, **keywds)
+                handle = db(*args, **keywds)
             except IOError:
                 continue
             else:
@@ -134,7 +133,7 @@ class IOGroup:
     def __getitem__(self, key):
         return self(key)
     
-class IORegistry:
+class DBRegistry:
     # This class should be merged with FormatRegistry.py
     def __init__(self, loadpath):
         self._name_table = {}
@@ -144,20 +143,22 @@ class IORegistry:
         self._autoloading = 0
 
     def _autoload(self):
+        if not self.loadpath:
+            return
         if self._autoloaded or self._autoloading:
             return
         self._autoloading = 1
-        _FmtUtils.load_basemodule(self.loadpath, package="iodefs")
+        _FmtUtils.load_basemodule(self.loadpath, package="dbdefs")
         self.autoloading = 0
         self._autoloaded = 1
 
     # XXX need to check kwargs to make sure there's nothing extraneous
-    def register_io(self, **kwargs):
+    def register_db(self, **kwargs):
         self._autoload()
         if kwargs.has_key("source"):
-            format = IODef(**kwargs)
+            format = DBDef(**kwargs)
         else:
-            format = IOGroup(**kwargs)
+            format = DBGroup(**kwargs)
         name = format.name
         abbrev = format.abbrev
         if self._name_table.has_key(name):
@@ -178,7 +179,7 @@ class IORegistry:
         if not self._name_table.has_key(name):
             raise ValueError, "%s not found in registry" % name
         groupobj = self._name_table[group_name]
-        groupobj.iodefs.append(self._name_table[name])
+        groupobj.dbdefs.append(self._name_table[name])
             
     def get(self, name, default = None):
         self._autoload()
@@ -197,5 +198,5 @@ class IORegistry:
     def __str__(self):
         locations = self.keys()
         locations.sort()
-        return "IORegistry, exporting %s" % ', '.join(map(repr, locations))
+        return "DBRegistry, exporting %s" % ', '.join(map(repr, locations))
     __repr__ = __str__

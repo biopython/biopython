@@ -3,15 +3,13 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-from Bio import register_io
-from Bio.sources import EBI
+from Bio import register_db
+from Bio.sources import ExPASy
 
-from _support import *
+from Martel import *
 
-
-register_io(
-    name="interpro-ebi-cgi",
-    source=EBI.IEntry,
-    key="ac",
-    failure=[(has_str("No InterPro entry"), "No InterPro entry")]
+register_db(
+    name="prodoc-expasy-cgi",
+    source=ExPASy.get_prodoc_entry,
+    key="",
     )

@@ -12,7 +12,7 @@ http://www.ncbi.nlm.nih.gov/entrez/utils/utils_index.html
 from Bio.sources import CGI
 from Martel import *
 
-from Bio.iodefs._support import *
+from Bio.dbdefs._support import *
 
 proxy_error_expr = has_expr(Alt(Str("500"), Str("502")) + Str(" Proxy Error"))
 diagnostic_error_expr = has_str("WWW Error 500 Diagnostic")

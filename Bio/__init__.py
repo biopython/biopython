@@ -47,10 +47,9 @@ if getattr(sys, "version_info", (1, 5))[:2] >= (2, 1):
   register_format = formats.register_format
   link_format = formats.link
 
-if getattr(sys, "version_info", (1, 5))[:2] >= (2, 1):
-  import IORegistry
-  io = IORegistry.IORegistry("Bio")
-  register_io = io.register_io
-  group_io = io.group
+  import DBRegistry
+  db = DBRegistry.DBRegistry("Bio")
+  register_db = db.register_db
+  group_db = db.group
 
 del sys

@@ -89,6 +89,12 @@ class CGI(Source):
             handle = urllib.urlopen(self.cgi, options)
         return handle
 
+##class PythonFunction:
+##    function name
+
+##class Application:
+##    location
+
 ##class BerkeleyDBIndex:
 ##    index_filename
 
@@ -102,22 +108,6 @@ class CGI(Source):
 ##    pass
 
 
-
-
-
-# THESE SHOULD BE INSTANCES OF DATASOURCES, NOT BASE CLASSES.
-
-##class BSANE_CORBA:
-##    pass
-
-##class BioSQL:
-##    pass
-
-##class BioFetch(CGI):
-##    pass
-
-##class XEMBL(CGI):
-##    pass
 
 
 

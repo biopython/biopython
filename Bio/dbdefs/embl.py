@@ -3,12 +3,12 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-from Bio import register_io, group_io
+from Bio import register_db, group_db
 from Bio.sources import EBI
 
 from _support import *
 
-register_io(
+register_db(
     name="embl-xembl-cgi",
     source=EBI.XEMBL,
     params=[("format", "Bsml")],
@@ -16,7 +16,7 @@ register_io(
     failure=[(has_str("NOT EXIST"), "id does not exist")],
     )
 
-register_io(
+register_db(
     name="embl-dbfetch-cgi",
     source=EBI.dbfetch,
     params=[("db", "embl"),
@@ -27,7 +27,7 @@ register_io(
     failure=[(has_str("not found in database"), "id does not exist")]
     )
 
-register_io(
+register_db(
     name="embl-ebi-cgi",
     source=EBI.emblfetch,
     params=[("db", "EMBL"),
@@ -38,20 +38,20 @@ register_io(
     failure=[(blank_expr, "No results returned")]
     )
 
-register_io(
+register_db(
     name="embl",
     behavior="serial",
 ##    cache="XXX"
     )
-group_io("embl", "embl-dbfetch-cgi")
-group_io("embl", "embl-xembl-cgi")
-group_io("embl", "embl-ebi-cgi")
+group_db("embl", "embl-dbfetch-cgi")
+group_db("embl", "embl-xembl-cgi")
+group_db("embl", "embl-ebi-cgi")
 
 
-register_io(
+register_db(
     name="embl-fast",
     behavior="concurrent",
     )
-group_io("embl-fast", "embl-dbfetch-cgi")
-group_io("embl-fast", "embl-xembl-cgi")
-group_io("embl-fast", "embl-ebi-cgi")
+group_db("embl-fast", "embl-dbfetch-cgi")
+group_db("embl-fast", "embl-xembl-cgi")
+group_db("embl-fast", "embl-ebi-cgi")

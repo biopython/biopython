@@ -3,13 +3,13 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-from Bio import register_io, group_io
+from Bio import register_db, group_db
 from Bio.sources import RCSB, EBI
 
 from Martel import *
 from _support import *
 
-register_io(
+register_db(
     name="pdb-rcsb-cgi",
     source=RCSB.export,
     params=[("format", "PDB"),
@@ -21,7 +21,7 @@ register_io(
     
 
 not_header_expr = AssertNot(Str("HEADER"))
-register_io(
+register_db(
     name="pdb-ebi-cgi",
     source=EBI.emblfetch,
     params=[("db", "PDB"),
@@ -32,9 +32,9 @@ register_io(
     failure=[(not_header_expr, "results do not look like PDB format")]
     )
 
-register_io(
+register_db(
     name="pdb",
     behavior="serial",
     )
-group_io("pdb", "pdb-rcsb-cgi")
-group_io("pdb", "pdb-ebi-cgi")
+group_db("pdb", "pdb-rcsb-cgi")
+group_db("pdb", "pdb-ebi-cgi")

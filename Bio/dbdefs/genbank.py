@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-from Bio import register_io
+from Bio import register_db
 from Bio.sources import NCBI, EBI
 
 from Martel import *
@@ -19,7 +19,7 @@ ncbi_failures=[
     ]
 
     
-register_io(
+register_db(
     name="nucleotide-genbank-cgi",
     source=NCBI.query,
     params=[("cmd", "Text"),
@@ -35,7 +35,7 @@ register_io(
 # ERROR : GenPept does not exist for gi = 433174
 not_exist_expr = Str("ERROR") + Re("[^d]*") + Str("does not exist for gi")
 
-register_io(
+register_db(
     name="protein-genbank-cgi",
     source=NCBI.query,
     params=[("cmd", "Text"),
@@ -46,7 +46,7 @@ register_io(
     failure=ncbi_failures+[(not_exist_expr, "GI does not exist")]
     )
 
-register_io(
+register_db(
     name="nucleotide-dbfetch-cgi",
     source=EBI.dbfetch,
     params=[("db", "genbank"),

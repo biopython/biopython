@@ -3,20 +3,15 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-from Bio import register_io, group_io
+from Bio import register_db
 from Bio.sources import ExPASy
 
 from _support import *
 
-register_io(
-    name="swissprot-expasy-cgi",
-    source=ExPASy.get_sprot_raw,
+register_db(
+    name="prosite-expasy-cgi",
+    source=ExPASy.get_prosite_entry,
     key="",
-    failure=[(blank_expr, "no results")]
+    failure=[(has_str("There is currently no PROSITE entry"),
+              "No PROSITE entry")],
     )
-
-register_io(
-    name="swissprot",
-    behavior="serial",
-    )
-group_io("swissprot", "swissprot-expasy-cgi")
