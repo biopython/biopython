@@ -83,7 +83,8 @@ class PropertyManager:
 
             # this is why the search is depth-first/right-left
             bases[:0] = list(base.__bases__)
-        raise KeyError, "cannot find property"
+        raise KeyError, "cannot find property %s for class %s" % \
+              (property, klass)
             
 
 default_manager = PropertyManager()
