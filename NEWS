@@ -4,6 +4,14 @@ News for the Biopython Project
 This file contains release notes and general news
 about the biopython project.
 
+Sept 3, 2001: Biopython1.00a3
+  added package to support KEGG
+  added sequtils module for computations on sequences
+  added pairwise sequence alignment algorithm
+  major bug fixes in UndoHandle
+  format updates in PubMed  
+  Tk interface to kMeans clustering
+
 July 5, 2001: Biopython1.00a2
   deprecated old regression testing frameworks
   deprecated Sequence.py

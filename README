@@ -29,12 +29,13 @@ python setup.py install
 
 o "Python 2.0":http://www.python.org/ or above
 
-o "Martel":http://www.biopython.org/~dalke/Martel/
-  (requires "mxTextTools":http://starship.python.net/~lemburg/mxTextTools.html)
+o "mxTextTools":http://starship.python.net/~lemburg/mxTextTools.html
 
 o "Numerical Python 15.3 or above":http://numpy.sourceforge.net/ (optional)
 This is only required if you want to use the classification tools.
 
+o "Martel":http://www.biopython.org/~dalke/Martel/
+  (now included in Biopython by default, so don't worry about adding this)
 
 
 **Installation**
