@@ -1,0 +1,238 @@
+ID   PSBL_ORYSA     STANDARD;      PRT;    37 AA.
+AC   P12166; P12167; Q34007;
+DT   01-OCT-1989 (Rel. 12, Created)
+DT   15-DEC-1998 (Rel. 37, Last sequence update)
+DT   15-DEC-1998 (Rel. 37, Last annotation update)
+DE   PHOTOSYSTEM II REACTION CENTER L PROTEIN (PSII 5 KDA PROTEIN).
+GN   PSBL.
+OS   Oryza sativa (Rice), Nicotiana tabacum (Common tobacco),
+OS   Hordeum vulgare (Barley), Triticum aestivum (Wheat),
+OS   Secale cereale (Rye), Zea mays (Maize), Pisum sativum (Garden pea),
+OS   Spinacia oleracea (Spinach), Capsicum annuum (Bell pepper),
+OS   Mesembryanthemum crystallinum (Common ice plant),
+OS   Beta vulgaris (Sugar beet), and Populus deltoides (Poplar).
+OG   Chloroplast.
+OC   Eukaryota; Viridiplantae; Embryophyta; Tracheophyta; Spermatophyta;
+OC   Magnoliophyta; Liliopsida; Poales; Poaceae; Ehrhartoideae; Oryzeae;
+OC   Oryza.
+OX   NCBI_TaxID=4530, 4097, 4513, 4565, 4550, 4577, 3888, 3562, 4072, 3544,
+OX   3555, 3696;
+RN   [1]
+RP   SEQUENCE FROM N.A.
+RC   SPECIES=O.sativa; STRAIN=CV. NIPPONBARE;
+RA   Sugiura M.;
+RL   Submitted (JUL-1989) to the EMBL/GenBank/DDBJ databases.
+RN   [2]
+RP   COMPLETE GENOME.
+RC   SPECIES=O.sativa;
+RX   MEDLINE=89364698; PubMed=2770692;
+RA   Hiratsuka J., Shimada H., Whittier R., Ishibashi T., Sakamoto M.,
+RA   Mori M., Kondo C., Honji Y., Sun C.-R., Meng B.-Y., Li Y.-Q.,
+RA   Kanno A., Nishizawa Y., Hirai A., Shinozaki K., Sugiura M.;
+RT   "The complete sequence of the rice (Oryza sativa) chloroplast genome:
+RT   intermolecular recombination between distinct tRNA genes accounts for
+RT   a major plastid DNA inversion during the evolution of the cereals.";
+RL   Mol. Gen. Genet. 217:185-194(1989).
+RN   [3]
+RP   SEQUENCE FROM N.A.
+RC   SPECIES=N.tabacum; STRAIN=CV. BRIGHT YELLOW 4;
+RA   Sugiura M.;
+RL   Submitted (AUG-1986) to the EMBL/GenBank/DDBJ databases.
+RN   [4]
+RP   COMPLETE GENOME.
+RC   SPECIES=N.tabacum;
+RA   Shinozaki K., Ohme M., Tanaka M., Wakasugi T., Hayashida N.,
+RA   Matsubayashi T., Zaita N., Chunwongse J., Obokata J.,
+RA   Yamaguchi-Shinozaki K., Ohto C., Torazawa K., Meng B.Y., Sugita M.,
+RA   Deno H., Kamogashira T., Yamada K., Kusuda J., Takaiwa F., Kato A.,
+RA   Tohdoh N., Shimada H., Sugiura M.;
+RT   "The complete nucleotide sequence of the tobacco chloroplast genome:
+RT   its gene organization and expression.";
+RL   EMBO J. 5:2043-2049(1986).
+RN   [5]
+RP   RNA EDITING OF INITIATOR CODON.
+RC   SPECIES=N.tabacum;
+RX   MEDLINE=97076156; PubMed=8918473;
+RA   Chaudhuri S., Maliga P.;
+RT   "Sequences directing C to U editing of the plastid psbL mRNA are
+RT   located within a 22 nucleotide segment spanning the editing site.";
+RL   EMBO J. 15:5958-5964(1996).
+RN   [6]
+RP   SEQUENCE FROM N.A.
+RC   SPECIES=H.vulgare; STRAIN=CV. SABARLIS;
+RX   MEDLINE=89240046; PubMed=2654886;
+RA   Chakhmakhcheva O.G., Andreeva A.V., Buryakova A.A., Reverdatto S.V.,
+RA   Efimov V.A.;
+RT   "Nucleotide sequence of the barley chloroplast psbE, psbF genes and
+RT   flanking regions.";
+RL   Nucleic Acids Res. 17:2858-2858(1989).
+RN   [7]
+RP   SEQUENCE FROM N.A.
+RC   SPECIES=H.vulgare; STRAIN=CV. SABARLIS;
+RX   MEDLINE=92207253; PubMed=1804121;
+RA   Efimov V.A., Andreeva A.V., Reverdatto S.V., Chakhmakhcheva O.G.;
+RT   "Photosystem II of rye. Nucleotide sequence of the psbB, psbC, psbE,
+RT   psbF, psbH genes of rye and chloroplast DNA regions adjacent to
+RT   them.";
+RL   Bioorg. Khim. 17:1369-1385(1991).
+RN   [8]
+RP   SEQUENCE FROM N.A.
+RC   SPECIES=T.aestivum; STRAIN=CV. SENTRY; TISSUE=Leaf;
+RA   Webber A.N., Hird S.M., Packman L.C., Dyer T.A., Gray J.C.;
+RT   "A photosystem II polypeptide is encoded by an open reading frame
+RT   co-transcribed with genes for cytochrome b-559 in wheat chloroplast
+RT   DNA.";
+RL   Plant Mol. Biol. 12:141-151(1989).
+RN   [9]
+RP   RNA EDITING OF INITIATOR CODON.
+RC   SPECIES=T.aestivum;
+RX   MEDLINE=92191997; PubMed=1547774;
+RA   Kudla J., Igloi G.L., Metzlaff M., Hagemann R., Koessel H.;
+RT   "RNA editing in tobacco chloroplasts leads to the formation of a
+RT   translatable psbL mRNA by a C to U substitution within the initiation
+RT   codon.";
+RL   EMBO J. 11:1099-1103(1992).
+RN   [10]
+RP   SEQUENCE FROM N.A.
+RC   SPECIES=S.cereale;
+RX   MEDLINE=89160331; PubMed=2646599;
+RA   Zolotarev A.S., Kolosov V.L.;
+RT   "Nucleotide sequence of the rye chloroplast DNA fragment, comprising
+RT   psbE and psbF genes.";
+RL   Nucleic Acids Res. 17:1760-1760(1989).
+RN   [11]
+RP   SEQUENCE FROM N.A.
+RC   SPECIES=S.cereale;
+RX   MEDLINE=90073796; PubMed=2686655;
+RA   Kolosov V.L., Klezovich O.N., Abdulaev N.G., Zolotarev A.S.;
+RT   "Photosystem II of rye. Nucleotide sequence of genes psbE, psbF, psbL
+RT   and OPC40 of chloroplast DNA.";
+RL   Bioorg. Khim. 15:1284-1286(1989).
+RN   [12]
+RP   SEQUENCE FROM N.A.
+RC   SPECIES=Maize;
+RA   Haley J., Bogorad L.;
+RL   Submitted (MAY-1989) to the EMBL/GenBank/DDBJ databases.
+RN   [13]
+RP   SEQUENCE FROM N.A.
+RC   SPECIES=Maize;
+RX   MEDLINE=95395841; PubMed=7666415;
+RA   Maier R.M., Neckermann K., Igloi G.L., Koessel H.;
+RT   "Complete sequence of the maize chloroplast genome: gene content,
+RT   hotspots of divergence and fine tuning of genetic information by
+RT   transcript editing.";
+RL   J. Mol. Biol. 251:614-628(1995).
+RN   [14]
+RP   SEQUENCE FROM N.A.
+RC   SPECIES=P.sativum;
+RX   MEDLINE=89354671; PubMed=2766383;
+RA   Willey D.L., Gray J.C.;
+RT   "Two small open reading frames are co-transcribed with the pea
+RT   chloroplast genes for the polypeptides of cytochrome b-559.";
+RL   Curr. Genet. 15:213-220(1989).
+RN   [15]
+RP   SEQUENCE FROM N.A., AND RNA EDITING OF INITIATOR CODON.
+RC   SPECIES=S.oleracea;
+RX   MEDLINE=93360903; PubMed=8355656;
+RA   Bock R., Hagemann R., Koessel H., Kudla J.;
+RT   "Tissue- and stage-specific modulation of RNA editing of the psbF and
+RT   psbL transcript from spinach plastids -- a new regulatory mechanism?";
+RL   Mol. Gen. Genet. 240:238-244(1993).
+RN   [16]
+RP   SEQUENCE OF 1-12 FROM N.A.
+RC   SPECIES=S.oleracea;
+RA   Hermann R.G., Alt J., Schiller B., Widger W.R., Cramer W.A.;
+RT   "Nucleotide sequence of the gene for apocytochrome b-559 on the
+RT   spinach plastid chromosome: implications for the structure of the
+RT   membrane protein.";
+RL   FEBS Lett. 176:239-244(1984).
+RN   [17]
+RP   SEQUENCE FROM N.A., AND RNA EDITING OF INITIATOR CODON.
+RC   SPECIES=C.annuum; STRAIN=CV. LAMUYO; TISSUE=Leaf, and Fruit;
+RX   MEDLINE=93099270; PubMed=1463853;
+RA   Kuntz M., Camara B., Weil J.-H., Schantz R.;
+RT   "The psbL gene from bell pepper (Capsicum annuum): plastid RNA
+RT   editing also occurs in non-photosynthetic chromoplasts.";
+RL   Plant Mol. Biol. 20:1185-1188(1992).
+RN   [18]
+RP   SEQUENCE FROM N.A.
+RC   SPECIES=M.crystallinum;
+RX   MEDLINE=94345017; PubMed=8066140;
+RA   Forsthoefel N.R., Cushman J.C.;
+RT   "Characterization and expression of photosystem II genes (psbE, psbF,
+RT   and psbL) from the facultative crassulacean acid metabolism plant
+RT   Mesembryanthemum crystallinum.";
+RL   Plant Physiol. 105:761-762(1994).
+RN   [19]
+RP   SEQUENCE FROM N.A.
+RC   SPECIES=B.vulgaris; STRAIN=CV. TK81-O; TISSUE=Leaf;
+RX   MEDLINE=95254673; PubMed=7736615;
+RA   Kubo T., Yanai Y., Kinoshita T., Mikami T.;
+RT   "The chloroplast trnP-trnW-petG gene cluster in the mitochondrial
+RT   genomes of Beta vulgaris, B. trigyna and B. webbiana: evolutionary
+RT   aspects.";
+RL   Curr. Genet. 27:285-289(1995).
+RN   [20]
+RP   SEQUENCE FROM N.A.
+RC   SPECIES=P.deltoides; STRAIN=CV. STONEVILLE D121; TISSUE=Leaf;
+RA   Naithani S.;
+RL   Submitted (FEB-1997) to the EMBL/GenBank/DDBJ databases.
+RN   [21]
+RP   SEQUENCE OF 1-15 FROM N.A.
+RC   SPECIES=T.aestivum, and S.oleracea;
+RX   MEDLINE=89121082; PubMed=2644131;
+RA   Ikeuchi M., Takio K., Inoue Y.;
+RT   "N-terminal sequencing of photosystem II low-molecular-mass proteins.
+RT   5 and 4.1 kDa components of the O2-evolving core complex from higher
+RT   plants.";
+RL   FEBS Lett. 242:263-269(1989).
+RN   [22]
+RP   SEQUENCE OF 1-3, AND MASS-SPECTROMETRY.
+RC   SPECIES=S.oleracea;
+RX   MEDLINE=98298118; PubMed=9632665;
+RA   Zheleva D., Sharma J., Panico M., Morris H.R., Barber J.;
+RT   "Isolation and characterization of monomeric and dimeric
+RT   CP47-reaction center photosystem II complexes.";
+RL   J. Biol. Chem. 273:16122-16127(1998).
+CC   -!- FUNCTION: NOT KNOWN. POSSIBLY A PERIPHERAL COMPONENT OF CYTOCHROME
+CC       B559.
+CC   -!- MASS SPECTROMETRY: MW=4365.5; METHOD=MALDI.
+CC   -!- SIMILARITY: BELONGS TO THE PSBL FAMILY.
+CC   -!- CAUTION: THE INITIATOR METHIONINE IS CREATED BY RNA EDITING.
+CC   --------------------------------------------------------------------------
+CC   This SWISS-PROT entry is copyright. It is produced through a collaboration
+CC   between  the Swiss Institute of Bioinformatics  and the  EMBL outstation -
+CC   the European Bioinformatics Institute.  There are no  restrictions on  its
+CC   use  by  non-profit  institutions as long  as its content  is  in  no  way
+CC   modified and this statement is not removed.  Usage  by  and for commercial
+CC   entities requires a license agreement (See http://www.isb-sib.ch/announce/
+CC   or send an email to license@isb-sib.ch).
+CC   --------------------------------------------------------------------------
+DR   EMBL; X15901; CAA33963.1; -.
+DR   EMBL; Z00044; -; NOT_ANNOTATED_CDS.
+DR   EMBL; X15767; CAA33774.1; -.
+DR   EMBL; X14108; -; NOT_ANNOTATED_CDS.
+DR   EMBL; X15225; CAA33296.1; -.
+DR   EMBL; J04502; AAA84476.1; -.
+DR   EMBL; X86563; CAA60300.1; -.
+DR   EMBL; X13326; CAA31700.1; -.
+DR   EMBL; M35673; -; NOT_ANNOTATED_CDS.
+DR   EMBL; X70699; CAA50030.1; ALT_SEQ.
+DR   EMBL; X65570; CAA46540.1; ALT_SEQ.
+DR   EMBL; U04314; AAA21859.1; -.
+DR   EMBL; D38019; BAA07220.1; -.
+DR   EMBL; X89651; CAA61800.1; -.
+DR   PIR; JQ0241; F2RZL.
+DR   PIR; JG0010; F2WTL.
+DR   PIR; S04064; S04064.
+DR   PIR; S05685; S05685.
+DR   PIR; S03193; S03193.
+DR   PIR; JN0358; JN0358.
+DR   PIR; S28056; S28056.
+DR   PIR; C48310; C48310.
+DR   MaizeDB; 69558; -.
+KW   Photosynthesis; Photosystem II; Chloroplast; RNA editing.
+FT   INIT_MET      0      0
+SQ   SEQUENCE   37 AA;  4366 MW;  CC537AEC50B2C784 CRC64;
+     TQSNPNEQNV ELNRTSLYWG LLLIFVLAVL FSNYFFN
+//

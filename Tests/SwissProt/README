@@ -19,6 +19,12 @@ sp006  37        TCMO_STRGA  comment with no topic
 sp007  39        CLD1_HUMAN  broken RX line, broken DR lines 
                              (from katel@worldpath.net)
 sp008  39        1A02_HUMAN  contains 2 AC lines
+sp009            CHS3_BROFI  contains an OX line
+sp010            5H4_HUMAN   RX line has multiple '='
+sp011            LSHR_RAT    broken VARSPLIC in feature table
+sp012  TrEMBL 16.0  Q9Y736   RC line has too many '='
+sp013  TrEMBL 16.0  P82909   reference 2 missing RL line
+sp014  SP 39.14  PSBL_ORYSA  OX spans 2 lines
 
 
 KEYWLIST TEST FILES

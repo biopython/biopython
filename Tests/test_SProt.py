@@ -5,7 +5,8 @@ import os
 from Bio.SwissProt import SProt
 
 test_files = ['sp001', 'sp002', 'sp003', 'sp004', 'sp005',
-              'sp006', 'sp007', 'sp008', 'sp009', 'sp010', 'sp011']
+              'sp006', 'sp007', 'sp008', 'sp009', 'sp010',
+              'sp011', 'sp012', 'sp013', 'sp014']
 
 record_parser = SProt.RecordParser()
 sequence_parser = SProt.SequenceParser()

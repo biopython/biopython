@@ -549,6 +549,144 @@ title: "Asp383 in the second transmembrane domain of the lutropin receptor
 is important for high affinity hormone binding and cAMP production.";
 references: [('MEDLINE', '91332007'), ('PubMed', '1714448')]
 
+testing sp012...
+Q9Y736
+['Q9Y736']
+['Eukaryota', 'Fungi', 'Ascomycota', 'Pezizomycotina', 'Eurotiomycetes', 'Onygenales', 'Arthrodermataceae', 'mitosporic Arthrodermataceae', 'Trichophyton']
+(153, 17238, '01153CF30C2DEDFF')
+***Features:
+***References:
+authors: Kano R., Nakamura Y., Watanabe S., Hasegawa A.;
+title: "Trichophyton mentagrophytes mRNA for ubiquitin.";
+references: []
+authors: Kano R.;
+title: "Microsporum canis mRNA for ubiquitin, complete cds.";
+references: []
+
+testing sp013...
+P82909
+['P82909']
+['Eukaryota', 'Metazoa', 'Chordata', 'Craniata', 'Vertebrata', 'Euteleostomi', 'Mammalia', 'Eutheria', 'Primates', 'Catarrhini', 'Hominidae', 'Homo']
+(102, 11335, '83EF107B42E2FCFD')
+***Features:
+***References:
+authors: Strausberg R.;
+title: 
+references: []
+authors: Koc E.C., Burkhart W., Blackburn K., Moseley A., Spremulli L.L.;
+title: "The small subunit of the mammalian mitochondrial ribosome.
+Identification of the full complement ribosomal proteins present.";
+references: []
+
+testing sp014...
+PSBL_ORYSA
+['P12166', 'P12167', 'Q34007']
+['Eukaryota', 'Viridiplantae', 'Embryophyta', 'Tracheophyta', 'Spermatophyta', 'Magnoliophyta', 'Liliopsida', 'Poales', 'Poaceae', 'Ehrhartoideae', 'Oryzeae', 'Oryza']
+(37, 4366, 'CC537AEC50B2C784')
+***Features:
+('INIT_MET', 0, 0, '')
+***References:
+authors: Sugiura M.;
+title: 
+references: []
+authors: Hiratsuka J., Shimada H., Whittier R., Ishibashi T., Sakamoto M.,
+Mori M., Kondo C., Honji Y., Sun C.-R., Meng B.-Y., Li Y.-Q.,
+Kanno A., Nishizawa Y., Hirai A., Shinozaki K., Sugiura M.;
+title: "The complete sequence of the rice (Oryza sativa) chloroplast genome:
+intermolecular recombination between distinct tRNA genes accounts for
+a major plastid DNA inversion during the evolution of the cereals.";
+references: [('MEDLINE', '89364698'), ('PubMed', '2770692')]
+authors: Sugiura M.;
+title: 
+references: []
+authors: Shinozaki K., Ohme M., Tanaka M., Wakasugi T., Hayashida N.,
+Matsubayashi T., Zaita N., Chunwongse J., Obokata J.,
+Yamaguchi-Shinozaki K., Ohto C., Torazawa K., Meng B.Y., Sugita M.,
+Deno H., Kamogashira T., Yamada K., Kusuda J., Takaiwa F., Kato A.,
+Tohdoh N., Shimada H., Sugiura M.;
+title: "The complete nucleotide sequence of the tobacco chloroplast genome:
+its gene organization and expression.";
+references: []
+authors: Chaudhuri S., Maliga P.;
+title: "Sequences directing C to U editing of the plastid psbL mRNA are
+located within a 22 nucleotide segment spanning the editing site.";
+references: [('MEDLINE', '97076156'), ('PubMed', '8918473')]
+authors: Chakhmakhcheva O.G., Andreeva A.V., Buryakova A.A., Reverdatto S.V.,
+Efimov V.A.;
+title: "Nucleotide sequence of the barley chloroplast psbE, psbF genes and
+flanking regions.";
+references: [('MEDLINE', '89240046'), ('PubMed', '2654886')]
+authors: Efimov V.A., Andreeva A.V., Reverdatto S.V., Chakhmakhcheva O.G.;
+title: "Photosystem II of rye. Nucleotide sequence of the psbB, psbC, psbE,
+psbF, psbH genes of rye and chloroplast DNA regions adjacent to
+them.";
+references: [('MEDLINE', '92207253'), ('PubMed', '1804121')]
+authors: Webber A.N., Hird S.M., Packman L.C., Dyer T.A., Gray J.C.;
+title: "A photosystem II polypeptide is encoded by an open reading frame
+co-transcribed with genes for cytochrome b-559 in wheat chloroplast
+DNA.";
+references: []
+authors: Kudla J., Igloi G.L., Metzlaff M., Hagemann R., Koessel H.;
+title: "RNA editing in tobacco chloroplasts leads to the formation of a
+translatable psbL mRNA by a C to U substitution within the initiation
+codon.";
+references: [('MEDLINE', '92191997'), ('PubMed', '1547774')]
+authors: Zolotarev A.S., Kolosov V.L.;
+title: "Nucleotide sequence of the rye chloroplast DNA fragment, comprising
+psbE and psbF genes.";
+references: [('MEDLINE', '89160331'), ('PubMed', '2646599')]
+authors: Kolosov V.L., Klezovich O.N., Abdulaev N.G., Zolotarev A.S.;
+title: "Photosystem II of rye. Nucleotide sequence of genes psbE, psbF, psbL
+and OPC40 of chloroplast DNA.";
+references: [('MEDLINE', '90073796'), ('PubMed', '2686655')]
+authors: Haley J., Bogorad L.;
+title: 
+references: []
+authors: Maier R.M., Neckermann K., Igloi G.L., Koessel H.;
+title: "Complete sequence of the maize chloroplast genome: gene content,
+hotspots of divergence and fine tuning of genetic information by
+transcript editing.";
+references: [('MEDLINE', '95395841'), ('PubMed', '7666415')]
+authors: Willey D.L., Gray J.C.;
+title: "Two small open reading frames are co-transcribed with the pea
+chloroplast genes for the polypeptides of cytochrome b-559.";
+references: [('MEDLINE', '89354671'), ('PubMed', '2766383')]
+authors: Bock R., Hagemann R., Koessel H., Kudla J.;
+title: "Tissue- and stage-specific modulation of RNA editing of the psbF and
+psbL transcript from spinach plastids -- a new regulatory mechanism?";
+references: [('MEDLINE', '93360903'), ('PubMed', '8355656')]
+authors: Hermann R.G., Alt J., Schiller B., Widger W.R., Cramer W.A.;
+title: "Nucleotide sequence of the gene for apocytochrome b-559 on the
+spinach plastid chromosome: implications for the structure of the
+membrane protein.";
+references: []
+authors: Kuntz M., Camara B., Weil J.-H., Schantz R.;
+title: "The psbL gene from bell pepper (Capsicum annuum): plastid RNA
+editing also occurs in non-photosynthetic chromoplasts.";
+references: [('MEDLINE', '93099270'), ('PubMed', '1463853')]
+authors: Forsthoefel N.R., Cushman J.C.;
+title: "Characterization and expression of photosystem II genes (psbE, psbF,
+and psbL) from the facultative crassulacean acid metabolism plant
+Mesembryanthemum crystallinum.";
+references: [('MEDLINE', '94345017'), ('PubMed', '8066140')]
+authors: Kubo T., Yanai Y., Kinoshita T., Mikami T.;
+title: "The chloroplast trnP-trnW-petG gene cluster in the mitochondrial
+genomes of Beta vulgaris, B. trigyna and B. webbiana: evolutionary
+aspects.";
+references: [('MEDLINE', '95254673'), ('PubMed', '7736615')]
+authors: Naithani S.;
+title: 
+references: []
+authors: Ikeuchi M., Takio K., Inoue Y.;
+title: "N-terminal sequencing of photosystem II low-molecular-mass proteins.
+5 and 4.1 kDa components of the O2-evolving core complex from higher
+plants.";
+references: [('MEDLINE', '89121082'), ('PubMed', '2644131')]
+authors: Zheleva D., Sharma J., Panico M., Morris H.R., Barber J.;
+title: "Isolation and characterization of monomeric and dimeric
+CP47-reaction center photosystem II complexes.";
+references: [('MEDLINE', '98298118'), ('PubMed', '9632665')]
+
 testing sp001...
 Q13454
 N33_HUMAN
@@ -617,3 +755,21 @@ LSHR_RAT
 LUTROPIN-CHORIOGONADOTROPIC HORMONE RECEPTOR PRECURSOR (LH/CG-R)
 (LSH-R) (LUTEINIZING HORMONE RECEPTOR).
 Seq('MGRRVPALRQLLVLAVLLLKPSQLQSRELSGSRCPEPCDCAPDGALRCPGPRAGLARLSL ...', ProteinAlphabet())
+
+testing sp012...
+Q9Y736
+Q9Y736
+UBIQUITIN.
+Seq('MQIFVKTLTGKTITLEVESSDTIDNVKTKIQDKEGIPPDQQRLIFAGKQLEDGRTLSDYN ...', ProteinAlphabet())
+
+testing sp013...
+P82909
+P82909
+MITOCHONDRIAL 28S RIBOSOMAL PROTEIN S36 (MRP-S36).
+Seq('MGSKMASASRVVQVVKPHTPLIRFPDRRDNPKPNVSEALRSAGLPSHSSVISQHSKGSKS ...', ProteinAlphabet())
+
+testing sp014...
+P12166
+PSBL_ORYSA
+PHOTOSYSTEM II REACTION CENTER L PROTEIN (PSII 5 KDA PROTEIN).
+Seq('TQSNPNEQNVELNRTSLYWGLLLIFVLAVLFSNYFFN', ProteinAlphabet())

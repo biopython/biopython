@@ -1,0 +1,28 @@
+ID   P82909      PRELIMINARY;      PRT;   102 AA.
+AC   P82909;
+DT   01-MAR-2001 (TrEMBLrel. 16, Created)
+DT   01-MAR-2001 (TrEMBLrel. 16, Last sequence update)
+DT   01-MAR-2001 (TrEMBLrel. 16, Last annotation update)
+DE   MITOCHONDRIAL 28S RIBOSOMAL PROTEIN S36 (MRP-S36).
+OS   Homo sapiens (Human).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+OC   Mammalia; Eutheria; Primates; Catarrhini; Hominidae; Homo.
+OX   NCBI_TaxID=9606;
+RN   [1]
+RP   SEQUENCE FROM N.A.
+RA   Strausberg R.;
+RL   Submitted (OCT-2000) to the EMBL/GenBank/DDBJ databases.
+RN   [2]
+RP   IDENTIFICATION.
+RA   Koc E.C., Burkhart W., Blackburn K., Moseley A., Spremulli L.L.;
+RT   "The small subunit of the mammalian mitochondrial ribosome.
+RT   Identification of the full complement ribosomal proteins present.";
+CC   -!- SUBCELLULAR LOCATION: MITOCHONDRIAL.
+DR   EMBL; BE785097; -; NOT_ANNOTATED_CDS.
+DR   InterPro; IPR001971; -.
+DR   ProDom; PD001010; -; 1.
+KW   Ribosomal protein; Mitochondrion.
+SQ   SEQUENCE   102 AA;  11335 MW;  83EF107B42E2FCFD CRC64;
+     MGSKMASASR VVQVVKPHTP LIRFPDRRDN PKPNVSEALR SAGLPSHSSV ISQHSKGSKS
+     PDLLMYQGPP DTAEIIKTLP QKYRRKLVSQ EEMEFIQRGG PE
+//

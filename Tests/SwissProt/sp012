@@ -1,0 +1,38 @@
+ID   Q9Y736      PRELIMINARY;      PRT;   153 AA.
+AC   Q9Y736;
+DT   01-NOV-1999 (TrEMBLrel. 12, Created)
+DT   01-NOV-1999 (TrEMBLrel. 12, Last sequence update)
+DT   01-MAR-2001 (TrEMBLrel. 16, Last annotation update)
+DE   UBIQUITIN.
+OS   Trichophyton mentagrophytes, and Microsporum canis.
+OC   Eukaryota; Fungi; Ascomycota; Pezizomycotina; Eurotiomycetes;
+OC   Onygenales; Arthrodermataceae; mitosporic Arthrodermataceae;
+OC   Trichophyton.
+OX   NCBI_TaxID=82077, 82078;
+RN   [1]
+RP   SEQUENCE FROM N.A.
+RC   SPECIES=T.mentagrophytes; STRAIN=VUT-77011 (=IAM12704, AND =RV26678);
+RA   Kano R., Nakamura Y., Watanabe S., Hasegawa A.;
+RT   "Trichophyton mentagrophytes mRNA for ubiquitin.";
+RL   Submitted (APR-1999) to the EMBL/GenBank/DDBJ databases.
+RN   [2]
+RP   SEQUENCE FROM N.A.
+RC   SPECIES=M.canis; STRAIN=VUT-77055 (=IAM12729, AND =ATCC44335);
+RA   Kano R.;
+RT   "Microsporum canis mRNA for ubiquitin, complete cds.";
+RL   Submitted (DEC-1999) to the EMBL/GenBank/DDBJ databases.
+DR   EMBL; AB025792; BAA76889.1; -.
+DR   EMBL; AB035543; BAA88168.1; -.
+DR   HSSP; P02248; 1UBI.
+DR   InterPro; IPR000626; -.
+DR   Pfam; PF00240; ubiquitin; 2.
+DR   PRINTS; PR00348; UBIQUITIN.
+DR   PROSITE; PS00299; UBIQUITIN_1; 2.
+DR   PROSITE; PS50053; UBIQUITIN_2; 2.
+DR   SMART; SM00213; UBQ; 1.
+KW   Nuclear protein; Ubiquitin conjugation.
+SQ   SEQUENCE   153 AA;  17238 MW;  01153CF30C2DEDFF CRC64;
+     MQIFVKTLTG KTITLEVESS DTIDNVKTKI QDKEGIPPDQ QRLIFAGKQL EDGRTLSDYN
+     IQKESTLHLV LRLRGGMQIF VKTLTGKTIT LEVESSDTID NVKTKIQDKE GIPPDQQRLI
+     FAGKQLEDGR TLSDYNIQKE STLHLVLRLR GGN
+//
