@@ -132,10 +132,11 @@ _is_title = re.compile(r"[A-Z][^A-Z]*$")
 _is_lower = re.compile(r"[^A-Z]+$")
 
 class Species:
-    def __init__(self, classification, common_name = None, sub_species = None,
-                 organelle = None):
+    def __init__(self, classification, common_name = None, ncbi_id = None,
+                 sub_species = None, organelle = None):
         self.classification = classification
         self.common_name = common_name
+        self.ncbi_id = ncbi_id
         self.sub_species = sub_species
         self.organelle = organelle
 
@@ -236,8 +237,9 @@ class Annotation:
         
     def _get_dblinks(self):
         dblink_info = self.adaptor.execute_and_fetchall(
-            """select dbname, accession from bioentry_direct_links
-                    where source_bioentry_id = %s""",
+            "SELECT dbname, accession FROM bioentry_dblink, dbxref" \
+            " WHERE bioentry_dblink.dbxref_id = dbxref.dbxref_id" \
+            " AND bioentry_id = %s""",
             (self.primary_id,))
         dblinks =  [DBLink(database, primary_id) for (database, primary_id)
                                                      in dblink_info]
@@ -426,14 +428,14 @@ class DBSeqRecord:
         return self.dates
 
     def _get_species(self):
-        full_lineage, common_name = self.adaptor.execute_one(
-            """select tx.full_lineage, tx.common_name
+        full_lineage, common_name, ncbi_id = self.adaptor.execute_one(
+            """select tx.full_lineage, tx.common_name, tx.ncbi_taxon_id
                            from taxon tx, bioentry be
                            where tx.taxon_id = be.taxon_id and
                                  be.bioentry_id = %s""",
             (self.primary_id,))
         terms = full_lineage.split(":")
-        species = Species(terms, common_name)
+        species = Species(terms, common_name, ncbi_id)
         return species
 
     def _get_seq_version(self):
