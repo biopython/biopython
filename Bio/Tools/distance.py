@@ -36,3 +36,10 @@ def euclidean_py(x, y):
     for i in range(len(x)):
         sum += (x[i]-y[i])**2
     return math.sqrt(sum)
+
+# Try and load C implementations of functions.  If I can't,
+# then just ignore and use the pure python implementations.
+try:
+    from cdistance import *
+except ImportError:
+    pass
