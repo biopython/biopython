@@ -9,10 +9,11 @@ def load_module(modulename):
     try:
         module = __import__(modulename)
     except SyntaxError, exc:
-        raise SyntaxError("%s in module %r" % (exc, modulename)), \
-              None, sys.exc_info()[2]
+##        raise SyntaxError("%s during import of %r" % (exc, modulename)), \
+##              None, sys.exc_info()[2]
+        raise
     except ImportError, exc:
-        raise ImportError("%s in module %r" % (exc, modulename)), \
+        raise ImportError("%s during import of %r" % (exc, modulename)), \
               None, sys.exc_info()[2]
     for name in modulename.split(".")[1:]:
         module = getattr(module, name)
@@ -32,8 +33,9 @@ def load_object(path):
         try:
             __import__(s)
         except SyntaxError, exc:
-            raise SyntaxError("%s in module %r" % (exc, s)), \
-                  None, sys.exc_info()[2]
+##            raise SyntaxError("%s during import of %r" % (exc, s)), \
+##                  None, sys.exc_info()[2]
+            raise
         except ImportError, exc:
             # This is the only way I know to tell if the module
             # could not be loaded because it doesn't exist.
