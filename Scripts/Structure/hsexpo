@@ -29,7 +29,7 @@ if len(sys.argv)==1:
     sys.exit()
 
 # Get the user's options
-parser=OptionParser()
+parser=OptionParser(usage="usage: %prog [options] <PDB file>")
 
 parser.add_option("-t", "--type", dest="exp", 
                   help="exposure type (HSEAU, HSEAD, HSEBU, HSEBD, CN, DSSPr, DSSPa, RD, RDa)",
