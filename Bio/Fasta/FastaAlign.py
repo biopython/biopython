@@ -11,6 +11,7 @@ classes:
 FastaAlignment"""
 # standard library
 import string
+import os
 
 # biopython
 from Bio.Align.Generic import Alignment
