@@ -2,11 +2,11 @@
 #
 # This tells distutils what files to distribute.
 
-include AUTHORS
+include CONTRIB
 include LICENSE
 include NEWS
 include README
-recursive-include Scripts *.py
+recursive-include Scripts *
 
 # add only the things we are interested in from the docs
 recursive-include Doc *.tex
