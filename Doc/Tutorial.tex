@@ -278,7 +278,79 @@ Seq('GCTGTTATGGGTCGTTGGAAGGGTGGTCGTGCTGCTGGT', IUPACUnambiguousDNA())
 
 This covers the basic features and uses of the Biopython sequence class. There is a more detailed description of the design ideas behind the sequence class in the Advanced section of this tutorial. This class is still under development and comments on the design and use are, of course, very welcome. Now that you've got some idea of what it is like to interact with the Biopython libraries, it's time to delve into the fun, fun world of dealing with biological file formats!
 
+\subsection{A usage example}
+
+Before we jump right into parsers and everything else to do with Biopython, let's set up an example to motivate everything we do and make life more interesting. After all, if there wasn't any biology in this tutorial, why would you want you read it?
+
+
+Since I love plants, I think we're just going to have to have a plant based example (sorry to all the fans of other organisms out there!).  Having just completed a recent trip to our local greenhouse, we've suddenly developed an incredible obsession with Lady Slipper Orchids (if you wonder why take a look at \ahrefurl{\url{http://www.millicentorchids.com/greenhouse/images/papesq01.jpg}}. If that doesn't convince you, you can look at all of the available photos at  \ahrefurl{\url{http://www.millicentorchids.com/greenhouse/indexphoto.htm}}).  Of course, orchids are not only beautiful to look at, they are also extermely interesting for people studying evolution and systematics. So we're thinking about writing a little proposal to do a molecular study of Lady Slipper evolution and would like to see what kind of research has already been done and how we can add to that.
+
+
+After a little bit of reading up we discover that the Lady Slipper Orchids are in the Orchidaceae family and the Cypripedioideae sub-family and are made up of 5 genera:  \emph{Cypripedium}, \emph{Paphiopedilum}, \emph{Phragmipedium}, \emph{Selenipedium} and \emph{Mexipedium}. That gives us enough information to get started delving for more information. So, let's look at how biopython tools can help us.
+
 \subsection{Parsing biological file formats}
+
+A large part of much bioinformatics work involves dealing with the many types of file formats designed to hold biological data. These files are loaded with interesting biological data, and a special challenge is parsing these files into a format so that you can manipulate them with some kind of programming language. However the task of parsing these files can be frustrated by the fact that the formats can change quite regularly, and that formats may contain small subleties which can break even the most well designed parsers. 
+
+\subsubsection{General parser design}
+
+The biopython solution to these problem is to develop a structured parser framework that is applicable to all of the parsers. The advantages are two fold. First, this allows code reuse between parsers (see \verb|Bio/ParserSupport.py|). Second, this provides a similar framework for all the parsers so that it is relatively easy to jump into the internals of a parser and figure out problems you might be having. 
+
+
+All of the parsers have two components:
+
+\begin{enumerate}
+
+\item Scanner - The part of the parser that actually does the work or going through the file and extracting useful information. This useful information is converted into Events.
+
+\item Consumer - The consumer does the job of processing the useful information and spitting it out ina format that the programmer can use. The consumer does this by recieving the events created by the scanner.
+
+\end{enumerate}
+
+So, the parser design is event oriented. The general idea is that a scanner will go through and produce events for every item that might be of interest in a file. For instance, let's say we've got the following FASTA formatted entry (edited to fit the page):
+
+
+\begin{verbatim}
+>gi|6273290|gb|AF191664.1|AF191664 Opuntia clavata rpl16 gene; chloroplast gene for...
+TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAAAAAAATGAA
+TCTAAATGATATAGGATTCCACTATGTAAGGTCTTTGAATCATATCATAAAAGACAATGTAAT
+AAA...
+\end{verbatim}
+
+As a scanner moved through a file containing this entry, it would create the following events:
+\\
+\\
+\begin{tabular}{cc}
+Event Name & Entry input \\
+\hline
+begin\_sequence & (as soon as we notice we've got a new \verb|>|) \\
+title & \verb+>gi|6273290|gb|AF191664.1|AF191664 Opuntia clavata...+ \\
+sequence & \verb|TATACATTAAAGGAGGGGGATGCGGAT...| \\
+sequence & \verb|TCTAAATGATATAGGATTCCACTATGTAA...| \\
+sequence & \verb|AAA...| (and so on -- you've got the idea!) \\
+end\_sequence & (as soon as we reach a blank line after the sequence data) \\
+
+\end{tabular}
+\\
+\\
+So, events are being produced. Big deal, unless we are able to capture these events and do something interesting with them! This is where the consumer comes in. The consumer needs to do two things:
+
+\begin{enumerate}
+
+\item Register itself with the the scanner to let it know that it wants to recieve those events that are being generated.
+
+\item Do something with the events (and the information associated with them).
+
+\end{enumerate}
+
+An example should make it more clear how this works.
+
+\subsubsection{Writing your own consumer}
+
+Now it's time to understand our parser framework, and also start looking at our friends, the lady slipper orchids. To start our search, let's just take a look through the nucleotide databases at NCBI, using an Entrez search (\ahrefurl{\url{lhttp://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?db=Nucleotide}}) for everything mentioning the text Cypripedioideae (this is the subfamily of lady slipper orchids). This search gives us 94 hits, which we save into a FASTA formatted text file.
+
+
+Now, let's try and use a parser to summarize the type of information we got. To take a simple example, why don't we go through and grab all of the organism names mentioned, to see how many different species of lady slipper orchids are represented in this data.
 
 \subsection{Connecting with biological databases}
 
@@ -298,18 +370,15 @@ This covers the basic features and uses of the Biopython sequence class. There i
 
 \subsubsection{Parsing a file full of BLAST runs}
 
-
 \subsection{SWISS-PROT}
 
 \subsubsection{Retrieving a SWISS-PROT record}
-
 
 \subsection{PubMed}
 
 \subsubsection{Sending a query to PubMed}
 
 \subsubsection{Retrieving a PubMed record}
-
 
 \subsection{Classification}
 
@@ -318,8 +387,6 @@ This covers the basic features and uses of the Biopython sequence class. There i
 \subsection{Miscellaneous}
 
 \subsubsection{Translating a DNA sequence to Protein}
-
-
 
 \section{Advanced}
 
@@ -694,7 +761,6 @@ keywords
 footer
     copyright
 \end{verbatim}
-
 
 \section{Biocorba}
 
