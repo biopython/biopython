@@ -7,9 +7,9 @@ except ImportError:
 from Bio.Tools.KDTree import _KDTree 
 
 def _neighbor_test(nr_points, dim, bucket_size, radius):
-		""" Test all fixed radius nieghbor search.
+		""" Test all fixed radius neighbor search.
 
-		Test all fixed radius nieghbor search using the 
+		Test all fixed radius neighbor search using the 
 		KD tree C module.
 
 		o nr_points - number of points used in test
@@ -17,11 +17,13 @@ def _neighbor_test(nr_points, dim, bucket_size, radius):
 		o bucket_size - nr of points per tree node
 		o radius - radius of search (typically 0.05 or so) 
 		"""
+		# KD tree search
 		kdt=_KDTree.KDTree(dim, bucket_size)
 		coords=random((nr_points, dim)).astype("f")
 		kdt.set_data(coords, nr_points)
 		kdt.neighbor_search(radius)
 		l1=len(kdt.neighbor_get_radii())
+		# now do a slow search to compare results
 		kdt.neighbor_simple_search(radius)
 		l2=len(kdt.neighbor_get_radii())
 		if l1==l2:
@@ -40,6 +42,7 @@ def _test(nr_points, dim, bucket_size, radius):
 	o radius - radius of search (typically 0.05 or so) 
 	"""
 	radius_sq=radius*radius
+	# kd tree search
 	kdt=_KDTree.KDTree(dim, bucket_size)
 	coords=random((nr_points, dim)).astype("f")
 	center=coords[0]
@@ -47,6 +50,7 @@ def _test(nr_points, dim, bucket_size, radius):
 	kdt.search_center_radius(center, radius)
 	l1=len(kdt.get_indices())
 	l2=0
+	# now do a manual search to compare results
 	for i in range(0, nr_points):
 		p=coords[i]
 		if _KDTree.KDTREE_dist(p, center, dim)<=radius_sq:
@@ -59,6 +63,11 @@ def _test(nr_points, dim, bucket_size, radius):
 class KDTree:
 	"""
 	KD tree implementation (C++, SWIG python wrapper)
+
+	The KD tree data structure can be used for all kinds of algorithms that
+	involve N-dimensional points, e.g.  neighbor searches (find all points
+	within a radius of a given point) or finding all point pairs in a set
+	that are within a certain radius of each other.
 
 	Reference:
 
@@ -189,7 +198,7 @@ if __name__=="__main__":
 	bucket_size=10
 	radius=0.05
 
-	while(1):
+	for i in range(0, 1000):
  		 _neighbor_test(nr_points, dim, bucket_size, radius)
 		 _test(nr_points, dim, bucket_size, radius)
 
