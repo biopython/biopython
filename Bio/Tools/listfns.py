@@ -33,7 +33,22 @@ def items(l):
     in arbitrary order.
 
     """
-    return asdict(l).keys()
+    try:
+        return asdict(l).keys()
+    except TypeError, x:
+        if str(x) != 'unhashable type':
+            raise
+    # asdict failed because l is unhashable.  Back up to a naive
+    # implementation.
+    l = l[:]
+    l.sort()
+    i = 0
+    while i < len(l)-1:
+        if l[i] == l[i+1]:
+            del l[i]
+        else:
+            i += 1
+    return l
 
 def count(items):
     """count(items) -> dict of counts of each item
