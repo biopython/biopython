@@ -130,7 +130,10 @@ class PDBParser:
                 altloc=line[16:17]
                 resname=line[17:20]
                 chainid=line[21:22]
-                serial_number=int(line[6:11])
+                try:
+                    serial_number=int(line[6:11])
+                except:
+                    serial_number=0
                 resseq=int(split(line[22:26])[0])   # sequence identifier   
                 icode=line[26:27]           # insertion code
                 if record_type=='HETATM':       # hetero atom flag
