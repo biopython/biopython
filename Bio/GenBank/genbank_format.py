@@ -596,7 +596,7 @@ sequence = Martel.Group("sequence",
                         Martel.ToEol())
 sequence_line = Martel.Group("sequence_line",
                              blank_space +
-                             base_number +
+                             Martel.Opt(base_number) +
                              sequence)
 
 sequence_entry = Martel.Group("sequence_entry",
