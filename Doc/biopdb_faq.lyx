@@ -502,14 +502,18 @@ retrieve_pdb_file
 pdbl=PDBList()
 \layout LyX-Code
 
-pdbl.retrieve_pdb_file('1FAT')
+pdbl.retrieve_pdb_file('1FAT', here=1)
 \layout Standard
 
 In this case, the downloaded file will be called 
 \family typewriter 
 pdb1fat.ent
 \family default 
-.
+, and it will be downloaded to the current directory (
+\family typewriter 
+here=1
+\family default 
+).
  
 \layout Standard
 
@@ -527,7 +531,8 @@ retrieve_pdb_file
 gunzip
 \family default 
 ).
- In addition, the PDB ftp site can be specified upon creation of the 
+ In addition, the PDB ftp site and a default download directory can be specified
+ upon creation of the 
 \family typewriter 
 PDBList
 \family default 
@@ -1060,7 +1065,11 @@ insertion code
  wild type structure.
 \layout Standard
 
-The id of the above glucose residue would thus be ('H_GLC', 100, 'A').
+The id of the above glucose residue would thus be 
+\family typewriter 
+('H_GLC', 100, 'A')
+\family default 
+.
  If the hetero-flag and insertion code are blanc, the sequence identifier
  alone can be used:
 \layout LyX-Code
@@ -1891,43 +1900,7 @@ E
 \bar no 
 \noun off 
 \color none
-Strand (
-\family default 
-\series default 
-\shape default 
-\size default 
-\emph default 
-\bar default 
-\noun default 
-\color default
-'
-\family roman 
-\series medium 
-\shape up 
-\size normal 
-\emph off 
-\bar no 
-\noun off 
-\color none
-extended
-\family default 
-\series default 
-\shape default 
-\size default 
-\emph default 
-\bar default 
-\noun default 
-\color default
-'
-\family roman 
-\series medium 
-\shape up 
-\size normal 
-\emph off 
-\bar no 
-\noun off 
-\color none
-) 
+Strand 
 \end_inset 
 </cell>
 </row>
@@ -2096,6 +2069,7 @@ Use the
 DSSP 
 \family default 
 class (see also previous entry).
+ But see also next entry.
 \layout Subsubsection*
 
 How do I calculate residue depth?

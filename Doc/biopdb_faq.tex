@@ -307,16 +307,18 @@ structure.
 \begin{lyxcode}
 pdbl=PDBList()
 
-pdbl.retrieve\_pdb\_file('1FAT')
+pdbl.retrieve\_pdb\_file('1FAT',~here=1)
 \end{lyxcode}
-In this case, the downloaded file will be called \texttt{pdb1fat.ent}. 
+In this case, the downloaded file will be called \texttt{pdb1fat.ent},
+and it will be downloaded to the current directory (\texttt{here=1}). 
 
 The \texttt{retrieve\_pdb\_file} method also has some options to specify
 the compression format used for the download, and the program used
 for local decompression (default \texttt{.Z} format and \texttt{gunzip}).
-In addition, the PDB ftp site can be specified upon creation of the
-\texttt{PDBList} object. See the API documentation for more details.
-Thanks again to Kristian Rother for donating this module.
+In addition, the PDB ftp site and a default download directory can
+be specified upon creation of the \texttt{PDBList} object. See the
+API documentation for more details. Thanks again to Kristian Rother
+for donating this module.
 
 
 \subsubsection*{How do I keep a local copy of the PDB up-to-date?}
@@ -597,8 +599,8 @@ residue) could e.g. have sequence identifiers and insertion codes
 as follows: Thr 80 A, Ser 80 B, Asn 81. In this way the residue numbering
 scheme stays in tune with that of the wild type structure.
 \end{itemize}
-The id of the above glucose residue would thus be ('H\_GLC', 100,
-'A'). If the hetero-flag and insertion code are blanc, the sequence
+The id of the above glucose residue would thus be \texttt{('H\_GLC',
+100, 'A')}. If the hetero-flag and insertion code are blanc, the sequence
 identifier alone can be used:
 
 \begin{lyxcode}
@@ -929,7 +931,7 @@ B&
 Isolated $\beta$-bridge residue\tabularnewline
 \hline 
 E&
-Strand ('extended') \tabularnewline
+Strand \tabularnewline
 \hline 
 G&
 3-10 helix \tabularnewline
@@ -956,7 +958,8 @@ Other\tabularnewline
 
 \subsubsection*{How do I calculate the accessible surface area of a residue?}
 
-Use the \texttt{DSSP} class (see also previous entry).
+Use the \texttt{DSSP} class (see also previous entry). But see also
+next entry.
 
 
 \subsubsection*{How do I calculate residue depth?}
