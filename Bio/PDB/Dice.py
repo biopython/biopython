@@ -1,7 +1,6 @@
 import re
 
 from Bio.PDB.PDBIO import PDBIO
-from Bio.SVDSuperimposer import SVDSuperimposer
 
 
 _hydrogen=re.compile("[123 ]*H.*")
@@ -10,22 +9,23 @@ _hydrogen=re.compile("[123 ]*H.*")
 class Selector:
 	"""
 	Only accepts residues with right chainid
-	and between start and end. Remove hydrogens.
-        Only use model 0.
+	and between start and end. Remove hydrogens, waters and ligands.
+        Only use model 0 by default.
 	"""
-	def __init__(self, chainid, start, end):
-		self.chainid=chainid
+	def __init__(self, chain_id, start, end, model_id=0):
+		self.chain_id=chain_id
 		self.start=start
 		self.end=end
+                self.model_id=0
 
 	def accept_model(self, model):
 		# model - only keep model 0
-		if model.get_id()==0:
+		if model.get_id()==self.model_id:
 			return 1
 		return 0
 
 	def accept_chain(self, chain):
-		if chain.get_id()==self.chainid:
+		if chain.get_id()==self.chain_id:
 			return 1
 		return 0
 
@@ -50,11 +50,11 @@ class Selector:
 			return 1
 
 
-def extract(structure, chainid, start, end, filename):
+def extract(structure, chain_id, start, end, filename):
 	"""
 	Write out selected portion to filename.
 	"""
-	sel=Selector(chainid, start, end)
+	sel=Selector(chain_id, start, end)
 	io=PDBIO()
 	io.set_structure(structure)
 	io.save(filename, sel)
