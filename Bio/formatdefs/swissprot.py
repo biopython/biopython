@@ -16,15 +16,13 @@ register_format(
 )
 
 register_format(
-    name = "swissprot/39",
-    abbrev = "sprot39",
-    expression = "Bio.expressions.swissprot.sprot38.format",
+    name = "swissprot/40",
+    abbrev = "sprot40",
+    expression = "Bio.expressions.swissprot.sprot40.format",
 )
 
 
 link_format("swissprot", "swissprot/38")
-#link_format("swissprot", "swissprot/39", before = "swissprot/38")
-
-#link_format("swissprot", "swissprot/40")  # default inserts at end
+link_format("swissprot", "swissprot/40", before = "swissprot/38")
 
 link_format("sequence", "swissprot")
