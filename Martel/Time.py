@@ -289,7 +289,7 @@ is a bug.
   Element attributes: "type" = "numeric"
   Note: This does not allow single digit months like "1" or months which
     start with an space like " 3".  If you also want to include those,
-    use %(month).
+    use %(month).  See also %(DD), which is an alias for %m.
   
 %M is replaced by the pattern for the minute as a decimal number [00,59].
   Pattern: "[0-5][0-9]"
@@ -512,13 +512,27 @@ is a bug.
   Element name: "day"
   Element attributes: "type" = "numeric"
 
+%(DD) is the same as "%d", which is the pattern for a day of the month
+   as a decimal number [01,31].
+  Pattern: See the definition for "%d"
+  Example: "09", "31"
+  Element name: "day"
+  Element attributes: "type" = "numeric"
+
 %(month) is replaced by the pattern for the month as a decimal in any
    of the common month formats.
   Pattern: "(0[1-9]|1[012]?|[2-9]| [1-9])"
   Example: "5", "05", " 5", and "12".
+  Element name: 
+  Element attributes: "type" = "numeric"
+  Note: See also "%m" and %(MM).
+
+%(MM) is the same as "%(month)".
+  Pattern: See the definition for "%month"
+  Example: "5", "05", " 5", and "12".
   Element name: "month"
   Element attributes: "type" = "numeric"
-  Note: See also "%m".
+  Note: See also "%m" and %(MM).
 
 %(YY)
   Pattern: "[0-9][0-9]"
@@ -648,7 +662,9 @@ _time_fields = (
            "hour", {"type": "any"}),
     ("day", r"(0[1-9]|[12][0-9]?|3[01]?|[4-9]| [1-9])",
               "day", {"type": "numeric"}),
+    ("DD", "%d", None, None),
     ("month", r"(0[1-9]|1[012]?|[2-9]| [1-9])", "month", {"type": "numeric"}),
+    ("MM", "%m", None, None),
     ("YY", r"[0-9]{2}", "year", {"type": "short"}),
     ("YYYY", r"[0-9]{4}", "year", {"type": "long"}),
     ("year", r"([0-9]{2}([0-9]{2})?)", "year", {"type": "any"}),
