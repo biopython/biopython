@@ -848,7 +848,8 @@ void KDTree::_neighbor_search_pairs(Node *down, Region *down_region,
 		if (down_is_leaf)
 		{
 			down_left=down;
-			down_left_region=down_region;
+			// make a copy of down_region
+			down_left_region=new Region(down_region->get_left(), down_region->get_right());
 			down_right=NULL;
 			down_right_region=NULL;
 		}
@@ -867,7 +868,8 @@ void KDTree::_neighbor_search_pairs(Node *down, Region *down_region,
 		if (up_is_leaf)
 		{
 			up_left=up;
-			up_left_region=up_region;
+			// make a copy of up_region
+			up_left_region=new Region(up_region->get_left(), up_region->get_right());
 			up_right=NULL;
 			up_right_region=NULL;
 		}

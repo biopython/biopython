@@ -219,14 +219,28 @@ if __name__=="__main__":
 	nr_points=100000
 	dim=3
 	bucket_size=10
-	query_radius=0.01
+	query_radius=1
 
-	coords=random((nr_points, dim)).astype("f")
+	coords=(200*random((nr_points, dim))).astype("f")
 
 	kdtree=KDTree(dim, bucket_size)
 
 	# enter coords
 	kdtree.set_coords(coords)
+
+	# Find all point pairs within radius
+
+	kdtree.all_search(query_radius)
+
+	# get indices & radii of points
+
+	# indices is a list of tuples. Each tuple contains the 
+	# two indices of a point pair within query_radius of 
+	# each other.
+	indices=kdtree.all_get_indices() 
+	radii=kdtree.all_get_radii()
+
+	print "Found %i point pairs within radius %f." % (len(indices), query_radius)
 
 	# Do 10 individual queries
 
@@ -243,23 +257,4 @@ if __name__=="__main__":
 
 		x, y, z=center
 		print "Found %i points in radius %f around center (%.2f, %.2f, %.2f)." % (len(indices), query_radius, x, y, z)
-
-	# Find all point pairs within radius
-
-	kdtree.all_search(query_radius)
-
-	# get indices & radii of points
-
-	# indices is a list of tuples. Each tuple contains the 
-	# two indices of a point pair within query_radius of 
-	# each other.
-	indices=kdtree.all_get_indices() 
-	radii=kdtree.all_get_radii()
-
-	print "Found %i point pairs within radius %f." % (len(indices), query_radius)
-
-		
-		
-
-	
 
