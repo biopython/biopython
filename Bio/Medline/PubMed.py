@@ -90,7 +90,8 @@ class Dictionary:
         self.last_query_time = time.time()
         
         try:
-            handle = NCBIWWW.query(db='m', uid=id, dopt='l')
+            handle = NCBIWWW.pmfetch(
+                db='PubMed', id=id, report='medlars', mode='text')
         except IOError, x:
             # raise a KeyError instead of an IOError
             raise KeyError, x

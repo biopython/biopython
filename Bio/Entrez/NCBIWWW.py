@@ -5,60 +5,133 @@
 
 """WWW.py
 
-Provides code to access the Entrez over the WWW.
+Provides code to access the Entrez over the WWW.  The main Entrez web page
+is available at:
+http://www.ncbi.nlm.nih.gov/Entrez/
+
+A list of the Entrez utilities is available at:
+http://www.ncbi.nlm.nih.gov/entrez/utils/utils_index.html
 
 
 Functions:
-query
+query        Query Entrez.
+pmfetch      Retrieve results using a unique identifier.
+pmqty        Search PubMed.
+pmneighbor   Return a list of related articles for a PubMed entry.
+_open
 
 """
-
 import string
 import urllib
 
 from Bio import File
 
-def query(db, uid, dopt, base_cgi="http://www.ncbi.nlm.nih.gov/" +
-                 "htbin-post/Entrez/query"):
-    """query(db, uid, dopt,
-    base_cgi="http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query") -> handle
+def query(cmd, db, cgi='http://www.ncbi.nlm.nih.gov/entrez/query.fcgi',
+          **keywds):
+    """query(cmd, db, cgi='http://www.ncbi.nlm.nih.gov/entrez/query.fcgi',
+    **keywds) -> handle
 
-    Query Entrez and return a handle to the results.  db is the database
-    to query.  uid is the ID of the thing to get.  dopt, Display Options,
-    specifies the format of the return value.  base_cgi should point
-    to the CGI script for querying the database.
-
-    http://www.ncbi.nlm.nih.gov/Entrez/
+    Query Entrez and return a handle to the results.  See the online
+    documentation for an explanation of the parameters:
+    http://www.ncbi.nlm.nih.gov/entrez/query/static/linking.html
 
     Raises an IOError exception if there's a network error.
 
     """
-    # Format the query variables.  For some reason, the Entrez server
-    # will still occasionally return HTML tags.
-    options = urllib.urlencode({'db' : db,
-                                'uid' : uid,
-                                'Dopt' : dopt,
-                                'form' : 6,      # required for some reason
-                                'title' : 'no',  # no title buttons, etc.
-                                'html' : 'no'    # no HTML tags
-                                })
-    # to do a "GET" instead of a "POST"
-    #handle = urllib.urlopen("%s?%s" % (base_cgi, options))
-    handle = urllib.urlopen(base_cgi, options)
+    variables = {'cmd' : cmd, 'db' : db}
+    variables.update(keywds)
+    return _open(cgi, variables)
+
+def pmfetch(db, id, report=None, mode=None,
+            cgi="http://www.ncbi.nlm.nih.gov/entrez/utils/pmfetch.fcgi"):
+    """pmfetch(db, id, report=None, mode=None,
+    cgi="http://www.ncbi.nlm.nih.gov/entrez/utils/pmfetch.fcgi")
+
+    Query PmFetch and return a handle to the results.  See the
+    online documentation for an explanation of the parameters:
+    http://www.ncbi.nlm.nih.gov/entrez/utils/pmfetch_help.html
+    
+    Raises an IOError exception if there's a network error.
+    
+    """
+    variables = {'db' : db, 'id' : id}
+    if report is not None:
+        variables['report'] = report
+    if mode is not None:
+        variables['mode'] = mode
+    return _open(cgi, variables)
+
+def pmqty(db, term, dopt=None, 
+          cgi='http://www.ncbi.nlm.nih.gov/entrez/utils/pmqty.fcgi',
+          **keywds):
+    """pmqty(db, term, dopt=None,
+    cgi='http://www.ncbi.nlm.nih.gov/entrez/utils/pmqty.fcgi') -> handle
+
+    Query PmQty and return a handle to the results.  See the
+    online documentation for an explanation of the parameters:
+    http://www.ncbi.nlm.nih.gov/entrez/utils/pmqty_help.html
+    
+    Raises an IOError exception if there's a network error.
+    
+    """
+    variables = {'db' : db, 'term' : term}
+    if dopt is not None:
+        variables['dopt'] = dopt
+    variables.update(keywds)
+    return _open(cgi, variables)
+
+def pmneighbor(pmid, display,
+               cgi='http://www.ncbi.nlm.nih.gov/entrez/utils/pmneighbor.fcgi'):
+    """pmneighbor(pmid, display,
+    cgi='http://www.ncbi.nlm.nih.gov/entrez/utils/pmneighbor.fcgi') -> handle
+
+    Query PMNeighbor and return a handle to the results.  See the
+    online documentation for an explanation of the parameters:
+    http://www.ncbi.nlm.nih.gov/entrez/utils/pmneighbor_help.html
+    
+    Raises an IOError exception if there's a network error.
+    
+    """
+    variables = {'pmid' : pmid, 'display' : display}
+    return _open(cgi, variables)
+
+def _open(cgi, params={}, get=1):
+    """_open(cgi, params={}, get=1) -> UndoHandle
+
+    Open a handle to Entrez.  cgi is the URL for the cgi script to access.
+    params is a dictionary with the options to pass to it.  get is a boolean
+    that describes whether a GET should be used.  Does some
+    simple error checking, and will raise an IOError if it encounters one.
+
+    """
+    # Open a handle to Entrez.
+    options = urllib.urlencode(params)
+    if get:  # do a GET
+        handle = urllib.urlopen("%s?%s" % (cgi, options))
+    else:    # do a POST
+        handle = urllib.urlopen(cgi, options)
 
     # Wrap the handle inside an UndoHandle.
-    # I need to peek at the first line to see if there are errors.
-    # XXX Possible bug here: what is the error message is not on the
-    # first line?  Better check this.
     uhandle = File.UndoHandle(handle)
 
-    # Check for errors
-    line = uhandle.peekline()
-    # Sometimes Entrez returns a Proxy Error instead of results
-    if string.find(line, "500 Proxy Error") >= 0:
-        raise IOError, "Proxy Error (Entrez busy?)"
-    elif line[:5] == "ERROR":
-        # XXX argh, need to check this
-        raise IOError, "ERROR, possibly because uid not available"
+    # Check for errors in the first 5 lines.
+    # This is kind of ugly.
+    lines = []
+    for i in range(5):
+        lines.append(uhandle.readline())
+    for i in range(4, -1, -1):
+        uhandle.saveline(lines[i])
+    data = string.join(lines, '')
+                   
+    if string.find(data, "500 Proxy Error") >= 0:
+        # Sometimes Entrez returns a Proxy Error instead of results
+        raise IOError, "500 Proxy Error (Entrez busy?)"
+    elif string.find(data, "WWW Error 500 Diagnostic") >= 0:
+        raise IOError, "WWW Error 500 Diagnostic (Entrez busy?)"
+    elif data[:5] == "ERROR":
+        # XXX Possible bug here, because I don't know whether this really
+        # occurs on the first line.  I need to check this!
+        raise IOError, "ERROR, possibly because id not available?"
     # Should I check for 404?  timeout?  etc?
     return uhandle
+    

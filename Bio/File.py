@@ -46,7 +46,8 @@ class UndoHandle:
         return saved + apply(self._handle.read, args, keywds)
 
     def saveline(self, line):
-        self._saved = [line] + self._saved
+        if line:
+            self._saved = [line] + self._saved
 
     def peekline(self):
         if self._saved:
