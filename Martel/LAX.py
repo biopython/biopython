@@ -113,7 +113,7 @@ class LAX(handler.ContentHandler, dict):
         self.start()
         
     def start(self):
-        self.data.clear()
+        self.clear()
 
     def startElement(self, tag, attrs):
         if tag in self.__fields:
@@ -136,7 +136,7 @@ class LAX(handler.ContentHandler, dict):
                 self.__expect = None
 
     def element(self, tag, attrs, text, startpos, endpos):
-        self.data.setdefault(tag, []).append(text)
+        self.setdefault(tag, []).append(text)
             
     def endDocument(self):
         if self.__capture:
@@ -154,7 +154,7 @@ class LAX(handler.ContentHandler, dict):
 # Also stores the attributes
 class LAXAttrs(LAX):
     def element(self, tag, attrs, text, startpos, endpos):
-        self.data.setdefault(tag, []).append( (text, attrs) )
+        self.setdefault(tag, []).append( (text, attrs) )
 
 # Stores attributes and positions
 class ElementInfo:
@@ -166,5 +166,5 @@ class ElementInfo:
 
 class LAXPositions(LAXAttrs):
     def element(self, tag, attrs, text, startpos, endpos):
-        self.data.setdefault(tag, []).append(
+        self.setdefault(tag, []).append(
             ElementInfo(text, attrs, startpos, endpos) )
