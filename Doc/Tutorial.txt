@@ -1,0 +1,18 @@
+Table of Contents
+
+- Introduction
+
+(assume they have it installed.  Maybe give a pointer to the files
+that describe where to install it?)
+
+- Sequence class
+
+- Running BLAST
+
+- Accessing SwissProt
+
+- Downloading Medline abstracts
+
+- BioCorba
+
+
