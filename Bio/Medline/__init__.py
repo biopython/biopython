@@ -414,7 +414,16 @@ class _RecordConsumer(AbstractConsumer):
         self.data.last_revision_date = self._clean(line)
     
     def mesh_heading(self, line):
-        self.data.mesh_headings.append(self._clean(line))
+        # Check to see whether this is a new MH line, or a
+        # continuation of an old one.  If it's a continuation of an
+        # old one, append it to the previous line.
+        # See PMID 12107064 for an example, found by Dan Rubin.
+        if line[:2] == 'MH':
+            self.data.mesh_headings.append(self._clean(line))
+        else:
+            prev_mh = self.data.mesh_headings.pop()
+            continued_mh = self._clean(line)
+            self.data.mesh_headings.append("%s %s" % (prev_mh, continued_mh))
     
     def mesh_tree_number(self, line):
         self.data.mesh_tree_numbers.append(self._clean(line))
