@@ -9,7 +9,7 @@
 Bio.DocSQL: easy access to DB API databases
 
 >>> import DocSQL, MySQLdb, os
->>> db=MySQLdb.connect(passwd=os.environ['MYSQLPASS'], db='test')
+>>> db=MySQLdb.connect(passwd='', db='test')
 >>> class CreatePeople(DocSQL.Create):
 ...     \"""
 ...     CREATE TEMPORARY TABLE people
@@ -22,7 +22,7 @@ Bio.DocSQL: easy access to DB API databases
 CreatePeople(message=Success)
 """
 
-__version__ = "$Revision: 1.3 $"
+__version__ = "$Revision: 1.4 $"
 # $Source: /home/bartek/cvs2bzr/biopython_fastimport/cvs_repo/biopython/Bio/DocSQL.py,v $
 
 import exceptions

@@ -27,7 +27,7 @@ record_parser = LocusLinkParser()
 
 for test in test_files:
     datafile = os.path.join( 'LocusLink', test )
-    print datafile
+    print test
     src_handle = open( datafile )
     data = record_parser.parse( src_handle )
     print data

@@ -80,9 +80,17 @@ class Immune:
     protected sequences.
     """
 
-    def __init__( self, friendly, alphabet = 'acgt' ):
+    def __init__( self, friendly, alphabet = 'acgt', do_tuning = 1):
+        """Initialize an Immune object.
+
+        do_tuning specifies whether or not we should look for a file with
+        parameters.
+        """
         self.hot_random = HotRandom()
-        self.tune()
+        if do_tuning:
+            self.tune()
+        else:
+            self.set_defaults()
         self.friendly = friendly
         self.alphabet = alphabet[:]
         self.lymphocyte_factory()

@@ -1,5 +1,5 @@
 test_locus_http
-LocusLink\Locus14789.htm
+Locus14789.htm
 ADDITIONAL_LINKS:
                 key is UniGene
                     Mm.35708
@@ -259,7 +259,7 @@ url = /Homology/view.cgi?map=ucsc_mgd&tax_id=9606&chr=12&symbol=HSU47926
 
 
 
-LocusLink\Locus16590.htm
+Locus16590.htm
 ADDITIONAL_LINKS:
                 key is UniGene
                     Mm.4394
@@ -736,7 +736,7 @@ url = /Homology/view.cgi?map=natgen_paper&tax_id=9606&chr=4&symbol=AW263947
 
 
 
-LocusLink\Locus2523.htm
+Locus2523.htm
 ADDITIONAL_LINKS:
                 key is OMIM
                     211100
@@ -1195,7 +1195,7 @@ url = /Homology/view.cgi?map=ucsc_mgd&tax_id=10090&chr=7&symbol=Fut1
 
 
 
-LocusLink\Locus5797.htm
+Locus5797.htm
 ADDITIONAL_LINKS:
                 key is OMIM
                     176888
@@ -1570,7 +1570,7 @@ url = /Homology/view.cgi?map=ucsc_mgd&tax_id=10090&chr=17&symbol=Ptprm
 
 
 
-LocusLink\Locus6373.htm
+Locus6373.htm
 ADDITIONAL_LINKS:
                 key is OMIM
                     604852
