@@ -35,23 +35,15 @@ from Bio.Align.Generic import Alignment
 from xml.sax import saxutils
 from xml.sax import handler
 
-def parse_file(file_name, type = 'DNA'):
+def parse_file(file_name, alphabet = IUPAC.unambiguous_dna):
     """Parse the given file into a clustal aligment object.
     
     Arguments:
     o file_name - The name of the file to parse.
-    o type - The type of information contained in the file
-    """
-    if type.upper() == 'DNA':
-        alphabet = IUPAC.ambiguous_dna
-    elif type.upper() == 'RNA':
-        alphabet = IUPAC.ambiguous_rna
-    elif type.upper() == 'PROTEIN':
-        alphabet = IUPAC.protein
-    else:
-        raise ValueError("Invalid type %s passed. Need DNA, RNA or PROTEIN"
-                         % type)
-        
+    o alphabet - The type of alphabet to use for the alignment sequences.
+    This should correspond to the type of information contained in the file.
+    Defaults to be unambiguous_dna sequence.
+    """ 
     align_handler = _AlignCreator(Alphabet.Gapped(alphabet))
 
     parser = clustal_format.format.make_parser()
