@@ -293,6 +293,7 @@ PACKAGES = [
     'Bio.builders.Search',
     'Bio.builders.SeqRecord',
     'Bio.CDD',
+    'Bio.Compass',
     'Bio.Clustalw',
     'Bio.config',
     'Bio.Crystal',

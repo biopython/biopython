@@ -1,0 +1,40 @@
+....Ali1: 60456.blo.gz.aln      Ali2: 60456.blo.gz.aln
+Threshold of effective gap content in columns: 0.5
+length1=388     filtered_length1=386    length2=388     filtered_length2=386
+Nseqs1=399      Neff1=12.972    Nseqs2=399      Neff2=12.972
+Smith-Waterman score = 2759      Evalue = 0.00e+00
+
+QUERY   2      LSDRLELVSASEIRKLFDIAAGMKDVISLGIGEPDFDTPQHIKEYAKEALDKGLTHYGPN
+               ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+QUERY   2      LSDRLELVSASEIRKLFDIAAGMKDVISLGIGEPDFDTPQHIKEYAKEALDKGLTHYGPN
+
+
+QUERY          IGLLELREAIAEKLKKQNGIEADPKTEIMVLLGANQAFLMGLSAFLKDGEEVLIPTPAFV
+               ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+QUERY          IGLLELREAIAEKLKKQNGIEADPKTEIMVLLGANQAFLMGLSAFLKDGEEVLIPTPAFV
+
+
+QUERY          SYAPAVILAGGKPVEVPTYEEDEFRLNVDELKKYVTDKTRALIINSPCNPTGAVLTKKDL
+               ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+QUERY          SYAPAVILAGGKPVEVPTYEEDEFRLNVDELKKYVTDKTRALIINSPCNPTGAVLTKKDL
+
+
+QUERY          EEIADFVVEHDLIVISDEVYEHFIYDDARHYSIASLDGMFERTITVNGFSKTFAMTGWRL
+               ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+QUERY          EEIADFVVEHDLIVISDEVYEHFIYDDARHYSIASLDGMFERTITVNGFSKTFAMTGWRL
+
+
+QUERY          GFVAAPSWIIERMVKFQMYNATCPVTFIQYAAAKALKDERSWKAVEEMRKEYDRRRKLVW
+               ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+QUERY          GFVAAPSWIIERMVKFQMYNATCPVTFIQYAAAKALKDERSWKAVEEMRKEYDRRRKLVW
+
+
+QUERY          KRLNEMGLPTVKPKGAFYIFPRIRDTGLTSKKFSELMLKEARVAVVPGSAFGKAGEGYVR
+               ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+QUERY          KRLNEMGLPTVKPKGAFYIFPRIRDTGLTSKKFSELMLKEARVAVVPGSAFGKAGEGYVR
+
+
+QUERY          ISYATAYEKLEEAMDRMERVLKERKL
+               ++++++++++++++++++++++++++
+QUERY          ISYATAYEKLEEAMDRMERVLKERKL
+

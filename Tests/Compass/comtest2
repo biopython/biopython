@@ -1,0 +1,41 @@
+Ali1: 60456.blo.gz.aln  Ali2: allscop//14982.blo.gz.aln
+Threshold of effective gap content in columns: 0.5
+length1=388     filtered_length1=386    length2=116     filtered_length2=115
+Nseqs1=399      Neff1=12.972    Nseqs2=1        Neff2=11.313
+Smith-Waterman score = 35        Evalue = 1.01e+03
+
+QUERY   178    KKDLEEIAD
+               ++ ++++++
+QUERY   9      QAAVQAVTA
+
+Ali1: 60456.blo.gz.aln  Ali2: allscop//14983.blo.gz.aln
+Threshold of effective gap content in columns: 0.5
+length1=388     filtered_length1=386    length2=121     filtered_length2=119
+Nseqs1=399      Neff1=12.972    Nseqs2=1        Neff2=11.168
+Smith-Waterman score = 35        Evalue = 1.01e+03
+
+QUERY   178    KKDLEEIAD
+               ++ ++++++
+QUERY   9      REAVEAAVD
+
+Ali1: 60456.blo.gz.aln  Ali2: allscop//14984.blo.gz.aln
+Threshold of effective gap content in columns: 0.5
+length1=388     filtered_length1=386    length2=145     filtered_length2=137
+Nseqs1=399      Neff1=12.972    Nseqs2=1        Neff2=5.869
+Smith-Waterman score = 37        Evalue = 5.75e+02
+
+QUERY   371    LEEAMDRMER~~~V
+               + ++++ + +   +
+QUERY   76     LQNFIDQLDNpddL
+
+Ali1: 60456.blo.gz.aln  Ali2: allscop//15010.blo.gz.aln
+Threshold of effective gap content in columns: 0.5
+length1=388     filtered_length1=386    length2=141     filtered_length2=141
+Nseqs1=399      Neff1=12.972    Nseqs2=1        Neff2=6.099
+Smith-Waterman score = 37        Evalue = 5.75e+02
+
+QUERY   163    LIINSP
+               ++++++
+QUERY   32     LFDAHD
+
+

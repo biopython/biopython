@@ -1,0 +1,12 @@
+test_Compass
+testAlignmentParsingOne (test_Compass.CompassTest) ... ok
+testAlignmentParsingTwo (test_Compass.CompassTest) ... ok
+testCompassIteratorEasy (test_Compass.CompassTest) ... ok
+testCompassIteratorHard (test_Compass.CompassTest) ... ok
+testCompassParser (test_Compass.CompassTest) ... ok
+testCompassScanAndConsume (test_Compass.CompassTest) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.007s
+
+OK
