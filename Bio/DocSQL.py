@@ -22,36 +22,57 @@ Bio.DocSQL: easy access to DB API databases
 CreatePeople(message=Success)
 """
 
-__version__ = "$Revision: 1.4 $"
+__version__ = "$Revision: 1.5 $"
 # $Source: /home/bartek/cvs2bzr/biopython_fastimport/cvs_repo/biopython/Bio/DocSQL.py,v $
 
 import exceptions
 import MySQLdb
 import sys
+from GFF.GenericTools import enumerate
 
 connection = None
 
 class NoInsertionError(exceptions.Exception):
     pass
 
+def _check_is_public(name):
+    if name[6] == "_names":
+        raise AttributeError
+    
 class QueryRow(list):
     def __init__(self, cursor):
         try:
-            list.__init__(self, cursor.fetchone())
+            super(QueryRow, self).__init__(self, cursor.fetchone())
         except TypeError:
             raise StopIteration
 
-        self._names = map(lambda x: x[0], cursor.description)
+        self._names = [x[0] for x in cursor.description] # FIXME: legacy
+        self._names_hash = {}
+        
+        for i, name in enumerate(self._names):
+            self._names_hash[name] = i
 
     def __getattr__(self, name):
-        if name == "_names":
-            raise AttributeError
+        _check_is_public(name)
         try:
-            return self[self._names.index(name)]
-        except ValueError:
+            return self[self._names_hash[name]]
+        except KeyError:
             raise AttributeError, "'%s' object has no attribute '%s'" % (self.__class__.__name__, name)
         except AttributeError:
             raise AttributeError, "'%s' object has no attribute '%s'" % (self.__class__.__name__, name)
+
+    def __setattr__(self, name, value):
+        try:
+            self._names_hash
+        except AttributeError:
+            return super(QueryRow, self).__setattr__(self, name, value)
+            
+        _check_is_public(name)
+        try:
+            index = self._names_hash[name]
+            self[index] = value
+        except KeyError:
+            super(QueryRow, self).__setattr__(self, name, value)
 
 class Query(object):
     """
@@ -98,6 +119,8 @@ class QueryGeneric(Query):
 
 class IterationCursor(object):
     def __init__(self, query, connection=connection):
+        if connection is None:
+            raise TypeError, "database connection is None"
         self.cursor = connection.cursor()
         self.row_class = query.row_class
         if query.diagnostics:

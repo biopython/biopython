@@ -11,7 +11,7 @@ Docstring
 
 from __future__ import generators
 
-__version__ = "$Revision: 1.2 $"
+__version__ = "$Revision: 1.3 $"
 # $Source: /home/bartek/cvs2bzr/biopython_fastimport/cvs_repo/biopython/Bio/GFF/GenericTools.py,v $
 
 import exceptions
@@ -51,6 +51,7 @@ class TempFile(file):
     def __init__(self, suffix = ".python-temp", keep = 0):
         self.removed = 0
         self.keep = keep
+        # XXX: this is a race condition:
         file.__init__(self, tempfile.mktemp(suffix), "w")
 
     def __del__(self):

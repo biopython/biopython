@@ -9,9 +9,17 @@
 GFF.py: Access to General Feature Format databases created with Bio::DB:GFF
 
 based on documentation for Lincoln Stein's Perl Bio::DB::GFF
+
+>>> import os
+>>> import Bio.GFF
+>>> PASSWORD = os.environ['MYSQLPASS']
+>>> DATABASE_GFF = 'wormbase_ws93'
+>>> FASTADIR = '/local/wormbase_ws93/'
+>>> gff = Bio.GFF.Connection(passwd=PASSWORD, db=DATABASE_GFF, fastadir=FASTADIR)
+
 """
 
-__version__ = "$Revision: 1.4 $"
+__version__ = "$Revision: 1.5 $"
 # $Source: /home/bartek/cvs2bzr/biopython_fastimport/cvs_repo/biopython/Bio/GFF/__init__.py,v $
 
 import exceptions
@@ -183,6 +191,14 @@ class Feature(object):
             self.end = location.end() + 1
             self.strand = location.complement
 
+    def __hash__(self):
+        return hash((self.seqname,
+                     self.start,
+                     self.end,
+                     self.strand,
+                     self.frame,
+                     self.alphabet))
+
     def seq(self):
         rec = RetrieveSeqname(self.seqname)
         return easy.record_subseq(rec, self.location(), upper=1)
@@ -222,6 +238,9 @@ class Feature(object):
 
     def record(self):
         return SeqRecord(self.seq(), self.id(), "", self.location())
+
+    def xrange(self):
+        return xrange(self.start, self.end)
 
     def __str__(self):
         return "Feature(%s)" % self.location()
@@ -269,6 +288,7 @@ class FeatureQuery(DocSQL.Query):
                  method=None,
                  source=None,
                  object=None, # "class:name"
+                 gid=None,
                  *args,
                  **keywds):
         
@@ -288,6 +308,8 @@ class FeatureQuery(DocSQL.Query):
             self.statement += ' AND fsource LIKE "%s"\n' % source
         if object is not None:
             self.statement += ' AND %s\n' % object2fgroup_sql(object)
+        if gid is not None:
+            self.statement += ' AND fgroup.gid = %s\n' % gid
             
         if complement:
             self.statement += " ORDER BY 0-fstart, 0-fstop"

@@ -11,7 +11,7 @@ Bio.easy: some functions to ease the use of Biopython
 
 from __future__ import generators # requires Python 2.2
 
-__version__ = "$Revision: 1.2 $"
+__version__ = "$Revision: 1.3 $"
 # $Source: /home/bartek/cvs2bzr/biopython_fastimport/cvs_repo/biopython/Bio/GFF/easy.py,v $
 
 import copy
@@ -76,7 +76,7 @@ class Location(GenericTools.VerboseList):
             label = 'join'
         elif self.join == 2:
             label = 'order'
-        return "%s(%s)" % (label, string.join(map(lambda x: str(x), self), ","))
+        return "%s(%s)" % (label, ",".join(map(str, self)))
     
     def __str__(self):
         if self.seqname:
@@ -98,7 +98,7 @@ class Location(GenericTools.VerboseList):
             return format % str(self[0] + 1)
 
     def __repr__(self):
-        return "Location(%s)" % string.join(map(lambda x: repr(x), self), ", ")
+        return "Location(%s)" % ", ".join(map(repr, self))
 
     direction2index = {1: 0, -1: -1}
     def direction_and_index(self, direction):
