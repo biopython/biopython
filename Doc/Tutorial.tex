@@ -1,8 +1,11 @@
-\documentclass{article}
+\documentclass{report}
 \usepackage{url}
 \usepackage{fullpage}
 \usepackage{hevea}
 \usepackage{graphicx}
+
+% make everything have section numbers
+\setcounter{secnumdepth}{4}
 
 % Make links between references
 \usepackage{hyperref}
@@ -21,16 +24,74 @@
 
 \title{Biopython Tutorial and Cookbook}
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg}
-\date{Last Update--18 November 2000}
+\date{Last Update--20 January 2001}
 
 \maketitle
 \tableofcontents
 
-\section{Introduction}
+\chapter{Introduction}
 
-\subsection{What is Biopython?}
+\section{What is Biopython?}
 
-\subsection{Obtaining Biopython}
+The Biopython Project is an international association of developers of freely available Python (\ahrefurl{\url{http://www.python.org}}) tools for computational molecular biology. The web site \ahrefurl{\url{http://www.biopython.org}} provides an online resource for modules, scripts, and web links for developers of Python-based software for life science research.
+
+
+Basically, we just like to program in python and want to make it as easy as possible to use python for bioinformatics by creating high-quality, reusable modules and scripts.
+
+\subsection{What can I find in the biopython package}
+
+The main biopython releases have lots of functionality, including:
+
+\begin{itemize}
+  \item The ability to parse bioinformatics files into python utilizable data structures, including support for the following formats:
+
+  \begin{itemize}
+    \item Blast output -- both from standalone and WWW Blast
+    \item Clustalw
+    \item FASTA
+    \item GenBank
+    \item PubMed and Medline
+    \item Expasy files, like Enzyme, Prodoc and Prosite
+    \item SCOP, including 'dom' and 'lin' files
+    \item Rebase
+    \item SwissProt
+  \end{itemize}
+
+  \item Files in the supported formats can be iterated over record by record or indexed and accessed via a Dictionary interface.
+
+  \item Code to deal with popular on-line bioinformatics destinations such as:
+
+  \begin{itemize}
+    \item NCBI -- Blast, Entrez and PubMed services
+    \item Expasy -- Prodoc and Prosite entries
+  \end{itemize}
+
+  \item Interfaces to common bioinformatics programs such as:
+
+  \begin{itemize}
+    \item Standalone Blast from NCBI
+    \item Clustalw alignment program.
+  \end{itemize}
+
+  \item A standard sequence class that deals with sequences, ids on sequences, and sequence features.
+
+  \item Tools for performing common operations on sequences, such as translation, transcription and weight calculations.
+
+  \item Code to perform classification of data using k Nearest Neighbors, Naive Bayes or Support Vector Machines.
+
+  \item Code for dealing with alignments, including a standard way to create and deal with substitution matrices.
+
+  \item GUI-based programs to do basic sequence manipulations, translations, BLASTing, etc.
+
+  \item Extensive documentation and help with using the modules, including this file, on-line wiki documentation, the web site, and the mailing list.
+
+  \item Integration with other languages, including the Bioperl and Biojava projects, using the BioCorba interface standard (available with the biopython-corba module).
+
+\end{itemize}
+
+We hope this gives you plenty of reasons to download and start using Biopython!
+
+\section{Obtaining Biopython}
 
 Biopython's internet home is at, naturally enough,  \ahrefurl{\url{http://www.biopython.org}}. This is the home of all things biopython, so it is the best place to start looking around if you are interested. When you feel ready to dive in and start working with the code, you have three choices:
 
@@ -44,9 +105,9 @@ Biopython's internet home is at, naturally enough,  \ahrefurl{\url{http://www.bi
 
 Based on which way you choose, you'll need to follow one of the following installation options. Read on for the information you are interested in.
 
-\subsection{Installation}
+\section{Installation}
 
-\subsubsection{Installing from source on UNIX}
+\subsection{Installing from source on UNIX}
 \label{sec:unix_install}
 
 Biopython uses Distutils, which is the new standard python installation package. Copies are available at \ahrefurl{\url{http://www.python.org/sigs/distutils-sig/download.html}} and Distutils will also come standard with Python 1.6 and future versions (the version that is shipped with alpha versions of 1.6 should work just fine). Distutils will make installation a snap, as you will see in a second.
@@ -74,7 +135,21 @@ Now that we've got what we need let's get into the installation:
 
 \end{enumerate}
 
-\subsubsection{Installing from source on Windows}
+\subsubsection{Installation of FreeBSD}
+
+Johann Visagie has been kind enough to create (and keep updated) a FreeBSD port of Biopython. Thanks to the wonders of the ports system, this means that all you need to do to install Biopython on FreeBSD is do the following as root:
+
+\begin{verbatim}
+# cd /usr/ports/biology/py-biopython
+# make install
+\end{verbatim}
+
+And voila! It's installed. 
+
+
+If you want more information on FreeBSD and things, Johann has written a nice primer for his FreeBSD EMBOSS port. This has lots of generally useful information, such as how to keep your ports tree up to do. If you are new to FreeBSD, you should definately check it out at \ahrefurl{\url{ftp://ftp.no.embnet.org/pub/EMBOSS-extras/EMBOSS-FreeBSD-HOWTO.txt}}.
+
+\subsection{Installing from source on Windows}
 \label{sec:windows_install}
 
 This section deals with installing the source (ie. from CVS or from a source zip file) on a Windows machine. Much of the information from the UNIX install applies here, so it would be good to read section~\ref{sec:unix_install} before starting. Also, a little warning -- I (Brad) am writing these instructions based on very limited experience with Windows; I am basically a UNIX geek. So if you know more about Windows and want to add/correct things in this section, please feel let us know!
@@ -111,7 +186,7 @@ and voila!, it's installed.
 
 Now that you've got everything installed, skip on ahead to section~\ref{sec:is_working} to make sure everything worked.
 
-\subsubsection{Installing using RPMs}
+\subsection{Installing using RPMs}
 
 People who use RPM based systems might like to install everything with a RPM to use it's packaging system. Additionally, this saves the necessity of having a C compiler and compiling things. 
 
@@ -131,14 +206,24 @@ To see what you installed try doing \verb|rpm -qpl your_biopython.rpm| which wil
 RPMs do not install the documentation, tests, or example code, so you might want to also grab a source distribution, so you can use these resources (and also look at the source code if you want to).
 
 
-\subsubsection{Installing with a Windows Installer}
+\subsection{Installing with a Windows Installer}
 
 Installing things on Windows with the installer should be really easy (hey, that's why they've got graphical installers, right?). You should just need to download the \verb|Biopython-version.exe| installer from biopython web site. Then you just need to double click and voila, a nice little installer will come up and you can stick the libraries where you need to. No need for a C compiler or anything fancy.
 
 
 This does not install the documentation, tests, example code or source code, so it is probably also a good idea to download the zip file containing this so you can test your installation and learn how to use it.
 
-\subsection{Making sure it worked}
+\subsection{Installing on Macintosh}
+
+Biopython code should work like a charm on the Macintosh, using the MacPython distribution. I (Brad) am not a big Mac user, but have had good luck using several on the modules on the Macintosh.
+
+
+Basically, installation should be very easy. You need to download either the \verb|biopython-version.tar.gz| or \verb|biopython-version.zip| file from the download page, and unpack these. This can be done with tools such as Aladdin's Stuff-It expander. It will unpack into a directory called \verb|biopython-version|. If you open up this directory, you will find the main directory of modules, called \verb|Bio|. You should then open up your python installation (which should be in some place like \verb|Macintosh HD::Python2.0|) to the directory \verb|Lib::site-packages|, and copy the \verb|Bio| directory there by dragging it. Bam! You're done! By default, \verb|site-packages| is included in your PYTHONPATH, so you should be ready to use it.
+
+
+Some notes: Obviously this will not compile any of the C extensions in biopython. There are pure python implementations of all of these extensions, though, so you shouldn't need to worry about lack on functionality, only lack of speed. Jack Jansen (the MacPython god) has made patches to distutils which allow it to work on the Mac with the Metrowerks CodeWarrior compiler. I don't have this compiler (it costs money, oh no!), so I can't speak of how well it works. If anyone who codes more on the Mac has more information, I would be very happy to include it here.
+
+\section{Making sure it worked}
 \label{sec:is_working}
 
 First, we'll just do a quick test to make sure python. The most important thing is that python can find the biopython installation. Biopython all installs into a top level \verb|Bio| directory, and you want to make sure this directory is specified in on your\verb| $PYTHONPATH| environmental variable. If you used the default install, this shouldn't be a problem, but if not, you'll need to set the \verb|PYTHONPATH| with something like \verb|export PYTHONPATH = $PYTHONPATH':/directory/where/you/put/Biopython'| (on UNIX). Now that we think we are ready, fire up your python interpreter and follow along with the following code:
@@ -169,11 +254,14 @@ test_File
 
 Well, now you've gotten Biopython installed and running, you are probably ready to get working with it, so continue reading...
 
-\subsection{FAQ}
+\section{FAQ}
 
-Hmmmm, don't have a FAQ yet since questions we've seen so far are hopefully covered in the info below. If you have anything that should be in a FAQ, please let us know!
+\begin{enumerate}
+  \item \emph{I looked in a directory for code, but I couldn't seem to find the code that does something. Where's it hidden?} \\
+  One thing to know is that we put code in \verb|__init__.py| files. If you are not used to looking for code in this file this can be confusing. The reason we do this is to make the imports easier for users. For instance, instead of having to do a ``repetitive'' import like \verb|from Bio.GenBank import GenBank|, you can just import like \verb|from Bio import GenBank|.
+\end{enumerate}
 
-\section{Quick Start -- What can you do with Biopython?}
+\chapter{Quick Start -- What can you do with Biopython?}
 
 This section is designed to get you started quickly with Biopython, and to give a general overview of what is available and how to use it. All of the examples in this section assume that you have some general working knowledge of python, and that you have successfully installed biopython on your system. If you think you need to brush up on your python, the main python web site provides quick a bit of free documentation to get started with at \ahrefurl{\url{http://www.python.org/doc/}}. 
 
@@ -183,14 +271,15 @@ Since much biological work on the computer involves connecting with databases on
 
 Now that that is all out of the way, let's get into what we can do with Biopython.
 
-\subsection{General overview of what Biopython provides}
+\section{General overview of what Biopython provides}
 
 As mentioned in the introduction, Biopython is a set of libraries to provide the ability to deal with ''things'' of interest to biologists working on the computer. In general this means that you will need to have at least some programming experience (in python, of course!) or at least an interest in learning to program. Biopython's job is to make your job easier as a programmer by supplying reusable libraries so that you can focus on answering your specific question of interest, instead of focusing on the internals of parsing a particular file format (of course, if you want to help by writing a parser that doesn't exist and contributing it to Biopython, please go ahead!). So Biopython's job is to make you happy!
 
 
 One thing to note about Biopython is that it often provides multiple ways of ``doing the same thing.'' To me, this can be frustrating since I  often way to just know the one right way to do something. However, this is also a real benefit because it gives you lots of flexibility and control over the libraries. The tutorial helps to show you the common or easy ways to do things so that you can just make things work. To learn more about the alternative possibilities, look into the Cookbook section (which tells you some cools tricks and tips) and the Advanced section (which provides you with as much detail as you'd ever want to know!). 
 
-\subsection{Working with sequences}
+\section{Working with sequences}
+\label{sec:sequences}
 
 Disputedly (of course!), the central object in bioinformatics is the sequence. Thus, we'll start with the Biopython mechanisms for dealing with sequences. When I think of a sequence the first thing that pops into my mind is a string of letters:\verb| 'AGTACACTGGT'| which seems natural since this is the most common way that sequences are seen in biological file formats.  However, a simple string of letters by itself is also very uninformative -- is it a DNA or  protein sequence (okay, a protein with a lot of Alanines, Glycines, Cysteines and Threonines!), what type of organism did it come from, what is so interesting about it, and so on. The challenge in designing a sequence interface is to pick a representation that is informative enough to take into account the more complex information, yet is as lightweight and easy to work with as just a simple sequence.
 
@@ -361,7 +450,7 @@ Seq('GCTGTTATGGGTCGTTGGAAGGGTGGTCGTGCTGCTGGT', IUPACUnambiguousDNA())
 
 This covers the basic features and uses of the Biopython sequence class. There is a more detailed description of the design ideas behind the sequence class in the Advanced section of this tutorial. This class is still under development and comments on the design and use are, of course, very welcome. Now that you've got some idea of what it is like to interact with the Biopython libraries, it's time to delve into the fun, fun world of dealing with biological file formats!
 
-\subsection{A usage example}
+\section{A usage example}
 \label{sec:orchids}
 
 Before we jump right into parsers and everything else to do with Biopython, let's set up an example to motivate everything we do and make life more interesting. After all, if there wasn't any biology in this tutorial, why would you want you read it?
@@ -372,11 +461,11 @@ Since I love plants, I think we're just going to have to have a plant based exam
 
 After a little bit of reading up we discover that the Lady Slipper Orchids are in the Orchidaceae family and the Cypripedioideae sub-family and are made up of 5 genera:  \emph{Cypripedium}, \emph{Paphiopedilum}, \emph{Phragmipedium}, \emph{Selenipedium} and \emph{Mexipedium}. That gives us enough information to get started delving for more information. So, let's look at how biopython tools can help us.
 
-\subsection{Parsing biological file formats}
+\section{Parsing biological file formats}
 
 A large part of much bioinformatics work involves dealing with the many types of file formats designed to hold biological data. These files are loaded with interesting biological data, and a special challenge is parsing these files into a format so that you can manipulate them with some kind of programming language. However the task of parsing these files can be frustrated by the fact that the formats can change quite regularly, and that formats may contain small subleties which can break even the most well designed parsers. 
 
-\subsubsection{General parser design}
+\subsection{General parser design}
 
 The biopython solution to these problem is to develop a structured parser framework that is applicable to all of the parsers. The advantages are two fold. First, this allows code reuse between parsers (see \verb|Bio/ParserSupport.py|). Second, this provides a similar framework for all the parsers so that it is relatively easy to jump into the internals of a parser and figure out problems you might be having. 
 
@@ -429,7 +518,7 @@ So, events are being produced. Big deal, unless we are able to capture these eve
 
 An example should make it more clear how this works.
 
-\subsubsection{Writing your own consumer}
+\subsection{Writing your own consumer}
 \label{sec:writing_consumer}
 
 Now it's time to understand our parser framework, and also start looking at our friends, the lady slipper orchids. To start our search, let's just take a look through the nucleotide databases at NCBI, using an Entrez search (\ahrefurl{\url{lhttp://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?db=Nucleotide}}) for everything mentioning the text Cypripedioideae (this is the subfamily of lady slipper orchids). This search gives us 94 hits, which we save into a FASTA formatted text file.
@@ -522,7 +611,7 @@ species names: ['C.irapeanum', 'C.californicum', 'C.fasciculatum',
 ...
 \end{verbatim}
 
-\subsubsection{Making it easier}
+\subsection{Making it easier}
 
 The last section explained all of the nitty gritty of writing a specialized consumer. The flexibility of being able to write your own consumer is very nice, however for many applications it can be overkill. For a simple application, the nice Biopython folks have provided some useful classes that act more like full parsers. So, for quick and dirty applications, these are what you want to look at. 
 
@@ -611,7 +700,7 @@ def extract_organisms(file_to_parse):
 
 Running this will give us identical results to what we saw earlier. Whether you choose to use this interface or the previous one depends on your needs and what you feel most comfortable with. Hey, Perl isn't the only place where there's more that one way to do things!
 
-\subsubsection{FASTA files as Dictionaries}
+\subsection{FASTA files as Dictionaries}
 
 The final thing that we'll do with our ubiquitous orchid fasta file is to show how to index it and access it like a database. This is very useful for large files where you only need to access certain elements of the file, and makes for a nice quick 'n dirty database.
 
@@ -692,12 +781,12 @@ Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGTTGAGATCACATAATAAT ...', IUPACAmb
 That easily, we have created a database of our FASTA file that will spit out sequence objects. 
 
 
-\subsubsection{I love parsing -- please don't stop talking about it!}
+\subsection{I love parsing -- please don't stop talking about it!}
 
 Biopython has a lot of parsers, and each has its own little special niches based on the sequence format it is parsing and all of that. The best place to look for information about specific parsers and how to do cool things with them is in the Cookbook section of the Tutorial. If you don't find the information you are looking for, please consider helping out your poor overworked documentors and submitting a cookbook entry about it! (once you figure out how to do it, that is!)
 
 
-\subsection{Connecting with biological databases}
+\section{Connecting with biological databases}
 
 One of the very common things that you need to do in bioinformatics is extract information from biological databases. It can be quite tedious to access these databases manually, especially if you have a lot of repetitive work to do. Biopython attempts to save you time and energy by making some on-line databases available from python scripts. Currently, Biopython has code to extract information from the following databases:
 
@@ -761,23 +850,7 @@ elif my_browser == 'netscape':
 
 Snazzy! We can fetch things and display them automatically -- you could use this to quickly set up searches that you want to repeat on a daily basis and check by hand, or to set up a small CGI script to do queries and locally save the results before displaying them (as a kind of lab notebook of our search results). Hopefully whatever your task, the database connectivity code will make things lots easier for you!
 
-\subsection{Other nifty things}
-
-\subsubsection{Alignments}
-
-Biopython contains some code to deal with doing alignments and dealing with different alignment formats. Right now, you can do the following fun things:
-
-\begin{enumerate}
-\item Interact with the clustalw alignment program and parse things in clustalw format. Check section~\ref{sec:align_clustal} of the Cookbook for examples of how to use this.
-
-\item Parse and write out alignments in fasta format. 
-
-\item Translate between the different formats we can deal with. The cookbook also has an example of how to do this in section~\ref{sec:align_translate}
-\end{enumerate}
-
-Eventually, it would be nice to be able to deal with all of the various alignment formats and also have code to do pairwise alignments simply from within Biopython. These are definately things that are on my wish list!
-
-\subsection{What to do next}
+\section{What to do next}
 
 Now that you've made it this far, you hopefully have a good understanding of the basics of Biopython and are ready to start using it for doing useful work. The best thing to do now is to start snooping around in the source code and looking at the automatically generated documentation. 
 
@@ -790,17 +863,17 @@ If you know what you want to do, but can't figure out how to do it, please feel 
 
 Enjoy the code!
 
-\section{Cookbook -- Cool things to do with it}
+\chapter{Cookbook -- Cool things to do with it}
 \label{sec:cookbook}
 
-\subsection{BLAST}
+\section{BLAST}
 
 Hey, everybody loves BLAST right? I mean, geez, how can get it get any easier to do comparisons between one of your sequences and every other sequence in the known world? Heck, if I was writing the code to do that it would probably take about a day and a half to complete, and the results still wouldn't be as good. But, of course, this section isn't about how cool BLAST is, since we already know that. It is about the problem with BLAST -- it can be really difficult to deal with the volume of data generated by large runs, and to automate BLAST runs in general.
 
 
 Fortunately, the Biopython folks know this only too well, so they've developed lots of tools for dealing with BLAST and making things much easier. This section details how to use these tools and do useful things with 'em. 
 
-\subsubsection{Running BLAST over the internet}
+\subsection{Running BLAST over the internet}
 
 The first step in automating BLASTing is to make everything accessable from python scripts. So, biopython contains code that allows you to run the WWW version of BLAST (\ahrefurl{\url{http://www.ncbi.nlm.nih.gov/BLAST/}}) directly from your python scripts. This is very nice, especially since BLAST can be a real pain to deal with from scripts, especially with the whole BLAST queue thing and the separate results page.
 
@@ -850,7 +923,7 @@ After this, the results are in the file \verb|my_blast.out| and the variable \ve
 
 Well, now that we've got the BLAST results, we are ready to do something with them, so this leads us right into the parsing section.
 
-\subsubsection{Parsing the output from the WWW version of BLAST}
+\subsection{Parsing the output from the WWW version of BLAST}
 
 The WWW version of BLAST is of course infamous for continually changing the output in a way that will break parsers that deal with it. Because of this, having a centralized parser in libraries such as Biopython is very important, since then you can have multiple people testing and using it and keeping it up to date. This is so much nicer than trying to keep a tool such as this running yourself.
 
@@ -912,7 +985,7 @@ tacttgttggtgttggatcgaaccaattggaagacgaatatgctcacatcacttctcattccttacatcttcttc...
 
 Basically, you can do anything you want to with the info in the BLAST report once you have parsed it. This will, of course, depend on what you want to use it for, but hopefully this helps you get started on doing what you need to do!
 
-\subsubsection{The BLAST record class}
+\subsection{The BLAST record class}
 
 An important consideration for extracting information from a BLAST report is the type of objects that the information is stored in. In Biopython, the parsers return \verb|Record| objects, either \verb|Blast| or \verb|PSIBlast| depending on what you are parsing. These objects are defined in \verb|Bio.Blast.Record| and are quite complete.
 
@@ -949,7 +1022,7 @@ The PSIBlast record object is similar, but has support for the rounds that are u
 \end{figure}
 \end{latexonly}
 
-\subsubsection{Running BLAST locally}
+\subsection{Running BLAST locally}
 
 If you want to make your own database to search for sequences against, then local BLAST is definately the way you want to go. As with online BLAST, biopython provides lots of nice code to make you able to call local BLAST executables from your scripts, and have full access to the many command line options that these executables provide. You can obtain local BLAST precompiled for a number of platforms at \ahrefurl{\url{ftp://ncbi.nlm.nih.gov/blast/executables/}}, or can compile it yourself in the NCBI toolbox (\ahrefurl{\url{ftp://ncbi.nlm.nih.gov/toolbox/}}).
 
@@ -988,7 +1061,7 @@ If you are interested in saving your results to a file before parsing them, see 
 
 Well, now that you've got output, we should start parsing them, so read on to learn about parsing local BLAST output.
 
-\subsubsection{Parsing BLAST output from local BLAST}
+\subsection{Parsing BLAST output from local BLAST}
 
 Since the output generated by local BLAST is different than that generated by the web-based BLAST, we use the parsers located in \verb|Bio.Blast.NCBIStandalone| to parse and deal with the results.
 
@@ -1032,7 +1105,7 @@ If you also read the section on parsing BLAST from the WWW version, you'll notic
 
 Sure, parsing one record is great, but I've got a BLAST file with tons of records -- how can I parse them all? Well, fear not, the answer lies in the very next section.
 
-\subsubsection{Parsing a file full of BLAST runs}
+\subsection{Parsing a file full of BLAST runs}
 
 Of course, local blast is cool because you can run a whole bunch of sequences against a database and get back a nice report on all of it. So, biopython definately has facilities to make it easy to parse humungous files without memory problems. 
 
@@ -1093,7 +1166,7 @@ Notice that \verb|b_iterator.next()| will return \verb|None| when it runs out of
 
 The iterator allows you to deal with huge blast records without any memory problems, since things are read in one at a time. I have parsed tremendously huge files without any problems using this.
 
-\subsubsection{Finding a bad record somewhere in a huge file}
+\subsection{Finding a bad record somewhere in a huge file}
 
 One really ugly problem that happens to me is that I'll be parsing a huge blast file for a while, and the parser will bomb out with a SyntaxError. This is a serious problem, since you can't tell if the SyntaxError is due to a parser problem, or a problem with the BLAST. To make it even worse, you have no idea where the parse failed, so you can't just ignore the error, since this could be ignoring an important data point.
 
@@ -1156,14 +1229,14 @@ As mentioned, with each error generated, the BlastErrorParser will write the off
 
 Hopefully the \verb|BlastErrorParser| will make it much easier to debug and deal with large Blast files.
 
-\subsubsection{Dealing with PSIBlast}
+\subsection{Dealing with PSIBlast}
 
 We should write some stuff to make it easier to deal directly with PSIBlast from scripts (ie. output the align file in the proper format from an alignment). I need to look at PSIBlast more and come up with some good ways of going this...
 
-\subsection{SWISS-PROT}
+\section{SWISS-PROT}
 \label{sec:swiss_prot}
 
-\subsubsection{Retrieving a SWISS-PROT record}
+\subsection{Retrieving a SWISS-PROT record}
 
 SwissProt (\ahrefurl{\url{http://www.expasy.ch/sprot/sprot-top.html}}) is a handcurated database of protein sequences. Let's look at how we connect with it from a script and parse SwissProt formatted results. 
 
@@ -1231,10 +1304,10 @@ classification: ['Eukaryota', 'Viridiplantae', 'Embryophyta', 'Tracheophyta',
 
 It is equally easy to extract any kind of information you'd like from SwissProt records.
 
-\subsection{PubMed}
+\section{PubMed}
 \label{sec:pub_med}
 
-\subsubsection{Sending a query to PubMed}
+\subsection{Sending a query to PubMed}
 
 If you are in the Medical field or interested in human issues (and many times even if you are not!), PubMed (\ahrefurl{\url{http://www.ncbi.nlm.nih.gov/PubMed/}}) is an excellent source of all kinds of goodies. So like other things, we'd like to be able to grab information from it and use it in python scripts.
 
@@ -1258,7 +1331,7 @@ This returns a python list containing all of the orchid ids
 
 With this list of ids we are ready to start retrieving the records, so follow on ahead to the next section.
 
-\subsubsection{Retrieving a PubMed record}
+\subsection{Retrieving a PubMed record}
 
 The previous section described how to get a bunch of article ids. Now that we've got them, we obviously want to get the corresponding Medline records and extract the information from them. 
 
@@ -1313,11 +1386,154 @@ for id in our_id_list:
 
 The PubMed and Medline interfaces are very mature and nice to work with -- hopefully this section gave you an idea of the power of the interfaces and how they can be used.
 
-\subsection{Dealing with alignments}
+\section{GenBank}
+
+The GenBank record format is a very popular method of holding information about sequences, sequence features, and other associated sequence information. The format is a good way to get information from the NCBI databases at \ahrefurl{\url{http://www.ncbi.nlm.nih.gov/}}. 
+
+\subsection{Retrieving GenBank entries from NCBI}
+
+One very nice feature of the GenBank libraries is the ability to automate retrieval of entries from GenBank. This is very convenient for creating scripts that automate a lot of your daily work. In this example we'll show how to query the NCBI databases, and to retrieve the records from the query.
+
+
+First, we want to make a query and find out the ids of the records to retrieve. Here we'll do a quick search for \emph{Opuntia}, my favorite organism (since I work on it). We can do quick search and get back the GIs (GenBank identifiers) for all of the corresponding records:
+
+\begin{verbatim}
+from Bio import GenBank
+
+gi_list = GenBank.search_for("Opuntia AND rpl16")
+\end{verbatim}
+
+\verb|gi_list| will be a list of all of the GenBank identifiers that match our query:
+
+\begin{verbatim}
+['6273291', '6273290', '6273289', '6273287', '6273286', '6273285', '6273284']
+\end{verbatim}
+
+Now that we've got the GIs, we can use these to access the NCBI database through a dictionary interface. For instance, to retrieve the information for the first GI, we'll first have to create a dictionary that accesses NCBI:
+
+\begin{verbatim}
+ncbi_dict = GenBank.NCBIDictionary()
+\end{verbatim}
+
+Now that we've got this, we do the retrieval:
+
+\begin{verbatim}
+gb_record = ncbi_dict[gi_list[0]]
+\end{verbatim}
+
+In this case, \verb|gb_record| will be GenBank formatted record:
+
+\begin{verbatim}
+LOCUS       AF191665      902 bp    DNA             PLN       07-NOV-1999
+DEFINITION  Opuntia marenae rpl16 gene; chloroplast gene for chloroplast
+            product, partial intron sequence.
+ACCESSION   AF191665
+VERSION     AF191665.1  GI:6273291
+...
+\end{verbatim}
+
+In this case, we are just getting the raw records. We can also pass these records directly into a parser and return the parsed record. For instance, if we wanted to get back SeqRecord objects with the GenBank file parsed into SeqFeature objects we would need to create the dictionary with the GenBank FeatureParser:
+
+\begin{verbatim}
+record_parser = GenBank.FeatureParser()
+ncbi_dict = GenBank.NCBIDictionary(parser = record_parser)
+\end{verbatim}
+
+Now retrieving a record will give you a SeqRecord object instead of the raw record:
+
+\begin{verbatim}
+>>> gb_seqrecord = ncbi_dict[gi_list[0]]
+>>> print gb_seqrecord
+<Bio.SeqRecord.SeqRecord instance at 0x102f9404>
+\end{verbatim}
+
+For more information of formats you can parse GenBank records into, please see section~\ref{sec:gb-parsing}.
+
+
+Using these automated query retrieval functionality is a big plus over doing things by hand. Additionally, the retrieval has nice built in features like a time-delay, which will prevent NCBI from getting mad at you and blocking your access.
+
+\subsection{Parsing GenBank records}
+\label{sec:gb-parsing}
+
+While GenBank files are nice and have lots of information, at the same time you probably only want to extract a small amount of that information at a time. The key to doing this is parsing out the information. Biopython provides GenBank parsers which help you accomplish this task. Right now the GenBank module provides the following parsers:
+
+\begin{enumerate}
+  \item RecordParser -- This parses the raw record into a GenBank specific Record object. This object models the information in a raw record very closely, so this is good to use if you are just interested in GenBank records themselves.
+
+  \item FeatureParser -- This parses the raw record in a SeqRecord object with all of the feature table information represented in SeqFeatures (see section~\ref{sec:advanced-seq} for more info on these objects). This is best to use if you are interested in getting things in a more standard format.
+\end{enumerate}
+
+Either way you chose to go, the most common usage of these will be creating an iterator and parsing through a file on GenBank records. Doing this is very similar to how things are done in other formats, as the following code demonstrates:
+
+\begin{verbatim}
+from Bio import GenBank
+
+gb_file = "my_file.gb"
+gb_handle = open(gb_file, 'r')
+
+feature_parser = GenBank.FeatureParser()
+
+gb_iterator = GenBank.Iterator(gb_handle, feature_parser)
+
+while 1:
+   cur_record = gb_iterator.next()
+
+   if cur_record is None:
+       break
+
+   # now do something with the record
+   print cur_record.seq
+\end{verbatim}
+
+This just iterates over a GenBank file, parsing it into SeqRecord and SeqFeature objects, and prints out the Seq objects representing the sequences in the record.
+
+
+As with other formats, you have lots of tools for dealing with GenBank records. This should make it possible to do whatever you need to with GenBank.
+
+\subsection{Making your very own GenBank database}
+
+One very cool thing that you can do is set up your own personal GenBank database and access it like a dictionary (this can be extra cool because you can also allow access to these local databases over a network using BioCorba -- see the BioCorba documentation for more information).
+
+
+Making a local database first involves creating an index file, which will allow quick access to any record in the file. To do this, we use the index file function:
+
+\begin{verbatim}
+>>> from Bio import GenBank
+>>> dict_file = 'cor6_6.gb'
+>>> index_file = 'cor6_6.idx'
+>>> GenBank.index_file(dict_file, index_file)
+\end{verbatim}
+
+This will create the file \verb|my_index_file.idx|. Now, we can use this index to create a dictionary object that allows individual access to every record. Like the Iterator and NCBIDictionary interfaces, we can either get back raw records, or we can pass the dictionary a parser that will parse the records before returning them. In this case, we pass a \verb|FeatureParser| so that when we get a record, then we retrieve a SeqRecord object. 
+
+
+Setting up the dictionary is as easy as one line:
+
+\begin{verbatim}
+>>> gb_dict = GenBank.Dictionary(index_file, GenBank.FeatureParser())
+\end{verbatim}
+
+Now we can deal with this like a dictionary. For instance:
+
+\begin{verbatim}
+>>> len(gb_dict)
+7
+>>> gb_dict.keys()
+['L31939', 'AJ237582', 'X62281', 'AF297471', 'M81224', 'X55053']
+\end{verbatim}
+
+Finally, we retrieve objects using subscripting:
+
+\begin{verbatim}
+>>> gb_dict['AJ237582']
+<Bio.SeqRecord.SeqRecord instance at 0x102fdd8c>
+\end{verbatim}
+
+\section{Dealing with alignments}
 
 It is often very useful to be able to align particular sequences. I do this quite often to get a quick and dirty idea of relationships between sequences. Consequently, it is very nice to be able to quickly write up a python script that does an alignment and gives you back objects that are easy to work with. The alignment related code in Biopython is meant to allow python-level access to alignment programs so that you can run alignments quickly from within scripts.
 
-\subsubsection{Clustalw}
+\subsection{Clustalw}
 \label{sec:align_clustal}
 
 Clustalx (\ahrefurl{\url{http://www-igbmc.u-strasbg.fr/BioInfo/ClustalX/Top.html}}) is a very nice program for doing multiple alignments. Biopython offers access to alignments in clustal format (these normally have a \verb|*.aln| extension) that are produced by Clustalx. It also offers access to clustalw, which the is command line version of clustalx.
@@ -1398,7 +1614,7 @@ This makes it easy to write your alignment back into a file with all of the orig
 
 If you want to do more interesting things with an alignment, the best thing to do is to pass the alignment to an alignment information generating object, such as the SummaryInfo object, described in section~\ref{sec:summary_info}.
 
-\subsubsection{Calculating summary information}
+\subsection{Calculating summary information}
 \label{sec:summary_info}
 
 Once you have an alignment, you are very likely going to want to find out information about it. Instead of trying to have all of the functions that can generate information about an alignment in the alignment object itself, we've tried to separate out the functionality into separate classes, which act on the alignment. 
@@ -1420,7 +1636,7 @@ The \verb|summary_align| object is very useful, and will do the following neat t
   \item Generate information on substitutions in the alignment -- section~\ref{sec:sub_matrix} details using this to generate a substitution matrix.
 \end{enumerate}
 
-\subsubsection{Calculating a quick consensus sequence}
+\subsection{Calculating a quick consensus sequence}
 \label{sec:consensus}
 
 The \verb|SummaryInfo| object, described in section~\ref{sec:summary_info}, provides functionality to calculate a quick consensus of an alignment. Assuming we've got a \verb|SummaryInfo| object called \verb|summary_align| we can calculate a consensus by doing:
@@ -1446,7 +1662,7 @@ You can adjust how \verb|dumb_consensus| works by passing optional parameters:
 \item[the consensus alphabet] This is the alphabet to use for the consensus sequence. If an alphabet is not specified than we will try to guess the alphabet based on the alphabets of the sequences in the alignment.
 \end{description}
 
-\subsubsection{Position Specific Score Matrices}
+\subsection{Position Specific Score Matrices}
 \label{sec:pssm}
 
 Position specific score matrices (PSSMs) summarize the alignment information in a different way than a consensus, and may be useful for different tasks. Basically, a PSSM is a count matrix. For each column in the alignment, the number of each alphabet letters is counted and totaled. The totals are displayed relative to some representative sequence along the left axis. This sequence may be the consesus sequence, but can also be any sequence in the alignment. For instance for the alignment:
@@ -1521,7 +1737,7 @@ You can access any element of the PSSM by subscripting like \verb|your_pssm[sequ
 
 The structure of the PSSM class hopefully makes it easy both to access elements and to pretty print the matrix.
 
-\subsubsection{Information Content}
+\subsection{Information Content}
 \label{sec:getting_info_content}
 
 A potentially useful measure of evolutionary conservation is the information ceontent of a sequence.
@@ -1605,7 +1821,7 @@ info_content = summary_align.information_content(5, 30, log_base = 10
 
 Well, now you are ready to calculate information content. If you want to try applying this to some real life problems, it would probably be best to dig into the literature on information content to get an idea of how it is used. Hopefully your digging won't reveal any mistakes made in coding this function!
 
-\subsubsection{Translating between Alignment formats}
+\subsection{Translating between Alignment formats}
 \label{sec:align_translate}
 
 One thing that you always end up having to do is convert between different formats. Biopython does this using a FormatConverter class for alignment objects. First, let's say we have just parsed an alignment from clustal format into a \verb|ClustalAlignment| object:
@@ -1645,7 +1861,7 @@ The conversion process will, of course, lose information specific to a particula
 
 As more formats are added the converter will be beefed up to read and write all of these different formats.
 
-\subsection{Substitution Matrices}
+\section{Substitution Matrices}
 \label{sec:sub_matrix}
 
 Substitution matrices are an extremely important part of everyday bioinformatics work. They provide the scoring terms for classifying how likely two different residues are to substitute for each other. This is essential in doing sequence comparisons. The book ``Biological Sequence Analysis'' by Durbin et al. provides a really nice introduction to Substitution Matrices and their uses. Some famous substitution matrices are the PAM and BLOSUM series of matrices.
@@ -1653,9 +1869,9 @@ Substitution matrices are an extremely important part of everyday bioinformatics
 
 Biopython provides a ton of common substitution matrices, and also provides functionality for creating your own substitution matrices.
 
-\subsubsection{Using common substitution matrices}
+\subsection{Using common substitution matrices}
 
-\subsubsection{Creating your own substitution matrix from an alignment}
+\subsection{Creating your own substitution matrix from an alignment}
 \label{sec:subs_mat_ex}
 
 A very cool thing that you can do easily with the substitution matrix classes is to create your own substitution matrix from an alignment. To do this, we first need to get a biopython alignment object and then get a summary object to calculate info about the alignment:
@@ -1726,23 +1942,276 @@ T -20 -15 -18   5
 
 Very nice. Now we've got our very own substitution matrix to play with!
 
-\subsection{Classification}
+\section{More Advanced Sequence Classes -- Sequence IDs and Features}
+\label{sec:advanced-seq}
 
-\subsection{BioCorba}
+You read all about the basic Biopython sequence class in section~\ref{sec:sequences}, which described how to do many useful things with just the sequence. Howerver, many times sequences have important additional properties associated with them. This section described how Biopython handles these higher level descriptions of a sequence.
 
-\subsection{Miscellaneous}
+\subsection{Sequence ids and Descriptions -- dealing with SeqRecords}
 
-\subsubsection{Translating a DNA sequence to Protein}
+Immediately above the Sequence class is the SeqRecord class, defined in the \verb|Bio.SeqRecord| module. This class allows higher level features such as ids and features to be associated with the sequence. The class itself is very simple, and offers the following information as attributes:
 
-\section{Advanced}
+\begin{description}
+  \item[seq] -- The sequence itself -- A Bio.Seq object
 
-\subsection{Sequence Class}
+  \item[id] -- The primary id used to identify the sequence. In most cases this is something like an accession number.
 
-\subsection{Regression Testing Framework}
+  \item[name] -- A ``common'' name/id for the sequence. In some cases this will be the same as the accession number, but it could also be a clone name. I think of this as being analagous to the LOCUS id in a GenBank record.
 
-\subsection{Parser Design}
+  \item[description] -- A human readible description or expressive name for the sequence. This is similar to what follows the id information in a FASTA formatted entry.
 
-\subsubsection{Design Overview}
+  \item[annotations] -- A dictionary of additional information about the sequence. The keys are the name of the information, and the information is contained in the value. This allows the addition of more ``unstructed'' information to the sequence.
+
+  \item[features] -- A list of SeqFeature objects with more structured information about the features on a sequence. The structure of SeqFeatures is described below in section~\ref{sec:seq_features}.
+\end{description}
+
+Using a SeqRecord class is not very complicated, since all of the information is stored as attributes of the class. Initializing the class just involves passing a Seq object to the SeqRecord:
+
+\begin{verbatim}
+>>> from Bio.Seq import Seq
+>>> simple_seq = Seq("GATC")
+>>> from Bio.SeqRecord import SeqRecord
+>>> simple_seq_r = SeqRecord(simple_seq)
+\end{verbatim}
+
+Additionally, you can also pass the id, name and description to the initialization function, but if not they will be set as strings indicating they are unknown, and can be modified subsequently:
+
+\begin{verbatim}
+>>> simple_seq_r.id
+'<unknown id>'
+>>> simple_seq_r.id = 'AC12345'
+>>> simple_seq_r.description = 'My little made up sequence I wish I could 
+write a paper about and submit to GenBank'
+>>> print simple_seq_r.description
+My little made up sequence I wish I could write a paper about and submit 
+to GenBank
+>>> simple_seq_r.seq
+Seq('GATC', Alphabet())
+\end{verbatim}
+
+Adding annotations is almost as easy, and just involves dealing directly with the annotation dictionary:
+
+\begin{verbatim}
+>>> simple_seq_r.annotations['evidence'] = 'None. I just made it up.'
+>>> print simple_seq_r.annotations
+{'evidence': 'None. I just made it up.'}
+\end{verbatim}
+
+That's just about all there is to it! Next, you may want to learn about SeqFeatures, which offer an additional structured way to represent information about a sequence.
+
+\subsection{Features and Annotations -- SeqFeatures}
+\label{sec:seq_features}
+
+Sequence features are an essential part of describing a sequence. Once you get beyond the sequence itself, you need some way to organize and easily get at the more ``abstract'' information that is known about the sequence. While it is probably impossible to develop a general sequence feature class that will cover everything, the Biopython SeqFeature class attempts to encapsulate as much of the information about the sequence as possible. The design is heavily based on the GenBank/EMBL feature tables, so if you understand how they look, you'll probably have an easier time grasping the structure of the Biopython classes.
+
+\subsubsection{SeqFeatures themselves}
+
+The first level of dealing with Sequence features is the SeqFeature class itself. This class has a number of attributes, so first we'll list them and there general features, and then work through an example to show how this applies to a real life example, a GenBank feature table. The attributes of a SeqFeature are:
+
+\begin{description}
+  \item[location] -- The location of the SeqFeature on the sequence that you are dealing with. The locations end-points may be fuzzy -- section~\ref{sec:locations} has a lot more description on how to deal with descriptions.
+
+  \item[type] -- This is a textual description of the type of feature (for instance, this will be something like 'CDS' or 'gene').
+
+  \item[ref] -- A reference to a different sequence. Some times features may be ``on'' a particular sequence, but may need to refer to a different sequence, and this provides the reference (normally an accession number). A good example of this is a genomic sequence that has most of a coding sequence, but one of the exons is on a different accession. In this case, the feature would need to refer to this different accession for this missing exon.
+
+  \item[ref\_db] -- This works along with \verb|ref| to provide a cross sequence reference. If there is a reference, \verb|ref_db| will be set as None if the reference is in the same database, and will be set to the name of the database otherwise.
+
+  \item[strand] -- The strand on the sequence that the feature is located on. This may either be '1' for the top strand, '-1' for the bottom strand, or '0' for both strands (or if it doesn't matter). Keep in mind that this only really makes sense for double stranded DNA, and not for proteins or RNA. 
+
+  \item[qualifiers] -- This is a python dictionary of additional information about the feature. The key is some kind of terse one-word description of what the information contained in the value is about, and the value is the actual information. For example, a common key for a qualifier might be ``evidence'' and the value might be ``computational (non-experimental).'' This is just a way to let the person who is looking at the feature know that it has not be experimentally (ie. in a wet lab) confirmed.
+  
+  \item[sub\_features] -- A very important feature of a feature is that it can have additional \verb|sub_features| underneath it. This allows nesting of features, and helps us to deal with things such as the GenBank/EMBL feature lines in a (we hope) intuitive way.
+\end{description}
+
+To show an example of SeqFeatures in action, let's take a look at the following feature from a GenBank feature table:
+
+\begin{verbatim}
+     mRNA            complement(join(<49223..49300,49780..>50208))
+                     /gene="F28B23.12"
+\end{verbatim}
+
+To look at the easiest attributes of the SeqFeature first, if you got a SeqFeature object for this it would have it \verb|type| of 'mRNA', a \verb|strand| of -1 (due to the 'complement'), and would have None for the \verb|ref| and \verb|ref_db| since there are no references to external databases. The \verb|qualifiers| for this SeqFeature would be a python dictionarary that looked like \verb|{'gene' : 'F28B23.12'}|.
+
+
+Now lets, look at the more tricky part, how the 'join' in the location line is handled. First, the location for the top level SeqFeature (the one we are dealing with right now) is set as going from '<49223' to '>50208' (see section~\ref{sec:locations} for the nitty gritty on how fuzzy locations like this are handled). So the location of the top level object is the entire span of the feature. So, how do you get at the information in the 'join?' Well, that is where the \verb|sub_features| go in.
+
+
+The \verb|sub_features| attribute will have a list with two SeqFeature objects in it, and these contain the information in the join. Let's look at \verb|top_level_feature.sub_features[0]|; the first \verb|sub_feature|). This object is a SeqFeature object with a \verb|type| of '\verb|mRNA_join|,' a \verb|strand| of -1 (inherited from the parent SeqFeature) and a location going from '<49223' to '49300'. 
+
+
+So, the \verb|sub_features| allow you to get at the internal information if you want it (ie. if you were trying to get only the exons out of a genomic sequence), or just to deal with the broad picture (ie. you just want to know that the coding sequence for a gene lies in a region). Hopefully this structuring makes it easy and intuitive to get at the sometimes complex information that can be contained in a SeqFeature.
+
+\subsubsection{Locations}
+\label{sec:locations}
+
+In the section on SeqFeatures above, we skipped over one of the more difficult parts of Features, dealing with the locations. The reason this can be difficult is because of fuzziness of the positions in locations. Before we get into all of this, let's just define the vocabulary we'll use to talk about this. Basically there are two terms we'll use:
+
+\begin{description}
+  \item[position] -- This refers to a single position on a sequence, which may be fuzzy or not. For instance, 5, 20, <100 and 3\^5 are all positions.
+
+  \item[location] -- A location is two positions that defines a region of a sequence. For instance 5..20 (ie. 5 to 20) is a location.
+\end{description}
+
+I just mention this because sometimes I get confused between the two.
+
+
+The complication in dealing with locations comes in the positions themselves. In biology many times things aren't entirely certain (as much as us wet lab biologists try to make them certain!). For instance, you might do a dinucleotide priming experiment and discover that the start of mRNA transcript starts at one of two sites. This is very useful information, but the complication comes in how to represent this as a position. To help us deal with this, we have the concept of fuzzy positions. Basically there are five types of fuzzy positions, so we have five classes do deal with them:
+
+\begin{description}
+  \item[ExactPosition] -- As its name suggests, this class represents a position which is specified as exact along the sequence. This is represented as just a a number, and you can get the position by looking at the \verb|position| attribute of the object.
+
+  \item[BeforePosition] -- This class represents a fuzzy position that occurs prior to some specified site. In GenBank/EMBL notation, this is represented as something like '<13', signifying that the real position is located somewhere less then 13. To get the specified upper boundary, look at the \verb|position| attribute of the object.
+
+  \item[AfterPosition] -- Contrary to \verb|BeforePosition|, this class represents a position that occurs after some specified site. This is represented in GenBank as '>13', and like \verb|BeforePosition|, you get the boundary number by looking at the \verb|position| attribute of the object.
+
+  \item[WithinPosition] -- This class models a position which occurs somewhere between two specified nucleotides. In GenBank/EMBL notation, this would be represented as '(1.5)', to represent that the position is somewhere within the range 1 to 5. To get the information in this class you have to look at two attributes. The \verb|position| attribute specifies the lower boundary of the range we are looking at, so in our example case this would be one. The \verb|extension| attribute specifies the range to the higher boundary, so in this case it would be 4. So \verb|object.position| is the lower boundary and \verb|object.position + object.extension| is the upper boundary.
+
+  \item[BetweenPosition] -- This class deals with a position that occurs between two coordinates. For instance, you might have a protein binding site that occurs between two nucleotides on a sequence. This is represented as '2\^3', which indicates that the real position happens between position 2 and 3. Getting this information from the object is very similar to \verb|WithinPosition|, the \verb|position| attribute specifies the lower boundary (2, in this case) and the \verb|extension| indicates the range to the higher boundary (1 in this case).
+\end{description}
+
+Now that we've got all of the types of fuzzy positions we can have taken care of, we are ready to actually specify a location on a sequence. This is handled by the \verb|FeatureLocation| class. An object of this type basically just holds the potentially fuzzy start and end positions of a feature. You can create a \verb|FeatureLocation| object by creating the positions and passing them in:
+
+\begin{verbatim}
+>>> from Bio import SeqFeature
+>>> start_pos = SeqFeature.AfterPosition(5)
+>>> end_pos = SeqFeature.BetweenPosition(8, 9)
+>>> my_location = SeqFeature.FeatureLocation(start_pos, end_pos)
+\end{verbatim}
+
+If you print out a \verb|FeatureLocation| object, you can get a nice representation of the information:
+
+\begin{verbatim}
+>>> print my_location
+(>5..(8^9))
+\end{verbatim}
+
+We can access the fuzzy start and end positions using the start and end attributes of the location:
+
+\begin{verbatim}
+>>> my_location.start
+<Bio.SeqFeature.AfterPosition instance at 0x101d7164>
+>>> print my_location.start
+>5
+>>> print my_location.end
+(8^9)
+\end{verbatim}
+
+If you don't want to deal with fuzzy positions and just want numbers, you just need to ask for the \verb|nofuzzy_start| and \verb|nofuzzy_end| attributes of the location:
+
+\begin{verbatim}
+>>> my_location.nofuzzy_start 
+5
+>>> my_location.nofuzzy_end
+8
+\end{verbatim}
+
+Notice that this just gives you back the position attributes of the fuzzy locations.
+
+
+Similary, to make it easy to create a position without worrying about fuzzy positions, you can just pass in numbers to the \verb|FeaturePosition| constructors, and you'll get back out \verb|ExactPosition| objects:
+
+\begin{verbatim}
+>>> exact_location = SeqFeature.FeatureLocation(5, 8)
+>>> print exact_location
+(5..8)
+>>> exact_location.start
+<Bio.SeqFeature.ExactPosition instance at 0x101dcab4>
+\end{verbatim}
+
+That is all of the nitty gritty about dealing with fuzzy positions in Biopython. It has been designed so that dealing with fuzziness is not that much more complicated than dealing with exact positions, and hopefully you find that true!
+ 
+\subsubsection{References}
+
+Another common annotation related to a sequence is a reference to a journal or other published work dealing with the sequence. We have a fairly simple way of representing a Reference in Biopython -- we have a \verb|Bio.SeqFeature.Reference| class that stores the relevant information about a reference as attributes of an object.
+
+
+The attributes include things that you would expect to see in a reference like \verb|journal|, \verb|title| and \verb|authors|. Additionally, it also can hold the \verb|medline_id| and \verb|pubmed_id| and a \verb|comment| about the reference. These are all accessed simply as attributes of the object.
+
+
+A reference also has a \verb|location| object so that it can specify a particular location on the sequence that the reference refers to. For instance, you might have a journal that is dealing with a particular gene located on a BAC, and want to specify that it only refers to this position exactly. The \verb|location| is a potentially fuzzy location, as described in section~\ref{sec:locations}.
+
+
+That's all there is too it. References are meant to be easy to deal with, and hopefully general enough to cover lots of usage cases.
+
+\section{Classification}
+
+\section{BioCorba}
+
+Biocorba does some cool stuff with CORBA. Basically, it allows you to easily interact with code written in other languages, including Perl and Java. This is all done through an interface which is very similar to the standard biopython interface. Much work has been done to make it easy to use knowing only very little about CORBA. You should check out the biocorba specific documentation, which describes in detail how to use it.
+
+\section{Miscellaneous}
+
+\subsection{Translating a DNA sequence to Protein}
+
+\chapter{Advanced}
+
+\section{Sequence Class}
+
+\section{Regression Testing Framework}
+\label{sec:regr_test}
+
+Biopython has a regression testing framework donated by AndrewDalke which helps us make sure the code is as bug-free as possible before going out.
+
+\subsection{Writing a Regression Test}
+
+Every module that goes into Biopython should have a test (and should also have documentation!) in the regression test. Let's say you've written a new module called Biospam -- here is what you should do to make a regression test:
+
+\begin{enumerate}
+  \item Write a script called \verb|test_Biospam.py|
+
+  \begin{itemize}
+
+    \item This script should live in the Tests directory
+       
+     \item The script should test all of the important functionality of the module (the more you test the better your test is, of course!).
+  \end{itemize}
+       
+  \item If the script requires files to do the testing, these should go in
+       the directory Tests/Biospam.
+       
+  \item Write out the test output and verify the output to be correct. 
+       There are two ways to do this:
+
+  \begin{enumerate}
+    \item The long way:
+
+    \begin{itemize}
+       
+     \item Run the script and write its output to a file. On UNIX machines,
+       you would do something like: \verb|python test_Biospam.py > test_Biospam| which would write the output to the file \verb|test_Biospam|.
+       
+     \item Manually look at the file \verb|test_Biospam| to make sure the output is correct. When you are sure it is all right and there are no bugs, you need to quickly edit the \verb|test_Biospam| file so that the first line is: '\verb|test_Biospam|' (no quotes).
+
+     \item copy the \verb|test_Biospam| file to the directory Tests/output
+     
+   \end{itemize}
+
+   \item The quick way:
+
+   \begin{itemize}
+      \item Run \verb|python br_regrtest.py -g test_Biospam.py|. The
+            regression testing framework is nifty enough that it'll put
+            the output in the right place in just the way it likes it.   
+       
+       \item Go to the output (which should be in \verb|Tests/output/test_Biospam|) and double check the output to make sure it is all correct. 
+
+   \end{itemize}
+
+ \end{enumerate}
+       
+ \item Now change to the Tests directory and run the regression tests
+       with \verb|python br_regrtest.py|. This will run all of the tests, and
+       you should see your test run (and pass!).
+       
+  \item That's it! Now you've got a nice test for your module.
+       Congratulations!
+\end{enumerate}
+
+
+\section{Parser Design}
+
+\subsection{Design Overview}
 
 Parsers are built around an event-oriented design that includes
 Scanner and Consumer objects.
@@ -1760,7 +2229,7 @@ Following the previous example, the consumer receives the
 \verb|organism_name| event, and the processes it in whatever manner
 necessary in the current application.
 
-\subsubsection{Events}
+\subsection{Events}
 
 There are two types of events: info events that tag the location of
 information within a data stream, and section events that mark
@@ -1803,7 +2272,7 @@ The events a scanner can send must be specifically defined for each
 data format.
 
 
-\subsubsection{'noevent' EVENT}
+\subsection{'noevent' EVENT}
 
 A data file can contain lines that have no meaningful information,
 such as blank lines.  By convention, a scanner should generate the
@@ -1812,7 +2281,7 @@ such as blank lines.  By convention, a scanner should generate the
 
 
 
-\subsubsection{Scanners}
+\subsection{Scanners}
 
 \begin{verbatim}
 class Scanner:
@@ -1825,7 +2294,7 @@ Scanners should implement a method named 'feed' that takes a file
 handle and a consumer.  The scanner should read data from the file
 handle and generate appropriate events for the consumer.
 
-\subsubsection{Consumers}
+\subsection{Consumers}
 
 \begin{verbatim}
 class Consumer:
@@ -1862,7 +2331,7 @@ class FASTAConsumer(Consumer):
 \end{verbatim}
 
 
-\subsubsection{BLAST}
+\subsection{BLAST}
 
 BLAST Scanners produce the following events:
 
@@ -1935,7 +2404,7 @@ parameters
     blast_cutoff
 \end{verbatim}
 
-\subsubsection{Enzyme}
+\subsection{Enzyme}
 The Enzyme Scanner produces the following events:
 \begin{verbatim}
 record
@@ -1951,7 +2420,7 @@ record
     terminator
 \end{verbatim}
 
-\subsubsection{Fasta}
+\subsection{Fasta}
 The Fasta Scanner produces the following events:
 \begin{verbatim}
 sequence
@@ -1960,7 +2429,7 @@ sequence
 \end{verbatim}
 
 
-\subsubsection{Medline}
+\subsection{Medline}
 The Online Services Reference Manual documents the MEDLINE format at:
 \ahrefurl{\url{http://www.nlm.nih.gov/pubs/osrm_nlm.html}}
 
@@ -2016,7 +2485,7 @@ undefined is a special event that is called for every line with a
 qualifier not defined in the specification.
 
 
-\subsubsection{Prosite}
+\subsection{Prosite}
 The Prosite scanner produces the following events:
 \begin{verbatim}
 copyrights
@@ -2047,7 +2516,7 @@ record
 \end{verbatim}
 
 
-\subsubsection{SWISS-PROT}
+\subsection{SWISS-PROT}
 The SProt Scanner produces the following events:
 \begin{verbatim}
 record
@@ -2085,9 +2554,9 @@ footer
     copyright
 \end{verbatim}
 
-\subsection{Substitution Matrices}
+\section{Substitution Matrices}
 
-\subsubsection{SubsMat}
+\subsection{SubsMat}
 
 This module provides a class and a few routines for generating substitution matrices, similar to BLOSUM or PAM matrices, but based on user-provided data.
 
@@ -2305,7 +2774,7 @@ make_log_odds_matrix(acc_rep_mat,exp_freq_table=None,logbase=10,
 
 \end{enumerate}
 
-\subsubsection{FreqTable}
+\subsection{FreqTable}
 \label{sec:freq_table}
 
 \begin{verbatim}
@@ -2390,13 +2859,9 @@ Any one of the following may be done to geerate the frequency table (ftab):
 
 \end{enumerate}
 
-\section{Biocorba}
+\chapter{Where to go from here -- contributing to Biopython}
 
-Biocorba does some cool stuff with CORBA. You should check out the biocorba specific documentation.
-
-\section{Where to go from here -- contributing to Biopython}
-
-\subsection{Maintaining a distribution for a platform}
+\section{Maintaining a distribution for a platform}
 \label{sec:maintain_dist}
 
 We try to release Biopython to make it as easy to install as possible for users. Thus, we try to provide the Biopython libraries in as many install formats as we can. Doing this from release to release can be a lot of work for developers, and sometimes requires them to maintain packages they are not all that familiar with. This section is meant to provide tips to encourage other people besides developers to maintain platform builds.
@@ -2433,12 +2898,37 @@ python setup.py bdist_wininst
 
 Now you've got a Windows installer. Congrats!
 
+\item[Macintosh] -- We would love to find someone who wants to maintain a Macintosh distribution, and make it available in a Macintosh friendly format like bin-hex. This would basically include finding a way to compile everything on the Mac, making sure all of the code written by us UNIX-based developers works well on the Mac, and providing any Mac-friendly hints for us.
+
 \end{description}
 
 Once you've got a package, please test it on your system to make sure it installs everything in a good way and seems to work properly. Once you feel good about it, send it off to one of the biopython developers (write to our main list serve at biopython@biopython.org if you're not sure who to send it to) and you've done it. Thanks!
 
-\subsection{Bug Reports + Feature Requests}
+\section{Bug Reports + Feature Requests}
 
-\subsection{Contributing Code}
+Getting feedback on the Biopython modules is very important to us. Open-source projects like this benefit greatly from feedback, bug-reports (and patches!) from a wide variety of contributors.
 
+
+The main forums for discussing feature requests and potential bugs are the biopython development lists:
+
+\begin{itemize}
+  \item \mailto{biopython@biopython.org} -- An unmoderated list for discussion of anything to do with biopython.
+
+  \item \mailto{biopython-dev@biopython.org} -- A more development oriented list that is mainly used by developers (but anyone is free to contribute!).
+\end{itemize}
+
+Additionally, if you think you've found a bug, you can submit it to our bug-tracking page at \ahrefurl{\url{http://www.biopython.org/biopython-bugs/}}. This way, it won't get buried in anyone's Inbox and forgotten about.
+
+\section{Contributing Code}
+
+There are no barriers to joining biopython code development other than an interest in creating biology-related code in python. The best place to express an interest is on the biopython mailing lists -- just let us know you are interested in coding and what kind of stuff you want to work on. Normally, we try to have some discussion on modules before coding them, since that helps generate good ideas -- then just feel free to jump right in and start coding!
+
+
+The main biopython release tries to be fairly uniform and interworkable, to make it easier for users. You can read about some of (fairly informal) coding style guidelines we try to use in biopython on the wiki site at \ahrefurl{\url{http://biopython.org/wiki/html/BioPython/PythonStyle.html}}. We also try to add code to the distribution along with tests (see section~\ref{sec:regr_test} for more info on the regression testing framework) and documentation, so that everything can stay as workable and well documented as possible. This is, of course, the most ideal situation, under many situations you'll be able to find other people on the list who will be willing to help add documentation or more tests for your code once you make it available. So, to end this paragraph like the last, feel free to start working!
+
+
+Additionally, if you have code that you don't think fits in the distribution, but that you want to make available, we maintain Script Central (\ahrefurl{\url{http://biopython.org/ScriptCentral.shtml}}) which has pointers to freely available code in python for bioinformatics. Just let us know on the mailing list, and we'll be happy to add links to your code.
+
+
+Hopefully this documentation has got you excited enough about biopython to try it out (and most importantly, contribute!). Thanks for reading all the way through!
 \end{document}
