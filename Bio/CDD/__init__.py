@@ -19,7 +19,6 @@ from xml.sax import handler
 import Martel
 from Martel import RecordReader
 
-from Bio.RecordFile import RecordFile
 from Bio.FilteredReader import FilteredReader
 from Bio.FilteredReader import remove_empty_line
 from Bio.FilteredReader import remove_leading_whitespace

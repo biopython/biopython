@@ -5,7 +5,6 @@ import os
 import sys
 
 import Bio.CDD
-from Bio.RecordFile import RecordFile
 from Bio.FilteredReader import FilteredReader
 from Bio.FilteredReader import remove_empty_line
 from Bio.FilteredReader import remove_leading_whitespace

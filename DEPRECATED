@@ -16,6 +16,14 @@ interface. We recommend using LIBSVM:
 
 http://www.csie.ntu.edu.tw/~cjlin/libsvm/
 
+Bio.RecordFile
+==============
+Deprecated as of Release 1.30.
+RecordFile wasn't completely implemented and duplicates the work 
+of most standard parsers. We recommend using a specific iterator 
+(Bio.Fasta.Iterator for example) without a parser to get back
+text records.
+
 Bio.kMeans and Bio.xkMeans
 ==========================
 Deprecated as of Release 1.30.

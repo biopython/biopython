@@ -27,7 +27,6 @@ import random
 from urllib import FancyURLopener
 from urllib import urlencode
 
-from Bio.RecordFile import RecordFile
 from Bio.SGMLExtractor import SGMLExtractorHandle
 from Bio.NetCatch import NetCatch
 from Bio.NetCatch import ExtractUrls
