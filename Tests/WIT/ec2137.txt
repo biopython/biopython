@@ -1,0 +1,19 @@
+ENTRY       EC <A HREF="http://www.genome.ad.jp/dbget-bin/www_bget?ec:2.1.3.7">2.1.3.7</A>
+NAME        3-Hydroxymethylcephem carbamoyltransferase
+CLASS       Transferases
+            Transferring one-carbon groups
+            Carboxyl- and carbamoyltransferases
+SYSNAME     Carbamoyl-phosphate:3-hydroxymethylceph-3-em-4-carboxylate
+            $ carbamoyltransferase
+REACTION    Carbamoyl phosphate + a 3-Hydroxymethyl ceph-3-em-4-carboxylate =
+            Orthophosphate + a 3-Carbamoyloxymethylcephem
+SUBSTRATE   Carbamoyl phosphate
+            3-Hydroxymethyl ceph-3-em-4-carboxylate
+PRODUCT     Orthophosphate
+            3-Carbamoyloxymethylcephem
+EFFECTOR    ATP
+COMMENT     Acts on a wide range of 3-hydroxymethylcephems (a subclass of the
+            cephalosporin antibiotics). Activated by ATP.
+DBLINKS     University of Geneva ENZYME DATA BANK: 2.1.3.7
+            WIT (What Is There) Metabolic Reconstruction: 2.1.3.7
+///

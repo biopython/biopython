@@ -1,0 +1,16 @@
+ENTRY       EC <A HREF="http://www.genome.ad.jp/dbget-bin/www_bget?ec:3.3.2.5">3.3.2.5</A>
+NAME        Alkenylglycerophosphoethanolamine hydrolase
+CLASS       Hydrolases
+            Acting on ether bonds
+            Ether hydrolases
+SYSNAME     1-(1-Alkenyl)-sn-glycero-3-phosphoethanolamine aldehydohydrolase
+REACTION    1-(1-Alkenyl)-sn-glycero-3-phosphoethanolamine + H2O =
+            an Aldehyde + sn-Glycero-3-phosphoethanolamine
+SUBSTRATE   1-(1-Alkenyl)-sn-glycero-3-phosphoethanolamine
+            H2O
+PRODUCT     Aldehyde
+            sn-Glycero-3-phosphoethanolamine
+PATHWAY     PATH: MAP00561  Glycerolipid metabolism
+DBLINKS     University of Geneva ENZYME DATA BANK: 3.3.2.5
+            WIT (What Is There) Metabolic Reconstruction: 3.3.2.5
+///

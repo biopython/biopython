@@ -1,0 +1,17 @@
+ENTRY       EC <A HREF="http://www.genome.ad.jp/dbget-bin/www_bget?ec:2.2.1.4">2.2.1.4</A>
+NAME        Acetoin--ribose-5-phosphate transaldolase
+            1-Deoxy-D-altro-heptulose-7-phosphate synthetase
+CLASS       Transferases
+            Transferring aldehyde or ketone residues
+SYSNAME     3-Hydroxybutan-2-one:D-ribose-5-phosphate aldehydetransferase
+REACTION    3-Hydroxybutan-2-one + D-Ribose 5-phosphate = Acetaldehyde +
+            1-Deoxy-D-altro-heptulose 7-phosphate
+SUBSTRATE   3-Hydroxybutan-2-one
+            D-Ribose 5-phosphate
+PRODUCT     Acetaldehyde
+            1-Deoxy-D-altro-heptulose 7-phosphate
+COFACTOR    Thiamine diphosphate
+COMMENT     A thiamine-diphosphate protein.
+DBLINKS     University of Geneva ENZYME DATA BANK: 2.2.1.4
+            WIT (What Is There) Metabolic Reconstruction: 2.2.1.4
+///

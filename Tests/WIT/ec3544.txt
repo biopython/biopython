@@ -1,0 +1,29 @@
+ENTRY       EC <A HREF="http://www.genome.ad.jp/dbget-bin/www_bget?ec:3.5.4.4">3.5.4.4</A>
+NAME        Adenosine deaminase
+CLASS       Hydrolases
+            Acting on carbon-nitrogen bonds, other than peptide bonds
+            In cyclic amidines
+SYSNAME     Adenosine aminohydrolase
+REACTION    Adenosine + H2O = Inosine + NH3
+SUBSTRATE   Adenosine
+            H2O
+PRODUCT     Inosine
+            NH3
+INHIBITOR   Nebularine
+            6-Hydroxyl-1,6-dihydropurine ribonucleoside
+COMMENT     Inhibited by Nebularine and 6-hydroxyl-1,6-dihydropurine
+            ribonucleoside (Science (1989) 243, 1591-1593).
+PATHWAY     PATH: MAP00230  Purine metabolism
+DISEASE     MIM: 102700  Adenosine deaminase; Severe combined immunodeficiency
+                         due to ADA deficiency (3); Hemolytic anemia due to ADA
+                         excess (1)
+MOTIF       PS: PS00485  S-[LIVM]-[NS]-T-D-D-P
+GENES       ECO: ECOLI_1582(add)
+            SCE: YNL141W(N1208)
+            HSA: 119649(ADA)
+DBLINKS     University of Geneva ENZYME DATA BANK: 3.5.4.4
+            WIT (What Is There) Metabolic Reconstruction: 3.5.4.4
+            SCOP (Structural Classificaion of Proteins): 3.5.4.4
+            PDB: 1ADD    1FKW    1FKX    2ADA    
+            PIR: DUMSA   DUHUA   A37943  
+///

@@ -1,0 +1,18 @@
+ENTRY       EC <A HREF="http://www.genome.ad.jp/dbget-bin/www_bget?ec:4.4.1.6">4.4.1.6</A>
+NAME        S-Alkylcysteine lyase
+CLASS       Lyases
+            Carbon-sulfur lyases
+SYSNAME     S-Alkyl-L-cysteine alkylthiol-lyase (deaminating)
+REACTION    an S-Alkyl-L-cysteine + H2O = an Alkyl thiol + NH3 + Pyruvate
+SUBSTRATE   S-Alkyl-L-cysteine
+            H2O
+PRODUCT     Alkyl thiol
+            NH3
+            Pyruvate
+COFACTOR    Pyridoxal phosphate
+COMMENT     A pyridoxal-phosphate protein. Decomposes S-alkyl-L-cysteines by
+            alpha,beta-elimination. Possibly identical, in yeast, with
+            EC 4.4.1.8.
+DBLINKS     University of Geneva ENZYME DATA BANK: 4.4.1.6
+            WIT (What Is There) Metabolic Reconstruction: 4.4.1.6
+///

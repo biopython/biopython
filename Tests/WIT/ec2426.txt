@@ -1,0 +1,32 @@
+ENTRY       EC <A HREF="http://www.genome.ad.jp/dbget-bin/www_bget?ec:2.4.2.6">2.4.2.6</A>
+NAME        Nucleoside deoxyribosyltransferase
+CLASS       Transferases
+            Glycosyltransferases
+            Pentosyltransferases
+SYSNAME     Nucleoside:purine(pyrimidine) deoxy-D-ribosyltransferase
+REACTION    2-Deoxy-D-ribosyl-base1 + Base2 = 2-Deoxy-D-ribosyl-base2 + Base1
+SUBSTRATE   2-Deoxy-D-ribosyl-base1
+            Base2
+            Deoxyadenosine
+            Deoxyguanosine
+            Deoxycytidine
+            Deoxythymidine
+            Adenine
+            Guanine
+            Cytosine
+            Thymine
+PRODUCT     2-Deoxy-D-ribosyl-base2
+            Base1
+            Deoxyadenosine
+            Deoxyguanosine
+            Deoxycytidine
+            Deoxythymidine
+            Adenine
+            Guanine
+            Cytosine
+            Thymine
+COMMENT     Base1 and base2 represent various purines and pyrimidines.
+PATHWAY     PATH: MAP00240  Pyrimidine metabolism
+DBLINKS     University of Geneva ENZYME DATA BANK: 2.4.2.6
+            WIT (What Is There) Metabolic Reconstruction: 2.4.2.6
+///

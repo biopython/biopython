@@ -1,0 +1,17 @@
+ENTRY       EC <A HREF="http://www.genome.ad.jp/dbget-bin/www_bget?ec:3.2.2.4">3.2.2.4</A>
+NAME        AMP nucleosidase
+CLASS       Hydrolases
+            Glycosidases
+            Hydrolysing N-glycosyl compounds
+SYSNAME     AMP phosphoribohydrolase
+REACTION    AMP + H2O = Adenine + D-Ribose 5-phosphate
+SUBSTRATE   AMP
+            H2O
+PRODUCT     Adenine
+            D-Ribose 5-phosphate
+PATHWAY     PATH: MAP00230  Purine metabolism
+GENES       ECO: ECOLI_1933(amn)
+DBLINKS     University of Geneva ENZYME DATA BANK: 3.2.2.4
+            WIT (What Is There) Metabolic Reconstruction: 3.2.2.4
+            PIR: A33364  
+///

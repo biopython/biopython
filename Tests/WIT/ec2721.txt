@@ -1,0 +1,29 @@
+ENTRY       EC <A HREF="http://www.genome.ad.jp/dbget-bin/www_bget?ec:2.7.2.1">2.7.2.1</A>
+NAME        Acetate kinase
+            Acetokinase
+CLASS       Transferases
+            Transferring phosphorus-containing groups
+            Phosphotransferases with a carboxyl group as acceptor
+SYSNAME     ATP:acetate phosphotransferase
+REACTION    ATP + Acetate = ADP + Acetyl phosphate
+SUBSTRATE   ATP
+            Acetate
+            Propanoate
+PRODUCT     ADP
+            Acetyl phosphate
+            Propanoyl phosphate
+COMMENT     Propanoate also acts as acceptor, but more slowly.
+PATHWAY     PATH: MAP00620  Pyruvate metabolism
+            PATH: MAP00640  Propanoate metabolism
+MOTIF       PS: PS01075  [LIVM](2)-x-[LIVM]-N-x-G-S-[ST]-S-x-K
+            PS: PS01076  [LIVMA](2)-x(2)-H-x-G-x-G-x-S-[LIVM]-x-[AV]-x(3)-G
+GENES       ECO: ECOLI_2245(ackA)
+            HIN: HI1204(ackA)
+            BSU: ackA
+            MGE: MG357(ackA)
+            MPN: G12_orf390(ackA)
+            SYN: sll1299(ackA)
+DBLINKS     University of Geneva ENZYME DATA BANK: 2.7.2.1
+            WIT (What Is There) Metabolic Reconstruction: 2.7.2.1
+            PIR: B49338  B49935  E64239  KIECAA  
+///

@@ -1,0 +1,32 @@
+ENTRY       EC <A HREF="http://www.genome.ad.jp/dbget-bin/www_bget?ec:6.3.4.4">6.3.4.4</A>
+NAME        Adenylosuccinate synthase
+            IMP--aspartate ligase
+CLASS       Ligases
+            Forming carbon-nitrogen bonds
+            Other carbon--nitrogen ligases
+SYSNAME     IMP:L-aspartate ligase (GDP-forming)
+REACTION    GTP + IMP + L-Aspartate = GDP + Orthophosphate +
+            N6-(1,2-Dicarboxyethyl)-AMP
+SUBSTRATE   GTP
+            IMP
+            L-Aspartate
+PRODUCT     GDP
+            Orthophosphate
+            N6-(1,2-Dicarboxyethyl)-AMP
+PATHWAY     PATH: MAP00230  Purine metabolism
+            PATH: MAP00252  Alanine and Aspartate metabolism
+DISEASE     MIM: 103060  Adenylosuccinate synthetase (Ade(-)H-complementing)
+MOTIF       PS: PS00513  G-I-[GR]-P-x-Y-x(2)-K-x(2)-R
+GENES       ECO: ECOLI_4060(purA)
+            HIN: HI1633(purA)
+            BSU: purA
+            MJA: MJ0561
+            SYN: sll1823(purA)
+            SCE: YNL220W(ADE12)
+            HSA: 119656(ADSS)
+DBLINKS     University of Geneva ENZYME DATA BANK: 6.3.4.4
+            WIT (What Is There) Metabolic Reconstruction: 6.3.4.4
+            PDB: 1ADE    1ADI    1GIN    1HON    1HOO    1HOP    
+            PIR: A53162  A64370  AJDODS  AJECDS  AJMSDS  S48515  A45027  
+                 S56402  
+///

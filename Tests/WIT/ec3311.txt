@@ -1,0 +1,25 @@
+ENTRY       EC <A HREF="http://www.genome.ad.jp/dbget-bin/www_bget?ec:3.3.1.1">3.3.1.1</A>
+NAME        Adenosylhomocysteinase
+CLASS       Hydrolases
+            Acting on ether bonds
+            Thioether hydrolases
+SYSNAME     S-Adenosyl-L-homocysteine hydrolase
+REACTION    S-Adenosyl-L-homocysteine + H2O = Adenosine + L-Homocysteine
+SUBSTRATE   S-Adenosyl-L-homocysteine
+            H2O
+PRODUCT     Adenosine
+            L-Homocysteine
+PATHWAY     PATH: MAP00271  Methionine metabolism
+            PATH: MAP00450  Selenoamino acid metabolism
+DISEASE     MIM: 180960  S-adenosylhomocysteine hydrolase
+MOTIF       PS: PS00738  C-N-I-[FY]-S-[ST]-Q-[DEN]-x-A-A-A-A-I-A
+            PS: PS00739  G-K-x(3)-[LIV]-x-G-Y-G-D-V-G-K-G
+GENES       MJA: MJ1388
+            SYN: sll1234(ahcY)
+            SCE: YER043C(SAH1)
+            HSA: 118983(AHCY)
+DBLINKS     University of Geneva ENZYME DATA BANK: 3.3.1.1
+            WIT (What Is There) Metabolic Reconstruction: 3.3.1.1
+            PIR: A46035  A26583  A27655  A43629  A45569  S50546  A54040  
+                 C64473  JC2480  S06394  S22958  S38379  S58193  
+///
