@@ -168,9 +168,11 @@ class _Scanner:
         attempt_read_and_call(uhandle, consumer.noevent, start='<p>')
         read_and_call(uhandle, consumer.database_info, contains='Database')
         # Sagar Damle reported that databases can consist of multiple lines.
+        # But, trickily enough, sometimes the second line can also have the
+        # word sequences in it. Try to use 'sequences;' (with a semicolon)
         read_and_call_until(uhandle, consumer.database_info,
-                            contains='sequences')
-        read_and_call(uhandle, consumer.database_info, contains='sequences')
+                            contains='sequences;')
+        read_and_call(uhandle, consumer.database_info, contains='sequences;')
         read_and_call(uhandle, consumer.noevent, blank=1)
         read_and_call(uhandle, consumer.noevent,
                       contains='problems or questions')
