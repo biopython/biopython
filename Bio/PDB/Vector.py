@@ -8,10 +8,20 @@ from Numeric import array, sum, sqrt, arccos
 from LinearAlgebra import determinant
 
 
+def angle(v1, v2, v3):
+    """
+    Calculate the angle between 3 vectors
+    representing 3 connected points.
+    """
+    v1=v1-v2
+    v3=v3-v2
+    return v1.angle(v3)
+
+
 def dihedral(v1, v2, v3, v4):
     """
     Calculate the dihedral angle between 4 vectors
-    representing 4 connected atoms. The angle is in
+    representing 4 connected points. The angle is in
     ]-pi, pi].
     """
     ab=v1-v2
@@ -109,6 +119,7 @@ if __name__=="__main__":
         v3=Vector(1,0,0)
         v4=Vector(1,-1,0)
 
+        print angle(v1, v2, v3)
         print dihedral(v1, v2, v3, v4)
         print 180*dihedral(v1, v2, v3, v4)/pi
 
