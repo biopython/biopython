@@ -340,7 +340,7 @@ static PyObject *cpairwise2__make_score_matrix_fast(
 	IndexList_append(&row_cache_index[i], i, 0);
     }
     for(i=0; i<lenB-1; i++) {
-	col_cache_score[i] = score_matrix[i*lenB] + first_B_gap;
+	col_cache_score[i] = score_matrix[i] + first_B_gap;
 	IndexList_append(&col_cache_index[i], 0, i);
     }
 
@@ -539,10 +539,9 @@ static PyObject *cpairwise2_rint(
 
 static PyMethodDef cpairwise2Methods[] = {
     {"_make_score_matrix_fast", 
-     (PyCFunction)cpairwise2__make_score_matrix_fast, 
-     METH_VARARGS|METH_KEYWORDS},
-    {"rint", (PyCFunction)cpairwise2_rint, METH_VARARGS|METH_KEYWORDS},
-    {NULL, NULL}
+     (PyCFunction)cpairwise2__make_score_matrix_fast, METH_VARARGS, ""},
+    {"rint", (PyCFunction)cpairwise2_rint, METH_VARARGS|METH_KEYWORDS, ""},
+    {NULL, NULL, 0, NULL}
 };
 
 static char cpairwise2__doc__[] =
