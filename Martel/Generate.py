@@ -323,6 +323,17 @@ def generate_max_repeat(expression, genstate):
 def generate_null_op(expression, genstate):
     return []
 
+class print_debug:
+    """Print debug information"""
+    def __init__(self, msg):
+        self.msg = msg
+    def __call__(self, text, x, end):
+        print "Martel:", self.msg
+        return x
+
+def generate_debug(expression, genstate):
+    return [(None, TT.Call, print_debug(expression.msg), +1, +1)]
+
 # XXX Is this correct?  This is the multiline behaviour which allows
 # "^" to match the beginning of a line.
 def check_at_beginning(text, x, end):
@@ -455,6 +466,7 @@ generate_table = {
     Expression.Assert: generate_assert,
     Expression.AtBeginning: generate_at_beginning,
     Expression.AtEnd: generate_at_end,
+    Expression.Debug: generate_debug,
     Expression.Dot: generate_dot,
     Expression.AnyEol: generate_eol,
     Expression.Group: generate_group,
@@ -592,6 +604,7 @@ def _find_wanted_groupref_names(expression):
          isinstance(expression, Expression.AtEnd) or \
          isinstance(expression, Expression.Dot) or \
          isinstance(expression, Expression.AnyEol) or \
+         isinstance(expression, Expression.Debug) or \
          isinstance(expression, Expression.NullOp):
         pass
 
