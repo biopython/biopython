@@ -421,8 +421,11 @@ class DatabaseLoader:
         # XXX This could also handle fuzzies
         start = feature.location.nofuzzy_start + 1
         end = feature.location.nofuzzy_end
-        strand = feature.strand
-            
+        # Biopython uses None when we don't know strand information but
+        # BioSQL requires something (non null) and sets this as zero
+        # So we'll use the strand or 0 if Biopython spits out None
+        strand = feature.strand or 0
+
         self.adaptor.execute(sql, (seqfeature_id, start, end, strand, rank))
 
     def _load_seqfeature_qualifiers(self, qualifiers, seqfeature_id):

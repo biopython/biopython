@@ -70,6 +70,7 @@ class DBServer:
         if module_name is None:
             module_name = module.__name__
         self.adaptor = Adaptor(conn, DBUtils.get_dbutils(module_name))
+        self.module_name = module_name
         
     def __repr__(self):
         return self.__class__.__name__ + "(%r)" % self.adaptor.conn
@@ -105,26 +106,37 @@ class DBServer:
         sql_file should specify the complete path to a file containing
         SQL entries for building the tables.
         """
-        sql = file(sql_file, "rb").read()
-        self.adaptor.cursor.execute(sql)
         # Not sophisticated enough for PG schema. Is it needed by MySQL?
-        if 0:
-            # break the file up into SQL statements
-            sql_handle = open(sql_file, "rb")
-            sql = r""
-            for line in sql_handle.xreadlines():
-                if line.find("--") == 0: # don't include comment lines
-                    pass
-                if line.find("#") == 0: # ditto for MySQL comments
-                    pass
-                elif line.strip(): # only include non-blank lines
-                    sql += line.strip()
-                    sql += ' '
-            sql_parts = sql.split(";") # one line per sql command
+        # Looks like we need this more complicated way for both. Leaving it
+        # the default and removing the simple-minded approach.
 
-            # create the schema
+        # read the file with all comment lines removed
+        sql_handle = open(sql_file, "rb")
+        sql = r""
+        for line in sql_handle.xreadlines():
+            if line.find("--") == 0: # don't include comment lines
+                pass
+            elif line.find("#") == 0: # ditto for MySQL comments
+                pass
+            elif line.strip(): # only include non-blank lines
+                sql += line.strip()
+                sql += ' '
+        
+        # two ways to load the SQL
+        # 1. PostgreSQL can load it all at once and actually needs to
+        # due to FUNCTION defines at the end of the SQL which mess up
+        # the splitting by semicolons
+        if self.module_name in ["psycopg"]:
+            self.adaptor.cursor.execute(sql)
+        # 2. MySQL needs the database loading split up into single lines of
+        # SQL executed one at a time
+        elif self.module_name in ["MySQLdb"]:
+            sql_parts = sql.split(";") # one line per sql command
             for sql_line in sql_parts[:-1]: # don't use the last item, it's blank
                 self.adaptor.cursor.execute(sql_line)
+        else:
+            raise ValueError("Module %s not supported by the loader." %
+                    (self.module_name))
 
 class Adaptor:
     def __init__(self, conn, dbutils):

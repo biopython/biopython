@@ -11,7 +11,7 @@ if getattr(sys, "version_info", (1, 5))[:2] >= (2,1):
                          default_output_format = "fasta")
 
 
-class SeqRecord:                           
+class SeqRecord:
     def __init__(self, seq, id = "<unknown id>", name = "<unknown name>",
                  description = "<unknown description>", dbxrefs = None,
                  features = None):

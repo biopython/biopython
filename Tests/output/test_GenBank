@@ -27,7 +27,7 @@ Feaures
 type: source
 location: (0..1622)
 ref: None:None
-strand: None
+strand: 1
 qualifiers: 
 	Key: db_xref, Value: ['taxon:9606']
 	Key: map, Value: ['16']
@@ -36,7 +36,7 @@ qualifiers:
 type: gene
 location: (0..1622)
 ref: None:None
-strand: None
+strand: 1
 qualifiers: 
 	Key: db_xref, Value: ['LocusID:1783']
 	Key: gene, Value: ['DNCLI2']
@@ -45,7 +45,7 @@ qualifiers:
 type: CDS
 location: (6..1485)
 ref: None:None
-strand: None
+strand: 1
 qualifiers: 
 	Key: codon_start, Value: ['1']
 	Key: db_xref, Value: ['LocusID:1783', 'GI:5453634']
@@ -99,7 +99,7 @@ Feaures
 type: source
 location: (0..513)
 ref: None:None
-strand: None
+strand: 1
 qualifiers: 
 	Key: db_xref, Value: ['taxon:3702']
 	Key: organism, Value: ['Arabidopsis thaliana']
@@ -108,14 +108,14 @@ qualifiers:
 type: gene
 location: (49..250)
 ref: None:None
-strand: None
+strand: 1
 qualifiers: 
 	Key: gene, Value: ['cor6.6']
 
 type: CDS
 location: (49..250)
 ref: None:None
-strand: None
+strand: 1
 qualifiers: 
 	Key: codon_start, Value: ['1']
 	Key: db_xref, Value: ['GI:16230', 'SWISS-PROT:P31169']
@@ -344,7 +344,7 @@ Feaures
 type: source
 location: (0..441)
 ref: None:None
-strand: None
+strand: 1
 qualifiers: 
 	Key: cultivar, Value: ['Jet neuf']
 	Key: db_xref, Value: ['taxon:3708']
@@ -355,14 +355,14 @@ qualifiers:
 type: gene
 location: (33..300)
 ref: None:None
-strand: None
+strand: 1
 qualifiers: 
 	Key: gene, Value: ['kin1']
 
 type: CDS
 location: (33..231)
 ref: None:None
-strand: None
+strand: 1
 qualifiers: 
 	Key: codon_start, Value: ['1']
 	Key: db_xref, Value: ['GI:167146']
@@ -374,7 +374,7 @@ qualifiers:
 type: polyA_signal
 location: (240..247)
 ref: None:None
-strand: None
+strand: 1
 qualifiers: 
 	Key: gene, Value: ['kin1']
 	Key: note, Value: ['putative']
@@ -382,7 +382,7 @@ qualifiers:
 type: polyA_signal
 location: (293..300)
 ref: None:None
-strand: None
+strand: 1
 qualifiers: 
 	Key: gene, Value: ['kin1']
 	Key: note, Value: ['putative']
@@ -390,7 +390,7 @@ qualifiers:
 type: polyA_site
 location: (440..440)
 ref: None:None
-strand: None
+strand: 1
 qualifiers: 
 	Key: gene, Value: ['kin1']
 
@@ -550,7 +550,7 @@ Feaures
 type: source
 location: (0..282)
 ref: None:None
-strand: None
+strand: 1
 qualifiers: 
 	Key: db_xref, Value: ['taxon:3711']
 	Key: dev_stage, Value: ['flower']
@@ -559,14 +559,14 @@ qualifiers:
 type: gene
 location: (23..221)
 ref: None:None
-strand: None
+strand: 1
 qualifiers: 
 	Key: gene, Value: ['kin']
 
 type: CDS
 location: (23..221)
 ref: None:None
-strand: None
+strand: 1
 qualifiers: 
 	Key: codon_start, Value: ['1']
 	Key: db_xref, Value: ['GI:1209262']
@@ -742,7 +742,7 @@ Feaures
 type: source
 location: (0..1326)
 ref: None:None
-strand: None
+strand: 1
 qualifiers: 
 	Key: chromosome, Value: ['21']
 	Key: clone, Value: ['IMAGE cDNA clone 125195']
@@ -754,14 +754,14 @@ qualifiers:
 type: gene
 location: (340..756)
 ref: None:None
-strand: None
+strand: 1
 qualifiers: 
 	Key: gene, Value: ['FTCD']
 
 type: exon
 location: (340..384)
 ref: None:None
-strand: None
+strand: 1
 qualifiers: 
 	Key: gene, Value: ['FTCD']
 	Key: number, Value: ['1']
@@ -769,7 +769,7 @@ qualifiers:
 type: intron
 location: (384..617)
 ref: None:None
-strand: None
+strand: 1
 qualifiers: 
 	Key: gene, Value: ['FTCD']
 	Key: number, Value: ['1']
@@ -777,7 +777,7 @@ qualifiers:
 type: exon
 location: (617..756)
 ref: None:None
-strand: None
+strand: 1
 qualifiers: 
 	Key: gene, Value: ['FTCD']
 	Key: number, Value: ['2']

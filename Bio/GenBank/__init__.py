@@ -601,9 +601,10 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         self._cur_feature = SeqFeature.SeqFeature()
         self._cur_feature.type = content
 
-        # assume positive strand to start with if we have DNA. The
-        # complement in the location will change this later.
-        if self._seq_type.find("DNA") >= 0:
+        # assume positive strand to start with if we have DNA or cDNA
+        # (labelled as mRNA). The complement in the location will 
+        # change this later if something is on the reverse strand
+        if self._seq_type.find("DNA") >= 0 or self._seq_type.find("mRNA") >= 0:
             self._cur_feature.strand = 1
 
     def location(self, content):

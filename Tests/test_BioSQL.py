@@ -19,25 +19,30 @@ from BioSQL import BioSeq
 
 # This testing suite should try to detect whether a valid database
 # installation exists on this computer.  Only run the tests if it
-# does.  For now, I'm just going to disable the tests completely, so
-# it doesn't generate spurious and alarming errors when people without
-# databases try to run it.
-# raise ImportError, "Please comment out this line to enable the tests."
+# does.  
 
 # -- MySQL
-DBDRIVER = 'MySQLdb'
-DBTYPE = 'mysql'
+#DBDRIVER = 'MySQLdb'
+#DBTYPE = 'mysql'
 # -- PostgreSQL
-# DBDRIVER = 'psycopg'
-# DBTYPE = 'pg'
+#DBDRIVER = 'psycopg'
+#DBTYPE = 'pg'
 
 # Works for mysql and postgresql, not oracle
-DBSCHEMA = "biosqldb-" + DBTYPE + ".sql"
+try:
+    DBSCHEMA = "biosqldb-" + DBTYPE + ".sql"
+# don't run the tests unless a valid DBTYPE has been set. This
+# should be done if you have a MySQL or PostgreSQL database set up and want
+# to run the tests. You will also need to set the constants for the database
+# driver below.
+except NameError:
+    raise ImportError("Skipping BioSQL tests -- enable tests in " \
+            "Tests/test_BioSQL.py")
 # Constants for the database driver
 DBHOST = 'localhost'
-DBUSER = ''
-DBPASSWD = ''
-TESTDB = 'biosql'
+DBUSER = 'your_db_username'
+DBPASSWD = 'your_db_password'
+TESTDB = 'biosql_test'
 # Uses the SQL file in the Test directory -- try to keep this current
 # with what is going on with BioSQL
 SQL_FILE = os.path.join(os.getcwd(), "BioSQL", DBSCHEMA)
@@ -87,12 +92,12 @@ def create_database():
         server.adaptor.cursor.execute(sql, ())
     except server.module.OperationalError: # the database doesn't exist
         pass
-    except server.module.IntegrityError, e: # ditto--perhaps
+    except (server.module.IntegrityError,
+            server.module.ProgrammingError), e: # ditto--perhaps
         if str(e).find('database "%s" does not exist' % TESTDB) > 0:
             pass
         else:
             raise
-    
     # create a new database
     sql = r"CREATE DATABASE " + TESTDB
     server.adaptor.execute(sql, ())
@@ -174,11 +179,12 @@ class ReadTest(unittest.TestCase):
         except IndexError:
             pass
         
-        # primary id doesn't work right now
+        # primary id retrieval
+        item = self.db.lookup(primary_id = "16353")
         try:
-            item = self.db.lookup(primary_id = "16353")
-            raise AssertionError("Need to write tests for primary_id fetch")
-        except NotImplementedError:
+            item = self.db.lookup(primary_id = "Not Real")
+            raise AssertionError("No problem on fake primary id retrieval")
+        except IndexError:
             pass
 
 class SeqInterfaceTest(unittest.TestCase):
@@ -209,7 +215,7 @@ class SeqInterfaceTest(unittest.TestCase):
         test_record = self.item
         assert isinstance(test_record.seq, BioSeq.DBSeq), \
           "Seq retrieval is not correct"
-        assert test_record.id == "X62281"
+        assert test_record.id == "X62281.1", test_record.id
         assert test_record.name == "ATKIN2"
         assert test_record.description == "A.thaliana kin2 gene."
 
@@ -320,10 +326,10 @@ class LoaderTest(unittest.TestCase):
             item_ids.append(item.id)
         item_names.sort()
         item_ids.sort()
-        assert item_names == ['AF297471', 'ARU237582', 'ATCOR66M', 
+        assert item_names == ['AF297471', 'ARU237582', 'ATCOR66M',
                               'ATKIN2', 'BNAKINI', 'BRRBIF72']
-        assert item_ids == ['AF297471', 'AJ237582', 'L31939', 'M81224', 
-                            'X55053', 'X62281']
+        assert item_ids == ['AF297471.1', 'AJ237582.1', 'L31939.1', 'M81224.1',
+                            'X55053.1', 'X62281.1'], item_ids
 
 class InDepthLoadTest(unittest.TestCase):
     """Make sure we are loading and retreiving in a semi-lossless fashion.
@@ -348,14 +354,14 @@ class InDepthLoadTest(unittest.TestCase):
         """
         test_record = self.db.lookup(accession = "X55053")
         assert test_record.name == "ATCOR66M"
-        assert test_record.id == "X55053"
+        assert test_record.id == "X55053.1", test_record.id
         assert test_record.description == "A.thaliana cor6.6 mRNA."
         assert isinstance(test_record.seq.alphabet, Alphabet.DNAAlphabet)
         assert test_record.seq[:10].tostring() == 'AACAAAACAC'
 
         test_record = self.db.lookup(accession = "X62281")
         assert test_record.name == "ATKIN2"
-        assert test_record.id == "X62281"
+        assert test_record.id == "X62281.1", test_record.id
         assert test_record.description == "A.thaliana kin2 gene."
         assert isinstance(test_record.seq.alphabet, Alphabet.DNAAlphabet)
         assert test_record.seq[:10].tostring() == 'ATTTGGCCTA'
@@ -399,8 +405,9 @@ class InDepthLoadTest(unittest.TestCase):
             assert sub_feature.strand == 1
 
         test_record = self.db.lookup(accession = "X55053")
-        test_feature = test_record.features[0] # RNA, so no strand info
-        assert test_feature.strand == 0
+        test_feature = test_record.features[0]
+        # mRNA, so really cDNA, so the strand should be 1 (not complemented)
+        assert test_feature.strand == 1, test_feature.strand
 
 if __name__ == "__main__":
     sys.exit(run_tests(sys.argv))

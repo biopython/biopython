@@ -60,7 +60,7 @@ def _retrieve_seq(adaptor, primary_id):
             alphabet = IUPAC.protein
         else:
             raise AssertionError("Unknown moltype: %s" % moltype)
-        seq = DBSeq(primary_id, adaptor, alphabet, 0, length)
+        seq = DBSeq(primary_id, adaptor, alphabet, 0, int(length))
         return seq
     else:
         return None
@@ -181,7 +181,7 @@ def _retrieve_qualifier_value(adaptor, primary_id):
         "SELECT name, value" \
         " FROM bioentry_qualifier_value JOIN term USING (term_id)" \
         " WHERE bioentry_id = %s" \
-        " ORDER BY term_id, rank", (primary_id,))
+        " ORDER BY rank", (primary_id,))
     qualifiers = {}
     for name, value in qvs:
         if name == "keyword": name = "keywords"
@@ -201,7 +201,7 @@ def _retrieve_reference(adaptor, primary_id):
         " JOIN reference USING (reference_id)" \
         " LEFT JOIN dbxref USING (dbxref_id)" \
         " WHERE bioentry_id = %s" \
-        " ORDER BY reference_id, rank", (primary_id,))
+        " ORDER BY rank", (primary_id,))
     references = []
     for start, end, location, title, authors, dbname, accession in refs:
         reference = SeqFeature.Reference()
@@ -224,7 +224,7 @@ def _retrieve_dbxref(adaptor, primary_id):
         "SELECT dbname, accession, version" \
         " FROM bioentry_dbxref JOIN dbxref USING (dbxref_id)" \
         " WHERE bioentry_id = %s" \
-        " ORDER BY dbxref_id, rank", (primary_id,))
+        " ORDER BY rank", (primary_id,))
     dbxrefs = []
     for dbname, accession, version in refs:
         if version and version != "0":
