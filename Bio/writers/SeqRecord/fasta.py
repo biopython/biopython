@@ -9,6 +9,9 @@ class WriteFasta(Writer.Writer):
     def write(self, record):
         self.outfile.write(">%s %s\n" % (record.id, record.description))
         seq = record.seq
+        assert seq.alphabet.size == 1, "cannot handle alphabet of size %d" % \
+               seq.alphabet.size
+        seq = seq.data
         seqwidth = self.seqwidth
         for i in range(0, len(seq), seqwidth):
             self.outfile.write(seq[i:i+seqwidth])
