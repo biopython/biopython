@@ -339,7 +339,7 @@ class SummaryInfo:
 
     def information_content(self, start = 0,
                             end = None,
-                            expected_freqs = None, log_base = 2,
+                            e_freq_table = None, log_base = 2,
                             chars_to_ignore = []):
         """Calculate the information content for each residue along an alignment.
 
@@ -350,7 +350,7 @@ class SummaryInfo:
         first position in the seq is 203 in the initial sequence, for
         the info content, we need to use zero). This defaults to the entire
         length of the first sequence.
-        o expected_freqs - A dictionary specifying the expected frequencies
+        o e_freq_table - A FreqTable object  specifying the expected frequencies
         for each letter in the alphabet we are using (ie. {'G' : 0.4,
         'C' : 0.4, 'T' : 0.1, 'A' : 0.1}). Gap characters should not be
         included, since these should not have expected frequencies.
@@ -386,7 +386,7 @@ class SummaryInfo:
                                                all_letters, chars_to_ignore)
 
             column_score = self._get_column_info_content(freq_dict,
-                                                         expected_freqs,
+                                                         e_freq_table,
                                                          log_base)
 
             info_content[residue_num] = column_score
@@ -438,24 +438,24 @@ class SummaryInfo:
 
         return freq_info
             
-    def _get_column_info_content(self, obs_freq, expected_freq, log_base):
+    def _get_column_info_content(self, obs_freq, e_freq_table, log_base):
         """Calculate the information content for a column.
 
         Arguments:
         o obs_freq - The frequencies observed for each letter in the column.
-        o expected_freq - An optional argument specifying the expected
-        frequencies for each letter.
+        o e_freq_table - An optional argument specifying the expected
+        frequencies for each letter. This is a SubsMat.FreqTable instance.
         o log_base - The base of the logathrim to use in calculating the
         info content.
         """
-        if expected_freq:
+        if e_freq_table:
             # check the expected freq information to make sure it is good
             for key in obs_freq.keys():
                 if (key != self.alignment._alphabet.gap_char and
-                    key not in expected_freq.keys()):
+                    key not in e_freq_table.data.keys()):
                     raise ValueError("Expected frequency letters %s" +
                                      " do not match observed %s"
-                           % (expected_freq.keys(), obs_freq.keys() -
+                           % (e_freq_table.data.keys(), obs_freq.keys() -
                               [self.alignment._alphabet.gap_char]))
         
         total_info = 0
@@ -464,8 +464,8 @@ class SummaryInfo:
             # if we have expected frequencies, modify the log value by them
             # gap characters do not have expected frequencies, so they
             # should just be the observed frequency.
-            if expected_freq and letter != self.alignment._alphabet.gap_char:
-                inner_log = obs_freq[letter] / expected_freq[letter]
+            if e_freq_table and letter != self.alignment._alphabet.gap_char:
+                inner_log = obs_freq[letter] / e_freq_table.data[letter]
             else:
                 inner_log = obs_freq[letter]
 
