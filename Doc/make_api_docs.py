@@ -38,7 +38,7 @@ if happydoc_location is None:
     print IMPORT_MESSAGE
     sys.exit()
 
-sys.argv = [os.path.join(happydoc_location, 'happydoc.py'), 'Bio']
+sys.argv = [os.path.join(happydoc_location, 'happydoc.py'), 'README', 'Bio']
 
 try:
     from happydoc_class import HappyDoc
@@ -57,7 +57,7 @@ if __name__ == '__main__':
         doc_gen.output_directory = 'Doc/api'
         doc_gen.app_home = 'http://www.biopython.org'
         doc_gen.docset_title = 'Biopython API documentation'
-        package_description_file = 'README'
+        doc_gen.package_description_file = 'README'
         
         doc_gen.run()
     except HappyDoc.HelpRequested:
