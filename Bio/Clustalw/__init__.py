@@ -112,6 +112,12 @@ def do_alignment(command_line, alphabet=None):
         if not alphabet:
             alphabet = (IUPAC.unambiguous_dna, IUPAC.protein)[
                 command_line.type == 'PROTEIN']
+            
+        # check if the outfile exists before parsing
+        if not(os.path.exists(out_file)):
+            raise IOError("Output .aln file %s not produced, commandline: %s"
+                          % (out_file, command_line))
+            
         return parse_file(out_file, alphabet)
 
 
