@@ -9,12 +9,15 @@ o Qualifier - Qualifiers on a Feature.
 # standard modules
 import string
 
-def _wrapped_genbank(information, indent, wrap_space = 1):
+# local stuff
+import Bio.GenBank
+
+def _wrapped_genbank(information, indent, wrap_space = 1, split_char = " "):
     """Write a line of GenBank info that can wrap over multiple lines.
 
     This takes a line of information which can potentially wrap over
     multiple lines, and breaks it up with carriage returns and
-    indentation so it fits properly.
+    indentation so it fits properly into a GenBank record.
 
     Arguments:
 
@@ -24,39 +27,64 @@ def _wrapped_genbank(information, indent, wrap_space = 1):
     o indent - The indentation on the lines we are writing.
 
     o wrap_space - Whether or not to wrap only on spaces in the
-    information. 
+    information.
+
+    o split_char - A specific character to split the lines on. By default
+    spaces are used.
     """
     info_length = Record.GB_LINE_LENGTH - indent
 
-    line_start = 0
-    output_info = ""
-    while 1:
-        if wrap_space:
-            if line_start + info_length >= len(information):
-                line_end = len(information)
-            else:
-                line_end = information.rfind(" ", line_start,
-                                             line_start + info_length)
-            # if we can't find a space before the end, we are forced
-            # to wrap with what we've got
-            if line_end == -1:
-                line_end = line_start + info_length
+    if wrap_space:
+        info_parts = information.split(split_char)
+    else:
+        cur_pos = 0
+        info_parts = []
+        while cur_pos < len(information):
+            info_parts.append(information[cur_pos: cur_pos + info_length])
+            cur_pos += info_length
+            
+    # first get the information string split up by line
+    output_parts = []
+    cur_part = ""
+    for info_part in info_parts:
+        if len(cur_part) + 1 + len(info_part) > info_length:
+            if cur_part:
+                if split_char != " ":
+                    cur_part += split_char
+                output_parts.append(cur_part)
+            cur_part = info_part
         else:
-            line_end = line_start + info_length
+            if cur_part == "":
+                cur_part = info_part
+            else:
+                cur_part += split_char + info_part
 
-        cur_info_line = information[line_start:line_end]
+    # add the last bit of information to the output
+    if cur_part:
+        output_parts.append(cur_part)
 
-        if not(cur_info_line):
-            break
+    # now format the information string for return
+    output_info = output_parts[0] + "\n"
+    for output_part in output_parts[1:]:
+        output_info += " " * indent + output_part + "\n"
 
-        # only add indent spaces if we are not at the start of the info
-        if line_start != 0:
-            output_info += " " * indent
-        # add the actual information
-        output_info += "%s\n" % string.lstrip(cur_info_line)
+    return output_info            
+        
+def _indent_genbank(information, indent):
+    """Write out information with the specified indent.
 
-        # update where we are at in the information
-        line_start = line_end
+    Unlike _wrapped_genbank, this function makes no attempt to wrap
+    lines -- it assumes that the information already has newlines in the
+    appropriate places, and will add the specified indent to the start of
+    each line.
+    """
+    # split the info into lines based on line breaks
+    info_parts = information.split("\n")
+
+    # the first line will have no indent
+    output_info = info_parts[0] + "\n"
+    for info_part in info_parts[1:]:
+        output_info += " " * indent + info_part + "\n"
 
     return output_info
 
@@ -175,21 +203,27 @@ class Record:
         """
         output = "LOCUS"
         output += " " * 7 # 6-12 spaces
-        output += "%9s" % self.locus
+        output += "%-9s" % self.locus
         output += " " # 22 space
         output += "%7s" % self.size
-        output += " bp"
+        output += " bp "
+
         # treat circular types differently, since they'll have long residue
         # types
         if self.residue_type.find("circular") >= 0:
-            output += "%18s" % self.residue_type
+            output += "%17s" % self.residue_type
+        # second case: ss-DNA types of records
+        elif self.residue_type.find("-") >= 0:
+            output += "%7s" % self.residue_type
+            output += " " * 8 # spaces for circular
         else:
-            output += "%9s" % self.residue_type
-            output += "         " # spaces for circular
+            output += " " * 3 # spaces for stuff like ss-
+            output += "%-4s" % self.residue_type
+            output += " " * 8 # spaces for circular
 
-        output += " " # space at 52
+        output += " " * 4
         output += "%3s" % self.data_file_division
-        output += " " * 8 # spaces for 56-63
+        output += " " * 7 # spaces for 56-63
         output += "%11s" % self.date
         output += "\n"
         return output
@@ -209,6 +243,8 @@ class Record:
         acc_info = ""
         for accession in self.accession:
             acc_info += "%s " % accession
+        # strip off an extra space at the end
+        acc_info = acc_info.rstrip()
         output += _wrapped_genbank(acc_info, Record.GB_BASE_INDENT)
         
         return output
@@ -218,7 +254,7 @@ class Record:
         """
         output = Record.BASE_FORMAT % "VERSION"
         output += self.version
-        output += " GI:"
+        output += "  GI:"
         output += "%s\n" % self.gi
         return output
 
@@ -287,8 +323,8 @@ class Record:
         output = ""
         if self.comment:
             output += Record.BASE_FORMAT % "COMMENT"
-            output += _wrapped_genbank(self.comment,
-                                       Record.GB_BASE_INDENT)
+            output += _indent_genbank(self.comment,
+                                      Record.GB_BASE_INDENT)
         return output
 
     def _features_line(self):
@@ -303,8 +339,20 @@ class Record:
     def _base_count_line(self):
         """Output for the BASE COUNT line with base information.
         """
-        output = Record.BASE_FORMAT % "BASE_COUNT"
-        output += "%s\n" % self.base_counts 
+        output = Record.BASE_FORMAT % "BASE COUNT  "
+        # split up the base counts into their individual parts
+        count_parts = self.base_counts.split(" ")
+        while '' in count_parts:
+            count_parts.remove('')
+        assert len(count_parts) % 2 == 0, "Unexpected count information: %s"\
+               % self.base_counts
+        while len(count_parts) > 0:
+            count_info = count_parts.pop(0)
+            count_type = count_parts.pop(0)
+
+            output += "%7s %s" % (count_info, count_type)
+
+        output += "\n"
         return output
 
     def _origin_line(self):
@@ -381,7 +429,7 @@ class Reference:
         if self.number:
             output += "%s" % self.number
         if self.number and self.bases:
-            output += " "
+            output += "  "
         if self.bases:
             output += "%s" % self.bases
         output += "\n"
@@ -420,7 +468,7 @@ class Reference:
         output = ""
         if self.medline_id:
             output += Record.INTERNAL_FORMAT % "MEDLINE"
-            output += self.medline_id
+            output += self.medline_id + "\n"
         return output
     
     def _pubmed_line(self):
@@ -456,12 +504,20 @@ class Feature:
 
     def __str__(self):
         output = Record.INTERNAL_FEATURE_FORMAT % self.key
-        output += _wrapped_genbank(self.location, Record.GB_FEATURE_INDENT)
+        output += _wrapped_genbank(self.location, Record.GB_FEATURE_INDENT,
+                                   split_char = ',')
         for qualifier in self.qualifiers:
             output += " " * Record.GB_FEATURE_INDENT
-            output += qualifier.key
-            output += _wrapped_genbank(qualifier.value,
-                                       Record.GB_FEATURE_INDENT)
+            
+            # determine whether we can wrap on spaces
+            space_wrap = 1
+            for no_space_key in \
+                Bio.GenBank._BaseGenBankConsumer.remove_space_keys:
+                if qualifier.key.find(no_space_key) >= 0:
+                    space_wrap = 0
+            
+            output += _wrapped_genbank(qualifier.key + qualifier.value,
+                                       Record.GB_FEATURE_INDENT, space_wrap)
         return output
 
 class Qualifier:
