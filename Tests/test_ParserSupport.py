@@ -61,7 +61,17 @@ try:
     h.saveline("another")
     assert h.readline() == 'another'
     assert h.readline() == 'saved'
-    assert len(h.readlines()) == 2  # ['a multi-line\n', 'file']
+
+    # Test readlines after saveline
+    h.saveline("saved again")
+    lines = h.readlines()
+    assert string.strip(lines[0]) == 'saved again'
+    assert string.strip(lines[1]) == 'a multi-line'
+    assert string.strip(lines[2]) == 'file'
+    
+    # should be empty now
+    assert h.readline() == ''
+    
     h.saveline("save after empty")
     assert h.readline() == 'save after empty'
     assert h.readline() == ''
