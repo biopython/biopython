@@ -29,13 +29,15 @@ python setup.py install
 
 o "Python 2.0":http://www.python.org/ or above
 
-o "mxTextTools":http://starship.python.net/~lemburg/mxTextTools.html
-
 o "Numerical Python 15.3 or above":http://numpy.sourceforge.net/ (optional)
 This is only required if you want to use the classification tools.
 
 o "Martel":http://www.biopython.org/~dalke/Martel/
   (now included in Biopython by default, so don't worry about adding this)
+
+o "mxTextTools":http://starship.python.net/~lemburg/mxTextTools.html
+
+o "ReportLab":URL
 
 
 **Installation**
@@ -118,25 +120,6 @@ Tests/ --       Regression testing code
 setup.py --     Installation file.
 
 
-
-**To Do**
-
-
-(In no particular order...)
-
-- clean up the directory tree
-
-- make Registry for algorithms
-
-- consolidate miscellaneous file handle code
-
-- smoother handling of dependencies
-
-- retrieval of search results
-
-- connect DB stuff to Format stuff
-
-- clean up the /etc/bioinformatics configuration files
 
 If you see something here you would like to work on, please send mail
 to biopython@biopython.org!
