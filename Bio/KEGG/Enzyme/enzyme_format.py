@@ -1,6 +1,6 @@
 """Martel based parser to read KEGG Ligand/Enzyme files.
 
-This is a huge regular regular expression for KEGG Ligand/Enzyme,
+This is a huge regular expression for KEGG Ligand/Enzyme,
 built using the 'regular expressions on steroids' capabilities of
 Martel.
 
