@@ -4,6 +4,23 @@ import sys, urllib
 from xml.sax import saxutils
 import ReseekFile
 
+class FormatIOIterator:
+    def __init__(self, obj):
+        self.obj = obj
+        self._n = 0
+    def next(self):
+        x = self.obj.next()
+        if x is not None:
+            self._n += 1
+            return x.document
+        return x
+    def __getitem__(self, i):
+        assert i == self._n, "forward iteration only"
+        x = self.next()
+        if x is None:
+            raise IndexError(i)
+        return x
+
 class FormatIO:
     def __init__(self, name,
                  default_input_format = None,
@@ -76,8 +93,7 @@ class FormatIO:
             exp = Martel.select_names(exp, uses_tags + ("record", "dataset"))
         
         iterator = exp.make_iterator("record", debug_level = debug_level)
-        for record in iterator.iterateFile(infile, builder):
-            yield record.document
+        return FormatIOIterator(iterator.iterateFile(infile, builder))
 
 
     def readString(self, s, format = None, builder = None, debug_level = 0):
@@ -93,8 +109,7 @@ class FormatIO:
 
         iterator = format.make_iterator("record", debug_level = debug_level)
         
-        for record in iterator.iterateString(s, builder):
-            yield record.document
+        return FormatIOIterator(iterator.iterateString(s, builder))
       
                   
     def read(self, systemID, format = None, builder = None, debug_level = 0):
@@ -103,8 +118,7 @@ class FormatIO:
             infile = ReseekFile.ReseekFile(urllib.urlopen(systemID))
         else:
             infile = systemID
-        for record in self.readFile(infile, format, builder, debug_level):
-            yield record
+        return self.readFile(infile, format, builder, debug_level)
 
     def make_writer(self, outfile = sys.stdout, format = None):
         if format is None:
