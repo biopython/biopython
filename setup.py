@@ -158,7 +158,6 @@ class run_tests(Command):
 biopython_packages = ['Bio',
                       'Bio.Align',
                       'Bio.Alphabet',
-                      'Bio.Application',
                       'Bio.Blast',
                       'Bio.Clustalw',
                       'Bio.Data',
