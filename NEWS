@@ -7,8 +7,12 @@ about the biopython project.
 Feb 18, 2005: Biopython 1.40
 Major Changes since v1.30. For a full list of changes please see the CVS
 
-Bio.PDB -- thanks to Thomas Hamelryck
+IMPORTANT: Biopython now works with Python version >= 2.3
 
+NEW: Bio.Nexus -- thanks to Frank Kauff
+Bio.Nexus is a Nexus file parser. Nexus is  a common format for phylogenetic trees.
+
+Bio.PDB -- thanks to Thomas Hamelryck
 Added atom serial number.
 Epydoc style documentation.
 Added secondary structure support (through DSSP)
