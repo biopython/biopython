@@ -166,15 +166,15 @@ class run_tests(Command):
 # --- set up the packages we are going to install
 # standard biopython packages
 biopython_packages = ['Bio',
-                      'Bio.Application',
                       'Bio.Align',
                       'Bio.Alphabet',
+                      'Bio.Application',
                       'Bio.Application',
                       'Bio.Blast',
                       'Bio.Clustalw',
                       'Bio.Data',
-                      'Bio.Encodings',
                       'Bio.Emboss',
+                      'Bio.Encodings',
                       'Bio.Enzyme',
                       'Bio.FSSP',
                       'Bio.Fasta',
@@ -187,36 +187,33 @@ biopython_packages = ['Bio',
                       'Bio.Gobase',
                       'Bio.Graphics',
                       'Bio.HMM',
-                      'Bio.InterPro',
                       'Bio.IntelliGenetics',
-                      'Bio.Kabat',
+                      'Bio.InterPro',
+                      'Bio.KDTree',
                       'Bio.KEGG',
                       'Bio.KEGG.Compound',
                       'Bio.KEGG.Enzyme',
                       'Bio.KEGG.Map',
+                      'Bio.Kabat',
                       'Bio.Medline',
                       'Bio.MetaTool',
                       'Bio.Mindy',
+                      'Bio.MultiProc',
                       'Bio.NBRF',
                       'Bio.NeuralNetwork',
                       'Bio.NeuralNetwork.BackPropagation',
                       'Bio.NeuralNetwork.Gene',
+                      'Bio.PDB',
+                      'Bio.Parsers',
                       'Bio.Pathway',
                       'Bio.Pathway.Rep',
-                      'Bio.PDB',
                       'Bio.Prosite',
                       'Bio.Rebase',
                       'Bio.SCOP',
+                      'Bio.SVDSuperimposer',
                       'Bio.SeqIO',
                       'Bio.SubsMat',
                       'Bio.SwissProt',
-                      'Bio.Tools',
-                      'Bio.Tools.Classification',
-                      'Bio.Tools.Clustering',
-                      'Bio.Tools.KDTree',
-                      'Bio.Tools.MultiProc',
-                      'Bio.Tools.Parsers',
-                      'Bio.Tools.SVDSuperimposer',
                       'Bio.UniGene',
                       'Bio.WWW',
                       'Bio.builders',
@@ -259,47 +256,42 @@ setup(name='biopython',
       
       packages = all_packages,
       
-      ext_modules = [Extension('Bio.Tools.Classification.cSVM',
-                               ['Bio/Tools/Classification/cSVMmodule.c',
-                                'Bio/Tools/csupport.c'],
-                               include_dirs=["Bio/Tools"]
+      ext_modules = [Extension('Bio.cSVM',
+                               ['Bio/cSVMmodule.c',
+                                'Bio/csupport.c'],
+                               include_dirs=["Bio"]
                                ),
-                     Extension('Bio.Tools.Clustering.ckMeans',
-                               ['Bio/Tools/Clustering/ckMeansmodule.c',
-                                'Bio/Tools/csupport.c'],
-                               include_dirs=["Bio/Tools"]
+                     Extension('Bio.ckMeans',
+                               ['Bio/ckMeansmodule.c',
+                                'Bio/csupport.c'],
+                               include_dirs=["Bio"]
                                ),
-                     Extension('Bio.Tools.clistfns',
-                               ['Bio/Tools/clistfnsmodule.c']
+                     Extension('Bio.clistfns',
+                               ['Bio/clistfnsmodule.c']
                                ),
-                     Extension('Bio.Tools.cmathfns',
-                               ['Bio/Tools/cmathfnsmodule.c',
-                                'Bio/Tools/csupport.c'],
-                               include_dirs=["Bio/Tools"]
+                     Extension('Bio.cmathfns',
+                               ['Bio/cmathfnsmodule.c',
+                                'Bio/csupport.c'],
+                               include_dirs=["Bio"]
                                ),
-                     Extension('Bio.Tools.cstringfns',
-                               ['Bio/Tools/cstringfnsmodule.c']
+                     Extension('Bio.cstringfns',
+                               ['Bio/cstringfnsmodule.c']
                                ),
-                     Extension('Bio.Tools.cdistance',
-                               ['Bio/Tools/cdistancemodule.c',
-                                'Bio/Tools/csupport.c'],
-                               include_dirs=["Bio/Tools"]
+                     Extension('Bio.cdistance',
+                               ['Bio/cdistancemodule.c',
+                                'Bio/csupport.c'],
+                               include_dirs=["Bio"]
                                ),
-                     Extension('Bio.Align.cfastpairwise',
-                               ['Bio/Align/cfastpairwisemodule.c',
-                                'Bio/Tools/csupport.c'],
-                               include_dirs=["Bio/Tools"]
+                     Extension('Bio.cpairwise2',
+                               ['Bio/cpairwise2module.c',
+                                'Bio/csupport.c'],
+                               include_dirs=["Bio"]
                                ),
-                     Extension('Bio.Align.cpairwise2',
-                               ['Bio/Align/cpairwise2module.c',
-                                'Bio/Tools/csupport.c'],
-                               include_dirs=["Bio/Tools"]
-                               ),
-                     Extension('Bio.Tools.KDTree._KDTreecmodule',
-                               ["Bio/Tools/KDTree/_KDTree.C", 
-                                "Bio/Tools/KDTree/_KDTree.swig.C"],
-                               libraries=["stdc++"]
-                               )
+#                     Extension('Bio.KDTree._KDTreecmodule',
+#                               ["Bio/KDTree/_KDTree.C", 
+#                                "Bio/KDTree/_KDTree.swig.C"],
+#                               libraries=["stdc++"]
+#                               )
                      ]
       )
 

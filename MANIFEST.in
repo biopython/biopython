@@ -2,6 +2,8 @@
 #
 # This tells distutils what files to distribute.
 
+# XXX need to make sure Makefile isn't distributed
+
 include CONTRIB
 include LICENSE
 include NEWS
@@ -17,7 +19,7 @@ recursive-include Doc *.html
 recursive-include Doc *.fasta
 
 # csupport.h is necessary to compile several .c files...
-include Bio/Tools/csupport.h
+include Bio/csupport.h
 
 recursive-include Tests *
 global-exclude CVS
@@ -30,9 +32,6 @@ exclude Tests/Graphics/*.eps
 # Don't include obsolete regression testing frameworks.
 exclude Tests/br_regrtest.py
 recursive-exclude Tests/UnitTests *
-
-# Don't include obsolete Sequence.py
-exclude Bio/Sequence.py
 
 exclude Tests/Amino
 exclude Tests/Blast
