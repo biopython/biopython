@@ -314,6 +314,25 @@ class _BaseGenBankConsumer(AbstractConsumer):
 
         return location_line
 
+    def _remove_newlines(self, text):
+        """Remove any newlines in the passed text, returning the new string.
+        """
+        # get rid of newlines in the qualifier value
+        newlines = ["\n", "\r"]
+        for ws in newlines:
+            text = text.replace(ws, "")
+
+        return text
+
+    def _remove_spaces(self, text):
+        """Replace multiple spaces in the passed text with single spaces.
+        """
+        # get rid of excessive spaces
+        text_parts = text.split(" ")
+        while '' in text_parts:
+            text_parts.remove('')
+        return string.join(text_parts)
+
 class _FeatureConsumer(_BaseGenBankConsumer):
     """Create a SeqRecord object with Features to return.
 
@@ -477,7 +496,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         self._current_ref.comment = content
 
     def comment(self, content):
-        self.data.annotations['comment'] = content
+        self.data.annotations['comment'] = string.join(content, "\n")
 
     def features_line(self, content):
         """Get ready for the feature table when we reach the FEATURE line.
@@ -898,7 +917,7 @@ class _RecordConsumer(_BaseGenBankConsumer):
         self._cur_reference.pubmed_id = content
 
     def comment(self, content):
-        self.data.comment = content
+        self.data.comment = string.join(content, "\n")
 
     def features_line(self, content):
         """Get ready for the feature table when we reach the FEATURE line.
@@ -948,26 +967,9 @@ class _RecordConsumer(_BaseGenBankConsumer):
         self._cur_qualifier = Record.Qualifier()
         self._cur_qualifier.key = content
 
-    def _clean_qualifier_value(self, text):
-        """Clean up the qualifier value so it is one long string.
-
-        This removes newlines, and gets rid of excessive spaces, so that
-        the qualifier value is just a long string with works separated by
-        single spaces.
-        """
-        # get rid of newlines in the qualifier value
-        newlines = ["\n", "\r"]
-        for ws in newlines:
-            text = text.replace(ws, "")
-
-        # get rid of excessive spaces
-        text_parts = text.split(" ")
-        while '' in text_parts:
-            text_parts.remove('')
-        return string.join(text_parts)
-
     def qualifier_value(self, content):
-        self._cur_qualifier.value = self._clean_qualifier_value(content)
+        no_newline_content = self._remove_newlines(content)
+        self._cur_qualifier.value = self._remove_spaces(no_newline_content)
 
     def base_count(self, content):
         self.data.base_counts = content
@@ -1035,6 +1037,10 @@ class _Scanner:
                               "base_count", "base_number",
                               "sequence", "record_end"]
 
+        # a listing of all tags which should be left alone with respect
+        # to whitespace handles
+        self.exempt_tags = ["comment"]
+
         # make a parser that returns only the tags we are interested in
         expression = Martel.select_names(genbank_format.record,
                                          self.interest_tags)
@@ -1049,7 +1055,8 @@ class _Scanner:
         """
         self._parser.setContentHandler(EventGenerator(consumer,
                                                       self.interest_tags,
-                                                      _strip_and_combine))
+                                                      _strip_and_combine,
+                                                      self.exempt_tags))
         self._parser.setErrorHandler(handler.ErrorHandler())
 
         self._parser.parseFile(handle)
