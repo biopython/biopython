@@ -80,12 +80,35 @@ class Immune:
     protected sequences.
     """
 
-    def __init__( self, friendly, alphabet = 'acgt', size = 20 ):
+    def __init__( self, friendly, alphabet = 'acgt' ):
         self.hot_random = HotRandom()
+        self.tune()
         self.friendly = friendly
         self.alphabet = alphabet[:]
-        self.size = size
-        self.lymphocyte_factory( self.size )
+        self.lymphocyte_factory()
+
+    def tune( self ):
+        self.set_defaults()
+        tune_path = os.path.join( '.' )
+        tune_file = os.path.join( tune_path, 'ais_tuner.txt' )
+        handle = open( tune_file  )
+        while 1:
+            line = handle.readline()
+            if line.strip() == '':
+                break
+            if line.startswith( '#' ):
+                continue
+            ( key, val ) = line.split( '=', 1 )
+            key = key.strip()
+            val = int( val.strip() )
+            self.__dict__[ key ] = val
+
+    def set_defaults( self ):
+        self.num_lymphocytes = 20
+        self.num_tosses = 5
+        self.threshold = 5
+        self.segment_size = 60
+        self.replicant_num = 1
 
     def select_at_random( self, items ):
         selector = self.hot_random.hot_rand( len( items ) - 1 )
@@ -102,10 +125,11 @@ class Immune:
                 seq = seq[ :dest_index] + self.alphabet[ source_index ] + seq[ dest_index + 1: ]
         return seq
 
-    def scramble( self, seq, num_tosses = 5 ):
+    def scramble( self, seq ):
         """
         Substitute residues in sequence at random.
         """
+        num_tosses = self.num_tosses
         seq = seq[:].lower()
         for toss in range( 0, num_tosses ):
             dest_index = self.select_at_random( seq )
@@ -115,10 +139,10 @@ class Immune:
         return seq
 
 
-    def found_antigen( self, detector, mystery_sequence, threshold = 5 ):
+    def found_antigen( self, detector, mystery_sequence ):
         detector = detector.lower()
         mystery_sequence = mystery_sequence.lower()
-        return( match_sequence( detector, mystery_sequence, threshold ) )
+        return( match_sequence( detector, mystery_sequence, self.threshold ) )
 
     def lazy_auto_immune_check( self, seq ):
         auto_immune = 0
@@ -140,10 +164,14 @@ class Immune:
         return self.accum_weight
 
     def search_accum_weight( self, t):
-        min = 0; max = len( self.lymphocytes ) - 1
+        last =  len( self.lymphocytes ) - 1
+        min = 0; max = last
         while 1:
             if max < min:
-                return min
+                if( min <= last ):
+                    return min
+                else:
+                    return last
             m = (min + max) / 2
             if self.lymphocytes[ m ].accum_weight < t:
                 min = m + 1
@@ -169,7 +197,6 @@ class Immune:
         mystery_sequence = mystery_sequence.lower()
         lymphocyte = self.lymphocytes[ index ]
         detector = lymphocyte.residues
-#        print 'detector %s mystery_sequence %s' % ( detector, mystery_sequence )
         suspicious = self.found_antigen( detector, mystery_sequence )
         if suspicious:
             auto_immune = 0
@@ -195,7 +222,8 @@ class Immune:
 
 
 
-    def lymphocyte_factory( self, num_lymphocytes  ):
+    def lymphocyte_factory( self ):
+        num_lymphocytes = self.num_lymphocytes
         self.lymphocytes = []
         summary_info = SummaryInfo( self.friendly )
         consensus = summary_info.dumb_consensus()
