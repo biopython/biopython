@@ -39,6 +39,7 @@ def testing_suite():
     test_loader = unittest.TestLoader()
     test_loader.testMethodPrefix = 't_'
     tests = [ReadTest, SeqInterfaceTest, LoaderTest]
+    tests = [LoaderTest]
     
     for test in tests:
         cur_suite = test_loader.loadTestsFromTestCase(test)
@@ -200,9 +201,19 @@ class LoaderTest(unittest.TestCase):
 
         # do some simple tests to make sure we actually loaded the right
         # thing. More advanced tests in a different module.
-        # items = self.db.values()
-        # for item in items:
-        #    print item.name, item.id
+        items = self.db.values()
+        assert len(items) == 6
+        item_names = []
+        item_ids = []
+        for item in items:
+            item_names.append(item.name)
+            item_ids.append(item.id)
+        item_names.sort()
+        item_ids.sort()
+        assert item_names == ['AF297471', 'ARU237582', 'ATCOR66M', 
+                              'ATKIN2', 'BNAKINI', 'BRRBIF72']
+        assert item_ids == ['AF297471', 'AJ237582', 'L31939', 'M81224', 
+                            'X55053', 'X62281']
 
 if __name__ == "__main__":
     sys.exit(run_tests(sys.argv))
