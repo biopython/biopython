@@ -1,12 +1,12 @@
 test_locus_http
-LocusLink/Locus14789.htm
+LocusLink\Locus14789.htm
 ADDITIONAL_LINKS:
-        key is UniGene
-                
+                key is UniGene
+                    Mm.35708
 url = http://www.ncbi.nlm.nih.gov/UniGene/clust.cgi?ORG=Mm&CID=35708
 
 
-                Mm.35708
+----------------------------------------------
 ----------------------------------------------
 EXTERNAL_ANNOTATION:
         Not Available
@@ -79,16 +79,21 @@ url = http://www.informatics.jax.org/searches/accession_report.cgi?id=MGI:131520
 ----------------------------------------------
 NOMENCLATURE:
         key is Grcb
-             gene rich cluster, B gene
+                 gene rich cluster, B gene
+----------------------------------------------
         key is LocusID
-            14789
+                14789
+----------------------------------------------
 OVERVIEW:
         key is Alternate Symbols
-            B
+                B
+----------------------------------------------
         key is Locus Type
-            gene with protein product, function known or inferred
+                gene with protein product, function known or inferred
+----------------------------------------------
         key is Product
-            gene rich cluster, B gene
+                gene rich cluster, B gene
+----------------------------------------------
 REFSEQ:
             key is PROVISIONAL
                 key is GenBank Source
@@ -254,101 +259,118 @@ url = /Homology/view.cgi?map=ucsc_mgd&tax_id=9606&chr=12&symbol=HSU47926
 
 
 
-LocusLink/Locus16590.htm
-Element
-['Chr. 5', <Bio.LocusLink.web_parse.Url instance at 0x83b598c>]
+LocusLink\Locus16590.htm
 ADDITIONAL_LINKS:
-        key is UniGene
-                
+                key is UniGene
+                    Mm.4394
 url = http://www.ncbi.nlm.nih.gov/UniGene/clust.cgi?ORG=Mm&CID=4394
 
 
-                Mm.4394
+----------------------------------------------
 ----------------------------------------------
 EXTERNAL_ANNOTATION:
         Not Available
 FUNCTION:
-        key is Gene OntologyTM
-                membrane
-url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0016020
-
-
-                IEA
-                MGD
-                ATP binding
-url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0005524
-
-
-                IEA
-                MGD
-                transferase
-url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0016740
-
-
-                IEA
-                MGD
-                intracellular
-url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0005622
-
-
-                IEA
-                MGD
-                protein kinase
-url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0004672
-
-
-                IEA
-                MGD
-                protein tyrosine kinase
-url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0004713
-
-
-                IEA
-                MGD
-                regulation of cell cycle
-url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0000074
-
-
-                IEA
-                MGD
-                integral membrane protein
-url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0016021
-
-
-                IEA
-                MGD
-                cell growth and/or maintenance
-url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0008151
-
-
-                IEA
-                MGD
-                protein amino acid phosphorylation
-url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0006468
-
-
-                IEA
-                MGD
-                transmembrane receptor protein tyrosine kinase
-url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0004714
-
-
-                IEA
-                MGD
-                transmembrane receptor protein tyrosine kinase signaling pathway
-url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0007169
-
-
-                IEA
-                MGD
-----------------------------------------------
         key is GeneRIF
-                 Gene References into Function:
+                     Gene References into Function:
+----------------------------------------------
                 11964302
 url = http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=11964302
 
 
-                Critical roles of c-Kit tyrosine residues 567 and 719 in stem cell factor-induced chemotaxis
+                    Critical roles of c-Kit tyrosine residues 567 and 719 in stem cell factor-induced chemotaxis
+----------------------------------------------
+                Gene Ontology
+url = http://www.geneontology.org/
+
+
+----------------------------------------------
+        key is TM
+----------------------------------------------
+                    membrane
+url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0016020
+
+
+                    IEA
+                    MGD
+----------------------------------------------
+                ATP binding
+url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0005524
+
+
+                    IEA
+                    MGD
+----------------------------------------------
+                transferase
+url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0016740
+
+
+                    IEA
+                    MGD
+----------------------------------------------
+                intracellular
+url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0005622
+
+
+                    IEA
+                    MGD
+----------------------------------------------
+                protein kinase
+url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0004672
+
+
+                    IEA
+                    MGD
+----------------------------------------------
+                protein tyrosine kinase
+url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0004713
+
+
+                    IEA
+                    MGD
+----------------------------------------------
+                regulation of cell cycle
+url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0000074
+
+
+                    IEA
+                    MGD
+----------------------------------------------
+                integral membrane protein
+url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0016021
+
+
+                    IEA
+                    MGD
+----------------------------------------------
+                cell growth and/or maintenance
+url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0008151
+
+
+                    IEA
+                    MGD
+----------------------------------------------
+                protein amino acid phosphorylation
+url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0006468
+
+
+                    IEA
+                    MGD
+----------------------------------------------
+                transmembrane receptor protein tyrosine kinase
+url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0004714
+
+
+                    IEA
+                    MGD
+----------------------------------------------
+                transmembrane receptor protein tyrosine kinase signaling pathway
+url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0007169
+
+
+                    IEA
+                    MGD
+----------------------------------------------
 ----------------------------------------------
 GENBANK:
                 L11358
@@ -430,16 +452,6 @@ url = /cgi-bin/Entrez/blink?pid=50424&all=1
 LOCUS:
         Not Available
 MAP:
-        key is 
-url = help.html#epcr
-
-
-            Markers
-        key is Chr. 5
-            Y00864
-url = http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=179184
-
-
         key is Chromosome
                 5
                 mv
@@ -458,11 +470,27 @@ url = http://www.informatics.jax.org/searches/accession_report.cgi?id=MGI:96677
 
 
 ----------------------------------------------
+        key is Markers
+                    Chr. 5
+                    3714
+url = http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=179184
+
+
+----------------------------------------------
+                    Chr. 5
+                    Y00864
+url = http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=179184
+
+
+----------------------------------------------
+----------------------------------------------
 NOMENCLATURE:
         key is Kit
-             kit oncogene
+                 kit oncogene
+----------------------------------------------
         key is LocusID
-            16590
+                16590
+----------------------------------------------
 OVERVIEW:
         key is Alias
                 dominant spotting
@@ -472,13 +500,17 @@ OVERVIEW:
                 c-kit proto-oncogene protein
 ----------------------------------------------
         key is Alternate Symbols
-            W, Bs, Fdc, Ssm, CD117, c-KIT, belly-spot
+                W, Bs, Fdc, Ssm, CD117, c-KIT, belly-spot
+----------------------------------------------
         key is Locus Type
-            gene with protein product, function known or inferred
+                gene with protein product, function known or inferred
+----------------------------------------------
         key is Product
-            c-kit
+                c-kit
+----------------------------------------------
         key is RefSeqSummary
-            The c-Kit proto-oncogene is the cellular homolog of the transforming gene of a feline retrovirus (v-Kit). The c-kit protein includes characteristics of a protein kinase transmembrane receptor.
+                The c-Kit proto-oncogene is the cellular homolog of the transforming gene of a feline retrovirus (v-Kit). The c-kit protein includes characteristics of a protein kinase transmembrane receptor.
+----------------------------------------------
 REFSEQ:
             key is REVIEWED
                 key is Domains
@@ -704,92 +736,57 @@ url = /Homology/view.cgi?map=natgen_paper&tax_id=9606&chr=4&symbol=AW263947
 
 
 
-LocusLink/Locus2523.htm
-Element
-['Chr. 19', <Bio.LocusLink.web_parse.Url instance at 0x83de6cc>, <Bio.LocusLink.web_parse.Url instance at 0x83e7b74>]
+LocusLink\Locus2523.htm
 ADDITIONAL_LINKS:
-        key is OMIM
-            211100
+                key is OMIM
+                    211100
 url = http://www.ncbi.nlm.nih.gov/entrez/dispomim.cgi?id=211100
 
 
-        key is UniGene
-                
+----------------------------------------------
+                key is UniGene
+                    Hs.69747
 url = http://www.ncbi.nlm.nih.gov/UniGene/clust.cgi?ORG=Hs&CID=69747
 
 
-                Hs.69747
+----------------------------------------------
+                GeneCards
+url = http://bioinformatics.weizmann.ac.il/cards-bin/carddisp?FUT1
+
+
+----------------------------------------------
+                KEGG pathway: Blood group glycolipid biosynthesis - lact series
+url = http://www.genome.ad.jp/dbget-bin/get_pathway?org_name=hsa&mapno=00601
+
+
+----------------------------------------------
+                KEGG pathway: Blood group glycolipid biosynthesis - neolact series
+url = http://www.genome.ad.jp/dbget-bin/get_pathway?org_name=hsa&mapno=00602
+
+
+----------------------------------------------
+                Blood Group Antigen Gene Mutation Database
+url = http://www.bioc.aecom.yu.edu/bgmut/hh.htm
+
+
+----------------------------------------------
 ----------------------------------------------
 EXTERNAL_ANNOTATION:
         Not Available
 FUNCTION:
         key is EC Number
-            2.4.1.69
+                    2.4.1.69
 url = http://www.expasy.ch/cgi-bin/nicezyme.pl?2.4.1.69
 
 
-        key is Gene OntologyTM
-                Golgi apparatus
-url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0005794
+----------------------------------------------
+                Gene Ontology
+url = http://www.geneontology.org/
 
 
-                P
-                Proteome
-                pm
-url = http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=2118655
-
-
-                membrane fraction
-url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0005624
-
-
-                P
-                Proteome
-                pm
-url = http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=2118655
-
-
-                fucosyltransferase
-url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0008417
-
-
-                E
-                Proteome
-                pm
-url = http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=2118655
-
-
-                blood group antigen
-url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0005555
-
-
-                E
-                Proteome
-                pm
-url = http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=2118655
-
-
-                carbohydrate metabolism
-url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0005975
-
-
-                E
-                Proteome
-                pm
-url = http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=2118655
-
-
-                integral plasma membrane protein
-url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0005887
-
-
-                P
-                Proteome
-                pm
-url = http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=2118655
-
-
-                Other Ontologies
+----------------------------------------------
+        key is Other Ontologies
+----------------------------------------------
                     Golgi
                     P
                     Proteome
@@ -797,6 +794,7 @@ url = http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptc
 url = http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=2118655
 
 
+----------------------------------------------
                     Transferase
                     E
                     Proteome
@@ -804,6 +802,7 @@ url = http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptc
 url = http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=2118655
 
 
+----------------------------------------------
                     Integral membrane
                     P
                     Proteome
@@ -811,7 +810,77 @@ url = http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptc
 url = http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=2118655
 
 
+----------------------------------------------
                     Unspecified membrane
+                    P
+                    Proteome
+                    pm
+url = http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=2118655
+
+
+----------------------------------------------
+----------------------------------------------
+        key is TM
+----------------------------------------------
+                    Golgi apparatus
+url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0005794
+
+
+                    P
+                    Proteome
+                    pm
+url = http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=2118655
+
+
+----------------------------------------------
+                membrane fraction
+url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0005624
+
+
+                    P
+                    Proteome
+                    pm
+url = http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=2118655
+
+
+----------------------------------------------
+                fucosyltransferase
+url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0008417
+
+
+                    E
+                    Proteome
+                    pm
+url = http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=2118655
+
+
+----------------------------------------------
+                blood group antigen
+url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0005555
+
+
+                    E
+                    Proteome
+                    pm
+url = http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=2118655
+
+
+----------------------------------------------
+                carbohydrate metabolism
+url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0005975
+
+
+                    E
+                    Proteome
+                    pm
+url = http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=2118655
+
+
+----------------------------------------------
+                integral plasma membrane protein
+url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0005887
+
+
                     P
                     Proteome
                     pm
@@ -923,31 +992,6 @@ url = /cgi-bin/Entrez/blink?pid=306830&all=1
 LOCUS:
         Not Available
 MAP:
-        key is 
-url = help.html#epcr
-
-
-            Markers
-        key is Chr. -
-            D19S596
-url = http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=42586
-
-
-        key is Chr. 19
-                    STS-M35531
-url = http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=53731
-
-
-                    RH78937
-url = http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=64899
-
-
-----------------------------------------------
-                SHGC-35310
-url = http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=69684
-
-
-----------------------------------------------
         key is Chromosome
                 19
                 mv
@@ -962,24 +1006,79 @@ url = http://gdbwww.gdb.org/gdb-bin/genera/accno?GDB:120618
 
 
 ----------------------------------------------
+        key is Markers
+                    Chr. 19
+                    G15901
+url = http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=37175
+
+
+                    mv
+url = http://www.ncbi.nlm.nih.gov/cgi-bin/Entrez/maps.cgi?ORG=hum&CHR=19&MAPS=rh,wiyac,g3,gb4,shgcg3,marsh,thon,loc,comp,sts&sts=37175&ZOOM=10
+
+
+----------------------------------------------
+                    Chr. -
+                    D19S596
+url = http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=42586
+
+
+                    D19S596
+----------------------------------------------
+                    Chr. 19
+                    STS-M35531
+url = http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=53731
+
+
+                    mv
+url = http://www.ncbi.nlm.nih.gov/cgi-bin/Entrez/maps.cgi?ORG=hum&CHR=19&MAPS=rh,wiyac,g3,gb4,shgcg3,marsh,thon,loc,comp,sts&sts=53731&ZOOM=10
+
+
+----------------------------------------------
+                    Chr. 19
+                    RH78937
+url = http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=64899
+
+
+                    mv
+url = http://www.ncbi.nlm.nih.gov/cgi-bin/Entrez/maps.cgi?ORG=hum&CHR=19&MAPS=rh,wiyac,g3,gb4,shgcg3,marsh,thon,loc,comp,sts&sts=64899&ZOOM=10
+
+
+----------------------------------------------
+                    Chr. 19
+                    SHGC-35310
+url = http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=69684
+
+
+                    mv
+url = http://www.ncbi.nlm.nih.gov/cgi-bin/Entrez/maps.cgi?ORG=hum&CHR=19&MAPS=rh,wiyac,g3,gb4,shgcg3,marsh,thon,loc,comp,sts&sts=69684&ZOOM=10
+
+
+----------------------------------------------
+----------------------------------------------
 NOMENCLATURE:
         key is FUT1
-             fucosyltransferase 1 (galactoside 2-alpha-L-fucosyltransferase, Bombay phenotype included)
+                 fucosyltransferase 1 (galactoside 2-alpha-L-fucosyltransferase, Bombay phenotype included)
+----------------------------------------------
         key is LocusID
-            2523
+                2523
+----------------------------------------------
 OVERVIEW:
         key is Alias
                 Fucosyltransferase-1 (Bombay phenotype)
                 fucosyltransferase 1 (alpha (1,2) fucosyltransferase, Bombay phenotype included)
 ----------------------------------------------
         key is Alternate Symbols
-            H, HH
+                H, HH
+----------------------------------------------
         key is Locus Type
-            gene with protein product, function known or inferred
+                gene with protein product, function known or inferred
+----------------------------------------------
         key is Product
-            fucosyltransferase 1 (galactoside 2-alpha-L-fucosyltransferase, Bombay phenotype included)
+                fucosyltransferase 1 (galactoside 2-alpha-L-fucosyltransferase, Bombay phenotype included)
+----------------------------------------------
         key is Proteome Summary
-            Alpha(1,2)fucosyltransferase (alpha-2-fucosyltransferase, GDP-L-fucose:beta-D-galactoside 2-alpha-L-fucosyltransferase); forms the H blood-group antigen
+                Alpha(1,2)fucosyltransferase (alpha-2-fucosyltransferase, GDP-L-fucose:beta-D-galactoside 2-alpha-L-fucosyltransferase); forms the H blood-group antigen
+----------------------------------------------
 REFSEQ:
             key is PROVISIONAL
                 key is Domains
@@ -1096,62 +1195,42 @@ url = /Homology/view.cgi?map=ucsc_mgd&tax_id=10090&chr=7&symbol=Fut1
 
 
 
-LocusLink/Locus5797.htm
-Element
-['Chr. -', <Bio.LocusLink.web_parse.Url instance at 0x83e7e9c>]
+LocusLink\Locus5797.htm
 ADDITIONAL_LINKS:
-        key is OMIM
-            176888
+                key is OMIM
+                    176888
 url = http://www.ncbi.nlm.nih.gov/entrez/dispomim.cgi?id=176888
 
 
-        key is UniGene
-                
+----------------------------------------------
+                key is UniGene
+                    Hs.154151
 url = http://www.ncbi.nlm.nih.gov/UniGene/clust.cgi?ORG=Hs&CID=154151
 
 
-                Hs.154151
+----------------------------------------------
+                GeneCards
+url = http://bioinformatics.weizmann.ac.il/cards-bin/carddisp?PTPRM
+
+
+----------------------------------------------
 ----------------------------------------------
 EXTERNAL_ANNOTATION:
         Not Available
 FUNCTION:
         key is EC Number
-            3.1.3.48
+                    3.1.3.48
 url = http://www.expasy.ch/cgi-bin/nicezyme.pl?3.1.3.48
 
 
-        key is Gene OntologyTM
-                protein dephosphorylation
-url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0006470
+----------------------------------------------
+                Gene Ontology
+url = http://www.geneontology.org/
 
 
-                E
-                Proteome
-                pm
-url = http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=10809770
-
-
-                integral plasma membrane protein
-url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0005887
-
-
-                P
-                Proteome
-                pm
-url = http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=1655529
-
-
-                transmembrane receptor protein tyrosine phosphatase
-url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0005001
-
-
-                E
-                Proteome
-                pm
-url = http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=10809770
-
-
-                Other Ontologies
+----------------------------------------------
+        key is Other Ontologies
+----------------------------------------------
                     Hydrolase
                     E
                     Proteome
@@ -1159,6 +1238,7 @@ url = http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptc
 url = http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=10809770
 
 
+----------------------------------------------
                     Integral membrane
                     P
                     Proteome
@@ -1166,11 +1246,48 @@ url = http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptc
 url = http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=1655529
 
 
+----------------------------------------------
                     Receptor (signalling)
                     P
                     Proteome
                     pm
 url = http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=1655529
+
+
+----------------------------------------------
+----------------------------------------------
+        key is TM
+----------------------------------------------
+                    protein dephosphorylation
+url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0006470
+
+
+                    E
+                    Proteome
+                    pm
+url = http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=10809770
+
+
+----------------------------------------------
+                integral plasma membrane protein
+url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0005887
+
+
+                    P
+                    Proteome
+                    pm
+url = http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=1655529
+
+
+----------------------------------------------
+                transmembrane receptor protein tyrosine phosphatase
+url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0005001
+
+
+                    E
+                    Proteome
+                    pm
+url = http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=10809770
 
 
 ----------------------------------------------
@@ -1200,21 +1317,6 @@ url = /cgi-bin/Entrez/blink?pid=32456&all=1
 LOCUS:
         Not Available
 MAP:
-        key is 
-url = help.html#epcr
-
-
-            Markers
-        key is Chr. 18
-                WI-9017
-url = http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=29528
-
-
-                Cda09f01
-url = http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=60128
-
-
-----------------------------------------------
         key is Chromosome
                 18
                 mv
@@ -1229,26 +1331,61 @@ url = http://gdbwww.gdb.org/gdb-bin/genera/accno?GDB:128093
 
 
 ----------------------------------------------
+        key is Markers
+                    Chr. -
+                    G10607
+url = http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=2693
+
+
+----------------------------------------------
+                    Chr. 18
+                    WI-9017
+url = http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=29528
+
+
+                    mv
+url = http://www.ncbi.nlm.nih.gov/cgi-bin/Entrez/maps.cgi?ORG=hum&CHR=18&MAPS=rh,wiyac,g3,gb4,shgcg3,marsh,thon,loc,comp,sts&sts=29528&ZOOM=10
+
+
+----------------------------------------------
+                    Chr. 18
+                    Cda09f01
+url = http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=60128
+
+
+                    mv
+url = http://www.ncbi.nlm.nih.gov/cgi-bin/Entrez/maps.cgi?ORG=hum&CHR=18&MAPS=rh,wiyac,g3,gb4,shgcg3,marsh,thon,loc,comp,sts&sts=60128&ZOOM=10
+
+
+----------------------------------------------
+----------------------------------------------
 NOMENCLATURE:
         key is LocusID
-            5797
+                5797
+----------------------------------------------
         key is PTPRM
-             protein tyrosine phosphatase, receptor type, M
+                 protein tyrosine phosphatase, receptor type, M
+----------------------------------------------
 OVERVIEW:
         key is Alias
                 protein tyrosine phosphatase mu precursor
                 protein tyrosine phosphatase, receptor type, mu polypeptide
 ----------------------------------------------
         key is Alternate Symbols
-            RPTPM, RPTPU, PTPRL1, HR-PTPU, R-PTP-MU
+                RPTPM, RPTPU, PTPRL1, HR-PTPU, R-PTP-MU
+----------------------------------------------
         key is Locus Type
-            gene with protein product, function known or inferred
+                gene with protein product, function known or inferred
+----------------------------------------------
         key is Product
-            protein tyrosine phosphatase, receptor type, M precursor
+                protein tyrosine phosphatase, receptor type, M precursor
+----------------------------------------------
         key is Proteome Summary
-            Receptor-type protein tyrosine phosphatase M
+                Receptor-type protein tyrosine phosphatase M
+----------------------------------------------
         key is RefSeqSummary
-            The protein encoded by this gene is a member of the protein tyrosine phosphatase (PTP) family. PTPs are known to be signaling molecules that regulate a variety of cellular processes including cell growth, differentiation, mitotic cycle, and oncogenic transformation. This PTP possesses an extracellular region, a single transmembrane region, and two tandem catalytic domains, and thus represents a receptor-type PTP. The extracellular region contains a meprin-A5 antigen-PTP mu (MAM) domain, an Ig-like domain and four fibronectin type III-like repeats. This PTP has been shown to mediate cell-cell aggregation through the interaction with another molecule of this PTP on an adjacent cell. This PTP can interact with scaffolding protein RACK1/GNB2L1, which may be necessary for the downstream signaling in response to cell-cell adhesion.
+                The protein encoded by this gene is a member of the protein tyrosine phosphatase (PTP) family. PTPs are known to be signaling molecules that regulate a variety of cellular processes including cell growth, differentiation, mitotic cycle, and oncogenic transformation. This PTP possesses an extracellular region, a single transmembrane region, and two tandem catalytic domains, and thus represents a receptor-type PTP. The extracellular region contains a meprin-A5 antigen-PTP mu (MAM) domain, an Ig-like domain and four fibronectin type III-like repeats. This PTP has been shown to mediate cell-cell aggregation through the interaction with another molecule of this PTP on an adjacent cell. This PTP can interact with scaffolding protein RACK1/GNB2L1, which may be necessary for the downstream signaling in response to cell-cell adhesion.
+----------------------------------------------
 REFSEQ:
             key is REVIEWED
                 key is Domains
@@ -1433,85 +1570,45 @@ url = /Homology/view.cgi?map=ucsc_mgd&tax_id=10090&chr=17&symbol=Ptprm
 
 
 
-LocusLink/Locus6373.htm
+LocusLink\Locus6373.htm
 ADDITIONAL_LINKS:
-        key is OMIM
-            604852
+                key is OMIM
+                    604852
 url = http://www.ncbi.nlm.nih.gov/entrez/dispomim.cgi?id=604852
 
 
-        key is UniGene
-                
+----------------------------------------------
+                key is UniGene
+                    Hs.103982
 url = http://www.ncbi.nlm.nih.gov/UniGene/clust.cgi?ORG=Hs&CID=103982
 
 
-                Hs.103982
+----------------------------------------------
+                GeneCards
+url = http://bioinformatics.weizmann.ac.il/cards-bin/carddisp?SCYB11
+
+
+----------------------------------------------
 ----------------------------------------------
 EXTERNAL_ANNOTATION:
         Not Available
 FUNCTION:
-        key is Gene OntologyTM
-                chemokine
-url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0008009
+        key is GeneRIF
+                     Gene References into Function:
+----------------------------------------------
+                11559369
+url = http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=11559369
 
 
-                E
-                Proteome
-                pm
-url = http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=10233762
+                    chemotactic activity for CXCR3-expressing cells; substrate for dipeptidylpeptidase IV
+----------------------------------------------
+                Gene Ontology
+url = http://www.geneontology.org/
 
 
-                chemotaxis
-url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0006935
-
-
-                E
-                Proteome
-                pm
-url = http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=10233762
-
-
-                signal transduction
-url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0007165
-
-
-                P
-                Proteome
-                pm
-url = http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=10233762
-
-
-                cell-cell signalling
-url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0007267
-
-
-                E
-                Proteome
-                pm
-url = http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=10233762
-
-
-                inflammatory response
-url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0006954
-
-
-                P
-                Proteome
-                pm
-url = http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=10233762
-
-
-                response to pathogenic fungi
-url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0009621
-
-
-                P
-                Proteome
-                pm
-url = http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=10233762
-
-
-                Other Ontologies
+----------------------------------------------
+        key is Other Ontologies
+----------------------------------------------
                     Response to injury
                     NR
                     Proteome
@@ -1519,6 +1616,7 @@ url = http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptc
 url = http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=10233762
 
 
+----------------------------------------------
                     Anti-pathogen response
                     NR
                     Proteome
@@ -1526,6 +1624,7 @@ url = http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptc
 url = http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=10233762
 
 
+----------------------------------------------
                     Cell migration/motility
                     NR
                     Proteome
@@ -1533,6 +1632,7 @@ url = http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptc
 url = http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=10233762
 
 
+----------------------------------------------
                     Cell-to-cell signalling
                     NR
                     Proteome
@@ -1542,13 +1642,74 @@ url = http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptc
 
 ----------------------------------------------
 ----------------------------------------------
-        key is GeneRIF
-                 Gene References into Function:
-                11559369
-url = http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=11559369
+        key is TM
+----------------------------------------------
+                    chemokine
+url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0008009
 
 
-                chemotactic activity for CXCR3-expressing cells; substrate for dipeptidylpeptidase IV
+                    E
+                    Proteome
+                    pm
+url = http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=10233762
+
+
+----------------------------------------------
+                chemotaxis
+url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0006935
+
+
+                    E
+                    Proteome
+                    pm
+url = http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=10233762
+
+
+----------------------------------------------
+                signal transduction
+url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0007165
+
+
+                    P
+                    Proteome
+                    pm
+url = http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=10233762
+
+
+----------------------------------------------
+                cell-cell signalling
+url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0007267
+
+
+                    E
+                    Proteome
+                    pm
+url = http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=10233762
+
+
+----------------------------------------------
+                inflammatory response
+url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0006954
+
+
+                    P
+                    Proteome
+                    pm
+url = http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=10233762
+
+
+----------------------------------------------
+                response to pathogenic fungi
+url = http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0009621
+
+
+                    P
+                    Proteome
+                    pm
+url = http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=10233762
+
+
+----------------------------------------------
 ----------------------------------------------
 GENBANK:
                 A82120
@@ -1708,22 +1869,30 @@ url = http://www.ncbi.nlm.nih.gov/cgi-bin/Entrez/maps.cgi?ORG=hum&chr=4&ovr=ideo
 ----------------------------------------------
 NOMENCLATURE:
         key is LocusID
-            6373
+                6373
+----------------------------------------------
         key is SCYB11
-             small inducible cytokine subfamily B (Cys-X-Cys), member 11
+                 small inducible cytokine subfamily B (Cys-X-Cys), member 11
+----------------------------------------------
 OVERVIEW:
         key is Alias
-            small inducible cytokine subfamily B (Cys-X-Cys), member 9B
+                small inducible cytokine subfamily B (Cys-X-Cys), member 9B
+----------------------------------------------
         key is Alternate Symbols
-            IP9, B-R1, H174, IP-9, I-TAC, CXCL11, SCYB9B
+                IP9, B-R1, H174, IP-9, I-TAC, CXCL11, SCYB9B
+----------------------------------------------
         key is Locus Type
-            gene with protein product, function known or inferred
+                gene with protein product, function known or inferred
+----------------------------------------------
         key is Product
-            small inducible cytokine subfamily B (Cys-X-Cys), member 11 precursor
+                small inducible cytokine subfamily B (Cys-X-Cys), member 11 precursor
+----------------------------------------------
         key is Proteome Summary
-            Cytokine B11; CXC chemokine that has chemotactic activity on activated T cells
+                Cytokine B11; CXC chemokine that has chemotactic activity on activated T cells
+----------------------------------------------
         key is RefSeqSummary
-            Chemokines are a group of small (approximately 8 to 14 kD), mostly basic, structurally related molecules that regulate cell trafficking of various types of leukocytes through interactions with a subset of 7-transmembrane, G protein-coupled receptors. Chemokines also play fundamental roles in the development, homeostasis, and function of the immune system, and they have effects on cells of the central nervous system as well as on endothelial cells involved in angiogenesis or angiostasis. Chemokines are divided into 2 major subfamilies, CXC and CC.  Small inducible cytokine subfamily B member 11 (SCYB11) is a CXC member of the chemokine superfamily. It induces a chemotactic response in activated T-cells and is the dominant ligand for CXC receptor-3. The gene encoding SCYB11 protein contains 4 exons and at least three polyadenylation signals which might reflect cell-specific regulation of expression. IFN-gamma is a potent inducer of SCYB11 gene transcription.
+                Chemokines are a group of small (approximately 8 to 14 kD), mostly basic, structurally related molecules that regulate cell trafficking of various types of leukocytes through interactions with a subset of 7-transmembrane, G protein-coupled receptors. Chemokines also play fundamental roles in the development, homeostasis, and function of the immune system, and they have effects on cells of the central nervous system as well as on endothelial cells involved in angiogenesis or angiostasis. Chemokines are divided into 2 major subfamilies, CXC and CC.  Small inducible cytokine subfamily B member 11 (SCYB11) is a CXC member of the chemokine superfamily. It induces a chemotactic response in activated T-cells and is the dominant ligand for CXC receptor-3. The gene encoding SCYB11 protein contains 4 exons and at least three polyadenylation signals which might reflect cell-specific regulation of expression. IFN-gamma is a potent inducer of SCYB11 gene transcription.
+----------------------------------------------
 REFSEQ:
             key is REVIEWED
                 key is Domains
