@@ -155,6 +155,11 @@ class Adaptor:
         assert count == 1, "Expected 1 response, got %s" % count
         return self.cursor.fetchone()
 
+    def execute(self, sql, args):
+        """Just execute an sql command.
+        """
+        self.cursor.execute(sql, args)
+
     def get_subseq_as_string(self, seqid, start, end):
         length = end - start
         return self.execute_one(
@@ -165,7 +170,6 @@ class Adaptor:
     def execute_and_fetch_col0(self, sql, args):
         self.cursor.execute(sql, args)
         return [field[0] for field in self.cursor.fetchall()]
-
 
     def execute_and_fetchall(self, sql, args):
         self.cursor.execute(sql, args)

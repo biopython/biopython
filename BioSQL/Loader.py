@@ -33,7 +33,34 @@ class DatabaseLoader:
         for seq_feature_num in range(len(record.features)):
             seq_feature = record.features[seq_feature_num]
             self._load_seqfeature(seq_feature, seq_feature_num, bioentry_id)
-    
+
+    def _get_ontology_id(self, term_name, term_description = ""):
+        """Get the id that corresponds to any term in an ontology.
+
+        This looks through the ontology table for a the given term. If it
+        is not found, a new id corresponding to this ontology is created.
+        In either case, the id corresponding to that term is returned, so
+        that you can reference it in another table.
+        """
+        # try to get the ontology term
+        sql = r"SELECT ontology_term_id FROM ontology_term " \
+              r"WHERE term_name = %s"
+        id_results = self.adaptor.execute_and_fetchall(sql, (term_name,))
+        # something is wrong
+        if len(id_results) > 1:
+            raise ValueError("Multiple ontology ids for %s: %s" % 
+                             term_name, id_results)
+        # we already have the ontology term inserted
+        elif len(id_results) == 1:
+            return id_results[0][0]
+        # we need to create it
+        else:
+            sql = r"INSERT INTO ontology_term (term_name, term_definition)" \
+                  r"VALUES (%s, %s)"
+            self.adaptor.execute_one(sql, (term_name, term_description))
+            # recursively call this to give back the id
+            return self._get_ontology_id(term_name, term_description)
+   
     def _load_bioentry_table(self, record):
         """Fill the bioentry table with sequence information.
         """
@@ -65,9 +92,10 @@ class DatabaseLoader:
         except KeyError:
             # just use today's date
             date = strftime("%d-%b-%Y", gmtime())
-        sql = r"INSERT INTO bioentry_date VALUES" \
-              r" (%s, %s)" 
-        self.adaptor.execute_one(sql, (bioentry_id, date))
+        date_id = self._get_ontology_id("date", "Sequence date")
+        sql = r"INSERT INTO bioentry_qualifier_value VALUES" \
+              r" (%s, %s, %s)" 
+        self.adaptor.execute_one(sql, (bioentry_id, date_id, date))
 
     def _load_bioentry_taxa(self, record, bioentry_id):
         """Add taxa information to the database.
@@ -104,8 +132,10 @@ class DatabaseLoader:
     def _load_bioentry_description(self, record, bioentry_id):
         """Load the description table.
         """
-        sql = r"INSERT INTO bioentry_description VALUES (%s, %s)"
-        self.adaptor.execute_one(sql, (bioentry_id, record.description))
+        descr_id = self._get_ontology_id("descrption", "Sequence descrption")
+        sql = r"INSERT INTO bioentry_qualifier_value VALUES (%s, %s, %s)"
+        self.adaptor.execute_one(sql, (bioentry_id, descr_id, 
+                                       record.description))
 
     def _load_seqfeature(self, feature, feature_rank, bioentry_id):
         """Load a biopython SeqFeature into the database.
@@ -121,11 +151,7 @@ class DatabaseLoader:
         This loads the "key" of the seqfeature (ie. CDS, gene) and
         the basic seqfeature table itself.
         """
-        sql = r"INSERT INTO seqfeature_key (key_name) VALUES (%s)"
-        self.adaptor.execute_one(sql, (feature_type))
-        sql = r"SELECT max(seqfeature_key_id) FROM seqfeature_key"
-        results = self.adaptor.execute_one(sql, ())                
-        seqfeature_key_id = results[0]               
+        seqfeature_key_id = self._get_ontology_id(feature_type)
         
         # XXX This doesn't do source yet, since I'm not sure I understand it.
         sql = r"INSERT INTO seqfeature (bioentry_id, seqfeature_key_id, " \
@@ -190,14 +216,7 @@ class DatabaseLoader:
             {key : [value1, value2]}
         """
         for qualifier_key in qualifiers.keys():
-            # add the key to the appropriate table
-            sql = r"INSERT INTO seqfeature_qualifier (qualifier_name) " \
-                  r"VALUES (%s)"
-            self.adaptor.execute_one(sql, (qualifier_key))
-            sql = r"SELECT max(seqfeature_qualifier_id) FROM " \
-                  r"seqfeature_qualifier"
-            results = self.adaptor.execute_one(sql, ())
-            seqfeature_qualifier_id = results[0]
+            qualifier_key_id = self._get_ontology_id(qualifier_key)
 
             # now add all of the values to their table
             for qual_value_rank in range(len(qualifiers[qualifier_key])):
@@ -205,7 +224,7 @@ class DatabaseLoader:
                 sql = r"INSERT INTO seqfeature_qualifier_value VALUES" \
                       r" (%s, %s, %s, %s)"
                 self.adaptor.execute_one(sql, (seqfeature_id,
-                  seqfeature_qualifier_id, qual_value_rank, qualifier_value))
+                  qualifier_key_id, qual_value_rank, qualifier_value))
        
 class DatabaseRemover:
     """Compliment the Loader functionality by fully removing a database.
@@ -238,23 +257,21 @@ class DatabaseRemover:
 
         # finally remove the database
         sql = r"DELETE FROM biodatabase WHERE biodatabase_id = %s"
-        self.adaptor.execute_one(sql, (self.dbid))
+        self.adaptor.execute(sql, (self.dbid))
 
     def _remove_bioentry_basic(self, bioentry_id):
         """Remove basic stuff relating to a bioentry.
         """
         sql = r"DELETE FROM bioentry WHERE bioentry_id = %s"
-        self.adaptor.execute_one(sql, (bioentry_id))
+        self.adaptor.execute(sql, (bioentry_id))
         sql = r"DELETE FROM biosequence WHERE bioentry_id = %s"
-        self.adaptor.execute_one(sql, (bioentry_id))
+        self.adaptor.execute(sql, (bioentry_id))
 
     def _remove_bioentry_metadata(self, bioentry_id):
         """Remove all metadata relating to a bioentry.
         """
-        sql = r"DELETE FROM bioentry_date WHERE bioentry_id = %s"
-        self.adaptor.execute_one(sql, (bioentry_id))
-        sql = r"DELETE FROM bioentry_description WHERE bioentry_id = %s"
-        self.adaptor.execute_one(sql, (bioentry_id))
+        sql = r"DELETE FROM bioentry_qualifier_value WHERE bioentry_id = %s"
+        self.adaptor.execute(sql, (bioentry_id))
 
     def _remove_bioentry_features(self, bioentry_id):
         """Remove all feature relating to a bioentry.
@@ -268,13 +285,6 @@ class DatabaseRemover:
             sql = r"DELETE FROM seqfeature_location WHERE seqfeature_id = %s"
             self.adaptor.cursor.execute(sql, (seqfeature_id))
             # qualifiers
-            sql = r"SELECT seqfeature_qualifier_id FROM "\
-                  r"seqfeature_qualifier_value WHERE seqfeature_id = %s"
-            qualifier_ids = self.adaptor.list_any_ids(sql, (seqfeature_id))
-            for qualifier_id in qualifier_ids:
-                sql = r"DELETE FROM seqfeature_qualifier WHERE "\
-                      r"seqfeature_qualifier_id = %s"
-                self.adaptor.cursor.execute(sql, (qualifier_id))
             sql = r"DELETE FROM seqfeature_qualifier_value WHERE " \
                   r"seqfeature_id = %s"
             self.adaptor.cursor.execute(sql, (seqfeature_id))
