@@ -7,6 +7,16 @@ except ImportError:
 from Bio.Tools.KDTree import _KDTree 
 
 def _neighbor_test(nr_points, dim, bucket_size, radius):
+		""" Test all fixed radius nieghbor search.
+
+		Test all fixed radius nieghbor search using the 
+		KD tree C module.
+
+		o nr_points - number of points used in test
+		o dim - dimension of coords
+		o bucket_size - nr of points per tree node
+		o radius - radius of search (typically 0.05 or so) 
+		"""
 		kdt=_KDTree.KDTree(dim, bucket_size)
 		coords=random((nr_points, dim)).astype("f")
 		kdt.set_data(coords, nr_points)
@@ -20,6 +30,15 @@ def _neighbor_test(nr_points, dim, bucket_size, radius):
 			print "Not passed: %i <> %i." % (l1, l2)
 
 def _test(nr_points, dim, bucket_size, radius):
+	"""Test neighbor search.
+
+	Test neighbor search using the KD tree C module.
+
+	o nr_points - number of points used in test
+	o dim - dimension of coords
+	o bucket_size - nr of points per tree node
+	o radius - radius of search (typically 0.05 or so) 
+	"""
 	radius_sq=radius*radius
 	kdt=_KDTree.KDTree(dim, bucket_size)
 	coords=random((nr_points, dim)).astype("f")
@@ -70,7 +89,7 @@ class KDTree:
 		o radius - float>=0
 		"""
 		if not self.built:
-				raise Exception, "No points set specified"
+				raise Exception, "No point set specified"
 		if center.shape!=(self.dim,):
 				raise Exception, "Expected a %i-dimensional Numpy array" % self.dim
 		if center.typecode()!="f":
@@ -103,7 +122,7 @@ class KDTree:
 		o radius - float (>0)
 		"""
 		if not self.built:
-				raise Exception, "No points set specified"
+				raise Exception, "No point set specified"
 		self.kdt.neighbor_search(radius)
 
 	def neighbor_get_indices(self):
