@@ -16,6 +16,8 @@ Accepts an initial set of sequences to be protected.
 Creates a set of randomly scrambled sequences and uses a lazy check to remove
 those that trigger on members of the protected set.
 The detector for a suspicious sequence checks for a close match to a scrambled sequence.
+The detectors start out with equal weights.  When a detector finds a suspicious antigen,
+its weight is incremented so its chances of being selected in the future increases.
 Intended only for experimentation.
 """
 
@@ -68,16 +70,20 @@ class Lymphocyte:
 
     def __init__( self, residues ):
         self.residues = residues
+        self.may_be_autoimmune = 1
         self.weight = 1
 
 
 class Immune:
+    """
+    friendly should be an instance of Align.  It should contain the set of
+    protected sequences.
+    """
 
     def __init__( self, friendly, alphabet = [ 'a', 'c', 'g', 't' ], size = 20 ):
         self.hot_random = HotRandom()
         self.friendly = friendly
         self.alphabet = alphabet[:]
-        self.may_be_autoimmune = 1
         self.lymphocyte_factory( size )
 
     def select_at_random( self, items ):
@@ -166,7 +172,7 @@ class Immune:
 
     def lymphocyte_factory( self, num_lymphocytes = 20 ):
         self.lymphocytes = []
-        summary_info = SummaryInfo( align )
+        summary_info = SummaryInfo( self.friendly )
         consensus = summary_info.dumb_consensus()
         self.consensus = consensus
         for j in range( 0, num_lymphocytes ):
