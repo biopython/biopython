@@ -16,6 +16,8 @@ sp003  37        143E_HUMAN
 sp004  38        NDOA_PSEPU  broken RC line
 sp005  38        NU3M_BALPH  broken RC line
 sp006  37        TCMO_STRGA  comment with no topic
+sp007  39        CLD1_HUMAN  broken RX line (from katel@worldpath.net)
+sp008  39        1A02_HUMAN  contains 2 AC lines
 
 
 KEYWLIST TEST FILES

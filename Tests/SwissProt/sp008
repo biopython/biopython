@@ -1,0 +1,365 @@
+ID   1A02_HUMAN     STANDARD;      PRT;   365 AA.
+AC   P01892; P06338; P30514; P30444; P30445; P30446; Q29680; Q29899;
+AC   Q95352; Q29837; Q95380;
+DT   21-JUL-1986 (Rel. 01, Created)
+DT   13-AUG-1987 (Rel. 05, Last sequence update)
+DT   15-FEB-2000 (Rel. 39, Last annotation update)
+DE   HLA CLASS I HISTOCOMPATIBILITY ANTIGEN, A-2 ALPHA CHAIN PRECURSOR.
+GN   HLA-A OR HLAA.
+OS   Homo sapiens (Human).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+RN   [1]
+RP   SEQUENCE FROM N.A. (A*0201).
+RX   MEDLINE; 85132727.
+RA   Koller B.H., Orr H.T.;
+RT   "Cloning and complete sequence of an HLA-A2 gene: analysis of two
+RT   HLA-A alleles at the nucleotide level.";
+RL   J. Immunol. 134:2727-2733(1985).
+RN   [2]
+RP   SEQUENCE FROM N.A. (A*0201).
+RX   MEDLINE; 89122144.
+RA   Cianetti L., Testa U., Scotto L., la Valle R., Simeone A.,
+RA   Boccoli G., Giannella G., Peschle C., Boncinelli E.;
+RT   "Three new class I HLA alleles: structure of mRNAs and alternative
+RT   mechanisms of processing.";
+RL   Immunogenetics 29:80-91(1989).
+RN   [3]
+RP   SEQUENCE FROM N.A. (A*0201).
+RX   MEDLINE; 90207291.
+RA   Ennis P.D., Zemmour J., Salter R.D., Parham P.;
+RT   "Rapid cloning of HLA-A,B cDNA by using the polymerase chain
+RT   reaction: frequency and nature of errors produced in amplification.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 87:2833-2837(1990).
+RN   [4]
+RP   SEQUENCE FROM N.A. (A*0201/A*0211/A*0212).
+RX   MEDLINE; 92269955.
+RA   Belich M.P., Madrigal J.A., Hildebrand W.H., Zemmour J.,
+RA   Williams R.C., Luz R., Petzl-Erler M.L., Parham P.;
+RT   "Unusual HLA-B alleles in two tribes of Brazilian Indians.";
+RL   Nature 357:326-329(1992).
+RN   [5]
+RP   SEQUENCE OF 39-365 FROM N.A. (A*0201).
+RX   MEDLINE; 85230571.
+RA   Krangel M.S.;
+RT   "Unusual RNA splicing generates a secreted form of HLA-A2 in a
+RT   mutagenized B lymphoblastoid cell line.";
+RL   EMBO J. 4:1205-1210(1985).
+RN   [6]
+RP   SEQUENCE OF 25-295 (A*0201).
+RX   MEDLINE; 80056745.
+RA   Orr H.T., Lopez de Castro J.A., Parham P., Ploegh H.L.,
+RA   Strominger J.L.;
+RT   "Comparison of amino acid sequences of two human histocompatibility
+RT   antigens, HLA-A2 and HLA-B7: location of putative alloantigenic
+RT   sites.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 76:4395-4399(1979).
+RN   [7]
+RP   REVISIONS (A*0201).
+RX   MEDLINE; 82247941.
+RA   Lopez de Castro J.A., Strominger J.L., Strong D.M., Orr H.T.;
+RT   "Structure of crossreactive human histocompatibility antigens HLA-A28
+RT   and HLA-A2: possible implications for the generation of HLA
+RT   polymorphism.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 79:3813-3817(1982).
+RN   [8]
+RP   SEQUENCE OF 26-298 FROM N.A. (A*0202/A*0203).
+RX   MEDLINE; 87306734.
+RA   Mattson D.H., Handy D.E., Bradley D.A., Coligan J.E., Cowan E.P.,
+RA   Biddison W.E.;
+RT   "DNA sequences of the genes that encode the CTL-defined HLA-A2
+RT   variants M7 and DK1.";
+RL   Immunogenetics 26:190-192(1987).
+RN   [9]
+RP   SEQUENCE FROM N.A. (A*0203/A*0205).
+RX   MEDLINE; 87252273.
+RA   Holmes N., Ennis P., Wan A.M., Denney D.W., Parham P.;
+RT   "Multiple genetic mechanisms have contributed to the generation of
+RT   the HLA-A2/A28 family of class I MHC molecules.";
+RL   J. Immunol. 139:936-941(1987).
+RN   [10]
+RP   SEQUENCE FROM N.A. (A*0203/A*0205).
+RA   Domena J.D.;
+RL   Submitted (NOV-1993) to the EMBL/GenBank/DDBJ databases.
+RN   [11]
+RP   SEQUENCE OF 9-365 FROM N.A. (A*0204).
+RX   MEDLINE; 92039809.
+RA   Castano A.R., Lopez de Castro J.A.;
+RT   "Structure of the HLA-A*0204 antigen, found in South American
+RT   Indians. Spatial clustering of HLA-A2 subtype polymorphism.";
+RL   Immunogenetics 34:281-285(1991).
+RN   [12]
+RP   SEQUENCE OF 9-365 FROM N.A. (A*0204).
+RX   MEDLINE; 92269956.
+RA   Watkins D.I., McAdam S.N., Liu X., Stang C.R., Milford E.L.,
+RA   Levine C.G., Garber T.L., Dogon A.L., Lord C.I., Ghim S.H.,
+RA   Troup G.M., Hughes A.L., Letvin N.L.;
+RT   "New recombinant HLA-B alleles in a tribe of South American
+RT   Amerindians indicate rapid evolution of MHC class I loci.";
+RL   Nature 357:329-333(1992).
+RN   [13]
+RP   SEQUENCE FROM N.A. (A*0206).
+RX   MEDLINE; 89235215.
+RA   Parham P., Lawlor D.A., Lomen C.E., Ennis P.D.;
+RT   "Diversity and diversification of HLA-A,B,C alleles.";
+RL   J. Immunol. 142:3937-3950(1989).
+RN   [14]
+RP   PARTIAL SEQUENCE (A*0206).
+RX   MEDLINE; 86305811.
+RA   Ezquerra A., Domenech N., van der Poel J., Strominger J.L., Vega M.A.,
+RA   Lopez de Castro J.A.;
+RT   "Molecular analysis of an HLA-A2 functional variant CLA defined by
+RT   cytolytic T lymphocytes.";
+RL   J. Immunol. 137:1642-1649(1986).
+RN   [15]
+RP   PARTIAL SEQUENCE (A*0207).
+RX   MEDLINE; 88113844.
+RA   Domenech N., Ezquerra A., Castano R., Lopez de Castro J.A.;
+RT   "Structural analysis of HLA-A2.4 functional variant KNE. Implications
+RT   for the mapping of HLA-A2-specific T-cell epitopes.";
+RL   Immunogenetics 27:196-202(1988).
+RN   [16]
+RP   PARTIAL SEQUENCE (A*0208).
+RX   MEDLINE; 88314183.
+RA   Domenech N., Castano R., Goulmy E., Lopez de Castro J.A.;
+RT   "Molecular analysis of HLA-A2.4 functional variant KLO: close
+RT   structural and evolutionary relatedness to the HLA-A2.2 subtype.";
+RL   Immunogenetics 28:143-152(1988).
+RN   [17]
+RP   PARTIAL SEQUENCE (A*0209).
+RX   MEDLINE; 88186100.
+RA   Castano R., Ezquerra A., Domenech N., Lopez de Castro J.A.;
+RT   "An HLA-A2 population variant with structural polymorphism in the
+RT   alpha 3 region.";
+RL   Immunogenetics 27:345-355(1988).
+RN   [18]
+RP   SEQUENCE FROM N.A. (A*0210).
+RX   MEDLINE; 89122133.
+RA   Epstein H., Kennedy L., Holmes N.;
+RT   "An Oriental HLA-A2 subtype is closely related to a subset of
+RT   Caucasoid HLA-A2 alleles.";
+RL   Immunogenetics 29:112-116(1989).
+RN   [19]
+RP   SEQUENCE OF 9-365 FROM N.A. (A*0211).
+RX   MEDLINE; 92218010.
+RA   Castano A.R., Lopez de Castro J.A.;
+RT   "Structure of the HLA-A*0211 (A2.5) subtype: further evidence for
+RT   selection-driven diversification of HLA-A2 antigens.";
+RL   Immunogenetics 35:344-346(1992).
+RN   [20]
+RP   SEQUENCE FROM N.A. (A*0213).
+RX   MEDLINE; 94222455.
+RA   Barber D.F., Fernandez J.M., Lopez de Castro J.A.;
+RT   "Primary structure of a new HLA-A2 subtype: HLA-A*0213.";
+RL   Immunogenetics 39:378-378(1994).
+RN   [21]
+RP   SEQUENCE FROM N.A. (A*0216).
+RX   MEDLINE; 95278976.
+RA   Barouch D., Krausa P., Bodmer J., Browning M.J., McMichael A.J.;
+RT   "Identification of a novel HLA-A2 subtype, HLA-A*0216.";
+RL   Immunogenetics 41:388-388(1995).
+RN   [22]
+RP   SEQUENCE FROM N.A. (A*0217).
+RC   TISSUE=BLOOD;
+RX   MEDLINE; 95381236.
+RA   Selvakumar A., Granja C.B., Salazar M., Alosco S.M., Yunis E.J.,
+RA   Dupont B.;
+RT   "A novel subtype of A2 (A*0217) isolated from the South American
+RT   Indian B-cell line AMALA.";
+RL   Tissue Antigens 45:343-347(1995).
+RN   [23]
+RP   SEQUENCE FROM N.A. (A*0218).
+RC   TISSUE=BLOOD;
+RA   Kashiwase K., Tokunaga K., Ishikawa Y., Oohashi H., Hashimoto M.,
+RA   Akaza T., Tadokoro K., Juji T.;
+RT   "A new A2 sequence HLA-A2K from Japanese.";
+RL   Submitted (FEB-1996) to the EMBL/GenBank/DDBJ databases.
+RN   [24]
+RP   SEQUENCE FROM N.A. (A*0220).
+RC   TISSUE=BLOOD;
+RX   MEDLINE; 97161038.
+RA   Fleischhauer K., Zino E., Mazzi B., Severini G.M., Benazzi E.,
+RA   Bordignon C.;
+RT   "HLA-A*02 subtype distribution in Caucasians from northern Italy:
+RT   identification of A*0220.";
+RL   Tissue Antigens 48:673-679(1996).
+RN   [25]
+RP   SEQUENCE FROM N.A. (A*0221).
+RC   TISSUE=BLOOD;
+RA   Szmania S., Baxter-Lowe L.A.;
+RT   "Nucleotide sequence of a novel HLA-A2 gene.";
+RL   Submitted (APR-1996) to the EMBL/GenBank/DDBJ databases.
+RN   [26]
+RP   X-RAY CRYSTALLOGRAPHY (3.5 ANGSTROMS) OF A*0201.
+RX   MEDLINE; 88014204.
+RA   Bjorkman P.J., Saper M.A., Samraoui B., Bennett W.S.,
+RA   Strominger J.L., Wiley D.C.;
+RT   "Structure of the human class I histocompatibility antigen, HLA-A2.";
+RL   Nature 329:506-512(1987).
+RN   [27]
+RP   X-RAY CRYSTALLOGRAPHY (2.6 ANGSTROMS) OF A*0201.
+RX   MEDLINE; 91245570.
+RA   Saper M.A., Bjorkman P.J., Wiley D.C.;
+RT   "Refined structure of the human histocompatibility antigen HLA-A2 at
+RT   2.6-A resolution.";
+RL   J. Mol. Biol. 219:277-319(1991).
+CC   -!- FUNCTION: INVOLVED IN THE PRESENTATION OF FOREIGN ANTIGENS TO
+CC       THE IMMUNE SYSTEM.
+CC   -!- SUBUNIT: DIMER OF ALPHA CHAIN AND A BETA CHAIN (BETA-2-
+CC       MICROGLOBULIN).
+CC   -!- POLYMORPHISM: THE FOLLOWING ALLELES OF A-2 ARE KNOWN: A*0201,
+CC       A*0202, A*0203, A*0204, A*0205, A*0206 (A2.4A), A*0207, A*0208,
+CC       A*0209, A*0210, A*0211 (A2.5), A*0212, A*0213 (A*02SLU), A*0216,
+CC       A*0217, A*0218 (A2K), A*0219, A*0220 AND A*0221. THE SEQUENCE
+CC       SHOWN IS THAT OF A*0201.
+CC   -!- CAUTION: REF.6 AND REF.7 SEQUENCES DIFFER FROM THAT SHOWN
+CC       EXTENSIVELY.
+CC   --------------------------------------------------------------------------
+CC   This SWISS-PROT entry is copyright. It is produced through a collaboration
+CC   between  the Swiss Institute of Bioinformatics  and the  EMBL outstation -
+CC   the European Bioinformatics Institute.  There are no  restrictions on  its
+CC   use  by  non-profit  institutions as long  as its content  is  in  no  way
+CC   modified and this statement is not removed.  Usage  by  and for commercial
+CC   entities requires a license agreement (See http://www.isb-sib.ch/announce/
+CC   or send an email to license@isb-sib.ch).
+CC   --------------------------------------------------------------------------
+DR   EMBL; K02883; AAA98727.1; -.
+DR   EMBL; M84379; AAA59606.1; -.
+DR   EMBL; X02457; CAA26297.1; -.
+DR   EMBL; M19670; AAA03683.1; -.
+DR   EMBL; M17690; AAB02120.1; -.
+DR   EMBL; U03863; AAA03604.1; -.
+DR   EMBL; M86404; -; NOT_ANNOTATED_CDS.
+DR   EMBL; X57954; CAA41022.1; ALT_SEQ.
+DR   EMBL; U03862; AAA03603.1; -.
+DR   EMBL; M24042; AAA59653.1; -.
+DR   EMBL; Z23071; CAA80612.1; -.
+DR   EMBL; M84377; AAA59603.1; -.
+DR   EMBL; X60764; -; NOT_ANNOTATED_CDS.
+DR   EMBL; M84378; AAA59604.1; -.
+DR   EMBL; Z27120; CAA81644.1; -.
+DR   EMBL; Z46633; CAA86602.1; -.
+DR   EMBL; U18930; AAA87076.1; -.
+DR   EMBL; D83515; BAA11935.1; -.
+DR   EMBL; X96724; CAA65501.1; -.
+DR   EMBL; U56825; AAB17465.1; -.
+DR   PIR; A02188; HLHUA2.
+DR   PIR; A02191; HLHU2A.
+DR   PIR; E35997; E35997.
+DR   PIR; S19020; S19020.
+DR   PIR; S23593; S23593.
+DR   PDB; 1HLA; 15-JUL-90.
+DR   PDB; 3HLA; 15-APR-90.
+DR   PDB; 1HHG; 31-OCT-93.
+DR   PDB; 1HHH; 31-OCT-93.
+DR   PDB; 1HHI; 31-OCT-93.
+DR   PDB; 1HHJ; 31-OCT-93.
+DR   PDB; 1HHK; 31-OCT-93.
+DR   PDB; 1AQD; 28-JAN-98.
+DR   MIM; 142800; -.
+DR   PROSITE; PS00290; IG_MHC; 1.
+DR   PFAM; PF00047; ig; 1.
+DR   PFAM; PF00129; MHC_I; 1.
+KW   MHC I; Transmembrane; Glycoprotein; Signal; Polymorphism;
+KW   3D-structure.
+FT   SIGNAL        1     24
+FT   CHAIN        25    365       HLA CLASS I HISTOCOMPATIBILITY ANTIGEN,
+FT                                A-2 ALPHA CHAIN.
+FT   DOMAIN       25    114       EXTRACELLULAR ALPHA-1.
+FT   DOMAIN      115    206       EXTRACELLULAR ALPHA-2.
+FT   DOMAIN      207    298       EXTRACELLULAR ALPHA-3.
+FT   DOMAIN      299    308       CONNECTING PEPTIDE.
+FT   TRANSMEM    309    332
+FT   DOMAIN      333    365       CYTOPLASMIC TAIL.
+FT   CARBOHYD    110    110
+FT   DISULFID    125    188
+FT   DISULFID    227    283
+FT   STRAND       27     36
+FT   STRAND       45     52
+FT   TURN         53     54
+FT   STRAND       55     61
+FT   TURN         62     63
+FT   STRAND       70     71
+FT   HELIX        74     76
+FT   TURN         77     78
+FT   HELIX        81    108
+FT   TURN        109    110
+FT   TURN        113    114
+FT   STRAND      118    127
+FT   TURN        129    130
+FT   STRAND      133    142
+FT   TURN        143    144
+FT   STRAND      145    150
+FT   TURN        152    153
+FT   STRAND      157    159
+FT   TURN        163    163
+FT   HELIX       164    173
+FT   TURN        174    175
+FT   HELIX       176    185
+FT   TURN        186    186
+FT   HELIX       187    198
+FT   TURN        199    199
+FT   HELIX       200    203
+FT   TURN        204    204
+FT   STRAND      207    207
+FT   STRAND      210    219
+FT   TURN        220    221
+FT   STRAND      222    233
+FT   STRAND      238    243
+FT   TURN        244    245
+FT   STRAND      246    247
+FT   HELIX       249    251
+FT   STRAND      253    254
+FT   STRAND      258    259
+FT   STRAND      265    274
+FT   TURN        275    276
+FT   HELIX       278    280
+FT   STRAND      281    286
+FT   TURN        288    289
+FT   STRAND      294    297
+FT   VARIANT      33     33       F -> Y (IN A*0205, A*0206, A*0208, A*0210
+FT                                AND A*0221).
+FT                                /FTId=VAR_004334.
+FT   VARIANT      54     54       D -> N (IN A*0221).
+FT                                /FTId=VAR_004335.
+FT   VARIANT      67     67       Q -> R (IN A*0202, A*0205, AND A*0208).
+FT                                /FTId=VAR_004336.
+FT   VARIANT      90     90       K -> N (IN A*0208 AND A*0220).
+FT                                /FTId=VAR_004337.
+FT   VARIANT      97     98       TH -> ID (IN A*0211).
+FT                                /FTId=VAR_004338.
+FT   VARIANT     119    119       V -> L (IN A*0202, A*0205, A*0208 AND
+FT                                A*0217).
+FT                                /FTId=VAR_004339.
+FT   VARIANT     121    121       R -> M (IN A*0204 AND A*0217).
+FT                                /FTId=VAR_004340.
+FT   VARIANT     123    123       Y -> C (IN A*0207 AND A*0218).
+FT                                /FTId=VAR_004341.
+FT   VARIANT     123    123       Y -> F (IN A*0210 AND A*0217).
+FT                                /FTId=VAR_004342.
+FT   VARIANT     131    131       W -> G (IN A*0210).
+FT                                /FTId=VAR_004343.
+FT   VARIANT     162    162       M -> K (IN A*0218).
+FT                                /FTId=VAR_004344.
+FT   VARIANT     173    173       A -> T (IN A*0203).
+FT                                /FTId=VAR_004345.
+FT   VARIANT     176    176       V -> E (IN A*0203 AND A*0213).
+FT                                /FTId=VAR_004346.
+FT   VARIANT     180    180       L -> W (IN A*0202, A*0203, A*0205 AND
+FT                                A*0208).
+FT                                /FTId=VAR_004347.
+FT   VARIANT     180    180       L -> Q (IN A*0212 AND A*0213).
+FT                                /FTId=VAR_004348.
+FT   VARIANT     187    187       T -> E (IN A*0216).
+FT                                /FTId=VAR_004349.
+FT   VARIANT     260    260       A -> E (IN A*0209).
+FT                                /FTId=VAR_004350.
+SQ   SEQUENCE   365 AA;  40922 MW;  B54A97B24B337C08 CRC64;
+     MAVMAPRTLV LLLSGALALT QTWAGSHSMR YFFTSVSRPG RGEPRFIAVG YVDDTQFVRF
+     DSDAASQRME PRAPWIEQEG PEYWDGETRK VKAHSQTHRV DLGTLRGYYN QSEAGSHTVQ
+     RMYGCDVGSD WRFLRGYHQY AYDGKDYIAL KEDLRSWTAA DMAAQTTKHK WEAAHVAEQL
+     RAYLEGTCVE WLRRYLENGK ETLQRTDAPK THMTHHAVSD HEATLRCWAL SFYPAEITLT
+     WQRDGEDQTQ DTELVETRPA GDGTFQKWAA VVVPSGQEQR YTCHVQHEGL PKPLTLRWEP
+     SSQPTIPIVG IIAGLVLFGA VITGAVVAAV MWRRKSSDRK GGSYSQAASS DSAQGSDVSL
+     TACKV
+//

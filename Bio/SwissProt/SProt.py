@@ -281,7 +281,10 @@ class _Scanner:
         self._scan_line('ID', uhandle, consumer.identification, exactly_one=1)
 
     def _scan_ac(self, uhandle, consumer):
-        self._scan_line('AC', uhandle, consumer.accession, exactly_one=1)
+        # Until release 38, this used to match exactly_one.
+        # However, in release 39, 1A02_HUMAN has 2 AC lines, and the
+        # definition needed to be expanded.
+        self._scan_line('AC', uhandle, consumer.accession, any_number=1)
     
     def _scan_dt(self, uhandle, consumer):
         self._scan_line('DT', uhandle, consumer.date, exactly_one=1)
@@ -479,8 +482,11 @@ class _RecordConsumer(AbstractConsumer):
     def reference_cross_reference(self, line):
         assert self.data.references, "RX: missing RN"
         cols = string.split(line)
-        assert len(cols) == 3, "I don't understand RX line %s" \
-               % line
+        if line[:22] != 'RX   MEDLINE; 99132301':
+            # CLD1_HUMAN in Release 39 has a broken RX line.
+            # (noticed by katel@worldpath.net)
+            assert len(cols) == 3, "I don't understand RX line %s" \
+                   % line
         self.data.references[-1].references.append(
             (self._chomp(cols[1]), self._chomp(cols[2])))
     

@@ -1,0 +1,60 @@
+ID   CLD1_HUMAN     STANDARD;      PRT;   211 AA.
+AC   O95832;
+DT   15-FEB-2000 (Rel. 39, Created)
+DT   15-FEB-2000 (Rel. 39, Last sequence update)
+DT   15-FEB-2000 (Rel. 39, Last annotation update)
+DE   CLAUDIN-1 (SENESCENCE-ASSOCIATED EPITHELIAL MEMBRANE PROTEIN).
+GN   CLDN1 OR CLD1 OR SEMP1.
+OS   Homo sapiens (Human).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+RN   [1]
+RP   SEQUENCE FROM N.A.
+RX   MEDLINE; 99132301. [NCBI, ExPASy, Israel, Japan]
+RA   Swisshelm K.L., Machl A., Planitzer S., Robertson R., Kubbies M.,
+RA   Hosier S.;
+RT   "SEMP1, a senescence-associated cDNA isolated from human mammary
+RT   epithelial cells, is a member of an epithelial membrane protein
+RT   superfamily.";
+RL   Gene 226:285-295(1999).
+RN   [2]
+RP   SEQUENCE FROM N.A.
+RA   Mitic L.M., Anderson J.M.;
+RT   "Human claudin-1 isolated from Caco-2 mRNA.";
+RL   Submitted (DEC-1998) to the EMBL/GenBank/DDBJ databases.
+CC   -!- FUNCTION: COMPONENT OF TIGHT JUNCTION (TJ) STRANDS.
+CC   -!- SUBCELLULAR LOCATION: INTEGRAL MEMBRANE PROTEIN.
+CC   -!- SIMILARITY: BELONGS TO THE CLAUDIN FAMILY.
+CC   --------------------------------------------------------------------------
+CC   This SWISS-PROT entry is copyright. It is produced through a collaboration
+CC   between  the Swiss Institute of Bioinformatics  and the  EMBL outstation -
+CC   the European Bioinformatics Institute.  There are no  restrictions on  its
+CC   use  by  non-profit  institutions as long  as its content  is  in  no  way
+CC   modified and this statement is not removed.  Usage  by  and for commercial
+CC   entities requires a license agreement (See http://www.isb-sib.ch/announce/
+CC   or send an email to license@isb-sib.ch).
+CC   --------------------------------------------------------------------------
+DR   EMBL; AF101051; AAD16433.1; -. [EMBL / GenBank / DDBJ] [CoDingSequence]
+DR   EMBL; AF115546; AAD22962.1; -. [EMBL / GenBank / DDBJ] [CoDingSequence]
+DR   GeneCards; CLDN1.
+DR   MIM; 603718; -.
+DR   PROSITE; PS01346; CLAUDIN; 1.
+DR   PRODOM [Domain structure / List of seq. sharing at least 1 domain]
+DR   BLOCKS; O95832.
+DR   DOMO; O95832.
+DR   PROTOMAP; O95832.
+DR   PRESAGE; O95832.
+DR   SWISS-2DPAGE; GET REGION ON 2D PAGE.
+KW   Tight junction; Transmembrane.
+FT   TRANSMEM      8     28       POTENTIAL.
+FT   TRANSMEM     82    102       POTENTIAL.
+FT   TRANSMEM    116    136       POTENTIAL.
+FT   TRANSMEM    164    184       POTENTIAL.
+FT   CONFLICT     62     62       I -> V (IN REF. 2).
+FT   CONFLICT    135    135       V -> A (IN REF. 2).
+SQ   SEQUENCE   211 AA;  22744 MW;  07269000E6C214F0 CRC64;
+     MANAGLQLLG FILAFLGWIG AIVSTALPQW RIYSYAGDNI VTAQAMYEGL WMSCVSQSTG
+     QIQCKVFDSL LNLSSTLQAT RALMVVGILL GVIAIFVATV GMKCMKCLED DEVQKMRMAV
+     IGGAIFLLAG LAILVATAWY GNRIVQEFYD PMTPVNARYE FGQALFTGWA AASLCLLGGA
+     LLCCSCPRKT TSYPTPRPYP KPAPSSGKDY V
+//
