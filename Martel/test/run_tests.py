@@ -8,6 +8,7 @@ def main(args):
     except NameError:
         dirname = "."
     files = glob.glob(os.path.join(dirname, "test_*.py"))
+    files.sort()
 
     for file in files:
         name = os.path.basename(file)
