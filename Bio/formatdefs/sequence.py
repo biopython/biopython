@@ -10,3 +10,7 @@ register_format(
 )
 
 link_format("sequence", "fasta")
+
+register_format(
+    name = "empty",
+)
