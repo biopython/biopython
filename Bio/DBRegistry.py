@@ -11,13 +11,6 @@ from Bio.Tools.MultiProc.copen import copen_fn
 from ReseekFile import ReseekFile
 
 
-##INI_FILES = [
-##    $HOME/.bioinformatics/seqdatabase.ini,
-##    "/etc/bioinformatics/seqdatabase.ini",
-##    "http://www.open-bio.org/registry/seqdatabase.ini",
-##    ]
-
-
 class DBDef:
     # name
     # abbrev    (optional)
@@ -135,7 +128,7 @@ class DBGroup:
     
 class DBRegistry:
     # This class should be merged with FormatRegistry.py
-    def __init__(self, loadpath):
+    def __init__(self, loadpath=None):
         self._name_table = {}
         self._abbrev_table = {}
         self.loadpath = loadpath
@@ -198,5 +191,7 @@ class DBRegistry:
     def __str__(self):
         locations = self.keys()
         locations.sort()
+        if not locations:
+            return "DBRegistry"
         return "DBRegistry, exporting %s" % ', '.join(map(repr, locations))
     __repr__ = __str__
