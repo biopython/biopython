@@ -196,6 +196,15 @@ class DictionaryTest(unittest.TestCase):
         for gi in gis:
             rec = fasta_dict[gi]
             assert isinstance(rec, Fasta.Record)
+            assert gi in fasta_dict
+            
+            
 
+        # dict like function
+        self.assertRaises(KeyError,fasta_dict.__getitem__, 'this is not a key')
+        assert fasta_dict.has_key("1348912")== True
+        assert fasta_dict.has_key("not a key")== False
+        
+        
 if __name__ == "__main__":
     sys.exit(run_tests(sys.argv))
