@@ -71,12 +71,19 @@ class ThreeLetterProtein(Alphabet):
 class AlphabetEncoder:
     def __init__(self, alphabet, new_letters):
         self.alphabet = alphabet
+        self.new_letters = new_letters
         if alphabet.letters is not None:
             self.letters = alphabet.letters + new_letters
         else:
             self.letters = None
     def __getattr__(self, key):
+        if key[:2] == "__" and key[-2:] == "__":
+            raise AttributeError(key)
         return getattr(self.alphabet, key)
+
+    def __repr__(self):
+        return "%s(%r, %r)" % (self.__class__.__name__, self.alphabet,
+                               self.new_letters)
 
     def contains(self, other):
         return 0
