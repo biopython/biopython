@@ -253,3 +253,29 @@ class EConsenseCommandline(Application.AbstractCommandline):
           _Option(["-printsets"], ["input"], None, 0,
                   "Print out the sets of species")]
                   
+class WaterCommandline(Application.AbstractCommandline):
+    """Commandline object for the water program from EMBOSS.
+    """
+    def __init__(self, cmd = "water"):
+        Application.AbstractCommandline.__init__(self)
+        self.program_name = cmd
+
+        self.parameters = \
+         [_Option(["-sequencea"], ["input", "file"], None, 1,
+                  "First sequence to align"),
+         _Option(["-seqall"], ["input", "file"], None, 1,
+                  "Second sequence to align"),
+         _Option(["-gapopen"], ["input"], None, 1,
+                 "Gap open penalty"),
+         _Option(["-gapextend"], ["input"], None, 1,
+                 "Gap extension penalty"),
+         _Option(["-outfile"], ["output", "file"], None, 1,
+                 "Output file for the alignment"),
+         _Option(["-datafile"], ["input", "file"], None, 0,
+                 "Matrix file"),
+         _Option(["-similarity"], ["input"], None, 0,
+                 "Display percent identity and similarity"),
+         _Option(["-nosimilarity"], ["input"], None, 0,
+                 "Do not display percent identity and similarity"),
+         _Option(["-fasta"], ["input"], None, 0,
+                 "Output overlap as fasta sequences")]
