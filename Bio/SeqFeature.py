@@ -79,7 +79,12 @@ class SeqFeature:
         out += "location: %s\n" % self.location
         out += "ref: %s:%s\n" % (self.ref, self.ref_db)
         out += "strand: %s\n" % self.strand
-        out += "qualifiers: %s\n" % self.qualifiers
+        out += "qualifiers: \n"
+        qualifier_keys = self.qualifiers.keys()
+        qualifier_keys.sort()
+        for qual_key in qualifier_keys:
+            out += "\tKey: %s, Value: %s\n" % (qual_key,
+                                               self.qualifiers[qual_key])
         if len(self.sub_features) != 0:
             out += "Sub-Features\n"
             for sub_feature in self.sub_features:
