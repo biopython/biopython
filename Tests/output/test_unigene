@@ -1,3 +1,5 @@
+test_unigene
+Warning: can't open .\output\test_unigene
 testing Bt145.htm
 key EXPRESSION INFORMATION
         key is Note
@@ -331,3 +333,4 @@ key EST SEQUENCES
             cDNA clone IMAGE:223702 Eye 5' read 2.6 kb
 
 
+1 test OK.
