@@ -77,8 +77,8 @@ class Dictionary:
         """__getitem__(self, id) -> object
 
         Return the Medline entry.  id is either the Medline Unique ID
-        or the Pubmed ID of the article.  If no more entries, return None.
-        Raises a KeyError if there's an error.
+        or the Pubmed ID of the article.  Raises a KeyError if there's an
+        error.
         
         """
         # First, check to see if enough time has passed since my
