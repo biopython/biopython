@@ -256,10 +256,16 @@ _get_approximate_transition(const unsigned char *key,
 			    unsigned char *current_key, const int max_key
 			    )
 {
+    int i;
     int prev_keylen = strlen(current_key);
 
+    /* Short circuit optimization.  If there's too many characters to
+       possibly be a match, then don't even try to match things. */
+    if((abs(strlen(suffix)-strlen(key))) > k)
+	return;
+
     /* Match as many characters as possible. */
-    int i = 0;
+    i = 0;
     while(suffix[i] && key[i] && (key[i] == suffix[i])) {
 	if(prev_keylen+i >= max_key)
 	    break;
@@ -274,17 +280,14 @@ _get_approximate_transition(const unsigned char *key,
     }
     current_key[prev_keylen+i] = 0;
 
-    /* If all the letters in the suffix matched, then move onto the
+    /* If all the letters in the suffix matched, then move to the
        next trie. */
     if(!suffix[i]) {
 	_get_approximate_trie(transition->next, &key[i], k, callback, data,
 			      mismatches, current_key, max_key);
     }
-    /* If no more mismatches are allowed, then the match failed. */
-    else if(!k) {
-    }
     /* Otherwise, try out different kinds of mismatches. */
-    else {
+    else if(k) {
 	int new_keylen = prev_keylen+i;
 
 	/* Letter replacement, skip the next letter in both the key and
@@ -353,6 +356,14 @@ _get_approximate_trie(const Trie trie, const unsigned char *key, const int k,
 	    }
 	    /* BUG: Ran out of space for the key.  This fails
 	       silently, but should signal an error. */
+	}
+    }
+    /* If there are no more transitions, then all the characters left
+       in the key are mismatches. */
+    else if(!trie->num_transitions) {
+	if(trie->value && (strlen(key) <= k)) {
+	    (*callback)(current_key, trie->value, 
+			mismatches+strlen(key), data);
 	}
     }
     /* Otherwise, try to match each of the transitions. */
