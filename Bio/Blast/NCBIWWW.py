@@ -3,6 +3,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+# Patched by Brad Chapman.
+
 """NCBIWWW.py
 
 This module provides code to work with the WWW version of BLAST
@@ -14,7 +16,7 @@ BlastParser   Parses output from WWW blast.
 _Scanner      Scans output from NCBI's BLAST WWW server.
 
 Functions:
-blast         Do a BLAST search against the WWW page (deprecated).
+blast         Do a BLAST search against the WWW page.
 blasturl      Do a BLAST search against the stable blasturl.
 
 """
@@ -153,30 +155,47 @@ class _Scanner:
         # Brad Chapman noticed a '<p>' line in BLASTN 2.1.1
         attempt_read_and_call(uhandle, consumer.noevent, start='<p>')
 
+        # 2.1.2 has the database right and blastform after the RID
+        database_read = 0
+        if attempt_read_and_call(uhandle, consumer.noevent, start = '<p>'):
+            self._scan_database_info(uhandle, consumer)
+            # Skip to the Query line.
+            read_and_call_until(uhandle, consumer.noevent, contains="Query=")
+            database_read = 1
+
         # Read the Query lines and the following blank line.
         read_and_call(uhandle, consumer.query_info, contains='Query=')
         read_and_call_until(uhandle, consumer.query_info, blank=1)
         read_and_call_while(uhandle, consumer.noevent, blank=1)
 
-        # Read the database lines and the following blank line.
+        # Read the database lines and the following blank line, if it
+        # hasn't been read already.
+        if not database_read:
+            self._scan_database_info(uhandle, consumer)
+
+            # Read the blast form, if it exists. 
+            if attempt_read_and_call(uhandle, consumer.noevent,
+                                     contains='BLASTFORM'):
+                read_and_call_until(uhandle, consumer.noevent, blank=1)
+            elif attempt_read_and_call(uhandle, consumer.noevent,
+                                       start='<PRE>'):
+                read_and_call_until(uhandle, consumer.noevent, blank=1)
+        # otherwise we'll need to scan a <PRE> tag
+        else:
+            read_and_call(uhandle, consumer.noevent, start = '<PRE>')
+
+        # Read the blank lines until the next section.
+        read_and_call_while(uhandle, consumer.noevent, blank=1)
+
+        consumer.end_header()
+
+    def _scan_database_info(self, uhandle, consumer):
         attempt_read_and_call(uhandle, consumer.noevent, start='<p>')
         read_and_call(uhandle, consumer.database_info, contains='Database')
         read_and_call(uhandle, consumer.database_info, contains='sequences')
         read_and_call(uhandle, consumer.noevent, blank=1)
         read_and_call(uhandle, consumer.noevent,
                       contains='problems or questions')
-
-        # Read the blast form, if it exists. 
-        if attempt_read_and_call(uhandle, consumer.noevent,
-                                 contains='BLASTFORM'):
-            read_and_call_until(uhandle, consumer.noevent, blank=1)
-        elif attempt_read_and_call(uhandle, consumer.noevent, start='<PRE>'):
-            read_and_call_until(uhandle, consumer.noevent, blank=1)
-
-        # Read the blank lines until the next section.
-        read_and_call_while(uhandle, consumer.noevent, blank=1)
-
-        consumer.end_header()
 
     def _scan_rounds(self, uhandle, consumer):
         self._scan_descriptions(uhandle, consumer)
@@ -530,37 +549,64 @@ class _Scanner:
 
         consumer.end_parameters()
 
+def blast(program, database, query,
+          entrez_query = '(none)',
+          filter = 'L',
+          expect = '10',
+          word_size = None,
+          ungapped_alignment = 'no',
+          other_advanced = None,
+          cdd_search = 'on',
+          composition_based_statistics = None,
+          matrix_name = None,
+          run_psiblast = None,
+          i_thresh = '0.001',
+          genetic_code = '1',
+          show_overview = 'on',
+          ncbi_gi = 'on',
+          format_object = 'alignment',
+          format_type = 'html',
+          descriptions = '100',
+          alignments = '50',
+          alignment_view = 'Pairwise',
+          auto_format = 'on',
+          cgi='http://www.ncbi.nlm.nih.gov/blast/Blast.cgi',
+          timeout = 20):
+    
+    """blast(program, database, query[, entrez_query][, filter][, expect]
+    [, word_size][, ungapped_alignment][, other_advanced][, cdd_search]
+    [, composition_based_statistics][, matrix_name][, run_psiblast]
+    [, i_thresh][, genetic_code][, show_overview][, ncbi_gi]
+    [, format_object][, format_type][, descriptions][, alignments]
+    [, alignment_view][, auto_format][, cgi][, timeout]) -> handle
 
-def blast(program, datalib, sequence,
-          input_type='Sequence in FASTA format',
-          double_window=None, gi_list='(None)',
-          list_org = None, expect='10',
-          filter='L', genetic_code='Standard (1)',
-          mat_param='PAM30     9       1',
-          other_advanced=None, ncbi_gi=None, overview=None,
-          alignment_view='0', descriptions=None, alignments=None,
-          email=None, path=None, html=None, 
-          cgi='http://www.ncbi.nlm.nih.gov/blast/blast.cgi',
-          timeout=20
-          ):
-    """blast(program, datalib, sequence,
-    input_type='Sequence in FASTA format',
-    double_window=None, gi_list='(None)',
-    list_org = None, expect='10',
-    filter='L', genetic_code='Standard (1)',
-    mat_param='PAM30     9       1',
-    other_advanced=None, ncbi_gi=None, overview=None,
-    alignment_view='0', descriptions=None, alignments=None,
-    email=None, path=None, html=None, 
-    cgi='http://www.ncbi.nlm.nih.gov/blast/blast.cgi',
-    timeout=20) -> handle
+    Blast against the NCBI Blast web page.  This uses the NCBI web
+    page cgi script to BLAST, and returns a handle to the
+    results. See:
+    
+    http://www.ncbi.nlm.nih.gov/blast/html/blastcgihelp.html
+    
+    for more descriptions about the options.
 
-    Do a BLAST search against NCBI.  Returns a handle to the results.
-    timeout is the number of seconds to wait for the results before timing
-    out.  The other parameters are provided to BLAST.  A description
-    can be found online at:
-    http://www.ncbi.nlm.nih.gov/BLAST/newoptions.html
+    Required Inputs:
+    o program - The name of the blast program to run (ie. blastn, blastx...)
+    o database - The database to search against (ie. nr, dbest...)
+    o query - The input for the search, which NCBI tries to autodetermine
+    the type of. Ideally, this would be a sequence in FASTA format.
 
+    General Options:
+    filter, expect, word_size, other_advanced
+
+    Formatting Options:
+    show_overview, ncbi_gi, format_object, format_type, descriptions,
+    alignments, alignment_view, auto_format
+
+    Protein specific options:
+    cdd_search, composition_based_statistics, matrix_name, run_psiblast,
+    i_thresh
+
+    Translated specific options:
+    genetic code
     """
     # NCBI Blast is hard to work with.  The user enters a query, and then
     # it returns a "reference" page which contains a button that the user
@@ -571,49 +617,82 @@ def blast(program, datalib, sequence,
     # page to figure out how to retrieve the results.  Then, it needs to
     # check the results to see if the search has been finished.
     params = {'PROGRAM' : program,
-              'DATALIB' : datalib,
-              'SEQUENCE' : sequence,
-              'DOUBLE_WINDOW' : double_window,
-              'GI_LIST' : gi_list,
-              'LIST_ORG' : list_org,
-              'INPUT_TYPE' : input_type,
-              'EXPECT' : expect,
+              'DATABASE' : database,
+              'QUERY' : query,
+              'ENTREZ_QUERY' : entrez_query,
               'FILTER' : filter,
+              'EXPECT' : expect,
+              'WORD_SIZE' : word_size,
+              'UNGAPPED_ALIGNMENT' : ungapped_alignment,
+              'OTHER_ADVANCED': other_advanced,
+              'CDD_SEARCH' : cdd_search,
+              'COMPOSITION_BASED_STATISTICS' : composition_based_statistics,
+              'MATRIX_NAME' : matrix_name,
+              'RUN_PSIBLAST' : run_psiblast,
+              'I_THRESH' : i_thresh,
               'GENETIC_CODE' : genetic_code,
-              'MAT_PARAM' : mat_param,
-              'OTHER_ADVANCED' : other_advanced,
+              'SHOW_OVERVIEW' : show_overview,
               'NCBI_GI' : ncbi_gi,
-              'OVERVIEW' : overview,
-              'ALIGNMENT_VIEW' : alignment_view,
+              'FORMAT_OBJECT' : format_object,
+              'FORMAT_TYPE' : format_type,
               'DESCRIPTIONS' : descriptions,
               'ALIGNMENTS' : alignments,
-              'EMAIL' : email,
-              'PATH' : path,
-              'HTML' : html
-              }
+              'ALIGNMENT_VIEW' : alignment_view,
+              'AUTO_FORMAT' : auto_format}
     variables = {}
     for k in params.keys():
         if params[k] is not None:
             variables[k] = str(params[k])
+            
+    variables['CLIENT'] = 'web'
+    variables['SERVICE'] = 'plain'
+    variables['CMD'] = 'Put'
+
+    if program.upper() == 'BLASTN':
+        variables['PAGE'] = 'Nucleotides'
+    elif program.upper() == 'BLASTP':
+        variables['PAGE'] = 'Proteins'
+    elif program.upper() in ['BLASTX', 'TBLASTN','TBLASTX']:
+        variables['PAGE'] = 'Translations'
+    else:
+        raise ValueError("Unexpected program name %s" % program)
+        
     # This returns a handle to the HTML file that points to the results.
-    handle = NCBI._open(cgi, variables, get=0)
+    handle = NCBI._open(cgi, variables, get = 0)
     # Now parse the HTML from the handle and figure out how to retrieve
     # the results.
     refcgi, params = _parse_blast_ref_page(handle, cgi)
 
+    # start with the initial recommended delay. Otherwise we get hit with
+    # an extra long delay right away
+    if params.has_key("RTOE"):
+        refresh_delay = int(params["RTOE"]) + 1
+        del params["RTOE"]
+    else:
+        refresh_delay = 5
+
+    cgi = refcgi
     start = time.time()
     while 1:
+        # pause before trying to get the results
+        time.sleep(refresh_delay)
+        
         # Sometimes the BLAST results aren't done yet.  Look at the page
         # to see if the results are there.  If not, then try again later.
         handle = NCBI._open(cgi, params, get=0)
-        ready, results, refresh_delay = _parse_blast_results_page(handle)
+        ready, results, refresh_delay, cgi = _parse_blast_results_page(handle)
+        
         if ready:
             break
         # Time out if it's not done after timeout minutes.
         if time.time() - start > timeout*60:
             raise IOError, "timed out after %d minutes" % timeout
-        # pause and try again.
-        time.sleep(refresh_delay)
+
+    # now get the results page and return it
+    # -- the "ready" page from before is just a check page
+    result_handle = NCBI._open(refcgi, params, get=0)
+    results = result_handle.read()
+    
     return File.UndoHandle(File.StringHandle(results))
 
 def _parse_blast_ref_page(handle, base_cgi):
@@ -635,20 +714,27 @@ def _parse_blast_ref_page(handle, base_cgi):
                 if attr == 'ACTION':
                     self.cgi = urlparse.urljoin(self.cgi, value)
         def do_input(self, attributes):
-            # parse the "INPUT" tags to try and find the reference ID (RID)
-            is_rid = 0
-            rid = None
+            # parse out all of the different inputs we are interested in
+            inputs = ["RID", "RTOE", "CLIENT", "CMD", "PAGE",
+                      "EXPECT", "DESCRIPTIONS", "ALIGNMENTS", "AUTO_FORMAT"]
+
+            cur_input = None
+            
             for attr, value in attributes:
                 attr, value = string.upper(attr), string.upper(value)
-                if attr == 'NAME' and value == 'RID':
-                    is_rid = 1
+                if attr == 'NAME':
+                    if value in inputs:
+                        cur_input = value
+                    else:
+                        cur_input = None
                 elif attr == 'VALUE':
-                    rid = value
-            if is_rid and rid:
-                self.params['RID'] = rid
+                    if cur_input is not None and value:
+                        self.params[cur_input] = value
                 
     parser = RefPageParser(base_cgi)
-    parser.feed(handle.read())
+    html_info = handle.read()
+    
+    parser.feed(html_info)
     if not parser.params.has_key('RID'):
         raise SyntaxError, "Error getting BLAST results: RID not found"
     return parser.cgi, parser.params
@@ -659,21 +745,59 @@ def _parse_blast_results_page(handle):
         def __init__(self):
             sgmllib.SGMLParser.__init__(self)
             self.ready = 0
+            self.refresh_cgi = None
             self.refresh = 5
+
         def handle_comment(self, comment):
-            comment = string.lower(comment)
-            if string.find(comment, 'status=ready') >= 0:
+            # determine if it is ready
+            if string.find(comment.lower(), 'status=ready') >= 0:
                 self.ready = 1
+            # otherwise, we need to parse for the delay and url
+            elif string.find(comment, 'location.href') >= 0:
+                self.refresh_cgi, self.refresh = self._find_cgi_info(comment)
+
         _refresh_re = re.compile('REFRESH_DELAY=(\d+)', re.IGNORECASE)
-        def do_meta(self, attributes):
-            for attr, value in attributes:
-                m = self._refresh_re.search(value)
-                if m:
-                    self.refresh = int(m.group(1))
+        def _find_cgi_info(self, comment):
+            """Find the refresh CGI string and refresh delay from a comment.
+
+            We are parsing a comment string like:
+            setTimeout('location.href =
+            "http://www.ncbi.nlm.nih.gov/blast/Blast.cgi?
+            CMD=Get&RID=984874645-19210-15659&CHECK_STATUS_ONLY=yes&
+            REFRESH_DELAY=106&AUTO_FORMAT=yes&KEY=20111";',106000);
+
+            Arguments:
+
+            o comment - A comment which is assumed to have been checked to
+            have the refresh delay cgi string in it.
+            """
+            # find where the cgi string starts
+            href_string = 'location.href = "'
+            cgi_start_pos = string.find(comment, href_string)
+            assert cgi_start_pos is not -1, \
+                   "Unable to parse the start of the refresh cgi."
+            # the cgi starts at the end of the location.href stuff
+            cgi_start_pos += len(href_string)
+
+            # find the end pos of the cgi string
+            cgi_end_pos = string.find(comment, '"', cgi_start_pos)
+            assert cgi_end_pos is not -1, \
+                   "Unable to parse end of refresh cgi."
+
+            refresh_cgi = comment[cgi_start_pos:cgi_end_pos]
+
+            # parse the refresh delay out of the comment
+            m = self._refresh_re.search(refresh_cgi)
+            assert m, "Failed to parse refresh time from %s" % refresh_cgi
+            refresh = int(m.group(1))
+
+            return refresh_cgi, refresh
+                    
     results = handle.read()
+
     parser = ResultsParser()
     parser.feed(results)
-    return parser.ready, results, parser.refresh
+    return parser.ready, results, parser.refresh, parser.refresh_cgi
 
 
 def blasturl(program, datalib, sequence,
