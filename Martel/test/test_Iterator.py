@@ -12,7 +12,7 @@ text = test_swissprot38.record1 + test_swissprot38.record2
 def test1():
     # Does it read all of the records?
     iterator = swissprot38.format.make_iterator("swissprot38_record")
-    stream = iterator.iterateString(text, handler.ContentHandler)
+    stream = iterator.iterateString(text, handler.ContentHandler())
     i = 0
     while 1:
         x = stream.next()
@@ -25,7 +25,7 @@ def test2():
     # Is is reading a record at a time?
     iterator = swissprot38.format.make_iterator("swissprot38_record")
     stream = iterator.iterateString(test_swissprot38.record1 + "X" * 100,
-                                    handler.ContentHandler)
+                                    handler.ContentHandler())
     x = stream.next()
     assert x is not None, x
     try:
@@ -40,7 +40,7 @@ def test2():
 def test3():
     # test the non-record reader parser
     iterator = swissprot38.format.expression.make_iterator("swissprot38_record")
-    stream = iterator.iterateString(text, handler.ContentHandler)
+    stream = iterator.iterateString(text, handler.ContentHandler())
     i = 0
     while 1:
         x = stream.next()

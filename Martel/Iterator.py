@@ -21,7 +21,7 @@ Here's an example use of the API:
 >>> from xml.dom import pulldom
 >>> iterator = swissprot38.format.make_iterator("swissprot38_record")
 >>> text = open("sample.swissprot").read()
->>> for record in iterator.iterateString(text, pulldom.SAX2DOM):
+>>> for record in iterator.iterateString(text, pulldom.SAX2DOM()):
 ..      print "Read a record with the following AC numbers:"
 ...     for acc in record.document.getElementsByTagName("ac_number"):
 ...         acc.writexml(sys.stdout)
@@ -88,19 +88,19 @@ class Iterator:
         self.parser = parser
         self.tag = tag
 
-    def iterateString(self, s, make_cont_handler):
+    def iterateString(self, s, cont_handler):
         """create an iterator over a string"""
         events = StoreEvents()
         self.parser.setContentHandler(events)
         self.parser.setErrorHandler(events)
         self.parser.parseString(s)
-        return Iterate(EventStream(events.events), self.tag, make_cont_handler)
+        return Iterate(EventStream(events.events), self.tag, cont_handler)
 
-    def iterateFile(self, fileobj, make_cont_handler):
-        return self.iterateString(self, fileobj.read(), make_cont_handler)
+    def iterateFile(self, fileobj, cont_handler):
+        return self.iterateString(self, fileobj.read(), cont_handler)
         
     def iterate(self, systemId, doc_handler):
-        return self.iterateFile(urllib.urlopen(systemId), make_cont_handler)
+        return self.iterateFile(urllib.urlopen(systemId), cont_handler)
     
 class RecordEventStream:
     def __init__(self, reader, parser):
@@ -123,24 +123,24 @@ class IteratorRecords:
         self.reader_args = reader_args
         self.marker_tag = marker_tag
 
-    def iterateString(self, s, make_cont_handler):
-        return self.iterateFile(StringIO(s), make_cont_handler)
+    def iterateString(self, s, cont_handler):
+        return self.iterateFile(StringIO(s), cont_handler)
 
-    def iterateFile(self, fileobj, make_cont_handler):
+    def iterateFile(self, fileobj, cont_handler):
         record_reader = apply(self.make_reader,
                               (fileobj,) + self.reader_args)
         return Iterate(RecordEventStream(record_reader, self.record_parser),
-                       self.marker_tag, make_cont_handler)
+                       self.marker_tag, cont_handler)
 
-    def iterate(self, systemId, make_cont_handler):
-        return self.iterateFile(urllib.urlopen(systemId), make_cont_handler)
+    def iterate(self, systemId, cont_handler):
+        return self.iterateFile(urllib.urlopen(systemId), cont_handler)
 
 class Iterate:
-    def __init__(self, event_stream, tag, make_cont_handler):
+    def __init__(self, event_stream, tag, cont_handler):
         self.event_stream = event_stream
         self.events = None
         self.tag = tag
-        self.make_cont_handler = make_cont_handler
+        self.cont_handler = cont_handler
         self._n = 0
         self.start_position = 0
         self.end_position = 0
@@ -173,7 +173,7 @@ class Iterate:
 
             if name == "startElement" and args[0] == self.tag:
                 self.start_position = self.current_position
-                cont_handler = self.make_cont_handler()
+                cont_handler = self.cont_handler
                 cont_handler.startDocument()
                 while i < n:
                     name, args = events[i]
