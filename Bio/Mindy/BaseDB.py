@@ -12,7 +12,7 @@ class WriteDB:
     # Must define 'self.filename_map' mapping from filename -> fileid
     # Must define 'self.fileid_info' mapping from fileid -> (filename,size)
 
-    def add_filename(self, filename, size):
+    def add_filename(self, filename, size, fileid_info):
         fileid = self.filename_map.get(filename, None)
         if fileid is not None:
             return fileid
@@ -22,10 +22,10 @@ class WriteDB:
         self.fileid_info[s] = (filename, size)
         return s
 
-    def load(self, filename, builder, record_tag = "record"):
+    def load(self, filename, builder, fileid_info, record_tag = "record"):
         formatname = self.formatname
         size = os.path.getsize(filename)
-        filetag = self.add_filename(filename, size)
+        filetag = self.add_filename(filename, size, fileid_info)
 
         source = compression.open_file(filename, "rb")
         if formatname == "unknown":
@@ -37,7 +37,7 @@ class WriteDB:
                             (self.formatname,))
         if self.formatname == "unknown":
             expected_names = ["fasta", "embl", "swissprot", "genbank"]
-            for node in format._get_parents_in_depth_order():
+            for node in format._parents:
                 if node.name in expected_names:
                     self.formatname = node.name
                     break

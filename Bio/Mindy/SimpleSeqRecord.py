@@ -101,7 +101,7 @@ def create_berkeleydb(files, db_name, indexer = SimpleIndexer()):
     creator = BerkeleyDB.create(db_name, unique_name, alias_names)
     builder = indexer.get_builder()
     for filename in files:
-        creator.load(filename, builder = builder)
+        creator.load(filename, builder = builder, fileid_info = {})
     creator.close()
 
 def create_flatdb(files, db_name, indexer = SimpleIndexer()):
@@ -111,5 +111,5 @@ def create_flatdb(files, db_name, indexer = SimpleIndexer()):
     creator = FlatDB.create(db_name, unique_name, alias_names)
     builder = indexer.get_builder()
     for filename in files:
-        creator.load(filename, builder = builder)
+        creator.load(filename, builder = builder, fileid_info = {})
     creator.close()

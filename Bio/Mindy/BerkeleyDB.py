@@ -14,9 +14,10 @@ def create(dbname, primary_namespace, secondary_namespaces,
     config_filename = os.path.join(dbname, "config.dat")
     BaseDB.write_config(config_filename = config_filename,
                         index_type = INDEX_TYPE,
-                        primary_namespace = self.primary_namespace,
-                        secondary_namespaces = self.secondary_tables.keys(),
-                        fileid_info = self.fileid_info,
+                        primary_namespace = primary_namespace,
+                        secondary_namespaces = secondary_namespaces,
+                        fileid_info = {},
+                        formatname = formatname
                         )
 
     dbenv = db.DBEnv(0)
