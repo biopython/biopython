@@ -287,11 +287,11 @@ setup(name='biopython',
                                 'Bio/csupport.c'],
                                include_dirs=["Bio"]
                                ),
-#                     Extension('Bio.KDTree._KDTreecmodule',
-#                               ["Bio/KDTree/_KDTree.C", 
-#                                "Bio/KDTree/_KDTree.swig.C"],
-#                               libraries=["stdc++"]
-#                               )
+                     Extension('Bio.KDTree._KDTreecmodule',
+                               ["Bio/KDTree/_KDTree.C", 
+                                "Bio/KDTree/_KDTree.swig.C"],
+                               libraries=["stdc++"]
+                               )
                      ]
       )
 
