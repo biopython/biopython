@@ -98,6 +98,12 @@ else:
 
 ################ identifier, description, and cross-references
 
+def record(expr, attrs = {}):
+    attrs = _check_attrs(attrs, ("format",))
+    d = {}
+    _set_if_given(attrs, "format", d)
+    return Group("record", expr, d) # XX FIXME
+
 def dbid(expr, attrs = {}):
     attrs = _check_attrs(attrs, ("type", "style", "dbname"))
     d = {}
@@ -118,7 +124,9 @@ def description(expr, attrs = {}):
     attrs = _check_attrs(attrs, ())
     return Group(NS + "description", expr)
 _settag(description, NS + "description")
-    
+
+def description_line(expr, attrs = {}):
+    return description_block(description(expr, attrs))
 
 def dbxref(expr, attrs = {}):
     attrs = _check_attrs(attrs, ("style",))
