@@ -33,7 +33,13 @@ try:
     import test_support
 except ImportError:
     # looks like Python 1.5.2 changed the location on me
-    test_support = __import__("test/test_support")
+    # hmmm... windows doesn't seem to like the next line, tried to do
+    # the same thing in a different way
+    # test_support = __import__("test/test_support")
+    
+    from test import test_support
+    
+    
 
 SUCCEEDED = 1
 FAILED = 0
