@@ -339,6 +339,9 @@ def DelimitedFields(name = None, sep = None, attrs = None):
     rep = Rep(Any(sep) + term)
     return term + rep + AnyEol()
     
+# Allows some optimizations
+FastFeature = Expression.FastFeature
+
 
 # Used when making parsers which read a record at a time
 ParseRecords = Expression.ParseRecords

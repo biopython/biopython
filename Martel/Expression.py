@@ -17,6 +17,7 @@
    |--- MaxRepeat     - greedy repeat of an expression, within min/max bounds
    |--- NullOp        - does nothing (useful as an initial seed)
    |--- PassThrough   - used when overriding 'make_parser'; match its subexp
+   |      |--- FastFeature  - keeps information about possibly optional tags
    |      |--- HeaderFooter - files with a header, records and a footer
    |      `--- ParseRecords - parse a record at a time
    |--- Str           - match a given string
@@ -57,6 +58,10 @@ class Expression:
 
     def _find_groups(self, tag):
         """return a list of all groups matching the given tag"""
+        return []
+
+    def features(self):
+        """return a list of all features"""
         return []
     
     def _select_names(self, names):
@@ -292,6 +297,10 @@ class Group(Expression):
             x.append(self)
         return x + self.expression._find_groups(tag)
 
+    def features(self):
+        """return a list of all features"""
+        return self.expression.features()
+
     def _select_names(self, names):
         """internal function: do not use"""
         if self.name is not None and self.name not in names:
@@ -312,7 +321,7 @@ class Group(Expression):
     def __str__(self):
         """the corresponding pattern string"""
         return _make_group_pattern(self.name, self.expression, self.attrs)
-                                   
+
 
 # group reference: '(?P<name>.)(?P=name)'
 class GroupRef(Expression):
@@ -411,6 +420,10 @@ class MaxRepeat(Expression):
         return self.expression.group_names()
     def _find_groups(self, tag):
         return self.expression._find_groups(tag)
+
+    def features(self):
+        """return a list of all features"""
+        return self.expression.features()
     
     def copy(self):
         """do a deep copy on this Expression tree"""
@@ -524,7 +537,7 @@ class PassThrough(Expression):
         return self
     def copy(self):
         """do a deep copy on this Expression tree"""
-        return PassThrough(self.expression)
+        return PassThrough(self.expression.copy())
     def __str__(self):
         """the corresponding pattern string"""
         return str(self.expression)
@@ -532,6 +545,21 @@ class PassThrough(Expression):
         return self.expression.group_names()
     def _find_groups(self, tag):
         return self.expression._find_groups()
+    def features(self):
+        """return a list of all features"""
+        return self.expression.features()
+
+class FastFeature(PassThrough):
+    def __init__(self, expression, feature, remove_tags):
+        PassThrough.__init__(self, expression)
+        self.feature = feature
+        self.remove_tags = remove_tags
+    def copy(self):
+        """do a deep copy on this Expression tree"""
+        return FastFeature(self.expression.copy(), self.feature,
+                           self.remove_tags[:])
+    def features(self):
+        return [(self.feature, self.remove_tags)]
 
 class HeaderFooter(PassThrough):
     def __init__(self, format_name, attrs,
@@ -709,6 +737,16 @@ class HeaderFooter(PassThrough):
         if self.footer_expression is not None:
             x.extend(self.footer_expression._find_groups(tag))
         return x
+    
+    def features(self):
+        """return a list of all features"""
+        x = []
+        if self.header_expression is not None:
+            x.extend(self.header_expression.features())
+        x.extend(self.expression.features())
+        if self.footer_expression is not None:
+            x.extend(self.footer_expression.features())
+        return x
 
 # Might be useful to allow a minimum record count (likely either 0 or 1)
 class ParseRecords(PassThrough):
@@ -774,6 +812,10 @@ class ParseRecords(PassThrough):
         assert tag != self.format_name, "can't handle that case"
         return self.expression._find_groups(tag)
 
+    def features(self):
+        """return a list of all features"""
+        return self.expression.features()
+
     def _modify_leaves(self, func):
         exp = self.expression.modify_leaves(func)
         assert exp is not None
@@ -813,6 +855,13 @@ class ExpressionList(Expression):
         for exp in self.expressions:
             x.extend(exp._find_groups(tag))
         return x
+    def features(self):
+        """return a list of all features"""
+        x = []
+        for exp in self.expressions:
+            x.extend(exp.features())
+        return x
+    
     def _select_names(self, names):
         """internal function.  Do not use."""
         for exp in self.expressions:

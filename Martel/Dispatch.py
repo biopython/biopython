@@ -75,6 +75,7 @@ class DispatchHandler:
         end_table = self._end_table = {}
         self._acquired = []
         self._prefix = prefix
+        self.supported_features = []
 
         for methodname in superdir(self):
             if methodname.startswith("start_"):
@@ -89,6 +90,10 @@ class DispatchHandler:
                 tagname = prefix + unescape(escaped_tagname)
                 assert not end_table.has_key(tagname)  # by construction
                 end_table[tagname] = method
+
+    def get_supported_features(self):
+        return self.supported_features
+        
 
     def acquire(self, obj, prefix = ""):
         # Add the objects methods to the local tables, possibly with
@@ -109,6 +114,16 @@ class DispatchHandler:
             method = _merge_methods(self._end_table.get(tagname, None),
                                     new_method, MulticallEnd)
             self._end_table[tagname] = method
+
+        # This isn't technically correct because one acquisition might
+        # support a feature while another might not, so in that case
+        # we need disable feature support.  Getting that information
+        # is tricky, so I decided that for now if you want feature
+        # support you better know what you're doing.  :(
+        d = {}
+        for x in self.supported_features + obj.get_supported_features():
+            d[x] = 1
+        self.supported_features[:] = d.keys()
         self._acquired.append(obj)
 
     def setCharacterSaver(self, saver):
