@@ -15,6 +15,8 @@ import unittest
 import Bio
 from Bio.Seq import Seq
 from Bio import Alphabet
+from Bio import GenBank
+
 from BioSQL import BioSeqDatabase
 from BioSQL import BioSeq
 
@@ -36,7 +38,7 @@ def testing_suite():
 
     test_loader = unittest.TestLoader()
     test_loader.testMethodPrefix = 't_'
-    tests = [LoadTest, SeqInterfaceTest]
+    tests = [ReadTest, SeqInterfaceTest, LoaderTest]
     
     for test in tests:
         cur_suite = test_loader.loadTestsFromTestCase(test)
@@ -44,8 +46,8 @@ def testing_suite():
 
     return test_suite
 
-class LoadTest(unittest.TestCase):
-    """Test loading a database from an already built database.
+class ReadTest(unittest.TestCase):
+    """Test reading a database from an already built database.
 
     XXX Once we have loading ability, this should use that instead
     of insisting on an existing database.
@@ -166,6 +168,41 @@ class SeqInterfaceTest(unittest.TestCase):
         assert len(multi_ann) == 2
         assert "GI:16354" in multi_ann
         assert "SWISS-PROT:P31169" in multi_ann
+
+class LoaderTest(unittest.TestCase):
+    """Load a database from a GenBank file.
+    """
+    def setUp(self):
+        # load the database
+        db_name = "biosql-loadertest"
+        server = BioSeqDatabase.open_database(user = DBUSER, passwd = DBPASSWD,
+                                              host = DBHOST, db = TESTDB)
+        
+        # remove the database if it already exists
+        try:
+            server[db_name]
+            server.remove_database(db_name)
+        except KeyError:
+            pass
+        
+        self.db = server.new_database(db_name)
+
+        # get the GenBank file we are going to put into it
+        input_file = os.path.join(os.getcwd(), "GenBank", "cor6_6.gb")
+        handle = open(input_file, "r")
+        parser = GenBank.FeatureParser()
+        self.iterator = GenBank.Iterator(handle, parser)
+
+    def t_load_database(self):
+        """Load SeqRecord objects into a BioSQL database.
+        """
+        self.db.load(self.iterator)
+
+        # do some simple tests to make sure we actually loaded the right
+        # thing. More advanced tests in a different module.
+        # items = self.db.values()
+        # for item in items:
+        #    print item.name, item.id
 
 if __name__ == "__main__":
     sys.exit(run_tests(sys.argv))
