@@ -11,6 +11,8 @@ from time import gmtime, strftime
 # biopython
 from Bio import Alphabet
 
+from Bio.crc import crc64
+
 class DatabaseLoader:
     """Load a database with biopython objects.
     """
@@ -27,40 +29,135 @@ class DatabaseLoader:
         """
         bioentry_id = self._load_bioentry_table(record)
         self._load_bioentry_date(record, bioentry_id)
-        # self._load_bioentry_taxa(record, bioentry_id)
         self._load_biosequence(record, bioentry_id)
-        self._load_bioentry_description(record, bioentry_id)
+        self._load_comment(record, bioentry_id)
+        references = record.annotations.get('references', ())
+        for reference, rank in zip(references, range(len(references))):
+            self._load_reference(reference, rank, bioentry_id)
         for seq_feature_num in range(len(record.features)):
             seq_feature = record.features[seq_feature_num]
             self._load_seqfeature(seq_feature, seq_feature_num, bioentry_id)
 
-    def _get_ontology_id(self, term_name, term_description = ""):
+    def _get_ontology_id(self,
+                         term_name,
+                         term_description = None,
+                         term_identifier = None,
+                         category_id = 0):
         """Get the id that corresponds to any term in an ontology.
 
         This looks through the ontology table for a the given term. If it
         is not found, a new id corresponding to this ontology is created.
         In either case, the id corresponding to that term is returned, so
         that you can reference it in another table.
+
+        The category_id can be needed to disambiguate the term:
+        it will be used if != 0.
         """
+
         # try to get the ontology term
         sql = r"SELECT ontology_term_id FROM ontology_term " \
               r"WHERE term_name = %s"
-        id_results = self.adaptor.execute_and_fetchall(sql, (term_name,))
+        fields = [term_name]
+        if category_id != 0:            # 'None' is legitimate
+            sql += ' AND category_id '
+            if category_id is None:
+                sql += 'IS NULL'
+            else:
+                sql += '= %s'
+                fields.append(category_id)
+        id_results = self.adaptor.execute_and_fetchall(sql, fields)
         # something is wrong
         if len(id_results) > 1:
             raise ValueError("Multiple ontology ids for %s: %s" % 
-                             term_name, id_results)
+                             (term_name, id_results))
         # we already have the ontology term inserted
         elif len(id_results) == 1:
             return id_results[0][0]
         # we need to create it
         else:
-            sql = r"INSERT INTO ontology_term (term_name, term_definition)" \
-                  r"VALUES (%s, %s)"
-            self.adaptor.execute(sql, (term_name, term_description))
-            # recursively call this to give back the id
-            return self._get_ontology_id(term_name, term_description)
+            # If no category_id specified, set it to null, as 0 isn't possible
+            if category_id == 0: category_id = None
+            
+            sql = r"INSERT INTO ontology_term (term_name, term_definition," \
+                  r" term_identifier, category_id)" \
+                  r" VALUES (%s, %s, %s, %s)"
+            self.adaptor.execute(sql, (term_name, term_description,
+                                       term_identifier, category_id))
+            return self.adaptor.last_id('ontology_term')
    
+    def _get_taxon_id(self, record):
+        """Get the id corresponding to a taxon.
+
+        If the species isn't in the taxon table, it is created.
+        
+        The code to find the species in the record is brittle.
+        """
+        # Binomial and full lineage
+        try:
+            binomial = record.annotations["organism"]
+        except KeyError:
+            binomial = None
+
+        # XXX no variant
+        variant = '-'
+
+        if binomial and variant:
+            sql = "SELECT taxon_id FROM taxon WHERE binomial = %s" \
+                  " AND variant = %s"
+            taxa = self.adaptor.execute_and_fetchall(sql, (binomial, variant))
+            if taxa:
+                return taxa[0][0]
+
+        # Didn't found the binomial/variant... Let's try with the taxon id
+        ncbi_taxon_id = None
+        for f in record.features:
+            if (f.type == 'source' and getattr(f, 'qualifiers', None)
+                and f.qualifiers.has_key('db_xref')):
+                for db_xref in f.qualifiers['db_xref']:
+                    if db_xref[:6] == 'taxon:':
+                        ncbi_taxon_id = int(db_xref[6:])
+                        break
+            if ncbi_taxon_id: break
+
+        if ncbi_taxon_id:
+            sql = "SELECT taxon_id FROM taxon WHERE ncbi_taxon_id = %s"
+            taxa = self.adaptor.execute_and_fetchall(sql, (ncbi_taxon_id,))
+            if taxa:
+                return taxa[0][0]
+
+        # OK, so we're gonna try to insert the taxon
+        
+        # Common name
+        try:
+            common_name = record.annotations["source"]
+        except KeyError:
+            common_name = None
+
+        # Full lineage
+        try:
+            full_lineage = record.annotations["taxonomy"]
+            ante, last = binomial.split()
+            if full_lineage[-1] == ante:
+                full_lineage.append(last)
+            full_lineage.reverse()
+            full_lineage = ':'.join(full_lineage)
+        except KeyError:
+            full_lineage = None
+
+        # Check for the NON NULLs
+        if binomial == None or variant == None or full_lineage == None:
+            return
+        
+        # Insert into the taxon table
+        sql = r"INSERT INTO taxon (binomial, variant, common_name," \
+              r" ncbi_taxon_id, full_lineage)" \
+              r" VALUES (%s, %s, %s, %s, %s)"
+        self.adaptor.execute(sql, (binomial, variant, common_name,
+                                   ncbi_taxon_id, full_lineage))
+        taxon_id = self.adaptor.last_id('taxon')
+
+        return taxon_id
+
     def _load_bioentry_table(self, record):
         """Fill the bioentry table with sequence information.
         """
@@ -68,18 +165,21 @@ class DatabaseLoader:
         
         if record.id.find('.') >= 0: # try to get a version from the id
             accession, version = record.id.split('.')
-        else: # otherwise just use a null version
+            version = int(version)
+        else: # otherwise just use a version of 0
             accession = record.id
             version = 0
-        try:
-            division = record.annotations["data_file_divison"]
-        except KeyError:
-            division = "No"
-        sql = r"INSERT INTO bioentry (biodatabase_id, display_id, " \
-              r"accession, entry_version, division) VALUES" \
-              r" (%s, %s, %s, %s, %s)"
-        self.adaptor.execute(sql, (self.dbid, record.name, 
-                                   accession, version, division))
+            
+        taxon_id = self._get_taxon_id(record)
+        identifier = record.annotations.get('gi')
+        description = getattr(record, 'description', None)
+        
+        sql = r"INSERT INTO bioentry (biodatabase_id, taxon_id, display_id, " \
+              r"accession, identifier, description, entry_version) VALUES" \
+              r" (%s, %s, %s, %s, %s, %s, %s)"
+        self.adaptor.execute(sql, (self.dbid, taxon_id, record.name, 
+                                   accession, identifier, description,
+                                   version))
         # now retrieve the id for the bioentry
         bioentry_id = self.adaptor.last_id('bioentry')
 
@@ -96,50 +196,88 @@ class DatabaseLoader:
             # just use today's date
             date = strftime("%d-%b-%Y", gmtime())
         date_id = self._get_ontology_id("date", "Sequence date")
-        sql = r"INSERT INTO bioentry_qualifier_value VALUES" \
-              r" (%s, %s, %s)" 
+        sql = r"INSERT INTO bioentry_qualifier_value" \
+              r" (bioentry_id, ontology_term_id, qualifier_value)" \
+              r" VALUES (%s, %s, %s)" 
         self.adaptor.execute(sql, (bioentry_id, date_id, date))
-
-    def _load_bioentry_taxa(self, record, bioentry_id):
-        """Add taxa information to the database.
-        """
-        return None # XXX don't do anything right now
-        try:
-            # XXX this isn't right, we need taxa ids and other junk
-            taxa = record.annotations["taxa"]
-            sql = r"INSERT INTO bioentry_taxa(bioentry_id, taxa_id) VALUES" \
-                  r" (%s, %s)" 
-            self.adapter.execute(sql, (bioentry_id, taxa))
-        except KeyError:
-            pass
 
     def _load_biosequence(self, record, bioentry_id):
         """Load the biosequence table in the database.
         """
         accession, version = record.id.split(".")
+        version = int(version)
         # determine the string representation of the alphabet
         if isinstance(record.seq.alphabet, Alphabet.DNAAlphabet):
-            alphabet = "DNA"
+            alphabet = "dna"
         elif isinstance(record.seq.alphabet, Alphabet.RNAAlphabet):
-            alphabet = "RNA"
+            alphabet = "rna"
         elif isinstance(record.seq.alphabet, Alphabet.ProteinAlphabet):
-            alphabet = "PROTEIN"
+            alphabet = "protein"
         else:
-            alphabet = "UNKNOWN"
+            alphabet = "unknown"
         
+        try:
+            division = record.annotations["data_file_division"]
+        except KeyError:
+            division = "UNK"
+
         sql = r"INSERT INTO biosequence (bioentry_id, seq_version, " \
-              r"biosequence_str, molecule) VALUES (%s, %s, %s, %s)"
-        self.adaptor.execute(sql, (bioentry_id, version, record.seq.data,
-                                   alphabet))
+              r"seq_length, biosequence_str, alphabet, division) " \
+              r"VALUES (%s, %s, %s, %s, %s, %s)"
+        self.adaptor.execute(sql, (bioentry_id, version,
+                                   len(record.seq.data),
+                                   record.seq.data,
+                                   alphabet, division))
 
-    def _load_bioentry_description(self, record, bioentry_id):
-        """Load the description table.
-        """
-        descr_id = self._get_ontology_id("description", "Sequence description")
-        sql = r"INSERT INTO bioentry_qualifier_value VALUES (%s, %s, %s)"
-        self.adaptor.execute(sql, (bioentry_id, descr_id, 
-                                   record.description))
+    def _load_comment(self, record, bioentry_id):
+        # Assume annotations['comment'] is not a list
+        comment = record.annotations.get('comment')
+        if not comment:
+            return
+        comment = comment.replace('\n', ' ')
+        
+        sql = "INSERT INTO comment (bioentry_id, comment_text, comment_rank)" \
+              " VALUES (%s, %s, %s)"
+        self.adaptor.execute(sql, (bioentry_id, comment, 1))
+        
+    def _load_reference(self, reference, rank, bioentry_id):
+        # Currently, the UK is either the medline_id or a CRC64
+        if reference.medline_id:
+            uk = reference.medline_id
+        else:
+            s = ''
+            for f in reference.authors, reference.title, reference.journal:
+                if f: s += f
+                else: s += "<undef>"
+            uk = crc64(s)
 
+        sql = "SELECT reference_id FROM reference WHERE reference_medline = %s"
+        refs = self.adaptor.execute_and_fetch_col0(sql, (uk,))
+        if not len(refs):
+            authors = reference.authors or None
+            title =  reference.title or None
+            journal = reference.journal or None
+            sql = "INSERT INTO reference (reference_location," \
+                  " reference_title, reference_authors, reference_medline)" \
+                  " VALUES (%s, %s, %s, %s)"
+            self.adaptor.execute(sql, (journal, title,
+                                   authors, uk))
+            reference_id = self.adaptor.last_id('reference')
+        else:
+            reference_id = refs[0]
+        if len(reference.location):
+            start = 1 + int(str(reference.location[0].start))
+            end = int(str(reference.location[0].end))
+        else:
+            start = None
+            end = None
+        
+        sql = "INSERT INTO bioentry_reference (bioentry_id, reference_id," \
+              " reference_start, reference_end, reference_rank)" \
+              " VALUES (%s, %s, %s, %s, %s)"
+        self.adaptor.execute(sql, (bioentry_id, reference_id,
+                                   start, end, rank + 1))
+        
     def _load_seqfeature(self, feature, feature_rank, bioentry_id):
         """Load a biopython SeqFeature into the database.
         """
@@ -154,13 +292,20 @@ class DatabaseLoader:
         This loads the "key" of the seqfeature (ie. CDS, gene) and
         the basic seqfeature table itself.
         """
-        seqfeature_key_id = self._get_ontology_id(feature_type)
+        category_id = self._get_ontology_id('SeqFeature Keys')
+        seqfeature_key_id = self._get_ontology_id(feature_type,
+                                                  category_id = category_id)
         
-        # XXX This doesn't do source yet, since I'm not sure I understand it.
-        sql = r"INSERT INTO seqfeature (bioentry_id, seqfeature_key_id, " \
-              r"seqfeature_rank) VALUES (%s, %s, %s)"
+        # XXX source is always EMBL/GenBank/SwissProt here; it should depend on
+        # the record
+        source_cat_id = self._get_ontology_id('SeqFeature Sources')
+        source_id = self._get_ontology_id('EMBL/GenBank/SwissProt',
+                                          category_id = source_cat_id)
+        
+        sql = r"INSERT INTO seqfeature (bioentry_id, ontology_term_id, " \
+              r"seqfeature_source_id, seqfeature_rank) VALUES (%s, %s, %s, %s)"
         self.adaptor.execute(sql, (bioentry_id, seqfeature_key_id,
-                                   feature_rank))
+                                   source_id, feature_rank + 1))
         seqfeature_id = self.adaptor.last_id('seqfeature')
 
         return seqfeature_id
@@ -208,7 +353,7 @@ class DatabaseLoader:
         start = feature.location.nofuzzy_start + 1
         end = feature.location.nofuzzy_end 
             
-        self.adaptor.execute(sql, (seqfeature_id, start, end, strand, rank))
+        self.adaptor.execute(sql, (seqfeature_id, start, end, strand, rank+1))
 
     def _load_seqfeature_qualifiers(self, qualifiers, seqfeature_id):
         """Insert the (key, value) pair qualifiers relating to a feature.
@@ -216,8 +361,10 @@ class DatabaseLoader:
         Qualifiers should be a dictionary of the form:
             {key : [value1, value2]}
         """
+        tag_category_id = self._get_ontology_id('Annotation Tags')
         for qualifier_key in qualifiers.keys():
-            qualifier_key_id = self._get_ontology_id(qualifier_key)
+            qualifier_key_id = self._get_ontology_id(qualifier_key,
+                                                     category_id = tag_category_id)
 
             # now add all of the values to their table
             for qual_value_rank in range(len(qualifiers[qualifier_key])):
@@ -225,7 +372,7 @@ class DatabaseLoader:
                 sql = r"INSERT INTO seqfeature_qualifier_value VALUES" \
                       r" (%s, %s, %s, %s)"
                 self.adaptor.execute(sql, (seqfeature_id,
-                  qualifier_key_id, qual_value_rank, qualifier_value))
+                  qualifier_key_id, qual_value_rank + 1, qualifier_value))
        
 class DatabaseRemover:
     """Complement the Loader functionality by fully removing a database.

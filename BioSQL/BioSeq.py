@@ -14,7 +14,7 @@ class DBSeq:  # This implements the biopython Seq interface
     def __getattr__(self, name):
         if name == "data":
             return self.tostring()
-        raise AttributeError(name)
+        raise AttributeError, name
     
     def __len__(self):
         return self._length
@@ -55,18 +55,20 @@ class DBInternalSeq:
         self.primary_id = primary_id
         self.adaptor = adaptor
 
-        self.name, self.id, _length, self.moltype = \
+        self.name, self.id, _length, self.description, self.moltype = \
                          self.adaptor.execute_one(
             """select en.display_id, en.accession, length(bs.biosequence_str),
-                                      bs.molecule
-                                from bioentry en, biosequence bs
-                                where bs.bioentry_id = en.bioentry_id and
-                                      bs.bioentry_id = %s""",
+                      en.description, bs.alphabet
+               from bioentry en, biosequence bs
+               where bs.bioentry_id = en.bioentry_id and
+                     bs.bioentry_id = %s""",
             (self.primary_id,))
 
         self._length = int(_length)
-
+        
     def __getattr__(self, name):
+        if name[:1] == '_':
+            raise AttributeError, name
         if name == "seq":
             moltype = self.moltype.upper()
             from Bio.Alphabet import IUPAC
@@ -84,22 +86,8 @@ class DBInternalSeq:
             return seq
         f = getattr(self, "_get_" + name, None)
         if f is None:
-            raise AttributeError(name)
+            raise AttributeError, name
         return f()
-
-    def _get_description(self):
-        descr_results = _get_ontology_terms("description", self.primary_id,
-                                            self.adaptor)
-        if len(descr_results) == 0:
-            description = ""
-        elif len(descr_results) == 1:
-            description = descr_results[0]
-        else:
-            raise ValueError("Got multiple unexpected descriptions: %s" %
-                             descr_results)
-
-        self.description = description
-        return description
 
     def __len__(self):
         return self._length
@@ -110,6 +98,9 @@ def _get_ontology_terms(ontology_name, bioentry_id, adaptor):
     sql = r"SELECT ontology_term_id FROM ontology_term " \
           r"WHERE term_name = %s" 
     id_info = adaptor.execute_and_fetchall(sql, (ontology_name,))
+    if id_info is None:
+        return None
+    
     ontology_id = id_info[0][0]
 
     sql = r"SELECT qualifier_value FROM bioentry_qualifier_value " \
@@ -190,7 +181,7 @@ class Species:
         elif name == "genus":
             return self.classification[1]
 
-        raise AttributeError(name)
+        raise AttributeError, name
 
     def __setattr__(self, name, val):
         if name == "species":
@@ -212,9 +203,11 @@ class Annotation:
         self.primary_id = primary_id
 
     def __getattr__(self, name):
+        if name[:1] == '_':
+            raise AttributeError, name
         f = getattr(self, "_get_" + name, None)
         if f is None:
-            raise AttributeError(name)
+            raise AttributeError, name
         return f()
     
     # functions to make this more like a dictionary
@@ -222,7 +215,7 @@ class Annotation:
         if key in ["comments", "dblinks", "references"]:
             return getattr(self, key)
         else:
-            raise KeyError("Unexpected item: %s")
+            raise KeyError("Unexpected item: %s" % key)
 
     def has_key(self, key):
         if key in ["comments", "dblinks", "references"]:
@@ -284,7 +277,7 @@ def load_seq_features(adaptor, primary_id):
     from Bio import SeqFeature
     
     # Get the seqfeature id list
-    sql = r"SELECT seqfeature_id, seqfeature_rank, seqfeature_key_id " \
+    sql = r"SELECT seqfeature_id, seqfeature_rank, ontology_term_id " \
           r"FROM seqfeature WHERE bioentry_id = %s"
     results = adaptor.execute_and_fetchall(sql, (primary_id,))
 
@@ -324,9 +317,9 @@ def load_seq_features(adaptor, primary_id):
 
         # Get any remote reference information
         remote_results = adaptor.execute_and_fetchall("""
-          SELECT rem.seqfeature_location_id, rem.accession, rem.version
-            FROM remote_seqfeature_name rem, seqfeature_location sfl
-            WHERE rem.seqfeature_location_id = sfl.seqfeature_location_id AND
+          SELECT seqfeature_location_id, accession, version
+            FROM seqfeature_location sfl, dbxref drf
+            WHERE drf.dbxref_id = sfl.dbxref_id AND
                   sfl.seqfeature_id = %s""",
                                                       (seqfeature_id,))
         # Do the merge locally
@@ -387,7 +380,7 @@ class DBSeqRecord:
 
         self.version, _length, self.division = \
                       self.adaptor.execute_one(
-            """select en.entry_version, length(bs.biosequence_str), en.division
+            """select en.entry_version, length(bs.biosequence_str), bs.division
                     from bioentry en, biosequence bs
                     where bs.bioentry_id = en.bioentry_id and
                           bs.bioentry_id = %s""",
@@ -399,12 +392,12 @@ class DBSeqRecord:
 
     def __getattr__(self, name):
         if name[:1] == "_":
-            raise AttributeError(name)
+            raise AttributeError, name
         if name in self._forward_getattr:
             return getattr(self.primary_seq, name)
         f = getattr(self, "_get_" + name, None)
         if f is None:
-            raise AttributeError(name)
+            raise AttributeError, name
         return f()
 
     def _get_primary_seq(self):
@@ -430,14 +423,14 @@ class DBSeqRecord:
    
     def _get_dates(self):
         self.dates = _get_ontology_terms("date", self.primary_id, self.adaptor)
-        return dates
+        return self.dates
 
     def _get_species(self):
         full_lineage, common_name = self.adaptor.execute_one(
             """select tx.full_lineage, tx.common_name
-                           from taxa tx, bioentry_taxa bt
-                           where tx.taxa_id = bt.taxa_id and
-                                 bt.bioentry_id = %s""",
+                           from taxon tx, bioentry be
+                           where tx.taxon_id = be.taxon_id and
+                                 be.bioentry_id = %s""",
             (self.primary_id,))
         terms = full_lineage.split(":")
         species = Species(terms, common_name)
@@ -448,9 +441,7 @@ class DBSeqRecord:
         return version
 
     def _get_keywords(self):
-        keywords = self.adaptor.execute_and_fetch_col0(
-            """select keywords from bioentry_keywords
-                               where bioentry_id = %s""",
-            (self.primary_id,))
+        keywords = _get_ontology_term('Keywords', self.primary_id,
+                                      self.adaptor)
         self.keywords = keywords
         return keywords

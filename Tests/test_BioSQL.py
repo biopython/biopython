@@ -17,10 +17,12 @@ from Bio import GenBank
 from BioSQL import BioSeqDatabase
 from BioSQL import BioSeq
 
-#DBDRIVER = 'MySQLdb'
-#DBTYPE = 'mysql'
-DBDRIVER = 'psycopg'
-DBTYPE = 'pg'
+# -- MySQL
+DBDRIVER = 'MySQLdb'
+DBTYPE = 'mysql'
+# -- PostgreSQL
+#DBDRIVER = 'psycopg'
+#DBTYPE = 'pg'
 
 # Works for mysql and postgresql, not oracle
 DBSCHEMA = "biosqldb-" + DBTYPE + ".sql"
@@ -29,9 +31,9 @@ DBHOST = 'localhost'
 DBUSER = ''
 DBPASSWD = ''
 TESTDB = 'biosql'
-# XXX I need to put these SQL files somewhere in biopython
-SQL_FILE = os.path.join(os.pardir, os.pardir, "biosql-schema", "sql",
-                        DBSCHEMA)
+# Uses the SQL file in the Test directory -- try to keep this current
+# with what is going on with BioSQL
+SQL_FILE = os.path.join(os.getcwd(), "BioSQL", DBSCHEMA)
 
 def run_tests(argv):
     test_suite = testing_suite()
@@ -68,6 +70,12 @@ def create_database():
 
     # drop anything in the database
     try:
+        # with Postgres, can get errors about database still being used and
+        # not able to be dropped. Wait briefly to be sure previous tests are
+        # done with it.
+        import time
+        time.sleep(1)
+
         sql = r"DROP DATABASE " + TESTDB
         server.adaptor.cursor.execute(sql, ())
     except server.module.OperationalError: # the database doesn't exist

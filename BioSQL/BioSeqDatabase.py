@@ -58,11 +58,12 @@ def open_database(driver = "MySQLdb", *args, **kwargs):
     return DBServer(conn, module)
 
 class DBServer:
-    def __init__(self, conn, module):
+    def __init__(self, conn, module, module_name = None):
         self.module = module
-        if module.__name__ == 'psycopg':
+        if module_name is None: module_name = module.__name__
+        if module_name == 'psycopg':
             create_dbutils = DBUtils.create_Pg_dbutils
-        elif module.__name__ == 'MySQLdb':
+        elif module_name == 'MySQLdb':
             create_dbutils = DBUtils.create_Mysql_dbutils
         else:
             create_dbutils = DBUtils.create_Generic_dbutils
@@ -123,13 +124,19 @@ class Adaptor:
     def __init__(self, conn, create_dbutils):
         self.conn = conn
         self.cursor = conn.cursor()
-        self.dbutils = create_dbutils()##self.conn, self.cursor)
+        self.dbutils = create_dbutils()
 
     def last_id(self, table):
         return self.dbutils.last_id(self.cursor, table)
 
     def autocommit(self, y = 1):
         return self.dbutils.autocommit(self.conn, y)
+
+    def commit(self):
+        return self.conn.commit()
+
+    def rollback(self):
+        return self.conn.rollback()
 
     def fetch_dbid_by_dbname(self, dbname):
         self.cursor.execute(
@@ -138,14 +145,17 @@ class Adaptor:
         rv = self.cursor.fetchall()
         if not rv:
             raise KeyError("Cannot find biodatabase with name %r" % dbname)
-        assert len(rv) == 1, "More than one biodatabase with name %r" % dbname
+        # Cannot happen (UK)
+##        assert len(rv) == 1, "More than one biodatabase with name %r" % dbname
         return rv[0][0]
 
     def fetch_seqid_by_display_id(self, dbid, name):
-        self.cursor.execute(
-            r"select bioentry_id from bioentry where "
-            r"    biodatabase_id = %s and display_id = %s",
-            (dbid, name))
+        sql = r"select bioentry_id from bioentry where display_id = %s"
+        fields = [name]
+        if dbid:
+            sql += " and biodatabase_id = %s"
+            fields.append(dbid)
+        self.cursor.execute(sql, fields)
         rv = self.cursor.fetchall()
         if not rv:
             raise IndexError("Cannot find display id %r" % name)
@@ -153,13 +163,17 @@ class Adaptor:
         return rv[0][0]
 
     def fetch_seqid_by_accession(self, dbid, name):
-        self.cursor.execute(
-            r"select bioentry_id from bioentry where "
-            r"    biodatabase_id = %s and accession = %s",
-            (dbid, name))
+        sql = r"select bioentry_id from bioentry where accession = %s"
+        fields = [name]
+        if dbid:
+            sql += " and biodatabase_id = %s"
+            fields.append(dbid)
+
+        self.cursor.execute(sql, fields)
         rv = self.cursor.fetchall()
         if not rv:
             raise IndexError("Cannot find accession %r" % name)
+        # Can happen: several versions (or biodatabases)
         assert len(rv) == 1, "More than one entry with accession of %r" % name
         return rv[0][0]
 
@@ -203,6 +217,8 @@ class Adaptor:
     def execute(self, sql, args):
         """Just execute an sql command.
         """
+##        print "sql:", `sql`
+##        print "args:", `args`
         self.cursor.execute(sql, args)
 
     def get_subseq_as_string(self, seqid, start, end):
