@@ -1,0 +1,723 @@
+<HTML>
+<HEAD>
+
+   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <META NAME="keys" CONTENT="LocusLink, RefSeq, reference sequence, genes, locus, loci, human genome, genetic map, sequence, NCBI">
+
+    <META NAME="description" CONTENT="LocusLink provides a single point-of-access for information about genes including sequences, nomenclature, map information, and links to related resources such as OMIM, GDB, HGMD, dbSNP, publications, and UniGene.">
+
+<!--
+<link rel="stylesheet" href="http://www.ncbi.nlm.nih.gov/corehtml/ncbi2.css">
+--->
+
+  <title>LocusLink Report</title>
+
+<style type="text/css"> 
+<!---
+P. {}
+P.GUTTER1 { color: #FFCC66; font-family: arial, helvetica,sans-serif;  }
+.GUTTER1 { color: #FFCC66; font-family: arial, helvetica,sans-serif;  }
+.GUTTER2 { color: #CCCCFF; font-family: arial, helvetica,sans-serif; }
+A { color:#0033CC; }
+A.EvvLink { color:#0033CC; text-decoration: none; }
+A.GUTTER1 { color: #FFCC66; font-family: arial, helvetica,sans-serif; text-decoration: none; }
+A.GUTTER2 { color: #CCCCFF; font-family: arial, helvetica,sans-serif; text-decoration: none; }
+A.GUTTER2S { color: #CCCCFF; font-family: arial, helvetica,sans-serif; text-decoration: none; font-size: 75%; }
+A.NN { color: #000099; font-weight: bold; font-family: arial,helvetica,sans-serif; text-decoration:none; } 
+A.BAR { font-size:85%;  color:#ffffff; font-family: arial,helvetica,sans-serif; text-decoration:none; }
+.BAR { font-size:85%;  color:#ffffff; font-family: arial,helvetica,sans-serif; text-decoration:none; }
+sup {font-family: arial, helvetica, sans-serif; font-size: 60%; vertical-align: super;}
+.NN  { color: #000099; font-weight: bold; font-family: arial,helvetica,sans-serif; }
+--->
+</style> 
+
+
+
+
+<script LANGUAGE="JavaScript"> 
+ 
+
+
+
+  
+<!--
+      var agt=navigator.userAgent.toLowerCase(); 
+      var is_major = parseInt(navigator.appVersion); 
+      var is_minor = parseFloat(navigator.appVersion); 
+      var is_nav  = ((agt.indexOf('mozilla')!=-1) && (agt.indexOf('spoofer')==-1) 
+        && (agt.indexOf('compatible') == -1) && (agt.indexOf('opera')==-1) 
+        && (agt.indexOf('webtv')==-1)); 
+      var is_nav2 = (is_nav && (is_major == 2)); 
+      var is_nav3 = (is_nav && (is_major == 3)); 
+      var is_nav4 = (is_nav && (is_major == 4)); 
+      var is_nav4up = (is_nav && (is_major >= 4)); 
+      var is_navonly      = (is_nav && ((agt.indexOf(";nav") != -1) || 
+      (agt.indexOf("; nav") != -1)) ); 
+      var is_nav5 = (is_nav && (is_major == 5)); 
+      var is_nav5up = (is_nav && (is_major >= 5)); 
+      var is_nav6up = (is_nav && (is_major >= 6)); 
+      
+      var is_ie   = (agt.indexOf("msie") != -1); 
+      var is_ie3  = (is_ie && (is_major < 4)); 
+      var is_ie4  = (is_ie && (is_major == 4) && (agt.indexOf("msie 5.0")==-1) ); 
+      var is_ie4up  = (is_ie  && (is_major >= 4)); 
+      var is_ie5  = (is_ie && (is_major == 4) && (agt.indexOf("msie 5.0")!=-1) ); 
+      var is_ie5up  = (is_ie  && !is_ie3 && !is_ie4); 
+   
+      /* 
+      Source: Webmonkey Code Library 
+      (http://www.hotwired.com/webmonkey/javascript/code_library/) 
+      
+      Author: Taylor 
+      Author Email: taylor@wired.com 
+      Author URL: http://www.taylor.org/ 
+      */ 
+      
+
+function pageOffset()
+{ 
+
+      if (document.all) { 
+         document.all['overview'].style.pixelTop = Math.max(window.document.body.scrollTop,165); 
+         setTimeout('pageOffset()',100); 
+      } 
+      else if (document.getElementById) { 
+         document.getElementById('overview').style.top = Math.max(window.pageYOffset,165); 
+        setTimeout('pageOffset()',100); 
+      }
+      else if (is_nav4up && is_minor>4.04) { 
+         document.layers['overview'].pageY = Math.max(window.pageYOffset,165); 
+         setTimeout('pageOffset()',100); 
+      }
+}
+
+function MoveTo(a)
+{
+ self.location.replace(a)
+}
+
+
+function openEvvViewer()
+{
+EvvViewer=window.open("http://www.ncbi.nlm.nih.gov/cgi-bin/Entrez/evv.cgi?org=hs&contig=NT_022760.10&gene=SCYB11&lid=6373&locuslink=true","_blank", "height=300,innerHeight=300,width=700,innerWidth=700,resizable=1,scrollbars=1,toolbar=1,left=30,top=30");
+}
+
+//-->  
+ 
+</script> 
+
+
+
+</HEAD>
+
+<a name="top"></a>
+<body bgcolor="#FFFFFF" background="http://www.ncbi.nlm.nih.gov/corehtml/bkgd.gif" text="#000000" link="#000099" vlink="#6666CC" onLoad="pageOffset()" alt="">
+
+<!--  the header   --> 
+
+<TABLE width=600 border=0 cellpadding=0 cellspacing=0>
+<tr><td><table width=600 border=0 cellspacing=0 cellpadding=0>
+<tr valign="bottom">
+<td width=140><a name="top"></a><a href="http://www.ncbi.nlm.nih.gov">
+<img src="http://www.ncbi.nlm.nih.gov/corehtml/left.GIF" border=0 alt=""></a>
+<br><img src="IMG/pix_tr.gif" width=140 height=1 alt=""></td>
+<td width=460><img src="IMG/LLogo.gif" width="460" height="43" alt="Locus Link Logo"> 
+</td></tr></table></td></tr>
+<tr><td>
+<table width=600 border=0 cellspacing=0 cellpadding=1 bgcolor="#000000">
+<tr>
+
+<td width=100 class="BAR">
+<a href="http://www.ncbi.nlm.nih.gov/entrez/" class="BAR">
+ PubMed</a></td>
+
+<td width=100 class="BAR">
+<a href="http://www.ncbi.nlm.nih.gov/Entrez/" class="BAR">
+ Entrez</a></td>
+
+<td width=100 class="BAR">
+<a href="http://www.ncbi.nlm.nih.gov/BLAST/" class="BAR">
+ BLAST</a></td>
+
+<td width=100 class="BAR">
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=OMIM" class="BAR">
+ OMIM</a></td>
+
+<td width=100 class="BAR">
+<a href="http://www.ncbi.nlm.nih.gov/Taxonomy/" class="BAR">
+ Taxonomy</a></td>
+
+<td width=100 class="BAR">
+<a href="http://www.ncbi.nlm.nih.gov/Structure/" class="BAR">
+ Structure</a></td>
+
+</tr>
+
+</TABLE></td></tr>
+
+<tr><td>
+
+<table width=600 border=0 cellspacing=0 cellpadding=0 bgcolor="#CCCCCC" class="TEXT">
+ 
+  
+  <tr> 
+   <td class="table-text"> <form method="post" action="list.cgi">
+     &nbsp;&nbsp;Search <small> 
+    <select name="SITE">
+     <option selected value="104">LocusLink</option>
+     <option value="300">Maps</option>
+     <option value="2">Nucleotide</option>
+     <option value="100">OMIM</option>
+     <option value="1">Protein</option>
+     <option value="0">PubMed</option>
+     <option value="200">UniGene</option>
+     <option value="111">UniSts</option>
+     
+    </select></small> 
+     &nbsp;&nbsp;Display<small>
+ <select name="V">
+     <option selected value="0">Brief
+     <option  value="1">Summary
+ </select></small>
+ 
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Organism:
+     <small><select name="ORG" >
+   <!-- <option selected value = "Hs&ORG=Mm&ORG=Rn&ORG=Dr&ORG=Dm&ORG=HIV&ORG=Ce">All
+   -->
+    <option selected value = "Hs&ORG=Mm&ORG=Rn&ORG=Dr&ORG=Dm&ORG=HIV-1">All
+    <option value = "Dm">Fruit Fly
+    <option value = "HIV-1">HIV-1
+    <option value = "Hs">Human
+    <option value = "Mm">Mouse
+    <!-- <option value = "Ce">Nematode -->
+    <option value = "Rn">Rat
+    <option value = "Dr">Zebrafish
+    </select></small>
+    <br>&nbsp;&nbsp;&nbsp;Query:
+    <input type="text" name="Q" value="" size=30>
+    
+    <small><input type="submit" name="submit" value="Go">
+    <input type="button" name = "Clear" value="Clear" onClick="this.form.Q.value='';this.form.Q.focus()"; onKeyPress="this.form.Q.value='';this.form.Q.focus()";></small>
+   </form>
+   </td>
+   
+  </tr>
+ </table>
+
+</td></tr>
+</tr></td></TABLE>
+
+
+
+<!-- the contents  -->
+
+<table border=0 width=600 cellspacing=0 cellpadding=0>
+<tr valign=TOP>
+
+
+
+<td width=125> <!-- left column -->
+
+<img src="http://www.ncbi.nlm.nih.gov/corehtml/spacer10.GIF" border=0 width=125 height=1 alt="white space">
+
+<DIV id="overview" style="position:absolute;left:8;top:165;width:125">
+
+<p><a href="index.html" class="GUTTER1">LocusLink Home</a></p>
+
+
+
+<!---index for report-->
+
+<font class="GUTTER1">SCYB11 Index:</font><br>
+<img src="http://www.ncbi.nlm.nih.gov/corehtml/spacer10.GIF" width="5" border=0 alt=""><a href ="#top" class="GUTTER2">Top of Page</a>
+<br>
+<img src="http://www.ncbi.nlm.nih.gov/corehtml/spacer10.GIF" width="5" border=0 alt=""><a href ="#nome" class="GUTTER2">Nomenclature</a>
+<br>
+<img src="http://www.ncbi.nlm.nih.gov/corehtml/spacer10.GIF" width="5" border=0 alt=""><a class="GUTTER2" href="javascript:MoveTo('#over')">Overview</a>
+<br>
+<img src="http://www.ncbi.nlm.nih.gov/corehtml/spacer10.GIF" width="5" border=0 alt=""><a href ="#function" class="GUTTER2">Function</a>
+<br>
+<img src="http://www.ncbi.nlm.nih.gov/corehtml/spacer10.GIF" width="5" border=0  alt=""><a href ="#relations" class="GUTTER2">Relationships</a>
+<br>
+<!------>
+<img src="http://www.ncbi.nlm.nih.gov/corehtml/spacer10.GIF" width="5" border=0  alt=""><a href ="#map" class="GUTTER2">Map</a>
+<br>
+<img src="http://www.ncbi.nlm.nih.gov/corehtml/spacer10.GIF" width="5" border=0  alt=""><a href ="#refseq" class="GUTTER2">RefSeq</a>
+<br>
+<img src="http://www.ncbi.nlm.nih.gov/corehtml/spacer10.GIF" width="5" border=0  alt=""><a href ="#genbank" class="GUTTER2" >GenBank
+ </a>
+<br>
+
+<img src="http://www.ncbi.nlm.nih.gov/corehtml/spacer10.GIF" width="5" border=0  alt=""><a href ="#links" class="GUTTER2" >Links</a>
+
+<!---end of index for report-->
+
+<br><br>
+<font class="GUTTER1">LocusLink:</font>
+<br>
+
+<img src="http://www.ncbi.nlm.nih.gov/corehtml/spacer10.GIF" width="5" border=0 alt=""><a href="collaborators.html" class="GUTTER2S">Collaborators</a>
+<br>
+
+<img src="http://www.ncbi.nlm.nih.gov/corehtml/spacer10.GIF" width="5" border=0 alt=""><a href="ftp://ftp.ncbi.nih.gov/refseq/LocusLink/" class="GUTTER2S">Download</a>
+<br>
+
+<img src="http://www.ncbi.nlm.nih.gov/corehtml/spacer10.GIF" width="5" border=0 alt=""><a href="LLfaq.html" class="GUTTER2S">FAQ</a>
+<br>
+
+<img src="http://www.ncbi.nlm.nih.gov/corehtml/spacer10.GIF" width="5" border=0 alt=""><a href="help.html" class="GUTTER2S">Help</a>
+<br>
+
+<img src="http://www.ncbi.nlm.nih.gov/corehtml/spacer10.GIF" width="5" border=0 alt=""><a href="statistics.html" class="GUTTER2S">Statistics</a>
+
+<br><br>
+<font class="GUTTER1">RefSeq:</font>
+<br>
+
+<img src="http://www.ncbi.nlm.nih.gov/corehtml/spacer10.GIF" width="5" border=0 alt=""><a href="refseq.html" class="GUTTER2S">About</a>
+<br>
+
+<img src="http://www.ncbi.nlm.nih.gov/corehtml/spacer10.GIF" width="5" border=0 alt=""><a href="ftp://ftp.ncbi.nih.gov/refseq/" class="GUTTER2S">Download</a>
+<br>
+
+<img src="http://www.ncbi.nlm.nih.gov/corehtml/spacer10.GIF" width="5" border=0 alt=""><a href="RSfaq.html" class="GUTTER2S">FAQ</a>
+<br>
+
+<img src="http://www.ncbi.nlm.nih.gov/corehtml/spacer10.GIF" width="5" border=0 alt=""><a href="RSstatistics.html" class="GUTTER2S">Statistics</a>
+<br>
+
+
+
+</DIV>
+
+</td>
+
+
+<!-- extra column to force things over gif border -->
+<td width=15><img src="http://www.ncbi.nlm.nih.gov/corehtml/spacer10.GIF" width=15 height=1 border=0 alt=""></td>
+
+<!-- right column -->	    
+
+<td width=460>
+
+<table width="460" bgcolor="#CCCCCC"class="TEXT" cellbuffer="0" cellspacing="0" border="0">
+<form method = "POST" action ="./LocRpt.cgi"name="loc_menu">
+<td align="center" valign="top"><input type="hidden" name="LOCI_SYM" value ="6373|Hs SCYB11">
+<NOSCRIPT><input type="submit" value="Get"><input type="hidden" name="save" value="false"></NOSCRIPT>
+View <small><select name = "l" onChange ="this.form.save.value=false;this.form.submit();">
+<option selected value = "6373">Hs SCYB11</option>
+</select></small> One of 1 Loci    <input type="submit" value="Save All Loci"onClick="this.form.save.value=true;this.form.submit();" onKeyPress="this.form.save.value=true;this.form.submit();">
+ <input type="hidden" name="save"><NOSCRIPT><input type="hidden" name="save" value="true"></NOSCRIPT>
+
+
+ </td></form></table>
+
+
+<!---<br>---->
+
+
+<table width=442 border=0 cellpadding=0 cellspacing=0>
+<tr bgcolor="#CCCCFF" class="GUTTER2">
+<td width=17 align="center"><a href="list.cgi?Apage=A&V=0" class="GUTTER2"><font color="#000099">A</a><br><img src="IMG/pix_bk.gif" width=17 height=2 alt =""></td>
+<td width=17 align="center"><a href="list.cgi?Apage=B&V=0" class="GUTTER2"><font color="#000099">B</a><br><img src="IMG/pix_bk.gif" width=17 height=2 alt=""></td>
+<td width=17 align="center"><a href="list.cgi?Apage=C&V=0" class="GUTTER2"><font color="#000099">C</a><br><img src="IMG/pix_bk.gif" width=17 height=2 alt=""></td>
+<td width=17 align="center"><a href="list.cgi?Apage=D&V=0" class="GUTTER2"><font color="#000099">D</a><br><img src="IMG/pix_bk.gif" width=17 height=2 alt=""></td>
+<td width=17 align="center"><a href="list.cgi?Apage=E&V=0" class="GUTTER2"><font color="#000099">E</a><br><img src="IMG/pix_bk.gif" width=17 height=2 alt=""></td>
+<td width=17 align="center"><a href="list.cgi?Apage=F&V=0" class="GUTTER2"><font color="#000099">F</a><br><img src="IMG/pix_bk.gif" width=17 height=2 alt=""></td>
+<td width=17 align="center"><a href="list.cgi?Apage=G&V=0" class="GUTTER2"><font color="#000099">G</a><br><img src="IMG/pix_bk.gif" width=17 height=2 alt=""></td>
+<td width=17 align="center"><a href="list.cgi?Apage=H&V=0" class="GUTTER2"><font color="#000099">H</a><br><img src="IMG/pix_bk.gif" width=17 height=2 alt=""></td>
+<td width=17 align="center"><a href="list.cgi?Apage=I&V=0" class="GUTTER2"><font color="#000099">I</a><br><img src="IMG/pix_bk.gif" width=17 height=2 alt=""></td>
+<td width=17 align="center"><a href="list.cgi?Apage=J&V=0" class="GUTTER2"><font color="#000099">J</a><br><img src="IMG/pix_bk.gif" width=17 height=2 alt=""></td>
+<td width=17 align="center"><a href="list.cgi?Apage=K&V=0" class="GUTTER2"><font color="#000099">K</a><br><img src="IMG/pix_bk.gif" width=17 height=2 alt=""></td>
+<td width=17 align="center"><a href="list.cgi?Apage=L&V=0" class="GUTTER2"><font color="#000099">L</a><br><img src="IMG/pix_bk.gif" width=17 height=2 alt=""></td>
+<td width=17 align="center"><a href="list.cgi?Apage=M&V=0" class="GUTTER2"><font color="#000099">M</a><br><img src="IMG/pix_bk.gif" width=17 height=2 alt=""></td>
+<td width=17 align="center"><a href="list.cgi?Apage=N&V=0" class="GUTTER2"><font color="#000099">N</a><br><img src="IMG/pix_bk.gif" width=17 height=2 alt=""></td>
+<td width=17 align="center"><a href="list.cgi?Apage=O&V=0" class="GUTTER2"><font color="#000099">O</a><br><img src="IMG/pix_bk.gif" width=17 height=2 alt=""></td>
+<td width=17 align="center"><a href="list.cgi?Apage=P&V=0" class="GUTTER2"><font color="#000099">P</a><br><img src="IMG/pix_bk.gif" width=17 height=2 alt=""></td>
+<td width=17 align="center"><a href="list.cgi?Apage=Q&V=0" class="GUTTER2"><font color="#000099">Q</a><br><img src="IMG/pix_bk.gif" width=17 height=2 alt=""></td>
+<td width=17 align="center"><a href="list.cgi?Apage=R&V=0" class="GUTTER2"><font color="#000099">R</a><br><img src="IMG/pix_bk.gif" width=17 height=2 alt=""></td>
+<td width=17 align="center"><a href="list.cgi?Apage=S&V=0" class="GUTTER2"><font color="#000099">S</a><br><img src="IMG/pix_bk.gif" width=17 height=2 alt=""></td>
+<td width=17 align="center"><a href="list.cgi?Apage=T&V=0" class="GUTTER2"><font color="#000099">T</a><br><img src="IMG/pix_bk.gif" width=17 height=2 alt=""></td>
+<td width=17 align="center"><a href="list.cgi?Apage=U&V=0" class="GUTTER2"><font color="#000099">U</a><br><img src="IMG/pix_bk.gif" width=17 height=2 alt=""></td>
+<td width=17 align="center"><a href="list.cgi?Apage=V&V=0" class="GUTTER2"><font color="#000099">V</a><br><img src="IMG/pix_bk.gif" width=17 height=2 alt=""></td>
+<td width=17 align="center"><a href="list.cgi?Apage=W&V=0" class="GUTTER2"><font color="#000099">W</a><br><img src="IMG/pix_bk.gif" width=17 height=2 alt=""></td>
+<td width=17 align="center"><a href="list.cgi?Apage=X&V=0" class="GUTTER2"><font color="#000099">X</a><br><img src="IMG/pix_bk.gif" width=17 height=2 alt=""></td>
+<td width=17 align="center"><a href="list.cgi?Apage=Y&V=0" class="GUTTER2"><font color="#000099">Y</a><br><img src="IMG/pix_bk.gif" width=17 height=2 alt=""></td>
+<td width=17 align="center"><a href="list.cgi?Apage=Z&V=0" class="GUTTER2"><font color="#000099">Z</a><br><img src="IMG/pix_bk.gif" width=17 height=2 alt=""></td>
+</tr></table>
+
+
+<br>
+
+<!--<img src="IMG/dot_clear.gif" hspace=5>--->
+
+<!--- Picture  ----->
+
+<table border="0" width="460" cellpadding="2" cellspacing="0">
+<tr><td nowrap><a class="EvvLink" href="javascript:openEvvViewer();"><img src=IMG/evvred.gif height="2" width="0" border="0" alt="This is the beginning of a simple schematic depicting the longest mRNA-encoding exon/intron structure of the gene region"><img src=IMG/evvred.gif height="2" width="22" border="0" alt="upsream of gene picture"><img src=IMG/evvred.gif height="2" width="1" border="0" alt="non-coding region"><img src=IMG/evvred.gif height="8" width="25" border="0" alt="exon"><img src=IMG/evvred.gif height="2" width="97" border="0" alt="non-coding region"><img src=IMG/evvred.gif height="8" width="21" border="0" alt="exon"><img src=IMG/evvred.gif height="2" width="16" border="0" alt="non-coding region"><img src=IMG/evvred.gif height="8" width="12" border="0" alt="exon"><img src=IMG/evvred.gif height="2" width="38" border="0" alt="non-coding region"><img src=IMG/evvred.gif height="8" width="187" border="0" alt="exon"><img src=IMG/evvred.gif height="2" width="1" border="0" alt="non-coding region"><img src=IMG/evvred.gif height="2" width="22" border="0" alt="downstream of gene picture"><br>Click to Display mRNA-Genomic Alignments (spanning 2391 bps)</a></td></tr></table>
+
+<!--- End of Picture  --->
+
+<!-- Links Block --> 
+
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&dopt=DocSum&list_uids=11559369,10395932,10386863,10233762,10065899,9730616,9625760,9370294,8798467" onMouseOver="window.status='PubMed';return true" onMouseOut="window.status='';return true"><img src="IMG/pubmed.gif" border=0 alt="PubMed"></a><a href="http://www.ncbi.nlm.nih.gov/entrez/dispomim.cgi?id=604852" onMouseOver="window.status='Online Mendelian Inheritance in Man';return true" onMouseOut="window.status='';return true"><img src="IMG/omim.gif" border=0 alt="Online Mendelian Inheritance in Man"></a><a href="http://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/av.cgi?c=locusid&l=6373" onMouseOver="window.status='Use AceView';return true" onMouseOut="window.status='';return true"><img src="IMG/aceview.gif" border=0 alt="Use AceView"></a><a href="http://www.ncbi.nlm.nih.gov/UniGene/clust.cgi?ORG=Hs&CID=103982" onMouseOver="window.status='NCBI UniGene';return true" onMouseOut="window.status='';return true"><img src="IMG/unigene.gif" border=0 alt="NCBI UniGene"></a><a href="http://www.ncbi.nlm.nih.gov/cgi-bin/Entrez/maps.cgi?ORG=hum&chr=4&ovr=ideogr&maps=scan-r,est,loc&VERBOSE=ON&cmd=focus&fill=40&size=40&query=SCYB11" onMouseOver="window.status='NCBI Genome Map Viewer';return true" onMouseOut="window.status='';return true"><img src="IMG/map.gif" border=0 alt="NCBI Genome Map Viewer"></a><a href="http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?locusId=6373" onMouseOver="window.status='NCBI Molecular Variation Database (dbSNP)';return true" onMouseOut="window.status='';return true"><img src="IMG/snp.gif" border=0 alt="NCBI Molecular Variation Database (dbSNP)"></a><a href="http://www.ncbi.nlm.nih.gov/HomoloGene/homolquery.cgi?TEXT=6373[loc]" onMouseOver="window.status='NCBI HomoloGene';return true" onMouseOut="window.status='';return true"><img src="IMG/homol.gif" border=0 alt="NCBI HomoloGene"></a><a href="http://gdbwww.gdb.org/gdb-bin/genera/accno?GDB:9848807" onMouseOver="window.status='Genome Database';return true" onMouseOut="window.status='';return true"><img src="IMG/gdb.gif" border=0 alt="Genome Database"></a><a href="http://www.ensembl.org/Homo_sapiens/contigview?geneid=NM_005409" onMouseOver="window.status='Ensembl Genome Server';return true" onMouseOut="window.status='';return true"><img src="IMG/ensembl.gif" border=0 alt="Ensembl Genome Server"></a><a href="http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg11&position=NM_005409" onMouseOver="window.status='UCSC Genome Browser';return true" onMouseOut="window.status='';return true"><img src="IMG/ucsc.gif" border=0 alt="UCSC Genome Browser"></a><a href="http://mgc.nci.nih.gov/Genes/GeneInfo?ORG=Hs&CID=103982" onMouseOver="window.status='Mammalian Gene Collection';return true" onMouseOut="window.status='';return true"><img src="IMG/mgc.gif" border=0 alt="Mammalian Gene Collection"></a><br>
+
+<!-- End of Links Block -->
+
+<!-- Withdrawn -->
+
+
+
+<!-- End of Withdrawn -->
+
+<!-- Nomenclature Block --> 
+
+<a name="nome"></a>
+<table border="0" width="460" cellspacing="2" cellpadding="0" 
+bgcolor="#FFFFFF"><tr><td width="7" bgcolor="#315399">&nbsp;</td>
+<td width="303" bgcolor="#CCCCFF"><font size=+1>
+ 
+
+&nbsp;<i>Homo sapiens</i>&nbsp;Official Gene Symbol 
+ and Name&nbsp;<A HREF="http://www.gene.ucl.ac.uk/cgi-bin/nomenclature/searchgenes.pl?field=symbol&anchor=equals&page_size=25&limit=1000&.cgifields=limit&.cgifields=page_size&match=SCYB11">(HGNC)</a></font></td></tr></table>
+ <table border=0 width="460"><tr><td width="5">&nbsp;</td>
+ <td width="450" ><b>SCYB11: small inducible cytokine subfamily B (Cys-X-Cys), member 11</b></td></tr><tr><td width="5">&nbsp;</td><td align="left"><b>LocusID:</b>  6373</td></tr>
+</table>
+
+<!--- End of Nomenclature Block --->
+
+
+<!--- Overview --->
+
+<table border="0" width="460" cellspacing="0" cellpadding="0"> <tr><td width="310" bgcolor="#CCCCFF"> <a name="over"></a><font size=+1>Overview</font></td><td bgcolor="#CCCCFF" align="right"> <a href="./help.html#over" class="NN">?</a></td> </tr></table>
+<table border="0" width="460" cellpadding="2" cellspacing="0">
+<tr><td width="5"></td><td  bgcolor="#FFFFCC"  valign=top colspan="2">
+<b><a href="#refseq">RefSeq </a>Summary:</b> Chemokines are a group of small (approximately 8 to 14 kD), mostly basic, structurally related molecules that regulate cell trafficking of various types of leukocytes through interactions with a subset of 7-transmembrane, G protein-coupled receptors. Chemokines also play fundamental roles in the development, homeostasis, and function of the immune system, and they have effects on cells of the central nervous system as well as on endothelial cells involved in angiogenesis or angiostasis. Chemokines are divided into 2 major subfamilies, CXC and CC.  Small inducible cytokine subfamily B member 11 (SCYB11) is a CXC member of the chemokine superfamily. It induces a chemotactic response in activated T-cells and is the dominant ligand for CXC receptor-3. The gene encoding SCYB11 protein contains 4 exons and at least three polyadenylation signals which might reflect cell-specific regulation of expression. IFN-gamma is a potent inducer of SCYB11 gene transcription.</td></tr><tr><td colspan=2>&nbsp;</td></tr><tr><td width="5"></td><td  bgcolor="#FFFFCC"  valign=top colspan="2">
+<b>Proteome Summary:</b> Cytokine B11; CXC chemokine that has chemotactic activity on activated T cells</td></tr><tr><td width="5"></td><td align="left" valign="top" ><b>Locus Type:</b></td>
+ <td align="left" valign="top" >gene with protein product, function known or inferred</td></tr><tr><td width="5"></td><td align="left" valign="top" ><b>Product:</b></td>
+ <td align="left" valign="top" >small inducible cytokine subfamily B (Cys-X-Cys), member 11 precursor<br></td></tr><tr><td width="5"></td><td align="left" valign="top" ><b>Alternate Symbols:</b></td>
+ <td align="left" valign="top" >IP9, B-R1, H174, IP-9, I-TAC, CXCL11, SCYB9B</td></tr><tr><td width="5"></td><td align="left" valign="top" ><b>Alias:</b></td>
+ <td align="left" valign="top" >small inducible cytokine subfamily B (Cys-X-Cys), member 9B <br></td></tr></table>
+
+
+<!--- End of Overview --->
+
+<!--- Function --->
+<table border="0" width="460" cellspacing="0" cellpadding="0">
+<tr><td bgcolor="#CCCCFF"><a name="function"></a><font size=+1>Function</font></td><td bgcolor="#CCCCFF"><font size=+1><a href="../LocusLink/GeneRIF.cgi?lid=6373&sym=SCYB11&name=small+inducible+cytokine+subfamily+B+(Cys-X-Cys),+member+11&url=LocRpt.cgi?l=6373"><font color="#ff4500">Submit GeneRIF</font></a></font></td><td bgcolor="#CCCCFF"><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=11559369,10233762"><b>(All Pubs)</b></a></td><td bgcolor="#CCCCFF" align="right"><a href="./help.html#function" class="NN">?</a></td></tr></table>
+<table border="0" width="460" cellpadding="2" cellspacing="0">
+<tr><td width="5" valign=top align=left>&nbsp;</td>
+<td align=left colspan="4"><b>GeneRIF: Gene References into Function:</b> &nbsp;</td></tr>
+<tr><td width="5">&nbsp;</td>
+ <td valign=top align=left><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=11559369">11559369</a></td>
+ <td valign=top align=left><ul><li>chemotactic activity for CXCR3-expressing cells; substrate for dipeptidylpeptidase IV</li></ul></td></tr></table><br><table border="0" width="460" cellpadding="2" cellspacing="0">
+<ul><tr><td width="5" valign=top align=left>&nbsp;</td>
+<td align=left colspan="4"><b><a href="http://www.geneontology.org/">Gene Ontology</a><sup>TM</sup>:</b> &nbsp;</td></tr>
+<tr><td valign=top align=left width="5">
+ &nbsp;</td><th scope="col" valign=top align=left><a href="./help.html#annot" class="NN"><img src="IMG/dot_clear.gif" hspace=20 border=0 alt=""><font size=-1>Term</font></a></th>
+ <th scope="col" valign=top align=left><a href="./help.html#annot" class="NN"><font size=-1>Evidence</font></a></th>
+ <th scope="col" valign=top align=left><a href="./help.html#annot" class="NN"><font size=-1>Source</font></a></th>
+ <th scope="col" valign=top align=right><a href="./help.html#annot" class="NN"><font size=-1>Pub</font></a></th></tr>
+<tr><td valign=top align=left width="5">
+ &nbsp;</td><td valign=top align=left><li><a href="http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0008009">chemokine</a></li></td>
+ <td valign=top align=left>E</td>
+ <td valign=top align=left>Proteome</td>
+ <td valign=top align=right><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=10233762" class="NN">pm</a></td></tr>
+<tr><td valign=top align=left width="5">
+ &nbsp;</td><td valign=top align=left><li><a href="http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0006935">chemotaxis</a></li></td>
+ <td valign=top align=left>E</td>
+ <td valign=top align=left>Proteome</td>
+ <td valign=top align=right><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=10233762" class="NN">pm</a></td></tr>
+<tr><td valign=top align=left width="5">
+ &nbsp;</td><td valign=top align=left><li><a href="http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0007165">signal transduction</a></li></td>
+ <td valign=top align=left>P</td>
+ <td valign=top align=left>Proteome</td>
+ <td valign=top align=right><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=10233762" class="NN">pm</a></td></tr>
+<tr><td valign=top align=left width="5">
+ &nbsp;</td><td valign=top align=left><li><a href="http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0007267">cell-cell signalling</a></li></td>
+ <td valign=top align=left>E</td>
+ <td valign=top align=left>Proteome</td>
+ <td valign=top align=right><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=10233762" class="NN">pm</a></td></tr>
+<tr><td valign=top align=left width="5">
+ &nbsp;</td><td valign=top align=left><li><a href="http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0006954">inflammatory response</a></li></td>
+ <td valign=top align=left>P</td>
+ <td valign=top align=left>Proteome</td>
+ <td valign=top align=right><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=10233762" class="NN">pm</a></td></tr>
+<tr><td valign=top align=left width="5">
+ &nbsp;</td><td valign=top align=left><li><a href="http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0009621">response to pathogenic fungi</a></li></td>
+ <td valign=top align=left>P</td>
+ <td valign=top align=left>Proteome</td>
+ <td valign=top align=right><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=10233762" class="NN">pm</a></td></tr>
+<tr><td width="5" valign=top align=left>&nbsp;</td>
+<td align=left colspan="4"><b>Other Ontologies:</b> &nbsp;</td></tr>
+<tr><td valign=top align=left width="5">
+ &nbsp;</td><th scope="col" valign=top align=left><a href="./help.html#annot" class="NN"><img src="IMG/dot_clear.gif" hspace=20 border=0 alt=""><font size=-1>Term</font></a></th>
+ <th scope="col" valign=top align=left><a href="./help.html#annot" class="NN"><font size=-1>Evidence</font></a></th>
+ <th scope="col" valign=top align=left><a href="./help.html#annot" class="NN"><font size=-1>Source</font></a></th>
+ <th scope="col" valign=top align=right><a href="./help.html#annot" class="NN"><font size=-1>Pub</font></a></th></tr>
+<tr><td valign=top align=left width="5">
+ &nbsp;</td><td valign=top align=left><li>Response to injury</li></td>
+ <td valign=top align=left>NR</td>
+ <td valign=top align=left>Proteome</td>
+ <td valign=top align=right><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=10233762" class="NN">pm</a></td></tr>
+<tr><td valign=top align=left width="5">
+ &nbsp;</td><td valign=top align=left><li>Anti-pathogen response</li></td>
+ <td valign=top align=left>NR</td>
+ <td valign=top align=left>Proteome</td>
+ <td valign=top align=right><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=10233762" class="NN">pm</a></td></tr>
+<tr><td valign=top align=left width="5">
+ &nbsp;</td><td valign=top align=left><li>Cell migration/motility</li></td>
+ <td valign=top align=left>NR</td>
+ <td valign=top align=left>Proteome</td>
+ <td valign=top align=right><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=10233762" class="NN">pm</a></td></tr>
+<tr><td valign=top align=left width="5">
+ &nbsp;</td><td valign=top align=left><li>Cell-to-cell signalling</li></td>
+ <td valign=top align=left>NR</td>
+ <td valign=top align=left>Proteome</td>
+ <td valign=top align=right><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=10233762" class="NN">pm</a></td></tr>
+</ul></table>
+<br>
+<!-- End of Function --->
+
+
+<!--- Relationships --->
+
+<a name="relations"></a>
+<table border="0" width="460" cellspacing="0" 
+ cellpadding="0"><tr><td width="310" bgcolor="#CCCCFF"><font size=+1>
+ Relationships</font></td>
+ <td bgcolor="#CCCCFF" align="right">
+ <a href="./help.html#relations" class="NN">?</a></td></tr></table>
+ <table border="0" width="460" cellpadding="2" cellspacing="0">
+<tr><td width="5">&nbsp;</td><td>
+ <b>Mouse Homology Maps:</b></td><td >&nbsp;</td><td width="2" >&nbsp;</td>
+ <td >&nbsp;</td><td  align="right" >&nbsp;</td></tr>
+<tr><td width="5">&nbsp;</td><td>
+ &nbsp;&nbsp;NCBI vs. MGD</td><td >&nbsp;</td><td>&nbsp;</td>
+ <td ><a href = "./LocRpt.cgi?l=56066">Scyb11</a></td><td  align="right" ><a href="/Homology/view.cgi?map=ncbi_mgd&tax_id=9606&chr=4&symbol=SCYB11" class="NN">Hs</a></td></tr>
+<tr><td width="5">&nbsp;</td><td>
+ &nbsp;&nbsp;UCSC vs. MGD</td><td >&nbsp;</td><td>&nbsp;</td>
+ <td ><a href = "./LocRpt.cgi?l=56066">Scyb11</a></td><td  align="right" ><a href="/Homology/view.cgi?map=ucsc_mgd&tax_id=9606&chr=4&symbol=SCYB11" class="NN">Hs</a></td></tr>
+</table><br>
+
+
+<!-- End of Relationships --->
+
+
+<!-- Locus Information Block -->
+
+<!------>
+
+
+<!--- End of Locus Info Block --->
+
+<!--Map Information Block-->
+
+
+<a name="map">
+</a><table border="0" width="460" cellspacing="0" 
+ cellpadding="0"><tr><td width="310" bgcolor="#CCCCFF"><font size=+1>
+ Map Information</font></td>
+ <td bgcolor="#CCCCFF" align="right">
+ <a href="./help.html#map" class="NN">?</a></td></tr></table>
+ <table border="0" width="460" cellpadding="2" cellspacing="0">
+<tr><td width="5">&nbsp;</td><td>
+ <b>Chromosome:</b></td><td>4</td><td width="2" >&nbsp;</td>
+ <td>&nbsp;</td><td  align="right" ><a href="http://www.ncbi.nlm.nih.gov/cgi-bin/Entrez/maps.cgi?ORG=hum&chr=4&ovr=ideogr&maps=scan-r,est,loc&VERBOSE=ON&cmd=focus&fill=40&size=40&query=SCYB11" class="NN">mv</a></td></tr>
+<tr><td width="5">&nbsp;</td><td>
+ <b>Cytogenetic:</b></td><td >4q21.2</td><td width="2" >&nbsp;</td>
+ <td >RefSeq</td><td align="right" >&nbsp;</td></tr>
+</table><br>
+
+
+<!--- End of Map Information Block --->
+
+<!--RefSeq Block-->
+
+<a name="refseq"></a>
+<table border="0" width="460" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF"><tr><td width=310 bgcolor="#CCCCFF"><font size=+1>NCBI Reference Sequences&nbsp;(RefSeq)</font></td><td bgcolor="#CCCCFF" align="right"><a href="./help.html#refseq" class="NN">?</a></td></tr></table>
+<table border=0  cellspacing=0 cellpadding=2 
+  width="460"><tr><th  align=left > 
+ Category:&nbsp;<font color="#ff4500">REVIEWED</font></th>
+ </tr></table><table border="0" width="460" cellpadding="2" cellspacing="0">
+<tr><th align=left valign=top 
+ width=10>&nbsp;</th><th align=left valign=top >mRNA:</th>
+ <td align=left valign=top ><a href="http://www.ncbi.nlm.nih.gov/entrez/viewer.cgi?val=14790145&db=Nucleotide&dopt=GenBank">NM_005409</a></td>
+ <td align=left valign=top >&nbsp;</td>
+ <td align=right valign=top >&nbsp;</td>
+<tr><th align=left valign=top 
+ width=10>&nbsp;</th><th align=left valign=top >Protein:</th>
+ <td align=left valign=top colspan="2" ><a href="http://www.ncbi.nlm.nih.gov/entrez/viewer.cgi?val=4885589&db=Protein&dopt=GenPept">NP_005400</a>&nbsp;&nbsp;small inducible cytokine subfamily B (Cys-X-Cys), member 11 precursor</td>
+ <td align=right valign=top ><a href="/cgi-bin/Entrez/blink?pid=4885589&all=1" class="NN">BL</a></td>
+<tr><th align=left valign=top 
+ width=10>&nbsp;</th><th align=left valign=top >Domains:</th>
+ <td align=left valign=top ><a href="/Structure/cdd/cddsrv.cgi?uid=pfam00048">Small cytokines (intecrine/chemokine)</a></td>
+ <td align=left valign=top >score:&nbsp;76</td>
+ <td align=right valign=top >&nbsp;</td>
+<tr><th align=left valign=top 
+ width=10>&nbsp;</th><th align=left valign=top >&nbsp;</th>
+ <td align=left valign=top ><a href="/Structure/cdd/cddsrv.cgi?uid=smart00199">Intercrine alpha family (small cytokine C-X-C) (chemokine CXC).</a></td>
+ <td align=left valign=top >score:&nbsp;88</td>
+ <td align=right valign=top >&nbsp;</td>
+<tr><th align=left valign=top 
+ width=10>&nbsp;</th><th align=left valign=top >GenBank Source:</th>
+ <td align=left valign=top ><a href="http://www.ncbi.nlm.nih.gov/entrez/viewer.cgi?val=AF030514,U66096,Y15220&dopt=DocSum&dispmax=1000">AF030514,U66096,Y15220</a></td>
+ <td align=left valign=top >&nbsp;</td>
+ <td align=right valign=top >&nbsp;</td>
+</td></tr></table><br><table border=0  cellspacing=0 cellpadding=2 
+  width="460"><tr><th  align=left > 
+ Category:&nbsp;<font color="#ff4500">NCBI Genome Annotation</font></th>
+ </tr></table><table border="0" width="460" cellpadding="2" cellspacing="0">
+<tr><th align=left valign=top 
+ width=10>&nbsp;</th><th align=left valign=top >Genomic Contig:</th>
+ <td align=left valign=top ><a href="http://www.ncbi.nlm.nih.gov/entrez/viewer.cgi?val=NT_022760.10&db=Nucleotide&dopt=GenBank">NT_022760</a></td>
+ <td align=left valign=top >&nbsp;</td>
+ <td align=right valign=top ><a href = "http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?val=NT_022760.10&from=2657918&to=2660426&strand=1&text=on&view=genbank" class = "NN">gb</a>&nbsp;<a href="/entrez/viewer.cgi?val=NT_022760.10&_gene=SCYB11&view=graph" class ="NN">sv</a>&nbsp;<a href = "http://www.ncbi.nlm.nih.gov/cgi-bin/Entrez/maps.cgi?ORG=hum&MAPS=est,clone,loc,cntg-r&verbose=on&gnl=NT_022760.10&query=NT_022760.10&cmd=FOCUS" class="NN">mv</a>&nbsp;<a href="http://www.ncbi.nlm.nih.gov/cgi-bin/Entrez/evv.cgi?org=hs&contig=NT_022760.10&gene=SCYB11&lid=6373" class="NN">ev</a>&nbsp;<a href = "http://www.ncbi.nlm.nih.gov/cgi-bin/Entrez/modelmaker.cgi?contig=NT_022760.10&gene=SCYB11&lid=6373" class = "NN">mm</a></td>
+<tr><th align=left valign=top 
+ width=10>&nbsp;</th><th align=left valign=top colspan=4> <font color="ff4500">Annotated transcripts/proteins for this locus:</font></th>
+ </tr>
+<tr><th align=left valign=top 
+ width=10>&nbsp;</th><th align=left valign=top >Evidence:</th>
+ <td align=left valign=top >supported by alignment with mRNA</td><td align=left valign=top >&nbsp;</td>
+ <td align=right>&nbsp;</td></tr>
+<tr><th align=left valign=top 
+ width=10>&nbsp;</th><th align=left valign=top >Model mRNA:</th>
+ <td align=left valign=top ><a href="http://www.ncbi.nlm.nih.gov/entrez/viewer.cgi?val=20469053&db=Nucleotide&dopt=GenBank">XM_113426</a></td>
+ <td align=left valign=top >&nbsp;</td>
+ <td align=right valign=top >&nbsp;</td>
+<tr><th align=left valign=top 
+ width=10>&nbsp;</th><th align=left valign=top >Model Protein:</th>
+ <td align=left valign=top ><a href="http://www.ncbi.nlm.nih.gov/entrez/viewer.cgi?val=20469054&db=Protein&dopt=GenPept">XP_113426</a></td>
+ <td align=left valign=top >&nbsp;</td>
+ <td align=right valign=top ><a href="/cgi-bin/Entrez/blink?pid=20469054&all=1" class="NN">BL</a></td>
+<tr><th align=left valign=top 
+ width=10>&nbsp;</th><th align=left valign=top >Domains:</th>
+ <td align=left valign=top ><a href="/Structure/cdd/cddsrv.cgi?uid=pfam00048">Small cytokines (intecrine/chemokine), interleukin-8 like</a></td>
+ <td align=left valign=top >score:&nbsp;87</td>
+ <td align=right valign=top >&nbsp;</td>
+<tr><th align=left valign=top 
+ width=10>&nbsp;</th><th align=left valign=top >&nbsp;</th>
+ <td align=left valign=top ><a href="/Structure/cdd/cddsrv.cgi?uid=smart00199">Intercrine alpha family (small cytokine C-X-C) (chemokine CXC).</a></td>
+ <td align=left valign=top >score:&nbsp;89</td>
+ <td align=right valign=top >&nbsp;</td>
+</td></tr></table><br>
+
+<!--- End of RefSeq Block --->
+
+<!-- GenBank Block -->
+
+<a name="genbank"></a>
+<table border="0" width="460" cellspacing="0"
+ cellpadding="0"><tr><td width="310" bgcolor="#CCCCFF"><font size=+1>
+ </a>GenBank Sequences</font></td> <td bgcolor="#CCCCFF" align="right"> <a href="./help.html#genbank" class="NN">?</a></td> </tr></table>
+ <table border="0" width="460" cellpadding="2" cellspacing="0">
+ <tr><td width=5></td><th align=left valign=middle class="NN"><font size="-1">Nucleotide</font></th>
+ <th align=left valign=middle >
+ <a href="help.html#type" class="NN"><font size="-1">Type</a></font></th><th align=left valign=middle >
+ <a href="help.html#protein" class="NN"><font size="-1">Protein</a></font></th>
+<th class="TEXT">&nbsp;</th><td class="TEXT">&nbsp;</td></tr></tr><tr><td width=5></td><td align=left 
+ valign=middle ><a href="http://www.ncbi.nlm.nih.gov/entrez/viewer.cgi?val=6731985&db=Nucleotide&dopt=GenBank">A82120</a></td>
+ <td align=left valign=middle  >g</td>
+ <td align=left valign=middle ><a href="http://www.ncbi.nlm.nih.gov/entrez/viewer.cgi?val=6731986&db=Protein&dopt=GenPept">CAB69205</a></td>
+ <td align=left valign=middle  >&nbsp;</td>
+ <td align=right valign=middle  ><a href="/cgi-bin/Entrez/blink?pid=6731986&all=1" class="NN">BL</a></td></tr></tr><tr><td width=5></td><td align=left 
+ valign=middle ><a href="http://www.ncbi.nlm.nih.gov/entrez/viewer.cgi?val=3746491&db=Nucleotide&dopt=GenBank">AF053972</a></td>
+ <td align=left valign=middle  >g</td>
+ <td align=left valign=middle ><a href="http://www.ncbi.nlm.nih.gov/entrez/viewer.cgi?val=3746492&db=Protein&dopt=GenPept">AAD10206</a></td>
+ <td align=left valign=middle  >&nbsp;</td>
+ <td align=right valign=middle  ><a href="/cgi-bin/Entrez/blink?pid=3746492&all=1" class="NN">BL</a></td></tr></tr><tr><td width=5></td><td align=left 
+ valign=middle ><a href="http://www.ncbi.nlm.nih.gov/entrez/viewer.cgi?val=5051637&db=Nucleotide&dopt=GenBank">AF077867</a></td>
+ <td align=left valign=middle  >g</td>
+ <td align=left valign=middle ><a href="http://www.ncbi.nlm.nih.gov/entrez/viewer.cgi?val=5051638&db=Protein&dopt=GenPept">AAD38327</a></td>
+ <td align=left valign=middle  >&nbsp;</td>
+ <td align=right valign=middle  ><a href="/cgi-bin/Entrez/blink?pid=5051638&all=1" class="NN">BL</a></td></tr></tr><tr><td width=5></td><td align=left 
+ valign=middle ><a href="http://www.ncbi.nlm.nih.gov/entrez/viewer.cgi?val=5689773&db=Nucleotide&dopt=GenBank">Y15221</a></td>
+ <td align=left valign=middle  >g</td>
+ <td align=left valign=middle ><a href="http://www.ncbi.nlm.nih.gov/entrez/viewer.cgi?val=5689774&db=Protein&dopt=GenPept">CAB51859</a></td>
+ <td align=left valign=middle  >&nbsp;</td>
+ <td align=right valign=middle  ><a href="/cgi-bin/Entrez/blink?pid=5689774&all=1" class="NN">BL</a></td></tr></tr><tr><td width=5></td><td align=left 
+ valign=middle ><a href="http://www.ncbi.nlm.nih.gov/entrez/viewer.cgi?val=2580585&db=Nucleotide&dopt=GenBank">AF002985</a></td>
+ <td align=left valign=middle  >m</td>
+ <td align=left valign=middle ><a href="http://www.ncbi.nlm.nih.gov/entrez/viewer.cgi?val=2580586&db=Protein&dopt=GenPept">AAC51845</a></td>
+ <td align=left valign=middle  >&nbsp;</td>
+ <td align=right valign=middle  ><a href="/cgi-bin/Entrez/blink?pid=2580586&all=1" class="NN">BL</a></td></tr></tr><tr><td width=5></td><td align=left 
+ valign=middle ><a href="http://www.ncbi.nlm.nih.gov/entrez/viewer.cgi?val=3219692&db=Nucleotide&dopt=GenBank">AF030514</a></td>
+ <td align=left valign=middle  >m</td>
+ <td align=left valign=middle ><a href="http://www.ncbi.nlm.nih.gov/entrez/viewer.cgi?val=3219693&db=Protein&dopt=GenPept">AAC39775</a></td>
+ <td align=left valign=middle  >&nbsp;</td>
+ <td align=right valign=middle  ><a href="/cgi-bin/Entrez/blink?pid=3219693&all=1" class="NN">BL</a></td></tr></tr><tr><td width=5></td><td align=left 
+ valign=middle ><a href="http://www.ncbi.nlm.nih.gov/entrez/viewer.cgi?val=13529004&db=Nucleotide&dopt=GenBank">BC005292</a></td>
+ <td align=left valign=middle  >m</td>
+ <td align=left valign=middle ><a href="http://www.ncbi.nlm.nih.gov/entrez/viewer.cgi?val=13529005&db=Protein&dopt=GenPept">AAH05292</a></td>
+ <td align=left valign=middle  >&nbsp;</td>
+ <td align=right valign=middle  ><a href="/cgi-bin/Entrez/blink?pid=13529005&all=1" class="NN">BL</a></td></tr></tr><tr><td width=5></td><td align=left 
+ valign=middle ><a href="http://www.ncbi.nlm.nih.gov/entrez/viewer.cgi?val=1628562&db=Nucleotide&dopt=GenBank">U59286</a></td>
+ <td align=left valign=middle  >m</td>
+ <td align=left valign=middle ><a href="http://www.ncbi.nlm.nih.gov/entrez/viewer.cgi?val=1628563&db=Protein&dopt=GenPept">AAB17374</a></td>
+ <td align=left valign=middle  >&nbsp;</td>
+ <td align=right valign=middle  ><a href="/cgi-bin/Entrez/blink?pid=1628563&all=1" class="NN">BL</a></td></tr></tr><tr><td width=5></td><td align=left 
+ valign=middle ><a href="http://www.ncbi.nlm.nih.gov/entrez/viewer.cgi?val=5058994&db=Nucleotide&dopt=GenBank">U66096</a></td>
+ <td align=left valign=middle  >m</td>
+ <td align=left valign=middle ><a href="http://www.ncbi.nlm.nih.gov/entrez/viewer.cgi?val=5058995&db=Protein&dopt=GenPept">AAD38867</a></td>
+ <td align=left valign=middle  >&nbsp;</td>
+ <td align=right valign=middle  ><a href="/cgi-bin/Entrez/blink?pid=5058995&all=1" class="NN">BL</a></td></tr></tr><tr><td width=5></td><td align=left 
+ valign=middle ><a href="http://www.ncbi.nlm.nih.gov/entrez/viewer.cgi?val=4225953&db=Nucleotide&dopt=GenBank">Y15220</a></td>
+ <td align=left valign=middle  >m</td>
+ <td align=left valign=middle ><a href="http://www.ncbi.nlm.nih.gov/entrez/viewer.cgi?val=4225954&db=Protein&dopt=GenPept">CAA75510</a></td>
+ <td align=left valign=middle  >&nbsp;</td>
+ <td align=right valign=middle  ><a href="/cgi-bin/Entrez/blink?pid=4225954&all=1" class="NN">BL</a></td></tr></table><br>
+
+<!--- End of GenBank Block --->
+
+<!-- External Annotations Block --->
+
+
+
+<!--- End of External Annotations Block --->
+
+<!-- Additional Links Block -->
+
+<a name="links"></a>
+<table border="0" width="460" cellspacing="0" cellpadding="0"><tr><td width="310" bgcolor="#CCCCFF"><font size=+1>Additional Links</font></td><td bgcolor="#CCCCFF" align="right"> <a href="./help.html#links" class="NN">?</a></td> </tr></table>
+<table border="0" width="460" cellpadding="0" cellspacing="0">
+<tr><td width="5">&nbsp;</td><td align="left"><ul><li><b>OMIM:</b>  <a href="http://www.ncbi.nlm.nih.gov/entrez/dispomim.cgi?id=604852">604852</a>
+</li></ul></td></tr>
+<tr><td width="5">&nbsp;</td><td align="left"><ul><li><b>UniGene:</b>  <a href="http://www.ncbi.nlm.nih.gov/UniGene/clust.cgi?ORG=Hs&CID=103982">Hs.103982<br></a>
+</li></ul></td></tr>
+<tr><td width="5">&nbsp;</td><td align="left"><ul><li><a href="http://bioinformatics.weizmann.ac.il/cards-bin/carddisp?SCYB11" >GeneCards</a></li></ul></td></tr>
+</table>
+
+
+<!-- End of Additional Links Block -->
+
+
+<table border="0" width="460" cellspacing="0" cellpadding="0">
+
+  <tr valign="TOP"> 
+    <td>
+      <div align="CENTER">
+        <br><font size=-1><i><a href="#top">To Top</a></i></font><br>
+        <br><b>Questions or Comments?</b><br>
+          Write to the <a href="mailto:info@ncbi.nlm.nih.gov?subject=LocusLink">NCBI Service Desk</a></div></td></tr>
+  <tr valign="TOP">
+    <td>
+      <div align="CENTER">
+        <P><A HREF="../About/disclaimer.html"><font size=-1>Disclaimer</font></A>
+&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="../About/privacy.html"><font size=-1>Privacy statement</font></A></P>
+      </div>
+     </td>
+    </tr>
+</table>
+
+
+
+<hr>
+
+ 
+
+</td></tr></table>
+ 
+</body>
+
+</html>

@@ -1,0 +1,773 @@
+<HTML>
+<HEAD>
+
+   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <META NAME="keys" CONTENT="LocusLink, RefSeq, reference sequence, genes, locus, loci, human genome, genetic map, sequence, NCBI">
+
+    <META NAME="description" CONTENT="LocusLink provides a single point-of-access for information about genes including sequences, nomenclature, map information, and links to related resources such as OMIM, GDB, HGMD, dbSNP, publications, and UniGene.">
+
+<!--
+<link rel="stylesheet" href="http://www.ncbi.nlm.nih.gov/corehtml/ncbi2.css">
+--->
+
+  <title>LocusLink Report</title>
+
+<style type="text/css"> 
+<!---
+P. {}
+P.GUTTER1 { color: #FFCC66; font-family: arial, helvetica,sans-serif;  }
+.GUTTER1 { color: #FFCC66; font-family: arial, helvetica,sans-serif;  }
+.GUTTER2 { color: #CCCCFF; font-family: arial, helvetica,sans-serif; }
+A { color:#0033CC; }
+A.EvvLink { color:#0033CC; text-decoration: none; }
+A.GUTTER1 { color: #FFCC66; font-family: arial, helvetica,sans-serif; text-decoration: none; }
+A.GUTTER2 { color: #CCCCFF; font-family: arial, helvetica,sans-serif; text-decoration: none; }
+A.GUTTER2S { color: #CCCCFF; font-family: arial, helvetica,sans-serif; text-decoration: none; font-size: 75%; }
+A.NN { color: #000099; font-weight: bold; font-family: arial,helvetica,sans-serif; text-decoration:none; } 
+A.BAR { font-size:85%;  color:#ffffff; font-family: arial,helvetica,sans-serif; text-decoration:none; }
+.BAR { font-size:85%;  color:#ffffff; font-family: arial,helvetica,sans-serif; text-decoration:none; }
+sup {font-family: arial, helvetica, sans-serif; font-size: 60%; vertical-align: super;}
+.NN  { color: #000099; font-weight: bold; font-family: arial,helvetica,sans-serif; }
+--->
+</style> 
+
+
+
+
+<script LANGUAGE="JavaScript"> 
+ 
+
+
+
+  
+<!--
+      var agt=navigator.userAgent.toLowerCase(); 
+      var is_major = parseInt(navigator.appVersion); 
+      var is_minor = parseFloat(navigator.appVersion); 
+      var is_nav  = ((agt.indexOf('mozilla')!=-1) && (agt.indexOf('spoofer')==-1) 
+        && (agt.indexOf('compatible') == -1) && (agt.indexOf('opera')==-1) 
+        && (agt.indexOf('webtv')==-1)); 
+      var is_nav2 = (is_nav && (is_major == 2)); 
+      var is_nav3 = (is_nav && (is_major == 3)); 
+      var is_nav4 = (is_nav && (is_major == 4)); 
+      var is_nav4up = (is_nav && (is_major >= 4)); 
+      var is_navonly      = (is_nav && ((agt.indexOf(";nav") != -1) || 
+      (agt.indexOf("; nav") != -1)) ); 
+      var is_nav5 = (is_nav && (is_major == 5)); 
+      var is_nav5up = (is_nav && (is_major >= 5)); 
+      var is_nav6up = (is_nav && (is_major >= 6)); 
+      
+      var is_ie   = (agt.indexOf("msie") != -1); 
+      var is_ie3  = (is_ie && (is_major < 4)); 
+      var is_ie4  = (is_ie && (is_major == 4) && (agt.indexOf("msie 5.0")==-1) ); 
+      var is_ie4up  = (is_ie  && (is_major >= 4)); 
+      var is_ie5  = (is_ie && (is_major == 4) && (agt.indexOf("msie 5.0")!=-1) ); 
+      var is_ie5up  = (is_ie  && !is_ie3 && !is_ie4); 
+   
+      /* 
+      Source: Webmonkey Code Library 
+      (http://www.hotwired.com/webmonkey/javascript/code_library/) 
+      
+      Author: Taylor 
+      Author Email: taylor@wired.com 
+      Author URL: http://www.taylor.org/ 
+      */ 
+      
+
+function pageOffset()
+{ 
+
+      if (document.all) { 
+         document.all['overview'].style.pixelTop = Math.max(window.document.body.scrollTop,165); 
+         setTimeout('pageOffset()',100); 
+      } 
+      else if (document.getElementById) { 
+         document.getElementById('overview').style.top = Math.max(window.pageYOffset,165); 
+        setTimeout('pageOffset()',100); 
+      }
+      else if (is_nav4up && is_minor>4.04) { 
+         document.layers['overview'].pageY = Math.max(window.pageYOffset,165); 
+         setTimeout('pageOffset()',100); 
+      }
+}
+
+function MoveTo(a)
+{
+ self.location.replace(a)
+}
+
+
+function openEvvViewer()
+{
+EvvViewer=window.open("http://www.ncbi.nlm.nih.gov/cgi-bin/Entrez/evv.cgi?org=mouse&contig=NW_000230.1&gene=Kit&lid=16590&locuslink=true","_blank", "height=300,innerHeight=300,width=700,innerWidth=700,resizable=1,scrollbars=1,toolbar=1,left=30,top=30");
+}
+
+//-->  
+ 
+</script> 
+
+
+
+</HEAD>
+
+<a name="top"></a>
+<body bgcolor="#FFFFFF" background="http://www.ncbi.nlm.nih.gov/corehtml/bkgd.gif" text="#000000" link="#000099" vlink="#6666CC" onLoad="pageOffset()" alt="">
+
+<!--  the header   --> 
+
+<TABLE width=600 border=0 cellpadding=0 cellspacing=0>
+<tr><td><table width=600 border=0 cellspacing=0 cellpadding=0>
+<tr valign="bottom">
+<td width=140><a name="top"></a><a href="http://www.ncbi.nlm.nih.gov">
+<img src="http://www.ncbi.nlm.nih.gov/corehtml/left.GIF" border=0 alt=""></a>
+<br><img src="IMG/pix_tr.gif" width=140 height=1 alt=""></td>
+<td width=460><img src="IMG/LLogo.gif" width="460" height="43" alt="Locus Link Logo"> 
+</td></tr></table></td></tr>
+<tr><td>
+<table width=600 border=0 cellspacing=0 cellpadding=1 bgcolor="#000000">
+<tr>
+
+<td width=100 class="BAR">
+<a href="http://www.ncbi.nlm.nih.gov/entrez/" class="BAR">
+ PubMed</a></td>
+
+<td width=100 class="BAR">
+<a href="http://www.ncbi.nlm.nih.gov/Entrez/" class="BAR">
+ Entrez</a></td>
+
+<td width=100 class="BAR">
+<a href="http://www.ncbi.nlm.nih.gov/BLAST/" class="BAR">
+ BLAST</a></td>
+
+<td width=100 class="BAR">
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=OMIM" class="BAR">
+ OMIM</a></td>
+
+<td width=100 class="BAR">
+<a href="http://www.ncbi.nlm.nih.gov/Taxonomy/" class="BAR">
+ Taxonomy</a></td>
+
+<td width=100 class="BAR">
+<a href="http://www.ncbi.nlm.nih.gov/Structure/" class="BAR">
+ Structure</a></td>
+
+</tr>
+
+</TABLE></td></tr>
+
+<tr><td>
+
+<table width=600 border=0 cellspacing=0 cellpadding=0 bgcolor="#CCCCCC" class="TEXT">
+ 
+  
+  <tr> 
+   <td class="table-text"> <form method="post" action="list.cgi">
+     &nbsp;&nbsp;Search <small> 
+    <select name="SITE">
+     <option selected value="104">LocusLink</option>
+     <option value="300">Maps</option>
+     <option value="2">Nucleotide</option>
+     <option value="100">OMIM</option>
+     <option value="1">Protein</option>
+     <option value="0">PubMed</option>
+     <option value="200">UniGene</option>
+     <option value="111">UniSts</option>
+     
+    </select></small> 
+     &nbsp;&nbsp;Display<small>
+ <select name="V">
+     <option selected value="0">Brief
+     <option  value="1">Summary
+ </select></small>
+ 
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Organism:
+     <small><select name="ORG" >
+   <!-- <option selected value = "Hs&ORG=Mm&ORG=Rn&ORG=Dr&ORG=Dm&ORG=HIV&ORG=Ce">All
+   -->
+    <option selected value = "Hs&ORG=Mm&ORG=Rn&ORG=Dr&ORG=Dm&ORG=HIV-1">All
+    <option value = "Dm">Fruit Fly
+    <option value = "HIV-1">HIV-1
+    <option value = "Hs">Human
+    <option value = "Mm">Mouse
+    <!-- <option value = "Ce">Nematode -->
+    <option value = "Rn">Rat
+    <option value = "Dr">Zebrafish
+    </select></small>
+    <br>&nbsp;&nbsp;&nbsp;Query:
+    <input type="text" name="Q" value="" size=30>
+    
+    <small><input type="submit" name="submit" value="Go">
+    <input type="button" name = "Clear" value="Clear" onClick="this.form.Q.value='';this.form.Q.focus()"; onKeyPress="this.form.Q.value='';this.form.Q.focus()";></small>
+   </form>
+   </td>
+   
+  </tr>
+ </table>
+
+</td></tr>
+</tr></td></TABLE>
+
+
+
+<!-- the contents  -->
+
+<table border=0 width=600 cellspacing=0 cellpadding=0>
+<tr valign=TOP>
+
+
+
+<td width=125> <!-- left column -->
+
+<img src="http://www.ncbi.nlm.nih.gov/corehtml/spacer10.GIF" border=0 width=125 height=1 alt="white space">
+
+<DIV id="overview" style="position:absolute;left:8;top:165;width:125">
+
+<p><a href="index.html" class="GUTTER1">LocusLink Home</a></p>
+
+
+
+<!---index for report-->
+
+<font class="GUTTER1">Kit Index:</font><br>
+<img src="http://www.ncbi.nlm.nih.gov/corehtml/spacer10.GIF" width="5" border=0 alt=""><a href ="#top" class="GUTTER2">Top of Page</a>
+<br>
+<img src="http://www.ncbi.nlm.nih.gov/corehtml/spacer10.GIF" width="5" border=0 alt=""><a href ="#nome" class="GUTTER2">Nomenclature</a>
+<br>
+<img src="http://www.ncbi.nlm.nih.gov/corehtml/spacer10.GIF" width="5" border=0 alt=""><a class="GUTTER2" href="javascript:MoveTo('#over')">Overview</a>
+<br>
+<img src="http://www.ncbi.nlm.nih.gov/corehtml/spacer10.GIF" width="5" border=0 alt=""><a href ="#function" class="GUTTER2">Function</a>
+<br>
+<img src="http://www.ncbi.nlm.nih.gov/corehtml/spacer10.GIF" width="5" border=0  alt=""><a href ="#relations" class="GUTTER2">Relationships</a>
+<br>
+<!------>
+<img src="http://www.ncbi.nlm.nih.gov/corehtml/spacer10.GIF" width="5" border=0  alt=""><a href ="#map" class="GUTTER2">Map</a>
+<br>
+<img src="http://www.ncbi.nlm.nih.gov/corehtml/spacer10.GIF" width="5" border=0  alt=""><a href ="#refseq" class="GUTTER2">RefSeq</a>
+<br>
+<img src="http://www.ncbi.nlm.nih.gov/corehtml/spacer10.GIF" width="5" border=0  alt=""><a href ="#genbank" class="GUTTER2" >GenBank
+ </a>
+<br>
+
+<img src="http://www.ncbi.nlm.nih.gov/corehtml/spacer10.GIF" width="5" border=0  alt=""><a href ="#links" class="GUTTER2" >Links</a>
+
+<!---end of index for report-->
+
+<br><br>
+<font class="GUTTER1">LocusLink:</font>
+<br>
+
+<img src="http://www.ncbi.nlm.nih.gov/corehtml/spacer10.GIF" width="5" border=0 alt=""><a href="collaborators.html" class="GUTTER2S">Collaborators</a>
+<br>
+
+<img src="http://www.ncbi.nlm.nih.gov/corehtml/spacer10.GIF" width="5" border=0 alt=""><a href="ftp://ftp.ncbi.nih.gov/refseq/LocusLink/" class="GUTTER2S">Download</a>
+<br>
+
+<img src="http://www.ncbi.nlm.nih.gov/corehtml/spacer10.GIF" width="5" border=0 alt=""><a href="LLfaq.html" class="GUTTER2S">FAQ</a>
+<br>
+
+<img src="http://www.ncbi.nlm.nih.gov/corehtml/spacer10.GIF" width="5" border=0 alt=""><a href="help.html" class="GUTTER2S">Help</a>
+<br>
+
+<img src="http://www.ncbi.nlm.nih.gov/corehtml/spacer10.GIF" width="5" border=0 alt=""><a href="statistics.html" class="GUTTER2S">Statistics</a>
+
+<br><br>
+<font class="GUTTER1">RefSeq:</font>
+<br>
+
+<img src="http://www.ncbi.nlm.nih.gov/corehtml/spacer10.GIF" width="5" border=0 alt=""><a href="refseq.html" class="GUTTER2S">About</a>
+<br>
+
+<img src="http://www.ncbi.nlm.nih.gov/corehtml/spacer10.GIF" width="5" border=0 alt=""><a href="ftp://ftp.ncbi.nih.gov/refseq/" class="GUTTER2S">Download</a>
+<br>
+
+<img src="http://www.ncbi.nlm.nih.gov/corehtml/spacer10.GIF" width="5" border=0 alt=""><a href="RSfaq.html" class="GUTTER2S">FAQ</a>
+<br>
+
+<img src="http://www.ncbi.nlm.nih.gov/corehtml/spacer10.GIF" width="5" border=0 alt=""><a href="RSstatistics.html" class="GUTTER2S">Statistics</a>
+<br>
+
+
+
+</DIV>
+
+</td>
+
+
+<!-- extra column to force things over gif border -->
+<td width=15><img src="http://www.ncbi.nlm.nih.gov/corehtml/spacer10.GIF" width=15 height=1 border=0 alt=""></td>
+
+<!-- right column -->	    
+
+<td width=460>
+
+<table width="460" bgcolor="#CCCCCC"class="TEXT" cellbuffer="0" cellspacing="0" border="0">
+<form method = "POST" action ="./LocRpt.cgi"name="loc_menu">
+<td align="center" valign="top"><input type="hidden" name="LOCI_SYM" value ="16590|Mm Kit">
+<NOSCRIPT><input type="submit" value="Get"><input type="hidden" name="save" value="false"></NOSCRIPT>
+View <small><select name = "l" onChange ="this.form.save.value=false;this.form.submit();">
+<option selected value = "16590">Mm Kit</option>
+</select></small> One of 1 Loci    <input type="submit" value="Save All Loci"onClick="this.form.save.value=true;this.form.submit();" onKeyPress="this.form.save.value=true;this.form.submit();">
+ <input type="hidden" name="save"><NOSCRIPT><input type="hidden" name="save" value="true"></NOSCRIPT>
+
+
+ </td></form></table>
+
+
+<!---<br>---->
+
+
+<table width=442 border=0 cellpadding=0 cellspacing=0>
+<tr bgcolor="#CCCCFF" class="GUTTER2">
+<td width=17 align="center"><a href="list.cgi?Apage=A&V=0" class="GUTTER2"><font color="#000099">A</a><br><img src="IMG/pix_bk.gif" width=17 height=2 alt =""></td>
+<td width=17 align="center"><a href="list.cgi?Apage=B&V=0" class="GUTTER2"><font color="#000099">B</a><br><img src="IMG/pix_bk.gif" width=17 height=2 alt=""></td>
+<td width=17 align="center"><a href="list.cgi?Apage=C&V=0" class="GUTTER2"><font color="#000099">C</a><br><img src="IMG/pix_bk.gif" width=17 height=2 alt=""></td>
+<td width=17 align="center"><a href="list.cgi?Apage=D&V=0" class="GUTTER2"><font color="#000099">D</a><br><img src="IMG/pix_bk.gif" width=17 height=2 alt=""></td>
+<td width=17 align="center"><a href="list.cgi?Apage=E&V=0" class="GUTTER2"><font color="#000099">E</a><br><img src="IMG/pix_bk.gif" width=17 height=2 alt=""></td>
+<td width=17 align="center"><a href="list.cgi?Apage=F&V=0" class="GUTTER2"><font color="#000099">F</a><br><img src="IMG/pix_bk.gif" width=17 height=2 alt=""></td>
+<td width=17 align="center"><a href="list.cgi?Apage=G&V=0" class="GUTTER2"><font color="#000099">G</a><br><img src="IMG/pix_bk.gif" width=17 height=2 alt=""></td>
+<td width=17 align="center"><a href="list.cgi?Apage=H&V=0" class="GUTTER2"><font color="#000099">H</a><br><img src="IMG/pix_bk.gif" width=17 height=2 alt=""></td>
+<td width=17 align="center"><a href="list.cgi?Apage=I&V=0" class="GUTTER2"><font color="#000099">I</a><br><img src="IMG/pix_bk.gif" width=17 height=2 alt=""></td>
+<td width=17 align="center"><a href="list.cgi?Apage=J&V=0" class="GUTTER2"><font color="#000099">J</a><br><img src="IMG/pix_bk.gif" width=17 height=2 alt=""></td>
+<td width=17 align="center"><a href="list.cgi?Apage=K&V=0" class="GUTTER2"><font color="#000099">K</a><br><img src="IMG/pix_bk.gif" width=17 height=2 alt=""></td>
+<td width=17 align="center"><a href="list.cgi?Apage=L&V=0" class="GUTTER2"><font color="#000099">L</a><br><img src="IMG/pix_bk.gif" width=17 height=2 alt=""></td>
+<td width=17 align="center"><a href="list.cgi?Apage=M&V=0" class="GUTTER2"><font color="#000099">M</a><br><img src="IMG/pix_bk.gif" width=17 height=2 alt=""></td>
+<td width=17 align="center"><a href="list.cgi?Apage=N&V=0" class="GUTTER2"><font color="#000099">N</a><br><img src="IMG/pix_bk.gif" width=17 height=2 alt=""></td>
+<td width=17 align="center"><a href="list.cgi?Apage=O&V=0" class="GUTTER2"><font color="#000099">O</a><br><img src="IMG/pix_bk.gif" width=17 height=2 alt=""></td>
+<td width=17 align="center"><a href="list.cgi?Apage=P&V=0" class="GUTTER2"><font color="#000099">P</a><br><img src="IMG/pix_bk.gif" width=17 height=2 alt=""></td>
+<td width=17 align="center"><a href="list.cgi?Apage=Q&V=0" class="GUTTER2"><font color="#000099">Q</a><br><img src="IMG/pix_bk.gif" width=17 height=2 alt=""></td>
+<td width=17 align="center"><a href="list.cgi?Apage=R&V=0" class="GUTTER2"><font color="#000099">R</a><br><img src="IMG/pix_bk.gif" width=17 height=2 alt=""></td>
+<td width=17 align="center"><a href="list.cgi?Apage=S&V=0" class="GUTTER2"><font color="#000099">S</a><br><img src="IMG/pix_bk.gif" width=17 height=2 alt=""></td>
+<td width=17 align="center"><a href="list.cgi?Apage=T&V=0" class="GUTTER2"><font color="#000099">T</a><br><img src="IMG/pix_bk.gif" width=17 height=2 alt=""></td>
+<td width=17 align="center"><a href="list.cgi?Apage=U&V=0" class="GUTTER2"><font color="#000099">U</a><br><img src="IMG/pix_bk.gif" width=17 height=2 alt=""></td>
+<td width=17 align="center"><a href="list.cgi?Apage=V&V=0" class="GUTTER2"><font color="#000099">V</a><br><img src="IMG/pix_bk.gif" width=17 height=2 alt=""></td>
+<td width=17 align="center"><a href="list.cgi?Apage=W&V=0" class="GUTTER2"><font color="#000099">W</a><br><img src="IMG/pix_bk.gif" width=17 height=2 alt=""></td>
+<td width=17 align="center"><a href="list.cgi?Apage=X&V=0" class="GUTTER2"><font color="#000099">X</a><br><img src="IMG/pix_bk.gif" width=17 height=2 alt=""></td>
+<td width=17 align="center"><a href="list.cgi?Apage=Y&V=0" class="GUTTER2"><font color="#000099">Y</a><br><img src="IMG/pix_bk.gif" width=17 height=2 alt=""></td>
+<td width=17 align="center"><a href="list.cgi?Apage=Z&V=0" class="GUTTER2"><font color="#000099">Z</a><br><img src="IMG/pix_bk.gif" width=17 height=2 alt=""></td>
+</tr></table>
+
+
+<br>
+
+<!--<img src="IMG/dot_clear.gif" hspace=5>--->
+
+<!--- Picture  ----->
+
+<table border="0" width="460" cellpadding="2" cellspacing="0">
+<tr><td nowrap><a class="EvvLink" href="javascript:openEvvViewer();"><img src=IMG/evvred.gif height="2" width="0" border="0" alt="This is the beginning of a simple schematic depicting the longest mRNA-encoding exon/intron structure of the gene region"><img src=IMG/evvred.gif height="2" width="1" border="0" alt="non-coding region"><img src=IMG/evvred.gif height="8" width="1" border="0" alt="exon"><img src=IMG/evvred.gif height="2" width="158" border="0" alt="non-coding region"><img src=IMG/evvred.gif height="8" width="1" border="0" alt="exon"><img src=IMG/evvred.gif height="2" width="9" border="0" alt="non-coding region"><img src=IMG/evvred.gif height="8" width="1" border="0" alt="exon"><img src=IMG/evvred.gif height="2" width="6" border="0" alt="non-coding region"><img src=IMG/evvred.gif height="8" width="1" border="0" alt="exon"><img src=IMG/evvred.gif height="2" width="21" border="0" alt="non-coding region"><img src=IMG/evvred.gif height="8" width="1" border="0" alt="exon"><img src=IMG/evvred.gif height="2" width="26" border="0" alt="non-coding region"><img src=IMG/evvred.gif height="8" width="1" border="0" alt="exon"><img src=IMG/evvred.gif height="2" width="9" border="0" alt="non-coding region"><img src=IMG/evvred.gif height="8" width="1" border="0" alt="exon"><img src=IMG/evvred.gif height="2" width="70" border="0" alt="non-coding region"><img src=IMG/evvred.gif height="8" width="1" border="0" alt="exon"><img src=IMG/evvred.gif height="2" width="7" border="0" alt="non-coding region"><img src=IMG/evvred.gif height="8" width="1" border="0" alt="exon"><img src=IMG/evvred.gif height="2" width="6" border="0" alt="non-coding region"><img src=IMG/evvred.gif height="8" width="1" border="0" alt="exon"><img src=IMG/evvred.gif height="2" width="1" border="0" alt="non-coding region"><img src=IMG/evvred.gif height="8" width="1" border="0" alt="exon"><img src=IMG/evvred.gif height="2" width="1" border="0" alt="non-coding region"><img src=IMG/evvred.gif height="8" width="1" border="0" alt="exon"><img src=IMG/evvred.gif height="2" width="1" border="0" alt="non-coding region"><img src=IMG/evvred.gif height="8" width="1" border="0" alt="exon"><img src=IMG/evvred.gif height="2" width="22" border="0" alt="non-coding region"><img src=IMG/evvred.gif height="8" width="1" border="0" alt="exon"><img src=IMG/evvred.gif height="2" width="8" border="0" alt="non-coding region"><img src=IMG/evvred.gif height="8" width="1" border="0" alt="exon"><img src=IMG/evvred.gif height="2" width="2" border="0" alt="non-coding region"><img src=IMG/evvred.gif height="8" width="1" border="0" alt="exon"><img src=IMG/evvred.gif height="2" width="5" border="0" alt="non-coding region"><img src=IMG/evvred.gif height="8" width="1" border="0" alt="exon"><img src=IMG/evvred.gif height="2" width="14" border="0" alt="non-coding region"><img src=IMG/evvred.gif height="8" width="1" border="0" alt="exon"><img src=IMG/evvred.gif height="2" width="1" border="0" alt="non-coding region"><img src=IMG/evvred.gif height="8" width="1" border="0" alt="exon"><img src=IMG/evvred.gif height="2" width="1" border="0" alt="non-coding region"><img src=IMG/evvred.gif height="8" width="1" border="0" alt="exon"><img src=IMG/evvred.gif height="2" width="5" border="0" alt="non-coding region"><img src=IMG/evvred.gif height="8" width="11" border="0" alt="exon"><img src=IMG/evvred.gif height="2" width="1" border="0" alt="non-coding region"><br>Click to Display mRNA-Genomic Alignments (spanning 81484 bps)</a></td></tr></table>
+
+<!--- End of Picture  --->
+
+<!-- Links Block --> 
+
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&dopt=DocSum&list_uids=11964302,11290586,7682073,2457811,2456920,1378413" onMouseOver="window.status='PubMed';return true" onMouseOut="window.status='';return true"><img src="IMG/pubmed.gif" border=0 alt="PubMed"></a><a href="http://www.ncbi.nlm.nih.gov/UniGene/clust.cgi?ORG=Mm&CID=4394" onMouseOver="window.status='NCBI UniGene';return true" onMouseOut="window.status='';return true"><img src="IMG/unigene.gif" border=0 alt="NCBI UniGene"></a><a href="http://www.ncbi.nlm.nih.gov/cgi-bin/Entrez/maps.cgi?org=mouse&chr=5&query=Kit&cmd=focus&fill=40&size=40" onMouseOver="window.status='NCBI Genome Map Viewer';return true" onMouseOut="window.status='';return true"><img src="IMG/map.gif" border=0 alt="NCBI Genome Map Viewer"></a><a href="http://www.ncbi.nlm.nih.gov/HomoloGene/homolquery.cgi?TEXT=16590[loc]" onMouseOver="window.status='NCBI HomoloGene';return true" onMouseOut="window.status='';return true"><img src="IMG/homol.gif" border=0 alt="NCBI HomoloGene"></a><a href="http://www.informatics.jax.org/searches/accession_report.cgi?id=MGI:96677" onMouseOver="window.status='Mouse Genome Informatics';return true" onMouseOut="window.status='';return true"><img src="IMG/mgd.gif" border=0 alt="Mouse Genome Informatics"></a><br>
+
+<!-- End of Links Block -->
+
+<!-- Withdrawn -->
+
+
+
+<!-- End of Withdrawn -->
+
+<!-- Nomenclature Block --> 
+
+<a name="nome"></a>
+<table border="0" width="460" cellspacing="2" cellpadding="0" 
+bgcolor="#FFFFFF"><tr><td width="7" bgcolor="#315399">&nbsp;</td>
+<td width="303" bgcolor="#CCCCFF"><font size=+1>
+ 
+
+&nbsp;<i>Mus musculus</i>&nbsp;Official Gene Symbol 
+ and Name&nbsp;<a href="http://www.informatics.jax.org/searches/accession_report.cgi?id=MGI:96677">(MGI)</a>
+</font></td></tr></table>
+ <table border=0 width="460"><tr><td width="5">&nbsp;</td>
+ <td width="450" ><b>Kit: kit oncogene</b></td></tr><tr><td width="5">&nbsp;</td><td align="left"><b>LocusID:</b>  16590</td></tr>
+</table>
+
+<!--- End of Nomenclature Block --->
+
+
+<!--- Overview --->
+
+<table border="0" width="460" cellspacing="0" cellpadding="0"> <tr><td width="310" bgcolor="#CCCCFF"> <a name="over"></a><font size=+1>Overview</font></td><td bgcolor="#CCCCFF" align="right"> <a href="./help.html#over" class="NN">?</a></td> </tr></table>
+<table border="0" width="460" cellpadding="2" cellspacing="0">
+<tr><td width="5"></td><td  bgcolor="#FFFFCC"  valign=top colspan="2">
+<b><a href="#refseq">RefSeq </a>Summary:</b> The c-Kit proto-oncogene is the cellular homolog of the transforming gene of a feline retrovirus (v-Kit). The c-kit protein includes characteristics of a protein kinase transmembrane receptor.</td></tr><tr><td width="5"></td><td align="left" valign="top" ><b>Locus Type:</b></td>
+ <td align="left" valign="top" >gene with protein product, function known or inferred</td></tr><tr><td width="5"></td><td align="left" valign="top" ><b>Product:</b></td>
+ <td align="left" valign="top" >c-kit<br></td></tr><tr><td width="5"></td><td align="left" valign="top" ><b>Alternate Symbols:</b></td>
+ <td align="left" valign="top" >W, Bs, Fdc, Ssm, CD117, c-KIT, belly-spot</td></tr><tr><td width="5"></td><td align="left" valign="top" ><b>Alias:</b></td>
+ <td align="left" valign="top" >dominant spotting <br>spotted sterile male <br>Steel Factor Receptor <br>Dominant white spotting <br>c-kit proto-oncogene protein <br></td></tr></table>
+
+
+<!--- End of Overview --->
+
+<!--- Function --->
+<table border="0" width="460" cellspacing="0" cellpadding="0">
+<tr><td bgcolor="#CCCCFF"><a name="function"></a><font size=+1>Function</font></td><td bgcolor="#CCCCFF"><font size=+1><a href="../LocusLink/GeneRIF.cgi?lid=16590&sym=Kit&name=kit+oncogene&url=LocRpt.cgi?l=16590"><font color="#ff4500">Submit GeneRIF</font></a></font></td><td bgcolor="#CCCCFF"><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=11964302"><b>(All Pubs)</b></a></td><td bgcolor="#CCCCFF" align="right"><a href="./help.html#function" class="NN">?</a></td></tr></table>
+<table border="0" width="460" cellpadding="2" cellspacing="0">
+<tr><td width="5" valign=top align=left>&nbsp;</td>
+<td align=left colspan="4"><b>GeneRIF: Gene References into Function:</b> &nbsp;</td></tr>
+<tr><td width="5">&nbsp;</td>
+ <td valign=top align=left><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&doptcmdl=DocSum&list_uids=11964302">11964302</a></td>
+ <td valign=top align=left><ul><li>Critical roles of c-Kit tyrosine residues 567 and 719 in stem cell factor-induced chemotaxis</li></ul></td></tr></table><br><table border="0" width="460" cellpadding="2" cellspacing="0">
+<ul><tr><td width="5" valign=top align=left>&nbsp;</td>
+<td align=left colspan="4"><b><a href="http://www.geneontology.org/">Gene Ontology</a><sup>TM</sup>:</b> &nbsp;</td></tr>
+<tr><td valign=top align=left width="5">
+ &nbsp;</td><th scope="col" valign=top align=left><a href="./help.html#annot" class="NN"><img src="IMG/dot_clear.gif" hspace=20 border=0 alt=""><font size=-1>Term</font></a></th>
+ <th scope="col" valign=top align=left><a href="./help.html#annot" class="NN"><font size=-1>Evidence</font></a></th>
+ <th scope="col" valign=top align=left><a href="./help.html#annot" class="NN"><font size=-1>Source</font></a></th>
+ <th scope="col" valign=top align=right><a href="./help.html#annot" class="NN"><font size=-1>Pub</font></a></th></tr>
+<tr><td valign=top align=left width="5">
+ &nbsp;</td><td valign=top align=left><li><a href="http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0016020">membrane</a></li></td>
+ <td valign=top align=left>IEA</td>
+ <td valign=top align=left>MGD</td>
+ <td valign=top align=right>&nbsp;</td></tr>
+<tr><td valign=top align=left width="5">
+ &nbsp;</td><td valign=top align=left><li><a href="http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0005524">ATP binding</a></li></td>
+ <td valign=top align=left>IEA</td>
+ <td valign=top align=left>MGD</td>
+ <td valign=top align=right>&nbsp;</td></tr>
+<tr><td valign=top align=left width="5">
+ &nbsp;</td><td valign=top align=left><li><a href="http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0016740">transferase</a></li></td>
+ <td valign=top align=left>IEA</td>
+ <td valign=top align=left>MGD</td>
+ <td valign=top align=right>&nbsp;</td></tr>
+<tr><td valign=top align=left width="5">
+ &nbsp;</td><td valign=top align=left><li><a href="http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0005622">intracellular</a></li></td>
+ <td valign=top align=left>IEA</td>
+ <td valign=top align=left>MGD</td>
+ <td valign=top align=right>&nbsp;</td></tr>
+<tr><td valign=top align=left width="5">
+ &nbsp;</td><td valign=top align=left><li><a href="http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0004672">protein kinase</a></li></td>
+ <td valign=top align=left>IEA</td>
+ <td valign=top align=left>MGD</td>
+ <td valign=top align=right>&nbsp;</td></tr>
+<tr><td valign=top align=left width="5">
+ &nbsp;</td><td valign=top align=left><li><a href="http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0004713">protein tyrosine kinase</a></li></td>
+ <td valign=top align=left>IEA</td>
+ <td valign=top align=left>MGD</td>
+ <td valign=top align=right>&nbsp;</td></tr>
+<tr><td valign=top align=left width="5">
+ &nbsp;</td><td valign=top align=left><li><a href="http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0000074">regulation of cell cycle</a></li></td>
+ <td valign=top align=left>IEA</td>
+ <td valign=top align=left>MGD</td>
+ <td valign=top align=right>&nbsp;</td></tr>
+<tr><td valign=top align=left width="5">
+ &nbsp;</td><td valign=top align=left><li><a href="http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0016021">integral membrane protein</a></li></td>
+ <td valign=top align=left>IEA</td>
+ <td valign=top align=left>MGD</td>
+ <td valign=top align=right>&nbsp;</td></tr>
+<tr><td valign=top align=left width="5">
+ &nbsp;</td><td valign=top align=left><li><a href="http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0008151">cell growth and/or maintenance</a></li></td>
+ <td valign=top align=left>IEA</td>
+ <td valign=top align=left>MGD</td>
+ <td valign=top align=right>&nbsp;</td></tr>
+<tr><td valign=top align=left width="5">
+ &nbsp;</td><td valign=top align=left><li><a href="http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0006468">protein amino acid phosphorylation</a></li></td>
+ <td valign=top align=left>IEA</td>
+ <td valign=top align=left>MGD</td>
+ <td valign=top align=right>&nbsp;</td></tr>
+<tr><td valign=top align=left width="5">
+ &nbsp;</td><td valign=top align=left><li><a href="http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0004714">transmembrane receptor protein tyrosine kinase</a></li></td>
+ <td valign=top align=left>IEA</td>
+ <td valign=top align=left>MGD</td>
+ <td valign=top align=right>&nbsp;</td></tr>
+<tr><td valign=top align=left width="5">
+ &nbsp;</td><td valign=top align=left><li><a href="http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=GO:0007169">transmembrane receptor protein tyrosine kinase signaling pathway</a></li></td>
+ <td valign=top align=left>IEA</td>
+ <td valign=top align=left>MGD</td>
+ <td valign=top align=right>&nbsp;</td></tr>
+</ul></table>
+<br>
+<!-- End of Function --->
+
+
+<!--- Relationships --->
+
+<a name="relations"></a>
+<table border="0" width="460" cellspacing="0" 
+ cellpadding="0"><tr><td width="310" bgcolor="#CCCCFF"><font size=+1>
+ Relationships</font></td>
+ <td bgcolor="#CCCCFF" align="right">
+ <a href="./help.html#relations" class="NN">?</a></td></tr></table>
+ <table border="0" width="460" cellpadding="2" cellspacing="0">
+<tr><td width="5">&nbsp;</td><td>
+ <b>Human Homology Maps:</b></td><td >&nbsp;</td><td width="2" >&nbsp;</td>
+ <td >&nbsp;</td><td  align="right" >&nbsp;</td></tr>
+<tr><td width="5">&nbsp;</td><td>
+ &nbsp;&nbsp;NCBI vs. MGD</td><td >&nbsp;</td><td>4q11-q12</td>
+ <td ><a href = "./LocRpt.cgi?l=3815">KIT</a></td><td  align="right" ><a href="/Homology/view.cgi?map=ncbi_mgd&tax_id=10090&chr=5&symbol=Kit" class="NN">Mm</a>&nbsp;<a href="/Homology/view.cgi?map=ncbi_mgd&tax_id=9606&chr=4&symbol=KIT" class="NN">Hs</a></td></tr>
+<tr><td width="5">&nbsp;</td><td>
+ &nbsp;&nbsp;UCSC vs. MGD</td><td >&nbsp;</td><td>4q11-q12</td>
+ <td ><a href = "./LocRpt.cgi?l=3815">KIT</a></td><td  align="right" ><a href="/Homology/view.cgi?map=ucsc_mgd&tax_id=10090&chr=5&symbol=Kit" class="NN">Mm</a>&nbsp;<a href="/Homology/view.cgi?map=ucsc_mgd&tax_id=9606&chr=4&symbol=KIT" class="NN">Hs</a></td></tr>
+<tr><td width="5">&nbsp;</td><td>
+ &nbsp;&nbsp;NCBI vs. EST-based RH Map</td><td >&nbsp;</td><td>4q11-q12</td>
+ <td ><a href = "./LocRpt.cgi?l=16590">X06182</a></td><td  align="right" ><a href="/Homology/view.cgi?map=ncbi_est&tax_id=10090&chr=5&symbol=Y00864" class="NN">Mm</a>&nbsp;<a href="/Homology/view.cgi?map=ncbi_est&tax_id=9606&chr=4&symbol=X06182" class="NN">Hs</a></td></tr>
+<tr><td width="5">&nbsp;</td><td>
+ &nbsp;&nbsp;UCSC vs. EST-based RH Map</td><td >&nbsp;</td><td>4q11-q12</td>
+ <td ><a href = "./LocRpt.cgi?l=16590">X06182</a></td><td  align="right" ><a href="/Homology/view.cgi?map=ucsc_est&tax_id=10090&chr=5&symbol=Y00864" class="NN">Mm</a>&nbsp;<a href="/Homology/view.cgi?map=ucsc_est&tax_id=9606&chr=4&symbol=X06182" class="NN">Hs</a></td></tr>
+<tr><td width="5">&nbsp;</td><td>
+ &nbsp;&nbsp;UCSC vs. Hudson et al.</td><td >&nbsp;</td><td>4q11-q12</td>
+ <td ><a href = "./LocRpt.cgi?l=16590">AW263947</a></td><td  align="right" ><a href="/Homology/view.cgi?map=natgen_paper&tax_id=10090&chr=5&symbol=Y00864" class="NN">Mm</a>&nbsp;<a href="/Homology/view.cgi?map=natgen_paper&tax_id=9606&chr=4&symbol=AW263947" class="NN">Hs</a></td></tr>
+</table><br>
+
+
+<!-- End of Relationships --->
+
+
+<!-- Locus Information Block -->
+
+<!------>
+
+
+<!--- End of Locus Info Block --->
+
+<!--Map Information Block-->
+
+
+<a name="map">
+</a><table border="0" width="460" cellspacing="0" 
+ cellpadding="0"><tr><td width="310" bgcolor="#CCCCFF"><font size=+1>
+ Map Information</font></td>
+ <td bgcolor="#CCCCFF" align="right">
+ <a href="./help.html#map" class="NN">?</a></td></tr></table>
+ <table border="0" width="460" cellpadding="2" cellspacing="0">
+<tr><td width="5">&nbsp;</td><td>
+ <b>Chromosome:</b></td><td>5</td><td width="2" >&nbsp;</td>
+ <td>&nbsp;</td><td  align="right" ><a href="http://www.ncbi.nlm.nih.gov/cgi-bin/Entrez/maps.cgi?org=mouse&chr=5&query=Kit&cmd=focus&fill=40&size=40" class="NN">mv</a></td></tr>
+<tr><td width="5">&nbsp;</td><td>
+ <b>Cytogenetic:</b></td><td >5</td><td width="2" >&nbsp;</td>
+ <td >RefSeq</td><td align="right" >&nbsp;</td></tr>
+<tr><td width="5">&nbsp;</td><td>
+ <b>Genetic:</b></td><td >5 42.0 cM</td><td width="2" >&nbsp;</td>
+ <td ><a href="http://www.informatics.jax.org/searches/accession_report.cgi?id=MGI:96677">MGD</a></td><td align="right" >&nbsp;</td></tr>
+<tr><td width="5">&nbsp;</td><td>
+ <a href="help.html#epcr"><b>Markers:</b></a>
+</td><td >Chr. 5</td><td width="2" ><a href="http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=179184">3714</a></td>
+ <td >&nbsp;</td><td align="right" ></td></tr>
+<tr><td width="5">&nbsp;</td><td>
+ &nbsp;</td><td >Chr. 5</td><td width="2" ><a href="http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=179184">Y00864</a></td>
+ <td >&nbsp;</td><td align="right" ></td></tr>
+</table><br>
+
+
+<!--- End of Map Information Block --->
+
+<!--RefSeq Block-->
+
+<a name="refseq"></a>
+<table border="0" width="460" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF"><tr><td width=310 bgcolor="#CCCCFF"><font size=+1>NCBI Reference Sequences&nbsp;(RefSeq)</font></td><td bgcolor="#CCCCFF" align="right"><a href="./help.html#refseq" class="NN">?</a></td></tr></table>
+<table border=0  cellspacing=0 cellpadding=2 
+  width="460"><tr><th  align=left > 
+ Category:&nbsp;<font color="#ff4500">REVIEWED</font></th>
+ </tr></table><table border="0" width="460" cellpadding="2" cellspacing="0">
+<tr><th align=left valign=top 
+ width=10>&nbsp;</th><th align=left valign=top >mRNA:</th>
+ <td align=left valign=top ><a href="http://www.ncbi.nlm.nih.gov/entrez/viewer.cgi?val=10947120&db=Nucleotide&dopt=GenBank">NM_021099</a></td>
+ <td align=left valign=top >&nbsp;</td>
+ <td align=right valign=top >&nbsp;</td>
+<tr><th align=left valign=top 
+ width=10>&nbsp;</th><th align=left valign=top >Protein:</th>
+ <td align=left valign=top colspan="2" ><a href="http://www.ncbi.nlm.nih.gov/entrez/viewer.cgi?val=10863917&db=Protein&dopt=GenPept">NP_066922</a>&nbsp;&nbsp;c-kit</td>
+ <td align=right valign=top ><a href="/cgi-bin/Entrez/blink?pid=10863917&all=1" class="NN">BL</a></td>
+<tr><th align=left valign=top 
+ width=10>&nbsp;</th><th align=left valign=top >Domains:</th>
+ <td align=left valign=top ><a href="/Structure/cdd/cddsrv.cgi?uid=smart00409">Immunoglobulin</a></td>
+ <td align=left valign=top >score:&nbsp;125</td>
+ <td align=right valign=top >&nbsp;</td>
+<tr><th align=left valign=top 
+ width=10>&nbsp;</th><th align=left valign=top >&nbsp;</th>
+ <td align=left valign=top ><a href="/Structure/cdd/cddsrv.cgi?uid=pfam00047">Immunoglobulin domain</a></td>
+ <td align=left valign=top >score:&nbsp;94</td>
+ <td align=right valign=top >&nbsp;</td>
+<tr><th align=left valign=top 
+ width=10>&nbsp;</th><th align=left valign=top >&nbsp;</th>
+ <td align=left valign=top ><a href="/Structure/cdd/cddsrv.cgi?uid=pfam00069">Protein kinase domain</a></td>
+ <td align=left valign=top >score:&nbsp;198</td>
+ <td align=right valign=top >&nbsp;</td>
+<tr><th align=left valign=top 
+ width=10>&nbsp;</th><th align=left valign=top >&nbsp;</th>
+ <td align=left valign=top ><a href="/Structure/cdd/cddsrv.cgi?uid=smart00408">Immunoglobulin C-2 Type</a></td>
+ <td align=left valign=top >score:&nbsp;83</td>
+ <td align=right valign=top >&nbsp;</td>
+<tr><th align=left valign=top 
+ width=10>&nbsp;</th><th align=left valign=top >&nbsp;</th>
+ <td align=left valign=top ><a href="/Structure/cdd/cddsrv.cgi?uid=smart00219">Tyrosine kinase, catalytic domain</a></td>
+ <td align=left valign=top >score:&nbsp;610</td>
+ <td align=right valign=top >&nbsp;</td>
+<tr><th align=left valign=top 
+ width=10>&nbsp;</th><th align=left valign=top >&nbsp;</th>
+ <td align=left valign=top ><a href="/Structure/cdd/cddsrv.cgi?uid=smart00220">Serine/Threonine protein kinases, catalytic domain</a></td>
+ <td align=left valign=top >score:&nbsp;159</td>
+ <td align=right valign=top >&nbsp;</td>
+<tr><th align=left valign=top 
+ width=10>&nbsp;</th><th align=left valign=top >Strain</th>
+ <td align=left valign=top >BALB/c</td>
+ <td align=left valign=top >&nbsp;</td>
+ <td align=right valign=top >&nbsp;</td>
+<tr><th align=left valign=top 
+ width=10>&nbsp;</th><th align=left valign=top >GenBank Source:</th>
+ <td align=left valign=top ><a href="http://www.ncbi.nlm.nih.gov/entrez/viewer.cgi?val=AW741410,Y00864&dopt=DocSum&dispmax=1000">AW741410,Y00864</a></td>
+ <td align=left valign=top >&nbsp;</td>
+ <td align=right valign=top >&nbsp;</td>
+</td></tr></table><br><table border=0  cellspacing=0 cellpadding=2 
+  width="460"><tr><th  align=left > 
+ Category:&nbsp;<font color="#ff4500">NCBI Genome Annotation</font></th>
+ </tr></table><table border="0" width="460" cellpadding="2" cellspacing="0">
+<tr><th align=left valign=top 
+ width=10>&nbsp;</th><th align=left valign=top >Genomic Contig:</th>
+ <td align=left valign=top ><a href="http://www.ncbi.nlm.nih.gov/entrez/viewer.cgi?val=NW_000230.1&db=Nucleotide&dopt=GenBank">NW_000230</a></td>
+ <td align=left valign=top >&nbsp;</td>
+ <td align=right valign=top ><a href = "http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?val=NW_000230.1&from=1594776&to=1676260&strand=1&text=on&view=genbank" class = "NN">gb</a>&nbsp;<a href="/entrez/viewer.cgi?val=NW_000230.1&_gene=Kit&view=graph" class ="NN">sv</a>&nbsp;<a href = "http://www.ncbi.nlm.nih.gov/cgi-bin/Entrez/maps.cgi?ORG=mouse&MAPS=cntgnw,stsnw-r,rh,mgi,besnw,locnw&chr=5&gnl=NW_000230.1&verbose=on&query=LOCUS(16590)" class="NN">mv</a>&nbsp;<a href="http://www.ncbi.nlm.nih.gov/cgi-bin/Entrez/evv.cgi?org=mouse&contig=NW_000230.1&gene=Kit&lid=16590" class="NN">ev</a>&nbsp;<a href = "http://www.ncbi.nlm.nih.gov/cgi-bin/Entrez/modelmaker.cgi?org=mouse&cntg=cntgnw&contig=NW_000230.1&gene=Kit&lid=16590" class = "NN">mm</a></td>
+<tr><th align=left valign=top 
+ width=10>&nbsp;</th><th align=left valign=top >Strain</th>
+ <td align=left valign=top >C57BL/6J</td>
+ <td align=left valign=top >&nbsp;</td>
+ <td align=right valign=top >&nbsp;</td>
+<tr><th align=left valign=top 
+ width=10>&nbsp;</th><th align=left valign=top colspan=4> <font color="ff4500">Annotated transcripts/proteins for this locus:</font></th>
+ </tr>
+<tr><th align=left valign=top 
+ width=10>&nbsp;</th><th align=left valign=top >Evidence:</th>
+ <td align=left valign=top >supported by alignment with both mRNA and ESTs (51)</td><td align=left valign=top >&nbsp;</td>
+ <td align=right>&nbsp;</td></tr>
+<tr><th align=left valign=top 
+ width=10>&nbsp;</th><th align=left valign=top >Model mRNA:</th>
+ <td align=left valign=top ><a href="http://www.ncbi.nlm.nih.gov/entrez/viewer.cgi?val=20832867&db=Nucleotide&dopt=GenBank">XM_132123</a></td>
+ <td align=left valign=top >&nbsp;</td>
+ <td align=right valign=top >&nbsp;</td>
+<tr><th align=left valign=top 
+ width=10>&nbsp;</th><th align=left valign=top >Model Protein:</th>
+ <td align=left valign=top ><a href="http://www.ncbi.nlm.nih.gov/entrez/viewer.cgi?val=20832868&db=Protein&dopt=GenPept">XP_132123</a></td>
+ <td align=left valign=top >&nbsp;</td>
+ <td align=right valign=top ><a href="/cgi-bin/Entrez/blink?pid=20832868&all=1" class="NN">BL</a></td>
+<tr><th align=left valign=top 
+ width=10>&nbsp;</th><th align=left valign=top >Domains:</th>
+ <td align=left valign=top ><a href="/Structure/cdd/cddsrv.cgi?uid=smart00409">Immunoglobulin</a></td>
+ <td align=left valign=top >score:&nbsp;125</td>
+ <td align=right valign=top >&nbsp;</td>
+<tr><th align=left valign=top 
+ width=10>&nbsp;</th><th align=left valign=top >&nbsp;</th>
+ <td align=left valign=top ><a href="/Structure/cdd/cddsrv.cgi?uid=pfam00047">Immunoglobulin domain</a></td>
+ <td align=left valign=top >score:&nbsp;94</td>
+ <td align=right valign=top >&nbsp;</td>
+<tr><th align=left valign=top 
+ width=10>&nbsp;</th><th align=left valign=top >&nbsp;</th>
+ <td align=left valign=top ><a href="/Structure/cdd/cddsrv.cgi?uid=pfam00069">Protein kinase domain</a></td>
+ <td align=left valign=top >score:&nbsp;402</td>
+ <td align=right valign=top >&nbsp;</td>
+<tr><th align=left valign=top 
+ width=10>&nbsp;</th><th align=left valign=top >&nbsp;</th>
+ <td align=left valign=top ><a href="/Structure/cdd/cddsrv.cgi?uid=smart00408">Immunoglobulin C-2 Type</a></td>
+ <td align=left valign=top >score:&nbsp;83</td>
+ <td align=right valign=top >&nbsp;</td>
+<tr><th align=left valign=top 
+ width=10>&nbsp;</th><th align=left valign=top >&nbsp;</th>
+ <td align=left valign=top ><a href="/Structure/cdd/cddsrv.cgi?uid=smart00219">Tyrosine kinase, catalytic domain</a></td>
+ <td align=left valign=top >score:&nbsp;616</td>
+ <td align=right valign=top >&nbsp;</td>
+<tr><th align=left valign=top 
+ width=10>&nbsp;</th><th align=left valign=top >&nbsp;</th>
+ <td align=left valign=top ><a href="/Structure/cdd/cddsrv.cgi?uid=smart00220">Serine/Threonine protein kinases, catalytic domain</a></td>
+ <td align=left valign=top >score:&nbsp;308</td>
+ <td align=right valign=top >&nbsp;</td>
+</td></tr></table><br>
+
+<!--- End of RefSeq Block --->
+
+<!-- GenBank Block -->
+
+<a name="genbank"></a>
+<table border="0" width="460" cellspacing="0"
+ cellpadding="0"><tr><td width="310" bgcolor="#CCCCFF"><font size=+1>
+ </a>GenBank Sequences</font></td> <td bgcolor="#CCCCFF" align="right"> <a href="./help.html#genbank" class="NN">?</a></td> </tr></table>
+ <table border="0" width="460" cellpadding="2" cellspacing="0">
+ <tr><td width=5></td><th align=left valign=middle class="NN"><font size="-1">Nucleotide</font></th>
+ <th align=left valign=middle >
+ <a href="help.html#type" class="NN"><font size="-1">Type</a></font></th><th align=left valign=middle >
+ <a href="help.html#protein" class="NN"><font size="-1">Protein</a></font></th>
+<th  align=left valign=middle>
+ <a href="help.html#strain">Strain</a></th><td class="TEXT">&nbsp;</td></tr></tr><tr><td width=5></td><td align=left 
+ valign=middle ><a href="http://www.ncbi.nlm.nih.gov/entrez/viewer.cgi?val=293325&db=Nucleotide&dopt=GenBank">L11358</a></td>
+ <td align=left valign=middle  >g</td>
+ <td align=left valign=middle ><a href="http://www.ncbi.nlm.nih.gov/entrez/viewer.cgi?val=293326&db=Protein&dopt=GenPept">AAA37420</a></td>
+ <td align=left valign=middle  >BALB/c</td>
+ <td align=right valign=middle  ><a href="/cgi-bin/Entrez/blink?pid=293326&all=1" class="NN">BL</a></td></tr></tr><tr><td width=5></td><td align=left 
+ valign=middle ><a href="http://www.ncbi.nlm.nih.gov/entrez/viewer.cgi?val=50433&db=Nucleotide&dopt=GenBank">X65998</a></td>
+ <td align=left valign=middle  >g</td>
+ <td align=left valign=middle ><a href="http://www.ncbi.nlm.nih.gov/entrez/viewer.cgi?val=50434&db=Protein&dopt=GenPept">CAA46799</a></td>
+ <td align=left valign=middle  >ICR</td>
+ <td align=right valign=middle  ><a href="/cgi-bin/Entrez/blink?pid=50434&all=1" class="NN">BL</a></td></tr></tr><tr><td width=5></td><td align=left 
+ valign=middle >&nbsp;</td>
+ <td align=left valign=middle  >&nbsp;</td>
+ <td align=left valign=middle ><a href="http://www.ncbi.nlm.nih.gov/entrez/viewer.cgi?val=50435&db=Protein&dopt=GenPept">CAA46800</a></td>
+ <td align=left valign=middle  >&nbsp;</td>
+ <td align=right valign=middle  ><a href="/cgi-bin/Entrez/blink?pid=50435&all=1" class="NN">BL</a></td></tr></tr><tr><td width=5></td><td align=left 
+ valign=middle ><a href="http://www.ncbi.nlm.nih.gov/entrez/viewer.cgi?val=7653185&db=Nucleotide&dopt=GenBank">AW741410</a></td>
+ <td align=left valign=middle  >m</td>
+ <td align=left valign=middle >&nbsp;</td>
+ <td align=left valign=middle  >&nbsp;</td>
+ <td align=right valign=middle  >&nbsp;</td></tr></tr><tr><td width=5></td><td align=left 
+ valign=middle ><a href="http://www.ncbi.nlm.nih.gov/entrez/viewer.cgi?val=50431&db=Nucleotide&dopt=GenBank">X65997</a></td>
+ <td align=left valign=middle  >m</td>
+ <td align=left valign=middle ><a href="http://www.ncbi.nlm.nih.gov/entrez/viewer.cgi?val=50432&db=Protein&dopt=GenPept">CAA46798</a></td>
+ <td align=left valign=middle  >ICR</td>
+ <td align=right valign=middle  ><a href="/cgi-bin/Entrez/blink?pid=50432&all=1" class="NN">BL</a></td></tr></tr><tr><td width=5></td><td align=left 
+ valign=middle ><a href="http://www.ncbi.nlm.nih.gov/entrez/viewer.cgi?val=50423&db=Nucleotide&dopt=GenBank">Y00864</a></td>
+ <td align=left valign=middle  >m</td>
+ <td align=left valign=middle ><a href="http://www.ncbi.nlm.nih.gov/entrez/viewer.cgi?val=50424&db=Protein&dopt=GenPept">CAA68772</a></td>
+ <td align=left valign=middle  >BALB/c</td>
+ <td align=right valign=middle  ><a href="/cgi-bin/Entrez/blink?pid=50424&all=1" class="NN">BL</a></td></tr></table><br>
+
+<!--- End of GenBank Block --->
+
+<!-- External Annotations Block --->
+
+
+
+<!--- End of External Annotations Block --->
+
+<!-- Additional Links Block -->
+
+<a name="links"></a>
+<table border="0" width="460" cellspacing="0" cellpadding="0"><tr><td width="310" bgcolor="#CCCCFF"><font size=+1>Additional Links</font></td><td bgcolor="#CCCCFF" align="right"> <a href="./help.html#links" class="NN">?</a></td> </tr></table>
+<table border="0" width="460" cellpadding="0" cellspacing="0">
+<tr><td width="5">&nbsp;</td><td align="left"><ul><li><b>UniGene:</b>  <a href="http://www.ncbi.nlm.nih.gov/UniGene/clust.cgi?ORG=Mm&CID=4394">Mm.4394<br></a>
+</li></ul></td></tr>
+</table>
+
+
+<!-- End of Additional Links Block -->
+
+
+<table border="0" width="460" cellspacing="0" cellpadding="0">
+
+  <tr valign="TOP"> 
+    <td>
+      <div align="CENTER">
+        <br><font size=-1><i><a href="#top">To Top</a></i></font><br>
+        <br><b>Questions or Comments?</b><br>
+          Write to the <a href="mailto:info@ncbi.nlm.nih.gov?subject=LocusLink">NCBI Service Desk</a></div></td></tr>
+  <tr valign="TOP">
+    <td>
+      <div align="CENTER">
+        <P><A HREF="../About/disclaimer.html"><font size=-1>Disclaimer</font></A>
+&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="../About/privacy.html"><font size=-1>Privacy statement</font></A></P>
+      </div>
+     </td>
+    </tr>
+</table>
+
+
+
+<hr>
+
+ 
+
+</td></tr></table>
+ 
+</body>
+
+</html>
