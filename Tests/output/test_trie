@@ -1,0 +1,24 @@
+test_trie
+['foo', 'he', 'hej', 'hello']
+5
+None
+1
+1
+0
+1
+1
+0
+0
+4
+['foo']
+[1]
+99
+[('foo', 1, 0)]
+[('foo', 1, 0)]
+[]
+[('foo', 1, 1)]
+found 2 matches
+[('foo', 1, 1), ('foo', 1, 2)]
+[(('foo', 1, 0), 1), (('hello', '55a', 4), 6)]
+foo 1
+hello '55a'
