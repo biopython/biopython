@@ -1,6 +1,6 @@
 #!/usr/bin/env python2.3
 
-__version__ = "$Revision: 1.2 $"
+__version__ = "$Revision: 1.3 $"
 
 import exceptions
 import os
@@ -9,7 +9,7 @@ import sys
 
 from Bio import Wise
 
-_CMDLINE_PSW = ["psw", "-l"]
+_CMDLINE_PSW = ["psw", "-l", "-F"]
 _OPTION_GAP_START = "-g"
 _OPTION_GAP_EXTENSION = "-e"
 _OPTION_SCORES = "-m"
@@ -107,7 +107,6 @@ def align(pair,
           gap_extension=None,
           *args, **keywds):
     
-    os.environ["WISE_FORCE_TYPE"] = "PROTEIN"
     cmdline = _CMDLINE_PSW[:]
     if scores:
         cmdline.extend((_OPTION_SCORES, scores))
