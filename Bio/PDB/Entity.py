@@ -108,7 +108,8 @@ class Entity:
 	def add(self, entity):
 		"Add a child to the Entity."
 		entity_id=entity.get_id()
-		assert(not self.has_id(entity_id))
+		if self.has_id(entity_id):
+			raise PDBConstructionException, "%s defined twice" % entity.get_full_id()
 		entity.set_parent(self)
 		self.child_list.append(entity)
 		#self.child_list.sort(self._sort)
