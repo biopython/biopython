@@ -27,7 +27,7 @@ See --help for all options.
 parser=OptionParser()
 
 parser.add_option("-t", "--type", dest="exp", 
-                  help="exposure type (CA3, CB, FS, DSSP, RD)",
+                  help="exposure type (CA3, CB, FS, DSSPR, DSSPA, RD, RD_CA)",
                   default="CA3")
 
 parser.add_option("-o", "--out", dest="outfile", 
@@ -83,13 +83,16 @@ elif options.exp=="CB":
 elif options.exp=="FS":
     hse=HSExposure()
     d=hse.calc_fs_exposure(m, RADIUS)
-    k=0
+    k=-1
 elif options.exp=="ANGLE":
     hse=HSExposure()
     d=hse.get_angles()
-    k=0
+    k=-1
     format="%4.1f"
-elif options.exp=="DSSP":
+elif options.exp=="DSSPR":
+    d=DSSP(m, pdbfile)
+    k=2
+elif options.exp=="DSSPA":
     d=DSSP(m, pdbfile)
     k=1
 elif options.exp=="RD":
@@ -106,7 +109,14 @@ residue_list=Selection.unfold_entities(m, 'R')
 for r in residue_list:
 
     if d.has_key(r):
-        exposure=d[r][k] 
+        if k==-1:
+            exposure=d[r]
+        else:
+            exposure=d[r][k] 
+
+        if options.exp=="DSSPR":
+            # to 0=exposed, 1=buried
+            exposure=1-exposure
 
         # Print info
         hetflag, resseq, icode=r.get_id()
