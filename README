@@ -150,7 +150,7 @@ setup.py --     Installation file.
 
 - look into Zope-ifying the web site
 
-- deprecate Seq.py
+- deprecate Sequence.py
 
 - microarray data
 
