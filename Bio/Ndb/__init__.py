@@ -72,6 +72,13 @@ class Record( UserDict.UserDict ):
                 subkeys.sort()
                 for item in subkeys:
                     out = out + '%s : %s\n' % ( item, val[ item ] )
+            elif( isinstance( val, UserDict.UserDict ) ):
+                out = out + '\n%s\n' % key
+                subkeys = val.keys()
+                subkeys.sort()
+                for item in subkeys:
+                    out = out + '%s : %s\n' % ( item, val[ item ] )
+
             else:
                 out = out + '%s: %s\n' % ( key, self[ key ] )
         return out
@@ -101,7 +108,7 @@ def _parse_constants( text ):
 
 class NdbParser(  sgmllib.SGMLParser ):
     """Parses Ndb sequence data into a Record object.
-
+    data available at: http://ndbserver.rutgers.edu/NDB/NDBATLAS/index.html
     """
     def reset(self):
         sgmllib.SGMLParser.reset( self )
