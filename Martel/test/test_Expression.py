@@ -1,5 +1,6 @@
 # regression tests for the Expression module
 
+from Martel import Re
 from Martel.Expression import *
 
 from Martel.Expression import _minimize_any_range, _minimize_escape_range, \
@@ -120,6 +121,17 @@ def test_seq():
     compare(str(Seq( (seq, alt, seq, alt) )), "abc(a|b|c)abc(a|b|c)")
         
 
+def test_nocase():
+    compare(str(NoCase(Literal("A"))), "[Aa]")
+    compare(str(NoCase(Literal("9.8"))), "9\\.8")
+    compare(str(NoCase(Str("A"))), "[Aa]")
+    compare(str(NoCase(Str("AB"))), "[Aa][Bb]")
+    compare(str(NoCase(Re("[ab]"))), "[ABab]")
+    compare(str(NoCase(Re("[abC]"))), "[A-Ca-c]")
+    compare(str(NoCase(Any("1AbC9"))), "[19A-Ca-c]")
+    compare(str(NoCase(Str("age = 10"))), "[Aa][Gg][Ee] = 10")
+    compare(str(NoCase(Alt( (Str("A")|Str("B")|Str("C"),)))), "[Aa]|[Bb]|[Cc]")
+
 def test_nodes():
     test__add__()
     test__or__()
@@ -136,6 +148,7 @@ def test_nodes():
     test_str()
     test_alt()
     test_seq()
+    test_nocase()
 
     
 
