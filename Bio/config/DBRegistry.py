@@ -17,10 +17,10 @@ DBObject       Base class for Registry objects for databases.
 DBGroup        Groups DBObjects.
 
 CGIDB          Accesses CGI databases.
+EUtilsDB       Accesses NCBI using EUtils.
 BioSQLDB       Accesses a BioSQL database.
 BioCorbaDB     Accesses a BioCorba database.
 IndexedFileDB  Accesses a Mindy Indexed file.
-
 """
 from Bio.config.Registry import *
 

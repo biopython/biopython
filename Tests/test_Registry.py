@@ -11,6 +11,7 @@ import unittest
 import StringIO
 
 from Bio import db
+from Bio import GenBank
 
 def run_tests(argv):
     test_suite = testing_suite()
@@ -24,7 +25,7 @@ def testing_suite():
 
     test_loader = unittest.TestLoader()
     test_loader.testMethodPrefix = 't_'
-    tests = [BaseRetrievalTest]
+    tests = [BaseRetrievalTest, GenBankRetrievalTest]
     
     for test in tests:
         cur_suite = test_loader.loadTestsFromTestCase(test)
@@ -146,6 +147,47 @@ class BaseRetrievalTest(unittest.TestCase):
                 first_part = handle.read(80)
                 assert fasta_id in first_part, \
                         (fasta_loc.name, fasta_id, first_part)
+
+class GenBankRetrievalTest(unittest.TestCase):
+    """Test convience functionality in Bio.GenBank for retrieval.
+    """
+    def setUp(self):
+        self.gb_protein_ids = ["NP_058835", "8393944"]
+        self.gb_nuc_ids = ["NM_017139", "8393943"]
+        self.search_term = "Opuntia"
+
+    def t_ncbi_dictionary(self):
+        """Retrieve sequences using a GenBank dictionary-like interface.
+        """
+        for ids, database_type in [(self.gb_protein_ids, "protein"),
+                                   (self.gb_nuc_ids, "nucleotide")]:
+            for format in ["genbank", "fasta"]:
+                ncbi_dict = GenBank.NCBIDictionary(database_type, format)
+                for gb_id in ids:
+                    ncbi_dict[gb_id]
+
+    def t_search_for(self):
+        """Search for ids using the GenBank search_for function.
+        """
+        ids = GenBank.search_for(self.search_term, database = 'protein')
+        assert len(ids) >= 9 # 9 in GenBank right now
+
+    def t_download_many(self):
+        """Retrieve sequences using the GenBank download_many function.
+        """
+        nuc_results = GenBank.download_many(self.gb_nuc_ids, 'nucleotide')
+        iterator = GenBank.Iterator(nuc_results)
+        num = 0
+        for rec in iterator:
+            num += 1
+        assert num == 2
+
+        prot_results = GenBank.download_many(self.gb_protein_ids, 'protein')
+        iterator = GenBank.Iterator(prot_results)
+        num = 0
+        for rec in iterator:
+            num += 1
+        assert num == 2
 
 if __name__ == "__main__":
     sys.exit(run_tests(sys.argv))

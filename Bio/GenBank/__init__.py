@@ -40,6 +40,7 @@ __all__ = [
     ]
 
 import cStringIO
+import warnings
 
 # other Biopython stuff
 from Bio.expressions import genbank
@@ -48,6 +49,9 @@ import utils
 
 from Bio import Mindy
 from Bio.Mindy import SimpleSeqRecord
+from Bio import db
+from Bio import EUtils
+from Bio.EUtils import DBIds, DBIdsClient
 
 class Dictionary:
     """Access a GenBank file using a dictionary-like interface.
@@ -1285,36 +1289,42 @@ def index_file(filename, indexname, rec2key = None, use_berkeley = 0):
 
 class NCBIDictionary:
     """Access GenBank using a read-only dictionary interface.
-
-    Methods:
-    
     """
-    def __init__(self, database='sequences', format=None, delay=5.0,
-                 retmax=1, parser=None):
-        """NCBIDictionary([database][, delay][, parser])
+    VALID_DATABASES = ['nucleotide', 'protein']
+    VALID_FORMATS = ['genbank', 'fasta']
+    def __init__(self, database, format, delay = None,
+                 retmax = None, parser=None):
+        """Initialize an NCBI dictionary to retrieve sequences.
 
         Create a new Dictionary to access GenBank.  Valid values for
-        database are 'genome', 'nucleotide', 'protein', 'popset', and
-        'sequences'.  delay is the number of seconds to wait between
-        each query (5 default).  parser is an optional parser object
+        database are 'nucleotide' and 'protein'.
+        Valid values for format are 'genbank' (for nucleotide genbank and
+        protein genpept) and 'fasta'.
+        dely and retmax are old options kept only for compatibility -- do not
+        bother to set them.
+        parser is an optional parser object
         to change the results into another form.  If unspecified, then
         the raw contents of the file will be returned.
-
         """
-        from Bio.WWW import RequestLimiter
+        if delay or retmax:
+            warnings.warn("Setting delay or retmax parameters has no effect.",
+                    DeprecationWarning)
+        
         self.parser = parser
-        self.limiter = RequestLimiter(delay)
-        self.database = database
-        if format is None:   # No format specified, try to guess it.
-            ldatabase = database.lower()
-            if ldatabase in ["sequences", "nucleotide"]:
-                format = "gb"
-            elif ldatabase in ["protein", "popset"]:
-                format = "gb"
-            else:   # don't recognize the database, just use 'native'.
-                format = "native"
-        self.format = format
-        self.retmax = retmax
+        if database not in self.__class__.VALID_DATABASES:
+            raise ValueError("Invalid database %s, should be one of %s" %
+                    (database, self.__class__.VALID_DATABASES))
+        if format not in self.__class__.VALID_FORMATS:
+            raise ValueError("Invalid format %s, should be one of %s" %
+                    (format, self.__class__.VALID_FORMATS))
+
+        if format == 'fasta':
+            self.db = db["fasta-sequence-eutils"]
+        elif format == 'genbank':
+            if database == 'nucleotide':
+                self.db = db["nucleotide-genbank-eutils"]
+            elif database == 'protein':
+                self.db = db["protein-genbank-eutils"]
 
     def __len__(self):
         raise NotImplementedError, "GenBank contains lots of entries"
@@ -1349,49 +1359,11 @@ class NCBIDictionary:
         raise "How did I get here?"
 
     def __getitem__(self, id):
-        """S.__getitem__(id) -> object
-
-        Return the GenBank entry.  id is the GenBank ID (gi) of the
-        entry.  Raises a KeyError if there's an error.
+        """Return the GenBank entry specified by the GenBank ID.
         
+        Raises a KeyError if there's an error.
         """
-        from Bio.WWW import NCBI
-        # First, check to see if enough time has passed since my
-        # last query.
-        self.limiter.wait()
-
-        params = {}
-        params['rettype'] = self.format
-        params['id'] = id
-        if self.retmax:
-            params['retmax'] = str(self.retmax)
-        try:
-            handle = NCBI.efetch(self.database, **params)
-        except IOError, x:
-            # raise a KeyError instead of an IOError
-            # XXX I really should distinguish between a real IOError and
-            # if the id is not in the database.
-            raise KeyError, x
-
-        # If the id is not in the database, I get a message like:
-        # 'GenPept does not exist for GI "433174"\012\012' 
-        line = handle.peekline()
-        if line.find('does not exist') >= 0:
-            raise KeyError, line
-        # if there is a problem with the server, we'll get back a line like:
-        # Please try again later. Server error  for GI "7212005"
-        elif line.find("Please try again later.") >= 0:
-            raise KeyError, line
-        # if a sequence has been withdrawn, we'll get a line like:
-        # The sequence has been intentionally withdrawn : GI "9993999"
-        elif line.find("intentionally withdrawn") >= 0:
-            raise KeyError, line
-        # sometimes the intentianally withdrawn sequences just
-        # return and empty sting
-        elif line == '':
-            raise KeyError, "Empty information returned."
-        elif line.lower().find('html') >= 0:
-            raise KeyError, "I unexpectedly got back html-formatted data."
+        handle = self.db[id]
         # Parse the record if a parser was passed in.
         if self.parser is not None:
             return self.parser.parse(handle)
@@ -1399,210 +1371,64 @@ class NCBIDictionary:
 
 def search_for(search, database='nucleotide',
                reldate=None, mindate=None, maxdate=None,
-               batchsize=100, delay=2, callback_fn=None,
-               start_id=0, max_ids=None):
+               batchsize=None, delay=None, callback_fn=None,
+               start_id = 0, max_ids = 50000000):
     """search_for(search[, reldate][, mindate][, maxdate]
     [, batchsize][, delay][, callback_fn][, start_id][, max_ids]) -> ids
 
     Search GenBank and return a list of the GenBank identifiers (gi's)
     that match the criteria.  search is the search string used to
-    search the database.  Valid values for database are 'genome',
-    'nucleotide', 'protein', 'popset', and 'sequences'.  reldate is
+    search the database.  Valid values for database are
+    'nucleotide', 'protein', 'popset' and 'genome'.  reldate is
     the number of dates prior to the current date to restrict the
     search.  mindate and maxdate are the dates to restrict the search,
-    e.g. 2002/01/01.  batchsize specifies the number of ids to return
-    at one time.  By default, it is set to 10000, the maximum.  delay
-    is the number of seconds to wait between queries (default 2).
-    callback_fn is an optional callback function that will be called
-    and passed a gi as results are retrieved.  start_id specifies the
-    index of the first id to retrieve and max_ids specifies the
-    maximum number of id's to retrieve.
-
-    XXX NCBI's esearch script does not seem to respect the date
-    parameters.  Please let me know if you figure out how to get it to
-    work.
-
-    """
-    import re
-    import sgmllib
-    from Bio.WWW import RequestLimiter
-    from Bio.WWW import NCBI
+    e.g. 2002/01/01.  start_id is the number to begin retrieval on.
+    max_ids specifies the maximum number of id's to retrieve.
     
-    class ResultParser(sgmllib.SGMLParser):
-        # Parse the ID's out of the XML-formatted page that PubMed
-        # returns.  The format of the page is:
-        # [...]
-        #    <Id>...</Id>
-        # [...]
-        def __init__(self):
-            sgmllib.SGMLParser.__init__(self)
-            self.ids = []
-            self.in_id = 0
-        def start_id(self, attributes):
-            self.in_id = 1
-        def end_id(self):
-            self.in_id = 0
-        _not_pmid_re = re.compile(r'\D')
-        def handle_data(self, data):
-            if not self.in_id:
-                return
-            # If data is just whitespace, then ignore it.
-            data = data.strip()
-            if not data:
-                return
-            # Everything here should be a PMID.  Check and make sure
-            # data really is one.  A PMID should be a string consisting
-            # of only integers.  Should I check to make sure it
-            # meets a certain minimum length?
-            if self._not_pmid_re.search(data):
-                raise SyntaxError, \
-                      "I expected an ID, but %s doesn't look like one." % \
-                      repr(data)
-            self.ids.append(data)
+    batchsize, delay and callback_fn are old parameters for
+    compatibility -- do not set them.
+    """
+    if batchsize or delay or callback_fn:
+        warnings.warn("Passing old parameters to search_for.",
+                DeprecationWarning)
+    # deal with dates
+    date_restrict = None
+    if reldate:
+        date_restrict = EUtils.WithinNDays(reldate)
+    elif mindate:
+        date_restrict = EUtils.DateRange(mindate, maxdate)
 
-    params = {
-        'db' : database,
-        'term' : search,
-        'reldate' : reldate,
-        'mindate' : mindate,
-        'maxdate' : maxdate
-        }
-    for k, v in params.items():
-        if v is None:
-            del params[k]
-
-    limiter = RequestLimiter(delay)
+    eutils_client = DBIdsClient.DBIdsClient()
+    db_ids = eutils_client.search(search, database, daterange = date_restrict,
+            retstart = start_id, retmax = max_ids)
     ids = []
-    while max_ids is None or len(ids) < max_ids:
-        parser = ResultParser()
-        
-        # Check to make sure enough time has passed before my
-        # last search.  If not, then wait.
-        limiter.wait()
-
-        start = start_id + len(ids)
-        max = batchsize
-        if max_ids is not None and max > max_ids - len(ids):
-            max = max_ids - len(ids)
-
-        params['retstart'] = start
-        params['retmax'] = max
-        h = NCBI.esearch(**params)
-        parser.feed(h.read())
-        ids.extend(parser.ids)
-        if callback_fn is not None:
-            # Call the callback function with each of the new ID's.
-            for id in parser.ids:
-                callback_fn(id)
-        if len(parser.ids) < max or not parser.ids:  # no more id's to read
-            break
+    for db_id in db_ids:
+        ids.append(db_id.dbids.ids[0])
     return ids
 
-def download_many(ids, callback_fn, database='nucleotide',
-                  broken_fn=None, delay=120.0, faildelay=5.0,
-                  batchsize=500, parser=None):
-    """download_many(ids, callback_fn[, broken_fn][, delay][, faildelay][, batchsize])
+def download_many(ids, database = 'nucleotide', callback_fn = None,
+                  broken_fn=None, delay=None, faildelay=None,
+                  batchsize=None, parser=None):
+    """download_many(ids, database) -> handle of results
 
     Download many records from GenBank.  ids is a list of gis or
-    accessions.  Each time a record is downloaded, callback_fn is
-    called with the text of the record.  broken_fn is an optional
-    function that is called with the id of records that were not able
-    to be downloaded.  delay is the number of seconds to wait between
-    requests.  batchsize is the number of records to request each
-    time.
+    accessions.  
 
+    callback_fn, broken_fn, delay, faildelay, batchsize, parser are old
+    parameter for compatibility. They should not be used.
     """
-    from Bio.WWW import NCBI
-    from Bio.WWW import RequestLimiter
-    from Bio import File
-    # parser is an undocumented parameter that allows people to
-    # specify an optional parser to handle each record.  This is
-    # dangerous because the results may be malformed, and exceptions
-    # in the parser may disrupt the whole download process.
-    if batchsize > 500 or batchsize < 1:
-        raise ValueError, "batchsize must be between 1 and 500"
-
-    if database == 'nucleotide':
+    if callback_fn or broken_fn or delay or faildelay or batchsize or parser:
+        warnings.warn("Passing old parameters to download_many.",
+                DeprecationWarning)
+    
+    db_ids = DBIds(database, ids)
+    if database in ['nucleotide']:
         format = 'gb'
-    elif database == 'protein' or database == 'popset':
+    elif database in ['protein']:
         format = 'gp'
     else:
-        format = 'native'
+        raise ValueError("Unexpected database: %s" % database)
 
-    limiter = RequestLimiter(delay)
-    current_batchsize = batchsize
-    
-    # Loop until all the ids are processed.  We want to process as
-    # many as possible with each request.  Unfortunately, errors can
-    # occur.  Some id may be incorrect, or the server may be
-    # unresponsive.  In addition, one broken id out of a list of id's
-    # can cause a non-specific error.  Thus, the strategy I'm going to
-    # take, is to start by downloading as many as I can.  If the
-    # request fails, I'm going to half the number of records I try to
-    # get.  If there's only one more record, then I'll report it as
-    # broken and move on.  If the request succeeds, I'll double the
-    # number of records until I get back up to the batchsize.
-    nsuccesses = 0
-    while ids:
-        if current_batchsize > len(ids):
-            current_batchsize = len(ids)
-        
-        id_str = ','.join(ids[:current_batchsize])
-
-        # Make sure enough time has passed before I do another query.
-        if not nsuccesses:
-            limiter.wait(faildelay)
-        else:
-            limiter.wait()
-        try:
-            # If one or more of the id's are broken, this will raise
-            # an IOError.
-            handle = NCBI.efetch(
-                db=database, id=id_str, retmode='text', rettype=format)
-
-            # I'm going to check to make sure PubMed returned the same
-            # number of id's as I requested.  If it didn't then I'm going
-            # to raise an exception.  This could take a lot of memory if
-            # the batchsize is large.
-            results = handle.read()
-            iter = Iterator(File.StringHandle(results))
-            num_ids = 0
-            while iter.next() is not None:
-                num_ids = num_ids + 1
-            if num_ids != current_batchsize:
-                raise IOError
-            handle = File.StringHandle(results)
-        except IOError:   # Query did not work.
-            if current_batchsize == 1:
-                # There was only 1 id in the query.  Report it as
-                # broken and move on.
-                id = ids.pop(0)
-                if broken_fn is not None:
-                    broken_fn(id)
-            else:
-                # I don't know which one is broken.  Try again with
-                # fewer id's.
-                current_batchsize = current_batchsize / 2
-            nsuccesses = 0
-            continue
-        nsuccesses = nsuccesses + 1
-
-        # Iterate through the results and pass the records to the
-        # callback.
-        iter = Iterator(handle, parser)
-        idnum = 0
-        while 1:
-            rec = iter.next()
-            if rec is None:
-                break
-            callback_fn(ids[idnum], rec)
-            idnum = idnum + 1
-
-        ids = ids[current_batchsize:]
-
-        # If I'm not downloading the maximum number of articles,
-        # double the number for next time.
-        if nsuccesses >= 2 and current_batchsize < batchsize:
-            current_batchsize = current_batchsize * 2
-            if current_batchsize > batchsize:
-                current_batchsize = batchsize
+    eutils_client = DBIdsClient.from_dbids(db_ids)
+    result_handle = eutils_client.efetch(retmode = "text", rettype = format)
+    return cStringIO.StringIO(result_handle.read())
