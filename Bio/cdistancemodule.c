@@ -21,9 +21,7 @@ static char cdistance_euclidean__doc__[] =
 "euclidean(x, y) -> euclidean distance between x and y";
 
 static PyObject *
-cdistance_euclidean(self, args)
-     PyObject *self;
-     PyObject *args;
+cdistance_euclidean(PyObject *self, PyObject *args)
 {
     int i;
     int length;
@@ -85,7 +83,7 @@ static char cdistance__doc__[] =
 \n\
 ";
 
-void initcdistance()
+void initcdistance(void)
 {
     (void) Py_InitModule3("cdistance", cdistanceMethods, cdistance__doc__);
 }
