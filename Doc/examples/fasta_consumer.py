@@ -27,7 +27,7 @@ def extract_organisms(file, num_records):
 
     file_to_parse.close()
 
-    return handler.species_list
+    return consumer.species_list
 
 
 if __name__ == "__main__":
