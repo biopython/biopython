@@ -84,10 +84,6 @@ To Do
     - needs to be done
   o Enzyme
     - add parsers, iterator, dictionary, etc.
-  o Prosite
-    - WWW interface
-  o Prodoc
-    - WWW interface
   o PDB
     - needs to be done
     - build on Andrew's UPDB?
