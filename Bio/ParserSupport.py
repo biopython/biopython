@@ -53,8 +53,10 @@ class AbstractParser:
 
     def parse_file(self, filename):
         h = open(filename)
-        retval = self.parse(h)
-        h.close()
+        try:
+            retval = self.parse(h)
+        finally:
+            h.close()
         return retval
 
 class AbstractConsumer:
