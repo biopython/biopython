@@ -204,6 +204,7 @@ class HSExposure:
             ca_v=res["CA"].get_vector()
         else:
             # CB absent
+            print "WARNING: CB ABSENT ", res
             return None
         real_cb_v=cb_v-ca_v
         angle=360*real_cb_v.angle(pseudo_cb_v)/(2*pi)
