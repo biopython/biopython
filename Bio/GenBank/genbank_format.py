@@ -619,7 +619,7 @@ record = Martel.Group("genbank_record",
                       Martel.Opt(segment_line) + \
                       source_block + \
                       organism_block + \
-                      Martel.Rep1(reference) + \
+                      Martel.Rep(reference) + \
                       Martel.Opt(comment_block) + \
                       features_line + \
                       Martel.Rep1(feature) + \
