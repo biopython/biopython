@@ -8,7 +8,7 @@ from _support import *
 
 swissprot_expasy_cgi = CGIDB(
     name="swissprot-expasy-cgi",
-    doc="Retrieve a swiss-prot entry by ID",
+    doc="Retrieve a swiss-prot entry by ID from ExPASy.",
     cgi="http://www.expasy.ch/cgi-bin/get-sprot-raw.pl",
     delay=5.0,
     timeout=10,
@@ -19,7 +19,7 @@ swissprot_expasy_cgi = CGIDB(
 
 swissprot_usmirror_cgi = CGIDB(
     name="swissprot-usmirror-cgi",
-    doc="Retrieve a swiss-prot entry by ID",
+    doc="Retrieve a swiss-prot entry by ID from the US mirror.",
     cgi="http://us.expasy.org/cgi-bin/get-sprot-raw.pl",
     delay=5.0,
     timeout=10,
@@ -31,6 +31,7 @@ swissprot_usmirror_cgi = CGIDB(
 swissprot = DBGroup(
     name="swissprot",
     behavior="serial",
+    doc="Retrieve a swiss-prot entry by ID.  Will try different servers until one works.",
     )
 swissprot.add(swissprot_expasy_cgi)
 swissprot.add(swissprot_usmirror_cgi)
