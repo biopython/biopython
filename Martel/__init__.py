@@ -141,52 +141,103 @@ def Re(pattern, fix_newlines = 0):
 
 NullOp = Expression.NullOp
 
-def Integer(name = None):
-    """(name = None) -> match digits, possibly inside of a named group
-
-    If 'name' is not None, the matching text will be put inside a group
-    of the given name.
-    
-    """
+# helper function
+def _group(name, exp, attrs):
     if name is None:
-        return Re(r"\d+")
-    else:
-        return Group(name, Re(r"\d+"))
-
-def SignedInteger(name = None):
-    """(name = None) -> match digits with an optional leading minus sign
-
-    If 'name' is not None, the matching text will be put inside of a
-    group of the given name.
-    """
-    if name is None:
-        return Re(r"-?\d+")
-    else:
-        return Group(name, Re("-?\d+"))
-
-def Float(name = None):
-    """(name = None) -> match floating point numbers like 6, 6., .1 and 2.3
-
-    If 'name' is not None, the matching text will be put inside of a
-    group of the given name.  Can be signed.
-    """
-    exp = Re(r"[+-]?((\d+(\.(\d+)?)?)|\.\d+)")
-    if name is None:
+        assert not attrs, "Attributes (%s) require a group name" % (attrs,)
         return exp
-    else:
-        return Group(name, exp)
+    return Group(name, exp, attrs)
 
-def ToEol(name = None):
-    """(name = None) -> match everything up to and including the end of line
+def Digits(name = None, attrs = None):
+    """match one or more decimal digits
 
-    If 'name' is not None, the matching text, except for the newline, will
-    be put inside a group of the given name.
+    This is the same as (?P<name?attrs>\d+).
     
+    If 'name' is not None, the matching text will be put inside a
+    group of the given name.  You can optionally include group
+    attributes.    
+    """
+    return _group(name, Re(r"\d+"), attrs)
+
+def Integer(name = None, attrs = None):
+    """match an integer (digits w/ optional leading + or - sign)
+
+    If 'name' is not None, the matching text will be put inside a
+    group of the given name.  You can optionally include group
+    attributes.    
+    """
+    exp = Re(r"[+-]?\d+")
+    return _group(name, exp, attrs)
+
+def Float(name = None, attrs = None):
+    """match floating point numbers like 6, 6., -.1, 2.3, +4E-5, ...
+
+    If 'name' is not None, the matching text will be put inside of a
+    group of the given name.  You can optionally include group
+    attributes.
+    """
+    exp = Re(r"[+-]?((\d+(\.\d*)?)|\.\d+)([eE][+-]?[0-9]+)?")
+    return _group(name, exp, attrs)
+
+def Word(name = None, attrs = None):
+    """match a 'word'
+ 
+    A 'word' is defined as '\w+', and \w is [a-zA-Z0-9_].
+ 
+    If 'name' is not None, the matching text will be put inside of a
+    group of the given name.  You can optionally include group
+    attributes.    
+ 
+    In other words, this is the short way to write (?P<name>\w+).
+    """
+    exp = Re(r"\w+")
+    return _group(name, exp, attrs)
+ 
+def Spaces(name = None, attrs = None):
+    """match one or more whitespace (except newline)
+ 
+    "Spaces" is defined as [\\t\\v\\f\\r ]+, which is *not* the same
+    as '\\s+'.  (It's missing the '\\n', which is useful since you
+    almost never mean for whitespace to go beyond the newline.)
+ 
+    If 'name' is not None, the matching text will be put inside of a
+    group of the given name.  You can optionally include group
+    attributes.
+    """
+    exp = Re(r"[\t\v\f\r ]+")
+    return _group(name, exp, attrs)
+
+def Unprintable(name = None, attrs = None):
+    """match an unprintable character (characters not in string.printable)
+
+    If 'name' is not None, the matching text will be put inside of a
+    group of the given name.  You can optionally include group
+    attributes.    
+    """
+    return _group(name, AnyBut(string.printable), attrs)
+
+def Punctuation(name = None, attrs = None):
+    """match a punctuation character (characters in string.punctuation)
+
+    If 'name' is not None, the matching text will be put inside of a
+    group of the given name.  You can optionally include group
+    attributes.    
+    """
+    return _group(name, Any(string.punctuation), attrs)
+
+
+def ToEol(name = None, attrs = None):
+    """match everything up to and including the end of line
+
+    If 'name' is not None, the matching text, except for the newline,
+    will be put inside a group of the given name.  You can optionally
+    include group attributes.    
     """
     if name is None:
+        assert not attrs, "Attributes (%s) require a group name" % (attrs,)
         return Re(r"[^\R]*\R")
     else:
-        return Group(name, Re(r"[^\R]*")) + AnyEol()
+        return Group(name, Re(r"[^\R]*"), attrs) + AnyEol()
 
 # Used when making parsers which read a record at a time
 ParseRecords = Expression.ParseRecords
