@@ -11,8 +11,8 @@ UndoHandle     File object decorator with support for undo-like operations.
 StringHandle   Wraps a file object around a string.
 """
 
-import urllib  # XXX remove this
 import os
+import tempfile
 
 class UndoHandle:
     """A Python handle that adds functionality for saving lines.
@@ -63,19 +63,44 @@ class UndoHandle:
     def __getattr__(self, attr):
         return getattr(self._handle, attr)
 
+
+# Old implementation of StringHandle based on pipes.
+# This fails if str fills up the pipe.
+# Maybe I should use a pipe if the string is short, but
+# a "real" file if it's long?
+
+#class StringHandle:
+#    def __init__(self, str):
+#        r, w = os.pipe()
+#        os.fdopen(w, 'w').write(str)
+#        self._handle = os.fdopen(r, 'r')
+#
+#    def __getattr__(self, name):
+#        return getattr(self._handle, name)
+#        
+#    def __setattr__(self, name, value):
+#        if name == '_handle':
+#            self.__dict__[name] = value
+#        else:
+#            setattr(self._handle, name, value)
+
 class StringHandle:
     def __init__(self, str):
-        r, w = os.pipe()
-        os.fdopen(w, 'w').write(str)
-        self._handle = os.fdopen(r, 'r')
+        self._filename = tempfile.mktemp()
+        open(self._filename, 'w').write(str)
+        self._handle = open(self._filename)
+
+    def __del__(self):
+        if self.__dict__.has_key('_handle'):
+            self._handle.close()
+        if os.path.exists(self._filename):
+            os.unlink(self._filename)
 
     def __getattr__(self, name):
-        if name == '_handle':
-            return self.__dict__[name]
         return getattr(self._handle, name)
         
     def __setattr__(self, name, value):
-        if name == '_handle':
+        if name in ['_handle', '_filename']:
             self.__dict__[name] = value
         else:
             setattr(self._handle, name, value)
