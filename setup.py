@@ -23,8 +23,8 @@ import sys
 import os
 
 # Make sure I have the right Python version.
-if sys.version_info[:2] < (2, 2):
-    print "Biopython requires Python 2.2 or better.  Python %d.%d detected" % \
+if sys.version_info[:2] < (2, 3):
+    print "Biopython requires Python 2.3 or better.  Python %d.%d detected" % \
           sys.version_info[:2]
     sys.exit(-1)
 
@@ -352,6 +352,7 @@ PACKAGES = [
     'Bio.NeuralNetwork',
     'Bio.NeuralNetwork.BackPropagation',
     'Bio.NeuralNetwork.Gene',
+    'Bio.Nexus',
     'Bio.NMR',
     'Bio.Parsers',
     'Bio.Pathway',
@@ -432,6 +433,9 @@ EXTENSIONS = [
                'Bio/PDB/mmCIF/MMCIFlexmodule.c'],
               include_dirs=["Bio"],
               libraries=["fl"]
+              ),
+    Extension('Bio.cnexus',
+              ['Bio/Nexus/cnexus.c']
               ),
     Extension('Bio.Restriction.DNAUtils',
               ['Bio/Restriction/DNAUtils.c']
