@@ -97,7 +97,7 @@ size = Martel.Group("size",
 # deal with the different kinds of residues we can have
 valid_residue_prefixes = ["ss-", "ds-", "ms-"]
 valid_residue_types = ["DNA", "RNA", "mRNA", "tRNA", "rRNA", "uRNA",
-                       "snRNA", "PROTEIN"]
+                       "snRNA", "snoRNA", "PROTEIN"]
 
 residue_prefixes = map(Martel.Str, valid_residue_prefixes)
 residue_types = map(Martel.Str, valid_residue_types)
