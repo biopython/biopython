@@ -69,7 +69,7 @@ class SeqFeature:
     40 and 50 to 60, respectively.
     """
     def __init__(self, location = None, type = '', location_operator = '',
-                 strand = 0, id = "<unknown id>", 
+                 strand = None, id = "<unknown id>", 
                  qualifiers = {}, sub_features = [],
                  ref = None, ref_db = None):
         """Initialize a SeqFeature on a Sequence.
