@@ -129,6 +129,44 @@ class Dictionary:
     def __getattr__(self, name):
         return getattr(self._index, name)
 
+class EnzymeDict( UserDict.UserDict ):
+    def print_item( self, item, level = 1 ):
+        indent = '    '
+        for j in range( 0, level ):
+            indent = indent + '    '
+        out = ''
+        if( type( item ) == type( '' ) ):
+            if( item != '' ):
+                out = out + '%s%s\n' % ( indent, item )
+        elif( type( item ) == type([])):
+            for subitem in item:
+                out = out + self.print_item( subitem, level + 1 )
+        elif( isinstance( item, UserDict.UserDict ) ):
+            keys = item.keys()
+            keys.sort()
+            for subitem in keys:
+                out = out + '%s%s\n' % ( indent, subitem )
+                out = out + self.print_item( item[ subitem ], level + 1 )
+        elif( type( item ) == type( {} ) ):
+            keys = item.keys()
+            keys.sort()
+            for subitem in keys:
+                out = out +  '%s%s\n' % ( indent, subitem )
+                out = out + self.print_item( item[ subitem ], level + 1 )
+        else:
+            out = out + item
+            out = out + '\n'
+        return out
+
+    def __str__( self ):
+        out = ''
+        keys = self.keys()
+        keys.sort()
+        for key in keys:
+            out = out +  '%s\n' % key
+            out = out + self.print_item( self[ key ] )
+        return out
+
 class RebaseParser(  sgmllib.SGMLParser ):
     """Parses Rebase sequence data into a Record object.
 
@@ -136,7 +174,7 @@ class RebaseParser(  sgmllib.SGMLParser ):
     def reset(self):
         sgmllib.SGMLParser.reset( self )
         self.text = ''
-        self.enzyme_dict = UserDict.UserDict()
+        self.enzyme_dict = EnzymeDict()
         self._state = 'title'
         self.key_waiting = ''
         self.enzyme_dict[ 'factoids' ] = []
@@ -303,35 +341,10 @@ class RebaseParser(  sgmllib.SGMLParser ):
         self.text = ''
         return text
 
-    def print_item( self, item, level = 1 ):
-        indent = '    '
-        for j in range( 0, level ):
-            indent = indent + '    '
-        if( type( item ) == type( '' ) ):
-            if( item != '' ):
-                print '%s%s' % ( indent, item )
-        elif( type( item ) == type([])):
-            for subitem in item:
-                self.print_item( subitem, level + 1 )
-        elif( isinstance( item, UserDict.UserDict ) ):
-            for subitem in item.keys():
-                print '%skey is %s' % ( indent, subitem )
-                self.print_item( item[ subitem ], level + 1 )
-        elif( type( item ) == type( {} ) ):
-            for subitem in item.keys():
-                print '%skey is %s' % ( indent, subitem )
-                self.print_item( item[ subitem ], level + 1 )
-        else:
-            print item
-
-    def print_tags( self ):
-        for key in self.enzyme_dict.keys():
-            print 'key %s' % key
-            self.print_item( self.enzyme_dict[ key ] )
 
 if( __name__ == '__main__' ):
     handle = open( 'bamii.htm')
     undo_handle = Bio.File.UndoHandle( handle )
     rebase_parser = RebaseParser()
-    rebase_parser.parse( handle )
-    rebase_parser.print_tags()
+    data = rebase_parser.parse( handle )
+    print data
