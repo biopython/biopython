@@ -30,10 +30,7 @@ try:
 except ImportError:
     import StringIO
 
-from Bio import File
-from Bio.WWW import NCBI
 from Bio.ParserSupport import *
-import NCBIStandalone
 
 class BlastParser(AbstractParser):
     """Parses WWW BLAST data into a Record.Blast object.
@@ -41,6 +38,7 @@ class BlastParser(AbstractParser):
     """
     def __init__(self):
         """__init__(self)"""
+        import NCBIStandalone
         self._scanner = _Scanner()
         self._consumer = SGMLStrippingConsumer(NCBIStandalone._BlastConsumer())
 
@@ -67,6 +65,8 @@ class _Scanner:
         object that will receive events as the report is scanned.
 
         """
+        from Bio import File
+
         # This stuff appears in 2.0.12.
         # <p><!--
         # QBlastInfoBegin
@@ -684,6 +684,8 @@ def blast(program, database, query,
     """
     import time
     import urlparse
+    from Bio.WWW import NCBI
+    
     import warnings
     warnings.warn("blast is deprecated.  Please use qblast instead.")
     
@@ -765,7 +767,7 @@ def blast(program, database, query,
     if output_fn is not None:
         results = handle.read()
         output_fn(results)
-        handle = File.StringHandle(results)
+        handle = StringIO.StringIO(results)
     ref_cgi, ref_params = _parse_blast_ref_page(handle)
     ref_cgi = urlparse.urljoin(cgi, ref_cgi)  # convert to absolute URL
 
@@ -783,7 +785,7 @@ def blast(program, database, query,
         if output_fn is not None:
             results = handle.read()
             output_fn(results)
-            handle = File.StringHandle(results)
+            handle = StringIO.StringIO(results)
         ready, results_cgi, results_params = _parse_blast_results_page(handle)
         results_params['FORMAT_TYPE']=format_type
         results_params['NCBI_GI']='yes'
