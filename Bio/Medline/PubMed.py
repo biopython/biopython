@@ -13,11 +13,12 @@ http://www.ncbi.nlm.nih.gov/PubMed/linking.html
 
 
 Classes:
-Dictionary    Access PubMed articles using a dictionary interface.
+Dictionary     Access PubMed articles using a dictionary interface.
 
 Functions:
-search_for    Search PubMed.
-find_related  Find related articles in PubMed.
+search_for     Search PubMed.
+find_related   Find related articles in PubMed.
+download_many  Download many articles from PubMed in batch mode.
 
 """
 
@@ -26,7 +27,20 @@ import string
 import re
 import sgmllib
 
+from Bio import File
 from Bio.WWW import NCBI
+from Bio.Medline import Medline
+
+class _Timer:
+    # This class implements a simple countdown timer.
+    def __init__(self, delay):
+        self.last_time = 0.0
+        self.delay = delay
+    def wait(self):
+        how_long = self.last_time + self.delay - time.time()
+        if how_long > 0:
+            time.sleep(how_long)
+        self.last_time = time.time()
 
 class Dictionary:
     """Access PubMed using a read-only dictionary interface.
@@ -44,9 +58,8 @@ class Dictionary:
         between each query.
 
         """
-        self.delay = delay
         self.parser = parser
-        self.last_query_time = None
+        self._timer = _Timer(delay)
 
     def __len__(self):
         raise NotImplementedError, "PubMed contains lots of entries"
@@ -90,11 +103,7 @@ class Dictionary:
         """
         # First, check to see if enough time has passed since my
         # last query.
-        if self.last_query_time is not None:
-            delay = self.last_query_time + self.delay - time.time()
-            if delay > 0.0:
-                time.sleep(delay)
-        self.last_query_time = time.time()
+        self._timer.wait()
         
         try:
             handle = NCBI.pmfetch(
@@ -223,3 +232,92 @@ def find_related(pmid):
     h = NCBI.pmneighbor(pmid, 'pmid')
     parser.feed(h.read())
     return parser.ids
+
+def download_many(ids, callback_fn, broken_fn=None, delay=120.0, batchsize=500,
+                  parser=None):
+    """download_many(ids, callback_fn, broken_fn=None, delay=120.0, batchsize=500)
+
+    Download many records from PubMed.  ids is a list of either the
+    Medline Unique ID or the PubMed ID's of the articles.  Each time a
+    record is downloaded, callback_fn is called with the text of the
+    record.  broken_fn is an optional function that is called with the
+    id of records that were not able to be downloaded.  delay is the
+    number of seconds to wait between requests.  batchsize is the
+    number of records to request each time.
+
+    """
+    # parser is an undocumented parameter that allows people to
+    # specify an optional parser to handle each record.  This is
+    # dangerous because the results may be malformed, and exceptions
+    # in the parser may disrupt the whole download process.
+    if batchsize > 500 or batchsize < 1:
+        raise ValueError, "batchsize must be between 1 and 500"
+    timer = _Timer(delay)
+    current_batchsize = batchsize
+    
+    # Loop until all the ids are processed.  We want to process as
+    # many as possible with each request.  Unfortunately, errors can
+    # occur.  Some id may be incorrect, or the server may be
+    # unresponsive.  In addition, one broken id out of a list of id's
+    # can cause a non-specific error.  Thus, the strategy I'm going to
+    # take, is to start by downloading as many as I can.  If the
+    # request fails, I'm going to half the number of records I try to
+    # get.  If there's only one more record, then I'll report it as
+    # broken and move on.  If the request succeeds, I'll double the
+    # number of records until I get back up to the batchsize.
+    while ids:
+        id_str = ','.join(ids[:current_batchsize])
+
+        # Make sure enough time has passed before I do another query.
+        timer.wait()
+        try:
+            # Query PubMed.  If one or more of the id's are broken,
+            # this will raise an IOError.
+            handle = NCBI.pmfetch(
+                db='PubMed', id=id_str, report='medlars', mode='text')
+        except IOError:   # Query did not work.
+            if current_batchsize == 1:
+                # There was only 1 id in the query.  Report it as
+                # broken and move on.
+                id = ids.pop(0)
+                if broken_fn is not None:
+                    broken_fn(id)
+            else:
+                # I don't know which one is broken.  Try again with
+                # fewer id's.
+                current_batchsize = current_batchsize / 2
+            continue
+
+        results = handle.read()
+        
+        # I'm going to check to make sure PubMed returned the same
+        # number of id's as I requested.  If it didn't then I'm going
+        # to raise an exception.  This could take a lot of memory if
+        # the batchsize is large.
+        iter = Medline.Iterator(File.StringHandle(results))
+        num_ids = 0
+        while 1:
+            if iter.next() is None:
+                break
+            num_ids += 1
+        if num_ids != current_batchsize and num_ids != len(ids):
+            raise SyntaxError, "I requested %d id's from PubMed but found %d" \
+                  % (current_batchsize, num_ids)
+
+        # Iterate through the results and pass the records to the
+        # callback.
+        iter = Medline.Iterator(File.StringHandle(results), parser)
+        while 1:
+            rec = iter.next()
+            if rec is None:
+                break
+            callback_fn(ids[idnum], rec)
+
+        ids = ids[current_batchsize:]
+
+        # If I'm not downloading the maximum number of articles,
+        # double the number for next time.
+        if current_batchsize < batchsize:
+            current_batchsize = current_batchsize * 2
+            if current_batchsize > batchsize:
+                current_batchsize = batchsize
