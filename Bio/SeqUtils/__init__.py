@@ -26,10 +26,9 @@ _after = ''.join(IUPACData.ambiguous_dna_complement.values())
 _ttable = maketrans(_before, _after)
 
 def complement(seq):
-    '''returns the complementary sequence (NOT antiparallel)
-    much faster on long sequences than the previous loop based one.
-    provided by Michael Palmer, University of Waterloo
-    '''
+    '''returns the complementary sequence (NOT antiparallel)'''
+    #Much faster on really long sequences than the previous loop based one.
+    #thx to Michael Palmer, University of Waterloo
     return seq.translate(_ttable)
 
 def reverse(seq):
