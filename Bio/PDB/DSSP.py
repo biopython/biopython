@@ -115,6 +115,9 @@ class DSSP:
         """
         return len(self.res_list)
 
+    def has_key(self, item):
+        return self.map.has_key(res)
+
     def get_keys(self):
         """
         Return the list of residues.
