@@ -231,11 +231,17 @@ martel_packages = ['Martel']
 # a flag to determine if we should install Martel
 INSTALL_MARTEL = 1
 
+# BioSQL -- for interacting with relational databases
+biosql_packages = ['BioSQL']
+INSTALL_BIOSQL = 0
+
 # -- setup the packages list
 all_packages = biopython_packages
 # only install Martel if we have the flag set 
 if INSTALL_MARTEL:
     all_packages.extend(martel_packages)
+if INSTALL_BIOSQL:
+    all_packages.extend(biosql_packages)
 
 setup(name='biopython', 
       version='1.00a4',
