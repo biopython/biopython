@@ -1,0 +1,810 @@
+>>1
+LOCUSID: 1
+LOCUS_CONFIRMED: yes
+LOCUS_TYPE: gene with protein product, function known or inferred
+ORGANISM: Homo sapiens
+STATUS: REVIEWED
+NM: NM_130786|21071029|na
+NP: NP_570602|21071030
+CDD: Immunoglobulin C-2 Type|smart00408|104|na|4.466900e+01
+PRODUCT: alpha 1B-glycoprotein
+ASSEMBLY: AF414429,AK055885,AK056201
+CONTIG: NT_011104.11|20544099|na|1555258|1566315|+|19
+EVID: supported by alignment with mRNA
+XM: XM_058938|20544041|na
+XP: XP_058938|17482319|na
+CDD: Immunoglobulin C-2 Type|smart00408|104|6.130e-06|44.669
+ACCNUM: AC010642|9929687|na|43581|41119
+TYPE: g
+ACCNUM: AA484435|2213248|na|na|na
+TYPE: m
+ACCNUM: AF414429|15778555|na|na|na
+TYPE: m
+PROT: AAL07469|15778556
+ACCNUM: AI022193|3239546|na|na|na
+TYPE: m
+ACCNUM: AK055885|16550723|na|na|na
+TYPE: m
+ACCNUM: AK056201|16551539|na|na|na
+TYPE: m
+ACCNUM: T80683|703568|na|na|na
+TYPE: m
+ACCNUM: W25099|1302954|na|na|na
+TYPE: m
+OFFICIAL_SYMBOL: A1BG
+OFFICIAL_GENE_NAME: alpha-1-B glycoprotein
+ALIAS_SYMBOL: A1B
+ALIAS_SYMBOL: ABG
+ALIAS_SYMBOL: GAB
+PREFERRED_PRODUCT: alpha 1B-glycoprotein
+SUMMARY: Summary: The protein encoded by this gene is a plasma glycoprotein of unknown function. The protein shows sequence similarity to the variable regions of some immunoglobulin supergene family member proteins.
+CHR: 19
+STS: RH65092|-|10673|na|na|epcr
+STS: WI-16009|-|52209|na|na|epcr
+STS: G59506|-|136670|na|na|epcr
+COMP: 10090|A1bg|na|na|117586|19|A1BG|ncbi_mgd
+COMP: 10090|A1bg|7|7  cM|117586|19|A1BG|ncbi_mgd
+UNIGENE: Hs.373554
+BUTTON: unigene.gif
+LINK: http://www.ncbi.nlm.nih.gov/UniGene/clust.cgi?ORG=Hs&CID=373554
+OMIM: 138670
+MAP: 19q13.4|RefSeq|C|
+MAPLINK: default_human_gene|A1BG
+BUTTON: snp.gif
+LINK: http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?locusId=1
+BUTTON: homol.gif
+LINK: http://www.ncbi.nlm.nih.gov/HomoloGene/homolquery.cgi?TEXT=1[loc]
+BUTTON: gdb.gif
+LINK: http://gdbwww.gdb.org/gdb-bin/genera/accno?GDB:119638
+BUTTON: ensembl.gif
+LINK: http://www.ensembl.org/Homo_sapiens/contigview?geneid=NM_130786
+BUTTON: ucsc.gif
+LINK: http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg12&position=NM_130786
+DB_DESCR: GeneCards
+DB_LINK: http://bioinformatics.weizmann.ac.il/cards-bin/carddisp?A1BG
+PMID: 8889549,3458201,2591067
+>>2
+LOCUSID: 2
+LOCUS_CONFIRMED: yes
+LOCUS_TYPE: gene with protein product, function known or inferred
+ORGANISM: Homo sapiens
+STATUS: REVIEWED
+NM: NM_000014|6226959|na
+NP: NP_000005|4557225
+CDD: Ependymins|EPEND|86|na|3.773540e+01
+CDD: Alpha-2-macroglobulin family|pfam00207|2501|na|9.679920e+02
+CDD: Alpha-2-macroglobulin family N-terminal region|pfam01835|1889|na|7.322500e+02
+PRODUCT: alpha 2 macroglobulin precursor
+ASSEMBLY: M11313
+CONTIG: NT_009702.9|20554950|na|365512|413776|+|12
+EVID: supported by alignment with mRNA
+XM: XM_006925|18580498|na
+XP: XP_006925|17455493|na
+CDD: Alpha-2-macroglobulin family|pfam00207|2449|0.000e+00|947.962
+CDD: Alpha-2-macroglobulin family N-terminal region|pfam01835|1931|0.000e+00|748.429
+ACCNUM: X68728|450521|na|na|na
+TYPE: g
+PROT: CAA48670|825615
+ACCNUM: Z11711|24760|na|na|na
+TYPE: g
+PROT: CAA77774|24761
+ACCNUM: M11313|177869|na|na|na
+TYPE: m
+PROT: AAA51551|177870
+ACCNUM: M36501|177871|na|na|na
+TYPE: m
+PROT: AAA51552|177872
+OFFICIAL_SYMBOL: A2M
+OFFICIAL_GENE_NAME: alpha-2-macroglobulin
+PREFERRED_PRODUCT: alpha 2 macroglobulin precursor
+SUMMARY: Summary: Alpha-2-macroglobulin is a protease inhibitor and cytokine transporter. It inhibits many proteases, including trypsin, thrombin and collagenase. A2M is implicated in Alzheimer disease (AD) due to its ability to mediate the clearance and degradation of A-beta, the major component of beta-amyloid deposits.
+CHR: 12
+STS: SGC31674|12|40245|na|na|epcr
+STS: RH11157|12|46849|na|na|epcr
+STS: G44356|12|95143|na|seq_map|epcr
+COMP: 10090|A2m|6|6 62.00 cM|11287|12|A2M|ncbi_mgd
+COMP: 10090|A2m|6|6 62.00 cM|11287|12|A2M|ucsc_mgd
+UNIGENE: Hs.74561
+BUTTON: unigene.gif
+LINK: http://www.ncbi.nlm.nih.gov/UniGene/clust.cgi?ORG=Hs&CID=74561
+OMIM: 103950
+MAP: 12p13.3-p12.3|<a href="http://gdbwww.gdb.org/gdb-bin/genera/accno?GDB:119639">HUGO</a>|C|
+MAPLINK: default_human_gene|A2M
+PHENOTYPE: Alzheimer disease, susceptibility to
+PHENOTYPE_ID: 103950
+PHENOTYPE: Emphysema due to alpha-2-macroglobulin deficiency
+PHENOTYPE_ID: 103950
+BUTTON: snp.gif
+LINK: http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?locusId=2
+BUTTON: homol.gif
+LINK: http://www.ncbi.nlm.nih.gov/HomoloGene/homolquery.cgi?TEXT=2[loc]
+BUTTON: gdb.gif
+LINK: http://gdbwww.gdb.org/gdb-bin/genera/accno?GDB:119639
+BUTTON: hgmd.gif
+LINK: http://www.uwcm.ac.uk/uwcm/mg/search/119639.html
+BUTTON: ensembl.gif
+LINK: http://www.ensembl.org/Homo_sapiens/contigview?geneid=NM_000014
+BUTTON: ucsc.gif
+LINK: http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg12&position=NM_000014
+DB_DESCR: GeneCards
+DB_LINK: http://bioinformatics.weizmann.ac.il/cards-bin/carddisp?A2M
+PMID: 11823454,11811950,2581245,2408344,1707161,1370808,1281457
+GRIF: 11811950|Differential binding to ldl receptor related protein
+GRIF: 11823454|distinct binding sites mediate interaction with beta-amyloid peptide and growth factors
+SUMFUNC: Alpha-2-macroglobulin; protease inhibitor, binds/aids in cellular internalization of proteins|Proteome
+GO: molecular function|protein carrier|NR|GO:0008320|Proteome|na
+GO: molecular function|proteinase inhibitor|NR|GO:0004866|Proteome|na
+GO: biological process|intracellular protein traffic|NR|GO:0006886|Proteome|na
+EXTANNOT: organismal role|CNS-specific functions|NR|Proteome|1281457
+EXTANNOT: biochemical function|Inhibitor or repressor|NR|Proteome|1281457
+>>3
+LOCUSID: 3
+LOCUS_CONFIRMED: yes
+LOCUS_TYPE: pseudogene
+ORGANISM: Homo sapiens
+STATUS: REVIEWED
+ACCNUM: M24415|187575|na|177|2881
+TYPE: g
+OFFICIAL_SYMBOL: A2MP
+OFFICIAL_GENE_NAME: alpha-2-macroglobulin pseudogene
+CHR: 12
+MAP: 12p13.3-p12.3|<a href="http://gdbwww.gdb.org/gdb-bin/genera/accno?GDB:128103">HUGO</a>|C|
+MAPLINK: default_human_cyto|A2MP
+BUTTON: gdb.gif
+LINK: http://gdbwww.gdb.org/gdb-bin/genera/accno?GDB:128103
+DB_DESCR: GeneCards
+DB_LINK: http://bioinformatics.weizmann.ac.il/cards-bin/carddisp?A2MP
+PMID: 2478422
+>>8
+LOCUSID: 8
+LOCUS_CONFIRMED: yes
+LOCUS_TYPE: gene with protein product, function known or inferred
+ORGANISM: Homo sapiens
+OFFICIAL_SYMBOL: AA
+OFFICIAL_GENE_NAME: atrophia areata, peripapillary chorioretinal degeneration
+CHR: 11
+OMIM: 108985
+MAP: 11p15|<a href="http://gdbwww.gdb.org/gdb-bin/genera/accno?GDB:568984">HUGO</a>|C|
+MAPLINK: default_human_cyto|AA
+PHENOTYPE: Atrophia areata
+PHENOTYPE_ID: 108985
+BUTTON: gdb.gif
+LINK: http://gdbwww.gdb.org/gdb-bin/genera/accno?GDB:568984
+DB_DESCR: GeneCards
+DB_LINK: http://bioinformatics.weizmann.ac.il/cards-bin/carddisp?AA
+PMID: 7795606
+>>9
+LOCUSID: 9
+LOCUS_CONFIRMED: yes
+LOCUS_TYPE: gene with protein product, function known or inferred
+ORGANISM: Homo sapiens
+STATUS: PROVISIONAL
+NM: NM_000662|21361196|na
+NP: NP_000653|4505335
+CDD: N-acetyltransferase|pfam00797|1030|na|4.056250e+02
+PRODUCT: N-acetyltransferase 1
+ASSEMBLY: BC013732
+CONTIG: NT_030737.3|20541522|na|1907807|1921012|+|8
+EVID: supported by alignment with mRNA
+XM: NM_000662|21361196|na
+XP: NP_000653|4505335|na
+ACCNUM: AF008204|2618821|na|na|na
+TYPE: g
+PROT: AAB84384|2258431
+ACCNUM: AF032677|2641552|na|na|na
+TYPE: g
+PROT: AAB86878|2641553
+ACCNUM: AF032678|2641554|na|na|na
+TYPE: g
+PROT: AAB86879|2641555
+ACCNUM: AF067408|3265061|na|na|na
+TYPE: g
+PROT: AAC24707|3265062
+ACCNUM: AF071552|3265151|na|na|na
+TYPE: g
+PROT: AAC24712|3265152
+ACCNUM: AF082903|3435297|na|na|na
+TYPE: g
+PROT: AAD13343|3435298
+ACCNUM: AF082904|3435299|na|na|na
+TYPE: g
+PROT: AAC32388|3435300
+ACCNUM: U80835|2245375|na|na|na
+TYPE: g
+PROT: AAB62398|2245376
+ACCNUM: X17059|34993|na|na|na
+TYPE: g
+PROT: CAA34905|34994
+ACCNUM: BC013732|16975545|na|na|na
+TYPE: m
+PROT: AAH13732|16975546
+ACCNUM: D90041|219413|na|na|na
+TYPE: m
+PROT: BAA14095|219414
+OFFICIAL_SYMBOL: NAT1
+OFFICIAL_GENE_NAME: N-acetyltransferase 1 (arylamine N-acetyltransferase)
+ALIAS_SYMBOL: AAC1
+PREFERRED_PRODUCT: N-acetyltransferase 1
+CHR: 8
+STS: STS-D90041|8|57372|na|seq_map|epcr
+STS: RH70671|8|63787|na|seq_map|epcr
+COMP: 10090|Nat1|8|8 31.00 cM|17960|8|NAT1|ncbi_mgd
+COMP: 10090|Nat1|8|8 31.00 cM|17960|8|NAT1|ucsc_mgd
+COMP: 10090|U35886|8|8 14135.38 cR|17961|8|AW390667|natgen_paper
+ALIAS_PROT: arylamine N-acetyltransferase-1
+ALIAS_PROT: arylamide acetylase 1 (N-acetyltransferase 1)
+UNIGENE: Hs.155956
+BUTTON: unigene.gif
+LINK: http://www.ncbi.nlm.nih.gov/UniGene/clust.cgi?ORG=Hs&CID=155956
+OMIM: 108345
+ECNUM: 2.3.1.5
+MAP: 8p23.1-p21.3|<a href="http://gdbwww.gdb.org/gdb-bin/genera/accno?GDB:125364">HUGO</a>|C|
+MAPLINK: default_human_gene|NAT1
+BUTTON: snp.gif
+LINK: http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?locusId=9
+BUTTON: homol.gif
+LINK: http://www.ncbi.nlm.nih.gov/HomoloGene/homolquery.cgi?TEXT=9[loc]
+BUTTON: gdb.gif
+LINK: http://gdbwww.gdb.org/gdb-bin/genera/accno?GDB:125364
+BUTTON: ensembl.gif
+LINK: http://www.ensembl.org/Homo_sapiens/contigview?geneid=NM_000662
+BUTTON: ucsc.gif
+LINK: http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg12&position=NM_000662
+DB_DESCR: GeneCards
+DB_LINK: http://bioinformatics.weizmann.ac.il/cards-bin/carddisp?NAT1
+DB_DESCR: Arylamine N-Acetyltransferase Nomenclature
+DB_LINK: http://www.louisville.edu/medschool/pharmacology/NAT.html
+PMID: 11955677,11955676,10908296,10862520,9168895,7773298,2340091
+GRIF: 11955676|paclitaxel is an uncompetitive inhibitor to arylamine N-acetyltransferase (NAT) enzyme
+GRIF: 11955677|paclitaxel affected human leukemia HL-60 cells arylamine N-acetyltransferase (NAT) activity and DNA-2-aminofluorene adduct formation.
+SUMFUNC: Arylamine N-acetyltransferase 1; N- or O-acetylates arylamines and heterocyclic amines, detoxifies carcinogens and xenobiotics|Proteome
+GO: molecular function|arylamine N-acetyltransferase|E|GO:0004060|Proteome|10908296
+EXTANNOT: cellular role|Other metabolism|E|Proteome|10908296
+EXTANNOT: biochemical function|Transferase|E|Proteome|10908296
+>>10
+LOCUSID: 10
+LOCUS_CONFIRMED: yes
+LOCUS_TYPE: gene with protein product, function known or inferred
+ORGANISM: Homo sapiens
+STATUS: REVIEWED
+NM: NM_000015|4557782|na
+NP: NP_000006|4557783
+CDD: N-acetyltransferase|pfam00797|838|na|3.274050e+02
+PRODUCT: arylamide acetylase 2
+ASSEMBLY: D90042
+CONTIG: NT_030737.3|20541522|na|2088970|2098897|+|8
+EVID: supported by alignment with mRNA
+XM: NM_000015|4557782|na
+XP: NP_000006|4557783|na
+ACCNUM: AF042740|2801806|na|na|na
+TYPE: g
+PROT: AAC03773|2801807
+ACCNUM: AF055874|3063613|na|na|na
+TYPE: g
+PROT: AAC14117|3063614
+ACCNUM: AF055875|3063615|na|na|na
+TYPE: g
+PROT: AAC14118|3063616
+ACCNUM: D10870|219871|na|na|na
+TYPE: g
+PROT: BAA01640|219872
+ACCNUM: D10871|219874|na|na|na
+TYPE: g
+PROT: BAA01641|219875
+ACCNUM: D10872|219877|na|na|na
+TYPE: g
+PROT: BAA01642|219878
+ACCNUM: M75163|189075|na|na|na
+TYPE: g
+PROT: AAA59906|553602
+ACCNUM: M75164|189072|na|na|na
+TYPE: g
+PROT: AAA59905|553601
+ACCNUM: U23052|747646|na|na|na
+TYPE: g
+PROT: AAA64584|727413
+ACCNUM: U23434|727456|na|na|na
+TYPE: g
+PROT: AAA64585|727457
+ACCNUM: U53473|1297331|na|na|na
+TYPE: g
+PROT: AAA98976|1297332
+ACCNUM: X14672|28227|na|na|na
+TYPE: g
+PROT: CAA32802|28228
+ACCNUM: BC015878|16198419|na|na|na
+TYPE: m
+PROT: AAH15878|16198420
+ACCNUM: D90040|219411|na|na|na
+TYPE: m
+PROT: BAA14094|219412
+ACCNUM: D90042|219415|na|na|na
+TYPE: m
+PROT: BAA14096|219416
+OFFICIAL_SYMBOL: NAT2
+OFFICIAL_GENE_NAME: N-acetyltransferase 2 (arylamine N-acetyltransferase)
+ALIAS_SYMBOL: AAC2
+PREFERRED_PRODUCT: arylamide acetylase 2
+SUMMARY: Summary: The intronless NAT2 gene encodes N-acetyltransferase 2 (arylamine N-acetyltransferase 2). This enzyme functions to both activate and deactivate arylamine and hydrazine drugs and carcinogens. Polymorphisms in this gene are reponsible for the N-acetylation polymorphism in which human populations segregate into rapid,intermediate, and slow acetylator phenotypes. Polymorphisms in NAT2 are also associated with higher incidences of cancer and drug toxicity.A second arylamine N-acetyltransferase gene (NAT1) is located near NAT2.
+CHR: 8
+STS: G06461|8|17088|na|seq_map|epcr
+STS: WIAF-2120|8|44576|na|seq_map|epcr
+STS: G59899|8|137181|na|seq_map|epcr
+STS: GDB:187676|8|155563|na|seq_map|epcr
+STS: GDB:310612|8|156422|na|seq_map|epcr
+STS: GDB:310613|8|156423|na|seq_map|epcr
+STS: GDB:386004|8|157141|na|seq_map|epcr
+COMP: 10090|Nat2|8|8 31.00 cM|17961|8|NAT2|ncbi_mgd
+COMP: 10090|Nat2|8|8 31.00 cM|17961|8|NAT2|ucsc_mgd
+ALIAS_PROT: Arylamine N-acetyltransferase-2
+ALIAS_PROT: arylamide acetylase 2 (N-acetyltransferase 2, isoniazid inactivation)
+UNIGENE: Hs.2
+BUTTON: unigene.gif
+LINK: http://www.ncbi.nlm.nih.gov/UniGene/clust.cgi?ORG=Hs&CID=2
+OMIM: 243400
+ECNUM: 2.3.1.5
+MAP: 8p22|<a href="http://gdbwww.gdb.org/gdb-bin/genera/accno?GDB:125365">HUGO</a>|C|
+MAPLINK: default_human_gene|NAT2
+BUTTON: snp.gif
+LINK: http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?locusId=10
+BUTTON: homol.gif
+LINK: http://www.ncbi.nlm.nih.gov/HomoloGene/homolquery.cgi?TEXT=10[loc]
+BUTTON: gdb.gif
+LINK: http://gdbwww.gdb.org/gdb-bin/genera/accno?GDB:125365
+BUTTON: ensembl.gif
+LINK: http://www.ensembl.org/Homo_sapiens/contigview?geneid=NM_000015
+BUTTON: ucsc.gif
+LINK: http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg12&position=NM_000015
+DB_DESCR: GeneCards
+DB_LINK: http://bioinformatics.weizmann.ac.il/cards-bin/carddisp?NAT2
+BUTTON: mgc.gif
+LINK: http://mgc.nci.nih.gov/Genes/GeneInfo?ORG=Hs&CID=2
+DB_DESCR: Arylamine N-Acetyltransferase Nomenclature
+DB_LINK: http://www.louisville.edu/medschool/pharmacology/NAT.html
+PMID: 12016157,11915035,11872636,11846845,8460648,8102597,7915226,7773298,2734109,2340091,1968463,1676262,1381364,1306121
+GRIF: 11846845|Association between bone loss in periodontal disease and polymorphism of N-acetyltransferase (NAT2)
+GRIF: 11915035|Polymorphism of the N-acetyltransferase 2 gene as a susceptibility risk factor for antituberculosis drug-induced hepatitis.
+GRIF: 12016157|urinary excretion of N(2)-(beta-1-glucos-iduronyl)-2-hydroxyamino-1-methyl-6-phenylimidazo[4,5-b]pyridine relationship to activity levels of NAT2
+GRIF: 11872636|we investigated the relationship between the levels of aromatic DNA adducts in breast tissues and polymorphisms of the drug-metabolizing genes CYP1A1, NAT2, and GSTM1 in 166 women having breast cancer
+SUMFUNC: Arylamine N-acetyltransferase 2; N- or O-acetylates arylamines and heterocyclic amines|Proteome
+GO: molecular function|arylamine N-acetyltransferase|E|GO:0004060|Proteome|2340091
+EXTANNOT: cellular role|Other metabolism|E|Proteome|2340091
+EXTANNOT: biochemical function|Transferase|E|Proteome|2340091
+>>11
+LOCUSID: 11
+LOCUS_CONFIRMED: yes
+LOCUS_TYPE: pseudogene
+ORGANISM: Homo sapiens
+OFFICIAL_SYMBOL: AACP
+OFFICIAL_GENE_NAME: arylamide acetylase pseudogene
+ALIAS_SYMBOL: NATP
+BUTTON: gdb.gif
+LINK: http://gdbwww.gdb.org/gdb-bin/genera/accno?GDB:132838
+DB_DESCR: GeneCards
+DB_LINK: http://bioinformatics.weizmann.ac.il/cards-bin/carddisp?AACP
+PMID: 2340091
+>>12
+LOCUSID: 12
+LOCUS_CONFIRMED: yes
+LOCUS_TYPE: gene with protein product, function known or inferred
+ORGANISM: Homo sapiens
+STATUS: REVIEWED
+NM: NM_001085|9665246|na
+NP: NP_001076|4501843
+CDD: SERine Proteinase INhibitors|SERPIN|950|na|3.744620e+02
+CDD: Serpins (serine protease inhibitors)|pfam00079|932|na|3.674510e+02
+PRODUCT: alpha-1-antichymotrypsin, precursor
+ASSEMBLY: AH002551,K01500
+CONTIG: NT_026437.7|20543860|na|28765484|28777145|+|14
+EVID: supported by alignment with mRNA
+XM: XM_028322|14748211|na
+XP: XP_028322|14748212|na
+CDD: Serpin (S protease inhibitor)|pfam00079|1225|5.273e-136|476.478
+CDD: SERine  Proteinase INhibitors|smart00093|1168|2.146e-129|454.521
+ACCNUM: X00947|28331|na|na|na
+TYPE: g
+PROT: CAA25459|28332
+ACCNUM: X68733|439137|na|na|na
+TYPE: g
+PROT: CAA48671|1340142
+ACCNUM: AF089747|4165889|na|na|na
+TYPE: m
+PROT: AAD08810|4165890
+ACCNUM: BC003559|13097704|na|na|na
+TYPE: m
+PROT: AAH03559|13097705
+ACCNUM: J05176|177932|na|na|na
+TYPE: m
+PROT: AAA51560|177933
+ACCNUM: K01500|177808|na|na|na
+TYPE: m
+PROT: AAA51543|177809
+ACCNUM: M18906|177928|na|na|na
+TYPE: m
+PROT: AAA51559|177931
+OFFICIAL_SYMBOL: SERPINA3
+OFFICIAL_GENE_NAME: serine (or cysteine) proteinase inhibitor, clade A (alpha-1 antiproteinase, antitrypsin), member 3
+ALIAS_SYMBOL: ACT
+ALIAS_SYMBOL: AACT
+PREFERRED_PRODUCT: alpha-1-antichymotrypsin, precursor
+SUMMARY: Summary: The protein encoded by this gene is a plasma protease inhibitor and member of the serine protease inhibitor class.  Polymorphisms in this protein appear to be tissue specific and influence protease targeting.  Variation in this protein's sequence have been implicated in Alzheimer's disease, and deficiency of this protein has been associated with liver disease.  Mutations have been identified in patients with Parkinson disease and chronic obstructive pulmonary disease.
+CHR: 14
+STS: RH1625|14|32177|na|seq_map|epcr
+STS: SHGC-32982|14|37467|na|na|epcr
+STS: D14S845|14|64155|D14S845|seq_map|epcr
+STS: G31126|14|66238|na|seq_map|epcr
+STS: RH78280|14|74665|na|seq_map|epcr
+STS: RH91507|14|86678|na|seq_map|epcr
+STS: D14S1143|-|148321|D14S1143|na|epcr
+COMP: 10090|Pre2|12|12 52.00 cM|109636|14|SERPINA3|ucsc_mgd
+COMP: 10090|X69832|12|12 957.87 cR|20717|14|AV689358|ucsc_est
+COMP: 10090|AI194247|16|16 509.87 cR|16423|14|AW819120|ucsc_est
+ALIAS_PROT: actichymotrypsin
+ALIAS_PROT: alpha-1-antichymotrypsin
+UNIGENE: Hs.234726
+BUTTON: unigene.gif
+LINK: http://www.ncbi.nlm.nih.gov/UniGene/clust.cgi?ORG=Hs&CID=234726
+OMIM: 107280
+MAP: 14q32.1|<a href="http://gdbwww.gdb.org/gdb-bin/genera/accno?GDB:118955">HUGO</a>|C|
+MAPLINK: default_human_gene|SERPINA3
+PHENOTYPE: Alpha-1-antichymotrypsin deficiency
+PHENOTYPE_ID: 107280
+PHENOTYPE: Cerebrovascular disease, occlusive
+PHENOTYPE_ID: 107280
+BUTTON: snp.gif
+LINK: http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?locusId=12
+BUTTON: homol.gif
+LINK: http://www.ncbi.nlm.nih.gov/HomoloGene/homolquery.cgi?TEXT=12[loc]
+BUTTON: gdb.gif
+LINK: http://gdbwww.gdb.org/gdb-bin/genera/accno?GDB:118955
+BUTTON: ensembl.gif
+LINK: http://www.ensembl.org/Homo_sapiens/contigview?geneid=NM_001085
+BUTTON: ucsc.gif
+LINK: http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg12&position=NM_001085
+DB_DESCR: GeneCards
+DB_LINK: http://bioinformatics.weizmann.ac.il/cards-bin/carddisp?SERPINA3
+BUTTON: mgc.gif
+LINK: http://mgc.nci.nih.gov/Genes/GeneInfo?ORG=Hs&CID=234726
+PMID: 11959399,11798857,9880565,8244391,6687683,6606438,6556193,6547997,3492865,3485824,3260956,3257719,2404007,1351206
+GRIF: 11959399|significantly higher in plasma of Alzheimer patients compared to controls
+GRIF: 11798857|A25G and G39A substitutions in the AACT gene are probably one of the risk factors to Alzheimer's disease (AD) in Han Chinese.
+SUMFUNC: Alpha-1-antichymotrypsin; member of the serpin family of serine protease inhibitors|Proteome
+GO: molecular function|plasma protein|NR|GO:0005209|Proteome|na
+GO: biological process|acute-phase response|NR|GO:0006953|Proteome|na
+GO: molecular function|proteinase inhibitor|NR|GO:0004866|Proteome|na
+GO: molecular function|serine protease inhibitor|E|GO:0004867|Proteome|2404007
+EXTANNOT: biochemical function|Inhibitor or repressor|NR|Proteome|2404007
+>>13
+LOCUSID: 13
+LOCUS_CONFIRMED: yes
+LOCUS_TYPE: gene with protein product, function known or inferred
+ORGANISM: Homo sapiens
+STATUS: REVIEWED
+NM: NM_001086|4557226|na
+NP: NP_001077|4557227
+CDD: Carboxylesterases|pfam00135|154|na|6.439850e+01
+PRODUCT: arylacetamide deacetylase
+ASSEMBLY: L32179
+CONTIG: NT_005849.11|20537660|na|726090|740503|+|3
+EVID: supported by alignment with mRNA
+XM: XM_003002|12729778|na
+XP: XP_003002|11433103|na
+CDD: Carboxylesterase|pfam00135|137|7.185e-10|57.381
+ACCNUM: L32179|537513|na|na|na
+TYPE: m
+PROT: AAA35551|537514
+OFFICIAL_SYMBOL: AADAC
+OFFICIAL_GENE_NAME: arylacetamide deacetylase (esterase)
+ALIAS_SYMBOL: DAC
+PREFERRED_PRODUCT: arylacetamide deacetylase
+SUMMARY: Summary: Microsomal arylacetamide deacetylase competes against the activity of cytosolic arylamine N-acetyltransferase, which catalyzes one of the initial biotransformation pathways for arylamine and heterocyclic amine carcinogens
+CHR: 3
+STS: STS-L32179|3|13170|na|seq_map|epcr
+STS: D3S4189|-|18863|D3S4189|na|epcr
+STS: RH36344|3|24707|na|seq_map|epcr
+STS: RH124029|-|136046|na|na|epcr
+COMP: 10090|Aadac|3|3  cM|67758|3|AADAC|ncbi_mgd
+COMP: 10090|AI265437|3|3 5067.00 cR|67758|3|AA702448|natgen_paper
+UNIGENE: Hs.587
+BUTTON: unigene.gif
+LINK: http://www.ncbi.nlm.nih.gov/UniGene/clust.cgi?ORG=Hs&CID=587
+OMIM: 600338
+ECNUM: 3.1.1.-
+MAP: 3q21.3-q25.2|RefSeq|C|
+MAPLINK: default_human_gene|AADAC
+BUTTON: snp.gif
+LINK: http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?locusId=13
+BUTTON: homol.gif
+LINK: http://www.ncbi.nlm.nih.gov/HomoloGene/homolquery.cgi?TEXT=13[loc]
+BUTTON: gdb.gif
+LINK: http://gdbwww.gdb.org/gdb-bin/genera/accno?GDB:392587
+BUTTON: ensembl.gif
+LINK: http://www.ensembl.org/Homo_sapiens/contigview?geneid=NM_001086
+BUTTON: ucsc.gif
+LINK: http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg12&position=NM_001086
+DB_DESCR: GeneCards
+DB_LINK: http://bioinformatics.weizmann.ac.il/cards-bin/carddisp?AADAC
+DB_DESCR: KEGG pathway: Butanoate metabolism
+DB_LINK: http://www.genome.ad.jp/dbget-bin/get_pathway?org_name=hsa&mapno=00650
+DB_DESCR: KEGG pathway: 2,4-Dichlorobenzoate degradation
+DB_LINK: http://www.genome.ad.jp/dbget-bin/get_pathway?org_name=hsa&mapno=00623
+DB_DESCR: KEGG pathway: Pentose and glucuronate interconversions
+DB_LINK: http://www.genome.ad.jp/dbget-bin/get_pathway?org_name=hsa&mapno=00040
+PMID: 9299245,8063807
+SUMFUNC: Liver microsomal arylacetamide deacetylase; esterase involved in metabolically activating arylamine carcinogens|Proteome
+GO: molecular function|enzyme|P|GO:0003824|Proteome|8063807
+GO: cellular component|microsome|E|GO:0005792|Proteome|8063807
+EXTANNOT: cellular role|Other metabolism|P|Proteome|8063807
+EXTANNOT: subcellular localization|Microsomal fraction|NR|Proteome|8063807
+>>14
+LOCUSID: 14
+LOCUS_CONFIRMED: yes
+LOCUS_TYPE: gene with protein product, function known or inferred
+ORGANISM: Homo sapiens
+STATUS: REVIEWED
+NM: NM_001087|4557228|na
+NP: NP_001078|4557229
+CDD: WD40 repeats|smart00320|97|na|4.197260e+01
+CDD: WD domain, G-beta repeat|pfam00400|90|na|3.927620e+01
+PRODUCT: angio-associated, migratory cell protein
+ASSEMBLY: M95627
+CONTIG: NT_005403.9|20537925|na|9668494|9674501|+|2
+EVID: supported by alignment with both mRNA and ESTs (3)
+XM: NM_001087|4557228|na
+XP: NP_001078|4557229|na
+ACCNUM: BC020244|18044383|na|na|na
+TYPE: m
+PROT: AAH20244|18044384
+ACCNUM: M95627|870802|na|na|na
+TYPE: m
+PROT: AAA68889|870803
+OFFICIAL_SYMBOL: AAMP
+OFFICIAL_GENE_NAME: angio-associated, migratory cell protein
+PREFERRED_PRODUCT: angio-associated, migratory cell protein
+SUMMARY: Summary: The gene product is an immunoglobulin-type protein. It is found to be expressed strongly in endothelial cells, cytotrophoblasts, and poorly differentiated colon adenocarcinoma cells found in lymphatics. The protein contains a heparin-binding domain and mediates heparin-sensitive cell adhesion.
+CHR: 2
+STS: SGC31591|2|52581|na|seq_map|epcr
+UNIGENE: Hs.83347
+BUTTON: unigene.gif
+LINK: http://www.ncbi.nlm.nih.gov/UniGene/clust.cgi?ORG=Hs&CID=83347
+OMIM: 603488
+MAP: 2q36.1|RefSeq|C|
+MAPLINK: default_human_gene|AAMP
+BUTTON: snp.gif
+LINK: http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?locusId=14
+BUTTON: homol.gif
+LINK: http://www.ncbi.nlm.nih.gov/HomoloGene/homolquery.cgi?TEXT=14[loc]
+BUTTON: gdb.gif
+LINK: http://gdbwww.gdb.org/gdb-bin/genera/accno?GDB:4573993
+BUTTON: ensembl.gif
+LINK: http://www.ensembl.org/Homo_sapiens/contigview?geneid=NM_001087
+BUTTON: ucsc.gif
+LINK: http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg12&position=NM_001087
+DB_DESCR: GeneCards
+DB_LINK: http://bioinformatics.weizmann.ac.il/cards-bin/carddisp?AAMP
+PMID: 7743515
+SUMFUNC: immunoglobulin-type protein; may mediate heparin-sensitive cell adhesion, may act in cell migration|Proteome
+GO: biological process|cell motility|NR|GO:0006928|Proteome|na
+GO: molecular function|heparin binding|P|GO:0008201|Proteome|7743515
+EXTANNOT: organismal role|Cell migration/motility|P|Proteome|7743515
+EXTANNOT: biochemical function|Adhesin/agglutinin|NR|Proteome|7743515
+>>15
+LOCUSID: 15
+LOCUS_CONFIRMED: yes
+LOCUS_TYPE: gene with protein product, function known or inferred
+ORGANISM: Homo sapiens
+STATUS: REVIEWED
+NM: NM_001088|4501844|na
+NP: NP_001079|4501845
+CDD: Acetyltransferase (GNAT) family|pfam00583|149|na|6.245080e+01
+PRODUCT: arylalkylamine N-acetyltransferase
+ASSEMBLY: U40347
+CONTIG: NT_010641.9|20557460|na|163690|166237|+|17
+EVID: supported by alignment with mRNA
+XM: NM_001088|4501844|na
+XP: NP_001079|4501845|na
+ACCNUM: U40391|1389593|na|na|na
+TYPE: g
+PROT: AAC50555|1389594
+ACCNUM: U40347|1389591|na|na|na
+TYPE: m
+PROT: AAC50554|1389592
+OFFICIAL_SYMBOL: AANAT
+OFFICIAL_GENE_NAME: arylalkylamine N-acetyltransferase
+ALIAS_SYMBOL: SNAT
+ALIAS_SYMBOL: AA-NAT
+PREFERRED_PRODUCT: arylalkylamine N-acetyltransferase
+SUMMARY: Summary: Arylalkylamine N-acetyltransferase belongs to the superfamily of acetyltransferases. It is the penultimate enzyme in melatonin synthesis and controls the night/day rhythm in melatonin production in the vertebrate pineal gland. Melatonin is essential for seasonal reproduction, modulates the function of the circadian clock in the suprachiasmatic nucleus, and influences activity and sleep. This enzyme is rapidly inactivated when animals are exposed to light at night. This protein is 80% identical to sheep and rat AA-NAT. Arylalkylamine N-acetyltransferase may contribute a multifactorial genetic diseases such as altered behavior in sleep/wake cycle.
+CHR: 17
+COMP: 10090|Aanat|11|11 70.00 cM|11298|17|AANAT|ncbi_mgd
+ALIAS_PROT: Serotonin N-acetyltransferase
+ALIAS_PROT: serotonin N-acetyltransferase
+UNIGENE: Hs.152972
+BUTTON: unigene.gif
+LINK: http://www.ncbi.nlm.nih.gov/UniGene/clust.cgi?ORG=Hs&CID=152972
+OMIM: 600950
+ECNUM: 2.3.1.87
+MAP: 17q25|RefSeq|C|
+MAPLINK: default_human_gene|AANAT
+BUTTON: snp.gif
+LINK: http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?locusId=15
+BUTTON: homol.gif
+LINK: http://www.ncbi.nlm.nih.gov/HomoloGene/homolquery.cgi?TEXT=15[loc]
+BUTTON: gdb.gif
+LINK: http://gdbwww.gdb.org/gdb-bin/genera/accno?GDB:700076
+BUTTON: ensembl.gif
+LINK: http://www.ensembl.org/Homo_sapiens/contigview?geneid=NM_001088
+BUTTON: ucsc.gif
+LINK: http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg12&position=NM_001088
+DB_DESCR: GeneCards
+DB_LINK: http://bioinformatics.weizmann.ac.il/cards-bin/carddisp?AANAT
+DB_DESCR: KEGG pathway: Tryptophan metabolism
+DB_LINK: http://www.genome.ad.jp/dbget-bin/get_pathway?org_name=hsa&mapno=00380
+PMID: 9238858,8661026,7502081,2181999
+SUMFUNC: Serotonin N-acetyltransferase (arylalkylamine N-acetyltransferase); melatonin synthesis, may regulate serotonin-dependent effects on human behavior and pituitary function|Proteome
+GO: biological process|circadian rhythm|P|GO:0007623|Proteome|8661026
+GO: molecular function|arylalkylamine N-acetyltransferase|P|GO:0004059|Proteome|8661026
+EXTANNOT: cellular role|Other metabolism|NR|Proteome|8661026
+EXTANNOT: biochemical function|Transferase|NR|Proteome|8661026
+EXTANNOT: organismal role|Biological rhythm|P|Proteome|8661026
+>>16
+LOCUSID: 16
+LOCUS_CONFIRMED: yes
+LOCUS_TYPE: gene with protein product, function known or inferred
+ORGANISM: Homo sapiens
+STATUS: REVIEWED
+NM: NM_001605|4501840|na
+NP: NP_001596|4501841
+CDD: DHHA1 domain|pfam02272|153|na|6.400890e+01
+CDD: tRNA synthetases class II (A)|pfam01411|2830|na|1.106770e+03
+PRODUCT: alanyl-tRNA synthetase
+ASSEMBLY: D32050
+CONTIG: NT_010478.9|20561873|na|3372239|3409467|-|16
+EVID: supported by alignment with both mRNA and ESTs (17)
+XM: NM_001605|4501840|na
+XP: NP_001596|4501841|na
+ACCNUM: BC011451|15079237|na|na|na
+TYPE: m
+PROT: AAH11451|15079238
+ACCNUM: D16969|598562|na|na|na
+TYPE: m
+ACCNUM: D32050|1015320|na|na|na
+TYPE: m
+PROT: BAA06808|1015321
+OFFICIAL_SYMBOL: AARS
+OFFICIAL_GENE_NAME: alanyl-tRNA synthetase
+PREFERRED_PRODUCT: alanyl-tRNA synthetase
+SUMMARY: Summary: The human alanyl-tRNA synthetase (AARS) belongs to a family of tRNA synthases, of the class II enzymes.  Class II tRNA synthases evolved early in evolution and are highly conserved.  This is reflected by the fact that 498 of the 968-residue polypeptide human AARS shares 41% identity witht the E.coli protein.  tRNA synthases are the enzymes that interpret the RNA code and attach specific aminoacids to the tRNAs that contain the cognate trinucleotide anticodons.  They consist of a catalytic domain which interacts with the amino acid acceptor-T psi C helix of the tRNA, and a second domain which interacts with the rest of the tRNA structure.
+CHR: 16
+STS: RH66606|16|19748|na|na|epcr
+STS: A002L29|16|35285|na|seq_map|epcr
+STS: RH65736|16|75263|na|seq_map|epcr
+COMP: 10090|Aanat|11|11 70.00 cM|11298|16|AARS|ucsc_mgd
+UNIGENE: Hs.75102
+BUTTON: unigene.gif
+LINK: http://www.ncbi.nlm.nih.gov/UniGene/clust.cgi?ORG=Hs&CID=75102
+OMIM: 601065
+ECNUM: 6.1.1.7
+MAP: 16q22|<a href="http://gdbwww.gdb.org/gdb-bin/genera/accno?GDB:595485">HUGO</a>|C|
+MAPLINK: default_human_gene|AARS
+BUTTON: snp.gif
+LINK: http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?locusId=16
+BUTTON: homol.gif
+LINK: http://www.ncbi.nlm.nih.gov/HomoloGene/homolquery.cgi?TEXT=16[loc]
+BUTTON: gdb.gif
+LINK: http://gdbwww.gdb.org/gdb-bin/genera/accno?GDB:595485
+BUTTON: ensembl.gif
+LINK: http://www.ensembl.org/Homo_sapiens/contigview?geneid=NM_001605
+BUTTON: ucsc.gif
+LINK: http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg12&position=NM_001605
+DB_DESCR: GeneCards
+DB_LINK: http://bioinformatics.weizmann.ac.il/cards-bin/carddisp?AARS
+DB_DESCR: KEGG pathway: Aminoacyl-tRNA biosynthesis
+DB_LINK: http://www.genome.ad.jp/dbget-bin/get_pathway?org_name=hsa&mapno=00970
+DB_DESCR: KEGG pathway: Alanine and aspartate metabolism
+DB_LINK: http://www.genome.ad.jp/dbget-bin/get_pathway?org_name=hsa&mapno=00252
+PMID: 8595897,7761427,7654687,2915692
+SUMFUNC: Alanyl-tRNA synthetase; aminoacylates its cognate tRNA with alanine for protein biosynthesis|Proteome
+GO: cellular component|cytoplasm|P|GO:0005737|Proteome|7654687
+GO: molecular function|tRNA binding|E|GO:0000049|Proteome|7654687
+GO: biological process|tRNA processing|E|GO:0008033|Proteome|7654687
+GO: cellular component|soluble fraction|P|GO:0005625|Proteome|7654687
+GO: biological process|alanyl-tRNA biosynthesis|P|GO:0006419|Proteome|7761427
+EXTANNOT: biochemical function|Ligase|E|Proteome|7654687
+EXTANNOT: molecular localization|Soluble|P|Proteome|7654687
+EXTANNOT: cellular role|Protein synthesis|E|Proteome|7654687
+EXTANNOT: biochemical function|tRNA synthetase|E|Proteome|7654687
+EXTANNOT: subcellular localization|Cytoplasmic|P|Proteome|7654687
+EXTANNOT: biochemical function|RNA-binding protein|P|Proteome|7654687
+EXTANNOT: cellular role|RNA processing/modification|E|Proteome|7654687
+>>17
+LOCUSID: 17
+LOCUS_CONFIRMED: yes
+LOCUS_TYPE: region
+ORGANISM: Homo sapiens
+ACCNUM: S51329|261958|na|na|na
+TYPE: g
+OFFICIAL_SYMBOL: AAVS1
+OFFICIAL_GENE_NAME: adeno-associated virus integration site 1
+ALIAS_SYMBOL: AAV
+CHR: 19
+OMIM: 102699
+MAP: 19q13|<a href="http://gdbwww.gdb.org/gdb-bin/genera/accno?GDB:125369">HUGO</a>|C|19q13-qter|<a href="http://www.ncbi.nlm.nih.gov/entrez/dispomim.cgi?id=102699">OMIM</a>|C|
+MAPLINK: default_human_cyto|AAVS1
+BUTTON: gdb.gif
+LINK: http://gdbwww.gdb.org/gdb-bin/genera/accno?GDB:125369
+DB_DESCR: GeneCards
+DB_LINK: http://bioinformatics.weizmann.ac.il/cards-bin/carddisp?AAVS1
+PMID: 1334463
+>>18
+LOCUSID: 18
+LOCUS_CONFIRMED: yes
+LOCUS_TYPE: gene with protein product, function known or inferred
+ORGANISM: Homo sapiens
+STATUS: REVIEWED
+NM: NM_000663|4501846|na
+NP: NP_000654|4501847
+CDD: Aminotransferases class-III pyridoxal-phosphate|pfam00202|1219|na|4.792450e+02
+PRODUCT: 4-aminobutyrate aminotransferase precursor
+ASSEMBLY: L32961
+CONTIG: NT_031905.2|20562650|na|77831|184772|+|16
+EVID: supported by alignment with both mRNA and ESTs (6)
+XM: XM_007904|17487485|na
+XP: XP_007904|17487486|na
+CDD: Aminotransferase class-III|pfam00202|1019|4.925e-112|397.127
+ACCNUM: BC015628|15990486|na|na|na
+TYPE: m
+PROT: AAH15628|15990487
+ACCNUM: L32961|602704|na|na|na
+TYPE: m
+PROT: AAA74449|602705
+ACCNUM: S75578|914103|na|na|na
+TYPE: m
+PROT: AAD14176|4261876
+ACCNUM: U80226|1724132|na|na|na
+TYPE: m
+PROT: AAB38510|1724133
+OFFICIAL_SYMBOL: ABAT
+OFFICIAL_GENE_NAME: 4-aminobutyrate aminotransferase
+ALIAS_SYMBOL: GABAT
+PREFERRED_PRODUCT: 4-aminobutyrate aminotransferase precursor
+SUMMARY: Summary: 4-aminobutyrate aminotransferase (ABAT) is responsible for catabolism of gamma-aminobutyric acid (GABA), an important, mostly inhibitory neurotransmitter in the central nervous system, into succinic semialdehyde. The active enzyme is a homodimer of 50-kD subunits complexed to pyridoxal-5-phosphate. ABAT cDNA encodes a 500-amino acid protein that is over 95% similar to the pig protein. GABA is estimated to be present in nearly one-third of human synapses.  ABAT in liver and brain is controlled by 2 codominant alleles with a frequency in a Caucasian population of 0.56 and 0.44. The ABAT deficiency phenotype includes psychomotor retardation, hypotonia, hyperreflexia, lethargy, refractory seizures, and EEG abnormalities.
+CHR: 16
+STS: RH69040|16|75760|na|seq_map|epcr
+ALIAS_PROT: GABA transferase
+UNIGENE: Hs.1588
+BUTTON: unigene.gif
+LINK: http://www.ncbi.nlm.nih.gov/UniGene/clust.cgi?ORG=Hs&CID=1588
+OMIM: 137150
+ECNUM: 2.6.1.19
+MAP: 16p13.3|RefSeq|C|
+MAPLINK: default_human_gene|ABAT
+PHENOTYPE: GABA-transaminase deficiency
+PHENOTYPE_ID: 137150
+BUTTON: snp.gif
+LINK: http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?locusId=18
+BUTTON: homol.gif
+LINK: http://www.ncbi.nlm.nih.gov/HomoloGene/homolquery.cgi?TEXT=18[loc]
+BUTTON: gdb.gif
+LINK: http://gdbwww.gdb.org/gdb-bin/genera/accno?GDB:581658
+BUTTON: ensembl.gif
+LINK: http://www.ensembl.org/Homo_sapiens/contigview?geneid=NM_000663
+BUTTON: ucsc.gif
+LINK: http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg12&position=NM_000663
+DB_DESCR: Mitochondrion Database (MitoDat)
+DB_LINK: http://tango01.cit.nih.gov/mitodat/search.taf?_function=list&locusid=18
+DB_DESCR: GeneCards
+DB_LINK: http://bioinformatics.weizmann.ac.il/cards-bin/carddisp?ABAT
+DB_DESCR: KEGG pathway: Butanoate metabolism
+DB_LINK: http://www.genome.ad.jp/dbget-bin/get_pathway?org_name=hsa&mapno=00650
+DB_DESCR: KEGG pathway: Glutamate metabolism
+DB_LINK: http://www.genome.ad.jp/dbget-bin/get_pathway?org_name=hsa&mapno=00251
+DB_DESCR: KEGG pathway: Propanoate metabolism
+DB_LINK: http://www.genome.ad.jp/dbget-bin/get_pathway?org_name=hsa&mapno=00640
+DB_DESCR: KEGG pathway: beta-Alanine metabolism
+DB_LINK: http://www.genome.ad.jp/dbget-bin/get_pathway?org_name=hsa&mapno=00410
+DB_DESCR: KEGG pathway: Alanine and aspartate metabolism
+DB_LINK: http://www.genome.ad.jp/dbget-bin/get_pathway?org_name=hsa&mapno=00252
+PMID: 10407778,7851425,7721088,7305280,6148708
+SUMFUNC: 4-aminobutyrate aminotransferase; catalyzes the transfer of GABA amino groups, specifically transfers an amino group from 4-aminobutyrate (GABA) to alpha-ketoglutarate to form succinate semialdehyde and glutamic acid|Proteome
+EXTANNOT: cellular role|Amino-acid metabolism|E|Proteome|7721088
