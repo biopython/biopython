@@ -86,7 +86,7 @@ print "Testing dictionaries..."
 dict_file = os.path.join(gb_file_dir, 'cor6_6.gb')
 index_file = os.path.join(gb_file_dir, 'cor6_6.idx')
 
-print "Indexing %s to serve as a dictionary..." % dict_file
+print "Indexing file to serve as a dictionary..."
 GenBank.index_file(dict_file, index_file)
 gb_dict = GenBank.Dictionary(index_file, GenBank.FeatureParser())
 
