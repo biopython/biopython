@@ -20,10 +20,14 @@ gb_file_dir = os.path.join(os.getcwd(), 'GenBank')
 
 test_files = ['noref.gb', 'cor6_6.gb', 'iro.gb', 'pri1.gb', 'arab1.gb',
               'protein_refseq.gb', 'extra_keywords.gb']
+test_files += ['one_of.gb', 'NT_019265.gb']
 
 write_format_files = test_files[:]
 # don't test writing on protein_refseq, since it is horribly nasty
 write_format_files.remove("protein_refseq.gb")
+# don't test writing on the CONTIG refseq, because the wrapping of
+# locations won't work exactly
+write_format_files.remove("NT_019265.gb")
 
 files_to_parse = []
 for file in test_files:
@@ -107,7 +111,7 @@ k.sort()
 print "keys:", k
 
 # pick out some keys and make sure we are getting back decent records
-for key in gb_dict.keys()[:3]:
+for key in k[:3]:
     print "Retrieving record with key %s" % key
     cur_seqrecord = gb_dict[key]
     print "description:", cur_seqrecord.description

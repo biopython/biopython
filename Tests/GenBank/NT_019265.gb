@@ -1,0 +1,65 @@
+LOCUS       NT_019265 1250660 bp    DNA             CON       16-OCT-2001
+DEFINITION  Homo sapiens chromosome 1 working draft sequence segment.
+ACCESSION   NT_019265
+VERSION     NT_019265.6  GI:16156830
+KEYWORDS    .
+SOURCE      human.
+  ORGANISM  Homo sapiens
+            Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+            Mammalia; Eutheria; Primates; Catarrhini; Hominidae; Homo.
+REFERENCE   1  (bases 1 to 1250660)
+  AUTHORS   NCBI Annotation Project.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (11-OCT-2001) National Center for Biotechnology
+            Information, NIH, Bethesda, MD 20894, USA
+COMMENT     GENOME ANNOTATION REFSEQ:  NCBI contigs are derived from assembled
+            genomic sequence data. They may include both draft and finished
+            sequence.
+            On Oct 16, 2001 this sequence version replaced gi:15294341.
+            COMPLETENESS: not full length.
+FEATURES             Location/Qualifiers
+     source          1..1250660
+                     /organism="Homo sapiens"
+                     /db_xref="taxon:9606"
+                     /chromosome="1"
+     source          1..3290
+                     /note="Accession AL391218 sequenced by The Sanger Centre"
+                     /organism="Homo sapiens"
+                     /db_xref="taxon:9606"
+                     /clone="RP11-13G5"
+     misc_feature    215902..365470
+                     /standard_name="RP11-242F24"
+                     /note="FISH-mapped clone"
+     variation       217508
+                     /allele="T"
+                     /allele="C"
+                     /db_xref="dbSNP:811400"
+     mRNA            join(342430..342515,363171..363300,365741..365814,
+                     376398..376499,390169..390297,391257..391379,
+                     392606..392679,398230..398419,399082..399167,
+                     399534..399650,405844..405913,406704..406761,
+                     406868..407010,407962..408091,408508..409092)
+                     /gene="FLJ10737"
+                     /product="hypothetical protein FLJ10737"
+                     /transcript_id="XM_057697.1"
+                     /db_xref="LocusID:55735"
+CONTIG      join(AL391218.9:105173..108462,gap(100),
+            complement(AL512330.12:1..182490),
+            complement(AL590128.4:9034..81287),gap(100),
+            AL591163.7:85799..94832,gap(100),AL591163.7:94933..113245,gap(100),
+            AL591163.7:42173..44897,complement(AL590128.4:1..6208),
+            AL591163.7:51307..52779,gap(100),AL591163.7:52880..85698,gap(100),
+            AL591163.7:113346..126143,complement(AL159177.12:184729..186047),
+            AL031447.4:1..112158,complement(AL159177.12:1..72671),
+            complement(AL591866.12:23507..86371),AL031848.11:1..142965,
+            AL031847.17:1..166418,AL035406.25:1..161651,
+            complement(AL356261.20:94599..98345),
+            complement(AC026968.3:54432..54579),gap(100),
+            complement(AC062024.2:98529..107911),gap(100),
+            AC062024.2:7713..11594,gap(100),complement(AL356261.20:1..94498),
+            complement(AL356693.18:19988..70853),gap(100),
+            AL356693.18:17351..19887,gap(100),
+            complement(AL356693.18:3037..17250),gap(100),
+            complement(AL356693.18:1..2936),gap(100),AC026968.3:675..2393,
+            gap(100),AC026968.3:1..574,gap(100),AL356261.20:179029..182233)
+//

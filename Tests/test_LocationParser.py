@@ -54,6 +54,9 @@ test_data = (
     # I'm not sure if we really need to worry about it, but the parser
     # won't handle the ugly thing right now.
     # "J00194:(100..202),1..245,300..422"
+    # one-of syntax
+    "one-of(1888,1901)..2200",
+    "39..one-of(1956,2843)"
     )
 
 # test all of the data using Andrew's parser
