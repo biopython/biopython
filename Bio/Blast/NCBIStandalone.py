@@ -10,8 +10,18 @@ BLAST, either blastall or blastpgp, provided by the NCBI.
 http://www.ncbi.nlm.nih.gov/BLAST/
 
 Classes:
-_Scanner        Scans output from standalone BLAST.
-_HeavyConsumer  Heavyweight consumer.
+BlastallParser           Consumes output from blastall.
+PSIBLASTParser           NotImplementedYet.
+MasterSlaveParser        NotImplementedYet.
+
+_Scanner                 Scans output from standalone BLAST.
+_BlastallConsumer        Consumes output from plain-vanilla blastall.
+_HeaderConsumer          Consumes header information.
+_DescriptionConsumer     Consumes description information.
+_AlignmentConsumer       Consumes alignment information.
+_HSPConsumer             Consumes hsp information.
+_DatabaseReportConsumer  Consumes database report information.
+_ParametersConsumer      Consumes parameters information.
 
 Functions:
 blastall        Execute blastall.
@@ -475,13 +485,13 @@ class _Scanner:
 
         consumer.end_parameters()
 
-class ComprehensiveParser:
+class BlastallParser:
     """Parses BLAST data into a Record.Comprehensive object.
 
     """
     def __init__(self):
         self._scanner = _Scanner()
-        self._consumer = _ComprehensiveConsumer()
+        self._consumer = _BlastallConsumer()
 
     def parse(self, handle):
         self._scanner.feed(handle, self._consumer)
@@ -888,7 +898,7 @@ class _ParametersConsumer:
         pass
     
 
-class _ComprehensiveConsumer(AbstractConsumer,
+class _BlastallConsumer(AbstractConsumer,
                              _HeaderConsumer,
                              _DescriptionConsumer,
                              _AlignmentConsumer,

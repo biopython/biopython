@@ -16,7 +16,7 @@ def scan(file, format):
     from Bio import ParserSupport
     consumer = ParserSupport.TaggingConsumer()
     
-    if format == 'ncbi-standalone':
+    if format == 'ncbi-blastall':
         from Bio.Blast import NCBIStandalone
         scanner = NCBIStandalone._Scanner()
     elif format == 'ncbi-www':
@@ -28,9 +28,9 @@ def scan(file, format):
     scanner.feed(open(file), consumer)
 
 def parse(file, format):
-    if format == 'ncbi-standalone':
+    if format == 'ncbi-blastall':
         from Bio.Blast import NCBIStandalone
-        parser = NCBIStandalone.ComprehensiveParser()
+        parser = NCBIStandalone.BlastallParser()
     elif format == 'ncbi-www':
         from Bio.Blast import NCBIWWW
         sys.stderr.write("The parser for NCBIWWW is not written.  Sorry.\n")
@@ -50,7 +50,7 @@ XXX describe script here
 OPTIONS
     -f FORMAT
         The format of the input file.  FORMAT can be either
-        ncbi-standalone (default) or ncbi-www.
+        ncbi-blastall or ncbi-www (default).
 
     -s
         Only scan the file, printing out the scanned results
@@ -71,7 +71,7 @@ if __name__ == '__main__':
         sys.exit(0)
     file = files[0]
 
-    format = 'ncbi-standalone'
+    format = 'ncbi-www'
     scan_only = 0
     
     for opt, value in options:
