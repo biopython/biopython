@@ -5,15 +5,19 @@ This file contains release notes and general news
 about the biopython project.
 
 
-July 6, 2000
-Biopython 0.90d01 is released.
+Aug 2, 2000: Biopython 0.90d02 is released.
+  Blast updates:
+    - now works with v2.0.14
+    - HSP.identities and HSP.positives now tuples
+    - HSP.gaps added
+  SCOP updates:
+    - Lin.Iterator now works with release 50
+  Starting a tutorial
+  New regression tests for Prodoc
 
+July 6, 2000: Biopython 0.90d01 is released.
 
-
-
-February 8, 2000
-Anonymous CVS made available.
-
+February 8, 2000: Anonymous CVS made available.
 
 
 August 1999
