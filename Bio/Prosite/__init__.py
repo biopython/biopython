@@ -17,6 +17,7 @@ http://www.expasy.ch/prosite/
 Tested with:
 Release 15.0, July 1998
 Release 16.0, July 1999
+Release 17.0, Dec 2001
 
 
 Classes:
@@ -84,6 +85,11 @@ class Record:
     cc_max_repeat  Maximum number of repetitions in a protein
     cc_site        Interesting site.  list of tuples (pattern pos, desc.)
     cc_skip_flag   Can this entry be ignored?
+    cc_matrix_type
+    cc_scaling_db
+    cc_author
+    cc_ft_key
+    cc_ft_desc
 
     DATA BANK REFERENCES - The following are all
                            lists of tuples (swiss-prot accession,
@@ -435,19 +441,20 @@ class _Scanner:
         self._scan_line('PA', uhandle, consumer.pattern, any_number=1)
     
     def _scan_ma(self, uhandle, consumer):
-        # ZN2_CY6_FUNGAL_2, DNAJ_2 in Release 15
-        # contain a CC line buried within an 'MA' line.  Need to check
-        # for that.
-        while 1:
-            if not attempt_read_and_call(uhandle, consumer.matrix, start='MA'):
-                line1 = uhandle.readline()
-                line2 = uhandle.readline()
-                uhandle.saveline(line2)
-                uhandle.saveline(line1)
-                if line1[:2] == 'CC' and line2[:2] == 'MA':
-                    read_and_call(uhandle, consumer.comment, start='CC')
-                else:
-                    break
+        self._scan_line('MA', uhandle, consumer.matrix, any_number=1)
+##        # ZN2_CY6_FUNGAL_2, DNAJ_2 in Release 15
+##        # contain a CC line buried within an 'MA' line.  Need to check
+##        # for that.
+##        while 1:
+##            if not attempt_read_and_call(uhandle, consumer.matrix, start='MA'):
+##                line1 = uhandle.readline()
+##                line2 = uhandle.readline()
+##                uhandle.saveline(line2)
+##                uhandle.saveline(line1)
+##                if line1[:2] == 'CC' and line2[:2] == 'MA':
+##                    read_and_call(uhandle, consumer.comment, start='CC')
+##                else:
+##                    break
     
     def _scan_ru(self, uhandle, consumer):
         self._scan_line('RU', uhandle, consumer.rule, any_number=1)
@@ -483,6 +490,15 @@ class _Scanner:
         _scan_ru,
         _scan_nr,
         _scan_cc,
+
+        # This is a really dirty hack, and should be fixed properly at
+        # some point.  ZN2_CY6_FUNGAL_2, DNAJ_2 in Rel 15 and PS50309
+        # in Rel 17 have lines out of order.  Thus, I have to rescan
+        # these, which decreases performance.
+        _scan_ma,   
+        _scan_nr,
+        _scan_cc,
+
         _scan_dr,
         _scan_3d,
         _scan_do,
@@ -595,6 +611,16 @@ class _RecordConsumer(AbstractConsumer):
                 self.data.cc_site = (int(pos), desc)
             elif qual == '/SKIP-FLAG':
                 self.data.cc_skip_flag = data
+            elif qual == '/MATRIX_TYPE':
+                self.data.cc_matrix_type = data
+            elif qual == '/SCALING_DB':
+                self.data.cc_scaling_db = data
+            elif qual == '/AUTHOR':
+                self.data.cc_author = data
+            elif qual == '/FT_KEY':
+                self.data.cc_ft_key = data
+            elif qual == '/FT_DESC':
+                self.data.cc_ft_desc = data
             else:
                 raise SyntaxError, "Unknown qual %s in comment line\n%s" % \
                       (repr(qual), line)
