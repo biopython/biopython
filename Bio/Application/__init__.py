@@ -89,15 +89,29 @@ class AbstractCommandline:
         for parameter in self.parameters:
             if name in parameter.names:
                 if value is not None:
-                    if parameter.checker_function is not None:
-                        paramater.checker_function(value)
-
+                    self._check_value(value, name, parameter.checker_function)
                     parameter.value = value
                 parameter.is_set = 1
                 set_option = 1
 
         if set_option == 0:
             raise ValueError("Option name %s was not found." % name)
+
+    def _check_value(self, value, name, check_function):
+        """Check whether the given value is valid.
+
+        This uses the passed function 'check_function', which can either
+        return a [0, 1] (bad, good) value or raise an error. Either way
+        this function will raise an error if the value is not valid, or
+        finish silently otherwise.
+        """
+        if check_function is not None:
+            is_good = check_function(value)
+            if is_good in [0, 1]: # if we are dealing with a good/bad check
+                if not(is_good):
+                    raise ValueError(
+                            "Invalid parameter value %r for parameter %s" %
+                            (value, name))
                     
 class _AbstractParameter:
     """A class to hold information about a parameter for a commandline.
@@ -118,7 +132,9 @@ class _AbstractParameter:
     include 'input', 'output', 'file'
 
     o checker_function -- a reference to a function that will determine
-    if a given value is valid for this parameter.
+    if a given value is valid for this parameter. This function can either
+    raise an error when given a bad value, or return a [0, 1] decision on
+    whether the value is correct.
 
     o description -- a description of the option.
 
