@@ -48,7 +48,48 @@ def test3():
             break
         i = i + 1
     assert i == 2, i
-    
+
+def test4():
+    # Make sure the default returns LAX items
+    exp = Martel.Re("(?P<term>(?P<a>a+)(?P<b>b+))+")
+    x = exp.make_iterator("term").iterateString("aabbabaaaabb")
+    term = x.next()
+    assert len(term["a"]) == 1 and term["a"][0] == "aa", term["a"]
+    assert len(term["b"]) == 1 and term["b"][0] == "bb", term["b"]
+    term = x.next()
+    assert len(term["a"]) == 1 and term["a"][0] == "a", term["a"]
+    assert len(term["b"]) == 1 and term["b"][0] == "b", term["b"]
+    term = x.next()
+    assert len(term["a"]) == 1 and term["a"][0] == "aaaa", term["a"]
+    assert len(term["b"]) == 1 and term["b"][0] == "bb", term["b"]
+    term = x.next()
+    assert term is None, "Did not stop correctly"
+
+def test5():
+    # Does 'iter' work?
+    try:
+        iter
+    except NameError:
+        print "Test skipped - missing 'iter' builtin from Python 2.2."
+        return
+    exp = Martel.Re("(?P<term>(?P<a>a+)(?P<b>b+))+")
+    x = exp.make_iterator("term")
+    it = iter(x.iterateString("aabbabaaaabb"))
+    term = it.next()
+    assert len(term["a"]) == 1 and term["a"][0] == "aa", term["a"]
+    assert len(term["b"]) == 1 and term["b"][0] == "bb", term["b"]
+    term = it.next()
+    assert len(term["a"]) == 1 and term["a"][0] == "a", term["a"]
+    assert len(term["b"]) == 1 and term["b"][0] == "b", term["b"]
+    term = it.next()
+    assert len(term["a"]) == 1 and term["a"][0] == "aaaa", term["a"]
+    assert len(term["b"]) == 1 and term["b"][0] == "bb", term["b"]
+    try:
+        it.next()
+        raise AssertionError("Did not stop correctly")
+    except StopIteration:
+        pass
+
     
 def test():
     print "Iteration through all records"
@@ -57,6 +98,10 @@ def test():
     test2()
     print "Test non-record-based parsers"
     test3()
+    print "Test return of LAX objects"
+    test4()
+    print "Test Python 2.2 iterators"
+    test5()
 
 if __name__ == "__main__":
     test()
