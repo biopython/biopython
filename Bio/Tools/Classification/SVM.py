@@ -16,9 +16,10 @@ http://svm.first.gmd.de/
 http://svm.research.bell-labs.com/
 
 Classes:
-SVM               Holds data for a Support Vector Machine.
-SMOTrainer        Trains an SVM using Sequential Minimal Optimization (SMO).
-KeerthiTrainer    Trains an SVM using Keerthi's extensions to SMO.
+SVM                  Holds data for a Support Vector Machine.
+SMOTrainer           Trains an SVM using Sequential Minimal Optimization (SMO).
+KeerthiTrainer       Trains an SVM using Keerthi's extensions to SMO.
+TransductiveTrainer  Trains a transductive SVM.
 
 LinearKernel
 PolynomialKernel
@@ -27,7 +28,9 @@ HyperbolicTangentKernel
 
 
 Functions:
-train             Train a Support Vector Machine on some training data.
+train                Train a Support Vector Machine on some training data.
+trans_transductive
+classify             Use a Support Vector Machine to classify some data.
 
 Usage:
 The 'train' function is provided as a user-friendly interface module.
@@ -175,6 +178,11 @@ class SVM:
         raise AttributeError, x
         
 def classify(svm, x):
+    """classify(svm, x) -> score
+
+    Classify x based on an SVM object.
+
+    """
     sum = 0.0
     for i in range(len(svm.xs)):
         if svm.alphas[i] == 0.0:
