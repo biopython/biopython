@@ -21,12 +21,13 @@ blasturl      Do a BLAST search against the stable blasturl.
 
 """
 import string
-import time
 import re
 import sgmllib
-import urlparse
-import socket
-import cStringIO
+
+try:
+    import cStringIO as StringIO
+except ImportError:
+    import StringIO
 
 from Bio import File
 from Bio.WWW import NCBI
@@ -680,6 +681,9 @@ def blast(program, database, query,
     genetic code
     
     """
+    import time
+    import urlparse
+    
     # NCBI Blast is hard to work with.  The user enters a query, and then
     # it returns a "reference" page which contains a button that the user
     # clicks to retrieve the results.  This will retrieve the "results"
@@ -927,7 +931,7 @@ def blasturl(program, datalib, sequence,
                   ('FILTER', filter),
                   ('HTML', html),
                   ('GCODE', gcode),
-                  ('PATH', path)
+                  ('PATH', path),
                   ]
     for name, value in parameters:
         if value is not None:
@@ -941,7 +945,7 @@ def blasturl(program, datalib, sequence,
 
     message = string.join(lines, '\n')
 
-    outhandle = cStringIO.StringIO()
+    outhandle = StringIO.StringIO()
     _send_to_blasturl(message, outhandle)
     outhandle.seek(0)   # Reset the handle to the beginning.
     return outhandle
@@ -954,6 +958,7 @@ def _send_to_blasturl(query, outhandle):
     The results are written to outhandle.
     
     """
+    import socket
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.connect(('www.ncbi.nlm.nih.gov', 80))
     
@@ -971,3 +976,118 @@ def _send_to_blasturl(query, outhandle):
             break
         outhandle.write(data)
     sock.close()
+
+def qblast(program, database, sequence,
+           ncbi_gi=None, descriptions=None, alignments=None,
+           expect=None, matrix=None,
+           filter=None, format_type=None,
+           ):
+    """Do a BLAST search using the QBLAST server at NCBI.
+    program        BLASTP, BLASTN, BLASTX, TBLASTN, or TBLASTX.
+    database       Which database to search against.
+    sequence       The sequence to search.
+    ncbi_gi        TRUE/FALSE whether to give 'gi' identifier.  Def FALSE.
+    descriptions   Number of descriptions to show.  Def 500.
+    alignments     Number of alignments to show.  Def 500.
+    expect         An expect value cutoff.  Def 10.0.
+    matrix         Specify an alt. matrix (PAM30, PAM70, BLOSUM80, BLOSUM45).
+    filter         "none" turns off filtering.  Default uses 'seg' or 'dust'.
+    format_type    "HTML", "Text", "ASN.1", or "XML".  Def. "HTML".
+
+    This function does no checking of the validity of the parameters
+    and passes the values to the server as is.  More help is available at:
+    http://www.ncbi.nlm.nih.gov/BLAST/blast_overview.html
+
+    """
+    import urllib
+    from Bio.WWW import RequestLimiter
+    
+    parameters = [
+        ('QUERY', sequence),
+        ('PROGRAM', program),
+        ('DATABASE', database),
+        ('EXPECT', expect),
+        ('MATRIX_NAME', matrix),
+        ('FILTER', filter),
+        ('CMD', 'Put'),
+        ]
+    query = [x for x in parameters if x[1] is not None]
+    message = urllib.urlencode(query)
+
+    # Send off the initial query to qblast.
+    handle = _send_to_qblast(message)
+
+    # Format the query now.
+    rid, rtoe = _parse_qblast_ref_page(handle)
+    parameters = [
+        ("RID", rid),
+        ('DESCRIPTIONS', descriptions),
+        ('ALIGNMENTS', alignments),
+        ('NCBI_GI', ncbi_gi),
+        ('FORMAT_TYPE', format_type),
+        ("CMD", "Get"),
+        ]
+    query = [x for x in parameters if x[1] is not None]
+    message = urllib.urlencode(query)
+
+    # Poll NCBI until the results are ready.
+    limiter = RequestLimiter(3)
+    while 1:
+        limiter.wait()
+        handle = _send_to_qblast(message)
+        results = handle.read()
+
+        # XML results don't have the Status tag.
+        if results.find("Status=") < 0:
+            break
+        i = results.index("Status=")
+        j = results.index("\n", i)
+        status = results[i+len("Status="):j].strip()
+        if status.upper() == "READY":
+            break
+
+    results = results.lstrip()
+    return StringIO.StringIO(results)
+
+def _send_to_qblast(query):
+    """Send a BLAST request to the QBLAST server at NCBI.
+    http://www.ncbi.nlm.nih.gov/BLAST/Doc/urlapi.html
+
+    Return a handle to the results.
+    
+    """
+    import socket
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.connect(('www.ncbi.nlm.nih.gov', 80))
+    
+    sock.send('POST /blast/Blast.cgi HTTP/1.0\n')
+    sock.send('User-Agent: BiopythonClient\n')
+    sock.send('Connection: Keep-Alive\n')
+    sock.send('Content-type: application/x-www-form-urlencoded\n')
+    sock.send('Content-Length: %d\n' % len(query))
+    sock.send('\n')
+    sock.send(query)
+
+    handle = StringIO.StringIO()
+    while 1:
+        data = sock.recv(1024)
+        if not data:
+            break
+        handle.write(data)
+    sock.close()
+    
+    handle.seek(0)
+    return handle
+
+def _parse_qblast_ref_page(handle):
+    """Return tuple of RID, RTOE."""
+    s = handle.read()
+    i = s.find("RID =")
+    j = s.find("\n", i)
+    rid = s[i+len("RID ="):j].strip()
+
+    i = s.find("RTOE =")
+    j = s.find("\n", i)
+    rtoe = s[i+len("RTOE ="):j].strip()
+    return rid, int(rtoe)
+    
