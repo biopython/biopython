@@ -99,8 +99,12 @@ class DBObject(RegisterableObject):
         return self._convert_to(data, to_io)
 
     def __getitem__(self, key):
-        return self._get(key)
-
+        try:
+            return self._get(key)
+        except IOError, x:
+            if str(x) == "timed out":
+                raise KeyError, x
+            raise
 
     # THESE FUNCTIONS CAN BE OVERLOADED IN A DERIVED CLASS.
         
