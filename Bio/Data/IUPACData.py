@@ -72,6 +72,25 @@ ambiguous_dna_complement = {
     "N": "N",
     }
 
+ambiguous_rna_complement = {
+    "A": "U",
+    "C": "G",
+    "G": "C",
+    "U": "A",
+    "M": "K",
+    "R": "Y",
+    "W": "W",
+    "S": "S",
+    "Y": "R",
+    "K": "M",
+    "V": "B",
+    "H": "D",
+    "D": "H",
+    "B": "V",
+    "X": "X",
+    "N": "N",
+    }
+
 
 def _make_ranges(dict):
     d = {}

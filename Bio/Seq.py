@@ -1,6 +1,8 @@
 import string, array
 
 import Alphabet
+from Data.IUPACData import ambiguous_dna_complement, ambiguous_rna_complement
+
 
 class Seq:
     def __init__(self, data, alphabet = Alphabet.generic_alphabet):
@@ -61,6 +63,45 @@ class Seq:
     
     def count(self, item):
         return len([x for x in self.data if x == item])
+
+    def complement(self):
+        """Returns the complement sequence.
+        """
+        if seq.alphabet in (IUPAC.ambiguous_dna, IUPAC.unambiguous_dna):
+            d = ambiguous_dna_complement
+        elif seq.alphabet in (IUPAC.ambiguous_rna, IUPAC.unambiguous_rna):
+            d = ambiguous_rna_complement
+        elif 'U' in self.data:
+            d = ambiguous_rna_complement
+        else:
+            d = ambiguous_dna_complement
+        before = ''.join(d.keys())
+        after = ''.join(d.values())
+        ttable = maketrans(before, after)
+        #Much faster on really long sequences than the previous loop based one.
+        #thx to Michael Palmer, University of Waterloo
+        s = self.data.translate(ttable)
+        return Seq(s, self.alphabet)
+
+    def reverse_complement(self):
+        """Returns the reverse complement sequence.
+        """
+        if seq.alphabet in (IUPAC.ambiguous_dna, IUPAC.unambiguous_dna):
+            d = ambiguous_dna_complement
+        elif seq.alphabet in (IUPAC.ambiguous_rna, IUPAC.unambiguous_rna):
+            d = ambiguous_rna_complement
+        elif 'U' in self.data:
+            d = ambiguous_rna_complement
+        else:
+            d = ambiguous_dna_complement
+        before = ''.join(d.keys())
+        after = ''.join(d.values())
+        ttable = maketrans(before, after)
+        #Much faster on really long sequences than the previous loop based one.
+        #thx to Michael Palmer, University of Waterloo
+        s = self.data[-1::-1].translate(ttable)
+        return Seq(s, self.alphabet)
+
 
 class MutableSeq:
     def __init__(self, data, alphabet = Alphabet.generic_alphabet):
@@ -157,6 +198,20 @@ class MutableSeq:
                 return i
         raise ValueError, "MutableSeq.index(x): x not in list"
     def reverse(self):
+        self.data.reverse()
+    def complement(self):
+        if seq.alphabet in (IUPAC.ambiguous_dna, IUPAC.unambiguous_dna):
+            d = ambiguous_dna_complement
+        elif seq.alphabet in (IUPAC.ambiguous_rna, IUPAC.unambiguous_rna):
+            d = ambiguous_rna_complement
+        elif 'U' in self.data:
+            d = ambiguous_rna_complement
+        else:
+            d = ambiguous_dna_complement
+        self.data = map(lambda c: d[c], self.data)
+        self.data = array.array('c', self.data)
+    def reverse_complement(self):
+        self.complement()
         self.data.reverse()
 
     ## Sorting a sequence makes no sense.

@@ -11,7 +11,7 @@ Bio.easy: some functions to ease the use of Biopython
 
 from __future__ import generators # requires Python 2.2
 
-__version__ = "$Revision: 1.3 $"
+__version__ = "$Revision: 1.4 $"
 # $Source: /home/bartek/cvs2bzr/biopython_fastimport/cvs_repo/biopython/Bio/GFF/easy.py,v $
 
 import copy
@@ -568,10 +568,15 @@ def record_coords(record, start, end, strand=0, upper=0):
     subseq = record_sequence(record)[start:end]
     subseq_str = subseq.tostring()
     subseq_str = subseq_str.upper()
+    subseq = Seq(subseq_str, subseq.alphabet)
     if strand == '-' or strand == 1:
-        return Seq(SeqUtils.antiparallel(subseq_str), subseq.alphabet)
+        return subseq.reverse_complement()
     else:
-        return Seq(subseq_str, subseq.alphabet)
+        return subseq
+
+### The following section was replaced by the functions complement,
+### forward_complement in Bio.Seq. The code here can be removed eventually
+### (using deprecation warnings for now).
 
 def forward_complement(seq):
     """
@@ -584,6 +589,10 @@ def forward_complement(seq):
     >>> forward_complement(Seq('aaauuuc'))
     Seq('UUUAAAG', Alphabet())
     """
+    import warnings
+    warnings.warn(
+        "forward_complement in Bio.GFF is deprecated; please use complement in Bio.Seq instead",
+        category=DeprecationWarning)
     return _complement(seq, reverse=0)
 
 def _forward_complement_list_with_table(table, seq):
@@ -625,7 +634,15 @@ def reverse_complement(seq):
     >>> reverse_complement(Seq('aaatttc'))
     Seq('GAAATTT', Alphabet())
     """
+    import warnings
+    warnings.warn(
+        "reverse_complement in Bio.GFF is deprecated; please use reverse_complement in Bio.Seq instead",
+        category=DeprecationWarning)
     return _complement(seq, reverse=1)
+
+###
+### End section to be removed.
+###
 
 class TempFastaWriter(FastaWriter):
     def __init__(self, *args, **keywds):
