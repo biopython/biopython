@@ -21,7 +21,7 @@ class _Scanner:
     """Scans Enzyme data.
 
     Tested with:
-    Release 24
+    Release 33
     """
 
     def feed(self, handle, consumer):
@@ -121,23 +121,49 @@ class _Scanner:
         _scan_terminator
         ]
 class DataRecord:
-	def __init__(self,tr_code='',sw_code=''):
-		self.tr_code = tr_code
-		self.sw_code = sw_code
-
+    def __init__(self,tr_code='',sw_code=''):
+        self.tr_code = tr_code
+        self.sw_code = sw_code
+    
+    def __str__(self):
+        return self.tr_code + ", " + self.sw_code
+        
 class EnzymeRecord:
-	def __init__(self):
-		self.ID = ''
-		self.DE = []
-		self.AN = []
-		self.CA = ''
-		self.CF = []
-		self.CC = []   # one comment per line
-		self.DI = []
-		self.PR = []
-		self.DR = []
-		
-
+    def __init__(self):
+        self.ID = ''
+        self.DE = []
+        self.AN = []
+        self.CA = ''
+        self.CF = []
+        self.CC = []   # one comment per line
+        self.DI = []
+        self.PR = []
+        self.DR = []
+    
+    def __repr__(self):
+        if self.ID:
+            if self.DE:
+                return "%s (%s, %s)" % (self.__class__.__name__, 
+                                        self.ID, self.DE[0])
+            else:
+                return "%s (%s)" % (self.__class__.__name__, 
+                                       self.ID)
+        else:
+            return "%s ( )" % (self.__class__.__name__)
+            
+    def __str__(self):
+        output = "ID: " + self.ID
+        output += " DE: " + repr(self.DE)
+        output += " AN: " + repr(self.AN)
+        output += " CA: '" + self.CA + "'"
+        output += " CF: " + repr(self.CF)
+        output += " CC: " + repr(self.CC)
+        output += " DI: " + repr(self.DI)
+        output += " PR: " + repr(self.PR)
+        output += " DR: %d Records" % len(self.DR)
+        
+        return output
+        
 class RecordParser(AbstractParser):
 	def __init__(self):
 		self._scanner = _Scanner()
@@ -171,37 +197,51 @@ class Iterator:
 		if self._parser is not None:
 			return self._parser.parse(File.StringHandle(data))
 		return data
-    
+
         def __iter__(self):
                 return iter(self.next, None)
 
 class _RecordConsumer(AbstractConsumer):
-	def __init__(self):
-		self.enzyme_record = EnzymeRecord()
-	def identification(self, id_info):
-		self.enzyme_record.ID = id_info.split()[1]
-	def description(self,de_info):
-		self.enzyme_record.DE.append(de_info[2:].strip())
-	def alternate_name(self,an_info):
-		self.enzyme_record.AN.append(an_info[2:].strip())
-	def catalytic_activity(self, ca_info):
-		self.enzyme_record.CA = string.join([self.enzyme_record.CA,ca_info[2:].strip()],'')
-	def cofactor(self, cf_info):
-		self.enzyme_record.CF.append(cf_info[2:].strip())
+    def __init__(self):
+        self.enzyme_record = EnzymeRecord()
+    def identification(self, id_info):
+        self.enzyme_record.ID = id_info.split()[1]
+    def description(self,de_info):
+        self.enzyme_record.DE.append(de_info[2:].strip())
+    def alternate_name(self,an_info):
+        self.enzyme_record.AN.append(an_info[2:].strip())
+    def catalytic_activity(self, ca_info):
+        self.enzyme_record.CA = string.join([self.enzyme_record.CA,ca_info[2:].strip()],'')
+    def cofactor(self, cf_info):
+        self.enzyme_record.CF.append(cf_info[2:].strip())
+    def comment(self, cc_info):
+        cc = cc_info[2:].strip()
+        if cc.startswith("-!-"):
+            self.enzyme_record.CC.append(cc[len("-!-"):].strip())
+        else:
+            # The header is all CC, but doesn't start with -!-
+            if self.enzyme_record.CC:
+                pre_cc = self.enzyme_record.CC.pop()
+            else:
+                pre_cc = ""
+            new_cc = pre_cc + " " + cc
+            self.enzyme_record.CC.append(new_cc)
+    def disease(self, di_info):
+        self.enzyme_record.DI.append(di_info[2:].strip())
+        
+    def prosite_reference(self,pr_info):
+        self.enzyme_record.PR.append(pr_info.split(';')[1].strip())
 
-	def prosite_reference(self,pr_info):
-		self.enzyme_record.PR.append(pr_info.split(';')[1].strip())
-
-	def databank_reference(self,dr_info):
-		good_data = dr_info[2:].strip()
-		pair_data = good_data.split(';')
-		for pair in pair_data:
-			if not pair: continue
-			data_record = DataRecord()
-			t1, t2 = pair.split(',')
-			data_record.tr_code, data_record.sw_code = \
-					 t1.strip(), t2.strip()
-			self.enzyme_record.DR.append(data_record)
+    def databank_reference(self,dr_info):
+        good_data = dr_info[2:].strip()
+        pair_data = good_data.split(';')
+        for pair in pair_data:
+            if not pair: continue
+            data_record = DataRecord()
+            t1, t2 = pair.split(',')
+            data_record.tr_code, data_record.sw_code = \
+                t1.strip(), t2.strip()
+            self.enzyme_record.DR.append(data_record)
 
 	def terminator(self,schwarzenegger):
 		pass # Hasta la Vista, baby!
