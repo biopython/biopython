@@ -1,10 +1,2 @@
 build
-Tests/dump
-Tests/GenBank/cor6_6.idx
-Tests/Graphics/multi_bar.pdf
-Tests/Graphics/organism.eps
-Tests/Graphics/organism.pdf
-Tests/Graphics/random_organism.pdf
-Tests/Graphics/scatter_test.pdf
-Tests/Graphics/simple_bar.pdf
-Tests/NeuralNetwork/patternio.txt
+so_locations
