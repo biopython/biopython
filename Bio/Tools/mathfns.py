@@ -51,6 +51,19 @@ def safe_log(n, zero=None, neg=None):
         return zero
     return math.log(n)
 
+LOG2 = math.log(2)
+def safe_log2(n, zero=None, neg=None):
+    """safe_log2(n, zero=None, neg=None) -> log(n)
+
+    Calculate the log base 2 of n.  If n is 0, returns the value of
+    zero.  If n is negative, returns the value of neg.
+
+    """
+    l = safe_log(n, zero=zero, neg=neg)
+    if l is None:
+        return l
+    return l/LOG2
+
 def safe_exp(n, under=None, over=None):
     """safe_exp(n, under=None, over=None) -> e**n
 
