@@ -46,42 +46,18 @@ class DBServer:
 
     def remove_database(self, db_name):
         """Try to remove all references to items in a database.
-        
-        XXX I think this might be the worst optimized SQL in the history
-        of the world. There is probably a much better way to do it.
         """
-        # first get the database id and entry ids in the database
         db_id = self.adaptor.fetch_dbid_by_dbname(db_name)
-        bioentry_ids = self.adaptor.list_bioentry_ids(db_id)
-
-        # now remove all the entries
-        # XXX This doesn't work for all the tables.
-        for bioentry_id in bioentry_ids:
-            sql = r"DELETE FROM bioentry WHERE bioentry_id = %s"
-            self.adaptor.execute_one(sql, (bioentry_id))
-            sql = r"DELETE FROM bioentry_date WHERE bioentry_id = %s"
-            # self.adaptor.execute_one(sql, (bioentry_id))
-        
-        # finally remove the database
-        sql = r"DELETE FROM biodatabase WHERE biodatabase_id = %s"
-        self.adaptor.execute_one(sql, (db_id))
+        remover = Loader.DatabaseRemover(self.adaptor, db_id)
+        remover.remove()
 
     def new_database(self, db_name):
         """Add a new database to the server and return it.
         """
-        # get an id for the database
-        db_ids = self.adaptor.list_biodatabase_ids()
-        if len(db_ids) >= 1:
-            last_id = max(db_ids)
-            db_id = last_id + 1
-        else:
-            db_id = 1
-        assert db_id not in db_ids, "Failed to make a unique id"
-
         # make the database
-        sql = r"INSERT INTO biodatabase VALUES" \
-              r" (%s, %s)" 
-        self.adaptor.execute_one(sql, (db_id, db_name))
+        sql = r"INSERT INTO biodatabase (name) VALUES" \
+              r" (%s)" 
+        self.adaptor.execute_one(sql, (db_name))
         return BioSeqDatabase(self.adaptor, db_name)
 
 class Adaptor:
@@ -97,11 +73,6 @@ class Adaptor:
             raise KeyError("Cannot find biodatabase with name %r" % dbname)
         assert count == 1, "More than one biodatabase with name %r" % dbname
         return self.cursor.fetchone()[0]
-
-    def list_biodatabase_ids(self):
-        self.cursor.execute(
-            r"select biodatabase_id from biodatabase")
-        return [field[0] for field in self.cursor.fetchall()]
 
     def fetch_seqid_by_display_id(self, dbid, name):
         count = self.cursor.execute(
@@ -140,17 +111,20 @@ class Adaptor:
             (dbid,))
         return [field[0] for field in self.cursor.fetchall()]
 
-    def all_bioentry_ids(self):
-        """List all bioentry ids in the database.
-        """
-        self.cursor.execute(
-            r"SELECT bioentry_id from bioentry", ())
-        return [field[0] for field in self.cursor.fetchall()]
-        
     def list_bioentry_display_ids(self, dbid):
         self.cursor.execute(
             r"select display_ids from bioentry where biodatabase_id = %s",
             (dbid,))
+        return [field[0] for field in self.cursor.fetchall()]
+
+    def list_any_ids(self, sql, args):
+        """Return ids given a SQL statement to select for them.
+        
+        This assumes that the given SQL does a SELECT statement that
+        returns a list of items. This parses them out of the 2D list
+        they come as and just returns them in a list.
+        """
+        self.cursor.execute(sql, args)
         return [field[0] for field in self.cursor.fetchall()]
 
     def execute_one(self, sql, args):
@@ -173,8 +147,6 @@ class Adaptor:
     def execute_and_fetchall(self, sql, args):
         self.cursor.execute(sql, args)
         return self.cursor.fetchall()
-    
-
 
 _allowed_lookups = {
     # Lookup name / function name to get id, function to list all ids
@@ -182,7 +154,6 @@ _allowed_lookups = {
     'display_id': "fetch_seqid_by_display_id",
     'accession': "fetch_seqid_by_accession",
     }
-
 
 class BioSeqDatabase:
     def __init__(self, adaptor, name):
