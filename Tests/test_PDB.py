@@ -44,6 +44,5 @@ for model in structure.get_list():
 polypep_list=build_peptides(structure, 1)
 
 
-for pp in polypep_list:
-	print pp
+print "Found ", len(polypep_list), " polypeptides."
 					
