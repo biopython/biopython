@@ -17,7 +17,7 @@ all_tests = [
     'bt042', 'bt043', 'bt044', 'bt045', 'bt046',
     'bt047', 'bt048', 'bt049', 'bt050', 'bt051',
     'bt052', 'bt053', 'bt054', 'bt055', 'bt056',
-    'bt057', 'bt058', 'bt059', 'bt060',
+    'bt057', 'bt058', 'bt059', 'bt060', 'bt062'
     ]
 
 # In order to keep the output file sizes reasonable, only generate

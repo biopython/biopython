@@ -18,6 +18,8 @@ DatabaseReport     Holds information from the database report.
 Parameters         Holds information from the parameters.
 
 """
+# XXX finish printable BLAST output
+
 import string
 
 class Header:
@@ -63,6 +65,8 @@ class Description:
         self.title = ''
         self.score = None
         self.e = None
+    def __str__(self):
+        return "%-66s %5s  %s" % (self.title, self.score, self.e)
 
 class Alignment:
     """Stores information about one hit in the alignments section.
@@ -77,6 +81,15 @@ class Alignment:
         self.title = ''
         self.length = None
         self.hsps = []
+    def __str__(self):
+        lines = []
+        titles = string.split(self.title, '\n')
+        for i in range(len(titles)):
+            if i:
+                lines.append("           ")
+            lines.append("%s\n" % titles[i])
+        lines.append("           Length = %s\n" % self.length)
+        return string.join(lines, '')
 
 class HSP:
     """Stores information about one hsp in an alignment hit.

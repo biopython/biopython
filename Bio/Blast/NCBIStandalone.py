@@ -264,7 +264,11 @@ class _Scanner:
                 raise SyntaxError, "I missed the Length in an alignment header"
             consumer.title(line)
 
-        read_and_call(uhandle, consumer.noevent, start='          ')
+        # Older versions of BLAST will have a line with some spaces.
+        # Version 2.0.14 (maybe 2.0.13?) and above print a true blank line.
+        if not attempt_read_and_call(uhandle, consumer.noevent,
+                                     start='          '):
+            read_and_call(uhandle, consumer.noevent, blank=1)
 
     def _scan_hsp(self, uhandle, consumer):
         consumer.start_hsp()
