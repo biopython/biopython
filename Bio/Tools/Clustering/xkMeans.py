@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # Created: Sat Jul 14 14:20:55 2001
-# Last changed: Time-stamp: <01/07/16 13:00:14 thomas>
+# Last changed: Time-stamp: <01/07/16 13:45:19 thomas>
 # thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas
 # File: xkMeans.py
 
@@ -12,11 +12,13 @@ from Bio.Tools.Clustering import kMeans
 from tkFileDialog import askopenfilename, asksaveasfilename
 import Pmw
 
-""" This is a small xwrapper for Jeff's kMeans module. It displays the
+"""
+    This is a small xwrapper for Jeff's kMeans module. It displays the
     ongoing change of cluster sizes and allows easy retrieval of the observations
     per cluster (Button-1 on cluster box).
     Input is a cvs file
-"""
+
+    """
 
 class xkMeans:
     def __init__(self, parent = None):
