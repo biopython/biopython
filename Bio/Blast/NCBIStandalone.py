@@ -836,7 +836,7 @@ class _HSPConsumer:
         if self._hsp.query_start is None:
             self._hsp.query_start = _safe_int(start)
 
-        self._query_start_index = m.start(1)
+        self._query_start_index = m.start(2)
         self._query_len = len(seq)
 
     def align(self, line):
