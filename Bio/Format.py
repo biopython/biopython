@@ -380,7 +380,7 @@ class FormatDef(Format):
             
         if not self._iterator_cache.has_key(key):
             exp = self.expression
-            if select_names is None:
+            if select_names is not None:
                 exp = Martel.select_names(exp, select_names)
             p = exp.make_iterator(tag, debug_level = debug_level)
             self._parser_cache[key] = p
