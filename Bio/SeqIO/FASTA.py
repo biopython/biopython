@@ -65,16 +65,16 @@ class FastaWriter:
 
     def write(self, record):
         id = record.id
-        assert "\n" not in id
+        assert os.linesep not in id
 
         description = record.description
-        assert "\n" not in description
+        assert os.linesep not in description
         
-        self.outfile.write(">%s %s\n" % (id, description))
+        self.outfile.write(">%s %s%s" % (id, description,os.linesep))
 
         data = record.seq.tostring()
         for i in range(0, len(data), 60):
-            self.outfile.write(data[i:i+60] + "\n")
+            self.outfile.write(data[i:i+60] + os.linesep)
 
     
     def write_records(self, records):
