@@ -34,7 +34,7 @@ class Mysql_dbutils(Generic_dbutils):
         return cursor.insert_id()
 _dbutils["MySQLdb"] = Mysql_dbutils
 
-class Pg_dbutils(Generic_dbutils):
+class Psycopg_dbutils(Generic_dbutils):
     def next_id(self, cursor, table):
         table = self.tname(table)
         sql = r"select nextval('%s_pk_seq')" % table
@@ -51,7 +51,29 @@ class Pg_dbutils(Generic_dbutils):
 
     def autocommit(self, conn, y = True):
         conn.autocommit(y)
-_dbutils["psycopg"] = Pg_dbutils
+_dbutils["psycopg"] = Psycopg_dbutils
+
+class Pgdb_dbutils(Generic_dbutils):
+    """Add support for pgdb in the PyGreSQL database connectivity package.
+    """
+    def next_id(self, cursor, table):
+        table = self.tname(table)
+        sql = r"select nextval('%s_pk_seq')" % table
+        cursor.execute(sql)
+        rv = cursor.fetchone()
+        return rv[0]
+
+    def last_id(self, cursor, table):
+        table = self.tname(table)
+        sql = r"select currval('%s_pk_seq')" % table
+        cursor.execute(sql)
+        rv = cursor.fetchone()
+        return rv[0]
+
+    def autocommit(self, conn, y = True):
+        raise NotImplementedError("pgdb does not support this!")
+
+_dbutils["pgdb"] = Pgdb_dbutils
 
 def get_dbutils(module_name):
     try:
