@@ -221,6 +221,7 @@ PACKAGES = [
     'Bio.builders.SeqRecord',
     'Bio.CDD',
     'Bio.Clustalw',
+    'Bio.Cluster',
     'Bio.config',
     'Bio.Crystal',
     'Bio.Data',
@@ -326,6 +327,14 @@ EXTENSIONS = [
               ['Bio/cMarkovModelmodule.c',
                'Bio/csupport.c'],
               include_dirs=["Bio"]
+              ),
+    Extension('Bio.Cluster.cluster',
+              ['Bio/Cluster/clustermodule.c',
+               'Bio/Cluster/cluster.c',
+               'Bio/Cluster/ranlib.c',
+               'Bio/Cluster/com.c',
+               'Bio/Cluster/linpack.c'],
+              include_dirs=["Bio/Cluster"]
               ),
     #Extension('Bio.KDTree._KDTreecmodule',
     #          ["Bio/KDTree/_KDTree.C", 
