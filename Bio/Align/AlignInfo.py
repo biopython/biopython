@@ -6,7 +6,8 @@ be put into classes in this module.
 
 classes:
 o SummaryInfo
-o PSSM"""
+o PSSM
+"""
 
 # standard library
 import string
@@ -171,7 +172,7 @@ class SummaryInfo:
         to include the ambiguity characters in the dictionary.
         """
         # get a starting dictionary based on the alphabet of the alignment
-        rep_dict, skip_items = self._get_base_replacements()
+        rep_dict, skip_items = self._get_base_replacements(skip_chars)
 
         # iterate through each record
         for rec_num1 in range(len(self.alignment._records)):
@@ -185,7 +186,7 @@ class SummaryInfo:
                     self.alignment._records[rec_num2].seq,
                     self.alignment._records[rec_num1].annotations['weight'],
                     self.alignment._records[rec_num2].annotations['weight'],
-                    rep_dict, skip_items + skip_chars)
+                    rep_dict, skip_items)
 
         return rep_dict
 
@@ -233,7 +234,7 @@ class SummaryInfo:
         return start_dict
 
 
-    def _get_base_replacements(self):
+    def _get_base_replacements(self, skip_items = []):
         """Get a zeroed dictonary of all possible letter combinations.
 
         This looks at the type of alphabet and gets the letters for it.
@@ -244,9 +245,9 @@ class SummaryInfo:
         o The base dictionary created
         o A list of alphabet items to skip when filling the dictionary.Right
         now the only thing I can imagine in this list is gap characters, but
-        maybe X's or something else might be useful later.
+        maybe X's or something else might be useful later. This will also
+        include any characters that are specified to be skipped.
         """
-        skip_items = []
         base_dictionary = {}
         all_letters = self.alignment._alphabet.letters
 
@@ -261,7 +262,9 @@ class SummaryInfo:
         # now create the dictionary
         for first_letter in all_letters:
             for second_letter in all_letters:
-                base_dictionary[(first_letter, second_letter)] = 0
+                if (first_letter not in skip_items and
+                    second_letter not in skip_items):
+                    base_dictionary[(first_letter, second_letter)] = 0
 
         return base_dictionary, skip_items
 
