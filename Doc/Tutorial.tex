@@ -454,10 +454,16 @@ MutableSeq('GACGTTGGGCCTATATAGGATCGAAAATCGC', IUPACUnambiguousDNA())
 MutableSeq('CGCTAAAAGCTAGGATATATCCGGGTTGCAG', IUPACUnambiguousDNA())
 \end{verbatim}
 
-Now that the nature of the sequence object makes some sense, the next thing to look at is what kind of things we can do with a sequence. The \verb|Bio/Tools| directory contains two useful modules to transcribe and translate a sequence object. These tools work based on the alphabet of the sequence. For instance, let's supposed we want to transcribe our \verb|my_seq| object. Remember that this contains an unambiguous alphabet, so to transcribe we would do the following:
+Now that the nature of the sequence object makes some sense, the next
+thing to look at is what kind of things we can do with a sequence. The
+\verb|Bio| directory contains two useful modules to transcribe and
+translate a sequence object. These tools work based on the alphabet of
+the sequence. For instance, let's supposed we want to transcribe our
+\verb|my_seq| object. Remember that this contains an unambiguous
+alphabet, so to transcribe we would do the following:
 
 \begin{verbatim}
->>> from Bio.Tools import Transcribe
+>>> from Bio import Transcribe
 >>> transcriber = Transcribe.unambiguous_transcriber
 >>> my_rna_seq = transcriber.transcribe(my_seq)
 >>> print my_rna_seq
@@ -478,7 +484,7 @@ Seq('GATCGATGGGCCTATATAGGATCGAAAATCGC', IUPACUnambiguousDNA())
 To translate our DNA object we have quite a few choices. First, we can use any number of translation tables depending on what we know about our DNA sequence. The translation tables available in biopython were taken from information at \ahrefurl{\url{ftp://ncbi.nlm.nih.gov/entrez/misc/data/gc.prt}}. So, you have tons of choices to pick from. For this, let's just focus on two choices: the Standard translation table, and the Translation table for Vertebrate Mitochondriall DNA. These tables are labelled with id numbers 1 and 2, respectively. Now that we know what tables we are looking to get, we're all set to perform a basic translation. First, we need to get our translators that use these tables. Since we are still dealing with our unambiguous DNA object, we want to fetch translators that take this into account:
 
 \begin{verbatim}
->>> from Bio.Tools import Translate
+>>> from Bio import Translate
 >>> standard_translator = Translate.unambiguous_dna_by_id[1] 
 >>> mito_translator = Translate.unambiguous_dna_by_id[2]
 \end{verbatim}
