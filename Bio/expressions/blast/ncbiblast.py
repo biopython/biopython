@@ -4,42 +4,44 @@ from Bio import Std
 spaces_line = Opt(Spaces()) + AnyEol()
 
 blast_filter = Str("BLASTN", "BLASTP", "BLASTX", "TBLASTX", "TBLASTN")
-ncbi_blastn_filter = Re(r"BLASTN 2.\d+\.\d+ ")
-ncbi_blastp_filter = Re(r"BLASTP 2.\d+\.\d+ ")
-ncbi_blastx_filter = Re(r"BLASTX 2.\d+\.\d+ ")
-ncbi_tblastn_filter = Re(r"TBLASTN 2.\d+\.\d+ ")
-ncbi_tblastx_filter = Re(r"TBLASTX 2.\d+\.\d+ ")
 
+ncbi_version = Std.application_version(Group("appversion", Re(r"2.\d+\.\d+")))
 
 # BLASTN 2.0.11 [Jan-20-2000]
-blastn_header = (Std.application_name(Str("BLASTN"), {"app": "blastn"}) + 
-                 Str(" ") +
-                 Std.application_version(UntilSep(sep=" ")) +
-                 ToEol())
+blastn_appheader = (Std.application_name(Str("BLASTN"), {"app": "blastn"}) + 
+                    Str(" ") +
+                    ncbi_version +
+                    Str(" ") +
+                    ToEol())
+
 
 # BLASTP 2.0.11 [Jan-20-2000]
-blastp_header = (Std.application_name(Str("BLASTP"), {"app": "blastp"}) + 
-                Str(" ") +
-                Std.application_version(UntilSep(sep=" ")) +
-                ToEol())
+blastp_appheader = (Std.application_name(Str("BLASTP"), {"app": "blastp"}) + 
+                    Str(" ") +
+                    ncbi_version +
+                    Str(" ") +
+                    ToEol())
 
 # BLASTX 2.0.11 [Jan-20-2000]
-blastx_header = (Std.application_name(Str("BLASTX"), {"app": "blastx"}) + 
-                 Str(" ") +
-                 Std.application_version(UntilSep(sep=" ")) +
-                ToEol())
+blastx_appheader = (Std.application_name(Str("BLASTX"), {"app": "blastx"}) + 
+                    Str(" ") +
+                    ncbi_version +
+                    Str(" ") +
+                    ToEol())
 
 # TBLASTN 2.0.11 [Jan-20-2000]
-tblastn_header = (Std.application_name(Str("TBLASTN"), {"app": "tblastn"}) + 
-                  Str(" ") +
-                  Std.application_version(UntilSep(sep=" ")) +
-                  ToEol())
+tblastn_appheader = (Std.application_name(Str("TBLASTN"), {"app": "tblastn"}) +
+                     Str(" ") +
+                     ncbi_version +
+                     Str(" ") +
+                     ToEol())
 
 # TBLASTX 2.0.11 [Jan-20-2000]
-tblastx_header = (Std.application_name(Str("TBLASTX"), {"app": "tblastx"}) + 
-                  Str(" ") +
-                  Std.application_version(UntilSep(sep=" ")) +
-                  ToEol())
+tblastx_appheader = (Std.application_name(Str("TBLASTX"), {"app": "tblastx"}) +
+                     Str(" ") +
+                     ncbi_version +
+                     Str(" ") +
+                     ToEol())
 
 # This is tricky because the description can include a statement like
 #  '(492 letters)' at just the right place to confuse things.
@@ -76,10 +78,10 @@ query_database = (Str("Database:") + Opt(Spaces()) +
                   Std.database_name(UntilEol()) + AnyEol() +
                   Spaces() +
                   Std.database_num_sequences(Number(),
-                                             {"bioformat:encoding": "comma"}) +
+                                          {"bioformat:decode": "int.comma"}) +
                   Str(" sequences;") + Spaces() + 
                   Std.database_num_letters(Number(),
-                                           {"bioformat:encoding": "comma"}) +
+                                          {"bioformat:decode": "int.comma"}) +
                   Spaces() + Str("total letters") + ToEol())
 
 
@@ -89,19 +91,23 @@ query_database = (Str("Database:") + Opt(Spaces()) +
 # U51677 Human non-histone chromatin protein HMG1 (HMG1) gene, co...  4129  0.0
 # L38477 Mus musculus (clone Clebp-1) high mobility group 1 prote...   353  7e-95
 
-to_table = (SkipLinesUntil(Str("Sequences producing significant")) +
-            ToEol() +
-            AnyEol())
+to_table = Group("to_table",
+                 (SkipLinesUntil(Str("Sequences producing significant")) +
+                  ToEol() +
+                  AnyEol()))
 
 table_entry = Std.search_table_entry(
-    (AssertNot(AnyEol()) +
-     Std.search_table_description(Re(r".{66}")) + Spaces() +
-     Std.search_table_value(Float(), {"name": "score",
-                                      "bioformat:type": "float"}) +
-     Spaces() +
-     Std.search_table_value(Float(), {"name": "evalue",
-                                      "bioformat:type": "float"}) +
-     AnyEol()))
+    Group("table_entry",
+          (AssertNot(AnyEol()) +
+           Std.search_table_description(Re(r".{66}")) + Spaces() +
+           Std.search_table_value(Float(), {"name": "score",
+                                            "bioformat:decode": "float"}) +
+           Spaces() +
+           Std.search_table_value(Float(), {"name": "evalue",
+                                            "bioformat:decode": "float"}) +
+           AnyEol())
+          )
+    )
 
 table = Std.search_table(Rep(table_entry))
 
@@ -111,6 +117,7 @@ header = Std.search_header(
     query_descr +
     query_letters +
     AnyEol() +
+    Group("to_database", NullOp()) + # Needed for wu-blastx
     query_database +
     Opt(to_table + table) + 
     SkipLinesUntil(Str(">"))
@@ -140,20 +147,20 @@ hit_descr = (Str(">") + Std.hit_description(UntilEol()) + AnyEol() +
 
 
 num_bits = Std.hsp_value(Float(), {"name": "bits",
-                                   "bioformat:type": "float",
+                                   "bioformat:decode": "float",
                                    })
 
 expect = Std.hsp_value(Float(), {"name": "expect",
-                                 "bioformat:type": "float"})
+                                 "bioformat:decode": "float"})
 
 num_identical = Std.hsp_value(Digits(), {"name": "identical",
-                                          "bioformat:type": "int"})
+                                          "bioformat:decode": "int"})
 
 hsp_length = Std.hsp_value(Digits(), {"name": "length",
-                                      "bioformat:type": "int"})
+                                      "bioformat:decode": "int"})
 
 num_positives = Std.hsp_value(Digits(), {"name": "positives",
-                                         "bioformat:type": "int"})
+                                         "bioformat:decode": "int"})
 
 # What's after the bits?
 score = (Re(r" *Score = *") + num_bits +
@@ -201,60 +208,61 @@ strand = (Re(r" *Strand = ") +
            Std.hsp_strand(Str("Minus"), {"strand": "-1", "which": "subject"}))+
           AnyEol())
 
-query_line = Std.hsp_seqalign_line(
-    Std.hsp_seqalign_leader(
-      Std.hsp_seqalign_name(Str("Query")) +
+query_line = (
+    Std.hsp_seqalign_query_leader(
+      Std.hsp_seqalign_query_name(Str("Query")) +
       Re(": *") +
-      Std.hsp_seqalign_start(Digits()) +
+      Std.hsp_seqalign_query_start(Digits()) +
       Re(" *")
     ) +
-    Std.hsp_seqalign_seq(UntilSep(sep = " ")) +
+    Std.hsp_seqalign_query_seq(UntilSep(sep = " ")) +
     Re(" *") +
-    Std.hsp_seqalign_end(Digits()) +
-    AnyEol(),
-    {"which": "query"})
+    Std.hsp_seqalign_query_end(Digits()) +
+    AnyEol()
+    )
 
-homology_line = Std.hsp_seqalign_line(
-    Std.hsp_seqalign_seq(Str("      ") +
-                         UntilEol()) +
-    AnyEol(),
-    {"which": "homology"})
-
-subject_line = Std.hsp_seqalign_line(
-    Std.hsp_seqalign_leader(
-      Std.hsp_seqalign_name(Str("Sbjct")) +
-      Re(": *") +
-      Std.hsp_seqalign_start(Digits()) +
-      Re(" *")
+homology_line = (                
+    Std.hsp_seqalign_homology_seq(
+      Str("     ") +  # The blanks are for safety; to
+      UntilEol()      # ensure we don't blindly read a line
     ) +
-    Std.hsp_seqalign_seq(UntilSep(sep = " ")) +
+    AnyEol()
+    )
+
+subject_line = (
+    Std.hsp_seqalign_subject_name(Str("Sbjct")) +
+    Re(": *") +
+    Std.hsp_seqalign_subject_start(Digits()) +
     Re(" *") +
-    Std.hsp_seqalign_end(Digits()) +
-    AnyEol(),
-    {"which": "subject"})
+    Std.hsp_seqalign_subject_seq(UntilSep(sep = " ")) +
+    Re(" *") +
+    Std.hsp_seqalign_subject_end(Digits()) +
+    AnyEol()
+    )
+
+
+blastn_hsp_header = (score + blastn_identical + strand +
+                     spaces_line + spaces_line)
+
+blastp_hsp_header = score + blastp_identical + spaces_line
+
+blastx_hsp_header = score + blastp_identical + frame + spaces_line
+
+tblastn_hsp_header = tblastn_score + blastp_identical + frame + spaces_line
+
+tblastx_hsp_header = (tblastn_score + blastp_identical + tblastx_frame +
+                      spaces_line + spaces_line)
+
 
 alignment = Std.hsp_seqalign(query_line + homology_line + subject_line +
                              Rep1(spaces_line))
 
-blastn_hsp = Std.hsp(score + blastn_identical + strand +
-                     spaces_line + spaces_line +
-                     Rep(alignment))
-blastp_hsp = Std.hsp(score + blastp_identical + spaces_line +
-                     Rep(alignment))
-blastx_hsp = Std.hsp(score + blastp_identical + frame + spaces_line +
-                     Rep(alignment))
-tblastn_hsp = Std.hsp(tblastn_score + blastp_identical + frame + spaces_line +
-                      Rep(alignment))
-tblastx_hsp = Std.hsp(tblastn_score + blastp_identical + tblastx_frame +
-                      spaces_line + spaces_line +
-                      Rep(alignment))
+hsp = Std.hsp(Group("hsp_header", NullOp()) +
+              Rep(alignment))
 
-blastn_hit = Std.hit(hit_descr + hit_length + Rep(blastn_hsp))
-blastp_hit = Std.hit(hit_descr + hit_length + Rep(blastp_hsp))
-blastx_hit = Std.hit(hit_descr + hit_length + Rep(blastx_hsp))
-tblastn_hit = Std.hit(hit_descr + hit_length + Rep(tblastn_hsp))
-tblastx_hit = Std.hit(hit_descr + hit_length + Rep(tblastx_hsp))
-
+hit = Std.hit(hit_descr + hit_length +
+              Rep(Group("hsp", hsp))
+              )
 
 # Already know the database
 
@@ -263,15 +271,15 @@ def _nv(s, expr):
     return Str(s) + expr + AnyEol()
 def float_stat(name):
     return Std.search_statistic(Float(), {"name": name,
-                                          "bioformat:type": "float"})
+                                          "bioformat:decode": "float"})
 def _num_stat(name, signed, comma):
     d = {"name": name,
-         "bioformat:type": "int"}
+         "bioformat:decode": "int"}
     if signed:
         exp = Integer()
     elif comma:
         exp = Number()
-        d["bioformat:encoding"] = "comma"
+        d["bioformat:decode"] = "int.comma"
     else:
         exp = Digits()
     return exp, d
@@ -286,7 +294,7 @@ def int_param(name, signed = 0, comma = 0):
 
 def float_param(name):
     return Std.search_parameter(Float(), {"name": name,
-                                          "bioformat:type": "float"})
+                                          "bioformat:decode": "float"})
 
 
 db_stats = (Str("  Database:") + ToEol() +
@@ -488,8 +496,32 @@ tblastx_ending = (db_stats +
                  s2_info
                  )
 
-blastn = Std.record(blastn_header + header + Rep(blastn_hit) + blastn_ending)
-blastp = Std.record(blastp_header + header + Rep(blastp_hit) + blastp_ending)
-blastx = Std.record(blastx_header + header + Rep(blastx_hit) + blastx_ending)
-tblastn = Std.record(tblastn_header + header + Rep(tblastn_hit) + tblastn_ending)
-tblastx = Std.record(tblastx_header + header + Rep(tblastx_hit) + tblastx_ending)
+format = Std.record(Group("appheader", NullOp()) +
+                    header +
+                    Rep(hit) +
+                    Group("ending", NullOp()))
+
+blastn = replace_groups(format,
+                        (("appheader", blastn_appheader),
+                         ("hsp_header", blastn_hsp_header),
+                         ("ending", blastn_ending)))
+                        
+blastp = replace_groups(format,
+                        (("appheader", blastp_appheader),
+                         ("hsp_header", blastp_hsp_header),
+                         ("ending", blastp_ending)))
+
+blastx = replace_groups(format,
+                        (("appheader", blastx_appheader),
+                         ("hsp_header", blastx_hsp_header),
+                         ("ending", blastx_ending)))
+
+tblastn = replace_groups(format,
+                         (("appheader", tblastn_appheader),
+                          ("hsp_header", tblastn_hsp_header),
+                          ("ending", tblastn_ending)))
+
+tblastx = replace_groups(format,
+                         (("appheader", tblastx_appheader),
+                          ("hsp_header", tblastx_hsp_header),
+                          ("ending", tblastx_ending)))
