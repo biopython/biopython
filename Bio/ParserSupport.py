@@ -238,7 +238,7 @@ if xml_support:
             # set the appropriate flag if we are keeping track of these flags
             if self.flags.has_key(name):
                 # make sure that all of the flags are being properly unset
-                assert self.flags[name] == 0, "Flag % not unset" % name
+                assert self.flags[name] == 0, "Flag %s not unset" % name
 
                 self.flags[name] = 1
 
