@@ -440,7 +440,7 @@ int Trie_has_prefix(const Trie trie, const unsigned char *prefix)
 	else
 	    return Trie_has_prefix(transition->next, prefix+minlen);
     }
-    return NULL;
+    return 0;
 }
 
 static void 
