@@ -88,7 +88,7 @@ class Iterator:
         self.parser = parser
         self.tag = tag
 
-    def iterateString(self, s, cont_handler):
+    def iterateString(self, s, cont_handler = None):
         """create an iterator over a string"""
         events = StoreEvents()
         self.parser.setContentHandler(events)
@@ -96,10 +96,10 @@ class Iterator:
         self.parser.parseString(s)
         return Iterate(EventStream(events.events), self.tag, cont_handler)
 
-    def iterateFile(self, fileobj, cont_handler):
+    def iterateFile(self, fileobj, cont_handler = None):
         return self.iterateString(self, fileobj.read(), cont_handler)
         
-    def iterate(self, systemId, doc_handler):
+    def iterate(self, systemId, cont_handler = None):
         return self.iterateFile(urllib.urlopen(systemId), cont_handler)
     
 class RecordEventStream:
@@ -123,20 +123,23 @@ class IteratorRecords:
         self.reader_args = reader_args
         self.marker_tag = marker_tag
 
-    def iterateString(self, s, cont_handler):
+    def iterateString(self, s, cont_handler = None):
         return self.iterateFile(StringIO(s), cont_handler)
 
-    def iterateFile(self, fileobj, cont_handler):
+    def iterateFile(self, fileobj, cont_handler = None):
         record_reader = apply(self.make_reader,
                               (fileobj,) + self.reader_args)
         return Iterate(RecordEventStream(record_reader, self.record_parser),
                        self.marker_tag, cont_handler)
 
-    def iterate(self, systemId, cont_handler):
+    def iterate(self, systemId, cont_handler = None):
         return self.iterateFile(urllib.urlopen(systemId), cont_handler)
 
 class Iterate:
-    def __init__(self, event_stream, tag, cont_handler):
+    def __init__(self, event_stream, tag, cont_handler = None):
+        if cont_handler is None:
+            import LAX
+            cont_handler = LAX.LAX()
         self.event_stream = event_stream
         self.events = None
         self.tag = tag
@@ -225,6 +228,9 @@ class Iterate:
         if x is None:
             raise IndexError, n
         return x
+
+    def __iter__(self):
+        return iter(self.next, None)
 
 def test1():
     from Martel.formats import swissprot38
