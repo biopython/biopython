@@ -100,6 +100,8 @@ def convert_branch(group_names, name, (ignore, branches)):
 def invert(s):
     """s -> a string containing all the characters not present in s"""
     letters = []
+    if not(isinstance(s, type(""))):
+        s = str(s)
     for c in map(chr, range(256)):
         if c not in s:
             letters.append(c)

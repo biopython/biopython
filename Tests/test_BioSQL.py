@@ -22,14 +22,14 @@ from BioSQL import BioSeq
 # does.  For now, I'm just going to disable the tests completely, so
 # it doesn't generate spurious and alarming errors when people without
 # databases try to run it.
-raise ImportError, "Please comment out this line to enable the tests."
+# raise ImportError, "Please comment out this line to enable the tests."
 
 # -- MySQL
 DBDRIVER = 'MySQLdb'
 DBTYPE = 'mysql'
 # -- PostgreSQL
-DBDRIVER = 'psycopg'
-DBTYPE = 'pg'
+# DBDRIVER = 'psycopg'
+# DBTYPE = 'pg'
 
 # Works for mysql and postgresql, not oracle
 DBSCHEMA = "biosqldb-" + DBTYPE + ".sql"

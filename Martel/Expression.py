@@ -245,8 +245,9 @@ def _quote(s):
         _make_fast_lookup()
     lookup = _fast_quote_lookup
     terms = []
-    for c in s:
-        terms.append(lookup[c])
+    if s:
+        for c in s:
+            terms.append(lookup[c])
     return string.join(terms, "")
 
 def _make_group_pattern(name, expression, attrs):
@@ -1014,6 +1015,8 @@ def _minimize_any_range(s):
 
     This code isn't perfect.
     """
+    if not(isinstance(s, type(""))):
+        s = str(s)
     if not s:
         return s
 
