@@ -1,0 +1,924 @@
+%% LyX 1.3 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[a4paper,english]{article}
+\usepackage{bookman}
+\usepackage[T1]{fontenc}
+\usepackage[latin1]{inputenc}
+\usepackage{graphicx}
+\IfFileExists{url.sty}{\usepackage{url}}
+                      {\newcommand{\url}{\texttt}}
+
+\makeatletter
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LyX specific LaTeX commands.
+%% Bold symbol macro for standard LaTeX users
+\newcommand{\boldsymbol}[1]{\mbox{\boldmath $#1$}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
+ \newenvironment{lyxcode}
+   {\begin{list}{}{
+     \setlength{\rightmargin}{\leftmargin}
+     \setlength{\listparindent}{0pt}% needed for AMS classes
+     \raggedright
+     \setlength{\itemsep}{0pt}
+     \setlength{\parsep}{0pt}
+     \normalfont\ttfamily}%
+    \item[]}
+   {\end{list}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+% header
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\lhead{Bio.PDB}
+\rhead{FAQ}
+
+
+% make everything have section numbers
+% Make links between references
+\usepackage{hyperref}
+
+\newif\ifpdf
+\ifx\pdfoutput\undefined
+  \pdffalse
+\else
+  \pdfoutput=1
+  \pdftrue
+\fi
+\ifpdf
+  \hypersetup{colorlinks=true, hyperindex=true, citecolor=red, urlcolor=blue}
+\fi
+
+\usepackage{babel}
+\makeatother
+\begin{document}
+
+\title{The BioPython Structural Bioinformatics FAQ}
+
+
+\author{Thomas Hamelryck\\
+Bioinformatics center\\
+Copenhagen University\\
+Universitetsparken 15, Bygning 10\\
+DK-2100 København Ø\\
+Denmark \\
+thamelry@binf.ku.dk\\
+\url{http://www.binf.ku.dk/users/thamelry/}}
+
+\maketitle
+
+\section{Introduction}
+
+The Biopython Project is an international association of developers
+of freely available Python (\url{http://www.python.org}) tools for
+computational molecular biology. Python is an object oriented, interpreted,
+flexible language that is becoming increasingly popular for scientific
+computing. Python is easy to learn, has a very clear syntax and can
+easily be extended with modules written in C, C++ or FORTRAN.
+
+The Biopython web site (\url{http://www.biopython.org}) provides
+an online resource for modules, scripts, and web links for developers
+of Python-based software for life science research. Basically, we
+want to make it as easy as possible to use python for bioinformatics
+by creating high-quality, reusable modules and scripts. Biopython
+features include parsers for various Bioinformatics file formats (BLAST,
+Clustalw, FASTA, Genbank, etc.), access to online services (NCBI,
+Expasy), interfaces to common programs (eg. Clustalw), a standard
+sequence class, various clustering modules, a \texttt{KDTree} module
+etc. and documentation. 
+
+Bio.PDB is a biopython module that focuses on handling crystal structures
+of biological macromolecules. This document gives an overview of Bio.PDB.
+
+
+\section{Bio.PDB's installation}
+
+Bio.PDB is automatically installed as part of Biopython. Biopython
+can be obtained from \url{http://www.biopython.org}.
+
+
+\section{What's the Bio.PDB license?}
+
+The Biopython license, which is one of the most unrestricted Open
+Source licenses around.
+
+
+\section{Who's using Bio.PDB?}
+
+Bio.PDB was used in the construction of DISEMBL, a webserver that
+predicts disordered regions in proteins (\url{http://dis.embl.de/}),
+and COLUMBA, a website that provides annotated protein structures
+(\url{http://www.columba-db.de/}). Bio.PDB has also been used to
+perform a large scale search for active sites similarities between
+protein structures in the PDB (see \textit{Proteins Struct. Func.
+Gen.}, \textbf{2003}, 51, 96-108). 
+
+Judging from requests for features and information, Bio.PDB is also
+used by several LPC's (Large Pharmaceutical Companies :-).
+
+
+\section{Is there a Bio.PDB reference?}
+
+Yes, and I'd appreciate it if you would refer to Bio.PDB in publications
+that makes use of it. The reference is:
+
+\begin{quote}
+Hamelryck, T., Manderick, B. (2003) PDB parser and structure class
+implemented in Python. \textit{Bioinformatics}, \textbf{19}, 2308-2310. 
+\end{quote}
+The article can be freely downloaded via the Bioinformatics journal
+website (\url{http://www.binf.ku.dk/users/thamelry/references.html}).
+
+
+\section{How well tested is Bio.PDB?}
+
+Pretty well, actually. Bio.PDB has been tested on nearly 5500 structures
+from the PDB and did not crash once. Moreover, all structures seemed
+to be parsed correctly. More details can be found in the Bio.PDB Bioinformatics
+article. Bio.PDB has been used/is being used in many research projects
+as a reliable tool. In fact, I'm using Bio.PDB almost daily for research
+purposes and continue working on improving it.
+
+
+\section{Usage}
+
+
+\subsection{General questions}
+
+
+\subsubsection{Importing Bio.PDB}
+
+That's simple:
+
+\begin{lyxcode}
+from~Bio.PDB~import~{*}
+\end{lyxcode}
+
+\subsubsection*{Is there support for molecular graphics?}
+
+Not directly, mostly since there are quite a few Python based solutions
+already, that can potentially be used with Bio.PDB. My choice is Pymol,
+BTW (I've used this successfully with Bio.PDB, and there will probably
+be specific PyMol modules in Bio.PDB soon/some day). Python based
+molecular graphics solutions include:
+
+\begin{itemize}
+\item PyMol: \url{http://pymol.sourceforge.net/}
+\item Chimera: \url{http://www.cgl.ucsf.edu/chimera/}
+\item PMV: \url{http://www.scripps.edu/~sanner/python/}
+\item Coot: \url{http://www.ysbl.york.ac.uk/~emsley/coot/}
+\end{itemize}
+In addition, the CCP4 people are also working on a python based molecular
+graphics program. 
+
+
+\subsection{Input/output}
+
+
+\subsubsection*{How do I create a structure object from a PDB file?}
+
+First, create a \texttt{PDBParser} object:
+
+\begin{lyxcode}
+parser=PDBParser()
+\end{lyxcode}
+Then, create a structure object from a PDB file in the following way
+(the PDB file in this case is called '1FAT.pdb', 'PHA-L' is a user
+defined name for the structure):
+
+\begin{lyxcode}
+structure=p.get\_structure('PHA-L',~'1FAT.pdb')
+\end{lyxcode}
+
+\subsubsection*{How do I create a structure object from an mmCIF file?}
+
+Similarly to the case the case of PDB files, first create an \texttt{MMCIFParser}
+object:
+
+\begin{lyxcode}
+parser=MMCIFParser()
+\end{lyxcode}
+Then use this parser to create a structure object from the mmCIF file:
+
+\begin{lyxcode}
+structure=p.get\_structure('PHA-L',~'1FAT.cif')
+\end{lyxcode}
+
+\subsubsection*{...and what about the new PDB XML format?}
+
+That's not yet supported, but I'm definitely planning to support that
+in the future.
+
+
+\subsubsection*{I'd like to have some more low level access to an mmCIF file...}
+
+You got it. You can create a python dictionary that maps all mmCIF
+tags in an mmCIF file to their values. If there are multiple values
+(like in the case of tag \texttt{\_atom\_site.Cartn\_y}, which holds
+the y coordinates of all atoms), the tag is mapped to a list of values.
+The dictionary is created from the mmCIF file as follows:
+
+\begin{lyxcode}
+mmcif\_dict=MMCIF2Dict('1FAT.cif')
+\end{lyxcode}
+Example: get the solvent content from an mmCIF file:
+
+\begin{lyxcode}
+sc=mmcif\_dict{[}'\_exptl\_crystal.density\_percent\_sol'{]}
+\end{lyxcode}
+Example: get the list of the y coordinates of all atoms
+
+\begin{lyxcode}
+y\_list=mmcif\_dict{[}'\_atom\_site.Cartn\_y'{]}
+\end{lyxcode}
+
+\subsubsection*{Can I access the header information?}
+
+Thanks to Christian Rother you can. The structure object has an attribute
+called \texttt{header} which is a python dictionary that maps header
+records to their values.
+
+Example:
+
+\begin{lyxcode}
+resolution=structure.header{[}'resolution'{]}
+
+keywords=structure.header{[}'keywords'{]}
+\end{lyxcode}
+The available keys are \texttt{name, head, deposition\_date, release\_date,
+structure\_method, resolution, structure\_reference} (maps to a list
+of references), \texttt{journal\_reference, author} and \texttt{compound}
+(maps to a dictionary with various information about the crystallized
+compound).
+
+The dictionary can also be created without creating a \texttt{Structure}
+object, ie. directly from the PDB file:
+
+\begin{lyxcode}
+file=open(filename,'r')
+
+header\_dict=parse\_pdb\_header(file)
+
+file.close()
+\end{lyxcode}
+
+\subsubsection*{Can I use Bio.PDB with NMR structures (ie. with more than one model)?}
+
+Sure. Many PDB parsers assume that there is only one model, making
+them all but useless for NMR structures. The design of the Structure
+object makes it easy to handle PDB files with more than one model
+(see section \ref{sub:The-Structure-object}). 
+
+
+\subsubsection*{How do I download structures from the PDB?}
+
+This can be done using the \texttt{PDBList} object, using the \texttt{retrieve\_pdb\_file}
+method. The argument for this method is the PDB identifier of the
+structure.
+
+\begin{lyxcode}
+pdbl=PDBList()
+
+pdbl.retrieve\_pdb\_file('1FAT')
+\end{lyxcode}
+In this case, the downloaded file will be called \texttt{pdb1fat.ent}. 
+
+The \texttt{retrieve\_pdb\_file} method also has some options to specify
+the compression format used for the download, and the program used
+for local decompression (default \texttt{.Z} format and \texttt{gunzip}).
+In addition, the PDB ftp site can be specified upon creation of the
+\texttt{PDBList} object. See the API documentation for more details.
+Thanks again to Kristian Rother for donating this module.
+
+
+\subsubsection*{How do I keep a local copy of the PDB up-to-date?}
+
+This can also be done using Kristian Rother's \texttt{PDBList} object.
+One simply creates a \texttt{PDBList} object (specifying the directory
+where the local copy of the PDB is present) and calls the \texttt{update\_pdb}
+method:
+
+\begin{lyxcode}
+pl=PDBList(pdb='/data/pdb')
+
+pl.update\_pdb()
+\end{lyxcode}
+One can of course make a weekly \texttt{cronjob} out of this to keep
+the local copy automatically up-to-date. The PDB ftp site can also
+be specified (see API documentation).
+
+\texttt{PDBList} has some additional methods that can be of use. The
+\texttt{get\_all\_obsolete} method can be used to get a list of all
+obsolete PDB entries. The \texttt{changed\_this\_week} method can
+be used to obtain the entries that were added, modified or obsoleted
+during the current week. For more info on the possibilities of \texttt{PDBList},
+see the API documentation.
+
+
+\subsubsection*{What about all those buggy PDB files?}
+
+It is well known that many PDB files contain semantic errors (I'm
+not talking about the structures themselves know, but their representation
+in PDB files). Bio.PDB tries to handle this in two ways. The PDBParser
+object can behave in two ways: a restrictive way and a permissive
+way (THIS IS NOW THE DEFAULT). The restrictive way used to be the
+default, but people seemed to think that Bio.PDB 'crashed' due to
+a bug, so I changed it. If you ever encounter a real (!) bug, please
+tell me immediately!
+
+In the permissive state (DEFAULT), PDB files that obviously contain
+errors are 'corrected' (ie. some residues or atoms are left out).
+These errors include:
+
+\begin{itemize}
+\item Multiple residues with the same identifier
+\item Multiple atoms with the same identifier (taking into account the altloc
+identifier)
+\end{itemize}
+These errors often indicate real problems in the PDB file (for details
+see the Bioinformatics article). 
+
+In the restrictive state, PDB files with errors cause an exception
+to occur. This is good to find errors in PDB files.
+
+
+\subsubsection*{Can I write PDB files?}
+
+Use the PDBIO class for this. It's easy to write out specific parts
+of a structure too, of course.
+
+Example: saving a structure
+
+\begin{lyxcode}
+io=PDBIO()
+
+io.set\_structure(s)
+
+io.save(\char`\"{}out.pdb\char`\"{})
+\end{lyxcode}
+If you want to write out a part of the structure, make use of the
+\texttt{Select} class (also in \texttt{PDBIO}). Select has four methods:
+
+\begin{lyxcode}
+accept\_model(model)
+
+accept\_chain(chain)
+
+accept\_residue(residue)
+
+accept\_atom(atom)
+\end{lyxcode}
+By default, every method returns 1 (which means the model/\-chain/\-residue/\-atom
+is included in the output). By subclassing Select and returning 0
+when appropriate you can exclude models, chains, etc. from the output.
+Cumbersome maybe, but very powerful. The following code only writes
+out glycine residues:
+
+\begin{lyxcode}
+class~GlySelect(Select):
+
+~~~~def~accept\_residue(self,~residue):
+
+~~~~~~~~if~residue.get\_name()=='GLY':
+
+~~~~~~~~~~~~return~1
+
+~~~~~~~~else:
+
+~~~~~~~~~~~~return~0
+
+
+
+io=PDBIO()
+
+io.set\_structure(s)
+
+io.save(\char`\"{}out.pdb\char`\"{},~GlySelect())
+
+
+\end{lyxcode}
+
+\subsubsection*{Can I write mmCIF files?}
+
+No, and I also don't have plans to add that functionality soon (or
+ever - I don't need it at all, and it's a lot of work, plus no-one
+has ever asked for it). People who want to add this can contact me.
+
+
+\subsection{The Structure object\label{sub:The-Structure-object}}
+
+
+\subsubsection*{What's the overall layout of a Structure object?}
+
+The \texttt{Structure} object follows the so-called \texttt{SMCRA}
+architecture: 
+
+\begin{itemize}
+\item A structure consists of models
+\item A model consists of chains
+\item A chain consists of residues
+\item A residue consists of atoms
+\end{itemize}
+This is the way many structural biologists/bioinformaticians think
+about structure, and provides a simple but complete way to deal with
+structure. Additional stuff is essentially added when needed. A UML
+diagram of the \texttt{Structure} object (forget about the Disordered
+classes for now) is shown in Fig. \ref{cap:SMCRA}.
+
+%
+\begin{figure}[tbh]
+\begin{center}\includegraphics[%
+  width=100mm,
+  keepaspectratio]{/home/thamelry/Documents/biopython_manual/smcra.eps}\end{center}
+
+
+\caption{\label{cap:SMCRA}UML diagram of SMCRA architecture of the \texttt{Structure}
+object. Diamonds denote aggregation, arrows denote reference, lines
+with arrows denote inheritance and dotted lines denote interface realization. }
+\end{figure}
+
+
+
+\subsubsection*{How do I iterate through a Structure object?}
+
+The following code iterates through all atoms of a structure:
+
+\begin{lyxcode}
+p=PDBParser()
+
+s=p.get\_structure('X',~'pdb1fat.ent')
+
+for~model~in~structure.get\_iterator():
+
+~~for~chain~in~model.get\_iterator():~
+
+~~~~for~residue~in~chain.get\_iterator():
+
+~~~~~~for~atom~in~residue.get\_iterator():
+
+~~~~~~~~print~atom
+\end{lyxcode}
+Structures, models, chains, residues and atoms are called \texttt{Entities}
+in Biopython. You can always get a parent \texttt{Entity} from a child
+entity, eg:
+
+\begin{lyxcode}
+residue=atom.get\_parent()
+\end{lyxcode}
+
+\subsubsection*{Can I do that a bit faster?}
+
+You can use the \texttt{Selection.unfold\_entities} function:
+
+\begin{lyxcode}
+\#~Get~all~residues~from~a~structure
+
+res\_list=Selection.unfold\_entities(structure,~'R')
+
+\#~Get~all~atoms~from~a~chain
+
+atom\_list=Selection.unfold\_entities(chain,~'A')
+\end{lyxcode}
+You can also use this to get a list of \texttt{Residue} parents from
+a list of \texttt{Atoms}:
+
+\begin{lyxcode}
+residue\_list=Selection.unfold\_entities(atom\_list,~'R')
+\end{lyxcode}
+For more info, see the API documentation.
+
+
+\subsubsection*{How do I extract a specific Atom/Residue/Chain/Model from a Structure?}
+
+Easy. Here are some examples:
+
+\begin{lyxcode}
+atom=residue{[}'CA'{]}
+
+residue=chain{[}100{]}
+
+chain=model{[}'A'{]}
+
+model=structure{[}0{]}
+\end{lyxcode}
+Note that you can use shortcuts:
+
+\begin{lyxcode}
+atom=structure{[}0{]}{[}'A'{]}{[}100{]}{[}'CA'{]}
+\end{lyxcode}
+
+\subsubsection*{What is a model id?}
+
+The model id is an integer which denotes the rank of the model in
+the PDB/mmCIF file. The model is starts at 0. Crystal structures generally
+have only one model (with id 0), while NMR files usually have several
+models.
+
+
+\subsubsection*{What is a chain id?}
+
+The chain id is specified in the PDB/mmCIF file, and is a single character
+(typically a letter). 
+
+
+\subsubsection*{What is a residue id?\ref{residue id}}
+
+This is a bit more complicated, due to the clumsy PDB format. A residue
+id is a tuple with three elements:
+
+\begin{itemize}
+\item The hetero-flag: this is \texttt{'H\_'} plus the name of the hetero-residue
+(eg. \texttt{'H\_GLC'} in the case of a glucose molecule), or \texttt{'W'}
+in the case of a water molecule.
+\item The sequence identifier in the chain, eg. 100
+\item The insertion code, eg, 'A'
+\end{itemize}
+The id of the above glucose residue would thus be ('H\_GLC', 100,
+'A'). If the hetero-flag and insertion code are blanc, the sequence
+identifier alone can be used:
+
+\begin{lyxcode}
+\#~Full~id
+
+residue=chain{[}('~',~100,~'~'){]}
+
+\#~Shortcut~id
+
+residue=chain{[}100{]}
+\end{lyxcode}
+The reason for the hetero-flag is that many, many PDB files use the
+same sequence identifier for an amino acid and a hetero-residue or
+a water, which would create obvious problems. The insertion code is
+eg. used to preserve sequence numbering among point mutants.
+
+The name of the residue can be obtained with the \texttt{get\_resname}
+method.
+
+
+\subsubsection*{What is an atom id?}
+
+The atom id is simply the atom name (eg. \texttt{'CA'}). In practice,
+the atom name is created by stripping all spaces from the atom name
+in the PDB file. 
+
+However, in PDB files, a space can be part of an atom name. Often,
+calcium atoms are called \texttt{'CA..'} in order to distinguish them
+from C$\alpha$ atoms (which are called \texttt{'.CA.'}). In cases
+were stripping the spaces would create problems (ie. two atoms called
+\texttt{'CA'} in the same residue) the spaces are kept.
+
+
+\subsubsection*{How is disorder handled?}
+
+This is one of the strong points of Bio.PDB. It can handle both disordered
+atoms and point mutations (ie. a Gly and an Ala residue in the same
+position). 
+
+Disorder should be dealt with from two points of view: the atom and
+the residue points of view. In general, I have tried to encapsulate
+all the complexity that arises from disorder. If you just want to
+loop over all C$\alpha$ atoms, you do not care that some residues
+have a disordered side chain. On the other hand it should also be
+possible to represent disorder completely in the data structure. Therefore,
+disordered atoms or residues are stored in special objects that behave
+as if there is no disorder. This is done by only representing a subset
+of the disordered atoms or residues. Which subset is picked (e.g.
+which of the two disordered OG side chain atom positions of a Ser
+residue is used) can be specified by the user.
+
+\textbf{Disordered atoms} are represented by ordinary \texttt{Atom}
+objects, but all \texttt{Atom} objects that represent the same physical
+atom are stored in a \texttt{DisorderedAtom} object. Each \texttt{Atom}
+object in a \texttt{DisorderedAtom} object can be uniquely indexed
+using its altloc specifier. The \texttt{DisorderedAtom} object forwards
+all uncaught method calls to the selected Atom object, by default
+the one that represents the atom with with the highest occupancy.
+The user can of course change the selected \texttt{Atom} object, making
+use of its altloc specifier. In this way atom disorder is represented
+correctly without much additional complexity. In other words, if you
+are not interested in atom disorder, you will not be bothered by it.
+
+Each disordered atom has a characteristic altloc identifier. You can
+specify that a \texttt{DisorderedAtom} object should behave like the
+\texttt{Atom} object associated with a specific altloc identifier:
+
+\begin{lyxcode}
+atom.disordered\_select(\char`\"{}A\char`\"{})~\#~select~altloc~A~atom
+
+atom.disordered\_select(\char`\"{}B\char`\"{})~\#~select~altloc~B~atom~
+\end{lyxcode}
+A special case arises when disorder is due to \textbf{point mutation}s,
+i.e. when two or more point mutants of a polypeptide are present in
+the crystal. An example of this can be found in PDB structure 1EN2.
+
+Since these residues belong to a different residue type (e.g. let's
+say Ser 60 and Cys 60) they should not be stored in a single Residue
+object as in the common case. In this case, each residue is represented
+by one Residue object, and both Residue objects are stored in a DisorderedResidue
+object.
+
+The DisorderedResidue object forwards all uncaught methods to the
+selected Residue object (by default the last Residue object added),
+and thus behaves like an ordinary residue. Each Residue object in
+a DisorderedResidue object can be uniquely identified by its residue
+name. In the above example, residue Ser 60 would have id \char`\"{}SER\char`\"{}
+in the DisorderedResidue object, while residue Cys 60 would have id
+\char`\"{}CYS\char`\"{}. The user can select the active Residue object
+in a DisorderedResidue object via this id.
+
+Example: suppose that a chain has a point mutation at position 10,
+consisting of a Ser and a Cys residue. Make sure that residue 10 of
+this chain behaves as the Cys residue.
+
+\begin{lyxcode}
+residue=chain{[}10{]}
+
+residue.disordered\_select(\char`\"{}CYS\char`\"{})
+\end{lyxcode}
+
+\subsubsection*{Can I sort residues in a chain somehow?}
+
+Yes. More info soon.
+
+
+\subsubsection*{How are ligands and solvent handled?}
+
+See 'What is a residue id?'.
+
+
+\subsubsection*{What about B factors?}
+
+Well, yes! Bio.PDB supports isotropic and anisotropic B factors, and
+also deals with standard deviations of anisotropic B factor if present.
+
+
+\subsubsection*{What about standard deviation of atomic positions?}
+
+Yup, supported.
+
+
+\subsubsection*{I think the SMCRA data structure is not flexible/\-molecular/\-sexy/\-whatever
+enough...}
+
+Sure, sure. Everybody is always coming up with data structures that
+handle all possible situations and are extensible in all thinkable
+(and unthinkable) ways. The prozaic truth however is that 99.9\% of
+people using (and I mean really using!) crystal structures think in
+terms of models, chains, residues and atoms. The philosophy of Bio.PDB
+is to provide a reasonably fast, clean, simple, but complete data
+structure to access structure data. 
+
+Moreover, it is quite easy to build more specialised data structures
+on top of the \texttt{Structure} class. On the other hand, the Structure
+object is built using a Parser/Consumer approach (called \texttt{PDBParser/\-MMCIFParser}
+and \texttt{Structure\-Builder}, respectively). One can easily re-use
+the PDB/mmCIF parsers by implementing a specialised \texttt{Structure\-Builder}
+class. It is of course also trivial to add support for new file formats
+by writing new parsers.
+
+
+\subsection{Analysis}
+
+
+\subsubsection*{How do I extract information from an Atom object?}
+
+Using the following methods:
+
+\begin{lyxcode}
+a.get\_name()~\#~atom~name~(spaces~stripped,~e.g.~'CA')~a.get\_id()~\#~id~(equals~atom~name)~
+
+a.get\_coord()~\#~atomic~coordinates~
+
+a.get\_bfactor()~\#~B~factor~
+
+a.get\_occupancy()~\#~occupancy~
+
+a.get\_altloc()~\#~alternative~location~specifie~a.get\_sigatm()~\#~std.~dev.~of~atomic~parameters~a.get\_siguij()~\#~std.~dev.~of~anisotropic~B~factor~a.get\_anisou()~\#~anisotropic~B~factor~
+
+a.get\_fullname()~\#~atom~name~(with~spaces,~e.g.~'.CA.')
+\end{lyxcode}
+
+\subsubsection*{How do I measure distances?}
+
+That's simple: the minus operator for atoms has been overloaded to
+return the distance between two atoms. 
+
+Example:
+
+\begin{lyxcode}
+\#~Get~some~atoms
+
+ca1=residue1{[}'CA'{]}
+
+ca2=residue2{[}'CA'{]}
+
+\#~Simply~substract~the~atoms~to~get~their~distance
+
+distance=ca1-ca2
+\end{lyxcode}
+
+\subsubsection*{How do I measure angles?}
+
+This can easily be done via the vector representation of the atomic
+coordinates, and the \texttt{calc\_angle} function from the \texttt{Vector}
+module:
+
+\begin{lyxcode}
+vector1=atom1.get\_vector()
+
+vector2=atom2.get\_vector()
+
+vector3=atom3.get\_vector()
+
+angle=calc\_angle(vector1,~vector2,~vector3)
+\end{lyxcode}
+
+\subsubsection*{How do I measure torsion angles?}
+
+Again, this can easily be done via the vector representation of the
+atomic coordinates, this time using the \texttt{calc\_dihedral} function
+from the \texttt{Vector} module:
+
+\begin{lyxcode}
+vector1=atom1.get\_vector()
+
+vector2=atom2.get\_vector()
+
+vector3=atom3.get\_vector()
+
+vector4=atom4.get\_vector()
+
+angle=calc\_dihedral(vector1,~vector2,~vector3,~vector4)
+\end{lyxcode}
+
+\subsubsection*{How do I determine atom-atom contacts?}
+
+Use \texttt{NeighborSearch}.
+
+
+\subsubsection*{How do I extract polypeptides from a structure object?}
+
+Use \texttt{PolypeptideBuilder}.
+
+
+\subsubsection*{How do I get the sequence of a structure?}
+
+The first thing to do is to extract all polypeptides from the structure
+(see previous entry). The sequence of each polypeptide can then easily
+be obtained from the \texttt{Polypeptide} objects. The sequence is
+represented as a Biopython \texttt{Seq} object, and its alphabet is
+defined by a \texttt{ProteinAlphabet} object.
+
+Example:
+
+\begin{lyxcode}
+>\,{}>\,{}>~seq=polypeptide.get\_sequence()
+
+>\,{}>\,{}>~print~seq
+
+Seq('SNVVAVE~...',~<class~Bio.Alphabet.ProteinAlphabet>)
+\end{lyxcode}
+
+\subsubsection*{How do I determine secondary structure?}
+
+For this functionality, you need to install DSSP (and obtain a license
+for it - free for academic use). Then use the \texttt{DSSP} class.
+
+
+\subsubsection*{How do I calculate the solvent exposure of a residue?}
+
+Use the \texttt{DSSP} class.
+
+
+\subsubsection*{How do I calculate residue depth?}
+
+For this functionality, you need to install Michel Sanner's MSMS program.
+Then use the \texttt{ResidueDepth} class.
+
+
+\subsubsection*{How do I put a virtual C$\beta$ on a Gly residue?}
+
+OK, I admit, this example is only present to show off the possibilities
+of Bio.PDB's Vector module (though this code is actually used in the
+\texttt{Exposure} module). Suppose that you would like to find the
+position of a Gly residue's C$\beta$ atom, if it had one. How would
+you do that? Well, rotating the N atom of the Gly residue along the
+C$\alpha$-C bond over -120 degrees would roughly put it in the position
+of a C$\beta$ atom. Here's how to do it, making use of the \texttt{rotaxis}
+method (which can be used to construct a rotation around a certain
+axis) of the \texttt{Vector} module:
+
+\begin{lyxcode}
+n=residue{[}'N'{]}.get\_vector()~
+
+c=residue{[}'C'{]}.get\_vector()~
+
+ca=residue{[}'CA'{]}.get\_vector()
+
+\#~center~at~origin
+
+n=n-ca~
+
+c=c-ca~
+
+\#~find~rotation~matrix~that~rotates~-120~degrees
+
+\#~along~the~ca-c~vector
+
+rot=rotaxis(-pi{*}120.0/180.0,~c)
+
+\#~apply~rotation~to~ca-n~vector
+
+cb=n.left\_multiply(rot)
+
+\#~put~on~top~of~ca~atom
+
+cb=cb+ca
+\end{lyxcode}
+This example shows that it's possible to do some quite nontrivial
+vector operations on atomic data, which can be quite useful. In addition
+to all the usual vector operations (cross and dot product, angle,
+norm, etc.) and the above mentioned \texttt{rotaxis} function, the
+\texttt{Vector} module also has methods to rotate (\texttt{rotmat})
+or reflect (\texttt{refmat}) one vector on top of another.
+
+
+\subsection{Manipulating the structure}
+
+
+\subsubsection*{How do I superimpose two structures?}
+
+Surprisingly, this is done using the \texttt{Superimposer} object.
+This object calculates the rotation and translation matrix that rotates
+two lists of atoms on top of each other in such a way that their RMSD
+is minimized. Of course, the two lists need to contain the same amount
+of atoms. The \texttt{Superimposer} object can also apply the rotation/translation
+to a list of atoms. The rotation and translation are stored as a tuple
+in the \texttt{rotran} attribute of the \texttt{Superimposer} object
+(note that the rotation is right multiplying!). The RMSD is stored
+in the \texttt{rmsd} attribute.
+
+The algorithm used by \texttt{Superimposer} comes from \textit{Matrix
+computations, 2nd ed. Golub, G. \& Van Loan (1989)}, and makes use
+of singular value decomposition (as implemented in the general \texttt{Bio.\-SVDSuperimposer}
+module).
+
+Example:
+
+\begin{lyxcode}
+sup=Superimposer()
+
+\#~Specify~the~atom~lists
+
+\#~'fixed'~and~'moving'~are~lists~of~Atom~objects
+
+\#~The~moving~atoms~will~be~put~on~the~fixed~atoms
+
+sup.set\_atoms(fixed,~moving)
+
+\#~Print~rotation/translation/rmsd
+
+print~sup.rotran
+
+print~sup.rms~
+
+\#~Apply~rotation/translation~to~the~moving~atoms
+
+sup.apply(moving)
+\end{lyxcode}
+
+\subsubsection*{How do I superimpose two structures based on their active sites?}
+
+Pretty easily. Use the active site atoms to calculate the rotation/translation
+matrices (see above), and apply them to the whole molecule.
+
+
+\subsubsection*{Can I manipulate the atomic coordinates?}
+
+Yes, using the \texttt{transform} method of the Atom object, or directly
+using the \texttt{set\_coord} method.
+
+
+\subsection{You haven't answered my question yet!}
+
+It's late and I'm tired, and a fresh beer is waiting for me in the
+fridge. Just drop me a mail, and I'll answer you in the morning (with
+a bit of luck...).
+
+
+\section{Contributors}
+
+The main author/maintainer of Bio.PDB is yours truly. Kristian Rother
+donated code to interact with the PDB database, and to parse the PDB
+header. Indraneel Majumdar sent in some bug reports and assisted in
+coding the \texttt{Polypeptide} module. Many, many thanks to Brad
+Chapman, Jeffrey Chang, Andrew Dalke and Iddo Friedberg for suggestions,
+comments and/or general support.
+
+
+\section{Can I contribute?}
+
+Yes, yes, yes! Just send me an e-mail (thamelry@binf.ku.dk) if you
+have something useful to contribute! 
+\end{document}
