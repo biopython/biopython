@@ -13,6 +13,8 @@ import unittest
 
 # local stuff
 import Bio
+from Bio.Seq import Seq
+from Bio import Alphabet
 from BioSQL import BioSeqDatabase
 from BioSQL import BioSeq
 
@@ -117,16 +119,53 @@ class SeqInterfaceTest(unittest.TestCase):
         """Make sure Seqs from BioSQL implement the right interface.
         """
         test_seq = self.item.seq
+        alphabet = test_seq.alphabet
+        assert isinstance(alphabet, Alphabet.Alphabet)
+
+        data = test_seq.data
+        assert type(data) == type("")
+    
+        string_rep = test_seq.tostring()
+        assert type(string_rep) == type("")
+    
+        assert len(test_seq) == 880, len(test_seq)
 
     def t_seq_slicing(self):
         """Check that slices of sequences are retrieved properly.
         """
         test_seq = self.item.seq
+        new_seq = test_seq[:10]
+        assert isinstance(new_seq, BioSeq.DBSeq)
+
+        # simple slicing
+        assert test_seq[:5].tostring() == 'ATTTG'
+        assert test_seq[0:5].tostring() == 'ATTTG'
+        assert test_seq[2:3].tostring() == 'T'
+        assert test_seq[2:4].tostring() == 'TT'
+        assert test_seq[870:].tostring() == 'TTGAATTATA'
+
+        # getting more fancy
+        assert test_seq[-1] == 'A'
+        assert test_seq[1] == 'T'
+        assert test_seq[-10:][5:].tostring() == "TTATA"
 
     def t_seq_features(self):
         """Check SeqFeatures of a sequence.
         """
         test_features = self.item.features
+        cds_feature = test_features[6]
+        assert cds_feature.type == "CDS", cds_feature.type
+        assert str(cds_feature.location) == "(103..579)"
+        for sub_feature in cds_feature.sub_features:
+            assert sub_feature.type == "CDS"
+            assert sub_feature.location_operator == "join"
+       
+        ann = cds_feature.qualifiers["gene"]
+        assert ann == ["kin2"]
+        multi_ann = cds_feature.qualifiers["db_xref"]
+        assert len(multi_ann) == 2
+        assert "GI:16354" in multi_ann
+        assert "SWISS-PROT:P31169" in multi_ann
 
 if __name__ == "__main__":
     sys.exit(run_tests(sys.argv))
