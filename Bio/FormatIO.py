@@ -20,6 +20,26 @@ class FormatIOIterator:
             raise IndexError(i)
         return x
 
+def _get_selected_names(builder, format):
+    if not hasattr(builder, "uses_tags"):
+        return None
+    
+    select_names = tuple(builder.uses_tags())
+    if not hasattr(builder, "get_supported_features"):
+        return select_names
+    
+    d = {}
+    for name in select_names:
+        d[name] = 1
+    supported_features = builder.get_supported_features()
+
+    for name, remove_tags in format.expression.features():
+        if name in supported_features:
+            for tag in remove_tags:
+                if d.has_key(tag):
+                    del d[tag]
+    return d.keys()
+
 class FormatIO:
     def __init__(self, name,
                  default_input_format = None,
@@ -73,28 +93,17 @@ class FormatIO:
         
 
     def readFile(self, infile, format = None, builder = None, debug_level = 0):
-        import time
         if format is None:
             format = self.default_input_format
         format = self.registery.normalize(format)
 
-        t1 = time.clock()
         format, infile = self._get_file_format(format, infile)
-        t2 = time.clock()
-        print "format detected", t2-t1
             
         if format is None:
             raise TypeError("Could not determine file type")
 
-        t1 = time.clock()
         builder = self._find_builder(builder, format)
-        t2 = time.clock()
-        print "builder found", t2-t1
-
-        if hasattr(builder, "uses_tags"):
-            select_names = tuple(builder.uses_tags())
-        else:
-            select_names = None
+        select_names = _get_selected_names(builder, format)
 
         if format.multirecord == 1:
             iterator = format.make_iterator("record",
@@ -102,16 +111,10 @@ class FormatIO:
                                             debug_level = debug_level)
             return FormatIOIterator(iterator.iterateFile(infile, builder))
         elif format.multirecord == 0:
-            t1 = time.clock()
             parser = format.make_parser(select_names = select_names,
                                         debug_level = debug_level)
-            t2 = time.clock()
-            print "Parser made", t2-t1
             parser.setContentHandler(builder)
-            t1 = time.clock()
             parser.parseFile(infile)
-            t2 = time.clock()
-            print "document created", t2-t1
             return builder.document
         else:
             raise AssertionError(format.multirecord)
@@ -122,19 +125,25 @@ class FormatIO:
             format = self.default_input_format
         format = self.registery.normalize(format)
 
+        # Check to see if we need to do further identification.
+        # (FormatDef is the leaf, so we don't need to go further than that.)
         import Format
         if not isinstance(format, Format.FormatDef):
             format = format.identifyString(s)
+            if format is None:
+                raise TypeError("Could not determine file type")
 
         builder = self._find_builder(builder, format)
-
-        iterator = format.make_iterator("record", debug_level = debug_level)
+        select_names = _get_selected_names(builder, format)
         
         if format.multirecord == 1:
-            iterator = exp.make_iterator("record", debug_level = debug_level)
+            iterator = format.make_iterator("record",
+                                            select_names = select_names,
+                                            debug_level = debug_level)
             return FormatIOIterator(iterator.iterateString(s, builder))
         elif format.multirecord == 0:
-            parser = exp.make_parser(debug_level = debug_level)
+            parser = format.make_parser(select_names = select_names,
+                                        debug_level = debug_level)
             parser.setContentHandler(builder)
             parser.parseString(infile)
             return builder.document
@@ -170,14 +179,10 @@ class FormatIO:
 
         writer = self.make_writer(outfile, output_format)
 
-        exp = input_format.expression
-        if hasattr(builder, "uses_tags"):
-            import Martel
-            uses_tags = tuple(builder.uses_tags())
-            exp = Martel.select_names(exp, uses_tags + ("record", "dataset"))
-        
-        parser = exp.make_parser()
+        select_names = _get_selected_names(builder, format)
+        parser = format.make_parser(select_names = select_names)
 
+        # We can optimize StdHandler conversions
         import StdHandler
         if isinstance(builder, Dispatch.Dispatcher):
             cont_h = StdHandler.ConvertDispatchHandler(builder, writer)
