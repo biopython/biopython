@@ -211,11 +211,8 @@ comment = Martel.Group("comment_block",
 
 _to_secondary_end = Martel.Re(r"([^.\R]|(?!.\R)\.)+")
 
-##DR_general = Martel.Re("(?P<database_identifier>[^;]+);" \
-##                       "(?P<primary_identifier>[^;]+); " \
-##                       "(?P<secondary_identifier>([^.\R]|(?!.\R)\.)+)")
-
-database_id = Std.dbxref_dbname(Martel.UntilSep("database_identifier", ";"))
+database_id = Std.dbxref_dbname(Martel.UntilSep("database_identifier", ";"),
+                                {"style": "sp"})
 
 primary_id = Std.dbxref_dbid(Martel.UntilSep("primary_identifier", ";"),
                              {"type": "primary"})
@@ -224,41 +221,58 @@ secondary_id = Std.dbxref_dbid(Martel.Group("secondary_identifier",
                                             _to_secondary_end),
                                {"type": "accession"})
 
-DR_general = Std.dbxref(database_id + Martel.Str("; ") + \
+# used in StdHandler for fast dxbref - don't rename!
+real_DR_general = Std.dbxref(database_id + Martel.Str("; ") + \
                         primary_id + Martel.Str("; ") + \
                         secondary_id,
                         )
+DR_general = Std.fast_dbxref(Martel.select_names(real_DR_general, ()),
+                             {"style": "sp-general"})
 
-##DR_prosite = Martel.Re("(?P<database_identifier>(PROSITE|PFAM)); " \
-##                       "(?P<primary_identifier>[^;]+); " \
-##                       "(?P<secondary_identifier>[^;]+); " \
-##                       "(?P<status_identifier>[^.]+)")
+# This gains a factor of 2
+use_fast = 1
+if not use_fast:
+    DR_general = real_DR_general
 
-DR_prosite = Std.dbxref(
+# used in StdHandler for fast dxbref - don't rename!
+real_DR_prosite = Std.dbxref(
     Std.dbxref_dbname(Martel.Group("database_identifier",
-                                   Martel.Str("PROSITE", "PFAM"))) + \
-    Martel.Str("; ") + \
-    primary_id + \
-    Martel.Str("; ") + \
+                                   Martel.Str("PROSITE", "PFAM")),
+                      {"style": "sp"}) +
+    Martel.Str("; ") + 
+    primary_id +
+    Martel.Str("; ") +
+    Std.dbxref_dbid(Martel.UntilSep(sep = ";"), {"type": "accession"}) +
+    Martel.Str("; ") +
     Martel.UntilSep("status_identifier", "."),
     )
 
-##DR_embl = Martel.Re("(?P<database_identifier>EMBL); " \
-##                    "(?P<primary_identifier>[^;]+); " \
-##                    "(?P<secondary_identifier>[^;]+); " \
-##                    "(?P<status_identifier>[^.]+)")
+# used in StdHandler for fast dxbref - don't rename!
+DR_prosite = Std.fast_dbxref(Martel.select_names(real_DR_prosite, ()),
+                             {"style": "sp-prosite"})
 
-DR_embl = Std.dbxref(
+if not use_fast:
+    DR_prosite = real_DR_prosite
+
+real_DR_embl = Std.dbxref(
     Std.dbxref_dbname(Martel.Group("database_identifier",
-                                   Martel.Str("EMBL"))) + \
-    Martel.Str("; ") + \
-    primary_id + \
-    Martel.Str("; ") + \
+                                   Martel.Str("EMBL")),
+                      {"style": "sp"}) +
+    Martel.Str("; ") +
+    primary_id +
+    Martel.Str("; ") +
     Std.dbxref_dbid(Martel.UntilSep("secondary_identifier", ";"),
-                    {"type": "accession"}) + \
-    Martel.Str("; ") + \
+                    {"type": "accession"}) +
+    Martel.Str("; ") +
     Martel.UntilSep("status_identifier", "."),
     )
+
+DR_embl = Std.fast_dbxref(Martel.select_names(real_DR_embl, ()),
+                             {"style": "sp-embl"})
+
+if not use_fast:
+    DR_embl = real_DR_embl
+
 
 DR = Martel.Group("DR", Martel.Str("DR   ") + \
                   Martel.Group("database_reference",
