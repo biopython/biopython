@@ -385,6 +385,7 @@ class _Scanner:
         #
 
         attempt_read_and_call(uhandle, consumer.noevent, start='<PRE>')
+        attempt_read_and_call(uhandle, consumer.noevent, blank=1)
         read_and_call(uhandle, consumer.score, start=' Score')
         read_and_call(uhandle, consumer.identities, start=' Identities')
         # BLASTN
