@@ -10,7 +10,7 @@ s = "TCAAAAAGGTGCATCTAGATG"
 print "Starting with", s
 dna = Seq.Seq(s, IUPAC.unambiguous_dna)
 
-from Bio.Tools import Translate
+from Bio import Translate
 
 # use the standard table
 trans = Translate.unambiguous_dna_by_id[1]

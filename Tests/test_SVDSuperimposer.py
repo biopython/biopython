@@ -1,6 +1,6 @@
 from Numeric import *
 
-from Bio.Tools.SVDSuperimposer import *
+from Bio.SVDSuperimposer import *
 
 # start with two coordinate sets (Nx3 arrays - Float0)
 

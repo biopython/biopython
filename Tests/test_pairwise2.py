@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from Bio.Align import pairwise2
+from Bio import pairwise2
 
 
 def _pretty_print_align(align1, align2, score, begin, end):

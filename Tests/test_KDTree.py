@@ -1,4 +1,4 @@
-from Bio.Tools.KDTree import _neighbor_test, _test
+from Bio.KDTree import _neighbor_test, _test
 
 nr_points=5000
 dim=3
