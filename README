@@ -122,7 +122,6 @@ To Do
   o Genbank
     - Chris Fenton chrisf@fagmed.uit.no
 - generalize parsers
-- bug database
 - regression tests
 - documentation(!!)
 - look into Zope-ifying the web site
