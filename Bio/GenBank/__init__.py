@@ -1461,7 +1461,8 @@ class NCBIDictionary:
     Methods:
     
     """
-    def __init__(self, database='sequences', delay=5.0, parser=None):
+    def __init__(self, database='sequences', format="gb", delay=5.0,
+                 parser=None):
         """NCBIDictionary([database][, delay][, parser])
 
         Create a new Dictionary to access GenBank.  Valid values for
@@ -1475,7 +1476,9 @@ class NCBIDictionary:
         self.parser = parser
         self.limiter = RequestLimiter(delay)
         self.database = database
-        if self.database == 'nucleotide':
+        if format:
+            self.format = format
+        elif self.database == 'nucleotide':
             self.format = 'gb'
         elif self.database == 'protein' or self.database == 'popset':
             self.format = 'gp'
