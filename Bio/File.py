@@ -14,7 +14,7 @@ StringHandle   Wraps a file object around a string.
 import os
 import string
 import tempfile
-import cStringIO
+import StringIO
 
 class UndoHandle:
     """A Python handle that adds functionality for saving lines.
@@ -70,4 +70,7 @@ class UndoHandle:
     def __getattr__(self, attr):
         return getattr(self._handle, attr)
 
-StringHandle = cStringIO.StringIO
+# I could make this faster by using cStringIO.
+# However, cStringIO (in v1.52) does not implement the
+# readlines method.
+StringHandle = StringIO.StringIO
