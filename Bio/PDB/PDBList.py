@@ -155,7 +155,9 @@ OBSLTE     26-SEP-03 1DYV      1UN2
         """Retrieves a PDB structure file from the PDB server and
         stores it in a local file tree (if 'write' is set true).
         The PDB structure is returned as a single string.
-        The compression should be '.Z'.
+        The compression should be '.Z' or '.gz'. If uncompress
+		or gunzip is installed the structure files are automatically 
+		uncompressed.
         """
         # get the structure
         code=string.lower(pdb_code)
@@ -170,10 +172,10 @@ OBSLTE     26-SEP-03 1DYV      1UN2
         open(filename,'w').write(lines)
 
         # uncompress the file
-        if compression==".Z":
-            os.system("uncompress %s" % filename)
+		if compression==".Z":
+			os.system("uncompress %s" % filename)
 		elif compression==".gz":
-            os.system("gunzip %s" % filename)
+			os.system("gunzip %s" % filename)
 
         return lines
             
