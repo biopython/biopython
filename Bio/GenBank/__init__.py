@@ -1319,6 +1319,10 @@ class NCBIDictionary:
         # Please try again later. Server error  for GI "7212005"
         elif line.find("Please try again later.") >= 0:
             raise KeyError, line
+        # if a sequuence has been withdrawn, we'll get a line like:
+        # The sequence has been intentionally withdrawn : GI "9993999"
+        elif line.find("intentionally withdrawn") >= 0:
+            raise KeyError, line
         elif line.lower().find('html') >= 0:
             raise KeyError, "I unexpectedly got back html-formatted data."
         # Parse the record if a parser was passed in.
