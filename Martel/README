@@ -1,11 +1,16 @@
                           Martel
-                       version 0.5
+                       version 0.6
 
                Life's too short to (re)write parsers
 
              A scanner generator for regular grammars
                supporting a SAX-like output interface
 
+             THIS DOCUMENT IS  NO LONGER VALID!
+
+        Martel is being moved into CVS and non-core code moved
+                  into other parts of biopython.
+         
 
 - To see output right away
 
