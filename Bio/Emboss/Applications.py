@@ -294,7 +294,7 @@ class WaterCommandline(Application.AbstractCommandline):
         self.program_name = cmd
 
         self.parameters = \
-         [_Option(["-sequencea"], ["input", "file"], None, 1,
+         [_Option(["-asequence"], ["input", "file"], None, 1,
                   "First sequence to align"),
          _Option(["-seqall"], ["input", "file"], None, 1,
                   "Second sequence to align"),
