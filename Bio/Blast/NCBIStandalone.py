@@ -54,6 +54,21 @@ class LowQualityBlastError(Exception):
     """
     pass
 
+class ShortQueryBlastError(Exception):
+    """Error caused by running a short query sequence through BLAST.
+
+    If the query sequence is too short, BLAST outputs warnings and errors:
+    Searching[blastall] WARNING:  [000.000]  AT1G08320: SetUpBlastSearch failed.
+    [blastall] ERROR:  [000.000]  AT1G08320: Blast: 
+    [blastall] ERROR:  [000.000]  AT1G08320: Blast: Query must be at least wordsize
+    done
+
+    This exception is raised when that condition is detected.
+
+    """
+    pass
+    
+
 class _Scanner:
     """Scan BLAST output from blastall or blastpgp.
 
@@ -172,6 +187,18 @@ class _Scanner:
         if not uhandle.peekline():
             raise SyntaxError, "Unexpected end of blast report.  " + \
                   "Looks suspiciously like a PSI-BLAST crash."
+
+        # BLASTN 2.2.3 sometimes spews a bunch of warnings and errors here:
+        # Searching[blastall] WARNING:  [000.000]  AT1G08320: SetUpBlastSearch 
+        # [blastall] ERROR:  [000.000]  AT1G08320: Blast: 
+        # [blastall] ERROR:  [000.000]  AT1G08320: Blast: Query must be at leas
+        # done 
+        # Reported by David Weisman.
+        # Check for these error lines and ignore them for now.  Let
+        # the BlastErrorParser deal with them.
+        if uhandle.peekline().find("ERROR:") >= 0:
+            read_and_call_while(uhandle, consumer.noevent, contains="ERROR:")
+            read_and_call(uhandle, consumer.noevent, start="done")
 
         # Check to see if this is PSI-BLAST.
         # If it is, the 'Searching' line will be followed by:
@@ -528,74 +555,6 @@ class BlastParser(AbstractParser):
         """parse(self, handle)"""
         self._scanner.feed(handle, self._consumer)
         return self._consumer.data
-
-class BlastErrorParser(AbstractParser):
-    """Attempt to catch and diagnose BLAST errors while parsing.
-
-    This utilizes the BlastParser module but adds an additional layer
-    of complexity on top of it by attempting to diagnose SyntaxError's
-    that may actually indicate problems during BLAST parsing.
-
-    Current BLAST problems this detects are:
-    o LowQualityBlastError - When BLASTing really low quality sequences
-    (ie. some GenBank entries which are just short streches of a single
-    nucleotide), BLAST will report an error with the sequence and be
-    unable to search with this. This will lead to a badly formatted
-    BLAST report that the parsers choke on. The parser will convert the
-    SyntaxError to a LowQualityBlastError and attempt to provide useful
-    information.
-    """
-    def __init__(self, bad_report_handle = None):
-        """Initialize a parser that tries to catch BlastErrors.
-
-        Arguments:
-        o bad_report_handle - An optional argument specifying a handle
-        where bad reports should be sent. This would allow you to save
-        all of the bad reports to a file, for instance. If no handle
-        is specified, the bad reports will not be saved.
-        """
-        self._bad_report_handle = bad_report_handle
-        
-        self._b_parser = BlastParser()
-
-    def parse(self, handle):
-        """Parse a handle, attempting to diagnose errors.
-        """
-        results = handle.read()
-
-        try:
-            return self._b_parser.parse(File.StringHandle(results))
-        except SyntaxError, msg:
-            # if we have a bad_report_file, save the info to it first
-            if self._bad_report_handle:
-                # send the info to the error handle
-                self._bad_report_handle.write(results)
-
-            # now we want to try and diagnose the error
-            self._diagnose_error(
-                File.StringHandle(results), self._b_parser._consumer.data)
-
-            # if we got here we can't figure out the problem
-            # so we should pass along the syntax error we got
-            raise SyntaxError, msg
-
-    def _diagnose_error(self, handle, data_record):
-        """Attempt to diagnose an error in the passed handle.
-
-        Arguments:
-        o handle - The handle potentially containing the error
-        o data_record - The data record partially created by the consumer.
-        """
-        line = handle.readline()
-
-        while line:
-            # 'Searchingdone' instead of 'Searching......done' seems
-            # to indicate a failure to perform the BLAST due to
-            # low quality sequence
-            if line[:13] == 'Searchingdone':
-                raise LowQualityBlastError("Blast failure occured on query: ",
-                                           data_record.query)
-            line = handle.readline()
 
 class PSIBlastParser(AbstractParser):
     """Parses BLAST data into a Record.PSIBlast object.
@@ -1647,4 +1606,87 @@ def _safe_float(str):
         str = string.replace(str, ',', '')
     # try again.
     return float(str)
+
+class _BlastErrorConsumer(_BlastConsumer):
+    def __init__(self):
+        _BlastConsumer.__init__(self)
+    def noevent(self, line):
+        if line.find("Query must be at least wordsize") >= 0:
+            raise ShortQueryBlastError, "Query must be at least wordsize"
+        # Now pass the line back up to the superclass.
+        method = getattr(_BlastConsumer, 'noevent',
+                         _BlastConsumer.__getattr__(self, 'noevent'))
+        method(line)
+
+class BlastErrorParser(AbstractParser):
+    """Attempt to catch and diagnose BLAST errors while parsing.
+
+    This utilizes the BlastParser module but adds an additional layer
+    of complexity on top of it by attempting to diagnose SyntaxError's
+    that may actually indicate problems during BLAST parsing.
+
+    Current BLAST problems this detects are:
+    o LowQualityBlastError - When BLASTing really low quality sequences
+    (ie. some GenBank entries which are just short streches of a single
+    nucleotide), BLAST will report an error with the sequence and be
+    unable to search with this. This will lead to a badly formatted
+    BLAST report that the parsers choke on. The parser will convert the
+    SyntaxError to a LowQualityBlastError and attempt to provide useful
+    information.
+    
+    """
+    def __init__(self, bad_report_handle = None):
+        """Initialize a parser that tries to catch BlastErrors.
+
+        Arguments:
+        o bad_report_handle - An optional argument specifying a handle
+        where bad reports should be sent. This would allow you to save
+        all of the bad reports to a file, for instance. If no handle
+        is specified, the bad reports will not be saved.
+        """
+        self._bad_report_handle = bad_report_handle
+        
+        #self._b_parser = BlastParser()
+        self._scanner = _Scanner()
+        self._consumer = _BlastErrorConsumer()
+
+    def parse(self, handle):
+        """Parse a handle, attempting to diagnose errors.
+        """
+        results = handle.read()
+
+        try:
+            self._scanner.feed(File.StringHandle(results), self._consumer)
+        except SyntaxError, msg:
+            # if we have a bad_report_file, save the info to it first
+            if self._bad_report_handle:
+                # send the info to the error handle
+                self._bad_report_handle.write(results)
+
+            # now we want to try and diagnose the error
+            self._diagnose_error(
+                File.StringHandle(results), self._consumer.data)
+
+            # if we got here we can't figure out the problem
+            # so we should pass along the syntax error we got
+            raise
+        return self._consumer.data
+
+    def _diagnose_error(self, handle, data_record):
+        """Attempt to diagnose an error in the passed handle.
+
+        Arguments:
+        o handle - The handle potentially containing the error
+        o data_record - The data record partially created by the consumer.
+        """
+        line = handle.readline()
+
+        while line:
+            # 'Searchingdone' instead of 'Searching......done' seems
+            # to indicate a failure to perform the BLAST due to
+            # low quality sequence
+            if line[:13] == 'Searchingdone':
+                raise LowQualityBlastError("Blast failure occured on query: ",
+                                           data_record.query)
+            line = handle.readline()
 
