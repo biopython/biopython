@@ -8,6 +8,7 @@
 # as part of this package.
 
 import os, sys, getopt, re, time
+from string import maketrans
 from Bio import Fasta
 from Bio import Translate
 from Bio.Seq import Seq
@@ -20,9 +21,16 @@ from Bio.Data import IUPACData, CodonTable
 ######################
 # {{{ 
 
+_before = ''.join(IUPACData.ambiguous_dna_complement.keys())
+_after = ''.join(IUPACData.ambiguous_dna_complement.values())
+_ttable = maketrans(_before, _after)
+
 def complement(seq):
-   " returns the complementary sequence (NOT antiparallel) "
-   return ''.join([IUPACData.ambiguous_dna_complement[x] for x in seq])
+    '''returns the complementary sequence (NOT antiparallel)
+    much faster on long sequences than the previous loop based one.
+    provided by Michael Palmer, University of Waterloo
+    '''
+    return seq.translate(_ttable)
 
 def reverse(seq):
    " reverse the sequence "
