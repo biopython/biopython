@@ -23,13 +23,17 @@ obs_freq_mat.print_mat(f=f,format=" %4.3f")
 
 
 f.write("Diff between supplied and matrix-derived frequencies, should be small\n")
-for i in ftab_prot.keys():
+ks = ftab_prot.keys()
+ks.sort()
+for i in ks:
     f.write("%s %.2f\n" % (i,abs(ftab_prot[i] - ftab_prot2[i])))
 
 s = 0.
 f.write("Calculating sum of letters for an observed frequency matrix\n")
 obs_freq_mat.all_letters_sum()
-for i in obs_freq_mat.sum_letters.keys():
+ks = obs_freq_mat.sum_letters.keys()
+ks.sort()
+for i in ks:
     f.write("%s\t%.2f\n" % (i, obs_freq_mat.sum_letters[i]))
     s += obs_freq_mat.sum_letters[i]
 f.write("Total sum %.2f should be 1.0\n" % (s))

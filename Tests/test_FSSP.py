@@ -4,14 +4,16 @@ import sys
 import os
 import cPickle
 import time
+import pprint
 
 test_file = os.path.join('FSSP', '1cnv.fssp')
 f = sys.stdout
 f.write("\nRead in %s\n" % os.path.basename(test_file))
 head_rec, sum_rec, align_rec = FSSP.read_fssp(open(test_file))
 f.write("...1cnv.fssp read\n")
-for i in dir(head_rec):
-   f.write('head_rec.%s %s\n' % (i, str(getattr(head_rec,i))))
+for i in ["author", "compnd", "database", "header", "nalign",
+          "pdbid", "seqlength", "source"]:
+    f.write('head_rec.%s %s\n' % (i, str(getattr(head_rec,i))))
 f.write("\nlen(sum_rec) = %d; head_rec.nalign = %d\n" %
         (len(sum_rec), head_rec.nalign))
 f.write("The above two numbers should be the same\n")
@@ -36,5 +38,6 @@ name_list = ['2hvm0', '1hvq0', '1nar0', '2ebn0']
 f.write("\nname list %s\n" % str(name_list))
 sum_newnames, align_newnames = FSSPTools.name_filter(sum_rec, align_rec,
                                                      name_list)
-f.write("\n%s\n" % sum_newnames)
-f.write("\n%s\n" % align_newnames['0P168'].pos_align_dict)
+
+pprint.pprint(sum_newnames, f)
+pprint.pprint(align_newnames['0P168'].pos_align_dict, f)

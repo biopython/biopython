@@ -36,11 +36,11 @@ J IMMUNOL 150: 4985-4995 (1993)
 VARADE,W.S.,MARIN,E.,KITTELBERGER,A.M. & INSEL,R.A. 
 J IMMUNOL 150: 4985-4995 (1993)
 8496600
-SRCE: PCR AMPLIFIED cDNA FROM SPLEEN OF PATIENT WITH CHRONICMYELOGENOUS LEUKEMIA
-NNNT: FOR ALIGNMENT, THE CODONS ctt acc acc gtc tac tac aac WEREREPLACED BY A # AT POSITION 100H.
-NNIN: 100H:  ctt acc acc gtc tac tac aac
 AAIN: 100H:  LEU THR THR VAL TYR TYR ASN
 AANT: FOR ALIGNMENT, THE AMINO ACIDS LEU THR THR VAL TYR TYR ASN WEREREPLACED BY A # AT POSITION 100H.
+NNIN: 100H:  ctt acc acc gtc tac tac aac
+NNNT: FOR ALIGNMENT, THE CODONS ctt acc acc gtc tac tac aac WEREREPLACED BY A # AT POSITION 100H.
+SRCE: PCR AMPLIFIED cDNA FROM SPLEEN OF PATIENT WITH CHRONICMYELOGENOUS LEUKEMIA
 
 ccaggactggtgaagccctcgcagaccctctcactcacctgtgccatctccggggacagtgtctctgacaggagtgcttc
 ctggatcaggcagtccccttcgagaggccttgagtggctgggaaggacatactccaagtggtttagtgattatgcggact
@@ -112,8 +112,8 @@ J IMMUNOL 150: 1348-1357 (1993)
 MORTARI,F.,WANG,J.-Y. & SCHROEDER,JR.,H.W. 
 J IMMUNOL 150: 1348-1357 (1993)
 8381834
-SRCE: PCR AMPLIFIED cDNA FROM HUMAN CORD BLOOD MONONUCLEAR CELLS
 CLAS: IGA-
+SRCE: PCR AMPLIFIED cDNA FROM HUMAN CORD BLOOD MONONUCLEAR CELLS
 
 ---caggtgcagctggtggagtctgggggaggcttcgtcaagcctggagggtccctgagactctcctgtgcagcctctgg
 attcacctttagtgactactacatgagctggatccgccaggctccagggaaggggctggagtgggtttcatacattagta
