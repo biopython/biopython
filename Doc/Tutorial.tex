@@ -1501,9 +1501,27 @@ expect_freq = {
     'G' : .2,
     'T' : .3,
     'C' : .2}
+\end{verbatim}
 
+The expected should not be passed as a raw dictionary, but instead by passed as a \verb|SubsMat.FreqTable| object (see section~\ref{sec:freq_table} for more information about FreqTables). The FreqTable object provides a standard for associating the dictionary with an Alphabet, similar to how the Biopython Seq class works. 
+
+
+To create a FreqTable object, from the frequency dictionary you just need to do:
+
+\begin{verbatim}
+from Bio.Alphabet import IUPAC
+from Bio.SubsMat import FreqTable
+
+e_freq_table = FreqTable.FreqTable(expect_freq, FreqTable.FREQ,
+                                   IUPAC.unambigous_dna)
+\end{verbatim}
+
+Now that we've got that, calculating the relative information content for our region of the alignment is as simple as:
+
+
+\begin{verbatim}
 info_content = summary_align.information_content(5, 30,
-                                                 expected_freqs = expect_freq,
+                                                 e_freq_table = e_freq_table,
                                                  chars_to_ignore = ['N'])
 \end{verbatim}
 
@@ -1570,6 +1588,7 @@ Biopython provides a ton of common substitution matrices, and also provides func
 \subsubsection{Using common substitution matrices}
 
 \subsubsection{Creating your own substitution matrix from an alignment}
+\label{sec:subs_mat_ex}
 
 A very cool thing that you can do easily with the substitution matrix classes is to create your own substitution matrix from an alignment. To do this, we first need to get a biopython alignment object and then get a summary object to calculate info about the alignment:
 

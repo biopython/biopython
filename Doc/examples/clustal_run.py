@@ -7,9 +7,11 @@ and parse the results into an object that can be dealt with easily."""
 import os
 
 # biopython
+from Bio.Alphabet import IUPAC
 from Bio.Clustalw import Clustalw
 from Bio.Clustalw.Clustalw import MultipleAlignCL
 from Bio.Align import AlignInfo
+from Bio.SubsMat import FreqTable
 
 # create the command line to run clustalw
 # this assumes you've got clustalw somewhere on your path, otherwise
@@ -47,9 +49,15 @@ expect_freq = {
     'A' : .3,
     'G' : .2,
     'T' : .3,
-    'C' : .1,
-    '-' : .1}
+    'C' : .2}
+
+freq_table_info = FreqTable.FreqTable(expect_freq, FreqTable.FREQ,
+                                      IUPAC.unambiguous_dna)
 
 info_content = summary_align.information_content(5, 30,
-                                                 chars_to_ignore = ['N'])
+                                                 chars_to_ignore = ['N'],
+                                                 e_freq_table = \
+                                                 freq_table_info)
+
+print "relative info content:", info_content
 
