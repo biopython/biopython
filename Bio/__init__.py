@@ -4,18 +4,31 @@
 # as part of this package.
 
 __all__ = [
+    "Align",
+    "Alphabet"
     "Blast",
-    "Entrez",
+    "Clustalw",
+    "Data",
+    "Encodings",
     "Enzyme",
     "Fasta",
     "File",
+    "GenBank",
+    "Gobase",
     "Index",
     "Medline",
     "PDB",
     "ParserSupport",
     "Prosite",
+    "Rebase",
     "SCOP",
-    "Sequence",
+    "Seq",
+    "SeqFeature",
+    "SeqRecord",
+    "SubsMat",
     "SwissProt",
-    "Toolbox"
+    "Tools",
+    "UniGene",
+    "WWW",
+    "utils"
     ]
