@@ -25,7 +25,24 @@ import getopt
 # PyUnit
 import unittest
 
+import distutils.util
+
 def main(argv):
+    # insert our pathes in sys.path:
+    # ../build/lib.*
+    # ..
+    # Q. Why this order?
+    # A. To find the C modules (which are in ../build/lib.*/Bio)
+    # Q. Then, why ".."?
+    # A. Because Martel may not be in ../build/lib.*
+    test_path = sys.path[0] or "."
+    source_path = os.path.abspath("%s/.." % test_path)
+    sys.path.insert(1, source_path)
+    build_path = os.path.abspath("%s/../build/lib.%s-%s" % (
+        test_path, distutils.util.get_platform(), sys.version[:3]))
+    if os.access(build_path, os.F_OK):
+        sys.path.insert(1, build_path)
+    
     # start off using the GUI
     use_gui = 1
     
