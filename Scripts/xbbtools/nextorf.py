@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # Created: Tue Aug  8 20:32:36 2000
-# Last changed: Time-stamp: <00/08/09 15:42:04 thomas>
+# Last changed: Time-stamp: <00/08/09 17:16:46 thomas>
 # thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas/index.html
 # File: nextorf.py
 
@@ -24,7 +24,7 @@ class NextORF:
         self.code = 1
         self.file = file
         self.options = options
-        self.translator = Translate.ambiguous_dna_by_id[self.options['table']]
+        self.translator = Translate.unambiguous_dna_by_id[self.options['table']]
         
     def read_file(self):
         self.parser = Fasta.RecordParser()
@@ -49,8 +49,8 @@ class NextORF:
         if self.options['strand'] == 'both' or self.options['strand'] == 'plus': plus = 1
         if self.options['strand'] == 'both' or self.options['strand'] == 'minus': minus = 1         
         s = string.upper(rec.sequence[self.options['start']:self.options['stop']])
-        seq = Seq(s,IUPAC.ambiguous_dna)
-        if minus: rseq = Seq(complement(s), IUPAC.ambiguous_dna)
+        seq = Seq(s,IUPAC.unambiguous_dna)
+        if minus: rseq = Seq(complement(s), IUPAC.unambiguous_dna)
 
 
         n = 0
