@@ -16,7 +16,6 @@ from Bio.Tools.MultiProc.copen import copen_fn
 from Bio.ReseekFile import ReseekFile
 from Bio.WWW import RequestLimiter
 from Bio import SeqRecord
-from BioSQL import BioSeqDatabase
 
 from Martel import Parser
 
@@ -160,6 +159,9 @@ class BioSQL(Source):
         self.namespace_db = namespace_db
     
     def _rawget(self, params):
+        # do the import here to prevent circular import problems
+        from BioSQL import BioSeqDatabase
+
         # for params, we expect to get something like
         # [('accession', 'AB030760')]. We don't worry about what the id
         # is called right now, and just try to find it in the database
