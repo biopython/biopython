@@ -61,7 +61,6 @@ def match_sequence( first, second, threshold ):
                 max_match = match_count
         else:
             match_count = 0
-    print max_match
     if( max_match >= threshold ):
         return 1
     else:
@@ -85,7 +84,8 @@ class Immune:
         self.hot_random = HotRandom()
         self.friendly = friendly
         self.alphabet = alphabet[:]
-        self.lymphocyte_factory( size )
+        self.size = size
+        self.lymphocyte_factory( self.size )
 
     def select_at_random( self, items ):
         selector = self.hot_random.hot_rand( len( items ) - 1 )
@@ -115,7 +115,9 @@ class Immune:
         return seq
 
 
-    def found_antigen( self, detector, mystery_sequence, threshold = 3 ):
+    def found_antigen( self, detector, mystery_sequence, threshold = 5 ):
+        detector = detector.lower()
+        mystery_sequence = mystery_sequence.lower()
         return( match_sequence( detector, mystery_sequence, threshold ) )
 
     def lazy_auto_immune_check( self, seq ):
@@ -164,14 +166,17 @@ class Immune:
         Lots of tests are required
         """
         index = self.pick_a_lymphocyte()
+        mystery_sequence = mystery_sequence.lower()
         lymphocyte = self.lymphocytes[ index ]
         detector = lymphocyte.residues
+#        print 'detector %s mystery_sequence %s' % ( detector, mystery_sequence )
         suspicious = self.found_antigen( detector, mystery_sequence )
         if suspicious:
+            auto_immune = 0
             if( lymphocyte.may_be_autoimmune ):
                 auto_immune = self.lazy_auto_immune_check( detector )
             if( auto_immune ):
-                self.lymphocytes.remove( index )
+                del self.lymphocytes[ index ]
                 self.create_lymphocyte()
                 suspicious = 0
             else:
@@ -183,14 +188,14 @@ class Immune:
 
 
     def create_lymphocyte( self ):
-        lymphocyte = self.guess_gaps( consensus.data )
+        lymphocyte = self.guess_gaps( self.consensus.data )
         lymphocyte = self.scramble( lymphocyte )
         self.lymphocytes.append( Lymphocyte( lymphocyte ) )
         self.compute_accum_weight()
 
 
 
-    def lymphocyte_factory( self, num_lymphocytes = 20 ):
+    def lymphocyte_factory( self, num_lymphocytes  ):
         self.lymphocytes = []
         summary_info = SummaryInfo( self.friendly )
         consensus = summary_info.dumb_consensus()
