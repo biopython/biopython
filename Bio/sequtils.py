@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # Created: Sat Jul 21 08:01:13 2001
-# Last changed: Time-stamp: <01/07/24 14:38:06 thomas>
+# Last changed: Time-stamp: <01/07/24 18:50:05 thomas>
 # thomas@cbs.dtu.dk, Cecilia.Alsmark@ebc.uu.se
 # Copyright 2001 by Thomas Sicheritz-Ponten and Cecilia Alsmark.
 # All rights reserved.
@@ -263,6 +263,32 @@ def molecular_weight(seq):
       sum += weight_table[x]
    return sum
 
+def nt_search(seq, subseq):
+   pattern = ''
+   for nt in subseq:
+      value = IUPACData.ambiguous_dna_values[nt]
+      if len(value) == 1:
+         pattern += value
+      else:
+         pattern += '[%s]' % value
+
+   pos = -1
+   result = [pattern]
+   l = len(seq)
+   while 1:
+      pos+=1
+      s = seq[pos:]
+      m = re.search(pattern, s)
+      if not m: break
+      pos += int(m.start(0))
+      result.append(pos)
+
+   return result
+
+      
+      
+   
+   
 def fasta_uniqids(file):
    " checks and changes the name/ID's to be unique identifiers by adding numbers "
    dict = {}
@@ -297,7 +323,7 @@ def quick_FASTA_reader(file):
       
    return entries
     
-def apply_on_multi_fasta(file, function):
+def apply_on_multi_fasta(file, function, *args):
    " apply function on each sequence in a multiple FASTA file "
    try:
       f = globals()[function]
@@ -307,15 +333,18 @@ def apply_on_multi_fasta(file, function):
    parser = Fasta.RecordParser()
    handle = open(file, 'r')
    iter = Fasta.Iterator(handle, parser)
-
+   results = []
    while 1:
       record = iter.next()
       if not record: break
-      result = f(record.sequence)
+      arguments = [record.sequence]
+      for arg in args: arguments.append(arg)
+      result = apply(f, arguments)
       if result:
-         print '>%s\n%s' % (record.title, result)
+         results.append('>%s\n%s' % (record.title, result))
+   return results
          
-def quicker_apply_on_multi_fasta(file, function):
+def quicker_apply_on_multi_fasta(file, function, *args):
    " apply function on each sequence in a multiple FASTA file "
    try:
       f = globals()[function]
@@ -323,11 +352,14 @@ def quicker_apply_on_multi_fasta(file, function):
       raise NotImplementedError, "%s not implemented" % function
    
    entries = quick_FASTA_reader(file)
+   results = []
    for name, seq in entries:
-      result = f(seq)
+      arguments = [seq]
+      for arg in args: arguments.append(arg)
+      result = apply(f, arguments)
       if result:
-         print '>%s\n%s' % (record.title, result)
-         
+         results.append('>%s\n%s' % (record.title, result))
+   return results
     
 if __name__ == '__main__':
    # crude command line options to use most functions directly on a FASTA file
@@ -337,7 +369,7 @@ if __name__ == '__main__':
               }
 
    optlist, args = getopt.getopt(sys.argv[1:], '', ['describe', 'apply_on_multi_fasta=',
-                                                    'help', 'quick', 'uniq_ids', 'search'])
+                                                    'help', 'quick', 'uniq_ids', 'search='])
    for arg in optlist:
       if arg[0] in ['-h', '--help']:
          pass
@@ -346,7 +378,9 @@ if __name__ == '__main__':
          mol_funcs = [x[0] for x in locals().items() if type(x[1]) == type(GC)]
          mol_funcs.sort()
          print 'available functions:'
-         for f in mol_funcs: print '\t', f
+         for f in mol_funcs: print '\t--%s' % f
+         print '\n\ne.g.\n./sequtils.py  --apply_on_multi_fasta GC test.fas'
+
          sys.exit(0)
       elif arg[0] in ['--apply_on_multi_fasta']:
          options['apply_on_multi_fasta'] = arg[1]
@@ -360,14 +394,17 @@ if __name__ == '__main__':
    if options.get('apply_on_multi_fasta'):
       file = args[0]
       function = options['apply_on_multi_fasta']
-
+      arguments = []
+      if options.get('search'):
+         arguments = options['search']
+                          
       if options.get('quick'):
-         quicker_apply_on_multi_fasta(file, function)
+         results = quicker_apply_on_multi_fasta(file, function, arguments)
       else:
-         apply_on_multi_fasta(file, function)
+         results = apply_on_multi_fasta(file, function, arguments)
+      for result in results: print result
       
    elif options.get('uniq_ids'):
       file = args[0]
       fasta_uniqids(file)
-      
 
