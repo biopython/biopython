@@ -347,7 +347,6 @@ class _RecordConsumer(AbstractConsumer):
         pass
 
     def sequence( self, line ):
-        print '### %s ' % line
 	cols = string.split( line, ': ' )
         sequence = cols[ 1 ]
         sequence = string.strip( sequence )

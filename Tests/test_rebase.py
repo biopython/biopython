@@ -23,9 +23,10 @@ for test in tests:
     datafile = os.path.join( 'Rebase', test )
     src_handle = open( datafile )
     data = record_parser.parse( src_handle )
+    print 'sequence'
     print data.seq_5_to_3
     print data.seq_3_to_5
-    print '!!! %s ' % data.enzyme_num
+    print 'Enzyme number %s ' % data.enzyme_num
     print ' prototype %s' % data.prototype
     print data.source
     print data.microorganism
