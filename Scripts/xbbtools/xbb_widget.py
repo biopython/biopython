@@ -23,7 +23,7 @@ from xbb_translations import xbb_translations
 from xbb_blast import BlastIt
 from xbb_search import XDNAsearch
 from xbb_help import xbbtools_help
-from Bio.Tools import Translate
+from Bio import Translate
 from Bio.sequtils import quick_FASTA_reader
 
 

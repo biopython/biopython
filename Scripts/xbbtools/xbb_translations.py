@@ -14,7 +14,7 @@ from Tkinter import *
 from Bio import Seq
 from Bio import Alphabet
 from Bio.Alphabet import IUPAC
-from Bio.Tools import Translate
+from Bio import Translate
 from Bio.Data import IUPACData
 
 
