@@ -186,8 +186,8 @@ def _make_score_matrix(sequenceA, sequenceB,
     Dmatrix, Pmatrix, Qmatrix, direction_matrix = [], [], [], []
     for i in range(M):
         Dmatrix.append([0] * N)             # going diagonal, best score
-        Pmatrix.append([0] * N)             # going up
-        Qmatrix.append([0] * N)             # going left
+        Pmatrix.append([0] * N)             # going up    (gap in B)
+        Qmatrix.append([0] * N)             # going left  (gap in A)
         direction_matrix.append([0] * N)    # for the traceback
     
     # Cache some commonly used gap penalties.
@@ -197,6 +197,11 @@ def _make_score_matrix(sequenceA, sequenceB,
     # Now fill in the score matrix.
     for i in range(M):
         for j in range(N):
+            # The Pmatrix stores the scores from alignments in which a
+            # gap in sequence B that has already been opened.  Thus,
+            # at each step, I can choose to either create a new gap
+            # from previously aligned characters (Dmatrix), or extend
+            # an old gap (Pmatrix).
             if i > 0 and i < M-1:
                 Pscore = max(
                     Pmatrix[i-1][j] + extend_B,
