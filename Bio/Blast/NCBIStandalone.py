@@ -932,7 +932,10 @@ class _HSPConsumer:
                 r"Frame = ([-+][123])", line,
                 "I could not find the frame in line\n%s" % line)
 
-    _query_re = re.compile(r"Query: (\d+)\s+(.+) \d")
+    # Match a space, if one is available.  Masahir Ishikawa found a
+    # case where there's no space between the start and the sequence:
+    # Query: 100tt 101
+    _query_re = re.compile(r"Query: (\d+)\s*(.+) \d")
     def query(self, line):
         m = self._query_re.search(line)
         if m is None:
