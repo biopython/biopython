@@ -154,7 +154,8 @@ if xml_support:
         'Biopython events', which can then be caught by a standard
         biopython consumer
         """
-        def __init__(self, consumer, interest_tags, callback_finalizer = None):
+        def __init__(self, consumer, interest_tags, callback_finalizer = None,
+                     exempt_tags = []):
             """Initialize to begin catching and firing off events.
 
             Arguments:
@@ -178,10 +179,16 @@ if xml_support:
             This list of lines will be passed to the callback finalizer if
             it is present. Otherwise the consumer will be called with the
             list of content information.
+
+            o exempt_tags - A listing of particular tags that are exempt from
+            being processed by the callback_finalizer. This allows you to
+            use a finalizer to deal with most tags, but leave those you don't
+            want touched.
             """
             self._consumer = consumer
             self.interest_tags = interest_tags
             self._finalizer = callback_finalizer
+            self._exempt_tags = exempt_tags
 
             # a dictionary of flags to recognize when we are in different
             # info items
@@ -279,7 +286,7 @@ if xml_support:
 
             # --- pass back the information
             # if there is a finalizer, use that
-            if self._finalizer is not None:
+            if self._finalizer is not None and name not in self._exempt_tags:
                 info_to_pass = self._finalizer(self.info[name])
             # otherwise pass back the entire list of information
             else:
