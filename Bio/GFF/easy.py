@@ -11,7 +11,7 @@ Bio.easy: some functions to ease the use of Biopython
 
 from __future__ import generators # requires Python 2.2
 
-__version__ = "$Revision: 1.4 $"
+__version__ = "$Revision: 1.5 $"
 # $Source: /home/bartek/cvs2bzr/biopython_fastimport/cvs_repo/biopython/Bio/GFF/easy.py,v $
 
 import copy
@@ -584,10 +584,12 @@ def forward_complement(seq):
 
     stolen from a broken BioPython sequtils.py
 
-    >>> forward_complement(Seq('aaatttc'))
-    Seq('TTTAAAG', Alphabet())
-    >>> forward_complement(Seq('aaauuuc'))
-    Seq('UUUAAAG', Alphabet())
+    deprecated
+
+    # >>> forward_complement(Seq('aaatttc'))
+    # Seq('TTTAAAG', Alphabet())
+    # >>> forward_complement(Seq('aaauuuc'))
+    # Seq('UUUAAAG', Alphabet())
     """
     import warnings
     warnings.warn(
@@ -631,8 +633,10 @@ def _complement(seq, reverse=0):
 
 def reverse_complement(seq):
     """
-    >>> reverse_complement(Seq('aaatttc'))
-    Seq('GAAATTT', Alphabet())
+    deprecated
+    
+    # >>> reverse_complement(Seq('aaatttc'))
+    # Seq('GAAATTT', Alphabet())
     """
     import warnings
     warnings.warn(
