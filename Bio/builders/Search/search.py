@@ -1,4 +1,5 @@
-from Bio import Search, Dispatch, StdHandler
+from Martel import Dispatch
+from Bio import Search, StdHandler
 
 class BuildSearch(Dispatch.Dispatcher):
     def __init__(self):
@@ -6,12 +7,8 @@ class BuildSearch(Dispatch.Dispatcher):
                                      prefix = "bioformat:",
                                      remap = {
             "bioformat:hit": "bioformat:hit_description_block",
-            })
-        
-        self.acquire(StdHandler.TextBlock(self, "hit_description"),
-                     "hit_description")
-        self.acquire(StdHandler.Int(self, "hit_length"), "hit_length")
-                     
+            }
+                                     )
         
         self.acquire(StdHandler.Handle_hsp(self.add_hsp))
         self.acquire(StdHandler.Handle_search_header(self.add_header))
@@ -28,6 +25,7 @@ class BuildSearch(Dispatch.Dispatcher):
         self.statistics = {}
         
     def end_(self, name):
+        self.document = None
         self.document = Search.Search(
             self.algorithm,
             self.query,
@@ -47,18 +45,19 @@ class BuildSearch(Dispatch.Dispatcher):
                                     "XXX EGGS", self.hit_length,
                                     self.algorithm, self.hsps))
 
-    def add_hsp(self, hsp_values, names, seqs, starts, ends, strands, frames):
-        
-        self.hsps.append(Search.HSP(seqs["query"],
-                                    seqs["homology"],
-                                    seqs["subject"],
+    def add_hsp(self, hsp_values, hsp_handler, strands, frames):
+        self.hsps.append(Search.HSP(hsp_handler.query_seq,
+                                    hsp_handler.homology_seq,
+                                    hsp_handler.subject_seq,
 
                                     # XXX strand and frame!
-                                    (starts["query"], ends["query"]),
-                                    (starts["subject"], ends["subject"]),
+                                    (hsp_handler.query_start_loc,
+                                     hsp_handler.query_end_loc),
+                                    (hsp_handler.subject_start_loc,
+                                     hsp_handler.subject_end_loc),
 
-                                    names["query"],
-                                    names["subject"],
+                                    hsp_handler.query_name,
+                                    hsp_handler.subject_name,
 
                                     self.algorithm,
 
@@ -81,4 +80,10 @@ class BuildSearch(Dispatch.Dispatcher):
         self.parameters = parameters
         self.statistics = statistics
 
+StdHandler.add_text_block_handler(BuildSearch, "hit_description",
+                                  "join-description", "join|fixspaces",
+                                  "hit_description")
+
+StdHandler.add_int_handler(BuildSearch, "hit_length", "hit_length")
+                                  
 make_builder = BuildSearch
