@@ -174,6 +174,7 @@ class test_biopython(Command):
 
         # change to the test dir and run the tests
         os.chdir("Tests")
+        sys.path.insert(0, '')
         import run_tests
         run_tests.main([])
 
