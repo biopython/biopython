@@ -1,0 +1,1163 @@
+test_locuslink
+Testing Bio.LocusLink on LL_block
+
+
+record 0
+
+ACCNUM:
+             ACCNUM:
+                AC010642|9929687|na|43581|41119
+             TYPE:
+                g
+
+             ACCNUM:
+                AA484435|2213248|na|na|na
+             TYPE:
+                m
+
+             ACCNUM:
+                AF414429|15778555|na|na|na
+             PROT:
+                AAL07469|15778556
+             TYPE:
+                m
+
+             ACCNUM:
+                AI022193|3239546|na|na|na
+             TYPE:
+                m
+
+             ACCNUM:
+                AK055885|16550723|na|na|na
+             TYPE:
+                m
+
+             ACCNUM:
+                AK056201|16551539|na|na|na
+             TYPE:
+                m
+
+             ACCNUM:
+                T80683|703568|na|na|na
+             TYPE:
+                m
+
+             ACCNUM:
+                W25099|1302954|na|na|na
+             TYPE:
+                m
+
+
+ALIAS_SYMBOL:
+            A1B
+            ABG
+            GAB
+
+ASSEMBLY:
+        AF414429,AK055885,AK056201
+CDD:
+            Immunoglobulin C-2 Type|smart00408|104|na|4.466900e+01
+            Immunoglobulin C-2 Type|smart00408|104|6.130e-06|44.669
+
+CHR:
+        19
+COMP:
+            10090|A1bg|na|na|117586|19|A1BG|ncbi_mgd
+            10090|A1bg|7|7  cM|117586|19|A1BG|ncbi_mgd
+
+CONTIG:
+        NT_011104.11|20544099|na|1555258|1566315|+|19
+DB:
+             DB_DESCR:
+                GeneCards
+             DB_LINK:
+                http://bioinformatics.weizmann.ac.il/cards-bin/carddisp?A1BG
+
+
+EVID:
+        supported by alignment with mRNA
+LINK:
+            http://www.ncbi.nlm.nih.gov/UniGene/clust.cgi?ORG=Hs&CID=373554
+            http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?locusId=1
+            http://www.ncbi.nlm.nih.gov/HomoloGene/homolquery.cgi?TEXT=1[loc]
+            http://gdbwww.gdb.org/gdb-bin/genera/accno?GDB:119638
+            http://www.ensembl.org/Homo_sapiens/contigview?geneid=NM_130786
+            http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg12&position=NM_130786
+
+LOCUSID:
+        1
+LOCUS_CONFIRMED:
+        yes
+LOCUS_TYPE:
+        gene with protein product, function known or inferred
+MAP:
+        19q13.4|RefSeq|C|
+MAPLINK:
+        default_human_gene|A1BG
+NM:
+        NM_130786|21071029|na
+NP:
+        NP_570602|21071030
+OFFICIAL_GENE_NAME:
+        alpha-1-B glycoprotein
+OFFICIAL_SYMBOL:
+        A1BG
+OMIM:
+        138670
+ORGANISM:
+        Homo sapiens
+PMID:
+        8889549,3458201,2591067
+PREFERRED_PRODUCT:
+        alpha 1B-glycoprotein
+PRODUCT:
+        alpha 1B-glycoprotein
+STATUS:
+        REVIEWED
+STS:
+            RH65092|-|10673|na|na|epcr
+            WI-16009|-|52209|na|na|epcr
+            G59506|-|136670|na|na|epcr
+
+SUMMARY:
+        Summary: The protein encoded by this gene is a plasma glycoprotein of unknown function. The protein shows sequence similarity to the variable regions of some immunoglobulin supergene family member proteins.
+UNIGENE:
+        Hs.373554
+XM:
+        XM_058938|20544041|na
+XP:
+        XP_058938|17482319|na
+
+
+record 1
+
+ACCNUM:
+             ACCNUM:
+                X68728|450521|na|na|na
+             PROT:
+                CAA48670|825615
+             TYPE:
+                g
+
+             ACCNUM:
+                Z11711|24760|na|na|na
+             PROT:
+                CAA77774|24761
+             TYPE:
+                g
+
+             ACCNUM:
+                M11313|177869|na|na|na
+             PROT:
+                AAA51551|177870
+             TYPE:
+                m
+
+             ACCNUM:
+                M36501|177871|na|na|na
+             PROT:
+                AAA51552|177872
+             TYPE:
+                m
+
+
+ASSEMBLY:
+        M11313
+CDD:
+            Ependymins|EPEND|86|na|3.773540e+01
+            Alpha-2-macroglobulin family|pfam00207|2501|na|9.679920e+02
+            Alpha-2-macroglobulin family N-terminal region|pfam01835|1889|na|7.322500e+02
+            Alpha-2-macroglobulin family|pfam00207|2449|0.000e+00|947.962
+            Alpha-2-macroglobulin family N-terminal region|pfam01835|1931|0.000e+00|748.429
+
+CHR:
+        12
+COMP:
+            10090|A2m|6|6 62.00 cM|11287|12|A2M|ncbi_mgd
+            10090|A2m|6|6 62.00 cM|11287|12|A2M|ucsc_mgd
+
+CONTIG:
+        NT_009702.9|20554950|na|365512|413776|+|12
+DB:
+             DB_DESCR:
+                GeneCards
+             DB_LINK:
+                http://bioinformatics.weizmann.ac.il/cards-bin/carddisp?A2M
+
+
+EVID:
+        supported by alignment with mRNA
+EXTANNOT:
+            organismal role|CNS-specific functions|NR|Proteome|1281457
+            biochemical function|Inhibitor or repressor|NR|Proteome|1281457
+
+GO:
+            molecular function|protein carrier|NR|GO:0008320|Proteome|na
+            molecular function|proteinase inhibitor|NR|GO:0004866|Proteome|na
+            biological process|intracellular protein traffic|NR|GO:0006886|Proteome|na
+
+GRIF:
+            11811950|Differential binding to ldl receptor related protein
+            11823454|distinct binding sites mediate interaction with beta-amyloid peptide and growth factors
+
+LINK:
+            http://www.ncbi.nlm.nih.gov/UniGene/clust.cgi?ORG=Hs&CID=74561
+            http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?locusId=2
+            http://www.ncbi.nlm.nih.gov/HomoloGene/homolquery.cgi?TEXT=2[loc]
+            http://gdbwww.gdb.org/gdb-bin/genera/accno?GDB:119639
+            http://www.uwcm.ac.uk/uwcm/mg/search/119639.html
+            http://www.ensembl.org/Homo_sapiens/contigview?geneid=NM_000014
+            http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg12&position=NM_000014
+
+LOCUSID:
+        2
+LOCUS_CONFIRMED:
+        yes
+LOCUS_TYPE:
+        gene with protein product, function known or inferred
+MAP:
+        12p13.3-p12.3|<a href="http://gdbwww.gdb.org/gdb-bin/genera/accno?GDB:119639">HUGO</a>|C|
+MAPLINK:
+        default_human_gene|A2M
+NM:
+        NM_000014|6226959|na
+NP:
+        NP_000005|4557225
+OFFICIAL_GENE_NAME:
+        alpha-2-macroglobulin
+OFFICIAL_SYMBOL:
+        A2M
+OMIM:
+        103950
+ORGANISM:
+        Homo sapiens
+PHENOTYPE:
+             PHENOTYPE:
+                Alzheimer disease, susceptibility to
+             PHENOTYPE_ID:
+                103950
+
+             PHENOTYPE:
+                Emphysema due to alpha-2-macroglobulin deficiency
+             PHENOTYPE_ID:
+                103950
+
+
+PMID:
+        11823454,11811950,2581245,2408344,1707161,1370808,1281457
+PREFERRED_PRODUCT:
+        alpha 2 macroglobulin precursor
+PRODUCT:
+        alpha 2 macroglobulin precursor
+STATUS:
+        REVIEWED
+STS:
+            SGC31674|12|40245|na|na|epcr
+            RH11157|12|46849|na|na|epcr
+            G44356|12|95143|na|seq_map|epcr
+
+SUMFUNC:
+        Alpha-2-macroglobulin; protease inhibitor, binds/aids in cellular internalization of proteins|Proteome
+SUMMARY:
+        Summary: Alpha-2-macroglobulin is a protease inhibitor and cytokine transporter. It inhibits many proteases, including trypsin, thrombin and collagenase. A2M is implicated in Alzheimer disease (AD) due to its ability to mediate the clearance and degradation of A-beta, the major component of beta-amyloid deposits.
+UNIGENE:
+        Hs.74561
+XM:
+        XM_006925|18580498|na
+XP:
+        XP_006925|17455493|na
+
+
+record 2
+
+ACCNUM:
+             ACCNUM:
+                M24415|187575|na|177|2881
+             TYPE:
+                g
+
+
+CHR:
+        12
+DB:
+             DB_DESCR:
+                GeneCards
+             DB_LINK:
+                http://bioinformatics.weizmann.ac.il/cards-bin/carddisp?A2MP
+
+
+LINK:
+        http://gdbwww.gdb.org/gdb-bin/genera/accno?GDB:128103
+LOCUSID:
+        3
+LOCUS_CONFIRMED:
+        yes
+LOCUS_TYPE:
+        pseudogene
+MAP:
+        12p13.3-p12.3|<a href="http://gdbwww.gdb.org/gdb-bin/genera/accno?GDB:128103">HUGO</a>|C|
+MAPLINK:
+        default_human_cyto|A2MP
+OFFICIAL_GENE_NAME:
+        alpha-2-macroglobulin pseudogene
+OFFICIAL_SYMBOL:
+        A2MP
+ORGANISM:
+        Homo sapiens
+PMID:
+        2478422
+STATUS:
+        REVIEWED
+
+
+record 3
+
+CHR:
+        11
+DB:
+             DB_DESCR:
+                GeneCards
+             DB_LINK:
+                http://bioinformatics.weizmann.ac.il/cards-bin/carddisp?AA
+
+
+LINK:
+        http://gdbwww.gdb.org/gdb-bin/genera/accno?GDB:568984
+LOCUSID:
+        8
+LOCUS_CONFIRMED:
+        yes
+LOCUS_TYPE:
+        gene with protein product, function known or inferred
+MAP:
+        11p15|<a href="http://gdbwww.gdb.org/gdb-bin/genera/accno?GDB:568984">HUGO</a>|C|
+MAPLINK:
+        default_human_cyto|AA
+OFFICIAL_GENE_NAME:
+        atrophia areata, peripapillary chorioretinal degeneration
+OFFICIAL_SYMBOL:
+        AA
+OMIM:
+        108985
+ORGANISM:
+        Homo sapiens
+PHENOTYPE:
+             PHENOTYPE:
+                Atrophia areata
+             PHENOTYPE_ID:
+                108985
+
+
+PMID:
+        7795606
+
+
+record 4
+
+ACCNUM:
+             ACCNUM:
+                AF008204|2618821|na|na|na
+             PROT:
+                AAB84384|2258431
+             TYPE:
+                g
+
+             ACCNUM:
+                AF032677|2641552|na|na|na
+             PROT:
+                AAB86878|2641553
+             TYPE:
+                g
+
+             ACCNUM:
+                AF032678|2641554|na|na|na
+             PROT:
+                AAB86879|2641555
+             TYPE:
+                g
+
+             ACCNUM:
+                AF067408|3265061|na|na|na
+             PROT:
+                AAC24707|3265062
+             TYPE:
+                g
+
+             ACCNUM:
+                AF071552|3265151|na|na|na
+             PROT:
+                AAC24712|3265152
+             TYPE:
+                g
+
+             ACCNUM:
+                AF082903|3435297|na|na|na
+             PROT:
+                AAD13343|3435298
+             TYPE:
+                g
+
+             ACCNUM:
+                AF082904|3435299|na|na|na
+             PROT:
+                AAC32388|3435300
+             TYPE:
+                g
+
+             ACCNUM:
+                U80835|2245375|na|na|na
+             PROT:
+                AAB62398|2245376
+             TYPE:
+                g
+
+             ACCNUM:
+                X17059|34993|na|na|na
+             PROT:
+                CAA34905|34994
+             TYPE:
+                g
+
+             ACCNUM:
+                BC013732|16975545|na|na|na
+             PROT:
+                AAH13732|16975546
+             TYPE:
+                m
+
+             ACCNUM:
+                D90041|219413|na|na|na
+             PROT:
+                BAA14095|219414
+             TYPE:
+                m
+
+
+ALIAS_PROT:
+            arylamine N-acetyltransferase-1
+            arylamide acetylase 1 (N-acetyltransferase 1)
+
+ALIAS_SYMBOL:
+        AAC1
+ASSEMBLY:
+        BC013732
+CDD:
+        N-acetyltransferase|pfam00797|1030|na|4.056250e+02
+CHR:
+        8
+COMP:
+            10090|Nat1|8|8 31.00 cM|17960|8|NAT1|ncbi_mgd
+            10090|Nat1|8|8 31.00 cM|17960|8|NAT1|ucsc_mgd
+            10090|U35886|8|8 14135.38 cR|17961|8|AW390667|natgen_paper
+
+CONTIG:
+        NT_030737.3|20541522|na|1907807|1921012|+|8
+DB:
+             DB_DESCR:
+                GeneCards
+             DB_LINK:
+                http://bioinformatics.weizmann.ac.il/cards-bin/carddisp?NAT1
+
+             DB_DESCR:
+                Arylamine N-Acetyltransferase Nomenclature
+             DB_LINK:
+                http://www.louisville.edu/medschool/pharmacology/NAT.html
+
+
+ECNUM:
+        2.3.1.5
+EVID:
+        supported by alignment with mRNA
+EXTANNOT:
+            cellular role|Other metabolism|E|Proteome|10908296
+            biochemical function|Transferase|E|Proteome|10908296
+
+GO:
+        molecular function|arylamine N-acetyltransferase|E|GO:0004060|Proteome|10908296
+GRIF:
+            11955676|paclitaxel is an uncompetitive inhibitor to arylamine N-acetyltransferase (NAT) enzyme
+            11955677|paclitaxel affected human leukemia HL-60 cells arylamine N-acetyltransferase (NAT) activity and DNA-2-aminofluorene adduct formation.
+
+LINK:
+            http://www.ncbi.nlm.nih.gov/UniGene/clust.cgi?ORG=Hs&CID=155956
+            http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?locusId=9
+            http://www.ncbi.nlm.nih.gov/HomoloGene/homolquery.cgi?TEXT=9[loc]
+            http://gdbwww.gdb.org/gdb-bin/genera/accno?GDB:125364
+            http://www.ensembl.org/Homo_sapiens/contigview?geneid=NM_000662
+            http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg12&position=NM_000662
+
+LOCUSID:
+        9
+LOCUS_CONFIRMED:
+        yes
+LOCUS_TYPE:
+        gene with protein product, function known or inferred
+MAP:
+        8p23.1-p21.3|<a href="http://gdbwww.gdb.org/gdb-bin/genera/accno?GDB:125364">HUGO</a>|C|
+MAPLINK:
+        default_human_gene|NAT1
+NM:
+        NM_000662|21361196|na
+NP:
+        NP_000653|4505335
+OFFICIAL_GENE_NAME:
+        N-acetyltransferase 1 (arylamine N-acetyltransferase)
+OFFICIAL_SYMBOL:
+        NAT1
+OMIM:
+        108345
+ORGANISM:
+        Homo sapiens
+PMID:
+        11955677,11955676,10908296,10862520,9168895,7773298,2340091
+PREFERRED_PRODUCT:
+        N-acetyltransferase 1
+PRODUCT:
+        N-acetyltransferase 1
+STATUS:
+        PROVISIONAL
+STS:
+            STS-D90041|8|57372|na|seq_map|epcr
+            RH70671|8|63787|na|seq_map|epcr
+
+SUMFUNC:
+        Arylamine N-acetyltransferase 1; N- or O-acetylates arylamines and heterocyclic amines, detoxifies carcinogens and xenobiotics|Proteome
+UNIGENE:
+        Hs.155956
+XM:
+        NM_000662|21361196|na
+XP:
+        NP_000653|4505335|na
+
+
+record 5
+
+ACCNUM:
+             ACCNUM:
+                AF042740|2801806|na|na|na
+             PROT:
+                AAC03773|2801807
+             TYPE:
+                g
+
+             ACCNUM:
+                AF055874|3063613|na|na|na
+             PROT:
+                AAC14117|3063614
+             TYPE:
+                g
+
+             ACCNUM:
+                AF055875|3063615|na|na|na
+             PROT:
+                AAC14118|3063616
+             TYPE:
+                g
+
+             ACCNUM:
+                D10870|219871|na|na|na
+             PROT:
+                BAA01640|219872
+             TYPE:
+                g
+
+             ACCNUM:
+                D10871|219874|na|na|na
+             PROT:
+                BAA01641|219875
+             TYPE:
+                g
+
+             ACCNUM:
+                D10872|219877|na|na|na
+             PROT:
+                BAA01642|219878
+             TYPE:
+                g
+
+             ACCNUM:
+                M75163|189075|na|na|na
+             PROT:
+                AAA59906|553602
+             TYPE:
+                g
+
+             ACCNUM:
+                M75164|189072|na|na|na
+             PROT:
+                AAA59905|553601
+             TYPE:
+                g
+
+             ACCNUM:
+                U23052|747646|na|na|na
+             PROT:
+                AAA64584|727413
+             TYPE:
+                g
+
+             ACCNUM:
+                U23434|727456|na|na|na
+             PROT:
+                AAA64585|727457
+             TYPE:
+                g
+
+             ACCNUM:
+                U53473|1297331|na|na|na
+             PROT:
+                AAA98976|1297332
+             TYPE:
+                g
+
+             ACCNUM:
+                X14672|28227|na|na|na
+             PROT:
+                CAA32802|28228
+             TYPE:
+                g
+
+             ACCNUM:
+                BC015878|16198419|na|na|na
+             PROT:
+                AAH15878|16198420
+             TYPE:
+                m
+
+             ACCNUM:
+                D90040|219411|na|na|na
+             PROT:
+                BAA14094|219412
+             TYPE:
+                m
+
+             ACCNUM:
+                D90042|219415|na|na|na
+             PROT:
+                BAA14096|219416
+             TYPE:
+                m
+
+
+ALIAS_PROT:
+            Arylamine N-acetyltransferase-2
+            arylamide acetylase 2 (N-acetyltransferase 2, isoniazid inactivation)
+
+ALIAS_SYMBOL:
+        AAC2
+ASSEMBLY:
+        D90042
+CDD:
+        N-acetyltransferase|pfam00797|838|na|3.274050e+02
+CHR:
+        8
+COMP:
+            10090|Nat2|8|8 31.00 cM|17961|8|NAT2|ncbi_mgd
+            10090|Nat2|8|8 31.00 cM|17961|8|NAT2|ucsc_mgd
+
+CONTIG:
+        NT_030737.3|20541522|na|2088970|2098897|+|8
+DB:
+             DB_DESCR:
+                GeneCards
+             DB_LINK:
+                http://bioinformatics.weizmann.ac.il/cards-bin/carddisp?NAT2
+
+             DB_DESCR:
+                Arylamine N-Acetyltransferase Nomenclature
+             DB_LINK:
+                http://www.louisville.edu/medschool/pharmacology/NAT.html
+
+
+ECNUM:
+        2.3.1.5
+EVID:
+        supported by alignment with mRNA
+EXTANNOT:
+            cellular role|Other metabolism|E|Proteome|2340091
+            biochemical function|Transferase|E|Proteome|2340091
+
+GO:
+        molecular function|arylamine N-acetyltransferase|E|GO:0004060|Proteome|2340091
+GRIF:
+            11846845|Association between bone loss in periodontal disease and polymorphism of N-acetyltransferase (NAT2)
+            11915035|Polymorphism of the N-acetyltransferase 2 gene as a susceptibility risk factor for antituberculosis drug-induced hepatitis.
+            12016157|urinary excretion of N(2)-(beta-1-glucos-iduronyl)-2-hydroxyamino-1-methyl-6-phenylimidazo[4,5-b]pyridine relationship to activity levels of NAT2
+            11872636|we investigated the relationship between the levels of aromatic DNA adducts in breast tissues and polymorphisms of the drug-metabolizing genes CYP1A1, NAT2, and GSTM1 in 166 women having breast cancer
+
+LINK:
+            http://www.ncbi.nlm.nih.gov/UniGene/clust.cgi?ORG=Hs&CID=2
+            http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?locusId=10
+            http://www.ncbi.nlm.nih.gov/HomoloGene/homolquery.cgi?TEXT=10[loc]
+            http://gdbwww.gdb.org/gdb-bin/genera/accno?GDB:125365
+            http://www.ensembl.org/Homo_sapiens/contigview?geneid=NM_000015
+            http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg12&position=NM_000015
+            http://mgc.nci.nih.gov/Genes/GeneInfo?ORG=Hs&CID=2
+
+LOCUSID:
+        10
+LOCUS_CONFIRMED:
+        yes
+LOCUS_TYPE:
+        gene with protein product, function known or inferred
+MAP:
+        8p22|<a href="http://gdbwww.gdb.org/gdb-bin/genera/accno?GDB:125365">HUGO</a>|C|
+MAPLINK:
+        default_human_gene|NAT2
+NM:
+        NM_000015|4557782|na
+NP:
+        NP_000006|4557783
+OFFICIAL_GENE_NAME:
+        N-acetyltransferase 2 (arylamine N-acetyltransferase)
+OFFICIAL_SYMBOL:
+        NAT2
+OMIM:
+        243400
+ORGANISM:
+        Homo sapiens
+PMID:
+        12016157,11915035,11872636,11846845,8460648,8102597,7915226,7773298,2734109,2340091,1968463,1676262,1381364,1306121
+PREFERRED_PRODUCT:
+        arylamide acetylase 2
+PRODUCT:
+        arylamide acetylase 2
+STATUS:
+        REVIEWED
+STS:
+            G06461|8|17088|na|seq_map|epcr
+            WIAF-2120|8|44576|na|seq_map|epcr
+            G59899|8|137181|na|seq_map|epcr
+            GDB:187676|8|155563|na|seq_map|epcr
+            GDB:310612|8|156422|na|seq_map|epcr
+            GDB:310613|8|156423|na|seq_map|epcr
+            GDB:386004|8|157141|na|seq_map|epcr
+
+SUMFUNC:
+        Arylamine N-acetyltransferase 2; N- or O-acetylates arylamines and heterocyclic amines|Proteome
+SUMMARY:
+        Summary: The intronless NAT2 gene encodes N-acetyltransferase 2 (arylamine N-acetyltransferase 2). This enzyme functions to both activate and deactivate arylamine and hydrazine drugs and carcinogens. Polymorphisms in this gene are reponsible for the N-acetylation polymorphism in which human populations segregate into rapid,intermediate, and slow acetylator phenotypes. Polymorphisms in NAT2 are also associated with higher incidences of cancer and drug toxicity.A second arylamine N-acetyltransferase gene (NAT1) is located near NAT2.
+UNIGENE:
+        Hs.2
+XM:
+        NM_000015|4557782|na
+XP:
+        NP_000006|4557783|na
+
+
+record 6
+
+ALIAS_SYMBOL:
+        NATP
+DB:
+             DB_DESCR:
+                GeneCards
+             DB_LINK:
+                http://bioinformatics.weizmann.ac.il/cards-bin/carddisp?AACP
+
+
+LINK:
+        http://gdbwww.gdb.org/gdb-bin/genera/accno?GDB:132838
+LOCUSID:
+        11
+LOCUS_CONFIRMED:
+        yes
+LOCUS_TYPE:
+        pseudogene
+OFFICIAL_GENE_NAME:
+        arylamide acetylase pseudogene
+OFFICIAL_SYMBOL:
+        AACP
+ORGANISM:
+        Homo sapiens
+PMID:
+        2340091
+
+
+record 7
+
+ACCNUM:
+             ACCNUM:
+                X00947|28331|na|na|na
+             PROT:
+                CAA25459|28332
+             TYPE:
+                g
+
+             ACCNUM:
+                X68733|439137|na|na|na
+             PROT:
+                CAA48671|1340142
+             TYPE:
+                g
+
+             ACCNUM:
+                AF089747|4165889|na|na|na
+             PROT:
+                AAD08810|4165890
+             TYPE:
+                m
+
+             ACCNUM:
+                BC003559|13097704|na|na|na
+             PROT:
+                AAH03559|13097705
+             TYPE:
+                m
+
+             ACCNUM:
+                J05176|177932|na|na|na
+             PROT:
+                AAA51560|177933
+             TYPE:
+                m
+
+             ACCNUM:
+                K01500|177808|na|na|na
+             PROT:
+                AAA51543|177809
+             TYPE:
+                m
+
+             ACCNUM:
+                M18906|177928|na|na|na
+             PROT:
+                AAA51559|177931
+             TYPE:
+                m
+
+
+ALIAS_PROT:
+            actichymotrypsin
+            alpha-1-antichymotrypsin
+
+ALIAS_SYMBOL:
+            ACT
+            AACT
+
+ASSEMBLY:
+        AH002551,K01500
+CDD:
+            SERine Proteinase INhibitors|SERPIN|950|na|3.744620e+02
+            Serpins (serine protease inhibitors)|pfam00079|932|na|3.674510e+02
+            Serpin (S protease inhibitor)|pfam00079|1225|5.273e-136|476.478
+            SERine  Proteinase INhibitors|smart00093|1168|2.146e-129|454.521
+
+CHR:
+        14
+COMP:
+            10090|Pre2|12|12 52.00 cM|109636|14|SERPINA3|ucsc_mgd
+            10090|X69832|12|12 957.87 cR|20717|14|AV689358|ucsc_est
+            10090|AI194247|16|16 509.87 cR|16423|14|AW819120|ucsc_est
+
+CONTIG:
+        NT_026437.7|20543860|na|28765484|28777145|+|14
+DB:
+             DB_DESCR:
+                GeneCards
+             DB_LINK:
+                http://bioinformatics.weizmann.ac.il/cards-bin/carddisp?SERPINA3
+
+
+EVID:
+        supported by alignment with mRNA
+EXTANNOT:
+        biochemical function|Inhibitor or repressor|NR|Proteome|2404007
+GO:
+            molecular function|plasma protein|NR|GO:0005209|Proteome|na
+            biological process|acute-phase response|NR|GO:0006953|Proteome|na
+            molecular function|proteinase inhibitor|NR|GO:0004866|Proteome|na
+            molecular function|serine protease inhibitor|E|GO:0004867|Proteome|2404007
+
+GRIF:
+            11959399|significantly higher in plasma of Alzheimer patients compared to controls
+            11798857|A25G and G39A substitutions in the AACT gene are probably one of the risk factors to Alzheimer's disease (AD) in Han Chinese.
+
+LINK:
+            http://www.ncbi.nlm.nih.gov/UniGene/clust.cgi?ORG=Hs&CID=234726
+            http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?locusId=12
+            http://www.ncbi.nlm.nih.gov/HomoloGene/homolquery.cgi?TEXT=12[loc]
+            http://gdbwww.gdb.org/gdb-bin/genera/accno?GDB:118955
+            http://www.ensembl.org/Homo_sapiens/contigview?geneid=NM_001085
+            http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg12&position=NM_001085
+            http://mgc.nci.nih.gov/Genes/GeneInfo?ORG=Hs&CID=234726
+
+LOCUSID:
+        12
+LOCUS_CONFIRMED:
+        yes
+LOCUS_TYPE:
+        gene with protein product, function known or inferred
+MAP:
+        14q32.1|<a href="http://gdbwww.gdb.org/gdb-bin/genera/accno?GDB:118955">HUGO</a>|C|
+MAPLINK:
+        default_human_gene|SERPINA3
+NM:
+        NM_001085|9665246|na
+NP:
+        NP_001076|4501843
+OFFICIAL_GENE_NAME:
+        serine (or cysteine) proteinase inhibitor, clade A (alpha-1 antiproteinase, antitrypsin), member 3
+OFFICIAL_SYMBOL:
+        SERPINA3
+OMIM:
+        107280
+ORGANISM:
+        Homo sapiens
+PHENOTYPE:
+             PHENOTYPE:
+                Alpha-1-antichymotrypsin deficiency
+             PHENOTYPE_ID:
+                107280
+
+             PHENOTYPE:
+                Cerebrovascular disease, occlusive
+             PHENOTYPE_ID:
+                107280
+
+
+PMID:
+        11959399,11798857,9880565,8244391,6687683,6606438,6556193,6547997,3492865,3485824,3260956,3257719,2404007,1351206
+PREFERRED_PRODUCT:
+        alpha-1-antichymotrypsin, precursor
+PRODUCT:
+        alpha-1-antichymotrypsin, precursor
+STATUS:
+        REVIEWED
+STS:
+            RH1625|14|32177|na|seq_map|epcr
+            SHGC-32982|14|37467|na|na|epcr
+            D14S845|14|64155|D14S845|seq_map|epcr
+            G31126|14|66238|na|seq_map|epcr
+            RH78280|14|74665|na|seq_map|epcr
+            RH91507|14|86678|na|seq_map|epcr
+            D14S1143|-|148321|D14S1143|na|epcr
+
+SUMFUNC:
+        Alpha-1-antichymotrypsin; member of the serpin family of serine protease inhibitors|Proteome
+SUMMARY:
+        Summary: The protein encoded by this gene is a plasma protease inhibitor and member of the serine protease inhibitor class.  Polymorphisms in this protein appear to be tissue specific and influence protease targeting.  Variation in this protein's sequence have been implicated in Alzheimer's disease, and deficiency of this protein has been associated with liver disease.  Mutations have been identified in patients with Parkinson disease and chronic obstructive pulmonary disease.
+UNIGENE:
+        Hs.234726
+XM:
+        XM_028322|14748211|na
+XP:
+        XP_028322|14748212|na
+
+
+record 8
+
+ACCNUM:
+             ACCNUM:
+                L32179|537513|na|na|na
+             PROT:
+                AAA35551|537514
+             TYPE:
+                m
+
+
+ALIAS_SYMBOL:
+        DAC
+ASSEMBLY:
+        L32179
+CDD:
+            Carboxylesterases|pfam00135|154|na|6.439850e+01
+            Carboxylesterase|pfam00135|137|7.185e-10|57.381
+
+CHR:
+        3
+COMP:
+            10090|Aadac|3|3  cM|67758|3|AADAC|ncbi_mgd
+            10090|AI265437|3|3 5067.00 cR|67758|3|AA702448|natgen_paper
+
+CONTIG:
+        NT_005849.11|20537660|na|726090|740503|+|3
+DB:
+             DB_DESCR:
+                GeneCards
+             DB_LINK:
+                http://bioinformatics.weizmann.ac.il/cards-bin/carddisp?AADAC
+
+             DB_DESCR:
+                KEGG pathway: Butanoate metabolism
+             DB_LINK:
+                http://www.genome.ad.jp/dbget-bin/get_pathway?org_name=hsa&mapno=00650
+
+             DB_DESCR:
+                KEGG pathway: 2,4-Dichlorobenzoate degradation
+             DB_LINK:
+                http://www.genome.ad.jp/dbget-bin/get_pathway?org_name=hsa&mapno=00623
+
+             DB_DESCR:
+                KEGG pathway: Pentose and glucuronate interconversions
+             DB_LINK:
+                http://www.genome.ad.jp/dbget-bin/get_pathway?org_name=hsa&mapno=00040
+
+
+ECNUM:
+        3.1.1.-
+EVID:
+        supported by alignment with mRNA
+EXTANNOT:
+            cellular role|Other metabolism|P|Proteome|8063807
+            subcellular localization|Microsomal fraction|NR|Proteome|8063807
+
+GO:
+            molecular function|enzyme|P|GO:0003824|Proteome|8063807
+            cellular component|microsome|E|GO:0005792|Proteome|8063807
+
+LINK:
+            http://www.ncbi.nlm.nih.gov/UniGene/clust.cgi?ORG=Hs&CID=587
+            http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?locusId=13
+            http://www.ncbi.nlm.nih.gov/HomoloGene/homolquery.cgi?TEXT=13[loc]
+            http://gdbwww.gdb.org/gdb-bin/genera/accno?GDB:392587
+            http://www.ensembl.org/Homo_sapiens/contigview?geneid=NM_001086
+            http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg12&position=NM_001086
+
+LOCUSID:
+        13
+LOCUS_CONFIRMED:
+        yes
+LOCUS_TYPE:
+        gene with protein product, function known or inferred
+MAP:
+        3q21.3-q25.2|RefSeq|C|
+MAPLINK:
+        default_human_gene|AADAC
+NM:
+        NM_001086|4557226|na
+NP:
+        NP_001077|4557227
+OFFICIAL_GENE_NAME:
+        arylacetamide deacetylase (esterase)
+OFFICIAL_SYMBOL:
+        AADAC
+OMIM:
+        600338
+ORGANISM:
+        Homo sapiens
+PMID:
+        9299245,8063807
+PREFERRED_PRODUCT:
+        arylacetamide deacetylase
+PRODUCT:
+        arylacetamide deacetylase
+STATUS:
+        REVIEWED
+STS:
+            STS-L32179|3|13170|na|seq_map|epcr
+            D3S4189|-|18863|D3S4189|na|epcr
+            RH36344|3|24707|na|seq_map|epcr
+            RH124029|-|136046|na|na|epcr
+
+SUMFUNC:
+        Liver microsomal arylacetamide deacetylase; esterase involved in metabolically activating arylamine carcinogens|Proteome
+SUMMARY:
+        Summary: Microsomal arylacetamide deacetylase competes against the activity of cytosolic arylamine N-acetyltransferase, which catalyzes one of the initial biotransformation pathways for arylamine and heterocyclic amine carcinogens
+UNIGENE:
+        Hs.587
+XM:
+        XM_003002|12729778|na
+XP:
+        XP_003002|11433103|na
+
+
+record 9
+
+ACCNUM:
+             ACCNUM:
+                BC020244|18044383|na|na|na
+             PROT:
+                AAH20244|18044384
+             TYPE:
+                m
+
+             ACCNUM:
+                M95627|870802|na|na|na
+             PROT:
+                AAA68889|870803
+             TYPE:
+                m
+
+
+ASSEMBLY:
+        M95627
+CDD:
+            WD40 repeats|smart00320|97|na|4.197260e+01
+            WD domain, G-beta repeat|pfam00400|90|na|3.927620e+01
+
+CHR:
+        2
+CONTIG:
+        NT_005403.9|20537925|na|9668494|9674501|+|2
+DB:
+             DB_DESCR:
+                GeneCards
+             DB_LINK:
+                http://bioinformatics.weizmann.ac.il/cards-bin/carddisp?AAMP
+
+
+EVID:
+        supported by alignment with both mRNA and ESTs (3)
+EXTANNOT:
+            organismal role|Cell migration/motility|P|Proteome|7743515
+            biochemical function|Adhesin/agglutinin|NR|Proteome|7743515
+
+GO:
+            biological process|cell motility|NR|GO:0006928|Proteome|na
+            molecular function|heparin binding|P|GO:0008201|Proteome|7743515
+
+LINK:
+            http://www.ncbi.nlm.nih.gov/UniGene/clust.cgi?ORG=Hs&CID=83347
+            http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?locusId=14
+            http://www.ncbi.nlm.nih.gov/HomoloGene/homolquery.cgi?TEXT=14[loc]
+            http://gdbwww.gdb.org/gdb-bin/genera/accno?GDB:4573993
+            http://www.ensembl.org/Homo_sapiens/contigview?geneid=NM_001087
+            http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg12&position=NM_001087
+
+LOCUSID:
+        14
+LOCUS_CONFIRMED:
+        yes
+LOCUS_TYPE:
+        gene with protein product, function known or inferred
+MAP:
+        2q36.1|RefSeq|C|
+MAPLINK:
+        default_human_gene|AAMP
+NM:
+        NM_001087|4557228|na
+NP:
+        NP_001078|4557229
+OFFICIAL_GENE_NAME:
+        angio-associated, migratory cell protein
+OFFICIAL_SYMBOL:
+        AAMP
+OMIM:
+        603488
+ORGANISM:
+        Homo sapiens
+PMID:
+        7743515
+PREFERRED_PRODUCT:
+        angio-associated, migratory cell protein
+PRODUCT:
+        angio-associated, migratory cell protein
+STATUS:
+        REVIEWED
+STS:
+        SGC31591|2|52581|na|seq_map|epcr
+SUMFUNC:
+        immunoglobulin-type protein; may mediate heparin-sensitive cell adhesion, may act in cell migration|Proteome
+SUMMARY:
+        Summary: The gene product is an immunoglobulin-type protein. It is found to be expressed strongly in endothelial cells, cytotrophoblasts, and poorly differentiated colon adenocarcinoma cells found in lymphatics. The protein contains a heparin-binding domain and mediates heparin-sensitive cell adhesion.
+UNIGENE:
+        Hs.83347
+XM:
+        NM_001087|4557228|na
+XP:
+        NP_001078|4557229|na
+
+
+
+
