@@ -314,6 +314,8 @@ class _Scanner:
         uhandle.saveline(line1)
 
         is_pairwise = is_masterslave = 0
+#        Was line1, changed to line2. 16-feb-2005. Iddo
+#        if string.find(line2, 'Alignments') >= 0:
         if string.find(line2, 'Alignments') >= 0:
             is_pairwise = 1
         elif line2[:10] == '  Database':
