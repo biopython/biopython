@@ -9,10 +9,6 @@ __all__ = [
     'copen'
     ]
 
-import Scheduler
-import Task
-import time
-
 def run(nprocs, fn, fn_args=(), fn_keywds={},
         sleep=0.1, always_use_scheduler=0):
     """run(nprocs, fn[, fn_args][, fn_keywds][, sleep])
@@ -39,6 +35,9 @@ def run(nprocs, fn, fn_args=(), fn_keywds={},
         r = fn(*args, **fn_keywds)
         retvals[0] = r
     else:
+        import time
+        import Scheduler
+        import Task
         def save_retval(task, retvals=retvals):
             i = int(task.getName())
             retvals[i] = task.retval

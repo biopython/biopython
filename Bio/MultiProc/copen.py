@@ -10,6 +10,7 @@ copen_fn      Open a file-like pipe to a python function.
 
 """
 import os
+import sys
 import time
 import signal
 
@@ -29,12 +30,13 @@ def copen_sys(syscmd, *args):
 
     pid = os.fork()
     if pid == 0: # child process
-        os.dup2(w, 1)
-        os.dup2(ew, 2)
+        os.close(r)
+        os.close(er)
+        os.dup2(w, sys.stdout.fileno())
+        os.dup2(ew, sys.stderr.fileno())
         try:
             os.execvp(syscmd, args)  # execute it!
         except:
-            import sys
             sys.stderr.write("%s could not be executed\n" % syscmd)
             os._exit(-1)
         os._exit(0)
@@ -74,8 +76,13 @@ def copen_fn(func, *args, **keywords):
             traceback.print_exc(file=errwrite)
             errwrite.flush()
             os._exit(-1)
-        cwrite.write(s)
-        cwrite.flush()
+        try:
+            cwrite.write(s)
+            cwrite.flush()
+        except IOError, x:
+            # There can be an IOError if the parent is no longer
+            # listening.  Ignore it.
+            pass
         os._exit(0)
 
     # parent
@@ -83,11 +90,6 @@ def copen_fn(func, *args, **keywords):
     os.close(ew)
     return _PickleHandle(pid, os.fdopen(r, 'r'), os.fdopen(er, 'r'))
 
-
-# Keep a list of all the active child processes.  If the process is
-# forcibly killed, e.g. by a SIGTERM, make sure the child processes
-# die too.
-_active = []   # list of _ProcHandle objects
 
 class _ProcHandle:
     """This object provides a file-like interface to a running
@@ -145,7 +147,7 @@ class _ProcHandle:
                 pid, ind = os.waitpid(self.pid, os.WNOHANG)
                 if pid == self.pid:
                     return ind & 0xff
-                time.sleep(0.01)
+                time.sleep(0.1)
             # It didn't die, so kill with a SIGKILL
             os.kill(self.pid, signal.SIGKILL)
             return signal.SIGKILL
@@ -293,19 +295,26 @@ class _PickleHandle:
 
 # Handle SIGTERM below
 
+# Keep a list of all the active child processes.  If the process is
+# forcibly killed, e.g. by a SIGTERM, make sure the child processes
+# die too.
+_active = []   # list of _ProcHandle objects
+
+_HANDLING = 0
 def _handle_sigterm(signum, stackframe):
     """Handles a SIGTERM.  Cleans up."""
+    global _HANDLING
+    if _HANDLING:
+        return
+    _HANDLING = 1
     _cleanup()
     # call the previous handler
     if _PREV_SIGTERM is not None:
         signal.signal(signal.SIGTERM, _PREV_SIGTERM)
+    os.kill(os.getpid(), signum)
 
 def _cleanup():
-    """_cleanup()
-
-    Close all active commands.
-
-    """
+    """Close all active commands."""
     for obj in _active[:]:
         obj.close()
 

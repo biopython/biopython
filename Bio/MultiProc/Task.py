@@ -6,8 +6,6 @@ Classes:
 Task    Processing that can be forked off in a separate process.
 
 """
-import copen
-
 # Copied from threading.py
 # This is not thread safe!
 _counter = 0
@@ -74,6 +72,7 @@ class Task:
         Run this task.  Should only be called by S.start().
 
         """
+        import copen
         # If the client didn't specify a target function, then don't
         # do any processing.
         if not self._target:
