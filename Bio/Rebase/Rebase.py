@@ -48,6 +48,11 @@ class Record:
     misc             Miscellaneous information
     date_entered
     date_modified
+    num_Adeno2
+    num_Lambda
+    num_pBR322
+    num_PhiX174
+    num_SV40
 
     """
     def __init__(self, colwidth=60):
@@ -59,6 +64,7 @@ class Record:
         """
         self.sequence = ''
         self.complement = ''
+        self.methylation = ''
         self.enzyme_num = None
         self.prototype = ''
         self.source = ''
@@ -66,8 +72,13 @@ class Record:
         self.temperature = None
         self.misc = ''
         self.date_entered = ''
-        self_date_modified = ''
+        self.date_modified = ''
         self._colwidth = colwidth
+        self.num_Adeno2 = 0
+        self.num_Lambda = 0
+        self.num_pBR322 = 0
+        self.num_PhiX174 = 0
+        self.num_SV40 = 0
 
 class Iterator:
     """Returns one record at a time from a Rebase file.
@@ -213,21 +224,38 @@ class _Scanner:
         text = self._text_in( uhandle, text, 100 )
 	print text
         self._scan_sequence( text, consumer)
+        self._scan_methylation( text, consumer)
         self._scan_enzyme_num( text, consumer )
         self._scan_prototype( text, consumer )
         self._scan_source( text, consumer )
         self._scan_microorganism( text, consumer )
         self._scan_temperature( text, consumer)
         self._scan_date_entered( text, consumer)
+        self._scan_date_modified( text, consumer)
+        self._scan_Adeno2( text, consumer)
+        self._scan_Lambda( text, consumer)
+        self._scan_pBR322( text, consumer)
+        self._scan_PhiX174( text, consumer)
+        self._scan_SV40( text, consumer)
 #        consumer.end_sequence()
 
 
     def _scan_sequence(self, text, consumer ):
         start = string.find( text, 'Recognition Sequence:' )
-        end = string.find( text, 'REBASE enzyme #:' )
+        end = string.find( text, 'Base (Type of methylation):' )
+        if( end == -1 ):
+            end = string.find( text, 'REBASE enzyme #:' )
         next_item = text[ start:end ]
         print next_item
         consumer.sequence( next_item )
+
+    def _scan_methylation(self, text, consumer ):
+        start = string.find( text, 'Base (Type of methylation):' )
+        if( start != -1 ):
+            end = string.find( text, 'REBASE enzyme #:' )
+            next_item = text[ start:end ]
+            print next_item
+            consumer.methylation( next_item )
 
     def _scan_enzyme_num(self, text, consumer ):
         start = string.find( text, 'REBASE enzyme #:' )
@@ -273,6 +301,49 @@ class _Scanner:
         print next_item
         consumer.data_entered( next_item )
 
+    def _scan_date_modified(self, text, consumer):
+        start = string.find( text, 'Modified:' )
+        if( start != -1 ):
+            end = start + 30
+            next_item = text[ start:end ]
+            print next_item
+            consumer.data_modified( next_item )
+
+    def _scan_Adeno2( self, text, consumer ):
+        start = string.find( text, 'Adeno2:' )
+        end = string.find( text, 'Lambda:' )
+        next_item = text[ start:end ]
+        print next_item
+        consumer.num_Adeno2( next_item )
+
+    def _scan_Lambda( self, text, consumer ):
+        start = string.find( text, 'Lambda:' )
+        end = string.find( text, 'pBR322:' )
+        next_item = text[ start:end ]
+        print next_item
+        consumer.num_Lambda( next_item )
+
+    def _scan_pBR322(self, text, consumer ):
+        start = string.find( text, 'pBR322:' )
+        end = string.find( text, 'PhiX174:' )
+        next_item = text[ start:end ]
+        print next_item
+        consumer.num_pBR322( next_item )
+
+    def _scan_PhiX174(self, text, consumer ):
+        start = string.find( text, 'PhiX174:' )
+        end = string.find( text, 'SV40:' )
+        next_item = text[ start:end ]
+        print next_item
+        consumer.num_PhiX174( next_item )
+
+    def _scan_SV40(self, text, consumer ):
+        start = string.find( text, 'SV40:' )
+        end = start + 30
+        next_item = text[ start:end ]
+        print next_item
+        consumer.num_SV40( next_item )
+
 
 class _RecordConsumer(AbstractConsumer):
     """Consumer that converts a rebase record to a Record object.
@@ -294,6 +365,10 @@ class _RecordConsumer(AbstractConsumer):
         print '### %s ' % line
 	cols = string.split( line, ': ' )
         self.data.sequence = cols[ 1 ]
+
+    def methylation( self, line ):
+        cols = string.split( line, ': ' )
+        self.data.methylation = cols[ 1 ]
 
     def enzyme_num( self, line ):
         cols = string.split( line, ': ' )
@@ -322,6 +397,34 @@ class _RecordConsumer(AbstractConsumer):
         cols = string.split( cols[ 1 ] )
         print cols[ 0 ]
         self.data.date_entered = string.join( cols[ :3 ] )
+
+    def data_modified( self, line ):
+        cols = string.split( line, ':' )
+        print cols[ 0 ]
+        cols = string.split( cols[ 1 ] )
+        print cols[ 0 ]
+        self.data.date_modified = string.join( cols[ :3 ] )
+
+    def num_Adeno2( self, line ):
+        cols = string.split( line, ': ' )
+        self.data.num_Adeno2 = int( cols[ 1 ] )
+
+    def num_Lambda( self, line ):
+        cols = string.split( line, ': ' )
+        self.data.num_Lambda = int( cols[ 1 ] )
+
+    def num_pBR322( self, line ):
+        cols = string.split( line, ': ' )
+        self.data.num_pBR322 = int( cols[ 1 ] )
+
+    def num_PhiX174( self, line ):
+        cols = string.split( line, ': ' )
+        self.data.num_PhiX174 = int( cols[ 1 ] )
+
+    def num_SV40( self, line ):
+        cols = string.split( line, ':' )
+        cols = string.split( cols[ 1 ], ' ' )
+        self.data.num_SV40 = cols[ 1 ]
 
 def index_file(filename, indexname, rec2key=None):
     """index_file(filename, ind/exname, rec2key=None)
