@@ -530,6 +530,7 @@ feature_qualifier_names = (
     "map",            # Map position of the feature in free-format text
     "mitochondrion",  # Organelle type from which the sequence was obtained
     "mod_base",       # Abbreviation for a modified nucleotide base
+    "motif",
     "name",           # RefSeq specification for a Protein name
     "note",           # Any comment or additional information
     "number",         # A number indicating the order of genetic elements
