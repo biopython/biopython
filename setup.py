@@ -236,7 +236,6 @@ biopython_packages = ['Bio',
                       'Bio.expressions.embl',
                       'Bio.expressions.swissprot',
                       'Bio.formatdefs',
-#                      'Bio.sources',
                       'Bio.writers',
                       'Bio.writers.SeqRecord'
                       ]
@@ -259,7 +258,7 @@ if INSTALL_BIOSQL:
     all_packages.extend(biosql_packages)
 
 setup(name='biopython', 
-      version='1.00a4_022205',
+      version='1.10',
       author='The Biopython Consortium',
       author_email='biopython@biopython.org',
       url='http://www.biopython.org/',
@@ -300,13 +299,21 @@ setup(name='biopython',
                                 'Bio/csupport.c'],
                                include_dirs=["Bio"]
                                ),
+                     Extension('Bio.trie',
+                               ['Bio/triemodule.c',
+                                'Bio/trie.c'],
+                               include_dirs=["Bio"]
+                               ),
+                     Extension('Bio.cMarkovModel',
+                               ['Bio/cMarkovModelmodule.c',
+                                'Bio/csupport.c'],
+                               include_dirs=["Bio"]
+                               ),
                      Extension('Bio.KDTree._KDTreecmodule',
                                ["Bio/KDTree/_KDTree.C", 
                                 "Bio/KDTree/_KDTree.swig.C"],
                                libraries=["stdc++"]
                                ),
-                     Extension('Bio.trie',
-                               ["Bio/trie.c"])
                      ]
       )
 
