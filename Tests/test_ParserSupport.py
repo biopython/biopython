@@ -78,7 +78,80 @@ try:
     h.close()  # should pass this to the original handle
 except:
     raise TestFailed, "OopsHandle"
-    
+
+
+
+### is_blank_line
+
+if verbose:
+    print "Running tests on is_blank_line"
+
+is_blank_line = ParserSupport.is_blank_line
+try:
+    assert is_blank_line('\n')
+    assert is_blank_line('\r\n')
+    assert is_blank_line('\r')
+    assert is_blank_line('')
+    assert not is_blank_line('hello')
+    assert is_blank_line('', allow_spaces=1)
+    assert is_blank_line('', allow_spaces=0)
+    assert not is_blank_line('hello', allow_spaces=1)
+    assert not is_blank_line('hello', allow_spaces=0)
+    assert is_blank_line(string.whitespace, allow_spaces=1)
+    assert not is_blank_line(string.whitespace, allow_spaces=0)
+except:
+    raise TestFailed, "is_blank_line"
+
+
+
+### safe_readline
+
+if verbose:
+    print "Running tests on safe_readline"
+
+data = """This
+file"""
+
+r, w = os.pipe()
+os.fdopen(w, 'w').write(data)
+h = ParserSupport.OopsHandle(os.fdopen(r, 'r'))
+
+safe_readline = ParserSupport.safe_readline
+try:
+    assert string.rstrip(safe_readline(h)) == "This"
+    assert string.rstrip(safe_readline(h)) == "file"
+    try: safe_readline(h)
+    except SyntaxError: pass
+    else: assert 0
+except:
+    raise TestFailed, "safe_readline"
+
+
+### safe_peekline
+
+if verbose:
+    print "Running tests on safe_peekline"
+
+data = """This
+file"""
+
+r, w = os.pipe()
+os.fdopen(w, 'w').write(data)
+h = ParserSupport.OopsHandle(os.fdopen(r, 'r'))
+
+safe_peekline = ParserSupport.safe_peekline
+try:
+    assert string.rstrip(safe_peekline(h)) == "This"
+    h.readline()
+    assert string.rstrip(safe_peekline(h)) == "file"
+    h.readline()
+    try: safe_peekline(h)
+    except SyntaxError: pass
+    else: assert 0
+    h.saveline('hello')
+    assert string.rstrip(safe_peekline(h)) == 'hello'
+except:
+    raise TestFailed, "safe_peekline"
 
 
 ### read_and_call
@@ -91,7 +164,10 @@ MAKLEITLKRSVIGRPEDQRVTVRTLGLKKTNQTVVHEDNAAIRGMINKVSHLVSVKEQ
 >gi|132679|sp|P19946|RL15_BACSU 50S RIBOSOMAL PROTEIN L15
 MKLHELKPSEGSRKTRNRVGRGIGSGNGKTAGKGHKGQNARSGGGVRPGFEGGQMPLFQRLPKRGFTNIN
 RKEYAVVNLDKLNGFAEGTEVTPELLLETGVISKLNAGVKILGNGKLEKKLTVKANKFSASAKEAVEAAG
-GTAEVI"""
+GTAEVI
+
+
+"""
 
 r, w = os.pipe()
 os.fdopen(w, 'w').write(data)
@@ -105,8 +181,12 @@ try:
     rac(h, m)
     assert lines[-1][:10] == '>gi|132871'
     rac(h, m, start='MAKLE', end='KEQ', contains='SVIG')
+    rac(h, m, blank=0)
 
     # These should be errors.  If they're not, then complain.
+    try: rac(h, m, blank=1)
+    except SyntaxError: pass
+    else: assert 0
     try: rac(h, m, start='foobar')
     except SyntaxError: pass
     else: assert 0
@@ -116,10 +196,11 @@ try:
     try: rac(h, m, contains='foobar')
     except SyntaxError: pass
     else: assert 0
-    try: rac(h, m, blank=1)
+    try: rac(h, m, blank=0)
     except SyntaxError: pass
     else: assert 0
 except:
+    raise
     raise TestFailed, "read_and_call"
         
 

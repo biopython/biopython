@@ -63,3 +63,27 @@ NEWS          Release notes and news
 README        This file
 Scripts/      Miscellaneous, possibly useful, standalone scripts
 Tests/        Regression testing code
+
+
+
+To Do
+-----
+
+(In no particular order...)
+
+- how to deal with unsupported (not core) code
+- Sequence class
+- BLAST additions
+  o scripting front end
+  o heavyweight/lightweight data structure
+  o consumers to fill data structures
+  o PSI-BLAST for WWW
+- more parsers
+  o FASTA
+  o SWISSPROT
+  o PDB
+  o Medline
+  o Prosite
+  o Prodoc
+  o Genbank
+- bug database

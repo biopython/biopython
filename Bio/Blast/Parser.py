@@ -83,7 +83,7 @@ StandaloneScanner  Scans output from standalone BLAST.
 NCBIWWWScanner     Scans output from NCBI's BLAST WWW server.
 """
 
-# XXX use _safe_peekline where appropriate
+# XXX use safe_peekline where appropriate
 
 
 import string
@@ -141,7 +141,7 @@ class StandaloneScanner:
         # Read the reference lines and the following blank line.
         read_and_call(ohandle, consumer.reference, start='Reference')
         while 1:
-            line = _safe_readline(ohandle)
+            line = safe_readline(ohandle)
             if is_blank_line(line):
                 consumer.noevent(line)
                 break
@@ -150,7 +150,7 @@ class StandaloneScanner:
         # Read the Query lines and the following blank line.
         read_and_call(ohandle, consumer.query_info, start='Query=')
         while 1:
-            line = _safe_readline(ohandle)
+            line = safe_readline(ohandle)
             if is_blank_line(line):
                 consumer.noevent(line)
                 break
@@ -169,7 +169,7 @@ class StandaloneScanner:
         # followed by descriptions and alignments.
 
         while 1:
-            line = _safe_peekline(ohandle)
+            line = safe_peekline(ohandle)
             if line[:9] != 'Searching':
                 break
 
@@ -224,7 +224,7 @@ class StandaloneScanner:
         # indicates that no descriptions follow, and we should go straight
         # to the alignments.
 
-        line = _safe_peekline(ohandle)
+        line = safe_peekline(ohandle)
         if string.find(line, 'Score     E') == -1:
             # no descriptions.
             # Look for "No hits found".  If this exists, then read the
@@ -246,7 +246,7 @@ class StandaloneScanner:
 
         # Read the descriptions and the following blank line.
         while 1:
-            line = _safe_readline(ohandle)
+            line = safe_readline(ohandle)
             if is_blank_line(line):
                 consumer.noevent(line)
                 break
@@ -260,7 +260,7 @@ class StandaloneScanner:
 
             # Read the descriptions and the following blank line.
             while 1:
-                line = _safe_readline(ohandle)
+                line = safe_readline(ohandle)
                 if is_blank_line(line):
                     consumer.noevent(line)
                     break
@@ -281,7 +281,7 @@ class StandaloneScanner:
 
     def _scan_alignments(self, ohandle, consumer):
         # First, check to see if I'm at the database report.
-        line = _safe_peekline(ohandle)
+        line = safe_peekline(ohandle)
         if line[:10] == '  Database':
             return
         elif line[0] == '>':
@@ -291,7 +291,7 @@ class StandaloneScanner:
 
     def _scan_pairwise_alignments(self, ohandle, consumer):
         while 1:
-            line = _safe_peekline(ohandle)
+            line = safe_peekline(ohandle)
             if line[0] != '>':
                 break
             self._scan_one_pairwise_alignment(ohandle, consumer)
@@ -303,7 +303,7 @@ class StandaloneScanner:
 
         # Scan a bunch of score/alignment pairs.
         while 1:
-            line = _safe_peekline(ohandle)
+            line = safe_peekline(ohandle)
             if line[:6] != ' Score':
                 break
             self._scan_hsp_header(ohandle, consumer)
@@ -318,7 +318,7 @@ class StandaloneScanner:
         #
         read_and_call(ohandle, consumer.title, start='>')
         while 1:
-            line = _safe_readline(ohandle)
+            line = safe_readline(ohandle)
             index = string.find(line, 'Length =')
             # if index == 10 or index == 11 or index == 12:
             if index >= 10:
@@ -363,7 +363,7 @@ class StandaloneScanner:
             read_and_call(ohandle, consumer.align, start='     ')
             read_and_call(ohandle, consumer.sbjct, start='Sbjct')
             read_and_call(ohandle, consumer.noevent, blank=1)
-            line = _safe_peekline(ohandle)
+            line = safe_peekline(ohandle)
             # Alignment continues if I see a 'Query' or the spaces for Blastn.
             if line[:5] != 'Query' and line[:5] != '     ':
                 break
@@ -371,7 +371,7 @@ class StandaloneScanner:
     def _scan_masterslave_alignment(self, ohandle, consumer):
         consumer.start_alignment()
         while 1:
-            line = _safe_readline(ohandle)
+            line = safe_readline(ohandle)
             if line[:10] == '  Database':
                 ohandle.saveline(line)
                 break
@@ -606,7 +606,7 @@ class NCBIWWWScanner:
         # Read the reference lines and the '<p>' line.
         read_and_call(ohandle, consumer.reference, start='<b><a href=')
         while 1:
-            line = _safe_readline(ohandle)
+            line = safe_readline(ohandle)
             if line[:3] == '<p>':
                 consumer.noevent(line)
                 break
@@ -615,7 +615,7 @@ class NCBIWWWScanner:
         # Read the Query lines and the following blank line.
         read_and_call(ohandle, consumer.query_info, contains='Query=')
         while 1:
-            line = _safe_readline(ohandle)
+            line = safe_readline(ohandle)
             if is_blank_line(line):
                 consumer.noevent(line)
                 break
@@ -632,7 +632,7 @@ class NCBIWWWScanner:
         if attempt_read_and_call(ohandle, consumer.noevent,
                                  contains='BLASTFORM'):
             while 1:
-                line = _safe_readline(ohandle)
+                line = safe_readline(ohandle)
                 consumer.noevent(line)
                 if line[:5] == '<PRE>':
                     break
@@ -646,7 +646,7 @@ class NCBIWWWScanner:
     def _scan_descriptions(self, ohandle, consumer):
         consumer.start_descriptions()
 
-        line = _safe_peekline(ohandle)
+        line = safe_peekline(ohandle)
         if string.find(line, 'No significant similarity') >= 0:
             # no hits found:
             # <b>No significant similarity found.</b> For reasons why, <A HREF
@@ -690,8 +690,8 @@ class NCBIWWWScanner:
         # An alignment starts at a <PRE>.
         # If I'm at a blank line, then there's no alignment and I'm
         # at a database report.
-        line1 = _safe_readline(ohandle)
-        line2 = _safe_readline(ohandle)
+        line1 = safe_readline(ohandle)
+        line2 = safe_readline(ohandle)
         ohandle.saveline(line2)
         ohandle.saveline(line1)
         if is_blank_line(line1) or line2[:10] == '  Database':
@@ -709,8 +709,8 @@ class NCBIWWWScanner:
             # If I'm at an alignment header, the first line should be
             # <PRE>.  If I'm at the database report, then the
             # first line will be blank.
-            line1 = _safe_readline(ohandle)
-            line2 = _safe_readline(ohandle)
+            line1 = safe_readline(ohandle)
+            line2 = safe_readline(ohandle)
             ohandle.saveline(line2)
             ohandle.saveline(line1)
             if line1[:5] != '<PRE>':
@@ -758,8 +758,8 @@ class NCBIWWWScanner:
             # alignment, there will be a '<PRE>' line first.  Therefore,
             # I will need to check either of the first two lines to
             # see if I'm at an HSP header.
-            line1 = _safe_readline(ohandle)
-            line2 = _safe_readline(ohandle)
+            line1 = safe_readline(ohandle)
+            line2 = safe_readline(ohandle)
             ohandle.saveline(line2)
             ohandle.saveline(line1)
             if line1[:6] != ' Score' and line2[:6] != ' Score':
@@ -774,7 +774,7 @@ class NCBIWWWScanner:
         #            Length = 141
         #            
         while 1:
-            line = _safe_readline(ohandle)
+            line = safe_readline(ohandle)
             index = string.find(line, 'Length =')
             # if index == 10 or index == 11 or index == 12:
             if index >= 10:
@@ -834,7 +834,7 @@ class NCBIWWWScanner:
         consumer.start_alignment()
         read_and_call(ohandle, consumer.noevent, start='<PRE>')
         while 1:
-            line = _safe_readline(ohandle)
+            line = safe_readline(ohandle)
             if is_blank_line(line):
                 consumer.noevent(line)
                 # # If the blank line is followed by '<PRE>', then
@@ -979,14 +979,3 @@ class NCBIWWWScanner:
 
         consumer.end_parameters()
 
-def _safe_readline(handle):
-    line = handle.readline()
-    if not line:
-        raise SyntaxError, "Unexpected end of blast report."
-    return line
-
-def _safe_peekline(handle):
-    line = handle.peekline()
-    if not line:
-        raise SyntaxError, "Unexpected end of blast report."
-    return line

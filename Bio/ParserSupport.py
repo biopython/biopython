@@ -13,6 +13,8 @@ TaggingConsumer  Consumer that tags output with its event.
 OopsHandle       File object decorator with support for undo-like things.
 
 Functions:
+safe_readline    Read a line from a handle, with check for EOF.
+safe_peekline    Peek at next line, with check for EOF.
 read_and_call    Read a line from a handle and pass it to a method.
 attempt_read_and_call  Like read_and_call, but forgiving of errors.
 is_blank_line    Test whether a line is blank.
@@ -135,7 +137,7 @@ def read_and_call(ohandle, method,
     """
     line = ohandle.readline()
     if not line:
-        raise SyntaxError, "Unexpected end of blast report."
+        raise SyntaxError, "Unexpected end of stream."
     if start:
         if line[:len(start)] != start:
             raise SyntaxError, "Line does not start with '%s': %s" % \
@@ -148,10 +150,14 @@ def read_and_call(ohandle, method,
         if string.find(line, contains) == -1:
             raise SyntaxError, "Line does not contain '%s': %s" % \
                   (contains, line)
-    if blank:
-        if not is_blank_line(line):
-            raise SyntaxError, "Expected blank line, but got: %s" % \
-                  line
+    if blank is not None:
+        if blank:
+            if not is_blank_line(line):
+                raise SyntaxError, "Expected blank line, but got: %s" % \
+                      line
+        else:
+            if is_blank_line(line):
+                raise SyntaxError, "Expected non-blank line, but got a blank one"
     apply(method, (line,))
 
 def attempt_read_and_call(ohandle, method, **keywds):
@@ -194,6 +200,32 @@ def is_blank_line(line, allow_spaces=0):
     should be considered blank.
 
     """
+    if not line:
+        return 1
     if allow_spaces:
         return string.rstrip(line) == ''
     return line[0] == '\n' or line[0] == '\r'
+
+def safe_readline(handle):
+    """safe_readline(handle) -> line
+
+    Read a line from an OopsHandle and return it.  If there are no more
+    lines to read, I will raise a SyntaxError.
+
+    """
+    line = handle.readline()
+    if not line:
+        raise SyntaxError, "Unexpected end of stream."
+    return line
+
+def safe_peekline(handle):
+    """safe_peekline(handle) -> line
+
+    Peek at the next line in an OopsHandle and return it.  If there are no
+    more lines to peek, I will raise a SyntaxError.
+    
+    """
+    line = handle.peekline()
+    if not line:
+        raise SyntaxError, "Unexpected end of stream."
+    return line
