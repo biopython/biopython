@@ -1,11 +1,10 @@
 """
-Parser for ACE files output by PHRAP.
+Parser for (new) ACE files output by PHRAP.
 
-version 1.0
+version 1.1, 02/03/2004
 Written by Frank Kauff (fkauff@duke.edu) and
 Cymon J. Cox (cymon@duke.edu)
 
-Tags RT, CT and WA are *not* supported
 Uses the Biopython Parser interface: ParserSupport.py
 
 Usage:
@@ -15,15 +14,18 @@ the whole file at once and the RecordParser() reads contig after
 contig.
     
 1) Parse whole ace file at once:
-        aceparser=Ace.ACEParser()
+        aceparser=ace.ACEParser()
         acefilerecord=aceparser.parse(open('my_ace_file.ace','r'))
 
 gives you 
         acefilerecord.contigs (the number of contigs in the ace file)
         acefilerecord.reads (the number of reads in the ace file)
         acefilerecord.records[] (one record for each contig)
+        acefilerecord.wa[] (all WA tags)
+        acefilerecord.ct[] (all CT tags)
+        acefilerecord.rt[] (all RT tags)
 
-The latter one includes the data for each contig. All the info in the
+The records[] includes the data objects for each contig. All the info in the
         co and bq tags is unique for each contig: contig_name, bases, reads
         segments, coru, sequence, quality, like in 
         
@@ -36,19 +38,25 @@ The latter one includes the data for each contig. All the info in the
 
         see _RecordConsumer for details.
 
+        record.sort() sorts the ct and rt tags into their appropriate contig record.
 
 2) Or you can iterate over the contigs of an ace file one by one in the ususal way:        
-        recordparser=Ace.RecordParser()
-        iterator=Ace.Iterator(open('my_ace_file.ace','r'),recordparser)
+        recordparser=ace.RecordParser()
+        iterator=ace.Iterator(open('my_ace_file.ace','r'),recordparser)
         while 1:
             contig=iterator.next()
             if contig is None:
                 break
             ...
 
+        if WA, CT, RT tags are at the end and the iterator is used, they will be returned
+        with the last contig record. This is is necessarily the case when using an interator.
+        Thus an ace file does not entirerly suit the concept of iterating. If WA, CT, RT tags
+        are needed, the ACEParser instead of the RecordParser might be appropriate.
+        
 """
 
-import os
+import os 
 from types import *
 
 from Bio import File
@@ -95,10 +103,37 @@ class _bs:
         self.name=''
         self.padded_start=None
         self.padded_end=None
-        
+
+class _rt:
+    def __init__(self):
+        self.name=''
+        self.tag_type=''
+        self.program=''
+        self.padded_start=None
+        self.padded_end=None
+        self.date=''
+
+class _ct:
+    def __init__(self):
+        self.name=''
+        self.tag_type=''
+        self.program=''
+        self.padded_start=None
+        self.padded_end=None
+        self.date=''
+        self.notrans=''
+        self.info=[]
+
+class _wa:
+    def __init__(self):
+        self.tag_type=''
+        self.program=''
+        self.date=''
+        self.info=[]
+
 class Record:
     """Hold information from a ACE record
-
+        
     """
     def __init__(self):
         self.contig_name = ''
@@ -113,6 +148,9 @@ class Record:
         self.rd=[]
         self.qa=[]
         self.ds=[]
+        self.rt=[]
+        self.ct=[]
+        self.wa=[]
         
 class Iterator:
     """Iterates over a ACE-file with multiple contigs
@@ -191,9 +229,34 @@ class ACEFileRecord:
         self.records=[]
         self.contigs=None
         self.reads=None
+        self.wa=[]
+        self.rt=[]
+        self.ct=[]
 
+    def sort(self):
+        """Sorts rt and ct tags into the appropriate contig record, if possible.
+
+        Tags that cannot be associated with a contig or a read remain in the
+        main record.
+        """
+        
+        for i in range(len(self.records)):
+            for j in range(len(self.ct)):
+                if self.records[i].contig_name==self.ct[j].name:
+                    self.records[i].ct.append(self.ct[j])
+                    self.ct[j]=None # you don't want to pop() out of a sequence you iterate over...
+            self.ct=[ct for ct in self.ct if ct]
+            for j in range(len(self.rt)):
+                if self.rt[j].name in [r.name for r in self.records[i].rd]:
+                    self.records[i].rt.append(self.rt[j])
+                    self.rt[j]=None
+            self.rt=[rt for rt in self.rt if rt]
+        
 class ACEParser(AbstractParser):
     """Parses full ACE file in list of records.
+
+    wa, rt and ct tags are all stored in the main data record, independent
+    of their location in the ace file.
     """
 
     def __init__(self):
@@ -201,10 +264,12 @@ class ACEParser(AbstractParser):
         
     def parse(self,handle):
         firstline=handle.readline()
+        # check if the file starts correctly
         if firstline[:2]!='AS':
             raise SyntaxError, "File does not start with 'AS'."
         self.data.contigs=eval(firstline.split()[1])
         self.data.reads=eval(firstline.split()[2])
+        # now read all the records
         recparser=RecordParser()
         iter=Iterator(handle,recparser)
         while 1:
@@ -212,8 +277,22 @@ class ACEParser(AbstractParser):
             if not rec:
                 break
             self.data.records.append(rec)
+        # wa, ct, rt rags are usually at the end of the file, but not necessarily (correct?).
+        # If the iterator is used, the tags are returned with the contig after which they appear,
+        # if all tags are at the end, they are read with the last contig. The concept of an
+        # iterator leaves no other choice. But if the user 
+        # uses the ACEParser, we can collect them and put them into self.data, and then
+        # the data structure reflects the file structure.
+        # Conclusion: An ACE file is not a filetype for which iteration is 100% suitable...
+        for i in range(len(self.data.records)):
+            self.data.wa.extend(self.data.records[i].wa)
+            self.data.records[i].wa=[]
+            self.data.ct.extend(self.data.records[i].ct)
+            self.data.records[i].ct=[]
+            self.data.rt.extend(self.data.records[i].rt)
+            self.data.records[i].rt=[]
         return self.data
-        
+
 class _Scanner:
     """Scans a ACE-formatted file
     
@@ -235,42 +314,71 @@ class _Scanner:
     def _scan_record(self, uhandle, consumer):
         consumer.begin_contig()
         read_and_call(uhandle,consumer.co_header,start='CO ')
-        self._scan_co_data(uhandle, consumer)
+        consumer.co_data(self._scan_sequence_data(uhandle))
         read_and_call_while(uhandle,consumer.noevent,blank=1)
         read_and_call(uhandle,consumer.bq_header,start='BQ')
-        self._scan_bq_data(uhandle, consumer)
+        consumer.bq_data(self._scan_bq_data(uhandle, consumer))
         read_and_call_while(uhandle,consumer.noevent,blank=1)
         read_and_call_while(uhandle,consumer.af,start='AF ')
         read_and_call_while(uhandle,consumer.noevent,blank=1)
         read_and_call_while(uhandle,consumer.bs,start='BS ')
+        # now read all the read data
         while 1:
             read_and_call_until(uhandle,consumer.noevent,start='RD ')
             read_and_call(uhandle,consumer.rd_header,start='RD ')
-            self._scan_rd_data(uhandle, consumer)
+            consumer.rd_data(self._scan_sequence_data(uhandle))
             read_and_call_while(uhandle,consumer.noevent,blank=1)
             read_and_call(uhandle,consumer.qa,start='QA ')
             read_and_call_while(uhandle,consumer.noevent,blank=1)
             read_and_call(uhandle,consumer.ds,start='DS ')
+            # rt tags can be interspersed between reads
             while 1:
+                # something left 
                 try:
-                    line=safe_peekline(uhandle)
+                    read_and_call_while(uhandle,consumer.noevent,blank=1)
                 except SyntaxError:
-                    break
+                    # file ends here
+                    consumer.end_contig()
+                    return
+                line=safe_peekline(uhandle)
+                if line.startswith('RT'):
+                    read_and_call(uhandle,consumer.rt_start,start='RT')
+                    consumer.rt_data(self._scan_bracket_tags(uhandle))
                 else:
-                    if line[:2]=='RD':
-                        break
-                    line=safe_readline(uhandle)
-            if not line[:2]=='RD':
-                break
+                    break
+            if not line.startswith('RD'): # another read?
+                break    
+        # now we check for rt,ct,wa tags *after* the contig-read-block
+        while 1:
+            try:
+                line=safe_peekline(uhandle)
+            except SyntaxError:
+                # file ends here
+                consumer.end_contig()
+                return
+            if line.startswith('CT'):
+                    read_and_call(uhandle,consumer.ct_start,start='CT')
+                    consumer.ct_data(self._scan_bracket_tags(uhandle))
+            elif line.startswith('RT'):
+                    read_and_call(uhandle,consumer.rt_start,start='RT')
+                    consumer.rt_data(self._scan_bracket_tags(uhandle))
+            elif line.startswith('WA'):
+                    read_and_call(uhandle,consumer.wa_start,start='WA')
+                    consumer.wa_data(self._scan_bracket_tags(uhandle))
+            else:
+                line=safe_readline(uhandle)
+            # we ignore other tags...  
+        consumer.end_contig()
+        return
+
+
+            
+        # are there any wa, ct or rt tags before the next contig starts (or the file ends)?
         consumer.end_contig()
     
-    def _scan_co_data(self, uhandle, consumer):
-        consumer.co_data(self._scan_sequence_data(uhandle))
-            
-    def _scan_rd_data(self, uhandle, consumer):
-        consumer.rd_data(self._scan_sequence_data(uhandle))
-    
     def _scan_bq_data(self, uhandle, consumer):
+        """Scans multiple lines of quality data and concatenates them."""
+        
         qual=''
         while 1:
             line=uhandle.readline()
@@ -278,9 +386,11 @@ class _Scanner:
                 uhandle.saveline(line)
                 break
             qual+=' '+line
-        consumer.bq_data(qual)
-    
+        return qual
+   
     def _scan_sequence_data(self,uhandle):
+        """Scans multiple lines of sequence data and concatenates them."""
+        
         seq=''
         while 1:
             line=uhandle.readline()
@@ -289,7 +399,21 @@ class _Scanner:
                 break
             seq+=line.strip()
         return seq
+     
+    def _scan_bracket_tags(self,uhandle):
+        """Reads the data lines of a {} tag."""
         
+        fulltag=[]
+        while 1:
+            line=uhandle.readline().strip()
+            fulltag.append(line)
+            if line.endswith('}'):
+                fulltag[-1]=fulltag[-1][:-1]    # delete the ending }
+                if fulltag[-1]=='':
+                    fulltag=fulltag[:-1]        # delete empty line
+                break
+        return fulltag
+            
 class _RecordConsumer(AbstractConsumer):
     """Reads the ace tags into data records."""
     
@@ -366,6 +490,60 @@ class _RecordConsumer(AbstractConsumer):
         ps=tagpos.keys()
         ps.sort()
         for (p1,p2) in zip(ps,ps[1:]+[len(line)+1]):
-            setattr(dsdata,tagpos[p1].lower(),line[p1+len(tagpos[p1])+1:p2])   
+            setattr(dsdata,tagpos[p1].lower(),line[p1+len(tagpos[p1])+1:p2].strip())   
         self.data.ds.append(dsdata)
 
+    def ct_start(self,line):
+        if not line.strip().endswith('{'):
+            print line
+            raise SyntaxError, 'CT tag does not start with CT{'
+        ctdata=_ct()
+        self.data.ct.append(ctdata)   
+    
+    def rt_start(self,line):
+        if not line.strip().endswith('{'):
+            raise SyntaxError, 'RT tag does not start with RT{'
+        rtdata=_rt()
+        self.data.rt.append(rtdata)   
+    
+    def wa_start(self,line):
+        if not line.strip().endswith('{'):
+            raise SyntaxError, 'WA tag does not start with WA{'
+        wadata=_wa()
+        self.data.wa.append(wadata)   
+    
+    def ct_data(self,taglines):
+        if len(taglines)<1:
+            raise SyntaxError, 'Missing header line in CT tag'
+        header=taglines[0].split()
+        self.data.ct[-1].name=header[0]
+        self.data.ct[-1].tag_type=header[1]
+        self.data.ct[-1].program=header[2]
+        self.data.ct[-1].padded_start=eval(header[3])
+        self.data.ct[-1].padded_end=eval(header[4])
+        self.data.ct[-1].date=header[5]
+        if len(header)==7:
+            self.data.ct[-1].notrans=header[6]
+        self.data.ct[-1].info=taglines[1:] 
+
+    def rt_data(self,taglines):
+        if len(taglines)<1:
+            raise SyntaxError, 'Missing header line in RT tag'
+        header=taglines[0].split()
+        self.data.rt[-1].name=header[0]
+        self.data.rt[-1].tag_type=header[1]
+        self.data.rt[-1].program=header[2]
+        self.data.rt[-1].padded_start=eval(header[3])
+        self.data.rt[-1].padded_end=eval(header[4])
+        self.data.rt[-1].date=header[5]
+    
+    def wa_data(self,taglines):
+        if len(taglines)<1:
+            raise SyntaxError, 'Missing header line in WA tag'
+        header=taglines[0].split()
+        self.data.wa[-1].tag_type=header[0]
+        self.data.wa[-1].program=header[1]
+        self.data.wa[-1].date=header[2]
+        self.data.wa[-1].info=taglines[1:]
+
+    
