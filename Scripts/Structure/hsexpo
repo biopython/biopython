@@ -8,6 +8,7 @@
 from optparse import OptionParser
 
 from Bio.PDB import *
+import sys
 
 __doc__="""
 This program calculates solvent exposure for all amino
@@ -22,6 +23,10 @@ acids in a PDB file using 5 different methods:
 A PDB file can be written out with the exposure in the B factor field.
 See --help for all options.
 """
+
+if len(sys.argv)==1:
+    print __doc__
+    sys.exit()
 
 # Get the user's options
 parser=OptionParser()
@@ -76,6 +81,7 @@ if options.exp=="CA3":
 elif options.exp=="CB":
     hse=HSExposure(OFFSET=options.offset)
     d=hse.calc_hs_exposure(m, RADIUS, option="CB")
+    hse.write_pymol_script()
     if options.ds:
         k=1
     else:
