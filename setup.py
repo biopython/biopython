@@ -95,7 +95,7 @@ def check_mxTextTools():
 
 def check_Numpy():
     try:
-        from Numeric import *
+        import Numeric
         return 1
     except ImportError:
         return 0
