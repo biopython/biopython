@@ -1,6 +1,6 @@
 #!/usr/bin/env python2.3
 
-__version__ = "$Revision: 1.7 $"
+__version__ = "$Revision: 1.8 $"
 
 import os
 import sys
@@ -85,7 +85,15 @@ def align(cmdline, pair, kbyte=None, force_type=None, dry_run=False, quiet=False
     if debug:
         print >>sys.stderr, cmdline_str
         
-    os.system(cmdline_str)
+    status = os.system(cmdline_str)
+
+    if status:
+        if kbyte: # possible memory problem
+            print >>sys.stderr, "INFO trying again with the linear model"
+            return align(cmdline, pair, 0, force_type, dry_run, quiet, debug)
+        else:
+            raise OSError, "%s returned %s" % (cmdline, status)
+    
     return output_file
 
 def all_pairs(singles):
