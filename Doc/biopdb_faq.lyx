@@ -5,8 +5,8 @@
 % header
 \usepackage{fancyhdr}
 \pagestyle{fancy}
-\lhead{Bio.PDB}
-\rhead{FAQ}
+\lhead{Structural Biopython FAQ}
+\rhead{}
 
 % remove date
 \date{}
@@ -53,14 +53,18 @@
 
 \layout Title
 
-The BioPython Structural Bioinformatics FAQ
+
+\size huge 
+The Biopython
+\newline 
+Structural Bioinformatics FAQ
 \layout Author
 
 Thomas Hamelryck
 \newline 
 Bioinformatics center
 \newline 
-Copenhagen University
+University of Copenhagen 
 \newline 
 Universitetsparken 15, Bygning 10
 \newline 
@@ -100,24 +104,21 @@ The Biopython web site (
 \end_inset 
 
 ) provides an online resource for modules, scripts, and web links for developers
- of Python-based software for life science research.
- Basically, we want to make it as easy as possible to use python for bioinformat
-ics by creating high-quality, reusable modules and scripts.
+ of Python-based software for bioinformatics use and research.
+ Basically, the goal of biopython is to make it as easy as possible to use
+ python for bioinformatics by creating high-quality, reusable modules and
+ classes.
  Biopython features include parsers for various Bioinformatics file formats
- (BLAST, Clustalw, FASTA, Genbank, etc.), access to online services (NCBI,
- Expasy), interfaces to common programs (eg.
- Clustalw), a standard sequence class, various clustering modules, a 
-\family typewriter 
-KDTree
-\family default 
- module etc.
+ (BLAST, Clustalw, FASTA, Genbank,...), access to online services (NCBI, Expasy,...),
+ interfaces to common programs (Clustalw, DSSP,...), a standard sequence class,
+ various clustering modules, a KD tree data structure etc.
  and documentation.
  
 \layout Standard
 
-Bio.PDB is a biopython module that focuses on handling crystal structures
+Bio.PDB is a biopython module that focuses on working with crystal structures
  of biological macromolecules.
- This document gives an overview of Bio.PDB.
+ This document gives a fairly complete overview of Bio.PDB.
 \layout Section
 
 Bio.PDB's installation
@@ -130,6 +131,7 @@ Bio.PDB is automatically installed as part of Biopython.
 \end_inset 
 
 .
+ It runs on many platforms (Linux/Unix, windows, Mac,...).
 \layout Section
 
 What's the Bio.PDB license?
@@ -137,12 +139,13 @@ What's the Bio.PDB license?
 
 The Biopython license, which is one of the most unrestricted Open Source
  licenses around.
+ Read the license before you start using Biopython, please.
 \layout Section
 
 Who's using Bio.PDB?
 \layout Standard
 
-Bio.PDB was used in the construction of DISEMBL, a webserver that predicts
+Bio.PDB was used in the construction of DISEMBL, a web server that predicts
  disordered regions in proteins (
 \begin_inset LatexCommand \url{http://dis.embl.de/}
 
@@ -170,14 +173,14 @@ Proteins Struct.
 \layout Standard
 
 Judging from requests for features and information, Bio.PDB is also used
- by several LPC's (Large Pharmaceutical Companies :-).
+ by several LPCs (Large Pharmaceutical Companies :-).
 \layout Section
 
 Is there a Bio.PDB reference?
 \layout Standard
 
 Yes, and I'd appreciate it if you would refer to Bio.PDB in publications
- that makes use of it.
+ if you make use of it.
  The reference is:
 \layout Quote
 
@@ -218,11 +221,26 @@ Pretty well, actually.
  working on improving it.
 \layout Section
 
+How fast is it?
+\layout Standard
+
+The 
+\family typewriter 
+PDBParser
+\family default 
+ performance was tested on about 800 structures (each belonging to a unique
+ SCOP superfamily).
+ This takes about 20 minutes, or on average 1.5 seconds per structure.
+ Parsing the structure of the large ribosomal subunit (1FKK), which contains
+ about 64000 atoms, takes 10 seconds on a 1000 MHz PC.
+ In short: it's more than fast enough for many applications.
+\layout Section
+
 Usage
 \layout Subsection
 
 General questions
-\layout Subsubsection
+\layout Subsubsection*
 
 Importing Bio.PDB
 \layout Standard
@@ -236,11 +254,11 @@ from Bio.PDB import *
 Is there support for molecular graphics?
 \layout Standard
 
-Not directly, mostly since there are quite a few Python based solutions
- already, that can potentially be used with Bio.PDB.
+Not directly, mostly since there are quite a few Python based/Python aware
+ solutions already, that can potentially be used with Bio.PDB.
  My choice is Pymol, BTW (I've used this successfully with Bio.PDB, and there
  will probably be specific PyMol modules in Bio.PDB soon/some day).
- Python based molecular graphics solutions include:
+ Python based/aware molecular graphics solutions include:
 \layout Itemize
 
 PyMol: 
@@ -273,11 +291,42 @@ Coot:
 \end_inset 
 
 
+\layout Itemize
+
+CCP4mg: 
+\begin_inset LatexCommand \url{http://www.ysbl.york.ac.uk/~lizp/molgraphics.html}
+
+\end_inset 
+
+
+\layout Itemize
+
+mmLib: 
+\begin_inset LatexCommand \url{http://pymmlib.sourceforge.net/}
+
+\end_inset 
+
+ 
+\layout Itemize
+
+VMD: 
+\begin_inset LatexCommand \url{http://www.ks.uiuc.edu/Research/vmd/}
+
+\end_inset 
+
+
+\layout Itemize
+
+MMTK: 
+\begin_inset LatexCommand \url{http://starship.python.net/crew/hinsen/MMTK/}
+
+\end_inset 
+
+
 \layout Standard
 
-In addition, the CCP4 people are also working on a python based molecular
- graphics program.
- 
+I'd be crazy to write another molecular graphics application (been there
+ - done that, actually :-).
 \layout Subsection
 
 Input/output
@@ -425,8 +474,12 @@ Can I use Bio.PDB with NMR structures (ie.
 Sure.
  Many PDB parsers assume that there is only one model, making them all but
  useless for NMR structures.
- The design of the Structure object makes it easy to handle PDB files with
- more than one model (see section 
+ The design of the 
+\family typewriter 
+Structure
+\family default 
+ object makes it easy to handle PDB files with more than one model (see
+ section 
 \begin_inset LatexCommand \ref{sub:The-Structure-object}
 
 \end_inset 
@@ -553,8 +606,8 @@ It is well known that many PDB files contain semantic errors (I'm not talking
  The PDBParser object can behave in two ways: a restrictive way and a permissive
  way (THIS IS NOW THE DEFAULT).
  The restrictive way used to be the default, but people seemed to think
- that Bio.PDB 'crashed' due to a bug, so I changed it.
- If you ever encounter a real (!) bug, please tell me immediately!
+ that Bio.PDB 'crashed' due to a bug (hah!), so I changed it.
+ If you ever encounter a real bug, please tell me immediately!
 \layout Standard
 
 Example:
@@ -588,13 +641,25 @@ Multiple atoms with the same identifier (taking into account the altloc
  identifier)
 \layout Standard
 
-These errors often indicate real problems in the PDB file (for details see
- the Bioinformatics article).
- 
+These errors indicate real problems in the PDB file (for details see the
+ Bioinformatics article).
+ In the restrictive state, PDB files with errors cause an exception to occur.
+ This is useful to find errors in PDB files.
 \layout Standard
 
-In the restrictive state, PDB files with errors cause an exception to occur.
- This is good to find errors in PDB files.
+Some errors however are automatically corrected.
+ Normally each disordered atom should have a non-blanc altloc identifier.
+ However, there are many structures that do not follow this convention,
+ and have a blank and a non-blank identifier for two disordered positions
+ of the same atom.
+ This is automatically interpreted in the right way.
+\layout Standard
+
+Sometimes a structure contains a list of residues belonging to chain A,
+ followed by residues belonging to chain B, and again followed by residues
+ belonging to chain A, i.e.
+ the chains are 'broken'.
+ This is also correctly interpreted.
 \layout Subsubsection*
 
 Can I write PDB files?
@@ -613,7 +678,7 @@ io=PDBIO()
 io.set_structure(s)
 \layout LyX-Code
 
-io.save("out.pdb")
+io.save('out.pdb')
 \layout Standard
 
 If you want to write out a part of the structure, make use of the 
@@ -681,7 +746,7 @@ io=PDBIO()
 io.set_structure(s)
 \layout LyX-Code
 
-io.save("out.pdb", GlySelect())
+io.save('gly_only.pdb', GlySelect())
 \layout Subsubsection*
 
 Can I write mmCIF files?
@@ -712,7 +777,11 @@ Structure
 \family typewriter 
 SMCRA
 \family default 
- architecture: 
+ (Structure/\SpecialChar \-
+Model/\SpecialChar \-
+Chain/\SpecialChar \-
+Residue/\SpecialChar \-
+Atom) architecture : 
 \layout Itemize
 
 A structure consists of models
@@ -728,13 +797,17 @@ A residue consists of atoms
 \layout Standard
 
 This is the way many structural biologists/bioinformaticians think about
- structure, and provides a simple but complete way to deal with structure.
+ structure, and provides a simple but efficient way to deal with structure.
  Additional stuff is essentially added when needed.
  A UML diagram of the 
 \family typewriter 
 Structure
 \family default 
- object (forget about the Disordered classes for now) is shown in Fig.
+ object (forget about the 
+\family typewriter 
+Disordered
+\family default 
+ classes for now) is shown in Fig.
  
 \begin_inset LatexCommand \ref{cap:SMCRA}
 
@@ -753,7 +826,7 @@ collapsed false
 \align center 
 
 \begin_inset Graphics
-	filename /home/thamelry/Documents/biopython_manual/smcra.eps
+	filename images/smcra.png
 	lyxscale 50
 	width 100mm
 	keepAspectRatio
@@ -773,15 +846,16 @@ UML diagram of SMCRA architecture of the
 Structure 
 \family default 
 object.
- Diamonds denote aggregation, arrows denote reference, lines with arrows
- denote inheritance and dotted lines denote interface realization.
+ Full lines with diamonds denote aggregation, full lines with arrows denote
+ referencing, full lines with triangles denote inheritance and dashed lines
+ with triangles denote interface realization.
  
 \end_inset 
 
 
 \layout Subsubsection*
 
-How do I iterate through a Structure object?
+How do I navigate through a Structure object?
 \layout Standard
 
 The following code iterates through all atoms of a structure:
@@ -817,13 +891,20 @@ Entities
 \family typewriter 
 Entity
 \family default 
- from a child entity, eg:
+ from a child 
+\family typewriter 
+Entity
+\family default 
+, eg:
 \layout LyX-Code
 
 residue=atom.get_parent()
+\layout LyX-Code
+
+chain=residue.get_parent()
 \layout Subsubsection*
 
-Can I do that a bit faster?
+Can I do that a bit more conveniently?
 \layout Standard
 
 You can use the 
@@ -845,9 +926,15 @@ res_list=Selection.unfold_entities(structure, 'R')
 atom_list=Selection.unfold_entities(chain, 'A')
 \layout Standard
 
-You can also use this to get a list of 
+Obviously, A=atom, R=residue, C=chain, M=model, S=structure.
+ You can also use this to go up in the hierarchy, eg.
+ to get a list of (unique) 
 \family typewriter 
 Residue
+\family default 
+ or 
+\family typewriter 
+Chain
 \family default 
  parents from a list of 
 \family typewriter 
@@ -857,6 +944,9 @@ Atoms
 \layout LyX-Code
 
 residue_list=Selection.unfold_entities(atom_list, 'R')
+\layout LyX-Code
+
+chain_list=Selection.unfold_entities(atom_list, 'C')
 \layout Standard
 
 For more info, see the API documentation.
@@ -869,19 +959,19 @@ Easy.
  Here are some examples:
 \layout LyX-Code
 
-atom=residue['CA']
-\layout LyX-Code
-
-residue=chain[100]
+model=structure[0]
 \layout LyX-Code
 
 chain=model['A']
 \layout LyX-Code
 
-model=structure[0]
+residue=chain[100]
+\layout LyX-Code
+
+atom=residue['CA']
 \layout Standard
 
-Note that you can use shortcuts:
+Note that you can use a shortcut:
 \layout LyX-Code
 
 atom=structure[0]['A'][100]['CA']
@@ -912,7 +1002,11 @@ This is a bit more complicated, due to the clumsy PDB format.
  A residue id is a tuple with three elements:
 \layout Itemize
 
-The hetero-flag: this is
+The 
+\series bold 
+hetero-flag
+\series default 
+: this is
 \family typewriter 
  'H_'
 \family default 
@@ -928,11 +1022,28 @@ The hetero-flag: this is
  in the case of a water molecule.
 \layout Itemize
 
-The sequence identifier in the chain, eg.
+The 
+\series bold 
+sequence identifier
+\series default 
+ in the chain, eg.
  100
 \layout Itemize
 
-The insertion code, eg, 'A'
+The 
+\series bold 
+insertion code
+\series default 
+, eg.
+ 'A'.
+ The insertion code is sometimes used to preserve a certain desirable residue
+ numbering scheme.
+ A Ser 80 insertion mutant (inserted e.g.
+ between a Thr 80 and an Asn 81 residue) could e.g.
+ have sequence identifiers and insertion codes as follows: Thr 80 A, Ser
+ 80 B, Asn 81.
+ In this way the residue numbering scheme stays in tune with that of the
+ wild type structure.
 \layout Standard
 
 The id of the above glucose residue would thus be ('H_GLC', 100, 'A').
@@ -954,16 +1065,8 @@ residue=chain[100]
 
 The reason for the hetero-flag is that many, many PDB files use the same
  sequence identifier for an amino acid and a hetero-residue or a water,
- which would create obvious problems.
- The insertion code is eg.
- used to preserve sequence numbering among point mutants.
-\layout Standard
-
-The name of the residue can be obtained with the 
-\family typewriter 
-get_resname
-\family default 
- method.
+ which would create obvious problems if the hetero-flag was not used.
+ 
 \layout Subsubsection*
 
 What is an atom id?
@@ -1047,7 +1150,13 @@ Atom
 Disordered\SpecialChar \-
 Atom
 \family default 
- object.
+ object (see Fig.
+ 
+\begin_inset LatexCommand \ref{cap:SMCRA}
+
+\end_inset 
+
+).
  Each 
 \family typewriter 
 Atom
@@ -1089,10 +1198,10 @@ Atom
  object associated with a specific altloc identifier:
 \layout LyX-Code
 
-atom.disordered_select("A") # select altloc A atom
+atom.disordered_select('A') # select altloc A atom
 \layout LyX-Code
 
-atom.disordered_select("B") # select altloc B atom 
+atom.disordered_select('B') # select altloc B atom 
 \layout Standard
 
 A special case arises when disorder is due to 
@@ -1123,7 +1232,13 @@ Residue
 Disordered\SpecialChar \-
 Residue
 \family default 
- object.
+ object (see Fig.
+ 
+\begin_inset LatexCommand \ref{cap:SMCRA}
+
+\end_inset 
+
+).
 \layout Standard
 
 The 
@@ -1157,7 +1272,7 @@ Residue
 Disordered\SpecialChar \-
 Residue
 \family default 
- object, while residue Cys 60 would have id "CYS".
+ object, while residue Cys 60 would have id 'CYS'.
  The user can select the active 
 \family typewriter 
 Residue
@@ -1190,13 +1305,18 @@ Atom
 \family typewriter 
 DisorderedAtom
 \family default 
- objects are 'unpacked') using the 
+ objects are 'unpacked' to 
+\family typewriter 
+Atom
+\family default 
+ objects) using the 
 \family typewriter 
 get_unpacked_list
 \family default 
  method of a 
 \family typewriter 
-(Disordered)Residue
+(Disordered)\SpecialChar \-
+Residue
 \family default 
  object.
 \layout Subsubsection*
@@ -1204,8 +1324,8 @@ get_unpacked_list
 Can I sort residues in a chain somehow?
 \layout Standard
 
-Yes, but I'm waiting for a request for this feature to finish it :-).
- More info soon.
+Yes, kinda, but I'm waiting for a request for this feature to finish it
+ :-).
 \layout Subsubsection*
 
 How are ligands and solvent handled?
@@ -1231,6 +1351,12 @@ What about standard deviation of atomic positions?
 \layout Standard
 
 Yup, supported.
+ See section 
+\begin_inset LatexCommand \ref{sub:Analysis}
+
+\end_inset 
+
+.
 \layout Subsubsection*
 
 I think the SMCRA data structure is not flexible/\SpecialChar \-
@@ -1244,7 +1370,7 @@ Sure, sure.
  Everybody is always coming up with (mostly vaporware) data structures that
  handle all possible situations and are extensible in all thinkable (and
  unthinkable) ways.
- The prozaic truth however is that 99.9% of people using (and I mean really
+ The prosaic truth however is that 99.9% of people using (and I mean really
  using!) crystal structures think in terms of models, chains, residues and
  atoms.
  The philosophy of Bio.PDB is to provide a reasonably fast, clean, simple,
@@ -1345,7 +1471,7 @@ Using the following methods:
 \layout LyX-Code
 
 r.get_resname() # return the residue name (eg.
- GLY)
+ 'GLY')
 \layout LyX-Code
 
 r.is_disordered() # 1 if the residue has disordered atoms
@@ -1374,7 +1500,7 @@ ca1=residue1['CA']
 ca2=residue2['CA']
 \layout LyX-Code
 
-# Simply substract the atoms to get their distance
+# Simply subtract the atoms to get their distance
 \layout LyX-Code
 
 distance=ca1-ca2
@@ -1469,7 +1595,47 @@ Polypeptide
 \family typewriter 
 Seq
 \family default 
- object as well.
+ object or to get a list of C
+\begin_inset Formula $\alpha$
+\end_inset 
+
+ atoms as well.
+ Polypeptides can be built using a C-N or a C
+\begin_inset Formula $\alpha$
+\end_inset 
+
+-C
+\begin_inset Formula $\alpha$
+\end_inset 
+
+ distance criterion.
+\layout Standard
+
+Example:
+\layout LyX-Code
+
+# Using C-N 
+\layout LyX-Code
+
+ppb=PPBuilder()
+\layout LyX-Code
+
+for pp in ppb.build_peptides(structure): 
+\layout LyX-Code
+
+    print pp.get_sequence()
+\layout LyX-Code
+
+# Using CA-CA
+\layout LyX-Code
+
+ppb=CaPPBuilder()
+\layout LyX-Code
+
+for pp in ppb.build_peptides(structure): 
+\layout LyX-Code
+
+    print pp.get_sequence() 
 \layout Subsubsection*
 
 How do I get the sequence of a structure?
@@ -1509,22 +1675,370 @@ How do I determine secondary structure?
 \layout Standard
 
 For this functionality, you need to install DSSP (and obtain a license for
- it - free for academic use).
+ it - free for academic use, see 
+\begin_inset LatexCommand \url{http://www.cmbi.kun.nl/gv/dssp/}
+
+\end_inset 
+
+).
  Then use the 
 \family typewriter 
 DSSP
 \family default 
- class.
+ class, which maps 
+\family typewriter 
+Residue
+\family default 
+ objects to their secondary structure (and accessible surface area).
+ The DSSP codes are listed in Table 
+\begin_inset LatexCommand \ref{cap:DSSP-codes}
+
+\end_inset 
+
+.
+ Note that DSSP (the program, and thus by consequence the class) cannot
+ handle mutiple models!
+\layout Standard
+
+
+\begin_inset Float table
+wide false
+collapsed false
+
+\layout Standard
+\align center 
+
+\begin_inset  Tabular
+<lyxtabular version="3" rows="9" columns="2">
+<features>
+<column alignment="center" valignment="top" leftline="true" width="0">
+<column alignment="center" valignment="top" leftline="true" rightline="true" width="0">
+<row topline="true" bottomline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Code
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Secondary structure
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+A
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+
+\begin_inset Formula $\alpha$
+\end_inset 
+
+-helix
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+B
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+
+\family roman 
+\series medium 
+\shape up 
+\size normal 
+\emph off 
+\bar no 
+\noun off 
+\color none
+Isolated 
+\family default 
+\series default 
+\shape default 
+\size default 
+\emph default 
+\bar default 
+\noun default 
+\color default
+
+\begin_inset Formula $\beta$
+\end_inset 
+
+
+\family roman 
+\series medium 
+\shape up 
+\size normal 
+\emph off 
+\bar no 
+\noun off 
+\color none
+-bridge resid
+\family default 
+\series default 
+\shape default 
+\size default 
+\emph default 
+\bar default 
+\noun default 
+\color default
+ue
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+E
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+
+\family roman 
+\series medium 
+\shape up 
+\size normal 
+\emph off 
+\bar no 
+\noun off 
+\color none
+Strand (
+\family default 
+\series default 
+\shape default 
+\size default 
+\emph default 
+\bar default 
+\noun default 
+\color default
+'
+\family roman 
+\series medium 
+\shape up 
+\size normal 
+\emph off 
+\bar no 
+\noun off 
+\color none
+extended
+\family default 
+\series default 
+\shape default 
+\size default 
+\emph default 
+\bar default 
+\noun default 
+\color default
+'
+\family roman 
+\series medium 
+\shape up 
+\size normal 
+\emph off 
+\bar no 
+\noun off 
+\color none
+) 
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+G
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+
+\family roman 
+\series medium 
+\shape up 
+\size normal 
+\emph off 
+\bar no 
+\noun off 
+\color none
+3-10 helix 
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+I
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+
+\begin_inset Formula $\Pi$
+\end_inset 
+
+-
+\family roman 
+\series medium 
+\shape up 
+\size normal 
+\emph off 
+\bar no 
+\noun off 
+\color none
+helix 
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+T
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+
+\family roman 
+\series medium 
+\shape up 
+\size normal 
+\emph off 
+\bar no 
+\noun off 
+\color none
+Turn
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+S
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+
+\family roman 
+\series medium 
+\shape up 
+\size normal 
+\emph off 
+\bar no 
+\noun off 
+\color none
+Bend 
+\end_inset 
+</cell>
+</row>
+<row topline="true" bottomline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+-
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+
+\family roman 
+\series medium 
+\shape up 
+\size normal 
+\emph off 
+\bar no 
+\noun off 
+\color none
+Other
+\end_inset 
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset 
+
+
+\layout Caption
+
+
+\begin_inset LatexCommand \label{cap:DSSP-codes}
+
+\end_inset 
+
+DSSP codes in Bio.PDB.
+\end_inset 
+
+
 \layout Subsubsection*
 
-How do I calculate the solvent exposure of a residue?
+How do I calculate the accessible surface area of a residue?
 \layout Standard
 
 Use the 
 \family typewriter 
 DSSP 
 \family default 
-class.
+class (see also previous entry).
 \layout Subsubsection*
 
 How do I calculate residue depth?
@@ -1549,17 +2063,22 @@ For this functionality, you need to install Michel Sanner's MSMS program
 ResidueDepth
 \family default 
  class.
- You can also get a handle to the molecular surface itself.
+ You can also get access to the molecular surface itself (via the 
+\family typewriter 
+get_surface
+\family default 
+ function).
 \layout Subsubsection*
 
 How do I map the residues of two related structures onto each other?
 \layout Standard
 
-First, create an alignment in FASTA format, then use the 
+First, create an alignment file in FASTA format, then use the 
 \family typewriter 
 StructureAlignment
 \family default 
  class.
+ This class can also be used for alignments with more than two structures.
 \layout Subsubsection*
 
 How do I put a virtual C
@@ -1574,9 +2093,9 @@ OK, I admit, this example is only present to show off the possibilities
 \family typewriter 
 Vector
 \family default 
- module (though this code is actually used in the 
+ module (though this code is actually used in the upcoming 
 \family typewriter 
-Exposure
+HSExposure
 \family default 
  module).
  Suppose that you would like to find the position of a Gly residue's C
@@ -1606,6 +2125,9 @@ Vector
  module:
 \layout LyX-Code
 
+# get atom coordinates as vectors
+\layout LyX-Code
+
 n=residue['N'].get_vector() 
 \layout LyX-Code
 
@@ -1624,10 +2146,10 @@ n=n-ca
 c=c-ca 
 \layout LyX-Code
 
-# find rotation matrix that rotates -120 degrees
+# find rotation matrix that rotates n 
 \layout LyX-Code
 
-# along the ca-c vector
+# -120 degrees along the ca-c vector
 \layout LyX-Code
 
 rot=rotaxis(-pi*120.0/180.0, c)
@@ -1636,13 +2158,13 @@ rot=rotaxis(-pi*120.0/180.0, c)
 # apply rotation to ca-n vector
 \layout LyX-Code
 
-cb=n.left_multiply(rot)
+cb_at_origin=n.left_multiply(rot)
 \layout LyX-Code
 
 # put on top of ca atom
 \layout LyX-Code
 
-cb=cb+ca
+cb=cb_at_origin+ca
 \layout Standard
 
 This example shows that it's possible to do some quite nontrivial vector
@@ -1713,8 +2235,8 @@ Matrix computations, 2nd ed.
  Golub, G.
  & Van Loan (1989)
 \shape default 
-, and makes use of singular value decomposition (as implemented in the general
- 
+ and makes use of singular value decomposition (this is implemented in the
+ general 
 \family typewriter 
 Bio.\SpecialChar \-
 SVDSuperimposer
@@ -1760,7 +2282,7 @@ How do I superimpose two structures based on their active sites?
 
 Pretty easily.
  Use the active site atoms to calculate the rotation/translation matrices
- (see above), and apply them to the whole molecule.
+ (see above), and apply these to the whole molecule.
 \layout Subsubsection*
 
 Can I manipulate the atomic coordinates?
@@ -1770,17 +2292,40 @@ Yes, using the
 \family typewriter 
 transform
 \family default 
- method of the Atom object, or directly using the 
+ method of the 
+\family typewriter 
+Atom
+\family default 
+ object, or directly using the 
 \family typewriter 
 set_coord
 \family default 
  method.
 \layout Section
 
+Other Structural Bioinformatics modules
+\layout Subsubsection*
+
+Bio.SCOP
+\layout Standard
+
+Coming soon.
+\layout Subsubsection*
+
+Bio.FSSP
+\layout Standard
+
+Coming soon.
+\layout Section
+
 You haven't answered my question yet!
 \layout Standard
 
-It's late and I'm tired, and a fresh beer is waiting for me in the fridge.
+Woah! It's late and I'm tired, and a glass of excellent 
+\shape italic 
+Pedro Ximenez
+\shape default 
+ sherry is waiting for me.
  Just drop me a mail, and I'll answer you in the morning (with a bit of
  luck...).
 \layout Section
@@ -1797,13 +2342,13 @@ The main author/maintainer of Bio.PDB is yours truly.
 Polypeptide 
 \family default 
 module.
- Many, many thanks to Brad Chapman, Jeffrey Chang, Andrew Dalke and Iddo
- Friedberg for suggestions, comments and/or general support.
+ Many thanks to Brad Chapman, Jeffrey Chang, Andrew Dalke and Iddo Friedberg
+ for suggestions, comments, help and/or biting criticism.
 \layout Section
 
 Can I contribute?
 \layout Standard
 
 Yes, yes, yes! Just send me an e-mail (thamelry@binf.ku.dk) if you have something
- useful to contribute! 
+ useful to contribute! Eternal fame awaits!
 \the_end

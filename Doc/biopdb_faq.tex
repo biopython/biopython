@@ -16,6 +16,8 @@
 %% Bold symbol macro for standard LaTeX users
 \newcommand{\boldsymbol}[1]{\mbox{\boldmath $#1$}}
 
+%% Because html converters don't know tabularnewline
+\providecommand{\tabularnewline}{\\}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
  \newenvironment{lyxcode}
@@ -33,8 +35,8 @@
 % header
 \usepackage{fancyhdr}
 \pagestyle{fancy}
-\lhead{Bio.PDB}
-\rhead{FAQ}
+\lhead{Structural Biopython FAQ}
+\rhead{}
 
 % remove date
 \date{}
@@ -58,12 +60,13 @@
 \makeatother
 \begin{document}
 
-\title{The BioPython Structural Bioinformatics FAQ}
+\title{{\huge The Biopython}\\
+{\huge Structural Bioinformatics FAQ}}
 
 
 \author{Thomas Hamelryck\\
 Bioinformatics center\\
-Copenhagen University\\
+University of Copenhagen \\
 Universitetsparken 15, Bygning 10\\
 DK-2100 København Ø\\
 Denmark \\
@@ -83,34 +86,37 @@ easily be extended with modules written in C, C++ or FORTRAN.
 
 The Biopython web site (\url{http://www.biopython.org}) provides
 an online resource for modules, scripts, and web links for developers
-of Python-based software for life science research. Basically, we
-want to make it as easy as possible to use python for bioinformatics
-by creating high-quality, reusable modules and scripts. Biopython
-features include parsers for various Bioinformatics file formats (BLAST,
-Clustalw, FASTA, Genbank, etc.), access to online services (NCBI,
-Expasy), interfaces to common programs (eg. Clustalw), a standard
-sequence class, various clustering modules, a \texttt{KDTree} module
-etc. and documentation. 
+of Python-based software for bioinformatics use and research. Basically,
+the goal of biopython is to make it as easy as possible to use python
+for bioinformatics by creating high-quality, reusable modules and
+classes. Biopython features include parsers for various Bioinformatics
+file formats (BLAST, Clustalw, FASTA, Genbank,...), access to online
+services (NCBI, Expasy,...), interfaces to common programs (Clustalw,
+DSSP,...), a standard sequence class, various clustering modules,
+a KD tree data structure etc. and documentation. 
 
-Bio.PDB is a biopython module that focuses on handling crystal structures
-of biological macromolecules. This document gives an overview of Bio.PDB.
+Bio.PDB is a biopython module that focuses on working with crystal
+structures of biological macromolecules. This document gives a fairly
+complete overview of Bio.PDB.
 
 
 \section{Bio.PDB's installation}
 
 Bio.PDB is automatically installed as part of Biopython. Biopython
-can be obtained from \url{http://www.biopython.org}.
+can be obtained from \url{http://www.biopython.org}. It runs on many
+platforms (Linux/Unix, windows, Mac,...).
 
 
 \section{What's the Bio.PDB license?}
 
 The Biopython license, which is one of the most unrestricted Open
-Source licenses around.
+Source licenses around. Read the license before you start using Biopython,
+please.
 
 
 \section{Who's using Bio.PDB?}
 
-Bio.PDB was used in the construction of DISEMBL, a webserver that
+Bio.PDB was used in the construction of DISEMBL, a web server that
 predicts disordered regions in proteins (\url{http://dis.embl.de/}),
 and COLUMBA, a website that provides annotated protein structures
 (\url{http://www.columba-db.de/}). Bio.PDB has also been used to
@@ -119,13 +125,13 @@ protein structures in the PDB (see \textit{Proteins Struct. Func.
 Gen.}, \textbf{2003}, 51, 96-108). 
 
 Judging from requests for features and information, Bio.PDB is also
-used by several LPC's (Large Pharmaceutical Companies :-).
+used by several LPCs (Large Pharmaceutical Companies :-).
 
 
 \section{Is there a Bio.PDB reference?}
 
 Yes, and I'd appreciate it if you would refer to Bio.PDB in publications
-that makes use of it. The reference is:
+if you make use of it. The reference is:
 
 \begin{quote}
 Hamelryck, T., Manderick, B. (2003) PDB parser and structure class
@@ -145,13 +151,23 @@ as a reliable tool. In fact, I'm using Bio.PDB almost daily for research
 purposes and continue working on improving it.
 
 
+\section{How fast is it?}
+
+The \texttt{PDBParser} performance was tested on about 800 structures
+(each belonging to a unique SCOP superfamily). This takes about 20
+minutes, or on average 1.5 seconds per structure. Parsing the structure
+of the large ribosomal subunit (1FKK), which contains about 64000
+atoms, takes 10 seconds on a 1000 MHz PC. In short: it's more than
+fast enough for many applications.
+
+
 \section{Usage}
 
 
 \subsection{General questions}
 
 
-\subsubsection{Importing Bio.PDB}
+\subsubsection*{Importing Bio.PDB}
 
 That's simple:
 
@@ -161,20 +177,24 @@ from~Bio.PDB~import~{*}
 
 \subsubsection*{Is there support for molecular graphics?}
 
-Not directly, mostly since there are quite a few Python based solutions
-already, that can potentially be used with Bio.PDB. My choice is Pymol,
-BTW (I've used this successfully with Bio.PDB, and there will probably
-be specific PyMol modules in Bio.PDB soon/some day). Python based
-molecular graphics solutions include:
+Not directly, mostly since there are quite a few Python based/Python
+aware solutions already, that can potentially be used with Bio.PDB.
+My choice is Pymol, BTW (I've used this successfully with Bio.PDB,
+and there will probably be specific PyMol modules in Bio.PDB soon/some
+day). Python based/aware molecular graphics solutions include:
 
 \begin{itemize}
 \item PyMol: \url{http://pymol.sourceforge.net/}
 \item Chimera: \url{http://www.cgl.ucsf.edu/chimera/}
 \item PMV: \url{http://www.scripps.edu/~sanner/python/}
 \item Coot: \url{http://www.ysbl.york.ac.uk/~emsley/coot/}
+\item CCP4mg: \url{http://www.ysbl.york.ac.uk/~lizp/molgraphics.html}
+\item mmLib: \url{http://pymmlib.sourceforge.net/} 
+\item VMD: \url{http://www.ks.uiuc.edu/Research/vmd/}
+\item MMTK: \url{http://starship.python.net/crew/hinsen/MMTK/}
 \end{itemize}
-In addition, the CCP4 people are also working on a python based molecular
-graphics program. 
+I'd be crazy to write another molecular graphics application (been
+there - done that, actually :-).
 
 
 \subsection{Input/output}
@@ -270,7 +290,7 @@ file.close()
 \subsubsection*{Can I use Bio.PDB with NMR structures (ie. with more than one model)?}
 
 Sure. Many PDB parsers assume that there is only one model, making
-them all but useless for NMR structures. The design of the Structure
+them all but useless for NMR structures. The design of the \texttt{Structure}
 object makes it easy to handle PDB files with more than one model
 (see section \ref{sub:The-Structure-object}). 
 
@@ -328,7 +348,7 @@ in PDB files). Bio.PDB tries to handle this in two ways. The PDBParser
 object can behave in two ways: a restrictive way and a permissive
 way (THIS IS NOW THE DEFAULT). The restrictive way used to be the
 default, but people seemed to think that Bio.PDB 'crashed' due to
-a bug, so I changed it. If you ever encounter a real (!) bug, please
+a bug (hah!), so I changed it. If you ever encounter a real bug, please
 tell me immediately!
 
 Example:
@@ -353,11 +373,21 @@ These errors include:
 \item Multiple atoms with the same identifier (taking into account the altloc
 identifier)
 \end{itemize}
-These errors often indicate real problems in the PDB file (for details
-see the Bioinformatics article). 
+These errors indicate real problems in the PDB file (for details see
+the Bioinformatics article). In the restrictive state, PDB files with
+errors cause an exception to occur. This is useful to find errors
+in PDB files.
 
-In the restrictive state, PDB files with errors cause an exception
-to occur. This is good to find errors in PDB files.
+Some errors however are automatically corrected. Normally each disordered
+atom should have a non-blanc altloc identifier. However, there are
+many structures that do not follow this convention, and have a blank
+and a non-blank identifier for two disordered positions of the same
+atom. This is automatically interpreted in the right way.
+
+Sometimes a structure contains a list of residues belonging to chain
+A, followed by residues belonging to chain B, and again followed by
+residues belonging to chain A, i.e. the chains are 'broken'. This
+is also correctly interpreted.
 
 
 \subsubsection*{Can I write PDB files?}
@@ -372,7 +402,7 @@ io=PDBIO()
 
 io.set\_structure(s)
 
-io.save(\char`\"{}out.pdb\char`\"{})
+io.save('out.pdb')
 \end{lyxcode}
 If you want to write out a part of the structure, make use of the
 \texttt{Select} class (also in \texttt{PDBIO}). Select has four methods:
@@ -411,7 +441,7 @@ io=PDBIO()
 
 io.set\_structure(s)
 
-io.save(\char`\"{}out.pdb\char`\"{},~GlySelect())
+io.save('gly\_only.pdb',~GlySelect())
 \end{lyxcode}
 
 \subsubsection*{Can I write mmCIF files?}
@@ -427,7 +457,7 @@ has ever asked for it). People who want to add this can contact me.
 \subsubsection*{What's the overall layout of a Structure object?}
 
 The \texttt{Structure} object follows the so-called \texttt{SMCRA}
-architecture: 
+(Structure/\-Model/\-Chain/\-Residue/\-Atom) architecture : 
 
 \begin{itemize}
 \item A structure consists of models
@@ -436,26 +466,27 @@ architecture:
 \item A residue consists of atoms
 \end{itemize}
 This is the way many structural biologists/bioinformaticians think
-about structure, and provides a simple but complete way to deal with
+about structure, and provides a simple but efficient way to deal with
 structure. Additional stuff is essentially added when needed. A UML
-diagram of the \texttt{Structure} object (forget about the Disordered
+diagram of the \texttt{Structure} object (forget about the \texttt{Disordered}
 classes for now) is shown in Fig. \ref{cap:SMCRA}.
 
 %
 \begin{figure}[tbh]
 \begin{center}\includegraphics[%
   width=100mm,
-  keepaspectratio]{/home/thamelry/Documents/biopython_manual/smcra.eps}\end{center}
+  keepaspectratio]{images/smcra.png}\end{center}
 
 
 \caption{\label{cap:SMCRA}UML diagram of SMCRA architecture of the \texttt{Structure}
-object. Diamonds denote aggregation, arrows denote reference, lines
-with arrows denote inheritance and dotted lines denote interface realization. }
+object. Full lines with diamonds denote aggregation, full lines with
+arrows denote referencing, full lines with triangles denote inheritance
+and dashed lines with triangles denote interface realization. }
 \end{figure}
 
 
 
-\subsubsection*{How do I iterate through a Structure object?}
+\subsubsection*{How do I navigate through a Structure object?}
 
 The following code iterates through all atoms of a structure:
 
@@ -476,13 +507,15 @@ for~model~in~structure.get\_iterator():
 \end{lyxcode}
 Structures, models, chains, residues and atoms are called \texttt{Entities}
 in Biopython. You can always get a parent \texttt{Entity} from a child
-entity, eg:
+\texttt{Entity}, eg:
 
 \begin{lyxcode}
 residue=atom.get\_parent()
+
+chain=residue.get\_parent()
 \end{lyxcode}
 
-\subsubsection*{Can I do that a bit faster?}
+\subsubsection*{Can I do that a bit more conveniently?}
 
 You can use the \texttt{Selection.unfold\_entities} function:
 
@@ -495,11 +528,14 @@ res\_list=Selection.unfold\_entities(structure,~'R')
 
 atom\_list=Selection.unfold\_entities(chain,~'A')
 \end{lyxcode}
-You can also use this to get a list of \texttt{Residue} parents from
-a list of \texttt{Atoms}:
+Obviously, A=atom, R=residue, C=chain, M=model, S=structure. You can
+also use this to go up in the hierarchy, eg. to get a list of (unique)
+\texttt{Residue} or \texttt{Chain} parents from a list of \texttt{Atoms}:
 
 \begin{lyxcode}
 residue\_list=Selection.unfold\_entities(atom\_list,~'R')
+
+chain\_list=Selection.unfold\_entities(atom\_list,~'C')
 \end{lyxcode}
 For more info, see the API documentation.
 
@@ -509,15 +545,15 @@ For more info, see the API documentation.
 Easy. Here are some examples:
 
 \begin{lyxcode}
-atom=residue{[}'CA'{]}
-
-residue=chain{[}100{]}
+model=structure{[}0{]}
 
 chain=model{[}'A'{]}
 
-model=structure{[}0{]}
+residue=chain{[}100{]}
+
+atom=residue{[}'CA'{]}
 \end{lyxcode}
-Note that you can use shortcuts:
+Note that you can use a shortcut:
 
 \begin{lyxcode}
 atom=structure{[}0{]}{[}'A'{]}{[}100{]}{[}'CA'{]}
@@ -543,11 +579,16 @@ This is a bit more complicated, due to the clumsy PDB format. A residue
 id is a tuple with three elements:
 
 \begin{itemize}
-\item The hetero-flag: this is \texttt{'H\_'} plus the name of the hetero-residue
-(eg. \texttt{'H\_GLC'} in the case of a glucose molecule), or \texttt{'W'}
-in the case of a water molecule.
-\item The sequence identifier in the chain, eg. 100
-\item The insertion code, eg, 'A'
+\item The \textbf{hetero-flag}: this is \texttt{'H\_'} plus the name of
+the hetero-residue (eg. \texttt{'H\_GLC'} in the case of a glucose
+molecule), or \texttt{'W'} in the case of a water molecule.
+\item The \textbf{sequence identifier} in the chain, eg. 100
+\item The \textbf{insertion code}, eg. 'A'. The insertion code is sometimes
+used to preserve a certain desirable residue numbering scheme. A Ser
+80 insertion mutant (inserted e.g. between a Thr 80 and an Asn 81
+residue) could e.g. have sequence identifiers and insertion codes
+as follows: Thr 80 A, Ser 80 B, Asn 81. In this way the residue numbering
+scheme stays in tune with that of the wild type structure.
 \end{itemize}
 The id of the above glucose residue would thus be ('H\_GLC', 100,
 'A'). If the hetero-flag and insertion code are blanc, the sequence
@@ -564,11 +605,8 @@ residue=chain{[}100{]}
 \end{lyxcode}
 The reason for the hetero-flag is that many, many PDB files use the
 same sequence identifier for an amino acid and a hetero-residue or
-a water, which would create obvious problems. The insertion code is
-eg. used to preserve sequence numbering among point mutants.
-
-The name of the residue can be obtained with the \texttt{get\_resname}
-method.
+a water, which would create obvious problems if the hetero-flag was
+not used. 
 
 
 \subsubsection*{What is an atom id?}
@@ -604,24 +642,25 @@ residue is used) can be specified by the user.
 
 \textbf{Disordered atom positions} are represented by ordinary \texttt{Atom}
 objects, but all \texttt{Atom} objects that represent the same physical
-atom are stored in a \texttt{Disordered\-Atom} object. Each \texttt{Atom}
-object in a \texttt{Disordered\-Atom} object can be uniquely indexed
-using its altloc specifier. The \texttt{Disordered\-Atom} object
-forwards all uncaught method calls to the selected Atom object, by
-default the one that represents the atom with with the highest occupancy.
-The user can of course change the selected \texttt{Atom} object, making
-use of its altloc specifier. In this way atom disorder is represented
-correctly without much additional complexity. In other words, if you
-are not interested in atom disorder, you will not be bothered by it.
+atom are stored in a \texttt{Disordered\-Atom} object (see Fig. \ref{cap:SMCRA}).
+Each \texttt{Atom} object in a \texttt{Disordered\-Atom} object can
+be uniquely indexed using its altloc specifier. The \texttt{Disordered\-Atom}
+object forwards all uncaught method calls to the selected Atom object,
+by default the one that represents the atom with with the highest
+occupancy. The user can of course change the selected \texttt{Atom}
+object, making use of its altloc specifier. In this way atom disorder
+is represented correctly without much additional complexity. In other
+words, if you are not interested in atom disorder, you will not be
+bothered by it.
 
 Each disordered atom has a characteristic altloc identifier. You can
 specify that a \texttt{Disordered\-Atom} object should behave like
 the \texttt{Atom} object associated with a specific altloc identifier:
 
 \begin{lyxcode}
-atom.disordered\_select(\char`\"{}A\char`\"{})~\#~select~altloc~A~atom
+atom.disordered\_select('A')~\#~select~altloc~A~atom
 
-atom.disordered\_select(\char`\"{}B\char`\"{})~\#~select~altloc~B~atom~
+atom.disordered\_select('B')~\#~select~altloc~B~atom~
 \end{lyxcode}
 A special case arises when disorder is due to \textbf{point mutation}s,
 i.e. when two or more point mutants of a polypeptide are present in
@@ -631,7 +670,8 @@ Since these residues belong to a different residue type (e.g. let's
 say Ser 60 and Cys 60) they should not be stored in a single \texttt{Residue}
 object as in the common case. In this case, each residue is represented
 by one \texttt{Residue} object, and both \texttt{Residue} objects
-are stored in a single \texttt{Disordered\-Residue} object.
+are stored in a single \texttt{Disordered\-Residue} object (see Fig.
+\ref{cap:SMCRA}).
 
 The \texttt{Dis\-ordered\-Residue} object forwards all un\-caught
 methods to the selected \texttt{Residue} object (by default the last
@@ -639,8 +679,8 @@ methods to the selected \texttt{Residue} object (by default the last
 residue. Each \texttt{Residue} object in a \texttt{Disordered\-Residue}
 object can be uniquely identified by its residue name. In the above
 example, residue Ser 60 would have id 'SER' in the \texttt{Disordered\-Residue}
-object, while residue Cys 60 would have id \char`\"{}CYS\char`\"{}.
-The user can select the active \texttt{Residue} object in a \texttt{Disordered\-Residue}
+object, while residue Cys 60 would have id 'CYS'. The user can select
+the active \texttt{Residue} object in a \texttt{Disordered\-Residue}
 object via this id.
 
 Example: suppose that a chain has a point mutation at position 10,
@@ -653,14 +693,15 @@ residue=chain{[}10{]}
 residue.disordered\_select('CYS')
 \end{lyxcode}
 In addition, you can get a list of all \texttt{Atom} objects (ie.
-all \texttt{DisorderedAtom} objects are 'unpacked') using the \texttt{get\_unpacked\_list}
-method of a \texttt{(Disordered)Residue} object.
+all \texttt{DisorderedAtom} objects are 'unpacked' to \texttt{Atom}
+objects) using the \texttt{get\_unpacked\_list} method of a \texttt{(Disordered)\-Residue}
+object.
 
 
 \subsubsection*{Can I sort residues in a chain somehow?}
 
-Yes, but I'm waiting for a request for this feature to finish it :-).
-More info soon.
+Yes, kinda, but I'm waiting for a request for this feature to finish
+it :-).
 
 
 \subsubsection*{How are ligands and solvent handled?}
@@ -677,7 +718,7 @@ also deals with standard deviations of anisotropic B factor if present
 
 \subsubsection*{What about standard deviation of atomic positions?}
 
-Yup, supported.
+Yup, supported. See section \ref{sub:Analysis}.
 
 
 \subsubsection*{I think the SMCRA data structure is not flexible/\-molecular/\-sexy/\-whatever
@@ -685,7 +726,7 @@ enough...}
 
 Sure, sure. Everybody is always coming up with (mostly vaporware)
 data structures that handle all possible situations and are extensible
-in all thinkable (and unthinkable) ways. The prozaic truth however
+in all thinkable (and unthinkable) ways. The prosaic truth however
 is that 99.9\% of people using (and I mean really using!) crystal
 structures think in terms of models, chains, residues and atoms. The
 philosophy of Bio.PDB is to provide a reasonably fast, clean, simple,
@@ -737,7 +778,7 @@ a.get\_fullname()~\#~atom~name~(with~spaces,~e.g.~'.CA.')
 Using the following methods:
 
 \begin{lyxcode}
-r.get\_resname()~\#~return~the~residue~name~(eg.~GLY)
+r.get\_resname()~\#~return~the~residue~name~(eg.~'GLY')
 
 r.is\_disordered()~\#~1~if~the~residue~has~disordered~atoms
 
@@ -758,7 +799,7 @@ ca1=residue1{[}'CA'{]}
 
 ca2=residue2{[}'CA'{]}
 
-\#~Simply~substract~the~atoms~to~get~their~distance
+\#~Simply~subtract~the~atoms~to~get~their~distance
 
 distance=ca1-ca2
 \end{lyxcode}
@@ -806,8 +847,29 @@ in C++ behind the screens, so it's pretty darn fast (see \texttt{Bio.KDTree}).
 \subsubsection*{How do I extract polypeptides from a structure object?}
 
 Use \texttt{PolypeptideBuilder}. You can use the resulting \texttt{Polypeptide}
-object to get the sequence as a \texttt{Seq} object as well.
+object to get the sequence as a \texttt{Seq} object or to get a list
+of C$\alpha$ atoms as well. Polypeptides can be built using a C-N
+or a C$\alpha$-C$\alpha$ distance criterion.
 
+Example:
+
+\begin{lyxcode}
+\#~Using~C-N~
+
+ppb=PPBuilder()
+
+for~pp~in~ppb.build\_peptides(structure):~
+
+~~~~print~pp.get\_sequence()
+
+\#~Using~CA-CA
+
+ppb=CaPPBuilder()
+
+for~pp~in~ppb.build\_peptides(structure):~
+
+~~~~print~pp.get\_sequence()~
+\end{lyxcode}
 
 \subsubsection*{How do I get the sequence of a structure?}
 
@@ -830,12 +892,56 @@ Seq('SNVVE...',~<class~Bio.Alphabet.ProteinAlphabet>)
 \subsubsection*{How do I determine secondary structure?}
 
 For this functionality, you need to install DSSP (and obtain a license
-for it - free for academic use). Then use the \texttt{DSSP} class.
+for it - free for academic use, see \url{http://www.cmbi.kun.nl/gv/dssp/}).
+Then use the \texttt{DSSP} class, which maps \texttt{Residue} objects
+to their secondary structure (and accessible surface area). The DSSP
+codes are listed in Table \ref{cap:DSSP-codes}. Note that DSSP (the
+program, and thus by consequence the class) cannot handle mutiple
+models!
+
+%
+\begin{table}
+\begin{center}\begin{tabular}{|c|c|}
+\hline 
+Code&
+Secondary structure\tabularnewline
+\hline
+\hline 
+A&
+$\alpha$-helix\tabularnewline
+\hline 
+B&
+Isolated $\beta$-bridge residue\tabularnewline
+\hline 
+E&
+Strand ('extended') \tabularnewline
+\hline 
+G&
+3-10 helix \tabularnewline
+\hline 
+I&
+$\Pi$-helix \tabularnewline
+\hline 
+T&
+Turn\tabularnewline
+\hline 
+S&
+Bend \tabularnewline
+\hline 
+-&
+Other\tabularnewline
+\hline
+\end{tabular}\end{center}
 
 
-\subsubsection*{How do I calculate the solvent exposure of a residue?}
+\caption{\label{cap:DSSP-codes}DSSP codes in Bio.PDB.}
+\end{table}
 
-Use the \texttt{DSSP} class.
+
+
+\subsubsection*{How do I calculate the accessible surface area of a residue?}
+
+Use the \texttt{DSSP} class (see also previous entry).
 
 
 \subsubsection*{How do I calculate residue depth?}
@@ -847,29 +953,33 @@ of solvent accessibility (but I'm working on something even more powerful
 
 For this functionality, you need to install Michel Sanner's MSMS program
 (\url{http://www.scripps.edu/pub/olson-web/people/sanner/html/msms_home.html}).
-Then use the \texttt{ResidueDepth} class. You can also get a handle
-to the molecular surface itself.
+Then use the \texttt{ResidueDepth} class. You can also get access
+to the molecular surface itself (via the \texttt{get\_surface} function).
 
 
 \subsubsection*{How do I map the residues of two related structures onto each other?}
 
-First, create an alignment in FASTA format, then use the \texttt{StructureAlignment}
-class.
+First, create an alignment file in FASTA format, then use the \texttt{StructureAlignment}
+class. This class can also be used for alignments with more than two
+structures.
 
 
 \subsubsection*{How do I put a virtual C$\beta$ on a Gly residue?}
 
 OK, I admit, this example is only present to show off the possibilities
 of Bio.PDB's \texttt{Vector} module (though this code is actually
-used in the \texttt{Exposure} module). Suppose that you would like
-to find the position of a Gly residue's C$\beta$ atom, if it had
-one. How would you do that? Well, rotating the N atom of the Gly residue
-along the C$\alpha$-C bond over -120 degrees would roughly put it
-in the position of a C$\beta$ atom. Here's how to do it, making use
-of the \texttt{rotaxis} method (which can be used to construct a rotation
-around a certain axis) of the \texttt{Vector} module:
+used in the upcoming \texttt{HSExposure} module). Suppose that you
+would like to find the position of a Gly residue's C$\beta$ atom,
+if it had one. How would you do that? Well, rotating the N atom of
+the Gly residue along the C$\alpha$-C bond over -120 degrees would
+roughly put it in the position of a C$\beta$ atom. Here's how to
+do it, making use of the \texttt{rotaxis} method (which can be used
+to construct a rotation around a certain axis) of the \texttt{Vector}
+module:
 
 \begin{lyxcode}
+\#~get~atom~coordinates~as~vectors
+
 n=residue{[}'N'{]}.get\_vector()~
 
 c=residue{[}'C'{]}.get\_vector()~
@@ -882,19 +992,19 @@ n=n-ca~
 
 c=c-ca~
 
-\#~find~rotation~matrix~that~rotates~-120~degrees
+\#~find~rotation~matrix~that~rotates~n~
 
-\#~along~the~ca-c~vector
+\#~-120~degrees~along~the~ca-c~vector
 
 rot=rotaxis(-pi{*}120.0/180.0,~c)
 
 \#~apply~rotation~to~ca-n~vector
 
-cb=n.left\_multiply(rot)
+cb\_at\_origin=n.left\_multiply(rot)
 
 \#~put~on~top~of~ca~atom
 
-cb=cb+ca
+cb=cb\_at\_origin+ca
 \end{lyxcode}
 This example shows that it's possible to do some quite nontrivial
 vector operations on atomic data, which can be quite useful. In addition
@@ -920,9 +1030,9 @@ in the \texttt{rotran} attribute of the \texttt{Superimposer} object
 in the \texttt{rmsd} attribute.
 
 The algorithm used by \texttt{Superimposer} comes from \textit{Matrix
-computations, 2nd ed. Golub, G. \& Van Loan (1989)}, and makes use
-of singular value decomposition (as implemented in the general \texttt{Bio.\-SVDSuperimposer}
-module).
+computations, 2nd ed. Golub, G. \& Van Loan (1989)} and makes use
+of singular value decomposition (this is implemented in the general
+\texttt{Bio.\-SVDSuperimposer} module).
 
 Example:
 
@@ -951,20 +1061,33 @@ sup.apply(moving)
 \subsubsection*{How do I superimpose two structures based on their active sites?}
 
 Pretty easily. Use the active site atoms to calculate the rotation/translation
-matrices (see above), and apply them to the whole molecule.
+matrices (see above), and apply these to the whole molecule.
 
 
 \subsubsection*{Can I manipulate the atomic coordinates?}
 
-Yes, using the \texttt{transform} method of the Atom object, or directly
-using the \texttt{set\_coord} method.
+Yes, using the \texttt{transform} method of the \texttt{Atom} object,
+or directly using the \texttt{set\_coord} method.
+
+
+\section{Other Structural Bioinformatics modules}
+
+
+\subsubsection*{Bio.SCOP}
+
+Coming soon.
+
+
+\subsubsection*{Bio.FSSP}
+
+Coming soon.
 
 
 \section{You haven't answered my question yet!}
 
-It's late and I'm tired, and a fresh beer is waiting for me in the
-fridge. Just drop me a mail, and I'll answer you in the morning (with
-a bit of luck...).
+Woah! It's late and I'm tired, and a glass of excellent \textit{Pedro
+Ximenez} sherry is waiting for me. Just drop me a mail, and I'll answer
+you in the morning (with a bit of luck...).
 
 
 \section{Contributors}
@@ -972,13 +1095,13 @@ a bit of luck...).
 The main author/maintainer of Bio.PDB is yours truly. Kristian Rother
 donated code to interact with the PDB database, and to parse the PDB
 header. Indraneel Majumdar sent in some bug reports and assisted in
-coding the \texttt{Polypeptide} module. Many, many thanks to Brad
-Chapman, Jeffrey Chang, Andrew Dalke and Iddo Friedberg for suggestions,
-comments and/or general support.
+coding the \texttt{Polypeptide} module. Many thanks to Brad Chapman,
+Jeffrey Chang, Andrew Dalke and Iddo Friedberg for suggestions, comments,
+help and/or biting criticism.
 
 
 \section{Can I contribute?}
 
 Yes, yes, yes! Just send me an e-mail (thamelry@binf.ku.dk) if you
-have something useful to contribute! 
+have something useful to contribute! Eternal fame awaits!
 \end{document}
