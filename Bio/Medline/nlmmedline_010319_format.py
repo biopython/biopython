@@ -2,9 +2,9 @@
 
 A Martel format to parse the NLM's XML format for Medline.
 
-http://www.nlm.nih.gov/databases/dtd/nlmmedline_001211.dtd
-http://www.nlm.nih.gov/databases/dtd/nlmmedlinecitation_001211.dtd
-http://www.nlm.nih.gov/databases/dtd/nlmcommon_001211.dtd
+http://www.nlm.nih.gov/databases/dtd/nlmmedline_010319.dtd
+http://www.nlm.nih.gov/databases/dtd/nlmmedlinecitation_010319.dtd
+http://www.nlm.nih.gov/databases/dtd/nlmcommon_010319.dtd
 
 Formats:
 citation_format    Format for one MedlineCitation.
@@ -79,7 +79,7 @@ def group_elem(element, expr, *attrs):
 
 ######################################################################
 # Implement Martel expressions that recognize:                       #
-# http://www.nlm.nih.gov/databases/dtd/nlmcommon_001211.dtd          #
+# http://www.nlm.nih.gov/databases/dtd/nlmcommon_010319.dtd          #
 ######################################################################
 
 ########################################
@@ -110,6 +110,10 @@ normal_date = Year + Month + Day + \
 pub_date = Alt((Year + Opt(Alt((Month + Opt(Day)), Season))), MedlineDate)
 
 
+simple_elem("CopyrightInformation")
+simple_elem("AbstractText")
+group_elem("Abstract", AbstractText + Opt(CopyrightInformation))
+
 ########################################
 # NCBIArticle
 
@@ -124,9 +128,6 @@ simple_elem("EndPage")
 simple_elem("StartPage")
 group_elem("Pagination",
            Alt(StartPage + Opt(EndPage) + Opt(MedlinePgn), MedlinePgn))
-simple_elem("CopyrightInformation")
-simple_elem("AbstractText")
-group_elem("Abstract", AbstractText + Opt(CopyrightInformation))
 
 simple_elem("Affiliation")
 group_elem("Author", author_name + Opt(Affiliation))
@@ -147,7 +148,7 @@ simple_elem("Country")
 simple_elem("MedlineTA")
 simple_elem("MedlineCode")
 group_elem("MedlineJournalInfo",
-           Country + MedlineTA + MedlineCode + Opt(NlmUniqueID))
+           Opt(Country) + MedlineTA + Opt(MedlineCode) + Opt(NlmUniqueID))
 simple_elem("DateOfElectronicPublication")
 simple_elem("ISOAbbreviation")
 simple_elem("Coden")
@@ -165,7 +166,7 @@ group_elem("Journal",
 simple_elem("GrantID")
 simple_elem("Acronym")
 simple_elem("Agency")
-group_elem("Grant", GrantID + Opt(Acronym) + Opt(Agency))
+group_elem("Grant", Opt(GrantID) + Opt(Acronym) + Opt(Agency))
 group_elem("GrantList", Rep1(Grant), "CompleteYN")
 simple_elem("AccessionNumber")
 group_elem("AccessionNumberList", Rep1(AccessionNumber))
@@ -196,7 +197,7 @@ group_elem("NCBIArticle", PMID + Article + Opt(MedlineJournalInfo))
 
 ######################################################################
 # Implement Martel expressions that recognize:                       #
-# http://www.nlm.nih.gov/databases/dtd/nlmmedlinecitation_001211.dtd #
+# http://www.nlm.nih.gov/databases/dtd/nlmmedlinecitation_010319.dtd #
 ######################################################################
 
 
@@ -210,6 +211,8 @@ Ref_template = RefSource + Opt(MedlineID) + Opt(Note)
 ########################################
 # MedlineCitation
 
+group_elem("OriginalReportIn", Ref_template)
+group_elem("SummaryForPatientsIn", Ref_template)
 group_elem("CommentOn", Ref_template)
 group_elem("CommentIn", Ref_template)
 group_elem("ErratumIn", Ref_template)
@@ -224,7 +227,8 @@ group_elem("CommentsCorrections",
            Rep(ErratumIn) + \
            Rep(RepublishedFrom) + Rep(RepublishedIn) + \
            Rep(RetractionOf) + Rep(RetractionIn) + \
-           Rep(UpdateIn) + Rep(UpdateOf)
+           Rep(UpdateIn) + Rep(UpdateOf) + \
+           Rep(SummaryForPatientsIn) + Rep(OriginalReportIn)
            )
 simple_elem("NumberOfReferences")
 group_elem("PersonalNameSubject", personal_name)
@@ -236,18 +240,16 @@ simple_elem("CASRegistryNumber")
 group_elem("Chemical", CASRegistryNumber + NameOfSubstance)
 group_elem("ChemicalList", Rep1(Chemical))
 simple_elem("CitationSubset")
+simple_elem("GeneralNote", "Owner")
+group_elem("Investigator", personal_name + Opt(Affiliation))
+group_elem("InvestigatorList", Rep1(Investigator))
+simple_elem("OtherID", "Source")
 simple_elem("SpaceFlightMission")
-simple_elem("SponsoringAgency")
-simple_elem("ProcurementSource")
-simple_elem("Keyword")
-simple_elem("AbstractAuthor")
-group_elem("OtherAbstract", Abstract + AbstractAuthor)
-group_elem("AdditionalInformation",
-           Rep(OtherAbstract) + \
-           Rep(Keyword) + \
-           Rep(ProcurementSource) + \
-           Rep(SponsoringAgency) + \
-           Rep(SpaceFlightMission))
+simple_elem("Keyword", "MajorTopicYN")
+group_elem("KeywordList", Rep1(Keyword), "Owner")
+group_elem("OtherAbstract",
+           AbstractText + Opt(CopyrightInformation),
+           "Type")
 group_elem("DateRevised", normal_date)
 group_elem("DateCompleted", normal_date)
 group_elem("DateCreated", normal_date)
@@ -259,15 +261,20 @@ group_elem("MedlineCitation",
            Opt(DateRevised) + \
            Article + \
            MedlineJournalInfo + \
-           Opt(AdditionalInformation) + \
            Opt(ChemicalList) + \
            Rep(CitationSubset) + \
            Opt(CommentsCorrections) + \
            Opt(GeneSymbolList) + \
            Opt(MeshHeadingList) + \
            Opt(NumberOfReferences) + \
-           Opt(PersonalNameSubjectList),
-           "CitationOwner"
+           Opt(PersonalNameSubjectList) + \
+           Rep(OtherID) + \
+           Rep(OtherAbstract) + \
+           Rep(KeywordList) + \
+           Rep(SpaceFlightMission) + \
+           Opt(InvestigatorList) + \
+           Rep(GeneralNote),
+           "Owner"
            )
 
 
@@ -277,7 +284,7 @@ group_elem("MedlineCitation",
            
 ######################################################################
 # Implement Martel expressions that recognize:                       #
-# http://www.nlm.nih.gov/databases/dtd/nlmmedline_001211.dtd         #
+# http://www.nlm.nih.gov/databases/dtd/nlmmedline_010319.dtd         #
 ######################################################################
 
 
@@ -320,7 +327,15 @@ header_format = Group("header", DOCTYPE + MedlineCitationSet_start)
 footer_format = Opt(DeleteCitation) + MedlineCitationSet_end
 format = HeaderFooter(
     None,
-    header_format, RecordReader.Until, ("<MedlineCitation>",),
+    # Unfortunately, RecordReader.Until doesn't work because some
+    # MedlineCitations have attributes are in the form
+    # <MedlineCitation Owner="NLM">.  "<MedlineCitation" by itself
+    # won't differentiate between the beginning of a
+    # MedlineCitationSet or the beginning of a MedlineCitation.  Thus,
+    # I'm just going to read the first 4 lines and hope that's the
+    # whole header.
+    #header_format, RecordReader.Until, ("<MedlineCitation>",),
+    header_format, RecordReader.CountLines, (4,),
     citation_format, RecordReader.EndsWith, ("</MedlineCitation>",),
     footer_format, RecordReader.Everything, (),
     )
