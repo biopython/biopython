@@ -1,4 +1,4 @@
-__all__ = ["SubsMat","FreqTable","MatrixInfo"]
+__all__ = ["FreqTable","MatrixInfo"]
 
 import sys
 import copy
