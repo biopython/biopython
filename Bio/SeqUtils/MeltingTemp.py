@@ -62,7 +62,7 @@ def Tm_staluc(s,dnac=50,saltc=50,rna=0):
                 deltas=deltas+10.5
             dhL=dh+deltah
             dsL=ds+deltas
-            print "delta h=",dhL
+            # print "delta h=",dhL
             return dsL,dhL
 
     def overcount(st,p):
@@ -114,8 +114,8 @@ def Tm_staluc(s,dnac=50,saltc=50,rna=0):
 
     ds=ds-0.368*(len(s)-1)*math.log(saltc/1e3)
     tm=((1000* (-dh))/(-ds+(R * (math.log(k)))))-273.15
-    print "ds="+str(ds)
-    print "dh="+str(dh)
+    # print "ds="+str(ds)
+    # print "dh="+str(dh)
     return tm
 
 
