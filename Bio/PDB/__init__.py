@@ -24,7 +24,7 @@ from Polypeptide import PPBuilder, CaPPBuilder, is_aa, standard_aa_names
 from Bio.SCOP.Raf import to_one_letter_code
 
 # IO of PDB files (including flexible selective output)
-from PDBIO import PDBIO
+from PDBIO import PDBIO, Select
 
 # Some methods to eg. get a list of Residues
 # from a list of Atoms.
