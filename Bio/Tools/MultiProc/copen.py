@@ -41,7 +41,7 @@ def copen_sys(syscmd, *args):
         try:
             os.execvp(syscmd, args)  # execute it!
         except:
-            sys.stderr.write("%s could not be executed\n" % path)
+            sys.stderr.write("%s could not be executed\n" % syscmd)
             os._exit(-1)
         os._exit(0)
 
@@ -239,7 +239,7 @@ class _CommandHandle:
         # If I'm done, then read the results.
         if select.select([self], [], [], 0)[0]:
             self._cleanup_child()
-        return input
+        return self._done
 
     def elapsed(self):
         """S.elapsed() -> num seconds
