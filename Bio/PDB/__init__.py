@@ -15,6 +15,9 @@ from MMCIFParser import MMCIFParser
 # Download from the PDB
 from PDBList import PDBList 
 
+# Parse PDB header directly
+from parse_pdb_header import parse_pdb_header
+
 # Find connected polypeptides in a Structure
 from Polypeptide import PPBuilder, CaPPBuilder, is_aa
 # This is also useful :-)
@@ -35,6 +38,4 @@ from Superimposer import Superimposer
 try:
     from NeighborSearch import NeighborSearch
 except ImportError:
-    # remove extra print statement here which messes up regression testing
-    # print 'NeighborSearch skipped --- KDTree not installed.'
     pass
