@@ -75,10 +75,10 @@ class ClaTests(unittest.TestCase):
         assert rec.residues.pdbid =='1dan'
         assert rec.residues.fragments ==(('T','',''),('U','91','106'))
         assert rec.sccs == 'b.1.2.1'
-        assert rec.sunid == '21953'
-        assert rec.hierarchy == [['cl','48724'],['cf','48725'],['sf','49265'],
-             ['fa','49266'],['dm','49267'],['sp','49268'],
-             ['px','21953']], rec.hierarchy
+        assert rec.sunid == 21953
+        assert rec.hierarchy == [['cl',48724],['cf',48725],['sf',49265],
+             ['fa',49266],['dm',49267],['sp',49268],
+             ['px',21953]], rec.hierarchy
 
     def testIndex(self) :
         index = Cla.Index(self.filename)
@@ -87,7 +87,7 @@ class ClaTests(unittest.TestCase):
         assert index.has_key('d4hbia_')
 
         rec = index['d1hbia_']
-        assert rec.sunid == '14996'
+        assert rec.sunid == 14996
 
 
 def test_suite():

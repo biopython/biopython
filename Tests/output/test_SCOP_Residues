@@ -7,6 +7,6 @@ testPdbId (test_SCOP_Residues.ResiduesTests) ... ok
 testStr (test_SCOP_Residues.ResiduesTests) ... ok
 
 ----------------------------------------------------------------------
-Ran 6 tests in 0.007s
+Ran 6 tests in 0.002s
 
 OK

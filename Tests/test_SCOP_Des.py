@@ -66,7 +66,7 @@ class DesTests(unittest.TestCase):
 
     def testRecord(self) :
         recLine = '49268\tsp\tb.1.2.1\t-\tHuman (Homo sapiens)    \n'
-        recFields = ('49268','sp','b.1.2.1','','Human (Homo sapiens)')
+        recFields = (49268,'sp','b.1.2.1','','Human (Homo sapiens)')
 
         rec = Des.Parser().parse(recLine)
         assert rec.sunid == recFields[0]

@@ -1,0 +1,10 @@
+test_SCOP_Astral
+testConstructWithCustomFile (test_SCOP_Astral.AstralTests) ... ok
+testGetDomainsClustered (test_SCOP_Astral.AstralTests) ... ok
+testGetDomainsFromFile (test_SCOP_Astral.AstralTests) ... ok
+testGetSeq (test_SCOP_Astral.AstralTests) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.194s
+
+OK

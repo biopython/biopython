@@ -18,7 +18,19 @@ def run_tests(argv):
     runner.run(test_suite)
 
 def testing_suite():
-    return test_suite()
+    """Generate the suite of tests.
+    """
+    test_suite = unittest.TestSuite()
+    
+    test_loader = unittest.TestLoader()
+    test_loader.testMethodPrefix = 'test'
+    tests = [ScopTests]
+    
+    for test in tests:
+        cur_suite = test_loader.loadTestsFromTestCase(test)
+        test_suite.addTest(cur_suite)
+        
+    return test_suite
 
 
 class ScopTests(unittest.TestCase):
@@ -55,12 +67,18 @@ class ScopTests(unittest.TestCase):
         assert hie_out.getvalue() == hie, hie_out.getvalue()
 
         domain = scop.getDomainBySid("d1hbia_")
-        assert domain.sunid == '14996'
+        assert domain.sunid == 14996
 
         domains = scop.getDomains()
         assert len(domains)==14
-        assert domains[4].sunid == '14988'
+        assert domains[4].sunid == 14988
 
+
+        dom = scop.getNodeBySunid(-111)
+        assert dom == None
+        dom = scop.getDomainBySid("no such domain")
+        assert dom == None
+                
 
 
     def testSccsOrder(self) :
@@ -102,10 +120,59 @@ class ScopTests(unittest.TestCase):
             assert 0, "Should never get here"
         except SyntaxError, e :
             pass
-            
 
-def test_suite():
-    return unittest.makeSuite(ScopTests)
+    def testConstructFromDirectory(self):
+         scop = Scop (dir_path="SCOP", version="test")
+         assert isinstance(scop, Scop)
+         
+         domain = scop.getDomainBySid("d1hbia_")
+         assert domain.sunid == 14996
+         
+    def testGetAscendent(self):
+        scop = Scop (dir_path="SCOP", version="test")
+        domain = scop.getDomainBySid("d1hbia_")
+
+        # get the fold
+        fold = domain.getAscendent('cf')
+        assert fold.sunid == 46457
+        
+        #get the superfamily
+        sf = domain.getAscendent('superfamily')
+        assert sf.sunid == 46458
+
+        # px has no px ascendent
+        px = domain.getAscendent('px')
+        assert px == None
+
+        # an sf has no px ascendent
+        px2 = sf.getAscendent('px')
+        assert px2 == None
+
+
+    def test_get_descendents(self):
+        """Test getDescendents method"""
+        scop = Scop (dir_path="SCOP", version="test")
+        fold = scop.getNodeBySunid(46457)
+
+        # get px descendents
+        domains = fold.getDescendents('px')
+        assert len(domains) == 14
+        for d in domains:
+            assert d.type == 'px'
+            
+        sfs = fold.getDescendents('superfamily')
+        assert len(sfs) == 1
+        for d in sfs:
+            assert d.type == 'sf'
+
+        # cl has no cl descendent
+        cl = fold.getDescendents('cl')
+        assert cl == []
+        
+        
+
+#def test_suite():
+#    return unittest.makeSuite(ScopTests)
 
 if __name__ == '__main__':
     unittest.main()

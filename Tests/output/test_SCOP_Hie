@@ -4,6 +4,6 @@ testParse (test_SCOP_Hie.HieTests) ... ok
 testStr (test_SCOP_Hie.HieTests) ... ok
 
 ----------------------------------------------------------------------
-Ran 3 tests in 0.005s
+Ran 3 tests in 0.002s
 
 OK
