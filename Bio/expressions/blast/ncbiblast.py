@@ -311,7 +311,7 @@ ungapped_lambda_stats = (
       ToEol() )
 )
 gapped_lambda_stats = (
-    Str("Gapped") + AnyEol() + 
+    Opt(Str("Gapped") + AnyEol()) + 
     Str("Lambda     K      H") + AnyEol() + 
     ( Spaces() + float_stat("gapped_lambda") + 
       Spaces() + float_stat("gapped_k") + 
