@@ -10,24 +10,37 @@ from Numeric import sum, sqrt, matrixmultiply
 from Entity import DisorderedEntityWrapper
 from Vector import Vector
 
+__doc__="Atom class, used in Structure objects."
+
 
 class Atom:
     def __init__(self, name, coord, bfactor, occupancy, altloc, fullname):
-        """Atom object.
+        """
+        Atom object.
 
         The Atom object stores atom name (both with and without spaces), 
         coordinates, B factor, occupancy, alternative location specifier
         and (optionally) anisotropic B factor and standard deviations of 
         B factor and positions.
   
-        Arguments:
-        o name - string, atom name e.g. "CA", note that spaces are normally stripped
-        o coord - Numpy array (Float0, size 3), atomic coordinates
-        o bfactor - float
-        o occupancy - float
-        o altloc - string, alternative location specifier for disordered atoms
-        o fullname - string, full atom name, including spaces, e.g. " CA ". Normally
+        @param name: atom name (eg. "CA"). Note that spaces are normally stripped.
+        @type name: string
+
+        @param coord: atomic coordinates (x,y,z)
+        @type coord: Numpy array (Float0, size 3)
+
+        @param bfactor: isotropic B factor
+        @type bfactor: number 
+
+        @param occupancy: occupancy (0.0-1.0)
+        @type occupancy: number
+
+        @param altloc: alternative location specifier for disordered atoms
+        @type altloc: string
+
+        @param fullname: full atom name, including spaces, e.g. " CA ". Normally
         these spaces are stripped from the atom name. 
+        @type fullname: string
         """
         self.level="A"
         # Reference to the residue 
@@ -49,10 +62,16 @@ class Atom:
     # Special methods   
 
     def __repr__(self):
+        "Print Atom object as <Atom atom_name>."
         return "<Atom %s>" % self.get_id()
 
     def __sub__(self, other):
-        "Calculate distance between two atoms."
+        """
+        Calculate distance between two atoms.
+        
+        Example:
+            >>> distance=atom1-atom2
+        """
         diff=self.coord-other.coord
         return sqrt(sum(diff*diff))
 
@@ -71,32 +90,33 @@ class Atom:
         self.occupancy=occupancy
 
     def set_sigatm(self, sigatm_array):
-        """Set standard deviation of atomic parameters.
+        """
+        Set standard deviation of atomic parameters.
 
         The standard deviation of atomic parameters consists
         of 3 positional, 1 B factor and 1 occupancy standard 
         deviation.
 
-        Arguments:
-        o sigatm_array - Numpy array (length 5), standard deviations of atomic 
-        parameters.
+        @param sigatm_array: standard deviations of atomic parameters.
+        @type sigatm_array: Numpy array (length 5)
         """
         self.sigatm_array=sigatm_array
 
     def set_siguij(self, siguij_array):
-        """Set standard deviations of anisotropic temperature factors.
+        """
+        Set standard deviations of anisotropic temperature factors.
 
-        Arguments:
-        o siguij_array - Numpy array (length 6), standard deviations of 
-        anisotropic temperature factors.
+        @param siguij_array: standard deviations of anisotropic temperature factors.
+        @type siguij_array: Numpy array (length 6)
         """
         self.siguij_array=siguij_array
 
     def set_anisou(self, anisou_array):
-        """Set anisotropic B factor.
+        """
+        Set anisotropic B factor.
 
-        Arguments:
-        o anisou_array -  Numpy array (length 6), anisotropic B factor.
+        @param anisou_array: anisotropic B factor.
+        @type anisou_array: Numpy array (length 6)
         """
         self.anisou_array=anisou_array
 
@@ -190,15 +210,26 @@ class Atom:
         """
         Apply rotation and translation to the atomic coordinates.
 
-        COORD=COORD x ROT + TRAN 
+        Example:
+                >>> rotation=rotmat(pi, Vector(1,0,0))
+                >>> translation=array((0,0,1), 'f')
+                >>> atom.transform(rotation, translation)
 
-        rot --- A right multiplying matrix (a 3x3 Numpy array).
-        trans --- The translation (a size 3 Numpy array)
+        @param rot: A right multiplying rotation matrix
+        @type rot: 3x3 Numpy array
+
+        @param tran: the translation vector
+        @type tran: size 3 Numpy array
         """
         self.coord=matrixmultiply(self.coord, rot)+tran
         
     def get_vector(self):
-        "Return coordinates as Vector"
+        """
+        Return coordinates as Vector.
+
+        @return: coordinates as 3D vector
+        @rtype: Vector
+        """
         x,y,z=self.coord
         return Vector(x,y,z)
 

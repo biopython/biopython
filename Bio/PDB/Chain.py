@@ -10,6 +10,8 @@ from types import IntType
 # My Stuff
 from Entity import Entity
 
+__doc__="Chain class, used in Structure objects."
+
 
 class Chain(Entity):
     def __init__(self, id):

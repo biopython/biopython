@@ -21,6 +21,8 @@
 # Last modified on Tue, Oct 21st 2003, Berlin
 #
 
+__doc__="Access the PDB over the internet (for example to download structures)."
+
 import urllib,string,re,os,sys
 
 class PDBList:

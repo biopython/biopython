@@ -1,4 +1,4 @@
-"""
+__doc__="""
 Classes that deal with macromolecular crystal structures. (eg.
 PDB and mmCIF parsers, a Structure class, a module to keep 
 a local copy of the PDB up-to-date, selective IO of PDB files,

@@ -9,6 +9,9 @@ from PDBExceptions import PDBConstructionException
 from Entity import Entity, DisorderedEntityWrapper
 
 
+__doc__="Residue class, used by Structure objects."
+
+
 atom_name_dict={}
 atom_name_dict["N"]=1
 atom_name_dict["CA"]=2

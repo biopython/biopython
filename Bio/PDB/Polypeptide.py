@@ -7,6 +7,8 @@ from Bio.SCOP.Raf import to_one_letter_code
 from Bio.PDB.PDBExceptions import PDBException
 from Bio.PDB.Residue import Residue, DisorderedResidue
 
+__doc__="Polypeptide related classes (construction and representation)."
+
 def is_aa(residue):
     """
     Return 1 if residue object/string is an amino acid.

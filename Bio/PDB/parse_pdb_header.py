@@ -17,6 +17,8 @@
 #
 # Thomas, 19/03/04
 
+__doc__="Parse the header of a PDB file."
+
 import sys
 import os,string,re
 import urllib

@@ -2,6 +2,8 @@ import os.path
 import Bio.PDB.mmCIF.MMCIFlex
 from UserDict import UserDict
 
+__doc__="Turn an mmCIF file into a dictionary."
+
 
 class MMCIF2Dict(UserDict):
     # The token identifiers

@@ -1,6 +1,12 @@
 from Bio.PDB import Selection 
 
 
+__doc__="""
+Map the residues of two structures to each other based on 
+a FASTA alignment file.
+"""
+
+
 class StructureAlignment:
     """
     This class aligns two structures based on a FASTA alignment of their

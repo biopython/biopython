@@ -10,6 +10,8 @@ import os
 # My Stuff
 from Entity import Entity
 
+__doc__="Model class, used in Structure objects."
+
 
 class Model(Entity):
     """

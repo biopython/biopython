@@ -14,6 +14,8 @@ from StructureBuilder import StructureBuilder
 from PDBExceptions import PDBConstructionException
 from parse_pdb_header import parse_pdb_header_list
 
+__doc__="Parser for PDB files."
+
 
 # If PDB spec says "COLUMNS 18-20" this means line[17:20]
 

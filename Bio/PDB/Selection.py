@@ -2,6 +2,8 @@ from types import ListType
 
 from PDBExceptions import PDBException
 
+__doc__="Selection of atoms, residues, etc."
+
 
 entity_levels=["A", "R", "C", "M", "S"]
 

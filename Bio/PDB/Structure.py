@@ -8,6 +8,9 @@
 from Entity import Entity
 
 
+__doc__="The structure class, representing a macromolecular structure."
+
+
 class Structure(Entity):
     """
     The Structure class contains a collection of Model instances.

@@ -6,10 +6,9 @@ import sys
 from Bio.PDB import *
 
 
-"""
-This module implements calculation of residue depth
-(using Michel Sanner's MSMS program for the surface 
-calculation).
+__doc__="""
+Calculation of residue depth (using Michel Sanner's MSMS program for the
+surface calculation).
 
 Residue depth is the average distance of the atoms of a residue from 
 the solvent accessible surface.

@@ -6,6 +6,12 @@
 import sys
 
 
+__doc__="""
+Consumer class that builds a Structure object. This is used by 
+the PDBParser and MMCIFparser classes.
+"""
+
+
 # My stuff 
 # SMCRA hierarchy
 from Structure import Structure

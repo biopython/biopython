@@ -5,6 +5,9 @@ from PDBExceptions import PDBException
 from Selection import unfold_entities, get_unique_parents, entity_levels, uniqueify
 
 
+__doc__="Fast atom neighbor lookup using a KD tree (implemented in C++)."
+
+
 
 class NeighborSearch:
     """

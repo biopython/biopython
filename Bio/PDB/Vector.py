@@ -9,6 +9,9 @@ from MLab import eye
 import sys
 
 
+__doc__="Vector class, including rotation-related functions."
+
+
 def rotaxis(theta, vector):
     """
     Calculate a left multiplying rotation matrix that rotates
@@ -22,7 +25,7 @@ def rotaxis(theta, vector):
     @type theta: float
     @param theta: the rotation angle
 
-    @type vector: Vector
+    @type vector: L{Vector}
     @param vector: the rotation axis
 
     @return: The rotation matrix, a 3x3 Numpy array.
@@ -56,7 +59,7 @@ def refmat(p,q):
         >>> qq=p.left_multiply(mirror)
         >>> print q, qq # q and qq should be the same
 
-    @type p,q: Vector
+    @type p,q: L{Vector}
     @return: The mirror operation, a 3x3 Numpy array. 
     """
     p=p.normalize()
@@ -72,6 +75,19 @@ def refmat(p,q):
 def rotmat(p,q):
     """
     Return a (left multiplying) matrix that rotates p onto q.
+
+    Example:
+        >>> r=rotmat(p,q)
+        >>> print q, p.left_multiply(r)
+
+    @param p: moving vector
+    @type p: L{Vector}
+
+    @param q: fixed vector
+    @type q: L{Vector}
+
+    @return: rotation matrix that rotates p onto q
+    @rtype: 3x3 Numpy array
     """
     rot=matrixmultiply(refmat(q, -p), refmat(p, -p))
     return rot
@@ -80,6 +96,12 @@ def calc_angle(v1, v2, v3):
     """
     Calculate the angle between 3 vectors
     representing 3 connected points.
+
+    @param v1, v2, v3: the tree points that define the angle
+    @type v1, v2, v3: L{Vector}
+    
+    @return: angle
+    @rtype: float
     """
     v1=v1-v2
     v3=v3-v2

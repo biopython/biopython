@@ -3,6 +3,10 @@ from Numeric import Float0
 from Bio.SVDSuperimposer import SVDSuperimposer
 from Bio.PDB.PDBExceptions import PDBException
 
+
+__doc__="Superimpose two structures."
+
+
 class Superimposer:
     def __init__(self):
         self.rotran=None

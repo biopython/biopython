@@ -5,6 +5,8 @@ import sys
 
 from Bio.PDB import *
 
+__doc__="Half sphere exposure and coordination number calculation."
+
 
 class HSExposure:
     """

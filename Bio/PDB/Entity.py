@@ -9,6 +9,11 @@ from __future__ import generators
 
 from PDBExceptions import PDBConstructionException
 
+__doc__="""
+Base class for Residue, Chain, Model and Structure classes. 
+It is a simple container class, with list and dictiuonary like properties.
+"""
+
 
 class Entity:
     """

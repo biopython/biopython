@@ -7,6 +7,9 @@ from MMCIF2Dict import MMCIF2Dict
 from StructureBuilder import StructureBuilder
 
 
+__doc__="mmCIF parser (partly implemented in C)." 
+
+
 class MMCIFParser:
     def get_structure(self, structure_id, filename):
         self._mmcif_dict=MMCIF2Dict(filename)
