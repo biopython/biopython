@@ -22,7 +22,6 @@ download_many  Download many articles from PubMed in batch mode.
 
 """
 
-import time
 import string
 import re
 import sgmllib
@@ -107,16 +106,20 @@ class Dictionary:
             return self.parser.parse(handle)
         return handle.read()
 
-def search_for(search, batchsize=10000, delay=2, callback_fn=None):
-    """search_for(search, batchsize=10000, delay=2, callback_fn=None) -> ids
+def search_for(search, batchsize=10000, delay=2, callback_fn=None,
+               start_id=0, max_ids=None):
+    """search_for(search[, batchsize][, delay][, callback_fn]
+    [, start_id][, max_ids]) -> ids
 
-    Search PubMed and return a list of the PMID's that match the criteria.
-    search is the search string used to search the database.  PubMed only
-    allows users to retrieve the search results in batches of up to 10000
-    ID's at a time.  batchsize is the size of the batch to use.  delay
-    is the number of seconds to wait between queries.  callback_fn is
-    an optional callback function that will be called as results are
-    retrieved.  It should take the PMID as an argument.
+    Search PubMed and return a list of the PMID's that match the
+    criteria.  search is the search string used to search the
+    database.  batchsize specifies the number of ids to return at one
+    time.  By default, it is set to 10000, the maximum.  delay is the
+    number of seconds to wait between queries (default 2).
+    callback_fn is an optional callback function that will be called
+    as passed a PMID as results are retrieved.  start_id specifies the
+    index of the first id to retrieve and max_ids specifies the
+    maximum number of id's to retrieve.
 
     """
     class ResultParser(sgmllib.SGMLParser):
@@ -155,31 +158,31 @@ def search_for(search, batchsize=10000, delay=2, callback_fn=None):
                       repr(data)
             self.ids.append(data)
 
-    last_search = None
+    limiter = RequestLimiter(delay)
     ids = []
-    while 1:
+    while max_ids is None or len(ids) < max_ids:
         parser = ResultParser()
         
         # Check to make sure enough time has passed before my
         # last search.  If not, then wait.
-        if last_search is not None:
-            pause = time.time() - (last_search + delay)
-            if pause > 0:
-                time.sleep(pause)
-        last_search = time.time()
-        
+        limiter.wait()
+
+        start = start_id + len(ids)
+        max = batchsize
+        if max_ids is not None and max > max_ids - len(ids):
+            max = max_ids - len(ids)
+
         # Do a query against PmQty.  Search medline, using the
         # search string, and get only the ID's in the results.
-        h = NCBI.pmqty('m', search, dopt='d',
-                       dispmax=batchsize, dispstart=len(ids))
+        h = NCBI.pmqty('m', search, dopt='d', dispmax=max, dispstart=start)
         parser.feed(h.read())
-        if not parser.ids:  # no more id's to read
-            break
+        ids.extend(parser.ids)
         if callback_fn is not None:
             # Call the callback function with each of the new ID's.
             for id in parser.ids:
                 callback_fn(id)
-        ids.extend(parser.ids)
+        if len(parser.ids) < max or not parser.ids:  # no more id's to read
+            break
     return ids
 
 def find_related(pmid):
