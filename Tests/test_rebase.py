@@ -1,4 +1,4 @@
-# Copyright 1999 by Jeffrey Chang.  All rights reserved.
+# Copyright 1999 by Katharine Lindner.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -7,7 +7,7 @@ import os
 from types import *
 from Bio import File
 from Bio import ParserSupport
-from Bio.Rebase import Rebase
+from Bio import Rebase
 
 
 tests = [ 'cac81.htm', 'bamii.htm', 'pvuii.htm', 'taqi.htm', 'foki.htm' ]
