@@ -8,10 +8,24 @@
 Classes:
 Filtered is a decorator for File that allows the user to filter the output
 on a line by line basis.
+
+The FilteredReader module reads a file and applies a sequence of filters to the input
+The constructor sets a default filter chain, but the user can select another filter by setting
+Bio.FilteredReader.filter_chain.
+
+handle = open( "filename" )
+filtered_reader = Bio.FilteredReader( handle )
+filtered_reader.filter_chain = [ remove_asterisks, replace_dot_with_dash ]
+filtered_reasder.read()
+
+All filters in the chain must provide the same interface with a line of text as the single
+input parameter and altered text as the return value.
+
 """
 
 import os
 import string
+import copy
 from File import UndoHandle
 
 
@@ -61,6 +75,7 @@ class FilteredReader:
         self._handle = handle
         self._start_line = ''
         self._debug_count = 0
+        self.filter_chain = [ remove_empty_line, remove_useless_dot, fix_punctuation ]
 
     def __getattr__(self, attr):
         return getattr(self._handle, attr)
@@ -88,9 +103,14 @@ class FilteredReader:
 
             text_read = self._handle.read( len_adjusted )
             full_text = self._start_line + text_read
-            filtered_text = filtered_text + self._filter( full_text )
+            lines = full_text.splitlines( 1 )
             if( text_read == '' ):
+                filtered_text = filtered_text + self.filter( lines )
                 break
+            else:
+                all_but_last_line = lines[ :-1 ]
+                self._start_line = lines[ -1 ]
+                filtered_text = filtered_text + self.filter( all_but_last_line )
             len_filtered_text = len( filtered_text )
             len_adjusted = len_adjusted - len_filtered_text
         return filtered_text[ : ]
@@ -99,8 +119,8 @@ class FilteredReader:
         filtered_text = ''
         text_read = self._handle.read()
         full_text = self._start_line + text_read
-        filtered_text = filtered_text + self._filter( full_text )
-        filtered_text = filtered_text + self._start_line
+        lines = full_text.splitlines( 1 )
+        filtered_text = filtered_text + self.filter( lines[:] )
         return filtered_text[ : ]
 
 
@@ -120,22 +140,15 @@ class FilteredReader:
             len_expected = None
         return len_expected
 
-    def _filter( self, text, filter_chain = [ remove_empty_line, remove_useless_dot, fix_punctuation ] ):
-        lines = text.splitlines( 1 )
+    def filter( self, lines  ):
+        filter_chain = self.filter_chain
         filtered_text = ''
-        all_but_last_line = lines[ :-1 ]
-        for line in all_but_last_line:
-            for filter in filter_chain:
-                line = apply( filter, ( line, ) )
-                print line
-            filtered_text = filtered_text + line
-        last_line = lines[ -1 ]
-        if( has_trailing_linefeed( last_line ) ):
+        for line in lines:
             for filter in filter_chain:
                 line = apply( filter, ( line, ) )
             filtered_text = filtered_text + line
-        else:
-            self._start_line = last_line
+
+        print filtered_text
         return filtered_text
 
 def has_trailing_linefeed( line ):
