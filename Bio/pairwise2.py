@@ -796,7 +796,6 @@ def format_alignment(align1, align2, score, begin, end):
 # Try and load C implementations of functions.  If I can't,
 # then just ignore and use the pure python implementations.
 try:
-    #raise ImportError
     import cpairwise2
 except ImportError:
     pass
