@@ -608,22 +608,27 @@ record_end = Martel.Group("record_end",
                           Martel.Str("//") +
                           Martel.Rep1(Martel.AnyEol()))
 
-record = locus_line + \
-         definition_block + \
-         accession_block + \
-         Martel.Opt(nid_line) + \
-         Martel.Opt(version_line) + \
-         keywords_block + \
-         Martel.Opt(segment_line) + \
-         source_block + \
-         organism_block + \
-         Martel.Rep1(reference) + \
-         Martel.Opt(comment_block) + \
-         features_line + \
-         Martel.Rep1(feature) + \
-         base_count_line + \
-         sequence_entry + \
-         record_end
+record = Martel.Group("genbank_record",
+                      locus_line + \
+                      definition_block + \
+                      accession_block + \
+                      Martel.Opt(nid_line) + \
+                      Martel.Opt(version_line) + \
+                      keywords_block + \
+                      Martel.Opt(segment_line) + \
+                      source_block + \
+                      organism_block + \
+                      Martel.Rep1(reference) + \
+                      Martel.Opt(comment_block) + \
+                      features_line + \
+                      Martel.Rep1(feature) + \
+                      base_count_line + \
+                      sequence_entry + \
+                      record_end)
+
+record_format = Martel.ParseRecords("genbank_file", record,
+                                    RecordReader.EndsWith, ("//\n",) )
+
 
 # if you download a big mess of GenBank files, it'll have a header
 # in that case you should be using 'format' instead of the standard
