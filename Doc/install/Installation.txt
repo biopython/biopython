@@ -299,15 +299,13 @@ http://sourceforge.net/project/showfiles.php?group_id=1369&package_id=13
 3.2.1  UNIX and Mac OS X systems
 --------------------------------
   
-  As with mxTextTools, you should download the `tar.gz' file. The last
-version of Numerical Python that compiles out of the box is
-`Numeric-23.4.tar.gz'. With more recent versions of Numerical Python,
-you may need to tweak `setup.py' for the compilation to work. The build
-process is exactly the same as with mxTextTools:
+  As with mxTextTools, you should download the `tar.gz' file. Version
+23.8 of Numerical Python (`Numeric-23.8.tar.gz') compiles out of the
+box. The build process is exactly the same as with mxTextTools:
 <<
-  $ gunzip Numeric-23.4.tar.gz 
-  $ tar -xvpf Numeric-23.4.tar
-  $ cd Numeric-23.4
+  $ gunzip Numeric-23.8.tar.gz 
+  $ tar -xvpf Numeric-23.8.tar
+  $ cd Numeric-23.8
   $ python setup.py build
 >>
   
@@ -329,7 +327,7 @@ well as the basic Numeric package.
   
   Once again, Windows installers are available for Numeric so you should
 follow the now-standard procedure of downloading the installer
-(`Numeric-23.7.win32-py2.4.exe' at the current time), double clicking it
+(`Numeric-23.8.win32-py2.4.exe' at the current time), double clicking it
 and then following the installation instructions. As before, you will
 need to have administrator permissions to do this.
   
