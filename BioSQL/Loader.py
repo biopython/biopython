@@ -241,30 +241,38 @@ class DatabaseLoader:
         self.adaptor.execute(sql, (bioentry_id, comment, 1))
         
     def _load_reference(self, reference, rank, bioentry_id):
-        # Currently, the UK is either the medline_id or a CRC64
+        s = ''
+        for f in reference.authors, reference.title, reference.journal:
+            if f: s += f
+            else: s += "<undef>"
+        doc_id = crc64(s)
+        
+        # The UK is either the medline id or the CRC64 'docid'
         if reference.medline_id:
-            uk = reference.medline_id
+            sql = r"SELECT reference_id FROM reference" \
+                  r" WHERE reference_medline = %s"
+            refs = self.adaptor.execute_and_fetch_col0(sql,
+                                                       (reference.medline_id,))
         else:
-            s = ''
-            for f in reference.authors, reference.title, reference.journal:
-                if f: s += f
-                else: s += "<undef>"
-            uk = crc64(s)
+            sql = r"SELECT reference_id FROM reference" \
+                  r" WHERE reference_docid = %s"
+            refs = self.adaptor.execute_and_fetch_col0(sql, (doc_id,))
 
-        sql = "SELECT reference_id FROM reference WHERE reference_medline = %s"
-        refs = self.adaptor.execute_and_fetch_col0(sql, (uk,))
         if not len(refs):
             authors = reference.authors or None
             title =  reference.title or None
             journal = reference.journal or None
-            sql = "INSERT INTO reference (reference_location," \
-                  " reference_title, reference_authors, reference_medline)" \
-                  " VALUES (%s, %s, %s, %s)"
+            medline_id = reference.medline_id or None
+            sql = r"INSERT INTO reference (reference_location," \
+                  r" reference_title, reference_authors, reference_medline," \
+                  r" reference_docid)" \
+                  r" VALUES (%s, %s, %s, %s, %s)"
             self.adaptor.execute(sql, (journal, title,
-                                   authors, uk))
+                                   authors, medline_id, doc_id))
             reference_id = self.adaptor.last_id('reference')
         else:
             reference_id = refs[0]
+
         if len(reference.location):
             start = 1 + int(str(reference.location[0].start))
             end = int(str(reference.location[0].end))

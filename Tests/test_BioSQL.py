@@ -21,8 +21,8 @@ from BioSQL import BioSeq
 DBDRIVER = 'MySQLdb'
 DBTYPE = 'mysql'
 # -- PostgreSQL
-#DBDRIVER = 'psycopg'
-#DBTYPE = 'pg'
+DBDRIVER = 'psycopg'
+DBTYPE = 'pg'
 
 # Works for mysql and postgresql, not oracle
 DBSCHEMA = "biosqldb-" + DBTYPE + ".sql"
