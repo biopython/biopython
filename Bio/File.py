@@ -12,6 +12,7 @@ StringHandle   Wraps a file object around a string.
 """
 
 import os
+import string
 import tempfile
 
 class UndoHandle:
@@ -39,6 +40,10 @@ class UndoHandle:
         else:
             line = apply(self._handle.readline, args, keywds)
         return line
+
+    def read(self, *args, **keywds):
+        saved = string.join(self._saved, '')
+        return saved + apply(self._handle.read, args, keywds)
 
     def saveline(self, line):
         self._saved = [line] + self._saved
