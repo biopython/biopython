@@ -19,7 +19,7 @@ gb_file_dir = os.path.join(os.getcwd(), 'GenBank')
 #              'arab3.gb', 'arab4.gb', 'pri2.gb', 'bct1.gb', 'bct2.gb']
 
 test_files = ['noref.gb', 'cor6_6.gb', 'iro.gb', 'pri1.gb', 'arab1.gb',
-              'protein_refseq.gb']
+              'protein_refseq.gb', 'extra_keywords.gb']
 
 write_format_files = test_files[:]
 # don't test writing on protein_refseq, since it is horribly nasty
@@ -61,7 +61,9 @@ for parser in all_parsers:
                 print "Name:", cur_record.name
                 print "Description", cur_record.description
                 print "Annotations***"
-                for ann_key in cur_record.annotations.keys():
+                ann_keys = cur_record.annotations.keys()
+                ann_keys.sort()
+                for ann_key in ann_keys:
                     if ann_key != 'references':
                         print "Key: %s" % ann_key
                         print "Value: %s" % \

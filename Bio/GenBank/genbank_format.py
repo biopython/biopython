@@ -494,6 +494,7 @@ feature_qualifier_names = (
                       #   between macronuclear and micronuclear stages,
                       #   this qualifier is used to denote that the
                       #   sequence is from macronuclear DNA.
+    "match",
     "map",            # Map position of the feature in free-format text
     "mitochondrion",  # Organelle type from which the sequence was obtained
     "mod_base",       # Abbreviation for a modified nucleotide base
@@ -511,6 +512,7 @@ feature_qualifier_names = (
     "phenotype",      # Phenotype conferred by the feature
     "plasmid",        # Name of plasmid from which sequence was obtained
     "pop_variant",    # Population variant from which the sequence was obtained
+    "prediction",
     "product",        # Name of a product encoded by a coding region (CDS)
                       #   feature
     "protein_id",     # Protein Identifier, issued by International
