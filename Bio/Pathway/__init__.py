@@ -110,7 +110,9 @@ class Reaction:
         """Returns a string representation of self."""
         substrates = ""
         products   = ""
-        for species in self.reactants.keys():
+        all_species = self.reactants.keys()
+        all_species.sort()
+        for species in all_species:
             stoch = self.reactants[species]
             if stoch < 0:
                 # species is a substrate:
