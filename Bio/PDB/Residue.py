@@ -12,11 +12,11 @@ from Entity import Entity, DisorderedEntityWrapper
 __doc__="Residue class, used by Structure objects."
 
 
-atom_name_dict={}
-atom_name_dict["N"]=1
-atom_name_dict["CA"]=2
-atom_name_dict["C"]=3
-atom_name_dict["O"]=4
+_atom_name_dict={}
+_atom_name_dict["N"]=1
+_atom_name_dict["CA"]=2
+_atom_name_dict["C"]=3
+_atom_name_dict["O"]=4
 
 
 class Residue(Entity):
@@ -53,12 +53,12 @@ class Residue(Entity):
         name2=a2.get_name()
         if name1==name2:
             return(cmp(a1.get_altloc(), a2.get_altloc()))
-        if atom_name_dict.has_key(name1):
-            index1=atom_name_dict[name1]
+        if _atom_name_dict.has_key(name1):
+            index1=_atom_name_dict[name1]
         else:
             index1=None
-        if atom_name_dict.has_key(name2):
-            index2=atom_name_dict[name2]
+        if _atom_name_dict.has_key(name2):
+            index2=_atom_name_dict[name2]
         else:
             index2=None
         if index1 and index2:

@@ -11,15 +11,15 @@ __doc__="Fast atom neighbor lookup using a KD tree (implemented in C++)."
 
 class NeighborSearch:
     """
-    This module can be used in two ways:
+    This class can be used for two related purposes:
 
     1. To find all atoms/residues/chains/models/structures within radius 
-    of a given query vector. 
+    of a given query position. 
 
     2. To find all atoms/residues/chains/models/structures that are within 
     a fixed radius of each other.
 
-    NeighborSearch makes use of the KD tree C++ module.
+    NeighborSearch makes use of the Bio.KDTree C++ module, so it's fast.
     """
     def __init__(self, atom_list, bucket_size=10):
         """

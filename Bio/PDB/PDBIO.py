@@ -3,28 +3,55 @@
 __doc__="Output of PDB files."
 
 
-ATOM_FORMAT_STRING="%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f%6.2f%6.2f      %4s%2s%2s\n"
+_ATOM_FORMAT_STRING="%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f%6.2f%6.2f      %4s%2s%2s\n"
 
 
 class Select:
     """
-    Dummy class.
-    This selects which entities will be written out.
+    Default selection (everything) during writing - can be used as base class
+    to implement selective output. This selects which entities will be written out.
     """
+
+    def __repr__(self):
+        return "<Select all>"
+
     def accept_model(self, model):
+        """
+        Overload this to reject models for output.
+        """
         return 1
 
     def accept_chain(self, chain):
+        """
+        Overload this to reject chains for output.
+        """
         return 1
 
     def accept_residue(self, residue):
+        """
+        Overload this to reject residues for output.
+        """
         return 1
 
     def accept_atom(self, atom):
+        """
+        Overload this to reject atoms for output.
+        """
         return 1
 
 
 class PDBIO:
+    """
+    Write a Structure object (or a subset of a Structure object) as a PDB file.
+
+
+    Example:
+        >>> p=PDBParser()
+        >>> s=p.get_structure("1fat", "1fat.pdb")
+        >>> io=PDBIO()
+        >>> io.set_structure(s)
+        >>> io.save("out.pdb")
+    """
     def __init__(self):
         pass
     
@@ -47,7 +74,7 @@ class PDBIO:
         args=(record_type, atom_number, name, altloc, resname, chain_id,
             resseq, icode, x, y, z, occupancy, bfactor, segid,
             element, charge)
-        return ATOM_FORMAT_STRING % args
+        return _ATOM_FORMAT_STRING % args
 
     # Public methods
 

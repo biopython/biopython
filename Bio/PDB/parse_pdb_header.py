@@ -109,7 +109,13 @@ def _nice_case(line):
     return s
 
 def parse_pdb_header(file):
-    """Returns the header lines for a pdb entry."""
+    """
+    Returns the header lines of a pdb file as a dictionary.
+
+    Dictionary keys are: head, deposition_date, release_date, structure_method,
+    resolution, structure_reference, journal_reference, author and
+    compound.
+    """
     header=[]
     f=open(filename,'r')
     while f:
