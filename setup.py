@@ -1,5 +1,24 @@
-# XXX message about how distutils is required.
-# how to run distutils to install the package
+"""Distutils based setup script for Biopython.
+
+This uses Distutils (http://python.org/sigs/distutils-sig/) the standard
+python mechanism for installing packages. For the easiest installation
+just type the command:
+
+python setup.py install
+
+For more in-depth instructions, see the installation section of the
+biopython manual, linked to from:
+
+http://biopython.org/wiki/html/BioPython/BiopythonCode.html
+
+Or for more details about the options available from distutils, look at
+the 'Installing Python Modules' distutils documentation, available from:
+
+http://python.org/sigs/distutils-sig/doc/
+
+Or, if all else, fails, feel free to write to the biopython list
+(biopython@biopython.org) and ask for help.
+"""
 
 import sys
 import os
@@ -14,41 +33,11 @@ except ImportError:
 # this is to support old distutils which do extensions differently
 try:
     from distutils.extension import Extension
-    new_extension = 1
 except ImportError:
-    print "Your version of distutils is really old. You should definately"
-    print "upgrade to a newer version!"
-    new_extension = 0
-
-if new_extension:
-    extensions = [Extension('Bio.Tools.Classification.cSVM',
-                            ['Bio/Tools/Classification/cSVMmodule.c']
-                            ),
-                  Extension('Bio.Tools.clistfns',
-                            ['Bio/Tools/clistfnsmodule.c']
-                            ),
-                  Extension('Bio.Tools.cmathfns',
-                            ['Bio/Tools/cmathfnsmodule.c']
-                            ),
-                  Extension('Bio.Tools.cstringfns',
-                            ['Bio/Tools/cstringfnsmodule.c']
-                            )
-                  ]
-else:
-    extensions = [('Bio.Tools.Classification.cSVM',
-                   { 'sources' : ['Bio/Tools/Classification/cSVMmodule.c'] }
-                   ),
-                  ('Bio.Tools.clistfns',
-                   { 'sources' : ['Bio/Tools/clistfnsmodule.c'] }
-                   ),
-                  ('Bio.Tools.cmathfns',
-                   { 'sources' : ['Bio/Tools/cmathfnsmodule.c'] }
-                   ),
-                  ('Bio.Tools.cstringfns',
-                   { 'sources' : ['Bio/Tools/cstringfnsmodule.c'] }
-                   )
-                  ]
-
+    print "Your version of distutils is really old. You need to upgrade"
+    print "to a newer version. The latest releases of distutils are available"
+    print "from http://python.org/sigs/distutils-sig/download.html"
+    sys.exit(0)
 
 setup(name='biopython', 
       version='0.90d04',
@@ -66,6 +55,7 @@ setup(name='biopython',
                 'Bio.Entrez',
                 'Bio.Enzyme',
                 'Bio.Fasta',
+                'Bio.GenBank',
                 'Bio.Gobase',
                 'Bio.Medline',
                 'Bio.PDB',
@@ -75,10 +65,24 @@ setup(name='biopython',
                 'Bio.SeqIO',
                 'Bio.SubsMat',
                 'Bio.SwissProt',
-                'Bio.Tools', 'Bio.Tools.Classification',
+                'Bio.Tools',
+                'Bio.Tools.Classification',
+                'Bio.Tools.Parsers',
                 'Bio.WWW'
                 ],
       
-      ext_modules = extensions
+      ext_modules = [Extension('Bio.Tools.Classification.cSVM',
+                               ['Bio/Tools/Classification/cSVMmodule.c']
+                               ),
+                     Extension('Bio.Tools.clistfns',
+                               ['Bio/Tools/clistfnsmodule.c']
+                               ),
+                     Extension('Bio.Tools.cmathfns',
+                               ['Bio/Tools/cmathfnsmodule.c']
+                               ),
+                     Extension('Bio.Tools.cstringfns',
+                               ['Bio/Tools/cstringfnsmodule.c']
+                               )
+                     ]
       )
 
