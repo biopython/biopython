@@ -245,13 +245,17 @@ class Crystal:
 
     def __repr__(self):
         output = ''
-        for key in self.data.keys():
+        keys = self.data.keys()
+        keys.sort()
+        for key in keys:
             output = output +  '%s : %s\n' % ( key, self.data[ key ] )
         return output
 
     def __str__(self):
         output = ''
-        for key in self.data.keys():
+        keys = self.data.keys()
+        keys.sort()
+        for key in keys:
             output = output +  '%s : %s\n' % ( key, self.data[ key ] )
         return output
 

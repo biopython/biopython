@@ -30,13 +30,13 @@ Name: 5'-r(GpCpG)-d(pApTpApT)-r(pApCpGpU)-3'
 Refinement: The structure was refined using the CNS 1.0 program. The R value is 21.7 for 26418 reflections in the resolution range 10.0 to 1.7 Å with I>0.0 sigma(I).
 Sequence: A : g c g a t a t a c g u
 
-C : g c g a t a t a c g u
-
 B : g c g a t a t a c g u
 
-E : g c g a t a t a c g u
+C : g c g a t a t a c g u
 
 D : g c g a t a t a c g u
+
+E : g c g a t a t a c g u
 
 F : g c g a t a t a c g u
 
@@ -255,6 +255,8 @@ Name: MS2 PROTEIN CAPSID/RNA COMPLEX
 Refinement: The structure was refined using the X-PLOR 3.860 program. The R value is 20.0 for 166564 reflections in the resolution range 30.0 to 2.8 Å with Fobs>0.0 sigma(Fobs).
 Sequence: A : u c g c c a a c a g g c g g
 
+B : u c g c c a a c a g g c g g
+
 C : ala ser asn phe thr gln phe val leu val asp asn gly gly thr gly asp val thr val 
 ala pro ser asn phe ala asn gly val ala glu trp ile ser ser asn ser arg ser gln 
 ala tyr lys val thr cys ser val arg gln ser ser ala gln asn arg lys tyr thr ile 
@@ -263,9 +265,7 @@ ala trp arg ser tyr leu asn met glu leu thr ile pro ile phe ala thr asn ser asp
 cys glu leu ile val lys ala met gln gly leu leu lys asp gly asn pro ile pro ser 
 ala ile ala ala asn ser gly ile tyr
 
-B : u c g c c a a c a g g c g g
-
-E : ala ser asn phe thr gln phe val leu val asp asn gly gly thr gly asp val thr val 
+D : ala ser asn phe thr gln phe val leu val asp asn gly gly thr gly asp val thr val 
 ala pro ser asn phe ala asn gly val ala glu trp ile ser ser asn ser arg ser gln 
 ala tyr lys val thr cys ser val arg gln ser ser ala gln asn arg lys tyr thr ile 
 lys val glu val pro lys val ala thr gln thr val gly gly val glu leu pro val ala 
@@ -273,7 +273,7 @@ ala trp arg ser tyr leu asn met glu leu thr ile pro ile phe ala thr asn ser asp
 cys glu leu ile val lys ala met gln gly leu leu lys asp gly asn pro ile pro ser 
 ala ile ala ala asn ser gly ile tyr
 
-D : ala ser asn phe thr gln phe val leu val asp asn gly gly thr gly asp val thr val 
+E : ala ser asn phe thr gln phe val leu val asp asn gly gly thr gly asp val thr val 
 ala pro ser asn phe ala asn gly val ala glu trp ile ser ser asn ser arg ser gln 
 ala tyr lys val thr cys ser val arg gln ser ser ala gln asn arg lys tyr thr ile 
 lys val glu val pro lys val ala thr gln thr val gly gly val glu leu pro val ala 
@@ -375,32 +375,21 @@ Name: POLYDENYLATE BINDING PROTEIN 1/RNA COMPLEX
 Refinement: The structure was refined using the CNS program. The R value is 23.0 for 57149 reflections in the resolution range 20.0 to 2.6 Å with Fobs>2.0 sigma(Fobs).
 Sequence: A : a a a a a a a a a a a
 
-C : a a a a a a a a a a a
-
 B : a a a a a a a a a a a
 
-E : a a a a a a a a a a a
+C : a a a a a a a a a a a
 
 D : a a a a a a a a a a a
 
-G : a a a a a a a a a a a
+E : a a a a a a a a a a a
 
 F : a a a a a a a a a a a
 
-I : met asn pro ser ala pro ser tyr pro met ala ser leu tyr val gly asp leu his pro 
-asp val thr glu ala met leu tyr glu lys phe ser pro ala gly pro ile leu ser ile 
-arg val cys arg asp met ile thr arg arg ser leu gly tyr ala tyr val asn phe gln 
-gln pro ala asp ala glu arg ala leu asp thr met asn phe asp val ile lys gly lys 
-pro val arg ile met trp ser gln arg asp pro ser leu arg lys ser gly val gly asn 
-ile phe ile lys asn leu asp lys ser ile asp asn lys ala leu tyr asp thr phe ser 
-ala phe gly asn ile leu ser cys lys val val cys asp glu asn gly ser lys gly tyr 
-gly phe val his phe glu thr gln glu ala ala glu arg ala ile glu lys met asn gly 
-met leu leu asn asp arg lys val phe val gly arg phe lys ser arg lys glu arg glu 
-ala glu leu gly ala arg ala lys glu phe
+G : a a a a a a a a a a a
 
 H : a a a a a a a a a a a
 
-K : met asn pro ser ala pro ser tyr pro met ala ser leu tyr val gly asp leu his pro 
+I : met asn pro ser ala pro ser tyr pro met ala ser leu tyr val gly asp leu his pro 
 asp val thr glu ala met leu tyr glu lys phe ser pro ala gly pro ile leu ser ile 
 arg val cys arg asp met ile thr arg arg ser leu gly tyr ala tyr val asn phe gln 
 gln pro ala asp ala glu arg ala leu asp thr met asn phe asp val ile lys gly lys 
@@ -422,7 +411,7 @@ gly phe val his phe glu thr gln glu ala ala glu arg ala ile glu lys met asn gly
 met leu leu asn asp arg lys val phe val gly arg phe lys ser arg lys glu arg glu 
 ala glu leu gly ala arg ala lys glu phe
 
-M : met asn pro ser ala pro ser tyr pro met ala ser leu tyr val gly asp leu his pro 
+K : met asn pro ser ala pro ser tyr pro met ala ser leu tyr val gly asp leu his pro 
 asp val thr glu ala met leu tyr glu lys phe ser pro ala gly pro ile leu ser ile 
 arg val cys arg asp met ile thr arg arg ser leu gly tyr ala tyr val asn phe gln 
 gln pro ala asp ala glu arg ala leu asp thr met asn phe asp val ile lys gly lys 
@@ -444,7 +433,7 @@ gly phe val his phe glu thr gln glu ala ala glu arg ala ile glu lys met asn gly
 met leu leu asn asp arg lys val phe val gly arg phe lys ser arg lys glu arg glu 
 ala glu leu gly ala arg ala lys glu phe
 
-O : met asn pro ser ala pro ser tyr pro met ala ser leu tyr val gly asp leu his pro 
+M : met asn pro ser ala pro ser tyr pro met ala ser leu tyr val gly asp leu his pro 
 asp val thr glu ala met leu tyr glu lys phe ser pro ala gly pro ile leu ser ile 
 arg val cys arg asp met ile thr arg arg ser leu gly tyr ala tyr val asn phe gln 
 gln pro ala asp ala glu arg ala leu asp thr met asn phe asp val ile lys gly lys 
@@ -456,6 +445,17 @@ met leu leu asn asp arg lys val phe val gly arg phe lys ser arg lys glu arg glu
 ala glu leu gly ala arg ala lys glu phe
 
 N : met asn pro ser ala pro ser tyr pro met ala ser leu tyr val gly asp leu his pro 
+asp val thr glu ala met leu tyr glu lys phe ser pro ala gly pro ile leu ser ile 
+arg val cys arg asp met ile thr arg arg ser leu gly tyr ala tyr val asn phe gln 
+gln pro ala asp ala glu arg ala leu asp thr met asn phe asp val ile lys gly lys 
+pro val arg ile met trp ser gln arg asp pro ser leu arg lys ser gly val gly asn 
+ile phe ile lys asn leu asp lys ser ile asp asn lys ala leu tyr asp thr phe ser 
+ala phe gly asn ile leu ser cys lys val val cys asp glu asn gly ser lys gly tyr 
+gly phe val his phe glu thr gln glu ala ala glu arg ala ile glu lys met asn gly 
+met leu leu asn asp arg lys val phe val gly arg phe lys ser arg lys glu arg glu 
+ala glu leu gly ala arg ala lys glu phe
+
+O : met asn pro ser ala pro ser tyr pro met ala ser leu tyr val gly asp leu his pro 
 asp val thr glu ala met leu tyr glu lys phe ser pro ala gly pro ile leu ser ile 
 arg val cys arg asp met ile thr arg arg ser leu gly tyr ala tyr val asn phe gln 
 gln pro ala asp ala glu arg ala leu asp thr met asn phe asp val ile lys gly lys 
@@ -538,9 +538,9 @@ Name: RNA hammerhead ribozyme
 Refinement: The structure was refined using the X-PLOR 3.1 program. The R value is 25.1 for 6199 reflections in the resolution range 15.0 to 3.1 Å with Fobs>2.0 sigma(Fobs).
 Sequence: A : g u g g u c u g a u g a g g c c
 
-C : g u g g u c u g a u g a g g c c
-
 B : g g c c g a a a c u c g u a a g a g u c a c c a c
+
+C : g u g g u c u g a u g a g g c c
 
 D : g g c c g a a a c u c g u a a g a g u c a c c a c
 
