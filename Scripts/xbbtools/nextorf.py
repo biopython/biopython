@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # Created: Tue Aug  8 20:32:36 2000
-# Last changed: Time-stamp: <00/08/09 20:21:28 thomas>
+# Last changed: Time-stamp: <00/08/10 09:55:44 thomas>
 # thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas/index.html
 # File: nextorf.py
 
@@ -13,8 +13,41 @@ import getopt
 from Bio.Fasta import Fasta
 from Bio.Tools import Translate
 from Bio.Seq import Seq
+from Bio import Alphabet
 from Bio.Alphabet import IUPAC
 from Bio.Data import IUPACData, CodonTable
+
+# From: "Andrew Dalke" <dalke@acm.org>
+# To: <thomas@cbs.dtu.dk>, <biopython-dev@biopython.org>
+# Subject: Re: [Biopython-dev] unambiguous DNA
+# Date: Thu, 10 Aug 2000 01:43:07 -0600
+# [..] There isn't an alphabet in biopython which supports output sequence
+# uses the ambiguous protein alphabet along with '*' for stop codon
+# symbol and 'X' for untranslatable protein residues , so we need to
+# make a new one:
+
+class ProteinX(Alphabet.ProteinAlphabet):
+   letters = IUPACData.extended_protein_letters + "X"
+
+proteinX = ProteinX()
+
+# Forward translation table, mapping codon to protein
+class MissingTable:
+  def __init__(self, table):
+    self._table = table
+  def get(self, codon, stop_symbol):
+    try:
+      return self._table.get(codon, stop_symbol)
+    except CodonTable.TranslationError:
+      return 'X'
+
+# Make the codon table given an existing table
+def makeTableX(table):
+  assert table.protein_alphabet == IUPAC.extended_protein
+  return CodonTable.CodonTable(table.nucleotide_alphabet, proteinX,
+                               MissingTable(table.forward_table),
+                               table.back_table, table.start_codons,
+                               table.stop_codons)
 
 def complement(seq):
     return string.join(map(lambda x:IUPACData.ambiguous_dna_complement[x], map(None,seq)),'')
@@ -24,7 +57,8 @@ class NextORF:
         self.code = 1
         self.file = file
         self.options = options
-        self.translator = Translate.unambiguous_dna_by_id[int(self.options['table'])]
+        table = makeTableX(CodonTable.ambiguous_dna_by_id[int(self.options['table'])])
+        self.translator = Translate.Translator(table)
         
     def read_file(self):
         self.parser = Fasta.RecordParser()
@@ -49,8 +83,8 @@ class NextORF:
         if self.options['strand'] == 'both' or self.options['strand'] == 'plus': plus = 1
         if self.options['strand'] == 'both' or self.options['strand'] == 'minus': minus = 1         
         s = string.upper(rec.sequence[self.options['start']:self.options['stop']])
-        seq = Seq(s,IUPAC.unambiguous_dna)
-        if minus: rseq = Seq(complement(s), IUPAC.unambiguous_dna)
+        seq = Seq(s,IUPAC.ambiguous_dna)
+        if minus: rseq = Seq(complement(s), IUPAC.ambiguous_dna)
 
 
         n = 0
