@@ -31,32 +31,35 @@ def parse_simple_xpath(s):
 
 def xpath_index(dbname,
                 filenames,
-                unique,
+                primary_namespace,
                 extract_info,  # pair of (data_value, xpath)
                 format = "sequence",
                 record_tag = Std.record.tag,
-                creator_class = None,
+                creator_factory = None,
                 ):
-    if creator_class is None:
+    if creator_factory is None:
         import BerkeleyDB
-        creator_class = BerkeleyDB.CreateBerkeleyDB
+        creator_factory = BerkeleyDB.create
     
     data_names = [x[0] for x in extract_info]
-    if unique not in data_names:
-        raise TypeError("No way to get the %r field needed for the unique id" %
-                        (unique,))
-    data_names.remove(unique)
+    if primary_namespace not in data_names:
+        raise TypeError(
+            "No way to get the %r field needed for the primary (unique) id" %
+            (primary_namespace,))
+    data_names.remove(primary_namespace)
 
     for prop, xpath in extract_info:
-        if prop == unique:
+        if prop == primary_namespace:
             break
     else:
-        raise TypeError("Property %r has no xpath definition" % (unique,))
+        raise TypeError("Property %r has no xpath definition" %
+                        (primary_namespace,))
 
-    creator = creator_class(dbname, unique, data_names, format)
+    creator = creator_factory(dbname, primary_namespace, data_names)
     builder = GrabXPathNodes(extract_info)
     for filename in filenames:
-        creator.load(filename, builder = builder, record_tag = record_tag)
+        creator.load(filename, builder = builder, record_tag = record_tag,
+                     format = format)
     creator.close()
 
 

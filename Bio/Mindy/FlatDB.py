@@ -5,33 +5,193 @@ import Bio
 
 _open = open
 
-class CreateFlatDB(BaseDB.CreateDB):
-    def __init__(self, dbname, primary_namespace,
-                 secondary_namespaces, format):
-        self.dbname = dbname        
-        self.primary_namespace = primary_namespace
-        self.secondary_namespaces = secondary_namespaces
-        self.format = Bio.formats.normalize(format)
+# Write the configuration
+def _write_config(config_filename,
+                  primary_namespace,
+                  secondary_namespaces,
+                  filemap):
+    configfile = _open(os.path.join(self.dbname, "config.dat"), "wb")
 
-        # This is used in __del__ to tell if the file has been closed.
-        # Set it to None so that test can work if the mkdir or open fail.
-        # After the directory is made, we'll set it to {}
-        self.fileids = None
+    # Write the header
+    configfile.write("index\tflat/1\n")
+
+    # Write the namespace information
+    configfile.write("primary_namespace\t%s\n" % self.primary_namespace)
+    keys = secondary_namespaces[:]
+    keys.sort()
+    configfile.write("secondary_namespaces\t")
+    configfile.write("\t".join(keys) + "\n")
+
+    # Write the fileid table
+    items = self.filemap.items()
+    items.sort()
+    for fileid, s in items:
+        configfile.write("fileid_%s\t%s\n" % (fileid, s))
+
+    configfile.close()
+        
+
+def _parse_primary_table_entry(s):
+    name, filetag, startpos, length = s.rstrip().split("\t")
+    return name, filetag, long(startpos), long(length)
+
+def _read_primary_table(filename):
+    infile = _open(filename, "rb")
+    size = int(infile.read(4))
+    table = {}
+    while 1:
+        s = infile.read(size)
+        if not s:
+            break
+        assert len(s) == size, (repr(s), size)
+        name, filetag, startpos, length = _parse_primary_table_entry(s)
+        table[name] = filetag, startpos, length
+    return table
+
+def _write_primary_table(filename, primary_table):
+    info = primary_table.items()
+    info.sort()
+    n = 1
+    for k, v in info:
+        # Find the longest width
+        s = "%s\t%s" % (k, v)
+        if len(s) > n:
+            n = len(s)
+            if n > 9999:
+                raise AssertionError(
+                    "Primary index record too large for format spec! " +
+                    " %s bytes in %r" % (n, s))
+    outfile = _open(filename, "wb")
+    outfile.write("%04d" % n)
+    for k, v in info:
+        s = "%s\t%s" % (k, v)
+        outfile.write(s.ljust(n))
+    outfile.close()
+
+def _parse_secondary_table_entry(s):
+    return s.rstrip().split("\t")
+
+def _read_secondary_table(filename):
+    infile = _open(filename, "rb")
+    size = int(infile.read(4))
+    table = {}
+    while 1:
+        s = infile.read(size)
+        if not s:
+            break
+        assert len(s) == size, (repr(s), size)
+        alias, name = _parse_secondary_table_entry(s)
+        table.setdefault(alias, []).append(name)
+    infile.close()
+    return table
+
+def _write_secondary_table(filename, table):
+    items = table.items()
+    items.sort()
+    # Find the largest field
+    n = 0
+    for k, v in items:
+        for x in v:
+            s = "%s\t%s" % (k, x)
+            if len(s) > n:
+                n = len(s)
+                if n > 9999:
+                    raise AssertionError(
+               "Secondary index record too large for format spec! " +
+               " %s bytes in %r" % (n, s))
+    # And write the output
+    outfile = _open(filename, "wb")
+    outfile.write("%04d" % n)
+    for k, v in items:
+        for x in v:
+            s = "%s\t%s" % (k, x)
+            outfile.write(s.ljust(n))
+    outfile.close()
+
+class BaseFlatDB(BaseDB.OpenDB):
+    def __init__(self, dbname):
+        BaseDB.OpenDB.__init__(self, dbname)
+
+        config = _read_tab_dict(os.path.join(dbname, "config.dat"))
+        if config["index"][0] != "flat/1":
+            raise TypeError("FlatDB does not support %r index" %
+                            (config["index"][0],))
+        self.primary_namespace = config["primary_namespace"][0]
+        self.secondary_namespaces = config["secondary_namespaces"]
+        fileids = {}
+        for k, v in config.items():
+            if not k.startswith("fileid_"):
+                continue
+            fileid = k[7:]
+            filename, size = v
+            size = long(size)
+            fileids[fileid] = filename, size
+            if os.path.getsize(filename) != size:
+                raise TypeError(
+                    "File %s has changed size from %d to %d bytes!" %
+                    (size, os.path.getsize(filename)))
+
+        self.fileids = fileids
+        self.dbname = dbname
+
+        self.key_filename = os.path.join(dbname,
+                                         "key_%s.key" % self.primary_namespace)
+        
+class PrimaryTable(BaseDB.DictLookup):
+    def __init__(self, db, namespace, table):
+        self.db = db
+        self.namespace = namespace
+        self.table = table
+    def __getitem__(self, name):
+        fileid, startpos, length = self.table[name]
+        return [Location.Location(self.namespace,
+                                  name,
+                                  self.db.fileids[fileid][0],
+                                  startpos,
+                                  length)
+                ]
+    def keys(self):
+        return self.table.keys()
+
+class SecondaryTable(BaseDB.DictLookup):
+    def __init__(self, db, namespace, table):
+        self.db = db
+        self.namespace = namespace
+        self.table = table
+    def __getitem__(self, name):
+        data = []
+        for entry in self.table[name]:
+            fileid, startpos, length = self.db.primary_table[entry]
+            data.append( Location.Location(self.namespace,
+                                           name,
+                                           self.db.fileids[fileid][0],
+                                           startpos,
+                                           length) )
+        return data
+    def keys(self):
+        return self.table.keys()
+
+class MemoryFlatDB(BaseDB.CreateDB, BaseFlatDB):
+    def __init__(self, dbname):
+        self.__in_constructor = 1
+        self._need_flush = 0
+        BaseFlatDB.__init__(self, dbname)
+
         self.filemap = {}
 
-        self.primary_table = {}
-        self.lookup_tables = {}
-        for namespace in secondary_namespaces:
-            self.lookup_tables[namespace] = {}
+        primary_filename = os.path.join(self.dbname,
+                             "key_%s.key" % (self.primary_namespace,) )
+        self.primary_table = _read_primary_table(primary_filename)
 
-        os.mkdir(dbname)
-        outfile = _open(os.path.join(dbname, "config.dat"), "wb")
-        outfile.write("index\tflat/1\n")
-        outfile.close()
+        self.secondary_tables = {}
+        for namespace in self.secondary_namespaces:
+            filename = os.path.join(self.dbname, "id_%s.index" % namespace)
+            self.secondary_tables[namespace] = _read_secondary_table(filename)
 
-        self.fileids = {}
+        self.__in_constructor = 0
 
     def add_record(self, filetag, startpos, length, table):
+        self._need_flush = 1
         key_list = table[self.primary_namespace]
         if len(key_list) != 1:
             raise TypeError(
@@ -41,87 +201,56 @@ class CreateFlatDB(BaseDB.CreateDB):
         if self.primary_table.has_key(key):
             raise TypeError("Field %r = %r already exists; must be unique" %
                             (self.primary_namespace, key))
-        self.primary_table[key] = "%s\t%s\t%s" % (filetag, startpos, length)
+        self.primary_table[key] = "%s\t%s\t%s" % (filetag,
+                                                  BaseDB._int_str(startpos),
+                                                  BaseDB._int_str(length))
 
         for namespace in secondary_namespaces:
-            lookup = self.lookup_tables[namespace]
+            lookup = self.secondary_tables[namespace]
             # Get the list of secondary identifiers for this identifier
-            for val in table.get(field, ()):
+            for val in table.get(namespace, ()):
                 # Go from secondary identifier to list of primary identifiers
                 lookup.setdefault(val, []).append(key)
 
-    def close(self):
-        # Write the configuration
-        configfile = _open(os.path.join(self.dbname, "config.dat"), "ab")
+    def flush(self):
+        if not self._need_flush:
+            return
 
-        # Write the namespace information
-        configfile.write("primary_namespace\t%s\n" % self.primary_namespace)
-        keys = self.lookup_tables.keys()
-        keys.sort()
-        configfile.write("secondary_namespaces\t")
-        configfile.write("\t".join(keys) + "\n")
-        
-        # Write the fileid table
-        items = self.filemap.items()
-        items.sort()
-        for fileid, s in items:
-            configfile.write("fileid_%s\t%s\n" % (fileid, s))
+        config_filename = os.path.join(self.dbname, "config.dat")
+        _write_config(config_filename = config_filename,
+                      primary_namespace = self.primary_namespace,
+                      secondary_namespaces = self.secondary_tables.keys(),
+                      filemap = self.filemap,
+                      )
 
-        configfile.close()
+        primary_filename = os.path.join(self.dbname,
+                           "key_%s.key" % (self.primary_namespace,) )
+        _write_primary_table(filename = primary_filename,
+                             primary_table = self.primary_table)
 
-        # Write the primary identifier information, which is fixed width
-        filename = os.path.join(self.dbname, "key_%s.key" % (self.primary_namespace,) )
-        info = self.primary_table.items()
-        info.sort()
-        n = 1
-        for k, v in info:
-            # Find the longest width
-            s = "%s\t%s" % (k, v)
-            if len(s) > n:
-                n = len(s)
-                if n > 9999:
-                    raise AssertionError(
-                        "Primary index record too large for format spec! " +
-                        " %s bytes in %r" % (n, s))
-        outfile = _open(filename, "wb")
-        outfile.write("%04d" % n)
-        for k, v in info:
-            s = "%s\t%s" % (k, v)
-            outfile.write(s.ljust(n))
-        outfile.close()
 
         # Write the secondary identifier information
-        for field, table in self.lookup_tables.items():
-            
-            filename = os.path.join(self.dbname, "id_%s.index" % field)
-            items = table.items()
-            items.sort()
-            # Find the largest field
-            n = 0
-            for k, v in items:
-                for x in v:
-                    s = "%s\t%s" % (k, x)
-                    if len(s) > n:
-                        n = len(s)
-                        if n > 9999:
-                            raise AssertionError(
-                       "Secondary index record too large for format spec! " +
-                       " %s bytes in %r" % (n, s))
-            # And write the output
-            outfile = _open(filename, "wb")
-            outfile.write("%04d" % n)
-            for k, v in items:
-                for x in v:
-                    s = "%s\t%s" % (k, x)
-                    outfile.write(s.ljust(n))
-            outfile.close()
+        for namespace, table in self.secondary_tables.items():
+            filename = os.path.join(self.dbname, "id_%s.index" % namespace)
+            _write_secondary_table(filename = filename,
+                                   table = table)
 
-        self.primary_table = self.fileids = self.lookup_tables = None
+        self._need_flush = 0
+
+    def close(self):
+        self.flush()
+        self.primary_table = self.fileids = self.secondary_tables = None
 
     def __del__(self):
-        if self.fileids is not None:
+        if not self.__in_constructor:
             self.close()
 
+
+    def __getitem__(self, namespace):
+        """return the database table lookup for the given namespace"""
+        if namespace == self.primary_namespace:
+            return PrimaryTable(self, namespace, self.primary_table)
+        return SecondaryTable(self, namespace, self.secondary_tables[namespace])
 
 
 def _read_tab_dict(filename):
@@ -145,17 +274,17 @@ class BisectFile:
     def __getitem__(self, i):
         self.infile.seek(i * self.record_size + 4)
         return self.infile.read(self.record_size).split("\t")[0]
-    def get_line(self, i):
+    def get_entry(self, i):
         self.infile.seek(i * self.record_size + 4)
         return self.infile.read(self.record_size)
 
-def _find_line(filename, wantword):
+def _find_entry(filename, wantword):
     size = os.path.getsize(filename)
     infile = _open(filename, "rb")
 
     bf = BisectFile(infile, size)
     left = bisect.bisect_left(bf, wantword)
-    line = bf.get_line(left)
+    line = bf.get_entry(left)
     if not line.startswith(wantword):
         return None
     return line
@@ -166,25 +295,23 @@ def _find_range(filename, wantword):
 
     bf = BisectFile(infile, size)
     left = bisect.bisect_left(bf, wantword)
-    line = bf.get_line(left)
+    line = bf.get_entry(left)
     if not line.startswith(wantword):
         return None
     
     right = bisect.bisect_right(bf, wantword)
     data = []
     for i in range(left, right):
-        x = bf.get_line(i)
+        x = bf.get_entry(i)
         data.append(x)
     return data
 
 
 def _lookup_location(key_filename, word):
-    line = _find_line(key_filename, word)
+    line = _find_entry(key_filename, word)
     if line is None:
         return None
-    line = line.rstrip()  # get rid of the packing and newline
-    words = line.split("\t")[1:4]  # Get fileid, start, length
-    return words[0], long(words[1]), long(words[2])
+    return _parse_primary_table_entry(line)[1:]
 
 def _lookup_alias(id_filename, word):
     lines = _find_range(id_filename, word)
@@ -192,93 +319,116 @@ def _lookup_alias(id_filename, word):
         return None
     primary_keys = []
     for line in lines:
-        # get rid of newline (and spaces? spec says there are none)
-        line = line.rstrip()
-        # There are only two fields
-        found_word, primary_key = line.split("\t")
-        assert found_word == word, (found_word, word)
+        alias, primary_key = _parse_secondary_table_entry(line)
+        assert alias == word, (alias, word)
         primary_keys.append(primary_key)
     return primary_keys
 
-def open(dbname):
-    return OpenFlatDB(dbname)
+def create(dbname, primary_namespace, secondary_namespaces):
+    os.mkdir(dbname)
+    config_filename = os.path.join(dbname, "config.dat")
+    _write_config(config_filename = config_filename,
+                  primary_namespace = primary_namespace,
+                  secondary_namespaces = secondary_namespaces,
+                  filemap = filemap,
+                  )
 
-class OpenFlatDB(BaseDB.OpenDB):
-    def __init__(self, dbname):
-        BaseDB.OpenDB.__init__(self, dbname)
+    primary_filename = os.path.join(dbname,
+                       "key_%s.key" % (primary_namespace,) )
+    _write_primary_table(filename = primary_filename,
+                         primary_table = primary_table)
+
+
+    # Write the secondary identifier information
+    for namespace in secondary_namespaces:
+        filename = os.path.join(self.dbname, "id_%s.index" % namespace)
+        _write_secondary_table(filename = filename,
+                               table = {})
+    return open(dbname, "rw")
+    
+
+def open(dbname, mode = "r"):
+    if mode == "r":
+        return DiskFlatDB(dbname)
+    elif mode == "rw":
+        return MemoryFlatDB(dbname)
+    elif mode == "a":
+        raise TypeError("Must call FlatDB.create to create the database")
+    else:
+        raise TypeError("Unknown mode: %r" % (mode,))
+
+def _get_first_words(filename):
+    infile = _open(filename, "rb")
+    size = int(infile.read(4))
+    data = []
+    while 1:
+        s = infile.read(size)
+        if not s:
+            break
+        assert len(s) == size, (repr(s), size)
+        s = s.split("\t")[0]
+        if not data or data[-1] != s:
+            data.append(s)
+    return data
+
+class PrimaryNamespace(BaseDB.DictLookup):
+    def __init__(self, db, namespace):
+        self.db = db
+        self.namespace = namespace
+    def __getitem__(self, name):
+        loc = _lookup_location(self.db.key_filename, name)
+        if loc is None:
+            raise KeyError("Cannot find primary key %r" % (name,))
+        data = [
+            Location.Location(self.namespace,
+                              name,
+                              self.db.fileids[loc[0]][0],
+                              loc[1],
+                              loc[2])
+        ]
+        return data
+    def keys(self):
+        return _get_first_words(self.db.key_filename)
+    
         
-        config = _read_tab_dict(os.path.join(dbname, "config.dat"))
-        if config["index"][0] != "flat/1":
-            raise TypeError("FlatDB does not support %r index" %
-                            (config["index"][0],))
-        self.primary_namespace = config["primary_namespace"][0]
-        self.secondary_namespaces = config["secondary_namespaces"]
-
-        fileids = {}
-        for k, v in config.items():
-            if not k.startswith("fileid_"):
-                continue
-            fileid = k[7:]
-            filename, size = v
-            size = long(size)
-            fileids[fileid] = filename, size
-            if os.path.getsize(filename) != size:
-                raise TypeError(
-                    "File %s has changed size from %d to %d bytes!" %
-                    (size, os.path.getsize(filename)))
-
-        self.fileids = fileids
-        self.dbname = dbname
-
-        self.key_filename = os.path.join(dbname,
-                                         "key_%s.key" % self.primary_namespace)
-
-    def _turn_into_query(self, *args, **kwargs):
-        if args:
-            if kwargs:
-                raise TypeError("Cannot specify both args and kwargs")
-            if len(args) != 1:
-                raise TypeError("Only one identifier handled")
-            return self.primary_namespace, args[0]
-        
-        if len(kwargs) != 1:
-            raise TypeError("lookup takes a single key")
-        return kwargs.items()[0]
-
-    def lookup(self, *args, **kwargs):
-        query = self._turn_into_query(*args, **kwargs)
-        namespace, name = query
-        if namespace == self.primary_namespace:
-            loc = _lookup_location(self.key_filename, name)
-            if loc is None:
-                raise KeyError("Cannot find primary key %r" % (name,))
-            data = [
-                Location.Location(namespace,
-                                  name,
-                                  self.fileids[loc[0]][0],
-                                  loc[1],
-                                  loc[2])
-            ]
-            return data
-
-        # There can be one or more aliases
-        id_filename = os.path.join(self.dbname,
-                                   "id_%s.index" % namespace)
+class SecondaryNamespace(BaseDB.DictLookup):
+    def __init__(self, db, namespace):
+        self.db = db
+        self.namespace = namespace
+    def __getitem__(self, name):
+        id_filename = os.path.join(self.db.dbname,
+                                   "id_%s.index" % self.namespace)
         primary_keys = _lookup_alias(id_filename, name)
         if primary_keys is None:
-            raise KeyError("Cannot find %r key %r" % (namespace, name))
+            raise KeyError("Cannot find %r key %r" % (self.namespace, name))
 
         data = []
         for key in primary_keys:
-            loc = _lookup_location(self.key_filename, key)
+            loc = _lookup_location(self.db.key_filename, key)
             if loc is None:
                 raise AssertionError("Cannot find primary key %r -- "
                                      "lost database integrety" % (key,))
-            data.append(Location.Location(namespace, name,
-                                          self.fileids[loc[0]][0],
+            data.append(Location.Location(self.namespace, name,
+                                          self.db.fileids[loc[0]][0],
                                           loc[1],
                                           loc[2]))
         return data
 
+    def keys(self):
+        id_filename = os.path.join(self.db.dbname,
+                                   "id_%s.index" % self.namespace)
+        return _get_first_words(id_filename)
 
 
+class DiskFlatDB(BaseFlatDB):
+    def __init__(self, dbname):
+        BaseFlatDB.__init__(self, dbname)
+        
+
+    def __getitem__(self, namespace):
+        """return the database table lookup for the given namespace"""
+        if namespace == self.primary_namespace:
+            return PrimaryNamespace(self, namespace)
+        if namespace in self.secondary_namespaces:
+            return SecondaryNamespace(self, namespace)
+        raise KeyError(namespace)

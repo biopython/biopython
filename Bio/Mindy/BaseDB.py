@@ -9,8 +9,7 @@ def _int_str(i):
     return s
 
 class CreateDB:
-    def __init__(self, dbname, unique, data_fields, format = "sequence"):
-        # Must define 'self.format' being a Format object
+    def __init__(self, dbname, unique, data_fields):
         # Must define 'self.fileids' mapping from filename -> fileid
         # Must define 'self.filemap' mapping from fileid -> filename \t size
         raise NotImplementedError
@@ -24,12 +23,13 @@ class CreateDB:
         self.filemap[s] = "%s\t%s" % (filename, _int_str(size))
         return s
 
-    def load(self, filename, builder, record_tag = "record"):
+    def load(self, filename, builder, record_tag = "record",
+             format = "sequence"):
         size = os.path.getsize(filename)
         filetag = self.add_filename(filename, size)
 
         source = compression.open_file(filename, "rb")
-        format = self.format.identifyFile(source)
+        format = Bio.formats.normalize(format).identifyFile(source)
         if format is None:
             raise TypeError("Cannot identify file as a %s format" %
                             (origformat,))
@@ -44,8 +44,26 @@ class CreateDB:
                             iterator.start_position,
                             iterator.end_position - iterator.start_position,
                             record.document)
+
+class DictLookup:
+    def __getitem__(self, key):
+        raise NotImplementedError("Must be implemented in subclass")
+    def keys(self):
+        raise NotImplementedError("Must be implemented in subclass")
+
+    def values(self):
+        return [self[key] for key in self.keys()]
+    def items(self):
+        return [(key, self[key]) for key in self.keys()]
+
+    def get(self, key, default = None):
+        try:
+            return self[key]
+        except KeyError:
+            return default
+    
         
-class OpenDB:
+class OpenDB(DictLookup):
     def __init__(self, dbname):
         self.dbname = dbname
 
@@ -63,16 +81,10 @@ class OpenDB:
             namespace, name = kwargs.items()[0]
         return self[namespace][name]
 
-    def __getitem__(self, name):
+    def __getitem__(self, namespace):
+        """return the database table lookup for the given namespace"""
         raise NotImplementedError("must be implemented in the derived class")
 
-    # Introspection
     def keys(self):
         return [self.primary_namespace] + self.secondary_namespaces
-    def values(self):
-        return [self[key] for key in self.keys()]
-    def items(self):
-        return [(key, self[key]) for key in self.keys()]
         
-        
-
