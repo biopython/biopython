@@ -10,8 +10,7 @@ SwissProt.
 http://www.expasy.ch/sprot/sprot-top.html
 
 Tested with:
-Release 37
-Release 38
+Release 37, Release 38, Release 39
 
 
 Classes:
@@ -33,6 +32,7 @@ index_file         Index a SwissProt file for a Dictionary.
 
 """
 from types import *
+import os
 import string
 import time
 from Bio import File
@@ -565,8 +565,9 @@ class _RecordConsumer(AbstractConsumer):
             elif col == ' STRAIN=NCIB 9816-4, AND STRAIN=G7 / ATCC 17485':
                 # from NDOA_PSEPU, release 38
                 token, text = "STRAIN", "NCIB 9816-4 AND G7 / ATCC 17485"
-            elif col == ' STRAIN=ISOLATE=NO 27, ANNO 1987':
-                # from NU3M_BALPH, release 38
+            elif col == ' STRAIN=ISOLATE=NO 27, ANNO 1987' or \
+                 col == ' STRAIN=ISOLATE=NO 27 / ANNO 1987':
+                # from NU3M_BALPH, release 38, release 39
                 token, text = "STRAIN", "ISOLATE NO 27, ANNO 1987"
             else:
                 token, text = string.split(col, '=')
