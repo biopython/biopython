@@ -1,0 +1,24 @@
+CDD.txt
+=======
+
+
+CDD
+---
+
+The CDD module works with CDD-formatted sequence data.  Data is available at:
+http://www.ncbi.nlm.nih.gov/Structure/cdd/cdd.shtml
+
+
+The following code fragment is an example of how to parse CDD files into
+a record and print the record.
+
+    fh = open(os.path.join("CDD", file + '.htm' ))
+    records = Bio.CDD.Iterator( fh, Bio.CDD.RecordParser(debug_level=0))
+    while 1:
+        record = records.next()
+        if record is not None:
+            print record
+        else:
+            break
+    print "\n"
+
