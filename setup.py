@@ -16,123 +16,112 @@ the 'Installing Python Modules' distutils documentation, available from:
 
 http://python.org/sigs/distutils-sig/doc/
 
-Or, if all else fails, feel free to write to the biopython list
-at biopython@biopython.org and ask for help.
-"""
+Or, if all else fails, feel free to write to the biopython list at
+biopython@biopython.org and ask for help.
 
+"""
 import sys
 import os
-try:
-    from distutils.core import setup
-    from distutils.command.install import install
-    from distutils.core import Command
-except ImportError:
-    print "Biopython installation requires distutils, available with python 2.0"
-    print "or better, or from:"
-    print "http://python.org/sigs/distutils-sig/download.html"
-    sys.exit(0)
 
-# check if the distutils has the new extension class stuff
-try:
-    from distutils.extension import Extension
-except ImportError:
-    print "Your version of distutils is really old. You need to upgrade"
-    print "to a newer version. The latest releases of distutils are available"
-    print "from http://python.org/sigs/distutils-sig/download.html"
-    sys.exit(0)
+# Make sure I have the right Python version.
+if sys.version_info[:2] < (2, 2):
+    print "Biopython requires Python 2.2.  Python %d.%d detected" % \
+          sys.version_info[:2]
+    sys.exit(-1)
 
-# --- check for installed programs needed by Biopython
+from distutils.core import setup
+from distutils.core import Command
+from distutils.command.install import install
+from distutils.command.build_py import build_py
+from distutils.extension import Extension
 
-def check_install(name, check_library, location, other_messages = None):
-    """Check if a program is installed and print a warning message if not.
+def get_yes_or_no(question, default):
+    if default:
+        option_str = "(Y/n)"
+        default_str = 'y'
+    else:
+        option_str = "(y/N)"
+        default_str = 'n'
 
-    This helps users at least know they are missing some installed stuff
-    and where to get it when they install biopython.
+    while 1:
+        print "%s %s " % (question, option_str),
+        response = raw_input().lower()
+        if not response:
+            response = default_str
+        if response[0] in ['y', 'n']:
+            break
+        print "Please answer y or n."
+    return response[0] == 'y'
 
-    Arguments:
-    
-    o check_library -- a function to check whether or not the specified
-    program and version is present, returns 1 if it is, 0 otherwise.
-
-    o name -- the name of the library we are looking for
-
-    o location -- a URL where the library can be downloaded
-
-    o other_messages -- other random messages to print if the library
-    is not present (ie. version information, etc...)
-    """
-    if not(check_library()):
-        print "\nWARNING -- %s is not installed." % name
-        print "You should install this from:"
-        print location
-        print "to get full functionality from Biopython."
-        if other_messages:
-            print other_messages
-
-# -- functions to check for specific libraries and versions.
-
-def check_Martel():
-    """Check for Martel version 0.5 or better.
-    """
-    try:
-        import Martel
-        if str(Martel.__version__) >= "0.5":
-            return 1
-        else:
-            return 0
-    except ImportError:
-        return 0
-
-def check_mxTextTools():
-    try:
-        import TextTools
-        return 1
-    except ImportError:
-        try:
-            from mx import TextTools
-            return 1
-        except ImportError:
-            return 0
-
-def check_Numpy():
-    try:
-        import Numeric
-        return 1
-    except ImportError:
-        return 0
-
-def check_reportlab():
-    try:
-        import reportlab
-        return 1
-    except ImportError:
-        return 0
-                  
-class my_install(install):
+class install_biopython(install):
     """Override the standard install to check for dependencies.
 
     This will just run the normal install, and then print warning messages
     if packages are missing.
+    
     """
+    def check_dependencies(self):
+        """S.check_dependencies() -> boolean
+
+        Return whether the installation should continue.
+
+        """
+        # There should be some way for the user to tell specify not to
+        # check dependencies.  For example, it probably should not if
+        # the user specified "-q".  However, I'm not sure where
+        # distutils stores that information.  Also, install has a
+        # --force option that gets saved in self.user_options.  It
+        # means overwrite previous installations.  If the user has
+        # forced an installation, should we also ignore dependencies?
+        dependencies = [
+            ("mxTextTools", is_mxTextTools_installed, 1,
+             "http://www.lemburg.com/files/python/mxExtensions.html"),
+            ("Martel", is_Martel_installed, 1,
+             "http://www.biopython.org/~dalke/Martel/"),
+            ("Numerical Python", is_Numpy_installed, 0,
+             "http://numpy.sourceforge.net/"),
+            ("Reportlab", is_reportlab_installed, 0,
+             "http://www.reportlab.com/download.html"),
+            ]
+
+        for name, is_installed_fn, is_required, url in dependencies:
+            if is_installed_fn():
+                continue
+            
+            print "*** %s *** is either not installed or out of date." % name
+            if is_required:
+                
+                print """
+This package is required for many Biopython features.  Please install
+it before you install Biopython."""
+                default = 0
+            else:
+                print """
+This package is optional, which means it is only used in a few
+specialized modules in Biopython.  You probably don't need this is you
+are unsure.  You can ignore this requirement, and install it later if
+you see ImportErrors."""
+                default = 1
+            print "You can find %s at %s." % (name, url)
+            print
+
+            return get_yes_or_no("Do you want to continue this installation?",
+                                 default)
+        
     def run(self):
-        # run the normal install and everthing
-        install.run(self)
+        if self.check_dependencies():
+            # Run the normal install.
+            install.run(self)
 
-        # now print warning messages if we are missing stuff
-        check_install("Martel", check_Martel,
-                      "http://www.biopython.org/~dalke/Martel/",
-                      "Version 0.5 or better required")
+class build_py_biopython(build_py):
+    def run(self):
+        # Check to see if Martel is installed.  If not, then install
+        # it automatically.
+        if not is_Martel_installed():
+            self.packages.append("Martel")
+        build_py.run(self)
 
-        check_install("mxTextTools", check_mxTextTools,
-                      "http://www.lemburg.com/files/python/mxExtensions.html")
-
-        check_install("Numerical Python", check_Numpy,
-                      "http://numpy.sourceforge.net/")
-
-        check_install("Reportlab", check_reportlab,
-                      "http://www.reportlab.com/download.html")
-
-class run_tests(Command):
+class test_biopython(Command):
     """Run all of the tests for the package.
 
     This is a automatic test run class to make distutils kind of act like
@@ -141,17 +130,14 @@ class run_tests(Command):
     python setup.py build
     python setup.py install
     python setup.py test
+    
     """
-    description = "Automatically run the test suite for the package."
-
-    user_options = []
-
-    def initialize_options(self):
+    description = "Automatically run the test suite for Biopython."
+    user_options = []  # distutils complains if this is not here.
+    def initialize_options(self):  # distutils wants this
         pass
-
-    def finalize_options(self):
+    def finalize_options(self):    # this too
         pass
-
     def run(self):
         this_dir = os.getcwd()
 
@@ -163,157 +149,204 @@ class run_tests(Command):
         # change back to the current directory
         os.chdir(this_dir)
 
+def can_import(module_name):
+    """can_import(module_name) -> module or None"""
+    try:
+        return __import__(module_name)
+    except ImportError:
+        return None
+    raise AssertionError, "how did I get here?"
+
+def is_Martel_installed():
+    old_path = sys.path[:]
+
+    # First, check the version of the Martel that's bundled with
+    # Biopython.
+    sys.path.insert(0, '')   # Make sure I'm importing the current one.
+    m = can_import("Martel")
+    sys.path = old_path
+    if m:
+        bundled_martel_version = m.__version__
+    else:
+        bundled_martel_version = None
+    del sys.modules["Martel"]   # Delete the old version of Martel.
+
+    # Now try and import a Martel that's not bundled with Biopython.
+    # To do that, I need to delete all the references to the current
+    # path from sys.path.
+    i = 0
+    while i < len(sys.path):
+        if sys.path[i] in ['', '.']:
+            del sys.path[i]
+        else:
+            i += 1
+    m = can_import("Martel")
+    sys.path = old_path
+    if m:
+        old_martel_version = m.__version__
+    else:
+        old_martel_version = None
+
+    installed = 0
+    # If the bundled one is the same or older, then ignore it
+    if old_martel_version and bundled_martel_version and \
+           bundled_martel_version <= old_martel_version:
+        installed = 1
+    return installed
+
+def is_mxTextTools_installed():
+    if can_import("TextTools"):
+        return 1
+    return can_import("mx.TextTools")
+
+def is_Numpy_installed():
+    return can_import("Numeric")
+
+def is_reportlab_installed():
+    return can_import("reportlab")
+                  
 # --- set up the packages we are going to install
 # standard biopython packages
-biopython_packages = ['Bio',
-                      'Bio.Ais',
-                      'Bio.Align',
-                      'Bio.Alphabet',
-                      'Bio.Application',
-                      'Bio.Blast',
-                      'Bio.builders',
-                      'Bio.builders.Search',
-                      'Bio.builders.SeqRecord',
-                      'Bio.CDD',
-                      'Bio.Clustalw',
-                      'Bio.config',
-                      'Bio.Crystal',
-                      'Bio.Data',
-                      'Bio.dbdefs',
-                      'Bio.ECell',
-                      'Bio.Emboss',
-                      'Bio.Encodings',
-                      'Bio.Enzyme',
-                      'Bio.expressions',
-                      'Bio.expressions.blast',
-                      'Bio.expressions.embl',
-                      'Bio.expressions.swissprot',
-                      'Bio.Fasta',
-                      'Bio.formatdefs',
-                      'Bio.FSSP',
-                      'Bio.GA',
-                      'Bio.GA.Crossover',
-                      'Bio.GA.Mutation',
-                      'Bio.GA.Repair',
-                      'Bio.GA.Selection',
-                      'Bio.GenBank',
-                      'Bio.Geo',
-                      'Bio.GFF',
-                      'Bio.Gobase',
-                      'Bio.Graphics',
-                      'Bio.HMM',
-                      'Bio.IntelliGenetics',
-                      'Bio.InterPro',
-                      'Bio.Kabat',
-                      'Bio.KDTree',
-                      'Bio.KEGG',
-                      'Bio.KEGG.Compound',
-                      'Bio.KEGG.Enzyme',
-                      'Bio.KEGG.Map',
-                      #'Bio.LocusLink',
-                      'Bio.Medline',
-                      'Bio.MetaTool',
-                      'Bio.Mindy',
-                      'Bio.MultiProc',
-                      'Bio.NBRF',
-                      'Bio.Ndb',
-                      'Bio.NeuralNetwork',
-                      'Bio.NeuralNetwork.BackPropagation',
-                      'Bio.NeuralNetwork.Gene',
-                      'Bio.Parsers',
-                      'Bio.Pathway',
-                      'Bio.Pathway.Rep',
-                      'Bio.PDB',
-                      'Bio.Prosite',
-                      'Bio.Rebase',
-                      'Bio.Saf',
-                      'Bio.SCOP',
-                      'Bio.SCOP.tests',
-                      'Bio.SeqIO',
-                      'Bio.SeqUtils',
-                      'Bio.SubsMat',
-                      'Bio.SVDSuperimposer',
-                      'Bio.SwissProt',
-                      'Bio.UniGene',
-                      'Bio.writers',
-                      'Bio.writers.SeqRecord',
-                      'Bio.WWW',
-                      ]
+PACKAGES = [
+    'Bio',
+    'Bio.Ais',
+    'Bio.Align',
+    'Bio.Alphabet',
+    'Bio.Application',
+    'Bio.Blast',
+    'Bio.builders',
+    'Bio.builders.Search',
+    'Bio.builders.SeqRecord',
+    'Bio.CDD',
+    'Bio.Clustalw',
+    'Bio.config',
+    'Bio.Crystal',
+    'Bio.Data',
+    'Bio.dbdefs',
+    'Bio.ECell',
+    'Bio.Emboss',
+    'Bio.Encodings',
+    'Bio.Enzyme',
+    'Bio.expressions',
+    'Bio.expressions.blast',
+    'Bio.expressions.embl',
+    'Bio.expressions.swissprot',
+    'Bio.Fasta',
+    'Bio.formatdefs',
+    'Bio.FSSP',
+    'Bio.GA',
+    'Bio.GA.Crossover',
+    'Bio.GA.Mutation',
+    'Bio.GA.Repair',
+    'Bio.GA.Selection',
+    'Bio.GenBank',
+    'Bio.Geo',
+    'Bio.GFF',
+    'Bio.Gobase',
+    'Bio.Graphics',
+    'Bio.HMM',
+    'Bio.IntelliGenetics',
+    'Bio.InterPro',
+    'Bio.Kabat',
+    'Bio.KDTree',
+    'Bio.KEGG',
+    'Bio.KEGG.Compound',
+    'Bio.KEGG.Enzyme',
+    'Bio.KEGG.Map',
+    #'Bio.LocusLink',
+    'Bio.Medline',
+    'Bio.MetaTool',
+    'Bio.Mindy',
+    'Bio.MultiProc',
+    'Bio.NBRF',
+    'Bio.Ndb',
+    'Bio.NeuralNetwork',
+    'Bio.NeuralNetwork.BackPropagation',
+    'Bio.NeuralNetwork.Gene',
+    'Bio.Parsers',
+    'Bio.Pathway',
+    'Bio.Pathway.Rep',
+    'Bio.PDB',
+    'Bio.Prosite',
+    'Bio.Rebase',
+    'Bio.Saf',
+    'Bio.SCOP',
+    'Bio.SCOP.tests',
+    'Bio.SeqIO',
+    'Bio.SeqUtils',
+    'Bio.SubsMat',
+    'Bio.SVDSuperimposer',
+    'Bio.SwissProt',
+    'Bio.UniGene',
+    'Bio.writers',
+    'Bio.writers.SeqRecord',
+    'Bio.WWW',
+    ]
 
-# Martel -- for building parsers
-martel_packages = ['Martel']
-# a flag to determine if we should install Martel
-INSTALL_MARTEL = 1
+EXTENSIONS = [
+    Extension('Bio.cSVM',
+              ['Bio/cSVMmodule.c',
+               'Bio/csupport.c'],
+              include_dirs=["Bio"]
+              ),
+    Extension('Bio.ckMeans',
+              ['Bio/ckMeansmodule.c',
+               'Bio/csupport.c'],
+              include_dirs=["Bio"]
+              ),
+    Extension('Bio.clistfns',
+              ['Bio/clistfnsmodule.c']
+              ),
+    Extension('Bio.cmathfns',
+              ['Bio/cmathfnsmodule.c',
+               'Bio/csupport.c'],
+              include_dirs=["Bio"]
+              ),
+    Extension('Bio.cstringfns',
+              ['Bio/cstringfnsmodule.c']
+              ),
+    Extension('Bio.cdistance',
+              ['Bio/cdistancemodule.c',
+               'Bio/csupport.c'],
+              include_dirs=["Bio"]
+              ),
+    Extension('Bio.cpairwise2',
+              ['Bio/cpairwise2module.c',
+               'Bio/csupport.c'],
+              include_dirs=["Bio"]
+              ),
+    Extension('Bio.trie',
+              ['Bio/triemodule.c',
+               'Bio/trie.c'],
+              include_dirs=["Bio"]
+              ),
+    Extension('Bio.cMarkovModel',
+              ['Bio/cMarkovModelmodule.c',
+               'Bio/csupport.c'],
+              include_dirs=["Bio"]
+              ),
+    #Extension('Bio.KDTree._KDTreecmodule',
+    #          ["Bio/KDTree/_KDTree.C", 
+    #           "Bio/KDTree/_KDTree.swig.C"],
+    #          libraries=["stdc++"]
+    #          ),
+    ]
 
-# BioSQL -- for interacting with relational databases
-biosql_packages = ['BioSQL']
-INSTALL_BIOSQL = 1
 
-# -- setup the packages list
-all_packages = biopython_packages
-# only install Martel if we have the flag set 
-if INSTALL_MARTEL:
-    all_packages.extend(martel_packages)
-if INSTALL_BIOSQL:
-    all_packages.extend(biosql_packages)
+# Install BioSQL.
+PACKAGES.append("BioSQL")
 
-setup(name='biopython', 
-      version='1.10',
-      author='The Biopython Consortium',
-      author_email='biopython@biopython.org',
-      url='http://www.biopython.org/',
-
-      cmdclass = {"install" : my_install,
-                  "test" : run_tests},
-      
-      packages = all_packages,
-      
-      ext_modules = [Extension('Bio.cSVM',
-                               ['Bio/cSVMmodule.c',
-                                'Bio/csupport.c'],
-                               include_dirs=["Bio"]
-                               ),
-                     Extension('Bio.ckMeans',
-                               ['Bio/ckMeansmodule.c',
-                                'Bio/csupport.c'],
-                               include_dirs=["Bio"]
-                               ),
-                     Extension('Bio.clistfns',
-                               ['Bio/clistfnsmodule.c']
-                               ),
-                     Extension('Bio.cmathfns',
-                               ['Bio/cmathfnsmodule.c',
-                                'Bio/csupport.c'],
-                               include_dirs=["Bio"]
-                               ),
-                     Extension('Bio.cstringfns',
-                               ['Bio/cstringfnsmodule.c']
-                               ),
-                     Extension('Bio.cdistance',
-                               ['Bio/cdistancemodule.c',
-                                'Bio/csupport.c'],
-                               include_dirs=["Bio"]
-                               ),
-                     Extension('Bio.cpairwise2',
-                               ['Bio/cpairwise2module.c',
-                                'Bio/csupport.c'],
-                               include_dirs=["Bio"]
-                               ),
-                     Extension('Bio.trie',
-                               ['Bio/triemodule.c',
-                                'Bio/trie.c'],
-                               include_dirs=["Bio"]
-                               ),
-                     Extension('Bio.cMarkovModel',
-                               ['Bio/cMarkovModelmodule.c',
-                                'Bio/csupport.c'],
-                               include_dirs=["Bio"]
-                               ),
-                     Extension('Bio.KDTree._KDTreecmodule',
-                               ["Bio/KDTree/_KDTree.C", 
-                                "Bio/KDTree/_KDTree.swig.C"],
-                               libraries=["stdc++"]
-                               ),
-                     ]
-      )
-
+setup(
+    name='biopython',
+    version='1.10',
+    author='The Biopython Consortium',
+    author_email='biopython@biopython.org',
+    url='http://www.biopython.org/',
+    cmdclass={
+        "install" : install_biopython,
+        "build_py" : build_py_biopython,
+        "test" : test_biopython,
+        },
+    packages=PACKAGES,
+    ext_modules=EXTENSIONS,
+    )
