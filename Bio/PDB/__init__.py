@@ -30,4 +30,6 @@ import Selection
 try:
     from NeighborSearch import NeighborSearch
 except ImportError:
-    print 'NeighborSearch skipped --- KDTree not installed.'
+    # remove extra print statement here which messes up regression testing
+    # print 'NeighborSearch skipped --- KDTree not installed.'
+    pass

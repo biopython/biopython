@@ -1,6 +1,6 @@
 from Bio.SCOP.Raf import to_one_letter_code
 from Bio.PDB.PDBExceptions import PDBException
-from Bio.PDB.Residue import Residue
+from Bio.PDB.Residue import Residue, DisorderedResidue
 from Numeric import sum
 
 
@@ -10,10 +10,10 @@ def is_aa(residue):
 
     residue --- a residue object OR a three letter amino acid code
     """
-    if isinstance(residue, Residue):
+    if isinstance(residue, Residue) or isinstance(residue, DisorderedResidue):
         residue=residue.get_resname()
     residue=residue.upper()
-    return to_one_letter_code.has_key(residue) 
+    return to_one_letter_code.has_key(residue)
 
 
 class Polypeptide(list):
