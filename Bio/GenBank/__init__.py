@@ -134,16 +134,33 @@ class Dictionary:
 class Iterator:
     """Iterator interface to move over a file of GenBank entries one at a time.
     """
-    def __init__(self, handle, parser = None):
+    def __init__(self, handle, parser = None, has_header = 0):
         """Initialize the iterator.
 
         Arguments:
         o handle - A handle with GenBank entries to iterate through.
         o parser - An optional parser to pass the entries through before
         returning them. If None, then the raw entry will be returned.
+        o has_header - Whether or not the file to iterate over has one of
+        those GenBank headers (ie. if you downloaded it directly from
+        GenBank). If so, we'll iterate over the header to get past it, and
+        then the iterator will be set up to return the first record in
+        the file.
         """
-        self._reader = RecordReader.StartsWith(handle, "LOCUS")
-        # self._reader = RecordReader.EndsWith(handle, "//\n")
+        if has_header:
+            first_line = handle.readline()
+            assert first_line.find("Genetic Sequence Data Bank") >= 0, \
+                   "Doesn't seem to have a GenBank header."
+            while 1:
+                cur_line = handle.readline()
+                if cur_line.find("reported sequences") >= 0:
+                    break
+
+            # read off two more lines and we are ready to go
+            handle.readline()
+            handle.readline()
+            
+        self._reader = RecordReader.StartsWith(handle, "LOCUS")          
         self._parser = parser
 
     def next(self):
