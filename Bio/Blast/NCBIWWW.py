@@ -148,6 +148,9 @@ class _Scanner:
         # Read the RID line, for version 2.0.12 (2.0.11?) and above.
         attempt_read_and_call(uhandle, consumer.noevent, start='RID')
 
+        # Brad Chapman noticed a '<p>' line in BLASTN 2.1.1
+        attempt_read_and_call(uhandle, consumer.noevent, start='<p>')
+
         # Read the Query lines and the following blank line.
         read_and_call(uhandle, consumer.query_info, contains='Query=')
         read_and_call_until(uhandle, consumer.query_info, blank=1)
@@ -203,9 +206,15 @@ class _Scanner:
                       start='Sequences producing')
         read_and_call(uhandle, consumer.noevent, blank=1)
 
-        # Read the descriptions and the following blank line.
-        read_and_call_until(uhandle, consumer.description, blank=1)
-        read_and_call_while(uhandle, consumer.noevent, blank=1)
+        # Read the descriptions
+        read_and_call_while(uhandle, consumer.description, blank=0, start='<a')
+
+        # two choices here, either blank lines or a </PRE>
+        if attempt_read_and_call(uhandle, consumer.noevent, blank=1):
+            read_and_call_while(uhandle, consumer.noevent, blank=1)
+        # otherwise we've got a </PRE> (introduced in 2.1.1)
+        else:
+            read_and_call(uhandle, consumer.noevent, contains='</PRE>')
 
         consumer.end_descriptions()
 
