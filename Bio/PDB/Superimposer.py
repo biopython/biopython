@@ -1,4 +1,4 @@
-from Numeric import Float0
+from Numeric import Float0, zeros
 
 from Bio.SVDSuperimposer import SVDSuperimposer
 from Bio.PDB.PDBExceptions import PDBException
