@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-from Numeric import array, sum, sqrt, arccos, matrixmultiply, transpose
+from Numeric import array, sum, sqrt, arccos, matrixmultiply, transpose, cos, sin, zeros
 from LinearAlgebra import determinant
 from MLab import eye
 import sys
