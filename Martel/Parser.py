@@ -40,7 +40,8 @@ except ImportError:
 # These exceptions are liable to change in the future
 class ParserException(_exceptions.SAXException):
     """used when a parse cannot be done"""
-    pass
+    def setLocation(self, text):
+        self._msg += "; in %s" % repr(text)
 
 class ParserPositionException(ParserException):
     def __init__(self, pos):
@@ -52,6 +53,14 @@ class ParserPositionException(ParserException):
         self.pos += offset
         self._msg = "error parsing at or beyond character %d" % self.pos
         return self
+
+class ParserIncompleteException(ParserPositionException):
+    def __init__(self, pos):
+        ParserPositionException.__init__(self, pos)
+        self._msg += " (unparsed text remains)"
+    def __iadd__(self, offset):
+        ParserPositionException.__iadd__(self, offset)
+        self._msg += " (unparsed text remains)"
 
 class ParserRecordException(ParserException):
     """used by the RecordParser when it can't read a record"""
@@ -214,7 +223,15 @@ class Parser(xmlreader.XMLReader):
 
         self.debug_level = debug_level
         self.attrlookup = attrlookup
-        
+
+    def copy(self):
+        parser = Parser(self.tagtable, (self.want_groupref_names,
+                                        self.debug_level, self.attrlookup))
+        parser.setContentHandler(self.getContentHandler())
+        parser.setErrorHandler(self.getErrorHandler())
+        parser.setDTDHandler(self.getDTDHandler())
+        return parser
+            
     def __str__(self):
         x = StringIO()
         pprint.pprint(self.tagtable, x)
@@ -258,9 +275,9 @@ class Parser(xmlreader.XMLReader):
             self._err_handler.fatalError(result)
         
         else:
-            # Reached EOF
+            # Parsed a record, but extra text remains
             pos = result
-            self._err_handler.fatalError(ParserPositionException(pos))
+            self._err_handler.fatalError(ParserIncompleteException(pos))
         
         # Send an endDocument event even after errors
         self._cont_handler.endDocument()
@@ -270,7 +287,7 @@ class Parser(xmlreader.XMLReader):
 
 class RecordParser(xmlreader.XMLReader):
     """Parse the input data a record at a time"""
-    def __init__(self, format_name, record_tagtable,
+    def __init__(self, format_name, attrs, record_tagtable,
                  (want_groupref_names, debug_level, attrlookup),
                  make_reader, reader_args = ()):
         """parse the input data a record at a time
@@ -288,6 +305,7 @@ class RecordParser(xmlreader.XMLReader):
         xmlreader.XMLReader.__init__(self)
         
         self.format_name = format_name
+        self.attrs = attrs
         assert type(record_tagtable) == type( () ), \
                "mxTextTools only allows a tuple tagtable"
         self.tagtable = record_tagtable
@@ -296,6 +314,17 @@ class RecordParser(xmlreader.XMLReader):
         self.attrlookup = attrlookup
         self.make_reader = make_reader
         self.reader_args = reader_args
+
+    def copy(self):
+        parser =  RecordParser(self.format_name, self.attrs, self.tagtable,
+                               (self.want_groupref_names, self.debug_level,
+                                self.attrlookup),
+                               self.make_reader, self.reader_args)
+        parser.setContentHandler(self.getContentHandler())
+        parser.setErrorHandler(self.getErrorHandler())
+        parser.setDTDHandler(self.getDTDHandler())
+        return parser
+
     
     def __str__(self):
         x = StringIO()
@@ -326,8 +355,8 @@ class RecordParser(xmlreader.XMLReader):
 
         if self.want_groupref_names:
             _match_group.clear()
-        
-        self._cont_handler.startElement(self.format_name, _attribute_list)
+
+        self._cont_handler.startElement(self.format_name, self.attrs)
         filepos = 0  # can get mixed up with DOS style "\r\n"
         while 1:
             try:
@@ -385,9 +414,9 @@ class RecordParser(xmlreader.XMLReader):
         pass
 
 # This is entirely too complex, but I don't see a way to simplify it
-class HeaderFooterParser(xmlreader.XMLReader):
+class obsolete_HeaderFooterParser(xmlreader.XMLReader):
     """Header followed by 0 or more records followed by a footer"""
-    def __init__(self, format_name,
+    def __init__(self, format_name, attrs,
                  make_header_reader, header_reader_args, header_tagtable,
                  make_reader, reader_args, record_tagtable,
                  make_footer_reader, footer_reader_args, footer_tagtable,
@@ -395,6 +424,7 @@ class HeaderFooterParser(xmlreader.XMLReader):
         xmlreader.XMLReader.__init__(self)
 
         self.format_name = format_name
+        self.attrs = attrs
 
         self.make_header_reader = make_header_reader
         self.header_reader_args = header_reader_args
@@ -427,7 +457,7 @@ class HeaderFooterParser(xmlreader.XMLReader):
 
     def parseFile(self, fileobj):
         self._cont_handler.startDocument()
-        self._cont_handler.startElement(self.format_name, _attribute_list)
+        self._cont_handler.startElement(self.format_name, self.attrs)
 
         if self.want_groupref_names:
             _match_group.clear()
@@ -644,7 +674,7 @@ class HeaderFooterParser(xmlreader.XMLReader):
 
 class HeaderFooterParser(xmlreader.XMLReader):
     """Header followed by 0 or more records followed by a footer"""
-    def __init__(self, format_name,
+    def __init__(self, format_name, attrs,
                  make_header_reader, header_reader_args, header_tagtable,
                  make_reader, reader_args, record_tagtable,
                  make_footer_reader, footer_reader_args, footer_tagtable,
@@ -652,6 +682,7 @@ class HeaderFooterParser(xmlreader.XMLReader):
         xmlreader.XMLReader.__init__(self)
 
         self.format_name = format_name
+        self.attrs = attrs
 
         self.make_header_reader = make_header_reader
         self.header_reader_args = header_reader_args
@@ -675,6 +706,19 @@ class HeaderFooterParser(xmlreader.XMLReader):
                         self.footer_tagtable), x)
         return "header footer records: " + x.getvalue()
 
+    def __copy__(self):
+        parser = HeaderFooterParser(self.format_name, self.attrs,
+    self.make_header_reader, self.header_reader_args, self.header_tagtable,
+    self.make_reader, self.reader_args, self.record_tagtable,
+    self.make_footer_reader, self.footer_reader_args, self.footer_tagtable,
+    (self.want_groupref_names, self.debug_level, self.attrlookup))
+
+        parser.setContentHandler(self.getContentHandler())
+        parser.setErrorHandler(self.getErrorHandler())
+        parser.setDTDHandler(self.getDTDHandler())
+        return parser
+
+
     def parseString(self, s):
         strfile = StringIO(s)
         self.parseFile(strfile)
@@ -684,7 +728,7 @@ class HeaderFooterParser(xmlreader.XMLReader):
 
     def parseFile(self, fileobj):
         self._cont_handler.startDocument()
-        self._cont_handler.startElement(self.format_name, _attribute_list)
+        self._cont_handler.startElement(self.format_name, self.attrs)
 
         if self.want_groupref_names:
             _match_group.clear()
