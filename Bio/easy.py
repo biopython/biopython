@@ -11,7 +11,7 @@ Bio.easy: some functions to ease the use of Biopython
 
 from __future__ import generators # requires Python 2.2
 
-__version__ = "$Revision: 1.2 $"
+__version__ = "$Revision: 1.3 $"
 # $Source: /home/bartek/cvs2bzr/biopython_fastimport/cvs_repo/biopython/Bio/Attic/easy.py,v $
 
 import copy
@@ -576,19 +576,32 @@ def forward_complement(seq):
 
     stolen from a broken BioPython sequtils.py
 
-    WARNING: doesn't work with RNA (uracil)
-    
     >>> forward_complement(Seq('aaatttc'))
     Seq('TTTAAAG', Alphabet())
+    >>> forward_complement(Seq('aaauuuc'))
+    Seq('UUUAAAG', Alphabet())
     """
     return _complement(seq, reverse=0)
 
+def _forward_complement_list_with_table(table, seq):
+    return [table[x] for x in seq.tostring().upper()]
+
+from Bio.Data.IUPACData import ambiguous_dna_complement
+ambiguous_rna_complement = ambiguous_dna_complement.copy()
+ambiguous_rna_complement["A"] = "U"
+ambiguous_rna_complement["U"] = "A"
+del ambiguous_rna_complement["T"]
+
 def _forward_complement_list(seq):
     """
-    >>> _forward_complement_list(Seq('aaatttc'))
-    ['C', 'T', 'T', 'T', 'A', 'A', 'A']
+    assumes DNA, then tries RNA
     """
-    return [IUPACData.ambiguous_dna_complement[x] for x in seq.tostring().upper()]
+    try:
+        return _forward_complement_list_with_table(ambiguous_dna_complement, seq)
+    except KeyError, err:
+        if err[0] == "U":
+            return _forward_complement_list_with_table(ambiguous_rna_complement, seq)
+        raise
 
 def _complement(seq, reverse=0):
     """
