@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 """Example of generating a substitution matrix from an alignment.
-
-Requires SubsMat.py and FreqTable.py from Iddo."""
+"""
 # standard library
 import sys
 
@@ -12,11 +11,15 @@ from Bio.Alphabet import IUPAC
 from Bio.Align import AlignInfo
 
 # get an alignment object from a Clustalw alignment output
-c_align = Clustalw.parse_file('test.aln', IUPAC.unambiguous_dna)
+c_align = Clustalw.parse_file('protein.aln', IUPAC.protein)
 summary_align = AlignInfo.SummaryInfo(c_align)
 
 # get a replacement dictionary and accepted replacement matrix
-replace_info = summary_align.replacement_dictionary(['N'])
+# exclude all amino acids that aren't charged polar
+replace_info = summary_align.replacement_dictionary(["G", "A", "V", "L", "I",
+                                                     "M", "P", "F", "W", "S",
+                                                     "T", "N", "Q", "Y", "C"])
+
 my_arm = SubsMat.SeqMat(replace_info)
 
 print replace_info
