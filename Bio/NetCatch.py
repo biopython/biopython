@@ -107,7 +107,7 @@ class NetCatch:
         url_opener = urllib.URLopener()
         for label in labels:
             base_path =  self.base_path
-            name = '%s%d.htm' % ( label, i )
+            name = '%s.htm' % ( label )
             full_path = os.path.join( base_path, name )
             out_handle = open( full_path , "wb" )
             url = self._urls[ label ]
@@ -121,7 +121,7 @@ class NetCatch:
         url_opener = urllib.URLopener()
         for index in indices:
             base_path =  self.base_path
-            name = '%s%d.htm' % ( label, i )
+            name = '%s.htm' % self._labels[ index ]
             full_path = os.path.join( base_path, name )
             out_handle = open( full_path , "wb" )
             label = self._labels[ index ]
@@ -136,7 +136,7 @@ class NetCatch:
         url_opener = urllib.URLopener(  )
         for index in range( low, hi ):
             base_path =  self.base_path
-            name = '%s%d.htm' % ( label, i )
+            name = '%s.htm' % self._labels[ index ]
             full_path = os.path.join( base_path, name )
             out_handle = open( full_path , "wb" )
             label = self._labels[ index ]
@@ -147,11 +147,4 @@ class NetCatch:
             url_opener.close( )
             out_handle.close( )
 
-if( __name__ == '__main__' ):
-    net_catch = NetCatch( [ 'net_catch' ] )
-    net_catch.add_url( "CA44_HUMAN", "http://srs6.ebi.ac.uk/srs6bin/cgi-bin/wgetz?-newId+-e+[SWall-ACC:P53420]" )
-    net_catch.add_url( "CA24_ASCSU", "http://srs6.ebi.ac.uk/srs6bin/cgi-bin/wgetz?-newId+-e+[SWall-ACC:P27393]" )
-    net_catch.add_url( "CA54_CANFA", "http://srs6.ebi.ac.uk/srs6bin/cgi-bin/wgetz?-newId+-e+[SWall-ACC:Q28247]" )
-    net_catch.get_all_urls()
-    print net_catch
 
