@@ -39,3 +39,8 @@ __all__ = [
     "WWW",
     "utils"
     ]
+
+import FormatRegistry
+formats = FormatRegistry.FormatRegistry("Bio")
+register_format = formats.register_format
+link_format = formats.link

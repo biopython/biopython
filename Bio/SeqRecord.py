@@ -9,7 +9,15 @@
 # annotations, and one of them will be a "vocabulary" to distinguish
 # between differences in vocabulary. :)
 
-class SeqRecord:
+from Bio import FormatIO
+
+# Should this be in the module namespace or the record namespace?
+io = FormatIO.FormatIO("SeqRecord",
+                       default_input_format = "sequence",
+                       default_output_format = "fasta")
+
+
+class SeqRecord:                           
     def __init__(self, seq, id = "<unknown id>", name = "<unknown name>",
                  description = "<unknown description>"):
         self.seq = seq
