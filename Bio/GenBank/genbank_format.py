@@ -616,6 +616,7 @@ feature_qualifier_names = (
                       #   repeat_region
     "sec_str_type",   # RefSeq invention, no idea what it means
     "segment",        # Name of viral or phage segment sequenced
+    "selenocysteine",
     "sequenced_mol",  # Molecule from which the sequence was obtained
     "serotype",       # Variety of a species (usually bacteria or virus)
                       #   characterized by its antigenic properties
