@@ -1,0 +1,62 @@
+test_Enzyme
+testing lipoprotein.txt
+*************** start_record
+identification : ID   3.1.1.34
+description    : DE   Lipoprotein lipase.
+alternate_name : AN   Clearing factor lipase.
+alternate_name : AN   Diglyceride lipase.
+alternate_name : AN   Diacylglycerol lipase.
+catalytic_activ: CA   Triacylglycerol + H(2)O = diacylglycerol + a fatty acid an
+comment        : CC   -!- Hydrolyses triacylglycerols in chylomicrons and very l
+comment        : CC       lipoproteins (VLDL).
+comment        : CC   -!- Also hydrolyses diacylglycerol.
+disease        : DI   Hyperlipoproteinemia type IA; MIM:238600.
+prosite_referen: PR   PROSITE; PDOC00110;
+databank_refere: DR   BRENDA; 3.1.1.34.
+databank_refere: DR   EMP/PUMA; 3.1.1.34.
+databank_refere: DR   WIT; 3.1.1.34.
+databank_refere: DR   KYOTO UNIVERSITY LIGAND CHEMICAL DATABASE; 3.1.1.34.
+databank_refere: DR   P11151, LIPL_BOVIN;  P11153, LIPL_CAVPO;  P11602, LIPL_CHI
+databank_refere: DR   P55031, LIPL_FELCA;  P06858, LIPL_HUMAN;  P11152, LIPL_MOU
+databank_refere: DR   O46647, LIPL_MUSVI;  P49060, LIPL_PAPAN;  P49923, LIPL_PIG
+databank_refere: DR   Q06000, LIPL_RAT  ;  Q29524, LIPL_SHEEP;
+terminator     : //
+*************** end_record
+testing proline.txt
+*************** start_record
+identification : ID   5.1.1.4
+description    : DE   Proline racemase.
+catalytic_activ: CA   L-proline = D-proline.
+databank_refere: DR   BRENDA; 5.1.1.4.
+databank_refere: DR   EMP/PUMA; 5.1.1.4.
+databank_refere: DR   WIT; 5.1.1.4.
+databank_refere: DR   KYOTO UNIVERSITY LIGAND CHEMICAL DATABASE; 5.1.1.4.
+terminator     : //
+*************** end_record
+testing valine.txt
+*************** start_record
+identification : ID   4.1.1.14
+description    : DE   Valine decarboxylase.
+catalytic_activ: CA   L-valine = 2-methylpropanamine + CO(2).
+cofactor       : CF   Pyridoxal-phosphate.
+comment        : CC   -!- Also acts on L-leucine.
+databank_refere: DR   BRENDA; 4.1.1.14.
+databank_refere: DR   EMP/PUMA; 4.1.1.14.
+databank_refere: DR   WIT; 4.1.1.14.
+databank_refere: DR   KYOTO UNIVERSITY LIGAND CHEMICAL DATABASE; 4.1.1.14.
+terminator     : //
+*************** end_record
+testing lactate.txt
+*************** start_record
+identification : ID   5.1.2.1
+description    : DE   Lactate racemase.
+alternate_name : AN   Lacticoracemase.
+alternate_name : AN   Lactic acid racemase.
+alternate_name : AN   Hydroxyacid racemase.
+catalytic_activ: CA   (S)-lactate = (R)-lactate.
+databank_refere: DR   BRENDA; 5.1.2.1.
+databank_refere: DR   EMP/PUMA; 5.1.2.1.
+databank_refere: DR   WIT; 5.1.2.1.
+databank_refere: DR   KYOTO UNIVERSITY LIGAND CHEMICAL DATABASE; 5.1.2.1.
+terminator     : //
+*************** end_record
