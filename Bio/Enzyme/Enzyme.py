@@ -11,18 +11,18 @@ http://www.expasy.ch/enzyme/
 
 
 Classes:
-Scanner     Scans Enzyme data.
+_Scanner     Scans Enzyme data.
 
 """
 
 from Bio import File
 from Bio.ParserSupport import *
 
-class Scanner:
+class _Scanner:
     """Scans Enzyme data.
 
     Tested with:
-    XXX ??
+    Release 24
     """
 
     def feed(self, handle, consumer):
