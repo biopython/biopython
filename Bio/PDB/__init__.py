@@ -4,6 +4,7 @@ __all__=[
 "Atom",
 "Chain",
 "Entity",
+"MMCIFParser",
 "Model",
 "NeighborSearch",
 "PDBExceptions",
