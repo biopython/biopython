@@ -3,6 +3,242 @@ or deprecated in favor of other modules. This provides some quick and easy
 to find documentation about how to update your code to work again.
 
 Bio.sequtils
-------------
+============
 Deprecated as of Release 1.30.
 Use Bio.SeqUtils instead.
+
+
+Bio.kMeans and Bio.xkMeans
+==========================
+
+The k-Means algorithm is an algorithm for unsupervised clustering of data.
+Biopython includes an implementation of the k-means clustering algorithm
+in kMeans.py. Recently, a larger set of clustering algorithms entered
+Biopython as Bio.Cluster. As the kcluster routine in Bio.Cluster also implements
+the k-means clustering algorithm, the kMeans.py module has been deprecated.
+Below you will find a description of how to switch from kMeans.py to
+Bio.Cluster's kcluster.
+
+The function kcluster in Bio.Cluster performs k-means or k-medians clustering.
+The corresponding function in kMeans.py is called cluster. This function takes
+the following arguments:
+
+o data
+o k
+o distance_fn
+o init_centroids_fn
+o calc_centroid_fn
+o max_iterations
+o update_fn
+
+The function kcluster in Bio.Cluster takes the following arguments:
+
+o data
+o nclusters
+o mask
+o weight
+o transpose
+o npass
+o method
+o dist
+o initialid
+
+
+Arguments for kMeans.py's cluster, and their equivalents in Bio.Cluster
+-----------------------------------------------------------------------
+
+
+o data:
+
+In kMeans.py, data is a list of vectors, each containing the same number of
+data points. Within the context of clustering genes based on their gene
+expression values, each vector would correspond to the gene expression data of
+one particular gene, and the values in the vector would correspond to the
+measured gene expression value by the different microarrays. The cluster
+routine in kMeans.py always performs a row-wise clustering by grouping vectors.
+
+The argument data to Bio.Cluster's kcluster has the same structure as in
+kMeans.py. However, Bio.Cluster allows row-wise and column-wise clustering by
+the transpose argument. If transpose==0 (the default value), kcluster performs
+row-wise clustering, consistent with kMeans.py. If transpose==1, kcluster
+performs column-wise clustering. The same behavior can be obtained, of course,
+by transposing the data array before calling kcluster.
+
+
+o k:
+
+The desired number of clusters is specified by the input argument k in
+kMeans.py. The corresponding argument in Bio.Cluster's kcluster is nclusters.
+
+o distance_fn:
+
+In kMeans.py, the argument distance_fn represents the distance function to
+calculate the distances between items and cluster centroids. This argument
+corresponds to a true Python function. The default value is the Euclidean
+distance, implemented as distance.euclidean in distance.py. User-defined
+distance functions can also be used.
+
+The k-means routine in Bio.Cluster does not allow user-specified distance
+functions. Instead, it provides the following nine built-in distance functions,
+depending on the argument dist:
+
+dist=='e': Euclidean distance
+dist=='h': Harmonically summed Euclidean distance
+dist=='b': City-block distance
+dist=='c': Pearson correlation
+dist=='a': absolute value of the Pearson correlation
+dist=='u': uncentered correlation
+dist=='x': absolute uncentered correlation
+dist=='s': Spearmans rank correlation
+dist=='k': Kendalls tau
+
+User-defined distance functions are possible only by modifying the C code in
+cluster.c (which may not be as hard as it sounds). The default distance function
+is the Euclidean distance (distance=='e'). Note that in Bio.Cluster the
+Euclidean distance is defined as the sum of squared differences, whereas in
+kMeans.py the square root of this quantity is taken. This does not affect the
+clustering result.
+
+o init_centroids_fn:
+
+This function specifies the initial choice for the cluster centroids. By
+default, cluster in kMeans.py uses a random initial choice of cluster centroids
+by randomly choosing k data vectors from the input vectors in the data input
+argument. Alternatively, the user can specify a user-defined function to choose
+the initial cluster centroids.
+
+In Bio.Cluster, the k-means algorithm in kcluster starts from an initial cluster
+assignment instead of an initial choice of cluster centroids. As far as I know,
+these two initialization methods are equivalent in practice. Similar to the
+cluster routine in kMeans.py, Bio.Cluster's kcluster performs a random initial
+assignment of items to clusters. Alternatively, users can specify a
+(deterministic) initial clustering via the initialid argument. This argument is
+None by default. If not None, it should be a 1D array (or list) containing the
+number (between 0 and nclusters-1) of the cluster to which each item is
+assigned initially.
+
+Note that the k-means routine in Bio.Cluster performs automatic repeats of the
+algorithm, each time starting from a different random initial clustering. See
+the comment for the npass argument below.
+
+o calc_centroid_fn:
+
+This argument specifies how to calculate the cluster centroids, given the data
+vectors of the items that belong to each cluster. By default, the mean over the
+vectors is calculated. A user-defined function can also be used. 
+
+Bio.Cluster's kcluster does not allow user-defined functions. Instead, the
+method to calculate the cluster centroid is determined by the argument method,
+which can be either 'a' (arithmetic mean) or 'm' (median). The default is to
+calculate the mean ('a').
+
+o max_iterations:
+
+The cluster routine in kMeans.py has an argument max_iterations, which is used
+to stop the iteration it the routine does not converge after the given number of
+iterations.
+
+The kcluster routine in Bio.Cluster does not have such an argument. The failure
+of a k-means algorithm to converge is due to the occurrence of periodic
+clustering solutions during the course of the k-means algorithm. The kcluster
+routine in Bio.Cluster automatically checks for the occurrence of such a
+periodicity in the solutions. If a periodic behavior is detected, the algorithm
+is interrupted and the last clustering solution is returned. Accordingly, the
+kcluster routine is guaranteed to return a clustering solution. Also see the
+discussion of the npass argument below.
+
+o update_fn:
+
+The argument update_fn to cluster in kMeans.py is a hook function that is
+called at the beginning of every iteration and passed the iteration number,
+cluster centroids, and current cluster assignments. It is used by xkMeans.py,
+which provides a visualization of k-means clustering. Currently there is no
+equivalent in Bio.Cluster.
+
+ 
+Other arguments for Bio.Cluster's kcluster.
+-------------------------------------------
+
+Three arguments in Bio.Cluster's kcluster do not have a direct equivalent in
+kMeans.py's cluster.
+
+o mask:
+
+Microarray experiments tend to suffer from a large number of missing data. The
+argument mask to Bio.Cluster's kcluster lets the user specify which data are
+missing. This argument is an array with the same shape as data, and contains
+a 1 for each data point that is present, and a 0 for a missing data point:
+
+  mask[i,j]==1: data[i,j] is valid
+  mask[i,j]==0: data[i,j] is a missing data point
+
+Missing data points are ignored by the clustering algorithm. By default, mask
+is an array containing 1's everywhere.
+
+o weight:
+
+The weight argument is used to put different weights on different data point.
+For example, when clustering genes based on their gene expression profile, we
+may want to attach a bigger weight to some microarrays compared to others. By
+default, the weight argument contains equal weights of 1.0 for all data points.
+Note that for row-wise clustering, the weight argument is a 1D vector whose
+length is equal to the number of columns. For column-wise clustering, the length
+of this argument is equal to the number of rows.
+
+o npass:
+
+Typical implementations of the k-means clustering algorithm rely on a random
+initialization. Unlike Self-Organizing Maps, however, the k-means algorithm has
+a clearly defined goal, which is to minimize the within-cluster sum of
+distances. Different k-means clustering solutions (based on different initial
+clusterings) can therefore be compared to each other directly. In order to
+increase the chance of finding the optimal k-means clustering solution, the
+k-means routine in Bio.Cluster automatically repeats the algorithm npass times,
+each time starting from a different initial random clustering. The best
+clustering solution, as well as in how many of the npass attempts it was found,
+is returned to the user. For more information, see the output variable nfound
+below.
+
+
+Return values
+-------------
+
+The cluster routine in kMeans.py returns two values:
+
+o centroids
+o clusters
+
+The kcluster routine in Bio.Cluster returns four values:
+
+o clusterid
+o centroids
+o error
+o nfound
+
+
+o centroids:
+
+The centroids return value contains the centroids of the k clusters that were
+found, and corresponds to the centroids return value from Bio.Cluster's
+kcluster routine.
+
+o clusters:
+
+The clusters return value contains the number of the cluster to which each
+vector was assigned. The corresponding return value in Bio.Cluster's kcluster
+is clusterid.
+
+o error:
+
+The error return value from Bio.Cluster's kcluster is the within-cluster sum of
+distances for the optimal clustering solution that was found. This value can be
+used to compare different clustering solutions to each other.
+
+o nfound:
+
+The nfound return value from Bio.Cluster's kcluster shows in how many of the
+npass runs the optimal clustering solution was found. Accordingly, nfound is at
+least 1 and at most equal to npass. A large value for nfound is an indication
+that the clustering solution that was found is optimal. On the other hand, if
+nfound is equal to 1, it is very well possible that a better clustering solution
+exists than the one found by kcluster.
