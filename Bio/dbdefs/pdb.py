@@ -8,6 +8,7 @@ from _support import *
 
 from Martel import *
 
+not_header_expr = AssertNot(Str("HEADER"))
 pdb_rcsb_cgi = CGIDB(
     name="pdb-rcsb-cgi",
     cgi="http://www.rcsb.org/pdb/cgi/export.cgi",
@@ -17,10 +18,13 @@ pdb_rcsb_cgi = CGIDB(
             ("compression", "None")
             ],
     key="pdbId",
-    failure_cases=[(has_str("File not found"), "ID does not exist")],
+    # failure cases for file not found are making retrieval freeze up 
+    # while Martel checks for them, for some reason I can't figure
+    # so we go with checking to make sure results look like PDB
+    # failure_cases=[(has_str("File not found"), "ID does not exist")],
+    failure_cases=[(not_header_expr, "results do not look like PDB format")]
     )
 
-not_header_expr = AssertNot(Str("HEADER"))
 pdb_ebi_cgi = CGIDB(
     name="pdb-ebi-cgi",
     cgi="http://www.ebi.ac.uk/cgi-bin/emblfetch",

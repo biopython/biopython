@@ -13,3 +13,9 @@ prodoc_expasy_cgi = CGIDB(
     params=[],
     key="",
     )
+
+prodoc = DBGroup(
+        name = "prodoc",
+        behavior = "serial"
+    )
+prodoc.add(prodoc_expasy_cgi)

@@ -1,10 +1,16 @@
 test_Registry
 Retrieval of EMBL records from various sources. ... ok
 Retrieval of XML EMBL records in BSML format. ... ok
+Retrieval of FASTA protein and nucleotide sequences. ... ok
 Retrieval of GenBank from various sources. ... ok
+Retrieval of InterPro data from EBI. ... ok
+Retrieval of Medline data from various locations. ... ok
+Retrieval of PDB data from various locations. ... ok
+Retrieval of Prodoc data from various locations. ... ok
+Retrieval of Prosite data from various locations. ... ok
 Retrieval of Swissprot records from various sources. ... ok
 
 ----------------------------------------------------------------------
-Ran 4 tests in 6.868s
+Ran 10 tests in 31.769s
 
 OK

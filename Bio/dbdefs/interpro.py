@@ -15,3 +15,9 @@ interpro_ebi_cgi = CGIDB(
     key="ac",
     failure_cases=[(has_str("No InterPro entry"), "No InterPro entry")]
     )
+
+interpro = DBGroup(
+        name = "interpro",
+        behavior = "serial"
+    )
+interpro.add(interpro_ebi_cgi)

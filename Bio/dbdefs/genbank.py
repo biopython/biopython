@@ -44,3 +44,14 @@ protein_genbank_eutils = EUtilsDB(
         rettype = "gp",
         failure_cases = ncbi_failures+[(not_exist_expr, "GI does not exist")]
         )
+
+gb_nucleotide = DBGroup(
+        name = "genbank-nucleotide",
+        behavior = "serial"
+    )
+gb_nucleotide.add(nucleotide_genbank_eutils)
+
+gb_protein = DBGroup(
+        name = "genbank-protein",
+        behavior = "serial")
+gb_protein.add(protein_genbank_eutils)

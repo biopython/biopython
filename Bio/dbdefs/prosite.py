@@ -16,3 +16,9 @@ prosite_expasy_cgi = CGIDB(
     failure_cases=[(has_str("There is currently no PROSITE entry"),
               "No PROSITE entry")],
     )
+
+prosite = DBGroup(
+        name = "prosite",
+        behavior = "serial"
+    )
+prosite.add(prosite_expasy_cgi)

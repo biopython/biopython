@@ -12,10 +12,6 @@ http://www.ebi.ac.uk/interpro/
 Classes:
 Record             Holds interpro sequence data.
 InterProParser     Parses interpro sequence data into a Record object.
-
-
-
-
 """
 
 __all__ = [
@@ -60,8 +56,6 @@ class Record( dict ):
             else:
                 out = out + '%s: %s\n' % ( key, self[ key ] )
         return out
-
-
 
 class InterProParser(  sgmllib.SGMLParser ):
     """Parses InterPro sequence data into a Record object.
