@@ -61,13 +61,12 @@ try:
     c.sequence('EFG\n')
     c.end_sequence()
 
-    assert len(c.records) == 1, "consumer should have 1 record"
-    assert c.records[0].title == "This is a title", "title is incorrect"
-    assert c.records[0].sequence == "ABCDEFG", "sequence is incorrect"
+    assert c.record.title == "This is a title", "title is incorrect"
+    assert c.record.sequence == "ABCDEFG", "sequence is incorrect"
 
     c.start_sequence()
     c.end_sequence()
-    assert len(c.records) == 2, "consumer should have 2 records"
+    assert c.record.title == '', "record should be cleared"
 except Exception, x:
     raise TestFailed, "Consumer (%s)" % x
 

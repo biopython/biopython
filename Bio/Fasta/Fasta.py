@@ -58,27 +58,12 @@ class Scanner:
     """Scans a FASTA-formatted file.
 
     Methods:
-    feed      Feed in FASTA data for scanning.
-    feed_one  Feed in FASTA data, but only consume 1 record.
+    feed   Feed in one FASTA record.
 
     """
 
     def feed(self, uhandle, consumer):
         """feed(self, uhandle, consumer)
-
-        Feed in FASTA data for scanning.  uhandle must be an UndoHandle
-        that contains the keyword information.  consumer is a Consumer
-        object that will receive events as the record is scanned.
-
-        """
-        assert isinstance(uhandle, File.UndoHandle), \
-               "uhandle must be an instance of Bio.File.UndoHandle"
-            
-        while not is_blank_line(uhandle.peekline()):   # Am I done yet?
-            self.feed_one(uhandle, consumer)
-
-    def feed_one(self, uhandle, consumer):
-        """feed_one(self, uhandle, consumer)
 
         Feed in FASTA data for scanning.  Only consumes a single
         record.  uhandle must be an UndoHandle.  consumer is a
@@ -86,6 +71,9 @@ class Scanner:
         is scanned.
 
         """
+        assert isinstance(uhandle, File.UndoHandle), \
+               "uhandle must be an instance of Bio.File.UndoHandle"
+        
         if not is_blank_line(uhandle.peekline()):
             self._scan_record(uhandle, consumer)
 
@@ -112,26 +100,26 @@ class Consumer(AbstractConsumer):
     """Standard consumer that converts a FASTA stream to a list of Records.
 
     Members:
-    records     List of Records.
+    record    Record with FASTA data.
 
     """
     def __init__(self):
-        self.records = []
+        self.record = None
     
     def start_sequence(self):
-        self.records.append(Record())
+        self.record = Record()
 
     def end_sequence(self):
         pass
     
     def title(self, line):
         assert line[0] == '>'
-        self.records[-1].title = string.rstrip(line[1:])
+        self.record.title = string.rstrip(line[1:])
 
     def sequence(self, line):
         # This can be optimized
         seq = string.rstrip(line)
-        self.records[-1].sequence = self.records[-1].sequence + seq
+        self.record.sequence = self.record.sequence + seq
 
 class Iterator:
     """An iterator that returns Records from a FASTA stream.
@@ -150,10 +138,10 @@ class Iterator:
     def next(self):
         """next(self) -> Record or None"""
         c = Consumer()
-        self._scanner.feed_one(self._uhandle, c)
-        if c.records:
-            return c.records[0]
-        return None
+        self._scanner.feed(self._uhandle, c)
+        if c.record is None:
+            return None
+        return c.record
 
 def parse(uhandle):
     """parse(uhandle) -> list of Records
@@ -164,6 +152,11 @@ def parse(uhandle):
     exceed the amount of memory in your machine!
 
     """
-    c = Consumer()
-    Scanner().feed(uhandle, c)
-    return c.records
+    iter = Iterator(uhandle)
+    records = []
+    while 1:
+        r = iter.next()
+        if r is None:
+            break
+        records.append(r)
+    return records
