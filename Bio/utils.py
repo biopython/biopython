@@ -65,14 +65,15 @@ def count_monomers(seq):
 
 def sum(seq, table, zero = 0.0):
     total = zero
-    for c in seq.data:
+    for c in getattr(seq, "data", seq):
         total = total + table[c]
     return total
 
 # For ranged addition
 def sum_2ple(seq, table, zero = (0.0, 0.0)):
     x, y = zero
-    for c in seq.data:
+    data = getattr(seq, "data", seq)
+    for c in data:
         x2, y2 = table[c]
         x = x + x2
         y = y + y2
@@ -80,11 +81,10 @@ def sum_2ple(seq, table, zero = (0.0, 0.0)):
 
 def total_weight(seq, weight_table = None):
     if weight_table is None:
-        # need to look it up
-        1/0
+        weight_table = default_manager.resolve(seq.alphabet, "weight_table")
     return sum(seq, weight_table)
 
 def total_weight_range(seq, weight_table = None):
     if weight_table is None:
-        1/0
+        weight_table = default_manager.resolve(seq.alphabet, "weight_range_table")
     return sum_2ple(seq, weight_table)
