@@ -6,6 +6,17 @@
 # This functionality may be of general use, in which case this module should
 # be moved out of the SCOP package.
 
+class defaultdict(dict):
+
+    def __init__(self, default=None):
+        dict.__init__(self)
+        self.default = default
+
+    def __getitem__(self, key):
+        try:
+            return dict.__getitem__(self, key)
+        except KeyError:
+            return self.default
 
 class FileIndex(dict) :
     """ An in memory index that allows rapid random access into a file.
@@ -40,14 +51,14 @@ class FileIndex(dict) :
                 if next_thing is None : break
                 key = key_gen(next_thing)
                 if key != None :
-                    self.data[key]=loc
+                    self[key]=loc
                 loc = f.tell()
         finally :
             f.close()
 
     def __getitem__(self, key) :
         """ Return an item from the indexed file. """
-        loc = self.data[key]
+        loc = dict.__getitem__(self,key)
 
         f = open(self.filename)
         try:
