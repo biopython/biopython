@@ -225,9 +225,7 @@ to install this if you want to get any sort of serious use out of
 Biopython.
   mxTextTools is available along with the entire mx-base system (which
 contains a number of other useful utilities as well) and is available
-for download at:
-http://www.egenix.com/files/python/eGenix-mx-Extensions.html\#Download-m
-xBASE. 
+for download at: http://www.lemburg.com/files/python/mxTextTools.html.
   
 
 3.1.1  UNIX and Mac OS X systems
