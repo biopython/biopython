@@ -17,7 +17,12 @@ gb_file_dir = os.path.join(os.getcwd(), 'GenBank')
 #test_files = ['cor6_6.gb', 'arab1.gb', 'iro.gb', 'arab2.gb', 'pri1.gb',
 #              'arab3.gb', 'arab4.gb', 'pri2.gb', 'bct1.gb', 'bct2.gb']
 
-test_files = ['noref.gb', 'cor6_6.gb', 'iro.gb', 'pri1.gb', 'arab1.gb']
+test_files = ['noref.gb', 'cor6_6.gb', 'iro.gb', 'pri1.gb', 'arab1.gb',
+              'protein_refseq.gb']
+
+write_format_files = test_files[:]
+# don't test writing on protein_refseq, since it is horribly nasty
+write_format_files.remove("protein_refseq.gb")
 
 files_to_parse = []
 for file in test_files:
@@ -134,7 +139,7 @@ def do_comparison(good_record, test_record):
 def t_write_format():
     record_parser = GenBank.RecordParser(debug_level = 0)
 
-    for file in test_files:
+    for file in write_format_files:
         print "Testing GenBank writing for %s..." % os.path.basename(file)
         cur_handle = open(os.path.join("GenBank", file), "r")
         compare_handle = open(os.path.join("GenBank", file), "r")

@@ -1971,6 +1971,101 @@ strand: -1
 qualifiers: 
 
 
+***Record from the FeatureParser
+Seq: Seq('MNNRWILHAAFLLCFSTTALSINYKQLQLQERTNIRKCQELLEQLNGKINLTYRADFKIP ...', Alphabet())
+Id: NP_034640.1
+Name: NP_034640
+Description interferon beta, fibroblast [Mus musculus].
+Annotations***
+Key: gi
+Value: 6754304
+Key: organism
+Value: Mus musculus
+Key: keywords
+Value: ['']
+Key: data_file_division
+Value: ROD
+Key: date
+Value: 01-NOV-2000
+References*
+location: (1..182)
+authors: Higashi,Y., Sokawa,Y., Watanabe,Y., Kawade,Y., Ohno,S., Takaoka,C. and Taniguchi,T.
+title: structure and expression of a cloned cdna for mouse interferon-beta
+journal: J. Biol. Chem. 258, 9522-9529 (1983)
+medline id: 83265757
+pubmed id: 
+comment: 
+
+Key: source
+Value: house mouse
+Key: pid
+Value: g6754304
+Key: taxonomy
+Value: ['Eukaryota', 'Metazoa', 'Chordata', 'Craniata', 'Vertebrata', 'Euteleostomi', 'Mammalia', 'Eutheria', 'Rodentia', 'Sciurognathi', 'Muridae', 'Murinae', 'Mus']
+Key: db_source
+Value: REFSEQ: accession NM_010510.1
+Key: comment
+Value: PROVISIONAL REFSEQ: This record has not yet been subject to final
+NCBI review. The reference sequence was derived from K00020.1.
+Feaures
+type: source
+location: (1..182)
+ref: None:None
+strand: 0
+qualifiers: 
+	Key: chromosome, Value: 4
+	Key: db_xref, Value: taxon:10090
+	Key: map, Value: 4 42.6 cM
+	Key: organism, Value: Mus musculus
+
+type: Protein
+location: (1..182)
+ref: None:None
+strand: 0
+qualifiers: 
+	Key: product, Value: interferon beta, fibroblast
+
+type: sig_peptide
+location: (1..21)
+ref: None:None
+strand: 0
+qualifiers: 
+
+type: Region
+location: (1..182)
+ref: None:None
+strand: 0
+qualifiers: 
+	Key: db_xref, Value: CDD:pfam00143
+	Key: note, Value: interferon
+	Key: region_name, Value: Interferon alpha/beta domain
+
+type: mat_peptide
+location: (22..182)
+ref: None:None
+strand: 0
+qualifiers: 
+	Key: product, Value: ifn-beta
+
+type: Region
+location: (56..170)
+ref: None:None
+strand: 0
+qualifiers: 
+	Key: db_xref, Value: CDD:IFabd
+	Key: note, Value: IFabd
+	Key: region_name, Value: Interferon alpha, beta and delta.
+
+type: CDS
+location: (1..182)
+ref: None:None
+strand: 0
+qualifiers: 
+	Key: coded_by, Value: NM_010510.1:21..569
+	Key: db_xref, Value: LocusID:15977
+	Key: db_xref1, Value: MGD:MGI:107657
+	Key: gene, Value: Ifnb
+
 ***Record from the RecordParser
 locus: NM_006141
 definition: Homo sapiens dynein, cytoplasmic, light intermediate polypeptide 2 (DNCLI2), mRNA.
@@ -2499,192 +2594,59 @@ key: /product= value: "T25K16.18"
 key: /protein_id= value: "AAF26465.1"
 key: /db_xref= value: "GI:6715638"
 key: /translation= value: "MFSLNMRTEIESLWVFALASKFNIYMQQHFASLLVAIAITWFTITIVFWSTPGGPAWGKYFFTRRFISLDYNRKYKNLIPGPRGFPLVGSMSLRSSHVAHQRIASVAEMSNAKRLMAFSLGDTKVVVTCHPAVAKEILNSSVFADRPVDETAYGLMFNRAMGFAPNGTYWRTLRRLGSNHLFNPKQIKQSEDQRRVIATQMVNAFARNPKSACAVRDLLKTASLCNMMGLVFGREYELESNNNLESECLKGLVEEGYDLLGTLNWTDHLPWLAGLDFQQIRFRCSQLVPKVNLLLSRIIHEQRAATGNFLDMLLSLQGSEKLSESDMVAVLWEMIFRGTDTVAVLVEWVLARIVMHPKVQLTVHDELDRVVGRSRTVDESDLPSLTYLTAMIKEVLRLHPPGPLLSWARLSITDTSVDGYHVPAGTTAMVNMWAIARDPHVWEDPLEFKPERFVAKEGEAEFSVFGSDLRLAPFGSGKRVCPGKNLGLTTVSFWVATLLHEFEWLPSVEANPPDLSEVLRLSCEMACPLIVNVSSRRKIIAWMF"
+***Record from the RecordParser
+locus: NP_034640
+definition: interferon beta, fibroblast [Mus musculus].
+accession: ['NP_034640']
+reference title: structure and expression of a cloned cdna for mouse interferon-beta
+feature key: source
+location: 1..182
+num qualifiers: 4
+key: /organism= value: "Mus musculus"
+key: /db_xref= value: "taxon:10090"
+key: /chromosome= value: "4"
+key: /map= value: "4 42.6 cM"
+feature key: Protein
+location: 1..182
+num qualifiers: 1
+key: /product= value: "interferon beta, fibroblast"
+feature key: sig_peptide
+location: 1..21
+num qualifiers: 0
+feature key: Region
+location: 1..182
+num qualifiers: 3
+key: /region_name= value: "Interferon alpha/beta domain"
+key: /db_xref= value: "CDD:pfam00143"
+key: /note= value: "interferon"
+feature key: mat_peptide
+location: 22..182
+num qualifiers: 1
+key: /product= value: "ifn-beta"
+feature key: Region
+location: 56..170
+num qualifiers: 3
+key: /region_name= value: "Interferon alpha, beta and delta."
+key: /db_xref= value: "CDD:IFabd"
+key: /note= value: "IFabd"
+feature key: CDS
+location: 1..182
+num qualifiers: 4
+key: /gene= value: "Ifnb"
+key: /db_xref= value: "LocusID:15977"
+key: /db_xref= value: "MGD:MGI:107657"
+key: /coded_by= value: "NM_010510.1:21..569"
 Testing dictionaries...
 Indexing file to serve as a dictionary...
 len: 7
 keys: ['L31939', 'AJ237582', 'X62281', 'AF297471', 'M81224', 'X55053']
 Retrieving record with key L31939
-keys: ['__filename', 'L31939', 'AJ237582', 'X62281', 'AF297471', 'M81224', 'X55053']
-start: 10775 len: 1718
-data: LOCUS       BRRBIF72      282 bp    mRNA            PLN       01-MAR-1996
-DEFINITION  Brassica rapa (clone bif72) kin mRNA, complete cds.
-ACCESSION   L31939
-VERSION     L31939.1  GI:1209261
-KEYWORDS    .
-SOURCE      Brassica rapa flower cDNA to mRNA.
-  ORGANISM  Brassica rapa
-            Eukaryota; Viridiplantae; Embryophyta; Tracheophyta; Spermatophyta;
-            Magnoliophyta; eudicotyledons; core eudicots; Rosidae; eurosids II;
-            Brassicales; Brassicaceae; Brassica.
-REFERENCE   1  (bases 1 to 282)
-  AUTHORS   Kim,J.-B., Kim,H.-U., Park,B.-S., Yun,C.-H., Cho,W.-S., Ryu,J.-C.
-            and Chung,T.-Y.
-  TITLE     Nucleotide sequences of kin gene in chinese cabbage
-  JOURNAL   Unpublished (1994)
-FEATURES             Location/Qualifiers
-     source          1..282
-                     /organism="Brassica rapa"
-                     /db_xref="taxon:3711"
-                     /dev_stage="flower"
-     gene            24..221
-                     /gene="kin"
-     CDS             24..221
-                     /gene="kin"
-                     /codon_start=1
-                     /protein_id="AAA91051.1"
-                     /db_xref="GI:1209262"
-                     /translation="MADNKQSFQAGQAAGRAEEKGNVLLMDKVKDAATAAGALQTAGQ
-                     KITEAAGGAVNLVKEKTGMNK"
-BASE COUNT       88 a     56 c     80 g     58 t
-ORIGIN      
-        1 aacaaaactc aataaataaa caaatggcag acaacaagca gagcttccaa gccggtcaag
-       61 ccgctggtcg tgctgaggag aagggtaatg tgctgctgat ggacaaggtc aaggatgctg
-      121 ctaccgcagc tggagctctc caaaccgcgg gacagaagat aacggaggcg gcagggggag
-      181 ccgttaatct cgtgaaggag aagaccggca tgaacaagta gccccattgg aaacaaaatt
-      241 gggagttata gtttcctttt taatattaat cgttgtggtt tt
-//
-
 description: Brassica rapa (clone bif72) kin mRNA, complete cds.
 id: L31939.1
 Retrieving record with key AJ237582
-keys: ['__filename', 'L31939', 'AJ237582', 'X62281', 'AF297471', 'M81224', 'X55053']
-start: 8544 len: 2231
-data: LOCUS       ARU237582     206 bp    DNA             PLN       24-MAR-1999
-DEFINITION  Armoracia rusticana csp14 gene (partial), exons 2-3.
-ACCESSION   AJ237582
-VERSION     AJ237582.1  GI:4538892
-KEYWORDS    cold shock protein; csp14 gene.
-SOURCE      horseradish.
-  ORGANISM  Armoracia rusticana
-            Eukaryota; Viridiplantae; Streptophyta; Embryophyta; Tracheophyta;
-            euphyllophytes; Spermatophyta; Magnoliophyta; eudicotyledons;
-            Rosidae; Capparales; Brassicaceae; Armoracia.
-REFERENCE   1  (bases 1 to 206)
-  AUTHORS   Baymiev,A.K., Gimalov,F.R. and Vakhitov,V.A.
-  JOURNAL   Unpublished
-REFERENCE   2  (bases 1 to 206)
-  AUTHORS   Baymiev,A.K.
-  TITLE     Direct Submission
-  JOURNAL   Submitted (20-MAR-1999) Baymiev A.K., Departament of Biochemistry
-            and Cytochemistry, Ufa Scientific Centre, pr. Oktyabrya 69, Ufa,
-            Bashkortostan, Russia, 450054, RUSSIA
-FEATURES             Location/Qualifiers
-     source          1..206
-                     /organism="Armoracia rusticana"
-                     /db_xref="taxon:3704"
-                     /country="Russia:Bashkortostan"
-     mRNA            join(<1..48,143..>206)
-                     /gene="csp14"
-     exon            1..48
-                     /gene="csp14"
-                     /number=2
-     gene            1..206
-                     /gene="csp14"
-     CDS             join(<1..48,143..>206)
-                     /gene="csp14"
-                     /codon_start=2
-                     /product="cold shock protein"
-                     /protein_id="CAB39890.1"
-                     /db_xref="GI:4538893"
-                     /translation="DKAKDAAAAAGASAQQAGKNISDAAAGGVNFVKEKTG"
-     intron          49..142
-                     /gene="csp14"
-                     /number=2
-     exon            143..206
-                     /gene="csp14"
-                     /number=3
-BASE COUNT       65 a     38 c     53 g     48 t      2 others
-ORIGIN      
-        1 ggacaaggcc aaggatgctg ctgctgcagc tggagcttcc gcgcaacaag taaacagata
-       61 cacacacatg acacatatat aantacatat cacaagtagg tcgtagattt ctgatatntt
-      121 tgtattgtgt attacgtata taggcgggaa agaacatatc ggatgcagca gctggaggtg
-      181 ttaacttcgt gaaggagaag accggc
-//
-
 description: Armoracia rusticana csp14 gene (partial), exons 2-3.
 id: AJ237582.1
 Retrieving record with key X62281
-keys: ['__filename', 'L31939', 'AJ237582', 'X62281', 'AF297471', 'M81224', 'X55053']
-start: 2635 len: 3586
-data: LOCUS       ATKIN2        880 bp    DNA             PLN       23-JUL-1992
-DEFINITION  A.thaliana kin2 gene.
-ACCESSION   X62281
-VERSION     X62281.1  GI:16353
-KEYWORDS    kin2 gene.
-SOURCE      thale cress.
-  ORGANISM  Arabidopsis thaliana
-            Eukaryota; Viridiplantae; Streptophyta; Embryophyta; Tracheophyta;
-            euphyllophytes; Spermatophyta; Magnoliophyta; eudicotyledons;
-            Rosidae; Capparales; Brassicaceae; Arabidopsis.
-REFERENCE   1  (bases 1 to 880)
-  AUTHORS   Borg-Franck,M.E.
-  TITLE     Direct Submission
-  JOURNAL   Submitted (27-SEP-1991) M.E. Borg-Franck, Inst of Biotechnology,
-            University of Helsinki, Karvaamokuja 3, SF-00380 Helsinki, FINLAND
-REFERENCE   2  (bases 1 to 880)
-  AUTHORS   Kurkela,S. and Borg-Franck,M.
-  TITLE     Structure and expression of kin2, one of two cold- and ABA-induced
-            genes of Arabidopsis thaliana
-  JOURNAL   Plant Mol. Biol. 19 (4), 689-692 (1992)
-  MEDLINE   92329728
-FEATURES             Location/Qualifiers
-     source          1..880
-                     /organism="Arabidopsis thaliana"
-                     /strain="ssp. L. Heynh, Colombia"
-                     /db_xref="taxon:3702"
-     TATA_signal     9..20
-     exon            44..160
-                     /gene="kin2"
-                     /number=1
-     prim_transcript 44..>579
-                     /gene="kin2"
-     mRNA            join(44..160,320..390,504..>579)
-                     /gene="kin2"
-     gene            44..579
-                     /gene="kin2"
-     CDS             join(104..160,320..390,504..579)
-                     /gene="kin2"
-                     /codon_start=1
-                     /protein_id="CAA44171.1"
-                     /db_xref="GI:16354"
-                     /db_xref="SWISS-PROT:P31169"
-                     /translation="MSETNKNAFQAGQAAGKAERRRAMFCWTRPRMLLLQLELPRNRA
-                     GKSISDAAVGGVNFVKDKTGLNK"
-     intron          161..319
-                     /gene="kin2"
-                     /number=1
-     exon            320..390
-                     /gene="kin2"
-                     /number=2
-     intron          391..503
-                     /gene="kin2"
-                     /number=2
-     exon            504..>579
-                     /gene="kin2"
-                     /number=3
-     polyA_signal    620..625
-     polyA_signal    641..646
-     polyA_site      785
-     polyA_site      800
-BASE COUNT      263 a    155 c    160 g    302 t
-ORIGIN      
-        1 atttggccta taaatataaa cccttaagcc cacatatctt ctcaatccat cacaaacaaa
-       61 acacacatca aaaacgattt tacaagaaaa aaatatctga aaaatgtcag agaccaacaa
-      121 gaatgccttc caagccggtc aggccgctgg caaagctgag gtactctttc tctcttagaa
-      181 cagagtactg atagattgtt caagttataa ctctttgaaa acagttgaaa cttgatcact
-      241 cctagaactt ccattttctt gtttaattta gtttgtcgta attatgtaat tgattttgtg
-      301 ttgaccatgg ttgttatata ggagaagagc aatgttctgc tggacaaggc caaggatgct
-      361 gctgctgcag ctggagcttc cgcgcaacag gtaaacgatc tatacacaca ttatgacatt
-      421 tatgtaaaga atgaaaagtc ttcttagagc atacatttac gcagatttct gatattttca
-      481 tatggtttga tgtaaatgtt ataggcggga aagagtatat cggatgcggc agtgggaggt
-      541 gttaacttcg tgaaggacaa gaccggcctg aacaagtagc gatccgagtc aactttggga
-      601 gttataattt cccttttcta attaattgtt gggattttca aataaaattt gggagtcata
-      661 attgattctc gtactcatcg tacttgttgt tgtttttagt gttgtaatgt tttaatgttt
-      721 cttctccctt tagatgtact acgtttggaa ctttaagttt aatcaacaaa atctagttta
-      781 agttctaaga actttgtttt accatcctct tttttattgc acttaatgct tatagacttt
-      841 tatctccatc catttctcaa ttcggctacg ttgaattata 
-//
-
 description: A.thaliana kin2 gene.
 id: X62281.1
 Testing writing GenBank format...
