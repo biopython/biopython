@@ -204,7 +204,7 @@ def Spaces(name = None, attrs = None):
     group of the given name.  You can optionally include group
     attributes.
     """
-    exp = Re(r"[\t\v\f\r ]+")
+    exp = Re(r"[\t\v\f ]+")
     return _group(name, exp, attrs)
 
 def Unprintable(name = None, attrs = None):
