@@ -71,6 +71,21 @@ except Exception, x:
     raise TestFailed, "Consumer (%s)" % x
 
 
+### Iterator
+
+if verbose:
+    print "Running tests on Iterator"
+
+i = Fasta.Iterator(open(os.path.join('Fasta', 'f002')))
+try:
+    assert i.next().title[:10] == 'gi|1348912', "sequence 1"
+    assert i.next().title[:10] == 'gi|1348917', "sequence 2"
+    assert i.next().title[:10] == 'gi|1592936', "sequence 3"
+    assert i.next() is None, "no more sequences"
+except Exception, x:
+    raise TestFailed, "Iterator (%s)" % x
+
+
 ### parse
 
 if verbose:

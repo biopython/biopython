@@ -10,13 +10,18 @@ This module provides code to work with FASTA-formatted sequences.
 
 Classes:
 Record     Holds information from a FASTA record.
-Scanner    Scans a FASTA-format file.
+Scanner    Scans a FASTA-format stream.
 Consumer   Standard consumer that converts a FASTA stream to a list of Records.
+Iterator   An iterator that returns Records from a FASTA stream.
 
 Functions:
 parse      Parse a handle with FASTA-formatted data into a list of Records.
 
 """
+
+# To do:
+# Random access for FASTA entries
+# index file?
 
 from Bio.ParserSupport import *
 
@@ -52,7 +57,8 @@ class Scanner:
     """Scans a FASTA-formatted file.
 
     Methods:
-    feed     Feed in FASTA data for scanning.
+    feed      Feed in FASTA data for scanning.
+    feed_one  Feed in FASTA data, but only consume 1 record.
 
     """
 
@@ -61,11 +67,28 @@ class Scanner:
 
         Feed in FASTA data for scanning.  handle is a file-like object
         that contains the keyword information.  consumer is a Consumer
-        object that will receive events as the report is scanned.
+        object that will receive events as the record is scanned.
 
         """
-        ohandle = OopsHandle(handle)
+        # Make an OopsHandle from handle, if it's not one already.
+        if isinstance(handle, OopsHandle):
+            ohandle = handle
+        else:
+            ohandle = OopsHandle(handle)
+            
         while not is_blank_line(ohandle.peekline()):   # Am I done yet?
+            self.feed_one(ohandle, consumer)
+
+    def feed_one(self, ohandle, consumer):
+        """feed_one(self, ohandle, consumer)
+
+        Feed in FASTA data for scanning.  Only consumes a single
+        record.  ohandle must be an OopsHandle.  consumer is a
+        Consumer object that will recieve events as the record
+        is scanned.
+
+        """
+        if not is_blank_line(ohandle.peekline()):
             self._scan_record(ohandle, consumer)
 
     def _scan_record(self, ohandle, consumer):
@@ -111,7 +134,25 @@ class Consumer(AbstractConsumer):
         # This can be optimized
         seq = string.rstrip(line)
         self.records[-1].sequence = self.records[-1].sequence + seq
-    
+
+class Iterator:
+    """An iterator that returns Records from a FASTA stream.
+
+    Methods:
+    next   Return the next Record from the stream, or None.
+
+    """
+    def __init__(self, handle):
+        self._ohandle = OopsHandle(handle)
+        self._scanner = Scanner()
+
+    def next(self):
+        """next(self) -> Record or None"""
+        c = Consumer()
+        self._scanner.feed_one(self._ohandle, c)
+        if c.records:
+            return c.records[0]
+        return None
 
 def parse(handle):
     """parse(handle) -> list of Records
@@ -125,4 +166,3 @@ def parse(handle):
     c = Consumer()
     Scanner().feed(handle, c)
     return c.records
-    
