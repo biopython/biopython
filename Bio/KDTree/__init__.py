@@ -1,3 +1,12 @@
+"""
+The KD tree data structure can be used for all kinds of searches that
+involve N-dimensional vectors, e.g.  neighbor searches (find all points
+within a radius of a given point) or finding all point pairs in a set
+that are within a certain radius of each other. See "Computational Geometry: 
+Algorithms and Applications" (Mark de Berg, Marc van Kreveld, Mark Overmars, 
+Otfried Schwarzkopf).
+"""
+
 try:
 	import Numeric
 	from Numeric import sum, sqrt
@@ -80,8 +89,8 @@ class KDTree:
 	"""
 	KD tree implementation (C++, SWIG python wrapper)
 
-	The KD tree data structure can be used for all kinds of algorithms that
-	involve N-dimensional points, e.g.  neighbor searches (find all points
+	The KD tree data structure can be used for all kinds of searches that
+	involve N-dimensional vectors, e.g.  neighbor searches (find all points
 	within a radius of a given point) or finding all point pairs in a set
 	that are within a certain radius of each other.
 
@@ -97,7 +106,7 @@ class KDTree:
 	The KD tree data structure is described in chapter 5, pg. 99. 
 
 	The following article made clear to me that the nodes should 
-	contains more than one point (this leads to dramatic speed 
+	contain more than one point (this leads to dramatic speed 
 	improvements for the "all fixed radius neighbor search", see
 	below):
 
@@ -106,7 +115,7 @@ class KDTree:
 
 	This KD implementation also performs a "all fixed radius neighbor search",
 	i.e. it can find all point pairs in a set that are within a certain radius
-	of each other. As far as I now the algorithm has not been published.
+	of each other. As far as I know the algorithm has not been published.
 	"""
 
 	def __init__(self, dim, bucket_size=1):

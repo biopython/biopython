@@ -1,3 +1,8 @@
+"""
+Classes that deal with macromolecular crystal structures (eg.
+PDB and mmCIF parsers and a Structure class).
+"""
+
 # PDB directory
 
 __all__=[
