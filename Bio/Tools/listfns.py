@@ -14,6 +14,7 @@ itemindex     Make an index of the items in the list.
 intersection  Get the items in common between 2 lists.
 difference    Get the items in 1 list, but not the other.
 indexesof     Get a list of the indexes of some items in a list.
+take          Take some items from a list.
 
 """
 
@@ -36,7 +37,7 @@ def items(l):
     try:
         return asdict(l).keys()
     except TypeError, x:
-        if str(x) != 'unhashable type':
+        if str(x).find("unhashable") == -1:
             raise
     # asdict failed because l is unhashable.  Back up to a naive
     # implementation.
@@ -120,7 +121,7 @@ def itemindex(l):
             dict[l[i]] = i
     return dict
 
-def indexesof(l, fn):
+def indexesof(l, fn, opposite=0):
     """indexesof(l, fn) -> list of indexes
 
     Return a list of indexes i where fn(l[i]) is true.
@@ -128,9 +129,21 @@ def indexesof(l, fn):
     """
     indexes = []
     for i in range(len(l)):
-        if fn(l[i]):
+        f = fn(l[i])
+        if (not opposite and f) or (opposite and not f):
             indexes.append(i)
     return indexes
+
+def take(l, indexes):
+    """take(l, indexes) -> list of just the indexes from l"""
+    items = []
+    for i in indexes:
+        items.append(l[i])
+    return items
+
+def take_byfn(l, fn, opposite=0):
+    indexes = indexesof(l, fn, opposite=opposite)
+    return take(l, indexes)
 
 # Try and load C implementations of functions.  If I can't,
 # then just ignore and use the pure python implementations.
