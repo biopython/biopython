@@ -108,7 +108,8 @@ class BlastParser(_XMLparser):
 
         handler -- file handler or StringIO
         """
-        self._parser.parse(filename)
+        # bugfix: changed `filename` to `handler`. Iddo 12/20/2004
+        self._parser.parse(handler)
         return self._blast
 
     # Header
