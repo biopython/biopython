@@ -1,8 +1,7 @@
 from __future__ import generators
 
 import sys
-import Martel
-import Format, StdHandler, ReseekFile
+import ReseekFile
 
 class FormatIO:
     def __init__(self, name,
@@ -32,6 +31,7 @@ class FormatIO:
         return builder
 
     def _get_file_format(self, format, infile):
+        import Format
         # By construction, this is the lowest we can go, so don't try
         if isinstance(format, Format.FormatDef):
             return format
@@ -66,6 +66,7 @@ class FormatIO:
         exp = format.expression
 
         if hasattr(builder, "uses_tags"):
+            import Martel
             uses_tags = tuple(builder.uses_tags())
             exp = Martel.select_names(exp, uses_tags + ("record", "dataset"))
         
@@ -79,6 +80,7 @@ class FormatIO:
             format = self.default_input_format
         format = self.registery.normalize(format)
 
+        import Format
         if not isinstance(format, Format.FormatDef):
             format = format.identifyString(s)
 
@@ -121,10 +123,13 @@ class FormatIO:
 
         exp = input_format.expression
         if hasattr(builder, "uses_tags"):
+            import Martel
             uses_tags = tuple(builder.uses_tags())
             exp = Martel.select_names(exp, uses_tags + ("record", "dataset"))
         
         parser = exp.make_parser()
+
+        import StdHandler        
         parser.setContentHandler(StdHandler.ConvertHandler(builder, writer))
             
         parser.parseFile(infile)
