@@ -26,10 +26,14 @@ index_file         Index a FASTA file for a Dictionary.
 """
 from types import *
 import string
+import os
+
 from Bio import File
 from Bio import Index
-from Bio import Sequence
+from Bio import Seq
+from Bio import SeqRecord
 from Bio.ParserSupport import *
+from Bio import Alphabet
 
 class Record:
     """Holds information from a FASTA record.
@@ -138,6 +142,25 @@ class Dictionary:
     def __getattr__(self, name):
         return getattr(self._index, name)
 
+    def keys(self):
+        """Override keys to return only valid keys.
+
+        The keys which is called normally on this dictionary will return
+        internal values such as '__filename'. This just strips those out
+        before returning.
+        """
+        all_keys = self._index.keys()
+        to_remove = []
+        for key in all_keys:
+            # if the key is an internal element with a '__', strip it
+            if key[:2] == '__':
+                to_remove.append(key)
+
+        for key in to_remove:
+            all_keys.remove(key)
+
+        return all_keys
+
 class RecordParser:
     """Parses FASTA sequence data into a Record object.
 
@@ -154,9 +177,15 @@ class SequenceParser:
     """Parses FASTA sequence data into a Sequence object.
 
     """
-    def __init__(self):
+    def __init__(self, alphabet = Alphabet.generic_alphabet):
+        """Initialize a Scanner and Sequence Consumer.
+
+        Arguments:
+        o alphabet - The alphabet of the sequences to be parsed. If not
+        passed, this will be set as generic_alphabet.
+        """
         self._scanner = _Scanner()
-        self._consumer = _SequenceConsumer()
+        self._consumer = _SequenceConsumer(alphabet)
 
     def parse(self, handle):
         self._scanner.feed(handle, self._consumer)
@@ -237,22 +266,29 @@ class _SequenceConsumer(AbstractConsumer):
     data    Sequence with FASTA data.
 
     """
-    def __init__(self):
+    def __init__(self, alphabet):
+        """Initialize the Consumer.
+
+        Arguments:
+        o Alphabet - The alphabet of the sequences we will be creating.
+        """
         self.data = None
+        self.alphabet = alphabet
     
     def start_sequence(self):
-        self.data = Sequence.NamedSequence(Sequence.Sequence())
+        seq = Seq.Seq('', self.alphabet)
+        self.data = SeqRecord.SeqRecord(seq)
 
     def end_sequence(self):
         pass
     
     def title(self, line):
         assert line[0] == '>'
-        self.data.name = string.rstrip(line[1:])
+        self.data.description = string.rstrip(line[1:])
 
     def sequence(self, line):
         # This can be optimized
-        seq = string.rstrip(line)
+        seq = Seq.Seq(string.rstrip(line), self.alphabet)
         self.data.seq = self.data.seq + seq
 
 def index_file(filename, indexname, rec2key=None):
