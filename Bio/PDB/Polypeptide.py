@@ -1,8 +1,10 @@
+from Numeric import sum
+
+from Bio.Alphabet import ProteinAlphabet
+from Bio.Seq import Seq
 from Bio.SCOP.Raf import to_one_letter_code
 from Bio.PDB.PDBExceptions import PDBException
 from Bio.PDB.Residue import Residue, DisorderedResidue
-from Numeric import sum
-
 
 def is_aa(residue):
     """
@@ -20,6 +22,27 @@ class Polypeptide(list):
     """
     A polypeptide is simply a list of Residue objects.
     """
+    def get_ca_list(self):
+        """
+        Get the list of CA atoms.
+        """
+        ca_list=[]
+        for res in self:
+            if res.has_id("CA"):
+                ca=res["CA"]
+                ca_list.append(ca)
+        return ca_list
+
+    def get_sequence(self):
+        "Return the AA sequence."
+        s=""
+        for res in self:
+            resname=res.get_resname()
+            resname=to_one_letter_code[resname]
+            s=s+resname
+        seq=Seq(s, ProteinAlphabet)
+        return seq
+
     def __repr__(self):
         start=self[0].get_id()[1]
         end=self[-1].get_id()[1]
@@ -173,7 +196,7 @@ if __name__=="__main__":
 
     print "CA-CA"
     for pp in ppb.build_peptides(s):
-        print pp
+        print pp.get_sequence()
 
 
 
