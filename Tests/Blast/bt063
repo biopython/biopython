@@ -1,0 +1,252 @@
+BLASTP 2.0.14 [Jun-29-2000]
+
+
+Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+
+Query= aseq 
+         (82 letters)
+
+Database: SWISS_PROT
+           87,404 sequences; 31,753,758 total letters
+
+Searching..................................................done
+
+
+Results from round 1
+
+
+                                                                   Score     E
+Sequences producing significant alignments:                        (bits)  Value
+
+YMZ9_YEAST Q04439 saccharomyces cerevisiae (baker's yeast). ...    27  6.0
+DPOL_WHVW6 P11292 woodchuck hepatitis virus w64 (isolate pws...    27  7.9
+DPOL_WHV8I P17396 woodchuck hepatitis virus 8 (infectious cl...    27  7.9
+DPOL_WHV8 P06275 woodchuck hepatitis virus 8 (whv 8). dna po...    27  7.9
+DPOL_WHV7 P12898 woodchuck hepatitis virus 7 (whv 7). dna po...    27  7.9
+DPOL_WHV59 P12899 woodchuck hepatitis virus 59 (whv 59). dna...    27  7.9
+
+>YMZ9_YEAST Q04439 saccharomyces cerevisiae (baker's yeast). hypothetical
+            myosin-like protein in ilv2-ade17 intergenic region.
+            5/2000
+          Length = 1219
+
+ Score = 27.4 bits (59), Expect = 6.0
+ Identities = 10/22 (45%), Positives = 16/22 (72%)
+
+Query: 52   NLIALQHIPLSPAGVIAKRPAP 73
+            ++ A QH+P +PA   +K+PAP
+Sbjct: 992  SIAAAQHVPTAPASRHSKKPAP 1013
+
+
+>DPOL_WHVW6 P11292 woodchuck hepatitis virus w64 (isolate pws23). dna
+           polymerase (ec 2.7.7.7) (fragment). 12/1998
+          Length = 556
+
+ Score = 27.0 bits (58), Expect = 7.9
+ Identities = 17/43 (39%), Positives = 20/43 (45%), Gaps = 10/43 (23%)
+
+Query: 34  IHWPSFY--NVVTGKTLALPNL--------IALQHIPLSPAGV 66
+           +HWP F   N+ T   L   NL         A  HIP+SPA V
+Sbjct: 115 VHWPKFAVPNLQTLANLLSTNLQWLSLDVSAAFYHIPISPAAV 157
+
+
+>DPOL_WHV8I P17396 woodchuck hepatitis virus 8 (infectious clone) (whv 8). dna
+           polymerase (ec 2.7.7.7). 12/1998
+          Length = 884
+
+ Score = 27.0 bits (58), Expect = 7.9
+ Identities = 17/43 (39%), Positives = 20/43 (45%), Gaps = 10/43 (23%)
+
+Query: 34  IHWPSFY--NVVTGKTLALPNL--------IALQHIPLSPAGV 66
+           +HWP F   N+ T   L   NL         A  HIP+SPA V
+Sbjct: 443 VHWPKFAVPNLQTLANLLSTNLQWLSLDVSAAFYHIPISPAAV 485
+
+
+>DPOL_WHV8 P06275 woodchuck hepatitis virus 8 (whv 8). dna polymerase (ec
+           2.7.7.7). 12/1998
+          Length = 883
+
+ Score = 27.0 bits (58), Expect = 7.9
+ Identities = 17/43 (39%), Positives = 20/43 (45%), Gaps = 10/43 (23%)
+
+Query: 34  IHWPSFY--NVVTGKTLALPNL--------IALQHIPLSPAGV 66
+           +HWP F   N+ T   L   NL         A  HIP+SPA V
+Sbjct: 442 VHWPKFAVPNLQTLANLLSTNLQWLSLDVSAAFYHIPISPAAV 484
+
+
+>DPOL_WHV7 P12898 woodchuck hepatitis virus 7 (whv 7). dna polymerase (ec
+           2.7.7.7). 12/1998
+          Length = 884
+
+ Score = 27.0 bits (58), Expect = 7.9
+ Identities = 17/43 (39%), Positives = 20/43 (45%), Gaps = 10/43 (23%)
+
+Query: 34  IHWPSFY--NVVTGKTLALPNL--------IALQHIPLSPAGV 66
+           +HWP F   N+ T   L   NL         A  HIP+SPA V
+Sbjct: 443 VHWPKFAVPNLQTLANLLSTNLQWLSLDVSAAFYHIPISPAAV 485
+
+
+>DPOL_WHV59 P12899 woodchuck hepatitis virus 59 (whv 59). dna polymerase (ec
+           2.7.7.7). 12/1998
+          Length = 884
+
+ Score = 27.0 bits (58), Expect = 7.9
+ Identities = 17/43 (39%), Positives = 20/43 (45%), Gaps = 10/43 (23%)
+
+Query: 34  IHWPSFY--NVVTGKTLALPNL--------IALQHIPLSPAGV 66
+           +HWP F   N+ T   L   NL         A  HIP+SPA V
+Sbjct: 443 VHWPKFAVPNLQTLANLLSTNLQWLSLDVSAAFYHIPISPAAV 485
+
+
+Searching..................................................done
+
+
+Results from round 2
+
+
+                                                                   Score     E
+Sequences producing significant alignments:                        (bits)  Value
+Sequences used in model and found again:
+
+Sequences not found previously or not previously below threshold:
+
+YMZ9_YEAST Q04439 saccharomyces cerevisiae (baker's yeast). ...    27  5.9
+DPOL_WHVW6 P11292 woodchuck hepatitis virus w64 (isolate pws...    27  5.9
+DPOL_WHV8I P17396 woodchuck hepatitis virus 8 (infectious cl...    27  5.9
+DPOL_WHV8 P06275 woodchuck hepatitis virus 8 (whv 8). dna po...    27  5.9
+DPOL_WHV7 P12898 woodchuck hepatitis virus 7 (whv 7). dna po...    27  5.9
+DPOL_WHV59 P12899 woodchuck hepatitis virus 59 (whv 59). dna...    27  5.9
+DPOL_HPBGS P03161 ground squirrel hepatitis virus (gshv). dn...    27  7.8
+
+
+CONVERGED!
+>YMZ9_YEAST Q04439 saccharomyces cerevisiae (baker's yeast). hypothetical
+            myosin-like protein in ilv2-ade17 intergenic region.
+            5/2000
+          Length = 1219
+
+ Score = 27.4 bits (59), Expect = 5.9
+ Identities = 10/22 (45%), Positives = 16/22 (72%)
+
+Query: 52   NLIALQHIPLSPAGVIAKRPAP 73
+            ++ A QH+P +PA   +K+PAP
+Sbjct: 992  SIAAAQHVPTAPASRHSKKPAP 1013
+
+
+>DPOL_WHVW6 P11292 woodchuck hepatitis virus w64 (isolate pws23). dna
+           polymerase (ec 2.7.7.7) (fragment). 12/1998
+          Length = 556
+
+ Score = 27.4 bits (59), Expect = 5.9
+ Identities = 17/43 (39%), Positives = 20/43 (45%), Gaps = 10/43 (23%)
+
+Query: 34  IHWPSFY--NVVTGKTLALPNL--------IALQHIPLSPAGV 66
+           +HWP F   N+ T   L   NL         A  HIP+SPA V
+Sbjct: 115 VHWPKFAVPNLQTLANLLSTNLQWLSLDVSAAFYHIPISPAAV 157
+
+
+>DPOL_WHV8I P17396 woodchuck hepatitis virus 8 (infectious clone) (whv 8). dna
+           polymerase (ec 2.7.7.7). 12/1998
+          Length = 884
+
+ Score = 27.4 bits (59), Expect = 5.9
+ Identities = 17/43 (39%), Positives = 20/43 (45%), Gaps = 10/43 (23%)
+
+Query: 34  IHWPSFY--NVVTGKTLALPNL--------IALQHIPLSPAGV 66
+           +HWP F   N+ T   L   NL         A  HIP+SPA V
+Sbjct: 443 VHWPKFAVPNLQTLANLLSTNLQWLSLDVSAAFYHIPISPAAV 485
+
+
+>DPOL_WHV8 P06275 woodchuck hepatitis virus 8 (whv 8). dna polymerase (ec
+           2.7.7.7). 12/1998
+          Length = 883
+
+ Score = 27.4 bits (59), Expect = 5.9
+ Identities = 17/43 (39%), Positives = 20/43 (45%), Gaps = 10/43 (23%)
+
+Query: 34  IHWPSFY--NVVTGKTLALPNL--------IALQHIPLSPAGV 66
+           +HWP F   N+ T   L   NL         A  HIP+SPA V
+Sbjct: 442 VHWPKFAVPNLQTLANLLSTNLQWLSLDVSAAFYHIPISPAAV 484
+
+
+>DPOL_WHV7 P12898 woodchuck hepatitis virus 7 (whv 7). dna polymerase (ec
+           2.7.7.7). 12/1998
+          Length = 884
+
+ Score = 27.4 bits (59), Expect = 5.9
+ Identities = 17/43 (39%), Positives = 20/43 (45%), Gaps = 10/43 (23%)
+
+Query: 34  IHWPSFY--NVVTGKTLALPNL--------IALQHIPLSPAGV 66
+           +HWP F   N+ T   L   NL         A  HIP+SPA V
+Sbjct: 443 VHWPKFAVPNLQTLANLLSTNLQWLSLDVSAAFYHIPISPAAV 485
+
+
+>DPOL_WHV59 P12899 woodchuck hepatitis virus 59 (whv 59). dna polymerase (ec
+           2.7.7.7). 12/1998
+          Length = 884
+
+ Score = 27.4 bits (59), Expect = 5.9
+ Identities = 17/43 (39%), Positives = 20/43 (45%), Gaps = 10/43 (23%)
+
+Query: 34  IHWPSFY--NVVTGKTLALPNL--------IALQHIPLSPAGV 66
+           +HWP F   N+ T   L   NL         A  HIP+SPA V
+Sbjct: 443 VHWPKFAVPNLQTLANLLSTNLQWLSLDVSAAFYHIPISPAAV 485
+
+
+>DPOL_HPBGS P03161 ground squirrel hepatitis virus (gshv). dna polymerase (ec
+           2.7.7.7) (a protein). 12/1998
+          Length = 881
+
+ Score = 27.0 bits (58), Expect = 7.8
+ Identities = 17/43 (39%), Positives = 20/43 (45%), Gaps = 10/43 (23%)
+
+Query: 34  IHWPSFY--NVVTGKTLALPNL--------IALQHIPLSPAGV 66
+           +HWP F   N+ T   L   NL         A  HIP+SPA V
+Sbjct: 440 VHWPKFAVPNLQTLANLLSTNLQWLSLDVSAAFYHIPVSPAAV 482
+
+
+  Database: /dbase/swissprot/main/release/sp
+    Posted date:  Jun 21, 2000 12:39 PM
+  Number of letters in database: 31,411,157
+  Number of sequences in database:  86,593
+  
+  Database: /dbase/swissprot/main/update/spu
+    Posted date:  Jul 30, 2000 11:00 PM
+  Number of letters in database: 342,601
+  Number of sequences in database:  811
+  
+Lambda     K      H
+   0.318    0.132    0.422 
+
+Lambda     K      H
+   0.270   0.0464    0.230 
+
+
+Matrix: BLOSUM62
+Gap Penalties: Existence: 11, Extension: 1
+Number of Hits to DB: 7377465
+Number of Sequences: 87404
+Number of extensions: 229017
+Number of successful extensions: 569
+Number of sequences better than 10.0: 13
+Number of HSP's better than 10.0 without gapping: 2
+Number of HSP's successfully gapped in prelim test: 11
+Number of HSP's that attempted gapping in prelim test: 567
+Number of HSP's gapped (non-prelim): 13
+length of query: 82
+length of database: 31,753,758
+effective HSP length: 44
+effective length of query: 38
+effective length of database: 27,907,982
+effective search space: 1060503316
+effective search space used: 1060503316
+T: 11
+A: 40
+X1: 16 ( 7.3 bits)
+X2: 38 (14.8 bits)
+X3: 64 (24.9 bits)
+S1: 41 (21.7 bits)
+S2: 58 (27.0 bits)

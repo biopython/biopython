@@ -14,6 +14,7 @@ Aug 31, 2000: Biopython 0.90d03
   New parsers for Rebase, Gobase
   pure python implementation of C-based tools
   Thomas Sicheritz-Ponten's xbbtools
+  can now generate documentation from docstrings using HappyDoc
 
 
 Aug17-18, 2000: Bioinformatics Open Source Conference 2000

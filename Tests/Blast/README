@@ -72,6 +72,7 @@ bt059 blastpgp 2.0.11 sp:P07175  swissprot -m 6           multiple HSP (41943)
 bt060 blastpgp 2.0.12                                     multiple db, Mike Poidinger
 bt061 NCBI WWW 2.0.14 sp:P06563  swissprot blastp
 bt062 blastall 2.0.14 gi:1348916 sts       -p blastn
+bt063 blastpgp 2.0.14 ad-hoc                              from Mike Poidinger, no model sequences found
 
 
 * bt008 is not included because the file is too big (>15Mb).
