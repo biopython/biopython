@@ -128,6 +128,17 @@ trie_has_key(trieobject *mp, PyObject *py_key)
     return PyInt_FromLong((long)has_key);
 }
 
+static PyObject *
+trie_has_key_onearg(trieobject *mp, PyObject *py_args)
+{
+    PyObject *py_arg;
+    if(!PyArg_ParseTuple(py_args, "O", &py_arg))
+	return NULL;
+    return trie_has_key(mp, py_arg);
+}
+
+
+
 static char has_prefix__doc__[] =
 "D.has_prefix(k) -> 1 if D has a prefix k, else 0";
 
@@ -145,6 +156,15 @@ trie_has_prefix(trieobject *mp, PyObject *py_prefix)
     prefix = PyString_AS_STRING(py_prefix);
     has_prefix = Trie_has_prefix(mp->trie, prefix);
     return PyInt_FromLong((long)has_prefix);
+}
+
+static PyObject *
+trie_has_prefix_onearg(trieobject *mp, PyObject *py_args)
+{
+    PyObject *py_arg;
+    if(!PyArg_ParseTuple(py_args, "O", &py_arg))
+	return NULL;
+    return trie_has_prefix(mp, py_arg);
 }
 
 static char with_prefix__doc__[] =
@@ -190,6 +210,16 @@ trie_with_prefix(trieobject *mp, PyObject *py_prefix)
     return py_list;
 }
 
+static PyObject *
+trie_with_prefix_onearg(trieobject *mp, PyObject *py_args)
+{
+    PyObject *py_arg;
+    if(!PyArg_ParseTuple(py_args, "O", &py_arg))
+	return NULL;
+    return trie_with_prefix(mp, py_arg);
+}
+
+
 static char keys__doc__[] =
 "D.keys() -> list of D's keys";
 
@@ -223,6 +253,16 @@ trie_keys(trieobject *mp)
     return py_list;
 }
 
+static PyObject *
+trie_keys_noargs(trieobject *mp, PyObject *py_args)
+{
+    if(PyTuple_Size(py_args) != 0) {
+	PyErr_SetString(PyExc_ValueError, "no args expected");
+	return NULL;
+    }
+    return trie_keys(mp);
+}
+
 static char values__doc__[] =
 "D.values() -> list of D's values";
 
@@ -250,6 +290,15 @@ trie_values(trieobject *mp)
     return py_list;
 }
 
+static PyObject *
+trie_values_noargs(trieobject *mp, PyObject *py_args)
+{
+    if(PyTuple_Size(py_args) != 0) {
+	PyErr_SetString(PyExc_ValueError, "no args expected");
+	return NULL;
+    }
+    return trie_values(mp);
+}
 
 static char get__doc__[] =
 "D.get(k[,d]) -> D[k] if D.has_key(k), else d.  d defaults to None.";
@@ -343,6 +392,7 @@ static PyMappingMethods trie_as_mapping = {
 };
 
 static PyMethodDef trieobj_methods[] = {
+    /*  METH_O and METH_NOARGS require Python 2.2.
     {"has_key", (PyCFunction)trie_has_key,  METH_O,
      has_key__doc__},
     {"has_prefix", (PyCFunction)trie_has_prefix,  METH_O,
@@ -353,12 +403,31 @@ static PyMethodDef trieobj_methods[] = {
      keys__doc__},
     {"values",  (PyCFunction)trie_values,   METH_NOARGS,
      values__doc__},
+    */
+
+    {"has_key", (PyCFunction)trie_has_key_onearg,  METH_VARARGS,
+     has_key__doc__},
+    {"has_prefix", (PyCFunction)trie_has_prefix_onearg,  METH_VARARGS,
+     has_prefix__doc__},
+    {"with_prefix", (PyCFunction)trie_with_prefix_onearg,  METH_VARARGS,
+     with_prefix__doc__},
+    {"keys",    (PyCFunction)trie_keys_noargs,     METH_VARARGS,
+     keys__doc__},
+    {"values",  (PyCFunction)trie_values_noargs,   METH_VARARGS,
+     values__doc__},
+
     {"get",     (PyCFunction)trie_get,      METH_VARARGS,
      get__doc__},
     {"get_approximate",  (PyCFunction)trie_get_approximate,  METH_VARARGS,
      get_approximate__doc__},
     {NULL, NULL}   /* sentinel */
 };
+
+static PyObject *trie_getattr(PyObject *obj, char *name)
+{
+    return Py_FindMethod(trieobj_methods, (PyObject *)obj, name);
+
+}
 
 static PyTypeObject Trie_Type = {
     PyObject_HEAD_INIT(NULL)
@@ -368,7 +437,7 @@ static PyTypeObject Trie_Type = {
     0,
     trie_dealloc,       /*tp_dealloc*/
     0,                  /*tp_print*/
-    0,                  /*tp_getattr*/
+    trie_getattr,                  /*tp_getattr*/
     0,                  /*tp_setattr*/
     0,                  /*tp_compare*/
     0,                  /*tp_repr*/
@@ -376,62 +445,24 @@ static PyTypeObject Trie_Type = {
     0,                  /*tp_as_sequence*/
     &trie_as_mapping,   /*tp_as_mapping*/
     trie_nohash,        /*tp_hash */
-    0,                                      /* tp_call */
-    0,                                      /* tp_str */
-    PyObject_GenericGetAttr,                /* tp_getattro */
-    0,                                      /* tp_setattro */
-    0,                                      /* tp_as_buffer */
-    0,            /* tp_flags */
-    0,                         /* tp_doc */
-    0,            /* tp_traverse */
-    0,                 /* tp_clear */
-    0,                       /* tp_richcompare */
-    0,                                      /* tp_weaklistoffset */
-    0,                 /* tp_iter */
-    0,                                      /* tp_iternext */
-    trieobj_methods,                           /* tp_methods */
-    0,                                      /* tp_members */
-    0,                                      /* tp_getset */
-    0,                                      /* tp_base */
-    0,                                      /* tp_dict */
-    0,                                      /* tp_descr_get */
-    0,                                      /* tp_descr_set */
-    0,                                      /* tp_dictoffset */
-    0,                    /* tp_init */
-    0,                    /* tp_alloc */
-    0,                               /* tp_new */
-    0,                       /* tp_free */
 };
 
 static int
 _write_to_handle(const void *towrite, const int length, void *handle)
 {
     PyObject *py_handle = (PyObject *)handle,
-	*py_write_string = NULL,
-	*py_retval = NULL,
-	*py_towrite = NULL;
+	*py_retval = NULL;
     int success = 0;
 
     if(!length)
 	return 1;
 
-    if(!(py_towrite = PyString_FromStringAndSize(towrite, length)))
-	goto _write_to_handle_cleanup;
-
-    if(!(py_write_string = PyString_FromString("write")))
-	goto _write_to_handle_cleanup;
-    if(!(py_retval = PyObject_CallMethodObjArgs(py_handle, py_write_string,
-						py_towrite, NULL)))
+    if(!(py_retval = PyObject_CallMethod(py_handle, "write", "s#", 
+					 towrite, length)))
 	goto _write_to_handle_cleanup;
     success = 1;
 
  _write_to_handle_cleanup:
-    if(py_towrite) {
-	Py_DECREF(py_towrite);
-    }
-    if(py_write_string) {
-	Py_DECREF(py_write_string);
-    }
     if(py_retval) {
 	Py_DECREF(py_retval);
     }
@@ -489,8 +520,6 @@ static int
 _read_from_handle(void *wasread, const int length, void *handle)
 {
     PyObject *py_handle = (PyObject *)handle,
-	*py_length = NULL,
-	*py_read_string = NULL,
 	*py_retval = NULL;
     void *retval;
     int success = 0;
@@ -501,12 +530,7 @@ _read_from_handle(void *wasread, const int length, void *handle)
     if(!length)
 	return 1;
 
-    if(!(py_read_string = PyString_FromString("read")))
-	goto _read_from_handle_cleanup;
-    if(!(py_length = PyInt_FromLong((long)length)))
-	goto _read_from_handle_cleanup;
-    if(!(py_retval = PyObject_CallMethodObjArgs(py_handle, py_read_string,
-	  py_length, NULL)))
+    if(!(py_retval = PyObject_CallMethod(py_handle, "read", "i", length)))
 	goto _read_from_handle_cleanup;
     if(!py_retval->ob_type->tp_as_buffer) {
 	PyErr_SetString(PyExc_ValueError, "read method should return buffer");
@@ -537,12 +561,6 @@ _read_from_handle(void *wasread, const int length, void *handle)
     success = 1;
     
  _read_from_handle_cleanup:
-    if(py_read_string) {
-	Py_DECREF(py_read_string);
-    }
-    if(py_length) {
-	Py_DECREF(py_length);
-    }
     if(py_retval) {
 	Py_DECREF(py_retval);
     }
