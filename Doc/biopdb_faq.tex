@@ -1,9 +1,11 @@
 %% LyX 1.3 created this file.  For more info, see http://www.lyx.org/.
 %% Do not edit unless you really know what you are doing.
-\documentclass[a4paper,english]{article}
+\documentclass[english]{article}
 \usepackage{bookman}
 \usepackage[T1]{fontenc}
 \usepackage[latin1]{inputenc}
+\usepackage{geometry}
+\geometry{verbose,a4paper,tmargin=20mm,bmargin=20mm}
 \usepackage{graphicx}
 \IfFileExists{url.sty}{\usepackage{url}}
                       {\newcommand{\url}{\texttt}}
@@ -34,6 +36,8 @@
 \lhead{Bio.PDB}
 \rhead{FAQ}
 
+% remove date
+\date{}
 
 % make everything have section numbers
 % Make links between references
@@ -246,11 +250,11 @@ resolution=structure.header{[}'resolution'{]}
 
 keywords=structure.header{[}'keywords'{]}
 \end{lyxcode}
-The available keys are \texttt{name, head, deposition\_date, release\_date,
-structure\_method, resolution, structure\_reference} (maps to a list
-of references), \texttt{journal\_reference, author} and \texttt{compound}
-(maps to a dictionary with various information about the crystallized
-compound).
+The available keys are \texttt{name, head, deposition\_\-date, release\_\-date,
+structure\_\-method, resolution, structure\_\-reference} (maps to
+a list of references), \texttt{journal\_\-reference, author} and
+\texttt{compound} (maps to a dictionary with various information about
+the crystallized compound).
 
 The dictionary can also be created without creating a \texttt{Structure}
 object, ie. directly from the PDB file:
@@ -327,6 +331,19 @@ default, but people seemed to think that Bio.PDB 'crashed' due to
 a bug, so I changed it. If you ever encounter a real (!) bug, please
 tell me immediately!
 
+Example:
+
+\begin{lyxcode}
+\#~Permissive~parser
+
+parser=PDBParser(PERMISSIVE=1)
+
+parser=PDBParser()~\#~The~same~(default)
+
+\#~Strict~parser
+
+strict\_parser=PDBParser(PERMISSIVE=0)
+\end{lyxcode}
 In the permissive state (DEFAULT), PDB files that obviously contain
 errors are 'corrected' (ie. some residues or atoms are left out).
 These errors include:
@@ -370,8 +387,8 @@ accept\_residue(residue)
 accept\_atom(atom)
 \end{lyxcode}
 By default, every method returns 1 (which means the model/\-chain/\-residue/\-atom
-is included in the output). By subclassing Select and returning 0
-when appropriate you can exclude models, chains, etc. from the output.
+is included in the output). By subclassing \texttt{Select} and returning
+0 when appropriate you can exclude models, chains, etc. from the output.
 Cumbersome maybe, but very powerful. The following code only writes
 out glycine residues:
 
@@ -395,8 +412,6 @@ io=PDBIO()
 io.set\_structure(s)
 
 io.save(\char`\"{}out.pdb\char`\"{},~GlySelect())
-
-
 \end{lyxcode}
 
 \subsubsection*{Can I write mmCIF files?}
@@ -522,7 +537,7 @@ The chain id is specified in the PDB/mmCIF file, and is a single character
 (typically a letter). 
 
 
-\subsubsection*{What is a residue id?\ref{residue id}}
+\subsubsection*{What is a residue id?}
 
 This is a bit more complicated, due to the clumsy PDB format. A residue
 id is a tuple with three elements:
@@ -587,21 +602,21 @@ of the disordered atoms or residues. Which subset is picked (e.g.
 which of the two disordered OG side chain atom positions of a Ser
 residue is used) can be specified by the user.
 
-\textbf{Disordered atoms} are represented by ordinary \texttt{Atom}
+\textbf{Disordered atom positions} are represented by ordinary \texttt{Atom}
 objects, but all \texttt{Atom} objects that represent the same physical
-atom are stored in a \texttt{DisorderedAtom} object. Each \texttt{Atom}
-object in a \texttt{DisorderedAtom} object can be uniquely indexed
-using its altloc specifier. The \texttt{DisorderedAtom} object forwards
-all uncaught method calls to the selected Atom object, by default
-the one that represents the atom with with the highest occupancy.
+atom are stored in a \texttt{Disordered\-Atom} object. Each \texttt{Atom}
+object in a \texttt{Disordered\-Atom} object can be uniquely indexed
+using its altloc specifier. The \texttt{Disordered\-Atom} object
+forwards all uncaught method calls to the selected Atom object, by
+default the one that represents the atom with with the highest occupancy.
 The user can of course change the selected \texttt{Atom} object, making
 use of its altloc specifier. In this way atom disorder is represented
 correctly without much additional complexity. In other words, if you
 are not interested in atom disorder, you will not be bothered by it.
 
 Each disordered atom has a characteristic altloc identifier. You can
-specify that a \texttt{DisorderedAtom} object should behave like the
-\texttt{Atom} object associated with a specific altloc identifier:
+specify that a \texttt{Disordered\-Atom} object should behave like
+the \texttt{Atom} object associated with a specific altloc identifier:
 
 \begin{lyxcode}
 atom.disordered\_select(\char`\"{}A\char`\"{})~\#~select~altloc~A~atom
@@ -613,19 +628,20 @@ i.e. when two or more point mutants of a polypeptide are present in
 the crystal. An example of this can be found in PDB structure 1EN2.
 
 Since these residues belong to a different residue type (e.g. let's
-say Ser 60 and Cys 60) they should not be stored in a single Residue
+say Ser 60 and Cys 60) they should not be stored in a single \texttt{Residue}
 object as in the common case. In this case, each residue is represented
-by one Residue object, and both Residue objects are stored in a DisorderedResidue
-object.
+by one \texttt{Residue} object, and both \texttt{Residue} objects
+are stored in a single \texttt{Disordered\-Residue} object.
 
-The DisorderedResidue object forwards all uncaught methods to the
-selected Residue object (by default the last Residue object added),
-and thus behaves like an ordinary residue. Each Residue object in
-a DisorderedResidue object can be uniquely identified by its residue
-name. In the above example, residue Ser 60 would have id \char`\"{}SER\char`\"{}
-in the DisorderedResidue object, while residue Cys 60 would have id
-\char`\"{}CYS\char`\"{}. The user can select the active Residue object
-in a DisorderedResidue object via this id.
+The \texttt{Dis\-ordered\-Residue} object forwards all un\-caught
+methods to the selected \texttt{Residue} object (by default the last
+\texttt{Residue} object added), and thus behaves like an ordinary
+residue. Each \texttt{Residue} object in a \texttt{Disordered\-Residue}
+object can be uniquely identified by its residue name. In the above
+example, residue Ser 60 would have id 'SER' in the \texttt{Disordered\-Residue}
+object, while residue Cys 60 would have id \char`\"{}CYS\char`\"{}.
+The user can select the active \texttt{Residue} object in a \texttt{Disordered\-Residue}
+object via this id.
 
 Example: suppose that a chain has a point mutation at position 10,
 consisting of a Ser and a Cys residue. Make sure that residue 10 of
@@ -634,12 +650,17 @@ this chain behaves as the Cys residue.
 \begin{lyxcode}
 residue=chain{[}10{]}
 
-residue.disordered\_select(\char`\"{}CYS\char`\"{})
+residue.disordered\_select('CYS')
 \end{lyxcode}
+In addition, you can get a list of all \texttt{Atom} objects (ie.
+all \texttt{DisorderedAtom} objects are 'unpacked') using the \texttt{get\_unpacked\_list}
+method of a \texttt{(Disordered)Residue} object.
+
 
 \subsubsection*{Can I sort residues in a chain somehow?}
 
-Yes. More info soon.
+Yes, but I'm waiting for a request for this feature to finish it :-).
+More info soon.
 
 
 \subsubsection*{How are ligands and solvent handled?}
@@ -650,7 +671,8 @@ See 'What is a residue id?'.
 \subsubsection*{What about B factors?}
 
 Well, yes! Bio.PDB supports isotropic and anisotropic B factors, and
-also deals with standard deviations of anisotropic B factor if present.
+also deals with standard deviations of anisotropic B factor if present
+(see \ref{sub:Analysis}).
 
 
 \subsubsection*{What about standard deviation of atomic positions?}
@@ -661,24 +683,25 @@ Yup, supported.
 \subsubsection*{I think the SMCRA data structure is not flexible/\-molecular/\-sexy/\-whatever
 enough...}
 
-Sure, sure. Everybody is always coming up with data structures that
-handle all possible situations and are extensible in all thinkable
-(and unthinkable) ways. The prozaic truth however is that 99.9\% of
-people using (and I mean really using!) crystal structures think in
-terms of models, chains, residues and atoms. The philosophy of Bio.PDB
-is to provide a reasonably fast, clean, simple, but complete data
-structure to access structure data. 
+Sure, sure. Everybody is always coming up with (mostly vaporware)
+data structures that handle all possible situations and are extensible
+in all thinkable (and unthinkable) ways. The prozaic truth however
+is that 99.9\% of people using (and I mean really using!) crystal
+structures think in terms of models, chains, residues and atoms. The
+philosophy of Bio.PDB is to provide a reasonably fast, clean, simple,
+but complete data structure to access structure data. The proof of
+the pudding is in the eating.
 
 Moreover, it is quite easy to build more specialised data structures
-on top of the \texttt{Structure} class. On the other hand, the Structure
-object is built using a Parser/Consumer approach (called \texttt{PDBParser/\-MMCIFParser}
+on top of the \texttt{Structure} class. On the other hand, the \texttt{Structure}
+object is built using a Parser/\-Consumer approach (called \texttt{PDBParser/\-MMCIFParser}
 and \texttt{Structure\-Builder}, respectively). One can easily re-use
 the PDB/mmCIF parsers by implementing a specialised \texttt{Structure\-Builder}
 class. It is of course also trivial to add support for new file formats
 by writing new parsers.
 
 
-\subsection{Analysis}
+\subsection{\label{sub:Analysis}Analysis}
 
 
 \subsubsection*{How do I extract information from an Atom object?}
@@ -686,17 +709,39 @@ by writing new parsers.
 Using the following methods:
 
 \begin{lyxcode}
-a.get\_name()~\#~atom~name~(spaces~stripped,~e.g.~'CA')~a.get\_id()~\#~id~(equals~atom~name)~
+a.get\_name()~\#~atom~name~(spaces~stripped,~e.g.~'CA')
 
-a.get\_coord()~\#~atomic~coordinates~
+a.get\_id()~\#~id~(equals~atom~name)
 
-a.get\_bfactor()~\#~B~factor~
+a.get\_coord()~\#~atomic~coordinates
 
-a.get\_occupancy()~\#~occupancy~
+a.get\_vector()~\#~atomic~coordinates~as~Vector~object
 
-a.get\_altloc()~\#~alternative~location~specifie~a.get\_sigatm()~\#~std.~dev.~of~atomic~parameters~a.get\_siguij()~\#~std.~dev.~of~anisotropic~B~factor~a.get\_anisou()~\#~anisotropic~B~factor~
+a.get\_bfactor()~\#~B~factor
+
+a.get\_occupancy()~\#~occupancy
+
+a.get\_altloc()~\#~alternative~location~specifier
+
+a.get\_sigatm()~\#~std.~dev.~of~atomic~parameters
+
+a.get\_siguij()~\#~std.~dev.~of~anisotropic~B~factor
+
+a.get\_anisou()~\#~anisotropic~B~factor
 
 a.get\_fullname()~\#~atom~name~(with~spaces,~e.g.~'.CA.')
+\end{lyxcode}
+
+\subsubsection*{How do I extract information from a Residue object?}
+
+Using the following methods:
+
+\begin{lyxcode}
+r.get\_resname()~\#~return~the~residue~name~(eg.~GLY)
+
+r.is\_disordered()~\#~1~if~the~residue~has~disordered~atoms
+
+r.get\_segid()~\#~return~the~SEGID
 \end{lyxcode}
 
 \subsubsection*{How do I measure distances?}
@@ -754,12 +799,14 @@ angle=calc\_dihedral(vector1,~vector2,~vector3,~vector4)
 
 \subsubsection*{How do I determine atom-atom contacts?}
 
-Use \texttt{NeighborSearch}.
+Use \texttt{NeighborSearch}. This uses a KD tree data structure coded
+in C++ behind the screens, so it's pretty darn fast (see \texttt{Bio.KDTree}).
 
 
 \subsubsection*{How do I extract polypeptides from a structure object?}
 
-Use \texttt{PolypeptideBuilder}.
+Use \texttt{PolypeptideBuilder}. You can use the resulting \texttt{Polypeptide}
+object to get the sequence as a \texttt{Seq} object as well.
 
 
 \subsubsection*{How do I get the sequence of a structure?}
@@ -777,7 +824,7 @@ Example:
 
 >\,{}>\,{}>~print~seq
 
-Seq('SNVVAVE~...',~<class~Bio.Alphabet.ProteinAlphabet>)
+Seq('SNVVE...',~<class~Bio.Alphabet.ProteinAlphabet>)
 \end{lyxcode}
 
 \subsubsection*{How do I determine secondary structure?}
@@ -793,21 +840,34 @@ Use the \texttt{DSSP} class.
 
 \subsubsection*{How do I calculate residue depth?}
 
-For this functionality, you need to install Michel Sanner's MSMS program.
-Then use the \texttt{ResidueDepth} class.
+Residue depth is the average distance of a residue's atoms from the
+solvent accessible surface. It's a fairly new and very powerful parameterization
+of solvent accessibility (but I'm working on something even more powerful
+:-). 
+
+For this functionality, you need to install Michel Sanner's MSMS program
+(\url{http://www.scripps.edu/pub/olson-web/people/sanner/html/msms_home.html}).
+Then use the \texttt{ResidueDepth} class. You can also get a handle
+to the molecular surface itself.
+
+
+\subsubsection*{How do I map the residues of two related structures onto each other?}
+
+First, create an alignment in FASTA format, then use the \texttt{StructureAlignment}
+class.
 
 
 \subsubsection*{How do I put a virtual C$\beta$ on a Gly residue?}
 
 OK, I admit, this example is only present to show off the possibilities
-of Bio.PDB's Vector module (though this code is actually used in the
-\texttt{Exposure} module). Suppose that you would like to find the
-position of a Gly residue's C$\beta$ atom, if it had one. How would
-you do that? Well, rotating the N atom of the Gly residue along the
-C$\alpha$-C bond over -120 degrees would roughly put it in the position
-of a C$\beta$ atom. Here's how to do it, making use of the \texttt{rotaxis}
-method (which can be used to construct a rotation around a certain
-axis) of the \texttt{Vector} module:
+of Bio.PDB's \texttt{Vector} module (though this code is actually
+used in the \texttt{Exposure} module). Suppose that you would like
+to find the position of a Gly residue's C$\beta$ atom, if it had
+one. How would you do that? Well, rotating the N atom of the Gly residue
+along the C$\alpha$-C bond over -120 degrees would roughly put it
+in the position of a C$\beta$ atom. Here's how to do it, making use
+of the \texttt{rotaxis} method (which can be used to construct a rotation
+around a certain axis) of the \texttt{Vector} module:
 
 \begin{lyxcode}
 n=residue{[}'N'{]}.get\_vector()~
@@ -900,7 +960,7 @@ Yes, using the \texttt{transform} method of the Atom object, or directly
 using the \texttt{set\_coord} method.
 
 
-\subsection{You haven't answered my question yet!}
+\section{You haven't answered my question yet!}
 
 It's late and I'm tired, and a fresh beer is waiting for me in the
 fridge. Just drop me a mail, and I'll answer you in the morning (with

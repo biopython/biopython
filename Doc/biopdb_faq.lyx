@@ -8,6 +8,8 @@
 \lhead{Bio.PDB}
 \rhead{FAQ}
 
+% remove date
+\date{}
 
 % make everything have section numbers
 % Make links between references
@@ -32,17 +34,19 @@
 \spacing single 
 \papersize a4paper
 \paperpackage a4
-\use_geometry 0
+\use_geometry 1
 \use_amsmath 0
 \use_natbib 0
 \use_numerical_citations 0
 \paperorientation portrait
+\topmargin 20mm
+\bottommargin 20mm
 \secnumdepth 3
 \tocdepth 3
 \paragraph_separation indent
 \defskip medskip
 \quotes_language english
-\quotes_times 2
+\quotes_times 1
 \papercolumns 1
 \papersides 1
 \paperpagestyle default
@@ -378,12 +382,17 @@ keywords=structure.header['keywords']
 
 The available keys are 
 \family typewriter 
-name, head, deposition_date, release_date, structure_method, resolution,
- structure_reference 
+name, head, deposition_\SpecialChar \-
+date, release_\SpecialChar \-
+date, structure_\SpecialChar \-
+method, resolution,
+ structure_\SpecialChar \-
+reference 
 \family default 
 (maps to a list of references), 
 \family typewriter 
-journal_reference, author
+journal_\SpecialChar \-
+reference, author
 \family default 
  and 
 \family typewriter 
@@ -548,6 +557,24 @@ It is well known that many PDB files contain semantic errors (I'm not talking
  If you ever encounter a real (!) bug, please tell me immediately!
 \layout Standard
 
+Example:
+\layout LyX-Code
+
+# Permissive parser
+\layout LyX-Code
+
+parser=PDBParser(PERMISSIVE=1)
+\layout LyX-Code
+
+parser=PDBParser() # The same (default)
+\layout LyX-Code
+
+# Strict parser
+\layout LyX-Code
+
+strict_parser=PDBParser(PERMISSIVE=0)
+\layout Standard
+
 In the permissive state (DEFAULT), PDB files that obviously contain errors
  are 'corrected' (ie.
  some residues or atoms are left out).
@@ -618,8 +645,11 @@ chain/\SpecialChar \-
 residue/\SpecialChar \-
 atom
  is included in the output).
- By subclassing Select and returning 0 when appropriate you can exclude
- models, chains, etc.
+ By subclassing 
+\family typewriter 
+Select
+\family default 
+ and returning 0 when appropriate you can exclude models, chains, etc.
  from the output.
  Cumbersome maybe, but very powerful.
  The following code only writes out glycine residues:
@@ -652,8 +682,6 @@ io.set_structure(s)
 \layout LyX-Code
 
 io.save("out.pdb", GlySelect())
-\layout LyX-Code
-
 \layout Subsubsection*
 
 Can I write mmCIF files?
@@ -878,11 +906,6 @@ The chain id is specified in the PDB/mmCIF file, and is a single character
 \layout Subsubsection*
 
 What is a residue id?
-\begin_inset LatexCommand \ref{residue id}
-
-\end_inset 
-
-
 \layout Standard
 
 This is a bit more complicated, due to the clumsy PDB format.
@@ -1009,7 +1032,7 @@ Disorder should be dealt with from two points of view: the atom and the
 
 
 \series bold 
-Disordered atoms
+Disordered atom positions
 \series default 
  are represented by ordinary 
 \family typewriter 
@@ -1021,7 +1044,8 @@ Atom
 \family default 
  objects that represent the same physical atom are stored in a 
 \family typewriter 
-DisorderedAtom
+Disordered\SpecialChar \-
+Atom
 \family default 
  object.
  Each 
@@ -1030,12 +1054,14 @@ Atom
 \family default 
  object in a 
 \family typewriter 
-DisorderedAtom
+Disordered\SpecialChar \-
+Atom
 \family default 
  object can be uniquely indexed using its altloc specifier.
  The 
 \family typewriter 
-DisorderedAtom
+Disordered\SpecialChar \-
+Atom
 \family default 
  object forwards all uncaught method calls to the selected Atom object,
  by default the one that represents the atom with with the highest occupancy.
@@ -1053,7 +1079,8 @@ object, making use of its altloc specifier.
 Each disordered atom has a characteristic altloc identifier.
  You can specify that a 
 \family typewriter 
-DisorderedAtom
+Disordered\SpecialChar \-
+Atom
 \family default 
  object should behave like the 
 \family typewriter 
@@ -1078,21 +1105,69 @@ s, i.e.
 \layout Standard
 
 Since these residues belong to a different residue type (e.g.
- let's say Ser 60 and Cys 60) they should not be stored in a single Residue
+ let's say Ser 60 and Cys 60) they should not be stored in a single 
+\family typewriter 
+Residue
+\family default 
  object as in the common case.
- In this case, each residue is represented by one Residue object, and both
- Residue objects are stored in a DisorderedResidue object.
+ In this case, each residue is represented by one 
+\family typewriter 
+Residue
+\family default 
+ object, and both 
+\family typewriter 
+Residue
+\family default 
+ objects are stored in a single 
+\family typewriter 
+Disordered\SpecialChar \-
+Residue
+\family default 
+ object.
 \layout Standard
 
-The DisorderedResidue object forwards all uncaught methods to the selected
- Residue object (by default the last Residue object added), and thus behaves
- like an ordinary residue.
- Each Residue object in a DisorderedResidue object can be uniquely identified
- by its residue name.
- In the above example, residue Ser 60 would have id "SER" in the DisorderedResid
-ue object, while residue Cys 60 would have id "CYS".
- The user can select the active Residue object in a DisorderedResidue object
- via this id.
+The 
+\family typewriter 
+Dis\SpecialChar \-
+ordered\SpecialChar \-
+Residue
+\family default 
+ object forwards all un\SpecialChar \-
+caught methods to the selected 
+\family typewriter 
+Residue
+\family default 
+ object (by default the last 
+\family typewriter 
+Residue
+\family default 
+ object added), and thus behaves like an ordinary residue.
+ Each 
+\family typewriter 
+Residue
+\family default 
+ object in a 
+\family typewriter 
+Disordered\SpecialChar \-
+Residue
+\family default 
+ object can be uniquely identified by its residue name.
+ In the above example, residue Ser 60 would have id 'SER' in the 
+\family typewriter 
+Disordered\SpecialChar \-
+Residue
+\family default 
+ object, while residue Cys 60 would have id "CYS".
+ The user can select the active 
+\family typewriter 
+Residue
+\family default 
+ object in a 
+\family typewriter 
+Disordered\SpecialChar \-
+Residue
+\family default 
+ object via this id.
 \layout Standard
 
 Example: suppose that a chain has a point mutation at position 10, consisting
@@ -1103,13 +1178,33 @@ Example: suppose that a chain has a point mutation at position 10, consisting
 residue=chain[10]
 \layout LyX-Code
 
-residue.disordered_select("CYS")
+residue.disordered_select('CYS')
+\layout Standard
+
+In addition, you can get a list of all 
+\family typewriter 
+Atom
+\family default 
+ objects (ie.
+ all 
+\family typewriter 
+DisorderedAtom
+\family default 
+ objects are 'unpacked') using the 
+\family typewriter 
+get_unpacked_list
+\family default 
+ method of a 
+\family typewriter 
+(Disordered)Residue
+\family default 
+ object.
 \layout Subsubsection*
 
 Can I sort residues in a chain somehow?
 \layout Standard
 
-Yes.
+Yes, but I'm waiting for a request for this feature to finish it :-).
  More info soon.
 \layout Subsubsection*
 
@@ -1123,7 +1218,13 @@ What about B factors?
 \layout Standard
 
 Well, yes! Bio.PDB supports isotropic and anisotropic B factors, and also
- deals with standard deviations of anisotropic B factor if present.
+ deals with standard deviations of anisotropic B factor if present (see
+ 
+\begin_inset LatexCommand \ref{sub:Analysis}
+
+\end_inset 
+
+).
 \layout Subsubsection*
 
 What about standard deviation of atomic positions?
@@ -1140,14 +1241,15 @@ whatever
 \layout Standard
 
 Sure, sure.
- Everybody is always coming up with data structures that handle all possible
- situations and are extensible in all thinkable (and unthinkable) ways.
+ Everybody is always coming up with (mostly vaporware) data structures that
+ handle all possible situations and are extensible in all thinkable (and
+ unthinkable) ways.
  The prozaic truth however is that 99.9% of people using (and I mean really
  using!) crystal structures think in terms of models, chains, residues and
  atoms.
  The philosophy of Bio.PDB is to provide a reasonably fast, clean, simple,
  but complete data structure to access structure data.
- 
+ The proof of the pudding is in the eating.
 \layout Standard
 
 Moreover, it is quite easy to build more specialised data structures on
@@ -1156,8 +1258,12 @@ Moreover, it is quite easy to build more specialised data structures on
 Structure
 \family default 
  class.
- On the other hand, the Structure object is built using a Parser/Consumer
- approach (called 
+ On the other hand, the 
+\family typewriter 
+Structure 
+\family default 
+object is built using a Parser/\SpecialChar \-
+Consumer approach (called 
 \family typewriter 
 PDBParser/\SpecialChar \-
 MMCIFParser
@@ -1179,6 +1285,11 @@ Builder
  new parsers.
 \layout Subsection
 
+
+\begin_inset LatexCommand \label{sub:Analysis}
+
+\end_inset 
+
 Analysis
 \layout Subsubsection*
 
@@ -1189,27 +1300,58 @@ Using the following methods:
 \layout LyX-Code
 
 a.get_name() # atom name (spaces stripped, e.g.
- 'CA') a.get_id() # id (equals atom name) 
+ 'CA')
 \layout LyX-Code
 
-a.get_coord() # atomic coordinates 
+a.get_id() # id (equals atom name)
 \layout LyX-Code
 
-a.get_bfactor() # B factor 
+a.get_coord() # atomic coordinates
 \layout LyX-Code
 
-a.get_occupancy() # occupancy 
+a.get_vector() # atomic coordinates as Vector object
 \layout LyX-Code
 
-a.get_altloc() # alternative location specifie a.get_sigatm() # std.
+a.get_bfactor() # B factor
+\layout LyX-Code
+
+a.get_occupancy() # occupancy
+\layout LyX-Code
+
+a.get_altloc() # alternative location specifier
+\layout LyX-Code
+
+a.get_sigatm() # std.
  dev.
- of atomic parameters a.get_siguij() # std.
+ of atomic parameters
+\layout LyX-Code
+
+a.get_siguij() # std.
  dev.
- of anisotropic B factor a.get_anisou() # anisotropic B factor 
+ of anisotropic B factor
+\layout LyX-Code
+
+a.get_anisou() # anisotropic B factor
 \layout LyX-Code
 
 a.get_fullname() # atom name (with spaces, e.g.
  '.CA.')
+\layout Subsubsection*
+
+How do I extract information from a Residue object?
+\layout Standard
+
+Using the following methods:
+\layout LyX-Code
+
+r.get_resname() # return the residue name (eg.
+ GLY)
+\layout LyX-Code
+
+r.is_disordered() # 1 if the residue has disordered atoms
+\layout LyX-Code
+
+r.get_segid() # return the SEGID
 \layout Subsubsection*
 
 How do I measure distances?
@@ -1303,6 +1445,12 @@ Use
 NeighborSearch
 \family default 
 .
+ This uses a KD tree data structure coded in C++ behind the screens, so
+ it's pretty darn fast (see 
+\family typewriter 
+Bio.KDTree
+\family default 
+).
 \layout Subsubsection*
 
 How do I extract polypeptides from a structure object?
@@ -1313,6 +1461,15 @@ Use
 PolypeptideBuilder
 \family default 
 .
+ You can use the resulting 
+\family typewriter 
+Polypeptide
+\family default 
+ object to get the sequence as a 
+\family typewriter 
+Seq
+\family default 
+ object as well.
 \layout Subsubsection*
 
 How do I get the sequence of a structure?
@@ -1345,7 +1502,7 @@ Example:
 >>> print seq
 \layout LyX-Code
 
-Seq('SNVVAVE ...', <class Bio.Alphabet.ProteinAlphabet>)
+Seq('SNVVE...', <class Bio.Alphabet.ProteinAlphabet>)
 \layout Subsubsection*
 
 How do I determine secondary structure?
@@ -1373,10 +1530,34 @@ class.
 How do I calculate residue depth?
 \layout Standard
 
-For this functionality, you need to install Michel Sanner's MSMS program.
+Residue depth is the average distance of a residue's atoms from the solvent
+ accessible surface.
+ It's a fairly new and very powerful parameterization of solvent accessibility
+ (but I'm working on something even more powerful :-).
+ 
+\layout Standard
+
+For this functionality, you need to install Michel Sanner's MSMS program
+ (
+\begin_inset LatexCommand \url{http://www.scripps.edu/pub/olson-web/people/sanner/html/msms_home.html}
+
+\end_inset 
+
+).
  Then use the 
 \family typewriter 
 ResidueDepth
+\family default 
+ class.
+ You can also get a handle to the molecular surface itself.
+\layout Subsubsection*
+
+How do I map the residues of two related structures onto each other?
+\layout Standard
+
+First, create an alignment in FASTA format, then use the 
+\family typewriter 
+StructureAlignment
 \family default 
  class.
 \layout Subsubsection*
@@ -1389,7 +1570,11 @@ How do I put a virtual C
 \layout Standard
 
 OK, I admit, this example is only present to show off the possibilities
- of Bio.PDB's Vector module (though this code is actually used in the 
+ of Bio.PDB's 
+\family typewriter 
+Vector
+\family default 
+ module (though this code is actually used in the 
 \family typewriter 
 Exposure
 \family default 
@@ -1590,7 +1775,7 @@ transform
 set_coord
 \family default 
  method.
-\layout Subsection
+\layout Section
 
 You haven't answered my question yet!
 \layout Standard
