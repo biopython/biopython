@@ -77,7 +77,9 @@ class KDTree
 		long int _count;
 		long int _neighbor_count;
 		float _radius;
+		float _radius_sq;
 		float _neighbor_radius;
+		float _neighbor_radius_sq;
 		float *_center_coord;
 		float *_coords;
 		// Methods

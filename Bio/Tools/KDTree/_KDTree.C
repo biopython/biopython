@@ -10,7 +10,7 @@ float KDTREE_dist(float *coord1, float *coord2, int dim)
 		dif=coord1[i]-coord2[i];
 		sum+=dif*dif;
 	}
-	return sqrt(sum);
+	return sum;
 }
 
 
@@ -440,10 +440,11 @@ void KDTree::_report_point(long int index, float *coord)
 
 	r=KDTREE_dist(_center_coord, coord, KDTree::dim);
 
-	if (r<=_radius)
+	if (r<=_radius_sq)
 	{
 		_index_list.push_back(index);
-		_radius_list.push_back(r);
+		// note use of sqrt - only calculated if necessary
+		_radius_list.push_back(sqrt(r));
 		_count++;
 	}
 }
@@ -482,6 +483,8 @@ void KDTree::search_center_radius(float *coord, float radius)
 	_count=0;
 
 	_radius=radius;
+	// use of r^2 to avoid sqrt use
+	_radius_sq=radius*radius;
 
 	for (i=0; i<KDTree::dim; i++)
 	{
@@ -558,7 +561,9 @@ void KDTree::neighbor_search(float neighbor_radius)
 {
 	_neighbor_index_list.clear();
 	_neighbor_radius_list.clear();
+	// note the use of r^2 to avoid use of sqrt
 	_neighbor_radius=neighbor_radius;
+	_neighbor_radius_sq=neighbor_radius*neighbor_radius;
 	_neighbor_count=0;
 
 	_neighbor_search(_root, 0);
@@ -639,11 +644,13 @@ void KDTree::_neighbor_search_pairs(Node *left, Node *right, int depth)
 
 			r=KDTREE_dist(left->get_coord(), right->get_coord(), KDTree::dim);
 
-			if(r<=_neighbor_radius)
+			if(r<=_neighbor_radius_sq)
 			{
 				// we found a neighbor pair!
 				_neighbor_index_list.push_back(li);
 				_neighbor_index_list.push_back(ri);
+				// note sqrt
+				_neighbor_radius_list.push_back(sqrt(r));
 				_neighbor_count++;
 			}
 		}
@@ -695,10 +702,11 @@ void KDTree::_neighbor_search_pairs(Node *left, Node *right, int depth)
 			{
 				// only test 3 "overlapping" nodes
 				_neighbor_search_pairs(left->get_left_node(), right->get_left_node(), depth+1);
-				// NOT this one since they are >R apart, so this is were we save time!
-				//_neighbor_search_pairs(left->get_left_node(), right->get_right_node(), depth+1);
 				_neighbor_search_pairs(left->get_right_node(), right->get_left_node(), depth+1);
 				_neighbor_search_pairs(left->get_right_node(), right->get_right_node(), depth+1);
+				// NOT this one since the half planes are >R apart
+				// This is were we save time!
+				//_neighbor_search_pairs(left->get_left_node(), right->get_right_node(), depth+1);
 			}
 		}
 	}

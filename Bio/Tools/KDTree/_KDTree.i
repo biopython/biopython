@@ -25,8 +25,43 @@
   $target = $source;
 }      
 
-// Handle input of coordinates as a Numpy array
-%typemap(python, in) float *
+// Handle input of 0xD coordinates as a Numpy array
+%typemap(python, in) float *onedim
+{
+	float *coord_data;
+	PyArrayObject *array;
+	long int n, i;
+
+	array=(PyArrayObject *) $source;
+
+	/* Check if it is an array */
+	if (PyArray_Check($source))
+	{
+		if(array->nd!=1)
+		{
+			PyErr_SetString(PyExc_ValueError, "Array must be one dimensional.");
+			return NULL;
+		}	
+
+		n=array->dimensions[0];
+
+		// coord_data is deleted by the KDTree object
+		coord_data=new float [n];
+
+		for (i=0; i<n; i++)
+		{
+			coord_data[i]=*(float *) (array->data+i*array->strides[0]);
+		}	
+		$target=coord_data;
+	}
+	else
+	{
+		return NULL;
+	}
+}
+
+// Handle input of NxD coordinates as a Numpy array
+%typemap(python, in) float *twodim
 {
 	float *coord_data;
 	PyArrayObject *array;
@@ -72,8 +107,8 @@ class KDTree
 	public:
 		KDTree(int POSITIVE);
 		~KDTree();
-		void set_data(float *coords, unsigned long int POSITIVE);
-		void search_center_radius(float *coord, float POSITIVE);
+		void set_data(float *twodim, unsigned long int POSITIVE);
+		void search_center_radius(float *onedim, float POSITIVE);
 		long int get_count(void);
 		void neighbor_search(float POSITIVE);
 		long int get_neighbor_count(void);
