@@ -119,9 +119,15 @@ class _Scanner:
         read_and_call_while(uhandle, consumer.noevent, blank=1)
 
         # Read the reference lines and the following blank line.
+        # There might be a <pre> line, for qblast output.
+        attempt_read_and_call(uhandle, consumer.noevent, start="<pre>")
         read_and_call(uhandle, consumer.reference, start='Reference')
-        read_and_call_until(uhandle, consumer.reference, blank=1)
-        read_and_call_while(uhandle, consumer.noevent, blank=1)
+        while 1:
+            line = uhandle.readline()
+            if is_blank_line(line) or line.startswith("RID"):
+                read_and_call_while(uhandle, consumer.noevent, blank=1)
+                break
+            consumer.reference(line)
 
         # Read the Query lines and the following blank line.
         read_and_call(uhandle, consumer.query_info, start='Query=')
@@ -228,7 +234,7 @@ class _Scanner:
         # to the alignments.
         if not attempt_read_and_call(
             uhandle, consumer.description_header,
-            has_re=re.compile(r'Score {4,5}E')):
+            has_re=re.compile(r'Score +E')):
             # Either case 2 or 3.  Look for "No hits found".
             attempt_read_and_call(uhandle, consumer.no_hits,
                                   contains='No hits found')
@@ -285,6 +291,9 @@ class _Scanner:
         consumer.end_descriptions()
 
     def _scan_alignments(self, uhandle, consumer):
+        # qblast inserts a helpful line here.
+        attempt_read_and_call(uhandle, consumer.noevent, start="ALIGNMENTS")
+
         # First, check to see if I'm at the database report.
         line = safe_peekline(uhandle)
         if line.startswith('  Database'):
