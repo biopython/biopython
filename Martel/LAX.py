@@ -94,10 +94,22 @@ class LAX(handler.ContentHandler, UserDict.UserDict):
         if fields is None:
             fields = _IsIn()
         self.__fields = fields
-        
+
+    def __getattr__(self, name):
+        if name == "document":
+            return self
+        raise AttributeError(name)
+
+    def uses_tags(self):
+        if isinstance(self.__fields, _IsIn):
+            return None
+        return self.__fields
+
+    
     def startDocument(self):
         self.__capture = []
         self.__expect = None
+        self.__pos = 0
         self.start()
         
     def start(self):
@@ -105,23 +117,25 @@ class LAX(handler.ContentHandler, UserDict.UserDict):
 
     def startElement(self, tag, attrs):
         if tag in self.__fields:
-            self.__capture.append( (tag, attrs, []) )
+            self.__capture.append( (tag, attrs, [], self.__pos) )
             self.__expect = tag
             
     def characters(self, s):
+        self.__pos += len(s)
         for term in self.__capture:
             term[2].append(s)
             
     def endElement(self, tag):
         if tag == self.__expect:
-            cap, attrs, text_items = self.__capture.pop()
-            self.element(tag, attrs, string.join(text_items, ""))
+            cap, attrs, text_items, start = self.__capture.pop()
+            self.element(tag, attrs, string.join(text_items, ""),
+                         start, self.__pos)
             if self.__capture:
                 self.__expect = self.__capture[-1][0]
             else:
                 self.__expect = None
 
-    def element(self, tag, attrs, text):
+    def element(self, tag, attrs, text, startpos, endpos):
         self.data.setdefault(tag, []).append(text)
             
     def endDocument(self):
@@ -136,8 +150,21 @@ class LAX(handler.ContentHandler, UserDict.UserDict):
     def end(self):
         pass
 
+
 # Also stores the attributes
 class LAXAttrs(LAX):
-    def element(self, tag, attrs, text):
+    def element(self, tag, attrs, text, startpos, endpos):
         self.data.setdefault(tag, []).append( (text, attrs) )
 
+# Stores attributes and positions
+class ElementInfo:
+    def __init__(self, text, attrs, startpos, endpos):
+        self.text = text
+        self.attrs = attrs
+        self.startpos = startpos
+        self.endpos = endpos
+
+class LAXPositions(LAXAttrs):
+    def element(self, tag, attrs, text, startpos, endpos):
+        self.data.setdefault(tag, []).append(
+            ElementInfo(text, attrs, startpos, endpos) )
