@@ -26,19 +26,19 @@ if os.path.basename(os.getcwd()) == 'Doc':
 # Kludge: manipulate sys.argv so it will look like happydoc is being called
 # via the happydoc.py program.
 
-# find out where happydoc is by checking through the imports for it
-happydoc_location = None
-for import_dir in sys.path:
-    if import_dir != '':
-        dir_contents = os.listdir(import_dir)
-        if 'happydoc.py' in dir_contents:
-            happydoc_location = import_dir
-
-if happydoc_location is None:
+try:
+    # this is a HappyDoc file. We can't import happydoc_class or anything
+    # that imports it until after we do this sys.argv hack.
+    import StructuredText
+except ImportError:
     print IMPORT_MESSAGE
-    sys.exit()
+    sys.exit(1)
 
-sys.argv = [os.path.join(happydoc_location, 'happydoc.py'), 'README', 'Bio']
+# find where happydoc is via the imported StructuredText file
+happydoc_location = os.path.dirname(StructuredText.__file__)
+print 'happydoc_location:', happydoc_location
+
+sys.argv = [os.path.join(happydoc_location, 'happydoc.py'), 'Bio']
 
 try:
     from happydoc_class import HappyDoc
