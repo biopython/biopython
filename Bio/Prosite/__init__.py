@@ -4,5 +4,6 @@
 # as part of this package.
 
 __all__ = [
-    'Prosite'
+    'Prosite',
+    'Prodoc'
     ]

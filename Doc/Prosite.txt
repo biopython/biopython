@@ -23,3 +23,17 @@ record
     pdb_reference
     documentation
     terminator
+
+
+
+
+
+Prodoc
+------
+
+The PRODOC scanner produces the following events:
+record
+    accession
+    prosite_reference
+    text
+    reference
