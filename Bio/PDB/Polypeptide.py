@@ -193,14 +193,13 @@ if __name__=="__main__":
 
     print "C-N"
     for pp in ppb.build_peptides(s):
-        print pp
+        print pp.get_sequence()
 
     ppb=CaPPBuilder()
 
     print "CA-CA"
     for pp in ppb.build_peptides(s):
         print pp.get_sequence()
-        print pp.get_ca_list()
 
 
 
