@@ -156,7 +156,7 @@ OBSLTE     26-SEP-03 1DYV      1UN2
         stores it in a local file tree (if 'write' is set true).
         The PDB structure is returned as a single string.
         The compression should be '.Z' or '.gz'. 'uncompress' is
-		the command called to uncompress the files.
+        the command called to uncompress the files.
         """
         # get the structure
         code=string.lower(pdb_code)

@@ -9,29 +9,30 @@ from Entity import Entity
 
 
 class Structure(Entity):
-	"""
-	The Structure class contains a collection of Model instances.
-	"""
-	def __init__(self, id):
-		self.level="S"
-		Entity.__init__(self, id)
+    """
+    The Structure class contains a collection of Model instances.
+    """
+    def __init__(self, id):
+        self.level="S"
+        Entity.__init__(self, id)
 
-	# Special methods
+    # Special methods
 
-	def __repr__(self):
-		return "<Structure id=%s>" % self.get_id()
+    def __repr__(self):
+        return "<Structure id=%s>" % self.get_id()
 
-	# Private methods
+    # Private methods
 
-	def _sort(self, m1, m2):
-		"""Sort models.
+    def _sort(self, m1, m2):
+        """Sort models.
 
-		This sorting function sorts the Model instances in the Structure instance.
-		The sorting is done based on the model id, which is a simple int that 
-		reflects the order of the models in the PDB file.
+        This sorting function sorts the Model instances in the Structure instance.
+        The sorting is done based on the model id, which is a simple int that 
+        reflects the order of the models in the PDB file.
 
-		Arguments:
-		o m1, m2 - Model instances
-		"""
-		return cmp(m1.get_id(), m2.get_id())
+        Arguments:
+        o m1, m2 - Model instances
+        """
+        return cmp(m1.get_id(), m2.get_id())
+        
 
