@@ -67,7 +67,6 @@ gnl_id = Str("gnl|") + \
          Str("|") + \
          Std.dbxref_dbid(UntilSep(sep = "| "))
 
-
 # NCBI Reference Sequence      ref|accession|locus
 ids.append(make_2id("ref", "x-ref", "primary", "secondary"))
 
