@@ -11,7 +11,7 @@ GFF.py: Access to General Feature Format databases created with Bio::DB:GFF
 based on documentation for Lincoln Stein's Perl Bio::DB::GFF
 """
 
-__version__ = "$Revision: 1.3 $"
+__version__ = "$Revision: 1.4 $"
 # $Source: /home/bartek/cvs2bzr/biopython_fastimport/cvs_repo/biopython/Bio/GFF/__init__.py,v $
 
 import exceptions
@@ -53,6 +53,12 @@ class Segment(object):
 
     def features(self, *args, **keywds):
         return FeatureQuery(self.seqname, self.coords, self.complement, connection=self.gff.db, *args, **keywds)
+
+    def single_feature(self, *args, **keywds):
+        features = self.features(*args, **keywds)
+        all_features = GenericTools.all(features)
+        assert len(all_features) == 1
+        return all_features[0]
 
 class Connection(Segment):
     """

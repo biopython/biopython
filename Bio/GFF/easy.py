@@ -11,7 +11,7 @@ Bio.easy: some functions to ease the use of Biopython
 
 from __future__ import generators # requires Python 2.2
 
-__version__ = "$Revision: 1.1 $"
+__version__ = "$Revision: 1.2 $"
 # $Source: /home/bartek/cvs2bzr/biopython_fastimport/cvs_repo/biopython/Bio/GFF/easy.py,v $
 
 import copy
@@ -193,12 +193,14 @@ class Location(GenericTools.VerboseList):
         return Location([Location([start]), Location([end])])
 
     def start(self):
+        # zero-based
         if self.complement:
             return self.three_prime()[0]
         else:
             return self.five_prime()[0]
 
     def end(self):
+        # zero-based
         if self.complement:
             return self.five_prime()[0]
         else:

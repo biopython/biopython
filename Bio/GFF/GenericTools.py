@@ -11,7 +11,7 @@ Docstring
 
 from __future__ import generators
 
-__version__ = "$Revision: 1.1 $"
+__version__ = "$Revision: 1.2 $"
 # $Source: /home/bartek/cvs2bzr/biopython_fastimport/cvs_repo/biopython/Bio/GFF/GenericTools.py,v $
 
 import exceptions
@@ -160,6 +160,9 @@ class ArgsParser(object):
             except IndexError:
                 pass
             self.__dict__[default[0]] = default[1]
+
+def all(iterator):
+    return [item for item in iterator]
 
 def _test(*args, **keywds):
     import doctest, sys
