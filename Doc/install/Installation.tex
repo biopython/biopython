@@ -423,14 +423,35 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 Depending on your version of python and what you have installed, you may
 get the following warning message: 
-\verb|Warn: Python Imaging Library not available|. 
-This isn't anything to worry about since the Biopython
-parts that use ReportLab will work just fine without it.
+\verb|Warn: Python Imaging Library not available|.  This isn't anything
+to worry about since the Biopython parts that use ReportLab will work
+just fine without it.
+
+\subsection{Database Access (MySQLdb, ...) (optional)}
+
+The MySQLdb package is a library for accessing MySQL databases. It is
+used in the Biopython GFF module, which allows access to databases
+created from GFF feature tables. Biopython also includes an accessory
+module, DocSQL, which provides a convenient interface to MySQLdb. 
+If you are not planning on using Bio.GFF or Bio.DocSQL, installing
+MySQLdb is not necessary.
+
+
+Additionally, both MySQLdb and psycopg (a PostgreSQL database adaptor)
+can be used for accessing BioSQL databases through Biopython. Again if
+you are not going to use BioSQL, there shouldn't be any need to install
+these modules.
+
+
+Installation instructions for MySQLdb and psycopg are included in the
+BioSQL documentation, which is available from
+\ahrefurl{\url{http://www.biopython.org/docs/python_biosql_basic.html}} and
+\ahrefurl{\url{http://www.biopython.org/docs/python_biosql_basic.pdf}}.
 
 \section{Installing Biopython}
 
-\subsection{Obtaining Biopython}
-
+\subsection{Obtaining Biopython
+}
 Biopython's internet home is at, naturally enough,  
 \ahrefurl{\url{http://www.biopython.org}}. This is the home of all things 
 Biopython, so it is the best place to start looking around. 

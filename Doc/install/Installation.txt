@@ -43,10 +43,11 @@ Table of Contents
        - 3.3.2  Windows systems 
        - 3.3.3  Making sure it installed correctly 
      
+    - 3.4  Database Access (MySQLdb, ...) (optional) 
   
  - 4  Installing Biopython 
      
-    - 4.1  Obtaining Biopython 
+    - 4.1  Obtaining Biopython  
     - 4.2  Installing from source on UNIX and Mac OS X 
         
        - 4.2.1  Installation on FreeBSD 
@@ -426,8 +427,27 @@ following:
   
   Depending on your version of python and what you have installed, you
 may get the following warning message:  `Warn: Python Imaging Library
-not available'.  This isn't anything to worry about since the Biopython
+not available'. This isn't anything to worry about since the Biopython
 parts that use ReportLab will work just fine without it.
+  
+
+3.4  Database Access (MySQLdb, ...) (optional)
+==============================================
+  
+  The MySQLdb package is a library for accessing MySQL databases. It is
+used in the Biopython GFF module, which allows access to databases
+created from GFF feature tables. Biopython also includes an accessory
+module, DocSQL, which provides a convenient interface to MySQLdb.  If
+you are not planning on using Bio.GFF or Bio.DocSQL, installing MySQLdb
+is not necessary.
+  Additionally, both MySQLdb and psycopg (a PostgreSQL database adaptor)
+can be used for accessing BioSQL databases through Biopython. Again if
+you are not going to use BioSQL, there shouldn't be any need to install
+these modules.
+  Installation instructions for MySQLdb and psycopg are included in the
+BioSQL documentation, which is available from
+http://www.biopython.org/docs/python_biosql_basic.html and
+http://www.biopython.org/docs/python_biosql_basic.pdf.
   
 
 4  Installing Biopython
@@ -436,10 +456,9 @@ parts that use ReportLab will work just fine without it.
   
   
 
-4.1  Obtaining Biopython
-========================
-  
-  Biopython's internet home is at, naturally enough, 
+4.1  Obtaining Biopython 
+=========================
+   Biopython's internet home is at, naturally enough, 
 http://www.biopython.org. This is the home of all things  Biopython, so
 it is the best place to start looking around.  You have two choices for
 obtaining Biopython:

@@ -55,24 +55,26 @@
 <LI><A HREF="#htoc18">3.3.2&nbsp;&nbsp;Windows systems</A>
 <LI><A HREF="#htoc19">3.3.3&nbsp;&nbsp;Making sure it installed correctly</A>
 </UL>
+<LI><A HREF="#htoc20">3.4&nbsp;&nbsp;Database Access (MySQLdb, ...) (optional)</A>
 </UL>
-<LI><A HREF="#htoc20">4&nbsp;&nbsp;Installing Biopython</A>
+<LI><A HREF="#htoc21">4&nbsp;&nbsp;Installing Biopython</A>
 <UL><LI>
-<A HREF="#htoc21">4.1&nbsp;&nbsp;Obtaining Biopython</A>
-<LI><A HREF="#htoc22">4.2&nbsp;&nbsp;Installing from source on UNIX and Mac OS X</A>
+<A HREF="#htoc22">4.1&nbsp;&nbsp;Obtaining Biopython
+</A>
+<LI><A HREF="#htoc23">4.2&nbsp;&nbsp;Installing from source on UNIX and Mac OS X</A>
 <UL><LI>
-<A HREF="#htoc23">4.2.1&nbsp;&nbsp;Installation on FreeBSD</A>
+<A HREF="#htoc24">4.2.1&nbsp;&nbsp;Installation on FreeBSD</A>
 </UL>
-<LI><A HREF="#htoc24">4.3&nbsp;&nbsp;Installing on UNIX systems using RPMs</A>
-<LI><A HREF="#htoc25">4.4&nbsp;&nbsp;Installing with a Windows Installer</A>
-<LI><A HREF="#htoc26">4.5&nbsp;&nbsp;Installing from source on Windows</A>
-<LI><A HREF="#htoc27">4.6&nbsp;&nbsp;Installing on Macintosh</A>
+<LI><A HREF="#htoc25">4.3&nbsp;&nbsp;Installing on UNIX systems using RPMs</A>
+<LI><A HREF="#htoc26">4.4&nbsp;&nbsp;Installing with a Windows Installer</A>
+<LI><A HREF="#htoc27">4.5&nbsp;&nbsp;Installing from source on Windows</A>
+<LI><A HREF="#htoc28">4.6&nbsp;&nbsp;Installing on Macintosh</A>
 <UL><LI>
-<A HREF="#htoc28">4.6.1&nbsp;&nbsp;Pre-Built Install</A>
-<LI><A HREF="#htoc29">4.6.2&nbsp;&nbsp;Non Pre-Built Installation</A>
+<A HREF="#htoc29">4.6.1&nbsp;&nbsp;Pre-Built Install</A>
+<LI><A HREF="#htoc30">4.6.2&nbsp;&nbsp;Non Pre-Built Installation</A>
 </UL>
 </UL>
-<LI><A HREF="#htoc30">5&nbsp;&nbsp;Making sure everything worked</A>
+<LI><A HREF="#htoc31">5&nbsp;&nbsp;Making sure everything worked</A>
 </UL>
 
 <!--TOC section Purpose and Assumptions-->
@@ -433,17 +435,40 @@ Type "help", "copyright", "credits" or "license" for more information.
 </PRE>
 Depending on your version of python and what you have installed, you may
 get the following warning message: 
-<CODE>Warn: Python Imaging Library not available</CODE>. 
-This isn't anything to worry about since the Biopython
-parts that use ReportLab will work just fine without it.<BR>
+<CODE>Warn: Python Imaging Library not available</CODE>. This isn't anything
+to worry about since the Biopython parts that use ReportLab will work
+just fine without it.<BR>
+<BR>
+<!--TOC subsection Database Access (MySQLdb, ...) (optional)-->
+
+<H3><A NAME="htoc20">3.4</A>&nbsp;&nbsp;Database Access (MySQLdb, ...) (optional)</H3><!--SEC END -->
+
+The MySQLdb package is a library for accessing MySQL databases. It is
+used in the Biopython GFF module, which allows access to databases
+created from GFF feature tables. Biopython also includes an accessory
+module, DocSQL, which provides a convenient interface to MySQLdb. 
+If you are not planning on using Bio.GFF or Bio.DocSQL, installing
+MySQLdb is not necessary.<BR>
+<BR>
+Additionally, both MySQLdb and psycopg (a PostgreSQL database adaptor)
+can be used for accessing BioSQL databases through Biopython. Again if
+you are not going to use BioSQL, there shouldn't be any need to install
+these modules.<BR>
+<BR>
+Installation instructions for MySQLdb and psycopg are included in the
+BioSQL documentation, which is available from
+<A HREF="http://www.biopython.org/docs/python_biosql_basic.html"><TT>http://www.biopython.org/docs/python_biosql_basic.html</TT></A> and
+<A HREF="http://www.biopython.org/docs/python_biosql_basic.pdf"><TT>http://www.biopython.org/docs/python_biosql_basic.pdf</TT></A>.<BR>
 <BR>
 <!--TOC section Installing Biopython-->
 
-<H2><A NAME="htoc20">4</A>&nbsp;&nbsp;Installing Biopython</H2><!--SEC END -->
+<H2><A NAME="htoc21">4</A>&nbsp;&nbsp;Installing Biopython</H2><!--SEC END -->
 
-<!--TOC subsection Obtaining Biopython-->
+<!--TOC subsection Obtaining Biopython
+-->
 
-<H3><A NAME="htoc21">4.1</A>&nbsp;&nbsp;Obtaining Biopython</H3><!--SEC END -->
+<H3><A NAME="htoc22">4.1</A>&nbsp;&nbsp;Obtaining Biopython
+</H3><!--SEC END -->
 
 Biopython's internet home is at, naturally enough, 
 <A HREF="http://www.biopython.org"><TT>http://www.biopython.org</TT></A>. This is the home of all things 
@@ -466,7 +491,7 @@ Based on which way you choose, you'll need to follow one of the following instal
 <BR>
 <!--TOC subsection Installing from source on UNIX and Mac OS X-->
 
-<H3><A NAME="htoc22">4.2</A>&nbsp;&nbsp;Installing from source on UNIX and Mac OS X</H3><!--SEC END -->
+<H3><A NAME="htoc23">4.2</A>&nbsp;&nbsp;Installing from source on UNIX and Mac OS X</H3><!--SEC END -->
 
 <A NAME="sec:unix_install"></A>
 Biopython uses Distutils, the new standard python installation package, for
@@ -490,7 +515,7 @@ as well (normally called something like <CODE>python-devel-2.2.2.rpm</CODE>).<BR
 <LI>That's it! Biopython is installed. Wasn't that easy? Now let's check and make sure it worked properly. Skip on ahead to section&nbsp;<A HREF="#sec:is_working">5</A>.</OL>
 <!--TOC subsubsection Installation on FreeBSD-->
 
-<H4><A NAME="htoc23">4.2.1</A>&nbsp;&nbsp;Installation on FreeBSD</H4><!--SEC END -->
+<H4><A NAME="htoc24">4.2.1</A>&nbsp;&nbsp;Installation on FreeBSD</H4><!--SEC END -->
 
 Johann Visagie has been kind enough to create (and keep updated) a FreeBSD port of Biopython. Thanks to the wonders of the ports system, this means that all you need to do to install Biopython on FreeBSD is do the following as root:
 <PRE>
@@ -503,7 +528,7 @@ If you want more information on FreeBSD and things, Johann has written a nice pr
 <BR>
 <!--TOC subsection Installing on UNIX systems using RPMs-->
 
-<H3><A NAME="htoc24">4.3</A>&nbsp;&nbsp;Installing on UNIX systems using RPMs</H3><!--SEC END -->
+<H3><A NAME="htoc25">4.3</A>&nbsp;&nbsp;Installing on UNIX systems using RPMs</H3><!--SEC END -->
 
 Warning. Right now we're not making RPMs for biopython (because I
 stopped using an RPM system, basically). If anyone wants to pick this
@@ -526,7 +551,7 @@ RPMs do not install the documentation, tests, or example code, so you might want
 <BR>
 <!--TOC subsection Installing with a Windows Installer-->
 
-<H3><A NAME="htoc25">4.4</A>&nbsp;&nbsp;Installing with a Windows Installer</H3><!--SEC END -->
+<H3><A NAME="htoc26">4.4</A>&nbsp;&nbsp;Installing with a Windows Installer</H3><!--SEC END -->
 
 Installing things on Windows with the installer should be really easy (hey, that's why they've got graphical installers, right?). You should just need to download the <CODE>Biopython-version.exe</CODE> installer from biopython web site. Then you just need to double click and voila, a nice little installer will come up and you can stick the libraries where you need to. No need for a C compiler or anything fancy. You will need to have Administrator privileges on the machine to do the installation.<BR>
 <BR>
@@ -534,7 +559,7 @@ This does not install the documentation, tests, example code or source code, so 
 <BR>
 <!--TOC subsection Installing from source on Windows-->
 
-<H3><A NAME="htoc26">4.5</A>&nbsp;&nbsp;Installing from source on Windows</H3><!--SEC END -->
+<H3><A NAME="htoc27">4.5</A>&nbsp;&nbsp;Installing from source on Windows</H3><!--SEC END -->
 
 <A NAME="sec:windows_install"></A>
 This section deals with installing the source (i.&nbsp;e.&nbsp;from CVS or from a source zip file) on a Windows machine. Much of the information from the UNIX install applies here, so it would be good to read section&nbsp;<A HREF="#sec:unix_install">4.2</A> before starting. Also, a little warning -- I (Brad) am writing these instructions based on very limited experience with Windows; I am basically a UNIX geek. So if you know more about Windows and want to add/correct things in this section, please feel let us know!<BR>
@@ -561,7 +586,7 @@ Now that you've got everything installed, skip on ahead to section&nbsp;<A HREF=
 <BR>
 <!--TOC subsection Installing on Macintosh-->
 
-<H3><A NAME="htoc27">4.6</A>&nbsp;&nbsp;Installing on Macintosh</H3><!--SEC END -->
+<H3><A NAME="htoc28">4.6</A>&nbsp;&nbsp;Installing on Macintosh</H3><!--SEC END -->
 
 This section describes installation on pre-OS X machines. On OS X
 Biopython can be installed using the UNIX instructions.<BR>
@@ -570,7 +595,7 @@ Biopython code should work on Pre-OS X Macintoshes, using the MacPython distribu
 <BR>
 <!--TOC subsubsection Pre-Built Install-->
 
-<H4><A NAME="htoc28">4.6.1</A>&nbsp;&nbsp;Pre-Built Install</H4><!--SEC END -->
+<H4><A NAME="htoc29">4.6.1</A>&nbsp;&nbsp;Pre-Built Install</H4><!--SEC END -->
 
 Yair Benita has been kind enough prepare pre-compiled and ready to go
 binaries for Macintosh machines. These distributions also contain the
@@ -586,7 +611,7 @@ a standard location python searches (something like
 <BR>
 <!--TOC subsubsection Non Pre-Built Installation-->
 
-<H4><A NAME="htoc29">4.6.2</A>&nbsp;&nbsp;Non Pre-Built Installation</H4><!--SEC END -->
+<H4><A NAME="htoc30">4.6.2</A>&nbsp;&nbsp;Non Pre-Built Installation</H4><!--SEC END -->
 
 If you don't want to use the pre-built releases, you can get some basic
 functionality from Biopython without compiling anything.
@@ -596,7 +621,7 @@ Some notes: Obviously this will not compile any of the C extensions in biopython
 <BR>
 <!--TOC section Making sure everything worked-->
 
-<H2><A NAME="htoc30">5</A>&nbsp;&nbsp;Making sure everything worked</H2><!--SEC END -->
+<H2><A NAME="htoc31">5</A>&nbsp;&nbsp;Making sure everything worked</H2><!--SEC END -->
 
 <A NAME="sec:is_working"></A>
 First, we'll just do a quick test to make sure Biopython is installed correctly. The most important thing is that python can find the biopython installation. Biopython installs into top level <CODE>Bio</CODE>, <CODE>Martel</CODE> and <CODE>BioSQL</CODE> directories, so you'll want to make sure these directories are located in a directory specified 
