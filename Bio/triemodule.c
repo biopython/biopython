@@ -603,7 +603,7 @@ static PyMethodDef trie_methods[] = {
 };
 
 static char trie__doc__[] =
-"
+"\
 This module implements a trie data structure.  This allows an O(M)\n\
 lookup of a string in a dictionary, where M is the length of the\n\
 string.  It also supports approximate matches.\n\

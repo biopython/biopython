@@ -92,7 +92,7 @@ int Trie_set(Trie trie, const unsigned char *key, const void *value) {
 	   allocate these first so that if I can detect memory errors
 	   before I mess up the data structure of the transitions.
 	*/
-	if(!(new_suffix = strdup(key)))
+	if(!(new_suffix = (unsigned char *)strdup(key)))
 	    goto insert_memerror;
 	if(!(newtrie = Trie_new()))
 	    goto insert_memerror;
@@ -153,7 +153,7 @@ int Trie_set(Trie trie, const unsigned char *key, const void *value) {
 		goto split_memerror;
 	    strncpy(new_suffix1, key, chars_shared);
 	    new_suffix1[chars_shared] = 0;
-	    if(!(new_suffix2 = strdup(suffix+chars_shared)))
+	    if(!(new_suffix2 = (unsigned char *)strdup(suffix+chars_shared)))
 		goto split_memerror;
 	    if(!(newtrie = Trie_new()))
 		goto split_memerror;
@@ -697,7 +697,7 @@ int _deserialize_transition(Transition transition,
     if(!(*read)(KEY, suffixlen, data))
 	goto _deserialize_transition_error;
     KEY[suffixlen] = 0;
-    if(!(transition->suffix = strdup(KEY)))
+    if(!(transition->suffix = (unsigned char *)strdup(KEY)))
 	goto _deserialize_transition_error;
     if(!(*read)(&has_trie, sizeof(has_trie), data))
 	goto _deserialize_transition_error;
