@@ -100,7 +100,8 @@ class Iterator:
         self.parser.setContentHandler(events)
         self.parser.setErrorHandler(events)
         self.parser.parseString(s)
-        return Iterate(EventStream(events.events), self.tag, cont_handler)
+        return Iterate(self, EventStream(events.events), self.tag,
+                       cont_handler)
 
     def iterateFile(self, fileobj, cont_handler = None):
         return self.iterateString(fileobj.read(), cont_handler)
@@ -141,7 +142,8 @@ class IteratorRecords:
     def iterateFile(self, fileobj, cont_handler = None):
         record_reader = apply(self.make_reader,
                               (fileobj,) + self.reader_args)
-        return Iterate(RecordEventStream(record_reader, self.record_parser),
+        return Iterate(self,
+                       RecordEventStream(record_reader, self.record_parser),
                        self.marker_tag, cont_handler)
 
     def iterate(self, source, cont_handler = None):
@@ -304,7 +306,7 @@ class IteratorHeaderFooter:
         
     def iterateFile(self, fileobj, cont_handler = None):
         args = (fileobj,) + self.args
-        return Iterate(HeaderFooterEventStream(*args),
+        return Iterate(self, HeaderFooterEventStream(*args),
                        self.marker_tag, cont_handler)
     
     def iterate(self, source, cont_handler = None):
@@ -315,7 +317,8 @@ class IteratorHeaderFooter:
     
 
 class Iterate:
-    def __init__(self, event_stream, tag, cont_handler = None):
+    def __init__(self, parent, event_stream, tag, cont_handler = None):
+        self.parent = parent
         if cont_handler is None:
             import LAX
             cont_handler = LAX.LAX()
@@ -324,8 +327,8 @@ class Iterate:
         self.tag = tag
         self.cont_handler = cont_handler
         self._n = 0
-        self.start_position = 0
-        self.end_position = 0
+        self.parent.start_position = 0
+        self.parent.end_position = 0
         self.current_position = 0
         
     def next(self):
@@ -358,7 +361,7 @@ class Iterate:
                 raise args[0]
 
             if name == "startElement" and args[0] == self.tag:
-                self.start_position = self.current_position
+                self.parent.start_position = self.current_position
                 cont_handler = self.cont_handler
                 cont_handler.startDocument()
                 while i < n:
@@ -388,7 +391,7 @@ class Iterate:
                         self.events = None
                         if isinstance(exc, Parser.ParserPositionException):
                             exc.pos = 0
-                            exc += self.start_position
+                            exc += self.parent.start_position
                         raise exc
                     elif name == "fatalError":
                         # not recoverable
@@ -396,12 +399,12 @@ class Iterate:
                         if isinstance(args[0], Parser.ParserPositionException):
                             exc = args[0]
                             exc = 0
-                            exc += self.start_position
+                            exc += self.parent.start_position
                         raise args[0]
                     else:
                         apply(getattr(cont_handler, name), args)
                         if name == "endElement" and args[0] == self.tag:
-                            self.end_position = self.current_position
+                            self.parent.end_position = self.current_position
                             del self.events[:i+1]
                             cont_handler.endDocument()
                             self._n = self._n + 1
