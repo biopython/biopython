@@ -40,7 +40,15 @@ The filter must not accept empty input.
 
 If not given, 'expression' is used.
 
+ o multirecord -- specifies if the format returns more than one record (optional)
+
+Some formats contain a single record, others returns a list of records.
+Different parts of the API change to handle these as expected.  This value
+should be 0 or 1.  The default is 1, which means there may be
+more than one record in the file.
+
  o description -- free form text which describes this format (optional)
+
 
  == These fields concern the original provider of the format
  This may have nothing to do with the Bioformats format definition.
@@ -92,8 +100,9 @@ If not given, the default is the same as the author_email
 If not given, the default is the same as author_url.
 
 """
-import re, urllib
+import re, urllib, sys
 from xml.sax import handler, saxutils
+import Martel
 from Martel import Parser
 
 import ReseekFile, _FmtUtils, StdHandler
@@ -152,9 +161,34 @@ def _build_child_path(format, visited, format_list):
             # depth first traversal is correct order
             _build_child_path(child, visited, format_list)
 
+class Trace:
+    def __init__(self, outfile = sys.stdout):
+        self.outfile = outfile
+        self._indent = 0
+    def indent(self):
+        self._indent += 1
+    def dedent(self):
+        self._indent -= 1
+        assert self._indent >= 0, "too many dedents"
+    def writeln(self, s):
+        if self.outfile is None:
+            return
+        pre = "  " * self._indent
+        for line in s.split("\n"):
+            self.outfile.write(pre + line + "\n")
+def _Trace(trace):
+    if isinstance(trace, Trace):
+        return trace
+    if trace == 0:
+        return Trace(None)
+    return Trace()
 
-def check_parser_file(expression, infile, debug_level):
+
+def check_parser_file(expression, infile, trace, debug_level):
+    trace.indent()
     if expression is None:
+        trace.writeln("No filter defined")
+        trace.dedent()
         return 1
     parser = expression.make_parser(debug_level = debug_level)
     handler = StdHandler.RecognizeHandler()
@@ -168,10 +202,22 @@ def check_parser_file(expression, infile, debug_level):
             pass
     finally:
         infile.seek(pos)
+        
+    if trace:
+        if handler.recognized:
+            trace.writeln("Check passed")
+        else:
+            trace.writeln("Check failed because:")
+            trace.indent()
+            trace.writeln(str(handler.exc))
+            trace.dedent()
+
+    trace.dedent()
     return handler.recognized
  
 def check_parser_string(expression, s, debug_level):
     if expression is None:
+        trace.writeln("No filter defined")
         return 1
     parser = expression.make_parser(debug_level = debug_level)
     handler = StdHandler.RecognizeHandler()
@@ -181,6 +227,16 @@ def check_parser_string(expression, s, debug_level):
         parser.parseString(s)
     except Parser.ParserException:
         pass
+    
+    if trace:
+        if handler.recognized:
+            trace.writeln("Check passed")
+        else:
+            trace.writeln("Check failed because:")
+            trace.indent()
+            trace.writeln(str(handler.exc))
+            trace.dedent()
+    
     return handler.recognized
 
 
@@ -214,16 +270,22 @@ class Format:
             raise TypeError("abbrev name of %r is not allowed" % \
                             (abbrev,))
 
+        x = kwargs["multirecord"]
+        if x == None:
+            kwargs["multirecord"] = 1
+        elif x not in (0, 1):
+            raise TypeError("'multirecord' must be 0 or 1: %s" % repr(x))
+        
         self.__dict__.update(kwargs)
         self._parents = []
 
-    def identifyFile(self, infile, debug_level = 0):
+    def identifyFile(self, infile, trace = 0, debug_level = 0):
         raise NotImplementedError("must be defined in subclass")
     
-    def identifyString(self, s, debug_level = 0):
+    def identifyString(self, s, trace = 0, debug_level = 0):
         raise NotImplementedError("must be defined in subclass")
     
-    def identify(self, source, debug_level = 0):
+    def identify(self, source, trace = 0, debug_level = 0):
         source = saxutils.prepare_input_source(source)
         # Is this correct?  Don't know - don't have Unicode exprerience
         f = source.getCharacterStream() or source.getByteStream()
@@ -231,7 +293,7 @@ class Format:
             f.tell()
         except (AttributeError, IOError):
             f = ReseekFile.ReseekFile(f)
-        return self.identifyFile(f, debug_level)
+        return self.identifyFile(f, trace, debug_level)
 
     def _get_parents_in_depth_order(self):
         # Return a list of self and all the parents, in a depth-first
@@ -268,16 +330,61 @@ class FormatDef(Format):
             # Filter must accept at least a record
             self.filter = self.expression
         self.filter = _FmtUtils.CacheParser(self.filter)
+        self._parser_cache = {}
+        self._iterator_cache = {}
 
-    def identifyFile(self, infile, debug_level = 0):
-        if check_parser_file(self.filter, infile, debug_level):
+    def identifyFile(self, infile, trace = 0, debug_level = 0):
+        trace = _Trace(trace)
+        if self.filter is self.expression:
+            trace.writeln("%r: Checking expression" % (self.name,))
+        else:
+            trace.writeln("%r: Checking filter" % (self.name,))
+        if check_parser_file(self.filter, infile, trace, debug_level):
             return self
         return None
 
-    def identifyString(self, s, debug_level = 0):
-        if check_parser_string(self.filter, s, debug_level):
+    def identifyString(self, s, trace = 0, debug_level = 0):
+        trace = _Trace(trace)
+        if self.filter is self.expression:
+            trace.writeln("%r: Checking expression", (self.name,))
+        else:
+            trace.writeln("%r: Checking filter", (self.name,))
+        if check_parser_string(self.filter, s, trace, debug_level):
             return self
         return None
+
+    def make_parser(self, select_names = None, debug_level = 0):
+        if select_names is not None:
+            select_names = list(select_names)
+            select_names.sort()
+            key = tuple(select_names), debug_level
+        else:
+            key = None, debug_level
+
+        if not self._parser_cache.has_key(key):
+            exp = self.expression
+            if select_names is not None:
+                exp = Martel.select_names(exp, select_names)
+            p = exp.make_parser(debug_level = debug_level)
+            self._parser_cache[key] = p
+        return self._parser_cache[key].copy()
+    
+    def make_iterator(self, tag = "record", select_names = None,
+                      debug_level = 0):
+        if select_names is not None:
+            select_names = list(select_names)
+            select_names.sort()
+            key = tuple(select_names), debug_level
+        else:
+            key = None, debug_level
+            
+        if not self._iterator_cache.has_key(key):
+            exp = self.expression
+            if select_names is None:
+                exp = Martel.select_names(exp, select_names)
+            p = exp.make_iterator(tag, debug_level = debug_level)
+            self._parser_cache[key] = p
+        return self._parser_cache[key].copy()
         
 
 class FormatGroup(Format):
@@ -289,35 +396,46 @@ class FormatGroup(Format):
             self.filter = _FmtUtils.CacheParser(self.filter)
         self._children = []
 
-    def identifyFile(self, infile, debug_level = 0):
+    def identifyFile(self, infile, trace = 0, debug_level = 0):
         # See if the filter test weeds things out
-        if not check_parser_file(self.filter, infile, debug_level):
+        trace = _Trace(trace)
+        trace.writeln("%r: Checking format group filter" % (self.name,))
+            
+        if not check_parser_file(self.filter, infile, trace, debug_level):
             return None
 
         for (child, filter) in self._children:
             if filter is not None:
                 # Check the associated pre-filter for each format
-                if not check_parser_file(filter, infile, debug_level):
+                trace.writeln("%r: Checking child %r filter" %
+                              (self.name, child.name))
+                if not check_parser_file(filter, infile, trace, debug_level):
                     continue
             # Ask the child if it knows about this format
-            format =  child.identifyFile(infile, debug_level)
+            trace.writeln("%r: Asking child %r to identify" %
+                          (self.name, child.name))
+            trace.indent()
+            format = child.identifyFile(infile, trace, debug_level)
+            trace.dedent()
             if format is not None:
+                trace.writeln("%r: Child %r thinks this is a %r" %
+                              (self.name, child.name, format.name))
                 return format
         return None
         
 
-    def identifyString(self, s, debug_level = 0):
+    def identifyString(self, s, trace = 0, debug_level = 0):
         # See if the filter test weeds things out
-        if not check_parser_string(self.filter, s, debug_level):
+        if not check_parser_string(self.filter, s, trace, debug_level):
             return None
         
         for (child, filter) in self._children:
             if filter is not None:
                 # Check the associated pre-filter for each format
-                if not check_parser_file(filter, infile, debug_level):
+                if not check_parser_file(filter, infile, trace, debug_level):
                     continue
             # Ask the child if it knows about this format
-            format = child.identifyString(s, debug_level)
+            format = child.identifyString(s, trace, debug_level)
             if format is not None:
                 return format
         return None
