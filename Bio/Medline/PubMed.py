@@ -17,6 +17,7 @@ Dictionary    Access PubMed articles using a dictionary interface.
 
 Functions:
 search_for    Search PubMed.
+find_related  Find related articles in PubMed.
 
 """
 
@@ -107,8 +108,8 @@ class Dictionary:
             return self.parser.parse(handle)
         return handle.read()
 
-def search_for(search, batchsize=10000, delay=1, callback_fn=None):
-    """search_for(search, batchsize=10000, delay=1, callback_fn=None) -> ids
+def search_for(search, batchsize=10000, delay=2, callback_fn=None):
+    """search_for(search, batchsize=10000, delay=2, callback_fn=None) -> ids
 
     Search PubMed and return a list of the PMID's that match the criteria.
     search is the search string used to search the database.  PubMed only
@@ -163,7 +164,9 @@ def search_for(search, batchsize=10000, delay=1, callback_fn=None):
         # Check to make sure enough time has passed before my
         # last search.  If not, then wait.
         if last_search is not None:
-            time.sleep(time.time() - (last_search + delay))
+            pause = time.time() - (last_search + delay)
+            if pause > 0:
+                time.sleep(pause)
         last_search = time.time()
         
         # Do a query against PmQty.  Search medline, using the
@@ -179,3 +182,44 @@ def search_for(search, batchsize=10000, delay=1, callback_fn=None):
                 callback_fn(id)
         ids.extend(parser.ids)
     return ids
+
+def find_related(pmid):
+    """find_related(pmid) -> ids
+
+    Search PubMed for a list of citations related to pmid.
+
+    """
+    class ResultParser(sgmllib.SGMLParser):
+        # Parse the ID's out of the HTML-formatted page that PubMed
+        # returns.  The format of the page is:
+        # <pmneighborResult> 
+        #      <id>######</id>
+        #      [...]
+        # </pmneighborResult>
+
+        def __init__(self):
+            sgmllib.SGMLParser.__init__(self)
+            self.ids = []
+            self.in_id = 0
+        def start_id(self, attributes):
+            self.in_id = 1
+        def end_id(self):
+            self.in_id = 0
+        _not_pmid_re = re.compile(r'\D')
+        def handle_data(self, data):
+            if not self.in_id:
+                return
+            # Everything here should be a PMID.  Check and make sure
+            # data really is one.  A PMID should be a string consisting
+            # of only integers.  Should I check to make sure it
+            # meets a certain minimum length?
+            if self._not_pmid_re.search(data):
+                raise SyntaxError, \
+                      "I expected an ID, but '%s' doesn't look like one." % \
+                      repr(data)
+            self.ids.append(data)
+
+    parser = ResultParser()
+    h = NCBI.pmneighbor(pmid, 'pmid')
+    parser.feed(h.read())
+    return parser.ids
