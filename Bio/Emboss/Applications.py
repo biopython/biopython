@@ -333,3 +333,52 @@ class FuzznucCommandline(Application.AbstractCommandline):
                  "Search complementary strand"),
          _Option(["-rformat"], ["input"], None, 0,
                  "Specify the report format to output in.")]
+
+class Est2GenomeCommandline(Application.AbstractCommandline):
+    """Commandline object for the est2genome program from EMBOSS.
+    """
+    def __init__(self, cmd = "est2genome"):
+        Application.AbstractCommandline.__init__(self)
+        self.program_name = cmd
+
+        self.parameters = [
+         _Option(["-est"], ["input"], None, 1,
+                 "EST sequence(s)"),
+         _Option(["-genome"], ["input"], None, 1,
+                 "Genomic sequence"),
+         _Option(["-outfile"], ["output", "file"], None, 1,
+                 "Output file name"),
+         _Option(["-match"], ["input"], None, 0, 
+                 "Score for matching two bases"),
+         _Option(["-mismatch"], ["input"], None, 0,
+                 "Cost for mismatching two bases"),
+         _Option(["-gappenalty"], ["input"], None, 0,
+                 "Cost for deleting a single base in either sequence, " + \
+                 "excluding introns"),
+         _Option(["-intronpenalty"], ["input"], None, 0,
+                 "Cost for an intron, independent of length."),
+         _Option(["-splicepenalty"], ["input"], None, 0,
+                 "Cost for an intron, independent of length " + \
+                 "and starting/ending on donor-acceptor sites"),
+         _Option(["-minscore"], ["input"], None, 0,
+                 "Exclude alignments with scores below this threshold score."),
+         _Option(["-reverse"], ["input"], None, 0,
+                 "Reverse the orientation of the EST sequence"),
+         _Option(["-splice"], ["input"], None, 0,
+                 "Use donor and acceptor splice sites."),
+         _Option(["-mode"], ["input"], None, 0,
+                 "This determines the comparion mode. 'both', 'forward' " + \
+                 "'reverse'"),
+         _Option(["-best"], ["input"], None, 0,
+                 "You can print out all comparisons instead of just the best"),
+         _Option(["-space"], ["input"], None, 0,
+                 "for linear-space recursion."),
+         _Option(["-shuffle"], ["input"], None, 0,
+                 "Shuffle"),
+         _Option(["-seed"], ["input"], None, 0,
+                 "Random number seed"),
+         _Option(["-align"], ["input"], None, 0,
+                 "Show the alignment."),
+         _Option(["-width"], ["input"], None, 0,
+                 "Alignment width")
+        ]
