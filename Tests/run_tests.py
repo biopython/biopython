@@ -133,7 +133,14 @@ class RegressionTest(unittest.TestCase):
         try:
             # write the output from the test into a string
             sys.stdout = output
-            __import__(self.test_name)
+            cur_test = __import__(self.test_name)
+
+            # some tests may be runnable by run_tests()
+            try:        
+                cur_test.run_tests([])
+            except AttributeError:
+                pass
+
             generated_output = output.getvalue()
         finally:
             # return standard out to its normal setting
@@ -191,7 +198,13 @@ def generate_output(test_name):
     try:
         # write the output from the test into a string
         sys.stdout = output_handle
-        __import__(test_name)
+        cur_test = __import__(test_name)
+
+        # run tests that use run_tests() to signify running
+        try:
+            cur_test.run_tests([])
+        except AttributeError:
+            pass
     finally:
         output_handle.close()
         # return standard out to its normal setting
