@@ -39,39 +39,11 @@ __all__ = [
     'Record',
     'genbank_format',
     ]
-# standard library
-import string
-import os
-import re
-import sgmllib
-import urlparse
-
-# XML from python 2.0
-from xml.sax import handler
-
-# Martel
-import Martel
-from Martel import RecordReader
 
 # other Biopython stuff
-from Bio.SeqRecord import SeqRecord
-from Bio import Alphabet
-from Bio.Alphabet import IUPAC
-from Bio.Seq import Seq
-from Bio import File
-from Bio import Index
 from Bio.ParserSupport import AbstractConsumer
-from Bio.WWW import NCBI
-from Bio.WWW import RequestLimiter
-from Bio.ParserSupport import EventGenerator
-
-import genbank_format
-import Record
 import utils
 
-from Bio.SeqFeature import Reference
-from Bio import SeqFeature
-from Bio.GenBank import LocationParser
 
 class Dictionary:
     """Allow a GenBank file to be accessed using a dictionary interface.
@@ -89,6 +61,7 @@ class Dictionary:
         parser is None then the unprocessed contents of the file will be
         returned.
         """
+        from Bio import Index
         self._index = Index.Index(index_file)
         self._handle = open(self._index[Dictionary.__filename_key])
         self._parser = parser
@@ -99,6 +72,7 @@ class Dictionary:
     def __getitem__(self, key):
         """Retrieve an item from the dictionary.
         """
+        from Bio import File
         # print "keys:", self._index.keys()
         # get the location of the record of interest in the file
         start, len = self._index[key]
@@ -151,6 +125,8 @@ class Iterator:
         returning them. If None, then the raw entry will be returned.
         o has_header - Deprecated, headers are now autodetected.
         """
+        from Martel import RecordReader
+        from Bio import File
         if isinstance(handle, File.UndoHandle):
             _handle = handle
         else:
@@ -167,6 +143,7 @@ class Iterator:
 
         Will return None if we ran out of records.
         """
+        from Bio import File
         data = self._reader.next()
 
         if self._parser is not None:
@@ -209,6 +186,8 @@ class ErrorParser:
     def parse(self, handle):
         """Parse the specified handle.
         """
+        import Martel
+        from Bio import File
         record = handle.read()
 
         try:
@@ -303,19 +282,18 @@ class _BaseGenBankConsumer(AbstractConsumer):
             keywords = keyword_string[:-1]
         else:
             keywords = keyword_string
-        keyword_list = string.split(keywords, ';')
-        clean_keyword_list = map(string.strip, keyword_list)
-
+        keyword_list = keywords.split(';')
+        clean_keyword_list = [x.strip() for x in keyword_list]
         return clean_keyword_list
 
     def _split_accessions(self, accession_string):
         """Split a string of accession numbers into a list.
         """
         # first replace all line feeds with spaces
-        accession = string.replace(accession_string, "\n", " ")
+        accession = accession_string.replace("\n", " ")
 
-        accession_list = string.split(accession, ' ')
-        clean_accession_list = map(string.strip, accession_list)
+        accession_list = accession.split(' ')
+        clean_accession_list = [x.strip() for x in accession_list]
 
         return clean_accession_list
 
@@ -326,14 +304,14 @@ class _BaseGenBankConsumer(AbstractConsumer):
             tax_info = taxonomy_string[:-1]
         else:
             tax_info = taxonomy_string
-        tax_list = string.split(tax_info, ';')
+        tax_list = tax_info.split(';')
         new_tax_list = []
         for tax_item in tax_list:
             new_items = tax_item.split("\n")
             new_tax_list.extend(new_items)
         while '' in new_tax_list:
             new_tax_list.remove('')
-        clean_tax_list = map(string.strip, new_tax_list)
+        clean_tax_list = [x.strip() for x in new_tax_list]
 
         return clean_tax_list
 
@@ -343,9 +321,10 @@ class _BaseGenBankConsumer(AbstractConsumer):
         The location parser isn't a fan of whitespace, so we clean it out
         before feeding it into the parser.
         """
+        import string
         location_line = location_string
         for ws in string.whitespace:
-            location_line = string.replace(location_line, ws, '')
+            location_line = location_line.replace(ws, '')
 
         return location_line
 
@@ -364,9 +343,8 @@ class _BaseGenBankConsumer(AbstractConsumer):
         """
         # get rid of excessive spaces
         text_parts = text.split(" ")
-        while '' in text_parts:
-            text_parts.remove('')
-        return string.join(text_parts)
+        text_parts = filter(None, text_parts)
+        return ' '.join(text_parts)
 
     def _remove_spaces(self, text):
         """Remove all spaces from the passed text.
@@ -401,6 +379,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
     cleaning-up of feature values.
     """
     def __init__(self, use_fuzziness, feature_cleaner = None):
+        from Bio.SeqRecord import SeqRecord
         _BaseGenBankConsumer.__init__(self)
         self.data = SeqRecord(None, id = None)
 
@@ -494,6 +473,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
     def reference_num(self, content):
         """Signal the beginning of a new reference object.
         """
+        from Bio.SeqFeature import Reference
         # if we have a current reference that hasn't been added to
         # the list of references, add it.
         if self._current_ref is not None:
@@ -518,8 +498,8 @@ class _FeatureConsumer(_BaseGenBankConsumer):
 
         all_locations = []
         # parse if we've got 'bases' and 'to'
-        if (string.find(ref_base_info, 'bases') != -1 and
-            string.find(ref_base_info, 'to') != -1):
+        if ref_base_info.find('bases') != -1 and \
+            ref_base_info.find('to') != -1:
             # get rid of the beginning 'bases'
             ref_base_info = ref_base_info[5:]
             locations = self._split_reference_locations(ref_base_info)
@@ -535,7 +515,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         # make sure if we are not finding information then we have
         # the string 'sites' or the string 'bases'
         elif (ref_base_info == 'sites' or
-              string.strip(ref_base_info) == 'bases'):
+              ref_base_info.strip() == 'bases'):
             pass
         # otherwise raise an error
         else:
@@ -554,6 +534,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         This splits the information out and returns a list of location objects
         based on the reference locations.
         """
+        from Bio import SeqFeature
         # split possibly multiple locations using the ';'
         all_base_info = location_string.split(';')
 
@@ -589,7 +570,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         self._current_ref.comment = content
 
     def comment(self, content):
-        self.data.annotations['comment'] = string.join(content, "\n")
+        self.data.annotations['comment'] = "\n".join(content)
 
     def features_line(self, content):
         """Get ready for the feature table when we reach the FEATURE line.
@@ -621,6 +602,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             self.data.features.append(self._cur_feature)
             
     def feature_key(self, content):
+        from Bio import SeqFeature
         # if we already have a feature, add it on
         self._add_feature()
 
@@ -640,6 +622,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         for us, and translates the results of the parse into appropriate
         Location objects.
         """
+        from Bio.GenBank import LocationParser
         # --- first preprocess the location for the spark parser
         
         # we need to clean up newlines and other whitespace inside
@@ -653,8 +636,8 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         # the number 266 and have the information in a more reasonable
         # place. So we'll just grab out the number and feed this to the
         # parser. We shouldn't really be losing any info this way.
-        if string.find(location_line, 'replace') != -1:
-            comma_pos = string.find(location_line, ',')
+        if location_line.find('replace') != -1:
+            comma_pos = location_line.find(',')
             location_line = location_line[8:comma_pos]
         
         # feed everything into the scanner and parser
@@ -681,6 +664,8 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         function we are acting on.
         o cur_feature - The feature to add information to.
         """
+        from Bio import SeqFeature
+        from Bio.GenBank import LocationParser
         assert isinstance(function, LocationParser.Function), \
                "Expected a Function object, got %s" % function
         
@@ -716,6 +701,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         specifically 'join' and 'order'. The inner locations are
         added as subfeatures of the top level feature
         """
+        from Bio import SeqFeature
         # for each inner element, create a sub SeqFeature within the
         # current feature, then get the information for this feature
         for inner_element in function.args:
@@ -755,6 +741,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         o parse_info - The classes generated by the LocationParser.
         o cur_feature - The feature to add the information to.
         """
+        from Bio.GenBank import LocationParser
         # base case -- we are out of information
         if parse_info is None:
             return
@@ -798,6 +785,8 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         If parser.use_fuzziness is set at one, the positions for the
         end points will possibly be fuzzy.
         """
+        from Bio import SeqFeature
+        from Bio.GenBank import LocationParser
         # check if we just have a single base
         if not(isinstance(range_info, LocationParser.Range)):
             pos = self._get_position(range_info)
@@ -828,6 +817,8 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         This is used with _get_location to parse out a location of any
         end_point of arbitrary fuzziness.
         """
+        from Bio import SeqFeature
+        from Bio.GenBank import LocationParser
         # case 1 -- just a normal number
         if (isinstance(position, LocationParser.Integer)):
             final_pos = SeqFeature.ExactPosition(position.val) 
@@ -899,22 +890,23 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         self._add_qualifier()
 
         # remove the / and = from the qualifier
-        qual_key = string.replace(content, '/', '')
-        qual_key = string.replace(qual_key, '=', '')
-        qual_key = string.strip(qual_key)
+        qual_key = content.replace('/', '')
+        qual_key = qual_key.replace('=', '')
+        qual_key = qual_key.strip()
         
         self._cur_qualifier_key = qual_key
         self._cur_qualifier_value = ''
         
     def qualifier_value(self, content):
         # get rid of the quotes surrounding the qualifier if we've got 'em
-        qual_value = string.replace(content, '"', '')
+        qual_value = content.replace('"', '')
         
         self._cur_qualifier_value = qual_value
 
     def contig_location(self, content):
         """Deal with a location of CONTIG information.
         """
+        from Bio import SeqFeature
         # add a last feature if is hasn't been added,
         # so that we don't overwrite it
         self._add_feature()
@@ -947,14 +939,17 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         into a list of strings, and then uses string.join later to put
         them together. Supposedly, this is a big time savings
         """
-        new_seq = string.replace(content, ' ', '')
-        new_seq = string.upper(new_seq)
+        new_seq = content.replace(' ', '')
+        new_seq = new_seq.upper()
 
         self._seq_data.append(new_seq)
 
     def record_end(self, content):
         """Clean up when we've finished the record.
         """
+        from Bio import Alphabet
+        from Bio.Alphabet import IUPAC
+        from Bio.Seq import Seq
         # add the last feature in the table which hasn't been added yet
         self._add_feature()
 
@@ -966,11 +961,11 @@ class _FeatureConsumer(_BaseGenBankConsumer):
 
         if self._seq_type:
             # mRNA is really also DNA, since it is actually cDNA
-            if string.find(self._seq_type, 'DNA') != -1 or \
-               string.find(self._seq_type, 'mRNA') != -1:
+            if self._seq_type.find('DNA') != -1 or \
+               self._seq_type.find('mRNA') != -1:
                 seq_alphabet = IUPAC.ambiguous_dna
             # are there every really RNA sequences in GenBank?
-            elif string.find(self._seq_type, 'RNA') != -1:
+            elif self._seq_type.find('RNA') != -1:
                 seq_alphabet = IUPAC.ambiguous_rna
             elif self._seq_type == "PROTEIN":
                 seq_alphabet = IUPAC.protein  # or extended protein?
@@ -984,7 +979,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                                  % self._seq_type)
 
         # now set the sequence
-        sequence = string.join(self._seq_data, "")
+        sequence = "".join(self._seq_data)
         self.data.seq = Seq(sequence, seq_alphabet)
 
 class _RecordConsumer(_BaseGenBankConsumer):
@@ -992,6 +987,7 @@ class _RecordConsumer(_BaseGenBankConsumer):
     """
     def __init__(self):
         _BaseGenBankConsumer.__init__(self)
+        import Record
         self.data = Record.Record()
 
         self._seq_data = []
@@ -1086,7 +1082,7 @@ class _RecordConsumer(_BaseGenBankConsumer):
         self._cur_reference.remark = content
 
     def comment(self, content):
-        self.data.comment = string.join(content, "\n")
+        self.data.comment = "\n".join(content)
 
     def features_line(self, content):
         """Get ready for the feature table when we reach the FEATURE line.
@@ -1164,15 +1160,15 @@ class _RecordConsumer(_BaseGenBankConsumer):
         list together to make the final sequence. This is faster than
         adding on the new string every time.
         """
-        new_seq = string.replace(content, ' ', '')
-        self._seq_data.append(string.upper(new_seq))
+        new_seq = content.replace(' ', '')
+        self._seq_data.append(new_seq.upper())
 
     def record_end(self, content):
         """Signal the end of the record and do any necessary clean-up.
         """
         # add together all of the sequence parts to create the
         # final sequence string
-        self.data.sequence = string.join(self._seq_data, "")
+        self.data.sequence = "".join(self._seq_data)
         # add on the last feature
         self._add_feature()
 
@@ -1186,10 +1182,10 @@ def _strip_and_combine(line_list):
     work for most cases.
     """
     # first strip out extra whitespace
-    stripped_line_list = map(string.strip, line_list)
+    stripped_line_list = [x.strip() for x in line_list]
 
     # now combine everything with spaces
-    return string.join(stripped_line_list, ' ')
+    return ' '.join(stripped_line_list)
 
 class _Scanner:
     """Start up Martel to do the scanning of the file.
@@ -1209,6 +1205,8 @@ class _Scanner:
         debugging info (but is much slower). See Martel documentation
         for more info on this.
         """
+        import Martel
+        import genbank_format
         # a listing of all tags we are interested in scanning for
         # in the MartelParser
         self.interest_tags = ["locus", "size", "residue_type",
@@ -1243,6 +1241,9 @@ class _Scanner:
         o handle - A handle with the information to parse.
         o consumer - The consumer that should be informed of events.
         """
+        # XML from python 2.0
+        from xml.sax import handler
+        from Bio.ParserSupport import EventGenerator
         self._parser.setContentHandler(EventGenerator(consumer,
                                                       self.interest_tags,
                                                       _strip_and_combine,
@@ -1288,6 +1289,8 @@ def index_file_db(genbank_file, db_name, db_directory,
     if the file appears not to have changed. By default, the function will
     try to skip indexing if it thinks the file hasn't changed.
     """
+    import os
+    import genbank_format
     try:
         from mindy import mindy_index, mindy_search
     except ImportError:
@@ -1378,6 +1381,7 @@ class MindyDictionary:
         Most of the time I find it easiest to search by aliases (the GenBank
         accession numbers), but YMMV.
         """
+        from Bio import File
         try:
             data = self._search[key]
         except KeyError:
@@ -1420,6 +1424,8 @@ def index_file(genbank_file, index_file, rec_to_key = None):
     function is specified, then the accession numbers will be used as
     the keys.
     """
+    import os
+    from Bio import Index
     if not os.path.exists(genbank_file):
         raise ValueError("%s does not exist" % genbank_file)
 
@@ -1473,6 +1479,7 @@ class NCBIDictionary:
         the raw contents of the file will be returned.
 
         """
+        from Bio.WWW import RequestLimiter
         self.parser = parser
         self.limiter = RequestLimiter(delay)
         self.database = database
@@ -1524,6 +1531,7 @@ class NCBIDictionary:
         entry.  Raises a KeyError if there's an error.
         
         """
+        from Bio.WWW import NCBI
         # First, check to see if enough time has passed since my
         # last query.
         self.limiter.wait()
@@ -1586,6 +1594,11 @@ def search_for(search, database='nucleotide',
     work.
 
     """
+    import re
+    import sgmllib
+    from Bio.WWW import RequestLimiter
+    from Bio.WWW import NCBI
+    
     class ResultParser(sgmllib.SGMLParser):
         # Parse the ID's out of the XML-formatted page that PubMed
         # returns.  The format of the page is:
@@ -1605,7 +1618,7 @@ def search_for(search, database='nucleotide',
             if not self.in_id:
                 return
             # If data is just whitespace, then ignore it.
-            data = string.strip(data)
+            data = data.strip()
             if not data:
                 return
             # Everything here should be a PMID.  Check and make sure
@@ -1670,6 +1683,9 @@ def download_many(ids, callback_fn, database='nucleotide',
     time.
 
     """
+    from Bio.WWW import NCBI
+    from Bio.WWW import RequestLimiter
+    from Bio import File
     # parser is an undocumented parameter that allows people to
     # specify an optional parser to handle each record.  This is
     # dangerous because the results may be malformed, and exceptions
