@@ -437,8 +437,10 @@ class _Scanner:
                         any_number=1)
     
     def _scan_rl(self, uhandle, consumer):
+        # This was one_or_more, but P82909 in TrEMBL 16.0 does not
+        # have one.
         self._scan_line('RL', uhandle, consumer.reference_location,
-                        one_or_more=1)
+                        any_number=1)
     
     def _scan_cc(self, uhandle, consumer):
         self._scan_line('CC', uhandle, consumer.comment, any_number=1)
@@ -571,21 +573,28 @@ class _RecordConsumer(AbstractConsumer):
         assert self.data.references, "RC: missing RN"
         cols = string.split(string.rstrip(line[5:]), ';')
         ref = self.data.references[-1]
-        for col in cols[1:]:
+        for col in cols:
             if not col:  # last column will be the empty string
                 continue
-            if col == ' STRAIN=TISSUE=BRAIN':
-                # from CSP_MOUSE, release 38
-                token, text = "TISSUE", "BRAIN"
-            elif col == ' STRAIN=NCIB 9816-4, AND STRAIN=G7 / ATCC 17485':
-                # from NDOA_PSEPU, release 38
-                token, text = "STRAIN", "NCIB 9816-4 AND G7 / ATCC 17485"
-            elif col == ' STRAIN=ISOLATE=NO 27, ANNO 1987' or \
-                 col == ' STRAIN=ISOLATE=NO 27 / ANNO 1987':
-                # from NU3M_BALPH, release 38, release 39
-                token, text = "STRAIN", "ISOLATE NO 27, ANNO 1987"
-            else:
-                token, text = string.split(col, '=')
+            # The token is everything before the first '=' character.
+            index = string.find(col, '=')
+            token, text = col[:index], col[index+1:]
+            # According to the spec, there should only be 1 '='
+            # character.  However, there are too many exceptions to
+            # handle, so we'll ease up and allow anything after the
+            # first '='.
+            #if col == ' STRAIN=TISSUE=BRAIN':
+            #    # from CSP_MOUSE, release 38
+            #    token, text = "TISSUE", "BRAIN"
+            #elif col == ' STRAIN=NCIB 9816-4, AND STRAIN=G7 / ATCC 17485':
+            #    # from NDOA_PSEPU, release 38
+            #    token, text = "STRAIN", "NCIB 9816-4 AND G7 / ATCC 17485"
+            #elif col == ' STRAIN=ISOLATE=NO 27, ANNO 1987' or \
+            #     col == ' STRAIN=ISOLATE=NO 27 / ANNO 1987':
+            #    # from NU3M_BALPH, release 38, release 39
+            #    token, text = "STRAIN", "ISOLATE NO 27, ANNO 1987"
+            #else:
+            #    token, text = string.split(col, '=')
             ref.comments.append((string.lstrip(token), text))
     
     def reference_cross_reference(self, line):
