@@ -6,6 +6,7 @@ include CONTRIB
 include LICENSE
 include NEWS
 include README
+include DEPRECATED
 
 recursive-include Scripts *    # Include scripts.
 recursive-include Tests *      # Include regression tests.
