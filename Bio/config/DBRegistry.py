@@ -118,8 +118,6 @@ class DBObject(RegisterableObject):
         # Only need to implement if supporting timeout or concurrent
         # access.
         raise NotImplementedError, "pickling not supported."
-        
-        
 
 class DBGroup(RegisterableGroup):
     """Groups DBObjects that return the same kind of data.
@@ -218,7 +216,51 @@ class DBGroup(RegisterableGroup):
                 return handle
         raise KeyError, "I could not get any results."
 
-class CGIDB(DBObject):
+class TextLikeMixin:
+    """Mixin class with useful functionality for retrival of text files.
+
+    This implements some useful helper functions and overrides of DBObject
+    for those implementations which need to retrieve text, check for errors in
+    the retrieve text, and then convert that text to other formats.
+    """
+    def _check_for_errors(self, handle, failure_cases):
+        from Martel import Parser
+        from Bio import StdHandler
+        from Bio.ReseekFile import ReseekFile
+        
+        if not failure_cases:
+            return handle
+        handle = ReseekFile(handle)
+        pos = handle.tell()
+        for expression, errormsg in failure_cases:
+            handle.seek(pos)
+            parser = expression.make_parser()
+            handler = StdHandler.RecognizeHandler()
+            parser.setContentHandler(handler)
+            parser.setErrorHandler(handler)
+            try:
+                parser.parseFile(handle)
+            except Parser.ParserException:
+                pass
+            if handler.recognized:
+                raise KeyError, errormsg
+        handle.seek(pos)
+        return handle
+
+    def _convert_to(self, handle, to_io):
+        from Bio import FormatIO
+        x = to_io.read(handle)
+        if isinstance(x, FormatIO.FormatIOIterator):
+            i = 0
+            for rec in x:
+                if i > 0:
+                    raise AssertionError, "Multiple records returned"
+                i += 1
+        else:
+            rec = x
+        return rec
+
+class CGIDB(DBObject, TextLikeMixin):
     """This class implements DBObject for accessing CGI databases.
 
     """
@@ -265,7 +307,7 @@ class CGIDB(DBObject):
     
     def _get(self, key):
         handle = self._cgiopen(key)
-        handle = self._check_for_errors(handle)
+        handle = self._check_for_errors(handle, self.failure_cases)
         return handle
 
     def _cgiopen(self, key):
@@ -280,43 +322,6 @@ class CGIDB(DBObject):
         else:    # do a POST
             handle = urllib.urlopen(self.cgi, options)
         return handle
-    
-    def _check_for_errors(self, handle):
-        from Martel import Parser
-        from Bio import StdHandler
-        from Bio.ReseekFile import ReseekFile
-        
-        if not self.failure_cases:
-            return handle
-        handle = ReseekFile(handle)
-        pos = handle.tell()
-        for expression, errormsg in self.failure_cases:
-            handle.seek(pos)
-            parser = expression.make_parser()
-            handler = StdHandler.RecognizeHandler()
-            parser.setContentHandler(handler)
-            parser.setErrorHandler(handler)
-            try:
-                parser.parseFile(handle)
-            except Parser.ParserException:
-                pass
-            if handler.recognized:
-                raise KeyError, errormsg
-        handle.seek(pos)
-        return handle
-
-    def _convert_to(self, handle, to_io):
-        from Bio import FormatIO
-        x = to_io.read(handle)
-        if isinstance(x, FormatIO.FormatIOIterator):
-            i = 0
-            for rec in x:
-                if i > 0:
-                    raise AssertionError, "Multiple records returned"
-                i += 1
-        else:
-            rec = x
-        return rec
 
     def _make_pickleable(self, handle):
         return handle.read()
@@ -324,6 +329,48 @@ class CGIDB(DBObject):
     def _unmake_pickleable(self, obj):
         import StringIO
         return StringIO.StringIO(obj)
+
+class EUtilsDB(DBObject, TextLikeMixin):
+    """Implement DBObject for accessing EUtils databases at NCBI.
+    """
+    def __init__(self, name, db, rettype, abbrev = None, doc = None,
+                 failure_cases = None, delay = None, timeout = None):
+        """Initialize an EUtilsDB connection for retrieval.
+
+        name is the name of the object, abbrev is an abbreviation for
+        the name, and doc is some documentation describing the object.
+
+        db is the name of the database at NCBI you want to retrieve from
+        (ie. protein, nucleotide, pubmed)
+
+        rettype is the type of information to return
+        (ie. gp, gb, fasta, medline)
+
+        failure_cases is a list of (Martel Expression, error message)
+        describing patterns of errors in the text returned by the
+        script.
+        """
+        import _support
+        DBObject.__init__(self, name=name, abbrev=abbrev,
+                          doc=doc, delay=delay, timeout=timeout)
+        self.db = db
+        self.rettype = rettype
+        self.failure_cases = []
+        for exp, message in failure_cases or []:
+            exp = _support.make_cached_expression(exp)
+            self.failure_cases.append((exp, message))
+
+    def _get(self, key):
+        """Implementation of retrieval -- used DBIds client from EUtils.
+        """
+        from Bio.EUtils import DBIds
+        from Bio.EUtils import DBIdsClient
+        db_id = DBIds(self.db, [key])
+        eutils_client = DBIdsClient.from_dbids(db_id)
+        handle = eutils_client.efetch(retmode = "text", rettype =
+                self.rettype)
+        handle = self._check_for_errors(handle, self.failure_cases)
+        return handle
 
 class BioSQLDB(DBObject):
     """Represent a BioSQL-style database to retrieve SeqRecord objects.

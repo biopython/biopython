@@ -51,14 +51,15 @@ embl = DBGroup(
 ##    cache="XXX"
     )
 embl.add(embl_dbfetch_cgi)
-embl.add(embl_xembl_cgi)
 embl.add(embl_ebi_cgi)
 
+embl_xml = DBGroup(
+        name = "embl-xml",
+        behavior = "serial")
 
 embl_fast = DBGroup(
     name="embl-fast",
     behavior="concurrent",
     )
 embl_fast.add(embl_dbfetch_cgi)
-embl_fast.add(embl_xembl_cgi)
 embl_fast.add(embl_ebi_cgi)

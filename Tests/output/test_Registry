@@ -1,0 +1,10 @@
+test_Registry
+Retrieval of EMBL records from various sources. ... ok
+Retrieval of XML EMBL records in BSML format. ... ok
+Retrieval of GenBank from various sources. ... ok
+Retrieval of Swissprot records from various sources. ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 6.868s
+
+OK
