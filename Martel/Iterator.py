@@ -55,16 +55,19 @@ class StoreEvents:
     def __init__(self):
         self.events = []
 
+        self.characters = lambda ch, append = self.events.append: \
+                          append( ("characters", ch) )
+
     def startDocument(self):
         pass
     def endDocument(self):
         pass
 
     def startElement(self, *args):
-        #print "startElement", args
         self.events.append( ("startElement", args) )
-    def characters(self, *args):
-        self.events.append( ("characters", args) )
+##    def characters(self, s):
+##        # Note: This doesn't store the args as a tuple!
+##        self.events.append( ("characters", s) )
     def endElement(self, *args):
         self.events.append( ("endElement", args) )
 
@@ -180,7 +183,13 @@ class Iterate:
                 cont_handler.startDocument()
                 while i < n:
                     name, args = events[i]
-                    if name == "error":
+                    if name == "characters":
+                        # This is the most common case.
+                        # Recall, args is not a tuple
+                        cont_handler.characters(args)
+                        self.current_position += len(args)
+                        i = i + 1
+                    elif name == "error":
                         # in theory this is recoverable, so scan forward
                         # until there's an endElement
                         exc = args[0]
@@ -190,7 +199,7 @@ class Iterate:
                                 del self.events[:i+1]
                                 raise exc
                             elif name == "characters":
-                                self.current_position += len(args[0])
+                                self.current_position += len(args)
                             i = i + 1
                         # no end found, so not recoverable
                         self.events = None
@@ -207,15 +216,14 @@ class Iterate:
                             cont_handler.endDocument()
                             self._n = self._n + 1
                             return cont_handler
-                        elif name == "characters":
-                            self.current_position += len(args[0])
                         i = i + 1
+
                 # Got here without an endElement?  Not supposed to happen!
                 raise AssertionError, "no endElement(%s) and no errors?" % \
                       repr(self.tag)
             else:
                 if name == "characters":
-                    self.current_position += len(args[0])
+                    self.current_position += len(args)
                 i = i + 1
 
         # Went through the document and no more records were found
