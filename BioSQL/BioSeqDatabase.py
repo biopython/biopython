@@ -5,6 +5,7 @@ database, and is compatible with the BioSQL standards.
 """
 import BioSeq
 import Loader
+import DBUtils
 
 def open_database(driver = "MySQLdb", *args, **kwargs):
     """Main interface for loading a existing BioSQL-style database.
@@ -26,16 +27,49 @@ def open_database(driver = "MySQLdb", *args, **kwargs):
     """
     module = __import__(driver)
     connect = getattr(module, "connect")
-    conn = connect(*args, **kwargs)
+    try:
+        conn = connect(*args, **kwargs)
+    except TypeError:
+        # Perhaps a version of psycopg with different parameter style
+        # (i.e., dsn="dbname= host= user=..."
+        # FIXME: doesn't use the args array
+        kw = kwargs.copy()
+
+        for k in kw.keys():
+            if kw[k] == '': del kw[k]
+
+        if kw.has_key('db'):
+            kw['dbname'] = kw['db']
+            del kw['db']
+        if kw.has_key('passwd'):
+            kw['password'] = kw['passwd']
+            del kw['passwd']
+
+        # PostgreSQL needs a database to connect to, so use a
+        # system one if needed
+        # FIXME: might be a security risk?
+        #        So currently, we keep dbname=user
+##        if not kw.has_key('dbname'):
+##            kw['dbname'] = 'template1'
+        
+        dsn = ' '.join(['='.join(i) for i in kw.items()])
+        conn = connect(dsn)
+    
     return DBServer(conn, module)
 
 class DBServer:
     def __init__(self, conn, module):
-        self.conn = conn
         self.module = module
-        self.adaptor = Adaptor(self.conn)
+        if module.__name__ == 'psycopg':
+            create_dbutils = DBUtils.create_Pg_dbutils
+        elif module.__name__ == 'MySQLdb':
+            create_dbutils = DBUtils.create_Mysql_dbutils
+        else:
+            create_dbutils = DBUtils.create_Generic_dbutils
+        self.adaptor = Adaptor(conn, create_dbutils)
+        
     def __repr__(self):
-        return self.__class__.__name__ + "(%r)" % self.conn
+        return self.__class__.__name__ + "(%r)" % self.adaptor.conn
     def __getitem__(self, name):
         return BioSeqDatabase(self.adaptor, name)
     def keys(self):
@@ -58,7 +92,7 @@ class DBServer:
         # make the database
         sql = r"INSERT INTO biodatabase (name) VALUES" \
               r" (%s)" 
-        self.adaptor.execute_one(sql, (db_name))
+        self.adaptor.execute(sql, (db_name,))
         return BioSeqDatabase(self.adaptor, db_name)
 
     def load_database_sql(self, sql_file):
@@ -74,6 +108,8 @@ class DBServer:
         for line in sql_handle.xreadlines():
             if line.find("#") == 0: # don't include comment lines
                 pass
+            elif line.find("--") == 0: # ditto, SQL std. comments
+                pass
             elif line.strip(): # only include non-blank lines
                 sql += line.strip()
                 sql += ' '
@@ -84,40 +120,48 @@ class DBServer:
             self.adaptor.cursor.execute(sql_line, ())
 
 class Adaptor:
-    def __init__(self, conn):
+    def __init__(self, conn, create_dbutils):
         self.conn = conn
         self.cursor = conn.cursor()
+        self.dbutils = create_dbutils()##self.conn, self.cursor)
+
+    def last_id(self, table):
+        return self.dbutils.last_id(self.cursor, table)
+
+    def autocommit(self, y = 1):
+        return self.dbutils.autocommit(self.conn, y)
 
     def fetch_dbid_by_dbname(self, dbname):
-        count = self.cursor.execute(
+        self.cursor.execute(
             r"select biodatabase_id from biodatabase where name = %s",
             (dbname,))
-        if count == 0:
+        rv = self.cursor.fetchall()
+        if not rv:
             raise KeyError("Cannot find biodatabase with name %r" % dbname)
-        assert count == 1, "More than one biodatabase with name %r" % dbname
-        return self.cursor.fetchone()[0]
+        assert len(rv) == 1, "More than one biodatabase with name %r" % dbname
+        return rv[0][0]
 
     def fetch_seqid_by_display_id(self, dbid, name):
-        count = self.cursor.execute(
+        self.cursor.execute(
             r"select bioentry_id from bioentry where "
             r"    biodatabase_id = %s and display_id = %s",
             (dbid, name))
-        if count == 0:
+        rv = self.cursor.fetchall()
+        if not rv:
             raise IndexError("Cannot find display id %r" % name)
-        assert count == 1, "More than one entry with display id of %r" % name
-        seqid, = self.cursor.fetchone()
-        return seqid
+        assert len(rv) == 1, "More than one entry with display id of %r" % name
+        return rv[0][0]
 
     def fetch_seqid_by_accession(self, dbid, name):
-        count = self.cursor.execute(
+        self.cursor.execute(
             r"select bioentry_id from bioentry where "
             r"    biodatabase_id = %s and accession = %s",
             (dbid, name))
-        if count == 0:
+        rv = self.cursor.fetchall()
+        if not rv:
             raise IndexError("Cannot find accession %r" % name)
-        assert count == 1, "More than one entry with accession of %r" % name
-        seqid, = self.cursor.fetchone()
-        return seqid
+        assert len(rv) == 1, "More than one entry with accession of %r" % name
+        return rv[0][0]
 
     def fetch_seqid_by_seqid(self, dbid, seqid):
         # XXX can't implement this right since it doesn't seem like the 
@@ -151,9 +195,10 @@ class Adaptor:
         return [field[0] for field in self.cursor.fetchall()]
 
     def execute_one(self, sql, args):
-        count = self.cursor.execute(sql, args)
-        assert count == 1, "Expected 1 response, got %s" % count
-        return self.cursor.fetchone()
+        self.cursor.execute(sql, args)
+        rv = self.cursor.fetchall()
+        assert len(rv) == 1, "Expected 1 response, got %s" % count
+        return rv[0]
 
     def execute(self, sql, args):
         """Just execute an sql command.
@@ -163,7 +208,7 @@ class Adaptor:
     def get_subseq_as_string(self, seqid, start, end):
         length = end - start
         return self.execute_one(
-            """select SUBSTRING(biosequence_str, %s, %s)
+            """select SUBSTRING(biosequence_str FROM %s FOR %s)
                      from biosequence where bioentry_id = %s""",
             (start+1, length, seqid))[0]
 

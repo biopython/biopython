@@ -1,8 +1,5 @@
 #!/usr/bin/env python
 """Tests for dealing with storage of biopython objects in a relational db.
-
-Currently these tests require a MySQL db loaded with the GenBank info
-in GenBank/cor6_6.gb. This loading can be done with bioperl-db.
 """
 # standard library
 import sys
@@ -20,14 +17,21 @@ from Bio import GenBank
 from BioSQL import BioSeqDatabase
 from BioSQL import BioSeq
 
-# Constants for the MySQL database
+#DBDRIVER = 'MySQLdb'
+#DBTYPE = 'mysql'
+DBDRIVER = 'psycopg'
+DBTYPE = 'pg'
+
+# Works for mysql and postgresql, not oracle
+DBSCHEMA = "biosqldb-" + DBTYPE + ".sql"
+# Constants for the database driver
 DBHOST = 'localhost'
-DBUSER = 'chapmanb'
+DBUSER = ''
 DBPASSWD = ''
 TESTDB = 'biosql'
 # XXX I need to put these SQL files somewhere in biopython
 SQL_FILE = os.path.join(os.pardir, os.pardir, "biosql-schema", "sql",
-                        "biosqldb-mysql.sql")
+                        DBSCHEMA)
 
 def run_tests(argv):
     test_suite = testing_suite()
@@ -49,31 +53,57 @@ def testing_suite():
 
     return test_suite
 
-def load_database(gb_handle):
-    """Load a GenBank file into a BioSQL database.
-    
-    This is useful for running tests against a newly created database.
-    """
+def create_database():
+    """Create an empty BioSQL database."""
     # first open a connection to create the database
-    server = BioSeqDatabase.open_database(user = DBUSER, passwd = DBPASSWD,
+    server = BioSeqDatabase.open_database(driver = DBDRIVER,
+                                          user = DBUSER, passwd = DBPASSWD,
                                           host = DBHOST)
-    
+
+    # Auto-commit: postgresql cannot drop database in a transaction
+    try:
+        server.adaptor.autocommit()
+    except AttributeError:
+        pass
+
     # drop anything in the database
     try:
         sql = r"DROP DATABASE " + TESTDB
         server.adaptor.cursor.execute(sql, ())
     except server.module.OperationalError: # the database doesn't exist
         pass
+    except server.module.IntegrityError, e: # ditto--perhaps
+        if str(e).find('database "%s" does not exist' % TESTDB) > 0:
+            pass
+        else:
+            raise
     
     # create a new database
     sql = r"CREATE DATABASE " + TESTDB
-    server.adaptor.execute_one(sql, ())
-    
+    server.adaptor.execute(sql, ())
+
+    server.adaptor.conn.close()
+
     # now open a connection to load the database
-    db_name = "biosql-test"
-    server = BioSeqDatabase.open_database(user = DBUSER, passwd = DBPASSWD,
+    server = BioSeqDatabase.open_database(driver = DBDRIVER,
+                                          user = DBUSER, passwd = DBPASSWD,
                                           host = DBHOST, db = TESTDB)
     server.load_database_sql(SQL_FILE)
+    server.adaptor.conn.commit()
+    server.adaptor.conn.close()
+
+def load_database(gb_handle):
+    """Load a GenBank file into a BioSQL database.
+    
+    This is useful for running tests against a newly created database.
+    """
+
+    create_database()
+    # now open a connection to load the database
+    db_name = "biosql-test"
+    server = BioSeqDatabase.open_database(driver = DBDRIVER,
+                                          user = DBUSER, passwd = DBPASSWD,
+                                          host = DBHOST, db = TESTDB)
     db = server.new_database(db_name)
     
     # get the GenBank file we are going to put into it
@@ -81,6 +111,8 @@ def load_database(gb_handle):
     iterator = GenBank.Iterator(gb_handle, parser)
     # finally put it in the database
     db.load(iterator)
+    server.adaptor.conn.commit()
+    server.adaptor.conn.close()
 
 class ReadTest(unittest.TestCase):
     """Test reading a database from an already built database.
@@ -95,10 +127,16 @@ class ReadTest(unittest.TestCase):
         load_database(gb_handle)
         gb_handle.close()
             
-        server = BioSeqDatabase.open_database(user = DBUSER, 
-                     passwd = DBPASSWD, host = DBHOST, db = TESTDB)
+        server = BioSeqDatabase.open_database(driver = DBDRIVER,
+                                              user = DBUSER, 
+                                              passwd = DBPASSWD,
+                                              host = DBHOST, db = TESTDB)
             
         self.db = server["biosql-test"]
+
+    def tearDown(self):
+        self.db.adaptor.conn.close()
+        del self.db
 
     def t_get_db_items(self):
         """Get a list of all items in the database.
@@ -139,10 +177,16 @@ class SeqInterfaceTest(unittest.TestCase):
         load_database(gb_handle)
         gb_handle.close()
 
-        server = BioSeqDatabase.open_database(user = DBUSER, passwd = DBPASSWD,
+        server = BioSeqDatabase.open_database(driver = DBDRIVER,
+                                              user = DBUSER, passwd = DBPASSWD,
                                               host = DBHOST, db = TESTDB)
-        db = server["biosql-test"]
-        self.item = db.lookup(accession = "X62281")
+        self.db = server["biosql-test"]
+        self.item = self.db.lookup(accession = "X62281")
+
+    def tearDown(self):
+        self.db.adaptor.conn.close()
+        del self.db
+        del self.item
     
     def t_seq_record(self):
         """Make sure SeqRecords from BioSQL implement the right interface.
@@ -217,9 +261,14 @@ class LoaderTest(unittest.TestCase):
     """Load a database from a GenBank file.
     """
     def setUp(self):
+
+        # create TESTDB
+        create_database()
+        
         # load the database
         db_name = "biosql-test"
-        server = BioSeqDatabase.open_database(user = DBUSER, passwd = DBPASSWD,
+        server = BioSeqDatabase.open_database(driver = DBDRIVER,
+                                              user = DBUSER, passwd = DBPASSWD,
                                               host = DBHOST, db = TESTDB)
         
         # remove the database if it already exists
@@ -236,6 +285,10 @@ class LoaderTest(unittest.TestCase):
         handle = open(input_file, "r")
         parser = GenBank.FeatureParser()
         self.iterator = GenBank.Iterator(handle, parser)
+
+    def tearDown(self):
+        self.db.adaptor.conn.close()
+        del self.db
 
     def t_load_database(self):
         """Load SeqRecord objects into a BioSQL database.
@@ -267,9 +320,14 @@ class InDepthLoadTest(unittest.TestCase):
         load_database(gb_handle)
         gb_handle.close()
 
-        server = BioSeqDatabase.open_database(user = DBUSER, passwd = DBPASSWD,
+        server = BioSeqDatabase.open_database(driver = DBDRIVER,
+                                              user = DBUSER, passwd = DBPASSWD,
                                               host = DBHOST, db = TESTDB)
         self.db = server["biosql-test"]
+
+    def tearDown(self):
+        self.db.adaptor.conn.close()
+        del self.db
 
     def t_record_loading(self):
         """Make sure all records are correctly loaded.

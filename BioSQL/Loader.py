@@ -57,7 +57,7 @@ class DatabaseLoader:
         else:
             sql = r"INSERT INTO ontology_term (term_name, term_definition)" \
                   r"VALUES (%s, %s)"
-            self.adaptor.execute_one(sql, (term_name, term_description))
+            self.adaptor.execute(sql, (term_name, term_description))
             # recursively call this to give back the id
             return self._get_ontology_id(term_name, term_description)
    
@@ -78,12 +78,10 @@ class DatabaseLoader:
         sql = r"INSERT INTO bioentry (biodatabase_id, display_id, " \
               r"accession, entry_version, division) VALUES" \
               r" (%s, %s, %s, %s, %s)"
-        self.adaptor.execute_one(sql, (self.dbid, record.name, 
-                                       accession, version, division))
+        self.adaptor.execute(sql, (self.dbid, record.name, 
+                                   accession, version, division))
         # now retrieve the id for the bioentry
-        sql = r"SELECT max(bioentry_id) FROM bioentry"
-        results = self.adaptor.execute_one(sql, ())
-        bioentry_id = results[0]
+        bioentry_id = self.adaptor.last_id('bioentry')
 
         return bioentry_id
 
@@ -100,7 +98,7 @@ class DatabaseLoader:
         date_id = self._get_ontology_id("date", "Sequence date")
         sql = r"INSERT INTO bioentry_qualifier_value VALUES" \
               r" (%s, %s, %s)" 
-        self.adaptor.execute_one(sql, (bioentry_id, date_id, date))
+        self.adaptor.execute(sql, (bioentry_id, date_id, date))
 
     def _load_bioentry_taxa(self, record, bioentry_id):
         """Add taxa information to the database.
@@ -109,9 +107,9 @@ class DatabaseLoader:
         try:
             # XXX this isn't right, we need taxa ids and other junk
             taxa = record.annotations["taxa"]
-            sql = r"INSERT INTO bioentry_taxa VALUES" \
+            sql = r"INSERT INTO bioentry_taxa(bioentry_id, taxa_id) VALUES" \
                   r" (%s, %s)" 
-            self.adapter.execute_one(sql, (bioentry_id, taxa))
+            self.adapter.execute(sql, (bioentry_id, taxa))
         except KeyError:
             pass
 
@@ -121,26 +119,26 @@ class DatabaseLoader:
         accession, version = record.id.split(".")
         # determine the string representation of the alphabet
         if isinstance(record.seq.alphabet, Alphabet.DNAAlphabet):
-            mol_type = "DNA"
+            alphabet = "DNA"
         elif isinstance(record.seq.alphabet, Alphabet.RNAAlphabet):
-            mol_type = "RNA"
+            alphabet = "RNA"
         elif isinstance(record.seq.alphabet, Alphabet.ProteinAlphabet):
-            mol_type = "PROTEIN"
+            alphabet = "PROTEIN"
         else:
-            mol_type = "UNKNOWN"
+            alphabet = "UNKNOWN"
         
         sql = r"INSERT INTO biosequence (bioentry_id, seq_version, " \
               r"biosequence_str, molecule) VALUES (%s, %s, %s, %s)"
-        self.adaptor.execute_one(sql, (bioentry_id, version, record.seq.data,
-                                       mol_type))
+        self.adaptor.execute(sql, (bioentry_id, version, record.seq.data,
+                                   alphabet))
 
     def _load_bioentry_description(self, record, bioentry_id):
         """Load the description table.
         """
         descr_id = self._get_ontology_id("description", "Sequence description")
         sql = r"INSERT INTO bioentry_qualifier_value VALUES (%s, %s, %s)"
-        self.adaptor.execute_one(sql, (bioentry_id, descr_id, 
-                                       record.description))
+        self.adaptor.execute(sql, (bioentry_id, descr_id, 
+                                   record.description))
 
     def _load_seqfeature(self, feature, feature_rank, bioentry_id):
         """Load a biopython SeqFeature into the database.
@@ -161,11 +159,9 @@ class DatabaseLoader:
         # XXX This doesn't do source yet, since I'm not sure I understand it.
         sql = r"INSERT INTO seqfeature (bioentry_id, seqfeature_key_id, " \
               r"seqfeature_rank) VALUES (%s, %s, %s)"
-        self.adaptor.execute_one(sql, (bioentry_id, seqfeature_key_id,
-                                       feature_rank))
-        sql = r"SELECT max(seqfeature_id) FROM seqfeature"
-        results = self.adaptor.execute_one(sql, ())
-        seqfeature_id = results[0]
+        self.adaptor.execute(sql, (bioentry_id, seqfeature_key_id,
+                                   feature_rank))
+        seqfeature_id = self.adaptor.last_id('seqfeature')
 
         return seqfeature_id
 
@@ -212,7 +208,7 @@ class DatabaseLoader:
         start = feature.location.nofuzzy_start + 1
         end = feature.location.nofuzzy_end 
             
-        self.adaptor.execute_one(sql, (seqfeature_id, start, end, strand, rank))
+        self.adaptor.execute(sql, (seqfeature_id, start, end, strand, rank))
 
     def _load_seqfeature_qualifiers(self, qualifiers, seqfeature_id):
         """Insert the (key, value) pair qualifiers relating to a feature.
@@ -228,11 +224,11 @@ class DatabaseLoader:
                 qualifier_value = qualifiers[qualifier_key][qual_value_rank]
                 sql = r"INSERT INTO seqfeature_qualifier_value VALUES" \
                       r" (%s, %s, %s, %s)"
-                self.adaptor.execute_one(sql, (seqfeature_id,
+                self.adaptor.execute(sql, (seqfeature_id,
                   qualifier_key_id, qual_value_rank, qualifier_value))
        
 class DatabaseRemover:
-    """Compliment the Loader functionality by fully removing a database.
+    """Complement the Loader functionality by fully removing a database.
 
     This probably isn't really useful for normal purposes, since you
     can just do a:
@@ -242,6 +238,7 @@ class DatabaseRemover:
 
     XXX I think this might be the worst optimized SQL in the history
     of the world. There is probably a much better way to do it.
+    [The "right" way is of course to have FKs--YB]
     """
     def __init__(self, adaptor, dbid):
         """Initialize with a database id and adaptor connection.
