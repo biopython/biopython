@@ -19,7 +19,7 @@ Dictionary
 
 import time
 
-from Bio.Entrez import NCBIWWW
+from Bio.WWW import NCBI
 
 class Dictionary:
     """Access PubMed using a read-only dictionary interface.
@@ -90,7 +90,7 @@ class Dictionary:
         self.last_query_time = time.time()
         
         try:
-            handle = NCBIWWW.pmfetch(
+            handle = NCBI.pmfetch(
                 db='PubMed', id=id, report='medlars', mode='text')
         except IOError, x:
             # raise a KeyError instead of an IOError

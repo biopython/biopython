@@ -265,6 +265,9 @@ def index_file(filename, indexname, rec2key=None):
     the sequence title will be used.
 
     """
+    if not os.path.exists(filename):
+        raise ValueError, "%s does not exist" % filename
+
     index = Index.Index(indexname, truncate=1)
     index[Dictionary._Dictionary__filename_key] = filename
     

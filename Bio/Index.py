@@ -80,10 +80,12 @@ class _InMemoryIndex(UserDict.UserDict):
     def __init__(self, indexname, truncate=None):
         self._indexname = indexname
         UserDict.UserDict.__init__(self)
+        self.__changed = 0     # the index hasn't changed
         
         # Remove the database if truncate is true.
         if truncate and os.path.exists(indexname):
             os.unlink(indexname)
+            self.__changed = 1
 
         # Load the database if it exists
         if os.path.exists(indexname):
@@ -97,14 +99,29 @@ class _InMemoryIndex(UserDict.UserDict):
             for key, value in lines:
                 key, value = self._toobj(key), self._toobj(value)
                 self[key] = value
+            self.__changed = 0
+
+    def update(self, dict):
+        self.__changed = 1
+        UserDict.UserDict.update(self, dict)
+    def __setitem__(self, key, value):
+        self.__changed = 1
+        UserDict.UserDict.__setitem__(self, key, value)
+    def __delitem__(self, key):
+        self.__changed = 1
+        UserDict.UserDict.__delitem__(self, key)
+    def clear(self):
+        self.__changed = 1
+        UserDict.UserDict.clear(self)
             
     def __del__(self):
-        # XXX Bug: should only save if changed!
-        handle = open(self._indexname, 'w')
-        handle.write("%s\n" % self._tostr(self.__version))
-        for key, value in self.items():
-            handle.write("%s %s\n" % (self._tostr(key), self._tostr(value)))
-        handle.close()
+        if self.__changed:
+            handle = open(self._indexname, 'w')
+            handle.write("%s\n" % self._tostr(self.__version))
+            for key, value in self.items():
+                handle.write("%s %s\n" %
+                             (self._tostr(key), self._tostr(value)))
+            handle.close()
 
     def _tostr(self, obj):
         # I need a representation of the object that's saveable to
