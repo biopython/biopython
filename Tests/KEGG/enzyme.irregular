@@ -1,0 +1,66 @@
+ENTRY       EC 1.14.18.1
+NAME        Monophenol monooxygenase
+            Tyrosinase
+            Phenolase
+            Monophenol oxidase
+            Cresolase
+SYSNAME     Monophenol,L-dopa:oxygen oxidoreductase
+CLASS       Oxidoreductases
+            Acting on paired donors with incorporation of molecular oxygen
+            With another compound as one donor, and incorporation of one atom
+            of oxygen
+REACTION    L-Tyrosine + L-Dopa + O2 = L-Dopa + Dopaquinone + H2O
+SUBSTRATE   L-Tyrosine
+            L-Dopa
+            Benzenediol
+            O2
+PRODUCT     L-Dopa
+            Dopaquinone
+            H2O
+COFACTOR    Copper
+COMMENT     A group of copper proteins that also catalyse the reaction of
+            EC 1.10.3.1, if only benzenediols are available as substrate.
+            (EC 1.10.3.1 Catechol oxidase)
+PATHWAY     PATH: MAP00350  Tyrosine metabolism
+            PATH: MAP00740  Riboflavin metabolism
+            PATH: MAP00940  Flavonoids, stilbene and lignin biosynthesis
+            PATH: MAP00950  Alkaloid biosynthesis I
+GENES       DME: CG5779
+            MMU: 94856 98880(Tyr)
+            HSA: 7299(TYR)
+DISEASE     MIM: 203100  Tyrosinase
+MOTIF       PS: PS00497  H-x(4,5)-F-[LIVMFTP]-x-[FW]-H-R-x(2)-[LVM]-x(3)-E
+            PS: PS00498  D-P-x-F-[LIVMFYW]-x(2)-H-x(3)-D
+DBLINKS     IUBMB Enzyme Nomenclature: 1.14.18.1
+            ExPASy - ENZYME nomenclature database: 1.14.18.1
+            WIT (What Is There) Metabolic Reconstruction: 1.14.18.1
+            BRENDA, the Enzyme Database: 1.14.18.1
+///
+ENTRY       EC 3.4.21.50
+NAME        Lysyl endopeptidase
+            Achromobacter proteinase I
+            Endoproteinase Lys-C
+            Ps-1
+CLASS       Hydrolases
+            Acting on peptide bonds (peptidases)
+            Serine endopeptidases
+REACTION    Preferential cleavage: Lys+, including -Lys-|-Pro-
+SUBSTRATE   Protein
+            Peptide
+            H2O
+PRODUCT     Protein
+            Peptide
+COMMENT     A chymotrypsin homologue isolated from Achromobacter lyticus.
+            Enzymes with similar specificity are produced by Lysobacter
+            enzymogenes (Endoproteinase Lys-C) and Pseudomonas aeruginosa
+            (Ps-1).
+COMMENT     Also hydrolyses lysine amides and esters.
+GENES       MJA: MJ1468
+            MTH: MTH995
+STRUCTURES  PDB: 1ARC  1ARB  
+DBLINKS     IUBMB Enzyme Nomenclature: 3.4.21.50
+            ExPASy - ENZYME nomenclature database: 3.4.21.50
+            WIT (What Is There) Metabolic Reconstruction: 3.4.21.50
+            BRENDA, the Enzyme Database: 3.4.21.50
+            SCOP (Structural Classification of Proteins): 3.4.21.50
+///

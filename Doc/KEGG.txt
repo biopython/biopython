@@ -1,0 +1,74 @@
+KEGG.txt
+========
+
+
+Bio.KEGG.Enzyme
+---------------
+
+The Bio.KEGG.Enzyme module works with the 'enzyme' file from the
+Ligand database, which can be obtained from the KEGG project. 
+(http://www.genome.ad.jp/kegg/).
+
+The Bio.KEGG.Enzyme.Record contains all the information stored in
+a KEGG/Enzyme record. Its string representation also is a valid KEGG
+record, but it is NOT guaranteed to be equivalent to the record
+from which it was produced.
+
+The Bio.KEGG.Enzyme.Scanner produces the following events:
+
+entry 
+name 
+classname
+sysname
+reaction
+substrate
+product
+inhibitor 
+cofactor
+effector
+comment 
+pathway_db 
+pathway_id
+pathway_desc
+organism 
+gene_id
+disease_db
+disease_id 
+disease_desc
+motif_db
+motif_id
+motif
+structure_db 
+structure_id
+dblinks_db
+dblinks_id
+record_end
+
+
+Bio.KEGG.Compound
+---------------
+
+The Bio.KEGG.Compound module works with the 'compound' file from the
+Ligand database, which can be obtained from the KEGG project. 
+(http://www.genome.ad.jp/kegg/).
+
+The Bio.KEGG.Compound.Record contains all the information stored in
+a KEGG/Compound record. Its string representation also is a valid KEGG
+record, but it is NOT guaranteed to be equivalent to the record
+from which it was produced.
+
+The Bio.KEGG.Enzyme.Scanner produces the following events:
+
+entry 
+name 
+formula 
+pathway_db 
+pathway_id
+pathway_desc
+enzyme_id
+enzyme_role
+structure_db 
+structure_id
+dblinks_db
+dblinks_id
+record_end
