@@ -635,3 +635,62 @@ PATHWAY     PATH: MAP00626  Nitorobenzene degradation
 ///
 
 
+Testing Bio.KEGG.Compound on map00950.rea
+
+
+(S)-Stylopine + S-Adenosyl-L-methionine <=> (S)-cis-N-methylstylopine
+Dihydrochelirubine <=> 12-Hydroxychelirubine
+O2 + (S)-Scoulerine + NADPH <=> (S)-Cheilanthifoline + NADP+ + 2 H2O
+Salutaridinol acetate <=> Thebaine
+Tyramine <=> Dopamine
+Dopamine + 3,4-Dihydroxyphenylacetaldehyde <=> (S)-Norlaudanosoline + H2O
+Morphinone <=> Codeine
+O2 + NADPH + Protopine <=> NADP+ + H2O + 6-Hydroxyprotopine
+Codeinone + NADPH <=> NADP+ + Codeine
+O2 + NADPH + (S)-Tetrahydrocolumbamine <=> NADP+ + 2 H2O + (S)-Canadine
+2 O2 + (S)-Canadine <=> 2 H2O2 + Berberine
+Salutaridine + NADPH <=> NADP+ + Salutaridinol
+4-Hydroxyphenylpyruvate <=> 4-Hydroxyphenylacetaldehyde + CO2
+O2 + Dihydromacarpine <=> Macarpine + H2O2
+Acetyl-CoA + Salutaridinol <=> 7-O-Acetylsalutaridinol + CoA
+(S)-Norcoclaurine + S-Adenosyl-L-methionine <=> S-Adenosyl-L-homocysteine + (S)-Coclaurine
+(S)-Norlaudanosoline + S-Adenosyl-L-methionine <=> (S)-6-O-Methylnorlaudanosoline + S-Adenosyl-L-homocysteine
+L-Tyrosine + 2-Oxoglutarate <=> L-Glutamate + 3-(4-Hydroxyphenyl)pyruvate
+O2 + (S)-N-Methylcoclaurine + (R)-N-Methylcoclaurine + NADPH <=> NADP + 2 H2O + Berbamunine
+(S)-3'-Hydroxycoclaurine + S-Adenosyl-L-methionine <=> S-Adenosyl-L-homocysteine + (S)-Norreticuline
+(S)-N-Methylcoclaurine <=> (S)-3'-Hydroxy-N-methylcoclaurine
+Thebaine <=> Neopinone
+(R)-Norreticuline + S-Adenosyl-L-methionine <=> (R)-Reticuline + S-Adenosyl-L-homocysteine
+L-Tyrosine + 2-Oxoglutarate <=> 4-Hydroxyphenylpyruvate + L-Glutamate
+(R)-Reticuline + O2 + NADPH <=> Salutaridine + NADP+ + 2 H2O
+(S)-6-O-Methylnorlaudanosoline + S-Adenosyl-L-methionine <=> S-Adenosyl-L-homocysteine + (S)-Nororientaline
+(S)-Tetrahydrocolumbamine + 2 O2 <=> 2 H2O2 + Columbamine
+6-Hydroxyprotopine <=> Dihydrosanguinarine
+(S)-Norreticuline + S-Adenosyl-L-methionine <=> S-Adenosyl-L-homocysteine + (S)-Reticuline
+Morphine + NADP+ <=> Morphinone + NADPH
+(S)-Cheilanthifoline + O2 + NADPH <=> (S)-Stylopine + NADP+ + 2 H2O
+O2 + L-Tyrosine + H2O <=> NH3 + H2O2 + 4-Hydroxyphenylpyruvate
+Oripavine <=> Morphinone
+O2 + Dihydrochelirubine <=> H2O2 + Chelirubine
+S-Adenosyl-L-methionine + (S)-Coclaurine <=> S-Adenosyl-L-homocysteine + (S)-N-Methylcoclaurine
+(S)-cis-N-methylstylopine <=> Protopine
+(S)-Tetrahydrocolumbamine + S-Adenosyl-L-methionine <=> S-Adenosyl-L-homocysteine + Tetrahydropalmatine
+S-Adenosyl-L-methionine + 3'-Hydroxy-N-methyl-(S)-coclaurine <=> S-Adenosyl-L-homocysteine + (S)-Reticuline
+S-Adenosyl-L-methionine + (S)-Scoulerine <=> (S)-Tetrahydrocolumbamine + S-Adenosyl-L-homocysteine
+O2 + 2 Columbamine <=> 2 Berberine + 2 H2O
+12-Hydroxydihydrochelirubine + S-Adenosyl-L-methionine <=> S-Adenosyl-L-homocysteine + Dihydromacarpine
+Dopamine + 4-Hydroxyphenylacetaldehyde <=> (S)-Norcoclaurine + H2O
+O2 + (S)-Coclaurine + (R)-N-Methylcoclaurine + NADPH <=> 2'-Norberbamunine + NADP + 2 H2O
+Neopinone <=> Codeinone
+1,2-Dehydroreticuline + NADPH <=> (R)-Reticuline + NADP+
+L-Tyrosine + 2-Oxoglutarate <=> 4-Hydroxyphenylpyruvate + L-Glutamate
+Morphine + NAD+ <=> NADH + Morphinone
+O2 + 2 (R)-N-Methylcoclaurine + NADPH <=> NADP + Guattegaumerine + 2 H2O
+O2 + Dihydrosanguinarine <=> H2O2 + Sanguinarine
+O2 + (S)-Reticuline <=> H2O2 + (S)-Scoulerine
+L-Tyrosine <=> Tyramine + CO2
+Thebaine <=> Oripavine
+10-Hydroxydihydrosanguinarine + S-Adenosyl-L-methionine <=> Dihydrochelirubine + S-Adenosyl-L-homocysteine
+O2 + Dihydrosanguinarine + NADPH <=> 10-Hydroxydihydrosanguinarine + H2O + NADP+
+L-Tyrosine <=> Tyramine + CO2
+Columbamine + S-Adenosyl-L-methionine <=> S-Adenosyl-L-homocysteine + Palmatine

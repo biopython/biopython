@@ -5,9 +5,13 @@ import os
 
 from Bio.KEGG import Enzyme
 from Bio.KEGG import Compound
+from Bio.KEGG import Map
+from Bio.Pathway import Reaction
+from Bio.Pathway import System
 
 test_KEGG_Enzyme_files   = ["enzyme.sample", "enzyme.irregular"]
 test_KEGG_Compound_files = ["compound.sample", "compound.irregular"] 
+test_KEGG_Map_files      = ["map00950.rea"]
 
 def t_KEGG_Enzyme(testfiles):
     """Tests Bio.KEGG.Enzyme functionality."""
@@ -37,8 +41,25 @@ def t_KEGG_Compound(testfiles):
                 break
         print "\n"    
 
+def t_KEGG_Map(testfiles):
+    """Tests Bio.KEGG.Map functionality."""
+    for file in testfiles:
+        fh = open(os.path.join("KEGG", file))
+        print "Testing Bio.KEGG.Compound on " + file + "\n\n"
+        reactions = Map.Iterator(fh, Map.Parser(debug_level=0))
+        system = System()
+        while 1:
+            r = reactions.next()
+            if r is not None:
+                system.add_reaction(r)
+            else:
+                break
+        for x in system.reactions():
+            print str(x)
+
+
 t_KEGG_Enzyme(test_KEGG_Enzyme_files)
 t_KEGG_Compound(test_KEGG_Compound_files)
-
+t_KEGG_Map(test_KEGG_Map_files)
 
 
