@@ -89,8 +89,8 @@ class StructureBuilder:
 
 		Arguments:
 		o resname - string, e.g. "ASN"
-		o field - hetero flag, "W" for waters, "H_" followed by the residue name for 
-			hetero residues (e.g. "H_FUC"), default blanc.
+		o field - hetero flag, "W" for waters, "H" for 
+			hetero residues, otherwise blanc.
 		o resseq - int, sequence identifier
 		o icode - string, insertion code
 		"""
