@@ -22,30 +22,30 @@ The DSSP codes for secondary structure used here are:
     - -        None
 """
 
-# ASA of amino acids in a G-X-G peptide in extended conformation
-# Values from Miller et al. (1987), JMB, 196:641-656 (see Creighton)
+# Maximal ASA of amino acids
+# Values from Sander & Rost, (1994), Proteins, 20:216-226
 # Used for relative accessibility
-_GXG={}
-_GXG["ALA"]=113.0
-_GXG["CYS"]=140.0
-_GXG["ASP"]=151.0
-_GXG["GLU"]=183.0
-_GXG["PHE"]=218.0
-_GXG["GLY"]=85.0
-_GXG["HIS"]=194.0
-_GXG["ILE"]=182.0
-_GXG["LYS"]=211.0
-_GXG["LEU"]=180.0
-_GXG["MET"]=204.0
-_GXG["ASN"]=158.0
-_GXG["PRO"]=143.0
-_GXG["GLN"]=189.0
-_GXG["ARG"]=241.0
-_GXG["SER"]=122.0
-_GXG["THR"]=146.0
-_GXG["VAL"]=160.0
-_GXG["TRP"]=259.0
-_GXG["TYR"]=229.0
+_MAX_ACC={}
+_MAX_ACC["ALA"]=106.0
+_MAX_ACC["CYS"]=135.0
+_MAX_ACC["ASP"]=163.0
+_MAX_ACC["GLU"]=194.0
+_MAX_ACC["PHE"]=197.0
+_MAX_ACC["GLY"]=84.0
+_MAX_ACC["HIS"]=184.0
+_MAX_ACC["ILE"]=169.0
+_MAX_ACC["LYS"]=205.0
+_MAX_ACC["LEU"]=164.0
+_MAX_ACC["MET"]=188.0
+_MAX_ACC["ASN"]=157.0
+_MAX_ACC["PRO"]=136.0
+_MAX_ACC["GLN"]=198.0
+_MAX_ACC["ARG"]=248.0
+_MAX_ACC["SER"]=130.0
+_MAX_ACC["THR"]=142.0
+_MAX_ACC["VAL"]=142.0
+_MAX_ACC["TRP"]=227.0
+_MAX_ACC["TYR"]=222.0
 
 def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
     """
@@ -151,7 +151,7 @@ class DSSP:
                     aa, ss, acc=self.dssp_dict[(chain_id, res_id)]
                     resname=res.get_resname()
                     # relative accessibility
-                    rel_acc=acc/_GXG[resname]
+                    rel_acc=acc/_MAX_ACC[resname]
                     if rel_acc>1.0:
                         rel_acc=1.0
                     # Verify if AA in DSSP == AA in Structure
