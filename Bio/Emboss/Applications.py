@@ -296,7 +296,7 @@ class WaterCommandline(Application.AbstractCommandline):
         self.parameters = \
          [_Option(["-asequence"], ["input", "file"], None, 1,
                   "First sequence to align"),
-         _Option(["-seqall"], ["input", "file"], None, 1,
+         _Option(["-bsequence"], ["input", "file"], None, 1,
                   "Second sequence to align"),
          _Option(["-gapopen"], ["input"], None, 1,
                  "Gap open penalty"),
