@@ -379,6 +379,7 @@ feature_key_names = (
     "mutation",         # Obsolete: see variation feature key
     "N_region",         # Span of the N immunological feature
     "old_sequence",     # Presented sequence revises a previous version
+    "operon",
     "polyA_signal",     # Signal for cleavage & polyadenylation
     "polyA_site",       # Site at which polyadenine is added to mRNA
     "Precursor",
@@ -581,6 +582,7 @@ feature_qualifier_names = (
     "note",           # Any comment or additional information
     "number",         # A number indicating the order of genetic elements
                       #   (e.g., exons or introns) in the 5 to 3 direction
+    "operon",
     "organelle",      # Type of membrane-bound intracellular structure from
                       #  which the sequence was obtained
     "organism",       # Name of the organism that is the source of the
