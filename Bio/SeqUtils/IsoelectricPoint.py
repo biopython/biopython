@@ -98,8 +98,8 @@ class IsoelectricPoint:
 			
 		
 		# some times the charge is still higher or lower than zero. in such case we fix it in a step-wise way.
-		if abs(Charge) > 0.01:
-			while abs(Charge) > 0.01:
+		if abs(Charge) > 0.1:
+			while abs(Charge) > 0.1:
 				if Charge > 0:
 					pH += 0.001
 				else:
