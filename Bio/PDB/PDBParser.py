@@ -107,18 +107,21 @@ class PDBParser:
         "Parse the atomic data in the PDB file."
         local_line_counter=0
         structure_builder=self.structure_builder
-        current_model_id=0
+        current_model_id=None
         current_chain_id=None
         current_segid=None
         current_residue_id=None
         current_resname=None
-        structure_builder.init_model(current_model_id)
         for i in range(0, len(coords_trailer)):
             line=coords_trailer[i]
             record_type=line[0:6]
             global_line_counter=self.line_counter+local_line_counter+1
             structure_builder.set_line_counter(global_line_counter)
             if(record_type=='ATOM  ' or record_type=='HETATM'):
+                # Initialize the Model - there was no explicit MODEL record
+                if current_model_id is None:
+                    current_model_id=0
+                    structure_builder.init_model(current_model_id)
                 fullname=line[12:16]
                 # get rid of whitespace in atom names
                 split_list=split(fullname)
@@ -184,8 +187,12 @@ class PDBParser:
                 # U's are scaled by 10^4 
                 anisou_array=(array(anisou, Float0)/10000.0).astype(Float0)
                 structure_builder.set_anisou(anisou_array)
-            elif(record_type=='ENDMDL'):
-                current_model_id=current_model_id+1
+            elif(record_type=='MODEL '):
+                if current_model_id is None:
+                    # First Model
+                    current_model_id=0
+                else:
+                    current_model_id+=1
                 structure_builder.init_model(current_model_id)
                 current_chain_id=None
                 current_residue_id=None
@@ -233,16 +240,17 @@ if __name__=="__main__":
 
     s=p.get_structure("scr", sys.argv[1])
 
-    for m in s.get_iterator():
+    for m in s:
         p=m.get_parent()
         assert(p is s)
-        for c in m.get_iterator():
+        for c in m:
             p=c.get_parent()
             assert(p is m)
-            for r in c.get_iterator():
+            for r in c:
+                print r
                 p=r.get_parent()
                 assert(p is c)
-                for a in r.get_iterator():
+                for a in r:
                     p=a.get_parent()
                     if not p is r:
                         print p, r
