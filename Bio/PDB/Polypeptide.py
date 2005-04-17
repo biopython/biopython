@@ -127,9 +127,9 @@ class Polypeptide(list):
             tau_list.append(tau)
         return tau_list
 
-    def get_omega_list(self):
+    def get_theta_list(self):
         """
-        Return list of omega angles for all 3 consecutive
+        Return list of theta angles for all 3 consecutive
         Calpha atoms.
         """
         omega_list=[]
