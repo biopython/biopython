@@ -8,7 +8,6 @@
 import sys
 from string import split
 from Numeric import array, Float0
-import types
 
 # My stuff
 from StructureBuilder import StructureBuilder
@@ -62,7 +61,7 @@ class PDBParser:
         self.trailer=None
         # Make a StructureBuilder instance (pass id of structure as parameter)
         self.structure_builder.init_structure(id)
-        if type(file)==types.StringType:
+        if isinstance(file, basestring):
             file=open(file)
         self._parse(file.readlines())
         file.close()

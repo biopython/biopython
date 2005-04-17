@@ -1,4 +1,3 @@
-import types
 
 __doc__="Output of PDB files."
 
@@ -103,7 +102,7 @@ class PDBIO:
             Typically select is a subclass of L{Select}.
         """
         get_atom_line=self._get_atom_line
-        if type(file)==types.StringType:
+        if isinstance(file, basestring):
             fp=open(file, "w")
             close_file=1
         else:
@@ -171,7 +170,7 @@ if __name__=="__main__":
     fp=open("out2.pdb", "w")
     s1=p.get_structure("test1", sys.argv[1])
     s2=p.get_structure("test2", sys.argv[2])
-    io=PDBIO()
+    io=PDBIO(1)
     io.set_structure(s1)
     io.save(fp)
     io.set_structure(s2)
