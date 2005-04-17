@@ -56,7 +56,7 @@ class PDBParser:
 
         Arguments:
         o id - string, the id that will be used for the structure
-        o file - name of the PDB file OR an open file
+        o file - name of the PDB file OR an open filehandle
         """
         self.header=None
         self.trailer=None
