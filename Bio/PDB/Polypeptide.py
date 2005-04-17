@@ -174,15 +174,15 @@ class Polypeptide(list):
         Return list of theta angles for all 3 consecutive
         Calpha atoms.
         """
-        omega_list=[]
+        theta_list=[]
         ca_list=self.get_ca_list()
         for i in range(0, len(ca_list)-2):
             atom_list=[ca_list[i], ca_list[i+1], ca_list[i+2]]
             vector_list=map(lambda a: a.get_vector(), atom_list)
             v1, v2, v3=vector_list
-            omega=calc_angle(v1, v2, v3)
-            omega_list.append(omega)
-        return omega_list
+            theta=calc_angle(v1, v2, v3)
+            theta_list.append(theta)
+        return theta_list
 
     def get_sequence(self):
         """
