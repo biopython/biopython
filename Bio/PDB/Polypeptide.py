@@ -251,18 +251,22 @@ class CaPPBuilder(_PPBuilder):
         for r in [prev, next]:
             if not r.has_id("CA"):
                 return 0
-        n_ca=next["CA"]
-        p_ca=prev["CA"]
-        for a in [n_ca, p_ca]:
-            # if a CA is disordered we consider
-            # it as not part of a polypeptide 
-            # chain
-            if a.is_disordered():
-                return 0
-        if (n_ca-p_ca)<self.radius:
-            return 1
+        n=next["CA"]
+        p=prev["CA"]
+        # Unpack disordered
+        if n.is_disordered():
+            nlist=n.disordered_get_list()
         else:
-            return 0
+            nlist=[n]
+        if p.is_disordered():
+            plist=p.disordered_get_list()
+        else:
+            plist=[p]
+        for nn in nlist:
+            for pp in plist:
+                if (nn-pp)<self.radius:
+                    return 1
+        return 0
 
 
 class PPBuilder(_PPBuilder):
