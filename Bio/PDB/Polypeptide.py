@@ -112,6 +112,48 @@ class Polypeptide(list):
             ca_list.append(ca)
         return ca_list
 
+    def get_phi_psi_list(self):
+        """
+        Return the list of phi/psi dihedral angles
+        """
+        ppl=[]
+        lng=len(self)
+        for i in range(0, lng):
+            r=self[i]
+            try:
+                n=r['N'].get_vector()
+                ca=r['CA'].get_vector()
+                c=r['C'].get_vector()
+            except:
+                # Some atoms are missing
+                # Phi/Psi cannot be calculated for this residue
+                ppl.append((None, None))
+                continue
+            # Phi
+            if i>0:
+                rp=self[i-1]
+                try:
+                    cp=rp['C'].get_vector()
+                    phi=calc_dihedral(cp, n, ca, c)
+                except:
+                    phi=None
+            else:
+                # No phi for residue 0!
+                phi=None
+            # Psi
+            if i<(lng-1):
+                rn=self[i+1]
+                try:
+                    nn=rn['N'].get_vector()
+                    psi=calc_dihedral(n, ca, c, nn)
+                except:
+                    psi=None
+            else:
+                # No psi for last residue!
+                psi=None
+            ppl.append((phi, psi))
+        return ppl
+
     def get_tau_list(self):
         """
         Return list of tau torsions angles for all 4 consecutive
@@ -338,6 +380,10 @@ if __name__=="__main__":
         print pp.get_sequence()
     for pp in ppb.build_peptides(s[0]["A"]):
         print pp.get_sequence()
+
+    for pp in ppb.build_peptides(s):
+        for phi, psi in pp.get_phi_psi_list():
+            print phi, psi
 
     ppb=CaPPBuilder()
 
