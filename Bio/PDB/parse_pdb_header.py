@@ -122,8 +122,7 @@ def parse_pdb_header(file):
         f=open(file,'r')
     else:
         f=file
-    while f:
-        l=f.readline()
+    for l in f:
         record_type=l[0:6]
         if record_type=='ATOM  ' or record_type=='HETATM' or record_type=='MODEL ':
             break
