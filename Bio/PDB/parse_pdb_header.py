@@ -124,10 +124,11 @@ def parse_pdb_header(file):
         f=file
     while f:
         l=f.readline()
-        if not re.search("\AATOM",l):
-            header.append(l)    
-        else:
+        record_type=l[0:6]
+        if record_type=='ATOM  ' or record_type=='HETATM' or record_type=='MODEL ':
             break
+        else:
+            header.append(l)    
     f.close()
     return _parse_pdb_header_list(header)
 
