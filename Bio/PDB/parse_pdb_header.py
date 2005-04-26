@@ -119,7 +119,7 @@ def parse_pdb_header(file):
     """
     header=[]
     if type(file)==types.StringType:
-        f=open(filename,'r')
+        f=open(file,'r')
     else:
         f=file
     while f:
