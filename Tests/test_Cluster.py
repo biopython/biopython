@@ -178,9 +178,8 @@ def test_kcluster(module):
 
   # test first data set
   print "First data set"
-  clusterid, centroids, error, nfound = kcluster (data1, nclusters=nclusters, mask=mask1, weight=weight1, transpose=0, npass=100, method='a', dist='e')
+  clusterid, error, nfound = kcluster (data1, nclusters=nclusters, mask=mask1, weight=weight1, transpose=0, npass=100, method='a', dist='e')
   print "Number of cluster ids is %d (should be %d)" % (len(clusterid), len(data1))
-  print "Number of centroids is %d (should be %d)" % (len(centroids), nclusters)
   correct = [0,1,1,2]
   mapping = [clusterid[correct.index(i)] for i in range(nclusters)]
   same = 1
@@ -188,18 +187,11 @@ def test_kcluster(module):
     if clusterid[i]!=mapping[correct[i]]: same = 0
   if same: print "Correct clustering solution found."
   else: print "Wrong clustering solution found."
-  print "Cluster centroids:"
-  for i in range(nclusters):
-    centroid = centroids[mapping[i]]
-    for number in centroid:
-      print "%7.3f " % number,
-    print
 
   # test second data set
   print "Second data set"
-  clusterid, centroids, error, nfound = kcluster (data2, nclusters=3, mask=mask2, weight=weight2, transpose=0, npass=100, method='a', dist='e')
+  clusterid, error, nfound = kcluster (data2, nclusters=3, mask=mask2, weight=weight2, transpose=0, npass=100, method='a', dist='e')
   print "Number of cluster ids is %d (should be %d)" % (len(clusterid), len(data2))
-  print "Number of centroids is %d (should be %d)" % (len(centroids), nclusters)
   correct = [0, 0, 0, 0, 0, 0, 1, 1, 2, 1, 1, 1, 1]
   mapping = [clusterid[correct.index(i)] for i in range(nclusters)]
   same = 1
@@ -207,12 +199,6 @@ def test_kcluster(module):
     if clusterid[i]!=mapping[correct[i]]: same = 0
   if same: print "Correct clustering solution found."
   else: print "Wrong clustering solution found."
-  print "Cluster centroids:"
-  for i in range(nclusters):
-    centroid = centroids[mapping[i]]
-    for number in centroid:
-      print "%7.3f " % number,
-    print
   print
 
 def test_clusterdistance(module):
@@ -345,28 +331,28 @@ def test_treecluster(module):
   print "First data set:"
   print_matrix(data1, mask1)
   print "Pairwise average-linkage clustering"
-  result, linkdist = treecluster(data=data1, mask=mask1, weight=weight1, applyscale=0, transpose=0, method='a', dist='e')
+  result, linkdist = treecluster(data=data1, mask=mask1, weight=weight1, transpose=0, method='a', dist='e')
   print "Number of nodes is %d (should be %d)" % (len(result), len(data1)-1)
   print "Number of link distances is %d (should be %d)" % (len(linkdist), len(data1)-1)
   for i in range(len(result)):
     print "Node %3d joins node %3d with node %3d; link distance is %7.3f" % (i, result[i][0], result[i][1], linkdist[i])
 
   print "Pairwise single-linkage clustering"
-  result, linkdist = treecluster(data=data1, mask=mask1, weight=weight1, applyscale=0, transpose=0, method='s', dist='e')
+  result, linkdist = treecluster(data=data1, mask=mask1, weight=weight1, transpose=0, method='s', dist='e')
   print "Number of nodes is %d (should be %d)" % (len(result), len(data1)-1)
   print "Number of link distances is %d (should be %d)" % (len(linkdist), len(data1)-1)
   for i in range(len(result)):
     print "Node %3d joins node %3d with node %3d; link distance is %7.3f" % (i, result[i][0], result[i][1], linkdist[i])
 
   print "Pairwise centroid-linkage clustering"
-  result, linkdist = treecluster(data=data1, mask=mask1, weight=weight1, applyscale=0, transpose=0, method='c', dist='e')
+  result, linkdist = treecluster(data=data1, mask=mask1, weight=weight1, transpose=0, method='c', dist='e')
   print "Number of nodes is %d (should be %d)" % (len(result), len(data1)-1)
   print "Number of link distances is %d (should be %d)" % (len(linkdist), len(data1)-1)
   for i in range(len(result)):
     print "Node %3d joins node %3d with node %3d; link distance is %7.3f" % (i, result[i][0], result[i][1], linkdist[i])
 
   print "Pairwise maximum-linkage clustering"
-  result, linkdist = treecluster(data=data1, mask=mask1, weight=weight1, applyscale=0, transpose=0, method='m', dist='e')
+  result, linkdist = treecluster(data=data1, mask=mask1, weight=weight1, transpose=0, method='m', dist='e')
   print "Number of nodes is %d (should be %d)" % (len(result), len(data1)-1)
   print "Number of link distances is %d (should be %d)" % (len(linkdist), len(data1)-1)
   for i in range(len(result)):
@@ -375,28 +361,28 @@ def test_treecluster(module):
   # Test second data set
   print "Second data set:"
   print "Pairwise average-linkage clustering"
-  result, linkdist = treecluster(data=data2, mask=mask2, weight=weight2, applyscale=0, transpose=0, method='a', dist='e')
+  result, linkdist = treecluster(data=data2, mask=mask2, weight=weight2, transpose=0, method='a', dist='e')
   print "Number of nodes is %d (should be %d)" % (len(result), len(data2)-1)
   print "Number of link distances is %d (should be %d)" % (len(linkdist), len(data2)-1)
   for i in range(len(result)):
     print "Node %3d joins node %3d with node %3d; link distance is %7.3f" % (i, result[i][0], result[i][1], linkdist[i])
 
   print "Pairwise single-linkage clustering"
-  result, linkdist = treecluster(data=data2, mask=mask2, weight=weight2, applyscale=0, transpose=0, method='s', dist='e')
+  result, linkdist = treecluster(data=data2, mask=mask2, weight=weight2, transpose=0, method='s', dist='e')
   print "Number of nodes is %d (should be %d)" % (len(result), len(data2)-1)
   print "Number of link distances is %d (should be %d)" % (len(linkdist), len(data2)-1)
   for i in range(len(result)):
     print "Node %3d joins node %3d with node %3d; link distance is %7.3f" % (i, result[i][0], result[i][1], linkdist[i])
 
   print "Pairwise centroid-linkage clustering"
-  result, linkdist = treecluster(data=data2, mask=mask2, weight=weight2, applyscale=0, transpose=0, method='c', dist='e')
+  result, linkdist = treecluster(data=data2, mask=mask2, weight=weight2, transpose=0, method='c', dist='e')
   print "Number of nodes is %d (should be %d)" % (len(result), len(data2)-1)
   print "Number of link distances is %d (should be %d)" % (len(linkdist), len(data2)-1)
   for i in range(len(result)):
     print "Node %3d joins node %3d with node %3d; link distance is %7.3f" % (i, result[i][0], result[i][1], linkdist[i])
 
   print "Pairwise maximum-linkage clustering"
-  result, linkdist = treecluster(data=data2, mask=mask2, weight=weight2, applyscale=0, transpose=0, method='m', dist='e')
+  result, linkdist = treecluster(data=data2, mask=mask2, weight=weight2, transpose=0, method='m', dist='e')
   print "Number of nodes is %d (should be %d)" % (len(result), len(data2)-1)
   print "Number of link distances is %d (should be %d)" % (len(linkdist), len(data2)-1)
   for i in range(len(result)):

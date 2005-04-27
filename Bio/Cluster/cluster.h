@@ -60,23 +60,23 @@ double** CALL distancematrix (int ngenes, int ndata, double** data,
 
 /* Chapter 5 */
 void CALL randomassign (int nclusters, int ngenes, int clusterid[]);
-void getclustermean (int nclusters, int nrows, int ncolumns,
+void getclustermean(int nclusters, int nrows, int ncolumns,
   double** data, int** mask, int clusterid[], double** cdata, int** cmask,
   int transpose);
-void getclustermedian (int nclusters, int nrows, int ncolumns,
+void getclustermedian(int nclusters, int nrows, int ncolumns,
   double** data, int** mask, int clusterid[], double** cdata, int** cmask,
   int transpose);
 void getclustermedoid(int nclusters, int nelements, double** distance,
   int clusterid[], int centroids[], double errors[]);
 void CALL kcluster (int nclusters, int ngenes, int ndata, double** data,
   int** mask, double weight[], int transpose, int npass, char method, char dist,
-  int clusterid[], double** cdata, double* error, int* ifound);
+  int clusterid[], double* error, int* ifound);
 void CALL kmedoids (int nclusters, int nelements, double** distance,
   int npass, int clusterid[], double* error, int* ifound);
 
 /* Chapter 6 */
-void CALL treecluster (int nrows, int ncolumns, double** data, int** mask,
-  double weight[], int applyscale, int transpose, char dist, char method,
+int CALL treecluster (int nrows, int ncolumns, double** data, int** mask,
+  double weight[], int transpose, char dist, char method,
   int result[][2], double linkdist[], double** distmatrix);
 void cuttree (int nelements, int tree[][2], int nclusters, int clusterid[]);
 
@@ -93,4 +93,7 @@ void CALL svd(int m, int n, double** u, double w[], double** v, int* ierr);
 void CALL sort(int n, const double data[], int index[]);
 double CALL mean(int n, double x[]);
 double CALL median (int n, double x[]);
+
+double* calculate_weights(int nrows, int ncolumns, double** data, int** mask,
+  double weights[], int transpose, char dist, double cutoff, double exponent);
 #endif

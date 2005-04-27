@@ -3,12 +3,12 @@
 #include <stdio.h>
 #include <string.h>
 #include "cluster.h"
- 
+
 static PyObject *ErrorObject;
 static char buffer[512];
 static char* message = NULL;
 
-static const char known_distances[] = "ebhcauxsk";
+static const char known_distances[] = "ebcauxsk";
 
 /* ========================================================================== */
 /* -- Helper routines ------------------------------------------------------- */
@@ -724,7 +724,7 @@ free_index(PyArrayObject* array, int* index)
 
 /* kcluster */
 static char kcluster__doc__[] =
-"returns clusterid, centroids, error, nfound.\n"
+"returns clusterid, error, nfound.\n"
 "\n"
 "This function implements k-means clustering.\n"
 "The array data is a nrows x ncolumns array containing the expression data\n"
@@ -742,7 +742,6 @@ static char kcluster__doc__[] =
 "The character dist defines the distance function to be used:\n"
 "dist=='e': Euclidean distance\n"
 "dist=='b': City Block distance\n"
-"dist=='h': Harmonically summed Euclidean distance\n"
 "dist=='c': Pearson correlation\n"
 "dist=='a': absolute value of the correlation\n"
 "dist=='u': uncentered correlation\n"
@@ -762,8 +761,6 @@ static char kcluster__doc__[] =
 "Return values:\n"
 "clusterid is an array containing the number of the cluster to which each\n"
 "  gene/microarray was assigned;\n"
-"centroids is an array containing the gene expression data for the cluster\n"
-"  centroids;\n"
 "error is the within-cluster sum of distances for the optimal k-means\n"
 "  clustering solution;\n"
 "nfound is the number of times the optimal solution was found.\n";
@@ -789,12 +786,8 @@ py_kcluster (PyObject* self, PyObject* args, PyObject* keywords)
   char DIST = 'e';
   PyObject* INITIALID = NULL;
   PyArrayObject* aCLUSTERID = NULL;
-  PyArrayObject* aCDATA = NULL;
-  double** cdata;
-  int shape[2];
   double ERROR;
   int IFOUND;
-  int i;
 
   /* -- Read the input variables ----------------------------------------- */
   static char* kwlist[] = { "data",
@@ -886,22 +879,6 @@ py_kcluster (PyObject* self, PyObject* args, PyObject* keywords)
     Py_DECREF((PyObject*) aCLUSTERID);
     return NULL;
   }
-  /* -- Create the centroid data output variable ------------------------- */
-  shape[0] = TRANSPOSE ? nrows : NCLUSTERS;
-  shape[1] = TRANSPOSE ? NCLUSTERS : ncolumns;
-  aCDATA = (PyArrayObject*) PyArray_FromDims(2, shape, PyArray_DOUBLE);
-  if (!aCDATA)
-  { strcpy(message, "Could not create centroids array -- too big?");
-    PyErr_SetString (ErrorObject, buffer);
-    free_data(aDATA, data);
-    free_mask(aMASK, mask, nrows);
-    free_weight(aWEIGHT, weight);
-    Py_DECREF((PyObject*) aCLUSTERID);
-    return NULL;
-  }
-  cdata = malloc(shape[0]*sizeof(double*));
-  for (i=0; i<shape[0]; i++)
-    cdata[i] = ((double*) (aCDATA->data)) + i*shape[1];
   /* --------------------------------------------------------------------- */
   kcluster(NCLUSTERS, 
       nrows, 
@@ -914,17 +891,15 @@ py_kcluster (PyObject* self, PyObject* args, PyObject* keywords)
       METHOD, 
       DIST, 
       (int*) (aCLUSTERID->data), 
-      cdata,
       &ERROR, 
       &IFOUND);
   /* --------------------------------------------------------------------- */
   free_data(aDATA, data);
   free_mask(aMASK, mask, nrows);
   free_weight(aWEIGHT, weight);
-  free (cdata);
   /* --------------------------------------------------------------------- */
 
-  return Py_BuildValue("NNdl",aCLUSTERID, aCDATA, ERROR, IFOUND);
+  return Py_BuildValue("Ndl", aCLUSTERID, ERROR, IFOUND);
 } 
 /* end of wrapper for kcluster */
 
@@ -1056,16 +1031,12 @@ static char treecluster__doc__[] =
 "is missing.\n"
 "The array weight contains the weights to be used for the distance\n"
 "calculation.\n"
-"If the integer applyscale is nonzero, then the distances in linkdist are\n"
-"scaled such that all distances are between zero and two (as in case of the\n"
-"Pearson distance).\n"
 "The integer transpose defines if rows (genes) or columns (microarrays) are\n"
 "clustered. If transpose==0, then genes are clustered. If transpose==1,\n"
 "microarrays are clustered.\n"
 "The character dist defines the distance function to be used:\n"
 "dist=='e': Euclidean distance (default)\n"
 "dist=='b': City Block distance\n"
-"dist=='h': Harmonically summed Euclidean distance\n"
 "dist=='c': Pearson correlation\n"
 "dist=='a': absolute value of the Pearson correlation\n"
 "dist=='u': uncentered correlation\n"
@@ -1103,29 +1074,27 @@ py_treecluster (PyObject* self, PyObject* args, PyObject* keywords)
 { PyObject *DATA = NULL;
   PyObject *MASK = NULL;
   PyObject *WEIGHT = NULL;
-  int APPLYSCALE = 0;
   int TRANSPOSE = 0;
   char DIST = 'e';
   char METHOD = 'm';
   PyObject *DISTANCEMATRIX = NULL;
   PyArrayObject* aRESULT = NULL;
   PyArrayObject* aLINKDIST = NULL;
+  double* linkdist;
 
   /* -- Read the input variables ----------------------------------------- */
   static char* kwlist[] = { "data",
                             "mask",
                             "weight",
-                            "applyscale",
                             "transpose",
                             "method",
                             "dist",
                             "distancematrix",
                              NULL };
-  if(!PyArg_ParseTupleAndKeywords(args, keywords, "|OOOllccO", kwlist,
+  if(!PyArg_ParseTupleAndKeywords(args, keywords, "|OOOlccO", kwlist,
                                   &DATA,
                                   &MASK,
                                   &WEIGHT,
-                                  &APPLYSCALE,
                                   &TRANSPOSE,
                                   &METHOD,
                                   &DIST,
@@ -1149,8 +1118,8 @@ py_treecluster (PyObject* self, PyObject* args, PyObject* keywords)
   if (DISTANCEMATRIX==NULL) /* DATA contains gene expression data */
   { int nrows;
     int ncolumns;
-    int ndata;
     int nnodes;
+    int ndata;
     PyArrayObject* aDATA = NULL;
     PyArrayObject* aMASK = NULL;
     PyArrayObject* aWEIGHT = NULL;
@@ -1159,6 +1128,7 @@ py_treecluster (PyObject* self, PyObject* args, PyObject* keywords)
     double* weight = NULL;
     int shape[2];
     int (*result)[2];
+    int success;
 
     /* -- Check the method variable ---------------------------------------- */
     if (!strchr("csma", METHOD))
@@ -1178,6 +1148,7 @@ py_treecluster (PyObject* self, PyObject* args, PyObject* keywords)
     nrows = aDATA->dimensions[0];
     ncolumns = aDATA->dimensions[1];
     ndata = TRANSPOSE ? nrows : ncolumns;
+    nnodes = ((TRANSPOSE==0) ? nrows : ncolumns) - 1;
     /* -- Check the mask input --------------------------------------------- */
     mask = parse_mask(MASK, &aMASK, aDATA->dimensions);
     if (!mask)
@@ -1192,7 +1163,6 @@ py_treecluster (PyObject* self, PyObject* args, PyObject* keywords)
       return NULL;
     }
     /* -- Create the output variable tree ---------------------------------- */
-    nnodes = ((TRANSPOSE==0) ? nrows : ncolumns) - 1;
     shape[0] = nnodes;
     shape[1] = 2;
     aRESULT = (PyArrayObject*) PyArray_FromDims(2, shape, PyArray_LONG);
@@ -1215,24 +1185,25 @@ py_treecluster (PyObject* self, PyObject* args, PyObject* keywords)
       free_weight(aWEIGHT, weight);
       Py_DECREF((PyObject*) aRESULT);
     }
+    linkdist = (double*) (aLINKDIST->data);
     /* --------------------------------------------------------------------- */
-    treecluster(nrows,
-        ncolumns,
-        data,
-        mask,
-        weight,
-        APPLYSCALE,
-        TRANSPOSE,
-        DIST,
-        METHOD,
-        result,
-        (double*) (aLINKDIST->data), 0);
+    success = treecluster(nrows,
+                          ncolumns,
+                          data,
+                          mask,
+                          weight,
+                          TRANSPOSE,
+                          DIST,
+                          METHOD,
+                          result,
+                          linkdist,
+                          NULL);
     /* --------------------------------------------------------------------- */
     free_data(aDATA, data);
     free_mask(aMASK, mask, nrows);
     free_weight(aWEIGHT, weight);
     /* -- Check if a memory allocation error occurred ---------------------- */
-    if(result[0][0]==0 && result[0][1]==0)
+    if(!success)
     { strcpy(message, "insufficient memory to store the distance matrix");
       PyErr_SetString (ErrorObject, buffer);
       return NULL;
@@ -1253,8 +1224,8 @@ py_treecluster (PyObject* self, PyObject* args, PyObject* keywords)
     /* -- Check the distance matrix ---------------------------------------- */
     distances = parse_distance(DISTANCEMATRIX, &aDISTANCEMATRIX, &nitems);
     if (!distances) return NULL;
-    /* -- Create the output variable tree ---------------------------------- */
     nnodes = nitems - 1;
+    /* -- Create the output variable tree ---------------------------------- */
     shape[0] = nnodes;
     shape[1] = 2;
     aRESULT = (PyArrayObject*) PyArray_FromDims(2, shape, PyArray_LONG);
@@ -1271,26 +1242,28 @@ py_treecluster (PyObject* self, PyObject* args, PyObject* keywords)
       PyErr_SetString(ErrorObject, buffer);
       free_distances(aDISTANCEMATRIX, distances);
       Py_DECREF((PyObject*) aRESULT);
+      return NULL;
     }
+    linkdist = (double*) (aLINKDIST->data);
     /* --------------------------------------------------------------------- */
     treecluster(nitems,
         nitems,
         0, 
         0, 
         0, 
-        APPLYSCALE, 
         TRANSPOSE, 
         DIST, 
         METHOD, 
         (int(*)[2]) (aRESULT->data),
-        (double*) (aLINKDIST->data),
+        linkdist,
         distances);
     /* --------------------------------------------------------------------- */
     free_distances(aDISTANCEMATRIX, distances);
     /* --------------------------------------------------------------------- */
   }
 
-  return Py_BuildValue("NN",PyArray_Return(aRESULT),PyArray_Return(aLINKDIST));
+  return Py_BuildValue("NN", PyArray_Return(aRESULT),
+                             PyArray_Return(aLINKDIST));
 } 
 /* end of wrapper for treecluster */
 
@@ -1311,7 +1284,6 @@ static char somcluster__doc__[] =
 "The character dist defines the distance function to be used:\n"
 "dist=='e': Euclidean distance\n"
 "dist=='b': City Block distance\n"
-"dist=='h': Harmonically summed Euclidean distance\n"
 "dist=='c': correlation\n"
 "dist=='a': absolute value of the correlation\n"
 "dist=='u': uncentered correlation\n"
@@ -1627,7 +1599,6 @@ static char clusterdistance__doc__[] =
 "The character dist defines the distance function to be used:\n"
 "dist=='e': Euclidean distance\n"
 "dist=='b': City Block distance\n"
-"dist=='h': Harmonically summed Euclidean distance\n"
 "dist=='c': correlation\n"
 "dist=='a': absolute value of the correlation\n"
 "dist=='u': uncentered correlation\n"
@@ -1915,7 +1886,6 @@ static char distancematrix__doc__[] =
 "The character dist defines the distance function to be used:\n"
 "dist=='e': Euclidean distance\n"
 "dist=='b': City Block distance\n"
-"dist=='h': Harmonically summed Euclidean distance\n"
 "dist=='c': Pearson correlation\n"
 "dist=='a': absolute value of the correlation\n"
 "dist=='u': uncentered correlation\n"
