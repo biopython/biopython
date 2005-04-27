@@ -72,8 +72,11 @@ def do_alignment(command_line, alphabet=None):
     If the alignment type was not a clustal object, None is returned.
     """
     run_clust = os.popen(str(command_line))
-    value = run_clust.close()
+    status = run_clust.close()
 
+    # The exit status is the second byte of the termination status
+    value = 0
+    if status: value = status / 256
     # check the return value for errors, as on 1.81 the return value
     # from Clustalw is actually helpful for figuring out errors
     # 1 => bad command line option
