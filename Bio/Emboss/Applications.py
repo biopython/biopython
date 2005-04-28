@@ -408,6 +408,54 @@ class ETandemCommandline(Application.AbstractCommandline):
          _Option(["-rformat"], ["output"], None, 0,
                  "Output report format")]
 
+class EInvertedCommandline(Application.AbstractCommandline):
+    """Commandline object for the einverted program from EMBOSS.
+    """
+    def __init__(self, cmd = "einverted"):
+        Application.AbstractCommandline.__init__(self)
+        self.program_name = cmd
+
+        self.parameters = [
+         _Option(["-sequence"], ["input", "file"], None, 1,
+                 "Sequence"),
+         _Option(["-gap"], ["input", "file"], None, 1,
+                 "Gap penalty"),
+         _Option(["-threshold"], ["input"], None, 1,
+                 "Minimum score threshold"),
+         _Option(["-match"], ["input"], None, 1,
+                 "Match score"),
+         _Option(["-mismatch"], ["input"], None, 1,
+                   "Mismatch score"),
+         _Option(["-outfile"], ["output", "file"] , None, 1,
+                 "Output report file name"),
+         _Option(["-maxrepeat"], ["input"], None, 0,
+                 "Maximum separation between the start and end of repeat"),
+         ]
+
+class PalindromeCommandline(Application.AbstractCommandline):
+    """Commandline object for the palindrome program from EMBOSS.
+    """
+    def __init__(self, cmd = "palindrome"):
+        Application.AbstractCommandline.__init__(self)
+        self.program_name = cmd
+
+        self.parameters = [
+         _Option(["-sequence"], ["input", "file"], None, 1,
+                 "Sequence"),
+         _Option(["-minpallen"], ["input"], None, 1,
+                 "Minimum palindrome length"),
+         _Option(["-maxpallen"], ["input"], None, 1,
+                 "Maximum palindrome length"),
+         _Option(["-gaplimit"], ["input"], None, 1,
+                 "Maximum gap between repeats"),
+         _Option(["-nummismatches"], ["input"], None, 1,
+                 "Number of mismatches allowed"),
+         _Option(["-overlap"], ["input"], None, 1,
+                 "Report overlapping matches"),
+         _Option(["-outfile"], ["output", "file"] , None, 1,
+                 "Output report file name"),
+         ]
+
 class TranalignCommandline(Application.AbstractCommandline):
     """Commandline object for the tranalign program from EMBOSS.
     """
