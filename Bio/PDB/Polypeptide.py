@@ -259,26 +259,22 @@ class _PPBuilder:
             raise PDBException, "Entity should be Structure, Model or Chain."
         pp_list=[]
         for chain in chain_list:
-            prev=None
+            chain_it=iter(chain)
+            prev=chain_it.next()
             pp=None
-            for next in chain.get_list():
-                if prev:
-                    if is_connected(prev, next):
-                        if pp is None:
-                            pp=Polypeptide()
-                            pp.append(prev)
-                            pp_list.append(pp)
-                        pp.append(next)
-                    else:
-                        pp=None
-                if aa_only:
-                    if accept(next):
-                        prev=next
-                    else:
-                        prev=None
-                        pp=None
-                else:
+            for next in chain_it:
+                if aa_only and not accept(prev):
                     prev=next
+                    continue
+                if is_connected(prev, next):
+                    if pp is None:
+                        pp=Polypeptide()
+                        pp.append(prev)
+                        pp_list.append(pp)
+                    pp.append(next)
+                else:
+                    pp=None
+                prev=next
         return pp_list
 
 
