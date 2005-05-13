@@ -28,6 +28,7 @@ include Bio/KDTree/KDTree.h
 include Bio/KDTree/KDTree.cpp
 include Bio/KDTree/KDTree.swig.cpp
 include Bio/KDTree/README
+include Bio/KDTree/*.py
 
 # Include Bio.Cluster and Bio.Affy. setup.py will only install if Numeric
 # python is installed.
