@@ -216,9 +216,9 @@ OBSLTE     26-SEP-03 1DYV      1UN2
         to_download = new + modified
 
         for pdb_code in to_download:
-            self.retrieve_pdb_file(pdb_code)
             try:
                 print 'retrieving %s'%(pdb_code)            
+                self.retrieve_pdb_file(pdb_code)
             except:
                 print 'error %s'%(pdb_code)
                 # you can insert here some more log notes that
