@@ -3,13 +3,56 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-from Numeric import array, sum, sqrt, arccos, matrixmultiply, transpose, cos, sin, zeros
-from LinearAlgebra import determinant
+from Numeric import array, sum, sqrt, arccos, matrixmultiply, transpose, cos, \
+        sin, zeros, trace
+from math import acos
+from LinearAlgebra import determinant, eigenvectors
 from MLab import eye
 import sys
+from math import pi
 
 
 __doc__="Vector class, including rotation-related functions."
+
+def m2rotaxis(m):
+    """
+    Return angles, axis pair that corresponds to rotation matrix m.
+    """
+    # Angle always between 0 and pi
+    # Sense of rotation is defined by axis orientation
+    angle=acos(0.5*(trace(m)-1))
+    if angle<1e-15:
+        # Angle is 0
+        return 0.0, Vector(1,0,0)
+    elif angle<pi:
+        # Angle is smaller than pi
+        x=m[2,1]-m[1,2]
+        y=m[0,2]-m[2,0]
+        z=m[1,0]-m[0,1]
+        axis=Vector(x,y,z)
+        axis.normalize()
+        return angle, axis
+    else:
+        # Angle is pi - special case!
+        m00=m[0,0]
+        m11=m[1,1]
+        m22=m[2,2]
+        if m00>m11 and m00>m22:
+            x=sqrt(m00-m11-m22+0.5)
+            y=m[0,1]/(2*x)
+            z=m[0,2]/(2*x)
+        elif m11>m00 and m11>m22:
+            y=sqrt(m11-m00-m22+0.5)
+            x=m[0,1]/(2*y)
+            z=m[1,2]/(2*y)
+        else:
+            z=sqrt(m22-m00-m11+0.5)
+            x=m[0,2]/(2*z)
+            y=m[1,2]/(2*z)
+        axis=Vector(x,y,z)
+        axis.normalize()
+        return pi, axis
+
 
 def vector_to_axis(line, point):
     """
@@ -41,6 +84,7 @@ def rotaxis(theta, vector):
 
     @type theta: float
     @param theta: the rotation angle
+
 
     @type vector: L{Vector}
     @param vector: the rotation axis
@@ -311,3 +355,17 @@ if __name__=="__main__":
         print v1[2]
 
         print array(v1)
+
+        print "ROT"
+
+        angle=random()*pi
+        axis=Vector(random(3)-random(3))
+        axis.normalize()
+
+        m=rotaxis(angle, axis)
+
+        cangle, caxis=m2rotaxis(m)
+
+        print angle-cangle
+        print axis-caxis
+        print
