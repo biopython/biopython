@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-__version__ = "$Revision: 1.12 $"
+__version__ = "$Revision: 1.13 $"
 
 import os
 import sys
@@ -72,30 +72,34 @@ def align(cmdline, pair, kbyte=None, force_type=None, dry_run=False, quiet=False
                                    quiet)
         return
 
-    for filename, input_file in zip(pair, input_files):
-        input_file.close()
-        FastaWriter(file(input_file.name, "w")).write(FastaReader(file(filename)).next())
+    try:
+        for filename, input_file in zip(pair, input_files):
+            input_file.close()
+            FastaWriter(file(input_file.name, "w")).write(FastaReader(file(filename)).next())
 
-    input_file_names = [input_file.name for input_file in input_files]
-    
-    cmdline_str = _build_align_cmdline(cmdline,
-                                       input_file_names,
-                                       output_file.name,
-                                       kbyte,
-                                       force_type,
-                                       quiet)
+        input_file_names = [input_file.name for input_file in input_files]
 
-    if debug:
-        print >>sys.stderr, cmdline_str
-        
-    status = os.system(cmdline_str) >> 8
+        cmdline_str = _build_align_cmdline(cmdline,
+                                           input_file_names,
+                                           output_file.name,
+                                           kbyte,
+                                           force_type,
+                                           quiet)
 
-    if status > 1:
-        if kbyte != 0: # possible memory problem; could be None
-            print >>sys.stderr, "INFO trying again with the linear model"
-            return align(cmdline, pair, 0, force_type, dry_run, quiet, debug)
-        else:
-            raise OSError, "%s returned %s" % (" ".join(cmdline), status)
+        if debug:
+            print >>sys.stderr, cmdline_str
+
+        status = os.system(cmdline_str) >> 8
+
+        if status > 1:
+            if kbyte != 0: # possible memory problem; could be None
+                print >>sys.stderr, "INFO trying again with the linear model"
+                return align(cmdline, pair, 0, force_type, dry_run, quiet, debug)
+            else:
+                raise OSError, "%s returned %s" % (" ".join(cmdline), status)
+    finally:
+        for input_file in input_files:
+            os.remove(input_file.name)
     
     return output_file
 
