@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-__version__ = "$Revision: 1.8 $"
+__version__ = "$Revision: 1.9 $"
 
 from __future__ import division
 
@@ -50,6 +50,9 @@ def _get_coords(filename):
             else:
                 end_line = line
 
+    if end_line is None: # sequence is too short
+        return [(0, 0), (0, 0)]
+        
     return zip(*map(_alb_line2coords, [start_line, end_line])) # returns [(start0, end0), (start1, end1)]
 
 def _any(seq, pred=bool):
@@ -64,7 +67,16 @@ class Statistics(object):
         self.matches = _fgrep_count('"SEQUENCE" %s' % match, filename)
         self.mismatches = _fgrep_count('"SEQUENCE" %s' % mismatch, filename)
         self.gaps = _fgrep_count('"INSERT" %s' % gap, filename)
-        self.extensions = _fgrep_count('"INSERT" %s' % extension, filename)
+
+        if gap == extension:
+            self.extensions = 0
+        else:
+            self.extensions = _fgrep_count('"INSERT" %s' % extension, filename)
+            
+        self.score = (match*self.matches +
+                      mismatch*self.mismatches +
+                      gap*self.gaps +
+                      extension*self.extensions)
 
         if _any([self.matches, self.mismatches, self.gaps, self.extensions]):
             self.coords = _get_coords(filename)
