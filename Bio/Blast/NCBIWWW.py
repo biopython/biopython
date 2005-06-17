@@ -1036,7 +1036,7 @@ def _send_to_blasturl(query, outhandle):
 def qblast(program, database, sequence,
            ncbi_gi=None, descriptions=None, alignments=None,
            expect=None, matrix=None,
-           filter=None, format_type=None,
+           filter=None, format_type=None, hitlist_size=None,
            entrez_query='(none)',
            ):
     """Do a BLAST search using the QBLAST server at NCBI.
@@ -1059,17 +1059,23 @@ def qblast(program, database, sequence,
     """
     import urllib
     from Bio.WWW import RequestLimiter
-    
+
+    # Is this warning useful?  If the program is blastn or blastp, the
+    # warning is not necessary because the program is supported.  If
+    # it is not, the script will raise an exception anyway.
+    # - Jeff
     import warnings
     warnings.warn("qblast works only with blastn and blastp for now.")
     assert program == 'blastn' or program == 'blastp'
 
+    # hitlist_size parameter contributed by Sjoerd de Vries.
     parameters = [
         ('QUERY', sequence),
         ('PROGRAM', program),
         ('ENTREZ_QUERY', entrez_query),
         ('DATABASE', database),
         ('EXPECT', expect),
+        ('HITLIST_SIZE', hitlist_size),
         ('MATRIX_NAME', matrix),
         ('FILTER', filter),
         ('CMD', 'Put'),
