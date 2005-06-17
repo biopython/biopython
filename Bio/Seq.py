@@ -3,6 +3,7 @@ import string, array
 import Alphabet
 from Alphabet import IUPAC
 from Data.IUPACData import ambiguous_dna_complement, ambiguous_rna_complement
+from Bio.Data import CodonTable
 
 
 class Seq:
@@ -248,3 +249,99 @@ class MutableSeq:
 
     def toseq(self):
         return Seq(string.join(self.data, ""), self.alphabet)
+
+
+# The transcribe, backward_transcribe, and translate functions are
+# user-friendly versions of the corresponding functions in Bio.Transcribe
+# and Bio.Translate. The functions work both on Seq objects, and on strings.
+
+def transcribe(dna):
+    if isinstance(dna, Seq):
+        rna = dna.data.replace('T','U').replace('t','u')
+	if dna.alphabet==IUPAC.unambiguous_dna:
+            alphabet = IUPAC.unambiguous_rna
+        elif dna.alphabet==IUPAC.ambiguous_dna:
+            alphabet = IUPAC.ambiguous_rna
+        else:
+            alphabet = Alphabet.generic_rna
+        return Seq(rna, alphabet)
+    else:
+        rna = dna.replace('T','U').replace('t','u')
+        return rna
+
+
+def back_transcribe(rna):
+    if isinstance(rna, Seq):
+        dna = rna.data.replace('U','T').replace('u','t')
+	if rna.alphabet==IUPAC.unambiguous_rna:
+            alphabet = IUPAC.unambiguous_dna
+        elif rna.alphabet==IUPAC.ambiguous_rna:
+            alphabet = IUPAC.ambiguous_dna
+        else:
+            alphabet = Alphabet.generic_dna
+        return Seq(dna, alphabet)
+    else:
+        dna = rna.replace('U','T').replace('u','t')
+        return dna
+
+
+def translate(sequence, table = "Standard", stop_symbol = "*"):
+    try:
+        id = int(table)
+    except:
+        id = None
+    if isinstance(sequence, Seq):
+        if sequence.alphabet==IUPAC.unambiguous_dna:
+            if id==None:
+                table = CodonTable.unambiguous_dna_by_name[table]
+            else:
+                table = CodonTable.unambiguous_dna_by_id[id]
+        elif sequence.alphabet==IUPAC.ambiguous_dna:
+            if id==None:
+                table = CodonTable.ambiguous_dna_by_name[table]
+            else:
+                table = CodonTable.ambiguous_dna_by_id[id]
+        elif sequence.alphabet==IUPAC.unambiguous_rna:
+            if id==None:
+                table = CodonTable.unambiguous_rna_by_name[table]
+            else:
+                table = CodonTable.unambiguous_rna_by_id[id]
+        elif sequence.alphabet==IUPAC.ambiguous_rna:
+            if id==None:
+                table = CodonTable.ambiguous_rna_by_name[table]
+            else:
+                table = CodonTable.ambiguous_rna_by_id[id]
+        else:
+            if id==None:
+                table = CodonTable.generic_by_name[table]
+            else:
+                table = CodonTable.generic_by_id[id]
+        sequence = sequence.data.upper()
+        n = len(sequence)
+        get = table.forward_table.get
+        protein = [get(sequence[i:i+3], stop_symbol) for i in xrange(0,n-n%3,3)]
+        protein = "".join(protein)
+        alphabet = Alphabet.HasStopCodon(table.protein_alphabet)
+        return Seq(protein, alphabet)
+    else:
+        if id==None:
+            table = CodonTable.generic_by_name[table]
+        else:
+            table = CodonTable.generic_by_id[id]
+        get = table.forward_table.get
+        sequence = sequence.upper()
+        n = len(sequence)
+        protein = [get(sequence[i:i+3], stop_symbol) for i in xrange(0,n-n%3,3)]
+        protein = "".join(protein)
+        return protein
+
+
+def reverse_complement(sequence):
+    """Returns the reverse complement sequence. New string object.
+    """
+    if 'U' in sequence:
+        ttable = string.maketrans("ACGUacgu","UGCAugca")
+    else:
+        ttable = string.maketrans("ACGTacgt","TGCAtgca")
+    sequence = sequence[-1::-1].translate(ttable)
+    return sequence

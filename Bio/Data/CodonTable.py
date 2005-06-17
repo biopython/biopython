@@ -7,6 +7,8 @@ unambiguous_dna_by_name = {}
 unambiguous_dna_by_id = {}
 unambiguous_rna_by_name = {}
 unambiguous_rna_by_id = {}
+generic_by_name = {}
+generic_by_id = {}
 
 # standard IUPAC unambiguous codons
 standard_dna_table = None
@@ -80,15 +82,29 @@ def register_ncbi_table(name, alt_name, id,
                             stop_codons)
     # replace all T's with U's for the RNA tables
     rna_table = {}
+    generic_table = {}
     for codon, val in table.items():
-        rna_table[string.replace(codon, "T", "U")] = val
+        generic_table[codon] = val
+        codon = codon.replace("T", "U")
+        generic_table[codon] = val
+        rna_table[codon] = val
     rna_start_codons = []
+    generic_start_codons = []
     for codon in start_codons:
-        rna_start_codons.append(string.replace(codon, "T", "U"))
+        generic_start_codons.append(codon)
+        codon = codon.replace("T", "U")
+        generic_start_codons.append(codon)
+        rna_start_codons.append(codon)
     rna_stop_codons = []
+    generic_stop_codons = []
     for codon in stop_codons:
-        rna_stop_codons.append(string.replace(codon, "T", "U"))
+        generic_stop_codons.append(codon)
+        codon = codon.replace("T", "U")
+        generic_stop_codons.append(codon)
+        rna_stop_codons.append(codon)
     
+    generic = NCBICodonTable(id, names + [alt_name], generic_table,
+                             generic_start_codons, generic_stop_codons)
     rna = NCBICodonTableRNA(id, names + [alt_name], rna_table,
                             rna_start_codons, rna_stop_codons)
 
@@ -99,6 +115,7 @@ def register_ncbi_table(name, alt_name, id,
 
     unambiguous_dna_by_id[id] = dna
     unambiguous_rna_by_id[id] = rna
+    generic_by_id[id] = generic
 
     if alt_name is not None:
         names.append(alt_name)
@@ -106,6 +123,7 @@ def register_ncbi_table(name, alt_name, id,
     for name in names:
         unambiguous_dna_by_name[name] = dna
         unambiguous_rna_by_name[name] = rna
+        generic_by_name[name] = generic
 
 ### These tables created from the data file
 ###  ftp://ncbi.nlm.nih.gov/entrez/misc/data/gc.prt
