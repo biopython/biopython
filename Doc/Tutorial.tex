@@ -1352,9 +1352,9 @@ handle = ExPASy.sprot_search_de("Orchid Chalcone Synthase")
 # handle = ExPASy.sprot_search_ful("Orchid and {Chalcone Synthase}")
 html_results = handle.read()
 if "Number of sequences found" in html_results:
-    ids = re.findall(r'HREF="/cgi-bin/niceprot\.pl\?(\w+)"', html_results)
+    ids = re.findall(r'HREF="/uniprot/(\w+)"', html_results)
 else:
-    ids = re.findall(r'href="/cgi-bin/get-sprot-raw\.pl\?(\w+)"', html_results)
+    ids = re.findall(r'href="/cgi-bin/niceprot\.pl\?(\w+)"', html_results)
 \end{verbatim}
 
 \section{PubMed}
