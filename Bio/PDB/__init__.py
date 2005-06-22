@@ -48,8 +48,8 @@ from DSSP import DSSP, make_dssp_dict
 # distance of residue atoms from solvent accessible surface
 from ResidueDepth import ResidueDepth, get_surface
 
-# My new solvent exposure method - article coming up
-from HSExposure import HSExposure
+# Calculation of Half Sphere Solvent Exposure
+from HSExposure import HSExposureCA, HSExposureCB, ExposureCN
 
 # Kolodny et al.'s backbone libraries
 from FragmentMapper import FragmentMapper
