@@ -7,6 +7,7 @@ import os
 import sys
 
 from Bio.PDB import *
+from AbstractPropertyMap import AbstractPropertyMap
 
 __doc__="""
 Calculation of residue depth (using Michel Sanner's MSMS program for the
@@ -19,10 +20,7 @@ Residue Depth:
 
     rd=ResidueDepth(model, pdb_file)
 
-    print rd[residue]
-
-    Each Residue object is mapped to a (residue depth, ca depth) 
-    tuple.
+    print rd[(chain_id, res_id)]
 
 Direct MSMS interface:
 
@@ -115,50 +113,39 @@ def residue_depth(residue, surface):
 
 def ca_depth(residue, surface):
     if not residue.has_id("CA"):
-        return -1
+        return None
     ca=residue["CA"]
     coord=ca.get_coord()
     return min_dist(coord, surface)
 
-class ResidueDepth:
+class ResidueDepth(AbstractPropertyMap):
     """
     Calculate residue and CA depth for all residues.
     """
     def __init__(self, model, pdb_file):
         depth_dict={}
         depth_list=[]
+        depth_keys=[]
         # get_residue
         residue_list=Selection.unfold_entities(model, 'R')
         # make surface from PDB file
         surface=get_surface(pdb_file)
         # calculate rdepth for each residue
         for residue in residue_list:
+            if not is_aa(residue):
+                continue
             rd=residue_depth(residue, surface)
             ca_rd=ca_depth(residue, surface)
-            depth_dict[residue]=(rd, ca_rd)
+            # Get the key
+            res_id=residue.get_id()
+            chain_id=residue.get_parent().get_id()
+            depth_dict[(chain_id, res_id)]=(rd, ca_rd)
             depth_list.append((residue, (rd, ca_rd)))
-        self.depth_list=depth_list
-        self.depth_dict=depth_dict
-
-    def __getitem__(self, key):
-        """
-        Map (chain_id, res_id) to (residue depth, CA depth) tuple.
-        """
-        return self.depth_dict[key]
-
-    def __len__(self):
-        return len(self.depth_list)
-
-    def has_key(self, res):
-        return self.depth_dict.has_key(res)
-
-    def get_iterator(self):
-        """
-        Loop over list of ((chain_id, res_id), (residue depth, CA depth))
-        tuples.
-        """
-        for i in range(0, len(self.depth_list)):
-            yield self.depth_list[i] 
+            depth_keys.append((chain_id, res_id))
+            # Update xtra information
+            residue.xtra['EXP_RD']=rd
+            residue.xtra['EXP_RD_CA']=ca_rd
+        AbstractPropertyMap.__init__(self, depth_dict, depth_keys, depth_list)
 
 
 if __name__=="__main__":
@@ -172,6 +159,6 @@ if __name__=="__main__":
     rd=ResidueDepth(model, sys.argv[1])
 
 
-    for item in rd.get_iterator():
+    for item in rd:
         print item
 
