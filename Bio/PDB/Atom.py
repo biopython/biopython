@@ -59,6 +59,8 @@ class Atom:
         self.siguij_array=None
         self.sigatm_array=None
         self.serial_number=serial_number
+        # Dictionary that keeps addictional properties
+        self.xtra={}
 
     # Special methods   
 
@@ -171,11 +173,6 @@ class Atom:
 
     def get_serial_number(self):
         return self.serial_number
-
-    def destroy(self):
-        self.parent=None
-        del self.id
-        del self.name
 
     def get_name(self):
         "Return atom name."

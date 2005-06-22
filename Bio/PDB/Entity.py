@@ -26,6 +26,8 @@ class Entity:
         self.parent=None
         self.child_list=[]
         self.child_dict={}
+        # Dictionary that keeps addictional properties
+        self.xtra={}
     
     # Special methods   
 
@@ -37,29 +39,10 @@ class Entity:
         "Return the child with given id."
         return self.child_dict[id]
 
-    def __delitem__(self, id):
-        "Delete (and destroy) the child with given id."
-        child=self[id]
-        child.destroy()
-        del self.child_dict[id]
-        self.child_list=self.child_dict.values()
-        self.child_list.sort(self._sort)
-
     def __iter__(self):
         "Iterate over children."
         for child in self.child_list:
             yield child
-
-    # Private methods
-
-    def _sort(self, e1, e2):
-        """Sort the children in the Entity object.
-
-        This method is implemented by the Entity subclasses. A Chain object
-        e.g. sorts Residue objects according to hetero field, sequence
-        identifier and insertion code.
-        """
-        raise NotImplementedError
 
     # Public methods    
 
@@ -74,20 +57,6 @@ class Entity:
         """
         return self.level
 
-    def sort(self, sort_function=None):
-        """Sort the children in the Entity object.
-
-        Arguments:
-        o sort_function - Optional. A function that compares two Entities. If this
-        argument is present, the default sort method is replaced with this function.
-        """
-        if sort_function is None:
-            self.child_list.sort(self._sort)
-        else:
-            self.child_list.sort(sort_function)
-        for child in self.child_list:
-            child.sort()
-
     def set_parent(self, entity):
         "Set the parent Entity object."
         self.parent=entity
@@ -97,25 +66,12 @@ class Entity:
         self.parent=None
 
     def detach_child(self, id):
-        "Remove (but do not destroy) a child."
+        "Remove a child."
         child=self.child_dict[id] 
         child.detach_parent()
         del self.child_dict[id]
         self.child_list=self.child_dict.values()
         self.child_list.sort(self._sort)
-
-    def destroy(self):
-        """Destroy the Entity.
-
-        This trashes the Entity object and breaks all circular references
-        (eh, yes, I'm still using 1.5).
-        """
-        for child in self.child_list:
-            child.destroy()
-        del self.parent
-        del self.child_list
-        del self.child_dict
-        del self.id
 
     def add(self, entity):
         "Add a child to the Entity."
@@ -217,15 +173,6 @@ class DisorderedEntityWrapper:
     def disordered_has_id(self, id):
         "Return 1 if there is an object present associated with this id."
         return self.child_dict.has_key(id)
-
-    def destroy(self):
-        "Destroy the object (and its children)."
-        for child in self.disordered_get_list():
-            child.destroy()
-        del self.parent
-        del self.selected_child
-        del self.id
-        del self.child_dict
 
     def detach_parent(self):
         "Detach the parent"
