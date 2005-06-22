@@ -20,7 +20,10 @@ def m2rotaxis(m):
     """
     # Angle always between 0 and pi
     # Sense of rotation is defined by axis orientation
-    angle=acos(0.5*(trace(m)-1))
+    t=0.5*(trace(m)-1)
+    t=max(-1, t)
+    t=min(1, t)
+    angle=acos(t)
     if angle<1e-15:
         # Angle is 0
         return 0.0, Vector(1,0,0)
@@ -72,7 +75,7 @@ def vector_to_axis(line, point):
     return point-line**(np*cos(angle))
 
 
-def rotaxis(theta, vector):
+def rotaxis2m(theta, vector):
     """
     Calculate a left multiplying rotation matrix that rotates
     theta rad around vector.
@@ -111,6 +114,8 @@ def rotaxis(theta, vector):
     rot[2,1]=t*y*z+s*x
     rot[2,2]=t*z*z+c
     return rot
+
+rotaxis=rotaxis2m
 
 def refmat(p,q):
     """
