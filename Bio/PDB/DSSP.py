@@ -4,6 +4,7 @@ import os
 import tempfile
 from Bio.PDB import *
 from PDBExceptions import PDBException
+from AbstractPropertyMap import AbstractPropertyMap
 import re
 
 
@@ -73,10 +74,10 @@ def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
     """
     out_file=tempfile.mktemp()
     os.system(DSSP+" %s > %s" % (in_file, out_file))
-    d=make_dssp_dict(out_file)
+    dict, keys=make_dssp_dict(out_file)
     # This can be dangerous...
     #os.system("rm "+out_file)
-    return d
+    return dict, keys
 
 def make_dssp_dict(filename):
     """
@@ -89,6 +90,7 @@ def make_dssp_dict(filename):
     dssp={}
     fp=open(filename, "r")
     start=0
+    keys=[]
     for l in fp.readlines():
         sl=l.split()
         if sl[1]=="RESIDUE":
@@ -110,11 +112,12 @@ def make_dssp_dict(filename):
         acc=int(l[34:38])
         res_id=(" ", resseq, icode)
         dssp[(chainid, res_id)]=(aa, ss, acc)
+        keys.append((chainid, res_id))
     fp.close()
-    return dssp
+    return dssp, keys
 
 
-class DSSP:
+class DSSP(AbstractPropertyMap):
     """
     Run DSSP on a pdb file, and provide a handle to the 
     DSSP secondary structure and accessibility.
@@ -127,7 +130,7 @@ class DSSP:
         >>> model=structure[0]
         >>> dssp=DSSP(model, "1fat.pdb")
         >>> # print dssp data for a residue
-        >>> secondary_structure, accessibility=dssp[residue]
+        >>> secondary_structure, accessibility=dssp[(chain_id, res_id)]
     """
     def __init__(self, model, pdb_file, dssp="dssp"):
         """
@@ -140,105 +143,39 @@ class DSSP:
         @param dssp: the dssp executable (ie. the argument to os.system)
         @type dssp: string
         """
-        p=PDBParser()
         # create DSSP dictionary
-        self.dssp_dict=dssp_dict_from_pdb_file(pdb_file, dssp)
-        map={}
-        res_list=[]
+        dssp_dict, dssp_keys=dssp_dict_from_pdb_file(pdb_file, dssp)
+        dssp_map={}
+        dssp_list=[]
         # Now create a dictionary that maps Residue objects to 
         # secondary structure and accessibility, and a list of 
         # (residue, (secondary structure, accessibility)) tuples
-        for chain in model.get_iterator():
-            chain_id=chain.get_id()
-            for res in chain.get_iterator():
-                res_id=res.get_id()
-                if self.dssp_dict.has_key((chain_id, res_id)):
-                    aa, ss, acc=self.dssp_dict[(chain_id, res_id)]
-                    resname=res.get_resname()
-                    # relative accessibility
-                    rel_acc=acc/MAX_ACC[resname]
-                    if rel_acc>1.0:
-                        rel_acc=1.0
-                    # Verify if AA in DSSP == AA in Structure
-                    # Something went wrong if this is not true!
-                    resname=to_one_letter_code[resname]
-                    if resname=="C":
-                        # DSSP renames C in C-bridges to a,b,c,d,...
-                        # - we rename it back to 'C'
-                        if _dssp_cys.match(aa):
-                            aa='C'
-                    if not (resname==aa):
-                        raise PDBException, "Structure/DSSP mismatch at "+str(res) 
-                    map[res]=(ss, acc, rel_acc)
-                    res_list.append((res, (ss, acc, rel_acc)))
-                else:
-                    pass
-        self.map=map
-        self.res_list=res_list
-        self.model=model
-
-    def __getitem__(self, res):
-        """
-        Return (secondary structure, accessibility) tuple for 
-        a residue.
-
-        @param res: a residue
-        @type res: L{Residue}
-
-        @return: (secondary structure, accessibility, relative accessibility) tuple
-        @rtype: (char, int, float)
-        """
-        return self.map[res]
-
-    def __len__(self):
-        """
-        Return number of residues for which accessibility & secondary
-        structure is available.
-
-        @return: number of residues
-        @rtype: int
-        """
-        return len(self.res_list)
-
-    def has_key(self, res):
-        """
-        Return 1 if DSSP has calculated accessibility & secondary
-        structure for this residue, 0 otherwise.
-
-        Example:
-            >>> if dssp.has_key(residue):
-            >>>     sec, acc=dssp[residue]
-            >>>     print sec, acc
-
-        @param res: a residue
-        @type res: L{Residue}
-        """
-        return self.map.has_key(res)
-
-    def get_keys(self):
-        """
-        Return the list of residues.
-
-        @return: list of residues for which accessibility & secondary 
-            structure was calculated by DSSP.
-        @rtype: [L{Residue}, L{Residue},...] 
-        """
-        return Selection.unfold_entities(self.model, 'R')
-
-    def get_iterator(self):
-        """
-        Iterate over the (residue, (secondary structure, accessibility,
-        relative accessibility)) list. Handy alternative to the dictionary-like 
-        access.
-
-        Example:
-            >>> for (res, (sec, acc, rel_acc)) in dssp.get_iterator():
-            >>>     print res, sec, acc, rel_acc         
-
-        @return: iterator
-        """
-        for i in range(0, len(self.res_list)):
-            yield self.res_list[i]
+        for key in dssp_keys:
+            chain_id, res_id=key
+            chain=model[chain_id]
+            res=chain[res_id]
+            aa, ss, acc=dssp_dict[key]
+            res.xtra["SS_DSSP"]=ss
+            res.xtra["EXP_DSSP_ASA"]=acc
+            # relative accessibility
+            resname=res.get_resname()
+            rel_acc=acc/MAX_ACC[resname]
+            if rel_acc>1.0:
+                rel_acc=1.0
+            res.xtra["EXP_DSSP_RASA"]=rel_acc
+            # Verify if AA in DSSP == AA in Structure
+            # Something went wrong if this is not true!
+            resname=to_one_letter_code[resname]
+            if resname=="C":
+                # DSSP renames C in C-bridges to a,b,c,d,...
+                # - we rename it back to 'C'
+                if _dssp_cys.match(aa):
+                    aa='C'
+            if not (resname==aa):
+                raise PDBException, "Structure/DSSP mismatch at "+str(res) 
+            dssp_map[key]=((res, ss, acc, rel_acc))
+            dssp_list.append((res, ss, acc, rel_acc))
+        AbstractPropertyMap.__init__(self, dssp_map, dssp_keys, dssp_list)
 
 
 if __name__=="__main__":
@@ -252,8 +189,18 @@ if __name__=="__main__":
 
     d=DSSP(model, sys.argv[1])
 
-    for r in d.get_iterator():
-        print r[1][2]
+    for r in d:
+        print r
+
+    print d.keys()
+
+    print len(d)
+
+    print d.has_key('A', 1)
+
+    print d[('A', 1)]
+
+    print s[0]['A'][1].xtra
 
 
 
