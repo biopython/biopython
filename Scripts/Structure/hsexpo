@@ -17,8 +17,8 @@ acids in a PDB file using 5 different methods:
     -DSSP (DSSP needs to be installed)
     -Residue depth (MSMS needs to be installed)
     -Coordination number (ie. number of CA atoms within a sphere)
-    -HSEa half sphere exposure
-    -HSEb half sphere exposure
+    -HSEalpha half sphere exposure
+    -HSEbeta half sphere exposure
 
 A PDB file can be written out with the exposure in the B factor field.
 See --help for all options.
@@ -59,7 +59,7 @@ m=s[options.model]
 
 RADIUS=options.radius
 
-# d=dictionary of expsoures
+# d=dictionary of exposures
 # k=position in ntuple containing the desired exposure
 
 format="%4i"
@@ -67,42 +67,39 @@ format="%4i"
 options.exp=options.exp.upper()
 
 if options.exp[0]=="H" and options.exp[3]=="A":
-    hse=HSExposure()
-    d=hse.calc_hs_exposure(m, RADIUS, option="CA3")
+    hse=HSExposureCA(m, RADIUS)
     if options.exp[-1]=="D":
-        k=1
+        k='EXP_HSEAD'
     else:
-        k=0
+        k='EXP_HSEAU'
 elif options.exp[0]=="H" and options.exp[3]=="B":
-    hse=HSExposure()
-    d=hse.calc_hs_exposure(m, RADIUS, option="CB")
+    hse=HSExposureCB(m, RADIUS)
     #hse.write_pymol_script()
     if options.exp[-1]=="D":
-        k=1
+        k='EXP_HSEBD'
     else:
-        k=0
+        k='EXP_HSEBU'
 elif options.exp=="CN":
-    hse=HSExposure()
-    d=hse.calc_fs_exposure(m, RADIUS)
-    k=-1
+    hse=ExposureCN(m, RADIUS)
+    k='EXP_CN'
 elif options.exp=="ANGLE":
-    hse=HSExposure()
-    d=hse.get_angles()
-    k=-1
+    hse=HSExposureCA(m, RADIUS)
+    k='EXP_CB_PCB_ANGLE'
     format="%4.1f"
 elif options.exp=="DSSPR":
     d=DSSP(m, pdbfile)
-    k=2
+    k='EXP_DSSP_RASA'
+    format="%.4f"
 elif options.exp=="DSSPA":
     d=DSSP(m, pdbfile)
-    k=1
+    k='EXP_DSSP_ASA'
 elif options.exp=="RD":
     d=ResidueDepth(m, pdbfile)
-    k=0
+    k='EXP_RD'
     format="%4.1f"
 elif options.exp=="RDA":
     d=ResidueDepth(m, pdbfile)
-    k=1
+    k='EXP_RD_CA'
     format="%4.1f"
 else:
     print "ERROR: Unknown option."
@@ -112,11 +109,9 @@ residue_list=Selection.unfold_entities(m, 'R')
 
 for r in residue_list:
 
-    if d.has_key(r):
-        if k==-1:
-            exposure=d[r]
-        else:
-            exposure=d[r][k] 
+    if r.xtra.has_key(k):
+
+        exposure=r.xtra[k]
 
         if options.exp=="DSSPR":
             # to 0=exposed, 1=buried
