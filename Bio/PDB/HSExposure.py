@@ -1,39 +1,192 @@
-from Numeric import matrixmultiply, transpose, array, sqrt
 from math import pi
-from MLab import eye
 import sys
 
 from Bio.PDB import *
+from AbstractPropertyMap import AbstractPropertyMap
+
 
 __doc__="Half sphere exposure and coordination number calculation."
 
 
-class HSExposure:
+class _AbstractHSExposure(AbstractPropertyMap):
     """
-    Calculates the Half-Sphere Exposure (HSE). The HSE can be 
-    calculated based on the CA-CB vector, or the pseudo CB-CA vector
-    based on three consecutive CA atoms. In addition, the coordination
-    number (number of CA atoms within a sphere) can be calculated.
-    """
-    # unit vector along z
-    # CA-CB vectors or the CA-CA-CA approximation will
-    # be rotated onto this unit vector
-    _unit_z=Vector(0.0, 0.0, 1.0)
+    Abstract class to calculate Half-Sphere Exposure (HSE).
 
-    def __init__(self, OFFSET=0.0):
+    The HSE can be calculated based on the CA-CB vector, or the pseudo CB-CA
+    vector based on three consecutive CA atoms. This is done by two separate 
+    subclasses. 
+    """
+    def __init__(self, model, radius, offset, hse_up_key, hse_down_key, 
+            angle_key=None):
         """
-        @param OFFSET: the dividing plane will be shifted 
-            by OFFSET in the direction of the CB atom (in angstrom)
-        @type OFFSET: float
+        @param model: model
+        @type model: L{Model}
+
+        @param radius: HSE radius
+        @type radius: float
+
+        @param offset: number of flanking residues that are ignored in the calculation            of the number of neighbors
+        @type offset: int
+
+        @param hse_up_key: key used to store HSEup in the entity.xtra attribute
+        @type hse_up_key: string
+
+        @param hse_down_key: key used to store HSEdown in the entity.xtra attribute
+        @type hse_down_key: string
+
+        @param angle_key: key used to store the angle between CA-CB and CA-pCB in 
+            the entity.xtra attribute
+        @type angle_key: string
         """
-        # List of CA-CB direction calculated from CA-CA-CA
-        # Used for the PyMol script
+        assert(offset>=0)
+        # For PyMOL visualization
         self.ca_cb_list=[]
-        # Dummy 
-        self.angles={}
-        self.OFFSET=OFFSET
+        ppb=CaPPBuilder()
+        ppl=ppb.build_peptides(model)
+        hse_map={}
+        hse_list=[]
+        hse_keys=[]
+        for pp1 in ppl:
+            for i in range(0, len(pp1)):
+                if i==0:
+                    r1=None
+                else:
+                    r1=pp1[i-1]
+                r2=pp1[i]
+                if i==len(pp1)-1:
+                    r3=None
+                else:
+                    r3=pp1[i+1]
+                # This method is provided by the subclasses to calculate HSE
+                result=self._get_cb(r1, r2, r3)
+                if result is None:
+                    # Missing atoms, or i==0, or i==len(pp1)-1
+                    continue
+                pcb, angle=result
+                hse_u=0
+                hse_d=0
+                ca2=r2['CA'].get_vector()
+                for pp2 in ppl:
+                    for j in range(0, len(pp2)):
+                        if pp1 is pp2 and abs(i-j)<=offset:
+                            # neighboring residues in the chain are ignored 
+                            continue
+                        ro=pp2[j]
+                        if not is_aa(ro) or not ro.has_id('CA'):
+                            continue
+                        cao=ro['CA'].get_vector()
+                        d=(cao-ca2)
+                        if d.norm()<radius:
+                            if d.angle(pcb)<(pi/2):
+                                hse_u+=1
+                            else:
+                                hse_d+=1
+                res_id=r2.get_id()
+                chain_id=r2.get_parent().get_id()
+                # Fill the 3 data structures
+                hse_map[(chain_id, res_id)]=(hse_u, hse_d, angle)
+                hse_list.append((r2, (hse_u, hse_d, angle)))
+                hse_keys.append((chain_id, res_id))
+                # Add to xtra
+                r2.xtra[hse_up_key]=hse_u
+                r2.xtra[hse_down_key]=hse_d
+                if angle_key:
+                    r2.xtra[angle_key]=angle
+        AbstractPropertyMap.__init__(self, hse_map, hse_keys, hse_list)
 
-    def write_pymol_script(self, filename="hs_exp.py"):
+    def _get_gly_cb_vector(self, residue):
+        """
+        Return a pseudo CB vector for a Gly residue.
+        The pseudoCB vector is centered at the origin.
+
+        CB coord=N coord rotated over -120 degrees 
+        along the CA-C axis.
+        """
+        try:
+            n_v=residue["N"].get_vector()
+            c_v=residue["C"].get_vector()
+            ca_v=residue["CA"].get_vector()
+        except:
+            return None
+        # center at origin
+        n_v=n_v-ca_v
+        c_v=c_v-ca_v
+        # rotation around c-ca over -120 deg
+        rot=rotaxis(-pi*120.0/180.0, c_v)
+        cb_at_origin_v=n_v.left_multiply(rot)
+        # move back to ca position
+        cb_v=cb_at_origin_v+ca_v
+        # This is for PyMol visualization
+        self.ca_cb_list.append((ca_v, cb_v))
+        return cb_at_origin_v
+
+
+
+class HSExposureCA(_AbstractHSExposure):
+    """
+    Class to calculate HSE based on the approximate CA-CB vectors,
+    using three consecutive CA positions.
+    """
+    def __init__(self, model, radius=12, offset=0):
+        """
+        @param model: the model that contains the residues
+        @type model: L{Model}
+
+        @param radius: radius of the sphere (centred at the CA atom)
+        @type radius: float
+
+        @param offset: number of flanking residues that are ignored in the calculation            of the number of neighbors
+        @type offset: int
+        """
+        _AbstractHSExposure.__init__(self, model, radius, offset, 
+                'EXP_HSEAU', 'EXP_HSEAD', 'EXP_CB_PCB_ANGLE')
+
+    def _get_cb(self, r1, r2, r3):
+        """
+        Calculate the approximate CA-CB direction for a central
+        CA atom based on the two flanking CA positions, and the angle
+        with the real CA-CB vector. 
+        
+        The CA-CB vector is centered at the origin.
+
+        @param r1, r2, r3: three consecutive residues
+        @type r1, r2, r3: L{Residue}
+        """
+        if r1 is None or r3 is None:
+            return None
+        try:
+            ca1=r1['CA'].get_vector()
+            ca2=r2['CA'].get_vector()
+            ca3=r3['CA'].get_vector()
+        except:
+            return None
+        # center
+        d1=ca2-ca1
+        d3=ca2-ca3
+        d1.normalize()
+        d3.normalize()
+        # bisection
+        b=(d1+d3)
+        b.normalize()
+        # Add to ca_cb_list for drawing
+        self.ca_cb_list.append((ca2, b+ca2))
+        if r2.has_id('CB'):
+            cb=r2['CB'].get_vector()
+            cb_ca=cb-ca2
+            cb_ca.normalize()
+            angle=cb_ca.angle(b)
+        elif r2.get_resname()=='GLY':
+            cb_ca=self._get_gly_cb_vector(r2)
+            if cb_ca is None:
+                angle=None
+            else:
+                angle=cb_ca.angle(b)
+        else:
+            angle=None
+        # vector b is centered at the origin!
+        return b, angle
+
+    def pcb_vectors_pymol(self, filename="hs_exp.py"):
         """
         Write a PyMol script that visualizes the pseudo CB-CA directions 
         at the CA coordinates.
@@ -59,219 +212,44 @@ class HSExposure:
         fp.write("cmd.load_cgo(obj, 'HS')\n")
         fp.close()
 
-    def _get_gly_cb_vector(self, residue):
-        """
-        Return a pseudo CB coord for a Gly residue.
-        
-        The pseudoCB vector is centered at CA (ie. it's the
-        atom position itself).
 
-        CB coord=N coord rotated over -120 degrees 
-        along the CA-C axis.
+class HSExposureCB(_AbstractHSExposure):
+    """
+    Class to calculate HSE based on the real CA-CB vectors.
+    """
+    def __init__(self, model, radius=12, offset=0):
         """
-        n_v=residue["N"].get_vector()
-        c_v=residue["C"].get_vector()
-        ca_v=residue["CA"].get_vector()
-        # center at origin
-        n_v=n_v-ca_v
-        c_v=c_v-ca_v
-        # rotation around c-ca over -120 deg
-        rot=rotaxis(-pi*120.0/180.0, c_v)
-        cb_at_origin_v=n_v.left_multiply(rot)
-        # move back to ca position
-        cb_v=cb_at_origin_v+ca_v
-        # This is for PyMol visualization
-        self.ca_cb_list.append((ca_v, cb_v))
-        return cb_v
-
-    def _get_cb_from_ca(self, ca1, ca2, ca3):
-        """
-        Calculate the approximate CA-CB direction for a central
-        CA atom based on the two flanking CA positions. 
-        
-        The CA-CB vector is centered at the origin.
-        """
-        # center
-        ca1=ca1-ca2
-        ca3=ca3-ca2
-        ca1.normalize()
-        ca3.normalize()
-        # bisection
-        b=(ca1+ca3)
-        b.normalize()
-        b=-b
-        # Add to ca_cb_list for drawing
-        self.ca_cb_list.append((ca2, b+ca2))
-        # vector b is centered at the origin!
-        return b
-
-    def _get_rotran_list_from_cb(self, residue_list):
-        """
-        Return a list of (translation, rotation, ca, residue)
-        tuples (using CB). 
-        
-        The translation and rotation are calculated 
-        using the CA-CB coordinates.
-
-        This list is used in the following way:
-
-        A certain atom is found within radius of a given position.
-        The coordinates are translated by -translation.
-        The coordinates are rotated by rotation.
-        If the z coordinate is >0 it lies in the side-chain sphere.
-        Otherwise it lies in the backbone sphere.
-        """
-        # list of (translation, rotation, ca, residue) tuples
-        rotran_list=[]
-        for residue in residue_list:
-            if is_aa(residue):
-                ca=residue["CA"]
-                ca_v=ca.get_vector()
-                if residue.has_id("CB"):
-                    cb=residue["CB"]
-                    cb_v=cb.get_vector()
-                    # Call _get_gly_cb_vector here for PyMol output
-                    # self._get_gly_cb_vector(residue)
-                else:
-                    # GLY has no CB - calculate pseudo CB position
-                    # based on N/CA/C positions
-                    cb_v=self._get_gly_cb_vector(residue)
-                # CB-CA vector
-                cb_ca_v=cb_v-ca_v
-                # Rotate CB-CA vector to unit vector along Z
-                rotation=rotmat(cb_ca_v, self._unit_z)
-                translation=ca.get_coord()
-                rotran_list.append((translation, rotation, ca, residue))
-        return rotran_list
-
-    def _get_rotran_list_from_ca(self, model):
-        """
-        Return a list of (translation, rotation, ca, residue)
-        tuples (using CA). 
-        
-        The translation and rotation are calculated 
-        using the CA-CA-CA coordinates (ie. the side chain 
-        direction is approximated using the CA-CA-CA vectors).
-
-        This list is used in the following way:
-
-        A certain atom is found within radius of a given position.
-        The coordinates are translated by -translation.
-        The coordinates are rotated by rotation.
-        If the z coordinate is >0 it lies in the side-chain sphere.
-        Otherwise it lies in the backbone sphere.
-        """
-        # list of (translation, rotation, ca, residue) tuples
-        rotran_list=[]
-        ppb=PPBuilder()
-        # angles between pseudo-CB-CA and CA-CB
-        angles={}
-        for pp in ppb.build_peptides(model):
-            ca_list=[]
-            ca_list=pp.get_ca_list()
-            for i in range(1, len(ca_list)-1):
-                r=pp[i]
-                ca1=ca_list[i-1]
-                ca2=ca_list[i]
-                ca3=ca_list[i+1]
-                ca_v1=ca1.get_vector()
-                ca_v2=ca2.get_vector()
-                ca_v3=ca3.get_vector()
-                # pseudo cb centred at origin
-                cb_v=self._get_cb_from_ca(ca_v1, ca_v2, ca_v3)
-                # rotate cb to unit vector along z
-                rotation=rotmat(cb_v, self._unit_z)
-                translation=ca2.get_coord()
-                rotran_list.append((translation, rotation, ca2, r))
-                # Calculate angle between pseudo-CB-CA and CA-CB
-                a=self._calc_delta_angle(r, cb_v)
-                # None if CB is absent
-                if not (a is None):
-                    angles[r]=a
-        self.angles=angles
-        return rotran_list
-
-    def _calc_delta_angle(self, res, pseudo_cb_v):
-        """
-        Caculate delta angle between CB-CA and pseudoCB-CA
-        """
-        if res.get_resname()=="GLY":
-            # Calculate pseudo CA for GLY
-            cb_v=self._get_gly_cb_vector(res)
-            ca_v=res["CA"].get_vector()
-        elif res.has_id("CB"):
-            # Calculate CB-CA vector
-            cb_v=res["CB"].get_vector()
-            ca_v=res["CA"].get_vector()
-        else:
-            # CB absent
-            print "WARNING: CB ABSENT ", res
-            return None
-        real_cb_v=cb_v-ca_v
-        angle=360*real_cb_v.angle(pseudo_cb_v)/(2*pi)
-        return angle
-
-    def _calc_hs_exposure(self, rotran_list, residue_list, radius):
-        """
-        Calculate for each residue how many CA atoms are present in 
-        the half sphere in the side chain direction, and in the half
-        sphere on the opposite side.'
-        """
-        d={}
-        for tran, rot, ca1, r1 in rotran_list:
-            hs_sidechain=0
-            hs_mainchain=0
-            for r2 in residue_list:
-                if not is_aa(r2):
-                    continue
-                if r1 is r2:
-                    continue
-                ca2=r2["CA"]
-                if (ca1-ca2)<radius:
-                    neighbor_coord=ca2.get_coord()
-                    # Rotate neighbor to the CB-CA direction
-                    rot_coord=matrixmultiply(rot, neighbor_coord-tran)
-                    if rot_coord[2]>self.OFFSET:
-                        # in side chain half sphere
-                        hs_sidechain+=1
-                    else:
-                        # in main chain half sphere
-                        hs_mainchain+=1
-            d[r1]=(hs_sidechain, hs_mainchain)
-        return d
-    
-    def calc_hs_exposure(self, model, radius=13.0, option='CB'):
-        """
-        Calculate the half sphere exposure. A dictionary is returned that uses 
-        a L{Residue} object as key, and the residue exposure (a tuple of two ints)
-        as corresponding value. The first number in the tuple is the number of CA
-        atoms in the half sphere in the CB direction, the second number is the 
-        number of CA atoms in the opposite sphere.
-
         @param model: the model that contains the residues
         @type model: L{Model}
 
         @param radius: radius of the sphere (centred at the CA atom)
         @type radius: float
 
-        @param option: CB (using the CB-CA vector) or CA3 (using the pseudo CB-CA
-            vector, based on three consecutive CA atoms).
-        @type option: string
-
-        @return: a dictionary that uses a L{Residue} object as key, 
-            and the residue exposure as corresponding value.
-        @rtype: {L{Residue}:(int, int), L{Residue}:(int, int),...}
+        @param offset: number of flanking residues that are ignored in the calculation            of the number of neighbors
+        @type offset: int
         """
-        residue_list=Selection.unfold_entities(model, 'R')
-        if option=='CA3':
-            rotran_list=self._get_rotran_list_from_ca(model)
-        elif option=='CB':
-            rotran_list=self._get_rotran_list_from_cb(residue_list)
-        else:
-            raise "Options: CA3 or CB"
-        return self._calc_hs_exposure(rotran_list, residue_list, radius)
+        _AbstractHSExposure.__init__(self, model, radius, offset,
+                'EXP_HSEBU', 'EXP_HSEBD')
 
-    def calc_fs_exposure(self, model, radius=13.0):
+    def _get_cb(self, r1, r2, r3):
+        """
+        Method to calculate CB-CA vector.
+
+        @param r1, r2, r3: three consecutive residues (only r2 is used)
+        @type r1, r2, r3: L{Residue}
+        """
+        if r2.get_resname()=='GLY':
+            return self._get_gly_cb_vector(r2), 0.0
+        else:
+            if r2.has_id('CB') and r2.has_id('CA'):
+                vcb=r2['CB'].get_vector()
+                vca=r2['CA'].get_vector()
+                return (vcb-vca), 0.0
+        return None
+
+
+class ExposureCN(AbstractPropertyMap):
+    def __init__(self, model, radius=12.0, offset=0):
         """
         A residue's exposure is defined as the number of CA atoms around 
         that residues CA atom. A dictionary is returned that uses a L{Residue}
@@ -283,39 +261,43 @@ class HSExposure:
         @param radius: radius of the sphere (centred at the CA atom)
         @type radius: float
 
-        @return: a dictionary that uses a L{Residue} object as key, 
-            and the residue exposure as corresponding value.
-        @rtype: {L{Residue}:int, L{Residue}:int,...}
+        @param offset: number of flanking residues that are ignored in the calculation            of the number of neighbors
+        @type offset: int
+
         """
-        residue_list=Selection.unfold_entities(model, 'R')
-        ca_list=[]
-        # Extract the CA coordinates
-        for r in residue_list:
-            if is_aa(r) and r.has_id("CA"):
-                ca=r["CA"]
-                ca_list.append((ca, r))
-        # Calculate exposure
-        d={}
-        for ca1, res1 in ca_list:
-            for ca2, res2 in ca_list:
-                if ca1 is ca2:
+        assert(offset>=0)
+        ppb=CaPPBuilder()
+        ppl=ppb.build_peptides(model)
+        fs_map={}
+        fs_list=[]
+        fs_keys=[]
+        for pp1 in ppl:
+            for i in range(0, len(pp1)):
+                fs=0
+                r1=pp1[i]
+                if not is_aa(r1) or not r1.has_id('CA'):
                     continue
-                if (ca1-ca2)<=radius:
-                    if d.has_key(res1):
-                        d[res1]=d[res1]+1
-                    else:
-                        d[res1]=1
-        return d
-
-    def get_angles(self):
-        """
-        Return delta angle between CA-CB and pseudoCB-CA
-
-        @return: a dictionary that uses a L{Residue} object as key, 
-            and the angle as corresponding value.
-        @rtype: {L{Residue}:float, L{Residue}:float,...}
-        """
-        return self.angles
+                ca1=r1['CA']
+                for pp2 in ppl:
+                    for j in range(0, len(pp2)):
+                        if pp1 is pp2 and abs(i-j)<=offset:
+                            continue
+                        r2=pp2[j]
+                        if not is_aa(r2) or not r2.has_id('CA'):
+                            continue
+                        ca2=r2['CA']
+                        d=(ca2-ca1)
+                        if d<radius:
+                            fs+=1
+                res_id=r1.get_id()
+                chain_id=r1.get_parent().get_id()
+                # Fill the 3 data structures
+                fs_map[(chain_id, res_id)]=fs
+                fs_list.append((r1, fs))
+                fs_keys.append((chain_id, res_id))
+                # Add to xtra
+                r1.xtra['EXP_CN']=fs
+        AbstractPropertyMap.__init__(self, fs_map, fs_keys, fs_list)
 
 
 if __name__=="__main__":
@@ -324,51 +306,32 @@ if __name__=="__main__":
 
     p=PDBParser()
     s=p.get_structure('X', sys.argv[1])
-
     model=s[0]
 
     # Neighbor sphere radius
     RADIUS=13.0
+    OFFSET=0
 
-    hse=HSExposure()
+    hse=HSExposureCA(model, radius=RADIUS, offset=OFFSET)
+    for l in hse:
+        print l
+    print
 
-    # Calculate CA-CA-CA based HS-exposure
-    exp_ca=hse.calc_hs_exposure(model, RADIUS, option='CA3')
+    hse=HSExposureCB(model, radius=RADIUS, offset=OFFSET)
+    for l in hse:
+        print l
+    print
 
-    # Calculate CB based HS-exposure
-    exp_cb=hse.calc_hs_exposure(model, RADIUS, option='CB')
+    hse=ExposureCN(model, radius=RADIUS, offset=OFFSET)
+    for l in hse:
+        print l
+    print
 
-    # Calculate classical coordination number
-    exp_fs=hse.calc_fs_exposure(model, RADIUS)
-
-    angles=hse.get_angles()
-
-    # All residues in the model
-    residue_list=Selection.unfold_entities(model, 'R')
-
-    # Print accessibilities for each residue
-    for r in residue_list:
-        print r
-
-        # CA hs-exposure
-        if exp_ca.has_key(r):
-            print "CA3  ", exp_ca[r]
-
-        # CB hs-exposure
-        if exp_cb.has_key(r):
-            print "CB   ", exp_cb[r]
-
-        # Classical sphere coordination number
-        if exp_fs.has_key(r):
-            print "SPHE ", exp_fs[r]
-
-        if angles.has_key(r):
-            print "DELTA %.2f" % angles[r]
-
-        print "--------------------"
-
-    hse.write_pymol_script()
-
-
+    for c in model:
+        for r in c:
+            try:
+                print r.xtra['PCB_CB_ANGLE']
+            except:
+                pass
 
 
