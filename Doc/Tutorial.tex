@@ -319,7 +319,7 @@ Seq('GATCGATGGGCCTATATAGGATCGAAAATCGC', IUPACUnambiguousDNA())
 \end{verbatim}
 
 
-To translate our DNA object we have quite a few choices. First, we can use any number of translation tables depending on what we know about our DNA sequence. The translation tables available in biopython were taken from information at \ahrefurl{\url{ftp://ncbi.nlm.nih.gov/entrez/misc/data/gc.prt}}. So, you have tons of choices to pick from. For this, let's just focus on two choices: the Standard translation table, and the Translation table for Vertebrate Mitochondrial DNA. These tables are labeled with id numbers 1 and 2, respectively. Now that we know what tables we are looking to get, we're all set to perform a basic translation. First, we need to get our translators that use these tables. Since we are still dealing with our unambiguous DNA object, we want to fetch translators that take this into account:
+To translate our DNA object we have quite a few choices. First, we can use any number of translation tables depending on what we know about our DNA sequence. The translation tables available in biopython were taken from information at \ahrefurl{\url{ftp://ftp.ncbi.nlm.nih.gov/entrez/misc/data/gc.prt}}. So, you have tons of choices to pick from. For this, let's just focus on two choices: the Standard translation table, and the Translation table for Vertebrate Mitochondrial DNA. These tables are labeled with id numbers 1 and 2, respectively. Now that we know what tables we are looking to get, we're all set to perform a basic translation. First, we need to get our translators that use these tables. Since we are still dealing with our unambiguous DNA object, we want to fetch translators that take this into account:
 
 \begin{verbatim}
 >>> from Bio import Translate
@@ -1029,7 +1029,7 @@ The PSIBlast record object is similar, but has support for the rounds that are u
 
 \subsection{Running BLAST locally}
 
-If you want to make your own database to search for sequences against, then local BLAST is definitely the way you want to go. As with online BLAST, biopython provides lots of nice code to make you able to call local BLAST executables from your scripts, and have full access to the many command line options that these executables provide. You can obtain local BLAST precompiled for a number of platforms at \ahrefurl{\url{ftp://ncbi.nlm.nih.gov/blast/executables/}}, or can compile it yourself in the NCBI toolbox (\ahrefurl{\url{ftp://ncbi.nlm.nih.gov/toolbox/}}).
+If you want to make your own database to search for sequences against, then local BLAST is definitely the way you want to go. As with online BLAST, biopython provides lots of nice code to make you able to call local BLAST executables from your scripts, and have full access to the many command line options that these executables provide. You can obtain local BLAST precompiled for a number of platforms at \ahrefurl{\url{ftp://ftp.ncbi.nlm.nih.gov/blast/executables/}}, or can compile it yourself in the NCBI toolbox (\ahrefurl{\url{ftp://ftp.ncbi.nlm.nih.gov/toolbox/}}).
 
 
 The code for dealing with local BLAST is found in \verb|Bio.Blast.NCBIStandalone|, specifically in the functions \verb|blastall| and \verb|blastpgp|, which correspond with the BLAST executables that their names imply.
