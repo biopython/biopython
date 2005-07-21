@@ -386,7 +386,8 @@ class MultipleAlignCL:
         if self.type:
             cline = cline + " -TYPE=%s" % self.type
         if self.is_quick == 1:
-            cline = cline + " -INTERACTIVE"
+            #cline = cline + " -INTERACTIVE"
+            cline = cline + " -QUICKTREE"
         if self.allow_negative == 1:
             cline = cline + " -NEGATIVE"
 
