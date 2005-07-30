@@ -9,8 +9,8 @@ class AbstractPropertyMap:
         self.property_keys=property_keys
         self.property_list=property_list
 
-    def _translate_id(self, id):
-        raise NotImplementedError
+    def _translate_id(self, entity_id):
+        return entity_id
 
     def __getitem__(self, key):
         """
