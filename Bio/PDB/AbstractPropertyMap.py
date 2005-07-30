@@ -1,3 +1,4 @@
+from types import IntType
 
 __doc__="Class that maps (chain_id, residue_id) to a residue property"
 
@@ -8,10 +9,8 @@ class AbstractPropertyMap:
         self.property_keys=property_keys
         self.property_list=property_list
 
-    def _translate_res_id(self, res_id):
-        if isinstance(res_id, int):
-            res_id=(' ', res_id, ' ')
-        return res_id
+    def _translate_id(self, id):
+        raise NotImplementedError
 
     def __getitem__(self, key):
         """
@@ -26,9 +25,8 @@ class AbstractPropertyMap:
         @return: some residue property 
         @rtype: anything (can be a tuple)
         """
-        chain_id, res_id=key
-        res_id=self._translate_res_id(res_id)
-        return self.property_dict[(chain_id, res_id)]
+        translated_id=self._translate_id(key)
+        return self.property_dict[translated_id]
 
     def __len__(self):
         """
@@ -39,7 +37,7 @@ class AbstractPropertyMap:
         """
         return len(self.property_dict)
 
-    def has_key(self, chain_id, res_id):
+    def has_key(self, id):
         """
         Return 1 if the map has a property for this residue, 0 otherwise.
 
@@ -53,8 +51,8 @@ class AbstractPropertyMap:
         @param res_id: residue id
         @type res_id: char 
         """
-        res_id=self._translate_res_id(res_id)
-        return self.property_dict.has_key((chain_id, res_id))
+        translated_id=self._translate_id(id)
+        return self.property_dict.has_key(translated_id)
 
     def keys(self):
         """
@@ -67,8 +65,8 @@ class AbstractPropertyMap:
 
     def __iter__(self):
         """
-        Iterate over the (residue, property) list. Handy alternative to the dictionary-like 
-        access.
+        Iterate over the (entity, property) list. Handy alternative to 
+        the dictionary-like access.
 
         Example:
             >>> for (res, property) in iter(map):
@@ -78,4 +76,34 @@ class AbstractPropertyMap:
         """
         for i in range(0, len(self.property_list)):
             yield self.property_list[i]
+
+
+class AbstractResiduePropertyMap(AbstractPropertyMap):
+    def __init__(self, property_dict, property_keys, property_list):
+        AbstractPropertyMap.__init__(self, property_dict, property_keys, 
+                property_list)
+
+    def _translate_id(self, ent_id):
+        print ent_id
+        chain_id, res_id=ent_id
+        if type(res_id)==IntType:
+            ent_id=(chain_id, (' ', res_id, ' '))
+        return ent_id
+
+class AbstractAtomPropertyMap(AbstractPropertyMap):
+    def __init__(self, property_dict, property_keys, property_list):
+        AbstractPropertyMap.__init__(self, property_dict, property_keys, 
+                property_list)
+
+    def _translate_id(self, ent_id):
+        if len(ent_id)==4:
+            chain_id, res_id, atom_name, icode=ent_id
+        else:
+            chain_id, res_id, atom_name=ent_id
+            icode=None
+        if type(res_id)==IntType:
+            ent_id=(chain_id, (' ', res_id, ' '), atom_name, icode)
+        return ent_id
+
+
 
