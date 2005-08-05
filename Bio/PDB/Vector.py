@@ -129,8 +129,10 @@ def refmat(p,q):
     @type p,q: L{Vector}
     @return: The mirror operation, a 3x3 Numpy array. 
     """
-    p.normalized()
-    q.normalized()
+    p.normalize()
+    q.normalize()
+    if (p-q).norm()<1e-5:
+        return eye(3)
     pq=p-q
     pq.normalize()
     b=pq.get_array()
