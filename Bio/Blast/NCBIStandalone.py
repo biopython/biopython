@@ -442,6 +442,13 @@ class _Scanner:
         # was missing the "Database" stanza completely.
 	while attempt_read_and_call(uhandle, consumer.database,
                                     start='  Database'):
+            # BLAT output ends abruptly here, without any of the other
+            # information.  Check to see if this is the case.  If so,
+            # then end the database report here gracefully.
+            if not uhandle.peekline():
+                consumer.end_database_report()
+                return
+            
             # Database can span multiple lines.
             read_and_call_until(uhandle, consumer.database, start='    Posted')
             read_and_call(uhandle, consumer.posted_date, start='    Posted')
@@ -921,7 +928,7 @@ class _HSPConsumer:
         self._hsp.bits = _safe_float(self._hsp.bits)
 
         x, y = _re_search(
-            r"Expect\(?(\d*)\)? = +([0-9.e-]+)", line,
+            r"Expect\(?(\d*)\)? = +([0-9.e\-|\+]+)", line,
             "I could not find the expect in line\n%s" % line)
         if x:
             self._hsp.num_alignments = _safe_int(x)
@@ -969,16 +976,23 @@ class _HSPConsumer:
     # Match a space, if one is available.  Masahir Ishikawa found a
     # case where there's no space between the start and the sequence:
     # Query: 100tt 101
-    _query_re = re.compile(r"Query: (\d+)\s*(.+) \d")
+    # line below modified by Yair Benita, Sep 2004
+    _query_re = re.compile(r"Query: \s*(\d+)\s*(.+) (\d+)")
     def query(self, line):
         m = self._query_re.search(line)
         if m is None:
             raise SyntaxError, "I could not find the query in line\n%s" % line
-        start, seq = m.groups()
+        
+        # line below modified by Yair Benita, Sep 2004.
+        # added the end attribute for the query
+        start, seq, end = m.groups()
         self._hsp.query = self._hsp.query + seq
         if self._hsp.query_start is None:
             self._hsp.query_start = _safe_int(start)
 
+        # line below added by Yair Benita, Sep 2004.
+        # added the end attribute for the query
+        self._hsp.query_end = _safe_int(end)
         self._query_start_index = m.start(2)
         self._query_len = len(seq)
 
@@ -993,8 +1007,11 @@ class _HSPConsumer:
         self._hsp.match = self._hsp.match + seq
 
     def sbjct(self, line):
-        start, seq = _re_search(
-            r"Sbjct: (\d+)\s*(.+) \d", line,
+        # line below modified by Yair Benita, Sep 2004
+        # added the end group and the -? to allow parsing
+        # of BLAT output in BLAST format.
+        start, seq, end = _re_search(
+            r"Sbjct: (-?\d+)\s*(.+) (-?\d+)", line,
             "I could not find the sbjct in line\n%s" % line)
 	#mikep 26/9/00
 	#On occasion, there is a blast hit with no subject match
@@ -1006,6 +1023,7 @@ class _HSPConsumer:
         if self._hsp.sbjct_start is None:
             self._hsp.sbjct_start = _safe_int(start)
 
+        self._hsp.sbjct_end = _safe_int(end)
         if len(seq) != self._query_len:
             raise SyntaxError, \
                   "QUERY and SBJCT sequence lengths don't match in line\n%s" \
