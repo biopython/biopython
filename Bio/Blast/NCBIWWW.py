@@ -157,8 +157,10 @@ class _Scanner:
 
         # Read the RID line, for version 2.0.12 (2.0.11?) and above.
         attempt_read_and_call(uhandle, consumer.noevent, start='RID')
-        # Brad Chapman noticed a '<p>' line in BLASTN 2.1.1
-        attempt_read_and_call(uhandle, consumer.noevent, start='<p>')
+        # Brad Chapman noticed a '<p>' line in BLASTN 2.1.1; this line
+        # seems to have disappeared again.
+        # attempt_read_and_call(uhandle, consumer.noevent, start='<p>')
+        attempt_read_and_call(uhandle, consumer.noevent)
 
         # Apparently, there's some discrepancy between whether the
         # Query or database comes first.  Usually the Query does, but
