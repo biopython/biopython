@@ -130,6 +130,12 @@ class _Scanner:
                 break
             consumer.reference(line)
 
+        # blastpgp has a Reference for composition-based statistics.
+        if attempt_read_and_call(
+            uhandle, consumer.reference, start="Reference"):
+            read_and_call_until(uhandle, consumer.reference, blank=1)
+            read_and_call_while(uhandle, consumer.noevent, blank=1)
+
         # Read the Query lines and the following blank line.
         read_and_call(uhandle, consumer.query_info, start='Query=')
         read_and_call_until(uhandle, consumer.query_info, blank=1)
