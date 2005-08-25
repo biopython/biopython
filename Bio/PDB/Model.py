@@ -55,3 +55,15 @@ class Model(Entity):
     def __repr__(self):
         return "<Model id=%s>" % self.get_id()
 
+    # Public
+
+    def get_residues(self):
+        for c in self:
+            for r in c:
+                yield r
+
+    def get_atoms(self):
+        for r in self.get_residues():
+            for a in r:
+                yield a
+

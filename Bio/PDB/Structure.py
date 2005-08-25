@@ -37,5 +37,22 @@ class Structure(Entity):
         o m1, m2 - Model instances
         """
         return cmp(m1.get_id(), m2.get_id())
+
+    # Public 
+
+    def get_chains(self):
+        for m in self:
+            for c in m:
+                yield c
+
+    def get_residues(self):
+        for c in self.get_chains():
+            for r in c :
+                yield r
+
+    def get_atoms(self):
+        for r in self.get_residues():
+            for a in r:
+                yield a
         
 

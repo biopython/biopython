@@ -113,3 +113,11 @@ class Chain(Entity):
         id=self._translate_id(id)
         return Entity.has_id(self, id)
 
+
+    # Public
+
+    def get_atoms(self):
+        for r in self:
+            for a in r:
+                yield a
+
