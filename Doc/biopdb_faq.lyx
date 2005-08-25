@@ -166,7 +166,21 @@ Proteins Struct.
 \series bold 
 2003
 \series default 
-, 51, 96-108).
+, 51, 96-108), and to develop a new algorithm that identifies linear secondary
+ structure elements (
+\emph on 
+BMC Bioinformatics
+\emph default 
+, 
+\series bold 
+2005
+\series default 
+, 6, 202, 
+\begin_inset LatexCommand \url{http://www.biomedcentral.com/1471-2105/6/202}
+
+\end_inset 
+
+).
  
 \layout Standard
 
@@ -233,6 +247,17 @@ PDBParser
  Parsing the structure of the large ribosomal subunit (1FKK), which contains
  about 64000 atoms, takes 10 seconds on a 1000 MHz PC.
  In short: it's more than fast enough for many applications.
+\layout Section
+
+Why should I use Bio.PDB?
+\layout Standard
+
+Bio.PDB might be exactly what you want, and then again it might not.
+ If you are interested in data mining the PDB header, you might want to
+ look elsewhere because there is only limited support for this.
+ If you look for a powerful, complete data structure to access the atomic
+ data Bio.PDB is probably for you.
+ 
 \layout Section
 
 Usage
@@ -412,7 +437,8 @@ y_list=mmcif_dict['_atom_site.Cartn_y']
 Can I access the header information?
 \layout Standard
 
-Thanks to Christian Rother you can.
+Thanks to Christian Rother you can access some information from the PDB
+ header.
  The structure object has an attribute called 
 \family typewriter 
 header
@@ -885,19 +911,40 @@ p=PDBParser()
 structure=p.get_structure('X', 'pdb1fat.ent')
 \layout LyX-Code
 
-for model in structure.get_iterator():
+for model in structure:
 \layout LyX-Code
 
-  for chain in model.get_iterator(): 
+  for chain in model: 
 \layout LyX-Code
 
-    for residue in chain.get_iterator():
+    for residue in chain:
 \layout LyX-Code
 
-      for atom in residue.get_iterator():
+      for atom in residue:
 \layout LyX-Code
 
         print atom
+\layout Standard
+
+There are also some shortcuts:
+\layout LyX-Code
+
+# Iterate over all atoms in a structure
+\layout LyX-Code
+
+for atom in structure.get_atoms():
+\layout LyX-Code
+
+    print atom
+\layout LyX-Code
+
+# Iterate over all residues in a model
+\layout LyX-Code
+
+for residue in model.get_residues():
+\layout LyX-Code
+
+    print residue
 \layout Standard
 
 Structures, models, chains, residues and atoms are called 
@@ -955,7 +1002,11 @@ res_list=Selection.unfold_entities(structure, 'R')
 atom_list=Selection.unfold_entities(chain, 'A')
 \layout Standard
 
-Obviously, A=atom, R=residue, C=chain, M=model, S=structure.
+Obviously, 
+\family typewriter 
+A=atom, R=residue, C=chain, M=model, S=structure
+\family default 
+.
  You can use this to go up in the hierarchy, eg.
  to get a list of (unique) 
 \family typewriter 

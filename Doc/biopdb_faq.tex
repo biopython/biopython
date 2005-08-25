@@ -117,7 +117,9 @@ and COLUMBA, a website that provides annotated protein structures
 (\url{http://www.columba-db.de/}). Bio.PDB has also been used to
 perform a large scale search for active sites similarities between
 protein structures in the PDB (see \textit{Proteins Struct. Func.
-Gen.}, \textbf{2003}, 51, 96-108). 
+Gen.}, \textbf{2003}, 51, 96-108), and to develop a new algorithm
+that identifies linear secondary structure elements (\emph{BMC Bioinformatics},
+\textbf{2005}, 6, 202, \url{http://www.biomedcentral.com/1471-2105/6/202}). 
 
 Judging from requests for features and information, Bio.PDB is also
 used by several LPCs (Large Pharmaceutical Companies :-).
@@ -156,6 +158,15 @@ minutes, or on average 1.5 seconds per structure. Parsing the structure
 of the large ribosomal subunit (1FKK), which contains about 64000
 atoms, takes 10 seconds on a 1000 MHz PC. In short: it's more than
 fast enough for many applications.
+
+
+\section{Why should I use Bio.PDB?}
+
+Bio.PDB might be exactly what you want, and then again it might not.
+If you are interested in data mining the PDB header, you might want
+to look elsewhere because there is only limited support for this.
+If you look for a powerful, complete data structure to access the
+atomic data Bio.PDB is probably for you. 
 
 
 \section{Usage}
@@ -257,9 +268,9 @@ y\_list=mmcif\_dict{[}'\_atom\_site.Cartn\_y'{]}
 
 \subsubsection*{Can I access the header information?}
 
-Thanks to Christian Rother you can. The structure object has an attribute
-called \texttt{header} which is a python dictionary that maps header
-records to their values.
+Thanks to Christian Rother you can access some information from the
+PDB header. The structure object has an attribute called \texttt{header}
+which is a python dictionary that maps header records to their values.
 
 Example:
 
@@ -499,15 +510,30 @@ p=PDBParser()
 
 structure=p.get\_structure('X',~'pdb1fat.ent')
 
-for~model~in~structure.get\_iterator():
+for~model~in~structure:
 
-~~for~chain~in~model.get\_iterator():~
+~~for~chain~in~model:~
 
-~~~~for~residue~in~chain.get\_iterator():
+~~~~for~residue~in~chain:
 
-~~~~~~for~atom~in~residue.get\_iterator():
+~~~~~~for~atom~in~residue:
 
 ~~~~~~~~print~atom
+\end{lyxcode}
+There are also some shortcuts:
+
+\begin{lyxcode}
+\#~Iterate~over~all~atoms~in~a~structure
+
+for~atom~in~structure.get\_atoms():
+
+~~~~print~atom
+
+\#~Iterate~over~all~residues~in~a~model
+
+for~residue~in~model.get\_residues():
+
+~~~~print~residue
 \end{lyxcode}
 Structures, models, chains, residues and atoms are called \texttt{Entities}
 in Biopython. You can always get a parent \texttt{Entity} from a child
@@ -535,8 +561,8 @@ res\_list=Selection.unfold\_entities(structure,~'R')
 
 atom\_list=Selection.unfold\_entities(chain,~'A')
 \end{lyxcode}
-Obviously, A=atom, R=residue, C=chain, M=model, S=structure. You can
-use this to go up in the hierarchy, eg. to get a list of (unique)
+Obviously, \texttt{A=atom, R=residue, C=chain, M=model, S=structure}.
+You can use this to go up in the hierarchy, eg. to get a list of (unique)
 \texttt{Residue} or \texttt{Chain} parents from a list of \texttt{Atoms}:
 
 \begin{lyxcode}
