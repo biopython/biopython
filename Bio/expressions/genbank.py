@@ -111,7 +111,7 @@ date = Martel.Group("date",
 # the PLN, etc stuff indicates data file divisions
 valid_divisions = ["PRI", "ROD", "MAM", "VRT", "INV", "PLN", "BCT", "RNA",
                    "VRL", "PHG", "SYN", "UNA", "EST", "PAT", "STS", "GSS",
-                   "HTG", "HTC", "CON"]
+                   "HTG", "HTC", "CON", "ENV"]
 divisions = map(Martel.Str, valid_divisions)
 data_file_division = Martel.Group("data_file_division",
                                   Martel.Alt(*divisions))
