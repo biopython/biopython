@@ -1038,7 +1038,7 @@ def _send_to_blasturl(query, outhandle):
 def qblast(program, database, sequence,
            ncbi_gi=None, descriptions=None, alignments=None,
            expect=None, matrix=None,
-           filter=None, format_type=None, hitlist_size=None,
+           filter=None, format_type="XML", hitlist_size=None,
            entrez_query='(none)',
            ):
     """Do a BLAST search using the QBLAST server at NCBI.
@@ -1051,7 +1051,7 @@ def qblast(program, database, sequence,
     expect         An expect value cutoff.  Def 10.0.
     matrix         Specify an alt. matrix (PAM30, PAM70, BLOSUM80, BLOSUM45).
     filter         "none" turns off filtering.  Default uses 'seg' or 'dust'.
-    format_type    "HTML", "Text", "ASN.1", or "XML".  Def. "HTML".
+    format_type    "HTML", "Text", "ASN.1", or "XML".  Def. "XML".
     entrez_query   Entrez query to limit Blast search
 
     This function does no checking of the validity of the parameters
@@ -1117,7 +1117,21 @@ def qblast(program, database, sequence,
         if status.upper() == "READY":
             break
 
-    results = results.lstrip()
+    # results come with this kind of header:
+
+    # HTTP/1.1 200 OK
+    # Date: Wed, 05 Oct 2005 02:13:33 GMT
+    # Server: Nde
+    # Content-Type: text/plain
+    # Connection: close
+    # 
+
+    # As the parser will choke on this header, we need to remove it
+    i = results.index("Connection: close")
+    i = results.index("\n",i)
+    i = results.index("\n",i+1)
+    results = results[i+1:]
+
     return StringIO.StringIO(results)
 
 def _send_to_qblast(query):
