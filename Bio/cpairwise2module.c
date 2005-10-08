@@ -198,7 +198,8 @@ static PyObject *cpairwise2__make_score_matrix_fast(
     char *sequenceA=NULL, *sequenceB=NULL;
     int use_sequence_cstring;
     double open_A, extend_A, open_B, extend_B;
-    int penalize_extend_when_opening, penalize_end_gaps, align_globally;
+    int penalize_extend_when_opening, penalize_end_gaps;
+    int align_globally, score_only;
 
     double first_A_gap, first_B_gap;
     double match, mismatch;
@@ -215,10 +216,10 @@ static PyObject *cpairwise2__make_score_matrix_fast(
 
     PyObject *py_retval = NULL;
 
-    if(!PyArg_ParseTuple(args, "OOOddddiii", &py_sequenceA, &py_sequenceB,
+    if(!PyArg_ParseTuple(args, "OOOddddiiii", &py_sequenceA, &py_sequenceB,
 			 &py_match_fn, &open_A, &extend_A, &open_B, &extend_B,
 			 &penalize_extend_when_opening, &penalize_end_gaps,
-			 &align_globally))
+			 &align_globally, &score_only))
 	return NULL;
     if(!PySequence_Check(py_sequenceA) || !PySequence_Check(py_sequenceB)) {
 	PyErr_SetString(PyExc_TypeError, 
@@ -458,6 +459,8 @@ static PyObject *cpairwise2__make_score_matrix_fast(
 		goto _cleanup_make_score_matrix_fast;
 	    PyList_SET_ITEM(py_score_row, col, py_score);
 
+	    if(score_only)
+		continue;
 	    /* Set py_trace_matrix[row][col] to a list of indexes.  On
 	       the edges of the matrix (row or column is 0), the
 	       matrix should be [None]. */
