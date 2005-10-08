@@ -301,7 +301,7 @@ class _Scanner:
                 qualifier = prev_qualifier
             else:
                 # Make sure it contains a '-'
-                if line[4] != '-':
+                if len(line) < 5 or line[4] != '-':
                     raise SyntaxError, \
                           "I don't understand the format of line %s" % line
             prev_qualifier = qualifier
