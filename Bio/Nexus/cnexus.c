@@ -43,9 +43,12 @@ static PyObject * cnexus_scanfile(PyObject *self, PyObject *args)
         else if (!quotelevel  && t=='[')
         {
             /* check for special comments */
-            if ((*(input+1)=='!' || *(input+1)=='&' || *(input+1)=='%' || 
+            /*if ((*(input+1)=='!' || *(input+1)=='&' || *(input+1)=='%' || 
                     *(input+1)=='/' || *(input+1)=='\\' || *(input+1)=='@')
                     && !(commlevel || speciallevel))
+                speciallevel=1;
+            */
+            if ((*(input+1)=='&') && !(commlevel || speciallevel))
                 speciallevel=1;
             else /* standard comment */
                 commlevel++;

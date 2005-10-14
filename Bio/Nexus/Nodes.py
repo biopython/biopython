@@ -35,6 +35,10 @@ class Chain:
         self.id+=1
         return self.id 
    
+    def all_ids(self):
+        """Return a list of all node ids."""
+        return self.chain.keys()
+
     def add(self,node,prev=None):
         """Attaches node to another: (self, node, prev)."""
         if prev is not None and prev not in self.chain:
