@@ -548,7 +548,7 @@ class Nexus(object):
                 file_contents = input
                 self.filename='input_string'
             #3 Assume we have a file object
-            elif isinstance(input, file):
+            elif hasattr(input,'read'): # file objects or StringIO objects
                 file_contents=input.read()
                 if input.name:
                     self.filename=input.name
