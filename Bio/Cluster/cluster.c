@@ -4,7 +4,7 @@
  * This library was written at the Laboratory of DNA Information Analysis,
  * Human Genome Center, Institute of Medical Science, University of Tokyo,
  * 4-6-1 Shirokanedai, Minato-ku, Tokyo 108-8639, Japan.
- * Contact: mdehoon@ims.u-tokyo.ac.jp
+ * Contact: mdehoon@c2b2.columbia.edu
  * 
  * Permission to use, copy, modify, and distribute this software and its
  * documentation with or without modifications and for any purpose and
@@ -276,73 +276,6 @@ the shortest distance.
     }
   }
   return distance;
-}
-
-/* ---------------------------------------------------------------------- */
-
-static void normalize(int nrows, int ncolumns, double** data, int** mask,
-  char dist)
-{ int i, j;
-  if (dist=='e' || dist=='b') return; /* No need for normalization */
-  if (dist=='s' || dist=='k')
-  { double* rank = malloc(ncolumns*sizeof(double));
-    double* row = malloc(ncolumns*sizeof(double));
-    for (i = 0; i < nrows; i++)
-    { int n = 0;
-      for (j = 0; j < ncolumns; j++)
-      { if (mask[i][j])
-        { row[n] = data[i][j];
-          n++;
-        }
-      }
-      getrank(n, row, rank);
-      n = 0;
-      for (j = 0; j < ncolumns; j++)
-      { if (mask[i][j])
-        { data[i][j] = rank[n];
-          n++;
-        }
-      }
-    }
-    free(rank);
-    free(row);
-  }
-  switch (dist)
-  { case 'c':
-    case 'a':
-    case 's':
-    { int i, j;
-      for (i = 0; i < nrows; i++)
-      { int n = 0;
-        double average = 0.0;
-        for (j = 0; j < ncolumns; j++)
-          if (mask[i][j])
-          { average += data[i][j];
-            n++;
-          }
-        average /= n;
-        for (j = 0; j < ncolumns; j++)
-          if (mask[i][j]) data[i][j] -= average;
-      }
-    }
-    case 'u':
-    case 'x':
-    { int i, j;
-      for (i = 0; i < nrows; i++)
-      { int n = 0;
-        double std = 0.0;
-        for (j = 0; j < ncolumns; j++)
-          if (mask[i][j])
-          { double temp = data[i][j];
-            std += temp*temp;
-            n++;
-          }
-        std = sqrt(std/n);
-        for (j = 0; j < ncolumns; j++)
-          if (mask[i][j]) data[i][j] /= std;
-      }
-    }
-  }
 }
 
 /* ********************************************************************* */
@@ -1750,14 +1683,17 @@ centroid.
 
 /* ********************************************************************* */
 static
-void emalg (int nclusters, int nitems, int ndata,
-  double** data, int** mask, double weight[],
+void emalg (int nclusters, int nrows, int ncolumns,
+  double** data, int** mask, double weight[], int transpose,
   void getclustercenter(int, int, int, double**, int**, int[],
                         double**, int**, int),
   double metric (int,double**,double**,int**,int**,const double[],int,int,int),
-  int clusterid[])
+  int clusterid[], double** cdata, int** cmask)
 
-{ int* cn = calloc(nclusters,sizeof(int));
+{ const int nitems = (transpose==0) ? nrows : ncolumns;
+  const int ndata = (transpose==0) ? ncolumns : nrows;
+
+  int* cn = calloc(nclusters,sizeof(int));
   /* This will contain the number of elements in each cluster. This is needed
    * to check for empty clusters.
    */
@@ -1779,11 +1715,11 @@ void emalg (int nclusters, int nitems, int ndata,
       for (i = 0; i < nitems; i++) savedids[i] = clusterid[i];
       period *= 2;
     }
-    iteration += 1;
+    iteration++;
 
     /* Find the center */
-    getclustercenter(nclusters, nitems, ndata, data, mask, clusterid,
-                     &data[nitems], &mask[nitems], 0);
+    getclustercenter(nclusters, nrows, ncolumns, data, mask, clusterid,
+                     cdata, cmask, transpose);
 
     changed = 0;
 
@@ -1794,11 +1730,11 @@ void emalg (int nclusters, int nitems, int ndata,
       if (cn[jnow]==1) continue;
       /* No reassignment if that would lead to an empty cluster */
       /* Treat the present cluster as a special case */
-      distance = metric(ndata,data,data,mask,mask,weight,i,nitems+jnow,0);
+      distance = metric(ndata,data,cdata,mask,cmask,weight,i,jnow,transpose);
       for (j = 0; j < nclusters; j++)
       { double tdistance;
         if (j==jnow) continue;
-        tdistance = metric(ndata,data,data,mask,mask,weight,i,nitems+j,0);
+        tdistance = metric(ndata,data,cdata,mask,cmask,weight,i,j,transpose);
         if (tdistance < distance)
         { distance = tdistance;
           cn[clusterid[i]]--;
@@ -1885,7 +1821,7 @@ clusterid  (output; input) int[nrows] if transpose==0
                            int[ncolumns] if transpose==1
 The cluster number to which a gene or microarray was assigned. If npass==0,
 then on input clusterid contains the initial clustering assignment from which
-the clustering algorithm starts. On output. it contains the clustering solution
+the clustering algorithm starts. On output, it contains the clustering solution
 that was found.
 
 error      (output) double
@@ -1906,16 +1842,18 @@ found. The value of ifound is at least 1; its maximum value is npass.
   double (*metric)
     (int,double**,double**,int**,int**,const double[],int,int,int);
 
-  int i, j;
+  int i;
   int ipass;
   int* tclusterid;
   int* mapping;
+  double** cdata;
+  int** cmask;
 
   if (nelements < nclusters)
   { *ifound = 0;
     return;
   }
-  /* More clusters asked for than objects available */
+  /* More clusters asked for than elements available */
 
   /* Set the function to find the centroid as indicated by method */
   if (method == 'm') getclustercenter = &getclustermedian;
@@ -1927,64 +1865,54 @@ found. The value of ifound is at least 1; its maximum value is npass.
   /* Set the result of the first pass as the initial best clustering solution */
   *ifound = 1;
 
-  if (transpose)
-  { double** newdata = malloc((nelements+nclusters)*sizeof(double*));
-    int** newmask = malloc((nelements+nclusters)*sizeof(int*));
-    for (i = 0; i < nelements; i++)
-    { newdata[i] = malloc(ndata*sizeof(double));
-      newmask[i] = malloc(ndata*sizeof(int));
-      for (j = 0; j < ndata; j++)
-      { newdata[i][j] = data[j][i];
-        newmask[i][j] = mask[j][i];
-      }
-    }
-    for (i = 0; i < nclusters; i++)
-    { newdata[nelements+i] = malloc(ndata*sizeof(double));
-      newmask[nelements+i] = malloc(ndata*sizeof(int));
-    }
-    data = newdata;
-    mask = newmask;
-  }
-  else
-  { double** newdata = malloc((nelements+nclusters)*sizeof(double*));
-    int** newmask = malloc((nelements+nclusters)*sizeof(int*));
-    for (i = 0; i < nelements; i++)
-    { newdata[i] = malloc(ndata*sizeof(double));
-      newmask[i] = malloc(ndata*sizeof(int));
-      memcpy(newdata[i], data[i], ndata*sizeof(double));
-      memcpy(newmask[i], mask[i], ndata*sizeof(int));
-    }
-    for (i = 0; i < nclusters; i++)
-    { newdata[nelements+i] = malloc(ndata*sizeof(double));
-      newmask[nelements+i] = malloc(ndata*sizeof(int));
-    }
-    data = newdata;
-    mask = newmask;
-  }
-  normalize(nelements, ndata, data, mask, dist);
-
   /* Find out if the user specified an initial clustering */
   if (npass!=0)
   { initran(); /* First initialize the random number generator */
     randomassign (nclusters, nelements, clusterid);
   }
 
+  /* Allocate space to store the centroid data */
+  if (transpose==0)
+  { cdata = malloc(nclusters*sizeof(double*));
+    cmask = malloc(nclusters*sizeof(int*));
+    for (i = 0; i < nclusters; i++)
+    { cdata[i] = malloc(ndata*sizeof(double));
+      cmask[i] = malloc(ndata*sizeof(int));
+    }
+  }
+  else
+  { cdata = malloc(ndata*sizeof(double*));
+    cmask = malloc(ndata*sizeof(int*));
+    for (i = 0; i < ndata; i++)
+    { cdata[i] = malloc(nclusters*sizeof(double));
+      cmask[i] = malloc(nclusters*sizeof(int));
+    }
+  }
+
   *error = 0.;
-  emalg(nclusters, nelements, ndata, data, mask, weight,
-    getclustercenter, metric, clusterid);
+  emalg(nclusters, nrows, ncolumns, data, mask, weight, transpose,
+    getclustercenter, metric, clusterid, cdata, cmask);
 
   for (i = 0; i < nelements; i++)
   { int j = clusterid[i];
-    *error += metric(ndata, data, data, mask, mask, weight, i, nelements+j, 0);
+    *error += metric(ndata, data, cdata, mask, cmask, weight, i, j, transpose);
   }
 
   if (npass==0)
-  { for (i = 0; i < nelements + nclusters; i++)
-    { free(data[i]);
-      free(mask[i]);
+  { if (transpose==0)
+    { for (i = 0; i < nclusters; i++)
+      { free(cdata[i]);
+        free(cmask[i]);
+      }
     }
-    free(data);
-    free(mask);
+    else
+    { for (i = 0; i < ndata; i++)
+      { free(cdata[i]);
+        free(cmask[i]);
+      }
+    }
+    free(cdata);
+    free(cmask);
     return;
   }
 
@@ -1996,8 +1924,8 @@ found. The value of ifound is at least 1; its maximum value is npass.
     int same = 1;
 
     randomassign (nclusters, nelements, tclusterid);
-    emalg(nclusters, nelements, ndata, data, mask, weight,
-      getclustercenter, metric, tclusterid);
+    emalg(nclusters, nrows, ncolumns, data, mask, weight, transpose,
+      getclustercenter, metric, tclusterid, cdata, cmask);
 
     for (i = 0; i < nclusters; i++) mapping[i] = -1;
     for (i = 0; i < nelements; i++)
@@ -2005,7 +1933,7 @@ found. The value of ifound is at least 1; its maximum value is npass.
       if (mapping[j] == -1) mapping[j] = clusterid[i];
       else if (mapping[j] != clusterid[i]) same = 0;
       tssin +=
-        metric(ndata, data, data, mask, mask, weight, i, nelements+j, 0);
+        metric(ndata, data, cdata, mask, cmask, weight, i, j, transpose);
     }
     if (same) (*ifound)++;
     else if (tssin < *error)
@@ -2018,13 +1946,20 @@ found. The value of ifound is at least 1; its maximum value is npass.
   /* Deallocate temporarily used space */
   free(mapping);
   free(tclusterid);
-
-  for (i = 0; i < nelements + nclusters; i++)
-  { free(data[i]);
-    free(mask[i]);
+  if (transpose==0)
+  { for (i = 0; i < nclusters; i++)
+    { free(cmask[i]);
+      free(cdata[i]);
+    }
   }
-  free(data);
-  free(mask);
+  else
+  { for (i = 0; i < ndata; i++)
+    { free(cmask[i]);
+      free(cdata[i]);
+    }
+  }
+  free(cmask);
+  free(cdata);
 
   return;
 }
@@ -2852,8 +2787,7 @@ clustered, or the number of microarrays minus one if microarrays are clustered.
 
   return;
 }
-
-/* ********************************************************************* */
+/* ******************************************************************** */
 
 static
 void pmlcluster (int nelements, double** distmatrix, int result[][2],
@@ -3175,24 +3109,32 @@ void somworker (int nrows, int ncolumns, double** data, int** mask,
   /* Calculate the standard deviation for each row or column */
   if (transpose==0)
   { for (i = 0; i < nelements; i++)
-    { for (j = 0; j < ndata; j++)
-      { double term = data[i][j];
-        term = term * term;
-        stddata[i] += term;
+    { int n = 0;
+      for (j = 0; j < ndata; j++)
+      { if (mask[i][j])
+        { double term = data[i][j];
+          term = term * term;
+          stddata[i] += term;
+          n++;
+        }
       }
-      stddata[i] = sqrt(stddata[i]);
-      if (stddata[i]==0) stddata[i] = 1;
+      if (stddata[i] > 0) stddata[i] = sqrt(stddata[i]/n);
+      else stddata[i] = 1;
     }
   }
   else
   { for (i = 0; i < nelements; i++)
-    { for (j = 0; j < ndata; j++)
-      { double term = data[j][i];
-        term = term * term;
-        stddata[i] += term;
+    { int n = 0;
+      for (j = 0; j < ndata; j++)
+      { if (mask[j][i])
+        { double term = data[j][i];
+          term = term * term;
+          stddata[i] += term;
+          n++;
+        }
       }
-      stddata[i] = sqrt(stddata[i]);
-      if (stddata[i]==0) stddata[i] = 1;
+      if (stddata[i] > 0) stddata[i] = sqrt(stddata[i]/n);
+      else stddata[i] = 1;
     }
   }
 
@@ -3220,7 +3162,7 @@ void somworker (int nrows, int ncolumns, double** data, int** mask,
         celldata[ix][iy][i] = term;
         sum += term * term;
       }
-      sum = sqrt(sum);
+      sum = sqrt(sum/ndata);
       for (i = 0; i < ndata; i++) celldata[ix][iy][i] /= sum;
     }
   }
@@ -3259,16 +3201,19 @@ void somworker (int nrows, int ncolumns, double** data, int** mask,
         { if (sqrt((ix-ixbest)*(ix-ixbest)+(iy-iybest)*(iy-iybest))<radius)
           { double sum = 0.;
             for (i = 0; i < ndata; i++)
+            { if (mask[iobject][i]==0) continue;
               celldata[ix][iy][i] +=
                 tau * (data[iobject][i]/stddata[iobject]-celldata[ix][iy][i]);
+            }
             for (i = 0; i < ndata; i++)
             { double term = celldata[ix][iy][i];
               term = term * term;
               sum += term;
             }
-            sum = sqrt(sum);
             if (sum>0)
+            { sum = sqrt(sum/ndata);
               for (i = 0; i < ndata; i++) celldata[ix][iy][i] /= sum;
+            }
           }
         }
       }
@@ -3304,16 +3249,19 @@ void somworker (int nrows, int ncolumns, double** data, int** mask,
         { if (sqrt((ix-ixbest)*(ix-ixbest)+(iy-iybest)*(iy-iybest))<radius)
           { double sum = 0.;
             for (i = 0; i < ndata; i++)
+            { if (mask[i][iobject]==0) continue;
               celldata[ix][iy][i] +=
                 tau * (data[i][iobject]/stddata[iobject]-celldata[ix][iy][i]);
+            }
             for (i = 0; i < ndata; i++)
             { double term = celldata[ix][iy][i];
               term = term * term;
               sum += term;
             }
-            sum = sqrt(sum);
             if (sum>0)
+            { sum = sqrt(sum/ndata);
               for (i = 0; i < ndata; i++) celldata[ix][iy][i] /= sum;
+            }
           }
         }
       }

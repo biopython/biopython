@@ -279,22 +279,22 @@ mask=None: This array describes which elements in data are missing. If
 geneclusters=None:  For hierarchical clustering results, geneclusters
            is an (ngenes-1 x 2) array that describes the hierarchical
            clustering result for genes. This array can be calculated
-           by the hierarchical clustering methods pslcluster,
-           pclcluster, pmlcluster, and palcluster.
+           by the hierarchical clustering methods implemented in
+           treecluster.
            For k-means clustering results, geneclusters is a vector
            containing ngenes integers, describing to which cluster a
            given gene belongs. This vector can be calculated by kcluster.
 genelinkdist=None:  An array with (ngenes-1) elements containing the
            distance between the subnodes that were joined for each node.
            genelinkdist is calculated by the hierarchical clustering
-           methods pslcluster, pclcluster, pmlcluster, and palcluster.
+           methods implemented in treecluster.
            genelinkdist is required only if geneclusters is given and
            contains an hierarchical clustering result. 
 expclusters=None:  For hierarchical clustering results, expclusters
            is an (nexps-1 x 2) array that describes the hierarchical
            clustering result for experimental conditions. This array can
-           be calculated by the hierarchical clustering methods
-           pslcluster, pclcluster, pmlcluster, and palcluster.
+           be calculated by the hierarchical clustering methods implemented
+           in treecluster.
            For k-means clustering results, expclusters is a vector
            containing nexps integers, describing to which cluster a
            given experimental condition belongs. This vector can be
@@ -302,7 +302,7 @@ expclusters=None:  For hierarchical clustering results, expclusters
 explinkdist=None:  An array with (nexps-1) elements containing the
            distance between the subnodes that were joined for each node.
            explinkdist is calculated by the hierarchical clustering
-           methods pslcluster, pclcluster, pmlcluster, and palcluster.
+           methods implemented in treecluster.
            explinkdist is required only if expclusters is given and
            contains an hierarchical clustering result. 
 gorder=None: an array of real numbers indicating the preferred order of
