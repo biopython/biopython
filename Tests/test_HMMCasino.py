@@ -12,7 +12,7 @@ loaded dice is .05 and the probability of switching from loaded to fair is
 .1.
 """
 # standard modules
-import whrandom
+import random
 
 # biopython
 from Bio import Alphabet
@@ -82,21 +82,18 @@ def generate_rolls(num_rolls):
     roll_seq = MutableSeq('', DiceRollAlphabet)
     state_seq = MutableSeq('', DiceTypeAlphabet)
 
-    roll_generator = whrandom.whrandom()
-    switch_generator = whrandom.whrandom()
-
     # generate the sequence
     for roll in range(num_rolls):
         state_seq.append(cur_state)
         # generate a random number
-        chance_num = roll_generator.random()
+        chance_num = random.random()
 
         # add on a new roll to the sequence
         new_roll = _loaded_dice_roll(chance_num, cur_state)
         roll_seq.append(new_roll)
 
         # now give us a chance to switch to a new state
-        chance_num = switch_generator.random()
+        chance_num = random.random()
         if cur_state == 'F':
             if chance_num <= .05:
                 cur_state = 'L'

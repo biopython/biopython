@@ -3,7 +3,7 @@
 # standard modules
 import copy
 import math
-import whrandom
+import random
 
 # biopython
 from Bio.Seq import MutableSeq
@@ -131,10 +131,10 @@ class MarkovModelBuilder:
         a probability to each
         """
         for key in self.transition_prob.keys():
-            self.transition_prob[key] = whrandom.random()
+            self.transition_prob[key] = random.random()
 
         for key in self.emission_prob.keys():
-            self.emission_prob[key] = whrandom.random()
+            self.emission_prob[key] = random.random()
 
     # --- functions to deal with the transitions in the sequence
 

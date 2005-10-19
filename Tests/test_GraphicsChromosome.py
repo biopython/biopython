@@ -10,7 +10,7 @@ Graphics.DisplayRepresentation classes.
 import os
 import sys
 import string
-import whrandom
+import random
 import cStringIO
 
 # PyUnit
@@ -112,7 +112,7 @@ def get_random_id():
     """
     id = ''
     for n in range(6):
-        letter = whrandom.choice(letter_choices)
+        letter = random.choice(letter_choices)
         id += letter
 
     return id
@@ -122,7 +122,7 @@ def load_random_chromosome(chr_name):
     """
     cur_chromosome = BasicChromosome.Chromosome(chr_name)
 
-    num_segments = whrandom.randrange(num_possible_segments)
+    num_segments = random.randrange(num_possible_segments)
     for seg in range(num_segments):
         # make the top and bottom telomeres
         if seg == 0:
@@ -133,12 +133,12 @@ def load_random_chromosome(chr_name):
         else:
             cur_segment = BasicChromosome.ChromosomeSegment()
             
-        color_chance = whrandom.random()
+        color_chance = random.random()
         if color_chance <= color_prob:
-            fill_color = whrandom.choice(color_choices)
+            fill_color = random.choice(color_choices)
             cur_segment.fill_color = fill_color
 
-        id_chance = whrandom.random()
+        id_chance = random.random()
         if id_chance <= id_prob:
             id = get_random_id()
             cur_segment.label = id
@@ -188,7 +188,7 @@ class OrganismGraphicTest(unittest.TestCase):
         all_segs = []
         all_chrs = []
         
-        num_chrs = whrandom.randrange(1, 15)
+        num_chrs = random.randrange(1, 15)
         for chr_name in range(num_chrs):
             cur_chromosome, num_segs = load_random_chromosome(str(chr_name))
             all_chrs.append(cur_chromosome)
