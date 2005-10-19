@@ -14,7 +14,7 @@ Uniform Crossover is a standard crossover technique for
 rapid mutation-behavior.  
 """
 # standard modules
-import whrandom
+import random
 
 class UniformCrossover:
     """Perform single point crossover between genomes at some defined rates.
@@ -28,10 +28,6 @@ class UniformCrossover:
         """
         self._crossover_prob = crossover_prob
 	self._uniform_prob   = uniform_prob
-        # a random number generator to test if we have a crossover
-        self._crossover_rand = whrandom.whrandom()
-        # a random number generator to pick a crossover location
-        self._uniform_rand = whrandom.whrandom()
 	return
 	
     def do_crossover(self, org_1, org_2):
@@ -41,13 +37,13 @@ class UniformCrossover:
         new_org_2 = org_2.copy()
         
         # determine if we have a crossover
-        crossover_chance = self._crossover_rand.random()
+        crossover_chance = random.random()
         if crossover_chance <= self._crossover_prob:
 	    
 	    minlen = min(len(new_org_1.genome),len(new_org_2.genome))
 	    for i in range( minlen ):
 		
-		uniform_chance = self._uniform_rand.random()
+		uniform_chance = random.random()
 		if uniform_chance <= self._uniform_prob:
 		    # cycle element
 		    temp                  = new_org_1.genome[ i ]

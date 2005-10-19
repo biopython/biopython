@@ -11,7 +11,6 @@ new genome 2 --   a b c D E F
 
 """
 # standard modules
-import whrandom
 from GeneralPoint import TwoCrossover
 
 class SinglePointCrossover(TwoCrossover):

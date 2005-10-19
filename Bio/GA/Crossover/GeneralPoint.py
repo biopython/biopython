@@ -30,7 +30,7 @@ and for the drastic (n can be arbitrary to the length of the genome!):
 	
 """
 # standard modules
-import whrandom
+import random
 
 class GeneralPointCrossover:
     """Perform n-point crossover between genomes at some defined rates.
@@ -48,10 +48,6 @@ class GeneralPointCrossover:
         """Initialize to do crossovers at the specified probability.
         """
         self._crossover_prob = crossover_prob
-        # a random number generator to test if we have a crossover
-        self._crossover_rand = whrandom.whrandom()
-        # a random number generator to pick a crossover location
-        self._location_rand  = whrandom.whrandom()
 
 	self._sym     = points % 2 # odd n, gets a symmetry flag
 	self._npoints = (points + self._sym)/2 # (N or N+1)/2
@@ -62,7 +58,7 @@ class GeneralPointCrossover:
         new_org = ( org_1.copy(), org_2.copy() )
         
         # determine if we have a crossover
-        crossover_chance = self._crossover_rand.random()
+        crossover_chance = random.random()
         if crossover_chance <= self._crossover_prob:
 	    
 	    # pre-compute bounds (len(genome))
@@ -107,9 +103,9 @@ class GeneralPointCrossover:
 	"""
 	results = []
 	for increment in range(self._npoints):
-	    x = self._location_rand.choice( range(1,bound ) )
+	    x = random.randint(1,bound-1)
 	    while (x in results):  # uniqueness
-		x = self._location_rand.choice( range(1,bound) )
+		x = random.randint(1,bound-1)
 	    results.append( x )
 	results.sort()             # sorted
 	return [0]+results+[bound] # [0, +n points+, bound]
@@ -152,7 +148,7 @@ class TwoCrossover(GeneralPointCrossover):
 	   see GeneralPoint._generate_locs documentation for details
 	"""
 	
-	return [0, self._location_rand.choice(range(1,bound)), bound]
+	return [0, random.randint(1,bound-1), bound]
     
     def _crossover( self, x, no, locs ):
 	"""Replacement crossover

@@ -5,7 +5,7 @@ selected from a population randomly, with their proportion of selection
 based on their relative fitness in the population.
 """
 # standard modules
-import whrandom
+import random
 import copy
 
 # local modules
@@ -54,11 +54,10 @@ class RouletteWheelSelection(AbstractSelection):
         # now create the new population with the same size as the original
         new_population = []
 
-        num_chooser = whrandom.whrandom()
         for pair_spin in range(len(population) / 2):
             # select two individuals using roulette wheel selection
-            choice_num_1 = num_chooser.random()
-            choice_num_2 = num_chooser.random()
+            choice_num_1 = random.random()
+            choice_num_2 = random.random()
 
             # now grab the two organisms from the probabilities
             chosen_org_1 = None
