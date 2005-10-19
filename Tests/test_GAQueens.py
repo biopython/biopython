@@ -18,7 +18,7 @@ queens you want to try to calculate this for.
 import sys
 import getopt
 import math
-import whrandom
+import random
 import copy
 import time
 
@@ -227,7 +227,7 @@ class QueensRepair:
         repair on.
         """
         # check if we should repair or not
-        repair_chance = whrandom.random()
+        repair_chance = random.random()
         if repair_chance <= self._repair_prob:
             while 1:
                 # get the duplicated items we need to work on
@@ -243,7 +243,7 @@ class QueensRepair:
                 free_rows = self._get_unused(organism.genome)
                 assert len(free_rows) > 0, "Unexpected lack of empty rows"
 
-                new_item = whrandom.choice(free_rows)
+                new_item = random.choice(free_rows)
                 organism.genome[duplicated_pos] = new_item
 
         return organism
@@ -285,7 +285,7 @@ class QueensCrossover:
         new_org_2 = org_2.copy()
         
         # determine if we have a crossover
-        crossover_chance = whrandom.random()
+        crossover_chance = random.random()
         if crossover_chance <= self._crossover_prob:
             # find the region of highest probability in both orgs
             best_1, rest_1 = self._find_best_region(new_org_1.genome,
@@ -375,7 +375,7 @@ class QueensMutation:
 
         # potentially mutate any gene in the genome
         for gene_index in range(len(new_org.genome)):
-            mutation_chance = whrandom.random()
+            mutation_chance = random.random()
             # if we have a mutation
             if mutation_chance <= self._mutation_rate:
                 # find only choices that are not already taken elsewhere
@@ -391,7 +391,7 @@ class QueensMutation:
                     gene_choices = new_org.genome.alphabet.letters
                 
                 # get a new letter with the left-over choices
-                new_letter = whrandom.choice(gene_choices)
+                new_letter = random.choice(gene_choices)
                 new_org.genome[gene_index] = new_letter
 
         return new_org
