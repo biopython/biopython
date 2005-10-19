@@ -141,15 +141,26 @@ definition_block = define_block("DEFINITION", "definition_block",
 
 # accession line
 # ACCESSION   AC007323
+# or
+# ACCESSION   NC_004353 REGION: 1..1281640
 accession = Martel.Group("accession",
                          Martel.Re("[\w]+"))
+
+region = Martel.Group("region",
+                      Martel.Re("[\d]+..[\d]+"))
 
 accession_block = Martel.Group("accession_block",
                                Martel.Str("ACCESSION") +
                                Martel.Rep1(blank_space +
-                                           Martel.Rep1(accession +
-                                                Martel.Opt(Martel.Str(" "))) +
-                                           Martel.AnyEol()))
+                                   Martel.Rep1(accession +
+                                       Martel.Opt(
+                                           Martel.Opt(Martel.Str(" ")) +
+                                           Martel.Str("REGION:") +
+                                           Martel.Opt(Martel.Str(" ")) +
+                                           region) +
+                                       Martel.Opt(Martel.Str(" "))) +
+                                   Martel.AnyEol()))
+
 
 # accession_block = define_block("ACCESSION", "accession_block", "accession")
 
@@ -478,3 +489,4 @@ ncbi_format = Martel.HeaderFooter("genbank", {"format" : "ncbi_genbank"},
 
 format = Martel.ParseRecords("genbank", {"format" : "genbank"},
                              record, RecordReader.EndsWith, ("//",))
+
