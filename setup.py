@@ -344,6 +344,7 @@ PACKAGES = [
     'Bio.KEGG.Map',
     'Bio.LocusLink',
     'Bio.Medline',
+    'Bio.MEME',
     'Bio.MetaTool',
     'Bio.Mindy',
     'Bio.MultiProc',
