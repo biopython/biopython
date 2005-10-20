@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+<!DOCTYPE BlastOutput PUBLIC "-//NCBI//NCBI BlastOutput/EN" "NCBI_BlastOutput.dtd">
+<BlastOutput>
+  <BlastOutput_program>blastn</BlastOutput_program>
+  <BlastOutput_version>BLASTN 2.2.12 [Aug-07-2005]</BlastOutput_version>
+  <BlastOutput_reference>Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schäffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), &quot;Gapped BLAST and PSI-BLAST: a new generation of protein database search programs&quot;, Nucleic Acids Res. 25:3389-3402.</BlastOutput_reference>
+  <BlastOutput_db>nr</BlastOutput_db>
+  <BlastOutput_query-ID>gi|1348916|gb|G26684.1|G26684</BlastOutput_query-ID>
+  <BlastOutput_query-def>human STS STS_D11570, sequence tagged site</BlastOutput_query-def>
+  <BlastOutput_query-len>285</BlastOutput_query-len>
+  <BlastOutput_param>
+    <Parameters>
+      <Parameters_expect>10</Parameters_expect>
+      <Parameters_sc-match>1</Parameters_sc-match>
+      <Parameters_sc-mismatch>-3</Parameters_sc-mismatch>
+      <Parameters_gap-open>5</Parameters_gap-open>
+      <Parameters_gap-extend>2</Parameters_gap-extend>
+    </Parameters>
+  </BlastOutput_param>
+  <BlastOutput_iterations>
+    <Iteration>
+      <Iteration_iter-num>1</Iteration_iter-num>
+      <Iteration_query-ID>gi|1348916|gb|G26684.1|G26684</Iteration_query-ID>
+      <Iteration_query-def>human STS STS_D11570, sequence tagged site</Iteration_query-def>
+      <Iteration_query-len>285</Iteration_query-len>
+      <Iteration_hits>
+        <Hit>
+          <Hit_num>1</Hit_num>
+          <Hit_id>gi|9950606|gb|AE004854.1|</Hit_id>
+          <Hit_def>Pseudomonas aeruginosa PAO1, section 415 of 529 of the complete genome</Hit_def>
+          <Hit_accession>AE004854</Hit_accession>
+          <Hit_len>11884</Hit_len>
+          <Hit_hsps>
+            <Hsp>
+              <Hsp_num>1</Hsp_num>
+              <Hsp_bit-score>38.1576</Hsp_bit-score>
+              <Hsp_score>19</Hsp_score>
+              <Hsp_evalue>1.0598</Hsp_evalue>
+              <Hsp_query-from>68</Hsp_query-from>
+              <Hsp_query-to>86</Hsp_query-to>
+              <Hsp_hit-from>6012</Hsp_hit-from>
+              <Hsp_hit-to>6030</Hsp_hit-to>
+              <Hsp_query-frame>1</Hsp_query-frame>
+              <Hsp_hit-frame>1</Hsp_hit-frame>
+              <Hsp_identity>19</Hsp_identity>
+              <Hsp_positive>19</Hsp_positive>
+              <Hsp_gaps>0</Hsp_gaps>
+              <Hsp_align-len>19</Hsp_align-len>
+              <Hsp_qseq>CAGGCCAGCGACTTCTGGG</Hsp_qseq>
+              <Hsp_hseq>CAGGCCAGCGACTTCTGGG</Hsp_hseq>
+              <Hsp_midline>|||||||||||||||||||</Hsp_midline>
+            </Hsp>
+          </Hit_hsps>
+        </Hit>
+        <Hit>
+          <Hit_num>2</Hit_num>
+          <Hit_id>gi|15073988|emb|AL591786.1|SME591786</Hit_id>
+          <Hit_def>Sinorhizobium meliloti 1021 complete chromosome; segment 5/12</Hit_def>
+          <Hit_accession>AL591786</Hit_accession>
+          <Hit_len>299350</Hit_len>
+          <Hit_hsps>
+            <Hsp>
+              <Hsp_num>1</Hsp_num>
+              <Hsp_bit-score>36.1753</Hsp_bit-score>
+              <Hsp_score>18</Hsp_score>
+              <Hsp_evalue>4.18768</Hsp_evalue>
+              <Hsp_query-from>204</Hsp_query-from>
+              <Hsp_query-to>224</Hsp_query-to>
+              <Hsp_hit-from>83648</Hsp_hit-from>
+              <Hsp_hit-to>83628</Hsp_hit-to>
+              <Hsp_query-frame>1</Hsp_query-frame>
+              <Hsp_hit-frame>-1</Hsp_hit-frame>
+              <Hsp_identity>20</Hsp_identity>
+              <Hsp_positive>20</Hsp_positive>
+              <Hsp_gaps>0</Hsp_gaps>
+              <Hsp_align-len>21</Hsp_align-len>
+              <Hsp_qseq>TGAAAGGAAATNAAAATGGAA</Hsp_qseq>
+              <Hsp_hseq>TGAAAGGAAATCAAAATGGAA</Hsp_hseq>
+              <Hsp_midline>||||||||||| |||||||||</Hsp_midline>
+            </Hsp>
+          </Hit_hsps>
+        </Hit>
+      </Iteration_hits>
+      <Iteration_stat>
+        <Statistics>
+          <Statistics_db-num>371021</Statistics_db-num>
+          <Statistics_db-len>1233631384</Statistics_db-len>
+          <Statistics_hsp-len>0</Statistics_hsp-len>
+          <Statistics_eff-space>0</Statistics_eff-space>
+          <Statistics_kappa>0.710603</Statistics_kappa>
+          <Statistics_lambda>1.37406</Statistics_lambda>
+          <Statistics_entropy>1.30725</Statistics_entropy>
+        </Statistics>
+      </Iteration_stat>
+    </Iteration>
+  </BlastOutput_iterations>
+</BlastOutput>
+
+
