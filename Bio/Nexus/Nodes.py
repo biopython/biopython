@@ -5,8 +5,6 @@
 #
 # Nodes.py
 # 
-# version 1.0
-#
 # Provides functionality of a linked list.
 # Each node has one (or none) predecessor, and an arbitrary number of successors.
 # Nodes can store arbitrary data in a NodeData class.

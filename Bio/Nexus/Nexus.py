@@ -1,8 +1,5 @@
 # Nexus.py - a NEXUS parser
 #
-# version 1.01
-# Feb. 20, 2005
-#
 # Copyright 2005 by Frank Kauff & Cymon J. Cox. All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license. Please see the LICENSE file that should have been included
@@ -520,11 +517,12 @@ class Nexus(object):
         self.structured=[]              # structured input representation
         self.set={}                     # dict of the set command to set various options 
         self.options={}                 # dict of the options command in the data block
-        if input:
-            self.read(input)
    
         # some defaults
         self.options['gapmode']='missing'
+        
+        if input:
+            self.read(input)
 
     def get_original_taxon_order(self):
         """Included for backwards compatibility."""

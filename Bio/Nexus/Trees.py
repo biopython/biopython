@@ -13,8 +13,6 @@
 #
 # Trees.py 
 #
-# version 1.0
-#
 # Copyright 2005 by Frank Kauff & Cymon J. Cox. All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license. Please see the LICENSE file that should have been included
