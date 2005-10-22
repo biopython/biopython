@@ -5,6 +5,7 @@
 begin data;
 dimensions ntax=9 nchar=48;
 format datatype=dna gap=- missing=? interleave=yes;
+options gapmode=newstate;
 taxlabels t1 
 't2 the name' 
 'isn''that [a] strange name?' 'one should be punished, for (that)!' 
