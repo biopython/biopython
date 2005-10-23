@@ -6,7 +6,7 @@ test_AlignmentColumn_repr (test_psw.TestPSW) ... ok
 test_Alignment_assertions (test_psw.TestPSW) ... ok
 test_Alignment_normal (test_psw.TestPSW) ... ok
 test_ColumnUnit (test_psw.TestPSW) ... ok
-doctest of Bio.Wise.psw.parse_line ... ok
+Doctest: Bio.Wise.psw.parse_line ... ok
 
 ----------------------------------------------------------------------
 Ran 8 tests in 0.002s
