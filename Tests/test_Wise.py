@@ -1,6 +1,6 @@
 #!/usr/bin/env python2.3
 
-__version__ = "$Revision: 1.3 $"
+__version__ = "$Revision: 1.4 $"
 
 import cStringIO
 import doctest, unittest
@@ -19,11 +19,11 @@ class TestWiseDryRun(unittest.TestCase):
         
     def test_dnal(self):
         Wise.align(["dnal"], ("seq1.fna", "seq2.fna"), kbyte=100000, dry_run=True)
-        self.assert_(sys.stdout.getvalue().startswith("dnal -kbyte 100000 seq1.fna seq2.fna > /tmp/tmp"))
+        self.assert_(sys.stdout.getvalue().startswith("dnal -kbyte 100000 seq1.fna seq2.fna"))
 
     def test_psw(self):
         Wise.align(["psw"], ("seq1.faa", "seq2.faa"), dry_run=True, kbyte=4)
-        self.assert_(sys.stdout.getvalue().startswith("psw -kbyte 4 seq1.faa seq2.faa > /tmp/tmp"))
+        self.assert_(sys.stdout.getvalue().startswith("psw -kbyte 4 seq1.faa seq2.faa"))
 
     def tearDown(self):
         sys.stdout = self.old_stdout
