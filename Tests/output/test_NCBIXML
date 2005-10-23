@@ -1,3 +1,4 @@
+test_NCBIXML
 Running tests on NCBIXML.BlastParser
 ************************************************** TESTING xbt001.xml
 Blast of component of Sec-independent translocase [Escherichia coli K12]
