@@ -1,0 +1,655 @@
+test_MEME
+Testing MEME Scanner
+noevent        : ***************************************************************
+noevent        : MEME - Motif discovery tool
+noevent        : ***************************************************************
+_version       : MEME version 3.0 (Release date: 2004/08/18 09:07:01)
+noevent        : 
+noevent        : For further information on how to interpret these results or to
+noevent        : a copy of the MEME software please access http://meme.sdsc.edu.
+noevent        : 
+noevent        : This file may be used as input to the MAST algorithm for search
+noevent        : sequence databases for matches to groups of motifs.  MAST is av
+noevent        : for interactive use and downloading at http://meme.sdsc.edu.
+noevent        : ***************************************************************
+noevent        : 
+noevent        : 
+noevent        : ***************************************************************
+noevent        : REFERENCE
+noevent        : ***************************************************************
+noevent        : If you use this program in your research, please cite:
+noevent        : 
+noevent        : Timothy L. Bailey and Charles Elkan,
+noevent        : "Fitting a mixture model by expectation maximization to discove
+noevent        : motifs in biopolymers", Proceedings of the Second International
+noevent        : Conference on Intelligent Systems for Molecular Biology, pp. 28
+noevent        : AAAI Press, Menlo Park, California, 1994.
+noevent        : ***************************************************************
+noevent        : 
+noevent        : 
+noevent        : ***************************************************************
+noevent        : TRAINING SET
+noevent        : ***************************************************************
+_datafile      : DATAFILE= INO_up800.s
+_alphabet      : ALPHABET= ACGT
+noevent        : Sequence name            Weight Length  Sequence name
+noevent        : -------------            ------ ------  -------------
+_sequence_name : CHO1                     1.0000    800  CHO2
+_sequence_name : FAS1                     1.0000    800  FAS2
+_sequence_name : ACC1                     1.0000    800  INO1
+_sequence_name : OPI3                     1.0000    800
+noevent        : ***************************************************************
+noevent        : 
+noevent        : ***************************************************************
+noevent        : COMMAND LINE SUMMARY
+noevent        : ***************************************************************
+noevent        : This information can also be useful in the event you wish to re
+noevent        : problem with the MEME software.
+noevent        : 
+_commandline   : command: meme -mod oops -dna -revcomp -nmotifs 2 -bfile yeast.n
+noevent        : 
+noevent        : model:  mod=          oops    nmotifs=         2    evt=
+noevent        : object function=  E-value of product of p-values
+noevent        : width:  minw=            8    maxw=           50    minic=
+noevent        : width:  wg=             11    ws=              1    endgaps=
+noevent        : nsites: minsites=        7    maxsites=        7    wnsites=
+noevent        : theta:  prob=            1    spmap=         uni    spfuzz=
+noevent        : em:     prior=   dirichlet    b=            0.01    maxiter=
+noevent        :         distance=    1e-05
+noevent        : data:   n=            5600    N=               7
+noevent        : strands: + -
+noevent        : sample: seed=            0    seqfrac=         1
+noevent        : Letter frequencies in dataset:
+noevent        : A 0.304 C 0.196 G 0.196 T 0.304
+noevent        : Background letter frequencies (from yeast.nc.6.freq):
+noevent        : A 0.324 C 0.176 G 0.176 T 0.324
+noevent        : ***************************************************************
+noevent        : 
+noevent        : 
+noevent        : ***************************************************************
+_add_motif_with: MOTIF  1	width =   12   sites =   7   llr = 95   E-value = 2.0e
+noevent        : ***************************************************************
+noevent        : ---------------------------------------------------------------
+noevent        : 	Motif 1 Description
+noevent        : ---------------------------------------------------------------
+noevent        : Simplified        A  :::9:a::::3:
+noevent        : pos.-specific     C  ::a:9:11691a
+noevent        : probability       G  ::::1::94:4:
+noevent        : matrix            T  aa:1::9::11:
+noevent        : 
+noevent        :          bits    2.5   *        *
+noevent        :                  2.3   *        *
+noevent        :                  2.0   * *  *   *
+noevent        :                  1.8   * *  * * *
+noevent        : Information      1.5 *** ** *** *
+noevent        : content          1.3 *** ****** *
+noevent        : (19.5 bits)      1.0 ********** *
+noevent        :                  0.8 ********** *
+noevent        :                  0.5 ********** *
+noevent        :                  0.3 ************
+noevent        :                  0.0 ------------
+noevent        : 
+noevent        : Multilevel           TTCACATGCCGC
+noevent        : consensus                    G A
+noevent        : sequence
+noevent        : 
+noevent        : ---------------------------------------------------------------
+noevent        : 
+noevent        : ---------------------------------------------------------------
+motif_name     : 	Motif 1 sites sorted by position p-value
+noevent        : ---------------------------------------------------------------
+noevent        : Sequence name            Strand  Start   P-value
+noevent        : -------------            ------  ----- ---------            ---
+add_instance   : INO1                         -    620  1.85e-08 GACAATACTT TTCA
+add_instance   : FAS1                         +     95  1.85e-08 GGCCAAAAAC TTCA
+add_instance   : ACC1                         +     83  1.52e-07 CGTTAAAATC TTCA
+add_instance   : CHO2                         +    354  2.52e-07 TGCCACACTT TTCT
+add_instance   : CHO1                         +    611  4.23e-07 ACTTTGAACG TTCA
+add_instance   : FAS2                         +    567  9.43e-07 CTCCCGCGTT TTCA
+add_instance   : OPI3                         +    340  3.32e-06 CCAAGCCTCC TTCA
+noevent        : ---------------------------------------------------------------
+noevent        : 
+noevent        : ---------------------------------------------------------------
+noevent        : 	Motif 1 block diagrams
+noevent        : ---------------------------------------------------------------
+noevent        : SEQUENCE NAME            POSITION P-VALUE  MOTIF DIAGRAM
+noevent        : -------------            ----------------  -------------
+noevent        : INO1                              1.8e-08  619_[-1]_169
+noevent        : FAS1                              1.8e-08  94_[+1]_694
+noevent        : ACC1                              1.5e-07  82_[+1]_706
+noevent        : CHO2                              2.5e-07  353_[+1]_435
+noevent        : CHO1                              4.2e-07  610_[+1]_178
+noevent        : FAS2                              9.4e-07  566_[+1]_222
+noevent        : OPI3                              3.3e-06  339_[+1]_449
+noevent        : ---------------------------------------------------------------
+noevent        : 
+noevent        : ---------------------------------------------------------------
+noevent        : 	Motif 1 in BLOCKS format
+noevent        : ---------------------------------------------------------------
+noevent        : BL   MOTIF 1 width=12 seqs=7
+noevent        : INO1                     (  620) TTCACATGCCGC  1
+noevent        : FAS1                     (   95) TTCACATGCCGC  1
+noevent        : ACC1                     (   83) TTCACATGGCCC  1
+noevent        : CHO2                     (  354) TTCTCATGCCGC  1
+noevent        : CHO1                     (  611) TTCACACGGCAC  1
+noevent        : FAS2                     (  567) TTCACATGCTAC  1
+noevent        : OPI3                     (  340) TTCAGATCGCTC  1
+noevent        : //
+noevent        : 
+noevent        : ---------------------------------------------------------------
+noevent        : 
+noevent        : ---------------------------------------------------------------
+noevent        : 	Motif 1 position-specific scoring matrix
+noevent        : ---------------------------------------------------------------
+noevent        : log-odds matrix: alength= 4 w= 12 n= 5523 bayes= 9.62205 E= 2.0
+add_to_logodds :   -945   -945   -945    162
+add_to_logodds :   -945   -945   -945    162
+add_to_logodds :   -945    251   -945   -945
+add_to_logodds :    140   -945   -945   -118
+add_to_logodds :   -945    229    -30   -945
+add_to_logodds :    162   -945   -945   -945
+add_to_logodds :   -945    -30   -945    140
+add_to_logodds :   -945    -30    229   -945
+add_to_logodds :   -945    170    129   -945
+add_to_logodds :   -945    229   -945   -118
+add_to_logodds :    -18    -30    129   -118
+add_to_logodds :   -945    251   -945   -945
+noevent        : ---------------------------------------------------------------
+noevent        : 
+noevent        : ---------------------------------------------------------------
+noevent        : 	Motif 1 position-specific probability matrix
+noevent        : ---------------------------------------------------------------
+noevent        : letter-probability matrix: alength= 4 w= 12 nsites= 7 E= 2.0e-0
+add_to_pssm    :  0.000000  0.000000  0.000000  1.000000
+add_to_pssm    :  0.000000  0.000000  0.000000  1.000000
+add_to_pssm    :  0.000000  1.000000  0.000000  0.000000
+add_to_pssm    :  0.857143  0.000000  0.000000  0.142857
+add_to_pssm    :  0.000000  0.857143  0.142857  0.000000
+add_to_pssm    :  1.000000  0.000000  0.000000  0.000000
+add_to_pssm    :  0.000000  0.142857  0.000000  0.857143
+add_to_pssm    :  0.000000  0.142857  0.857143  0.000000
+add_to_pssm    :  0.000000  0.571429  0.428571  0.000000
+add_to_pssm    :  0.000000  0.857143  0.000000  0.142857
+add_to_pssm    :  0.285714  0.142857  0.428571  0.142857
+add_to_pssm    :  0.000000  1.000000  0.000000  0.000000
+noevent        : ---------------------------------------------------------------
+noevent        : 
+noevent        : 
+noevent        : 
+noevent        : 
+noevent        : 
+noevent        : Time 20.91 secs.
+noevent        : 
+noevent        : ***************************************************************
+noevent        : 
+noevent        : 
+noevent        : ***************************************************************
+_add_motif_with: MOTIF  2	width =   10   sites =   7   llr = 81   E-value = 1.1e
+noevent        : ***************************************************************
+noevent        : ---------------------------------------------------------------
+noevent        : 	Motif 2 Description
+noevent        : ---------------------------------------------------------------
+noevent        : Simplified        A  ::1:::9:6:
+noevent        : pos.-specific     C  :a:::a:911
+noevent        : probability       G  3:1aa:1:19
+noevent        : matrix            T  7:7::::11:
+noevent        : 
+noevent        :          bits    2.5  * ***
+noevent        :                  2.3  * ***
+noevent        :                  2.0  * ***   *
+noevent        :                  1.8  * *** * *
+noevent        : Information      1.5  * *** * *
+noevent        : content          1.3  * ***** *
+noevent        : (16.7 bits)      1.0 ** ***** *
+noevent        :                  0.8 ** ***** *
+noevent        :                  0.5 ******** *
+noevent        :                  0.3 **********
+noevent        :                  0.0 ----------
+noevent        : 
+noevent        : Multilevel           TCTGGCACAG
+noevent        : consensus            G
+noevent        : sequence
+noevent        : 
+noevent        : ---------------------------------------------------------------
+noevent        : 
+noevent        : ---------------------------------------------------------------
+motif_name     : 	Motif 2 sites sorted by position p-value
+noevent        : ---------------------------------------------------------------
+noevent        : Sequence name            Strand  Start   P-value
+noevent        : -------------            ------  ----- ---------            ---
+add_instance   : OPI3                         -    186  3.24e-07 GAAAACCAGA TCTG
+add_instance   : ACC1                         +    232  3.24e-07 CCAGTCGTAT TCTG
+add_instance   : CHO1                         -    559  3.24e-07 ATATTCAGTG TCTG
+add_instance   : INO1                         -    283  5.29e-06 ACGGTCTACG GCGG
+add_instance   : FAS1                         +     44  6.25e-06 TACACGAGGT GCAG
+add_instance   : FAS2                         -    185  8.48e-06 TTCTTGCTTT TCTG
+add_instance   : CHO2                         -    413  8.48e-06 TTTTGCCGTT TCTG
+noevent        : ---------------------------------------------------------------
+noevent        : 
+noevent        : ---------------------------------------------------------------
+noevent        : 	Motif 2 block diagrams
+noevent        : ---------------------------------------------------------------
+noevent        : SEQUENCE NAME            POSITION P-VALUE  MOTIF DIAGRAM
+noevent        : -------------            ----------------  -------------
+noevent        : OPI3                              3.2e-07  185_[-2]_605
+noevent        : ACC1                              3.2e-07  231_[+2]_559
+noevent        : CHO1                              3.2e-07  558_[-2]_232
+noevent        : INO1                              5.3e-06  282_[-2]_508
+noevent        : FAS1                              6.3e-06  43_[+2]_747
+noevent        : FAS2                              8.5e-06  184_[-2]_606
+noevent        : CHO2                              8.5e-06  412_[-2]_378
+noevent        : ---------------------------------------------------------------
+noevent        : 
+noevent        : ---------------------------------------------------------------
+noevent        : 	Motif 2 in BLOCKS format
+noevent        : ---------------------------------------------------------------
+noevent        : BL   MOTIF 2 width=10 seqs=7
+noevent        : OPI3                     (  186) TCTGGCACAG  1
+noevent        : ACC1                     (  232) TCTGGCACAG  1
+noevent        : CHO1                     (  559) TCTGGCACAG  1
+noevent        : INO1                     (  283) GCGGGCGCAG  1
+noevent        : FAS1                     (   44) GCAGGCACGG  1
+noevent        : FAS2                     (  185) TCTGGCACTC  1
+noevent        : CHO2                     (  413) TCTGGCATCG  1
+noevent        : //
+noevent        : 
+noevent        : ---------------------------------------------------------------
+noevent        : 
+noevent        : ---------------------------------------------------------------
+noevent        : 	Motif 2 position-specific scoring matrix
+noevent        : ---------------------------------------------------------------
+noevent        : log-odds matrix: alength= 4 w= 10 n= 5537 bayes= 9.62571 E= 1.1
+add_to_logodds :   -945   -945     70    114
+add_to_logodds :   -945    251   -945   -945
+add_to_logodds :   -118   -945    -30    114
+add_to_logodds :   -945   -945    251   -945
+add_to_logodds :   -945   -945    251   -945
+add_to_logodds :   -945    251   -945   -945
+add_to_logodds :    140   -945    -30   -945
+add_to_logodds :   -945    229   -945   -118
+add_to_logodds :     82    -30    -30   -118
+add_to_logodds :   -945    -30    229   -945
+noevent        : ---------------------------------------------------------------
+noevent        : 
+noevent        : ---------------------------------------------------------------
+noevent        : 	Motif 2 position-specific probability matrix
+noevent        : ---------------------------------------------------------------
+noevent        : letter-probability matrix: alength= 4 w= 10 nsites= 7 E= 1.1e+0
+add_to_pssm    :  0.000000  0.000000  0.285714  0.714286
+add_to_pssm    :  0.000000  1.000000  0.000000  0.000000
+add_to_pssm    :  0.142857  0.000000  0.142857  0.714286
+add_to_pssm    :  0.000000  0.000000  1.000000  0.000000
+add_to_pssm    :  0.000000  0.000000  1.000000  0.000000
+add_to_pssm    :  0.000000  1.000000  0.000000  0.000000
+add_to_pssm    :  0.857143  0.000000  0.142857  0.000000
+add_to_pssm    :  0.000000  0.857143  0.000000  0.142857
+add_to_pssm    :  0.571429  0.142857  0.142857  0.142857
+add_to_pssm    :  0.000000  0.142857  0.857143  0.000000
+noevent        : ---------------------------------------------------------------
+noevent        : 
+noevent        : 
+noevent        : 
+noevent        : 
+noevent        : 
+noevent        : Time 41.19 secs.
+noevent        : 
+noevent        : ***************************************************************
+noevent        : 
+noevent        : 
+noevent        : ***************************************************************
+Running tests on MEME parser
+************************************************** TESTING meme.dna.oops.txt
+************************************************** TESTING meme.protein.oops.txt
+************************************************** TESTING meme.protein.tcm.txt
+Testing MEME Scanner
+noevent        : ***************************************************************
+noevent        : MAST - Motif Alignment and Search Tool
+noevent        : ***************************************************************
+_version       : 	MAST version 3.0 (Release date: 2004/08/18 09:07:01)
+noevent        : 
+noevent        : 	For further information on how to interpret these results or t
+noevent        : 	a copy of the MAST software please access http://meme.sdsc.edu
+noevent        : ***************************************************************
+noevent        : 
+noevent        : 
+noevent        : ***************************************************************
+noevent        : REFERENCE
+noevent        : ***************************************************************
+noevent        : 	If you use this program in your research, please cite:
+noevent        : 
+noevent        : 	Timothy L. Bailey and Michael Gribskov,
+noevent        : 	"Combining evidence using p-values: application to sequence ho
+noevent        : 	searches", Bioinformatics, 14(48-54), 1998.
+noevent        : ***************************************************************
+noevent        : 
+noevent        : 
+noevent        : ***************************************************************
+noevent        : DATABASE AND MOTIFS
+noevent        : ***************************************************************
+_database      : 	DATABASE INO_up800.s (nucleotide)
+noevent        : 	Last updated on Mon Aug 16 21:19:59 2004
+noevent        : 	Database contains 7 sequences, 5600 residues
+noevent        : 
+noevent        : 	Scores for positive and reverse complement strands are combine
+noevent        : 
+noevent        : 	MOTIFS meme.INO_up800.oops.txt (nucleotide)
+noevent        : 	MOTIF WIDTH BEST POSSIBLE MATCH
+noevent        : 	----- ----- -------------------
+_add_motif     : 	  1    12   TTCACATGCCGC
+_add_motif     : 	  2    10   TCTGGCACAG
+noevent        : 
+noevent        : 	PAIRWISE MOTIF CORRELATIONS:
+noevent        : 	MOTIF     1
+noevent        : 	----- -----
+noevent        : 	   2   0.32
+noevent        : 	No overly similar pairs (correlation > 0.60) found.
+noevent        : 
+noevent        : 	Random model letter frequencies (from non-redundant database):
+noevent        : 	A 0.281 C 0.222 G 0.229 T 0.267
+noevent        : ***************************************************************
+noevent        : 
+noevent        : 
+noevent        : ***************************************************************
+noevent        : SECTION I: HIGH-SCORING SEQUENCES
+noevent        : ***************************************************************
+noevent        : 	- Each of the following 7 sequences has E-value less than 10.
+noevent        : 	- The E-value of a sequence is the expected number of sequence
+noevent        : 	  in a random database of the same size that would match the m
+noevent        : 	  well as the sequence does and is equal to the combined p-val
+noevent        : 	  sequence times the number of sequences in the database.
+noevent        : 	- The combined p-value of a sequence measures the strength of
+noevent        : 	  match of the sequence to all the motifs and is calculated by
+noevent        : 	    o finding the score of the single best match of each motif
+noevent        : 	      to the sequence (best matches may overlap),
+noevent        : 	    o calculating the sequence p-value of each score,
+noevent        : 	    o forming the product of the p-values,
+noevent        : 	    o taking the p-value of the product.
+noevent        : 	- The sequence p-value of a score is defined as the
+noevent        : 	  probability of a random sequence of the same length containi
+noevent        : 	  some match with as good or better a score.
+noevent        : 	- The score for the match of a position in a sequence to a mot
+noevent        : 	  is computed by by summing the appropriate entry from each co
+noevent        : 	  the position-dependent scoring matrix that represents the mo
+noevent        : 	- Sequences shorter than one or more of the motifs are skipped
+noevent        : 	- The table is sorted by increasing E-value.
+noevent        : ***************************************************************
+noevent        : 
+noevent        : SEQUENCE NAME                      DESCRIPTION
+noevent        : -------------                      -----------
+noevent        : ACC1                               sequence of the region up...
+noevent        : CHO1                               sequence of the region up...
+noevent        : INO1                               sequence of the region up...
+noevent        : FAS1                               sequence of the region up...
+noevent        : OPI3                               sequence of the region up...
+noevent        : CHO2                               sequence of the region up...
+noevent        : FAS2                               sequence of the region up...
+noevent        : 
+noevent        : ***************************************************************
+noevent        : 
+noevent        : 
+noevent        : 
+noevent        : ***************************************************************
+noevent        : SECTION II: MOTIF DIAGRAMS
+noevent        : ***************************************************************
+noevent        : 	- The ordering and spacing of all non-overlapping motif occurr
+noevent        : 	  are shown for each high-scoring sequence listed in Section I
+noevent        : 	- A motif occurrence is defined as a position in the sequence
+noevent        : 	  match to the motif has POSITION p-value less than 0.0001.
+noevent        : 	- The POSITION p-value of a match is the probability of
+noevent        : 	  a single random subsequence of the length of the motif
+noevent        : 	  scoring at least as well as the observed match.
+noevent        : 	- For each sequence, all motif occurrences are shown unless th
+noevent        : 	  are overlaps.  In that case, a motif occurrence is shown onl
+noevent        : 	  p-value is less than the product of the p-values of the othe
+noevent        : 	  (lower-numbered) motif occurrences that it overlaps.
+noevent        : 	- The table also shows the E-value of each sequence.
+noevent        : 	- Spacers and motif occurences are indicated by
+noevent        : 	   o -d-    `d' residues separate the end of the preceding mot
+noevent        : 		    occurrence and the start of the following motif occurrenc
+noevent        : 	   o [sn]  occurrence of motif `n' with p-value less than 0.00
+noevent        : 		    A minus sign indicates that the occurrence is on the
+noevent        : 		    reverse complement strand.
+noevent        : ***************************************************************
+noevent        : 
+noevent        : SEQUENCE NAME                      E-VALUE   MOTIF DIAGRAM
+noevent        : -------------                      --------  -------------
+noevent        : ACC1                                6.1e-05  82_[+1]_137_[+2]_5
+noevent        : CHO1                                0.00016  152_[+2]_396_[-2]_
+noevent        :                                              [+1]_149
+noevent        : INO1                                0.00019  282_[-2]_327_[-1]_
+noevent        : FAS1                                0.00022  43_[+2]_41_[+1]_69
+noevent        : OPI3                                0.00092  185_[-2]_144_[+1]_
+noevent        : CHO2                                 0.0029  353_[+1]_47_[-2]_3
+noevent        : FAS2                                 0.0093  184_[-2]_372_[+1]_
+noevent        : 
+noevent        : ***************************************************************
+noevent        : 
+noevent        : 
+noevent        : 
+noevent        : ***************************************************************
+noevent        : SECTION III: ANNOTATED SEQUENCES
+noevent        : ***************************************************************
+noevent        : 	- The positions and p-values of the non-overlapping motif occu
+noevent        : 	  are shown above the actual sequence for each of the high-sco
+noevent        : 	  sequences from Section I.
+noevent        : 	- A motif occurrence is defined as a position in the sequence
+noevent        : 	  match to the motif has POSITION p-value less than 0.0001 as
+noevent        : 	  defined in Section II.
+noevent        : 	- For each sequence, the first line specifies the name of the
+noevent        : 	- The second (and possibly more) lines give a description of t
+noevent        : 	  sequence.
+noevent        : 	- Following the description line(s) is a line giving the lengt
+noevent        : 	  combined p-value, and E-value of the sequence as defined in
+noevent        : 	- The next line reproduces the motif diagram from Section II.
+noevent        : 	- The entire sequence is printed on the following lines.
+noevent        : 	- Motif occurrences are indicated directly above their positio
+noevent        : 	  sequence on lines showing
+noevent        : 	   o the motif number of the occurrence (a minus sign indicate
+noevent        : 	  the occurrence is on the reverse complement strand),
+noevent        : 	   o the position p-value of the occurrence,
+noevent        : 	   o the best possible match to the motif (or its reverse comp
+noevent        : 	   o columns whose match to the motif has a positive score (in
+noevent        : 	     by a plus sign).
+noevent        : ***************************************************************
+noevent        : 
+noevent        : 
+*************** _parse_buffer
+*************** _blank_buffer
+_set_current_se: ACC1
+noevent        :   sequence of the region upstream from YNR016C
+noevent        :   LENGTH = 800  COMBINED P-VALUE = 8.78e-06  E-VALUE =  6.1e-05
+_add_line_to_bu:   DIAGRAM: 82_[+1]_137_[+2]_559
+*************** _add_diagram_from_buffer
+*************** _blank_buffer
+noevent        : 
+noevent        : 
+*************** _collapse_buffer
+_add_line_to_bu:             [+1]
+_add_line_to_bu:             3.1e-07
+_add_line_to_bu:             TTCACATGCCGC
+_add_line_to_bu:             ++++++++++ +
+_add_line_to_bu: 76   TAAAATCTTCACATGGCCCGGCCGCGCGCGCGTTGTGCCAACAAGTCGCAGTCGAAAT
+noevent        : 
+*************** _collapse_buffer
+_add_line_to_bu:            [+2]
+_add_line_to_bu:            7.4e-07
+_add_line_to_bu:            TCTGGCACAG
+_add_line_to_bu:            ++++++++++
+_add_line_to_bu: 226  TCGTATTCTGGCACAGTATAGCCTAGCACAATCACTGTCACAATTGTTATCGGTTCTA
+noevent        : 
+*************** _collapse_buffer
+noevent        : 
+*************** _parse_buffer
+*************** _blank_buffer
+_set_current_se: CHO1
+noevent        :   sequence of the region upstream from YER026C
+noevent        :   LENGTH = 800  COMBINED P-VALUE = 2.30e-05  E-VALUE =  0.00016
+_add_line_to_bu:   DIAGRAM: 152_[+2]_396_[-2]_42_[+1]_17_[+1]_149
+*************** _add_diagram_from_buffer
+*************** _blank_buffer
+noevent        : 
+noevent        : 
+*************** _collapse_buffer
+_add_line_to_bu:        [+2]
+_add_line_to_bu:        3.9e-05
+_add_line_to_bu:        TCTGGCACAG
+_add_line_to_bu:        ++++++ +
+_add_line_to_bu: 151  CGTCTGGCGCCCTTCCCATTCCGAACCATGTTATATTGAACCATCTGGCGACAAGCAG
+noevent        : 
+*************** _collapse_buffer
+_add_line_to_bu:                                       [-2]
+_add_line_to_bu:                                       7.4e-07
+_add_line_to_bu:                                       CTGTGCCAGA
+_add_line_to_bu:                                       ++++++++++
+_add_line_to_bu: 526  CAATCCCCACTCCTTCTCAATGTGTGCAGACTTCTGTGCCAGACACTGAATATATATC
+noevent        : 
+*************** _collapse_buffer
+_add_line_to_bu:                [+1]                         [+1]
+_add_line_to_bu:                8.7e-07                      2.2e-05
+_add_line_to_bu:                TTCACATGCCGC                 TTCACATGCCGC
+_add_line_to_bu:                ++++++ +++ +                 +++++++++  +
+_add_line_to_bu: 601  ACTTTGAACGTTCACACGGCACCCTCACGCCTTTGAGCTTTCACATGGACCCATCTAA
+noevent        : 
+*************** _collapse_buffer
+noevent        : 
+*************** _parse_buffer
+*************** _blank_buffer
+_set_current_se: INO1
+noevent        :   sequence of the region upstream from YJL153C
+noevent        :   LENGTH = 800  COMBINED P-VALUE = 2.71e-05  E-VALUE =  0.00019
+_add_line_to_bu:   DIAGRAM: 282_[-2]_327_[-1]_55_[+1]_102
+*************** _add_diagram_from_buffer
+*************** _blank_buffer
+noevent        : 
+noevent        : 
+*************** _collapse_buffer
+_add_line_to_bu:                                                               [
+_add_line_to_bu:                                                               1
+_add_line_to_bu:                                                               C
+_add_line_to_bu:                                                               +
+_add_line_to_bu: 226  ACGTTGTATATGAAACGAGTAGTGAACGTTCGTACGATCTTTCACGCAGACATGCGAC
+noevent        : 
+*************** _collapse_buffer
+_add_line_to_bu:                         [-1]
+_add_line_to_bu:                         4.2e-08
+_add_line_to_bu:                         GCGGCATGTGAA
+_add_line_to_bu:                         ++++++++++++
+_add_line_to_bu: 601  TGCGCTTCGGCGGCTAAATGCGGCATGTGAAAAGTATTGTCTATTTTATCTTCATCCT
+noevent        : 
+*************** _collapse_buffer
+_add_line_to_bu:                 [+1]
+_add_line_to_bu:                 1.3e-05
+_add_line_to_bu:                 TTCACATGCCGC
+_add_line_to_bu:                 +++++++++ ++
+_add_line_to_bu: 676  AACTTATTTAATTCACATGGAGCAGAGAAAGCGCACCTCTGCGTTGGCGGCAATGTTA
+noevent        : 
+*************** _collapse_buffer
+noevent        : 
+*************** _parse_buffer
+*************** _blank_buffer
+_set_current_se: FAS1
+noevent        :   sequence of the region upstream from YKL182W
+noevent        :   LENGTH = 800  COMBINED P-VALUE = 3.19e-05  E-VALUE =  0.00022
+_add_line_to_bu:   DIAGRAM: 43_[+2]_41_[+1]_694
+*************** _add_diagram_from_buffer
+*************** _blank_buffer
+noevent        : 
+_add_line_to_bu:                                                 [+2]
+_add_line_to_bu:                                                 2.2e-05
+_add_line_to_bu:                                                 TCTGGCACAG
+_add_line_to_bu:                                                 ++ +++++ +
+_add_line_to_bu: 1    CCGGGTTATAGCAGCGTCTGCTCCGCATCACGATACACGAGGTGCAGGCACGGTTCAC
+noevent        : 
+*************** _collapse_buffer
+_add_line_to_bu:                         [+1]
+_add_line_to_bu:                         4.2e-08
+_add_line_to_bu:                         TTCACATGCCGC
+_add_line_to_bu:                         ++++++++++++
+_add_line_to_bu: 76   ACAAACGACGGCCAAAAACTTCACATGCCGCCCAGCCAAGCATAATTACGCAACAGCG
+noevent        : 
+*************** _collapse_buffer
+noevent        : 
+*************** _parse_buffer
+*************** _blank_buffer
+_set_current_se: OPI3
+noevent        :   sequence of the region upstream from YJR073C
+noevent        :   LENGTH = 800  COMBINED P-VALUE = 1.32e-04  E-VALUE =  0.00092
+_add_line_to_bu:   DIAGRAM: 185_[-2]_144_[+1]_449
+*************** _add_diagram_from_buffer
+*************** _blank_buffer
+noevent        : 
+noevent        : 
+*************** _collapse_buffer
+_add_line_to_bu:                                         [-2]
+_add_line_to_bu:                                         7.4e-07
+_add_line_to_bu:                                         CTGTGCCAGA
+_add_line_to_bu:                                         ++++++++++
+_add_line_to_bu: 151  GTTAATCTGATCAACGCTACGCCGATGACAACGGTCTGTGCCAGATCTGGTTTTCCCC
+noevent        : 
+*************** _collapse_buffer
+_add_line_to_bu:                                             [+1]
+_add_line_to_bu:                                             5.8e-06
+_add_line_to_bu:                                             TTCACATGCCGC
+_add_line_to_bu:                                             ++++ ++ ++ +
+_add_line_to_bu: 301  AACTCCGTCAGGTCTTCCACGTGGAACTGCCAAGCCTCCTTCAGATCGCTCTTGTCGA
+noevent        : 
+*************** _collapse_buffer
+noevent        : 
+*************** _parse_buffer
+*************** _blank_buffer
+_set_current_se: CHO2
+noevent        :   sequence of the region upstream from YGR157W
+noevent        :   LENGTH = 800  COMBINED P-VALUE = 4.18e-04  E-VALUE =   0.0029
+_add_line_to_bu:   DIAGRAM: 353_[+1]_47_[-2]_378
+*************** _add_diagram_from_buffer
+*************** _blank_buffer
+noevent        : 
+noevent        : 
+*************** _collapse_buffer
+_add_line_to_bu:                                                           [+1]
+_add_line_to_bu:                                                           5.2e-
+_add_line_to_bu:                                                           TTCAC
+_add_line_to_bu:                                                           +++ +
+_add_line_to_bu: 301  ATATATATTTTTGCCTTGGTTTAAATTGGTCAAGACAGTCAATTGCCACACTTTTCTC
+noevent        : 
+*************** _collapse_buffer
+_add_line_to_bu:                                           [-2]
+_add_line_to_bu:                                           2.9e-05
+_add_line_to_bu:                                           CTGTGCCAGA
+_add_line_to_bu:                                           +  +++++++
+_add_line_to_bu: 376  CGCGAAGTTTTCCACACAAAACTGTGAAAATGAACGGCGATGCCAGAAACGGCAAAAC
+noevent        : 
+*************** _collapse_buffer
+noevent        : 
+*************** _parse_buffer
+*************** _blank_buffer
+_set_current_se: FAS2
+noevent        :   sequence of the region upstream from YPL231W
+noevent        :   LENGTH = 800  COMBINED P-VALUE = 1.33e-03  E-VALUE =   0.0093
+_add_line_to_bu:   DIAGRAM: 184_[-2]_372_[+1]_222
+*************** _add_diagram_from_buffer
+*************** _blank_buffer
+noevent        : 
+noevent        : 
+*************** _collapse_buffer
+_add_line_to_bu:                                        [-2]
+_add_line_to_bu:                                        2.9e-05
+_add_line_to_bu:                                        CTGTGCCAGA
+_add_line_to_bu:                                          ++++++++
+_add_line_to_bu: 151  AACAGGGTGTCGGTCATACCGATAAAGCCGTCAAGAGTGCCAGAAAAGCAAGAAAGAA
+noevent        : 
+*************** _collapse_buffer
+_add_line_to_bu:                                               [+1]
+_add_line_to_bu:                                               1.9e-06
+_add_line_to_bu:                                               TTCACATGCCGC
+_add_line_to_bu:                                               +++++++++  +
+_add_line_to_bu: 526  GCTTAGCAAAATCCAACCATTTTTTTTTTATCTCCCGCGTTTTCACATGCTACCTCAT
+noevent        : 
+*************** _collapse_buffer
+noevent        : ***************************************************************
+*************** _parse_buffer
+*************** _blank_buffer
+Running tests on MAST parser
+************************************************** TESTING mast.dna.oops.txt
+************************************************** TESTING mast.protein.oops.txt
+************************************************** TESTING mast.protein.tcm.txt
