@@ -6,6 +6,7 @@
 from Bio import Seq
 from Bio.Alphabet import IUPAC
 from math import sqrt
+import sys
 
 class Motif:
     """A generic motif class.
@@ -26,6 +27,7 @@ class Motif:
         self.num_occurrences = 0
         self.name = ""
         self.consensus = ""
+        self.pssm = []
     
     def add_instance (self, instance):
         if isinstance(instance, Instance):
@@ -70,7 +72,55 @@ class Motif:
             number = int(number)
             self.num_occurrences = number
     
-
+    def make_pssm (self):
+        if self.alphabet == None:
+            raise ValueError, "Alphabet for motif has not been set"
+        moieties = ''
+        if self.alphabet == IUPAC.unambiguous_dna:
+            moieties = 'ACGT'
+        if self.alphabet == IUPAC.protein:
+            moieties = 'ACDEFGHIKLMNPQRSTVWY'
+        pssm = []
+        if self.instances and self.instances[0].sequence:
+            for position in self.instances[0].sequence:
+                pos = []
+                for m in moieties:
+                    pos.append(0.0)
+                pssm.append(pos)
+            for instance in self.instances:
+                for position in range(self.length):
+                    my_moiety = instance.sequence[position]
+                    try:
+                        moiety_index = moieties.index(my_moiety)
+                    except ValueError:
+                        moiety_index = 0
+                    pssm[position][moiety_index] += 1.0
+            pssm = [[x/len(self.instances) for x in y] for y in pssm ]            
+            pssm = [tuple(x) for x in pssm]
+            self.pssm = pssm
+        else:
+            self.pssm = None
+    
+    def make_consensus (self, minimum_frequency = 0.6):
+        if not self.pssm:
+            self.make_pssm()
+        consensus = ''
+        null_character = 'N'
+        moieties = 'ACGT'
+        if self.alphabet == IUPAC.protein:
+            null_character = 'X'
+            moieties = 'ACDEFGHIKLMNPQRSTVWY'
+        for position in self.pssm:
+            this_position = null_character
+            vals = zip(position,moieties)
+            good_values = filter(lambda x: x[0] >= minimum_frequency, vals)
+            if good_values:
+                letters = [str(x[1]) for x in good_values]            
+                my_letter = '/'.join(letters)
+            else:
+                my_letter = null_character
+            consensus += my_letter
+        self.consensus = consensus
 
 class MEMEMotif (Motif):
     """A subclass of Motif used in parsing MEME (and MAST) output.
@@ -81,12 +131,14 @@ class MEMEMotif (Motif):
     Methods:
     add_instance_from_values (name = 'default', pvalue = 1, sequence = 'ATA', start = 0, strand = +): create a new instance of the motif with the specified values.
     add_to_pssm (position): add a new position to the pssm. The position should be a list of nucleotide/amino acid frequencies
+    add_to_logodds (position): add a new position to the log odds matrix. The position should be a tuple of log odds values for the nucleotide/amino acid at that position.
     compare_motifs (other_motif): returns the maximum correlation between this motif and other_motif
     """
     def __init__ (self):
         Motif.__init__(self)
         self.evalue = 0.0
         self.pssm = []
+        self.logodds = []
     
     def add_instance_from_values (self, name = 'default', pvalue = 1, sequence = 'ATA', start = 0, strand = '+'):
         inst = Instance()
@@ -111,8 +163,15 @@ class MEMEMotif (Motif):
     def add_to_pssm (self, thisposition):
         self.pssm.append(thisposition)
     
+    def add_to_logodds (self, thisposition):
+        self.logodds.append(thisposition)
+    
     def compare_motifs (self, motif):
         if isinstance(motif, MEMEMotif):
+            if not self.pssm:
+                raise ValueError, 'This motif does not have a PSSM'
+            if not motif.pssm:
+                raise ValueError, 'The other motif does not have a PSSM'
             mylen = len(self.pssm)
             yourlen = len(motif.pssm)
             myr = None
@@ -178,7 +237,6 @@ class Instance:
     def _length (self, length):
         self.length = length
     
-
 
 def _corr (x,y):
     sx = 0

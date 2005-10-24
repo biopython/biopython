@@ -26,6 +26,11 @@ class MEMERecord:
         self.command = ""
         self.alphabet = None
         self.sequence_names = []
+        
+    def get_motif_by_name (self, name):
+        for m in self.motifs:
+            if m.name == name:
+                return m
 
 class MEMEParser (AbstractParser):
     """A parser for the text output of the MEME program.
@@ -105,6 +110,9 @@ class _MEMEScanner:
             read_and_call(uhandle, consumer.noevent, start = 'Sequence name')
             read_and_call(uhandle, consumer.noevent, start = '---')
             read_and_call_until(uhandle, consumer.add_instance, start = '---')
+            read_and_call_until(uhandle, consumer.noevent, start = 'log-odds matrix')
+            read_and_call(uhandle, consumer.noevent)
+            read_and_call_until(uhandle, consumer.add_to_logodds, start = '---')
             read_and_call_until(uhandle, consumer.noevent, start = 'letter-probability matrix')
             read_and_call(uhandle, consumer.noevent, start = 'letter-probability matrix')    
             read_and_call_until(uhandle, consumer.add_to_pssm, start = '---')
@@ -171,6 +179,7 @@ class _MEMEConsumer:
         motif._length(ls[4])
         motif._numoccurrences(ls[7])
         motif._evalue(ls[13])
+        motif._alphabet(self.data.alphabet)
         self.data.motifs.append(motif)
         self.current_motif = motif
     
@@ -193,11 +202,14 @@ class _MEMEConsumer:
     def add_to_pssm (self, line):
         line = line.strip()
         sl = line.split()
-        i = 0
-        for i in range(0,len(sl)):
-            sl[i] = float(sl[i])
-        thisposition = tuple(sl)
+        thisposition = tuple([float(i) for i in sl])
         self.current_motif.add_to_pssm(thisposition)
+    
+    def add_to_logodds (self, line):
+        line = line.strip()
+        sl = line.split()
+        thisposition = tuple([float(i) for i in sl])    
+        self.current_motif.add_to_logodds(thisposition)
     
     def noevent (self,line):
         pass
@@ -234,10 +246,11 @@ class _MASTConsumer:
         al = ""
         if ls[2] == '(nucleotide)':
             al = IUPAC.unambiguous_dna
+            self.data._alphabet(al)        
         else:
             al = IUPAC.protein
-        self.data._alphabet(al)
-    
+            self.data._alphabet(al)
+        
     def _add_motif (self, line):
         line = line.strip()
         ls = line.split()
@@ -338,6 +351,10 @@ class _MASTConsumer:
             return -1
     
     def _parse_buffer (self, dummy):
+        """Parses the line buffer to get e-values for each instance of a motif.
+        This buffer parser is the most likely point of failure for the 
+        MASTParser.
+        """
         insts = self.data.get_motif_matches_for_sequence(self._current_seq)    
         if len(insts) > 0:
             
@@ -347,24 +364,44 @@ class _MASTConsumer:
             lpval = len(pvals)
             while p < lpval:
                 if pvals[p].count('e') > 1:
-                        sp = pvals[p].split('.')
-                        pvs = []
-                        spi = 1
-                        for spi in range(1,len(sp)-1):
-                            thispv = sp[spi-1][-1] + '.' + sp[spi][:-1]
-                            pvs.append(thispv)
-                        lastpv = sp[len(sp)-2][-1] + '.' + sp[len(sp)-1]
-                        pvs.append(lastpv)
-                        if p > 0:
-                            pvals = pvals[0:p] + pvs + pvals[p+1:]
+                #Break blocks up by e and parse into valid floats. This only 
+                #works if there are no e-values greater than 1e-5.
+                    pvs = []
+                    spe = pvals[p].split('e')
+                    spe.reverse()
+                    dotind = spe[1].find('.')
+                    if dotind == -1:
+                        thispval = spe[1][-1] + 'e' + spe[0]
+                    else:
+                        thispval = spe[1][dotind-1:] + 'e' + spe[0]
+                    pvs.append(thispval)
+                    for spi in range(2,len(spe)):
+                        dotind = spe[spi].find('.')
+                        prevdotind = spe[spi-1].find('.')
+                        if dotind != -1:
+                            if prevdotind == -1:
+                                thispval = spe[spi][dotind-1:] + 'e' + spe[spi-1][:-1]
+                            else:
+                                thispval = spe[spi][dotind-1:] + 'e' + spe[spi-1][0:prevdotind-1]
                         else:
-                            pvals = pvs + pvals[p+1:]
-                        lpval = len(pvals)
+                            if prevdotind == -1:
+                                thispval = spe[spi][-1] + 'e' + spe[spi-1][:-1]
+                            else:
+                                thispval = spe[spi][-1] + 'e' + spe[spi-1][0:prevdotind-1]
+                        pvs.append(thispval)
+                    pvs.reverse()
+                    if p > 0:
+                        pvals = pvals[0:p] + pvs + pvals[p+1:]
+                    else:
+                        pvals = pvs + pvals[p+1:]
+                    lpval = len(pvals)
                 p += 1
             i = 0
             if len(pvals) != len(insts):
                 sys.stderr.write("Failure to parse p-values for " + self._current_seq +  ":  " + self._line_buffer[1] + " to: " + str(pvals) + "\n")
                 pvals = []
+#            else:
+#                sys.stderr.write('These are just fine' + self._current_seq + ': ' + self._line_buffer[1] + " to: " + str(pvals) + "\n")
             for i in range(0,len(insts)):
                 inst = insts[i]
                 start = inst.start - self._buffered_seq_start + 1
@@ -551,7 +588,7 @@ class MASTRecord:
         self.version = version
     
     def _alphabet (self, alphabet):
-        if alphabet == IUPAC.protein or alphabet == IUPAC.ambiguous_dna or alphabet == IUPAC.ambiguous_dna:
+        if alphabet == IUPAC.protein or alphabet == IUPAC.ambiguous_dna or alphabet == IUPAC.unambiguous_dna:
             self.alphabet = alphabet
         else:
             return -1
