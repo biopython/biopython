@@ -335,10 +335,10 @@ class PPBuilder(_PPBuilder):
             for cc in clist:
                 # To form a peptide bond, N and C must be 
                 # within radius and have the same altloc
-                # identifier
+                # identifier or one altloc blanc
                 n_altloc=nn.get_altloc()
                 c_altloc=cc.get_altloc()
-                if n_altloc==c_altloc: 
+                if n_altloc==c_altloc or n_altloc==" " or c_altloc==" ": 
                     if test_dist(nn, cc):
                         # Select the disordered atoms that
                         # are indeed bonded
