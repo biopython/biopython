@@ -106,7 +106,9 @@ class PDBParser:
         "Parse the atomic data in the PDB file."
         local_line_counter=0
         structure_builder=self.structure_builder
-        current_model_id=None
+        current_model_id=0
+        # Flag we have an open model
+        model_open=0
         current_chain_id=None
         current_segid=None
         current_residue_id=None
@@ -118,9 +120,10 @@ class PDBParser:
             structure_builder.set_line_counter(global_line_counter)
             if(record_type=='ATOM  ' or record_type=='HETATM'):
                 # Initialize the Model - there was no explicit MODEL record
-                if current_model_id is None:
-                    current_model_id=0
+                if not model_open:
                     structure_builder.init_model(current_model_id)
+                    current_model_id+=1
+                    model_open=1
                 fullname=line[12:16]
                 # get rid of whitespace in atom names
                 split_list=split(fullname)
@@ -187,18 +190,19 @@ class PDBParser:
                 anisou_array=(array(anisou, Float0)/10000.0).astype(Float0)
                 structure_builder.set_anisou(anisou_array)
             elif(record_type=='MODEL '):
-                if current_model_id is None:
-                    # First Model
-                    current_model_id=0
-                else:
-                    current_model_id+=1
                 structure_builder.init_model(current_model_id)
+                current_model_id+=1
+                model_open=1
                 current_chain_id=None
                 current_residue_id=None
             elif(record_type=='END   ' or record_type=='CONECT'):
                 # End of atomic data, return the trailer
                 self.line_counter=self.line_counter+local_line_counter
                 return coords_trailer[local_line_counter:]
+            elif(record_type=='ENDMDL'):
+                model_open=0
+                current_chain_id=None
+                current_residue_id=None
             elif(record_type=='SIGUIJ'):
                 # standard deviation of anisotropic B factor
                 siguij=map(float, (line[28:35], line[35:42], line[42:49], line[49:56], line[56:63], line[63:70]))
