@@ -139,7 +139,7 @@ class HSExposureCA(_AbstractHSExposure):
         @type offset: int
         """
         _AbstractHSExposure.__init__(self, model, radius, offset, 
-                'EXP_HSEAU', 'EXP_HSEAD', 'EXP_CB_PCB_ANGLE')
+                'EXP_HSE_A_U', 'EXP_HSE_A_D', 'EXP_CB_PCB_ANGLE')
 
     def _get_cb(self, r1, r2, r3):
         """
@@ -229,7 +229,7 @@ class HSExposureCB(_AbstractHSExposure):
         @type offset: int
         """
         _AbstractHSExposure.__init__(self, model, radius, offset,
-                'EXP_HSEBU', 'EXP_HSEBD')
+                'EXP_HSE_B_U', 'EXP_HSE_B_D')
 
     def _get_cb(self, r1, r2, r3):
         """

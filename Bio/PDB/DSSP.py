@@ -4,7 +4,7 @@ import os
 import tempfile
 from Bio.PDB import *
 from PDBExceptions import PDBException
-from AbstractPropertyMap import AbstractPropertyMap
+from AbstractPropertyMap import AbstractResiduePropertyMap
 import re
 
 
@@ -117,7 +117,7 @@ def make_dssp_dict(filename):
     return dssp, keys
 
 
-class DSSP(AbstractPropertyMap):
+class DSSP(AbstractResiduePropertyMap):
     """
     Run DSSP on a pdb file, and provide a handle to the 
     DSSP secondary structure and accessibility.
@@ -175,7 +175,7 @@ class DSSP(AbstractPropertyMap):
                 raise PDBException, "Structure/DSSP mismatch at "+str(res) 
             dssp_map[key]=((res, ss, acc, rel_acc))
             dssp_list.append((res, ss, acc, rel_acc))
-        AbstractPropertyMap.__init__(self, dssp_map, dssp_keys, dssp_list)
+        AbstractResiduePropertyMap.__init__(self, dssp_map, dssp_keys, dssp_list)
 
 
 if __name__=="__main__":
@@ -196,7 +196,7 @@ if __name__=="__main__":
 
     print len(d)
 
-    print d.has_key('A', 1)
+    print d.has_key(('A', 1))
 
     print d[('A', 1)]
 

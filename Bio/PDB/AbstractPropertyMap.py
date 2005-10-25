@@ -84,7 +84,6 @@ class AbstractResiduePropertyMap(AbstractPropertyMap):
                 property_list)
 
     def _translate_id(self, ent_id):
-        print ent_id
         chain_id, res_id=ent_id
         if type(res_id)==IntType:
             ent_id=(chain_id, (' ', res_id, ' '))

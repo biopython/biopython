@@ -7,11 +7,11 @@ from __future__ import generators
 from Numeric import Float0
 from copy import copy
 
-from PDBExceptions import PDBConstructionException
+from PDBExceptions import PDBConstructionException, PDBException
 
 __doc__="""
 Base class for Residue, Chain, Model and Structure classes. 
-It is a simple container class, with list and dictiuonary like properties.
+It is a simple container class, with list and dictionary like properties.
 """
 
 
@@ -98,6 +98,8 @@ class Entity:
 
     def get_parent(self):
         "Return the parent Entity object."
+        if self.parent is None:
+            raise PDBException, 'No parent'
         return self.parent
 
     def get_id(self):
