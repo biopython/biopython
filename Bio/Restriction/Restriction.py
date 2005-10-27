@@ -968,7 +968,6 @@ class Blunt(AbstractCut) :
             #   add the others.
             #
             fragments += [d[r[x]:r[x+1]] for x in xrange(length)]
-        fragments.sort()
         return tuple(fragments)
     catalyze = catalyse = classmethod(catalyse)
 
@@ -1087,7 +1086,6 @@ class Ov5(AbstractCut) :
             #   add the others.
             #
             fragments += [d[r[x]:r[x+1]] for x in xrange(length)]
-        fragments.sort()
         return tuple(fragments)
     catalyze = catalyse = classmethod(catalyse)
 
@@ -1207,7 +1205,6 @@ class Ov3(AbstractCut) :
             #   add the others.
             #
             fragments += [d[r[x]:r[x+1]] for x in xrange(length)]
-        fragments.sort()
         return tuple(fragments)
     catalyze = catalyse = classmethod(catalyse)
     
