@@ -17,7 +17,8 @@ Major code optimization in cpairwise2module.
 CompareACE support added to AlignAce.
 
 Updates to Blast parsers in Bio.Blast, in particular use of the XML parser
-in NCBIXML contributed by Bertrand Frottier.
+in NCBIXML contributed by Bertrand Frottier, and the BLAT parser by Yair
+Benita.
 
 Pairwise single-linkage hierarchical clustering in Bio.Cluster became much
 faster and memory-efficient, allowing clustering of large data sets.
