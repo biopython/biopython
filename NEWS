@@ -4,6 +4,32 @@ News for the Biopython Project
 This file contains release notes and general news 
 about the biopython project.
 
+October 28, 2005: Biopython 1.41 released.
+Major changes:
+
+NEW: Bio.MEME -- thanks to Jason Hackney
+
+Added transcribe, translate, and reverse_complement functions to Bio.Seq that
+work both on Seq objects and plain strings.
+
+Major code optimization in cpairwise2module.
+
+CompareACE support added to AlignAce.
+
+Updates to Blast parsers in Bio.Blast, in particular use of the XML parser
+in NCBIXML contributed by Bertrand Frottier.
+
+Pairwise single-linkage hierarchical clustering in Bio.Cluster became much
+faster and memory-efficient, allowing clustering of large data sets.
+
+Bio.Emboss: Added command lines for einverted and palindrome.
+
+Bio.Nexus: Added support for StringIO objects.
+
+Numerous updates in Bio.PDB.
+
+Lots of fixes in the documentation.
+
 March 29, 2005: MEME parser added. Thanks to Jason Hackney
 
 Feb 18, 2005: Biopython 1.40 beta
