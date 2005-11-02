@@ -37,7 +37,7 @@ def _define_block_seq(block_tag, block_group, item):
     Arguments:
     o block_tag - A string of length <= INDENT giving the block tag
                   (i.e. 'TAG' in the example above).
-    o block_group - A callbakc tag for the entire block.
+    o block_group - A callback tag for the entire block.
     o item - A Martel group/expression for a single instance of the
              data item in this block. (Must NOT include the final
              newline character).
@@ -53,16 +53,21 @@ def _define_block_seq(block_tag, block_group, item):
 # --- Create regular expressions for each data item
 
 # ENTRY
+# D, Drug provide functionality for the drug part of KEGG ligand
 entry_tag = "ENTRY"
-entry = Group("entry", Re("C.*"))
+
+entry = Group("entry", Alt(Re("C\d+"),Re("D\d+")))
 
 entry_line = Group("entry_line",
                    Str1(entry_tag + " " * (INDENT - len(entry_tag))) +
                    entry +
+                   Opt(blank_space + Str("Obsolete")) +
+                   Alt(blank_space + Str("Compound"),
+                       blank_space + Str("Drug")) +
                    AnyEol())
 
-
 # NAME
+# this doesn't seem to pick up on wrapped names properly
 name_tag = "NAME"
 partial_name = Re("[\S]+")
 composite_name = Rep1(Opt(Str1(" ")) + partial_name + Opt(Str1(" ")))
@@ -83,6 +88,44 @@ formula_line = Group("formula_line",
                      formula +
                      AnyEol())
 
+# MASS
+
+mass_tag = "MASS"
+mass = Group("mass", Re(".*"))
+
+mass_line = Group("mass_line",
+                  Str1(mass_tag + " " * (INDENT - len(mass_tag))) +
+                  mass +
+                  AnyEol())
+
+# COMMENT
+
+comment_line = Group("comment_line", Re(".*"))
+
+comment_block = _define_block_seq("COMMENT","comment_block", comment_line)
+
+# REMARK
+
+remark_line = Group("remark_line", Re(".*"))
+
+remark_block = _define_block_seq("REMARK","remark_block", remark_line)
+
+# GLYCAN
+
+glycan_id = Group("glycan_id", Re("G[\w]+"))
+
+glycan_line = Rep(glycan_id + Opt(blank_space))
+
+glycan_block = _define_block_seq("GLYCAN","glycan_block", glycan_line)
+
+                  
+# REACTION
+
+reaction_id = Group("reaction_id", Re("R[\w]+"))
+
+reaction_line = Rep(reaction_id + Opt(blank_space))
+
+reaction_block = _define_block_seq("REACTION","reaction_block", reaction_line)
 
 # PATHWAY
 pathway_db = Group("pathway_db", Re("[\w]+"))
@@ -102,31 +145,23 @@ pathway_block = _define_block_seq("PATHWAY", "pathway_block", pathway_line)
 
 
 # ENZYME
-enzyme_id = Group("enzyme_id", Rep1(Integer() + Opt(Str1("."))))
+
+enzyme_id = Group("enzyme_id",Rep1(Alt(Integer(),Str1("-")) + Opt(Str1("."))))
+
 enzyme_role = Group("enzyme_role", Str("R", "C", "I", "E"))
+
 enzyme_entry = enzyme_id + \
-               blank_space + \
-               Str1("(") + enzyme_role + Str1(")")
+               Opt(blank_space + Str1("(") + enzyme_role + Str1(")"))
+
 enzyme_line = Rep1(enzyme_entry + Opt(blank_space))
 
 enzyme_block = _define_block_seq("ENZYME", "enzyme_block", enzyme_line)
 
+# REFERENCE
 
-# STRUCTURES
-structure_db = Group("structure_db", Re("[\w]+"))
-structure_id = Group("structure_id", Re("[\w]+"))
-structures_line = structure_db + \
-                  Str1(":") + \
-                  blank_space + \
-                  Rep1(structure_id + blank_space) + \
-                  Rep(AnyEol() +
-                      Str1(" " * (INDENT + 1)) +
-                      blank_space + 
-                      Rep1(structure_id + blank_space))
+reference_line = Group("reference_line", Re(".*"))
 
-structures_block = _define_block_seq("STRUCTURES",
-                                     "structures_block",
-                                     structures_line)
+reference_block = _define_block_seq("REFERENCE","reference_block", reference_line)
 
 
 # DBLINKS
@@ -142,6 +177,20 @@ dblinks_line = Opt(dblinks_db +
 
 dblinks_block = _define_block_seq("DBLINKS", "dblinks_line", dblinks_line)
 
+# STRUCTURE
+
+# ATOM
+
+atom_line = Group("atom_line", Integer() + Opt(blank_space + Re(".*")))
+
+atom_block = _define_block_seq("ATOM", "atom_line", atom_line)
+
+# BOND
+
+bond_line = Group("bond_line", Integer() + Opt(blank_space + Re(".*")))
+
+bond_block = _define_block_seq("BOND", "bond_line", bond_line)
+
 
 # --- Assemble the full record format
 
@@ -153,11 +202,17 @@ record = Group("KEGG_Compound_record",
                entry_line +
                name_block +
                Opt(formula_line) +
+               Opt(mass_line) +
+               Opt(remark_block) +
+               Opt(comment_block) +
+               Opt(glycan_block) +
+               Opt(reaction_block) +
                Opt(pathway_block) +
                Opt(enzyme_block) +
-               Opt(structures_block) +
+               Opt(reference_block) +
                Opt(dblinks_block) +
-               Opt(formula_line) +
+               Opt(atom_block) +
+               Opt(bond_block) +
                record_end)
 
 record_format = ParseRecords("KEGG_Compound_file", {},

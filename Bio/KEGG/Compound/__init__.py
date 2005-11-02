@@ -48,10 +48,12 @@ class Record:
     entry       The entry identifier.
     name        A list of the compund names.
     formula     The chemical formula for the compound 
+    mass        The molecular weight for the compound
     pathway     A list of 3-tuples: (database, id, pathway)
     enzyme      A list of 2-tuples: (enzyme id, role)
     structures  A list of 2-tuples: (database, list of struct ids)
     dblinks     A list of 2-tuples: (database, list of link ids)
+
     """
     def __init__(self):
         """__init___(self)
@@ -61,6 +63,7 @@ class Record:
         self.entry      = ""
         self.name       = []
         self.formula    = ""
+        self.mass       = ""
         self.pathway    = []
         self.enzyme     = []
         self.structures = []
@@ -73,6 +76,7 @@ class Record:
         return self._entry() + \
                self._name()  + \
                self._formula() + \
+               self._mass() + \
                self._pathway() + \
                self._enzyme() + \
                self._structures() + \
@@ -89,6 +93,11 @@ class Record:
     def _formula(self):
         return _write_kegg("FORMULA",
                            [self.formula])
+
+    def _mass(self):
+        return _write_kegg("MASS",
+                           [self.mass])
+    
     def _pathway(self):
         s = []
         for entry in self.pathway:
@@ -200,6 +209,8 @@ class _Consumer(AbstractConsumer):
         self.data.name = map(self._unwrap, name)
     def formula(self, formula):
         self.data.formula = formula[0]
+    def mass(self, mass):
+        self.data.mass = mass[0]
     def enzyme_id(self, enzyme_id):
         self._current_enzyme_id = enzyme_id[0]
     def enzyme_role(self, enzyme_role):
@@ -257,7 +268,7 @@ class _Scanner:
         """
         # a listing of all tags we are interested in scanning for
         # in the Martel parser
-        self.interest_tags = ["entry", "name", "formula",
+        self.interest_tags = ["entry", "name", "formula", "mass",
                               "pathway_db", "pathway_id", "pathway_desc",
                               "enzyme_id", "enzyme_role",
                               "structure_db", "structure_id",
@@ -270,7 +281,7 @@ class _Scanner:
         self._parser = expression.make_parser(debug_level = debug)
 
     def feed(self, handle, consumer):
-        """Feeed a set of data into the scanner.
+        """Feed a set of data into the scanner.
 
         Arguments:
         o handle - A handle with the information to parse.
