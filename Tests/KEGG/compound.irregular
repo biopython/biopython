@@ -1,16 +1,16 @@
-ENTRY       C01454
+ENTRY       C01454                      Compound
 NAME        Toluate
             p-Toluate
             p-Toluic acid
             4-Methylbenzoic acid
             Toluenecarboxylic acid
             Crithminic acid
+FORMULA     C8H8O2
 PATHWAY     PATH: MAP00624  Xylene degradation
 ENZYME      1.14.99.15 (R)
 DBLINKS     CAS: 99-94-5
-FORMULA     C8H8O2
 ///
-ENTRY       C06876
+ENTRY       C06876                      Compound
 NAME        Nitrosobenzene
 FORMULA     C6H5NO
 PATHWAY     PATH: MAP00626  Nitorobenzene degradation
