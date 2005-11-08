@@ -2,7 +2,7 @@ import sys, urllib
 from xml.sax import saxutils
 import StringIO
 
-import ReseekFile
+from Bio.EUtils import ReseekFile
 from Bio.config.FormatRegistry import FormatObject
 
 class FormatIOIterator:

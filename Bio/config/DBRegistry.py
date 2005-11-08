@@ -226,7 +226,7 @@ class TextLikeMixin:
     def _check_for_errors(self, handle, failure_cases):
         from Martel import Parser
         from Bio import StdHandler
-        from Bio.ReseekFile import ReseekFile
+        from Bio.EUtils.ReseekFile import ReseekFile
         
         if not failure_cases:
             return handle
