@@ -1195,68 +1195,440 @@ def _strip_and_combine(line_list):
     return ' '.join(stripped_line_list)
 
 class _Scanner:
-    """Start up Martel to do the scanning of the file.
-
-    This initialzes the Martel based parser and connects it to a handler
-    that will generate events for a Feature Consumer.
+    """Does the parsing of a GenBank file.  Earlier versions of this
+    class used Martel to do this, but there where significant speed
+    and memory limitations to this.
     """
     def __init__(self, debug = 0):
-        """Initialize the scanner by setting up our caches.
-
-        Creating the parser takes a long time, so we want to cache it
-        to reduce parsing time.
+        """Initialize the scanner.
 
         Arguments:
         o debug - The level of debugging that the parser should
         display. Level 0 is no debugging, Level 2 displays the most
-        debugging info (but is much slower). See Martel documentation
-        for more info on this.
+        debugging info (but is much slower).
         """
-        import Martel
-        # a listing of all tags we are interested in scanning for
-        # in the MartelParser
-        self.interest_tags = ["locus", "size", "residue_type",
-                              "data_file_division", "date",
-                              "definition", "accession", "nid",
-                              "pid", "version", "db_source",
-                              "gi", "keywords", "segment",
-                              "source", "organism",
-                              "taxonomy", "reference_num",
-                              "reference_bases", "authors", "consrtm", "title",
-                              "journal", "medline_id", "pubmed_id",
-                              "remark", "comment",
-                              "features_line", "feature_key",
-                              "location", "feature_qualifier_name",
-                              "feature_qualifier_description", "origin_name",
-                              "base_count", "base_number",
-                              "sequence", "contig_location", "record_end","primary_ref_line"]
 
-        # a listing of all tags which should be left alone with respect
-        # to whitespace handling
-        self.exempt_tags = ["comment", "feature_qualifier_name"]
+        #Following dictionary maps GenBank lines to the associated
+        #consumer methods - the special cases like LOCUS where one
+        #genbank line triggers several consumer calls have to be
+        #handled individually.
+        self._consumer_dict = {
+            'DEFINITION' : 'definition',
+            'ACCESSION'  : 'accession',
+            'NID'        : 'nid',
+            'PID'        : 'pid',
+            'DBSOURCE'   : 'db_source',
+            'KEYWORDS'   : 'keywords',
+            'SEGMENT'    : 'segment',
+            'SOURCE'     : 'source',
+            'AUTHORS'    : 'authors',
+            'CONSRTM'    : 'consrtm',
+            'TITLE'      : 'title',
+            'JOURNAL'    : 'journal',
+            'MEDLINE'    : 'medline_id',
+            'PUBMED'     : 'pubmed_id',
+            'REMARK'     : 'remark'}
+        #We have to handle the following specially:
+        #ORIGIN (locus, size, residue_type, data_file_division and date)
+        #COMMENT (comment)
+        #VERSION (version and gi)
+        #REFERENCE (eference_num and reference_bases)
+        #ORGANISM (organism and taxonomy)
 
-        # make a parser that returns only the tags we are interested in
-        expression = Martel.select_names(genbank.record,
-                                         self.interest_tags)
-        self._parser = expression.make_parser(debug_level = debug)
+        #Save the requested debug level
+        self._debug = debug
 
     def feed(self, handle, consumer):
-        """Feeed a set of data into the scanner.
+        """Feed a set of data into the scanner.
 
         Arguments:
         o handle - A handle with the information to parse.
         o consumer - The consumer that should be informed of events.
         """
-        # XML from python 2.0
-        from xml.sax import handler
-        from Bio.ParserSupport import EventGenerator
-        self._parser.setContentHandler(EventGenerator(consumer,
-                                                      self.interest_tags,
-                                                      _strip_and_combine,
-                                                      self.exempt_tags))
-        self._parser.setErrorHandler(handler.ErrorHandler())
 
-        self._parser.parseFile(handle)
+        #The following are also defined as genbank.INDENT etc
+        #but that file will be redundant if we abandone Martel
+        #for parsing GenBank files
+        GENBANK_INDENT = 12
+        FEATURE_KEY_INDENT = 5
+        FEATURE_QUALIFIER_INDENT = 21
+        
+        GENBANK_SPACER = " " * GENBANK_INDENT
+        FEATURE_KEY_SPACER = " " * FEATURE_KEY_INDENT
+        FEATURE_QUALIFIER_SPACER = " " * FEATURE_QUALIFIER_INDENT
+        
+        # skip ahead until we find first record
+        line = handle.readline()
+        while line.find('LOCUS       ') <> 0:
+            assert line, \
+                   'Unexpected end of file while looking for LOCUS line'
+            if self._debug : print "Ignoring line:\n" + line
+            line = handle.readline()
+        if self._debug : print "Starting LOCUS"
+        assert line[0:GENBANK_INDENT] == 'LOCUS       ', \
+               'LOCUS line does not start correctly:\n' + line
+        #####################################
+        # LOCUS line                        #
+        #####################################
+        #Have to break up the locus line, and handle the different bits of it.
+        #There are at least two different versions of the locus line...
+        if line[29:33] in [' bp ', ' aa '] :
+            #Old...
+            #
+            #    Positions  Contents
+            #    ---------  --------
+            #    00:06      LOCUS
+            #    06:12      spaces
+            #    12:??      Locus name
+            #    ??:??      space
+            #    ??:29      Length of sequence, right-justified
+            #    29:33      space, bp, space
+            #    33:41      strand type
+            #    41:42      space
+            #    42:51      Blank (implies linear), linear or circular
+            #    51:52      space
+            #    52:55      The division code (e.g. BCT, VRL, INV)
+            #    55:62      space
+            #    62:73      Date, in the form dd-MMM-yyyy (e.g., 15-MAR-1991)
+            #
+            assert line[29:33] in [' bp ', ' aa '] , \
+                   'LOCUS line does not contain size units at expected position:\n' + line
+            assert line[41:42] == ' ', \
+                   'LOCUS line does not contain space at position 42:\n' + line
+            assert line[42:51].strip() in ['','linear','circular'], \
+                   'LOCUS line does not contain valid entry (linear, circular, ...):\n' + line
+            assert line[51:52] == ' ', \
+                   'LOCUS line does not contain space at position 52:\n' + line
+            assert line[55:62] == '       ', \
+                   'LOCUS line does not contain spaces from position 56 to 62:\n' + line
+            assert line[64:65] == '-', \
+                   'LOCUS line does not contain - at position 65 in date:\n' + line
+            assert line[68:69] == '-', \
+                   'LOCUS line does not contain - at position 69 in date:\n' + line
+
+            name_and_length_str = line[GENBANK_INDENT:29]
+            while name_and_length_str.find('  ')<>-1 :
+                name_and_length_str = name_and_length_str.replace('  ',' ')
+            name_and_length = name_and_length_str.split(' ')
+            assert len(name_and_length)<=2, \
+                   'Cannot parse the name and length in the LOCUS line:\n' + line
+            assert len(name_and_length)<>1, \
+                   'Name and length collide in the LOCUS line:\n' + line
+                   #Should be possible to split them based on position, if
+                   #a clear definition of the standard exists THAT AGREES with
+                   #existing files.
+            consumer.locus(name_and_length[0])
+            consumer.size(name_and_length[1])
+            #consumer.residue_type(line[33:41].strip())
+            consumer.residue_type(line[33:51].strip())
+            consumer.data_file_division(line[52:55])
+            consumer.date(line[62:73])
+        elif line[40:44] in [' bp ', ' aa '] :
+            #New...
+            #
+            #    Positions  Contents
+            #    ---------  --------
+            #    00:06      LOCUS
+            #    06:12      spaces
+            #    12:??      Locus name
+            #    ??:??      space
+            #    ??:40      Length of sequence, right-justified
+            #    40:44      space, bp, space
+            #    44:47      Blank, ss-, ds-, ms-
+            #    47:54      Blank, DNA, RNA, tRNA, mRNA, uRNA, snRNA
+            #    54:55      space
+            #    55:63      Blank (implies linear), linear or circular
+            #    63:64      space
+            #    64:67      The division code (e.g. BCT, VRL, INV)
+            #    67:68      space
+            #    68:79      Date, in the form dd-MMM-yyyy (e.g., 15-MAR-1991)
+            #
+            assert line[40:44] in [' bp ', ' aa '] , \
+                   'LOCUS line does not contain size units at expected position:\n' + line
+            assert line[44:47] in ['   ', 'ss-', 'ds-', 'ms-'], \
+                    'LOCUS line does not have valid strand type (Single stranded, ...):\n' + line
+            assert line[47:54].strip() in ['','DNA','RNA','tRNA','mRNA','uRNA','snRNA'], \
+                   'LOCUS line does not contain valid sequence type (DNA, RNA, ...):\n' + line
+            assert line[54:55] == ' ', \
+                   'LOCUS line does not contain space at position 55:\n' + line
+            assert line[55:63].strip() in ['','linear','circular'], \
+                   'LOCUS line does not contain valid entry (linear, circular, ...):\n' + line
+            assert line[63:64] == ' ', \
+                   'LOCUS line does not contain space at position 64:\n' + line
+            assert line[67:68] == ' ', \
+                   'LOCUS line does not contain space at position 68:\n' + line
+            assert line[70:71] == '-', \
+                   'LOCUS line does not contain - at position 71 in date:\n' + line
+            assert line[74:75] == '-', \
+                   'LOCUS line does not contain - at position 75 in date:\n' + line
+
+            name_and_length_str = line[GENBANK_INDENT:40]
+            while name_and_length_str.find('  ')<>-1 :
+                name_and_length_str = name_and_length_str.replace('  ',' ')
+            name_and_length = name_and_length_str.split(' ')
+            assert len(name_and_length)<=2, \
+                   'Cannot parse the name and length in the LOCUS line:\n' + line
+            assert len(name_and_length)<>1, \
+                   'Name and length collide in the LOCUS line:\n' + line
+                   #Should be possible to split them based on position, if
+                   #a clear definition of the stand exists THAT AGREES with
+                   #existing files.
+            consumer.locus(name_and_length[0])
+            consumer.size(name_and_length[1])
+            consumer.residue_type(line[44:63].strip())
+            consumer.data_file_division(line[64:67])
+            consumer.date(line[68:79])
+        else :
+            assert False, \
+                   'Did not recognise the LOCUS line layout:\n' + line
+        if self._debug : print "Finished LOCUS"
+
+        #############################################################
+        #now read in and cache JUST the header lines, up to and
+        #excluding the features and nucleotide sequence..
+        line = handle.readline()
+        while True :
+            assert line, \
+                   'Unexpected end of file during GenBank header section'
+            assert line[0:GENBANK_INDENT] <> GENBANK_SPACER, \
+                   'Unexpected continuation of an entry:\n' + line
+
+            if line.find("FEATURES             ") == 0 :
+                #We are about to start the features?
+                consumer.features_line(line)
+                break
+
+            line_type = line[0:GENBANK_INDENT].strip()
+            data = line[GENBANK_INDENT:]
+            if data[-1:]=='\n' : data = data[:-1]
+            if data[-1:]=='\r' : data = data[:-1]
+
+            if line_type == 'VERSION' :
+                #Need to call consumer.version(), and maybe also consumer.gi() as well.
+                #e.g.
+                # VERSION     AC007323.5  GI:6587720
+                while data.find('  ')<>-1:
+                    data = data.replace('  ',' ')
+                if data.find(' GI:')==-1 :
+                    consumer.version(data)
+                else :
+                    if self._debug : print "Version [" + data.split(' GI:')[0] + "], gi [" + data.split(' GI:')[1] + "]"
+                    consumer.version(data.split(' GI:')[0])
+                    consumer.gi(data.split(' GI:')[1])
+                #Read in the next line!
+                line = handle.readline()
+            elif line_type == 'REFERENCE' :
+                #Need to call consumer.reference_num() and consumer.reference_bases()
+                #e.g.
+                # REFERENCE   1  (bases 1 to 86436)
+                data = data.strip()
+                while data.find('  ')<>-1:
+                    data = data.replace('  ',' ')
+                if data.find(' ')==-1 :
+                    consumer.reference_num(data)
+                else :
+                    if self._debug : print "Reference [" + data[:data.find(' ')] + "], num [" + data[data.find(' ')+1:] + "]"
+                    consumer.reference_num(data[:data.find(' ')])
+                    consumer.reference_bases(data[data.find(' ')+1:])
+                #Read in the next line!
+                line = handle.readline()
+            elif line_type == 'ORGANISM' :
+                #The first line is the organism, but subsequent lines go to the taxonomy consumer
+                consumer.organism(data)
+                data = ""
+                while True :
+                    line = handle.readline()
+                    if line[0:GENBANK_INDENT] == GENBANK_SPACER :
+                        data = data + ' ' + line[GENBANK_INDENT:]
+                        if data[-1:]=='\n' : data = data[:-1]
+                        if data[-1:]=='\r' : data = data[:-1]
+                    else :
+                        #We now have all the data for this taxonomy:
+                        consumer.taxonomy(data.strip())
+                        #End of continuation - return to top of loop!
+                        break
+            elif line_type == 'COMMENT' :
+                if self._debug : print "Found comment"
+                #This can be multiline, and should call consumer.comment() once
+                #with a list where each entry is a line.
+                list=[]
+                list.append(data)
+                while True:
+                    line = handle.readline()
+                    if line[0:GENBANK_INDENT] == GENBANK_SPACER :
+                        data = line[GENBANK_INDENT:]
+                        if data[-1:]=='\n' : data = data[:-1]
+                        if data[-1:]=='\r' : data = data[:-1]
+                        list.append(data)
+                        if self._debug : print "[" + data + "]"
+                    else :
+                        #End of the comment
+                        break
+                consumer.comment(list)
+                list=[]
+            elif line_type in self._consumer_dict :
+                #Its a semi-automatic entry!
+                #Now, this may be a multi line entry...
+                while True :
+                    line = handle.readline()
+                    if line[0:GENBANK_INDENT] == GENBANK_SPACER :
+                        data = data + ' ' + line[GENBANK_INDENT:]
+                        if data[-1:]=='\n' : data = data[:-1]
+                        if data[-1:]=='\r' : data = data[:-1]
+                    else :
+                        #We now have all the data for this entry:
+                        getattr(consumer, self._consumer_dict[line_type])(data)
+                        #End of continuation - return to top of loop!
+                        break
+            else :
+                assert False, \
+                       'Unknown line type, ' + line_type + ' found:\n' + line
+                
+        #############################################################
+        if self._debug : print "Starting features..."
+        #############################################################
+        assert line.find("FEATURES             ") == 0, \
+               'Internal error - expected to be on the FEATURES line, not:\n' + line
+        line = handle.readline()
+        while True :
+            assert line, \
+                   'Unexpected end of file during GenBank features section'
+            assert line[0:FEATURE_QUALIFIER_INDENT]<>FEATURE_QUALIFIER_SPACER, \
+                   'Unexpected continuation of feature:\n' + line
+            if line[0:FEATURE_KEY_INDENT]<>FEATURE_KEY_SPACER :
+                #This should be the BASE COUNT, ORIGIN or CONTIG line now
+                break
+            #So, start of a new feature then.
+            #This line should have a feature_key and a location string
+            #(note the location could span several lines!)
+
+            #Extract the key...
+            feature_key = line[FEATURE_KEY_INDENT:FEATURE_QUALIFIER_INDENT].strip()
+            consumer.feature_key(feature_key)
+
+            #Extract the location...
+            feature_location = line[FEATURE_QUALIFIER_INDENT:].strip()
+            while feature_location[-1:]=="," :
+                #Still more to come!
+                line = handle.readline()
+                assert line[0:FEATURE_QUALIFIER_INDENT]==FEATURE_QUALIFIER_SPACER, \
+                       'Expected continuation of location, not:\n' + line
+                line = line[FEATURE_QUALIFIER_INDENT:]
+                if line[-1:]=='\n' : line = line[:-1]
+                if line[-1:]=='\r' : line = line[:-1]
+                feature_location = feature_location + line
+            #############################################################
+            if self._debug > 1 : print "Starting " + feature_key + " feature at location " + feature_location
+            #############################################################
+            consumer.location(feature_location)
+
+            #We have dealt with that line (key and location, plus any lines continuing of the location).
+            #The next line could be the first of one or more qualifiers to the feature:
+            line = handle.readline()
+            while line[0:FEATURE_QUALIFIER_INDENT]==FEATURE_QUALIFIER_SPACER :
+                #This is the start of a new qualifier for the current feature
+                line = line[FEATURE_QUALIFIER_INDENT:]
+                if line[-1:]=='\n' : line = line[:-1]
+                if line[-1:]=='\r' : line = line[:-1]
+                assert line[0:1]=='/', \
+                       'Expected start of new qualifier, not:\n' + line
+                if line.find("=") == -1 :
+                    #Can have qualifiers with no data, like /psuedo
+                    qualifier_name = line[1:]
+                    consumer.feature_qualifier_name([qualifier_name])
+                    #There is no description in this case
+                else :
+                    #Expect format /name=... or /name="...
+                    qualifier_name = line[1:line.find('=')]
+                    consumer.feature_qualifier_name([qualifier_name])
+                    qualifier_description = line[line.find("=")+1:]
+                    #And the description for this qualifier?
+                    if qualifier_description[0:1]=='\"' and qualifier_description[-1:]<>'\"' :
+                        #There should now be one or more lines continuing the description
+                        while True :
+                            line = handle.readline()
+                            assert line[0:FEATURE_QUALIFIER_INDENT]==FEATURE_QUALIFIER_SPACER, \
+                                   'Expected qualifier description continuation, not:\n' + line
+                            #Note, for backwards compatibility we do not remove the FEATURE_QUALIFIER_SPACER
+                            #from the description
+                            if line[-1:]=='\n' : line = line[:-1]
+                            if line[-1:]=='\r' : line = line[:-1]
+                            qualifier_description = qualifier_description + '\n' + line
+                            if qualifier_description[-1:]=='\"' :
+                                #That should be the end of the description continuation
+                                break
+                    consumer.feature_qualifier_description(qualifier_description)
+                #We have dealt with that line (qualifier and description, plus any line continuing the description).
+                #The could be another qualifier for this feature...
+                line = handle.readline()
+            #We have dealt with all the qualifiers (if any) for this feature
+            #Now move on to the next line...
+
+        #############################################################
+        if self._debug : print "Finished features"
+        #############################################################
+        if line.find('BASE COUNT')==0 :
+            #Hmm.
+            line = line[10:].strip()
+            if self._debug : print "base_count = " + line
+            consumer.base_count(line)
+            line = handle.readline()
+
+        if line.find("ORIGIN")==0 :
+            #############################################################
+            if self._debug : print "Starting sequence..."
+            #############################################################
+            #May need to call consumer for origin_name if part of ORIGIN line...
+            line = line[6:].strip()
+            if line :
+                if self._debug : print "origin_name = " + line
+                consumer.origin_name(line)
+            #Now just consume the sequence lines until reach the // marker
+            #or a CONTIG line
+            while True :
+                line = handle.readline()
+                assert line, \
+                       'Unexpected end of file during GenBank ORIGIN section'
+                if line=='//\n' :
+                    break
+                if line.find('CONTIG')==0 :
+                    break
+                assert line[9:10]==' ', \
+                       'Sequence line mal-formed, \n' + line
+                consumer.base_number(line[0:10].strip())
+                consumer.sequence(line[10:].replace('\n',''))
+        
+        if line.find("CONTIG")==0 :
+            #############################################################
+            if self._debug : print "Starting Contig..."
+            #############################################################
+            line = line[6:].strip()
+            contig_location = line + '\n'
+            while True :
+                line = handle.readline()
+                assert line, \
+                       'Unexpected end of file during GenBank CONTIG section'
+                if line=='//\n' :
+                    consumer.contig_location(contig_location)
+                    break
+                elif line[:GENBANK_INDENT]==GENBANK_SPACER :
+                    contig_location = contig_location + line
+                else:
+                    consumer.contig_location(contig_location)
+                    assert False, \
+                           'Expected CONTIG continuation line or // marker, got\n' + line
+                    break
+
+        if line=='//\n' :
+            #############################################################
+            if self._debug : print "Found record end..."
+            #############################################################
+            consumer.record_end(line)
+            return
+
+        assert False, \
+               'Unexpected line near end of file:\n' + line
+        return
 
 def index_file(filename, indexname, rec2key = None, use_berkeley = 0):
     """Index a GenBank file to prepare it for use as a dictionary.
