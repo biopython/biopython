@@ -276,18 +276,19 @@ class Tree(Nodes.Chain):
         """
         return self.set_subtree(self.root)==tree2.set_subtree(tree2.root)
 
-    def is_compatible(self,tree2,threshold):
+    def is_compatible(self,tree2,threshold,strict=True):
         """Compares branches with support>threshold for compatibility.
         
         result = is_compatible(self,tree2,threshold)
         """
 
-        if sets.Set(self.get_taxa())!=sets.Set(tree2.get_taxa()):
-            missing2=list(sets.Set(self.get_taxa())-sets.Set(tree2.get_taxa()))
-            missing1=list(sets.Set(tree2.get_taxa())-sets.Set(self.get_taxa()))
-            if missing1 != [None]: 
+        # check if both trees have the same set of taxa. strict=True enforces this.
+        missing2=sets.Set(self.get_taxa())-sets.Set(tree2.get_taxa())
+        missing1=sets.Set(tree2.get_taxa())-sets.Set(self.get_taxa())
+        if strict and (missing1 or missing2):
+            if missing1: 
                 print 'Taxon/taxa %s is/are missing in tree %s' % (','.join(missing1) , self.name)
-            if missing2 != [None]:
+            if missing2:
                 print 'Taxon/taxa %s is/are missing in tree %s' % (','.join(missing2) , tree2.name)
             raise TreeError, 'Can\'t compare trees with different taxon compositions.'
         t1=[(sets.Set(self.get_taxa(n)),self.node(n).data.support) for n in self.all_ids() if \
@@ -299,9 +300,10 @@ class Tree(Nodes.Chain):
         conflict=[]
         for (st1,sup1) in t1:
             for (st2,sup2) in t2:
-                if not st1.issubset(st2) and not st2.issubset(st1):
-                    intersect,notin1,notin2=st1 & st2, st2-st1, st1-st2
-                    if intersect:
+                if not st1.issubset(st2) and not st2.issubset(st1):                     # don't hiccup on upstream nodes
+                    intersect,notin1,notin2=st1 & st2, st2-st1, st1-st2                 # all three are non-empty sets
+                    # if notin1==missing1 or notin2==missing2  <==> st1.issubset(st2) or st2.issubset(st1) ???
+                    if intersect and not (notin1==missing1 or notin2==missing2):         # omit conflicts due to missing taxa
                         conflict.append((st1,sup1,st2,sup2,intersect,notin1,notin2))
         return conflict
         
