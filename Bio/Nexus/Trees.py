@@ -303,7 +303,7 @@ class Tree(Nodes.Chain):
                 if not st1.issubset(st2) and not st2.issubset(st1):                     # don't hiccup on upstream nodes
                     intersect,notin1,notin2=st1 & st2, st2-st1, st1-st2                 # all three are non-empty sets
                     # if notin1==missing1 or notin2==missing2  <==> st1.issubset(st2) or st2.issubset(st1) ???
-                    if intersect and not (notin1==missing1 or notin2==missing2):         # omit conflicts due to missing taxa
+                    if intersect and not (notin1.issubset(missing1) or notin2.issubset(missing2)):         # omit conflicts due to missing taxa
                         conflict.append((st1,sup1,st2,sup2,intersect,notin1,notin2))
         return conflict
         
