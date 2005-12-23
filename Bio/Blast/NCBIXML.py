@@ -268,7 +268,6 @@ class BlastParser(_XMLparser):
         if self._descr.score == None:
             self._descr.score = float(self._value)
 
-    # Added bit score. Christof 12/22/2005
     def _end_Hsp_bit_score(self):
         """bit score of HSP
         """
