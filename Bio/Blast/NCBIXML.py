@@ -262,11 +262,19 @@ class BlastParser(_XMLparser):
 
     # Hsp_num is useless
     def _end_Hsp_score(self):
-        """score (in bits) of HSP
+        """raw score of HSP
         """
         self._hsp.score = float(self._value)
         if self._descr.score == None:
             self._descr.score = float(self._value)
+
+    # Added bit score. Christof 12/22/2005
+    def _end_Hsp_bit_score(self):
+        """bit score of HSP
+        """
+        self._hsp.bits = float(self._value)
+        if self._descr.bits == None:
+            self._descr.bits = float(self._value)
 
     def _end_Hsp_evalue(self):
         """expect value value of the HSP
