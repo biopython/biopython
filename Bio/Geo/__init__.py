@@ -1,4 +1,5 @@
 # Copyright 2001 by Katharine Lindner.  All rights reserved.
+# Copyright 2006 by PeterC.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -49,6 +50,8 @@ class GeoError( Error ):
 
 class Iterator:
     """Iterator interface to move over a file of Geo entries one at a time.
+
+    Uses the fact that each GEO record begins with a line starting ^ (caret).
     """
     def __init__(self, handle, parser = None):
         """Initialize the iterator.
@@ -59,7 +62,9 @@ class Iterator:
         returning them. If None, then the raw entry will be returned.
         """
         self.handle = File.UndoHandle( handle )
-        self._reader = RecordReader.Everything( self.handle )
+        #Don't want to read EVERYTHING, but record by record!
+        #self._reader = RecordReader.Everything( self.handle )
+        self._reader = RecordReader.StartsWith( self.handle , "^")
         self._parser = parser
 
     def next(self):
@@ -71,9 +76,6 @@ class Iterator:
 
         if self._parser is not None:
             if data:
-                dumpfile = open( 'dump', 'w' )
-                dumpfile.write( data )
-                dumpfile.close()
                 return self._parser.parse(File.StringHandle(data))
 
         return data
@@ -151,9 +153,13 @@ class _RecordConsumer( Dispatch.Dispatcher ):
         entity_type = ( cols[ 0 ] ).strip()
         entity_type = entity_type[ 1: ]
         self.data.entity_type = entity_type
-        entity_id = cols[ 1 ].strip()
+        try :
+            entity_id = cols[ 1 ].strip()
+        except IndexError :
+            entity_id = ''
+            #This seems to be normal in some cases,
+            #like the entity line "^Annotation"
         self.data.entity_id = entity_id
-
 
     def start_attribute_line(self, text, attrs):
         self.save_characters()
