@@ -1,0 +1,124 @@
+^SAMPLE=body wall rep1
+!Sample_title = body wall replicate 1
+!Sample_source_name = body wall
+!Sample_organism = Drosophila melanogaster	
+!Sample_characteristics = Wild type, third instar larvae, body wall
+!Sample_molecule = total RNA
+!Sample_extract_protocol = Approximately 200 wild-type (Berlin strain) wandering third-instar larvae were dissected and the wing discs were collected in a drop of PBS on Sylgard (Dow Corning). Discs were cut between the presumptive hinge and the body wall regions using a 30-gauge syringe needle, and fragments were lysed in separate groups in RLT buffer (Qiagen).Total RNA was extracted from the tissue lysate using an RNeasy kit (Qiagen).
+!Sample_label = biotin
+!Sample_label_protocol = Approximately 8 µg of total RNA was processed to produce biotinylated cRNA targets.
+!Sample_hyb_protocol = standard Affymetrix procedures
+!Sample_scan_protocol = standard Affymetrix procedures
+!Sample_description = Wild type third instar larvae imaginal wing discs
+!Sample_data_processing = Affymetrix Microarray Suite version 5.0
+!Sample_platform_id = GPL72
+#ID_REF = 
+#VALUE = MAS5-calculated Signal intensity
+#ABS_CALL = the call in an absolute analysis that indicates if the transcript was present (P), absent (A), marginal (M), or no call (NC)
+#DETECTION P-VALUE = 'detection p-value', p-value that indicates the significance level of the detection call
+!Sample_table_begin
+ID_REF	VALUE	ABS_CALL	DETECTION P-VALUE
+141200_at	36.6	A	0.818657
+141201_at	41.5	A	0.703191
+141202_at	607.3	P	0.000944
+141203_at	1509.1	P	0.000762
+141204_at	837.3	P	0.000613
+141205_at	363.2	P	0.003815
+141206_at	1193.6	P	0.000491
+141207_at	346.6	P	0.001165
+141208_at	257.8	P	0.006575
+141209_at	337.1	P	0.002607
+141210_at	48	A	0.150145
+141211_at	130.7	P	0.005504
+141212_at	1454.3	P	0.000491
+141213_at	21.2	A	0.635055
+141214_at	2372.6	P	0.000491
+141215_at	452.9	P	0.017732
+141216_at	504.1	P	0.006575
+141217_at	716.9	P	0.004591
+141218_at	3248.8	P	0.000491
+141219_at	223.5	P	0.007827
+!Sample_table_end
+^SAMPLE=body wall rep2
+!Sample_title = body wall replicate 2
+!Sample_source_name = body wall
+!Sample_organism = Drosophila melanogaster
+!Sample_characteristics = Wild type, third instar larvae, body wall
+!Sample_molecule = total RNA
+!Sample_extract_protocol = Approximately 200 wild-type (Berlin strain) wandering third-instar larvae were dissected and the wing discs were collected in a drop of PBS on Sylgard (Dow Corning). Discs were cut between the presumptive hinge and the body wall regions using a 30-gauge syringe needle, and fragments were lysed in separate groups in RLT buffer (Qiagen).Total RNA was extracted from the tissue lysate using an RNeasy kit (Qiagen).
+!Sample_label = biotin
+!Sample_label_protocol = Approximately 8 µg of total RNA was processed to produce biotinylated cRNA targets.
+!Sample_hyb_protocol = standard Affymetrix procedures
+!Sample_scan_protocol = standard Affymetrix procedures
+!Sample_description = Wild type third instar larvae imaginal wing discs
+!Sample_data_processing = Affymetrix Microarray Suite version 5.0
+!Sample_platform_id = GPL72
+#ID_REF = 
+#VALUE = MAS5-calculated Signal intensity
+#ABS_CALL = the call in an absolute analysis that indicates if the transcript was present (P), absent (A), marginal (M), or no call (NC)
+#DETECTION P-VALUE = 'detection p-value', p-value that indicates the significance level of the detection call
+!Sample_table_begin
+ID_REF	VALUE	ABS_CALL	DETECTION P-VALUE
+141200_at	70.3	A	0.216313
+141201_at	38	A	0.635055
+141202_at	831.8	P	0.000613
+141203_at	2215.5	P	0.000944
+141204_at	965.6	P	0.000491
+141205_at	383.2	P	0.001432
+141206_at	1195	P	0.000491
+141207_at	413.7	P	0.000613
+141208_at	447.3	P	0.000762
+141209_at	294.4	P	0.004591
+141210_at	81.7	M	0.054711
+141211_at	84.9	P	0.005504
+141212_at	1456.4	P	0.000491
+141213_at	37	A	0.122747
+141214_at	2022	P	0.000491
+141215_at	690.9	P	0.004591
+141216_at	525.1	P	0.000762
+141217_at	643.5	P	0.000613
+141218_at	2570.5	P	0.000491
+141219_at	265.9	P	0.005504
+!Sample_table_end
+^SAMPLE=wing/hinge rep1
+!Sample_title = wing/hinge replicate 1
+!Sample_source_name = wing/hinge
+!Sample_organism = Drosophila melanogaster
+!Sample_characteristics = Wild type, third instar larvae, wing/hinge
+!Sample_molecule = total RNA
+!Sample_extract_protocol = Approximately 200 wild-type (Berlin strain) wandering third-instar larvae were dissected and the wing discs were collected in a drop of PBS on Sylgard (Dow Corning). Discs were cut between the presumptive hinge and the body wall regions using a 30-gauge syringe needle, and fragments were lysed in separate groups in RLT buffer (Qiagen).Total RNA was extracted from the tissue lysate using an RNeasy kit (Qiagen).
+!Sample_label = biotin
+!Sample_label_protocol = Approximately 8 µg of total RNA was processed to produce biotinylated cRNA targets.
+!Sample_hyb_protocol = standard Affymetrix procedures
+!Sample_scan_protocol = standard Affymetrix procedures
+!Sample_description = Wild type third instar larvae imaginal wing discs
+!Sample_data_processing = Affymetrix Microarray Suite version 5.0
+!Sample_platform_id = GPL72 
+#ID_REF = 
+#VALUE = MAS5-calculated Signal intensity
+#ABS_CALL = the call in an absolute analysis that indicates if the transcript was present (P), absent (A), marginal (M), or no call (NC)
+#DETECTION P-VALUE = 'detection p-value', p-value that indicates the significance level of the detection call
+!Sample_table_begin
+ID_REF	VALUE	ABS_CALL	DETECTION P-VALUE
+141200_at	20.8	A	0.801637
+141201_at	85.8	A	0.48748
+141202_at	704.8	P	0.000613
+141203_at	1036.6	P	0.000944
+141204_at	700.3	P	0.000491
+141205_at	462.4	P	0.003159
+141206_at	1301.9	P	0.000491
+141207_at	454.8	P	0.000944
+141208_at	438.6	P	0.000944
+141209_at	264.4	P	0.004591
+141210_at	65.6	A	0.150145
+141211_at	72.2	A	0.070073
+141212_at	1200	P	0.000491
+141213_at	13.7	A	0.635055
+141214_at	1944	P	0.000491
+141215_at	465.5	P	0.005504
+141216_at	538.9	P	0.002607
+141217_at	753.9	P	0.003159
+141218_at	2942.6	P	0.000491
+141219_at	283.9	P	0.010972
+!Sample_table_end
+

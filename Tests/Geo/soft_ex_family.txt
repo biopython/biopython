@@ -1,0 +1,268 @@
+^PLATFORM=GEO Human 15K v2.0
+!Platform_title = Human 15K long oligo array version 2.0
+!Platform_distribution = non-commercial
+!Platform_description = This set includes 13971 oligonucleotides, mostly 70-mers, designed based upon representative sequences in build 155 of the human UniGene database.
+!Platform_technology = spotted oligonucleotide
+!Platform_organism = Homo sapiens
+!Platform_manufacturer = GEO Labs
+!Platform_manufacture_protocol = as described in GEO Labs manual
+!Platform_support = glass
+!Platform_coating = unknown
+!Platform_pubmed_id = 123456789
+!Platform_web_link = http://geo.best-arrays.org
+!Platform_contributor = Jane,Doe
+!Platform_contributor = John,A,Smith
+!Platform_contributor = Hans,van Elton
+!Platform_contributor = John,Smithers Jr
+!Platform_contributor = Jie,D,Chen
+#ID =
+#GB_ACC = GenBank accession number of sequence used to design oligonucleotide probe   LINK_PRE:"http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=" 
+#GENE_NAME = Descriptive gene name, from UniGene Build 155
+#UNIGENE = UniGene cluster ID, Build 155   LINK_PRE:"http://www.ncbi.nlm.nih.gov/UniGene/clust.cgi?ORG=Hs&CID="
+#LOCUSLINK = LocusLink identifier   LINK_PRE:"http://www.ncbi.nlm.nih.gov/LocusLink/LocRpt.cgi?l="
+#GENE_SYMBOL = Gene symbol, from UniGene Build 155
+#TIP_ID = Print tip ID
+#ROW = Row within array
+#COLUMN = Column within array
+#PLATE_ID = Plate identifier
+#FLAG = Passed validation
+#SEQUENCE = Sequence of oligonucleotide probe
+!Platform_table_begin
+ID	GB_ACC	GENE_NAME	UNIGENE	LOCUSLINK	GENE_SYMBOL	TIP_ID	ROW	COLUMN	PLATE_ID	FLAG	SEQUENCE
+1	NM_012115	CASP8 associated protein 2	122843	9994	CASP8AP2	1	1	1	HK1A1	1	GAGGGCCATCATTTAAAACATTTGCATATTTAGCCGCCAAGTTGGATAAAAATCCAAATCAGGTCTCAGA
+2	AF035444	tumor suppressing subtransferable candidate 3	154036	7262	TSSC3	5	1	1	HK1A2	1	CTCATCCAGTCATGCGGGGCTGGTGTGAAAGGCGCTGGGAACCGGCTTTGAATGAATAAATGAATCGTGT
+3	AK001420	PEF protein with a long N-terminal hydrophobic domain (peflin)	241531	23578	PEF	1	3	1	HK1A3	1	AATCTGACCAAGCATGAGAGAGATCTGTCTATGGGACCAGTGGCTTGGATTCTGCCACACCCATAAATCC
+4	M55150	fumarylacetoacetate hydrolase (fumarylacetoacetase)	73875	2184	FAH	5	3	1	HK1A4	1	TCCTGCCATCATGAGATTTTCTCTGCTCTTCTGGAAACAAAGGGCTCAAGCACCCCTTTCAACCCTGTGA
+5	AL121964					1	5	1	HK1A5	1	TCCCTGTGAAACTTTGGTTTCTTTCTATAAATGTGTGTGGTTTTCAGCGCTCAACTCCTGTCTTCAAATG
+6	NM_012094	peroxiredoxin 5	31731	25824	PRDX5	5	5	1	HK1A6	1	AATATCATCTCACAGCTCTGAGGCCCTGGGCCAGATTACTTCCTCCACCCCTCCCTATCTCACCTGCCCA
+7	AK001917	programmed cell death 6	80019	10016	PDCD6	1	7	1	HK1A7	1	TGTCACGTGGGGACCCAGCTGTACATATGTGGATAAGCTGATTAATGGTTTTGCAACTGTAATAGTAGCT
+8	AF135794	v-akt murine thymoma viral oncogene homolog 3 (protein kinase B, gamma)	278582	10000	AKT3	5	7	1	HK1A8	1	CTTTGGGAGAAGAGATGCTGCCATTTAACCCCTTGGTACTGAAAATGAGAAAATCCCCAACTATGCATGC
+9	U43342	nuclear factor of activated T-cells, cytoplasmic, calcineurin-dependent 2	248037	4773	NFATC2	1	9	1	HK1A9	1	CTACTTGGATGATGTTAATGAAATTATCAGGAAGGAGTTTTCAGGACCTCCTGCCAGAAATCAGACGTAA
+10	AF067724	non-metastatic cells 5, protein expressed in (nucleoside-diphosphate kinase)	72050	8382	NME5	5	9	1	HK1A10	1	TTTCATGCTCATGTGTCAGATATGCTTCCCTCAAACCTTGTTACAGCATCATCACATTACCTGTTTGATG
+11	M13452	lamin A/C	77886	4000	LMNA	1	11	1	HK1A11	1	GAGCCCTTGCCTCCCCATTTCCCATCTGCACCCCTTCTCTCCTCCCCAAATCAATACACTAGTTGTTTCT
+12	AJ242832	calpain 11	225953	11131	CAPN11	5	11	1	HK1A12	1	TGAACAACAAGGTAATGCAGGTCCTGGTGGCCAGGTATGCAGATGATGACCTGATCATAGACTTTGACAG
+13	AF041378	cell death-inducing DFFA-like effector a	249129	1149	CIDEA	2	1	1	HK1B1	1	AGGACTTCATCGGCTGCCTTAACGTGAAGGCCACCATGTATGAGATGTACTCCGTGTCCTACGACATCCG
+14	AF014955	programmed cell death 5	166468	9141	PDCD5	6	1	1	HK1B2	1	GAAAAGTAATGGACTCTGATGAAGATGACGATTATTGAACTACAAGTGCTCACAGACTAGAACTTAACGG
+15	D50857	dedicator of cyto-kinesis 1	82295	1793	DOCK1	2	3	1	HK1B3	1	TGTTCCAGCCGGTGGTGTGACTTCGTTGGTTGAGGTGTGTCTCCAACCTACATCAGACCATGAAGTTCAA
+16	AB011414	Kruppel-type zinc finger (C2H2)	142150	10224	ZK1	6	3	1	HK1B4	1	TGATACCTGCTGGGTATTGGTTCCAGCACTCCGTGAGCCATGTCCAGTCCCTTTTATAAAATGACATGTT
+17	AF064019	DNA fragmentation factor, 40kDa, beta polypeptide (caspase-activated DNase)	133089	1677	DFFB	2	5	1	HK1B5	1	CGGTCTGGAAGGAAACACGCGGATCTGAACAGCAGTAATCCTGGGGGATACGGGGGTTGGGCTAGATTAC
+18	U83857	apoptosis inhibitor 5	227913	8539	API5	6	5	1	HK1B6	1	TCACCGTTCCCCTTCCCTTTCGTAAGGCAATAGTGCACAACTTAGGTTATTTTTGCTTCCGAATTTGAAT
+19	J05243	spectrin, alpha, non-erythrocytic 1 (alpha-fodrin)	77196	6709	SPTAN1	2	7	1	HK1B7	1	TAGGAGAAAATGGTGCTTCACTAACCCGCTTCCGGTCCAGTCACAATCATCATGTCACTGTGGGACCCAG
+20	AB014541	apoptosis-associated tyrosine kinase	128316	9625	AATK	6	7	1	HK1B8	1	ATGTAAAGTTTATTGTTGCTTCGCAGGGGGATTTGTTTTGTGTTTTGTTTGAGGCTTAGAACGCTGGTGC
+!Platform_table_end
+^SAMPLE=HS-5 cells rep 1
+!Sample_title = Human bone marrow stromal cells, HS-5 cells, replicate 1
+!Sample_source_name_ch1 = Human bone marrow stromal cells, HS-5 cells
+!Sample_organism_ch1 = Homo sapiens
+!Sample_characteristics_ch1 = Human bone marrow stromal cells, HS-5
+!Sample_growth_protocol_ch1 = HS-5 cells cultured in RPMI medium 1640 containing 10% fetal calf serum. Cells were plated in T75 flasks at 3,000,000 cells/flask. They were cultured for 3 days and harvested by trypsinization followed by pelleting of the cells.
+!Sample_molecule_ch1 = total RNA
+!Sample_extract_protocol_ch1 = RNA isolation was accomplished with Qiagen RNeasy Mini Kit reagents. The RNA (30 µg) was annealed with 5 µg oligo dT12-18, and reverse-transcribed into cDNA with Superscript II reverse transcriptase for 2h at 42°C in the presence of 0.5 mM dGTP, 0.5 mM dCTP, 0.5 mM dATP, 0.3 mM dTTP, 0.2 mM amino-allyl dUTP. After hydrolysis of RNA in 0.2 M NaOH, Tris was removed from the reaction with a Microcon-30 concentrator.
+!Sample_label_ch1 = Cy5
+!Sample_label_protocol_ch1 = The cDNA from HS-5 RNA and Human Universal RNA was covalently coupled separately with Cy5 and Cy3 monoreactive fluors, respectively, in 50 mM sodium bicarbonate, pH 9.0, followed by quenching with 2.7 M hydroxylamine. The Cy5 and Cy3 labelled cDNAs were combined and purified with a QIAquick PCR purification kit and suspended in 36 µl of 3X SSC and 0.8 mg/ml of poly-A for hybridization to the microarray.
+!Sample_source_name_ch2 = Universal human reference RNA
+!Sample_organism_ch2 = Homo sapiens
+!Sample_characteristics_ch2 = As a control RNA, Human Universal RNA (Stratagene, La Jolla, CA) which is a mixture of RNA from 10 control cell lines approximating the expression profile of the majority of human genes was used.
+!Sample_molecule_ch2 = total RNA
+!Sample_extract_protocol_ch2 = The RNA (30 µg) was annealed with 5 µg oligo dT12-18, and reverse-transcribed into cDNA with Superscript II reverse transcriptase for 2h at 42°C in the presence of 0.5 mM dGTP, 0.5 mM dCTP, 0.5 mM dATP, 0.3 mM dTTP, 0.2 mM amino-allyl dUTP. After hydrolysis of RNA in 0.2 M NaOH, Tris was removed from the reaction with a Microcon-30 concentrator.
+!Sample_label_ch2 = Cy3
+!Sample_label_protocol_ch2 = The cDNA from HS-5 RNA and Human Universal RNA was covalently coupled separately with Cy5 and Cy3 monoreactive fluors, respectively, in 50 mM sodium bicarbonate, pH 9.0, followed by quenching with 2.7 M hydroxylamine. The Cy5 and Cy3 labelled cDNAs were combined and purified with a QIAquick PCR purification kit and suspended in 36 µl of 3X SSC and 0.8 mg/ml of poly-A for hybridization to the microarray.
+!Sample_scan_protocol = Fluorescent array images were collected for both Cy3 and Cy5 with a GenePix 4000A fluorescent scanner and image intensity data were extracted and analyzed with GenePix Pro 3.0 analysis software.
+!Sample_description = Human bone marrow stromal cells, HS-5 cells
+!Sample_data_processing = After background correction and removal of flagged values, log base 2 expression ratios were mean centered and linear transformed to obtain the log and linear values given in the data table.
+!Sample_platform_id = GEO Human 15K v2.0
+#ID_REF = 
+#VALUE = Normalized log2 ratio of means defined as CH1 divided by CH2
+#CH1_Median = Channel 1 median intensity
+#CH1_Mean = Channel 1 mean intensity
+#CH1_SD = Channel 1 mean standard deviation
+#CH1_BKD_ Median = Channel 1 median background intensity
+#CH1_BKD_ Mean = Channel 1 mean background intensity
+#CH1_BKD_ SD = Channel 1 background standard deviation
+#% > CH1_BKD_+2SD = Percent of feature pixels that were greater than two standard deviations of
+#CH2_Median = Channel 2 median intensity
+#CH2_Mean = Channel 2 mean intensity
+#CH2_SD = Channel 2 mean standard deviation
+#CH2_BKD_ Median = Channel 2 median background intensity
+#CH2_BKD_ Mean = Channel 2 mean background intensity
+#CH2_BKD_ SD = Channel 2 background standard deviation
+#% > CH2_BKD_+2SD = Percent of feature pixels that were greater than two standard deviations of the background over the background signal
+#Ratio of Means = Unnormalized, untransformed ratio of means
+#AREA = Number of pixels used to calculate a feature's intensity
+#BKD_AREA = Number of pixles used to calculate a feature's background
+#CH1_Median - CH1_BKD_ = Channel 1 median signal
+#CH2_Median - CH2_BKD_ = Channel 2 median signal
+#CH1_Mean - CH1_BKD_ = Channel 1 mean signal
+#CH2_Mean - CH2_BKD_ = Channel 2 mean signal
+#Flags = 0 denotes satisfactory features, while <0 denotes features that did not meet
+!Sample_table_begin
+ID_REF	VALUE	CH1_Median	CH1_Mean	CH1_SD	CH1_BKD_ Median	CH1_BKD_ Mean	CH1_BKD_ SD	% > CH1_BKD_+2SD	CH2_Median	CH2_Mean	CH2_SD	CH2_BKD_ Median	CH2_BKD_ Mean	CH2_BKD_ SD	% > CH2_BKD_+2SD	Ratio of Means	AREA	BKD_AREA	CH1_Median - CH1_BKD_	CH2_Median - CH2_BKD_	CH1_Mean - CH1_BKD_	CH2_Mean - CH2_BKD_	Flags
+1	17.51	36	38	9	37	38	8	5	45	46	9	46	47	10	0	100000	80	500	-1	-1	1	0	-50
+2	-0.10	42	47	19	37	39	11	12	64	65	15	45	47	10	43	0.5	32	176	5	19	10	20	-50
+3	-0.42	44	48	18	36	38	8	37	75	75	17	45	46	10	71	0.4	32	176	8	30	12	30	-50
+4	17.51	37	40	11	37	39	10	11	42	43	8	43	43	8	2	100000	80	498	0	-1	3	0	-50
+5	0.95	147	193	125	37	39	8	98	157	194	109	43	44	9	98	1.033	52	398	110	114	156	151	0
+6	0.79	57	62	21	37	39	9	55	69	71	14	44	45	8	76	0.926	52	329	20	25	25	27	-50
+7	0.12	45	48	16	37	40	10	28	64	64	14	45	46	9	50	0.579	32	224	8	19	11	19	-50
+8	0.68	54	54	17	36	38	9	48	63	64	13	43	44	8	57	0.857	80	510	18	20	18	21	-50
+9	-0.10	51	53	16	36	38	9	44	73	77	19	43	44	9	84	0.5	52	406	15	30	17	34	-50
+10	0.15	47	50	15	37	39	8	38	65	65	14	43	44	9	63	0.591	52	332	10	22	13	22	-50
+11	-1.42	38	40	12	37	39	10	9	58	60	13	45	47	10	31	0.2	32	148	1	13	3	15	-50
+12	-0.58	44	47	15	37	39	9	22	70	71	16	43	44	9	70	0.357	80	506	7	27	10	28	-50
+13	0.08	63	63	24	36	38	9	63	85	91	21	43	44	9	94	0.563	52	382	27	42	27	48	0
+14	-1.05	63	69	23	37	38	9	69	168	167	32	43	45	8	100	0.258	52	382	26	125	32	124	0
+15	1.02	439	452	225	37	39	9	98	428	425	198	43	44	8	93	1.086	80	546	402	385	415	382	0
+16	2.07	86	91	30	37	39	9	88	66	67	15	43	44	8	70	2.25	80	540	49	23	54	24	0
+17	-0.79	40	44	14	36	39	10	11	67	69	15	43	44	9	73	0.308	52	384	4	24	8	26	-50
+18	-0.57	50	51	16	37	39	10	37	79	82	22	43	44	9	83	0.359	80	570	13	36	14	39	-50
+19	1.90	37	39	10	37	39	10	5	44	44	8	43	44	9	1	2	80	475	0	1	2	1	-50
+20	-0.99	42	44	11	37	39	9	9	65	69	16	43	45	9	61	0.269	52	388	5	22	7	26	-50
+!Sample_table_end
+^SAMPLE=HS-27a cells
+!Sample_title = HS-27a cells.
+!Sample_source_name_ch1 = Human bone marrow stromal cells, HS-27a
+!Sample_organism_ch1 = Homo sapiens
+!Sample_characteristics_ch1 = Human bone marrow stromal cells, HS-27a
+!Sample_growth_protocol_ch1 = HS-27a cells cultured in RPMI medium 1640 containing 10% fetal calf serum. Cells were plated in T75 flasks at 3,000,000 cells/flask. They were cultured for 3 days and harvested by trypsinization followed by pelleting of the cells.
+!Sample_molecule_ch1 = total RNA
+!Sample_extract_protocol_ch1 = RNA isolation was accomplished with Qiagen RNeasy Mini Kit reagents. The RNA (30 µg) was annealed with 5 µg oligo dT12-18, and reverse-transcribed into cDNA with Superscript II reverse transcriptase for 2h at 42°C in the presence of 0.5 mM dGTP, 0.5 mM dCTP, 0.5 mM dATP, 0.3 mM dTTP, 0.2 mM amino-allyl dUTP. After hydrolysis of RNA in 0.2 M NaOH, Tris was removed from the reaction with a Microcon-30 concentrator.
+!Sample_label_ch1 = Cy5
+!Sample_label_protocol_ch1 = The cDNA from HS-27a RNA and Human Universal RNA was covalently coupled separately with Cy5 and Cy3 monoreactive fluors, respectively, in 50 mM sodium bicarbonate, pH 9.0, followed by quenching with 2.7 M hydroxylamine. The Cy5 and Cy3 labelled cDNAs were combined and purified with a QIAquick PCR purification kit and suspended in 36 µl of 3X SSC and 0.8 mg/ml of poly-A for hybridization to the microarray.
+!Sample_source_name_ch2 = Universal human reference RNA
+!Sample_organism_ch2 = Homo sapiens
+!Sample_characteristics_ch2 = As a control RNA, Human Universal RNA (Stratagene, La Jolla, CA) which is a mixture of RNA from 10 control cell lines approximating the expression profile of the majority of human genes was used.
+!Sample_molecule_ch2 = total RNA
+!Sample_extract_protocol_ch2 = The RNA (30 µg) was annealed with 5 µg oligo dT12-18, and reverse-transcribed into cDNA with Superscript II reverse transcriptase for 2h at 42°C in the presence of 0.5 mM dGTP, 0.5 mM dCTP, 0.5 mM dATP, 0.3 mM dTTP, 0.2 mM amino-allyl dUTP. After hydrolysis of RNA in 0.2 M NaOH, Tris was removed from the reaction with a Microcon-30 concentrator.
+!Sample_label_ch2 = Cy3
+!Sample_label_protocol_ch2 = The cDNA from HS-27a RNA and Human Universal RNA was covalently coupled separately with Cy5 and Cy3 monoreactive fluors, respectively, in 50 mM sodium bicarbonate, pH 9.0, followed by quenching with 2.7 M hydroxylamine. The Cy5 and Cy3 labelled cDNAs were combined and purified with a QIAquick PCR purification kit and suspended in 36 µl of 3X SSC and 0.8 mg/ml of poly-A for hybridization to the microarray.
+!Sample_scan_protocol = Fluorescent array images were collected for both Cy3 and Cy5 with a GenePix 4000A fluorescent scanner and image intensity data were extracted and analyzed with GenePix Pro 3.0 analysis software.
+!Sample_description = Human bone marrow stromal cells, HS-27a cells
+!Sample_data_processing = After background correction and removal of flagged values, log base 2 expression ratios were mean centered and linear transformed to obtain the log and linear values given in the data table.
+!Sample_platform_id = GEO Human 15K v2.0
+#ID_REF = 
+#VALUE = Normalized log2 ratio of means defined as CH1 divided by CH2
+#CH1_Median = Channel 1 median intensity
+#CH1_Mean = Channel 1 mean intensity
+#CH1_SD = Channel 1 mean standard deviation
+#CH1_BKD_ Median = Channel 1 median background intensity
+#CH1_BKD_ Mean = Channel 1 mean background intensity
+#CH1_BKD_ SD = Channel 1 background standard deviation
+#% > CH1_BKD_+2SD = Percent of feature pixels that were greater than two standard deviations of
+#CH2_Median = Channel 2 median intensity
+#CH2_Mean = Channel 2 mean intensity
+#CH2_SD = Channel 2 mean standard deviation
+#CH2_BKD_ Median = Channel 2 median background intensity
+#CH2_BKD_ Mean = Channel 2 mean background intensity
+#CH2_BKD_ SD = Channel 2 background standard deviation
+#% > CH2_BKD_+2SD = Percent of feature pixels that were greater than two standard deviations of the background over the background signal
+#Ratio of Means = Unnormalized, untransformed ratio of means
+#AREA = Number of pixels used to calculate a feature's intensity
+#BKD_AREA = Number of pixles used to calculate a feature's background
+#CH1_Median - CH1_BKD_ = Channel 1 median signal
+#CH2_Median - CH2_BKD_ = Channel 2 median signal
+#CH1_Mean - CH1_BKD_ = Channel 1 mean signal
+#CH2_Mean - CH2_BKD_ = Channel 2 mean signal
+#Flags = 0 denotes satisfactory features, while <0 denotes features that did not meet
+!Sample_table_begin
+ID_REF	VALUE	CH1_Median	CH1_Mean	CH1_SD	CH1_BKD_ Median	CH1_BKD_ Mean	CH1_BKD_ SD	% > CH1_BKD_+2SD	CH2_Median	CH2_Mean	CH2_SD	CH2_BKD_ Median	CH2_BKD_ Mean	CH2_BKD_ SD	% > CH2_BKD_+2SD	Ratio of Means	AREA	BKD_AREA	CH1_Median - CH1_BKD_	CH2_Median - CH2_BKD_	CH1_Mean - CH1_BKD_	CH2_Mean - CH2_BKD_	Flags
+1	17.07	36	40	11	37	40	12	5	39	38	5	38	39	6	1	100000	80	540	-1	1	3	0	-50
+2	-0.25	47	51	18	37	39	10	30	60	62	15	39	39	6	71	0.609	52	408	10	21	14	23	-50
+3	-0.53	46	49	16	37	40	12	15	62	62	13	38	39	5	86	0.5	52	318	9	24	12	24	-50
+4	17.07	36	40	12	36	40	12	10	39	39	6	39	39	6	5	100000	80	489	0	0	4	0	-50
+5	1.28	178	251	175	36	41	12	95	116	161	103	39	39	6	95	1.762	80	476	142	77	215	122	0
+6	0.83	56	64	31	37	41	18	32	57	60	18	39	39	7	57	1.286	80	514	19	18	27	21	-50
+7	0.86	59	63	32	38	40	12	32	55	58	14	39	39	7	57	1.316	52	382	21	16	25	19	-50
+8	2.12	124	144	75	37	40	12	95	72	73	15	39	39	6	88	3.147	80	554	87	33	107	34	0
+9	-0.24	59	66	26	36	40	12	48	92	87	19	38	39	6	96	0.612	52	400	23	54	30	49	-50
+10	0.64	63	63	20	37	40	11	53	58	61	12	38	39	6	75	1.13	80	502	26	20	26	23	-50
+11	0.39	50	57	21	38	41	12	31	57	58	11	38	39	7	62	0.95	32	171	12	19	19	20	-50
+12	-0.05	57	59	21	38	42	15	25	69	69	13	39	40	6	96	0.7	52	330	19	30	21	30	-50
+13	-0.30	76	77	28	37	40	13	67	106	107	20	39	40	6	100	0.588	52	390	39	67	40	68	0
+14	0.11	166	170	60	36	39	12	100	210	210	38	39	39	7	100	0.784	52	380	130	171	134	171	0
+15	0.92	1356	1345	447	38	42	15	100	1004	993	331	39	40	10	100	1.37	52	380	1318	965	1307	954	0
+16	2.92	183	193	62	39	42	12	100	66	67	14	39	39	6	88	5.5	80	476	144	27	154	28	0
+17	-0.12	54	58	17	36	39	12	36	70	71	14	38	39	6	93	0.667	80	535	18	32	22	33	-50
+18	-1.08	59	62	24	36	39	11	51	109	114	36	38	39	5	100	0.342	80	466	23	71	26	76	-50
+19	17.07	36	41	13	38	41	11	11	39	38	5	38	39	5	1	100000	80	485	-2	1	3	0	-50
+20	0.05	50	52	20	37	41	24	5	56	58	16	38	39	7	63	0.75	52	371	13	18	15	20	-50
+!Sample_table_end
+^SAMPLE=HS-5 cells rep2
+!Sample_title = HS-5 cells, replicate 2
+!Sample_source_name_ch1 = Human bone marrow stromal cells, HS-5
+!Sample_organism_ch1 = Homo sapiens
+!Sample_characteristics_ch1 = Human bone marrow stromal cells, HS-5
+!Sample_growth_protocol_ch1 = HS-5 cells cultured in RPMI medium 1640 containing 10% fetal calf serum. Cells were plated in T75 flasks at 3,000,000 cells/flask. They were cultured for 3 days and harvested by trypsinization followed by pelleting of the cells.
+!Sample_molecule_ch1 = total RNA
+!Sample_extract_protocol_ch1 = RNA isolation was accomplished with Qiagen RNeasy Mini Kit reagents. The RNA (30 µg) was annealed with 5 µg oligo dT12-18, and reverse-transcribed into cDNA with Superscript II reverse transcriptase for 2h at 42°C in the presence of 0.5 mM dGTP, 0.5 mM dCTP, 0.5 mM dATP, 0.3 mM dTTP, 0.2 mM amino-allyl dUTP. After hydrolysis of RNA in 0.2 M NaOH, Tris was removed from the reaction with a Microcon-30 concentrator.
+!Sample_label_ch1 = Cy5
+!Sample_label_protocol_ch1 = The cDNA from HS-5 RNA and Human Universal RNA was covalently coupled separately with Cy5 and Cy3 monoreactive fluors, respectively, in 50 mM sodium bicarbonate, pH 9.0, followed by quenching with 2.7 M hydroxylamine. The Cy5 and Cy3 labelled cDNAs were combined and purified with a QIAquick PCR purification kit and suspended in 36 µl of 3X SSC and 0.8 mg/ml of poly-A for hybridization to the microarray.
+!Sample_source_name_ch2 = Universal human reference RNA
+!Sample_organism_ch2 = Homo sapiens
+!Sample_characteristics_ch2 = As a control RNA, Human Universal RNA (Stratagene, La Jolla, CA) which is a mixture of RNA from 10 control cell lines approximating the expression profile of the majority of human genes was used.
+!Sample_molecule_ch2 = total RNA
+!Sample_extract_protocol_ch2 = The RNA (30 µg) was annealed with 5 µg oligo dT12-18, and reverse-transcribed into cDNA with Superscript II reverse transcriptase for 2h at 42°C in the presence of 0.5 mM dGTP, 0.5 mM dCTP, 0.5 mM dATP, 0.3 mM dTTP, 0.2 mM amino-allyl dUTP. After hydrolysis of RNA in 0.2 M NaOH, Tris was removed from the reaction with a Microcon-30 concentrator.
+!Sample_label_ch2 = Cy3
+!Sample_label_protocol_ch2 = The cDNA from HS-5 RNA and Human Universal RNA was covalently coupled separately with Cy5 and Cy3 monoreactive fluors, respectively, in 50 mM sodium bicarbonate, pH 9.0, followed by quenching with 2.7 M hydroxylamine. The Cy5 and Cy3 labelled cDNAs were combined and purified with a QIAquick PCR purification kit and suspended in 36 µl of 3X SSC and 0.8 mg/ml of poly-A for hybridization to the microarray.
+!Sample_scan_protocol = Fluorescent array images were collected for both Cy3 and Cy5 with a GenePix 4000A fluorescent scanner and image intensity data were extracted and analyzed with GenePix Pro 3.0 analysis software.
+!Sample_description = Human bone marrow stromal cells, HS-5 cells
+!Sample_data_processing = After background correction and removal of flagged values, log base 2 expression ratios were mean centered and linear transformed to obtain the log and linear values given in the data table.
+!Sample_platform_id = GEO Human 15K v2.0
+#ID_REF = 
+#VALUE = Normalized log2 ratio of means defined as CH1 divided by CH2
+#CH1_Median = Channel 1 median intensity
+#CH1_Mean = Channel 1 mean intensity
+#CH1_SD = Channel 1 mean standard deviation
+#CH1_BKD_ Median = Channel 1 median background intensity
+#CH1_BKD_ Mean = Channel 1 mean background intensity
+#CH1_BKD_ SD = Channel 1 background standard deviation
+#% > CH1_BKD_+2SD = Percent of feature pixels that were greater than two standard deviations of
+#CH2_Median = Channel 2 median intensity
+#CH2_Mean = Channel 2 mean intensity
+#CH2_SD = Channel 2 mean standard deviation
+#CH2_BKD_ Median = Channel 2 median background intensity
+#CH2_BKD_ Mean = Channel 2 mean background intensity
+#CH2_BKD_ SD = Channel 2 background standard deviation
+#% > CH2_BKD_+2SD = Percent of feature pixels that were greater than two standard deviations of the background over the background signal
+#Ratio of Means = Unnormalized, untransformed ratio of means
+#AREA = Number of pixels used to calculate a feature's intensity
+#BKD_AREA = Number of pixles used to calculate a feature's background
+#CH1_Median - CH1_BKD_ = Channel 1 median signal
+#CH2_Median - CH2_BKD_ = Channel 2 median signal
+#CH1_Mean - CH1_BKD_ = Channel 1 mean signal
+#CH2_Mean - CH2_BKD_ = Channel 2 mean signal
+#Flags = 0 denotes satisfactory features, while <0 denotes features that did not meet
+!Sample_table_begin
+ID_REF	VALUE	CH1_Median	CH1_Mean	CH1_SD	CH1_BKD_ Median	CH1_BKD_ Mean	CH1_BKD_ SD	% > CH1_BKD_+2SD	CH2_Median	CH2_Mean	CH2_SD	CH2_BKD_ Median	CH2_BKD_ Mean	CH2_BKD_ SD	% > CH2_BKD_+2SD	Ratio of Means	AREA	BKD_AREA	CH1_Median - CH1_BKD_	CH2_Median - CH2_BKD_	CH1_Mean - CH1_BKD_	CH2_Mean - CH2_BKD_	Flags
+1	3.74	39	44	16	37	40	13	10	42	42	8	41	42	8	2	7	80	473	2	1	7	1	-50
+2	-0.14	46	46	15	37	40	13	10	57	58	14	39	40	7	53	0.474	80	549	9	18	9	19	-50
+3	-0.31	47	47	18	36	40	13	16	65	66	18	40	41	7	75	0.423	80	554	11	25	11	26	-50
+4	3.74	40	43	12	36	40	12	10	40	40	7	39	40	8	1	7	80	480	4	1	7	1	-50
+5	0.60	74	91	55	37	41	14	60	95	108	45	40	41	8	93	0.794	80	532	37	55	54	68	0
+6	0.86	60	58	19	38	42	14	33	59	60	14	39	40	8	60	0.952	80	555	22	20	20	21	-50
+7	0.67	47	48	14	38	42	14	7	50	52	11	40	41	8	30	0.833	52	392	9	10	10	12	-50
+8	0.71	51	56	22	38	41	13	31	62	61	14	40	41	7	66	0.857	80	516	13	22	18	21	-50
+9	0.09	49	52	18	37	40	13	21	67	67	18	40	41	7	75	0.556	120	699	12	27	15	27	-50
+10	-0.29	45	49	16	40	44	16	9	62	62	14	41	42	10	53	0.429	32	232	5	21	9	21	-50
+11	-0.18	42	46	15	40	44	15	10	52	52	11	39	40	8	33	0.462	80	488	2	13	6	13	-50
+12	-0.87	45	49	18	39	42	15	10	75	75	15	40	41	8	88	0.286	80	521	6	35	10	35	-50
+13	-0.04	64	69	27	37	41	13	51	100	102	23	39	41	8	98	0.508	80	467	27	61	32	63	-50
+14	-1.75	58	63	22	37	41	14	38	206	208	43	40	41	8	100	0.155	80	468	21	166	26	168	-50
+15	1.32	643	731	413	38	42	15	100	543	569	218	40	41	7	100	1.31	80	537	605	503	693	529	0
+16	2.58	162	168	74	37	41	13	98	80	83	22	41	42	8	93	3.119	80	458	125	39	131	42	0
+17	-0.75	42	46	15	37	40	12	12	67	69	16	40	41	8	82	0.31	80	470	5	27	9	29	-50
+18	-1.39	41	45	16	38	41	13	8	67	75	29	40	41	9	68	0.2	80	555	3	27	7	35	-50
+19	0.00	40	42	14	37	40	12	10	39	39	7	40	40	7	2	-5	80	464	3	-1	5	-1	-50
+20	-0.65	38	42	15	37	40	14	3	53	55	13	40	41	8	37	0.333	80	549	1	13	5	15	-50
+!Sample_table_end
+^SERIES=Bone_marrow_stromal_cells
+!Series_title = Profiling of the functionally distinct human bone marrow stromal cell lines HS-5 and HS-27a.
+!Series_type = other
+!Series_summary = Two human stromal cell lines, HS-5 and HS-27a, represent functionally distinct components of the bone marrow microenvironment.1,2 HS-27a supports cobblestone area formation by early hematopoietic progenitors, whereas HS-5 secretes multiple cytokines that support the proliferation of committed progenitors. These cell lines have been distributed to research groups worldwide for use as a tool to understand interactions between hematopoietic cells and their microenvironment. We have used DNA microarray technology to characterize and compare the expression of over 17 000 genes in these cell lines. Gene expression differences in cytokines/chemokines, G-protein signaling molecules, and multiple extracellular matrix proteins add to the known protein and functional characterization of the lines, leading to new insight into the differences in their support function for hematopoietic progenitors.
+!Series_overall_design = We analyzed 2 arrays for HS-5 cell line and 1 array for HS-27a cell line
+!Series_pubmed_id = 123456789
+!Series_contributor = Jane,,Doe
+!Series_contributor = John,A,Smith
+!Series_web_link = http://geo.best-arrays.org
+!Series_sample_id = HS-5 cells rep1
+!Series_sample_id = HS-27a cells
+!Series_sample_id = HS-5 cells rep2
