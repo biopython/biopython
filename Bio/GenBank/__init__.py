@@ -1552,18 +1552,52 @@ class _Scanner:
                 if self._debug > 1 : print "Starting " + feature_key + " feature at location " + feature_location
                 #############################################################
                 consumer.location(feature_location)
-
                 #We have dealt with that line (key and location, plus any lines continuing of the location).
                 #The next line could be the first of one or more qualifiers to the feature:
+                #
+                #We have dealt with that line (key and location, plus any lines continuing of the location).
+                #The next line could be the first of one or more qualifiers to the feature:
+                #
+                #Can have single line entries like this:
+                #                     /pseudo                (no information)
+                #                     /name=Fred             (unquoted)
+                #                     /name="Fred Jones"     (quoted)
+                #
+                #Can have quoted multiline entries like this:
+                #                     /name="Fred
+                #                     Jones"
+                #
+                #Or even like this (see bug 1903):
+                #                     /name="
+                #                     Fred Jones"
+                #
+                #We can also have unquoted multiline entries (bug 1758):
+                #                     /transl_except=(pos:complement(18111697..18111699),
+                #                     aa:OTHER)
+                #
+                #Note that you can get text of the form /word= which are INSIDE a
+                #quoted entry, which does not mean its a new feature key!
+                #(Any examples to hand?)
+                #
+                #Also note that the NCBI have sometimes used unescaped quotes inside
+                #the text, for example it was reported on the mailing list that one
+                #version of NC_000913 had the following:
+                #                     /note="2'-(5"-phosphoribosyl)-3'-dephospho-CoA...
+                #The 02-DEC-2005 version of the citX gene had been changed to:
+                #                     /note="2'-(5'-phosphoribosyl)-3'-dephospho-CoA...
                 line = handle.readline()
                 while line[0:FEATURE_QUALIFIER_INDENT]==FEATURE_QUALIFIER_SPACER :
-                    #This is the start of a new qualifier for the current feature
+                    #This SHOULD be the start of a new qualifier for the current feature
                     line = line[FEATURE_QUALIFIER_INDENT:]
                     if line[-1:]=='\n' : line = line[:-1]
                     if line[-1:]=='\r' : line = line[:-1]
-                    assert line[0:1]=='/', \
-                           'Expected start of new qualifier, not:\n' + line
-                    if line.find("=") == -1 :
+                    if line[0:1]<>'/' :
+                        #This is an unquoted multiline feature key, as reported in bug 1758
+                        print "WARNING - Unquoted multiline %s entry for %s feature with location:\n%s" \
+                              % (qualifier_name, feature_key, feature_location)
+                        #This will append the line to the description parsed so far:
+                        consumer.feature_qualifier_description(line)    
+                    elif line.find("=") == -1 :
                         #Can have qualifiers with no data, like /psuedo
                         qualifier_name = line[1:]
                         consumer.feature_qualifier_name([qualifier_name])
@@ -1574,7 +1608,9 @@ class _Scanner:
                         qualifier_name = line[1:line.find('=')]
                         consumer.feature_qualifier_name([qualifier_name])
                         qualifier_description = line[line.find("=")+1:]
-                        #And the description for this qualifier?
+                        #Try and get all of the description now, so we can make a single
+                        #call to the consumer.  Making less function calls should be
+                        #slightly faster.
                         if qualifier_description=='\"' \
                         or ( qualifier_description[0:1]=='\"' and qualifier_description[-1:]<>'\"' ) :
                             #There should now be one or more lines continuing the description
@@ -1592,7 +1628,7 @@ class _Scanner:
                                     break
                         consumer.feature_qualifier_description(qualifier_description)
                     #We have dealt with that line (qualifier and description, plus any line continuing the description).
-                    #The could be another qualifier for this feature...
+                    #There could be another qualifier for this feature...
                     line = handle.readline()
                 #We have dealt with all the qualifiers (if any) for this feature
                 #Now move on to the next line...
