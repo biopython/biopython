@@ -1,6 +1,7 @@
 # Copyright Yair Benita Y.Benita@pharm.uu.nl
 # Biopython (http://biopython.org) license applies
 
+import sys
 import ProtParamData, IsoelectricPoint
 from ProtParamData import kd  # Added by Iddo to enable the gravy method
 from Bio.Seq import Seq
@@ -203,9 +204,18 @@ class ProteinAnalysis:
 			score = 0.0
 			for j in range(Window/2):
 				# walk from the outside of the Window towards the middle.
-				score += weight[j] * ParamDict[subsequence[j]] + weight[j] * ParamDict[subsequence[Window-j-1]]
+				# Iddo: try/except clauses added to avoid raising an exception on a non-standad amino acid
+					try:
+						score += weight[j] * ParamDict[subsequence[j]] + weight[j] * ParamDict[subsequence[Window-j-1]]
+					except KeyError:
+						sys.stderr.write('warning: %s or %s is not a standard amino acid.\n' %
+                                 (subsequence[j],subsequence[Window-j-1]))
+
 			# Now add the middle value, which always has a weight of 1.
-			score += ParamDict[subsequence[Window/2]]
+			if subsequence[Window/2] in ParamDict:
+				score += ParamDict[subsequence[Window/2]]
+			else:
+				sys.stderr.write('warning: %s  is not a standard amino acid.\n' % (subsequence[Window/2]))
 		
 			list.append(score/sum_of_weights)
 		return list
