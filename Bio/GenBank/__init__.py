@@ -1485,8 +1485,19 @@ class _Scanner:
                         #End of continuation - return to top of loop!
                         break
             else :
-                assert False, \
-                       'Unknown line type, ' + line_type + ' found:\n' + line
+                #Its an unknown line type, the NCBI might have added
+                #something new... see bug 1946
+                #Print a warning, and ignore the line (and any continuation)
+                print 'WARNING - Ignoring an unknown line type, ' + line_type + ' found:\n' + line
+                while True :
+                    line = handle.readline()
+                    if line[0:GENBANK_INDENT] == GENBANK_SPACER :
+                        #More of the unknown line type, could print another
+                        #warning...
+                        pass
+                    else :
+                        #Got to the end of it.
+                        break
         #############################################################
         if self._debug : print "Found start of features..."
         assert line.find("FEATURES             ") == 0, \
