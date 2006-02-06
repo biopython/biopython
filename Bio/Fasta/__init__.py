@@ -106,7 +106,7 @@ class _MartelBaseFastaParser:
         raise NotImplementedError("Derived class must implement")
 
 class RecordParser(_MartelBaseFastaParser):
-    """Parses FASTA sequence data into a Record object.
+    """Parses FASTA sequence data into a Fasta.Record object.
     """
     def __init__(self, debug = 0):
         _MartelBaseFastaParser.__init__(self, debug)
@@ -123,7 +123,7 @@ class RecordParser(_MartelBaseFastaParser):
         return rec
 
 class SequenceParser(_MartelBaseFastaParser):
-    """Parses FASTA sequence data into a Sequence object.
+    """Parses FASTA sequence data into a SeqRecord object.
     """
     def __init__(self, alphabet = Alphabet.generic_alphabet, title2ids = None,
             debug = 0):
@@ -133,7 +133,7 @@ class SequenceParser(_MartelBaseFastaParser):
         o alphabet - The alphabet of the sequences to be parsed. If not
         passed, this will be set as generic_alphabet.
         o title2ids - A function that, when given the title of the FASTA
-        file (without the beginning >), will return the name, id and
+        file (without the beginning >), will return the id, name and
         description (in that order) for the record. If this is not given,
         then the entire title line will be used as the description.
         """
