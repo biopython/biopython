@@ -1596,6 +1596,8 @@ class _Scanner:
                 #                     /note="2'-(5"-phosphoribosyl)-3'-dephospho-CoA...
                 #The 02-DEC-2005 version of the citX gene had been changed to:
                 #                     /note="2'-(5'-phosphoribosyl)-3'-dephospho-CoA...
+                #
+                #We have also seen blank lines inside a multiline feature (see bug 1942)
                 line = handle.readline()
                 while line[0:FEATURE_QUALIFIER_INDENT]==FEATURE_QUALIFIER_SPACER :
                     #This SHOULD be the start of a new qualifier for the current feature
@@ -1604,7 +1606,7 @@ class _Scanner:
                     if line[-1:]=='\r' : line = line[:-1]
                     if line[0:1]<>'/' :
                         #This is an unquoted multiline feature key, as reported in bug 1758
-                        print "WARNING - Unquoted multiline %s entry for %s feature with location:\n%s" \
+                        print "WARNING - Unquoted multiline '%s' entry for %s feature with location %s" \
                               % (qualifier_name, feature_key, feature_location)
                         #This will append the line to the description parsed so far:
                         consumer.feature_qualifier_description(line)    
@@ -1627,12 +1629,23 @@ class _Scanner:
                             #There should now be one or more lines continuing the description
                             while True :
                                 line = handle.readline()
-                                assert line[0:FEATURE_QUALIFIER_INDENT]==FEATURE_QUALIFIER_SPACER, \
-                                       'Expected qualifier description continuation, not:\n' + line
-                                #Note, for backwards compatibility we do not remove the FEATURE_QUALIFIER_SPACER
-                                #from the description
                                 if line[-1:]=='\n' : line = line[:-1]
                                 if line[-1:]=='\r' : line = line[:-1]
+                                while line=="" :
+                                    #See bug 1942, blank line in feature with malformed /note entry
+                                    print "WARNING - Blank line in '%s' entry for %s feature with location %s" \
+                                          % (qualifier_name, feature_key, feature_location)
+                                    #Ignore it, carry on
+                                    line = handle.readline()
+                                    if not line : break
+                                    if line[-1:]=='\n' : line = line[:-1]
+                                    if line[-1:]=='\r' : line = line[:-1]
+                                assert line[0:FEATURE_QUALIFIER_INDENT]==FEATURE_QUALIFIER_SPACER, \
+                                       "Expected qualifier description continuation in " \
+                                       + "'%s' entry for %s feature with location %s, not:\n%s" \
+                                       % (qualifier_name, feature_key, feature_location, line)
+                                #Note, for backwards compatibility we do not remove the FEATURE_QUALIFIER_SPACER
+                                #from the description
                                 qualifier_description = qualifier_description + '\n' + line
                                 if qualifier_description[-1:]=='\"' :
                                     #That should be the end of the description continuation
