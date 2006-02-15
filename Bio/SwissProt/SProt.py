@@ -538,40 +538,79 @@ class _RecordConsumer(AbstractConsumer):
     
     def date(self, line):
         uprline = string.upper(line)
-        
-        # find where the version information will be located
-        # This is needed for when you have cases like IPI where
-        # the release verison is in a different spot:
-        # DT   08-JAN-2002 (IPI Human rel. 2.3, Created)
-        uprcols = uprline.split()
-        rel_index = -1
-        for index in range(len(uprcols)):
-            if uprcols[index].find("REL.") >= 0:
-                rel_index = index
-        assert rel_index >= 0, \
-                "Could not find Rel. in DT line: %s" % (line)
-        version_index = rel_index + 1
-        # get the version information
-        cols = line.split()
-        str_version = self._chomp(cols[version_index])
-        # no version number
-        if str_version == '':
-            version = 0
-        # dot versioned
-        elif str_version.find(".") >= 0:
-            version = str_version
-        # integer versioned
-        else:
-            version = int(str_version)
 
-        if uprline.find("CREATED") >= 0:
-            self.data.created = cols[1], version
-        elif uprline.find('LAST SEQUENCE UPDATE') >= 0:
-            self.data.sequence_update = cols[1], version
-        elif uprline.find( 'LAST ANNOTATION UPDATE') >= 0:
-            self.data.annotation_update = cols[1], version
+        if uprline.find('CREATED') >= 0 \
+        or uprline.find('LAST SEQUENCE UPDATE') >= 0 \
+        or uprline.find('LAST ANNOTATION UPDATE') >= 0:
+            # Old style DT line
+            # =================
+            # e.g.
+            # DT   01-FEB-1995 (Rel. 31, Created)
+            # DT   01-FEB-1995 (Rel. 31, Last sequence update)
+            # DT   01-OCT-2000 (Rel. 40, Last annotation update)
+            #
+            # or:
+            # DT   08-JAN-2002 (IPI Human rel. 2.3, Created)
+            # ... 
+            
+            # find where the version information will be located
+            # This is needed for when you have cases like IPI where
+            # the release verison is in a different spot:
+            # DT   08-JAN-2002 (IPI Human rel. 2.3, Created)
+            uprcols = uprline.split()
+            rel_index = -1
+            for index in range(len(uprcols)):
+                if uprcols[index].find("REL.") >= 0:
+                    rel_index = index
+            assert rel_index >= 0, \
+                    "Could not find Rel. in DT line: %s" % (line)
+            version_index = rel_index + 1
+            # get the version information
+            cols = line.split()
+            str_version = self._chomp(cols[version_index])
+            # no version number
+            if str_version == '':
+                version = 0
+            # dot versioned
+            elif str_version.find(".") >= 0:
+                version = str_version
+            # integer versioned
+            else:
+                version = int(str_version)
+
+            if uprline.find('CREATED') >= 0:
+                self.data.created = cols[1], version
+            elif uprline.find('LAST SEQUENCE UPDATE') >= 0:
+                self.data.sequence_update = cols[1], version
+            elif uprline.find( 'LAST ANNOTATION UPDATE') >= 0:
+                self.data.annotation_update = cols[1], version
+            else:
+                assert False, "Shouldn't reach this line!"
+                raise SyntaxError, "I don't understand the date line %s" % line
+        elif uprline.find('INTEGRATED INTO') >= 0 \
+        or uprline.find('SEQUENCE VERSION') >= 0 \
+        or uprline.find('ENTRY VERSION') >= 0:
+            # New style DT line
+            # =================
+            # As of UniProt Knowledgebase release 7.0 (including
+            # Swiss-Prot release 49.0 and TrEMBL release 32.0) the
+            # format of the DT lines and the version information
+            # in them was changed - the release number was dropped.
+            #
+            # For more information see bug 1948 and
+            # http://ca.expasy.org/sprot/relnotes/sp_news.html#rel7.0
+            #
+            # e.g.
+            # DT   01-JAN-1998, integrated into UniProtKB/Swiss-Prot.
+            # DT   15-OCT-2001, sequence version 3.
+            # DT   01-APR-2004, entry version 14.
+            #
+            #This is a new style DT line...
+            print "WARNING - Ignoring line: " + line
+            # TODO - Expose the new version and database information
+            #        to the record object.
         else:
-            raise SyntaxError, "I don't understand the date line %s" % line
+            raise SyntaxError, "I don't understand the date line %s" % line        
     
     def description(self, line):
         self.data.description = self.data.description + line[5:]
