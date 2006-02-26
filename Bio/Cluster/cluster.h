@@ -27,9 +27,6 @@
  * 
  */
 
-#ifndef C_CLUSTERING_LIB
-#define C_CLUSTERING_LIB
-
 #ifndef CALL 
 # define CALL
 #endif
@@ -96,4 +93,3 @@ double CALL median (int n, double x[]);
 
 double* calculate_weights(int nrows, int ncolumns, double** data, int** mask,
   double weights[], int transpose, char dist, double cutoff, double exponent);
-#endif

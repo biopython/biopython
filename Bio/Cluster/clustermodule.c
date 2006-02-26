@@ -33,24 +33,23 @@ parse_data(PyObject* object, PyArrayObject** array)
   }
   else /* User passed an array */
   { *array = (PyArrayObject*) object;
-    Py_INCREF(object);
+    /* Check number of dimensions */
+    if ((*array)->nd == 2) Py_INCREF(object);
+    else
+    { sprintf(message, "data has incorrect rank (%d expected 2)", (*array)->nd);
+      PyErr_SetString (ErrorObject, buffer);
+      *array = NULL;
+      return NULL;
+    }
     if ((*array)->descr->type_num != PyArray_DOUBLE) /* Cast to type double */
-    { PyArrayObject* av = (PyArrayObject*) PyArray_Cast(*array, PyArray_DOUBLE);
-      Py_DECREF((PyObject*) (*array));
-      *array = av;
+    { *array = (PyArrayObject*) PyArray_Cast(*array, PyArray_DOUBLE);
+      Py_DECREF(object);
       if (!(*array))
       { strcpy (message, "data cannot be cast to needed type.");
         PyErr_SetString(ErrorObject, buffer);
         return NULL;
       }
     } 
-    if ((*array)->nd != 2) /* Checking number of dimensions */
-    { sprintf(message, "data has incorrect rank (%d expected 2)", (*array)->nd);
-      PyErr_SetString (ErrorObject, buffer);
-      Py_DECREF((PyObject*) (*array));
-      *array = NULL;
-      return NULL;
-    }
   }
   nrows = (*array)->dimensions[0];
   ncols = (*array)->dimensions[1];
@@ -111,7 +110,7 @@ parse_mask (PyObject* object, PyArrayObject** array, const int dimensions[2])
     return mask;
   }
   if(!PyArray_Check (object)) /* Try to convert object to a 2D double array */
-  { *array = (PyArrayObject*) PyArray_FromObject(object, PyArray_LONG, 2, 2);
+  { *array = (PyArrayObject*) PyArray_FromObject(object, PyArray_INT, 2, 2);
     if (!(*array))
     { strcpy (message, "mask cannot be converted to needed array");
       PyErr_SetString(ErrorObject, buffer);
@@ -120,24 +119,21 @@ parse_mask (PyObject* object, PyArrayObject** array, const int dimensions[2])
   }
   else /* User passed an array */
   { *array = (PyArrayObject*) object;
-    Py_INCREF(object);
-    if ((*array)->descr->type_num != PyArray_LONG)
-    { PyArrayObject* av = (PyArrayObject*) PyArray_Cast (*array, PyArray_LONG);
-      Py_DECREF((PyObject*) *array);
-      *array = av;
+    if((*array)->nd != 2) /* Checking number of dimensions */
+    { sprintf(message, "mask has incorrect rank (%d expected 2)", (*array)->nd);
+      PyErr_SetString (ErrorObject, buffer);
+      *array = NULL;
+      return NULL;
+    }
+    if ((*array)->descr->type_num == PyArray_INT) Py_INCREF(object);
+    else
+    { *array = (PyArrayObject*) PyArray_Cast (*array, PyArray_INT);
       if (!(*array))
       { strcpy (message, "mask cannot be cast to needed type.");
         PyErr_SetString(ErrorObject, buffer);
         return NULL;
       }
     } 
-  }
-  if((*array)->nd != 2) /* Checking number of dimensions */
-  { sprintf(message, "mask has incorrect rank (%d expected 2)", (*array)->nd);
-    PyErr_SetString (ErrorObject, buffer);
-    Py_DECREF((PyObject*)*array);
-    *array = NULL;
-    return NULL;
   }
   if((*array)->dimensions[0] != nrows) /* Checking number of rows */
   { sprintf(message,
@@ -211,16 +207,14 @@ parse_weight (PyObject* object, PyArrayObject** array, const int ndata)
   }
   else
   { *array = (PyArrayObject*) object;
-    Py_INCREF(object);
-  }
-  if ((*array)->descr->type_num != PyArray_DOUBLE)
-  { PyArrayObject* av = (PyArrayObject*)PyArray_Cast(*array, PyArray_DOUBLE);
-    Py_DECREF((PyObject*) *array);
-    *array = av;
-    if (!(*array))
-    { strcpy (message, "weight cannot be cast to needed type.");
-      PyErr_SetString(ErrorObject, message);
-      return NULL;
+    if ((*array)->descr->type_num == PyArray_DOUBLE) Py_INCREF(object);
+    else
+    { *array = (PyArrayObject*)PyArray_Cast(*array, PyArray_DOUBLE);
+      if (!(*array))
+      { strcpy (message, "weight cannot be cast to needed type.");
+        PyErr_SetString(ErrorObject, message);
+        return NULL;
+      }
     }
   }
   if((*array)->nd == 1) /* Checking number of dimensions */
@@ -281,7 +275,7 @@ parse_initialid(PyObject* object, int* nclusters, int nitems)
   PyArrayObject* array;
   /* -- First we create the clusterid variable ------------------------ */
   PyArrayObject* clusterid =
-    (PyArrayObject*) PyArray_FromDims(1, &nitems, PyArray_LONG);
+    (PyArrayObject*) PyArray_FromDims(1, &nitems, PyArray_INT);
   if (!clusterid)
   { strcpy(message, "Could not create clusterid array -- too big?");
     PyErr_SetString (ErrorObject, buffer);
@@ -291,7 +285,7 @@ parse_initialid(PyObject* object, int* nclusters, int nitems)
   if (object==NULL) return clusterid;
   /* -- Check if the specified object is an array --------------------- */
   if(!PyArray_Check (object))
-  { array = (PyArrayObject*) PyArray_FromObject(object, PyArray_LONG,1,1);
+  { array = (PyArrayObject*) PyArray_FromObject(object, PyArray_INT,1,1);
     if (!array)
     { strcpy (message, "initialid cannot be converted to needed array.");
       PyErr_SetString(ErrorObject, buffer);
@@ -301,20 +295,18 @@ parse_initialid(PyObject* object, int* nclusters, int nitems)
   }
   else
   { array = (PyArrayObject*) object;
-    Py_INCREF(object);
+    /* -- Check if the array contains integers ------------------------ */
+    if (array->descr->type_num == PyArray_INT) Py_INCREF(object);
+    else
+    { array = (PyArrayObject*) PyArray_Cast(array, PyArray_INT);
+      if (!array)
+      { strcpy (message, "initialid cannot be cast to needed type.");
+        PyErr_SetString(ErrorObject, buffer);
+        Py_DECREF((PyObject*) clusterid);
+        return NULL;
+      }
+    } 
   }
-  /* -- Check if the array contains integers -------------------------- */
-  if (array->descr->type_num != PyArray_LONG)
-  { PyArrayObject* av = (PyArrayObject*) PyArray_Cast(array, PyArray_LONG);
-    Py_DECREF((PyObject*) array);
-    array = av;
-    if (!array)
-    { strcpy (message, "initialid cannot be cast to needed type.");
-      PyErr_SetString(ErrorObject, buffer);
-      Py_DECREF((PyObject*) clusterid);
-      return NULL;
-    }
-  } 
   /* -- Check the size of the array ----------------------------------- */
   if(array->nd == 1)
   { /* no checking on last dimension of expected size 1 */
@@ -394,7 +386,7 @@ parse_clusterid(PyObject* object, PyArrayObject** array, unsigned int nitems,
   }
   /* -- The user specified something. Let's see if it is an array ----- */
   if(!PyArray_Check (object))
-  { *array = (PyArrayObject*) PyArray_FromObject(object, PyArray_LONG,1,1);
+  { *array = (PyArrayObject*) PyArray_FromObject(object, PyArray_INT,1,1);
     if (!(*array))
     { strcpy (message, "clusterid cannot be converted to needed array.");
       PyErr_SetString(ErrorObject, buffer);
@@ -403,19 +395,17 @@ parse_clusterid(PyObject* object, PyArrayObject** array, unsigned int nitems,
   }
   else
   { *array = (PyArrayObject*) object;
-    Py_INCREF(object);
+    /* -- Check if the array contains integers ------------------------ */
+    if ((*array)->descr->type_num == PyArray_INT) Py_INCREF(object);
+    else
+    { *array = (PyArrayObject*) PyArray_Cast(*array, PyArray_INT);
+      if (!(*array))
+      { strcpy (message, "clusterid cannot be cast to needed type.");
+        PyErr_SetString(ErrorObject, buffer);
+        return NULL;
+      }
+    } 
   }
-  /* -- Check if the array contains integers -------------------------- */
-  if ((*array)->descr->type_num != PyArray_LONG)
-  { PyArrayObject* av = (PyArrayObject*) PyArray_Cast(*array, PyArray_LONG);
-    Py_DECREF((PyObject*) (*array));
-    *array = av;
-    if (!(*array))
-    { strcpy (message, "clusterid cannot be cast to needed type.");
-      PyErr_SetString(ErrorObject, buffer);
-      return NULL;
-    }
-  } 
   /* -- Check the array size ------------------------------------------ */
   if((*array)->nd == 1)
   { /* no checking on last dimension of expected size 1 */
@@ -428,15 +418,13 @@ parse_clusterid(PyObject* object, PyArrayObject** array, unsigned int nitems,
       return NULL;
     }
   }
-  else
-  { if ((*array)->nd > 0 || nitems != 1)
-    { sprintf(message,
-             "clusterid has incorrect rank (%d expected 1)",
-              (*array)->nd);
-      PyErr_SetString (ErrorObject, buffer);
-      Py_DECREF((PyObject*) (*array));
-      return NULL;
-    }
+  else if ((*array)->nd > 0 || nitems != 1)
+  { sprintf(message,
+           "clusterid has incorrect rank (%d expected 1)",
+            (*array)->nd);
+    PyErr_SetString (ErrorObject, buffer);
+    Py_DECREF((PyObject*) (*array));
+    return NULL;
   }
   /* -- The array seems to be OK. Count the number of clusters -------- */
   stride = (*array)->strides[0];
@@ -502,7 +490,6 @@ parse_distance(PyObject* object, PyArrayObject** array, int* n)
     if (*array==NULL)
     { strcpy (message, "distance cannot be converted to needed array.");
       PyErr_SetString(ErrorObject, buffer);
-      *array = NULL;
       *n = 0;
       return NULL;
     }
@@ -510,15 +497,12 @@ parse_distance(PyObject* object, PyArrayObject** array, int* n)
   else
   { /* User passed an array */
     *array = (PyArrayObject*) object;
-    Py_INCREF(object);
-    if ((*array)->descr->type_num != PyArray_DOUBLE)
-    { PyArrayObject* av = (PyArrayObject*) PyArray_Cast((*array), PyArray_DOUBLE);
-      Py_DECREF((PyObject*) (*array));
-      *array = av;
+    if ((*array)->descr->type_num == PyArray_DOUBLE) Py_INCREF(object);
+    else
+    { *array = (PyArrayObject*) PyArray_Cast((*array), PyArray_DOUBLE);
       if (!(*array))
       { strcpy (message, "distance cannot be cast to needed type.");
         PyErr_SetString(ErrorObject, buffer);
-        *array = NULL;
         *n = 0;
         return NULL;
       }
@@ -656,14 +640,14 @@ parse_index(PyObject* object, PyArrayObject** array, int* n)
   { *array = NULL;
     index = malloc(sizeof(int));
     if (!object) index[0] = 0;
-    else index[0] = PyInt_AS_LONG(object);
+    else index[0] = (int) PyInt_AS_LONG(object);
     *n = 1;
     return index;
   }
   /* Check if the user specified an array */
-  if(!PyArray_Check (object)) /* Try to convert to an array of type long */
+  if(!PyArray_Check (object)) /* Try to convert to an array of type int */
   { *array = (PyArrayObject*)
-      PyArray_ContiguousFromObject(object, PyArray_LONG, 1, 1);
+      PyArray_ContiguousFromObject(object, PyArray_INT, 1, 1);
     if (!(*array))
     { strcpy(message, "index argument cannot be converted to needed type.");
       PyErr_SetString (ErrorObject, buffer);
@@ -671,17 +655,20 @@ parse_index(PyObject* object, PyArrayObject** array, int* n)
       return NULL;
     }
   }
-  /* If an array, make sure it contains integers */
-  else if ((*array)->descr->type_num == PyArray_LONG)
-  { *array = (PyArrayObject*) object;
-    Py_INCREF(object);
-  }
   else
-  { strcpy(message, "index argument cannot be cast to needed type.");
-    PyErr_SetString (ErrorObject, buffer);
-    *array = NULL;
-    *n = 0;
-    return NULL;
+  { *array = (PyArrayObject*) object;
+    /* -- Check if the array contains integers ------------------------ */
+    if ((*array)->descr->type_num == PyArray_INT) Py_INCREF(object);
+    else
+    { object = PyArray_Cast(*array, PyArray_INT);
+      if (!object)
+      { strcpy (message, "index argument cannot be cast to needed type.");
+        PyErr_SetString(ErrorObject, buffer);
+        *n = 0;
+        return NULL;
+      }
+      *array = (PyArrayObject*) object;
+    } 
   }
   /* We have an array */
   *n = (*array)->dimensions[0];
@@ -696,17 +683,15 @@ parse_index(PyObject* object, PyArrayObject** array, int* n)
     return NULL;
   }
   if (!(*array)->flags & CONTIGUOUS)
-  { PyObject* av =
-      PyArray_ContiguousFromObject((PyObject*) array, PyArray_LONG, 0, 0);
-    Py_DECREF(object); /* can only happen if *array==(PyArrayObject*)object */
-    if(!av)
+  { *array = (PyArrayObject*) PyArray_ContiguousFromObject(object, PyArray_INT, 1, 1);
+    Py_DECREF(object);
+    if(!(*array))
     { strcpy(message, "Failed making argument index contiguous.");
       PyErr_SetString (ErrorObject, buffer);
       *array = NULL;
       *n = 0;
       return NULL;
     }
-    *array = (PyArrayObject*) av;
   }
   index = (int*)((*array)->data);
   return index;
@@ -1165,7 +1150,7 @@ py_treecluster (PyObject* self, PyObject* args, PyObject* keywords)
     /* -- Create the output variable tree ---------------------------------- */
     shape[0] = nnodes;
     shape[1] = 2;
-    aRESULT = (PyArrayObject*) PyArray_FromDims(2, shape, PyArray_LONG);
+    aRESULT = (PyArrayObject*) PyArray_FromDims(2, shape, PyArray_INT);
     if (!aRESULT)
     { strcpy(message, "Could not create array for return value -- too big?");
       PyErr_SetString(ErrorObject, buffer);
@@ -1228,7 +1213,7 @@ py_treecluster (PyObject* self, PyObject* args, PyObject* keywords)
     /* -- Create the output variable tree ---------------------------------- */
     shape[0] = nnodes;
     shape[1] = 2;
-    aRESULT = (PyArrayObject*) PyArray_FromDims(2, shape, PyArray_LONG);
+    aRESULT = (PyArrayObject*) PyArray_FromDims(2, shape, PyArray_INT);
     if (!aRESULT)
     { strcpy(message, "Could not create array for return value -- too big?");
       PyErr_SetString(ErrorObject, buffer);
@@ -1403,7 +1388,7 @@ py_somcluster (PyObject* self, PyObject* args, PyObject* keywords)
   /* --------------------------------------------------------------------- */
   shape[0] = nitems;
   shape[1] = 2;
-  aCLUSTERID = (PyArrayObject*) PyArray_FromDims(2, shape, PyArray_LONG);
+  aCLUSTERID = (PyArrayObject*) PyArray_FromDims(2, shape, PyArray_INT);
   if (!aCLUSTERID)
   { strcpy(buffer, "somcluster: Could not create clusterid array -- too big?");
     PyErr_SetString (ErrorObject, buffer);
@@ -1826,7 +1811,7 @@ py_clustercentroid (PyObject* self, PyObject* args, PyObject* keywords)
   for (i=0; i<shape[0]; i++)
     cdata[i] = ((double*) (aCDATA->data)) + i*shape[1];
   /* -- Create the centroid mask output variable ------------------------- */
-  aCMASK = (PyArrayObject*) PyArray_FromDims(2, shape, PyArray_LONG);
+  aCMASK = (PyArrayObject*) PyArray_FromDims(2, shape, PyArray_INT);
   if (!aCMASK)
   { strcpy(message, "Could not create centroids array -- too big?");
     PyErr_SetString (ErrorObject, buffer);
@@ -2045,7 +2030,7 @@ py_cuttree (PyObject* self, PyObject* args, PyObject* keywords)
                                   &TREE, &NCLUSTERS)) return NULL;
   /* -- Check the tree variable (don't allow casting) -------------------- */
   if(!PyArray_Check (TREE))
-  { aTREE = (PyArrayObject *) PyArray_ContiguousFromObject(TREE, PyArray_NOTYPE, 0, 0);
+  { aTREE = (PyArrayObject *) PyArray_ContiguousFromObject(TREE, PyArray_INT, 0, 0);
     if (!aTREE)
     { PyErr_SetString (ErrorObject,
         "cuttree: Failed converting input argument tree to needed array");
@@ -2054,31 +2039,34 @@ py_cuttree (PyObject* self, PyObject* args, PyObject* keywords)
   }
   else
   { aTREE = (PyArrayObject*) TREE;
-    Py_INCREF((PyObject*) aTREE);
-  }
-  if (aTREE->descr->type_num != PyArray_LONG)
-  { PyErr_SetString (ErrorObject,
-      "cuttree: Argument tree should contain integer values only");
-    return NULL;
-  }
-  if(aTREE->nd != 2) {
-     sprintf(buffer, "cuttree, argument tree: Incorrect rank (%d expected 2)",
-                       aTREE->nd);
-     PyErr_SetString (ErrorObject, buffer);
-     Py_DECREF((PyObject*) aTREE);
-     return NULL;
-  }
-  if (!(aTREE->flags & CONTIGUOUS)) {
-    PyObject* av =
-      PyArray_ContiguousFromObject((PyObject*) aTREE,
-                                   aTREE->descr->type_num, 0, 0);
-    Py_DECREF(aTREE);
-    if(!av)
-    { PyErr_SetString (ErrorObject,
-        "cuttree: Failed making input argument tree contiguous");
+    if(aTREE->nd != 2)
+    { sprintf(buffer, "cuttree, argument tree: Incorrect rank (%d expected 2)",
+                      aTREE->nd);
+      PyErr_SetString (ErrorObject, buffer);
+      Py_DECREF((PyObject*) aTREE);
       return NULL;
     }
-    aTREE = (PyArrayObject*) av;
+    Py_INCREF(TREE);
+    if (aTREE->descr->type_num != PyArray_INT)
+    { aTREE = (PyArrayObject*) PyArray_Cast (aTREE, PyArray_INT);
+      Py_DECREF(TREE);
+      if (!aTREE)
+      { strcpy(message,
+               "cuttree: Argument tree cannot be cast to needed type.");
+        PyErr_SetString(ErrorObject, buffer);
+        return NULL;
+      }
+      TREE = (PyObject*) aTREE;
+    }
+    if (!(aTREE->flags & CONTIGUOUS))
+    { aTREE = (PyArrayObject*) PyArray_ContiguousFromObject(TREE, PyArray_INT, 0, 0);
+      Py_DECREF(TREE);
+      if(!aTREE)
+      { PyErr_SetString (ErrorObject,
+          "cuttree: Failed making input argument tree contiguous");
+        return NULL;
+      }
+    }
   }
   /* -- Check the nclusters variable ------------------------------------- */
   NELEMENTS = aTREE->dimensions[0] + 1;
@@ -2095,7 +2083,7 @@ py_cuttree (PyObject* self, PyObject* args, PyObject* keywords)
     return NULL;
   }
   /* -- Create the clusterid output variable ----------------------------- */
-  aCLUSTERID = (PyArrayObject*) PyArray_FromDims(1, &NELEMENTS, PyArray_LONG);
+  aCLUSTERID = (PyArrayObject*) PyArray_FromDims(1, &NELEMENTS, PyArray_INT);
   if (!aCLUSTERID) {
     PyErr_SetString (ErrorObject,
       "cuttree: Could not create array for return value -- too big?");
