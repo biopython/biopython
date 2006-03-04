@@ -1059,15 +1059,9 @@ def qblast(program, database, sequence,
     http://www.ncbi.nlm.nih.gov/BLAST/blast_overview.html
 
     """
-    import urllib
+    import urllib, urllib2
     from Bio.WWW import RequestLimiter
 
-    # Is this warning useful?  If the program is blastn or blastp, the
-    # warning is not necessary because the program is supported.  If
-    # it is not, the script will raise an exception anyway.
-    # - Jeff
-    import warnings
-    warnings.warn("qblast works only with blastn and blastp for now.")
     assert program == 'blastn' or program == 'blastp'
 
     # hitlist_size parameter contributed by Sjoerd de Vries.
@@ -1086,7 +1080,10 @@ def qblast(program, database, sequence,
     message = urllib.urlencode(query)
 
     # Send off the initial query to qblast.
-    handle = _send_to_qblast(message)
+    request = urllib2.Request("http://www.ncbi.nlm.nih.gov/blast/Blast.cgi",
+                              message,
+                              {"User-Agent":"BiopythonClient"})
+    handle = urllib2.urlopen(request)
 
     # Format the query now.
     rid, rtoe = _parse_qblast_ref_page(handle)
@@ -1105,10 +1102,12 @@ def qblast(program, database, sequence,
     limiter = RequestLimiter(3)
     while 1:
         limiter.wait()
-        handle = _send_to_qblast(message)
+        request = urllib2.Request("http://www.ncbi.nlm.nih.gov/blast/Blast.cgi",
+                                  message,
+                                  {"User-Agent":"BiopythonClient"})
+        handle = urllib2.urlopen(request)
         results = handle.read()
-
-        # XML results don't have the Status tag.
+        # XML results don't have the Status tag when finished
         if results.find("Status=") < 0:
             break
         i = results.index("Status=")
@@ -1117,52 +1116,7 @@ def qblast(program, database, sequence,
         if status.upper() == "READY":
             break
 
-    # results come with this kind of header:
-
-    # HTTP/1.1 200 OK
-    # Date: Wed, 05 Oct 2005 02:13:33 GMT
-    # Server: Nde
-    # Content-Type: text/plain
-    # Connection: close
-    # 
-
-    # As the parser will choke on this header, we need to remove it
-    i = results.index("Connection: close")
-    i = results.index("\n",i)
-    i = results.index("\n",i+1)
-    results = results[i+1:]
-
     return StringIO.StringIO(results)
-
-def _send_to_qblast(query):
-    """Send a BLAST request to the QBLAST server at NCBI.
-    http://www.ncbi.nlm.nih.gov/BLAST/Doc/urlapi.html
-
-    Return a handle to the results.
-    
-    """
-    import socket
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.connect(('www.ncbi.nlm.nih.gov', 80))
-    
-    sock.send('POST /blast/Blast.cgi HTTP/1.0\n')
-    sock.send('User-Agent: BiopythonClient\n')
-    sock.send('Connection: Keep-Alive\n')
-    sock.send('Content-type: application/x-www-form-urlencoded\n')
-    sock.send('Content-Length: %d\n' % len(query))
-    sock.send('\n')
-    sock.send(query)
-
-    handle = StringIO.StringIO()
-    while 1:
-        data = sock.recv(1024)
-        if not data:
-            break
-        handle.write(data)
-    sock.close()
-    
-    handle.seek(0)
-    return handle
 
 def _parse_qblast_ref_page(handle):
     """Return tuple of RID, RTOE."""
