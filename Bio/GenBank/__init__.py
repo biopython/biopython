@@ -1422,20 +1422,43 @@ class _Scanner:
                 #Read in the next line!
                 line = handle.readline()
             elif line_type == 'REFERENCE' :
+                if self._debug >1 : print "Found reference [" + data + "]"
                 #Need to call consumer.reference_num() and consumer.reference_bases()
                 #e.g.
                 # REFERENCE   1  (bases 1 to 86436)
+                #
+                #Note that this can be multiline, see Bug 1968, e.g.
+                #
+                # REFERENCE   42 (bases 1517 to 1696; 3932 to 4112; 17880 to 17975; 21142 to
+                #             28259)
+                #
+                #For such cases we will call the consumer once only.
                 data = data.strip()
+
+                #Read in the next line, and see if its more of the reference:
+                while True:
+                    line = handle.readline()
+                    if line[0:GENBANK_INDENT] == GENBANK_SPACER :
+                        #Add this continuation to the data string
+                        data = data + " " + line[GENBANK_INDENT:]
+                        if data[-1:]=='\n' : data = data[:-1]
+                        if data[-1:]=='\r' : data = data[:-1]
+                        if self._debug >1 : print "Extended reference text [" + data + "]"
+                    else :
+                        #End of the reference, leave this text in the variable "line"
+                        break
+
+                #We now have all the reference line(s) stored in a string, data,
+                #which we pass to the consumer
                 while data.find('  ')<>-1:
                     data = data.replace('  ',' ')
                 if data.find(' ')==-1 :
+                    if self._debug >2 : print 'Reference number \"' + data + '\"'
                     consumer.reference_num(data)
                 else :
-                    if self._debug : print "Reference [" + data[:data.find(' ')] + "], num [" + data[data.find(' ')+1:] + "]"
+                    if self._debug >2 : print 'Reference number \"' + data[:data.find(' ')] + '\", \"' + data[data.find(' ')+1:] + '\"'
                     consumer.reference_num(data[:data.find(' ')])
                     consumer.reference_bases(data[data.find(' ')+1:])
-                #Read in the next line!
-                line = handle.readline()
             elif line_type == 'ORGANISM' :
                 #The first line is the organism, but subsequent lines go to the taxonomy consumer
                 consumer.organism(data)
@@ -1464,7 +1487,7 @@ class _Scanner:
                         if data[-1:]=='\n' : data = data[:-1]
                         if data[-1:]=='\r' : data = data[:-1]
                         list.append(data)
-                        if self._debug : print "[" + data + "]"
+                        if self._debug > 2 : print "Comment continuation [" + data + "]"
                     else :
                         #End of the comment
                         break
