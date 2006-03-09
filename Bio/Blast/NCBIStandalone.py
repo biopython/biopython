@@ -29,6 +29,7 @@ _ParametersConsumer      Consumes parameters information.
 Functions:
 blastall        Execute blastall.
 blastpgp        Execute blastpgp.
+rpsblast        Execute rpsblast.
 
 """
 
@@ -93,7 +94,7 @@ class _Scanner:
         read_and_call_until(uhandle, consumer.noevent, contains='BLAST')
         # Now scan the BLAST report.
         self._scan_header(uhandle, consumer)
-	self._scan_rounds(uhandle, consumer)
+        self._scan_rounds(uhandle, consumer)
         self._scan_database_report(uhandle, consumer)
         self._scan_parameters(uhandle, consumer)
 
@@ -247,14 +248,14 @@ class _Scanner:
                                   contains='No hits found')
             read_and_call_while(uhandle, consumer.noevent, blank=1)
 
-	    #Psiblast can repeat the Searching...No hits found section
-	    if attempt_read_and_call(uhandle, consumer.noevent,
+            #Psiblast can repeat the Searching...No hits found section
+            if attempt_read_and_call(uhandle, consumer.noevent,
                                      start='Searching'):
-	        read_and_call_while(uhandle, consumer.noevent, blank=1)
-	        read_and_call(uhandle, consumer.noevent,
+                read_and_call_while(uhandle, consumer.noevent, blank=1)
+                read_and_call(uhandle, consumer.noevent,
                               contains='No hits found')
-	        read_and_call_while(uhandle, consumer.noevent, blank=1)
-	    
+                read_and_call_while(uhandle, consumer.noevent, blank=1)
+            
             consumer.end_descriptions()
             # Stop processing.
             return
@@ -446,8 +447,8 @@ class _Scanner:
 
         # Sameet Mehta reported seeing output from BLASTN 2.2.9 that
         # was missing the "Database" stanza completely.
-	while attempt_read_and_call(uhandle, consumer.database,
-                                    start='  Database'):
+        while attempt_read_and_call(uhandle, consumer.database,
+                start='  Database'):
             # BLAT output ends abruptly here, without any of the other
             # information.  Check to see if this is the case.  If so,
             # then end the database report here gracefully.
@@ -467,11 +468,11 @@ class _Scanner:
             line = safe_readline(uhandle)
             uhandle.saveline(line)
             if line.find('Lambda') != -1:
-		break
+                break
 
-	read_and_call(uhandle, consumer.noevent, start='Lambda')
-	read_and_call(uhandle, consumer.ka_params)
-	read_and_call(uhandle, consumer.noevent, blank=1)
+        read_and_call(uhandle, consumer.noevent, start='Lambda')
+        read_and_call(uhandle, consumer.ka_params)
+        read_and_call(uhandle, consumer.noevent, blank=1)
 
         # not BLASTP
         attempt_read_and_call(uhandle, consumer.gapped, start='Gapped')
@@ -668,7 +669,7 @@ class _HeaderConsumer:
         line = line.rstrip()
         if line.startswith('Database: '):
             self._header.database = line[10:]
-	elif not line.endswith('total letters'):
+        elif not line.endswith('total letters'):
             self._header.database = self._header.database + line.strip()
         else:
             sequences, letters =_re_search(
@@ -1019,11 +1020,11 @@ class _HSPConsumer:
         start, seq, end = _re_search(
             r"Sbjct: (-?\d+)\s*(.+) (-?\d+)", line,
             "I could not find the sbjct in line\n%s" % line)
-	#mikep 26/9/00
-	#On occasion, there is a blast hit with no subject match
-	#so far, it only occurs with 1-line short "matches"
-	#I have decided to let these pass as they appear
-	if not seq.strip():
+        #mikep 26/9/00
+        #On occasion, there is a blast hit with no subject match
+        #so far, it only occurs with 1-line short "matches"
+        #I have decided to let these pass as they appear
+        if not seq.strip():
             seq = ' ' * self._query_len
         self._hsp.sbjct = self._hsp.sbjct + seq
         if self._hsp.sbjct_start is None:
@@ -1396,7 +1397,8 @@ class Iterator:
                 break
             # If I've reached the next one, then put the line back and stop.
             if lines and (line.startswith('BLAST')
-                          or line.startswith('BLAST', 1)):
+                          or line.startswith('BLAST', 1)
+                          or line.startswith('<?xml ')):
                 self._uhandle.saveline(line)
                 break
             lines.append(line)
@@ -1635,6 +1637,106 @@ def blastpgp(blastcmd, database, infile, **keywds):
     w.close()
     return File.UndoHandle(r), File.UndoHandle(e)
 
+
+def rpsblast(blastcmd, database, infile, align_view="7", **keywds):
+    """rpsblast(blastcmd, database, infile, **keywds) ->
+    read, error Undohandles
+    
+    Execute and retrieve data from standalone RPS-BLAST.  blastcmd is the
+    command used to launch the 'rpsblast' executable.  database is the path
+    to the database to search against.  infile is the path to the file
+    containing the sequence to search with.
+
+    You may pass more parameters to **keywds to change the behavior of
+    the search.  Otherwise, optional values will be chosen by rpsblast.
+
+    Please note that this function will give XML output by default, by
+    setting align_view to seven (i.e. command line option -m 7).
+    You should use the NCBIXML.BlastParser() to read the resulting output.
+    This is because NCBIStandalone.BlastParser() does not understand the
+    plain text output format from rpsblast.
+
+    WARNING - The following text and associated parameter handling has not
+    received extensive testing.  Please report any errors we might have made...
+
+        Algorithm/Scoring
+    gapped              Whether to do a gapped alignment.  T/F
+    multihit            0 for multiple hit (default), 1 for single hit
+    expectation         Expectation value cutoff.
+    range_restriction   Range restriction on query sequence (Format: start,stop) blastp only
+                        0 in 'start' refers to the beginning of the sequence
+                        0 in 'stop' refers to the end of the sequence
+                        Default = 0,0
+    xdrop               Dropoff value (bits) for gapped alignments.
+    xdrop_final         X dropoff for final gapped alignment (in bits).
+    xdrop_extension     Dropoff for blast extensions (in bits).
+    search_length       Effective length of search space.
+    nbits_gapping       Number of bits to trigger gapping.
+    protein             Query sequence is protein.  T/F
+    db_length           Effective database length.
+
+        Processing
+    filter              Filter query sequence with SEG?  T/F
+    case_filter         Use lower case filtering of FASTA sequence T/F, default F
+    believe_query       Believe the query defline.  T/F
+    nprocessors         Number of processors to use.
+    logfile             Name of log file to use, default rpsblast.log
+
+        Formatting
+    html                Produce HTML output?  T/F
+    descriptions        Number of one-line descriptions.
+    alignments          Number of alignments.
+    align_view          Alignment view.  Integer 0-9.
+    show_gi             Show GI's in deflines?  T/F
+    seqalign_file       seqalign file to output.
+    align_outfile       Output file for alignment.
+    
+    """
+    att2param = {
+        'multihit' : '-P',
+        'gapped' : '-g',
+        'expectation' : '-e',
+        'range_restriction' : '-L',
+        'xdrop' : '-X',
+        'xdrop_final' : '-Z',
+        'xdrop_extension' : '-y',
+        'search_length' : '-Y',
+        'nbits_gapping' : '-N',
+        'protein' : '-p',
+        'db_length' : '-z',
+
+        'database' : '-d',
+        'infile' : '-i',
+        'filter' : '-F',
+        'case_filter' : '-U',
+        'believe_query' : '-J',
+        'nprocessors' : '-a',
+        'logfile' : '-l',
+
+        'html' : '-T',
+        'descriptions' : '-v',
+        'alignments' : '-b',
+        'align_view' : '-m',
+        'show_gi' : '-I',
+        'seqalign_file' : '-O',
+        'align_outfile' : '-o'
+        }
+        
+    if not os.path.exists(blastcmd):
+        raise ValueError, "rpsblast does not exist at %s" % blastcmd
+    
+    params = []
+
+    params.extend([att2param['database'], database])
+    params.extend([att2param['infile'], infile])
+    params.extend([att2param['align_view'], align_view])
+
+    for attr in keywds.keys():
+        params.extend([att2param[attr], str(keywds[attr])])
+
+    w, r, e = os.popen3(" ".join([blastcmd] + params))
+    w.close()
+    return File.UndoHandle(r), File.UndoHandle(e)
 
 def _re_search(regex, line, error_msg):
     m = re.search(regex, line)
