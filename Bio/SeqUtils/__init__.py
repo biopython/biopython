@@ -81,19 +81,19 @@ def GC(seq):
    return gc*100.0/len(seq)
     
 def GC123(seq):
-   " calculates totla G+C content plus first, second and third position "
-   l = len(seq)
+   " calculates total G+C content plus first, second and third position "
 
    d= {}
    for nt in ['A','T','G','C']:
       d[nt] = [0,0,0]
 
-   for i in range(0,l,3):
+   for i in range(0,len(seq),3):
       codon = seq[i:i+3]
       if len(codon) <3: codon += '  '
       for pos in range(0,3):
          for nt in ['A','T','G','C']:
-            if codon[pos] == nt: d[nt][pos] = d[nt][pos] +1
+            if codon[pos] == nt or codon[pos] == nt.lower():
+                d[nt][pos] = d[nt][pos] +1
 
 
    gc = {}
