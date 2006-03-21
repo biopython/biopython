@@ -16,6 +16,7 @@ Tested with:
 Release 15.0, July 1998
 Release 16.0, July 1999
 Release 17.0, Dec 2001
+Release 19.0, Mar 2006
 
 
 Classes:
@@ -84,6 +85,7 @@ class Record:
     cc_author
     cc_ft_key
     cc_ft_desc
+    cc_version     version number (introduced in release 19.0)
 
     DATA BANK REFERENCES - The following are all
                            lists of tuples (swiss-prot accession,
@@ -618,6 +620,8 @@ class _RecordConsumer(AbstractConsumer):
                 self.data.cc_ft_key = data
             elif qual == '/FT_DESC':
                 self.data.cc_ft_desc = data
+            elif qual == '/VERSION':
+                self.data.cc_version = data
             else:
                 raise SyntaxError, "Unknown qual %s in comment line\n%s" % \
                       (repr(qual), line)
