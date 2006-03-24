@@ -840,7 +840,7 @@ class Nexus(object):
             if block_interleave==0:
                 while self.matrix.has_key(id):
                     if id.split('.')[-1].startswith('copy'):
-                        id='.'.join(id.split('.')[:-1])+'.copy'+str(eval(id.split('.')[-1][4:])+1)
+                        id='.'.join(id.split('.')[:-1])+'.copy'+str(eval('0'+id.split('.')[-1][4:])+1)
                     else:
                         id+='.copy'
                     #raise NexusError, id+' already in matrix!\nError in: '+l
