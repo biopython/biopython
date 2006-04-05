@@ -1540,6 +1540,9 @@ class _Scanner:
         #This is usually the FEATURES line.
         line = self._feed_header(handle, consumer)
 
+        if line[-1:]=='\n' : line = line[:-1]
+        if line[-1:]=='\r' : line = line[:-1]
+
         if self._debug > 1 :
             print "self._feed_header returned :\n" + line
 
@@ -1554,6 +1557,8 @@ class _Scanner:
             consumer.features_line(line)
             #Now parse the features table...
             line = handle.readline()
+            if line[-1:]=='\n' : line = line[:-1]
+            if line[-1:]=='\r' : line = line[:-1]
             while True :
                 assert line, \
                        'Unexpected blank line/end of file during GenBank features section'
@@ -1622,11 +1627,11 @@ class _Scanner:
                 #
                 #We have also seen blank lines inside a multiline feature (see bug 1942)
                 line = handle.readline()
+                if line[-1:]=='\n' : line = line[:-1]
+                if line[-1:]=='\r' : line = line[:-1]
                 while line[0:FEATURE_QUALIFIER_INDENT]==FEATURE_QUALIFIER_SPACER :
                     #This SHOULD be the start of a new qualifier for the current feature
                     line = line[FEATURE_QUALIFIER_INDENT:]
-                    if line[-1:]=='\n' : line = line[:-1]
-                    if line[-1:]=='\r' : line = line[:-1]
                     if line[0:1]<>'/' :
                         #This is an unquoted multiline feature key, as reported in bug 1758
                         print "WARNING - Unquoted multiline '%s' entry for %s feature with location %s" \
@@ -1677,6 +1682,8 @@ class _Scanner:
                     #We have dealt with that line (qualifier and description, plus any line continuing the description).
                     #There could be another qualifier for this feature...
                     line = handle.readline()
+                    if line[-1:]=='\n' : line = line[:-1]
+                    if line[-1:]=='\r' : line = line[:-1]
                 #We have dealt with all the qualifiers (if any) for this feature
                 #Now move on to the next line...
 
@@ -1691,6 +1698,8 @@ class _Scanner:
             if self._debug : print "base_count = " + line
             consumer.base_count(line)
             line = handle.readline()
+            if line[-1:]=='\n' : line = line[:-1]
+            if line[-1:]=='\r' : line = line[:-1]
 
         if line.find("ORIGIN")==0 :
             #############################################################
@@ -1705,16 +1714,18 @@ class _Scanner:
             #or a CONTIG line
             while True :
                 line = handle.readline()
+                if line[-1:]=='\n' : line = line[:-1]
+                if line[-1:]=='\r' : line = line[:-1]
                 assert line, \
                        'Unexpected blank line/end of file during GenBank ORIGIN section'
-                if line=='//\n' :
+                if line=='//' :
                     break
                 if line.find('CONTIG')==0 :
                     break
                 assert line[9:10]==' ', \
                        'Sequence line mal-formed, \n' + line
                 consumer.base_number(line[0:10].strip())
-                consumer.sequence(line[10:].replace('\n',''))
+                consumer.sequence(line[10:])
         
         if line.find("CONTIG")==0 :
             #############################################################
@@ -1724,9 +1735,11 @@ class _Scanner:
             contig_location = line + '\n'
             while True :
                 line = handle.readline()
+                if line[-1:]=='\n' : line = line[:-1]
+                if line[-1:]=='\r' : line = line[:-1]
                 assert line, \
                        'Unexpected blank line/end of file during GenBank CONTIG section'
-                if line=='//\n' :
+                if line=='//' :
                     consumer.contig_location(contig_location)
                     break
                 elif line[:GENBANK_INDENT]==GENBANK_SPACER :
@@ -1737,7 +1750,7 @@ class _Scanner:
                            'Expected CONTIG continuation line or // marker, got\n' + line
                     break
 
-        if line=='//\n' :
+        if line=='//' :
             #############################################################
             if self._debug : print "Found record end..."
             #############################################################
