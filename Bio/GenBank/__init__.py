@@ -1594,9 +1594,6 @@ class _Scanner:
                 #We have dealt with that line (key and location, plus any lines continuing of the location).
                 #The next line could be the first of one or more qualifiers to the feature:
                 #
-                #We have dealt with that line (key and location, plus any lines continuing of the location).
-                #The next line could be the first of one or more qualifiers to the feature:
-                #
                 #Can have single line entries like this:
                 #                     /pseudo                (no information)
                 #                     /name=Fred             (unquoted)
