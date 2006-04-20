@@ -1455,7 +1455,6 @@ The GenBank record format is a very popular method of holding information about 
 
 One very nice feature of the GenBank libraries is the ability to automate retrieval of entries from GenBank. This is very convenient for creating scripts that automate a lot of your daily work. In this example we'll show how to query the NCBI databases, and to retrieve the records from the query.
 
-
 First, we want to make a query and find out the ids of the records to retrieve. Here we'll do a quick search for \emph{Opuntia}, my favorite organism (since I work on it). We can do quick search and get back the GIs (GenBank identifiers) for all of the corresponding records:
 
 \begin{verbatim}
@@ -1511,7 +1510,6 @@ Now retrieving a record will give you a SeqRecord object instead of the raw reco
 
 For more information of formats you can parse GenBank records into, please see section~\ref{sec:gb-parsing}.
 
-
 Using these automated query retrieval functionality is a big plus over doing things by hand. Additionally, the retrieval has nice built in features like a time-delay, which will prevent NCBI from getting mad at you and blocking your access.
 
 \subsection{Parsing GenBank records}
@@ -1525,30 +1523,58 @@ While GenBank files are nice and have lots of information, at the same time you 
   \item FeatureParser -- This parses the raw record in a SeqRecord object with all of the feature table information represented in SeqFeatures (see section~\ref{sec:advanced-seq} for more info on these objects). This is best to use if you are interested in getting things in a more standard format.
 \end{enumerate}
 
-Either way you chose to go, the most common usage of these will be creating an iterator and parsing through a file on GenBank records. Doing this is very similar to how things are done in other formats, as the following code demonstrates:
+Depending on the type of GenBank files you are interested in, they will either contain a single record, or multiple records.  Each record will start with a {\tt LOCUS} line, various other header lines, a list of features, and finally the sequence data, ending with a {\tt //} line.
+
+Dealing with a GenBank file containing a single record is very easy.  For example, lets use a small bacterial genome, {\it Nanoarchaeum equitans Kin4-M} (RefSeq NC\_005213, GenBank AE017199) which can be downloaded from the NCBI here \ahrefurl{\url{ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Bacteria/Nanoarchaeum_equitans/AE017199.gbk}} (only 1.15 MB):
 
 \begin{verbatim}
 from Bio import GenBank
 
-gb_file = "my_file.gb"
+feature_parser = GenBank.FeatureParser()
+
+gb_file = "AE017199.gbk"
+
+gb_record = feature_parser.parse(open(gb_file,"r"))
+
+# now do something with the record
+print "Name %s, %i features" % (gb_record.name, len(gb_record.features))
+print gb_record.seq
+\end{verbatim}
+
+This gives the following output:
+
+\begin{verbatim}
+Name AE017199, 1107 features
+Seq('TCTCGCAGAGTTCTTTTTTGTATTAACAAACCCAAAACCCATAGAATTTAATGAACCCAA ...', IUPACAmbiguousDNA())
+\end{verbatim}
+
+\subsection{Iterating over GenBank records}
+\label{sec:gb-parsing-iterator}
+
+For multi-record GenBank files, the most common usage will be creating an iterator, and parsing through the file record by record. Doing this is very similar to how things are done in other formats, as the following code demonstrates, using an example file \verb|cor6_6.gb| included in the BioPython source code under the Tests/GenBank/ directory:
+
+\begin{verbatim}
+from Bio import GenBank
+
+gb_file = "cor6_6.gb"
 gb_handle = open(gb_file, 'r')
 
 feature_parser = GenBank.FeatureParser()
 
 gb_iterator = GenBank.Iterator(gb_handle, feature_parser)
 
-while 1:
+while True:
    cur_record = gb_iterator.next()
 
    if cur_record is None:
        break
 
    # now do something with the record
+   print "Name %s, %i features" % (cur_record.name, len(cur_record.features))
    print cur_record.seq
 \end{verbatim}
 
 This just iterates over a GenBank file, parsing it into SeqRecord and SeqFeature objects, and prints out the Seq objects representing the sequences in the record.
-
 
 As with other formats, you have lots of tools for dealing with GenBank records. This should make it possible to do whatever you need to with GenBank.
 
@@ -1556,8 +1582,10 @@ As with other formats, you have lots of tools for dealing with GenBank records. 
 
 One very cool thing that you can do is set up your own personal GenBank database and access it like a dictionary (this can be extra cool because you can also allow access to these local databases over a network using BioCorba -- see the BioCorba documentation for more information).
 
+Note - this is only worth doing {\it if} your GenBank file contains more than one record.
 
-Making a local database first involves creating an index file, which will allow quick access to any record in the file. To do this, we use the index file function:
+Making a local database first involves creating an index file, which will allow quick access to any record in the file. To do this, we use the index file function.
+Again, this example uses the file \verb|cor6_6.gb| which is included in the BioPython source code under the Tests/GenBank/ directory:
 
 \begin{verbatim}
 >>> from Bio import GenBank
@@ -1566,7 +1594,7 @@ Making a local database first involves creating an index file, which will allow 
 >>> GenBank.index_file(dict_file, index_file)
 \end{verbatim}
 
-This will create the file \verb|my_index_file.idx|. Now, we can use this index to create a dictionary object that allows individual access to every record. Like the Iterator and NCBIDictionary interfaces, we can either get back raw records, or we can pass the dictionary a parser that will parse the records before returning them. In this case, we pass a \verb|FeatureParser| so that when we get a record, then we retrieve a SeqRecord object. 
+This will create a directory called \verb|cor6_6.idx| containing the index files. Now, we can use this index to create a dictionary object that allows individual access to every record. Like the Iterator and NCBIDictionary interfaces, we can either get back raw records, or we can pass the dictionary a parser that will parse the records before returning them. In this case, we pass a \verb|FeatureParser| so that when we get a record, then we retrieve a SeqRecord object. 
 
 
 Setting up the dictionary is as easy as one line:
@@ -1579,7 +1607,7 @@ Now we can deal with this like a dictionary. For instance:
 
 \begin{verbatim}
 >>> len(gb_dict)
-7
+6
 >>> gb_dict.keys()
 ['L31939', 'AJ237582', 'X62281', 'AF297471', 'M81224', 'X55053']
 \end{verbatim}
@@ -1589,6 +1617,8 @@ Finally, we retrieve objects using subscripting:
 \begin{verbatim}
 >>> gb_dict['AJ237582']
 <Bio.SeqRecord.SeqRecord instance at 0x102fdd8c>
+>>> print len(gb_dict['X55053'].features)
+3
 \end{verbatim}
 
 \section{Dealing with alignments}
