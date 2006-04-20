@@ -1,19 +1,16 @@
-
+   
     
                                      
-                    Biopython Tutorial and Cookbook
-                    *******************************
-       Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck
-       ==========================================================
-                       Last Update--16 Feb 2005 
-                       =========================
+                                    
+                                    
+                                    
   
 
-Table of Contents
-*****************
+Contents
+********
    
   
- - Chapter 1  Introduction 
+ - Chapter&nbsp;1  Introduction 
      
     - 1.1  What is Biopython? 
         
@@ -22,7 +19,7 @@ Table of Contents
     - 1.2  Installing Biopython 
     - 1.3  FAQ 
   
- - Chapter 2  Quick Start -- What can you do with Biopython? 
+ - Chapter&nbsp;2  Quick Start -- What can you do with Biopython? 
      
     - 2.1  General overview of what Biopython provides 
     - 2.2  Working with sequences 
@@ -38,7 +35,7 @@ Table of Contents
     - 2.5  Connecting with biological databases 
     - 2.6  What to do next 
   
- - Chapter 3  Cookbook -- Cool things to do with it 
+ - Chapter&nbsp;3  Cookbook -- Cool things to do with it 
      
     - 3.1  BLAST 
         
@@ -64,7 +61,8 @@ Table of Contents
         
        - 3.4.1  Retrieving GenBank entries from NCBI 
        - 3.4.2  Parsing GenBank records 
-       - 3.4.3  Making your very own GenBank database 
+       - 3.4.3  Iterating over GenBank records 
+       - 3.4.4  Making your very own GenBank database 
      
     - 3.5  Dealing with alignments 
         
@@ -108,7 +106,7 @@ Table of Contents
        - 3.12.1  Translating a DNA sequence to Protein 
      
   
- - Chapter 4  Advanced 
+ - Chapter&nbsp;4  Advanced 
      
     - 4.1  Sequence Class 
     - 4.2  Regression Testing Framework 
@@ -135,13 +133,13 @@ Table of Contents
        - 4.4.2  FreqTable 
      
   
- - Chapter 5  Where to go from here -- contributing to Biopython 
+ - Chapter&nbsp;5  Where to go from here -- contributing to Biopython 
      
     - 5.1  Maintaining a distribution for a platform 
     - 5.2  Bug Reports + Feature Requests 
     - 5.3  Contributing Code 
   
- - Chapter 6  Appendix: Useful stuff about Python 
+ - Chapter&nbsp;6  Appendix: Useful stuff about Python 
      
     - 6.1  What the heck in a handle? 
         
@@ -501,15 +499,15 @@ simple string.
   To translate our DNA object we have quite a few choices. First, we can
 use any number of translation tables depending on what we know about our
 DNA sequence. The translation tables available in biopython were taken
-from information at ftp://ncbi.nlm.nih.gov/entrez/misc/data/gc.prt. So,
-you have tons of choices to pick from. For this, let's just focus on two
-choices: the Standard translation table, and the Translation table for
-Vertebrate Mitochondrial DNA. These tables are labeled with id numbers 1
-and 2, respectively. Now that we know what tables we are looking to get,
-we're all set to perform a basic translation. First, we need to get our
-translators that use these tables. Since we are still dealing with our
-unambiguous DNA object, we want to fetch translators that take this into
-account:
+from information at ftp://ftp.ncbi.nlm.nih.gov/entrez/misc/data/gc.prt.
+So, you have tons of choices to pick from. For this, let's just focus on
+two choices: the Standard translation table, and the Translation table
+for Vertebrate Mitochondrial DNA. These tables are labeled with id
+numbers 1 and 2, respectively. Now that we know what tables we are
+looking to get, we're all set to perform a basic translation. First, we
+need to get our translators that use these tables. Since we are still
+dealing with our unambiguous DNA object, we want to fetch translators
+that take this into account:
 <<
   >>> from Bio import Translate
   >>> standard_translator = Translate.unambiguous_dna_by_id[1] 
@@ -1030,11 +1028,12 @@ making some on-line databases available from python scripts. Currently,
 Biopython has code to extract information from the following databases:
   
    
- - ExPASy -- http://www.expasy.org/ See section 3.2 in the Cookbook for
-   more information.  
+ - ExPASy -- http://www.expasy.org/ See section
+   3.226SWISS-PROTsection.3.2 in the Cookbook for more information.  
  - Entrez from NCBI -- http://www.ncbi.nlm.nih.gov/Entrez/  
  - PubMed from NCBI -- http://www.ncbi.nlm.nih.gov/PubMed/. See section
-   3.3 in the Cookbook for example code detailing how to use this.  
+   3.327PubMedsection.3.3 in the Cookbook for example code detailing how
+   to use this.  
  - SCOP -- http://scop.mrc-lmb.cam.ac.uk/scop/ 
   
   The code is these modules basically makes it easy to write python code
@@ -1045,15 +1044,16 @@ to extract information.
   Here we'll show a simple example of performing a remote Entrez query.
 More information on the other services is available in the Cookbook,
 which begins on page ??.
-  In section 2.4.2 of the parsing examples, we talked about using Entrez
-to search the NCBI nucleotide databases for info on Cypripedioideae, our
-friends the lady slipper orchids. Now, we'll look at how to automate
-that process using a python script. For Entrez searching, this is more
-useful for displaying results then as a tool for getting sequences. The
-NCBI web site is mostly set up to allow remote queries so that you could
-write our own local CGI scripts that return information from NCBI pages.
-For this reason, the results are returned as HTML and it is pretty tough
-to get a flat file in a quick manner.
+  In section 2.4.210Writing your own consumersubsection.2.4.2 of the
+parsing examples, we talked about using Entrez to search the NCBI
+nucleotide databases for info on Cypripedioideae, our friends the lady
+slipper orchids. Now, we'll look at how to automate that process using a
+python script. For Entrez searching, this is more useful for displaying
+results then as a tool for getting sequences. The NCBI web site is
+mostly set up to allow remote queries so that you could write our own
+local CGI scripts that return information from NCBI pages. For this
+reason, the results are returned as HTML and it is pretty tough to get a
+flat file in a quick manner.
   In this example, we'll just show how to connect, get the results, and
 display them in a web browser. First, we'll start by defining our search
 and how to display the results:
@@ -1166,7 +1166,7 @@ to BLAST info we have in a FASTA formatted file against the database.
 First, we need to get the info in the FASTA file. The easiest way to do
 this is to use the Fasta iterator to get a record. In this example,
 we'll just grab the first FASTA record from a  file, using an Iterator
-(section 2.4.3 explains FASTA iterators in more detail).
+(section ?? explains FASTA iterators in more detail).
 <<
   from Bio import Fasta
   
@@ -1196,6 +1196,10 @@ http://www.ncbi.nlm.nih.gov/BLAST/blast_program.html. The second
 argument specifies the databases to search against. Again, the options
 for this are available on the NCBI web pages at
 http://www.ncbi.nlm.nih.gov/BLAST/blast_databases.html.
+  The `qblast' function can return the BLAST results in various formats,
+which you can choose with the `format_type' keyword: `"HTML"', `"Text"',
+`"ASN.1"', or `"XML"'. The default is `"XML"', as that is the format
+expected by the parser, described below.
   Note that in version 1.40 of Biopython, `blast' is deprecated, and
 `qblast' is used instead. Also, currently `qblast' only works with
 blastn and blasp as program arguments.
@@ -1227,8 +1231,8 @@ a string with the BLAST results and write it to a file by doing:
   
   After doing this, the results are in the file `my_blast.out' and the
 variable `blast_results' contains the blast results in a string form.
-  The `parse' function of the BLAST parser, as described in 3.1.2, takes
-a file-handle-like object to be parsed. We can get a handle-like object
+  The `parse' function of the BLAST parser, as described in ??, takes a
+file-handle-like object to be parsed. We can get a handle-like object
 from our string of BLAST results using the python standard library
 module `cStringIO'. The  following code will give us a handle we can
 feed directly into the parser:
@@ -1252,13 +1256,15 @@ and keeping it up to date. This is so much nicer than trying to keep a
 tool such as this running yourself.
   You can get information to parse with the WWW BLAST parser in one of
 the two ways. The first is to grab the info using the biopython function
-for dealing with blast -- doing this is described in section 3.1.1. The 
-second way is to manually do the BLAST on the NCBI site, and then save
-the results. In order to have your output in the right format, you need
-to save the final BLAST page you get (you know, the one with all of the
-interesting results!) as HTML (i. e. do not save as text!) to a file.
-The important point is that you do not have to use biopython scripts to
-fetch the data in order to be able to parse it.
+for dealing with blast -- doing this is described in section
+3.1.117Running BLAST over the Internetsubsection.3.1.1. The  second way
+is to manually do the BLAST on the NCBI site, and then save the results.
+In order to have your output in the right format for the parser, you
+need to choose XML as the format in which to receive the results, and
+save the final BLAST page you get (you know, the one with all of the
+interesting results!) to a file. The important point is that you do not
+have to use biopython scripts to fetch the data in order to be able to
+parse it.
   Doing things either of these two ways, you then need to get a handle
 to the results. In python, a handle is just a nice general way of
 describing input to any info source so that the info can be retrieved
@@ -1276,9 +1282,9 @@ get you what you need:
   Now that we've got a handle, we are ready to parse the output. The
 code to parse it is really quite small:
 <<
-  from Bio.Blast import NCBIWWW
+  from Bio.Blast import NCBIXML
   
-  b_parser = NCBIWWW.BlastParser()
+  b_parser = NCBIXML.BlastParser()
   b_record = b_parser.parse(blast_out)
 >>
   
@@ -1342,12 +1348,12 @@ in `Bio.Blast.Record' and are quite complete.
   Here are my attempts at UML class diagrams for the `Blast' and
 `PSIBlast' record classes. If you are good at UML and see
 mistakes/improvements that can be made, please let me know. The Blast
-class diagram is shown in Figure 3.1.3.
+class diagram is shown in Figure 3.121The BLAST record classfigure.3.1.
     *images/BlastRecord.png* 
   
   The PSIBlast record object is similar, but has support for the rounds
 that are used in the iteration steps of PSIBlast. The class diagram for
-PSIBlast is shown in Figure 3.1.3.
+PSIBlast is shown in Figure ??.
     *images/PSIBlastRecord.png* 
   
   
@@ -1361,8 +1367,8 @@ BLAST, biopython provides lots of nice code to make you able to call
 local BLAST executables from your scripts, and have full access to the
 many command line options that these executables provide. You can obtain
 local BLAST precompiled for a number of platforms at
-ftp://ncbi.nlm.nih.gov/blast/executables/, or can compile it yourself in
-the NCBI toolbox (ftp://ncbi.nlm.nih.gov/toolbox/).
+ftp://ftp.ncbi.nlm.nih.gov/blast/executables/, or can compile it
+yourself in the NCBI toolbox (ftp://ftp.ncbi.nlm.nih.gov/toolbox/).
   The code for dealing with local BLAST is found in
 `Bio.Blast.NCBIStandalone', specifically in the functions `blastall' and
 `blastpgp', which correspond with the BLAST executables that their names
@@ -1403,6 +1409,13 @@ output generated by the blast command.
 opinion, the best way to deal with the error is only to print it out if
 you are not getting `blast_out' results to be parsed, but otherwise to
 leave it alone.
+  This command will generate BLAST output in text format. For XML
+output, use the `align_view=7' keyword. XML output is needed to parse
+the BLAST results with the XML parser, described in ??. Parsing BLAST
+results as XML is recommended, as this format is more likely to be
+stable than text or HTML output. To parse text output instead of XML
+output, see the section 3.1.523Parsing BLAST output from local
+BLASTsubsection.3.1.5 below.
   If you are interested in saving your results to a file before parsing
 them, see the section on WWW blast above for some info on how to use the
 `copy' module to do this.
@@ -1412,7 +1425,7 @@ read on to learn about parsing local BLAST output.
 
 3.1.5  Parsing BLAST output from local BLAST
 ============================================
-  
+   
   Since the output generated by local BLAST is different than that
 generated by the web-based BLAST, we use the parsers located in
 `Bio.Blast.NCBIStandalone' to parse and deal with the results.
@@ -1650,7 +1663,7 @@ some good ways of going this...
 hand-curated database of protein sequences. Let's look at how we connect
 with it from a script and parse SwissProt formatted results. 
   First, we need to retrieve some results to parse. Let's say we are
-looking at chalcone synthases for Orchids (see section 2.3 for some
+looking at chalcone synthases for Orchids (see section ?? for some
 justification for looking for interesting things about orchids).
 Chalcone synthase is involved in flavanoid biosynthesis in plants, and
 flavanoids make lots of cool things like pigment colors and UV
@@ -1761,10 +1774,9 @@ extractable:
   # handle = ExPASy.sprot_search_ful("Orchid and {Chalcone Synthase}")
   html_results = handle.read()
   if "Number of sequences found" in html_results:
-      ids = re.findall(r'HREF="/cgi-bin/niceprot\.pl\?(\w+)"',
-html_results)
+      ids = re.findall(r'HREF="/uniprot/(\w+)"', html_results)
   else:
-      ids = re.findall(r'href="/cgi-bin/get-sprot-raw\.pl\?(\w+)"',
+      ids = re.findall(r'href="/cgi-bin/niceprot\.pl\?(\w+)"',
 html_results)
 >>
   
@@ -1958,7 +1970,7 @@ the raw record:
 >>
   
   For more information of formats you can parse GenBank records into,
-please see section 3.4.2.
+please see section 3.4.230Parsing GenBank recordssubsection.3.4.2.
   Using these automated query retrieval functionality is a big plus over
 doing things by hand. Additionally, the retrieval has nice built in
 features like a time-delay, which will prevent NCBI from getting mad at
@@ -1983,30 +1995,70 @@ following parsers:
  
  2. FeatureParser -- This parses the raw record in a SeqRecord object
    with all of the feature table information represented in SeqFeatures
-   (see section 3.7 for more info on these objects). This is best to use
+   (see section ?? for more info on these objects). This is best to use
    if you are interested in getting things in a more standard format. 
   
-  Either way you chose to go, the most common usage of these will be
-creating an iterator and parsing through a file on GenBank records.
-Doing this is very similar to how things are done in other formats, as
-the following code demonstrates:
+  Depending on the type of GenBank files you are interested in, they
+will either contain a single record, or multiple records. Each record
+will start with a LOCUS line, various other header lines, a list of
+features, and finally the sequence data, ending with a // line.
+  Dealing with a GenBank file containing a single record is very easy.
+For example, lets use a small bacterial genome, Nanoarchaeum equitans
+Kin4-M (RefSeq NC_005213, GenBank AE017199) which can be downloaded from
+the NCBI here
+ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Bacteria/Nanoarchaeum_equitan
+s/AE017199.gbk (only 1.15 MB):
 <<
   from Bio import GenBank
   
-  gb_file = "my_file.gb"
+  feature_parser = GenBank.FeatureParser()
+  
+  gb_file = "AE017199.gbk"
+  
+  gb_record = feature_parser.parse(open(gb_file,"r"))
+  
+  # now do something with the record
+  print "Name %s, %i features" % (gb_record.name,
+len(gb_record.features))
+  print gb_record.seq
+>>
+  
+  This gives the following output:
+<<
+  Name AE017199, 1107 features
+  Seq('TCTCGCAGAGTTCTTTTTTGTATTAACAAACCCAAAACCCATAGAATTTAATGAACCCAA
+...', IUPACAmbiguousDNA())
+>>
+  
+  
+
+3.4.3  Iterating over GenBank records
+=====================================
+   
+  For multi-record GenBank files, the most common usage will be creating
+an iterator, and parsing through the file record by record. Doing this
+is very similar to how things are done in other formats, as the
+following code demonstrates, using an example file `cor6_6.gb' included
+in the BioPython source code under the Tests/GenBank/ directory:
+<<
+  from Bio import GenBank
+  
+  gb_file = "cor6_6.gb"
   gb_handle = open(gb_file, 'r')
   
   feature_parser = GenBank.FeatureParser()
   
   gb_iterator = GenBank.Iterator(gb_handle, feature_parser)
   
-  while 1:
+  while True:
      cur_record = gb_iterator.next()
   
      if cur_record is None:
          break
   
      # now do something with the record
+     print "Name %s, %i features" % (cur_record.name,
+len(cur_record.features))
      print cur_record.seq
 >>
   
@@ -2018,7 +2070,7 @@ records. This should make it possible to do whatever you need to with
 GenBank.
   
 
-3.4.3  Making your very own GenBank database
+3.4.4  Making your very own GenBank database
 ============================================
   
   One very cool thing that you can do is set up your own personal
@@ -2026,9 +2078,13 @@ GenBank database and access it like a dictionary (this can be extra cool
 because you can also allow access to these local databases over a
 network using BioCorba -- see the BioCorba documentation for more
 information).
+  Note - this is only worth doing if your GenBank file contains more
+than one record.
   Making a local database first involves creating an index file, which
 will allow quick access to any record in the file. To do this, we use
-the index file function:
+the index file function. Again, this example uses the file `cor6_6.gb'
+which is included in the BioPython source code under the Tests/GenBank/
+directory:
 <<
   >>> from Bio import GenBank
   >>> dict_file = 'cor6_6.gb'
@@ -2036,13 +2092,13 @@ the index file function:
   >>> GenBank.index_file(dict_file, index_file)
 >>
   
-  This will create the file `my_index_file.idx'. Now, we can use this
-index to create a dictionary object that allows individual access to
-every record. Like the Iterator and NCBIDictionary interfaces, we can
-either get back raw records, or we can pass the dictionary a parser that
-will parse the records before returning them. In this case, we pass a
-`FeatureParser' so that when we get a record, then we retrieve a
-SeqRecord object. 
+  This will create a directory called `cor6_6.idx' containing the index
+files. Now, we can use this index to create a dictionary object that
+allows individual access to every record. Like the Iterator and
+NCBIDictionary interfaces, we can either get back raw records, or we can
+pass the dictionary a parser that will parse the records before
+returning them. In this case, we pass a `FeatureParser' so that when we
+get a record, then we retrieve a SeqRecord object. 
   Setting up the dictionary is as easy as one line:
 <<
   >>> gb_dict = GenBank.Dictionary(index_file, GenBank.FeatureParser())
@@ -2051,7 +2107,7 @@ SeqRecord object.
   Now we can deal with this like a dictionary. For instance:
 <<
   >>> len(gb_dict)
-  7
+  6
   >>> gb_dict.keys()
   ['L31939', 'AJ237582', 'X62281', 'AF297471', 'M81224', 'X55053']
 >>
@@ -2060,6 +2116,8 @@ SeqRecord object.
 <<
   >>> gb_dict['AJ237582']
   <Bio.SeqRecord.SeqRecord instance at 0x102fdd8c>
+  >>> print len(gb_dict['X55053'].features)
+  3
 >>
   
   
@@ -2179,7 +2237,7 @@ of the original info intact.
   If you want to do more interesting things with an alignment, the best
 thing to do is to pass the alignment to an alignment information
 generating object, such as the SummaryInfo object, described in section
-3.5.2.
+??.
   
 
 3.5.2  Calculating summary information
@@ -2203,20 +2261,22 @@ information is:
 neat things for you:
   
    
- 1. Calculate a quick consensus sequence -- see section 3.5.3  
+ 1. Calculate a quick consensus sequence -- see section
+   3.5.334Calculating a quick consensus sequencesubsection.3.5.3  
  2. Get a position specific score matrix for the alignment -- see
-   section 3.5.4  
+   section ??  
  3. Calculate the information content for the alignment -- see section
-   3.5.5  
+   3.5.535Information Contentsubsection.3.5.5  
  4. Generate information on substitutions in the alignment -- section
-   3.6 details using this to generate a substitution matrix. 
+   3.637Substitution Matricessection.3.6 details using this to generate
+   a substitution matrix. 
   
   
 
 3.5.3  Calculating a quick consensus sequence
 =============================================
    
-  The `SummaryInfo' object, described in section 3.5.2, provides
+  The `SummaryInfo' object, described in section ??, provides
 functionality to calculate a quick consensus of an alignment. Assuming
 we've got a `SummaryInfo' object called `summary_align' we can calculate
 a consensus by doing:
@@ -2387,7 +2447,7 @@ formula:
 calculated in Biopython, let's look at how to get it for a particular
 region of the alignment.
   First, we need to use our alignment to get a alignment summary object,
-which we'll assume is called `summary_align' (see section 3.5.2) for
+which we'll assume is called `summary_align' (see section ??) for
 instructions on how to get this. Once we've got this object, calculating
 the information content for a region is as easy as:
 <<
@@ -2413,10 +2473,10 @@ by supplying the expected frequencies:
 >>
   
   The expected should not be passed as a raw dictionary, but instead by
-passed as a `SubsMat.FreqTable' object (see section 4.4.2 for more
-information about FreqTables). The FreqTable object provides a standard
-for associating the dictionary with an Alphabet, similar to how the
-Biopython Seq class works. 
+passed as a `SubsMat.FreqTable' object (see section
+4.4.265FreqTablesubsection.4.4.2 for more information about FreqTables).
+The FreqTable object provides a standard for associating the dictionary
+with an Alphabet, similar to how the Biopython Seq class works. 
   To create a FreqTable object, from the frequency dictionary you just
 need to do:
 <<
@@ -2537,7 +2597,8 @@ summary object to calculate info about the alignment:
   summary_align = AlignInfo.SummaryInfo(c_align)
 >>
   
-  Sections 3.5.1 and 3.5.2 contain more information on doing this.
+  Sections 3.5.132Clustalwsubsection.3.5.1 and ?? contain more
+information on doing this.
   Now that we've got our `summary_align' object, we want to use it to
 find out the number of times different residues substitute for each
 other. To make the example more readable, we'll focus on only amino
@@ -2622,11 +2683,12 @@ with!
 *=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
 
    
-  You read all about the basic Biopython sequence class in section 2.2,
-which described how to do many useful things with just the sequence.
-Howerver, many times sequences have important additional properties
-associated with them. This section described how Biopython handles these
-higher level descriptions of a sequence.
+  You read all about the basic Biopython sequence class in section
+2.25Working with sequencessection.2.2, which described how to do many
+useful things with just the sequence. Howerver, many times sequences
+have important additional properties associated with them. This section
+described how Biopython handles these higher level descriptions of a
+sequence.
   
 
 3.7.1  Sequence ids and Descriptions -- dealing with SeqRecords
@@ -2660,7 +2722,8 @@ attributes:
  
  features  -- A list of SeqFeature objects with more structured
    information about the features on a sequence. The structure of
-   SeqFeatures is described below in section 3.7.2. 
+   SeqFeatures is described below in section 3.7.240Features and
+   Annotations -- SeqFeaturessubsection.3.7.2. 
   
   Using a SeqRecord class is not very complicated, since all of the
 information is stored as attributes of the class. Initializing the class
@@ -2729,7 +2792,8 @@ The attributes of a SeqFeature are:
    
  location  -- The location of the SeqFeature on the sequence that you
    are dealing with. The locations end-points may be fuzzy -- section
-   3.7.2.2 has a lot more description on how to deal with descriptions.
+   3.7.2.241Locationssubsubsection.3.7.2.2 has a lot more description on
+   how to deal with descriptions.
  
  type  -- This is a textual description of the type of feature (for
    instance, this will be something like 'CDS' or 'gene').
@@ -2783,10 +2847,11 @@ looked like `{'gene' : 'F28B23.12'}'.
   Now lets, look at the more tricky part, how the 'join' in the location
  line is handled. First, the location for the top level SeqFeature (the 
 one we are dealing with right now) is set as going from  `'<49223' to
-'>50208'' (see section 3.7.2.2 for  the nitty gritty on how fuzzy
-locations like this are handled).  So the location of the top level
-object is the entire span of the  feature. So, how do you get at the
-information in the 'join?'  Well, that's where the `sub_features' go in.
+'>50208'' (see section 3.7.2.241Locationssubsubsection.3.7.2.2 for  the
+nitty gritty on how fuzzy locations like this are handled).  So the
+location of the top level object is the entire span of the  feature. So,
+how do you get at the information in the 'join?'  Well, that's where the
+`sub_features' go in.
   The `sub_features' attribute will have a list with two SeqFeature 
 objects in it, and these contain the information in the join. Let's 
 look at `top_level_feature.sub_features[0]'; the first  `sub_feature').
@@ -2945,7 +3010,7 @@ particular location on the sequence that the reference refers to. For
 instance, you might have a journal that is dealing with a particular
 gene located on a BAC, and want to specify that it only refers to this
 position exactly. The `location' is a potentially fuzzy location, as
-described in section 3.7.2.2.
+described in section 3.7.2.241Locationssubsubsection.3.7.2.2.
   That's all there is too it. References are meant to be easy to deal
 with, and hopefully general enough to cover lots of usage cases.
   
@@ -3180,18 +3245,18 @@ the atomic data in the file in a convenient manner.
 ================================
   
   A macromolecular structure is represented using a structure, model
-chain, residue, atom (or SMCRA) hierarchy. Fig. 3.11.1 shows a UML class
-diagram of the SMCRA data structure. Such a data structure is not
-necessarily best suited for the representation of the macromolecular
-content of a structure, but it is absolutely necessary for a good
-interpretation of the data present in a file that describes the
-structure (typically a PDB or MMCIF file). If this hierarchy cannot
-represent the contents of a structure file, it is fairly certain that
-the file contains an error or at least does not describe the structure
-unambiguously. If a SMCRA data structure cannot be generated, there is
-reason to suspect a problem. Parsing a PDB file can thus be used to
-detect likely problems. We will give several examples of this in section
-3.11.5.1. 
+chain, residue, atom (or SMCRA) hierarchy. Fig. 3.11.147Structure
+representationsubsection.3.11.1 shows a UML class diagram of the SMCRA
+data structure. Such a data structure is not necessarily best suited for
+the representation of the macromolecular content of a structure, but it
+is absolutely necessary for a good interpretation of the data present in
+a file that describes the structure (typically a PDB or MMCIF file). If
+this hierarchy cannot represent the contents of a structure file, it is
+fairly certain that the file contains an error or at least does not
+describe the structure unambiguously. If a SMCRA data structure cannot
+be generated, there is reason to suspect a problem. Parsing a PDB file
+can thus be used to detect likely problems. We will give several
+examples of this in section 3.11.5.153Examplessubsubsection.3.11.5.1. 
     *images/smcra.png* 
   
   Structure, Model, Chain and Residue are all subclasses of the Entity
@@ -3295,9 +3360,10 @@ models.
 >>
   
   The PERMISSIVE flag indicates that a number of common problems (see
-3.11.5.1) associated with PDB files will be ignored (but note that some
-atoms and/or residues will be missing). If the flag is not present a
-PDBConstructionException will be generated during the parse operation.
+3.11.5.153Examplessubsubsection.3.11.5.1) associated with PDB files will
+be ignored (but note that some atoms and/or residues will be missing).
+If the flag is not present a PDBConstructionException will be generated
+during the parse operation.
 3.11.1.1.2  Header and trailer
   
   You can extract the header and trailer (simple lists of strings) of
@@ -3350,7 +3416,8 @@ code (icode).
   The hetero field is a string : it is ``W'' for waters, ``H_'' followed
 by the residue name (e.g. ``H_FUC'') for other hetero residues and blank
 for standard amino and nucleic acids. This scheme is adopted for reasons
-described in section 3.11.3.1.
+described in section 3.11.3.152Associated
+problemssubsubsection.3.11.3.1.
   The second field in the Residue id is the sequence identifier, an
 integer describing the position of the residue in the chain.
   The third field is a string, consisting of the insertion code. The
@@ -3382,7 +3449,7 @@ used as a shortcut for the full id:
   
   Each Residue object in a Chain object should have a unique id.
 However, disordered residues are dealt with in a special way, as
-described in section 3.11.2.3.2.
+described in section 3.11.2.3.251Point mutationsparagraph.3.11.2.3.2.
   A Residue object has a number of additional methods:
 <<
   r.get_resname()  # return residue name, e.g. "ASN"
@@ -3398,7 +3465,7 @@ described in section 3.11.2.3.2.
 children. The id of an atom is its atom name (e.g. ``OG'' for the side
 chain oxygen of a Ser residue). An Atom id needs to be unique in a
 Residue. Again, an exception is made for disordered atoms, as described
-in section 3.11.2.2.
+in section ??.
   In a PDB file, an atom name consists of 4 chars, typically with
 leading and trailing spaces. Often these spaces can be removed for ease
 of use (e.g. an amino acid C alpha  atom is labeled ``.CA.'' in a PDB
@@ -4042,7 +4109,8 @@ blastool.c..
 
 4.3.7  Enzyme
 =============
-   The Enzyme Scanner produces the following events: 
+   The Enzyme.py module works with the enzyme.dat file included with the
+Enzyme distribution. The Enzyme Scanner produces the following events: 
 <<
   record
       identification
@@ -4061,7 +4129,8 @@ blastool.c..
 
 4.3.8  Fasta
 ============
-   The Fasta Scanner produces the following events: 
+   The Fasta.py module works with FASTA-formatted sequence data. The
+Fasta Scanner produces the following events: 
 <<
   sequence
       title
@@ -4161,7 +4230,8 @@ qualifier not defined in the specification.
 
 4.3.11  SWISS-PROT
 ==================
-   The SProt Scanner produces the following events: 
+   The SProt.py module works with the sprotXX.dat file included with the
+SwissProt distribution. The SProt Scanner produces the following events:
 <<
   record
       identification
@@ -4188,7 +4258,9 @@ qualifier not defined in the specification.
       terminator
 >>
   
-  The KeyWList scanner produces the following events: 
+  The KeyWList.py modules works with the keywlist.txt file included with
+the SwissProt distribution. The KeyWList scanner produces the following
+events: 
 <<
   header
   keywords
@@ -4388,11 +4460,12 @@ of established substitution matrices.
      
          
        1. `exp_freq_table': should be a FreqTable instance. See section
-         4.4.2 for detailed information on FreqTable. Briefly, the
-         expected frequency table has the frequencies of appearance for
-         each member of the alphabet. It is  implemented as a dictionary
-         with the alphabet letters as keys, and each letter's frequency
-         as a value. Values sum to 1.  
+         4.4.265FreqTablesubsection.4.4.2 for detailed information on
+         FreqTable. Briefly, the expected frequency table has the
+         frequencies of appearance for each member of the alphabet. It
+         is  implemented as a dictionary with the alphabet letters as
+         keys, and each letter's frequency as a value. Values sum to 1. 
+         
     
     The expected frequency table can (and generally should) be generated
       from the observed frequency matrix. So in most cases you will
@@ -4643,13 +4716,14 @@ interworkable, to make it easier for users. You can read about some of
 (fairly informal) coding style guidelines we try to use in biopython in
 the contributing documentation at 
 http://www.biopython.org/docs/developer/contrib.html. We also try to add
-code to the distribution along with tests (see section 4.2 for more info
-on the regression testing framework) and documentation, so that
-everything can stay as workable and well documented as possible. This
-is, of course, the most ideal situation, under many situations you'll be
-able to find other people on the list who will be willing to help add
-documentation or more tests for your code once you make it available.
-So, to end this paragraph like the last, feel free to start working!
+code to the distribution along with tests (see section 4.256Regression
+Testing Frameworksection.4.2 for more info on the regression testing
+framework) and documentation, so that everything can stay as workable
+and well documented as possible. This is, of course, the most ideal
+situation, under many situations you'll be able to find other people on
+the list who will be willing to help add documentation or more tests for
+your code once you make it available. So, to end this paragraph like the
+last, feel free to start working!
   Additionally, if you have code that you don't think fits in the
 distribution, but that you want to make available, we maintain Script
 Central (http://www.biopython.org/scriptcentral/)  which has pointers to
@@ -4735,6 +4809,4 @@ string into a handle. The following example shows how to do this using
   
 -----------------------------------------------------------------------
   
-   
-              This document was translated from LaTeX by HeVeA
-              (http://pauillac.inria.fr/~maranget/hevea/index.html). 
+              This document was translated from LaTeX by HeVeA (1).
