@@ -31,7 +31,7 @@ else:
 
 INTERLEAVE=70
 SPECIAL_COMMANDS=['charstatelabels','charlabels','taxlabels', 'taxset', 'charset','charpartition','taxpartition',\
-        'matrix','tree','translate']
+        'matrix','tree', 'utree','translate']
 KNOWN_NEXUS_BLOCKS = ['trees','data', 'characters', 'taxa', 'sets']
 PUNCTUATION='()[]{}/\,;:=*\'"`+-<>'
 MRBAYESSAFE='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_'
@@ -542,11 +542,11 @@ class Nexus(object):
             self.filename=input
         except (TypeError,IOError,AttributeError):
             #2 Assume we have a string from a fh.read()
-            if isinstance(input, str):
-                file_contents = input
-                self.filename='input_string'
+            #if isinstance(input, str):
+            #    file_contents = input
+            #    self.filename='input_string'
             #3 Assume we have a file object
-            elif hasattr(input,'read'): # file objects or StringIO objects
+            if hasattr(input,'read'): # file objects or StringIO objects
                 file_contents=input.read()
                 if input.name:
                     self.filename=input.name
@@ -879,8 +879,14 @@ class Nexus(object):
             except:
                 raise NexusError,'Format error in line %s.' % options
 
+    def _utree(self,options):
+        """Some software (clustalx) uses 'utree' to denote an unrooted tree."""
+        self._tree(options)
+        
     def _tree(self,options):
         opts=CharBuffer(options)
+        print options
+        print opts
         name=opts.next_word()
         if opts.next_nonwhitespace()!='=':
             raise NexusError,'Syntax error in tree description: %s' % options[:50]

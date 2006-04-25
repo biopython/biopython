@@ -66,11 +66,16 @@ class Tree(Nodes.Chain):
         self.add(root)
         self.root=root.id
         if tree:    # use the tree we have
+            # if Tree is called from outside Nexus parser, we need to get rid of linebreaks, etc
+            tree=tree.strip().replace('\n','').replace('\r','')
+            # there's discrepancy whether newick allows semicolons et the end
+            tree=tree.rstrip(';')
             self._add_subtree(parent_id=root.id,tree=self._parse(tree)[0])
         
     def _parse(self,tree):
         """Parses (a,b,c...)[[[xx]:]yy] into subcomponents and travels down recursively."""
         
+        #print 'parsing',tree
         if tree.count('(')!=tree.count(')'):
             raise TreeError, 'Parentheses do not match in (sub)tree: '+tree
         if tree.count('(')==0: # a leaf
