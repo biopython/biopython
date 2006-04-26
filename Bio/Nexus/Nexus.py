@@ -885,8 +885,6 @@ class Nexus(object):
         
     def _tree(self,options):
         opts=CharBuffer(options)
-        print options
-        print opts
         name=opts.next_word()
         if opts.next_nonwhitespace()!='=':
             raise NexusError,'Syntax error in tree description: %s' % options[:50]
