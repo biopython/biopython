@@ -156,13 +156,19 @@ Based on Alan J. Miller's median.f90 routine.
 
 /* ********************************************************************** */
 
+static const double* sortdata = NULL; /* used in the quicksort algorithm */
+
+/* ---------------------------------------------------------------------- */
+
 static
 int compare(const void* a, const void* b)
-/* Helper function for sort. Previously, this was a nested function under sort,
- * which is not allowed under ANSI C.
+/* Helper function for sort. Previously, this was a nested function under
+ * sort, which is not allowed under ANSI C.
  */
-{ const double term1 = *(*(double**)a);
-  const double term2 = *(*(double**)b);
+{ const int i1 = *(const int*)a;
+  const int i2 = *(const int*)b;
+  const double term1 = sortdata[i1];
+  const double term2 = sortdata[i2];
   if (term1 < term2) return -1;
   if (term1 > term2) return +1;
   return 0;
@@ -172,28 +178,34 @@ int compare(const void* a, const void* b)
 
 void CALL sort(int n, const double data[], int index[])
 /* Sets up an index table given the data, such that data[index[]] is in
- * increasing order. Sorting is done on the pointers, from which the indeces
- * are recalculated. The array data is unchanged.
+ * increasing order. Sorting is done on the indices; the array data
+ * is unchanged.
  */
 { int i;
-  const double** p = malloc(n*sizeof(double*));
-  const double* start = data;
-  for (i = 0; i < n; i++) p[i] = &(data[i]);
-  qsort(p, n, sizeof(double*), compare);
-  for (i = 0; i < n; i++) index[i] = (int)(p[i]-start);
-  free(p);
+  sortdata = data;
+  for (i = 0; i < n; i++) index[i] = i;
+  qsort(index, n, sizeof(int), compare);
 }
 
-/* ---------------------------------------------------------------------- */
+/* ********************************************************************** */
 
-static
-void getrank (int n, double data[], double rank[])
-/* Calculates the ranks of the elements in the array data. Two elements with the
- * same value get the same rank, equal to the average of the ranks had the
- * elements different values.
+static double* getrank (int n, double data[])
+/* Calculates the ranks of the elements in the array data. Two elements with
+ * the same value get the same rank, equal to the average of the ranks had the
+ * elements different values. The ranks are returned as a newly allocated
+ * array that should be freed by the calling routine. If getrank fails due to
+ * a memory allocation error, it returns NULL.
  */
 { int i;
-  int* index = malloc(n*sizeof(int));
+  double* rank;
+  int* index;
+  rank = malloc(n*sizeof(double));
+  if (!rank) return NULL;
+  index = malloc(n*sizeof(int));
+  if (!index)
+  { free(rank);
+    return NULL;
+  }
   /* Call sort to get an index table */
   sort (n, data, index);
   /* Build a rank table */
@@ -211,33 +223,60 @@ void getrank (int n, double data[], double rank[])
     i += m;
   }
   free (index);
-  return;
+  return rank;
 }
 
 /* ---------------------------------------------------------------------- */
 
-static
-int equal_clusters(int n, int clusterids1[], int clusterids2[])
-/*
-This function checks if two k-means clustering solutions are equal to each
-other. If equal, the function returns 1; otherwise, it returns 0.
+static int
+makedatamask(int nrows, int ncols, double*** pdata, int*** pmask)
+{ int i;
+  double** data;
+  int** mask;
+  data = malloc(nrows*sizeof(double*));
+  if(!data) return 0;
+  mask = malloc(nrows*sizeof(int*));
+  if(!mask)
+  { free(data);
+    return 0;
+  }
+  for (i = 0; i < nrows; i++)
+  { data[i] = malloc(ncols*sizeof(double));
+    if(!data[i]) break;
+    mask[i] = malloc(ncols*sizeof(int));
+    if(!mask[i])
+    { free(data[i]);
+      break;
+    }
+  }
+  if (i==nrows) /* break not encountered */
+  { *pdata = data;
+    *pmask = mask;
+    return 1;
+  }
+  *pdata = NULL;
+  *pmask = NULL;
+  nrows = i;
+  for (i = 0; i < nrows; i++)
+  { free(data[i]);
+    free(mask[i]);
+  }
+  free(data);
+  free(mask);
+  return 0;
+}
 
-n          (input) int
-The size of the arrays clusterids1 and clusterids2, equal to the number of
-items that were clustered.
+/* ---------------------------------------------------------------------- */
 
-clusterids1 (input) int[n]
-An array containing n elements, indicating the number of the cluster to which
-each of the items was assigned in the first clustering solution.
-
-clusterids2 (input) int[n]
-An array containing n elements, indicating the number of the cluster to which
-each of the items was assigned in the second clustering solution.
-*/
+static void
+freedatamask(int n, double** data, int** mask)
 { int i;
   for (i = 0; i < n; i++)
-    if (clusterids1[i]!=clusterids2[i]) return 0;
-  return 1;
+  { free(mask[i]);
+    free(data[i]);
+  }
+  free(mask);
+  free(data);
 }
 
 /* ---------------------------------------------------------------------- */
@@ -246,7 +285,7 @@ static
 double find_closest_pair(int n, double** distmatrix, int* ip, int* jp)
 /*
 This function searches the distance matrix to find the pair with the shortest
-distance between them. The indeces of the pair are returned in ip and jp; the
+distance between them. The indices of the pair are returned in ip and jp; the
 distance itself is returned by the function.
 
 n          (input) int
@@ -320,7 +359,8 @@ void CALL svd(int m, int n, double** u, double w[], double** v, int* ierr)
  *      ierr is set to
  *        zero       for normal return,
  *        k          if the k-th singular value has not been
- *                   determined after 30 iterations.
+ *                   determined after 30 iterations,
+ *        -1         if memory allocation fails.
  *
  *   Questions and comments should be directed to B. S. Garbow,
  *   Applied Mathematics division, Argonne National Laboratory
@@ -338,16 +378,21 @@ void CALL svd(int m, int n, double** u, double w[], double** v, int* ierr)
  *       overwritten.
  *     - We allocate for the array rv1, used as a working space,
  *       internally in this routine, instead of passing it as an
- *       argument.
+ *       argument. If the allocation fails, svd sets *ierr to -1
+ *       and returns.
  *   2003.06.05
  */
 { int i, j, k, i1, k1, l1, its;
-  double* rv1 = malloc(n*sizeof(double));
   double c,f,h,s,x,y,z;
   int l = 0;
   double g = 0.0;
   double scale = 0.0;
   double anorm = 0.0;
+  double* rv1 = malloc(n*sizeof(double));
+  if (!rv1)
+  { *ierr = -1;
+    return;
+  }
   *ierr = 0;
   /* Householder reduction to bidiagonal form */
   for (i = 0; i < n; i++)
@@ -1141,16 +1186,23 @@ If transpose==0, the distance between two rows in the matrix is calculated.
 Otherwise, the distance between two columns in the matrix is calculated.
 ============================================================================
 */
-{ double* rank1;
+{ int i;
+  int m = 0;
+  double* rank1;
   double* rank2;
   double result = 0.;
   double denom1 = 0.;
   double denom2 = 0.;
   double avgrank;
-  double* tdata1 = malloc(n*sizeof(double));
-  double* tdata2 = malloc(n*sizeof(double));
-  int i;
-  int m = 0;
+  double* tdata1;
+  double* tdata2;
+  tdata1 = malloc(n*sizeof(double));
+  if(!tdata1) return 0.0; /* Memory allocation error */
+  tdata2 = malloc(n*sizeof(double));
+  if(!tdata2) /* Memory allocation error */
+  { free(tdata1);
+    return 0.0;
+  }
   if (transpose==0)
   { for (i = 0; i < n; i++)
     { if (mask1[index1][i] && mask2[index2][i])
@@ -1170,12 +1222,15 @@ Otherwise, the distance between two columns in the matrix is calculated.
     }
   }
   if (m==0) return 0;
-  rank1 = malloc(m*sizeof(double));
-  rank2 = malloc(m*sizeof(double));
-  getrank(m, tdata1, rank1);
+  rank1 = getrank(m, tdata1);
   free(tdata1);
-  getrank(m, tdata2, rank2);
+  if(!rank1) return 0.0; /* Memory allocation error */
+  rank2 = getrank(m, tdata2);
   free(tdata2);
+  if(!rank2) /* Memory allocation error */
+  { free(rank1);
+    return 0.0;
+  }
   avgrank = 0.5*(m-1); /* Average rank */
   for (i = 0; i < m; i++)
   { const double value1 = rank1[i];
@@ -1314,22 +1369,20 @@ Otherwise, the distance between two columns in the matrix is calculated.
 
 /* *********************************************************************  */
 
-static
-void setmetric (char dist,
-  double (**metric)
-    (int,double**,double**,int**,int**, const double[],int,int,int) )
+static double(*setmetric(char dist)) 
+  (int, double**, double**, int**, int**, const double[], int, int, int)
 { switch(dist)
-  { case ('e'): *metric = &euclid; break;
-    case ('b'): *metric = &cityblock; break;
-    case ('c'): *metric = &correlation; break;
-    case ('a'): *metric = &acorrelation; break;
-    case ('u'): *metric = &ucorrelation; break;
-    case ('x'): *metric = &uacorrelation; break;
-    case ('s'): *metric = &spearman; break;
-    case ('k'): *metric = &kendall; break;
-    default: *metric = &euclid; break;
+  { case 'e': return &euclid;
+    case 'b': return &cityblock;
+    case 'c': return &correlation;
+    case 'a': return &acorrelation;
+    case 'u': return &ucorrelation;
+    case 'x': return &uacorrelation;
+    case 's': return &spearman;
+    case 'k': return &kendall;
+    default: return &euclid;
   }
-  return;
+  return NULL; /* Never get here */
 }
 
 /* *********************************************************************  */
@@ -1362,21 +1415,21 @@ ranlib.h:   setall
 
 /* ************************************************************************ */
 
-void CALL randomassign (int nclusters, int nelements, int clusterid[])
+void randomassign (int nclusters, int nelements, int clusterid[])
 /*
 Purpose
 =======
 
 The randomassign routine performs an initial random clustering, needed for
 k-means or k-median clustering. Elements (genes or microarrays) are randomly
-assigned to clusters. First, nclust elements are randomly chosen to be assigned
-to the clusters 0..nclust-1 in order to guarantee that none of the clusters
-are empty. The remaining elements are then randomly assigned to a cluster.
+assigned to clusters. The number of elements in each cluster is chosen
+randomly, making sure that each cluster will receive at least one element.
+
 
 Arguments
 =========
 
-nclust  (input) int
+nclusters  (input) int
 The number of clusters.
 
 nelements  (input) int
@@ -1386,39 +1439,54 @@ to be clustered).
 clusterid  (output) int[nelements]
 The cluster number to which an element was assigned.
 
-External Functions:
-ranlib: int genprm
+
+External functions
+==================
+
+ranlib: long ignuin(long low, long high);
+        long ignbin(long n, float pp);
+
 ============================================================================
 */
+{ int i, j;
+  int k = 0;
+  float p;
+  long n = nelements-nclusters;
+  /* Draw the number of elements in each cluster from a multinomial
+   * distribution, reserving ncluster elements to set independently
+   * in order to guarantee that none of the clusters are empty.
+   */
+  for (i = 0; i < nclusters-1; i++)
+  { p = 1.0/(nclusters-i);
+    j = ignbin(n, p);
+    n -= j;
+    j += k+1; /* Assign at least one element to cluster i */
+    for ( ; k < j; k++) clusterid[k] = i;
+  }
+  /* Assign the remaining elements to the last cluster */
+  for ( ; k < nelements; k++) clusterid[k] = i;
 
-{ int i;
-  long* map = malloc(nelements*sizeof(long));
-  /* Initialize mapping */
-  for (i = 0; i < nelements; i++) map[i] = i;
-  /* Create a random permutation of this mapping */
-  genprm (map, nelements);
+  /* Create a random permutation of the cluster assignments */
+  for (i = 0; i < nelements; i++)
+  { j = ignuin(0, nelements-1);
+    k = clusterid[j];
+    clusterid[j] = clusterid[i];
+    clusterid[i] = k;
+  }
 
-  /* Assign each of the first nclusters elements to a different cluster
-   * to avoid empty clusters */
-  for (i = 0; i < nclusters; i++) clusterid[map[i]] = i;
-
-  /* Assign other elements randomly to a cluster */
-  for (i = nclusters; i < nelements; i++)
-    clusterid[map[i]] = ignuin (0,nclusters-1);
-  free(map);
   return;
 }
 
 /* ********************************************************************* */
 
-void getclustermean(int nclusters, int nrows, int ncolumns,
+static void getclustermeans(int nclusters, int nrows, int ncolumns,
   double** data, int** mask, int clusterid[], double** cdata, int** cmask,
   int transpose)
 /*
 Purpose
 =======
 
-The getclustermean routine calculates the cluster centroids, given to which
+The getclustermeans routine calculates the cluster centroids, given to which
 cluster each element belongs. The centroid is defined as the mean over all
 elements for each dimension.
 
@@ -1451,7 +1519,7 @@ is equal to ncolumns (the number of microarrays).
 
 cdata      (output) double[nclusters][ncolumns] if transpose==0
                     double[nrows][nclusters] if transpose==1
-On exit of getclustermean, this array contains the cluster centroids.
+On exit of getclustermeans, this array contains the cluster centroids.
 
 cmask      (output) int[nclusters][ncolumns] if transpose==0
                     int[nrows][nclusters] if transpose==1
@@ -1516,19 +1584,19 @@ columns (microarrays) are specified.
       }
     }
   }
-  return;
 }
 
 /* ********************************************************************* */
 
-void getclustermedian(int nclusters, int nrows, int ncolumns,
+static void
+getclustermedians(int nclusters, int nrows, int ncolumns,
   double** data, int** mask, int clusterid[], double** cdata, int** cmask,
-  int transpose)
+  int transpose, double cache[])
 /*
 Purpose
 =======
 
-The getclustermedian routine calculates the cluster centroids, given to which
+The getclustermedians routine calculates the cluster centroids, given to which
 cluster each element belongs. The centroid is defined as the median over all
 elements for each dimension.
 
@@ -1561,7 +1629,7 @@ is equal to ncolumns (the number of microarrays).
 
 cdata      (output) double[nclusters][ncolumns] if transpose==0
                     double[nrows][nclusters] if transpose==1
-On exit of getclustermedian, this array contains the cluster centroids.
+On exit of getclustermedians, this array contains the cluster centroids.
 
 cmask      (output) int[nclusters][ncolumns] if transpose==0
                     int[nrows][nclusters] if transpose==1
@@ -1573,22 +1641,27 @@ transpose  (input) int
 If transpose==0, clusters of rows (genes) are specified. Otherwise, clusters of
 columns (microarrays) are specified.
 
+cache      (input) double[nrows] if transpose==0
+                   double[ncolumns] if transpose==1
+This array should be allocated before calling getclustermedians; its contents
+on input is not relevant. This array is used as a temporary storage space when
+calculating the medians.
+
 ========================================================================
 */
 { int i, j, k;
   if (transpose==0)
-  { double* temp = malloc(nrows*sizeof(double));
-    for (i = 0; i < nclusters; i++)
+  { for (i = 0; i < nclusters; i++)
     { for (j = 0; j < ncolumns; j++)
       { int count = 0;
         for (k = 0; k < nrows; k++)
         { if (i==clusterid[k] && mask[k][j])
-          { temp[count] = data[k][j];
+          { cache[count] = data[k][j];
             count++;
           }
         }
         if (count>0)
-        { cdata[i][j] = median (count,temp);
+        { cdata[i][j] = median(count,cache);
           cmask[i][j] = 1;
         }
         else
@@ -1597,21 +1670,19 @@ columns (microarrays) are specified.
         }
       }
     }
-    free (temp);
   }
   else
-  { double* temp = malloc(ncolumns*sizeof(double));
-    for (i = 0; i < nclusters; i++)
+  { for (i = 0; i < nclusters; i++)
     { for (j = 0; j < nrows; j++)
       { int count = 0;
         for (k = 0; k < ncolumns; k++)
         { if (i==clusterid[k] && mask[j][k])
-          { temp[count] = data[j][k];
+          { cache[count] = data[j][k];
             count++;
           }
         }
         if (count>0)
-        { cdata[j][i] = median (count,temp);
+        { cdata[j][i] = median(count,cache);
           cmask[j][i] = 1;
         }
         else
@@ -1620,20 +1691,106 @@ columns (microarrays) are specified.
         }
       }
     }
-    free (temp);
   }
-  return;
+}
+ 
+/* ********************************************************************* */
+
+int getclustercentroids(int nclusters, int nrows, int ncolumns,
+  double** data, int** mask, int clusterid[], double** cdata, int** cmask,
+  int transpose, char method)
+/*
+Purpose
+=======
+
+The getclustercentroids routine calculates the cluster centroids, given to
+which cluster each element belongs. Depending on the argument method, the
+centroid is defined as either the mean or the median for each dimension over
+all elements belonging to a cluster.
+
+Arguments
+=========
+
+nclusters  (input) int
+The number of clusters.
+
+nrows     (input) int
+The number of rows in the gene expression data matrix, equal to the number of
+genes.
+
+ncolumns  (input) int
+The number of columns in the gene expression data matrix, equal to the number of
+microarrays.
+
+data       (input) double[nrows][ncolumns]
+The array containing the gene expression data.
+
+mask       (input) int[nrows][ncolumns]
+This array shows which data values are missing. If mask[i][j]==0, then
+data[i][j] is missing.
+
+clusterid  (output) int[nrows] if transpose==0
+                    int[ncolumns] if transpose==1
+The cluster number to which each element belongs. If transpose==0, then the
+dimension of clusterid is equal to nrows (the number of genes). Otherwise, it
+is equal to ncolumns (the number of microarrays).
+
+cdata      (output) double[nclusters][ncolumns] if transpose==0
+                    double[nrows][nclusters] if transpose==1
+On exit of getclustercentroids, this array contains the cluster centroids.
+
+cmask      (output) int[nclusters][ncolumns] if transpose==0
+                    int[nrows][nclusters] if transpose==1
+This array shows which data values of are missing for each centroid. If
+cmask[i][j]==0, then cdata[i][j] is missing. A data value is missing for
+a centroid if all corresponding data values of the cluster members are missing.
+
+transpose  (input) int
+If transpose==0, clusters of rows (genes) are specified. Otherwise, clusters of
+columns (microarrays) are specified.
+
+method     (input) char
+For method=='a', the centroid is defined as the mean over all elements
+belonging to a cluster for each dimension.
+For method=='m', the centroid is defined as the median over all elements
+belonging to a cluster for each dimension.
+
+Return value
+============
+
+The function returns an integer to indicate success or failure. If a
+memory error occurs, or if method is not 'm' or 'a', getclustercentroids
+returns 0. If successful, getclustercentroids returns 1;
+========================================================================
+*/
+{ switch(method)
+  { case 'm':
+    { const int nelements = (transpose==0) ? nrows : ncolumns;
+      double* cache = malloc(nelements*sizeof(double));
+      if (!cache) return 0;
+      getclustermedians(nclusters, nrows, ncolumns, data, mask, clusterid,
+                        cdata, cmask, transpose, cache);
+      free(cache);
+      return 1;
+    }
+    case 'a':
+    { getclustermeans(nclusters, nrows, ncolumns, data, mask, clusterid,
+                      cdata, cmask, transpose);
+      return 1;
+    }
+  }
+  return 0;
 }
 
 /* ********************************************************************* */
 
-void getclustermedoid(int nclusters, int nelements, double** distance,
+void getclustermedoids(int nclusters, int nelements, double** distance,
   int clusterid[], int centroids[], double errors[])
 /*
 Purpose
 =======
 
-The getclustermedoid routine calculates the cluster centroids, given to which
+The getclustermedoids routine calculates the cluster centroids, given to which
 cluster each element belongs. The centroid is defined as the element with the
 smallest sum of distances to the other elements.
 
@@ -1682,75 +1839,176 @@ centroid.
 }
 
 /* ********************************************************************* */
-static
-void emalg (int nclusters, int nrows, int ncolumns,
-  double** data, int** mask, double weight[], int transpose,
-  void getclustercenter(int, int, int, double**, int**, int[],
-                        double**, int**, int),
-  double metric (int,double**,double**,int**,int**,const double[],int,int,int),
-  int clusterid[], double** cdata, int** cmask)
 
-{ const int nitems = (transpose==0) ? nrows : ncolumns;
+static int
+kmeans(int nclusters, int nrows, int ncolumns, double** data, int** mask,
+  double weight[], int transpose, int npass, char dist,
+  double** cdata, int** cmask, int clusterid[], double* error,
+  int tclusterid[], int counts[], int mapping[])
+{ int i, j, k;
+  const int nelements = (transpose==0) ? nrows : ncolumns;
   const int ndata = (transpose==0) ? ncolumns : nrows;
+  int ifound = 0;
+  int ipass = 0;
+  /* Set the metric function as indicated by dist */
+  double (*metric)
+    (int, double**, double**, int**, int**, const double[], int, int, int) =
+       setmetric(dist);
 
-  int* cn = calloc(nclusters,sizeof(int));
-  /* This will contain the number of elements in each cluster. This is needed
-   * to check for empty clusters.
-   */
+  *error = DBL_MAX;
 
-  int* savedids = malloc(nitems*sizeof(int));
-  /* needed to check for periodic behavior */
-
-  int changed;
-  int iteration = 0;
-  int period = 10;
-  int i, j;
-
-  for (i = 0; i < nitems; i++) cn[clusterid[i]]++;
-
-  /* Start the loop */
   do
-  { if (iteration % period == 0)
-    { /* save the current clustering solution */
-      for (i = 0; i < nitems; i++) savedids[i] = clusterid[i];
-      period *= 2;
-    }
-    iteration++;
+  { double total = DBL_MAX;
 
-    /* Find the center */
-    getclustercenter(nclusters, nrows, ncolumns, data, mask, clusterid,
-                     cdata, cmask, transpose);
+    /* Perform the EM algorithm. First, randomly assign elements to clusters. */
+    if (npass!=0) randomassign (nclusters, nelements, tclusterid);
 
-    changed = 0;
+    for (i = 0; i < nclusters; i++) counts[i]=0;
+    for (i = 0; i < nelements; i++) counts[tclusterid[i]]++;
 
-    for (i = 0; i < nitems; i++)
-    /* Calculate the distances */
-    { double distance;
-      int jnow = clusterid[i];
-      if (cn[jnow]==1) continue;
-      /* No reassignment if that would lead to an empty cluster */
-      /* Treat the present cluster as a special case */
-      distance = metric(ndata,data,cdata,mask,cmask,weight,i,jnow,transpose);
-      for (j = 0; j < nclusters; j++)
-      { double tdistance;
-        if (j==jnow) continue;
-        tdistance = metric(ndata,data,cdata,mask,cmask,weight,i,j,transpose);
-        if (tdistance < distance)
-        { distance = tdistance;
-          cn[clusterid[i]]--;
-          clusterid[i] = j;
-          cn[j]++;
-          changed = 1;
+    /* Start the loop */
+    while(1)
+    { double previous = total;
+      total = 0.0;
+
+      /* Find the center */
+      getclustermeans(nclusters, nrows, ncolumns, data, mask, tclusterid,
+                      cdata, cmask, transpose);
+
+      for (i = 0; i < nelements; i++)
+      /* Calculate the distances */
+      { double distance;
+        k = tclusterid[i];
+        if (counts[k]==1) continue;
+        /* No reassignment if that would lead to an empty cluster */
+        /* Treat the present cluster as a special case */
+        distance = metric(ndata,data,cdata,mask,cmask,weight,i,k,transpose);
+        for (j = 0; j < nclusters; j++)
+        { double tdistance;
+          if (j==k) continue;
+          tdistance = metric(ndata,data,cdata,mask,cmask,weight,i,j,transpose);
+          if (tdistance < distance)
+          { distance = tdistance;
+            counts[tclusterid[i]]--;
+            tclusterid[i] = j;
+            counts[j]++;
+          }
         }
+        total += distance;
+      }
+      if (total>=previous) break;
+    }
+
+    if (npass<=1) 
+    { *error = total;
+      return 1;
+    }
+
+    for (i = 0; i < nclusters; i++) mapping[i] = -1;
+    for (i = 0; i < nelements; i++)
+    { j = tclusterid[i];
+      k = clusterid[i];
+      if (mapping[k] == -1) mapping[k] = j;
+      else if (mapping[k] != j)
+      { if (total < *error)
+        { ifound = 1;
+          *error = total;
+          for (i = 0; i < nelements; i++) clusterid[i] = tclusterid[i];
+        }
+        break;
       }
     }
-  } while (changed && !equal_clusters(nitems, savedids, clusterid));
-  free (savedids);
-  free (cn);
-  return;
+    if (i==nelements) ifound++; /* break statement not encountered */
+  } while (++ipass < npass);
+  return ifound;
 }
 
-/* *********************************************************************** */
+/* ---------------------------------------------------------------------- */
+
+static int
+kmedians(int nclusters, int nrows, int ncolumns, double** data, int** mask,
+  double weight[], int transpose, int npass, char dist,
+  double** cdata, int** cmask, int clusterid[], double* error,
+  int tclusterid[], int counts[], int mapping[], double cache[])
+{ int i, j, k;
+  const int nelements = (transpose==0) ? nrows : ncolumns;
+  const int ndata = (transpose==0) ? ncolumns : nrows;
+  int ifound = 0;
+  int ipass = 0;
+  /* Set the metric function as indicated by dist */
+  double (*metric)
+    (int, double**, double**, int**, int**, const double[], int, int, int) =
+       setmetric(dist);
+
+  *error = DBL_MAX;
+
+  do
+  { double total = DBL_MAX;
+
+    /* Perform the EM algorithm. First, randomly assign elements to clusters. */
+    if (npass!=0) randomassign (nclusters, nelements, tclusterid);
+
+    for (i = 0; i < nclusters; i++) counts[i]=0;
+    for (i = 0; i < nelements; i++) counts[tclusterid[i]]++;
+
+    /* Start the loop */
+    while(1)
+    { double previous = total;
+      total = 0.0;
+
+      /* Find the center */
+      getclustermedians(nclusters, nrows, ncolumns, data, mask, tclusterid,
+                        cdata, cmask, transpose, cache);
+
+      for (i = 0; i < nelements; i++)
+      /* Calculate the distances */
+      { double distance;
+        k = tclusterid[i];
+        if (counts[k]==1) continue;
+        /* No reassignment if that would lead to an empty cluster */
+        /* Treat the present cluster as a special case */
+        distance = metric(ndata,data,cdata,mask,cmask,weight,i,k,transpose);
+        for (j = 0; j < nclusters; j++)
+        { double tdistance;
+          if (j==k) continue;
+          tdistance = metric(ndata,data,cdata,mask,cmask,weight,i,j,transpose);
+          if (tdistance < distance)
+          { distance = tdistance;
+            counts[tclusterid[i]]--;
+            tclusterid[i] = j;
+            counts[j]++;
+          }
+        }
+        total += distance;
+      }
+      if (total>=previous) break;
+    }
+
+    if (npass<=1) 
+    { *error = total;
+      return 1;
+    }
+
+    for (i = 0; i < nclusters; i++) mapping[i] = -1;
+    for (i = 0; i < nelements; i++)
+    { j = tclusterid[i];
+      k = clusterid[i];
+      if (mapping[k] == -1) mapping[k] = j;
+      else if (mapping[k] != j)
+      { if (total < *error)
+        { ifound = 1;
+          *error = total;
+          for (i = 0; i < nelements; i++) clusterid[i] = tclusterid[i];
+        }
+        break;
+      }
+    }
+    if (i==nelements) ifound++; /* break statement not encountered */
+  } while (++ipass < npass);
+  return ifound;
+}
+
+/* ********************************************************************* */
 
 void CALL kcluster (int nclusters, int nrows, int ncolumns,
   double** data, int** mask, double weight[], int transpose,
@@ -1824,30 +2082,29 @@ then on input clusterid contains the initial clustering assignment from which
 the clustering algorithm starts. On output, it contains the clustering solution
 that was found.
 
-error      (output) double
+error      (output) double*
 The sum of distances to the cluster center of each item in the optimal k-means
 clustering solution that was found.
 
-ifound     (output) int
+ifound     (output) int*
 The number of times the optimal clustering solution was
-found. The value of ifound is at least 1; its maximum value is npass.
+found. The value of ifound is at least 1; its maximum value is npass. If the
+number of clusters is larger than the number of elements being clustered,
+*ifound is set to 0 as an error code. If a memory allocation error occurs,
+*ifound is set to -1.
 
 ========================================================================
 */
 { const int nelements = (transpose==0) ? nrows : ncolumns;
   const int ndata = (transpose==0) ? ncolumns : nrows;
-  void (*getclustercenter) (int, int, int, double**, int**, int[],
-                            double**, int**, int);
-
-  double (*metric)
-    (int,double**,double**,int**,int**,const double[],int,int,int);
 
   int i;
-  int ipass;
+  int ok;
   int* tclusterid;
-  int* mapping;
+  int* mapping = NULL;
   double** cdata;
   int** cmask;
+  int* counts;
 
   if (nelements < nclusters)
   { *ifound = 0;
@@ -1855,118 +2112,72 @@ found. The value of ifound is at least 1; its maximum value is npass.
   }
   /* More clusters asked for than elements available */
 
-  /* Set the function to find the centroid as indicated by method */
-  if (method == 'm') getclustercenter = &getclustermedian;
-  else getclustercenter = &getclustermean;
+  *ifound = -1;
 
-  /* Set the metric function as indicated by dist */
-  setmetric (dist, &metric);
-
-  /* Set the result of the first pass as the initial best clustering solution */
-  *ifound = 1;
+  /* This will contain the number of elements in each cluster, which is
+   * needed to check for empty clusters. */
+  counts = malloc(nclusters*sizeof(int));
+  if(!counts) return;
 
   /* Find out if the user specified an initial clustering */
-  if (npass!=0)
-  { initran(); /* First initialize the random number generator */
-    randomassign (nclusters, nelements, clusterid);
+  if (npass>0) initran(); /* First initialize the random number generator */
+  if (npass<=1) tclusterid = clusterid;
+  else
+  { tclusterid = malloc(nelements*sizeof(int));
+    if (!tclusterid)
+    { free(counts);
+      return;
+    }
+    mapping = malloc(nclusters*sizeof(int));
+    if (!mapping)
+    { free(counts);
+      free(tclusterid);
+      return;
+    }
+    for (i = 0; i < nelements; i++) clusterid[i] = 0;
   }
 
   /* Allocate space to store the centroid data */
-  if (transpose==0)
-  { cdata = malloc(nclusters*sizeof(double*));
-    cmask = malloc(nclusters*sizeof(int*));
-    for (i = 0; i < nclusters; i++)
-    { cdata[i] = malloc(ndata*sizeof(double));
-      cmask[i] = malloc(ndata*sizeof(int));
+  if (transpose==0) ok = makedatamask(nclusters, ndata, &cdata, &cmask);
+  else ok = makedatamask(ndata, nclusters, &cdata, &cmask);
+  if(!ok)
+  { free(counts);
+    if(npass>1)
+    { free(tclusterid);
+      free(mapping);
+      return;
+    }
+  }
+  
+  if (method=='m')
+  { double* cache = malloc(nelements*sizeof(double));
+    if(cache)
+    { *ifound = kmedians(nclusters, nrows, ncolumns, data, mask, weight,
+                         transpose, npass, dist, cdata, cmask, clusterid, error,
+                         tclusterid, counts, mapping, cache);
+      free(cache);
     }
   }
   else
-  { cdata = malloc(ndata*sizeof(double*));
-    cmask = malloc(ndata*sizeof(int*));
-    for (i = 0; i < ndata; i++)
-    { cdata[i] = malloc(nclusters*sizeof(double));
-      cmask[i] = malloc(nclusters*sizeof(int));
-    }
-  }
-
-  *error = 0.;
-  emalg(nclusters, nrows, ncolumns, data, mask, weight, transpose,
-    getclustercenter, metric, clusterid, cdata, cmask);
-
-  for (i = 0; i < nelements; i++)
-  { int j = clusterid[i];
-    *error += metric(ndata, data, cdata, mask, cmask, weight, i, j, transpose);
-  }
-
-  if (npass==0)
-  { if (transpose==0)
-    { for (i = 0; i < nclusters; i++)
-      { free(cdata[i]);
-        free(cmask[i]);
-      }
-    }
-    else
-    { for (i = 0; i < ndata; i++)
-      { free(cdata[i]);
-        free(cmask[i]);
-      }
-    }
-    free(cdata);
-    free(cmask);
-    return;
-  }
-
-  tclusterid = malloc(nelements*sizeof(int));
-  mapping = malloc(nclusters*sizeof(int));
-
-  for (ipass = 1; ipass < npass; ipass++)
-  { double tssin = 0.;
-    int same = 1;
-
-    randomassign (nclusters, nelements, tclusterid);
-    emalg(nclusters, nrows, ncolumns, data, mask, weight, transpose,
-      getclustercenter, metric, tclusterid, cdata, cmask);
-
-    for (i = 0; i < nclusters; i++) mapping[i] = -1;
-    for (i = 0; i < nelements; i++)
-    { int j = tclusterid[i];
-      if (mapping[j] == -1) mapping[j] = clusterid[i];
-      else if (mapping[j] != clusterid[i]) same = 0;
-      tssin +=
-        metric(ndata, data, cdata, mask, cmask, weight, i, j, transpose);
-    }
-    if (same) (*ifound)++;
-    else if (tssin < *error)
-    { *ifound = 1;
-      *error = tssin;
-      for (i = 0; i < nelements; i++) clusterid[i] = tclusterid[i];
-    }
-  }
+    *ifound = kmeans(nclusters, nrows, ncolumns, data, mask, weight,
+                     transpose, npass, dist, cdata, cmask, clusterid, error,
+                     tclusterid, counts, mapping);
 
   /* Deallocate temporarily used space */
-  free(mapping);
-  free(tclusterid);
-  if (transpose==0)
-  { for (i = 0; i < nclusters; i++)
-    { free(cmask[i]);
-      free(cdata[i]);
-    }
+  if (npass > 1)
+  { free(mapping);
+    free(tclusterid);
   }
-  else
-  { for (i = 0; i < ndata; i++)
-    { free(cmask[i]);
-      free(cdata[i]);
-    }
-  }
-  free(cmask);
-  free(cdata);
 
-  return;
+  if (transpose==0) freedatamask(nclusters, cdata, cmask);
+  else freedatamask(ndata, cdata, cmask);
+
+  free(counts);
 }
 
 /* *********************************************************************** */
 
-void CALL kmedoids (int nclusters, int nelements, double** distance,
+void CALL kmedoids (int nclusters, int nelements, double** distmatrix,
   int npass, int clusterid[], double* error, int* ifound)
 /*
 Purpose
@@ -2016,155 +2227,100 @@ The sum of distances to the cluster center of each item in the optimal k-medoids
 clustering solution that was found.
 
 ifound     (output) int
-The number of times the optimal clustering solution was
-found. The value of ifound is at least 1; its maximum value is npass.
+If kmedoids is successful: the number of times the optimal clustering solution
+was found. The value of ifound is at least 1; its maximum value is npass.
+If the user requested more clusters than elements available, ifound is set
+to 0. If kmedoids fails due to a memory allocation error, ifound is set to -1.
 
 ========================================================================
 */
 
-{ int i, j, k, icluster, ipass;
+{ int i, j, icluster;
   int* tclusterid;
   int* centroids;
-  int* savedids;
   double* errors;
-  int changed;
-  int iteration = 0;
-  int period = 10;
-  /* needed to check for periodic behavior */
+  int ipass = 0;
 
   if (nelements < nclusters)
   { *ifound = 0;
     return;
   } /* More clusters asked for than elements available */
 
-  centroids = malloc(nclusters*sizeof(int));
-  savedids = malloc(nelements*sizeof(int));
-  errors = malloc(nclusters*sizeof(double));
+  *ifound = -1;
 
-  /* Set the result of the first pass as the initial best clustering solution */
-  *ifound = 1;
+  centroids = malloc(nclusters*sizeof(int));
+  if(!centroids) return;
+
+  errors = malloc(nclusters*sizeof(double));
+  if(!errors)
+  { free(centroids);
+    return;
+  }
 
   /* Find out if the user specified an initial clustering */
-  if (npass)
-  { initran(); /* First initialize the random number generator */
-    randomassign (nclusters, nelements, clusterid);
-    /* Ready for the first run */
+  if (npass > 0) initran(); /* First initialize the random number generator */
+  if (npass<=1) tclusterid = clusterid;
+  else
+  { tclusterid = malloc(nelements*sizeof(int));
+    if(!tclusterid)
+    { free(centroids);
+      free(errors);
+      return;
+    }
   }
 
-  *error = 0.;
+  *error = DBL_MAX;
   do /* Start the loop */
-  { if (iteration % period == 0)
-    { /* save the current clustering solution */
-      for (i = 0; i < nelements; i++) savedids[i] = clusterid[i];
-      period *= 2;
-    }
-    iteration++;
+  { double total = DBL_MAX;
 
-    /* Find the center */
-    getclustermedoid (nclusters, nelements, distance, clusterid, centroids, errors);
-
-    changed = 0;
-    for (i = 0; i < nelements; i++)
-    /* Find the closest cluster */
-    { double d = DBL_MAX;
-      for (icluster = 0; icluster < nclusters; icluster++)
-      { double td;
-        j = centroids[icluster];
-        if (i==j)
-        { d = 0.0;
-          clusterid[i] = icluster;
-          changed = 1;
-          break;
-        }
-        td = (i > j) ? distance[i][j] : distance[j][i];
-        if (td < d)
-        { d = td;
-          clusterid[i] = icluster;
-          changed = 1;
-        }
-      }
-    }
-  } while (changed && !equal_clusters(nelements, clusterid, savedids));
-
-  for (i = 0; i < nelements; i++)
-  { const int j = centroids[clusterid[i]];
-    /* Set the cluster number to the item number of the cluster centroid */
-    clusterid[i] = j;
-    if (i==j) continue;
-    *error += (i > j) ? distance[i][j] : distance[j][i];
-  }
-  if (npass==0)
-  /* Deterministic result depending on the specified initial clustering */
-  { free(savedids);
-    free(centroids);
-    free(errors);
-    return; /* Done for today */
-  }
-
-  tclusterid = malloc(nelements*sizeof(int));
-  for (ipass = 1; ipass < npass; ipass++)
-  { double terror = 0.0;
-
-    iteration = 0;
-    period = 10;
- 
-    randomassign (nclusters, nelements, tclusterid);
-    do /* Start the loop */
-    { if (iteration % period == 0)
-      { /* save the current clustering solution */
-        for (i = 0; i < nelements; i++) savedids[i] = tclusterid[i];
-        period = period * 2;
-      }
-      iteration++;
+    if (npass!=0) randomassign (nclusters, nelements, tclusterid);
+    while(1)
+    { double previous = total;
+      total = 0.0;
 
       /* Find the center */
-      getclustermedoid (nclusters, nelements, distance, tclusterid, centroids, errors);
+      getclustermedoids(nclusters, nelements, distmatrix, tclusterid,
+                        centroids, errors);
 
-      changed = 0;
       for (i = 0; i < nelements; i++)
       /* Find the closest cluster */
-      { double d = DBL_MAX;
+      { double distance = DBL_MAX;
         for (icluster = 0; icluster < nclusters; icluster++)
-        { double td;
+        { double tdistance;
           j = centroids[icluster];
           if (i==j)
-          { d = 0.0;
+          { distance = 0.0;
             tclusterid[i] = icluster;
-            changed = 1;
             break;
           }
-          td = (i > j) ? distance[i][j] : distance[j][i];
-          if (td < d)
-          { d = td;
+          tdistance = (i > j) ? distmatrix[i][j] : distmatrix[j][i];
+          if (tdistance < distance)
+          { distance = tdistance;
             tclusterid[i] = icluster;
-            changed = 1;
           }
         }
+        total += distance;
       }
-      /* compare to the saved clustering solution */
-    } while (changed && !equal_clusters(nelements, tclusterid, savedids));
+      if (total>=previous) break;
+    }
 
-    changed = 0;
     for (i = 0; i < nelements; i++)
-    { k = tclusterid[i];
-      j = centroids[k];
-      if (j!=clusterid[i]) changed = 1;
-      if (i==j) continue;
-      terror += (i > j) ? distance[i][j] : distance[j][i];
+    { if (total < *error)
+      { *ifound = 1;
+        *error = total;
+        /* Replace by the centroid in each cluster. */
+        for (j = 0; j < nelements; j++) clusterid[j] = centroids[tclusterid[j]];
+        break;
+      }
+      else if (clusterid[i]!=tclusterid[i]) break;
     }
-    if (!changed) (*ifound)++;
-    else if (terror < *error)
-    { *ifound = 1;
-      *error = terror;
-      /* The cluster number is set to the item number of the cluster centroid */
-      for (i = 0; i < nelements; i++) clusterid[i] = centroids[tclusterid[i]];
-    }
-  }
+    if (i==nelements) (*ifound)++; /* break statement not encountered */
+  } while (++ipass < npass);
+
 
   /* Deallocate temporarily used space */
-  free(savedids);
+  if (npass > 1) free(tclusterid);
   free(centroids);
-  free(tclusterid);
   free(errors);
 
   return;
@@ -2174,7 +2330,6 @@ found. The value of ifound is at least 1; its maximum value is npass.
 
 double** CALL distancematrix (int nrows, int ncolumns, double** data,
   int** mask, double weights[], char dist, int transpose)
-              
 /*
 Purpose
 =======
@@ -2208,8 +2363,8 @@ data       (input) double[nrows][ncolumns]
 The array containing the gene expression data.
 
 mask       (input) int[nrows][ncolumns]
-This array shows which data values are missing. If
-mask(i,j) == 0, then data(i,j) is missing.
+This array shows which data values are missing. If mask[i][j]==0, then
+data[i][j] is missing.
 
 weight (input) double[n]
 The weights that are used to calculate the distance. The length of this vector
@@ -2241,8 +2396,11 @@ when microarrays are being clustered.
   const int ndata = (transpose==0) ? ncolumns : nrows;
   int i,j;
   double** matrix;
+
+  /* Set the metric function as indicated by dist */
   double (*metric)
-    (int,double**,double**,int**,int**,const double[],int,int,int);
+    (int, double**, double**, int**, int**, const double[], int, int, int) =
+       setmetric(dist);
 
   if (n < 2) return NULL;
 
@@ -2260,9 +2418,6 @@ when microarrays are being clustered.
     for (i = 1; i < j; i++) free(matrix[i]);
     return NULL;
   }
-
-  /* Set the metric function as indicated by dist */
-  setmetric (dist, &metric);
 
   /* Calculate the distances and save them in the ragged array */
   for (i = 0; i < n; i++)
@@ -2345,17 +2500,17 @@ weights array, the function returns NULL.
 ========================================================================
 */
 { int i,j;
-  double (*metric)
-    (int,double**,double**,int**,int**,const double[],int,int,int);
   const int ndata = (transpose==0) ? ncolumns : nrows;
   const int nelements = (transpose==0) ? nrows : ncolumns;
+
+  /* Set the metric function as indicated by dist */
+  double (*metric)
+    (int, double**, double**, int**, int**, const double[], int, int, int) =
+       setmetric(dist);
 
   double* result = malloc(nelements*sizeof(double));
   if (!result) return NULL;
   memset(result, 0, nelements*sizeof(double));
-
-  /* Set the metric function as indicated by dist */
-  setmetric (dist, &metric);
 
   for (i = 0; i < nelements; i++)
   { result[i] += 1.0;
@@ -2375,7 +2530,7 @@ weights array, the function returns NULL.
 
 /* ******************************************************************** */
 
-void cuttree (int nelements, int tree[][2], int nclusters, int clusterid[]) 
+void cuttree (int nelements, Node* tree, int nclusters, int clusterid[]) 
 
 /*
 Purpose
@@ -2391,21 +2546,19 @@ Arguments
 nelements      (input) int
 The number of elements that were clustered.
 
-tree           (input) int[nelements-1][2]
-The clustering solution. Each row in the matrix describes one linking event,
-with the two columns containing the name of the nodes that were joined.
+tree           (input) Node[nelements-1]
+The clustering solution. Each node in the array describes one linking event,
+with tree[i].left and tree[i].right representig the elements that were joined.
 The original elements are numbered 0..nelements-1, nodes are numbered
--1..-(nelements-1). The cuttree routine checks the tree array for errors to
-avoid segmentation faults. Errors in the tree array that would not cause
-segmentation faults may pass undetected. If an error is found, all elements
-are assigned to cluster -1, and the routine returns.
+-1..-(nelements-1).
 
 nclusters      (input) int
 The number of clusters to be formed.
 
 clusterid      (output) int[nelements]
 The number of the cluster to which each element was assigned. Space for this
-array should be allocated before calling the cuttree routine.
+array should be allocated before calling the cuttree routine. If a memory
+error occured, all elements in clusterid are set to -1.
 
 ========================================================================
 */
@@ -2413,35 +2566,23 @@ array should be allocated before calling the cuttree routine.
   int icluster = 0;
   const int n = nelements-nclusters; /* number of nodes to join */
   int* nodeid;
-  /* Check the tree */
-  int flag = 0;
-  if (nclusters > nelements || nclusters < 1) flag = 1;
-  for (i = 0; i < nelements-1; i++)
-  { if (tree[i][0] >= nelements || tree[i][0] < -i ||
-        tree[i][1] >= nelements || tree[i][1] < -i)  
-    { flag = 1;
-      break;
-    }
-  }
-  /* Assign all elements to cluster -1 and return if an error is found. */
-  if (flag)
-  { for (i = 0; i < nelements; i++) clusterid[i] = -1;
-    return;
-  }
-  /* The tree array is safe to use. */
   for (i = nelements-2; i >= n; i--)
-  { k = tree[i][0];
+  { k = tree[i].left;
     if (k>=0)
     { clusterid[k] = icluster;
       icluster++;
     }
-    k = tree[i][1];
+    k = tree[i].right;
     if (k>=0)
     { clusterid[k] = icluster;
       icluster++;
     }
   }
   nodeid = malloc(n*sizeof(int));
+  if(!nodeid)
+  { for (i = 0; i < nelements; i++) clusterid[i] = -1;
+    return;
+  }
   for (i = 0; i < n; i++) nodeid[i] = -1;
   for (i = n-1; i >= 0; i--)
   { if(nodeid[i]<0) 
@@ -2450,9 +2591,9 @@ array should be allocated before calling the cuttree routine.
       icluster++;
     }
     else j = nodeid[i];
-    k = tree[i][0];
+    k = tree[i].left;
     if (k<0) nodeid[-k-1] = j; else clusterid[k] = j;
-    k = tree[i][1];
+    k = tree[i].right;
     if (k<0) nodeid[-k-1] = j; else clusterid[k] = j;
   }
   free(nodeid);
@@ -2462,9 +2603,8 @@ array should be allocated before calling the cuttree routine.
 /* ******************************************************************** */
 
 static
-void pclcluster (int nrows, int ncolumns, double** data, int** mask,
-  double weight[], double** distmatrix, char dist, int transpose,
-  int result[][2], double linkdist[])
+Node* pclcluster (int nrows, int ncolumns, double** data, int** mask,
+  double weight[], double** distmatrix, char dist, int transpose)
 
 /*
 
@@ -2519,43 +2659,51 @@ The distance matrix. This matrix is precalculated by the calling routine
 treecluster. The pclcluster routine modifies the contents of distmatrix, but
 does not deallocate it.
 
-result  (output) int[nelements-1][2]
-The clustering solution. Each row in the matrix describes one linking event,
-with the two columns containing the name of the nodes that were joined.
-The original genes are numbered 0..ngenes-1, nodes are numbered
--1..-(nelements-1), where nelements is nrows or ncolumns depending on whether
-genes (rows) or microarrays (columns) are being clustered.
+Return value
+============
 
-linkdist (output) double[nelements-1]
-For each node, the distance between the two subnodes that were joined. The
-number of nodes (nnodes) is equal to the number of genes minus one if genes are
-clustered, or the number of microarrays minus one if microarrays are clustered.
-
+A pointer to a newly allocated array of Node structs, describing the
+hierarchical clustering solution consisting of nelements-1 nodes. Depending on
+whether genes (rows) or microarrays (columns) were clustered, nelements is
+equal to nrows or ncolumns. See src/cluster.h for a description of the Node
+structure.
+If a memory error occurs, pclcluster returns NULL.
 ========================================================================
 */
-{ double (*metric)
-    (int,double**,double**,int**,int**,const double[],int,int,int);
-  int i, j;
+{ int i, j;
   const int nelements = (transpose==0) ? nrows : ncolumns;
-  int* distid = malloc(nelements*sizeof(int));
   int inode;
   const int ndata = transpose ? nrows : ncolumns;
   const int nnodes = nelements - 1;
 
   /* Set the metric function as indicated by dist */
-  setmetric (dist, &metric);
+  double (*metric)
+    (int, double**, double**, int**, int**, const double[], int, int, int) =
+       setmetric(dist);
+
+  Node* result;
+  double** newdata;
+  int** newmask;
+  int* distid = malloc(nelements*sizeof(int));
+  if(!distid) return NULL;
+  result = malloc(nnodes*sizeof(Node));
+  if(!result)
+  { free(distid);
+    return NULL;
+  }
+  if(!makedatamask(nelements, ndata, &newdata, &newmask))
+  { free(result);
+    free(distid);
+    return NULL; 
+  }
 
   for (i = 0; i < nelements; i++) distid[i] = i;
   /* To remember which row/column in the distance matrix contains what */
 
   /* Storage for node data */
   if (transpose)
-  { double** newdata = malloc(nelements*sizeof(double*));
-    int** newmask = malloc(nelements*sizeof(int*));
-    for (i = 0; i < nelements; i++)
-    { newdata[i] = malloc(ndata*sizeof(double));
-      newmask[i] = malloc(ndata*sizeof(int));
-      for (j = 0; j < ndata; j++)
+  { for (i = 0; i < nelements; i++)
+    { for (j = 0; j < ndata; j++)
       { newdata[i][j] = data[j][i];
         newmask[i][j] = mask[j][i];
       }
@@ -2564,12 +2712,8 @@ clustered, or the number of microarrays minus one if microarrays are clustered.
     mask = newmask;
   }
   else
-  { double** newdata = malloc(nelements*sizeof(double*));
-    int** newmask = malloc(nelements*sizeof(int*));
-    for (i = 0; i < nelements; i++)
-    { newdata[i] = malloc(ndata*sizeof(double));
-      newmask[i] = malloc(ndata*sizeof(int));
-      memcpy(newdata[i], data[i], ndata*sizeof(double));
+  { for (i = 0; i < nelements; i++)
+    { memcpy(newdata[i], data[i], ndata*sizeof(double));
       memcpy(newmask[i], mask[i], ndata*sizeof(int));
     }
     data = newdata;
@@ -2578,40 +2722,35 @@ clustered, or the number of microarrays minus one if microarrays are clustered.
 
   for (inode = 0; inode < nnodes; inode++)
   { /* Find the pair with the shortest distance */
-    int isaved = 1;
-    int jsaved = 0;
-    linkdist[inode] = find_closest_pair(nelements-inode, distmatrix, &isaved, &jsaved);
-    result[inode][0] = distid[jsaved];
-    result[inode][1] = distid[isaved];
+    int is = 1;
+    int js = 0;
+    result[inode].distance = find_closest_pair(nelements-inode, distmatrix, &is, &js);
+    result[inode].left = distid[js];
+    result[inode].right = distid[is];
 
-    /* Make node jsaved the new node */
+    /* Make node js the new node */
     for (i = 0; i < ndata; i++)
-    { data[jsaved][i] = data[jsaved][i]*mask[jsaved][i]
-                      + data[isaved][i]*mask[isaved][i];
-      mask[jsaved][i] += mask[isaved][i];
-      if (mask[jsaved][i]) data[jsaved][i] /= mask[jsaved][i];
+    { data[js][i] = data[js][i]*mask[js][i] + data[is][i]*mask[is][i];
+      mask[js][i] += mask[is][i];
+      if (mask[js][i]) data[js][i] /= mask[js][i];
     }
-    free(data[isaved]);
-    free(mask[isaved]);
-    data[isaved] = data[nnodes-inode];
-    mask[isaved] = mask[nnodes-inode];
+    free(data[is]);
+    free(mask[is]);
+    data[is] = data[nnodes-inode];
+    mask[is] = mask[nnodes-inode];
   
     /* Fix the distances */
-    distid[isaved] = distid[nnodes-inode];
-    for (i = 0; i < isaved; i++)
-      distmatrix[isaved][i] = distmatrix[nnodes-inode][i];
-    for (i = isaved + 1; i < nnodes-inode; i++)
-      distmatrix[i][isaved] = distmatrix[nnodes-inode][i];
+    distid[is] = distid[nnodes-inode];
+    for (i = 0; i < is; i++)
+      distmatrix[is][i] = distmatrix[nnodes-inode][i];
+    for (i = is + 1; i < nnodes-inode; i++)
+      distmatrix[i][is] = distmatrix[nnodes-inode][i];
 
-    distid[jsaved] = -inode-1;
-    for (i = 0; i < jsaved; i++)
-    { distmatrix[jsaved][i] =
-        metric(ndata,data,data,mask,mask,weight,jsaved,i,0);
-    }
-    for (i = jsaved + 1; i < nnodes-inode; i++)
-    { distmatrix[i][jsaved] =
-        metric(ndata,data,data,mask,mask,weight,jsaved,i,0);
-    }
+    distid[js] = -inode-1;
+    for (i = 0; i < js; i++)
+      distmatrix[js][i] = metric(ndata,data,data,mask,mask,weight,js,i,0);
+    for (i = js + 1; i < nnodes-inode; i++)
+      distmatrix[i][js] = metric(ndata,data,data,mask,mask,weight,js,i,0);
   }
 
   /* Free temporarily allocated space */
@@ -2621,15 +2760,28 @@ clustered, or the number of microarrays minus one if microarrays are clustered.
   free(mask);
   free(distid);
  
-  return;
+  return result;
 }
 
 /* ******************************************************************** */
 
 static
-void pslcluster (int nrows, int ncolumns, double** data, int** mask,
-  double weight[], double** distmatrix, char dist, int transpose,
-  int result[][2], double linkdist[])
+int nodecompare(const void* a, const void* b)
+/* Helper function for qsort. */
+{ const Node* node1 = (const Node*)a;
+  const Node* node2 = (const Node*)b;
+  const double term1 = node1->distance;
+  const double term2 = node2->distance;
+  if (term1 < term2) return -1;
+  if (term1 > term2) return +1;
+  return 0;
+}
+
+/* ---------------------------------------------------------------------- */
+
+static
+Node* pslcluster (int nrows, int ncolumns, double** data, int** mask,
+  double weight[], double** distmatrix, char dist, int transpose)
 
 /*
 
@@ -2697,30 +2849,50 @@ arrays) and stored in temporary arrays. If distmatrix is passed, the original
 gene expression data (specified by the data and mask arguments) are not needed
 and are therefore ignored.
 
-result  (output) int[nelements-1][2]
-The clustering solution. Each row in the matrix describes one linking event,
-with the two columns containing the name of the nodes that were joined.
-The original genes are numbered 0..ngenes-1, nodes are numbered
--1..-(nelements-1), where nelements is nrows or ncolumns depending on whether
-genes (rows) or microarrays (columns) are being clustered.
 
-linkdist (output) double[nelements-1]
-For each node, the distance between the two subnodes that were joined. The
-number of nodes (nnodes) is equal to the number of genes minus one if genes are
-clustered, or the number of microarrays minus one if microarrays are clustered.
+Return value
+============
+
+A pointer to a newly allocated array of Node structs, describing the
+hierarchical clustering solution consisting of nelements-1 nodes. Depending on
+whether genes (rows) or microarrays (columns) were clustered, nelements is
+equal to nrows or ncolumns. See src/cluster.h for a description of the Node
+structure.
+If a memory error occurs, pslcluster returns NULL.
 
 ========================================================================
 */
 { int i, j, k;
   const int nelements = transpose ? ncolumns : nrows;
   const int nnodes = nelements - 1;
-  int* vector = malloc(nnodes*sizeof(int));
-  double* temp = malloc(nnodes*sizeof(double));
+  int* vector;
+  double* temp;
   int* index;
+  Node* result;
+  temp = malloc(nnodes*sizeof(double));
+  if(!temp) return NULL;
+  index = malloc(nelements*sizeof(int));
+  if(!index)
+  { free(temp);
+    return NULL;
+  }
+  vector = malloc(nnodes*sizeof(int));
+  if(!vector)
+  { free(index);
+    free(temp);
+    return NULL;
+  }
+  result = malloc(nnodes*sizeof(Node));
+  if(!result)
+  { free(vector);
+    free(index);
+    free(temp);
+    return NULL;
+  }
 
   for (i = 0; i < nnodes; i++)
   { vector[i] = i;
-    linkdist[i] = DBL_MAX;
+    result[i].distance = DBL_MAX;
   }
 
   if(distmatrix)
@@ -2728,70 +2900,61 @@ clustered, or the number of microarrays minus one if microarrays are clustered.
     { for (j = 0; j < i; j++) temp[j] = distmatrix[i][j];
       for (j = 0; j < i; j++)
       { k = vector[j];
-        if (linkdist[j] >= temp[j])
-        { if (linkdist[j] < temp[k]) temp[k] = linkdist[j];
-          linkdist[j] = temp[j];
+        if (result[j].distance >= temp[j])
+        { if (result[j].distance < temp[k]) temp[k] = result[j].distance;
+          result[j].distance = temp[j];
           vector[j] = i;
         }
         else if (temp[j] < temp[k]) temp[k] = temp[j];
       }
       for (j = 0; j < i; j++)
-        if (linkdist[j] >= linkdist[vector[j]]) vector[j] = i;
+        if (result[j].distance >= result[vector[j]].distance) vector[j] = i;
     }
   }
   else
-  { double (*metric)
-      (int,double**,double**,int**,int**,const double[],int,int,int);
-    const int ndata = transpose ? nrows : ncolumns;
+  { const int ndata = transpose ? nrows : ncolumns;
     /* Set the metric function as indicated by dist */
-    setmetric(dist, &metric);
+    double (*metric)
+      (int, double**, double**, int**, int**, const double[], int, int, int) =
+         setmetric(dist);
+
     for (i = 0; i < nelements; i++)
     { for (j = 0; j < i; j++) temp[j] =
         metric(ndata, data, data, mask, mask, weight, i, j, transpose);
       for (j = 0; j < i; j++)
       { k = vector[j];
-        if (linkdist[j] >= temp[j])
-        { if (linkdist[j] < temp[k]) temp[k] = linkdist[j];
-          linkdist[j] = temp[j];
+        if (result[j].distance >= temp[j])
+        { if (result[j].distance < temp[k]) temp[k] = result[j].distance;
+          result[j].distance = temp[j];
           vector[j] = i;
         }
         else if (temp[j] < temp[k]) temp[k] = temp[j];
       }
       for (j = 0; j < i; j++)
-        if (linkdist[j] >= linkdist[vector[j]]) vector[j] = i;
+        if (result[j].distance >= result[vector[j]].distance) vector[j] = i;
     }
-  }
-
-  /* One of these days, I should write my own quicksort routine that takes
-   * care of this reordering more efficiently. */
-  index = malloc(nelements*sizeof(int));
-  sort(nnodes, linkdist, index);
-  for (i = 0; i < nnodes; i++) temp[i] = linkdist[i];
-  for (i = 0; i < nnodes; i++)
-  { j = index[i];
-    result[i][0] = j;
-    linkdist[i] = temp[j];
   }
   free(temp);
 
+  for (i = 0; i < nnodes; i++) result[i].left = i;
+  qsort(result, nnodes, sizeof(Node), nodecompare);
+
   for (i = 0; i < nelements; i++) index[i] = i;
   for (i = 0; i < nnodes; i++)
-  { j = result[i][0];
+  { j = result[i].left;
     k = vector[j];
-    result[i][0] = index[j];
-    result[i][1] = index[k];
+    result[i].left = index[j];
+    result[i].right = index[k];
     index[k] = -i-1;
   }
   free(vector);
   free(index);
 
-  return;
+  return result;
 }
 /* ******************************************************************** */
 
-static
-void pmlcluster (int nelements, double** distmatrix, int result[][2],
-  double linkdist[])
+static Node* pmlcluster (int nelements, double** distmatrix)
 /*
 
 Purpose
@@ -2811,62 +2974,64 @@ The distance matrix, with nelements rows, each row being filled up to the
 diagonal. The elements on the diagonal are not used, as they are assumed to be
 zero. The distance matrix will be modified by this routine.
 
-result  (output) int[nelements-1][2]
-The clustering solution. Each row in the matrix describes one linking event,
-with the two columns containing the name of the nodes that were joined.
-The original elements are numbered 0..nelements-1, nodes are numbered
--1..-(nelements-1).
+Return value
+============
 
-linkdist (output) double[nelements-1]
-For each node, the distance between the two subnodes that were joined. The
-number of nodes (nnodes) is equal to the number of genes minus one if genes are
-clustered, or the number of microarrays minus one if microarrays are clustered.
-
+A pointer to a newly allocated array of Node structs, describing the
+hierarchical clustering solution consisting of nelements-1 nodes. Depending on
+whether genes (rows) or microarrays (columns) were clustered, nelements is
+equal to nrows or ncolumns. See src/cluster.h for a description of the Node
+structure.
+If a memory error occurs, pmlcluster returns NULL.
 ========================================================================
 */
 { int j;
-  int nNodes;
+  int n;
+  int* clusterid;
+  Node* result;
+
+  clusterid = malloc(nelements*sizeof(int));
+  if(!clusterid) return NULL;
+  result = malloc((nelements-1)*sizeof(Node));
+  if (!result)
+  { free(clusterid);
+    return NULL;
+  }
 
   /* Setup a list specifying to which cluster a gene belongs */
-  int* clusterid = malloc(nelements*sizeof(int));
   for (j = 0; j < nelements; j++) clusterid[j] = j;
 
-  for (nNodes = nelements; nNodes > 1; nNodes--)
-  { int isaved = 1;
-    int jsaved = 0;
-    linkdist[nelements-nNodes] = find_closest_pair(nNodes, distmatrix, &isaved, &jsaved);
+  for (n = nelements; n > 1; n--)
+  { int is = 1;
+    int js = 0;
+    result[nelements-n].distance = find_closest_pair(n, distmatrix, &is, &js);
 
     /* Fix the distances */
-    for (j = 0; j < jsaved; j++)
-      distmatrix[jsaved][j] = max(distmatrix[isaved][j],distmatrix[jsaved][j]);
-    for (j = jsaved+1; j < isaved; j++)
-      distmatrix[j][jsaved] = max(distmatrix[isaved][j],distmatrix[j][jsaved]);
-    for (j = isaved+1; j < nNodes; j++)
-      distmatrix[j][jsaved] = max(distmatrix[j][isaved],distmatrix[j][jsaved]);
+    for (j = 0; j < js; j++)
+      distmatrix[js][j] = max(distmatrix[is][j],distmatrix[js][j]);
+    for (j = js+1; j < is; j++)
+      distmatrix[j][js] = max(distmatrix[is][j],distmatrix[j][js]);
+    for (j = is+1; j < n; j++)
+      distmatrix[j][js] = max(distmatrix[j][is],distmatrix[j][js]);
 
-    for (j = 0; j < isaved; j++)
-      distmatrix[isaved][j] = distmatrix[nNodes-1][j];
-    for (j = isaved+1; j < nNodes-1; j++)
-      distmatrix[j][isaved] = distmatrix[nNodes-1][j];
+    for (j = 0; j < is; j++) distmatrix[is][j] = distmatrix[n-1][j];
+    for (j = is+1; j < n-1; j++) distmatrix[j][is] = distmatrix[n-1][j];
 
     /* Update clusterids */
-    result[nelements-nNodes][0] = clusterid[isaved];
-    result[nelements-nNodes][1] = clusterid[jsaved];
-    clusterid[jsaved] = nNodes-nelements-1;
-    clusterid[isaved] = clusterid[nNodes-1];
+    result[nelements-n].left = clusterid[is];
+    result[nelements-n].right = clusterid[js];
+    clusterid[js] = n-nelements-1;
+    clusterid[is] = clusterid[n-1];
   }
   free(clusterid);
 
-  return;
+  return result;
 }
 
 /* ******************************************************************* */
 
-static
-void palcluster (int nelements, double** distmatrix, int result[][2],
-  double linkdist[])
+static Node* palcluster (int nelements, double** distmatrix)
 /*
-
 Purpose
 =======
 
@@ -2884,84 +3049,94 @@ The distance matrix, with nelements rows, each row being filled up to the
 diagonal. The elements on the diagonal are not used, as they are assumed to be
 zero. The distance matrix will be modified by this routine.
 
-result  (output) int[nelements-1][2]
-The clustering solution. Each row in the matrix describes one linking event,
-with the two columns containing the name of the nodes that were joined.
-The original elements are numbered 0..nelements-1, nodes are numbered
--1..-(nelements-1).
+Return value
+============
 
-linkdist (output) double[nelements-1]
-For each node, the distance between the two subnodes that were joined. The
-number of nodes (nnodes) is equal to the number of genes minus one if genes are
-clustered, or the number of microarrays minus one if microarrays are clustered.
-
+A pointer to a newly allocated array of Node structs, describing the
+hierarchical clustering solution consisting of nelements-1 nodes. Depending on
+whether genes (rows) or microarrays (columns) were clustered, nelements is
+equal to nrows or ncolumns. See src/cluster.h for a description of the Node
+structure.
+If a memory error occurs, palcluster returns NULL.
 ========================================================================
 */
 { int j;
-  int nNodes;
+  int n;
+  int* clusterid;
+  int* number;
+  Node* result;
 
-  /* Keep track of the number of elements in each cluster
-   * (needed to calculate the average) */
-  int* number = malloc(nelements*sizeof(int));
-  /* Setup a list specifying to which cluster a gene belongs */
-  int* clusterid = malloc(nelements*sizeof(int));
+  clusterid = malloc(nelements*sizeof(int));
+  if(!clusterid) return NULL;
+  number = malloc(nelements*sizeof(int));
+  if(!number)
+  { free(clusterid);
+    return NULL;
+  }
+  result = malloc((nelements-1)*sizeof(Node));
+  if (!result)
+  { free(clusterid);
+    free(number);
+    return NULL;
+  }
+
+  /* Setup a list specifying to which cluster a gene belongs, and keep track
+   * of the number of elements in each cluster (needed to calculate the
+   * average). */
   for (j = 0; j < nelements; j++)
   { number[j] = 1;
     clusterid[j] = j;
   }
 
-  for (nNodes = nelements; nNodes > 1; nNodes--)
+  for (n = nelements; n > 1; n--)
   { int sum;
-    int isaved = 1;
-    int jsaved = 0;
-    linkdist[nelements-nNodes] = find_closest_pair(nNodes, distmatrix, &isaved, &jsaved);
+    int is = 1;
+    int js = 0;
+    result[nelements-n].distance = find_closest_pair(n, distmatrix, &is, &js);
 
     /* Save result */
-    result[nelements-nNodes][0] = clusterid[isaved];
-    result[nelements-nNodes][1] = clusterid[jsaved];
+    result[nelements-n].left = clusterid[is];
+    result[nelements-n].right = clusterid[js];
 
     /* Fix the distances */
-    sum = number[isaved] + number[jsaved];
-    for (j = 0; j < jsaved; j++)
-    { distmatrix[jsaved][j] = distmatrix[isaved][j]*number[isaved]
-                            + distmatrix[jsaved][j]*number[jsaved];
-      distmatrix[jsaved][j] /= sum;
+    sum = number[is] + number[js];
+    for (j = 0; j < js; j++)
+    { distmatrix[js][j] = distmatrix[is][j]*number[is]
+                        + distmatrix[js][j]*number[js];
+      distmatrix[js][j] /= sum;
     }
-    for (j = jsaved+1; j < isaved; j++)
-    { distmatrix[j][jsaved] = distmatrix[isaved][j]*number[isaved]
-                            + distmatrix[j][jsaved]*number[jsaved];
-      distmatrix[j][jsaved] /= sum;
+    for (j = js+1; j < is; j++)
+    { distmatrix[j][js] = distmatrix[is][j]*number[is]
+                        + distmatrix[j][js]*number[js];
+      distmatrix[j][js] /= sum;
     }
-    for (j = isaved+1; j < nNodes; j++)
-    { distmatrix[j][jsaved] = distmatrix[j][isaved]*number[isaved]
-                            + distmatrix[j][jsaved]*number[jsaved];
-      distmatrix[j][jsaved] /= sum;
+    for (j = is+1; j < n; j++)
+    { distmatrix[j][js] = distmatrix[j][is]*number[is]
+                        + distmatrix[j][js]*number[js];
+      distmatrix[j][js] /= sum;
     }
 
-    for (j = 0; j < isaved; j++)
-      distmatrix[isaved][j] = distmatrix[nNodes-1][j];
-    for (j = isaved+1; j < nNodes-1; j++)
-      distmatrix[j][isaved] = distmatrix[nNodes-1][j];
+    for (j = 0; j < is; j++) distmatrix[is][j] = distmatrix[n-1][j];
+    for (j = is+1; j < n-1; j++) distmatrix[j][is] = distmatrix[n-1][j];
 
     /* Update number of elements in the clusters */
-    number[jsaved] = sum;
-    number[isaved] = number[nNodes-1];
+    number[js] = sum;
+    number[is] = number[n-1];
 
     /* Update clusterids */
-    clusterid[jsaved] = nNodes-nelements-1;
-    clusterid[isaved] = clusterid[nNodes-1];
+    clusterid[js] = n-nelements-1;
+    clusterid[is] = clusterid[n-1];
   }
   free(clusterid);
   free(number);
 
-  return;
+  return result;
 }
 
 /* ******************************************************************* */
 
-int CALL treecluster (int nrows, int ncolumns, double** data, int** mask,
-  double weight[], int transpose, char dist, char method,
-  int result[][2], double linkdist[], double** distmatrix)
+Node* CALL treecluster (int nrows, int ncolumns, double** data, int** mask,
+  double weight[], int transpose, char dist, char method, double** distmatrix)
 /*
 Purpose
 =======
@@ -2969,7 +3144,10 @@ Purpose
 The treecluster routine performs hierarchical clustering using pairwise
 single-, maximum-, centroid-, or average-linkage, as defined by method, on a
 given set of gene expression data, using the distance metric given by dist.
-The function return 0 if a memory error occurs, and 1 otherwise.
+If successful, the function returns a pointer to a newly allocated Tree struct
+containing the hierarchical clustering solution, and NULL if a memory error
+occurs. The pointer should be freed by the calling routine to prevent memory
+leaks.
 
 Arguments
 =========
@@ -3017,20 +3195,6 @@ sufficient to perform the clustering algorithm. For pairwise centroid-linkage
 clustering, however, the gene expression data are always needed, even if the
 distance matrix itself is available.
 
-result  (output) int[nelements-1][2]
-The clustering solution. Each row in the matrix describes one linking event,
-with the two columns containing the name of the nodes that were joined.
-The original elements are numbered 0..nelements-1, nodes are numbered
--1..-(nelements-1), where nelements is nrows or ncolumns depending on whether
-genes (rows) or microarrays (columns) are being clustered.
-If the treecluster routine fails due to lack of memory, the two columns of the
-first row of result are set to (0,0) before returning.
-
-linkdist (output) double[nelements-1]
-For each node, the distance between the two subnodes that were joined. The
-number of nodes (nnodes) is equal to the number of genes minus one if genes are
-clustered, or the number of microarrays minus one if microarrays are clustered.
-
 distmatrix (input) double**
 The distance matrix. If the distance matrix is zero initially, the distance
 matrix will be allocated and calculated from the data by treecluster, and
@@ -3039,45 +3203,56 @@ calling routine, treecluster will modify the contents of the distance matrix as
 part of the clustering algorithm, but will not deallocate it. The calling
 routine should deallocate the distance matrix after the return from treecluster.
 
+Return value
+============
+
+A pointer to a newly allocated array of Node structs, describing the
+hierarchical clustering solution consisting of nelements-1 nodes. Depending on
+whether genes (rows) or microarrays (columns) were clustered, nelements is
+equal to nrows or ncolumns. See src/cluster.h for a description of the Node
+structure.
+If a memory error occurs, treecluster returns NULL.
+
 ========================================================================
 */
-{ const int nelements = (transpose==0) ? nrows : ncolumns;
+{ Node* result = NULL;
+  const int nelements = (transpose==0) ? nrows : ncolumns;
   const int ldistmatrix = (distmatrix==NULL && method!='s') ? 1 : 0;
-  int i;
 
-  if (nelements < 2) return 1;
+  if (nelements < 2) return NULL;
 
   /* Calculate the distance matrix if the user didn't give it */
   if(ldistmatrix)
   { distmatrix =
       distancematrix(nrows, ncolumns, data, mask, weight, dist, transpose);
-    if (!distmatrix) return 0; /* Insufficient memory */
+    if (!distmatrix) return NULL; /* Insufficient memory */
   }
 
   switch(method)
   { case 's':
-      pslcluster(nrows, ncolumns, data, mask, weight, distmatrix, dist,
-                 transpose, result, linkdist);
+      result = pslcluster(nrows, ncolumns, data, mask, weight, distmatrix,
+                          dist, transpose);
       break;
     case 'm':
-      pmlcluster(nelements, distmatrix, result, linkdist);
+      result = pmlcluster(nelements, distmatrix);
       break;
     case 'a':
-      palcluster(nelements, distmatrix, result, linkdist);
+      result = palcluster(nelements, distmatrix);
       break;
     case 'c':
-      pclcluster(nrows, ncolumns, data, mask, weight, distmatrix, dist,
-                 transpose, result, linkdist);
+      result = pclcluster(nrows, ncolumns, data, mask, weight, distmatrix,
+                          dist, transpose);
       break;
   }
 
   /* Deallocate space for distance matrix, if it was allocated by treecluster */
   if(ldistmatrix)
-  { for (i = 1; i < nelements; i++) free(distmatrix[i]);
+  { int i;
+    for (i = 1; i < nelements; i++) free(distmatrix[i]);
     free (distmatrix);
   }
  
-  return 1;
+  return result;
 }
 
 /* ******************************************************************* */
@@ -3089,8 +3264,6 @@ void somworker (int nrows, int ncolumns, double** data, int** mask,
 
 { const int nelements = (transpose==0) ? nrows : ncolumns;
   const int ndata = (transpose==0) ? ncolumns : nrows;
-  double (*metric)
-    (int,double**,double**,int**,int**,const double[],int,int,int);
   int i, j;
   double* stddata = calloc(nelements,sizeof(double));
   int** dummymask;
@@ -3100,11 +3273,13 @@ void somworker (int nrows, int ncolumns, double** data, int** mask,
   /* Maximum radius in which nodes are adjusted */
   double maxradius = sqrt(nxgrid*nxgrid+nygrid*nygrid);
 
+  /* Set the metric function as indicated by dist */
+  double (*metric)
+    (int, double**, double**, int**, int**, const double[], int, int, int) =
+       setmetric(dist);
+
   /* Initialize the random number generator */
   initran();
-
-  /* Set the metric function as indicated by dist */
-  setmetric (dist, &metric);
 
   /* Calculate the standard deviation for each row or column */
   if (transpose==0)
@@ -3284,12 +3459,13 @@ void somassign (int nrows, int ncolumns, double** data, int** mask,
   const double weights[], int transpose, int nxgrid, int nygrid,
   double*** celldata, char dist, int clusterid[][2])
 /* Collect clusterids */
-{ double (*metric)
-    (int,double**,double**,int**,int**, const double[],int,int,int);
-  const int ndata = (transpose==0) ? ncolumns : nrows;
+{ const int ndata = (transpose==0) ? ncolumns : nrows;
   int i,j;
 
-  setmetric (dist, &metric);
+  /* Set the metric function as indicated by dist */
+  double (*metric)
+    (int, double**, double**, int**, int**, const double[], int, int, int) =
+       setmetric(dist);
 
   if (transpose==0)
   { int** dummymask = malloc(nygrid*sizeof(int*));
@@ -3508,8 +3684,8 @@ data       (input) double[nrows][ncolumns]
 The array containing the data of the vectors.
 
 mask       (input) int[nrows][ncolumns]
-This array shows which data values are missing. If
-mask(i,j) == 0, then data(i,j) is missing.
+This array shows which data values are missing. If mask[i][j]==0, then
+data[i][j] is missing.
 
 weight     (input) double[ncolumns] if transpose==0;
                    double[nrows]    if transpose==1
@@ -3556,35 +3732,37 @@ when microarrays are being clustered.
 
 ========================================================================
 */
-{ double (*metric)
-    (int,double**,double**,int**,int**, const double[],int,int,int);
+{ /* Set the metric function as indicated by dist */
+  double (*metric)
+    (int, double**, double**, int**, int**, const double[], int, int, int) =
+       setmetric(dist);
+
   /* if one or both clusters are empty, return */
-  if (n1 < 1 || n2 < 1) return 0;
-  /* Check the indeces */
+  if (n1 < 1 || n2 < 1) return -1.0;
+  /* Check the indices */
   if (transpose==0)
   { int i;
     for (i = 0; i < n1; i++)
     { int index = index1[i];
-      if (index < 0 || index >= nrows) return 0;
+      if (index < 0 || index >= nrows) return -1.0;
     }
     for (i = 0; i < n2; i++)
     { int index = index2[i];
-      if (index < 0 || index >= nrows) return 0;
+      if (index < 0 || index >= nrows) return -1.0;
     }
   }
   else
   { int i;
     for (i = 0; i < n1; i++)
     { int index = index1[i];
-      if (index < 0 || index >= ncolumns) return 0;
+      if (index < 0 || index >= ncolumns) return -1.0;
     }
     for (i = 0; i < n2; i++)
     { int index = index2[i];
-      if (index < 0 || index >= ncolumns) return 0;
+      if (index < 0 || index >= ncolumns) return -1.0;
     }
   }
-  /* Set the metric function as indicated by dist */
-  setmetric (dist, &metric);
+
   switch (method)
   { case 'a':
     { /* Find the center */
@@ -3836,5 +4014,5 @@ when microarrays are being clustered.
     }
   }
   /* Never get here */
-  return 0;
+  return -2.0;
 }
