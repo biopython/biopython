@@ -66,32 +66,27 @@ First data set:
 [  12.100   2.000   0.000   5.000   0.000 ]
 Pairwise average-linkage clustering
 Number of nodes is 3 (should be 3)
-Number of link distances is 3 (should be 3)
 Node   0 joins node   2 with node   1; link distance is   2.600
 Node   1 joins node  -1 with node   0; link distance is   7.300
 Node   2 joins node   3 with node  -2; link distance is  21.348
 Pairwise single-linkage clustering
 Number of nodes is 3 (should be 3)
-Number of link distances is 3 (should be 3)
 Node   0 joins node   1 with node   2; link distance is   2.600
 Node   1 joins node   0 with node  -1; link distance is   5.800
 Node   2 joins node  -2 with node   3; link distance is  12.908
 Pairwise centroid-linkage clustering
 Number of nodes is 3 (should be 3)
-Number of link distances is 3 (should be 3)
 Node   0 joins node   1 with node   2; link distance is   2.600
 Node   1 joins node   0 with node  -1; link distance is   6.650
 Node   2 joins node  -2 with node   3; link distance is  19.437
 Pairwise maximum-linkage clustering
 Number of nodes is 3 (should be 3)
-Number of link distances is 3 (should be 3)
 Node   0 joins node   2 with node   1; link distance is   2.600
 Node   1 joins node  -1 with node   0; link distance is   8.800
 Node   2 joins node   3 with node  -2; link distance is  32.508
 Second data set:
 Pairwise average-linkage clustering
 Number of nodes is 12 (should be 12)
-Number of link distances is 12 (should be 12)
 Node   0 joins node   5 with node   4; link distance is   0.003
 Node   1 joins node   9 with node  12; link distance is   0.029
 Node   2 joins node   2 with node   1; link distance is   0.061
@@ -106,7 +101,6 @@ Node  10 joins node  -6 with node   6; link distance is   4.636
 Node  11 joins node -11 with node -10; link distance is  12.741
 Pairwise single-linkage clustering
 Number of nodes is 12 (should be 12)
-Number of link distances is 12 (should be 12)
 Node   0 joins node   4 with node   5; link distance is   0.003
 Node   1 joins node   9 with node  12; link distance is   0.029
 Node   2 joins node  11 with node  -2; link distance is   0.033
@@ -121,7 +115,6 @@ Node  10 joins node -10 with node  -6; link distance is   3.432
 Node  11 joins node   6 with node -11; link distance is   3.535
 Pairwise centroid-linkage clustering
 Number of nodes is 12 (should be 12)
-Number of link distances is 12 (should be 12)
 Node   0 joins node   4 with node   5; link distance is   0.003
 Node   1 joins node  12 with node   9; link distance is   0.029
 Node   2 joins node   1 with node   2; link distance is   0.061
@@ -136,7 +129,6 @@ Node  10 joins node   6 with node  -6; link distance is   4.578
 Node  11 joins node -10 with node -11; link distance is  11.536
 Pairwise maximum-linkage clustering
 Number of nodes is 12 (should be 12)
-Number of link distances is 12 (should be 12)
 Node   0 joins node   5 with node   4; link distance is   0.003
 Node   1 joins node   9 with node  12; link distance is   0.029
 Node   2 joins node   2 with node   1; link distance is   0.061
