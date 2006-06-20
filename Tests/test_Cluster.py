@@ -473,3 +473,8 @@ def run_tests(module="Pycluster"):
   test_clusterdistance(module)
   test_treecluster(module)
   test_somcluster(module)
+
+if __name__ == "__main__" :
+  print "test_Cluster"
+  run_tests(module = "Bio.Cluster")
+
