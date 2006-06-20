@@ -2,7 +2,6 @@
 
 import operator
 from Martel import *
-from Martel import RecordReader
 from Bio import Std
 
 ### Parse dbxrefs given the NCBI|descr|line as explained
