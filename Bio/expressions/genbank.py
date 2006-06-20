@@ -488,5 +488,4 @@ ncbi_format = Martel.HeaderFooter("genbank", {"format" : "ncbi_genbank"},
                              )
 
 format = Martel.ParseRecords("genbank", {"format" : "genbank"},
-                             record, RecordReader.EndsWith, ("//",))
-
+                             record, RecordReader.StartsWith, ("LOCUS ",))
