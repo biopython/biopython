@@ -3,16 +3,49 @@ import unittest
 from Bio.Restriction import *
 from Bio.Fasta import FastaAlign
 from StringIO import StringIO
-from tempfile import NamedTemporaryFile
+
+import sys
+if sys.platform=="win32":
+    from tempfile import mktemp
+    import os
+else :
+    from tempfile import NamedTemporaryFile
 
 def createAlignment(alignment):
   """Create a FastaAlignment from an alignment string"""
   alignment = alignment[alignment.find(">"):]
-  
-  tmp = NamedTemporaryFile(bufsize=0)
-  tmp.write(alignment)
-  tmp.flush()
-  align = FastaAlign.parse_file(str(tmp.name))
+
+  if sys.platform=="win32":
+      # On windows we cannot (re)open the tempfile to read it
+      # while it is still open for writing.  And once closed,
+      # it gets automatically deleted.
+      #
+      # This is a crude and potentially "unsafe" work around
+      # (as in theory another program could use the same
+      # filename in the instant before we open it)
+      tmp_name = mktemp()
+      tmp = open(tmp_name, "w")
+      tmp.write(alignment)
+      tmp.close()
+  else :
+      tmp = NamedTemporaryFile(bufsize=0)
+      tmp_name = tmp.name
+      tmp.write(alignment)
+      #Don't close the file yet...
+      tmp.flush()
+
+  #import os
+  #assert os.path.isfile(tmp_name), 'Missing temp file "%s"' % tmp_name
+
+  align = FastaAlign.parse_file(tmp.name)
+
+  if sys.platform=="win32":
+      #We must remove the temp file ourselves.
+      os.remove(tmp.name)
+  else :
+      #This will delete the temp file
+      tmp.close()
+
   return align
 
 class UnevenAlignment(unittest.TestCase):
