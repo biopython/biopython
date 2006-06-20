@@ -32,7 +32,7 @@ class NexusTest1(unittest.TestCase):
         self.handle.close()
 
     def print_dictnlist(self,name,d):
-	"""Output a list or a dict alphabetically by keys()"""
+        """Output a list or a dict alphabetically by keys()"""
         if type(d)==dict:
             dk=d.keys()
             dk.sort()
@@ -42,7 +42,9 @@ class NexusTest1(unittest.TestCase):
 
     def output_basics(self,n):
         """Output basic info of a nexus file."""
-        print '\nName:',n.filename
+        # When run on Windows, want to match the expected test output
+        # (in file output/test_Nexus) which uses "Nexus/f1.nex", not "Nexus\f1.nex"
+        print '\nName:',n.filename.replace(os.sep,"/")
         print '\n',n.ntax, n.nchar, n.datatype, n.interleave, n.missing, n.gap
         self.print_dictnlist('Taxa',n.taxlabels)
         self.print_dictnlist('Charlabels',n.charlabels)
@@ -52,13 +54,13 @@ class NexusTest1(unittest.TestCase):
         ps.sort()
         print '\nCharpartitions:'
         for pk in ps:
-		self.print_dictnlist(pk,n.charpartitions[pk])
+                self.print_dictnlist(pk,n.charpartitions[pk])
         ps=n.taxpartitions.keys()
         ps.sort()
         print '\nTaxpartitions:'
         for pk in ps:
-		self.print_dictnlist(pk,n.taxpartitions[pk])
-	
+                self.print_dictnlist(pk,n.taxpartitions[pk])
+        
     def t_NexusTest1(self):
         """Test Nexus module"""
         n=Nexus.Nexus(self.handle)
