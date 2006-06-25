@@ -71,6 +71,25 @@ reverse_line = Martel.Group("reverse_line",
                  any_space + reverse_primer_gc + any_space + 
                  reverse_primer_seq + Martel.AnyEol())
 
+#     INTERNAL OLIGO     197   20  59.96  40.00  AATTGCACATAACGGATGCA
+
+internal_oligo_start = Martel.Group("internal_start",
+                                   any_integer)
+internal_oligo_length = Martel.Group("internal_length",
+                                     any_integer)
+internal_oligo_tm = Martel.Group("internal_tm",
+                                 any_float)
+internal_oligo_gc = Martel.Group("internal_gc",
+                                 any_float)
+internal_oligo_seq = Martel.Group("internal_seq",
+                                  sequence)
+internal_line = Martel.Group("internal_line", 
+                 primer_space + Martel.Str("INTERNAL OLIGO") +
+                 any_space + internal_oligo_start + any_space +
+                 internal_oligo_length + any_space + internal_oligo_tm +
+                 any_space + internal_oligo_gc + any_space + 
+                 internal_oligo_seq + Martel.AnyEol())
+
 
 # XXX This record definition is ugly. But it works :-)
 record = Martel.Group("primer3_record",
@@ -90,8 +109,10 @@ record = Martel.Group("primer3_record",
                                       reverse_line + blank_line,
                            # case 2b1. Reverse primer
                                       reverse_line + blank_line,
-                            # case 2b2, Forward primer
-                                      forward_line + blank_line)) +
+                           # case 2b2, Forward primer
+                                      forward_line + blank_line,
+                           # case 2b3, Internal oligo 
+                                      internal_line + blank_line)) +
                            blank_line + blank_line + Martel.Rep(blank_line)))
                         
                           

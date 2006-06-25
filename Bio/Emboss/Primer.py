@@ -227,6 +227,21 @@ class _Primer3RecordConsumer(AbstractConsumer):
     def reverse_seq(self, seq):
         self._cur_primer.reverse_seq = seq
 
+    def internal_start(self, start):
+        self._cur_primer.internal_start = int(start)
+
+    def internal_length(self, length):
+        self._cur_primer.internal_length = int(length)
+
+    def internal_tm(self, tm):
+        self._cur_primer.internal_tm = float(tm)
+
+    def internal_gc(self, gc):
+        self._cur_primer.internal_gc = float(gc)
+
+    def internal_seq(self, seq):
+        self._cur_primer.internal_seq = seq
+
     def end_record(self):
         self._add_last_primer()
 
@@ -240,6 +255,8 @@ class _Primer3Scanner:
                               "forward_tm", "forward_gc", "forward_seq",
                               "reverse_start", "reverse_length",
                               "reverse_tm", "reverse_gc", "reverse_seq",
+                              "internal_start", "internal_length",
+                              "internal_tm", "internal_gc", "internal_seq",
                               "end_record"]
 
         expression = Martel.select_names(primer3_format.record,
