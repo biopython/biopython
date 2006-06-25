@@ -39,7 +39,9 @@ class Primer3ParseTest(unittest.TestCase):
           [os.path.join("Emboss", "bac_find.primer3"),
            os.path.join("Emboss", "cds_forward.primer3"),
            os.path.join("Emboss", "cds_reverse.primer3"),
-           os.path.join("Emboss", "short.primer3")]
+           os.path.join("Emboss", "short.primer3"),
+           os.path.join("Emboss", "internal_oligo.primer3")
+           ]
 
     def t_simple_parse(self):
         """Make sure that we can parse all primer3 files.
@@ -91,6 +93,23 @@ class Primer3ParseTest(unittest.TestCase):
 
         assert primer_info.primers[3].forward_seq == "TGTGATTGCTTGAGCTGGAC"
         assert primer_info.primers[3].forward_start == 253
+
+    def t_internal_oligo_single_parse(self):
+        ''' Make sure we can parse an internal oligo file correctly '''
+        # these files are generated when designing hybridization probes.
+        file = self.test_files[4]
+        parser = Primer3Parser()
+        h = open(file, "r")
+        primer_info = parser.parse(h)
+        h.close()
+
+        assert len(primer_info.primers) == 5
+        assert primer_info.primers[0].internal_length == 22 
+        assert primer_info.primers[1].internal_seq == 'TTGCGCTTTAGTTTGAATTGAA'
+        assert primer_info.primers[2].internal_tm == 58.62 
+        assert primer_info.primers[3].internal_start == 16 
+        assert primer_info.primers[4].internal_gc == 35.00 
+
 
 class PrimersearchParseTest(unittest.TestCase):
     def setUp(self):
