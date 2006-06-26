@@ -25,7 +25,7 @@ Key: taxonomy
 Value: ['Eukaryota', 'Metazoa', 'Chordata', 'Craniata', 'Vertebrata', 'Euteleostomi', 'Mammalia', 'Eutheria', 'Primates', 'Catarrhini', 'Hominidae', 'Homo']
 Feaures
 type: source
-location: (0..1622)
+location: [0:1622]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -34,7 +34,7 @@ qualifiers:
 	Key: organism, Value: ['Homo sapiens']
 
 type: gene
-location: (0..1622)
+location: [0:1622]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -43,7 +43,7 @@ qualifiers:
 	Key: note, Value: ['LIC2']
 
 type: CDS
-location: (6..1485)
+location: [6:1485]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -75,7 +75,7 @@ Value: ['antifreeze protein homology', 'cold-regulated gene', 'cor6.6 gene', 'KI
 Key: organism
 Value: Arabidopsis thaliana
 References*
-location: (0..513)
+location: [0:513]
 authors: Thomashow,M.F.
 title: Direct Submission
 journal: Submitted (01-FEB-1991) M.F. Thomashow, Dept. Crop and Soil Sciences, Dept. Microbiology, Michigan State University, East Lansing, Michigan 48824, USA
@@ -83,7 +83,7 @@ medline id:
 pubmed id: 
 comment: 
 
-location: (0..513)
+location: [0:513]
 authors: Gilmour,S.J., Artus,N.N. and Thomashow,M.F.
 title: cDNA sequence analysis and expression of two cold-regulated genes of Arabidopsis thaliana
 journal: Plant Mol. Biol. 18 (1), 13-21 (1992)
@@ -97,7 +97,7 @@ Key: taxonomy
 Value: ['Eukaryota', 'Viridiplantae', 'Streptophyta', 'Embryophyta', 'Tracheophyta', 'euphyllophytes', 'Spermatophyta', 'Magnoliophyta', 'eudicotyledons', 'Rosidae', 'Capparales', 'Brassicaceae', 'Arabidopsis']
 Feaures
 type: source
-location: (0..513)
+location: [0:513]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -106,14 +106,14 @@ qualifiers:
 	Key: strain, Value: ['Columbia']
 
 type: gene
-location: (49..250)
+location: [49:250]
 ref: None:None
 strand: 1
 qualifiers: 
 	Key: gene, Value: ['cor6.6']
 
 type: CDS
-location: (49..250)
+location: [49:250]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -141,7 +141,7 @@ Value: ['kin2 gene']
 Key: organism
 Value: Arabidopsis thaliana
 References*
-location: (0..880)
+location: [0:880]
 authors: Borg-Franck,M.E.
 title: Direct Submission
 journal: Submitted (27-SEP-1991) M.E. Borg-Franck, Inst of Biotechnology, University of Helsinki, Karvaamokuja 3, SF-00380 Helsinki, FINLAND
@@ -149,7 +149,7 @@ medline id:
 pubmed id: 
 comment: 
 
-location: (0..880)
+location: [0:880]
 authors: Kurkela,S. and Borg-Franck,M.
 title: Structure and expression of kin2, one of two cold- and ABA-induced genes of Arabidopsis thaliana
 journal: Plant Mol. Biol. 19 (4), 689-692 (1992)
@@ -163,7 +163,7 @@ Key: taxonomy
 Value: ['Eukaryota', 'Viridiplantae', 'Streptophyta', 'Embryophyta', 'Tracheophyta', 'euphyllophytes', 'Spermatophyta', 'Magnoliophyta', 'eudicotyledons', 'Rosidae', 'Capparales', 'Brassicaceae', 'Arabidopsis']
 Feaures
 type: source
-location: (0..880)
+location: [0:880]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -172,13 +172,13 @@ qualifiers:
 	Key: strain, Value: ['ssp. L. Heynh, Colombia']
 
 type: TATA_signal
-location: (8..20)
+location: [8:20]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: exon
-location: (43..160)
+location: [43:160]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -186,47 +186,47 @@ qualifiers:
 	Key: number, Value: ['1']
 
 type: prim_transcript
-location: (43..>579)
+location: [43:>579]
 ref: None:None
 strand: 1
 qualifiers: 
 	Key: gene, Value: ['kin2']
 
 type: mRNA
-location: (43..>579)
+location: [43:>579]
 ref: None:None
 strand: 1
 qualifiers: 
 	Key: gene, Value: ['kin2']
 Sub-Features
 type: mRNA
-location: (43..160)
+location: [43:160]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: mRNA
-location: (319..390)
+location: [319:390]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: mRNA
-location: (503..>579)
+location: [503:>579]
 ref: None:None
 strand: 1
 qualifiers: 
 
 
 type: gene
-location: (43..579)
+location: [43:579]
 ref: None:None
 strand: 1
 qualifiers: 
 	Key: gene, Value: ['kin2']
 
 type: CDS
-location: (103..579)
+location: [103:579]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -237,26 +237,26 @@ qualifiers:
 	Key: translation, Value: ['MSETNKNAFQAGQAAGKAERRRAMFCWTRPRMLLLQLELPRNRAGKSISDAAVGGVNFVKDKTGLNK']
 Sub-Features
 type: CDS
-location: (103..160)
+location: [103:160]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (319..390)
+location: [319:390]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (503..579)
+location: [503:579]
 ref: None:None
 strand: 1
 qualifiers: 
 
 
 type: intron
-location: (160..319)
+location: [160:319]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -264,7 +264,7 @@ qualifiers:
 	Key: number, Value: ['1']
 
 type: exon
-location: (319..390)
+location: [319:390]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -272,7 +272,7 @@ qualifiers:
 	Key: number, Value: ['2']
 
 type: intron
-location: (390..503)
+location: [390:503]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -280,7 +280,7 @@ qualifiers:
 	Key: number, Value: ['2']
 
 type: exon
-location: (503..>579)
+location: [503:>579]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -288,25 +288,25 @@ qualifiers:
 	Key: number, Value: ['3']
 
 type: polyA_signal
-location: (619..625)
+location: [619:625]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: polyA_signal
-location: (640..646)
+location: [640:646]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: polyA_site
-location: (784..784)
+location: [784:784]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: polyA_site
-location: (799..799)
+location: [799:799]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -328,7 +328,7 @@ Value: ['']
 Key: organism
 Value: Brassica napus
 References*
-location: (0..441)
+location: [0:441]
 authors: Orr,W., Iu,B., White,T., Robert,L.S. and Singh,J.
 title: Nucleotide sequence of a winter B. napus Kin 1 cDNA
 journal: Plant Physiol. 98, 1532-1534 (1992)
@@ -342,7 +342,7 @@ Key: taxonomy
 Value: ['Eukaryota', 'Viridiplantae', 'Embryophyta', 'Tracheophyta', 'Spermatophyta', 'Magnoliophyta', 'eudicotyledons', 'core eudicots', 'Rosidae', 'eurosids II', 'Brassicales', 'Brassicaceae', 'Brassica']
 Feaures
 type: source
-location: (0..441)
+location: [0:441]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -353,14 +353,14 @@ qualifiers:
 	Key: tissue_type, Value: ['leaf']
 
 type: gene
-location: (33..300)
+location: [33:300]
 ref: None:None
 strand: 1
 qualifiers: 
 	Key: gene, Value: ['kin1']
 
 type: CDS
-location: (33..231)
+location: [33:231]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -372,7 +372,7 @@ qualifiers:
 	Key: translation, Value: ['MADNKQSFQAGQASGRAEEKGNVLMDKVKDAATAAGASAQTAGQKITEAAGGAVNLVKEKTGMNK']
 
 type: polyA_signal
-location: (240..247)
+location: [240:247]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -380,7 +380,7 @@ qualifiers:
 	Key: note, Value: ['putative']
 
 type: polyA_signal
-location: (293..300)
+location: [293:300]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -388,7 +388,7 @@ qualifiers:
 	Key: note, Value: ['putative']
 
 type: polyA_site
-location: (440..440)
+location: [440:440]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -411,7 +411,7 @@ Value: ['cold shock protein', 'csp14 gene']
 Key: organism
 Value: Armoracia rusticana
 References*
-location: (0..206)
+location: [0:206]
 authors: Baymiev,A.K., Gimalov,F.R. and Vakhitov,V.A.
 title: 
 journal: Unpublished
@@ -419,7 +419,7 @@ medline id:
 pubmed id: 
 comment: 
 
-location: (0..206)
+location: [0:206]
 authors: Baymiev,A.K.
 title: Direct Submission
 journal: Submitted (20-MAR-1999) Baymiev A.K., Departament of Biochemistry and Cytochemistry, Ufa Scientific Centre, pr. Oktyabrya 69, Ufa, Bashkortostan, Russia, 450054, RUSSIA
@@ -433,7 +433,7 @@ Key: taxonomy
 Value: ['Eukaryota', 'Viridiplantae', 'Streptophyta', 'Embryophyta', 'Tracheophyta', 'euphyllophytes', 'Spermatophyta', 'Magnoliophyta', 'eudicotyledons', 'Rosidae', 'Capparales', 'Brassicaceae', 'Armoracia']
 Feaures
 type: source
-location: (0..206)
+location: [0:206]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -442,27 +442,27 @@ qualifiers:
 	Key: organism, Value: ['Armoracia rusticana']
 
 type: mRNA
-location: (<0..>206)
+location: [<0:>206]
 ref: None:None
 strand: 1
 qualifiers: 
 	Key: gene, Value: ['csp14']
 Sub-Features
 type: mRNA
-location: (<0..48)
+location: [<0:48]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: mRNA
-location: (142..>206)
+location: [142:>206]
 ref: None:None
 strand: 1
 qualifiers: 
 
 
 type: exon
-location: (0..48)
+location: [0:48]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -470,14 +470,14 @@ qualifiers:
 	Key: number, Value: ['2']
 
 type: gene
-location: (0..206)
+location: [0:206]
 ref: None:None
 strand: 1
 qualifiers: 
 	Key: gene, Value: ['csp14']
 
 type: CDS
-location: (<0..>206)
+location: [<0:>206]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -489,20 +489,20 @@ qualifiers:
 	Key: translation, Value: ['DKAKDAAAAAGASAQQAGKNISDAAAGGVNFVKEKTG']
 Sub-Features
 type: CDS
-location: (<0..48)
+location: [<0:48]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (142..>206)
+location: [142:>206]
 ref: None:None
 strand: 1
 qualifiers: 
 
 
 type: intron
-location: (48..142)
+location: [48:142]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -510,7 +510,7 @@ qualifiers:
 	Key: number, Value: ['2']
 
 type: exon
-location: (142..206)
+location: [142:206]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -534,7 +534,7 @@ Value: ['']
 Key: organism
 Value: Brassica rapa
 References*
-location: (0..282)
+location: [0:282]
 authors: Kim,J.-B., Kim,H.-U., Park,B.-S., Yun,C.-H., Cho,W.-S., Ryu,J.-C. and Chung,T.-Y.
 title: Nucleotide sequences of kin gene in chinese cabbage
 journal: Unpublished (1994)
@@ -548,7 +548,7 @@ Key: taxonomy
 Value: ['Eukaryota', 'Viridiplantae', 'Embryophyta', 'Tracheophyta', 'Spermatophyta', 'Magnoliophyta', 'eudicotyledons', 'core eudicots', 'Rosidae', 'eurosids II', 'Brassicales', 'Brassicaceae', 'Brassica']
 Feaures
 type: source
-location: (0..282)
+location: [0:282]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -557,14 +557,14 @@ qualifiers:
 	Key: organism, Value: ['Brassica rapa']
 
 type: gene
-location: (23..221)
+location: [23:221]
 ref: None:None
 strand: 1
 qualifiers: 
 	Key: gene, Value: ['kin']
 
 type: CDS
-location: (23..221)
+location: [23:221]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -591,7 +591,7 @@ Value: ['']
 Key: organism
 Value: Brassica napus
 References*
-location: (0..497)
+location: [0:497]
 authors: Byass,L.J. and Flanagan,A.M.
 title: BN28a, a low temperature-induced gene of Brassica napus
 journal: Unpublished
@@ -599,7 +599,7 @@ medline id:
 pubmed id: 
 comment: 
 
-location: (0..497)
+location: [0:497]
 authors: Byass,L.J. and Flanagan,A.M.
 title: Direct Submission
 journal: Submitted (18-AUG-2000) AFNS, University of Alberta, 4-10 Agriculture/Forestry Centre, Edmonton, Alberta T6G 2P5, Canada
@@ -613,7 +613,7 @@ Key: taxonomy
 Value: ['Eukaryota', 'Viridiplantae', 'Embryophyta', 'Tracheophyta', 'Spermatophyta', 'Magnoliophyta', 'eudicotyledons', 'core eudicots', 'Rosidae', 'eurosids II', 'Brassicales', 'Brassicaceae', 'Brassica']
 Feaures
 type: source
-location: (0..497)
+location: [0:497]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -622,7 +622,7 @@ qualifiers:
 	Key: organism, Value: ['Brassica napus']
 
 type: mRNA
-location: (<0..>497)
+location: [<0:>497]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -630,33 +630,33 @@ qualifiers:
 	Key: product, Value: ['BN28a']
 Sub-Features
 type: mRNA
-location: (<0..54)
+location: [<0:54]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: mRNA
-location: (240..309)
+location: [240:309]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: mRNA
-location: (422..>497)
+location: [422:>497]
 ref: None:None
 strand: 1
 qualifiers: 
 
 
 type: gene
-location: (<0..>497)
+location: [<0:>497]
 ref: None:None
 strand: 1
 qualifiers: 
 	Key: gene, Value: ['BN28a']
 
 type: CDS
-location: (0..497)
+location: [0:497]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -669,19 +669,19 @@ qualifiers:
 	Key: translation, Value: ['MADNKQSFQAGQAAGRAEEKGNVLMDKVKDAATAAGASAQTAGQKITEAAGGAVNLVKEKTGMNK']
 Sub-Features
 type: CDS
-location: (0..54)
+location: [0:54]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (240..309)
+location: [240:309]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (422..497)
+location: [422:497]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -718,7 +718,7 @@ Value: ['FLI_CDNA']
 Key: organism
 Value: Homo sapiens
 References*
-location: (0..1326)
+location: [0:1326]
 authors: Auffray,C., Ansorge,W., Ballabio,A., Estivill,X., Gibson,K., Lehrach,H., Poustka,A. and Lundeberg,J.
 title: The European IMAGE consortium for integrated Molecular analysis of human gene transcripts
 journal: Unpublished
@@ -726,7 +726,7 @@ medline id:
 pubmed id: 
 comment: 
 
-location: (0..1326)
+location: [0:1326]
 authors: Carim,L., Estivill,X., Sumoy,L. and Escarceller,M.
 title: Direct Submission
 journal: Submitted (11-AUG-1999) Dept. Genetica Molecular, Institut de Recerca Oncologica (IRO), Hospital Duran i Reynals, Autovia de Castelldefels Km 2,7 L'Hospitalet de Llobregat, 08907 Barcelona, Catalunya, SPAIN. Tel: ++34-93-260-7775 Fax: ++34-93-260-7776 WWW site: http://www.iro.es e-mail enquiries: lsumoy@iro.es, mescarceller@iro.es
@@ -740,7 +740,7 @@ Key: taxonomy
 Value: ['Eukaryota', 'Metazoa', 'Chordata', 'Craniata', 'Vertebrata', 'Mammalia', 'Eutheria', 'Primates', 'Catarrhini', 'Hominidae', 'Homo']
 Feaures
 type: source
-location: (0..1326)
+location: [0:1326]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -752,14 +752,14 @@ qualifiers:
 	Key: organism, Value: ['Homo sapiens']
 
 type: gene
-location: (340..756)
+location: [340:756]
 ref: None:None
 strand: 1
 qualifiers: 
 	Key: gene, Value: ['FTCD']
 
 type: exon
-location: (340..384)
+location: [340:384]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -767,7 +767,7 @@ qualifiers:
 	Key: number, Value: ['1']
 
 type: intron
-location: (384..617)
+location: [384:617]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -775,7 +775,7 @@ qualifiers:
 	Key: number, Value: ['1']
 
 type: exon
-location: (617..756)
+location: [617:756]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -799,7 +799,7 @@ Value: ['']
 Key: organism
 Value: Homo sapiens
 References*
-location: (0..741)
+location: [0:741]
 authors: Mahraoui,L., Takeda,J., Mesonero,J., Chantret,I., Dussaulx,E., Bell,G.I. and Brot-Laroche,E.
 title: Regulation of expression of the human fructose transporter (GLUT5) by cyclic AMP
 journal: Biochem. J. 301 (Pt 1), 169-175 (1994)
@@ -807,7 +807,7 @@ medline id: 94311827
 pubmed id: 
 comment: 
 
-location: (0..741)
+location: [0:741]
 authors: Takeda,J.
 title: Direct Submission
 journal: Submitted (24-JAN-1994) Jun Takeda, Howard Hughes Medical Institute, The University of Chicago, 5841 S. Maryland Ave., Chicago, IL 60637, USA
@@ -821,7 +821,7 @@ Key: taxonomy
 Value: ['Eukaryota', 'Metazoa', 'Chordata', 'Craniata', 'Vertebrata', 'Euteleostomi', 'Mammalia', 'Eutheria', 'Primates', 'Catarrhini', 'Hominidae', 'Homo']
 Feaures
 type: source
-location: (0..741)
+location: [0:741]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -835,27 +835,27 @@ qualifiers:
 	Key: tissue_type, Value: ['liver']
 
 type: repeat_region
-location: (0..73)
+location: [0:73]
 ref: None:None
 strand: 1
 qualifiers: 
 	Key: rpt_family, Value: ['Alu']
 
 type: promoter
-location: (0..513)
+location: [0:513]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: 5'UTR
-location: (513..609)
+location: [513:609]
 ref: None:None
 strand: 1
 qualifiers: 
 	Key: gene, Value: ['GLUT5']
 
 type: exon
-location: (513..642)
+location: [513:642]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -882,7 +882,7 @@ Value: ['HTG']
 Key: organism
 Value: Arabidopsis thaliana
 References*
-location: (0..86436)
+location: [0:86436]
 authors: Dunn,P., Shinn,P., Brooks,S., Buehler,E., Chao,Q., Johnson-Hopson,C., Khan,S., Kim,C., Altafi,H., Bei,Q., Chin,C., Chiou,J., Choi,E., Conn,L., Conway,A., Gonzales,A., Hansen,N., Howing,B., Koo,T., Lam,B., Lee,J., Lenz,C., Li,J., Liu,A., Liu,K., Liu,S., Mukharsky,N., Nguyen,M., Palm,C., Pham,P., Sakano,H., Schwartz,J., Southwick,A., Thaveri,A., Toriumi,M., Vaysberg,M., Yu,G., Federspiel,N.A., Theologis,A. and Ecker,J.R.
 title: Genomic sequence for Arabidopsis thaliana BAC T25K16 from chromosome I
 journal: Unpublished
@@ -890,7 +890,7 @@ medline id:
 pubmed id: 
 comment: 
 
-location: (0..86436)
+location: [0:86436]
 authors: Ecker,J.R.
 title: Direct Submission
 journal: Submitted (17-APR-1999) Arabidopsis thaliana Genome Center, Department of Biology, University of Pennsylvania, 38th Street and Hamilton Walk, Philadelphia, Pennsylvania 19104-6018, USA
@@ -898,7 +898,7 @@ medline id:
 pubmed id: 
 comment: 
 
-location: (0..86436)
+location: [0:86436]
 authors: Ecker,J.R.
 title: Direct Submission
 journal: Submitted (11-AUG-1999) Arabidopsis thaliana Genome Center, Department of Biology, University of Pennsylvania, 38th Street and Hamilton Walk, Philadelphia, Pennsylvania 19104-6018, USA
@@ -906,7 +906,7 @@ medline id:
 pubmed id: 
 comment: 
 
-location: (0..86436)
+location: [0:86436]
 authors: Ecker,J.R.
 title: Direct Submission
 journal: Submitted (16-DEC-1999) Arabidopsis thaliana Genome Center, Department of Biology, University of Pennsylvania, 38th Street and Hamilton Walk, Philadelphia, Pennsylvania 19104-6018, USA
@@ -914,7 +914,7 @@ medline id:
 pubmed id: 
 comment: 
 
-location: (0..86436)
+location: [0:86436]
 authors: Chao,Q., Brooks,S., Buehler,E., Johnson-Hopson,C., Khan,S., Kim,C., Shinn,P., Altafi,H., Bei,B., Chin,C., Chiou,J., Choi,E., Conn,L., Conway,A., Gonzalez,A., Hansen,N., Howing,B., Koo,T., Lam,B., Lee,J., Lenz,C., Li,J., Liu,A., Liu,J., Liu,S., Mukharsky,N., Nguyen,M., Palm,C., Pham,P., Sakano,H., Schwartz,J., Southwick,A., Thaveri,A., Toriumi,M., Vaysberg,M., Yu,G., Davis,R., Federspiel,N., Theologis,A. and Ecker,J.
 title: Direct Submission
 journal: Submitted (19-JAN-2000) Arabidopsis thaliana Genome Center, Department of Biology, University of Pennsylvania, 38th and Hamilton Walk, Philadelphia, PA 19104-6018, USA
@@ -928,7 +928,7 @@ Key: taxonomy
 Value: ['Eukaryota', 'Viridiplantae', 'Embryophyta', 'Tracheophyta', 'Spermatophyta', 'Magnoliophyta', 'eudicotyledons', 'core eudicots', 'Rosidae', 'eurosids II', 'Brassicales', 'Brassicaceae', 'Arabidopsis']
 Feaures
 type: source
-location: (0..86436)
+location: [0:86436]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -938,7 +938,7 @@ qualifiers:
 	Key: organism, Value: ['Arabidopsis thaliana']
 
 type: CDS
-location: (3461..5332)
+location: [3461:5332]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -951,44 +951,44 @@ qualifiers:
 	Key: translation, Value: ['MEDQVGFGFRPNDEELVGHYLRNKIEGNTSRDVEVAISEVNICSYDPWNLRFQSKYKSRDAMWYFFSRRENNKGNRQSRTTVSGKWKLTGESVEVKDQWGFCSEGFRGKIGHKRVLVFLDGRYPDKTKSDWVIHEFHYDLLPEHQKLCNVTLFRFSSYFRLSLLSPMFYTDELMCLPPEILQRTYVICRLEYKGDDADILSAYAIDPTPAFVPNMTSSAGSVVNQSRQRNSGSYNTYSEYDSANHGQQFNENSNIMQQQPLQGSFNPLLEYDFANHGGQWLSDYIDLQQQVPYLAPYENESEMIWKHVIEENFEFLVDERTSMQQHYSDHRPKKPVSGVLPDDSSDTETGSMIFEDTSSSTDSVGSSDEPGHTRIDDIPSLNIIEPLHNYKAQEQPKQQSKEKVISSQKSECEWKMAEDSIKIPPSTNTVKQSWIVLENAQWNYLKNMIIGVLLFISVISWIILVG']
 Sub-Features
 type: CDS
-location: (3461..3615)
+location: [3461:3615]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (3697..3978)
+location: [3697:3978]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (4076..4307)
+location: [4076:4307]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (4407..4797)
+location: [4407:4797]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (4875..5028)
+location: [4875:5028]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (5140..5332)
+location: [5140:5332]
 ref: None:None
 strand: 1
 qualifiers: 
 
 
 type: CDS
-location: (6616..8368)
+location: [6616:8368]
 ref: None:None
 strand: -1
 qualifiers: 
@@ -1001,44 +1001,44 @@ qualifiers:
 	Key: translation, Value: ['MAASEHRCVGCGFRVKSLFIQYSPGNIRLMKCGNCKEVADEYIECERMVCFNHFLSLFGPKVYRHVLYNAINPATVNIQVKNYFNSTSRCVVGEIHRQTYLKSPELIIDRSLLLRKSDEESSFSDSPVLLSIKVLIGVLSANAAFIISFAIATKGLLNEVSRESLLLQVWEFPMSVIFFVDILLLTSNSMALKGQTFKMFSMQIVFCCCYFGISQCKFVFKPVMTESTMTRCIAVCLIAHLIRFLVGQIFEPTIFLIQIGSLLQYMSYFFRIV']
 Sub-Features
 type: CDS
-location: (6616..6953)
+location: [6616:6953]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (7265..7351)
+location: [7265:7351]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (7463..7603)
+location: [7463:7603]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (7915..7998)
+location: [7915:7998]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (8086..8166)
+location: [8086:8166]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (8272..8368)
+location: [8272:8368]
 ref: None:None
 strand: -1
 qualifiers: 
 
 
 type: CDS
-location: (11565..12642)
+location: [11565:12642]
 ref: None:None
 strand: -1
 qualifiers: 
@@ -1051,7 +1051,7 @@ qualifiers:
 	Key: translation, Value: ['MDLSLAPTTTTSSDQEQDRDQELTSNIGASSSSGPSGNNNNLPMMMIPPPEKEHMFDKVVTPSDVGKLNRLVIPKQHAERYFPLDSSNNQNGTLLNFQDRNGKMWRFRYSYWNSSQSYVMTKGWSRFVKEKKLDAGDIVSFQRGIGDESERSKLYIDWRHRPDMSLVQAHQFGNFGFNFNFPTTSQYSNRFHPLPEYNSVPIHRGLNIGNHQRSYYNTQRQEFVGYGYGNLAGRCYYTGSPLDHRNIVGSEPLVIDSVPVVPGRLTPVMLPPLPPPPSTAGKRLRLFGVNMECGNDYNQQEESWLVPRGEIGASSSSSSALRLNLSTDHDDDNDDGDDGDDDQFAKKGKSSLSLNFNP']
 
 type: CDS
-location: (23220..30781)
+location: [23220:30781]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -1064,116 +1064,116 @@ qualifiers:
 	Key: translation, Value: ['MVMEDEPREATIKPSYWLDACEDISCDLIDDLVSEFDPSSVAVNESTDENGVINDFFGGIDHILDSIKNGGGLPNNGVSDTNSQINEVTVTPQVIAKETVKENGLQKNGGKRDEFSKEEGDKDRKRARVCSYQSERSNLSGRGHVNNSREGDRFMNRKRTRNWDEAGNNKKKRECNNYRRDGRDREVRGYWERDKVGSNELVYRSGTWEADHERDVKKVSGGNRECDVKAEENKSKPEERKEKVVEEQARRYQLDVLEQAKAKNTIAFLETGAGKTLIAILLIKSVHKDLMSQNRKMLSVFLVPKVPLVYQVPPNKKHQAEVIRNQTCFQVGHYCGEMGQDFWDSRRWQREFESKQFLKLTSFFLFSSTQVLVMTAQILLNILRHSIIRMETIDLLILDECHHAVKKHPYSLVMSEFYHTTPKDKRPAIFGMTASPVNLKGVSSQVDCAIKIRNLETKLDSTVCTIKDRKELEKHVPMPSEIVVEYDKAATMWSLHETIKQMIAAVEEAAQASSRKSKWQFMGARDAGAKDELRQVYGVSERTESDGAANLIHKLRAINYTLAELGQWCAYKVGQSFLSALQSDERVNFQVDVKFQESYLSEVVSLLQCELLEGAAAEKVAAEVGKPENGNAHDEMEEGELPDDPVVSGGEHVDEVIGAAVADGKVTPKVQSLIKLLLKYQHTADFRAIVFVERVVAALVLPKVRIKVFAELPSLSFIRCASMIGHNNSQEMKSSQMQDTISKFRDGHVTLLVATSVAEEGLDIRQCNVVMRFDLAKTVLAYIQSRGRARKPGSDYILMVERYIKSFKNYILIFVTTGHQISTDMSTCVTCRGNVSHAAFLRNARNSEETLRKEAIERTDLSHLKDTSRLISIDAVPGTVYKVEATGAMVSLNSAVGLVHFYCSQLPGDRYAILRPEFSMEKHEKPGGHTEYSCRLQLPCNAPFEILEGPVCSSMRLAQQVDIIVSACKKLHEMGAFTDMLLPDKGSGQDAEKADQDDEGEPVPGTARHREFYPEGVADVLKGEWVSSGKEVCESSKLFHLYMYNVRCVDFGSSKDPFLSEVSEFAILFGNELDAEVLSMSMDLYVARAMITKASLAFKGSLDITENQLSSLKKFHVRLMSIVLDVDVEPSTTPWDPAKAYLFVPVTDNTSMEPIKGINWELVEKITKTTAWDNPLQRARPDVYLGTNERTLGGDRREYGFGKLRHNIVFGQKSHPTYGIRGAVASFDVVRASGLLPVRDAFEKEVEEDLSKGKLMMADGCMVAEDLIGKIVTAAHSGKRFYVDSICYDMSAETSFPRKEGYLGPLEYNTYADYYKQKIYVVQDRLFFYFLHNLRLLRLYKSSSIMLFIRYGVDLNCKQQPLIKGRGVSYCKNLLSPRFEQSGESETVLDKTYYVFLPPELCVVHPLSGSLIRGAQRLPSIMRRVESMLLAVQLKNLISYPIPTSKILEALTAASCQETFCYERAELLGDAYLKWVVSRFLFLKYPQKHEGQLTRMRQQMVSNMVLYQFALVKGLQSYIQADRFAPSRWSAPGVPPVFDEDTKDGGSSFFDEEQKPVSEENSDVFEDGEMEDGELEGDLSSYRVLSSKTLADVVEALIGVYYVEGGKIAANHLMKWIGIHVEDDPDEVDGTLKNVNVPESVLKSIDFVGLERALKYEFKEKGLLVEAITHASRPSSGVSCYQRLEFVGDAVLDHLITRHLFFTYTSLPPGRLTDLRAAAVNNENFARVAVKHKLHLYLRHGSSALEKQVNKIKKQSILFSKSFKCLTVWLLFVFQIREFVKEVQTESSKPGFNSFGLGDCKAPKVLGDIVESIAGAIFLDSGKDTTAAWKVFQPLLQPMVTPETLPMHPVRELQERCQQQAEGLEYKASRSGNTATVEVFIDGVQVGVAQNPQKKMAQKLAARNALAALKEKEIAESKEKHINNGNAGEDQGENENGNKKNGHQPFTRQTLNDICLRKNWPMPSYRCVKEGGPAHAKRFTFGVRVNTSDRGWTDECIGEPMPSVKKAKDSAAVLLLELLNKTFS']
 Sub-Features
 type: CDS
-location: (23220..24174)
+location: [23220:24174]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (24243..24357)
+location: [24243:24357]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (24411..24664)
+location: [24411:24664]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (24742..25137)
+location: [24742:25137]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (25225..25445)
+location: [25225:25445]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (25526..25711)
+location: [25526:25711]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (25782..25905)
+location: [25782:25905]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (25993..26478)
+location: [25993:26478]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (26563..26730)
+location: [26563:26730]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (26813..26983)
+location: [26813:26983]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (27073..27235)
+location: [27073:27235]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (27319..27415)
+location: [27319:27415]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (27504..28133)
+location: [27504:28133]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (28313..28507)
+location: [28313:28507]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (28591..28782)
+location: [28591:28782]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (28861..30013)
+location: [28861:30013]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (30111..30518)
+location: [30111:30518]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (30603..30781)
+location: [30603:30781]
 ref: None:None
 strand: 1
 qualifiers: 
 
 
 type: CDS
-location: (31083..32372)
+location: [31083:32372]
 ref: None:None
 strand: -1
 qualifiers: 
@@ -1186,56 +1186,56 @@ qualifiers:
 	Key: translation, Value: ['MSEETKDNQRLQRPAPRLNERILSSLSRRSVAAHPWHDLEIGPGAPQIFNVVVEITKGSKVKYELDKKTGLIKVDRILYSSVVYPHNYGFVPRTLCEDNDPIDVLVIMQEPVLPGCFLRARAIGLMPMIDQGEKDDKIIAVCVDDPEYKHYTDIKELPPHRLSEIRRFFEDCILFLQCSSLFISIDLSTNKKNENKEVAVNDFLPSESAVEAIQYSMDLYAEYILHTLRR']
 Sub-Features
 type: CDS
-location: (31083..31126)
+location: [31083:31126]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (31222..31304)
+location: [31222:31304]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (31340..31515)
+location: [31340:31515]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (31634..31700)
+location: [31634:31700]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (31789..31897)
+location: [31789:31897]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (31983..32049)
+location: [31983:32049]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (32132..32161)
+location: [32132:32161]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (32248..32372)
+location: [32248:32372]
 ref: None:None
 strand: -1
 qualifiers: 
 
 
 type: CDS
-location: (33693..36763)
+location: [33693:36763]
 ref: None:None
 strand: -1
 qualifiers: 
@@ -1248,50 +1248,50 @@ qualifiers:
 	Key: translation, Value: ['MDTNTSGEELLAKARKPYTITKQRERWTEDEHERFLEALRLYGRAWQRIEEHIGTKTAVQIRSHAQKFFTKFGKAHSFWFTFQLEKEAEVKGIPVCQALDIEIPPPRPKRKPNTPYPRKPGNNGTSSSQVSSAKDAKLVSSASSSQLNQAFLDLEKMPFSEKTSTGKENQDENCSGVSTVNKYPLPTKVSGDIETSKTSTVDNAVQDVPKKNKDKDGNDGTTVHSMQNYPWHFHADIVNGNIAKCPQNHPSGMVSQDFMFHPMREETHGHANLQATTASATTTASHQAFPACHSQDDYRSFLQISSTFSNLIMSTLLQNPAAHAAATFAASVWPYASVGNSGDSSTPMSSSPPSITAIAAATVAAATAWWASHGLLPVCAPAPITCVPFSTVAVPTPAMTEMDTVENTQPFEKQNTALQDQNLASKSPASSSDDSDETGVTKLNADSKTNDDKIEEVVVTAAVHDSNTAQKKNLVDRSSCGSNTPSGSDAETDALDKMEKDKEDVKETDENQPDVIELNNRKIKMRDNNSNNNATTDSWKEVSEEGRIAFQALFARERLPQSFSPPQVAENVNRKQSDTSMPLAPNFKSQDSCAADQEGVVMIGVGTCKSLKTRQTGFKPYKRCSMEVKESQVGNINNQSDEKVCKRLRLEGEAST']
 Sub-Features
 type: CDS
-location: (33693..34029)
+location: [33693:34029]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (34102..35173)
+location: [34102:35173]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (35268..35349)
+location: [35268:35349]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (35431..35701)
+location: [35431:35701]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (36325..36387)
+location: [36325:36387]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (36511..36623)
+location: [36511:36623]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (36724..36763)
+location: [36724:36763]
 ref: None:None
 strand: -1
 qualifiers: 
 
 
 type: CDS
-location: (38599..40579)
+location: [38599:40579]
 ref: None:None
 strand: -1
 qualifiers: 
@@ -1304,38 +1304,38 @@ qualifiers:
 	Key: translation, Value: ['MAGDMQGVRVVEKYSPVIVMVMSNVAMGSVNALVKKALDVGVNHMVIGAYRMAISALILVPFAYVLERASLMQFFFLLGLSYTSATVSCALVSMLPAITFALALIFRTENVKILKTKAGMLKVIGTLICISGALFLTFYKGPQISNSHSHSHGGASHNNNDQDKANNWLLGCLYLTIGTVLLSLWMLFQGTLSIKYPCKYSSTCLMSIFAAFQCALLSLYKSRDVNDWIIDDRFVITVIIYAGVVGQAMTTVATTWGIKKLGAVFASAFFPLTLISATLFDFLILHTPLYLGSVIGSLVTITGLYMFLWGKNKETESSTALSSGMDNEAQYTTPNKDNDSKSPV']
 Sub-Features
 type: CDS
-location: (38599..38756)
+location: [38599:38756]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (38837..38989)
+location: [38837:38989]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (39110..39516)
+location: [39110:39516]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (39914..40031)
+location: [39914:40031]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (40376..40579)
+location: [40376:40579]
 ref: None:None
 strand: -1
 qualifiers: 
 
 
 type: CDS
-location: (45149..48868)
+location: [45149:48868]
 ref: None:None
 strand: -1
 qualifiers: 
@@ -1348,50 +1348,50 @@ qualifiers:
 	Key: translation, Value: ['MATAFAPTKLTATVPLHGSHENRLLLPIRLAPPSSFLGSTRSLSLRRLNHSNATRRSPVVSVQEVVKEKQSTNNTSLLITKEEGLELYEDMILGRSFEDMCAQMYYRGKMFGFVHLYNGQEAVSTGFIKLLTKSDSVVSTYRDHVHALSKGVSARAVMSELFGKVTGCCRGQGGSMHMFSKEHNMLGGFAFIGEGIPVATGAAFSSKYRREVLKQDCDDVTVAFFGDGTCNNGQFFECLNMAALYKLPIIFVVENNLWAIGMSHLRATSDPEIWKKGPAFGMPGVHVDGMDVLKVREVAKEAVTRARRGEGPTLVECETYRFRGHSLADPDELRDAAEKAKYAARDPIAALKKYLIENKLAKEAELKSIEKKIDELVEEAVEFADASPQPGRSQLLENVFADPKGFGIGPDGRYRSQPLQIKVSSSELSVLDEEKEEEVVKGEAEPNKDSVVSKAEPVKKPRPCELYVCNIPRSYDIAQLLDMFQPFGTVISVEVVSRNPQTGESRGSGYVTMGSINSAKIAIASLDGTVRARETKKQEVGGREMRVRYSVDMNPGTRRNPEVLNSTPKKILMYESQHKVYVGNLPWFTQPDGLRNHFSKFGTIVSTRVLHDRKTGRNRVFAFLSFTSGEERDAALSFNGTVNNMKVAESSSEKVSRRVSRKPTVLLLLQRHLLDTNNV']
 Sub-Features
 type: CDS
-location: (45149..45261)
+location: [45149:45261]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (45342..45656)
+location: [45342:45656]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (45718..45847)
+location: [45718:45847]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (46074..46313)
+location: [46074:46313]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (47447..47684)
+location: [47447:47684]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (47776..48554)
+location: [47776:48554]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (48637..48868)
+location: [48637:48868]
 ref: None:None
 strand: -1
 qualifiers: 
 
 
 type: CDS
-location: (49985..50656)
+location: [49985:50656]
 ref: None:None
 strand: -1
 qualifiers: 
@@ -1404,26 +1404,26 @@ qualifiers:
 	Key: translation, Value: ['MSTVGELACSYAVMILEDEGIAITADKIATLVKAAGVSIESYWPMLFAKMAEKRNVTDLIMNVGAGGGGGAPVAAAAPAAGGGAAAAPAAEEKKKDEPAEESDGDLGFGLFD']
 Sub-Features
 type: CDS
-location: (49985..50039)
+location: [49985:50039]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (50120..50333)
+location: [50120:50333]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (50584..50656)
+location: [50584:50656]
 ref: None:None
 strand: -1
 qualifiers: 
 
 
 type: CDS
-location: (51940..54196)
+location: [51940:54196]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -1436,38 +1436,38 @@ qualifiers:
 	Key: translation, Value: ['MGKKNGSSSWLTAVKRAFRSPTKKDHSNDVEEDEEKKREKRRWFRKPATQESPVKSSGISPPAPQEDSLNVNSKPSPETAPSYATTTPPSNAGKPPSAVVPIATSASKTLAPRRIYYARENYAAVVIQTSFRGYLARRALRALKGLVKLQALVRGHNVRKQAKMTLRCMQALVRVQSRVLDQRKRLSHDGSRKSAFSDSHAVFESRYLQDLSDRQSMSREGSSAAEDWDDRPHTIDAVKVMLQRRRDTALRHDKTNLSQAFSQKMWRTVGNQSTEGHHEVELEEERPKWLDRWMATRPWDKRASSRASVDQRVSVKTVEIDTSQPYSRTGAGSPSRGQRPSSPSRTSHHYQSRNNFSATPSPAKSRPILIRSASPRCQRDPREDRDRAAYSYTSNTPSLRSNYSFTARSGCSISTTMVNNASLLPNYMASTESAKARIRSHSAPRQRPSTPERDRAGLVKKRLSYPVPPPAEYEDNNSLRSPSFKSVAGSHFGGMLEQQSNYSSCCTESNGVEISPASTSDFRNWLR']
 Sub-Features
 type: CDS
-location: (51940..52048)
+location: [51940:52048]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (52135..52432)
+location: [52135:52432]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (52639..52885)
+location: [52639:52885]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (53185..53326)
+location: [53185:53326]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (53404..54196)
+location: [53404:54196]
 ref: None:None
 strand: 1
 qualifiers: 
 
 
 type: CDS
-location: (57093..58680)
+location: [57093:58680]
 ref: None:None
 strand: -1
 qualifiers: 
@@ -1480,7 +1480,7 @@ qualifiers:
 	Key: translation, Value: ['MERTNSIEMDRERLTAEMAFRDSSSAVIRIRRRLPDLLTSVKLKYVKLGLHNSCNVTTILFFLIILPLTGTVLVQLTGLTFDTFSELWSNQAVQLDTATRLTCLVFLSFVLTLYVANRSKPVYLVDFSCYKPEDERKISVDSFLTMTEENGSFTDDTVQFQQRISNRAGLGDETYLPRGITSTPPKLNMSEARAEAEAVMFGALDSLFEKTGIKPAEVGILIVNCSLFNPTPSLSAMIVNHYKMREDIKSYNLGGMGCSAGLISIDLANNLLKANPNSYAVVVSTENITLNWYFGNDRSMLLCNCIFRMGGAAILLSNRRQDRKKSKYSLVNVVRTHKGSDDKNYNCVYQKEDERGTIGVSLARELMSVAGDALKTNITTLGPMVLPLSEQLMFLISLVKRKMFKLKVKPYIPDFKLAFEHFCIHAGGRAVLDEVQKNLDLKDWHMEPSRMTLHRFGNTSSSSLWYEMAYTEAKGRVKAGDRLWQIAFGSGFKCNSAVWKALRPVSTEEMTGNAWAGSIDQYPVKVVQ']
 
 type: CDS
-location: (59507..63513)
+location: [59507:63513]
 ref: None:None
 strand: -1
 qualifiers: 
@@ -1493,26 +1493,26 @@ qualifiers:
 	Key: translation, Value: ['MEKRSDSESVEILGDWDSPPPEERIVMVSVPTSPESDYARSNQPKEIESRVSDKETASASGEVAARRVLPPWMDPSYEWGGGKWKVDGRKNKNKKEKEKEKEEIIPFKEIIEALLGNSGDKVQQDNKVFEVAPSLHVVELRKTGDDTLEFHKVYFRFNLYQPVQLPLILFVVIRFSMLKIIHYHQFTMAHIKEFVCMWDTHLYKEITNLNIWDTLSSTLVLAIWTVNASHE']
 Sub-Features
 type: CDS
-location: (59507..59665)
+location: [59507:59665]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (61669..61826)
+location: [61669:61826]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (63132..63513)
+location: [63132:63513]
 ref: None:None
 strand: -1
 qualifiers: 
 
 
 type: CDS
-location: (64099..67214)
+location: [64099:67214]
 ref: None:None
 strand: -1
 qualifiers: 
@@ -1525,92 +1525,92 @@ qualifiers:
 	Key: translation, Value: ['MSGSRRKATPASRTRVGNYEMGRTLGEGSFAKVKYAKNTVTGDQAAIKILDREKVFRHKMVEQLKREISTMKLIKHPNVVEIIEVMASKTKIYIVLELVNGGELFDKIAQQGRLKEDEARRYFQQLINAVDYCHSRGVYHRDLKPENLILDANGVLKVSDFGLSAFSRQVREDGLLHTACGTPNYVAPEVLSDKGYDGAAADVWSCGVILFVLMAGYLPFDEPNLMTLYKRVRICKAEFSCPPWFSQGAKRVIKRILEPNPITRISIAELLEDEWFKKGYKPPSFDQDDEDITIDDVDAAFSNSKECLVTEKKEKPVSMNAFELISSSSEFSLENLFEKQAQLVKKETRFTSQRSASEIMSKMEETAKPLGFNVRKDNYKIKMKGDKSGRKGQLSVATEVFEVAPSLHVVELRKTGGDTLEFHKVCDSFYKNFSSGLKDVVWNTDAAAEEQKQ']
 Sub-Features
 type: CDS
-location: (64099..64177)
+location: [64099:64177]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (64271..64358)
+location: [64271:64358]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (64452..64509)
+location: [64452:64509]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (64602..64719)
+location: [64602:64719]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (64811..64919)
+location: [64811:64919]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (65032..65158)
+location: [65032:65158]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (65264..65354)
+location: [65264:65354]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (65434..65566)
+location: [65434:65566]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (65808..65862)
+location: [65808:65862]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (65963..66044)
+location: [65963:66044]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (66151..66259)
+location: [66151:66259]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (66379..66451)
+location: [66379:66451]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (66536..66599)
+location: [66536:66599]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (67025..67214)
+location: [67025:67214]
 ref: None:None
 strand: -1
 qualifiers: 
 
 
 type: CDS
-location: (69830..71700)
+location: [69830:71700]
 ref: None:None
 strand: -1
 qualifiers: 
@@ -1623,32 +1623,32 @@ qualifiers:
 	Key: translation, Value: ['MVSDLPLDEDDIALLKSPYCDDGGDEDVNSAPNIFTYDNVPLKKRHYLGTSDTFRSFEPLNEHACIVCDIADDGVVPCSGNECPLAVHRKCVELDCEDPATFYCPYCWFKEQATRSTALRTRGVAAAKTLVQYGCSELRSGDIVMTRENSQLENGSDNSLPMQLHENLHQLQELVKHLKARNSQLDESTDQFIDMEKSCGEAYAVVNDQPKRVLWTVNEEKMLREGVEKFSDTINKNMPWKKILEMGKGIFHTTRNSSDLKDKWRNMVRIIILIWLRSRLTSSSSSQRSEIKMERERNAGVMKKMSPTGTIQRLEFVGWYL']
 Sub-Features
 type: CDS
-location: (69830..69987)
+location: [69830:69987]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (70533..70670)
+location: [70533:70670]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (70742..71357)
+location: [70742:71357]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (71643..71700)
+location: [71643:71700]
 ref: None:None
 strand: -1
 qualifiers: 
 
 
 type: CDS
-location: (72284..73585)
+location: [72284:73585]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -1661,38 +1661,38 @@ qualifiers:
 	Key: translation, Value: ['MQQQQSPQMFPMVPSIPPANNITTEQIQKYLDENKKLIMAIMENQNLGKLAECAQYQALLQKNLMYLAAIADAQPPPPTPGPSPSTAVAAQMATPHSGMQPPSYFMQHPQASPAGIFAPRGPLQFGSPLQFQDPQQQQQIHQQAMQGHMGIRPMGMTNNGMQHAMQQPETGLGGNVGLRGGKQDGADGQGKDDGK']
 Sub-Features
 type: CDS
-location: (72284..72371)
+location: [72284:72371]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (72788..72865)
+location: [72788:72865]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (72988..73097)
+location: [72988:73097]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (73189..73442)
+location: [73189:73442]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (73523..73585)
+location: [73523:73585]
 ref: None:None
 strand: 1
 qualifiers: 
 
 
 type: CDS
-location: (73806..74145)
+location: [73806:74145]
 ref: None:None
 strand: -1
 qualifiers: 
@@ -1705,20 +1705,20 @@ qualifiers:
 	Key: translation, Value: ['MASGGKAKYIIGALIGSFGISYIFDKVISDNKIFGGKDDLNGYLLVKISGTTPGTVSNKEWWAATDEKFQAWPRTAGPPVVMNPISRQNFIVKTRPE']
 Sub-Features
 type: CDS
-location: (73806..73990)
+location: [73806:73990]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (74035..74145)
+location: [74035:74145]
 ref: None:None
 strand: -1
 qualifiers: 
 
 
 type: CDS
-location: (75334..77148)
+location: [75334:77148]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -1731,32 +1731,32 @@ qualifiers:
 	Key: translation, Value: ['MKEDRRLPHKRDAFQFLKTKAAYVIVIVLTYAFGYFSAYHYHQPLQQQLPPSTTAVETTKPQVCSIDNFRVTTPCGNLVPPELIRQTVIDRIFNGTSPYIDFPPPHAKKFLRPKRIKGWGSYGAVFENLIRRVKPKTIVEVGSFLGASAIHMANLTRRLGLEETQILCVDDFRGWPGFRDRFKDMALVNGDVLLMYQFMQNVVISDFSGSILPVPFSTGSALEKLCEWGVTADLVEIDAGHDFNSAWADINRAVRILRPGGVIFGHDYFTAADNRGVRRAVNLFAEINRLKVKTDGQHWVIDSVKVINKGTRFAISKTVAKIKEDANQWFFAQVLENQDLVNEQAVHISVKVLRGFLRDEHGKVLIHARRSFASVHSKLDATFLCWQWAMESMKSLRVDKIIFASEDNDLIGAVTRLPSWPSYKFQIHFLLGELIRSSNLGAHLIAKSVTMEDRRQSYVATGFPFWLKHLFEKERSIA']
 Sub-Features
 type: CDS
-location: (75334..76249)
+location: [75334:76249]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (76515..76653)
+location: [76515:76653]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (76732..76982)
+location: [76732:76982]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (77014..77148)
+location: [77014:77148]
 ref: None:None
 strand: 1
 qualifiers: 
 
 
 type: CDS
-location: (82722..84581)
+location: [82722:84581]
 ref: None:None
 strand: -1
 qualifiers: 
@@ -1769,19 +1769,19 @@ qualifiers:
 	Key: translation, Value: ['MFSLNMRTEIESLWVFALASKFNIYMQQHFASLLVAIAITWFTITIVFWSTPGGPAWGKYFFTRRFISLDYNRKYKNLIPGPRGFPLVGSMSLRSSHVAHQRIASVAEMSNAKRLMAFSLGDTKVVVTCHPAVAKEILNSSVFADRPVDETAYGLMFNRAMGFAPNGTYWRTLRRLGSNHLFNPKQIKQSEDQRRVIATQMVNAFARNPKSACAVRDLLKTASLCNMMGLVFGREYELESNNNLESECLKGLVEEGYDLLGTLNWTDHLPWLAGLDFQQIRFRCSQLVPKVNLLLSRIIHEQRAATGNFLDMLLSLQGSEKLSESDMVAVLWEMIFRGTDTVAVLVEWVLARIVMHPKVQLTVHDELDRVVGRSRTVDESDLPSLTYLTAMIKEVLRLHPPGPLLSWARLSITDTSVDGYHVPAGTTAMVNMWAIARDPHVWEDPLEFKPERFVAKEGEAEFSVFGSDLRLAPFGSGKRVCPGKNLGLTTVSFWVATLLHEFEWLPSVEANPPDLSEVLRLSCEMACPLIVNVSSRRKIIAWMF']
 Sub-Features
 type: CDS
-location: (82722..82738)
+location: [82722:82738]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (82750..83373)
+location: [82750:83373]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (83585..84581)
+location: [83585:84581]
 ref: None:None
 strand: -1
 qualifiers: 
@@ -1811,7 +1811,7 @@ Value: Mus musculus
 Key: pid
 Value: g6754304
 References*
-location: (0..182)
+location: [0:182]
 authors: Higashi,Y., Sokawa,Y., Watanabe,Y., Kawade,Y., Ohno,S., Takaoka,C. and Taniguchi,T.
 title: structure and expression of a cloned cdna for mouse interferon-beta
 journal: J. Biol. Chem. 258, 9522-9529 (1983)
@@ -1825,7 +1825,7 @@ Key: taxonomy
 Value: ['Eukaryota', 'Metazoa', 'Chordata', 'Craniata', 'Vertebrata', 'Euteleostomi', 'Mammalia', 'Eutheria', 'Rodentia', 'Sciurognathi', 'Muridae', 'Murinae', 'Mus']
 Feaures
 type: source
-location: (0..182)
+location: [0:182]
 ref: None:None
 strand: None
 qualifiers: 
@@ -1835,20 +1835,20 @@ qualifiers:
 	Key: organism, Value: ['Mus musculus']
 
 type: Protein
-location: (0..182)
+location: [0:182]
 ref: None:None
 strand: None
 qualifiers: 
 	Key: product, Value: ['interferon beta, fibroblast']
 
 type: sig_peptide
-location: (0..21)
+location: [0:21]
 ref: None:None
 strand: None
 qualifiers: 
 
 type: Region
-location: (0..182)
+location: [0:182]
 ref: None:None
 strand: None
 qualifiers: 
@@ -1857,14 +1857,14 @@ qualifiers:
 	Key: region_name, Value: ['Interferon alpha/beta domain']
 
 type: mat_peptide
-location: (21..182)
+location: [21:182]
 ref: None:None
 strand: None
 qualifiers: 
 	Key: product, Value: ['ifn-beta']
 
 type: Region
-location: (55..170)
+location: [55:170]
 ref: None:None
 strand: None
 qualifiers: 
@@ -1873,7 +1873,7 @@ qualifiers:
 	Key: region_name, Value: ['Interferon alpha, beta and delta.']
 
 type: CDS
-location: (0..182)
+location: [0:182]
 ref: None:None
 strand: None
 qualifiers: 
@@ -1922,7 +1922,7 @@ Value: ['']
 Key: organism
 Value: Drosophila melanogaster
 References*
-location: (0..154329)
+location: [0:154329]
 authors: Murphy,L., Harris,D. and Barrell,B.
 title: Sequencing the distal X chromosome of Drosophila melanogaster
 journal: Unpublished
@@ -1930,7 +1930,7 @@ medline id:
 pubmed id: 
 comment: Sanger Centre, Wellcome Trust Genome Campus, Hinxton Hall, Hinxton, Cambridge CB10 1SA, U.K.
 
-location: (0..154329)
+location: [0:154329]
 authors: Benos,P.
 title: Direct Submission
 journal: Submitted (06-FEB-2000) European Drosophila Genome Sequencing Consortium
@@ -1944,7 +1944,7 @@ Key: taxonomy
 Value: ['Eukaryota', 'Metazoa', 'Arthropoda', 'Tracheata', 'Hexapoda', 'Insecta', 'Pterygota', 'Neoptera', 'Endopterygota', 'Diptera', 'Brachycera', 'Muscomorpha', 'Ephydroidea', 'Drosophilidae', 'Drosophila']
 Feaures
 type: source
-location: (0..154329)
+location: [0:154329]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -1953,14 +1953,14 @@ qualifiers:
 	Key: organism, Value: ['Drosophila melanogaster']
 
 type: gene
-location: (22147..27773)
+location: [22147:27773]
 ref: None:None
 strand: -1
 qualifiers: 
 	Key: gene, Value: ['EG:BACR25B3.11']
 
 type: CDS
-location: (22147..27773)
+location: [22147:27773]
 ref: None:None
 strand: -1
 qualifiers: 
@@ -1972,63 +1972,63 @@ qualifiers:
 	Key: translation, Value: ['MACNCNQSMIYQSNERRDYNCPGAPQYPYNRFKGGVSLKDTPCMVLYICADFKSSKLSSAKPIISGPATTRAPAISYVCQPNDFKCVSHPHTCVRANMVCDGIYDCTDHSDEFNCIAGKGSGKSESNSGSGSFKRWKKSPEQGRRSLAKAVKNRKLRKRSFAKSRDYSLKLDDQSSNLRAGESTDVECYSSDDTYTDVVWERSDGAPLSNNVRQVGNRLVISNVSPSDAGNYVCKCKTDEGDLYTTSYKLEVEDQPHELKSSKIVYAKVGANADLQCGADESRQPTYRWSRQYGQLQAGRSLMNEKLSLDSVQANDAGTYICTAQYADGETADFPNILVVTGAIPQFRQEPRSYMSFPTLPNSSFKFNFELTFRPENGDGLLLFNGQTRGSGDYIALSLKDRYAEFRFDFGGKPMLVRAEEPLALNEWHTVRVSRFKRDGYIQVDEQHPVAFPTLQQIPQLDLIEDLYIGGVPNWELLPADAVSQQVGFVGCISRLTLQGRTVELIREAKYKEGITDCRPCAQGPCQNKGVCLESQTEQAYTCICQPGWTGRDCAIEGTQCTPGVCGAGRCENTENDMECLCPLNRSGDRCQYNEILNEHSLNFKGNSFAAYGTPKVTKVNITLSVRPASLEDSVILYTAESTLPSGDYLALVLRGGHAELLINTAARLDPVVVRSAEPLPLNRWTRIEIRRRLGEGILRVGDGPERKAKAPGSDRILSLKTHLYVGGYDRSTVKVNRDVNITKGFDGCISRLYNFQKPVNLLADIKDAANIQSCGETNMIGGDEDSDNEPPVPPPTPDVHENELQPYAMAPCASDPCENGGSCSEQEDVAVCSCPFGFSGKHCQEHLQLGFNASFRGDGYVELNRSHFQPALEQSYTSMGIVFTTNKPNGLLFWWGQEAGEEYTGQDFIAAAVVDGYVEYSMRLDGEEAVIRNSDIRVDNGERHIVIAKRDENTAILEVDRMLHSGETRPTSKKSMKLPGNVFVGGAPDLEVFTGFRYKHNLNGCIVVVEGETVGQINLSSAAVNGVNANVCPA']
 Sub-Features
 type: CDS
-location: (22147..22299)
+location: [22147:22299]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (22374..22791)
+location: [22374:22791]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (22859..23560)
+location: [22859:23560]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (23629..24555)
+location: [23629:24555]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (24615..24888)
+location: [24615:24888]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (25023..25178)
+location: [25023:25178]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (26676..27009)
+location: [26676:27009]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (27622..27773)
+location: [27622:27773]
 ref: None:None
 strand: -1
 qualifiers: 
 
 
 type: gene
-location: (29925..33978)
+location: [29925:33978]
 ref: None:None
 strand: -1
 qualifiers: 
 	Key: gene, Value: ['EG:BACR25B3.10']
 
 type: CDS
-location: (29925..33978)
+location: [29925:33978]
 ref: None:None
 strand: -1
 qualifiers: 
@@ -2040,69 +2040,69 @@ qualifiers:
 	Key: translation, Value: ['MFLATLDTNDPTDIGTEDPVLTQIIVSIQKPEITIVPVGGSMTLSCSGRMRWSNSPVIVNWYKENSRLPENVEVQGGNLYLYDLQVSDSGVYICQAVNNETASVFKDTVSITITKKDQLSPAEIVNLPSHVTFEEYVNNEIICEVLGNPAPRVTWARVDGHADAQSTRTYDNRLIFDSPRKSDEGRYRCQAENDQNRDEKYVIVYVQSNPPQPPPQQDRLYITPEEINGLAGESFQLNCQFTSVASLRYDWSHNGRSLSSSPARNVEIRGNTLEVRDASESDSGVYTCVAYDVRTRRNFTESARVNIDRREEQPFGVLMRMMILTDSLINHSNKPIIESLEQNILIIQGEDYSITCEASGSPYPSIKWAKVHDFMPENVHISGNVLTIYGARFENRGVYSCVAENDHGSDLSSTSIDIEPRERPSVKIVSAPLQTFSVGAPASLYCTVEGIPDPTVEWVRVDGQPLSPRHKIQSPGYMVIDDIQLEDSGDYECRAKNIVGEATGVATITVQEPTLVQIIPDNRDLRLTEGDELSLTCVGSGVPNPEVEWVNEMALKRDLYSPPSNTAILKIYRVTKADAGIYTCHGKNEAGSDEAHVRVEVQERRGDIGGVDDDSDRDPINYNPPQQQNPGIHQPGSNQLLATDIGDNVTLTCDMFQPLNTRWERVDGAPLPRNAYTIKNRLEIVRVEQQNLGQYRCNGIGRDGNVKTYFVKELVLMPLPRIRFYPNIPLTVEAGQNLDVHCQVENVRPEDVHWSTDNNRPLPSSVRIVGSVLRFVSITQAAAGEYRCSAFNQYGNRSQIARVAVKKPADFHQVPQSQLQRHREGENIQLQCTVTDQYGVRAQDNVEFNWFRDDRRPLPNNARTDSQILVLTNLRPEDAGRYICNSYDVDRGQQLPEVSIDLQVLSE']
 Sub-Features
 type: CDS
-location: (29925..30108)
+location: [29925:30108]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (30269..30519)
+location: [30269:30519]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (30616..31076)
+location: [30616:31076]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (31196..31591)
+location: [31196:31591]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (31658..31836)
+location: [31658:31836]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (32323..32634)
+location: [32323:32634]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (32685..33289)
+location: [32685:33289]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (33532..33713)
+location: [33532:33713]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (33816..33978)
+location: [33816:33978]
 ref: None:None
 strand: -1
 qualifiers: 
 
 
 type: gene
-location: (36118..56153)
+location: [36118:56153]
 ref: None:None
 strand: -1
 qualifiers: 
 	Key: gene, Value: ['EG:BACR25B3.1']
 
 type: CDS
-location: (36118..56153)
+location: [36118:56153]
 ref: None:None
 strand: -1
 qualifiers: 
@@ -2114,177 +2114,177 @@ qualifiers:
 	Key: translation, Value: ['MLLLQLLLQLLLLGKLLLGKTPPTVFGFRLLFAAFRFPLSLHFPHRMHDHFFVRGDTHSCGWKNSTTFTIRISAIYRYLNQCQANEFRCNNGDCIDARKRCNNVSDCSEGEDENEECPAACSGMEYQCRDGTRCISVSQQCDGHSDCSDGDDEEHCDGIVPKLRYTCPKGKFTCRDLSCISIVHRCDGRADCPNDRSDEEGCPCLYDKWQCDDGTCIAKELLCNGNIDCPEDISDERYCEGGYDSEECRFDEFHCGTGECIPMRQVCDNIYDCNDYSDEVNCVEGEEEDRVGIPIGHQPWRPASKHDDWLHEMDTSEYQVYQPSNVYEKANSQNPCASNQFRCTTSNVCIPLHLRCDGFYHCNDMSDEKSCEQYQRHTTTRRPLTLATPTSRITTQGPGLLERRNTTTATEASRWPWATKTTTIATTTSNPITTVGVANSPPQTCLENIEFACHNRDCISIESVCDGIPDCGRNEDEDDALCKCSGDKYKCQRGGGCIPKSQVCDGKPQCHDRSDESACHLHGRLNKTRLGVKCLESQYQCGDGSCISGYKRCNGIHDCADASDEYNCIYDYEDTYDTDPNNNPLNECDILEFECDYSQCLPLEKKCDGYADCEDMSDELECQSYTDHCLESEFECDSYCLPRDQLCNGIPNCQDGSDERNCTFCREDAYLCNTGECVADNQRCNGIADCADGSDERHCARIYCPPNKLACNGTCVSRRIKCDGIRDCLDGYDEMYCPETNNHYPTQNVNVIRPKLGPNPIPKSCRPHEWQCANLECIDSSLQCNEIKDCSDGSDEELSVCFGTATTRLKPSDCSPEQFYCDESCYNRSVRCNGHVDCSDGSDEVGCSLPCPQHQCPSGRCYTESERCDRHRHCEDGSDEANCTAILCKDNEFLCFDRQFCINATQQCDGYYDCRDFSDEQNCIGCYANQFRCNNGDCVSGSAPCNGYSECSDHSDELNCGGTQECLPNQFRCNSGQCVSSSVRCNGRTDCQDSSDEQNCGHRHTEVSQGLETTGVFTTSTTSTTAMTPLRIICPPTSFKCENGPCISLGLKCNGRVDCPYDGSDEADCGQISNDIDPADSNDRRPNQLNLKTYPDSQIIKESREVIFRCRDEGPARAKVKWSRPGGRPLPPGFTDRNGRLEIPNIRVEDAGTYVCEAVGYASYIPGQQVTVNLNVERSWGENKYEEIRSNRIRYGTVPHIDLEFFGLDNDVGSRPESACTEYQATCMNGECIDKSSICDGNPDCSDASDEQSCSLGLKCQPNQFMCSNSKCVDRTWRCDGENDCGDNSDETSCDPEPSGAPCRYNEFQCRSGHCIPKSFQCDNVPDCTDGTDEVGCMAPLPIRPPPQSVSLLEYEVLELTCVATGTPTPTIVWRLNWGHVPDKCESKSYGGTGTLRCPDMRPQDSGAYSCEIINTRGTHFVNPDTIVTVRPVRTDVCEAGFFNMLARKAEECVQCFCFGVAKACDSANLFTYAIHPPILSHRVVSVELSPLRQIVINEAAPGQDLLTLLHGVQFRATNVHFSGRETPYLALPADYMGNQLKSYGGNLRYEVNYRGSGRPVNGPDVIITGNRFTLTYRVRTQPGQNNRVSIPFVPGGWQKPDGRKASREEIMMILANVDNILIRLGYLDSTAREVDLINIALDSAGTADKGLGSASLVEKCQCPPGYVGDSCESCASGYVRQPGGPWLGHCVPFIPDSCPSGTYGDPRRGVPCKECPCPLTGSNNFASGCQQSPDGDVVCRCNEGYTGRRCEQCAAGYQGNPLAAGGICRRIPDTSCNVDGTYSVHSNGTCQCKDSVIGEQCDTCKSKSFHLNSFTYTGCIECFCSGVGLDCDSSTWYRDQVTSTFGRSRVDHGFVLVTNYMQPTPDTVPVSMAAEPNALSFIGSADQSGNTLYWSLPAAFLGNKLSSYGGKLTYTLSYSPLPNGIMSRNSAPDVVIKSGEDLRLIHYRKSQVVPSVANTYSVEIKESAWQRGDEVVANREHVLMALSDITAIYIKATYTTSTKEASLRQVTLDVATPTNLGTPRAVEVEQCRCPEGYLGLSCEQCAPGYARDPEGGIYLGLCRPCECNGHSKYCNSDTGDCEECSDNTEGPSCERCAAGYVGDATRGTIYDCQPDEGYPIPSPPAPGNQTLECTAYCQIEGIYDCRGNECLCKRNVIGDQCDQCRPGTYGLSAQNQDGCKECYCSGLASQCRSAALYRQLIPVDFILNAPLITDESGAVQDTENLIPDISRNMYTYTHTSYLPKYWSLRGSVLGNQLFSYGGRLSYSLIVESYGNYERGHDIVLIGNGLKLIWSRPDGNENQEEYNVRLHEDEQWTRQDRESARPASRSDFMTVLSDLQHILIRATPRVPTQSTSIGNVILESAVTTRTPGATHASDIELCQCPSGYVGTSCESCAPLHYRDASGSCSLCPCDVSNTESCDLVSGGYVECRCKARWKGDRCREIGE']
 Sub-Features
 type: CDS
-location: (36118..37213)
+location: [36118:37213]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (37280..39517)
+location: [37280:39517]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (39655..40042)
+location: [39655:40042]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (40344..40434)
+location: [40344:40434]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (40518..40612)
+location: [40518:40612]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (40680..40814)
+location: [40680:40814]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (41545..41620)
+location: [41545:41620]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (41854..42085)
+location: [41854:42085]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (42187..42415)
+location: [42187:42415]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (42750..42876)
+location: [42750:42876]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (43603..43837)
+location: [43603:43837]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (44240..44438)
+location: [44240:44438]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (44811..44928)
+location: [44811:44928]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (45147..45233)
+location: [45147:45233]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (45660..45793)
+location: [45660:45793]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (45975..46125)
+location: [45975:46125]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (46517..46688)
+location: [46517:46688]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (47221..47315)
+location: [47221:47315]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (47682..47831)
+location: [47682:47831]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (48410..48878)
+location: [48410:48878]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (49436..49562)
+location: [49436:49562]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (49762..49876)
+location: [49762:49876]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (49970..50102)
+location: [49970:50102]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (50318..50441)
+location: [50318:50441]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (50826..50937)
+location: [50826:50937]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (52848..52966)
+location: [52848:52966]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (56030..56153)
+location: [56030:56153]
 ref: None:None
 strand: -1
 qualifiers: 
 
 
 type: gene
-location: (70719..75241)
+location: [70719:75241]
 ref: None:None
 strand: -1
 qualifiers: 
 	Key: gene, Value: ['EG:BACR25B3.2']
 
 type: CDS
-location: (70719..75241)
+location: [70719:75241]
 ref: None:None
 strand: -1
 qualifiers: 
@@ -2296,51 +2296,51 @@ qualifiers:
 	Key: translation, Value: ['MANSKVVAHDESLQGINDSEWQLMGDDIDDGLLDDVDETLKPMETKSEEEDLPTGNWFSQSVHRVRRSINRLFGSDDNQERGRRQQRERSQRNRDAINRQKELRRRQKEDHNRWKQMRMERQLEKQRLVKRTNHVVFNRATDPRKRASDLYDENEASGYHEEDTTLYRTYFVVNEPYDNEYRDRESVQFQNLQKLLDDDLRNFFHSNYEGNDDEEQEIRSTLERVEPTNDNFKIRVQLRIELPTSVNDFGSKLQQQLNVYNRIENLSAATDGVFSFTESSDIEEEAIDVTLPQEEVEGSGSDDSSCRGDATFTCPRSGKTICDEMRCDREIQCPDGEDEEYCNYPNVCTEDQFKCDDKCLELKKRCDGSIDCLDQTDEAGCINAPEPEPEPEPEPEPEPESEPEAEPEPEPEPEPESEPEQEPEPQVPEANGKFY']
 Sub-Features
 type: CDS
-location: (70719..70988)
+location: [70719:70988]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (71423..71621)
+location: [71423:71621]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (72604..72768)
+location: [72604:72768]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (72838..73016)
+location: [72838:73016]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (73085..73559)
+location: [73085:73559]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (75216..75241)
+location: [75216:75241]
 ref: None:None
 strand: -1
 qualifiers: 
 
 
 type: gene
-location: (121866..127124)
+location: [121866:127124]
 ref: None:None
 strand: 1
 qualifiers: 
 	Key: gene, Value: ['EG:BACR25B3.3']
 
 type: CDS
-location: (121866..127124)
+location: [121866:127124]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -2352,69 +2352,69 @@ qualifiers:
 	Key: translation, Value: ['MGAGNRKSETKTKTEAEIEIEMERDQFSIAANACMSMGPMLISKDKAPCSGGRVRHADSLHIYYAVDGKMTLLSNILDCGGCISAQRFTRLLRQSGSSGPSPSAPTAGTFESKSMLEPTSSHSLATGRVPLLHDFDASTTESPGTYVLDGVARVAQLALEPTVMDALPDSDTEQVLGNLNSSAPWNLTLASAAATNFENCSALFVNYTLPQTEFAIRKCELDGRWGSRPNATEVNPPGWTDYGPCYKPEIIRLMQQMGSKDFDAYIDIARRTRTLEIVGLCLSLFALIVSLLIFCTFRSLRNNRTKIHKNLFVAMVLQVIIRLTLYLDQFRRGNKEAATNTSLSVIENTPYLCEASYVLLEYARTAMFMWMFIEGLYLHNMVTVAVFQGSFPLKFFSRLGWCVPILMTTVWARCTVMYMDTSLGECLWNYNLTPYYWILEGPRLAVILLNFCFLVNIIRVLVMKLRQSQASDIEQTRKAVRAAIVLLPLLGITNLLHQLAPLKTATNFAVWSYGTHFLTSFQGFFIALIYCFLNGEVRAVLLKSLATQLSVRGHPEWAPKRASMYSGAYNTAPDTDAVQPAGDPSATGKRISPPNKRLNGRKPSSASIVMIHEPQQRQRLMPRLQNKAREKGKDRVEKTDAEAEPDPTISHIHSKEAGSARSRTRGSKWIMGICFRGQMCDAGLAKDAANIHDVANAADVDACSGSNNNYHNINNNNGSQNNNSIHCNHRDDDKVKGESQSDFKEPSNTNAESLVHLALFTAHTSNTQNNTHRNTIFTPIRRRNCS']
 Sub-Features
 type: CDS
-location: (121866..122046)
+location: [121866:122046]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (122173..122630)
+location: [122173:122630]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (123671..123823)
+location: [123671:123823]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (124062..124320)
+location: [124062:124320]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (124391..124688)
+location: [124391:124688]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (124754..125018)
+location: [124754:125018]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (125093..125254)
+location: [125093:125254]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (125316..125576)
+location: [125316:125576]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (126792..127124)
+location: [126792:127124]
 ref: None:None
 strand: 1
 qualifiers: 
 
 
 type: gene
-location: (128488..129414)
+location: [128488:129414]
 ref: None:None
 strand: -1
 qualifiers: 
 	Key: gene, Value: ['EG:BACR25B3.4']
 
 type: CDS
-location: (128488..129414)
+location: [128488:129414]
 ref: None:None
 strand: -1
 qualifiers: 
@@ -2426,39 +2426,39 @@ qualifiers:
 	Key: translation, Value: ['MAAKDRLPIFPSRGAQTLMKSRLAGATKGHGLLKKKADALQMRFRLILGKIIETKTLMGQVMKEAAFSLAEVKFTTGDINQIVLQNVTKAQIKIRTKKDNVAGVTLPIFEPYTDGVDTYELAGLARGGQQLAKLKKNYQSAVRLLVQLASLQTSFVTLDDVIKVTNRRVNAIEHVIIPRINRTIEYIISELDELEREEFYRLKKIQDKKREARKASDKLRAEQRLLGQMAEAQEVQNILDEDGDEDLLF']
 Sub-Features
 type: CDS
-location: (128488..128715)
+location: [128488:128715]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (128776..129140)
+location: [128776:129140]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (129195..129313)
+location: [129195:129313]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (129373..129414)
+location: [129373:129414]
 ref: None:None
 strand: -1
 qualifiers: 
 
 
 type: gene
-location: (132239..132926)
+location: [132239:132926]
 ref: None:None
 strand: 1
 qualifiers: 
 	Key: gene, Value: ['EG:BACR25B3.5']
 
 type: CDS
-location: (132239..132926)
+location: [132239:132926]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -2470,14 +2470,14 @@ qualifiers:
 	Key: translation, Value: ['MEYKMIAPEHSEQVMEHLRRNFFADEPLNKAAGLCQNGSSCPALEAHCAEAIQHRMSVMAVDAKEKDTLKIVGVVLNGILKPGDTAKALSKLDCNDDADFRKIFDLLHRHNLKHNLFEHFDVDCMFDVRILSVDSCYRGQGIANELVKRSVAVAKKNGFRLLKADATGIFSQKIFRSHGFEVFSEQPYSKYTDENGKVILPVEAPHIKLQQLYKAICADDQDEKKQSL']
 
 type: gene
-location: (133491..134407)
+location: [133491:134407]
 ref: None:None
 strand: -1
 qualifiers: 
 	Key: gene, Value: ['EG:BACR25B3.6']
 
 type: CDS
-location: (133491..134407)
+location: [133491:134407]
 ref: None:None
 strand: -1
 qualifiers: 
@@ -2489,39 +2489,39 @@ qualifiers:
 	Key: translation, Value: ['MNGLPPSKHYNLTHYQQRYNWDCGLSCIIMILSAQQREQLLGNFDAVCGEEGFGSSTWTIDLCYLLMRYQVRHEYFTQTLGIDPNYAQHTYYSKIIDKDERRVTRKFKDARAHGLRVEQRTVDMEVILRHLARHGPVILLTNASLLTCEVCKRNVLEKFGYAGHYVVLCGYDMAAQKLFYHNPEVHDGHICRCLIESMDTARRAYGTDEDIIFIYEKKETRE']
 Sub-Features
 type: CDS
-location: (133491..133595)
+location: [133491:133595]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (133662..133748)
+location: [133662:133748]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (133866..134135)
+location: [133866:134135]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (134197..134407)
+location: [134197:134407]
 ref: None:None
 strand: -1
 qualifiers: 
 
 
 type: gene
-location: (135478..136829)
+location: [135478:136829]
 ref: None:None
 strand: 1
 qualifiers: 
 	Key: gene, Value: ['EG:BACR25B3.7']
 
 type: CDS
-location: (135478..136829)
+location: [135478:136829]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -2533,33 +2533,33 @@ qualifiers:
 	Key: translation, Value: ['MVPIGAVHGGHPGVVHPPQQPLPTAPSGPNSLQPNSVGQPGATTSSNSSASNKSSLSVKPNYTLKFTLAGHTKAVSAVKFSPNGEWLASSSADKLIKIWGAYDGKFEKTISGHKLGISDVAWSSDSRLLVSGSDDKTLKVWELSTGKSLKTLKGHSNYVFCCNFNPQSNLIVSGSFDESVRIWDVRTGKCLKTLPAHSDPVSAVHFNRDGSLIVSSSYDGLCRIWDTASGQCLKTLIDDDNPPVSFVKFSPNGKYILAATLDNTLKLWDYSKGKCLKTYTGHKNEKYCIFANFSVTGGKWIVSGSEDNMVYIWNLQSKEVVQKLQGHTDTVLCTACHPTENIIASAALENDKTIKLWKSDT']
 Sub-Features
 type: CDS
-location: (135478..135749)
+location: [135478:135749]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (135960..136586)
+location: [135960:136586]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (136640..136829)
+location: [136640:136829]
 ref: None:None
 strand: 1
 qualifiers: 
 
 
 type: gene
-location: (145402..147087)
+location: [145402:147087]
 ref: None:None
 strand: 1
 qualifiers: 
 	Key: gene, Value: ['EG:BACR25B3.8']
 
 type: CDS
-location: (145402..147087)
+location: [145402:147087]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -2570,27 +2570,27 @@ qualifiers:
 	Key: translation, Value: ['MNSTTKHLLHCTLLITVIVTFEVFSGGIKIDENSFTLVDPWTEYGQLATVLLYLLRFLTLLTLPQVLFNFCGLVFYNAFPEKVVLKGSPLLAPFICIRVVTRGDFPDLVKTNVLRNMNTCLDTGLENFLIEVVTDKAVNLSQHRRIREIVVPKEYKTRTGALFKSRALQYCLEDNVNVLNDSDWIVHLDEETLLTENSVRGIINFVLDGKHPFGQGLITYANENVVNWLTTLADSFRVSDDMGKLRLQFKLFHKPLFSWKGSYVVTQVSAERSVSFDNGIDGSVAEDCFFAMRAFSQGYTFNFIEGEMYEKSPFTLLDFLQQRKRWLQGILLVVHSKMIPFKHKLLLGISVYSWVTMPLSTSNIIFAALYPIPCPNLVDFVCAFIAAINIYMYVFGVIKSFSLYRFGLFRFLACVLGAVCTIPVNVVIENVAVIWGLVGKKHKFYVVQKDVRVLETV']
 Sub-Features
 type: CDS
-location: (145402..146203)
+location: [145402:146203]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (146514..147087)
+location: [146514:147087]
 ref: None:None
 strand: 1
 qualifiers: 
 
 
 type: gene
-location: (148859..152785)
+location: [148859:152785]
 ref: None:None
 strand: -1
 qualifiers: 
 	Key: gene, Value: ['EG:BACR25B3.9']
 
 type: CDS
-location: (148859..152785)
+location: [148859:152785]
 ref: None:None
 strand: -1
 qualifiers: 
@@ -2602,64 +2602,64 @@ qualifiers:
 	Key: translation, Value: ['MSSEDPSCVAVALRVRPLVQSELDRGCRIAVERSADGAPQVTVNRNESYTYNYVFDIDDSQKDLFETCVQAKVKKLLNGYNVTILAYGQTGSGKTYTMGTAFNGVLDDHVGVIPRAVHDIFTAIAEMQSEFRFAVTCSFVELYQEQFYDLFSSKTRDKATVDIREVKNRIIMPGLTELVVTSAQQVTDHLIRGSAGRAVAATAMNETSSRSHAIFTLTLVATKLDGKQSVTTSRFNLVDLAGSERCSKTLASGDRFKEGVNINKGLLALGNVINALGSGQAAGYIPYRQSKLTRLLQDSLGGNSITLMIACVSPADYNVAETLSTLRYADRALQIKNKPVVNLDPHAAEVNMLKDVIQKLRVELLSGGKMSSSLISAVGAAGLGAIPCEESLAGSMANAAEIQRLKEQVRTLQDRNRKLQQELHQSLLDLTEKEMRAHIAEQAHDKLRSHVSELKNKLDQREQAQFGNENTNGDNEMRDFSLLVNRVHVELQRTQEELESQGHESRQRLSSRSHTEGGESGGDEVHEMLHSHSEEYTNKQMNFAGELRNINRQLDLKQELHERIMRNFSRLDSDDEDVKLRLCNQKIDDLEAERRDLMDQLRNIKSKDISAKLAEERRKRLQLLEQEISDLRRKLITQANLLKIRDKEREKIQNLSTEIRTMKESKVKLIRAMRGESEKFRQWKMVREKELTQLKSKDRKMQSEIVRQQTLHSKQRQVLKRKCEEALAANKRLKDALERQASAQAQRHKYKDNGGSAAGSSNANAKTDSWVDRELEIILSLIDAEHSLEQLMEDRAVINNHYHLLQQEKTSDPAEAAEQARILASLEEELEMRNAQISDLQQKVCPTDLDSRIRSLAEGVQSLGESRTVSKQLLKTLVQQRRLQASSLNEQRTTLDELRAQLLDAQQQEDAASKRLRLLQSQHEEQMLAQQRAYEEKVSVLIRTANQRWAEARSPAEDQQRNQILEELLSSREALQQELDKLRAKNKSKSKAVKSEPQDLDDSFQIVDGNETVVLSDVSDDPDWVPSTSKSKRIQSDSRNVISPPEKQDANVTSLGNSSIQSLNSTSATEDGKRCKGCKCRTKCTTKRCGCLSGNNACSETCVCKSNCRNPLNLKDHASQCGDGDGQKDETEDADKSDDDGDDEPQTSKENAVKFVTPEAPGKVVASPKQTLQEPKAAATPLMNSNVVEDINGPKLAKMSGLAFDTPKRKFF']
 Sub-Features
 type: CDS
-location: (148859..148905)
+location: [148859:148905]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (148965..149462)
+location: [148965:149462]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (149545..151809)
+location: [149545:151809]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (151880..152032)
+location: [151880:152032]
 ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
-location: (152105..152785)
+location: [152105:152785]
 ref: None:None
 strand: -1
 qualifiers: 
 
 
 type: gene
-location: (153489..1487)
+location: [153489:1487]
 ref: None:None
 strand: 1
 qualifiers: 
 	Key: gene, Value: ['EG:BACR7C10.3']
 Sub-Features
 type: gene
-location: (153489..154269)
+location: [153489:154269]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: gene
-location: (40..610)
+location: [40:610]
 ref: AL121804.2:None
 strand: 1
 qualifiers: 
 
 type: gene
-location: (671..1487)
+location: [671:1487]
 ref: AL121804.2:None
 strand: 1
 qualifiers: 
 
 
 type: CDS
-location: (153489..1487)
+location: [153489:1487]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -2670,19 +2670,19 @@ qualifiers:
 	Key: translation, Value: ['MEEEAPRFNVLEEAFNGNGNGCANVEATQSAILKVLTRVNRFQMRVRKHIEDNYTEFLPNNTSPDIFLEESGSLNREIHDMLENLGSEGLDALDEANVKMAGNGRQLREILLGLGVSEHVLRIDELFQCVEEAKATKDYLVLLDLVGRLRAFIYGDDSVDGDAQVATPEVRRIFKALECYETIKVKYHVQAYMLQQSLQERFDRLVQLQCKSFPTSRCVTLQVSRDQTQLQDIVQALFQEPYNPARLAEFLLDNCIEPVIMRPVMADYSEEADGGTYVRLSLSYATKEPSSAHVRPNYKQVLENLRLLLHTLAGINCSVSRDQHVFGIIGDHVKDKMLKLLVDECLIPAVPESTEEYQTSTLCEDVAQLEQLLVDSFIINPEQDRALGQFVEKYETYYRNRMYRRVLETAREIIQRDLQDMVLVAPNNHSAEVANDPFLFPRCMISKSAQDFVKLMDRILRQPTDKLGDQEADPIAGVISIMLHTYINEVPKVHRKLLESIPQQAVLFHNNCMFFTHWVAQHANKGIESLAALAKTLQATGQQHFRVQVDYQSSILMGIMQEFEFESTHTLGSGPLKLVRQCLRQLELLKNVWANVLPETVYNATFCELINTFVAELIRRVFTLRHISAQMACELSDLIDVVLQRAPTLFREPNEVVQVLSWLKLQQLKAMLNASLMEITELWGDGVGPLTASYKSDEIKHLIRALFQDTDWRAKAITQIV']
 Sub-Features
 type: CDS
-location: (153489..154269)
+location: [153489:154269]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (40..610)
+location: [40:610]
 ref: AL121804.2:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (671..1487)
+location: [671:1487]
 ref: AL121804.2:None
 strand: 1
 qualifiers: 
@@ -2705,7 +2705,7 @@ Value: ['']
 Key: organism
 Value: Homo sapiens
 References*
-location: (0..2509)
+location: [0:2509]
 authors: Harris,C.A., Andryuk,P.J., Cline,S.W., Siekierka,J.J. and Goldstein,G.
 title: Structure and mapping of the human thymopoietin (TMPO) gene and relationship of TMPO beta to rat lamin-associated polypeptide 2
 journal: Unpublished
@@ -2713,7 +2713,7 @@ medline id:
 pubmed id: 
 comment: 
 
-location: (0..2509)
+location: [0:2509]
 authors: Harris,C.A.
 title: Direct Submission
 journal: Submitted (07-DEC-1994) Crafford A. Harris, Immunobiology Research Institute, Route 22 East, Annandale, NJ 08801-0999, USA
@@ -2729,7 +2729,7 @@ Key: taxonomy
 Value: ['Eukaryota', 'Metazoa', 'Chordata', 'Craniata', 'Vertebrata', 'Euteleostomi', 'Mammalia', 'Eutheria', 'Primates', 'Catarrhini', 'Hominidae', 'Homo']
 Feaures
 type: source
-location: (0..2509)
+location: [0:2509]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -2741,58 +2741,58 @@ qualifiers:
 	Key: organism, Value: ['Homo sapiens']
 
 type: 5'UTR
-location: (one-of(1888,1901)..2200)
+location: [one-of(1888,1901):2200]
 ref: None:None
 strand: 1
 qualifiers: 
 	Key: gene, Value: ['TMPO']
 
 type: gene
-location: (1887..3234)
+location: [1887:3234]
 ref: None:None
 strand: 1
 qualifiers: 
 	Key: gene, Value: ['TMPO']
 Sub-Features
 type: gene
-location: (1887..2509)
+location: [1887:2509]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: gene
-location: (0..270)
+location: [0:270]
 ref: U18267.1:None
 strand: 1
 qualifiers: 
 
 type: gene
-location: (0..309)
+location: [0:309]
 ref: U18268.1:None
 strand: 1
 qualifiers: 
 
 type: gene
-location: (0..6905)
+location: [0:6905]
 ref: U18270.1:None
 strand: 1
 qualifiers: 
 
 type: gene
-location: (0..128)
+location: [0:128]
 ref: U18269.1:None
 strand: 1
 qualifiers: 
 
 type: gene
-location: (0..3234)
+location: [0:3234]
 ref: U18271.1:None
 strand: 1
 qualifiers: 
 
 
 type: exon
-location: (one-of(1888,1901)..2479)
+location: [one-of(1888,1901):2479]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -2800,7 +2800,7 @@ qualifiers:
 	Key: number, Value: ['1']
 
 type: CDS
-location: (2200..>128)
+location: [2200:>128]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -2812,38 +2812,38 @@ qualifiers:
 	Key: translation, Value: ['MPEFLEDPSVLTKDKLKSELVANNVTLPAGEQRKDVYVQLYLQHLTARNRPPLPAGTNSKGPPDFSSDEEREPTPVLGSGAAAAGRSRAAVGRKATKKTDKPRQEDKDDLDVTELTNEDLLDQLVKYGVNPGPIVGTTRKLYEKKLLKLREQGTESRSSTPLPTISSSAENTRQNGSNDSDRYSDNEEDSKIELKLEKREPLKGRAKTPVTLKQRRVEHNQSYSQAGITETEWTSGS']
 Sub-Features
 type: CDS
-location: (2200..2479)
+location: [2200:2479]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (119..246)
+location: [119:246]
 ref: U18267.1:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (129..288)
+location: [129:288]
 ref: U18268.1:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (4690..4788)
+location: [4690:4788]
 ref: U18270.1:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (81..>128)
+location: [81:>128]
 ref: U18269.1:None
 strand: 1
 qualifiers: 
 
 
 type: CDS
-location: (2200..1558)
+location: [2200:1558]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -2855,25 +2855,25 @@ qualifiers:
 	Key: translation, Value: ['MPEFLEDPSVLTKDKLKSELVANNVTLPAGEQRKDVYVQLYLQHLTARNRPPLPAGTNSKGPPDFSSDEEREPTPVLGSGAAAAGRSRAAVGRKATKKTDKPRQEDKDDLDVTELTNEDLLDQLVKYGVNPGPIVGTTRKLYEKKLLKLREQGTESRSSTPLPTISSSAENTRQNGSNDSDRYSDNEEGKKKEHKKVKSTRDIVPFSELGTTPSGGGFFQGISFPEISTRPPLGSTELQAAKKVHTSKGDLPREPLVATNLPGRGQLQKLASERNLFISCKSSHDRCLEKSSSSSSQPEHSAMLVSTAASPSLIKETTTGYYKDIVENICGREKSGIQPLCPERSHISDQSPLSSKRKALEESESSQLISPPLAQAIRDYVNSLLVQGGVGSLPGTSNSMPPLDVENIQKRIDQSKFQETEFLSPPRKVPRLSEKSVEERDSGSFVAFQNIPGSELMSSFAKTVVSHSLTTLGLEVAKQSQHDKIDASELSFPFHESILKVIEEEWQQVDRQLPSLACKYPVSSREATQILSVPKVDDEILGFISEATPLGGIQAASTESCNQQLDLALCRAYEAAASALQIATHTAFVAKAMQADISEAAQILSSDPSRTHQALGILSKTYDAASYICEAAFDEVKMAAHTMGNATVGRRYLWLKDCKINLASKNKLASTPFKGGTLFGGEVCKVIKKRGNKH']
 Sub-Features
 type: CDS
-location: (2200..2479)
+location: [2200:2479]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (119..246)
+location: [119:246]
 ref: U18267.1:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (129..288)
+location: [129:288]
 ref: U18268.1:None
 strand: 1
 qualifiers: 
 
 type: CDS
-location: (38..1558)
+location: [38:1558]
 ref: U18270.1:None
 strand: 1
 qualifiers: 
@@ -2893,13 +2893,13 @@ On Oct 16, 2001 this sequence version replaced gi:15294341.
 COMPLETENESS: not full length.
 Key: contig
 Value: type: contig
-location: (105172..182233)
+location: [105172:182233]
 ref: None:None
 strand: None
 qualifiers: 
 Sub-Features
 type: contig
-location: (105172..108462)
+location: [105172:108462]
 ref: AL391218.9:None
 strand: None
 qualifiers: 
@@ -2911,13 +2911,13 @@ strand: None
 qualifiers: 
 
 type: contig
-location: (0..182490)
+location: [0:182490]
 ref: AL512330.12:None
 strand: -1
 qualifiers: 
 
 type: contig
-location: (9033..81287)
+location: [9033:81287]
 ref: AL590128.4:None
 strand: -1
 qualifiers: 
@@ -2929,7 +2929,7 @@ strand: None
 qualifiers: 
 
 type: contig
-location: (85798..94832)
+location: [85798:94832]
 ref: AL591163.7:None
 strand: None
 qualifiers: 
@@ -2941,7 +2941,7 @@ strand: None
 qualifiers: 
 
 type: contig
-location: (94932..113245)
+location: [94932:113245]
 ref: AL591163.7:None
 strand: None
 qualifiers: 
@@ -2953,19 +2953,19 @@ strand: None
 qualifiers: 
 
 type: contig
-location: (42172..44897)
+location: [42172:44897]
 ref: AL591163.7:None
 strand: None
 qualifiers: 
 
 type: contig
-location: (0..6208)
+location: [0:6208]
 ref: AL590128.4:None
 strand: -1
 qualifiers: 
 
 type: contig
-location: (51306..52779)
+location: [51306:52779]
 ref: AL591163.7:None
 strand: None
 qualifiers: 
@@ -2977,7 +2977,7 @@ strand: None
 qualifiers: 
 
 type: contig
-location: (52879..85698)
+location: [52879:85698]
 ref: AL591163.7:None
 strand: None
 qualifiers: 
@@ -2989,61 +2989,61 @@ strand: None
 qualifiers: 
 
 type: contig
-location: (113345..126143)
+location: [113345:126143]
 ref: AL591163.7:None
 strand: None
 qualifiers: 
 
 type: contig
-location: (184728..186047)
+location: [184728:186047]
 ref: AL159177.12:None
 strand: -1
 qualifiers: 
 
 type: contig
-location: (0..112158)
+location: [0:112158]
 ref: AL031447.4:None
 strand: None
 qualifiers: 
 
 type: contig
-location: (0..72671)
+location: [0:72671]
 ref: AL159177.12:None
 strand: -1
 qualifiers: 
 
 type: contig
-location: (23506..86371)
+location: [23506:86371]
 ref: AL591866.12:None
 strand: -1
 qualifiers: 
 
 type: contig
-location: (0..142965)
+location: [0:142965]
 ref: AL031848.11:None
 strand: None
 qualifiers: 
 
 type: contig
-location: (0..166418)
+location: [0:166418]
 ref: AL031847.17:None
 strand: None
 qualifiers: 
 
 type: contig
-location: (0..161651)
+location: [0:161651]
 ref: AL035406.25:None
 strand: None
 qualifiers: 
 
 type: contig
-location: (94598..98345)
+location: [94598:98345]
 ref: AL356261.20:None
 strand: -1
 qualifiers: 
 
 type: contig
-location: (54431..54579)
+location: [54431:54579]
 ref: AC026968.3:None
 strand: -1
 qualifiers: 
@@ -3055,7 +3055,7 @@ strand: None
 qualifiers: 
 
 type: contig
-location: (98528..107911)
+location: [98528:107911]
 ref: AC062024.2:None
 strand: -1
 qualifiers: 
@@ -3067,7 +3067,7 @@ strand: None
 qualifiers: 
 
 type: contig
-location: (7712..11594)
+location: [7712:11594]
 ref: AC062024.2:None
 strand: None
 qualifiers: 
@@ -3079,13 +3079,13 @@ strand: None
 qualifiers: 
 
 type: contig
-location: (0..94498)
+location: [0:94498]
 ref: AL356261.20:None
 strand: -1
 qualifiers: 
 
 type: contig
-location: (19987..70853)
+location: [19987:70853]
 ref: AL356693.18:None
 strand: -1
 qualifiers: 
@@ -3097,7 +3097,7 @@ strand: None
 qualifiers: 
 
 type: contig
-location: (17350..19887)
+location: [17350:19887]
 ref: AL356693.18:None
 strand: None
 qualifiers: 
@@ -3109,19 +3109,7 @@ strand: None
 qualifiers: 
 
 type: contig
-location: (3036..17250)
-ref: AL356693.18:None
-strand: -1
-qualifiers: 
-
-type: contig
-location: gap(100)
-ref: None:None
-strand: None
-qualifiers: 
-
-type: contig
-location: (0..2936)
+location: [3036:17250]
 ref: AL356693.18:None
 strand: -1
 qualifiers: 
@@ -3133,7 +3121,19 @@ strand: None
 qualifiers: 
 
 type: contig
-location: (674..2393)
+location: [0:2936]
+ref: AL356693.18:None
+strand: -1
+qualifiers: 
+
+type: contig
+location: gap(100)
+ref: None:None
+strand: None
+qualifiers: 
+
+type: contig
+location: [674:2393]
 ref: AC026968.3:None
 strand: None
 qualifiers: 
@@ -3145,7 +3145,7 @@ strand: None
 qualifiers: 
 
 type: contig
-location: (0..574)
+location: [0:574]
 ref: AC026968.3:None
 strand: None
 qualifiers: 
@@ -3157,7 +3157,7 @@ strand: None
 qualifiers: 
 
 type: contig
-location: (179028..182233)
+location: [179028:182233]
 ref: AL356261.20:None
 strand: None
 qualifiers: 
@@ -3174,7 +3174,7 @@ Value: ['']
 Key: organism
 Value: Homo sapiens
 References*
-location: (0..1250660)
+location: [0:1250660]
 authors: NCBI Annotation Project.
 title: Direct Submission
 journal: Submitted (11-OCT-2001) National Center for Biotechnology Information, NIH, Bethesda, MD 20894, USA
@@ -3188,7 +3188,7 @@ Key: taxonomy
 Value: ['Eukaryota', 'Metazoa', 'Chordata', 'Craniata', 'Vertebrata', 'Euteleostomi', 'Mammalia', 'Eutheria', 'Primates', 'Catarrhini', 'Hominidae', 'Homo']
 Feaures
 type: source
-location: (0..1250660)
+location: [0:1250660]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -3197,7 +3197,7 @@ qualifiers:
 	Key: organism, Value: ['Homo sapiens']
 
 type: source
-location: (0..3290)
+location: [0:3290]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -3207,7 +3207,7 @@ qualifiers:
 	Key: organism, Value: ['Homo sapiens']
 
 type: misc_feature
-location: (215901..365470)
+location: [215901:365470]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -3215,7 +3215,7 @@ qualifiers:
 	Key: standard_name, Value: ['RP11-242F24']
 
 type: variation
-location: (217507..217507)
+location: [217507:217507]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -3223,7 +3223,7 @@ qualifiers:
 	Key: db_xref, Value: ['dbSNP:811400']
 
 type: mRNA
-location: (342429..409092)
+location: [342429:409092]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -3233,91 +3233,91 @@ qualifiers:
 	Key: transcript_id, Value: ['XM_057697.1']
 Sub-Features
 type: mRNA
-location: (342429..342515)
+location: [342429:342515]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: mRNA
-location: (363170..363300)
+location: [363170:363300]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: mRNA
-location: (365740..365814)
+location: [365740:365814]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: mRNA
-location: (376397..376499)
+location: [376397:376499]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: mRNA
-location: (390168..390297)
+location: [390168:390297]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: mRNA
-location: (391256..391379)
+location: [391256:391379]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: mRNA
-location: (392605..392679)
+location: [392605:392679]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: mRNA
-location: (398229..398419)
+location: [398229:398419]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: mRNA
-location: (399081..399167)
+location: [399081:399167]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: mRNA
-location: (399533..399650)
+location: [399533:399650]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: mRNA
-location: (405843..405913)
+location: [405843:405913]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: mRNA
-location: (406703..406761)
+location: [406703:406761]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: mRNA
-location: (406867..407010)
+location: [406867:407010]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: mRNA
-location: (407961..408091)
+location: [407961:408091]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: mRNA
-location: (408507..409092)
+location: [408507:409092]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -3347,7 +3347,7 @@ medline id:
 pubmed id: 
 comment: 
 
-location: (0..7036074)
+location: [0:7036074]
 authors: Kaneko,T.
 title: Direct Submission
 journal: Submitted (05-DEC-2000) Takakazu Kaneko, Kazusa DNA Research Institute, The First Laboratory for Plant Gene Research; Yana 1532-3, Kisarazu, Chiba 292-0812, Japan (E-mail:kaneko@kazusa.or.jp, URL:http://www.kazusa.or.jp/rhizobase/, Tel:81-438-52-3935, Fax:81-438-52-3934)
@@ -3361,7 +3361,7 @@ Key: taxonomy
 Value: ['Bacteria', 'Proteobacteria', 'alpha subdivision', 'Rhizobiaceae group', 'Phyllobacteriaceae', 'Mesorhizobium']
 Feaures
 type: source
-location: (0..7036074)
+location: [0:7036074]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -3370,7 +3370,7 @@ qualifiers:
 	Key: strain, Value: ['MAFF303099']
 
 type: gene
-location: (286..1084)
+location: [286:1084]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -3411,7 +3411,7 @@ Value: Homo sapiens
 Key: pid
 Value: g4502929
 References*
-location: (0..360)
+location: [0:360]
 authors: Munro,S., Thomas,K.L. and Abu-Shaar,M.
 title: Molecular characterization of a peripheral receptor for cannabinoids
 journal: Nature 365 (6441), 61-65 (1993)
@@ -3419,7 +3419,7 @@ medline id: 93368659
 pubmed id: 7689702
 comment: 
 
-location: (0..360)
+location: [0:360]
 authors: Galiegue,S., Mary,S., Marchand,J., Dussossoy,D., Carriere,D., Carayon,P., Bouaboula,M., Shire,D., Le Fur,G. and Casellas,P.
 title: Expression of central and peripheral cannabinoid receptors in human immune tissues and leukocyte subpopulations
 journal: Eur. J. Biochem. 232 (1), 54-61 (1995)
@@ -3427,7 +3427,7 @@ medline id: 96048028
 pubmed id: 7556170
 comment: 
 
-location: (0..360)
+location: [0:360]
 authors: Shire,D., Calandra,B., Rinaldi-Carmona,M., Oustric,D., Pessegue,B., Bonnin-Cabanne,O., Le Fur,G., Caput,D. and Ferrara,P.
 title: Molecular cloning, expression and function of the murine CB2 peripheral cannabinoid receptor
 journal: Biochim. Biophys. Acta 1307 (2), 132-136 (1996)
@@ -3441,7 +3441,7 @@ Key: taxonomy
 Value: ['Eukaryota', 'Metazoa', 'Chordata', 'Craniata', 'Vertebrata', 'Euteleostomi', 'Mammalia', 'Eutheria', 'Primates', 'Catarrhini', 'Hominidae', 'Homo']
 Feaures
 type: source
-location: (0..360)
+location: [0:360]
 ref: None:None
 strand: None
 qualifiers: 
@@ -3451,14 +3451,14 @@ qualifiers:
 	Key: organism, Value: ['Homo sapiens']
 
 type: Protein
-location: (0..360)
+location: [0:360]
 ref: None:None
 strand: None
 qualifiers: 
 	Key: product, Value: ['cannabinoid receptor 2 (macrophage)']
 
 type: Region
-location: (49..299)
+location: [49:299]
 ref: None:None
 strand: None
 qualifiers: 
@@ -3467,7 +3467,7 @@ qualifiers:
 	Key: region_name, Value: ['7 transmembrane receptor (rhodopsin family)']
 
 type: CDS
-location: (0..360)
+location: [0:360]
 ref: None:None
 strand: None
 qualifiers: 
@@ -3503,7 +3503,7 @@ Value: Buthus occitanus tunetanus
 Key: pid
 Value: g134354
 References*
-location: (0..64)
+location: [0:64]
 authors: Vargas,O., Gregoire,J., Martin,M.-F., Bechis,G. and Rochat,H.
 title: Neurotoxins from the venoms of two scorpions: Buthus occitanus tunetanus and Buthus occitanus mardochei
 journal: Toxicon 20, 79-79 (1982)
@@ -3517,7 +3517,7 @@ Key: taxonomy
 Value: ['Eukaryota', 'Metazoa', 'Arthropoda', 'Chelicerata', 'Arachnida', 'Scorpiones', 'Buthoidea', 'Buthidae', 'Buthus']
 Feaures
 type: source
-location: (0..64)
+location: [0:64]
 ref: None:None
 strand: None
 qualifiers: 
@@ -3525,14 +3525,14 @@ qualifiers:
 	Key: organism, Value: ['Buthus occitanus tunetanus']
 
 type: Protein
-location: (0..64)
+location: [0:64]
 ref: None:None
 strand: None
 qualifiers: 
 	Key: product, Value: ['Neurotoxin III']
 
 type: Bond
-location: (11..62)
+location: [11:62]
 ref: None:None
 strand: None
 qualifiers: 
@@ -3540,41 +3540,20 @@ qualifiers:
 	Key: note, Value: ['BY SIMILARITY.']
 Sub-Features
 type: Bond
-location: (11..11)
+location: [11:11]
 ref: None:None
 strand: None
 qualifiers: 
 
 type: Bond
-location: (62..62)
-ref: None:None
-strand: None
-qualifiers: 
-
-
-type: Bond
-location: (15..35)
-ref: None:None
-strand: None
-qualifiers: 
-	Key: bond_type, Value: ['disulfide']
-	Key: note, Value: ['BY SIMILARITY.']
-Sub-Features
-type: Bond
-location: (15..15)
-ref: None:None
-strand: None
-qualifiers: 
-
-type: Bond
-location: (35..35)
+location: [62:62]
 ref: None:None
 strand: None
 qualifiers: 
 
 
 type: Bond
-location: (21..45)
+location: [15:35]
 ref: None:None
 strand: None
 qualifiers: 
@@ -3582,20 +3561,20 @@ qualifiers:
 	Key: note, Value: ['BY SIMILARITY.']
 Sub-Features
 type: Bond
-location: (21..21)
+location: [15:15]
 ref: None:None
 strand: None
 qualifiers: 
 
 type: Bond
-location: (45..45)
+location: [35:35]
 ref: None:None
 strand: None
 qualifiers: 
 
 
 type: Bond
-location: (25..47)
+location: [21:45]
 ref: None:None
 strand: None
 qualifiers: 
@@ -3603,20 +3582,41 @@ qualifiers:
 	Key: note, Value: ['BY SIMILARITY.']
 Sub-Features
 type: Bond
-location: (25..25)
+location: [21:21]
 ref: None:None
 strand: None
 qualifiers: 
 
 type: Bond
-location: (47..47)
+location: [45:45]
+ref: None:None
+strand: None
+qualifiers: 
+
+
+type: Bond
+location: [25:47]
+ref: None:None
+strand: None
+qualifiers: 
+	Key: bond_type, Value: ['disulfide']
+	Key: note, Value: ['BY SIMILARITY.']
+Sub-Features
+type: Bond
+location: [25:25]
+ref: None:None
+strand: None
+qualifiers: 
+
+type: Bond
+location: [47:47]
 ref: None:None
 strand: None
 qualifiers: 
 
 
 type: Site
-location: (63..63)
+location: [63:63]
 ref: None:None
 strand: None
 qualifiers: 
