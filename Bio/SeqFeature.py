@@ -167,6 +167,10 @@ class FeatureLocation:
     your_location.start and your_location.end. If the start and
     end are exact, this will return the positions, if not, we'll return
     the approriate Fuzzy class with info about the position and fuzziness.
+
+    Note that the start and end location numbering follow Python's scheme,
+    thus a GenBank entry of 123..150 (one based counting) becomes a location
+    of [122:150] (zero based counting).
     """
     def __init__(self, start, end):
         """Specify the start and end of a sequence feature.
@@ -189,7 +193,11 @@ class FeatureLocation:
             self._end = ExactPosition(end)
 
     def __str__(self):
-        return "(%s..%s)" % (self._start, self._end)
+        """Returns a representation of the location.  For the simple case this
+        uses the python splicing syntax, [122:150] (zero based counting) which
+        GenBank would call 123..150 (one based counting).
+        """
+        return "[%s:%s]" % (self._start, self._end)
 
     def __getattr__(self, attr):
         """Make it easy to get non-fuzzy starts and ends.
