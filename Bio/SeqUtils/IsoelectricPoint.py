@@ -70,34 +70,45 @@ class IsoelectricPoint:
         if cterm in pKcterminal.keys():
             neg_pKs['Cterm'] = pKcterminal[cterm]
 
+        # Bracket between pH1 and pH2
         pH = 7.0
-        CutBy = 3.5
         Charge = self._chargeR(pH, pos_pKs, neg_pKs)
-        while CutBy > 0.0001: # this loop is usually good enough to get the job done.
-            pH1=pH+CutBy
-            pH2=pH-CutBy
-            Charge1 = self._chargeR(pH1, pos_pKs, neg_pKs)
-            Charge2 = self._chargeR(pH2, pos_pKs, neg_pKs)
-
-            if abs(Charge1) < abs(Charge2):
-                Charge = Charge1
-                pH = pH1
-            else:
-                Charge = Charge2
-                pH = pH2
-            CutBy = CutBy/2.0
-			
-		
-        # sometimes the charge is still higher or lower than zero. in such case we fix it in a step-wise way.
-        if abs(Charge) > 0.01:
-            while abs(Charge) > 0.01:
-                if Charge > 0:
-                    pH += 0.001
-                else:
-                    pH -= 0.001
+        if Charge > 0.0:
+            pH1 = pH
+            Charge1 = Charge
+            while Charge1 > 0.0:
+                pH = pH1 + 1.0
                 Charge = self._chargeR(pH, pos_pKs, neg_pKs)
+                if Charge > 0.0:
+                    pH1 = pH
+                    Charge1 = Charge
+                else:
+                    pH2 = pH
+                    Charge2 = Charge
+                    break
+        else:
+            pH2 = pH
+            Charge2 = Charge
+            while Charge2 < 0.0:
+                pH = pH2 - 1.0
+                Charge = self._chargeR(pH, pos_pKs, neg_pKs)
+                if Charge < 0.0:
+                    pH2 = pH
+                    Charge2 = Charge
+                else:
+                    pH1 = pH
+                    Charge1 = Charge
+                    break
+
+        # Bisection
+        while pH2 - pH1 > 0.0001 and Charge!=0.0:
+            pH = (pH1 + pH2) / 2.0
+            Charge = self._chargeR(pH, pos_pKs, neg_pKs)
+            if Charge > 0.0:
+                pH1 = pH
+                Charge1 = Charge
+            else:
+                pH2 = pH
+                Charge2 = Charge
 
         return pH
-	
-
-
