@@ -928,7 +928,7 @@ class _HSPConsumer:
         self._hsp = Record.HSP()
 
     def score(self, line):
-        self._hsp.score, self._hsp.bits = _re_search(
+        self._hsp.bits, self._hsp.score = _re_search(
             r"Score =\s*([0-9.e+]+) bits \(([0-9]+)\)", line,
             "I could not find the score in line\n%s" % line)
         self._hsp.score = _safe_float(self._hsp.score)
