@@ -20,102 +20,84 @@ http://fields.scripps.edu/DTASelect/20010710-pI-Algorithm.pdf
 
 """
 
-pKinternal = {'D':4.05, 'E':4.45, 'H':5.98, 'C':9.0, 'K':10.0, 'Y':10.0, 'R':12.0}
+positive_pKs = { 'Nterm': 7.5, 'K': 10.0, 'R': 12.0, 'H':5.98 }
+negative_pKs = { 'Cterm': 3.55, 'D': 4.05, 'E': 4.45, 'C':9.0, 'Y':10.0 }
 pKcterminal= {'D':4.55, 'E':4.75}
 pKnterminal = {'A':7.59, 'M':7.0, 'S':6.93, 'P':8.36, 'T':6.82, 'V':7.44, 'E':7.7}
-
-neg = ['D', 'E', 'C', 'Y', 'Cterm']
-pos = ['R', 'K', 'H', 'Nterm']
+charged_aas = ('K', 'R', 'H', 'D', 'E', 'C', 'Y')
 
 # access this module through ProtParam.ProteinAnalysis class.
 # first make a ProteinAnalysis object and then call its isoelectric_point method.
 class IsoelectricPoint:
-	def __init__(self, ProteinSequence, AminoAcidsContent):
-		self.sequence = ProteinSequence
-		self.amino_acids_content = AminoAcidsContent
-	
-	
+    def __init__(self, ProteinSequence, AminoAcidsContent):
+        self.sequence = ProteinSequence        
+        self.charged_aas_content = self._select_charged(AminoAcidsContent)
+
+    # This function creates a dictionary with the contents of each charged aa, 
+    # plus Cterm and Nterm.
+    def _select_charged(self, AminoAcidsContent):
+        charged = {}    
+        for aa in charged_aas:
+            charged[aa] = float(AminoAcidsContent[aa])
+        charged['Nterm'] = 1.0
+        charged['Cterm'] = 1.0
+        return charged
+
 	#This function calculates the total charge of the protein at a given pH.		
-	def _chargeR(self, pH, Cterm=0, Nterm=0):
-		NegScore = 0.0
-		PosScore = 0.0
-		# make a local dictionary with the relevant amino acids
-		ChargedAminoAcids={}
-		for i in pKinternal.keys():
-			ChargedAminoAcids[i] = self.amino_acids_content[i]
-		
-		for i in ChargedAminoAcids.keys():
-			#first calculate the score per amino acid
-			score = ChargedAminoAcids[i] * self._cr_ratio(pKinternal[i], pH, i)
-			# determine if it goes to positive or negative
-			if i in pos:
-				PosScore += score
-			elif i in neg:
-				NegScore += score
-				
-		# now add the score for C and N terminals.
-		if Nterm == 0:	
-			PosScore += self._cr_ratio(7.5, pH ,'Nterm')
-		else:
-			PosScore += self._cr_ratio(Nterm, pH ,'Nterm')
-		
-		if Cterm == 0:
-			NegScore += self._cr_ratio(3.55, pH ,'Cterm')
-		else:
-			NegScore += self._cr_ratio(Cterm, pH ,'Cterm')
-			
-		return PosScore-NegScore
+    def _chargeR(self, pH, pos_pKs, neg_pKs):
+        PositiveCharge = 0.0
+        for aa, pK in pos_pKs.iteritems():         
+             CR = 10**(pK-pH)
+             partial_charge = CR/(CR+1.0)
+             PositiveCharge += self.charged_aas_content[aa] * partial_charge 
+
+        NegativeCharge = 0.0
+        for aa, pK in neg_pKs.iteritems():         
+             CR = 10**(pH-pK)
+             partial_charge = CR/(CR+1.0)
+             NegativeCharge += self.charged_aas_content[aa] * partial_charge 
+
+        return PositiveCharge - NegativeCharge       
 	
 	# This is the action function, it tries different pH until the charge of the protein is 0 (or close).
-	def pi(self):		
-		if self.sequence[0] in pKnterminal.keys():
-			Nterm = pKnterminal[self.sequence[0]]
-		else:
-			Nterm = 0
-			
-		if self.sequence[-1] in pKcterminal.keys():
-			Cterm = pKcterminal[self.sequence[-1]]
-		else:
-			Cterm = 0
-			
-		pH = 7.0
-		CutBy = 3.5
-		Charge = self._chargeR(pH, Cterm, Nterm)
+    def pi(self):        
+        pos_pKs = dict(positive_pKs)
+        neg_pKs = dict(negative_pKs)
+        nterm = self.sequence[0]
+        cterm = self.sequence[-1]    
+        if nterm in pKnterminal.keys():
+            pos_pKs['Nterm'] = pKnterminal[nterm]
+        if cterm in pKcterminal.keys():
+            neg_pKs['Cterm'] = pKcterminal[cterm]
 
-		while CutBy > 0.0001: # this loop is usually good enough to get the job done.
-			pH1=pH+CutBy
-			pH2=pH-CutBy
-			Charge1 = self._chargeR(pH1, Cterm, Nterm)
-			Charge2 = self._chargeR(pH2, Cterm, Nterm)
+        pH = 7.0
+        CutBy = 3.5
+        Charge = self._chargeR(pH, pos_pKs, neg_pKs)
+        while CutBy > 0.0001: # this loop is usually good enough to get the job done.
+            pH1=pH+CutBy
+            pH2=pH-CutBy
+            Charge1 = self._chargeR(pH1, pos_pKs, neg_pKs)
+            Charge2 = self._chargeR(pH2, pos_pKs, neg_pKs)
 
-			if abs(Charge1) < abs(Charge2):
-				Charge = Charge1
-				pH = pH1
-			else:
-				Charge = Charge2
-				pH = pH2
-			CutBy = CutBy/2.0
+            if abs(Charge1) < abs(Charge2):
+                Charge = Charge1
+                pH = pH1
+            else:
+                Charge = Charge2
+                pH = pH2
+            CutBy = CutBy/2.0
 			
 		
-		# some times the charge is still higher or lower than zero. in such case we fix it in a step-wise way.
-		if abs(Charge) > 0.1:
-			while abs(Charge) > 0.1:
-				if Charge > 0:
-					pH += 0.001
-				else:
-					pH -= 0.001
-				Charge = self._chargeR(pH, Cterm, Nterm)
-				
-		return pH
+        # sometimes the charge is still higher or lower than zero. in such case we fix it in a step-wise way.
+        if abs(Charge) > 0.01:
+            while abs(Charge) > 0.01:
+                if Charge > 0:
+                    pH += 0.001
+                else:
+                    pH -= 0.001
+                Charge = self._chargeR(pH, pos_pKs, neg_pKs)
+
+        return pH
 	
-	# This function calculates the charge on one amino acid at a specific pH.	
-	def _cr_ratio(self, pk, ph, i):
-		if i in pos:
-			CR=10**(pk-ph)
-		elif i in neg:
-			CR=10**(ph-pk)
-		else:
-			raise KeyError ("amino acid is neither positive nor negative. check dictionary.")
-		return (CR/(CR+1.0))
-	
+
 
