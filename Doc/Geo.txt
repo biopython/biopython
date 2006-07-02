@@ -7,7 +7,7 @@ Geo
 
 GEO is a gene expression and hybridization array data repository.
 
-The Geo ( ene Expression Omnibus module works with Geo-formatted sequence data.
+The Geo (Gene Expression Omnibus) module works with Geo-formatted sequence data.
 Data is available at:
 http://www.ncbi.nlm.nih.gov/geo/
 

@@ -65,7 +65,7 @@
 
 \title{Biopython Tutorial and Cookbook}
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck}
-\date{Last Update--16 Feb 2005}
+\date{Last Update--2 July 2006}
 
 \maketitle
 \tableofcontents
@@ -3388,6 +3388,80 @@ record
     terminator
 \end{verbatim}
 
+\subsection{KEGG}
+
+\subsubsection{Bio.KEGG.Enzyme}
+
+The Bio.KEGG.Enzyme module works with the 'enzyme' file from the
+Ligand database, which can be obtained from the KEGG project. 
+(\ahrefurl{\url{http://www.genome.ad.jp/kegg}}).
+
+The Bio.KEGG.Enzyme.Record contains all the information stored in
+a KEGG/Enzyme record. Its string representation also is a valid KEGG
+record, but it is NOT guaranteed to be equivalent to the record
+from which it was produced.
+
+The Bio.KEGG.Enzyme.Scanner produces the following events:
+
+\begin{verbatim}
+entry 
+name 
+classname
+sysname
+reaction
+substrate
+product
+inhibitor 
+cofactor
+effector
+comment 
+pathway_db 
+pathway_id
+pathway_desc
+organism 
+gene_id
+disease_db
+disease_id 
+disease_desc
+motif_db
+motif_id
+motif
+structure_db 
+structure_id
+dblinks_db
+dblinks_id
+record_end
+\end{verbatim}
+
+\subsubsection{Bio.KEGG.Compound}
+
+The Bio.KEGG.Compound module works with the 'compound' file from the
+Ligand database, which can be obtained from the KEGG project. 
+(\ahrefurl{\url{http://www.genome.ad.jp/kegg}}).
+
+The Bio.KEGG.Compound.Record contains all the information stored in
+a KEGG/Compound record. Its string representation also is a valid KEGG
+record, but it is NOT guaranteed to be equivalent to the record
+from which it was produced.
+
+The Bio.KEGG.Enzyme.Scanner produces the following events:
+
+\begin{verbatim}
+entry 
+name 
+formula 
+pathway_db 
+pathway_id
+pathway_desc
+enzyme_id
+enzyme_role
+structure_db 
+structure_id
+dblinks_db
+dblinks_id
+record_end
+\end{verbatim}
+
 \subsection{Fasta}
 The Fasta.py module works with FASTA-formatted sequence data.
 The Fasta Scanner produces the following events:
@@ -3525,6 +3599,81 @@ keywords
     keyword
 footer
     copyright
+\end{verbatim}
+
+\subsection{NBRF}
+
+The NBRF module works with NBRF-formatted sequence data.  Data is available at:
+\ahrefurl{\url{http://www-nbrf.georgetown.edu/pirwww/pirhome.shtml}}.
+
+The NBRF Scanner produces the following events:
+\begin{verbatim}
+    sequence_type
+    sequence_name
+    comment
+    sequence
+\end{verbatim}
+
+\subsection{Ndb}
+
+The Ndb module works with Ndb-formatted sequence data.  Data is available at:
+\ahrefurl{\url{http://ndbserver.rutgers.edu/NDB/NDBATLAS/index.html}}.
+
+The Ndb record contains the following items:
+\begin{verbatim}
+        Id
+        Features
+        Name
+        Sequence
+        Citation
+        Space Group
+        Cell Constants
+        Crystallization Conditions
+        Refinement
+        Coordinates
+\end{verbatim}
+
+Sequence is an instance of Crystal which is dictionary of Chain objects.  Each chain is a sequence of PDB hetero items.  Citation is a list of Reference objects.  Crystal, Reference, Chain and Hetero are part of the biopython distribution.
+
+\subsection{MetaTool}
+
+The MetaTool parser works with MetaTool output files.  MetaTool implements algorithms to decompose a biochemical pathway into a combination of simpler networks that are more accessible to analysis.
+
+The MetaTool web page is \ahrefurl{\url{http://pinguin.biologie.uni-jena.de/bioinformatik/networks/}}.
+
+The MetaTool parser requires Numerical Python. Information is available at
+\ahrefurl{\url{http://sourceforge.net/projects/numpy}}.
+
+The Bio.MetaTool.Scanner produces the following events:
+\begin{verbatim}
+input_file_name
+num_int_metabolites
+num_reactions
+metabolite_line
+unbalanced_metabolite
+num_rows
+num_cols
+irreversible_vector
+branch_metabolite
+non_branch_metabolite
+stoichiometric_tag
+kernel_tag
+subsets_tag
+reduced_system_tag
+convex_basis_tag
+conservation_relations_tag
+elementary_modes_tag
+reaction
+enzyme
+matrix_row
+sum_is_constant_line
+end_stochiometric
+end_kernel
+end_subsets
+end_reduced_system
+end_convex_basis
+end_conservation_relations
+end_elementary_modes
 \end{verbatim}
 
 \section{Substitution Matrices}
