@@ -1,6 +1,6 @@
 <!--    
                 This is the Current DTD for Entrez eSearch
-$Id: eSearch_020511.dtd,v 1.1 2003-06-13 00:49:37 dalke Exp $
+$Id: eSearch_020511.dtd,v 1.2 2006-07-16 18:26:21 mdehoon Exp $
 -->
 <!-- ================================================================= -->
 
@@ -19,7 +19,7 @@ $Id: eSearch_020511.dtd,v 1.1 2003-06-13 00:49:37 dalke Exp $
 <!ELEMENT        WebEnv         (#PCDATA)>	<!-- \S+ -->
  
 <!ELEMENT       Explode         (#PCDATA)>	<!-- (Y|N) -->
-<!ELEMENT       OP              (#PCDATA)>	<!-- (AND|OR|NOT|RANGE) -->
+<!ELEMENT       OP              (#PCDATA)>	<!-- (AND|OR|NOT|RANGE|GROUP) -->
 <!ELEMENT       IdList          (Id*)>
 
 <!ELEMENT       Translation     (From, To)>
@@ -32,11 +32,12 @@ $Id: eSearch_020511.dtd,v 1.1 2003-06-13 00:49:37 dalke Exp $
 
 <!ELEMENT        ERROR                  (#PCDATA)>	<!-- .+ -->
 
-<!ELEMENT        OutputMessage		(#PCDATA)>	<!-- .+ -->
+<!ELEMENT        OutputMessage		    (#PCDATA)>	<!-- .+ -->
 <!ELEMENT        QuotedPhraseNotFound   (#PCDATA)>	<!-- .+ -->
 <!ELEMENT        PhraseIgnored          (#PCDATA)>	<!-- .+ -->
 <!ELEMENT        FieldNotFound          (#PCDATA)>	<!-- .+ -->
 <!ELEMENT        PhraseNotFound         (#PCDATA)>	<!-- .+ -->
+<!ELEMENT        QueryTranslation       (#PCDATA)>	<!-- .+ -->
 
 <!ELEMENT        ErrorList      (PhraseNotFound*,FieldNotFound*)>
 <!ELEMENT        WarningList   	(PhraseIgnored*,
@@ -53,7 +54,8 @@ $Id: eSearch_020511.dtd,v 1.1 2003-06-13 00:49:37 dalke Exp $
                                     WebEnv?,
                                     IdList,
                                     TranslationSet,
-                                    TranslationStack?
+                                    TranslationStack?,
+                                    QueryTranslation
                                     )?
                                 ) | ERROR),
 				ErrorList?,

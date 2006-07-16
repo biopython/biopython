@@ -5,7 +5,7 @@ import Bio.EUtils.POM
 
 #     
 #                 This is the Current DTD for Entrez eSearch
-# $Id: eSearch_020511.py,v 1.2 2003-06-13 02:08:57 chapmanb Exp $
+# $Id: eSearch_020511.py,v 1.3 2006-07-16 18:26:21 mdehoon Exp $
 # 
 #  ================================================================= 
 class Count(Bio.EUtils.POM.ElementNode):
@@ -67,7 +67,7 @@ class OP(Bio.EUtils.POM.ElementNode):
 	CONTENTMODEL = Bio.EUtils.POM.ContentModel(('', [('#PCDATA', '')], ''))
 
 
-#  (AND|OR|NOT|RANGE) 
+#  (AND|OR|NOT|RANGE|GROUP) 
 class IdList(Bio.EUtils.POM.ElementNode):
 	CONTENTMODEL = Bio.EUtils.POM.ContentModel(('', [(u'Id', u'*')], ''))
 
@@ -119,6 +119,11 @@ class PhraseNotFound(Bio.EUtils.POM.ElementNode):
 
 
 #  .+ 
+class QueryTranslation(Bio.EUtils.POM.ElementNode):
+	CONTENTMODEL = Bio.EUtils.POM.ContentModel(('', [('#PCDATA', '')], ''))
+
+
+#  .+ 
 class ErrorList(Bio.EUtils.POM.ElementNode):
 	CONTENTMODEL = Bio.EUtils.POM.ContentModel((u',', [(u'PhraseNotFound', u'*'), (u'FieldNotFound', u'*')], ''))
 
@@ -129,5 +134,5 @@ class WarningList(Bio.EUtils.POM.ElementNode):
 
 #  Response tags 
 class eSearchResult(Bio.EUtils.POM.ElementNode):
-	CONTENTMODEL = Bio.EUtils.POM.ContentModel((u',', [(u'|', [(u',', [(u'Count', ''), (u',', [(u'RetMax', ''), (u'RetStart', ''), (u'QueryKey', u'?'), (u'WebEnv', u'?'), (u'IdList', ''), (u'TranslationSet', ''), (u'TranslationStack', u'?')], u'?')], ''), (u'ERROR', '')], ''), (u'ErrorList', u'?'), (u'WarningList', u'?')], ''))
+	CONTENTMODEL = Bio.EUtils.POM.ContentModel((u',', [(u'|', [(u',', [(u'Count', ''), (u',', [(u'RetMax', ''), (u'RetStart', ''), (u'QueryKey', u'?'), (u'WebEnv', u'?'), (u'IdList', ''), (u'TranslationSet', ''), (u'TranslationStack', u'?'), (u'QueryTranslation', '')], u'?')], ''), (u'ERROR', '')], ''), (u'ErrorList', u'?'), (u'WarningList', u'?')], ''))
 
