@@ -9,7 +9,7 @@ typedef struct _Trie *Trie;
  * details of this structure.  When finished, each Trie should be
  * freed with Trie_del.
  */
-Trie Trie_new();
+Trie Trie_new(void);
 
 
 /* Trie_del
