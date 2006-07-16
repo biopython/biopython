@@ -4,6 +4,14 @@
 
 #include "trie.h"
 
+/* The following is necessary to make sure that trie.pyd won't link
+ * to msvcrt.dll in addition to msvcr71.dll on Windows.
+ * See Bug #1767 on Bugzilla.
+ */
+#ifdef __MINGW32__
+#  define strdup _strdup
+#endif
+
 struct _Transition;   /* Forward declaration, needed in _Trie. */
 
 
@@ -35,7 +43,7 @@ typedef struct _Transition {
 static unsigned char KEY[MAX_KEY_LENGTH];
 
 
-Trie Trie_new() {
+Trie Trie_new(void) {
     Trie trie;
 
     if(!(trie = (Trie)malloc(sizeof(struct _Trie))))
@@ -734,7 +742,7 @@ Trie Trie_deserialize(int (*read)(void *wasread, const int length, void *data),
     return trie;
 }
 
-void test() {
+void test(void) {
     Trie trie;
 
     printf("Hello world!\n");
