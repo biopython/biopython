@@ -36,7 +36,6 @@ download_many         Download many GenBank records.
 
 """
 import cStringIO
-import warnings
 
 # other Biopython stuff
 from Bio.expressions import genbank
@@ -111,14 +110,13 @@ class Dictionary:
 class Iterator:
     """Iterator interface to move over a file of GenBank entries one at a time.
     """
-    def __init__(self, handle, parser = None, has_header = 0):
+    def __init__(self, handle, parser = None):
         """Initialize the iterator.
 
         Arguments:
         o handle - A handle with GenBank entries to iterate through.
         o parser - An optional parser to pass the entries through before
         returning them. If None, then the raw entry will be returned.
-        o has_header - Deprecated, headers are now autodetected.
         """
         from Martel import RecordReader
         from Bio import File
@@ -1787,8 +1785,7 @@ class NCBIDictionary:
     """
     VALID_DATABASES = ['nucleotide', 'protein']
     VALID_FORMATS = ['genbank', 'fasta']
-    def __init__(self, database, format, delay = None,
-                 retmax = None, parser=None):
+    def __init__(self, database, format, delay = None):
         """Initialize an NCBI dictionary to retrieve sequences.
 
         Create a new Dictionary to access GenBank.  Valid values for
@@ -1801,10 +1798,6 @@ class NCBIDictionary:
         to change the results into another form.  If unspecified, then
         the raw contents of the file will be returned.
         """
-        if delay or retmax:
-            warnings.warn("Setting delay or retmax parameters has no effect.",
-                    DeprecationWarning)
-        
         self.parser = parser
         if database not in self.__class__.VALID_DATABASES:
             raise ValueError("Invalid database %s, should be one of %s" %
@@ -1866,7 +1859,6 @@ class NCBIDictionary:
 
 def search_for(search, database='nucleotide',
                reldate=None, mindate=None, maxdate=None,
-               batchsize=None, delay=None, callback_fn=None,
                start_id = 0, max_ids = 50000000):
     """search_for(search[, reldate][, mindate][, maxdate]
     [, batchsize][, delay][, callback_fn][, start_id][, max_ids]) -> ids
@@ -1883,9 +1875,6 @@ def search_for(search, database='nucleotide',
     batchsize, delay and callback_fn are old parameters for
     compatibility -- do not set them.
     """
-    if batchsize or delay or callback_fn:
-        warnings.warn("Passing old parameters to search_for.",
-                DeprecationWarning)
     # deal with dates
     date_restrict = None
     if reldate:
@@ -1901,9 +1890,7 @@ def search_for(search, database='nucleotide',
         ids.append(db_id.dbids.ids[0])
     return ids
 
-def download_many(ids, database = 'nucleotide', callback_fn = None,
-                  broken_fn=None, delay=None, faildelay=None,
-                  batchsize=None, parser=None):
+def download_many(ids, database = 'nucleotide'):
     """download_many(ids, database) -> handle of results
 
     Download many records from GenBank.  ids is a list of gis or
@@ -1912,10 +1899,6 @@ def download_many(ids, database = 'nucleotide', callback_fn = None,
     callback_fn, broken_fn, delay, faildelay, batchsize, parser are old
     parameter for compatibility. They should not be used.
     """
-    if callback_fn or broken_fn or delay or faildelay or batchsize or parser:
-        warnings.warn("Passing old parameters to download_many.",
-                DeprecationWarning)
-    
     db_ids = DBIds(database, ids)
     if database in ['nucleotide']:
         format = 'gb'
