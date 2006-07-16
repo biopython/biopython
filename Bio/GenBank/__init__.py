@@ -1785,7 +1785,7 @@ class NCBIDictionary:
     """
     VALID_DATABASES = ['nucleotide', 'protein']
     VALID_FORMATS = ['genbank', 'fasta']
-    def __init__(self, database, format, delay = None):
+    def __init__(self, database, format, parser = None):
         """Initialize an NCBI dictionary to retrieve sequences.
 
         Create a new Dictionary to access GenBank.  Valid values for
