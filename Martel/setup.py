@@ -142,7 +142,7 @@ class run_install_tests(run_local_tests):
         os.chdir(this_dir)
 
 setup(name = "Martel",
-      version = "0.8",
+      version = "1.42",
       description = "Parse flat-file formats as if they are in XML",
       author = "Dalke Scientific Software, LLC; " \
                "member of the The Biopython Consortium",
