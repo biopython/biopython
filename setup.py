@@ -388,11 +388,6 @@ NUMPY_PACKAGES = [
 ]
 
 EXTENSIONS = [
-    Extension('Bio.ckMeans',
-              ['Bio/ckMeansmodule.c',
-               'Bio/csupport.c'],
-              include_dirs=["Bio"]
-              ),
     Extension('Bio.clistfns',
               ['Bio/clistfnsmodule.c']
               ),
