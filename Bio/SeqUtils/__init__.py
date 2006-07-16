@@ -16,41 +16,6 @@ from Bio import Alphabet
 from Bio.Alphabet import IUPAC
 from Bio.Data import IUPACData, CodonTable
 
-### The following section was replaced by the functions complement,
-### forward_complement in Bio.Seq. The code here can be removed eventually
-### (using deprecation warnings for now).
-
-_before = ''.join(IUPACData.ambiguous_dna_complement.keys())
-_after = ''.join(IUPACData.ambiguous_dna_complement.values())
-_ttable = maketrans(_before, _after)
-
-def complement(seq):
-    """Returns the complementary sequence (NOT antiparallel).
-
-    This works on string sequences, not on Bio.Seq objects.
-    """
-    #Much faster on really long sequences than the previous loop based one.
-    #thx to Michael Palmer, University of Waterloo
-    import warnings
-    warnings.warn(
-        "complement in Bio.SeqUtils is deprecated; please use complement in Bio.Seq instead",
-        category=DeprecationWarning)
-    return seq.translate(_ttable)
-
-def antiparallel(seq):
-   """returns reversed complementary sequence ( = other strand )
-
-   This works on string sequences, not on Bio.Seq objects.
-   """
-   import warnings
-   warnings.warn(
-       "antiparallel in Bio.SeqUtils is deprecated; please use reverse_complement in Bio.Seq instead",
-       category=DeprecationWarning)
-   s = complement(seq)
-   s = reverse(s)
-   return s
-
-### End section to be removed.
 
 ######################################
 # DNA
