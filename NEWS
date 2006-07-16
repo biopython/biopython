@@ -4,6 +4,17 @@ News for the Biopython Project
 This file contains release notes and general news 
 about the biopython project.
 
+July 16, 2006: Biopython 1.42 released.
+
+Bio.GenBank: New parser by Peter, which doesn't rely on Martel.
+
+Numerous updates in Bio.Nexus and Bio.Geo.
+
+Bio.Cluster became (somewhat) objected-oriented.
+
+Lots of bug fixes, and updates to the documentation.
+
+
 October 28, 2005: Biopython 1.41 released.
 Major changes:
 
