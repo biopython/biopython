@@ -738,7 +738,8 @@ def blast(program, database, query,
     from Bio.WWW import NCBI
     
     import warnings
-    warnings.warn("blast is deprecated.  Please use qblast instead.")
+    warnings.warn("blast is deprecated.  Please use qblast instead.",
+                  DeprecationWarning)
     
     # NCBI Blast is hard to work with.  The user enters a query, and then
     # it returns a "reference" page which contains a button that the user
@@ -973,7 +974,8 @@ def blasturl(program, datalib, sequence,
     
     """
     import warnings
-    warnings.warn("blasturl is deprecated.  Please use qblast instead.")
+    warnings.warn("blasturl is deprecated.  Please use qblast instead.",
+                  DeprecationWarning)
     lines = []
     lines.append('PROGRAM %s' % program)
     lines.append('DATALIB %s' % datalib)
