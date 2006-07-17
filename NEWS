@@ -10,7 +10,7 @@ Bio.GenBank: New parser by Peter, which doesn't rely on Martel.
 
 Numerous updates in Bio.Nexus and Bio.Geo.
 
-Bio.Cluster became (somewhat) objected-oriented.
+Bio.Cluster became (somewhat) object-oriented.
 
 Lots of bug fixes, and updates to the documentation.
 
