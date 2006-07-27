@@ -181,9 +181,9 @@ class build_ext_biopython(build_ext):
         # build this extension by default
         build = 1
         if hasattr(ext, "language") and ext.language == "c++":
-            # places where C++ just won't build right now:
-            # mingw32, msvc -- windows just needs work in general
-            if self.compiler.compiler_type in ["mingw32", "msvc"]:
+            # C++ didn't build in the past with msvc
+            # mingw32 seems fine now
+            if self.compiler.compiler_type=="msvc":
                 build = 0
             # fix for distutils where C++ is not handled well. This includes
             # Python 2.2.x -- need to find the C++ compiler
