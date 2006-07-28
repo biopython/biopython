@@ -109,6 +109,27 @@ you see ImportErrors."""
         if not get_yes_or_no(
             "Do you want to continue this installation?", default):
             return 0
+        
+    
+    # Compile KDTree ? Not compiled by default
+    print "\n*** Bio.KDTree *** NOT built by default "
+    kdtree_msg = """
+The Bio.PDB.NeighborSearch module depends on the Bio.KDTree module,
+which in turn, depends on C++ code that does not compile cleanly on
+all platforms. Hence, Bio.KDTree is not built by default.
+
+Would you like to build Bio.KDTree ?"""
+
+    if get_yes_or_no (kdtree_msg, 0):
+        NUMPY_PACKAGES.append("Bio.KDTree")
+        NUMPY_EXTENSIONS.append(
+            CplusplusExtension('Bio.KDTree._CKDTree', 
+                               ["Bio/KDTree/KDTree.cpp",
+                                "Bio/KDTree/KDTree.swig.cpp"],
+                               libraries=["stdc++"],
+                               language="c++"))
+    
+    
     return 1
 
 class install_biopython(install):
@@ -384,7 +405,6 @@ PACKAGES = [
 NUMPY_PACKAGES = [
     'Bio.Affy',
     'Bio.Cluster',
-#   'Bio.KDTree', # disabled by default to avoid C++ compilation errors
 ]
 
 EXTENSIONS = [
@@ -443,12 +463,6 @@ NUMPY_EXTENSIONS = [
                'Bio/Cluster/linpack.c'],
               include_dirs=["Bio/Cluster"]
               ),
-#   CplusplusExtension('Bio.KDTree._CKDTree', # Disabled by default to avoid
-#             ["Bio/KDTree/KDTree.cpp",       # C++ compilation errors
-#              "Bio/KDTree/KDTree.swig.cpp"],
-#             libraries=["stdc++"],
-#             language="c++"
-#             ),
 #   CplusplusExtension('Bio.Affy._cel',  # The file parser in celmodule.cc was
 #            ['Bio/Affy/celmodule.cc'],  # replaced by a scanner/consumer in
 #            language="c++"              # CelFile.py, using Biopython's
