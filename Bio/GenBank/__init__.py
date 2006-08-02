@@ -118,17 +118,7 @@ class Iterator:
         o parser - An optional parser to pass the entries through before
         returning them. If None, then the raw entry will be returned.
         """
-        from Martel import RecordReader
-        from Bio import File
-        if isinstance(handle, File.UndoHandle):
-            _handle = handle
-        else:
-            _handle = File.UndoHandle(handle)
-        # skip ahead until we find first record
-        while _handle.peekline() and _handle.peekline().find("LOCUS") < 0:
-            _handle.readline()
-
-        self._reader = RecordReader.StartsWith(_handle, "LOCUS")          
+        self.handle = handle
         self._parser = parser
 
     def next(self):
@@ -136,15 +126,19 @@ class Iterator:
 
         Will return None if we ran out of records.
         """
-        from Bio import File
-        data = self._reader.next()
+        if self._parser is None :
+            lines = []
+            while True :
+                line = self.handle.readline()
+                if not line : return None #Premature end of file?
+                lines.append(line)
+                if line.rstrip() == "//" : break
+            return "".join(lines)
+        try :
+            return self._parser.parse(self.handle)
+        except StopIteration :
+            return None
 
-        if self._parser is not None:
-            if data:
-                return self._parser.parse(File.StringHandle(data))
-
-        return data
-    
     def __iter__(self):
         return iter(self.next, None)
 
@@ -1365,8 +1359,7 @@ class _Scanner:
         # skip ahead until we find first record
         line = handle.readline()
         while line.find('LOCUS       ') <> 0:
-            assert line, \
-                   'Unexpected end of file while looking for LOCUS line'
+            if not line : raise StopIteration
             if self._debug : print "Ignoring line:\n" + line
             line = handle.readline()
 
