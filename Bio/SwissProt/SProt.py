@@ -402,6 +402,9 @@ class _Scanner:
         self._scan_line('OX', uhandle, consumer.taxonomy_id,
                         any_number=1)
 
+    def _scan_oh(self, uhandle, consumer):
+        self._scan_line('OH', uhandle, consumer.organism_host, any_number=1)
+
     def _scan_reference(self, uhandle, consumer):
         while 1:
             if safe_peekline(uhandle)[:2] != 'RN':
@@ -488,6 +491,7 @@ class _Scanner:
         _scan_og,
         _scan_oc,
         _scan_ox,
+        _scan_oh,
         _scan_reference,
         _scan_cc,
         _scan_dr,
@@ -606,11 +610,11 @@ class _RecordConsumer(AbstractConsumer):
             # DT   01-APR-2004, entry version 14.
             #
             #This is a new style DT line...
-            print "WARNING - Ignoring line: " + line
+            print "WARNING - Ignoring line: " + line.rstrip()
             # TODO - Expose the new version and database information
             #        to the record object.
         else:
-            raise SyntaxError, "I don't understand the date line %s" % line        
+            raise SyntaxError, "I don't understand the date line %s" % line
     
     def description(self, line):
         self.data.description = self.data.description + line[5:]
@@ -651,6 +655,10 @@ class _RecordConsumer(AbstractConsumer):
         else:
             ids = line.split(',')
         self.data.taxonomy_id.extend([id.strip() for id in ids])
+
+    def organism_host(self, line):
+        # Not Implemented...
+        pass
     
     def reference_number(self, line):
         rn = line[5:].rstrip()
@@ -710,28 +718,25 @@ class _RecordConsumer(AbstractConsumer):
         # reported by edvard@farmasi.uit.no
         # and these can be more complicated like:
         # RX   MEDLINE=95385798; PubMed=7656980;
+        # RX   PubMed=15060122; DOI=10.1136/jmg 2003.012781;
         # We look for these cases first and deal with them
-        if line.find( "=") != -1:
-            cols = line.split()
-            assert len(cols) > 1, "I don't understand RX line %s" % line
-
-            for info_col in cols[1:]:
-                id_cols = info_col.split("=")
-                if len(id_cols) == 2:
-                    self.data.references[-1].references.append(
-                        (self._chomp(id_cols[0]), self._chomp(id_cols[1])))
-                else:
-                    raise AssertionError("I don't understand RX line %s"
-                                         % line)
+        if line.find("=") != -1:
+            cols = line[2:].split("; ")
+            cols = [x.strip() for x in cols]
+            cols = [x for x in cols if x]
+            for col in cols:
+                x = col.split("=")
+                assert len(x) == 2, "I don't understand RX line %s" % line
+                key, value = self._chomp(x[0]), self._chomp(x[1])
+                ref = self.data.references[-1].references
+                ref.append((key, value))
         # otherwise we assume we have the type 'RX   MEDLINE; 85132727.'
         else:
             cols = line.split()
             # normally we split into the three parts
-            if len(cols) == 3:
-                self.data.references[-1].references.append(
-                    (self._chomp(cols[1]), self._chomp(cols[2])))
-            else:
-                raise AssertionError("I don't understand RX line %s" % line)
+            assert len(cols) == 3, "I don't understand RX line %s" % line
+            self.data.references[-1].references.append(
+                (self._chomp(cols[1]), self._chomp(cols[2])))
     
     def reference_author(self, line):
         assert self.data.references, "RA: missing RN"
