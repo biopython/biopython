@@ -1,14 +1,3 @@
-#
-#
-#
-#
-#   CHECK SELF.MAX_SUPPORT
-#
-#
-#
-#
-
-
 
 #
 # Trees.py 
@@ -75,7 +64,6 @@ class Tree(Nodes.Chain):
     def _parse(self,tree):
         """Parses (a,b,c...)[[[xx]:]yy] into subcomponents and travels down recursively."""
         
-        #print 'parsing',tree
         if tree.count('(')!=tree.count(')'):
             raise TreeError, 'Parentheses do not match in (sub)tree: '+tree
         if tree.count('(')==0: # a leaf
@@ -353,6 +341,23 @@ class Tree(Nodes.Chain):
                 else:
                     return -1   # taxon set was not with successors, for loop exhausted
 
+    def is_bifurcating(self,node=None):
+        """Return True if tree downstream of node is strictly bifurcating."""
+        if not node:
+            node=self.root
+        if node==self.root and len(self.node(node).succ)==3: #root can be trifurcating, because it has no ancestor
+            return self.is_bifurcating(self.node(node).succ[0]) and \
+                    self.is_bifurcating(self.node(node).succ[1]) and \
+                    self.is_bifurcating(self.node(node).succ[2])
+        if len(self.node(node).succ)==2:
+            return self.is_bifurcating(self.node(node).succ[0]) and self.is_bifurcating(self.node(node).succ[1])
+        elif len(self.node(node).succ)==0:
+            return True
+        else:
+            return False
+
+
+
     def branchlength2support(self):
         """Move values stored in data.branchlength to data.support, and set branchlength to 0.0
 
@@ -434,7 +439,7 @@ class Tree(Nodes.Chain):
         print '\n'.join(['%3s %32s %15s %15s %8s %10s %8s' % l for l in table])
         print '\nRoot: ',self.root
 
-    def to_string(self,support_as_branchlengths=False,branchlengths_only=False,plain=True):
+    def to_string(self,support_as_branchlengths=False,branchlengths_only=False,plain=True,plain_newick=False):
         """Return a paup compatible tree line.
        
         to_string(self,support_as_branchlengths=False,branchlengths_only=False,plain=True)
@@ -480,18 +485,22 @@ class Tree(Nodes.Chain):
                 return '(%s)%s' % (','.join(map(newickize,self.node(node).succ)),make_info_string(self.node(node).data))
             return subtree
                     
-        treeline='tree '
+        treeline=['tree']
         if self.name:
-            treeline+=self.name
+            treeline.append(self.name)
         else:
-            treeline+='a_tree'
-        treeline+=' = '
+            treeline.append('a_tree')
+        treeline.append('=')
         if self.weight<>1:
-            treeline+='[&W%s] ' % str(round(float(self.weight),3))
+            treeline.append('[&W%s]' % str(round(float(self.weight),3)))
         if self.rooted:
-            treeline+='[&R] '
-        treeline+='(%s);' % ','.join(map(newickize,self.node(self.root).succ))
-        return treeline 
+            treeline.append('[&R]')
+        treeline.append('(%s)' % ','.join(map(newickize,self.node(self.root).succ)))
+        treeline.append(';')
+        if plain_newick:
+            return treeline[-2]
+        else:
+            return ' '.join(treeline)
         
     def __str__(self):
         """Short version of to_string(), gives plain tree"""
