@@ -396,7 +396,7 @@ class Scop:
         des_list = []
         
 
-        # SQL cla table knows noting about 'ro'
+        # SQL cla table knows nothing about 'ro'
         if node.type == 'ro':
             for c in node.getChildren():
                 for d in self.getDescendentsFromSQL(c,type):
@@ -475,7 +475,7 @@ class Scop:
 
         cur.execute("DROP TABLE IF EXISTS cla")
         cur.execute("CREATE TABLE cla (sunid INT, sid CHAR(8), pdbid CHAR(4),\
-        residues VARCHAR(30), sccs CHAR(10), cl INT, cf INT, sf INT, fa INT,\
+        residues VARCHAR(50), sccs CHAR(10), cl INT, cf INT, sf INT, fa INT,\
         dm INT, sp INT, px INT, PRIMARY KEY (sunid), INDEX (SID) )")
 
         for n in self._sidDict.values():
