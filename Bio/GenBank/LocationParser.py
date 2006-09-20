@@ -302,12 +302,18 @@ class LocationParser(GenericParser):
         """
         return args[0].name
 
+
+_cached_scanner = LocationScanner()
 def scan(input):
-    scanner = LocationScanner()
-    return scanner.tokenize(input)
+    """Break a location string into a set of tokens"""
+    #scanner = LocationScanner()
+    #return scanner.tokenize(input)
+    return _cached_scanner.tokenize(input)
 
+_cached_parser = LocationParser()
 def parse(tokens):
+    """Go from a set of tokens to an object representation"""
     #print "I have", tokens
-    parser = LocationParser()
-    return parser.parse(tokens)
-
+    #parser = LocationParser()
+    #return parser.parse(tokens)
+    return _cached_parser.parse(tokens)
