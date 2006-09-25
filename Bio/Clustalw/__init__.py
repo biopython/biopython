@@ -386,8 +386,9 @@ class MultipleAlignCL:
         if self.type:
             cline = cline + " -TYPE=%s" % self.type
         if self.is_quick == 1:
-            #cline = cline + " -INTERACTIVE"
-            cline = cline + " -QUICKTREE"
+            #Some versions of clustalw are case sensitive,
+            #and require -quicktree rather than -QUICKTREE
+            cline = cline + " -quicktree"
         if self.allow_negative == 1:
             cline = cline + " -NEGATIVE"
 
