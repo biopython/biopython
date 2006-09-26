@@ -47,15 +47,10 @@
 double CALL clusterdistance (int nrows, int ncolumns, double** data, int** mask,
   double weight[], int n1, int n2, int index1[], int index2[], char dist,
   char method, int transpose);
-
-/* Chapter 3 */
-void CALL initran(void);
-
-/* Chapter 4 */
 double** CALL distancematrix (int ngenes, int ndata, double** data,
   int** mask, double* weight, char dist, int transpose);
 
-/* Chapter 5 */
+/* Chapter 3 */
 int getclustercentroids(int nclusters, int nrows, int ncolumns,
   double** data, int** mask, int clusterid[], double** cdata, int** cmask,
   int transpose, char method);
@@ -67,7 +62,7 @@ void CALL kcluster (int nclusters, int ngenes, int ndata, double** data,
 void CALL kmedoids (int nclusters, int nelements, double** distance,
   int npass, int clusterid[], double* error, int* ifound);
 
-/* Chapter 6 */
+/* Chapter 4 */
 typedef struct {int left; int right; double distance;} Node;
 /*
  * A Node struct describes a single node in a tree created by hierarchical
@@ -83,13 +78,13 @@ Node* CALL treecluster (int nrows, int ncolumns, double** data, int** mask,
   double weight[], int transpose, char dist, char method, double** distmatrix);
 void cuttree (int nelements, Node* tree, int nclusters, int clusterid[]);
 
-/* Chapter 7 */
+/* Chapter 5 */
 void CALL somcluster (int nrows, int ncolumns, double** data, int** mask,
   const double weight[], int transpose, int nxnodes, int nynodes,
   double inittau, int niter, char dist, double*** celldata,
   int clusterid[][2]);
 
-/* Chapter 8 */
+/* Chapter 6 */
 void CALL svd(int m, int n, double** u, double w[], double** v, int* ierr);
 
 /* Utility routines, currently undocumented */

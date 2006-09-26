@@ -997,12 +997,18 @@ PyTree_slice(PyTree* self, int i, int j)
   return result;
 }
 
+#if (PY_MAJOR_VERSION <= 2) & (PY_MINOR_VERSION <= 4)
+#define lenfunc inquiry
+#define ssizeargfunc intargfunc
+#define ssizessizeargfunc intintargfunc
+#endif
+
 static PySequenceMethods PyTree_sequence = {
-        (inquiry)PyTree_length, /*sq_length*/
+        (lenfunc)PyTree_length, /*sq_length*/
         NULL,                 /*sq_concat*/
         NULL,                 /*sq_repeat*/
-        (intargfunc)PyTree_item, /*sq_item*/
-        (intintargfunc)PyTree_slice, /*sq_slice*/
+        (ssizeargfunc)PyTree_item, /*sq_item*/
+        (ssizessizeargfunc)PyTree_slice, /*sq_slice*/
         NULL,                 /*sq_ass_item*/
         NULL,                 /*sq_ass_slice*/
         NULL                  /*sq_contains*/
