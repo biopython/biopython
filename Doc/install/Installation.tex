@@ -480,8 +480,10 @@ development.
 
 Based on which way you choose, you'll need to follow one of the following installation options. Read on for the platform you are working on.
 
-\subsection{Installing from source on UNIX and Mac OS X}
+\subsection{Installing on UNIX and Mac OS X}
 \label{sec:unix_install}
+
+\subsubsection{Installation from source on UNIX and Mac OS X}
 
 Biopython uses Distutils, the standard python installation package, for
 its installation. If you read the install instructions above you are
@@ -518,8 +520,8 @@ as well (normally called something like \verb|python-devel-2.4.rpm|).
 Johann Visagie has been kind enough to create (and keep updated) a FreeBSD port of Biopython. Thanks to the wonders of the ports system, this means that all you need to do to install Biopython on FreeBSD is do the following as root:
 
 \begin{verbatim}
-# cd /usr/ports/biology/py-biopython
-# make install
+cd /usr/ports/biology/py-biopython
+make install
 \end{verbatim}
 
 And voila! It's installed. 
@@ -527,7 +529,17 @@ And voila! It's installed.
 
 If you want more information on FreeBSD and things, Johann has written a nice primer for his FreeBSD EMBOSS port. This has lots of generally useful information, such as how to keep your ports tree up to date. If you are new to FreeBSD, you should definitely check it out at \ahrefurl{\url{ftp://ftp.no.embnet.org/pub/EMBOSS-extras/EMBOSS-FreeBSD-HOWTO.txt}}.
 
-\subsection{Installing on UNIX systems using RPMs}
+\subsubsection{Installation on Mac OS X using the fink package manager}
+
+Instead of installing from source, on Mac OS X you can also use the fink package manager, see \ahrefurl{\url{http://fink.sf.net}}. Fink will take care of downloading the source code and installing all needed packages for biopython, including python itself. Once you have installed fink, you can install biopython using:
+
+\begin{verbatim}
+fink install biopython-pyXX
+\end{verbatim}
+
+\noindent where XX is the python version you would like to use. Currently, python 2.3, 2.4, and 2.5 are available through fink on Mac OS X 10.4, so you would have to replace XX with 23, 24, or 25, respectively. Most likely, you will have to enable the unstable tree of fink in order to install the most recent versions of the package, see also this item in the Fink FAQ: \ahrefurl{\url{http://fink.sourceforge.net/faq/usage-fink.php\#unstable}}. Note that 'unstable' doesn't mean that a package won't work, but only that there has not been feedback to the fink team from users.
+
+\subsubsection{Installation on UNIX systems using RPMs}
 
 Warning. Right now we're not making RPMs for biopython (because I
 stopped using an RPM system, basically). If anyone wants to pick this
@@ -597,7 +609,7 @@ and voila!, it's installed.
 
 Now that you've got everything installed, skip on ahead to section~\ref{sec:is_working} to make sure everything worked.
 
-\subsection{Installing on Macintosh}
+\subsection{Installation on older Macintoshes}
 
 This section describes installation on pre-OS X machines. On OS X
 Biopython can be installed using the UNIX instructions.

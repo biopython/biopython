@@ -61,21 +61,23 @@
 <UL><LI>
 <A HREF="#htoc22">4.1&nbsp;&nbsp;Obtaining Biopython
 </A>
-<LI><A HREF="#htoc23">4.2&nbsp;&nbsp;Installing from source on UNIX and Mac OS X</A>
+<LI><A HREF="#htoc23">4.2&nbsp;&nbsp;Installing on UNIX and Mac OS X</A>
 <UL><LI>
-<A HREF="#htoc24">4.2.1&nbsp;&nbsp;Installation on FreeBSD</A>
+<A HREF="#htoc24">4.2.1&nbsp;&nbsp;Installation from source on UNIX and Mac OS X</A>
+<LI><A HREF="#htoc25">4.2.2&nbsp;&nbsp;Installation on FreeBSD</A>
+<LI><A HREF="#htoc26">4.2.3&nbsp;&nbsp;Installation on Mac OS X using the fink package manager</A>
+<LI><A HREF="#htoc27">4.2.4&nbsp;&nbsp;Installation on UNIX systems using RPMs</A>
 </UL>
-<LI><A HREF="#htoc25">4.3&nbsp;&nbsp;Installing on UNIX systems using RPMs</A>
-<LI><A HREF="#htoc26">4.4&nbsp;&nbsp;Installing with a Windows Installer</A>
-<LI><A HREF="#htoc27">4.5&nbsp;&nbsp;Installing from source on Windows</A>
-<LI><A HREF="#htoc28">4.6&nbsp;&nbsp;Installing on Macintosh</A>
+<LI><A HREF="#htoc28">4.3&nbsp;&nbsp;Installing with a Windows Installer</A>
+<LI><A HREF="#htoc29">4.4&nbsp;&nbsp;Installing from source on Windows</A>
+<LI><A HREF="#htoc30">4.5&nbsp;&nbsp;Installation on older Macintoshes</A>
 <UL><LI>
-<A HREF="#htoc29">4.6.1&nbsp;&nbsp;Pre-Built Install</A>
-<LI><A HREF="#htoc30">4.6.2&nbsp;&nbsp;Non Pre-Built Installation</A>
+<A HREF="#htoc31">4.5.1&nbsp;&nbsp;Pre-Built Install</A>
+<LI><A HREF="#htoc32">4.5.2&nbsp;&nbsp;Non Pre-Built Installation</A>
 </UL>
 </UL>
-<LI><A HREF="#htoc31">5&nbsp;&nbsp;Making sure everything worked</A>
-<LI><A HREF="#htoc32">6&nbsp;&nbsp;Notes for installing with non-administrator permissions</A>
+<LI><A HREF="#htoc33">5&nbsp;&nbsp;Making sure everything worked</A>
+<LI><A HREF="#htoc34">6&nbsp;&nbsp;Notes for installing with non-administrator permissions</A>
 </UL>
 
 <!--TOC section Purpose and Assumptions-->
@@ -490,11 +492,15 @@ but there is always the caveat that the code there is under
 development.</OL>
 Based on which way you choose, you'll need to follow one of the following installation options. Read on for the platform you are working on.<BR>
 <BR>
-<!--TOC subsection Installing from source on UNIX and Mac OS X-->
+<!--TOC subsection Installing on UNIX and Mac OS X-->
 
-<H3><A NAME="htoc23">4.2</A>&nbsp;&nbsp;Installing from source on UNIX and Mac OS X</H3><!--SEC END -->
+<H3><A NAME="htoc23">4.2</A>&nbsp;&nbsp;Installing on UNIX and Mac OS X</H3><!--SEC END -->
 
 <A NAME="sec:unix_install"></A>
+<!--TOC subsubsection Installation from source on UNIX and Mac OS X-->
+
+<H4><A NAME="htoc24">4.2.1</A>&nbsp;&nbsp;Installation from source on UNIX and Mac OS X</H4><!--SEC END -->
+
 Biopython uses Distutils, the standard python installation package, for
 its installation. If you read the install instructions above you are
 already quite familiar with its workings. Distutils comes standard with 
@@ -516,20 +522,30 @@ as well (normally called something like <CODE>python-devel-2.4.rpm</CODE>).<BR>
 <LI>That's it! Biopython is installed. Wasn't that easy? Now let's check and make sure it worked properly. Skip on ahead to section&nbsp;<A HREF="#sec:is_working">5</A>.</OL>
 <!--TOC subsubsection Installation on FreeBSD-->
 
-<H4><A NAME="htoc24">4.2.1</A>&nbsp;&nbsp;Installation on FreeBSD</H4><!--SEC END -->
+<H4><A NAME="htoc25">4.2.2</A>&nbsp;&nbsp;Installation on FreeBSD</H4><!--SEC END -->
 
 Johann Visagie has been kind enough to create (and keep updated) a FreeBSD port of Biopython. Thanks to the wonders of the ports system, this means that all you need to do to install Biopython on FreeBSD is do the following as root:
 <PRE>
-# cd /usr/ports/biology/py-biopython
-# make install
+cd /usr/ports/biology/py-biopython
+make install
 </PRE>
 And voila! It's installed. <BR>
 <BR>
 If you want more information on FreeBSD and things, Johann has written a nice primer for his FreeBSD EMBOSS port. This has lots of generally useful information, such as how to keep your ports tree up to date. If you are new to FreeBSD, you should definitely check it out at <A HREF="ftp://ftp.no.embnet.org/pub/EMBOSS-extras/EMBOSS-FreeBSD-HOWTO.txt"><TT>ftp://ftp.no.embnet.org/pub/EMBOSS-extras/EMBOSS-FreeBSD-HOWTO.txt</TT></A>.<BR>
 <BR>
-<!--TOC subsection Installing on UNIX systems using RPMs-->
+<!--TOC subsubsection Installation on Mac OS X using the fink package manager-->
 
-<H3><A NAME="htoc25">4.3</A>&nbsp;&nbsp;Installing on UNIX systems using RPMs</H3><!--SEC END -->
+<H4><A NAME="htoc26">4.2.3</A>&nbsp;&nbsp;Installation on Mac OS X using the fink package manager</H4><!--SEC END -->
+
+Instead of installing from source, on Mac OS X you can also use the fink package manager, see <A HREF="http://fink.sf.net"><TT>http://fink.sf.net</TT></A>. Fink will take care of downloading the source code and installing all needed packages for biopython, including python itself. Once you have installed fink, you can install biopython using:
+<PRE>
+fink install biopython-pyXX
+</PRE>
+where XX is the python version you would like to use. Currently, python 2.3, 2.4, and 2.5 are available through fink on Mac OS X 10.4, so you would have to replace XX with 23, 24, or 25, respectively. Most likely, you will have to enable the unstable tree of fink in order to install the most recent versions of the package, see also this item in the Fink FAQ: <A HREF="http://fink.sourceforge.net/faq/usage-fink.php\#unstable"><TT>http://fink.sourceforge.net/faq/usage-fink.php\#unstable</TT></A>. Note that 'unstable' doesn't mean that a package won't work, but only that there has not been feedback to the fink team from users.<BR>
+<BR>
+<!--TOC subsubsection Installation on UNIX systems using RPMs-->
+
+<H4><A NAME="htoc27">4.2.4</A>&nbsp;&nbsp;Installation on UNIX systems using RPMs</H4><!--SEC END -->
 
 Warning. Right now we're not making RPMs for biopython (because I
 stopped using an RPM system, basically). If anyone wants to pick this
@@ -552,7 +568,7 @@ RPMs do not install the documentation, tests, or example code, so you might want
 <BR>
 <!--TOC subsection Installing with a Windows Installer-->
 
-<H3><A NAME="htoc26">4.4</A>&nbsp;&nbsp;Installing with a Windows Installer</H3><!--SEC END -->
+<H3><A NAME="htoc28">4.3</A>&nbsp;&nbsp;Installing with a Windows Installer</H3><!--SEC END -->
 
 Installing things on Windows with the installer should be really easy (hey, that's why they've got graphical installers, right?). You should just need to download the <CODE>Biopython-version.exe</CODE> installer from biopython web site. Then you just need to double click and voila, a nice little installer will come up and you can stick the libraries where you need to. No need for a C compiler or anything fancy. You will need to have Administrator privileges on the machine to do the installation.<BR>
 <BR>
@@ -560,7 +576,7 @@ This does not install the documentation, tests, example code or source code, so 
 <BR>
 <!--TOC subsection Installing from source on Windows-->
 
-<H3><A NAME="htoc27">4.5</A>&nbsp;&nbsp;Installing from source on Windows</H3><!--SEC END -->
+<H3><A NAME="htoc29">4.4</A>&nbsp;&nbsp;Installing from source on Windows</H3><!--SEC END -->
 
 <A NAME="sec:windows_install"></A>
 This section deals with installing the source (i.&nbsp;e.&nbsp;from CVS or from a source zip file) on a Windows machine. Much of the information from the UNIX install applies here, so it would be good to read section&nbsp;<A HREF="#sec:unix_install">4.2</A> before starting. Also, a little warning -- I (Brad) am writing these instructions based on very limited experience with Windows; I am basically a UNIX geek. So if you know more about Windows and want to add/correct things in this section, please feel let us know!<BR>
@@ -585,9 +601,9 @@ Then I just renamed <CODE>python20.lib</CODE> to <CODE>python20-orig.lib</CODE> 
 and voila!, it's installed. </UL></OL>
 Now that you've got everything installed, skip on ahead to section&nbsp;<A HREF="#sec:is_working">5</A> to make sure everything worked.<BR>
 <BR>
-<!--TOC subsection Installing on Macintosh-->
+<!--TOC subsection Installation on older Macintoshes-->
 
-<H3><A NAME="htoc28">4.6</A>&nbsp;&nbsp;Installing on Macintosh</H3><!--SEC END -->
+<H3><A NAME="htoc30">4.5</A>&nbsp;&nbsp;Installation on older Macintoshes</H3><!--SEC END -->
 
 This section describes installation on pre-OS X machines. On OS X
 Biopython can be installed using the UNIX instructions.<BR>
@@ -596,7 +612,7 @@ Biopython code should work on Pre-OS X Macintoshes, using the MacPython distribu
 <BR>
 <!--TOC subsubsection Pre-Built Install-->
 
-<H4><A NAME="htoc29">4.6.1</A>&nbsp;&nbsp;Pre-Built Install</H4><!--SEC END -->
+<H4><A NAME="htoc31">4.5.1</A>&nbsp;&nbsp;Pre-Built Install</H4><!--SEC END -->
 
 Yair Benita has been kind enough prepare pre-compiled and ready to go
 binaries for Macintosh machines. These distributions also contain the
@@ -612,7 +628,7 @@ a standard location python searches (something like
 <BR>
 <!--TOC subsubsection Non Pre-Built Installation-->
 
-<H4><A NAME="htoc30">4.6.2</A>&nbsp;&nbsp;Non Pre-Built Installation</H4><!--SEC END -->
+<H4><A NAME="htoc32">4.5.2</A>&nbsp;&nbsp;Non Pre-Built Installation</H4><!--SEC END -->
 
 If you don't want to use the pre-built releases, you can get some basic
 functionality from Biopython without compiling anything.
@@ -622,7 +638,7 @@ Some notes: Obviously this will not compile any of the C extensions in biopython
 <BR>
 <!--TOC section Making sure everything worked-->
 
-<H2><A NAME="htoc31">5</A>&nbsp;&nbsp;Making sure everything worked</H2><!--SEC END -->
+<H2><A NAME="htoc33">5</A>&nbsp;&nbsp;Making sure everything worked</H2><!--SEC END -->
 
 <A NAME="sec:is_working"></A>
 First, we'll just do a quick test to make sure Biopython is installed correctly. The most important thing is that python can find the biopython installation. Biopython installs into top level <CODE>Bio</CODE>, <CODE>Martel</CODE> and <CODE>BioSQL</CODE> directories, so you'll want to make sure these directories are located in a directory specified 
@@ -656,7 +672,7 @@ Congratulations!<BR>
 <BR>
 <!--TOC section Notes for installing with non-administrator permissions-->
 
-<H2><A NAME="htoc32">6</A>&nbsp;&nbsp;Notes for installing with non-administrator permissions</H2><!--SEC END -->
+<H2><A NAME="htoc34">6</A>&nbsp;&nbsp;Notes for installing with non-administrator permissions</H2><!--SEC END -->
 
 Although I mentioned above that I wouldn't go much into installing in
 non-root directories, if you are stuck installing

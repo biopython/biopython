@@ -48,17 +48,19 @@ Table of Contents
  - 4  Installing Biopython 
      
     - 4.1  Obtaining Biopython  
-    - 4.2  Installing from source on UNIX and Mac OS X 
+    - 4.2  Installing on UNIX and Mac OS X 
         
-       - 4.2.1  Installation on FreeBSD 
+       - 4.2.1  Installation from source on UNIX and Mac OS X 
+       - 4.2.2  Installation on FreeBSD 
+       - 4.2.3  Installation on Mac OS X using the fink package manager 
+       - 4.2.4  Installation on UNIX systems using RPMs 
      
-    - 4.3  Installing on UNIX systems using RPMs 
-    - 4.4  Installing with a Windows Installer 
-    - 4.5  Installing from source on Windows 
-    - 4.6  Installing on Macintosh 
+    - 4.3  Installing with a Windows Installer 
+    - 4.4  Installing from source on Windows 
+    - 4.5  Installation on older Macintoshes 
         
-       - 4.6.1  Pre-Built Install 
-       - 4.6.2  Non Pre-Built Installation 
+       - 4.5.1  Pre-Built Install 
+       - 4.5.2  Non Pre-Built Installation 
      
   
  - 5  Making sure everything worked 
@@ -482,9 +484,14 @@ following installation options. Read on for the platform you are working
 on.
   
 
-4.2  Installing from source on UNIX and Mac OS X
-================================================
+4.2  Installing on UNIX and Mac OS X
+====================================
    
+  
+
+4.2.1  Installation from source on UNIX and Mac OS X
+----------------------------------------------------
+  
   Biopython uses Distutils, the standard python installation package,
 for its installation. If you read the install instructions above you are
 already quite familiar with its workings. Distutils comes standard with 
@@ -539,7 +546,7 @@ Python 1.6 and beyond.
   
   
 
-4.2.1  Installation on FreeBSD
+4.2.2  Installation on FreeBSD
 ------------------------------
   
   Johann Visagie has been kind enough to create (and keep updated) a
@@ -547,8 +554,8 @@ FreeBSD port of Biopython. Thanks to the wonders of the ports system,
 this means that all you need to do to install Biopython on FreeBSD is do
 the following as root:
 <<
-  # cd /usr/ports/biology/py-biopython
-  # make install
+  cd /usr/ports/biology/py-biopython
+  make install
 >>
   
   And voila! It's installed. 
@@ -559,8 +566,30 @@ you are new to FreeBSD, you should definitely check it out at
 ftp://ftp.no.embnet.org/pub/EMBOSS-extras/EMBOSS-FreeBSD-HOWTO.txt.
   
 
-4.3  Installing on UNIX systems using RPMs
-==========================================
+4.2.3  Installation on Mac OS X using the fink package manager
+--------------------------------------------------------------
+  
+  Instead of installing from source, on Mac OS X you can also use the
+fink package manager, see http://fink.sf.net. Fink will take care of
+downloading the source code and installing all needed packages for
+biopython, including python itself. Once you have installed fink, you
+can install biopython using:
+<<
+  fink install biopython-pyXX
+>>
+  
+  where XX is the python version you would like to use. Currently,
+python 2.3, 2.4, and 2.5 are available through fink on Mac OS X 10.4, so
+you would have to replace XX with 23, 24, or 25, respectively. Most
+likely, you will have to enable the unstable tree of fink in order to
+install the most recent versions of the package, see also this item in
+the Fink FAQ: http://fink.sourceforge.net/faq/usage-fink.php\#unstable.
+Note that 'unstable' doesn't mean that a package won't work, but only
+that there has not been feedback to the fink team from users.
+  
+
+4.2.4  Installation on UNIX systems using RPMs
+----------------------------------------------
   
   Warning. Right now we're not making RPMs for biopython (because I
 stopped using an RPM system, basically). If anyone wants to pick this
@@ -584,7 +613,7 @@ might want to also grab a source distribution, so you can use these
 resources (and also look at the source code if you want to).
   
 
-4.4  Installing with a Windows Installer
+4.3  Installing with a Windows Installer
 ========================================
   
   Installing things on Windows with the installer should be really easy
@@ -600,7 +629,7 @@ containing this so you can test your installation and learn how to use
 it.
   
 
-4.5  Installing from source on Windows
+4.4  Installing from source on Windows
 ======================================
    
   This section deals with installing the source (i. e. from CVS or from
@@ -652,8 +681,8 @@ if you've done this!).
 to make sure everything worked.
   
 
-4.6  Installing on Macintosh
-============================
+4.5  Installation on older Macintoshes
+======================================
   
   This section describes installation on pre-OS X machines. On OS X
 Biopython can be installed using the UNIX instructions.
@@ -662,7 +691,7 @@ MacPython distribution. I (Brad) am not a big Mac user, but have had
 good luck using several on the modules on the Macintosh.
   
 
-4.6.1  Pre-Built Install
+4.5.1  Pre-Built Install
 ------------------------
   
   Yair Benita has been kind enough prepare pre-compiled and ready to go
@@ -677,7 +706,7 @@ python searches (something like  `Macintosh
 HD::Python2.2::Lib::site-packages') and it's all installed.
   
 
-4.6.2  Non Pre-Built Installation
+4.5.2  Non Pre-Built Installation
 ---------------------------------
   
   If you don't want to use the pre-built releases, you can get some
