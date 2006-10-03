@@ -286,7 +286,7 @@ remark_block = define_block("  REMARK", "remark_block", "remark")
 # an entire reference for the sequence
 reference = Martel.Group("reference",
                          reference_line +
-                         authors_block +
+                         Martel.Opt(authors_block) +
                          Martel.Opt(consrtm_block) +
                          Martel.Opt(title_block) +
                          journal_block +
