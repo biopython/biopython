@@ -111,9 +111,11 @@ class HSP:
 
     query           The query sequence.
     query_start     The start residue for the query sequence.  (1-based)
+    query_end       The end residue for the query sequence.  (1-based)
     match           The match sequence.
     sbjct           The sbjct sequence.
     sbjct_start     The start residue for the sbjct sequence.  (1-based)
+    sbjct_end       The end residue for the sbjct sequence.  (1-based)
     
     Not all flavors of BLAST return values for every attribute:
               score     expect     identities   positives    strand  frame
@@ -146,9 +148,11 @@ class HSP:
         
         self.query = ''
         self.query_start = None
+        self.query_end = None
         self.match = ''
         self.sbjct = ''
         self.sbjct_start = None
+        self.sbjct_end = None
 
 class MultipleAlignment:
     """Holds information about a multiple alignment.

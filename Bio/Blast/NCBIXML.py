@@ -286,13 +286,21 @@ class BlastParser(_XMLparser):
         """offset of query at the start of the alignment (one-offset)
         """
         self._hsp.query_start = int(self._value)
-    # No need for Hsp_query_to
+
+    def _end_Hsp_query_to(self):
+        """offset of query at the end of the alignment (one-offset)
+        """
+        self._hsp.query_end = int(self._value)
 
     def _end_Hsp_hit_from(self):
         """offset of the database at the start of the alignment (one-offset)
         """
         self._hsp.sbjct_start = int(self._value)
-    # No need for Hsp_hit_to
+
+    def _end_Hsp_hit_to(self):
+        """offset of the database at the end of the alignment (one-offset)
+        """
+        self._hsp.sbjct_end = int(self._value)
 
 ##     def _end_Hsp_pattern_from(self):
 ##         """start of phi-blast pattern on the query (one-offset)
