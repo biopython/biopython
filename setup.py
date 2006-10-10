@@ -457,10 +457,7 @@ EXTENSIONS = [
 NUMPY_EXTENSIONS = [
     Extension('Bio.Cluster.cluster',
               ['Bio/Cluster/clustermodule.c',
-               'Bio/Cluster/cluster.c',
-               'Bio/Cluster/ranlib.c',
-               'Bio/Cluster/com.c',
-               'Bio/Cluster/linpack.c'],
+               'Bio/Cluster/cluster.c'],
               include_dirs=["Bio/Cluster"]
               ),
 #   CplusplusExtension('Bio.Affy._cel',  # The file parser in celmodule.cc was
