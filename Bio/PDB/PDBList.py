@@ -23,7 +23,7 @@
 # Removed 'write' options from retrieve_pdb_file method: it is not used.
 # Also added a 'dir' options (pdb file is put in this directory if given),
 # and an 'exist' option (test if the file is already there). This method
-# now returns teh name of the downloaded uncompressed file.
+# now returns the name of the downloaded uncompressed file.
 #
 # -Thomas, 1/06/04
 
