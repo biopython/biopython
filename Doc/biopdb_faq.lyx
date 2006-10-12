@@ -985,7 +985,19 @@ has_id
 Can I do that a bit more conveniently?
 \layout Standard
 
-You can use the 
+You can do things like:
+\layout LyX-Code
+
+atoms=structure.get_atoms()
+\layout LyX-Code
+
+residue=structure.get_residues()
+\layout LyX-Code
+
+atoms=chain.get_atoms()
+\layout Standard
+
+You can also use the 
 \family typewriter 
 Selection.unfold_entities
 \family default 
@@ -1010,6 +1022,15 @@ A=atom, R=residue, C=chain, M=model, S=structure
 \family default 
 .
  You can use this to go up in the hierarchy, eg.
+\begin_inset ERT
+status Collapsed
+
+\layout Standard
+
+\backslash 
+
+\end_inset 
+
  to get a list of (unique) 
 \family typewriter 
 Residue

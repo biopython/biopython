@@ -551,7 +551,16 @@ the \texttt{has\_id} method.
 
 \subsubsection*{Can I do that a bit more conveniently?}
 
-You can use the \texttt{Selection.unfold\_entities} function:
+You can do things like:
+
+\begin{lyxcode}
+atoms=structure.get\_atoms()
+
+residue=structure.get\_residues()
+
+atoms=chain.get\_atoms()
+\end{lyxcode}
+You can also use the \texttt{Selection.unfold\_entities} function:
 
 \begin{lyxcode}
 \#~Get~all~residues~from~a~structure
@@ -563,8 +572,9 @@ res\_list=Selection.unfold\_entities(structure,~'R')
 atom\_list=Selection.unfold\_entities(chain,~'A')
 \end{lyxcode}
 Obviously, \texttt{A=atom, R=residue, C=chain, M=model, S=structure}.
-You can use this to go up in the hierarchy, eg. to get a list of (unique)
-\texttt{Residue} or \texttt{Chain} parents from a list of \texttt{Atoms}:
+You can use this to go up in the hierarchy, eg.\ to get a list of
+(unique) \texttt{Residue} or \texttt{Chain} parents from a list of
+\texttt{Atoms}:
 
 \begin{lyxcode}
 residue\_list=Selection.unfold\_entities(atom\_list,~'R')
