@@ -1,3 +1,8 @@
+# Copyright (C) 2002, Thomas Hamelryck (thamelry@binf.ku.dk)
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
 from types import IntType
 
 __doc__="Class that maps (chain_id, residue_id) to a residue property"
