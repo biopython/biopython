@@ -241,7 +241,7 @@ def _parse_pdb_header_list(header):
         elif key=="REMARK":
             if re.search("REMARK   2 RESOLUTION.",hh):
                 r=_chop_end_codes(re.sub("REMARK   2 RESOLUTION.",'',hh))
-                r=re.sub("\s+ANGSTROMS.*","",r)
+                r=re.sub("\s+ANGSTROM.*","",r)
                 try:
                     dict['resolution']=float(r)
                 except:
