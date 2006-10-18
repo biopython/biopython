@@ -99,8 +99,6 @@ class Entity:
 
     def get_parent(self):
         "Return the parent Entity object."
-        if self.parent is None:
-            raise PDBException, 'No parent'
         return self.parent
 
     def get_id(self):
@@ -131,7 +129,7 @@ class Entity:
             entity_id=self.get_id()
             l=[entity_id]   
             parent=self.get_parent()
-            while parent!=None:
+            while not (parent is None):
                 entity_id=parent.get_id()
                 l.append(entity_id)
                 parent=parent.get_parent()
