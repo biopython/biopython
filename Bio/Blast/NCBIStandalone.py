@@ -248,14 +248,6 @@ class _Scanner:
                                   contains='No hits found')
             read_and_call_while(uhandle, consumer.noevent, blank=1)
 
-            #Psiblast can repeat the Searching...No hits found section
-            if attempt_read_and_call(uhandle, consumer.noevent,
-                                     start='Searching'):
-                read_and_call_while(uhandle, consumer.noevent, blank=1)
-                read_and_call(uhandle, consumer.noevent,
-                              contains='No hits found')
-                read_and_call_while(uhandle, consumer.noevent, blank=1)
-            
             consumer.end_descriptions()
             # Stop processing.
             return
