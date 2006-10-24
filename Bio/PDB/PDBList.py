@@ -5,6 +5,8 @@
 #
 # A tool for tracking changes in the PDB Protein Structure Database.
 #
+# Version 2.0
+#
 # (c) 2003 Kristian Rother
 # This work was supported by the German Ministry of Education
 # and Research (BMBF). Project http://www.bcbio.de
@@ -19,7 +21,7 @@
 # Any maintainer of the BioPython code may change this notice
 # when appropriate.
 #
-# Last modified on Fri, Sep 29th 2006, Warszawa
+# Last modified on Fri, Oct 24th 2006, Warszawa
 #
 # Removed 'write' options from retrieve_pdb_file method: it is not used.
 # Also added a 'dir' options (pdb file is put in this directory if given),
@@ -60,8 +62,11 @@ class PDBList:
     J. Mol. Biol. 112 pp. 535-542 (1977)
     http://www.pdb.org/.
     """
+
+    alternative_download_url = "http://www.rcsb.org/pdb/files/"
+    # just append PDB code to this, and then it works.
     
-    def __init__(self,server='ftp://ftp.rcsb.org',  pdb=os.getenv('HOME')+os.sep+'pdb', obsolete_pdb=None):
+    def __init__(self,server='ftp://ftp.rcsb.org', pdb=os.getcwd(), obsolete_pdb=None):
         """Initialize the class with the default server or a custom one."""
         # remote pdb server
         self.pdb_server = server
@@ -318,9 +323,12 @@ if __name__ == '__main__':
     (c) Kristian Rother 2003, Contributed to BioPython
 
     Usage:
-    PDBList.py update <pdb_path> [options]   - write weekly PDB updates to local pdb tree.
-    PDBList.py all    <pdb_path> [options]   - write all PDB entries to local pdb tree.
-    PDBList.py obsol  <pdb_path> [options]   - write all obsolete PDB entries to local pdb tree.
+    PDBList.py update <pdb_path> [options]   - write weekly PDB updates to
+                                               local pdb tree.
+    PDBList.py all    <pdb_path> [options]   - write all PDB entries to
+                                               local pdb tree.
+    PDBList.py obsol  <pdb_path> [options]   - write all obsolete PDB
+                                               entries to local pdb tree.
     PDBList.py <PDB-ID> <pdb_path> [options] - retrieve single structure
 
     Options:
@@ -332,12 +340,17 @@ if __name__ == '__main__':
     if len(sys.argv)>2:
         pdb_path = sys.argv[2]
         pl = PDBList(pdb=pdb_path)
-
         if len(sys.argv)>3:
             for option in sys.argv[3:]:
                 if option == '-d': pl.flat_tree = 1
-                elif option == '-o': pl.overwrite = 1            
-            
+                elif option == '-o': pl.overwrite = 1
+
+    else:
+        pdb_path = os.getcwd()
+        pl = PDBList()
+        pl.flat_tree = 1        
+
+    if len(sys.argv) > 1:   
         if sys.argv[1] == 'update':
             # update PDB
             print "updating local PDB at "+pdb_path 
@@ -349,11 +362,11 @@ if __name__ == '__main__':
 
         elif sys.argv[1] == 'obsol':
             # get all obsolete entries
-            pl.download_obsolete_entries(sys.argv[2])
+            pl.download_obsolete_entries(pdb_path)
 
         elif re.search('^\d...$',sys.argv[1]):
             # get single PDB entry
-            pl.retrieve_pdb_file(sys.argv[1],pdir=sys.argv[2])
+            pl.retrieve_pdb_file(sys.argv[1],pdir=pdb_path)
         
 
         
