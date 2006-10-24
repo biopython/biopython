@@ -441,6 +441,21 @@ Can I access the header information?
 
 Thanks to Christian Rother you can access some information from the PDB
  header.
+ Note however that many PDB files contain headers with incomplete or erroneous
+ information.
+ Many of the errors have been fixed in the equivalent mmCIF files.
+ 
+\emph on 
+Hence, if you are interested in the header information, it is a good idea
+ to extract information from mmCIF files using the 
+\family typewriter 
+MMCIF2Dict
+\family default 
+ tool described above, instead of parsing the PDB header.
+ 
+\layout Standard
+
+Now that is clarified, let's return to parsing the PDB header.
  The structure object has an attribute called 
 \family typewriter 
 header
@@ -534,18 +549,34 @@ retrieve_pdb_file
 pdbl=PDBList()
 \layout LyX-Code
 
-pdbl.retrieve_pdb_file('1FAT', here=1)
+pdbl.retrieve_pdb_file('1FAT')
 \layout Standard
 
-In this case, the downloaded file will be called 
+The 
+\family typewriter 
+PDBList
+\family default 
+ class can also be used as a command-line tool: 
+\layout LyX-Code
+
+python PDBList.py 1fat
+\layout Standard
+
+The downloaded file will be called 
 \family typewriter 
 pdb1fat.ent
 \family default 
-, and it will be downloaded to the current directory (option
+ and stored in the current working directory.
+ Note that the 
 \family typewriter 
- here=1
+retrieve_pdb_file
 \family default 
-).
+ method also has an optional argument 
+\family typewriter 
+pdir
+\family default 
+ that specifies a specific directory in which to store the downloaded PDB
+ files.
  
 \layout Standard
 
@@ -563,20 +594,57 @@ retrieve_pdb_file
 gunzip
 \family default 
 ).
- In addition, the PDB ftp site and a default download directory can be specified
- upon creation of the 
+ In addition, the PDB ftp site can be specified upon creation of the 
 \family typewriter 
 PDBList
 \family default 
  object.
+ By default, the RCSB PDB server (
+\begin_inset LatexCommand \url{ftp://ftp.rcsb.org/pub/pdb/data/structures/divided/pdb/}
+
+\end_inset 
+
+) is used.
  See the API documentation for more details.
  Thanks again to Kristian Rother for donating this module.
+\layout Subsubsection*
+
+How do I download the entire PDB?
+\layout Standard
+
+The following commands will store all PDB files in the 
+\family typewriter 
+/data/pdb
+\family default 
+ directory: 
+\layout LyX-Code
+
+python PDBList.py all /data/pdb 
+\layout LyX-Code
+
+python PDBList.py all /data/pdb -d 
+\layout Standard
+\noindent 
+The API method for this is called 
+\family typewriter 
+download_entire_pdb
+\family default 
+.
+ Adding the 
+\family typewriter 
+-d
+\family default 
+ option will store all files in the same directory.
+ Otherwise, they are sorted into PDB-style subdirectories according to their
+ PDB ID's.
+ Depending on the traffic, a complete download will take 2-4 days.
+ 
 \layout Subsubsection*
 
 How do I keep a local copy of the PDB up-to-date?
 \layout Standard
 
-This can also be done using Kristian Rother's 
+This can also be done using the 
 \family typewriter 
 PDBList
 \family default 

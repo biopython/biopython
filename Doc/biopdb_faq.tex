@@ -270,8 +270,16 @@ y\_list=mmcif\_dict{[}'\_atom\_site.Cartn\_y'{]}
 \subsubsection*{Can I access the header information?}
 
 Thanks to Christian Rother you can access some information from the
-PDB header. The structure object has an attribute called \texttt{header}
-which is a python dictionary that maps header records to their values.
+PDB header. Note however that many PDB files contain headers with
+incomplete or erroneous information. Many of the errors have been
+fixed in the equivalent mmCIF files. \emph{Hence, if you are interested
+in the header information, it is a good idea to extract information
+from mmCIF files using the} \texttt{\emph{MMCIF2Dict}} \emph{tool
+described above, instead of parsing the PDB header. }
+
+Now that is clarified, let's return to parsing the PDB header. The
+structure object has an attribute called \texttt{header} which is
+a python dictionary that maps header records to their values.
 
 Example:
 
@@ -314,25 +322,49 @@ structure.
 \begin{lyxcode}
 pdbl=PDBList()
 
-pdbl.retrieve\_pdb\_file('1FAT',~here=1)
+pdbl.retrieve\_pdb\_file('1FAT')
 \end{lyxcode}
-In this case, the downloaded file will be called \texttt{pdb1fat.ent},
-and it will be downloaded to the current directory (option \texttt{here=1}). 
+The \texttt{PDBList} class can also be used as a command-line tool: 
+
+\begin{lyxcode}
+python~PDBList.py~1fat
+\end{lyxcode}
+The downloaded file will be called \texttt{pdb1fat.ent} and stored
+in the current working directory. Note that the \texttt{retrieve\_pdb\_file}
+method also has an optional argument \texttt{pdir} that specifies
+a specific directory in which to store the downloaded PDB files. 
 
 The \texttt{retrieve\_pdb\_file} method also has some options to specify
 the compression format used for the download, and the program used
 for local decompression (default \texttt{.Z} format and \texttt{gunzip}).
-In addition, the PDB ftp site and a default download directory can
-be specified upon creation of the \texttt{PDBList} object. See the
-API documentation for more details. Thanks again to Kristian Rother
-for donating this module.
+In addition, the PDB ftp site can be specified upon creation of the
+\texttt{PDBList} object. By default, the RCSB PDB server (\url{ftp://ftp.rcsb.org/pub/pdb/data/structures/divided/pdb/})
+is used. See the API documentation for more details. Thanks again
+to Kristian Rother for donating this module.
+
+
+\subsubsection*{How do I download the entire PDB?}
+
+The following commands will store all PDB files in the \texttt{/data/pdb}
+directory: 
+
+\begin{lyxcode}
+python~PDBList.py~all~/data/pdb~
+
+python~PDBList.py~all~/data/pdb~-d~
+\end{lyxcode}
+\noindent The API method for this is called \texttt{download\_entire\_pdb}.
+Adding the \texttt{-d} option will store all files in the same directory.
+Otherwise, they are sorted into PDB-style subdirectories according
+to their PDB ID's. Depending on the traffic, a complete download will
+take 2-4 days. 
 
 
 \subsubsection*{How do I keep a local copy of the PDB up-to-date?}
 
-This can also be done using Kristian Rother's \texttt{PDBList} object.
-One simply creates a \texttt{PDBList} object (specifying the directory
-where the local copy of the PDB is present) and calls the \texttt{update\_pdb}
+This can also be done using the \texttt{PDBList} object. One simply
+creates a \texttt{PDBList} object (specifying the directory where
+the local copy of the PDB is present) and calls the \texttt{update\_pdb}
 method:
 
 \begin{lyxcode}
