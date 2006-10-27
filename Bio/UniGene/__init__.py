@@ -208,7 +208,9 @@ class UniGeneParser( sgmllib.SGMLParser ):
 
 
 if( __name__ == '__main__' ):
-    handle = open( 'Hs13225.htm')
+    import os.path
+    filename = os.path.join('..','..','Tests','UniGene','Hs13225.htm')
+    handle = open(filename)
     undo_handle = Bio.File.UndoHandle( handle )
     unigene_parser = UniGeneParser()
     record = unigene_parser.parse( handle )
