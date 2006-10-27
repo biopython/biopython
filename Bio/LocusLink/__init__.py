@@ -230,10 +230,3 @@ class RecordParser:
         self._consumer = _RecordConsumer()
         self._scanner.feed(handle, self._consumer)
         return self._consumer.data
-
-if( __name__ == '__main__' ):
-    handle = open( 'Hs13225.htm')
-    undo_handle = Bio.File.UndoHandle( handle )
-    unigene_parser = UniGeneParser()
-    record = unigene_parser.parse( handle )
-    print record
