@@ -1,7 +1,7 @@
 import re, sys, urllib2, unittest, urllib
 
-import EUtils
-from EUtils import ThinClient
+from Bio import EUtils
+from Bio.EUtils import ThinClient
 
 # This test uses a local file instead of going over the net.
 # This helps because:

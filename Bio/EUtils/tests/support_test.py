@@ -1,7 +1,7 @@
 import urlparse, cgi, urllib2, sys
 import cPickle as pickle
 import cStringIO as StringIO
-from EUtils import ThinClient
+from Bio.EUtils import ThinClient
 
 def _assert_same_urls(url1, url2):
     # The URL may have key/value parameters after the '?'

@@ -1,7 +1,7 @@
 import unittest, sys, urllib2
 
-import EUtils
-from EUtils import ThinClient, HistoryClient, Datatypes, MultiDict
+from Bio import EUtils
+from Bio.EUtils import ThinClient, HistoryClient, Datatypes, MultiDict
 import support_test
 
 picklestore = None

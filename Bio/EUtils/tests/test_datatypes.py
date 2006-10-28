@@ -1,7 +1,7 @@
 # Testing properties of datatypes
 
 import unittest
-from EUtils import Datatypes
+from Bio.EUtils import Datatypes
 
 class TestDBIds(unittest.TestCase):
     def testSubtraction(self):

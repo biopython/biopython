@@ -3,7 +3,7 @@
 import glob, sys, os
 
 try:
-    import EUtils
+    from Bio import EUtils
 except ImportError:
     raise SystemExit("""\
 The EUtils package is not on your PYTHONPATH.

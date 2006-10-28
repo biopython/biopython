@@ -1,7 +1,7 @@
 from __future__ import generators
 
 import unittest, cStringIO, re
-from EUtils import parse, Datatypes, MultiDict
+from Bio.EUtils import parse, Datatypes, MultiDict
 
 #  ======================  Test parsing Search results
 

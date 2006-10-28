@@ -1,7 +1,7 @@
 import unittest, sys, urllib2
 
-import EUtils
-from EUtils import ThinClient, DBIdsClient, Datatypes
+from Bio import EUtils
+from Bio.EUtils import ThinClient, DBIdsClient, Datatypes
 import support_test
 
 
