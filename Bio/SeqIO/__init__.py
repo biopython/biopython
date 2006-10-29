@@ -104,7 +104,6 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align.Generic import Alignment
 
-from Interfaces import *
 import FastaIO
 #import EmblGenBankIO
 import GenBankIO
@@ -155,6 +154,7 @@ _format2iterator = {"fasta" : FastaIO.FastaIterator,
 _format2writer = {"fasta" : FastaIO.FastaWriter,
                   "phylip" : PhylipIO.PhylipWriter,
                   "stockholm" : StockholmIO.StockholmWriter,
+                  "clustal" : ClustalIO.ClustalWriter,
                   }
 
 def _filename2format(filename) :
@@ -314,7 +314,7 @@ def Iter2Alignment(SeqIterator, alphabet=generic_alphabet, strict=True) :
     """
     alignment_length = None
     alignment = Alignment(alphabet)
-    for record in iterator :
+    for record in SeqIterator :
         if strict :
             if alignment_length is None :
                 alignment_length = len(record.seq)
@@ -1183,6 +1183,19 @@ ORIGIN
             assert last_id in seq_dict
             assert seq_dict[last_id].seq.tostring() == as_list[-1].seq.tostring()
 
+        if len(Set([len(r.seq) for r in as_list]))==1 :
+            #All the sequences in the example are the same length,
+            #so it make sense to try turning this file into an alignment.
+            print "File2Alignment(handle to file)"
+            alignment = File2Alignment(handle = StringIO(data), format=format)
+            assert len(alignment._records)==rec_count
+            assert alignment.get_alignment_length() == len(as_list[0].seq)
+            for i in range(0, rec_count) :
+                assert as_list[i].id == alignment._records[i].id
+                assert as_list[i].id == alignment.get_all_seqs()[i].id
+                assert as_list[i].seq.tostring() == alignment._records[i].seq.tostring()
+                assert as_list[i].seq.tostring() == alignment.get_all_seqs()[i].seq.tostring()
+
         print
         
     print "Checking phy <-> aln examples agree using File2SequenceList"
@@ -1239,7 +1252,7 @@ ORIGIN
     print
 
     general_output_formats = ["fasta"]
-    alignment_formats = ["phylip","stockholm"]
+    alignment_formats = ["phylip","stockholm","clustal"]
     for (in_data, in_format, rec_count, last_id, last_seq, unique_ids) in tests:
         if unique_ids :
             in_list =  File2SequenceList(contents=in_data, format=in_format)
