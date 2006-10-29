@@ -1167,7 +1167,7 @@ class Nexus(object):
         if not filename:
             filename=self.filename
         if [t for t in delete if not self._check_taxlabels(t)]:
-            raise NexusError, 'Unknwon taxa: %s' % ', '.join(sets.Set(delete).difference(sets.Set(self.taxlabels)))
+            raise NexusError, 'Unknown taxa: %s' % ', '.join(sets.Set(delete).difference(sets.Set(self.taxlabels)))
         if interleave_by_partition:
             if not interleave_by_partition in self.charpartitions:
                 raise NexusError, 'Unknown partition: '+interleave_by_partition
