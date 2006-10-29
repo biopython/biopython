@@ -250,21 +250,60 @@ def File2SequenceIterator(filename=None, format=None, handle=None, contents=None
 def File2SequenceList(filename=None, format=None, handle=None, contents=None) :
     """Turns a sequence file into a list of SeqRecords
 
+    This function is a simple wrapper for list(File2SequenceIterator(...))
+
     See File2SequenceIterator for details on the arguments."""
-    iterator = File2SequenceIterator(filename=filename, format=format,
-                                     handle=handle, contents=contents)
-    return SequenceList(iterator)
+    return list(File2SequenceIterator(filename=filename, format=format,
+                                     handle=handle, contents=contents))
+
+def SequenceIter2Dict(iterator, record2key=None) :
+    """Turns a sequence iterator into a dictionary
+
+    iterator   - An iterator that returns SeqRecord objects.
+    record2key - Optional function which when given a SeqRecord
+                 returns a unique string for the dictionary key.
+
+    e.g. record2key = lambda rec : rec.name
+    or,  record2key = lambda rec : rec.description.split()[0]
+
+    If record2key is ommitted then record.id is used, on the
+    assumption that the records objects returned are SeqRecords
+    with a unique id field.
+
+    If there are duplicate keys, an error is raised.
+
+    Example usage:
+
+    filename = "example.fasta"
+    d = SequenceIter2Dict(FastaIterator(open(faa_filename)),
+        record2key = lambda rec : rec.description.split()[0])
+    print len(d)
+    print d.keys()[0:10]
+    key = d.keys()[0]
+    print d[key]
+    """    
+    if record2key is None :
+        record2key = lambda rec : rec.id
+
+    d = dict()
+    for record in iterator :
+        key = record2key(record)
+        #TODO - Define an exception class, or use a ValueError here?
+        assert key not in d, "Duplicate key"
+        d[key] = record
+    return d
 
 def File2SequenceDict(filename=None, format=None, handle=None, contents=None, record2key=None) :
     """Turns a sequence file into a dictionary of SeqRecords
 
     If no function record2key is provided, then each record's
-    id is used as its key.
+    id is used as its key.  If the keys are non-unique an
+    error is raised.
 
     See File2SequenceIterator for details on the other four arguments."""
     iterator = File2SequenceIterator(filename=filename, format=format,
                                      handle=handle, contents=contents)
-    return SequenceDict(iterator, record2key)
+    return SequenceIter2Dict(iterator, record2key)
 
 def Iter2Alignment(SeqIterator, alphabet=generic_alphabet, strict=True) :
     """Returns a multiple sequence alignment

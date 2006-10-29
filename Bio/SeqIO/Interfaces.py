@@ -1,66 +1,10 @@
-import os
-from Bio.Alphabet import generic_alphabet, generic_protein
-from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
-from Bio.Align.Generic import Alignment
+# Copyright 2006 by Peter Cock.  All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
 
-#TODO - Add some summary methods to SequenceDict and SequenceList?
+from Bio.Alphabet import generic_alphabet
 
-class SequenceDict(dict) :
-    """Turns a sequence iterator into a dictionary"""
-    def __init__(self, iterator,
-                 record2key = None) :
-        """Create a SequenceDict from a sequence iterator
-
-        iterator   - Any iterator that returns sequences records.
-        record2key - Optional function which when given a sequence
-                     record returns a unique string to use as the
-                     dictionary key.
-
-        e.g. record2key = lambda rec : rec.name
-        or,  record2key = lambda rec : rec.description.split()[0]
-
-        If record2key is ommitted then record.id is used, on the
-        assumption that the records objects returned are SeqRecords
-        with a unique id field.
-
-        Example usage:
-
-        filename = "example.fasta"
-        d = SequenceDict(FastaIterator(open(faa_filename)),
-            record2key = lambda rec : rec.description.split()[0])
-        print len(d)
-        print d.keys()[0:10]
-        key = d.keys()[0]
-        print d[key]
-        """
-        if record2key is None :
-            record2key = lambda rec : rec.id
-
-        dict.__init__(self)
-        for record in iterator :
-            #dict.__setitem__(self,record2key(record),record)
-            key = record2key(record)
-            assert key not in self, "Duplicate key"
-            dict.__setitem__(self,key,record)
-
-class SequenceList(list) :
-    """Turns a sequence iterator into a list"""
-    def __init__(self, iterator) :
-        """Create a SequenceList from a sequence iterator
-
-        iterator - Any iterator that returns sequences records.
-
-        Example usage:
-
-        filename = "example.fasta"
-        iterator = FastaIterator(open(faa_filename))
-        l = SequenceList(iterator)
-        print len(l)
-        print l[6]        
-        """
-        list.__init__(self, iterator)
-        
 class SequenceIterator :
     """Base class for building Sequence iterators.
 
