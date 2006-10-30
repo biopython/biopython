@@ -548,7 +548,7 @@ class Nexus(object):
             #3 Assume we have a file object
             if hasattr(input,'read'): # file objects or StringIO objects
                 file_contents=input.read()
-                if input.name:
+                if hasattr(input,"name") and input.name:
                     self.filename=input.name
                 else:
                     self.filename='Unknown_nexus_file'
