@@ -1,3 +1,8 @@
+# Copyright 2006 by Peter Cock.  All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Nexus import Nexus
@@ -10,11 +15,6 @@ def NexusIterator(handle) :
     """Returns SeqRecord objects from a Nexus file
 
     Thus uses the Bio.Nexus module to do the hard work."""
-
-    #Quick hack to get Bio.Nexus to cope with a StringIO from StringIO
-    if not hasattr(handle,"name") :
-        handle.name = None
-        
     n = Nexus.Nexus(handle)
     for id in n.original_taxon_order :
         if id in n.matrix :
