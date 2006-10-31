@@ -1,217 +1,362 @@
-import string
-import sgmllib
-import Bio.File
+# $Id: __init__.py,v 1.9 2006-10-31 22:09:46 sdavis Exp $
+# Sean Davis <sdavis2 at mail dot nih dot gov>
+# National Cancer Institute
+# National Institutes of Health
+# Bethesda, MD, USA
+#
 
 """
-The UniGene site is:
-http://www.ncbi.nlm.nih.gov/UniGene/
+Parse Unigene flat file format files such as the Hs.data file.
+
+Here is an overview of the flat file format that this parser deals with:
+   Line types/qualifiers:
+
+       ID           UniGene cluster ID
+       TITLE        Title for the cluster
+       GENE         Gene symbol
+       CYTOBAND     Cytological band
+       EXPRESS      Tissues of origin for ESTs in cluster
+       RESTR_EXPR   Single tissue or development stage contributes 
+                    more than half the total EST frequency for this gene.
+       GNM_TERMINUS genomic confirmation of presence of a 3' terminus; 
+                    T if a non-templated polyA tail is found among 
+	              a cluster's sequences; else
+                    I if templated As are found in genomic sequence or
+                    S if a canonical polyA signal is found on 
+                      the genomic sequence
+       GENE_ID      Entrez gene identifier associated with at least one sequence in this cluster; 
+	            to be used instead of LocusLink.  
+       LOCUSLINK    LocusLink identifier associated with at least one sequence in this cluster;  
+		    deprecated in favor of GENE_ID
+       CHROMOSOME   Chromosome.  For plants, CHROMOSOME refers to mapping on the arabidopsis genome.
+       STS          STS
+            NAME=        Name of STS
+            ACC=         GenBank/EMBL/DDBJ accession number of STS [optional field]
+            DSEG=        GDB Dsegment number [optional field]
+            UNISTS=      identifier in NCBI's UNISTS database
+       TXMAP        Transcript map interval
+            MARKER=      Marker found on at least one sequence in this cluster
+            RHPANEL=     Radiation Hybrid panel used to place marker
+       PROTSIM      Protein Similarity data for the sequence with highest-scoring protein similarity in this cluster
+            ORG=         Organism
+            PROTGI=      Sequence GI of protein
+            PROTID=      Sequence ID of protein
+            PCT=         Percent alignment
+            ALN=         length of aligned region (aa)
+       SCOUNT       Number of sequences in the cluster
+       SEQUENCE     Sequence
+            ACC=         GenBank/EMBL/DDBJ accession number of sequence
+            NID=         Unique nucleotide sequence identifier (gi)
+            PID=         Unique protein sequence identifier (used for non-ESTs)
+            CLONE=       Clone identifier (used for ESTs only)
+            END=         End (5'/3') of clone insert read (used for ESTs only) 
+            LID=         Library ID; see Hs.lib.info for library name and tissue  	
+            MGC=	 5' CDS-completeness indicator; if present, 
+			 the clone associated with this sequence  
+			 is believed CDS-complete. A value greater than 511
+			 is the gi of the CDS-complete mRNA matched by the EST,
+ 	 		 otherwise the value is an indicator of the reliability
+                         of the test indicating CDS comleteness;
+ 			 higher values indicate more reliable CDS-completeness predictions. 
+           SEQTYPE=	 Description of the nucleotide sequence. Possible values are
+			 mRNA, EST and HTC.
+           TRACE=	 The Trace ID of the EST sequence, as provided by NCBI Trace Archive
+           PERIPHERAL=   Indicator that the sequence is a suboptimal 
+	                 representative of the gene represented by this cluster.
+                         Peripheral sequences are those that are in a cluster
+                         which represents a spliced gene without sharing a
+                         splice junction with any other sequence.  In many
+                         cases, they are unspliced transcripts originating
+                         from the gene.
+
+       //           End of record
 """
-
-class Record( dict):
-
-    def __init__( self ):
-        dict.__init__( self )
-
-    def __str__( self ):
-        queue_keys = self.keys()
-        queue_keys.sort()
-        out = ''
-        for key in queue_keys:
-            out = out +  'key %s\n' % key
-            out = out + self.print_item( self[ key ] )
-        out = out + '\n'
-        return out
-
-    def print_item( self, item, level = 1 ):
-        indent = '    '
-        out = ''
-        for j in range( 0, level ):
-            indent = indent + '    '
-        if( type( item ) == type( '' ) ):
-            if( item != '' ):
-                out = out + '%s%s\n' % ( indent, item )
-        elif( type( item ) == type([])):
-            for subitem in item:
-                out = out + self.print_item( subitem, level + 1 )
-        elif( isinstance( item, dict ) ):
-            keys = item.keys()
-            keys.sort()
-            for subitem in keys:
-                out = out + '%skey is %s\n' % ( indent, subitem )
-                out = out + self.print_item( item[ subitem ], level + 1 )
-        else:
-            out = out + '%s\n' % str( item )
-        return out
-
-
-class UniGeneParser( sgmllib.SGMLParser ):
-
-    def reset( self ):
-        sgmllib.SGMLParser.reset( self )
-        self.text = ''
-        self.queue = Record()
-        self.open_tag_stack = []
-        self.open_tag = 'open_html'
-        self.key_waiting = ''
-        self.master_key = ''
-        self.context = 'general_info'
-
-    def parse( self, handle ):
-        self.reset()
-        self.feed( handle )
-        for key in self.queue.keys():
-            if( self.queue[ key ] == {} ):
-                if( key[ :15 ] == 'UniGene Cluster' ):
-                    self.queue[ 'UniGene Cluster' ] = key[ 16: ]
-                del self.queue[ key ]
-        return self.queue
+from Bio.ParserSupport import *
+import re
 
 #
-# Assumes an empty line between records
+# CONSTANTS
 #
-    def feed( self, handle ):
-        if isinstance(handle, Bio.File.UndoHandle):
-            uhandle = handle
-        else:
-            uhandle = Bio.File.UndoHandle(handle)
-        text = ''
-        while 1:
-            line = uhandle.readline()
-            line = string.strip( line )
-            if( line == '' ):
+UG_INDENT=12
+
+class UnigeneSequenceRecord:
+    """Store the information for one SEQUENCE line from a Unigene file
+
+    Initialize with the text part of the SEQUENCE line, or nothing.
+
+    Attributes and descriptions (access as LOWER CASE)
+    ACC=         GenBank/EMBL/DDBJ accession number of sequence
+    NID=         Unique nucleotide sequence identifier (gi)
+    PID=         Unique protein sequence identifier (used for non-ESTs)
+    CLONE=       Clone identifier (used for ESTs only)
+    END=         End (5'/3') of clone insert read (used for ESTs only) 
+    LID=         Library ID; see Hs.lib.info for library name and tissue  	
+    MGC=	 5' CDS-completeness indicator; if present, 
+                 the clone associated with this sequence  
+                 is believed CDS-complete. A value greater than 511
+                 is the gi of the CDS-complete mRNA matched by the EST,
+                 otherwise the value is an indicator of the reliability
+                 of the test indicating CDS comleteness;
+                 higher values indicate more reliable CDS-completeness predictions. 
+    SEQTYPE=	 Description of the nucleotide sequence. Possible values are
+                 mRNA, EST and HTC.
+    TRACE=	 The Trace ID of the EST sequence, as provided by NCBI Trace Archive
+    PERIPHERAL=   Indicator that the sequence is a suboptimal 
+                  representative of the gene represented by this cluster.
+                  Peripheral sequences are those that are in a cluster
+                  which represents a spliced gene without sharing a
+                  splice junction with any other sequence.  In many
+                  cases, they are unspliced transcripts originating
+                  from the gene.
+    """
+    
+    def __init__(self,text=None):
+        self.acc = ''
+        self.nid = ''
+        self.lid = ''
+        self.pid = ''
+        self.clone = ''
+        self.image = ''
+        self.is_image = False
+        self.end = ''
+        self.mgc = ''
+        self.seqtype = ''
+        self.Trace = ''
+        self.peripheral = ''
+        if not text==None:
+            self.text=text
+            return self._init_from_text(text)
+
+    def _init_from_text(self,text):
+        parts = text.split('; ');
+        for part in parts:
+            key,val = re.match('(\w+)=(\S+)',part).groups()
+            if key=='CLONE':
+                if val[:5]=='IMAGE':
+                    self.is_image=True
+                    self.image = val[6:]
+            setattr(self,key.lower(),val)
+
+    def __repr__(self):
+        return self.text
+        
+
+class UnigeneProtsimRecord:
+    """Store the information for one PROTSIM line from a Unigene file
+
+    Initialize with the text part of the PROTSIM line, or nothing.
+
+    Attributes and descriptions (access as LOWER CASE)
+    ORG=         Organism
+    PROTGI=      Sequence GI of protein
+    PROTID=      Sequence ID of protein
+    PCT=         Percent alignment
+    ALN=         length of aligned region (aa)
+    """
+
+    def __init__(self,text=None):
+        self.org = ''
+        self.protgi = ''
+        self.protid = ''
+        self.pct = ''
+        self.aln = ''
+        if not text==None:
+            self.text=text
+            return self._init_from_text(text)
+
+    def _init_from_text(self,text):
+        parts = text.split('; ');
+        
+        for part in parts:
+            key,val = re.match('(\w+)=(\S+)',part).groups()
+            setattr(self,key.lower(),val)
+
+    def __repr__(self):
+        return self.text
+        
+
+class UnigeneSTSRecord:
+    """Store the information for one STS line from a Unigene file
+
+    Initialize with the text part of the STS line, or nothing.
+
+    Attributes and descriptions (access as LOWER CASE)
+
+    NAME=        Name of STS
+    ACC=         GenBank/EMBL/DDBJ accession number of STS [optional field]
+    DSEG=        GDB Dsegment number [optional field]
+    UNISTS=      identifier in NCBI's UNISTS database
+    """
+
+    def __init__(self,text=None):
+        self.name = ''
+        self.acc = ''
+        self.dseg = ''
+        self.unists = ''
+        if not text==None:
+            self.text=text
+            return self._init_from_text(text)
+
+    def _init_from_text(self,text):
+        parts = text.split(' ');
+        
+        for part in parts:
+            key,val = re.match('(\w+)=(\S+)',part).groups()
+            setattr(self,key.lower(),val)
+
+    def __repr__(self):
+        return self.text
+        
+
+class UnigeneRecord:
+    """Store a Unigene record
+
+    Here is what is stored:
+    
+        self.ID           = ''  # ID line
+        self.species      = ''  # Hs, Bt, etc.
+        self.title        = ''  # TITLE line
+        self.symbol       = ''  # GENE line
+        self.cytoband     = ''  # CYTOBAND line
+        self.express      = []  # EXPRESS line, parsed on ';'
+                                # Will be an array of strings
+        self.restr_expr   = ''  # RESTR_EXPR line
+        self.gnm_terminus = ''  # GNM_TERMINUS line
+        self.gene_id      = ''  # GENE_ID line
+        self.chromosome   = ''  # CHROMOSOME
+        self.protsim      = []  # PROTSIM entries, array of Protsims
+                                # Type UnigeneProtsimRecord
+        self.sequence     = []  # SEQUENCE entries, array of Sequence entries
+                                # Type UnigeneSequenceRecord
+        self.sts          = []  # STS entries, array of STS entries
+                                # Type UnigeneSTSRecord
+        self.txmap        = []  # TXMAP entries, array of TXMap entries
+    """
+
+    def __init__(self):
+        self.ID           = ''  # ID line
+        self.species      = ''  # Hs, Bt, etc.
+        self.title        = ''  # TITLE line
+        self.symbol       = ''  # GENE line
+        self.cytoband     = ''  # CYTOBAND line
+        self.express      = []  # EXPRESS line, parsed on ';'
+        self.restr_expr   = ''  # RESTR_EXPR line
+        self.gnm_terminus = ''  # GNM_TERMINUS line
+        self.gene_id      = ''  # GENE_ID line
+        self.chromosome   = ''  # CHROMOSOME
+        self.protsim      = []  # PROTSIM entries, array of Protsims
+        self.sequence     = []  # SEQUENCE entries, array of Sequence entries
+        self.sts          = []  # STS entries, array of STS entries
+        self.txmap        = []  # TXMAP entries, array of TXMap entries
+
+    def __repr__(self):
+        return "<%s> %s %s\n%s" % (self.__class__.__name__,
+                          self.ID, self.symbol, self.title)
+
+
+class _RecordConsumer(AbstractConsumer):
+
+    def __init__(self):
+        self.unigene_record = UnigeneRecord()
+    def ID(self,line):
+        self.unigene_record.ID = self._get_single_entry(line)
+        self.unigene_record.species = self.unigene_record.ID.split('.')[0]
+    def TITLE(self,line):
+        self.unigene_record.title = self._get_single_entry(line)
+    def GENE(self,line):
+        self.unigene_record.symbol = self._get_single_entry(line)
+    def EXPRESS(self,line):
+        self.unigene_record.express = self._get_array_entry(line,split_on='; ')
+    def RESTR_EXPR(self,line):
+        self.unigene_record.restr_expr = self._get_single_entry(line)
+    def GENE_ID(self,line):
+        self.unigene_record.gene_id = self._get_single_entry(line)
+    def CHROMOSOME(self,line):
+        self.unigene_record.chromosome = self._get_single_entry(line)
+    def GENE_ID(self,line):
+        self.unigene_record.gene_id = self._get_single_entry(line)
+    def SEQUENCE(self,line):
+        ug_seqrecord = UnigeneSequenceRecord(self._get_single_entry(line))
+        self.unigene_record.sequence.append(ug_seqrecord)
+    def PROTSIM(self,line):
+        ug_protsimrecord = UnigeneProtsimRecord(self._get_single_entry(line))
+        self.unigene_record.protsim.append(ug_protsimrecord)
+    def STS(self,line):
+        ug_stsrecord = UnigeneSTSRecord(self._get_single_entry(line))
+        self.unigene_record.sts.append(ug_stsrecord)
+    
+
+    def _get_single_entry(self,line):
+        """Consume a single-value line
+        """
+        return line[UG_INDENT:]
+
+    def _get_array_entry(self,line,split_on):
+        """Consume a multi-value line by splitting on split_on
+        """
+        return line[UG_INDENT:].split(split_on)
+    
+
+class _Scanner:
+    """Scans a Unigene Flat File Format file
+    """
+
+    def feed(self, handle, consumer):
+        """feed(self, handle, consumer)
+
+        Feed events from parsing a Unigene file to a consumer.
+        handle is a file-like object, and consumer is a consumer object that will receive events as the file is scanned
+
+        """
+        consumer.start_record()
+        for line in handle:
+            tag = line.split(' ')[0]
+            line = line.rstrip()
+            if line=='//':
+                consumer.end_record()
                 break
-            text = text + ' ' + line
+            try:
+                f = getattr(consumer, tag)
+            except AttributeError:
+                print 'no method called', tag
+            else:
+                if callable(f):
+                    f(line)
 
-        sgmllib.SGMLParser.feed( self, text )
+        
+class RecordParser(AbstractParser):
+	def __init__(self):
+		self._scanner = _Scanner()
+		self._consumer = _RecordConsumer()
 
+	def parse(self, handle):
+		if isinstance(handle, File.UndoHandle):
+			uhandle = handle
+		else:
+			uhandle = File.UndoHandle(handle)
+			self._scanner.feed(uhandle, self._consumer)
+		return self._consumer.unigene_record
 
+class Iterator:
+	def __init__(self, handle, parser=None):
+		self._uhandle = File.UndoHandle(handle)
 
-    def handle_data(self, newtext ):
-        newtext = string.strip( newtext )
-        self.text = self.text + newtext
+	def next(self):
+		self._parser = RecordParser()
+		lines = []
+		while 1:
+			line = self._uhandle.readline()
+			if not line: break
+			if line[:2] == '//':
+				break
+			lines.append(line)
+		if not lines:
+			return None
+		lines.append('//')
+		data = string.join(lines,'')
+		if self._parser is not None:
+			return self._parser.parse(File.StringHandle(data))
+		return data
 
-    def start_a( self, attrs ):
-        if( self.context == 'seq_info' ):
-            if( self.open_tag != 'open_b' ):
-                self.text = ''
-
-#        self.queue.append( attrs )
-
-    def end_a( self ):
-        if( self.context == 'seq_info' ):
-            if( self.open_tag != 'open_b' ):
-                if( self.key_waiting == '' ):
-                    self.key_waiting = self.text
-                    self.text = ''
-
-    def start_b( self, attrs ):
-
-        self.open_tag_stack.append( self.open_tag )
-        self.open_tag = 'open_b'
-        if( self.key_waiting == '' ):
-            self.text = ''
-
-    def end_b( self ):
-        if( self.text[ :15 ] == 'UniGene Cluster' ):
-            self.queue[ 'UniGene Cluster' ] = self.text[ 16: ]
-            self.text = ''
-        elif( self.key_waiting == '' ):
-            self.extract_key()
-
-    def extract_key( self ):
-        text = string.strip( self.text )
-        key = string.join( string.split( text ) )
-        words = string.split( key )
-        key = string.join( words[ :2 ] )
-        self.text = ''
-
-        try:
-            self.open_tag = self.open_tag_stack.pop()
-        except:
-            self.open_tag = 'open_html'
-        if( self.open_tag == 'open_table_data' ):
-            if( self.context == 'general_info' ):
-                if( self.key_waiting == '' ):
-                    self.key_waiting = key
-                    self.text = ''
-            elif( self.context == 'seq_info' ):
-                if( text == 'Key to Symbols' ):
-                    self.context = 'legend'
-                    self.master_key = key
-        elif( self.context == 'general_info' ):
-            self.master_key = key
-            if( string.find( key, 'SEQUENCE' ) != -1 ):
-                self.context = 'seq_info'
-            self.queue[ key ] = dict()
-        elif( self.context == 'seq_info' ):
-            self.queue[ key ] = dict()
-            self.master_key = key
-
-
-
-    def start_table( self, attrs ):
-        self.open_tag_stack.append( self.open_tag )
-        self.open_tag = 'open_table'
-
-    def end_table( self ):
-        try:
-            self.open_tag = self.open_tag_stack.pop()
-        except:
-            self.open_tag = 'open_html'
-        self.key_waiting = ''
-
-    def start_tr( self, attrs ):
-        self.open_tag_stack.append( self.open_tag )
-        self.open_tag = 'open_table_row'
-        self.text = ''
-
-    def end_tr( self ):
-        try:
-            self.open_tag = self.open_tag_stack.pop()
-        except:
-            self.open_tag = 'open_html'
-        text = self.text
-        if text:
-            self.text = ''
-            if( text[ 0 ] == ':' ):
-                text = text[ 1: ]
-            text = string.join( string.split( text ) )
-            if( ( self.context == 'general_info' ) or \
-                ( self.context == 'seq_info' ) ):
-                try:
-                    contents = self.queue[ self.master_key ][ self.key_waiting ]
-                    if( type( contents ) == type( [] ) ):
-                        contents.append( text )
-                    else:
-                        self.queue[ self.master_key ][ self.key_waiting ] = \
-                            [ contents , text ]
-                except:
-                    self.queue[ self.master_key ][ self.key_waiting ] = text
-
-
-                self.key_waiting = ''
-
-
-
-    def start_td( self, attrs ):
-        self.open_tag_stack.append( self.open_tag )
-        self.open_tag = 'open_table_data'
-
-    def end_td( self ):
-        try:
-            self.open_tag = self.open_tag_stack.pop()
-        except:
-            self.open_tag = 'open_html'
-        if( self.context == 'seq_info' ):
-            self.text = self.text + ' '
-
-
-
-if( __name__ == '__main__' ):
-    import os.path
-    filename = os.path.join('..','..','Tests','UniGene','Hs13225.htm')
-    handle = open(filename)
-    undo_handle = Bio.File.UndoHandle( handle )
-    unigene_parser = UniGeneParser()
-    record = unigene_parser.parse( handle )
-    print record
+        def __iter__(self):
+                return iter(self.next, None)
