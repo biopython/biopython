@@ -1,3 +1,8 @@
+# Copyright 2006 by Peter Cock.  All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
 from Bio.Alphabet import generic_alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
@@ -15,6 +20,7 @@ def PhylipIterator(handle, alphabet = generic_alphabet) :
     
     For more information on the file format, please see:
     http://evolution.genetics.washington.edu/phylip/doc/sequence.html
+    http://evolution.genetics.washington.edu/phylip/doc/main.html#inputfiles
     """
     line = handle.readline()
     if not line: return
@@ -63,6 +69,10 @@ def PhylipIterator(handle, alphabet = generic_alphabet) :
 class PhylipWriter(SequenceWriter):
     """Write interlaced Phylip sequence alignments
 
+    For more information on the file format, please see:
+    http://evolution.genetics.washington.edu/phylip/doc/sequence.html
+    http://evolution.genetics.washington.edu/phylip/doc/main.html#inputfiles
+
     All sequences must be the same length."""
     def __init__(self, handle, truncate=10):
         """Creates the writer object
@@ -95,7 +105,10 @@ class PhylipWriter(SequenceWriter):
 
         handle = self.handle
 
-        handle.write("\t%i\t%s\n" % (len(records), length_of_sequences))
+        # From experimentation, the use of tabs is not understood by the
+        # EMBOSS suite.  The nature of the expected white space is not
+        # defined, simply "These are in free format, separated by blanks"
+        handle.write(" %i %s\n" % (len(records), length_of_sequences))
         block=0
         while True :
             for record in records :
