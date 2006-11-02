@@ -11,6 +11,9 @@ http://www.expasy.ch/sprot/sprot-top.html
 Tested with:
 Release 37, Release 38, Release 39
 
+Limited testing with:
+Release 51
+
 
 Classes:
 Record             Holds SwissProt data.
@@ -520,18 +523,39 @@ class _RecordConsumer(AbstractConsumer):
 
     def identification(self, line):
         cols = line.split()
-        self.data.entry_name = cols[1]
-        self.data.data_class = self._chomp(cols[2])    # don't want ';'
-        self.data.molecule_type = self._chomp(cols[3]) # don't want ';'
-        self.data.sequence_length = int(cols[4])
-
+        #Prior to release 51, included with MoleculeType:
+        #ID   EntryName DataClass; MoleculeType; SequenceLength.
+        #
+        #Newer files lack the MoleculeType:
+        #ID   EntryName DataClass; SequenceLength.
+        #
+        #Note that cols is split on white space, so the length
+        #should become two fields (number and units)
+        if len(cols) == 6 :
+            self.data.entry_name = cols[1]
+            self.data.data_class = self._chomp(cols[2])    # don't want ';'
+            self.data.molecule_type = self._chomp(cols[3]) # don't want ';'
+            self.data.sequence_length = int(cols[4])
+        elif len(cols) == 5 :
+            self.data.entry_name = cols[1]
+            self.data.data_class = self._chomp(cols[2])    # don't want ';'
+            self.data.molecule_type = None
+            self.data.sequence_length = int(cols[3])
+        else :
+            #Should we print a warning an continue?
+            raise SyntaxError("ID line has unrecognised format:\n"+line)
+        
         # data class can be 'STANDARD' or 'PRELIMINARY'
         # ws:2001-12-05 added IPI
-        if self.data.data_class not in ['STANDARD', 'PRELIMINARY', 'IPI']: 
+        # pjc:2006-11-02 added 'Reviewed' and 'Unreviewed'
+        if self.data.data_class not in ['STANDARD', 'PRELIMINARY', 'IPI',
+                                        'Reviewed', 'Unreviewed']: 
             raise SyntaxError, "Unrecognized data class %s in line\n%s" % \
                   (self.data.data_class, line)
         # molecule_type should be 'PRT' for PRoTein
-        if self.data.molecule_type != 'PRT':
+        # Note that has been removed in recent releases (set to None)
+        if self.data.molecule_type is not None \
+        and self.data.molecule_type != 'PRT':
             raise SyntaxError, "Unrecognized molecule type %s in line\n%s" % \
                   (self.data.molecule_type, line)
     
