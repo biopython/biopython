@@ -13,13 +13,13 @@
 
 Input
 =====
-There are four helper functions which all take a filename/handle/data, and
+There are four helper functions which all take a filename/handle, and
 optional format
 
-File2SequenceIterator - SeqRecord iterator (low memory, forward access only)
-File2SequenceList     - List of SeqRecord objects
-File2SequenceDict     - Dictionary of SeqRecord objects by record ID
-File2Alignment        - Alignment from a multiple sequence alignment file
+FileToSequenceIterator - SeqRecord iterator (low memory, forward access only)
+FileToSequenceList     - List of SeqRecord objects
+FileToSequenceDict     - Dictionary of SeqRecord objects by record ID
+FileToAlignment        - Alignment from a multiple sequence alignment file
 
 For non-interlaced files (e.g. Fasta, GenBank, EMBL) with multiple records using
 a sequence iterator can save you a lot of memory (RAM).  The saving for interlaced
@@ -34,7 +34,7 @@ Output
 There is a single helper function which takes a complete set of records (either
 a list, or an iterator) and a filename:
 
-Sequences2File        - Creates a file, writes provided sequences and close file.
+SequencesToFile        - Creates a file, writes provided sequences and close file.
 
 For some writers (e.g. phylip and interlaced file formats) if you provide a
 SeqRecord iterator, it will be converted into a list.
@@ -111,6 +111,7 @@ import StockholmIO
 import ClustalIO
 import PhylipIO
 import NexusIO
+import SwissIO
 
 #Convention for format names is "mainname-subtype" in lower case.
 #Please use the same names as BioPerl where possible.
@@ -118,7 +119,7 @@ import NexusIO
 #Note that this simple system copes with defining
 #multiple possible iterators for a given format/extension
 #with the -subtype suffix
-_ext2format = {"fasta"     : "fasta",
+_ExtToFormat ={"fasta"     : "fasta",
                "faa"       : "fasta", #Used by the NCBI
                "fna"       : "fasta", #Used by the NCBI
                "fnn"       : "fasta", #Used by the NCBI
@@ -138,7 +139,7 @@ _ext2format = {"fasta"     : "fasta",
                "nex"       : "nexus", #nxs is used by clustal
                }
 
-_format2iterator = {"fasta" : FastaIO.FastaIterator,
+_FormatToIterator ={"fasta" : FastaIO.FastaIterator,
                     "genbank" : GenBankIO.GenBankIterator,
                     #See http://bugzilla.open-bio.org/show_bug.cgi?id=2059#c11
                     #"genbank" : EmblGenBankIO.GenBankIterator,
@@ -149,9 +150,10 @@ _format2iterator = {"fasta" : FastaIO.FastaIterator,
                     "phylip" : PhylipIO.PhylipIterator,
                     "nexus" : NexusIO.NexusIterator,
                     "stockholm" : StockholmIO.StockholmIterator,
+                    "swiss" : SwissIO.SwissIterator,
                     }
 
-_format2writer = {"fasta" : FastaIO.FastaWriter,
+_FormatToWriter ={"fasta" : FastaIO.FastaWriter,
                   "phylip" : PhylipIO.PhylipWriter,
                   "stockholm" : StockholmIO.StockholmWriter,
                   "clustal" : ClustalIO.ClustalWriter,
@@ -163,7 +165,7 @@ def _filename2format(filename) :
     assert len(parts) > 1, "No filename extension"
     extension = parts[-1]
     try :
-        format = _ext2format[extension.lower()]
+        format = _ExtToFormat[extension.lower()]
     except KeyError :
         assert False, "Unknown extension, " + extension
     #This shouldn't be needed:
@@ -171,7 +173,7 @@ def _filename2format(filename) :
     return format
 
 
-def Sequences2File(sequences, filename=None, format=None, handle=None) :
+def SequencesToFile(sequences, filename=None, format=None, handle=None) :
     """Write sequences to a file (and closes the file).
 
     sequences - A list (or iterator) of SeqRecord objects
@@ -192,7 +194,7 @@ def Sequences2File(sequences, filename=None, format=None, handle=None) :
         #This may raise an exception...
         format =  _filename2format(filename)
     try :
-        writer_class = _format2writer[format]
+        writer_class = _FormatToWriter[format]
     except KeyError :
         assert False, "Unknown format, " + format
 
@@ -201,15 +203,14 @@ def Sequences2File(sequences, filename=None, format=None, handle=None) :
     writer_class(handle).write_file(sequences)
     handle.close() #just in case the writer object forgot
     
-def File2SequenceIterator(filename=None, format=None, handle=None, contents=None) :
+def FileToSequenceIterator(filename=None, format=None, handle=None) :
     """Turns a sequence file into a iterator returning SeqRecords
 
     You must supply the data using one of the following arguments
-    (which are used in preference order: contents, handle, filename)
+    (which are used in preference order: handle, filename)
     
     filename - Path to a local file containing the sequences.
-    handle   - Handle to the file.
-    contents - String containing full contents of the file.
+    handle   - Or, handle to the file.
 
     format   - String describing the file format.  If omitted,
                then then filename (if given) will be used to
@@ -220,9 +221,8 @@ def File2SequenceIterator(filename=None, format=None, handle=None, contents=None
     settings.  For more control, use the format specific
     iterator directly."""
 
-    assert (filename is not None) \
-    or (handle is not None) or (contents is not None), \
-    "A filename, file contents or file handle must be supplied"
+    assert (filename is not None) or (handle is not None), \
+    "A filename or file handle must be supplied"
 
     if filename is not None :
         assert os.path.isfile(filename), "File not found: " + filename
@@ -233,33 +233,32 @@ def File2SequenceIterator(filename=None, format=None, handle=None, contents=None
         #This may raise an exception...
         format =  _filename2format(filename)
     try :
-        iterator_generator = _format2iterator[format]
+        iterator_generator = _FormatToIterator[format]
     except KeyError :
         assert False, "Unknown format, " + format
 
-    if contents is not None :
-        #This StringIO object will go out of scope and thus get closed.
-        return iterator_generator(StringIO(contents))
-    elif handle is not None :
+    if handle is not None :
         #Its up to the caller to close this handle - they opened it.
         return iterator_generator(handle)
     else :
         #TODO - I can't see a nice way to explicitly close this handle...
         return iterator_generator(open(filename,"rU"))
 
-def File2SequenceList(filename=None, format=None, handle=None, contents=None) :
+def FileToSequenceList(filename=None, format=None, handle=None) :
     """Turns a sequence file into a list of SeqRecords
 
-    This function is a simple wrapper for list(File2SequenceIterator(...))
+    This function is a simple wrapper for list(FileToSequenceIterator(...))
 
-    See File2SequenceIterator for details on the arguments."""
-    return list(File2SequenceIterator(filename=filename, format=format,
-                                     handle=handle, contents=contents))
+    See FileToSequenceIterator for details on the arguments."""
+    return list(FileToSequenceIterator(filename=filename,
+                                       format=format,
+                                       handle=handle))
 
-def SequenceIter2Dict(iterator, record2key=None) :
-    """Turns a sequence iterator into a dictionary
+def SequencesToDict(sequences, record2key=None) :
+    """Turns a sequence iterator or list into a dictionary
 
-    iterator   - An iterator that returns SeqRecord objects.
+    sequences  - An iterator that returns SeqRecord objects,
+                 or simply a list of SeqRecord objects.
     record2key - Optional function which when given a SeqRecord
                  returns a unique string for the dictionary key.
 
@@ -275,7 +274,7 @@ def SequenceIter2Dict(iterator, record2key=None) :
     Example usage:
 
     filename = "example.fasta"
-    d = SequenceIter2Dict(FastaIterator(open(faa_filename)),
+    d = SequencesToDict(FastaIterator(open(faa_filename)),
         record2key = lambda rec : rec.description.split()[0])
     print len(d)
     print d.keys()[0:10]
@@ -286,35 +285,40 @@ def SequenceIter2Dict(iterator, record2key=None) :
         record2key = lambda rec : rec.id
 
     d = dict()
-    for record in iterator :
+    for record in sequences :
         key = record2key(record)
         #TODO - Define an exception class, or use a ValueError here?
         assert key not in d, "Duplicate key"
         d[key] = record
     return d
 
-def File2SequenceDict(filename=None, format=None, handle=None, contents=None, record2key=None) :
+def FileToSequenceDict(filename=None, format=None, handle=None, record2key=None) :
     """Turns a sequence file into a dictionary of SeqRecords
 
     If no function record2key is provided, then each record's
     id is used as its key.  If the keys are non-unique an
     error is raised.
 
-    See File2SequenceIterator for details on the other four arguments."""
-    iterator = File2SequenceIterator(filename=filename, format=format,
-                                     handle=handle, contents=contents)
-    return SequenceIter2Dict(iterator, record2key)
+    See also SequencesToDict and FileToSequenceIterator."""
+    iterator = FileToSequenceIterator(filename=filename,
+                                      format=format,
+                                      handle=handle)
+    return SequencesToDict(iterator, record2key)
 
-def Iter2Alignment(SeqIterator, alphabet=generic_alphabet, strict=True) :
+def SequencesToAlignment(sequences, alphabet=generic_alphabet, strict=True) :
     """Returns a multiple sequence alignment
 
+    sequences -An iterator that returns SeqRecord objects,
+               or simply a list of SeqRecord objects.
+               All the record sequences must be the same length.
+    
     alphabet - Optional alphabet.  Stongly recommended.
     strict   - Optional, defaults to True.  Should error checking
                be done?
     """
     alignment_length = None
     alignment = Alignment(alphabet)
-    for record in SeqIterator :
+    for record in sequences :
         if strict :
             if alignment_length is None :
                 alignment_length = len(record.seq)
@@ -332,16 +336,17 @@ def Iter2Alignment(SeqIterator, alphabet=generic_alphabet, strict=True) :
         alignment._records.append(record)
     return alignment
 
-def File2Alignment(filename=None, format=None, handle=None, contents=None,
+def FileToAlignment(filename=None, format=None, handle=None,
                    alphabet=generic_alphabet, strict=True) :
     """Returns a multiple sequence alignment
 
     alphabet - Optional alphabet.  Stongly recommended.
 
-    See File2SequenceIterator for details on the other four arguments."""
-    iterator = File2SequenceIterator(filename=filename, format=format,
-                                     handle=handle, contents=contents)
-    return Iter2Alignment(iterator, alphabet=alphabet)
+    See FileToSequenceIterator for details on the other four arguments."""
+    iterator = FileToSequenceIterator(filename=filename,
+                                      format=format,
+                                      handle=handle)
+    return SequencesToAlignment(iterator, alphabet=alphabet)
            
 if __name__ == "__main__" :
     #Run some tests...
@@ -1058,6 +1063,183 @@ ORIGIN
       121 deiellsgli dklerniiql qsk
 //"""
 
+
+    swiss_example = \
+"""ID   104K_THEAN              Reviewed;         893 AA.
+AC   Q4U9M9;
+DT   18-APR-2006, integrated into UniProtKB/Swiss-Prot.
+DT   05-JUL-2005, sequence version 1.
+DT   31-OCT-2006, entry version 8.
+DE   104 kDa microneme-rhoptry antigen precursor (p104).
+GN   ORFNames=TA08425;
+OS   Theileria annulata.
+OC   Eukaryota; Alveolata; Apicomplexa; Piroplasmida; Theileriidae;
+OC   Theileria.
+OX   NCBI_TaxID=5874;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].
+RC   STRAIN=Ankara;
+RX   PubMed=15994557; DOI=10.1126/science.1110418;
+RA   Pain A., Renauld H., Berriman M., Murphy L., Yeats C.A., Weir W.,
+RA   Kerhornou A., Aslett M., Bishop R., Bouchier C., Cochet M.,
+RA   Coulson R.M.R., Cronin A., de Villiers E.P., Fraser A., Fosker N.,
+RA   Gardner M., Goble A., Griffiths-Jones S., Harris D.E., Katzer F.,
+RA   Larke N., Lord A., Maser P., McKellar S., Mooney P., Morton F.,
+RA   Nene V., O'Neil S., Price C., Quail M.A., Rabbinowitsch E.,
+RA   Rawlings N.D., Rutter S., Saunders D., Seeger K., Shah T., Squares R.,
+RA   Squares S., Tivey A., Walker A.R., Woodward J., Dobbelaere D.A.E.,
+RA   Langsley G., Rajandream M.A., McKeever D., Shiels B., Tait A.,
+RA   Barrell B.G., Hall N.;
+RT   "Genome of the host-cell transforming parasite Theileria annulata
+RT   compared with T. parva.";
+RL   Science 309:131-133(2005).
+CC   -!- SUBCELLULAR LOCATION: Cell membrane; lipid-anchor; GPI-anchor
+CC       (Potential). In microneme/rhoptry complexes (By similarity).
+DR   EMBL; CR940353; CAI76474.1; -; Genomic_DNA.
+DR   InterPro; IPR007480; DUF529.
+DR   Pfam; PF04385; FAINT; 4.
+KW   Complete proteome; GPI-anchor; Lipoprotein; Membrane; Repeat; Signal;
+KW   Sporozoite.
+FT   SIGNAL        1     19       Potential.
+FT   CHAIN        20    873       104 kDa microneme-rhoptry antigen.
+FT                                /FTId=PRO_0000232680.
+FT   PROPEP      874    893       Removed in mature form (Potential).
+FT                                /FTId=PRO_0000232681.
+FT   COMPBIAS    215    220       Poly-Leu.
+FT   COMPBIAS    486    683       Lys-rich.
+FT   COMPBIAS    854    859       Poly-Arg.
+FT   LIPID       873    873       GPI-anchor amidated aspartate
+FT                                (Potential).
+SQ   SEQUENCE   893 AA;  101921 MW;  2F67CEB3B02E7AC1 CRC64;
+     MKFLVLLFNI LCLFPILGAD ELVMSPIPTT DVQPKVTFDI NSEVSSGPLY LNPVEMAGVK
+     YLQLQRQPGV QVHKVVEGDI VIWENEEMPL YTCAIVTQNE VPYMAYVELL EDPDLIFFLK
+     EGDQWAPIPE DQYLARLQQL RQQIHTESFF SLNLSFQHEN YKYEMVSSFQ HSIKMVVFTP
+     KNGHICKMVY DKNIRIFKAL YNEYVTSVIG FFRGLKLLLL NIFVIDDRGM IGNKYFQLLD
+     DKYAPISVQG YVATIPKLKD FAEPYHPIIL DISDIDYVNF YLGDATYHDP GFKIVPKTPQ
+     CITKVVDGNE VIYESSNPSV ECVYKVTYYD KKNESMLRLD LNHSPPSYTS YYAKREGVWV
+     TSTYIDLEEK IEELQDHRST ELDVMFMSDK DLNVVPLTNG NLEYFMVTPK PHRDIIIVFD
+     GSEVLWYYEG LENHLVCTWI YVTEGAPRLV HLRVKDRIPQ NTDIYMVKFG EYWVRISKTQ
+     YTQEIKKLIK KSKKKLPSIE EEDSDKHGGP PKGPEPPTGP GHSSSESKEH EDSKESKEPK
+     EHGSPKETKE GEVTKKPGPA KEHKPSKIPV YTKRPEFPKK SKSPKRPESP KSPKRPVSPQ
+     RPVSPKSPKR PESLDIPKSP KRPESPKSPK RPVSPQRPVS PRRPESPKSP KSPKSPKSPK
+     VPFDPKFKEK LYDSYLDKAA KTKETVTLPP VLPTDESFTH TPIGEPTAEQ PDDIEPIEES
+     VFIKETGILT EEVKTEDIHS ETGEPEEPKR PDSPTKHSPK PTGTHPSMPK KRRRSDGLAL
+     STTDLESEAG RILRDPTGKI VTMKRSKSFD DLTTVREKEH MGAEIRKIVV DDDGTEADDE
+     DTHPSKEKHL STVRRRRPRP KKSSKSSKPR KPDSAFVPSI IFIFLVSLIV GIL
+//
+ID   104K_THEPA              Reviewed;         924 AA.
+AC   P15711; Q4N2B5;
+DT   01-APR-1990, integrated into UniProtKB/Swiss-Prot.
+DT   01-APR-1990, sequence version 1.
+DT   31-OCT-2006, entry version 31.
+DE   104 kDa microneme-rhoptry antigen precursor (p104).
+GN   OrderedLocusNames=TP04_0437;
+OS   Theileria parva.
+OC   Eukaryota; Alveolata; Apicomplexa; Piroplasmida; Theileriidae;
+OC   Theileria.
+OX   NCBI_TaxID=5875;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RC   STRAIN=Muguga;
+RX   MEDLINE=90158697; PubMed=1689460; DOI=10.1016/0166-6851(90)90007-9;
+RA   Iams K.P., Young J.R., Nene V., Desai J., Webster P., Ole-Moiyoi O.K.,
+RA   Musoke A.J.;
+RT   "Characterisation of the gene encoding a 104-kilodalton microneme-
+RT   rhoptry protein of Theileria parva.";
+RL   Mol. Biochem. Parasitol. 39:47-60(1990).
+RN   [2]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].
+RC   STRAIN=Muguga;
+RX   PubMed=15994558; DOI=10.1126/science.1110439;
+RA   Gardner M.J., Bishop R., Shah T., de Villiers E.P., Carlton J.M.,
+RA   Hall N., Ren Q., Paulsen I.T., Pain A., Berriman M., Wilson R.J.M.,
+RA   Sato S., Ralph S.A., Mann D.J., Xiong Z., Shallom S.J., Weidman J.,
+RA   Jiang L., Lynn J., Weaver B., Shoaibi A., Domingo A.R., Wasawo D.,
+RA   Crabtree J., Wortman J.R., Haas B., Angiuoli S.V., Creasy T.H., Lu C.,
+RA   Suh B., Silva J.C., Utterback T.R., Feldblyum T.V., Pertea M.,
+RA   Allen J., Nierman W.C., Taracha E.L.N., Salzberg S.L., White O.R.,
+RA   Fitzhugh H.A., Morzaria S., Venter J.C., Fraser C.M., Nene V.;
+RT   "Genome sequence of Theileria parva, a bovine pathogen that transforms
+RT   lymphocytes.";
+RL   Science 309:134-137(2005).
+CC   -!- SUBCELLULAR LOCATION: Cell membrane; lipid-anchor; GPI-anchor
+CC       (Potential). In microneme/rhoptry complexes.
+CC   -!- DEVELOPMENTAL STAGE: Sporozoite antigen.
+DR   EMBL; M29954; AAA18217.1; -; Unassigned_DNA.
+DR   EMBL; AAGK01000004; EAN31789.1; -; Genomic_DNA.
+DR   PIR; A44945; A44945.
+DR   InterPro; IPR007480; DUF529.
+DR   Pfam; PF04385; FAINT; 4.
+KW   Complete proteome; GPI-anchor; Lipoprotein; Membrane; Repeat; Signal;
+KW   Sporozoite.
+FT   SIGNAL        1     19       Potential.
+FT   CHAIN        20    904       104 kDa microneme-rhoptry antigen.
+FT                                /FTId=PRO_0000046081.
+FT   PROPEP      905    924       Removed in mature form (Potential).
+FT                                /FTId=PRO_0000232679.
+FT   COMPBIAS    508    753       Pro-rich.
+FT   COMPBIAS    880    883       Poly-Arg.
+FT   LIPID       904    904       GPI-anchor amidated aspartate
+FT                                (Potential).
+SQ   SEQUENCE   924 AA;  103626 MW;  289B4B554A61870E CRC64;
+     MKFLILLFNI LCLFPVLAAD NHGVGPQGAS GVDPITFDIN SNQTGPAFLT AVEMAGVKYL
+     QVQHGSNVNI HRLVEGNVVI WENASTPLYT GAIVTNNDGP YMAYVEVLGD PNLQFFIKSG
+     DAWVTLSEHE YLAKLQEIRQ AVHIESVFSL NMAFQLENNK YEVETHAKNG ANMVTFIPRN
+     GHICKMVYHK NVRIYKATGN DTVTSVVGFF RGLRLLLINV FSIDDNGMMS NRYFQHVDDK
+     YVPISQKNYE TGIVKLKDYK HAYHPVDLDI KDIDYTMFHL ADATYHEPCF KIIPNTGFCI
+     TKLFDGDQVL YESFNPLIHC INEVHIYDRN NGSIICLHLN YSPPSYKAYL VLKDTGWEAT
+     THPLLEEKIE ELQDQRACEL DVNFISDKDL YVAALTNADL NYTMVTPRPH RDVIRVSDGS
+     EVLWYYEGLD NFLVCAWIYV SDGVASLVHL RIKDRIPANN DIYVLKGDLY WTRITKIQFT
+     QEIKRLVKKS KKKLAPITEE DSDKHDEPPE GPGASGLPPK APGDKEGSEG HKGPSKGSDS
+     SKEGKKPGSG KKPGPAREHK PSKIPTLSKK PSGPKDPKHP RDPKEPRKSK SPRTASPTRR
+     PSPKLPQLSK LPKSTSPRSP PPPTRPSSPE RPEGTKIIKT SKPPSPKPPF DPSFKEKFYD
+     DYSKAASRSK ETKTTVVLDE SFESILKETL PETPGTPFTT PRPVPPKRPR TPESPFEPPK
+     DPDSPSTSPS EFFTPPESKR TRFHETPADT PLPDVTAELF KEPDVTAETK SPDEAMKRPR
+     SPSEYEDTSP GDYPSLPMKR HRLERLRLTT TEMETDPGRM AKDASGKPVK LKRSKSFDDL
+     TTVELAPEPK ASRIVVDDEG TEADDEETHP PEERQKTEVR RRRPPKKPSK SPRPSKPKKP
+     KKPDSAYIPS ILAILVVSLI VGIL
+//
+ID   108_SOLLC               Reviewed;         102 AA.
+AC   Q43495;
+DT   15-JUL-1999, integrated into UniProtKB/Swiss-Prot.
+DT   01-NOV-1996, sequence version 1.
+DT   31-OCT-2006, entry version 37.
+DE   Protein 108 precursor.
+OS   Solanum lycopersicum (Tomato) (Lycopersicon esculentum).
+OC   Eukaryota; Viridiplantae; Streptophyta; Embryophyta; Tracheophyta;
+OC   Spermatophyta; Magnoliophyta; eudicotyledons; core eudicotyledons;
+OC   asterids; lamiids; Solanales; Solanaceae; Solanum; Lycopersicon.
+OX   NCBI_TaxID=4081;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE [MRNA].
+RC   STRAIN=cv. VF36; TISSUE=Anther;
+RX   MEDLINE=94143497; PubMed=8310077; DOI=10.1104/pp.101.4.1413;
+RA   Chen R., Smith A.G.;
+RT   "Nucleotide sequence of a stamen- and tapetum-specific gene from
+RT   Lycopersicon esculentum.";
+RL   Plant Physiol. 101:1413-1413(1993).
+CC   -!- TISSUE SPECIFICITY: Stamen- and tapetum-specific.
+CC   -!- SIMILARITY: Belongs to the A9/FIL1 family.
+DR   EMBL; Z14088; CAA78466.1; -; mRNA.
+DR   PIR; S26409; S26409.
+DR   InterPro; IPR013770; LPT_helical.
+DR   InterPro; IPR003612; LTP/seed_store/tryp_amyl_inhib.
+DR   Pfam; PF00234; Tryp_alpha_amyl; 1.
+DR   SMART; SM00499; AAI; 1.
+KW   Signal.
+FT   SIGNAL        1     30       Potential.
+FT   CHAIN        31    102       Protein 108.
+FT                                /FTId=PRO_0000000238.
+FT   DISULFID     41     77       By similarity.
+FT   DISULFID     51     66       By similarity.
+FT   DISULFID     67     92       By similarity.
+FT   DISULFID     79     99       By similarity.
+SQ   SEQUENCE   102 AA;  10576 MW;  CFBAA1231C3A5E92 CRC64;
+     MASVKSSSSS SSSSFISLLL LILLVIVLQS QVIECQPQQS CTASLTGLNV CAPFLVPGSP
+     TASTECCNAV QSINHDCMCN TMRIAAQIPA QCNLPPLSCS AN
+//
+"""
+
     print "#########################################################"
     print "# Sequence Input Tests                                  #"
     print "#########################################################"
@@ -1108,17 +1290,20 @@ ORIGIN
           "MESTLGSDLARLVRVWRALIDHRLKPLELTQTHWVTLHNINRLPPEQSQIQLAKAIGIEQ" + \
           "PSLVRTLDQLEEKGLITRHTCANDRRAKRIKLTEQSSPIIEQVDGVICSTRKEILGGISP" + \
           "DEIELLSGLIDKLERNIIQLQSK", True),
+          (swiss_example,"swiss", 3, "Q43495",
+          "MASVKSSSSSSSSSFISLLLLILLVIVLQSQVIECQPQQSCTASLTGLNVCAPFLVPGSP" + \
+          "TASTECCNAVQSINHDCMCNTMRIAAQIPAQCNLPPLSCSAN", True),
     ]
     
     for (data, format, rec_count, last_id, last_seq, dict_check) in tests:
         
         print "%s file with %i records" % (format, rec_count)
         
-        print "File2SequenceIterator(contents of file)"
+        print "FileToSequenceIterator(handle)"
 
         #Basic check, turning the iterator into a list...
         #This uses "for x in iterator" interally.
-        iterator = File2SequenceIterator(contents=data, format=format)
+        iterator = FileToSequenceIterator(handle=StringIO(data), format=format)
         as_list = list(iterator)
         assert len(as_list) == rec_count
         assert as_list[-1].id == last_id
@@ -1126,7 +1311,7 @@ ORIGIN
             assert as_list[-1].seq.tostring() == last_seq
 
         #Test iteration including use of the next() method and "for x in iterator"
-        iterator = File2SequenceIterator(contents=data, format=format)
+        iterator = FileToSequenceIterator(handle=StringIO(data), format=format)
         count = 1
         record = iterator.next()
         assert record is not None
@@ -1141,7 +1326,7 @@ ORIGIN
         assert record.id == last_id
 
         #Test iteration using just next() method
-        iterator = File2SequenceIterator(contents=data, format=format)
+        iterator = FileToSequenceIterator(handle=StringIO(data), format=format)
         count = 0
         while True :
             try :
@@ -1154,31 +1339,20 @@ ORIGIN
             count=count+1
         assert count == rec_count
 
-        print "File2SequenceIterator(handle to file)"
-        iterator = File2SequenceIterator(handle=StringIO(data), format=format)
+        print "FileToSequenceIterator(handle)"
+        iterator = FileToSequenceIterator(handle=StringIO(data), format=format)
         for (i, record) in enumerate(iterator) :
             assert record.id == as_list[i].id
             assert record.seq.tostring() == as_list[i].seq.tostring()            
         assert i+1 == rec_count
 
-        print "File2SequenceIterator(handle to empty file)"
-        iterator = File2SequenceIterator(handle=StringIO(""), format=format)
+        print "FileToSequenceIterator(handle to empty file)"
+        iterator = FileToSequenceIterator(handle=StringIO(""), format=format)
         assert len(list(iterator))==0
-
-        print "File2SequenceIterator(empty contents)"
-        iterator = File2SequenceIterator(contents="", format=format)
-        assert len(list(iterator))==0
-
-        print "File2SequenceList(contents of file)"
-        seq_list = File2SequenceList(contents=data, format=format)
-        assert len(seq_list) == len(as_list)
-        assert [r.id for r in seq_list] == [r.id for r in as_list]
-        for i in range(0, rec_count) :
-            seq_list[i].seq.tostring() == as_list[i].seq.tostring()
 
         if dict_check :
-            print "File2SequenceDict(contents of file)"
-            seq_dict = File2SequenceDict(contents=data, format=format)
+            print "FileToSequenceDict(handle)"
+            seq_dict = FileToSequenceDict(handle=StringIO(data), format=format)
             assert Set(seq_dict.keys()) == Set([r.id for r in as_list])
             assert last_id in seq_dict
             assert seq_dict[last_id].seq.tostring() == as_list[-1].seq.tostring()
@@ -1186,8 +1360,8 @@ ORIGIN
         if len(Set([len(r.seq) for r in as_list]))==1 :
             #All the sequences in the example are the same length,
             #so it make sense to try turning this file into an alignment.
-            print "File2Alignment(handle to file)"
-            alignment = File2Alignment(handle = StringIO(data), format=format)
+            print "FileToAlignment(handle)"
+            alignment = FileToAlignment(handle = StringIO(data), format=format)
             assert len(alignment._records)==rec_count
             assert alignment.get_alignment_length() == len(as_list[0].seq)
             for i in range(0, rec_count) :
@@ -1198,24 +1372,24 @@ ORIGIN
 
         print
         
-    print "Checking phy <-> aln examples agree using File2SequenceList"
+    print "Checking phy <-> aln examples agree using FileToSequenceList"
     #Only compare the first 10 characters of the record.id as they
-    #are truncated in the phylip file.  Cannot use File2SequenceDict
+    #are truncated in the phylip file.  Cannot use FileToSequenceDict
     #on the phylip file as there is a repeared id.
-    aln_list = File2SequenceList(contents=aln_example, format="clustal")
-    phy_list = File2SequenceList(contents=phy_example, format="phylip")
+    aln_list = FileToSequenceList(handle=StringIO(aln_example), format="clustal")
+    phy_list = FileToSequenceList(handle=StringIO(phy_example), format="phylip")
     assert len(aln_list) == len(phy_list)
     assert Set([r.id[0:10] for r in aln_list]) == Set([r.id for r in phy_list])
     for i in range(0, len(aln_list)) :
         assert aln_list[i].id[0:10] == phy_list[i].id
         assert aln_list[i].seq.tostring() == phy_list[i].seq.tostring()
         
-    print "Checking nxs <-> aln examples agree using File2SequenceIterator"
+    print "Checking nxs <-> aln examples agree using FileToSequenceIterator"
     #Only compare the first 10 characters of the record.id as they
-    #are truncated in the phylip file.  Cannot use File2SequenceDict
+    #are truncated in the phylip file.  Cannot use FileToSequenceDict
     #on the phylip file as there is a repeared id.
-    aln_iter = File2SequenceIterator(contents=aln_example, format="clustal")
-    nxs_iter = File2SequenceIterator(contents=nxs_example, format="nexus")
+    aln_iter = FileToSequenceIterator(handle=StringIO(aln_example), format="clustal")
+    nxs_iter = FileToSequenceIterator(handle=StringIO(nxs_example), format="nexus")
     while True :
         try :
             aln_record = aln_iter.next()
@@ -1232,10 +1406,10 @@ ORIGIN
         assert aln_record.id == nxs_record.id
         assert aln_record.seq.tostring() == nxs_record.seq.tostring()
     
-    print "Checking faa <-> aln examples agree using File2SequenceDict"
+    print "Checking faa <-> aln examples agree using FileToSequenceDict"
     #In my examples, aln_example is an alignment of faa_example
-    aln_dict = File2SequenceDict(contents=aln_example, format="clustal")
-    faa_dict = File2SequenceDict(contents=faa_example, format="fasta")
+    aln_dict = FileToSequenceDict(handle=StringIO(aln_example), format="clustal")
+    faa_dict = FileToSequenceDict(handle=StringIO(faa_example), format="fasta")
 
     ids = Set(aln_dict.keys())
     assert ids == Set(faa_dict.keys())
@@ -1255,7 +1429,7 @@ ORIGIN
     alignment_formats = ["phylip","stockholm","clustal"]
     for (in_data, in_format, rec_count, last_id, last_seq, unique_ids) in tests:
         if unique_ids :
-            in_list =  File2SequenceList(contents=in_data, format=in_format)
+            in_list =  FileToSequenceList(handle=StringIO(in_data), format=in_format)
             seq_lengths = [len(r.seq) for r in in_list]
             output_formats = general_output_formats[:]
             if min(seq_lengths)==max(seq_lengths) :
@@ -1266,15 +1440,15 @@ ORIGIN
             for out_format in output_formats :
                 print "Converting %s iterator -> %s" % (in_format, out_format)
                 output = open("temp.txt","w")
-                iterator = File2SequenceIterator(contents=in_data, format=in_format)
+                iterator = FileToSequenceIterator(handle=StringIO(in_data), format=in_format)
                 #I am using an iterator here deliberately, as some format
                 #writers (e.g. phylip and stockholm) will have to cope with
                 #this and get the record count).
-                Sequences2File(iterator, handle=output, format=out_format)
+                SequencesToFile(iterator, handle=output, format=out_format)
                 output.close()
 
                 print "Checking %s <-> %s" % (in_format, out_format)
-                out_list = File2SequenceList(filename="temp.txt", format=out_format)
+                out_list = FileToSequenceList(filename="temp.txt", format=out_format)
 
                 assert rec_count == len(out_list)
                 if last_seq :
@@ -1297,4 +1471,4 @@ ORIGIN
     print "#########################################################"
 
 
-    in_list = File2SequenceList(r"c:\temp\nexus_etc\example.nexus")
+    in_list = FileToSequenceList(r"c:\temp\nexus_etc\example.nexus")
