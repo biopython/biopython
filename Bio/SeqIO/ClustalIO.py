@@ -14,7 +14,6 @@ from Bio.SeqRecord import SeqRecord
 
 #For writing alignments:
 from Bio.SeqIO.Interfaces import SequenceWriter
-from Bio.SeqIO import Iter2Alignment
 from Bio.Clustalw import ClustalAlignment
 
 #This is a generator function!
@@ -30,6 +29,10 @@ def ClustalIterator(handle, alphabet = generic_alphabet) :
     You might like to look at Bio.Clustalw which has an interface
     to the command line tool clustalw, and can also clustal alignment
     files into Bio.Clustalw.ClustalAlignment objects.
+    
+    We call this the "clustal" format which is consist with EMBOSS.
+    Sadly BioPerl calls it the "clustalw" format, so we can't match
+    them both."
     """
     line = handle.readline()
     if not line: return
