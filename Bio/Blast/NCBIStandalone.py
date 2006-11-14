@@ -1010,7 +1010,7 @@ class _HSPConsumer:
         # added the end group and the -? to allow parsing
         # of BLAT output in BLAST format.
         start, seq, end = _re_search(
-            r"Sbjct: (-?\d+)\s*(.+) (-?\d+)", line,
+            r"Sbjct:\s*(-?\d+)\s*(.+) (-?\d+)", line,
             "I could not find the sbjct in line\n%s" % line)
         #mikep 26/9/00
         #On occasion, there is a blast hit with no subject match
