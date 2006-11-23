@@ -271,6 +271,10 @@ class Vector:
         "Return vector norm"
         return sqrt(sum(self._ar*self._ar))
 
+    def normsq(self):
+        "Return square of vector norm"
+        return abs(sum(self._ar*self._ar))
+
     def normalize(self):
         "Normalize the Vector"
         self._ar=self._ar/self.norm()
@@ -355,6 +359,10 @@ if __name__=="__main__":
         print v1**v2
         print v1**2
         print v1**(1,2,3)
+        # norm
+        print v1.norm()
+        # norm squared
+        print v1.normsq()
         # setitem
         v1[2]=10
         print v1
