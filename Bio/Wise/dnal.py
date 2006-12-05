@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
-__version__ = "$Revision: 1.9 $"
-
 from __future__ import division
+
+__version__ = "$Revision: 1.10 $"
 
 import commands
 import itertools
