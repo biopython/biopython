@@ -13,7 +13,7 @@ motifs or signatures.
 # standard modules
 import random
 import string
-import sre
+import re
 
 # biopython
 from Bio import Alphabet
@@ -86,7 +86,7 @@ class Schema:
 
             regexp_string += regexp_match
 
-        return sre.compile(regexp_string)
+        return re.compile(regexp_string)
 
     def find_ambiguous(self, motif):
         """Return the location of ambiguous items in the motif.
