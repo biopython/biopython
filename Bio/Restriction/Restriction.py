@@ -78,7 +78,7 @@
     ----------------------------------------------------------------------------
         """
 
-import sre
+import re
 
 from sets import Set
 import itertools
@@ -194,7 +194,7 @@ class FormattedSeq(object) :
             data = self.data
         else :
             data = self.data + self.data[1:size+1]
-        return [(i.start(), i.group) for i in sre.finditer(pattern, data)]
+        return [(i.start(), i.group) for i in re.finditer(pattern, data)]
 
     def __getitem__(self, i) :
         if self.lower :
@@ -215,7 +215,7 @@ class RestrictionType(type) :
         
         see below."""
         super(RestrictionType, cls).__init__(name, bases, dict)
-        cls.compsite = sre.compile(cls.compsite)
+        cls.compsite = re.compile(cls.compsite)
         
     def __add__(cls, other) :
         """RE.__add__(other) -> RestrictionBatch().
@@ -1509,7 +1509,7 @@ class Ambiguous(AbstractCut) :
                 if base in 'RYWMSKHDBV':
                     expand = '['+ matching[base] + ']'
                     se = expand.join(se.split(base))
-            if sre.match(se, other.ovhgseq) :
+            if re.match(se, other.ovhgseq) :
                 return True
             else :
                 return False         

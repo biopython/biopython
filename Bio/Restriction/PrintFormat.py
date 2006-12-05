@@ -8,7 +8,7 @@
 # as part of this package.
 #
 
-import sre
+import re
 import itertools
 from Bio.Restriction import RanaConfig as RanaConf
 from Bio.Restriction.DNAUtils import complement
@@ -395,7 +395,7 @@ class PrintFormat(object) :
         ls.sort()
         indentation = '\n' + (self.NameWidth + self.Indent) * ' '
         linesize = self.linesize - self.MaxSize
-        pat = sre.compile("([\w,\s()]){1,%i}[,\.]"%linesize)
+        pat = re.compile("([\w,\s()]){1,%i}[,\.]"%linesize)
         several, Join = '', ''.join
         for name, sites in ls :
             stringsite = ''
@@ -404,7 +404,7 @@ class PrintFormat(object) :
                 #
                 #   cut where appropriate and add the indentation
                 #
-                l = [x.group() for x in sre.finditer(pat, l)]
+                l = [x.group() for x in re.finditer(pat, l)]
                 stringsite = indentation.join(l) 
             else :
                 stringsite = l    
