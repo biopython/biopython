@@ -116,7 +116,7 @@ class BlastParser(_XMLparser):
     def _end_BlastOutput_program(self):
         """BLAST program, e.g., blastp, blastn, etc.
         """
-        self._blast.application = self._value.uuper()
+        self._blast.application = self._value.upper()
 
     def _end_BlastOutput_version(self):
         """version number of the BLAST engine (e.g., 2.1.2)
