@@ -1445,6 +1445,7 @@ def blastall(blastcmd, program, database, infile, **keywds):
     believe_query       Believe the query defline.  T/F
     restrict_gi         Restrict search to these GI's.
     nprocessors         Number of processors to use.
+    oldengine           Force use of old engine T/F
 
         Formatting
     html                Produce HTML output?  T/F
@@ -1482,6 +1483,7 @@ def blastall(blastcmd, program, database, infile, **keywds):
         'believe_query' : '-J',
         'restrict_gi' : '-l',
         'nprocessors' : '-a',
+        'oldengine' : '-V',
 
         'html' : '-T',
         'descriptions' : '-v',
