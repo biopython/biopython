@@ -1,12 +1,23 @@
-# BLAST XML parsing
+# Copyright 2000 by Bertrand Frottier .  All rights reserved.
+# Revisions 2005-2006 copyright Michiel de Hoon
+# Revisions 2006 copyright Peter Cock
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
 """This module provides code to work with the BLAST XML output
 following the DTD available on the NCBI FTP
 ftp://ftp.ncbi.nlm.nih.gov/blast/documents/xml/NCBI_BlastOutput.dtd
 
 Classes:
 BlastParser         Parses XML output from BLAST.
+                    This (now) returns a list of Blast records.
+                    Historically it returned a single Blast record.
 
 _XMLParser          Generic SAX parser.
+
+Functions:
+parse               Incremental parser, this is an iterator that returns
+                    Blast records.
 """
 from Bio.Blast import Record
 import xml.sax
@@ -19,11 +30,15 @@ class _XMLparser(ContentHandler):
 
     Redefine the methods startElement, characters and endElement.
     """
-    def __init__(self):
+    def __init__(self, debug=0):
         """Constructor
+
+        debug - integer, amount of debug information to print
         """
         self._tag = []
         self._value = ''
+        self._debug = debug
+        self._debug_ignore_list = []
 
     def _secure_name(self, name):
         """Removes 'dangerous' from tag names
@@ -44,12 +59,21 @@ class _XMLparser(ContentHandler):
         """
         self._tag.append(name)
         
-        # Try to call a method
-        try:
-            eval(self._secure_name('self._start_' + name))()
-        except AttributeError:
+        # Try to call a method (defined in subclasses)
+        method = self._secure_name('_start_' + name)
+
+        #Note could use try / except AttributeError
+        #BUT I found often triggered by nested errors...
+        if hasattr(self, method) :
+            eval("self.%s()" % method)
+            if self._debug > 4 :
+                print "NCBIXML: Parsed:  " + method
+        else :
             # Doesn't exist (yet)
-            pass
+            if method not in self._debug_ignore_list :
+                if self._debug > 3 :
+                    print "NCBIXML: Ignored: " + method
+                self._debug_ignore_list.append(method)
 
     def characters(self, ch):
         """Found some text
@@ -67,11 +91,20 @@ class _XMLparser(ContentHandler):
         self._value = self._value.strip()
         
         # Try to call a method (defined in subclasses)
-        try:
-            eval(self._secure_name('self._end_' + name))()
-        except AttributeError: # Method doesn't exist (yet ?)
-            pass    
-
+        method = self._secure_name('_end_' + name)
+        #Note could use try / except AttributeError
+        #BUT I found often triggered by nested errors...
+        if hasattr(self, method) :
+            eval("self.%s()" % method)
+            if self._debug > 2 :
+                print "NCBIXML: Parsed:  " + method, self._value
+        else :
+            # Doesn't exist (yet)
+            if method not in self._debug_ignore_list :
+                if self._debug > 1 :
+                    print "NCBIXML: Ignored: " + method, self._value
+                self._debug_ignore_list.append(method)
+        
         # Reset character buffer
         self._value = ''
         
@@ -80,17 +113,20 @@ class BlastParser(_XMLparser):
 
     Methods:
     parse           Parses BLAST XML data.
+                    Returns a list of Blast records
 
     All XML 'action' methods are private methods and may be:
     _start_TAG      called when the start tag is found
     _end_TAG        called when the end tag is found
     """
 
-    def __init__(self):
+    def __init__(self, debug=0):
         """Constructor
+
+        debug - integer, amount of debug information to print
         """
         # Calling superclass method
-        _XMLparser.__init__(self)
+        _XMLparser.__init__(self, debug)
         
         self._parser = xml.sax.make_parser()
         self._parser.setContentHandler(self)
@@ -101,50 +137,133 @@ class BlastParser(_XMLparser):
         self._parser.setFeature(xml.sax.handler.feature_external_pes, 0)
         self._parser.setFeature(xml.sax.handler.feature_external_ges, 0)
 
-        self._blast = Record.Blast()
+        self.reset()
+
+    def reset(self) :
+        """Reset all the data allowing reuse of the BlastParser() object"""
+        self._records = []
+        self._header = Record.Header()
+        self._parameters = Record.Parameters()
+        self._parameters.filter = None #Maybe I should update the class?
 
     def parse(self, handler):
         """Parses the XML data
 
         handler -- file handler or StringIO
+
+        This method returns a list of Blast record objects.
         """
-        # bugfix: changed `filename` to `handler`. Iddo 12/20/2004
+        self.reset()
         self._parser.parse(handler)
-        return self._blast
+        return self._records
+
+    def _start_Iteration(self):
+        self._blast = Record.Blast()
+        pass
+
+    def _end_Iteration(self):
+        # We stored a lot of generic "top level" information
+        # in self._header (an object of type Record.Header)
+        self._blast.reference = self._header.reference
+        self._blast.date = self._header.date
+        self._blast.version = self._header.version
+        self._blast.database = self._header.database
+        self._blast.application = self._header.application
+
+        # These are required for "old" pre 2.2.14 files
+        # where only <BlastOutput_query-ID>, <BlastOutput_query-def>
+        # and <BlastOutput_query-len> were used.  Now they
+        # are suplemented/replaced by <Iteration_query-ID>,
+        # <Iteration_query-def> and <Iteration_query-len>
+        if not hasattr(self._blast, "query") \
+        or not self._blast.query :
+            self._blast.query = self._header.query
+        if not hasattr(self._blast, "query_id") \
+        or not self._blast.query_id :
+            self._blast.query_id = self._header.query_id
+        if not hasattr(self._blast, "query_letters") \
+        or not self._blast.query_letters :
+            self._blast_query_letters = self._header.query_letters
+
+        # Apply the "top level" parameter information
+        self._blast.matrix = self._parameters.matrix
+        self._blast.num_seqs_better_e = self._parameters.num_seqs_better_e
+        self._blast.gap_penalties = self._parameters.gap_penalties
+        self._blast.filter = self._parameters.filter
+        self._blast.expect = self._parameters.expect
+
+        #Add to the list
+        self._records.append(self._blast)
+        #Clear the object (a new empty one is create in _start_Iteration)
+        self._blast = None
+
+        if self._debug : "NCBIXML: Added Blast record to results"
 
     # Header
     def _end_BlastOutput_program(self):
         """BLAST program, e.g., blastp, blastn, etc.
+
+        Save this to put on each blast record object
         """
-        self._blast.application = self._value.upper()
+        self._header.application = self._value.upper()
 
     def _end_BlastOutput_version(self):
         """version number of the BLAST engine (e.g., 2.1.2)
+
+        Save this to put on each blast record object
         """
-        self._blast.version = self._value.split()[1]
-        self._blast.date = self._value.split()[2][1:-1]
+        self._header.version = self._value.split()[1]
+        self._header.date = self._value.split()[2][1:-1]
 
     def _end_BlastOutput_reference(self):
         """a reference to the article describing the algorithm
+
+        Save this to put on each blast record object
         """
-        self._blast.reference = self._value
+        self._header.reference = self._value
 
     def _end_BlastOutput_db(self):
         """the database(s) searched
-        """
-        self._blast.database = self._value
 
-##     def _end_BlastOutput_query_ID(self):
-##         """the identifier of the query
-##         """
-##         pass # XXX MISSING in Record.Blast ? Useless ?
+        Save this to put on each blast record object
+        """
+        self._header.database = self._value
+
+    def _end_BlastOutput_query_ID(self):
+        """the identifier of the query
+
+        Important in old pre 2.2.14 BLAST, for recent versions
+        <Iteration_query-ID> is enough
+        """
+        self._header.query_id = self._value
 
     def _end_BlastOutput_query_def(self):
+        """the definition line of the query
+
+        Important in old pre 2.2.14 BLAST, for recent versions
+        <Iteration_query-def> is enough
+        """
+        self._header.query = self._value
+
+    def _end_BlastOutput_query_len(self):
+        """the length of the query
+
+        Important in old pre 2.2.14 BLAST, for recent versions
+        <Iteration_query-len> is enough
+        """
+        self._header.query_letters = int(self._value)
+
+    def _end_Iteration_query_ID(self):
+        """the identifier of the query
+        """
+        self._blast.query_id = self._value
+
+    def _end_Iteration_query_def(self):
         """the definition line of the query
         """
         self._blast.query = self._value
 
-    def _end_BlastOutput_query_len(self):
+    def _end_Iteration_query_len(self):
         """the length of the query
         """
         self._blast.query_letters = int(self._value)
@@ -173,12 +292,19 @@ class BlastParser(_XMLparser):
     def _end_Parameters_matrix(self):
         """matrix used (-M)
         """
-        self._blast.matrix = self._value
+        self._parameters.matrix = self._value
         
     def _end_Parameters_expect(self):
         """expect values cutoff (-e)
         """
-        self._blast.num_seqs_better_e = self._value
+        # NOTE: In old text output there was a line:
+        # Number of sequences better than 1.0e-004: 1
+        # As far as I can see, parameters.num_seqs_better_e
+        # would take the value of 1, and the expectation
+        # value was not recorded.
+        #
+        # Anyway we should NOT record this against num_seqs_better_e
+        self._parameters.expect = self._value
 
 ##     def _end_Parameters_include(self):
 ##         """inclusion threshold for a psi-blast iteration (-h)
@@ -188,28 +314,28 @@ class BlastParser(_XMLparser):
     def _end_Parameters_sc_match(self):
         """match score for nucleotide-nucleotide comparaison (-r)
         """
-        self._blast.sc_match = int(self._value)
+        self._parameters.sc_match = int(self._value)
 
     def _end_Parameters_sc_mismatch(self):
         """mismatch penalty for nucleotide-nucleotide comparaison (-r)
         """
-        self._blast.sc_mismatch = int(self._value)
+        self._parameters.sc_mismatch = int(self._value)
 
     def _end_Parameters_gap_open(self):
         """gap existence cost (-G)
         """
-        self._blast.gap_penalties = int(self._value)
+        self._parameters.gap_penalties = int(self._value)
 
     def _end_Parameters_gap_extend(self):
         """gap extension cose (-E)
         """
-        self._blast.gap_penalties = (self._blast.gap_penalties,
-                                     int(self._value))
+        self._parameters.gap_penalties = (self._parameters.gap_penalties,
+                                         int(self._value))
 
     def _end_Parameters_filter(self):
         """filtering options (-F)
         """
-        self._blast.filter = self._value
+        self._parameters.filter = self._value
 
 ##     def _end_Parameters_pattern(self):
 ##         """pattern used for phi-blast search
@@ -229,8 +355,12 @@ class BlastParser(_XMLparser):
         self._hit = self._blast.alignments[-1]
         self._descr = self._blast.descriptions[-1]
         self._descr.num_alignments = 0
-        
-    # Hit_num is useless
+
+    def _end_Hit(self):
+        #Cleanup
+        self._blast.multiple_alignment = None
+        self._hit = None
+        self._descr = None
 
     def _end_Hit_id(self):
         """identifier of the database sequence
@@ -254,10 +384,12 @@ class BlastParser(_XMLparser):
 
     # HSPs
     def _start_Hsp(self):
+        #Note that self._start_Hit() should have been called
+        #to setup things like self._blast.multiple_alignment
         self._hit.hsps.append(Record.HSP())
         self._hsp = self._hit.hsps[-1]
         self._descr.num_alignments += 1
-        self._blast.multiple_alignment.append(Record.MultipleAligment())
+        self._blast.multiple_alignment.append(Record.MultipleAlignment())
         self._mult_al = self._blast.multiple_alignment[-1]
 
     # Hsp_num is useless
@@ -272,8 +404,8 @@ class BlastParser(_XMLparser):
         """bit score of HSP
         """
         self._hsp.bits = float(self._value)
-        if self._descr.bits == None:
-            self._descr.bits = float(self._value)
+        #if self._descr.bits == None:
+        #    self._descr.bits = float(self._value)
 
     def _end_Hsp_evalue(self):
         """expect value value of the HSP
@@ -394,31 +526,122 @@ class BlastParser(_XMLparser):
         """
         self._blast.ka_params = self._blast.ka_params + (float(self._value),)
     
+def parse(handle, debug=0):
+    """Returns an iterator a Blast record for each query.
 
+    handle - file handle to and XML file to parse
+    debug - integer, amount of debug information to print
+
+    This is a generator function that returns multiple Blast records
+    objects - one for each query sequence given to blast.  The file
+    is read incrementally, returning complete records as they are read
+    in.
+
+    Should cope with new BLAST 2.2.14+ which gives a single XML file
+    for mutliple query records.
+
+    Should also cope with XML output from older versions BLAST which
+    gave multiple XML files concatenated together (giving a single file
+    which strictly speaking wasn't valid XML)."""
+    from xml.parsers import expat
+    BLOCK = 1024
+    MARGIN = 10 # must be at lest length of newline + XML start
+    XML_START = "<?xml"
+
+    text = handle.read(BLOCK)
+    pending = ""
     
+    while text :
+        #We are now starting a new XML file
+        if not text.startswith(XML_START) :
+            raise SyntaxError("Your XML file did not start <?xml...")
+
+        expat_parser = expat.ParserCreate()
+        blast_parser = BlastParser(debug)
+        expat_parser.StartElementHandler = blast_parser.startElement
+        expat_parser.EndElementHandler = blast_parser.endElement
+        expat_parser.CharacterDataHandler = blast_parser.characters
+
+        expat_parser.Parse(text, False)
+        while blast_parser._records:
+            record = blast_parser._records[0]
+            blast_parser._records = blast_parser._records[1:]
+            yield record
+
+        while True :
+            #Read in another block of the file...
+            text, pending = pending + handle.read(BLOCK), ""
+            if not text:
+                #End of the file!
+                expat_parser.Parse("", True) # End of XML record
+                break
+
+            #Now read a little bit more so we can check for the
+            #start of another XML file...
+            pending = handle.read(MARGIN)
+
+            if (text+pending).find("\n" + XML_START) == -1 :
+                # Good - still dealing with the same XML file
+                expat_parser.Parse(text, False)        
+                while blast_parser._records:
+                    record = blast_parser._records[0]
+                    blast_parser._records = blast_parser._records[1:]
+                    yield record
+            else :
+                # This is output from pre 2.2.14 BLAST,
+                # one XML file for each query!
+                
+                # Finish the old file:
+                text, pending = (text+pending).split("\n" + XML_START,1)
+                pending = XML_START + pending
+
+                expat_parser.Parse(text, True) # End of XML record
+                while blast_parser._records:
+                    record = blast_parser._records[0]
+                    blast_parser._records = blast_parser._records[1:]
+                    yield record
+               
+                #Now we are going to re-loop, reset the
+                #parsers and start reading the next XML file
+                text, pending = pending, ""
+                break
+
+        #At this point we have finished the first XML record.
+        #If the file is from an old version of blast, it may
+        #contain more XML records (check if text=="").
+        assert pending==""
+        assert len(blast_parser._records) == 0
+        
+    #We should have finished the file!
+    assert text==""
+    assert pending==""
+    assert len(blast_parser._records) == 0
+
 if __name__ == '__main__':
     import sys
+    import os
     p = BlastParser()
-    r = p.parse(sys.argv[1])
+    r_list = p.parse(sys.argv[1])
 
-    # Small test
-    print 'Blast of', r.query
-    print 'Found %s alignments with a total of %s HSPs' % (len(r.alignments),
-              reduce(lambda a,b: a+b,
-                     [len(a.hsps) for a in r.alignments]))
+    for r in r_list :
+        # Small test
+        print 'Blast of', r.query
+        print 'Found %s alignments with a total of %s HSPs' % (len(r.alignments),
+                  reduce(lambda a,b: a+b,
+                         [len(a.hsps) for a in r.alignments]))
 
-    for al in r.alignments:
-        print al.title[:50], al.length, 'bp', len(al.hsps), 'HSPs'
+        for al in r.alignments:
+            print al.title[:50], al.length, 'bp', len(al.hsps), 'HSPs'
 
-    # Cookbook example
-    E_VALUE_THRESH = 0.04
-    for alignment in r.alignments:
-        for hsp in alignment.hsps:
-            if hsp.expect < E_VALUE_THRESH:
-                print '*****'
-                print 'sequence', alignment.title
-                print 'length', alignment.length
-                print 'e value', hsp.expect
-                print hsp.query[:75] + '...'
-                print hsp.match[:75] + '...'
-                print hsp.sbjct[:75] + '...'
+        # Cookbook example
+        E_VALUE_THRESH = 0.04
+        for alignment in r.alignments:
+            for hsp in alignment.hsps:
+                if hsp.expect < E_VALUE_THRESH:
+                    print '*****'
+                    print 'sequence', alignment.title
+                    print 'length', alignment.length
+                    print 'e value', hsp.expect
+                    print hsp.query[:75] + '...'
+                    print hsp.match[:75] + '...'
+                    print hsp.sbjct[:75] + '...'
