@@ -30,7 +30,17 @@ for test in all_tests:
     print "*" * 50, "TESTING %s" % test
     datafile = os.path.join("Blast", test)
     input = open(datafile)
+
     result = parser.parse(input)
+
+    # In 2006, in order to cope with the new style XML files
+    # for multiple queries introduced in Blast 2.2.14 the
+    # parser was changed to return a list or records
+    # (instead of one single record).
+    if isinstance(result, list) :
+        assert len(result)==1
+        result = result[0]
+
     if not test in detailed_tests: continue
 
     alignments = result.alignments
@@ -48,7 +58,15 @@ for test in all_tests:
                 print '*****'
                 print 'sequence', alignment.title
                 print 'length', alignment.length
-                print 'e value', hsp.expect
+                # The following is a quick and dirty hack to get the
+                # number of digits in the exponent to match that on record
+                # as the expected output.
+                f = str(hsp.expect)
+                if f.find("e-") <> -1 :
+                    matissa, exponent = str(f).split("e-")
+                    print 'e value %se-%02i' % (matissa, int(exponent))
+                else :
+                    print 'e value', hsp.expect
                 print hsp.query[:75] + '...'
                 print hsp.match[:75] + '...'
                 print hsp.sbjct[:75] + '...'
