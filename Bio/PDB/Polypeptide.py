@@ -89,17 +89,23 @@ def one_to_three(s):
     i=d1_to_index[s]
     return dindex_to_3[i]
 
-def is_aa(residue):
+def is_aa(residue, standard=0):
     """
     Return 1 if residue object/string is an amino acid.
 
     @param residue: a L{Residue} object OR a three letter amino acid code
     @type residue: L{Residue} or string
+
+    @param standard: flag to check for the 20 AA (default false) 
+    @type standard: boolean
     """
     if not type(residue)==StringType:
         residue=residue.get_resname()
     residue=residue.upper()
-    return to_one_letter_code.has_key(residue)
+    if standard:
+        return d3_to_index.has_key(residue)
+    else:
+        return to_one_letter_code.has_key(residue)
 
 
 class Polypeptide(list):
@@ -133,6 +139,8 @@ class Polypeptide(list):
                 # Some atoms are missing
                 # Phi/Psi cannot be calculated for this residue
                 ppl.append((None, None))
+                res.xtra["PHI"]=None
+                res.xtra["PSI"]=None
                 continue
             # Phi
             if i>0:
@@ -157,6 +165,9 @@ class Polypeptide(list):
                 # No psi for last residue!
                 psi=None
             ppl.append((phi, psi))
+            # Add Phi/Psi to xtra dict of residue
+            res.xtra["PHI"]=phi
+            res.xtra["PSI"]=psi
         return ppl
 
     def get_tau_list(self):
@@ -172,6 +183,9 @@ class Polypeptide(list):
             v1, v2, v3, v4=vector_list
             tau=calc_dihedral(v1, v2, v3, v4)
             tau_list.append(tau)
+            # Put tau in xtra dict of residue
+            res=ca_list[i+2].get_parent()
+            res.xtra["TAU"]=tau
         return tau_list
 
     def get_theta_list(self):
@@ -187,6 +201,9 @@ class Polypeptide(list):
             v1, v2, v3=vector_list
             theta=calc_angle(v1, v2, v3)
             theta_list.append(theta)
+            # Put tau in xtra dict of residue
+            res=ca_list[i+1].get_parent()
+            res.xtra["THETA"]=theta
         return theta_list
 
     def get_sequence(self):
