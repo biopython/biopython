@@ -58,6 +58,22 @@ MAX_ACC["VAL"]=142.0
 MAX_ACC["TRP"]=227.0
 MAX_ACC["TYR"]=222.0
 
+
+def ss_to_index(ss):
+    """
+    Secondary structure symbol to index.
+    H=0
+    E=1
+    C=2
+    """
+    if ss=='H':
+        return 0
+    if ss=='E':
+        return 1
+    if ss=='C':
+        return 2
+    assert(0)
+
 def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
     """
     Create a DSSP dictionary from a PDB file.
