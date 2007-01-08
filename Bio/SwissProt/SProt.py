@@ -65,6 +65,8 @@ class Record:
     organism_classification  The taxonomy classification.  List of strings.
                              (http://www.ncbi.nlm.nih.gov/Taxonomy/)
     taxonomy_id       A list of NCBI taxonomy id's.
+    host_organism     A list of NCBI taxonomy id's of the hosts of a virus,
+                      if any.
     references        List of Reference objects.
     comments          List of strings.
     cross_references  List of tuples (db, id1[, id2][, id3]).  See the docs.
@@ -94,6 +96,7 @@ class Record:
         self.organelle = ''
         self.organism_classification = []
         self.taxonomy_id = []
+        self.host_organism = []
         self.references = []
         self.comments = []
         self.cross_references = []
@@ -406,6 +409,7 @@ class _Scanner:
                         any_number=1)
 
     def _scan_oh(self, uhandle, consumer):
+        # viral host organism. introduced after SwissProt 39.
         self._scan_line('OH', uhandle, consumer.organism_host, any_number=1)
 
     def _scan_reference(self, uhandle, consumer):
@@ -681,9 +685,18 @@ class _RecordConsumer(AbstractConsumer):
         self.data.taxonomy_id.extend([id.strip() for id in ids])
 
     def organism_host(self, line):
-        # Not Implemented...
-        pass
-    
+        # Line type OH (Organism Host) for viral hosts
+        # same code as in taxonomy_id()
+        line = self._chomp(line[5:].rstrip())
+        index = line.find('=')
+        if index >= 0:
+            descr = line[:index]
+            assert descr == "NCBI_TaxID", "Unexpected taxonomy type %s" % descr
+            ids = line[index+1:].split(',')
+        else:
+            ids = line.split(',')
+        self.data.host_organism.extend([id.strip() for id in ids])
+        
     def reference_number(self, line):
         rn = line[5:].rstrip()
         assert rn[0] == '[' and rn[-1] == ']', "Missing brackets %s" % rn
