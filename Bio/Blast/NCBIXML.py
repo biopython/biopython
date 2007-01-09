@@ -183,7 +183,7 @@ class BlastParser(_XMLparser):
             self._blast.query_id = self._header.query_id
         if not hasattr(self._blast, "query_letters") \
         or not self._blast.query_letters :
-            self._blast_query_letters = self._header.query_letters
+            self._blast.query_letters = self._header.query_letters
 
         # Apply the "top level" parameter information
         self._blast.matrix = self._parameters.matrix
