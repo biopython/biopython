@@ -77,12 +77,16 @@ class Alignment:
 
     Members:
     title      Name.
+    hit_id     Hit identifier. (str)
+    hit_def    Hit definition. (str)
     length     Length.  (int)
     hsps       A list of HSP objects.
 
     """
     def __init__(self):
         self.title = ''
+        self.hit_id = ''
+        self.hit_def = ''
         self.length = None
         self.hsps = []
     def __str__(self):
@@ -106,6 +110,7 @@ class HSP:
     identities      Number of identities/total aligned.  tuple of (int, int)
     positives       Number of positives/total aligned.  tuple of (int, int)
     gaps            Numer of gaps/total aligned.  tuple of (int, int)
+    align_length    Length of the alignment. (int)
     strand          Tuple of (query, target) strand.
     frame           Tuple of 1 or 2 frame shifts, depending on the flavor.
 
@@ -143,6 +148,7 @@ class HSP:
         self.identities = (None, None)
         self.positives = (None, None)
         self.gaps = (None, None)
+        self.align_length = None
         self.strand = (None, None)
         self.frame = ()
         
@@ -258,6 +264,7 @@ class Parameters:
     hsps_prelim_gapped_attemped  Number of HSP's attempted in prelim.  (int)
     hsps_gapped         Total number of HSP's gapped.  (int)
     query_length        Length of the query.  (int)
+    query_id            Identifier of the query sequence. (str)
     database_length     Number of letters in the database.  (int)
     effective_hsp_length         Effective HSP length.  (int)
     effective_query_length       Effective length of query.  (int)
@@ -286,6 +293,7 @@ class Parameters:
         self.hsps_prelim_gapped = None
         self.hsps_prelim_gapped_attemped = None
         self.hsps_gapped = None
+        self.query_id = None
         self.query_length = None
         self.database_length = None
         self.effective_hsp_length = None

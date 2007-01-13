@@ -365,11 +365,13 @@ class BlastParser(_XMLparser):
     def _end_Hit_id(self):
         """identifier of the database sequence
         """
+        self._hit.hit_id = self._value
         self._hit.title = self._value + ' '
 
     def _end_Hit_def(self):
         """definition line of the database sequence
         """
+        self._hit.hit_def = self._value
         self._hit.title += self._value
         self._descr.title = self._hit.title
 
@@ -469,6 +471,11 @@ class BlastParser(_XMLparser):
         """
         self._hsp.gaps = int(self._value)
 
+    def _end_Hsp_align_len(self):
+        """length of the alignment
+        """
+        self._hsp.align_length = int(self._value)
+
 ##     def _en_Hsp_density(self):
 ##         """score density
 ##         """
@@ -545,7 +552,7 @@ def parse(handle, debug=0):
     which strictly speaking wasn't valid XML)."""
     from xml.parsers import expat
     BLOCK = 1024
-    MARGIN = 10 # must be at lest length of newline + XML start
+    MARGIN = 10 # must be at least length of newline + XML start
     XML_START = "<?xml"
 
     text = handle.read(BLOCK)
