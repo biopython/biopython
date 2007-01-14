@@ -9,9 +9,12 @@ class StockholmIterator(InterlacedSequenceIterator) :
     The entire file is loaded, and any sequence can be accessed using
     the [index] notation.
 
-    This parser assumes the Stockholm file follows the PFAM conventions
+    This parser will detect if the Stockholm file follows the PFAM conventions
     for sequence specific meta-data (lines starting #=GS and #=GR) and
     populates the SeqRecord fields accordingly.
+    
+    Any annotation which does not follow the PFAM conventions is currently
+    ignored.
 
     If an accession is provided for an entry in the meta data, IT WILL NOT
     be used as the record.id (it will be recorded in the record's annotations).
@@ -19,11 +22,14 @@ class StockholmIterator(InterlacedSequenceIterator) :
     the same accession (differentiated by different start-end positions).
 
     Wrap-around alignments are not supported - each sequences must be on
-    a single line.  Interlaced sequences should work.
+    a single line.  However, interlaced sequences should work.
 
     For more information on the file format, please see:
     http://www.bioperl.org/wiki/Stockholm_multiple_alignment_format
     http://www.cgb.ki.se/cgb/groups/sonnhammer/Stockholm.html
+
+    For consistency with BioPerl and EMBOSS we call this the "stockholm"
+    format.
     """
 
     #These dictionaries should be kept in sync with those
@@ -60,9 +66,14 @@ class StockholmIterator(InterlacedSequenceIterator) :
             #Empty file - just give up.
             return
         if not line.strip() == '# STOCKHOLM 1.0':
-            raise SyntaxError("Did not find CLUSTAL header")
+            raise SyntaxError("Did not find STOCKHOLM header")
             #import sys
             #print >> sys.stderr, 'Warning file does not start with STOCKHOLM 1.0'
+
+        # Note: If this file follows the PFAM conventions, there should be
+        # a line containing the number of sequences, e.g. "#=GF SQ 67"
+        # We do not check for this - perhaps we should, and verify that
+        # if present it agrees with our parsing.
 
         seqs = {}
         ids = []
@@ -274,7 +285,7 @@ class StockholmWriter(SequentialSequenceWriter):
         This method should only be called once for each file."""
         try :
             #This will work for a list, and some of the SeqIO
-            #iterators too, like theStockholmIterator
+            #iterators too, like the StockholmIterator
             count = len(records)
         except TypeError :
             #Probably have an standard iterator, not a list...
