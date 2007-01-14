@@ -1,4 +1,4 @@
-# Copyright 2006 by Peter Cock.  All rights reserved.
+# Copyright 2006, 2007 by Peter Cock.  All rights reserved.
 #
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -29,10 +29,10 @@ def ClustalIterator(handle, alphabet = generic_alphabet) :
     You might like to look at Bio.Clustalw which has an interface
     to the command line tool clustalw, and can also clustal alignment
     files into Bio.Clustalw.ClustalAlignment objects.
-    
+         
     We call this the "clustal" format which is consist with EMBOSS.
     Sadly BioPerl calls it the "clustalw" format, so we can't match
-    them both."
+    them both.
     """
     line = handle.readline()
     if not line: return
@@ -47,11 +47,27 @@ def ClustalIterator(handle, alphabet = generic_alphabet) :
         if line[0] == ' ': continue
         fields = line.rstrip().split()
         if not len(fields): continue
-        if len(fields) <> 2 : raise SyntaxError("Could not parse line:\n%s" % line)
-        name, seq = fields
+        
+        #We expect there to be two fields, but on older files
+        #there may be a third entry containing a letter count.
+        if len(fields) < 2 or len(fields) > 3:
+            raise SyntaxError("Could not parse line:\n%s" % line)
+
+        name, seq = fields[0], fields[1]
         if not name in ids: ids.append(name)
         seqs.setdefault(name, '')
         seqs[name] += seq.upper()
+
+        if len(fields) == 3 :
+            #This MAY be an old style file with a letter count...
+            try :
+                oddity = int(fields[2])
+            except ValueError :
+                raise SyntaxError("Could not parse line, odd third field:\n%s" % line)
+            #Check this equals the number of letters (excluding gaps)
+            #so far for this sequence?
+            if len(seqs[name].replace("-","")) <> oddity :
+                raise SyntaxError("Could not parse line, odd third field:\n%s" % line)
 
     for id in ids :
         yield SeqRecord(Seq(seqs[id], alphabet), id=id)
