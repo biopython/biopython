@@ -570,7 +570,8 @@ class _RecordConsumer(AbstractConsumer):
     
     def date(self, line):
         uprline = string.upper(line)
-
+        cols = line.rstrip().split()
+                
         if uprline.find('CREATED') >= 0 \
         or uprline.find('LAST SEQUENCE UPDATE') >= 0 \
         or uprline.find('LAST ANNOTATION UPDATE') >= 0:
@@ -598,7 +599,6 @@ class _RecordConsumer(AbstractConsumer):
                     "Could not find Rel. in DT line: %s" % (line)
             version_index = rel_index + 1
             # get the version information
-            cols = line.split()
             str_version = self._chomp(cols[version_index])
             # no version number
             if str_version == '':
@@ -618,7 +618,6 @@ class _RecordConsumer(AbstractConsumer):
                 self.data.annotation_update = cols[1], version
             else:
                 assert False, "Shouldn't reach this line!"
-                raise SyntaxError, "I don't understand the date line %s" % line
         elif uprline.find('INTEGRATED INTO') >= 0 \
         or uprline.find('SEQUENCE VERSION') >= 0 \
         or uprline.find('ENTRY VERSION') >= 0:
@@ -638,9 +637,25 @@ class _RecordConsumer(AbstractConsumer):
             # DT   01-APR-2004, entry version 14.
             #
             #This is a new style DT line...
-            print "WARNING - Ignoring line: " + line.rstrip()
-            # TODO - Expose the new version and database information
-            #        to the record object.
+
+            # The date should be in string cols[1]
+            # Get the version number if there is one.
+            # For the three DT lines above: 0, 3, 14
+            try:
+                version = int(cols[-1])
+            except ValueError :
+                version = 0
+
+            # Re-use the historical property names, even though
+            # the meaning has changed slighty:
+            if uprline.find("INTEGRATED") >= 0:
+                self.data.created = cols[1], version
+            elif uprline.find('SEQUENCE VERSION') >= 0:
+                self.data.sequence_update = cols[1], version
+            elif uprline.find( 'ENTRY VERSION') >= 0:
+                self.data.annotation_update = cols[1], version
+            else:
+                assert False, "Shouldn't reach this line!"
         else:
             raise SyntaxError, "I don't understand the date line %s" % line
     
@@ -1003,3 +1018,4 @@ def index_file(filename, indexname, rec2key=None):
             raise KeyError, "duplicate key %s found" % key
 
         index[key] = start, length
+        
