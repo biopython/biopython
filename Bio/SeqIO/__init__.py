@@ -1,4 +1,4 @@
-# Copyright 2006 by Peter Cock.  All rights reserved.
+# Copyright 2006-2007 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -13,31 +13,51 @@
 
 Input
 =====
-There are four helper functions which all take a filename/handle, and
-optional format
+The main function is SequenceIterator(...) which takes an input file handle,
+and optional format string.  This returns an iterator giving SeqRecord objects.
 
-FileToSequenceIterator - SeqRecord iterator (low memory, forward access only)
-FileToSequenceList     - List of SeqRecord objects
-FileToSequenceDict     - Dictionary of SeqRecord objects by record ID
-FileToAlignment        - Alignment from a multiple sequence alignment file
+    handle = open("example.fasta", "rU")
+    format = "fasta"
+    for record in SequenceIterator(handle, format) :
+        print record
 
-For non-interlaced files (e.g. Fasta, GenBank, EMBL) with multiple records using
-a sequence iterator can save you a lot of memory (RAM).  The saving for interlaced
-file formats (e.g. most multiple alignment file formats).  However, you will only
-be able to access the records one by one.
+For non-interlaced files (e.g. Fasta, GenBank, EMBL) with multiple records
+using a sequence iterator can save you a lot of memory (RAM).  The saving for
+interlaced file formats (e.g. most multiple alignment file formats).  However,
+you will only be able to access the records one by one.
 
 These will all invoke the relevant parser with default settings.  You may want
-more control, in which case you need to create a sequence iterator directly.
+more control, in which case you need to create a format specific sequence
+iterator directly.
+
+If you want random access to the records by number, turn this into a list:
+
+    handle = open("example.fasta", "rU")
+    format = "fasta"
+    records = list(SequenceIterator(handle, format))
+    print records[0]
+
+If you want random access to the records by a key such as the record id, turn
+the iterator into a dictionary:
+
+    handle = open("example.fasta", "rU")
+    format = "fasta"
+    record_dict = SequencesToDict(SequenceIterator(handle, format))
+    print record["gi:12345678"]
+
+Input - Alignments
+==================
+Use the SequencesToAlignment(...) function, like so:
+
+    handle = open("example.aln", "rU")
+    format = "clustal"
+    alignment = SequencesToAlignment(SequenceIterator(handle, format))
 
 Output
 ======
-There is a single helper function which takes a complete set of records (either
-a list, or an iterator) and a filename:
-
-SequencesToFile        - Creates a file, writes provided sequences and close file.
-
-For some writers (e.g. phylip and interlaced file formats) if you provide a
-SeqRecord iterator, it will be converted into a list.
+Use the function WriteSequences(...), which takes a complete set of SeqRecord
+objects (either as a list, or an iterator), an output file handle and of course
+the file format.
 
 If you are using a sequential file format, you may want to write out the records
 one at a time.  To do this, you will need to create a sequence writer directly.
@@ -48,12 +68,15 @@ When specifying formats, use lowercase strings.
 
 Old Files
 =========
-The modules Bio.SeqIO.FASTA and Bio.SeqIO.generic are going to be marked depreciated
+The modules Bio.SeqIO.FASTA and Bio.SeqIO.generic are considered to be depreciated
 """
 
 #TODO
 # - define policy on reading aligned sequences with gaps in
 #   (e.g. - and . characters) including how the alphabet interacts
+#
+# - Can we build the SequencesToAlignment(...) functionality
+#   into the generic Alignment class instead?
 #
 # - How best to handle unique/non unique record.id when writing.
 #   For most file formats reading such files is fine; The stockholm
@@ -160,7 +183,10 @@ _FormatToWriter ={"fasta" : FastaIO.FastaWriter,
                   }
 
 def _filename2format(filename) :
-    """Helper function to guess file format based on extension"""
+    """Guesses a format based on its extension
+
+    Raises an error if the extension is not recognised (e.g. *.txt)
+    """
     parts = os.path.basename(filename).split(os.path.extsep)
     assert len(parts) > 1, "No filename extension"
     extension = parts[-1]
@@ -173,86 +199,68 @@ def _filename2format(filename) :
     return format
 
 
-def SequencesToFile(sequences, filename=None, format=None, handle=None) :
+def WriteSequences(sequences, handle, format) :
     """Write sequences to a file (and closes the file).
 
     sequences - A list (or iterator) of SeqRecord objects
-
-    You should also supply at least one of:
-    filename - Where to write the records
-    handle   - File handle object to write to (which will get closed)
-
-    You are strongly recommended to supply:
-    format   - What format to use.  If ommitted, then the filename
-               extension will be used to try guess.
+    handle    - File handle object to write to (which will get closed)
+    format    - What format to use.
     """
-    assert filename is not None or handle is not None, \
-        "filename or handle is required"
-    if not format :
-        assert filename is not None, \
-           "A filename and/or file format must be supplied"
-        #This may raise an exception...
-        format =  _filename2format(filename)
+
+    #We could try and guess the format from the filename,
+    #but that is just too risky for little benefit.
     try :
         writer_class = _FormatToWriter[format]
     except KeyError :
         assert False, "Unknown format, " + format
 
-    if handle is None:
-        handle = open(filename,"w")
     writer_class(handle).write_file(sequences)
     handle.close() #just in case the writer object forgot
     
-def FileToSequenceIterator(filename=None, format=None, handle=None) :
+def SequenceIterator(handle, format=None) :
     """Turns a sequence file into a iterator returning SeqRecords
 
-    You must supply the data using one of the following arguments
-    (which are used in preference order: handle, filename)
-    
-    filename - Path to a local file containing the sequences.
-    handle   - Or, handle to the file.
-
+    handle   - handle to the file.
     format   - String describing the file format.  If omitted,
-               then then filename (if given) will be used to
-               guess the format.
+               then then filename (determined from the handle)
+               will be used to guess the format.
+
+    If you have a string 'filename', use:
+
+    my_iterator = SequenceIterator(open(filename,"rU"), format)
+
+    If you have a string 'data' containing the file contents, use:
+
+    from StringIO import StringIO
+    my_iterator = SequenceIterator(StringIO(data), format)
 
     Note that file will be parsed with default settings,
     which may result in a generic alphabet or other non-ideal
-    settings.  For more control, use the format specific
-    iterator directly."""
+    settings.  For more control, you must use the format specific
+    iterator directly..."""
 
-    assert (filename is not None) or (handle is not None), \
-    "A filename or file handle must be supplied"
+    #Try and give a helpful error message in this case:
+    if isinstance(handle, basestring) :
+        raise ValueError("Need a file handle, not a string (i.e. not a filename)")
 
-    if filename is not None :
-        assert os.path.isfile(filename), "File not found: " + filename
+    try :
+        filename = handle.name
+    except :
+        filename = None
+
+    if not format and not filename :
+        raise ValueError("Format required and could not determine filename to guess")
 
     if not format :
-        assert filename is not None, \
-           "A filename and/or file format must be supplied"
         #This may raise an exception...
         format =  _filename2format(filename)
     try :
         iterator_generator = _FormatToIterator[format]
     except KeyError :
-        assert False, "Unknown format, " + format
+        raise ValueError("Unknown format '%s'" % format)
 
-    if handle is not None :
-        #Its up to the caller to close this handle - they opened it.
-        return iterator_generator(handle)
-    else :
-        #TODO - I can't see a nice way to explicitly close this handle...
-        return iterator_generator(open(filename,"rU"))
-
-def FileToSequenceList(filename=None, format=None, handle=None) :
-    """Turns a sequence file into a list of SeqRecords
-
-    This function is a simple wrapper for list(FileToSequenceIterator(...))
-
-    See FileToSequenceIterator for details on the arguments."""
-    return list(FileToSequenceIterator(filename=filename,
-                                       format=format,
-                                       handle=handle))
+    #Its up to the caller to close this handle - they opened it.
+    return iterator_generator(handle)
 
 def SequencesToDict(sequences, record2key=None) :
     """Turns a sequence iterator or list into a dictionary
@@ -274,7 +282,7 @@ def SequencesToDict(sequences, record2key=None) :
     Example usage:
 
     filename = "example.fasta"
-    d = SequencesToDict(FastaIterator(open(faa_filename)),
+    d = SequencesToDict(FastaIterator(open(faa_filename, "rU")),
         record2key = lambda rec : rec.description.split()[0])
     print len(d)
     print d.keys()[0:10]
@@ -292,30 +300,17 @@ def SequencesToDict(sequences, record2key=None) :
         d[key] = record
     return d
 
-def FileToSequenceDict(filename=None, format=None, handle=None, record2key=None) :
-    """Turns a sequence file into a dictionary of SeqRecords
-
-    If no function record2key is provided, then each record's
-    id is used as its key.  If the keys are non-unique an
-    error is raised.
-
-    See also SequencesToDict and FileToSequenceIterator."""
-    iterator = FileToSequenceIterator(filename=filename,
-                                      format=format,
-                                      handle=handle)
-    return SequencesToDict(iterator, record2key)
-
 def SequencesToAlignment(sequences, alphabet=generic_alphabet, strict=True) :
     """Returns a multiple sequence alignment
 
     sequences -An iterator that returns SeqRecord objects,
                or simply a list of SeqRecord objects.
                All the record sequences must be the same length.
-    
     alphabet - Optional alphabet.  Stongly recommended.
     strict   - Optional, defaults to True.  Should error checking
                be done?
     """
+    #TODO - Move this functionality into the Alignment class instead?
     alignment_length = None
     alignment = Alignment(alphabet)
     for record in sequences :
@@ -335,25 +330,13 @@ def SequencesToAlignment(sequences, alphabet=generic_alphabet, strict=True) :
         #but which takes SeqRecord objects.
         alignment._records.append(record)
     return alignment
-
-def FileToAlignment(filename=None, format=None, handle=None,
-                   alphabet=generic_alphabet, strict=True) :
-    """Returns a multiple sequence alignment
-
-    alphabet - Optional alphabet.  Stongly recommended.
-
-    See FileToSequenceIterator for details on the other four arguments."""
-    iterator = FileToSequenceIterator(filename=filename,
-                                      format=format,
-                                      handle=handle)
-    return SequencesToAlignment(iterator, alphabet=alphabet)
            
 if __name__ == "__main__" :
     #Run some tests...
     from Bio.Alphabet import generic_nucleotide
     from sets import Set
     
-    # Fasta file with unusual lay out, from here:
+    # Fasta file with unusual layout, from here:
     # http://virgil.ruc.dk/kurser/Sekvens/Treedraw.htm
     faa_example = \
 """>V_Harveyi_PATH
@@ -1299,11 +1282,11 @@ SQ   SEQUENCE   102 AA;  10576 MW;  CFBAA1231C3A5E92 CRC64;
         
         print "%s file with %i records" % (format, rec_count)
         
-        print "FileToSequenceIterator(handle)"
+        print "SequenceIterator(handle)"
 
         #Basic check, turning the iterator into a list...
         #This uses "for x in iterator" interally.
-        iterator = FileToSequenceIterator(handle=StringIO(data), format=format)
+        iterator = SequenceIterator(StringIO(data), format=format)
         as_list = list(iterator)
         assert len(as_list) == rec_count
         assert as_list[-1].id == last_id
@@ -1311,7 +1294,7 @@ SQ   SEQUENCE   102 AA;  10576 MW;  CFBAA1231C3A5E92 CRC64;
             assert as_list[-1].seq.tostring() == last_seq
 
         #Test iteration including use of the next() method and "for x in iterator"
-        iterator = FileToSequenceIterator(handle=StringIO(data), format=format)
+        iterator = SequenceIterator(StringIO(data), format=format)
         count = 1
         record = iterator.next()
         assert record is not None
@@ -1326,7 +1309,7 @@ SQ   SEQUENCE   102 AA;  10576 MW;  CFBAA1231C3A5E92 CRC64;
         assert record.id == last_id
 
         #Test iteration using just next() method
-        iterator = FileToSequenceIterator(handle=StringIO(data), format=format)
+        iterator = SequenceIterator(StringIO(data), format=format)
         count = 0
         while True :
             try :
@@ -1339,20 +1322,20 @@ SQ   SEQUENCE   102 AA;  10576 MW;  CFBAA1231C3A5E92 CRC64;
             count=count+1
         assert count == rec_count
 
-        print "FileToSequenceIterator(handle)"
-        iterator = FileToSequenceIterator(handle=StringIO(data), format=format)
+        print "SequenceIterator(handle)"
+        iterator = SequenceIterator(StringIO(data), format=format)
         for (i, record) in enumerate(iterator) :
             assert record.id == as_list[i].id
             assert record.seq.tostring() == as_list[i].seq.tostring()            
         assert i+1 == rec_count
 
-        print "FileToSequenceIterator(handle to empty file)"
-        iterator = FileToSequenceIterator(handle=StringIO(""), format=format)
+        print "SequenceIterator(handle to empty file)"
+        iterator = SequenceIterator(StringIO(""), format=format)
         assert len(list(iterator))==0
 
         if dict_check :
-            print "FileToSequenceDict(handle)"
-            seq_dict = FileToSequenceDict(handle=StringIO(data), format=format)
+            print "SequencesToDict(SequenceIterator(...))"
+            seq_dict = SequencesToDict(SequenceIterator(StringIO(data), format=format))
             assert Set(seq_dict.keys()) == Set([r.id for r in as_list])
             assert last_id in seq_dict
             assert seq_dict[last_id].seq.tostring() == as_list[-1].seq.tostring()
@@ -1360,8 +1343,8 @@ SQ   SEQUENCE   102 AA;  10576 MW;  CFBAA1231C3A5E92 CRC64;
         if len(Set([len(r.seq) for r in as_list]))==1 :
             #All the sequences in the example are the same length,
             #so it make sense to try turning this file into an alignment.
-            print "FileToAlignment(handle)"
-            alignment = FileToAlignment(handle = StringIO(data), format=format)
+            print "SequencesToAlignment(SequenceIterator(handle))"
+            alignment = SequencesToAlignment(SequenceIterator(handle = StringIO(data), format=format))
             assert len(alignment._records)==rec_count
             assert alignment.get_alignment_length() == len(as_list[0].seq)
             for i in range(0, rec_count) :
@@ -1372,24 +1355,24 @@ SQ   SEQUENCE   102 AA;  10576 MW;  CFBAA1231C3A5E92 CRC64;
 
         print
         
-    print "Checking phy <-> aln examples agree using FileToSequenceList"
+    print "Checking phy <-> aln examples agree using list(SequenceIterator(...))"
     #Only compare the first 10 characters of the record.id as they
-    #are truncated in the phylip file.  Cannot use FileToSequenceDict
+    #are truncated in the phylip file.  Cannot use SequencesToDict(SequenceIterator(...))
     #on the phylip file as there is a repeared id.
-    aln_list = FileToSequenceList(handle=StringIO(aln_example), format="clustal")
-    phy_list = FileToSequenceList(handle=StringIO(phy_example), format="phylip")
+    aln_list = list(SequenceIterator(StringIO(aln_example), format="clustal"))
+    phy_list = list(SequenceIterator(StringIO(phy_example), format="phylip"))
     assert len(aln_list) == len(phy_list)
     assert Set([r.id[0:10] for r in aln_list]) == Set([r.id for r in phy_list])
     for i in range(0, len(aln_list)) :
         assert aln_list[i].id[0:10] == phy_list[i].id
         assert aln_list[i].seq.tostring() == phy_list[i].seq.tostring()
         
-    print "Checking nxs <-> aln examples agree using FileToSequenceIterator"
+    print "Checking nxs <-> aln examples agree using SequenceIterator"
     #Only compare the first 10 characters of the record.id as they
-    #are truncated in the phylip file.  Cannot use FileToSequenceDict
+    #are truncated in the phylip file.  Cannot use SequencesToDict(SequenceIterator(...))
     #on the phylip file as there is a repeared id.
-    aln_iter = FileToSequenceIterator(handle=StringIO(aln_example), format="clustal")
-    nxs_iter = FileToSequenceIterator(handle=StringIO(nxs_example), format="nexus")
+    aln_iter = SequenceIterator(StringIO(aln_example), format="clustal")
+    nxs_iter = SequenceIterator(StringIO(nxs_example), format="nexus")
     while True :
         try :
             aln_record = aln_iter.next()
@@ -1406,10 +1389,10 @@ SQ   SEQUENCE   102 AA;  10576 MW;  CFBAA1231C3A5E92 CRC64;
         assert aln_record.id == nxs_record.id
         assert aln_record.seq.tostring() == nxs_record.seq.tostring()
     
-    print "Checking faa <-> aln examples agree using FileToSequenceDict"
+    print "Checking faa <-> aln examples agree using SequencesToDict(SequenceIterator(...)"
     #In my examples, aln_example is an alignment of faa_example
-    aln_dict = FileToSequenceDict(handle=StringIO(aln_example), format="clustal")
-    faa_dict = FileToSequenceDict(handle=StringIO(faa_example), format="fasta")
+    aln_dict = SequencesToDict(SequenceIterator(StringIO(aln_example), format="clustal"))
+    faa_dict = SequencesToDict(SequenceIterator(StringIO(faa_example), format="fasta"))
 
     ids = Set(aln_dict.keys())
     assert ids == Set(faa_dict.keys())
@@ -1429,7 +1412,7 @@ SQ   SEQUENCE   102 AA;  10576 MW;  CFBAA1231C3A5E92 CRC64;
     alignment_formats = ["phylip","stockholm","clustal"]
     for (in_data, in_format, rec_count, last_id, last_seq, unique_ids) in tests:
         if unique_ids :
-            in_list =  FileToSequenceList(handle=StringIO(in_data), format=in_format)
+            in_list =  list(SequenceIterator(StringIO(in_data), format=in_format))
             seq_lengths = [len(r.seq) for r in in_list]
             output_formats = general_output_formats[:]
             if min(seq_lengths)==max(seq_lengths) :
@@ -1440,15 +1423,15 @@ SQ   SEQUENCE   102 AA;  10576 MW;  CFBAA1231C3A5E92 CRC64;
             for out_format in output_formats :
                 print "Converting %s iterator -> %s" % (in_format, out_format)
                 output = open("temp.txt","w")
-                iterator = FileToSequenceIterator(handle=StringIO(in_data), format=in_format)
+                iterator = SequenceIterator(StringIO(in_data), format=in_format)
                 #I am using an iterator here deliberately, as some format
                 #writers (e.g. phylip and stockholm) will have to cope with
-                #this and get the record count).
-                SequencesToFile(iterator, handle=output, format=out_format)
+                #this and get the record count.
+                WriteSequences(iterator, output, out_format)
                 output.close()
 
                 print "Checking %s <-> %s" % (in_format, out_format)
-                out_list = FileToSequenceList(filename="temp.txt", format=out_format)
+                out_list = list(SequenceIterator(open("temp.txt","rU"), format=out_format))
 
                 assert rec_count == len(out_list)
                 if last_seq :
@@ -1471,4 +1454,4 @@ SQ   SEQUENCE   102 AA;  10576 MW;  CFBAA1231C3A5E92 CRC64;
     print "#########################################################"
 
 
-    in_list = FileToSequenceList(r"c:\temp\nexus_etc\example.nexus")
+    in_list = list(SequenceIterator(open(r"c:\temp\nexus_etc\example.nexus","rU")))
