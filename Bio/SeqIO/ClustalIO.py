@@ -30,7 +30,7 @@ def ClustalIterator(handle, alphabet = generic_alphabet) :
     to the command line tool clustalw, and can also clustal alignment
     files into Bio.Clustalw.ClustalAlignment objects.
          
-    We call this the "clustal" format which is consist with EMBOSS.
+    We call this the "clustal" format which is consistent with EMBOSS.
     Sadly BioPerl calls it the "clustalw" format, so we can't match
     them both.
     """
@@ -86,9 +86,8 @@ class ClustalWriter(SequenceWriter):
 
         records - a SeqRecord iterator, or list of SeqRecords
 
-        This code uses Bio.Clustalw.ClustalAlignment to do the hard
-        work.  If you are working with alignment objects then using
-        Bio.Clustalw.ClustalAlignment directly would be best.
+        Right now this code uses Bio.Clustalw.ClustalAlignment to do
+        the hard work - this may change in the future.
         """
         # ToDo - decide if using Bio.Clustalw.ClustalAlignment is
         # actually the best way to handle this.
@@ -118,4 +117,7 @@ class ClustalWriter(SequenceWriter):
             alignment.add_sequence(record.id, record.seq.tostring())
 
         self.handle.write(str(alignment))
-        self.handle.close()
+        #Don't close the handle.  Doing so would prevent this code
+        #from writing concatenated Clustal files which might be used
+        #in phylogenetic bootstrapping (very common with phylip).
+        #self.handle.close()

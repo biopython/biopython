@@ -1,3 +1,8 @@
+# Copyright 2006, 2007 by Peter Cock.  All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
 from Bio.Alphabet import generic_alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
@@ -294,7 +299,10 @@ class StockholmWriter(SequentialSequenceWriter):
         self.write_header(count)
         self.write_records(records)
         self.write_footer()
-        self.close()
+        #Don't automatically close the file.  This would prevent
+        #things like writing concatenated alignments as used for
+        #phylogenetic bootstrapping (usually done with phylip).
+        #self.close()
         
     def write_record(self, record):
         """Write a single Stockholm record to the file"""

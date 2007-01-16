@@ -1,4 +1,4 @@
-# Copyright 2006 by Peter Cock.  All rights reserved.
+# Copyright 2006, 2007 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -129,8 +129,11 @@ class PhylipWriter(SequenceWriter):
             block=block+1
             if block*50 > length_of_sequences : break
             handle.write("\n")
-            
-        handle.close()
+
+        #Don't close the handle.  Doing so would prevent this code
+        #from writing concatenated phylip files which are used
+        #in phylogenetic bootstrapping
+        #handle.close()
 if __name__=="__main__" :
     print "Testing"
 

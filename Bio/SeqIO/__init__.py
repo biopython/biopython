@@ -59,8 +59,25 @@ Use the function WriteSequences(...), which takes a complete set of SeqRecord
 objects (either as a list, or an iterator), an output file handle and of course
 the file format.
 
+In general, you are expected to call this function once (with all your records)
+and then close the file handle.
+
+Output - Advanced
+=================
+The effect of calling WriteSequences multiple times on a single file will vary
+depending on the file format, and is best avoided unless you have a strong reason
+to do so.
+
+Trying this for certain alignment formats (e.g. phylip, clustal, stockholm) would
+have the effect of concatenating several multiple sequence alignments together.
+Such files are created by the PHYLIP suite of programs for bootstrap analysis.
+
+For sequential files formats (e.g. fasta, genbank) each "record block" holds a
+single sequence.  For these files it would probably be safe to call WriteSequences
+multiple times.
+
 If you are using a sequential file format, you may want to write out the records
-one at a time.  To do this, you will need to create a sequence writer directly.
+one at a time.  To do this, you would ideally create a sequence writer directly...
 
 File Formats
 ============
@@ -200,11 +217,13 @@ def _filename2format(filename) :
 
 
 def WriteSequences(sequences, handle, format) :
-    """Write sequences to a file (and closes the file).
+    """Write complete set of sequences to a file
 
     sequences - A list (or iterator) of SeqRecord objects
-    handle    - File handle object to write to (which will get closed)
+    handle    - File handle object to write to
     format    - What format to use.
+
+    You should close the handle after calling this function.
     """
 
     #We could try and guess the format from the filename,
@@ -215,7 +234,9 @@ def WriteSequences(sequences, handle, format) :
         assert False, "Unknown format, " + format
 
     writer_class(handle).write_file(sequences)
-    handle.close() #just in case the writer object forgot
+    #Don't close the file, as that would prevent things like
+    #creating concatenated phylip files for bootstrapping.
+    #handle.close()
     
 def SequenceIterator(handle, format=None) :
     """Turns a sequence file into a iterator returning SeqRecords

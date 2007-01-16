@@ -1,4 +1,4 @@
-# Copyright 2006 by Peter Cock.  All rights reserved.
+# Copyright 2006, 2007 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -234,7 +234,8 @@ class SequentialSequenceWriter(SequenceWriter):
         self.write_header()
         self.write_records(records)
         self.write_footer()
-        self.close()
+        #Don't automatically close the handle:
+        #self.handle.close()
 
     def flush(self):
         """Flush any output pending on the output file handle"""
