@@ -9,7 +9,7 @@
 Classes:
 Iterator              Iterate through a file of GenBank entries
 Dictionary            Access a GenBank file using a dictionary interface.
-ErrorFeatreParser     Catch errors caused during parsing.
+ErrorFeatureParser    Catch errors caused during parsing.
 FeatureParser         Parse GenBank data in Seq and SeqFeature objects.
 RecordParser          Parse GenBank data into a Record object.
 NCBIDictionary        Access GenBank using a dictionary interface.
@@ -1776,7 +1776,7 @@ def index_file(filename, indexname, rec2key = None, use_berkeley = 0):
 class NCBIDictionary:
     """Access GenBank using a read-only dictionary interface.
     """
-    VALID_DATABASES = ['nucleotide', 'protein']
+    VALID_DATABASES = ['nucleotide', 'protein', 'genome']
     VALID_FORMATS = ['genbank', 'fasta']
     def __init__(self, database, format, parser = None):
         """Initialize an NCBI dictionary to retrieve sequences.
@@ -1806,6 +1806,8 @@ class NCBIDictionary:
                 self.db = db["nucleotide-genbank-eutils"]
             elif database == 'protein':
                 self.db = db["protein-genbank-eutils"]
+            elif database == 'genome':
+                self.db = db["genome-genbank-eutils"]
 
     def __len__(self):
         raise NotImplementedError, "GenBank contains lots of entries"

@@ -32,6 +32,15 @@ nucleotide_genbank_eutils = EUtilsDB(
         failure_cases = ncbi_failures
         )
 
+genome_genbank_eutils = EUtilsDB(
+        name = "genome-genbank-eutils",
+        doc = "Retrieve genome GenBank sequences from NCBI using EUtils",
+        delay = 5.0,
+        db = "genome",
+        rettype = "gb",
+        failure_cases = ncbi_failures
+        )
+
 # If the id is not in the database, I get a message like:
 # ERROR : GenPept does not exist for gi = 433174
 not_exist_expr = Str("ERROR") + Re("[^d]*") + Str("does not exist for gi")
@@ -55,3 +64,8 @@ gb_protein = DBGroup(
         name = "genbank-protein",
         behavior = "serial")
 gb_protein.add(protein_genbank_eutils)
+
+gb_genome = DBGroup(
+        name = "genbank-genome",
+        behavior = "serial")
+gb_genome.add(genome_genbank_eutils)
