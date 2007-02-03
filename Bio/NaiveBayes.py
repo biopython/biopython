@@ -32,7 +32,7 @@ classify       Classify an observation into a class.
 try:
     from Numeric import *
 except ImportError, x:
-    raise ImportError, "This module requires NumPy"
+    raise ImportError, "This module requires Numeric (precursor to NumPy)"
 
 from Bio import mathfns, listfns
 
