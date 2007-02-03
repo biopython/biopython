@@ -12,7 +12,7 @@ try:
     from Numeric import sum, sqrt
     from RandomArray import *
 except ImportError:
-    raise ImportError, "This module requires NumPy"
+    raise ImportError, "This module requires Numeric (precursor to NumPy)"
 
 import CKDTree 
 
@@ -128,16 +128,16 @@ class KDTree:
     def set_coords(self, coords):
         """Add the coordinates of the points.
 
-        o coords - two dimensional Numpy array of type "f". E.g. if the 
+        o coords - two dimensional Numeric array of type "f". E.g. if the 
         points have dimensionality D and there are N points, the coords 
         array should be NxD dimensional. 
         """
         if min(coords)<=-1e6 or max(coords)>=1e6:
                 raise Exception, "Points should lie between -1e6 and 1e6"
         if len(coords.shape)!=2 or coords.shape[1]!=self.dim:
-                raise Exception, "Expected a Nx%i Numpy array" % self.dim
+                raise Exception, "Expected a Nx%i Numeric array" % self.dim
         if coords.typecode()!="f":
-                raise Exception, "Expected a Numpy array of type float" 
+                raise Exception, "Expected a Numeric array of type float" 
         self.kdt.set_data(coords, coords.shape[0])
         self.built=1
 
@@ -146,7 +146,7 @@ class KDTree:
     def search(self, center, radius):
         """Search all points within radius of center.
 
-        o center - one dimensional Numpy array of type "f". E.g. if the 
+        o center - one dimensional Numeric array of type "f". E.g. if the 
         points have dimensionality D, the center array should be D 
         dimensional. 
         o radius - float>0
@@ -154,9 +154,9 @@ class KDTree:
         if not self.built:
                 raise Exception, "No point set specified"
         if center.shape!=(self.dim,):
-                raise Exception, "Expected a %i-dimensional Numpy array" % self.dim
+                raise Exception, "Expected a %i-dimensional Numeric array" % self.dim
         if center.typecode()!="f":
-                raise Exception, "Expected a Numpy array of type float" 
+                raise Exception, "Expected a Numeric array of type float" 
         self.kdt.search_center_radius(center, radius)
 
     def get_radii(self):
@@ -174,7 +174,7 @@ class KDTree:
         """Return the list of indices.
 
         Return the list of indices after a neighbor search.
-        The indices refer to the original coords Numpy array. The
+        The indices refer to the original coords Numeric array. The
         coordinates with these indices were within radius of center.
 
         For an index pair, the first index<second index. 
@@ -201,14 +201,14 @@ class KDTree:
     def all_get_indices(self):
         """Return All Fixed Neighbor Search results.
 
-        Return a Nx2 dim Numpy array containing
+        Return a Nx2 dim Numeric array containing
         the indices of the point pairs, where N
         is the number of neighbor pairs.
         """
         a=self.kdt.neighbor_get_indices()
         if a is None:
             return [] 
-        # return as Nx2 dim Numpy array, where N
+        # return as Nx2 dim Numeric array, where N
         # is number of neighbor pairs.
         a.shape=(-1, 2)
         return a
