@@ -17,7 +17,7 @@ try:
     from Numeric import *
     from LinearAlgebra import *  # inverse
 except ImportError, x:
-    raise ImportError, "This module requires NumPy with the LinearAlgebra lib"
+    raise ImportError, "This module requires Numeric (precursor to NumPy) with the LinearAlgebra lib"
 
 from Bio import listfns
 

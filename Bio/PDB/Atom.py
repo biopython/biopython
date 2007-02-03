@@ -27,7 +27,7 @@ class Atom:
         @type name: string
 
         @param coord: atomic coordinates (x,y,z)
-        @type coord: Numpy array (Float0, size 3)
+        @type coord: Numeric array (Float0, size 3)
 
         @param bfactor: isotropic B factor
         @type bfactor: number 

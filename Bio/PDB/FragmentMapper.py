@@ -121,7 +121,7 @@ class Fragment:
     def get_coords(self):
         """
         @return: the CA coords in the fragment
-        @rtype: Numpy (Nx3) array
+        @rtype: Numeric (Nx3) array
         """
         return self.coords_ca
 
@@ -131,7 +131,7 @@ class Fragment:
         @type resname: string
 
         @param ca_coord: the c-alpha coorinates of the residues
-        @type ca_coord: Numpy array with length 3
+        @type ca_coord: Numeric array with length 3
         """
         if self.counter>=self.length:
             raise PDBException, "Fragment boundary exceeded."

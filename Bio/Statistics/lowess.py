@@ -14,18 +14,18 @@ try:
     from Numeric import *
     from LinearAlgebra import solve_linear_equations
 except ImportError, x:
-    raise ImportError, "This module requires NumPy with the LinearAlgebra and MLab libraries"
+    raise ImportError, "This module requires Numeric (precursor to NumPy) with the LinearAlgebra and MLab libraries"
 
 try:
     from Bio.Cluster import median
     # The function median in Bio.Cluster is faster than the function median
-    # in NumPy's MLab, as it does not require a full sort.
+    # in Numeric's MLab, as it does not require a full sort.
 except ImportError, x:
-    # Use the median function in NumPy's MLab if Bio.Cluster is not available
+    # Use the median function in Numeric's MLab if Bio.Cluster is not available
     try:
         from MLab import median
     except ImportError, x:
-        raise ImportError, "This module requires NumPy with the LinearAlgebra and MLab libraries"
+        raise ImportError, "This module requires Numeric (precursor to NumPy) with the LinearAlgebra and MLab libraries"
 
 def lowess(x, y, f=2./3., iter=3):
   """lowess(x, y, f=2./3., iter=3) -> yest
