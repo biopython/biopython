@@ -39,6 +39,9 @@ def ClustalIterator(handle, alphabet = generic_alphabet) :
     if not line[:7] == 'CLUSTAL':
         raise SyntaxError("Did not find CLUSTAL header")
 
+    #If the alignment contains entries with the same sequence
+    #identifier (not a good idea - but seems possible), then this
+    #dictionary based parser will merge their sequences.  Fix this?
     seqs = {}
     ids = []
     while True:
@@ -111,10 +114,15 @@ class ClustalWriter(SequenceWriter):
             #alphabet.contains() method is intended to be used,
             #but it doesn't make sense to me right now.
 
-            #Doing this works, but ClustalAlignment will use
+            #Doing this works, but ClustalAlignment currently uses
             #the record.descrption when outputing the records.
             #alignment._records.append(record)
-            alignment.add_sequence(record.id, record.seq.tostring())
+
+            #Make sure we don't get any spaces in the record
+            #identifier when output in the file by replacing
+            #them with underscores:
+            alignment.add_sequence(record.id.replace(" ","_"),
+                                   record.seq.tostring())
 
         self.handle.write(str(alignment))
         #Don't close the handle.  Doing so would prevent this code
