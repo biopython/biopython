@@ -2286,7 +2286,7 @@ You can also get access to the molecular surface itself (via the
 \family typewriter 
 get_surface
 \family default 
- function), in the form of a Numpy array with the surface points.
+ function), in the form of a Numeric python array with the surface points.
 \layout Subsubsection*
 
 How do I calculate Half Sphere Exposure?
