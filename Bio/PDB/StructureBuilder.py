@@ -161,7 +161,7 @@ class StructureBuilder:
 
         Arguments:
         o name - string, atom name, e.g. CA, spaces should be stripped
-        o coord - Numpy array (Float0, size 3), atomic coordinates
+        o coord - Numeric array (Float0, size 3), atomic coordinates
         o b_factor - float, B factor
         o occupancy - float
         o altloc - string, alternative location specifier

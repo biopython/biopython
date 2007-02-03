@@ -33,7 +33,7 @@ Direct MSMS interface:
 
         surface=get_surface("1FAT.pdb")
 
-    Surface is a Numpy array with all the surface 
+    Surface is a Numeric array with all the surface 
     vertices.  
 
     Distance to surface:
@@ -51,7 +51,7 @@ Direct MSMS interface:
 
 def _read_vertex_array(filename):
     """
-    Read the vertex list into a Numpy array.
+    Read the vertex list into a Numeric array.
     """
     fp=open(filename, "r")
     vertex_list=[]
@@ -67,7 +67,7 @@ def _read_vertex_array(filename):
 
 def get_surface(pdb_file, PDB_TO_XYZR="pdb_to_xyzr", MSMS="msms"):
     """
-    Return a Numpy array that represents 
+    Return a Numeric array that represents 
     the vertex list of the molecular surface.
 
     PDB_TO_XYZR --- pdb_to_xyzr executable (arg. to os.system)

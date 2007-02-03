@@ -92,7 +92,7 @@ def rotaxis2m(theta, vector):
     @type vector: L{Vector}
     @param vector: the rotation axis
 
-    @return: The rotation matrix, a 3x3 Numpy array.
+    @return: The rotation matrix, a 3x3 Numeric array.
     """
     vector=vector.copy()
     vector.normalize()
@@ -127,7 +127,7 @@ def refmat(p,q):
         >>> print q, qq # q and qq should be the same
 
     @type p,q: L{Vector}
-    @return: The mirror operation, a 3x3 Numpy array. 
+    @return: The mirror operation, a 3x3 Numeric array. 
     """
     p.normalize()
     q.normalize()
@@ -156,7 +156,7 @@ def rotmat(p,q):
     @type q: L{Vector}
 
     @return: rotation matrix that rotates p onto q
-    @rtype: 3x3 Numpy array
+    @rtype: 3x3 Numeric array
     """
     rot=matrixmultiply(refmat(q, -p), refmat(p, -p))
     return rot

@@ -75,7 +75,7 @@ class NeighborSearch:
         is determined by level (A=atoms, R=residues, C=chains,
         M=models, S=structures).
 
-        o center - Numpy array 
+        o center - Numeric array 
         o radius - float
         o level - char (A, R, C, M, S)
         """

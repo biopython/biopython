@@ -107,7 +107,7 @@ class Atom:
         deviation.
 
         @param sigatm_array: standard deviations of atomic parameters.
-        @type sigatm_array: Numpy array (length 5)
+        @type sigatm_array: Numeric array (length 5)
         """
         self.sigatm_array=sigatm_array
 
@@ -116,7 +116,7 @@ class Atom:
         Set standard deviations of anisotropic temperature factors.
 
         @param siguij_array: standard deviations of anisotropic temperature factors.
-        @type siguij_array: Numpy array (length 6)
+        @type siguij_array: Numeric array (length 6)
         """
         self.siguij_array=siguij_array
 
@@ -125,7 +125,7 @@ class Atom:
         Set anisotropic B factor.
 
         @param anisou_array: anisotropic B factor.
-        @type anisou_array: Numpy array (length 6)
+        @type anisou_array: Numeric array (length 6)
         """
         self.anisou_array=anisou_array
 
@@ -223,10 +223,10 @@ class Atom:
                 >>> atom.transform(rotation, translation)
 
         @param rot: A right multiplying rotation matrix
-        @type rot: 3x3 Numpy array
+        @type rot: 3x3 Numeric array
 
         @param tran: the translation vector
-        @type tran: size 3 Numpy array
+        @type tran: size 3 Numeric array
         """
         self.coord=matrixmultiply(self.coord, rot)+tran
         
