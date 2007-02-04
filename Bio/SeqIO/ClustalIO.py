@@ -129,3 +129,93 @@ class ClustalWriter(SequenceWriter):
         #from writing concatenated Clustal files which might be used
         #in phylogenetic bootstrapping (very common with phylip).
         #self.handle.close()
+
+
+if __name__ == "__main__" :
+    # Run a quick self-test
+
+    #This is a truncated version of the example in Tests/cw02.aln
+    aln_example1 = \
+"""CLUSTAL W (1.81) multiple sequence alignment
+
+
+gi|4959044|gb|AAD34209.1|AF069      MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNN 50
+gi|671626|emb|CAA85685.1|           ---------MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFR 41
+                                              * *: ::    :.   :*  :  :. : . :*  ::   .
+
+gi|4959044|gb|AAD34209.1|AF069      LLGTPGESTEEELLRRLQQIKEGPPPQSPDENRAGESSDDVTNSDSIIDW 100
+gi|671626|emb|CAA85685.1|           VTPQPG-----------------VPPEEAGAAVAAESSTGT--------- 65
+                                    :   **                  **:...   *.*** ..         
+
+gi|4959044|gb|AAD34209.1|AF069      LNSVRQTGNTTRSRQRGNQSWRAVSRTNPNSGDFRFSLEINVNRNNGSQT 150
+gi|671626|emb|CAA85685.1|           WTTVWTDGLTSLDRYKG-----RCYHIEPVPG------------------ 92
+                                     .:*   * *: .* :*        : :* .*                  
+
+gi|4959044|gb|AAD34209.1|AF069      SENESEPSTRRLSVENMESSSQRQMENSASESASARPSRAERNSTEAVTE 200
+gi|671626|emb|CAA85685.1|           -EKDQCICYVAYPLDLFEEGSVTNMFTSIVGNVFGFKALRALRLEDLRIP 141
+                                     *::.  .    .:: :*..*  :* .*   .. .  :    .  :    
+
+gi|4959044|gb|AAD34209.1|AF069      VPTTRAQRRA 210
+gi|671626|emb|CAA85685.1|           VAYVKTFQGP 151
+                                    *. .:: : .
+                                     
+"""                 
+
+    #This example is a truncated version of the dataset used here:
+    #http://virgil.ruc.dk/kurser/Sekvens/Treedraw.htm
+    aln_example2 = \
+"""CLUSTAL X (1.83) multiple sequence alignment
+
+
+V_Harveyi_PATH                 --MKNWIKVAVAAIA--LSAA------------------TVQAATEVKVG
+B_subtilis_YXEM                MKMKKWTVLVVAALLAVLSACG------------NGNSSSKEDDNVLHVG
+B_subtilis_GlnH_homo_YCKK      MKKALLALFMVVSIAALAACGAGNDNQSKDNAKDGDLWASIKKKGVLTVG
+YA80_HAEIN                     MKKLLFTTALLTGAIAFSTF-----------SHAGEIADRVEKTKTLLVG
+FLIY_ECOLI                     MKLAHLGRQALMGVMAVALVAG---MSVKSFADEG-LLNKVKERGTLLVG
+E_coli_GlnH                    --MKSVLKVSLAALTLAFAVS------------------SHAADKKLVVA
+Deinococcus_radiodurans        -MKKSLLSLKLSGLLVPSVLALS--------LSACSSPSSTLNQGTLKIA
+HISJ_E_COLI                    MKKLVLSLSLVLAFSSATAAF-------------------AAIPQNIRIG
+                                         : .                                 : :.
+
+V_Harveyi_PATH                 MSGRYFPFTFVKQ--DKLQGFEVDMWDEIGKRNDYKIEYVTANFSGLFGL
+B_subtilis_YXEM                ATGQSYPFAYKEN--GKLTGFDVEVMEAVAKKIDMKLDWKLLEFSGLMGE
+B_subtilis_GlnH_homo_YCKK      TEGTYEPFTYHDKDTDKLTGYDVEVITEVAKRLGLKVDFKETQWGSMFAG
+YA80_HAEIN                     TEGTYAPFTFHDK-SGKLTGFDVEVIRKVAEKLGLKVEFKETQWDAMYAG
+FLIY_ECOLI                     LEGTYPPFSFQGD-DGKLTGFEVEFAQQLAKHLGVEASLKPTKWDGMLAS
+E_coli_GlnH                    TDTAFVPFEFKQG--DKYVGFDVDLWAAIAKELKLDYELKPMDFSGIIPA
+Deinococcus_radiodurans        MEGTYPPFTSKNE-QGELVGFDVDIAKAVAQKLNLKPEFVLTEWSGILAG
+HISJ_E_COLI                    TDPTYAPFESKNS-QGELVGFDIDLAKELCKRINTQCTFVENPLDALIPS
+                                     **       .:  *::::.   : :.   .        ..:   
+
+V_Harveyi_PATH                 LETGRIDTISNQITMTDARKAKYLFADPYVVDG-AQI
+B_subtilis_YXEM                LQTGKLDTISNQVAVTDERKETYNFTKPYAYAG-TQI
+B_subtilis_GlnH_homo_YCKK      LNSKRFDVVANQVG-KTDREDKYDFSDKYTTSR-AVV
+YA80_HAEIN                     LNAKRFDVIANQTNPSPERLKKYSFTTPYNYSG-GVI
+FLIY_ECOLI                     LDSKRIDVVINQVTISDERKKKYDFSTPYTISGIQAL
+E_coli_GlnH                    LQTKNVDLALAGITITDERKKAIDFSDGYYKSG-LLV
+Deinococcus_radiodurans        LQANKYDVIVNQVGITPERQNSIGFSQPYAYSRPEII
+HISJ_E_COLI                    LKAKKIDAIMSSLSITEKRQQEIAFTDKLYAADSRLV
+                               *.: . *        .  *     *:          :
+
+"""
+
+    from StringIO import StringIO
+
+    records = list(ClustalIterator(StringIO(aln_example1)))
+    assert 2 == len(records)
+    assert records[0].id == "gi|4959044|gb|AAD34209.1|AF069"
+    assert records[1].id == "gi|671626|emb|CAA85685.1|"
+    assert records[0].seq.tostring() == \
+          "MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNN" + \
+          "LLGTPGESTEEELLRRLQQIKEGPPPQSPDENRAGESSDDVTNSDSIIDW" + \
+          "LNSVRQTGNTTRSRQRGNQSWRAVSRTNPNSGDFRFSLEINVNRNNGSQT" + \
+          "SENESEPSTRRLSVENMESSSQRQMENSASESASARPSRAERNSTEAVTE" + \
+          "VPTTRAQRRA"
+
+    records = list(ClustalIterator(StringIO(aln_example2)))
+    assert 8 == len(records)
+    assert records[-1].id == "HISJ_E_COLI"
+    assert records[-1].seq.tostring() == \
+          "MKKLVLSLSLVLAFSSATAAF-------------------AAIPQNIRIG" + \
+          "TDPTYAPFESKNS-QGELVGFDIDLAKELCKRINTQCTFVENPLDALIPS" + \
+          "LKAKKIDAIMSSLSITEKRQQEIAFTDKLYAADSRLV"
