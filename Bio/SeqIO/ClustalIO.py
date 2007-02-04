@@ -39,9 +39,10 @@ def ClustalIterator(handle, alphabet = generic_alphabet) :
     if not line[:7] == 'CLUSTAL':
         raise SyntaxError("Did not find CLUSTAL header")
 
-    #If the alignment contains entries with the same sequence
-    #identifier (not a good idea - but seems possible), then this
-    #dictionary based parser will merge their sequences.  Fix this?
+    #If the alignment contains multiple entries with the same sequence
+    #identifier (not a good idea, ClustalX 1.83 rejects such files)
+    #then this dictionary based parser will merge their sequences
+    #(and then spot the problem with the sequence lengths). Fix this?
     seqs = {}
     ids = []
     while True:
@@ -51,8 +52,9 @@ def ClustalIterator(handle, alphabet = generic_alphabet) :
         fields = line.rstrip().split()
         if not len(fields): continue
         
-        #We expect there to be two fields, but on older files
-        #there may be a third entry containing a letter count.
+        #We expect there to be two fields (identifier and sequence),
+        #but an optional "sequence number" field is allowed containing
+        #the number of letters in the sequence so far.
         if len(fields) < 2 or len(fields) > 3:
             raise SyntaxError("Could not parse line:\n%s" % line)
 
@@ -64,15 +66,16 @@ def ClustalIterator(handle, alphabet = generic_alphabet) :
         if len(fields) == 3 :
             #This MAY be an old style file with a letter count...
             try :
-                oddity = int(fields[2])
+                letters = int(fields[2])
             except ValueError :
-                raise SyntaxError("Could not parse line, odd third field:\n%s" % line)
-            #Check this equals the number of letters (excluding gaps)
-            #so far for this sequence?
-            if len(seqs[name].replace("-","")) <> oddity :
-                raise SyntaxError("Could not parse line, odd third field:\n%s" % line)
+                raise SyntaxError("Could not parse line, bad sequence number:\n%s" % line)
+            if len(seqs[name].replace("-","")) <> letters :
+                raise SyntaxError("Could not parse line, invalid sequence number:\n%s" % line)
 
+    alignment_length = len(seqs.values()[0])
     for id in ids :
+        if len(seqs[id]) <> alignment_length:
+            raise SyntaxError("Error parsing alignment - sequences of different length")
         yield SeqRecord(Seq(seqs[id], alphabet), id=id)
     
 class ClustalWriter(SequenceWriter):
@@ -103,6 +106,7 @@ class ClustalWriter(SequenceWriter):
         # The downside is code duplication.
         alignment_length = None
         alignment = ClustalAlignment()
+        used_ids = []
         for record in records :
             if alignment_length is None :
                 alignment_length = len(record.seq)
@@ -121,8 +125,14 @@ class ClustalWriter(SequenceWriter):
             #Make sure we don't get any spaces in the record
             #identifier when output in the file by replacing
             #them with underscores:
-            alignment.add_sequence(record.id.replace(" ","_"),
-                                   record.seq.tostring())
+            new_id = record.id.replace(" ","_")
+
+            #Check we don't write an invalid files with repeated
+            #identifiers
+            if new_id in used_ids :
+                raise ValueError("Repeated record identifiers not allowed")
+            alignment.add_sequence(new_id, record.seq.tostring())
+            used_ids.append(new_id)
 
         self.handle.write(str(alignment))
         #Don't close the handle.  Doing so would prevent this code
@@ -135,6 +145,7 @@ if __name__ == "__main__" :
     # Run a quick self-test
 
     #This is a truncated version of the example in Tests/cw02.aln
+    #Notice the inclusion of sequence numbers (right hand side)
     aln_example1 = \
 """CLUSTAL W (1.81) multiple sequence alignment
 
