@@ -3,9 +3,6 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-#
-# Clustal parsing based on earlier code by Thomas Sicheritz-Ponten,
-# copyright 2001.  See Bio/SeqIO/generic.py
 
 #For reading alignments:
 from Bio.Alphabet import generic_alphabet
@@ -39,44 +36,90 @@ def ClustalIterator(handle, alphabet = generic_alphabet) :
     if not line[:7] == 'CLUSTAL':
         raise SyntaxError("Did not find CLUSTAL header")
 
-    #If the alignment contains multiple entries with the same sequence
-    #identifier (not a good idea, ClustalX 1.83 rejects such files)
-    #then this dictionary based parser will merge their sequences
-    #(and then spot the problem with the sequence lengths). Fix this?
-    seqs = {}
-    ids = []
-    while True:
+    #There should be two blank lines after the header line
+    line = handle.readline()
+    while line.strip() == "" :
         line = handle.readline()
-        if not line: break
-        if line[0] == ' ': continue
-        fields = line.rstrip().split()
-        if not len(fields): continue
-        
-        #We expect there to be two fields (identifier and sequence),
-        #but an optional "sequence number" field is allowed containing
-        #the number of letters in the sequence so far.
-        if len(fields) < 2 or len(fields) > 3:
-            raise SyntaxError("Could not parse line:\n%s" % line)
 
-        name, seq = fields[0], fields[1]
-        if not name in ids: ids.append(name)
-        seqs.setdefault(name, '')
-        seqs[name] += seq.upper()
+    #If the alignment contains entries with the same sequence
+    #identifier (not a good idea - but seems possible), then this
+    #dictionary based parser will merge their sequences.  Fix this?
+    ids = []
+    seqs = []
 
-        if len(fields) == 3 :
-            #This MAY be an old style file with a letter count...
-            try :
-                letters = int(fields[2])
-            except ValueError :
-                raise SyntaxError("Could not parse line, bad sequence number:\n%s" % line)
-            if len(seqs[name].replace("-","")) <> letters :
-                raise SyntaxError("Could not parse line, invalid sequence number:\n%s" % line)
+    #Use the first block to get the sequence identifiers
+    while line.strip() <> "" :
+        if line[0] <> " " :
+            #Sequences identifier...
+            fields = line.rstrip().split()
 
-    alignment_length = len(seqs.values()[0])
-    for id in ids :
-        if len(seqs[id]) <> alignment_length:
-            raise SyntaxError("Error parsing alignment - sequences of different length")
-        yield SeqRecord(Seq(seqs[id], alphabet), id=id)
+            #We expect there to be two fields, there can be an optional
+            #"sequence number" field containing the letter count.
+            if len(fields) < 2 or len(fields) > 3:
+                raise SyntaxError("Could not parse line:\n%s" % line)
+
+            ids.append(fields[0])
+            seqs.append(fields[1])
+
+            if len(fields) == 3 :
+                #This MAY be an old style file with a letter count...
+                try :
+                    letters = int(fields[2])
+                except ValueError :
+                    raise SyntaxError("Could not parse line, bad sequence number:\n%s" % line)
+                if len(fields[1].replace("-","")) <> letters :
+                    raise SyntaxError("Could not parse line, invalid sequence number:\n%s" % line)
+        else :
+            #Sequence consensus line...
+            pass
+        line = handle.readline()
+        if not line : break #end of file
+
+    assert line.strip() == ""
+
+    #Loop over any remaining blocks...
+    while True :
+        #There should be a blank line between each block.
+        #Also want to ignore any consensus line from the
+        #previous block.
+        while (not line) or line.strip() == "" or line[0]==" ":
+            line = handle.readline()
+            if not line : break # end of file
+        if not line : break # end of file
+
+        for i in range(len(ids)) :
+            fields = line.rstrip().split()
+            
+            #We expect there to be two fields, there can be an optional
+            #"sequence number" field containing the letter count.
+            if len(fields) < 2 or len(fields) > 3:
+                raise SyntaxError("Could not parse line:\n%s" % line)
+
+            if fields[0] <> ids[i] :
+                raise SyntaxError("Identifiers out of order? Got '%s' but expected '%s'" \
+                                  % (fields[0], ids[i]))
+
+            #Append the sequence
+            seqs[i] += fields[1]
+
+            if len(fields) == 3 :
+                #This MAY be an old style file with a letter count...
+                try :
+                    letters = int(fields[2])
+                except ValueError :
+                    raise SyntaxError("Could not parse line, bad sequence number:\n%s" % line)
+                if len(seqs[i].replace("-","")) <> letters :
+                    raise SyntaxError("Could not parse line, invalid sequence number:\n%s" % line)
+
+            #Read in the next line
+            line = handle.readline()
+
+    assert len(ids) == len(seqs)
+    alignment_length = len(seqs[0])
+    for i in range(len(ids)) :
+        if len(seqs[i]) <> alignment_length:
+            raise SyntaxError("Error parsing alignment - sequences of different length?")
+        yield SeqRecord(Seq(seqs[i], alphabet), id=ids[i])
     
 class ClustalWriter(SequenceWriter):
     """Write Clustal sequence alignments"""
@@ -106,7 +149,6 @@ class ClustalWriter(SequenceWriter):
         # The downside is code duplication.
         alignment_length = None
         alignment = ClustalAlignment()
-        used_ids = []
         for record in records :
             if alignment_length is None :
                 alignment_length = len(record.seq)
@@ -125,14 +167,8 @@ class ClustalWriter(SequenceWriter):
             #Make sure we don't get any spaces in the record
             #identifier when output in the file by replacing
             #them with underscores:
-            new_id = record.id.replace(" ","_")
-
-            #Check we don't write an invalid files with repeated
-            #identifiers
-            if new_id in used_ids :
-                raise ValueError("Repeated record identifiers not allowed")
-            alignment.add_sequence(new_id, record.seq.tostring())
-            used_ids.append(new_id)
+            alignment.add_sequence(record.id.replace(" ","_"),
+                                   record.seq.tostring())
 
         self.handle.write(str(alignment))
         #Don't close the handle.  Doing so would prevent this code
@@ -174,6 +210,7 @@ gi|671626|emb|CAA85685.1|           VAYVKTFQGP 151
 
     #This example is a truncated version of the dataset used here:
     #http://virgil.ruc.dk/kurser/Sekvens/Treedraw.htm
+    #with the last record repeated twice (deliberate toture test)
     aln_example2 = \
 """CLUSTAL X (1.83) multiple sequence alignment
 
@@ -186,6 +223,7 @@ FLIY_ECOLI                     MKLAHLGRQALMGVMAVALVAG---MSVKSFADEG-LLNKVKERGTLLV
 E_coli_GlnH                    --MKSVLKVSLAALTLAFAVS------------------SHAADKKLVVA
 Deinococcus_radiodurans        -MKKSLLSLKLSGLLVPSVLALS--------LSACSSPSSTLNQGTLKIA
 HISJ_E_COLI                    MKKLVLSLSLVLAFSSATAAF-------------------AAIPQNIRIG
+HISJ_E_COLI                    MKKLVLSLSLVLAFSSATAAF-------------------AAIPQNIRIG
                                          : .                                 : :.
 
 V_Harveyi_PATH                 MSGRYFPFTFVKQ--DKLQGFEVDMWDEIGKRNDYKIEYVTANFSGLFGL
@@ -196,6 +234,7 @@ FLIY_ECOLI                     LEGTYPPFSFQGD-DGKLTGFEVEFAQQLAKHLGVEASLKPTKWDGMLA
 E_coli_GlnH                    TDTAFVPFEFKQG--DKYVGFDVDLWAAIAKELKLDYELKPMDFSGIIPA
 Deinococcus_radiodurans        MEGTYPPFTSKNE-QGELVGFDVDIAKAVAQKLNLKPEFVLTEWSGILAG
 HISJ_E_COLI                    TDPTYAPFESKNS-QGELVGFDIDLAKELCKRINTQCTFVENPLDALIPS
+HISJ_E_COLI                    TDPTYAPFESKNS-QGELVGFDIDLAKELCKRINTQCTFVENPLDALIPS
                                      **       .:  *::::.   : :.   .        ..:   
 
 V_Harveyi_PATH                 LETGRIDTISNQITMTDARKAKYLFADPYVVDG-AQI
@@ -205,6 +244,7 @@ YA80_HAEIN                     LNAKRFDVIANQTNPSPERLKKYSFTTPYNYSG-GVI
 FLIY_ECOLI                     LDSKRIDVVINQVTISDERKKKYDFSTPYTISGIQAL
 E_coli_GlnH                    LQTKNVDLALAGITITDERKKAIDFSDGYYKSG-LLV
 Deinococcus_radiodurans        LQANKYDVIVNQVGITPERQNSIGFSQPYAYSRPEII
+HISJ_E_COLI                    LKAKKIDAIMSSLSITEKRQQEIAFTDKLYAADSRLV
 HISJ_E_COLI                    LKAKKIDAIMSSLSITEKRQQEIAFTDKLYAADSRLV
                                *.: . *        .  *     *:          :
 
@@ -224,7 +264,7 @@ HISJ_E_COLI                    LKAKKIDAIMSSLSITEKRQQEIAFTDKLYAADSRLV
           "VPTTRAQRRA"
 
     records = list(ClustalIterator(StringIO(aln_example2)))
-    assert 8 == len(records)
+    assert 9 == len(records)
     assert records[-1].id == "HISJ_E_COLI"
     assert records[-1].seq.tostring() == \
           "MKKLVLSLSLVLAFSSATAAF-------------------AAIPQNIRIG" + \
