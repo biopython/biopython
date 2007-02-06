@@ -1,5 +1,5 @@
 # Copyright 2000 by Jeffrey Chang, Brad Chapman.  All rights reserved.
-# Copyright 2006 by PeterC.  All rights reserved.
+# Copyright 2006, 2007 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -515,7 +515,10 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         self._current_ref.comment = content
 
     def comment(self, content):
-        self.data.annotations['comment'] = "\n".join(content)
+        try :
+            self.data.annotations['comment'] += "\n" + "\n".join(content)
+        except KeyError :
+            self.data.annotations['comment'] = "\n".join(content)
 
     def features_line(self, content):
         """Get ready for the feature table when we reach the FEATURE line.
@@ -1033,7 +1036,7 @@ class _RecordConsumer(_BaseGenBankConsumer):
         self._cur_reference.remark = content
         
     def comment(self, content):
-        self.data.comment = "\n".join(content)
+        self.data.comment += "\n".join(content)
 
     def primary_ref_line(self,content):
         """Data for the PRIMARY line"""
@@ -1431,7 +1434,7 @@ class _Scanner:
                     line = handle.readline()
                     if line[0:GENBANK_INDENT] == GENBANK_SPACER :
                         #Add this continuation to the data string
-                        data = data + " " + line[GENBANK_INDENT:]
+                        data += " " + line[GENBANK_INDENT:]
                         if data[-1:]=='\n' : data = data[:-1]
                         if data[-1:]=='\r' : data = data[:-1]
                         if self._debug >1 : print "Extended reference text [" + data + "]"
@@ -1457,7 +1460,7 @@ class _Scanner:
                 while True :
                     line = handle.readline()
                     if line[0:GENBANK_INDENT] == GENBANK_SPACER :
-                        data = data + ' ' + line[GENBANK_INDENT:]
+                        data += ' ' + line[GENBANK_INDENT:]
                         if data[-1:]=='\n' : data = data[:-1]
                         if data[-1:]=='\r' : data = data[:-1]
                     else :
@@ -1490,7 +1493,7 @@ class _Scanner:
                 while True :
                     line = handle.readline()
                     if line[0:GENBANK_INDENT] == GENBANK_SPACER :
-                        data = data + ' ' + line[GENBANK_INDENT:]
+                        data += ' ' + line[GENBANK_INDENT:]
                         if data[-1:]=='\n' : data = data[:-1]
                         if data[-1:]=='\r' : data = data[:-1]
                     else :
@@ -1577,7 +1580,7 @@ class _Scanner:
                     line = line[FEATURE_QUALIFIER_INDENT:]
                     if line[-1:]=='\n' : line = line[:-1]
                     if line[-1:]=='\r' : line = line[:-1]
-                    feature_location = feature_location + line
+                    feature_location += line
                 #############################################################
                 if self._debug > 1 : print "Starting " + feature_key + " feature at location " + feature_location
                 #############################################################
@@ -1662,7 +1665,7 @@ class _Scanner:
                                        % (qualifier_name, feature_key, feature_location, line)
                                 #Note, for backwards compatibility we do not remove the FEATURE_QUALIFIER_SPACER
                                 #from the description
-                                qualifier_description = qualifier_description + '\n' + line
+                                qualifier_description += '\n' + line
                                 if qualifier_description[-1:]=='\"' :
                                     #That should be the end of the description continuation
                                     break
@@ -1731,7 +1734,7 @@ class _Scanner:
                     consumer.contig_location(contig_location)
                     break
                 elif line[:GENBANK_INDENT]==GENBANK_SPACER :
-                    contig_location = contig_location + line
+                    contig_location += line
                 else:
                     consumer.contig_location(contig_location)
                     assert False, \
