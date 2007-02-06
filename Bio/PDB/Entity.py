@@ -159,6 +159,9 @@ class DisorderedEntityWrapper:
 
     def __getattr__(self, method):
         "Forward the method call to the selected child."
+        if method=='__setstate__':
+            # Avoid problems with pickling
+            raise AttributeError
         return getattr(self.selected_child, method)
 
     def __setitem__(self, id, child):
