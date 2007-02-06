@@ -159,8 +159,9 @@ class DisorderedEntityWrapper:
 
     def __getattr__(self, method):
         "Forward the method call to the selected child."
-        if method=='__setstate__':
+        if not hasattr(self, 'selected_child'):
             # Avoid problems with pickling
+            # Unpickling goes into infinite loop!
             raise AttributeError
         return getattr(self.selected_child, method)
 
