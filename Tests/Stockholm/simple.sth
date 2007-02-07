@@ -1,0 +1,13 @@
+# STOCKHOLM 1.0
+#=GC SS_cons       .................<<<<<<<<...<<<<<<<........>>>>>>>..
+AP001509.1         UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-GAUGAGGGU
+#=GR AP001509.1 SS -----------------<<<<<<<<---..<<-<<-------->>->>..--
+AE007476.1         AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGAAU-UGG-CACGA-CGU
+#=GR AE007476.1 SS -----------------<<<<<<<<-----<<.<<-------->>.>>----
+
+#=GC SS_cons       ......<<<<<<<.......>>>>>>>..>>>>>>>>...............
+AP001509.1         CUCUAC-AGGUA-CCGUAAA-UACCUAGCUACGAAAAGAAUGCAGUUAAUGU
+#=GR AP001509.1 SS -------<<<<<--------->>>>>--->>>>>>>>---------------
+AE007476.1         UUCUACAAGGUG-CCGG-AA-CACCUAACAAUAAGUAAGUCAGCAGUGAGAU
+#=GR AE007476.1 SS ------.<<<<<--------->>>>>.-->>>>>>>>---------------
+//
