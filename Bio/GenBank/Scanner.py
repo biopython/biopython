@@ -433,6 +433,9 @@ class InsdcScanner :
                     annotations['raw_location'] = location_string.replace(' ','')
 
                     for (qualifier_name, qualifier_data) in qualifiers :
+                        if qualifier_data[0]=='"' and qualifier_data[-1]=='"' :
+                            #Remove quotes
+                            qualifier_data = qualifier_data[1:-1]
                         #Append the data to the annotation qualifier...
                         if qualifier_name == "translation" :
                             assert record.seq is None, "Multiple translations!"
