@@ -49,21 +49,21 @@ test_files = [ \
     ("nexus",  True,  'Nexus/f2.nex', 9),
     ("nexus",  True,  'Nexus/test_Nexus_input.nex', 9),
 #Following examples are also used in test_SwissProt.py
-    ("swiss",False, 'SwissProt/sp001', 1),
-    ("swiss",False, 'SwissProt/sp002', 1),
-    ("swiss",False, 'SwissProt/sp003', 1),
-    ("swiss",False, 'SwissProt/sp004', 1),
-    ("swiss",False, 'SwissProt/sp005', 1),
-    ("swiss",False, 'SwissProt/sp006', 1),
-    ("swiss",False, 'SwissProt/sp007', 1),
-    ("swiss",False, 'SwissProt/sp008', 1),
-    ("swiss",False, 'SwissProt/sp009', 1),
-    ("swiss",False, 'SwissProt/sp010', 1),
-    ("swiss",False, 'SwissProt/sp011', 1),
-    ("swiss",False, 'SwissProt/sp012', 1),
-    ("swiss",False, 'SwissProt/sp013', 1),
-    ("swiss",False, 'SwissProt/sp014', 1),
-    ("swiss",False, 'SwissProt/sp015', 1),
+    ("swiss",  False, 'SwissProt/sp001', 1),
+    ("swiss",  False, 'SwissProt/sp002', 1),
+    ("swiss",  False, 'SwissProt/sp003', 1),
+    ("swiss",  False, 'SwissProt/sp004', 1),
+    ("swiss",  False, 'SwissProt/sp005', 1),
+    ("swiss",  False, 'SwissProt/sp006', 1),
+    ("swiss",  False, 'SwissProt/sp007', 1),
+    ("swiss",  False, 'SwissProt/sp008', 1),
+    ("swiss",  False, 'SwissProt/sp009', 1),
+    ("swiss",  False, 'SwissProt/sp010', 1),
+    ("swiss",  False, 'SwissProt/sp011', 1),
+    ("swiss",  False, 'SwissProt/sp012', 1),
+    ("swiss",  False, 'SwissProt/sp013', 1),
+    ("swiss",  False, 'SwissProt/sp014', 1),
+    ("swiss",  False, 'SwissProt/sp015', 1),
 #Following examples are also used in test_GenBank.py
     ("genbank",False, 'GenBank/noref.gb', 1),
     ("genbank",False, 'GenBank/cor6_6.gb', 6),
@@ -77,6 +77,10 @@ test_files = [ \
     ("genbank",False, 'GenBank/origin_line.gb', 1),
     ("genbank",False, 'GenBank/blank_seq.gb', 1),
     ("genbank",False, 'GenBank/dbsource_wrap.gb', 1),
+#Following files are currently only used here:
+    ("embl",      False, 'EMBL/TRBG361.embl', 1),
+    ("stockholm", True,  'Stockholm/simple.sth', 2),
+    ("stockholm", True,  'Stockholm/funny.sth', 5),
     ]
 
 def records_match(record_one, record_two) :
@@ -103,24 +107,33 @@ def record_summary(record, indent=" ") :
     answer += "', length=%i" % (len(record.seq))
     return answer
 
+def col_summary(col_text) :
+    if len(col_text) < 65 :
+        return col_text
+    else :
+        return col_text[:60] + "..." + col_text[-5:]
+
 def alignment_summary(alignment, index=" ") :
     """Returns a concise summary of an Alignment object as a string"""
     answer = []
     alignment_len = alignment.get_alignment_length()
+    rec_count = len(alignment.get_all_seqs())
     for i in range(min(5,alignment_len)) :
-        answer.append(index + "%s alignment column %i" % (alignment.get_column(i),i))
+        answer.append(index + col_summary(alignment.get_column(i)) \
+                            + " alignment column %i" % i)
     if alignment_len > 5 :
         i = alignment_len - 1
-        answer.append(index + "%s ..." % ("|" * t_count))
-        answer.append(index + "%s alignment column %i" % (alignment.get_column(i),i))
+        answer.append(index + col_summary("|" * rec_count) \
+                            + " ...")
+        answer.append(index + col_summary(alignment.get_column(i)) \
+                            + " alignment column %i" % i)
     return "\n".join(answer)
 
 
 def check_simple_write_read(records, formats, indent=" ") :
     #print indent+"Checking we can write and then read back these records"
-    print indent+"Checking write/read in:",
     for format in formats :
-        print "%s," % format,
+        print indent+"Checking can write/read as '%s' format" % format
         
         #Going to write to a handle...
         handle = StringIO()
@@ -139,7 +152,6 @@ def check_simple_write_read(records, formats, indent=" ") :
             #Assume spaces are turned into underscores.
             records[i].id.replace(" ","_") == records2[i].id.replace(" ","_")
             records[i].seq.data == records2[i].seq.data
-    print "done."
 
 for (t_format, t_alignment, t_filename, t_count) in test_files :
     print "Testing reading %s format file %s" % (t_format, t_filename)
@@ -212,7 +224,11 @@ for (t_format, t_alignment, t_filename, t_count) in test_files :
         assert records_match(record, records4[i])
         assert records_match(record, records5[i])
 
-        print record_summary(record)        
+        if i < 10 :
+            print record_summary(record)
+    if t_count > 10 :
+        print " ..."
+        print record_summary(records[-1])
 
 
     if t_alignment :
