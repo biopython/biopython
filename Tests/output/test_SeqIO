@@ -12,7 +12,9 @@ Testing reading clustal format file Clustalw/cw02.aln as an alignment
  D- alignment column 4
  || ...
  V- alignment column 600
- Checking write/read in: fasta, stockholm, phylip, done.
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'phylip' format
 Testing reading clustal format file Clustalw/opuntia.aln
  ID = 'gi|6273285|gb|AF191659.1|AF191', Name='<unknown name>',
  Seq='TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCG...TACCAGA', length=156
@@ -36,55 +38,57 @@ Testing reading clustal format file Clustalw/opuntia.aln as an alignment
  CCCCCCC alignment column 4
  ||||||| ...
  AAAAAAA alignment column 155
- Checking write/read in: fasta, stockholm, phylip, done.
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'phylip' format
 Testing reading fasta format file Nucleic/lupine.nu
  ID and Name='gi|5049839|gb|AI730987.1|AI730987',
  Seq='GAAAATTCATTTTCTTTGGACTTTCTCTGAAATCCGAGTC...GGTTTTT', length=655
- Checking write/read in: fasta, done.
+ Checking can write/read as 'fasta' format
 Testing reading fasta format file Nucleic/elderberry.nu
  ID and Name='gi|4218935|gb|AF074388.1|AF074388',
  Seq='ATGAAGTTAAGCACTCTTCTCATCTTATCTTTTCCTTTCC...GTCGTTT', length=2050
- Checking write/read in: fasta, done.
+ Checking can write/read as 'fasta' format
 Testing reading fasta format file Nucleic/phlox.nu
  ID and Name='gi|5052071|gb|AF067555.1|AF067555',
  Seq='TCGAAACCTGCCTAGCAGAACGACCCGCGAACTTGTATTC...CACGACC', length=623
- Checking write/read in: fasta, done.
+ Checking can write/read as 'fasta' format
 Testing reading fasta format file Nucleic/centaurea.nu
  ID and Name='gi|4104054|gb|AH007193.1|SEG_CVIGS',
  Seq='CCTGTCACTTAACTTTTTGTTCATAAGGTATATATGGGGG...GTTAGAG', length=1002
- Checking write/read in: fasta, done.
+ Checking can write/read as 'fasta' format
 Testing reading fasta format file Nucleic/wisteria.nu
  ID and Name='gi|5817701|gb|AF142731.1|AF142731',
  Seq='GCTCCATTTTTTACACATTTCTATGAACTAATTGGTTCAT...ATGATGA', length=2551
- Checking write/read in: fasta, done.
+ Checking can write/read as 'fasta' format
 Testing reading fasta format file Nucleic/sweetpea.nu
  ID and Name='gi|3176602|gb|U78617.1|LOU78617',
  Seq='CAGGCTGCGCGGTTTCTATTTATGAAGAACAAGGTCCGTA...GTTTGTT', length=309
- Checking write/read in: fasta, done.
+ Checking can write/read as 'fasta' format
 Testing reading fasta format file Nucleic/lavender.nu
  ID and Name='gi|5690369|gb|AF158246.1|AF158246',
  Seq='GGCTCTTAAGTCATGTCTAGGCAGGTGTGCACAAGTTTAG...GTAGGTG', length=550
- Checking write/read in: fasta, done.
+ Checking can write/read as 'fasta' format
 Testing reading fasta format file Amino/aster.pro
  ID and Name='gi|3298468|dbj|BAA31520.1|',
  Seq='GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLL...FIVGANI', length=107
- Checking write/read in: fasta, done.
+ Checking can write/read as 'fasta' format
 Testing reading fasta format file Amino/loveliesbleeding.pro
  ID and Name='gi|2781234|pdb|1JLY|B',
  Seq='XAGLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKIL...IELGQNN', length=304
- Checking write/read in: fasta, done.
+ Checking can write/read as 'fasta' format
 Testing reading fasta format file Amino/rose.pro
  ID and Name='gi|4959044|gb|AAD34209.1|AF069992_1',
  Seq='MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSE...GNRESVV', length=600
- Checking write/read in: fasta, done.
+ Checking can write/read as 'fasta' format
 Testing reading fasta format file Amino/rosemary.pro
  ID and Name='gi|671626|emb|CAA85685.1|',
  Seq='MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAF...FEFPAMD', length=473
- Checking write/read in: fasta, done.
+ Checking can write/read as 'fasta' format
 Testing reading fasta format file Fasta/f001
  ID and Name='gi|3318709|pdb|1A91|',
  Seq='MENLNMDLLYMAAAVMMGLAAIGAAIGIGILGGKFLEGAA...YVMFAVA', length=79
- Checking write/read in: fasta, done.
+ Checking can write/read as 'fasta' format
 Testing reading fasta format file Fasta/f002
  ID and Name='gi|1348912|gb|G26680|G26680',
  Seq='CGGACCAGACGGACACAGGGAGAAGCTAGTTTCTTTCATG...GGTTTNA', length=633
@@ -92,13 +96,13 @@ Testing reading fasta format file Fasta/f002
  Seq='CGGAGCCAGCGAGCATATGCTGCATGAGGACCTTTCTATC...NNNGAAA', length=413
  ID and Name='gi|1592936|gb|G29385|G29385',
  Seq='GATCAAATCTGCACTGTGTCTACATATAGGAAAGGTCCTG...NTTTTTT', length=471
- Checking write/read in: fasta, done.
+ Checking can write/read as 'fasta' format
 Testing reading fasta format file Fasta/fa01
  ID and Name='AK1H_ECOLI/1-378',
  Seq='CPDSINAALICRGEKMSIAIMAGVLEARGH-N--VTVIDP...INIVAIA', length=378
  ID and Name='AKH_HAEIN/1-382',
  Seq='-----------------VEDAVKATIDCRGEKLSIAMMKA...SALAQAN', length=382
- Checking write/read in: fasta, done.
+ Checking can write/read as 'fasta' format
 Testing reading nexus format file Nexus/f1.nex
  ID and Name='t2 the name',
  Seq='ACGT', length=4
@@ -119,7 +123,9 @@ Testing reading nexus format file Nexus/f1.nex as an alignment
  CCCCCCc alignment column 1
  GGGGGGc alignment column 2
  TTTTTTc alignment column 3
- Checking write/read in: fasta, stockholm, phylip, done.
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'phylip' format
 Testing reading nexus format file Nexus/f2.nex
  ID and Name='t1',
  Seq='A-CG-T-gttgtctc-t------a-gttgtctct-t-t', length=38
@@ -147,7 +153,9 @@ Testing reading nexus format file Nexus/f2.nex as an alignment
  -cc--tgtc alignment column 4
  ||||||||| ...
  tt--?ag?c alignment column 37
- Checking write/read in: fasta, stockholm, phylip, done.
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'phylip' format
 Testing reading nexus format file Nexus/test_Nexus_input.nex
  ID and Name='t1',
  Seq='A-C-G-Tc-gtgtgtgctct-t-t------ac-gtgtgtgctct-t-t', length=48
@@ -175,71 +183,73 @@ Testing reading nexus format file Nexus/test_Nexus_input.nex as an alignment
  GGGGGGGGc alignment column 4
  ||||||||| ...
  tt--?ag?c alignment column 47
- Checking write/read in: fasta, stockholm, phylip, done.
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'phylip' format
 Testing reading swiss format file SwissProt/sp001
  ID = 'Q13454', Name='N33_HUMAN',
  Seq='MGARGAPSRRRQAGRRLRYLPTGSFPFLLLLLLLCIQLGG...YSDLDFE', length=348
- Checking write/read in: fasta, done.
+ Checking can write/read as 'fasta' format
 Testing reading swiss format file SwissProt/sp002
  ID = 'P54101', Name='CSP_MOUSE',
  Seq='MADQRQRSLSTSGESLYHVLGLDKNATSDDIKKSYRKLAL...YHTDGFN', length=198
- Checking write/read in: fasta, done.
+ Checking can write/read as 'fasta' format
 Testing reading swiss format file SwissProt/sp003
  ID = 'P42655', Name='143E_HUMAN',
  Seq='MDDREDLVYQAKLAEQAERYDEMVESMKKVAGMDVELTVE...DVEDENQ', length=255
- Checking write/read in: fasta, done.
+ Checking can write/read as 'fasta' format
 Testing reading swiss format file SwissProt/sp004
  ID = 'P23082', Name='NDOA_PSEPU',
  Seq='TVKWIEAVALSDILEGDVLGVTVEGKELALYEVEGEIYAT...RVMIDLS', length=103
- Checking write/read in: fasta, done.
+ Checking can write/read as 'fasta' format
 Testing reading swiss format file SwissProt/sp005
  ID = 'P24973', Name='NU3M_BALPH',
  Seq='MNLLLTLLTNTTLALLLVFIAFWLPQLNVYAEKTSPYECG...EGLEWAE', length=115
- Checking write/read in: fasta, done.
+ Checking can write/read as 'fasta' format
 Testing reading swiss format file SwissProt/sp006
  ID = 'P39896', Name='TCMO_STRGA',
  Seq='MTPHTHVRGPGDILQLTMAFYGSRALISAVELDLFTLLAG...AIGRKPR', length=339
- Checking write/read in: fasta, done.
+ Checking can write/read as 'fasta' format
 Testing reading swiss format file SwissProt/sp007
  ID = 'O95832', Name='CLD1_HUMAN',
  Seq='MANAGLQLLGFILAFLGWIGAIVSTALPQWRIYSYAGDNI...SSGKDYV', length=211
- Checking write/read in: fasta, done.
+ Checking can write/read as 'fasta' format
 Testing reading swiss format file SwissProt/sp008
  ID = 'Q95352', Name='1A02_HUMAN',
  Seq='MAVMAPRTLVLLLSGALALTQTWAGSHSMRYFFTSVSRPG...SLTACKV', length=365
- Checking write/read in: fasta, done.
+ Checking can write/read as 'fasta' format
 Testing reading swiss format file SwissProt/sp009
  ID = 'O23729', Name='CHS3_BROFI',
  Seq='MAPAMEEIRQAQRAEGPAAVLAIGTSTPPNALYQADYPDY...VPIAGAE', length=394
- Checking write/read in: fasta, done.
+ Checking can write/read as 'fasta' format
 Testing reading swiss format file SwissProt/sp010
  ID = 'Q13639', Name='5H4_HUMAN',
  Seq='MDKLDANVSSEEGFGSVEKVVLLTFLSTVILMAILGNLLV...AAQPSDT', length=388
- Checking write/read in: fasta, done.
+ Checking can write/read as 'fasta' format
 Testing reading swiss format file SwissProt/sp011
  ID = 'P16235', Name='LSHR_RAT',
  Seq='MGRRVPALRQLLVLAVLLLKPSQLQSRELSGSRCPEPCDC...PPRALTH', length=700
- Checking write/read in: fasta, done.
+ Checking can write/read as 'fasta' format
 Testing reading swiss format file SwissProt/sp012
  ID and Name='Q9Y736',
  Seq='MQIFVKTLTGKTITLEVESSDTIDNVKTKIQDKEGIPPDQ...LRLRGGN', length=153
- Checking write/read in: fasta, done.
+ Checking can write/read as 'fasta' format
 Testing reading swiss format file SwissProt/sp013
  ID and Name='P82909',
  Seq='MGSKMASASRVVQVVKPHTPLIRFPDRRDNPKPNVSEALR...IQRGGPE', length=102
- Checking write/read in: fasta, done.
+ Checking can write/read as 'fasta' format
 Testing reading swiss format file SwissProt/sp014
  ID = 'P12166', Name='PSBL_ORYSA',
  Seq='TQSNPNEQNVELNRTSLYWGLLLIFVLAVLFSNYFFN', length=37
- Checking write/read in: fasta, done.
+ Checking can write/read as 'fasta' format
 Testing reading swiss format file SwissProt/sp015
  ID = 'IPI00383150', Name='IPI00383150.2',
  Seq='MSFQAPRRLLELAGQSLLRDQALAISVLDELPRELFPRLF...FIGPTPC', length=457
- Checking write/read in: fasta, done.
+ Checking can write/read as 'fasta' format
 Testing reading genbank format file GenBank/noref.gb
  ID = 'NM_006141.1', Name='NM_006141',
  Seq='GGCAAGATGGCGCCGGTGGGGGTGGAGAAGAAGCTGCTGC...AAAAAAA', length=1622
- Checking write/read in: fasta, done.
+ Checking can write/read as 'fasta' format
 Testing reading genbank format file GenBank/cor6_6.gb
  ID = 'X55053.1', Name='ATCOR66M',
  Seq='AACAAAACACACATCAAAAACGATTTTACAAGAAAAAAAT...AAAAAAA', length=513
@@ -253,45 +263,87 @@ Testing reading genbank format file GenBank/cor6_6.gb
  Seq='AACAAAACTCAATAAATAAACAAATGGCAGACAACAAGCA...TGGTTTT', length=282
  ID = 'AF297471.1', Name='AF297471',
  Seq='ATGGCAGACAACAAGCAGAGCTTCCAAGCCGGTCAAGCCG...CAAGTAG', length=497
- Checking write/read in: fasta, done.
+ Checking can write/read as 'fasta' format
 Testing reading genbank format file GenBank/iro.gb
  ID = 'AL109817.1', Name='IRO125195',
  Seq='CACAGGCCCAGAGCCACTCCTGCCTACAGGTTCTGAGGGC...AAAAAAA', length=1326
- Checking write/read in: fasta, done.
+ Checking can write/read as 'fasta' format
 Testing reading genbank format file GenBank/pri1.gb
  ID = 'U05344.1', Name='HUGLUT1',
  Seq='GATCATGCATGCACTCCAGCCTGGGACAAGAGCGAAACTC...GTTTGCA', length=741
- Checking write/read in: fasta, done.
+ Checking can write/read as 'fasta' format
 Testing reading genbank format file GenBank/arab1.gb
  ID = 'AC007323.5', Name='AC007323',
  Seq='AAGCTTTGCTACGATCTACATTTGGGAATGTGAGTCTCTT...GAAGCTT', length=86436
- Checking write/read in: fasta, done.
+ Checking can write/read as 'fasta' format
 Testing reading genbank format file GenBank/protein_refseq.gb
  ID = 'NP_034640.1', Name='NP_034640',
  Seq='MNNRWILHAAFLLCFSTTALSINYKQLQLQERTNIRKCQE...LTRNFQN', length=182
- Checking write/read in: fasta, done.
+ Checking can write/read as 'fasta' format
 Testing reading genbank format file GenBank/extra_keywords.gb
  ID = 'AL138972.1', Name='DMBR25B3',
  Seq='TCCAGGGGATTCACGCGCAATATGTTTCCCTCGCTCGTCT...TCGATTG', length=154329
- Checking write/read in: fasta, done.
+ Checking can write/read as 'fasta' format
 Testing reading genbank format file GenBank/one_of.gb
  ID = 'U18266.1', Name='HSTMPO1',
  Seq='GAATTCAGATAGAATGTAGACAAGAGGGATGGTGAGGAAA...CAAAGGC', length=2509
- Checking write/read in: fasta, done.
+ Checking can write/read as 'fasta' format
 Testing reading genbank format file GenBank/NT_019265.gb
  ID = 'NT_019265.6', Name='NT_019265',
  Seq='', length=0
- Checking write/read in: fasta, done.
+ Checking can write/read as 'fasta' format
 Testing reading genbank format file GenBank/origin_line.gb
  ID = 'NC_002678.1', Name='NC_002678',
  Seq='TTAATTAACTGTCTTCGATTGCGTTTAATTGACGGTTTTC...TCAGCGC', length=180
- Checking write/read in: fasta, done.
+ Checking can write/read as 'fasta' format
 Testing reading genbank format file GenBank/blank_seq.gb
  ID = 'NP_001832.1', Name='NP_001832',
  Seq='MEECWVTEIANGSKDGLDSNPMKDYMILSGPQKTAVAVLC...DLDLSDC', length=360
- Checking write/read in: fasta, done.
+ Checking can write/read as 'fasta' format
 Testing reading genbank format file GenBank/dbsource_wrap.gb
  ID = 'P01485', Name='SCX3_BUTOC',
  Seq='VKDGYIVDDRNCTYFCGRNAYCNEECTKLKGESGYCQWAS...KGPGRCN', length=64
- Checking write/read in: fasta, done.
+ Checking can write/read as 'fasta' format
+Testing reading embl format file EMBL/TRBG361.embl
+ ID and Name='X56734',
+ Seq='AAACAAACCAAATATGGATTTTATTGTAGCCATATTTGCT...AAAAAAA', length=1859
+ Checking can write/read as 'fasta' format
+Testing reading stockholm format file Stockholm/simple.sth
+ ID and Name='AP001509.1',
+ Seq='UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAU...UUAAUGU', length=104
+ ID and Name='AE007476.1',
+ Seq='AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGAAU-U...GUGAGAU', length=104
+Testing reading stockholm format file Stockholm/simple.sth as an alignment
+ UA alignment column 0
+ UA alignment column 1
+ AA alignment column 2
+ AA alignment column 3
+ UU alignment column 4
+ || ...
+ UU alignment column 103
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'phylip' format
+Testing reading stockholm format file Stockholm/funny.sth
+ ID = 'O83071/192-246', Name='O83071',
+ Seq='MTCRAQLIAVPRASSLAE--AIACAQKM----RVSRVPVYERS', length=43
+ ID = 'O83071/259-312', Name='O83071',
+ Seq='MQHVSAPVFVFECTRLAY--VQHKLRAH----SRAVAIVLDEY', length=43
+ ID = 'O31698/18-71', Name='O31698',
+ Seq='MIEADKVAHVQVGNNLEH--ALLVLTKT----GYTAIPVLDPS', length=43
+ ID = 'O31698/88-139', Name='O31698',
+ Seq='EVMLTDIPRLHINDPIMK--GFGMVINN------GFVCVENDE', length=43
+ ID = 'O31699/88-139', Name='O31699',
+ Seq='EVMLTDIPRLHINDPIMK--GFGMVINN------GFVCVENDE', length=43
+Testing reading stockholm format file Stockholm/funny.sth as an alignment
+ MMMEE alignment column 0
+ TQIVV alignment column 1
+ CHEMM alignment column 2
+ RVALL alignment column 3
+ ASDTT alignment column 4
+ ||||| ...
+ SYSEE alignment column 42
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'phylip' format
 Finished tested reading files with Bio.SeqIO
