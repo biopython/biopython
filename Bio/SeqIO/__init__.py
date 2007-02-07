@@ -99,11 +99,6 @@ The modules Bio.SeqIO.FASTA and Bio.SeqIO.generic are considered to be depreciat
 #   For most file formats reading such files is fine; The stockholm
 #   parser would fail.
 #
-# - EMBL sequence format, ideally combined with GenBank nicely.
-#   http://www.bioperl.org/wiki/EMBL_sequence_format
-#   Possibly do this in Bio.GenBank?
-#   See http://bugzilla.open-bio.org/show_bug.cgi?id=2059#c11
-#
 # - MSF multiple alignment format, aka GCG, aka PileUp format (*.msf)
 #   http://www.bioperl.org/wiki/MSF_multiple_alignment_format 
 #
@@ -145,8 +140,7 @@ from Bio.SeqRecord import SeqRecord
 from Bio.Align.Generic import Alignment
 
 import FastaIO
-#import EmblGenBankIO
-import GenBankIO
+import InsdcIO #EMBL and GenBank
 import StockholmIO
 import ClustalIO
 import PhylipIO
@@ -168,6 +162,7 @@ _ExtToFormat ={"fasta"     : "fasta",
                "genbank"   : "genbank",
                "gbk"       : "genbank", #Used by the NCBI
                "gb"        : "genbank",
+               "embl"       : "embl",
                "aln"       : "clustal", #aln is almost always clustal format
                "phy"       : "phylip", #phy is used by clustal
                "phylip"    : "phylip",
@@ -180,12 +175,10 @@ _ExtToFormat ={"fasta"     : "fasta",
                }
 
 _FormatToIterator ={"fasta" : FastaIO.FastaIterator,
-                    "genbank" : GenBankIO.GenBankIterator,
-                    #See http://bugzilla.open-bio.org/show_bug.cgi?id=2059#c11
-                    #"genbank" : EmblGenBankIO.GenBankIterator,
-                    #"genbank-cds" : EmblGenBankIO.GenBankCdsFeatureIterator,
-                    #"embl" : EmblGenBankIO.EmblIterator, #Not written yet
-                    #"embl-cds" : EmblGenBankIO.EmblCdsFeatureIterator,
+                    "genbank" : InsdcIO.GenBankIterator,
+                    "genbank-cds" : InsdcIO.GenBankCdsFeatureIterator,
+                    "embl" : InsdcIO.EmblIterator,
+                    "embl-cds" : InsdcIO.EmblCdsFeatureIterator,
                     "clustal" : ClustalIO.ClustalIterator,
                     "phylip" : PhylipIO.PhylipIterator,
                     "nexus" : NexusIO.NexusIterator,
@@ -1248,7 +1241,7 @@ SQ   SEQUENCE   102 AA;  10576 MW;  CFBAA1231C3A5E92 CRC64;
     print "# Sequence Input Tests                                  #"
     print "#########################################################"
 
-    #ToDo - Check alphabet, or at least DNA/amino acid, or those
+    #ToDo - Check alphabet, or at least DNA/amino acid, for those
     #       filetype that specify it (e.g. Nexus, GenBank)
     tests = [
          (aln_example,  "clustal",   8, "HISJ_E_COLI",
@@ -1294,6 +1287,12 @@ SQ   SEQUENCE   102 AA;  10576 MW;  CFBAA1231C3A5E92 CRC64;
           "MESTLGSDLARLVRVWRALIDHRLKPLELTQTHWVTLHNINRLPPEQSQIQLAKAIGIEQ" + \
           "PSLVRTLDQLEEKGLITRHTCANDRRAKRIKLTEQSSPIIEQVDGVICSTRKEILGGISP" + \
           "DEIELLSGLIDKLERNIIQLQSK", True),
+         (gbk_example, "genbank-cds", 3, "AAA98667.1",
+          'MNRWVEKWLRVYLKCYINLILFYRNVYPPQSFDYTTYQSFNLPQFVPINRHPALIDYIEE' + \
+          'LILDVLSKLTHVYRFSICIINKKNDLCIEKYVLDFSELQHVDKDDQIITETEVFDEFRSS' + \
+          'LNSLIMHLEKLPKVNDDTITFEAVINAIELELGHKLDRNRRVDSLEEKAEIERDSNWVKC' + \
+          'QEDENLPDNNGFQPPKIKLTSLVGSDVGPLIIHQFSEKLISGDDKILNGVYSQYEEGESI' + \
+          'FGSLF', True),
           (swiss_example,"swiss", 3, "Q43495",
           "MASVKSSSSSSSSSFISLLLLILLVIVLQSQVIECQPQQSCTASLTGLNVCAPFLVPGSP" + \
           "TASTECCNAVQSINHDCMCNTMRIAAQIPAQCNLPPLSCSAN", True),
@@ -1309,8 +1308,12 @@ SQ   SEQUENCE   102 AA;  10576 MW;  CFBAA1231C3A5E92 CRC64;
         #This uses "for x in iterator" interally.
         iterator = SequenceIterator(StringIO(data), format=format)
         as_list = list(iterator)
-        assert len(as_list) == rec_count
-        assert as_list[-1].id == last_id
+        assert len(as_list) == rec_count, \
+            "Expected %i records, found %i" \
+            % (rec_count, len(as_list))
+        assert as_list[-1].id == last_id, \
+            "Expected '%s' as last record ID, found '%s'" \
+            % (last_id, as_list[-1].id)
         if last_seq :
             assert as_list[-1].seq.tostring() == last_seq
 
