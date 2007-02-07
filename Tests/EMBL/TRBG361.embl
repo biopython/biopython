@@ -1,0 +1,97 @@
+ID   X56734; SV 1; linear; mRNA; STD; PLN; 1859 BP.
+XX
+AC   X56734; S46826;
+XX
+DT   12-SEP-1991 (Rel. 29, Created)
+DT   25-NOV-2005 (Rel. 85, Last updated, Version 11)
+XX
+DE   Trifolium repens mRNA for non-cyanogenic beta-glucosidase
+XX
+KW   beta-glucosidase.
+XX
+OS   Trifolium repens (white clover)
+OC   Eukaryota; Viridiplantae; Streptophyta; Embryophyta; Tracheophyta;
+OC   Spermatophyta; Magnoliophyta; eudicotyledons; core eudicotyledons; rosids;
+OC   eurosids I; Fabales; Fabaceae; Papilionoideae; Trifolieae; Trifolium.
+XX
+RN   [5]
+RP   1-1859
+RX   PUBMED; 1907511.
+RA   Oxtoby E., Dunn M.A., Pancoro A., Hughes M.A.;
+RT   "Nucleotide and derived amino acid sequence of the cyanogenic
+RT   beta-glucosidase (linamarase) from white clover (Trifolium repens L.)";
+RL   Plant Mol. Biol. 17(2):209-219(1991).
+XX
+RN   [6]
+RP   1-1859
+RA   Hughes M.A.;
+RT   ;
+RL   Submitted (19-NOV-1990) to the EMBL/GenBank/DDBJ databases.
+RL   Hughes M.A., University of Newcastle Upon Tyne, Medical School, Newcastle
+RL   Upon Tyne, NE2 4HH, UK
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..1859
+FT                   /organism="Trifolium repens"
+FT                   /mol_type="mRNA"
+FT                   /clone_lib="lambda gt10"
+FT                   /clone="TRE361"
+FT                   /tissue_type="leaves"
+FT                   /db_xref="taxon:3899"
+FT   CDS             14..1495
+FT                   /product="beta-glucosidase"
+FT                   /EC_number="3.2.1.21"
+FT                   /note="non-cyanogenic"
+FT                   /db_xref="GOA:P26204"
+FT                   /db_xref="InterPro:IPR001360"
+FT                   /db_xref="InterPro:IPR013781"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P26204"
+FT                   /protein_id="CAA40058.1"
+FT                   /translation="MDFIVAIFALFVISSFTITSTNAVEASTLLDIGNLSRSSFPRGFI
+FT                   FGAGSSAYQFEGAVNEGGRGPSIWDTFTHKYPEKIRDGSNADITVDQYHRYKEDVGIMK
+FT                   DQNMDSYRFSISWPRILPKGKLSGGINHEGIKYYNNLINELLANGIQPFVTLFHWDLPQ
+FT                   VLEDEYGGFLNSGVINDFRDYTDLCFKEFGDRVRYWSTLNEPWVFSNSGYALGTNAPGR
+FT                   CSASNVAKPGDSGTGPYIVTHNQILAHAEAVHVYKTKYQAYQKGKIGITLVSNWLMPLD
+FT                   DNSIPDIKAAERSLDFQFGLFMEQLTTGDYSKSMRRIVKNRLPKFSKFESSLVNGSFDF
+FT                   IGINYYSSSYISNAPSHGNAKPSYSTNPMTNISFEKHGIPLGPRAASIWIYVYPYMFIQ
+FT                   EDFEIFCYILKINITILQFSITENGMNEFNDATLPVEEALLNTYRIDYYYRHLYYIRSA
+FT                   IRAGSNVKGFYAWSFLDCNEWFAGFTVRFGLNFVD"
+FT   mRNA            1..1859
+FT                   /experiment="experimental evidence, no additional details
+FT                   recorded"
+XX
+SQ   Sequence 1859 BP; 609 A; 314 C; 355 G; 581 T; 0 other;
+     aaacaaacca aatatggatt ttattgtagc catatttgct ctgtttgtta ttagctcatt        60
+     cacaattact tccacaaatg cagttgaagc ttctactctt cttgacatag gtaacctgag       120
+     tcggagcagt tttcctcgtg gcttcatctt tggtgctgga tcttcagcat accaatttga       180
+     aggtgcagta aacgaaggcg gtagaggacc aagtatttgg gataccttca cccataaata       240
+     tccagaaaaa ataagggatg gaagcaatgc agacatcacg gttgaccaat atcaccgcta       300
+     caaggaagat gttgggatta tgaaggatca aaatatggat tcgtatagat tctcaatctc       360
+     ttggccaaga atactcccaa agggaaagtt gagcggaggc ataaatcacg aaggaatcaa       420
+     atattacaac aaccttatca acgaactatt ggctaacggt atacaaccat ttgtaactct       480
+     ttttcattgg gatcttcccc aagtcttaga agatgagtat ggtggtttct taaactccgg       540
+     tgtaataaat gattttcgag actatacgga tctttgcttc aaggaatttg gagatagagt       600
+     gaggtattgg agtactctaa atgagccatg ggtgtttagc aattctggat atgcactagg       660
+     aacaaatgca ccaggtcgat gttcggcctc caacgtggcc aagcctggtg attctggaac       720
+     aggaccttat atagttacac acaatcaaat tcttgctcat gcagaagctg tacatgtgta       780
+     taagactaaa taccaggcat atcaaaaggg aaagataggc ataacgttgg tatctaactg       840
+     gttaatgcca cttgatgata atagcatacc agatataaag gctgccgaga gatcacttga       900
+     cttccaattt ggattgttta tggaacaatt aacaacagga gattattcta agagcatgcg       960
+     gcgtatagtt aaaaaccgat tacctaagtt ctcaaaattc gaatcaagcc tagtgaatgg      1020
+     ttcatttgat tttattggta taaactatta ctcttctagt tatattagca atgccccttc      1080
+     acatggcaat gccaaaccca gttactcaac aaatcctatg accaatattt catttgaaaa      1140
+     acatgggata cccttaggtc caagggctgc ttcaatttgg atatatgttt atccatatat      1200
+     gtttatccaa gaggacttcg agatcttttg ttacatatta aaaataaata taacaatcct      1260
+     gcaattttca atcactgaaa atggtatgaa tgaattcaac gatgcaacac ttccagtaga      1320
+     agaagctctt ttgaatactt acagaattga ttactattac cgtcacttat actacattcg      1380
+     ttctgcaatc agggctggct caaatgtgaa gggtttttac gcatggtcat ttttggactg      1440
+     taatgaatgg tttgcaggct ttactgttcg ttttggatta aactttgtag attagaaaga      1500
+     tggattaaaa aggtacccta agctttctgc ccaatggtac aagaactttc tcaaaagaaa      1560
+     ctagctagta ttattaaaag aactttgtag tagattacag tacatcgttt gaagttgagt      1620
+     tggtgcacct aattaaataa aagaggttac tcttaacata tttttaggcc attcgttgtg      1680
+     aagttgttag gctgttattt ctattatact atgttgtagt aataagtgca ttgttgtacc      1740
+     agaagctatg atcataacta taggttgatc cttcatgtat cagtttgatg ttgagaatac      1800
+     tttgaattaa aagtcttttt ttattttttt aaaaaaaaaa aaaaaaaaaa aaaaaaaaa       1859
+//
+
