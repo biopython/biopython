@@ -1204,133 +1204,40 @@ ORIGIN
 
     print "GenBank CDS Iteration"
     print "====================="
+
     g = GenBankScanner()
     for record in g.parse_cds_features(StringIO(gbk_example)) :
         print record
+        
+    g = GenBankScanner()
+    for record in g.parse_cds_features(StringIO(gbk_example2),
+                  tags2id=('gene','locus_tag','product')) :
+        print record
 
     g = GenBankScanner()
-    for record in g.parse_cds_features(StringIO(gbk_example2)) :
+    for record in g.parse_cds_features(StringIO(gbk_example + "\n" + gbk_example2),
+                                       tags2id=('gene','locus_tag','product')) :
         print record
-        
-    g = GenBankScanner()
-    for record in g.parse_cds_features(open(r"C:\TEMP\biopython_cvs\biopython_all\biopython\Tests\GenBank\noref.gb")) :
-        print record
-        
+
     print
     print "GenBank Iteration"
     print "================="
-    """
     g = GenBankScanner()
     for record in g.parse_records(StringIO(gbk_example),do_features=False) :
-        print record
+        print record.id, record.name, record.description
+        print record.seq
 
     g = GenBankScanner()
     for record in g.parse_records(StringIO(gbk_example),do_features=True) :
-        print record
+        print record.id, record.name, record.description
+        print record.seq
 
     g = GenBankScanner()
     for record in g.parse_records(StringIO(gbk_example2),do_features=False) :
-        print record
+        print record.id, record.name, record.description
+        print record.seq
 
     g = GenBankScanner()
     for record in g.parse_records(StringIO(gbk_example2),do_features=True) :
-        print record
-
-    g = GenBankScanner()
-    for record in g.parse_records(open(r"C:\TEMP\biopython_cvs\biopython_all\biopython\Tests\GenBank\noref.gb"),
-                                  do_features=True) :
-        print record
-    """
-    g = GenBankScanner()
-    for record in g.parse_records(open(r"C:\TEMP\biopython_cvs\biopython_all\biopython\Tests\GenBank\blank_seq.gb"),
-                                  do_features=True) :
-        print record
-
-    print
-    print "GenBank - simple parse"
-    print "======================"    
-    g = GenBankScanner(debug=0)
-    r = g.parse(open(r"C:\TEMP\biopython_cvs\biopython_all\biopython\Tests\GenBank\NT_019265.gb"))
-    print r
-        
-
-    print
-    print "GenBank - feed"
-    print "=============="    
-    from Bio.GenBank import _FeatureConsumer
-    from Bio.GenBank.utils import FeatureValueCleaner
-
-    consumer = _FeatureConsumer(use_fuzziness = 1, 
-                feature_cleaner = FeatureValueCleaner())
-    g = GenBankScanner(debug=0)
-    print g.feed(open(r"C:\TEMP\biopython_cvs\biopython_all\biopython\Tests\GenBank\NT_019265.gb"),
-               consumer)
-    print consumer.data
-
-    """
-    print
-    print "GenBank - simple parse"
-    print "======================"    
-    g = GenBankScanner(debug=0)
-    r = g.parse(open(r"C:\TEMP\biopython_cvs\biopython_all\biopython\Tests\GenBank\noref.gb"))
-    print r
-    assert len(r.seq) > 100
-    """
-    
-    """
-    print "GenBank CDS Iteration"
-    print "====================="
-    g = GenBankScanner()
-    for record in g.parse_cds_features(open("c:/temp/genbank/NT_033779_test.gbk")) :
-        print record
-        #break
-    
-    print
-    print "EMBL CDS Iteration"
-    print "=================="
-    e = EmblScanner()
-    for record in e.parse_cds_features(open(r"C:\Genomes\Bacteria\Escherichia_coli_K12\U00096.embl")) :
-        print record
-        break
-
-    print
-    print "GenBank CDS Iteration"
-    print "====================="
-    g = GenBankScanner()
-    for record in g.parse_cds_features(open(r"C:\temp\biopython_cvs\biopython_all\biopython\Tests\GenBank\cor6_6.gb")) :
-        print record
-        #break
-
-    print
-    print "GenBank Iteration"
-    print "================="    
-    g = GenBankScanner()
-    for record in g.parse_records(open(r"C:\temp\biopython_cvs\biopython_all\biopython\Tests\GenBank\cor6_6.gb"),
-                                  do_features=False) :
-        print record
-
-    print
-    print "GenBank - simple parse (repeated)"
-    print "================================"    
-    g = GenBankScanner(debug=0)
-    handle = open(r"C:\temp\biopython_cvs\biopython_all\biopython\Tests\GenBank\cor6_6.gb")
-    while True :
-        r = g.parse(handle)
-        if r is None : break
-        print r
-
-    print
-    print "GenBank - simple parse"
-    print "======================"    
-    g = GenBankScanner(debug=0)
-    r = g.parse(open("c:/temp/genbank/NT_033779_test.gbk"))
-    print r
-    assert len(r.seq) > 100
-
-    print
-    print "EMBL - simple parse"
-    print "==================="    
-    e = EmblScanner(debug=0)
-    r = e.parse(open(r"C:\Genomes\Bacteria\Escherichia_coli_K12\U00096.embl"), do_features=False)
-    print r
-    """    
+        print record.id, record.name, record.description
+        print record.seq
