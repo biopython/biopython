@@ -223,16 +223,18 @@ class DatabaseLoader:
             version = 0
             
 #        taxon_id = self._get_taxon_id(record)
-        taxon_id = "0" # inserted this because the taxon population code is out of date
+        #taxon_id = "0" # inserted this because the taxon population code is out of date
                        # with the tables
         identifier = record.annotations.get('gi')
         description = getattr(record, 'description', None)
         division = record.annotations.get("data_file_division", "UNK")
         
+	# removed taxon_id field, as it was causing difficulties with the 
+	# schema  - not inserting a value allows it to default to NULL, 
+	# avoiding the foreign key constraint.
         sql = """
         INSERT INTO bioentry (
          biodatabase_id,
-         taxon_id,
          name,
          accession,
          identifier,
@@ -246,10 +248,8 @@ class DatabaseLoader:
          %s,
          %s,
          %s,
-         %s,
          %s)"""
         self.adaptor.execute(sql, (self.dbid,
-                                   taxon_id,
                                    record.name, 
                                    accession,
                                    identifier,
