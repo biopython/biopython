@@ -63,7 +63,6 @@ class PDBParser:
         if isinstance(file, basestring):
             file=open(file)
         self._parse(file.readlines())
-        file.close()
         self.structure_builder.set_header(self.header)
         # Return the Structure instance
         return self.structure_builder.get_structure()
