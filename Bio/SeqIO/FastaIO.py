@@ -101,10 +101,10 @@ class FastaWriter(SequentialSequenceWriter):
         if self.record2title :
             title=record2title(record)
         else :
-            id = record.id
+            id = record.id.replace(os.linesep + " ", " ").replace(os.linesep, " ")
             assert os.linesep not in id
 
-            description = record.description
+            description = record.description.replace(os.linesep + " ", " ").replace(os.linesep, " ")
             assert os.linesep not in description
 
             #if description[:len(id)]==id :
