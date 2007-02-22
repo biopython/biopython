@@ -64,6 +64,9 @@ class Tree(Nodes.Chain):
     def _parse(self,tree):
         """Parses (a,b,c...)[[[xx]:]yy] into subcomponents and travels down recursively."""
         
+        #Remove any leading/trailing white space - want any string starting
+        #with " (..." should be recognised as a leaf, "(..."
+        tree = tree.strip()
         if tree.count('(')!=tree.count(')'):
             raise TreeError, 'Parentheses do not match in (sub)tree: '+tree
         if tree.count('(')==0: # a leaf
@@ -681,6 +684,3 @@ def consensus(trees, threshold=0.5,outgroup=None):
     consensus.node(consensus_ids[-1]).data.taxon=None 
     return consensus
 
-    
-                
-        
