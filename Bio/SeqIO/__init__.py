@@ -247,18 +247,18 @@ def SequenceIterator(handle, format) :
     #Its up to the caller to close this handle - they opened it.
     return iterator_generator(handle)
 
-def SequencesToDict(sequences, record2key=None) :
+def SequencesToDict(sequences, key_function=None) :
     """Turns a sequence iterator or list into a dictionary
 
     sequences  - An iterator that returns SeqRecord objects,
                  or simply a list of SeqRecord objects.
-    record2key - Optional function which when given a SeqRecord
-                 returns a unique string for the dictionary key.
+    key_function - Optional function which when given a SeqRecord
+                   returns a unique string for the dictionary key.
 
-    e.g. record2key = lambda rec : rec.name
-    or,  record2key = lambda rec : rec.description.split()[0]
+    e.g. key_function = lambda rec : rec.name
+    or,  key_function = lambda rec : rec.description.split()[0]
 
-    If record2key is ommitted then record.id is used, on the
+    If key_function is ommitted then record.id is used, on the
     assumption that the records objects returned are SeqRecords
     with a unique id field.
 
@@ -268,20 +268,20 @@ def SequencesToDict(sequences, record2key=None) :
 
     filename = "example.fasta"
     d = SequencesToDict(FastaIterator(open(faa_filename, "rU")),
-        record2key = lambda rec : rec.description.split()[0])
+        key_function = lambda rec : rec.description.split()[0])
     print len(d)
     print d.keys()[0:10]
     key = d.keys()[0]
     print d[key]
     """    
-    if record2key is None :
-        record2key = lambda rec : rec.id
+    if key_function is None :
+        key_function = lambda rec : rec.id
 
     d = dict()
     for record in sequences :
-        key = record2key(record)
-        #TODO - Define an exception class, or use a ValueError here?
-        assert key not in d, "Duplicate key"
+        key = key_function(record)
+        if key in d :
+            raise ValueError("Duplicate key '%s'" % key)
         d[key] = record
     return d
 
@@ -303,7 +303,7 @@ def SequencesToAlignment(sequences, alphabet=generic_alphabet, strict=True) :
             if alignment_length is None :
                 alignment_length = len(record.seq)
             elif alignment_length <> len(record.seq) :
-                raise ValueError, "Sequences of different lengths"
+                raise ValueError("Sequences of different lengths")
             
             #ToDo, check alphabet for this sequence matches that
             #specified for the alignment.  Not sure how the
