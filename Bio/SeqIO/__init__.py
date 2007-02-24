@@ -14,44 +14,43 @@
 Input
 =====
 The main function is SequenceIterator(...) which takes an input file handle,
-and optional format string.  This returns an iterator giving SeqRecord objects.
+and format string.  This returns an iterator giving SeqRecord objects.
 
     handle = open("example.fasta", "rU")
-    format = "fasta"
-    for record in SequenceIterator(handle, format) :
+    for record in SequenceIterator(handle, "fasta") :
         print record
 
-For non-interlaced files (e.g. Fasta, GenBank, EMBL) with multiple records
-using a sequence iterator can save you a lot of memory (RAM).  The saving for
-interlaced file formats (e.g. most multiple alignment file formats).  However,
-you will only be able to access the records one by one.
+Note that the SequenceIterator function will all invoke the relevant parser for
+the format with its default settings.  You may want more control, in which case
+you need to create a format specific sequence iterator directly.
 
-These will all invoke the relevant parser with default settings.  You may want
-more control, in which case you need to create a format specific sequence
-iterator directly.
+For non-interlaced files (e.g. Fasta, GenBank, EMBL) with multiple records
+using a sequence iterator can save you a lot of memory (RAM).  There is less
+benefit for interlaced file formats (e.g. most multiple alignment file formats).
+However, an iterator only lets you access the records one by one.
 
 If you want random access to the records by number, turn this into a list:
 
     handle = open("example.fasta", "rU")
-    format = "fasta"
-    records = list(SequenceIterator(handle, format))
+    records = list(SequenceIterator(handle, "fasta"))
     print records[0]
 
 If you want random access to the records by a key such as the record id, turn
 the iterator into a dictionary:
 
     handle = open("example.fasta", "rU")
-    format = "fasta"
-    record_dict = SequencesToDict(SequenceIterator(handle, format))
+    record_dict = SequencesToDict(SequenceIterator(handle, "format"))
     print record["gi:12345678"]
+
 
 Input - Alignments
 ==================
-Use the SequencesToAlignment(...) function, like so:
+Currently an alignment class cannot be created from SeqRecord objects.
+Instead, use the SequencesToAlignment(...) function, like so:
 
     handle = open("example.aln", "rU")
-    format = "clustal"
-    alignment = SequencesToAlignment(SequenceIterator(handle, format))
+    alignment = SequencesToAlignment(SequenceIterator(handle, "clustal"))
+    
 
 Output
 ======
@@ -153,26 +152,6 @@ import SwissIO
 #Note that this simple system copes with defining
 #multiple possible iterators for a given format/extension
 #with the -subtype suffix
-_ExtToFormat ={"fasta"     : "fasta",
-               "faa"       : "fasta", #Used by the NCBI
-               "fna"       : "fasta", #Used by the NCBI
-               "fnn"       : "fasta", #Used by the NCBI
-               "mfasta"    : "fasta", #Used for multiple alignments in Fasta format
-               "fa"        : "fasta",
-               "genbank"   : "genbank",
-               "gbk"       : "genbank", #Used by the NCBI
-               "gb"        : "genbank",
-               "embl"       : "embl",
-               "aln"       : "clustal", #aln is almost always clustal format
-               "phy"       : "phylip", #phy is used by clustal
-               "phylip"    : "phylip",
-               "stockholm" : "stockholm",
-               "sth"       : "stockholm", #Used by PFAM (Sanger Inst)
-               "pfam"      : "stockholm",
-               "nexus"     : "nexus",
-               "nxs"       : "nexus", #nxs is used by clustal
-               "nex"       : "nexus", #nxs is used by clustal
-               }
 
 _FormatToIterator ={"fasta" : FastaIO.FastaIterator,
                     "genbank" : InsdcIO.GenBankIterator,
@@ -192,23 +171,6 @@ _FormatToWriter ={"fasta" : FastaIO.FastaWriter,
                   "clustal" : ClustalIO.ClustalWriter,
                   }
 
-def _filename2format(filename) :
-    """Guesses a format based on its extension
-
-    Raises an error if the extension is not recognised (e.g. *.txt)
-    """
-    parts = os.path.basename(filename).split(os.path.extsep)
-    assert len(parts) > 1, "No filename extension"
-    extension = parts[-1]
-    try :
-        format = _ExtToFormat[extension.lower()]
-    except KeyError :
-        assert False, "Unknown extension, " + extension
-    #This shouldn't be needed:
-    assert format == format.lower().strip()
-    return format
-
-
 def WriteSequences(sequences, handle, format) :
     """Write complete set of sequences to a file
 
@@ -217,10 +179,21 @@ def WriteSequences(sequences, handle, format) :
     format    - What format to use.
 
     You should close the handle after calling this function.
+
+    There is no return value.
     """
 
-    #We could try and guess the format from the filename,
-    #but that is just too risky for little benefit.
+    #Try and give helpful error messages:
+    if isinstance(handle, basestring) :
+        raise ValueError("Need a file handle, not a string (i.e. not a filename)")
+    if not format :
+        raise ValueError("Format required (lower case string)")
+    if not isinstance(format, basestring) :
+        raise ValueError("Need a string for the file format (lower case)")
+    if format <> format.lower() :
+        raise ValueError("Format string '%s' should be lower case" % format)
+
+    #Map the file format to a writer class
     try :
         writer_class = _FormatToWriter[format]
     except KeyError :
@@ -230,8 +203,9 @@ def WriteSequences(sequences, handle, format) :
     #Don't close the file, as that would prevent things like
     #creating concatenated phylip files for bootstrapping.
     #handle.close()
+    return
     
-def SequenceIterator(handle, format=None) :
+def SequenceIterator(handle, format) :
     """Turns a sequence file into a iterator returning SeqRecords
 
     handle   - handle to the file.
@@ -239,7 +213,7 @@ def SequenceIterator(handle, format=None) :
                then then filename (determined from the handle)
                will be used to guess the format.
 
-    If you have a string 'filename', use:
+    If you have the file name in a string 'filename', use:
 
     my_iterator = SequenceIterator(open(filename,"rU"), format)
 
@@ -251,23 +225,20 @@ def SequenceIterator(handle, format=None) :
     Note that file will be parsed with default settings,
     which may result in a generic alphabet or other non-ideal
     settings.  For more control, you must use the format specific
-    iterator directly..."""
+    iterator directly...
+    """
 
-    #Try and give a helpful error message in this case:
+    #Try and give helpful error messages:
     if isinstance(handle, basestring) :
         raise ValueError("Need a file handle, not a string (i.e. not a filename)")
-
-    try :
-        filename = handle.name
-    except :
-        filename = None
-
-    if not format and not filename :
-        raise ValueError("Format required and could not determine filename to guess")
-
     if not format :
-        #This may raise an exception...
-        format =  _filename2format(filename)
+        raise ValueError("Format required (lower case string)")
+    if not isinstance(format, basestring) :
+        raise ValueError("Need a string for the file format (lower case)")
+    if format <> format.lower() :
+        raise ValueError("Format string '%s' should be lower case" % format)
+
+    #Map the file format to a sequence iterator:    
     try :
         iterator_generator = _FormatToIterator[format]
     except KeyError :
@@ -1476,6 +1447,3 @@ SQ   SEQUENCE   102 AA;  10576 MW;  CFBAA1231C3A5E92 CRC64;
     print "#########################################################"
     print "# SeqIO Tests finished                                  #"
     print "#########################################################"
-
-
-    in_list = list(SequenceIterator(open(r"c:\temp\nexus_etc\example.nexus","rU")))
