@@ -346,4 +346,186 @@ Testing reading stockholm format file Stockholm/funny.sth as an alignment
  Checking can write/read as 'fasta' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'phylip' format
+Testing reading phylip format file Phylip/reference_dna.phy
+ ID and Name='Archaeopt',
+ Seq='CGATGCTTACCGC', length=13
+ ID and Name='Hesperorni',
+ Seq='CGTTACTCGTTGT', length=13
+ ID and Name='Baluchithe',
+ Seq='TAATGTTAATTGT', length=13
+ ID and Name='B. virgini',
+ Seq='TAATGTTCGTTGT', length=13
+ ID and Name='Brontosaur',
+ Seq='CAAAACCCATCAT', length=13
+ ID and Name='B.subtilis',
+ Seq='GGCAGCCAATCAC', length=13
+Testing reading phylip format file Phylip/reference_dna.phy as an alignment
+ CCTTCG alignment column 0
+ GGAAAG alignment column 1
+ ATAAAC alignment column 2
+ TTTTAA alignment column 3
+ GAGGAG alignment column 4
+ |||||| ...
+ CTTTTC alignment column 12
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'phylip' format
+Testing reading phylip format file Phylip/reference_dna2.phy
+ ID and Name='Archaeopt',
+ Seq='CGATGCTTACCGCCGATGCTTACCGCCGATGCTTACCGC', length=39
+ ID and Name='Hesperorni',
+ Seq='CGTTACTCGTTGTCGTTACTCGTTGTCGTTACTCGTTGT', length=39
+ ID and Name='Baluchithe',
+ Seq='TAATGTTAATTGTTAATGTTAATTGTTAATGTTAATTGT', length=39
+ ID and Name='B. virgini',
+ Seq='TAATGTTCGTTGTTAATGTTCGTTGTTAATGTTCGTTGT', length=39
+ ID and Name='Brontosaur',
+ Seq='CAAAACCCATCATCAAAACCCATCATCAAAACCCATCAT', length=39
+ ID and Name='B.subtilis',
+ Seq='GGCAGCCAATCACGGCAGCCAATCACGGCAGCCAATCAC', length=39
+Testing reading phylip format file Phylip/reference_dna2.phy as an alignment
+ CCTTCG alignment column 0
+ GGAAAG alignment column 1
+ ATAAAC alignment column 2
+ TTTTAA alignment column 3
+ GAGGAG alignment column 4
+ |||||| ...
+ CTTTTC alignment column 38
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'phylip' format
+Testing reading phylip format file Phylip/hennigian.phy
+ ID and Name='A',
+ Seq='CACACACAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAA', length=40
+ ID and Name='B',
+ Seq='CACACAACAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAA', length=40
+ ID and Name='C',
+ Seq='CACAACAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAA', length=40
+ ID and Name='D',
+ Seq='CAACAAAACAAAAAAAAACAAAAAAAAAAAAAAAAAAAAA', length=40
+ ID and Name='E',
+ Seq='CAACAAAAACAAAAAAAACAAAAAAAAAAAAAAAAAAAAA', length=40
+ ID and Name='F',
+ Seq='ACAAAAAAAACACACAAAACAAAAAAAAAAAAAAAAAAAA', length=40
+ ID and Name='G',
+ Seq='ACAAAAAAAACACAACAAACAAAAAAAAAAAAAAAAAAAA', length=40
+ ID and Name='H',
+ Seq='ACAAAAAAAACAACAAAAACAAAAAAAAAAAAAAAAAAAA', length=40
+ ID and Name='I',
+ Seq='ACAAAAAAAAACAAAACAACAAAAAAAAAAAAAAAAAAAA', length=40
+ ID and Name='J',
+ Seq='ACAAAAAAAAACAAAAACACAAAAAAAAAAAAAAAAAAAA', length=40
+Testing reading phylip format file Phylip/hennigian.phy as an alignment
+ CCCCCAAAAA alignment column 0
+ AAAAACCCCC alignment column 1
+ CCCAAAAAAA alignment column 2
+ AAACCAAAAA alignment column 3
+ CCAAAAAAAA alignment column 4
+ |||||||||| ...
+ AAAAAAAAAA alignment column 39
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'phylip' format
+Testing reading phylip format file Phylip/horses.phy
+ ID and Name='Mesohippus',
+ Seq='AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', length=40
+ ID and Name='Hypohippus',
+ Seq='AAACCCCCCCAAAAAAAAACAAAAAAAAAAAAAAAAAAAA', length=40
+ ID and Name='Archaeohip',
+ Seq='CAAAAAAAAAAAAAAAACACAAAAAAAAAAAAAAAAAAAA', length=40
+ ID and Name='Parahippus',
+ Seq='CAAACAACAACAAAAAAAACAAAAAAAAAAAAAAAAAAAA', length=40
+ ID and Name='Merychippu',
+ Seq='CCAACCACCACCCCACACCCAAAAAAAAAAAAAAAAAAAA', length=40
+ ID and Name='M. secundu',
+ Seq='CCAACCACCACCCACACCCCAAAAAAAAAAAAAAAAAAAA', length=40
+ ID and Name='Nannipus',
+ Seq='CCAACCACAACCCCACACCCAAAAAAAAAAAAAAAAAAAA', length=40
+ ID and Name='Neohippari',
+ Seq='CCAACCCCCCCCCCACACCCAAAAAAAAAAAAAAAAAAAA', length=40
+ ID and Name='Calippus',
+ Seq='CCAACCACAACCCACACCCCAAAAAAAAAAAAAAAAAAAA', length=40
+ ID and Name='Pliohippus',
+ Seq='CCCACCCCCCCCCACACCCCAAAAAAAAAAAAAAAAAAAA', length=40
+Testing reading phylip format file Phylip/horses.phy as an alignment
+ AACCCCCCCC alignment column 0
+ AAAACCCCCC alignment column 1
+ AAAAAAAAAC alignment column 2
+ ACAAAAAAAA alignment column 3
+ ACACCCCCCC alignment column 4
+ |||||||||| ...
+ AAAAAAAAAA alignment column 39
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'phylip' format
+Testing reading phylip format file Phylip/random.phy
+ ID and Name='A',
+ Seq='CACACAACCAAACAAACCACAAAAAAAAAAAAAAAAAAAA', length=40
+ ID and Name='B',
+ Seq='AAACCACACACACAAACCCAAAAAAAAAAAAAAAAAAAAA', length=40
+ ID and Name='C',
+ Seq='ACAAAACCAAACCACCCACAAAAAAAAAAAAAAAAAAAAA', length=40
+ ID and Name='D',
+ Seq='AAAAACACAACACACCAAACAAAAAAAAAAAAAAAAAAAA', length=40
+ ID and Name='E',
+ Seq='AAACAACCACACACAACCAAAAAAAAAAAAAAAAAAAAAA', length=40
+ ID and Name='F',
+ Seq='CCCAAACACCCCCAAAAAACAAAAAAAAAAAAAAAAAAAA', length=40
+ ID and Name='G',
+ Seq='ACACCCCCACACCCACCAACAAAAAAAAAAAAAAAAAAAA', length=40
+ ID and Name='H',
+ Seq='AAAACAACAACCACCCCACCAAAAAAAAAAAAAAAAAAAA', length=40
+ ID and Name='I',
+ Seq='ACACAACAACACAAACAACCAAAAAAAAAAAAAAAAAAAA', length=40
+ ID and Name='J',
+ Seq='CCAAAAACACCCAACCCAACAAAAAAAAAAAAAAAAAAAA', length=40
+Testing reading phylip format file Phylip/random.phy as an alignment
+ CAAAACAAAC alignment column 0
+ AACAACCACC alignment column 1
+ CAAAACAAAA alignment column 2
+ ACAACACACA alignment column 3
+ CCAAAACCAA alignment column 4
+ |||||||||| ...
+ AAAAAAAAAA alignment column 39
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'phylip' format
+Testing reading phylip format file Phylip/interlaced.phy
+ ID and Name='CYS1_DICDI',
+ Seq='-----MKVILLFVLAVFTVFVSS---------------RG...STSII--', length=384
+ ID and Name='ALEU_HORVU',
+ Seq='MAHARVLLLALAVLATAAVAVASSSSFADSNPIRPVTDRA...SYPVVAA', length=384
+ ID and Name='CATH_HUMAN',
+ Seq='------MWATLPLLCAGAWLLGV--------PVCGAAELS...SYPIPLV', length=384
+Testing reading phylip format file Phylip/interlaced.phy as an alignment
+ -M- alignment column 0
+ -A- alignment column 1
+ -H- alignment column 2
+ -A- alignment column 3
+ -R- alignment column 4
+ ||| ...
+ -AV alignment column 383
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'phylip' format
+Testing reading phylip format file Phylip/interlaced2.phy
+ ID and Name='IXI_234',
+ Seq='TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGRPCC...AGDRSHE', length=131
+ ID and Name='IXI_235',
+ Seq='TSPASIRPPAGPSSR---------RPSPPGPRRPTGRPCC...AGDRSHE', length=131
+ ID and Name='IXI_236',
+ Seq='TSPASIRPPAGPSSRPAMVSSR--RPSPPPPRRPPGRPCC...AGDRSHE', length=131
+ ID and Name='IXI_237',
+ Seq='TSPASLRPPAGPSSRPAMVSSRR-RPSPPGPRRPT----C...AGDRSHE', length=131
+Testing reading phylip format file Phylip/interlaced2.phy as an alignment
+ TTTT alignment column 0
+ SSSS alignment column 1
+ PPPP alignment column 2
+ AAAA alignment column 3
+ SSSS alignment column 4
+ |||| ...
+ EEEE alignment column 130
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'phylip' format
 Finished tested reading files with Bio.SeqIO

@@ -81,6 +81,15 @@ test_files = [ \
     ("embl",      False, 'EMBL/TRBG361.embl', 1),
     ("stockholm", True,  'Stockholm/simple.sth', 2),
     ("stockholm", True,  'Stockholm/funny.sth', 5),
+#Following PHYLIP files are currently only used here (test_SeqIO)
+#and are mostly from Joseph Felsenstein's PHYLIP v3.6 documentation:
+    ("phylip",    True,  'Phylip/reference_dna.phy', 6),
+    ("phylip",    True,  'Phylip/reference_dna2.phy', 6),
+    ("phylip",    True,  'Phylip/hennigian.phy', 10),
+    ("phylip",    True,  'Phylip/horses.phy', 10),
+    ("phylip",    True,  'Phylip/random.phy', 10),
+    ("phylip",    True,  'Phylip/interlaced.phy', 3),
+    ("phylip",    True,  'Phylip/interlaced2.phy', 4),
     ]
 
 def records_match(record_one, record_two) :
