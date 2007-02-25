@@ -185,11 +185,11 @@ def WriteSequences(sequences, handle, format) :
 
     #Try and give helpful error messages:
     if isinstance(handle, basestring) :
-        raise ValueError("Need a file handle, not a string (i.e. not a filename)")
+        raise TypeError("Need a file handle, not a string (i.e. not a filename)")
+    if not isinstance(format, basestring) :
+        raise TypeError("Need a string for the file format (lower case)")
     if not format :
         raise ValueError("Format required (lower case string)")
-    if not isinstance(format, basestring) :
-        raise ValueError("Need a string for the file format (lower case)")
     if format <> format.lower() :
         raise ValueError("Format string '%s' should be lower case" % format)
 
@@ -197,7 +197,7 @@ def WriteSequences(sequences, handle, format) :
     try :
         writer_class = _FormatToWriter[format]
     except KeyError :
-        assert False, "Unknown format, " + format
+        raise ValueError("Unknown format '%s'" % format)
 
     writer_class(handle).write_file(sequences)
     #Don't close the file, as that would prevent things like
@@ -209,9 +209,7 @@ def SequenceIterator(handle, format) :
     """Turns a sequence file into a iterator returning SeqRecords
 
     handle   - handle to the file.
-    format   - String describing the file format.  If omitted,
-               then then filename (determined from the handle)
-               will be used to guess the format.
+    format   - string describing the file format.
 
     If you have the file name in a string 'filename', use:
 
@@ -230,11 +228,11 @@ def SequenceIterator(handle, format) :
 
     #Try and give helpful error messages:
     if isinstance(handle, basestring) :
-        raise ValueError("Need a file handle, not a string (i.e. not a filename)")
+        raise TypeError("Need a file handle, not a string (i.e. not a filename)")
+    if not isinstance(format, basestring) :
+        raise TypeError("Need a string for the file format (lower case)")
     if not format :
         raise ValueError("Format required (lower case string)")
-    if not isinstance(format, basestring) :
-        raise ValueError("Need a string for the file format (lower case)")
     if format <> format.lower() :
         raise ValueError("Format string '%s' should be lower case" % format)
 
