@@ -3,6 +3,19 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""
+Note
+====
+In TREE_PUZZLE (Schmidt et al. 2003) and PHYML (Guindon and Gascuel 2003)
+a dot/period (".") in a sequence is interpreted as meaning the same
+character as in the first sequence.  The PHYLIP 3.6 documentation says:
+
+   "a period was also previously allowed but it is no longer allowed,
+   because it sometimes is used in different senses in other programs"
+
+At the time of writing, we do nothing special with a dot/period.
+"""
+
 from Bio.Alphabet import generic_alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
@@ -17,7 +30,7 @@ def PhylipIterator(handle, alphabet = generic_alphabet) :
 
     It only copes with interlaced phylip files!  Sequential files won't work
     where the sequences are split over multiple lines.
-    
+
     For more information on the file format, please see:
     http://evolution.genetics.washington.edu/phylip/doc/sequence.html
     http://evolution.genetics.washington.edu/phylip/doc/main.html#inputfiles
@@ -114,15 +127,40 @@ class PhylipWriter(SequenceWriter):
             for record in records :
                 if block==0 :
                     #Write name (truncated/padded to 10 characters)
-                    handle.write("%s" % record.id[:self.truncate] + " "*(self.truncate-len(record.id[:self.truncate])))
+                    """
+                    Quoting the PHYLIP version 3.6 documentation:
+                    
+                    The name should be ten characters in length, filled out to
+                    the full ten characters by blanks if shorter. Any printable
+                    ASCII/ISO character is allowed in the name, except for
+                    parentheses ("(" and ")"), square brackets ("[" and "]"),
+                    colon (":"), semicolon (";") and comma (","). If you forget
+                    to extend the names to ten characters in length by blanks,
+                    the program [i.e. PHYLIP] will get out of synchronization with
+                    the contents of the data file, and an error message will result.
+
+                    Note that Tab characters count as only one character in the
+                    species names. Their inclusion can cause trouble.
+                    """
+                    name = record.id.strip()
+                    #Either remove the banned characters, or map them to something
+                    #else like an underscore "_" or pipe "|" character...
+                    for char in "[]()," :
+                        name = name.replace(char,"")
+                    for char in ":;" :
+                        name = name.replace(char,"|")
+
+                    #Now truncate and right pad to expected length.
+                    handle.write(name[:self.truncate].ljust(self.truncate))
                 else :
                     #write 10 space indent
                     handle.write(" "*self.truncate)
                 #Write five chunks of ten letters per line...
                 for chunk in range(0,5) :
                     i = block*50 + chunk*10
-                    seq_segment = record.seq.tostring()[i:i+10].replace(".","-")
+                    seq_segment = record.seq.tostring()[i:i+10]
                     #TODO - Force any gaps to be '-' character?  Look at the alphabet...
+                    #TODO - How to cope with '?' or '.' in the sequence?
                     handle.write(" %s" % seq_segment)
                     if i+10 > length_of_sequences : break
                 handle.write("\n")
