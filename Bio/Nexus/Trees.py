@@ -498,8 +498,7 @@ class Tree(Nodes.Chain):
             treeline.append('[&W%s]' % str(round(float(self.weight),3)))
         if self.rooted:
             treeline.append('[&R]')
-        treeline.append('(%s)' % ','.join(map(newickize,self.node(self.root).succ)))
-        treeline.append(';')
+        treeline.append('(%s);' % ','.join(map(newickize,self.node(self.root).succ)))
         if plain_newick:
             return treeline[-2]
         else:
