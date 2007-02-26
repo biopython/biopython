@@ -22,6 +22,33 @@ from Bio.Fasta import FastaAlign
 from Bio.SubsMat import FreqTable
 from Bio.Align.Generic import Alignment
 
+#Very simple tests on an empty alignment
+alignment = Alignment(Alphabet.generic_alphabet)
+assert alignment.get_alignment_length() == 0
+assert alignment.get_all_seqs() == []
+del alignment
+
+#Basic tests on simple three string alignment
+alignment = Alignment(Alphabet.generic_alphabet)
+letters = "AbcDefGhiJklMnoPqrStuVwxYz"
+alignment.add_sequence("mixed", letters)
+alignment.add_sequence("lower", letters.lower())
+alignment.add_sequence("upper", letters.upper())
+assert alignment.get_alignment_length() == 26
+assert len(alignment.get_all_seqs()) == 3
+assert alignment.get_seq_by_num(0).tostring() == letters
+assert alignment.get_seq_by_num(1).tostring() == letters.lower()
+assert alignment.get_seq_by_num(2).tostring() == letters.upper()
+assert alignment.get_all_seqs()[0].description == "mixed"
+assert alignment.get_all_seqs()[1].description == "lower"
+assert alignment.get_all_seqs()[2].description == "upper"
+for (col, letter) in enumerate(letters) :
+    assert alignment.get_column(col) == letter \
+                                      + letter.lower() \
+                                      + letter.upper()
+del alignment
+del letters
+
 print "testing reading and writing clustal format..."
 test_dir = os.path.join(os.getcwd(), 'Clustalw')
 test_names = ['opuntia.aln', 'cw02.aln']
