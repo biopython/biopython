@@ -145,7 +145,8 @@ class InsdcScanner :
                 feature_key = line[2:self.FEATURE_QUALIFIER_INDENT].strip()
                 feature_lines = [line[self.FEATURE_QUALIFIER_INDENT:]]
                 line = self.handle.readline()
-                while line[:self.FEATURE_QUALIFIER_INDENT] == self.FEATURE_QUALIFIER_SPACER :
+                while line[:self.FEATURE_QUALIFIER_INDENT] == self.FEATURE_QUALIFIER_SPACER \
+                or line.rstrip() == "" : # cope with blank lines in the midst of a feature
                     feature_lines.append(line[self.FEATURE_QUALIFIER_INDENT:].rstrip())
                     line = self.handle.readline()
                 features.append(self.parse_feature(feature_key, feature_lines))
@@ -235,7 +236,8 @@ class InsdcScanner :
                                 value += "\n" + iterator.next()
                         else :
                             #One single line (quoted)
-                            if debug : print "Quoted line %s:%s" % (key, value)
+                            assert value == '"'
+                            if self.debug : print "Quoted line %s:%s" % (key, value)
                         #DO NOT remove the quotes...
                         qualifiers.append((key,value))
                     else :
@@ -414,8 +416,11 @@ class InsdcScanner :
             #Got an EMBL or GenBank record...
             self.parse_header() # ignore header lines!
             feature_tuples = self.parse_features()
-            self.parse_footer() # ignore footer lines!
-            
+            #self.parse_footer() # ignore footer lines!
+            for line in self.handle :
+                if line[:2]=="//" : break
+            self.line = line.rstrip()
+
             #Now go though those features...
             for key, location_string, qualifiers in feature_tuples :
                 if key=="CDS" :
@@ -431,6 +436,7 @@ class InsdcScanner :
                     #I *think* that only makes sense for SeqFeatures with their
                     #sub features...
                     annotations['raw_location'] = location_string.replace(' ','')
+
                     for (qualifier_name, qualifier_data) in qualifiers :
                         if qualifier_data is not None \
                         and qualifier_data[0]=='"' and qualifier_data[-1]=='"' :
