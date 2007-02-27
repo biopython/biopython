@@ -20,7 +20,7 @@ def test_mean_median(module):
   elif module=='Pycluster':
     from Pycluster import mean, median
   else:
-    raise 'Unknown module name', module
+    raise ValueError('Unknown module name: ' + module)
   print "test_mean_median:"
   data1 = array([ 34.3, 3, 2 ])
   data2 = [ 5, 10 ,15, 20]
@@ -39,7 +39,7 @@ def test_matrix_parse(module):
   elif module=='Pycluster':
     from Pycluster import treecluster
   else:
-    raise 'Unknown module name', module
+    raise ValueError('Unknown module name: ' + module)
   print "test_matrix_parse:"
   # Normal matrix, no errors
   data1 = array([[ 1.1, 1.2 ],
@@ -133,7 +133,7 @@ def test_kcluster(module):
   elif module=='Pycluster':
     from Pycluster import kcluster
   else:
-    raise 'Unknown module name', module
+    raise ValueError('Unknown module name: ' + module)
   print "test_kcluster"
   nclusters = 3
   # First data set
@@ -207,7 +207,7 @@ def test_clusterdistance(module):
   elif module=='Pycluster':
     from Pycluster import clusterdistance
   else:
-    raise 'Unknown module name', module
+    raise ValueError('Unknown module name: ' + module)
   print "test_clusterdistance:"
 
   # First data set
@@ -285,7 +285,7 @@ def test_treecluster(module):
   elif module=='Pycluster':
     from Pycluster import treecluster
   else:
-    raise 'Unknown module name', module
+    raise ValueError('Unknown module name: ' + module)
   print "test_treecluster:"
   # First data set
   weight1 =  [ 1,1,1,1,1 ]
@@ -411,7 +411,7 @@ def test_somcluster(module):
   elif module=='Pycluster':
     from Pycluster import somcluster
   else:
-    raise 'Unknown module name', module
+    raise ValueError('Unknown module name: ' + module)
   print "test_somcluster:"
 
   # First data set
@@ -465,6 +465,42 @@ def test_somcluster(module):
   print "Grid is %d-dimensional (should be 2-dimensional)" % len(clusterid[0])
   print
 
+def test_distancematrix_kmedoids(module):
+  if module=='Bio.Cluster':
+    from Bio.Cluster import distancematrix, kmedoids
+  elif module=='Pycluster':
+    from Pycluster import distancematrix, kmedoids
+  else:
+    raise ValueError('Unknown module name: ' + module)
+
+  print "test_distancematrix_kmedoids:"
+  data = array([[2.2, 3.3, 4.4],
+                [2.1, 1.4, 5.6],
+                [7.8, 9.0, 1.2],
+                [4.5, 2.3, 1.5],
+                [4.2, 2.4, 1.9],
+                [3.6, 3.1, 9.3],
+                [2.3, 1.2, 3.9],
+                [4.2, 9.6, 9.3],
+                [1.7, 8.9, 1.1]])
+  mask = array([[1, 1, 1],
+                [1, 1, 1],
+                [0, 1, 1],
+                [1, 1, 1],
+                [1, 1, 1],
+                [0, 1, 0],
+                [1, 1, 1],
+                [1, 0, 1],
+                [1, 1, 1]])
+  weight = array([2.0, 1.0, 0.5])
+  matrix = distancematrix(data, mask=mask, weight=weight)
+  print "Distance matrix:"
+  for row in matrix:
+      print " ".join(["%7.3f" % number for number in row])
+  clusterid, error, nfound = kmedoids(matrix, npass=1000)
+  print "Cluster assignments:", clusterid
+  print "Within-cluster sum of distances: %7.3f" % error
+
 def run_tests(module="Pycluster"):
   if module==[]: module = "Bio.Cluster"
   test_mean_median(module)
@@ -473,6 +509,7 @@ def run_tests(module="Pycluster"):
   test_clusterdistance(module)
   test_treecluster(module)
   test_somcluster(module)
+  test_distancematrix_kmedoids(module)
 
 if __name__ == "__main__" :
   print "test_Cluster"

@@ -150,3 +150,16 @@ Second data set:
 Number of cluster ids is 13 (should be 13)
 Grid is 2-dimensional (should be 2-dimensional)
 
+test_distancematrix_kmedoids:
+Distance matrix:
+
+  1.243
+ 25.073  44.960
+  4.510   5.924  29.957
+  3.410   4.761  29.203   0.077
+  0.040   2.890  34.810   0.640   0.490
+  1.301   0.447  42.990   3.934   3.046   3.610
+  8.002   6.266  65.610  12.240  10.952   0.000   8.720
+ 10.659  19.056   0.010  16.949  15.734  33.640  18.266  18.448
+Cluster assignments: [5 5 2 5 5 5 5 5 2]
+Within-cluster sum of distances:   7.680
