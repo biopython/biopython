@@ -431,9 +431,9 @@ class InsdcScanner :
                     #I *think* that only makes sense for SeqFeatures with their
                     #sub features...
                     annotations['raw_location'] = location_string.replace(' ','')
-
                     for (qualifier_name, qualifier_data) in qualifiers :
-                        if qualifier_data[0]=='"' and qualifier_data[-1]=='"' :
+                        if qualifier_data is not None \
+                        and qualifier_data[0]=='"' and qualifier_data[-1]=='"' :
                             #Remove quotes
                             qualifier_data = qualifier_data[1:-1]
                         #Append the data to the annotation qualifier...
@@ -444,7 +444,8 @@ class InsdcScanner :
                             #its a list, possibly empty.  Its safe to extend
                             record.dbxrefs.append(qualifier_data)
                         else :
-                            qualifier_data = qualifier_data.replace("\n"," ").replace("  "," ")
+                            if qualifier_data is not None :
+                                qualifier_data = qualifier_data.replace("\n"," ").replace("  "," ")
                             try :
                                 annotations[qualifier_name] += " " + qualifier_data
                             except KeyError :
