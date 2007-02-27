@@ -5,7 +5,6 @@
 #include <float.h>
 #include "cluster.h"
 
-static PyObject *ErrorObject;
 static char buffer[512];
 static char* message = NULL;
 
@@ -28,7 +27,7 @@ parse_data(PyObject* object, PyArrayObject** array)
   { *array = (PyArrayObject*) PyArray_FromObject(object, PyArray_DOUBLE, 2, 2);
     if (*array==NULL)
     { strcpy (message, "data cannot be converted to needed array.");
-      PyErr_SetString(ErrorObject, buffer);
+      PyErr_SetString(PyExc_TypeError, buffer);
       return NULL;
     }
   }
@@ -38,7 +37,7 @@ parse_data(PyObject* object, PyArrayObject** array)
     if ((*array)->nd == 2) Py_INCREF(object);
     else
     { sprintf(message, "data has incorrect rank (%d expected 2)", (*array)->nd);
-      PyErr_SetString (ErrorObject, buffer);
+      PyErr_SetString(PyExc_ValueError, buffer);
       *array = NULL;
       return NULL;
     }
@@ -47,7 +46,7 @@ parse_data(PyObject* object, PyArrayObject** array)
       Py_DECREF(object);
       if (!(*array))
       { strcpy (message, "data cannot be cast to needed type.");
-        PyErr_SetString(ErrorObject, buffer);
+        PyErr_SetString(PyExc_ValueError, buffer);
         return NULL;
       }
     } 
@@ -56,7 +55,7 @@ parse_data(PyObject* object, PyArrayObject** array)
   ncols = (*array)->dimensions[1];
   if (nrows < 1 || ncols < 1)
   { strcpy (message, "data is an empty matrix");
-    PyErr_SetString (ErrorObject, buffer);
+    PyErr_SetString(PyExc_ValueError, buffer);
     Py_DECREF((PyObject*) (*array));
     *array = NULL;
     return NULL;
@@ -114,7 +113,7 @@ parse_mask (PyObject* object, PyArrayObject** array, const int dimensions[2])
   { *array = (PyArrayObject*) PyArray_FromObject(object, PyArray_INT, 2, 2);
     if (!(*array))
     { strcpy (message, "mask cannot be converted to needed array");
-      PyErr_SetString(ErrorObject, buffer);
+      PyErr_SetString(PyExc_TypeError, buffer);
       return NULL;
     }
   }
@@ -122,7 +121,7 @@ parse_mask (PyObject* object, PyArrayObject** array, const int dimensions[2])
   { *array = (PyArrayObject*) object;
     if((*array)->nd != 2) /* Checking number of dimensions */
     { sprintf(message, "mask has incorrect rank (%d expected 2)", (*array)->nd);
-      PyErr_SetString (ErrorObject, buffer);
+      PyErr_SetString(PyExc_ValueError, buffer);
       *array = NULL;
       return NULL;
     }
@@ -131,7 +130,7 @@ parse_mask (PyObject* object, PyArrayObject** array, const int dimensions[2])
     { *array = (PyArrayObject*) PyArray_Cast (*array, PyArray_INT);
       if (!(*array))
       { strcpy (message, "mask cannot be cast to needed type.");
-        PyErr_SetString(ErrorObject, buffer);
+        PyErr_SetString(PyExc_ValueError, buffer);
         return NULL;
       }
     } 
@@ -140,7 +139,7 @@ parse_mask (PyObject* object, PyArrayObject** array, const int dimensions[2])
   { sprintf(message,
       "mask has incorrect number of rows (%d expected %d)",
       (*array)->dimensions[0], nrows);
-    PyErr_SetString (ErrorObject, buffer);
+    PyErr_SetString (PyExc_ValueError, buffer);
     Py_DECREF((PyObject*)*array);
     *array = NULL;
     return NULL;
@@ -150,7 +149,7 @@ parse_mask (PyObject* object, PyArrayObject** array, const int dimensions[2])
   { sprintf(message,
       "mask incorrect number of columns (%d expected %d)",
       (*array)->dimensions[1], ncolumns);
-    PyErr_SetString (ErrorObject, buffer);
+    PyErr_SetString (PyExc_ValueError, buffer);
     *array = NULL;
     return NULL;
   }
@@ -202,7 +201,7 @@ parse_weight (PyObject* object, PyArrayObject** array, const int ndata)
   { *array = (PyArrayObject*) PyArray_FromObject(object, PyArray_DOUBLE, 1, 1);
     if (!(*array))
     { strcpy (message, "weight cannot be converted to needed array.");
-      PyErr_SetString(ErrorObject, buffer);
+      PyErr_SetString(PyExc_TypeError, buffer);
       return NULL;
     }
   }
@@ -213,7 +212,7 @@ parse_weight (PyObject* object, PyArrayObject** array, const int ndata)
     { *array = (PyArrayObject*)PyArray_Cast(*array, PyArray_DOUBLE);
       if (!(*array))
       { strcpy (message, "weight cannot be cast to needed type.");
-        PyErr_SetString(ErrorObject, message);
+        PyErr_SetString(PyExc_ValueError, message);
         return NULL;
       }
     }
@@ -224,7 +223,7 @@ parse_weight (PyObject* object, PyArrayObject** array, const int ndata)
     { sprintf(message,
               "weight has incorrect extent (%d expected %d)",
               (*array)->dimensions[0], ndata);
-      PyErr_SetString (ErrorObject, buffer);
+      PyErr_SetString (PyExc_ValueError, buffer);
       Py_DECREF(*array);
       *array = NULL;
       return NULL;
@@ -235,7 +234,7 @@ parse_weight (PyObject* object, PyArrayObject** array, const int ndata)
     { sprintf(message,
              "weight has incorrect rank (%d expected 1)",
               (*array)->nd);
-      PyErr_SetString (ErrorObject, buffer);
+      PyErr_SetString (PyExc_ValueError, buffer);
       Py_DECREF(*array);
       *array = NULL;
       return NULL;
@@ -289,7 +288,7 @@ parse_initialid(PyObject* object, int* nclusters, int nitems)
   { array = (PyArrayObject*) PyArray_FromObject(object, PyArray_INT,1,1);
     if (!array)
     { strcpy (message, "initialid cannot be converted to needed array.");
-      PyErr_SetString(ErrorObject, buffer);
+      PyErr_SetString(PyExc_TypeError, buffer);
       Py_DECREF((PyObject*) clusterid);
       return NULL;
     }
@@ -302,7 +301,7 @@ parse_initialid(PyObject* object, int* nclusters, int nitems)
     { array = (PyArrayObject*) PyArray_Cast(array, PyArray_INT);
       if (!array)
       { strcpy (message, "initialid cannot be cast to needed type.");
-        PyErr_SetString(ErrorObject, buffer);
+        PyErr_SetString(PyExc_ValueError, buffer);
         Py_DECREF((PyObject*) clusterid);
         return NULL;
       }
@@ -314,7 +313,7 @@ parse_initialid(PyObject* object, int* nclusters, int nitems)
     if (nitems!=1 && nitems!=array->dimensions[0]) 
     { sprintf(message, "initialid has incorrect extent (%d expected %d)",
         array->dimensions[0], nitems);
-      PyErr_SetString (ErrorObject, buffer);
+      PyErr_SetString (PyExc_ValueError, buffer);
       Py_DECREF((PyObject*) array);
       Py_DECREF((PyObject*) clusterid);
       return NULL;
@@ -324,7 +323,7 @@ parse_initialid(PyObject* object, int* nclusters, int nitems)
   { if (array->nd > 0 || nitems != 1)
     { sprintf(message, "initialid has incorrect rank (%d expected 1)",
         array->nd);
-      PyErr_SetString (ErrorObject, buffer);
+      PyErr_SetString (PyExc_ValueError, buffer);
       Py_DECREF((PyObject*) array);
       Py_DECREF((PyObject*) clusterid);
       return NULL;
@@ -339,7 +338,7 @@ parse_initialid(PyObject* object, int* nclusters, int nitems)
     if (j > *nclusters) *nclusters = j;
     if (j < 0)
     { strcpy(message, "initialid contains a negative cluster number");
-      PyErr_SetString (ErrorObject, buffer);
+      PyErr_SetString (PyExc_ValueError, buffer);
       Py_DECREF((PyObject*) array);
       Py_DECREF((PyObject*) clusterid);
       return NULL;
@@ -360,7 +359,7 @@ parse_initialid(PyObject* object, int* nclusters, int nitems)
   Py_DECREF((PyObject*) array);
   if (i < (*nclusters)) /* Due to the break above */
   { sprintf (message, "argument initialid: Cluster %d is empty", i);
-    PyErr_SetString (ErrorObject, buffer);
+    PyErr_SetString (PyExc_ValueError, buffer);
     Py_DECREF((PyObject*) clusterid);
     return NULL;
   }
@@ -390,7 +389,7 @@ parse_clusterid(PyObject* object, PyArrayObject** array, unsigned int nitems,
   { *array = (PyArrayObject*) PyArray_FromObject(object, PyArray_INT,1,1);
     if (!(*array))
     { strcpy (message, "clusterid cannot be converted to needed array.");
-      PyErr_SetString(ErrorObject, buffer);
+      PyErr_SetString(PyExc_TypeError, buffer);
       return NULL;
     }
   }
@@ -402,7 +401,7 @@ parse_clusterid(PyObject* object, PyArrayObject** array, unsigned int nitems,
     { *array = (PyArrayObject*) PyArray_Cast(*array, PyArray_INT);
       if (!(*array))
       { strcpy (message, "clusterid cannot be cast to needed type.");
-        PyErr_SetString(ErrorObject, buffer);
+        PyErr_SetString(PyExc_ValueError, buffer);
         return NULL;
       }
     } 
@@ -414,7 +413,7 @@ parse_clusterid(PyObject* object, PyArrayObject** array, unsigned int nitems,
     { sprintf(message,
               "clusterid has incorrect extent (%d expected %d)",
               (*array)->dimensions[0], nitems);
-      PyErr_SetString (ErrorObject, buffer);
+      PyErr_SetString (PyExc_ValueError, buffer);
       Py_DECREF((PyObject*) (*array));
       return NULL;
     }
@@ -423,7 +422,7 @@ parse_clusterid(PyObject* object, PyArrayObject** array, unsigned int nitems,
   { sprintf(message,
            "clusterid has incorrect rank (%d expected 1)",
             (*array)->nd);
-    PyErr_SetString (ErrorObject, buffer);
+    PyErr_SetString (PyExc_ValueError, buffer);
     Py_DECREF((PyObject*) (*array));
     return NULL;
   }
@@ -436,7 +435,7 @@ parse_clusterid(PyObject* object, PyArrayObject** array, unsigned int nitems,
     if (j > *nclusters) *nclusters = j;
     if (j < 0)
     { strcpy(message, "clusterid contains an invalid cluster number");
-      PyErr_SetString (ErrorObject, buffer);
+      PyErr_SetString (PyExc_ValueError, buffer);
       Py_DECREF((PyObject*) (*array));
       return NULL;
     }
@@ -453,7 +452,7 @@ parse_clusterid(PyObject* object, PyArrayObject** array, unsigned int nitems,
   free(number);
   if (i < (*nclusters))
   { sprintf (message, "argument initialid: Cluster %d is empty", i);
-    PyErr_SetString (ErrorObject, buffer);
+    PyErr_SetString (PyExc_ValueError, buffer);
     Py_DECREF((PyObject*) (*array));
     return NULL;
   }
@@ -479,6 +478,39 @@ free_clusterid(PyArrayObject* array, int* clusterid)
 
 /* -- distance -------------------------------------------------------------- */
 
+static void
+free_distances(PyObject* object, PyArrayObject* array, double** distance, int n)
+{ int i;
+   return;
+  if (array==NULL) /* User passed a lower-triangular matrix as a list of rows */
+  { for (i = 1; i < n; i++)
+    { PyObject* row = PyList_GET_ITEM(object, i);
+      if (PyArray_Check(row))
+      { PyArrayObject* a = (PyArrayObject*)row;
+        if (distance[i] == (double*) (a->data))
+        { Py_DECREF(row);
+          continue;
+        }
+      }
+      free(distance[i]);
+    }
+  }
+  else
+  { if (array->nd == 1)
+    { const int stride =  array->strides[0];
+      if (stride!=sizeof(double))
+        for (i = 1; i < n; i++) free(distance[i]);
+    }
+    else
+    { const int stride =  array->strides[1];
+      if (stride!=sizeof(double))
+        for (i = 1; i < n; i++) free(distance[i]);
+    }
+    Py_DECREF((PyObject*) array);
+  }
+  free(distance);
+}
+
 static double**
 parse_distance(PyObject* object, PyArrayObject** array, int* n)
 /* Takes the Python object from the argument list, and finds the distance
@@ -489,10 +521,115 @@ parse_distance(PyObject* object, PyArrayObject** array, int* n)
   { /* Convert object to a 1D or 2D array of type double */
     *array = (PyArrayObject*) PyArray_FromObject(object, PyArray_DOUBLE, 1, 2);
     if (*array==NULL)
-    { strcpy (message, "distance cannot be converted to needed array.");
-      PyErr_SetString(ErrorObject, buffer);
-      *n = 0;
-      return NULL;
+    { /* This is not necessarily an error; the user may have passed the
+       * the lower-triangular matrix as a list of rows. Clear the error
+       * indicator set by PyArrayFromObject first. */
+      PyErr_Clear();
+      if (!PyList_Check(object))
+      { strcpy (message, "distance cannot be converted to needed array.");
+        PyErr_SetString(PyExc_TypeError, buffer);
+        *n = 0;
+        return NULL;
+      }
+      *n = PyList_GET_SIZE(object);
+      distance = malloc((*n)*sizeof(double*));
+      if (!distance)
+      { strcpy (message, "failed to store distance matrix.");
+        PyErr_SetString(PyExc_MemoryError, buffer);
+        *n = 0;
+        return NULL;
+      }
+      for (i = 0; i < *n; i++)
+      { PyObject* row = PyList_GET_ITEM(object, i);
+        if (PyArray_Check(row))
+        { PyArrayObject* a = (PyArrayObject*)row;
+          if (a->nd != 1)
+          { sprintf (message, "Row %d in the distance matrix is not one-dimensional.", i);
+            PyErr_SetString(PyExc_ValueError, buffer);
+            break;
+          }
+          if (a->dimensions[0]!=i)
+          { sprintf (message, "Row %d in the distance matrix has incorrect size (%d, should be %d).", i, a->dimensions[0], i);
+            PyErr_SetString(PyExc_ValueError, buffer);
+            break;
+          }
+          if (i==0) continue;
+          if (a->descr->type_num == PyArray_DOUBLE)
+          { const int stride = a->strides[0];
+            if (stride==sizeof(double)) /* Row is contiguous */
+            { Py_INCREF(row);
+              distance[i] = (double*) (a->data);
+            }
+            else
+            { const char* p = (char*) (a->data);
+              distance[i] = malloc(i*sizeof(double));
+              if(!distance[i])
+              { Py_DECREF((PyObject*)a);
+                sprintf (message, "failed to store row %d in the distance matrix.", i);
+                PyErr_SetString(PyExc_MemoryError, buffer);
+                break;
+              }
+              for (j=0; j < i; j++, p+=stride) distance[i][j] = *((double*)p);
+            }
+          }
+          else
+          { row = PyArray_ContiguousFromObject(row, PyArray_DOUBLE, 1, 1);
+            if (!row)
+            { sprintf (message, "Failed to cast row %d in the distance matrix to double precision.", i);
+              PyErr_SetString(PyExc_MemoryError, buffer);
+              break;
+            }
+            else
+            { const double* p;
+              a = (PyArrayObject*)row;
+              p = (double*) (a->data);
+              distance[i] = malloc(i*sizeof(double));
+              if(!distance[i])
+              { Py_DECREF(row);
+                sprintf (message, "failed to store row %d in the distance matrix.", i);
+                PyErr_SetString(PyExc_MemoryError, buffer);
+                break;
+              }
+              for (j=0; j < i; j++, p++) distance[i][j] = *p;
+              Py_DECREF(row);
+            }
+          }
+        }
+        else
+        { /* Convert row */
+          const double* p;
+          PyArrayObject* a = (PyArrayObject*)PyArray_ContiguousFromObject(row, PyArray_DOUBLE, 1, 1);
+          if(!a)
+          { sprintf (message, "Failed to convert row %d in the distance matrix.", i);
+            PyErr_SetString(PyExc_TypeError, buffer);
+            break;
+          }
+          if (a->dimensions[0]!=i)
+          { sprintf (message, "Row %d in the distance matrix has incorrect size (%d, should be %d).", i, a->dimensions[0], i);
+            PyErr_SetString(PyExc_ValueError, buffer);
+            Py_DECREF((PyObject*)a);
+            break;
+          }
+          if (i > 0)
+          { distance[i] = malloc(i*sizeof(double));
+            if(!distance[i])
+            { Py_DECREF((PyObject*)a);
+              sprintf (message, "failed to store row %d in the distance matrix.", i);
+              PyErr_SetString(PyExc_MemoryError, buffer);
+              break;
+            }
+            p = (double*) (a->data);
+            for (j=0; j < i; j++) distance[i][j] = p[j];
+          }
+          Py_DECREF((PyObject*)a);
+        }
+      }
+      if (i < *n) /* break encountered */
+      { free_distances(object, NULL, distance, i);
+        *n = 0;
+        return NULL;
+      }
+      return distance;
     }
   }
   else
@@ -503,7 +640,7 @@ parse_distance(PyObject* object, PyArrayObject** array, int* n)
     { *array = (PyArrayObject*) PyArray_Cast((*array), PyArray_DOUBLE);
       if (!(*array))
       { strcpy (message, "distance cannot be cast to needed type.");
-        PyErr_SetString(ErrorObject, buffer);
+        PyErr_SetString(PyExc_ValueError, buffer);
         *n = 0;
         return NULL;
       }
@@ -517,7 +654,7 @@ parse_distance(PyObject* object, PyArrayObject** array, int* n)
     if ((*n)*(*n)-(*n) != 2 * m)
     { strcpy(message,
         "Array size of distance is incompatible with a lower triangular matrix");
-      PyErr_SetString(ErrorObject, buffer);
+      PyErr_SetString(PyExc_ValueError, buffer);
       Py_DECREF((PyObject*) (*array));
       *array = NULL;
       *n = 0;
@@ -537,10 +674,10 @@ parse_distance(PyObject* object, PyArrayObject** array, int* n)
   else if ((*array)->nd == 2)
   { const char* p = (char*) ((*array)->data);
     *n = (*array)->dimensions[0];
-    if ((*array)->dimensions[0]!=(*array)->dimensions[1])
+    if ((*n) != (*array)->dimensions[1])
     { strcpy(message,
         "The distance matrix should be square");
-      PyErr_SetString(ErrorObject, buffer);
+      PyErr_SetString(PyExc_ValueError, buffer);
       Py_DECREF((PyObject*) (*array));
       *array = NULL;
       *n = 0;
@@ -564,34 +701,13 @@ parse_distance(PyObject* object, PyArrayObject** array, int* n)
   { sprintf(message,
             "distance has an incorrect rank (%d expected 1 or 2)",
             (*array)->nd);
-    PyErr_SetString (ErrorObject, buffer);
+    PyErr_SetString (PyExc_ValueError, buffer);
     Py_DECREF((PyObject*) (*array));
     *array = NULL;
     *n = 0;
     return NULL;
   }
   return distance;
-}
-
-static void
-free_distances(PyArrayObject* array, double** distance)
-{ int i;
-  if (array->nd == 1)
-  { const int m = array->dimensions[0];
-    const int n = (int) ((1+sqrt(1+8*m))/2);
-    const int stride =  array->strides[0];
-    if (stride!=sizeof(double))
-      for (i=1; i < n; i++) free(distance[i]);
-  }
-  else
-  { const int n = array->dimensions[0];
-    const int stride =  array->strides[1];
-    if (stride!=sizeof(double))
-      for (i=1; i < n; i++) free(distance[i]);
-  }
-  Py_DECREF((PyObject*) array);
-  free(distance);
-  return;
 }
 
 /* -- celldata -------------------------------------------------------------- */
@@ -651,7 +767,7 @@ parse_index(PyObject* object, PyArrayObject** array, int* n)
       PyArray_ContiguousFromObject(object, PyArray_INT, 1, 1);
     if (!(*array))
     { strcpy(message, "index argument cannot be converted to needed type.");
-      PyErr_SetString (ErrorObject, buffer);
+      PyErr_SetString (PyExc_TypeError, buffer);
       *n = 0;
       return NULL;
     }
@@ -664,7 +780,7 @@ parse_index(PyObject* object, PyArrayObject** array, int* n)
     { object = PyArray_Cast(*array, PyArray_INT);
       if (!object)
       { strcpy (message, "index argument cannot be cast to needed type.");
-        PyErr_SetString(ErrorObject, buffer);
+        PyErr_SetString(PyExc_ValueError, buffer);
         *n = 0;
         return NULL;
       }
@@ -677,7 +793,7 @@ parse_index(PyObject* object, PyArrayObject** array, int* n)
   { sprintf(message,
             "index argument has incorrect rank (%d expected 1)",
             (*array)->nd);
-    PyErr_SetString (ErrorObject, buffer);
+    PyErr_SetString (PyExc_ValueError, buffer);
     Py_DECREF(object); /* can only happen if *array==(PyArrayObject*)object */
     *array = NULL;
     *n = 0;
@@ -688,7 +804,7 @@ parse_index(PyObject* object, PyArrayObject** array, int* n)
     Py_DECREF(object);
     if(!(*array))
     { strcpy(message, "Failed making argument index contiguous.");
-      PyErr_SetString (ErrorObject, buffer);
+      PyErr_SetString (PyExc_ValueError, buffer);
       *array = NULL;
       *n = 0;
       return NULL;
@@ -786,7 +902,7 @@ PyNode_setdistance(PyNode* self, PyObject* value, void* closure)
 }
 
 static char PyNode_distance__doc__[] =
-"the distance between the two members of this node.\n";
+"the distance between the two members of this node\n";
 
 static PyGetSetDef PyNode_getset[] = {
     {"left", (getter)PyNode_getleft, (setter)PyNode_setleft, PyNode_left__doc__, NULL},
@@ -864,13 +980,13 @@ PyTree_init(PyTree* self, PyObject* args, PyObject* kwds)
   if (! PyArg_ParseTuple(args, "O", &arg)) return -1;
 
   if (!PyList_Check(arg))
-  { PyErr_SetString(ErrorObject, "Argument should be a list of Node objects");
+  { PyErr_SetString(PyExc_TypeError, "Argument should be a list of Node objects");
     return -1;
   }
 
   n = PyList_GET_SIZE(arg);
   if (n < 1)
-  { PyErr_SetString(ErrorObject, "List is empty");
+  { PyErr_SetString(PyExc_ValueError, "List is empty");
     return -1;
   }
   nodes = malloc(n*sizeof(Node));
@@ -880,7 +996,7 @@ PyTree_init(PyTree* self, PyObject* args, PyObject* kwds)
     if (row->ob_type != &PyNodeType)
     { free(nodes);
       sprintf(buffer, "Row %d in list is not a Node object", i);
-      PyErr_SetString(ErrorObject, buffer);
+      PyErr_SetString(PyExc_TypeError, buffer);
       return -1;
     }
     p = (PyNode*)row;
@@ -913,7 +1029,7 @@ PyTree_init(PyTree* self, PyObject* args, PyObject* kwds)
   }
   if (!flag || i < n) /* break encountered */
   { free(nodes);
-    PyErr_SetString(ErrorObject, "Inconsistent tree");
+    PyErr_SetString(PyExc_ValueError, "Inconsistent tree");
     return -1;
   }
   /* --------------------------------------------------------------------- */
@@ -1040,7 +1156,7 @@ PyTree_scale(PyTree* self)
 static char PyTree_cut__doc__[] =
 "clusterid = mytree.cut(nclusters=2)\n"
 "Given a hierarchical clustering result mytree, cut() divides the elements\n"
-"in the tree into clusters. The number of clusters is equal to nclusters.\n";
+"in the tree into clusters. The number of clusters is given by nclusters.\n";
 
 static PyObject*
 PyTree_cut(PyTree* self, PyObject* args)
@@ -1052,12 +1168,12 @@ PyTree_cut(PyTree* self, PyObject* args)
   if(!PyArg_ParseTuple(args, "|i", &nclusters)) return NULL;
   /* -- Check the nclusters variable ------------------------------------- */
   if (nclusters < 1)
-  { PyErr_SetString (ErrorObject,
+  { PyErr_SetString (PyExc_ValueError,
       "cut: Requested number of clusters should be positive");
     return NULL;
   }
   if (nclusters > n)
-  { PyErr_SetString (ErrorObject,
+  { PyErr_SetString (PyExc_ValueError,
       "cut: More clusters requested than items available");
     return NULL;
   }
@@ -1093,7 +1209,7 @@ static char PyTree_doc[] =
 "Individual nodes in the tree can be accessed with tree[i], where i is\n"
 "an integer. Whereas the tree itself is a read-only object, tree[:]\n"
 "returns a list of all the nodes, which can then be modified. To create\n"
-"a new Tree from this list, use Tree(list)\n"
+"a new Tree from this list, use Tree(list).\n"
 "See the description of the Node class for more information.";
 
 static PyTypeObject PyTreeType = {
@@ -1142,46 +1258,49 @@ static PyTypeObject PyTreeType = {
 
 /* kcluster */
 static char kcluster__doc__[] =
-"returns clusterid, error, nfound.\n"
+"kcluster(data, nclusters=2, mask=None, weight=None,\n"
+"         transpose=0, npass=1, method='a', dist='e',\n"
+"         initialid=None) -> clusterid, error, nfound\n"
 "\n"
 "This function implements k-means clustering.\n"
-"The array data is a nrows x ncolumns array containing the expression data\n"
-"The number of clusters is given by nclusters.\n"
-"The array mask shows which data are missing. If mask[i][j]==0, then\n"
-"data[i][j] is missing.\n"
-"The array weight contains the weights to be used when calculating distances.\n"
-"If transpose==0, then genes are clustered. If transpose==1, microarrays are\n"
-"clustered.\n"
-"The integer npass is the number of times the k-means clustering algorithm\n"
-"is performed, each time with a different (random) initial condition.\n"
-"The character method describes how the center of a cluster is found:\n"
-"method=='a': arithmetic mean\n"
-"method=='m': median\n"
-"The character dist defines the distance function to be used:\n"
-"dist=='e': Euclidean distance\n"
-"dist=='b': City Block distance\n"
-"dist=='c': Pearson correlation\n"
-"dist=='a': absolute value of the correlation\n"
-"dist=='u': uncentered correlation\n"
-"dist=='x': absolute uncentered correlation\n"
-"dist=='s': Spearman's rank correlation\n"
-"dist=='k': Kendall's tau\n"
-"For other values of dist, the default (Euclidean distance) is used.\n"
-"initialid specifies the initial clustering from which the algorithm\n"
-"should start. If initialid is not given, the routine carries out npass\n"
-"repetitions of the EM algorithm, each time starting from a different\n"
-"random initial clustering. If initialid is given, the routine carries\n"
-"out the EM algorithm only once, starting from the same initial\n"
-"clustering and without randomizing the order in which items are assigned\n"
-"to clusters (i.e., using the same order as in the data matrix). In that\n"
-"case, the k-means algorithm is fully deterministic.\n"
+"data     : nrows x ncolumns array containing the expression data\n"
+"nclusters: number of clusters (the 'k' in k-means)\n"
+"mask     : nrows x ncolumns array of integers, showing which data are\n"
+"           missing. If mask[i][j]==0, then data[i][j] is missing.\n"
+"weight   : the weights to be used when calculating distances\n"
+"transpose: if equal to 0, genes (rows) are clustered;\n"
+"           if equal to 1, microarrays (columns) are clustered.\n"
+"npass    : number of times the k-means clustering algorithm is performed,\n"
+"           each time with a different (random) initial condition.\n"
+"method   : specifies how the center of a cluster is found:\n"
+"           method=='a': arithmetic mean\n"
+"           method=='m': median\n"
+"dist     : specifies the distance function to be used:\n"
+"           dist=='e': Euclidean distance\n"
+"           dist=='b': City Block distance\n"
+"           dist=='c': Pearson correlation\n"
+"           dist=='a': absolute value of the correlation\n"
+"           dist=='u': uncentered correlation\n"
+"           dist=='x': absolute uncentered correlation\n"
+"           dist=='s': Spearman's rank correlation\n"
+"           dist=='k': Kendall's tau\n"
+"initialid: the initial clustering from which the algorithm should start.\n"
+"           If initialid is None, the routine carries out npass repetitions\n"
+"           of the EM algorithm, each time starting from a different random\n"
+"           initial clustering. If initialid is given, the routine carries\n"
+"           out the EM algorithm only once, starting from the given initial\n"
+"           clustering and without randomizing the order in which items are\n"
+"           assigned to clusters (i.e., using the same order as in the data\n"
+"           matrix). In that case, the k-means algorithm is fully\n"
+"           deterministic.\n"
 "\n"
 "Return values:\n"
-"clusterid is an array containing the number of the cluster to which each\n"
-"  gene/microarray was assigned;\n"
-"error is the within-cluster sum of distances for the optimal k-means\n"
-"  clustering solution;\n"
-"nfound is the number of times the optimal solution was found.\n";
+"clusterid: array containing the number of the cluster to which each\n"
+"           gene/microarray was assigned in the best k-means clustering\n"
+"           solution that was found in the npass runs;\n"
+"error:     the within-cluster sum of distances for the returned k-means\n"
+"           clustering solution;\n"
+"nfound:    the number of times this solution was found.\n";
 
 static PyObject*
 py_kcluster (PyObject* self, PyObject* args, PyObject* keywords)
@@ -1218,7 +1337,7 @@ py_kcluster (PyObject* self, PyObject* args, PyObject* keywords)
                             "dist",
                             "initialid",
                              NULL };
-  if(!PyArg_ParseTupleAndKeywords(args, keywords, "O|lOOllccO", kwlist,
+  if(!PyArg_ParseTupleAndKeywords(args, keywords, "O|iOOiiccO", kwlist,
                                   &DATA,
                                   &NCLUSTERS,
                                   &MASK,
@@ -1238,13 +1357,13 @@ py_kcluster (PyObject* self, PyObject* args, PyObject* keywords)
   /* -- Check the method variable ---------------------------------------- */
   if (!strchr("am", METHOD))
   { sprintf(message, "method %c is unknown", METHOD);
-    PyErr_SetString (ErrorObject, buffer);
+    PyErr_SetString (PyExc_ValueError, buffer);
     return NULL;
   }
   /* -- Check the dist variable ------------------------------------------ */
   if (!strchr(known_distances, DIST))
   { sprintf(message, "dist %c is an unknown distance function", DIST);
-    PyErr_SetString (ErrorObject, buffer);
+    PyErr_SetString (PyExc_ValueError, buffer);
     return NULL;
   }
   /* -- Check the transpose variable ------------------------------------- */
@@ -1253,7 +1372,7 @@ py_kcluster (PyObject* self, PyObject* args, PyObject* keywords)
   if (INITIALID) NPASS = 0;
   else if (NPASS <= 0)
   { strcpy(message, "npass should be a positive integer");
-    PyErr_SetString (ErrorObject, buffer);
+    PyErr_SetString (PyExc_ValueError, buffer);
     return NULL;
   }
   /* -- Check the data input array --------------------------------------- */
@@ -1279,7 +1398,7 @@ py_kcluster (PyObject* self, PyObject* args, PyObject* keywords)
   /* -- Check the number of clusters ------------------------------------- */
   if (NCLUSTERS < 1)
   { strcpy(message, "nclusters should be positive");
-    PyErr_SetString (ErrorObject, buffer);
+    PyErr_SetString (PyExc_ValueError, buffer);
     free_data(aDATA, data);
     free_mask(aMASK, mask, nrows);
     Py_DECREF((PyObject*) aCLUSTERID);
@@ -1287,7 +1406,7 @@ py_kcluster (PyObject* self, PyObject* args, PyObject* keywords)
   }
   if (nitems < NCLUSTERS)
   { strcpy(message, "More clusters than items to be clustered");
-    PyErr_SetString (ErrorObject, buffer);
+    PyErr_SetString (PyExc_ValueError, buffer);
     free_data(aDATA, data);
     free_mask(aMASK, mask, nrows);
     Py_DECREF((PyObject*) aCLUSTERID);
@@ -1321,47 +1440,58 @@ py_kcluster (PyObject* self, PyObject* args, PyObject* keywords)
   free_weight(aWEIGHT, weight);
   /* --------------------------------------------------------------------- */
 
-  return Py_BuildValue("Ndl", aCLUSTERID, ERROR, IFOUND);
+  return Py_BuildValue("Ndi", aCLUSTERID, ERROR, IFOUND);
 } 
 /* end of wrapper for kcluster */
 
 /* kmedoids */
 static char kmedoids__doc__[] =
-"kmedoids(distance, nclusters=2, npass=1, initialid=None)\n"
-"returns clusterid, error, nfound.\n"
+"kmedoids(distance, nclusters=2, npass=1,\n"
+"         initialid=None) -> clusterid, error, nfound.\n"
 "\n"
 "This function implements k-medoids clustering.\n"
-"The argument distance is a 2D array containing the distance matrix between\n"
-"the elements. You can either pass a 2D Numerical Python array (in which\n"
-"only the left-lower part of the array will be accessed), or you can pass\n"
-"a 1D Numerical Python array containing the distances consecutively.\n" 
-"Examples are:\n"
-" distance = array([[0.0, 1.1, 2.3],\n"
-"                   [1.1, 0.0, 4.5],\n"
-"                   [2.3, 4.5, 0.0]])\n"
-"and\n"
-" distance = array([1.1, 2.3, 4.5])\n"
-"These two correspond to the same distance matrix\n"
-"The number of clusters is given by nclusters.\n"
-"The integer npass is the number of times the k-medoids clustering algorithm\n"
-"is performed, each time with a different (random) initial condition.\n"
-"The argument initialid specifies the initial clustering from which the\n"
-"algorithm should start. If initialid is not given, the routine carries\n"
-"out npass repetitions of the EM algorithm, each time starting from a\n"
-"different random initial clustering. If initialid is given, the routine\n"
-"carries out the EM algorithm only once, starting from the initial\n"
-"clustering specified by initialid and without randomizing the order in\n"
-"which items are assigned to clusters (i.e., using the same order as in\n"
-"the data matrix). In that case, the k-means algorithm is fully\n"
-"deterministic.\n"
+"distance:  The distance matrix between the elements. There are three ways\n"
+"           in which you can pass a distance matrix:\n"
+"           #1: a 2D Numerical Python array (in which only the left-lower\n"
+"               part of the array will be accessed);\n"
+"           #2: a 1D Numerical Python array containing the distances\n"
+"               consecutively;\n" 
+"           #3: a list of rows containing the lower-triangular part of the\n"
+"               distance matrix.\n"
+"           Examples are:\n"
+"           >>> distance = array([[0.0, 1.1, 2.3],\n"
+"                                 [1.1, 0.0, 4.5],\n"
+"                                 [2.3, 4.5, 0.0]])\n"
+"           (option #1)\n"
+"           >>> distance = array([1.1, 2.3, 4.5])\n"
+"           (option #2)\n"
+"           >>> distance = [array([]),\n"
+"                           array([1.1]),\n"
+"                           array([2.3, 4.5])\n"
+"                          ]\n"
+"           (option #3)\n"
+"           These three correspond to the same distance matrix.\n"
+"nclusters: number of clusters (the 'k' in k-medoids)\n"
+"npass    : the number of times the k-medoids clustering algorithm is\n"
+"           performed, each time with a different (random) initial\n"
+"           condition.\n"
+"initialid: the initial clustering from which the algorithm should start.\n"
+"           If initialid is not given, the routine carries out npass\n"
+"           repetitions of the EM algorithm, each time starting from a\n"
+"           different random initial clustering. If initialid is given,\n"
+"           the routine carries out the EM algorithm only once, starting\n"
+"           from the initial clustering specified by initialid and without\n"
+"           randomizing the order in which items are assigned to clusters\n"
+"           (i.e., using the same order as in the data matrix). In that\n"
+"           case, the k-means algorithm is fully deterministic.\n"
 "\n"
 "Return values:\n"
-"clusterid is an array containing the number of the cluster to which each\n"
-"  gene/microarray was assigned. The cluster number is equal to the number\n"
-"  of the element which forms the cluster centroid.\n"
-"error is the within-cluster sum of distances for the optimal k-means\n"
-"  clustering solution;\n"
-"nfound is the number of times the optimal solution was found.\n";
+"clusterid: array containing the number of the cluster to which each\n"
+"           gene/microarray was assigned in the best k-means clustering\n"
+"           solution that was found in the npass runs;\n"
+"error:     the within-cluster sum of distances for the returned k-means\n"
+"           clustering solution;\n"
+"nfound:    the number of times this solution was found.\n";
 
 static PyObject*
 py_kmedoids (PyObject* self, PyObject* args, PyObject* keywords)
@@ -1382,7 +1512,7 @@ py_kmedoids (PyObject* self, PyObject* args, PyObject* keywords)
                             "npass",
                             "initialid",
                              NULL };
-  if(!PyArg_ParseTupleAndKeywords(args, keywords, "O|llO", kwlist,
+  if(!PyArg_ParseTupleAndKeywords(args, keywords, "O|iiO", kwlist,
                                   &DISTANCES,
                                   &NCLUSTERS,
                                   &NPASS,
@@ -1396,7 +1526,7 @@ py_kmedoids (PyObject* self, PyObject* args, PyObject* keywords)
   if (INITIALID) NPASS = 0;
   else if (NPASS < 0)
   { strcpy(message, "npass should be a positive integer");
-    PyErr_SetString (ErrorObject, buffer);
+    PyErr_SetString (PyExc_ValueError, buffer);
     return NULL;
   }
   /* -- Check the distance matrix ---------------------------------------- */
@@ -1405,21 +1535,21 @@ py_kmedoids (PyObject* self, PyObject* args, PyObject* keywords)
   /* -- Create the clusterid output variable ----------------------------- */
   aCLUSTERID = parse_initialid(INITIALID, &NCLUSTERS, nitems);
   if (!aCLUSTERID)
-  { free_distances(aDISTANCES, distances);
+  { free_distances(DISTANCES, aDISTANCES, distances, nitems);
     return NULL;
   }
   /* -- Check the nclusters variable ------------------------------------- */
   if (NCLUSTERS <= 0)
   { strcpy(buffer,"nclusters should be a positive integer");
-    PyErr_SetString (ErrorObject, buffer);
-    free_distances(aDISTANCES, distances);
+    PyErr_SetString (PyExc_ValueError, buffer);
+    free_distances(DISTANCES, aDISTANCES, distances, nitems);
     Py_DECREF((PyObject*) aCLUSTERID);
     return NULL;
   }
   if (nitems < NCLUSTERS)
   { strcpy(message, "More clusters than items to be clustered");
-    PyErr_SetString (ErrorObject, buffer);
-    free_distances(aDISTANCES, distances);
+    PyErr_SetString (PyExc_ValueError, buffer);
+    free_distances(DISTANCES, aDISTANCES, distances, nitems);
     Py_DECREF((PyObject*) aCLUSTERID);
     return NULL;
   }
@@ -1432,63 +1562,86 @@ py_kmedoids (PyObject* self, PyObject* args, PyObject* keywords)
       &ERROR, 
       &IFOUND);
   /* --------------------------------------------------------------------- */
-  free_distances(aDISTANCES, distances);
+  free_distances(DISTANCES, aDISTANCES, distances, nitems);
   /* --------------------------------------------------------------------- */
   if(IFOUND==0) /* should not occur */
   { Py_DECREF((PyObject*) aCLUSTERID);
     strcpy(message, "Error in kmedoids input arguments");
-    PyErr_SetString (ErrorObject, buffer);
+    PyErr_SetString (PyExc_RuntimeError, buffer);
     return NULL;
   }
   if(IFOUND==-1)
   { Py_DECREF((PyObject*) aCLUSTERID);
     strcpy(message, "Memory allocation error in kmedoids");
-    PyErr_SetString (ErrorObject, buffer);
+    PyErr_SetString (PyExc_MemoryError, buffer);
     return NULL;
   }
-  return Py_BuildValue("Ndl",aCLUSTERID, ERROR, IFOUND);
+  return Py_BuildValue("Ndi",aCLUSTERID, ERROR, IFOUND);
 } 
 /* end of wrapper for kmedoids */
 
 /* treecluster */
 static char treecluster__doc__[] =
-"returns a Tree object\n"
+"treecluster(data=None, mask=None, weight=None, transpose=0, dist='e',\n"
+"            method='m', distancematrix=None) -> Tree object\n"
 "\n"
 "This function implements the pairwise single, complete, centroid, and\n"
 "average linkage hierarchical clustering methods.\n"
+"data     : nrows x ncolumns array containing the gene expression data.\n"
+"mask     : nrows x ncolumns array of integers, showing which data are\n"
+"           missing. If mask[i][j]==0, then data[i][j] is missing.\n"
+"weight   : the weights to be used when calculating distances.\n"
+"transpose: if equal to 0, genes (rows) are clustered;\n"
+"           if equal to 1, microarrays (columns) are clustered.\n"
+"dist     : specifies the distance function to be used:\n"
+"           dist=='e': Euclidean distance\n"
+"           dist=='b': City Block distance\n"
+"           dist=='c': Pearson correlation\n"
+"           dist=='a': absolute value of the correlation\n"
+"           dist=='u': uncentered correlation\n"
+"           dist=='x': absolute uncentered correlation\n"
+"           dist=='s': Spearman's rank correlation\n"
+"           dist=='k': Kendall's tau\n"
+"method   : specifies which linkage method is used:\n"
+"           method=='s': Single pairwise linkage\n"
+"           method=='m': Complete (maximum) pairwise linkage (default)\n"
+"           method=='c': Centroid linkage\n"
+"           method=='a': Average pairwise linkage\n"
+"distancematrix:  The distance matrix between the elements. There are three\n"
+"           ways in which you can pass a distance matrix:\n"
+"           #1: a 2D Numerical Python array (in which only the left-lower\n"
+"               part of the array will be accessed);\n"
+"           #2: a 1D Numerical Python array containing the distances\n"
+"               consecutively;\n" 
+"           #3: a list of rows containing the lower-triangular part of the\n"
+"               distance matrix.\n"
+"           Examples are:\n"
+"           >>> distance = array([[0.0, 1.1, 2.3],\n"
+"                                 [1.1, 0.0, 4.5],\n"
+"                                 [2.3, 4.5, 0.0]])\n"
+"           (option #1)\n"
+"           >>> distance = array([1.1, 2.3, 4.5])\n"
+"           (option #2)\n"
+"           >>> distance = [array([]),\n"
+"                           array([1.1]),\n"
+"                           array([2.3, 4.5])\n"
+"                          ]\n"
+"           (option #3)\n"
+"           These three correspond to the same distance matrix.\n"
+"           PLEASE NOTE:\n"
+"           As the treecluster routine may shuffle the values in the distance\n"
+"           matrix as part of the clustering algorithm, be sure to save this\n"
+"           array in a different variable before calling treecluster if you\n"
+"           need it later.\n"
 "\n"
-"The nrows x ncolumns array data contains the gene expression data.\n"
-"The array mask declares missing data. If mask[i][j]==0, then data[i][j]\n"
-"is missing.\n"
-"The array weight contains the weights to be used for the distance\n"
-"calculation.\n"
-"The integer transpose defines if rows (genes) or columns (microarrays) are\n"
-"clustered. If transpose==0, then genes are clustered. If transpose==1,\n"
-"microarrays are clustered.\n"
-"The character dist defines the distance function to be used:\n"
-"dist=='e': Euclidean distance (default)\n"
-"dist=='b': City Block distance\n"
-"dist=='c': Pearson correlation\n"
-"dist=='a': absolute value of the Pearson correlation\n"
-"dist=='u': uncentered correlation\n"
-"dist=='x': absolute uncentered correlation\n"
-"dist=='s': Spearman's rank correlation\n"
-"dist=='k': Kendall's tau\n"
-"For other values of dist, the default (Euclidean distance) is used.\n"
-"The character method specifies which linkage method is used:\n"
-"method=='s': Single pairwise linkage\n"
-"method=='m': Complete (maximum) pairwise linkage (default)\n"
-"method=='c': Centroid linkage\n"
-"method=='a': Average pairwise linkage\n"
-"The 2D array distancematrix, which is square and symmetric, is the distance\n"
-"matrix. Either data or distancematrix should be None. If distancematrix==None,\n"
+"Either data or distancematrix should be None. If distancematrix==None,\n"
 "the hierarchical clustering solution is calculated from the gene expression\n"
 "data stored in the argument data. If data==None, the hierarchical clustering\n"
 "solution is calculated from the distance matrix instead. Pairwise centroid-\n"
 "linkage clustering can be calculated only from the gene expression data and\n"
-"not from the distance matrix. Pairwise single-, maximum-, and average-linkage\n"
-"clustering can be calculated from either the gene expression data or from\n"
-"the distance matrix.\n"
+"not from the distance matrix. Pairwise single-, maximum-, and average-\n"
+"linkage clustering can be calculated from either the gene expression data or\n"
+"from the distance matrix.\n"
 "\n"
 "Return value:\n"
 "treecluster returns a Tree object describing the hierarchical clustering\n"
@@ -1516,7 +1669,7 @@ py_treecluster (PyObject* self, PyObject* args, PyObject* keywords)
                             "dist",
                             "distancematrix",
                              NULL };
-  if(!PyArg_ParseTupleAndKeywords(args, keywords, "|OOOlccO", kwlist,
+  if(!PyArg_ParseTupleAndKeywords(args, keywords, "|OOOiccO", kwlist,
                                   &DATA,
                                   &MASK,
                                   &WEIGHT,
@@ -1537,12 +1690,12 @@ py_treecluster (PyObject* self, PyObject* args, PyObject* keywords)
   /* -- Check if we are using the data matrix or the distance matrix ----- */
   if (DATA!=NULL && DISTANCEMATRIX!=NULL)
   { strcpy(message, "Use either data or distancematrix, do not use both");
-    PyErr_SetString(ErrorObject, buffer);
+    PyErr_SetString(PyExc_ValueError, buffer);
     return NULL;
   }
   if (DATA==NULL && DISTANCEMATRIX==NULL)
   { strcpy(message, "Neither data nor distancematrix was given");
-    PyErr_SetString(ErrorObject, buffer);
+    PyErr_SetString(PyExc_ValueError, buffer);
     return NULL;
   }
 
@@ -1560,13 +1713,13 @@ py_treecluster (PyObject* self, PyObject* args, PyObject* keywords)
     /* -- Check the method variable ---------------------------------------- */
     if (!strchr("csma", METHOD))
     { strcpy(message, "keyword method should be 'c', 's', 'm', or 'a'");
-      PyErr_SetString(ErrorObject, buffer);
+      PyErr_SetString(PyExc_ValueError, buffer);
       return NULL;
     }
     /* -- Check the dist variable ------------------------------------------ */
     if (!strchr(known_distances, DIST))
     { sprintf(message, "unknown distance function specified (dist='%c')", DIST);
-      PyErr_SetString(ErrorObject, buffer);
+      PyErr_SetString(PyExc_ValueError, buffer);
       return NULL;
     }
     /* -- Check the data input array --------------------------------------- */
@@ -1610,7 +1763,7 @@ py_treecluster (PyObject* self, PyObject* args, PyObject* keywords)
     if (!strchr("sma", METHOD))
     { strcpy(message,
         "argument method should be 's', 'm', or 'a' when specifying the distance matrix");
-      PyErr_SetString (ErrorObject, buffer);
+      PyErr_SetString (PyExc_ValueError, buffer);
       return NULL;
     }
     /* -- Check the distance matrix ---------------------------------------- */
@@ -1627,7 +1780,7 @@ py_treecluster (PyObject* self, PyObject* args, PyObject* keywords)
                         METHOD,
                         distances);
     /* --------------------------------------------------------------------- */
-    free_distances(aDISTANCEMATRIX, distances);
+    free_distances(DISTANCEMATRIX, aDISTANCEMATRIX, distances, nitems);
   }
 
   /* -- Check if a memory allocation error occurred ---------------------- */
@@ -1649,40 +1802,42 @@ py_treecluster (PyObject* self, PyObject* args, PyObject* keywords)
 
 /* somcluster */
 static char somcluster__doc__[] =
+"somcluster(data, mask=None, weight=None, transpose=0, nxgrid=2, nygrid=1,\n"
+"           inittau=0.02, niter=1, dist='e') -> clusterid, celldata\n"
+"\n"
 "This function implements a self-organizing map on a rectangular grid.\n"
-"The nrows x ncolumns array data contains the measurement data\n"
-"The array mask declares missing data. If mask[i][j]==0, then data[i][j]\n"
-"is missing.\n"
-"The array weights contains the weights to be used for the distance\n"
-"calculation.\n"
-"The integer transpose defines if rows (genes) or columns (microarrays) are\n"
-"clustered. If transpose==0, then genes are clustered. If transpose==1,\n"
-"microarrays are clustered.\n"
-"The dimensions of the SOM map are nxgrid x nygrid.\n"
-"The initial value of tau (the neighborbood function) is given by inittau.\n"
-"The number of iterations is given by niter.\n"
-"The character dist defines the distance function to be used:\n"
-"dist=='e': Euclidean distance\n"
-"dist=='b': City Block distance\n"
-"dist=='c': correlation\n"
-"dist=='a': absolute value of the correlation\n"
-"dist=='u': uncentered correlation\n"
-"dist=='x': absolute uncentered correlation\n"
-"dist=='s': Spearman's rank correlation\n"
-"dist=='k': Kendall's tau\n"
-"For other values of dist, the default (Euclidean distance) is used.\n"
+"data     : nrows x ncolumns array containing the gene expression data\n"
+"mask     : nrows x ncolumns array of integers, showing which data are\n"
+"           missing. If mask[i][j]==0, then data[i][j] is missing.\n"
+"weight   : the weights to be used when calculating distances\n"
+"transpose: if equal to 0, genes (rows) are clustered;\n"
+"           if equal to 1, microarrays (columns) are clustered.\n"
+"nxgrid   : the horizontal dimension of the rectangular SOM map\n"
+"nygrid   : the vertical dimension of the rectangular SOM map\n"
+"inittau  : the initial value of tau (the neighborbood function)\n"
+"niter    : the number of iterations\n"
+"dist     : specifies the distance function to be used:\n"
+"           dist=='e': Euclidean distance\n"
+"           dist=='b': City Block distance\n"
+"           dist=='c': Pearson correlation\n"
+"           dist=='a': absolute value of the correlation\n"
+"           dist=='u': uncentered correlation\n"
+"           dist=='x': absolute uncentered correlation\n"
+"           dist=='s': Spearman's rank correlation\n"
+"           dist=='k': Kendall's tau\n"
 "\n"
 "Return values:\n"
-"clusterid is an array with two columns, while the number of rows is equal to\n"
-"  the number of genes or the number of microarrays depending on whether\n"
-"  genes or microarrays are being clustered. Each row in the array contains\n"
-"  the x and y coordinates of the cell in the rectangular SOM grid to which\n"
-"  the gene or microarray was assigned.\n"
-"celldata is an array with dimensions (nxgrid, nygrid, number of microarrays)\n"
-"  if genes are being clustered, or (nxgrid, nygrid, number of genes) if\n"
-"  microarrays are being clustered. Each element [ix][iy] of this array is\n"
-"  a 1D vector containing the gene expression data for the centroid of the\n"
-"  cluster in the SOM grid cell with coordinates (ix, iy).\n";
+"clusterid: array with two columns, while the number of rows is equal to the\n"
+"           number of genes or the number of microarrays depending on whether\n"
+"           genes or microarrays are being clustered. Each row in the array\n"
+"           contains the x and y coordinates of the cell in the rectangular\n"
+"           SOM grid to which the gene or microarray was assigned.\n"
+"celldata:  an array with dimensions (nxgrid, nygrid, number of microarrays)\n"
+"           if genes are being clustered, or (nxgrid, nygrid, number of\n"
+"           genes) if microarrays are being clustered. Each element [ix][iy]\n"
+"           of this array is a 1D vector containing the gene expression data\n"
+"           for the centroid of the cluster in the SOM grid cell with\n"
+"           coordinates (ix, iy).\n";
 
 static PyObject*
 py_somcluster (PyObject* self, PyObject* args, PyObject* keywords)
@@ -1721,7 +1876,7 @@ py_somcluster (PyObject* self, PyObject* args, PyObject* keywords)
                             "niter",
                             "dist",
                              NULL };
-  if(!PyArg_ParseTupleAndKeywords(args, keywords, "O|OOllldlc", kwlist,
+  if(!PyArg_ParseTupleAndKeywords(args, keywords, "O|OOiiidic", kwlist,
                                   &DATA,
                                   &MASK,
                                   &WEIGHT,
@@ -1740,25 +1895,25 @@ py_somcluster (PyObject* self, PyObject* args, PyObject* keywords)
   /* -- Check the nxgrid variable ---------------------------------------- */
   if (NXGRID < 1)
   { strcpy(message, "nxgrid should be a positive integer (default is 2)");
-    PyErr_SetString (ErrorObject, buffer);
+    PyErr_SetString (PyExc_ValueError, buffer);
     return NULL;
   }
   /* -- Check the nygrid variable ---------------------------------------- */
   if (NYGRID < 1)
   { strcpy(message, "nygrid should be a positive integer (default is 1)");
-    PyErr_SetString (ErrorObject, buffer);
+    PyErr_SetString (PyExc_ValueError, buffer);
     return NULL;
   }
   /* -- Check the niter variable ----------------------------------------- */
   if (NITER < 1)
   { strcpy(message, "number of iterations (niter) should be positive");
-    PyErr_SetString (ErrorObject, buffer);
+    PyErr_SetString (PyExc_ValueError, buffer);
     return NULL;
   }
   /* -- Check the dist variable ------------------------------------------ */
   if (!strchr(known_distances, DIST))
   { sprintf(message, "dist %c is an unknown distance function", DIST);
-    PyErr_SetString (ErrorObject, buffer);
+    PyErr_SetString (PyExc_ValueError, buffer);
     return NULL;
   }
   /* -- Check the transpose variable ------------------------------------- */
@@ -1831,8 +1986,7 @@ py_somcluster (PyObject* self, PyObject* args, PyObject* keywords)
 
 /* median */
 static char median__doc__[] =
-"median (data)\n"
-"This function returns the median of the 1D array data.\n"
+"median(data) -> median value of the 1D array data\n"
 "Note: data will be partially ordered upon return.\n";
 
 static PyObject*
@@ -1853,7 +2007,7 @@ py_median (PyObject* unused, PyObject* args)
   { aDATA = (PyArrayObject *) PyArray_ContiguousFromObject(DATA, PyArray_NOTYPE, 0, 0);
     if (!aDATA)
     { strcpy(buffer, "median: Argument cannot be converted to needed array.");
-      PyErr_SetString (ErrorObject, buffer);
+      PyErr_SetString (PyExc_TypeError, buffer);
       return NULL;
     }
   }
@@ -1867,14 +2021,14 @@ py_median (PyObject* unused, PyObject* args)
     aDATA = (PyArrayObject*) av;
     if (!aDATA)
     { strcpy(buffer, "median: Argument cannot be cast to needed type.");
-      PyErr_SetString (ErrorObject, buffer);
+      PyErr_SetString (PyExc_ValueError, buffer);
       return NULL;
     }
   } 
   if (aDATA->nd != 1 && (aDATA->nd > 0 || aDATA->dimensions[0] != 1))
   { sprintf(buffer, "median: Argument has incorrect rank (%d expected 1).",
                     aDATA->nd);
-    PyErr_SetString (ErrorObject, buffer);
+    PyErr_SetString (PyExc_ValueError, buffer);
     Py_DECREF((PyObject*) aDATA);
     return NULL;
   }
@@ -1884,7 +2038,7 @@ py_median (PyObject* unused, PyObject* args)
     Py_DECREF((PyObject*)aDATA);
     if(!av)
     { strcpy(buffer, "median: Failed making argument contiguous.");
-      PyErr_SetString (ErrorObject, buffer);
+      PyErr_SetString (PyExc_ValueError, buffer);
     }
     aDATA = (PyArrayObject*) av;
   }
@@ -1899,8 +2053,7 @@ py_median (PyObject* unused, PyObject* args)
 
 /* mean */
 static char mean__doc__[] =
-"mean (data)\n"
-"This function returns the mean of the 1D array data.\n";
+"mean(data) -> arithmetic mean of the 1D array data.\n";
 
 static PyObject*
 py_mean (PyObject* unused, PyObject* args)
@@ -1920,7 +2073,7 @@ py_mean (PyObject* unused, PyObject* args)
   { aDATA = (PyArrayObject *) PyArray_ContiguousFromObject(DATA, PyArray_NOTYPE, 0, 0);
     if (!aDATA)
     { strcpy(buffer, "mean: Argument cannot be converted to needed array.");
-      PyErr_SetString (ErrorObject, buffer);
+      PyErr_SetString (PyExc_TypeError, buffer);
       return NULL;
     }
   }
@@ -1934,14 +2087,14 @@ py_mean (PyObject* unused, PyObject* args)
     aDATA = (PyArrayObject*) av;
     if (!aDATA)
     { strcpy(buffer, "mean: Argument cannot be cast to needed type.");
-      PyErr_SetString (ErrorObject, buffer);
+      PyErr_SetString (PyExc_ValueError, buffer);
       return NULL;
     }
   } 
   if (aDATA->nd != 1 && (aDATA->nd > 0 || aDATA->dimensions[0] != 1))
   { sprintf(buffer, "mean: Argument has incorrect rank (%d expected 1).",
                     aDATA->nd);
-    PyErr_SetString (ErrorObject, buffer);
+    PyErr_SetString (PyExc_ValueError, buffer);
     Py_DECREF((PyObject*) aDATA);
     return NULL;
   }
@@ -1951,7 +2104,7 @@ py_mean (PyObject* unused, PyObject* args)
     Py_DECREF((PyObject*)aDATA);
     if(!av)
     { strcpy(buffer, "mean: Failed making argument contiguous.");
-      PyErr_SetString (ErrorObject, buffer);
+      PyErr_SetString (PyExc_ValueError, buffer);
     }
     aDATA = (PyArrayObject*) av;
   }
@@ -1966,41 +2119,43 @@ py_mean (PyObject* unused, PyObject* args)
 
 /* clusterdistance */
 static char clusterdistance__doc__[] =
-"The distance between two clusters\n"
+"clusterdistance(data, mask=None, weight=None, index1, index2, dist='e',\n"
+"                method='a', transpose=0) -> the distance between the\n"
+"                                            two clusters\n"
 "\n"
-"The array data is a nrows x ncolumns array containing the gene expression\n"
-"data.\n"
-"The array mask shows which data are missing. If mask[i][j]==0, then\n"
-"data[i][j] is missing.\n"
-"The array weight contains the weights to be used when calculating distances.\n"
-"The list index1 identifies which genes/microarrays belong to the first\n"
-"cluster. If the cluster contains only one gene, then index1 can also be\n"
-"written as a single integer.\n"
-"The list index2 identifies which genes/microarrays belong to the second\n"
-"cluster. If the cluster contains only one gene, then index2 can also be\n"
-"written as a single integer.\n"
-"The character dist defines the distance function to be used:\n"
-"dist=='e': Euclidean distance\n"
-"dist=='b': City Block distance\n"
-"dist=='c': correlation\n"
-"dist=='a': absolute value of the correlation\n"
-"dist=='u': uncentered correlation\n"
-"dist=='x': absolute uncentered correlation\n"
-"dist=='s': Spearman's rank correlation\n"
-"dist=='k': Kendall's tau\n"
-"For other values of dist, the default (Euclidean distance) is used.\n"
-"The character method specifies how the distance between two clusters is\n"
-"defined:\n"
-"method=='a': the distance between the arithmetic means of the two clusters\n"
-"method=='m': the distance between the medians of the two clusters\n"
-"method=='s': the smallest pairwise distance between members of the two\n"
-"             clusters\n"
-"method=='x': the largest pairwise distance between members of the two\n"
-"             clusters\n"
-"method=='v': average of the pairwise distances between members of the\n"
-"             clusters\n"
-"If transpose==0, then clusters of genes are considered. If transpose==1,\n"
-"clusters of microarrays are considered.\n";
+"data     : nrows x ncolumns array containing the expression data\n"
+"mask     : nrows x ncolumns array of integers, showing which data are\n"
+"           missing. If mask[i][j]==0, then data[i][j] is missing.\n"
+"weight   : the weights to be used when calculating distances\n"
+"index1   : 1D array identifying which genes/microarrays belong to the first\n"
+"           cluster. If the cluster contains only one gene, then index1 can\n"
+"           also be written as a single integer.\n"
+"index2   : 1D array identifying which genes/microarrays belong to the second\n"
+"           cluster. If the cluster contains only one gene, then index2 can\n"
+"           also be written as a single integer.\n"
+"transpose: if equal to 0, genes (rows) are clustered;\n"
+"           if equal to 1, microarrays (columns) are clustered.\n"
+"dist     : specifies the distance function to be used:\n"
+"           dist=='e': Euclidean distance\n"
+"           dist=='b': City Block distance\n"
+"           dist=='c': Pearson correlation\n"
+"           dist=='a': absolute value of the correlation\n"
+"           dist=='u': uncentered correlation\n"
+"           dist=='x': absolute uncentered correlation\n"
+"           dist=='s': Spearman's rank correlation\n"
+"           dist=='k': Kendall's tau\n"
+"method   : specifies how the distance between two clusters is defined:\n"
+"           method=='a': the distance between the arithmetic means of the\n"
+"                        two clusters\n"
+"           method=='m': the distance between the medians of the two clusters\n"
+"           method=='s': the smallest pairwise distance between members of\n"
+"                        the two clusters\n"
+"           method=='x': the largest pairwise distance between members of\n"
+"                        the two clusters\n"
+"           method=='v': average of the pairwise distances between members\n"
+"                        of the clusters\n"
+"transpose: if equal to 0, clusters of genes (rows) are considered;\n"
+"           if equal to 1, clusters of microarrays (columns) are considered.\n";
 
 static PyObject*
 py_clusterdistance (PyObject* self, PyObject* args, PyObject* keywords)
@@ -2039,7 +2194,7 @@ py_clusterdistance (PyObject* self, PyObject* args, PyObject* keywords)
                             "dist",
                             "transpose",
                              NULL };
-  if(!PyArg_ParseTupleAndKeywords(args, keywords, "O|OOOOccl", kwlist,
+  if(!PyArg_ParseTupleAndKeywords(args, keywords, "O|OOOOcci", kwlist,
                                   &DATA,
                                   &MASK,
                                   &WEIGHT,
@@ -2122,25 +2277,30 @@ py_clusterdistance (PyObject* self, PyObject* args, PyObject* keywords)
 
 /* clustercentroids */
 static char clustercentroids__doc__[] =
+"clustercentroids(data, mask=None, transport=0, clusterid,\n"
+"                 method='a') -> cdata, cmask\n"
+"\n"
 "The clustercentroids routine calculates the cluster centroids, given to\n"
 "which cluster each element belongs. The centroid is defined as either the\n"
 "mean or the median over all elements for each dimension.\n"
-"The ngenes x nmicroarrays array data contains the gene expression data.\n"
-"The array mask declares missing data. If mask[i][j]==0, then data[i][j] is\n"
-"missing.\n"
-"The integer transpose defines if rows (genes) or columns (microarrays) are\n"
-"clustered. If transpose==0, then genes are clustered. If transpose==1,\n"
-"microarrays are clustered.\n"
-"The array clusterid contains the cluster number for each gene or microarray.\n"
-"The cluster number should be non-negative.\n"
-"The parameter method specifies whether the centroid is calculated from the\n"
-"arithmetic mean (method=='a', default) or the median (method=='m') over each\n"
-"dimension.\n"
-"This function returns an array cdata and an array cmask.\n"
-"The array cdata contains the cluster centroids. If transpose==0, then the\n"
-"dimensions of cdata are nclusters x nmicroarrays. If transpose==1, then the\n"
-"dimensions of cdata are ngenes x nclusters.\n"
-"The array cmask describes which elements in cdata, if any, are missing.\n";
+
+"data     : nrows x ncolumns array containing the expression data\n"
+"mask     : nrows x ncolumns array of integers, showing which data are\n"
+"           missing. If mask[i][j]==0, then data[i][j] is missing.\n"
+"transpose: if equal to 0, gene (row) clusters are considered;\n"
+"           if equal to 1, microarray (column) clusters are considered.\n"
+"clusterid: array containing the cluster number for each gene or microarray.\n"
+"           The cluster number should be non-negative.\n"
+"method   : specifies whether the centroid is calculated from the arithmetic\n"
+"           mean (method=='a', default) or the median (method=='m') over each\n"
+"           dimension.\n"
+"\n"
+"Return values:\n"
+"cdata    : 2D array containing the cluster centroids. If transpose==0, then\n"
+"           the dimensions of cdata are nclusters x ncolumns. If\n"
+"           transpose==1, then the dimensions of cdata are nrows x nclusters.\n"
+"cmask    : 2D array of integers describing which elements in cdata, if any,\n"
+"           are missing.\n";
 
 static PyObject*
 py_clustercentroids(PyObject* self, PyObject* args, PyObject* keywords)
@@ -2174,7 +2334,7 @@ py_clustercentroids(PyObject* self, PyObject* args, PyObject* keywords)
                             "method",
                             "transpose",
                              NULL };
-  if(!PyArg_ParseTupleAndKeywords(args, keywords, "O|OOcl", kwlist,
+  if(!PyArg_ParseTupleAndKeywords(args, keywords, "O|OOci", kwlist,
                                   &DATA,
                                   &MASK,
                                   &CLUSTERID,
@@ -2263,30 +2423,31 @@ py_clustercentroids(PyObject* self, PyObject* args, PyObject* keywords)
 
 /* distancematrix */
 static char distancematrix__doc__[] =
-"returns matrix\n"
+"distancematrix(data, mask=None, weight=None, transpose=0,\n"
+"               dist='e') -> distance matrix as a list of arrays\n"
 "\n"
 "This function returns the distance matrix between gene expression data.\n"
-"The array data is a nrows x ncolumns array containing the expression data\n"
-"The array mask shows which data are missing. If mask[i][j]==0, then\n"
-"data[i][j] is missing.\n"
-"The array weight contains the weights to be used when calculating distances.\n"
-"If transpose==0, then genes are clustered. If transpose==1, microarrays are\n"
-"clustered.\n"
-"The character dist defines the distance function to be used:\n"
-"dist=='e': Euclidean distance\n"
-"dist=='b': City Block distance\n"
-"dist=='c': Pearson correlation\n"
-"dist=='a': absolute value of the correlation\n"
-"dist=='u': uncentered correlation\n"
-"dist=='x': absolute uncentered correlation\n"
-"dist=='s': Spearman's rank correlation\n"
-"dist=='k': Kendall's tau\n"
-"For other values of dist, the default (Euclidean distance) is used.\n"
+"data     : nrows x ncolumns array containing the expression data\n"
+"mask     : nrows x ncolumns array of integers, showing which data are\n"
+"           missing. If mask[i][j]==0, then data[i][j] is missing.\n"
+"weight   : the weights to be used when calculating distances.\n"
+"transpose: if equal to 0, the distances between genes (rows) are calculated;\n"
+"           if equal to 1, the distances beteeen microarrays (columns) are\n"
+"           calculated.\n"
+"dist     : specifies the distance function to be used:\n"
+"           dist=='e': Euclidean distance\n"
+"           dist=='b': City Block distance\n"
+"           dist=='c': Pearson correlation\n"
+"           dist=='a': absolute value of the correlation\n"
+"           dist=='u': uncentered correlation\n"
+"           dist=='x': absolute uncentered correlation\n"
+"           dist=='s': Spearman's rank correlation\n"
+"           dist=='k': Kendall's tau\n"
 "\n"
-"Return values:\n"
-"matrix is a list of 1D arrays containing the distance matrix between the\n"
-"gene expression data. The number of columns in each row is equal to the\n"
-"row number. Hence, the first row has zero elements.\n"
+"Return value:\n"
+"The distance matrix is returned as a list of 1D arrays containing the\n"
+"distance matrix between the gene expression data. The number of columns in\n"
+"each row is equal to the row number. Hence, the first row has zero elements.\n"
 "An example of the return value is\n"
 "matrix = [[],\n"
 "          array([1.]),\n"
@@ -2297,7 +2458,6 @@ static char distancematrix__doc__[] =
 " [1., 0., 3., 2.]\n"
 " [7., 3., 0., 6.]\n"
 " [4., 2., 6., 0.]\n";
- 
 
 static PyObject*
 py_distancematrix (PyObject* self, PyObject* args, PyObject* keywords)
@@ -2323,7 +2483,7 @@ py_distancematrix (PyObject* self, PyObject* args, PyObject* keywords)
                             "transpose",
                             "dist",
                              NULL };
-  if(!PyArg_ParseTupleAndKeywords(args, keywords, "O|OOlc", kwlist,
+  if(!PyArg_ParseTupleAndKeywords(args, keywords, "O|OOic", kwlist,
                                   &DATA,
                                   &MASK,
                                   &WEIGHT,
@@ -2338,7 +2498,7 @@ py_distancematrix (PyObject* self, PyObject* args, PyObject* keywords)
   /* -- Check the dist variable ------------------------------------------ */
   if (!strchr(known_distances, DIST))
   { sprintf(message, "dist %c is an unknown distance function", DIST);
-    PyErr_SetString (ErrorObject, buffer);
+    PyErr_SetString (PyExc_ValueError, buffer);
     return NULL;
   }
   /* -- Check the transpose variable ------------------------------------- */
@@ -2442,7 +2602,7 @@ static struct PyMethodDef methods[] = {
 
 void initcluster(void)
 {
-  PyObject *m, *d;
+  PyObject *m;
 
   import_array();
 
@@ -2462,10 +2622,6 @@ void initcluster(void)
   Py_INCREF(&PyNodeType);
   PyModule_AddObject(m, "Tree", (PyObject*) &PyTreeType);
   PyModule_AddObject(m, "Node", (PyObject*) &PyNodeType);
-
-  d = PyModule_GetDict(m);
-  ErrorObject = PyString_FromString("cluster.error");
-  PyDict_SetItemString(d, "error", ErrorObject);
 
   if (PyErr_Occurred()) Py_FatalError("can't initialize module cluster");
 }

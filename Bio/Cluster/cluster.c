@@ -2587,7 +2587,7 @@ when microarrays are being clustered.
   }
 
   /* Calculate the distances and save them in the ragged array */
-  for (i = 0; i < n; i++)
+  for (i = 1; i < n; i++)
     for (j = 0; j < i; j++)
       matrix[i][j]=metric(ndata,data,data,mask,mask,weights,i,j,transpose);
 
