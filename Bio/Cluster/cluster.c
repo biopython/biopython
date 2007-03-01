@@ -1250,6 +1250,8 @@ Otherwise, the distance between two columns in the matrix is calculated.
   result -= avgrank * avgrank;
   denom1 -= avgrank * avgrank;
   denom2 -= avgrank * avgrank;
+  if (denom1 <= 0) return 1; /* include '<' to deal with roundoff errors */
+  if (denom2 <= 0) return 1; /* include '<' to deal with roundoff errors */
   result = result / sqrt(denom1*denom2);
   result = 1. - result;
   return result;
@@ -1426,7 +1428,7 @@ A double-precison number between 0.0 and 1.0.
   static int s2 = 0;
 
   if (s1==0 || s2==0) /* initialize */
-  { int initseed = time(0);
+  { unsigned int initseed = (unsigned int) time(0);
     srand(initseed);
     s1 = rand();
     s2 = rand();
@@ -1466,7 +1468,7 @@ Communications of the ACM, Volume 31, Number 2, February 1988, pages 216-222.
 Arguments
 =========
 
-p          (input) float
+p          (input) double
 The probability of a single event. This probability should be less than or
 equal to 0.5.
 
@@ -1498,7 +1500,7 @@ An integer drawn from a binomial distribution with parameters (p, n).
   else /* Algorithm BTPE */
   { /* Step 0 */
     const double fm = n*p + p;
-    const int m = floor(fm);
+    const int m = (int) fm;
     const double p1 = floor(2.195*sqrt(n*p*q) -4.6*q) + 0.5;
     const double xm = m + 0.5;
     const double xl = xm - p1;
@@ -1518,7 +1520,7 @@ An integer drawn from a binomial distribution with parameters (p, n).
       double u = uniform();
       double v = uniform();
       u *= p4;
-      if (u <= p1) return (int)(floor(xm-p1*v+u));
+      if (u <= p1) return (int)(xm-p1*v+u);
       /* Step 2 */
       if (u > p2)
       { /* Step 3 */
@@ -1620,7 +1622,7 @@ The cluster number to which an element was assigned.
 */
 { int i, j;
   int k = 0;
-  float p;
+  double p;
   int n = nelements-nclusters;
   /* Draw the number of elements in each cluster from a multinomial
    * distribution, reserving ncluster elements to set independently
@@ -1638,7 +1640,7 @@ The cluster number to which an element was assigned.
 
   /* Create a random permutation of the cluster assignments */
   for (i = 0; i < nelements; i++)
-  { j = i + (nelements-i)*uniform();
+  { j = (int) (i + (nelements-i)*uniform());
     k = clusterid[j];
     clusterid[j] = clusterid[i];
     clusterid[i] = k;
@@ -3511,7 +3513,7 @@ void somworker (int nrows, int ncolumns, double** data, int** mask,
   index = malloc(nelements*sizeof(int));
   for (i = 0; i < nelements; i++) index[i] = i;
   for (i = 0; i < nelements; i++)
-  { j = i + (nelements-i)*uniform();
+  { j = (int) (i + (nelements-i)*uniform());
     ix = index[j];
     index[j] = index[i];
     index[i] = ix;
