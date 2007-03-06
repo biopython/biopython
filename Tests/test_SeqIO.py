@@ -44,6 +44,10 @@ test_files = [ \
     ("fasta",  False, 'Fasta/f002', 3), #DNA
     #("fasta", False, 'Fasta/f003', 2), #Protein with comments
     ("fasta",  False, 'Fasta/fa01', 2), #Protein with gaps
+#Following examples are also used in test_GFF.py
+    ("fasta",  False, 'GFF/NC_001802.fna', 1), #upper case
+    ("fasta",  False, 'GFF/NC_001802lc.fna', 1), #lower case
+    ("fasta",  True,  'GFF/multi.fna', 3), #Trivial nucleotide alignment
 #Following examples are also used in test_Nexus.py (but not all of them?)
     ("nexus",  True,  'Nexus/f1.nex', 7),
     ("nexus",  True,  'Nexus/f2.nex', 9),
@@ -77,6 +81,8 @@ test_files = [ \
     ("genbank",False, 'GenBank/origin_line.gb', 1),
     ("genbank",False, 'GenBank/blank_seq.gb', 1),
     ("genbank",False, 'GenBank/dbsource_wrap.gb', 1),
+#Following files are also used in test_GFF.py
+    ("genbank",False, 'GFF/NC_001422.gbk', 1),
 #Following files are currently only used here:
     ("embl",      False, 'EMBL/TRBG361.embl', 1),
     ("stockholm", True,  'Stockholm/simple.sth', 2),

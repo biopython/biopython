@@ -103,6 +103,32 @@ Testing reading fasta format file Fasta/fa01
  ID and Name='AKH_HAEIN/1-382',
  Seq='-----------------VEDAVKATIDCRGEKLSIAMMKA...SALAQAN', length=382
  Checking can write/read as 'fasta' format
+Testing reading fasta format file GFF/NC_001802.fna
+ ID and Name='gi|9629357|ref|NC_001802.1|',
+ Seq='GGTCTCTCTGGTTAGACCAGATCTGAGCCTGGGAGCTCTC...GTGCTTC', length=9181
+ Checking can write/read as 'fasta' format
+Testing reading fasta format file GFF/NC_001802lc.fna
+ ID and Name='gi|9629357|ref|nc_001802.1|',
+ Seq='ggtctctctggttagaccagatctgagcctgggagctctc...gtgcttc', length=9181
+ Checking can write/read as 'fasta' format
+Testing reading fasta format file GFF/multi.fna
+ ID and Name='test1',
+ Seq='ACGTCGCG', length=8
+ ID and Name='test2',
+ Seq='GGGGCCCC', length=8
+ ID and Name='test3',
+ Seq='AAACACAC', length=8
+Testing reading fasta format file GFF/multi.fna as an alignment
+ AGA alignment column 0
+ CGA alignment column 1
+ GGA alignment column 2
+ TGC alignment column 3
+ CCA alignment column 4
+ ||| ...
+ GCC alignment column 7
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'phylip' format
 Testing reading nexus format file Nexus/f1.nex
  ID and Name='t2 the name',
  Seq='ACGT', length=4
@@ -303,6 +329,10 @@ Testing reading genbank format file GenBank/blank_seq.gb
 Testing reading genbank format file GenBank/dbsource_wrap.gb
  ID = 'P01485', Name='SCX3_BUTOC',
  Seq='VKDGYIVDDRNCTYFCGRNAYCNEECTKLKGESGYCQWAS...KGPGRCN', length=64
+ Checking can write/read as 'fasta' format
+Testing reading genbank format file GFF/NC_001422.gbk
+ ID = 'NC_001422.1', Name='NC_001422',
+ Seq='GAGTTTTATCGCTTCCATGACGCAGAAGTTAACACTTTCG...ACCTGCA', length=5386
  Checking can write/read as 'fasta' format
 Testing reading embl format file EMBL/TRBG361.embl
  ID and Name='X56734',
