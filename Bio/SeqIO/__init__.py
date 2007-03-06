@@ -13,14 +13,15 @@
 
 Input
 =====
-The main function is SequenceIterator(...) which takes an input file handle,
+The main function is Bio.SeqIO.parse(...) which takes an input file handle,
 and format string.  This returns an iterator giving SeqRecord objects.
 
+    from Bio import SeqIO
     handle = open("example.fasta", "rU")
-    for record in SequenceIterator(handle, "fasta") :
+    for record in SeqIO.parse(handle, "fasta") :
         print record
 
-Note that the SequenceIterator function will all invoke the relevant parser for
+Note that the parse() function will all invoke the relevant parser for
 the format with its default settings.  You may want more control, in which case
 you need to create a format specific sequence iterator directly.
 
@@ -31,15 +32,17 @@ However, an iterator only lets you access the records one by one.
 
 If you want random access to the records by number, turn this into a list:
 
+    from Bio import SeqIO
     handle = open("example.fasta", "rU")
-    records = list(SequenceIterator(handle, "fasta"))
+    records = list(SeqIO.parse(handle, "fasta"))
     print records[0]
 
 If you want random access to the records by a key such as the record id, turn
 the iterator into a dictionary:
 
+    from Bio import SeqIO
     handle = open("example.fasta", "rU")
-    record_dict = SequencesToDict(SequenceIterator(handle, "format"))
+    record_dict = SeqIO.SequencesToDict(SeqIO.parse(handle, "format"))
     print record["gi:12345678"]
 
 
@@ -48,22 +51,31 @@ Input - Alignments
 Currently an alignment class cannot be created from SeqRecord objects.
 Instead, use the SequencesToAlignment(...) function, like so:
 
+    from Bio import SeqIO
     handle = open("example.aln", "rU")
-    alignment = SequencesToAlignment(SequenceIterator(handle, "clustal"))
-    
+    alignment = SeqIO.SequencesToAlignment(SeqIO.parse(handle, "clustal"))
+
+This function may be removed in future once alignments can be created
+directly from SeqRecord objects.
 
 Output
 ======
-Use the function WriteSequences(...), which takes a complete set of SeqRecord
+Use the function Bio.SeqIO.write(...), which takes a complete set of SeqRecord
 objects (either as a list, or an iterator), an output file handle and of course
 the file format.
+
+    from Bio import SeqIO
+    records = ...
+    handle = open("example.faa", "w")
+    alignment = SeqIO.write(records, handle, "fasta")
+    handle.close()
 
 In general, you are expected to call this function once (with all your records)
 and then close the file handle.
 
 Output - Advanced
 =================
-The effect of calling WriteSequences multiple times on a single file will vary
+The effect of calling write() multiple times on a single file will vary
 depending on the file format, and is best avoided unless you have a strong reason
 to do so.
 
@@ -72,7 +84,7 @@ have the effect of concatenating several multiple sequence alignments together.
 Such files are created by the PHYLIP suite of programs for bootstrap analysis.
 
 For sequential files formats (e.g. fasta, genbank) each "record block" holds a
-single sequence.  For these files it would probably be safe to call WriteSequences
+single sequence.  For these files it would probably be safe to call write()
 multiple times.
 
 If you are using a sequential file format, you may want to write out the records
@@ -171,7 +183,7 @@ _FormatToWriter ={"fasta" : FastaIO.FastaWriter,
                   "clustal" : ClustalIO.ClustalWriter,
                   }
 
-def WriteSequences(sequences, handle, format) :
+def write(sequences, handle, format) :
     """Write complete set of sequences to a file
 
     sequences - A list (or iterator) of SeqRecord objects
@@ -205,7 +217,7 @@ def WriteSequences(sequences, handle, format) :
     #handle.close()
     return
     
-def SequenceIterator(handle, format) :
+def parse(handle, format) :
     """Turns a sequence file into a iterator returning SeqRecords
 
     handle   - handle to the file.
@@ -213,12 +225,14 @@ def SequenceIterator(handle, format) :
 
     If you have the file name in a string 'filename', use:
 
-    my_iterator = SequenceIterator(open(filename,"rU"), format)
+    from Bio import SeqIO
+    my_iterator = SeqIO.parse(open(filename,"rU"), format)
 
     If you have a string 'data' containing the file contents, use:
 
+    from Bio import SeqIO
     from StringIO import StringIO
-    my_iterator = SequenceIterator(StringIO(data), format)
+    my_iterator = SeqIO.parse(StringIO(data), format)
 
     Note that file will be parsed with default settings,
     which may result in a generic alphabet or other non-ideal
@@ -264,8 +278,9 @@ def SequencesToDict(sequences, key_function=None) :
 
     Example usage:
 
+    from Bio import SeqIO
     filename = "example.fasta"
-    d = SequencesToDict(FastaIterator(open(faa_filename, "rU")),
+    d = SeqIO.SequencesToDict(SeqIO.parse(open(faa_filename, "rU")),
         key_function = lambda rec : rec.description.split()[0])
     print len(d)
     print d.keys()[0:10]
@@ -1271,11 +1286,11 @@ SQ   SEQUENCE   102 AA;  10576 MW;  CFBAA1231C3A5E92 CRC64;
         
         print "%s file with %i records" % (format, rec_count)
         
-        print "SequenceIterator(handle)"
+        print "Bio.SeqIO.parse(handle)"
 
         #Basic check, turning the iterator into a list...
         #This uses "for x in iterator" interally.
-        iterator = SequenceIterator(StringIO(data), format=format)
+        iterator = parse(StringIO(data), format=format)
         as_list = list(iterator)
         assert len(as_list) == rec_count, \
             "Expected %i records, found %i" \
@@ -1287,7 +1302,7 @@ SQ   SEQUENCE   102 AA;  10576 MW;  CFBAA1231C3A5E92 CRC64;
             assert as_list[-1].seq.tostring() == last_seq
 
         #Test iteration including use of the next() method and "for x in iterator"
-        iterator = SequenceIterator(StringIO(data), format=format)
+        iterator = parse(StringIO(data), format=format)
         count = 1
         record = iterator.next()
         assert record is not None
@@ -1302,7 +1317,7 @@ SQ   SEQUENCE   102 AA;  10576 MW;  CFBAA1231C3A5E92 CRC64;
         assert record.id == last_id
 
         #Test iteration using just next() method
-        iterator = SequenceIterator(StringIO(data), format=format)
+        iterator = parse(StringIO(data), format=format)
         count = 0
         while True :
             try :
@@ -1315,20 +1330,20 @@ SQ   SEQUENCE   102 AA;  10576 MW;  CFBAA1231C3A5E92 CRC64;
             count=count+1
         assert count == rec_count
 
-        print "SequenceIterator(handle)"
-        iterator = SequenceIterator(StringIO(data), format=format)
+        print "parse(handle)"
+        iterator = parse(StringIO(data), format=format)
         for (i, record) in enumerate(iterator) :
             assert record.id == as_list[i].id
             assert record.seq.tostring() == as_list[i].seq.tostring()            
         assert i+1 == rec_count
 
-        print "SequenceIterator(handle to empty file)"
-        iterator = SequenceIterator(StringIO(""), format=format)
+        print "parse(handle to empty file)"
+        iterator = parse(StringIO(""), format=format)
         assert len(list(iterator))==0
 
         if dict_check :
-            print "SequencesToDict(SequenceIterator(...))"
-            seq_dict = SequencesToDict(SequenceIterator(StringIO(data), format=format))
+            print "SequencesToDict(parse(...))"
+            seq_dict = SequencesToDict(parse(StringIO(data), format=format))
             assert Set(seq_dict.keys()) == Set([r.id for r in as_list])
             assert last_id in seq_dict
             assert seq_dict[last_id].seq.tostring() == as_list[-1].seq.tostring()
@@ -1336,8 +1351,8 @@ SQ   SEQUENCE   102 AA;  10576 MW;  CFBAA1231C3A5E92 CRC64;
         if len(Set([len(r.seq) for r in as_list]))==1 :
             #All the sequences in the example are the same length,
             #so it make sense to try turning this file into an alignment.
-            print "SequencesToAlignment(SequenceIterator(handle))"
-            alignment = SequencesToAlignment(SequenceIterator(handle = StringIO(data), format=format))
+            print "SequencesToAlignment(parse(handle))"
+            alignment = SequencesToAlignment(parse(handle = StringIO(data), format=format))
             assert len(alignment._records)==rec_count
             assert alignment.get_alignment_length() == len(as_list[0].seq)
             for i in range(0, rec_count) :
@@ -1348,24 +1363,24 @@ SQ   SEQUENCE   102 AA;  10576 MW;  CFBAA1231C3A5E92 CRC64;
 
         print
         
-    print "Checking phy <-> aln examples agree using list(SequenceIterator(...))"
+    print "Checking phy <-> aln examples agree using list(parse(...))"
     #Only compare the first 10 characters of the record.id as they
-    #are truncated in the phylip file.  Cannot use SequencesToDict(SequenceIterator(...))
+    #are truncated in the phylip file.  Cannot use SequencesToDict(parse(...))
     #on the phylip file as there is a repeared id.
-    aln_list = list(SequenceIterator(StringIO(aln_example), format="clustal"))
-    phy_list = list(SequenceIterator(StringIO(phy_example), format="phylip"))
+    aln_list = list(parse(StringIO(aln_example), format="clustal"))
+    phy_list = list(parse(StringIO(phy_example), format="phylip"))
     assert len(aln_list) == len(phy_list)
     assert Set([r.id[0:10] for r in aln_list]) == Set([r.id for r in phy_list])
     for i in range(0, len(aln_list)) :
         assert aln_list[i].id[0:10] == phy_list[i].id
         assert aln_list[i].seq.tostring() == phy_list[i].seq.tostring()
         
-    print "Checking nxs <-> aln examples agree using SequenceIterator"
+    print "Checking nxs <-> aln examples agree using parse"
     #Only compare the first 10 characters of the record.id as they
-    #are truncated in the phylip file.  Cannot use SequencesToDict(SequenceIterator(...))
+    #are truncated in the phylip file.  Cannot use SequencesToDict(parse(...))
     #on the phylip file as there is a repeared id.
-    aln_iter = SequenceIterator(StringIO(aln_example), format="clustal")
-    nxs_iter = SequenceIterator(StringIO(nxs_example), format="nexus")
+    aln_iter = parse(StringIO(aln_example), format="clustal")
+    nxs_iter = parse(StringIO(nxs_example), format="nexus")
     while True :
         try :
             aln_record = aln_iter.next()
@@ -1382,10 +1397,10 @@ SQ   SEQUENCE   102 AA;  10576 MW;  CFBAA1231C3A5E92 CRC64;
         assert aln_record.id == nxs_record.id
         assert aln_record.seq.tostring() == nxs_record.seq.tostring()
     
-    print "Checking faa <-> aln examples agree using SequencesToDict(SequenceIterator(...)"
+    print "Checking faa <-> aln examples agree using SequencesToDict(parse(...)"
     #In my examples, aln_example is an alignment of faa_example
-    aln_dict = SequencesToDict(SequenceIterator(StringIO(aln_example), format="clustal"))
-    faa_dict = SequencesToDict(SequenceIterator(StringIO(faa_example), format="fasta"))
+    aln_dict = SequencesToDict(parse(StringIO(aln_example), format="clustal"))
+    faa_dict = SequencesToDict(parse(StringIO(faa_example), format="fasta"))
 
     ids = Set(aln_dict.keys())
     assert ids == Set(faa_dict.keys())
@@ -1405,7 +1420,7 @@ SQ   SEQUENCE   102 AA;  10576 MW;  CFBAA1231C3A5E92 CRC64;
     alignment_formats = ["phylip","stockholm","clustal"]
     for (in_data, in_format, rec_count, last_id, last_seq, unique_ids) in tests:
         if unique_ids :
-            in_list =  list(SequenceIterator(StringIO(in_data), format=in_format))
+            in_list =  list(parse(StringIO(in_data), format=in_format))
             seq_lengths = [len(r.seq) for r in in_list]
             output_formats = general_output_formats[:]
             if min(seq_lengths)==max(seq_lengths) :
@@ -1416,15 +1431,15 @@ SQ   SEQUENCE   102 AA;  10576 MW;  CFBAA1231C3A5E92 CRC64;
             for out_format in output_formats :
                 print "Converting %s iterator -> %s" % (in_format, out_format)
                 output = open("temp.txt","w")
-                iterator = SequenceIterator(StringIO(in_data), format=in_format)
+                iterator = parse(StringIO(in_data), format=in_format)
                 #I am using an iterator here deliberately, as some format
                 #writers (e.g. phylip and stockholm) will have to cope with
                 #this and get the record count.
-                WriteSequences(iterator, output, out_format)
+                write(iterator, output, out_format)
                 output.close()
 
                 print "Checking %s <-> %s" % (in_format, out_format)
-                out_list = list(SequenceIterator(open("temp.txt","rU"), format=out_format))
+                out_list = list(parse(open("temp.txt","rU"), format=out_format))
 
                 assert rec_count == len(out_list)
                 if last_seq :
