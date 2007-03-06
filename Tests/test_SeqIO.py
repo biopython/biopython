@@ -4,8 +4,13 @@
 # as part of this package.
 
 import os
-from types import *
-from Bio.SeqIO import *
+
+# The use of "import as" was to make life easy when I renamed the
+# main functions.  Perhaps I should do a search and replace instead...
+from Bio.SeqIO import parse as SequenceIterator
+from Bio.SeqIO import write as WriteSequences
+from Bio.SeqIO import SequencesToAlignment, SequencesToDict
+
 from Bio.SeqRecord import SeqRecord
 from Bio.Seq import Seq
 from StringIO import StringIO
@@ -48,6 +53,9 @@ test_files = [ \
     ("fasta",  False, 'GFF/NC_001802.fna', 1), #upper case
     ("fasta",  False, 'GFF/NC_001802lc.fna', 1), #lower case
     ("fasta",  True,  'GFF/multi.fna', 3), #Trivial nucleotide alignment
+#Following trivial examples are also used in test_Wise.py
+#    ("fasta",  False, 'Wise/human_114_g01_exons.fna_01', 1),
+#    ("fasta",  False, 'Wise/human_114_g02_exons.fna_01', 1),
 #Following examples are also used in test_Nexus.py (but not all of them?)
     ("nexus",  True,  'Nexus/f1.nex', 7),
     ("nexus",  True,  'Nexus/f2.nex', 9),
