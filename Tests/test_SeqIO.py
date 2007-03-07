@@ -5,12 +5,7 @@
 
 import os
 
-# The use of "import as" was to make life easy when I renamed the
-# main functions.  Perhaps I should do a search and replace instead...
-from Bio.SeqIO import parse as SequenceIterator
-from Bio.SeqIO import write as WriteSequences
-from Bio.SeqIO import SequencesToAlignment, SequencesToDict
-
+from Bio import SeqIO
 from Bio.SeqRecord import SeqRecord
 from Bio.Seq import Seq
 from StringIO import StringIO
@@ -160,11 +155,11 @@ def check_simple_write_read(records, formats, indent=" ") :
         
         #Going to write to a handle...
         handle = StringIO()
-        WriteSequences(sequences=records, handle=handle, format=format)
+        SeqIO.write(sequences=records, handle=handle, format=format)
         handle.flush()
         handle.seek(0)
         #Now ready to read back from the handle...
-        records2 = list(SequenceIterator(handle=handle, format=format))
+        records2 = list(SeqIO.parse(handle=handle, format=format))
 
         assert len(records2) == t_count
         for i in range(t_count) :
@@ -181,18 +176,18 @@ for (t_format, t_alignment, t_filename, t_count) in test_files :
     assert os.path.isfile(t_filename)
 
     #Try as an iterator using handle
-    records  = list(SequenceIterator(handle=open(t_filename,"rU"), format=t_format))
+    records  = list(SeqIO.parse(handle=open(t_filename,"rU"), format=t_format))
     assert len(records)  == t_count
 
     #Try using the iterator with a for loop
     records2 = []
-    for record in SequenceIterator(handle=open(t_filename,"rU"), format=t_format) :
+    for record in SeqIO.parse(handle=open(t_filename,"rU"), format=t_format) :
         records2.append(record)
     assert len(records2) == t_count
 
     #Try using the iterator with the next() method
     records3 = []
-    seq_iterator = SequenceIterator(handle=open(t_filename,"rU"), format=t_format)
+    seq_iterator = SeqIO.parse(handle=open(t_filename,"rU"), format=t_format)
     while True :
         try :
             record = seq_iterator.next()
@@ -204,7 +199,7 @@ for (t_format, t_alignment, t_filename, t_count) in test_files :
             break
 
     #Try a mixture of next() and list (a torture test!)
-    seq_iterator = SequenceIterator(handle=open(t_filename,"rU"), format=t_format)
+    seq_iterator = SeqIO.parse(handle=open(t_filename,"rU"), format=t_format)
     try :
         record = seq_iterator.next()
     except StopIteration :
@@ -217,7 +212,7 @@ for (t_format, t_alignment, t_filename, t_count) in test_files :
     assert len(records4) == t_count
 
     #Try a mixture of next() and for loop (a torture test!)
-    seq_iterator = SequenceIterator(handle=open(t_filename,"rU"), format=t_format)
+    seq_iterator = SeqIO.parse(handle=open(t_filename,"rU"), format=t_format)
     try :
         record = seq_iterator.next()
     except StopIteration :
@@ -258,8 +253,8 @@ for (t_format, t_alignment, t_filename, t_count) in test_files :
         print "Testing reading %s format file %s as an alignment" \
               % (t_format, t_filename)
 
-        #Using SequencesToAlignment(SequenceIterator(...))
-        alignment = SequencesToAlignment(SequenceIterator( \
+        #Using SeqIO.to_alignment(SeqIO.parse(...))
+        alignment = SeqIO.to_alignment(SeqIO.parse( \
                     handle=open(t_filename,"rU"), format=t_format))
         assert len(alignment.get_all_seqs()) == t_count
 
