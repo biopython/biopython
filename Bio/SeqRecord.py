@@ -36,6 +36,7 @@ class SeqRecord:
         name        - Seqeuence name, optional (string)
         description - Seqeuence description, optional (string)
         dbxrefs     - Database cross references, optional (list of strings)
+        features    - Any (sub)features, optional (list of SeqFeature objects)
 
         Note that while an id is optional, we strongly recommend you supply a
         unique id string for each record.  This is especially important
