@@ -42,18 +42,18 @@ the iterator into a dictionary:
 
     from Bio import SeqIO
     handle = open("example.fasta", "rU")
-    record_dict = SeqIO.SequencesToDict(SeqIO.parse(handle, "format"))
+    record_dict = SeqIO.to_dict(SeqIO.parse(handle, "format"))
     print record["gi:12345678"]
 
 
 Input - Alignments
 ==================
 Currently an alignment class cannot be created from SeqRecord objects.
-Instead, use the SequencesToAlignment(...) function, like so:
+Instead, use the to_alignment(...) function, like so:
 
     from Bio import SeqIO
     handle = open("example.aln", "rU")
-    alignment = SeqIO.SequencesToAlignment(SeqIO.parse(handle, "clustal"))
+    alignment = SeqIO.to_alignment(SeqIO.parse(handle, "clustal"))
 
 This function may be removed in future once alignments can be created
 directly from SeqRecord objects.
@@ -103,7 +103,7 @@ The modules Bio.SeqIO.FASTA and Bio.SeqIO.generic are considered to be depreciat
 # - define policy on reading aligned sequences with gaps in
 #   (e.g. - and . characters) including how the alphabet interacts
 #
-# - Can we build the SequencesToAlignment(...) functionality
+# - Can we build the to_alignment(...) functionality
 #   into the generic Alignment class instead?
 #
 # - How best to handle unique/non unique record.id when writing.
@@ -259,7 +259,7 @@ def parse(handle, format) :
     #Its up to the caller to close this handle - they opened it.
     return iterator_generator(handle)
 
-def SequencesToDict(sequences, key_function=None) :
+def to_dict(sequences, key_function=None) :
     """Turns a sequence iterator or list into a dictionary
 
     sequences  - An iterator that returns SeqRecord objects,
@@ -280,7 +280,7 @@ def SequencesToDict(sequences, key_function=None) :
 
     from Bio import SeqIO
     filename = "example.fasta"
-    d = SeqIO.SequencesToDict(SeqIO.parse(open(faa_filename, "rU")),
+    d = SeqIO.to_dict(SeqIO.parse(open(faa_filename, "rU")),
         key_function = lambda rec : rec.description.split()[0])
     print len(d)
     print d.keys()[0:10]
@@ -298,7 +298,7 @@ def SequencesToDict(sequences, key_function=None) :
         d[key] = record
     return d
 
-def SequencesToAlignment(sequences, alphabet=generic_alphabet, strict=True) :
+def to_alignment(sequences, alphabet=generic_alphabet, strict=True) :
     """Returns a multiple sequence alignment
 
     sequences -An iterator that returns SeqRecord objects,
@@ -1342,8 +1342,8 @@ SQ   SEQUENCE   102 AA;  10576 MW;  CFBAA1231C3A5E92 CRC64;
         assert len(list(iterator))==0
 
         if dict_check :
-            print "SequencesToDict(parse(...))"
-            seq_dict = SequencesToDict(parse(StringIO(data), format=format))
+            print "to_dict(parse(...))"
+            seq_dict = to_dict(parse(StringIO(data), format=format))
             assert Set(seq_dict.keys()) == Set([r.id for r in as_list])
             assert last_id in seq_dict
             assert seq_dict[last_id].seq.tostring() == as_list[-1].seq.tostring()
@@ -1351,8 +1351,8 @@ SQ   SEQUENCE   102 AA;  10576 MW;  CFBAA1231C3A5E92 CRC64;
         if len(Set([len(r.seq) for r in as_list]))==1 :
             #All the sequences in the example are the same length,
             #so it make sense to try turning this file into an alignment.
-            print "SequencesToAlignment(parse(handle))"
-            alignment = SequencesToAlignment(parse(handle = StringIO(data), format=format))
+            print "to_alignment(parse(handle))"
+            alignment = to_alignment(parse(handle = StringIO(data), format=format))
             assert len(alignment._records)==rec_count
             assert alignment.get_alignment_length() == len(as_list[0].seq)
             for i in range(0, rec_count) :
@@ -1365,7 +1365,7 @@ SQ   SEQUENCE   102 AA;  10576 MW;  CFBAA1231C3A5E92 CRC64;
         
     print "Checking phy <-> aln examples agree using list(parse(...))"
     #Only compare the first 10 characters of the record.id as they
-    #are truncated in the phylip file.  Cannot use SequencesToDict(parse(...))
+    #are truncated in the phylip file.  Cannot use to_dict(parse(...))
     #on the phylip file as there is a repeared id.
     aln_list = list(parse(StringIO(aln_example), format="clustal"))
     phy_list = list(parse(StringIO(phy_example), format="phylip"))
@@ -1377,7 +1377,7 @@ SQ   SEQUENCE   102 AA;  10576 MW;  CFBAA1231C3A5E92 CRC64;
         
     print "Checking nxs <-> aln examples agree using parse"
     #Only compare the first 10 characters of the record.id as they
-    #are truncated in the phylip file.  Cannot use SequencesToDict(parse(...))
+    #are truncated in the phylip file.  Cannot use to_dict(parse(...))
     #on the phylip file as there is a repeared id.
     aln_iter = parse(StringIO(aln_example), format="clustal")
     nxs_iter = parse(StringIO(nxs_example), format="nexus")
@@ -1397,10 +1397,10 @@ SQ   SEQUENCE   102 AA;  10576 MW;  CFBAA1231C3A5E92 CRC64;
         assert aln_record.id == nxs_record.id
         assert aln_record.seq.tostring() == nxs_record.seq.tostring()
     
-    print "Checking faa <-> aln examples agree using SequencesToDict(parse(...)"
+    print "Checking faa <-> aln examples agree using to_dict(parse(...)"
     #In my examples, aln_example is an alignment of faa_example
-    aln_dict = SequencesToDict(parse(StringIO(aln_example), format="clustal"))
-    faa_dict = SequencesToDict(parse(StringIO(faa_example), format="fasta"))
+    aln_dict = to_dict(parse(StringIO(aln_example), format="clustal"))
+    faa_dict = to_dict(parse(StringIO(faa_example), format="fasta"))
 
     ids = Set(aln_dict.keys())
     assert ids == Set(faa_dict.keys())
