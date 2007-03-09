@@ -279,3 +279,21 @@ for (t_format, t_alignment, t_filename, t_count) in test_files :
         check_simple_write_read(records, test_write_read_non_alignment_formats)
 
 print "Finished tested reading files with Bio.SeqIO"
+
+for format in ["fasta", "clustal", "phylip", "stockholm"] :
+    print "Testing writing zero records in %s format" % format
+    handle = StringIO()
+    print " -writing...",
+    try :
+        SeqIO.write([], handle, format)
+        print "done"
+    except ValueError, e:
+        print "failed: %s" % str(e)
+    else :
+        print " -reading back...",
+        handle.seek(0)
+        assert len(list(SeqIO.parse(handle, format))) == 0
+        print "done"
+    handle.close()
+        
+print "Finished tested writing files with Bio.SeqIO"
