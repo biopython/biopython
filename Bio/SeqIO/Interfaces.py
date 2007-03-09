@@ -223,7 +223,8 @@ class SequentialSequenceWriter(SequenceWriter):
         assert not self._footer_written, "You have already called write_footer()"
         for record in records :
             self.write_record(record)
-        assert self._record_written, "No records written!"
+        #Mark as true, even if there where no records
+        self._record_written = True
 
     def write_file(self, records) :
         """Use this to write an entire file containing the given records.
