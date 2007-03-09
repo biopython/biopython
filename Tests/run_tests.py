@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """Run a set of PyUnit-based regression tests.
 
-This will find all modules whose name is "test_*" in the test
+This will find all modules whose name is "test_*.py" in the test
 directory, and run them.  Various command line options provide
 additional facilities.
 
@@ -13,6 +13,7 @@ Command line options:
 --help        -- show usage info
 <test_name>   -- supply the name of one (or more) tests to be run. Supplying
                  the name of tests automatically switches to non-gui mode.
+                 The .py file extension is optional.
 """
 # standard modules
 import sys
@@ -28,7 +29,7 @@ import unittest
 import distutils.util
 
 def main(argv):
-    # insert our pathes in sys.path:
+    # insert our paths in sys.path:
     # ../build/lib.*
     # ..
     # Q. Why this order?
