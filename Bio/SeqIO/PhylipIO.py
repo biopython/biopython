@@ -107,14 +107,13 @@ class PhylipWriter(SequenceWriter):
             raise ValueError("Must have at least one sequence")
         length_of_sequences = len(records[0].seq)
         for record in records :
-            if length_of_sequences <> len(records[0].seq) :
-                raise ValueError, "Sequences must all be the same length"
+            if length_of_sequences <> len(record.seq) :
+                raise ValueError("Sequences must all be the same length")
         if length_of_sequences <= 0 :
-            raise ValueError, "Non-empty sequences are required"
+            raise ValueError("Non-empty sequences are required")
         
         if len(records) > len(Set([r.id[:self.truncate] for r in records])) :
-            print "WARNING - Truncation to length %i will create ambiguous names" \
-                  % self.truncate
+            raise ValueError("Repeated identifier, possibly due to truncation")
 
         handle = self.handle
 
