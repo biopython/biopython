@@ -285,6 +285,13 @@ class StockholmWriter(SequentialSequenceWriter):
                        "organism_classification" : "OC",
                        "look" : "LO"}
 
+    def __init__(self, handle):
+        """Creates the writer object
+
+        Use the method write_file() to actually record your sequence records."""
+        SequentialSequenceWriter.__init__(self, handle)
+        self._ids_written = []
+
     def write_header(self, count):
         """Must supply the number of records (count)"""
         SequentialSequenceWriter.write_header(self) # sets flags
@@ -340,6 +347,9 @@ class StockholmWriter(SequentialSequenceWriter):
                                         str(record.annotations["start"]),
                                         str(record.annotations["end"]))
 
+        if seq_name in self._ids_written :
+            raise ValueError("Duplicate record identifier: %s" % seq_name)
+        self._ids_written.append(seq_name)
         self.handle.write("%s %s\n" % (seq_name, record.seq.tostring()))
 
         #The recommended placement for GS lines (per sequence annotation)
