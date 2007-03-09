@@ -148,6 +148,17 @@ class StockholmIterator(InterlacedSequenceIterator) :
         #assert len(gs)   <= len(ids)
         #assert len(gr)   <= len(ids)
 
+        #This is some paranoia based on some pathelogical test cases.
+        if ids and seqs :
+            align_len = None
+            for id, seq in seqs.iteritems() :
+                assert id in ids
+                if align_len is None :
+                    align_len = len(seq)
+                elif align_len <> len(seq) :
+                    raise SyntaxError("Sequences have different lengths, or repeated identifier")
+            
+
         self.ids = ids
         self.sequences = seqs
         self.seq_annotation = gs
