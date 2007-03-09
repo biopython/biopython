@@ -9,12 +9,13 @@ from Bio import SeqIO
 from Bio.SeqRecord import SeqRecord
 from Bio.Seq import Seq
 from StringIO import StringIO
+from Bio.Alphabet import generic_protein, generic_rna, generic_dna
 
 #List of non-alignment file formats we can read AND write:
 test_write_read_non_alignment_formats = ["fasta"]
 #Longer list including alignment only file formats we can read AND write:
 test_write_read_alignment_formats = test_write_read_non_alignment_formats[:]
-test_write_read_alignment_formats.extend(["stockholm", "phylip"])
+test_write_read_alignment_formats.extend(["stockholm", "phylip", "clustal"])
 
 # test_files is a list of tuples containing:
 # - string:  file format
@@ -99,6 +100,29 @@ test_files = [ \
     ("phylip",    True,  'Phylip/random.phy', 10),
     ("phylip",    True,  'Phylip/interlaced.phy', 3),
     ("phylip",    True,  'Phylip/interlaced2.phy', 4),
+    ]
+
+# This is a list of tuples.  Each tuple contains a
+# list of SeqRecord objects and a description (string)
+test_records = [
+    ([], "zero records"),
+    ([SeqRecord(Seq("CHSMAIKLSSEHNIPSGIANAL",generic_protein), id="Alpha"),
+      SeqRecord(Seq("HNGFTALEGEIHHLTHGEKVAF",generic_protein), id="Gamma"),
+      SeqRecord(Seq("DITHGVG",generic_protein), id="delta")],
+     "three peptides of different lengths"),
+    ([SeqRecord(Seq("CHSMAIKLSSEHNIPSGIANAL",generic_protein), id="Alpha"),
+      SeqRecord(Seq("VHGMAHPLGAFYNTPHGVANAI",generic_protein), id="Beta"),
+      SeqRecord(Seq("HNGFTALEGEIHHLTHGEKVAF",generic_protein), id="Gamma")],
+     "three proteins alignment"),
+    ([SeqRecord(Seq("AATAAACCTTGCTGGCCATTGTGATCCATCCA",generic_dna), id="X"),
+      SeqRecord(Seq("ACTCAACCTTGCTGGTCATTGTGACCCCAGCA",generic_dna), id="Y"),
+      SeqRecord(Seq("TTTCCTCGGAGGCCAATCTGGATCAAGACCAT",generic_dna), id="Z")],
+     "three DNA sequence alignment"),
+    ([SeqRecord(Seq("CHSMAIKLSSEHNIPSGIANAL",generic_protein), id="Alpha"),
+      SeqRecord(Seq("VHGMAHPLGAFYNTPHGVANAI",generic_protein), id="Beta"),
+      SeqRecord(Seq("VHGMAHPLGAFYNTPHGVANAI",generic_protein), id="Beta"),
+      SeqRecord(Seq("HNGFTALEGEIHHLTHGEKVAF",generic_protein), id="Gamma")],
+     "alignment with repeated record"),
     ]
 
 def records_match(record_one, record_two) :
@@ -278,22 +302,46 @@ for (t_format, t_alignment, t_filename, t_count) in test_files :
     else :
         check_simple_write_read(records, test_write_read_non_alignment_formats)
 
-print "Finished tested reading files with Bio.SeqIO"
+print "Finished tested reading files"
+print
+print "Starting testing writing records"
+print "(Note that some of these are expected to 'fail' and say why)"
+print
+for (records, descr) in test_records :
+    print "Testing can write/read %s" % descr
+    for format in test_write_read_alignment_formats :
+        print " Checking can write/read as '%s' format" % format
 
-for format in ["fasta", "clustal", "phylip", "stockholm"] :
-    print "Testing writing zero records in %s format" % format
-    handle = StringIO()
-    print " -writing...",
-    try :
-        SeqIO.write([], handle, format)
-        print "done"
-    except ValueError, e:
-        print "failed: %s" % str(e)
-    else :
-        print " -reading back...",
+        #################
+        # Write records #
+        #################
+        handle = StringIO()
+        try :
+            SeqIO.write(records, handle, format)
+        except ValueError, e:
+            #This is expected to happen on many of the examples.
+            print " Failed: %s" % str(e)
+            continue #goto next test
+
+        #################
+        # Read records  #
+        #################
         handle.seek(0)
-        assert len(list(SeqIO.parse(handle, format))) == 0
-        print "done"
-    handle.close()
+        try :
+            new_records = list(SeqIO.parse(handle, format))
+        except SyntaxError, e :
+            #THIS INDICATES A SIGNIFICANT PROBLEM,
+            #as we can't read the file we just wrote!
+            print " FAILED: %s" % str(e)
+            continue #goto next test
+        handle.close()
+
+        #################
+        # Check records #
+        #################
+        assert len(new_records) == len(records)
+        for record, new_record in zip(records, new_records) :
+            assert record.id == new_record.id
+            assert record.seq.tostring() == new_record.seq.tostring()
         
-print "Finished tested writing files with Bio.SeqIO"
+print "Finished tested writing files"

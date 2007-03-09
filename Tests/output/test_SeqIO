@@ -15,6 +15,7 @@ Testing reading clustal format file Clustalw/cw02.aln as an alignment
  Checking can write/read as 'fasta' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'phylip' format
+ Checking can write/read as 'clustal' format
 Testing reading clustal format file Clustalw/opuntia.aln
  ID = 'gi|6273285|gb|AF191659.1|AF191', Name='<unknown name>',
  Seq='TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCG...TACCAGA', length=156
@@ -41,6 +42,7 @@ Testing reading clustal format file Clustalw/opuntia.aln as an alignment
  Checking can write/read as 'fasta' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'phylip' format
+ Checking can write/read as 'clustal' format
 Testing reading fasta format file Nucleic/lupine.nu
  ID and Name='gi|5049839|gb|AI730987.1|AI730987',
  Seq='GAAAATTCATTTTCTTTGGACTTTCTCTGAAATCCGAGTC...GGTTTTT', length=655
@@ -129,6 +131,7 @@ Testing reading fasta format file GFF/multi.fna as an alignment
  Checking can write/read as 'fasta' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'phylip' format
+ Checking can write/read as 'clustal' format
 Testing reading nexus format file Nexus/f1.nex
  ID and Name='t2 the name',
  Seq='ACGT', length=4
@@ -152,6 +155,7 @@ Testing reading nexus format file Nexus/f1.nex as an alignment
  Checking can write/read as 'fasta' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'phylip' format
+ Checking can write/read as 'clustal' format
 Testing reading nexus format file Nexus/f2.nex
  ID and Name='t1',
  Seq='A-CG-T-gttgtctc-t------a-gttgtctct-t-t', length=38
@@ -182,6 +186,7 @@ Testing reading nexus format file Nexus/f2.nex as an alignment
  Checking can write/read as 'fasta' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'phylip' format
+ Checking can write/read as 'clustal' format
 Testing reading nexus format file Nexus/test_Nexus_input.nex
  ID and Name='t1',
  Seq='A-C-G-Tc-gtgtgtgctct-t-t------ac-gtgtgtgctct-t-t', length=48
@@ -212,6 +217,7 @@ Testing reading nexus format file Nexus/test_Nexus_input.nex as an alignment
  Checking can write/read as 'fasta' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'phylip' format
+ Checking can write/read as 'clustal' format
 Testing reading swiss format file SwissProt/sp001
  ID = 'Q13454', Name='N33_HUMAN',
  Seq='MGARGAPSRRRQAGRRLRYLPTGSFPFLLLLLLLCIQLGG...YSDLDFE', length=348
@@ -354,6 +360,7 @@ Testing reading stockholm format file Stockholm/simple.sth as an alignment
  Checking can write/read as 'fasta' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'phylip' format
+ Checking can write/read as 'clustal' format
 Testing reading stockholm format file Stockholm/funny.sth
  ID = 'O83071/192-246', Name='O83071',
  Seq='MTCRAQLIAVPRASSLAE--AIACAQKM----RVSRVPVYERS', length=43
@@ -376,6 +383,7 @@ Testing reading stockholm format file Stockholm/funny.sth as an alignment
  Checking can write/read as 'fasta' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'phylip' format
+ Checking can write/read as 'clustal' format
 Testing reading phylip format file Phylip/reference_dna.phy
  ID and Name='Archaeopt',
  Seq='CGATGCTTACCGC', length=13
@@ -400,6 +408,7 @@ Testing reading phylip format file Phylip/reference_dna.phy as an alignment
  Checking can write/read as 'fasta' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'phylip' format
+ Checking can write/read as 'clustal' format
 Testing reading phylip format file Phylip/reference_dna2.phy
  ID and Name='Archaeopt',
  Seq='CGATGCTTACCGCCGATGCTTACCGCCGATGCTTACCGC', length=39
@@ -424,6 +433,7 @@ Testing reading phylip format file Phylip/reference_dna2.phy as an alignment
  Checking can write/read as 'fasta' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'phylip' format
+ Checking can write/read as 'clustal' format
 Testing reading phylip format file Phylip/hennigian.phy
  ID and Name='A',
  Seq='CACACACAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAA', length=40
@@ -456,6 +466,7 @@ Testing reading phylip format file Phylip/hennigian.phy as an alignment
  Checking can write/read as 'fasta' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'phylip' format
+ Checking can write/read as 'clustal' format
 Testing reading phylip format file Phylip/horses.phy
  ID and Name='Mesohippus',
  Seq='AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', length=40
@@ -488,6 +499,7 @@ Testing reading phylip format file Phylip/horses.phy as an alignment
  Checking can write/read as 'fasta' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'phylip' format
+ Checking can write/read as 'clustal' format
 Testing reading phylip format file Phylip/random.phy
  ID and Name='A',
  Seq='CACACAACCAAACAAACCACAAAAAAAAAAAAAAAAAAAA', length=40
@@ -520,6 +532,7 @@ Testing reading phylip format file Phylip/random.phy as an alignment
  Checking can write/read as 'fasta' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'phylip' format
+ Checking can write/read as 'clustal' format
 Testing reading phylip format file Phylip/interlaced.phy
  ID and Name='CYS1_DICDI',
  Seq='-----MKVILLFVLAVFTVFVSS---------------RG...STSII--', length=384
@@ -538,6 +551,7 @@ Testing reading phylip format file Phylip/interlaced.phy as an alignment
  Checking can write/read as 'fasta' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'phylip' format
+ Checking can write/read as 'clustal' format
 Testing reading phylip format file Phylip/interlaced2.phy
  ID and Name='IXI_234',
  Seq='TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGRPCC...AGDRSHE', length=131
@@ -558,15 +572,42 @@ Testing reading phylip format file Phylip/interlaced2.phy as an alignment
  Checking can write/read as 'fasta' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'phylip' format
-Finished tested reading files with Bio.SeqIO
-Testing writing zero records in fasta format
- -writing... done
- -reading back... done
-Testing writing zero records in clustal format
- -writing... failed: Must have at least one sequence
-Testing writing zero records in phylip format
- -writing... failed: Must have at least one sequence
-Testing writing zero records in stockholm format
- -writing... done
- -reading back... done
-Finished tested writing files with Bio.SeqIO
+ Checking can write/read as 'clustal' format
+Finished tested reading files
+
+Starting testing writing records
+(Note that some of these are expected to 'fail' and say why)
+
+Testing can write/read zero records
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'phylip' format
+ Failed: Must have at least one sequence
+ Checking can write/read as 'clustal' format
+ Failed: Must have at least one sequence
+Testing can write/read three peptides of different lengths
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'stockholm' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'phylip' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'clustal' format
+ Failed: Sequences must all be the same length
+Testing can write/read three proteins alignment
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'clustal' format
+Testing can write/read three DNA sequence alignment
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'clustal' format
+Testing can write/read alignment with repeated record
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'stockholm' format
+ Failed: Duplicate record identifier: Beta
+ Checking can write/read as 'phylip' format
+ Failed: Repeated identifier, possibly due to truncation
+ Checking can write/read as 'clustal' format
+Finished tested writing files
