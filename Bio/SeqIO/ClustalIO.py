@@ -153,7 +153,7 @@ class ClustalWriter(SequenceWriter):
             if alignment_length is None :
                 alignment_length = len(record.seq)
             elif alignment_length <> len(record.seq) :
-                raise ValueError, "Sequences of different lengths"
+                raise ValueError("Sequences must all be the same length")
             
             #ToDo, check alphabet for this sequence matches that
             #specified for the alignment.  Not sure how the
