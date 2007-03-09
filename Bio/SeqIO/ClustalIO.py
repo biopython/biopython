@@ -170,6 +170,9 @@ class ClustalWriter(SequenceWriter):
             alignment.add_sequence(record.id.replace(" ","_"),
                                    record.seq.tostring())
 
+        if len(alignment.get_all_seqs()) == 0 :
+            raise ValueError("Must have at least one sequence")
+
         self.handle.write(str(alignment))
         #Don't close the handle.  Doing so would prevent this code
         #from writing concatenated Clustal files which might be used

@@ -104,7 +104,7 @@ class PhylipWriter(SequenceWriter):
         records = list(records)
 
         if len(records)==0 :
-            raise ValueError
+            raise ValueError("Must have at least one sequence")
         length_of_sequences = len(records[0].seq)
         for record in records :
             if length_of_sequences <> len(records[0].seq) :
