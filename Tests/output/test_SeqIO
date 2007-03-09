@@ -559,3 +559,14 @@ Testing reading phylip format file Phylip/interlaced2.phy as an alignment
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'phylip' format
 Finished tested reading files with Bio.SeqIO
+Testing writing zero records in fasta format
+ -writing... done
+ -reading back... done
+Testing writing zero records in clustal format
+ -writing... failed: Must have at least one sequence
+Testing writing zero records in phylip format
+ -writing... failed: Must have at least one sequence
+Testing writing zero records in stockholm format
+ -writing... done
+ -reading back... done
+Finished tested writing files with Bio.SeqIO
