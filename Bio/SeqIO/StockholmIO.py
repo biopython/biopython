@@ -291,6 +291,7 @@ class StockholmWriter(SequentialSequenceWriter):
         Use the method write_file() to actually record your sequence records."""
         SequentialSequenceWriter.__init__(self, handle)
         self._ids_written = []
+        self._length_of_sequences = None
 
     def write_header(self, count):
         """Must supply the number of records (count)"""
@@ -327,6 +328,11 @@ class StockholmWriter(SequentialSequenceWriter):
         assert self._header_written
         assert not self._footer_written
         self._record_written = True
+
+        if self._length_of_sequences is None :
+            self._length_of_sequences = len(record.seq)
+        elif self._length_of_sequences <> len(record.seq) :
+            raise ValueError("Sequences must all be the same length")
 
         #For the case for stockholm to stockholm, try and use record.name
         seq_name = record.id
