@@ -5,7 +5,7 @@
 # as part of this package.
 
 #For reading alignments:
-from Bio.Alphabet import generic_alphabet
+from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
@@ -14,7 +14,8 @@ from Bio.SeqIO.Interfaces import SequenceWriter
 from Bio.Clustalw import ClustalAlignment
 
 #This is a generator function!
-def ClustalIterator(handle, alphabet = generic_alphabet) :
+#TODO - Should the default be Gapped(single_letter_alphabet) instead?
+def ClustalIterator(handle, alphabet = single_letter_alphabet) :
     """Reads a Clustalw file returning a SeqRecord object iterator
 
     The entire file is loaded at once, but the SeqRecord objects
@@ -123,12 +124,11 @@ def ClustalIterator(handle, alphabet = generic_alphabet) :
     
 class ClustalWriter(SequenceWriter):
     """Write Clustal sequence alignments"""
-    def __init__(self, handle, truncate=10):
+    def __init__(self, handle):
         """Creates the writer object
 
         Use the method write_file() to actually record your sequence records."""
         self.handle = handle
-        self.truncate = truncate
     
     def write_file(self, records) :
         """Use this to write an entire file containing the given records.

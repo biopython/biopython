@@ -16,14 +16,15 @@ character as in the first sequence.  The PHYLIP 3.6 documentation says:
 At the time of writing, we do nothing special with a dot/period.
 """
 
-from Bio.Alphabet import generic_alphabet
+from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Interfaces import SequenceWriter
 from sets import Set
 
 #This is a generator function!
-def PhylipIterator(handle, alphabet = generic_alphabet) :
+#TODO - Should the default be Gapped(single_letter_alphabet) instead?
+def PhylipIterator(handle, alphabet = single_letter_alphabet) :
     """Reads a Phylip alignment file returning a SeqRecord object iterator
 
     Record identifiers are limited to at most 10 characters.

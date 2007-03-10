@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-from Bio.Alphabet import generic_alphabet
+from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Interfaces import InterlacedSequenceIterator, SequentialSequenceWriter
@@ -51,7 +51,8 @@ class StockholmIterator(InterlacedSequenceIterator) :
                        "OC" : "organism_classification",
                        "LO" : "look"}
 
-    def __init__(self, handle, alphabet = generic_alphabet) :
+    #TODO - Should the default be Gapped(single_letter_alphabet) instead?
+    def __init__(self, handle, alphabet = single_letter_alphabet) :
         """Create a StockholmIterator object (which returns SeqRecord objects).
 
         handle - input file
