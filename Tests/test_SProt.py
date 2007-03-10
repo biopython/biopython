@@ -2,6 +2,7 @@
 """Test for the SProt parser on SwissProt files.
 """
 import os
+from Bio.SeqRecord import SeqRecord
 from Bio.SwissProt import SProt
 
 test_files = ['sp001', 'sp002', 'sp003', 'sp004', 'sp005',
@@ -20,6 +21,8 @@ for test_file in test_files:
     test_handle = open(datafile)
     seq_record = sequence_parser.parse(test_handle)
     test_handle.close()
+
+    assert isinstance(seq_record, SeqRecord)
 
     print seq_record.id
     print seq_record.name
@@ -52,3 +55,45 @@ for test_file in test_files:
     assert seq_record.description == record.description
     assert seq_record.name == record.entry_name
     assert seq_record.id in record.accessions
+
+    #Now try using the Iterator - note that all these
+    #test cases have only one record.
+
+    #First, no parser.
+    test_handle = open(datafile)
+    records = list(SProt.Iterator(test_handle))
+    test_handle.close()
+
+    assert len(records) == 1
+    assert isinstance(records[0], basestring)
+    assert records[0][:3] == "ID "
+    assert records[0].rstrip().split("\n")[-1] == "//"
+
+    #Next, with the SequenceParser
+    test_handle = open(datafile)
+    records = list(SProt.Iterator(test_handle, sequence_parser))
+    test_handle.close()
+
+    assert len(records) == 1
+    assert isinstance(records[0], SeqRecord)
+
+    #Check matches what we got earlier without the iterator:
+    assert records[0].seq.tostring() == seq_record.seq.tostring()
+    assert records[0].description == seq_record.description
+    assert records[0].name == seq_record.name
+    assert records[0].id == seq_record.id
+    
+    #Finally, with the RecordParser
+    test_handle = open(datafile)
+    records = list(SProt.Iterator(test_handle, record_parser))
+    test_handle.close()
+
+    assert len(records) == 1
+    assert isinstance(records[0], SProt.Record)
+    
+    #Check matches what we got earlier without the iterator:
+    assert records[0].sequence == record.sequence
+    assert records[0].description == record.description
+    assert records[0].entry_name == record.entry_name
+    assert records[0].accessions == record.accessions
+    
