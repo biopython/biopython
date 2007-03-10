@@ -1435,7 +1435,14 @@ SQ   SEQUENCE   102 AA;  10576 MW;  CFBAA1231C3A5E92 CRC64;
                 #I am using an iterator here deliberately, as some format
                 #writers (e.g. phylip and stockholm) will have to cope with
                 #this and get the record count.
-                write(iterator, output, out_format)
+
+                try :
+                    write(iterator, output, out_format)
+                except ValueError, e:
+                    print "FAILED: %s" % str(e)
+                    #Try next format instead...
+                    continue
+
                 output.close()
 
                 print "Checking %s <-> %s" % (in_format, out_format)
