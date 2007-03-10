@@ -15,9 +15,21 @@ sequence_parser = SProt.SequenceParser()
 for test_file in test_files:
     print "\ntesting %s..." % test_file
     datafile = os.path.join('SwissProt', test_file)
-    test_handle = open(datafile)
 
+    print "*Using SequenceParser"
+    test_handle = open(datafile)
+    seq_record = sequence_parser.parse(test_handle)
+    test_handle.close()
+
+    print seq_record.id
+    print seq_record.name
+    print seq_record.description
+    print seq_record.seq
+
+    print "*Using RecordParser"
+    test_handle = open(datafile)
     record = record_parser.parse(test_handle)
+    test_handle.close()
 
     # test a couple of things on the record -- this is not exhaustive
     print record.entry_name
@@ -35,21 +47,8 @@ for test_file in test_files:
         print "title:", ref.title
         print "references:", ref.references
 
-    test_handle.close()
-
-# test the sequence parser
-for test_file in test_files:
-    print "\ntesting %s..." % test_file
-    datafile = os.path.join('SwissProt', test_file)
-    test_handle = open(datafile)
-
-    seq_record = sequence_parser.parse(test_handle)
-    print seq_record.id
-    print seq_record.name
-    print seq_record.description
-    print seq_record.seq
-
-    test_handle.close()
-    
-
-    
+    #Check the two parsers agree on the essentials
+    assert seq_record.seq.tostring() == record.sequence    
+    assert seq_record.description == record.description
+    assert seq_record.name == record.entry_name
+    assert seq_record.id in record.accessions

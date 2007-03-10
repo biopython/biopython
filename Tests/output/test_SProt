@@ -1,6 +1,12 @@
 test_SProt
 
 testing sp001...
+*Using SequenceParser
+Q13454
+N33_HUMAN
+N33 PROTEIN.
+Seq('MGARGAPSRRRQAGRRLRYLPTGSFPFLLLLLLLCIQLGGGQKKKENLLAEKVEQLMEWS ...', ProteinAlphabet())
+*Using RecordParser
 N33_HUMAN
 ['Q13454', 'Q14911', 'Q14912']
 ['Eukaryota', 'Metazoa', 'Chordata', 'Craniata', 'Vertebrata', 'Mammalia', 'Eutheria', 'Primates', 'Catarrhini', 'Hominidae', 'Homo']
@@ -19,6 +25,12 @@ homozygously deleted region of human chromosome band 8p22.";
 references: [('MEDLINE', '96299740')]
 
 testing sp002...
+*Using SequenceParser
+P54101
+CSP_MOUSE
+CYSTEINE STRING PROTEIN (CSP).
+Seq('MADQRQRSLSTSGESLYHVLGLDKNATSDDIKKSYRKLALKYHPDKNPDNPEAADKFKEI ...', ProteinAlphabet())
+*Using RecordParser
 CSP_MOUSE
 ['P54101']
 ['Eukaryota', 'Metazoa', 'Chordata', 'Craniata', 'Vertebrata', 'Mammalia', 'Eutheria', 'Rodentia', 'Sciurognathi', 'Muridae', 'Murinae', 'Mus']
@@ -40,6 +52,13 @@ secretory vesicles.";
 references: [('MEDLINE', '96188189')]
 
 testing sp003...
+*Using SequenceParser
+P42655
+143E_HUMAN
+14-3-3 PROTEIN EPSILON (MITOCHONDRIAL IMPORT STIMULATION FACTOR L
+SUBUNIT) (PROTEIN KINASE C INHIBITOR PROTEIN-1) (KCIP-1) (14-3-3E).
+Seq('MDDREDLVYQAKLAEQAERYDEMVESMKKVAGMDVELTVEERNLLSVAYKNVIGARRASW ...', ProteinAlphabet())
+*Using RecordParser
 143E_HUMAN
 ['P42655', 'P29360', 'Q63631']
 ['EUKARYOTA', 'METAZOA', 'CHORDATA', 'VERTEBRATA', 'MAMMALIA', 'EUTHERIA', 'PRIMATES', 'CATARRHINI', 'HOMINIDAE', 'HOMO']
@@ -105,6 +124,12 @@ and sequence similarity to lipocortins and 14-3-3 protein.";
 references: [('MEDLINE', '90345949')]
 
 testing sp004...
+*Using SequenceParser
+P23082
+NDOA_PSEPU
+NAPHTHALENE 1,2-DIOXYGENASE SYSTEM FERREDOXIN COMPONENT.
+Seq('TVKWIEAVALSDILEGDVLGVTVEGKELALYEVEGEIYATDNLCTHGSARMSDGYLEGRE ...', ProteinAlphabet())
+*Using RecordParser
 NDOA_PSEPU
 ['P23082', 'Q52123', 'O07829']
 ['Bacteria', 'Proteobacteria', 'gamma subdivision', 'Pseudomonas group', 'Pseudomonas']
@@ -142,6 +167,12 @@ title:
 references: []
 
 testing sp005...
+*Using SequenceParser
+P24973
+NU3M_BALPH
+NADH-UBIQUINONE OXIDOREDUCTASE CHAIN 3 (EC 1.6.5.3).
+Seq('MNLLLTLLTNTTLALLLVFIAFWLPQLNVYAEKTSPYECGFDPMGSARLPFSMKFFLVAI ...', ProteinAlphabet())
+*Using RecordParser
 NU3M_BALPH
 ['P24973']
 ['Eukaryota', 'Metazoa', 'Chordata', 'Craniata', 'Vertebrata', 'Mammalia', 'Eutheria', 'Cetartiodactyla', 'Cetacea', 'Mysticeti', 'Balaenopteridae', 'Balaenoptera']
@@ -158,6 +189,13 @@ fin whale, two species that can hybridize in nature.";
 references: [('MEDLINE', '94141932')]
 
 testing sp006...
+*Using SequenceParser
+P39896
+TCMO_STRGA
+TETRACENOMYCIN POLYKETIDE SYNTHESIS 8-O-METHYL TRANSFERASE TCMO
+(EC 2.1.1.-).
+Seq('MTPHTHVRGPGDILQLTMAFYGSRALISAVELDLFTLLAGKPLPLGELCERAGIHPRGAR ...', ProteinAlphabet())
+*Using RecordParser
 TCMO_STRGA
 ['P39896']
 ['BACTERIA', 'FIRMICUTES', 'ACTINOBACTERIA', 'ACTINOBACTERIDAE', 'ACTINOMYCETALES', 'STREPTOMYCINEAE', 'STREPTOMYCETACEAE', 'STREPTOMYCES']
@@ -172,6 +210,12 @@ cyclase-dehydratase-O-methyl transferase.";
 references: [('MEDLINE', '92193265')]
 
 testing sp007...
+*Using SequenceParser
+O95832
+CLD1_HUMAN
+CLAUDIN-1 (SENESCENCE-ASSOCIATED EPITHELIAL MEMBRANE PROTEIN).
+Seq('MANAGLQLLGFILAFLGWIGAIVSTALPQWRIYSYAGDNIVTAQAMYEGLWMSCVSQSTG ...', ProteinAlphabet())
+*Using RecordParser
 CLD1_HUMAN
 ['O95832']
 ['Eukaryota', 'Metazoa', 'Chordata', 'Craniata', 'Vertebrata', 'Mammalia', 'Eutheria', 'Primates', 'Catarrhini', 'Hominidae', 'Homo']
@@ -195,6 +239,12 @@ title: "Human claudin-1 isolated from Caco-2 mRNA.";
 references: []
 
 testing sp008...
+*Using SequenceParser
+Q95352
+1A02_HUMAN
+HLA CLASS I HISTOCOMPATIBILITY ANTIGEN, A-2 ALPHA CHAIN PRECURSOR.
+Seq('MAVMAPRTLVLLLSGALALTQTWAGSHSMRYFFTSVSRPGRGEPRFIAVGYVDDTQFVRF ...', ProteinAlphabet())
+*Using RecordParser
 1A02_HUMAN
 ['P01892', 'P06338', 'P30514', 'P30444', 'P30445', 'P30446', 'Q29680', 'Q29899', 'Q95352', 'Q29837', 'Q95380']
 ['Eukaryota', 'Metazoa', 'Chordata', 'Craniata', 'Vertebrata', 'Mammalia', 'Eutheria', 'Primates', 'Catarrhini', 'Hominidae', 'Homo']
@@ -387,6 +437,12 @@ title: "Refined structure of the human histocompatibility antigen HLA-A2 at
 references: [('MEDLINE', '91245570')]
 
 testing sp009...
+*Using SequenceParser
+O23729
+CHS3_BROFI
+CHALCONE SYNTHASE 3 (EC 2.3.1.74) (NARINGENIN-CHALCONE SYNTHASE 3).
+Seq('MAPAMEEIRQAQRAEGPAAVLAIGTSTPPNALYQADYPDYYFRITKSEHLTELKEKFKRM ...', ProteinAlphabet())
+*Using RecordParser
 CHS3_BROFI
 ['O23729']
 ['Eukaryota', 'Viridiplantae', 'Embryophyta', 'Tracheophyta', 'Spermatophyta', 'Magnoliophyta', 'Liliopsida', 'Asparagales', 'Orchidaceae', 'Bromheadia']
@@ -400,6 +456,12 @@ Bromheadia finlaysoniana.";
 references: []
 
 testing sp010...
+*Using SequenceParser
+Q13639
+5H4_HUMAN
+5-HYDROXYTRYPTAMINE 4 RECEPTOR (5-HT-4) (SEROTONIN RECEPTOR) (5-HT4).
+Seq('MDKLDANVSSEEGFGSVEKVVLLTFLSTVILMAILGNLLVMVAVCWDRQLRKIKTNYFIV ...', ProteinAlphabet())
+*Using RecordParser
 5H4_HUMAN
 ['Q13639', 'Q9UBM6', 'Q9UQR6', 'Q9UE22', 'Q9UE23', 'Q9UBT4', 'Q9NY73']
 ['Eukaryota', 'Metazoa', 'Chordata', 'Craniata', 'Vertebrata', 'Euteleostomi', 'Mammalia', 'Eutheria', 'Primates', 'Catarrhini', 'Hominidae', 'Homo']
@@ -457,6 +519,13 @@ title: "Expression of serotonin receptor mRNAs in blood vessels.";
 references: [('MEDLINE', '95385798'), ('PubMed', '7656980')]
 
 testing sp011...
+*Using SequenceParser
+P16235
+LSHR_RAT
+LUTROPIN-CHORIOGONADOTROPIC HORMONE RECEPTOR PRECURSOR (LH/CG-R)
+(LSH-R) (LUTEINIZING HORMONE RECEPTOR).
+Seq('MGRRVPALRQLLVLAVLLLKPSQLQSRELSGSRCPEPCDCAPDGALRCPGPRAGLARLSL ...', ProteinAlphabet())
+*Using RecordParser
 LSHR_RAT
 ['P16235', 'P70646', 'Q63807', 'Q63808', 'Q63809']
 ['Eukaryota', 'Metazoa', 'Chordata', 'Craniata', 'Vertebrata', 'Euteleostomi', 'Mammalia', 'Eutheria', 'Rodentia', 'Sciurognathi', 'Muridae', 'Murinae', 'Rattus']
@@ -550,6 +619,12 @@ is important for high affinity hormone binding and cAMP production.";
 references: [('MEDLINE', '91332007'), ('PubMed', '1714448')]
 
 testing sp012...
+*Using SequenceParser
+Q9Y736
+Q9Y736
+UBIQUITIN.
+Seq('MQIFVKTLTGKTITLEVESSDTIDNVKTKIQDKEGIPPDQQRLIFAGKQLEDGRTLSDYN ...', ProteinAlphabet())
+*Using RecordParser
 Q9Y736
 ['Q9Y736']
 ['Eukaryota', 'Fungi', 'Ascomycota', 'Pezizomycotina', 'Eurotiomycetes', 'Onygenales', 'Arthrodermataceae', 'mitosporic Arthrodermataceae', 'Trichophyton']
@@ -564,6 +639,12 @@ title: "Microsporum canis mRNA for ubiquitin, complete cds.";
 references: []
 
 testing sp013...
+*Using SequenceParser
+P82909
+P82909
+MITOCHONDRIAL 28S RIBOSOMAL PROTEIN S36 (MRP-S36).
+Seq('MGSKMASASRVVQVVKPHTPLIRFPDRRDNPKPNVSEALRSAGLPSHSSVISQHSKGSKS ...', ProteinAlphabet())
+*Using RecordParser
 P82909
 ['P82909']
 ['Eukaryota', 'Metazoa', 'Chordata', 'Craniata', 'Vertebrata', 'Euteleostomi', 'Mammalia', 'Eutheria', 'Primates', 'Catarrhini', 'Hominidae', 'Homo']
@@ -579,6 +660,12 @@ Identification of the full complement ribosomal proteins present.";
 references: []
 
 testing sp014...
+*Using SequenceParser
+P12166
+PSBL_ORYSA
+PHOTOSYSTEM II REACTION CENTER L PROTEIN (PSII 5 KDA PROTEIN).
+Seq('TQSNPNEQNVELNRTSLYWGLLLIFVLAVLFSNYFFN', ProteinAlphabet())
+*Using RecordParser
 PSBL_ORYSA
 ['P12166', 'P12167', 'Q34007']
 ['Eukaryota', 'Viridiplantae', 'Embryophyta', 'Tracheophyta', 'Spermatophyta', 'Magnoliophyta', 'Liliopsida', 'Poales', 'Poaceae', 'Ehrhartoideae', 'Oryzeae', 'Oryza']
@@ -688,102 +775,15 @@ CP47-reaction center photosystem II complexes.";
 references: [('MEDLINE', '98298118'), ('PubMed', '9632665')]
 
 testing sp015...
+*Using SequenceParser
+IPI00383150
+IPI00383150.2
+
+Seq('MSFQAPRRLLELAGQSLLRDQALAISVLDELPRELFPRLFVEAFTSRRCEVLKVMVQAWP ...', ProteinAlphabet())
+*Using RecordParser
 IPI00383150.2
 ['IPI00383150']
 ['Eukaryota', 'Metazoa', 'Chordata', 'Craniata', 'Vertebrata', 'Euteleostomi', 'Mammalia', 'Eutheria', 'Primates', 'Catarrhini', 'Hominidae', 'Homo']
 (457, 52856, '5C3151AAADBDE232')
 ***Features:
 ***References:
-
-testing sp001...
-Q13454
-N33_HUMAN
-N33 PROTEIN.
-Seq('MGARGAPSRRRQAGRRLRYLPTGSFPFLLLLLLLCIQLGGGQKKKENLLAEKVEQLMEWS ...', ProteinAlphabet())
-
-testing sp002...
-P54101
-CSP_MOUSE
-CYSTEINE STRING PROTEIN (CSP).
-Seq('MADQRQRSLSTSGESLYHVLGLDKNATSDDIKKSYRKLALKYHPDKNPDNPEAADKFKEI ...', ProteinAlphabet())
-
-testing sp003...
-P42655
-143E_HUMAN
-14-3-3 PROTEIN EPSILON (MITOCHONDRIAL IMPORT STIMULATION FACTOR L
-SUBUNIT) (PROTEIN KINASE C INHIBITOR PROTEIN-1) (KCIP-1) (14-3-3E).
-Seq('MDDREDLVYQAKLAEQAERYDEMVESMKKVAGMDVELTVEERNLLSVAYKNVIGARRASW ...', ProteinAlphabet())
-
-testing sp004...
-P23082
-NDOA_PSEPU
-NAPHTHALENE 1,2-DIOXYGENASE SYSTEM FERREDOXIN COMPONENT.
-Seq('TVKWIEAVALSDILEGDVLGVTVEGKELALYEVEGEIYATDNLCTHGSARMSDGYLEGRE ...', ProteinAlphabet())
-
-testing sp005...
-P24973
-NU3M_BALPH
-NADH-UBIQUINONE OXIDOREDUCTASE CHAIN 3 (EC 1.6.5.3).
-Seq('MNLLLTLLTNTTLALLLVFIAFWLPQLNVYAEKTSPYECGFDPMGSARLPFSMKFFLVAI ...', ProteinAlphabet())
-
-testing sp006...
-P39896
-TCMO_STRGA
-TETRACENOMYCIN POLYKETIDE SYNTHESIS 8-O-METHYL TRANSFERASE TCMO
-(EC 2.1.1.-).
-Seq('MTPHTHVRGPGDILQLTMAFYGSRALISAVELDLFTLLAGKPLPLGELCERAGIHPRGAR ...', ProteinAlphabet())
-
-testing sp007...
-O95832
-CLD1_HUMAN
-CLAUDIN-1 (SENESCENCE-ASSOCIATED EPITHELIAL MEMBRANE PROTEIN).
-Seq('MANAGLQLLGFILAFLGWIGAIVSTALPQWRIYSYAGDNIVTAQAMYEGLWMSCVSQSTG ...', ProteinAlphabet())
-
-testing sp008...
-Q95352
-1A02_HUMAN
-HLA CLASS I HISTOCOMPATIBILITY ANTIGEN, A-2 ALPHA CHAIN PRECURSOR.
-Seq('MAVMAPRTLVLLLSGALALTQTWAGSHSMRYFFTSVSRPGRGEPRFIAVGYVDDTQFVRF ...', ProteinAlphabet())
-
-testing sp009...
-O23729
-CHS3_BROFI
-CHALCONE SYNTHASE 3 (EC 2.3.1.74) (NARINGENIN-CHALCONE SYNTHASE 3).
-Seq('MAPAMEEIRQAQRAEGPAAVLAIGTSTPPNALYQADYPDYYFRITKSEHLTELKEKFKRM ...', ProteinAlphabet())
-
-testing sp010...
-Q13639
-5H4_HUMAN
-5-HYDROXYTRYPTAMINE 4 RECEPTOR (5-HT-4) (SEROTONIN RECEPTOR) (5-HT4).
-Seq('MDKLDANVSSEEGFGSVEKVVLLTFLSTVILMAILGNLLVMVAVCWDRQLRKIKTNYFIV ...', ProteinAlphabet())
-
-testing sp011...
-P16235
-LSHR_RAT
-LUTROPIN-CHORIOGONADOTROPIC HORMONE RECEPTOR PRECURSOR (LH/CG-R)
-(LSH-R) (LUTEINIZING HORMONE RECEPTOR).
-Seq('MGRRVPALRQLLVLAVLLLKPSQLQSRELSGSRCPEPCDCAPDGALRCPGPRAGLARLSL ...', ProteinAlphabet())
-
-testing sp012...
-Q9Y736
-Q9Y736
-UBIQUITIN.
-Seq('MQIFVKTLTGKTITLEVESSDTIDNVKTKIQDKEGIPPDQQRLIFAGKQLEDGRTLSDYN ...', ProteinAlphabet())
-
-testing sp013...
-P82909
-P82909
-MITOCHONDRIAL 28S RIBOSOMAL PROTEIN S36 (MRP-S36).
-Seq('MGSKMASASRVVQVVKPHTPLIRFPDRRDNPKPNVSEALRSAGLPSHSSVISQHSKGSKS ...', ProteinAlphabet())
-
-testing sp014...
-P12166
-PSBL_ORYSA
-PHOTOSYSTEM II REACTION CENTER L PROTEIN (PSII 5 KDA PROTEIN).
-Seq('TQSNPNEQNVELNRTSLYWGLLLIFVLAVLFSNYFFN', ProteinAlphabet())
-
-testing sp015...
-IPI00383150
-IPI00383150.2
-
-Seq('MSFQAPRRLLELAGQSLLRDQALAISVLDELPRELFPRLFVEAFTSRRCEVLKVMVQAWP ...', ProteinAlphabet())
