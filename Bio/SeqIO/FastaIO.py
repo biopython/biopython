@@ -1,11 +1,11 @@
-from Bio.Alphabet import generic_alphabet
+from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Interfaces import SequentialSequenceWriter
 import os
 
 #This is a generator function!
-def FastaIterator(handle, alphabet = generic_alphabet, title2ids = None) :
+def FastaIterator(handle, alphabet = single_letter_alphabet, title2ids = None) :
     """Generator function to iterate over Fasta records (as SeqRecord objects).
 
     handle - input file
@@ -128,17 +128,12 @@ class FastaWriter(SequentialSequenceWriter):
 
 if __name__ == "__main__" :
     import os
-    from Bio.Alphabet import generic_alphabet, generic_protein, generic_nucleotide
+    from Bio.Alphabet import generic_protein, generic_nucleotide
     
     #Download the files from here:
     #ftp://ftp.ncbi.nlm.nih.gov/genomes/Bacteria/Nanoarchaeum_equitans
-    import sys
-    if sys.platform=="win32":
-        fna_filename = r"C:\Genomes\Bacteria\Nanoarchaeum_equitans\NC_005213.fna"
-        faa_filename = r"C:\Genomes\Bacteria\Nanoarchaeum_equitans\NC_005213.faa"
-    else :
-        fna_filename = "/home/maubp/genomes/Bacteria/Nanoarchaeum_equitans/NC_005213.fna"
-        faa_filename = "/home/maubp/genomes/Bacteria/Nanoarchaeum_equitans/NC_005213.faa"
+    fna_filename = "NC_005213.fna"
+    faa_filename = "NC_005213.faa"
         
     def genbank_name_function(text) :
         text, descr = text.split(None,1)
@@ -186,7 +181,7 @@ if __name__ == "__main__" :
     print "--------"
     print "FastaIterator (empty input file)"
     #Just to make sure no errors happen
-    iterator = FastaIterator(StringIO(""), alphabet=generic_protein, title2ids=genbank_name_function)
+    iterator = FastaIterator(StringIO(""))
     count = 0
     for record in iterator :
         count = count+1
