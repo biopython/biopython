@@ -344,6 +344,10 @@ Testing reading embl format file EMBL/TRBG361.embl
  ID and Name='X56734',
  Seq='AAACAAACCAAATATGGATTTTATTGTAGCCATATTTGCT...AAAAAAA', length=1859
  Checking can write/read as 'fasta' format
+Testing reading embl format file EMBL/DD231055_edited.embl
+ ID and Name='DD231055',
+ Seq='GCCGAGCTGACCCAGTCTCCATCCTCCCTGTCTGCATCTG...TATGAGA', length=315
+ Checking can write/read as 'fasta' format
 Testing reading stockholm format file Stockholm/simple.sth
  ID and Name='AP001509.1',
  Seq='UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAU...UUAAUGU', length=104
