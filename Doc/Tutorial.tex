@@ -358,7 +358,7 @@ This covers the basic features and uses of the Biopython sequence class. There i
 
 Before we jump right into parsers and everything else to do with Biopython, let's set up an example to motivate everything we do and make life more interesting. After all, if there wasn't any biology in this tutorial, why would you want you read it?
 
-Since I love plants, I think we're just going to have to have a plant based example (sorry to all the fans of other organisms out there!).  Having just completed a recent trip to our local greenhouse, we've suddenly developed an incredible obsession with Lady Slipper Orchids (if you wonder why take a look at \ahrefurl{\url{http://www.millicentorchids.com/greenhouse/images/papesq01.jpg}}. If that doesn't convince you, you can look at all of the available photos at  \ahrefurl{\url{http://www.millicentorchids...com/greenhouse/indexphoto.htm}}).  Of course, orchids are not only beautiful to look at, they are also extremely interesting for people studying evolution and systematics. So we're thinking about writing a little proposal to do a molecular study of Lady Slipper evolution and would like to see what kind of research has already been done and how we can add to that.
+Since I love plants, I think we're just going to have to have a plant based example (sorry to all the fans of other organisms out there!).  Having just completed a recent trip to our local greenhouse, we've suddenly developed an incredible obsession with Lady Slipper Orchids (if you wonder why take a look at \ahrefurl{\url{http://www.millicentorchids.com/greenhouse/images/papesq01.jpg}}. If that doesn't convince you, you can look at all of the available photos at  \ahrefurl{\url{http://www.millicentorchids....com/greenhouse/indexphoto.htm}}).  Of course, orchids are not only beautiful to look at, they are also extremely interesting for people studying evolution and systematics. So we're thinking about writing a little proposal to do a molecular study of Lady Slipper evolution and would like to see what kind of research has already been done and how we can add to that.
 
 After a little bit of reading up we discover that the Lady Slipper Orchids are in the Orchidaceae family and the Cypripedioideae sub-family and are made up of 5 genera:  \emph{Cypripedium}, \emph{Paphiopedilum}, \emph{Phragmipedium}, \emph{Selenipedium} and \emph{Mexipedium}.
 
@@ -445,13 +445,31 @@ Seq('CATTGTTGAGATCACATAATAATTGATCGAGTTAATCTGGAGGATCTGTTTACTTTGGTC ...', IUPACAmb
 
 This time \verb|Bio.SeqIO| has been able to choose a sensible alphabet, Ambigous DNA.  You'll also notice that a shorter string has been used as the \verb|record.id| in this case.
 
-\subsection{SeqRecord Iterators and Lists}
+\subsection{Iterating over the records in a sequence file}
 
-In the above two examples, we have used a for loop to iterate over all the records in the file one by one.  You can use the for loop for all sorts of python objects (including lists, tuples and strings) which support the iteration interface.
+In the above examples, we have used a for loop to iterate over all the records in the file one by one.  You can use the for loop for all sorts of python objects (including lists, tuples and strings) which support the iteration interface.
 
 The object returned by \verb|Bio.SeqIO| is actually an iterator which returns SeqRecord objects.  You get to see each record in turn, but once and only once.  The plus point is that an iterator can save you memory when dealing with large files.
 
-If you had a list of SeqRecord objects, you could still use a for loop - but you could also access the records in any order you liked.  To turn a SeqRecord iterator from \verb|SeqIO.parse| into a list, use the built python functin \verb|list| like this:
+Note that you can also use the \verb|next| method of an iterator to step through the entries, like this:
+
+\begin{verbatim}
+from Bio import SeqIO
+handle = open('ls_orchid.fasta')
+record_iterator = SeqIO.parse(handle, 'fasta')
+
+first_record = record_iterator.next()
+print first_record.id
+print first_record.description
+
+handle.close()
+\end{verbatim}
+
+\noindent The above style is useful if your sequence files have only one record.
+
+\subsection{Getting a list of the records in a sequence file}
+
+In the previous section we talked about the fact that \verb|Bio.SeqIO| gives you a SeqRecord iterator, and that you get the records one by one.  Very often you need to be able to access the records in any order - and for this we use the built python function \verb|list| like so:
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -488,10 +506,11 @@ Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGGAATAAA ...', IUPACAmb
 740
 \end{verbatim}
 
+You can of course still use a for loop with a list of SeqRecord objects.  Using a list is much more flexible, but does need more memory to hold all the records at once.
 
 \subsection{Sequence files as Dictionaries}
 
-The final thing that we'll do with our ubiquitous orchid files is to show how to index them and access them like a database. This is very useful for large files where you only need to access certain elements of the file, and makes for a nice quick 'n dirty database.
+The next thing that we'll do with our ubiquitous orchid files is to show how to index them and access them like a database. This is very useful for large files where you only need to access certain elements of the file, and makes for a nice quick 'n dirty database.
 
 You can use the function \verb|SeqIO.to_dict| to make a SeqRecord dictionary (in memory).  By default this will use each record's identifier (i.e. \verb|record.id|) as the key.  Lets try this using our GenBank file:
 
@@ -536,7 +555,7 @@ This time the keys are:
  ..., 'gi|2765613|emb|Z78488.1|PTZ78488', 'gi|2765583|emb|Z78458.1|PHZ78458']
 \end{verbatim} 
 
-You should recognised these strings from when we parsed the FASTA file earlier in Section~\ref{sec:fasta-parsing}.  Suppose you would rather have something else as the keys - like the accesion numbers.  This brings us nicely to \verb|SeqIO.to_dict|'s optional argument \verb|key_function|, which lets you define what to use as the dictionary key for your records.
+You should recognise these strings from when we parsed the FASTA file earlier in Section~\ref{sec:fasta-parsing}.  Suppose you would rather have something else as the keys - like the accesion numbers.  This brings us nicely to \verb|SeqIO.to_dict|'s optional argument \verb|key_function|, which lets you define what to use as the dictionary key for your records.
 
 First you must write your own function to return the key you want (as a string) when given a SeqRecord object.  In general, the details of function will depend on the sort of input records you are dealing with.  But for our orchids, we can just split up the record's identifier using the "pipe" character (the vertical line) and return the fourth entry (field three):
 
@@ -564,11 +583,108 @@ print orchid_dict.keys()
 \noindent Finally, as desired, the new dictionary keys:
 
 \begin{verbatim}
->>> print orchid_dict.keys()
 ['Z78484.1', 'Z78464.1', 'Z78455.1', 'Z78442.1', 'Z78532.1', 'Z78453.1', ..., 'Z78471.1']
 \end{verbatim}
 
 \noindent Not to complicated, I hope!
+
+\subsection{Extracting data}
+
+Suppose you wanted to extract a list of the species from your GenBank file.  Let's have a close look at the first record in the file and see where the species gets stored:
+
+\begin{verbatim}
+from Bio import SeqIO
+record_iterator = SeqIO.parse(open('ls_orchid.gbk'), 'genbank')
+first_record = record_iterator.next()
+print first_record
+\end{verbatim} 
+
+\noindent That should give something like this:
+
+\begin{verbatim}
+ID: Z78533.1
+Name: Z78533
+Desription: C.irapeanum 5.8S rRNA gene and ITS1 and ITS2 DNA.
+/source=Cypripedium irapeanum
+/taxonomy=['Eukaryota', 'Viridiplantae', 'Streptophyta', ..., 'Cypripedium']
+/keywords=['5.8S ribosomal RNA', '5.8S rRNA gene', 'internal transcribed spacer', 'ITS1', 'ITS2']
+/references=[...]
+/data_file_division=PLN
+/date=30-NOV-2006
+/organism=Cypripedium irapeanum
+/gi=2765658
+Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGGAATAAA ...', IUPACAmbiguousDNA())
+\end{verbatim} 
+
+\noindent The information we want, {\it Cypripedium irapeanum} is held in the annotations dictionary under 'source' and 'organism', which we can access like this:
+
+\begin{verbatim}
+print first_record.annotations['source']
+\end{verbatim} 
+
+\noindent or:
+
+\begin{verbatim}
+print first_record.annotations['organism']
+\end{verbatim} 
+
+Now lets go through all the records, building up a list of the name of the orchid species each sequence is from:
+
+\begin{verbatim}
+from Bio import SeqIO
+handle = open('ls_orchid.gbk')
+all_species = []
+for seq_record in SeqIO.parse(handle, 'genbank') :
+    all_species.append(seq_record.annotations['organism'])
+handle.close()
+print all_species
+\end{verbatim} 
+
+Another way of writing this code is to use a list comprehension (introduced in Python 2.0) like this:
+
+\begin{verbatim}
+from Bio import SeqIO
+all_species == [seq_record.annotations['organism'] for seq_record in \
+                SeqIO.parse(open('ls_orchid.gbk'), 'genbank')]
+print all_species
+\end{verbatim}
+
+\noindent In either case, the result is:
+
+\begin{verbatim}
+['Cypripedium irapeanum', 'Cypripedium californicum', 'Cypripedium fasciculatum', ..., 'Paphiopedilum barbatum']
+\end{verbatim} 
+
+Great.  That was pretty easy because GenBank files are annotated in a standardised way.
+
+Now, lets suppose you wanted to extract a list of the species from your FASTA file, rather than the GenBank file.  The trick is to notice that if you break up the description line at the spaces, then the species is there as field number one (field zero is the record identifier).  That means we can do this:
+
+\begin{verbatim}
+from Bio import SeqIO
+handle = open('ls_orchid.fasta')
+all_species = []
+for seq_record in SeqIO.parse(handle, 'fasta') :
+    all_species.append(seq_record.description.split()[1])
+handle.close()
+print all_species
+\end{verbatim}
+
+\noindent This gives:
+
+\begin{verbatim}
+['C.irapeanum', 'C.californicum', 'C.fasciculatum', 'C.margaritaceum', ..., 'P.barbatum']
+\end{verbatim}
+
+The concise alternative using list comprehensions (Python 2.0 or later) would be:
+
+\begin{verbatim}
+from Bio import SeqIO
+all_species == [seq_record.description.split()[1] for seq_record in \
+                SeqIO.parse(open('ls_orchid.fasta'), 'fasta')]
+print all_species
+\end{verbatim}
+
+In general, extracting information from the FASTA description line is not very nice.  If you can get your sequences in a well annotated file format like GenBank for EMBL, then this sort of annotation information is much easier to deal with.
 
 \subsection{I love parsing -- please don't stop talking about it!}
 
