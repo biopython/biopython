@@ -785,8 +785,9 @@ Section~\ref{sec:running-www-blast}) has two advantages:
 \begin{itemize}
 \item Local BLAST may be faster than BLAST over the internet;
 \item Local BLAST allows you to make your own database to search for sequences against.
-\item Dealing with proprietary or unpublished sequence data can be another reason to run BLAST locally.  You may not be allowed to redistribute the sequences, so submitting them to the NCBI as a BLAST query would not be an option. 
 \end{itemize}
+Dealing with proprietary or unpublished sequence data can be another reason to run BLAST locally.  You may not be allowed to redistribute the sequences, so submitting them to the NCBI as a BLAST query would not be an option. 
+
 Biopython provides lots of nice code to enable you to call local BLAST executables from your scripts, and have full access to the many command line options that these executables provide. You can obtain local BLAST precompiled for a number of platforms at \ahrefurl{\url{ftp://ftp.ncbi.nlm.nih.gov/blast/executables/}}, or can compile it yourself in the NCBI toolbox (\ahrefurl{\url{ftp://ftp.ncbi.nlm.nih.gov/toolbox/}}).
 
 The code for dealing with local BLAST is found in \verb|Bio.Blast.NCBIStandalone|, specifically in the functions \verb|blastall| and \verb|blastpgp|, which correspond with the BLAST executables that their names imply.
