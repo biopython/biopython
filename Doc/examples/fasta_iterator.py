@@ -1,4 +1,3 @@
-import string
 from Bio import Fasta
 
 def extract_organisms(file_to_parse):
@@ -16,8 +15,7 @@ def extract_organisms(file_to_parse):
             break
         
         # extract the info from the title
-        title_atoms = string.split(cur_record.title)
-        new_species = title_atoms[1]
+        new_species = cur_record.title.split()[1]
 
         # append the new species to the list if it isn't there
         if new_species not in all_species:
