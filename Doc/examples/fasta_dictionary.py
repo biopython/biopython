@@ -1,20 +1,20 @@
-import string
+import os
 from Bio import Fasta
 from Bio.Alphabet import IUPAC
 
 def get_accession_num(fasta_record):
-    title_atoms = string.split(fasta_record.title)
-
-    accession_atoms = string.split(title_atoms[0], '|')
-
+    title_atoms = fasta_record.title.split()
+    accession_atoms = title_atoms[0].split('|')
     gb_name = accession_atoms[3]
-
     # strip the version info before returning
     return gb_name[:-2]
 
-
-Fasta.index_file("ls_orchid.fasta", "my_orchid_dict.idx",
-                 get_accession_num)
+if not os.path.isdir("my_orchid_dict.idx") :
+    #Build a new index
+    Fasta.index_file("ls_orchid.fasta", "my_orchid_dict.idx",
+                     get_accession_num)
+else :
+    print "Reusing existing index"
 
 dna_parser = Fasta.SequenceParser(IUPAC.ambiguous_dna)
 
