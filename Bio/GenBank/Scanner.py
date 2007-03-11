@@ -10,6 +10,7 @@
 # It is used by Bio.GenBank to parse GenBank files
 # It is also used by Bio.SeqIO to parse GenBank and EMBL files
 
+import sys
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Alphabet import generic_alphabet, generic_protein
@@ -812,10 +813,9 @@ class GenBankScanner(InsdcScanner) :
             if line[GENBANK_INDENT:].strip() <> "" :
                 consumer.locus(line[GENBANK_INDENT:].strip())
             else :
-                #Must just have just "LOCUS       "
-                #We can cope with this, but is it a legitimate GenBank file?
-                print "Warning: Minimal LOCUS line found - is this correct?\n" + line
-                pass
+                #Must just have just "LOCUS       ", is this even legitimate?
+                #We should be able to continue parsing... we need real world testcases!
+                print >> sys.stderr, "Warning: Minimal LOCUS line found - is this correct?\n" + line
         else :
             assert False, \
                    'Did not recognise the LOCUS line layout:\n' + line
