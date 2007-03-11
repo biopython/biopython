@@ -89,6 +89,7 @@ test_files = [ \
     ("genbank",False, 'GFF/NC_001422.gbk', 1),
 #Following files are currently only used here:
     ("embl",      False, 'EMBL/TRBG361.embl', 1),
+    ("embl",      False, 'EMBL/DD231055_edited.embl', 1),
     ("stockholm", True,  'Stockholm/simple.sth', 2),
     ("stockholm", True,  'Stockholm/funny.sth', 5),
 #Following PHYLIP files are currently only used here (test_SeqIO)
@@ -200,18 +201,18 @@ for (t_format, t_alignment, t_filename, t_count) in test_files :
     assert os.path.isfile(t_filename)
 
     #Try as an iterator using handle
-    records  = list(SeqIO.parse(handle=open(t_filename,"rU"), format=t_format))
+    records  = list(SeqIO.parse(handle=open(t_filename,"r"), format=t_format))
     assert len(records)  == t_count
 
     #Try using the iterator with a for loop
     records2 = []
-    for record in SeqIO.parse(handle=open(t_filename,"rU"), format=t_format) :
+    for record in SeqIO.parse(handle=open(t_filename,"r"), format=t_format) :
         records2.append(record)
     assert len(records2) == t_count
 
     #Try using the iterator with the next() method
     records3 = []
-    seq_iterator = SeqIO.parse(handle=open(t_filename,"rU"), format=t_format)
+    seq_iterator = SeqIO.parse(handle=open(t_filename,"r"), format=t_format)
     while True :
         try :
             record = seq_iterator.next()
@@ -223,7 +224,7 @@ for (t_format, t_alignment, t_filename, t_count) in test_files :
             break
 
     #Try a mixture of next() and list (a torture test!)
-    seq_iterator = SeqIO.parse(handle=open(t_filename,"rU"), format=t_format)
+    seq_iterator = SeqIO.parse(handle=open(t_filename,"r"), format=t_format)
     try :
         record = seq_iterator.next()
     except StopIteration :
@@ -236,7 +237,7 @@ for (t_format, t_alignment, t_filename, t_count) in test_files :
     assert len(records4) == t_count
 
     #Try a mixture of next() and for loop (a torture test!)
-    seq_iterator = SeqIO.parse(handle=open(t_filename,"rU"), format=t_format)
+    seq_iterator = SeqIO.parse(handle=open(t_filename,"r"), format=t_format)
     try :
         record = seq_iterator.next()
     except StopIteration :
@@ -279,7 +280,7 @@ for (t_format, t_alignment, t_filename, t_count) in test_files :
 
         #Using SeqIO.to_alignment(SeqIO.parse(...))
         alignment = SeqIO.to_alignment(SeqIO.parse( \
-                    handle=open(t_filename,"rU"), format=t_format))
+                    handle=open(t_filename,"r"), format=t_format))
         assert len(alignment.get_all_seqs()) == t_count
 
         alignment_len = alignment.get_alignment_length()
