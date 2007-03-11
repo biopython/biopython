@@ -64,7 +64,7 @@
 \begin{document}
 
 \title{Biopython Tutorial and Cookbook}
-\author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck}
+\author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, Michiel de Hoon, Peter Cock}
 \date{Last Update--16 March 2007}
 
 \maketitle
@@ -75,7 +75,6 @@
 \section{What is Biopython?}
 
 The Biopython Project is an international association of developers of freely available Python (\ahrefurl{\url{http://www.python.org}}) tools for computational molecular biology. The web site \ahrefurl{\url{http://www.biopython.org}} provides an online resource for modules, scripts, and web links for developers of Python-based software for life science research.
-
 
 Basically, we just like to program in python and want to make it as easy as possible to use python for bioinformatics by creating high-quality, reusable modules and scripts.
 
@@ -242,7 +241,7 @@ Seq('GATCGATGGGCCTATATAGGATCGAAAATCGCGATCG', IUPACUnambiguousDNA())
 >>> my_seq[5]
 'A'
 >>> my_seq == new_seq
-0
+True
 \end{verbatim}
 
 In all of the operations, the alphabet property is maintained. This is very useful in case you accidentally end up trying to do something weird like add a protein sequence and a DNA sequence:
@@ -359,340 +358,227 @@ This covers the basic features and uses of the Biopython sequence class. There i
 
 Before we jump right into parsers and everything else to do with Biopython, let's set up an example to motivate everything we do and make life more interesting. After all, if there wasn't any biology in this tutorial, why would you want you read it?
 
+Since I love plants, I think we're just going to have to have a plant based example (sorry to all the fans of other organisms out there!).  Having just completed a recent trip to our local greenhouse, we've suddenly developed an incredible obsession with Lady Slipper Orchids (if you wonder why take a look at \ahrefurl{\url{http://www.millicentorchids.com/greenhouse/images/papesq01.jpg}}. If that doesn't convince you, you can look at all of the available photos at  \ahrefurl{\url{http://www.millicentorchids...com/greenhouse/indexphoto.htm}}).  Of course, orchids are not only beautiful to look at, they are also extremely interesting for people studying evolution and systematics. So we're thinking about writing a little proposal to do a molecular study of Lady Slipper evolution and would like to see what kind of research has already been done and how we can add to that.
 
-Since I love plants, I think we're just going to have to have a plant based example (sorry to all the fans of other organisms out there!).  Having just completed a recent trip to our local greenhouse, we've suddenly developed an incredible obsession with Lady Slipper Orchids (if you wonder why take a look at \ahrefurl{\url{http://www.millicentorchids.com/greenhouse/images/papesq01.jpg}}. If that doesn't convince you, you can look at all of the available photos at  \ahrefurl{\url{http://www.millicentorchids.com/greenhouse/indexphoto.htm}}).  Of course, orchids are not only beautiful to look at, they are also extremely interesting for people studying evolution and systematics. So we're thinking about writing a little proposal to do a molecular study of Lady Slipper evolution and would like to see what kind of research has already been done and how we can add to that.
+After a little bit of reading up we discover that the Lady Slipper Orchids are in the Orchidaceae family and the Cypripedioideae sub-family and are made up of 5 genera:  \emph{Cypripedium}, \emph{Paphiopedilum}, \emph{Phragmipedium}, \emph{Selenipedium} and \emph{Mexipedium}.
 
+We'll start with an online search for our friends, the lady slipper orchids. Let's just take a look through the nucleotide databases at NCBI, using an Entrez online search (\ahrefurl{\url{http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?db=Nucleotide}}) for everything mentioning the text Cypripedioideae (this is the subfamily of lady slipper orchids). When this tutorial was originally written, this search gave us only 94 hits, which we saved as a FASTA formatted text file (\ahrefurl{\href{http://cvs.biopython.org/cgi-bin/viewcvs/viewcvs.cgi/*checkout*/biopython/Doc/examples/ls_orchid.fasta?rev=HEAD&cvsroot=biopython&content-type=text/plain}{ls\_orchid.fasta}}) and as a GenBank formatted text file (\ahrefurl{\href{http://cvs.biopython.org/cgi-bin/viewcvs/viewcvs.cgi/*checkout*/biopython/Doc/examples/ls_orchid.gbk?rev=HEAD&cvsroot=biopython&content-type=text/plain}{ls\_orchid.gbk}}).
 
-After a little bit of reading up we discover that the Lady Slipper Orchids are in the Orchidaceae family and the Cypripedioideae sub-family and are made up of 5 genera:  \emph{Cypripedium}, \emph{Paphiopedilum}, \emph{Phragmipedium}, \emph{Selenipedium} and \emph{Mexipedium}. That gives us enough information to get started delving for more information. So, let's look at how biopython tools can help us.
+% I would rather link to the main website, but the file is not here where I might have expected it:
+% http://biopython.org/DIST/docs/examples/ls_orchid.fasta
+% The GenBank version is actually new - it was created by filtering out the original 94 hits from the
+% latest search of over 400 hits.
+
+If you run the search today, you'll get hundreds of results!  When following the tutorial, if you want to see the same list of genes, just download the two files above or copy them from \verb|docs/examples/| in the Biopython source code.  In Section~\ref{sec:connecting-with-biological-databases} will look at how to do a search like this from python.
+
+That gives us enough information to get started delving for more information. So, let's look at how biopython tools can help us.
 
 \section{Parsing biological file formats}
 
 A large part of much bioinformatics work involves dealing with the many types of file formats designed to hold biological data. These files are loaded with interesting biological data, and a special challenge is parsing these files into a format so that you can manipulate them with some kind of programming language. However the task of parsing these files can be frustrated by the fact that the formats can change quite regularly, and that formats may contain small subtleties which can break even the most well designed parsers. 
 
-\subsection{General parser design}
+We are going to introduce the \verb|Bio.SeqIO| module, available in Biopython 1.43 and later.  If you are using an older version of Biopython we encourage you to update (or find an old edition of this tutorial!).
 
-The biopython solution to these problem is to develop a structured parser framework that is applicable to all of the parsers. The advantages are two fold. First, this allows code reuse between parsers (see \verb|Bio/ParserSupport.py|). Second, this provides a similar framework for all the parsers so that it is relatively easy to jump into the internals of a parser and figure out problems you might be having. 
-
-
-All of the parsers have two components:
-
-\begin{enumerate}
-
-\item Scanner - The part of the parser that actually does the work or going through the file and extracting useful information. This useful information is converted into Events.
-
-\item Consumer - The consumer does the job of processing the useful information and spitting it out in a format that the programmer can use. The consumer does this by receiving the events created by the scanner.
-
-\end{enumerate}
-
-So, the parser design is event oriented. The general idea is that a scanner will go through and produce events for every item that might be of interest in a file. For instance, let's say we've got the following FASTA formatted entry (edited to fit the page):
-
-
-\begin{verbatim}
->gi|6273290|gb|AF191664.1|AF191664 Opuntia clavata rpl16 gene; chloroplast gene for...
-TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAAAAAAATGAA
-TCTAAATGATATAGGATTCCACTATGTAAGGTCTTTGAATCATATCATAAAAGACAATGTAAT
-AAA...
-\end{verbatim}
-
-As a scanner moved through a file containing this entry, it would create the following events:
-\\
-\\
-\begin{tabular}{cc}
-Event Name & Entry input \\
-\hline
-begin\_sequence & (as soon as we notice we've got a new \verb|>|) \\
-title & \verb+>gi|6273290|gb|AF191664.1|AF191664 Opuntia clavata...+ \\
-sequence & \verb|TATACATTAAAGGAGGGGGATGCGGAT...| \\
-sequence & \verb|TCTAAATGATATAGGATTCCACTATGTAA...| \\
-sequence & \verb|AAA...| (and so on -- you've got the idea!) \\
-end\_sequence & (as soon as we reach a blank line after the sequence data) \\
-
-\end{tabular}
-\\
-\\
-So, events are being produced. Big deal, unless we are able to capture these events and do something interesting with them! This is where the consumer comes in. The consumer needs to do two things:
-
-\begin{enumerate}
-
-\item Register itself with the the scanner to let it know that it wants to receive those events that are being generated.
-
-\item Do something with the events (and the information associated with them).
-
-\end{enumerate}
-
-An example should make it more clear how this works.
-
-\subsection{Writing your own consumer}
-\label{sec:writing_consumer}
-
-Now it's time to understand our parser framework, and also start looking at our friends, the lady slipper orchids. To start our search, let's just take a look through the nucleotide databases at NCBI, using an Entrez search (\ahrefurl{\url{lhttp://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?db=Nucleotide}}) for everything mentioning the text Cypripedioideae (this is the subfamily of lady slipper orchids). This search gives us 94 hits, which we save into a FASTA formatted text file.
-
-
-Now, let's try and use a parser to summarize the type of information we got. To take a simple example, why don't we go through and grab all of the organism names mentioned, to see how many different species of lady slipper orchids are represented in this data.
-
-
-To do this kind of useful work, we need to do get our hands dirty and write the solution to all of our problems -- a consumer. This is what our consumer implementation to extract the organisms will look like:
-
-\begin{verbatim}
-import string
-from Bio.ParserSupport import AbstractConsumer
-
-class SpeciesExtractor(AbstractConsumer):
-
-    def __init__(self):
-        self.species_list = []
-
-    def title(self, title_info):
-        title_atoms = string.split(title_info)
-        new_species = title_atoms[1]
-
-        if new_species not in self.species_list:
-            self.species_list.append(new_species)
-\end{verbatim}
-
-The first thing we do is import the base class which Consumers should derive from, \verb|AbstractConsumer|. This base class does nice things for us like take care of all the sections we aren't interested in. Then we create our personal consumer class by deriving from this base AbstractConsumer class.
-
-
-Just like any other python class, we define a \verb|__init__| function that will be called when a new instance of the class is created. In the initialization we set a \verb|species_list| class attribute. This will store the species information as the file is parsed, and will allow us to extract this information later on.
-
-
-Now we come to the function that is really nifty, the \verb|title| function. This function will be called by the Scanner every time a 'title' event is generated. So, when the Scanner comes to the first line in our example FASTA file:
-
-\begin{verbatim}
->gi|2765658|emb|Z78533.1|CIZ78533 C.irapeanum 5.8S rRNA gene and ITS1 and ITS2 DNA
-\end{verbatim}
-
-It will recognize this as a title, and call the \verb|title| function with the \verb|title_info| argument set as the value of the title.
-
-
-Now that we've captured the title, we want to extract the information from it we are interested in. Looking at the FASTA title info, we notice that the second item in the info string is the organism name. To get this out we can just use the built-in python function \verb|string.split| to split the string at every space, creating the list \verb|title_atoms|. Since the second element of this list is the species name, we then grab this out of the list. Then we simply check to see if the species is already in our current list of organisms, and if not, we add it.
-
-
-Okay, well that was easy enough -- so now we need to call the Scanner and actual do this work. To do this, we write a little function:
-
-\begin{verbatim}
-
-from Bio import Fasta
-
-def extract_organisms(file, num_records):
-    scanner = Fasta._Scanner()
-    consumer = SpeciesExtractor()
-
-    file_to_parse = open(file, 'r')
-
-    for fasta_record in range(num_records):
-        scanner.feed(file_to_parse, consumer)
-
-    file_to_parse.close()
-
-    return handler.species_list
-
-\end{verbatim}
-
-Let's walk though the function step by step. First, we import the Fasta parser from the Biopython library, then we proceed to define our function. It takes two arguments, the FASTA formatted file to parse, and the number of records in the file. It then creates a Scanner for scanning through FASTA files, and a SpeciesExtractor consumer which will get all of the organisms, as we described above.
-
-We then open our file to parse and get it ready to go. All of the Biopython parsers take file handles as inputs. This means that you can pass them any kind of ``file-like'' object. For instance, the \verb|url| library allows to you work with a document on a remote URL as if it was a local file, so you could use this to pass the parser a document somewhere on the net.
-
-
-Now that we've got the open file, it's time to parse it. The way the parser works is that you call \verb|feed| for every item in the file you want to parse, passing it the file-like object to parse, and the consumer to call back to. So we loop through all records in the file, and scan them, relying on the consumer to deal with the files as appropriate. Finally, once that is all done, we get the \verb|species_list| attribute of the consumer class, containing all of the information extracted and return that.
-
-
-Whew, with all of that work out of the way, parsing the file will be really easy:
-
-\begin{verbatim}
-all_species = extract_organisms("ls_orchid.fasta", 94)
-print "number of species:", len(all_species)
-print 'species names:', all_species
-\end{verbatim}
-
-Running this all as one big program (the program is available as \verb|fasta_consumer.py| in the \verb|Doc/examples| directory) give us the information we desire:
-
-\begin{verbatim}
-[chapmanb@taxus examples]# python fasta_consumer.py
-number of species: 92
-species names: ['C.irapeanum', 'C.californicum', 'C.fasciculatum', 
-'C.margaritaceum', 'C.lichiangense', 'C.yatabeanum', 'C.guttatum',
-...
-\end{verbatim}
-
-\subsection{Making it easier}
+\subsection{Simple FASTA parsing example}
 \label{sec:fasta-parsing}
 
-The last section explained all of the nitty gritty of writing a specialized consumer. The flexibility of being able to write your own consumer is very nice, however for many applications it can be overkill. For a simple application, the nice Biopython folks have provided some useful classes that act more like full parsers. So, for quick and dirty applications, these are what you want to look at. 
-
-
-One big problem with the parser we used above was that we were required to know the number of elements in the file. This can be pretty impractical for a lot of applications when you just want to parse through a file and look for something. To help deal with this problem, we can use the \verb|Iterator| interface for FASTA files. This interface allows you to not worry about consumers and scanners and all of that jazz, and just march through a file one record at a time. However, doing this requires that the Iterator return some kind of object that you can manipulate to extract the info you want.
-
-
-To deal with this problem, a very useful class was written into many of the Biopython parsers -- a \verb|RecordParser|, which parses a file into a python class that represents it. For instance, for FASTA files, the Record class is just an object with \verb|title| and \verb|sequence| attributes. 
-
-
-Let's make all of this talk more concrete by using the Iterator and Record interfaces to do what we did before -- extract a unique list of all species in our FASTA file. First we need to set up our parser and iterator:
+If you open the lady slipper orchids FASTA file in your favourite text editor, you'll see that the file starts like this:
 
 \begin{verbatim}
->>> from Bio import Fasta
->>> parser = Fasta.RecordParser()
->>> file = open("ls_orchid.fasta")
->>> iterator = Fasta.Iterator(file, parser)
-\end{verbatim}
-
-First we create our parser -- a RecordParser that parses a FASTA entry into the Record class representing it. Then we open the file, and create an iterator, and we are ready to start parsing.
-
-
-Like most iterator interfaces, we retrieve the objects by calling \verb|next()|. When there are no sequences left to parse, \verb|next()| will return \verb|None|, so we know that it is time to stop. To get our first record:
-
-\begin{verbatim}
->>> cur_record = iterator.next()
-\end{verbatim}
-
-Let's take a look at the record object. It has sequence and title attributes that we can easily get at:
-
-\begin{verbatim}
->>> dir(cur_record)
-['_colwidth', 'sequence', 'title']
->>> print cur_record.title
-gi|2765658|emb|Z78533.1|CIZ78533 C.irapeanum 5.8S rRNA gene and ITS1 and ITS2 DN>>> print cur_record.sequence
-CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGGAATAAACGATCGAGTGAATCCGGA
+>gi|2765658|emb|Z78533.1|CIZ78533 C.irapeanum 5.8S rRNA gene and ITS1 and ITS2 DNA
+CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGGAATAAACGATCGAGTG
+AATCCGGAGGACCGGTGTACTCAGCTCACCGGGGGCATTGCTCCCGTGGTGACCCTGATTTGTTGTTGGG
 ...
 \end{verbatim}
 
-In my opinion, the coolest thing is how easy it is to get the FASTA record right back:
+It contains 94 records, each has a line starting with "$>$" (greater-than symbol) followed by the sequence on one or more lines.  Now try this in python:
 
 \begin{verbatim}
->>> print cur_record
->gi|2765658|emb|Z78533.1|CIZ78533 C.irapeanum 5.8S rRNA gene and ITS1 and ITS2 DNA
-CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGGAATAAA
-CGATCGAGTGAATCCGGAGGACCGGTGTACTCAGCTCACCGGGGGCATTGCTCCCGTGGT
-GACCCTGATTTGTTGTTGGGCCGCCTCGGGAGCGTCCATGGCGGGTTTGAACCTCTAGCC
-CGGCGCAGTTTGGGCGCCAAGCCATATGAAAGCATCACCGGCGAATGGCATTGTCTTCCC
-CAAAACCCGGAGCGGCGGCGTGCTGTCGCGTGCCCAATGAATTTTGATGACTCTCGCAAA
-CGGGAATCTTGGCTCTTTGCATCGGATGGAAGGACGCAGCGAAATGCGATAAGTGGTGTG
-AATTGCAAGATCCCGTGAACCATCGAGTCTTTTGAACGCAAGTTGCGCCCGAGGCCATCA
-GGCTAAGGGCACGCCTGCTTGGGCGTCGCGCTTCGTCTCTCTCCTGCCAATGCTTGCCCG
-GCATACAGCCAGGCCGGCGTGGTGCGGATGTGAAAGATTGGCCCCTTGTGCCTAGGTGCG
-GCGGGTCCAAGAGCTGGTGTTTTGATGGCCCGGAACCCGGCAAGAGGTGGACGGATGCTG
-GCAGCAGCTGCCGTGCGAATCCCCCATGTTGTCGTGCTTGTCGGACAGGCAGGAGAACCC
-TTCCGAACCCCAATGGAGGGCGGTTGACCGCCATTCGGATGTGACCCCAGGTCAGGCGGG
-GGCACCCGCTGAGTTTACGC
+from Bio import SeqIO
+handle = open('ls_orchid.fasta')
+for record in SeqIO.parse(handle, 'fasta') :
+    print seq_record.id
+    print seq_record.seq
+    print len(seq_record.seq)
+handle.close()
 \end{verbatim}
 
-We can use all of this to do a rewrite of our \verb|extract_organisms| function:
+\noindent You should get something like this on your screen:
 
 \begin{verbatim}
-def extract_organisms(file_to_parse):
-
-    parser = Fasta.RecordParser()
-    file = open(file_to_parse, 'r')
-    iterator = Fasta.Iterator(file, parser)
-
-    all_species = []
-
-    while 1:
-        cur_record = iterator.next()
-
-        if cur_record is None:
-            break
-
-        # extract the info from the title
-        title_atoms = string.split(cur_record.title)
-        new_species = title_atoms[1]
-
-        # append the new species to the list if it isn't there
-        if new_species not in all_species:
-            all_species.append(new_species)
-
-    return all_species
+gi|2765658|emb|Z78533.1|CIZ78533
+Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGGAATAAA ...', SingleLetterAlphabet())
+740
+...
+gi|2765564|emb|Z78439.1|PBZ78439
+Seq('CATTGTTGAGATCACATAATAATTGATCGAGTTAATCTGGAGGATCTGTTTACTTTGGTC ...', SingleLetterAlphabet())
+592
 \end{verbatim}
 
-Running this will give us identical results to what we saw earlier. Whether you choose to use this interface or the previous one depends on your needs and what you feel most comfortable with. Hey, Perl isn't the only place where there's more that one way to do things!
+Notice that the FASTA format does not specify the alphabet, so \verb|Bio.SeqIO| has defaulted to the rather generic \verb|SingleLetterAlphabet()| rather than something DNA specific.
 
-\subsection{FASTA files as Dictionaries}
+\subsection{Simple GenBank parsing example}
 
-The final thing that we'll do with our ubiquitous orchid fasta file is to show how to index it and access it like a database. This is very useful for large files where you only need to access certain elements of the file, and makes for a nice quick 'n dirty database.
-
-
-Let's index our record via their GenBank accession number, which seems like a useful way to get track of them. To do this, we first need to write a small function which returns accession numbers from a FASTA record (this is the Record class we discussed earlier):
+Now lets load the GenBank file instead - notice that the code to do this is almost identical to the snippet used above for a FASTA file.
 
 \begin{verbatim}
-import string
-
-def get_accession_num(fasta_record):
-    title_atoms = string.split(fasta_record.title)
-
-    # all of the accession number information is stuck in the first element
-    # and separated by '|'s
-    accession_atoms = string.split(title_atoms[0], '|')
- 
-    # the accession number is the 4th element
-    gb_name = accession_atoms[3]
-
-    # strip the version info before returning
-    return gb_name[:-2]
+from Bio import SeqIO
+handle = open('ls_orchid.gbk')
+for seq_record in SeqIO.parse(handle, 'genbank') :
+    print seq_record.id
+    print seq_record.seq
+    print len(seq_record.seq)
+handle.close()
 \end{verbatim}
 
-Now we need to create an index from this file, which will show us why writing this function was important. The general format for indexing a file is:
+\noindent This should give:
 
 \begin{verbatim}
-index_file(file_to_index, index_file_to_create, function_to_get_index_key)
+Z78533.1
+Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGGAATAAA ...', IUPACAmbiguousDNA())
+740
+...
+Z78439.1
+Seq('CATTGTTGAGATCACATAATAATTGATCGAGTTAATCTGGAGGATCTGTTTACTTTGGTC ...', IUPACAmbiguousDNA())
+592
 \end{verbatim}
 
-The tricky argument is the \verb|function_to_get_index_key|. Basically, this is a reference to a function that can get called and return an element to use as a key. The idea here is that the \verb|index_file| should be general purpose, and there isn't any good way for the Biopython developers to read your mind and know how you want to index your files. So now the \verb|get_accession_num| function above makes a lot of sense!
+This time \verb|Bio.SeqIO| has been able to choose a sensible alphabet, Ambigous DNA.  You'll also notice that a shorter string has been used as the \verb|record.id| in this case.
 
+\subsection{SeqRecord Iterators and Lists}
 
-Using all of this, we can now create an index file and see how it works. First, let's create the index file:
+In the above two examples, we have used a for loop to iterate over all the records in the file one by one.  You can use the for loop for all sorts of python objects (including lists, tuples and strings) which support the iteration interface.
+
+The object returned by \verb|Bio.SeqIO| is actually an iterator which returns SeqRecord objects.  You get to see each record in turn, but once and only once.  The plus point is that an iterator can save you memory when dealing with large files.
+
+If you had a list of SeqRecord objects, you could still use a for loop - but you could also access the records in any order you liked.  To turn a SeqRecord iterator from \verb|SeqIO.parse| into a list, use the built python functin \verb|list| like this:
 
 \begin{verbatim}
->>> from Bio import Fasta 
->>> Fasta.index_file("ls_orchid.fasta", "my_orchid_dict.idx", get_accession_num)
+from Bio import SeqIO
+handle = open('ls_orchid.gbk')
+records = list(SeqIO.parse(handle, 'genbank'))
+handle.close()
+
+print 'Found %i records' % len(records)
+
+print 'The last record'
+seq_record = records[-1] #using python's list tricks
+print seq_record.id
+print seq_record.seq
+print len(seq_record.seq)
+
+print 'The first record'
+seq_record = records[0] #remember, python counts from zero
+print seq_record.id
+print seq_record.seq
+print len(seq_record.seq)
 \end{verbatim}
 
-This creates an index file \verb|my_orchid_dict.idx| based on the input from \verb|ls_orchid.fasta| and indexed by the values returned by our \verb|get_accession_number| function.
-
-
-Now that we've got the index, we can create an in-memory dictionary to access the file contents using the index:
+Giving:
 
 \begin{verbatim}
->>> from Bio.Alphabet import IUPAC
->>> dna_parser = Fasta.SequenceParser(IUPAC.ambiguous_dna)
->>> orchid_dict = Fasta.Dictionary("my_orchid_dict.idx", dna_parser)
+Found 94 records
+The last record
+Z78439.1
+Seq('CATTGTTGAGATCACATAATAATTGATCGAGTTAATCTGGAGGATCTGTTTACTTTGGTC ...', IUPACAmbiguousDNA())
+592
+The first record
+Z78533.1
+Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGGAATAAA ...', IUPACAmbiguousDNA())
+740
+\end{verbatim}
+
+
+\subsection{Sequence files as Dictionaries}
+
+The final thing that we'll do with our ubiquitous orchid files is to show how to index them and access them like a database. This is very useful for large files where you only need to access certain elements of the file, and makes for a nice quick 'n dirty database.
+
+You can use the function \verb|SeqIO.to_dict| to make a SeqRecord dictionary (in memory).  By default this will use each record's identifier (i.e. \verb|record.id|) as the key.  Lets try this using our GenBank file:
+
+\begin{verbatim}
+from Bio import SeqIO
+handle = open('ls_orchid.gbk')
+orchid_dict = SeqIO.to_dict(SeqIO.parse(handle, 'genbank'))
+handle.close()
 \end{verbatim} 
 
-The dictionary is created from our \verb|my_orchid_dict.idx| file, and returns Sequence objects. The type of objects returned by the index file are based on the second argument passed. This argument should be a parser that the index file will pass the information through before returning it. If no parser is passed, then the dictionary will just return the raw object (i.~e.~exactly as it appears in the file). 
-
-
-The parser that we pass here is a \verb|SequenceParser| which converts FASTA files into \verb|SeqRecord| objects. The \verb|SequenceParser| takes an argument of the alphabet we should be using for the sequences. Since the parser can't be smart enough to know exactly what it will be parsing, we need to tell it. If no alphabet is provided, then the parser will default to \verb|Alphabet.generic_alphabet|.
-
-
-Since this is a dictionary, we can look at all of the keys we have available:
+Since this variable \verb|orchid_dict| is a dictionary, we can look at all of the keys we have available:
 
 \begin{verbatim}
 >>> print orchid_dict.keys()
-['Z78475', 'Z78519', 'Z78516', 'Z78517', 'Z78514', 'Z78515', 'Z78512', 
- 'Z78513', 'Z78510', 'Z78511', 'Z78457', 'Z78456', 'Z78455', 'Z78454', 
-...
+['Z78484.1', 'Z78464.1', 'Z78455.1', 'Z78442.1', 'Z78532.1', 'Z78453.1', ..., 'Z78471.1']
 \end{verbatim} 
 
-We can access a single sequence object via the keys and manipulate the object as a normal \verb|SeqRecord| object:
+We can access a single \verb|SeqRecord| object via the keys and manipulate the object as normal:
 
 \begin{verbatim}
->>> seq_record = orchid_dict['Z78475']
->>> print seq_record
-<Bio.SeqRecord.SeqRecord instance at 0x102c1f2c>
+>>> seq_record = orchid_dict['Z78475.1']
 >>> print seq_record.description
-gi|2765600|emb|Z78475.1|PSZ78475 P.supardii 5.8S rRNA gene and ITS1 and ITS2 DNA
+P.supardii 5.8S rRNA gene and ITS1 and ITS2 DNA
 >>> print seq_record.seq
 Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGTTGAGATCACATAATAAT ...', IUPACAmbiguousDNA())
 \end{verbatim}
 
-That easily, we have created a database of our FASTA file that will spit out sequence objects. 
+That easily, we have created a database of our GenBank file that will spit out \verb|SeqRecord| objects.  Now lets try this for the FASTA file instead:
 
+\begin{verbatim}
+from Bio import SeqIO
+handle = open('ls_orchid.fasta')
+orchid_dict = SeqIO.to_dict(SeqIO.parse(handle, 'fasta'))
+handle.close()
+print orchid_dict.keys()
+\end{verbatim} 
+
+This time the keys are:
+
+\begin{verbatim}
+['gi|2765596|emb|Z78471.1|PDZ78471', 'gi|2765646|emb|Z78521.1|CCZ78521', ...
+ ..., 'gi|2765613|emb|Z78488.1|PTZ78488', 'gi|2765583|emb|Z78458.1|PHZ78458']
+\end{verbatim} 
+
+You should recognised these strings from when we parsed the FASTA file earlier in Section~\ref{sec:fasta-parsing}.  Suppose you would rather have something else as the keys - like the accesion numbers.  This brings us nicely to \verb|SeqIO.to_dict|'s optional argument \verb|key_function|, which lets you define what to use as the dictionary key for your records.
+
+First you must write your own function to return the key you want (as a string) when given a SeqRecord object.  In general, the details of function will depend on the sort of input records you are dealing with.  But for our orchids, we can just split up the record's identifier using the "pipe" character (the vertical line) and return the fourth entry (field three):
+
+\begin{verbatim}
+def get_accession(record) :
+    """"Given a SeqRecord, return the accession number as a string
+    
+    e.g. 'gi|2765613|emb|Z78488.1|PTZ78488' -> 'Z78488.1'
+    """
+    parts = record.id.split('|')
+    assert len(parts) == 5 and parts[0] == 'gi' and parts[2] == 'emb'
+    return parts[3]
+\end{verbatim} 
+
+\noindent Then we can give this function to the \verb|SeqIO.to_dict| function to use in building the dictionary:
+
+\begin{verbatim}
+from Bio import SeqIO
+handle = open('ls_orchid.fasta')
+orchid_dict = SeqIO.to_dict(SeqIO.parse(handle, 'fasta'), key_function=get_accession)
+handle.close()
+print orchid_dict.keys()
+\end{verbatim} 
+
+\noindent Finally, as desired, the new dictionary keys:
+
+\begin{verbatim}
+>>> print orchid_dict.keys()
+['Z78484.1', 'Z78464.1', 'Z78455.1', 'Z78442.1', 'Z78532.1', 'Z78453.1', ..., 'Z78471.1']
+\end{verbatim}
+
+\noindent Not to complicated, I hope!
 
 \subsection{I love parsing -- please don't stop talking about it!}
 
-Biopython has a lot of parsers, and each has its own little special niches based on the sequence format it is parsing and all of that. The best place to look for information about specific parsers and how to do cool things with them is in the Cookbook section of the Tutorial. If you don't find the information you are looking for, please consider helping out your poor overworked documentors and submitting a cookbook entry about it! (once you figure out how to do it, that is!)
+Biopython has a lot of parsers, and each has its own little special niches based on the sequence format it is parsing and all of that.  While the most popular file formats have parsers integrated into \verb|Bio.SeqIO|, for some of the rarer and unloved file formats there is either no parser at all, or an old parser which has not been linked in yet.  Please check the Bio.SeqIO wiki page (\ahrefurl{\url{http://biopython.org/wiki/SeqIO}}) for the latest information, or ask on the mailing list.
+
+The next best place to look for information about specific parsers and how to do cool things with them is in the Cookbook section of the Tutorial. If you don't find the information you are looking for, please consider helping out your poor overworked documentors and submitting a cookbook entry about it! (once you figure out how to do it, that is!)
 
 
 \section{Connecting with biological databases}
+\label{sec:connecting-with-biological-databases}
 
 One of the very common things that you need to do in bioinformatics is extract information from biological databases. It can be quite tedious to access these databases manually, especially if you have a lot of repetitive work to do. Biopython attempts to save you time and energy by making some on-line databases available from python scripts. Currently, Biopython has code to extract information from the following databases:
 
@@ -709,7 +595,7 @@ The code is these modules basically makes it easy to write python code that inte
 Here we'll show a simple example of performing a remote Entrez query. More information on the other services is available in the Cookbook, which begins on page~\pageref{sec:cookbook}.
 
 
-In section~\ref{sec:writing_consumer} of the parsing examples, we talked about using Entrez to search the NCBI nucleotide databases for info on Cypripedioideae, our friends the lady slipper orchids. Now, we'll look at how to automate that process using a python script. For Entrez searching, this is more useful for displaying results then as a tool for getting sequences. The NCBI web site is mostly set up to allow remote queries so that you could write our own local CGI scripts that return information from NCBI pages. For this reason, the results are returned as HTML and it is pretty tough to get a flat file in a quick manner.
+In section~\ref{sec:orchids} of the parsing examples, we talked about using Entrez website to search the NCBI nucleotide databases for info on Cypripedioideae, our friends the lady slipper orchids. Now, we'll look at how to automate that process using a python script. For Entrez searching, this is more useful for displaying results then as a tool for getting sequences. The NCBI web site is mostly set up to allow remote queries so that you could write our own local CGI scripts that return information from NCBI pages. For this reason, the results are returned as HTML and it is pretty tough to get a flat file in a quick manner.
 
 
 In this example, we'll just show how to connect, get the results, and display them in a web browser. First, we'll start by defining our search and how to display the results:
