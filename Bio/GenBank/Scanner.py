@@ -9,6 +9,11 @@
 #
 # It is used by Bio.GenBank to parse GenBank files
 # It is also used by Bio.SeqIO to parse GenBank and EMBL files
+#
+# Feature Table Documentation:
+# http://www.insdc.org/files/feature_table.html
+# http://www.ncbi.nlm.nih.gov/projects/collab/FT/index.html
+# ftp://ftp.ncbi.nih.gov/genbank/docs/
 
 import sys
 from Bio.Seq import Seq
@@ -47,7 +52,10 @@ class InsdcScanner :
         self.line = ""
 
     def find_start(self) :
-        """Read in lines until find the ID/LOCUS line, which is returned"""
+        """Read in lines until find the ID/LOCUS line, which is returned.
+        
+        Any preamble (such as the header used by the NCBI on *.seq.gz archives)
+        will we ignored."""
         while True :
             if self.line :
                 line = self.line
@@ -66,8 +74,9 @@ class InsdcScanner :
             elif line == "" :
                 if self.debug > 1: print "Skipping blank line before record"
             else :
-                raise SyntaxError("Expected line starting '%s', found '%s'" \
-                                  % (self.RECORD_START, line.rstrip()))
+                #Ignore any header before the first ID/LOCUS line.
+                if self.debug > 1:
+	                print "Skipping header line before record:\n" + line
         self.line = line
         return line
 
@@ -393,6 +402,8 @@ class InsdcScanner :
         Each record (from the ID/LOCUS line to the // line) becomes a SeqRecord
 
         The SeqRecord objects include SeqFeatures if do_features=True
+        
+        This method is intended for use in Bio.SeqIO
         """
         #This is a generator function
         while True :
@@ -411,6 +422,10 @@ class InsdcScanner :
         Each CDS feature becomes a SeqRecord.
 
         alphabet - Used for any sequence found in a translation field.
+        tags2id  - Tupple of three strings, the feature keys to use
+                   for the record id, name and description,
+
+        This method is intended for use in Bio.SeqIO
         """
         self.set_handle(handle)
         while self.find_start() :
