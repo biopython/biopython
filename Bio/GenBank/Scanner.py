@@ -766,7 +766,7 @@ class GenBankScanner(InsdcScanner) :
             #    ??:40      Length of sequence, right-justified
             #    40:44      space, bp, space
             #    44:47      Blank, ss-, ds-, ms-
-            #    47:54      Blank, DNA, RNA, tRNA, mRNA, uRNA, snRNA
+            #    47:54      Blank, DNA, RNA, tRNA, mRNA, uRNA, snRNA, cDNA
             #    54:55      space
             #    55:63      Blank (implies linear), linear or circular
             #    63:64      space
@@ -777,8 +777,8 @@ class GenBankScanner(InsdcScanner) :
             assert line[40:44] in [' bp ', ' aa '] , \
                    'LOCUS line does not contain size units at expected position:\n' + line
             assert line[44:47] in ['   ', 'ss-', 'ds-', 'ms-'], \
-                    'LOCUS line does not have valid strand type (Single stranded, ...):\n' + line
-            assert line[47:54].strip() in ['','DNA','RNA','tRNA','mRNA','uRNA','snRNA'], \
+                   'LOCUS line does not have valid strand type (Single stranded, ...):\n' + line
+            assert line[47:54].strip() in ['','DNA','RNA','tRNA','mRNA','uRNA','snRNA','cDNA'], \
                    'LOCUS line does not contain valid sequence type (DNA, RNA, ...):\n' + line
             assert line[54:55] == ' ', \
                    'LOCUS line does not contain space at position 55:\n' + line
