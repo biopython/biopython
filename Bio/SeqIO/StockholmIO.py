@@ -332,6 +332,13 @@ class StockholmWriter(SequentialSequenceWriter):
         #things like writing concatenated alignments as used for
         #phylogenetic bootstrapping (usually done with phylip).
         #self.close()
+
+    def clean(self, text) :
+        """Use this to avoid getting newlines in the output"""
+        answer = text
+        for x in ["\n", "\r"] :
+            answer = answer.replace(x, " ")
+        return answer.replace("  ", " ")
         
     def write_record(self, record):
         """Write a single Stockholm record to the file"""
@@ -384,25 +391,31 @@ class StockholmWriter(SequentialSequenceWriter):
 
         #AC = Accession
         if "accession" in record.annotations :
-            self.handle.write("#=GS %s AC %s\n" % (seq_name, record.annotations["accession"]))
+            self.handle.write("#=GS %s AC %s\n" % (seq_name, self.clean(record.annotations["accession"])))
         elif record.id :
-            self.handle.write("#=GS %s AC %s\n" % (seq_name, record.id))
+            self.handle.write("#=GS %s AC %s\n" % (seq_name, self.clean(record.id)))
         
         #DE = description
         if record.description :
-            self.handle.write("#=GS %s DE %s\n" % (seq_name, record.description))
+            self.handle.write("#=GS %s DE %s\n" % (seq_name, self.clean(record.description)))
 
         #DE = database links
         for xref in record.dbxrefs :
-            self.handle.write("#=GS %s DR %s\n" % (seq_name, xref))
+            self.handle.write("#=GS %s DR %s\n" % (seq_name, self.clean(xref)))
 
         #GS/GR = other per sequence annotation
         for key in record.annotations :
             if key in self.pfam_gs_mapping :
-                self.handle.write("#=GS %s %s %s\n" % (seq_name, self.pfam_gs_mapping[key], str(record.annotations[key])))
+                self.handle.write("#=GS %s %s %s\n" \
+                                  % (seq_name,
+                                     self.clean(self.pfam_gs_mapping[key]),
+                                     self.clean(str(record.annotations[key]))))
             elif key in self.pfam_gr_mapping :
                 if len(str(record.annotations[key]))==len(record.seq) :
-                    self.handle.write("#=GR %s %s %s\n" % (seq_name, self.pfam_gr_mapping[key], str(record.annotations[key])))
+                    self.handle.write("#=GR %s %s %s\n" \
+                                      % (seq_name,
+                                         self.clean(self.pfam_gr_mapping[key]),
+                                         self.clean((record.annotations[key]))))
                 else :
                     #Should we print a warning?
                     pass
