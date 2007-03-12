@@ -23,12 +23,7 @@ Testing reading clustal format file Clustalw/opuntia.aln
  Seq='TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCG...TACCAGA', length=156
  ID = 'gi|6273287|gb|AF191661.1|AF191', Name='<unknown name>',
  Seq='TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCG...TACCAGA', length=156
- ID = 'gi|6273286|gb|AF191660.1|AF191', Name='<unknown name>',
- Seq='TATACATAAAAGAAGGGGGATGCGGATAAATGGAAAGGCG...TACCAGA', length=156
- ID = 'gi|6273290|gb|AF191664.1|AF191', Name='<unknown name>',
- Seq='TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCG...TACCAGA', length=156
- ID = 'gi|6273289|gb|AF191663.1|AF191', Name='<unknown name>',
- Seq='TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCG...TACCAGA', length=156
+ ...
  ID = 'gi|6273291|gb|AF191665.1|AF191', Name='<unknown name>',
  Seq='TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCG...TACCAGA', length=156
 Testing reading clustal format file Clustalw/opuntia.aln as an alignment
@@ -193,12 +188,7 @@ Testing reading nexus format file Nexus/f1.nex
  Seq='ACGT', length=4
  ID and Name='one should be punished, for (that)!',
  Seq='ACGT', length=4
- ID and Name='t5',
- Seq='ACGT', length=4
- ID and Name='t6',
- Seq='ACGT', length=4
- ID and Name='t8',
- Seq='ACGT', length=4
+ ...
  ID and Name='t9',
  Seq='cccc', length=4
 Testing reading nexus format file Nexus/f1.nex as an alignment
@@ -217,16 +207,7 @@ Testing reading nexus format file Nexus/f2.nex
  Seq='A-CGcT-gt----tc-t----aca-gt----tct-t-t', length=38
  ID and Name='isn'that [a] strange name?',
  Seq='A-CGcT-gttgtct------aaca-gttgtct------', length=38
- ID and Name='one should be punished, for (that)!',
- Seq='A-CG-T--------------------------------', length=38
- ID and Name='t5',
- Seq='A-CG-T--agt?-??-??--?-----agt?-???-???', length=38
- ID and Name='t6',
- Seq='AcCGtT-?-aaaaaa-a-acgcta-?-aaaaaaa-a-a', length=38
- ID and Name='t7',
- Seq='A?CGgT-gggggggg-g-??-?gg-ggggggggg-g-g', length=38
- ID and Name='t8',
- Seq='AtCGtT-tttttttt-?-tttttt-ttttttttt-?-?', length=38
+ ...
  ID and Name='t9',
  Seq='cccccc-ccccccccNc-cccccc-cccccccccNc-c', length=38
 Testing reading nexus format file Nexus/f2.nex as an alignment
@@ -248,16 +229,7 @@ Testing reading nexus format file Nexus/test_Nexus_input.nex
  Seq='A-C-GcTc-gtg-----tct-t-t----acac-gtg-----tct-t-t', length=48
  ID and Name='isn'that [a] strange name?',
  Seq='A-CcGcTc-gtgtgtgct--------acacac-gtgtgtgct------', length=48
- ID and Name='one should be punished, for (that)!',
- Seq='A-C-G-T-----------------------------------------', length=48
- ID and Name='t5',
- Seq='A-C?G-T?--acgt??-???-???--??---?--acgt??-???-???', length=48
- ID and Name='t6',
- Seq='AcCaGtTc-?--aaaaaaaa-a-aacgactac-?--aaaaaaaa-a-a', length=48
- ID and Name='t7',
- Seq='A?C-GgTg-ggggggggggg-g-g??--?ggg-ggggggggggg-g-g', length=48
- ID and Name='t8',
- Seq='AtCtGtTt-ttttttttttt-?-?tttttttt-ttttttttttt-?-?', length=48
+ ...
  ID and Name='t9',
  Seq='cccccccc-cccccccccccNc-ccccccccc-cccccccccccNc-c', length=48
 Testing reading nexus format file Nexus/test_Nexus_input.nex as an alignment
@@ -391,10 +363,7 @@ Testing reading genbank format file GenBank/cor6_6.gb
  Seq='ATTTGGCCTATAAATATAAACCCTTAAGCCCACATATCTT...AATTATA', length=880
  ID = 'M81224.1', Name='BNAKINI',
  Seq='AAAAAAACACAACAAAACTCAATAAATAAACAAATGGCAG...AAGCTTC', length=441
- ID = 'AJ237582.1', Name='ARU237582',
- Seq='GGACAAGGCCAAGGATGCTGCTGCTGCAGCTGGAGCTTCC...GACCGGC', length=206
- ID = 'L31939.1', Name='BRRBIF72',
- Seq='AACAAAACTCAATAAATAAACAAATGGCAGACAACAAGCA...TGGTTTT', length=282
+ ...
  ID = 'AF297471.1', Name='AF297471',
  Seq='ATGGCAGACAACAAGCAGAGCTTCCAAGCCGGTCAAGCCG...CAAGTAG', length=497
  Checking can write/read as 'fasta' format
@@ -522,8 +491,7 @@ Testing reading stockholm format file Stockholm/funny.sth
  Seq='MQHVSAPVFVFECTRLAY--VQHKLRAH----SRAVAIVLDEY', length=43
  ID = 'O31698/18-71', Name='O31698',
  Seq='MIEADKVAHVQVGNNLEH--ALLVLTKT----GYTAIPVLDPS', length=43
- ID = 'O31698/88-139', Name='O31698',
- Seq='EVMLTDIPRLHINDPIMK--GFGMVINN------GFVCVENDE', length=43
+ ...
  ID = 'O31699/88-139', Name='O31699',
  Seq='EVMLTDIPRLHINDPIMK--GFGMVINN------GFVCVENDE', length=43
 Testing reading stockholm format file Stockholm/funny.sth as an alignment
@@ -545,10 +513,7 @@ Testing reading phylip format file Phylip/reference_dna.phy
  Seq='CGTTACTCGTTGT', length=13
  ID and Name='Baluchithe',
  Seq='TAATGTTAATTGT', length=13
- ID and Name='B. virgini',
- Seq='TAATGTTCGTTGT', length=13
- ID and Name='Brontosaur',
- Seq='CAAAACCCATCAT', length=13
+ ...
  ID and Name='B.subtilis',
  Seq='GGCAGCCAATCAC', length=13
 Testing reading phylip format file Phylip/reference_dna.phy as an alignment
@@ -570,10 +535,7 @@ Testing reading phylip format file Phylip/reference_dna2.phy
  Seq='CGTTACTCGTTGTCGTTACTCGTTGTCGTTACTCGTTGT', length=39
  ID and Name='Baluchithe',
  Seq='TAATGTTAATTGTTAATGTTAATTGTTAATGTTAATTGT', length=39
- ID and Name='B. virgini',
- Seq='TAATGTTCGTTGTTAATGTTCGTTGTTAATGTTCGTTGT', length=39
- ID and Name='Brontosaur',
- Seq='CAAAACCCATCATCAAAACCCATCATCAAAACCCATCAT', length=39
+ ...
  ID and Name='B.subtilis',
  Seq='GGCAGCCAATCACGGCAGCCAATCACGGCAGCCAATCAC', length=39
 Testing reading phylip format file Phylip/reference_dna2.phy as an alignment
@@ -595,18 +557,7 @@ Testing reading phylip format file Phylip/hennigian.phy
  Seq='CACACAACAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAA', length=40
  ID and Name='C',
  Seq='CACAACAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAA', length=40
- ID and Name='D',
- Seq='CAACAAAACAAAAAAAAACAAAAAAAAAAAAAAAAAAAAA', length=40
- ID and Name='E',
- Seq='CAACAAAAACAAAAAAAACAAAAAAAAAAAAAAAAAAAAA', length=40
- ID and Name='F',
- Seq='ACAAAAAAAACACACAAAACAAAAAAAAAAAAAAAAAAAA', length=40
- ID and Name='G',
- Seq='ACAAAAAAAACACAACAAACAAAAAAAAAAAAAAAAAAAA', length=40
- ID and Name='H',
- Seq='ACAAAAAAAACAACAAAAACAAAAAAAAAAAAAAAAAAAA', length=40
- ID and Name='I',
- Seq='ACAAAAAAAAACAAAACAACAAAAAAAAAAAAAAAAAAAA', length=40
+ ...
  ID and Name='J',
  Seq='ACAAAAAAAAACAAAAACACAAAAAAAAAAAAAAAAAAAA', length=40
 Testing reading phylip format file Phylip/hennigian.phy as an alignment
@@ -628,18 +579,7 @@ Testing reading phylip format file Phylip/horses.phy
  Seq='AAACCCCCCCAAAAAAAAACAAAAAAAAAAAAAAAAAAAA', length=40
  ID and Name='Archaeohip',
  Seq='CAAAAAAAAAAAAAAAACACAAAAAAAAAAAAAAAAAAAA', length=40
- ID and Name='Parahippus',
- Seq='CAAACAACAACAAAAAAAACAAAAAAAAAAAAAAAAAAAA', length=40
- ID and Name='Merychippu',
- Seq='CCAACCACCACCCCACACCCAAAAAAAAAAAAAAAAAAAA', length=40
- ID and Name='M. secundu',
- Seq='CCAACCACCACCCACACCCCAAAAAAAAAAAAAAAAAAAA', length=40
- ID and Name='Nannipus',
- Seq='CCAACCACAACCCCACACCCAAAAAAAAAAAAAAAAAAAA', length=40
- ID and Name='Neohippari',
- Seq='CCAACCCCCCCCCCACACCCAAAAAAAAAAAAAAAAAAAA', length=40
- ID and Name='Calippus',
- Seq='CCAACCACAACCCACACCCCAAAAAAAAAAAAAAAAAAAA', length=40
+ ...
  ID and Name='Pliohippus',
  Seq='CCCACCCCCCCCCACACCCCAAAAAAAAAAAAAAAAAAAA', length=40
 Testing reading phylip format file Phylip/horses.phy as an alignment
@@ -661,18 +601,7 @@ Testing reading phylip format file Phylip/random.phy
  Seq='AAACCACACACACAAACCCAAAAAAAAAAAAAAAAAAAAA', length=40
  ID and Name='C',
  Seq='ACAAAACCAAACCACCCACAAAAAAAAAAAAAAAAAAAAA', length=40
- ID and Name='D',
- Seq='AAAAACACAACACACCAAACAAAAAAAAAAAAAAAAAAAA', length=40
- ID and Name='E',
- Seq='AAACAACCACACACAACCAAAAAAAAAAAAAAAAAAAAAA', length=40
- ID and Name='F',
- Seq='CCCAAACACCCCCAAAAAACAAAAAAAAAAAAAAAAAAAA', length=40
- ID and Name='G',
- Seq='ACACCCCCACACCCACCAACAAAAAAAAAAAAAAAAAAAA', length=40
- ID and Name='H',
- Seq='AAAACAACAACCACCCCACCAAAAAAAAAAAAAAAAAAAA', length=40
- ID and Name='I',
- Seq='ACACAACAACACAAACAACCAAAAAAAAAAAAAAAAAAAA', length=40
+ ...
  ID and Name='J',
  Seq='CCAAAAACACCCAACCCAACAAAAAAAAAAAAAAAAAAAA', length=40
 Testing reading phylip format file Phylip/random.phy as an alignment
@@ -754,6 +683,11 @@ Testing can write/read three proteins alignment
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
 Testing can write/read three DNA sequence alignment
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing can write/read 3 DNA seq alignment with CR/LF in name/descr
  Checking can write/read as 'fasta' format
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format

@@ -117,12 +117,28 @@ test_records = [
       SeqRecord(Seq("ACTCAACCTTGCTGGTCATTGTGACCCCAGCA",generic_dna), id="Y"),
       SeqRecord(Seq("TTTCCTCGGAGGCCAATCTGGATCAAGACCAT",generic_dna), id="Z")],
      "three DNA sequence alignment"),
+    ([SeqRecord(Seq("AATAAACCTTGCTGGCCATTGTGATCCATCCA",generic_dna), id="X",
+                name="The\nMystery\rSequece:%sX" % os.linesep),
+      SeqRecord(Seq("ACTCAACCTTGCTGGTCATTGTGACCCCAGCA",generic_dna), id="Y",
+                description="an%sevil\rdescription right\nhere" % os.linesep),
+      SeqRecord(Seq("TTTCCTCGGAGGCCAATCTGGATCAAGACCAT",generic_dna), id="Z")],
+     "3 DNA seq alignment with CR/LF in name/descr"),
     ([SeqRecord(Seq("CHSMAIKLSSEHNIPSGIANAL",generic_protein), id="Alpha"),
       SeqRecord(Seq("VHGMAHPLGAFYNTPHGVANAI",generic_protein), id="Beta"),
       SeqRecord(Seq("VHGMAHPLGAFYNTPHGVANAI",generic_protein), id="Beta"),
       SeqRecord(Seq("HNGFTALEGEIHHLTHGEKVAF",generic_protein), id="Gamma")],
      "alignment with repeated record"),
     ]
+# Meddle with the annotation too:
+assert test_records[4][1] == "3 DNA seq alignment with CR/LF in name/descr"
+# Add a list of strings,
+test_records[4][0][2].annotations["note"] = ["Note%salso" % os.linesep \
+                                    + "\r\nhas\n evil line\rbreaks!", "Wow"]
+# Add a simple string
+test_records[4][0][2].annotations["comment"] = "More%sof" % os.linesep \
+                                          + "\r\nthese\n evil line\rbreaks!"
+# Add a float too:
+test_records[4][0][2].annotations["weight"] = 2.5
 
 def records_match(record_one, record_two) :
     """This is meant to be a strict comparison for exact agreement"""
@@ -284,10 +300,12 @@ for (t_format, t_alignment, t_filename, t_count) in test_files :
         assert records_match(record, records4[i])
         assert records_match(record, records5[i])
 
-        if i < 10 :
+        if i < 3 :
             print record_summary(record)
-    if t_count > 10 :
+    # Only printed the only first three records: 0,1,2 
+    if t_count > 4 :
         print " ..."
+    if t_count > 3 :
         print record_summary(records[-1])
 
 
