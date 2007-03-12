@@ -120,9 +120,9 @@ class FastaWriter(SequentialSequenceWriter):
 
         if self.wrap :
             for i in range(0, len(data), self.wrap):
-                self.handle.write(data[i:i+self.wrap] + os.linesep)
+                self.handle.write(data[i:i+self.wrap] + "\n")
         else :
-            self.handle.write(data + os.linesep)
+            self.handle.write(data + "\n")
 
 if __name__ == "__main__" :
     import os
