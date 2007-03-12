@@ -2,7 +2,6 @@ from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Interfaces import SequentialSequenceWriter
-import os
 
 #This is a generator function!
 def FastaIterator(handle, alphabet = single_letter_alphabet, title2ids = None) :
@@ -111,8 +110,9 @@ class FastaWriter(SequentialSequenceWriter):
             else :
                 title = "%s %s" % (id, description)
 
-        assert os.linesep not in title
-        self.handle.write(">%s%s" % (title, os.linesep))
+        assert "\n" not in title
+        assert "\r" not in title
+        self.handle.write(">%s\n" % title)
 
         data = record.seq.tostring()
         assert "\n" not in data
