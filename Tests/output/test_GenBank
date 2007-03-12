@@ -3622,6 +3622,186 @@ strand: None
 qualifiers: 
 	Key: site_type, Value: ['amidation']
 
+***Record from the FeatureParser
+Seq: Seq('ATGTCTGGCAACCAGTATACTGAGGAAGTTATGGAGGGAGTAAATTGGTTAAAGAAACAT ...', IUPACAmbiguousDNA())
+Id: AB000048.1
+Name: AB000048
+Description Feline panleukopenia virus DNA for nonstructural protein 1, complete cds.
+Annotations***
+Key: data_file_division
+Value: VRL
+Key: date
+Value: 05-FEB-1999
+Key: gi
+Value: 1769753
+Key: keywords
+Value: ['nonstructural protein 1']
+Key: organism
+Value: Feline panleukopenia virus
+References*
+location: [0:2007]
+authors: Horiuchi,M.
+title: Evolutionary pattern of feline panleukopenia virus differs from that of canine parvovirus
+journal: Unpublished
+medline id: 
+pubmed id: 
+comment: 
+
+location: [0:2007]
+authors: Horiuchi,M.
+title: Direct Submission
+journal: Submitted (22-DEC-1996) Motohiro Horiuchi, Obihiro University of Agriculture and Veterinary Medicine, Veterinary Public Health; Inada cho, Obihiro, Hokkaido 080, Japan (E-mail:horiuchi@obihiro.ac.jp, Tel:0155-49-5392, Fax:0155-49-5402)
+medline id: 
+pubmed id: 
+comment: 
+
+Key: source
+Value: Feline panleukopenia virus
+Key: taxonomy
+Value: ['Viruses', 'ssDNA viruses', 'Parvoviridae', 'Parvovirinae', 'Parvovirus']
+Feaures
+type: source
+location: [0:2007]
+ref: None:None
+strand: 1
+qualifiers: 
+	Key: db_xref, Value: ['taxon:10786']
+	Key: isolate, Value: ['483']
+	Key: lab_host, Value: ['Felis domesticus']
+	Key: mol_type, Value: ['genomic DNA']
+	Key: organism, Value: ['Feline panleukopenia virus']
+
+type: CDS
+location: [0:2007]
+ref: None:None
+strand: 1
+qualifiers: 
+	Key: codon_start, Value: ['1']
+	Key: db_xref, Value: ['GI:1769754']
+	Key: product, Value: ['nonstructural protein 1']
+	Key: protein_id, Value: ['BAA19009.1']
+	Key: translation, Value: ['MSGNQYTEEVMEGVNWLKKHAEDEAFSFVFKCDNVQLNGKDVRWNNYTKPIQNEELTSLIRGAQTAMDQTEEEEMDWESEVDSLAKKQVQTFDALIKKCLFEVFVSKNIEPNECVWFIQHEWGKDQGWHCHVLLHSKNLQQATGKWLRRQMNMYWSRWLVTLCSINLTPTEKIKLREIAEDSEWVTILTYRHKQTKKDYVKMVHFGNMIAYYFLTKKKIVHMTKESGYFLSTDSGWKFNFMKYQDRHTVSTLYTEQMKPETVETTVTTAQETKRGRIQTKKEVSIKCTLRDLVSKRVTSPEDWMMLQPDSYIEMMAQPGGENLLKNTLEICTLTLARTKTAFELILEKADNTKLTNFDLANSRTCQIFRMHGWNWIKVCHAIACVLNRQGGKRNTVLFHGPASTGKSIIAQAIAQAVGNVGCYNAANVNFPFNDCTNKNLIWVEEAGNFGQQVNQFKAICSGQTIRIDQKGKGSKQIEPTPVIMTTNENITIVRIGCEERPEHTQPIRDRMLNIKLVCKLPGDFGLVDKEEWPLICAWLVKHGYQSTMANYTHHWGKVPEWDENWAEPKIQEGINSPGCKDLETQAASNPQSQDHVLTPLTPDVVDLALEPWSTPDTPIAETANQQSNQLGVTHKDVQASPTWSEIEADLRAIFTSEQLEEDFRDDLD']
+
+***Record from the FeatureParser
+Seq: Seq('ATGTCTGGCAACCAGTATACTGAGGAAGTTATGGAGGGAGTAAATTGGTTAAAGAAACAT ...', IUPACAmbiguousDNA())
+Id: AB000049.1
+Name: AB000049
+Description Feline panleukopenia virus DNA for nonstructural protein 1, complete cds.
+Annotations***
+Key: data_file_division
+Value: VRL
+Key: date
+Value: 05-FEB-1999
+Key: gi
+Value: 1769755
+Key: keywords
+Value: ['nonstructural protein 1']
+Key: organism
+Value: Feline panleukopenia virus
+References*
+location: [0:2007]
+authors: Horiuchi,M.
+title: Evolutionary pattern of feline panleukopenia virus differs that of canine parvovirus
+journal: Unpublished
+medline id: 
+pubmed id: 
+comment: 
+
+location: [0:2007]
+authors: Horiuchi,M.
+title: Direct Submission
+journal: Submitted (22-DEC-1996) Motohiro Horiuchi, Obihiro University of Agriculture and Veterinary Medicine, Veterinary Public Health; Inada cho, Obihiro, Hokkaido 080, Japan (E-mail:horiuchi@obihiro.ac.jp, Tel:0155-49-5392, Fax:0155-49-5402)
+medline id: 
+pubmed id: 
+comment: 
+
+Key: source
+Value: Feline panleukopenia virus
+Key: taxonomy
+Value: ['Viruses', 'ssDNA viruses', 'Parvoviridae', 'Parvovirinae', 'Parvovirus']
+Feaures
+type: source
+location: [0:2007]
+ref: None:None
+strand: 1
+qualifiers: 
+	Key: db_xref, Value: ['taxon:10786']
+	Key: isolate, Value: ['94-1']
+	Key: lab_host, Value: ['Felis domesticus']
+	Key: mol_type, Value: ['genomic DNA']
+	Key: organism, Value: ['Feline panleukopenia virus']
+
+type: CDS
+location: [0:2007]
+ref: None:None
+strand: 1
+qualifiers: 
+	Key: codon_start, Value: ['1']
+	Key: db_xref, Value: ['GI:1769756']
+	Key: product, Value: ['nonstructural protein 1']
+	Key: protein_id, Value: ['BAA19010.1']
+	Key: translation, Value: ['MSGNQYTEEVMEGVNWLKKHAEDEAFSFVFKCDNVQLNGKDVRWNNYTKPIQNEELTSLIRGAQTAMDQTEEEEMDWESEVDSLAKKQVQTFDALIKKCLFEVFVSKNIEPNECVWFIQHEWGKDQGWHCHVLLHSKNLQQATGKWLRRQMNMYWSRWLVTLCSINLTPTEKIKLREIAEDSEWVTILTYRHKQTKKDYVKMVHFGNMIAYYFLTKKKIVHMTKESGYFLSTDSGWKFNFMKYQDRHTVSTLYTEQMKPETVETTVTTAQETKRGRIQTKKEVSIKCTLRDLVSKRVTSPEDWMMLQPDSYIEMMAQPGGENLLKNTLEICTLTLARTKTAFELILEKADNTKLTNFDLANSRTCQIFRMHGWNWIKVCHAIACVLNRQGGKRNTVLFHGPASTGKSIIAQAIAQAVGNVGCYNAANVNFPFNDCTNKNLIWVEEAGNFGQQVNQFKAICSGQTIRIDQKGKGSKQIEPTPVIMTTNENITIVRIGCEERPEHTQPIRDRMLNIKLVCKLPGDFGLVDKEEWPLICAWLVKHGYQSTMANYTHHWGKVPEWDENWAEPKIQEGINSPGCKDLETQAASNPQSQDHVLTPLTPDVVDLALEPWSTPDTPIAETANQQSNQLGVTHKDVQASPTWSEIEADLRAIFTSEQLEEDFRDDLD']
+
+***Record from the FeatureParser
+Seq: Seq('ATGAGTGATGGAGCAGTTCAACCAGACGGTGGTCAACCTGCTGTCAGAAATGAAAGAGCT ...', IUPACAmbiguousDNA())
+Id: AB000050.1
+Name: AB000050
+Description Feline panleukopenia virus DNA for capsid protein 2, complete cds.
+Annotations***
+Key: data_file_division
+Value: VRL
+Key: date
+Value: 05-FEB-1999
+Key: gi
+Value: 1769757
+Key: keywords
+Value: ['capsid protein 2']
+Key: organism
+Value: Feline panleukopenia virus
+References*
+location: [0:1755]
+authors: Horiuchi,M.
+title: Evolutionary pattern of feline panleukopenia virus differs from that of canine parvovirus
+journal: Unpublished
+medline id: 
+pubmed id: 
+comment: 
+
+location: [0:1755]
+authors: Horiuchi,M.
+title: Direct Submission
+journal: Submitted (22-DEC-1996) Motohiro Horiuchi, Obihiro University of Agriculture and Veterinary Medicine, Veterinary Public Health; Inada cho, Obihiro, Hokkaido 080, Japan (E-mail:horiuchi@obihiro.ac.jp, Tel:0155-49-5392, Fax:0155-49-5402)
+medline id: 
+pubmed id: 
+comment: 
+
+Key: source
+Value: Feline panleukopenia virus
+Key: taxonomy
+Value: ['Viruses', 'ssDNA viruses', 'Parvoviridae', 'Parvovirinae', 'Parvovirus']
+Feaures
+type: source
+location: [0:1755]
+ref: None:None
+strand: 1
+qualifiers: 
+	Key: db_xref, Value: ['taxon:10786']
+	Key: isolate, Value: ['94-1']
+	Key: lab_host, Value: ['Felis domesticus']
+	Key: mol_type, Value: ['genomic DNA']
+	Key: organism, Value: ['Feline panleukopenia virus']
+
+type: CDS
+location: [0:1755]
+ref: None:None
+strand: 1
+qualifiers: 
+	Key: codon_start, Value: ['1']
+	Key: db_xref, Value: ['GI:1769758']
+	Key: product, Value: ['capsid protein 2']
+	Key: protein_id, Value: ['BAA19011.1']
+	Key: translation, Value: ['MSDGAVQPDGGQPAVRNERATGSGNGSGGGGGGGSGGVGISTGTFNNQTEFKFLENGWVEITANSSRLVHLNMPESENYKRVVVNNMDKTAVKGNMALDDTHVQIVTPWSLVDANAWGVWFNPGDWQLIVNTMSELHLVSFEQEIFNVVLKTVSESATQPPTKVYNNDLTASLMVALDSNNTMPFTPAAMRSETLGFYPWKPTIPTPWRYYFQWDRTLIPSHTGTSGTPTNVYHGTDPDDVQFYTIENSVPVHLLRTGDEFATGTFFFDCKPCRLTHTWQTNRALGLPPFLNSLPQSEGATNFGDIGVQQDKRRGVTQMGNTDYITEATIMRPAEVGYSAPYYSFEASTQGPFKTPIAAGRGGAQTDENQAADGDPRYAFGRQHGQKTTTTGETPERFTYIAHQDTGRYPEGDWIQNINFNLPVTNDNVLLPTDPIGGKTGINYTNIFNTYGPLTALNNVPPVYPNGQIWDKEFDTDLKPRLHVNAPFVCQNNCPGQLFVKVAPNLTNEYDPDASANMSRIVTYSDFWWKGKLVFKAKLRASHTWNPIQQMSINVDNQFNYVPNNIGAMKIVYEKSQLAPRKLY']
+
 ***Record from the RecordParser
 locus: NM_006141
 definition: Homo sapiens dynein, cytoplasmic, light intermediate polypeptide 2 (DNCLI2), mRNA.
@@ -4526,6 +4706,72 @@ feature key: Site
 location: 64
 num qualifiers: 1
 key: /site_type= value: "amidation"
+***Record from the RecordParser
+locus: AB000048
+definition: Feline panleukopenia virus DNA for nonstructural protein 1, complete cds.
+accession: ['AB000048']
+reference title: Evolutionary pattern of feline panleukopenia virus differs from that of canine parvovirus
+reference title: Direct Submission
+feature key: source
+location: 1..2007
+num qualifiers: 5
+key: /organism= value: "Feline panleukopenia virus"
+key: /mol_type= value: "genomic DNA"
+key: /isolate= value: "483"
+key: /db_xref= value: "taxon:10786"
+key: /lab_host= value: "Felis domesticus"
+feature key: CDS
+location: 1..2007
+num qualifiers: 5
+key: /codon_start= value: 1
+key: /product= value: "nonstructural protein 1"
+key: /protein_id= value: "BAA19009.1"
+key: /db_xref= value: "GI:1769754"
+key: /translation= value: "MSGNQYTEEVMEGVNWLKKHAEDEAFSFVFKCDNVQLNGKDVRWNNYTKPIQNEELTSLIRGAQTAMDQTEEEEMDWESEVDSLAKKQVQTFDALIKKCLFEVFVSKNIEPNECVWFIQHEWGKDQGWHCHVLLHSKNLQQATGKWLRRQMNMYWSRWLVTLCSINLTPTEKIKLREIAEDSEWVTILTYRHKQTKKDYVKMVHFGNMIAYYFLTKKKIVHMTKESGYFLSTDSGWKFNFMKYQDRHTVSTLYTEQMKPETVETTVTTAQETKRGRIQTKKEVSIKCTLRDLVSKRVTSPEDWMMLQPDSYIEMMAQPGGENLLKNTLEICTLTLARTKTAFELILEKADNTKLTNFDLANSRTCQIFRMHGWNWIKVCHAIACVLNRQGGKRNTVLFHGPASTGKSIIAQAIAQAVGNVGCYNAANVNFPFNDCTNKNLIWVEEAGNFGQQVNQFKAICSGQTIRIDQKGKGSKQIEPTPVIMTTNENITIVRIGCEERPEHTQPIRDRMLNIKLVCKLPGDFGLVDKEEWPLICAWLVKHGYQSTMANYTHHWGKVPEWDENWAEPKIQEGINSPGCKDLETQAASNPQSQDHVLTPLTPDVVDLALEPWSTPDTPIAETANQQSNQLGVTHKDVQASPTWSEIEADLRAIFTSEQLEEDFRDDLD"
+***Record from the RecordParser
+locus: AB000049
+definition: Feline panleukopenia virus DNA for nonstructural protein 1, complete cds.
+accession: ['AB000049']
+reference title: Evolutionary pattern of feline panleukopenia virus differs that of canine parvovirus
+reference title: Direct Submission
+feature key: source
+location: 1..2007
+num qualifiers: 5
+key: /organism= value: "Feline panleukopenia virus"
+key: /mol_type= value: "genomic DNA"
+key: /isolate= value: "94-1"
+key: /db_xref= value: "taxon:10786"
+key: /lab_host= value: "Felis domesticus"
+feature key: CDS
+location: 1..2007
+num qualifiers: 5
+key: /codon_start= value: 1
+key: /product= value: "nonstructural protein 1"
+key: /protein_id= value: "BAA19010.1"
+key: /db_xref= value: "GI:1769756"
+key: /translation= value: "MSGNQYTEEVMEGVNWLKKHAEDEAFSFVFKCDNVQLNGKDVRWNNYTKPIQNEELTSLIRGAQTAMDQTEEEEMDWESEVDSLAKKQVQTFDALIKKCLFEVFVSKNIEPNECVWFIQHEWGKDQGWHCHVLLHSKNLQQATGKWLRRQMNMYWSRWLVTLCSINLTPTEKIKLREIAEDSEWVTILTYRHKQTKKDYVKMVHFGNMIAYYFLTKKKIVHMTKESGYFLSTDSGWKFNFMKYQDRHTVSTLYTEQMKPETVETTVTTAQETKRGRIQTKKEVSIKCTLRDLVSKRVTSPEDWMMLQPDSYIEMMAQPGGENLLKNTLEICTLTLARTKTAFELILEKADNTKLTNFDLANSRTCQIFRMHGWNWIKVCHAIACVLNRQGGKRNTVLFHGPASTGKSIIAQAIAQAVGNVGCYNAANVNFPFNDCTNKNLIWVEEAGNFGQQVNQFKAICSGQTIRIDQKGKGSKQIEPTPVIMTTNENITIVRIGCEERPEHTQPIRDRMLNIKLVCKLPGDFGLVDKEEWPLICAWLVKHGYQSTMANYTHHWGKVPEWDENWAEPKIQEGINSPGCKDLETQAASNPQSQDHVLTPLTPDVVDLALEPWSTPDTPIAETANQQSNQLGVTHKDVQASPTWSEIEADLRAIFTSEQLEEDFRDDLD"
+***Record from the RecordParser
+locus: AB000050
+definition: Feline panleukopenia virus DNA for capsid protein 2, complete cds.
+accession: ['AB000050']
+reference title: Evolutionary pattern of feline panleukopenia virus differs from that of canine parvovirus
+reference title: Direct Submission
+feature key: source
+location: 1..1755
+num qualifiers: 5
+key: /organism= value: "Feline panleukopenia virus"
+key: /mol_type= value: "genomic DNA"
+key: /isolate= value: "94-1"
+key: /db_xref= value: "taxon:10786"
+key: /lab_host= value: "Felis domesticus"
+feature key: CDS
+location: 1..1755
+num qualifiers: 5
+key: /codon_start= value: 1
+key: /product= value: "capsid protein 2"
+key: /protein_id= value: "BAA19011.1"
+key: /db_xref= value: "GI:1769758"
+key: /translation= value: "MSDGAVQPDGGQPAVRNERATGSGNGSGGGGGGGSGGVGISTGTFNNQTEFKFLENGWVEITANSSRLVHLNMPESENYKRVVVNNMDKTAVKGNMALDDTHVQIVTPWSLVDANAWGVWFNPGDWQLIVNTMSELHLVSFEQEIFNVVLKTVSESATQPPTKVYNNDLTASLMVALDSNNTMPFTPAAMRSETLGFYPWKPTIPTPWRYYFQWDRTLIPSHTGTSGTPTNVYHGTDPDDVQFYTIENSVPVHLLRTGDEFATGTFFFDCKPCRLTHTWQTNRALGLPPFLNSLPQSEGATNFGDIGVQQDKRRGVTQMGNTDYITEATIMRPAEVGYSAPYYSFEASTQGPFKTPIAAGRGGAQTDENQAADGDPRYAFGRQHGQKTTTTGETPERFTYIAHQDTGRYPEGDWIQNINFNLPVTNDNVLLPTDPIGGKTGINYTNIFNTYGPLTALNNVPPVYPNGQIWDKEFDTDLKPRLHVNAPFVCQNNCPGQLFVKVAPNLTNEYDPDASANMSRIVTYSDFWWKGKLVFKAKLRASHTWNPIQQMSINVDNQFNYVPNNIGAMKIVYEKSQLAPRKLY"
 Testing dictionaries...
 Indexing file to serve as a dictionary...
 len: 6

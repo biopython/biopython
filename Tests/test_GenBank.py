@@ -21,7 +21,7 @@ gb_file_dir = os.path.join(os.getcwd(), 'GenBank')
 test_files = ['noref.gb', 'cor6_6.gb', 'iro.gb', 'pri1.gb', 'arab1.gb',
               'protein_refseq.gb', 'extra_keywords.gb']
 test_files += ['one_of.gb', 'NT_019265.gb', 'origin_line.gb', 'blank_seq.gb']
-test_files += ['dbsource_wrap.gb']
+test_files += ['dbsource_wrap.gb', 'gbvrl1_start.seq']
 
 write_format_files = test_files[:]
 # don't test writing on protein_refseq, since it is horribly nasty
@@ -30,7 +30,7 @@ write_format_files = test_files[:]
 # don't test writing on blank_seq because it lacks a sequence type
 # don't test dbsource_wrap because it is a junky RefSeq file
 for remove_file in ["protein_refseq.gb", "NT_019265.gb", "blank_seq.gb",
-                    "dbsource_wrap.gb"]:
+                    "dbsource_wrap.gb", "gbvrl1_start.seq"]:
     if remove_file in write_format_files:
         write_format_files.remove(remove_file)
 
