@@ -83,6 +83,10 @@ test_files = [ \
     ("genbank",False, 'GenBank/origin_line.gb', 1),
     ("genbank",False, 'GenBank/blank_seq.gb', 1),
     ("genbank",False, 'GenBank/dbsource_wrap.gb', 1),
+# The next example is a truncated copy of gbvrl1.seq from
+# ftp://ftp.ncbi.nih.gov/genbank/gbvrl1.seq.gz
+# This includes an NCBI header, and the first three records:
+    ("genbank",False, 'GenBank/gbvrl1_start.seq', 3),
 #Following files are also used in test_GFF.py
     ("genbank",False, 'GFF/NC_001422.gbk', 1),
 #Following files are currently only used here:

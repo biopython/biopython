@@ -446,6 +446,20 @@ Testing reading genbank format file GenBank/dbsource_wrap.gb
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+Testing reading genbank format file GenBank/gbvrl1_start.seq
+ ID = 'AB000048.1', Name='AB000048',
+ Seq='ATGTCTGGCAACCAGTATACTGAGGAAGTTATGGAGGGAG...GGATTAA', length=2007
+ ID = 'AB000049.1', Name='AB000049',
+ Seq='ATGTCTGGCAACCAGTATACTGAGGAAGTTATGGAGGGAG...GGATTAA', length=2007
+ ID = 'AB000050.1', Name='AB000050',
+ Seq='ATGAGTGATGGAGCAGTTCAACCAGACGGTGGTCAACCTG...ATATTAA', length=1755
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'phylip' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'stockholm' format
+ Failed: Sequences must all be the same length
 Testing reading genbank format file GFF/NC_001422.gbk
  ID = 'NC_001422.1', Name='NC_001422',
  Seq='GAGTTTTATCGCTTCCATGACGCAGAAGTTAACACTTTCG...ACCTGCA', length=5386
