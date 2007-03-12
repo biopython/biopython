@@ -99,13 +99,10 @@ class FastaWriter(SequentialSequenceWriter):
         self._record_written = True
         
         if self.record2title :
-            title=record2title(record)
+            title=self.clean(record2title(record))
         else :
-            id = record.id.replace(os.linesep + " ", " ").replace(os.linesep, " ")
-            assert os.linesep not in id
-
-            description = record.description.replace(os.linesep + " ", " ").replace(os.linesep, " ")
-            assert os.linesep not in description
+            id = self.clean(record.id)
+            description = self.clean(record.description)
 
             #if description[:len(id)]==id :
             if description and description.split(None,1)[0]==id :
@@ -118,7 +115,8 @@ class FastaWriter(SequentialSequenceWriter):
         self.handle.write(">%s%s" % (title, os.linesep))
 
         data = record.seq.tostring()
-        assert os.linesep not in data
+        assert "\n" not in data
+        assert "\r" not in data
 
         if self.wrap :
             for i in range(0, len(data), self.wrap):

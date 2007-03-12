@@ -333,13 +333,6 @@ class StockholmWriter(SequentialSequenceWriter):
         #phylogenetic bootstrapping (usually done with phylip).
         #self.close()
 
-    def clean(self, text) :
-        """Use this to avoid getting newlines in the output"""
-        answer = text
-        for x in ["\n", "\r"] :
-            answer = answer.replace(x, " ")
-        return answer.replace("  ", " ")
-        
     def write_record(self, record):
         """Write a single Stockholm record to the file"""
         assert self._header_written

@@ -141,6 +141,13 @@ class SequenceWriter:
 
         Use the method write_file() to actually record your sequence records."""
         self.handle = handle
+
+    def clean(self, text) :
+        """Use this to avoid getting newlines in the output"""
+        answer = text
+        for x in ["\n", "\r"] :
+            answer = answer.replace(x, " ")
+        return answer.replace("  ", " ")
     
     def write_file(self, records) :
         """Use this to write an entire file containing the given records.
