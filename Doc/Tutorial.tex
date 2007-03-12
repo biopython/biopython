@@ -358,26 +358,27 @@ This covers the basic features and uses of the Biopython sequence class. There i
 
 Before we jump right into parsers and everything else to do with Biopython, let's set up an example to motivate everything we do and make life more interesting. After all, if there wasn't any biology in this tutorial, why would you want you read it?
 
-Since I love plants, I think we're just going to have to have a plant based example (sorry to all the fans of other organisms out there!).  Having just completed a recent trip to our local greenhouse, we've suddenly developed an incredible obsession with Lady Slipper Orchids (if you wonder why take a look at \ahrefurl{\url{http://www.millicentorchids.com/greenhouse/images/papesq01.jpg}}. If that doesn't convince you, you can look at all of the available photos at  \ahrefurl{\url{http://www.millicentorchids....com/greenhouse/indexphoto.htm}}).  Of course, orchids are not only beautiful to look at, they are also extremely interesting for people studying evolution and systematics. So we're thinking about writing a little proposal to do a molecular study of Lady Slipper evolution and would like to see what kind of research has already been done and how we can add to that.
+Since I love plants, I think we're just going to have to have a plant based example (sorry to all the fans of other organisms out there!).  Having just completed a recent trip to our local greenhouse, we've suddenly developed an incredible obsession with Lady Slipper Orchids (if you wonder why take a look at \ahrefurl{\url{http://www.millicentorchids.com/greenhouse/images/papesq01.jpg}}. If that doesn't convince you, you can look at all of the available photos at  \ahrefurl{\url{http://www.millicentorchids...com/greenhouse/indexphoto.htm}}).  Of course, orchids are not only beautiful to look at, they are also extremely interesting for people studying evolution and systematics. So we're thinking about writing a little proposal to do a molecular study of Lady Slipper evolution and would like to see what kind of research has already been done and how we can add to that.
 
 After a little bit of reading up we discover that the Lady Slipper Orchids are in the Orchidaceae family and the Cypripedioideae sub-family and are made up of 5 genera:  \emph{Cypripedium}, \emph{Paphiopedilum}, \emph{Phragmipedium}, \emph{Selenipedium} and \emph{Mexipedium}.
 
-We'll start with an online search for our friends, the lady slipper orchids. Let's just take a look through the nucleotide databases at NCBI, using an Entrez online search (\ahrefurl{\url{http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?db=Nucleotide}}) for everything mentioning the text Cypripedioideae (this is the subfamily of lady slipper orchids). When this tutorial was originally written, this search gave us only 94 hits, which we saved as a FASTA formatted text file (\ahrefurl{\href{http://cvs.biopython.org/cgi-bin/viewcvs/viewcvs.cgi/*checkout*/biopython/Doc/examples/ls_orchid.fasta?rev=HEAD&cvsroot=biopython&content-type=text/plain}{ls\_orchid.fasta}}) and as a GenBank formatted text file (\ahrefurl{\href{http://cvs.biopython.org/cgi-bin/viewcvs/viewcvs.cgi/*checkout*/biopython/Doc/examples/ls_orchid.gbk?rev=HEAD&cvsroot=biopython&content-type=text/plain}{ls\_orchid.gbk}}).
+That gives us enough to get started delving for more information. So, let's look at how the Biopython tools can help us.  We'll start with sequence parsing in Section~\ref{sec:sequence-parsing}, but the orchids will be back later on as well - for example we'll extra data from Swiss-Prot from certain orchid proteins in Section~\ref{sec:swiss_prot}, search PubMed for papers about orchids in Section~\ref{sec:pub_med}, extract sequence data from GenBank in Section~\ref{genbank-retrieval}, and work with ClustalW multiple sequence alignments of orchid proteins in Section~\ref{sec:align_clustal}.
+
+\section{Parsing sequence file formats}
+\label{sec:sequence-parsing}
+
+A large part of much bioinformatics work involves dealing with the many types of file formats designed to hold biological data. These files are loaded with interesting biological data, and a special challenge is parsing these files into a format so that you can manipulate them with some kind of programming language. However the task of parsing these files can be frustrated by the fact that the formats can change quite regularly, and that formats may contain small subtleties which can break even the most well designed parsers. 
+
+We are going to introduce the \verb|Bio.SeqIO| module, available in Biopython 1.43 and later.  If you are using an older version of Biopython we encourage you to update (or find an old edition of this tutorial!).
+
+We'll start with an online search for our friends, the lady slipper orchids. Let's just take a look through the nucleotide databases at NCBI, using an Entrez online search (\url{http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?db=Nucleotide}) for everything mentioning the text Cypripedioideae (this is the subfamily of lady slipper orchids). When this tutorial was originally written, this search gave us only 94 hits, which we saved as a FASTA formatted text file (\href{http://cvs.biopython.org/cgi-bin/viewcvs/viewcvs.cgi/*checkout*/biopython/Doc/examples/ls_orchid.fasta?rev=HEAD&cvsroot=biopython&content-type=text/plain}{ls\_orchid.fasta}) and as a GenBank formatted text file (\href{http://cvs.biopython.org/cgi-bin/viewcvs/viewcvs.cgi/*checkout*/biopython/Doc/examples/ls_orchid.gbk?rev=HEAD&cvsroot=biopython&content-type=text/plain}{ls\_orchid.gbk}).
 
 % I would rather link to the main website, but the file is not here where I might have expected it:
 % http://biopython.org/DIST/docs/examples/ls_orchid.fasta
 % The GenBank version is actually new - it was created by filtering out the original 94 hits from the
 % latest search of over 400 hits.
 
-If you run the search today, you'll get hundreds of results!  When following the tutorial, if you want to see the same list of genes, just download the two files above or copy them from \verb|docs/examples/| in the Biopython source code.  In Section~\ref{sec:connecting-with-biological-databases} will look at how to do a search like this from python.
-
-That gives us enough information to get started delving for more information. So, let's look at how biopython tools can help us.
-
-\section{Parsing biological file formats}
-
-A large part of much bioinformatics work involves dealing with the many types of file formats designed to hold biological data. These files are loaded with interesting biological data, and a special challenge is parsing these files into a format so that you can manipulate them with some kind of programming language. However the task of parsing these files can be frustrated by the fact that the formats can change quite regularly, and that formats may contain small subtleties which can break even the most well designed parsers. 
-
-We are going to introduce the \verb|Bio.SeqIO| module, available in Biopython 1.43 and later.  If you are using an older version of Biopython we encourage you to update (or find an old edition of this tutorial!).
+If you run the search today, you'll get hundreds of results!  When following the tutorial, if you want to see the same list of genes, just download the two files above or copy them from \verb|docs/examples/| in the Biopython source code.  In Section~\ref{sec:connecting-with-biological-databases} we will look at how to do a search like this from within python.
 
 \subsection{Simple FASTA parsing example}
 \label{sec:fasta-parsing}
@@ -419,7 +420,7 @@ Notice that the FASTA format does not specify the alphabet, so \verb|Bio.SeqIO| 
 
 \subsection{Simple GenBank parsing example}
 
-Now lets load the GenBank file instead - notice that the code to do this is almost identical to the snippet used above for a FASTA file.
+Now let's load the GenBank file instead - notice that the code to do this is almost identical to the snippet used above for a FASTA file.
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -443,7 +444,7 @@ Seq('CATTGTTGAGATCACATAATAATTGATCGAGTTAATCTGGAGGATCTGTTTACTTTGGTC ...', IUPACAmb
 592
 \end{verbatim}
 
-This time \verb|Bio.SeqIO| has been able to choose a sensible alphabet, Ambigous DNA.  You'll also notice that a shorter string has been used as the \verb|record.id| in this case.
+This time \verb|Bio.SeqIO| has been able to choose a sensible alphabet, Ambigous DNA.  You'll also notice that a shorter string has been used as the \verb|seq_record.id| in this case.
 
 \subsection{Iterating over the records in a sequence file}
 
@@ -469,7 +470,7 @@ handle.close()
 
 \subsection{Getting a list of the records in a sequence file}
 
-In the previous section we talked about the fact that \verb|Bio.SeqIO| gives you a SeqRecord iterator, and that you get the records one by one.  Very often you need to be able to access the records in any order - and for this we use the built python function \verb|list| like so:
+In the previous section we talked about the fact that \verb|Bio.SeqIO| gives you a SeqRecord iterator, and that you get the records one by one.  Very often you need to be able to access the records in any order - and for this we use the built-in python function \verb|list| like so:
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -480,16 +481,16 @@ handle.close()
 print 'Found %i records' % len(records)
 
 print 'The last record'
-seq_record = records[-1] #using python's list tricks
-print seq_record.id
-print seq_record.seq
-print len(seq_record.seq)
+last_record = records[-1] #using python's list tricks
+print last_record.id
+print last_record.seq
+print len(last_record.seq)
 
 print 'The first record'
-seq_record = records[0] #remember, python counts from zero
-print seq_record.id
-print seq_record.seq
-print len(seq_record.seq)
+first_record = records[0] #remember, python counts from zero
+print first_record.id
+print first_record.seq
+print len(first_record.seq)
 \end{verbatim}
 
 Giving:
@@ -512,7 +513,7 @@ You can of course still use a for loop with a list of SeqRecord objects.  Using 
 
 The next thing that we'll do with our ubiquitous orchid files is to show how to index them and access them like a database. This is very useful for large files where you only need to access certain elements of the file, and makes for a nice quick 'n dirty database.
 
-You can use the function \verb|SeqIO.to_dict| to make a SeqRecord dictionary (in memory).  By default this will use each record's identifier (i.e. \verb|record.id|) as the key.  Lets try this using our GenBank file:
+You can use the function \verb|SeqIO.to_dict| to make a SeqRecord dictionary (in memory).  By default this will use each record's identifier (i.e. the \verb|.id| attribute) as the key.  Let's try this using our GenBank file:
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -538,7 +539,7 @@ P.supardii 5.8S rRNA gene and ITS1 and ITS2 DNA
 Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGTTGAGATCACATAATAAT ...', IUPACAmbiguousDNA())
 \end{verbatim}
 
-That easily, we have created a database of our GenBank file that will spit out \verb|SeqRecord| objects.  Now lets try this for the FASTA file instead:
+That easily, we have created a database of our GenBank file that will spit out \verb|SeqRecord| objects.  Now let's try this for the FASTA file instead:
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -555,7 +556,7 @@ This time the keys are:
  ..., 'gi|2765613|emb|Z78488.1|PTZ78488', 'gi|2765583|emb|Z78458.1|PHZ78458']
 \end{verbatim} 
 
-You should recognise these strings from when we parsed the FASTA file earlier in Section~\ref{sec:fasta-parsing}.  Suppose you would rather have something else as the keys - like the accesion numbers.  This brings us nicely to \verb|SeqIO.to_dict|'s optional argument \verb|key_function|, which lets you define what to use as the dictionary key for your records.
+You should recognised these strings from when we parsed the FASTA file earlier in Section~\ref{sec:fasta-parsing}.  Suppose you would rather have something else as the keys - like the accesion numbers.  This brings us nicely to \verb|SeqIO.to_dict|'s optional argument \verb|key_function|, which let's you define what to use as the dictionary key for your records.
 
 First you must write your own function to return the key you want (as a string) when given a SeqRecord object.  In general, the details of function will depend on the sort of input records you are dealing with.  But for our orchids, we can just split up the record's identifier using the "pipe" character (the vertical line) and return the fourth entry (field three):
 
@@ -583,10 +584,11 @@ print orchid_dict.keys()
 \noindent Finally, as desired, the new dictionary keys:
 
 \begin{verbatim}
+>>> print orchid_dict.keys()
 ['Z78484.1', 'Z78464.1', 'Z78455.1', 'Z78442.1', 'Z78532.1', 'Z78453.1', ..., 'Z78471.1']
 \end{verbatim}
 
-\noindent Not to complicated, I hope!
+\noindent Not too complicated, I hope!
 
 \subsection{Extracting data}
 
@@ -616,7 +618,7 @@ Desription: C.irapeanum 5.8S rRNA gene and ITS1 and ITS2 DNA.
 Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGGAATAAA ...', IUPACAmbiguousDNA())
 \end{verbatim} 
 
-\noindent The information we want, {\it Cypripedium irapeanum} is held in the annotations dictionary under 'source' and 'organism', which we can access like this:
+\noindent The information we want, \emph{Cypripedium irapeanum} is held in the annotations dictionary under 'source' and 'organism', which we can access like this:
 
 \begin{verbatim}
 print first_record.annotations['source']
@@ -628,7 +630,7 @@ print first_record.annotations['source']
 print first_record.annotations['organism']
 \end{verbatim} 
 
-Now lets go through all the records, building up a list of the name of the orchid species each sequence is from:
+Now let's go through all the records, building up a list of the name of the orchid species each sequence is from:
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -657,7 +659,7 @@ print all_species
 
 Great.  That was pretty easy because GenBank files are annotated in a standardised way.
 
-Now, lets suppose you wanted to extract a list of the species from your FASTA file, rather than the GenBank file.  The trick is to notice that if you break up the description line at the spaces, then the species is there as field number one (field zero is the record identifier).  That means we can do this:
+Now, let's suppose you wanted to extract a list of the species from your FASTA file, rather than the GenBank file.  The trick is to notice that if you break up the description line at the spaces, then the species is there as field number one (field zero is the record identifier).  That means we can do this:
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -1460,7 +1462,7 @@ else:
 If you are in the Medical field or interested in human issues (and many times even if you are not!), PubMed (\ahrefurl{\url{http://www.ncbi.nlm.nih.gov/PubMed/}}) is an excellent source of all kinds of goodies. So like other things, we'd like to be able to grab information from it and use it in python scripts.
 
 
-Querying PubMed using Biopython is extremely painless. To get all of the article ids for articles having to do with orchids, we only need the following three lines of code:
+Querying PubMed using Biopython is extremely painless. To get all of the article ids for articles having to do with orchids (see section~\ref{sec:orchids} for our motivation), we only need the following three lines of code:
 
 \begin{verbatim}
 from Bio import PubMed
@@ -1529,7 +1531,7 @@ for our_id in our_id_list:
     
     if search_author in cur_record.authors:
         print "Author %s found: %s" % (search_author,
-                                       string.strip(cur_record.source))
+                                       cur_record.source.strip())
 \end{verbatim} 
 
 The PubMed and Medline interfaces are very mature and nice to work with -- hopefully this section gave you an idea of the power of the interfaces and how they can be used.
@@ -1539,6 +1541,7 @@ The PubMed and Medline interfaces are very mature and nice to work with -- hopef
 The GenBank record format is a very popular method of holding information about sequences, sequence features, and other associated sequence information. The format is a good way to get information from the NCBI databases at \ahrefurl{\url{http://www.ncbi.nlm.nih.gov/}}. 
 
 \subsection{Retrieving GenBank entries from NCBI}
+\label{genbank-retrieval}
 
 One very nice feature of the GenBank libraries is the ability to automate retrieval of entries from GenBank. This is very convenient for creating scripts that automate a lot of your daily work. In this example we'll show how to query the NCBI databases, and to retrieve the records from the query.
 
@@ -1612,7 +1615,7 @@ While GenBank files are nice and have lots of information, at the same time you 
 
 Depending on the type of GenBank files you are interested in, they will either contain a single record, or multiple records.  Each record will start with a {\tt LOCUS} line, various other header lines, a list of features, and finally the sequence data, ending with a {\tt //} line.
 
-Dealing with a GenBank file containing a single record is very easy.  For example, lets use a small bacterial genome, {\it Nanoarchaeum equitans Kin4-M} (RefSeq NC\_005213, GenBank AE017199) which can be downloaded from the NCBI here \ahrefurl{\url{ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Bacteria/Nanoarchaeum_equitans/AE017199.gbk}} (only 1.15 MB):
+Dealing with a GenBank file containing a single record is very easy.  For example, let's use a small bacterial genome, \emph{Nanoarchaeum equitans Kin4-M} (RefSeq NC\_005213, GenBank AE017199) which can be downloaded from the NCBI here \ahrefurl{\url{ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Bacteria/Nanoarchaeum_equitans/AE017199.gbk}} (only 1.15 MB):
 
 \begin{verbatim}
 from Bio import GenBank
@@ -1638,7 +1641,7 @@ Seq('TCTCGCAGAGTTCTTTTTTGTATTAACAAACCCAAAACCCATAGAATTTAATGAACCCAA ...', IUPACAmb
 \subsection{Iterating over GenBank records}
 \label{sec:gb-parsing-iterator}
 
-For multi-record GenBank files, the most common usage will be creating an iterator, and parsing through the file record by record. Doing this is very similar to how things are done in other formats, as the following code demonstrates, using an example file \verb|cor6_6.gb| included in the BioPython source code under the Tests/GenBank/ directory:
+For multi-record GenBank files, the most common usage will be creating an iterator, and parsing through the file record by record. Doing this is very similar to how things are done in other formats, as the following code demonstrates, using an example file \ahrefurl{\href{http://cvs.biopython.org/cgi-bin/viewcvs/viewcvs.cgi/*checkout*/biopython/Tests/GenBank/cor6_6.gb?rev=HEAD&cvsroot=biopython&content-type=text/plain}{cor6\_6.gb}} which is included in the BioPython source code under the Tests/GenBank/ directory:
 
 \begin{verbatim}
 from Bio import GenBank
@@ -1669,7 +1672,7 @@ As with other formats, you have lots of tools for dealing with GenBank records. 
 
 One very cool thing that you can do is set up your own personal GenBank database and access it like a dictionary (this can be extra cool because you can also allow access to these local databases over a network using BioCorba -- see the BioCorba documentation for more information).
 
-Note - this is only worth doing {\it if} your GenBank file contains more than one record.
+Note - this is only worth doing if your GenBank file contains more than one record.
 
 Making a local database first involves creating an index file, which will allow quick access to any record in the file. To do this, we use the index file function.
 Again, this example uses the file \verb|cor6_6.gb| which is included in the BioPython source code under the Tests/GenBank/ directory:
@@ -1717,9 +1720,9 @@ It is often very useful to be able to align particular sequences. I do this quit
 
 Clustalx (\ahrefurl{\url{http://www-igbmc.u-strasbg.fr/BioInfo/ClustalX/Top.html}}) is a very nice program for doing multiple alignments. Biopython offers access to alignments in clustal format (these normally have a \verb|*.aln| extension) that are produced by Clustalx. It also offers access to clustalw, which the is command line version of clustalx.
 
+We'll need some sequences to align, such as \href{http://cvs.biopython.org/cgi-bin/viewcvs/viewcvs.cgi/*checkout*/biopython/Doc/examples/opuntia.fasta?rev=HEAD&cvsroot=biopython&content-type=text/plain}{opuntia.fasta} which is a small FASTA file containing seven orchid gene DNA sequences, which you can also from \verb|docs/examples/| in the Biopython source code.
 
 The first step in interacting with clustalw is to set up a command line you want to pass to the program. Clustalw has a ton of command line options, and if you set a lot of parameters, you can end up typing in a huge ol' command line quite a bit. This command line class models the command line by making all of the options be attributes of the class that can be set. A few convenience functions also exist to set certain parameters, so that some error checking on the parameters can be done.
-
 
 To create a command line object to do a clustalw multiple alignment we do the following:
 
@@ -2256,7 +2259,7 @@ To show an example of SeqFeatures in action, let's take a look at the following 
 To look at the easiest attributes of the SeqFeature first, if you got a SeqFeature object for this it would have it \verb|type| of 'mRNA', a \verb|strand| of -1 (due to the 'complement'), and would have None for the \verb|ref| and \verb|ref_db| since there are no references to external databases. The \verb|qualifiers| for this SeqFeature would be a python dictionarary that looked like \verb|{'gene' : 'F28B23.12'}|.
 
 
-Now lets, look at the more tricky part, how the 'join' in the location 
+Now let's look at the more tricky part, how the 'join' in the location 
 line is handled. First, the location for the top level SeqFeature (the 
 one we are dealing with right now) is set as going from 
 \verb|'<49223' to '>50208'| (see section~\ref{sec:locations} for 
@@ -2264,7 +2267,6 @@ the nitty gritty on how fuzzy locations like this are handled).
 So the location of the top level object is the entire span of the 
 feature. So, how do you get at the information in the 'join?' 
 Well, that's where the \verb|sub_features| go in.
-
 
 
 The \verb|sub_features| attribute will have a list with two SeqFeature 
