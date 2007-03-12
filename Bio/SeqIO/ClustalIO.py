@@ -147,13 +147,16 @@ class ClustalWriter(SequenceWriter):
         # object.
         #
         # The downside is code duplication.
-        alignment_length = None
+        length_of_sequences = None
         alignment = ClustalAlignment()
         for record in records :
-            if alignment_length is None :
-                alignment_length = len(record.seq)
-            elif alignment_length <> len(record.seq) :
+            if length_of_sequences is None :
+                length_of_sequences = len(record.seq)
+            elif length_of_sequences <> len(record.seq) :
                 raise ValueError("Sequences must all be the same length")
+
+            if length_of_sequences <= 0 :
+                raise ValueError("Non-empty sequences are required")
             
             #ToDo, check alphabet for this sequence matches that
             #specified for the alignment.  Not sure how the

@@ -101,7 +101,12 @@ class StockholmIterator(InterlacedSequenceIterator) :
                 #Sequence
                 #Format: "<seqname> <sequence>"
                 assert not passed_end_alignment
-                id, seq = [x.strip() for x in line.split(" ",1)]
+                parts = [x.strip() for x in line.split(" ",1)]
+                if len(parts) <> 2 :
+                    #This might be someone attempting to store a zero length sequence?
+                    raise SyntaxError("Could not split line into identifier " \
+                                      + "and sequence:\n" + line)
+                id, seq = parts
                 if id not in ids :
                     ids.append(id)
                 seqs.setdefault(id, '')
@@ -316,6 +321,10 @@ class StockholmWriter(SequentialSequenceWriter):
             #Probably have an standard iterator, not a list...
             records = list(records)
             count = len(records)
+
+        if count == 0 :
+            raise ValueError("Must have at least one sequence")
+
         self.write_header(count)
         self.write_records(records)
         self.write_footer()
@@ -335,6 +344,9 @@ class StockholmWriter(SequentialSequenceWriter):
         elif self._length_of_sequences <> len(record.seq) :
             raise ValueError("Sequences must all be the same length")
 
+        if self._length_of_sequences == 0 :
+            raise ValueError("Non-empty sequences are required")
+    
         #For the case for stockholm to stockholm, try and use record.name
         seq_name = record.id
         if record.name is not None :
