@@ -11,11 +11,9 @@ from Bio.Seq import Seq
 from StringIO import StringIO
 from Bio.Alphabet import generic_protein, generic_rna, generic_dna
 
-#List of non-alignment file formats we can read AND write:
-test_write_read_non_alignment_formats = ["fasta"]
+
 #Longer list including alignment only file formats we can read AND write:
-test_write_read_alignment_formats = test_write_read_non_alignment_formats[:]
-test_write_read_alignment_formats.extend(["stockholm", "phylip", "clustal"])
+test_write_read_alignment_formats = SeqIO._FormatToWriter.keys()[:]
 
 # test_files is a list of tuples containing:
 # - string:  file format
@@ -134,6 +132,8 @@ def records_match(record_one, record_two) :
         return False
     if record_one.description <> record_two.description :
         return False
+    if record_one.seq.tostring() <> record_two.seq.tostring() :
+        return False
     #Close enough... should I check for features, annotation etc?
     return True
 
@@ -173,18 +173,35 @@ def alignment_summary(alignment, index=" ") :
     return "\n".join(answer)
 
 
-def check_simple_write_read(records, formats, indent=" ") :
+def check_simple_write_read(records, indent=" ") :
     #print indent+"Checking we can write and then read back these records"
-    for format in formats :
+    for format in SeqIO._FormatToWriter.keys() :
         print indent+"Checking can write/read as '%s' format" % format
         
         #Going to write to a handle...
         handle = StringIO()
-        SeqIO.write(sequences=records, handle=handle, format=format)
+        
+        try :
+            SeqIO.write(sequences=records, handle=handle, format=format)
+        except ValueError, e :
+            #This is often expected to happen, for example when we try and
+            #write sequences of different lengths to an alignment file.
+            print indent+"Failed: %s" % str(e)
+            #Carry on to the next format:
+            continue
+
         handle.flush()
         handle.seek(0)
         #Now ready to read back from the handle...
-        records2 = list(SeqIO.parse(handle=handle, format=format))
+        try :
+            records2 = list(SeqIO.parse(handle=handle, format=format))
+        except SyntaxError, e :
+            #This is BAD.  We can't read our own output.
+            #I want to see the output when called from the test harness,
+            #run_tests.py (which can be funny about new lines on Windows)
+            handle.seek(0)
+            raise SyntaxError("%s\n\n%s\n\n%s" \
+                              % (str(e), repr(handle.read()), repr(records)))
 
         assert len(records2) == t_count
         for i in range(t_count) :
@@ -298,10 +315,7 @@ for (t_format, t_alignment, t_filename, t_count) in test_files :
     #They should all have been converted by the parser, but if
     #not reversing the record order might expose an error.  Maybe.
     records.reverse()
-    if t_alignment :
-        check_simple_write_read(records, test_write_read_alignment_formats)
-    else :
-        check_simple_write_read(records, test_write_read_non_alignment_formats)
+    check_simple_write_read(records)
 
 print "Finished tested reading files"
 print
@@ -310,7 +324,7 @@ print "(Note that some of these are expected to 'fail' and say why)"
 print
 for (records, descr) in test_records :
     print "Testing can write/read %s" % descr
-    for format in test_write_read_alignment_formats :
+    for format in SeqIO._FormatToWriter.keys() :
         print " Checking can write/read as '%s' format" % format
 
         #################
@@ -335,7 +349,6 @@ for (records, descr) in test_records :
             #as we can't read the file we just wrote!
             print " FAILED: %s" % str(e)
             continue #goto next test
-        handle.close()
 
         #################
         # Check records #
@@ -344,5 +357,9 @@ for (records, descr) in test_records :
         for record, new_record in zip(records, new_records) :
             assert record.id == new_record.id
             assert record.seq.tostring() == new_record.seq.tostring()
+            #Using records_match(record, new_record) is too strict
+
+        #Close now, after checking, so that it can be used at the console for debugging
+        handle.close()
         
 print "Finished tested writing files"
