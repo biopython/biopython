@@ -241,7 +241,7 @@ parse_weight (PyObject* object, PyArrayObject** array, const int ndata)
     }
   }
   /* All checks OK */
-  if ((*array)->flags & CONTIGUOUS) weight = (double*) ((*array)->data);
+  if (PyArray_ISCONTIGUOUS(*array)) weight = (double*) ((*array)->data);
   else
   { const char* p = (char*) ((*array)->data);
     const int stride =  ((*array)->strides)[0];
@@ -457,7 +457,7 @@ parse_clusterid(PyObject* object, PyArrayObject** array, unsigned int nitems,
     return NULL;
   }
   /* All checks OK */
-  if ((*array)->flags & CONTIGUOUS) clusterid = (int*) ((*array)->data);
+  if (PyArray_ISCONTIGUOUS(*array)) clusterid = (int*) ((*array)->data);
   else
   { const char* p = (char*) ((*array)->data);
     const int stride =  ((*array)->strides)[0];
@@ -799,7 +799,7 @@ parse_index(PyObject* object, PyArrayObject** array, int* n)
     *n = 0;
     return NULL;
   }
-  if (!(*array)->flags & CONTIGUOUS)
+  if (!PyArray_ISCONTIGUOUS(*array))
   { *array = (PyArrayObject*) PyArray_ContiguousFromObject(object, PyArray_INT, 1, 1);
     Py_DECREF(object);
     if(!(*array))
@@ -2032,7 +2032,7 @@ py_median (PyObject* unused, PyObject* args)
     Py_DECREF((PyObject*) aDATA);
     return NULL;
   }
-  if (!(aDATA->flags & CONTIGUOUS))
+  if (!PyArray_ISCONTIGUOUS(aDATA))
   { PyObject* av =
       PyArray_ContiguousFromObject((PyObject*) aDATA, aDATA->descr->type_num, 0, 0);
     Py_DECREF((PyObject*)aDATA);
@@ -2098,7 +2098,7 @@ py_mean (PyObject* unused, PyObject* args)
     Py_DECREF((PyObject*) aDATA);
     return NULL;
   }
-  if (!(aDATA->flags & CONTIGUOUS))
+  if (!PyArray_ISCONTIGUOUS(aDATA))
   { PyObject* av =
       PyArray_ContiguousFromObject((PyObject*) aDATA, aDATA->descr->type_num, 0, 0);
     Py_DECREF((PyObject*)aDATA);
