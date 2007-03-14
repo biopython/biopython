@@ -394,12 +394,12 @@ AATCCGGAGGACCGGTGTACTCAGCTCACCGGGGGCATTGCTCCCGTGGTGACCCTGATTTGTTGTTGGG
 ...
 \end{verbatim}
 
-It contains 94 records, each has a line starting with "$>$" (greater-than symbol) followed by the sequence on one or more lines.  Now try this in python:
+It contains 94 records, each has a line starting with ``$>$'' (greater-than symbol) followed by the sequence on one or more lines.  Now try this in python:
 
 \begin{verbatim}
 from Bio import SeqIO
-handle = open('ls_orchid.fasta')
-for record in SeqIO.parse(handle, 'fasta') :
+handle = open("ls_orchid.fasta")
+for record in SeqIO.parse(handle, "fasta") :
     print seq_record.id
     print seq_record.seq
     print len(seq_record.seq)
@@ -426,8 +426,8 @@ Now let's load the GenBank file instead - notice that the code to do this is alm
 
 \begin{verbatim}
 from Bio import SeqIO
-handle = open('ls_orchid.gbk')
-for seq_record in SeqIO.parse(handle, 'genbank') :
+handle = open("ls_orchid.gbk")
+for seq_record in SeqIO.parse(handle, "genbank") :
     print seq_record.id
     print seq_record.seq
     print len(seq_record.seq)
@@ -458,8 +458,8 @@ Note that you can also use the \verb|next| method of an iterator to step through
 
 \begin{verbatim}
 from Bio import SeqIO
-handle = open('ls_orchid.fasta')
-record_iterator = SeqIO.parse(handle, 'fasta')
+handle = open("ls_orchid.fasta")
+record_iterator = SeqIO.parse(handle, "fasta")
 
 first_record = record_iterator.next()
 print first_record.id
@@ -476,19 +476,19 @@ In the previous section we talked about the fact that \verb|Bio.SeqIO| gives you
 
 \begin{verbatim}
 from Bio import SeqIO
-handle = open('ls_orchid.gbk')
-records = list(SeqIO.parse(handle, 'genbank'))
+handle = open("ls_orchid.gbk")
+records = list(SeqIO.parse(handle, "genbank"))
 handle.close()
 
-print 'Found %i records' % len(records)
+print "Found %i records" % len(records)
 
-print 'The last record'
+print "The last record"
 last_record = records[-1] #using python's list tricks
 print last_record.id
 print last_record.seq
 print len(last_record.seq)
 
-print 'The first record'
+print "The first record"
 first_record = records[0] #remember, python counts from zero
 print first_record.id
 print first_record.seq
@@ -519,8 +519,8 @@ You can use the function \verb|SeqIO.to_dict| to make a SeqRecord dictionary (in
 
 \begin{verbatim}
 from Bio import SeqIO
-handle = open('ls_orchid.gbk')
-orchid_dict = SeqIO.to_dict(SeqIO.parse(handle, 'genbank'))
+handle = open("ls_orchid.gbk")
+orchid_dict = SeqIO.to_dict(SeqIO.parse(handle, "genbank"))
 handle.close()
 \end{verbatim} 
 
@@ -534,7 +534,7 @@ Since this variable \verb|orchid_dict| is a dictionary, we can look at all of th
 We can access a single \verb|SeqRecord| object via the keys and manipulate the object as normal:
 
 \begin{verbatim}
->>> seq_record = orchid_dict['Z78475.1']
+>>> seq_record = orchid_dict["Z78475.1"]
 >>> print seq_record.description
 P.supardii 5.8S rRNA gene and ITS1 and ITS2 DNA
 >>> print seq_record.seq
@@ -545,8 +545,8 @@ That easily, we have created a database of our GenBank file that will spit out \
 
 \begin{verbatim}
 from Bio import SeqIO
-handle = open('ls_orchid.fasta')
-orchid_dict = SeqIO.to_dict(SeqIO.parse(handle, 'fasta'))
+handle = open("ls_orchid.fasta")
+orchid_dict = SeqIO.to_dict(SeqIO.parse(handle, "fasta"))
 handle.close()
 print orchid_dict.keys()
 \end{verbatim} 
@@ -566,10 +566,10 @@ First you must write your own function to return the key you want (as a string) 
 def get_accession(record) :
     """"Given a SeqRecord, return the accession number as a string
     
-    e.g. 'gi|2765613|emb|Z78488.1|PTZ78488' -> 'Z78488.1'
+    e.g. "gi|2765613|emb|Z78488.1|PTZ78488" -> "Z78488.1"
     """
-    parts = record.id.split('|')
-    assert len(parts) == 5 and parts[0] == 'gi' and parts[2] == 'emb'
+    parts = record.id.split("|")
+    assert len(parts) == 5 and parts[0] == "gi" and parts[2] == "emb"
     return parts[3]
 \end{verbatim} 
 
@@ -577,8 +577,8 @@ def get_accession(record) :
 
 \begin{verbatim}
 from Bio import SeqIO
-handle = open('ls_orchid.fasta')
-orchid_dict = SeqIO.to_dict(SeqIO.parse(handle, 'fasta'), key_function=get_accession)
+handle = open("ls_orchid.fasta")
+orchid_dict = SeqIO.to_dict(SeqIO.parse(handle, "fasta"), key_function=get_accession)
 handle.close()
 print orchid_dict.keys()
 \end{verbatim} 
@@ -598,7 +598,7 @@ Suppose you wanted to extract a list of the species from your GenBank file.  Let
 
 \begin{verbatim}
 from Bio import SeqIO
-record_iterator = SeqIO.parse(open('ls_orchid.gbk'), 'genbank')
+record_iterator = SeqIO.parse(open("ls_orchid.gbk"), "genbank")
 first_record = record_iterator.next()
 print first_record
 \end{verbatim} 
@@ -620,26 +620,26 @@ Desription: C.irapeanum 5.8S rRNA gene and ITS1 and ITS2 DNA.
 Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGGAATAAA ...', IUPACAmbiguousDNA())
 \end{verbatim} 
 
-\noindent The information we want, \emph{Cypripedium irapeanum} is held in the annotations dictionary under 'source' and 'organism', which we can access like this:
+\noindent The information we want, \emph{Cypripedium irapeanum}, is held in the annotations dictionary under 'source' and 'organism', which we can access like this:
 
 \begin{verbatim}
-print first_record.annotations['source']
+print first_record.annotations["source"]
 \end{verbatim} 
 
 \noindent or:
 
 \begin{verbatim}
-print first_record.annotations['organism']
+print first_record.annotations["organism"]
 \end{verbatim} 
 
 Now let's go through all the records, building up a list of the name of the orchid species each sequence is from:
 
 \begin{verbatim}
 from Bio import SeqIO
-handle = open('ls_orchid.gbk')
+handle = open("ls_orchid.gbk")
 all_species = []
-for seq_record in SeqIO.parse(handle, 'genbank') :
-    all_species.append(seq_record.annotations['organism'])
+for seq_record in SeqIO.parse(handle, "genbank") :
+    all_species.append(seq_record.annotations["organism"])
 handle.close()
 print all_species
 \end{verbatim} 
@@ -648,8 +648,8 @@ Another way of writing this code is to use a list comprehension (introduced in P
 
 \begin{verbatim}
 from Bio import SeqIO
-all_species == [seq_record.annotations['organism'] for seq_record in \
-                SeqIO.parse(open('ls_orchid.gbk'), 'genbank')]
+all_species == [seq_record.annotations["organism"] for seq_record in \
+                SeqIO.parse(open("ls_orchid.gbk"), "genbank")]
 print all_species
 \end{verbatim}
 
@@ -666,9 +666,9 @@ Now, let's suppose you wanted to extract a list of the species from your FASTA f
 
 \begin{verbatim}
 from Bio import SeqIO
-handle = open('ls_orchid.fasta')
+handle = open("ls_orchid.fasta")
 all_species = []
-for seq_record in SeqIO.parse(handle, 'fasta') :
+for seq_record in SeqIO.parse(handle, "fasta") :
     all_species.append(seq_record.description.split()[1])
 handle.close()
 print all_species
@@ -685,7 +685,7 @@ The concise alternative using list comprehensions (Python 2.0 or later) would be
 \begin{verbatim}
 from Bio import SeqIO
 all_species == [seq_record.description.split()[1] for seq_record in \
-                SeqIO.parse(open('ls_orchid.fasta'), 'fasta')]
+                SeqIO.parse(open("ls_orchid.fasta"), "fasta")]
 print all_species
 \end{verbatim}
 
@@ -707,8 +707,8 @@ One of the very common things that you need to do in bioinformatics is extract i
 
 \begin{itemize}
   \item \href{http://www.expasy.org/}{ExPASy} -- See section~\ref{sec:swiss_prot} in the Cookbook for more information.
-  \item \href{http://www.ncbi.nlm.nih.gov/Entrez/}{Entrez from NCBI}
-  \item \href{http://www.ncbi.nlm.nih.gov/PubMed/}{PubMed from NCBI} -- . See section~\ref{sec:pub_med} in the Cookbook for example code detailing how to use this.
+  \item \href{http://www.ncbi.nlm.nih.gov/Entrez/}{Entrez from NCBI} -- See below
+  \item \href{http://www.ncbi.nlm.nih.gov/PubMed/}{PubMed from NCBI} -- See section~\ref{sec:pub_med} in the Cookbook for example code detailing how to use this.
   \item \href{http://scop.mrc-lmb.cam.ac.uk/scop/}{SCOP}
 \end{itemize}
 
@@ -752,15 +752,15 @@ Now that we've got the results, we are ready to save them to a file and display 
 \begin{verbatim}
 import os
 
-result_file_name = os.path.join(os.getcwd(), 'results.html')
-result_file = open(result_file_name, 'w')
+result_file_name = os.path.join(os.getcwd(), "results.html")
+result_file = open(result_file_name, "w")
 result_file.write(result_handle.read())
 result_file.close()
 
-if my_browser == 'lynx':
-    os.system('lynx -force_html ' + result_file_name)
-elif my_browser == 'netscape':
-    os.system('netscape file:' + result_file_name)
+if my_browser == "lynx":
+    os.system("lynx -force_html " + result_file_name)
+elif my_browser == "netscape":
+    os.system("netscape file:" + result_file_name)
 \end{verbatim}
 
 Snazzy! We can fetch things and display them automatically -- you could use this to quickly set up searches that you want to repeat on a daily basis and check by hand, or to set up a small CGI script to do queries and locally save the results before displaying them (as a kind of lab notebook of our search results). Hopefully whatever your task, the database connectivity code will make things lots easier for you!
@@ -823,7 +823,7 @@ Now that we've got that all set, we are ready to run the BLAST and collect the r
 
 \begin{verbatim}
 >>> from Bio.Blast import NCBIStandalone
->>> result_handle, error_info = NCBIStandalone.blastall(my_blast_exe, 'blastn',
+>>> result_handle, error_info = NCBIStandalone.blastall(my_blast_exe, "blastn",
                                                     my_blast_db, my_blast_file)
 \end{verbatim}
 
@@ -864,8 +864,8 @@ more detail).
 
 \begin{verbatim}
 >>> from Bio import SeqIO
->>> file_handle = open('m_cold.fasta')
->>> records = SeqIO.parse(file_handle, format='fasta')
+>>> file_handle = open("m_cold.fasta")
+>>> records = SeqIO.parse(file_handle, format="fasta")
 >>> record = records.next()
 \end{verbatim}
 
@@ -879,7 +879,7 @@ databases) is:
 
 \begin{verbatim}
 >>> from Bio.Blast import NCBIWWW
->>> result_handle = NCBIWWW.qblast('blastn', 'nr', sequence)
+>>> result_handle = NCBIWWW.qblast("blastn", "nr", sequence)
 \end{verbatim}
 
 The \verb|qblast| function also take a number of other option arguments
@@ -935,7 +935,7 @@ the information from the handle into a string:
 Next, we save this string in a file:
 
 \begin{verbatim}
->>> save_file = open('my_blast.xml', 'w')
+>>> save_file = open("my_blast.xml", "w")
 >>> save_file.write(blast_results)
 >>> save_file.close()
 \end{verbatim}
@@ -955,7 +955,7 @@ feed directly into the BLAST parser:
 \end{verbatim}
 \item Open the saved file for reading. Duh.
 \begin{verbatim}
->>> result_handle = open('my_blast.xml')
+>>> result_handle = open("my_blast.xml")
 \end{verbatim}
 \end{itemize}
 
@@ -1013,7 +1013,7 @@ BLAST output (in XML format) in the file \verb|my_blast.xml|, all you
 need to do is to open the file for reading:
 
 \begin{verbatim}
->>> result_handle = open('my_blast.xml')
+>>> result_handle = open("my_blast.xml")
 \end{verbatim}
 
 Now that we've got a handle, we are ready to parse the output. The
@@ -1179,7 +1179,7 @@ The plain text BLAST parser is located in \verb|Bio.Blast.NCBIStandalone|.
 As with the XML parser, we need to have a handle object that we can pass to the parser. The handle must implement the \verb|readline()| method and do this properly. The common ways to get such a handle are to either use the provided \verb|blastall| or \verb|blastpgp| functions to run the local blast, or to run a local blast via the command line, and then do something like the following:
 
 \begin{verbatim}
->>> result_handle = open('my_file_of_blast_output')
+>>> result_handle = open("my_file_of_blast_output.txt")
 \end{verbatim}
 
 Well, now that we've got a handle (which we'll call \verb|result_handle|),
@@ -1286,8 +1286,8 @@ Let's take a look at using this parser -- first we define the file we are going 
 \begin{verbatim}
 >>> import os
  
->>> blast_file = os.path.join(os.getcwd(), 'blast_out', 'big_blast.out')
->>> error_file = os.path.join(os.getcwd(), 'blast_out', 'big_blast.problems')
+>>> blast_file = os.path.join(os.getcwd(), "blast_out", "big_blast.out")
+>>> error_file = os.path.join(os.getcwd(), "blast_out", "big_blast.problems")
 \end{verbatim}
 
 Now we want to get a \verb|BlastErrorParser|:
@@ -1295,7 +1295,7 @@ Now we want to get a \verb|BlastErrorParser|:
 \begin{verbatim}
 >>> from Bio.Blast import NCBIStandalone
 
->>> error_handle = open(error_file, 'w')
+>>> error_handle = open(error_file, "w")
 
 >>> blast_error_parser = NCBIStandalone.BlastErrorParser(error_handle)
 \end{verbatim}
@@ -1362,9 +1362,9 @@ First, we grab the records, using the \verb|get_sprot_raw()| function of \verb|B
 \begin{verbatim}
 from Bio.WWW import ExPASy
 
-ids = ['O23729', 'O23730', 'O23731']
+ids = ["O23729", "O23730", "O23731"]
 
-all_results = ''
+all_results = ""
 for eid in ids:
     results = ExPASy.get_sprot_raw(eid)
     all_results = all_results + results.read()
@@ -1567,7 +1567,7 @@ gi_list = GenBank.search_for("Opuntia AND rpl16")
 Now that we've got the GIs, we can use these to access the NCBI database through a dictionary interface. For instance, to retrieve the information for the first GI, we'll first have to create a dictionary that accesses NCBI:
 
 \begin{verbatim}
-ncbi_dict = GenBank.NCBIDictionary('nucleotide', 'genbank')
+ncbi_dict = GenBank.NCBIDictionary("nucleotide", "genbank")
 \end{verbatim}
 
 Now that we've got this, we do the retrieval:
@@ -1591,7 +1591,7 @@ In this case, we are just getting the raw records. We can also pass these record
 
 \begin{verbatim}
 record_parser = GenBank.FeatureParser()
-ncbi_dict = GenBank.NCBIDictionary('nucleotide', 'genbank',
+ncbi_dict = GenBank.NCBIDictionary("nucleotide", "genbank",
                                    parser = record_parser)
 \end{verbatim}
 
@@ -1652,7 +1652,7 @@ For multi-record GenBank files, the most common usage will be creating an iterat
 from Bio import GenBank
 
 gb_file = "cor6_6.gb"
-gb_handle = open(gb_file, 'r')
+gb_handle = open(gb_file, "r")
 
 feature_parser = GenBank.FeatureParser()
 
@@ -1735,8 +1735,8 @@ To create a command line object to do a clustalw multiple alignment we do the fo
 import os
 from Bio.Clustalw import MultipleAlignCL
 
-cline = MultipleAlignCL(os.path.join(os.curdir, 'opuntia.fasta'))
-cline.set_output('test.aln')
+cline = MultipleAlignCL(os.path.join(os.curdir, "opuntia.fasta"))
+cline.set_output("test.aln")
 \end{verbatim}
 
 First we import the \verb|MultipleAlignCL| object, which models running a multiple alignment from clustalw. We then initialize the command line, with a single argument of the fasta file that we are going to be using for the alignment. The initialization function also takes an optional second argument which specifies the location of the \verb|clustalw| executable. By default, the commandline will just be invoked with 'clustalw,' assuming that you've got it somewhere on your \verb|PATH|.
@@ -2017,7 +2017,7 @@ One thing that you always end up having to do is convert between different forma
 import os
 from Bio import Clustalw
 
-alignment = Clustalw.parse_file(os.path.join(os.curdir, 'test.aln'))
+alignment = Clustalw.parse_file(os.path.join(os.curdir, "test.aln"))
 \end{verbatim}
 
 Now, let's convert this alignment into FASTA format. First, we create a converter object:
@@ -2075,7 +2075,7 @@ from Bio.Alphabet import IUPAC
 from Bio.Align import AlignInfo
 
 # get an alignment object from a Clustalw alignment output
-c_align = Clustalw.parse_file('protein.aln', IUPAC.protein)
+c_align = Clustalw.parse_file("protein.aln", IUPAC.protein)
 summary_align = AlignInfo.SummaryInfo(c_align)
 \end{verbatim}
 
@@ -3273,7 +3273,7 @@ Every module that goes into Biopython should have a test (and should also have d
 
 \subsection{Design Overview}
 
-Parsers are built around an event-oriented design that includes
+Many of the Biopython parsers are built around an event-oriented design that includes
 Scanner and Consumer objects.
 
 
