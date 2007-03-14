@@ -560,7 +560,7 @@ This time the keys are:
 
 You should recognised these strings from when we parsed the FASTA file earlier in Section~\ref{sec:fasta-parsing}.  Suppose you would rather have something else as the keys - like the accesion numbers.  This brings us nicely to \verb|SeqIO.to_dict|'s optional argument \verb|key_function|, which let's you define what to use as the dictionary key for your records.
 
-First you must write your own function to return the key you want (as a string) when given a SeqRecord object.  In general, the details of function will depend on the sort of input records you are dealing with.  But for our orchids, we can just split up the record's identifier using the "pipe" character (the vertical line) and return the fourth entry (field three):
+First you must write your own function to return the key you want (as a string) when given a SeqRecord object.  In general, the details of function will depend on the sort of input records you are dealing with.  But for our orchids, we can just split up the record's identifier using the ``pipe'' character (the vertical line) and return the fourth entry (field three):
 
 \begin{verbatim}
 def get_accession(record) :
@@ -655,8 +655,9 @@ print all_species
 
 \noindent In either case, the result is:
 
+% Try and keep this example output line short enough to fit on one page of PDF output:
 \begin{verbatim}
-['Cypripedium irapeanum', 'Cypripedium californicum', 'Cypripedium fasciculatum', ..., 'Paphiopedilum barbatum']
+['Cypripedium irapeanum', 'Cypripedium californicum', ..., 'Paphiopedilum barbatum']
 \end{verbatim} 
 
 Great.  That was pretty easy because GenBank files are annotated in a standardised way.
@@ -688,7 +689,7 @@ all_species == [seq_record.description.split()[1] for seq_record in \
 print all_species
 \end{verbatim}
 
-In general, extracting information from the FASTA description line is not very nice.  If you can get your sequences in a well annotated file format like GenBank for EMBL, then this sort of annotation information is much easier to deal with.
+In general, extracting information from the FASTA description line is not very nice.  If you can get your sequences in a well annotated file format like GenBank or EMBL, then this sort of annotation information is much easier to deal with.
 
 \subsection{I love parsing -- please don't stop talking about it!}
 
@@ -696,7 +697,7 @@ Biopython has a lot of parsers, and each has its own little special niches based
 
 The wiki page also includes a list of supported file types, and more examples including writing sequences to a file, and converting between file formats.
 
-The next best place to look for information about specific parsers and how to do cool things with them is in the Cookbook section of the Tutorial. If you don't find the information you are looking for, please consider helping out your poor overworked documentors and submitting a cookbook entry about it! (once you figure out how to do it, that is!)
+The next place to look for information about specific parsers and how to do cool things with them is in the Cookbook, Section~\ref{sec:cookbook} of this Tutorial. If you don't find the information you are looking for, please consider helping out your poor overworked documentors and submitting a cookbook entry about it! (once you figure out how to do it, that is!)
 
 
 \section{Connecting with biological databases}
