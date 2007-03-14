@@ -74,7 +74,7 @@
 
 \section{What is Biopython?}
 
-The Biopython Project is an international association of developers of freely available Python (\ahrefurl{\url{http://www.python.org}}) tools for computational molecular biology. The web site \ahrefurl{\url{http://www.biopython.org}} provides an online resource for modules, scripts, and web links for developers of Python-based software for life science research.
+The Biopython Project is an international association of developers of freely available Python (\url{http://www.python.org}) tools for computational molecular biology. The web site \url{http://www.biopython.org} provides an online resource for modules, scripts, and web links for developers of Python-based software for life science research.
 
 Basically, we just like to program in python and want to make it as easy as possible to use python for bioinformatics by creating high-quality, reusable modules and scripts.
 
@@ -140,9 +140,9 @@ All of the installation information for Biopython was separated from
 this document to make it easier to keep updated. The instructions cover
 installation of python, Biopython dependencies and Biopython itself.
 It is available in pdf
-(\ahrefurl{\url{http://www.biopython.org/docs/install/Installation.pdf}})
+(\url{http://biopython.org/DIST/docs/install/Installation.pdf})
 and html formats
-(\ahrefurl{\url{http://www.biopython.org/docs/install/Installation.html}}).
+(\url{http://biopython.org/DIST/docs/install/Installation.html}).
 
 \section{FAQ}
 
@@ -160,7 +160,7 @@ and html formats
 
 \chapter{Quick Start -- What can you do with Biopython?}
 
-This section is designed to get you started quickly with Biopython, and to give a general overview of what is available and how to use it. All of the examples in this section assume that you have some general working knowledge of python, and that you have successfully installed Biopython on your system. If you think you need to brush up on your python, the main python web site provides quite a bit of free documentation to get started with (\ahrefurl{\url{http://www.python.org/doc/}}). 
+This section is designed to get you started quickly with Biopython, and to give a general overview of what is available and how to use it. All of the examples in this section assume that you have some general working knowledge of python, and that you have successfully installed Biopython on your system. If you think you need to brush up on your python, the main python web site provides quite a bit of free documentation to get started with (\url{http://www.python.org/doc/}). 
 
  
 Since much biological work on the computer involves connecting with databases on the internet, some of the examples will also require a working internet connection in order to run. 
@@ -194,10 +194,10 @@ A biopython Seq object has two important attributes:
 
 \end{enumerate}
 
-Clearly the alphabet object is the important thing that is making the Seq object more than just a string. The currently available alphabets for Biopython are defined in the \verb|Bio/Alphabet| module. We'll use the IUPAC alphabets \ahrefurl ({\url{http://www.chem.qmw.ac.uk/iupac/}}) here to deal with some of our favorite objects: DNA, RNA and Proteins.  
+Clearly the alphabet object is the important thing that is making the Seq object more than just a string. The currently available alphabets for Biopython are defined in the \verb|Bio/Alphabet| module. We'll use the IUPAC alphabets (\url{http://www.chem.qmw.ac.uk/iupac/}) here to deal with some of our favorite objects: DNA, RNA and Proteins.  
 
 
-\verb|Bio/Alphabet/IUPAC.py| provides basic definitions for proteins, DNA and RNA, but additionally provides the ability to extend and customize the basic definitions. For instance, for proteins, there is a basic IUPACProtein class, but there is an additional ExtendedIUPACProtein class providing for the additional elements ``Asx'' (asparagine or aspartic acid), ``Sec'' (selenocysteine), and ``Glx'' (glutamine or glutamic acid). For DNA you've got choices of IUPACUnambiguousDNA, which provides for just the basic letters, IUPACAmbiguousDNA (which provides for ambiguity letters for every possible situation) and ExtendedIUPACDNA, which allows letters for modified bases. Similarly, RNA can be represented by IUPACAmbigousRNA or IUPACUnambigousRNA.
+\verb|Bio/Alphabet/IUPAC.py| provides basic definitions for proteins, DNA and RNA, but additionally provides the ability to extend and customize the basic definitions. For instance, for proteins, there is a basic IUPACProtein class, but there is an additional ExtendedIUPACProtein class providing for the additional elements ``Asx'' (asparagine or aspartic acid), ``Sec'' (selenocysteine), and ``Glx'' (glutamine or glutamic acid). For DNA you've got choices of IUPACUnambiguousDNA, which provides for just the basic letters, IUPACAmbiguousDNA (which provides for ambiguity letters for every possible situation) and ExtendedIUPACDNA, which allows letters for modified bases. Similarly, RNA can be represented by IUPACAmbiguousRNA or IUPACUnambiguousRNA.
 
 
 The advantages of having an alphabet class are two fold. First, this gives an idea of the type of information the \verb|data| object contains. Secondly, this provides a means of constraining the information you have in the data object, as a means of type checking.
@@ -318,7 +318,7 @@ Seq('GATCGATGGGCCTATATAGGATCGAAAATCGC', IUPACUnambiguousDNA())
 \end{verbatim}
 
 
-To translate our DNA object we have quite a few choices. First, we can use any number of translation tables depending on what we know about our DNA sequence. The translation tables available in biopython were taken from information at \ahrefurl{\url{ftp://ftp.ncbi.nlm.nih.gov/entrez/misc/data/gc.prt}}. So, you have tons of choices to pick from. For this, let's just focus on two choices: the Standard translation table, and the Translation table for Vertebrate Mitochondrial DNA. These tables are labeled with id numbers 1 and 2, respectively. Now that we know what tables we are looking to get, we're all set to perform a basic translation. First, we need to get our translators that use these tables. Since we are still dealing with our unambiguous DNA object, we want to fetch translators that take this into account:
+To translate our DNA object we have quite a few choices. First, we can use any number of translation tables depending on what we know about our DNA sequence. The translation tables available in biopython were taken from information at \url{ftp://ftp.ncbi.nlm.nih.gov/entrez/misc/data/gc.prt}. So, you have tons of choices to pick from. For this, let's just focus on two choices: the Standard translation table, and the Translation table for Vertebrate Mitochondrial DNA. These tables are labeled with id numbers 1 and 2, respectively. Now that we know what tables we are looking to get, we're all set to perform a basic translation. First, we need to get our translators that use these tables. Since we are still dealing with our unambiguous DNA object, we want to fetch translators that take this into account:
 
 \begin{verbatim}
 >>> from Bio import Translate
@@ -358,7 +358,11 @@ This covers the basic features and uses of the Biopython sequence class. There i
 
 Before we jump right into parsers and everything else to do with Biopython, let's set up an example to motivate everything we do and make life more interesting. After all, if there wasn't any biology in this tutorial, why would you want you read it?
 
-Since I love plants, I think we're just going to have to have a plant based example (sorry to all the fans of other organisms out there!).  Having just completed a recent trip to our local greenhouse, we've suddenly developed an incredible obsession with Lady Slipper Orchids (if you wonder why take a look at \ahrefurl{\url{http://www.millicentorchids.com/greenhouse/images/papesq01.jpg}}. If that doesn't convince you, you can look at all of the available photos at  \ahrefurl{\url{http://www.millicentorchids...com/greenhouse/indexphoto.htm}}).  Of course, orchids are not only beautiful to look at, they are also extremely interesting for people studying evolution and systematics. So we're thinking about writing a little proposal to do a molecular study of Lady Slipper evolution and would like to see what kind of research has already been done and how we can add to that.
+Since I love plants, I think we're just going to have to have a plant based example (sorry to all the fans of other organisms out there!).  Having just completed a recent trip to our local greenhouse, we've suddenly developed an incredible obsession with Lady Slipper Orchids (if you wonder why, have a look at some \href{http://www.flickr.com/search/?q=lady+slipper+orchid&s=int&z=t}{Lady Slipper Orchids photos on Flickr}, or try a \href{http://images.google.com/images?q=lady%20slipper%20orchid}{Google Image Search}).  Of course, orchids are not only beautiful to look at, they are also extremely interesting for people studying evolution and systematics. So we're thinking about writing a little proposal to do a molecular study of Lady Slipper evolution and would like to see what kind of research has already been done and how we can add to that.
+
+% Brad's links to Millicent Orchids are dead now (March 2007)
+% http://www.millicentorchids.com/greenhouse/images/papesq01.jpg
+% http://www.millicentorchids...com/greenhouse/indexphoto.htm
 
 After a little bit of reading up we discover that the Lady Slipper Orchids are in the Orchidaceae family and the Cypripedioideae sub-family and are made up of 5 genera:  \emph{Cypripedium}, \emph{Paphiopedilum}, \emph{Phragmipedium}, \emph{Selenipedium} and \emph{Mexipedium}.
 
@@ -444,7 +448,7 @@ Seq('CATTGTTGAGATCACATAATAATTGATCGAGTTAATCTGGAGGATCTGTTTACTTTGGTC ...', IUPACAmb
 592
 \end{verbatim}
 
-This time \verb|Bio.SeqIO| has been able to choose a sensible alphabet, Ambigous DNA.  You'll also notice that a shorter string has been used as the \verb|seq_record.id| in this case.
+This time \verb|Bio.SeqIO| has been able to choose a sensible alphabet, Ambiguous DNA.  You'll also notice that a shorter string has been used as the \verb|seq_record.id| in this case.
 
 \subsection{Iterating over the records in a sequence file}
 
@@ -690,7 +694,9 @@ In general, extracting information from the FASTA description line is not very n
 
 \subsection{I love parsing -- please don't stop talking about it!}
 
-Biopython has a lot of parsers, and each has its own little special niches based on the sequence format it is parsing and all of that.  While the most popular file formats have parsers integrated into \verb|Bio.SeqIO|, for some of the rarer and unloved file formats there is either no parser at all, or an old parser which has not been linked in yet.  Please check the Bio.SeqIO wiki page (\ahrefurl{\url{http://biopython.org/wiki/SeqIO}}) for the latest information, or ask on the mailing list.
+Biopython has a lot of parsers, and each has its own little special niches based on the sequence format it is parsing and all of that.  While the most popular file formats have parsers integrated into \verb|Bio.SeqIO|, for some of the rarer and unloved file formats there is either no parser at all, or an old parser which has not been linked in yet.  Please check the Bio.SeqIO wiki page (\url{http://biopython.org/wiki/SeqIO}) for the latest information, or ask on the mailing list.
+
+The wiki page also includes a list of supported file types, and more examples including writing sequences to a file, and converting between file formats.
 
 The next best place to look for information about specific parsers and how to do cool things with them is in the Cookbook section of the Tutorial. If you don't find the information you are looking for, please consider helping out your poor overworked documentors and submitting a cookbook entry about it! (once you figure out how to do it, that is!)
 
@@ -701,10 +707,10 @@ The next best place to look for information about specific parsers and how to do
 One of the very common things that you need to do in bioinformatics is extract information from biological databases. It can be quite tedious to access these databases manually, especially if you have a lot of repetitive work to do. Biopython attempts to save you time and energy by making some on-line databases available from python scripts. Currently, Biopython has code to extract information from the following databases:
 
 \begin{itemize}
-  \item ExPASy -- \ahrefurl{\url{http://www.expasy.org/}} See section~\ref{sec:swiss_prot} in the Cookbook for more information.
-  \item Entrez from NCBI -- \ahrefurl{\url{http://www.ncbi.nlm.nih.gov/Entrez/}}
-  \item PubMed from NCBI -- \ahrefurl{\url{http://www.ncbi.nlm.nih.gov/PubMed/}}. See section~\ref{sec:pub_med} in the Cookbook for example code detailing how to use this.
-  \item SCOP -- \ahrefurl{\url{http://scop.mrc-lmb.cam.ac.uk/scop/}}
+  \item \href{http://www.expasy.org/}{ExPASy} -- See section~\ref{sec:swiss_prot} in the Cookbook for more information.
+  \item \href{http://www.ncbi.nlm.nih.gov/Entrez/}{Entrez from NCBI}
+  \item \href{http://www.ncbi.nlm.nih.gov/PubMed/}{PubMed from NCBI} -- . See section~\ref{sec:pub_med} in the Cookbook for example code detailing how to use this.
+  \item \href{http://scop.mrc-lmb.cam.ac.uk/scop/}{SCOP}
 \end{itemize}
 
 The code is these modules basically makes it easy to write python code that interact with the CGI scripts on these pages, so that you can get results in an easy to deal with format. In some cases, the results can be tightly integrated with the Biopython parsers to make it even easier to extract information.
@@ -727,7 +733,7 @@ search_term = 'Cypripedioideae'
 my_browser = 'lynx'
 \end{verbatim}
 
-The first four terms define the search we are going to do. To use the Entrez module, you'll need to know a bit about how the remote CGI scripts at NCBI work, and you can find out more about this at \ahrefurl{\url{http://www.ncbi.nlm.nih.gov/entrez/query/static/linking.html}}. The final term just describes the browser to display the results in.
+The first four terms define the search we are going to do. To use the Entrez module, you'll need to know a bit about how the remote CGI scripts at NCBI work, and you can find out more about this at \url{http://www.ncbi.nlm.nih.gov/entrez/query/static/linking.html}. The final term just describes the browser to display the results in.
 
 
 Now that we've got this all set up, we can query Entrez and get a handle with the results. This is done with the following code:
@@ -792,11 +798,11 @@ Section~\ref{sec:running-www-blast}) has two advantages:
 \end{itemize}
 Dealing with proprietary or unpublished sequence data can be another reason to run BLAST locally.  You may not be allowed to redistribute the sequences, so submitting them to the NCBI as a BLAST query would not be an option. 
 
-Biopython provides lots of nice code to enable you to call local BLAST executables from your scripts, and have full access to the many command line options that these executables provide. You can obtain local BLAST precompiled for a number of platforms at \ahrefurl{\url{ftp://ftp.ncbi.nlm.nih.gov/blast/executables/}}, or can compile it yourself in the NCBI toolbox (\ahrefurl{\url{ftp://ftp.ncbi.nlm.nih.gov/toolbox/}}).
+Biopython provides lots of nice code to enable you to call local BLAST executables from your scripts, and have full access to the many command line options that these executables provide. You can obtain local BLAST precompiled for a number of platforms at \url{ftp://ftp.ncbi.nlm.nih.gov/blast/executables/}, or can compile it yourself in the NCBI toolbox (\url{ftp://ftp.ncbi.nlm.nih.gov/toolbox/}).
 
 The code for dealing with local BLAST is found in \verb|Bio.Blast.NCBIStandalone|, specifically in the functions \verb|blastall| and \verb|blastpgp|, which correspond with the BLAST executables that their names imply.
 
-Let's use these functions to run a \verb|blastall| against a local database and return the results. First, we want to set up the paths to everything that we'll need to do the BLAST. What we need to know is the path to the database (which should have been prepared using \verb|formatdb|, see \ahrefurl{\url{ftp://ftp.ncbi.nlm.nih.gov/blast/documents/formatdb.html}}) to search against, the path to the file we want to search, and the path to the \verb|blastall| executable.
+Let's use these functions to run a \verb|blastall| against a local database and return the results. First, we want to set up the paths to everything that we'll need to do the BLAST. What we need to know is the path to the database (which should have been prepared using \verb|formatdb|, see \url{ftp://ftp.ncbi.nlm.nih.gov/blast/documents/formatdb.html}) to search against, the path to the file we want to search, and the path to the \verb|blastall| executable.
 
 
 \begin{verbatim}
@@ -839,7 +845,7 @@ results, go to Section~\ref{sec:parsing-blast}
 The first step in automating BLASTing is to make everything accessible
 from python scripts. So, Biopython contains code that allows you to
 run the WWW version of BLAST
-(\ahrefurl{\url{http://www.ncbi.nlm.nih.gov/BLAST/}}) directly from
+(\url{http://www.ncbi.nlm.nih.gov/BLAST/}) directly from
 your python scripts. This is very nice, especially since BLAST can be
 a real pain to deal with from scripts, especially with the whole BLAST
 queue thing and the separate results page. Keeping the Biopython code
@@ -880,20 +886,20 @@ databases) is:
 The \verb|qblast| function also take a number of other option arguments
 which are basically analogous to the different parameters you can set
 on the basic BLAST page
-(\ahrefurl{\url{http://www.ncbi.nlm.nih.gov/blast/blast.cgi?Jform=0}}),
+(\url{http://www.ncbi.nlm.nih.gov/blast/blast.cgi?Jform=0}),
 but for this I'll just talk about the first few arguments, which are
 the most important. The first three are non-optional.
 
 \begin{itemize}
 \item The first argument is the blast program to use for the search. The
 options and descriptions of the programs are available at
-\ahrefurl{\url{http://www.ncbi.nlm.nih.gov/BLAST/blast_program.html}}.
+\url{http://www.ncbi.nlm.nih.gov/BLAST/blast_program.html}.
 Currently \verb|qblast| only works with blastn and blastp as program
 arguments --- let us known if you want to use one of the other blast
 programs instead.
 \item The second argument specifies the databases to search against. Again,
 the options for this are available on the NCBI web pages at
-\ahrefurl{\url{http://www.ncbi.nlm.nih.gov/BLAST/blast_databases.html}}.
+\url{http://www.ncbi.nlm.nih.gov/BLAST/blast_databases.html}.
 \item The third argument is your Fasta sequence as a plain string.
 \item The \verb|qblast| function can return the BLAST results in various
 formats, which you can choose with the optional \verb|format_type| keyword:
@@ -1343,7 +1349,7 @@ We should write some stuff to make it easier to deal directly with PSIBlast from
 
 \subsection{Retrieving a SWISS-PROT record}
 
-SwissProt (\ahrefurl{\url{http://www.expasy.org/sprot/sprot-top.html}}) is a hand-curated database of protein sequences. Let's look at how we connect with it from a script and parse SwissProt formatted results. 
+SwissProt (\url{http://www.expasy.org/sprot/sprot-top.html}) is a hand-curated database of protein sequences. Let's look at how we connect with it from a script and parse SwissProt formatted results. 
 
 
 First, we need to retrieve some results to parse. Let's say we are looking at chalcone synthases for Orchids (see section~\ref{sec:orchids} for some justification for looking for interesting things about orchids). Chalcone synthase is involved in flavanoid biosynthesis in plants, and flavanoids make lots of cool things like pigment colors and UV protectants. 
@@ -1434,8 +1440,8 @@ functions.
 \verb|sprot_search_de()| searches in the ID, DE, GN, OS and OG lines;
 \verb|sprot_search_ful()| searches in (nearly) all the fields. They
 are detailed on
-\ahrefurl{\url{http://www.expasy.org/cgi-bin/sprot-search-de}} and
-\ahrefurl{\url{http://www.expasy.org/cgi-bin/sprot-search-ful}}
+\url{http://www.expasy.org/cgi-bin/sprot-search-de} and
+\url{http://www.expasy.org/cgi-bin/sprot-search-ful}
 respectively. Note that thet don't search in TrEMBL by default
 (argument \verb|trembl|). Note also that they return html pages;
 however, accession numbers are quite easily extractable:
@@ -1459,7 +1465,7 @@ else:
 
 \subsection{Sending a query to PubMed}
 
-If you are in the Medical field or interested in human issues (and many times even if you are not!), PubMed (\ahrefurl{\url{http://www.ncbi.nlm.nih.gov/PubMed/}}) is an excellent source of all kinds of goodies. So like other things, we'd like to be able to grab information from it and use it in python scripts.
+If you are in the Medical field or interested in human issues (and many times even if you are not!), PubMed (\url{http://www.ncbi.nlm.nih.gov/PubMed/}) is an excellent source of all kinds of goodies. So like other things, we'd like to be able to grab information from it and use it in python scripts.
 
 
 Querying PubMed using Biopython is extremely painless. To get all of the article ids for articles having to do with orchids (see section~\ref{sec:orchids} for our motivation), we only need the following three lines of code:
@@ -1538,7 +1544,7 @@ The PubMed and Medline interfaces are very mature and nice to work with -- hopef
 
 \section{GenBank}
 
-The GenBank record format is a very popular method of holding information about sequences, sequence features, and other associated sequence information. The format is a good way to get information from the NCBI databases at \ahrefurl{\url{http://www.ncbi.nlm.nih.gov/}}. 
+The GenBank record format is a very popular method of holding information about sequences, sequence features, and other associated sequence information. The format is a good way to get information from the NCBI databases at \url{http://www.ncbi.nlm.nih.gov/}. 
 
 \subsection{Retrieving GenBank entries from NCBI}
 \label{genbank-retrieval}
@@ -1615,7 +1621,7 @@ While GenBank files are nice and have lots of information, at the same time you 
 
 Depending on the type of GenBank files you are interested in, they will either contain a single record, or multiple records.  Each record will start with a {\tt LOCUS} line, various other header lines, a list of features, and finally the sequence data, ending with a {\tt //} line.
 
-Dealing with a GenBank file containing a single record is very easy.  For example, let's use a small bacterial genome, \emph{Nanoarchaeum equitans Kin4-M} (RefSeq NC\_005213, GenBank AE017199) which can be downloaded from the NCBI here \ahrefurl{\url{ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Bacteria/Nanoarchaeum_equitans/AE017199.gbk}} (only 1.15 MB):
+Dealing with a GenBank file containing a single record is very easy.  For example, let's use a small bacterial genome, \emph{Nanoarchaeum equitans Kin4-M} (RefSeq NC\_005213, GenBank AE017199) which can be downloaded from the NCBI here \href{ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Bacteria/Nanoarchaeum_equitans/AE017199.gbk} (only 1.15 MB):
 
 \begin{verbatim}
 from Bio import GenBank
@@ -1718,7 +1724,7 @@ It is often very useful to be able to align particular sequences. I do this quit
 \subsection{Clustalw}
 \label{sec:align_clustal}
 
-Clustalx (\ahrefurl{\url{http://www-igbmc.u-strasbg.fr/BioInfo/ClustalX/Top.html}}) is a very nice program for doing multiple alignments. Biopython offers access to alignments in clustal format (these normally have a \verb|*.aln| extension) that are produced by Clustalx. It also offers access to clustalw, which the is command line version of clustalx.
+Clustalx (\url{http://www-igbmc.u-strasbg.fr/BioInfo/ClustalX/Top.html}) is a very nice program for doing multiple alignments. Biopython offers access to alignments in clustal format (these normally have a \verb|*.aln| extension) that are produced by Clustalx. It also offers access to clustalw, which the is command line version of clustalx.
 
 We'll need some sequences to align, such as \href{http://cvs.biopython.org/cgi-bin/viewcvs/viewcvs.cgi/*checkout*/biopython/Doc/examples/opuntia.fasta?rev=HEAD&cvsroot=biopython&content-type=text/plain}{opuntia.fasta} which is a small FASTA file containing seven orchid gene DNA sequences, which you can also from \verb|docs/examples/| in the Biopython source code.
 
@@ -1925,7 +1931,7 @@ The structure of the PSSM class hopefully makes it easy both to access elements 
 A potentially useful measure of evolutionary conservation is the information ceontent of a sequence.
 
 
-A useful introduction to information theory targetted towards molecular biologists can be found at \ahrefurl{\url{http://www.lecb.ncifcrf.gov/~toms/paper/primer/}}. For our purposes, we will be looking at the information content of a consesus sequence, or a portion of a consensus sequence. We calculate information content at a particular column in a multiple sequence alignment using the following formula:
+A useful introduction to information theory targetted towards molecular biologists can be found at \url{http://www.lecb.ncifcrf.gov/~toms/paper/primer/}. For our purposes, we will be looking at the information content of a consesus sequence, or a portion of a consensus sequence. We calculate information content at a particular column in a multiple sequence alignment using the following formula:
 
 \begin{displaymath}
 IC_{j} = \sum_{i=1}^{N_{a}} P_{ij} * log(\frac{P_{ij}}{Q_{i}}) 
@@ -1979,7 +1985,7 @@ from Bio.Alphabet import IUPAC
 from Bio.SubsMat import FreqTable
 
 e_freq_table = FreqTable.FreqTable(expect_freq, FreqTable.FREQ,
-                                   IUPAC.unambigous_dna)
+                                   IUPAC.unambiguous_dna)
 \end{verbatim}
 
 Now that we've got that, calculating the relative information content for our region of the alignment is as simple as:
@@ -3483,7 +3489,7 @@ record
 
 The Bio.KEGG.Enzyme module works with the 'enzyme' file from the
 Ligand database, which can be obtained from the KEGG project. 
-(\ahrefurl{\url{http://www.genome.ad.jp/kegg}}).
+(\url{http://www.genome.ad.jp/kegg}).
 
 The Bio.KEGG.Enzyme.Record contains all the information stored in
 a KEGG/Enzyme record. Its string representation also is a valid KEGG
@@ -3526,7 +3532,7 @@ record_end
 
 The Bio.KEGG.Compound module works with the 'compound' file from the
 Ligand database, which can be obtained from the KEGG project. 
-(\ahrefurl{\url{http://www.genome.ad.jp/kegg}}).
+(\url{http://www.genome.ad.jp/kegg}).
 
 The Bio.KEGG.Compound.Record contains all the information stored in
 a KEGG/Compound record. Its string representation also is a valid KEGG
@@ -3562,8 +3568,9 @@ sequence
 
 
 \subsection{Medline}
+
 The Online Services Reference Manual documents the MEDLINE format at:
-\ahrefurl{\url{http://www.nlm.nih.gov/pubs/osrm_nlm.html}}
+\url{http://www.nlm.nih.gov/pubs/osrm_nlm.html}
 
 The Medline scanner produces the following events:
 \begin{verbatim}
@@ -3693,7 +3700,7 @@ footer
 \subsection{NBRF}
 
 The NBRF module works with NBRF-formatted sequence data.  Data is available at:
-\ahrefurl{\url{http://www-nbrf.georgetown.edu/pirwww/pirhome.shtml}}.
+\url{http://www-nbrf.georgetown.edu/pirwww/pirhome.shtml}.
 
 The NBRF Scanner produces the following events:
 \begin{verbatim}
@@ -3706,7 +3713,7 @@ The NBRF Scanner produces the following events:
 \subsection{Ndb}
 
 The Ndb module works with Ndb-formatted sequence data.  Data is available at:
-\ahrefurl{\url{http://ndbserver.rutgers.edu/NDB/NDBATLAS/index.html}}.
+\url{http://ndbserver.rutgers.edu/NDB/NDBATLAS/index.html}.
 
 The Ndb record contains the following items:
 \begin{verbatim}
@@ -3728,10 +3735,10 @@ Sequence is an instance of Crystal which is dictionary of Chain objects.  Each c
 
 The MetaTool parser works with MetaTool output files.  MetaTool implements algorithms to decompose a biochemical pathway into a combination of simpler networks that are more accessible to analysis.
 
-The MetaTool web page is \ahrefurl{\url{http://pinguin.biologie.uni-jena.de/bioinformatik/networks/}}.
+The MetaTool web page is \url{http://pinguin.biologie.uni-jena.de/bioinformatik/networks/}.
 
-The MetaTool parser requires Numerical Python. Information is available at
-\ahrefurl{\url{http://sourceforge.net/projects/numpy}}.
+The MetaTool parser requires Numeric Python. Information is available at
+\url{http://numpy.scipy.org/#older_array}.
 
 The Bio.MetaTool.Scanner produces the following events:
 \begin{verbatim}
@@ -4085,7 +4092,7 @@ In general, this is fairly easy -- all you would need to do is produce the syste
 Below are some tips for certain platforms to maybe get people started with helping out:
 
 \begin{description}
-  \item[RPMs] -- RPMs are pretty popular package systems on some platforms. There is lots of documentation on RPMs available at \ahrefurl{\url{http://www.rpm.org}} to help you get started with them. To create an RPM for your platform is really easy. You just need to be able to build the package from source (having a C compiler that works is thus essential) -- see the Biopython installation instructions for more info on this.
+  \item[RPMs] -- RPMs are pretty popular package systems on some platforms. There is lots of documentation on RPMs available at \url{http://www.rpm.org} to help you get started with them. To create an RPM for your platform is really easy. You just need to be able to build the package from source (having a C compiler that works is thus essential) -- see the Biopython installation instructions for more info on this.
 
 
 To make the RPM, you just need to do:
@@ -4130,7 +4137,7 @@ The main forums for discussing feature requests and potential bugs are the biopy
 \end{itemize}
 
 Additionally, if you think you've found a bug, you can submit it to our
-bug-tracking page at \ahrefurl{\url{http://bugzilla.open-bio.org/}}. This 
+bug-tracking page at \url{http://bugzilla.open-bio.org/}. This 
 way, it won't get buried in anyone's Inbox and forgotten about.
 
 \section{Contributing Code}
@@ -4142,12 +4149,12 @@ The main biopython release tries to be fairly uniform and interworkable,
 to make it easier for users. You can read about some of (fairly
 informal) coding style guidelines we try to use in biopython in the
 contributing documentation at 
-\ahrefurl{\url{http://www.biopython.org/docs/developer/contrib.html}}. We also try to add code to the distribution along with tests (see section~\ref{sec:regr_test} for more info on the regression testing framework) and documentation, so that everything can stay as workable and well documented as possible. This is, of course, the most ideal situation, under many situations you'll be able to find other people on the list who will be willing to help add documentation or more tests for your code once you make it available. So, to end this paragraph like the last, feel free to start working!
+\url{http://biopython.org/wiki/Contributing}. We also try to add code to the distribution along with tests (see section~\ref{sec:regr_test} for more info on the regression testing framework) and documentation, so that everything can stay as workable and well documented as possible. This is, of course, the most ideal situation, under many situations you'll be able to find other people on the list who will be willing to help add documentation or more tests for your code once you make it available. So, to end this paragraph like the last, feel free to start working!
 
 
 Additionally, if you have code that you don't think fits in the
 distribution, but that you want to make available, we maintain Script
-Central (\ahrefurl{\url{http://www.biopython.org/scriptcentral/}}) 
+Central (\url{http://biopython.org/wiki/Scriptcentral}) 
 which has pointers to freely available code in python for bioinformatics.
 
 
