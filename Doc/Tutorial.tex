@@ -375,7 +375,7 @@ A large part of much bioinformatics work involves dealing with the many types of
 
 We are going to introduce the \verb|Bio.SeqIO| module, available in Biopython 1.43 and later.  If you are using an older version of Biopython we encourage you to update (or find an old edition of this tutorial!).
 
-We'll start with an online search for our friends, the lady slipper orchids. Let's just take a look through the nucleotide databases at NCBI, using an Entrez online search (\url{http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?db=Nucleotide}) for everything mentioning the text Cypripedioideae (this is the subfamily of lady slipper orchids). When this tutorial was originally written, this search gave us only 94 hits, which we saved as a FASTA formatted text file (\href{http://biopython.org/DIST/docs/tutorial/ls_orchid.fasta}{ls\_orchid.fasta}) and as a GenBank formatted text file (\href{http://biopython.org/DIST/docs/tutorial/ls_orchid.gbk}{ls\_orchid.gbk}).
+We'll start with an online search for our friends, the lady slipper orchids. Let's just take a look through the nucleotide databases at NCBI, using an Entrez online search (\url{http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?db=Nucleotide}) for everything mentioning the text Cypripedioideae (this is the subfamily of lady slipper orchids). When this tutorial was originally written, this search gave us only 94 hits, which we saved as a FASTA formatted text file (\href{examples/ls_orchid.fasta}{ls\_orchid.fasta}) and as a GenBank formatted text file (\href{examples/ls_orchid.gbk}{ls\_orchid.gbk}).
 
 % The GenBank version is actually new - it was created by filtering out the original 94 hits from the
 % latest search of over 400 hits.
@@ -1725,7 +1725,7 @@ It is often very useful to be able to align particular sequences. I do this quit
 
 Clustalx (\url{http://www-igbmc.u-strasbg.fr/BioInfo/ClustalX/Top.html}) is a very nice program for doing multiple alignments. Biopython offers access to alignments in clustal format (these normally have a \verb|*.aln| extension) that are produced by Clustalx. It also offers access to clustalw, which the is command line version of clustalx.
 
-We'll need some sequences to align, such as \href{http://cvs.biopython.org/cgi-bin/viewcvs/viewcvs.cgi/*checkout*/biopython/Doc/examples/opuntia.fasta?rev=HEAD&cvsroot=biopython&content-type=text/plain}{opuntia.fasta} which is a small FASTA file containing seven orchid gene DNA sequences, which you can also from \verb|docs/examples/| in the Biopython source code.
+We'll need some sequences to align, such as \href{examples/opuntia.fasta}{opuntia.fasta} which is a small FASTA file containing seven orchid gene DNA sequences, which you can also from \verb|Doc/examples/| in the Biopython source distribution.
 
 The first step in interacting with clustalw is to set up a command line you want to pass to the program. Clustalw has a ton of command line options, and if you set a lot of parameters, you can end up typing in a huge ol' command line quite a bit. This command line class models the command line by making all of the options be attributes of the class that can be set. A few convenience functions also exist to set certain parameters, so that some error checking on the parameters can be done.
 
