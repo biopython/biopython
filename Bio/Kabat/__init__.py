@@ -7,6 +7,10 @@
 http://www.kabatdatabase.com/top.html
 """
 
+import warnings
+warnings.warn("Bio.Kabat is deprecated because its code seems to be out of date, and no users came forward saying that actively use this module. If you use Bio.Kabat, please let the developers known by sending an email to the biopython-dev mailiing list.",
+              DeprecationWarning)
+
 # standard library
 import string
 import array
