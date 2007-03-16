@@ -15,8 +15,6 @@ from Bio import File
 
 from Bio import InterPro
 
-kabat_file_dir = os.path.join(os.getcwd(), 'InterPro')
-
 test_files = ['IPR001064.htm', 'IPR001171.htm', 'IPR001391.htm',
               'IPR001442.htm', 'IPR001571.htm']
 
