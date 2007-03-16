@@ -181,7 +181,7 @@ One thing to note about Biopython is that it often provides multiple ways of ``d
 Disputedly (of course!), the central object in bioinformatics is the sequence. Thus, we'll start with the Biopython mechanisms for dealing with sequences. When I think of a sequence the first thing that pops into my mind is a string of letters:\verb| 'AGTACACTGGT'| which seems natural since this is the most common way that sequences are seen in biological file formats.  However, a simple string of letters by itself is also very uninformative -- is it a DNA or  protein sequence (okay, a protein with a lot of Alanines, Glycines, Cysteines and Threonines!), what type of organism did it come from, what is so interesting about it, and so on. The challenge in designing a sequence interface is to pick a representation that is informative enough to take into account the more complex information, yet is as lightweight and easy to work with as just a simple sequence.
 
 
-The approach taken in the Biopython sequence class is to utilize a class that holds more complex information, yet can be manipulated as if it were a simple string. This is accomplished by utilizing operator overloading to make manipulating a sequence object feel like manipulating a python string. The sequence class, referred to simply as Seq,  is defined in the file \verb|Bio/Seq.py.| Let's look at the Seq class deeper to see what it has to offer.
+The approach taken in the Biopython sequence class is to utilize a class that holds more complex information, yet can be manipulated as if it were a simple string. This is accomplished by utilizing operator overloading to make manipulating a sequence object feel like manipulating a python string. The sequence class, referred to simply as Seq,  is defined in the file \verb|Bio/Seq.py|. Let's look at the Seq class deeper to see what it has to offer.
 
 
 A biopython Seq object has two important attributes:
@@ -375,7 +375,7 @@ A large part of much bioinformatics work involves dealing with the many types of
 
 We are going to introduce the \verb|Bio.SeqIO| module, available in Biopython 1.43 and later.  If you are using an older version of Biopython we encourage you to update (or find an old edition of this tutorial!).
 
-We'll start with an online search for our friends, the lady slipper orchids. Let's just take a look through the nucleotide databases at NCBI, using an Entrez online search (\url{http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?db=Nucleotide}) for everything mentioning the text Cypripedioideae (this is the subfamily of lady slipper orchids). When this tutorial was originally written, this search gave us only 94 hits, which we saved as a FASTA formatted text file (\href{examples/ls_orchid.fasta}{ls\_orchid.fasta}) and as a GenBank formatted text file (\href{examples/ls_orchid.gbk}{ls\_orchid.gbk}).
+We'll start with an online search for our friends, the lady slipper orchids. Let's just take a look through the nucleotide databases at NCBI, using an Entrez online search (\url{http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?db=Nucleotide}) for everything mentioning the text Cypripedioideae (this is the subfamily of lady slipper orchids). When this tutorial was originally written, this search gave us only 94 hits, which we saved as a FASTA formatted text file (\href{examples/ls_orchid.fasta}{ls\_orchid.fasta}; also available online \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.fasta}{here}) and as a GenBank formatted text file (\href{examples/ls_orchid.gbk}{ls\_orchid.gbk}; also available online \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.gbk}{here}).
 
 % The GenBank version is actually new - it was created by filtering out the original 94 hits from the
 % latest search of over 400 hits.
@@ -399,7 +399,7 @@ It contains 94 records, each has a line starting with ``$>$'' (greater-than symb
 \begin{verbatim}
 from Bio import SeqIO
 handle = open("ls_orchid.fasta")
-for record in SeqIO.parse(handle, "fasta") :
+for seq_record in SeqIO.parse(handle, "fasta") :
     print seq_record.id
     print seq_record.seq
     print len(seq_record.seq)
@@ -558,7 +558,7 @@ This time the keys are:
  ..., 'gi|2765613|emb|Z78488.1|PTZ78488', 'gi|2765583|emb|Z78458.1|PHZ78458']
 \end{verbatim} 
 
-You should recognised these strings from when we parsed the FASTA file earlier in Section~\ref{sec:fasta-parsing}.  Suppose you would rather have something else as the keys - like the accesion numbers.  This brings us nicely to \verb|SeqIO.to_dict|'s optional argument \verb|key_function|, which let's you define what to use as the dictionary key for your records.
+You should recognised these strings from when we parsed the FASTA file earlier in Section~\ref{sec:fasta-parsing}.  Suppose you would rather have something else as the keys - like the accesion numbers.  This brings us nicely to \verb|SeqIO.to_dict|'s optional argument \verb|key_function|, which lets you define what to use as the dictionary key for your records.
 
 First you must write your own function to return the key you want (as a string) when given a SeqRecord object.  In general, the details of function will depend on the sort of input records you are dealing with.  But for our orchids, we can just split up the record's identifier using the ``pipe'' character (the vertical line) and return the fourth entry (field three):
 
@@ -1725,7 +1725,7 @@ It is often very useful to be able to align particular sequences. I do this quit
 
 Clustalx (\url{http://www-igbmc.u-strasbg.fr/BioInfo/ClustalX/Top.html}) is a very nice program for doing multiple alignments. Biopython offers access to alignments in clustal format (these normally have a \verb|*.aln| extension) that are produced by Clustalx. It also offers access to clustalw, which the is command line version of clustalx.
 
-We'll need some sequences to align, such as \href{examples/opuntia.fasta}{opuntia.fasta} which is a small FASTA file containing seven orchid gene DNA sequences, which you can also from \verb|Doc/examples/| in the Biopython source distribution.
+We'll need some sequences to align, such as \href{examples/opuntia.fasta}{opuntia.fasta} (also available online \href{http://biopython.org/DIST/docs/tutorial/examples/opuntia.fasta}{here}) which is a small FASTA file containing seven orchid gene DNA sequences, which you can also from \verb|Doc/examples/| in the Biopython source distribution.
 
 The first step in interacting with clustalw is to set up a command line you want to pass to the program. Clustalw has a ton of command line options, and if you set a lot of parameters, you can end up typing in a huge ol' command line quite a bit. This command line class models the command line by making all of the options be attributes of the class that can be set. A few convenience functions also exist to set certain parameters, so that some error checking on the parameters can be done.
 
