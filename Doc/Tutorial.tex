@@ -819,6 +819,10 @@ Let's use these functions to run a \verb|blastall| against a local database and 
 # The name of my BLAST executable
 \end{verbatim}
 
+The FASTA file used in this example is available
+\href{examples/m\_cold.fasta}{here} as well as
+\href{http://biopython.org/DIST/docs/tutorial/examples/m\_cold.fasta}{online}.
+
 Now that we've got that all set, we are ready to run the BLAST and collect the results. We can do this with two lines:
 
 \begin{verbatim}
@@ -2066,8 +2070,10 @@ classes is to create your own substitution matrix from an
 alignment. In practice, this is normally done with protein
 alignments. In this example, we'll first get a biopython alignment
 object and then get a summary object to calculate info about the
-alignment:
-
+alignment. The file containing \href{examples/protein.aln}{protein.aln}
+(also available online
+\href{http://biopython.org/DIST/docs/tutorial/examples/protein.aln}{here})
+contains the Clustalw alignment output.
 
 \begin{verbatim}
 from Bio import Clustalw
@@ -4171,7 +4177,7 @@ code that come up often (at least for us!) while using the Biopython
 libraries. If you have any suggestions for useful pointers that could
 go here, please contribute!
 
-\section{What the heck in a handle?}
+\section{What the heck is a handle?}
 \label{sec:appendix-handles}
 
 Handles are mentioned quite frequently throughout this documentation,
@@ -4203,7 +4209,10 @@ which reads the entire text information from the handle, and
 
 
 The most common usage for handles is reading information from a file,
-which is done using the built-in python function \verb|open|:
+which is done using the built-in python function \verb|open|. Here, we open a
+handle to the file \href{examples/m\_cold.fasta}{m\_cold.fasta}
+(also available online
+\href{http://biopython.org/DIST/docs/tutorial/examples/m\_cold.fasta}{here}):
 
 \begin{verbatim}
 >>> handle = open("m_cold.fasta", "r")
