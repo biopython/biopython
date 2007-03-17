@@ -24,9 +24,9 @@ python setup.py install
 
 **System Requirements**
 
-o "Python 2.2 or better":http://www.python.org/
+o "Python 2.3 or better":http://www.python.org/
 
-o "mxTextTools":http://starship.python.net/~lemburg/mxTextTools.html
+o "mxTextTools":http://www.egenix.com/files/python/mxTextTools.html
   This is used in many of the text handling routines in Biopython.
   Much of Biopython will not work without it.
 
@@ -37,23 +37,27 @@ o "Numerical Python":http://numpy.sourceforge.net/ (optional)
   Python first.  Also, please install if you are seeing
   error messages such as:
   ImportError: No module named Numeric
+  Biopython uses the "old" Numerical Python (version 24.2). Using
+  Biopython with the "new" NumPy (versions 0.9.6 and later) works for
+  most purposes, but some tweaking will be needed when compiling and
+  using Biopython.
 
-o ReportLab (optional)
+o "ReportLab":http://www.reportlab.org/downloads.html (optional)
   This package is used in some code that generates graphical displays
-  of chromosomes.  If you do not need this functoinality, you will not
+  of chromosomes.  If you do not need this functionality, you will not
   need to install this package.
 
-o psycopg:http://initd.org/software/psycopg/ (optional) or
-  pgdb:http://www.druid.net/pygresql/ (optional)
+o "psycopg":http://initd.org/software/psycopg/ (optional) or
+  "pgdb":http://www.druid.net/pygresql/ (optional)
   These packages are used by BioSQL to access a PostgreSQL database.
 
-o MySQLdb:http://sourceforge.net/projects/mysql-python (optional)
+o "MySQLdb":http://sourceforge.net/projects/mysql-python (optional)
   This package is only used by Bio.GFF to access a MySQL database.
 
 
 **Installation**
 
-*** Make sure Python and Distutils are installed correctly ***
+*** Make sure that Python is installed correctly ***
 
 Installation should be as simple as going to the biopython directory,
 and typing:
@@ -120,7 +124,7 @@ writing, technical administration, and whatever else comes up.
 
 If you wish to contribute, please visit the 
 "web site":http://www.biopython.org
-and join our "mailing list":http://biopython.org/maillists/
+and join our "mailing list":http://biopython.org/wiki/Mailing_lists
 
 
 
