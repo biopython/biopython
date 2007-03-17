@@ -832,7 +832,7 @@ Note that the Biopython interfaces to local blast programs returns two values. T
 The error info can be hard to deal with, because if you try to do a \verb|error_info.read()| and there was no error info returned, then the \verb|read()| call will block and not return, locking your script. In my opinion, the best way to deal with the error is only to print it out if you are not getting \verb|blast_out| results to be parsed, but otherwise to leave it alone.
 
 
-This command will generate BLAST output in text format. For XML output, use the \verb|align_view=7| keyword. XML output is needed to parse the BLAST results with the XML parser, described in Section~\ref{sec:parsing-blast}. Parsing BLAST results as XML is recommended, as this format is more likely to be stable than text or HTML output. To parse text output instead of XML output, see the Section~\ref{sec:parsing-blast-deprecated} below.
+This command will generate BLAST output in XML format, as that is the format expected by the XML parser, described in Section~\ref{sec:parsing-blast}. For plain text output, use the \verb|align_view='0'| keyword. To parse text output instead of XML output, see the Section~\ref{sec:parsing-blast-deprecated} below. However, parsing text output is not recommended, as the BLAST plain text output changes frequently, breaking our parsers.
 
 If you are interested in saving your results to a file before parsing them,
 see Section~\ref{sec:saving-blast-output}. To find out how to parse the BLAST
