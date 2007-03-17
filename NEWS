@@ -4,6 +4,38 @@ News for the Biopython Project
 This file contains release notes and general news 
 about the biopython project.
 
+March 17, 2007: Biopython 1.43 released.
+
+New Bio.SeqIO module for reading biological sequence files in various formats.
+Much faster than existing parsers in Biopython, in particular for larger files.
+Easier to use, too.
+
+Various improvements in Bio.SeqRecord.
+
+Running Blast using Bio.Blast.NCBIStandalone now generates output in XML
+format by default.
+The new function Bio.Blast.NCBIXML.parse can parse multiple Blast records
+in XML format.
+
+Bio.Cluster no longer uses ranlib, but uses its own random number generator
+instead. Some modifications to make Bio.Cluster more compatible with the new
+NumPy (we're not quite there yet though).
+
+New Bio.UniGene parser.
+
+Numerous improvements in Bio.PDB.
+
+Bug fixes in Bio.SwissProt, BioSQL, Bio.Nexus, and other modules.
+
+Faster parsing of large GenBank files.
+
+Compilation of KDTree (C++ code) is optional (setup.py asks the user if it
+should be compiled). For the Windows installer, C++ code is now included.
+
+Nominating Bio.Kabat for removal.
+
+Believe it or not, even the documentation was updated.
+
 July 16, 2006: Biopython 1.42 released.
 
 Bio.GenBank: New parser by Peter, which doesn't rely on Martel.
