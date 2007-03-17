@@ -1406,9 +1406,9 @@ class Iterator:
     def __iter__(self):
         return iter(self.next, None)
 
-def blastall(blastcmd, program, database, infile, **keywds):
-    """blastall(blastcmd, program, database, infile, **keywds) ->
-    read, error Undohandles
+def blastall(blastcmd, program, database, infile, align_view='7', **keywds):
+    """blastall(blastcmd, program, database, infile, align_view='7', **keywds)
+    -> read, error Undohandles
     
     Execute and retrieve data from blastall.  blastcmd is the command
     used to launch the 'blastall' executable.  program is the blast program
@@ -1418,6 +1418,8 @@ def blastall(blastcmd, program, database, infile, **keywds):
 
     You may pass more parameters to **keywds to change the behavior of
     the search.  Otherwise, optional values will be chosen by blastall.
+    The Blast output is by default in XML format. Use the align_view keyword
+    for output in a different format.
     
         Scoring
     matrix              Matrix to use.
@@ -1451,7 +1453,7 @@ def blastall(blastcmd, program, database, infile, **keywds):
     html                Produce HTML output?  T/F
     descriptions        Number of one-line descriptions.
     alignments          Number of alignments.
-    align_view          Alignment view.  Integer 0-6.
+    align_view          Alignment view.  Integer 0-11, passed as a string.
     show_gi             Show GI's in deflines?  T/F
     seqalign_file       seqalign file to output.
 
@@ -1501,6 +1503,7 @@ def blastall(blastcmd, program, database, infile, **keywds):
     params.extend([att2param['program'], program])
     params.extend([att2param['database'], database])
     params.extend([att2param['infile'], infile])
+    params.extend([att2param['align_view'], align_view])
 
     for attr in keywds.keys():
         params.extend([att2param[attr], str(keywds[attr])])
@@ -1510,8 +1513,8 @@ def blastall(blastcmd, program, database, infile, **keywds):
     return File.UndoHandle(r), File.UndoHandle(e)
 
 
-def blastpgp(blastcmd, database, infile, **keywds):
-    """blastpgp(blastcmd, database, infile, **keywds) ->
+def blastpgp(blastcmd, database, infile, align_view='7', **keywds):
+    """blastpgp(blastcmd, database, infile, align_view='7', **keywds) ->
     read, error Undohandles
     
     Execute and retrieve data from blastpgp.  blastcmd is the command
@@ -1521,6 +1524,8 @@ def blastpgp(blastcmd, database, infile, **keywds):
 
     You may pass more parameters to **keywds to change the behavior of
     the search.  Otherwise, optional values will be chosen by blastpgp.
+    The Blast output is by default in XML format. Use the align_view keyword
+    for output in a different format.
 
         Scoring
     matrix              Matrix to use.
@@ -1559,7 +1564,7 @@ def blastpgp(blastcmd, database, infile, **keywds):
     html                Produce HTML output?  T/F
     descriptions        Number of one-line descriptions.
     alignments          Number of alignments.
-    align_view          Alignment view.  Integer 0-6.
+    align_view          Alignment view.  Integer 0-11, passed as a string.
     show_gi             Show GI's in deflines?  T/F
     seqalign_file       seqalign file to output.
     align_outfile       Output file for alignment.
@@ -1623,6 +1628,7 @@ def blastpgp(blastcmd, database, infile, **keywds):
 
     params.extend([att2param['database'], database])
     params.extend([att2param['infile'], infile])
+    params.extend([att2param['align_view'], align_view])
 
     for attr in keywds.keys():
         params.extend([att2param[attr], str(keywds[attr])])
