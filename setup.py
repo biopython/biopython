@@ -238,11 +238,18 @@ class test_biopython(Command):
     
     """
     description = "Automatically run the test suite for Biopython."
-    user_options = []  # distutils complains if this is not here.
-    def initialize_options(self):  # distutils wants this
+
+    user_options = [
+        # provide the option to run tests in no-gui mode
+        ('no-gui', None, "Do not run in GUI mode")
+    ]
+
+    def initialize_options(self):
+        self.no_gui = None
+
+    def finalize_options(self):
         pass
-    def finalize_options(self):    # this too
-        pass
+
     def run(self):
         this_dir = os.getcwd()
 
@@ -250,7 +257,10 @@ class test_biopython(Command):
         os.chdir("Tests")
         sys.path.insert(0, '')
         import run_tests
-        run_tests.main([])
+        if self.no_gui:
+            run_tests.main(['--no-gui'])
+        else:
+            run_tests.main([])
 
         # change back to the current directory
         os.chdir(this_dir)

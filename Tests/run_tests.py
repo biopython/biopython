@@ -56,7 +56,7 @@ def main(argv):
 
     # get the command line options
     try:
-        opts, args = getopt.getopt(argv[1:], 'g',
+        opts, args = getopt.getopt(argv, 'g',
 				   ["generate", "no-gui", "help"])
     except getopt.error, msg:
         print msg
@@ -316,5 +316,5 @@ def convert_string_newlines(line):
     return line
         
 if __name__ == "__main__":
-    sys.exit(main(sys.argv))
+    sys.exit(main(sys.argv[1:]))
 
