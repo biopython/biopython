@@ -380,7 +380,7 @@ class StockholmWriter(SequentialSequenceWriter):
         #corresponding sequence.
         #
         #We put both just below the corresponding sequence as this allows
-        #us to write the file using a single pass though the records.
+        #us to write the file using a single pass through the records.
 
         #AC = Accession
         if "accession" in record.annotations :
@@ -422,7 +422,7 @@ class StockholmWriter(SequentialSequenceWriter):
     def write_footer(self):
         assert self._header_written, "You must call write_header() first"
         assert self._record_written, "You have not called write_record() or write_records() yet"
-        assert not self._footer_written, "You have aleady caled write_footer()"
+        assert not self._footer_written, "You have aleady called write_footer()"
         #self._footer_written = True
 
         
