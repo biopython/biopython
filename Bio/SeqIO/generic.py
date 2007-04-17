@@ -4,7 +4,17 @@
 # thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas/index.html
 # File: generic.py
 # based on Brads's code
+#
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
 
+import warnings
+warnings.warn("Bio.SeqIO.generic is deprecated." \
+              + " We hope the new code in Bio.SeqIO will be suitable for" \
+              + " most users.  Please get in touch on the mailing lists if" \
+              + " this (or its removal) causes any problems for you.",
+              DeprecationWarning)
 
 import sys
 import os, re, time
