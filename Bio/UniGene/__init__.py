@@ -1,4 +1,9 @@
-# $Id: __init__.py,v 1.9 2006-10-31 22:09:46 sdavis Exp $
+# Copyright 2006 by Sean Davis.  All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+#
+# $Id: __init__.py,v 1.10 2007-04-18 09:19:03 peterc Exp $
 # Sean Davis <sdavis2 at mail dot nih dot gov>
 # National Cancer Institute
 # National Institutes of Health
@@ -305,7 +310,8 @@ class _Scanner:
         """feed(self, handle, consumer)
 
         Feed events from parsing a Unigene file to a consumer.
-        handle is a file-like object, and consumer is a consumer object that will receive events as the file is scanned
+        handle is a file-like object, and consumer is a consumer object
+        that will receive events as the file is scanned
 
         """
         consumer.start_record()
