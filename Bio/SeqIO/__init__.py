@@ -67,7 +67,7 @@ the file format.
     from Bio import SeqIO
     records = ...
     handle = open("example.faa", "w")
-    alignment = SeqIO.write(records, handle, "fasta")
+    SeqIO.write(records, handle, "fasta")
     handle.close()
 
 In general, you are expected to call this function once (with all your records)
