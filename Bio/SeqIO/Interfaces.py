@@ -6,7 +6,7 @@
 from Bio.Alphabet import generic_alphabet
 
 class SequenceIterator :
-    """Base class for building Sequence iterators.
+    """Base class for building SeqRecord iterators.
 
     You should write a next() method to return SeqRecord
     objects.  You may wish to redefine the __init__
@@ -48,7 +48,7 @@ class SequenceIterator :
 
         myFile = open("example.fasta","r")
         myFastaReader = FastaIterator(myFile)
-        for record in FastaIterator :
+        for record in myFastaReader :
             print record.id
             print record.seq
         myFile.close()"""
