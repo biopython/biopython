@@ -4,10 +4,19 @@ News for the Biopython Project
 This file contains release notes and general news 
 about the biopython project.
 
+The latest news is at the top.
+
+===================================================================
+
+Bio.SeqIO.FASTA and Bio.SeqIO.generic marked as deprecated
+
+===================================================================
+
 March 17, 2007: Biopython 1.43 released.
 
-New Bio.SeqIO module for reading biological sequence files in various formats.
-Much faster than existing parsers in Biopython, in particular for larger files.
+New Bio.SeqIO module for reading and writing biological sequence files
+in various formats, based on SeqRecord objects.  This includes a new fasta
+parser which is much faster than Bio.Fasta, particularly for larger files.
 Easier to use, too.
 
 Various improvements in Bio.SeqRecord.
@@ -29,12 +38,16 @@ Bug fixes in Bio.SwissProt, BioSQL, Bio.Nexus, and other modules.
 
 Faster parsing of large GenBank files.
 
+New EMBL parser under Bio.GenBank and also integrated into (new) Bio.SeqIO
+
 Compilation of KDTree (C++ code) is optional (setup.py asks the user if it
 should be compiled). For the Windows installer, C++ code is now included.
 
 Nominating Bio.Kabat for removal.
 
 Believe it or not, even the documentation was updated.
+
+===================================================================
 
 July 16, 2006: Biopython 1.42 released.
 
@@ -46,6 +59,7 @@ Bio.Cluster became (somewhat) object-oriented.
 
 Lots of bug fixes, and updates to the documentation.
 
+===================================================================
 
 October 28, 2005: Biopython 1.41 released.
 Major changes:
@@ -75,6 +89,8 @@ Numerous updates in Bio.PDB.
 Lots of fixes in the documentation.
 
 March 29, 2005: MEME parser added. Thanks to Jason Hackney
+
+===================================================================
 
 Feb 18, 2005: Biopython 1.40 beta
 Major Changes since v1.30. For a full list of changes please see the CVS
