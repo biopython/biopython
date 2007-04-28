@@ -54,10 +54,6 @@ class SequenceIterator :
         myFile.close()"""
         return iter(self.next, None)
 
-    def close(self):
-        """Close the input file handle"""
-        return self.handle.close()
-
 class InterlacedSequenceIterator(SequenceIterator) :
     """This class should be subclassed by any iterator for a non-sequential file type.
 
@@ -171,8 +167,8 @@ class SequentialSequenceWriter(SequenceWriter):
     simply call the write_file() method and be done.
 
     However, they may also call the write_header(), followed
-    by mulitple calls to write_record() and/or write_records()
-    followed by write_footer() and close()
+    by multiple calls to write_record() and/or write_records()
+    followed finally by write_footer().
 
     Users must call write_header() and write_footer() even when
     the file format concerned doesn't have a header or footer.
@@ -180,8 +176,7 @@ class SequentialSequenceWriter(SequenceWriter):
     switching the output format.
     
     Note that write_header() cannot require any assumptions about
-    the number of records - which would be required for phylip files
-    for example.
+    the number of records.
     """
     def __init__(self, handle):
         self.handle = handle
@@ -200,7 +195,7 @@ class SequentialSequenceWriter(SequenceWriter):
         assert self._record_written, "You have not called write_record() or write_records() yet"
         assert not self._footer_written, "You have aleady called write_footer()"
         self._footer_written = True
-        
+
     def write_record(self, record):
         """Write a single record to the output file.
 
@@ -216,7 +211,7 @@ class SequentialSequenceWriter(SequenceWriter):
         #####################################################
         # You SHOULD subclass this                          #
         #####################################################
-        
+
     def write_records(self, records):
         """Write multiple record to the output file.
 
@@ -242,17 +237,3 @@ class SequentialSequenceWriter(SequenceWriter):
         self.write_header()
         self.write_records(records)
         self.write_footer()
-        #Don't automatically close the handle:
-        #self.handle.close()
-
-    def flush(self):
-        """Flush any output pending on the output file handle"""
-        return self.handle.flush()
-
-    def close(self):
-        """Close the output file handle"""
-        assert self._header_written, "You must call write_header() first"
-        assert self._record_written, "You must call write_record() or write_records() first"
-        assert self._footer_written, "You must call write_footer() first"
-        return self.handle.close()
-
