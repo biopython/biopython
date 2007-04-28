@@ -87,16 +87,14 @@ For sequential files formats (e.g. fasta, genbank) each "record block" holds a
 single sequence.  For these files it would probably be safe to call write()
 multiple times.
 
-If you are using a sequential file format, you may want to write out the records
-one at a time.  To do this, you would ideally create a sequence writer directly...
-
 File Formats
 ============
 When specifying formats, use lowercase strings.
 
 Old Files
 =========
-The modules Bio.SeqIO.FASTA and Bio.SeqIO.generic are considered to be depreciated
+The modules Bio.SeqIO.FASTA and Bio.SeqIO.generic are depreciated and may be
+removed.
 """
 
 #TODO
@@ -318,14 +316,15 @@ def to_alignment(sequences, alphabet=generic_alphabet, strict=True) :
             elif alignment_length <> len(record.seq) :
                 raise ValueError("Sequences of different lengths")
             
-            #ToDo, check alphabet for this sequence matches that
-            #specified for the alignment.  Not sure how the
-            #alphabet.contains() method is intended to be used,
-            #but it doesn't make sense to me right now.
+            if not isinstance(record.seq.alphabet, alphabet.__class__) :
+                raise ValueError("Incompatible sequence alphabet")
+            
+            #ToDo, additional checks on the specified alignment...
+            #Should we look at the alphabet.contains() method?
             
         #This is abusing the "private" records list,
         #we should really have a method like add_sequence
-        #but which takes SeqRecord objects.
+        #but which takes SeqRecord objects.  See also Bug 1944
         alignment._records.append(record)
     return alignment
            
