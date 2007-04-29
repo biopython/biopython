@@ -1,0 +1,235 @@
+ID   SC10H5 standard; DNA; PRO; 4870 BP.
+XX
+AC   AL031232;
+XX
+DE   Streptomyces coelicolor cosmid 10H5.
+XX
+KW   integral membrane protein.
+XX
+OS   Streptomyces coelicolor
+OC   Eubacteria; Firmicutes; Actinomycetes; Streptomycetes;
+OC   Streptomycetaceae; Streptomyces.
+XX
+RN   [1]
+RP   1-4870
+RA   Oliver K., Harris D.;
+RT   ;
+RL   Unpublished.
+XX
+RN   [2]
+RP   1-4870
+RA   Parkhill J., Barrell B.G., Rajandream M.A.;
+RT   ;
+RL   Submitted (10-AUG-1998) to the EMBL/GenBank/DDBJ databases.
+RL   Streptomyces coelicolor sequencing project,
+RL   Sanger Centre, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SA
+RL   E-mail: barrell@sanger.ac.uk
+RL   Cosmids supplied by Prof. David A. Hopwood, [3]
+RL   John Innes Centre, Norwich Research Park, Colney,
+RL   Norwich, Norfolk NR4 7UH, UK.
+XX
+RN   [3]
+RP   1-4870
+RA   Redenbach M., Kieser H.M., Denapaite D., Eichner A.,
+RA   Cullum J., Kinashi H., Hopwood D.A.;
+RT   "A set of ordered cosmids and a detailed genetic and physical
+RT   map for the 8 Mb Streptomyces coelicolor A3(2) chromosome.";
+RL   Mol. Microbiol. 21(1):77-96(1996).
+XX
+CC   Notes:
+CC
+CC   Streptomyces coelicolor sequencing at The Sanger Centre is funded 
+CC   by the BBSRC.
+CC
+CC   Details of S. coelicolor sequencing at the Sanger Centre 
+CC   are available on the World Wide Web. 
+CC   (URL; http://www.sanger.ac.uk/Projects/S_coelicolor/)
+CC
+CC   CDS are numbered using the following system eg SC7B7.01c. 
+CC   SC (S. coelicolor), 7B7 (cosmid name), .01 (first CDS), 
+CC   c (complementary strand).
+CC
+CC   The more significant matches with motifs in the PROSITE
+CC   database are also included but some of these may be fortuitous.
+CC
+CC   The length in codons is given for each CDS.
+CC
+CC   Usually the highest scoring match found by fasta -o is given for
+CC   CDS which show significant similarity to other CDS in the database.
+CC   The position of possible ribosome binding site sequences are
+CC   given where these have been used to deduce the initiation codon.
+CC   
+CC   Gene prediction is based on positional base preference in codons 
+CC   using a specially developed Hidden Markov Model (Krogh et al., 
+CC   Nucleic Acids Research, 22(22):4768-4778(1994)) and the FramePlot 
+CC   program of Bibb et al., Gene 30:157-66(1984) as implemented at 
+CC   http://www.nih.go.jp/~jun/cgi-bin/frameplot.pl. CAUTION:  We may  
+CC   not have predicted the correct initiation codon.  Where possible 
+CC   we choose an initiation codon (atg, gtg, ttg or (att)) which is 
+CC   preceded by an upstream ribosome binding site sequence (optimally 
+CC   5-13bp before the initiation codon).  If this cannot be identified
+CC   we choose the most upstream initiation codon.
+CC     
+CC   IMPORTANT: This sequence MAY NOT be the entire insert of
+CC   the sequenced clone.  It may be shorter because we only
+CC   sequence overlapping sections once, or longer, because we
+CC   arrange for a small overlap between neighbouring submissions.
+CC
+CC   Cosmid 10H5 lies to the right of 3A7 on the AseI-B genomic restriction 
+CC   fragment.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..4870
+FT                   /organism="Streptomyces coelicolor"
+FT                   /strain="A3(2)"
+FT                   /clone="cosmid 10H5"
+FT   CDS             complement(<1..327)
+FT                   /note="SC10H5.01c, unknown, partial CDS, len >109 aa;
+FT                   possible integral membrane protein"
+FT                   /gene="SC10H5.01c"
+FT                   /product="hypothetical protein SC10H5.01c"
+FT   CDS             complement(350..805)
+FT                   /note="SC10H5.02c, probable integral membrane protein, len:
+FT                   151 aa; similar to S. coelicolor hypothetical protein
+FT                   TR:O54194 (EMBL:AL021411) SC7H1.35 (155 aa), fasta scores;
+FT                   opt: 431 z-score: 749.8 E(): 0, 53.5% identity in 114 aa
+FT                   overlap."
+FT                   /product="putative integral membrane protein"
+FT                   /gene="SC10H5.02c"
+FT   RBS             complement(812..815)
+FT                   /note="possible RBS upstream of SC10H5.02c"
+FT   CDS             complement(837..1301)
+FT                   /note="SC10H5.03c, probable integral membrane protein, len:
+FT                   154 aa"
+FT                   /product="putative integral membrane protein"
+FT                   /gene="SC10H5.03c"
+FT   RBS             complement(1308..1312)
+FT                   /note="possible RBS upstream of SC10H5.03c"
+FT   CDS             complement(1427..1735)
+FT                   /note="SC10H5.04c, unknown, len: 103 aa; possible membrane"
+FT                   /gene="SC10H5.04c"
+FT                   /product="hypothetical protein SC10H5.04c"
+FT   RBS             complement(1738..1741)
+FT                   /note="possible RBS upstream of SC10H5.05c"
+FT   misc_feature    1800^1801
+FT                   /note="Zero-length feature added to test Bioperl parsing"
+FT   CDS             1933..2022
+FT                   /note="SC10H5.05, questionable ORF, len: 29 aa"
+FT                   /gene="SC10H5.05"
+FT                   /product="hypothetical protein SC10H5.05"
+FT   CDS             2019..2642
+FT                   /note="SC10H5.06, probable membrane protein, len: 207 aa;
+FT                   similar to S. coelicolor TR:O54192 SC7H1.33c (191 aa),
+FT                   fasta scores; opt: 312 z-score: 355.2 E(): 1.6e-12, 36.8%
+FT                   identity in 182 aa overlap"
+FT                   /product="putative membrane protein"
+FT                   /gene="SC10H5.06"
+FT   RBS             2627..2631
+FT                   /note="possible RBS upstream of SC10H5.07"
+FT   CDS             2639..4048
+FT                   /note="SC10H5.07, unknown, len: 469 aa"
+FT                   /gene="SC10H5.07"
+FT                   /product="hypothetical protein SC10H5.07"
+FT   CDS             complement(4100..4297)
+FT                   /note="SC10H5.08c, unknown, len: 65 aa"
+FT                   /gene="SC10H5.08c"
+FT                   /product="hypothetical protein SC10H5.08c"
+FT   RBS             complement(4314..4319)
+FT                   /note="possible RBS upstream of SC10H5.08c"
+FT   CDS             complement(4439..>4870)
+FT                   /note="SC10H5.09c, probable integral membrane protein,
+FT                   partial CDS len: >143 aa; some similarity in C-terminus to
+FT                   S. coelicolor hypothetical protein TR:O54106
+FT                   (EMBL:AL021529) SC10A5.15 (114 aa), fasta scores; opt: 145
+FT                   z-score: 233.8 E(): 9.2e-06, 33.3% identity in 81 aa
+FT                   overlap. Overlaps and extends SC3A7.01c"
+FT                   /product="putative integral membrane protein"
+FT                   /gene="SC10H5.09c"
+FT   misc_feature    4769..4870
+FT                   /note="overlap with cosmid 3A7 from 1 to 102"
+XX
+SQ   Sequence 4870 BP; 769 A; 1717 C; 1693 G; 691 T; 0 other;
+     gatcagtaga cccagcgaca gcagggcggg gcccagcagg ccggccgtgg cgtagagcgc        60
+     gaggacggcg accggcgtgg ccaccgacag gatggctgcg gcgacgcgga cgacaccgga       120
+     gtgtgccagg gcccaccaca cgccgatggc cgcgagcgcg agtcccgcgc tgccgaacag       180
+     ggcccacagc acactgcgca gaccggcggc cacgagtggc gccaggacgg tgcccagcag       240
+     gagcagcagg gtgacgtggg cgcgcgctgc actgtggccg ccccgtccgc ccgacgcgcg       300
+     cggctcgtca tctcgcggtc ccaccaccgg tcggccccat tactcgtcct caaccctgtg       360
+     gcgactgacg ttccccggac aggtcgtacc gattgccgcc acgccccacc acgcacaggg       420
+     cccagacgac gaagcctgac atggtgatca tgacgacgga ccacaccggg tagtacggca       480
+     gcgagaggaa gttggcgatg atcaccagcc cggcgatggc gaccccggtg acacgtgccc       540
+     acatcgccgt tttgagcagc ccggcgctga cgaccatggc gagcgcgccg agcgcgagat       600
+     ggatccaccc ccacccggtg agatcgaact ggaaaacgta gttgggcgtg gtgacgaaga       660
+     cgtcgtcctc ggcgatggcc atgatgcccc ggaagaggct gagcagcccg gcgaggaaga       720
+     gcatcaccgc cgcgaaggcg gtaaggcccg tcgcccattc ctgcctcgcg gtgtgtgccg       780
+     ggtggtgggt atgtgacgtg gtcatctcgg acctcgtttc gtggaatgcg gatgcttcag       840
+     cgagcggagg cgccggtgcc cgccgcgccc gtgtgccctg ccgggccgtg accggacagg       900
+     accaattcct tcgccttgcg gaactcctcg tccgtgatgg caccccggtc tcggatctcg       960
+     gagagccggg ccagctcgtc gacgctgctg gacccgccgc ccacggtctt cctgatgtag      1020
+     gcgtcgaact cctcctgctg agcccgtgcc cgcgttgtct cccggctgcc catgttcttg      1080
+     ccgcgagcga tcacgtagac gaaaacgccc aggaagggca ggaggatgca gaacaccaac      1140
+     cagccggcct tcgcccagcc actcagtccg tcgtcccgga agatgtcggt gacgacgcgg      1200
+     aagagcagga cgaaccacat gatccacagg aagatcatca gcatcgtcca gaaggcaccc      1260
+     agcagtgggt agtcgtacgc caggtaggtc tgtgcactca tgtccgtcct ccgtcctccg      1320
+     gggcgcggcc cggcggccct cgttccgtac tgacatcagg gtggtcacgg gtcccaccgg      1380
+     tcggcatcac ccggcacggg tgagtggggc gccgaggccg tcgtggtcag gcccgggaca      1440
+     ccggtgtgac cctggtggaa ggacgcgtcc cgtggggcac gcaccgccgg ccgagggcga      1500
+     ccaccgcctc ggtcagtccg agcaggccca gccacaggcc gagaagtcgg gtcagggcac      1560
+     gggccgactc ggcgggcagc gcgaggacga cgattccggc gacgtcgacg gccagcgggt      1620
+     tgcgcaggcc cagcactccg gccggggcgc ccggcaccag cgtggcgagg gccgatgcca      1680
+     tgagccaggt ccaggaaccc ccaagcctgg cgaggacgtg cgccggatcg ctcaatgctc      1740
+     cggtgaccgc cccgcccgac ccgtctccct tgtcggcagg ttccgccgca tcacgcggaa      1800
+     cggagatggc tcccctgtgg atcgggcggc cgctgcgggg ccgcccggtt ggtcggtcgg      1860
+     tgagcgccgg actccccctt cagctcttcc agggtcgggg tcgacaccga ggtcctggat      1920
+     cacccgtcag gggtgatccg ggcatgccgt cgtggcggtg aggtgggata cgggaacgat      1980
+     cggcccacgg gggaccggac gagacgaaga gacgtgagat gagcgatacg aactcgggcg      2040
+     gcgggcgcca ggccgcttcc ggaccggccc cacgtggccg actccctttc cgccggcgcg      2100
+     tggccctggt cgctgtcgca cgtcccctga tcgtcacggt cggtctcgtc accgcctact      2160
+     acctgcttcc cctggacgag agactcagcg ccggcaccct ggtgtcgctg gtgtgcggac      2220
+     tgctcgcagt ccttctggtg ttctgctggg aggtgcgggc catcacgcgc tccccgcatc      2280
+     cgcgtctgag agcgatcgag ggcctggccg ccacgctggt gctgttcctg gtcctcttcg      2340
+     ccggctccta ctacctgctg ggtcgctccg cgcccggctc cttcagcgag ccgctgaaca      2400
+     ggacggacgc gctgtacttc actctgacca cgttcgccac cgtcggcttc ggggacatca      2460
+     ccgcacgctc cgagaccggg cggatcctca cgatggcgca gatgacggga gggctactgc      2520
+     tcgtcggagt cgccgcccgg gtgctggcga gcgcagtgca ggcggggctg caccgacagg      2580
+     gccggggacc ggcggcatcg ccacgctccg gtgctgcgga ggagccggag gccggaccat      2640
+     gaccgtaccc ggtggcttca ccgcctccct gccgccggcc gagcgagccg cgtacggcag      2700
+     gaaggcccgt aaaagggcct cacgttcgtg ccacggctgg tacgagccgg ggcagcggcg      2760
+     gcctgacccc gtcgacctgc tggagcgcca gtccggcgag cgtgtcccgg cactcgtgcc      2820
+     catccgctac ggtcgcatgc tggagtcgcc gttccgcttc taccgcggtg cggcagcgat      2880
+     catggcggcg gacctggcac ccctgcccag cagcggactc caggtgcaat tgtgcgggga      2940
+     cgcgcacccg ttgaacttcc ggctcctggc ctcaccggag cgccggctgg tcttcgacat      3000
+     caacgacttc gacgagacgc tgcccggccc cttcgagtgg gacgtcaaac ggctggcggc      3060
+     cggattcgtg atcgcggccc ggtcgaacgg cttctcgtcc aaggaacaga accgcaccgt      3120
+     tcgggcctgt gtgcgggcct accgggagcg catgagggag ttcgccgtca tgccgaccct      3180
+     ggacatctgg tacgcccagg acgacgccga ccacgtacgg caactgctgg ctacggaggc      3240
+     cagaggagaa gctgagcagc ggctcaggga cgcggctgcg aaggcccgca cacgcaccca      3300
+     catgagggcg ttcgcgaagc tcacccgcgt cacggccgag ggccggcgca tcacccccga      3360
+     cccgccgctg atcaccccac tcggcgatct gctcaccgac ccggccgaag ccggccggga      3420
+     ggaggaactg cggtccgtcg tgaacggcta cgcacggtcc ctgccgcccg agcgccggca      3480
+     cctgctgcgt cactaccggc ttgtggacat ggcgcgcaag gtggtcggcg tcggcagtgt      3540
+     cggcacccgc tgctgggtac tgcttctgct cggcagggac gacgacgatc ctctgctgct      3600
+     ccaggccaag gaagcctcgg aatcggtgct ggcggcccac acgggcggcg aacgctacga      3660
+     ccatcagggc cgcagggtcg tggccggcca gcgtctgatc cagaccaccg gtgacatctt      3720
+     tctcggctgg gcgcgcgtca ccggcttcga cggaaaggcc cgggacttct acgtgcgtca      3780
+     actgtgggac tggaagggcg tcgcgcggcc ggaaaccatg gggcccgacc tgctctccct      3840
+     cttcgcccgg ctgtgcggtg cctgcctggc gagggcccac gcccgttccg gtgaccccgt      3900
+     cgcgctcgcc gcgtacctgg gcggcagcga ccgcttcgac ggcgcgctca ccgagttcgc      3960
+     ccagtcctac gccgatcaga atgaacgcga ccacgaagct ctgctggcgg cctgccgctc      4020
+     cggcagggtc acggccgccc gtttgtgagg ccgacccggg aacggccggc gggctggcac      4080
+     acaccgccgc cggtcggcgt cattccggaa gctgccgcat ctccaggacg cgcaggccca      4140
+     gcgactggca gcgggtgagc aacccgtaca gatgggcctc gtcgatcacc gtgccgaaca      4200
+     gcacggtctg gccggacatg acgacgtgct ccagctccgg gaacgcgttg gccagcgtcc      4260
+     gtgacaggtg tccctcgacg cggatctcgt agcgcacgag cggtcctttc accgtaggag      4320
+     ctcgggacac cgcccggggc tccgggtcgg acggtgctct tggtgacgag cctgcgcctc      4380
+     gtcgccctcc ggtgccctca cccagcacag gtgactccaa ccgcagtgtc agtgcctttc      4440
+     agtgcgtcac tgtgatcttg acgacgacga tcaccaggcc gagcagtacg ttgaccgtcg      4500
+     cggtgacggc caccagtcgt cgcgaggcgc ccgcgcggtg cgccgcggcg acggaccagc      4560
+     ccacctgacc ggcgacggcg acggacagcg ccagccacag ggtgcccggg acgtccagcc      4620
+     ccagtacggg gctgacggcg atggccgcgg ccggaggcac ggcggccttg acgatcggcc      4680
+     actcctcgcg gcacacacgc agaatcaccc gccggtccgg agtgtgccgc gcgagacgcg      4740
+     ctccgaacag ttcggcgtgg acgtgagcga tccagaacac caagctggtg agcaacagca      4800
+     gaagaaccag ttcggcgcgg gggaacgagc ccagggtgcc ggcgccgatc acgacggagg      4860
+     ctgcgagcat                                                             4870
+//

@@ -92,6 +92,7 @@ test_files = [ \
 #Following files are currently only used here:
     ("embl",      False, 'EMBL/TRBG361.embl', 1),
     ("embl",      False, 'EMBL/DD231055_edited.embl', 1),
+    ("embl",      False, 'EMBL/SC10H5.embl', 1), # Pre 2006 style ID line
     ("stockholm", True,  'Stockholm/simple.sth', 2),
     ("stockholm", True,  'Stockholm/funny.sth', 5),
 #Following PHYLIP files are currently only used here (test_SeqIO)
