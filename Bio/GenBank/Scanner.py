@@ -536,6 +536,42 @@ class EmblScanner(InsdcScanner) :
 
     def _feed_first_line(self, consumer, line) :
         assert line[:self.HEADER_WIDTH].rstrip() == "ID"
+        if line[self.HEADER_WIDTH:].count(";") == 6 :
+            #Looks like the semi colon separated style introduced in 2006
+            self._feed_first_line_new(consumer, line)
+        elif line[self.HEADER_WIDTH:].count(";") == 3 :
+            #Looks like the pre 2006 style
+            self._feed_first_line_old(consumer, line)
+        else :
+            raise SyntaxError('Did not recognise the ID line layout:\n' + line)
+
+    def _feed_first_line_old(self, consumer, line) :
+        #Expects an ID line in the style before 2006, e.g.
+        #ID   SC10H5 standard; DNA; PRO; 4870 BP.
+        #ID   BSUB9999   standard; circular DNA; PRO; 4214630 BP.
+        assert line[:self.HEADER_WIDTH].rstrip() == "ID"
+        fields = [line[self.HEADER_WIDTH:].split(None,1)[0]]
+        fields.extend(line[self.HEADER_WIDTH:].split(None,1)[1].split(";"))
+        """
+        The tokens represent:
+           0. Primary accession number
+           (space sep)
+           1. ??? (e.g. standard)
+           (semi-colon)
+           2. Topology and/or Molecule type (e.g. 'circular DNA' or 'DNA')
+           3. Taxonomic division (e.g. 'PRO')
+           4. Sequence length (e.g. '4639675 BP.')
+        """
+        consumer.locus(fields[0]) #Should we also call the accession consumer?
+        consumer.residue_type(fields[2])
+        consumer.data_file_division(fields[3])
+        self._feed_seq_length(consumer, fields[4])        
+
+    def _feed_first_line_new(self, consumer, line) :
+        #Expects an ID line in the style introduced in 2006, e.g.
+        #ID   X56734; SV 1; linear; mRNA; STD; PLN; 1859 BP.
+        #ID   CD789012; SV 4; linear; genomic DNA; HTG; MAM; 500 BP.
+        assert line[:self.HEADER_WIDTH].rstrip() == "ID"
         fields = [data.strip() for data in line[self.HEADER_WIDTH:].strip().split(";")]
         assert len(fields) == 7
         """
@@ -567,7 +603,10 @@ class EmblScanner(InsdcScanner) :
 
         consumer.data_file_division(fields[5])
 
-        length_parts = fields[6].split()
+        self._feed_seq_length(consumer, fields[6])
+
+    def _feed_seq_length(self, consumer, text) :
+        length_parts = text.split()
         assert len(length_parts) == 2
         assert length_parts[1].upper() in ["BP", "BP."]
         consumer.size(length_parts[0])
@@ -832,8 +871,7 @@ class GenBankScanner(InsdcScanner) :
                 #We should be able to continue parsing... we need real world testcases!
                 print >> sys.stderr, "Warning: Minimal LOCUS line found - is this correct?\n" + line
         else :
-            assert False, \
-                   'Did not recognise the LOCUS line layout:\n' + line
+            raise SyntaxError('Did not recognise the LOCUS line layout:\n' + line)
 
 
     def _feed_header_lines(self, consumer, lines) :
