@@ -76,7 +76,7 @@ class InsdcScanner :
             else :
                 #Ignore any header before the first ID/LOCUS line.
                 if self.debug > 1:
-	                print "Skipping header line before record:\n" + line
+                        print "Skipping header line before record:\n" + line
         self.line = line
         return line
 
@@ -817,7 +817,8 @@ class GenBankScanner(InsdcScanner) :
                    'LOCUS line does not contain size units at expected position:\n' + line
             assert line[44:47] in ['   ', 'ss-', 'ds-', 'ms-'], \
                    'LOCUS line does not have valid strand type (Single stranded, ...):\n' + line
-            assert line[47:54].strip() in ['','DNA','RNA','tRNA','mRNA','uRNA','snRNA','cDNA'], \
+            assert line[47:54].strip().find('DNA') <> -1 \
+                or line[47:54].strip().find('RNA') <> -1, \
                    'LOCUS line does not contain valid sequence type (DNA, RNA, ...):\n' + line
             assert line[54:55] == ' ', \
                    'LOCUS line does not contain space at position 55:\n' + line
@@ -867,7 +868,7 @@ class GenBankScanner(InsdcScanner) :
             if line[GENBANK_INDENT:].strip() <> "" :
                 consumer.locus(line[GENBANK_INDENT:].strip())
             else :
-                #Must just have just "LOCUS       ", is this even legitimate?
+                #Must have just "LOCUS       ", is this even legitimate?
                 #We should be able to continue parsing... we need real world testcases!
                 print >> sys.stderr, "Warning: Minimal LOCUS line found - is this correct?\n" + line
         else :
