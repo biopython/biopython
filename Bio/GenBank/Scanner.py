@@ -817,7 +817,8 @@ class GenBankScanner(InsdcScanner) :
                    'LOCUS line does not contain size units at expected position:\n' + line
             assert line[44:47] in ['   ', 'ss-', 'ds-', 'ms-'], \
                    'LOCUS line does not have valid strand type (Single stranded, ...):\n' + line
-            assert line[47:54].strip().find('DNA') <> -1 \
+            assert line[47:54].strip() == "" \
+                or line[47:54].strip().find('DNA') <> -1 \
                 or line[47:54].strip().find('RNA') <> -1, \
                    'LOCUS line does not contain valid sequence type (DNA, RNA, ...):\n' + line
             assert line[54:55] == ' ', \
