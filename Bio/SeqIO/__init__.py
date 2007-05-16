@@ -202,6 +202,8 @@ def write(sequences, handle, format) :
         raise ValueError("Format required (lower case string)")
     if format <> format.lower() :
         raise ValueError("Format string '%s' should be lower case" % format)
+    if isinstance(sequences,SeqRecord):
+        raise ValueError("Use a SeqRecord list/iterator, not just a single SeqRecord")
 
     #Map the file format to a writer class
     try :
