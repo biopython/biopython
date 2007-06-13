@@ -669,7 +669,7 @@ class _Scanner:
                               start="Number of HSP's gapped")
         #e.g. BLASTX 2.2.15 where the "better" line is missing
         elif attempt_read_and_call(uhandle, consumer.noevent,
-                                     start="Number of HSP's gapped:"):
+                                     start="Number of HSP's gapped"):
             read_and_call(uhandle, consumer.noevent,
                           start="Number of HSP's successfully")
 
@@ -1329,13 +1329,26 @@ class _ParametersConsumer:
            line, (4, 5), ncols=6, expected={0:"frameshift", 2:"decay"})
 
     def threshold(self, line):
-        self._params.threshold, = _get_cols(
-            line, (1,), ncols=2, expected={0:"T:"})
+        if line[:2] == "T:" :
+            #Assume its an old stlye line like "T: 123"
+            self._params.threshold, = _get_cols(
+                line, (1,), ncols=2, expected={0:"T:"})
+        elif line[:28] == "Neighboring words threshold:" :
+            self._params.threshold, = _get_cols(
+                line, (3,), ncols=4, expected={0:"Neighboring", 1:"words", 2:"threshold:"})
+        else :
+            raise SyntaxError("Unrecognised threshold line:\n%s" % line)
         self._params.threshold = _safe_int(self._params.threshold)
         
     def window_size(self, line):
-        self._params.window_size, = _get_cols(
-            line, (1,), ncols=2, expected={0:"A:"})
+        if line[:2] == "A:" :
+            self._params.window_size, = _get_cols(
+                line, (1,), ncols=2, expected={0:"A:"})
+        elif line[:25] == "Window for multiple hits:" :
+            self._params.window_size, = _get_cols(
+                line, (4,), ncols=5, expected={0:"Window", 2:"multiple", 3:"hits:"})
+        else :
+            raise SyntaxError("Unrecognised window size line:\n%s" % line)
         self._params.window_size = _safe_int(self._params.window_size)
         
     def dropoff_1st_pass(self, line):
