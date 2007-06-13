@@ -3,6 +3,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 # Patches by Mike Poidinger to support multiple databases.
+# Updated by Peter Cock in 2007 to do a better job on BLAST 2.2.15
+
 
 """
 This module provides code to work with the standalone version of
@@ -113,23 +115,63 @@ class _Scanner:
         # Database: sdqib40-1.35.seg.fa
         #            1323 sequences; 223,339 total letters
         #
+        # ========================================================
+        # This next example is from the online version of Blast,
+        # note there are TWO references, an RID line, and also
+        # the database is BEFORE the query line.
+        # Note there possibleuse of non-ASCII in the author names.
+        # ========================================================
+        #
+        # BLASTP 2.2.15 [Oct-15-2006]
+        # Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch??ffer, 
+        # Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman 
+        # (1997), "Gapped BLAST and PSI-BLAST: a new generation of 
+        # protein database search programs", Nucleic Acids Res. 25:3389-3402.
+        #
+        # Reference: Sch??ffer, Alejandro A., L. Aravind, Thomas L. Madden, Sergei 
+        # Shavirin, John L. Spouge, Yuri I. Wolf, Eugene V. Koonin, and 
+        # Stephen F. Altschul (2001), "Improving the accuracy of PSI-BLAST 
+        # protein database searches with composition-based statistics 
+        # and other refinements", Nucleic Acids Res. 29:2994-3005. 
+        #
+        # RID: 1166022616-19998-65316425856.BLASTQ1
+        # 
+        #
+        # Database: All non-redundant GenBank CDS
+        # translations+PDB+SwissProt+PIR+PRF excluding environmental samples
+        #            4,254,166 sequences; 1,462,033,012 total letters
+        # Query=  gi:16127998
+        # Length=428
+        #
 
         consumer.start_header()
 
         read_and_call(uhandle, consumer.version, contains='BLAST')
         read_and_call_while(uhandle, consumer.noevent, blank=1)
 
-        # Read the reference lines and the following blank line.
         # There might be a <pre> line, for qblast output.
         attempt_read_and_call(uhandle, consumer.noevent, start="<pre>")
-        read_and_call(uhandle, consumer.reference, start='Reference')
-        while 1:
-            line = uhandle.readline()
-            if is_blank_line(line) or line.startswith("RID"):
-                consumer.noevent(line)
-                read_and_call_while(uhandle, consumer.noevent, blank=1)
-                break
-            consumer.reference(line)
+
+        # Read the reference(s)
+        while attempt_read_and_call(uhandle,
+                                consumer.reference, start='Reference') :
+            # References are normally multiline terminated by a blank line
+            # (or, based on the old code, the RID line)
+            while 1:
+                line = uhandle.readline()
+                if is_blank_line(line) :
+                    consumer.noevent(line)
+                    break
+                elif line.startswith("RID"):
+                    break
+                else :
+                    #More of the reference
+                    consumer.reference(line)
+
+        #Deal with the optional RID: ...
+        read_and_call_while(uhandle, consumer.noevent, blank=1)
+        attempt_read_and_call(uhandle, consumer.reference, start="RID:")
+        read_and_call_while(uhandle, consumer.noevent, blank=1)
 
         # blastpgp has a Reference for composition-based statistics.
         if attempt_read_and_call(
@@ -137,15 +179,33 @@ class _Scanner:
             read_and_call_until(uhandle, consumer.reference, blank=1)
             read_and_call_while(uhandle, consumer.noevent, blank=1)
 
-        # Read the Query lines and the following blank line.
-        read_and_call(uhandle, consumer.query_info, start='Query=')
-        read_and_call_until(uhandle, consumer.query_info, blank=1)
-        read_and_call_while(uhandle, consumer.noevent, blank=1)
+        line = uhandle.peekline()
+        assert line.strip() <> ""
+        assert not line.startswith("RID:")
+        if line.startswith("Query=") :
+            #This is an old style query then database...
 
-        # Read the database lines and the following blank line.
-        read_and_call_until(uhandle, consumer.database_info, end='total letters')
-        read_and_call(uhandle, consumer.database_info, contains='sequences')
-        read_and_call_while(uhandle, consumer.noevent, blank=1)
+            # Read the Query lines and the following blank line.
+            read_and_call(uhandle, consumer.query_info, start='Query=')
+            read_and_call_until(uhandle, consumer.query_info, blank=1)
+            read_and_call_while(uhandle, consumer.noevent, blank=1)
+
+            # Read the database lines and the following blank line.
+            read_and_call_until(uhandle, consumer.database_info, end='total letters')
+            read_and_call(uhandle, consumer.database_info, contains='sequences')
+            read_and_call_while(uhandle, consumer.noevent, blank=1)
+        elif line.startswith("Database:") :
+            #This is a new style database then query...
+            read_and_call_until(uhandle, consumer.database_info, end='total letters')
+            read_and_call(uhandle, consumer.database_info, contains='sequences')
+            read_and_call_while(uhandle, consumer.noevent, blank=1)
+
+            # Read the Query lines and the following blank line.
+            read_and_call(uhandle, consumer.query_info, start='Query=')
+            read_and_call_until(uhandle, consumer.query_info, blank=1)
+            read_and_call_while(uhandle, consumer.noevent, blank=1)
+        else :
+            raise SyntaxError("Invalid header?")
 
         consumer.end_header()
 
@@ -330,10 +390,17 @@ class _Scanner:
         #           stearothermophilus]
         #           Length = 81
         #
+        # Or, more recently with different white space:
+        #
+        # >gi|15799684|ref|NP_285696.1| threonine synthase ...
+        #  gi|15829258|ref|NP_308031.1| threonine synthase 
+        #  ...
+        # Length=428
         read_and_call(uhandle, consumer.title, start='>')
         while 1:
             line = safe_readline(uhandle)
-            if line.lstrip().startswith('Length ='):
+            if line.lstrip().startswith('Length =') \
+            or line.lstrip().startswith('Length='):
                 consumer.length(line)
                 break
             elif is_blank_line(line):
@@ -426,6 +493,20 @@ class _Scanner:
         # Lambda     K      H
         #    0.270   0.0470    0.230 
         #
+        ##########################################
+        # Or, more recently Blast 2.2.15 gives less blank lines
+        ##########################################
+        #   Database: All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding 
+        # environmental samples
+        #     Posted date:  Dec 12, 2006  5:51 PM
+        #   Number of letters in database: 667,088,753
+        #   Number of sequences in database:  2,094,974
+        # Lambda     K      H
+        #    0.319    0.136    0.395 
+        # Gapped
+        # Lambda     K      H
+        #    0.267   0.0410    0.140 
+
 
         consumer.start_database_report()
         
@@ -455,7 +536,8 @@ class _Scanner:
                        start='  Number of letters')
             read_and_call(uhandle, consumer.num_sequences_in_database,
                        start='  Number of sequences')
-            read_and_call(uhandle, consumer.noevent, start='  ')
+            #There may not be a line starting with spaces...
+            attempt_read_and_call(uhandle, consumer.noevent, start='  ')
 
             line = safe_readline(uhandle)
             uhandle.saveline(line)
@@ -464,7 +546,9 @@ class _Scanner:
 
         read_and_call(uhandle, consumer.noevent, start='Lambda')
         read_and_call(uhandle, consumer.ka_params)
-        read_and_call(uhandle, consumer.noevent, blank=1)
+
+        #This blank line is optional:
+        attempt_read_and_call(uhandle, consumer.noevent, blank=1)
 
         # not BLASTP
         attempt_read_and_call(uhandle, consumer.gapped, start='Gapped')
@@ -508,6 +592,33 @@ class _Scanner:
         # X3: 64 (24.9 bits)
         # S1: 41 (21.9 bits)
         # S2: 42 (20.8 bits)
+        ##########################################
+        # Or, more recently Blast(x) 2.2.15 gives
+        ##########################################
+        # Matrix: BLOSUM62
+        # Gap Penalties: Existence: 11, Extension: 1
+        # Number of Sequences: 4535438
+        # Number of Hits to DB: 2,588,844,100
+        # Number of extensions: 60427286
+        # Number of successful extensions: 126433
+        # Number of sequences better than  2.0: 30
+        # Number of HSP's gapped: 126387
+        # Number of HSP's successfully gapped: 35
+        # Length of query: 291
+        # Length of database: 1,573,298,872
+        # Length adjustment: 130
+        # Effective length of query: 161
+        # Effective length of database: 983,691,932
+        # Effective search space: 158374401052
+        # Effective search space used: 158374401052
+        # Neighboring words threshold: 12
+        # Window for multiple hits: 40
+        # X1: 16 ( 7.3 bits)
+        # X2: 38 (14.6 bits)
+        # X3: 64 (24.7 bits)
+        # S1: 41 (21.7 bits)
+        # S2: 32 (16.9 bits)
+
 
         # Blast 2.2.4 can sometimes skip the whole parameter section.
         # Thus, check to make sure that the parameter section really
@@ -546,7 +657,8 @@ class _Scanner:
                                      start="Number of HSP's gapped:"):
                 read_and_call(uhandle, consumer.noevent,
                               start="Number of HSP's successfully")
-                read_and_call(uhandle, consumer.noevent,
+                #This is ommitted in 2.2.15
+                attempt_read_and_call(uhandle, consumer.noevent,
                               start="Number of extra gapped extensions")
             else:
                 read_and_call(uhandle, consumer.hsps_prelim_gapped,
@@ -555,6 +667,12 @@ class _Scanner:
                               start="Number of HSP's that")
                 read_and_call(uhandle, consumer.hsps_gapped,
                               start="Number of HSP's gapped")
+        #e.g. BLASTX 2.2.15 where the "better" line is missing
+        elif attempt_read_and_call(uhandle, consumer.noevent,
+                                     start="Number of HSP's gapped:"):
+            read_and_call(uhandle, consumer.noevent,
+                          start="Number of HSP's successfully")
+
         # not in blastx 2.2.1
         attempt_read_and_call(uhandle, consumer.query_length,
                               has_re=re.compile(r"[Ll]ength of query"))
@@ -570,7 +688,9 @@ class _Scanner:
         attempt_read_and_call(
             uhandle, consumer.effective_query_length,
             has_re=re.compile(r'[Ee]ffective length of query'))
-        read_and_call(
+
+        # This is not in BLASTP 2.2.15
+        attempt_read_and_call(
             uhandle, consumer.effective_database_length,
             has_re=re.compile(r'[Ee]ffective length of \s*[Dd]atabase'))
         # Not in blastx 2.2.1, added a ':' to distinguish between
@@ -585,14 +705,24 @@ class _Scanner:
 
         # BLASTX, TBLASTN, TBLASTX
         attempt_read_and_call(uhandle, consumer.frameshift, start='frameshift')
+
         # not in BLASTN 2.2.9
         attempt_read_and_call(uhandle, consumer.threshold, start='T')
-        read_and_call(uhandle, consumer.window_size, start='A')
+        # In BLASTX 2.2.15 replaced by: "Neighboring words threshold: 12"
+        attempt_read_and_call(uhandle, consumer.threshold, start='Neighboring words threshold')
+
+        # not in BLASTX 2.2.15
+        attempt_read_and_call(uhandle, consumer.window_size, start='A')
+        # get this instead: "Window for multiple hits: 40"
+        attempt_read_and_call(uhandle, consumer.window_size, start='Window for multiple hits')
+        
         read_and_call(uhandle, consumer.dropoff_1st_pass, start='X1')
         read_and_call(uhandle, consumer.gap_x_dropoff, start='X2')
+
         # not BLASTN, TBLASTX
         attempt_read_and_call(uhandle, consumer.gap_x_dropoff_final,
                               start='X3')
+
         read_and_call(uhandle, consumer.gap_trigger, start='S1')
         # not in blastx 2.2.1
         # first we make sure we have additional lines to work with, if
@@ -768,7 +898,10 @@ class _AlignmentConsumer:
                                            line.lstrip())
 
     def length(self, line):
-        self._alignment.length = line.split()[2]
+        #e.g. "Length = 81" or more recently, "Length=428"
+        parts = line.replace(" ","").split("=")
+        assert len(parts)==2, "Unrecognised format length line"
+        self._alignment.length = parts[1]
         self._alignment.length = _safe_int(self._alignment.length)
 
     def multalign(self, line):
@@ -976,7 +1109,8 @@ class _HSPConsumer:
     # case where there's no space between the start and the sequence:
     # Query: 100tt 101
     # line below modified by Yair Benita, Sep 2004
-    _query_re = re.compile(r"Query: \s*(\d+)\s*(.+) (\d+)")
+    # Note that the colon is not always present. 2006
+    _query_re = re.compile(r"Query(:?) \s*(\d+)\s*(.+) (\d+)")
     def query(self, line):
         m = self._query_re.search(line)
         if m is None:
@@ -984,7 +1118,7 @@ class _HSPConsumer:
         
         # line below modified by Yair Benita, Sep 2004.
         # added the end attribute for the query
-        start, seq, end = m.groups()
+        colon, start, seq, end = m.groups()
         self._hsp.query = self._hsp.query + seq
         if self._hsp.query_start is None:
             self._hsp.query_start = _safe_int(start)
@@ -1005,13 +1139,14 @@ class _HSPConsumer:
                   line
         self._hsp.match = self._hsp.match + seq
 
+    # To match how we do the query, cache the regular expression.
+    # Note that the colon is not always present.
+    _sbjct_re = re.compile(r"Sbjct(:?) \s*(\d+)\s*(.+) (\d+)")
     def sbjct(self, line):
-        # line below modified by Yair Benita, Sep 2004
-        # added the end group and the -? to allow parsing
-        # of BLAT output in BLAST format.
-        start, seq, end = _re_search(
-            r"Sbjct:\s*(-?\d+)\s*(.+) (-?\d+)", line,
-            "I could not find the sbjct in line\n%s" % line)
+        m = self._sbjct_re.search(line)
+        if m is None:
+            raise SyntaxError, "I could not find the sbjct in line\n%s" % line
+        colon, start, seq, end = m.groups()
         #mikep 26/9/00
         #On occasion, there is a blast hit with no subject match
         #so far, it only occurs with 1-line short "matches"
