@@ -5,7 +5,7 @@
  * This library was written at the Laboratory of DNA Information Analysis,
  * Human Genome Center, Institute of Medical Science, University of Tokyo,
  * 4-6-1 Shirokanedai, Minato-ku, Tokyo 108-8639, Japan.
- * Contact: mdehoon@c2b2.columbia.edu
+ * Contact: mdehoon 'AT' gsc.riken.jp
  * 
  * Permission to use, copy, modify, and distribute this software and its
  * documentation with or without modifications and for any purpose and

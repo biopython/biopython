@@ -4,7 +4,7 @@
  * This library was written at the Laboratory of DNA Information Analysis,
  * Human Genome Center, Institute of Medical Science, University of Tokyo,
  * 4-6-1 Shirokanedai, Minato-ku, Tokyo 108-8639, Japan.
- * Contact: mdehoon@c2b2.columbia.edu
+ * Contact: mdehoon 'AT' gsc.riken.jp
  * 
  * Permission to use, copy, modify, and distribute this software and its
  * documentation with or without modifications and for any purpose and
@@ -30,6 +30,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <float.h>
+#include <limits.h>
 #include <string.h>
 #include "cluster.h"
 #ifdef WINDOWS
@@ -303,11 +304,15 @@ A pointer to the integer that is to receive the second index of the pair with
 the shortest distance.
 */
 { int i, j;
+  double temp;
   double distance = distmatrix[1][0];
-  for (i = 0; i < n; i++)
+  *ip = 1;
+  *jp = 0;
+  for (i = 1; i < n; i++)
   { for (j = 0; j < i; j++)
-    { if (distmatrix[i][j]<distance)
-      { distance = distmatrix[i][j];
+    { temp = distmatrix[i][j];
+      if (temp<distance)
+      { distance = temp;
         *ip = i;
         *jp = j;
       }
@@ -2020,28 +2025,40 @@ kmeans(int nclusters, int nrows, int ncolumns, double** data, int** mask,
 { int i, j, k;
   const int nelements = (transpose==0) ? nrows : ncolumns;
   const int ndata = (transpose==0) ? ncolumns : nrows;
-  int ifound = 0;
+  int ifound = 1;
   int ipass = 0;
   /* Set the metric function as indicated by dist */
   double (*metric)
     (int, double**, double**, int**, int**, const double[], int, int, int) =
        setmetric(dist);
 
+  /* We save the clustering solution periodically and check if it reappears */
+  int* saved = malloc(nelements*sizeof(int));
+  if (saved==NULL) return -1;
+
   *error = DBL_MAX;
 
   do
   { double total = DBL_MAX;
+    int counter = 0;
+    int period = 10;
 
     /* Perform the EM algorithm. First, randomly assign elements to clusters. */
     if (npass!=0) randomassign (nclusters, nelements, tclusterid);
 
-    for (i = 0; i < nclusters; i++) counts[i]=0;
+    for (i = 0; i < nclusters; i++) counts[i] = 0;
     for (i = 0; i < nelements; i++) counts[tclusterid[i]]++;
 
     /* Start the loop */
     while(1)
     { double previous = total;
       total = 0.0;
+
+      if (counter % period == 0) /* Save the current cluster assignments */
+      { for (i = 0; i < nelements; i++) saved[i] = tclusterid[i];
+        if (period < INT_MAX / 2) period *= 2;
+      }
+      counter++;
 
       /* Find the center */
       getclustermeans(nclusters, nrows, ncolumns, data, mask, tclusterid,
@@ -2069,11 +2086,17 @@ kmeans(int nclusters, int nrows, int ncolumns, double** data, int** mask,
         total += distance;
       }
       if (total>=previous) break;
+      /* total>=previous is FALSE on some machines even if total and previous
+       * are bitwise identical. */
+      for (i = 0; i < nelements; i++)
+        if (saved[i]!=tclusterid[i]) break;
+      if (i==nelements)
+        break; /* Identical solution found; break out of this loop */
     }
 
     if (npass<=1) 
     { *error = total;
-      return 1;
+      break;
     }
 
     for (i = 0; i < nclusters; i++) mapping[i] = -1;
@@ -2092,6 +2115,8 @@ kmeans(int nclusters, int nrows, int ncolumns, double** data, int** mask,
     }
     if (i==nelements) ifound++; /* break statement not encountered */
   } while (++ipass < npass);
+
+  free(saved);
   return ifound;
 }
 
@@ -2105,17 +2130,23 @@ kmedians(int nclusters, int nrows, int ncolumns, double** data, int** mask,
 { int i, j, k;
   const int nelements = (transpose==0) ? nrows : ncolumns;
   const int ndata = (transpose==0) ? ncolumns : nrows;
-  int ifound = 0;
+  int ifound = 1;
   int ipass = 0;
   /* Set the metric function as indicated by dist */
   double (*metric)
     (int, double**, double**, int**, int**, const double[], int, int, int) =
        setmetric(dist);
 
+  /* We save the clustering solution periodically and check if it reappears */
+  int* saved = malloc(nelements*sizeof(int));
+  if (saved==NULL) return -1;
+
   *error = DBL_MAX;
 
   do
   { double total = DBL_MAX;
+    int counter = 0;
+    int period = 10;
 
     /* Perform the EM algorithm. First, randomly assign elements to clusters. */
     if (npass!=0) randomassign (nclusters, nelements, tclusterid);
@@ -2127,6 +2158,12 @@ kmedians(int nclusters, int nrows, int ncolumns, double** data, int** mask,
     while(1)
     { double previous = total;
       total = 0.0;
+
+      if (counter % period == 0) /* Save the current cluster assignments */
+      { for (i = 0; i < nelements; i++) saved[i] = tclusterid[i];
+        if (period < INT_MAX / 2) period *= 2;
+      }
+      counter++;
 
       /* Find the center */
       getclustermedians(nclusters, nrows, ncolumns, data, mask, tclusterid,
@@ -2154,11 +2191,17 @@ kmedians(int nclusters, int nrows, int ncolumns, double** data, int** mask,
         total += distance;
       }
       if (total>=previous) break;
+      /* total>=previous is FALSE on some machines even if total and previous
+       * are bitwise identical. */
+      for (i = 0; i < nelements; i++)
+        if (saved[i]!=tclusterid[i]) break;
+      if (i==nelements)
+        break; /* Identical solution found; break out of this loop */
     }
 
     if (npass<=1) 
     { *error = total;
-      return 1;
+      break;
     }
 
     for (i = 0; i < nclusters; i++) mapping[i] = -1;
@@ -2177,6 +2220,8 @@ kmedians(int nclusters, int nrows, int ncolumns, double** data, int** mask,
     }
     if (i==nelements) ifound++; /* break statement not encountered */
   } while (++ipass < npass);
+
+  free(saved);
   return ifound;
 }
 
@@ -2407,6 +2452,7 @@ to 0. If kmedoids fails due to a memory allocation error, ifound is set to -1.
 */
 { int i, j, icluster;
   int* tclusterid;
+  int* saved;
   int* centroids;
   double* errors;
   int ipass = 0;
@@ -2418,12 +2464,20 @@ to 0. If kmedoids fails due to a memory allocation error, ifound is set to -1.
 
   *ifound = -1;
 
+  /* We save the clustering solution periodically and check if it reappears */
+  saved = malloc(nelements*sizeof(int));
+  if (saved==NULL) return;
+
   centroids = malloc(nclusters*sizeof(int));
-  if(!centroids) return;
+  if(!centroids)
+  { free(saved);
+    return;
+  }
 
   errors = malloc(nclusters*sizeof(double));
   if(!errors)
-  { free(centroids);
+  { free(saved);
+    free(centroids);
     return;
   }
 
@@ -2432,7 +2486,8 @@ to 0. If kmedoids fails due to a memory allocation error, ifound is set to -1.
   else
   { tclusterid = malloc(nelements*sizeof(int));
     if(!tclusterid)
-    { free(centroids);
+    { free(saved);
+      free(centroids);
       free(errors);
       return;
     }
@@ -2441,11 +2496,19 @@ to 0. If kmedoids fails due to a memory allocation error, ifound is set to -1.
   *error = DBL_MAX;
   do /* Start the loop */
   { double total = DBL_MAX;
+    int counter = 0;
+    int period = 10;
 
     if (npass!=0) randomassign (nclusters, nelements, tclusterid);
     while(1)
     { double previous = total;
       total = 0.0;
+
+      if (counter % period == 0) /* Save the current cluster assignments */
+      { for (i = 0; i < nelements; i++) saved[i] = tclusterid[i];
+        if (period < INT_MAX / 2) period *= 2;
+      }
+      counter++;
 
       /* Find the center */
       getclustermedoids(nclusters, nelements, distmatrix, tclusterid,
@@ -2471,6 +2534,12 @@ to 0. If kmedoids fails due to a memory allocation error, ifound is set to -1.
         total += distance;
       }
       if (total>=previous) break;
+      /* total>=previous is FALSE on some machines even if total and previous
+       * are bitwise identical. */
+      for (i = 0; i < nelements; i++)
+        if (saved[i]!=tclusterid[i]) break;
+      if (i==nelements)
+        break; /* Identical solution found; break out of this loop */
     }
 
     for (i = 0; i < nelements; i++)
@@ -2486,9 +2555,10 @@ to 0. If kmedoids fails due to a memory allocation error, ifound is set to -1.
     if (i==nelements) (*ifound)++; /* break statement not encountered */
   } while (++ipass < npass);
 
-
   /* Deallocate temporarily used space */
   if (npass > 1) free(tclusterid);
+
+  free(saved);
   free(centroids);
   free(errors);
 

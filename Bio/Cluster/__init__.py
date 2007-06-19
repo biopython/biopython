@@ -99,14 +99,15 @@ class DataFile:
      Michael Eisen's format for Cluster/TreeView. A DataFile object
      has the following members:
 data:     a matrix containing the gene expression data
-mask:     a matrix containing only 1's and 0's, denoting which values are
-          present (1) or missing (0). If all elements of mask are one
-          (no missing data), then None is returned instead of the mask
+mask:     a matrix containing only 1's and 0's, denoting which values
+          are present (1) or missing (0). If all elements of mask are
+          one (no missing data), then mask is set to None.
 geneid:   a list containing a unique identifier for each gene
           (e.g., ORF name)
 genename: a list containing an additional description for each gene
           (e.g., gene name)
-gweight:  the weight to be used for each gene when calculating the distance
+gweight:  the weight to be used for each gene when calculating the
+          distance
 gorder:   an array of real numbers indicating the preferred order of the
           genes in the output file
 expid:    a list containing a unique identifier for each experimental
@@ -117,7 +118,8 @@ eorder:   an array of real numbers indication the preferred order in the
           output file of the experimental conditions
 uniqid:   the string that was used instead of UNIQID in the input file."""
   def __init__(self, filename=None):
-    """Reads a data file in the format corresponding to Michael Eisen's Cluster/TreeView program, and stores the data in a DataFile object"""
+    """Reads a data file in the format corresponding to Michael Eisen's
+Cluster/TreeView program, and stores the data in a DataFile object"""
     self.data = None
     self.mask = None
     self.geneid = None
@@ -210,7 +212,8 @@ uniqid:   the string that was used instead of UNIQID in the input file."""
     cdata, cmask = clustercentroids(self.data, self.mask, clusterid, method, transpose)
     return cdata, cmask
 
-  def clusterdistance(self, index1=[0], index2=[0], method='a', dist='e', transpose=0):
+  def clusterdistance(self, index1=[0], index2=[0], method='a', dist='e',
+                      transpose=0):
     if transpose==0: weight = self.eweight
     else: weight = self.gweight
     return clusterdistance(self.data, self.mask, weight, index1, index2, method, dist, transpose)
@@ -222,27 +225,29 @@ uniqid:   the string that was used instead of UNIQID in the input file."""
 
   def save(self, jobname, geneclusters=None, expclusters=None):
     """save(jobname, geneclusters=None, expclusters=None)
-saves the clustering results. The saved files follow the convention for
-Java TreeView program, which can therefore be used to view the clustering
-result.
+saves the clustering results. The saved files follow the convention
+for Java TreeView program, which can therefore be used to view the
+clustering result.
 Arguments:
 jobname:   The base name of the files to be saved. The filenames are
-           jobname.cdt, jobname.gtr, and jobname.atr for hierarchical
-           clustering, and jobname-K*.cdt, jobname-K*.kgg, jobname-K*.kag
-           for k-means clustering results
-geneclusters=None:  For hierarchical clustering results, geneclusters
-           is an (ngenes-1 x 2) array that describes the hierarchical
-           clustering result for genes. This array can be calculated
-           by the hierarchical clustering methods implemented in
-           treecluster.
+           jobname.cdt, jobname.gtr, and jobname.atr for
+           hierarchical clustering, and jobname-K*.cdt,
+           jobname-K*.kgg, jobname-K*.kag for k-means clustering
+           results.
+geneclusters=None:  For hierarchical clustering results,
+           geneclusters is an (ngenes-1 x 2) array that describes
+           the hierarchical clustering result for genes. This array
+           can be calculated by the hierarchical clustering methods
+           implemented in treecluster.
            For k-means clustering results, geneclusters is a vector
            containing ngenes integers, describing to which cluster a
-           given gene belongs. This vector can be calculated by kcluster.
+           given gene belongs. This vector can be calculated by
+           kcluster.
 expclusters=None:  For hierarchical clustering results, expclusters
            is an (nexps-1 x 2) array that describes the hierarchical
-           clustering result for experimental conditions. This array can
-           be calculated by the hierarchical clustering methods implemented
-           in treecluster.
+           clustering result for experimental conditions. This array
+           can be calculated by the hierarchical clustering methods
+           implemented in treecluster.
            For k-means clustering results, expclusters is a vector
            containing nexps integers, describing to which cluster a
            given experimental condition belongs. This vector can be

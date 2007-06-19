@@ -481,7 +481,6 @@ free_clusterid(PyArrayObject* array, int* clusterid)
 static void
 free_distances(PyObject* object, PyArrayObject* array, double** distance, int n)
 { int i;
-   return;
   if (array==NULL) /* User passed a lower-triangular matrix as a list of rows */
   { for (i = 1; i < n; i++)
     { PyObject* row = PyList_GET_ITEM(object, i);
@@ -1132,8 +1131,8 @@ static PySequenceMethods PyTree_sequence = {
 
 static char PyTree_scale__doc__[] =
 "mytree.scale()\n"
-"This method scales the node distances in the tree such that they are all\n"
-"between one and zero.\n";
+"This method scales the node distances in the tree such that they are\n"
+"all between one and zero.\n";
 
 static PyObject*
 PyTree_scale(PyTree* self)
@@ -1155,8 +1154,9 @@ PyTree_scale(PyTree* self)
 /* end of wrapper for cuttree */
 static char PyTree_cut__doc__[] =
 "clusterid = mytree.cut(nclusters=2)\n"
-"Given a hierarchical clustering result mytree, cut() divides the elements\n"
-"in the tree into clusters. The number of clusters is given by nclusters.\n";
+"Given a hierarchical clustering result mytree, cut() divides the\n"
+"elements in the tree into clusters. The number of clusters is given\n"
+"by nclusters.\n";
 
 static PyObject*
 PyTree_cut(PyTree* self, PyObject* args)
@@ -1270,8 +1270,9 @@ static char kcluster__doc__[] =
 "weight   : the weights to be used when calculating distances\n"
 "transpose: if equal to 0, genes (rows) are clustered;\n"
 "           if equal to 1, microarrays (columns) are clustered.\n"
-"npass    : number of times the k-means clustering algorithm is performed,\n"
-"           each time with a different (random) initial condition.\n"
+"npass    : number of times the k-means clustering algorithm is\n"
+"           performed, each time with a different (random) initial\n"
+"           condition.\n"
 "method   : specifies how the center of a cluster is found:\n"
 "           method=='a': arithmetic mean\n"
 "           method=='m': median\n"
@@ -1285,14 +1286,14 @@ static char kcluster__doc__[] =
 "           dist=='s': Spearman's rank correlation\n"
 "           dist=='k': Kendall's tau\n"
 "initialid: the initial clustering from which the algorithm should start.\n"
-"           If initialid is None, the routine carries out npass repetitions\n"
-"           of the EM algorithm, each time starting from a different random\n"
-"           initial clustering. If initialid is given, the routine carries\n"
-"           out the EM algorithm only once, starting from the given initial\n"
-"           clustering and without randomizing the order in which items are\n"
-"           assigned to clusters (i.e., using the same order as in the data\n"
-"           matrix). In that case, the k-means algorithm is fully\n"
-"           deterministic.\n"
+"           If initialid is None, the routine carries out npass\n"
+"           repetitions of the EM algorithm, each time starting from a\n"
+"           different random initial clustering. If initialid is given,\n"
+"           the routine carries out the EM algorithm only once, starting\n"
+"           from the given initial clustering and without randomizing the\n"
+"           order in which items are assigned to clusters (i.e., using\n"
+"           the same order as in the data matrix). In that case, the\n"
+"           k-means algorithm is fully deterministic.\n"
 "\n"
 "Return values:\n"
 "clusterid: array containing the number of the cluster to which each\n"
@@ -1450,14 +1451,14 @@ static char kmedoids__doc__[] =
 "         initialid=None) -> clusterid, error, nfound.\n"
 "\n"
 "This function implements k-medoids clustering.\n"
-"distance:  The distance matrix between the elements. There are three ways\n"
-"           in which you can pass a distance matrix:\n"
+"distance:  The distance matrix between the elements. There are three\n"
+"           ways in which you can pass a distance matrix:\n"
 "           #1: a 2D Numerical Python array (in which only the left-lower\n"
 "               part of the array will be accessed);\n"
 "           #2: a 1D Numerical Python array containing the distances\n"
 "               consecutively;\n" 
-"           #3: a list of rows containing the lower-triangular part of the\n"
-"               distance matrix.\n"
+"           #3: a list of rows containing the lower-triangular part of\n"
+"               the distance matrix.\n"
 "           Examples are:\n"
 "           >>> distance = array([[0.0, 1.1, 2.3],\n"
 "                                 [1.1, 0.0, 4.5],\n"
@@ -1480,10 +1481,10 @@ static char kmedoids__doc__[] =
 "           repetitions of the EM algorithm, each time starting from a\n"
 "           different random initial clustering. If initialid is given,\n"
 "           the routine carries out the EM algorithm only once, starting\n"
-"           from the initial clustering specified by initialid and without\n"
-"           randomizing the order in which items are assigned to clusters\n"
-"           (i.e., using the same order as in the data matrix). In that\n"
-"           case, the k-means algorithm is fully deterministic.\n"
+"           from the initial clustering specified by initialid and\n"
+"           without randomizing the order in which items are assigned to\n"
+"           clusters (i.e., using the same order as in the data matrix).\n"
+"           In that case, the k-means algorithm is fully deterministic.\n"
 "\n"
 "Return values:\n"
 "clusterid: array containing the number of the cluster to which each\n"
@@ -1607,14 +1608,14 @@ static char treecluster__doc__[] =
 "           method=='m': Complete (maximum) pairwise linkage (default)\n"
 "           method=='c': Centroid linkage\n"
 "           method=='a': Average pairwise linkage\n"
-"distancematrix:  The distance matrix between the elements. There are three\n"
-"           ways in which you can pass a distance matrix:\n"
+"distancematrix:  The distance matrix between the elements. There are\n"
+"           three ways in which you can pass a distance matrix:\n"
 "           #1: a 2D Numerical Python array (in which only the left-lower\n"
 "               part of the array will be accessed);\n"
 "           #2: a 1D Numerical Python array containing the distances\n"
 "               consecutively;\n" 
-"           #3: a list of rows containing the lower-triangular part of the\n"
-"               distance matrix.\n"
+"           #3: a list of rows containing the lower-triangular part of\n"
+"               the distance matrix.\n"
 "           Examples are:\n"
 "           >>> distance = array([[0.0, 1.1, 2.3],\n"
 "                                 [1.1, 0.0, 4.5],\n"
@@ -1629,19 +1630,19 @@ static char treecluster__doc__[] =
 "           (option #3)\n"
 "           These three correspond to the same distance matrix.\n"
 "           PLEASE NOTE:\n"
-"           As the treecluster routine may shuffle the values in the distance\n"
-"           matrix as part of the clustering algorithm, be sure to save this\n"
-"           array in a different variable before calling treecluster if you\n"
-"           need it later.\n"
+"           As the treecluster routine may shuffle the values in the\n"
+"           distance matrix as part of the clustering algorithm, be sure\n"
+"           to save this array in a different variable before calling\n"
+"           treecluster if you need it later.\n"
 "\n"
 "Either data or distancematrix should be None. If distancematrix==None,\n"
-"the hierarchical clustering solution is calculated from the gene expression\n"
-"data stored in the argument data. If data==None, the hierarchical clustering\n"
-"solution is calculated from the distance matrix instead. Pairwise centroid-\n"
-"linkage clustering can be calculated only from the gene expression data and\n"
-"not from the distance matrix. Pairwise single-, maximum-, and average-\n"
-"linkage clustering can be calculated from either the gene expression data or\n"
-"from the distance matrix.\n"
+"the hierarchical clustering solution is calculated from the gene\n"
+"expression data stored in the argument data. If data==None, the\n"
+"hierarchical clustering solution is calculated from the distance matrix\n"
+"instead. Pairwise centroid-linkage clustering can be calculated only\n"
+"from the gene expression data and not from the distance matrix. Pairwise\n"
+"single-, maximum-, and average-linkage clustering can be calculated from\n"
+"either the gene expression data or from the distance matrix.\n"
 "\n"
 "Return value:\n"
 "treecluster returns a Tree object describing the hierarchical clustering\n"
@@ -1802,8 +1803,9 @@ py_treecluster (PyObject* self, PyObject* args, PyObject* keywords)
 
 /* somcluster */
 static char somcluster__doc__[] =
-"somcluster(data, mask=None, weight=None, transpose=0, nxgrid=2, nygrid=1,\n"
-"           inittau=0.02, niter=1, dist='e') -> clusterid, celldata\n"
+"somcluster(data, mask=None, weight=None, transpose=0,\n"
+"           nxgrid=2, nygrid=1, inittau=0.02, niter=1,\n"
+"           dist='e') -> clusterid, celldata\n"
 "\n"
 "This function implements a self-organizing map on a rectangular grid.\n"
 "data     : nrows x ncolumns array containing the gene expression data\n"
@@ -1827,17 +1829,18 @@ static char somcluster__doc__[] =
 "           dist=='k': Kendall's tau\n"
 "\n"
 "Return values:\n"
-"clusterid: array with two columns, while the number of rows is equal to the\n"
-"           number of genes or the number of microarrays depending on whether\n"
-"           genes or microarrays are being clustered. Each row in the array\n"
-"           contains the x and y coordinates of the cell in the rectangular\n"
-"           SOM grid to which the gene or microarray was assigned.\n"
-"celldata:  an array with dimensions (nxgrid, nygrid, number of microarrays)\n"
-"           if genes are being clustered, or (nxgrid, nygrid, number of\n"
-"           genes) if microarrays are being clustered. Each element [ix][iy]\n"
-"           of this array is a 1D vector containing the gene expression data\n"
-"           for the centroid of the cluster in the SOM grid cell with\n"
-"           coordinates (ix, iy).\n";
+"clusterid: array with two columns, while the number of rows is equal to\n"
+"           the number of genes or the number of microarrays depending on\n"
+"           whether genes or microarrays are being clustered. Each row in\n"
+"           the array contains the x and y coordinates of the cell in the\n"
+"           rectangular SOM grid to which the gene or microarray was\n"
+"           assigned.\n"
+"celldata:  an array with dimensions (nxgrid, nygrid, number of\n"
+"           microarrays) if genes are being clustered, or (nxgrid,\n"
+"           nygrid, number of genes) if microarrays are being clustered.\n"
+"           Each element [ix][iy] of this array is a 1D vector containing\n"
+"           the gene expression data for the centroid of the cluster in\n"
+"           the SOM grid cell with coordinates (ix, iy).\n";
 
 static PyObject*
 py_somcluster (PyObject* self, PyObject* args, PyObject* keywords)
@@ -2127,12 +2130,12 @@ static char clusterdistance__doc__[] =
 "mask     : nrows x ncolumns array of integers, showing which data are\n"
 "           missing. If mask[i][j]==0, then data[i][j] is missing.\n"
 "weight   : the weights to be used when calculating distances\n"
-"index1   : 1D array identifying which genes/microarrays belong to the first\n"
-"           cluster. If the cluster contains only one gene, then index1 can\n"
-"           also be written as a single integer.\n"
-"index2   : 1D array identifying which genes/microarrays belong to the second\n"
-"           cluster. If the cluster contains only one gene, then index2 can\n"
-"           also be written as a single integer.\n"
+"index1   : 1D array identifying which genes/microarrays belong to the\n"
+"           first cluster. If the cluster contains only one gene, then\n"
+"           index1 can also be written as a single integer.\n"
+"index2   : 1D array identifying which genes/microarrays belong to the\n"
+"           second cluster. If the cluster contains only one gene, then\n"
+"           index2 can also be written as a single integer.\n"
 "transpose: if equal to 0, genes (rows) are clustered;\n"
 "           if equal to 1, microarrays (columns) are clustered.\n"
 "dist     : specifies the distance function to be used:\n"
@@ -2147,15 +2150,17 @@ static char clusterdistance__doc__[] =
 "method   : specifies how the distance between two clusters is defined:\n"
 "           method=='a': the distance between the arithmetic means of the\n"
 "                        two clusters\n"
-"           method=='m': the distance between the medians of the two clusters\n"
-"           method=='s': the smallest pairwise distance between members of\n"
-"                        the two clusters\n"
+"           method=='m': the distance between the medians of the two\n"
+"                        clusters\n"
+"           method=='s': the smallest pairwise distance between members\n"
+"                        of the two clusters\n"
 "           method=='x': the largest pairwise distance between members of\n"
 "                        the two clusters\n"
-"           method=='v': average of the pairwise distances between members\n"
-"                        of the clusters\n"
-"transpose: if equal to 0, clusters of genes (rows) are considered;\n"
-"           if equal to 1, clusters of microarrays (columns) are considered.\n";
+"           method=='v': average of the pairwise distances between\n"
+"                        members of the clusters\n"
+"transpose: if equal to 0: clusters of genes (rows) are considered;\n"
+"           if equal to 1: clusters of microarrays (columns) are\n"
+"                          considered.\n";
 
 static PyObject*
 py_clusterdistance (PyObject* self, PyObject* args, PyObject* keywords)
@@ -2281,26 +2286,27 @@ static char clustercentroids__doc__[] =
 "                 method='a') -> cdata, cmask\n"
 "\n"
 "The clustercentroids routine calculates the cluster centroids, given to\n"
-"which cluster each element belongs. The centroid is defined as either the\n"
-"mean or the median over all elements for each dimension.\n"
+"which cluster each element belongs. The centroid is defined as either\n"
+"the mean or the median over all elements for each dimension.\n"
 
 "data     : nrows x ncolumns array containing the expression data\n"
 "mask     : nrows x ncolumns array of integers, showing which data are\n"
 "           missing. If mask[i][j]==0, then data[i][j] is missing.\n"
 "transpose: if equal to 0, gene (row) clusters are considered;\n"
 "           if equal to 1, microarray (column) clusters are considered.\n"
-"clusterid: array containing the cluster number for each gene or microarray.\n"
-"           The cluster number should be non-negative.\n"
-"method   : specifies whether the centroid is calculated from the arithmetic\n"
-"           mean (method=='a', default) or the median (method=='m') over each\n"
-"           dimension.\n"
+"clusterid: array containing the cluster number for each gene or\n"
+"           microarray. The cluster number should be non-negative.\n"
+"method   : specifies whether the centroid is calculated from the\n"
+"           arithmetic mean (method=='a', default) or the median\n"
+"           (method=='m') over each dimension.\n"
 "\n"
 "Return values:\n"
-"cdata    : 2D array containing the cluster centroids. If transpose==0, then\n"
-"           the dimensions of cdata are nclusters x ncolumns. If\n"
-"           transpose==1, then the dimensions of cdata are nrows x nclusters.\n"
-"cmask    : 2D array of integers describing which elements in cdata, if any,\n"
-"           are missing.\n";
+"cdata    : 2D array containing the cluster centroids. If transpose==0,\n"
+"           then the dimensions of cdata are nclusters x ncolumns. If\n"
+"           transpose==1, then the dimensions of cdata are\n"
+"           nrows x nclusters.\n"
+"cmask    : 2D array of integers describing which elements in cdata,\n"
+"           if any, are missing.\n";
 
 static PyObject*
 py_clustercentroids(PyObject* self, PyObject* args, PyObject* keywords)
@@ -2431,9 +2437,10 @@ static char distancematrix__doc__[] =
 "mask     : nrows x ncolumns array of integers, showing which data are\n"
 "           missing. If mask[i][j]==0, then data[i][j] is missing.\n"
 "weight   : the weights to be used when calculating distances.\n"
-"transpose: if equal to 0, the distances between genes (rows) are calculated;\n"
-"           if equal to 1, the distances beteeen microarrays (columns) are\n"
-"           calculated.\n"
+"transpose: if equal to 0: the distances between genes (rows) are\n"
+"                          calculated;\n"
+"           if equal to 1, the distances beteeen microarrays (columns)\n"
+"                          are calculated.\n"
 "dist     : specifies the distance function to be used:\n"
 "           dist=='e': Euclidean distance\n"
 "           dist=='b': City Block distance\n"
@@ -2446,9 +2453,9 @@ static char distancematrix__doc__[] =
 "\n"
 "Return value:\n"
 "The distance matrix is returned as a list of 1D arrays containing the\n"
-"distance matrix between the gene expression data. The number of columns in\n"
-"each row is equal to the row number. Hence, the first row has zero elements.\n"
-"An example of the return value is\n"
+"distance matrix between the gene expression data. The number of columns\n"
+"in each row is equal to the row number. Hence, the first row has zero\n"
+"elements. An example of the return value is\n"
 "matrix = [[],\n"
 "          array([1.]),\n"
 "          array([7., 3.]),\n"
@@ -2547,7 +2554,8 @@ py_distancematrix (PyObject* self, PyObject* args, PyObject* keywords)
         }
         rowdata = (double*) (((PyArrayObject*)row)->data);
         for (j = 0; j < i; j++) rowdata[j] = distances[i][j];
-        free(distances[i]);
+        if (i!=0) /* distances[0]==NULL */
+          free(distances[i]);
         PyList_SET_ITEM(result, i, row);
       }
       if (i < nelements)
@@ -2555,6 +2563,7 @@ py_distancematrix (PyObject* self, PyObject* args, PyObject* keywords)
         { PyObject* row =  PyList_GET_ITEM(result, i);
           Py_DECREF(row);
         }
+        if (i==0) i = 1; /* distances[0]==NULL */
         for (j = i; j < nelements; j++) free(distances[j]);
         Py_DECREF(result);
         result = NULL;
