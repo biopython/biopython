@@ -1,4 +1,4 @@
-"""Load biopyton objects into a BioSQL database for persistant storage.
+"""Load biopython objects into a BioSQL database for persistent storage.
 
 This code makes it possible to store biopython objects in a relational
 database and then retrieve them back. You shouldn't use any of the
@@ -12,13 +12,6 @@ from time import gmtime, strftime
 from Bio import Alphabet
 from Bio.crc import crc64
 
-try:
-    enumerate
-except NameError:
-    import sys
-    _indices = xrange(sys.maxint)
-    def enumerate(s):
-        return zip(_indices, s)
 
 class DatabaseLoader:
     """Load a database with biopython objects.
@@ -229,9 +222,9 @@ class DatabaseLoader:
         description = getattr(record, 'description', None)
         division = record.annotations.get("data_file_division", "UNK")
         
-	# removed taxon_id field, as it was causing difficulties with the 
-	# schema  - not inserting a value allows it to default to NULL, 
-	# avoiding the foreign key constraint.
+        # removed taxon_id field, as it was causing difficulties with the
+        # schema  - not inserting a value allows it to default to NULL,
+        # avoiding the foreign key constraint.        
         sql = """
         INSERT INTO bioentry (
          biodatabase_id,
@@ -242,7 +235,6 @@ class DatabaseLoader:
          description,
          version)
         VALUES (
-         %s,
          %s,
          %s,
          %s,
@@ -447,17 +439,142 @@ class DatabaseLoader:
         """
         tag_ontology_id = self._get_ontology_id('Annotation Tags')
         for qualifier_key in qualifiers.keys():
-            qualifier_key_id = self._get_term_id(qualifier_key,
-                                                 ontology_id = tag_ontology_id)
+            # Treat db_xref qualifiers differently to sequence annotation
+            # qualifiers by populating the seqfeature_dbxref and dbxref
+            # tables.  Other qualifiers go into the seqfeature_qualifier_value
+            # and (if new) term tables.
+            if qualifier_key != 'db_xref':
+                qualifier_key_id = self._get_term_id(qualifier_key,
+                                                  ontology_id=tag_ontology_id)
+                # now add all of the values to their table
+                for qual_value_rank in range(len(qualifiers[qualifier_key])):
+                    qualifier_value = qualifiers[qualifier_key][qual_value_rank]
+                    sql = r"INSERT INTO seqfeature_qualifier_value VALUES" \
+                          r" (%s, %s, %s, %s)"
+                    self.adaptor.execute(sql, (seqfeature_id,
+                                               qualifier_key_id,
+                                               qual_value_rank + 1,
+                                               qualifier_value))
+            else:
+                # The dbxref_id qualifier/value sets go into the dbxref table
+                # as dbname, accession, version tuples, with dbxref.dbxref_id
+                # being automatically assigned, and into the seqfeature_dbxref
+                # table as seqfeature_id, dbxref_id, and rank tuples
+                self._load_seqfeature_dbxref(qualifiers[qualifier_key],
+                                             seqfeature_id)
 
-            # now add all of the values to their table
-            for qual_value_rank in range(len(qualifiers[qualifier_key])):
-                qualifier_value = qualifiers[qualifier_key][qual_value_rank]
-                sql = r"INSERT INTO seqfeature_qualifier_value VALUES" \
-                      r" (%s, %s, %s, %s)"
-                self.adaptor.execute(sql, (seqfeature_id,
-                  qualifier_key_id, qual_value_rank + 1, qualifier_value))
-       
+
+    def _load_seqfeature_dbxref(self, dbxrefs, seqfeature_id):
+        """ _load_seqfeature_dbxref(self, dbxrefs, seqfeature_id)
+
+            o dbxrefs           List, dbxref data from the source file in the
+                                format <database>:<accession>
+
+            o seqfeature_id     Int, the identifier for the seqfeature in the
+                                seqfeature table
+
+            Insert dbxref qualifier data for a seqfeature into the
+            seqfeature_dbxref and, if required, dbxref tables.
+            The dbxref_id qualifier/value sets go into the dbxref table
+            as dbname, accession, version tuples, with dbxref.dbxref_id
+            being automatically assigned, and into the seqfeature_dbxref
+            table as seqfeature_id, dbxref_id, and rank tuples
+        """
+        # Dictionary of database types, keyed by GenBank db_xref abbreviation
+        db_dict = {'GeneID': 'Entrez',
+                   'GI': 'GeneIndex',
+                   'COG': 'COG',
+                   'CDD': 'CDD',
+                   'DDBJ': 'DNA Databank of Japan',
+                   'Entrez': 'Entrez',
+                   'GeneIndex': 'GeneIndex',
+                   'PUBMED': 'PubMed',
+                   'taxon': 'Taxon',
+                   'ATCC': 'ATCC',
+                   'ISFinder': 'ISFinder',
+                   'GOA': 'Gene Ontology Annotation',
+                   'ASAP': 'ASAP',
+                   'PSEUDO': 'PSEUDO',
+                   'InterPro': 'InterPro',
+                   'GEO': 'Gene Expression Omnibus',
+                   'EMBL': 'EMBL',
+                   'UniProtKB/Swiss-Prot': 'UniProtKB/Swiss-Prot',
+                   'ECOCYC': 'EcoCyc',
+                   'UniProtKB/TrEMBL': 'UniProtKB/TrEMBL'
+                   }
+        for rank, value in enumerate(dbxrefs):
+            # Split the DB:accession format string at colons.  We have to
+            # account for multiple-line and multiple-accession entries
+            try:
+                dbxref_data = value.replace(' ','').replace('\n','').split(':')
+                key = dbxref_data[0]
+                accessions = dbxref_data[1:]
+            except:
+                raise Exception("Parsing of db_xref failed: %s; %s" % (key, accession))
+            if key not in db_dict:
+                # Database is currently unknown, so add it to the db_dict
+                # temporarily and issue a warning
+                import warnings
+                warnings.warn("%s not recognised as database type: temporarily accepting key" % key)
+                db_dict[key] = key
+            db = db_dict[key]
+            # Loop over all the grabbed accessions, and attempt to fill the
+            # table
+            for accession in accessions:
+                # Get the dbxref_id value for the dbxref data
+                dbxref_id = self._get_dbxref_id(db, accession)
+                # Insert the seqfeature_dbxref data
+                self._get_seqfeature_dbxref(seqfeature_id, dbxref_id, rank+1)
+        
+    def _get_dbxref_id(self, db, accession):
+        """ _get_dbxref_id(self, db, accession) -> Int
+
+            o db          String, the name of the external database containing
+                          the accession number
+
+            o accession   String, the accession of the dbxref data
+
+            Finds and returns the dbxref_id for the passed data.  The method
+            attempts to find an existing record first, and inserts the data
+            if there is no record.
+        """
+        # Check for an existing record
+        sql = r'SELECT dbxref_id FROM dbxref WHERE dbname = %s ' \
+              r'AND accession = %s'
+        dbxref_id = self.adaptor.execute_and_fetch_col0(sql, (db, accession))
+        # If there was a record, return the dbxref_id, else create the
+        # record and return the created dbxref_id
+        if dbxref_id:
+            return dbxref_id[0]
+        return self._add_dbxref(db, accession, 0)
+
+    def _get_seqfeature_dbxref(self, seqfeature_id, dbxref_id, rank):
+        """ Check for a pre-existing seqfeature_dbxref entry with the passed
+            seqfeature_id and dbxref_id.  If one does not exist, insert new
+            data
+
+        """
+        # Check for an existing record
+        sql = r'SELECT seqfeature_id, dbxref_id FROM seqfeature_dbxref ' \
+              r'WHERE seqfeature_id = "%s" AND dbxref_id = "%s"'
+        result = self.adaptor.execute_and_fetch_col0(sql, (seqfeature_id,
+                                                           dbxref_id))
+        # If there was a record, return without executing anything, else create
+        # the record and return
+        if result:
+            return result
+        return self._add_seqfeature_dbxref(seqfeature_id, dbxref_id, rank)
+
+    def _add_seqfeature_dbxref(self, seqfeature_id, dbxref_id, rank):
+        """ Insert a seqfeature_dbxref row and return the seqfeature_id and
+            dbxref_id
+        """
+        sql = r'INSERT INTO seqfeature_dbxref VALUES' \
+              r'(%s, %s, %s)'
+        self.adaptor.execute(sql, (seqfeature_id, dbxref_id, rank))
+        return (seqfeature_id, dbxref_id)
+        
+            
 class DatabaseRemover:
     """Complement the Loader functionality by fully removing a database.
 
