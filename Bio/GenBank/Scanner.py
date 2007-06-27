@@ -76,7 +76,7 @@ class InsdcScanner :
             else :
                 #Ignore any header before the first ID/LOCUS line.
                 if self.debug > 1:
-                        print "Skipping header line before record:\n" + line
+	                print "Skipping header line before record:\n" + line
         self.line = line
         return line
 
@@ -817,9 +817,7 @@ class GenBankScanner(InsdcScanner) :
                    'LOCUS line does not contain size units at expected position:\n' + line
             assert line[44:47] in ['   ', 'ss-', 'ds-', 'ms-'], \
                    'LOCUS line does not have valid strand type (Single stranded, ...):\n' + line
-            assert line[47:54].strip() == "" \
-                or line[47:54].strip().find('DNA') <> -1 \
-                or line[47:54].strip().find('RNA') <> -1, \
+            assert line[47:54].strip() in ['','DNA','RNA','tRNA','mRNA','uRNA','snRNA','cDNA'], \
                    'LOCUS line does not contain valid sequence type (DNA, RNA, ...):\n' + line
             assert line[54:55] == ' ', \
                    'LOCUS line does not contain space at position 55:\n' + line
@@ -869,7 +867,7 @@ class GenBankScanner(InsdcScanner) :
             if line[GENBANK_INDENT:].strip() <> "" :
                 consumer.locus(line[GENBANK_INDENT:].strip())
             else :
-                #Must have just "LOCUS       ", is this even legitimate?
+                #Must just have just "LOCUS       ", is this even legitimate?
                 #We should be able to continue parsing... we need real world testcases!
                 print >> sys.stderr, "Warning: Minimal LOCUS line found - is this correct?\n" + line
         else :
@@ -948,7 +946,7 @@ class GenBankScanner(InsdcScanner) :
                         line = line_iter.next()
                         if line[:GENBANK_INDENT] == GENBANK_SPACER :
                             #Add this continuation to the data string
-                            data = data + " " + line[GENBANK_INDENT:]
+                            data += " " + line[GENBANK_INDENT:]
                             if self.debug >1 : print "Extended reference text [" + data + "]"
                         else :
                             #End of the reference, leave this text in the variable "line"
@@ -972,9 +970,11 @@ class GenBankScanner(InsdcScanner) :
                     while True :
                         line = line_iter.next()
                         if line[0:GENBANK_INDENT] == GENBANK_SPACER :
-                            data = data + ' ' + line[GENBANK_INDENT:]
+                            data += ' ' + line[GENBANK_INDENT:]
                         else :
                             #We now have all the data for this taxonomy:
+                            if data.strip() == "" :
+                                if self.debug > 1 : print "Taxonomy line(s) missing or blank"
                             consumer.taxonomy(data.strip())
                             #End of continuation - return to top of loop!
                             break
@@ -982,19 +982,19 @@ class GenBankScanner(InsdcScanner) :
                     if self.debug > 1 : print "Found comment"
                     #This can be multiline, and should call consumer.comment() once
                     #with a list where each entry is a line.
-                    list=[]
-                    list.append(data)
+                    comment_list=[]
+                    comment_list.append(data)
                     while True:
                         line = line_iter.next()
                         if line[0:GENBANK_INDENT] == GENBANK_SPACER :
                             data = line[GENBANK_INDENT:]
-                            list.append(data)
+                            comment_list.append(data)
                             if self.debug > 2 : print "Comment continuation [" + data + "]"
                         else :
                             #End of the comment
                             break
-                    consumer.comment(list)
-                    list=[]
+                    consumer.comment(comment_list)
+                    del comment_list
                 elif line_type in consumer_dict :
                     #Its a semi-automatic entry!
                     #Now, this may be a multi line entry...
