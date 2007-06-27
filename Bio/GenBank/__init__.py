@@ -247,6 +247,10 @@ class _BaseGenBankConsumer(AbstractConsumer):
     def _split_taxonomy(self, taxonomy_string):
         """Split a string with taxonomy info into a list.
         """
+        if not taxonomy_string or taxonomy_string=="." :
+            #Missing data, no taxonomy
+            return []
+        
         if taxonomy_string[-1] == '.':
             tax_info = taxonomy_string[:-1]
         else:
