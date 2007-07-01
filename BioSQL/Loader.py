@@ -10,7 +10,7 @@ from time import gmtime, strftime
 
 # biopython
 from Bio import Alphabet
-from Bio.crc import crc64
+from Bio.SeqUtils.CheckSum import crc64
 
 
 class DatabaseLoader:
