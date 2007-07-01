@@ -39,28 +39,16 @@ def gcg(seq):
         returns the GCG checksum (int). Checksum used by GCG program.
         seq type = str.
         Based on BioPerl GCG_checksum. Adapted by Sebastian Bassi
-        with the help of John Lenton and Pablo Ziliani.
-        Python 2.5 Oneliner by Gabriel Genellina.
+        with the help of John Lenton, Pablo Ziliani, and Gabriel Genellina.
         All sequences are converted to uppercase """
-    import sys
-    if sys.version_info >= (2,4):
-        # GCG_checksum version for Python 2.4 and up.
-        # By Sebastian Bassi and Gabriel Genellina.
-        from itertools import cycle, izip
-        return sum(n*ord(c.upper()) for (n,c) in izip(cycle(range(1,58)),seq)) % 10000
-    else:
-        #slower version for Python 2.3
-        index = checksum = 0
-        if type(seq)!=type("aa"):
-            seq=seq.tostring().upper()
-        else:
-            seq=seq.upper()
-        for char in seq.upper():
-            index += 1
-            checksum += index * ord(char)
-            if index == 57: index = 0
-        return checksum % 10000
-
+    index = checksum = 0
+    if type(seq)!=type("aa"):
+        seq=seq.tostring()
+    for char in seq:
+        index += 1
+        checksum += index * ord(char.upper())
+        if index == 57: index = 0
+    return checksum % 10000
 
 def seguid(seq):
     """ given a nucleotide or amino-acid secuence (or any string),
