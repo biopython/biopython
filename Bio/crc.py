@@ -1,6 +1,10 @@
 # crc32 and crc64
 # crc64 is adapted from BioPerl
 
+import warnings
+warnings.warn("Bio.crc is deprecated; use crc32 and crc64 in Bio.SeqUtils.CheckSum instead", DeprecationWarning)
+
+
 from binascii import crc32
 
 _table_h = []
