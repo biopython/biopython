@@ -230,7 +230,10 @@ def get_start_end(sequence, skiplist=['-','?']):
     start=0
     while start<length and (sequence[start] in skiplist):
         start+=1
-    return start,end 
+    if start==length and end==-1: # empty sequence
+        return -1,-1
+    else:
+        return start,end 
     
 def _sort_keys_by_values(p):
     """Returns a sorted list of keys of p sorted by values of p."""     
@@ -542,19 +545,22 @@ class Nexus(object):
             self.filename=input
         except (TypeError,IOError,AttributeError):
             #2 Assume we have a string from a fh.read()
-            #if isinstance(input, str):
-            #    file_contents = input
-            #    self.filename='input_string'
+            if isinstance(input, str):
+                file_contents = input
+                self.filename='input_string'
             #3 Assume we have a file object
-            if hasattr(input,'read'): # file objects or StringIO objects
+            elif hasattr(input,'read'): # file objects or StringIO objects
                 file_contents=input.read()
                 if hasattr(input,"name") and input.name:
                     self.filename=input.name
                 else:
                     self.filename='Unknown_nexus_file'
             else:
-                print input.strip()[:6]
+                print input.strip()[:50]
                 raise NexusError, 'Unrecognized input: %s ...' % input[:100]
+        file_contents=file_contents.strip()
+        if file_contents.startswith('#NEXUS'):
+            file_contents=file_contents[6:]
         if C:
             decommented=cnexus.scanfile(file_contents)
             #check for unmatched parentheses
@@ -1570,8 +1576,11 @@ class Nexus(object):
             sequence=self.matrix[taxon].tostring()
             length=len(sequence)
             start,end=get_start_end(sequence,skiplist=replace)
-            sequence=sequence[:end+1]+missing*(length-end-1)
-            sequence=start*missing+sequence[start:]
+            if start==-1 and end==-1:
+                sequence=missing*length
+            else:
+                sequence=sequence[:end+1]+missing*(length-end-1)
+                sequence=start*missing+sequence[start:]
             assert length==len(sequence), 'Illegal sequence manipulation in Nexus.termial_gap_to_missing in taxon %s' % taxon
             self.matrix[taxon]=Seq(sequence,self.alphabet)
 
