@@ -206,11 +206,16 @@ class Tree(Nodes.Chain):
         else:
             prev=self.unlink(id)
             self.kill(id)
-            if not prev==self.root and len(self.node(prev).succ)==1:
-                succ=self.node(prev).succ[0]
-                new_bl=self.node(prev).data.branchlength+self.node(succ).data.branchlength
-                self.collapse(prev)
-                self.node(succ).data.branchlength=new_bl
+            if len(self.node(prev).succ)==1:
+                if prev==self.root: # we deleted one branch of a bifurcating root, then we have to move the root upwards
+                    self.root=self.node(self.root).succ[0]    
+                    self.node(self.root).branchlength=0.0
+                    self.kill(prev)
+                else: 
+                    succ=self.node(prev).succ[0]
+                    new_bl=self.node(prev).data.branchlength+self.node(succ).data.branchlength
+                    self.collapse(prev)
+                    self.node(succ).data.branchlength=new_bl
             return prev
         
     def get_taxa(self,node_id=None):
