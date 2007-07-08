@@ -1601,7 +1601,8 @@ def blastall(blastcmd, program, database, infile, align_view='7', **keywds):
     html                Produce HTML output?  T/F
     descriptions        Number of one-line descriptions.
     alignments          Number of alignments.
-    align_view          Alignment view.  Integer 0-11, passed as a string.
+    align_view          Alignment view.  Integer 0-11,
+                        passed as a string or integer.
     show_gi             Show GI's in deflines?  T/F
     seqalign_file       seqalign file to output.
 
@@ -1651,7 +1652,7 @@ def blastall(blastcmd, program, database, infile, align_view='7', **keywds):
     params.extend([att2param['program'], program])
     params.extend([att2param['database'], database])
     params.extend([att2param['infile'], infile])
-    params.extend([att2param['align_view'], align_view])
+    params.extend([att2param['align_view'], str(align_view)])
 
     for attr in keywds.keys():
         params.extend([att2param[attr], str(keywds[attr])])
@@ -1712,7 +1713,8 @@ def blastpgp(blastcmd, database, infile, align_view='7', **keywds):
     html                Produce HTML output?  T/F
     descriptions        Number of one-line descriptions.
     alignments          Number of alignments.
-    align_view          Alignment view.  Integer 0-11, passed as a string.
+    align_view          Alignment view.  Integer 0-11,
+                        passed as a string or integer.
     show_gi             Show GI's in deflines?  T/F
     seqalign_file       seqalign file to output.
     align_outfile       Output file for alignment.
@@ -1776,7 +1778,7 @@ def blastpgp(blastcmd, database, infile, align_view='7', **keywds):
 
     params.extend([att2param['database'], database])
     params.extend([att2param['infile'], infile])
-    params.extend([att2param['align_view'], align_view])
+    params.extend([att2param['align_view'], str(align_view)])
 
     for attr in keywds.keys():
         params.extend([att2param[attr], str(keywds[attr])])
@@ -1834,7 +1836,8 @@ def rpsblast(blastcmd, database, infile, align_view="7", **keywds):
     html                Produce HTML output?  T/F
     descriptions        Number of one-line descriptions.
     alignments          Number of alignments.
-    align_view          Alignment view.  Integer 0-9.
+    align_view          Alignment view.  Integer 0-11,
+                        passed as a string or integer.
     show_gi             Show GI's in deflines?  T/F
     seqalign_file       seqalign file to output.
     align_outfile       Output file for alignment.
@@ -1877,7 +1880,7 @@ def rpsblast(blastcmd, database, infile, align_view="7", **keywds):
 
     params.extend([att2param['database'], database])
     params.extend([att2param['infile'], infile])
-    params.extend([att2param['align_view'], align_view])
+    params.extend([att2param['align_view'], str(align_view)])
 
     for attr in keywds.keys():
         params.extend([att2param[attr], str(keywds[attr])])
