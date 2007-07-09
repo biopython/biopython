@@ -1063,7 +1063,7 @@ def qblast(program, database, sequence,
     descriptions   Number of descriptions to show.  Def 500.
     alignments     Number of alignments to show.  Def 500.
     expect         An expect value cutoff.  Def 10.0.
-    matrix         Specify an alt. matrix (PAM30, PAM70, BLOSUM80, BLOSUM45).
+    matrix_name    Specify an alt. matrix (PAM30, PAM70, BLOSUM80, BLOSUM45).
     filter         "none" turns off filtering.  Default no filtering
     format_type    "HTML", "Text", "ASN.1", or "XML".  Def. "XML".
     entrez_query   Entrez query to limit Blast search
