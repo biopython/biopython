@@ -1038,23 +1038,36 @@ def _send_to_blasturl(query, outhandle):
     sock.close()
 
 def qblast(program, database, sequence,
-           ncbi_gi=None, descriptions=None, alignments=None,
-           expect=None, matrix=None,
-           filter=None, format_type="XML", hitlist_size=None,
-           entrez_query='(none)',
+           auto_format=None,composition_based_statistics=None,
+           db_genetic_code=None,endpoints=None,entrez_query='(none)',
+           expect=10.0,filter=None,gapcosts=None,genetic_code=None,
+           hitlist_size=50,i_thresh=None,layout=None,lcase_mask=None,
+           matrix_name=None,nucl_penalty=None,nucl_reward=None,
+           other_advanced=None,perc_ident=None,phi_pattern=None,
+           query_file=None,query_believe_defline=None,query_from=None,
+           query_to=None,searchsp_eff=None,service=None,threshold=None,
+           ungapped_alignment=None,word_size=None,
+           alignments=500,alignment_view=None,descriptions=500,
+           entrez_links_new_window=None,expect_low=None,expect_high=None,
+           format_entrez_query=None,format_object=None,format_type='XML',
+           ncbi_gi=None,results_file=None,show_overview=None
            ):
     """Do a BLAST search using the QBLAST server at NCBI.
-    program        BLASTP, BLASTN, BLASTX, TBLASTN, or TBLASTX.
+
+    Supports all parameters of the qblast API for Put and Get.
+    Some useful parameters:
+    program        BLASTP or BLASTN
     database       Which database to search against.
     sequence       The sequence to search.
-    ncbi_gi        TRUE/FALSE whether to give 'gi' identifier.  Def FALSE.
+    ncbi_gi        TRUE/FALSE whether to give 'gi' identifier.
     descriptions   Number of descriptions to show.  Def 500.
     alignments     Number of alignments to show.  Def 500.
     expect         An expect value cutoff.  Def 10.0.
     matrix         Specify an alt. matrix (PAM30, PAM70, BLOSUM80, BLOSUM45).
-    filter         "none" turns off filtering.  Default uses 'seg' or 'dust'.
+    filter         "none" turns off filtering.  Default no filtering
     format_type    "HTML", "Text", "ASN.1", or "XML".  Def. "XML".
     entrez_query   Entrez query to limit Blast search
+    hitlist_size   Number of hits to return. Default 50
 
     This function does no checking of the validity of the parameters
     and passes the values to the server as is.  More help is available at:
@@ -1066,16 +1079,40 @@ def qblast(program, database, sequence,
 
     assert program == 'blastn' or program == 'blastp'
 
-    # hitlist_size parameter contributed by Sjoerd de Vries.
+    # Format the "Put" command, which sends search requests to qblast.
+    # Parameters taken from http://www.ncbi.nlm.nih.gov/BLAST/Doc/node5.html on 9 July 2007
     parameters = [
-        ('QUERY', sequence),
-        ('PROGRAM', program),
-        ('ENTREZ_QUERY', entrez_query),
-        ('DATABASE', database),
-        ('EXPECT', expect),
-        ('HITLIST_SIZE', hitlist_size),
-        ('MATRIX_NAME', matrix),
-        ('FILTER', filter),
+        ('AUTO_FORMAT',auto_format),
+        ('COMPOSITION_BASED_STATISTICS',composition_based_statistics),
+        ('DATABASE',database),
+        ('DB_GENETIC_CODE',db_genetic_code),
+        ('ENDPOINTS',endpoints),
+        ('ENTREZ_QUERY',entrez_query),
+        ('EXPECT',expect),
+        ('FILTER',filter),
+        ('GAPCOSTS',gapcosts),
+        ('GENETIC_CODE',genetic_code),
+        ('HITLIST_SIZE',hitlist_size),
+        ('I_THRESH',i_thresh),
+        ('LAYOUT',layout),
+        ('LCASE_MASK',lcase_mask),
+        ('MATRIX_NAME',matrix_name),
+        ('NUCL_PENALTY',nucl_penalty),
+        ('NUCL_REWARD',nucl_reward),
+        ('OTHER_ADVANCED',other_advanced),
+        ('PERC_IDENT',perc_ident),
+        ('PHI_PATTERN',phi_pattern),
+        ('PROGRAM',program),
+        ('QUERY',sequence),
+        ('QUERY_FILE',query_file),
+        ('QUERY_BELIEVE_DEFLINE',query_believe_defline),
+        ('QUERY_FROM',query_from),
+        ('QUERY_TO',query_to),
+        ('SEARCHSP_EFF',searchsp_eff),
+        ('SERVICE',service),
+        ('THRESHOLD',threshold),
+        ('UNGAPPED_ALIGNMENT',ungapped_alignment),
+        ('WORD_SIZE',word_size),
         ('CMD', 'Put'),
         ]
     query = [x for x in parameters if x[1] is not None]
@@ -1087,15 +1124,25 @@ def qblast(program, database, sequence,
                               {"User-Agent":"BiopythonClient"})
     handle = urllib2.urlopen(request)
 
-    # Format the query now.
+    # Format the "Get" command, which gets the formatted results from qblast
+    # Parameters taken from http://www.ncbi.nlm.nih.gov/BLAST/Doc/node6.html on 9 July 2007    
     rid, rtoe = _parse_qblast_ref_page(handle)
     parameters = [
-        ("RID", rid),
-        ('DESCRIPTIONS', descriptions),
-        ('ALIGNMENTS', alignments),
-        ('NCBI_GI', ncbi_gi),
-        ('FORMAT_TYPE', format_type),
-        ("CMD", "Get"),
+        ('ALIGNMENTS',alignments),
+        ('ALIGNMENT_VIEW',alignment_view),
+        ('DESCRIPTIONS',descriptions),
+        ('ENTREZ_LINKS_NEW_WINDOW',entrez_links_new_window),
+        ('EXPECT_LOW',expect_low),
+        ('EXPECT_HIGH',expect_high),
+        ('FORMAT_ENTREZ_QUERY',format_entrez_query),
+        ('FORMAT_OBJECT',format_object),
+        ('FORMAT_TYPE',format_type),
+        ('NCBI_GI',ncbi_gi),
+        ('RID',rid),
+        ('RESULTS_FILE',results_file),
+        ('SERVICE',service),
+        ('SHOW_OVERVIEW',show_overview),
+        ('CMD', 'Get'),
         ]
     query = [x for x in parameters if x[1] is not None]
     message = urllib.urlencode(query)
