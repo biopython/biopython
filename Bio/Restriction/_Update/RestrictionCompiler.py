@@ -1,4 +1,4 @@
-#!/usr/bin/python 
+#!/usr/bin/env python
 #
 #      Restriction Analysis Libraries.
 #      Copyright (C) 2004. Frederic Sohm.
@@ -342,7 +342,7 @@ class TypeCompiler(object) :
             n+=1
 
 start = '\n\
-#!/usr/bin/python \n\
+#!/usr/bin/env python\n\
 #\n\
 #      Restriction Analysis Libraries.\n\
 #      Copyright (C) 2004. Frederic Sohm.\n\

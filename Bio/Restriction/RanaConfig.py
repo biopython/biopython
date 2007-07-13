@@ -1,4 +1,3 @@
-#!/usr/bin/python
 #
 #      Restriction Analysis Libraries.
 #      Copyright (C) 2004. Frederic Sohm.

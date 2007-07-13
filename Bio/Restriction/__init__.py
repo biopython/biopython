@@ -1,4 +1,4 @@
-#!/usr/bin/python -OO
+#!/usr/bin/env python
 #
 #      Restriction Analysis Libraries.
 #      Copyright (C) 2004. Frederic Sohm.
@@ -78,7 +78,7 @@ from Bio.Restriction.Restriction import *
 #               i.e :
 #                   >>> from Bio.Restriction import RestrictionBatch, EcoRI
 #                   >>> MyBatch = RestrictionBatch(EcoRI)
-#                   >>>
+#                   >>> #!/usr/bin/env python
 #                   >>> EcoRI in MyBatch        # the class EcoRI.
 #                   True
 #                   >>>

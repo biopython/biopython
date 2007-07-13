@@ -1,5 +1,4 @@
-
-#!/usr/bin/python 
+#!/usr/bin/env python
 #
 #      Restriction Analysis Libraries.
 #      Copyright (C) 2004. Frederic Sohm.
