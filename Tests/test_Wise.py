@@ -1,6 +1,9 @@
-#!/usr/bin/env python2.3
+#!/usr/bin/env python
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
 
-__version__ = "$Revision: 1.4 $"
+__version__ = "$Revision: 1.5 $"
 
 import cStringIO
 import doctest, unittest
