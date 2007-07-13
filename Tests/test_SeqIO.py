@@ -47,6 +47,8 @@ test_files = [ \
     ("fasta",  False, 'GFF/NC_001802.fna', 1), #upper case
     ("fasta",  False, 'GFF/NC_001802lc.fna', 1), #lower case
     ("fasta",  True,  'GFF/multi.fna', 3), #Trivial nucleotide alignment
+#Following example is also used in test_registry.py
+    ("fasta",  False, 'Registry/seqs.fasta', 2), #contains blank line
 #Following trivial examples are also used in test_Wise.py
 #    ("fasta",  False, 'Wise/human_114_g01_exons.fna_01', 1),
 #    ("fasta",  False, 'Wise/human_114_g02_exons.fna_01', 1),
@@ -70,6 +72,8 @@ test_files = [ \
     ("swiss",  False, 'SwissProt/sp013', 1),
     ("swiss",  False, 'SwissProt/sp014', 1),
     ("swiss",  False, 'SwissProt/sp015', 1),
+#Following example is also used in test_registry.py
+    ("swiss",  False, 'Registry/EDD_RAT.dat', 1),
 #Following examples are also used in test_GenBank.py
     ("genbank",False, 'GenBank/noref.gb', 1),
     ("genbank",False, 'GenBank/cor6_6.gb', 6),
@@ -106,7 +110,7 @@ test_files = [ \
     ("phylip",    True,  'Phylip/interlaced2.phy', 4),
     ]
 
-# This is a list of tuples.  Each tuple contains a
+# This is a list of two-tuples.  Each tuple contains a
 # list of SeqRecord objects and a description (string)
 test_records = [
     ([], "zero records"),

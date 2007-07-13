@@ -181,6 +181,18 @@ Testing reading fasta format file GFF/multi.fna as an alignment
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+Testing reading fasta format file Registry/seqs.fasta
+ ID and Name='gi|1348916|gb|G26684|G26684',
+ Seq='GATCCCTACCCTTNCCGTTGGTCTCTNTCGCTGACTCGAG...TTATTTC', length=285
+ ID and Name='gi|129628|sp|P07175|PARA_AGRTU',
+ Seq='MPVVVVASSKGGAGKSTTAVVLGTELAHKGVPVTMLDCDP...KLTEALR', length=222
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'phylip' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'stockholm' format
+ Failed: Sequences must all be the same length
 Testing reading nexus format file Nexus/f1.nex
  ID and Name='t2 the name',
  Seq='ACGT', length=4
@@ -345,6 +357,13 @@ Testing reading swiss format file SwissProt/sp014
 Testing reading swiss format file SwissProt/sp015
  ID = 'IPI00383150', Name='IPI00383150.2',
  Seq='MSFQAPRRLLELAGQSLLRDQALAISVLDELPRELFPRLF...FIGPTPC', length=457
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading swiss format file Registry/EDD_RAT.dat
+ ID = 'Q62671', Name='EDD_RAT',
+ Seq='ARRERMTAREEASLRTLEGRRRATLLSARQGMMSARGDFL...TKNFGFV', length=920
  Checking can write/read as 'fasta' format
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
