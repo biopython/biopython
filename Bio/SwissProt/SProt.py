@@ -660,16 +660,16 @@ class _RecordConsumer(AbstractConsumer):
             raise SyntaxError, "I don't understand the date line %s" % line
     
     def description(self, line):
-        self.data.description = self.data.description + line[5:]
+        self.data.description += line[5:]
     
     def gene_name(self, line):
-        self.data.gene_name = self.data.gene_name + line[5:]
+        self.data.gene_name += line[5:]
     
     def organism_species(self, line):
-        self.data.organism = self.data.organism + line[5:]
+        self.data.organism += line[5:]
     
     def organelle(self, line):
-        self.data.organelle = self.data.organelle + line[5:]
+        self.data.organelle += line[5:]
     
     def organism_classification(self, line):
         line = self._chomp(line[5:].rstrip())
@@ -948,6 +948,7 @@ class _SequenceConsumer(AbstractConsumer):
     data      Record with SwissProt data.
     alphabet  The alphabet the generated Seq objects will have.
     """
+    #TODO - Cope with references as done for GenBank
     def __init__(self, alphabet = Alphabet.generic_protein):
         """Initialize a Sequence Consumer
 
@@ -962,6 +963,7 @@ class _SequenceConsumer(AbstractConsumer):
         seq = Seq.Seq("", self.alphabet)
         self.data = SeqRecord.SeqRecord(seq)
         self.data.description = ""
+        self.data.name = ""
         
     def end_record(self):
         self.data.description = self.data.description.rstrip()
@@ -982,6 +984,97 @@ class _SequenceConsumer(AbstractConsumer):
         seq = Seq.Seq(line.replace(" ", "").rstrip(),
                       self.alphabet)
         self.data.seq = self.data.seq + seq
+
+    def gene_name(self, line):
+        #We already store the identification/accession as the records name/id
+        try :
+            self.data.annotations['gene_name'] += line[5:]
+        except KeyError :
+            self.data.annotations['gene_name'] =  line[5:]
+
+    def comment(self, line):
+        #Try and agree with SeqRecord convension from the GenBank parser,
+        #which stores the comments as a long string with newlines
+        #with key 'comment'
+        try :
+            self.data.annotations['comment'] += "\n" + line[5:]
+        except KeyError :
+            self.data.annotations['comment'] =  line[5:]
+        #TODO - Follow SwissProt conventions more closely?
+            
+    def date(self, line):
+        date_str = line.split()[0]
+        uprline = string.upper(line)
+        if uprline.find('CREATED') >= 0 :
+            #Try and agree with SeqRecord convension from the GenBank parser,
+            #which stores the submitted date as 'date'
+            self.data.annotations['date'] = date_str
+        elif uprline.find('LAST SEQUENCE UPDATE') >= 0 :
+            #There is no existing convention from the GenBank SeqRecord parser
+            self.data.annotations['date_last_sequence_update'] = date_str
+        elif uprline.find('LAST ANNOTATION UPDATE') >= 0:
+            #There is no existing convention from the GenBank SeqRecord parser
+            self.data.annotations['date_last_annotation_update'] = date_str
+
+    def keyword(self, line):
+        #Try and agree with SeqRecord convension from the GenBank parser,
+        #which stores a list as 'keywords'
+        cols = line[5:].rstrip().rstrip(".").split(';')
+        cols = [c.strip() for c in cols]
+        cols = filter(None, cols)
+        try :
+            #Extend any existing list of keywords
+            self.data.annotations['keywords'].extend(cols)
+        except KeyError :
+            #Create the list of keywords
+            self.data.annotations['keywords'] = cols
+
+    def organism_species(self, line):
+        #Try and agree with SeqRecord convension from the GenBank parser,
+        #which stores the organism as a string with key 'organism'
+        data = line[5:].rstrip()
+        try :
+            #Append to any existing data split over multiple lines
+            self.data.annotations['organism'] += " " + data
+        except KeyError:
+            self.data.annotations['organism'] = data
+
+    def organism_host(self, line):
+        #There is no SeqRecord convension from the GenBank parser,
+        #based on how it deals with taxonomy ids (list of strings)
+        line = self._chomp(line[5:].rstrip())
+        index = line.find('=')
+        if index >= 0:
+            descr = line[:index]
+            assert descr == "NCBI_TaxID", "Unexpected taxonomy type %s" % descr
+            ids = line[index+1:].split(',')
+        else:
+            ids = line.split(',')
+
+        try :
+            #Append to any existing data
+            self.data.annotations['organism_host'].extend(ids)
+        except KeyError:
+            self.data.annotations['organism_host'] = ids
+
+    def taxonomy_id(self, line):
+        #Try and agree with SeqRecord convension from the GenBank parser,
+        #which stores these as a list of strings with key 'taxonomy'
+
+        line = line[5:].rstrip()
+        index = line.find('=')
+        if index >= 0:
+            descr = line[:index]
+            assert descr == "NCBI_TaxID", "Unexpected taxonomy type %s" % descr
+            ids = line[index+1:].split(',')
+        else:
+            ids = line.split(',')
+
+        try :
+            #Append to any existing data
+            self.data.annotations['taxonomy'].extend(ids)
+        except KeyError:
+            self.data.annotations['taxonomy'] = ids
 
 def index_file(filename, indexname, rec2key=None):
     """index_file(filename, indexname, rec2key=None)
@@ -1018,4 +1111,33 @@ def index_file(filename, indexname, rec2key=None):
             raise KeyError, "duplicate key %s found" % key
 
         index[key] = start, length
+        
+if __name__ == "__main__" :
+    print "Quick self test..."
+
+    example_filename = "../../Tests/SwissProt/sp008"
+
+    import os
+    if not os.path.isfile(example_filename) :
+        print "Missing test file %s" % example_filename
+    else :
+        #Try parsing it!
+        
+        handle = open(example_filename)
+        for record in Iterator(handle, RecordParser()) :
+            print record.entry_name
+            print ",".join(record.accessions)
+            print record.keywords
+            print repr(record.organism)
+            print record.sequence[:20] + "..."
+
+        handle = open(example_filename)
+        for record in Iterator(handle, SequenceParser()) :
+            print record.name
+            print record.id
+            print record.annotations['keywords']
+            print repr(record.annotations['organism'])
+            print record.seq.tostring()[:20] + "..."
+            
+
         
