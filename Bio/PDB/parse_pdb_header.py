@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#!/usr/bin/env python
 #
 # parse_pdb_header.py
 # parses header of PDB files into a python dictionary.
