@@ -130,11 +130,11 @@ class Polypeptide(list):
         ppl=[]
         lng=len(self)
         for i in range(0, lng):
-            r=self[i]
+            res=self[i]
             try:
-                n=r['N'].get_vector()
-                ca=r['CA'].get_vector()
-                c=r['C'].get_vector()
+                n=res['N'].get_vector()
+                ca=res['CA'].get_vector()
+                c=res['C'].get_vector()
             except:
                 # Some atoms are missing
                 # Phi/Psi cannot be calculated for this residue
