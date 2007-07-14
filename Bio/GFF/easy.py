@@ -6,12 +6,12 @@
 # as part of this package.
 
 """
-Bio.easy: some functions to ease the use of Biopython
+Bio.GFF.easy: some functions to ease the use of Biopython
 """
 
 from __future__ import generators # requires Python 2.2
 
-__version__ = "$Revision: 1.6 $"
+__version__ = "$Revision: 1.7 $"
 # $Source: /home/bartek/cvs2bzr/biopython_fastimport/cvs_repo/biopython/Bio/GFF/easy.py,v $
 
 import copy
@@ -23,7 +23,12 @@ import Bio
 from Bio import GenBank
 from Bio.Data import IUPACData
 from Bio.Seq import Seq
-from Bio.SeqIO.FASTA import FastaReader, FastaWriter
+
+#from Bio.SeqIO.FASTA import FastaReader, FastaWriter
+#The whole of Bio.SeqIO.FASTA has been deprecated, so
+#we'll use the new Bio.SeqIO functions instead:
+from Bio import SeqIO
+
 from Bio import SeqUtils
 
 import GenericTools
@@ -442,18 +447,30 @@ def fasta_single(filename=None, string=None):
     >>> record.id
     'gi|9629360|ref|NP_057850.1|'
     >>> record.description
-    'Gag [Human immunodeficiency virus type 1]'
+    'gi|9629360|ref|NP_057850.1| Gag [Human immunodeficiency virus type 1]'
     >>> record.seq[0:5]
-    Seq('MGARA', Alphabet())
+    Seq('MGARA', SingleLetterAlphabet())
     """
+    #Returns the first record in a fasta file as a SeqRecord,
+    #or None if there are no records in the file.
     if string:
         import cStringIO
-        return FastaReader(cStringIO.StringIO(string)).next()
-    return FastaReader(open_file(filename)).next()
+        handle = cStringIO.StringIO(string)
+    else :
+        handle = open_file(filename)
+    try :
+        record = SeqIO.parse(handle, format="fasta").next()
+    except StopIteration :
+        record = None
+    return record
 
 def fasta_multi(filename=None):
-    reader = FastaReader(open_file(filename))
-    while 1:
+    #Simple way is just:
+    #return SeqIO.parse(open_file(filename), format="fasta")
+    #However, for backwards compatibility make sure we raise
+    #the StopIteration exception rather than returning None.
+    reader = SeqIO.parse(open_file(filename), format="fasta")
+    while True:
         record = reader.next()
         if record is None:
             raise StopIteration
@@ -466,15 +483,14 @@ def fasta_readrecords(filename=None):
     >>> records[0].id
     'test1'
     >>> records[2].seq
-    Seq('AAACACAC', Alphabet())
+    Seq('AAACACAC', SingleLetterAlphabet())
     """
-    records = []
-    for record in fasta_multi(filename):
-        records.append(record)
-    return records
+    return list(SeqIO.parse(open_file(filename), format="fasta"))
 
 def fasta_write(filename, records):
-    FastaWriter(file(filename, "w")).write_records(records)
+    handle = open(filename, "w")
+    SeqIO.write(records, handle, format="fasta")
+    handle.close()
 
 def genbank_single(filename):
     """
@@ -574,16 +590,17 @@ def record_coords(record, start, end, strand=0, upper=0):
     else:
         return subseq
 
-class TempFastaWriter(FastaWriter):
-    def __init__(self, *args, **keywds):
-        self.file = GenericTools.TempFile()
-        FastaWriter.__init__(self, self.file, *args, **keywds)
-
-class TempFastaWriterSingle(TempFastaWriter):
-    def __init__(self, seqrecord, *args, **keywds):
-        TempFastaWriter.__init__(self, *args, **keywds)
-        self.write(seqrecord)
-        self.close()
+#Removed as Bio.SeqIO.FASTA.FastaWriter has been deprecated
+#class TempFastaWriter(FastaWriter):
+#    def __init__(self, *args, **keywds):
+#        self.file = GenericTools.TempFile()
+#        FastaWriter.__init__(self, self.file, *args, **keywds)
+#
+#class TempFastaWriterSingle(TempFastaWriter):
+#    def __init__(self, seqrecord, *args, **keywds):
+#        TempFastaWriter.__init__(self, *args, **keywds)
+#        self.write(seqrecord)
+#        self.close()
 
 def _test(*args, **keywds):
     import doctest, sys
