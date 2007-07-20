@@ -1,0 +1,13 @@
+The following test files are included
+
+GenePop
+-------
+c2line.gen  - 2 chars per allele, one locus name per line
+c3line.gen  - 3 chars per allele, one locus name per line
+c2space.gen - 2 chars per allele, all loci in one line
+c3space.gen - 3 chars per allele, all loci in one line
+
+
+FDist
+-----
+fdist1
