@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 """
 This module can be used to generate python source code. It has an interface
@@ -9,7 +9,7 @@ similar to the "new" module.
 import sys, os
 import string
 
-BANGLINE = "#!/usr/bin/python\n"
+BANGLINE = "#!/usr/bin/env python\n"
 
 def _tuplestr(tup):
 	return string.join(map(str, tup), ", ")

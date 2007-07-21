@@ -1,4 +1,4 @@
-#!/usr/bin/python -i
+#!/usr/bin/env python
 
 """
 This module implements the XML POM -- the Python Object Model for XML. It is
