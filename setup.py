@@ -390,7 +390,7 @@ PACKAGES = [
     'Bio.Pathway',
     'Bio.Pathway.Rep',
     'Bio.PDB',
-#   'Bio.PDB.mmCIF',
+    'Bio.PDB.mmCIF',
     'Bio.Prosite',
     'Bio.Rebase',
     'Bio.Restriction',
