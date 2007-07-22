@@ -202,11 +202,3 @@ class _Argument(_AbstractParameter):
             return "%s " % self.value
         else:
             return " "
-
-# --- general functions to check for valid parameters
-def _file_exists(self, filename):
-    """Make sure that a passed filename exists.
-    """
-    if not(os.path.exists(filename)):
-        raise ValueError("File %s does not exist." % filename)
-

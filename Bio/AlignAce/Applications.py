@@ -52,25 +52,15 @@ class CompareAceCommandline(Application.AbstractCommandline):
     """
     def __init__(self, cmd = "CompareACE"):
 
+        import os.path
         Application.AbstractCommandline.__init__(self)
         self.program_name = cmd
 
         self.parameters = \
           [
-            _Argument(["motif1"],["input","file"], _file_exists,1,"name of file containing motif 1"),
-            _Argument(["motif2"],["input","file"], _file_exists,1,"name of file containing motif 2"),
+            _Argument(["motif1"],["input","file"], os.path.exists,1,"name of file containing motif 1"),
+            _Argument(["motif2"],["input","file"], os.path.exists,1,"name of file containing motif 2"),
           ]
 
     def run(self):
         return Application.generic_run(self)
-
-def _file_exists(file_name):
-    """
-    Checks whether a given file exists
-    """
-    import os
-    try:
-        os.stat(file_name)
-        return True
-    except OSError:
-        return False
