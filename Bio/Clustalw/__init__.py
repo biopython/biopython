@@ -380,62 +380,78 @@ class MultipleAlignCL:
 
     def __str__(self):
         """Write out the command line as a string."""
-        cline = self.command + " " + self.sequence_file
+
+        cline = self.command + " -INFILE=" + self.sequence_file
+        #Don't use this:
+        #cline = self.command + " " + self.sequence_file
+        #
+        #This may be a windows only quirk of clustalw, but while
+        #these work at the command line:
+        #
+        #clustalw.exe input.faa
+        #clustalw.exe -input=input.faa
+        #clustalw.exe -input=C:\full\path\input.faa
+        #
+        #this fails:
+        #
+        #clustalw.exe C:\full\path\input.faa
+        #
+        #Thanks to Emanuel Hey for flagging this on the mailing list.
 
         # general options
         if self.type:
-            cline = cline + " -TYPE=%s" % self.type
+            cline += " -TYPE=%s" % self.type
         if self.is_quick == 1:
             #Some versions of clustalw are case sensitive,
             #and require -quicktree rather than -QUICKTREE
-            cline = cline + " -quicktree"
+            cline += " -quicktree"
         if self.allow_negative == 1:
-            cline = cline + " -NEGATIVE"
+            cline += " -NEGATIVE"
 
         # output options
         if self.output_file:
-            cline = cline + " -OUTFILE=%s" % self.output_file
+            cline += " -OUTFILE=%s" % self.output_file
         if self.output_type:
-            cline = cline + " -OUTPUT=%s" % self.output_type
+            cline += " -OUTPUT=%s" % self.output_type
         if self.output_order:
-            cline = cline + " -OUTORDER=%s" % self.output_order
+            cline += " -OUTORDER=%s" % self.output_order
         if self.change_case:
-            cline = cline + " -CASE=%s" % self.change_case
+            cline += " -CASE=%s" % self.change_case
         if self.add_seqnos:
-            cline = cline + " -SEQNOS=%s" % self.add_seqnos
+            cline += " -SEQNOS=%s" % self.add_seqnos
         if self.new_tree:
             # clustal does not work if -align is written -ALIGN
-            cline = cline + " -NEWTREE=%s -align" % self.new_tree
+            cline += " -NEWTREE=%s -align" % self.new_tree
 
         # multiple alignment options
         if self.guide_tree:
-            cline = cline + " -USETREE=%s" % self.guide_tree
+            cline += " -USETREE=%s" % self.guide_tree
         if self.protein_matrix:
-            cline = cline + " -MATRIX=%s" % self.protein_matrix
+            cline += " -MATRIX=%s" % self.protein_matrix
         if self.dna_matrix:
-            cline = cline + " -DNAMATRIX=%s" % self.dna_matrix
+            cline += " -DNAMATRIX=%s" % self.dna_matrix
         if self.gap_open_pen:
-            cline = cline + " -GAPOPEN=%s" % self.gap_open_pen
+            cline += " -GAPOPEN=%s" % self.gap_open_pen
         if self.gap_ext_pen:
-            cline = cline + " -GAPEXT=%s" % self.gap_ext_pen
+            cline += " -GAPEXT=%s" % self.gap_ext_pen
         if self.is_no_end_pen == 1:
-            cline = cline + " -ENDGAPS"
+            cline += " -ENDGAPS"
         if self.gap_sep_range:
-            cline = cline + " -GAPDIST=%s" % self.gap_sep_range
+            cline += " -GAPDIST=%s" % self.gap_sep_range
         if self.is_no_pgap == 1:
-            cline = cline + " -NOPGAP"
+            cline += " -NOPGAP"
         if self.is_no_hgap == 1:
-            cline = cline + " -NOHGAP"
+            cline += " -NOHGAP"
         if len(self.h_gap_residues) != 0:
             # stick the list of residues together as one big list o' residues
             residue_list = ''
             for residue in self.h_gap_residues:
                 residue_list = residue_list + residue
-            cline = cline + " -HGAPRESIDUES=%s" % residue_list
+            cline += " -HGAPRESIDUES=%s" % residue_list
         if self.max_div:
-            cline = cline + " -MAXDIV=%s" % self.max_div
+            cline += " -MAXDIV=%s" % self.max_div
         if self.trans_weight:
-            cline = cline + " -TRANSWEIGHT=%s" % self.trans_weight
+            cline += " -TRANSWEIGHT=%s" % self.trans_weight
 
         return cline
 
