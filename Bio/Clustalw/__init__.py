@@ -22,7 +22,8 @@ o MultipleAlignCL"""
 
 # standard library
 import os
-import string
+import sys
+import string #Obsolete - we should switch to using string object methods instead!
 
 # biopython
 from Bio.Seq import Seq
@@ -74,7 +75,9 @@ def do_alignment(command_line, alphabet=None):
     run_clust = os.popen(str(command_line))
     status = run_clust.close()
 
+    
     # The exit status is the second byte of the termination status
+    # TODO - Check this holds on win32...
     value = 0
     if status: value = status / 256
     # check the return value for errors, as on 1.81 the return value
@@ -381,22 +384,60 @@ class MultipleAlignCL:
     def __str__(self):
         """Write out the command line as a string."""
 
-        cline = self.command + " -INFILE=" + self.sequence_file
-        #Don't use this:
-        #cline = self.command + " " + self.sequence_file
-        #
-        #This may be a windows only quirk of clustalw, but while
-        #these work at the command line:
-        #
-        #clustalw.exe input.faa
-        #clustalw.exe -input=input.faa
-        #clustalw.exe -input=C:\full\path\input.faa
-        #
-        #this fails:
-        #
-        #clustalw.exe C:\full\path\input.faa
-        #
-        #Thanks to Emanuel Hey for flagging this on the mailing list.
+        if sys.platform <> "win32" :
+            #On Linux with clustalw 1.83, you can do:
+            #clustalw input.faa
+            #clustalw /full/path/input.faa
+            #clustalw -INFILE=input.faa
+            #clustalw -INFILE=/full/path/input.faa
+            #
+            #Note these fail (using DOS style slashes):
+            #
+            #clustalw /INFILE=input.faa
+            #clustalw /INFILE=/full/path/input.faa
+            #
+            #To keep things simple, and follow the original
+            #behaviour of Bio.Clustalw use this:
+            cline = self.command + " " + self.sequence_file
+        else :
+            #On Windows XP with clustalw.exe 1.83, these work at
+            #the command prompt:
+            #
+            #clustalw.exe input.faa
+            #clustalw.exe /INFILE=input.faa
+            #clustalw.exe /INFILE="input.faa"
+            #clustalw.exe /INFILE="with space.faa"
+            #clustalw.exe /INFILE=C:\full\path\input.faa
+            #clustalw.exe /INFILE="C:\full path\with spaces.faa"
+            #
+            #Sadly these fail:
+            #clustalw.exe "input.faa"
+            #clustalw.exe "with space.faa"
+            #clustalw.exe C:\full\path\input.faa
+            #clustalw.exe "C:\full path\with spaces.faa"
+            #
+            #These also fail but a minus/dash does seem to
+            #work with other options (!):
+            #clustalw.exe -INFILE=input.faa
+            #clustalw.exe -INFILE=C:\full\path\input.faa
+            #
+            #Also these fail:
+            #clustalw.exe "/INFILE=input.faa"
+            #clustalw.exe "/INFILE=C:\full\path\input.faa"
+            #
+            #Thanks to Emanuel Hey for flagging this on the mailing list.
+            #
+            #In addtion, both self.command and self.sequence_file
+            #may contain spaces, so should be quoted. But clustalw
+            #is fussy.
+            if self.command.count(" ") > 0 :
+                cline = '"%s"' % self.command
+            else :
+                cline = self.command
+            if self.sequence_file.count(" ") > 0 :
+                cline += ' /INFILE="%s"' % self.sequence_file
+            else :
+                cline += ' /INFILE=%s' % self.sequence_file
 
         # general options
         if self.type:
