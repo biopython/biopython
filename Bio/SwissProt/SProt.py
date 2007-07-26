@@ -478,6 +478,9 @@ class _Scanner:
     
     def _scan_ft(self, uhandle, consumer):
         self._scan_line('FT', uhandle, consumer.feature_table, any_number=1)
+
+    def _scan_pe(self, uhandle, consumer):
+        self._scan_line('PE', uhandle, consumer.protein_existence, any_number=1)
     
     def _scan_sq(self, uhandle, consumer):
         self._scan_line('SQ', uhandle, consumer.sequence_header, exactly_one=1)
@@ -502,6 +505,7 @@ class _Scanner:
         _scan_reference,
         _scan_cc,
         _scan_dr,
+        _scan_pe,
         _scan_kw,
         _scan_ft,
         _scan_sq,
@@ -898,6 +902,10 @@ class _RecordConsumer(AbstractConsumer):
             description = first_seq + " -> " + second_seq + extra_info
 
         return description
+    
+    def protein_existence(self, line):
+        #TODO - Record this information?
+        pass
     
     def sequence_header(self, line):
         cols = line.split()
