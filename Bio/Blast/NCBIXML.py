@@ -557,6 +557,10 @@ def parse(handle, debug=0):
 
     text = handle.read(BLOCK)
     pending = ""
+
+    if not text :
+        #NO DATA FOUND!
+        raise ValueError("Your XML file was empty")
     
     while text :
         #We are now starting a new XML file
