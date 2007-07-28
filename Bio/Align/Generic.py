@@ -75,6 +75,9 @@ class Alignment:
 
         Arguments:
         o descriptor - The descriptive id of the sequence being added.
+                       This will be used as the resulting SeqRecord's
+                       .id property (and, for historical compatibility,
+                       also the .description property)
         o sequence - A string with sequence info.
         o start - You can explicitly set the start point of the sequence.
         This is useful (at least) for BLAST alignments, which can just
@@ -86,7 +89,15 @@ class Alignment:
         1.0 => highest weight)
         """
         new_seq = Seq(sequence, self._alphabet)
-        new_record = SeqRecord(new_seq, description = descriptor)
+
+        #We are now effectively using the SeqRecord's .id as
+        #the primary identifier (e.g. in Bio.SeqIO) so we should
+        #populate it with the descriptor.
+        #For backwards compatibility, also store this in the
+        #SeqRecord's description property.
+        new_record = SeqRecord(new_seq,
+                               id = descriptor,
+                               description = descriptor)
 
         # hack! We really need to work out how to deal with annotations
         # and features in biopython. Right now, I'll just use the
