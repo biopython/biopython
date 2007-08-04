@@ -65,6 +65,7 @@ class Record:
             rep.append('Pop\n')
             for indiv in pop:
                 name, markers = indiv
+                rep.append(name)
                 rep.append(',')
                 for marker in markers:
                     rep.append(' ')
