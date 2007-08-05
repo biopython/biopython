@@ -20,32 +20,26 @@ from time import strftime, clock
 #from logging import debug
 
 class FDistController:
-    def __init__(self, fdist_dir = ''):
+    def __init__(self, fdist_dir = '', ext = None):
         """Initializes the controller.
         
         fdist_dir is the directory where fdist2 is.
+        ext is the extension of binaries (.exe on windows, 
+          autodetected on python necessary on jython)
         
-        The initializer checks for existance and executability of binaries.
         """
         self.tmp_idx = 0
         self.fdist_dir = fdist_dir
         self.os_name = os.name
         if self.os_name=='nt':
-            ext = '.exe'
+            py_ext = '.exe'
         else:
-            ext = ''
-        executable_list = ['datacal' + ext, 'fdist2' + ext,
-            'cplot' + ext, 'pv' + ext]
-        self.ext = ext
+            py_ext = ''
+        if ext == None:
+            self.ext = py_ext
+        else:
+            self.ext = ext
         exec_counts = 0
-        #dir_contents = os.listdir(self.fdist_dir)
-        #for file_name in executable_list:
-        #    if file_name in dir_contents:
-        #        if not os.access(self.fdist_dir +os.sep+ file_name, os.X_OK):
-        #            raise IOError, file_name + " not executable"
-        #    else:
-        #        raise IOError, file_name + " not available"
-        # #Doesn't work on jython, and doesn't make much sense...
 
     def _get_path(self, app):
         """Returns the path to an fdist application.
@@ -75,7 +69,7 @@ class FDistController:
         f.close()
         curr_dir = os.getcwd()
         #os.chdir(data_dir)
-        os.system('cd ' + data_dir+ ';' + self._get_path('datacal') + ' < ' + in_name + ' > ' + out_name)
+        os.system('cd ' + data_dir+ ' && ' + self._get_path('datacal') + ' < ' + in_name + ' > ' + out_name)
         #os.chdir(curr_dir)
         f = open(out_name)
         fst_line = f.readline().rstrip().split(' ')
@@ -128,7 +122,7 @@ class FDistController:
         inf.write('8\n')
         inf.close()
 
-        os.system('cd ' + data_dir + '; ' +
+        os.system('cd ' + data_dir + ' && ' +
             self._get_path('fdist2') + ' < ' + in_name + ' > ' + out_name)
         f = open(data_dir + os.sep + out_name)
         lines = f.readlines()
@@ -190,7 +184,7 @@ class FDistController:
         f.write('out.dat out.cpl\n' + str(ci) + '\n')
         f.close()
         curr_dir = os.getcwd()
-        os.system('cd ' + data_dir + ';'  +
+        os.system('cd ' + data_dir + ' && '  +
             self._get_path('cplot') + ' < ' + in_name + ' > ' + out_name)
         os.remove(data_dir + os.sep + in_name)
         os.remove(data_dir + os.sep + out_name)
