@@ -34,6 +34,11 @@ class FDistAsync(FDistController):
 class SplitFDist:
     def __init__(self, report_fun = None,
         num_thr = 2, split_size = 1000, fdist_dir = '', ext = None):
+        """
+
+          report_fun - function to be called when a part of fdist is done
+                       Important: Concurrent calls are possible
+        """
         self.async = Local.Local(num_thr)
         self.async.hooks['fdist'] = FDistAsync(fdist_dir, ext)
         self.report_fun = report_fun
@@ -50,12 +55,12 @@ class SplitFDist:
                 self.async.access_ds.acquire()
                 fst, files = self.async.done[done]
                 del self.async.done[done]
-                self.async.access_ds.release()
                 out_dat = files['out.dat']
                 f = open(self.data_dir + os.sep + 'out.dat','a')
                 f.writelines(out_dat.readlines())
                 f.close()
                 out_dat.close()
+                self.async.access_ds.release()
                 for file in os.listdir(self.parts[done]):
                     os.remove (self.parts[done] + os.sep + file)
                 os.rmdir(self.parts[done])
