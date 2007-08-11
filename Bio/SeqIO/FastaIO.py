@@ -54,13 +54,15 @@ def FastaIterator(handle, alphabet = single_letter_alphabet, title2ids = None) :
 
 class FastaWriter(SequentialSequenceWriter):
     """Class to write Fasta format files"""
-    def __init__(self, handle, wrap=None, record2title=None):
+    def __init__(self, handle, wrap=60, record2title=None):
         """Create a Fasta writer.
 
         handle - Handle to an output file, e.g. as returned
                  by open(filename, "w")
         wrap -   Optional line length used to wrap sequence lines.
-                 By default a single long line is used for each sequence.
+                 Defaults to wrapping the sequence at 60 characters
+                 Use zero (or None) for no wrapping, giving a single
+                 long line for the sequence.
         record2title - Optional function to return the text to be
                  used for the title line of each record.  By default the
                  a combination of the record.id and record.description
@@ -125,6 +127,8 @@ class FastaWriter(SequentialSequenceWriter):
             self.handle.write(data + "\n")
 
 if __name__ == "__main__" :
+    print "Running quick self test"
+    
     import os
     from Bio.Alphabet import generic_protein, generic_nucleotide
     
@@ -185,4 +189,4 @@ if __name__ == "__main__" :
         count = count+1
     assert count==0
 
-
+    print "Done"
