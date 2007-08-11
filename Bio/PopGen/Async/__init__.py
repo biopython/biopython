@@ -21,12 +21,12 @@ class Async:
     '''
 
     def __init__(self):
-    '''Async constructor.
+        '''Async constructor.
 
-       Initializes the queues, among other things.
-       Of notice, is the access_ds lock for controlling exclusive
-         access to this object.
-    '''
+           Initializes the queues, among other things.
+           Of notice, is the access_ds lock for controlling exclusive
+               access to this object.
+        '''
         self.running = {}
         self.waiting = []
         self.done = {}
