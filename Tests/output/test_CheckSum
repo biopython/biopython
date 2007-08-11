@@ -1,16 +1,34 @@
 test_CheckSum
 Example 1, length 110, QSALTQPASV...
- crc32 = -1299987031
- crc64 = CRC-44CAAD88706CC153
- gcg = 9729
- seguid = BpBeDdcNUYNsdk46JoJdw7Pd3BI
+ Using a string object:
+  crc32 = -1299987031
+  crc64 = CRC-44CAAD88706CC153
+  gcg = 9729
+  seguid = BpBeDdcNUYNsdk46JoJdw7Pd3BI
+ Using a Seq object:
+  crc32 = -1299987031
+  crc64 = CRC-44CAAD88706CC153
+  gcg = 9729
+  seguid = BpBeDdcNUYNsdk46JoJdw7Pd3BI
 Example 2, length 110, QSALTQPASV...
- crc32 = 802105214
- crc64 = CRC-44CAAD88706CC153
- gcg = 9647
- seguid = X5XEaayob1nZLOc7eVT9qyczarY
+ Using a string object:
+  crc32 = 802105214
+  crc64 = CRC-44CAAD88706CC153
+  gcg = 9647
+  seguid = X5XEaayob1nZLOc7eVT9qyczarY
+ Using a Seq object:
+  crc32 = 802105214
+  crc64 = CRC-44CAAD88706CC153
+  gcg = 9647
+  seguid = X5XEaayob1nZLOc7eVT9qyczarY
 Example 3, length 32, ATGCGTATCG...
- crc32 = 817679856
- crc64 = CRC-6234FF451DC6DFC6
- gcg = 7959
- seguid = 8WCUbVjBgiRmM10gfR7XJNjbwnE
+ Using a string object:
+  crc32 = 817679856
+  crc64 = CRC-6234FF451DC6DFC6
+  gcg = 7959
+  seguid = 8WCUbVjBgiRmM10gfR7XJNjbwnE
+ Using a Seq object:
+  crc32 = 817679856
+  crc64 = CRC-6234FF451DC6DFC6
+  gcg = 7959
+  seguid = 8WCUbVjBgiRmM10gfR7XJNjbwnE

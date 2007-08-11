@@ -38,17 +38,16 @@ examples = [str_light_chain_one, str_light_chain_two,
 
 for i, seq_str in enumerate(examples) :
     print "Example %i, length %i, %s..." % (i+1, len(seq_str), seq_str[:10])
-    for checksum in [crc32, crc64, gcg, seguid] :
-    
-        #First using a string,
-        seq_checksum = checksum(seq_str)
-        print " %s = %s" % (checksum.__name__, seq_checksum)
-        
-        #Next using a Seq object
-        seq_obj = Seq(seq_str, single_letter_alphabet)
-        try :
-            assert seq_checksum == checksum(seq_obj)
-        except Exception, e:
-   	        print " %s failed on Seq object, %s" % (checksum.__name__, str(e))
-   	    
 
+    #First using a string
+    print " Using a string object:"
+    for checksum in [crc32, crc64, gcg, seguid] :
+        seq_checksum = checksum(seq_str)
+        print "  %s = %s" % (checksum.__name__, seq_checksum)
+        
+    #Next using a Seq object
+    seq_obj = Seq(seq_str, single_letter_alphabet)
+    print " Using a Seq object:"
+    for checksum in [crc32, crc64, gcg, seguid] :
+        seq_checksum = checksum(seq_obj)
+        print "  %s = %s" % (checksum.__name__, seq_checksum)
