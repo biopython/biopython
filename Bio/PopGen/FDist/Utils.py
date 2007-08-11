@@ -14,6 +14,12 @@ import Bio.PopGen.FDist
 
 def convert_genepop_to_fdist(gp_rec):
     """Converts a GenePop record to a FDist one.
+
+       Parameters:
+       gp_rec - Genepop Record
+
+       Returns:
+       FDist record.
     """
     fd_rec = Bio.PopGen.FDist.Record()
     

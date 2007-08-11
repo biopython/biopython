@@ -21,6 +21,12 @@ class Async:
     '''
 
     def __init__(self):
+    '''Async constructor.
+
+       Initializes the queues, among other things.
+       Of notice, is the access_ds lock for controlling exclusive
+         access to this object.
+    '''
         self.running = {}
         self.waiting = []
         self.done = {}
@@ -31,13 +37,15 @@ class Async:
     def run_program(self, program, parameters, input_files):
         '''Runs a program.
         
-           Real 
-           _run_program to be implemented by concrete classes.
+           Real _run_program to be implemented by concrete classes.
 
-           @param program String identifying program.
-           @param parameters List of String parameters.
-           @param input_files Hash of Input file descriptors.
-           @return Task Id.
+           parameters:
+           program String identifying program.
+           parameters List of String parameters.
+           input_files Hash of Input file descriptors.
+
+           returns:
+           Task Id.
 
            The input_files hash key is the path that is passed
            to the program. It should always be relative.
@@ -55,8 +63,11 @@ class Async:
         ''' Returns the results for a certain Id, the info for that Id is
             forgotten.
 
-            @param id Id of the task.
-            @return (return_code, output_files) return code and file access
+            parameters:
+            id Id of the task.
+
+            returns:
+            (return_code, output_files) return code and file access
             object.
 
             The output_files hash key is a relative file name, and the value a

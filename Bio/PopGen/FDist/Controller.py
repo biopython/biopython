@@ -8,6 +8,8 @@
 """
 This module allows to control fdist.
 
+This will allow to call fdist and associated program (cplot, datacal, pv).
+
 http://www.rubic.rdg.ac.uk/~mab/software.html
 """
 
@@ -25,7 +27,7 @@ class FDistController:
         
         fdist_dir is the directory where fdist2 is.
         ext is the extension of binaries (.exe on windows, 
-          autodetected on python necessary on jython)
+          none on Unix)
         
         """
         self.tmp_idx = 0
@@ -43,6 +45,8 @@ class FDistController:
 
     def _get_path(self, app):
         """Returns the path to an fdist application.
+
+           Includes Path where fdist can be found plus executable extension.
         """
         if self.fdist_dir == '':
             return app + self.ext
@@ -51,6 +55,9 @@ class FDistController:
 
     def _get_temp_file(self):
         """Gets a temporary file name.
+
+           Returns a temporary file name, if executing inside jython
+           tries to replace unexisting tempfile.mkstemp().
         """
         if platform.startswith('java'): #no mkstemp, hack!
             self.tmp_idx += 1
@@ -61,6 +68,8 @@ class FDistController:
 
     def run_datacal(self, data_dir='.'):
         """Executes datacal.
+        
+           data_dir - Where the data is found.
         """
         in_name = data_dir + os.sep + self._get_temp_file()
         out_name = data_dir + os.sep + self._get_temp_file()
@@ -85,14 +94,17 @@ class FDistController:
         mut = 0, num_sims = 20000, data_dir='.'):
         """Executes fdist.
         
-        Parameters
+        Parameters:
         npops - Number of populations
         nsamples - Number of populations sampled
         fst - expected Fst
         sample_size - Sample size per population
         mut - 1=Stepwise, 0=Infinite allele
         num_sims - number of simulations
-        dir - directory where fdist will be executed (must be rw)
+        data_dir - Where the data is found
+
+        Returns:
+        fst - Average Fst
         
         Important Note: This can take quite a while to run!
         """
@@ -138,10 +150,11 @@ class FDistController:
         mut = 0, num_sims = 20000, data_dir='.', try_runs = 5000, limit=0.001):
         """Exectues fdist trying to force Fst.
         
-        Parameters
-        try_runs - number of simulations on the part trying to get
-                   Fst correct.
-        limit - interval limit
+        Parameters:
+        try_runs - Number of simulations on the part trying to get
+                   Fst correct
+        limit - Interval limit
+        Other parameters can be seen on run_fdist.
         """
         max_run_fst = 1
         min_run_fst = 0
@@ -177,6 +190,8 @@ class FDistController:
     def run_cplot(self, ci= 0.95, data_dir='.'):
         """Executes cplot.
 
+        ci - Confidence interval.
+        data_dir - Where the data is found.
         """
         in_name = self._get_temp_file()
         out_name = self._get_temp_file()
@@ -206,6 +221,8 @@ class FDistController:
     def run_pv(self, out_file='probs.dat', data_dir='.'):
         """Executes pv.
 
+        out_file - Name of output file.
+        data_dir - Where the data is found.
         """
         in_name = self._get_temp_file()
         out_name = self._get_temp_file()
