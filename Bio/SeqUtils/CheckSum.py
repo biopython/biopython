@@ -1,7 +1,16 @@
 # crc32, crc64, gcg, and seguid
 # crc64 is adapted from BioPerl
 
-from binascii import crc32
+from binascii import crc32 as _crc32
+
+def crc32(seq) :
+    """Returns the crc32 checksum for a sequence (string or Seq object)"""
+    try :
+        #Assume its a Seq object
+        return _crc32(seq.tostring())
+    except AttributeError :
+        #Assume its a string
+        return _crc32(seq)
 
 def _init_table_h():
     _table_h = []
@@ -21,6 +30,7 @@ def _init_table_h():
 _table_h = _init_table_h()
 
 def crc64(s):
+    """Returns the crc64 checksum for a sequence (string or Seq object)"""
     crcl = 0
     crch = 0
     for c in s:
@@ -35,12 +45,14 @@ def crc64(s):
 
 
 def gcg(seq):
-    """ given a nucleotide or amino-acid secuence (or any string),
-        returns the GCG checksum (int). Checksum used by GCG program.
-        seq type = str.
-        Based on BioPerl GCG_checksum. Adapted by Sebastian Bassi
-        with the help of John Lenton, Pablo Ziliani, and Gabriel Genellina.
-        All sequences are converted to uppercase """
+    """Returns the GCG checksum (int) for a sequence (string or Seq object)
+
+    Given a nucleotide or amino-acid secuence (or any string),
+    returns the GCG checksum (int). Checksum used by GCG program.
+    seq type = str.
+    Based on BioPerl GCG_checksum. Adapted by Sebastian Bassi
+    with the help of John Lenton, Pablo Ziliani, and Gabriel Genellina.
+    All sequences are converted to uppercase """
     index = checksum = 0
     if type(seq)!=type("aa"):
         seq=seq.tostring()
@@ -51,12 +63,14 @@ def gcg(seq):
     return checksum % 10000
 
 def seguid(seq):
-    """ given a nucleotide or amino-acid secuence (or any string),
-        returns the SEGUID string (A SEquence Globally Unique IDentifier).
-        seq type = str. 
-        For more information about SEGUID, see:
-        http://bioinformatics.anl.gov/seguid/
-        DOI: 10.1002/pmic.200600032 """
+    """Returns the SEGUID (string) for a sequence (string or Seq object)
+    
+    Given a nucleotide or amino-acid secuence (or any string),
+    returns the SEGUID string (A SEquence Globally Unique IDentifier).
+    seq type = str. 
+    For more information about SEGUID, see:
+    http://bioinformatics.anl.gov/seguid/
+    DOI: 10.1002/pmic.200600032 """
     try:
         #Python 2.5 sha1 is in hashlib
         import hashlib
