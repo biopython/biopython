@@ -4,7 +4,8 @@
 % If you just want to read the documentation, you can pick up ready-to-go 
 % copies in both pdf and html format from:
 %
-% http://www.biopython.org/documentation/
+% http://biopython.org/DIST/docs/tutorial/Tutorial.html
+% http://biopython.org/DIST/docs/tutorial/Tutorial.pdf
 %
 % If you want to typeset the documentation, you'll need a standard TeX/LaTeX
 % distribution (I use teTeX, which works great for me on unix platforms).
@@ -3209,7 +3210,9 @@ Model (in this case model 1).
 
 \section{Bio.PopGen: Population genetics}
 
-Bio.PopGen is a new Biopython module supporting population genetics.
+Bio.PopGen is a new Biopython module supporting population genetics,
+available in Biopython 1.44 onwards.
+
 The medium term objective for the module is to support widely used data
 formats, applications and databases. This module is currently under intense
 development and support for new features should appear at a rather fast pace.
@@ -3247,10 +3250,9 @@ handle.close()
 This will read a file called example.gen and parse it. If you
 do print rec, the record will be output again, in GenePop format.
 
-The most important information in rec (but not the only one -- please
-check the API documentation by doing print help(GenePop.Record) )
-will be the loci names and
-population information. Loci names can be found on rec.loci\_list.
+The most important information in rec will be the loci names and
+population information (but there is more -- use help(GenePop.Record)
+to check the API documentation). Loci names can be found on rec.loci\_list.
 Population information can be found on rec.populations.
 Populations is a list with one element per population. Each element is itself
 a list of individuals, each individual is a pair composed by individual
@@ -3269,7 +3271,7 @@ rec.populations:
     ]
 \end{verbatim}
 
-So we have 2 populations, the first with 2 individuals, the
+So we have two populations, the first with two individuals, the
 second with only one. The first individual of the first
 population is called Ind1, allelic information for each of
 the 3 loci follows. Please note that for any locus, information
@@ -3319,11 +3321,10 @@ rec_pops =  split_in_pops(rec, pop_names)
 #  rec is not altered.
 \end{verbatim}
 
-GenePop does not support population names, limitation which can be
-cumbersome at times.
-Functionality to enable population names is currently being developed in
-Biopython. These
-extensions won't break compatibility in any way with the standard format.
+GenePop does not support population names, a limitation which can be
+cumbersome at times. Functionality to enable population names is currently
+being developed in Biopython. These extensions won't break compatibility in
+any way with the standard format.
 
 In
 the medium term code to automatically access GenePop web service will also be
@@ -3365,6 +3366,8 @@ Every module that goes into Biopython should have a test (and should also have d
     \item This script should live in the Tests directory
        
      \item The script should test all of the important functionality of the module (the more you test the better your test is, of course!).
+     
+     \item Try to avoid anything which might be platform specific, such as printing floating point numbers without using an explicit formatting string.
   \end{itemize}
        
   \item If the script requires files to do the testing, these should go in
@@ -3404,7 +3407,7 @@ Every module that goes into Biopython should have a test (and should also have d
        with \verb|python run_tests.py|. This will run all of the tests, and
        you should see your test run (and pass!).
        
-  \item That's it! Now you've got a nice test for your module.
+  \item That's it! Now you've got a nice test for your module ready to check into CVS.
        Congratulations!
 \end{enumerate}
 
