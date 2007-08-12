@@ -1,0 +1,9 @@
+test_PopGen_GenePop
+Basic test on Record ... ok
+Basic operation of the Record Parser. ... ok
+Basic operation of GenePop Utils. ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.013s
+
+OK
