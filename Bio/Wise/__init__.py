@@ -1,22 +1,13 @@
 #!/usr/bin/env python
 
-__version__ = "$Revision: 1.14 $"
+__version__ = "$Revision: 1.15 $"
 
 import os
 import sys
+import tempfile
 
-from Bio.SeqIO.FASTA import FastaReader, FastaWriter
+from Bio import SeqIO
 
-try:
-    import poly
-
-    _NamedTemporaryFile = poly.NamedTemporaryFile
-except ImportError:
-    import tempfile
-    try:
-        _NamedTemporaryFile = tempfile.NamedTemporaryFile
-    except AttributeError: # no NamedTemporaryFile on 2.2, stuck without it
-        _NamedTemporaryFile = tempfile.TemporaryFile
 
 def _build_align_cmdline(cmdline, pair, output_filename, kbyte=None, force_type=None, quiet=False):
     """
@@ -56,8 +47,8 @@ def align(cmdline, pair, kbyte=None, force_type=None, dry_run=False, quiet=False
     """
     assert len(pair) == 2
     
-    output_file = _NamedTemporaryFile(mode='r')
-    input_files = _NamedTemporaryFile(mode="w"), _NamedTemporaryFile(mode="w")
+    output_file = tempfile.NamedTemporaryFile(mode='r')
+    input_files = tempfile.NamedTemporaryFile(mode="w"), tempfile.NamedTemporaryFile(mode="w")
 
     if dry_run:
         print _build_align_cmdline(cmdline,
@@ -68,34 +59,34 @@ def align(cmdline, pair, kbyte=None, force_type=None, dry_run=False, quiet=False
                                    quiet)
         return
 
-    try:
-        for filename, input_file in zip(pair, input_files):
-            input_file.close()
-            FastaWriter(file(input_file.name, "w")).write(FastaReader(file(filename)).next())
+    for filename, input_file in zip(pair, input_files):
+        # Pipe the file through Biopython's Fasta parser/writer
+        # to make sure it conforms to the Fasta standard (in particular,
+        # Wise2 may choke on long lines in the Fasta file)
+        records = SeqIO.parse(open(filename), 'fasta')
+        SeqIO.write(records, input_file, 'fasta')
+        input_file.flush()
 
-        input_file_names = [input_file.name for input_file in input_files]
+    input_file_names = [input_file.name for input_file in input_files]
 
-        cmdline_str = _build_align_cmdline(cmdline,
-                                           input_file_names,
-                                           output_file.name,
-                                           kbyte,
-                                           force_type,
-                                           quiet)
+    cmdline_str = _build_align_cmdline(cmdline,
+                                       input_file_names,
+                                       output_file.name,
+                                       kbyte,
+                                       force_type,
+                                       quiet)
 
-        if debug:
-            print >>sys.stderr, cmdline_str
+    if debug:
+        print >>sys.stderr, cmdline_str
 
-        status = os.system(cmdline_str) >> 8
+    status = os.system(cmdline_str) >> 8
 
-        if status > 1:
-            if kbyte != 0: # possible memory problem; could be None
-                print >>sys.stderr, "INFO trying again with the linear model"
-                return align(cmdline, pair, 0, force_type, dry_run, quiet, debug)
-            else:
-                raise OSError, "%s returned %s" % (" ".join(cmdline), status)
-    finally:
-        for input_file in input_files:
-            os.remove(input_file.name)
+    if status > 1:
+        if kbyte != 0: # possible memory problem; could be None
+            print >>sys.stderr, "INFO trying again with the linear model"
+            return align(cmdline, pair, 0, force_type, dry_run, quiet, debug)
+        else:
+            raise OSError, "%s returned %s" % (" ".join(cmdline), status)
     
     return output_file
 
