@@ -34,10 +34,6 @@ class RecordTest(unittest.TestCase):
     def t_record_basic(self):
         """Basic test on Record
         """
-        #def pbool(b):
-        #    if b:
-        #        return 1
-        #    return 0
 
         r = FDist.Record()
         assert type(r.data_org)  == int
