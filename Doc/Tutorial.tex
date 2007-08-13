@@ -540,11 +540,15 @@ Enjoy the code!
 
 In this chapter we'll discuss the \verb|Bio.SeqIO| module introduced earlier in more detail.  This is a new interface added to Biopython 1.43, which aims to provide a simple interface for working with assorted sequence file formats in a uniform way. The catch is that you have to work with SeqRecord ojects.
 
-\section{Reading Sequence Files}
+\section{Parsing or Reading Sequences}
 
-The workhorse function \verb|Bio.SeqIO.parse()| is used to read in sequence files as SeqRecord objects.  This function expects two arguments. The first argument is a {\it handle} to read the data from. A handle is typically a file opened for reading, but could be the output from a command line program, see Section~\ref{sec:appendix-handles} for more details.  The second argument is a lower case string specifying sequence format -- we don't try and guess the file format for you!
+The workhorse function \verb|Bio.SeqIO.parse()| is used to read in sequence data as SeqRecord objects.  This function expects two arguments. The first argument is a {\it handle} to read the data from. A handle is typically a file opened for reading, but could be the output from a command line program, see Section~\ref{sec:appendix-handles} for more details.  The second argument is a lower case string specifying sequence format -- we don't try and guess the file format for you!
 
-What you get back is an {\it iterator} which gives SeqRecord objects (which we'll talk about in more detail later), and is typically used in a for loop like this:
+What you get back is an {\it iterator} which gives SeqRecord objects, which we'll talk about in more detail later), and is typically used in a for loop.
+
+\subsection{Reading Sequence Files}
+
+In general \verb|Bio.SeqIO.parse()| is used to read in sequence {\it files} as SeqRecord objects, and is typically used with a for loop like this:
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -570,13 +574,56 @@ handle.close()
 
 Similarly, if you wanted to read in a file in another file format, then assuming \verb|Bio.SeqIO.parse()| supports it you would just need to change the format string as appropriate, for example ``swiss'' for SwissProt files or ``embl'' for EMBL text files. There is a full listing on the wiki page (\url{http://biopython.org/wiki/SeqIO}).
 
+\subsection{Reading Sequences from the net}
+\label{sec:SeqIO_ExPASy_and_SwissProt}
+
+In the previous section, we looked at parsing sequence data from a file handle. We hinted that handles are not always from files, and in this next example we'll use a handle to an internet connection to download a SwissProt file over the internet - something covered in more depth in Section~\ref{sec:swiss_prot}:
+
+\begin{verbatim}
+from Bio.WWW import ExPASy
+from Bio import SeqIO
+handle = ExPASy.get_sprot_raw("O23729")
+for seq_record in SeqIO.parse(handle, "swiss") :
+    print seq_record.id
+    print seq_record.name
+    print seq_record.description
+    print seq_record.seq
+    print len(seq_record.seq)
+    print seq_record.annotations['keywords']
+handle.close()
+\end{verbatim}
+
+\noindent Assuming your network connection is OK, you should get back:
+
+\begin{verbatim}
+O23729
+CHS3_BROFI
+Chalcone synthase 3 (EC 2.3.1.74) (Naringenin-chalcone synthase 3).
+Seq('MAPAMEEIRQAQRAEGPAAVLAIGTSTPPNALYQADYPDYYFRITKSEHLTELKEKFKRM ...', ProteinAlphabet())
+394
+['Acyltransferase', 'Flavonoid biosynthesis', 'Transferase']
+\end{verbatim}
+
+In fact, the function \verb|Bio.WWW.ExPASy.get_sprot_raw| only ever returns the data for a single record, so using a for loop here is a little redundant. How about this version:
+
+\begin{verbatim}
+from Bio.WWW import ExPASy
+from Bio import SeqIO
+seq_record = SeqIO.parse(ExPASy.get_sprot_raw("O23729"), "swiss").next()
+print seq_record.id
+print seq_record.seq
+print len(seq_record.seq)
+\end{verbatim}
+
+What's going on here with the \verb|.next()| method? Well its an alternative to using an iterator in a for loop, and we discuss this in the next section.
+
 \subsection{Iterating over the records in a sequence file}
 
-In the above examples, we have used a for loop to iterate over all the records in the file one by one.  You can use the for loop for all sorts of python objects (including lists, tuples and strings) which support the iteration interface.
+In the above examples, we have usually used a for loop to iterate over all the records one by one.  You can use the for loop for all sorts of python objects (including lists, tuples and strings) which support the iteration interface.
 
 The object returned by \verb|Bio.SeqIO| is actually an iterator which returns SeqRecord objects.  You get to see each record in turn, but once and only once.  The plus point is that an iterator can save you memory when dealing with large files.
 
-Note that you can also use the \verb|next| method of an iterator to step through the entries, like this:
+Instead of using a for loop, can also use the \verb|.next()| method of an iterator to step through the entries, like this:
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -587,10 +634,16 @@ first_record = record_iterator.next()
 print first_record.id
 print first_record.description
 
+second_record = record_iterator.next()
+print second_record.id
+print second_record.description
+
 handle.close()
 \end{verbatim}
 
-\noindent The above style is useful if your sequence files have only one record.
+\noindent The above style is useful if your sequence files have only one record, like the ExPASy SwissProt example above in Section~\ref{sec:SeqIO_ExPASy_and_SwissProt}, or a GenBank file for a single chromosome.
+
+Note that if you try and use \verb|.next()| and there are no more results, you'll either get back the special python object \verb|None| or a \verb|StopIteration| exception.
 
 \subsection{Getting a list of the records in a sequence file}
 
@@ -1487,7 +1540,7 @@ We should write some stuff to make it easier to deal directly with PSIBlast from
 
 \subsection{Retrieving a SWISS-PROT record}
 
-SwissProt (\url{http://www.expasy.org/sprot/sprot-top.html}) is a hand-curated database of protein sequences. Let's look at how we connect with it from a script and parse SwissProt formatted results. 
+SwissProt (\url{http://www.expasy.org/sprot/sprot-top.html}) is a hand-curated database of protein sequences. Let's look at how we connect with it from a script and parse SwissProt formatted results. We touched on this briefly in Section~\ref{sec:SeqIO_ExPASy_and_SwissProt}.
 
 
 First, we need to retrieve some results to parse. Let's say we are looking at chalcone synthases for Orchids (see section~\ref{sec:orchids} for some justification for looking for interesting things about orchids). Chalcone synthase is involved in flavanoid biosynthesis in plants, and flavanoids make lots of cool things like pigment colors and UV protectants. 
