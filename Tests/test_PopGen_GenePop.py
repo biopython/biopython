@@ -8,7 +8,6 @@ import os
 import sys
 import unittest
 from Bio.PopGen import GenePop
-from Bio.PopGen.GenePop import Utils
 
 def run_tests(argv):
     test_suite = testing_suite()
@@ -34,10 +33,6 @@ class RecordTest(unittest.TestCase):
     def t_record_basic(self):
         """Basic test on Record
         """
-        #def pbool(b):
-        #    if b:
-        #        return 1
-        #    return 0
 
         r = GenePop.Record()
         assert type(r.marker_len)   == int
@@ -68,10 +63,9 @@ class ParserTest(unittest.TestCase):
     def t_record_parser(self):
         """Basic operation of the Record Parser.
         """
-        parser = GenePop.RecordParser()
         for index in range(len(self.handles)):
             handle = self.handles[index]
-            rec = parser.parse(handle)
+            rec = GenePop.parse(handle)
             assert isinstance(rec, GenePop.Record)
             assert len(rec.loci_list) == self.num_loci[index]
             assert rec.marker_len == self.marker_len[index]
@@ -96,19 +90,18 @@ class UtilsTest(unittest.TestCase):
     def t_utils(self):
         """Basic operation of GenePop Utils.
         """
-        parser = GenePop.RecordParser()
         for index in range(len(self.handles)):
             handle = self.handles[index]
-            rec = parser.parse(handle)
+            rec = GenePop.parse(handle)
         initial_pops = len(rec.populations)
         initial_loci = len(rec.loci_list)
         first_loci = rec.loci_list[0]
-        Utils.remove_population(rec, 0)
+        rec.remove_population(0)
         assert len(rec.populations) == initial_pops - 1
-        Utils.remove_locus_by_name(rec, first_loci)
+        rec.remove_locus_by_name(first_loci)
         assert len(rec.loci_list) == initial_loci - 1
         assert rec.loci_list[0] <> first_loci
-        Utils.remove_locus_by_position(rec, 0)
+        rec.remove_locus_by_position(0)
         assert len(rec.loci_list) == initial_loci - 2
 
 if __name__ == "__main__":
