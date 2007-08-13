@@ -813,6 +813,92 @@ print orchid_dict.keys()
 
 \noindent Not too complicated, I hope!
 
+\section{Writing Sequence Files}
+
+We've talked about using \verb|Bio.SeqIO.parse()| for sequence input (reading files), and now we'll look at \verb|Bio.SeqIO.write()| which is for sequence output (writing files).  This is a function taking three arguments: some SeqRecord objects, a handle to write to, and a sequence format.
+
+Here is an example, where we start by creating a few SeqRecord objects the hard way (by hand, rather than by loading them from a files):
+
+\begin{verbatim}
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
+from Bio.Alphabet import generic_protein
+
+rec1 = SeqRecord(Seq("MMYQQGCFAGGTVLRLAKDLAENNRGARVLVVCSEITAVTFRGPSETHLDSMVGQALFGD" \
+                    +"GAGAVIVGSDPDLSVERPLYELVWTGATLLPDSEGAIDGHLREVGLTFHLLKDVPGLISK" \
+                    +"NIEKSLKEAFTPLGISDWNSTFWIAHPGGPAILDQVEAKLGLKEEKMRATREVLSEYGNM" \
+                    +"SSAC", generic_protein),
+                 id="gi|14150838|gb|AAK54648.1|AF376133_1",
+                 description="chalcone synthase [Cucumis sativus]")
+
+rec2 = SeqRecord(Seq("YPDYYFRITNREHKAELKEKFQRMCDKSMIKKRYMYLTEEILKENPSMCEYMAPSLDARQ" \
+                    +"DMVVVEIPKLGKEAAVKAIKEWGQ", generic_protein),
+                 id="gi|13919613|gb|AAK33142.1|",
+                 description="chalcone synthase [Fragaria vesca subsp. bracteata]")
+
+rec3 = SeqRecord(Seq("MVTVEEFRRAQCAEGPATVMAIGTATPSNCVDQSTYPDYYFRITNSEHKVELKEKFKRMC" \
+                    +"EKSMIKKRYMHLTEEILKENPNICAYMAPSLDARQDIVVVEVPKLGKEAAQKAIKEWGQP" \
+                    +"KSKITHLVFCTTSGVDMPGCDYQLTKLLGLRPSVKRFMMYQQGCFAGGTVLRMAKDLAEN" \
+                    +"NKGARVLVVCSEITAVTFRGPNDTHLDSLVGQALFGDGAAAVIIGSDPIPEVERPLFELV" \
+                    +"SAAQTLLPDSEGAIDGHLREVGLTFHLLKDVPGLISKNIEKSLVEAFQPLGISDWNSLFW" \
+                    +"IAHPGGPAILDQVELKLGLKQEKLKATRKVLSNYGNMSSACVLFILDEMRKASAKEGLGT" \
+                    +"TGEGLEWGVLFGFGPGLTVETVVLHSVAT", generic_protein),
+                 id="gi|13925890|gb|AAK49457.1|",
+                 description="chalcone synthase [Nicotiana tabacum]")
+                 
+my_records = [rec1, rec2, rec3]
+\end{verbatim}
+
+\noindent Now we have a list of SeqRecord objects, we'll write them to a FASTA format file:
+
+\begin{verbatim}
+from Bio import SeqIO
+handle = open("my_example.faa", "w")
+SeqIO.write(my_records, handle, "fasta")
+handle.close()
+\end{verbatim}
+
+\noindent And if you open this file in your favourite text editor it should look like this:
+
+\begin{verbatim}
+>gi|14150838|gb|AAK54648.1|AF376133_1 chalcone synthase [Cucumis sativus]
+MMYQQGCFAGGTVLRLAKDLAENNRGARVLVVCSEITAVTFRGPSETHLDSMVGQALFGD
+GAGAVIVGSDPDLSVERPLYELVWTGATLLPDSEGAIDGHLREVGLTFHLLKDVPGLISK
+NIEKSLKEAFTPLGISDWNSTFWIAHPGGPAILDQVEAKLGLKEEKMRATREVLSEYGNM
+SSAC
+>gi|13919613|gb|AAK33142.1| chalcone synthase [Fragaria vesca subsp. bracteata]
+YPDYYFRITNREHKAELKEKFQRMCDKSMIKKRYMYLTEEILKENPSMCEYMAPSLDARQ
+DMVVVEIPKLGKEAAVKAIKEWGQ
+>gi|13925890|gb|AAK49457.1| chalcone synthase [Nicotiana tabacum]
+MVTVEEFRRAQCAEGPATVMAIGTATPSNCVDQSTYPDYYFRITNSEHKVELKEKFKRMC
+EKSMIKKRYMHLTEEILKENPNICAYMAPSLDARQDIVVVEVPKLGKEAAQKAIKEWGQP
+KSKITHLVFCTTSGVDMPGCDYQLTKLLGLRPSVKRFMMYQQGCFAGGTVLRMAKDLAEN
+NKGARVLVVCSEITAVTFRGPNDTHLDSLVGQALFGDGAAAVIIGSDPIPEVERPLFELV
+SAAQTLLPDSEGAIDGHLREVGLTFHLLKDVPGLISKNIEKSLVEAFQPLGISDWNSLFW
+IAHPGGPAILDQVELKLGLKQEKLKATRKVLSNYGNMSSACVLFILDEMRKASAKEGLGT
+TGEGLEWGVLFGFGPGLTVETVVLHSVAT
+\end{verbatim}
+
+\subsection{Converting between sequence file formats}
+
+In previous example we used a list of SeqRecord objects as input to the \verb|Bio.SeqIO.write()| function, but it will also accept a SeqRecord interator like we get from \verb|Bio.SeqIO.parse()| -- this lets us do file conversion very succinctly. For this example we'll read in the GenBank format file \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.gbk}{ls\_orchid.gbk} and write it out in FASTA format:
+
+\begin{verbatim}
+from Bio import SeqIO
+in_handle = open("ls_orchid.gbk", "r")
+out_handle = open("my_example.faa", "w")
+SeqIO.write(SeqIO.parse(in_handle, "genbank"), out_handle, "fasta")
+in_handle.close()
+out_handle.close()
+\end{verbatim}
+
+You {\it can} in fact do this in one line, by being lazy about closing the file handles. This is arguably bad style, but its very concise:
+
+\begin{verbatim}
+from Bio import SeqIO
+SeqIO.write(SeqIO.parse(open("ls_orchid.gbk"), "genbank"), open("my_example.faa", "w"), "fasta")
+\end{verbatim}
+
 \chapter{BLAST}
 \label{sec:blast}
 
