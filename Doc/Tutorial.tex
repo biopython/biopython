@@ -574,10 +574,41 @@ handle.close()
 
 Similarly, if you wanted to read in a file in another file format, then assuming \verb|Bio.SeqIO.parse()| supports it you would just need to change the format string as appropriate, for example ``swiss'' for SwissProt files or ``embl'' for EMBL text files. There is a full listing on the wiki page (\url{http://biopython.org/wiki/SeqIO}).
 
-\subsection{Reading Sequences from the net}
+\subsection{Reading GenBank Sequences from the net}
+\label{sec:SeqIO_GenBank_Online}
+
+In the previous section, we looked at parsing sequence data from a file handle.
+We hinted that handles are not always from files, and in this and the next section we'll use a handles to internet connections to download a sequences over the internet.
+
+Section~\ref{genbank-retrieval} covers fetching sequences from GenBank in more depth, including how to do searches to get lists of GI numbers, but for now let's just connect to the NCBI and get a few orchid proteins from GenBank using their GI numbers:
+
+\begin{verbatim}
+from Bio import GenBank
+from Bio import SeqIO
+handle = GenBank.download_many(['6273291', '6273290', '6273289'])
+for seq_record in SeqIO.parse(handle, "genbank") :
+    print seq_record.id, seq_record.description[:50] + "..."
+    print "Sequence length %i," % len(seq_record.seq),
+    print "%i features," % len(seq_record.features),
+    print "from: %s" % seq_record.annotations['source']
+handle.close()
+\end{verbatim}
+
+\noindent That should give the following output:
+
+\begin{verbatim}
+AF191665.1 Opuntia marenae rpl16 gene; chloroplast gene for c...
+Sequence length 902, 3 features, from: chloroplast Opuntia marenae
+AF191664.1 Opuntia clavata rpl16 gene; chloroplast gene for c...
+Sequence length 899, 3 features, from: chloroplast Grusonia clavata
+AF191663.1 Opuntia bradtiana rpl16 gene; chloroplast gene for...
+Sequence length 899, 3 features, from: chloroplast Opuntia bradtianaa
+\end{verbatim}
+
+\subsection{Reading SwissProt Sequences from the net}
 \label{sec:SeqIO_ExPASy_and_SwissProt}
 
-In the previous section, we looked at parsing sequence data from a file handle. We hinted that handles are not always from files, and in this next example we'll use a handle to an internet connection to download a SwissProt file over the internet - something covered in more depth in Section~\ref{sec:swiss_prot}:
+Now let's use a handle download a SwissProt file from ExPASy, something covered in more depth in Section~\ref{sec:swiss_prot}:
 
 \begin{verbatim}
 from Bio.WWW import ExPASy
@@ -1740,7 +1771,7 @@ The GenBank record format is a very popular method of holding information about 
 \subsection{Retrieving GenBank entries from NCBI}
 \label{genbank-retrieval}
 
-One very nice feature of the GenBank libraries is the ability to automate retrieval of entries from GenBank. This is very convenient for creating scripts that automate a lot of your daily work. In this example we'll show how to query the NCBI databases, and to retrieve the records from the query.
+One very nice feature of the GenBank libraries is the ability to automate retrieval of entries from GenBank. This is very convenient for creating scripts that automate a lot of your daily work. In this example we'll show how to query the NCBI databases, and to retrieve the records from the query - something touched on in Section~\ref{sec:SeqIO_GenBank_Online}.
 
 First, we want to make a query and find out the ids of the records to retrieve. Here we'll do a quick search for \emph{Opuntia}, my favorite organism (since I work on it). We can do quick search and get back the GIs (GenBank identifiers) for all of the corresponding records:
 
