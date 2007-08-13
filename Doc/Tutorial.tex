@@ -617,7 +617,7 @@ print first_record.seq
 print len(first_record.seq)
 \end{verbatim}
 
-Giving:
+\noindent Giving:
 
 \begin{verbatim}
 Found 94 records
@@ -633,90 +633,9 @@ Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGGAATAAA ...', IUPACAmb
 
 You can of course still use a for loop with a list of SeqRecord objects.  Using a list is much more flexible than an iterator (for example, you can determine the number of records from the length of the list), but does need more memory because it will hold all the records in memory at once.
 
-\subsection{Sequence files as Dictionaries}
-
-The next thing that we'll do with our ubiquitous orchid files is to show how to index them and access them like a database using the python {\it dictionary} datatype (like a hash in Perl). This is very useful for large files where you only need to access certain elements of the file, and makes for a nice quick 'n dirty database.
-
-You can use the function \verb|SeqIO.to_dict| to make a SeqRecord dictionary (in memory).  By default this will use each record's identifier (i.e. the \verb|.id| attribute) as the key.  Let's try this using our GenBank file:
-
-\begin{verbatim}
-from Bio import SeqIO
-handle = open("ls_orchid.gbk")
-orchid_dict = SeqIO.to_dict(SeqIO.parse(handle, "genbank"))
-handle.close()
-\end{verbatim} 
-
-Since this variable \verb|orchid_dict| is an ordinary python dictionary, we can look at all of the keys we have available:
-
-\begin{verbatim}
->>> print orchid_dict.keys()
-['Z78484.1', 'Z78464.1', 'Z78455.1', 'Z78442.1', 'Z78532.1', 'Z78453.1', ..., 'Z78471.1']
-\end{verbatim} 
-
-We can access a single \verb|SeqRecord| object via the keys and manipulate the object as normal:
-
-\begin{verbatim}
->>> seq_record = orchid_dict["Z78475.1"]
->>> print seq_record.description
-P.supardii 5.8S rRNA gene and ITS1 and ITS2 DNA
->>> print seq_record.seq
-Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGTTGAGATCACATAATAAT ...', IUPACAmbiguousDNA())
-\end{verbatim}
-
-That easily, we have created a database of our GenBank file that will spit out \verb|SeqRecord| objects.  Now let's try this for the FASTA file instead:
-
-\begin{verbatim}
-from Bio import SeqIO
-handle = open("ls_orchid.fasta")
-orchid_dict = SeqIO.to_dict(SeqIO.parse(handle, "fasta"))
-handle.close()
-print orchid_dict.keys()
-\end{verbatim} 
-
-This time the keys are:
-
-\begin{verbatim}
-['gi|2765596|emb|Z78471.1|PDZ78471', 'gi|2765646|emb|Z78521.1|CCZ78521', ...
- ..., 'gi|2765613|emb|Z78488.1|PTZ78488', 'gi|2765583|emb|Z78458.1|PHZ78458']
-\end{verbatim} 
-
-You should recognise these strings from when we parsed the FASTA file earlier in Section~\ref{sec:fasta-parsing}.  Suppose you would rather have something else as the keys - like the accesion numbers.  This brings us nicely to \verb|SeqIO.to_dict|'s optional argument \verb|key_function|, which lets you define what to use as the dictionary key for your records.
-
-First you must write your own function to return the key you want (as a string) when given a SeqRecord object.  In general, the details of function will depend on the sort of input records you are dealing with.  But for our orchids, we can just split up the record's identifier using the ``pipe'' character (the vertical line) and return the fourth entry (field three):
-
-\begin{verbatim}
-def get_accession(record) :
-    """"Given a SeqRecord, return the accession number as a string
-    
-    e.g. "gi|2765613|emb|Z78488.1|PTZ78488" -> "Z78488.1"
-    """
-    parts = record.id.split("|")
-    assert len(parts) == 5 and parts[0] == "gi" and parts[2] == "emb"
-    return parts[3]
-\end{verbatim} 
-
-\noindent Then we can give this function to the \verb|SeqIO.to_dict| function to use in building the dictionary:
-
-\begin{verbatim}
-from Bio import SeqIO
-handle = open("ls_orchid.fasta")
-orchid_dict = SeqIO.to_dict(SeqIO.parse(handle, "fasta"), key_function=get_accession)
-handle.close()
-print orchid_dict.keys()
-\end{verbatim} 
-
-\noindent Finally, as desired, the new dictionary keys:
-
-\begin{verbatim}
->>> print orchid_dict.keys()
-['Z78484.1', 'Z78464.1', 'Z78455.1', 'Z78442.1', 'Z78532.1', 'Z78453.1', ..., 'Z78471.1']
-\end{verbatim}
-
-\noindent Not too complicated, I hope!
-
 \subsection{Extracting data}
 
-Suppose you wanted to extract a list of the species from your GenBank file.  Let's have a close look at the first record in the file and see where the species gets stored:
+Suppose you wanted to extract a list of the species from the \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.gbk}{ls\_orchid.gbk} GenBank file.  Let's have a close look at the first record in the file and see where the species gets stored:
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -813,6 +732,86 @@ print all_species
 
 In general, extracting information from the FASTA description line is not very nice.  If you can get your sequences in a well annotated file format like GenBank or EMBL, then this sort of annotation information is much easier to deal with.
 
+\section{Sequence files as Dictionaries}
+
+The next thing that we'll do with our ubiquitous orchid files is to show how to index them and access them like a database using the python {\it dictionary} datatype (like a hash in Perl). This is very useful for large files where you only need to access certain elements of the file, and makes for a nice quick 'n dirty database.
+
+You can use the function \verb|SeqIO.to_dict| to make a SeqRecord dictionary (in memory).  By default this will use each record's identifier (i.e. the \verb|.id| attribute) as the key.  Let's try this using our GenBank file:
+
+\begin{verbatim}
+from Bio import SeqIO
+handle = open("ls_orchid.gbk")
+orchid_dict = SeqIO.to_dict(SeqIO.parse(handle, "genbank"))
+handle.close()
+\end{verbatim} 
+
+Since this variable \verb|orchid_dict| is an ordinary python dictionary, we can look at all of the keys we have available:
+
+\begin{verbatim}
+>>> print orchid_dict.keys()
+['Z78484.1', 'Z78464.1', 'Z78455.1', 'Z78442.1', 'Z78532.1', 'Z78453.1', ..., 'Z78471.1']
+\end{verbatim} 
+
+We can access a single \verb|SeqRecord| object via the keys and manipulate the object as normal:
+
+\begin{verbatim}
+>>> seq_record = orchid_dict["Z78475.1"]
+>>> print seq_record.description
+P.supardii 5.8S rRNA gene and ITS1 and ITS2 DNA
+>>> print seq_record.seq
+Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGTTGAGATCACATAATAAT ...', IUPACAmbiguousDNA())
+\end{verbatim}
+
+That easily, we have created a database of our GenBank file that will spit out \verb|SeqRecord| objects.  Now let's try this for the FASTA file instead:
+
+\begin{verbatim}
+from Bio import SeqIO
+handle = open("ls_orchid.fasta")
+orchid_dict = SeqIO.to_dict(SeqIO.parse(handle, "fasta"))
+handle.close()
+print orchid_dict.keys()
+\end{verbatim} 
+
+\noindent This time the keys are:
+
+\begin{verbatim}
+['gi|2765596|emb|Z78471.1|PDZ78471', 'gi|2765646|emb|Z78521.1|CCZ78521', ...
+ ..., 'gi|2765613|emb|Z78488.1|PTZ78488', 'gi|2765583|emb|Z78458.1|PHZ78458']
+\end{verbatim} 
+
+You should recognise these strings from when we parsed the FASTA file earlier in Section~\ref{sec:fasta-parsing}.  Suppose you would rather have something else as the keys - like the accesion numbers.  This brings us nicely to \verb|SeqIO.to_dict|'s optional argument \verb|key_function|, which lets you define what to use as the dictionary key for your records.
+
+First you must write your own function to return the key you want (as a string) when given a SeqRecord object.  In general, the details of function will depend on the sort of input records you are dealing with.  But for our orchids, we can just split up the record's identifier using the ``pipe'' character (the vertical line) and return the fourth entry (field three):
+
+\begin{verbatim}
+def get_accession(record) :
+    """"Given a SeqRecord, return the accession number as a string
+    
+    e.g. "gi|2765613|emb|Z78488.1|PTZ78488" -> "Z78488.1"
+    """
+    parts = record.id.split("|")
+    assert len(parts) == 5 and parts[0] == "gi" and parts[2] == "emb"
+    return parts[3]
+\end{verbatim} 
+
+\noindent Then we can give this function to the \verb|SeqIO.to_dict| function to use in building the dictionary:
+
+\begin{verbatim}
+from Bio import SeqIO
+handle = open("ls_orchid.fasta")
+orchid_dict = SeqIO.to_dict(SeqIO.parse(handle, "fasta"), key_function=get_accession)
+handle.close()
+print orchid_dict.keys()
+\end{verbatim} 
+
+\noindent Finally, as desired, the new dictionary keys:
+
+\begin{verbatim}
+>>> print orchid_dict.keys()
+['Z78484.1', 'Z78464.1', 'Z78455.1', 'Z78442.1', 'Z78532.1', 'Z78453.1', ..., 'Z78471.1']
+\end{verbatim}
+
+\noindent Not too complicated, I hope!
 
 \chapter{BLAST}
 \label{sec:blast}
