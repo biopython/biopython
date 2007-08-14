@@ -3460,8 +3460,7 @@ example GenePop data files in the Test/PopGen directory of Biopython):
 from Bio.PopGen import GenePop
 
 handle = open("example.gen")
-parser = GenePop.RecordParser()
-rec = parser.parse(handle)
+rec = GenePop.parse(handle)
 handle.close()
 \end{verbatim}
 
@@ -3478,15 +3477,15 @@ name and a list of alleles (2 per marker), here is an example for
 rec.populations:
 
 \begin{verbatim}
- [
-        [
-            ('Ind1', [(1, 2),    (3, 3), (200, 201)],
-            ('Ind2', [(2, None), (3, 3), (None, None)],
-        ],
-        [
-            ('Other1', [(1, 1),  (4, 3), (200, 200)],
-        ]
+[
+    [
+        ('Ind1', [(1, 2),    (3, 3), (200, 201)],
+        ('Ind2', [(2, None), (3, 3), (None, None)],
+    ],
+    [
+        ('Other1', [(1, 1),  (4, 3), (200, 200)],
     ]
+]
 \end{verbatim}
 
 So we have two populations, the first with two individuals, the
@@ -3502,34 +3501,33 @@ available, here is an example:
 
 \begin{verbatim}
 from Bio.PopGen import GenePop
-from Bio.PopGen.GenePop.Utils import *
 
 #Imagine that you have loaded rec, as per the code snippet above...
 
-remove_population(rec, pos)
+rec.remove_population(pos)
 #Removes a population from a record, pos is the population position in
 #  rec.populations, remember that it starts on position 0.
 #  rec is altered.
 
-remove_locus_by_position(rec, pos)
+rec.remove_locus_by_position(pos)
 #Removes a locus by its position, pos is the locus position in
 #  rec.loci_list, remember that it starts on position 0.
 #  rec is altered.
 
-remove_locus_by_name(rec, name)
+rec.remove_locus_by_name(name)
 #Removes a locus by its name, name is the locus name as in
 #  rec.loci_list. If the name doesn't exist the function fails
 #  silently.
 #  rec is altered.
 
-rec_loci = split_in_loci(rec)
+rec_loci = rec.split_in_loci()
 #Splits a record in loci, that is, for each loci, it creates a new
 #  record, with a single loci and all populations.
 #  The result is returned in a dictionary, being each key the locus name.
 #  The value is the GenePop record.
 #  rec is not altered.
 
-rec_pops =  split_in_pops(rec, pop_names)
+rec_pops =  rec.split_in_pops(pop_names)
 #Splits a record in populations, that is, for each population, it creates
 #  a new record, with a single population and all loci.
 #  The result is returned in a dictionary, being each key
