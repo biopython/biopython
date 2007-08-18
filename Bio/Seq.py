@@ -32,11 +32,20 @@ class Seq:
 ##            return cmp(self.data, other.data)
 ##        else:
 ##            return cmp(self.data, other)
+
     def __len__(self): return len(self.data)       # Seq API requirement
-    def __getitem__(self, i): return self.data[i]  # Seq API requirement
-    def __getslice__(self, i, j):                  # Seq API requirement
-        i = max(i, 0); j = max(j, 0)
-        return Seq(self.data[i:j], self.alphabet)
+
+    def __getitem__(self, index) :                 # Seq API requirement
+        #Note since Python 2.0, __getslice__ is deprecated
+        #and __getitem__ is used instead.
+        #See http://docs.python.org/ref/sequence-methods.html
+        if isinstance(index, int) :
+            #Return a single letter as a string
+            return self.data[index]
+        else :
+            #Return the (sub)sequence as another Seq object
+            return Seq(self.data[index], self.alphabet)
+
     def __add__(self, other):
         if type(other) == type(' '):
             return self.__class__(self.data + other, self.alphabet)
@@ -47,6 +56,7 @@ class Seq:
         else:
             raise TypeError, ("incompatable alphabets", str(self.alphabet),
                               str(other.alphabet))
+        
     def __radd__(self, other):
         if self.alphabet.contains(other.alphabet):
             return self.__class__(other.data + self.data, self.alphabet)
@@ -153,24 +163,44 @@ class MutableSeq:
             return x
         else:
             return cmp(self.data, other)
+
     def __len__(self): return len(self.data)
-    def __getitem__(self, i): return self.data[i]
-    def __setitem__(self, i, item): self.data[i] = item
-    def __delitem__(self, i): del self.data[i]
-    def __getslice__(self, i, j):
-        i = max(i, 0); j = max(j, 0)
-        return self.__class__(self.data[i:j], self.alphabet)
-    def __setslice__(self, i, j, other):
-        i = max(i, 0); j = max(j, 0)
-        if isinstance(other, MutableSeq):
-            self.data[i:j] = other.data
-        elif isinstance(other, type(self.data)):
-            self.data[i:j] = other
-        else:
-            self.data[i:j] = array.array("c", str(other))
-    def __delslice__(self, i, j):
-        i = max(i, 0); j = max(j, 0)
-        del self.data[i:j]
+
+    def __getitem__(self, index) :
+        #Note since Python 2.0, __getslice__ is deprecated
+        #and __getitem__ is used instead.
+        #See http://docs.python.org/ref/sequence-methods.html
+        if isinstance(index, int) :
+            #Return a single letter as a string
+            return self.data[index]
+        else :
+            #Return the (sub)sequence as another Seq object
+            return MutableSeq(self.data[index], self.alphabet)
+
+    def __setitem__(self, index, value):
+        #Note since Python 2.0, __setslice__ is deprecated
+        #and __setitem__ is used instead.
+        #See http://docs.python.org/ref/sequence-methods.html
+        if isinstance(index, int) :
+            #Replacing a single letter with a new string
+            self.data[index] = value
+        else :
+            #Replacing a sub-sequence
+            if isinstance(value, MutableSeq):
+                self.data[index] = value.data
+            elif isinstance(value, type(self.data)):
+                self.data[index] = value
+            else:
+                self.data[index] = array.array("c", str(value))
+
+    def __delitem__(self, index):
+        #Note since Python 2.0, __delslice__ is deprecated
+        #and __delitem__ is used instead.
+        #See http://docs.python.org/ref/sequence-methods.html
+        
+        #Could be deleting a single letter, or a slice
+        del self.data[index]
+    
     def __add__(self, other):
         if self.alphabet.contains(other.alphabet):
             return self.__class__(self.data + other.data, self.alphabet)
