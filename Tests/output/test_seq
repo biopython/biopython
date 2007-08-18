@@ -4,6 +4,11 @@ TCAAAAGGATGCATCATG
 T
 G
 AA
+Reverse using -1 stride: Seq('GTACTACGTAGGAAAACT', IUPACUnambiguousDNA())
+Extract every third nucleotide (slicing with stride 3):
+Seq('TAGTAA', IUPACUnambiguousDNA())
+Seq('CAGGTT', IUPACUnambiguousDNA())
+Seq('AAACCG', IUPACUnambiguousDNA())
 GATC
 IUPACUnambiguousDNA()
 19
@@ -32,4 +37,12 @@ Expected value error and got it
 A count: 7
 A index: 1
 Reversed Seq: MutableSeq('GTACTACGTAGGAAGAAT', IUPACAmbiguousDNA())
+Reverse using -1 stride: MutableSeq('TAAGAAGGATGCATCATG', IUPACAmbiguousDNA())
 Extended Seq: MutableSeq('GTACTACGTAGGAAGAATGATTTT', IUPACAmbiguousDNA())
+Delete stride slice: MutableSeq('GTACTACGTAGGAAGAATGATTTT', IUPACAmbiguousDNA())
+Extract every third nucleotide (slicing with stride 3):
+MutableSeq('GCCAAAGT', IUPACAmbiguousDNA())
+MutableSeq('TTGGAAAT', IUPACAmbiguousDNA())
+MutableSeq('AATGGTTT', IUPACAmbiguousDNA())
+Setting wobble codon to N (set slice with stride 3):
+MutableSeq('GTNCTNCGNAGNAANAANGANTTN', IUPACAmbiguousDNA())

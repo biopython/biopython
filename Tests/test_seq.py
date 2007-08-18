@@ -9,6 +9,13 @@ print s[0]
 print s[-1]
 print s[3:5].tostring()
 
+print "Reverse using -1 stride:", s[::-1]
+
+print "Extract every third nucleotide (slicing with stride 3):"
+print s[0::3]
+print s[1::3]
+print s[2::3]
+
 print s.alphabet.letters
 
 t = Seq.Seq("T", IUPAC.unambiguous_dna)
@@ -87,6 +94,21 @@ for test_seq in [string_seq]:
     test_seq.reverse()
     print "Reversed Seq:", test_seq
 
+    print "Reverse using -1 stride:", test_seq[::-1]
+    
+
     test_seq.extend("GAT")
     test_seq.extend(MutableSeq("TTT", IUPAC.ambiguous_dna))
     print "Extended Seq:", test_seq
+
+    del test_seq[4:6:-1]
+    print "Delete stride slice:", test_seq
+
+    print "Extract every third nucleotide (slicing with stride 3):"
+    print test_seq[0::3]
+    print test_seq[1::3]
+    print test_seq[2::3]
+    
+    print "Setting wobble codon to N (set slice with stride 3):"
+    test_seq[2::3] = "N" * len(test_seq[2::3])
+    print test_seq
