@@ -4,7 +4,7 @@
 # as part of this package.
 
 
-
+import os
 from Bio.PopGen import GenePop
 import Bio.PopGen.FDist
 
@@ -51,10 +51,10 @@ def convert_genepop_to_fdist(gp_rec):
         fd_rec.loci_data.append((len(alleles), pop_data))
     return fd_rec
 
-def get_pv(fname = 'probs.dat'):
+def get_pv(data_dir = '.', fname = 'probs.dat'):
     """Returns the pv file. List of tuples
     """
-    pvf = open(fname, 'r')
+    pvf = open(data_dir + os.sep + fname, 'r')
     result = map(lambda x: tuple(map(lambda y: float(y), x.rstrip().split(' '))),
         pvf.readlines())
     pvf.close()

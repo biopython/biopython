@@ -71,23 +71,22 @@ class FDistController:
         
            data_dir - Where the data is found.
         """
-        in_name = data_dir + os.sep + self._get_temp_file()
-        out_name = data_dir + os.sep + self._get_temp_file()
-        f = open(in_name, 'w')
+        in_name = self._get_temp_file()
+        out_name = self._get_temp_file()
+        f = open(data_dir + os.sep + in_name, 'w')
         f.write('a\n')
         f.close()
         curr_dir = os.getcwd()
-        #os.chdir(data_dir)
-        os.system('cd ' + data_dir+ ' && ' + self._get_path('datacal') + ' < ' + in_name + ' > ' + out_name)
-        #os.chdir(curr_dir)
-        f = open(out_name)
+        os.system('cd ' + data_dir + ' && ' +
+                self._get_path('datacal') + ' < ' + in_name + ' > ' + out_name)
+        f = open(data_dir + os.sep + out_name)
         fst_line = f.readline().rstrip().split(' ')
         fst = float(fst_line[4])
         sample_line = f.readline().rstrip().split(' ')
         sample = int(sample_line[9])
         f.close()
-        os.remove(in_name)
-        os.remove(out_name)
+        os.remove(data_dir + os.sep + in_name)
+        os.remove(data_dir + os.sep + out_name)
         return fst, sample
     
     def run_fdist(self, npops, nsamples, fst, sample_size,
@@ -226,13 +225,12 @@ class FDistController:
         """
         in_name = self._get_temp_file()
         out_name = self._get_temp_file()
-        f = open(in_name, 'w')
+        f = open(data_dir + os.sep + in_name, 'w')
         f.write('data_fst_outfile ' + out_file + ' out.dat\n')
         f.close()
-        curr_dir = os.getcwd()
-        os.chdir(data_dir)
-        os.system(self._get_path('pv') + ' < ' + in_name + ' > ' + out_name)
-        os.chdir(curr_dir)
-        os.remove(in_name)
-        os.remove(out_name)
+        print os.listdir(data_dir)
+        os.system('cd ' + data_dir + ' && ' +
+                self._get_path('pv') + ' < ' + in_name + ' > ' + out_name)
+        os.remove(data_dir + os.sep + in_name)
+        os.remove(data_dir + os.sep + out_name)
 
