@@ -228,7 +228,6 @@ class FDistController:
         f = open(data_dir + os.sep + in_name, 'w')
         f.write('data_fst_outfile ' + out_file + ' out.dat\n')
         f.close()
-        print os.listdir(data_dir)
         os.system('cd ' + data_dir + ' && ' +
                 self._get_path('pv') + ' < ' + in_name + ' > ' + out_name)
         os.remove(data_dir + os.sep + in_name)
