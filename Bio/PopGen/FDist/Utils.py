@@ -59,3 +59,20 @@ def get_pv(data_dir = '.', fname = 'probs.dat'):
         pvf.readlines())
     pvf.close()
     return result
+
+def approximate_fst(desired_fst, simulated_fst, parameter_fst,
+           max_run_fst = 1, min_run_fst = 0, limit = 0.005):
+    """Calculates the next Fst attempt in order to approximate a
+       desired Fst.
+    
+    """
+    if abs(simulated_fst - desired_fst) < limit:
+        return parameter_fst, max_run_fst, min_run_fst
+    if simulated_fst > desired_fst:
+        max_run_fst = parameter_fst
+        next_parameter_fst = (min_run_fst + parameter_fst)/2
+    else:
+        min_run_fst = parameter_fst
+        next_parameter_fst = (max_run_fst + parameter_fst)/2
+    return next_parameter_fst, max_run_fst, min_run_fst
+
