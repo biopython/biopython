@@ -8,7 +8,19 @@ The latest news is at the top.
 
 ===================================================================
 
-Bio.SeqIO.FASTA and Bio.SeqIO.generic marked as deprecated
+Bio.Blast.NCBI.qblast() updated with more URL options, thanks to a patch
+from Chang Soon Ong
+
+Bio.SeqIO.FASTA and Bio.SeqIO.generic have been deprecated in favour of
+the new Bio.SeqIO module.
+
+Bio.SeqUtils.CheckSum created, including new methods from Sebastian Bassi,
+and functions crc32 and crc64 which where moved from Bio/crc.py
+Bio.crc is now deprecated.
+
+Bio.SwissProt parser updated to cope with recent file format updates.
+
+Updates to the tutorial, including giving Bio.SeqIO has a whole chapter.
 
 ===================================================================
 
