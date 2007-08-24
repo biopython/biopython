@@ -1,3 +1,12 @@
+# Copyright 2006, 2007 by Peter Cock.  All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+#
+# This module is for reading and writting FASTA format files as SeqRecord
+# objects.  The code is partly inspired  by earlier Biopython modules,
+# Bio.Fasta.* and the now deprecated Bio.SeqIO.FASTA
+
 from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
@@ -11,7 +20,7 @@ def FastaIterator(handle, alphabet = single_letter_alphabet, title2ids = None) :
     alphabet - optional alphabet
     title2ids - A function that, when given the title of the FASTA
     file (without the beginning >), will return the id, name and
-    description (in that order) for the record.
+    description (in that order) for the record as a tuple of strings.
 
     If this is not given, then the entire title line will be used
     as the description, and the first word as the id and name.
