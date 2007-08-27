@@ -59,12 +59,8 @@ class FDistController:
            Returns a temporary file name, if executing inside jython
            tries to replace unexisting tempfile.mkstemp().
         """
-        if platform.startswith('java'): #no mkstemp, hack!
-            self.tmp_idx += 1
-            return strftime("%H%M%S") + str(int(clock()*100)) + str(randint(0,1000)) + str(self.tmp_idx)
-        desc, name = tempfile.mkstemp()
-        os.close(desc)
-        return name
+        self.tmp_idx += 1
+        return strftime("%H%M%S") + str(int(clock()*100)) + str(randint(0,1000)) + str(self.tmp_idx)
 
     def run_datacal(self, data_dir='.'):
         """Executes datacal.
