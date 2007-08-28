@@ -9,13 +9,12 @@ import shutil
 import sys
 import tempfile
 import unittest
+from Bio.PopGen import GenePop
 from Bio.PopGen import FDist
-from Bio.PopGen.FDist import Controller
+from Bio.PopGen.FDist.Utils import convert_genepop_to_fdist
 
 #Tests fdist related code. Note: this case doesn't require fdist
 #test_PopGen_FDist tests code that requires fdist
-
-#We still need to test Utils
 
 def run_tests(argv):
     test_suite = testing_suite()
@@ -29,7 +28,7 @@ def testing_suite():
 
     test_loader = unittest.TestLoader()
     test_loader.testMethodPrefix = 't_'
-    tests = [RecordTest, ParserTest]
+    tests = [RecordTest, ParserTest, ConversionTest]
     
     for test in tests:
         cur_suite = test_loader.loadTestsFromTestCase(test)
@@ -91,6 +90,27 @@ class ParserTest(unittest.TestCase):
                 for test in my_test_pos:
                     locus, pop, pos, value = test
                     assert(rec.loci_data[locus][1][pop][pos] == value)
+
+class ConversionTest(unittest.TestCase):
+    def setUp(self):
+        files = ["c2line.gen"]
+        self.handles = []
+        for filename in files:
+            self.handles.append(open(os.path.join("PopGen", filename)))
+
+    def t_convert(self):
+        """Basic conversion test.
+        """
+        for i in range(len(self.handles)):
+            gp_rec = GenePop.parse(self.handles[i])
+            fd_rec = convert_genepop_to_fdist(gp_rec)
+            assert(fd_rec.num_loci == 3)
+            assert(fd_rec.num_pops == 3)
+
+
+    def tearDown(self):
+        for handle in self.handles:
+            handle.close()
 
 if __name__ == "__main__":
     sys.exit(run_tests(sys.argv))
