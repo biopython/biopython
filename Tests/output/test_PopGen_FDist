@@ -1,8 +1,12 @@
 test_PopGen_FDist
-Basic test on Record ... ok
-Basic operation of the Record Parser. ... ok
+Running fdist tests, which might take some time, please wait
+Test cplot execution. ... ok
+Test datacal execution. ... ok
+Test fdist execution. ... ok
+Test fdist execution approximating Fst. ... ok
+Test pv execution. ... ok
 
 ----------------------------------------------------------------------
-Ran 2 tests in 0.000s
+Ran 5 tests in 89.240s
 
 OK
