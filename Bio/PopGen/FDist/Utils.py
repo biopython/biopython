@@ -51,15 +51,6 @@ def convert_genepop_to_fdist(gp_rec):
         fd_rec.loci_data.append((len(alleles), pop_data))
     return fd_rec
 
-def get_pv(data_dir = '.', fname = 'probs.dat'):
-    """Returns the pv file. List of tuples
-    """
-    pvf = open(data_dir + os.sep + fname, 'r')
-    result = map(lambda x: tuple(map(lambda y: float(y), x.rstrip().split(' '))),
-        pvf.readlines())
-    pvf.close()
-    return result
-
 def approximate_fst(desired_fst, simulated_fst, parameter_fst,
            max_run_fst = 1, min_run_fst = 0, limit = 0.005):
     """Calculates the next Fst attempt in order to approximate a

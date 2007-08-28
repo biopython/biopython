@@ -84,6 +84,18 @@ class FDistController:
         os.remove(data_dir + os.sep + in_name)
         os.remove(data_dir + os.sep + out_name)
         return fst, sample
+
+    def _generate_intfile(self, data_dir):
+        """Generates an INTFILE.
+
+           Parameter:
+           data_dir - data directory
+        """
+        inf = open(data_dir + os.sep + 'INTFILE', 'w')
+        for i in range(98):
+            inf.write(str(randint(-maxint+1,maxint-1)) + '\n') 
+        inf.write('8\n')
+        inf.close()
     
     def run_fdist(self, npops, nsamples, fst, sample_size,
         mut = 0, num_sims = 20000, data_dir='.'):
@@ -123,11 +135,7 @@ class FDistController:
         f.write(str(mut) + '\n')
         f.write(str(num_sims) + '\n')
         f.close()
-        inf = open(data_dir + os.sep + 'INTFILE', 'w')
-        for i in range(98):
-            inf.write(str(randint(-maxint+1,maxint-1)) + '\n') 
-        inf.write('8\n')
-        inf.close()
+        self._generate_intfile(data_dir)
 
         os.system('cd ' + data_dir + ' && ' +
             self._get_path('fdist2') + ' < ' + in_name + ' > ' + out_name)
@@ -194,6 +202,7 @@ class FDistController:
         f.write('out.dat out.cpl\n' + str(ci) + '\n')
         f.close()
         curr_dir = os.getcwd()
+        self._generate_intfile(data_dir)
         os.system('cd ' + data_dir + ' && '  +
             self._get_path('cplot') + ' < ' + in_name + ' > ' + out_name)
         os.remove(data_dir + os.sep + in_name)
@@ -224,8 +233,14 @@ class FDistController:
         f = open(data_dir + os.sep + in_name, 'w')
         f.write('data_fst_outfile ' + out_file + ' out.dat\n')
         f.close()
+        self._generate_intfile(data_dir)
         os.system('cd ' + data_dir + ' && ' +
                 self._get_path('pv') + ' < ' + in_name + ' > ' + out_name)
+        pvf = open(data_dir + os.sep + out_file, 'r')
+        result = map(lambda x: tuple(map(lambda y: float(y), x.rstrip().split(' '))),
+            pvf.readlines())
+        pvf.close()
         os.remove(data_dir + os.sep + in_name)
         os.remove(data_dir + os.sep + out_name)
+        return result
 
