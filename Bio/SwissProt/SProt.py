@@ -12,7 +12,7 @@ Tested with:
 Release 37, Release 38, Release 39
 
 Limited testing with:
-Release 51
+Release 51, 54
 
 
 Classes:
@@ -1001,7 +1001,7 @@ class _SequenceConsumer(AbstractConsumer):
             self.data.annotations['gene_name'] =  line[5:]
 
     def comment(self, line):
-        #Try and agree with SeqRecord convension from the GenBank parser,
+        #Try and agree with SeqRecord convention from the GenBank parser,
         #which stores the comments as a long string with newlines
         #with key 'comment'
         try :
@@ -1014,7 +1014,7 @@ class _SequenceConsumer(AbstractConsumer):
         date_str = line.split()[0]
         uprline = string.upper(line)
         if uprline.find('CREATED') >= 0 :
-            #Try and agree with SeqRecord convension from the GenBank parser,
+            #Try and agree with SeqRecord convention from the GenBank parser,
             #which stores the submitted date as 'date'
             self.data.annotations['date'] = date_str
         elif uprline.find('LAST SEQUENCE UPDATE') >= 0 :
@@ -1025,7 +1025,7 @@ class _SequenceConsumer(AbstractConsumer):
             self.data.annotations['date_last_annotation_update'] = date_str
 
     def keyword(self, line):
-        #Try and agree with SeqRecord convension from the GenBank parser,
+        #Try and agree with SeqRecord convention from the GenBank parser,
         #which stores a list as 'keywords'
         cols = line[5:].rstrip().rstrip(".").split(';')
         cols = [c.strip() for c in cols]
@@ -1038,7 +1038,7 @@ class _SequenceConsumer(AbstractConsumer):
             self.data.annotations['keywords'] = cols
 
     def organism_species(self, line):
-        #Try and agree with SeqRecord convension from the GenBank parser,
+        #Try and agree with SeqRecord convention from the GenBank parser,
         #which stores the organism as a string with key 'organism'
         data = line[5:].rstrip()
         try :
@@ -1048,7 +1048,7 @@ class _SequenceConsumer(AbstractConsumer):
             self.data.annotations['organism'] = data
 
     def organism_host(self, line):
-        #There is no SeqRecord convension from the GenBank parser,
+        #There is no SeqRecord convention from the GenBank parser,
         #based on how it deals with taxonomy ids (list of strings)
         line = self._chomp(line[5:].rstrip())
         index = line.find('=')
@@ -1066,7 +1066,7 @@ class _SequenceConsumer(AbstractConsumer):
             self.data.annotations['organism_host'] = ids
 
     def taxonomy_id(self, line):
-        #Try and agree with SeqRecord convension from the GenBank parser,
+        #Try and agree with SeqRecord convention from the GenBank parser,
         #which stores these as a list of strings with key 'taxonomy'
 
         line = line[5:].rstrip()
