@@ -597,7 +597,7 @@ class EmblScanner(InsdcScanner) :
         consumer.version(fields[0]) #want it to be used as the ID
 
         #Based on how the old GenBank parser worked, merge these two:
-        consumer.residue_type(" ".join(fields[2:3])) #TODO - Store as two fields?
+        consumer.residue_type(" ".join(fields[2:4])) #TODO - Store as two fields?
 
         #consumer.xxx(fields[4]) #TODO - What should we do with the data class?
 
