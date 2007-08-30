@@ -225,7 +225,9 @@ class _BaseGenBankConsumer(AbstractConsumer):
         """Split a string of keywords into a nice clean list.
         """
         # process the keywords into a python list
-        if keyword_string[-1] == '.':
+        if keyword_string == "" or keyword_string == "." :
+            keywords = ""
+        elif keyword_string[-1] == '.':
             keywords = keyword_string[:-1]
         else:
             keywords = keyword_string
@@ -926,7 +928,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             # are there every really RNA sequences in GenBank?
             elif self._seq_type.find('RNA') != -1:
                 seq_alphabet = IUPAC.ambiguous_rna
-            elif self._seq_type == "PROTEIN":
+            elif self._seq_type.find('PROTEIN') != -1 :
                 seq_alphabet = IUPAC.protein  # or extended protein?
             # work around ugly GenBank records which have circular or
             # linear but no indication of sequence type

@@ -790,7 +790,16 @@ class GenBankScanner(InsdcScanner) :
             consumer.locus(name_and_length[0])
             consumer.size(name_and_length[1])
             #consumer.residue_type(line[33:41].strip())
-            consumer.residue_type(line[33:51].strip())
+
+            if line[33:51].strip() == "" and line[29:33] == ' aa ' :
+                #Amino acids -> protein (even if there is no residue type given)
+                #We want to use a protein alphabet in this case, rather than a
+                #generic one. Not sure if this is the best way to achieve this,
+                #but it works because the scanner checks for this:
+                consumer.residue_type("PROTEIN")
+            else :
+                consumer.residue_type(line[33:51].strip())
+
             consumer.data_file_division(line[52:55])
             consumer.date(line[62:73])
         elif line[40:44] in [' bp ', ' aa '] :
@@ -847,7 +856,16 @@ class GenBankScanner(InsdcScanner) :
                    #existing files.
             consumer.locus(name_and_length[0])
             consumer.size(name_and_length[1])
-            consumer.residue_type(line[44:63].strip())
+
+            if line[44:54].strip() == "" and line[40:44] == ' aa ' :
+                #Amino acids -> protein (even if there is no residue type given)
+                #We want to use a protein alphabet in this case, rather than a
+                #generic one. Not sure if this is the best way to achieve this,
+                #but it works because the scanner checks for this:
+                consumer.residue_type(("PROTEIN " + line[54:63]).strip())
+            else :
+                consumer.residue_type(line[44:63].strip())
+
             consumer.data_file_division(line[64:67])
             consumer.date(line[68:79])
         elif line[GENBANK_INDENT:].strip().count(" ")==0 : 

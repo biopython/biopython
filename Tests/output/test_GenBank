@@ -1788,7 +1788,7 @@ qualifiers:
 
 
 ***Record from the FeatureParser
-Seq: Seq('MNNRWILHAAFLLCFSTTALSINYKQLQLQERTNIRKCQELLEQLNGKINLTYRADFKIP ...', Alphabet())
+Seq: Seq('MNNRWILHAAFLLCFSTTALSINYKQLQLQERTNIRKCQELLEQLNGKINLTYRADFKIP ...', IUPACProtein())
 Id: NP_034640.1
 Name: NP_034640
 Description interferon beta, fibroblast [Mus musculus].
@@ -3377,7 +3377,7 @@ qualifiers:
 	Key: gene, Value: ['mlr0002']
 
 ***Record from the FeatureParser
-Seq: Seq('MEECWVTEIANGSKDGLDSNPMKDYMILSGPQKTAVAVLCTLLGLLSALENVAVLYLILS ...', Alphabet())
+Seq: Seq('MEECWVTEIANGSKDGLDSNPMKDYMILSGPQKTAVAVLCTLLGLLSALENVAVLYLILS ...', IUPACProtein())
 Id: NP_001832.1
 Name: NP_001832
 Description cannabinoid receptor 2 (macrophage) [Homo sapiens].
@@ -3477,7 +3477,7 @@ qualifiers:
 	Key: pseudo, Value: ['']
 
 ***Record from the FeatureParser
-Seq: Seq('VKDGYIVDDRNCTYFCGRNAYCNEECTKLKGESGYCQWASPYGNACYCYKVPDHVRTKGP ...', Alphabet())
+Seq: Seq('VKDGYIVDDRNCTYFCGRNAYCNEECTKLKGESGYCQWASPYGNACYCYKVPDHVRTKGP ...', IUPACProtein())
 Id: P01485
 Name: SCX3_BUTOC
 Description Neurotoxin III.
