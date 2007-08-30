@@ -52,19 +52,19 @@ class Record:
         self.loci_data   = []
         
     def __str__(self):
-        rep  = '0\n' #We only export in 0 format, even if originally was 1
-        rep += str(self.num_pops) + '\n'
-        rep += str(self.num_loci) + '\n'
-        rep += '\n'
+        rep  = ['0\n'] #We only export in 0 format, even if originally was 1
+        rep.append(str(self.num_pops) + '\n')
+        rep.append(str(self.num_loci) + '\n')
+        rep.append('\n')
         for locus_data in self.loci_data:
             num_alleles, pops_data = locus_data
-            rep += str(num_alleles) + '\n'
+            rep.append(str(num_alleles) + '\n')
             for pop_data in pops_data:
                 for allele_count in pop_data:
-                    rep += str(allele_count) + ' '
-                rep += '\n'
-            rep += '\n'
-        return rep
+                    rep.append(str(allele_count) + ' ')
+                rep.append('\n')
+            rep.append('\n')
+        return "".join(rep)
     
 
 class RecordParser(AbstractParser):
