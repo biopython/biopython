@@ -593,8 +593,11 @@ class EmblScanner(InsdcScanner) :
 
         #TODO - How to deal with the version field?  At the moment the consumer
         #will try and use this for the ID which isn't ideal for EMBL files.
-        #consumer.version(fields[1])
-        consumer.version(fields[0]) #want it to be used as the ID
+        version_parts = fields[1].split()
+        if len(version_parts)==2 \
+        and version_parts[0]=="SV" \
+        and version_parts[1].isdigit() :
+            consumer.version(fields[0]+"."+version_parts[1]) #mimic GenBank style
 
         #Based on how the old GenBank parser worked, merge these two:
         consumer.residue_type(" ".join(fields[2:4])) #TODO - Store as two fields?
@@ -616,6 +619,7 @@ class EmblScanner(InsdcScanner) :
         EMBL_SPACER = " "  * EMBL_INDENT
         consumer_dict = {
             'AC' : 'accession',
+            'SV' : 'version', # SV line removed in June 2006, now part of ID line
             'DE' : 'definition',
             #'RN' : 'reference_num',
             #'RP' : 'reference_bases',

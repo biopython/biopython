@@ -72,6 +72,7 @@ test_files = [ \
     ("swiss",  False, 'SwissProt/sp013', 1),
     ("swiss",  False, 'SwissProt/sp014', 1),
     ("swiss",  False, 'SwissProt/sp015', 1),
+    ("swiss",  False, 'SwissProt/sp016', 1),
 #Following example is also used in test_registry.py
     ("swiss",  False, 'Registry/EDD_RAT.dat', 1),
 #Following examples are also used in test_GenBank.py
@@ -97,6 +98,7 @@ test_files = [ \
     ("embl",      False, 'EMBL/TRBG361.embl', 1),
     ("embl",      False, 'EMBL/DD231055_edited.embl', 1),
     ("embl",      False, 'EMBL/SC10H5.embl', 1), # Pre 2006 style ID line
+    ("embl",      False, 'EMBL/U87107.embl', 1), # Old ID line with SV line
     ("stockholm", True,  'Stockholm/simple.sth', 2),
     ("stockholm", True,  'Stockholm/funny.sth', 5),
 #Following PHYLIP files are currently only used here (test_SeqIO)

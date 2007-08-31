@@ -361,6 +361,13 @@ Testing reading swiss format file SwissProt/sp015
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+Testing reading swiss format file SwissProt/sp016
+ ID = 'P01100', Name='FOS_HUMAN',
+ Seq='MMFSGFNADYEASSSRCSSASPAGDSLSYYHSPADSFSSM...SPTLLAL', length=380
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
 Testing reading swiss format file Registry/EDD_RAT.dat
  ID = 'Q62671', Name='EDD_RAT',
  Seq='ARRERMTAREEASLRTLEGRRRATLLSARQGMMSARGDFL...TKNFGFV', length=920
@@ -487,14 +494,14 @@ Testing reading genbank format file GFF/NC_001422.gbk
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
 Testing reading embl format file EMBL/TRBG361.embl
- ID and Name='X56734',
+ ID = 'X56734.1', Name='X56734',
  Seq='AAACAAACCAAATATGGATTTTATTGTAGCCATATTTGCT...AAAAAAA', length=1859
  Checking can write/read as 'fasta' format
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
 Testing reading embl format file EMBL/DD231055_edited.embl
- ID and Name='DD231055',
+ ID = 'DD231055.1', Name='DD231055',
  Seq='GCCGAGCTGACCCAGTCTCCATCCTCCCTGTCTGCATCTG...TATGAGA', length=315
  Checking can write/read as 'fasta' format
  Checking can write/read as 'clustal' format
@@ -503,6 +510,13 @@ Testing reading embl format file EMBL/DD231055_edited.embl
 Testing reading embl format file EMBL/SC10H5.embl
  ID = 'AL031232', Name='SC10H5',
  Seq='GATCAGTAGACCCAGCGACAGCAGGGCGGGGCCCAGCAGG...CGAGCAT', length=4870
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading embl format file EMBL/U87107.embl
+ ID = 'U87107.1', Name='U87107',
+ Seq='CAATTACTGCAATGCCCTCGTAATTAAGTGAATTTACAAT...CATCACC', length=8840
  Checking can write/read as 'fasta' format
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
