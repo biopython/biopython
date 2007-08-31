@@ -334,6 +334,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         _BaseGenBankConsumer.__init__(self)
         self.data = SeqRecord(None, id = None)
         self.data.id = None
+        self.data.description = ""
 
         self._use_fuzziness = use_fuzziness
         self._feature_cleaner = feature_cleaner
@@ -367,7 +368,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
     def definition(self, definition):
         """Set the definition as the description of the sequence.
         """
-        self.data.description = definition
+        self.data.description += definition
 
     def accession(self, acc_num):
         """Set the accession number as the id of the sequence.
