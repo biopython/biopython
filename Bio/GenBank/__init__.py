@@ -368,7 +368,12 @@ class _FeatureConsumer(_BaseGenBankConsumer):
     def definition(self, definition):
         """Set the definition as the description of the sequence.
         """
-        self.data.description += definition
+        if self.data.description :
+            #Append to any existing description
+            #e.g. EMBL files with two DE lines.
+            self.data.description += " " + definition
+        else :
+            self.data.description = definition
 
     def accession(self, acc_num):
         """Set the accession number as the id of the sequence.
