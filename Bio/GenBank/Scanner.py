@@ -516,7 +516,8 @@ class EmblScanner(InsdcScanner) :
                 raise SyntaxError("Premature end of file")
             self.line = self.line.rstrip()
 
-        assert self.line[:self.HEADER_WIDTH] == " " * self.HEADER_WIDTH
+        assert self.line[:self.HEADER_WIDTH] == " " * self.HEADER_WIDTH \
+               or self.line.strip() == '//', repr(self.line)
         
         seq_lines = []
         line = self.line
@@ -528,7 +529,8 @@ class EmblScanner(InsdcScanner) :
                 raise SyntaxError("Blank line in sequence data")
             if line=='//' :
                 break
-            assert self.line[:self.HEADER_WIDTH] == " " * self.HEADER_WIDTH
+            assert self.line[:self.HEADER_WIDTH] == " " * self.HEADER_WIDTH, \
+                   repr(self.line)
             seq_lines.append("".join(line.split()[:-1]))
             line = self.handle.readline()
         self.line = line
