@@ -337,9 +337,23 @@ class _Scanner:
         while uhandle.peekline():
             self._scan_record(uhandle, consumer)
 
+    def _skip_starstar(self, uhandle) :
+        """Ignores any lines starting **"""
+        #See Bug 2353, some files from the EBI have extra lines
+        #starting "**" (two asterisks/stars), usually between the
+        #features and sequence but not all the time.  They appear
+        #to be unofficial automated annotations. e.g.
+        #**
+        #**   #################    INTERNAL SECTION    ##################
+        #**HA SAM; Annotated by PicoHamap 1.88; MF_01138.1; 09-NOV-2003.
+        while "**" == uhandle.peekline()[:2] :
+            skip = uhandle.readline()
+            #print "Skipping line: %s" % skip.rstrip()
+
     def _scan_record(self, uhandle, consumer):
         consumer.start_record()
         for fn in self._scan_fns:
+            self._skip_starstar(uhandle)
             fn(self, uhandle, consumer)
 
             # In Release 38, ID N33_HUMAN has a DR buried within comments.
@@ -423,6 +437,10 @@ class _Scanner:
             # ws:2001-12-05 added, for record with RL before RA
             self._scan_rl(uhandle, consumer)
             self._scan_ra(uhandle, consumer)
+            #EBI copy of P72010 is missing the RT line, and has one
+            #of their ** lines in its place noting "**   /NO TITLE."
+            #See also bug 2353
+            self._skip_starstar(uhandle) 
             self._scan_rt(uhandle, consumer)
             self._scan_rl(uhandle, consumer)
     
@@ -482,15 +500,6 @@ class _Scanner:
     def _scan_pe(self, uhandle, consumer):
         self._scan_line('PE', uhandle, consumer.protein_existence, any_number=1)
 
-    def _scan_starstar(self, uhandle, consumer):
-        #See Bug 2353, some files from the EBI have extra lines starting "**"
-        #(two asterisks/stars) between the features and sequence.  These
-        #appear to be unofficial automated annotations. e.g.
-        #**
-        #**   #################    INTERNAL SECTION    ##################
-        #**HA SAM; Annotated by PicoHamap 1.88; MF_01138.1; 09-NOV-2003.
-        self._scan_line('**', uhandle, consumer.star_star, any_number=1)
-    
     def _scan_sq(self, uhandle, consumer):
         self._scan_line('SQ', uhandle, consumer.sequence_header, exactly_one=1)
     
@@ -517,7 +526,6 @@ class _Scanner:
         _scan_pe,
         _scan_kw,
         _scan_ft,
-        _scan_starstar,
         _scan_sq,
         _scan_sequence_data,
         _scan_terminator
@@ -1148,6 +1156,7 @@ if __name__ == "__main__" :
             print record.keywords
             print repr(record.organism)
             print record.sequence[:20] + "..."
+        handle.close()
 
         handle = open(example_filename)
         for record in Iterator(handle, SequenceParser()) :
@@ -1156,6 +1165,4 @@ if __name__ == "__main__" :
             print record.annotations['keywords']
             print repr(record.annotations['organism'])
             print record.seq.tostring()[:20] + "..."
-            
-
-        
+        handle.close()
