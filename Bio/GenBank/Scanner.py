@@ -552,6 +552,7 @@ class EmblScanner(InsdcScanner) :
         assert line[:self.HEADER_WIDTH].rstrip() == "ID"
         fields = [line[self.HEADER_WIDTH:].split(None,1)[0]]
         fields.extend(line[self.HEADER_WIDTH:].split(None,1)[1].split(";"))
+        fields = [entry.strip() for entry in fields]
         """
         The tokens represent:
            0. Primary accession number
@@ -597,7 +598,7 @@ class EmblScanner(InsdcScanner) :
         if len(version_parts)==2 \
         and version_parts[0]=="SV" \
         and version_parts[1].isdigit() :
-            consumer.version(fields[0]+"."+version_parts[1]) #mimic GenBank style
+            consumer.version_suffix(version_parts[1])
 
         #Based on how the old GenBank parser worked, merge these two:
         consumer.residue_type(" ".join(fields[2:4])) #TODO - Store as two fields?

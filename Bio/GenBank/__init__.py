@@ -395,13 +395,37 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         self.data.annotations['pid'] = content
 
     def version(self, version_id):
+        #Want to use the versioned accension as the record.id
+        #This comes from the VERSION line in GenBank files, or the
+        #obsolete SV line in EMBL.  For the new EMBL files we need
+        #both the version suffix from the ID line and the accession
+        #from the AC line.
+        if version_id.count(".")==1 and version_id.split(".")[1].isdigit() :
+            self.accession(version_id.split(".")[0])
+            self.version_suffix(version_id.split(".")[1])
+        else :
+            #For backwards compatibility...
+            self.data.id = version_id
+
+    def version_suffix(self, version):
         """Set the version to overwrite the id.
 
         Since the verison provides the same information as the accession
         number, plus some extra info, we set this as the id if we have
         a version.
         """
-        self.data.id = version_id
+        #e.g. GenBank line:
+        #VERSION     U49845.1  GI:1293613
+        #or the obsolete EMBL line:
+        #SV   U49845.1
+        #Scanner calls consumer.version("U49845.1")
+        #which then calls consumer.version_suffix(1)
+        #
+        #e.g. EMBL new line:
+        #ID   X56734; SV 1; linear; mRNA; STD; PLN; 1859 BP.
+        #Scanner calls consumer.version_suffix(1)
+        assert version.isdigit()
+        self.data.annotations['sequence_version'] = int(version)
 
     def db_source(self, content):
         self.data.annotations['db_source'] = content.rstrip()
@@ -917,6 +941,14 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         from Bio import Alphabet
         from Bio.Alphabet import IUPAC
         from Bio.Seq import Seq
+
+        #Try and append the version number to the accession for the full id
+        if self.data.id.count('.') == 0 :
+            try :
+                self.data.id+='.%i' % self.data.annotations['sequence_version']
+            except KeyError :
+                pass
+        
         # add the last feature in the table which hasn't been added yet
         self._add_feature()
 

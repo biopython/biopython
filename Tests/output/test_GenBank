@@ -19,6 +19,8 @@ Key: keywords
 Value: ['']
 Key: organism
 Value: Homo sapiens
+Key: sequence_version
+Value: 1
 Key: source
 Value: human
 Key: taxonomy
@@ -91,6 +93,8 @@ medline id: 92119220
 pubmed id: 
 comment: 
 
+Key: sequence_version
+Value: 1
 Key: source
 Value: thale cress
 Key: taxonomy
@@ -157,6 +161,8 @@ medline id: 92329728
 pubmed id: 
 comment: 
 
+Key: sequence_version
+Value: 1
 Key: source
 Value: thale cress
 Key: taxonomy
@@ -336,6 +342,8 @@ medline id:
 pubmed id: 
 comment: 
 
+Key: sequence_version
+Value: 1
 Key: source
 Value: Brassica napus (cultivar Jet neuf) cold induced leaf cDNA to mRNA
 Key: taxonomy
@@ -427,6 +435,8 @@ medline id:
 pubmed id: 
 comment: 
 
+Key: sequence_version
+Value: 1
 Key: source
 Value: horseradish
 Key: taxonomy
@@ -542,6 +552,8 @@ medline id:
 pubmed id: 
 comment: 
 
+Key: sequence_version
+Value: 1
 Key: source
 Value: Brassica rapa flower cDNA to mRNA
 Key: taxonomy
@@ -607,6 +619,8 @@ medline id:
 pubmed id: 
 comment: 
 
+Key: sequence_version
+Value: 1
 Key: source
 Value: rape
 Key: taxonomy
@@ -734,6 +748,8 @@ medline id:
 pubmed id: 
 comment: 
 
+Key: sequence_version
+Value: 1
 Key: source
 Value: human
 Key: taxonomy
@@ -815,6 +831,8 @@ medline id:
 pubmed id: 
 comment: 
 
+Key: sequence_version
+Value: 1
 Key: source
 Value: human
 Key: taxonomy
@@ -922,6 +940,8 @@ medline id:
 pubmed id: 
 comment: 
 
+Key: sequence_version
+Value: 5
 Key: source
 Value: thale cress
 Key: taxonomy
@@ -1819,6 +1839,8 @@ medline id: 83265757
 pubmed id: 
 comment: 
 
+Key: sequence_version
+Value: 1
 Key: source
 Value: house mouse
 Key: taxonomy
@@ -1938,6 +1960,8 @@ medline id:
 pubmed id: 
 comment: 
 
+Key: sequence_version
+Value: 1
 Key: source
 Value: fruit fly
 Key: taxonomy
@@ -2723,6 +2747,8 @@ comment:
 
 Key: segment
 Value: 1 of 6
+Key: sequence_version
+Value: 1
 Key: source
 Value: human
 Key: taxonomy
@@ -3182,6 +3208,8 @@ medline id:
 pubmed id: 
 comment: 
 
+Key: sequence_version
+Value: 6
 Key: source
 Value: human
 Key: taxonomy
@@ -3355,6 +3383,8 @@ medline id:
 pubmed id: 
 comment: 
 
+Key: sequence_version
+Value: 1
 Key: source
 Value: Mesorhizobium loti
 Key: taxonomy
@@ -3435,6 +3465,8 @@ medline id: 96283804
 pubmed id: 8679694
 comment: 
 
+Key: sequence_version
+Value: 1
 Key: source
 Value: human
 Key: taxonomy
@@ -3655,6 +3687,8 @@ medline id:
 pubmed id: 
 comment: 
 
+Key: sequence_version
+Value: 1
 Key: source
 Value: Feline panleukopenia virus
 Key: taxonomy
@@ -3715,6 +3749,8 @@ medline id:
 pubmed id: 
 comment: 
 
+Key: sequence_version
+Value: 1
 Key: source
 Value: Feline panleukopenia virus
 Key: taxonomy
@@ -3775,6 +3811,8 @@ medline id:
 pubmed id: 
 comment: 
 
+Key: sequence_version
+Value: 1
 Key: source
 Value: Feline panleukopenia virus
 Key: taxonomy
