@@ -1,5 +1,15 @@
 """Simplify adding markup to a piece of text."""
 
+import warnings
+warnings.warn("""\
+Bio.MarkupEditor is deprecated.
+If you use the code in Bio.MarkupEditor, Please get in touch on
+the Biopython mailing lists to prevent permanent removal of this
+module.""",
+              DeprecationWarning)
+
+
+
 
 from xml.sax import saxutils
 
