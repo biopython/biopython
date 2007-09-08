@@ -11,7 +11,7 @@ Bio.GFF.easy: some functions to ease the use of Biopython
 
 from __future__ import generators # requires Python 2.2
 
-__version__ = "$Revision: 1.7 $"
+__version__ = "$Revision: 1.8 $"
 # $Source: /home/bartek/cvs2bzr/biopython_fastimport/cvs_repo/biopython/Bio/GFF/easy.py,v $
 
 import copy
@@ -589,18 +589,6 @@ def record_coords(record, start, end, strand=0, upper=0):
         return subseq.reverse_complement()
     else:
         return subseq
-
-#Removed as Bio.SeqIO.FASTA.FastaWriter has been deprecated
-#class TempFastaWriter(FastaWriter):
-#    def __init__(self, *args, **keywds):
-#        self.file = GenericTools.TempFile()
-#        FastaWriter.__init__(self, self.file, *args, **keywds)
-#
-#class TempFastaWriterSingle(TempFastaWriter):
-#    def __init__(self, seqrecord, *args, **keywds):
-#        TempFastaWriter.__init__(self, *args, **keywds)
-#        self.write(seqrecord)
-#        self.close()
 
 def _test(*args, **keywds):
     import doctest, sys
