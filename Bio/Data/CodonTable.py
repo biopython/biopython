@@ -41,6 +41,63 @@ class CodonTable:
         self.start_codons = start_codons
         self.stop_codons = stop_codons
 
+    def __str__(self) :
+        """Returns a simple text representation of the codon table
+
+        e.g.
+        >>> import Bio.Data.CodonTable
+        >>> print Bio.Data.CodonTable.standard_dna_table
+        >>> print Bio.Data.CodonTable.generic_by_id[1]"""
+
+        if self.id :
+            answer = "Table %i" % self.id
+        else :
+            answer = "Table ID unknown"
+        if self.names :
+            answer += " " + ", ".join(filter(None, self.names))
+
+        #Use the main four letters (and the conventional ordering)
+        #even for ambiguous tables
+        letters = self.nucleotide_alphabet.letters
+        if isinstance(self.nucleotide_alphabet, Alphabet.DNAAlphabet) \
+        or (letters is not None and "T" in letters) :
+            letters = "TCAG"
+        else :
+            #Should be either RNA or generic nucleotides,
+            #e.g. Bio.Data.CodonTable.generic_by_id[1]
+            letters = "TCAG"
+
+        #Build the table...
+        answer=answer + "\n\n  |" + "|".join( \
+            ["  %s      " % c2 for c2 in letters] \
+            ) + "|"
+        answer=answer + "\n--+" \
+               + "+".join(["---------" for c2 in letters]) + "+--"
+        for c1 in letters :
+            for c3 in letters :
+                line = c1 + " |"
+                for c2 in letters :
+                    codon = c1+c2+c3
+                    line = line + " %s" % codon
+                    if codon in self.stop_codons :
+                        line = line + " Stop|"
+                    else :
+                        try :
+                            amino = self.forward_table[codon]
+                        except KeyError :
+                            amino = "?"
+                        except TranslationError :
+                            amino = "?"
+                        if codon in self.start_codons :
+                            line = line + " %s(s)|" % amino
+                        else :
+                            line = line + " %s   |" % amino
+                line = line + " " + c3
+                answer = answer + "\n"+ line 
+            answer=answer + "\n--+" \
+                  + "+".join(["---------" for c2 in letters]) + "+--"
+        return answer
+            
 def make_back_table(table, default_stop_codon):
     #  ONLY RETURNS A SINGLE CODON
     # Do the sort so changes in the hash implementation won't affect
