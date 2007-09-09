@@ -7,6 +7,9 @@ class Translator:
         self.table = table
         self._encoded = {}
 
+    def __str__(self) :
+        return "Translator object\n" + str(self.table)
+
     def translate(self, seq, stop_symbol = "*"):
         assert seq.alphabet == self.table.nucleotide_alphabet, \
                "cannot translate from the given alphabet (%s)" % seq.alphabet
