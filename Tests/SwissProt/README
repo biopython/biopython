@@ -26,7 +26,8 @@ sp012  TrEMBL 16.0  Q9Y736   RC line has too many '='
 sp013  TrEMBL 16.0  P82909   reference 2 missing RL line
 sp014  SP 39.14  PSBL_ORYSA  OX spans 2 lines
 sp015  IPI    IPI00383150.2  Only two DT lines, strange format of DT lines
-			     Dot versions in DT lines, no DE line
+                             Dot versions in DT lines, no DE line
+sp016            FOS_HUMAN   New PE line from UniProtKB rel 12.0, 24-Jul-2007
 
 
 KEYWLIST TEST FILES

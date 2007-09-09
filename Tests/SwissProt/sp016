@@ -1,0 +1,190 @@
+ID   FOS_HUMAN               Reviewed;         380 AA.
+AC   P01100; P18849;
+DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
+DT   21-JUL-1986, sequence version 1.
+DT   24-JUL-2007, entry version 93.
+DE   Proto-oncogene protein c-fos (Cellular oncogene fos) (G0/G1 switch
+DE   regulatory protein 7).
+GN   Name=FOS; Synonyms=G0S7;
+OS   Homo sapiens (Human).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+OC   Mammalia; Eutheria; Euarchontoglires; Primates; Haplorrhini;
+OC   Catarrhini; Hominidae; Homo.
+OX   NCBI_TaxID=9606;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RX   MEDLINE=83221560; PubMed=6574479;
+RA   van Straaten F., Mueller R., Curran T., Van Beveren C., Verma I.M.;
+RT   "Complete nucleotide sequence of a human c-onc gene: deduced amino
+RT   acid sequence of the human c-fos protein.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 80:3183-3187(1983).
+RN   [2]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA] OF 133-200.
+RX   MEDLINE=90185187; PubMed=2516827;
+RA   Hai T., Liu F., Coukos W.J., Green M.R.;
+RT   "Transcription factor ATF cDNA clones: an extensive family of leucine
+RT   zipper proteins able to selectively form DNA-binding heterodimers.";
+RL   Genes Dev. 3:2083-2090(1989).
+RN   [3]
+RP   ERRATUM.
+RA   Hai T., Liu F., Coukos W.J., Green M.R.;
+RL   Genes Dev. 4:682-682(1990).
+RN   [4]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RA   Rieder M.J., Livingston R.J., Daniels M.R., Montoya M.A., Chung M.-W.,
+RA   Miyamoto K.E., Nguyen C.P., Nguyen D.A., Poel C.L., Robertson P.D.,
+RA   Schackwitz W.S., Sherwood J.K., Witrak L.A., Nickerson D.A.;
+RT   "NIEHS-SNPs, environmental genome project, NIEHS ES15478, Department
+RT   of Genome Sciences, Seattle, WA (URL: http://egp.gs.washington.edu).";
+RL   Submitted (JAN-2003) to the EMBL/GenBank/DDBJ databases.
+RN   [5]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].
+RX   MEDLINE=22459283; PubMed=12508121; DOI=10.1038/nature01348;
+RA   Heilig R., Eckenberg R., Petit J.-L., Fonknechten N., Da Silva C.,
+RA   Cattolico L., Levy M., Barbe V., De Berardinis V., Ureta-Vidal A.,
+RA   Pelletier E., Vico V., Anthouard V., Rowen L., Madan A., Qin S.,
+RA   Sun H., Du H., Pepin K., Artiguenave F., Robert C., Cruaud C.,
+RA   Bruels T., Jaillon O., Friedlander L., Samson G., Brottier P.,
+RA   Cure S., Segurens B., Aniere F., Samain S., Crespeau H., Abbasi N.,
+RA   Aiach N., Boscus D., Dickhoff R., Dors M., Dubois I., Friedman C.,
+RA   Gouyvenoux M., James R., Madan A., Mairey-Estrada B., Mangenot S.,
+RA   Martins N., Menard M., Oztas S., Ratcliffe A., Shaffer T., Trask B.,
+RA   Vacherie B., Bellemere C., Belser C., Besnard-Gonnet M.,
+RA   Bartol-Mavel D., Boutard M., Briez-Silla S., Combette S.,
+RA   Dufosse-Laurent V., Ferron C., Lechaplais C., Louesse C., Muselet D.,
+RA   Magdelenat G., Pateau E., Petit E., Sirvain-Trukniewicz P., Trybou A.,
+RA   Vega-Czarny N., Bataille E., Bluet E., Bordelais I., Dubois M.,
+RA   Dumont C., Guerin T., Haffray S., Hammadi R., Muanga J., Pellouin V.,
+RA   Robert D., Wunderle E., Gauguet G., Roy A., Sainte-Marthe L.,
+RA   Verdier J., Verdier-Discala C., Hillier L.W., Fulton L., McPherson J.,
+RA   Matsuda F., Wilson R., Scarpelli C., Gyapay G., Wincker P., Saurin W.,
+RA   Quetier F., Waterston R., Hood L., Weissenbach J.;
+RT   "The DNA sequence and analysis of human chromosome 14.";
+RL   Nature 421:601-607(2003).
+RN   [6]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE MRNA].
+RC   TISSUE=Pancreas;
+RX   PubMed=15489334; DOI=10.1101/gr.2596504;
+RG   The MGC Project Team;
+RT   "The status, quality, and expansion of the NIH full-length cDNA
+RT   project: the Mammalian Gene Collection (MGC).";
+RL   Genome Res. 14:2121-2127(2004).
+RN   [7]
+RP   NUCLEOTIDE SEQUENCE [MRNA] OF 1-6.
+RX   MEDLINE=92050815; PubMed=1658710;
+RA   Roux P., Verrier B., Klein B., Niccolino M., Marty L., Alexandre C.,
+RA   Piechaczyk M.;
+RT   "Retrovirus-mediated gene transfer of a human c-fos cDNA into mouse
+RT   bone marrow stromal cells.";
+RL   Oncogene 6:2155-2160(1991).
+RN   [8]
+RP   DNA-BINDING.
+RX   MEDLINE=90059986; PubMed=2511004;
+RA   Nakabeppu Y., Nathans D.;
+RT   "The basic region of Fos mediates specific DNA binding.";
+RL   EMBO J. 8:3833-3841(1989).
+RN   [9]
+RP   UBIQUITINATION [LARGE SCALE ANALYSIS] AT LYS-113, AND MASS
+RP   SPECTROMETRY.
+RC   TISSUE=Lung adenocarcinoma;
+RX   PubMed=17203973; DOI=10.1021/pr060438j;
+RA   Vasilescu J., Zweitzig D.R., Denis N.J., Smith J.C., Ethier M.,
+RA   Haines D.S., Figeys D.;
+RT   "The proteomic reactor facilitates the analysis of affinity-purified
+RT   proteins by mass spectrometry: application for identifying
+RT   ubiquitinated proteins in human cells.";
+RL   J. Proteome Res. 6:298-305(2007).
+RN   [10]
+RP   X-RAY CRYSTALLOGRAPHY (3.05 ANGSTROMS) OF 139-198 OF COMPLEX WITH JUN.
+RX   MEDLINE=95115802; PubMed=7816143; DOI=10.1038/373257a0;
+RA   Glover J.N., Harrison S.C.;
+RT   "Crystal structure of the heterodimeric bZIP transcription factor c-
+RT   Fos-c-Jun bound to DNA.";
+RL   Nature 373:257-261(1995).
+CC   -!- FUNCTION: Nuclear phosphoprotein which forms a tight but non-
+CC       covalently linked complex with the JUN/AP-1 transcription factor.
+CC       In the heterodimer, c-fos and JUN/AP-1 basic regions each seems to
+CC       interact with symmetrical DNA half sites. Has a critical function
+CC       in regulating the development of cells destined to form and
+CC       maintain the skeleton. It is thought to have an important role in
+CC       signal transduction, cell proliferation and differentiation.
+CC   -!- SUBUNIT: Heterodimer with JUN. Interacts with DSIPI; this
+CC       interaction inhibits the binding of active AP1 to its target DNA.
+CC       Interacts with MAFB (By similarity).
+CC   -!- INTERACTION:
+CC       O60869-1:EDF1; NbExp=1; IntAct=EBI-852851, EBI-781310;
+CC   -!- SUBCELLULAR LOCATION: Nucleus.
+CC   -!- INDUCTION: C-fos expression increases upon a variety of stimuli,
+CC       including growth factors, cytokines, neurotransmitters,
+CC       polypeptide hormones, stress and cell injury.
+CC   -!- SIMILARITY: Belongs to the bZIP family. Fos subfamily.
+CC   -!- SIMILARITY: Contains 1 bZIP domain.
+CC   -----------------------------------------------------------------------
+CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
+CC   Distributed under the Creative Commons Attribution-NoDerivs License
+CC   -----------------------------------------------------------------------
+DR   EMBL; V01512; CAA24756.1; -; Genomic_DNA.
+DR   EMBL; K00650; AAA52471.1; -; Genomic_DNA.
+DR   EMBL; AY212879; AAO21129.1; -; Genomic_DNA.
+DR   EMBL; AF111167; AAC98315.1; -; Genomic_DNA.
+DR   EMBL; BC004490; AAH04490.1; -; mRNA.
+DR   EMBL; S65138; AAB20306.1; -; mRNA.
+DR   PIR; A01342; TVHUF1.
+DR   PIR; E34223; E34223.
+DR   UniGene; Hs.25647; -.
+DR   PDB; 1A02; X-ray; F=139-193.
+DR   PDB; 1FOS; X-ray; E=139-198, G=140-198.
+DR   PDB; 1S9K; X-ray; D=140-192.
+DR   DisProt; DP00078; -.
+DR   DIP; DIP:1047N; -.
+DR   IntAct; P01100; -.
+DR   TRANSFAC; T00123; -.
+DR   Ensembl; ENSG00000170345; Homo sapiens.
+DR   KEGG; hsa:2353; -.
+DR   H-InvDB; HIX0011826; -.
+DR   HGNC; HGNC:3796; FOS.
+DR   HPA; CAB000461; -.
+DR   MIM; 164810; gene.
+DR   PharmGKB; PA134953249; -.
+DR   LinkHub; P01100; -.
+DR   ArrayExpress; P01100; -.
+DR   GermOnline; ENSG00000170345; Homo sapiens.
+DR   RZPD-ProtExp; B0247; -.
+DR   RZPD-ProtExp; IOH27255; -.
+DR   RZPD-ProtExp; RZPDo834H0326; -.
+DR   RZPD-ProtExp; RZPDo834H0730; -.
+DR   RZPD-ProtExp; T1225; -.
+DR   GO; GO:0005634; C:nucleus; TAS:ProtInc.
+DR   GO; GO:0005515; F:protein binding; IPI:IntAct.
+DR   GO; GO:0003704; F:specific RNA polymerase II transcription fa...; TAS:ProtInc.
+DR   GO; GO:0006306; P:DNA methylation; TAS:ProtInc.
+DR   GO; GO:0006954; P:inflammatory response; TAS:ProtInc.
+DR   GO; GO:0006357; P:regulation of transcription from RNA polyme...; TAS:ProtInc.
+DR   InterPro; IPR011700; bZIP_2.
+DR   InterPro; IPR000837; Leuzip_Fos.
+DR   InterPro; IPR004827; TF_bZIP.
+DR   Pfam; PF07716; bZIP_2; 1.
+DR   PRINTS; PR00042; LEUZIPPRFOS.
+DR   SMART; SM00338; BRLZ; 1.
+DR   PROSITE; PS50217; BZIP; 1.
+DR   PROSITE; PS00036; BZIP_BASIC; 1.
+PE   1: Evidence at protein level;
+KW   3D-structure; DNA-binding; Nucleus; Phosphorylation; Proto-oncogene;
+KW   Ubl conjugation.
+FT   CHAIN         1    380       Proto-oncogene protein c-fos.
+FT                                /FTId=PRO_0000076465.
+FT   DOMAIN      165    193       Leucine-zipper.
+FT   DNA_BIND    139    160       Basic motif.
+FT   CROSSLNK    113    113       Glycyl lysine isopeptide (Lys-Gly)
+FT                                (interchain with G-Cter in ubiquitin).
+FT   CONFLICT    133    144       SPEEEEKRRIRR -> ISRRRREKENPK (in Ref. 2).
+FT   HELIX       141    191
+SQ   SEQUENCE   380 AA;  40695 MW;  9E3B2969347C90C8 CRC64;
+     MMFSGFNADY EASSSRCSSA SPAGDSLSYY HSPADSFSSM GSPVNAQDFC TDLAVSSANF
+     IPTVTAISTS PDLQWLVQPA LVSSVAPSQT RAPHPFGVPA PSAGAYSRAG VVKTMTGGRA
+     QSIGRRGKVE QLSPEEEEKR RIRRERNKMA AAKCRNRRRE LTDTLQAETD QLEDEKSALQ
+     TEIANLLKEK EKLEFILAAH RPACKIPDDL GFPEEMSVAS LDLTGGLPEV ATPESEEAFT
+     LPLLNDPEPK PSVEPVKSIS SMELKTEPFD DFLFPASSRP SGSETARSVP DMDLSGSFYA
+     ADWEPLHSGS LGMGPMATEL EPLCTPVVTC TPSCTAYTSS FVFTYPEADS FPSCAAAHRK
+     GSSSNEPSSD SLSSPTLLAL
+//
