@@ -16,14 +16,10 @@ BlastParser   Parses output from WWW blast.
 _Scanner      Scans output from NCBI's BLAST WWW server.
 
 Functions:
-blast         Do a BLAST search against the WWW page. (Deprecated)
-blasturl      Do a BLAST search against the stable blasturl. (Deprecated)
 qblast        Do a BLAST search using the QBLAST API.
 
 """
-import string
 import re
-import sgmllib
 
 try:
     import cStringIO as StringIO
@@ -181,7 +177,7 @@ class _Scanner:
                 line = uhandle.peekline()
                 if is_blank_line(line):
                     break
-                elif string.find(line, "Query=") >= 0:
+                elif "Query=" in line:
                     break
                 consumer.noevent(uhandle.readline())
 
@@ -316,17 +312,15 @@ class _Scanner:
         uhandle.saveline(line1)
 
         is_pairwise = is_masterslave = 0
-#        Was line1, changed to line2. 16-feb-2005. Iddo
-#        if string.find(line1, 'Alignments') >= 0:
-        if string.find(line2, 'Alignments') >= 0:
+        if 'Alignments' in line2:
             is_pairwise = 1
-        elif line2[:10] == '  Database':
+        elif line2.startswith('  Database'):
             pass
-        elif line2[:19] == 'Lambda     K      H':
+        elif line2.startswith('Lambda     K      H'):
             pass
-        elif line2[:9] == 'blast_tmp':
+        elif line2.startswith('blast_tmp'):
             is_masterslave = 1
-        elif line1[:5] == '<PRE>':
+        elif line1.startswith('<PRE>'):
             is_pairwise = 1
         else:
             raise SyntaxError, "Cannot resolve location at lines:\n%s\n%s" % (line1, line2)
@@ -421,7 +415,7 @@ class _Scanner:
         #
         while 1:
             line = safe_readline(uhandle)
-            if string.lstrip(line)[:8] == 'Length =':
+            if line.lstrip().startswith('Length ='):
                 consumer.length(line)
                 break
             elif is_blank_line(line):
@@ -670,372 +664,6 @@ class _Scanner:
         attempt_read_and_call(uhandle, consumer.noevent, start="</form>")
 
         consumer.end_parameters()
-
-def blast(program, database, query,
-          query_from='', query_to='',
-          entrez_query='(none)',
-          filter='L',
-          expect='10',
-          word_size=None,
-          ungapped_alignment='no',    # deprecated, not on webpage anymore
-          other_advanced=None,
-          cdd_search='on',
-          composition_based_statistics=None,
-          matrix_name=None,
-          run_psiblast=None,
-          i_thresh='0.001',
-          genetic_code='1',
-          show_overview='on',
-          ncbi_gi='on',
-          format_object='alignment',
-          format_type='HTML',
-          descriptions='100',
-          alignments='50',
-          alignment_view='Pairwise',
-          auto_format='on',
-          cgi='http://www.ncbi.nlm.nih.gov/blast/Blast.cgi',
-          timeout=20, output_fn=None):
-    
-    """blast(program, database, query[, query_from][, query_to]
-    [, entrez_query][, filter][, expect]
-    [, word_size][, other_advanced][, cdd_search]
-    [, composition_based_statistics][, matrix_name][, run_psiblast]
-    [, i_thresh][, genetic_code][, show_overview][, ncbi_gi]
-    [, format_object][, format_type][, descriptions][, alignments]
-    [, alignment_view][, auto_format][, cgi][, timeout]) -> handle
-
-    Blast against the NCBI Blast web page.  This uses the NCBI web
-    page cgi script to BLAST, and returns a handle to the
-    results. See:
-    
-    http://www.ncbi.nlm.nih.gov/blast/html/blastcgihelp.html
-    
-    for more descriptions about the options.
-
-    Required Inputs:
-    o program - The name of the blast program to run (ie. blastn, blastx...)
-    o database - The database to search against (ie. nr, dbest...)
-    o query - The input for the search, which NCBI tries to autodetermine
-    the type of. Ideally, this would be a sequence in FASTA format.
-
-    General Options:
-    filter, expect, word_size, other_advanced
-
-    Formatting Options:
-    show_overview, ncbi_gi, format_object, format_type, descriptions,
-    alignments, alignment_view, auto_format
-
-    Protein specific options:
-    cdd_search, composition_based_statistics, matrix_name, run_psiblast,
-    i_thresh
-
-    Translated specific options:
-    genetic code
-    
-    """
-    import time
-    import urlparse
-    from Bio.WWW import NCBI
-    
-    import warnings
-    warnings.warn("blast is deprecated.  Please use qblast instead.",
-                  DeprecationWarning)
-    
-    # NCBI Blast is hard to work with.  The user enters a query, and then
-    # it returns a "reference" page which contains a button that the user
-    # clicks to retrieve the results.  This will retrieve the "results"
-    # page.  However, this page may not contain BLAST results if the
-    # search isn't done.
-    # This function will send off the query and parse the reference
-    # page to figure out how to retrieve the results.  Then, it needs to
-    # periodically query the results to see if the search has finished.
-    # When it has, then it can retrieve the actual blast results.
-    params = {'PROGRAM' : program,
-              'QUERY_FROM' : query_from,
-              'QUERY_TO' : query_to,
-              'DATABASE' : database,
-              'QUERY' : query,
-              'ENTREZ_QUERY' : entrez_query,
-              'FILTER' : filter,
-              'EXPECT' : expect,
-              'WORD_SIZE' : word_size,
-              'OTHER_ADVANCED': other_advanced,
-              'CDD_SEARCH' : cdd_search,
-              'COMPOSITION_BASED_STATISTICS' : composition_based_statistics,
-              'MATRIX_NAME' : matrix_name,
-              'RUN_PSIBLAST' : run_psiblast,
-              'I_THRESH' : i_thresh,
-              'GENETIC_CODE' : genetic_code,
-              'SHOW_OVERVIEW' : show_overview,
-              'NCBI_GI' : ncbi_gi,
-              'FORMAT_OBJECT' : format_object,
-              'FORMAT_TYPE' : format_type,
-              'DESCRIPTIONS' : descriptions,
-              'ALIGNMENTS' : alignments,
-              'ALIGNMENT_VIEW' : alignment_view,
-              'AUTO_FORMAT' : auto_format}
-
-    default_word_sizes = {
-        'blastp' : 3,
-        'blastn' : 11,
-        'blastx' : 3,
-        'tblastn' : 3,
-        'tblastx' : 3
-        }
-    if not params['WORD_SIZE']:
-        params['WORD_SIZE'] = default_word_sizes.get(params['PROGRAM'], 3)
-    
-    variables = {}
-    for k in params.keys():
-        if params[k] is not None:
-            variables[k] = str(params[k])
-            
-    variables['CLIENT'] = 'web'
-    variables['SERVICE'] = 'plain'
-    variables['CMD'] = 'Put'
-    variables['LAYOUT'] = 'OneWindow'
-
-    if program.upper() == 'BLASTN':
-        variables['PAGE'] = 'Nucleotides'
-    elif program.upper() == 'BLASTP':
-        variables['PAGE'] = 'Proteins'
-    elif program.upper() in ['BLASTX', 'TBLASTN','TBLASTX']:
-        variables['PAGE'] = 'Translations'
-    else:
-        raise ValueError("Unexpected program name %s" % program)
-
-    # These parameters are not yet implemented.
-    # LCASE_MASK=''
-    # GAPCOSTS=''
-    # PSSM=''
-    # PHI_PATTERN=''
-    # FORMAT_BLOCK_ON_RESPAGE='None'
-    # EMAIL_ADDRESS=''
-
-    # This returns a handle to the HTML file that points to the results.
-    handle = NCBI._open(cgi, variables, get=0)
-    # Now parse the HTML from the handle and figure out how to retrieve
-    # the results.
-    if output_fn is not None:
-        results = handle.read()
-        output_fn(results)
-        handle = StringIO.StringIO(results)
-    ref_cgi, ref_params = _parse_blast_ref_page(handle)
-    ref_cgi = urlparse.urljoin(cgi, ref_cgi)  # convert to absolute URL
-
-    # Start with the initial recommended delay.
-    refresh_delay = int(ref_params.get("RTOE", 5))
-
-    start = time.time()
-    while 1:
-        # pause before trying to get the results
-        time.sleep(refresh_delay)
-        
-        # Sometimes the BLAST results aren't done yet.  Look at the page
-        # to see if the results are there.  If not, then try again later.
-        handle = NCBI._open(ref_cgi, ref_params, get=0)
-        if output_fn is not None:
-            results = handle.read()
-            output_fn(results)
-            handle = StringIO.StringIO(results)
-        ready, results_cgi, results_params = _parse_blast_results_page(handle)
-        results_params['FORMAT_TYPE']=format_type
-        results_params['NCBI_GI']='yes'
-        results_cgi = urlparse.urljoin(cgi, results_cgi)    # to absolute URL
-        if ready:
-            break
-        # Time out if it's not done after timeout minutes.
-        if time.time() - start > timeout*60:
-            raise IOError, "timed out after %d minutes" % timeout
-
-    # Now query for the actual results.  To do this, the CGI script
-    # needs CMD="Get", which should already be in results_params.
-    # Also, for some reason, this fails if FORMAT_OBJECT is in
-    # results_params, so we need to get rid of it.
-    if results_params.has_key("FORMAT_OBJECT"):
-        del results_params["FORMAT_OBJECT"]
-    return NCBI._open(results_cgi, results_params, get=0)
-
-class _FormParser(sgmllib.SGMLParser):
-    """Parse a form in an HTML page.
-
-    Members:
-    forms   List of forms in the page.
-            Each form is a tuple of (action, params) where action
-            is a string to the CGI script and params is a dict of
-            keys and values to pass to the script.
-
-    """
-    def __init__(self):
-        sgmllib.SGMLParser.__init__(self)
-        self.forms = []
-        self._current_form = '', {}
-    def start_form(self, attributes):
-        # Parse the "FORM" tag to see where the CGI script is.
-        attr_dict = self._attr2dict(attributes)
-        self._current_form = (attr_dict.get('ACTION', self._current_form[0]),
-                              self._current_form[1])
-    def end_form(self):
-        self.forms.append(self._current_form)
-        self._current_form = '', {}
-    def do_input(self, attributes):
-        params = self._current_form[1]
-        attr_dict = self._attr2dict(attributes)
-        if attr_dict.has_key('NAME'):
-            # Get the value, handling check boxes.
-            value = attr_dict.get('VALUE', attr_dict.get('CHECKED', ''))
-            params[attr_dict['NAME']] = value
-    def _attr2dict(self, attributes):
-        attr_dict = {}
-        for name, value in attributes:
-            attr_dict[string.upper(name)] = value
-        return attr_dict
-    # XXX should handle SELECT, not implemented yet        
-
-def _parse_blast_ref_page(handle):
-    """_parse_blast_ref_page(handle, base_cgi) -> cgi, parameters"""
-    parser = _FormParser()
-    parser.feed(handle.read())
-    if len(parser.forms) != 1:
-        raise SyntaxError, "Form broken in BLAST reference page"
-    cgi, params = parser.forms[0]
-    if not params.has_key('RID'):
-        raise SyntaxError, "Error getting BLAST results: RID not found"
-    return cgi, params
-    
-def _parse_blast_results_page(handle):
-    """_parse_blast_results_page(handle) -> ready, cgi, params"""
-    class _ResultsParser(_FormParser):
-        def __init__(self):
-            _FormParser.__init__(self)
-            self.ready = 0
-        #_refresh_re = re.compile(r",\s*(\d+)\s*\);")
-        def handle_comment(self, comment):
-            # There is lots of information in the comments of the results
-            # page:
-            # <!--
-            # QBlastInfoBegin
-            #         Status=WAITING
-            # QBlastInfoEnd
-            # -->
-            # <SCRIPT LANGUAGE="JavaScript"><!--
-            # setTimeout('document.forms[0].submit();',15000);
-            # //--></SCRIPT>
-            comment = string.lower(comment)
-            if string.find(comment, 'status=ready') >= 0:
-                self.ready = 1
-            #elif string.find(comment, 'settimeout') >= 0:
-            #    # parse the refresh delay out of the comment
-            #    m = self._refresh_re.search(comment)
-            #    assert m, "Failed to parse refresh time from %s" % comment
-            #    self.refresh = int(m.group(1))/1000  # give in milliseconds
-    parser = _ResultsParser()
-    parser.feed(handle.read())
-    
-    # The results page has 2 forms.  The first one is used if the
-    # results are ready.  Otherwise, return the second one.
-    if len(parser.forms) != 2:
-        raise SyntaxError, "I expected 2 forms in the results page."
-    if parser.ready:
-        cgi, params = parser.forms[0]
-    else:
-        cgi, params = parser.forms[1]
-    return parser.ready, cgi, params
-
-def blasturl(program, datalib, sequence,
-             ncbi_gi=None, descriptions=None, alignments=None,
-             expect=None, matrix=None,
-             gap_existence=None, gap_extend=None, gapped=None,
-             filter=None, html=None, gcode=None, path=None
-             ):
-    """blasturl(program, datalib, sequence[, ncbi_gi][, descriptions]
-    [, alignments][, expect][, matrix][, gap_existence][, gap_extend]
-    [, gapped][, filter][, html][, gcode]) -> handle
-
-    Do a BLAST search using the stable URL provided by NCBI.
-    program        BLASTP, BLASTN, BLASTX, TBLASTN, or TBLASTX.
-    datalib        Which database to search against.
-    sequence       The sequence to search.
-    ncbi_gi        TRUE/FALSE whether to give 'gi' identifier.  Def FALSE.
-    descriptions   Number of descriptions to show.  Def 100.
-    alignments     Number of alignments to show.  Def 50.
-    expect         An expect value cutoff.
-    matrix         Specify an alt. matrix (PAM30, PAM70, BLOSUM80, BLOSUM45).
-    gap_existence  Give a gap open penalty.
-    gap_extend     Give a gap extension penalty.
-    gapped         TRUE/FALSE for giving gapped alignments.  Def TRUE.
-    filter         "none" turns off filtering.  Default uses 'seg' or 'dust'.
-    html           TRUE/FALSE for html output.  Def FALSE.
-    gcode          Specify an alternate genetic code for (T)BLASTX.
-
-    This function does no checking of the validity of the parameters
-    and passes the values to the server as is.  More help is available at:
-    http://www.ncbi.nlm.nih.gov/BLAST/blast_overview.html
-    
-    """
-    import warnings
-    warnings.warn("blasturl is deprecated.  Please use qblast instead.",
-                  DeprecationWarning)
-    lines = []
-    lines.append('PROGRAM %s' % program)
-    lines.append('DATALIB %s' % datalib)
-
-    parameters = [('NCBI_GI', ncbi_gi),
-                  ('DESCRIPTIONS', descriptions),
-                  ('ALIGNMENTS', alignments),
-                  ('EXPECT', expect),
-                  ('MATRIX', matrix),
-                  ('GAP_EXISTENCE', gap_existence),
-                  ('GAP_EXTEND', gap_extend),
-                  ('GAPPED', gapped),
-                  ('FILTER', filter),
-                  ('HTML', html),
-                  ('GCODE', gcode),
-                  ('PATH', path),
-                  ]
-    for name, value in parameters:
-        if value is not None:
-            lines.append("%s %s" % (name, value))
-
-    lines.append('')
-    lines.append('BEGIN')
-    while sequence:
-        lines.append(sequence[:60])
-        sequence = sequence[60:]
-
-    message = string.join(lines, '\n')
-
-    outhandle = StringIO.StringIO()
-    _send_to_blasturl(message, outhandle)
-    outhandle.seek(0)   # Reset the handle to the beginning.
-    return outhandle
-
-def _send_to_blasturl(query, outhandle):
-    """_send_to_blasturl(query, outhandle)
-
-    Send a BLAST request to the stable blasturl server at the NCBI.
-    ftp://ncbi.nlm.nih.gov/blast/blasturl/
-    The results are written to outhandle.
-    
-    """
-    import socket
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.connect(('www.ncbi.nlm.nih.gov', 80))
-    
-    sock.send('POST /cgi-bin/BLAST/nph-blast_report HTTP/1.0\n')
-    sock.send('User-Agent: BiopythonClient\n')
-    sock.send('Connection: Keep-Alive\n')
-    sock.send('Content-type: application/x-www-form-urlencoded\n')
-    sock.send('Content-Length: %d\n' % len(query))
-    sock.send('\n')
-    sock.send(query)
-
-    while 1:
-        data = sock.recv(1024)
-        if not data:
-            break
-        outhandle.write(data)
-    sock.close()
 
 def qblast(program, database, sequence,
            auto_format=None,composition_based_statistics=None,
