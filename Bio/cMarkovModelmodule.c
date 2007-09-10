@@ -52,10 +52,9 @@ static char cMarkovModel__doc__[] =
 "This module provides optimized replacement functions for MarkovModel.\n\
 ";
 
-void initcMarkovModel()
+void initcMarkovModel(void)
 {
-  (void) Py_InitModule3("cMarkovModel", CMarkovModelMethods, 
-			cMarkovModel__doc__);
+  Py_InitModule3("cMarkovModel", CMarkovModelMethods, cMarkovModel__doc__);
 }
 
 
