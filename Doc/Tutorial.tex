@@ -538,13 +538,13 @@ Enjoy the code!
 \chapter{Sequence Input/Output}
 \label{sec:SeqIO}
 
-In this chapter we'll discuss the \verb|Bio.SeqIO| module introduced earlier in more detail.  This is a new interface added to Biopython 1.43, which aims to provide a simple interface for working with assorted sequence file formats in a uniform way. The catch is that you have to work with SeqRecord ojects.
+In this chapter we'll discuss the \verb|Bio.SeqIO| module introduced earlier in more detail.  This is a new interface added to Biopython 1.43, which aims to provide a simple interface for working with assorted sequence file formats in a uniform way.  The ``catch'' is that you have to work with SeqRecord ojects.
 
 \section{Parsing or Reading Sequences}
 
 The workhorse function \verb|Bio.SeqIO.parse()| is used to read in sequence data as SeqRecord objects.  This function expects two arguments. The first argument is a {\it handle} to read the data from. A handle is typically a file opened for reading, but could be the output from a command line program, see Section~\ref{sec:appendix-handles} for more details.  The second argument is a lower case string specifying sequence format -- we don't try and guess the file format for you!
 
-What you get back is an {\it iterator} which gives SeqRecord objects, which we'll talk about in more detail later), and is typically used in a for loop.
+What you get back is an {\it iterator} which gives SeqRecord objects, which we'll talk about in more detail later, and is typically used in a for loop.
 
 \subsection{Reading Sequence Files}
 
@@ -578,7 +578,7 @@ Similarly, if you wanted to read in a file in another file format, then assuming
 \label{sec:SeqIO_GenBank_Online}
 
 In the previous section, we looked at parsing sequence data from a file handle.
-We hinted that handles are not always from files, and in this and the next section we'll use a handles to internet connections to download a sequences over the internet.
+We hinted that handles are not always from files, and in this and the next section we'll use handles to internet connections to download sequences.
 
 Section~\ref{genbank-retrieval} covers fetching sequences from GenBank in more depth, including how to do searches to get lists of GI numbers, but for now let's just connect to the NCBI and get a few orchid proteins from GenBank using their GI numbers:
 
@@ -608,7 +608,7 @@ Sequence length 899, 3 features, from: chloroplast Opuntia bradtianaa
 \subsection{Reading SwissProt Sequences from the net}
 \label{sec:SeqIO_ExPASy_and_SwissProt}
 
-Now let's use a handle download a SwissProt file from ExPASy, something covered in more depth in Section~\ref{sec:swiss_prot}:
+Now let's use a handle to download a SwissProt file from ExPASy, something covered in more depth in Section~\ref{sec:swiss_prot}:
 
 \begin{verbatim}
 from Bio.WWW import ExPASy
@@ -650,7 +650,7 @@ What's going on here with the \verb|.next()| method? Well its an alternative to 
 
 \subsection{Iterating over the records in a sequence file}
 
-In the above examples, we have usually used a for loop to iterate over all the records one by one.  You can use the for loop for all sorts of python objects (including lists, tuples and strings) which support the iteration interface.
+In the above examples, we have usually used a for loop to iterate over all the records one by one.  You can use the for loop for all sorts of Python objects (including lists, tuples and strings) which support the iteration interface.
 
 The object returned by \verb|Bio.SeqIO| is actually an iterator which returns SeqRecord objects.  You get to see each record in turn, but once and only once.  The plus point is that an iterator can save you memory when dealing with large files.
 
@@ -674,11 +674,11 @@ handle.close()
 
 \noindent The above style is useful if your sequence files have only one record, like the ExPASy SwissProt example above in Section~\ref{sec:SeqIO_ExPASy_and_SwissProt}, or a GenBank file for a single chromosome.
 
-Note that if you try and use \verb|.next()| and there are no more results, you'll either get back the special python object \verb|None| or a \verb|StopIteration| exception.
+Note that if you try and use \verb|.next()| and there are no more results, you'll either get back the special Python object \verb|None| or a \verb|StopIteration| exception.
 
 \subsection{Getting a list of the records in a sequence file}
 
-In the previous section we talked about the fact that \verb|Bio.SeqIO| gives you a SeqRecord iterator, and that you get the records one by one.  Very often you need to be able to access the records in any order. The python {\it list} data type is perfect for this, and we can turn the SeqRecord iterator into a list of SeqRecord objects using the built-in python function \verb|list| like so:
+In the previous section we talked about the fact that \verb|Bio.SeqIO| gives you a SeqRecord iterator, and that you get the records one by one.  Very often you need to be able to access the records in any order. The Python {\it list} data type is perfect for this, and we can turn the SeqRecord iterator into a list of SeqRecord objects using the built-in Python function \verb|list()| like so:
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -689,13 +689,13 @@ handle.close()
 print "Found %i records" % len(records)
 
 print "The last record"
-last_record = records[-1] #using python's list tricks
+last_record = records[-1] #using Python's list tricks
 print last_record.id
 print last_record.seq
 print len(last_record.seq)
 
 print "The first record"
-first_record = records[0] #remember, python counts from zero
+first_record = records[0] #remember, Python counts from zero
 print first_record.id
 print first_record.seq
 print len(first_record.seq)
@@ -773,8 +773,8 @@ Another way of writing this code is to use a list comprehension (introduced in P
 
 \begin{verbatim}
 from Bio import SeqIO
-all_species == [seq_record.annotations["organism"] for seq_record in \
-                SeqIO.parse(open("ls_orchid.gbk"), "genbank")]
+all_species = [seq_record.annotations["organism"] for seq_record in \
+               SeqIO.parse(open("ls_orchid.gbk"), "genbank")]
 print all_species
 \end{verbatim}
 
@@ -785,9 +785,9 @@ print all_species
 ['Cypripedium irapeanum', 'Cypripedium californicum', ..., 'Paphiopedilum barbatum']
 \end{verbatim} 
 
-Great.  That was pretty easy because GenBank files are annotated in a standardised way.
+Great.  That was pretty easy because GenBank files are annotated in a standardised way.  Now, let's suppose you wanted to extract a list of the species from your FASTA file, rather than the GenBank file.  The bad news is you will have to write some code to extract the data you want from the record's description line - if the information is in the file in the first place!
 
-Now, let's suppose you wanted to extract a list of the species from your FASTA file, rather than the GenBank file.  The trick is to notice that if you break up the description line at the spaces, then the species is there as field number one (field zero is the record identifier).  That means we can do this:
+For this example, notice that if you break up the description line at the spaces, then the species is there as field number one (field zero is the record identifier).  That means we can do this:
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -818,9 +818,9 @@ In general, extracting information from the FASTA description line is not very n
 
 \section{Sequence files as Dictionaries}
 
-The next thing that we'll do with our ubiquitous orchid files is to show how to index them and access them like a database using the python {\it dictionary} datatype (like a hash in Perl). This is very useful for large files where you only need to access certain elements of the file, and makes for a nice quick 'n dirty database.
+The next thing that we'll do with our ubiquitous orchid files is to show how to index them and access them like a database using the Python {\it dictionary} datatype (like a hash in Perl). This is very useful for large files where you only need to access certain elements of the file, and makes for a nice quick 'n dirty database.
 
-You can use the function \verb|SeqIO.to_dict| to make a SeqRecord dictionary (in memory).  By default this will use each record's identifier (i.e. the \verb|.id| attribute) as the key.  Let's try this using our GenBank file:
+You can use the function \verb|SeqIO.to_dict()| to make a SeqRecord dictionary (in memory).  By default this will use each record's identifier (i.e. the \verb|.id| attribute) as the key.  Let's try this using our GenBank file:
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -829,7 +829,7 @@ orchid_dict = SeqIO.to_dict(SeqIO.parse(handle, "genbank"))
 handle.close()
 \end{verbatim} 
 
-Since this variable \verb|orchid_dict| is an ordinary python dictionary, we can look at all of the keys we have available:
+Since this variable \verb|orchid_dict| is an ordinary Python dictionary, we can look at all of the keys we have available:
 
 \begin{verbatim}
 >>> print orchid_dict.keys()
@@ -863,7 +863,7 @@ print orchid_dict.keys()
  ..., 'gi|2765613|emb|Z78488.1|PTZ78488', 'gi|2765583|emb|Z78458.1|PHZ78458']
 \end{verbatim} 
 
-You should recognise these strings from when we parsed the FASTA file earlier in Section~\ref{sec:fasta-parsing}.  Suppose you would rather have something else as the keys - like the accesion numbers.  This brings us nicely to \verb|SeqIO.to_dict|'s optional argument \verb|key_function|, which lets you define what to use as the dictionary key for your records.
+You should recognise these strings from when we parsed the FASTA file earlier in Section~\ref{sec:fasta-parsing}.  Suppose you would rather have something else as the keys - like the accesion numbers.  This brings us nicely to \verb|SeqIO.to_dict()|'s optional argument \verb|key_function|, which lets you define what to use as the dictionary key for your records.
 
 First you must write your own function to return the key you want (as a string) when given a SeqRecord object.  In general, the details of function will depend on the sort of input records you are dealing with.  But for our orchids, we can just split up the record's identifier using the ``pipe'' character (the vertical line) and return the fourth entry (field three):
 
@@ -878,7 +878,7 @@ def get_accession(record) :
     return parts[3]
 \end{verbatim} 
 
-\noindent Then we can give this function to the \verb|SeqIO.to_dict| function to use in building the dictionary:
+\noindent Then we can give this function to the \verb|SeqIO.to_dict()| function to use in building the dictionary:
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -901,7 +901,7 @@ print orchid_dict.keys()
 
 We've talked about using \verb|Bio.SeqIO.parse()| for sequence input (reading files), and now we'll look at \verb|Bio.SeqIO.write()| which is for sequence output (writing files).  This is a function taking three arguments: some SeqRecord objects, a handle to write to, and a sequence format.
 
-Here is an example, where we start by creating a few SeqRecord objects the hard way (by hand, rather than by loading them from a files):
+Here is an example, where we start by creating a few SeqRecord objects the hard way (by hand, rather than by loading them from a file):
 
 \begin{verbatim}
 from Bio.Seq import Seq
@@ -1065,10 +1065,10 @@ results, go to Section~\ref{sec:parsing-blast}
 \label{sec:running-www-blast}
 
 The first step in automating BLASTing is to make everything accessible
-from python scripts. So, Biopython contains code that allows you to
+from Python scripts. So, Biopython contains code that allows you to
 run the WWW version of BLAST
 (\url{http://www.ncbi.nlm.nih.gov/BLAST/}) directly from
-your python scripts. This is very nice, especially since BLAST can be
+your Python scripts. This is very nice, especially since BLAST can be
 a real pain to deal with from scripts, especially with the whole BLAST
 queue thing and the separate results page. Keeping the Biopython code
 up to date with all of the changes at NCBI is hard enough!
@@ -1224,7 +1224,7 @@ The important point is that you do not have to use Biopython
 scripts to fetch the data in order to be able to parse it.
 
 Doing things in one of these ways, you then need to get a handle
-to the results. In python, a handle is just a nice general way of
+to the results. In Python, a handle is just a nice general way of
 describing input to any info source so that the info can be retrieved
 using \verb|read()| and \verb|readline()| functions. This is the type
 of input the BLAST parser (and the other Biopython parsers take). 
@@ -4537,7 +4537,6 @@ Handles are mentioned quite frequently throughout this documentation,
 and are also fairly confusing (at least to me!). Basically, you can
 think of a handle as being a ``wrapper'' around text information.
 
-
 Handles provide (at least) two benefits over plain text information:
 
 \begin{enumerate}
@@ -4553,8 +4552,8 @@ Handles provide (at least) two benefits over plain text information:
   load them all.
 \end{enumerate}
 
-Handles can deal with text information that is being read (i.~e.~reading 
-from a file) or written (i.~e.~writing information to a file). In the
+Handles can deal with text information that is being read (e.~g.~reading 
+from a file) or written (e.~g.~writing information to a file). In the
 case of a ``read'' handle, commonly used functions are \verb|read()|,
 which reads the entire text information from the handle, and
 \verb|readline()|, which reads information one line at a time. For
@@ -4570,7 +4569,7 @@ handle to the file \href{examples/m\_cold.fasta}{m\_cold.fasta}
 \begin{verbatim}
 >>> handle = open("m_cold.fasta", "r")
 >>> handle.readline()
-">gi|8332116|gb|BE037100.1|BE037100 MP14H09 MP Mesembryanthemum crystallinum cDNA 5' similar to cold acclimation protein, mRNA sequence\n"
+">gi|8332116|gb|BE037100.1|BE037100 MP14H09 MP Mesembryanthemum ...\n"
 \end{verbatim}
 
 Handles are regularly used in Biopython for passing information to parsers.
