@@ -1732,9 +1732,9 @@ Now let's look at how to use this nice dictionary to print out some information 
 \begin{verbatim}
 for oid in orchid_ids[0:5]:
     cur_record = medline_dict[oid]
-    print 'title:', string.rstrip(cur_record.title)
+    print 'title:', cur_record.title.rstrip()
     print 'authors:', cur_record.authors
-    print 'source:', string.strip(cur_record.source)
+    print 'source:', cur_record.source.strip()
     print
 \end{verbatim}
 
