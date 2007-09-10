@@ -368,7 +368,6 @@ PACKAGES = [
     'Bio.HMM',
     'Bio.IntelliGenetics',
     'Bio.InterPro',
-    'Bio.Kabat',
     'Bio.KEGG',
     'Bio.KEGG.Compound',
     'Bio.KEGG.Enzyme',
