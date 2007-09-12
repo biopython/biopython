@@ -312,7 +312,7 @@ Column Header Definitions
     COUNT: Absolute tag count
 
     TAG: Ten base SAGE tag, LINK_PRE:"http://www.
-    ncbi.nlm.nih.gov/SAGE/SAGEtag.cgi?tag
+    ncbi.nlm.nih.gov/SAGE/SAGEtag.cgi?tag="
 
     TPM: Tags per million, or (1000000*COUNT)/(To
     tal tags)
@@ -430,7 +430,7 @@ Column Header Definitions
     COUNT: Absolute tag count
 
     TAG: Ten base SAGE tag, LINK_PRE:"http://www.
-    ncbi.nlm.nih.gov/SAGE/SAGEtag.cgi?tag
+    ncbi.nlm.nih.gov/SAGE/SAGEtag.cgi?tag="
 
     TPM: Tags per million, or (1000000*COUNT)/(To
     tal tags)
@@ -1300,7 +1300,7 @@ Column Header Definitions
 
     GB_ACC: GenBank accession number of sequence use
     d to design oligonucleotide probe   LINK_PRE:"http://www.ncbi.nlm.nih.gov/entrez
-    /query.fcgi?cmd
+    /query.fcgi?cmd=Search&db=Nucleotide&term="
 
     GENE_NAME: Descriptive gene name, from UniGene Buil
     d 155
@@ -1310,7 +1310,7 @@ Column Header Definitions
     ID: 
 
     LOCUSLINK: LocusLink identifier   LINK_PRE:"http://
-    www.ncbi.nlm.nih.gov/LocusLink/LocRpt.cgi?l
+    www.ncbi.nlm.nih.gov/LocusLink/LocRpt.cgi?l="
 
     PLATE_ID: Plate identifier
 
@@ -1321,7 +1321,7 @@ Column Header Definitions
     TIP_ID: Print tip ID
 
     UNIGENE: UniGene cluster ID, Build 155   LINK_PRE
-    :"http://www.ncbi.nlm.nih.gov/UniGene/clust.cgi?ORG
+    :"http://www.ncbi.nlm.nih.gov/UniGene/clust.cgi?ORG=Hs&CID="
 
 0: ID	GB_ACC	GENE_NAME	UNIGENE	LOCUSLINK	GENE_SYMBOL	TIP_ID	ROW	COLUMN	PLATE_ID	FLAG	SEQUENCE	
 1: 1	NM_012115	CASP8 associated protein 2	122843	9994	CASP8AP2	1	1	1	HK1A1	1	GAGGGCCATCATTTAAAACATTTGCATATTTAGCCGCCAAGTTGGATAAAAATCCAAATCAGGTCTCAGA	
