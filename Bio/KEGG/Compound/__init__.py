@@ -185,7 +185,7 @@ class Iterator:
         returning them. If None, then the raw entry will be returned.
         """
         import warnings
-        warnings.warn("Bio.KEGG.Compound.Iterator(handle, parser) is deprecated. Please use Bio.KEGG.Compound.parse(handle) instead. It also returns an iterator.""",
+        warnings.warn("Bio.KEGG.Compound.Iterator(handle, parser) is deprecated. Please use Bio.KEGG.Compound.parse(handle) instead. It also returns an iterator.",
               DeprecationWarning)
         self.records = parse(handle)
 
