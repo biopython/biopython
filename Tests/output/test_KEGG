@@ -640,6 +640,7 @@ Testing Bio.KEGG.Map on map00950.rea
 4-Hydroxyphenylacetaldehyde + Dopamine <=> (S)-Norcoclaurine + H2O
 4-Hydroxyphenylpyruvate <=> 4-Hydroxyphenylacetaldehyde + CO2
 6-Hydroxyprotopine <=> Dihydrosanguinarine
+7-O-Acetylsalutaridinol <=> Thebaine
 Acetyl-CoA + Salutaridinol <=> 7-O-Acetylsalutaridinol + CoA
 Codeinone + NADPH <=> Codeine + NADP+
 Columbamine + S-Adenosyl-L-methionine <=> Palmatine + S-Adenosyl-L-homocysteine
@@ -658,7 +659,6 @@ NADPH + O2 + Protopine <=> 6-Hydroxyprotopine + H2O + NADP+
 NADPH + Salutaridine <=> NADP+ + Salutaridinol
 Neopinone <=> Codeinone
 Oripavine <=> Morphinone
-Salutaridinol acetate <=> Thebaine
 Thebaine <=> Neopinone
 Thebaine <=> Oripavine
 Tyramine <=> Dopamine
