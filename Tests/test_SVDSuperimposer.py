@@ -35,12 +35,25 @@ y_on_x1=matrixmultiply(y, rot)+tran
 # same thing
 y_on_x2=sup.get_transformed()
 
+def simple_matrix_print(matrix) :
+    """Simple string to display a floating point matrix
+
+    This should give the same output on multiple systems.  This is
+    needed because a simple "print matrix" uses scientific notation
+    which varies between platforms."""
+
+    #This uses a fancy double nested list expression.
+    #If and when Biopython requires Python 2.4 or later,
+    #it would be slightly nicer to use generator expressions.
+    return "[" \
+    + "\n ".join(["[" \
+                 + " ".join(["% 1.6f" % val for val in row]) \
+                 + "]" for row in matrix]) \
+    + "]"
+
 # output results
-print y_on_x1
+print simple_matrix_print(y_on_x1)
 print
-print y_on_x2
+print simple_matrix_print(y_on_x2)
 print
 print "%.2f" % rms
-
-
-	
