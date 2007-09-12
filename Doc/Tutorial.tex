@@ -3445,14 +3445,12 @@ genetics software package supporting Hardy-Weinberg tests, linkage
 desiquilibrium, population diferentiation, basic statistics, $F_{st}$ and
 migration estimates, among others. GenePop does not supply sequence
 based statistics as it doesn't handle sequence data.
-
 The GenePop file format is supported by a wide range of other population
 genetic software applications, thus making it a relevant format in the
 population genetics field.
 
 Bio.PopGen provides a parser and generator of GenePop file format.
 Utilities to manipulate the content of a record are also provided.
-
 Here is an example on how to read a GenePop file (you can find
 example GenePop data files in the Test/PopGen directory of Biopython):
 
@@ -3539,12 +3537,213 @@ rec_pops =  rec.split_in_pops(pop_names)
 
 GenePop does not support population names, a limitation which can be
 cumbersome at times. Functionality to enable population names is currently
-being developed in Biopython. These extensions won't break compatibility in
-any way with the standard format.
+being planned for Biopython. These extensions won't break compatibility in
+any way with the standard format.  In the medium term, we would also like to
+support the GenePop web service.
 
-In
-the medium term code to automatically access GenePop web service will also be
-incorporated.
+\subsection{Other applications}
+
+Here we discuss interfaces and utilities to deal with population genetics'
+applications which arguably have a smaller user base.
+
+\subsubsection{FDist: Detecting selection and molecular adaptation}
+
+FDist is a selection detection application suite based on computing
+(i.e. simulating) a ``neutral'' confidence interval based on $F_{st}$ and
+heterozygosity. Markers (which can be SNPs, microsatellites, AFLPs
+among others) which lie outside the ``neutral'' interval are to be
+considered as possible candidates for being under selection.
+
+FDist is mainly used when the number of markers is considered enough
+to estimate an average $F_{st}$, but not enough to either have outliers
+calculated from the dataset directly or, with even more markers for
+which the relative positions in the genome are known, to use
+approaches based on, e.g., Extended Haplotype Heterozygosity (EHH).
+
+
+The typical usage pattern for FDist is as follows:
+
+\begin{enumerate}
+\item Import a dataset from an external format into FDist format.
+\item Compute average $F_{st}$. This is done by datacal inside FDist.
+\item Simulate ``neutral'' markers based on the
+    average $F_{st}$ and expected number of total populations.
+    This is the core operation, done by fdist inside FDist.
+\item Calculate the confidence interval, based on the desired
+    confidence boundaries (typically 95\% or 99\%). This is done by
+    cplot and is mainly used to plot the interval.
+\item Assess each marker status against the simulation ``neutral''
+    confidence interval. Done
+    by pv. This is used to detect the outlier status of each marker
+    against the simulation.
+\end{enumerate}
+
+
+We will now discuss each step with illustrating example code
+(for this example to work FDist binaries have to be on the
+executable PATH).
+
+The FDist data format is application specific and is not used at
+all by other applications, as such you will probably have to convert
+your data for use with FDist. Biopython can help you do this.
+Here is an example converting from GenePop format to FDist format
+(along with imports that will be needed on examples further below):
+
+\begin{verbatim}
+from Bio.PopGen import GenePop
+from Bio.PopGen import FDist
+from Bio.PopGen.FDist import Controller
+from Bio.PopGen.FDist.Utils import convert_genepop_to_fdist
+
+gp_rec = GenePop.parse(open("example.gen"))
+fd_rec = convert_genepop_to_fdist(gp_rec)
+in_file = open("infile", "w")
+in_file.write(str(fd_rec))
+in_file.close()
+\end{verbatim}
+
+In this code we simply parse a GenePop file and convert it to a FDist
+record.
+
+Printing an FDist record will generate
+a string that can be directly saved to a file and supplied to FDist. FDist
+requires the input file to be called infile, therefore we save the record on
+a file with that name.
+
+The most important fields on a FDist record are: num\_pops, the number of
+populations; num\_loci, the number of loci and loci\_data with the marker
+data itself. Most probably the details of the record are of no interest
+to the user, as the record only purpose is to be passed to FDist.
+
+The next step is to calculate the average $F_{st}$ of the dataset (along
+with the sample size):
+
+\begin{verbatim}
+ctrl = Controller.FDistController()
+fst, samp_size = ctrl.run_datacal()
+\end{verbatim}
+
+On the first line we create an object to control the call of  FDist
+suite, this object will be used further on in order to call other
+suite applications.
+
+On the second line we call the datacal application which computes the
+average $F_{st}$
+and the sample size. It is worth noting that the $F_{st}$ computed by
+datacal is a \emph{variation} of Weir and Cockerham's $\theta$.
+
+We can now call the main fdist application in order to simulate neutral
+markers.
+
+\begin{verbatim}
+sim_fst = ctrl.run_fdist(npops = 15, nsamples = fd_rec.num_pops, fst = fst,
+    sample_size = samp_size, mut = 0, num_sims = 40000)
+\end{verbatim}
+
+\begin{itemize}
+\item[npops] Number of populations existing in nature. This is really a
+    ``guestimate''. Has to be lower than 100.
+\item[nsamples] Number of populations sampled, has to be lower than npops.
+\item[fst] Average $F_{st}$.
+\item[sample\_size] Average number of individuals sampled on each population.
+\item[mut] Mutation model: 0 - Infinite alleles; 1 - Stepwise mutations 
+\item[num\_sims] Number of simulations to perform. Typically a number around
+    40000 will be OK, but if you get a confidence interval that looks sharp
+    (this can be detected when plotting the confidence interval computed
+    below) the value can be increased (a suggestion would be steps of 10000
+    simulations).
+\end{itemize}
+
+The confusion in wording between number of samples and sample size
+stems from the original application.
+
+A file named out.dat will be created with the simulated heterozygosities
+and $F_{st}$s, it will have as many lines as the number of simulations
+requested.
+
+Note that fdist returns the average $F_{st}$ that it was \emph{capable} of
+simulating, for more details about this issue please read below the paragraph
+on approximating the desired average $F_{st}$.
+
+The next (optional) step is to calculate the confidence interval:
+
+\begin{verbatim}
+cpl_interval = ctrl.run_cplot(ci=0.99)
+\end{verbatim}
+
+You can only call cplot after having run fdist.
+
+This will calculate the confidence intervals (99\% in this case)
+for a previous fdist run. A list of quadruples is returned. The
+first element represents the heterozygosity, the second the lower
+bound of $F_{st}$ confidence interval for that heterozygosity,
+the third the average and the fourth the upper bound. This can
+be used to trace the confidence interval contour. This list
+is also written to a file, out.cpl.
+
+The main purpose of this step is return a set of points which can
+be easily used to plot a confidence interval. It can be skipped
+if the objective is only to assess the status of each marker against
+the simulation, which is the next step...
+
+\begin{verbatim}
+pv_data = ctrl.run_pv()
+\end{verbatim}
+
+You can only call cplot after having run datacal and fdist.
+
+This will use the simulated markers to assess the status of each
+individual real marker. A list, in the same order than the loci\_list
+that is on the FDist record (which is in the same order that the GenePop
+record) is returned. Each element in the list is a quadruple, the
+fundamental member of each quadruple is the last element (regarding the
+other elements, please refer to the pv documentation -- for the
+sake of simplicity we will not discuss them here) which returns the
+probability of the simulated $F_{st}$ being lower than the marker $F_{st}$.
+Higher values would indicate a stronger candidate for positive selection,
+lower values a candidate for balancing selection, and intermediate values
+a possible neutral marker. What is ``higher'', ``lower'' or ``intermediate''
+is really a subjective issue, but taking a ``confidence interval'' approach
+and considering a 95\% confidence interval, ``higher'' would be between 0.95
+and 1.0, ``lower'' between 0.0 and 0.05 and ``intermediate'' between 0.05 and
+0.95.
+
+
+
+\paragraph{Approximating the desired average $F_{st}$}
+
+Fdist tries to approximate the desired average $F_{st}$ by doing a
+coalescent simulation using migration rates based on the formula
+
+\[ N_{m} = \frac{1 - F_{st}}{4F_{sŧ}} \]
+
+This formula assumes a few premises like an infinite number of populations.
+
+In practice, when the number of populations is low, the mutation model
+is stepwise and the sample size increases, fdist will not be able to
+simulate an acceptable approximate average $F_{st}$.
+
+To address that, a function is provided to iteratively approach the desired
+value by running several fdists in sequence. This approach is computationally
+more intensive than running a single fdist run, but yields good results.
+The following code runs fdist approximating the desired $F_{st}$:
+
+\begin{verbatim}
+sim_fst = ctrl.run_fdist_force_fst(npops = 15, nsamples = fd_rec.num_pops,
+    fst = fst, sample_size = samp_size, mut = 0, num_sims = 40000,
+    limit = 0.05)
+\end{verbatim}
+
+The only new optional parameter, when comparing with run\_fdist, is limit
+which is the desired maximum error. run\_fdist can (and probably should)
+be safely replaced with run\_fdist\_force\_fst.
+
+\paragraph{Final notes}
+
+The process to determine the average $F_{st}$ can be more sophisticated than
+the one presented here. For more information we refer you to the FDist
+README file. Biopython's code can be used to implement more sophisticated
+approaches.
 
 \subsection{Future Developments}
 
@@ -3568,7 +3767,7 @@ like $F_{st}$, or allele counts.
 \section{Regression Testing Framework}
 \label{sec:regr_test}
 
-Biopython has a regression testing framework written Andrew Dalke and ported to PyUnit by Brad Chapman which helps us make sure the code is as bug-free as possible before going out.
+Biopython has a regression testing framework originally written by Andrew Dalke and ported to PyUnit by Brad Chapman which helps us make sure the code is as bug-free as possible before going out.
 
 \subsection{Writing a Regression Test}
 
@@ -3600,7 +3799,7 @@ Every module that goes into Biopython should have a test (and should also have d
      \item Run the script and write its output to a file. On UNIX machines,
        you would do something like: \verb|python test_Biospam.py > test_Biospam| which would write the output to the file \verb|test_Biospam|.
        
-     \item Manually look at the file \verb|test_Biospam| to make sure the output is correct. When you are sure it is all right and there are no bugs, you need to quickly edit the \verb|test_Biospam| file so that the first line is: '\verb|test_Biospam|' (no quotes).
+     \item Manually look at the file \verb|test_Biospam| to make sure the output is correct. When you are sure it is all right and there are no bugs, you need to quickly edit the \verb|test_Biospam| file so that the first line is: `\verb|test_Biospam|' (no quotes).
 
      \item copy the \verb|test_Biospam| file to the directory Tests/output
      
@@ -3691,7 +3890,7 @@ The events a scanner can send must be specifically defined for each
 data format.
 
 
-\subsection{'noevent' EVENT}
+\subsection{`noevent' EVENT}
 
 A data file can contain lines that have no meaningful information,
 such as blank lines.  By convention, a scanner should generate the
