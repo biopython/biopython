@@ -18,13 +18,9 @@ def t_KEGG_Enzyme(testfiles):
     for file in testfiles:
         fh = open(os.path.join("KEGG", file))
         print "Testing Bio.KEGG.Enzyme on " + file + "\n\n"
-        records = Enzyme.Iterator(fh, Enzyme.Parser(debug_level=0))
-        while 1:
-            record = records.next()
-            if record is not None:
-                print record
-            else:
-                break
+        records = Enzyme.parse(fh)
+        for record in records:
+            print record
         print "\n"
 
 def t_KEGG_Compound(testfiles):
@@ -32,7 +28,6 @@ def t_KEGG_Compound(testfiles):
     for file in testfiles:
         fh = open(os.path.join("KEGG", file))
         print "Testing Bio.KEGG.Compound on " + file + "\n\n"
-        # records = Compound.Iterator(fh, Compound.Parser(debug_level=0))
         records = Compound.parse(fh)
         for record in records:
             print record

@@ -72,14 +72,6 @@ DISEASE     MIM: 103700  Alcohol dehydrogenase (class I), alpha polypeptide
             MIM: 103730  Alcohol dehydrogenase (class I), gamma polypeptide
             MIM: 103740  Alcohol dehydrogenase (class II), pi polypeptide
             MIM: 600086  Alcohol dehydrogenase-7
-MOTIF       PS: PS00059  G-H-E-x(2)-G-x(5)-[GA]-x(2)-[IVSAC]
-            PS: PS00060  [GSW]-x-[LIVTSACD]-[GH]-x(2)-[GSAE]-[GSHYQ]-x-[LIVTP]-
-                         [GAST]-[GAS]-x(3)-[LIVMT]-x-[HNS]-[GA]-x-[GTAC]
-            PS: PS00061  [LIVSPADNK]-x(12)-Y-[PSTAGNCV]-[STAGNQCIVM]-[STAGC]-K-
-                         {PC}-[SAGFYR]-[LIVMSTAGD]-x(2)-[LIVMFYW]-x(3)-
-                         [LIVMFYWGAPTHQ]-[GSACQRHM]
-            PS: PS00913  [STALIV]-[LIVF]-x-[DE]-x(6,7)-P-x(4)-[ALIV]-x-[GST]-
-                         x(2)-D-[TAIVM]-[LIVMF]-x(4)-E
 STRUCTURES  PDB: 1A4U  1A71  1A72  1ADB  1ADC  1ADF  1ADG  1AGN  1AXE  1AXG  
                  1B14  1B15  1B16  1B2L  1BTO  1CDO  1D1S  1D1T  1DDA  1DEH  
                  1E3E  1E3I  1E3L  1EE2  1HDX  1HDY  1HDZ  1HET  1HEU  1HF3  
@@ -115,14 +107,6 @@ GENES       CEL: F11A5.12
             HSA: 3292 3293 3294 3295 3296 51478
 DISEASE     MIM: 109685  Hydroxysteroid (17-beta) dehydrogenase 2
             MIM: 264300  Hydroxysteroid (17-beta) dehydrogenase 3
-MOTIF       PS: PS00061  [LIVSPADNK]-x(12)-Y-[PSTAGNCV]-[STAGNQCIVM]-[STAGC]-K-
-                         {PC}-[SAGFYR]-[LIVMSTAGD]-x(2)-[LIVMFYW]-x(3)-
-                         [LIVMFYWGAPTHQ]-[GSACQRHM]
-            PS: PS00062  [LIVMFY]-x(9)-[KREQ]-x-[LIVM]-G-[LIVM]-[SC]-N-[FY]
-            PS: PS00063  [LIVM]-[PAIV]-[KR]-[ST]-x(4)-R-x(2)-[GSTAEQK]-[NSL]-
-                         x(2)-[LIVMFA]
-            PS: PS00798  G-[FY]-R-[HSAL]-[LIVMF]-D-[STAGC]-[AS]-x(5)-E-x(2)-
-                         [LIVM]-G
 STRUCTURES  PDB: 1FDT  1FDS  1FDV  1FDW  1IOL  3DHE  1EQU  1DHT  1BHS  1A27  
                  1FDU  
 DBLINKS     IUBMB Enzyme Nomenclature: 1.1.1.62
@@ -245,27 +229,6 @@ DISEASE     MIM: 300078  NADH dehydrogenase (ubiquinone) 1 alpha subcomplex, 1,
                          7.5kD
             MIM: 601677  NADH dehydrogenase (ubiquinone) 1 alpha subcomplex, 5
                          (13kD, B13)
-MOTIF       PS: PS00012  [DEQGSTALMKRH]-[LIVMFYSTAC]-[GNQ]-[LIVMFYAG]-[DNEKHS]-
-                         S-[LIVMST]-{PCFY}-[STAGCPQLIVMF]-[LIVMATN]-
-                         [DENQGTAKRHLM]-[LIVMWSTA]-[LIVGSTACR]-x(2)-[LIVMFA]
-            PS: PS00198  C-x(2)-C-x(2)-C-x(3)-C-[PEG]
-            PS: PS00535  [LIVMH]-H-[RT]-[GA]-x-E-K-[LIVMTN]-x-E-x-[KRQ]
-            PS: PS00542  E-R-E-x(2)-[DE]-[LIVMFY](2)-x(6)-[HK]-x(3)-[KRP]-x-
-                         [LIVM]-[LIVMYS]
-            PS: PS00641  P-x(2)-C-[YWSD]-x(7)-G-x-C-R-x-C
-            PS: PS00642  C-P-x-C-[DE]-x-[GS](2)-x-C-x-L-Q
-            PS: PS00643  R-C-[LIVM]-x-C-x-R-C-[LIVMT]-x-[LMFY]
-            PS: PS00644  G-[AM]-G-[AR]-Y-[LIVM]-C-G-[DE](2)-[STA](2)-[LIM](2)-
-                         [END]-S
-            PS: PS00645  E-[ST]-C-G-x-C-x-P-C-R-x-G
-            PS: PS00667  G-[LIVMFYKRS]-[LIVMAGP]-Q-x-[LIVMFY]-x-D-[AGIM]-
-                         [LIVMFTA]-K-[LVMYST]-[LIVMFYG]-x-[KR]-[EQG]
-            PS: PS00668  P-F-D-[LIVMFYQ]-[STAGPVM]-E-[GAC]-E-x-[EQ]-[LIVMS]-
-                         x(2)-G
-            PS: PS01099  D-x(2)-F-[STK]-x(5)-C-[LM]-G-x-C-x(2)-[GA]-P
-            PS: PS01150  [GN]-x-D-[KRHST]-[LIVMF](2)-P-[IV]-D-[LIVMFYW](2)-x-P-
-                         x-C-P-[PT]
-            PS: PS50075  Acyl carrier protein phosphopantetheine domain profile
 DBLINKS     IUBMB Enzyme Nomenclature: 1.6.5.3
             ExPASy - ENZYME nomenclature database: 1.6.5.3
             WIT (What Is There) Metabolic Reconstruction: 1.6.5.3
@@ -278,8 +241,8 @@ CLASS       Oxidoreductases
             Acting on paired donors with incorporation of molecular oxygen
             With NADH or NADPH as one donor, and incorporation of one atom of
             oxygen
-SYSNAME     (6aR,11aR)-3,9-Dihydroxypterocarpan,NADPH:oxygen oxidoreductase 
-            $(6a-hydroxylating)
+SYSNAME     (6aR,11aR)-3,9-Dihydroxypterocarpan,NADPH:oxygen oxidoreductase
+            $ (6a-hydroxylating)
 REACTION    (6aR,11aR)-3,9-Dihydroxypterocarpan + NADPH + O2 =
             (6aS,11aS)-3,6a,9-Trihydroxypterocarpan + NADP+ + H2O
 SUBSTRATE   (6aR,11aR)-3,9-Dihydroxypterocarpan
@@ -303,11 +266,11 @@ NAME        Glycoprotein 6-alpha-L-fucosyltransferase
 CLASS       Transferases
             Glycosyltransferases
             Hexosyltransferases
-SYSNAME     GDP-L-fucose:glycoprotein (L-fucose to asparagine-linked 
-            $N-acetylglucosamine of 
-            $N-acetyl-beta-D-glucosaminyl-1,2-alpha-D-mannosyl-1,3-(R1-alpha-
-            $1,6)-beta-D-mannosyl-1,4-beta-N-acetyl-D-glucosaminyl-1,4-N-acetyl-
-            $D-glucosaminyl)asparagine 6-alpha-L-fucosyltransferase
+SYSNAME     GDP-L-fucose:glycoprotein (L-fucose to asparagine-linked
+            $ N-acetylglucosamine of N-acetyl-beta-D-glucosaminyl-1,2-alpha-
+            $D-mannosyl-1,3-(R1-alpha-1,6)-beta-D-mannosyl-1,4-beta-N-acetyl-
+            $D-glucosaminyl-1,4-N-acetyl-D-glucosaminyl)asparagine 6-alpha-L-
+            $fucosyltransferase
 REACTION    GDP-L-fucose + N4-(N-Acetyl-beta-D-glucosaminyl-1,2-alpha-D-
             $mannosyl-1,3-(R1-alpha-1,6)-beta-D-mannosyl-beta-N-acetyl-1,4-
             $D-glucosaminyl-1,4-N-acetyl-D-glucosaminyl)asparagine = GDP +
@@ -315,13 +278,13 @@ REACTION    GDP-L-fucose + N4-(N-Acetyl-beta-D-glucosaminyl-1,2-alpha-D-
             $(R1-alpha-1,6)-beta-D-mannosyl-1,4-beta-N-acetyl-D-glucosaminyl-
             $1,4-(alpha-L-fucosyl-1,6)-N-acetyl-D-glucosaminyl)asparagine
 SUBSTRATE   GDP-L-fucose
-            N4-(N-Acetyl-beta-D-glucosaminyl-1,2-alpha-D-mannosyl-1,3-(R1-alpha-
-            $1,6)-beta-D-mannosyl-beta-N-acetyl-1,4-D-glucosaminyl-1,4-N-acetyl-
-            $D-glucosaminyl)asparagine
+            N4-(N-Acetyl-beta-D-glucosaminyl-1,2-alpha-D-mannosyl-1,3-
+            $(R1-alpha-1,6)-beta-D-mannosyl-beta-N-acetyl-1,4-D-glucosaminyl-
+            $1,4-N-acetyl-D-glucosaminyl)asparagine
 PRODUCT     GDP
-            N4-(N-Acetyl-beta-D-glucosaminyl-1,2-alpha-D-mannosyl-1,3-(R1-alpha-
-            $1,6)-beta-D-mannosyl-1,4-beta-N-acetyl-D-glucosaminyl-1,4-(alpha-L-
-            $fucosyl-1,6)-N-acetyl-D-glucosaminyl)asparagine
+            N4-(N-Acetyl-beta-D-glucosaminyl-1,2-alpha-D-mannosyl-1,3-
+            $(R1-alpha-1,6)-beta-D-mannosyl-1,4-beta-N-acetyl-D-glucosaminyl-
+            $1,4-(alpha-L-fucosyl-1,6)-N-acetyl-D-glucosaminyl)asparagine
 PATHWAY     PATH: MAP00510  Glycoprotein biosynthesis
 DBLINKS     IUBMB Enzyme Nomenclature: 2.4.1.68
             ExPASy - ENZYME nomenclature database: 2.4.1.68
@@ -372,8 +335,6 @@ GENES       ECO: ECOLI_2245
             MGE: MG357
             MPN: G12_orf390
             SYN: sll1299
-MOTIF       PS: PS01075  [LIVM](2)-x-[LIVM]-N-x-G-S-[ST]-S-x-K
-            PS: PS01076  [LIVMA](2)-x(2)-H-x-G-x-G-x-S-[LIVM]-x-[AV]-x(3)-G
 DBLINKS     University of Geneva ENZYME DATA BANK: 2.7.2.1
             WIT (What Is There) Metabolic Reconstruction: 2.7.2.1
             PIR: B49338  B49935  E64239  KIECAA
@@ -414,8 +375,6 @@ GENES       DME: CG5779
             MMU: 94856 98880
             HSA: 7299
 DISEASE     MIM: 203100  Tyrosinase
-MOTIF       PS: PS00497  H-x(4,5)-F-[LIVMFTP]-x-[FW]-H-R-x(2)-[LVM]-x(3)-E
-            PS: PS00498  D-P-x-F-[LIVMFYW]-x(2)-H-x(3)-D
 DBLINKS     IUBMB Enzyme Nomenclature: 1.14.18.1
             ExPASy - ENZYME nomenclature database: 1.14.18.1
             WIT (What Is There) Metabolic Reconstruction: 1.14.18.1
