@@ -18,7 +18,7 @@ testfiles.extend(['soft_ex_affy.txt',
 for file in testfiles:
     fh = open(os.path.join("Geo", file))
     print "Testing Bio.Geo on " + file + "\n\n"
-    records = Bio.Geo.Iterator( fh, Bio.Geo.RecordParser(debug_level=0))
+    records = Bio.Geo.parse(fh)
     for record in records:
         print record
     print "\n"
