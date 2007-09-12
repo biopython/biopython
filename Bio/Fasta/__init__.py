@@ -21,9 +21,6 @@ from Bio import Alphabet
 
 from Bio import Mindy
 from Bio.Mindy import SimpleSeqRecord
-from Bio.expressions import fasta
-
-from Martel.LAX import LAX
 
 class Record:
     """Holds information from a FASTA record.
@@ -51,7 +48,9 @@ class Record:
         while i < len(self.sequence):
             s.append(self.sequence[i:i+self._colwidth])
             i = i + self._colwidth
-        return os.linesep.join(s)
+        #Was having a problem getting the tests to pass on windows...
+        #return os.linesep.join(s)
+        return "\n".join(s)
 
 class Iterator:
     """Returns one record at a time from a FASTA file.
@@ -59,70 +58,65 @@ class Iterator:
     def __init__(self, handle, parser = None, debug = 0):
         """Initialize a new iterator.
         """
-        it_builder = fasta.format.make_iterator("record", debug_level = debug)
+        self.handle = handle
         self._parser = parser
-        self._iterator = it_builder.iterateFile(handle,
-                LAX(fields = ['bioformat:sequence', 'bioformat:description']))
+        self._debug = debug
+
+        #Skip any text before the first record (e.g. blank lines)
+        while True :
+            line = handle.readline()
+            if line[0] == ">" :
+                break
+            if debug : print "Skipping: " + line
+        self._lookahead = line
 
     def __iter__(self):
         return iter(self.next, None)
 
     def next(self):
-        try:
-            result = self._iterator.next()
-        except StopIteration:
+        """Return the next record in the file"""
+        line = self._lookahead
+        if not line:
             return None
-
+        assert line[0]==">", line
+        lines = [line.rstrip()]
+        line = self.handle.readline()
+        while line:
+            if line[0] == ">": break
+            if line[0] == "#" :
+                if self._debug : print "Ignoring comment line"
+                pass
+            else :
+                lines.append(line.rstrip())
+            line = self.handle.readline()
+        self._lookahead = line
+        if self._debug : print "Debug: '%s' and '%s'" % (title, "".join(lines))
         if self._parser is None:
-            # return a string formatted result comparable to the original
-            parser = RecordParser()
-            rec = parser.convert_lax(result)
-            return str(rec) + "\n"
-        else:
-            return self._parser.convert_lax(result)
+            return "\n".join(lines)
+        else :
+            return self._parser.parse_string("\n".join(lines))
 
-class _MartelBaseFastaParser:
-    """Base class to provide a old-Biopython style to Martel parsing.
-    """
-    def __init__(self, debug):
-        self._it_builder = fasta.format.make_iterator("record",
-                debug_level = debug)
-
-    def parse(self, handle):
-        """Parse a single FASTA record in an file handle.
-
-        Internally, this parses the record into a dictionary
-        and then passes that on to the convert_lax function defined
-        in a derived class.
-        """
-        iterator = self._it_builder.iterateFile(handle,
-                LAX(fields = ['bioformat:sequence', 'bioformat:description']))
-        return self.convert_lax(iterator.next())
-
-    def parse_str(self, str):
-        return self.parse(cStringIO.StringIO(str))
-
-    def convert_lax(self, result):
-        raise NotImplementedError("Derived class must implement")
-
-class RecordParser(_MartelBaseFastaParser):
+class RecordParser:
     """Parses FASTA sequence data into a Fasta.Record object.
     """
     def __init__(self, debug = 0):
-        _MartelBaseFastaParser.__init__(self, debug)
+        pass
 
-    def convert_lax(self, result):
-        """Convert a dictionary LAX parsing result into a Record object.
-        """
+    def parse_string(self, text) :
+        text = text.replace("\r\n","\n") #Crude way of dealing with \r\n
+        assert text[0] == ">", text
+        text = text.split("\n>",1)[0] # Only do the first record if more than one
+        title, sequence = text.split("\n", 1)
+        title = title[1:]
         rec = Record()
-        rec.title = "".join(result['bioformat:description'])
-        if 'bioformat:sequence' in result:
-            rec.sequence = "".join(result['bioformat:sequence'])
-        else:
-            rec.sequence = ""
+        rec.title = title
+        rec.sequence = sequence.replace("\n","")
         return rec
+    
+    def parse(self, handle):
+        return self.parse_string(handle.read())
 
-class SequenceParser(_MartelBaseFastaParser):
+class SequenceParser:
     """Parses FASTA sequence data into a SeqRecord object.
     """
     def __init__(self, alphabet = Alphabet.generic_alphabet, title2ids = None,
@@ -137,17 +131,19 @@ class SequenceParser(_MartelBaseFastaParser):
         description (in that order) for the record. If this is not given,
         then the entire title line will be used as the description.
         """
-        _MartelBaseFastaParser.__init__(self, debug)
         self.alphabet = alphabet
         self.title2ids = title2ids
     
-    def convert_lax(self, result):
-        """Convert a dictionary LAX parsing result into a Sequence object.
-        """
-        seq = Seq.Seq("".join(result['bioformat:sequence']), self.alphabet)
+    def parse_string(self, text) :
+        text = text.replace("\r\n","\n") #Crude way of dealing with \r\n
+        assert text[0] == ">", text
+        text = text.split("\n>",1)[0] # Only do the first record if more than one
+        title, sequence = text.split("\n", 1)
+        title = title[1:]
+
+        seq = Seq.Seq(sequence.replace("\n",""), self.alphabet)
         rec = SeqRecord.SeqRecord(seq)
         
-        title = "".join(result['bioformat:description'])
         if self.title2ids:
             seq_id, name, descr = self.title2ids(title)
             rec.id = seq_id
@@ -157,6 +153,9 @@ class SequenceParser(_MartelBaseFastaParser):
             rec.description = title
 
         return rec
+
+    def parse(self, handle):
+        return self.parse_string(handle.read())
 
 class Dictionary(dict):
     """Accesses an indexed FASTA file using a dictionary interface.
