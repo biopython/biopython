@@ -624,14 +624,23 @@ NAME        Toluate
             Toluenecarboxylic acid
             Crithminic acid
 FORMULA     C8H8O2
-PATHWAY     PATH: MAP00624  Xylene degradation
-ENZYME      1.14.99.15 (R)  
+MASS        136.0524
+PATHWAY     PATH: map00622  Toluene and xylene degradation
+ENZYME      1.2.1.7         1.14.12.-       
 DBLINKS     CAS: 99-94-5
+            PubChem: 4631
+            ChEBI: 36635
+            3DMET: B00292
 ///
 ENTRY       C06876
 NAME        Nitrosobenzene
 FORMULA     C6H5NO
-PATHWAY     PATH: MAP00626  Nitorobenzene degradation
+MASS        107.0371
+PATHWAY     PATH: map00626  Naphthalene and anthracene degradation
+ENZYME      1.6.6.-         
+DBLINKS     CAS: 586-96-9
+            PubChem: 9093
+            3DMET: B01057
 ///
 
 
