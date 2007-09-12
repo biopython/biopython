@@ -6,7 +6,6 @@ import os
 from Bio.KEGG import Enzyme
 from Bio.KEGG import Compound
 from Bio.KEGG import Map
-from Bio.Pathway import Reaction
 from Bio.Pathway import System
 
 test_KEGG_Enzyme_files   = ["enzyme.sample", "enzyme.irregular"]
@@ -38,14 +37,10 @@ def t_KEGG_Map(testfiles):
     for file in testfiles:
         fh = open(os.path.join("KEGG", file))
         print "Testing Bio.KEGG.Map on " + file + "\n\n"
-        reactions = Map.Iterator(fh, Map.Parser(debug_level=0))
+        reactions = Map.parse(fh)
         system = System()
-        while 1:
-            r = reactions.next()
-            if r is not None:
-                system.add_reaction(r)
-            else:
-                break
+        for reaction in reactions:
+            system.add_reaction(reaction)
         # sort the reaction output by the string names, so that the
         # output will be consistent between python versions
         def str_cmp(first, second):
