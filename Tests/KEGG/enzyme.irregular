@@ -29,8 +29,6 @@ GENES       DME: CG5779
             MMU: 94856 98880(Tyr)
             HSA: 7299(TYR)
 DISEASE     MIM: 203100  Tyrosinase
-MOTIF       PS: PS00497  H-x(4,5)-F-[LIVMFTP]-x-[FW]-H-R-x(2)-[LVM]-x(3)-E
-            PS: PS00498  D-P-x-F-[LIVMFYW]-x(2)-H-x(3)-D
 DBLINKS     IUBMB Enzyme Nomenclature: 1.14.18.1
             ExPASy - ENZYME nomenclature database: 1.14.18.1
             WIT (What Is There) Metabolic Reconstruction: 1.14.18.1

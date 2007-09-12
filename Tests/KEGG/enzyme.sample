@@ -72,14 +72,6 @@ DISEASE     MIM: 103700  Alcohol dehydrogenase (class I), alpha polypeptide
             MIM: 103730  Alcohol dehydrogenase (class I), gamma polypeptide
             MIM: 103740  Alcohol dehydrogenase (class II), pi polypeptide
             MIM: 600086  Alcohol dehydrogenase-7
-MOTIF       PS: PS00059  G-H-E-x(2)-G-x(5)-[GA]-x(2)-[IVSAC]
-            PS: PS00060  [GSW]-x-[LIVTSACD]-[GH]-x(2)-[GSAE]-[GSHYQ]-x-[LIVTP]-
-                         [GAST]-[GAS]-x(3)-[LIVMT]-x-[HNS]-[GA]-x-[GTAC]
-            PS: PS00061  [LIVSPADNK]-x(12)-Y-[PSTAGNCV]-[STAGNQCIVM]-[STAGC]-K-
-                         {PC}-[SAGFYR]-[LIVMSTAGD]-x(2)-[LIVMFYW]-x(3)-
-                         [LIVMFYWGAPTHQ]-[GSACQRHM]
-            PS: PS00913  [STALIV]-[LIVF]-x-[DE]-x(6,7)-P-x(4)-[ALIV]-x-[GST]-
-                         x(2)-D-[TAIVM]-[LIVMF]-x(4)-E
 STRUCTURES  PDB: 1A4U  1A71  1A72  1ADB  1ADC  1ADF  1ADG  1AGN  1AXE  1AXG  
                  1B14  1B15  1B16  1B2L  1BTO  1CDO  1D1S  1D1T  1DDA  1DEH  
                  1E3E  1E3I  1E3L  1EE2  1HDX  1HDY  1HDZ  1HET  1HEU  1HF3  
@@ -116,14 +108,6 @@ GENES       CEL: F11A5.12
                  3296(HSD17BP1) 51478(HSD17B7)
 DISEASE     MIM: 109685  Hydroxysteroid (17-beta) dehydrogenase 2
             MIM: 264300  Hydroxysteroid (17-beta) dehydrogenase 3
-MOTIF       PS: PS00061  [LIVSPADNK]-x(12)-Y-[PSTAGNCV]-[STAGNQCIVM]-[STAGC]-K-
-                         {PC}-[SAGFYR]-[LIVMSTAGD]-x(2)-[LIVMFYW]-x(3)-
-                         [LIVMFYWGAPTHQ]-[GSACQRHM]
-            PS: PS00062  [LIVMFY]-x(9)-[KREQ]-x-[LIVM]-G-[LIVM]-[SC]-N-[FY]
-            PS: PS00063  [LIVM]-[PAIV]-[KR]-[ST]-x(4)-R-x(2)-[GSTAEQK]-[NSL]-
-                         x(2)-[LIVMFA]
-            PS: PS00798  G-[FY]-R-[HSAL]-[LIVMF]-D-[STAGC]-[AS]-x(5)-E-x(2)-
-                         [LIVM]-G
 STRUCTURES  PDB: 1FDT  1FDS  1FDV  1FDW  1IOL  3DHE  1EQU  1DHT  1BHS  1A27  
                  1FDU  
 DBLINKS     IUBMB Enzyme Nomenclature: 1.1.1.62
@@ -280,27 +264,6 @@ DISEASE     MIM: 300078  NADH dehydrogenase (ubiquinone) 1 alpha subcomplex, 1,
                          7.5kD
             MIM: 601677  NADH dehydrogenase (ubiquinone) 1 alpha subcomplex, 5
                          (13kD, B13)
-MOTIF       PS: PS00012  [DEQGSTALMKRH]-[LIVMFYSTAC]-[GNQ]-[LIVMFYAG]-[DNEKHS]-
-                         S-[LIVMST]-{PCFY}-[STAGCPQLIVMF]-[LIVMATN]-
-                         [DENQGTAKRHLM]-[LIVMWSTA]-[LIVGSTACR]-x(2)-[LIVMFA]
-            PS: PS00198  C-x(2)-C-x(2)-C-x(3)-C-[PEG]
-            PS: PS00535  [LIVMH]-H-[RT]-[GA]-x-E-K-[LIVMTN]-x-E-x-[KRQ]
-            PS: PS00542  E-R-E-x(2)-[DE]-[LIVMFY](2)-x(6)-[HK]-x(3)-[KRP]-x-
-                         [LIVM]-[LIVMYS]
-            PS: PS00641  P-x(2)-C-[YWSD]-x(7)-G-x-C-R-x-C
-            PS: PS00642  C-P-x-C-[DE]-x-[GS](2)-x-C-x-L-Q
-            PS: PS00643  R-C-[LIVM]-x-C-x-R-C-[LIVMT]-x-[LMFY]
-            PS: PS00644  G-[AM]-G-[AR]-Y-[LIVM]-C-G-[DE](2)-[STA](2)-[LIM](2)-
-                         [END]-S
-            PS: PS00645  E-[ST]-C-G-x-C-x-P-C-R-x-G
-            PS: PS00667  G-[LIVMFYKRS]-[LIVMAGP]-Q-x-[LIVMFY]-x-D-[AGIM]-
-                         [LIVMFTA]-K-[LVMYST]-[LIVMFYG]-x-[KR]-[EQG]
-            PS: PS00668  P-F-D-[LIVMFYQ]-[STAGPVM]-E-[GAC]-E-x-[EQ]-[LIVMS]-
-                         x(2)-G
-            PS: PS01099  D-x(2)-F-[STK]-x(5)-C-[LM]-G-x-C-x(2)-[GA]-P
-            PS: PS01150  [GN]-x-D-[KRHST]-[LIVMF](2)-P-[IV]-D-[LIVMFYW](2)-x-P-
-                         x-C-P-[PT]
-            PS: PS50075  Acyl carrier protein phosphopantetheine domain profile
 DBLINKS     IUBMB Enzyme Nomenclature: 1.6.5.3
             ExPASy - ENZYME nomenclature database: 1.6.5.3
             WIT (What Is There) Metabolic Reconstruction: 1.6.5.3
@@ -401,8 +364,6 @@ PRODUCT     ADP
 COMMENT     Propanoate also acts as acceptor, but more slowly.
 PATHWAY     PATH: MAP00620  Pyruvate metabolism
             PATH: MAP00640  Propanoate metabolism
-MOTIF       PS: PS01075  [LIVM](2)-x-[LIVM]-N-x-G-S-[ST]-S-x-K
-            PS: PS01076  [LIVMA](2)-x(2)-H-x-G-x-G-x-S-[LIVM]-x-[AV]-x(3)-G
 GENES       ECO: ECOLI_2245(ackA)
             HIN: HI1204(ackA)
             BSU: ackA
