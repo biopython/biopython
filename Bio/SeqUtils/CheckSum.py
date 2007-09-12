@@ -91,4 +91,26 @@ def seguid(seq):
     except:
         #For older versions
         import os
-        return base64.encodestring(m.digest()).replace(os.linesep,"").rstrip("=")
+        #Note: Using os.linesep doesn't work on Windows,
+        #where os.linesep= "\r\n" but the encoded string
+        #contains "\n" but not "\r\n"
+        return base64.encodestring(m.digest()).replace("\n","").rstrip("=")
+
+if __name__ == "__main__" :
+    print "Quick self test"
+
+    str_light_chain_one = "QSALTQPASVSGSPGQSITISCTGTSSDVGSYNLVSWYQQHPGK" \
+                    + "APKLMIYEGSKRPSGVSNRFSGSKSGNTASLTISGLQAEDEADY" \
+                    + "YCSSYAGSSTLVFGGGTKLTVL"
+
+    str_light_chain_two = "QSALTQPASVSGSPGQSITISCTGTSSDVGSYNLVSWYQQHPGK" \
+                    + "APKLMIYEGSKRPSGVSNRFSGSKSGNTASLTISGLQAEDEADY" \
+                    + "YCCSYAGSSTWVFGGGTKLTVL"
+
+    assert crc64(str_light_chain_one) == crc64(str_light_chain_two)
+    assert 'CRC-44CAAD88706CC153' == crc64(str_light_chain_one)
+
+    assert 'BpBeDdcNUYNsdk46JoJdw7Pd3BI' == seguid(str_light_chain_one)
+    assert 'X5XEaayob1nZLOc7eVT9qyczarY' == seguid(str_light_chain_two)
+    
+    print "Done"
