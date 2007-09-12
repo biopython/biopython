@@ -9,7 +9,7 @@ The latest news is at the top.
 ===================================================================
 
 Bio.Blast.NCBI.qblast() updated with more URL options, thanks to a patch
-from Chang Soon Ong
+from Chang Soon Ong.
 
 Bio.SeqIO.FASTA and Bio.SeqIO.generic have been deprecated in favour of
 the new Bio.SeqIO module.
@@ -19,6 +19,11 @@ and functions crc32 and crc64 which where moved from Bio/crc.py
 Bio.crc is now deprecated.
 
 Bio.SwissProt parser updated to cope with recent file format updates.
+
+Bio.Fasta, Bio.KEGG and Bio.Geo updated to pure python parsers which
+don't rely on Martel.
+
+Tiago Antao has started work on a Population Genetics module, Bio.PopGen
 
 Updates to the tutorial, including giving Bio.SeqIO has a whole chapter.
 
