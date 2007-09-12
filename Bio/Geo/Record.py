@@ -4,35 +4,13 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Martel based parser to read GEO formatted files.
-
-This is a huge regular regular expression for GEO, built using
-the 'regular expressiona on steroids' capabilities of Martel.
-
-#http://www.ncbi.nlm.nih.gov/geo/
-
-
-Notes:
-Just so I remember -- the new end of line syntax is:
-  New regexp syntax - \R
-     \R    means "\n|\r\n?"
-     [\R]  means "[\n\r]"
-
-This helps us have endlines be consistent across platforms.
-
 """
-# standard library
-import string
-
-
-from Bio.Seq import Seq
-from Bio.Align.Generic import Alignment
-import Bio.Alphabet
-
-"""Hold GEO data in a straightforward format.
+Hold GEO data in a straightforward format.
 
 classes:
 o Record - All of the information in an GEO record.
+
+See http://www.ncbi.nlm.nih.gov/geo/
 """
 
 class Record:
@@ -109,10 +87,3 @@ def out_block( text, prefix = '' ):
         output = output + '%s%s\n'  % ( prefix, text[ j: j + 80 ] )
     output = output + '\n'
     return output
-
-
-
-
-
-
-
