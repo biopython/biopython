@@ -1,6 +1,11 @@
-
 from Bio import Seq
 from Bio.Alphabet import IUPAC
+from Bio import Alphabet
+
+print
+print "Testing Seq"
+print "==========="
+
 s = Seq.Seq("TCAAAAGGATGCATCATG", IUPAC.unambiguous_dna)
 
 print s.tostring()
@@ -40,7 +45,9 @@ print str(u.alphabet)
 from Bio.Seq import MutableSeq
 import array
 
-print "\nTesting MutableSeq"
+print
+print "Testing MutableSeq"
+print "=================="
 
 print "Testing creating MutableSeqs in multiple ways"
 string_seq = MutableSeq("TCAAAAGGATGCATCATG", IUPAC.ambiguous_dna)
@@ -112,3 +119,57 @@ for test_seq in [string_seq]:
     print "Setting wobble codon to N (set slice with stride 3):"
     test_seq[2::3] = "N" * len(test_seq[2::3])
     print test_seq
+
+test_seqs = [s,t,u,
+             Seq.Seq("ATGAAACTG"), 
+             Seq.Seq("AUGAAACUG", Alphabet.generic_dna), 
+             Seq.Seq("ATGAAACTG", Alphabet.generic_rna), 
+             Seq.Seq("ATGAAACTG", Alphabet.generic_nucleotide), 
+             Seq.Seq("AUGAAACTG", Alphabet.generic_nucleotide), #U and T
+             Seq.MutableSeq("ATGAAACTG", Alphabet.generic_rna),
+             Seq.Seq("ACTGTCGTCT", Alphabet.generic_protein)]
+
+print
+print "Transcribe DNA into RNA"
+print "======================="
+for nucleotide_seq in test_seqs:
+    try :
+        print "%s -> %s" \
+        % (repr(nucleotide_seq) , repr(Seq.transcribe(nucleotide_seq)))
+    except ValueError, e :
+        print "%s -> %s" \
+        % (repr(nucleotide_seq) , str(e))
+
+print
+print "Back-transcribe RNA into DNA"
+print "============================"
+for nucleotide_seq in test_seqs:
+    try :
+        print "%s -> %s" \
+        % (repr(nucleotide_seq) , repr(Seq.transcribe(nucleotide_seq)))
+    except ValueError, e :
+        print "%s -> %s" \
+        % (repr(nucleotide_seq) , str(e))
+        
+print
+print "Reverse Complement"
+print "=================="
+for nucleotide_seq in test_seqs:
+    try :
+	print "%s\n-> %s" \
+	% (repr(nucleotide_seq) , repr(Seq.reverse_complement(nucleotide_seq)))
+    except ValueError, e :
+	print "%s\n-> %s" \
+	% (repr(nucleotide_seq) , str(e))
+        
+print
+print "Translating"
+print "==========="
+for nucleotide_seq in test_seqs:
+    try :
+	print "%s\n-> %s" \
+	% (repr(nucleotide_seq) , repr(Seq.translate(nucleotide_seq)))
+    except ValueError, e :
+	print "%s\n-> %s" \
+	% (repr(nucleotide_seq) , str(e))
+        

@@ -1,4 +1,7 @@
 test_seq
+
+Testing Seq
+===========
 TCAAAAGGATGCATCATG
 18
 T
@@ -16,6 +19,7 @@ expected error, and got it
 IUPACAmbiguousDNA()
 
 Testing MutableSeq
+==================
 Testing creating MutableSeqs in multiple ways
 MutableSeq('TCAAAAGGATGCATCATG', IUPACAmbiguousDNA())
 TCAAAAGGATGCATCATG
@@ -46,3 +50,75 @@ MutableSeq('TTGGAAAT', IUPACAmbiguousDNA())
 MutableSeq('AATGGTTT', IUPACAmbiguousDNA())
 Setting wobble codon to N (set slice with stride 3):
 MutableSeq('GTNCTNCGNAGNAANAANGANTTN', IUPACAmbiguousDNA())
+
+Transcribe DNA into RNA
+=======================
+Seq('TCAAAAGGATGCATCATG', IUPACUnambiguousDNA()) -> Seq('UCAAAAGGAUGCAUCAUG', IUPACUnambiguousRNA())
+Seq('T', IUPACAmbiguousDNA()) -> Seq('U', IUPACAmbiguousRNA())
+Seq('TCAAAAGGATGCATCATGT', IUPACAmbiguousDNA()) -> Seq('UCAAAAGGAUGCAUCAUGU', IUPACAmbiguousRNA())
+Seq('ATGAAACTG', Alphabet()) -> Seq('AUGAAACUG', RNAAlphabet())
+Seq('AUGAAACUG', DNAAlphabet()) -> Seq('AUGAAACUG', RNAAlphabet())
+Seq('ATGAAACTG', RNAAlphabet()) -> Seq('AUGAAACUG', RNAAlphabet())
+Seq('ATGAAACTG', NucleotideAlphabet()) -> Seq('AUGAAACUG', RNAAlphabet())
+Seq('AUGAAACTG', NucleotideAlphabet()) -> Seq('AUGAAACUG', RNAAlphabet())
+MutableSeq(array('c', 'ATGAAACTG'), RNAAlphabet()) -> Seq('AUGAAACUG', RNAAlphabet())
+Seq('ACTGTCGTCT', ProteinAlphabet()) -> Proteins cannot be transcribed!
+
+Back-transcribe RNA into DNA
+============================
+Seq('TCAAAAGGATGCATCATG', IUPACUnambiguousDNA()) -> Seq('UCAAAAGGAUGCAUCAUG', IUPACUnambiguousRNA())
+Seq('T', IUPACAmbiguousDNA()) -> Seq('U', IUPACAmbiguousRNA())
+Seq('TCAAAAGGATGCATCATGT', IUPACAmbiguousDNA()) -> Seq('UCAAAAGGAUGCAUCAUGU', IUPACAmbiguousRNA())
+Seq('ATGAAACTG', Alphabet()) -> Seq('AUGAAACUG', RNAAlphabet())
+Seq('AUGAAACUG', DNAAlphabet()) -> Seq('AUGAAACUG', RNAAlphabet())
+Seq('ATGAAACTG', RNAAlphabet()) -> Seq('AUGAAACUG', RNAAlphabet())
+Seq('ATGAAACTG', NucleotideAlphabet()) -> Seq('AUGAAACUG', RNAAlphabet())
+Seq('AUGAAACTG', NucleotideAlphabet()) -> Seq('AUGAAACUG', RNAAlphabet())
+MutableSeq(array('c', 'ATGAAACTG'), RNAAlphabet()) -> Seq('AUGAAACUG', RNAAlphabet())
+Seq('ACTGTCGTCT', ProteinAlphabet()) -> Proteins cannot be transcribed!
+
+Reverse Complement
+==================
+Seq('TCAAAAGGATGCATCATG', IUPACUnambiguousDNA())
+-> Seq('CATGATGCATCCTTTTGA', IUPACUnambiguousDNA())
+Seq('T', IUPACAmbiguousDNA())
+-> Seq('A', IUPACAmbiguousDNA())
+Seq('TCAAAAGGATGCATCATGT', IUPACAmbiguousDNA())
+-> Seq('ACATGATGCATCCTTTTGA', IUPACAmbiguousDNA())
+Seq('ATGAAACTG', Alphabet())
+-> Seq('CAGTTTCAT', Alphabet())
+Seq('AUGAAACUG', DNAAlphabet())
+-> Seq('CAGUUUCAU', DNAAlphabet())
+Seq('ATGAAACTG', RNAAlphabet())
+-> Seq('CAGTTTCAT', RNAAlphabet())
+Seq('ATGAAACTG', NucleotideAlphabet())
+-> Seq('CAGTTTCAT', NucleotideAlphabet())
+Seq('AUGAAACTG', NucleotideAlphabet())
+-> Seq('CTGUUUCAU', NucleotideAlphabet())
+MutableSeq(array('c', 'ATGAAACTG'), RNAAlphabet())
+-> Seq('CAGTTTCAT', RNAAlphabet())
+Seq('ACTGTCGTCT', ProteinAlphabet())
+-> Proteins do not have complements!
+
+Translating
+===========
+Seq('TCAAAAGGATGCATCATG', IUPACUnambiguousDNA())
+-> Seq('SKGCIM', HasStopCodon(IUPACProtein(), '*'))
+Seq('T', IUPACAmbiguousDNA())
+-> Seq('', HasStopCodon(ExtendedIUPACProtein(), '*'))
+Seq('TCAAAAGGATGCATCATGT', IUPACAmbiguousDNA())
+-> Seq('SKGCIM', HasStopCodon(ExtendedIUPACProtein(), '*'))
+Seq('ATGAAACTG', Alphabet())
+-> Seq('MKL', HasStopCodon(IUPACProtein(), '*'))
+Seq('AUGAAACUG', DNAAlphabet())
+-> Seq('MKL', HasStopCodon(IUPACProtein(), '*'))
+Seq('ATGAAACTG', RNAAlphabet())
+-> Seq('MKL', HasStopCodon(IUPACProtein(), '*'))
+Seq('ATGAAACTG', NucleotideAlphabet())
+-> Seq('MKL', HasStopCodon(IUPACProtein(), '*'))
+Seq('AUGAAACTG', NucleotideAlphabet())
+-> Seq('MKL', HasStopCodon(IUPACProtein(), '*'))
+MutableSeq(array('c', 'ATGAAACTG'), RNAAlphabet())
+-> Seq('MKL', HasStopCodon(IUPACProtein(), '*'))
+Seq('ACTGTCGTCT', ProteinAlphabet())
+-> Proteins cannot be translated!
