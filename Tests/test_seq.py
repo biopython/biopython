@@ -172,4 +172,31 @@ for nucleotide_seq in test_seqs:
     except ValueError, e :
 	print "%s\n-> %s" \
 	% (repr(nucleotide_seq) , str(e))
+    
+print
+print "Seq's .complement() method"
+print "=========================="
+for nucleotide_seq in test_seqs:
+    if isinstance(nucleotide_seq, Seq.Seq) :
+        try :
+            print "%s -> %s" \
+            % (repr(nucleotide_seq) , repr(nucleotide_seq.complement()))
+            assert nucleotide_seq.complement().tostring() \
+                == Seq.reverse_complement(nucleotide_seq).tostring()[::-1]
+        except ValueError, e :
+            print "%s -> %s" \
+            % (repr(nucleotide_seq) , str(e))
         
+print
+print "Seq's .reverse_complement() method"
+print "=================================="
+for nucleotide_seq in test_seqs:
+    if isinstance(nucleotide_seq, Seq.Seq) :
+        try :
+            print "%s -> %s" \
+            % (repr(nucleotide_seq) , repr(nucleotide_seq.reverse_complement()))
+            assert nucleotide_seq.reverse_complement().tostring() \
+                == Seq.reverse_complement(nucleotide_seq).tostring()
+        except ValueError, e :
+            print "%s -> %s" \
+            % (repr(nucleotide_seq) , str(e))

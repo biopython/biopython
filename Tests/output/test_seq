@@ -122,3 +122,27 @@ MutableSeq(array('c', 'ATGAAACTG'), RNAAlphabet())
 -> Seq('MKL', HasStopCodon(IUPACProtein(), '*'))
 Seq('ACTGTCGTCT', ProteinAlphabet())
 -> Proteins cannot be translated!
+
+Seq's .complement() method
+==========================
+Seq('TCAAAAGGATGCATCATG', IUPACUnambiguousDNA()) -> Seq('AGTTTTCCTACGTAGTAC', IUPACUnambiguousDNA())
+Seq('T', IUPACAmbiguousDNA()) -> Seq('A', IUPACAmbiguousDNA())
+Seq('TCAAAAGGATGCATCATGT', IUPACAmbiguousDNA()) -> Seq('AGTTTTCCTACGTAGTACA', IUPACAmbiguousDNA())
+Seq('ATGAAACTG', Alphabet()) -> Seq('TACTTTGAC', Alphabet())
+Seq('AUGAAACUG', DNAAlphabet()) -> Seq('UACUUUGAC', DNAAlphabet())
+Seq('ATGAAACTG', RNAAlphabet()) -> Seq('TACTTTGAC', RNAAlphabet())
+Seq('ATGAAACTG', NucleotideAlphabet()) -> Seq('TACTTTGAC', NucleotideAlphabet())
+Seq('AUGAAACTG', NucleotideAlphabet()) -> Seq('UACUUUGTC', NucleotideAlphabet())
+Seq('ACTGTCGTCT', ProteinAlphabet()) -> Proteins do not have complements!
+
+Seq's .reverse_complement() method
+==================================
+Seq('TCAAAAGGATGCATCATG', IUPACUnambiguousDNA()) -> Seq('CATGATGCATCCTTTTGA', IUPACUnambiguousDNA())
+Seq('T', IUPACAmbiguousDNA()) -> Seq('A', IUPACAmbiguousDNA())
+Seq('TCAAAAGGATGCATCATGT', IUPACAmbiguousDNA()) -> Seq('ACATGATGCATCCTTTTGA', IUPACAmbiguousDNA())
+Seq('ATGAAACTG', Alphabet()) -> Seq('CAGTTTCAT', Alphabet())
+Seq('AUGAAACUG', DNAAlphabet()) -> Seq('CAGUUUCAU', DNAAlphabet())
+Seq('ATGAAACTG', RNAAlphabet()) -> Seq('CAGTTTCAT', RNAAlphabet())
+Seq('ATGAAACTG', NucleotideAlphabet()) -> Seq('CAGTTTCAT', NucleotideAlphabet())
+Seq('AUGAAACTG', NucleotideAlphabet()) -> Seq('CTGUUUCAU', NucleotideAlphabet())
+Seq('ACTGTCGTCT', ProteinAlphabet()) -> Proteins do not have complements!
