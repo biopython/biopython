@@ -286,7 +286,15 @@ class MutableSeq:
 # and Bio.Translate. The functions work both on Seq objects, and on strings.
 
 def transcribe(dna):
-    if isinstance(dna, Seq):
+    """Transcribes a DNA sequence into RNA.
+
+    If given a string, returns a new string object.
+    Given a Seq or MutableSeq, returns a new Seq object with the same alphabet.
+    """
+    if isinstance(dna, Seq) or isinstance(dna, MutableSeq):
+        if isinstance(dna.alphabet, Alphabet.ProteinAlphabet) :
+            raise ValueError, "Proteins cannot be transcribed!"
+        #TODO - Raise an error if already is RNA alphabet?
         rna = dna.data.replace('T','U').replace('t','u')
 	if dna.alphabet==IUPAC.unambiguous_dna:
             alphabet = IUPAC.unambiguous_rna
@@ -301,7 +309,15 @@ def transcribe(dna):
 
 
 def back_transcribe(rna):
-    if isinstance(rna, Seq):
+    """Back-transcribes an RNA sequence into DNA.
+
+    If given a string, returns a new string object.
+    Given a Seq or MutableSeq, returns a new Seq object with the same alphabet.
+    """
+    if isinstance(rna, Seq) or sinstance(rna, MutableSeq):
+        if isinstance(sequence.alphabet, Alphabet.ProteinAlphabet) :
+            raise ValueError, "Proteins cannot be (back)transcribed!"
+        #TODO - Raise an error if already is DNA alphabet?
         dna = rna.data.replace('U','T').replace('u','t')
 	if rna.alphabet==IUPAC.unambiguous_rna:
             alphabet = IUPAC.unambiguous_dna
@@ -320,7 +336,9 @@ def translate(sequence, table = "Standard", stop_symbol = "*"):
         id = int(table)
     except:
         id = None
-    if isinstance(sequence, Seq):
+    if isinstance(sequence, Seq) or isinstance(sequence, MutableSeq):
+        if isinstance(sequence.alphabet, Alphabet.ProteinAlphabet) :
+            raise ValueError, "Proteins cannot be translated!"
         if sequence.alphabet==IUPAC.unambiguous_dna:
             if id==None:
                 table = CodonTable.unambiguous_dna_by_name[table]
@@ -346,7 +364,7 @@ def translate(sequence, table = "Standard", stop_symbol = "*"):
                 table = CodonTable.generic_by_name[table]
             else:
                 table = CodonTable.generic_by_id[id]
-        sequence = sequence.data.upper()
+        sequence = sequence.tostring().upper()
         n = len(sequence)
         get = table.forward_table.get
         protein = [get(sequence[i:i+3], stop_symbol) for i in xrange(0,n-n%3,3)]
@@ -367,11 +385,81 @@ def translate(sequence, table = "Standard", stop_symbol = "*"):
 
 
 def reverse_complement(sequence):
-    """Returns the reverse complement sequence. New string object.
+    """Returns the reverse complement sequence of a nucleotide string
+
+    If given a string, returns a new string object.
+    Given a Seq or a MutableSeq, returns a new Seq object with the same alphabet.
+
+    NOTE - Currently only supports unambiguous nucleotide sequences
     """
+    #TODO - Take complement of ambiguous nucleotides (as best possible)
     if 'U' in sequence:
         ttable = string.maketrans("ACGUacgu","UGCAugca")
     else:
         ttable = string.maketrans("ACGTacgt","TGCAtgca")
-    sequence = sequence[-1::-1].translate(ttable)
-    return sequence
+    if isinstance(sequence, Seq) or isinstance(sequence, MutableSeq):
+        if isinstance(sequence.alphabet, Alphabet.ProteinAlphabet) :
+            raise ValueError, "Proteins do not have complements!"
+        #Important - want to use the pthon string object's translate method here:
+        return Seq(sequence.tostring()[-1::-1].translate(ttable), \
+                   sequence.alphabet)
+    else :
+        #String
+        return sequence[-1::-1].translate(ttable)
+
+if __name__ == "__main__" :
+    print "Quick Self Test"
+
+    test_seqs = [Seq("ATGAAACTG"), 
+                 Seq("AUGAAACUG", Alphabet.generic_dna), 
+                 Seq("ATGAAACTG", Alphabet.generic_rna), 
+                 Seq("ATGAAACTG", Alphabet.generic_nucleotide), 
+                 Seq("ACTGTCGTCT", Alphabet.generic_protein)]
+
+    print
+    print "Transcribe DNA into RNA"
+    print "======================="
+    for nucleotide_seq in test_seqs:
+        try :
+            print "%s -> %s" \
+            % (repr(nucleotide_seq) , repr(transcribe(nucleotide_seq)))
+        except ValueError, e :
+            print "%s -> %s" \
+            % (repr(nucleotide_seq) , str(e))
+
+    print
+    print "Back-transcribe RNA into DNA"
+    print "============================"
+    for nucleotide_seq in test_seqs:
+        try :
+            print "%s -> %s" \
+            % (repr(nucleotide_seq) , repr(transcribe(nucleotide_seq)))
+        except ValueError, e :
+            print "%s -> %s" \
+            % (repr(nucleotide_seq) , str(e))
+
+            
+    print
+    print "Reverse Complement"
+    print "=================="
+    for nucleotide_seq in test_seqs:
+        try :
+            print "%s -> %s" \
+            % (repr(nucleotide_seq) , repr(reverse_complement(nucleotide_seq)))
+        except ValueError, e :
+            print "%s -> %s" \
+            % (repr(nucleotide_seq) , str(e))
+            
+    print
+    print "Translating"
+    print "==========="
+    for nucleotide_seq in test_seqs:
+        try :
+            print "%s -> %s" \
+            % (repr(nucleotide_seq) , repr(translate(nucleotide_seq)))
+        except ValueError, e :
+            print "%s -> %s" \
+            % (repr(nucleotide_seq) , str(e))
+        
+
+    print "Done"
