@@ -295,7 +295,7 @@ def transcribe(dna):
         if isinstance(dna.alphabet, Alphabet.ProteinAlphabet) :
             raise ValueError, "Proteins cannot be transcribed!"
         #TODO - Raise an error if already is RNA alphabet?
-        rna = dna.data.replace('T','U').replace('t','u')
+        rna = dna.tostring().replace('T','U').replace('t','u')
 	if dna.alphabet==IUPAC.unambiguous_dna:
             alphabet = IUPAC.unambiguous_rna
         elif dna.alphabet==IUPAC.ambiguous_dna:
@@ -413,7 +413,9 @@ if __name__ == "__main__" :
     test_seqs = [Seq("ATGAAACTG"), 
                  Seq("AUGAAACUG", Alphabet.generic_dna), 
                  Seq("ATGAAACTG", Alphabet.generic_rna), 
-                 Seq("ATGAAACTG", Alphabet.generic_nucleotide), 
+                 Seq("ATGAAACTG", Alphabet.generic_nucleotide),
+                 Seq("ATGAAACUG", Alphabet.generic_nucleotide), #U and T (!)
+                 MutableSeq("ATGAAACTG", Alphabet.generic_rna),
                  Seq("ACTGTCGTCT", Alphabet.generic_protein)]
 
     print
