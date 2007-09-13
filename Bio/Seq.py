@@ -97,6 +97,8 @@ class Seq:
     def complement(self):
         """Returns the complement sequence. New Seq object.
         """
+        if isinstance(self.alphabet, Alphabet.ProteinAlphabet) :
+            raise ValueError, "Proteins do not have complements!"
         if self.alphabet in (IUPAC.ambiguous_dna, IUPAC.unambiguous_dna):
             d = ambiguous_dna_complement
         elif self.alphabet in (IUPAC.ambiguous_rna, IUPAC.unambiguous_rna):
@@ -114,6 +116,8 @@ class Seq:
     def reverse_complement(self):
         """Returns the reverse complement sequence. new Seq object.
         """
+        if isinstance(self.alphabet, Alphabet.ProteinAlphabet) :
+            raise ValueError, "Proteins do not have complements!"
         if self.alphabet in (IUPAC.ambiguous_dna, IUPAC.unambiguous_dna):
             d = ambiguous_dna_complement
         elif self.alphabet in (IUPAC.ambiguous_rna, IUPAC.unambiguous_rna):
@@ -246,6 +250,8 @@ class MutableSeq:
     def reverse(self):
         self.data.reverse()
     def complement(self):
+        if isinstance(self.alphabet, Alphabet.ProteinAlphabet) :
+            raise ValueError, "Proteins do not have complements!"
         if self.alphabet in (IUPAC.ambiguous_dna, IUPAC.unambiguous_dna):
             d = ambiguous_dna_complement
         elif self.alphabet in (IUPAC.ambiguous_rna, IUPAC.unambiguous_rna):
@@ -260,6 +266,8 @@ class MutableSeq:
         self.data = array.array('c', self.data)
         
     def reverse_complement(self):
+        if isinstance(self.alphabet, Alphabet.ProteinAlphabet) :
+            raise ValueError, "Proteins do not have complements!"
         self.complement()
         self.data.reverse()
 
@@ -407,61 +415,3 @@ def reverse_complement(sequence):
         #String
         return sequence[-1::-1].translate(ttable)
 
-if __name__ == "__main__" :
-    print "Quick Self Test"
-
-    test_seqs = [Seq("ATGAAACTG"), 
-                 Seq("AUGAAACUG", Alphabet.generic_dna), 
-                 Seq("ATGAAACTG", Alphabet.generic_rna), 
-                 Seq("ATGAAACTG", Alphabet.generic_nucleotide),
-                 Seq("ATGAAACUG", Alphabet.generic_nucleotide), #U and T (!)
-                 MutableSeq("ATGAAACTG", Alphabet.generic_rna),
-                 Seq("ACTGTCGTCT", Alphabet.generic_protein)]
-
-    print
-    print "Transcribe DNA into RNA"
-    print "======================="
-    for nucleotide_seq in test_seqs:
-        try :
-            print "%s -> %s" \
-            % (repr(nucleotide_seq) , repr(transcribe(nucleotide_seq)))
-        except ValueError, e :
-            print "%s -> %s" \
-            % (repr(nucleotide_seq) , str(e))
-
-    print
-    print "Back-transcribe RNA into DNA"
-    print "============================"
-    for nucleotide_seq in test_seqs:
-        try :
-            print "%s -> %s" \
-            % (repr(nucleotide_seq) , repr(transcribe(nucleotide_seq)))
-        except ValueError, e :
-            print "%s -> %s" \
-            % (repr(nucleotide_seq) , str(e))
-
-            
-    print
-    print "Reverse Complement"
-    print "=================="
-    for nucleotide_seq in test_seqs:
-        try :
-            print "%s -> %s" \
-            % (repr(nucleotide_seq) , repr(reverse_complement(nucleotide_seq)))
-        except ValueError, e :
-            print "%s -> %s" \
-            % (repr(nucleotide_seq) , str(e))
-            
-    print
-    print "Translating"
-    print "==========="
-    for nucleotide_seq in test_seqs:
-        try :
-            print "%s -> %s" \
-            % (repr(nucleotide_seq) , repr(translate(nucleotide_seq)))
-        except ValueError, e :
-            print "%s -> %s" \
-            % (repr(nucleotide_seq) , str(e))
-        
-
-    print "Done"
