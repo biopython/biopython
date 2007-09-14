@@ -36,16 +36,18 @@ download_many         Download many GenBank records.
 import cStringIO
 
 # other Biopython stuff
-from Bio.expressions import genbank
 from Bio.ParserSupport import AbstractConsumer
-import utils
+from utils import FeatureValueCleaner
 
 #There used to be a (GenBank only) class _Scanner in
 #this file.  Now use a more generic system which we import:
 from Scanner import GenBankScanner
 
+#These are used by the index_file function and Dictionary class:
 from Bio import Mindy
 from Bio.Mindy import SimpleSeqRecord
+
+#These are used for downloading files from GenBank
 from Bio import db
 from Bio import EUtils
 from Bio.EUtils import DBIds, DBIdsClient
@@ -158,7 +160,7 @@ class FeatureParser:
     """Parse GenBank files into Seq + Feature objects.
     """
     def __init__(self, debug_level = 0, use_fuzziness = 1, 
-                 feature_cleaner = utils.FeatureValueCleaner()):
+                 feature_cleaner = FeatureValueCleaner()):
         """Initialize a GenBank parser and Feature consumer.
 
         Arguments:
