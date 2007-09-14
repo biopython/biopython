@@ -9,7 +9,7 @@
 
 import os, sys, getopt, re, time
 from string import maketrans
-from Bio import Fasta
+from Bio import SeqIO
 from Bio import Translate
 from Bio.Seq import Seq
 from Bio import Alphabet
@@ -363,13 +363,10 @@ def apply_on_multi_fasta(file, function, *args):
    except:
       raise NotImplementedError, "%s not implemented" % function
    
-   parser = Fasta.RecordParser()
    handle = open(file, 'r')
-   iter = Fasta.Iterator(handle, parser)
+   records = SeqIO.parse(handle, "fasta")
    results = []
-   while 1:
-      record = iter.next()
-      if not record: break
+   for record in records:
       arguments = [record.sequence]
       for arg in args: arguments.append(arg)
       result = f(*arguments)
