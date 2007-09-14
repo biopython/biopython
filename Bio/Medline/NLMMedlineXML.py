@@ -12,6 +12,12 @@ index           Index a Medline XML file.
 index_many      Index multiple Medline XML files.
 
 """
+
+
+import warnings
+warnings.warn("Bio.Medline.NLMMedlineXML was deprecated, as it does not seem to be able to parse recent Medline XML files. If you want to continue to use this module, please get in contact with the Biopython developers at biopython-dev@biopython.org to avoid permanent removal of this module from Biopython", DeprecationWarning)
+
+
 # To Do:
 # - Implement CitationParser
 import os
