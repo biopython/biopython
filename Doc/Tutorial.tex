@@ -970,7 +970,7 @@ In previous example we used a list of SeqRecord objects as input to the \verb|Bi
 \begin{verbatim}
 from Bio import SeqIO
 in_handle = open("ls_orchid.gbk", "r")
-out_handle = open("my_example.faa", "w")
+out_handle = open("my_example.fasta", "w")
 SeqIO.write(SeqIO.parse(in_handle, "genbank"), out_handle, "fasta")
 in_handle.close()
 out_handle.close()
@@ -981,6 +981,100 @@ You {\it can} in fact do this in one line, by being lazy about closing the file 
 \begin{verbatim}
 from Bio import SeqIO
 SeqIO.write(SeqIO.parse(open("ls_orchid.gbk"), "genbank"), open("my_example.faa", "w"), "fasta")
+\end{verbatim}
+
+\subsection{Converting a file of sequences to their reverse complements}
+
+Suppose you had a file of nucleotide sequences, and you wanted to turn it into a file containing their reverse complement sequences.  This time a little bit of work is required to transform the SeqRecords we get from our input file into something suitable for saving to our output file.
+
+To start with, we'll use \verb|Bio.SeqIO.parse()| to load some nucleotide
+sequences from a file, then print out their reverse complements using
+the Seq object's built in \verb|.reverse_complement()| method:
+
+\begin{verbatim}
+from Bio import SeqIO
+in_handle = open("ls_orchid.gbk")
+for record in SeqIO.parse(in_handle, "genbank") :
+    print record.id
+    print record.seq.reverse_complement().tostring()
+in_handle.close()
+\end{verbatim}
+
+Now, if we want to save these reverse complements to a file, we'll need to make SeqRecord objects.
+For this I think its most elegant to write our own function, where we can decide how to name our
+new records:
+
+\begin{verbatim}
+from Bio.SeqRecord import SeqRecord
+
+def make_rc_record(record) :
+    """Returns a new SeqRecord with the reverse complement sequence"""
+    rc_rec = SeqRecord(seq = record.seq.reverse_complement(), \
+             id = "rc_" + record.id, \
+             name = "rc_" + record.name, \
+             description = "reverse complement")
+    return rc_rec
+\end{verbatim}
+
+We can then use this to turn the input records into reverse complement records ready for output.  If you don't mind about having all the records in memory at once, then the python \verb|map()| function is a very intuitive way of doing this:
+
+\begin{verbatim}
+from Bio import SeqIO
+
+in_handle = open("ls_orchid.fasta", "r")
+records = map(make_rc_record, SeqIO.parse(in_handle, "fasta"))
+in_handle.close()
+
+out_handle = open("rev_comp.fasta", "w")
+SeqIO.write(records, out_handle, "fasta")
+out_handle.close()
+\end{verbatim}
+
+This is an excellent place to introduce list comprehensions (added to Python 2.0) which in their simplest are a long-winded equivalent to using \verb|map()|, like this:
+
+\begin{verbatim}
+records = [make_rc_record(rec) for rec in SeqIO.parse(in_handle, "fasta")]
+\end{verbatim}
+
+\noindent Now list comprehensions have a nice trick up their sleaves, you can add a conditional statement:
+
+\begin{verbatim}
+records = [make_rc_record(rec) for rec in SeqIO.parse(in_handle, "fasta") if len(rec.seq) < 700]
+\end{verbatim}
+
+That would create an in memory list of reverse complement SeqRecords where the sequence length was under 700 base pairs. However, if you are using Python 2.4 or later, we can do exactly the same with a generator expression - but with the advantage that this does not create a list of all the records in memory at once:
+
+\begin{verbatim}
+records = (make_rc_record(rec) for rec in SeqIO.parse(in_handle, "fasta") if len(rec.seq) < 700)
+\end{verbatim}
+
+If you like compact code, and don't mind being lax about closing file handles, we can reduce this to one long line: 
+
+\begin{verbatim}
+from Bio import SeqIO
+SeqIO.write((make_rc_record(rec) for rec in \
+            SeqIO.parse(open("ls_orchid.fasta", "r"), "fasta") if len(rec.seq) < 700), \
+            open("rev_comp.fasta", "w"), "fasta")
+\end{verbatim}
+
+Personally, I think the above snippet of code is a little too compact, and I find the following much easier to read:
+
+\begin{verbatim}
+from Bio import SeqIO
+records = (make_rc_record(rec) for rec in \
+           SeqIO.parse(open("ls_orchid.fasta", "r"), "fasta") \
+           if len(rec.seq) < 700)
+SeqIO.write(records, open("rev_comp.fasta", "w"), "fasta")
+\end{verbatim}
+
+\noindent or, for Python 2.3 or older,
+
+\begin{verbatim}
+from Bio import SeqIO
+records = [make_rc_record(rec) for rec in \
+           SeqIO.parse(open("ls_orchid.fasta", "r"), "fasta") \
+           if len(rec.seq) < 700]
+SeqIO.write(records, open("rev_comp.fasta", "w"), "fasta")
 \end{verbatim}
 
 \chapter{BLAST}
