@@ -1,22 +1,25 @@
-import string
 import math
 def Tm_staluc(s,dnac=50,saltc=50,rna=0):
-    """Returns DNA/DNA tm using nearest neighbor thermodynamics. dnac is
-    DNA concentration [nM] and saltc is salt concentration [mM].
+    """Returns DNA/DNA tm using nearest neighbor thermodynamics.
+
+    dnac is DNA concentration [nM]
+    saltc is salt concentration [mM].
     rna=0 is for DNA/DNA (default), for RNA, rna should be 1.
+    
     Sebastian Bassi <sbassi@genesdigitales.com>"""
     
     #Credits: 
     #Main author: Sebastian Bassi <sbassi@genesdigitales.com>
     #Overcount function: Greg Singer <singerg@tcd.ie>
-    #Based on the work of Nicolas Le Novere <lenov@ebi.ac.uk> Bioinformatics. 17:1226-1227(2001)
+    #Based on the work of Nicolas Le Novere <lenov@ebi.ac.uk> Bioinformatics.
+    #17:1226-1227(2001)
 
-    #This function returns better results than EMBOSS DAN because it uses updated
-    #thermodinamics values and take into account inicialization parameters from SantaLucia
-    #works (1998).
+    #This function returns better results than EMBOSS DAN because it uses
+    #updated thermodynamics values and takes into account inicialization
+    #parameters from the work of SantaLucia (1998).
     
     #Things to do:
-    #+Add a function to detect complementary sequences. Change K according to result.
+    #+Detect complementary sequences. Change K according to result.
     #+Add support for heteroduplex (see Sugimoto et al. 1995).
     #+Correction for Mg2+. Now supports only monovalent ions.
     #+Put thermodinamics table in a external file for users to change at will
@@ -31,16 +34,16 @@ def Tm_staluc(s,dnac=50,saltc=50,rna=0):
         if rna==0:
             #DNA/DNA
             #Allawi and SantaLucia (1997). Biochemistry 36 : 10581-10594
-            if stri[0]=="G" or stri[0]=="C":
+            if stri.startswith('G') or stri.startswith('C'):
                 deltah=deltah-0.1
                 deltas=deltas+2.8
-            elif stri[0]=="A" or stri[0]=="T":
+            elif stri.startswith('A') or stri.startswith('T'):
                 deltah=deltah-2.3
                 deltas=deltas-4.1
-            if stri[-1]=="G" or stri[-1]=="C":
+            if stri.endswith('G') or stri.endswith('C'):
                 deltah=deltah-0.1
                 deltas=deltas+2.8
-            elif stri[-1]=="A" or stri[-1]=="T":
+            elif stri.endswith('A') or stri.endswith('T'):
                 deltah=deltah-2.3
                 deltas=deltas-4.1
             dhL=dh+deltah
@@ -48,16 +51,18 @@ def Tm_staluc(s,dnac=50,saltc=50,rna=0):
             return dsL,dhL
         elif rna==1:
             #RNA
-            if stri[0]=="G" or stri[0]=="C":
+            if stri.startswith('G') or stri.startswith('C'):
                 deltah=deltah-3.61
                 deltas=deltas-1.5
-            elif stri[0]=="A" or stri[0]=="T" or stri[0]=="U":
+            elif stri.startswith('A') or stri.startswith('T') or \
+                 stri.startswith('U'):
                 deltah=deltah-3.72
                 deltas=deltas+10.5
-            if stri[-1]=="G" or stri[-1]=="C":
+            if stri.endswith('G') or stri.endswith('C'):
                 deltah=deltah-3.61
                 deltas=deltas-1.5
-            elif stri[-1]=="A" or stri[-1]=="T" or stri[0]=="U":
+            elif stri.endswith('A') or stri.endswith('T') or \
+                 stri.endswith('U'):
                 deltah=deltah-3.72
                 deltas=deltas+10.5
             dhL=dh+deltah
@@ -78,8 +83,8 @@ def Tm_staluc(s,dnac=50,saltc=50,rna=0):
             x=i+1
         return ocu
 
-    sup=string.upper(s)
     R=1.987 # universal gas constant in Cal/degrees C*Mol
+    sup=s.upper()
     vsTC,vh=tercorr(sup)
     vs=vsTC
     
