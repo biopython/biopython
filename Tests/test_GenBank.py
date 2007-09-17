@@ -100,40 +100,9 @@ for parser in all_parsers:
                          
         handle.close()
         
-# test GenBank dictionary
-def remove_index(indexname):
-    """Remove the index if it exists.
-    """
-    if os.path.exists(indexname):
-        try:
-            os.remove(indexname) # remove files -- old Biopython
-        except OSError: # is a directory -- new
-            for filename in os.listdir(indexname):
-                os.remove(os.path.join(indexname, filename))
-            os.removedirs(indexname)
-
-print "Testing dictionaries..."
-dict_file = os.path.join(gb_file_dir, 'cor6_6.gb')
-indexname = os.path.join(gb_file_dir, 'cor6_6.idx')
-
-print "Indexing file to serve as a dictionary..."
-remove_index(indexname)
-GenBank.index_file(dict_file, indexname)
-gb_dict = GenBank.Dictionary(indexname, GenBank.FeatureParser())
-
-print "len:", len(gb_dict)
-k = gb_dict.keys()
-k.sort()
-print "keys:", k
-
-# pick out some keys and make sure we are getting back decent records
-for key in k[:3]:
-    print "Retrieving record with key %s" % key
-    cur_seqrecord = gb_dict[key]
-    print "description:", cur_seqrecord.description
-    print "id:", cur_seqrecord.id
-
-remove_index(indexname)
+#The dictionaries code has been deprecated
+#print "Testing dictionaries..."
+#...
 
 # test writing GenBank format
 print "Testing writing GenBank format..."

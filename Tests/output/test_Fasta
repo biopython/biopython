@@ -9,9 +9,8 @@ Ensure the Fasta iterator works like a Python 2.2 iterator. ... ok
 Parse FASTA files with # style comment lines in them. ... ok
 Test the iterator with a Record Parser. ... ok
 Test the iterator with a Sequence Parser. ... ok
-Test indexing a file and retrieving from it. ... ok
 
 ----------------------------------------------------------------------
-Ran 11 tests in 0.761s
+Ran 10 tests in 0.003s
 
 OK

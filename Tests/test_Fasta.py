@@ -26,7 +26,7 @@ def testing_suite():
 
     test_loader = unittest.TestLoader()
     test_loader.testMethodPrefix = 't_'
-    tests = [RecordTest, ParserTest, IteratorTest, DictionaryTest]
+    tests = [RecordTest, ParserTest, IteratorTest]
     
     for test in tests:
         cur_suite = test_loader.loadTestsFromTestCase(test)
@@ -163,48 +163,9 @@ class IteratorTest(unittest.TestCase):
             num_recs += 1
         assert num_recs == 2
 
-class DictionaryTest(unittest.TestCase):
-    def setUp(self):
-        self.filename = os.path.join("Fasta", "f002")
-        self.indexname = self.filename + ".idx"
-
-    def tearDown(self):
-        try:
-            os.remove(self.indexname) # remove files -- old Biopython
-        except OSError: # is a directory -- new
-            for filename in os.listdir(self.indexname):
-                os.remove(os.path.join(self.indexname, filename))
-            os.removedirs(self.indexname)
-
-    def t_index_file(self):
-        """Test indexing a file and retrieving from it.
-        """
-        def rec_to_ids(rec):
-            """Just return the GI number to index by.
-            """
-            parts = rec.title.split()
-            gi_parts = parts[0].split("|")
-            return gi_parts[1]
-
-        Fasta.index_file(self.filename, self.indexname, rec_to_ids)
-        gis = ["1348912", "1348917", "1592936"]
-        fasta_dict = Fasta.Dictionary(self.indexname, Fasta.RecordParser())
-        assert len(fasta_dict) == len(gis), len(fasta_dict)
-        dict_keys = fasta_dict.keys()
-        dict_keys.sort()
-        assert dict_keys == gis
-        for gi in gis:
-            rec = fasta_dict[gi]
-            assert isinstance(rec, Fasta.Record)
-            assert gi in fasta_dict
-            
-            
-
-        # dict like function
-        self.assertRaises(KeyError,fasta_dict.__getitem__, 'this is not a key')
-        assert fasta_dict.has_key("1348912")== True
-        assert fasta_dict.has_key("not a key")== False
-        
+##The dictionaries code has been deprecated
+#class DictionaryTest(unittest.TestCase):
+#   ...
         
 if __name__ == "__main__":
     sys.exit(run_tests(sys.argv))
