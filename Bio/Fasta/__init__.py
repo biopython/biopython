@@ -12,13 +12,12 @@ SequenceParser     Parses FASTA sequence data into a Sequence object.
 Functions:
 index_file         Index a FASTA file for a Dictionary.
 """
-import os
-import cStringIO
-
 from Bio import Seq
 from Bio import SeqRecord
 from Bio import Alphabet
 
+#These imports are only used by the deprecated dictionary functions/classes
+import cStringIO
 from Bio import Mindy
 from Bio.Mindy import SimpleSeqRecord
 
@@ -158,10 +157,10 @@ class SequenceParser:
         return self.parse_string(handle.read())
 
 class Dictionary(dict):
-    """Accesses an indexed FASTA file using a dictionary interface.
+    """Accesses an indexed FASTA file using a dictionary interface. DEPRECATED
     """
     def __init__(self, indexname, parser=None, filename = None):
-        """Open a Fasta Dictionary.  
+        """Open a Fasta Dictionary.  DEPRECATED
         
         indexname is the name of the index for the dictionary.  The index should 
         have been created using the index_file function.  
@@ -175,11 +174,20 @@ class Dictionary(dict):
         index will be used. XXX This is no longer supported -- use symbolic
         links in the filesystem.
         """
+        
+        import warnings
+        warnings.warn("Bio.Fasta.index_file Bio.Fasta.Dictionary are deprecated." \
+                      + " We hope an in memory dictionary, for example using the" \
+                      + " Bio.SeqIO.to_dict() function, will be suitable for" \
+                      + " most users.  Please get in touch on the mailing lists if" \
+                      + " this (or its removal) causes any problems for you.",
+                      DeprecationWarning)
+
         # we can't support finding the index file name if we want to follow
         # standard open-bio fetching protocols.
         if filename is not None:
             raise AttributeError("Specifying filenames is no longer supported")
-        
+
         self._index = Mindy.open(indexname)
         self._parser = parser
         
@@ -214,7 +222,7 @@ class Dictionary(dict):
             
 
 def index_file(filename, indexname, rec2key = None, use_berkeley = 0):
-    """Index a FASTA file.
+    """Index a FASTA file. DEPRECATED
 
     filename is the name of the file to index.
 
@@ -234,6 +242,15 @@ def index_file(filename, indexname, rec2key = None, use_berkeley = 0):
     uses the bsddb3 wrappers around the embedded database Berkeley DB. By
     default, the standard flat file (non-Berkeley) indexes are used.
     """
+
+    import warnings
+    warnings.warn("Bio.Fasta.index_file Bio.Fasta.Dictionary are deprecated." \
+                  + " We hope an in memory dictionary, for example using the" \
+                  + " Bio.SeqIO.to_dict() function, will be suitable for" \
+                  + " most users.  Please get in touch on the mailing lists if" \
+                  + " this (or its removal) causes any problems for you.",
+                  DeprecationWarning)
+
     if rec2key:
         indexer = _FastaFunctionIndexer(rec2key)
     else:
