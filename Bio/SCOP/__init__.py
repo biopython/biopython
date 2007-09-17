@@ -1,5 +1,6 @@
 # Copyright 2001 by Gavin E. Crooks.  All rights reserved.
-# Modifications Copyright 2004/2005 James Casbon. All rights Reserved:
+# Modifications Copyright 2004/2005 James Casbon. All rights Reserved.
+#
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -43,7 +44,7 @@ import Des
 import Cla
 import Hie
 from Residues import *
-from Bio import Fasta
+from Bio import SeqIO
 from Bio.Alphabet import IUPAC
 from Bio.Seq import Seq
 
@@ -676,21 +677,28 @@ class Astral:
     def __init__( self, dir_path=None, version=None, scop=None, ind_file=None,
                   astral_file=None, db_handle=None):
         """
-        Initialise the astral database.  You must provide either:
-        a) the path to location of the scopseq-x.xx directory (not the directory itself),
-        and a version number.
-        or
-        b) a path to a fasta file
-        or
-        c) A database handle for a MYSQL database containing a table 'astral' with the
-        astral data in it.  This can be created using writeToSQL.
-
-        The constructor attempts to index the astral files using the Fasta.Dictionary
-        if given astral files.
-        It needs to write to an index file (if not exisiting already).  It defaults to
-        appending .idx to the astral file containing all sequences
-        (astral-scopdom-seqres-all-x.xx.fa.idx), to change this, use ind_file.
+        Initialise the astral database.
+        
+        You must provide either a directory of SCOP files:
+                
+        dir_path - string, the path to location of the scopseq-x.xx directory
+                   (not the directory itself), and
+        version   -a version number.
+        
+        or, a FASTA file:
+        
+        astral_file - string, a path to a fasta file (which will be loaded in memory)
+        
+        or, a MYSQL database:
+        
+        db_handle - a database handle for a MYSQL database containing a table
+                    'astral' with the astral data in it.  This can be created
+                    using writeToSQL.
+                    
+        Note that the ind_file argument is deprecated.
         """
+        if ind_file :
+            raise RuntimeError, "The ind_file (index file) argument is deprecated"
 
         if astral_file==dir_path==db_handle==None:
             raise RunTimeError,"Need either file handle, or (dir_path + version)\
@@ -711,21 +719,9 @@ class Astral:
             astral_file = "astral-scopdom-seqres-all-%s.fa" % self.version
             astral_file = os.path.join (self.path, astral_file)
 
-        if not ind_file and not db_handle:
-            ind_file = astral_file + ".idx"
-
         if astral_file:
-        
-            prot_parser = Fasta.SequenceParser(IUPAC.protein)
-            try:
-                self.fasta_dict = Fasta.Dictionary(ind_file, prot_parser)
-            except:
-                # failed to open dictionary so try and build one
-                def returnSidFromHeader(record):
-                    toks = string.split(record.title)
-                    return toks[0]
-                Fasta.index_file(astral_file, ind_file, returnSidFromHeader)
-                self.fasta_dict = Fasta.Dictionary(ind_file, prot_parser)
+            #Build a dictionary of SeqRecord objects in the FASTA file, IN MEMORY
+            self.fasta_dict = SeqIO.to_dict(SeqIO.parse(open(astral_file), "fasta"))
 
         self.astral_file = astral_file
         self.EvDatasets = {}
