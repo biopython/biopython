@@ -1126,7 +1126,9 @@ class _HSPConsumer:
         # line below added by Yair Benita, Sep 2004.
         # added the end attribute for the query
         self._hsp.query_end = _safe_int(end)
-        self._query_start_index = m.start(2)
+
+        #Get index for sequence start (regular expression element 3)
+        self._query_start_index = m.start(3)
         self._query_len = len(seq)
 
     def align(self, line):
