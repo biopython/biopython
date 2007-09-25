@@ -396,10 +396,20 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         """
         new_acc_nums = self._split_accessions(acc_num)
 
+        #Also record them ALL in the annotations
+        try :
+            #On the off chance there was more than one accession line:
+            self.data.annotations['accessions'].extend(new_acc_nums)
+        except KeyError :
+            self.data.annotations['accessions'] = new_acc_nums
+
         # if we haven't set the id information yet, add the first acc num
         if self.data.id is None:
             if len(new_acc_nums) > 0:
-                self.data.id = new_acc_nums[0]
+                #self.data.id = new_acc_nums[0]
+                #Use the FIRST accession as the ID, not the first on this line!
+                self.data.id = self.data.annotations['accessions'][0]
+                
 
     def nid(self, content):
         self.data.annotations['nid'] = content

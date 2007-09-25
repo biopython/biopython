@@ -306,7 +306,7 @@ Testing reading swiss format file SwissProt/sp007
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
 Testing reading swiss format file SwissProt/sp008
- ID = 'Q95352', Name='1A02_HUMAN',
+ ID = 'P01892', Name='1A02_HUMAN',
  Seq='MAVMAPRTLVLLLSGALALTQTWAGSHSMRYFFTSVSRPG...SLTACKV', length=365
  Checking can write/read as 'fasta' format
  Checking can write/read as 'clustal' format

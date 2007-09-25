@@ -999,8 +999,18 @@ class _SequenceConsumer(AbstractConsumer):
         self.data.name = cols[1]
 
     def accession(self, line):
+        #Note that files can and often do contain multiple AC lines.
         ids = line[5:].rstrip().split(';')
-        self.data.id = ids[0]
+        
+        #Use the first as the ID, but record them ALL in the annotations
+        try :
+            self.data.annotations['accessions'].extend(ids)
+        except KeyError :
+            self.data.annotations['accessions'] = ids
+            
+        #Use the FIRST accession as the ID, not the first on this line!
+        self.data.id = self.data.annotations['accessions'][0]
+        #self.data.id = ids[0]
 
     def description(self, line):
         self.data.description = self.data.description + \
