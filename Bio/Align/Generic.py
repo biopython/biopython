@@ -18,7 +18,7 @@ from Bio.Alphabet import IUPAC
 class Alignment:
     """Represent a set of alignments.
 
-    This is a base class to represent alignments, which should be subclassed
+    This is a base class to represent alignments, which can be subclassed
     to deal with an alignment in a specific format.
     """
     def __init__(self, alphabet):
@@ -38,6 +38,17 @@ class Alignment:
         The return value is a list of SeqRecord objects.
         """
         return self._records
+
+    def __iter__(self) :
+        """Iterate over alignment rows as SeqRecord objects
+
+        e.g.
+
+        for record in align :
+            print record.id
+            print record.seq
+        """
+        return iter(self._records) 
 
     def get_seq_by_num(self, number):
         """Retrieve a sequence by the number of the sequence in the consensus.
@@ -115,6 +126,7 @@ class Alignment:
         new_record.annotations['weight'] = weight
 
         self._records.append(new_record)
+        
     def get_column(self,col):
         """Returns a string containing a given column"""
         col_str = ''
@@ -123,6 +135,20 @@ class Alignment:
             col_str += rec.seq[col]
         return col_str
                 
-        
-        
+if __name__ == "__main__" :
+    print "Mini self test..."
 
+    raw_data = ["ACGATCAGCTAGCT", "CCGATCAGCTAGCT", "ACGATGAGCTAGCT"]
+    a = Alignment(Alphabet.generic_dna)
+    a.add_sequence("Alpha", raw_data[0], weight=2)
+    a.add_sequence("Beta",  raw_data[1])
+    a.add_sequence("Gamma", raw_data[2])
+
+    #Iterating over the rows...
+    for rec in a :
+        assert isinstance(rec, SeqRecord)
+    for r,rec in enumerate(a) :
+        assert isinstance(rec, SeqRecord)
+        assert raw_data[r] == rec.seq.tostring()
+        if r==0 : assert rec.annotations['weight']==2
+    print "Alignment iteraction as SeqRecord OK"
