@@ -44,6 +44,8 @@ from Bio.ParserSupport import *
 from Bio.WWW import ExPASy
 from Bio.WWW import RequestLimiter
 
+_CHOMP = " \n\r\t.,;" #whitespace and trailing punctuation
+
 class Record:
     """Holds information from a SwissProt record.
 
@@ -541,6 +543,9 @@ class _RecordConsumer(AbstractConsumer):
     def __init__(self):
         self.data = None
         
+    def __repr__(self) :
+        return "Bio.SwissProt.SProt._RecordConsumer()"
+        
     def start_record(self):
         self.data = Record()
         
@@ -559,12 +564,12 @@ class _RecordConsumer(AbstractConsumer):
         #should become two fields (number and units)
         if len(cols) == 6 :
             self.data.entry_name = cols[1]
-            self.data.data_class = self._chomp(cols[2])    # don't want ';'
-            self.data.molecule_type = self._chomp(cols[3]) # don't want ';'
+            self.data.data_class = cols[2].rstrip(_CHOMP)    # don't want ';'
+            self.data.molecule_type = cols[3].rstrip(_CHOMP) # don't want ';'
             self.data.sequence_length = int(cols[4])
         elif len(cols) == 5 :
             self.data.entry_name = cols[1]
-            self.data.data_class = self._chomp(cols[2])    # don't want ';'
+            self.data.data_class = cols[2].rstrip(_CHOMP)    # don't want ';'
             self.data.molecule_type = None
             self.data.sequence_length = int(cols[3])
         else :
@@ -586,7 +591,7 @@ class _RecordConsumer(AbstractConsumer):
                   (self.data.molecule_type, line)
     
     def accession(self, line):
-        cols = self._chomp(line[5:].rstrip()).split(';')
+        cols = line[5:].rstrip(_CHOMP).split(';')
         for ac in cols:
             self.data.accessions.append(ac.lstrip())
     
@@ -621,7 +626,7 @@ class _RecordConsumer(AbstractConsumer):
                     "Could not find Rel. in DT line: %s" % (line)
             version_index = rel_index + 1
             # get the version information
-            str_version = self._chomp(cols[version_index])
+            str_version = cols[version_index].rstrip(_CHOMP)
             # no version number
             if str_version == '':
                 version = 0
@@ -694,7 +699,7 @@ class _RecordConsumer(AbstractConsumer):
         self.data.organelle += line[5:]
     
     def organism_classification(self, line):
-        line = self._chomp(line[5:].rstrip())
+        line = line[5:].rstrip(_CHOMP)
         cols = line.split(';')
         for col in cols:
             self.data.organism_classification.append(col.lstrip())
@@ -711,7 +716,7 @@ class _RecordConsumer(AbstractConsumer):
         # To parse this, I need to check to see whether I'm at the
         # first line.  If I am, grab the description and make sure
         # it's an NCBI ID.  Then, grab all the id's.
-        line = self._chomp(line[5:].rstrip())
+        line = line[5:].rstrip(_CHOMP)
         index = line.find('=')
         if index >= 0:
             descr = line[:index]
@@ -724,7 +729,7 @@ class _RecordConsumer(AbstractConsumer):
     def organism_host(self, line):
         # Line type OH (Organism Host) for viral hosts
         # same code as in taxonomy_id()
-        line = self._chomp(line[5:].rstrip())
+        line = line[5:].rstrip(_CHOMP)
         index = line.find('=')
         if index >= 0:
             descr = line[:index]
@@ -801,7 +806,7 @@ class _RecordConsumer(AbstractConsumer):
             for col in cols:
                 x = col.split("=")
                 assert len(x) == 2, "I don't understand RX line %s" % line
-                key, value = self._chomp(x[0]), self._chomp(x[1])
+                key, value = x[0].rstrip(_CHOMP), x[1].rstrip(_CHOMP)
                 ref = self.data.references[-1].references
                 ref.append((key, value))
         # otherwise we assume we have the type 'RX   MEDLINE; 85132727.'
@@ -810,7 +815,7 @@ class _RecordConsumer(AbstractConsumer):
             # normally we split into the three parts
             assert len(cols) == 3, "I don't understand RX line %s" % line
             self.data.references[-1].references.append(
-                (self._chomp(cols[1]), self._chomp(cols[2])))
+                (cols[1].rstrip(_CHOMP), cols[2].rstrip(_CHOMP)))
     
     def reference_author(self, line):
         assert self.data.references, "RA: missing RN"
@@ -856,12 +861,12 @@ class _RecordConsumer(AbstractConsumer):
         i = line.find('[')
         if i >= 0:
             line = line[:i]
-        cols = self._chomp(line.rstrip()).split(';')
+        cols = line.rstrip(_CHOMP).split(';')
         cols = [col.lstrip() for col in cols]
         self.data.cross_references.append(tuple(cols))
     
     def keyword(self, line):
-        cols = self._chomp(line[5:].rstrip()).split(';')
+        cols = line[5:].rstrip(_CHOMP).split(';')
         self.data.keywords.extend([c.lstrip() for c in cols])
 
     def feature_table(self, line):
@@ -937,14 +942,6 @@ class _RecordConsumer(AbstractConsumer):
     
     def terminator(self, line):
         pass
-
-    # from Python 2.2.2 could be replaced with word.rstrip(".,;")
-    # if there is always only one puctuation
-    def _chomp(self, word, to_chomp='.,;'):
-        # Remove the punctuation at the end of a word.
-        if word[-1] in to_chomp:
-            return word[:-1]
-        return word
 
     #def _clean(self, line, rstrip=1):
     #    if rstrip:
@@ -1055,7 +1052,7 @@ class _SequenceConsumer(AbstractConsumer):
     def keyword(self, line):
         #Try and agree with SeqRecord convention from the GenBank parser,
         #which stores a list as 'keywords'
-        cols = line[5:].rstrip().rstrip(".").split(';')
+        cols = line[5:].rstrip(_CHOMP).split(';')
         cols = [c.strip() for c in cols]
         cols = filter(None, cols)
         try :
@@ -1068,7 +1065,7 @@ class _SequenceConsumer(AbstractConsumer):
     def organism_species(self, line):
         #Try and agree with SeqRecord convention from the GenBank parser,
         #which stores the organism as a string with key 'organism'
-        data = line[5:].rstrip()
+        data = line[5:].rstrip(_CHOMP)
         try :
             #Append to any existing data split over multiple lines
             self.data.annotations['organism'] += " " + data
@@ -1078,14 +1075,14 @@ class _SequenceConsumer(AbstractConsumer):
     def organism_host(self, line):
         #There is no SeqRecord convention from the GenBank parser,
         #based on how it deals with taxonomy ids (list of strings)
-        line = self._chomp(line[5:].rstrip())
-        index = line.find('=')
+        data = line[5:].rstrip(_CHOMP)
+        index = data.find('=')
         if index >= 0:
-            descr = line[:index]
+            descr = data[:index]
             assert descr == "NCBI_TaxID", "Unexpected taxonomy type %s" % descr
-            ids = line[index+1:].split(',')
+            ids = data[index+1:].split(',')
         else:
-            ids = line.split(',')
+            ids = data.split(',')
 
         try :
             #Append to any existing data
@@ -1097,7 +1094,7 @@ class _SequenceConsumer(AbstractConsumer):
         #Try and agree with SeqRecord convention from the GenBank parser,
         #which stores these as a list of strings with key 'taxonomy'
 
-        line = line[5:].rstrip()
+        line = line[5:].rstrip(_CHOMP)
         index = line.find('=')
         if index >= 0:
             descr = line[:index]
