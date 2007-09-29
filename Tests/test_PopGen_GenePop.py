@@ -74,6 +74,17 @@ class ParserTest(unittest.TestCase):
                 assert len(rec.populations[i]) == \
                            self.pops_indivs[index][1][i]
 
+    def t_wrong_file_parser(self):
+        """Testing the ability to deal with wrongly formatted files
+        """
+        f = open(os.path.join("PopGen", "fdist1"))
+        try:
+            rec = GenePop.parse(f)
+            raise Error("Should have raised exception")
+        except ValueError:
+            pass
+        f.close()
+
 class UtilsTest(unittest.TestCase):
     def setUp(self):
         #All files have to have at least 3 loci and 2 pops
