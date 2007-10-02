@@ -5,6 +5,10 @@
 """Code to schedule and run multiple processes.
 """
 
+import warnings
+warnings.warn("Bio.MultiProc is deprecated. If you want to use this code, please let the Biopython developers know by sending an email to biopython-dev@biopython.org to avoid permanent removal of Bio.MultiProc.",
+              DeprecationWarning)
+
 def run(nprocs, fn, fn_args=(), fn_keywds={},
         sleep=0.1, always_use_scheduler=0):
     """run(nprocs, fn[, fn_args][, fn_keywds][, sleep])

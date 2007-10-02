@@ -6,6 +6,11 @@ Classes:
 Task    Processing that can be forked off in a separate process.
 
 """
+
+import warnings
+warnings.warn("Bio.MultiProc is deprecated. If you want to use this code, please let the Biopython developers know by sending an email to biopython-dev@biopython.org to avoid permanent removal of Bio.MultiProc.",
+              DeprecationWarning)
+
 # Copied from threading.py
 # This is not thread safe!
 _counter = 0

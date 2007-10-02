@@ -8,6 +8,11 @@ copen_sys     Open a file-like pipe to a system command.
 copen_fn      Open a file-like pipe to a python function.
 
 """
+
+import warnings
+warnings.warn("Bio.MultiProc is deprecated. If you want to use this code, please let the Biopython developers know by sending an email to biopython-dev@biopython.org to avoid permanent removal of Bio.MultiProc.",
+              DeprecationWarning)
+
 import os
 import sys
 import time

@@ -5,6 +5,12 @@ Classes:
 Scheduler   Schedules threads to be run.
 
 """
+
+import warnings
+warnings.warn("Bio.MultiProc is deprecated. If you want to use this code, please let the Biopython developers know by sending an email to biopython-dev@biopython.org to avoid permanent removal of Bio.MultiProc.",
+              DeprecationWarning)
+
+
 class Scheduler:
     """Schedules threads to be run.  No prioritization.  Nothing fancy.
 
