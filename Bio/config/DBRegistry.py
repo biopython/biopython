@@ -140,6 +140,10 @@ class DBGroup(RegisterableGroup):
         RegisterableGroup.__init__(self, name, abbrev, doc)
         if behavior not in ['concurrent', 'serial']:
             raise ValueError, "behavior must be 'concurrent' or 'serial'"
+        if behavior=='concurrent':
+            import warnings
+            warnings.warn("Concurrent behavior has been deprecated, as this functionality needs Bio.MultiProc, which itself has been deprecated. If you need the concurrent behavior, please let the Biopython developers know by sending an email to biopython-dev@biopython.org to avoid permanent removal of this feature.",
+              DeprecationWarning)
         self.behavior = behavior
         self._last_object_used = None
 
