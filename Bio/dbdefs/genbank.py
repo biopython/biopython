@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-from Bio.config.DBRegistry import CGIDB, DBGroup, EUtilsDB
+from Bio.config.DBRegistry import DBGroup, EUtilsDB
 from _support import *
 
 from Martel import *
