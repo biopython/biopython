@@ -63,6 +63,9 @@ class DBObject(RegisterableObject):
             x = _support.make_rate_limited_function(self._get, delay)
             setattr(self, "_get", x)
         if timeout is not None:
+            import warnings
+            warnings.warn("Using timeouts has been deprecated, as this code relies on Bio.MultiProc, which itself has been deprecated. If you need this functionality, please let the Biopython developers know by sending an email to biopython-dev@biopython.org.",
+              DeprecationWarning)
             x = _support.make_timed_function(
                 self._get, timeout,
                 self._make_pickleable, self._unmake_pickleable)
