@@ -1,9 +1,10 @@
 test_PopGen_GenePop
 Basic test on Record ... ok
 Basic operation of the Record Parser. ... ok
+Testing the ability to deal with wrongly formatted files ... ok
 Basic operation of GenePop Utils. ... ok
 
 ----------------------------------------------------------------------
-Ran 3 tests in 0.013s
+Ran 4 tests in 0.002s
 
 OK
