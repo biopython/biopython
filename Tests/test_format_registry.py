@@ -40,31 +40,5 @@ x = Bio.formats['search'].identifyFile(_open('bt001'))
 print x.name   # ncbi-blastp
 
 
-print_title("Testing Format Parser")
-from Bio import SeqRecord
-format = Bio.formats['sequence'].identifyFile(_open('EDD_RAT.dat'))
-parser = format.make_parser()
-builder = Bio.formats.find_builder(Bio.formats['sequence'], SeqRecord.io)
-parser.setContentHandler(builder)
-parser.parseFile(_open('EDD_RAT.dat'))
-print builder.document.id    # EDD_RAT
-print builder.document.seq   # Seq('ARR...')
-
-from Bio import Search
-r = Search.io.readFile(_open("bt001"))
-print r.algorithm.name       # BLASTP
-
-
-print_title("Testing FormatIO")
-r = SeqRecord.io.readFile(_open("EDD_RAT.dat"))
-print r.__class__
-for seq in r:
-    print seq.id              # EDD_RAT
-    print seq.description     # Ubiquitin ...
-    print seq.seq             # Seq('ARR...')
-    
-SeqRecord.io.convert(infile=_open("EDD_RAT.dat"))   # FASTA-format
-
-print_title("Testing Reading Multiple Records")
-SeqRecord.io.convert(infile=_open("seqs.fasta"))    # 2 FASTA-format
-
+#print_title("Testing Format Parser")
+#Removed code using Bio.FormatIO

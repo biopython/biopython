@@ -1,9 +1,3 @@
-import FormatIO
-
-io = FormatIO.FormatIO("Search",
-                       default_input_format = "search")
-
-
 # BLASTN 2.0a19MP-WashU [05-Feb-1998] [Build decunix3.2 01:53:29 05-Feb-1998]
 # BLASTP 2.0.4 [Feb-24-1998]
 class Algorithm:
