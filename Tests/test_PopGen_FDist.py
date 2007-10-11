@@ -11,6 +11,7 @@ import tempfile
 import unittest
 from Bio.PopGen import FDist
 from Bio.PopGen.FDist import Controller
+from Bio import MissingExternalDependencyError
 
 #Tests fdist related code. Note: this case requires fdist
 #test_PopGen_FDist_nodepend tests code that does not require fdist
@@ -18,8 +19,8 @@ from Bio.PopGen.FDist import Controller
 not_found_types = ["command not found", ": not found"]
 fdist_output = commands.getoutput("fdist2")
 for not_found in not_found_types:
-    if fdist_output.find(not_found) != -1:
-        raise ImportError("Fdist not found, not a problem if you do not intend to use it")
+    if not_found in fdist_output:
+        raise MissingExternalDependencyError("Fdist not found (not a problem if you do not intend to use it).")
 
 def run_tests(argv):
     test_suite = testing_suite()

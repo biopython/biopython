@@ -2,7 +2,13 @@
 """Test the Bio.GFF module and dependencies
 """
 import os
-import MySQLdb
+from Bio import MissingExternalDependencyError
+
+# only do the test if we are set up to do it. We need to have MYSQLPASS
+# set and have a GFF wormbase installed (see the code in Bio/GFF/__init_.py
+if not os.environ.has_key("MYSQLPASS"):
+    raise MissingExternalDependencyError("Environment is not configured for this test (not important if you do not plan to use Bio.GFF).")
+
 import Bio.GFF
 
 """
@@ -20,10 +26,5 @@ print "Bio.GFF.easy doctests complete."
 """
 
 print "Running Bio.GFF doctests..."
-# only do the test if we are set up to do it. We need to have MYSQLPASS
-# set and have a GFF wormbase installed (see the code in Bio/GFF/__init_.py
-if os.environ.has_key("MYSQLPASS"):
-    Bio.GFF._test()
-else:
-    raise ImportError("Environment not configured for GFF test")
+Bio.GFF._test()
 print "Bio.GFF doctests complete."

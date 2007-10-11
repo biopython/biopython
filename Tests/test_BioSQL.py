@@ -36,8 +36,8 @@ try:
 # to run the tests. You will also need to set the constants for the database
 # driver below.
 except NameError:
-    raise ImportError("Skipping BioSQL tests -- enable tests in " \
-            "Tests/test_BioSQL.py")
+    message = "Enable tests in Tests/test_BioSQL.py (not important if you do not plan to use BioSQL)."
+    raise Bio.MissingExternalDependencyError(message)
 # Constants for the database driver
 DBHOST = 'localhost'
 DBUSER = 'your_db_username'

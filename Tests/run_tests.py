@@ -28,6 +28,9 @@ import unittest
 
 import distutils.util
 
+# Biopython
+from Bio import MissingExternalDependencyError
+
 def main(argv):
     # insert our paths in sys.path:
     # ../build/lib.*
@@ -147,8 +150,8 @@ class RegressionTest(unittest.TestCase):
         """
         try:
             self.runSafeTest()
-        except ImportError, msg:
-            print "Skipping test because of import error: %s" % msg
+        except MissingExternalDependencyError, msg:
+            print "skipping.", msg
 
     def runSafeTest(self):
         generated_output = ''

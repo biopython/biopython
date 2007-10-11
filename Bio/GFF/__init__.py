@@ -19,7 +19,7 @@ based on documentation for Lincoln Stein's Perl Bio::DB::GFF
 
 """
 
-__version__ = "$Revision: 1.6 $"
+__version__ = "$Revision: 1.7 $"
 # $Source: /home/bartek/cvs2bzr/biopython_fastimport/cvs_repo/biopython/Bio/GFF/__init__.py,v $
 
 import exceptions
@@ -28,7 +28,12 @@ import os.path
 import sys
 import types
 
-import MySQLdb
+from Bio import MissingExternalDependencyError
+
+try:
+    import MySQLdb
+except:
+    raise MissingExternalDependencyError("Install MySQLdb if you want to use Bio.GFF.")
 
 from Bio.Alphabet import IUPAC
 from Bio import DocSQL

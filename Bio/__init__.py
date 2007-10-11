@@ -10,6 +10,9 @@ of freely available Python tools for computational molecular biology.
 http://biopython.org
 """
 
+class MissingExternalDependencyError(Exception):
+    pass
+
 def _load_registries():
     import sys, os
     from Bio.config.Registry import Registry

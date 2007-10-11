@@ -25,12 +25,18 @@ Bio.DocSQL: easy access to DB API databases.
 CreatePeople(message=Success)
 """
 
-__version__ = "$Revision: 1.9 $"
+__version__ = "$Revision: 1.10 $"
 # $Source: /home/bartek/cvs2bzr/biopython_fastimport/cvs_repo/biopython/Bio/DocSQL.py,v $
 
 import exceptions
-import MySQLdb
 import sys
+
+from Bio import MissingExternalDependencyError
+
+try:
+    import MySQLdb
+except:
+    raise MissingExternalDependencyError("Install MySQLdb if you want to use Bio.DocSQL.")
 
 connection = None
 
