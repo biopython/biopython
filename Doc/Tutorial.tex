@@ -188,11 +188,11 @@ One thing to note about Biopython is that it often provides multiple ways of ``d
 
 Disputedly (of course!), the central object in bioinformatics is the sequence. Thus, we'll start with a quick introduction to the Biopython mechanisms for dealing with sequences, the \verb|Seq| object, which we'll discuss in more detail in Chapter~\ref{seq:sequence-chapter}.
 
-Most of the time when we think about sequences we have in my mind a string of letters like \verb|'AGTACACTGGT'|. You can create such \verb|Seq| object with this sequence as follows:
+Most of the time when we think about sequences we have in my mind a string of letters like \verb|'AGTACACTGGT'|. You can create such \verb|Seq| object with this sequence as follows - the ``$>>>$'' represents the python prompt followed by what you would type in:
 
 \begin{verbatim}
 >>> from Bio.Seq import Seq
->>> my_seq = Seq('AGTACACTGGT')
+>>> my_seq = Seq("AGTACACTGGT")
 >>> my_seq.alphabet
 Alphabet()
 >>> print my_seq.tostring()
@@ -398,7 +398,7 @@ Biological sequences are arguably the central object in Bioinformatics, and in t
 
 There are two important differences between the \verb|Seq| object and standard python strings.  First of all the Seq object has a slightly different set of methods to a plain python string (for example, a \verb|reverse_complement()| method used for nucleotide sequences).
 
-Secondly, the \verb|Seq| object has an important attribute, \verb|alphabet|, which is an object describing what the individual characters making up the sequence string ``mean'', and how they should be interpreted.  For example, is \verb|'AGTACACTGGT'| a DNA sequence, or just a protein sequence that happens to be rich in Alanines, Glycines, Cysteines
+Secondly, the \verb|Seq| object has an important attribute, \verb|alphabet|, which is an object describing what the individual characters making up the sequence string ``mean'', and how they should be interpreted.  For example, is \verb|AGTACACTGGT| a DNA sequence, or just a protein sequence that happens to be rich in Alanines, Glycines, Cysteines
 and Threonines?
 
 \section{Sequences and Alphabets}
@@ -414,7 +414,7 @@ You can create an ambiguous sequence with the default generic alphabet like this
 
 \begin{verbatim}
 >>> from Bio.Seq import Seq
->>> my_seq = Seq('AGTACACTGGT')
+>>> my_seq = Seq("AGTACACTGGT")
 >>> my_seq
 Seq('AGTACACTGGT', Alphabet())
 >>> my_seq.alphabet
@@ -435,7 +435,7 @@ IUPACUnambiguousDNA()
 
 \section{Sequences act like strings}
 
-In many ways, we can deal with Seq objects in as if they were normal python string, for example getting the length, or iterating over the elements:
+In many ways, we can deal with Seq objects as if they were normal python strings, for example getting the length, or iterating over the elements:
 
 \begin{verbatim}
 from Bio.Seq import Seq
@@ -446,7 +446,7 @@ for index, letter in enumerate(my_seq) :
 print len(letter) 
 \end{verbatim}
 
-You can access elements of the sequence in the same way as for strings (remember, python counts from zero!):
+You can access elements of the sequence in the same way as for strings (but remember, python counts from zero!):
 
 \begin{verbatim}
 >>> print my_seq[0] #first element
@@ -465,7 +465,7 @@ The \verb|Seq| object has a \verb|.count()| method, just like a string:
 0.46875
 \end{verbatim}
 
-\noindent Note Biopython does have some GC functions already built in, see the \verb|Bio.SeqUtils| module.
+\noindent While you could use the above snippet of code to calculate a GC\%, note that Biopython does have some GC functions already built in, see the \verb|Bio.SeqUtils| module.
 
 \section{Slicing a sequence}
 
@@ -523,8 +523,8 @@ Seq('GCGATTTTCGATCCTATATAGGCCCATCGATC', IUPACUnambiguousDNA())
 In all of these operations, the alphabet property is maintained. This is very useful in case you accidentally end up trying to do something weird like take the (reverse)complement of a protein seuqence:
 
 \begin{verbatim}
->>> protein_seq = Seq('EVRNAK', IUPAC.protein)
->>> dna_seq = Seq('ACGT', IUPAC.unambiguous_dna)
+>>> protein_seq = Seq("EVRNAK", IUPAC.protein)
+>>> dna_seq = Seq("ACGT", IUPAC.unambiguous_dna)
 >>> protein_seq.complement()
 Traceback (most recent call last):
   File "<stdin>", line 1, in ?
@@ -574,25 +574,25 @@ Seq('GATCGATGCACGT', NucleotideAlphabet())
 
 \section{MutableSeq objects}
 
-Just like the normal python string, the \verb|Seq| object is "read only" by default, or in python terminology, not mutable.  Apart from the wanting the \verb|Seq| object to act like a string, this is also a useful default since in many biological applications you want to ensure you are not changing your sequence data:
+Just like the normal python string, the \verb|Seq| object is ``read only'', or in python terminology, not mutable.  Apart from the wanting the \verb|Seq| object to act like a string, this is also a useful default since in many biological applications you want to ensure you are not changing your sequence data:
 
 \begin{verbatim}
->>> my_seq[5] = 'G'
+>>> my_seq[5] = "G"
 Traceback (most recent call last):
   File "<stdin>", line 1, in ?
 AttributeError: 'Seq' instance has no attribute '__setitem__'
 \end{verbatim}
 
-However, you can convert it into a mutable sequence and do pretty much anything you want with it:
+However, you can convert it into a mutable sequence (a \verb|MutableSeq| object) and do pretty much anything you want with it:
 
 \begin{verbatim}
 >>> mutable_seq = my_seq.tomutable()
 >>> print mutable_seq
 MutableSeq('GATCGATGGGCCTATATAGGATCGAAAATCGC', IUPACUnambiguousDNA())
->>> mutable_seq[5] = 'T'
+>>> mutable_seq[5] = "T"
 >>> print mutable_seq
 MutableSeq('GATCGTTGGGCCTATATAGGATCGAAAATCGC', IUPACUnambiguousDNA())
->>> mutable_seq.remove('T')
+>>> mutable_seq.remove("T")
 >>> print mutable_seq
 MutableSeq('GACGTTGGGCCTATATAGGATCGAAAATCGC', IUPACUnambiguousDNA())
 >>> mutable_seq.reverse()
@@ -611,9 +611,9 @@ the sequence.
 For instance, let's supposed we want to transcribe a DNA sequence:
 
 \begin{verbatim}
-from Bio.Seq import Seq
-from Bio.Alphabet import IUPAC
-my_seq = Seq('GATCGATGGGCCTATATAGGATCGAAAATCGC', IUPAC.unambiguous_dna)
+>>> from Bio.Seq import Seq
+>>> from Bio.Alphabet import IUPAC
+>>> my_seq = Seq("GATCGATGGGCCTATATAGGATCGAAAATCGC", IUPAC.unambiguous_dna)
 \end{verbatim}
 
 This contains an unambiguous alphabet, so to transcribe we would do the following:
@@ -646,7 +646,7 @@ To translate our DNA object we have quite a few choices. First, we can use any n
 Once we've got the proper translators, it's time to go ahead and translate a sequence:
 
 \begin{verbatim}
->>> my_seq = Seq('GCCATTGTAATGGGCCGCTGAAAGGGTGCCCGA', IUPAC.unambiguous_dna)
+>>> my_seq = Seq("GCCATTGTAATGGGCCGCTGAAAGGGTGCCCGA", IUPAC.unambiguous_dna)
 >>> standard_translator.translate(my_seq)
 Seq('AIVMGR*KGAR', IUPACProtein())
 >>> mito_translator.translate(my_seq)
@@ -663,7 +663,7 @@ Seq('AIVMGR', IUPACProtein())
 Similar to the transcriber, it is also possible to reverse translate a protein into a DNA sequence:
 
 \begin{verbatim}
->>> my_protein = Seq('AVMGRWKGGRAAG', IUPAC.protein)
+>>> my_protein = Seq("AVMGRWKGGRAAG", IUPAC.protein)
 >>> standard_translator.back_translate(my_protein)
 Seq('GCTGTTATGGGTCGTTGGAAGGGTGGTCGTGCTGCTGGT', IUPACUnambiguousDNA())
 \end{verbatim}
@@ -698,7 +698,7 @@ The above example is repeated from the introduction in Section~\ref{sec:sequence
 \begin{verbatim}
 from Bio import SeqIO
 handle = open("ls_orchid.gbk")
-for seq_record in SeqIO.parse(handle, "genbank") :
+for seq_record in SeqIO.parse(handle, one"genbank") :
     print seq_record.id
     print seq_record.seq
     print len(seq_record.seq)
@@ -1056,7 +1056,7 @@ Z78532.1 MN/s0q9zDoCVEEc+k/IFwCNF2pY
 Z78439.1 H+JfaShya/4yyAj7IbMqgNkxdxQ
 \end{verbatim}
 
-Now, recall the \verb|Bio.SeqIO.to_dict()| function's \verb|key_function| argument expects a function which turns a SeqRecord into a string.  We can't use the \verb|seguid()| function directly because it expects to be given a Seq object (or a string).  However, we can use python's \verb|lambda| feature to create a "one off" function to give to \verb|Bio.SeqIO.to_dict()| instead:
+Now, recall the \verb|Bio.SeqIO.to_dict()| function's \verb|key_function| argument expects a function which turns a SeqRecord into a string.  We can't use the \verb|seguid()| function directly because it expects to be given a Seq object (or a string).  However, we can use python's \verb|lambda| feature to create a ``one off'' function to give to \verb|Bio.SeqIO.to_dict()| instead:
 
 \begin{verbatim}
 from Bio import SeqIO
