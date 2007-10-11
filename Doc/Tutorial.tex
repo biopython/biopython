@@ -148,15 +148,23 @@ and html formats
 \section{FAQ}
 
 \begin{enumerate}
+  \item \emph{Why doesn't} \verb|Bio.SeqIO| \emph{work? It imports fine but there is no parse function etc.} \\
+  You need Biopython 1.43 or later.  Older versions did contain some related code under the \verb|Bio.SeqIO| name which has since been deprecated - and this is why the import ``works''.
+  
+  \item \emph{Why doesn't} \verb|Bio.Blast| \emph{work with the latest plain text NCBI blast output?} \\
+  The NCBI keep tweaking the plain text output from the BLAST tools, and keeping our parser up to date is an ongoing struggle.  We recommend you to use the XML output instead, which is designed to be read by a computer program.
+
   \item \emph{I looked in a directory for code, but I couldn't seem to find the code that does something. Where's it hidden?} \\
   One thing to know is that we put code in \verb|__init__.py| files. If you are not used to looking for code in this file this can be confusing. The reason we do this is to make the imports easier for users. For instance, instead of having to do a ``repetitive'' import like \verb|from Bio.GenBank import GenBank|, you can just import like \verb|from Bio import GenBank|.
 
-  \item \emph{What happened to the} \verb|br_regrtest.py| \emph{regression tests?}
-  We updated the regression testing framework to use PyUnit, and also to fix newline problems. \verb|br_regrtest.py| is still there, but almost all of its functionality has been moved (well, copy and pasted) to \verb|run_tests.py|.
+%This was over five years ago; I don't think its a FAQ anymore!
+%  \item \emph{What happened to the} \verb|br_regrtest.py| \emph{regression tests?}
+%  We updated the regression testing framework to use PyUnit, and also to fix newline problems. \verb|br_regrtest.py| is still there, but almost all of its functionality has been moved (well, copy and pasted) to \verb|run_tests.py|.
 
-  \item \emph{Why do some of the tests fail when running the regression tests with output like}: \\
-\verb|Writing: '\012', expected: '\015'| \\
- This shouldn't happen any more! We updated the regression testing suite so that it uses PyUnit and we hopefully have fixed newline problems. Please let us know if any tests fail.
+%Again, this hasn't been reported on the mailing list in the last three years:
+%  \item \emph{Why do some of the tests fail when running the regression tests with output like}: \\
+%\verb|Writing: '\012', expected: '\015'| \\
+% This shouldn't happen any more! We updated the regression testing suite so that it uses PyUnit and we hopefully have fixed newline problems. Please let us know if any tests fail.
 \end{enumerate}
 
 \chapter{Quick Start -- What can you do with Biopython?}
