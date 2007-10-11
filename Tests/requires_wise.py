@@ -7,10 +7,11 @@
 
 import commands
 import re
+from Bio import MissingExternalDependencyError
 
 not_found_types = ["command not found", "dnal: not found"]
 dnal_output = commands.getoutput("dnal")
 
 for not_found in not_found_types:
     if dnal_output.find(not_found) != -1:
-        raise ImportError(dnal_output)
+        raise MissingExternalDependencyError(dnal_output)
