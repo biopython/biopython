@@ -9,7 +9,7 @@
 # succeeds.  If it is not, then the statement will result in an
 # ImportError exception.
 
-
+from Bio import MissingExternalDependencyError 
 
 AVAILABLE = None  # Was the internet available the last time I checked?
 TESTED = 0        # Have I checked before?  If so, just re-use the result.
@@ -32,4 +32,4 @@ if not TESTED:
         AVAILABLE = 1
 
 if not AVAILABLE:
-    raise ImportError, "internet not available"
+    raise MissingExternalDependencyError("internet not available")
