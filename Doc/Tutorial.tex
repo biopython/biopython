@@ -148,10 +148,10 @@ and html formats
 \section{FAQ}
 
 \begin{enumerate}
-  \item \emph{Why doesn't} \verb|Bio.SeqIO| \emph{work? It imports fine but there is no parse function etc.} \\
+  \item \emph{Why doesn't} \verb|Bio.SeqIO| \emph{work? It imports fine but there is no parse function etc.}
   You need Biopython 1.43 or later.  Older versions did contain some related code under the \verb|Bio.SeqIO| name which has since been deprecated - and this is why the import ``works''.
   
-  \item \emph{Why doesn't} \verb|Bio.Blast| \emph{work with the latest plain text NCBI blast output?} \\
+  \item \emph{Why doesn't} \verb|Bio.Blast| \emph{work with the latest plain text NCBI blast output?}
   The NCBI keep tweaking the plain text output from the BLAST tools, and keeping our parser up to date is an ongoing struggle.  We recommend you to use the XML output instead, which is designed to be read by a computer program.
 
   \item \emph{I looked in a directory for code, but I couldn't seem to find the code that does something. Where's it hidden?} \\
@@ -181,176 +181,38 @@ Now that that is all out of the way, let's get into what we can do with Biopytho
 
 As mentioned in the introduction, Biopython is a set of libraries to provide the ability to deal with ''things'' of interest to biologists working on the computer. In general this means that you will need to have at least some programming experience (in python, of course!) or at least an interest in learning to program. Biopython's job is to make your job easier as a programmer by supplying reusable libraries so that you can focus on answering your specific question of interest, instead of focusing on the internals of parsing a particular file format (of course, if you want to help by writing a parser that doesn't exist and contributing it to Biopython, please go ahead!). So Biopython's job is to make you happy!
 
-
 One thing to note about Biopython is that it often provides multiple ways of ``doing the same thing.'' To me, this can be frustrating since I often way to just know the one right way to do something. However, this is also a real benefit because it gives you lots of flexibility and control over the libraries. The tutorial helps to show you the common or easy ways to do things so that you can just make things work. To learn more about the alternative possibilities, look into the Cookbook section (which tells you some cools tricks and tips) and the Advanced section (which provides you with as much detail as you'd ever want to know!). 
 
 \section{Working with sequences}
 \label{sec:sequences}
 
-Disputedly (of course!), the central object in bioinformatics is the sequence. Thus, we'll start with the Biopython mechanisms for dealing with sequences. When I think of a sequence the first thing that pops into my mind is a string of letters:\verb| 'AGTACACTGGT'| which seems natural since this is the most common way that sequences are seen in biological file formats.  However, a simple string of letters by itself is also very uninformative -- is it a DNA or  protein sequence (okay, a protein with a lot of Alanines, Glycines, Cysteines and Threonines!), what type of organism did it come from, what is so interesting about it, and so on. The challenge in designing a sequence interface is to pick a representation that is informative enough to take into account the more complex information, yet is as lightweight and easy to work with as just a simple sequence.
+Disputedly (of course!), the central object in bioinformatics is the sequence. Thus, we'll start with a quick introduction to the Biopython mechanisms for dealing with sequences, the \verb|Seq| object, which we'll discuss in more detail in Chapter~\ref{seq:sequence-chapter}.
 
-
-The approach taken in the Biopython sequence class is to utilize a class that holds more complex information, yet can be manipulated as if it were a simple string. This is accomplished by utilizing operator overloading to make manipulating a sequence object feel like manipulating a python string. The sequence class, referred to simply as Seq,  is defined in the file \verb|Bio/Seq.py|. Let's look at the Seq class deeper to see what it has to offer.
-
-
-A biopython Seq object has two important attributes:
-
-\begin{enumerate}
-
-\item \verb|data| -- as the name implies, this is the actual sequence data string of the sequence.
-
-\item \verb|alphabet| -- an object describing what the individual characters making up the string ``mean'' and how they should be interpreted.
-
-\end{enumerate}
-
-Clearly the alphabet object is the important thing that is making the Seq object more than just a string. The currently available alphabets for Biopython are defined in the \verb|Bio/Alphabet| module. We'll use the IUPAC alphabets (\url{http://www.chem.qmw.ac.uk/iupac/}) here to deal with some of our favorite objects: DNA, RNA and Proteins.  
-
-\verb|Bio/Alphabet/IUPAC.py| provides basic definitions for proteins, DNA and RNA, but additionally provides the ability to extend and customize the basic definitions. For instance, for proteins, there is a basic IUPACProtein class, but there is an additional ExtendedIUPACProtein class providing for the additional elements ``Asx'' (asparagine or aspartic acid), ``Sec'' (selenocysteine), and ``Glx'' (glutamine or glutamic acid). For DNA you've got choices of IUPACUnambiguousDNA, which provides for just the basic letters, IUPACAmbiguousDNA (which provides for ambiguity letters for every possible situation) and ExtendedIUPACDNA, which allows letters for modified bases. Similarly, RNA can be represented by IUPACAmbiguousRNA or IUPACUnambiguousRNA.
-
-The advantages of having an alphabet class are two fold. First, this gives an idea of the type of information the \verb|data| object contains. Secondly, this provides a means of constraining the information you have in the data object, as a means of type checking.
-
-Now that we know what we are dealing with, let's look at how to utilize this class to do interesting work.
-
-First, create a Sequence object from a string of information we've got. We'll create an unambiguous DNA object:
+Most of the time when we think about sequences we have in my mind a string of letters like \verb|'AGTACACTGGT'|. You can create such \verb|Seq| object with this sequence as follows:
 
 \begin{verbatim}
->>> from Bio.Alphabet import IUPAC
->>> my_alpha = IUPAC.unambiguous_dna
 >>> from Bio.Seq import Seq
->>> my_seq = Seq('GATCGATGGGCCTATATAGGATCGAAAATCGC', my_alpha)
->>> print my_seq
-Seq('GATCGATGGGCCTATATAGGATCGAAAATCGC', IUPACUnambiguousDNA())
+>>> my_seq = Seq('AGTACACTGGT')
+>>> my_seq.alphabet
+Alphabet()
+>>> print my_seq.tostring()
+AGTACACTGGT
 \end{verbatim}
 
+What we have here is a sequence object with a generic alphabet - reflecting the fact we have specified if this is a DNA or protein sequence (okay, a protein with a lot of Alanines, Glycines, Cysteines and Threonines!).  We'll talk more about alphabets in Chapter~\ref{seq:sequence-chapter}.
 
-Even though this is a sequence object, we can deal with it in some ways as if it were a normal python string. For instance, let's get a slice of the sequence.
+In addition to having an alphabet, the \verb|Seq| object differs from the python string in the methods it supports.  You can't do this with a plain string:
 
 \begin{verbatim}
->>> my_seq[4:12]
-Seq('GATGGGCC', IUPACUnambiguousDNA())
+>>> my_seq
+Seq('AGTACACTGGT', Alphabet())
+>>> my_seq.complement()
+Seq('TCATGTGACCA', Alphabet())
+>>> my_seq.reverse_complement()
+Seq('ACCAGTGTACT', Alphabet())
 \end{verbatim}
 
-Two things are interesting to note. First, this follows the normal conventions for python sequences.  So the first element of the sequence is 0 (which is normal for computer science, but not so normal for biology). When you do a slice the first item is included (i.~e.~4 in this case) and the last is excluded (12 in this case), which is the way things work in python, but of course not necessarily the way everyone in the world would expect. The main goal is to stay consistent with what python does. The second thing to notice is that the slice is performed on the sequence data string, but the new object produced retains the alphabet information from the original Seq object.
-
-You can treat the Seq object like the string in many ways:
-
-\begin{verbatim}
->>> len(my_seq)
-32
->>> new_seq = my_seq[0:5]
->>> print new_seq
-Seq('GATCG', IUPACUnambiguousDNA())
->>> my_seq + new_seq
-Seq('GATCGATGGGCCTATATAGGATCGAAAATCGCGATCG', IUPACUnambiguousDNA())
->>> my_seq[5]
-'A'
->>> my_seq == new_seq
-True
-\end{verbatim}
-
-In all of the operations, the alphabet property is maintained. This is very useful in case you accidentally end up trying to do something weird like add a protein sequence and a DNA sequence:
-
-\begin{verbatim}
->>> protein_seq = Seq('EVRNAK', IUPAC.protein)
->>> dna_seq = Seq('ACGT', IUPAC.unambiguous_dna)
->>> protein_seq + dna_seq
-Traceback (most recent call last):
-  File "<stdin>", line 1, in ?
-  File "/usr/local/lib/python1.6/site-packages/Bio/Seq.py", line 42, in __add__
-    raise TypeError, ("incompatable alphabets", str(self.alphabet),
-TypeError: ('incompatable alphabets', 'IUPACProtein()', 'IUPACUnambiguousDNA()')
-\end{verbatim}
-
-And if you are really just need the string to insert into something, this is very easy to extract:
-
-\begin{verbatim}
->>> my_seq.tostring()
-'GATCGATGGGCCTATATAGGATCGAAAATCGC'
-\end{verbatim} 
-
-The sequence object is not mutable by default, since in many biological applications you want to ensure you are not changing your data:
-
-\begin{verbatim}
->>> my_seq[5] = 'G'
-Traceback (most recent call last):
-  File "<stdin>", line 1, in ?
-AttributeError: 'Seq' instance has no attribute '__setitem__'
-\end{verbatim}
-
-However, you can convert it into a mutable sequence and do pretty much anything you want with it:
-
-\begin{verbatim}
->>> mutable_seq = my_seq.tomutable()
->>> print mutable_seq
-MutableSeq('GATCGATGGGCCTATATAGGATCGAAAATCGC', IUPACUnambiguousDNA())
->>> mutable_seq[5] = 'T'
->>> print mutable_seq
-MutableSeq('GATCGTTGGGCCTATATAGGATCGAAAATCGC', IUPACUnambiguousDNA())
->>> mutable_seq.remove('T')
->>> print mutable_seq
-MutableSeq('GACGTTGGGCCTATATAGGATCGAAAATCGC', IUPACUnambiguousDNA())
->>> mutable_seq.reverse()
->>> print mutable_seq
-MutableSeq('CGCTAAAAGCTAGGATATATCCGGGTTGCAG', IUPACUnambiguousDNA())
-\end{verbatim}
-
-Now that the nature of the sequence object makes some sense, the next
-thing to look at is what kind of things we can do with a sequence. The
-\verb|Bio| directory contains two useful modules to transcribe and
-translate a sequence object. These tools work based on the alphabet of
-the sequence. For instance, let's supposed we want to transcribe our
-\verb|my_seq| object. Remember that this contains an unambiguous
-alphabet, so to transcribe we would do the following:
-
-\begin{verbatim}
->>> from Bio import Transcribe
->>> transcriber = Transcribe.unambiguous_transcriber
->>> my_rna_seq = transcriber.transcribe(my_seq)
->>> print my_rna_seq
-Seq('GAUCGAUGGGCCUAUAUAGGAUCGAAAAUCGC', IUPACUnambiguousRNA())
-\end{verbatim}
-
-The alphabet of the new RNA Seq object is created for free, so again, dealing with a Seq object is no more difficult then dealing with a simple string.
-
-You can also reverse transcribe RNA sequences:
-
-\begin{verbatim}
->>> transcriber.back_transcribe(my_rna_seq)
-Seq('GATCGATGGGCCTATATAGGATCGAAAATCGC', IUPACUnambiguousDNA())
-\end{verbatim}
-
-To translate our DNA object we have quite a few choices. First, we can use any number of translation tables depending on what we know about our DNA sequence. The translation tables available in biopython were taken from information at \url{ftp://ftp.ncbi.nlm.nih.gov/entrez/misc/data/gc.prt}. So, you have tons of choices to pick from. For this, let's just focus on two choices: the Standard translation table, and the Translation table for Vertebrate Mitochondrial DNA. These tables are labeled with id numbers 1 and 2, respectively. Now that we know what tables we are looking to get, we're all set to perform a basic translation. First, we need to get our translators that use these tables. Since we are still dealing with our unambiguous DNA object, we want to fetch translators that take this into account:
-
-\begin{verbatim}
->>> from Bio import Translate
->>> standard_translator = Translate.unambiguous_dna_by_id[1] 
->>> mito_translator = Translate.unambiguous_dna_by_id[2]
-\end{verbatim}
-
-Once we've got the proper translators, it's time to go ahead and translate a sequence:
-
-\begin{verbatim}
->>> my_seq = Seq('GCCATTGTAATGGGCCGCTGAAAGGGTGCCCGA', IUPAC.unambiguous_dna)
->>> standard_translator.translate(my_seq)
-Seq('AIVMGR*KGAR', IUPACProtein())
->>> mito_translator.translate(my_seq)
-Seq('AIVMGRWKGAR', IUPACProtein())
-\end{verbatim}
-
-Notice that the default translation will just go ahead and proceed blindly through a stop codon. If you are aware that you are translating some kind of open reading frame and want to just see everything up until the stop codon, this can be easily done with the \verb|translate_to_stop| function:
-
-\begin{verbatim}
->>> standard_translator.translate_to_stop(my_seq)
-Seq('AIVMGR', IUPACProtein())
-\end{verbatim}
-
-Similar to the transcriber, it is also possible to reverse translate a protein into a DNA sequence:
-
-\begin{verbatim}
->>> my_protein = Seq('AVMGRWKGGRAAG', IUPAC.protein)
->>> standard_translator.back_translate(my_protein)
-Seq('GCTGTTATGGGTCGTTGGAAGGGTGGTCGTGCTGCTGGT', IUPACUnambiguousDNA())
-\end{verbatim}
+The next most important class is the \verb|SeqRecord| or Sequence Record.  This holds a sequence with additional annotation including an identifier, name and description.  The \verb|Bio.SeqIO| module for reading and writing sequence file formats works with \verb|SeqRecord| objects, which will be introduced below and cover in more detail by Chapter~\ref{sec:SeqIO}.
 
 This covers the basic features and uses of the Biopython sequence class. There is a more detailed description of the design ideas behind the sequence class in the Advanced section of this tutorial. This class is still under development and comments on the design and use are, of course, very welcome. Now that you've got some idea of what it is like to interact with the Biopython libraries, it's time to delve into the fun, fun world of dealing with biological file formats!
 
@@ -359,7 +221,9 @@ This covers the basic features and uses of the Biopython sequence class. There i
 
 Before we jump right into parsers and everything else to do with Biopython, let's set up an example to motivate everything we do and make life more interesting. After all, if there wasn't any biology in this tutorial, why would you want you read it?
 
-Since I love plants, I think we're just going to have to have a plant based example (sorry to all the fans of other organisms out there!).  Having just completed a recent trip to our local greenhouse, we've suddenly developed an incredible obsession with Lady Slipper Orchids (if you wonder why, have a look at some \href{http://www.flickr.com/search/?q=lady+slipper+orchid&s=int&z=t}{Lady Slipper Orchids photos on Flickr}, or try a \href{http://images.google.com/images?q=lady%20slipper%20orchid}{Google Image Search}).  Of course, orchids are not only beautiful to look at, they are also extremely interesting for people studying evolution and systematics. So we're thinking about writing a little proposal to do a molecular study of Lady Slipper evolution and would like to see what kind of research has already been done and how we can add to that.
+Since I love plants, I think we're just going to have to have a plant based example (sorry to all the fans of other organisms out there!).  Having just completed a recent trip to our local greenhouse, we've suddenly developed an incredible obsession with Lady Slipper Orchids (if you wonder why, have a look at some \href{http://www.flickr.com/search/?q=lady+slipper+orchid&s=int&z=t}{Lady Slipper Orchids photos on Flickr}, or try a \href{http://images.google.com/images?q=lady%20slipper%20orchid}{Google Image Search}).
+
+Of course, orchids are not only beautiful to look at, they are also extremely interesting for people studying evolution and systematics. So let's suppose we're thinking about writing a funding proposal to do a molecular study of Lady Slipper evolution, and would like to see what kind of research has already been done and how we can add to that.
 
 % Brad's links to Millicent Orchids are dead now (March 2007)
 % http://www.millicentorchids.com/greenhouse/images/papesq01.jpg
@@ -374,7 +238,7 @@ That gives us enough to get started delving for more information. So, let's look
 
 A large part of much bioinformatics work involves dealing with the many types of file formats designed to hold biological data. These files are loaded with interesting biological data, and a special challenge is parsing these files into a format so that you can manipulate them with some kind of programming language. However the task of parsing these files can be frustrated by the fact that the formats can change quite regularly, and that formats may contain small subtleties which can break even the most well designed parsers. 
 
-We are going to breifly introduce the \verb|Bio.SeqIO| module, available in Biopython 1.43 and later.  If you are using an older version of Biopython we encourage you to update (or find an old edition of this tutorial!). You can find out more in Chapter~\ref{sec:SeqIO}.
+We are going to briefly introduce the \verb|Bio.SeqIO| module, available in Biopython 1.43 and later.  If you are using an older version of Biopython we encourage you to update (or find an old edition of this tutorial!). You can find out more in Chapter~\ref{sec:SeqIO}.
 
 We'll start with an online search for our friends, the lady slipper orchids. Let's just take a look through the nucleotide databases at NCBI, using an Entrez online search (\url{http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?db=Nucleotide}) for everything mentioning the text Cypripedioideae (this is the subfamily of lady slipper orchids). When this tutorial was originally written, this search gave us only 94 hits, which we saved as a FASTA formatted text file (\href{examples/ls_orchid.fasta}{ls\_orchid.fasta}; also available online \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.fasta}{here}) and as a GenBank formatted text file (\href{examples/ls_orchid.gbk}{ls\_orchid.gbk}; also available online \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.gbk}{here}).
 
@@ -471,12 +335,9 @@ One of the very common things that you need to do in bioinformatics is extract i
 
 The code is these modules basically makes it easy to write python code that interact with the CGI scripts on these pages, so that you can get results in an easy to deal with format. In some cases, the results can be tightly integrated with the Biopython parsers to make it even easier to extract information.
 
-
 Here we'll show a simple example of performing a remote Entrez query. More information on the other services is available in the Cookbook, which begins on page~\pageref{sec:cookbook}.
 
-
 In section~\ref{sec:orchids} of the parsing examples, we talked about using Entrez website to search the NCBI nucleotide databases for info on Cypripedioideae, our friends the lady slipper orchids. Now, we'll look at how to automate that process using a python script. For Entrez searching, this is more useful for displaying results then as a tool for getting sequences. The NCBI web site is mostly set up to allow remote queries so that you could write our own local CGI scripts that return information from NCBI pages. For this reason, the results are returned as HTML and it is pretty tough to get a flat file in a quick manner.
-
 
 In this example, we'll just show how to connect, get the results, and display them in a web browser. First, we'll start by defining our search and how to display the results:
 
@@ -491,7 +352,6 @@ my_browser = 'lynx'
 
 The first four terms define the search we are going to do. To use the Entrez module, you'll need to know a bit about how the remote CGI scripts at NCBI work, and you can find out more about this at \url{http://www.ncbi.nlm.nih.gov/entrez/query/static/linking.html}. The final term just describes the browser to display the results in.
 
-
 Now that we've got this all set up, we can query Entrez and get a handle with the results. This is done with the following code:
 
 \begin{verbatim}
@@ -502,7 +362,6 @@ result_handle = NCBI.query(search_command, search_database, term = search_term,
 \end{verbatim}
 
 The query function does all of the work of preparing the CGI script command line and rounding up the HTML results.
-
 
 Now that we've got the results, we are ready to save them to a file and display them in our browser, which we can do with code like:
 
@@ -532,10 +391,287 @@ If you know what you want to do, but can't figure out how to do it, please feel 
 
 Enjoy the code!
 
+\chapter{Sequence objects}
+\label{seq:sequence-chapter}
+
+Biological sequences are arguably the central object in Bioinformatics, and in this chapter we'll introduce the Biopython mechanism for dealing with sequences, the \verb|Seq| object (see also the \verb|SeqRecord| object which combines the sequence information with annotation).  Sequences are essentially strings of letters like \verb|AGTACACTGGT|, which seems very natural since this is the most common way that sequences are seen in biological file formats.
+
+There are two important differences between the \verb|Seq| object and standard python strings.  First of all the Seq object has a slightly different set of methods to a plain python string (for example, a \verb|reverse_complement()| method used for nucleotide sequences).
+
+Secondly, the \verb|Seq| object has an important attribute, \verb|alphabet|, which is an object describing what the individual characters making up the sequence string ``mean'', and how they should be interpreted.  For example, is \verb|'AGTACACTGGT'| a DNA sequence, or just a protein sequence that happens to be rich in Alanines, Glycines, Cysteines
+and Threonines?
+
+\section{Sequences and Alphabets}
+
+The alphabet object is perhaps the important thing that makes the \verb|Seq| object more than just a string. The currently available alphabets for Biopython are defined in the \verb|Bio.Alphabet| module. We'll use the IUPAC alphabets (\url{http://www.chem.qmw.ac.uk/iupac/}) here to deal with some of our favorite objects: DNA, RNA and Proteins.  
+
+\verb|Bio.Alphabet.IUPAC| provides basic definitions for proteins, DNA and RNA, but additionally provides the ability to extend and customize the basic definitions. For instance, for proteins, there is a basic IUPACProtein class, but there is an additional ExtendedIUPACProtein class providing for the additional elements ``Asx'' (asparagine or aspartic acid), ``Sec'' (selenocysteine), and ``Glx'' (glutamine or glutamic acid). For DNA you've got choices of IUPACUnambiguousDNA, which provides for just the basic letters, IUPACAmbiguousDNA (which provides for ambiguity letters for every possible situation) and ExtendedIUPACDNA, which allows letters for modified bases. Similarly, RNA can be represented by IUPACAmbiguousRNA or IUPACUnambiguousRNA.
+
+The advantages of having an alphabet class are two fold. First, this gives an idea of the type of information the Seq object contains. Secondly, this provides a means of constraining the information, as a means of type checking.
+
+Now that we know what we are dealing with, let's look at how to utilize this class to do interesting work.
+You can create an ambiguous sequence with the default generic alphabet like this:
+
+\begin{verbatim}
+>>> from Bio.Seq import Seq
+>>> my_seq = Seq('AGTACACTGGT')
+>>> my_seq
+Seq('AGTACACTGGT', Alphabet())
+>>> my_seq.alphabet
+Alphabet()
+\end{verbatim}
+
+However, where possible you should specify the alphabet explicitly when creating your sequence objects - in this case an unambiguous DNA alphabet object:
+
+\begin{verbatim}
+>>> from Bio.Seq import Seq
+>>> from Bio.Alphabet import IUPAC
+>>> my_seq = Seq('AGTACACTGGT', IUPAC.unambiguous_dna)
+>>> my_seq
+Seq('AGTACACTGGT', IUPACUnambiguousDNA())
+>>> my_seq.alphabet
+IUPACUnambiguousDNA()
+\end{verbatim}
+
+\section{Sequences act like strings}
+
+In many ways, we can deal with Seq objects in as if they were normal python string, for example getting the length, or iterating over the elements:
+
+\begin{verbatim}
+from Bio.Seq import Seq
+from Bio.Alphabet import IUPAC
+my_seq = Seq('GATCGATGGGCCTATATAGGATCGAAAATCGC', IUPAC.unambiguous_dna)
+for index, letter in enumerate(my_seq) :
+    print index, letter
+print len(letter) 
+\end{verbatim}
+
+You can access elements of the sequence in the same way as for strings (remember, python counts from zero!):
+
+\begin{verbatim}
+>>> print my_seq[0] #first element
+>>> print my_seq[2] #third element
+>>> print my_seq[-1] #list element
+\end{verbatim}
+
+The \verb|Seq| object has a \verb|.count()| method, just like a string:
+
+\begin{verbatim}
+>>> len(my_seq)
+32
+>>> my_seq.count("G")
+10
+>>> float(my_seq.count("G") + my_seq.count("C")) / len(my_seq)
+0.46875
+\end{verbatim}
+
+\noindent Note Biopython does have some GC functions already built in, see the \verb|Bio.SeqUtils| module.
+
+\section{Slicing a sequence}
+
+A more complicated example, let's get a slice of the sequence:
+
+\begin{verbatim}
+>>> my_seq[4:12]
+Seq('GATGGGCC', IUPACUnambiguousDNA())
+\end{verbatim}
+
+Two things are interesting to note. First, this follows the normal conventions for python strings.  So the first element of the sequence is 0 (which is normal for computer science, but not so normal for biology). When you do a slice the first item is included (i.~e.~4 in this case) and the last is excluded (12 in this case), which is the way things work in python, but of course not necessarily the way everyone in the world would expect. The main goal is to stay consistent with what python does.
+
+The second thing to notice is that the slice is performed on the sequence data string, but the new object produced is another \verb|Seq| object which retains the alphabet information from the original \verb|Seq| object.
+
+Also like a python string, you can do slices with a start, stop and \emph{stride} (the step size, which defaults to one).  For example, we can get the first, second and third codon positions of this DNA sequence:
+
+\begin{verbatim}
+>>> my_seq[0::3]
+Seq('GCTGTAGTAAG', IUPACUnambiguousDNA())
+>>> my_seq[1::3]
+Seq('AGGCATGCATC', IUPACUnambiguousDNA())
+>>> my_seq[2::3]
+Seq('TAGCTAAGAC', IUPACUnambiguousDNA())
+\end{verbatim}
+
+Another stride trick you might have seen with a python string is the use of a -1 stride to reverse the string.  You can do this with a \verb|Seq| object too:
+
+\begin{verbatim}
+>>> my_seq[::-1]
+Seq('CGCTAAAAGCTAGGATATATCCGGGTAGCTAG', IUPACUnambiguousDNA())
+\end{verbatim}
+
+\section{Turning Seq objects into strings}
+
+If you are really do just need a plain string, for example to print out, write to a file, or insert into a database, then this is very easy to get:
+
+\begin{verbatim}
+>>> my_seq.tostring()
+'GATCGATGGGCCTATATAGGATCGAAAATCGC'
+\end{verbatim}
+
+\subsection{Nucleotide sequences and (reverse) complements}
+
+For nucleotide sequences, you can easily obtain the complement or reverse complement of a Seq object:
+
+\begin{verbatim}
+>>> my_seq
+Seq('GATCGATGGGCCTATATAGGATCGAAAATCGC', IUPACUnambiguousDNA())
+>>> my_seq.complement()
+Seq('CTAGCTACCCGGATATATCCTAGCTTTTAGCG', IUPACUnambiguousDNA())
+>>> my_seq.reverse_complement()
+Seq('GCGATTTTCGATCCTATATAGGCCCATCGATC', IUPACUnambiguousDNA())
+\end{verbatim}
+
+In all of these operations, the alphabet property is maintained. This is very useful in case you accidentally end up trying to do something weird like take the (reverse)complement of a protein seuqence:
+
+\begin{verbatim}
+>>> protein_seq = Seq('EVRNAK', IUPAC.protein)
+>>> dna_seq = Seq('ACGT', IUPAC.unambiguous_dna)
+>>> protein_seq.complement()
+Traceback (most recent call last):
+  File "<stdin>", line 1, in ?
+  File "/usr/local/lib/python2.4/site-packages/Bio/Seq.py", line 108, in complement
+    raise ValueError, "Proteins do not have complements!"
+ValueError: Proteins do not have complements!
+\end{verbatim}
+
+\section{Concatenating or adding sequences}
+
+Naturally, you can in principle add any two Seq objects together - just like you can with python strings to concatenate them.  However, you can't add sequences with incompatible alphabets, such as a protein sequence and a DNA sequence:
+
+\begin{verbatim}
+>>> protein_seq + dna_seq
+Traceback (most recent call last):
+  File "<stdin>", line 1, in ?
+  File "/usr/local/lib/python2.4/site-packages/Bio/Seq.py", line 42, in __add__
+    raise TypeError, ("incompatable alphabets", str(self.alphabet),
+TypeError: ('incompatable alphabets', 'IUPACProtein()', 'IUPACUnambiguousDNA()')
+\end{verbatim}
+
+If you \emph{really} wanted to do this, you'd have to first give both sequences generic alphabets:
+
+\begin{verbatim}
+>>> from Bio.Alphabet import generic_alphabet
+>>> protein_seq.alphabet = generic_alphabet
+>>> dna_seq.alphabet = generic_alphabet
+>>> protein_seq + dna_seq
+Seq('EVRNAKACGT', Alphabet())
+\end{verbatim}
+
+Here is an example of adding a generic nucleotide sequence to an unambiguous IUPAC DNA sequence, resulting in an ambiguous nucleotide sequence:
+
+\begin{verbatim}
+>>> from Bio.Seq import Seq
+>>> from Bio.Alphabet import generic_nucleotide
+>>> from Bio.Alphabet import IUPAC
+>>> nuc_seq = Seq('GATCGATGC', generic_nucleotide)
+>>> dna_seq = Seq('ACGT', IUPAC.unambiguous_dna)
+>>> nuc_seq
+Seq('GATCGATGC', NucleotideAlphabet())
+>>> dna_seq
+Seq('ACGT', IUPACUnambiguousDNA())
+>>> nuc_seq + dna_seq
+Seq('GATCGATGCACGT', NucleotideAlphabet())
+\end{verbatim}
+
+\section{MutableSeq objects}
+
+Just like the normal python string, the \verb|Seq| object is "read only" by default, or in python terminology, not mutable.  Apart from the wanting the \verb|Seq| object to act like a string, this is also a useful default since in many biological applications you want to ensure you are not changing your sequence data:
+
+\begin{verbatim}
+>>> my_seq[5] = 'G'
+Traceback (most recent call last):
+  File "<stdin>", line 1, in ?
+AttributeError: 'Seq' instance has no attribute '__setitem__'
+\end{verbatim}
+
+However, you can convert it into a mutable sequence and do pretty much anything you want with it:
+
+\begin{verbatim}
+>>> mutable_seq = my_seq.tomutable()
+>>> print mutable_seq
+MutableSeq('GATCGATGGGCCTATATAGGATCGAAAATCGC', IUPACUnambiguousDNA())
+>>> mutable_seq[5] = 'T'
+>>> print mutable_seq
+MutableSeq('GATCGTTGGGCCTATATAGGATCGAAAATCGC', IUPACUnambiguousDNA())
+>>> mutable_seq.remove('T')
+>>> print mutable_seq
+MutableSeq('GACGTTGGGCCTATATAGGATCGAAAATCGC', IUPACUnambiguousDNA())
+>>> mutable_seq.reverse()
+>>> print mutable_seq
+MutableSeq('CGCTAAAAGCTAGGATATATCCGGGTTGCAG', IUPACUnambiguousDNA())
+\end{verbatim}
+
+\section{Transcribing and Translation}
+
+Now that the nature of the sequence object makes some sense, the next
+thing to look at is what kind of things we can do with a sequence. The
+\verb|Bio| directory contains two useful modules to transcribe and
+translate a sequence object. These tools work based on the alphabet of
+the sequence.
+
+For instance, let's supposed we want to transcribe a DNA sequence:
+
+\begin{verbatim}
+from Bio.Seq import Seq
+from Bio.Alphabet import IUPAC
+my_seq = Seq('GATCGATGGGCCTATATAGGATCGAAAATCGC', IUPAC.unambiguous_dna)
+\end{verbatim}
+
+This contains an unambiguous alphabet, so to transcribe we would do the following:
+
+\begin{verbatim}
+>>> from Bio import Transcribe
+>>> transcriber = Transcribe.unambiguous_transcriber
+>>> my_rna_seq = transcriber.transcribe(my_seq)
+>>> print my_rna_seq
+Seq('GAUCGAUGGGCCUAUAUAGGAUCGAAAAUCGC', IUPACUnambiguousRNA())
+\end{verbatim}
+
+The alphabet of the new RNA Seq object is created for free, so again, dealing with a Seq object is no more difficult then dealing with a simple string.
+
+You can also reverse transcribe RNA sequences:
+
+\begin{verbatim}
+>>> transcriber.back_transcribe(my_rna_seq)
+Seq('GATCGATGGGCCTATATAGGATCGAAAATCGC', IUPACUnambiguousDNA())
+\end{verbatim}
+
+To translate our DNA object we have quite a few choices. First, we can use any number of translation tables depending on what we know about our DNA sequence. The translation tables available in biopython were taken from information at \url{ftp://ftp.ncbi.nlm.nih.gov/entrez/misc/data/gc.prt}. So, you have tons of choices to pick from. For this, let's just focus on two choices: the Standard translation table, and the Translation table for Vertebrate Mitochondrial DNA. These tables are labeled with id numbers 1 and 2, respectively. Now that we know what tables we are looking to get, we're all set to perform a basic translation. First, we need to get our translators that use these tables. Since we are still dealing with our unambiguous DNA object, we want to fetch translators that take this into account:
+
+\begin{verbatim}
+>>> from Bio import Translate
+>>> standard_translator = Translate.unambiguous_dna_by_id[1] 
+>>> mito_translator = Translate.unambiguous_dna_by_id[2]
+\end{verbatim}
+
+Once we've got the proper translators, it's time to go ahead and translate a sequence:
+
+\begin{verbatim}
+>>> my_seq = Seq('GCCATTGTAATGGGCCGCTGAAAGGGTGCCCGA', IUPAC.unambiguous_dna)
+>>> standard_translator.translate(my_seq)
+Seq('AIVMGR*KGAR', IUPACProtein())
+>>> mito_translator.translate(my_seq)
+Seq('AIVMGRWKGAR', IUPACProtein())
+\end{verbatim}
+
+Notice that the default translation will just go ahead and proceed blindly through a stop codon. If you are aware that you are translating some kind of open reading frame and want to just see everything up until the stop codon, this can be easily done with the \verb|translate_to_stop| function:
+
+\begin{verbatim}
+>>> standard_translator.translate_to_stop(my_seq)
+Seq('AIVMGR', IUPACProtein())
+\end{verbatim}
+
+Similar to the transcriber, it is also possible to reverse translate a protein into a DNA sequence:
+
+\begin{verbatim}
+>>> my_protein = Seq('AVMGRWKGGRAAG', IUPAC.protein)
+>>> standard_translator.back_translate(my_protein)
+Seq('GCTGTTATGGGTCGTTGGAAGGGTGGTCGTGCTGCTGGT', IUPACUnambiguousDNA())
+\end{verbatim}
+
 \chapter{Sequence Input/Output}
 \label{sec:SeqIO}
 
-In this chapter we'll discuss the \verb|Bio.SeqIO| module introduced earlier in more detail.  This is a new interface added to Biopython 1.43, which aims to provide a simple interface for working with assorted sequence file formats in a uniform way.  The ``catch'' is that you have to work with SeqRecord ojects.
+In this chapter we'll discuss the \verb|Bio.SeqIO| module introduced earlier in more detail.  This is a new interface added to Biopython 1.43, which aims to provide a simple interface for working with assorted sequence file formats in a uniform way.  The ``catch'' is that you have to work with SeqRecord ojects - which contain a \verb|Seq| object plus annotation like an identifier and description.
 
 \section{Parsing or Reading Sequences}
 
