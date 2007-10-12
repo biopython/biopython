@@ -7,7 +7,7 @@
 # To use it, just insert "import requires_internet" into your Python
 # code.  If the internet is available, then the import statement
 # succeeds.  If it is not, then the statement will result in an
-# ImportError exception.
+# MissingExternalDependencyError exception.
 
 from Bio import MissingExternalDependencyError 
 
