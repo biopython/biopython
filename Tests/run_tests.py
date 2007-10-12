@@ -28,8 +28,6 @@ import unittest
 
 import distutils.util
 
-# Biopython
-from Bio import MissingExternalDependencyError
 
 def main(argv):
     # insert our paths in sys.path:
@@ -148,6 +146,7 @@ class RegressionTest(unittest.TestCase):
     def runTest(self):
         """Run the actual test inside a try/except to catch import errors.
         """
+        from Bio import MissingExternalDependencyError
         try:
             self.runSafeTest()
         except MissingExternalDependencyError, msg:
