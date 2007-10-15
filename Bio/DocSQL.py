@@ -25,7 +25,7 @@ Bio.DocSQL: easy access to DB API databases.
 CreatePeople(message=Success)
 """
 
-__version__ = "$Revision: 1.10 $"
+__version__ = "$Revision: 1.11 $"
 # $Source: /home/bartek/cvs2bzr/biopython_fastimport/cvs_repo/biopython/Bio/DocSQL.py,v $
 
 import exceptions
@@ -39,26 +39,6 @@ except:
     raise MissingExternalDependencyError("Install MySQLdb if you want to use Bio.DocSQL.")
 
 connection = None
-
-# THIS IS A DUPLICATION
-# from Bio.GFF.GenericTools to avoid an annoying circular reference problem
-try:
-    enumerate
-except NameError:
-    def enumerate(collection):
-        """
-        Generates an indexed series:  (0,coll[0]), (1,coll[1]) ...
-
-        >>> for i, item in enumerate([4, 5, 6]):
-        ...     print "%d: %d" % (i, item)
-        0: 4
-        1: 5
-        2: 6
-        """
-        i = 0
-        for item in collection:
-            yield (i, item)
-            i += 1
 
 class NoInsertionError(exceptions.Exception):
     pass

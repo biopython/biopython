@@ -11,7 +11,7 @@ Docstring
 
 from __future__ import generators
 
-__version__ = "$Revision: 1.3 $"
+__version__ = "$Revision: 1.4 $"
 # $Source: /home/bartek/cvs2bzr/biopython_fastimport/cvs_repo/biopython/Bio/GFF/GenericTools.py,v $
 
 import exceptions
@@ -126,21 +126,6 @@ def reverse_text(text):
     l = list(text)
     l.reverse()
     return ''.join(l)
-
-def enumerate(collection):
-    """
-    Generates an indexed series:  (0,coll[0]), (1,coll[1]) ...
-
-    >>> for i, item in enumerate([4, 5, 6]):
-    ...     print "%d: %d" % (i, item)
-    0: 4
-    1: 5
-    2: 6
-    """
-    i = 0
-    for item in collection:
-        yield (i, item)
-        i += 1
 
 class ArgsParser(object):
     """
