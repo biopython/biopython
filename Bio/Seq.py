@@ -105,9 +105,9 @@ class Seq:
         """
         if isinstance(self.alphabet, Alphabet.ProteinAlphabet) :
             raise ValueError, "Proteins do not have complements!"
-        if self.alphabet in (IUPAC.ambiguous_dna, IUPAC.unambiguous_dna):
+        if isinstance(self.alphabet, Alphabet.DNAAlphabet) :
             d = ambiguous_dna_complement
-        elif self.alphabet in (IUPAC.ambiguous_rna, IUPAC.unambiguous_rna):
+        elif isinstance(self.alphabet, Alphabet.RNAAlphabet) :
             d = ambiguous_rna_complement
         elif 'U' in self.data:
             d = ambiguous_rna_complement
@@ -120,7 +120,7 @@ class Seq:
         return Seq(s, self.alphabet)
 
     def reverse_complement(self):
-        """Returns the reverse complement sequence. new Seq object.
+        """Returns the reverse complement sequence. New Seq object.
         """
         #Use -1 stride to reverse the complement
         return self.complement()[::-1]
@@ -239,9 +239,17 @@ class MutableSeq:
             if self.data[i] == item:
                 return i
         raise ValueError, "MutableSeq.index(x): x not in list"
+
     def reverse(self):
+        """Modify the MutableSequence to reverse itself
+
+        No return value"""
         self.data.reverse()
+
     def complement(self):
+        """Modify the MutableSequence to take on its complement
+
+        No return value"""
         if isinstance(self.alphabet, Alphabet.ProteinAlphabet) :
             raise ValueError, "Proteins do not have complements!"
         if self.alphabet in (IUPAC.ambiguous_dna, IUPAC.unambiguous_dna):
@@ -258,6 +266,9 @@ class MutableSeq:
         self.data = array.array('c', self.data)
         
     def reverse_complement(self):
+        """Modify the MutableSequence to take on its reverse complement.
+
+        No return value"""
         if isinstance(self.alphabet, Alphabet.ProteinAlphabet) :
             raise ValueError, "Proteins do not have complements!"
         self.complement()
@@ -332,7 +343,7 @@ def back_transcribe(rna):
 
 
 def translate(sequence, table = "Standard", stop_symbol = "*"):
-    """Translate a nucleotide sequence into amino acids
+    """Translate a nucleotide sequence into amino acids.
 
     If given a string, returns a new string object.
     Given a Seq or MutableSeq, returns a Seq object.
@@ -395,7 +406,7 @@ def translate(sequence, table = "Standard", stop_symbol = "*"):
 
 
 def reverse_complement(sequence):
-    """Returns the reverse complement sequence of a nucleotide string
+    """Returns the reverse complement sequence of a nucleotide string.
 
     If given a string, returns a new string object.
     Given a Seq or a MutableSeq, returns a new Seq object with the same alphabet.
@@ -412,11 +423,13 @@ def reverse_complement(sequence):
     else :
         #Assume its a string, turn it into a Seq,
         #do the reverse complement, and turn this back to a string
+        #TODO - Find a more efficient way to do this without code duplication?
         return Seq(sequence).reverse_complement().tostring()
 
 if __name__ == "__main__" :
     print "Quick self test"
-    from Bio.Data.IUPACData import ambiguous_dna_values
+    from Bio.Data.IUPACData import ambiguous_dna_values, ambiguous_rna_values#
+    from Bio.Alphabet import generic_dna, generic_rna
     from sets import Set
     print ambiguous_dna_complement
     for ambig_char, values in ambiguous_dna_values.iteritems() :
@@ -425,5 +438,10 @@ if __name__ == "__main__" :
             (ambig_char, values, compl_values, ambiguous_dna_complement[ambig_char])
         assert Set(compl_values) == Set(ambiguous_dna_values[ambiguous_dna_complement[ambig_char]])
 
-    for s in ["".join(ambiguous_dna_values), "".join(ambiguous_rna_values)] :
+    for s in ["".join(ambiguous_dna_values),
+              Seq("".join(ambiguous_dna_values)),
+              Seq("".join(ambiguous_dna_values), generic_dna),
+              "".join(ambiguous_rna_values),
+              Seq("".join(ambiguous_rna_values)),
+              Seq("".join(ambiguous_dna_values), generic_rna)]:
         print "%s -> %s" % (repr(s), repr(reverse_complement(s)))
