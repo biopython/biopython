@@ -51,6 +51,57 @@ MutableSeq('AATGGTTT', IUPACAmbiguousDNA())
 Setting wobble codon to N (set slice with stride 3):
 MutableSeq('GTNCTNCGNAGNAANAANGANTTN', IUPACAmbiguousDNA())
 
+Checking ambiguous complements
+==============================
+
+DNA Ambiguity mapping: {'A': 'A', 'C': 'C', 'B': 'CGT', 'D': 'AGT', 'G': 'G', 'H': 'ACT', 'K': 'GT', 'M': 'AC', 'N': 'GATC', 'S': 'CG', 'R': 'AG', 'T': 'T', 'W': 'AT', 'V': 'ACG', 'Y': 'CT', 'X': 'GATC'}
+DNA Complement mapping: {'A': 'T', 'C': 'G', 'B': 'V', 'D': 'H', 'G': 'C', 'H': 'D', 'K': 'M', 'M': 'K', 'N': 'N', 'S': 'S', 'R': 'Y', 'T': 'A', 'W': 'W', 'V': 'B', 'Y': 'R', 'X': 'X'}
+A={A} --> {T}=T
+C={C} --> {G}=G
+B={CGT} --> {GCA}=V
+D={AGT} --> {TCA}=H
+G={G} --> {C}=C
+H={ACT} --> {TGA}=D
+K={GT} --> {CA}=M
+M={AC} --> {TG}=K
+N={GATC} --> {CTAG}=N
+S={CG} --> {GC}=S
+R={AG} --> {TC}=Y
+T={T} --> {A}=A
+W={AT} --> {TA}=W
+V={ACG} --> {TGC}=B
+Y={CT} --> {GA}=R
+X={GATC} --> {CTAG}=X
+
+RNA Ambiguity mapping: {'A': 'A', 'C': 'C', 'B': 'CGU', 'D': 'AGU', 'G': 'G', 'H': 'ACU', 'K': 'GU', 'M': 'AC', 'N': 'GAUC', 'S': 'CG', 'R': 'AG', 'U': 'U', 'W': 'AU', 'V': 'ACG', 'Y': 'CU', 'X': 'GAUC'}
+RNA Complement mapping: {'A': 'U', 'C': 'G', 'B': 'V', 'D': 'H', 'G': 'C', 'H': 'D', 'K': 'M', 'M': 'K', 'N': 'N', 'S': 'S', 'R': 'Y', 'U': 'A', 'W': 'W', 'V': 'B', 'Y': 'R', 'X': 'X'}
+A={A} --> {U}=U
+C={C} --> {G}=G
+B={CGU} --> {GCA}=V
+D={AGU} --> {UCA}=H
+G={G} --> {C}=C
+H={ACU} --> {UGA}=D
+K={GU} --> {CA}=M
+M={AC} --> {UG}=K
+N={GAUC} --> {CUAG}=N
+S={CG} --> {GC}=S
+R={AG} --> {UC}=Y
+U={U} --> {A}=A
+W={AU} --> {UA}=W
+V={ACG} --> {UGC}=B
+Y={CU} --> {GA}=R
+X={GAUC} --> {CUAG}=X
+
+Reverse complements:
+Seq('ACBDGHKMNSRUWVYX', Alphabet()) -> Seq('XYVWARSNMKHCDBGU', Alphabet())
+Seq('ACBDGHKMNSRTWVYX', Alphabet()) -> Seq('XYVWARSNMKHCDBGT', Alphabet())
+Seq('ACBDGHKMNSRUWVYX', RNAAlphabet()) -> Seq('XYVWARSNMKHCDBGU', RNAAlphabet())
+Seq('ACBDGHKMNSRTWVYX', DNAAlphabet()) -> Seq('XYVWARSNMKHCDBGT', DNAAlphabet())
+Seq('ACBDGHKMNSRUWVYX', IUPACAmbiguousDNA()) -> Seq('XYVWARSNMKHCDBGU', IUPACAmbiguousDNA())
+Seq('ACBDGHKMNSRTWVYX', IUPACAmbiguousRNA()) -> Seq('XYVWARSNMKHCDBGT', IUPACAmbiguousRNA())
+Seq('AWGAARCKG', Alphabet()) -> Seq('CKGRTTCWT', Alphabet())
+
+
 Transcribe DNA into RNA
 =======================
 Seq('TCAAAAGGATGCATCATG', IUPACUnambiguousDNA()) -> Seq('UCAAAAGGAUGCAUCAUG', IUPACUnambiguousRNA())

@@ -12,7 +12,6 @@ from Alphabet import IUPAC
 from Data.IUPACData import ambiguous_dna_complement, ambiguous_rna_complement
 from Bio.Data import CodonTable
 
-
 class Seq:
     def __init__(self, data, alphabet = Alphabet.generic_alphabet):
         # Enforce string storage
@@ -123,22 +122,8 @@ class Seq:
     def reverse_complement(self):
         """Returns the reverse complement sequence. new Seq object.
         """
-        if isinstance(self.alphabet, Alphabet.ProteinAlphabet) :
-            raise ValueError, "Proteins do not have complements!"
-        if self.alphabet in (IUPAC.ambiguous_dna, IUPAC.unambiguous_dna):
-            d = ambiguous_dna_complement
-        elif self.alphabet in (IUPAC.ambiguous_rna, IUPAC.unambiguous_rna):
-            d = ambiguous_rna_complement
-        elif 'U' in self.data:
-            d = ambiguous_rna_complement
-        else:
-            d = ambiguous_dna_complement
-        ttable = self.__maketrans(d)
-        #Much faster on really long sequences than the previous loop based one.
-        #thx to Michael Palmer, University of Waterloo
-        s = self.data[-1::-1].translate(ttable)
-        return Seq(s, self.alphabet)
-
+        #Use -1 stride to reverse the complement
+        return self.complement()[::-1]
 
 class MutableSeq:
     def __init__(self, data, alphabet = Alphabet.generic_alphabet):
@@ -347,6 +332,16 @@ def back_transcribe(rna):
 
 
 def translate(sequence, table = "Standard", stop_symbol = "*"):
+    """Translate a nucleotide sequence into amino acids
+
+    If given a string, returns a new string object.
+    Given a Seq or MutableSeq, returns a Seq object.
+
+    table - Which codon table to use?  This can be either a name
+           (string) or an identifier (integer)
+
+    NOTE - Does NOT support unambiguous nucleotide sequences
+    It will however translate either DNA or RNA."""
     try:
         id = int(table)
     except:
@@ -405,20 +400,30 @@ def reverse_complement(sequence):
     If given a string, returns a new string object.
     Given a Seq or a MutableSeq, returns a new Seq object with the same alphabet.
 
-    NOTE - Currently only supports unambiguous nucleotide sequences
+    Supports unambiguous nucleotide sequences
     """
-    #TODO - Take complement of ambiguous nucleotides (as best possible)
-    if 'U' in sequence:
-        ttable = string.maketrans("ACGUacgu","UGCAugca")
-    else:
-        ttable = string.maketrans("ACGTacgt","TGCAtgca")
-    if isinstance(sequence, Seq) or isinstance(sequence, MutableSeq):
-        if isinstance(sequence.alphabet, Alphabet.ProteinAlphabet) :
-            raise ValueError, "Proteins do not have complements!"
-        #Important - want to use the pthon string object's translate method here:
-        return Seq(sequence.tostring()[-1::-1].translate(ttable), \
-                   sequence.alphabet)
+    if isinstance(sequence, Seq) :
+        #Return a Seq
+        return sequence.reverse_complement()
+    elif isinstance(sequence, MutableSeq) :
+        #Return a Seq
+        #Don't use the MutableSeq reverse_complement method as it is 'in place'.
+        return sequence.toseq().reverse_complement()
     else :
-        #String
-        return sequence[-1::-1].translate(ttable)
+        #Assume its a string, turn it into a Seq,
+        #do the reverse complement, and turn this back to a string
+        return Seq(sequence).reverse_complement().tostring()
 
+if __name__ == "__main__" :
+    print "Quick self test"
+    from Bio.Data.IUPACData import ambiguous_dna_values
+    from sets import Set
+    print ambiguous_dna_complement
+    for ambig_char, values in ambiguous_dna_values.iteritems() :
+        compl_values = reverse_complement(values)[::-1]
+        print "%s={%s} --> {%s}=%s" % \
+            (ambig_char, values, compl_values, ambiguous_dna_complement[ambig_char])
+        assert Set(compl_values) == Set(ambiguous_dna_values[ambiguous_dna_complement[ambig_char]])
+
+    for s in ["".join(ambiguous_dna_values), "".join(ambiguous_rna_values)] :
+        print "%s -> %s" % (repr(s), repr(reverse_complement(s)))

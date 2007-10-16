@@ -120,8 +120,75 @@ for test_seq in [string_seq]:
     test_seq[2::3] = "N" * len(test_seq[2::3])
     print test_seq
 
+###########################################################################
+from Bio.Data.IUPACData import ambiguous_dna_complement, ambiguous_rna_complement
+from Bio.Data.IUPACData import ambiguous_dna_values, ambiguous_rna_values
+from sets import Set
+
+print
+print "Checking ambiguous complements"
+print "=============================="
+
+#When run the full test suite, Bio.Nexus (called by test_Nexus.py) is
+#currently polluting this dict.  This is a short term hack to fix this
+#unit test...
+for ambig_char in ["-", "?"] :
+    if ambig_char in ambiguous_dna_values :
+        del ambiguous_dna_values[ambig_char]
+
+def complement(sequence) :
+    #TODO - Add a complement function to Bio/Seq.py?
+    #There is already a complement method on the Seq and MutableSeq objects.
+    return Seq.reverse_complement(sequence)[::-1]
+
+print
+print "DNA Ambiguity mapping:", ambiguous_dna_values
+print "DNA Complement mapping:", ambiguous_dna_complement
+for ambig_char, values in ambiguous_dna_values.iteritems() :
+    compl_values = complement(values)
+    print "%s={%s} --> {%s}=%s" % \
+        (ambig_char, values, compl_values, ambiguous_dna_complement[ambig_char])
+    assert Set(compl_values) == Set(ambiguous_dna_values[ambiguous_dna_complement[ambig_char]])
+    
+print
+print "RNA Ambiguity mapping:", ambiguous_rna_values
+print "RNA Complement mapping:", ambiguous_rna_complement
+for ambig_char, values in ambiguous_rna_values.iteritems() :
+    compl_values = complement(values).replace("T","U") #need to help as no alphabet
+    print "%s={%s} --> {%s}=%s" % \
+        (ambig_char, values, compl_values, ambiguous_rna_complement[ambig_char])
+    assert Set(compl_values) == Set(ambiguous_rna_values[ambiguous_rna_complement[ambig_char]])
+
+print
+print "Reverse complements:"
+for sequence in [Seq.Seq("".join(ambiguous_rna_values)),
+            Seq.Seq("".join(ambiguous_dna_values)),
+            Seq.Seq("".join(ambiguous_rna_values), Alphabet.generic_rna),
+            Seq.Seq("".join(ambiguous_dna_values), Alphabet.generic_dna),
+            Seq.Seq("".join(ambiguous_rna_values), IUPAC.IUPACAmbiguousDNA()),
+            Seq.Seq("".join(ambiguous_dna_values), IUPAC.IUPACAmbiguousRNA()),
+            Seq.Seq("AWGAARCKG")]:  # Note no U or T
+        print "%s -> %s" \
+              % (repr(sequence), repr(Seq.reverse_complement(sequence)))
+        assert sequence.tostring() \
+           == Seq.reverse_complement(Seq.reverse_complement(sequence)).tostring(), \
+           "Dobule reverse complement didn't preserve the sequence!"
+print
+
+###########################################################################
+
 test_seqs = [s,t,u,
-             Seq.Seq("ATGAAACTG"), 
+             Seq.Seq("ATGAAACTG"),
+             #TODO - Fix ambiguous translation
+             #Seq.Seq("ATGAARCTG"),
+             #Seq.Seq("AWGAARCKG"),  # Note no U or T
+             #Seq.Seq("".join(ambiguous_rna_values)),
+             #Seq.Seq("".join(ambiguous_dna_values)),
+             #Seq.Seq("".join(ambiguous_rna_values), Alphabet.generic_rna),
+             #Seq.Seq("".join(ambiguous_dna_values), Alphabet.generic_dna),
+             #Seq.Seq("".join(ambiguous_rna_values), IUPAC.IUPACAmbiguousDNA()),
+             #Seq.Seq("".join(ambiguous_dna_values), IUPAC.IUPACAmbiguousRNA()),
+             #Seq.Seq("AWGAARCKG", Alphabet.generic_dna), 
              Seq.Seq("AUGAAACUG", Alphabet.generic_dna), 
              Seq.Seq("ATGAAACTG", Alphabet.generic_rna), 
              Seq.Seq("ATGAAACTG", Alphabet.generic_nucleotide), 
@@ -182,7 +249,8 @@ for nucleotide_seq in test_seqs:
             print "%s -> %s" \
             % (repr(nucleotide_seq) , repr(nucleotide_seq.complement()))
             assert nucleotide_seq.complement().tostring() \
-                == Seq.reverse_complement(nucleotide_seq).tostring()[::-1]
+                == Seq.reverse_complement(nucleotide_seq).tostring()[::-1], \
+                "Bio.Seq function and method disagree!"
         except ValueError, e :
             print "%s -> %s" \
             % (repr(nucleotide_seq) , str(e))
@@ -196,7 +264,8 @@ for nucleotide_seq in test_seqs:
             print "%s -> %s" \
             % (repr(nucleotide_seq) , repr(nucleotide_seq.reverse_complement()))
             assert nucleotide_seq.reverse_complement().tostring() \
-                == Seq.reverse_complement(nucleotide_seq).tostring()
+                == Seq.reverse_complement(nucleotide_seq).tostring(), \
+                "Bio.Seq function and method disagree!"
         except ValueError, e :
             print "%s -> %s" \
             % (repr(nucleotide_seq) , str(e))
