@@ -193,47 +193,6 @@ Testing reading fasta format file Registry/seqs.fasta
  Failed: Sequences must all be the same length
  Checking can write/read as 'stockholm' format
  Failed: Sequences must all be the same length
-Testing reading nexus format file Nexus/f1.nex
- ID and Name='t2 the name',
- Seq='ACGT', length=4
- ID and Name='isn'that [a] strange name?',
- Seq='ACGT', length=4
- ID and Name='one should be punished, for (that)!',
- Seq='ACGT', length=4
- ...
- ID and Name='t9',
- Seq='cccc', length=4
-Testing reading nexus format file Nexus/f1.nex as an alignment
- AAAAAAc alignment column 0
- CCCCCCc alignment column 1
- GGGGGGc alignment column 2
- TTTTTTc alignment column 3
- Checking can write/read as 'fasta' format
- Checking can write/read as 'clustal' format
- Checking can write/read as 'phylip' format
- Checking can write/read as 'stockholm' format
-Testing reading nexus format file Nexus/f2.nex
- ID and Name='t1',
- Seq='A-CG-T-gttgtctc-t------a-gttgtctct-t-t', length=38
- ID and Name='t2 the name',
- Seq='A-CGcT-gt----tc-t----aca-gt----tct-t-t', length=38
- ID and Name='isn'that [a] strange name?',
- Seq='A-CGcT-gttgtct------aaca-gttgtct------', length=38
- ...
- ID and Name='t9',
- Seq='cccccc-ccccccccNc-cccccc-cccccccccNc-c', length=38
-Testing reading nexus format file Nexus/f2.nex as an alignment
- AAAAAAAAc alignment column 0
- -----c?tc alignment column 1
- CCCCCCCCc alignment column 2
- GGGGGGGGc alignment column 3
- -cc--tgtc alignment column 4
- ||||||||| ...
- tt--?ag?c alignment column 37
- Checking can write/read as 'fasta' format
- Checking can write/read as 'clustal' format
- Checking can write/read as 'phylip' format
- Checking can write/read as 'stockholm' format
 Testing reading nexus format file Nexus/test_Nexus_input.nex
  ID and Name='t1',
  Seq='A-C-G-Tc-gtgtgtgctct-t-t------ac-gtgtgtgctct-t-t', length=48

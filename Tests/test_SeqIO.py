@@ -11,7 +11,6 @@ from Bio.Seq import Seq
 from StringIO import StringIO
 from Bio.Alphabet import generic_protein, generic_rna, generic_dna
 
-
 #Longer list including alignment only file formats we can read AND write:
 test_write_read_alignment_formats = SeqIO._FormatToWriter.keys()[:]
 
@@ -49,12 +48,7 @@ test_files = [ \
     ("fasta",  True,  'GFF/multi.fna', 3), #Trivial nucleotide alignment
 #Following example is also used in test_registry.py
     ("fasta",  False, 'Registry/seqs.fasta', 2), #contains blank line
-#Following trivial examples are also used in test_Wise.py
-#    ("fasta",  False, 'Wise/human_114_g01_exons.fna_01', 1),
-#    ("fasta",  False, 'Wise/human_114_g02_exons.fna_01', 1),
-#Following examples are also used in test_Nexus.py (but not all of them?)
-    ("nexus",  True,  'Nexus/f1.nex', 7),
-    ("nexus",  True,  'Nexus/f2.nex', 9),
+#Following example is also used in test_Nexus.py
     ("nexus",  True,  'Nexus/test_Nexus_input.nex', 9),
 #Following examples are also used in test_SwissProt.py
     ("swiss",  False, 'SwissProt/sp001', 1),
