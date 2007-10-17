@@ -93,13 +93,13 @@ Y={CU} --> {GA}=R
 X={GAUC} --> {CUAG}=X
 
 Reverse complements:
-Seq('ACBDGHKMNSRUWVYX', Alphabet()) -> Seq('XYVWARSNMKHCDBGU', Alphabet())
-Seq('ACBDGHKMNSRTWVYX', Alphabet()) -> Seq('XYVWARSNMKHCDBGT', Alphabet())
-Seq('ACBDGHKMNSRUWVYX', RNAAlphabet()) -> Seq('XYVWARSNMKHCDBGU', RNAAlphabet())
-Seq('ACBDGHKMNSRTWVYX', DNAAlphabet()) -> Seq('XYVWARSNMKHCDBGT', DNAAlphabet())
-Seq('ACBDGHKMNSRUWVYX', IUPACAmbiguousDNA()) -> Seq('XYVWARSNMKHCDBGU', IUPACAmbiguousDNA())
-Seq('ACBDGHKMNSRTWVYX', IUPACAmbiguousRNA()) -> Seq('XYVWARSNMKHCDBGT', IUPACAmbiguousRNA())
-Seq('AWGAARCKG', Alphabet()) -> Seq('CKGRTTCWT', Alphabet())
+Seq('ACBDGHKMNSRUWVYX', Alphabet()) -> Seq('XRBWAYSNKMDCHVGU', Alphabet())
+Seq('ACBDGHKMNSRTWVYX', Alphabet()) -> Seq('XRBWAYSNKMDCHVGT', Alphabet())
+Seq('ACBDGHKMNSRUWVYX', RNAAlphabet()) -> Seq('XRBWAYSNKMDCHVGU', RNAAlphabet())
+Seq('ACBDGHKMNSRTWVYX', DNAAlphabet()) -> Seq('XRBWAYSNKMDCHVGT', DNAAlphabet())
+Seq('ACBDGHKMNSRUWVYX', IUPACAmbiguousRNA()) -> Seq('XRBWAYSNKMDCHVGU', IUPACAmbiguousRNA())
+Seq('ACBDGHKMNSRTWVYX', IUPACAmbiguousDNA()) -> Seq('XRBWAYSNKMDCHVGT', IUPACAmbiguousDNA())
+Seq('AWGAARCKG', Alphabet()) -> Seq('CMGYTTCWT', Alphabet())
 
 
 Transcribe DNA into RNA
@@ -139,15 +139,15 @@ Seq('TCAAAAGGATGCATCATGT', IUPACAmbiguousDNA())
 Seq('ATGAAACTG', Alphabet())
 -> Seq('CAGTTTCAT', Alphabet())
 Seq('AUGAAACUG', DNAAlphabet())
--> Seq('CAGUUUCAU', DNAAlphabet())
+-> Seq('CUGTTTCUT', DNAAlphabet())
 Seq('ATGAAACTG', RNAAlphabet())
--> Seq('CAGTTTCAT', RNAAlphabet())
+-> Seq('CTGUUUCTU', RNAAlphabet())
 Seq('ATGAAACTG', NucleotideAlphabet())
 -> Seq('CAGTTTCAT', NucleotideAlphabet())
 Seq('AUGAAACTG', NucleotideAlphabet())
 -> Seq('CTGUUUCAU', NucleotideAlphabet())
 MutableSeq(array('c', 'ATGAAACTG'), RNAAlphabet())
--> Seq('CAGTTTCAT', RNAAlphabet())
+-> Seq('CTGUUUCTU', RNAAlphabet())
 Seq('ACTGTCGTCT', ProteinAlphabet())
 -> Proteins do not have complements!
 
@@ -180,8 +180,8 @@ Seq('TCAAAAGGATGCATCATG', IUPACUnambiguousDNA()) -> Seq('AGTTTTCCTACGTAGTAC', IU
 Seq('T', IUPACAmbiguousDNA()) -> Seq('A', IUPACAmbiguousDNA())
 Seq('TCAAAAGGATGCATCATGT', IUPACAmbiguousDNA()) -> Seq('AGTTTTCCTACGTAGTACA', IUPACAmbiguousDNA())
 Seq('ATGAAACTG', Alphabet()) -> Seq('TACTTTGAC', Alphabet())
-Seq('AUGAAACUG', DNAAlphabet()) -> Seq('UACUUUGAC', DNAAlphabet())
-Seq('ATGAAACTG', RNAAlphabet()) -> Seq('TACTTTGAC', RNAAlphabet())
+Seq('AUGAAACUG', DNAAlphabet()) -> Seq('TUCTTTGUC', DNAAlphabet())
+Seq('ATGAAACTG', RNAAlphabet()) -> Seq('UTCUUUGTC', RNAAlphabet())
 Seq('ATGAAACTG', NucleotideAlphabet()) -> Seq('TACTTTGAC', NucleotideAlphabet())
 Seq('AUGAAACTG', NucleotideAlphabet()) -> Seq('UACUUUGTC', NucleotideAlphabet())
 Seq('ACTGTCGTCT', ProteinAlphabet()) -> Proteins do not have complements!
@@ -192,8 +192,8 @@ Seq('TCAAAAGGATGCATCATG', IUPACUnambiguousDNA()) -> Seq('CATGATGCATCCTTTTGA', IU
 Seq('T', IUPACAmbiguousDNA()) -> Seq('A', IUPACAmbiguousDNA())
 Seq('TCAAAAGGATGCATCATGT', IUPACAmbiguousDNA()) -> Seq('ACATGATGCATCCTTTTGA', IUPACAmbiguousDNA())
 Seq('ATGAAACTG', Alphabet()) -> Seq('CAGTTTCAT', Alphabet())
-Seq('AUGAAACUG', DNAAlphabet()) -> Seq('CAGUUUCAU', DNAAlphabet())
-Seq('ATGAAACTG', RNAAlphabet()) -> Seq('CAGTTTCAT', RNAAlphabet())
+Seq('AUGAAACUG', DNAAlphabet()) -> Seq('CUGTTTCUT', DNAAlphabet())
+Seq('ATGAAACTG', RNAAlphabet()) -> Seq('CTGUUUCTU', RNAAlphabet())
 Seq('ATGAAACTG', NucleotideAlphabet()) -> Seq('CAGTTTCAT', NucleotideAlphabet())
 Seq('AUGAAACTG', NucleotideAlphabet()) -> Seq('CTGUUUCAU', NucleotideAlphabet())
 Seq('ACTGTCGTCT', ProteinAlphabet()) -> Proteins do not have complements!
