@@ -165,8 +165,8 @@ for sequence in [Seq.Seq("".join(ambiguous_rna_values)),
             Seq.Seq("".join(ambiguous_dna_values)),
             Seq.Seq("".join(ambiguous_rna_values), Alphabet.generic_rna),
             Seq.Seq("".join(ambiguous_dna_values), Alphabet.generic_dna),
-            Seq.Seq("".join(ambiguous_rna_values), IUPAC.IUPACAmbiguousDNA()),
-            Seq.Seq("".join(ambiguous_dna_values), IUPAC.IUPACAmbiguousRNA()),
+            Seq.Seq("".join(ambiguous_rna_values), IUPAC.IUPACAmbiguousRNA()),
+            Seq.Seq("".join(ambiguous_dna_values), IUPAC.IUPACAmbiguousDNA()),
             Seq.Seq("AWGAARCKG")]:  # Note no U or T
         print "%s -> %s" \
               % (repr(sequence), repr(Seq.reverse_complement(sequence)))
