@@ -49,7 +49,6 @@ from Scanner import GenBankScanner
 #from Bio.Mindy import SimpleSeqRecord
 
 #These are used for downloading files from GenBank
-from Bio import db
 from Bio import EUtils
 from Bio.EUtils import DBIds, DBIdsClient
 
@@ -1281,6 +1280,7 @@ class NCBIDictionary:
         to change the results into another form.  If unspecified, then
         the raw contents of the file will be returned.
         """
+        from Bio import db
         self.parser = parser
         if database not in self.__class__.VALID_DATABASES:
             raise ValueError("Invalid database %s, should be one of %s" %
