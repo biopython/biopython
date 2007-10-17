@@ -10,7 +10,6 @@ import sys
 import unittest
 import StringIO
 
-from Bio import db
 from Bio import GenBank
 
 def run_tests(argv):
