@@ -14,8 +14,11 @@ from Chang Soon Ong.
 Bio.SeqIO.FASTA and Bio.SeqIO.generic have been deprecated in favour of
 the new Bio.SeqIO module.
 
+Bio.FormatIO has been removed (a gradual deprecation was not possible).
+Please look at Bio.SeqIO for sequence input/output instead.
+
 Bio.SeqUtils.CheckSum created, including new methods from Sebastian Bassi,
-and functions crc32 and crc64 which where moved from Bio/crc.py
+and functions crc32 and crc64 which were moved from Bio/crc.py
 Bio.crc is now deprecated.
 
 Bio.SwissProt parser updated to cope with recent file format updates.
@@ -25,7 +28,8 @@ don't rely on Martel.
 
 Tiago Antao has started work on a Population Genetics module, Bio.PopGen
 
-Updates to the tutorial, including giving Bio.SeqIO has a whole chapter.
+Updates to the tutorial, including giving Bio.Seq and Bio.SeqIO a whole
+chapter each.
 
 ===================================================================
 
