@@ -1,6 +1,13 @@
 """Format from EMBL Nucleotide Sequence Database Release 65, December 2000
 
 """
+
+import warnings
+warnings.warn("Bio.expressions was deprecated, as it does not work with recent versions of mxTextTools. If you want to continue to use this module, please get in contact with the Biopython developers at biopython-dev@biopython.org to avoid permanent removal of this module from Biopython", Deprecation
+Warning)
+
+
+
 import Martel
 from Martel import RecordReader, Time
 from Bio import Std

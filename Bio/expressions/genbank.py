@@ -11,6 +11,12 @@ http://www.ebi.ac.uk/embl/Documentation/FT_definitions/feature_table.html
 o There are also descriptions of different GenBank lines at:
 http://www.ibc.wustl.edu/standards/gbrel.txt
 """
+
+import warnings
+warnings.warn("Bio.expressions was deprecated, as it does not work with recent versions of mxTextTools. If you want to continue to use this module, please get in contact with the Biopython developers at biopython-dev@biopython.org to avoid permanent removal of this module from Biopython", Deprecation
+Warning)
+
+
 # Martel
 import Martel
 from Martel import RecordReader

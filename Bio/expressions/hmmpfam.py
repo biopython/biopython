@@ -8,6 +8,13 @@ The main two problems being that it isn't well tested for a wide variety of
 outputs and that the family line is not parsed into it's respective parts 
 (see multitude of comments on this below).
 """
+
+import warnings
+warnings.warn("Bio.expressions was deprecated, as it does not work with recent versions of mxTextTools. If you want to continue to use this module, please get in contact with the Biopython developers at biopython-dev@biopython.org to avoid permanent removal of this module from Biopython", Deprecation
+Warning)
+
+
+
 from Martel import *
 from Martel import RecordReader
 from Bio import Std

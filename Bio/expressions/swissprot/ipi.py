@@ -4,6 +4,12 @@ IPI is nearly swissprot, but contains some differents which makes the
 Swissprot parsers choke.
 """
 
+import warnings
+warnings.warn("Bio.expressions was deprecated, as it does not work with recent versions of mxTextTools. If you want to continue to use this module, please get in contact with the Biopython developers at biopython-dev@biopython.org to avoid permanent removal of this module from Biopython", Deprecation
+Warning)
+
+
+
 from Bio import Std
 import Martel
 from Martel import Time
