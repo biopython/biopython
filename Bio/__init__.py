@@ -48,5 +48,14 @@ def _load_registries():
 
 # Put the registry loading code in a function so we don't polute the
 # module namespace with local variables.
-_load_registries()
+
+# WARNING:
+# The call to _load_registries is being skipped as part of deprecating
+# Bio.expressions, which does not function properly with the new version
+# of mxTextTools. If at some point we decide to revive Bio.expressions,
+# this line should be reinstated.
+
+# _load_registries()
+
+
 del _load_registries
