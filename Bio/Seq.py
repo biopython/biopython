@@ -325,8 +325,8 @@ def back_transcribe(rna):
     If given a string, returns a new string object.
     Given a Seq or MutableSeq, returns a new Seq object with the same alphabet.
     """
-    if isinstance(rna, Seq) or sinstance(rna, MutableSeq):
-        if isinstance(sequence.alphabet, Alphabet.ProteinAlphabet) :
+    if isinstance(rna, Seq) or isinstance(rna, MutableSeq):
+        if isinstance(rna.alphabet, Alphabet.ProteinAlphabet) :
             raise ValueError, "Proteins cannot be (back)transcribed!"
         #TODO - Raise an error if already is DNA alphabet?
         dna = rna.data.replace('U','T').replace('u','t')
@@ -444,4 +444,6 @@ if __name__ == "__main__" :
               "".join(ambiguous_rna_values),
               Seq("".join(ambiguous_rna_values)),
               Seq("".join(ambiguous_dna_values), generic_rna)]:
-        print "%s -> %s" % (repr(s), repr(reverse_complement(s)))
+        print "%s -> %s [RC]" % (repr(s), repr(reverse_complement(s)))
+        print "%s -> %s [RNA]" % (repr(s), repr(transcribe(s)))
+        print "%s -> %s [DNA]" % (repr(s), repr(back_transcribe(s)))
