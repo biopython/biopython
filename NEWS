@@ -11,11 +11,15 @@ The latest news is at the top.
 Bio.Blast.NCBI.qblast() updated with more URL options, thanks to a patch
 from Chang Soon Ong.
 
+The deprecated Bio.Blast.NCBIWWW functions blast and blasturl were removed.
+
 Bio.SeqIO.FASTA and Bio.SeqIO.generic have been deprecated in favour of
 the new Bio.SeqIO module.
 
 Bio.FormatIO has been removed (a gradual deprecation was not possible).
 Please look at Bio.SeqIO for sequence input/output instead.
+
+Bio.expressions has been deprecated
 
 Bio.SeqUtils.CheckSum created, including new methods from Sebastian Bassi,
 and functions crc32 and crc64 which were moved from Bio/crc.py
