@@ -1,110 +1,110 @@
-# Copyright 2003 by Sebastian Bassi. sbassi@genesdigitales.com
+# Copyright 2003, 2007 by Sebastian Bassi. sbassi@genesdigitales.com
 # All rights reserved.  This code is part of the Biopython 
 # distribution and governed by its license.
 # Please see the LICENSE file that should have been included as part
 # of this package.
 
-import warnings
-warnings.warn("Bio.lcc is deprecated; it has been moved to Bio.SeqUtils.lcc instead", DeprecationWarning)
-
 import math
-from string import count
 
-crom=0
-compone=[0]
-lccsal=[0]
+def lcc_mult(seq,wsize):
+    """Local Composition Complexity (LCC) values over sliding window.
 
-def lcc_mult(seq,wsize,start,end):
-    """Return a list called lccsal, the LCC, a complexity measure 
-from a sequence, called seq."""
+    Returns a list of floats, the LCC values for a sliding window over
+    the sequence.
+
+    seq - an unambiguous DNA sequence
+    wsize - window size, integer
+
+    The result is the same as applying lcc_simp multiple times, but this
+    version is optimized for speed. The optimization works by using the
+    value of previous window as a base to compute the next one."""
     l2=math.log(2)
-    tamseq=end-start
-    global compone
-    global lccsal
+    tamseq=len(seq)
+    seq=seq.upper()
     compone=[0]
     lccsal=[0]
     for i in range(wsize):
-        compone.append(((i+1)/float(wsize))*((math.log((i+1)/float(wsize)))/l2))
+        compone.append(((i+1)/float(wsize))*
+                       ((math.log((i+1)/float(wsize)))/l2))
     window=seq[0:wsize]
-    cant_a=count(window,'A')
-    cant_c=count(window,'C')
-    cant_t=count(window,'T')
-    cant_g=count(window,'G')
+    cant_a=window.count('A')
+    cant_c=window.count('C')
+    cant_t=window.count('T')
+    cant_g=window.count('G')
     term_a=compone[cant_a]
     term_c=compone[cant_c]
     term_t=compone[cant_t]
     term_g=compone[cant_g]
-    lccsal[0]=(-(term_a+term_c+term_t+term_g))
+    lccsal.append(-(term_a+term_c+term_t+term_g))
     tail=seq[0]
     for x in range (tamseq-wsize):
         window=seq[x+1:wsize+x+1]
         if tail==window[-1]:
             lccsal.append(lccsal[-1])
-            #break
         elif tail=='A':
             cant_a=cant_a-1
-            if window[-1]=='C':
+            if window.endswith('C'):
                 cant_c=cant_c+1
                 term_a=compone[cant_a]
                 term_c=compone[cant_c]
                 lccsal.append(-(term_a+term_c+term_t+term_g))
-            elif window[-1]=='T':
+            elif window.endswith('T'):
                 cant_t=cant_t+1
                 term_a=compone[cant_a]
                 term_t=compone[cant_t]
                 lccsal.append(-(term_a+term_c+term_t+term_g))
-            elif window[-1]=='G':
+            elif window.endswith('G'):
                 cant_g=cant_g+1
                 term_a=compone[cant_a]
                 term_g=compone[cant_g]
                 lccsal.append(-(term_a+term_c+term_t+term_g))
         elif tail=='C':
             cant_c=cant_c-1
-            if window[-1]=='A':
+            if window.endswith('A'):
                 cant_a=cant_a+1
                 term_a=compone[cant_a]
                 term_c=compone[cant_c]
                 lccsal.append(-(term_a+term_c+term_t+term_g))
-            elif window[-1]=='T':
+            elif window.endswith('T'):
                 cant_t=cant_t+1
                 term_c=compone[cant_c]
                 term_t=compone[cant_t]
                 lccsal.append(-(term_a+term_c+term_t+term_g))
-            elif window[-1]=='G':
+            elif window.endswith('G'):
                 cant_g=cant_g+1
                 term_c=compone[cant_c]
                 term_g=compone[cant_g]
                 lccsal.append(-(term_a+term_c+term_t+term_g))
         elif tail=='T':
             cant_t=cant_t-1
-            if window[-1]=='A':
+            if window.endswith('A'):
                 cant_a=cant_a+1
                 term_a=compone[cant_a]
                 term_t=compone[cant_t]
                 lccsal.append(-(term_a+term_c+term_t+term_g))
-            elif window[-1]=='C':
+            elif window.endswith('C'):
                 cant_c=cant_c+1
                 term_c=compone[cant_c]
                 term_t=compone[cant_t]
                 lccsal.append(-(term_a+term_c+term_t+term_g))
-            elif window[-1]=='G':
+            elif window.endswith('G'):
                 cant_g=cant_g+1
                 term_t=compone[cant_t]
                 term_g=compone[cant_g]
                 lccsal.append(-(term_a+term_c+term_t+term_g))
         elif tail=='G':
             cant_g=cant_g-1
-            if window[-1]=='A':
+            if window.endswith('A'):
                 cant_a=cant_a+1
                 term_a=compone[cant_a]
                 term_g=compone[cant_g]
                 lccsal.append(-(term_a+term_c+term_t+term_g))
-            elif window[-1]=='C':
+            elif window.endswith('C'):
                 cant_c=cant_c+1
                 term_c=compone[cant_c]
                 term_g=compone[cant_g]
                 lccsal.append(-(term_a+term_c+term_t+term_g))
-            elif window[-1]=='T':
+            elif window.endswith('T'):
                 cant_t=cant_t+1
                 term_t=compone[cant_t]
                 term_g=compone[cant_g]
@@ -112,27 +112,41 @@ from a sequence, called seq."""
         tail=window[0]
     return lccsal
 
-def lcc_simp(seq,start,end):
-    """Return LCC, a complexity measure from a sequence (seq.)"""
-    wsize=end-start
+def lcc_simp(seq):
+    """Local Composition Complexity (LCC) for a sequence.
+
+    seq - an unambiguous DNA sequence
+    
+    Returns the Local Composition Complexity (LCC) value for the entire
+    sequence (as a float).
+
+    Reference:
+    Andrzej K Konopka (2005) Sequence Complexity and Composition
+    DOI: 10.1038/npg.els.0005260
+    """
+    wsize=len(seq)
+    seq=seq.upper()
     l2=math.log(2)
-    window=seq[start:end]
-    if count(window,'A')==0:
+    if 'A' not in seq:
         term_a=0
-	# This check is usefull in order to avoid calculate log of 0.
+	# Check to avoid calculating the log of 0.
     else:
-        term_a=((count(window,'A'))/float(wsize))*((math.log((count(window,'A'))/float(wsize)))/l2)
-    if count(window,'C')==0:
+        term_a=((seq.count('A'))/float(wsize))*((math.log((seq.count('A'))
+                                                          /float(wsize)))/l2)
+    if 'C' not in seq:
         term_c=0
     else:
-        term_c=((count(window,'C'))/float(wsize))*((math.log((count(window,'C'))/float(wsize)))/l2)
-    if count(window,'T')==0:
+        term_c=((seq.count('C'))/float(wsize))*((math.log((seq.count('C'))
+                                                          /float(wsize)))/l2)
+    if 'T' not in seq:
         term_t=0
     else:
-        term_t=((count(window,'T'))/float(wsize))*((math.log((count(window,'T'))/float(wsize)))/l2)
-    if count(window,'G')==0:
+        term_t=((seq.count('T'))/float(wsize))*((math.log((seq.count('T'))
+                                                          /float(wsize)))/l2)
+    if 'G' not in seq:
         term_g=0
     else:
-        term_g=((count(window,'G'))/float(wsize))*((math.log((count(window,'G'))/float(wsize)))/l2)
+        term_g=((seq.count('G'))/float(wsize))*((math.log((seq.count('G'))
+                                                          /float(wsize)))/l2)
     lccsal=-(term_a+term_c+term_t+term_g)
     return lccsal
