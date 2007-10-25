@@ -12,7 +12,7 @@ def lcc_mult(seq,wsize):
     Returns a list of floats, the LCC values for a sliding window over
     the sequence.
 
-    seq - an unambiguous DNA sequence
+    seq - an unambiguous DNA sequence (a string or Seq object)
     wsize - window size, integer
 
     The result is the same as applying lcc_simp multiple times, but this
@@ -20,7 +20,12 @@ def lcc_mult(seq,wsize):
     value of previous window as a base to compute the next one."""
     l2=math.log(2)
     tamseq=len(seq)
-    seq=seq.upper()
+    try :
+        #Assume its a string
+        upper = seq.upper()
+    except AttributeError :
+        #Should be a Seq object then
+        upper = seq.tostring().upper()
     compone=[0]
     lccsal=[0]
     for i in range(wsize):
@@ -38,7 +43,7 @@ def lcc_mult(seq,wsize):
     lccsal.append(-(term_a+term_c+term_t+term_g))
     tail=seq[0]
     for x in range (tamseq-wsize):
-        window=seq[x+1:wsize+x+1]
+        window=upper[x+1:wsize+x+1]
         if tail==window[-1]:
             lccsal.append(lccsal[-1])
         elif tail=='A':
@@ -115,7 +120,7 @@ def lcc_mult(seq,wsize):
 def lcc_simp(seq):
     """Local Composition Complexity (LCC) for a sequence.
 
-    seq - an unambiguous DNA sequence
+    seq - an unambiguous DNA sequence (a string or Seq object)
     
     Returns the Local Composition Complexity (LCC) value for the entire
     sequence (as a float).
@@ -125,28 +130,33 @@ def lcc_simp(seq):
     DOI: 10.1038/npg.els.0005260
     """
     wsize=len(seq)
-    seq=seq.upper()
+    try :
+        #Assume its a string
+        upper = seq.upper()
+    except AttributeError :
+        #Should be a Seq object then
+        upper = seq.tostring().upper()
     l2=math.log(2)
     if 'A' not in seq:
         term_a=0
 	# Check to avoid calculating the log of 0.
     else:
-        term_a=((seq.count('A'))/float(wsize))*((math.log((seq.count('A'))
+        term_a=((upper.count('A'))/float(wsize))*((math.log((upper.count('A'))
                                                           /float(wsize)))/l2)
     if 'C' not in seq:
         term_c=0
     else:
-        term_c=((seq.count('C'))/float(wsize))*((math.log((seq.count('C'))
+        term_c=((upper.count('C'))/float(wsize))*((math.log((upper.count('C'))
                                                           /float(wsize)))/l2)
     if 'T' not in seq:
         term_t=0
     else:
-        term_t=((seq.count('T'))/float(wsize))*((math.log((seq.count('T'))
+        term_t=((upper.count('T'))/float(wsize))*((math.log((upper.count('T'))
                                                           /float(wsize)))/l2)
     if 'G' not in seq:
         term_g=0
     else:
-        term_g=((seq.count('G'))/float(wsize))*((math.log((seq.count('G'))
+        term_g=((upper.count('G'))/float(wsize))*((math.log((upper.count('G'))
                                                           /float(wsize)))/l2)
     lccsal=-(term_a+term_c+term_t+term_g)
     return lccsal
