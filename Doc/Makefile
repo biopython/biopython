@@ -1,4 +1,4 @@
-subdirs := cookbook/biopython_test cookbook/genbank_to_fasta cookbook/LogisticRegression install
+subdirs := cookbook/biopython_test cookbook/LogisticRegression install
 
 
 all:  Tutorial.html Tutorial.txt pdf $(subdirs)
