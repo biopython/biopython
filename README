@@ -81,7 +81,7 @@ results of the tests.  Otherwise, you will see results on the command
 line.
 
 Do not panic if you see messages warning of skipped tests:
-    Skipping test because of import error: No module named reportlab.pdfgen
+    test_DocSQL ... skipping. Install MySQLdb if you want to use Bio.DocSQL.
 
 This most likely means that a package is not installed.  You can
 ignore this if it occurs in the tests for a module that you were not
