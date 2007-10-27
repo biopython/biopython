@@ -522,7 +522,7 @@ PACKAGES.append("BioSQL")
 
 setup(
     name='biopython',
-    version='1.43',
+    version='1.44',
     author='The Biopython Consortium',
     author_email='biopython@biopython.org',
     url='http://www.biopython.org/',
