@@ -72,6 +72,7 @@
 \tableofcontents
 
 \chapter{Introduction}
+\label{chapter:introduction}
 
 \section{What is Biopython?}
 
@@ -200,7 +201,7 @@ Alphabet()
 AGTACACTGGT
 \end{verbatim}
 
-What we have here is a sequence object with a generic alphabet - reflecting the fact we have specified if this is a DNA or protein sequence (okay, a protein with a lot of Alanines, Glycines, Cysteines and Threonines!).  We'll talk more about alphabets in Chapter~\ref{chapter:Bio.Seq}.
+What we have here is a sequence object with a \emph{generic} alphabet - reflecting the fact we have \emph{not} specified if this is a DNA or protein sequence (okay, a protein with a lot of Alanines, Glycines, Cysteines and Threonines!).  We'll talk more about alphabets in Chapter~\ref{chapter:Bio.Seq}.
 
 In addition to having an alphabet, the \verb|Seq| object differs from the python string in the methods it supports.  You can't do this with a plain string:
 
@@ -213,9 +214,10 @@ Seq('TCATGTGACCA', Alphabet())
 Seq('ACCAGTGTACT', Alphabet())
 \end{verbatim}
 
-The next most important class is the \verb|SeqRecord| or Sequence Record.  This holds a sequence with additional annotation including an identifier, name and description.  The \verb|Bio.SeqIO| module for reading and writing sequence file formats works with \verb|SeqRecord| objects, which will be introduced below and cover in more detail by Chapter~\ref{chapter:Bio.SeqIO}.
+The next most important class is the \verb|SeqRecord| or Sequence Record.  This holds a sequence (as a \verb|Seq| object) with additional annotation including an identifier, name and description.  The \verb|Bio.SeqIO| module for reading and writing sequence file formats works with \verb|SeqRecord| objects, which will be introduced below and cover in more detail by Chapter~\ref{chapter:Bio.SeqIO}.
 
-This covers the basic features and uses of the Biopython sequence class. There is a more detailed description of the design ideas behind the sequence class in the Advanced section of this tutorial. This class is still under development and comments on the design and use are, of course, very welcome. Now that you've got some idea of what it is like to interact with the Biopython libraries, it's time to delve into the fun, fun world of dealing with biological file formats!
+This covers the basic features and uses of the Biopython sequence class.
+Now that you've got some idea of what it is like to interact with the Biopython libraries, it's time to delve into the fun, fun world of dealing with biological file formats!
 
 \section{A usage example}
 \label{sec:orchids}
@@ -320,7 +322,7 @@ Biopython has a lot of parsers, and each has its own little special niches based
 
 Chapter~\ref{chapter:Bio.SeqIO} covers \verb|Bio.SeqIO| in more detail.  Please also check the wiki page (\url{http://biopython.org/wiki/SeqIO}) for the latest information, or ask on the mailing list. The wiki page should includes an up to date list of supported file types, and more examples including writing sequences to a file, and converting between file formats.
 
-The next place to look for information about specific parsers and how to do cool things with them is in the Cookbook, Section~\ref{sec:cookbook} of this Tutorial. If you don't find the information you are looking for, please consider helping out your poor overworked documentors and submitting a cookbook entry about it! (once you figure out how to do it, that is!)
+The next place to look for information about specific parsers and how to do cool things with them is in the Cookbook, Section~\ref{chapter:cookbook} of this Tutorial. If you don't find the information you are looking for, please consider helping out your poor overworked documentors and submitting a cookbook entry about it! (once you figure out how to do it, that is!)
 
 \section{Connecting with biological databases}
 \label{sec:connecting-with-biological-databases}
@@ -336,7 +338,7 @@ One of the very common things that you need to do in bioinformatics is extract i
 
 The code is these modules basically makes it easy to write python code that interact with the CGI scripts on these pages, so that you can get results in an easy to deal with format. In some cases, the results can be tightly integrated with the Biopython parsers to make it even easier to extract information.
 
-Here we'll show a simple example of performing a remote Entrez query. More information on the other services is available in the Cookbook, which begins on page~\pageref{sec:cookbook}.
+Here we'll show a simple example of performing a remote Entrez query. More information on the other services is available in the Cookbook, which begins on page~\pageref{chapter:cookbook}.
 
 In section~\ref{sec:orchids} of the parsing examples, we talked about using Entrez website to search the NCBI nucleotide databases for info on Cypripedioideae, our friends the lady slipper orchids. Now, we'll look at how to automate that process using a python script. For Entrez searching, this is more useful for displaying results then as a tool for getting sequences. The NCBI web site is mostly set up to allow remote queries so that you could write our own local CGI scripts that return information from NCBI pages. For this reason, the results are returned as HTML and it is pretty tough to get a flat file in a quick manner.
 
@@ -396,7 +398,7 @@ Enjoy the code!
 \label{chapter:Bio.Seq}
 
 Biological sequences are arguably the central object in Bioinformatics, and in this chapter we'll introduce the Biopython mechanism for dealing with sequences, the \verb|Seq| object.  
-In Chapter~\ref{chapter:Bio.SeqIO} on Sequence Input/Output, we'll see that the \verb|Seq| object is also used in the \verb|SeqRecord| object, which combines the sequence information with any annotation.
+In Chapter~\ref{chapter:Bio.SeqIO} on Sequence Input/Output (and Section~\ref{sec:advanced-seq}), we'll see that the \verb|Seq| object is also used in the \verb|SeqRecord| object, which combines the sequence information with any annotation.
 
 Sequences are essentially strings of letters like \verb|AGTACACTGGT|, which seems very natural since this is the most common way that sequences are seen in biological file formats.
 
@@ -694,7 +696,9 @@ To close this chapter, for those you who \emph{really} don't want to use the seq
 \chapter{Sequence Input/Output}
 \label{chapter:Bio.SeqIO}
 
-In this chapter we'll discuss in more detail the \verb|Bio.SeqIO| module, which was briefly introduced in Chapter~\ref{chapter:quick-start}. This is a relatively new interface, added in Biopython 1.43, which aims to provide a simple interface for working with assorted sequence file formats in a uniform way. The ``catch'' is that you have to work with \verb|SeqRecord| ojects - which contain a \verb|Seq| object (as described in Chapter~\ref{chapter:Bio.Seq}) plus annotation like an identifier and description.
+In this chapter we'll discuss in more detail the \verb|Bio.SeqIO| module, which was briefly introduced in Chapter~\ref{chapter:quick-start}. This is a relatively new interface, added in Biopython 1.43, which aims to provide a simple interface for working with assorted sequence file formats in a uniform way.
+
+The ``catch'' is that you have to work with \verb|SeqRecord| ojects - which contain a \verb|Seq| object (as described in Chapter~\ref{chapter:Bio.Seq}) plus annotation like an identifier and description.  We'll introduce the basics of \verb|SeqRecord| object in this chapter, but see Section~\ref{sec:advanced-seq} for more details.
 
 \section{Parsing or Reading Sequences}
 
@@ -1274,7 +1278,7 @@ SeqIO.write(records, open("rev_comp.fasta", "w"), "fasta")
 \end{verbatim}
 
 \chapter{BLAST}
-\label{sec:blast}
+\label{chapter:blast}
 
 Hey, everybody loves BLAST right? I mean, geez, how can get it get any easier to do comparisons between one of your sequences and every other sequence in the known world? Heck, if I was writing the code to do that it would probably take about a day and a half to complete, and the results still wouldn't be as good. But, of course, this section isn't about how cool BLAST is, since we already know that. It is about the problem with BLAST -- it can be really difficult to deal with the volume of data generated by large runs, and to automate BLAST runs in general.
 
@@ -1853,7 +1857,7 @@ Hopefully the \verb|BlastErrorParser| will make it much easier to debug and deal
 We should write some stuff to make it easier to deal directly with PSIBlast from scripts (i.~e.~output the align file in the proper format from an alignment). I need to look at PSIBlast more and come up with some good ways of going this...
 
 \chapter{Cookbook -- Cool things to do with it}
-\label{sec:cookbook}
+\label{chapter:cookbook}
 
 \section{SWISS-PROT}
 \label{sec:swiss_prot}
@@ -3826,18 +3830,20 @@ like $F_{st}$, or allele counts.
 \subsection{Translating a DNA sequence to Protein}
 
 \chapter{Advanced}
+\label{chapter:advanced}
 
 \section{The SeqRecord and SeqFeature classes}
 \label{sec:advanced-seq}
 
-You read all about the basic Biopython sequence class in section~\ref{sec:sequences}, which described how to do many useful things with just the sequence. Howerver, many times sequences have important additional properties associated with them. This section described how Biopython handles these higher level descriptions of a sequence.
+You read all about the basic Biopython sequence class in Chapter~\ref{chapter:Bio.Seq}, which described how to do many useful things with just the sequence. However, many times sequences have important additional properties associated with them -- as you will have seen with the \verb|SeqRecord| object in Chapter~\ref{chapter:Bio.SeqIO}.
+This section described how Biopython handles these higher level descriptions of a sequence.
 
 \subsection{Sequence ids and Descriptions -- dealing with SeqRecords}
 
-Immediately above the Sequence class is the SeqRecord class, defined in the \verb|Bio.SeqRecord| module. This class allows higher level features such as ids and features to be associated with the sequence. The class itself is very simple, and offers the following information as attributes:
+Immediately above the Sequence class is the Sequence Record class, defined in the \verb|Bio.SeqRecord| module. This class allows higher level features such as ids and features to be associated with the sequence, and is used thoughout the sequence input/output interface \verb|Bio.SeqIO|, described in Chapter~\ref{chapter:Bio.SeqIO}. The \verb|SeqRecord|class itself is very simple, and offers the following information as attributes:
 
 \begin{description}
-  \item[seq] -- The sequence itself -- A Bio.Seq object
+  \item[seq] -- The sequence itself -- A \verb|Seq| object
 
   \item[id] -- The primary id used to identify the sequence. In most cases this is something like an accession number.
 
@@ -3847,10 +3853,10 @@ Immediately above the Sequence class is the SeqRecord class, defined in the \ver
 
   \item[annotations] -- A dictionary of additional information about the sequence. The keys are the name of the information, and the information is contained in the value. This allows the addition of more ``unstructed'' information to the sequence.
 
-  \item[features] -- A list of SeqFeature objects with more structured information about the features on a sequence. The structure of SeqFeatures is described below in section~\ref{sec:seq_features}.
+  \item[features] -- A list of \verb|SeqFeature| objects with more structured information about the features on a sequence. The structure of sequence features is described below in Section~\ref{sec:seq_features}.
 \end{description}
 
-Using a SeqRecord class is not very complicated, since all of the information is stored as attributes of the class. Initializing the class just involves passing a Seq object to the SeqRecord:
+Using a \verb|SeqRecord| class is not very complicated, since all of the information is stored as attributes of the class. Initializing the class just involves passing a \verb|Seq| object to the \verb|SeqRecord|:
 
 \begin{verbatim}
 >>> from Bio.Seq import Seq
@@ -3887,14 +3893,14 @@ That's just about all there is to it! Next, you may want to learn about SeqFeatu
 \subsection{Features and Annotations -- SeqFeatures}
 \label{sec:seq_features}
 
-Sequence features are an essential part of describing a sequence. Once you get beyond the sequence itself, you need some way to organize and easily get at the more ``abstract'' information that is known about the sequence. While it is probably impossible to develop a general sequence feature class that will cover everything, the Biopython SeqFeature class attempts to encapsulate as much of the information about the sequence as possible. The design is heavily based on the GenBank/EMBL feature tables, so if you understand how they look, you'll probably have an easier time grasping the structure of the Biopython classes.
+Sequence features are an essential part of describing a sequence. Once you get beyond the sequence itself, you need some way to organize and easily get at the more ``abstract'' information that is known about the sequence. While it is probably impossible to develop a general sequence feature class that will cover everything, the Biopython \verb|SeqFeature| class attempts to encapsulate as much of the information about the sequence as possible. The design is heavily based on the GenBank/EMBL feature tables, so if you understand how they look, you'll probably have an easier time grasping the structure of the Biopython classes.
 
 \subsubsection{SeqFeatures themselves}
 
-The first level of dealing with Sequence features is the SeqFeature class itself. This class has a number of attributes, so first we'll list them and there general features, and then work through an example to show how this applies to a real life example, a GenBank feature table. The attributes of a SeqFeature are:
+The first level of dealing with Sequence features is the \verb|SeqFeature| class itself. This class has a number of attributes, so first we'll list them and there general features, and then work through an example to show how this applies to a real life example, a GenBank feature table. The attributes of a SeqFeature are:
 
 \begin{description}
-  \item[location] -- The location of the SeqFeature on the sequence that you are dealing with. The locations end-points may be fuzzy -- section~\ref{sec:locations} has a lot more description on how to deal with descriptions.
+  \item[location] -- The location of the \verb|SeqFeature| on the sequence that you are dealing with. The locations end-points may be fuzzy -- section~\ref{sec:locations} has a lot more description on how to deal with descriptions.
 
   \item[type] -- This is a textual description of the type of feature (for instance, this will be something like 'CDS' or 'gene').
 
@@ -4050,6 +4056,7 @@ A reference also has a \verb|location| object so that it can specify a particula
 
 
 That's all there is too it. References are meant to be easy to deal with, and hopefully general enough to cover lots of usage cases.
+
 
 \section{Regression Testing Framework}
 \label{sec:regr_test}
