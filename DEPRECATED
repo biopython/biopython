@@ -2,6 +2,35 @@ This file provides documentation for modules in Biopython that have been moved
 or deprecated in favor of other modules. This provides some quick and easy
 to find documentation about how to update your code to work again.
 
+Bio.Blast.NCBIWWW
+=================
+The deprecated functions blast and blasturl were removed in Release 1.44
+
+Bio.SeqIO
+=========
+The old Bio.SeqIO.FASTA and Bio.SeqIO.generic were deprecated in favour of
+the new Bio.SeqIO module as of Release 1.44
+
+Bio.lcc
+=======
+Deprecated in favor of Bio.SeqUtils.lcc in Release 1.44
+
+Bio.crc
+=======
+Deprecated in favor of Bio.SeqUtils.CheckSum in Release 1.44
+
+Bio.FormatIO
+============
+This was removed in Release 1.44
+
+Bio.expressions
+===============
+This has been deprecated as of Release 1.44
+
+Bio.Kabat
+=========
+This was deprecated in Release 1.43 and removed in Release 1.44
+
 Bio.SeqUtils
 ============
 The functions 'complement' and 'antiparallel' in Bio.SeqUtils have been
