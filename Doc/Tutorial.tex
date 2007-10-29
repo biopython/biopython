@@ -2686,230 +2686,6 @@ R -13 -25 -14  -7   7
 
 Very nice. Now we've got our very own substitution matrix to play with!
 
-\section{More Advanced Sequence Classes -- Sequence IDs and Features}
-\label{sec:advanced-seq}
-
-You read all about the basic Biopython sequence class in section~\ref{sec:sequences}, which described how to do many useful things with just the sequence. Howerver, many times sequences have important additional properties associated with them. This section described how Biopython handles these higher level descriptions of a sequence.
-
-\subsection{Sequence ids and Descriptions -- dealing with SeqRecords}
-
-Immediately above the Sequence class is the SeqRecord class, defined in the \verb|Bio.SeqRecord| module. This class allows higher level features such as ids and features to be associated with the sequence. The class itself is very simple, and offers the following information as attributes:
-
-\begin{description}
-  \item[seq] -- The sequence itself -- A Bio.Seq object
-
-  \item[id] -- The primary id used to identify the sequence. In most cases this is something like an accession number.
-
-  \item[name] -- A ``common'' name/id for the sequence. In some cases this will be the same as the accession number, but it could also be a clone name. I think of this as being analagous to the LOCUS id in a GenBank record.
-
-  \item[description] -- A human readible description or expressive name for the sequence. This is similar to what follows the id information in a FASTA formatted entry.
-
-  \item[annotations] -- A dictionary of additional information about the sequence. The keys are the name of the information, and the information is contained in the value. This allows the addition of more ``unstructed'' information to the sequence.
-
-  \item[features] -- A list of SeqFeature objects with more structured information about the features on a sequence. The structure of SeqFeatures is described below in section~\ref{sec:seq_features}.
-\end{description}
-
-Using a SeqRecord class is not very complicated, since all of the information is stored as attributes of the class. Initializing the class just involves passing a Seq object to the SeqRecord:
-
-\begin{verbatim}
->>> from Bio.Seq import Seq
->>> simple_seq = Seq("GATC")
->>> from Bio.SeqRecord import SeqRecord
->>> simple_seq_r = SeqRecord(simple_seq)
-\end{verbatim}
-
-Additionally, you can also pass the id, name and description to the initialization function, but if not they will be set as strings indicating they are unknown, and can be modified subsequently:
-
-\begin{verbatim}
->>> simple_seq_r.id
-'<unknown id>'
->>> simple_seq_r.id = 'AC12345'
->>> simple_seq_r.description = 'My little made up sequence I wish I could 
-write a paper about and submit to GenBank'
->>> print simple_seq_r.description
-My little made up sequence I wish I could write a paper about and submit 
-to GenBank
->>> simple_seq_r.seq
-Seq('GATC', Alphabet())
-\end{verbatim}
-
-Adding annotations is almost as easy, and just involves dealing directly with the annotation dictionary:
-
-\begin{verbatim}
->>> simple_seq_r.annotations['evidence'] = 'None. I just made it up.'
->>> print simple_seq_r.annotations
-{'evidence': 'None. I just made it up.'}
-\end{verbatim}
-
-That's just about all there is to it! Next, you may want to learn about SeqFeatures, which offer an additional structured way to represent information about a sequence.
-
-\subsection{Features and Annotations -- SeqFeatures}
-\label{sec:seq_features}
-
-Sequence features are an essential part of describing a sequence. Once you get beyond the sequence itself, you need some way to organize and easily get at the more ``abstract'' information that is known about the sequence. While it is probably impossible to develop a general sequence feature class that will cover everything, the Biopython SeqFeature class attempts to encapsulate as much of the information about the sequence as possible. The design is heavily based on the GenBank/EMBL feature tables, so if you understand how they look, you'll probably have an easier time grasping the structure of the Biopython classes.
-
-\subsubsection{SeqFeatures themselves}
-
-The first level of dealing with Sequence features is the SeqFeature class itself. This class has a number of attributes, so first we'll list them and there general features, and then work through an example to show how this applies to a real life example, a GenBank feature table. The attributes of a SeqFeature are:
-
-\begin{description}
-  \item[location] -- The location of the SeqFeature on the sequence that you are dealing with. The locations end-points may be fuzzy -- section~\ref{sec:locations} has a lot more description on how to deal with descriptions.
-
-  \item[type] -- This is a textual description of the type of feature (for instance, this will be something like 'CDS' or 'gene').
-
-  \item[ref] -- A reference to a different sequence. Some times features may be ``on'' a particular sequence, but may need to refer to a different sequence, and this provides the reference (normally an accession number). A good example of this is a genomic sequence that has most of a coding sequence, but one of the exons is on a different accession. In this case, the feature would need to refer to this different accession for this missing exon.
-
-  \item[ref\_db] -- This works along with \verb|ref| to provide a cross sequence reference. If there is a reference, \verb|ref_db| will be set as None if the reference is in the same database, and will be set to the name of the database otherwise.
-
-  \item[strand] -- The strand on the sequence that the feature is located on. This may either be '1' for the top strand, '-1' for the bottom strand, or '0' for both strands (or if it doesn't matter). Keep in mind that this only really makes sense for double stranded DNA, and not for proteins or RNA. 
-
-  \item[qualifiers] -- This is a python dictionary of additional information about the feature. The key is some kind of terse one-word description of what the information contained in the value is about, and the value is the actual information. For example, a common key for a qualifier might be ``evidence'' and the value might be ``computational (non-experimental).'' This is just a way to let the person who is looking at the feature know that it has not be experimentally (i.~e.~in a wet lab) confirmed.
-  
-  \item[sub\_features] -- A very important feature of a feature is that it can have additional \verb|sub_features| underneath it. This allows nesting of features, and helps us to deal with things such as the GenBank/EMBL feature lines in a (we hope) intuitive way.
-\end{description}
-
-To show an example of SeqFeatures in action, let's take a look at the following feature from a GenBank feature table:
-
-\begin{verbatim}
-     mRNA            complement(join(<49223..49300,49780..>50208))
-                     /gene="F28B23.12"
-\end{verbatim}
-
-To look at the easiest attributes of the SeqFeature first, if you got a SeqFeature object for this it would have it \verb|type| of 'mRNA', a \verb|strand| of -1 (due to the 'complement'), and would have None for the \verb|ref| and \verb|ref_db| since there are no references to external databases. The \verb|qualifiers| for this SeqFeature would be a python dictionarary that looked like \verb|{'gene' : 'F28B23.12'}|.
-
-
-Now let's look at the more tricky part, how the 'join' in the location 
-line is handled. First, the location for the top level SeqFeature (the 
-one we are dealing with right now) is set as going from 
-\verb|'<49223' to '>50208'| (see section~\ref{sec:locations} for 
-the nitty gritty on how fuzzy locations like this are handled). 
-So the location of the top level object is the entire span of the 
-feature. So, how do you get at the information in the 'join?' 
-Well, that's where the \verb|sub_features| go in.
-
-
-The \verb|sub_features| attribute will have a list with two SeqFeature 
-objects in it, and these contain the information in the join. Let's 
-look at \verb|top_level_feature.sub_features[0]|; the first 
-\verb|sub_feature|). This object is a SeqFeature object with a 
-\verb|type| of '\verb|mRNA_join|,' a \verb|strand| of -1 (inherited 
-from the parent SeqFeature) and a location going from 
-\verb|'<49223' to '49300'|. 
-
-
-So, the \verb|sub_features| allow you to get at the internal information if you want it (i.~e.~if you were trying to get only the exons out of a genomic sequence), or just to deal with the broad picture (i.~e.~you just want to know that the coding sequence for a gene lies in a region). Hopefully this structuring makes it easy and intuitive to get at the sometimes complex information that can be contained in a SeqFeature.
-
-\subsubsection{Locations}
-\label{sec:locations}
-
-In the section on SeqFeatures above, we skipped over one of the more difficult parts of Features, dealing with the locations. The reason this can be difficult is because of fuzziness of the positions in locations. Before we get into all of this, let's just define the vocabulary we'll use to talk about this. Basically there are two terms we'll use:
-
-\begin{description}
-  \item[position] -- This refers to a single position on a sequence, 
-  which may be fuzzy or not. For instance, 5, 20, \verb|<100| and 
-  \verb|3^5| are all positions.
-
-  \item[location] -- A location is two positions that defines a region of a sequence. For instance 5..20 (i.~e.~5 to 20) is a location.
-\end{description}
-
-I just mention this because sometimes I get confused between the two.
-
-
-The complication in dealing with locations comes in the positions themselves. In biology many times things aren't entirely certain (as much as us wet lab biologists try to make them certain!). For instance, you might do a dinucleotide priming experiment and discover that the start of mRNA transcript starts at one of two sites. This is very useful information, but the complication comes in how to represent this as a position. To help us deal with this, we have the concept of fuzzy positions. Basically there are five types of fuzzy positions, so we have five classes do deal with them:
-
-\begin{description}
-  \item[ExactPosition] -- As its name suggests, this class represents a position which is specified as exact along the sequence. This is represented as just a a number, and you can get the position by looking at the \verb|position| attribute of the object.
-
-  \item[BeforePosition] -- This class represents a fuzzy position 
-  that occurs prior to some specified site. In GenBank/EMBL notation, 
-  this is represented as something like \verb|'<13'|, signifying that 
-  the real position is located somewhere less then 13. To get 
-  the specified upper boundary, look at the \verb|position| 
-  attribute of the object.
-
-  \item[AfterPosition] -- Contrary to \verb|BeforePosition|, this 
-  class represents a position that occurs after some specified site. 
-  This is represented in GenBank as \verb|'>13'|, and like 
-  \verb|BeforePosition|, you get the boundary number by looking 
-  at the \verb|position| attribute of the object.
-
-  \item[WithinPosition] -- This class models a position which occurs somewhere between two specified nucleotides. In GenBank/EMBL notation, this would be represented as '(1.5)', to represent that the position is somewhere within the range 1 to 5. To get the information in this class you have to look at two attributes. The \verb|position| attribute specifies the lower boundary of the range we are looking at, so in our example case this would be one. The \verb|extension| attribute specifies the range to the higher boundary, so in this case it would be 4. So \verb|object.position| is the lower boundary and \verb|object.position + object.extension| is the upper boundary.
-
-  \item[BetweenPosition] -- This class deals with a position that 
-  occurs between two coordinates. For instance, you might have a 
-  protein binding site that occurs between two nucleotides on a 
-  sequence. This is represented as \verb|'2^3'|, which indicates that 
-  the real position happens between position 2 and 3. Getting 
-  this information from the object is very similar to 
-  \verb|WithinPosition|, the \verb|position| attribute specifies 
-  the lower boundary (2, in this case) and the \verb|extension| 
-  indicates the range to the higher boundary (1 in this case).
-\end{description}
-
-Now that we've got all of the types of fuzzy positions we can have taken care of, we are ready to actually specify a location on a sequence. This is handled by the \verb|FeatureLocation| class. An object of this type basically just holds the potentially fuzzy start and end positions of a feature. You can create a \verb|FeatureLocation| object by creating the positions and passing them in:
-
-\begin{verbatim}
->>> from Bio import SeqFeature
->>> start_pos = SeqFeature.AfterPosition(5)
->>> end_pos = SeqFeature.BetweenPosition(8, 1)
->>> my_location = SeqFeature.FeatureLocation(start_pos, end_pos)
-\end{verbatim}
-
-If you print out a \verb|FeatureLocation| object, you can get a nice representation of the information:
-
-\begin{verbatim}
->>> print my_location
-[>5:(8^9)]
-\end{verbatim}
-
-We can access the fuzzy start and end positions using the start and end attributes of the location:
-
-\begin{verbatim}
->>> my_location.start
-<Bio.SeqFeature.AfterPosition instance at 0x101d7164>
->>> print my_location.start
->5
->>> print my_location.end
-(8^9)
-\end{verbatim}
-
-If you don't want to deal with fuzzy positions and just want numbers, you just need to ask for the \verb|nofuzzy_start| and \verb|nofuzzy_end| attributes of the location:
-
-\begin{verbatim}
->>> my_location.nofuzzy_start 
-5
->>> my_location.nofuzzy_end
-8
-\end{verbatim}
-
-Notice that this just gives you back the position attributes of the fuzzy locations.
-
-
-Similary, to make it easy to create a position without worrying about fuzzy positions, you can just pass in numbers to the \verb|FeaturePosition| constructors, and you'll get back out \verb|ExactPosition| objects:
-
-\begin{verbatim}
->>> exact_location = SeqFeature.FeatureLocation(5, 8)
->>> print exact_location
-[5:8]
->>> exact_location.start
-<Bio.SeqFeature.ExactPosition instance at 0x101dcab4>
-\end{verbatim}
-
-That is all of the nitty gritty about dealing with fuzzy positions in Biopython. It has been designed so that dealing with fuzziness is not that much more complicated than dealing with exact positions, and hopefully you find that true!
- 
-\subsubsection{References}
-
-Another common annotation related to a sequence is a reference to a journal or other published work dealing with the sequence. We have a fairly simple way of representing a Reference in Biopython -- we have a \verb|Bio.SeqFeature.Reference| class that stores the relevant information about a reference as attributes of an object.
-
-
-The attributes include things that you would expect to see in a reference like \verb|journal|, \verb|title| and \verb|authors|. Additionally, it also can hold the \verb|medline_id| and \verb|pubmed_id| and a \verb|comment| about the reference. These are all accessed simply as attributes of the object.
-
-
-A reference also has a \verb|location| object so that it can specify a particular location on the sequence that the reference refers to. For instance, you might have a journal that is dealing with a particular gene located on a BAC, and want to specify that it only refers to this position exactly. The \verb|location| is a potentially fuzzy location, as described in section~\ref{sec:locations}.
-
-
-That's all there is too it. References are meant to be easy to deal with, and hopefully general enough to cover lots of usage cases.
-
 \section{BioRegistry -- automatically finding sequence sources}
 
 A consistently annoying problem in bioinformatics is easily finding a
@@ -4051,7 +3827,229 @@ like $F_{st}$, or allele counts.
 
 \chapter{Advanced}
 
-\section{Sequence Class}
+\section{The SeqRecord and SeqFeature classes}
+\label{sec:advanced-seq}
+
+You read all about the basic Biopython sequence class in section~\ref{sec:sequences}, which described how to do many useful things with just the sequence. Howerver, many times sequences have important additional properties associated with them. This section described how Biopython handles these higher level descriptions of a sequence.
+
+\subsection{Sequence ids and Descriptions -- dealing with SeqRecords}
+
+Immediately above the Sequence class is the SeqRecord class, defined in the \verb|Bio.SeqRecord| module. This class allows higher level features such as ids and features to be associated with the sequence. The class itself is very simple, and offers the following information as attributes:
+
+\begin{description}
+  \item[seq] -- The sequence itself -- A Bio.Seq object
+
+  \item[id] -- The primary id used to identify the sequence. In most cases this is something like an accession number.
+
+  \item[name] -- A ``common'' name/id for the sequence. In some cases this will be the same as the accession number, but it could also be a clone name. I think of this as being analagous to the LOCUS id in a GenBank record.
+
+  \item[description] -- A human readible description or expressive name for the sequence. This is similar to what follows the id information in a FASTA formatted entry.
+
+  \item[annotations] -- A dictionary of additional information about the sequence. The keys are the name of the information, and the information is contained in the value. This allows the addition of more ``unstructed'' information to the sequence.
+
+  \item[features] -- A list of SeqFeature objects with more structured information about the features on a sequence. The structure of SeqFeatures is described below in section~\ref{sec:seq_features}.
+\end{description}
+
+Using a SeqRecord class is not very complicated, since all of the information is stored as attributes of the class. Initializing the class just involves passing a Seq object to the SeqRecord:
+
+\begin{verbatim}
+>>> from Bio.Seq import Seq
+>>> simple_seq = Seq("GATC")
+>>> from Bio.SeqRecord import SeqRecord
+>>> simple_seq_r = SeqRecord(simple_seq)
+\end{verbatim}
+
+Additionally, you can also pass the id, name and description to the initialization function, but if not they will be set as strings indicating they are unknown, and can be modified subsequently:
+
+\begin{verbatim}
+>>> simple_seq_r.id
+'<unknown id>'
+>>> simple_seq_r.id = 'AC12345'
+>>> simple_seq_r.description = 'My little made up sequence I wish I could 
+write a paper about and submit to GenBank'
+>>> print simple_seq_r.description
+My little made up sequence I wish I could write a paper about and submit 
+to GenBank
+>>> simple_seq_r.seq
+Seq('GATC', Alphabet())
+\end{verbatim}
+
+Adding annotations is almost as easy, and just involves dealing directly with the annotation dictionary:
+
+\begin{verbatim}
+>>> simple_seq_r.annotations['evidence'] = 'None. I just made it up.'
+>>> print simple_seq_r.annotations
+{'evidence': 'None. I just made it up.'}
+\end{verbatim}
+
+That's just about all there is to it! Next, you may want to learn about SeqFeatures, which offer an additional structured way to represent information about a sequence.
+
+\subsection{Features and Annotations -- SeqFeatures}
+\label{sec:seq_features}
+
+Sequence features are an essential part of describing a sequence. Once you get beyond the sequence itself, you need some way to organize and easily get at the more ``abstract'' information that is known about the sequence. While it is probably impossible to develop a general sequence feature class that will cover everything, the Biopython SeqFeature class attempts to encapsulate as much of the information about the sequence as possible. The design is heavily based on the GenBank/EMBL feature tables, so if you understand how they look, you'll probably have an easier time grasping the structure of the Biopython classes.
+
+\subsubsection{SeqFeatures themselves}
+
+The first level of dealing with Sequence features is the SeqFeature class itself. This class has a number of attributes, so first we'll list them and there general features, and then work through an example to show how this applies to a real life example, a GenBank feature table. The attributes of a SeqFeature are:
+
+\begin{description}
+  \item[location] -- The location of the SeqFeature on the sequence that you are dealing with. The locations end-points may be fuzzy -- section~\ref{sec:locations} has a lot more description on how to deal with descriptions.
+
+  \item[type] -- This is a textual description of the type of feature (for instance, this will be something like 'CDS' or 'gene').
+
+  \item[ref] -- A reference to a different sequence. Some times features may be ``on'' a particular sequence, but may need to refer to a different sequence, and this provides the reference (normally an accession number). A good example of this is a genomic sequence that has most of a coding sequence, but one of the exons is on a different accession. In this case, the feature would need to refer to this different accession for this missing exon.
+
+  \item[ref\_db] -- This works along with \verb|ref| to provide a cross sequence reference. If there is a reference, \verb|ref_db| will be set as None if the reference is in the same database, and will be set to the name of the database otherwise.
+
+  \item[strand] -- The strand on the sequence that the feature is located on. This may either be '1' for the top strand, '-1' for the bottom strand, or '0' for both strands (or if it doesn't matter). Keep in mind that this only really makes sense for double stranded DNA, and not for proteins or RNA. 
+
+  \item[qualifiers] -- This is a python dictionary of additional information about the feature. The key is some kind of terse one-word description of what the information contained in the value is about, and the value is the actual information. For example, a common key for a qualifier might be ``evidence'' and the value might be ``computational (non-experimental).'' This is just a way to let the person who is looking at the feature know that it has not be experimentally (i.~e.~in a wet lab) confirmed.
+  
+  \item[sub\_features] -- A very important feature of a feature is that it can have additional \verb|sub_features| underneath it. This allows nesting of features, and helps us to deal with things such as the GenBank/EMBL feature lines in a (we hope) intuitive way.
+\end{description}
+
+To show an example of SeqFeatures in action, let's take a look at the following feature from a GenBank feature table:
+
+\begin{verbatim}
+     mRNA            complement(join(<49223..49300,49780..>50208))
+                     /gene="F28B23.12"
+\end{verbatim}
+
+To look at the easiest attributes of the SeqFeature first, if you got a SeqFeature object for this it would have it \verb|type| of 'mRNA', a \verb|strand| of -1 (due to the 'complement'), and would have None for the \verb|ref| and \verb|ref_db| since there are no references to external databases. The \verb|qualifiers| for this SeqFeature would be a python dictionarary that looked like \verb|{'gene' : 'F28B23.12'}|.
+
+
+Now let's look at the more tricky part, how the 'join' in the location 
+line is handled. First, the location for the top level SeqFeature (the 
+one we are dealing with right now) is set as going from 
+\verb|'<49223' to '>50208'| (see section~\ref{sec:locations} for 
+the nitty gritty on how fuzzy locations like this are handled). 
+So the location of the top level object is the entire span of the 
+feature. So, how do you get at the information in the 'join?' 
+Well, that's where the \verb|sub_features| go in.
+
+
+The \verb|sub_features| attribute will have a list with two SeqFeature 
+objects in it, and these contain the information in the join. Let's 
+look at \verb|top_level_feature.sub_features[0]|; the first 
+\verb|sub_feature|). This object is a SeqFeature object with a 
+\verb|type| of '\verb|mRNA_join|,' a \verb|strand| of -1 (inherited 
+from the parent SeqFeature) and a location going from 
+\verb|'<49223' to '49300'|. 
+
+
+So, the \verb|sub_features| allow you to get at the internal information if you want it (i.~e.~if you were trying to get only the exons out of a genomic sequence), or just to deal with the broad picture (i.~e.~you just want to know that the coding sequence for a gene lies in a region). Hopefully this structuring makes it easy and intuitive to get at the sometimes complex information that can be contained in a SeqFeature.
+
+\subsubsection{Locations}
+\label{sec:locations}
+
+In the section on SeqFeatures above, we skipped over one of the more difficult parts of Features, dealing with the locations. The reason this can be difficult is because of fuzziness of the positions in locations. Before we get into all of this, let's just define the vocabulary we'll use to talk about this. Basically there are two terms we'll use:
+
+\begin{description}
+  \item[position] -- This refers to a single position on a sequence, 
+  which may be fuzzy or not. For instance, 5, 20, \verb|<100| and 
+  \verb|3^5| are all positions.
+
+  \item[location] -- A location is two positions that defines a region of a sequence. For instance 5..20 (i.~e.~5 to 20) is a location.
+\end{description}
+
+I just mention this because sometimes I get confused between the two.
+
+
+The complication in dealing with locations comes in the positions themselves. In biology many times things aren't entirely certain (as much as us wet lab biologists try to make them certain!). For instance, you might do a dinucleotide priming experiment and discover that the start of mRNA transcript starts at one of two sites. This is very useful information, but the complication comes in how to represent this as a position. To help us deal with this, we have the concept of fuzzy positions. Basically there are five types of fuzzy positions, so we have five classes do deal with them:
+
+\begin{description}
+  \item[ExactPosition] -- As its name suggests, this class represents a position which is specified as exact along the sequence. This is represented as just a a number, and you can get the position by looking at the \verb|position| attribute of the object.
+
+  \item[BeforePosition] -- This class represents a fuzzy position 
+  that occurs prior to some specified site. In GenBank/EMBL notation, 
+  this is represented as something like \verb|'<13'|, signifying that 
+  the real position is located somewhere less then 13. To get 
+  the specified upper boundary, look at the \verb|position| 
+  attribute of the object.
+
+  \item[AfterPosition] -- Contrary to \verb|BeforePosition|, this 
+  class represents a position that occurs after some specified site. 
+  This is represented in GenBank as \verb|'>13'|, and like 
+  \verb|BeforePosition|, you get the boundary number by looking 
+  at the \verb|position| attribute of the object.
+
+  \item[WithinPosition] -- This class models a position which occurs somewhere between two specified nucleotides. In GenBank/EMBL notation, this would be represented as '(1.5)', to represent that the position is somewhere within the range 1 to 5. To get the information in this class you have to look at two attributes. The \verb|position| attribute specifies the lower boundary of the range we are looking at, so in our example case this would be one. The \verb|extension| attribute specifies the range to the higher boundary, so in this case it would be 4. So \verb|object.position| is the lower boundary and \verb|object.position + object.extension| is the upper boundary.
+
+  \item[BetweenPosition] -- This class deals with a position that 
+  occurs between two coordinates. For instance, you might have a 
+  protein binding site that occurs between two nucleotides on a 
+  sequence. This is represented as \verb|'2^3'|, which indicates that 
+  the real position happens between position 2 and 3. Getting 
+  this information from the object is very similar to 
+  \verb|WithinPosition|, the \verb|position| attribute specifies 
+  the lower boundary (2, in this case) and the \verb|extension| 
+  indicates the range to the higher boundary (1 in this case).
+\end{description}
+
+Now that we've got all of the types of fuzzy positions we can have taken care of, we are ready to actually specify a location on a sequence. This is handled by the \verb|FeatureLocation| class. An object of this type basically just holds the potentially fuzzy start and end positions of a feature. You can create a \verb|FeatureLocation| object by creating the positions and passing them in:
+
+\begin{verbatim}
+>>> from Bio import SeqFeature
+>>> start_pos = SeqFeature.AfterPosition(5)
+>>> end_pos = SeqFeature.BetweenPosition(8, 1)
+>>> my_location = SeqFeature.FeatureLocation(start_pos, end_pos)
+\end{verbatim}
+
+If you print out a \verb|FeatureLocation| object, you can get a nice representation of the information:
+
+\begin{verbatim}
+>>> print my_location
+[>5:(8^9)]
+\end{verbatim}
+
+We can access the fuzzy start and end positions using the start and end attributes of the location:
+
+\begin{verbatim}
+>>> my_location.start
+<Bio.SeqFeature.AfterPosition instance at 0x101d7164>
+>>> print my_location.start
+>5
+>>> print my_location.end
+(8^9)
+\end{verbatim}
+
+If you don't want to deal with fuzzy positions and just want numbers, you just need to ask for the \verb|nofuzzy_start| and \verb|nofuzzy_end| attributes of the location:
+
+\begin{verbatim}
+>>> my_location.nofuzzy_start 
+5
+>>> my_location.nofuzzy_end
+8
+\end{verbatim}
+
+Notice that this just gives you back the position attributes of the fuzzy locations.
+
+
+Similary, to make it easy to create a position without worrying about fuzzy positions, you can just pass in numbers to the \verb|FeaturePosition| constructors, and you'll get back out \verb|ExactPosition| objects:
+
+\begin{verbatim}
+>>> exact_location = SeqFeature.FeatureLocation(5, 8)
+>>> print exact_location
+[5:8]
+>>> exact_location.start
+<Bio.SeqFeature.ExactPosition instance at 0x101dcab4>
+\end{verbatim}
+
+That is all of the nitty gritty about dealing with fuzzy positions in Biopython. It has been designed so that dealing with fuzziness is not that much more complicated than dealing with exact positions, and hopefully you find that true!
+ 
+\subsubsection{References}
+
+Another common annotation related to a sequence is a reference to a journal or other published work dealing with the sequence. We have a fairly simple way of representing a Reference in Biopython -- we have a \verb|Bio.SeqFeature.Reference| class that stores the relevant information about a reference as attributes of an object.
+
+
+The attributes include things that you would expect to see in a reference like \verb|journal|, \verb|title| and \verb|authors|. Additionally, it also can hold the \verb|medline_id| and \verb|pubmed_id| and a \verb|comment| about the reference. These are all accessed simply as attributes of the object.
+
+
+A reference also has a \verb|location| object so that it can specify a particular location on the sequence that the reference refers to. For instance, you might have a journal that is dealing with a particular gene located on a BAC, and want to specify that it only refers to this position exactly. The \verb|location| is a potentially fuzzy location, as described in section~\ref{sec:locations}.
+
+
+That's all there is too it. References are meant to be easy to deal with, and hopefully general enough to cover lots of usage cases.
 
 \section{Regression Testing Framework}
 \label{sec:regr_test}
