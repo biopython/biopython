@@ -168,6 +168,7 @@ and html formats
 \end{enumerate}
 
 \chapter{Quick Start -- What can you do with Biopython?}
+\label{chapter:quick-start}
 
 This section is designed to get you started quickly with Biopython, and to give a general overview of what is available and how to use it. All of the examples in this section assume that you have some general working knowledge of python, and that you have successfully installed Biopython on your system. If you think you need to brush up on your python, the main python web site provides quite a bit of free documentation to get started with (\url{http://www.python.org/doc/}). 
 
@@ -186,7 +187,7 @@ One thing to note about Biopython is that it often provides multiple ways of ``d
 \section{Working with sequences}
 \label{sec:sequences}
 
-Disputedly (of course!), the central object in bioinformatics is the sequence. Thus, we'll start with a quick introduction to the Biopython mechanisms for dealing with sequences, the \verb|Seq| object, which we'll discuss in more detail in Chapter~\ref{seq:sequence-chapter}.
+Disputedly (of course!), the central object in bioinformatics is the sequence. Thus, we'll start with a quick introduction to the Biopython mechanisms for dealing with sequences, the \verb|Seq| object, which we'll discuss in more detail in Chapter~\ref{chapter:Bio.Seq}.
 
 Most of the time when we think about sequences we have in my mind a string of letters like \verb|'AGTACACTGGT'|. You can create such \verb|Seq| object with this sequence as follows - the ``$>>>$'' represents the python prompt followed by what you would type in:
 
@@ -199,7 +200,7 @@ Alphabet()
 AGTACACTGGT
 \end{verbatim}
 
-What we have here is a sequence object with a generic alphabet - reflecting the fact we have specified if this is a DNA or protein sequence (okay, a protein with a lot of Alanines, Glycines, Cysteines and Threonines!).  We'll talk more about alphabets in Chapter~\ref{seq:sequence-chapter}.
+What we have here is a sequence object with a generic alphabet - reflecting the fact we have specified if this is a DNA or protein sequence (okay, a protein with a lot of Alanines, Glycines, Cysteines and Threonines!).  We'll talk more about alphabets in Chapter~\ref{chapter:Bio.Seq}.
 
 In addition to having an alphabet, the \verb|Seq| object differs from the python string in the methods it supports.  You can't do this with a plain string:
 
@@ -212,7 +213,7 @@ Seq('TCATGTGACCA', Alphabet())
 Seq('ACCAGTGTACT', Alphabet())
 \end{verbatim}
 
-The next most important class is the \verb|SeqRecord| or Sequence Record.  This holds a sequence with additional annotation including an identifier, name and description.  The \verb|Bio.SeqIO| module for reading and writing sequence file formats works with \verb|SeqRecord| objects, which will be introduced below and cover in more detail by Chapter~\ref{sec:SeqIO}.
+The next most important class is the \verb|SeqRecord| or Sequence Record.  This holds a sequence with additional annotation including an identifier, name and description.  The \verb|Bio.SeqIO| module for reading and writing sequence file formats works with \verb|SeqRecord| objects, which will be introduced below and cover in more detail by Chapter~\ref{chapter:Bio.SeqIO}.
 
 This covers the basic features and uses of the Biopython sequence class. There is a more detailed description of the design ideas behind the sequence class in the Advanced section of this tutorial. This class is still under development and comments on the design and use are, of course, very welcome. Now that you've got some idea of what it is like to interact with the Biopython libraries, it's time to delve into the fun, fun world of dealing with biological file formats!
 
@@ -238,7 +239,7 @@ That gives us enough to get started delving for more information. So, let's look
 
 A large part of much bioinformatics work involves dealing with the many types of file formats designed to hold biological data. These files are loaded with interesting biological data, and a special challenge is parsing these files into a format so that you can manipulate them with some kind of programming language. However the task of parsing these files can be frustrated by the fact that the formats can change quite regularly, and that formats may contain small subtleties which can break even the most well designed parsers. 
 
-We are going to briefly introduce the \verb|Bio.SeqIO| module, available in Biopython 1.43 and later.  If you are using an older version of Biopython we encourage you to update (or find an old edition of this tutorial!). You can find out more in Chapter~\ref{sec:SeqIO}.
+We are going to briefly introduce the \verb|Bio.SeqIO| module, available in Biopython 1.43 and later.  If you are using an older version of Biopython we encourage you to update (or find an old edition of this tutorial!). You can find out more in Chapter~\ref{chapter:Bio.SeqIO}.
 
 We'll start with an online search for our friends, the lady slipper orchids. Let's just take a look through the nucleotide databases at NCBI, using an Entrez online search (\url{http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?db=Nucleotide}) for everything mentioning the text Cypripedioideae (this is the subfamily of lady slipper orchids). When this tutorial was originally written, this search gave us only 94 hits, which we saved as a FASTA formatted text file (\href{examples/ls_orchid.fasta}{ls\_orchid.fasta}; also available online \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.fasta}{here}) and as a GenBank formatted text file (\href{examples/ls_orchid.gbk}{ls\_orchid.gbk}; also available online \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.gbk}{here}).
 
@@ -317,7 +318,7 @@ This time \verb|Bio.SeqIO| has been able to choose a sensible alphabet, IUPAC Am
 
 Biopython has a lot of parsers, and each has its own little special niches based on the sequence format it is parsing and all of that.  While the most popular file formats have parsers integrated into \verb|Bio.SeqIO|, for some of the rarer and unloved file formats there is either no parser at all, or an old parser which has not been linked in yet.
 
-Chapter~\ref{sec:SeqIO} covers \verb|Bio.SeqIO| in more detail.  Please also check the wiki page (\url{http://biopython.org/wiki/SeqIO}) for the latest information, or ask on the mailing list. The wiki page should includes an up to date list of supported file types, and more examples including writing sequences to a file, and converting between file formats.
+Chapter~\ref{chapter:Bio.SeqIO} covers \verb|Bio.SeqIO| in more detail.  Please also check the wiki page (\url{http://biopython.org/wiki/SeqIO}) for the latest information, or ask on the mailing list. The wiki page should includes an up to date list of supported file types, and more examples including writing sequences to a file, and converting between file formats.
 
 The next place to look for information about specific parsers and how to do cool things with them is in the Cookbook, Section~\ref{sec:cookbook} of this Tutorial. If you don't find the information you are looking for, please consider helping out your poor overworked documentors and submitting a cookbook entry about it! (once you figure out how to do it, that is!)
 
@@ -392,12 +393,14 @@ If you know what you want to do, but can't figure out how to do it, please feel 
 Enjoy the code!
 
 \chapter{Sequence objects}
-\label{seq:sequence-chapter}
+\label{chapter:Bio.Seq}
 
-Biological sequences are arguably the central object in Bioinformatics, and in this chapter we'll introduce the Biopython mechanism for dealing with sequences, the \verb|Seq| object (see also the \verb|SeqRecord| object which combines the sequence information with annotation).  Sequences are essentially strings of letters like \verb|AGTACACTGGT|, which seems very natural since this is the most common way that sequences are seen in biological file formats.
+Biological sequences are arguably the central object in Bioinformatics, and in this chapter we'll introduce the Biopython mechanism for dealing with sequences, the \verb|Seq| object.  
+In Chapter~\ref{chapter:Bio.SeqIO} on Sequence Input/Output, we'll see that the \verb|Seq| object is also used in the \verb|SeqRecord| object, which combines the sequence information with any annotation.
+
+Sequences are essentially strings of letters like \verb|AGTACACTGGT|, which seems very natural since this is the most common way that sequences are seen in biological file formats.
 
 There are two important differences between the \verb|Seq| object and standard python strings.  First of all the Seq object has a slightly different set of methods to a plain python string (for example, a \verb|reverse_complement()| method used for nucleotide sequences).
-
 Secondly, the \verb|Seq| object has an important attribute, \verb|alphabet|, which is an object describing what the individual characters making up the sequence string ``mean'', and how they should be interpreted.  For example, is \verb|AGTACACTGGT| a DNA sequence, or just a protein sequence that happens to be rich in Alanines, Glycines, Cysteines
 and Threonines?
 
@@ -508,6 +511,7 @@ If you are really do just need a plain string, for example to print out, write t
 \end{verbatim}
 
 \section{Nucleotide sequences and (reverse) complements}
+\label{sec:seq-reverse-complement}
 
 For nucleotide sequences, you can easily obtain the complement or reverse complement of a Seq object:
 
@@ -668,20 +672,39 @@ Similar to the transcriber, it is also possible to reverse translate a protein i
 Seq('GCTGTTATGGGTCGTTGGAAGGGTGGTCGTGCTGCTGGT', IUPACUnambiguousDNA())
 \end{verbatim}
 
-\chapter{Sequence Input/Output}
-\label{sec:SeqIO}
+\section{Working with directly strings}
 
-In this chapter we'll discuss the \verb|Bio.SeqIO| module introduced earlier in more detail.  This is a new interface added to Biopython 1.43, which aims to provide a simple interface for working with assorted sequence file formats in a uniform way.  The ``catch'' is that you have to work with SeqRecord ojects - which contain a \verb|Seq| object plus annotation like an identifier and description.
+To close this chapter, for those you who \emph{really} don't want to use the sequence objects, there are a few module level functions in \verb|Bio.Seq| which will accept plain python strings (or \verb|Seq| objects or \verb|MutableSeq| objects):
+
+\begin{verbatim}
+>>> from Bio.Seq import reverse_complement, transcribe, back_transcribe, translate
+>>> my_string = "GCTGTTATGGGTCGTTGGAAGGGTGGTCGTGCTGCTGGTTAG"
+>>> reverse_complement(my_string)
+'CTAACCAGCAGCACGACCACCCTTCCAACGACCCATAACAGC'
+>>> transcribe(my_string)
+'GCUGUUAUGGGUCGUUGGAAGGGUGGUCGUGCUGCUGGUUAG'
+>>> back_transcribe(my_string)
+'GCTGTTATGGGTCGTTGGAAGGGTGGTCGTGCTGCTGGTTAG'
+>>> translate(my_string)
+'AVMGRWKGGRAAG*'
+\end{verbatim}
+
+\noindent You are however, encouraged to work with the \verb|Seq| object by default.
+
+\chapter{Sequence Input/Output}
+\label{chapter:Bio.SeqIO}
+
+In this chapter we'll discuss in more detail the \verb|Bio.SeqIO| module, which was briefly introduced in Chapter~\ref{chapter:quick-start}. This is a relatively new interface, added in Biopython 1.43, which aims to provide a simple interface for working with assorted sequence file formats in a uniform way. The ``catch'' is that you have to work with \verb|SeqRecord| ojects - which contain a \verb|Seq| object (as described in Chapter~\ref{chapter:Bio.Seq}) plus annotation like an identifier and description.
 
 \section{Parsing or Reading Sequences}
 
-The workhorse function \verb|Bio.SeqIO.parse()| is used to read in sequence data as SeqRecord objects.  This function expects two arguments. The first argument is a {\it handle} to read the data from. A handle is typically a file opened for reading, but could be the output from a command line program, see Section~\ref{sec:appendix-handles} for more details.  The second argument is a lower case string specifying sequence format -- we don't try and guess the file format for you!
+The workhorse function \verb|Bio.SeqIO.parse()| is used to read in sequence data as SeqRecord objects.  This function expects two arguments. The first argument is a {\it handle} to read the data from. A handle is typically a file opened for reading, but could be the output from a command line program, or data downloaded from the internet -- see Section~\ref{sec:appendix-handles} for more about handles.  The second argument is a lower case string specifying sequence format -- we don't try and guess the file format for you!
 
-What you get back is an {\it iterator} which gives SeqRecord objects, which we'll talk about in more detail later, and is typically used in a for loop.
+What you get back is an {\it iterator} which gives \verb|SeqRecord| objects, which we'll talk about in more detail later, and is typically used in a for loop.
 
 \subsection{Reading Sequence Files}
 
-In general \verb|Bio.SeqIO.parse()| is used to read in sequence {\it files} as SeqRecord objects, and is typically used with a for loop like this:
+In general \verb|Bio.SeqIO.parse()| is used to read in sequence {\it files} as \verb|SeqRecord| objects, and is typically used with a for loop like this:
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -785,7 +808,7 @@ What's going on here with the \verb|.next()| method? Well its an alternative to 
 
 In the above examples, we have usually used a for loop to iterate over all the records one by one.  You can use the for loop for all sorts of Python objects (including lists, tuples and strings) which support the iteration interface.
 
-The object returned by \verb|Bio.SeqIO| is actually an iterator which returns SeqRecord objects.  You get to see each record in turn, but once and only once.  The plus point is that an iterator can save you memory when dealing with large files.
+The object returned by \verb|Bio.SeqIO| is actually an iterator which returns \verb|SeqRecord| objects.  You get to see each record in turn, but once and only once.  The plus point is that an iterator can save you memory when dealing with large files.
 
 Instead of using a for loop, can also use the \verb|.next()| method of an iterator to step through the entries, like this:
 
@@ -811,7 +834,7 @@ Note that if you try and use \verb|.next()| and there are no more results, you'l
 
 \subsection{Getting a list of the records in a sequence file}
 
-In the previous section we talked about the fact that \verb|Bio.SeqIO| gives you a SeqRecord iterator, and that you get the records one by one.  Very often you need to be able to access the records in any order. The Python {\it list} data type is perfect for this, and we can turn the SeqRecord iterator into a list of SeqRecord objects using the built-in Python function \verb|list()| like so:
+In the previous section we talked about the fact that \verb|Bio.SeqIO| gives you a \verb|SeqRecord| iterator, and that you get the records one by one.  Very often you need to be able to access the records in any order. The Python {\it list} data type is perfect for this, and we can turn the record iterator into a list of \verb|SeqRecord| objects using the built-in Python function \verb|list()| like so:
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -848,7 +871,7 @@ Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGGAATAAA ...', IUPACAmb
 740
 \end{verbatim}
 
-You can of course still use a for loop with a list of SeqRecord objects.  Using a list is much more flexible than an iterator (for example, you can determine the number of records from the length of the list), but does need more memory because it will hold all the records in memory at once.
+You can of course still use a for loop with a list of \verb|SeqRecord| objects.  Using a list is much more flexible than an iterator (for example, you can determine the number of records from the length of the list), but does need more memory because it will hold all the records in memory at once.
 
 \subsection{Extracting data}
 
@@ -1002,7 +1025,7 @@ print orchid_dict.keys()
 
 You should recognise these strings from when we parsed the FASTA file earlier in Section~\ref{sec:fasta-parsing}.  Suppose you would rather have something else as the keys - like the accesion numbers.  This brings us nicely to \verb|SeqIO.to_dict()|'s optional argument \verb|key_function|, which lets you define what to use as the dictionary key for your records.
 
-First you must write your own function to return the key you want (as a string) when given a SeqRecord object.  In general, the details of function will depend on the sort of input records you are dealing with.  But for our orchids, we can just split up the record's identifier using the ``pipe'' character (the vertical line) and return the fourth entry (field three):
+First you must write your own function to return the key you want (as a string) when given a \verb|SeqRecord| object.  In general, the details of function will depend on the sort of input records you are dealing with.  But for our orchids, we can just split up the record's identifier using the ``pipe'' character (the vertical line) and return the fourth entry (field three):
 
 \begin{verbatim}
 def get_accession(record) :
@@ -1072,9 +1095,9 @@ print record.description
 
 \section{Writing Sequence Files}
 
-We've talked about using \verb|Bio.SeqIO.parse()| for sequence input (reading files), and now we'll look at \verb|Bio.SeqIO.write()| which is for sequence output (writing files).  This is a function taking three arguments: some SeqRecord objects, a handle to write to, and a sequence format.
+We've talked about using \verb|Bio.SeqIO.parse()| for sequence input (reading files), and now we'll look at \verb|Bio.SeqIO.write()| which is for sequence output (writing files).  This is a function taking three arguments: some \verb|SeqRecord| objects, a handle to write to, and a sequence format.
 
-Here is an example, where we start by creating a few SeqRecord objects the hard way (by hand, rather than by loading them from a file):
+Here is an example, where we start by creating a few \verb|SeqRecord| objects the hard way (by hand, rather than by loading them from a file):
 
 \begin{verbatim}
 from Bio.Seq import Seq
@@ -1106,7 +1129,7 @@ rec3 = SeqRecord(Seq("MVTVEEFRRAQCAEGPATVMAIGTATPSNCVDQSTYPDYYFRITNSEHKVELKEKFKR
 my_records = [rec1, rec2, rec3]
 \end{verbatim}
 
-\noindent Now we have a list of SeqRecord objects, we'll write them to a FASTA format file:
+\noindent Now we have a list of \verb|SeqRecord| objects, we'll write them to a FASTA format file:
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -1138,7 +1161,7 @@ TGEGLEWGVLFGFGPGLTVETVVLHSVAT
 
 \subsection{Converting between sequence file formats}
 
-In previous example we used a list of SeqRecord objects as input to the \verb|Bio.SeqIO.write()| function, but it will also accept a SeqRecord interator like we get from \verb|Bio.SeqIO.parse()| -- this lets us do file conversion very succinctly. For this example we'll read in the GenBank format file \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.gbk}{ls\_orchid.gbk} and write it out in FASTA format:
+In previous example we used a list of \verb|SeqRecord| objects as input to the \verb|Bio.SeqIO.write()| function, but it will also accept a \verb|SeqRecord| interator like we get from \verb|Bio.SeqIO.parse()| -- this lets us do file conversion very succinctly. For this example we'll read in the GenBank format file \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.gbk}{ls\_orchid.gbk} and write it out in FASTA format:
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -1149,7 +1172,7 @@ in_handle.close()
 out_handle.close()
 \end{verbatim}
 
-You {\it can} in fact do this in one line, by being lazy about closing the file handles. This is arguably bad style, but its very concise:
+You {\it can} in fact do this in one line, by being lazy about closing the file handles. This is arguably bad style, but it is very concise:
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -1162,7 +1185,7 @@ Suppose you had a file of nucleotide sequences, and you wanted to turn it into a
 
 To start with, we'll use \verb|Bio.SeqIO.parse()| to load some nucleotide
 sequences from a file, then print out their reverse complements using
-the Seq object's built in \verb|.reverse_complement()| method:
+the \verb|Seq| object's built in \verb|.reverse_complement()| method (see Section~\ref{sec:seq-reverse-complement}):
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -1173,7 +1196,7 @@ for record in SeqIO.parse(in_handle, "genbank") :
 in_handle.close()
 \end{verbatim}
 
-Now, if we want to save these reverse complements to a file, we'll need to make SeqRecord objects.
+Now, if we want to save these reverse complements to a file, we'll need to make \verb|SeqRecord| objects.
 For this I think its most elegant to write our own function, where we can decide how to name our
 new records:
 
@@ -1215,7 +1238,7 @@ records = [make_rc_record(rec) for rec in SeqIO.parse(in_handle, "fasta")]
 records = [make_rc_record(rec) for rec in SeqIO.parse(in_handle, "fasta") if len(rec.seq) < 700]
 \end{verbatim}
 
-That would create an in memory list of reverse complement SeqRecords where the sequence length was under 700 base pairs. However, if you are using Python 2.4 or later, we can do exactly the same with a generator expression - but with the advantage that this does not create a list of all the records in memory at once:
+That would create an in memory list of reverse complement records where the sequence length was under 700 base pairs. However, if you are using Python 2.4 or later, we can do exactly the same with a generator expression - but with the advantage that this does not create a list of all the records in memory at once:
 
 \begin{verbatim}
 records = (make_rc_record(rec) for rec in SeqIO.parse(in_handle, "fasta") if len(rec.seq) < 700)
@@ -1254,7 +1277,6 @@ SeqIO.write(records, open("rev_comp.fasta", "w"), "fasta")
 \label{sec:blast}
 
 Hey, everybody loves BLAST right? I mean, geez, how can get it get any easier to do comparisons between one of your sequences and every other sequence in the known world? Heck, if I was writing the code to do that it would probably take about a day and a half to complete, and the results still wouldn't be as good. But, of course, this section isn't about how cool BLAST is, since we already know that. It is about the problem with BLAST -- it can be really difficult to deal with the volume of data generated by large runs, and to automate BLAST runs in general.
-
 
 Fortunately, the Biopython folks know this only too well, so they've developed lots of tools for dealing with BLAST and making things much easier. This section details how to use these tools and do useful things with 'em. 
 
