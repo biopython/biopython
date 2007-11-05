@@ -20,7 +20,7 @@ class Generic_dbutils:
     def last_id(self, cursor, table):
         # XXX: Unsafe without transactions isolation
         table = self.tname(table)
-        sql = r"select max(%s_id) from %s" % table
+        sql = r"select max(%s_id) from %s" % (table, table)
         cursor.execute(sql)
         rv = cursor.fetchone()
         return rv[0]
