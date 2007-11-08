@@ -240,6 +240,7 @@ class DatabaseLoader:
          %s,
          %s,
          %s,
+         %s,
          %s)"""
         self.adaptor.execute(sql, (self.dbid,
                                    record.name, 
