@@ -37,7 +37,7 @@ class Mysql_dbutils(Generic_dbutils):
         except AttributeError:
             #See bug 2390
             #Google suggests this is the new way,
-            #same fix also suggested by Eric Gilbert:
+            #same fix also suggested by Eric Gibert:
             return cursor.lastrowid
         
 _dbutils["MySQLdb"] = Mysql_dbutils
