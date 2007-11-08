@@ -31,7 +31,15 @@ class Generic_dbutils:
 
 class Mysql_dbutils(Generic_dbutils):
     def last_id(self, cursor, table):
-        return cursor.insert_id()
+        try :
+            #This worked on older versions of MySQL
+            return cursor.insert_id()
+        except AttributeError:
+            #See bug 2390
+            #Google suggests this is the new way,
+            #same fix also suggested by Eric Gilbert:
+            return cursor.lastrowid
+        
 _dbutils["MySQLdb"] = Mysql_dbutils
 
 class Psycopg_dbutils(Generic_dbutils):
