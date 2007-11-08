@@ -51,6 +51,7 @@ def _retrieve_seq(adaptor, primary_id):
         " WHERE bioentry_id = %s", (primary_id,))
     if seqs:
         moltype, length = seqs[0]
+        moltype = moltype.lower() #might be upper case in database
         from Bio.Alphabet import IUPAC
         if moltype == "dna":
             alphabet = IUPAC.unambiguous_dna
