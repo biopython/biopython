@@ -9,7 +9,7 @@ Functions:
 splitany       Split a string using many delimiters.
 find_anychar   Find one of a list of characters in a string.
 rfind_anychar  Find one of a list of characters in a string, from end to start.
-starts_with    Check whether a string starts with another string.
+starts_with    Check whether a string starts with another string [DEPRECATED].
 
 """
 def splitany(s, sep=" \011\012\013\014\015", maxsplit=None, negate=0):
@@ -70,14 +70,15 @@ def rfind_anychar(string, chars, index=None, negate=0):
     # If not found, index will already be -1.
     return index
 
-# XXX should deprecate.  Python 2.0 and above has ''.startswith function.
 def starts_with(s, start):
     """starts_with(s, start) -> 1/0
 
     Return whether s begins with start.
 
     """
-    return s[:len(start)] == start
+    import warnings
+    warnings.warn("The starts_with function in Bio.stringfns was deprecated. Please use s.startswith(start) instead of starts_with(s, start)", DeprecationWarning)
+    return s.startswith(start)
 
 # Try and load C implementations of functions.  If I can't,
 # then just ignore and use the pure python implementations.
