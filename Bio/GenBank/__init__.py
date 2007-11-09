@@ -1280,7 +1280,7 @@ class NCBIDictionary:
         to change the results into another form.  If unspecified, then
         the raw contents of the file will be returned.
         """
-        from Bio import db
+        from Bio.config.DBRegistry import db #See bug 2393
         self.parser = parser
         if database not in self.__class__.VALID_DATABASES:
             raise ValueError("Invalid database %s, should be one of %s" %
