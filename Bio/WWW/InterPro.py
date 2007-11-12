@@ -12,10 +12,7 @@ Functions:
 get_interpro_entry
 
 """
-import time
 import urllib
-
-from Bio import File
 
 
 def get_interpro_entry( id ):
