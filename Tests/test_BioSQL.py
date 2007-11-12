@@ -265,7 +265,7 @@ class SeqInterfaceTest(unittest.TestCase):
         test_features = self.item.features
         cds_feature = test_features[6]
         assert cds_feature.type == "CDS", cds_feature.type
-        assert str(cds_feature.location) == "(103..579)", \
+        assert str(cds_feature.location) == "[103:579]", \
             str(cds_feature.location)
         for sub_feature in cds_feature.sub_features:
             assert sub_feature.type == "CDS"
@@ -273,6 +273,8 @@ class SeqInterfaceTest(unittest.TestCase):
        
         ann = cds_feature.qualifiers["gene"]
         assert ann == ["kin2"]
+        assert "db_xref" in cds_feature.qualifiers, \
+            cds_feature.qualifiers.keys()
         multi_ann = cds_feature.qualifiers["db_xref"]
         assert len(multi_ann) == 2
         assert "GI:16354" in multi_ann
@@ -376,7 +378,7 @@ class InDepthLoadTest(unittest.TestCase):
         # test single locations
         test_feature = features[0]
         assert test_feature.type == "source"
-        assert str(test_feature.location) == "(0..206)"
+        assert str(test_feature.location) == "[0:206]"
         assert len(test_feature.qualifiers.keys()) == 3
         assert test_feature.qualifiers.has_key("organism")
         assert test_feature.qualifiers["organism"] == ["Armoracia rusticana"]
@@ -384,12 +386,12 @@ class InDepthLoadTest(unittest.TestCase):
         # test split locations
         test_feature = features[4]
         assert test_feature.type == "CDS", test_feature.type
-        assert str(test_feature.location) == "(0..206)"
+        assert str(test_feature.location) == "[0:206]"
         assert len(test_feature.sub_features) == 2
-        assert str(test_feature.sub_features[0].location) == "(0..48)"
+        assert str(test_feature.sub_features[0].location) == "[0:48]"
         assert test_feature.sub_features[0].type == "CDS"
         assert test_feature.sub_features[0].location_operator == "join"
-        assert str(test_feature.sub_features[1].location) == "(142..206)"
+        assert str(test_feature.sub_features[1].location) == "[142:206]"
         assert test_feature.sub_features[1].type == "CDS"
         assert test_feature.sub_features[1].location_operator == "join"
         assert len(test_feature.qualifiers.keys()) == 6
