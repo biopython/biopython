@@ -8,11 +8,8 @@
 """
 # standard library
 import os
-import copy
 
 # Biopython
-from Bio import File
-
 from Bio import InterPro
 
 test_files = ['IPR001064.htm', 'IPR001171.htm', 'IPR001391.htm',
