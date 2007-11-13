@@ -27,7 +27,7 @@ for test_file in test_files:
     print seq_record.id
     print seq_record.name
     print seq_record.description
-    print seq_record.seq
+    print repr(seq_record.seq)
 
     print "*Using RecordParser"
     test_handle = open(datafile)
