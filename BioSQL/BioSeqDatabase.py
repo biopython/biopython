@@ -394,24 +394,20 @@ class BioSeqDatabase:
     def load(self, record_iterator):
         """Load a set of SeqRecords into the BioSQL database.
 
-        record_iterator is an Iterator object that returns SeqRecord objects
-        which will be used to populate the database. The Iterator should
-        implement next() and either return None or raise StopIteration
-        when it is out of objects.
+        record_iterator is either a list of SeqRecord objects, or an
+        Iterator object that returns SeqRecord objects (such as the
+        output from the Bio.SeqIO.parse() function), which will be
+        used to populate the database.
+
+        Example:
+        from Bio import SeqIO
+        count = db.load(SeqIO.parse(open(filename), format))
 
         Returns the number of records loaded.
         """
         db_loader = Loader.DatabaseLoader(self.adaptor, self.dbid)
         num_records = 0
-        while 1:
-            try:
-                cur_record = record_iterator.next()
-            except StopIteration:
-                break
-            if cur_record is None:
-                break
+        for cur_record in record_iterator :
             num_records += 1
             db_loader.load_seqrecord(cur_record)
-
         return num_records
-        
