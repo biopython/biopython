@@ -22,16 +22,28 @@ class Seq:
         self.alphabet = alphabet                   # Seq API requirement
 
     def __repr__(self):
-        return "%s(%s, %s)" % (self.__class__.__name__,
-                               repr(self.data),
-                               repr(self.alphabet))
+        """Returns a (truncated) representation of the sequence for debugging"""
+        if len(self) > 60 :
+            #Shows the last three letters as it is often useful to see if there
+            #is a stop codon at the end of a sequence.
+            #Note total length is 54+3+3=60
+            return "%s('%s...%s', %s)" % (self.__class__.__name__,
+                                   self.data[:54], self.data[-3:],
+                                   repr(self.alphabet))
+        else :
+            return "%s(%s, %s)" % (self.__class__.__name__,
+                                   repr(self.data),
+                                   repr(self.alphabet))
     def __str__(self):
-        if len(self.data) > 60:
-            s = repr(self.data[:60] + " ...")
-        else:
-            s = repr(self.data)
-        return "%s(%s, %s)" % (self.__class__.__name__, s,
-                               repr(self.alphabet))
+        """Returns the full sequence as a python string
+
+        Note that Biopython 1.44 and earlier would give a truncated
+        version of repr(my_seq) for str(my_seq).  If you are writing code
+        which need to be backwards compatible with old Biopython, you
+        should continue to use my_seq.tostring() rather than str(my_seq)
+        """
+        return self.data
+
     # I don't think I like this method...
 ##    def __cmp__(self, other):
 ##        if isinstance(other, Seq):
@@ -74,6 +86,10 @@ class Seq:
 
 
     def tostring(self):                            # Seq API requirement
+        """Returns the full sequence as a python string
+
+        Although not formally deprecated, you are now encouraged to use
+        str(my_seq) instead of my_seq.tostring()"""
         return self.data
 
     def tomutable(self):   # Needed?  Or use a function?
@@ -167,17 +183,23 @@ class MutableSeq:
             self.data = data   # assumes the input is an array
         self.alphabet = alphabet
     def __repr__(self):
+        """Returns a representation of the sequence for debugging"""
+        #TODO - Truncate long entries?
+        #TODO - Show using a string for data rather than an array?
         return "%s(%s, %s)" % (self.__class__.__name__,
                                repr(self.data),
                                repr(self.alphabet))
 
     def __str__(self):
-        if len(self.data) > 60:
-            s = repr(string.join(self.data[:60], "") + " ...")
-        else:
-            s = repr(string.join(self.data, ""))
-        return "%s(%s, %s)" % (self.__class__.__name__, s,
-                               repr(self.alphabet))
+        """Returns the full sequence as a python string
+
+        Note that Biopython 1.44 and earlier would give a truncated
+        version of repr(my_seq) for str(my_seq).  If you are writing code
+        which need to be backwards compatible with old Biopython, you
+        should continue to use my_seq.tostring() rather than str(my_seq)
+        """
+        return string.join(self.data, "")
+
     def __cmp__(self, other):
         if isinstance(other, MutableSeq):
             x = cmp(self.alphabet, other.alphabet)
@@ -361,9 +383,14 @@ class MutableSeq:
                 self.data.append(c)
 
     def tostring(self):
+        """Returns the full sequence as a python string
+
+        Although not formally deprecated, you are now encouraged to use
+        str(my_seq) instead of my_seq.tostring()"""
         return string.join(self.data, "")
 
     def toseq(self):
+        """Returns the full sequence as a new immutable Seq object"""
         return Seq(string.join(self.data, ""), self.alphabet)
 
 
