@@ -183,6 +183,19 @@ class MutableSeq:
             self.data = data   # assumes the input is an array
         self.alphabet = alphabet
     def __repr__(self):
+        """Returns a (truncated) representation of the sequence for debugging"""
+        if len(self) > 60 :
+            #Shows the last three letters as it is often useful to see if there
+            #is a stop codon at the end of a sequence.
+            #Note total length is 54+3+3=60
+            return "%s('%s...%s', %s)" % (self.__class__.__name__,
+                                   str(self[:54]), str(self[-3:]),
+                                   repr(self.alphabet))
+        else :
+            return "%s('%s', %s)" % (self.__class__.__name__,
+                                   str(self),
+                                   repr(self.alphabet))
+
         """Returns a representation of the sequence for debugging"""
         #TODO - Truncate long entries?
         #TODO - Show using a string for data rather than an array?
