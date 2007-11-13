@@ -1,0 +1,14 @@
+//Parameters for the coalescence simulation program : simcoal.exe
+1 samples
+//Population effective sizes (number of genes 2*diploids)
+?pop_size
+//Samples sizes (number of genes 2*diploids)
+?sample_size
+//Growth rates	: negative growth implies population expansion
+0
+//Number of migration matrices : 0 implies no migration between demes
+0
+//historical event: time, source, sink, migrants, new deme size, new growth rate, migration matrix index
+2 historical events
+?contract_gen 0 0 1 !!!1.0*?ne1/?ne2!!! 0 1
+?expand_gen 0 0 1 !!!1.0*?ne2/?pop_size!!! 0 1
