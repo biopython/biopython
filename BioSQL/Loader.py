@@ -450,7 +450,8 @@ class DatabaseLoader:
                 # now add all of the values to their table
                 for qual_value_rank in range(len(qualifiers[qualifier_key])):
                     qualifier_value = qualifiers[qualifier_key][qual_value_rank]
-                    sql = r"INSERT INTO seqfeature_qualifier_value VALUES" \
+                    sql = r"INSERT INTO seqfeature_qualifier_value "\
+                          r" (seqfeature_id, term_id, rank, value) VALUES"\
                           r" (%s, %s, %s, %s)"
                     self.adaptor.execute(sql, (seqfeature_id,
                                                qualifier_key_id,
