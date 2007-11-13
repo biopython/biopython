@@ -64,7 +64,7 @@ for parser in all_parsers:
 
             if isinstance(parser, GenBank.FeatureParser):
                 print "***Record from the FeatureParser"
-                print "Seq:", cur_record.seq
+                print "Seq:", repr(cur_record.seq)
                 print "Id:", cur_record.id
                 print "Name:", cur_record.name
                 print "Description", cur_record.description
