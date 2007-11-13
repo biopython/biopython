@@ -52,7 +52,7 @@ for test in tests:
     print data.id
     print data.name
     print data.description
-    print data.seq
+    print repr(data.seq)
 
 tests = [ 'aster.pro', 'rosemary.pro', 'rose.pro', 'loveliesbleeding.pro' ]
 sequence_parser = Fasta.SequenceParser(Alphabet.generic_protein, title_to_ids)
@@ -71,4 +71,4 @@ for test in tests:
     print data.id
     print data.name
     print data.description
-    print data.seq[ :60]
+    print repr(data.seq)
