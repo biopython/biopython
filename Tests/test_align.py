@@ -71,13 +71,14 @@ print 'all_seqs...'
 all_seqs = alignment.get_all_seqs()
 for seq_record in all_seqs:
     print 'description:', seq_record.description
-    print 'seq:', seq_record.seq
+    print 'seq:', repr(seq_record.seq)
 print 'length:', alignment.get_alignment_length()
 
 print 'Calculating summary information...'
 align_info = AlignInfo.SummaryInfo(alignment)
 consensus = align_info.dumb_consensus()
-print 'consensus:', consensus
+assert isinstance(consensus, Seq.Seq)
+print 'consensus:', repr(consensus)
 
 
 print 'Replacement dictionary'
@@ -133,12 +134,13 @@ print 'all_seqs...'
 all_seqs = alignment.get_all_seqs()
 for seq_record in all_seqs:
     print 'description:', seq_record.description
-    print 'seq:', seq_record.seq
+    print 'seq:', repr(seq_record.seq)
 
 print 'length:', alignment.get_alignment_length()
 align_info = AlignInfo.SummaryInfo(alignment)
 consensus = align_info.dumb_consensus(ambiguous = "X")
-print 'consensus:', consensus
+assert isinstance(consensus, Seq.Seq)
+print 'consensus:', repr(consensus)
 
 print alignment
 
