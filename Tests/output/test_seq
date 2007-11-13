@@ -112,7 +112,7 @@ Seq('AUGAAACUG', DNAAlphabet()) -> Seq('AUGAAACUG', RNAAlphabet())
 Seq('ATGAAACTG', RNAAlphabet()) -> Seq('AUGAAACUG', RNAAlphabet())
 Seq('ATGAAACTG', NucleotideAlphabet()) -> Seq('AUGAAACUG', RNAAlphabet())
 Seq('AUGAAACTG', NucleotideAlphabet()) -> Seq('AUGAAACUG', RNAAlphabet())
-MutableSeq(array('c', 'ATGAAACTG'), RNAAlphabet()) -> Seq('AUGAAACUG', RNAAlphabet())
+MutableSeq('ATGAAACTG', RNAAlphabet()) -> Seq('AUGAAACUG', RNAAlphabet())
 Seq('ACTGTCGTCT', ProteinAlphabet()) -> Proteins cannot be transcribed!
 
 Back-transcribe RNA into DNA
@@ -125,7 +125,7 @@ Seq('AUGAAACUG', DNAAlphabet()) -> Seq('AUGAAACUG', RNAAlphabet())
 Seq('ATGAAACTG', RNAAlphabet()) -> Seq('AUGAAACUG', RNAAlphabet())
 Seq('ATGAAACTG', NucleotideAlphabet()) -> Seq('AUGAAACUG', RNAAlphabet())
 Seq('AUGAAACTG', NucleotideAlphabet()) -> Seq('AUGAAACUG', RNAAlphabet())
-MutableSeq(array('c', 'ATGAAACTG'), RNAAlphabet()) -> Seq('AUGAAACUG', RNAAlphabet())
+MutableSeq('ATGAAACTG', RNAAlphabet()) -> Seq('AUGAAACUG', RNAAlphabet())
 Seq('ACTGTCGTCT', ProteinAlphabet()) -> Proteins cannot be transcribed!
 
 Reverse Complement
@@ -146,7 +146,7 @@ Seq('ATGAAACTG', NucleotideAlphabet())
 -> Seq('CAGTTTCAT', NucleotideAlphabet())
 Seq('AUGAAACTG', NucleotideAlphabet())
 -> Seq('CTGUUUCAU', NucleotideAlphabet())
-MutableSeq(array('c', 'ATGAAACTG'), RNAAlphabet())
+MutableSeq('ATGAAACTG', RNAAlphabet())
 -> Seq('CTGUUUCTU', RNAAlphabet())
 Seq('ACTGTCGTCT', ProteinAlphabet())
 -> Proteins do not have complements!
@@ -169,7 +169,7 @@ Seq('ATGAAACTG', NucleotideAlphabet())
 -> Seq('MKL', HasStopCodon(IUPACProtein(), '*'))
 Seq('AUGAAACTG', NucleotideAlphabet())
 -> Seq('MKL', HasStopCodon(IUPACProtein(), '*'))
-MutableSeq(array('c', 'ATGAAACTG'), RNAAlphabet())
+MutableSeq('ATGAAACTG', RNAAlphabet())
 -> Seq('MKL', HasStopCodon(IUPACProtein(), '*'))
 Seq('ACTGTCGTCT', ProteinAlphabet())
 -> Proteins cannot be translated!

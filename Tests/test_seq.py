@@ -14,12 +14,12 @@ print s[0]
 print s[-1]
 print s[3:5].tostring()
 
-print "Reverse using -1 stride:", s[::-1]
+print "Reverse using -1 stride:", repr(s[::-1])
 
 print "Extract every third nucleotide (slicing with stride 3):"
-print s[0::3]
-print s[1::3]
-print s[2::3]
+print repr(s[0::3])
+print repr(s[1::3])
+print repr(s[2::3])
 
 print s.alphabet.letters
 
@@ -56,38 +56,38 @@ array_seq = MutableSeq(array.array("c", "TCAAAAGGATGCATCATG"),
 converted_seq = s.tomutable()
 
 for test_seq in [string_seq]:
-    print test_seq
+    print repr(test_seq)
     print test_seq.tostring()
     print len(test_seq)
-    print test_seq.toseq()
+    print repr(test_seq.toseq())
 
     print test_seq[0]
-    print test_seq[1:5]
-
+    print repr(test_seq[1:5])
+    
     test_seq[1:3] = "GAT"
-    print "Set slice with string:", test_seq
+    print "Set slice with string:", repr(test_seq)
     test_seq[1:3] = test_seq[5:7]
-    print "Set slice with MutableSeq:", test_seq
+    print "Set slice with MutableSeq:", repr(test_seq)
     test_seq[1:3] = array.array("c", "GAT")
-    print "Set slice with array:", test_seq
+    print "Set slice with array:", repr(test_seq)
 
     test_seq[3] = "G"
-    print "Set item:", test_seq
+    print "Set item:", repr(test_seq)
 
     del test_seq[4:5]
-    print "Delete slice:", test_seq
+    print "Delete slice:", repr(test_seq)
     del test_seq[3]
-    print "Delete item:", test_seq
+    print "Delete item:", repr(test_seq)
 
     test_seq.append("C")
-    print "Append:", test_seq
+    print "Append:", repr(test_seq)
     test_seq.insert(4, "G")
-    print "Insert:", test_seq
+    print "Insert:", repr(test_seq)
 
     print "Pop off the last item:", test_seq.pop()
 
     test_seq.remove("G")
-    print "Removed Gs:", test_seq
+    print "Removed Gs:", repr(test_seq)
 
     try:
         test_seq.remove("Z")
@@ -99,26 +99,26 @@ for test_seq in [string_seq]:
     print "A index:", test_seq.index("A")
 
     test_seq.reverse()
-    print "Reversed Seq:", test_seq
+    print "Reversed Seq:", repr(test_seq)
 
-    print "Reverse using -1 stride:", test_seq[::-1]
+    print "Reverse using -1 stride:", repr(test_seq[::-1])
     
 
     test_seq.extend("GAT")
     test_seq.extend(MutableSeq("TTT", IUPAC.ambiguous_dna))
-    print "Extended Seq:", test_seq
+    print "Extended Seq:", repr(test_seq)
 
     del test_seq[4:6:-1]
-    print "Delete stride slice:", test_seq
+    print "Delete stride slice:", repr(test_seq)
 
     print "Extract every third nucleotide (slicing with stride 3):"
-    print test_seq[0::3]
-    print test_seq[1::3]
-    print test_seq[2::3]
+    print repr(test_seq[0::3])
+    print repr(test_seq[1::3])
+    print repr(test_seq[2::3])
     
     print "Setting wobble codon to N (set slice with stride 3):"
     test_seq[2::3] = "N" * len(test_seq[2::3])
-    print test_seq
+    print repr(test_seq)
 
 ###########################################################################
 from Bio.Data.IUPACData import ambiguous_dna_complement, ambiguous_rna_complement
