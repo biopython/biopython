@@ -79,8 +79,42 @@ class Seq:
     def tomutable(self):   # Needed?  Or use a function?
         return MutableSeq(self.data, self.alphabet)
     
-    def count(self, item):
-        return len([x for x in self.data if x == item])
+    def count(self, sub, start=None, end=None):
+        """Count method, like that of a python string.
+
+        Return an integer, the number of occurrences of substring
+        argument sub in the (sub)sequence given by [start:end].
+        Optional arguments start and end are interpreted as in slice
+        notation.
+    
+        sub - a string or another Seq object to look for
+        start - optional integer, slice start
+        end - optional integer, slice end
+
+        e.g.
+        from Bio.Seq import Seq
+        my_seq = Seq("AAAATGA")
+        print my_seq.count("A")
+        print my_seq.count("ATG")
+        print my_seq.count(Seq("AT"))
+        print my_seq.count("AT", 2, -1)
+        """
+        try :
+            #Assume sub is a Seq or MutableSeq object, so pass
+            #it to the string's count method as a string.
+            #TODO - Should we check the alphabet?
+            search = sub.tostring()
+        except AttributeError:
+            #Assume sub is a string.
+            search = sub
+
+        #TODO - More elegant way of doing this splice notation
+        if start is None and end is None :
+            return self.data.count(search)
+        elif end is None :
+            return self.data.count(search, start)
+        else :
+            return self.data.count(search, start, end)
 
     def __maketrans(self, alphabet) :
         """Seq.__maketrans(alphabet) -> translation table.
@@ -228,12 +262,53 @@ class MutableSeq:
                 del self.data[i]
                 return
         raise ValueError, "MutableSeq.remove(x): x not in list"
-    def count(self, item):
-        count = 0
-        for c in self.data:
-            if c == item:
-                count = count + 1
-        return count
+
+    def count(self, sub, start=None, end=None):
+        """Count method, like that of a python string.
+
+        Return an integer, the number of occurrences of substring
+        argument sub in the (sub)sequence given by [start:end].
+        Optional arguments start and end are interpreted as in slice
+        notation.
+    
+        sub - a string or another Seq object to look for
+        start - optional integer, slice start
+        end - optional integer, slice end
+
+        e.g.
+        from Bio.Seq import MutableSeq
+        my_mseq = MutableSeq("AAAATGA")
+        print my_mseq.count("A")
+        print my_mseq.count("ATG")
+        print my_mseq.count(Seq("AT"))
+        print my_mseq.count("AT", 2, -1)
+        """
+        if len(sub) == 1 :
+            #Try and be efficient and work directly from the array.
+            try :
+                #Assume item is a single letter Seq/MutableSeq
+                #TODO - Should we check the alphabet?
+                letter = sub.tostring()
+            except AttributeError :
+                letter = sub
+
+            count = 0
+            #TODO - More elegant way of doing this splice notation
+            if start is None and end is None :
+                for c in self.data:
+                    if c == letter: count += 1
+            elif end is None :
+                for c in self.data[start:]:
+                    if c == letter: count += 1
+            else :
+                for c in self.data[start:end]:
+                    if c == letter: count += 1
+            return count
+        else :
+            #TODO - Can we do this more efficiently?
+            #We could use the self.tostring().count(...) method
+            return self.toseq().count(sub, start, end)
+
     def index(self, item):
         for i in range(len(self.data)):
             if self.data[i] == item:
@@ -447,3 +522,32 @@ if __name__ == "__main__" :
         print "%s -> %s [RC]" % (repr(s), repr(reverse_complement(s)))
         print "%s -> %s [RNA]" % (repr(s), repr(transcribe(s)))
         print "%s -> %s [DNA]" % (repr(s), repr(back_transcribe(s)))
+
+    #Quick check of the count method
+    for letter in "ABCDEFGHIjklmnopqrstuvwyz" :
+        assert 1 == Seq(letter).count(letter)
+        assert 1 == MutableSeq(letter).count(letter)
+    my_str = "AAAATGACGGCGGCGGCT"
+    for my_obj in [my_str, Seq(my_str), MutableSeq(my_str)] :
+        assert 5 == my_obj.count("A")
+        assert 1 == my_obj.count("ATG")
+        assert 3 == my_obj.count("CG")
+        assert 2 == my_obj.count("A", 3, -5)
+    for my_obj in [Seq(my_str), MutableSeq(my_str)] :
+        assert 1 == my_obj.count(Seq("AT"))
+        assert 5 == my_obj.count(Seq("A"))
+        assert 3 == my_obj.count(Seq("CG"))
+        assert 2 == my_obj.count(Seq("A"), 3, -5)
+        assert 1 == my_obj.count(MutableSeq("AT"))
+        assert 5 == my_obj.count(MutableSeq("A"))
+        assert 3 == my_obj.count(MutableSeq("CG"))
+        assert 2 == my_obj.count(MutableSeq("A"), 3, -5)
+        for start in range(-len(my_str), len(my_str)) :
+            for end in range(-len(my_str), len(my_str)) :
+                c = my_str.count("A",start,end)
+                assert c == my_str[start:end].count("A")
+                assert c == my_obj.count("A",start,end)
+                assert c == my_obj[start:end].count("A")
+                #This one is a bit silly:
+                assert my_str[start:end:-1].count("A") == my_obj[start:end:-1].count("A")
+                
