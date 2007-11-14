@@ -16,11 +16,17 @@ from Bio import MissingExternalDependencyError
 #Tests fdist related code. Note: this case requires fdist
 #test_PopGen_FDist_nodepend tests code that does not require fdist
 
-not_found_types = ["command not found", ": not found"]
-fdist_output = commands.getoutput("fdist2")
-for not_found in not_found_types:
-    if not_found in fdist_output:
-        raise MissingExternalDependencyError("Fdist not found (not a problem if you do not intend to use it).")
+found = False
+for path in os.environ['PATH'].split(os.pathsep):
+    try:
+        list = os.listdir(path)
+        for file in os.listdir(path):
+            if file.startswith('fdist2'):
+                found = True
+    except os.error:
+        pass #Path doesn't exist - correct to pass
+if not found:
+    raise MissingExternalDependencyError("Fdist not found (not a problem if you do not intend to use it).")
 
 def run_tests(argv):
     test_suite = testing_suite()
