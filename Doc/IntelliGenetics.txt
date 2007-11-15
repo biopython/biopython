@@ -10,7 +10,7 @@ an IntelliGenetics record. Its string representation also is a valid IntelliGene
 record, but it is NOT guaranteed to be equivalent to the record
 from which it was produced.
 
-The Bio.InterPro.Record contains:
+The Bio.IntelliGenetics.Record contains:
 
 comments
 title
