@@ -3401,3 +3401,27 @@ pdb_structs
     1SLM
     1SU3
     1UC1
+testing ps2007.txt
+CAMP_PHOSPHO_SITE
+PATTERN
+PS00004
+APR-1990
+APR-1990
+APR-1990
+PDOC00004
+cAMP- and cGMP-dependent protein kinase phosphorylation site.
+[RK](2)-x-[ST].
+[]
+[]
+
+
+??E?V
+
+cc_site
+    (3, 'phosphorylation')
+dr_positive
+dr_false_neg
+dr_false_pos
+dr_potential
+dr_unknown
+pdb_structs

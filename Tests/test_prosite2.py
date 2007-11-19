@@ -10,7 +10,7 @@ from Bio import ParserSupport
 from Bio import Prosite
 
 tests = [ 'ps00107.txt', 'ps00159.txt', 'ps00165.txt', 'ps00432.txt', \
-    'ps00488.txt', 'ps00546.txt' ]
+          'ps00488.txt', 'ps00546.txt', 'ps2007.txt' ]
 record_parser = Prosite.RecordParser()
 
 def print_list( list ):
