@@ -89,7 +89,7 @@ def _retrieve_features(adaptor, primary_id):
     results = adaptor.execute_and_fetchall(sql, (primary_id,))
     seq_feature_list = []
     for seqfeature_id, seqfeature_type, seqfeature_rank in results:
-        # Get qualifiers
+        # Get qualifiers [except for db_xref which is stored separately]
         qvs = adaptor.execute_and_fetchall(
             "SELECT name, value" \
             " FROM seqfeature_qualifier_value  join term using (term_id)" \
@@ -97,6 +97,22 @@ def _retrieve_features(adaptor, primary_id):
         qualifiers = {}
         for qv_name, qv_value in qvs:
             qualifiers.setdefault(qv_name, []).append(qv_value)
+        # Get db_xrefs [special case of qualifiers]
+        qvs = adaptor.execute_and_fetchall(
+            "SELECT dbxref.dbname, dbxref.accession" \
+            " FROM dbxref join seqfeature_dbxref using (dbxref_id)" \
+            " WHERE seqfeature_dbxref.seqfeature_id = %s", (seqfeature_id,))
+        from BioSQL import _db_dict
+        db_dict = dict([(value,key) for (key,value) in _db_dict.iteritems()])
+        for qv_name, qv_value in qvs:
+            #Want to apply the inverse mapping of that in BioSQL/Loader.py
+            #so that for example "GeneIndex:12345678" -> "GI:12345678"
+            try :
+                qv_name = db_dict[qv_name]
+            except KeyError :
+                pass
+            value = "%s:%s" % (qv_name, qv_value)
+            qualifiers.setdefault("db_xref", []).append(value)
         # Get locations
         results = adaptor.execute_and_fetchall(
             "SELECT location_id, start_pos, end_pos, strand" \

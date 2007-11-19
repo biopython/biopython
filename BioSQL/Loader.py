@@ -299,7 +299,7 @@ class DatabaseLoader:
         sql = "INSERT INTO comment (bioentry_id, comment_text, rank)" \
               " VALUES (%s, %s, %s)"
         self.adaptor.execute(sql, (bioentry_id, comment, 1))
-        
+
     def _load_reference(self, reference, rank, bioentry_id):
 
         refs = None
@@ -483,27 +483,7 @@ class DatabaseLoader:
             table as seqfeature_id, dbxref_id, and rank tuples
         """
         # Dictionary of database types, keyed by GenBank db_xref abbreviation
-        db_dict = {'GeneID': 'Entrez',
-                   'GI': 'GeneIndex',
-                   'COG': 'COG',
-                   'CDD': 'CDD',
-                   'DDBJ': 'DNA Databank of Japan',
-                   'Entrez': 'Entrez',
-                   'GeneIndex': 'GeneIndex',
-                   'PUBMED': 'PubMed',
-                   'taxon': 'Taxon',
-                   'ATCC': 'ATCC',
-                   'ISFinder': 'ISFinder',
-                   'GOA': 'Gene Ontology Annotation',
-                   'ASAP': 'ASAP',
-                   'PSEUDO': 'PSEUDO',
-                   'InterPro': 'InterPro',
-                   'GEO': 'Gene Expression Omnibus',
-                   'EMBL': 'EMBL',
-                   'UniProtKB/Swiss-Prot': 'UniProtKB/Swiss-Prot',
-                   'ECOCYC': 'EcoCyc',
-                   'UniProtKB/TrEMBL': 'UniProtKB/TrEMBL'
-                   }
+        from BioSQL import _db_dict as db_dict
         for rank, value in enumerate(dbxrefs):
             # Split the DB:accession format string at colons.  We have to
             # account for multiple-line and multiple-accession entries
