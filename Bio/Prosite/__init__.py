@@ -1,9 +1,6 @@
 # Copyright 1999 by Jeffrey Chang.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
 # Copyright 2000 by Jeffrey Chang.  All rights reserved.
+# Revisions Copyright 2007 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -39,7 +36,6 @@ _extract_pattern_hits Extract Prosite patterns from a web page.
 
 """
 from types import *
-import string
 import re
 import sgmllib
 from Bio import File
@@ -170,7 +166,7 @@ class PatternHit:
                 lines.append("%7d %10s %s" % (i+1, range_str, seq))
             else:
                 lines.append("%7s %10s %s" % (' ', range_str, seq))
-        return string.join(lines, '\n')
+        return "\n".join(lines)
     
 class Iterator:
     """Returns one record at a time from a Prosite file.
@@ -224,7 +220,7 @@ class Iterator:
         if not lines:
             return None
             
-        data = string.join(lines, '')
+        data = "".join(lines)
         if self._parser is not None:
             return self._parser.parse(File.StringHandle(data))
         return data
@@ -531,7 +527,7 @@ class _RecordConsumer(AbstractConsumer):
         self._clean_record(self.data)
 
     def identification(self, line):
-        cols = string.split(line)
+        cols = line.split()
         if len(cols) != 3:
             raise SyntaxError, "I don't understand identification line\n%s" % \
                   line
@@ -539,14 +535,14 @@ class _RecordConsumer(AbstractConsumer):
         self.data.type = self._chomp(cols[2])    # don't want '.'
     
     def accession(self, line):
-        cols = string.split(line)
+        cols = line.split()
         if len(cols) != 2:
             raise SyntaxError, "I don't understand accession line\n%s" % line
         self.data.accession = self._chomp(cols[1])
     
     def date(self, line):
-        uprline = string.upper(line)
-        cols = string.split(uprline)
+        uprline = line.upper()
+        cols = uprline.split()
 
         # Release 15.0 contains both 'INFO UPDATE' and 'INF UPDATE'
         if cols[2] != '(CREATED);' or \
@@ -571,13 +567,13 @@ class _RecordConsumer(AbstractConsumer):
         self.data.rules.append(self._clean(line))
     
     def numerical_results(self, line):
-        cols = string.split(self._clean(line), ';')
+        cols = self._clean(line).split(";")
         for col in cols:
             if not col:
                 continue
-            qual, data = map(string.lstrip, string.split(col, '='))
+            qual, data = [word.lstrip() for word in col.split("=")]
             if qual == '/RELEASE':
-                release, seqs = string.split(data, ',')
+                release, seqs = data.split(",")
                 self.data.nr_sp_release = release
                 self.data.nr_sp_seqs = int(seqs)
             elif qual == '/FALSE_NEG':
@@ -603,20 +599,20 @@ class _RecordConsumer(AbstractConsumer):
                       (repr(qual), line)
     
     def comment(self, line):
-        cols = string.split(self._clean(line), ';')
+        cols = self._clean(line).split(";")
         for col in cols:
             # DNAJ_2 in Release 15 has a non-standard comment line:
             # CC   Automatic scaling using reversed database
             # Throw it away.  (Should I keep it?)
             if not col or col[:17] == 'Automatic scaling':
                 continue
-            qual, data = map(string.lstrip, string.split(col, '='))
+            qual, data = [word.lstrip() for word in col.split("=")]
             if qual == '/TAXO-RANGE':
                 self.data.cc_taxo_range = data
             elif qual == '/MAX-REPEAT':
                 self.data.cc_max_repeat = data
             elif qual == '/SITE':
-                pos, desc = string.split(data, ',')
+                pos, desc = data.split(",")
                 self.data.cc_site.append((int(pos), desc))
             elif qual == '/SKIP-FLAG':
                 self.data.cc_skip_flag = data
@@ -637,11 +633,11 @@ class _RecordConsumer(AbstractConsumer):
                       (repr(qual), line)
             
     def database_reference(self, line):
-        refs = string.split(self._clean(line), ';')
+        refs = self._clean(line).split(";")
         for ref in refs:
             if not ref:
                 continue
-            acc, name, type = map(string.strip, string.split(ref, ','))
+            acc, name, type = [word.strip() for word in ref.split(",")]
             if type == 'T':
                 self.data.dr_positive.append((acc, name))
             elif type == 'F':
@@ -656,13 +652,13 @@ class _RecordConsumer(AbstractConsumer):
                 raise SyntaxError, "I don't understand type flag %s" % type
     
     def pdb_reference(self, line):
-        cols = string.split(line)
+        cols = line.split()
         for id in cols[1:]:  # get all but the '3D' col
             self.data.pdb_structs.append(self._chomp(id))
     
     def prorule(self, line):
         #Assume that each PR line can contain multiple ";" separated rules
-        rules = string.split(self._clean(line), ';')
+        rules = self._clean(line).split(";")
         self.data.prorules.extend(rules)
 
     def documentation(self, line):
@@ -680,7 +676,7 @@ class _RecordConsumer(AbstractConsumer):
     def _clean(self, line, rstrip=1):
         # Clean up a line.
         if rstrip:
-            return string.rstrip(line[5:])
+            return line[5:].rstrip()
         return line[5:]
 
 def scan_sequence_expasy(seq=None, id=None, exclude_frequent=None):
@@ -715,7 +711,7 @@ def _extract_pattern_hits(handle):
             self._current_hit = None
             self._last_found = None   # Save state of parsing
         def handle_data(self, data):
-            if string.find(data, 'try again') >= 0:
+            if data.find('try again') >= 0:
                 self.broken_message = data
                 return
             elif data == 'illegal':
@@ -723,7 +719,7 @@ def _extract_pattern_hits(handle):
                 return
             if not self._in_pre:
                 return
-            elif not string.strip(data):
+            elif not data.strip():
                 return
             if self._last_found is None and data[:4] == 'PDOC':
                 self._current_hit.pdoc = data
@@ -830,4 +826,4 @@ def _extract_record(handle):
     p.feed(handle.read())
     if not p.data:
         raise ValueError, "No data found in web page."
-    return string.join(p.data, '')
+    return "".join(p.data)
