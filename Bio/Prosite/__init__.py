@@ -63,7 +63,8 @@ class Record:
     description    Free-format description.
     pattern        The PROSITE pattern.  See docs.
     matrix         List of strings that describes a matrix entry.
-    rules          List of rule definitions.  (strings)
+    rules          List of rule definitions (from RU lines).  (strings)
+    prorules       List of prorules (from PR lines). (strings)
 
     NUMERICAL RESULTS
     nr_sp_release  SwissProt release.
@@ -112,6 +113,7 @@ class Record:
         self.pattern = ''
         self.matrix = []
         self.rules = []
+        self.prorules = []
 
         self.nr_sp_release = ''
         self.nr_sp_seqs = ''
@@ -472,6 +474,10 @@ class _Scanner:
     def _scan_3d(self, uhandle, consumer):
         self._scan_line('3D', uhandle, consumer.pdb_reference,
                         any_number=1)
+
+    def _scan_pr(self, uhandle, consumer):
+        #New PR line, ProRule, between 3D and DO lines
+        self._scan_line('PR', uhandle, consumer.prorule, any_number=1)
     
     def _scan_do(self, uhandle, consumer):
         self._scan_line('DO', uhandle, consumer.documentation, exactly_one=1)
@@ -479,6 +485,9 @@ class _Scanner:
     def _scan_terminator(self, uhandle, consumer):
         self._scan_line('//', uhandle, consumer.terminator, exactly_one=1)
 
+    #This is a list of scan functions in the order expected in the file file.
+    #The function definitions define how many times each line type is exected
+    #(or if optional):
     _scan_fns = [
         _scan_id,
         _scan_ac,
@@ -500,6 +509,7 @@ class _Scanner:
 
         _scan_dr,
         _scan_3d,
+        _scan_pr,
         _scan_do,
         _scan_terminator
         ]
@@ -650,6 +660,11 @@ class _RecordConsumer(AbstractConsumer):
         for id in cols[1:]:  # get all but the '3D' col
             self.data.pdb_structs.append(self._chomp(id))
     
+    def prorule(self, line):
+        #Assume that each PR line can contain multiple ";" separated rules
+        rules = string.split(self._clean(line), ';')
+        self.data.prorules.extend(rules)
+
     def documentation(self, line):
         self.data.pdoc = self._chomp(self._clean(line))
 
@@ -816,4 +831,3 @@ def _extract_record(handle):
     if not p.data:
         raise ValueError, "No data found in web page."
     return string.join(p.data, '')
-
