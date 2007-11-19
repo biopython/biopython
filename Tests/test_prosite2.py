@@ -9,10 +9,6 @@ from Bio import File
 from Bio import ParserSupport
 from Bio import Prosite
 
-
-#tests = [ 'ps00107.txt', 'ps00159.txt', 'ps00165.txt', 'ps00213.txt', 'ps00432.txt', \
-#    'ps00488.txt', 'ps00546.txt' ]
-
 tests = [ 'ps00107.txt', 'ps00159.txt', 'ps00165.txt', 'ps00432.txt', \
     'ps00488.txt', 'ps00546.txt' ]
 record_parser = Prosite.RecordParser()
