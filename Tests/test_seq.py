@@ -129,12 +129,9 @@ print
 print "Checking ambiguous complements"
 print "=============================="
 
-#When run the full test suite, Bio.Nexus (called by test_Nexus.py) is
-#currently polluting this dict.  This is a short term hack to fix this
-#unit test...
-for ambig_char in ["-", "?"] :
-    if ambig_char in ambiguous_dna_values :
-        del ambiguous_dna_values[ambig_char]
+#See bug 2380, Bio.Nexus was polluting the dictionary.
+assert "-" not in ambiguous_dna_values
+assert "?" not in ambiguous_dna_values
 
 def complement(sequence) :
     #TODO - Add a complement function to Bio/Seq.py?
