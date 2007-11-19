@@ -19,34 +19,15 @@ from BioSQL import BioSeq
 
 # This testing suite should try to detect whether a valid database
 # installation exists on this computer.  Only run the tests if it
-# does.  
-
-# -- MySQL
-#DBDRIVER = 'MySQLdb'
-#DBTYPE = 'mysql'
-# -- PostgreSQL
-#DBDRIVER = 'psycopg'
-#DBTYPE = 'pg'
-
-# Works for mysql and postgresql, not oracle
-try:
-    DBSCHEMA = "biosqldb-" + DBTYPE + ".sql"
-# don't run the tests unless a valid DBTYPE has been set. This
-# should be done if you have a MySQL or PostgreSQL database set up and want
-# to run the tests. You will also need to set the constants for the database
-# driver below.
-except NameError:
-    message = "Enable tests in Tests/test_BioSQL.py (not important if you do not plan to use BioSQL)."
+# does.
+try :
+    from setup_BioSQL import DBDRIVER, DBTYPE
+    from setup_BioSQL import DBHOST, DBUSER, DBPASSWD, TESTDB
+    from setup_BioSQL import DBSCHEMA, SQL_FILE
+except NameError :
+    message = "Enable tests in Tests/setup_BioSQL.py (not important if you do not plan to use BioSQL)."
     raise Bio.MissingExternalDependencyError(message)
-# Constants for the database driver
-DBHOST = 'localhost'
-DBUSER = 'your_db_username'
-DBPASSWD = 'your_db_password'
-TESTDB = 'biosql_test'
-# Uses the SQL file in the Test directory -- try to keep this current
-# with what is going on with BioSQL
-SQL_FILE = os.path.join(os.getcwd(), "BioSQL", DBSCHEMA)
-
+  
 def run_tests(argv):
     test_suite = testing_suite()
     runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
@@ -270,11 +251,17 @@ class SeqInterfaceTest(unittest.TestCase):
         for sub_feature in cds_feature.sub_features:
             assert sub_feature.type == "CDS"
             assert sub_feature.location_operator == "join"
-       
-        ann = cds_feature.qualifiers["gene"]
-        assert ann == ["kin2"]
+
+        try :
+            assert cds_feature.qualifiers["gene"] == ["kin2"]
+            assert cds_feature.qualifiers["protein_id"] == ["CAA44171.1"]
+            assert cds_feature.qualifiers["codon_start"] == ["1"]
+        except KeyError :
+            assert False, \
+                   "Missing expected entries, have %s" % repr(cds_feature.qualifiers)
+        
         assert "db_xref" in cds_feature.qualifiers, \
-            cds_feature.qualifiers.keys()
+               cds_feature.qualifiers.keys()
         multi_ann = cds_feature.qualifiers["db_xref"]
         assert len(multi_ann) == 2
         assert "GI:16354" in multi_ann
@@ -379,9 +366,15 @@ class InDepthLoadTest(unittest.TestCase):
         test_feature = features[0]
         assert test_feature.type == "source"
         assert str(test_feature.location) == "[0:206]"
-        assert len(test_feature.qualifiers.keys()) == 3
+        assert len(test_feature.qualifiers.keys()) == 3, \
+               "Expected three keys, have %s" % repr(test_feature.qualifiers.keys())
+        assert test_feature.qualifiers.has_key("country")
+        assert test_feature.qualifiers["country"] == ["Russia:Bashkortostan"]
         assert test_feature.qualifiers.has_key("organism")
         assert test_feature.qualifiers["organism"] == ["Armoracia rusticana"]
+        assert test_feature.qualifiers.has_key("db_xref")
+        assert test_feature.qualifiers["db_xref"] == ["taxon:3704"], \
+               "%s <> ['taxon:3704']" % test_feature.qualifiers["db_xref"]
 
         # test split locations
         test_feature = features[4]
@@ -396,7 +389,13 @@ class InDepthLoadTest(unittest.TestCase):
         assert test_feature.sub_features[1].location_operator == "join"
         assert len(test_feature.qualifiers.keys()) == 6
         assert test_feature.qualifiers.has_key("product")
+        assert test_feature.qualifiers["gene"] == ["csp14"]
+        assert test_feature.qualifiers["codon_start"] == ["2"]
         assert test_feature.qualifiers["product"] == ["cold shock protein"]
+        assert test_feature.qualifiers["protein_id"] == ["CAB39890.1"]
+        assert test_feature.qualifiers["db_xref"] == ["GI:4538893"]
+        assert test_feature.qualifiers["translation"] \
+               == ["DKAKDAAAAAGASAQQAGKNISDAAAGGVNFVKEKTG"]
 
         # test passing strand information
         # XXX We should be testing complement as well
@@ -413,3 +412,4 @@ class InDepthLoadTest(unittest.TestCase):
 
 if __name__ == "__main__":
     sys.exit(run_tests(sys.argv))
+
