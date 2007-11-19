@@ -87,18 +87,19 @@ class AlphabetEncoder:
         return 0
     
 class Gapped(AlphabetEncoder):
-    gap_char = '-'
-    def __init__(self, alphabet, gap_char = gap_char):
+    def __init__(self, alphabet, gap_char = "-"):
         AlphabetEncoder.__init__(self, alphabet, gap_char)
+        self.gap_char = gap_char
 
     def contains(self, other):
         return other.gap_char == self.gap_char and \
                self.alphabet.contains(other.alphabet)
                
 class HasStopCodon(AlphabetEncoder):
-    stop_symbol = "*"
-    def __init__(self, alphabet, stop_symbol = stop_symbol):
+    def __init__(self, alphabet, stop_symbol = "*"):
         AlphabetEncoder.__init__(self, alphabet, stop_symbol)
+        self.stop_symbol = stop_symbol
+        
     def __cmp__(self, other):
         x = cmp(self.alphabet, other.alphabet)
         if x == 0:
