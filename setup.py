@@ -73,8 +73,14 @@ def check_dependencies():
     # --force option that gets saved in self.user_options.  It
     # means overwrite previous installations.  If the user has
     # forced an installation, should we also ignore dependencies?
+    
+    #This is a list of tuples, containing:
+    # - package name, string
+    # - is packaged installed, boolean
+    # - is packaged required, boolean
+    # - package website, string
     dependencies = [
-        ("mxTextTools", is_mxTextTools_installed, 1,
+        ("mxTextTools", is_mxTextTools_installed, 0,
          "http://www.egenix.com/files/python/eGenix-mx-Extensions.html"),
         ("Numerical Python", is_Numpy_installed, 0,
          "http://numpy.sourceforge.net/"),
