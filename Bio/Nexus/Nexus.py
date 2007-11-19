@@ -16,6 +16,8 @@ Maddison, Swofford, Maddison. 1997. Syst. Biol. 46(4):590-621
 import os,sys, math, random, copy
 import sets
 
+from copy import deepcopy
+
 from Bio.Alphabet import IUPAC
 from Bio.Data import IUPACData
 from Bio.Seq import Seq
@@ -656,17 +658,17 @@ class Nexus(object):
         if options.has_key('datatype'):
             self.datatype=options['datatype'].lower()
             if self.datatype=='dna' or self.datatype=='nucleotide':
-                self.alphabet=IUPAC.ambiguous_dna
-                self.ambiguous_values=IUPACData.ambiguous_dna_values
-                self.unambiguous_letters=IUPACData.unambiguous_dna_letters
+                self.alphabet=deepcopy(IUPAC.ambiguous_dna)
+                self.ambiguous_values=deepcopy(IUPACData.ambiguous_dna_values)
+                self.unambiguous_letters=deepcopy(IUPACData.unambiguous_dna_letters)
             elif self.datatype=='rna':
-                self.alphabet=IUPAC.ambiguous_rna
-                self.ambiguous_values=IUPACData.ambiguous_rna_values
-                self.unambiguous_letters=IUPACData.unambiguous_rna_letters
+                self.alphabet=deepcopy(IUPAC.ambiguous_rna)
+                self.ambiguous_values=deepcopy(IUPACData.ambiguous_rna_values)
+                self.unambiguous_letters=deepcopy(IUPACData.unambiguous_rna_letters)
             elif self.datatype=='protein':
-                self.alphabet=IUPAC.protein
-                self.ambiguous_values={'B':'DN','Z':'EQ','X':IUPACData.protein_letters} # that's how PAUP handles it
-                self.unambiguous_letters=IUPACData.protein_letters+'*' # stop-codon
+                self.alphabet=deepcopy(IUPAC.protein)
+                self.ambiguous_values={'B':'DN','Z':'EQ','X':deepcopy(IUPACData.protein_letters)} # that's how PAUP handles it
+                self.unambiguous_letters=deepcopy(IUPACData.protein_letters)+'*' # stop-codon
             elif self.datatype=='standard':
                 raise NexusError('Datatype standard is not yet supported.')
                 #self.alphabet=None
