@@ -398,7 +398,10 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         #Also record them ALL in the annotations
         try :
             #On the off chance there was more than one accession line:
-            self.data.annotations['accessions'].extend(new_acc_nums)
+            for acc in new_acc_nums :
+                #Prevent repeat entries
+                if acc not in self.data.annotations['accessions'] :
+                    self.data.annotations['accessions'].append(acc)
         except KeyError :
             self.data.annotations['accessions'] = new_acc_nums
 
@@ -1035,8 +1038,9 @@ class _RecordConsumer(_BaseGenBankConsumer):
         self.data.definition = content
 
     def accession(self, content):
-        new_accessions = self._split_accessions(content)
-        self.data.accession.extend(new_accessions)
+        for acc in self._split_accessions(content) :
+            if acc not in self.data.accession :
+                self.data.accession.append(acc)
 
     def nid(self, content):
         self.data.nid = content

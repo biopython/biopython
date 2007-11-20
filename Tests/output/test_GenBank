@@ -7,7 +7,7 @@ Name: NM_006141
 Description Homo sapiens dynein, cytoplasmic, light intermediate polypeptide 2 (DNCLI2), mRNA.
 Annotations***
 Key: accessions
-Value: ['NM_006141', 'NM_006141']
+Value: ['NM_006141']
 Key: comment
 Value: PROVISIONAL REFSEQ: This record has not yet been subject to final
 NCBI review. The reference sequence was derived from AF035812.1.
@@ -66,7 +66,7 @@ Name: ATCOR66M
 Description A.thaliana cor6.6 mRNA.
 Annotations***
 Key: accessions
-Value: ['X55053', 'X55053']
+Value: ['X55053']
 Key: comment
 Value: Cor6.6 homologous to KIN1. KIN1 is a cold-regulated Arabidopsis
 gene with suggested similarity to type I fish antifreeze proteins.
@@ -139,7 +139,7 @@ Name: ATKIN2
 Description A.thaliana kin2 gene.
 Annotations***
 Key: accessions
-Value: ['X62281', 'X62281']
+Value: ['X62281']
 Key: data_file_division
 Value: PLN
 Key: date
@@ -330,7 +330,7 @@ Name: BNAKINI
 Description Rapeseed Kin1 protein (kin1) mRNA, complete cds.
 Annotations***
 Key: accessions
-Value: ['M81224', 'M81224']
+Value: ['M81224']
 Key: data_file_division
 Value: PLN
 Key: date
@@ -417,7 +417,7 @@ Name: ARU237582
 Description Armoracia rusticana csp14 gene (partial), exons 2-3.
 Annotations***
 Key: accessions
-Value: ['AJ237582', 'AJ237582']
+Value: ['AJ237582']
 Key: data_file_division
 Value: PLN
 Key: date
@@ -544,7 +544,7 @@ Name: BRRBIF72
 Description Brassica rapa (clone bif72) kin mRNA, complete cds.
 Annotations***
 Key: accessions
-Value: ['L31939', 'L31939']
+Value: ['L31939']
 Key: data_file_division
 Value: PLN
 Key: date
@@ -605,7 +605,7 @@ Name: AF297471
 Description Brassica napus BN28a (BN28a) gene, complete cds.
 Annotations***
 Key: accessions
-Value: ['AF297471', 'AF297471']
+Value: ['AF297471']
 Key: data_file_division
 Value: PLN
 Key: date
@@ -722,7 +722,7 @@ Name: IRO125195
 Description Homo sapiens mRNA full length insert cDNA clone EUROIMAGE 125195.
 Annotations***
 Key: accessions
-Value: ['AL109817', 'AL109817']
+Value: ['AL109817']
 Key: comment
 Value: EURO-IMAGE Consortium Contact: Auffray C
 CNRS UPR 420 - Genetique Moleculaire et Biologie du Developement
@@ -821,7 +821,7 @@ Name: HUGLUT1
 Description Human fructose transporter (GLUT5) gene, promoter and exon 1.
 Annotations***
 Key: accessions
-Value: ['U05344', 'U05344']
+Value: ['U05344']
 Key: data_file_division
 Value: PRI
 Key: date
@@ -906,7 +906,7 @@ Name: AC007323
 Description Genomic sequence for Arabidopsis thaliana BAC T25K16 from chromosome I, complete sequence.
 Annotations***
 Key: accessions
-Value: ['AC007323', 'AC007323']
+Value: ['AC007323']
 Key: comment
 Value: On Dec 16, 1999 this sequence version replaced gi:5729683.
 Key: data_file_division
@@ -1834,7 +1834,7 @@ Name: NP_034640
 Description interferon beta, fibroblast [Mus musculus].
 Annotations***
 Key: accessions
-Value: ['NP_034640', 'NP_034640']
+Value: ['NP_034640']
 Key: comment
 Value: PROVISIONAL REFSEQ: This record has not yet been subject to final
 NCBI review. The reference sequence was derived from K00020.1.
@@ -1932,7 +1932,7 @@ Name: DMBR25B3
 Description Drosophila melanogaster BAC clone BACR25B3.
 Annotations***
 Key: accessions
-Value: ['AL138972', 'AL138972']
+Value: ['AL138972']
 Key: comment
 Value: Sequence submitted by Takis Benos, EMBL Outstation - The EBI,
 Hinxton, Cambridge, CB10 1SD, U.K.
@@ -2743,7 +2743,7 @@ Name: HSTMPO1
 Description Human thymopoietin (TMPO) gene, exon 1.
 Annotations***
 Key: accessions
-Value: ['U18266', 'U18266']
+Value: ['U18266']
 Key: data_file_division
 Value: PRI
 Key: date
@@ -2938,7 +2938,7 @@ Name: NT_019265
 Description Homo sapiens chromosome 1 working draft sequence segment.
 Annotations***
 Key: accessions
-Value: ['NT_019265', 'NT_019265']
+Value: ['NT_019265']
 Key: comment
 Value: GENOME ANNOTATION REFSEQ:  NCBI contigs are derived from assembled
 genomic sequence data. They may include both draft and finished
@@ -3386,7 +3386,7 @@ Name: NC_002678
 Description Mesorhizobium loti, complete genome.
 Annotations***
 Key: accessions
-Value: ['NC_002678', 'NC_002678']
+Value: ['NC_002678']
 Key: data_file_division
 Value: BCT
 Key: date
@@ -3443,7 +3443,7 @@ Name: NP_001832
 Description cannabinoid receptor 2 (macrophage) [Homo sapiens].
 Annotations***
 Key: accessions
-Value: ['NP_001832', 'NP_001832']
+Value: ['NP_001832']
 Key: comment
 Value: REVIEWED REFSEQ: This record has been curated by NCBI staff. The
 reference sequence was derived from X74328.1.
@@ -3695,7 +3695,7 @@ Name: AB000048
 Description Feline panleukopenia virus DNA for nonstructural protein 1, complete cds.
 Annotations***
 Key: accessions
-Value: ['AB000048', 'AB000048']
+Value: ['AB000048']
 Key: data_file_division
 Value: VRL
 Key: date
@@ -3759,7 +3759,7 @@ Name: AB000049
 Description Feline panleukopenia virus DNA for nonstructural protein 1, complete cds.
 Annotations***
 Key: accessions
-Value: ['AB000049', 'AB000049']
+Value: ['AB000049']
 Key: data_file_division
 Value: VRL
 Key: date
@@ -3823,7 +3823,7 @@ Name: AB000050
 Description Feline panleukopenia virus DNA for capsid protein 2, complete cds.
 Annotations***
 Key: accessions
-Value: ['AB000050', 'AB000050']
+Value: ['AB000050']
 Key: data_file_division
 Value: VRL
 Key: date
