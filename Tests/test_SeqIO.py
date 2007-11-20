@@ -4,7 +4,7 @@
 # as part of this package.
 
 import os
-
+from sets import Set
 from Bio import SeqIO
 from Bio.SeqRecord import SeqRecord
 from Bio.Seq import Seq
@@ -305,6 +305,14 @@ for (t_format, t_alignment, t_filename, t_count) in test_files :
             for acc in accs :
                 assert acc and acc == acc.strip(), \
                     "Bad accession in annotations: %s" % repr(acc)
+            assert len(Set(accs)) == len(accs), \
+                   "Repeated accession in annotations: %s" % repr(accs)
+        for ref in record.dbxrefs :
+            assert ref and ref == ref.strip(), \
+                "Bad cross reference in dbxrefs: %s" % repr(ref)
+        assert len(record.dbxrefs) == len(record.dbxrefs), \
+               "Repeated cross reference in dbxrefs: %s" % repr(record.dbxrefs)
+                
             
         #Check the lists obtained by the different methods agree
         assert records_match(record, records2[i])
