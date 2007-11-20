@@ -599,12 +599,20 @@ class _RecordConsumer(AbstractConsumer):
                       (repr(qual), line)
     
     def comment(self, line):
+        #Expect CC lines like this:
+        #CC   /TAXO-RANGE=??EPV; /MAX-REPEAT=2;
+        #Can (normally) split on ";" and then on "="
         cols = self._clean(line).split(";")
         for col in cols:
-            # DNAJ_2 in Release 15 has a non-standard comment line:
-            # CC   Automatic scaling using reversed database
-            # Throw it away.  (Should I keep it?)
             if not col or col[:17] == 'Automatic scaling':
+                # DNAJ_2 in Release 15 has a non-standard comment line:
+                # CC   Automatic scaling using reversed database
+                # Throw it away.  (Should I keep it?)
+                continue
+            if col.count("=") == 0 :
+                #Missing qualifier!  Can we recover gracefully?
+                #For example, from Bug 2403, in PS50293 have:
+                #CC /AUTHOR=K_Hofmann; N_Hulo
                 continue
             qual, data = [word.lstrip() for word in col.split("=")]
             if qual == '/TAXO-RANGE':
