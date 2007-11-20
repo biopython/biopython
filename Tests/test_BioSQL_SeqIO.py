@@ -92,7 +92,46 @@ def checksum_summary(record) :
     return "%s [%s] len %i" \
            % (short, seguid(record.seq), len(record.seq))
 
+def compare_references(old_r, new_r) :
+    """Compare Reference objects"""
+    assert old_r.title == new_r.title
+    assert old_r.authors == new_r.authors
+    assert old_r.consrtm == new_r.consrtm
+    assert old_r.journal == new_r.journal
+    assert old_r.medline_id == new_r.medline_id
+
+    #TODO assert old_r.pubmed_id == new_r.pubmed_id
+    #Looking at BioSQL/BioSeq.py function _retrieve_reference
+    #it seems that it will get either the MEDLINE or PUBMED,
+    #but not both.  I *think* the current schema does not allow
+    #us to store both... must confirm this.
+    
+    #TODO - assert old_r.comment == new_r.comment
+    #Looking at the tables, I *think* the current schema does not
+    #allow us to store a reference comment.  Must confirm this.
+    
+    #TODO - reference location?
+    #The parser seems to give a location object (i.e. which
+    #nucleotides from the file is the reference for), while the
+    #we seem to use the database to hold the journal details (!)
+
+def compare_features(old_f, new_f) :
+    """Compare two SeqFeature objects"""
+    assert old_f.type == new_f.type
+    #TODO - Sort out zero/None in strand
+    assert old_f.strand == new_f.strand \
+        or not old_f.strand or not new_f.strand
+    assert old_f.id == new_f.id
+    #TODO: assert old_f.location_operator == new_f.location_operator
+    #TODO: assert str(old_f.location) == str(new_f.location)
+    assert len(old_f.sub_features) == len(new_f.sub_features)
+    assert len(old_f.qualifiers) == len(new_f.qualifiers)    
+    assert Set(old_f.qualifiers.keys()) == Set(new_f.qualifiers.keys())
+    for key in old_f.qualifiers.keys() :
+        assert old_f.qualifiers[key] == new_f.qualifiers[key]
+                
 def compare_records(old, new) :
+    """Compare two SeqRecord objects"""
     #Sequence:
     assert len(old.seq) == len(new.seq)
     assert old.seq.tostring() == new.seq.tostring()
@@ -102,22 +141,12 @@ def compare_records(old, new) :
     assert old.description == new.description
     #database cross references:
     assert len(old.dbxrefs) == len(new.dbxrefs)
-    assert Set(old.dbxrefs) == Set(new.dbxrefs) #Shoulw we allow change in order?
+    assert Set(old.dbxrefs) == Set(new.dbxrefs) #Should we allow change in order?
     #Features:
     assert len(old.features) == len(new.features)
     for old_f, new_f in zip(old.features, new.features) :
-        assert old_f.type == new_f.type
-        #TODO - Sort out zero/None in strand
-        assert old_f.strand == new_f.strand \
-            or not old_f.strand or not new_f.strand
-        assert old_f.id == new_f.id
-        #TODO: assert old_f.location_operator == new_f.location_operator
-        #TODO: assert str(old_f.location) == str(new_f.location)
-        assert len(old_f.sub_features) == len(new_f.sub_features)
-        assert len(old_f.qualifiers) == len(new_f.qualifiers)    
-        assert Set(old_f.qualifiers.keys()) == Set(new_f.qualifiers.keys())
-        for key in old_f.qualifiers.keys() :
-            assert old_f.qualifiers[key] == new_f.qualifiers[key]
+        compare_features(old_f, new_f)
+
     #Annotation:
     #
     #TODO - See Bug 2396 for why some annotations are never recorded.
@@ -134,26 +163,7 @@ def compare_records(old, new) :
         if key == "references" :
             assert len(old.annotations[key]) == len(new.annotations[key])
             for old_r, new_r in zip(old.annotations[key], new.annotations[key]) :
-                assert old_r.title == new_r.title
-                assert old_r.authors == new_r.authors
-                assert old_r.consrtm == new_r.consrtm
-                assert old_r.journal == new_r.journal
-                assert old_r.medline_id == new_r.medline_id
-
-                #TODO assert old_r.pubmed_id == new_r.pubmed_id
-                #Looking at BioSQL/BioSeq.py function _retrieve_reference
-                #it seems that it will get either the MEDLINE or PUBMED,
-                #but not both.  I *think* the current schema does not allow
-                #us to store both... must confirm this.
-                
-                #TODO - assert old_r.comment == new_r.comment
-                #Looking at the tables, I *think* the current schema does not
-                #allow us to store a reference comment.  Must confirm this.
-                
-                #TODO - reference location?
-                #The parser seems to give a location object (i.e. which
-                #nucleotides from the file is the reference for), while the
-                #we seem to use the database to hold the journal details (!)
+                compare_references(old_r, new_r)
         else :
             assert old.annotations[key] == new.annotations[key]
 
