@@ -3,7 +3,10 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+
 """
+This module is deprecated; its functions are now available from Bio.InterPro.
+
 This module provides code to access resources at InterPro over the WWW.
 http://www.ebi.ac.uk/interpro
 
@@ -12,14 +15,11 @@ Functions:
 get_interpro_entry
 
 """
-import urllib
 
 
-def get_interpro_entry( id ):
-    """get specified interpro entry"""
-    handle = urllib.urlopen("http://www.ebi.ac.uk/interpro/IEntry?ac=" + id )
-
-    # XXX need to check to see if the entry exists!
-    return handle
+import warnings
+warnings.warn("Bio.WWW.InterPro was deprecated. Its functionality is now available from Bio.InterPro.")
 
 
+from Bio import InterPro
+get_interpro_entry = InterPro.get_interpro_entry

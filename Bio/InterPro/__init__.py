@@ -1,23 +1,25 @@
-
 # Copyright 2001 by Katharine Lindner.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
 """
-This module provides code to work with html files from InterPro.
+This module provides code to work with html files from InterPro,
+and code to access resources at InterPro over the WWW.
 http://www.ebi.ac.uk/interpro/
 
 
 Classes:
 Record             Holds interpro sequence data.
 InterProParser     Parses interpro sequence data into a Record object.
+
+Functions:
+get_interpro_entry
+
 """
-from types import *
-import string
+
 from Bio import File
 import sgmllib
-from Bio.ParserSupport import *
 from Bio.SeqFeature import Reference
 
 class Record( dict ):
@@ -98,7 +100,7 @@ class InterProParser(  sgmllib.SGMLParser ):
             line = uhandle.readline()
             if not line:
                 break
-            line = string.strip( line )
+            line = line.strip()
             if line[ -7: ] == '</HTML>':
                 break
             text = text + ' ' + line
@@ -107,13 +109,13 @@ class InterProParser(  sgmllib.SGMLParser ):
 
 
     def handle_data(self, newtext ):
-        newtext = string.strip( newtext )
+        newtext = newtext.strip()
         self.text = self.text + newtext
 
     def start_table( self, attrs ):
-        dict = pairlist_to_dict( attrs )
-        for key in dict.keys():
-            val = dict[ key ]
+        dictionary = dict( attrs )
+        for key in dictionary:
+            val = dictionary[key]
 
     def start_h2( self, attrs ):
         pass
@@ -122,13 +124,13 @@ class InterProParser(  sgmllib.SGMLParser ):
         self._state = 'chugging_along'
 
     def start_td( self, attrs ):
-        dict = pairlist_to_dict( attrs )
+        dictionary = dict( attrs )
         if self._state == 'chugging_along':
-            if dict.has_key( 'class' ):
-                if dict[ 'class' ] == 'tag':
+            if dictionary.has_key( 'class' ):
+                if dictionary[ 'class' ] == 'tag':
                     self._state = 'waiting_tag'
                     self._flush_text()
-                elif dict[ 'class' ] == 'inf':
+                elif dictionary[ 'class' ] == 'inf':
                     self._state = 'waiting_inf'
                     self._flush_text()
 
@@ -186,11 +188,11 @@ class InterProParser(  sgmllib.SGMLParser ):
             self.inter_pro_dict[ 'Examples' ].append( text )
 
     def start_a( self, attrs ):
-        dict = pairlist_to_dict( attrs )
+        dictionary = dict( attrs )
         if self._state == 'references':
             if self._reference_state == 'pubmed_id':
-                if dict.has_key( 'name' ):
-                    self._current_reference.pubmed_id = dict[ 'name' ]
+                if dictionary.has_key( 'name' ):
+                    self._current_reference.pubmed_id = dictionary[ 'name' ]
                     self._reference_state = 'authors'
             elif self._reference_state == 'journal':
                 self._current_reference.journal = self._flush_text()
@@ -241,23 +243,26 @@ class InterProParser(  sgmllib.SGMLParser ):
 
 
     def _flush_text( self ):
-        text = string.strip( self.text )
+        text = self.text.strip()
         self.text = ''
         return text[:]
 
 def pairlist_to_dict( pairs ):
-    dict = {}
-    for pair in pairs:
-        key = pair[ 0 ]
-        val = pair[ 1 ]
-        dict[key ] = val
-    return dict
+    import warnings
+    warnings.warn("pairlist_to_dict was deprecated. Please use dict() instead of pairlist_to_dict")
+    return dict(pairs)
 
+def get_interpro_entry( id ):
+    """get specified interpro entry"""
+    import urllib
+    handle = urllib.urlopen("http://www.ebi.ac.uk/interpro/IEntry?ac=" + id )
 
+    # XXX need to check to see if the entry exists!
+    return handle
 
 if __name__ == '__main__':
     import Bio.File
-    handle = open( 'IPR001064.htm')
+    handle = open('IPR001064.htm')
     undo_handle = Bio.File.UndoHandle( handle )
     interpro_parser = InterProParser()
     record = interpro_parser.parse( handle )
