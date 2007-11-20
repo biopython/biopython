@@ -2217,6 +2217,20 @@ py_clusterdistance (PyObject* self, PyObject* args, PyObject* keywords)
   if (WEIGHT==Py_None) WEIGHT = NULL;
   if (INDEX1==Py_None) INDEX1 = NULL;
   if (INDEX2==Py_None) INDEX2 = NULL;
+  /* -- Check the method variable ---------------------------------------- */
+  if (!strchr("amsxv", METHOD))
+  { sprintf(message, "method %c is unknown", METHOD);
+    PyErr_SetString (PyExc_ValueError, buffer);
+    return NULL;
+  }
+  /* -- Check the dist variable ------------------------------------------ */
+  if (!strchr(known_distances, DIST))
+  { sprintf(message, "dist %c is an unknown distance function", DIST);
+    PyErr_SetString (PyExc_ValueError, buffer);
+    return NULL;
+  }
+  /* -- Check the transpose variable ------------------------------------- */
+  if (TRANSPOSE) TRANSPOSE = 1;
   /* -- Check the data input array --------------------------------------- */
   data = parse_data(DATA, &aDATA);
   if (!data) return NULL;
