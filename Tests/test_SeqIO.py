@@ -305,11 +305,6 @@ for (t_format, t_alignment, t_filename, t_count) in test_files :
             for acc in accs :
                 assert acc and acc == acc.strip(), \
                     "Bad accession in annotations: %s" % repr(acc)
-            #Check for duplicates
-            accs = [acc.strip() for acc in accs]
-            assert len(accs) == len(Set(filter(None, accs))), \
-                    "Bad accession list in annotations: %s" \
-                    % repr(record.annotations["accessions"])
             
         #Check the lists obtained by the different methods agree
         assert records_match(record, records2[i])
