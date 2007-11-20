@@ -1,0 +1,153 @@
+LOCUS       NP_034640                182 aa            linear   ROD 15-NOV-2007
+DEFINITION  interferon beta 1, fibroblast precursor [Mus musculus].
+ACCESSION   NP_034640
+VERSION     NP_034640.1  GI:6754304
+DBSOURCE    REFSEQ: accession NM_010510.1
+KEYWORDS    .
+SOURCE      Mus musculus (house mouse)
+  ORGANISM  Mus musculus
+            Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+            Mammalia; Eutheria; Euarchontoglires; Glires; Rodentia;
+            Sciurognathi; Muroidea; Muridae; Murinae; Mus.
+REFERENCE   1  (residues 1 to 182)
+  AUTHORS   Schroder,K., Spille,M., Pilz,A., Lattin,J., Bode,K.A., Irvine,K.M.,
+            Burrows,A.D., Ravasi,T., Weighardt,H., Stacey,K.J., Decker,T.,
+            Hume,D.A., Dalpke,A.H. and Sweet,M.J.
+  TITLE     Differential effects of CpG DNA on IFN-beta induction and STAT1
+            activation in murine macrophages versus dendritic cells:
+            alternatively activated STAT1 negatively regulates TLR signaling in
+            macrophages
+  JOURNAL   J. Immunol. 179 (6), 3495-3503 (2007)
+   PUBMED   17785783
+  REMARK    GeneRIF: The interferon-beta/STAT1 axis is a key regulator of CpG
+            DNA signaling; divergent activation of this pathway between bone
+            marrow-derived macrophages and myeloid dendritic cells dictates
+            cell-specific immune responses.
+REFERENCE   2  (residues 1 to 182)
+  AUTHORS   Wang,Y.X., da Cunha,V., Vincelette,J., White,K., Velichko,S.,
+            Xu,Y., Gross,C., Fitch,R.M., Halks-Miller,M., Larsen,B.R.,
+            Yajima,T., Knowlton,K.U., Vergona,R., Sullivan,M.E. and Croze,E.
+  TITLE     Antiviral and myocyte protective effects of murine interferon-beta
+            and -{alpha}2 in coxsackievirus B3-induced myocarditis and
+            epicarditis in Balb/c mice
+  JOURNAL   Am. J. Physiol. Heart Circ. Physiol. 293 (1), H69-H76 (2007)
+   PUBMED   17434974
+  REMARK    GeneRIF: These data demonstrate antiviral effects for both
+            mIFN-beta and mIFN-alpha(2), which lead to protection of the mice
+            from CVB3-induced myocarditis.
+REFERENCE   3  (residues 1 to 182)
+  AUTHORS   Chang,E.Y., Guo,B., Doyle,S.E. and Cheng,G.
+  TITLE     Cutting edge: involvement of the type I IFN production and
+            signaling pathway in lipopolysaccharide-induced IL-10 production
+  JOURNAL   J. Immunol. 178 (11), 6705-6709 (2007)
+   PUBMED   17513714
+  REMARK    GeneRIF: Type I interferon production and signaling pathway play a
+            role in regulating the lipopolysaccharide response in bone
+            marrow-derived macrophages.
+REFERENCE   4  (residues 1 to 182)
+  AUTHORS   Meissner,N., Rutkowski,M., Harmsen,A.L., Han,S. and Harmsen,A.G.
+  TITLE     Type I interferon signaling and B cells maintain hemopoiesis during
+            Pneumocystis infection of the lung
+  JOURNAL   J. Immunol. 178 (10), 6604-6615 (2007)
+   PUBMED   17475892
+  REMARK    GeneRIF: Both interferon-beta and -alpha genes are required in the
+            regenerative capabilities of the hemopoietic system under the
+            pressure of Pneumocystis infection.
+REFERENCE   5  (residues 1 to 182)
+  AUTHORS   Henry,T., Brotcke,A., Weiss,D.S., Thompson,L.J. and Monack,D.M.
+  TITLE     Type I interferon signaling is required for activation of the
+            inflammasome during Francisella infection
+  JOURNAL   J. Exp. Med. 204 (5), 987-994 (2007)
+   PUBMED   17452523
+REFERENCE   6  (residues 1 to 182)
+  AUTHORS   Senda,T., Shimazu,T., Matsuda,S., Kawano,G., Shimizu,H.,
+            Nakamura,K.T. and Mitsui,Y.
+  TITLE     Three-dimensional crystal structure of recombinant murine
+            interferon-beta
+  JOURNAL   EMBO J. 11 (9), 3193-3201 (1992)
+   PUBMED   1505514
+REFERENCE   7  (residues 1 to 182)
+  AUTHORS   Cornall,R.J., Friedman,J.M. and Todd,J.A.
+  TITLE     Mouse microsatellites from a flow-sorted 4:6 Robertsonian
+            chromosome
+  JOURNAL   Mamm. Genome 3 (11), 620-624 (1992)
+   PUBMED   1450512
+REFERENCE   8  (residues 1 to 182)
+  AUTHORS   Tanaka,N. and Taniguchi,T.
+  TITLE     Cytokine gene regulation: regulatory cis-elements and DNA binding
+            factors involved in the interferon system
+  JOURNAL   Adv. Immunol. 52, 263-281 (1992)
+   PUBMED   1442307
+  REMARK    Review article
+REFERENCE   9  (residues 1 to 182)
+  AUTHORS   Le Roy,H., Simon-Chazottes,D., Montagutelli,X. and Guenet,J.L.
+  TITLE     A set of anonymous DNA clones as markers for mouse gene mapping
+  JOURNAL   Mamm. Genome 3 (4), 244-246 (1992)
+   PUBMED   1351769
+REFERENCE   10 (residues 1 to 182)
+  AUTHORS   Levan,G., Szpirer,J., Szpirer,C., Klinga,K., Hanson,C. and
+            Islam,M.Q.
+  TITLE     The gene map of the Norway rat (Rattus norvegicus) and comparative
+            mapping with mouse and man
+  JOURNAL   Genomics 10 (3), 699-718 (1991)
+   PUBMED   1889815
+COMMENT     VALIDATED REFSEQ: This record has undergone preliminary review of
+            the sequence, but has not yet been subject to final review. The
+            reference sequence was derived from K00020.1.
+            
+            Publication Note:  This RefSeq record includes a subset of the
+            publications that are available for this gene. Please see the
+            Entrez Gene record to access additional publications.
+FEATURES             Location/Qualifiers
+     source          1..182
+                     /organism="Mus musculus"
+                     /db_xref="taxon:10090"
+                     /chromosome="4"
+                     /map="4 42.6 cM"
+     Protein         1..182
+                     /product="interferon beta 1, fibroblast precursor"
+     sig_peptide     1..21
+                     /note="ifn-beta"
+                     /calculated_mol_wt=2410
+     mat_peptide     22..182
+                     /product="ifn-beta"
+                     /calculated_mol_wt=19735
+     Region          27..173
+                     /region_name="IFab"
+                     /note="Interferon alpha, beta. Includes also interferon
+                     omega and tau. Different from interferon gamma family;
+                     cd00095"
+                     /db_xref="CDD:28979"
+     Site            order(29..30,33,36..37,40,43..44,96..97,99..100,102..103,
+                     106,109..110,113..114,117)
+                     /site_type="other"
+                     /note="putative IFNAR-1 binding site"
+                     /db_xref="CDD:28979"
+     Site            order(51..58,60..62,66..67,136..137,139..140,143..144,
+                     146..147,150..155)
+                     /site_type="other"
+                     /note="putative IFNAR-2 binding site"
+                     /db_xref="CDD:28979"
+     Site            97
+                     /site_type="other"
+                     /note="N-glycosylation site"
+                     /db_xref="CDD:28979"
+     CDS             1..182
+                     /gene="Ifnb1"
+                     /coded_by="NM_010510.1:21..569"
+                     /GO_component="extracellular region"
+                     /GO_function="cytokine activity;
+                     hematopoietin/interferon-class (D200-domain) cytokine
+                     receptor binding"
+                     /GO_process="defense response; defense response to
+                     bacterium; response to virus"
+                     /db_xref="CCDS:CCDS18318.1"
+                     /db_xref="GeneID:15977"
+                     /db_xref="MGI:107657"
+ORIGIN      
+        1 mnnrwilhaa fllcfsttal sinykqlqlq ertnirkcqe lleqlngkin ltyradfkip
+       61 memtekmqks ytafaiqeml qnvflvfrnn fsstgwneti vvrlldelhq qtvflktvle
+      121 ekqeerltwe msstalhlks yywrvqrylk lmkynsyawm vvraeifrnf liirrltrnf
+      181 qn
+//
+

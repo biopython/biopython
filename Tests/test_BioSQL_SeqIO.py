@@ -59,7 +59,9 @@ test_files = [ \
     ("genbank",False, 'GenBank/iro.gb', 1),
     ("genbank",False, 'GenBank/pri1.gb', 1),
     ("genbank",False, 'GenBank/arab1.gb', 1),
-    ("genbank",False, 'GenBank/protein_refseq.gb', 1),
+    #protein_refseq.gb had malformed db_xref, fixed in protein_refseq2.gb
+    #("genbank",False, 'GenBank/protein_refseq.gb', 1), 
+    ("genbank",False, 'GenBank/protein_refseq2.gb', 1),
     ("genbank",False, 'GenBank/extra_keywords.gb', 1),
     ("genbank",False, 'GenBank/one_of.gb', 1),
     ("genbank",False, 'GenBank/NT_019265.gb', 1),
@@ -115,6 +117,9 @@ def compare_records(old, new) :
         assert Set(old_f.qualifiers.keys()) == Set(new_f.qualifiers.keys())
         for key in old_f.qualifiers.keys() :
             if key == "db_xref":
+                #Should be a list
+                assert Set(old_f.qualifiers[key]) == Set(new_f.qualifiers[key]), \
+                       "db_xref:\n%s\n%s" % (old_f.qualifiers[key], new_f.qualifiers[key])
                 pass #TODO - Fix this, e.g. file GenBank/protein_refseq.gb
             else :
                 assert old_f.qualifiers[key] == new_f.qualifiers[key]

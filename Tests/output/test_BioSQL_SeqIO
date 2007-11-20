@@ -123,7 +123,7 @@ Testing loading from genbank format file GenBank/arab1.gb
  - Retrieving by version 'AC007323.5', OK
  - Retrieving by accession 'AC007323', OK
  - Retrieving by GI '6587720', OK
-Testing loading from genbank format file GenBank/protein_refseq.gb
+Testing loading from genbank format file GenBank/protein_refseq2.gb
  - MNNRWILHAAFLLCFSTTA...FQN [+/OSLiyGWcFWiLWgW/xDKe+6Ml8] len 182, NP_034640.1
  - Retrieving by name/display_id 'NP_034640', OK
  - Retrieving by version 'NP_034640.1', OK
