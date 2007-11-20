@@ -102,6 +102,7 @@ def compare_records(old, new) :
     assert old.description == new.description
     #database cross references:
     assert len(old.dbxrefs) == len(new.dbxrefs)
+    assert Set(old.dbxrefs) == Set(new.dbxrefs) #Shoulw we allow change in order?
     #Features:
     assert len(old.features) == len(new.features)
     for old_f, new_f in zip(old.features, new.features) :
@@ -116,15 +117,19 @@ def compare_records(old, new) :
         assert len(old_f.qualifiers) == len(new_f.qualifiers)    
         assert Set(old_f.qualifiers.keys()) == Set(new_f.qualifiers.keys())
         for key in old_f.qualifiers.keys() :
-            if key == "db_xref":
-                #Should be a list
-                assert Set(old_f.qualifiers[key]) == Set(new_f.qualifiers[key]), \
-                       "db_xref:\n%s\n%s" % (old_f.qualifiers[key], new_f.qualifiers[key])
-                pass #TODO - Fix this, e.g. file GenBank/protein_refseq.gb
-            else :
-                assert old_f.qualifiers[key] == new_f.qualifiers[key]
+            assert old_f.qualifiers[key] == new_f.qualifiers[key]
     #Annotation:
-    #TODO assert len(old.annotations) == len(new.annotations) #comments!
+    #
+    #TODO - See Bug 2396 for why some annotations are never recorded.
+    #However, we are also seeing some "extra" annotations appearing,
+    #such as 'cross_references', 'dates', 'references', 'data_file_division'
+    #
+    #assert len(old.annotations) == len(new.annotations), \
+    #       "Different annotations\nOld extra: %s\nNew extra: %s" % \
+    #       (Set(old.annotations.keys()).difference(new.annotations.keys()),
+    #        Set(new.annotations.keys()).difference(old.annotations.keys()))
+    #
+    #In the short term, just compare any shared keys:
     for key in Set(old.annotations.keys()).intersection(new.annotations.keys()) :
         if key == "references" :
             assert len(old.annotations[key]) == len(new.annotations[key])
@@ -134,9 +139,21 @@ def compare_records(old, new) :
                 assert old_r.consrtm == new_r.consrtm
                 assert old_r.journal == new_r.journal
                 assert old_r.medline_id == new_r.medline_id
-                #TODO - assert old_r.pubmed_id == new_r.pubmed_id
+
+                #TODO assert old_r.pubmed_id == new_r.pubmed_id
+                #Looking at BioSQL/BioSeq.py function _retrieve_reference
+                #it seems that it will get either the MEDLINE or PUBMED,
+                #but not both.  I *think* the current schema does not allow
+                #us to store both... must confirm this.
+                
                 #TODO - assert old_r.comment == new_r.comment
+                #Looking at the tables, I *think* the current schema does not
+                #allow us to store a reference comment.  Must confirm this.
+                
                 #TODO - reference location?
+                #The parser seems to give a location object (i.e. which
+                #nucleotides from the file is the reference for), while the
+                #we seem to use the database to hold the journal details (!)
         else :
             assert old.annotations[key] == new.annotations[key]
 
