@@ -1,0 +1,22 @@
+test_SeqIO_online
+Checking Bio.WWW.ExPASy.get_sprot_raw()
+- Fetching O23729
+  Got MAPAMEEIRQAQRAEGPAA...GAE [5Y08l+HJRDIlhLKzFEfkcKd1dkM] len 394
+Checking Bio.GenBank.download_many()
+- Fetched GI 6273290 as genbank
+  Got TATACATTAAAGGAGGGGG...AGA [zCwpm1VfiJWQygly6VckKt3LZp0] len 899
+- Fetched GI 6273289 as genbank
+  Got TATACATTAAAGGAGGGGG...AGA [NQq+W2hMHMiMbv/pnUIQjM+ebEw] len 899
+Checking Bio.GenBank.NCBIDictionary()
+- Fetching X52960 from genome as fasta
+  Got TGGCTCGAACTGACTAGAA...GCT [Ktxz0HgMlhQmrKTuZpOxPZJ6zGU] len 248
+- Fetching X52960 from genome as genbank
+  Got TGGCTCGAACTGACTAGAA...GCT [Ktxz0HgMlhQmrKTuZpOxPZJ6zGU] len 248
+- Fetching 6273291 from nucleotide as fasta
+  Got TATACATTAAAGGAGGGGG...AGA [bLhlq4mEFJOoS9PieOx4nhGnjAQ] len 902
+- Fetching 6273291 from nucleotide as genbank
+  Got TATACATTAAAGGAGGGGG...AGA [bLhlq4mEFJOoS9PieOx4nhGnjAQ] len 902
+- Fetching 16130152 from protein as fasta
+  Got MKVKVLSLLVPALLVAGAA...YQF [fCjcjMFeGIrilHAn6h+yju267lg] len 367
+- Fetching 16130152 from protein as genbank
+  Got MKVKVLSLLVPALLVAGAA...YQF [fCjcjMFeGIrilHAn6h+yju267lg] len 367
