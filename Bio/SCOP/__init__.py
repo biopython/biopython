@@ -9,8 +9,9 @@
 # - New Astral class
 # - SQL functionality for both Scop and Astral classes
 # - All sunids are int not strings
-
-
+#
+# Code written by Jeffrey Chang to access SCOP over the internet, which
+# was previously in Bio.WWW.SCOP, has now been merged into this module.
 
 """ SCOP: Structural Classification of Proteins.
 
@@ -36,7 +37,15 @@ nodeCodeDict  -- A mapping between known 2 letter node codes and a longer
                   (fold), 'sf' (superfamily), 'fa' (family), 'dm' (domain), 
                   'sp' (species), 'px' (domain). Additional node types may
                   be added in the future.
+
+This module also provides code to access SCOP over the WWW.
+
+Functions:
+search        -- Access the main CGI script.
+_open         -- Internally used function.
+
 """
+
 from types import *
 import os, string
 
@@ -863,19 +872,50 @@ class Astral:
                 
                 cur.execute("UPDATE astral SET "+astralEv_to_sql[ev]+"=1  WHERE sid=%s",
                             d.sid)
-                                
-            
 
+def search(pdb=None, key=None, sid=None, disp=None, dir=None, loc=None,
+           cgi='http://scop.mrc-lmb.cam.ac.uk/scop/search.cgi', **keywds):
+    """search(pdb=None, key=None, sid=None, disp=None, dir=None, loc=None,
+    cgi='http://scop.mrc-lmb.cam.ac.uk/scop/search.cgi', **keywds)
 
+    Access search.cgi and return a handle to the results.  See the
+    online help file for an explanation of the parameters:
+    http://scop.mrc-lmb.cam.ac.uk/scop/help.html
 
+    Raises an IOError if there's a network error.
 
+    """
+    params = {'pdb' : pdb, 'key' : key, 'sid' : sid, 'disp' : disp,
+              'dir' : dir, 'loc' : loc}
+    variables = {}
+    for k in params.keys():
+        if params[k] is not None:
+            variables[k] = params[k]
+    variables.update(keywds)
+    return _open(cgi, variables)
 
+def _open(cgi, params={}, get=1):
+    """_open(cgi, params={}, get=1) -> UndoHandle
 
+    Open a handle to SCOP.  cgi is the URL for the cgi script to access.
+    params is a dictionary with the options to pass to it.  get is a boolean
+    that describes whether a GET should be used.  Does some
+    simple error checking, and will raise an IOError if it encounters one.
 
+    """
+    import urllib
+    from Bio import File
+    # Open a handle to SCOP.
+    options = urllib.urlencode(params)
+    if get:  # do a GET
+        fullcgi = cgi
+        if options:
+            fullcgi = "%s?%s" % (cgi, options)
+        handle = urllib.urlopen(fullcgi)
+    else:    # do a POST
+        handle = urllib.urlopen(cgi, options)
 
-
-
-
-
-
-
+    # Wrap the handle inside an UndoHandle.
+    uhandle = File.UndoHandle(handle)
+    # Should I check for 404?  timeout?  etc?
+    return uhandle
