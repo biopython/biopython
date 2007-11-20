@@ -386,6 +386,13 @@ Testing reading genbank format file GenBank/protein_refseq.gb
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+Testing reading genbank format file GenBank/protein_refseq2.gb
+ ID = 'NP_034640.1', Name='NP_034640',
+ Seq='MNNRWILHAAFLLCFSTTALSINYKQLQLQERTNIRKCQE...LTRNFQN', length=182
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
 Testing reading genbank format file GenBank/extra_keywords.gb
  ID = 'AL138972.1', Name='DMBR25B3',
  Seq='TCCAGGGGATTCACGCGCAATATGTTTCCCTCGCTCGTCT...TCGATTG', length=154329

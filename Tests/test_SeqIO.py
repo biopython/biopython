@@ -75,7 +75,8 @@ test_files = [ \
     ("genbank",False, 'GenBank/iro.gb', 1),
     ("genbank",False, 'GenBank/pri1.gb', 1),
     ("genbank",False, 'GenBank/arab1.gb', 1),
-    ("genbank",False, 'GenBank/protein_refseq.gb', 1),
+    ("genbank",False, 'GenBank/protein_refseq.gb', 1), #Old version
+    ("genbank",False, 'GenBank/protein_refseq2.gb', 1), #Revised version
     ("genbank",False, 'GenBank/extra_keywords.gb', 1),
     ("genbank",False, 'GenBank/one_of.gb', 1),
     ("genbank",False, 'GenBank/NT_019265.gb', 1),
