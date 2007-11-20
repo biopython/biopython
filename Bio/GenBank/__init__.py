@@ -254,7 +254,7 @@ class _BaseGenBankConsumer(AbstractConsumer):
         # Also, EMBL style accessions are split with ';'
         accession = accession_string.replace("\n", " ").replace(";"," ")
 
-        return [x.strip() for x in accession.split(' ')]
+        return [x.strip() for x in accession.split() if x.strip()]
 
     def _split_taxonomy(self, taxonomy_string):
         """Split a string with taxonomy info into a list.
