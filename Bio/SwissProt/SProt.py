@@ -591,9 +591,11 @@ class _RecordConsumer(AbstractConsumer):
                   (self.data.molecule_type, line)
     
     def accession(self, line):
-        cols = line[5:].rstrip(_CHOMP).split(';')
+        cols = line[5:].rstrip(_CHOMP).strip().split(';')
         for ac in cols:
-            self.data.accessions.append(ac.lstrip())
+            if ac.strip() :
+                #remove any leading or trailing white space
+                self.data.accessions.append(ac.strip())
     
     def date(self, line):
         uprline = string.upper(line)
@@ -997,7 +999,9 @@ class _SequenceConsumer(AbstractConsumer):
 
     def accession(self, line):
         #Note that files can and often do contain multiple AC lines.
-        ids = line[5:].rstrip().split(';')
+        ids = line[5:].strip().split(';')
+        #Remove any white space
+        ids = [x.strip() for x in ids if x.strip()]
         
         #Use the first as the ID, but record them ALL in the annotations
         try :
