@@ -110,6 +110,7 @@ class Record:
         self.matrix = []
         self.rules = []
         self.prorules = []
+        self.postprocessing = []
 
         self.nr_sp_release = ''
         self.nr_sp_seqs = ''
@@ -453,6 +454,10 @@ class _Scanner:
 ##                else:
 ##                    break
     
+    def _scan_pp(self, uhandle, consumer):
+        #New PP line, PostProcessing, just after the MA line
+        self._scan_line('PP', uhandle, consumer.postprocessing, any_number=1)
+    
     def _scan_ru(self, uhandle, consumer):
         self._scan_line('RU', uhandle, consumer.rule, any_number=1)
     
@@ -474,7 +479,7 @@ class _Scanner:
     def _scan_pr(self, uhandle, consumer):
         #New PR line, ProRule, between 3D and DO lines
         self._scan_line('PR', uhandle, consumer.prorule, any_number=1)
-    
+
     def _scan_do(self, uhandle, consumer):
         self._scan_line('DO', uhandle, consumer.documentation, exactly_one=1)
 
@@ -491,6 +496,7 @@ class _Scanner:
         _scan_de,
         _scan_pa,
         _scan_ma,
+        _scan_pp,
         _scan_ru,
         _scan_nr,
         _scan_cc,
@@ -562,7 +568,11 @@ class _RecordConsumer(AbstractConsumer):
     
     def matrix(self, line):
         self.data.matrix.append(self._clean(line))
-    
+
+    def postprocessing(self, line):
+        postprocessing = self._clean(line).split(";")
+        self.data.postprocessing.extend(postprocessing)
+
     def rule(self, line):
         self.data.rules.append(self._clean(line))
     
