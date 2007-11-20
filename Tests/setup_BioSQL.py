@@ -3,6 +3,8 @@
 """
 import os
 import Bio
+from BioSQL import BioSeqDatabase
+
 ##################################
 # Start of user-editable section #
 ##################################
@@ -30,15 +32,34 @@ TESTDB = 'biosql_test'
 # Works for mysql and postgresql, not oracle
 try:
     DBSCHEMA = "biosqldb-" + DBTYPE + ".sql"
-# don't run the tests unless a valid DBTYPE has been set. This
-# should be done if you have a MySQL or PostgreSQL database set up and want
-# to run the tests. You will also need to set the constants for the database
-# driver below.
 except NameError:
-    message = "Enable tests in Tests/setup_BioSQL.py (not important if you do not plan to use BioSQL)."
+    #This happens if the lines above are commented out
+    message = "Enter your settings in Tests/setup_BioSQL.py " \
+              "(not important if you do not plan to use BioSQL)."
     raise Bio.MissingExternalDependencyError(message)
 
 # Uses the SQL file in the Tests/BioSQL directory -- try to keep this current
 # with what is going on with BioSQL
 SQL_FILE = os.path.join(os.getcwd(), "BioSQL", DBSCHEMA)
 assert os.path.isfile(SQL_FILE), "Missing %s" % SQL_FILE
+
+#Check the database driver is installed:
+try :
+    __import__(DBDRIVER)
+except ImportError :
+    message = "Install %s or correct Tests/setup_BioSQL.py "\
+              "(not important if you do not plan to use BioSQL)." % DBDRIVER
+    raise Bio.MissingExternalDependencyError(message)
+
+#Check the username, password and host work
+try :
+    server = BioSeqDatabase.open_database(driver = DBDRIVER,
+                                          user = DBUSER, passwd = DBPASSWD,
+                                          host = DBHOST)
+    del server
+except Exception, e :
+    #Include str(e) in the message?
+    message = "Connection failed, check settings in Tests/setup_BioSQL.py "\
+              "(not important if you do not plan to use BioSQL)."
+    raise Bio.MissingExternalDependencyError(message)
+    
