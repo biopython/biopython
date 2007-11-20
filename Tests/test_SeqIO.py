@@ -299,6 +299,18 @@ for (t_format, t_alignment, t_filename, t_count) in test_files :
         assert isinstance(record.description, basestring)
         assert record.id <> ""
 
+        if "accessions" in record.annotations :
+            accs = record.annotations["accessions"]
+            #Check for blanks, or entries with leading/trailing spaces
+            for acc in accs :
+                assert acc and acc == acc.strip(), \
+                    "Bad accession in annotations: %s" % repr(acc)
+            #Check for duplicates
+            accs = [acc.strip() for acc in accs]
+            assert len(accs) == len(Set(filter(None, accs))), \
+                    "Bad accession list in annotations: %s" \
+                    % repr(record.annotations["accessions"])
+            
         #Check the lists obtained by the different methods agree
         assert records_match(record, records2[i])
         assert records_match(record, records3[i])
