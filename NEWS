@@ -8,12 +8,23 @@ The latest news is at the top.
 
 ===================================================================
 
+The Seq and MutableSeq objects act more like python strings, in particular
+str(object) now returns the full sequence as a plain string.  The existing
+tostring() method is preserved for backwards compatibility.
+
+BioSQL has had some bugs fixed, and has an additional unit test which loads
+records into a database using Bio.SeqIO and then checks the records can be
+retieved correctly.
+
+===================================================================
+
 October 28, 2007: Biopython 1.44 released.
 
 NOTE: This release includes some rather drastic code changes, which were
 necessary to get Biopython to work with the new release of mxTextTools.
 
-The (reverse)complement functions in Bio.Seq new supports ambiguous nucleotides.
+The (reverse)complement functions in Bio.Seq support ambiguous nucleotides.
+
 Bio.Kabat, which was previously deprecated, is now removed from Biopython.
 
 Bio.MarkupEditor was deprecated, as it does not appear to have any users.
