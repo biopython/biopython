@@ -49,8 +49,9 @@ class DBSeq:  # This implements the biopython Seq interface
                 raise IndexError(i)
             i = i + self._length
         elif i >= self._length:
-            raise IndexError(i)
-            
+            #Trivial case, should return empty string!
+            i = self._length
+
         if index.stop is None :
             j = -1
         else :
@@ -61,7 +62,7 @@ class DBSeq:  # This implements the biopython Seq interface
                 raise IndexError(j)
             j = j + self._length
         elif j >= self._length:
-            raise IndexError(j)
+            j = self._length
 
         if i >= j:
             #Trivial case, empty string.
