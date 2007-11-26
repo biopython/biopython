@@ -128,7 +128,7 @@ def compare_features(old_f, new_f) :
     assert len(old_f.qualifiers) == len(new_f.qualifiers)    
     assert Set(old_f.qualifiers.keys()) == Set(new_f.qualifiers.keys())
     for key in old_f.qualifiers.keys() :
-        assert old_f.qualifiers[key] == new_f.qualifiers[key]
+        assert Set(old_f.qualifiers[key]) == Set(new_f.qualifiers[key])
 
 def compare_sequences(old, new) :
     """Compare two Seq or DBSeq objects"""
@@ -140,14 +140,12 @@ def compare_sequences(old, new) :
 
     #Don't check every single element; for long sequences
     #this takes far far far too long to run!
+    #Test both positive and negative indices
     if l < 50 :
-        indices = range(l)
-        #TODO - Negative indices, see Bug 2411
-        #indices = range(-l,l)
+        indices = range(-l,l)
     else :
-        indices = [0,1,2,int(l/2),l-2,l-1]
-        #TODO - Negative indices, see Bug 2411
-        #indices = [-l,-1+1,-int(l/2),-2,-1,0,1,2,int(l/2),l-2,l-1]
+        #A selection of end cases, and the mid point
+        indices = [-l,-1+1,-int(l/2),-2,-1,0,1,2,int(l/2),l-2,l-1]
 
     #Test element access,    
     for i in indices :
@@ -159,9 +157,9 @@ def compare_sequences(old, new) :
     for i in indices :
         for j in indices :
             expected = s[i:j]
-            assert expected == str(old[i:j]), \
+            assert expected == old[i:j].tostring(), \
                    "Slice %s vs %s" % (repr(expected), repr(old[i:j]))
-            assert expected == str(new[i:j]), \
+            assert expected == new[i:j].tostring(), \
                    "Slice %s vs %s" % (repr(expected), repr(new[i:j]))
             #TODO - See bug 2411
             #for step in [1,2,3,17] :

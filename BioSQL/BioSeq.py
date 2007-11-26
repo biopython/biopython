@@ -19,7 +19,7 @@ class DBSeq:  # This implements the biopython Seq interface
     
     def __getitem__(self, i):
         if i < 0:
-            if -i >= self._length:
+            if -i > self._length:
                 raise IndexError(i)
             i = i + self._length
         elif i >= self._length:
