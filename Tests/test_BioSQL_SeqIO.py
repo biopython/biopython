@@ -152,8 +152,10 @@ def compare_sequences(old, new) :
         expected = s[i]
         assert expected == old[i]
         assert expected == new[i]
-        
-    #Test slices,
+
+    #Test slices
+    indices.append(l) #check copes with overflows
+    indices.append(l+1000) #check copes with overflows
     for i in indices :
         for j in indices :
             expected = s[i:j]
@@ -167,7 +169,19 @@ def compare_sequences(old, new) :
                 expected = s[i:j:step]
                 assert expected == old[i:j:step].tostring()
                 assert expected == new[i:j:step].tostring()
+
+        #Check automatic end points
+        expected = s[i:]
+        assert expected == old[i:].tostring()
+        assert expected == new[i:].tostring()
                 
+        expected = s[:i]
+        assert expected == old[:i].tostring()
+        assert expected == new[:i].tostring()
+
+    #Check "copy" splice
+    assert s == old[:].tostring()
+    assert s == new[:].tostring()
                 
 def compare_records(old, new) :
     """Compare two SeqRecord or DBSeqRecord objects"""
