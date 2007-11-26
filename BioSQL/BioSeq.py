@@ -4,6 +4,7 @@ This allows retrival of items stored in a BioSQL database using
 a biopython-like Seq interface.
 """
 
+from Bio.Seq import Seq
 from Bio import SeqFeature
 
 class DBSeq:  # This implements the biopython Seq interface
@@ -17,27 +18,65 @@ class DBSeq:  # This implements the biopython Seq interface
     def __len__(self):
         return self._length
     
-    def __getitem__(self, i):
-        if i < 0:
+    def __getitem__(self, index) :                 # Seq API requirement
+        #Note since Python 2.0, __getslice__ is deprecated
+        #and __getitem__ is used instead.
+        #See http://docs.python.org/ref/sequence-methods.html
+        if isinstance(index, int) :
+            #Return a single letter as a string
+            i = index
+            if i < 0:
+                if -i > self._length:
+                    raise IndexError(i)
+                i = i + self._length
+            elif i >= self._length:
+                raise IndexError(i)            
+            return self.adaptor.get_subseq_as_string(self.primary_id,
+                                                     self.start + i,
+                                                     self.start + i + 1)
+        if not isinstance(index, slice) :
+            raise ValueError, "Unexpected index type"
+
+        #Return the (sub)sequence as another DBSeq or Seq object
+        #(see the Seq obect's __getitem__ method)
+        if index.start is None :
+            i=0
+        else :
+            i = index.start
+        if i < 0 :
+            #Map to equavilent positive index
             if -i > self._length:
                 raise IndexError(i)
             i = i + self._length
         elif i >= self._length:
             raise IndexError(i)
+            
+        if index.stop is None :
+            j = -1
+        else :
+            j = index.stop
+        if j < 0 :
+            #Map to equavilent positive index
+            if -j > self._length:
+                raise IndexError(j)
+            j = j + self._length
+        elif j >= self._length:
+            raise IndexError(j)
 
-        return self.adaptor.get_subseq_as_string(self.primary_id,
-                                                 self.start + i,
-                                                 self.start + i + 1)
-    def __getslice__(self, i, j):
-        i = max(i, 0)
-        i = min(i, self._length)
-        j = max(j, 0)
-        j = min(j, self._length)
         if i >= j:
+            #Trivial case, empty string.
+            return Seq("", self.alphabet)
+        elif index.step is None or index.step == 1 :
+            #Easy case - can return a DBSeq with the start and end adjusted
             return self.__class__(self.primary_id, self.adaptor, self.alphabet,
-                                  self.start, 0)
-        return self.__class__(self.primary_id, self.adaptor, self.alphabet,
-                              self.start + i, j - i)
+                                  self.start + i, j - i)
+        else :
+            #Tricky.  Will have to create a Seq object because of the stride
+            full = self.adaptor.get_subseq_as_string(self.primary_id,
+                                                     self.start + i,
+                                                     self.start + j)
+            return Seq(full[::index.step], self.alphabet)
+        
     def tostring(self):
         return self.adaptor.get_subseq_as_string(self.primary_id,
                                                  self.start,

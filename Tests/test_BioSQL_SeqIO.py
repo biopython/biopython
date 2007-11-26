@@ -145,7 +145,7 @@ def compare_sequences(old, new) :
         indices = range(-l,l)
     else :
         #A selection of end cases, and the mid point
-        indices = [-l,-1+1,-int(l/2),-2,-1,0,1,2,int(l/2),l-2,l-1]
+        indices = [-l,-1+1,-int(l/2),-1,0,1,int(l/2),l-2,l-1]
 
     #Test element access,    
     for i in indices :
@@ -161,11 +161,12 @@ def compare_sequences(old, new) :
                    "Slice %s vs %s" % (repr(expected), repr(old[i:j]))
             assert expected == new[i:j].tostring(), \
                    "Slice %s vs %s" % (repr(expected), repr(new[i:j]))
-            #TODO - See bug 2411
-            #for step in [1,2,3,17] :
-            #    expected = s[i:j:step]
-            #    assert expected == str(old[i:j:step])
-            #    assert expected == str(new[i:j:step])
+            #Slicing with step of 1 should make no difference.
+            #Slicing with step 3 might be useful for codons.
+            for step in [1,3] :
+                expected = s[i:j:step]
+                assert expected == old[i:j:step].tostring()
+                assert expected == new[i:j:step].tostring()
                 
                 
 def compare_records(old, new) :
