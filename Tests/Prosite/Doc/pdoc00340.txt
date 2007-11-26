@@ -42,39 +42,46 @@ and span  positions  54 to 64 and 357 to 365. The last signature picks up both
 actins and  the actin-like proteins and corresponds to positions 106 to 118 in
 actins.
 
--Consensus pattern: [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
+-Consensus pattern: [FY]-[LIV]-[GV]-[DE]-E-[ARV]-[QLAH]-x(1,2)-[RKQ](2)-[GD]
 -Sequences known to belong to this class detected by the pattern: ALL,  except
  for the actin-like proteins and 10 actins.
--Other sequence(s) detected in SWISS-PROT: NONE.
+-Other sequence(s) detected in Swiss-Prot: NONE.
 
--Consensus pattern: W-[IV]-[STA]-[RK]-x-[DE]-Y-[DNE]-[DE]
+-Consensus pattern: W-[IVC]-[STAK]-[RK]-x-[DE]-Y-[DNE]-[DE]
 -Sequences known to belong to this class detected by the pattern: ALL,  except
  for the actin-like proteins and 9 actins.
--Other sequence(s) detected in SWISS-PROT: NONE.
+-Other sequence(s) detected in Swiss-Prot: NONE.
 
--Consensus pattern: [LM]-[LIVM]-T-E-[GAPQ]-x-[LIVMFYWHQ]-N-[PSTAQ]-x(2)-N-[KR]
+-Consensus pattern: [LM]-[LIVMA]-T-E-[GAPQ]-x-[LIVMFYWHQPK]-[NS]-[PSTAQ]-x(2)-
+                    N-[KR]
 -Sequences known to belong to this class detected by the pattern: ALL,  except
  for 5 actins.
--Other sequence(s) detected in SWISS-PROT: NONE.
+-Other sequence(s) detected in Swiss-Prot: NONE.
 
--Last update: November 1997 / Text revised.
+-Last update: December 2004 / Patterns and text revised.
 
 [ 1] Sheterline P., Clayton J., Sparrow J.C.
      (In) Actins, 3rd Edition, Academic Press Ltd, London, (1996).
 [ 2] Pollard T.D., Cooper J.A.
      Annu. Rev. Biochem. 55:987-1036(1986).
 [ 3] Pollard T.D.
-     Curr. Opin. Cell Biol. 1:33-40(1990).
+     "Actin."
+     Curr. Opin. Cell Biol. 2:33-40(1990).
+     PubMed=2183841
 [ 4] Rubenstein P.A.
+     "The functional importance of multiple actin isoforms."
      BioEssays 12:309-315(1990).
+     PubMed=2203335
 [ 5] Meagher R.B., McLean B.G.
      Cell Motil. Cytoskeleton 16:164-166(1990).
 
-+----------------------------------------------------------------------------+
-| This PROSITE entry  is copyright  by the Swiss Institute of Bioinformatics |
-| (SIB).  There are no restrictions on its use by non-profit institutions as |
-| long as its  content  is  in  no  way  modified  and this statement is not |
-| removed. Usage by and for commercial entities requires a license agreement |
-| (See http://www.isb-sib.ch/announce/ or email to license@isb-sib.ch).      |
-+----------------------------------------------------------------------------+
++------------------------------------------------------------------------+
+PROSITE is copyright.   It  is  produced  by  the  Swiss  Institute   of
+Bioinformatics (SIB). There are no restrictions on its use by non-profit
+institutions as long as its  content is in no way modified. Usage by and
+for commercial  entities requires a license agreement.   For information
+about  the  licensing  scheme   send  an  email to license@isb-sib.ch or
+see: http://www.expasy.org/prosite/prosite_license.htm.
++------------------------------------------------------------------------+
+
 {END}

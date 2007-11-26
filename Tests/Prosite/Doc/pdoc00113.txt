@@ -29,21 +29,32 @@ pattern.
 -Consensus pattern: [IV]-x-D-S-[GAS]-[GASC]-[GAST]-[GA]-T
                     [S is the active site residue]
 -Sequences known to belong to this class detected by the pattern: ALL.
--Other sequence(s) detected in SWISS-PROT: 3.
+-Other sequence(s) detected in Swiss-Prot: 3.
 -Last update: June 1994 / Text revised.
 
 [ 1] Trowsdale J., Martin D., Bicknell D., Campbell I.
+     "Alkaline phosphatases."
      Biochem. Soc. Trans. 18:178-180(1990).
+     PubMed=2379681
 [ 2] Manes T., Glade K., Ziomek C.A., Millan J.L.
+     "Genomic structure and comparison of mouse tissue-specific alkaline
+     phosphatase genes."
      Genomics 8:541-554(1990).
+     PubMed=2286375
 [ 3] Mansouri K., Piepersberg W.
+     "Genetics of streptomycin production in Streptomyces griseus:
+     nucleotide sequence of five genes, strFGHIK, including a phosphatase
+     gene."
      Mol. Gen. Genet. 228:459-469(1991).
+     PubMed=1654502
 
-+----------------------------------------------------------------------------+
-| This PROSITE entry  is copyright  by the Swiss Institute of Bioinformatics |
-| (SIB).  There are no restrictions on its use by non-profit institutions as |
-| long as its  content  is  in  no  way  modified  and this statement is not |
-| removed. Usage by and for commercial entities requires a license agreement |
-| (See http://www.isb-sib.ch/announce/ or email to license@isb-sib.ch).      |
-+----------------------------------------------------------------------------+
++------------------------------------------------------------------------+
+PROSITE is copyright.   It  is  produced  by  the  Swiss  Institute   of
+Bioinformatics (SIB). There are no restrictions on its use by non-profit
+institutions as long as its  content is in no way modified. Usage by and
+for commercial  entities requires a license agreement.   For information
+about  the  licensing  scheme   send  an  email to license@isb-sib.ch or
+see: http://www.expasy.org/prosite/prosite_license.htm.
++------------------------------------------------------------------------+
+
 {END}

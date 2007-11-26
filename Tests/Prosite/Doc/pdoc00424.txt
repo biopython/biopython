@@ -24,27 +24,45 @@ be the  precursor  of  this  essential electrophilic moiety. The region around
 this active  site  residue  is  well  conserved and can be used as a signature
 pattern.
 
--Consensus pattern: G-[STG]-[LIVM]-[STG]-[AC]-S-G-[DH]-L-x-P-L-[SA]-x(2)-[SA]
+-Consensus pattern: [GS]-[STG]-[LIVM]-[STG]-[SAC]-S-G-[DH]-L-x-[PN]-L-[SA]-
+                    x(2,3)-[SAGVTL]
                     [S is the active site residue]
 -Sequences known to belong to this class detected by the pattern: ALL.
--Other sequence(s) detected in SWISS-PROT: NONE.
--Last update: November 1995 / Pattern and text revised.
+-Other sequence(s) detected in Swiss-Prot: NONE.
+-Last update: April 2006 / Pattern revised.
 
 [ 1] Taylor R.G., Lambert M.A., Sexsmith E., Sadler S.J., Ray P.N.,
      Mahuran D.J., McInnes R.R.
+     "Cloning and expression of rat histidase. Homology to two bacterial
+     histidases and four phenylalanine ammonia-lyases."
      J. Biol. Chem. 265:18192-18199(1990).
+     PubMed=2120224
 [ 2] Langer M., Reck G., Reed J., Retey J.
+     "Identification of serine-143 as the most likely precursor of
+     dehydroalanine in the active site of histidine ammonia-lyase. A study
+     of the overexpressed enzyme by site-directed mutagenesis."
      Biochemistry 33:6462-6467(1994).
+     PubMed=8204579
 [ 3] Schuster B., Retey J.
+     "Serine-202 is the putative precursor of the active site
+     dehydroalanine of phenylalanine ammonia lyase. Site-directed
+     mutagenesis studies on the enzyme from parsley (Petroselinum crispum
+     L.)."
      FEBS Lett. 349:252-254(1994).
+     PubMed=8050576
 [ 4] Taylor R.G., McInnes R.R.
+     "Site-directed mutagenesis of conserved serines in rat histidase.
+     Identification of serine 254 as an essential active site residue."
      J. Biol. Chem. 269:27473-27477(1994).
+     PubMed=7961661
 
-+----------------------------------------------------------------------------+
-| This PROSITE entry  is copyright  by the Swiss Institute of Bioinformatics |
-| (SIB).  There are no restrictions on its use by non-profit institutions as |
-| long as its  content  is  in  no  way  modified  and this statement is not |
-| removed. Usage by and for commercial entities requires a license agreement |
-| (See http://www.isb-sib.ch/announce/ or email to license@isb-sib.ch).      |
-+----------------------------------------------------------------------------+
++------------------------------------------------------------------------+
+PROSITE is copyright.   It  is  produced  by  the  Swiss  Institute   of
+Bioinformatics (SIB). There are no restrictions on its use by non-profit
+institutions as long as its  content is in no way modified. Usage by and
+for commercial  entities requires a license agreement.   For information
+about  the  licensing  scheme   send  an  email to license@isb-sib.ch or
+see: http://www.expasy.org/prosite/prosite_license.htm.
++------------------------------------------------------------------------+
+
 {END}

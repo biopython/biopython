@@ -11,23 +11,24 @@ http://www.expasy.ch/
 Functions:
 get_prodoc_entry  Interface to the get-prodoc-entry CGI script.
 get_prosite_entry Interface to the get-prosite-entry CGI script.
-get_sprot_raw     Interface to the get-sprot-raw.pl CGI script.
+get_prosite_raw   Interface to the get-prosite-raw CGI script.
+get_sprot_raw     Interface to the get-sprot-raw CGI script.
 sprot_search_ful  Interface to the sprot-search-ful CGI script.
 sprot_search_de   Interface to the sprot-search-de CGI script.
 _open
 
 """
-import time
-import urllib
 
-from Bio import File
 
 def get_prodoc_entry(id, cgi='http://www.expasy.ch/cgi-bin/get-prodoc-entry'):
     """get_prodoc_entry(id,
     cgi='http://www.expasy.ch/cgi-bin/get-prodoc-entry') -> handle
 
-    Get a handle to a PRODOC entry at ExPASy.
+    Get a handle to a PRODOC entry at ExPASy in HTML format. 
 
+    For a non-existing key XXX, ExPASy returns a web page containing
+    this line:
+    'There is no PROSITE documentation entry XXX. Please try again.'
     """
     # XXX need to check to see if the entry exists!
     return _open("%s?%s" % (cgi, id))
@@ -37,11 +38,35 @@ def get_prosite_entry(id,
     """get_prosite_entry(id,
     cgi='http://www.expasy.ch/cgi-bin/get-prosite-entry') -> handle
 
-    Get a handle to a PROSITE entry at ExPASy.
+    Get a handle to a PROSITE entry at ExPASy in HTML format.
 
+    For a non-existing key XXX, ExPASy returns a web page containing
+    this line:
+    'There is currently no PROSITE entry for XXX. Please try again.'
     """
     # XXX need to check to see if the entry exists!
     return _open("%s?%s" % (cgi, id))
+
+def get_prosite_raw(id, cgi='http://www.expasy.ch/cgi-bin/get-prosite-raw.pl'):
+    """get_prosite_raw(id,
+                       cgi='http://www.expasy.ch/cgi-bin/get-prosite-raw.pl')
+    -> handle
+
+    Get a handle to a raw PROSITE or PRODOC entry at ExPASy.
+
+    For a non-existing key, ExPASy returns nothing.
+    """
+    import urllib, socket
+    handle = urllib.urlopen("%s?%s" % (cgi, id))
+
+    # Peek at the first character to see if anything is available.
+    # ExPASy returns nothing for non-existing keys
+
+    start = handle.fp._sock.recv(1, socket.MSG_PEEK)
+    if start!='{': # ExPASy returned nothing
+        raise IOError, "no results"
+
+    return handle
 
 def get_sprot_raw(id, cgi='http://www.expasy.ch/cgi-bin/get-sprot-raw.pl'):
     """get_sprot_raw(id, cgi='http://www.expasy.ch/cgi-bin/get-sprot-raw.pl')
@@ -49,6 +74,9 @@ def get_sprot_raw(id, cgi='http://www.expasy.ch/cgi-bin/get-sprot-raw.pl'):
 
     Get a handle to a raw SwissProt entry at ExPASy.
 
+    For a non-existing key XXX, ExPASy returns a web page containing
+    this line:
+    'XXX is not a valid identifier.'
     """
     return _open("%s?%s" % (cgi, id))
 
@@ -113,6 +141,9 @@ def _open(cgi, params={}, get=1):
     simple error checking, and will raise an IOError if it encounters one.
 
     """
+    import urllib
+    from Bio import File
+
     # Open a handle to ExPASy.
     options = urllib.urlencode(params)
     if get:  # do a GET

@@ -37,27 +37,42 @@ A cysteine switch has been found in the following zinc proteases:
                     [C chelates the zinc ion]
 -Sequences known to belong to this class detected by the pattern: ALL,  except
  for cat MMP-7 and mouse MMP-11.
--Other sequence(s) detected in SWISS-PROT: NONE.
+-Other sequence(s) detected in Swiss-Prot: NONE.
 -Last update: November 1997 / Pattern and text revised.
 
-[ 1] Woessner J. Jr.
+[ 1] Woessner J.F. Jr.
+     "Matrix metalloproteinases and their inhibitors in connective tissue
+     remodeling."
      FASEB J. 5:2145-2154(1991).
+     PubMed=1850705
 [ 2] Sanchez-Lopez R., Nicholson R., Gesnel M.C., Matrisian L.M.,
      Breathnach R.
      J. Biol. Chem. 263:11892-11899(1988).
-[ 3] Park A.J., Matrisian L.M., Kells A.F., Pearson R., Yuan Z., Navre M.
+[ 3] Park A.J., Matrisian L.M., Kells A.F., Pearson R., Yuan Z.Y., Navre M.
+     "Mutational analysis of the transin (rat stromelysin) autoinhibitor
+     region demonstrates a role for residues surrounding the 'cysteine
+     switch'."
      J. Biol. Chem. 266:1584-1590(1991).
+     PubMed=1988438
 [ 4] Lepage T., Gache C.
+     "Early expression of a collagenase-like hatching enzyme gene in the
+     sea urchin embryo."
      EMBO J. 9:3003-3012(1990).
+     PubMed=2167841
 [ 5] Kinoshita T., Fukuzawa H., Shimada T., Saito T., Matsuda Y.
+     "Primary structure and expression of a gamete lytic enzyme in
+     Chlamydomonas reinhardtii: similarity of functional domains to matrix
+     metalloproteases."
      Proc. Natl. Acad. Sci. U.S.A. 89:4693-4697(1992).
+     PubMed=1584806
 
-+----------------------------------------------------------------------------+
-| This PROSITE entry  is copyright  by the Swiss Institute of Bioinformatics |
-| (SIB).  There are no restrictions on its use by non-profit institutions as |
-| long as its  content  is  in  no  way  modified  and this statement is not |
-| removed. Usage by and for commercial entities requires a license agreement |
-| (See http://www.isb-sib.ch/announce/ or email to license@isb-sib.ch).      |
-+----------------------------------------------------------------------------+
++------------------------------------------------------------------------+
+PROSITE is copyright.   It  is  produced  by  the  Swiss  Institute   of
+Bioinformatics (SIB). There are no restrictions on its use by non-profit
+institutions as long as its  content is in no way modified. Usage by and
+for commercial  entities requires a license agreement.   For information
+about  the  licensing  scheme   send  an  email to license@isb-sib.ch or
+see: http://www.expasy.org/prosite/prosite_license.htm.
++------------------------------------------------------------------------+
+
 {END}
-

@@ -33,30 +33,45 @@ a signature pattern.
                     x(3)-[FW]
                     [The first D is an active site residue]
 -Sequences known to belong to this class detected by the pattern: ALL.
--Other sequence(s) detected in SWISS-PROT: NONE.
+-Other sequence(s) detected in Swiss-Prot: NONE.
 
 -Expert(s) to contact by email:
-                   Henrissat B.; bernie@afmb.cnrs-mrs.fr
+           Henrissat B.; bernie@afmb.cnrs-mrs.fr
 
 -Last update: November 1997 / Text revised.
 
 [ 1] Beguin P.
+     "Molecular biology of cellulose degradation."
      Annu. Rev. Microbiol. 44:219-248(1990).
+     PubMed=2252383; DOI=10.1146/annurev.mi.44.100190.001251
 [ 2] Gilkes N.R., Henrissat B., Kilburn D.G., Miller R.C. Jr., Warren R.A.J.
+     "Domains in microbial beta-1, 4-glycanases: sequence conservation,
+     function, and enzyme families."
      Microbiol. Rev. 55:303-315(1991).
+     PubMed=1886523
 [ 3] Henrissat B., Claeyssens M., Tomme P., Lemesle L., Mornon J.-P.
+     "Cellulase families revealed by hydrophobic cluster analysis."
      Gene 81:83-95(1989).
+     PubMed=2806912
 [ 4] Henrissat B.
+     "A classification of glycosyl hydrolases based on amino acid sequence
+     similarities."
      Biochem. J. 280:309-316(1991).
+     PubMed=1747104
 [ 5] Alzari P.M., Souchon H., Dominguez R.
+     "The crystal structure of endoglucanase CelA, a family 8 glycosyl
+     hydrolase from Clostridium thermocellum."
      Structure 4:265-275(1996).
-[E1] http://www.expasy.ch/cgi-bin/lists?glycosid.txt
+     PubMed=8805535
+[E1] http://www.expasy.org/cgi-bin/lists?glycosid.txt
 
-+----------------------------------------------------------------------------+
-| This PROSITE entry  is copyright  by the Swiss Institute of Bioinformatics |
-| (SIB).  There are no restrictions on its use by non-profit institutions as |
-| long as its  content  is  in  no  way  modified  and this statement is not |
-| removed. Usage by and for commercial entities requires a license agreement |
-| (See http://www.isb-sib.ch/announce/ or email to license@isb-sib.ch).      |
-+----------------------------------------------------------------------------+
++------------------------------------------------------------------------+
+PROSITE is copyright.   It  is  produced  by  the  Swiss  Institute   of
+Bioinformatics (SIB). There are no restrictions on its use by non-profit
+institutions as long as its  content is in no way modified. Usage by and
+for commercial  entities requires a license agreement.   For information
+about  the  licensing  scheme   send  an  email to license@isb-sib.ch or
+see: http://www.expasy.org/prosite/prosite_license.htm.
++------------------------------------------------------------------------+
+
 {END}

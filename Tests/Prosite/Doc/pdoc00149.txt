@@ -1,23 +1,23 @@
 {PDOC00149}
 {PS00165; DEHYDRATASE_SER_THR}
 {BEGIN}
-**********************************************************************
-* Serine/threonine dehydratases pyridoxal-phosphate attachment site  *
-**********************************************************************
+*********************************************************************
+* Serine/threonine dehydratases pyridoxal-phosphate attachment site *
+*********************************************************************
 
 Serine and threonine  dehydratases [1,2]  are  functionally  and  structurally
 related pyridoxal-phosphate dependent enzymes:
 
- - L-serine dehydratase (EC 4.2.1.13) and D-serine  dehydratase  (EC 4.2.1.14)
+ - L-serine dehydratase (EC 4.3.1.17) and D-serine  dehydratase  (EC 4.3.1.18)
    catalyze the dehydratation of L-serine (respectively D-serine) into ammonia
    and pyruvate.
- - Threonine dehydratase  (EC 4.2.1.16) (TDH) catalyzes  the  dehydratation of
+ - Threonine dehydratase  (EC 4.3.1.19) (TDH) catalyzes  the  dehydratation of
    threonine into  alpha-ketobutarate  and  ammonia.  In Escherichia coli  and
    other microorganisms,  two  classes  of  TDH  are  known  to  exist. One is
    involved in  the  biosynthesis of isoleucine, the other in hydroxamino acid
    catabolism.
 
-Threonine synthase  (EC 4.2.99.2) is  also  a pyridoxal-phosphate  enzyme,  it
+Threonine synthase  (EC 4.2.3.1) is  also  a  pyridoxal-phosphate  enzyme,  it
 catalyzes the  transformation of  homoserine-phosphate into threonine.  It has
 been shown [3] that  threonine  synthase  is  distantly related to the serine/
 threonine dehydratases.
@@ -27,32 +27,46 @@ residue.  The sequence around  this residue is sufficiently conserved to allow
 the derivation  of  a  pattern  specific  to serine/threonine dehydratases and
 threonine synthases.
 
--Consensus pattern: [DESH]-x(4,5)-[STVG]-x-[AS]-[FYI]-K-[DLIFSA]-[RVMF]-[GA]-
-                    [LIVMGA]
+-Consensus pattern: [DESH]-x(4,5)-[STVG]-{EVKD}-[AS]-[FYI]-K-[DLIFSA]-[RLVMF]-
+                    [GA]-[LIVMGA]
                     [The K is the pyridoxal-P attachment site]
 -Sequences known to belong to this class detected by the pattern: ALL.
--Other sequence(s) detected in SWISS-PROT: 12.
+-Other sequence(s) detected in Swiss-Prot: 17.
 
--Note: some   bacterial L-serine dehydratases - such as those from Escherichia
+-Note: Some   bacterial L-serine dehydratases - such as those from Escherichia
  coli - are iron-sulfur proteins [4] and do not belong to this family.
 
--Last update: November 1995 / Pattern and text revised.
+-Last update: December 2004 / Pattern and text revised.
 
-[ 1] Ogawa H., Gomi T., Konishi K., Date T., Naakashima H., Nose K.,
+[ 1] Ogawa H., Gomi T., Konishi K., Date T., Nakashima H., Nose K.,
      Matsuda Y., Peraino C., Pitot H.C., Fujioka M.
+     "Human liver serine dehydratase. cDNA cloning and sequence homology
+     with hydroxyamino acid dehydratases from other sources."
      J. Biol. Chem. 264:15818-15823(1989).
+     PubMed=2674117
 [ 2] Datta P., Goss T.J., Omnaas J.R., Patil R.V.
+     "Covalent structure of biodegradative threonine dehydratase of
+     Escherichia coli: homology with other dehydratases."
      Proc. Natl. Acad. Sci. U.S.A. 84:393-397(1987).
+     PubMed=3540965
 [ 3] Parsot C.
+     "Evolution of biosynthetic pathways: a common ancestor for threonine
+     synthase, threonine dehydratase and D-serine dehydratase."
      EMBO J. 5:3013-3019(1986).
+     PubMed=3098560
 [ 4] Grabowski R., Hofmeister A.E.M., Buckel W.
+     "Bacterial L-serine dehydratases: a new family of enzymes containing
+     iron-sulfur clusters."
      Trends Biochem. Sci. 18:297-300(1993).
+     PubMed=8236444
 
-+----------------------------------------------------------------------------+
-| This PROSITE entry  is copyright  by the Swiss Institute of Bioinformatics |
-| (SIB).  There are no restrictions on its use by non-profit institutions as |
-| long as its  content  is  in  no  way  modified  and this statement is not |
-| removed. Usage by and for commercial entities requires a license agreement |
-| (See http://www.isb-sib.ch/announce/ or email to license@isb-sib.ch).      |
-+----------------------------------------------------------------------------+
++------------------------------------------------------------------------+
+PROSITE is copyright.   It  is  produced  by  the  Swiss  Institute   of
+Bioinformatics (SIB). There are no restrictions on its use by non-profit
+institutions as long as its  content is in no way modified. Usage by and
+for commercial  entities requires a license agreement.   For information
+about  the  licensing  scheme   send  an  email to license@isb-sib.ch or
+see: http://www.expasy.org/prosite/prosite_license.htm.
++------------------------------------------------------------------------+
+
 {END}

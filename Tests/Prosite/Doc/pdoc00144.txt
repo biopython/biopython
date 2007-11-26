@@ -27,23 +27,29 @@ base formation.
 -Sequences known to belong to this class detected by the pattern: ALL,  except
  for Bacillus  subtilis  KDPG-aldolase  which  has  Thr  instead of Arg in the
  active site.
--Other sequence(s) detected in SWISS-PROT: NONE.
+-Other sequence(s) detected in Swiss-Prot: NONE.
 
 -Consensus pattern: G-x(3)-[LIVMF]-K-[LF]-F-P-[SA]-x(3)-G
                     [K is involved in Schiff-base formation]
 -Sequences known to belong to this class detected by the pattern: ALL.
--Other sequence(s) detected in SWISS-PROT: NONE.
+-Other sequence(s) detected in Swiss-Prot: NONE.
 
 -Last update: November 1997 / Patterns and text revised.
 
-[ 1] Vlahos C J., Dekker E.E.
+[ 1] Vlahos C.J., Dekker E.E.
+     "The complete amino acid sequence and identification of the
+     active-site arginine peptide of Escherichia coli
+     2-keto-4-hydroxyglutarate aldolase."
      J. Biol. Chem. 263:11683-11691(1988).
+     PubMed=3136164
 
-+----------------------------------------------------------------------------+
-| This PROSITE entry  is copyright  by the Swiss Institute of Bioinformatics |
-| (SIB).  There are no restrictions on its use by non-profit institutions as |
-| long as its  content  is  in  no  way  modified  and this statement is not |
-| removed. Usage by and for commercial entities requires a license agreement |
-| (See http://www.isb-sib.ch/announce/ or email to license@isb-sib.ch).      |
-+----------------------------------------------------------------------------+
++------------------------------------------------------------------------+
+PROSITE is copyright.   It  is  produced  by  the  Swiss  Institute   of
+Bioinformatics (SIB). There are no restrictions on its use by non-profit
+institutions as long as its  content is in no way modified. Usage by and
+for commercial  entities requires a license agreement.   For information
+about  the  licensing  scheme   send  an  email to license@isb-sib.ch or
+see: http://www.expasy.org/prosite/prosite_license.htm.
++------------------------------------------------------------------------+
+
 {END}

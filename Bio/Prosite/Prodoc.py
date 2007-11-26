@@ -315,8 +315,9 @@ class _Scanner:
         # appended at the end.  We'll try and recognize these.
         read_and_call_while(uhandle, consumer.noevent, blank=1)
         if attempt_read_and_call(uhandle, consumer.noevent, start='+----'):
-            read_and_call_while(uhandle, consumer.noevent, start='|')
+            read_and_call_until(uhandle, consumer.noevent, start='+----')
             read_and_call(uhandle, consumer.noevent, start='+----')
+        read_and_call_while(uhandle, consumer.noevent, blank=1)
 
 class _RecordConsumer(AbstractConsumer):
     """Consumer that converts a Prodoc record to a Record object.

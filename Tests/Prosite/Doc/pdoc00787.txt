@@ -19,26 +19,34 @@ the proton donor in the catalytic mechanism. We use this region as a signature
 pattern.
 
 -Consensus pattern: W-x-F-E-x-W-N-E-P-[DN]
-                    [The second E is the putative active site residue]
+                    [The second E may be the active site residue]
 -Sequences known to belong to this class detected by the pattern: ALL.
--Other sequence(s) detected in SWISS-PROT: NONE.
+-Other sequence(s) detected in Swiss-Prot: NONE.
 
 -Expert(s) to contact by email:
-                   Henrissat B.; bernie@afmb.cnrs-mrs.fr
+           Henrissat B.; bernie@afmb.cnrs-mrs.fr
 
--Last update: November 1997 / Text revised.
+-Last update: May 2004 / Text revised.
 
 [ 1] Henrissat B., Bairoch A.
+     "New families in the classification of glycosyl hydrolases based on
+     amino acid sequence similarities."
      Biochem. J. 293:781-788(1993).
+     PubMed=8352747
 [ 2] Henrissat B., Callebaut I., Fabrega S., Lehn P., Mornon J.-P., Davies G.
+     "Conserved catalytic machinery and the prediction of a common fold for
+     several families of glycosyl hydrolases."
      Proc. Natl. Acad. Sci. U.S.A. 92:7090-7094(1995).
-[E1] http://www.expasy.ch/cgi-bin/lists?glycosid.txt
+     PubMed=7624375
+[E1] http://www.expasy.org/cgi-bin/lists?glycosid.txt
 
-+----------------------------------------------------------------------------+
-| This PROSITE entry  is copyright  by the Swiss Institute of Bioinformatics |
-| (SIB).  There are no restrictions on its use by non-profit institutions as |
-| long as its  content  is  in  no  way  modified  and this statement is not |
-| removed. Usage by and for commercial entities requires a license agreement |
-| (See http://www.isb-sib.ch/announce/ or email to license@isb-sib.ch).      |
-+----------------------------------------------------------------------------+
++------------------------------------------------------------------------+
+PROSITE is copyright.   It  is  produced  by  the  Swiss  Institute   of
+Bioinformatics (SIB). There are no restrictions on its use by non-profit
+institutions as long as its  content is in no way modified. Usage by and
+for commercial  entities requires a license agreement.   For information
+about  the  licensing  scheme   send  an  email to license@isb-sib.ch or
+see: http://www.expasy.org/prosite/prosite_license.htm.
++------------------------------------------------------------------------+
+
 {END}

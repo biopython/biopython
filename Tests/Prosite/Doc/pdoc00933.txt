@@ -8,36 +8,50 @@
 Globins are heme-containing  proteins involved in  binding and/or transporting
 oxygen [1]. Almost all globins belong to a large family (see <PDOC00793>), the
 only exceptions  are  the  following proteins which form a family of their own
-[2,3]:
+[2,3,4]:
 
  - Monomeric  hemoglobins  from the protozoan Paramecium caudatum, Tetrahymena
    pyriformis and Tetrahymena thermophila.
- - Cyanoglobin from the cyanobacteria Nostoc commune.
+ - Cyanoglobins  from  the  cyanobacteria Nostoc commune and Synechocystis PCC
+   6803.
  - Globins  LI637  and  LI410  from  the chloroplast of the alga Chlamydomonas
    eugametos.
- - Mycobacterium tuberculosis hypothetical protein MtCY48.23.
+ - Mycobacterium tuberculosis globins glbN and glbO.
 
 These proteins  contain a conserved histidine which could be involved in heme-
 binding. As a signature pattern, we use a conserved region that ends with this
 residue.
 
--Consensus pattern: F-[LF]-x(5)-G-[PA]-x(4)-G-[KRA]-x-[LIVM]-x(3)-H
+-Consensus pattern: F-[LF]-x(4)-[GE]-G-[PAT]-x(2)-[YW]-x-[GSE]-[KRQAE]-x(1,5)-
+                    [LIVM]-x(3)-H
+                    [The H may be a heme ligand]
 -Sequences known to belong to this class detected by the pattern: ALL.
--Other sequence(s) detected in SWISS-PROT: NONE.
--Last update: November 1997 / First entry.
+-Other sequence(s) detected in Swiss-Prot: NONE.
+-Last update: April 2006 / Pattern revised.
 
 [ 1] Concise Encyclopedia Biochemistry, Second Edition, Walter de Gruyter,
      Berlin New-York (1988).
 [ 2] Takagi T.
      Curr. Opin. Struct. Biol. 3:413-418(1993).
-[ 3] Couture M., Chamberland H., St-Pierre B., Lafontaine J., Guertin M.;
+[ 3] Couture M., Chamberland H., St-Pierre B., Lafontaine J., Guertin M.
+     "Nuclear genes encoding chloroplast hemoglobins in the unicellular
+     green alga Chlamydomonas eugametos."
      Mol. Gen. Genet. 243:185-197(1994).
+     PubMed=8177215
+[ 4] Couture M., Das T.K., Savard P.Y., Ouellet Y., Wittenberg J.B.,
+     Wittenberg B.A., Rousseau D.L., Guertin M.
+     "Structural investigations of the hemoglobin of the cyanobacterium
+     Synechocystis PCC6803 reveal a unique distal heme pocket."
+     Eur. J. Biochem. 267:4770-4780(2000).
+     PubMed=10903511
 
-+----------------------------------------------------------------------------+
-| This PROSITE entry  is copyright  by the Swiss Institute of Bioinformatics |
-| (SIB).  There are no restrictions on its use by non-profit institutions as |
-| long as its  content  is  in  no  way  modified  and this statement is not |
-| removed. Usage by and for commercial entities requires a license agreement |
-| (See http://www.isb-sib.ch/announce/ or email to license@isb-sib.ch).      |
-+----------------------------------------------------------------------------+
++------------------------------------------------------------------------+
+PROSITE is copyright.   It  is  produced  by  the  Swiss  Institute   of
+Bioinformatics (SIB). There are no restrictions on its use by non-profit
+institutions as long as its  content is in no way modified. Usage by and
+for commercial  entities requires a license agreement.   For information
+about  the  licensing  scheme   send  an  email to license@isb-sib.ch or
+see: http://www.expasy.org/prosite/prosite_license.htm.
++------------------------------------------------------------------------+
+
 {END}

@@ -30,8 +30,8 @@ domain.
 -Sequences known to belong to this class detected by the pattern: the majority
  of known  protein  kinases  but it fails to find a number of them, especially
  viral kinases  which  are  quite  divergent in this region and are completely
- missed bythis pattern.
--Other sequence(s) detected in SWISS-PROT: 35.
+ missed by this pattern.
+-Other sequence(s) detected in Swiss-Prot: 42.
 
 -Consensus pattern: [LIVMFYC]-x-[HY]-x-D-[LIVMFY]-K-x(2)-N-[LIVMFYCT](3)
                     [D is an active site residue]
@@ -40,16 +40,17 @@ domain.
  kinases) and  also  Epstein-Barr  virus BGLF4 and Drosophila ninaC which have
  respectively Ser and Arg instead of the conserved Lys and which are therefore
  detected by the tyrosine kinase specific pattern described below.
--Other sequence(s) detected in SWISS-PROT: 1.
+-Other sequence(s) detected in Swiss-Prot: 1.
 
--Consensus pattern: [LIVMFYC]-x-[HY]-x-D-[LIVMFY]-[RSTAC]-x(2)-N-[LIVMFYC](3)
+-Consensus pattern: [LIVMFYC]-{A}-[HY]-x-D-[LIVMFY]-[RSTAC]-{D}-{PF}-N-
+                    [LIVMFYC](3)
                     [D is an active site residue]
 -Sequences known to belong to this class detected by the pattern: ALL tyrosine
  specific protein  kinases  with  the  exception of human ERBB3 and mouse blk.
  This pattern    will    also    detect    most    bacterial    aminoglycoside
  phosphotransferases [8,9]  and  herpesviruses ganciclovir kinases [10]; which
  are proteins structurally and evolutionary related to protein kinases.
--Other sequence(s) detected in SWISS-PROT: 15.
+-Other sequence(s) detected in Swiss-Prot: 17.
 
 -Sequences known to belong to this class detected by the profile: ALL,  except
  for three  viral  kinases.  This  profile  also  detects  receptor  guanylate
@@ -57,54 +58,71 @@ domain.
  similarities between  these  two  families  and the eukaryotic protein kinase
  family have been noticed before. It also detects Arabidopsis thaliana kinase-
  like protein TMKL1 which seems to have lost its catalytic activity.
--Other sequence(s) detected in SWISS-PROT: 4.
+-Other sequence(s) detected in Swiss-Prot: 4.
 
--Note: if a protein  analyzed  includes the two protein kinase signatures, the
+-Note: If a protein  analyzed  includes the two protein kinase signatures, the
  probability of it being a protein kinase is close to 100%
--Note: eukaryotic-type protein  kinases  have  also  been found in prokaryotes
+-Note: Eukaryotic-type protein  kinases  have  also  been found in prokaryotes
  such as Myxococcus xanthus [11] and Yersinia pseudotuberculosis.
--Note: the  patterns  shown  above has been updated since their publication in
+-Note: The  patterns  shown  above has been updated since their publication in
  [7].
--Note: this  documentation  entry  is linked  to both signature patterns and a
- profile. As  the profile is much more sensitive than the patterns, you should
- use it if you have access to the necessary software tools to do so.
 
 -Expert(s) to contact by email:
-                   Hunter T.; hunter@salk-sc2.sdsc.edu
-                   Quinn A.M.; quinn@biomed.med.yale.edu
+           Hunter T.; hunter@salk-sc2.sdsc.edu
+           Quinn A.M.; quinn@biomed.med.yale.edu
 
--Last update: November 1995 / Patterns and text revised; profile added.
+-Last update: April 2006 / Pattern revised.
 
 
 references
 1
 Hanks S.K., Hunter T.
+"Protein kinases 6. The eukaryotic protein kinase superfamily: kinase
+(catalytic) domain structure and classification."
 FASEB J. 9:576-596(1995).
+PubMed=7768349
 2
 Hunter T.
-Meth. Enzymol. 200:3-37(1991).
+"Protein kinase classification."
+Methods Enzymol. 200:3-37(1991).
+PubMed=1835513
 3
 Hanks S.K., Quinn A.M.
-Meth. Enzymol. 200:38-62(1991).
+"Protein kinase catalytic domain sequence database: identification of
+conserved features of primary structure and classification of family
+members."
+Methods Enzymol. 200:38-62(1991).
+PubMed=1956325
 4
 Hanks S.K.
 Curr. Opin. Struct. Biol. 1:369-383(1991).
 5
 Hanks S.K., Quinn A.M., Hunter T.
+"The protein kinase family: conserved features and deduced phylogeny
+of the catalytic domains."
 Science 241:42-52(1988).
+PubMed=3291115
 6
-Knighton D.R., Zheng J., Ten Eyck L.F., Ashford V.A., Xuong N.-H.,
+Knighton D.R., Zheng J.H., Ten Eyck L.F., Ashford V.A., Xuong N.-H.,
 Taylor S.S., Sowadski J.M.
+"Crystal structure of the catalytic subunit of cyclic adenosine
+monophosphate-dependent protein kinase."
 Science 253:407-414(1991).
+PubMed=1862342
 7
 Bairoch A., Claverie J.-M.
-Nature 331:22(1988).
+"Sequence patterns in protein kinases."
+Nature 331:22-22(1988).
+PubMed=3340146; DOI=10.1038/331022a0
 8
 Benner S.
 Nature 329:21-21(1987).
 9
 Kirby R.
-J. Mol. Evol. 30:489-492(1992).
+"Evolutionary origin of aminoglycoside phosphotransferase resistance
+genes."
+J. Mol. Evol. 30:489-492(1990).
+PubMed=2165531
 10
 Littler E., Stuart A.D., Chee M.S.
 Nature 358:160-162(1992).
@@ -142,20 +160,29 @@ pattern.
 -Consensus pattern: [IV]-x-D-S-[GAS]-[GASC]-[GAST]-[GA]-T
                     [S is the active site residue]
 -Sequences known to belong to this class detected by the pattern: ALL.
--Other sequence(s) detected in SWISS-PROT: 3.
+-Other sequence(s) detected in Swiss-Prot: 3.
 -Last update: June 1994 / Text revised.
 
 
 references
 1
 Trowsdale J., Martin D., Bicknell D., Campbell I.
+"Alkaline phosphatases."
 Biochem. Soc. Trans. 18:178-180(1990).
+PubMed=2379681
 2
 Manes T., Glade K., Ziomek C.A., Millan J.L.
+"Genomic structure and comparison of mouse tissue-specific alkaline
+phosphatase genes."
 Genomics 8:541-554(1990).
+PubMed=2286375
 3
 Mansouri K., Piepersberg W.
+"Genetics of streptomycin production in Streptomyces griseus:
+nucleotide sequence of five genes, strFGHIK, including a phosphatase
+gene."
 Mol. Gen. Genet. 228:459-469(1991).
+PubMed=1654502
 PDOC00144
 prosite_refs
     ('PS00159', 'ALDOLASE_KDPG_KHG_1')
@@ -185,40 +212,44 @@ base formation.
 -Sequences known to belong to this class detected by the pattern: ALL,  except
  for Bacillus  subtilis  KDPG-aldolase  which  has  Thr  instead of Arg in the
  active site.
--Other sequence(s) detected in SWISS-PROT: NONE.
+-Other sequence(s) detected in Swiss-Prot: NONE.
 
 -Consensus pattern: G-x(3)-[LIVMF]-K-[LF]-F-P-[SA]-x(3)-G
                     [K is involved in Schiff-base formation]
 -Sequences known to belong to this class detected by the pattern: ALL.
--Other sequence(s) detected in SWISS-PROT: NONE.
+-Other sequence(s) detected in Swiss-Prot: NONE.
 
 -Last update: November 1997 / Patterns and text revised.
 
 
 references
 1
-Vlahos C J., Dekker E.E.
+Vlahos C.J., Dekker E.E.
+"The complete amino acid sequence and identification of the
+active-site arginine peptide of Escherichia coli
+2-keto-4-hydroxyglutarate aldolase."
 J. Biol. Chem. 263:11683-11691(1988).
+PubMed=3136164
 PDOC00149
 prosite_refs
     ('PS00165', 'DEHYDRATASE_SER_THR')
-**********************************************************************
-* Serine/threonine dehydratases pyridoxal-phosphate attachment site  *
-**********************************************************************
+*********************************************************************
+* Serine/threonine dehydratases pyridoxal-phosphate attachment site *
+*********************************************************************
 
 Serine and threonine  dehydratases [1,2]  are  functionally  and  structurally
 related pyridoxal-phosphate dependent enzymes:
 
- - L-serine dehydratase (EC 4.2.1.13) and D-serine  dehydratase  (EC 4.2.1.14)
+ - L-serine dehydratase (EC 4.3.1.17) and D-serine  dehydratase  (EC 4.3.1.18)
    catalyze the dehydratation of L-serine (respectively D-serine) into ammonia
    and pyruvate.
- - Threonine dehydratase  (EC 4.2.1.16) (TDH) catalyzes  the  dehydratation of
+ - Threonine dehydratase  (EC 4.3.1.19) (TDH) catalyzes  the  dehydratation of
    threonine into  alpha-ketobutarate  and  ammonia.  In Escherichia coli  and
    other microorganisms,  two  classes  of  TDH  are  known  to  exist. One is
    involved in  the  biosynthesis of isoleucine, the other in hydroxamino acid
    catabolism.
 
-Threonine synthase  (EC 4.2.99.2) is  also  a pyridoxal-phosphate  enzyme,  it
+Threonine synthase  (EC 4.2.3.1) is  also  a  pyridoxal-phosphate  enzyme,  it
 catalyzes the  transformation of  homoserine-phosphate into threonine.  It has
 been shown [3] that  threonine  synthase  is  distantly related to the serine/
 threonine dehydratases.
@@ -228,32 +259,44 @@ residue.  The sequence around  this residue is sufficiently conserved to allow
 the derivation  of  a  pattern  specific  to serine/threonine dehydratases and
 threonine synthases.
 
--Consensus pattern: [DESH]-x(4,5)-[STVG]-x-[AS]-[FYI]-K-[DLIFSA]-[RVMF]-[GA]-
-                    [LIVMGA]
+-Consensus pattern: [DESH]-x(4,5)-[STVG]-{EVKD}-[AS]-[FYI]-K-[DLIFSA]-[RLVMF]-
+                    [GA]-[LIVMGA]
                     [The K is the pyridoxal-P attachment site]
 -Sequences known to belong to this class detected by the pattern: ALL.
--Other sequence(s) detected in SWISS-PROT: 12.
+-Other sequence(s) detected in Swiss-Prot: 17.
 
--Note: some   bacterial L-serine dehydratases - such as those from Escherichia
+-Note: Some   bacterial L-serine dehydratases - such as those from Escherichia
  coli - are iron-sulfur proteins [4] and do not belong to this family.
 
--Last update: November 1995 / Pattern and text revised.
+-Last update: December 2004 / Pattern and text revised.
 
 
 references
 1
-Ogawa H., Gomi T., Konishi K., Date T., Naakashima H., Nose K.,
+Ogawa H., Gomi T., Konishi K., Date T., Nakashima H., Nose K.,
 Matsuda Y., Peraino C., Pitot H.C., Fujioka M.
+"Human liver serine dehydratase. cDNA cloning and sequence homology
+with hydroxyamino acid dehydratases from other sources."
 J. Biol. Chem. 264:15818-15823(1989).
+PubMed=2674117
 2
 Datta P., Goss T.J., Omnaas J.R., Patil R.V.
+"Covalent structure of biodegradative threonine dehydratase of
+Escherichia coli: homology with other dehydratases."
 Proc. Natl. Acad. Sci. U.S.A. 84:393-397(1987).
+PubMed=3540965
 3
 Parsot C.
+"Evolution of biosynthetic pathways: a common ancestor for threonine
+synthase, threonine dehydratase and D-serine dehydratase."
 EMBO J. 5:3013-3019(1986).
+PubMed=3098560
 4
 Grabowski R., Hofmeister A.E.M., Buckel W.
+"Bacterial L-serine dehydratases: a new family of enzymes containing
+iron-sulfur clusters."
 Trends Biochem. Sci. 18:297-300(1993).
+PubMed=8236444
 PDOC00340
 prosite_refs
     ('PS00406', 'ACTINS_1')
@@ -298,22 +341,23 @@ and span  positions  54 to 64 and 357 to 365. The last signature picks up both
 actins and  the actin-like proteins and corresponds to positions 106 to 118 in
 actins.
 
--Consensus pattern: [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
+-Consensus pattern: [FY]-[LIV]-[GV]-[DE]-E-[ARV]-[QLAH]-x(1,2)-[RKQ](2)-[GD]
 -Sequences known to belong to this class detected by the pattern: ALL,  except
  for the actin-like proteins and 10 actins.
--Other sequence(s) detected in SWISS-PROT: NONE.
+-Other sequence(s) detected in Swiss-Prot: NONE.
 
--Consensus pattern: W-[IV]-[STA]-[RK]-x-[DE]-Y-[DNE]-[DE]
+-Consensus pattern: W-[IVC]-[STAK]-[RK]-x-[DE]-Y-[DNE]-[DE]
 -Sequences known to belong to this class detected by the pattern: ALL,  except
  for the actin-like proteins and 9 actins.
--Other sequence(s) detected in SWISS-PROT: NONE.
+-Other sequence(s) detected in Swiss-Prot: NONE.
 
--Consensus pattern: [LM]-[LIVM]-T-E-[GAPQ]-x-[LIVMFYWHQ]-N-[PSTAQ]-x(2)-N-[KR]
+-Consensus pattern: [LM]-[LIVMA]-T-E-[GAPQ]-x-[LIVMFYWHQPK]-[NS]-[PSTAQ]-x(2)-
+                    N-[KR]
 -Sequences known to belong to this class detected by the pattern: ALL,  except
  for 5 actins.
--Other sequence(s) detected in SWISS-PROT: NONE.
+-Other sequence(s) detected in Swiss-Prot: NONE.
 
--Last update: November 1997 / Text revised.
+-Last update: December 2004 / Patterns and text revised.
 
 
 references
@@ -325,10 +369,14 @@ Pollard T.D., Cooper J.A.
 Annu. Rev. Biochem. 55:987-1036(1986).
 3
 Pollard T.D.
-Curr. Opin. Cell Biol. 1:33-40(1990).
+"Actin."
+Curr. Opin. Cell Biol. 2:33-40(1990).
+PubMed=2183841
 4
 Rubenstein P.A.
+"The functional importance of multiple actin isoforms."
 BioEssays 12:309-315(1990).
+PubMed=2203335
 5
 Meagher R.B., McLean B.G.
 Cell Motil. Cytoskeleton 16:164-166(1990).
@@ -358,27 +406,43 @@ be the  precursor  of  this  essential electrophilic moiety. The region around
 this active  site  residue  is  well  conserved and can be used as a signature
 pattern.
 
--Consensus pattern: G-[STG]-[LIVM]-[STG]-[AC]-S-G-[DH]-L-x-P-L-[SA]-x(2)-[SA]
+-Consensus pattern: [GS]-[STG]-[LIVM]-[STG]-[SAC]-S-G-[DH]-L-x-[PN]-L-[SA]-
+                    x(2,3)-[SAGVTL]
                     [S is the active site residue]
 -Sequences known to belong to this class detected by the pattern: ALL.
--Other sequence(s) detected in SWISS-PROT: NONE.
--Last update: November 1995 / Pattern and text revised.
+-Other sequence(s) detected in Swiss-Prot: NONE.
+-Last update: April 2006 / Pattern revised.
 
 
 references
 1
 Taylor R.G., Lambert M.A., Sexsmith E., Sadler S.J., Ray P.N.,
 Mahuran D.J., McInnes R.R.
+"Cloning and expression of rat histidase. Homology to two bacterial
+histidases and four phenylalanine ammonia-lyases."
 J. Biol. Chem. 265:18192-18199(1990).
+PubMed=2120224
 2
 Langer M., Reck G., Reed J., Retey J.
+"Identification of serine-143 as the most likely precursor of
+dehydroalanine in the active site of histidine ammonia-lyase. A study
+of the overexpressed enzyme by site-directed mutagenesis."
 Biochemistry 33:6462-6467(1994).
+PubMed=8204579
 3
 Schuster B., Retey J.
+"Serine-202 is the putative precursor of the active site
+dehydroalanine of phenylalanine ammonia lyase. Site-directed
+mutagenesis studies on the enzyme from parsley (Petroselinum crispum
+L.)."
 FEBS Lett. 349:252-254(1994).
+PubMed=8050576
 4
 Taylor R.G., McInnes R.R.
+"Site-directed mutagenesis of conserved serines in rat histidase.
+Identification of serine 254 as an essential active site residue."
 J. Biol. Chem. 269:27473-27477(1994).
+PubMed=7961661
 PDOC00472
 prosite_refs
     ('PS00546', 'CYSTEINE_SWITCH')
@@ -418,27 +482,41 @@ A cysteine switch has been found in the following zinc proteases:
                     [C chelates the zinc ion]
 -Sequences known to belong to this class detected by the pattern: ALL,  except
  for cat MMP-7 and mouse MMP-11.
--Other sequence(s) detected in SWISS-PROT: NONE.
+-Other sequence(s) detected in Swiss-Prot: NONE.
 -Last update: November 1997 / Pattern and text revised.
 
 
 references
 1
-Woessner J. Jr.
+Woessner J.F. Jr.
+"Matrix metalloproteinases and their inhibitors in connective tissue
+remodeling."
 FASEB J. 5:2145-2154(1991).
+PubMed=1850705
 2
 Sanchez-Lopez R., Nicholson R., Gesnel M.C., Matrisian L.M.,
 Breathnach R.
 J. Biol. Chem. 263:11892-11899(1988).
 3
-Park A.J., Matrisian L.M., Kells A.F., Pearson R., Yuan Z., Navre M.
+Park A.J., Matrisian L.M., Kells A.F., Pearson R., Yuan Z.Y., Navre M.
+"Mutational analysis of the transin (rat stromelysin) autoinhibitor
+region demonstrates a role for residues surrounding the 'cysteine
+switch'."
 J. Biol. Chem. 266:1584-1590(1991).
+PubMed=1988438
 4
 Lepage T., Gache C.
+"Early expression of a collagenase-like hatching enzyme gene in the
+sea urchin embryo."
 EMBO J. 9:3003-3012(1990).
+PubMed=2167841
 5
 Kinoshita T., Fukuzawa H., Shimada T., Saito T., Matsuda Y.
+"Primary structure and expression of a gamete lytic enzyme in
+Chlamydomonas reinhardtii: similarity of functional domains to matrix
+metalloproteases."
 Proc. Natl. Acad. Sci. U.S.A. 89:4693-4697(1992).
+PubMed=1584806
 PDOC00640
 prosite_refs
     ('PS00812', 'GLYCOSYL_HYDROL_F8')
@@ -474,10 +552,10 @@ a signature pattern.
                     x(3)-[FW]
                     [The first D is an active site residue]
 -Sequences known to belong to this class detected by the pattern: ALL.
--Other sequence(s) detected in SWISS-PROT: NONE.
+-Other sequence(s) detected in Swiss-Prot: NONE.
 
 -Expert(s) to contact by email:
-                   Henrissat B.; bernie@afmb.cnrs-mrs.fr
+           Henrissat B.; bernie@afmb.cnrs-mrs.fr
 
 -Last update: November 1997 / Text revised.
 
@@ -485,22 +563,35 @@ a signature pattern.
 references
 1
 Beguin P.
+"Molecular biology of cellulose degradation."
 Annu. Rev. Microbiol. 44:219-248(1990).
+PubMed=2252383; DOI=10.1146/annurev.mi.44.100190.001251
 2
 Gilkes N.R., Henrissat B., Kilburn D.G., Miller R.C. Jr., Warren R.A.J.
+"Domains in microbial beta-1, 4-glycanases: sequence conservation,
+function, and enzyme families."
 Microbiol. Rev. 55:303-315(1991).
+PubMed=1886523
 3
 Henrissat B., Claeyssens M., Tomme P., Lemesle L., Mornon J.-P.
+"Cellulase families revealed by hydrophobic cluster analysis."
 Gene 81:83-95(1989).
+PubMed=2806912
 4
 Henrissat B.
+"A classification of glycosyl hydrolases based on amino acid sequence
+similarities."
 Biochem. J. 280:309-316(1991).
+PubMed=1747104
 5
 Alzari P.M., Souchon H., Dominguez R.
+"The crystal structure of endoglucanase CelA, a family 8 glycosyl
+hydrolase from Clostridium thermocellum."
 Structure 4:265-275(1996).
+PubMed=8805535
 E1
 
-http://www.expasy.ch/cgi-bin/lists?glycosid.txt
+http://www.expasy.org/cgi-bin/lists?glycosid.txt
 PDOC00787
 prosite_refs
     ('PS01027', 'GLYCOSYL_HYDROL_F39')
@@ -522,26 +613,32 @@ the proton donor in the catalytic mechanism. We use this region as a signature
 pattern.
 
 -Consensus pattern: W-x-F-E-x-W-N-E-P-[DN]
-                    [The second E is the putative active site residue]
+                    [The second E may be the active site residue]
 -Sequences known to belong to this class detected by the pattern: ALL.
--Other sequence(s) detected in SWISS-PROT: NONE.
+-Other sequence(s) detected in Swiss-Prot: NONE.
 
 -Expert(s) to contact by email:
-                   Henrissat B.; bernie@afmb.cnrs-mrs.fr
+           Henrissat B.; bernie@afmb.cnrs-mrs.fr
 
--Last update: November 1997 / Text revised.
+-Last update: May 2004 / Text revised.
 
 
 references
 1
 Henrissat B., Bairoch A.
+"New families in the classification of glycosyl hydrolases based on
+amino acid sequence similarities."
 Biochem. J. 293:781-788(1993).
+PubMed=8352747
 2
 Henrissat B., Callebaut I., Fabrega S., Lehn P., Mornon J.-P., Davies G.
+"Conserved catalytic machinery and the prediction of a common fold for
+several families of glycosyl hydrolases."
 Proc. Natl. Acad. Sci. U.S.A. 92:7090-7094(1995).
+PubMed=7624375
 E1
 
-http://www.expasy.ch/cgi-bin/lists?glycosid.txt
+http://www.expasy.org/cgi-bin/lists?glycosid.txt
 PDOC00933
 prosite_refs
     ('PS01213', 'GLOBIN_FAM_2')
@@ -552,23 +649,26 @@ prosite_refs
 Globins are heme-containing  proteins involved in  binding and/or transporting
 oxygen [1]. Almost all globins belong to a large family (see <PDOC00793>), the
 only exceptions  are  the  following proteins which form a family of their own
-[2,3]:
+[2,3,4]:
 
  - Monomeric  hemoglobins  from the protozoan Paramecium caudatum, Tetrahymena
    pyriformis and Tetrahymena thermophila.
- - Cyanoglobin from the cyanobacteria Nostoc commune.
+ - Cyanoglobins  from  the  cyanobacteria Nostoc commune and Synechocystis PCC
+   6803.
  - Globins  LI637  and  LI410  from  the chloroplast of the alga Chlamydomonas
    eugametos.
- - Mycobacterium tuberculosis hypothetical protein MtCY48.23.
+ - Mycobacterium tuberculosis globins glbN and glbO.
 
 These proteins  contain a conserved histidine which could be involved in heme-
 binding. As a signature pattern, we use a conserved region that ends with this
 residue.
 
--Consensus pattern: F-[LF]-x(5)-G-[PA]-x(4)-G-[KRA]-x-[LIVM]-x(3)-H
+-Consensus pattern: F-[LF]-x(4)-[GE]-G-[PAT]-x(2)-[YW]-x-[GSE]-[KRQAE]-x(1,5)-
+                    [LIVM]-x(3)-H
+                    [The H may be a heme ligand]
 -Sequences known to belong to this class detected by the pattern: ALL.
--Other sequence(s) detected in SWISS-PROT: NONE.
--Last update: November 1997 / First entry.
+-Other sequence(s) detected in Swiss-Prot: NONE.
+-Last update: April 2006 / Pattern revised.
 
 
 references
@@ -579,5 +679,15 @@ Berlin New-York (1988).
 Takagi T.
 Curr. Opin. Struct. Biol. 3:413-418(1993).
 3
-Couture M., Chamberland H., St-Pierre B., Lafontaine J., Guertin M.;
+Couture M., Chamberland H., St-Pierre B., Lafontaine J., Guertin M.
+"Nuclear genes encoding chloroplast hemoglobins in the unicellular
+green alga Chlamydomonas eugametos."
 Mol. Gen. Genet. 243:185-197(1994).
+PubMed=8177215
+4
+Couture M., Das T.K., Savard P.Y., Ouellet Y., Wittenberg J.B.,
+Wittenberg B.A., Rousseau D.L., Guertin M.
+"Structural investigations of the hemoglobin of the cyanobacterium
+Synechocystis PCC6803 reveal a unique distal heme pocket."
+Eur. J. Biochem. 267:4770-4780(2000).
+PubMed=10903511
