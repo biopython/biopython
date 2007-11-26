@@ -67,9 +67,10 @@ class SeqRecord:
         return "\n".join(lines)
 
     def __repr__(self) :
-        return "SeqRecord(seq=%s, id=%s, name=%s, description=%s, dbxrefs=%s)" \
-        % tuple(map(repr, (self.seq, self.id, self.name,
-                           self.description, self.dbxrefs)))
+        return self.__class__.__name__ \
+         + "(seq=%s, id=%s, name=%s, description=%s, dbxrefs=%s)" \
+         % tuple(map(repr, (self.seq, self.id, self.name,
+                            self.description, self.dbxrefs)))
         
 if __name__ == "__main__" :
     #The following is a very quick example of how to create a SeqRecord object
@@ -87,7 +88,8 @@ if __name__ == "__main__" :
     #Note that annotations must be added AFTER creating the record
     record.annotations["note"] = "This annotation was added later"
 
-    print record
+    print str(record)
+    print repr(record)
 
     #One way to create a minimal record.
     record2 = SeqRecord(Seq(""))
