@@ -4,7 +4,7 @@ Uses Bio.SeqIO to parse files, and then loads them into a BioSQL database,
 and checks we can retreive them again.
 
 Goals:
-    Make sure that all BioSQL preserves SeqRecord objects.
+    Make sure that BioSQL preserves SeqRecord objects.
 """
 
 from sets import Set
@@ -93,7 +93,7 @@ def checksum_summary(record) :
            % (short, seguid(record.seq), len(record.seq))
 
 def compare_references(old_r, new_r) :
-    """Compare Reference objects"""
+    """Compare two Reference objects"""
     assert old_r.title == new_r.title
     assert old_r.authors == new_r.authors
     assert old_r.consrtm == new_r.consrtm
@@ -129,12 +129,51 @@ def compare_features(old_f, new_f) :
     assert Set(old_f.qualifiers.keys()) == Set(new_f.qualifiers.keys())
     for key in old_f.qualifiers.keys() :
         assert old_f.qualifiers[key] == new_f.qualifiers[key]
+
+def compare_sequences(old, new) :
+    """Compare two Seq or DBSeq objects"""
+    assert len(old) == len(new)
+    assert old.tostring() == new.tostring()
+
+    l = len(old)
+    s = old.tostring()
+
+    #Don't check every single element; for long sequences
+    #this takes far far far too long to run!
+    if l < 50 :
+        indices = range(l)
+        #TODO - Negative indices, see Bug 2411
+        #indices = range(-l,l)
+    else :
+        indices = [0,1,2,int(l/2),l-2,l-1]
+        #TODO - Negative indices, see Bug 2411
+        #indices = [-l,-1+1,-int(l/2),-2,-1,0,1,2,int(l/2),l-2,l-1]
+
+    #Test element access,    
+    for i in indices :
+        expected = s[i]
+        assert expected == old[i]
+        assert expected == new[i]
+        
+    #Test slices,
+    for i in indices :
+        for j in indices :
+            expected = s[i:j]
+            assert expected == str(old[i:j]), \
+                   "Slice %s vs %s" % (repr(expected), repr(old[i:j]))
+            assert expected == str(new[i:j]), \
+                   "Slice %s vs %s" % (repr(expected), repr(new[i:j]))
+            #TODO - See bug 2411
+            #for step in [1,2,3,17] :
+            #    expected = s[i:j:step]
+            #    assert expected == str(old[i:j:step])
+            #    assert expected == str(new[i:j:step])
+                
                 
 def compare_records(old, new) :
-    """Compare two SeqRecord objects"""
+    """Compare two SeqRecord or DBSeqRecord objects"""
     #Sequence:
-    assert len(old.seq) == len(new.seq)
-    assert old.seq.tostring() == new.seq.tostring()
+    compare_sequences(old.seq, new.seq)
     #Basics:
     assert old.id == new.id
     assert old.name == new.name
@@ -179,8 +218,8 @@ print "Removing existing sub-database '%s' (if exists)" % db_name
 if db_name in server.keys() :
     #Might exist from a failed test run...
     #db = server[db_name]
-	server.remove_database(db_name)
-	server.adaptor.conn.commit()
+    server.remove_database(db_name)
+    server.adaptor.conn.commit()
 
 print "(Re)creating empty sub-database '%s'" % db_name
 db = server.new_database(db_name)
