@@ -482,24 +482,19 @@ class DatabaseLoader:
             being automatically assigned, and into the seqfeature_dbxref
             table as seqfeature_id, dbxref_id, and rank tuples
         """
-        # Dictionary of database types, keyed by GenBank db_xref abbreviation
-        from BioSQL import _db_dict as db_dict
+        # NOTE - In older versions of Biopython, we would map the GenBank
+        # db_xref "name", for example "GI" to "GeneIndex", and give a warning
+        # for any unknown terms.  This was a long term maintainance problem,
+        # and differed from BioPerl and BioJava's implementation.  See bug 2405
         for rank, value in enumerate(dbxrefs):
             # Split the DB:accession format string at colons.  We have to
             # account for multiple-line and multiple-accession entries
             try:
                 dbxref_data = value.replace(' ','').replace('\n','').split(':')
-                key = dbxref_data[0]
+                db = dbxref_data[0]
                 accessions = dbxref_data[1:]
             except:
                 raise Exception("Parsing of db_xref failed: %s; %s" % (key, accession))
-            if key not in db_dict:
-                # Database is currently unknown, so add it to the db_dict
-                # temporarily and issue a warning
-                import warnings
-                warnings.warn("%s not recognised as database type: temporarily accepting key" % key)
-                db_dict[key] = key
-            db = db_dict[key]
             # Loop over all the grabbed accessions, and attempt to fill the
             # table
             for accession in accessions:
