@@ -11,6 +11,7 @@ http://www.expasy.ch/prosite/
 Tested with:
 Release 15.0, July 1998
 Release 16.0, July 1999
+Release 20.22, 13 November 2007
 
 
 Classes:
@@ -31,10 +32,7 @@ _extract_record    Extract Prodoc data from a web page.
 
 """
 from types import *
-import string
-import re
 import sgmllib
-import time
 from Bio import File
 from Bio import Index
 from Bio.ParserSupport import *
@@ -109,7 +107,7 @@ class Iterator:
         if not lines:
             return None
             
-        data = string.join(lines, '')
+        data = "".join(lines)
         if self._parser is not None:
             return self._parser.parse(File.StringHandle(data))
         return data
@@ -208,6 +206,7 @@ class ExPASyDictionary:
         for the entry.  Raises a KeyError if there's an error.
         
         """
+        import time
         # First, check to see if enough time has passed since my
         # last query.
         if self.last_query_time is not None:
@@ -336,7 +335,7 @@ class _RecordConsumer(AbstractConsumer):
         self._clean_data()
 
     def accession(self, line):
-        line = string.rstrip(line)
+        line = line.rstrip()
         if line[0] != '{' or line[-1] != '}':
             raise SyntaxError, "I don't understand accession line\n%s" % line
         acc = line[1:-1]
@@ -345,10 +344,10 @@ class _RecordConsumer(AbstractConsumer):
         self.data.accession = acc
 
     def prosite_reference(self, line):
-        line = string.rstrip(line)
+        line = line.rstrip()
         if line[0] != '{' or line[-1] != '}':
             raise SyntaxError, "I don't understand accession line\n%s" % line
-        acc, name = string.split(line[1:-1], '; ')
+        acc, name = line[1:-1].split('; ')
         self.data.prosite_refs.append((acc, name))
     
     def text(self, line):
@@ -357,13 +356,13 @@ class _RecordConsumer(AbstractConsumer):
     def reference(self, line):
         if line[0] == '[' and line[3] == ']':  # new reference
             self._ref = Reference()
-            self._ref.number = string.strip(line[1:3])
+            self._ref.number = line[1:3].strip()
             if line[1] == 'E':
                 # If it's an electronic reference, then the URL is on the
                 # line, instead of the author.
-                self._ref.citation = string.strip(line[4:])
+                self._ref.citation = line[4:].strip()
             else:
-                self._ref.authors = string.strip(line[4:])
+                self._ref.authors = line[4:].strip()
             self.data.references.append(self._ref)
         elif line[:4] == '    ':
             if not self._ref:
@@ -375,8 +374,8 @@ class _RecordConsumer(AbstractConsumer):
     def _clean_data(self):
         # get rid of trailing newlines
         for ref in self.data.references:
-            ref.citation = string.rstrip(ref.citation)
-            ref.authors = string.rstrip(ref.authors)
+            ref.citation = ref.citation.rstrip()
+            ref.authors = ref.authors.rstrip()
     
 def index_file(filename, indexname, rec2key=None):
     """index_file(filename, indexname, rec2key=None)
@@ -441,7 +440,7 @@ def _extract_record(handle):
             self._in_pre = 0
     p = parser()
     p.feed(handle.read())
-    data = string.lstrip(string.join(p.data, ''))
+    data = ''.join(p.data).lstrip()
     if not data:
         raise ValueError, "No data found in web page."
     return data
