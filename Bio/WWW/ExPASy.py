@@ -57,13 +57,14 @@ def get_prosite_raw(id, cgi='http://www.expasy.ch/cgi-bin/get-prosite-raw.pl'):
     For a non-existing key, ExPASy returns nothing.
     """
     import urllib, socket
+    print "%s?%s" % (cgi, id)
     handle = urllib.urlopen("%s?%s" % (cgi, id))
 
     # Peek at the first character to see if anything is available.
     # ExPASy returns nothing for non-existing keys
 
     start = handle.fp._sock.recv(1, socket.MSG_PEEK)
-    if start!='{': # ExPASy returned nothing
+    if not start: # ExPASy returned nothing
         raise IOError, "no results"
 
     return handle
