@@ -34,6 +34,7 @@ class DatabaseLoader:
         references = record.annotations.get('references', ())
         for reference, rank in zip(references, range(len(references))):
             self._load_reference(reference, rank, bioentry_id)
+        self._load_annotations(record, bioentry_id)
         for seq_feature_num in range(len(record.features)):
             seq_feature = record.features[seq_feature_num]
             self._load_seqfeature(seq_feature, seq_feature_num, bioentry_id)
@@ -295,10 +296,46 @@ class DatabaseLoader:
         if not comment:
             return
         comment = comment.replace('\n', ' ')
-        
+
         sql = "INSERT INTO comment (bioentry_id, comment_text, rank)" \
               " VALUES (%s, %s, %s)"
         self.adaptor.execute(sql, (bioentry_id, comment, 1))
+        
+    def _load_annotations(self, record, bioentry_id) :
+        """Record misc annotations in the bioentry_qualifier_value table"""
+        mono_sql = "INSERT INTO bioentry_qualifier_value" \
+                   "(bioentry_id, term_id, value)" \
+                   " VALUES (%s, %s, %s)"
+        many_sql = "INSERT INTO bioentry_qualifier_value" \
+                   "(bioentry_id, term_id, value, rank)" \
+                   " VALUES (%s, %s, %s, %s)"
+        tag_ontology_id = self._get_ontology_id('Annotation Tags')
+        for key, value in record.annotations.iteritems() :
+            if key in ["references", "comment", "ncbi_taxid"] :
+                #Handled separately
+                continue
+            term_id = self._get_term_id(key, ontology_id=tag_ontology_id)
+            if isinstance(value, list) :
+                rank = 0
+                for entry in value :
+                    if isinstance(entry, str) or isinstance(entry, int):
+                        #Easy case
+                        rank += 1
+                        self.adaptor.execute(many_sql, \
+                                     (bioentry_id, term_id, str(entry), rank))
+                    else :
+                        pass
+                        #print "Ignoring annotation '%s' sub-entry of type '%s'" \
+                        #      % (key, str(type(entry)))
+            elif isinstance(value, str) or isinstance(value, int):
+                #Have a simple single entry, leave rank as the DB default
+                self.adaptor.execute(mono_sql, \
+                                     (bioentry_id, term_id, str(value)))
+            else :
+                pass
+                #print "Ignoring annotation '%s' entry of type '%s'" \
+                #      % (key, type(value))
+
 
     def _load_reference(self, reference, rank, bioentry_id):
 

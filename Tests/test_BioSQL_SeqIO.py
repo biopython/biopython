@@ -137,6 +137,7 @@ def compare_sequences(old, new) :
 
     l = len(old)
     s = old.tostring()
+    assert isinstance(s, str)
 
     #Don't check every single element; for long sequences
     #this takes far far far too long to run!
@@ -216,8 +217,16 @@ def compare_records(old, new) :
             assert len(old.annotations[key]) == len(new.annotations[key])
             for old_r, new_r in zip(old.annotations[key], new.annotations[key]) :
                 compare_references(old_r, new_r)
-        else :
+        elif type(old.annotations[key]) == type(new.annotations[key]) :
             assert old.annotations[key] == new.annotations[key]
+        elif isinstance(old.annotations[key], str) \
+        and isinstance(new.annotations[key], list) :
+            #Any annotation which is a single string gets turned into
+            #a list containing one string by BioSQL at the moment.
+            assert [old.annotations[key]] == new.annotations[key]
+        elif isinstance(old.annotations[key], list) \
+        and isinstance(new.annotations[key], str) :
+            assert old.annotations[key] == [new.annotations[key]]
 
         
 #####################################################################
