@@ -20,6 +20,7 @@ and format string.  This returns an iterator giving SeqRecord objects.
     handle = open("example.fasta", "rU")
     for record in SeqIO.parse(handle, "fasta") :
         print record
+    handle.close()
 
 Note that the parse() function will all invoke the relevant parser for
 the format with its default settings.  You may want more control, in which case
@@ -35,6 +36,7 @@ If you want random access to the records by number, turn this into a list:
     from Bio import SeqIO
     handle = open("example.fasta", "rU")
     records = list(SeqIO.parse(handle, "fasta"))
+    handle.close()
     print records[0]
 
 If you want random access to the records by a key such as the record id, turn
@@ -42,9 +44,22 @@ the iterator into a dictionary:
 
     from Bio import SeqIO
     handle = open("example.fasta", "rU")
-    record_dict = SeqIO.to_dict(SeqIO.parse(handle, "format"))
+    record_dict = SeqIO.to_dict(SeqIO.parse(handle, "fasta"))
+    handle.close()
     print record["gi:12345678"]
 
+If you only want the first record from the file, use the iterator's next()
+method:
+
+    from Bio import SeqIO
+    handle = open("example.fasta", "rU")
+    record = SeqIO.parse(handle, "fasta").next()
+    handle.close()
+    print record
+
+The above code will work as long as the file contains at least one record.
+Note that if there is more than one record, the remaining records will be
+silently ignored.
 
 Input - Alignments
 ==================
@@ -54,6 +69,7 @@ Instead, use the to_alignment(...) function, like so:
     from Bio import SeqIO
     handle = open("example.aln", "rU")
     alignment = SeqIO.to_alignment(SeqIO.parse(handle, "clustal"))
+    handle.close()
 
 This function may be removed in future once alignments can be created
 directly from SeqRecord objects.
