@@ -3,13 +3,13 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 #
-#New Wiki page:
-# http://biopython.org/wiki/SeqIO
-#
 #Nice link:
 # http://www.ebi.ac.uk/help/formats_frame.html
 
 """Sequence input/output designed to look similar to the bioperl design.
+
+The Bio.SeqIO module is also documented by a whole chapter in the Biopython
+tutorial, and by this wiki on the webage, http://biopython.org/wiki/SeqIO
 
 Input
 =====
@@ -48,8 +48,24 @@ the iterator into a dictionary:
     handle.close()
     print record["gi:12345678"]
 
-If you only want the first record from the file, use the iterator's next()
-method:
+If you expect your file to contain one-and-only-one record, then we provide
+the following 'helper' function which will return a single SeqRecord, or raise
+an exception if there are no records or more than one record:
+
+    from Bio import SeqIO
+    handle = open("example.fasta", "rU")
+    record = SeqIO.read(handle, "fasta")
+    handle.close()
+    print record
+
+This style is useful when you expect a single record only (and would consider
+multiple records an error).  For example, when dealing with GenBank files for
+bacterial genomes or chromosomes, there is normally only a single record.
+Alternatively, use this with a handle when download a single record from the
+internet.
+
+However, if you just want the first record from a file containing multiple
+record, use the iterator's next() method:
 
     from Bio import SeqIO
     handle = open("example.fasta", "rU")
@@ -234,7 +250,7 @@ def write(sequences, handle, format) :
     return
     
 def parse(handle, format) :
-    """Turns a sequence file into a iterator returning SeqRecords
+    """Turns a sequence file into a iterator returning SeqRecords.
 
     handle   - handle to the file.
     format   - string describing the file format.
@@ -254,6 +270,9 @@ def parse(handle, format) :
     which may result in a generic alphabet or other non-ideal
     settings.  For more control, you must use the format specific
     iterator directly...
+
+    Use the Bio.SeqIO.read(handle, format) function when you expect
+    a single record only.
     """
 
     #Try and give helpful error messages:
@@ -275,8 +294,46 @@ def parse(handle, format) :
     #Its up to the caller to close this handle - they opened it.
     return iterator_generator(handle)
 
+def read(handle, format) :
+    """Turns a sequence file into a single SeqRecord.
+
+    handle   - handle to the file.
+    format   - string describing the file format.
+
+    If the handle contains no records, or more than one record,
+    an exception is raised.  For example, using a GenBank file
+    containing one record:
+
+    from Bio import SeqIO
+    record = SeqIO.read(open("example.gbk"), "genbank")
+
+    If however you want the first record from a file containing,
+    multiple records this function would raise an exception.
+    Instead use:
+
+    from Bio import SeqIO
+    record = SeqIO.parse(open("example.gbk"), "genbank").next()
+
+    Use the Bio.SeqIO.parse(handle, format) function if you want
+    to read multiple records from the handle.
+    """
+    iterator = parse(handle, format)
+    try :
+        first = iterator.next()
+    except StopIteration :
+        first = None
+    if first is None :
+        raise ValueError, "No records found in handle"
+    try :
+        second = iterator.next()
+    except StopIteration :
+        second = None
+    if second is not None :
+        raise ValueError, "More than one record found in handle"
+    return first
+
 def to_dict(sequences, key_function=None) :
-    """Turns a sequence iterator or list into a dictionary
+    """Turns a sequence iterator or list into a dictionary.
 
     sequences  - An iterator that returns SeqRecord objects,
                  or simply a list of SeqRecord objects.
@@ -315,7 +372,7 @@ def to_dict(sequences, key_function=None) :
     return d
 
 def to_alignment(sequences, alphabet=generic_alphabet, strict=True) :
-    """Returns a multiple sequence alignment
+    """Returns a multiple sequence alignment.
 
     sequences -An iterator that returns SeqRecord objects,
                or simply a list of SeqRecord objects.
@@ -1347,7 +1404,7 @@ SQ   SEQUENCE   102 AA;  10576 MW;  CFBAA1231C3A5E92 CRC64;
             count=count+1
         assert count == rec_count
 
-        print "parse(handle)"
+        print "parse(...)"
         iterator = parse(StringIO(data), format=format)
         for (i, record) in enumerate(iterator) :
             assert record.id == as_list[i].id
@@ -1377,6 +1434,18 @@ SQ   SEQUENCE   102 AA;  10576 MW;  CFBAA1231C3A5E92 CRC64;
                 assert as_list[i].id == alignment.get_all_seqs()[i].id
                 assert as_list[i].seq.tostring() == alignment._records[i].seq.tostring()
                 assert as_list[i].seq.tostring() == alignment.get_all_seqs()[i].seq.tostring()
+
+        print "read(...)"
+        if rec_count == 1 :
+            record = read(StringIO(data), format)
+            assert isinstance(record, SeqRecord)
+        else :
+            try :
+                record = read(StringIO(data), format)
+                assert False, "Should have failed"
+            except ValueError :
+                #Expected to fail
+                pass
 
         print
         
