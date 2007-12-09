@@ -237,7 +237,7 @@ def check_simple_write_read(records, indent=" ") :
 
 for (t_format, t_alignment, t_filename, t_count) in test_files :
     print "Testing reading %s format file %s" % (t_format, t_filename)
-    assert os.path.isfile(t_filename)
+    assert os.path.isfile(t_filename), t_filename
 
     #Try as an iterator using handle
     records  = list(SeqIO.parse(handle=open(t_filename,"r"), format=t_format))
@@ -328,6 +328,18 @@ for (t_format, t_alignment, t_filename, t_count) in test_files :
         print " ..."
     if t_count > 3 :
         print record_summary(records[-1])
+
+    # Check Bio.SeqIO.read(...)
+    if t_count == 1 :
+        record = SeqIO.read(handle=open(t_filename), format=t_format)
+        assert isinstance(record, SeqRecord)
+    else :
+        try :
+            record = SeqIO.read(open(t_filename), t_format)
+            assert False, "Bio.SeqIO.read(...) should have failed"
+        except ValueError :
+            #Expected to fail
+            pass
 
 
     if t_alignment :
