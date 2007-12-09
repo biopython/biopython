@@ -4,6 +4,12 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Bio.SeqIO support for the "swiss" (aka SwissProt/UniProt) file format.
+
+You are expected to use this module via the Bio.SeqIO functions.
+See also the Bio.SwissProt module which offers more than just accessing
+the sequences as SeqRecord objects."""
+
 from Bio.SwissProt import SProt
     
 #This is a normal function!

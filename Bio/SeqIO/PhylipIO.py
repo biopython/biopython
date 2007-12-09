@@ -1,11 +1,14 @@
 # Copyright 2006, 2007 by Peter Cock.  All rights reserved.
+#
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""
-Note
-====
+"""Bio.SeqIO support for the "phylip" (PHYLIP) file format.
+
+You are expected to use this module via the Bio.SeqIO functions.
+
+Note:
 In TREE_PUZZLE (Schmidt et al. 2003) and PHYML (Guindon and Gascuel 2003)
 a dot/period (".") in a sequence is interpreted as meaning the same
 character as in the first sequence.  The PHYLIP 3.6 documentation says:

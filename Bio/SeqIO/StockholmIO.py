@@ -1,7 +1,12 @@
 # Copyright 2006, 2007 by Peter Cock.  All rights reserved.
+#
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+
+"""Bio.SeqIO support for the "stockholm" (aka PFAM) file format.
+
+You are expected to use this module via the Bio.SeqIO functions."""
 
 from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq

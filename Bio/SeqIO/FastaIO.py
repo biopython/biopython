@@ -7,6 +7,10 @@
 # objects.  The code is partly inspired  by earlier Biopython modules,
 # Bio.Fasta.* and the now deprecated Bio.SeqIO.FASTA
 
+"""Bio.SeqIO support for the "fasta" (aka FastA or Pearson) file format.
+
+You are expected to use this module via the Bio.SeqIO functions."""
+
 from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord

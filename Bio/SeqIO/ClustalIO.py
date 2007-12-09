@@ -4,6 +4,10 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Bio.SeqIO support for the "clustal" (aka ClustalW) file format.
+
+You are expected to use this module via the Bio.SeqIO functions."""
+
 #For reading alignments:
 from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq
