@@ -1,0 +1,18 @@
+//Parameters for the coalescence simulation program : simcoal.exe
+1 samples
+//Population effective sizes (number of genes 2*diploids)
+100
+//Samples sizes (number of genes 2*diploids)
+30
+//Growth rates	: negative growth implies population expansion
+0
+//Number of migration matrices : 0 implies no migration between demes
+0
+//historical event: time, source, sink, migrants, new deme size, new growth rate, migration matrix index
+0 historical events
+//Number of independent (unlinked) chromosomes, and "chromosome structure" flag:  0 for identical structure across chromosomes, and  1 for different structures on different chromosomes.
+1 1
+//Number of contiguous linkage blocks in chromosome
+1
+//Per Block: Data type, No. of loci, Recombination rate to the right-side locus, plus optional parameters
+SNP 24 0.0005 0.0
