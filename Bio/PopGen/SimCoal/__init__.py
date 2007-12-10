@@ -7,3 +7,6 @@
 SimCoal2 execution module and support functions.
 '''
 
+from os import sep
+
+builtin_tpl_dir = sep.join(__file__.split(sep)[:-1] + ['data'])

@@ -8,6 +8,8 @@ from sys import argv,exit
 from os import sep, mkdir
 import re
 
+from Bio.PopGen.SimCoal import builtin_tpl_dir
+
 
 def exec_template(template):
     executed_template = template
@@ -134,22 +136,28 @@ def generate_model(par_stream, out_prefix, params,
     return process_text(text, out_file_prefix, params, [], specific_processor)
 
 
-def get_demography_template(stream, model, tp_dir = '.'):
-   '''
-       Gets a demograpy template.
-
-       Most probably this model needs to be sent to GenCases.
-
-       stream - Writable stream.
-       param  - Template file.
-       tp_dir - Directory where to find the template.
-   '''
-   f = open(sep.join([tp_dir, model + '.par']), 'r')
-   l = f.readline()
-   while l<>'':
-       stream.write(l)
-       l = f.readline()
-   f.close()
+def get_demography_template(stream, model, tp_dir = None):
+    '''
+        Gets a demograpy template.
+ 
+        Most probably this model needs to be sent to GenCases.
+ 
+        stream - Writable stream.
+        param  - Template file.
+        tp_dir - Directory where to find the template, if None
+                 use an internal template
+    '''
+    if tp_dir == None:
+        #Internal Template
+        f = open(sep.join([builtin_tpl_dir, model + '.par']), 'r')
+    else:
+        #External template
+        f = open(sep.join([tp_dir, model + '.par']), 'r')
+    l = f.readline()
+    while l<>'':
+        stream.write(l)
+        l = f.readline()
+    f.close()
 
 def _gen_loci(stream, loci):
     stream.write('//Number of contiguous linkage blocks in chromosome\n')
@@ -172,7 +180,7 @@ def get_chr_template(stream, chrs):
           chr_repeats --> Number of chromosome repeats
           marker  --> 'SNP', 'DNA', 'RFLP', 'MICROSAT'
           params  --> Simcoal2 parameters for markers (list of floats
-            or strings - if to be processed by generate_model)
+            or ints - if to be processed by generate_model)
     '''
     num_chrs = reduce(lambda x, y: x + y[0], chrs, 0)
     stream.write('//Number of independent (unlinked) chromosomes, and "chromosome structure" flag:  0 for identical structure across chromosomes, and  1 for different structures on different chromosomes.\n')
@@ -189,7 +197,7 @@ def get_chr_template(stream, chrs):
             for i in range(repeats):
                 _gen_loci(stream, loci)
 
-def generate_simcoal_from_template(model, chrs, params, out_dir = '.', tp_dir='.'):
+def generate_simcoal_from_template(model, chrs, params, out_dir = '.', tp_dir=None):
     '''
        Writes a complete SimCoal2 template file.
 
@@ -203,27 +211,11 @@ def generate_simcoal_from_template(model, chrs, params, out_dir = '.', tp_dir='.
     get_demography_template(stream, model, tp_dir)
     get_chr_template(stream, chrs)
     stream.close()
-    par_stream = open(out_dir + sep + 'tmp.par', 'r')
-    print par_stream.read()
-    par_stream.close()
+    #par_stream = open(out_dir + sep + 'tmp.par', 'r')
+    #print par_stream.read()
+    #par_stream.close()
     par_stream = open(out_dir + sep + 'tmp.par', 'r')
     generate_model(par_stream, model, params, out_dir = out_dir)
     par_stream.close()
 
 
-
-#def clearRuns():
-#    '''
-#       Clear the runs directory.
-#
-#       Care should be exercised here!
-#    '''
-#
-#    runDir = sep.join([Config.dataDir, 'SimCoal', 'runs'])
-#    for root, dirs, files in os.walk(runDir, topdown=False):
-#        for name in files:
-#            if not name.startswith('.'):
-#                os.remove(os.path.join(root, name))
-#        for name in dirs:
-#            if not name.startswith('.'):
-#                os.rmdir(os.path.join(root, name))\

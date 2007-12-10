@@ -10,43 +10,38 @@ import tempfile
 from shutil import copyfile
 from logging import debug
 
-from PopGen import Config
-
 class SimCoalController:
-    def __init__(self, simcoalDir = None):
+    def __init__(self, simcoal_dir):
         """Initializes the controller.
         
-        simcoalDir is the directory where simcoal is.
+        simcoal_dir is the directory where simcoal is.
         
         The initializer checks for existance and executability of binaries.
         """
-        if simcoalDir == None:
-            self.simcoalDir = Config.simcoalDir
-        else:
-            self.simcoalDir = simcoalDir
+        self.simcoal_dir = simcoal_dir
         self.os_name = os.name
         if self.os_name=='nt':
-            self.bin_name = 'simcoal.exe'
+            self.bin_name = 'simcoal2.exe'
             #this is wrong (the exe name), most probably
         else:
-            self.bin_name = 'simcoal2_1_2'
+            self.bin_name = 'simcoal2'
             #This name is too specific
-        dir_contents = os.listdir(self.simcoalDir)
+        dir_contents = os.listdir(self.simcoal_dir)
         if self.bin_name in dir_contents:
-            if not os.access(self.simcoalDir + os.sep +
+            if not os.access(self.simcoal_dir + os.sep +
                 self.bin_name, os.X_OK):
                 raise IOError, "SimCoal not executable"
         else:
             raise IOError, "SimCoal not available"
 
-    def run_simcoal(self, par_file, num_sims, ploydi = '1', parDir = None):
+    def run_simcoal(self, par_file, num_sims, ploydi = '1', par_dir = '.'):
         """Executes SimCoal.
         """
-        if parDir == None:
-            parDir = os.sep.join([Config.dataDir, 'SimCoal', 'runs'])
+        if par_dir == None:
+            par_dir = os.sep.join([Config.dataDir, 'SimCoal', 'runs'])
         curr_dir = os.getcwd()
-        os.chdir(parDir)
-        os.system(self.simcoalDir + os.sep + self.bin_name + ' ' +
+        os.chdir(par_dir)
+        os.system(self.simcoal_dir + os.sep + self.bin_name + ' ' +
           par_file + ' ' + str(num_sims) + ' ' + ploydi + ' >/dev/null 2>&1')
         os.chdir(curr_dir)
     
