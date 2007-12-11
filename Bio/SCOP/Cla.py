@@ -97,7 +97,7 @@ class Parser:
         entry = entry.rstrip()        # no trailing whitespace
         columns = entry.split('\t')   # separate the tab-delineated cols
         if len(columns) != 6:
-            raise SyntaxError, "I don't understand the format of %s" % entry
+            raise ValueError, "I don't understand the format of %s" % entry
         
         rec = Record()
         rec.sid, pdbid, residues, rec.sccs, rec.sunid, hierarchy = columns

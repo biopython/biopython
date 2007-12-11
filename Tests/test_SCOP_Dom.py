@@ -58,7 +58,7 @@ class DomTests(unittest.TestCase):
 
     def testError(self) :
         corruptDom = "49xxx268\tsp\tb.1.2.1\t-\n"
-        self.assertRaises(SyntaxError, Dom.Parser().parse, corruptDom)
+        self.assertRaises(ValueError, Dom.Parser().parse, corruptDom)
 
 
     def testRecord(self) :

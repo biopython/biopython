@@ -122,7 +122,7 @@ def parse_domain(str) :
     """
 
     m = _domain_re.match(str)
-    if (not m) : raise SyntaxError, "Domain: "+ str
+    if (not m) : raise ValueError, "Domain: "+ str
 
     dom = Domain()
     dom.sid = m.group(1)
@@ -229,13 +229,13 @@ class Scop:
                     if rec.parent != '' : # Not root node
     
                         if not sunidDict.has_key(rec.parent):
-                            raise SyntaxError, "Incomplete data?"
+                            raise ValueError, "Incomplete data?"
                                        
                         n.parent = sunidDict[rec.parent]
                 
                     for c in rec.children:
                         if not sunidDict.has_key(c) :
-                            raise SyntaxError, "Incomplete data?"
+                            raise ValueError, "Incomplete data?"
                         n.children.append(sunidDict[c])
 
                         

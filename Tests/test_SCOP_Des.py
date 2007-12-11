@@ -60,8 +60,8 @@ class DesTests(unittest.TestCase):
 
         try:
             rec = p.parse(corruptRec)
-            assert 0, "Should never get here"
-        except SyntaxError, e :
+            assert False, "Should never get here"
+        except ValueError, e :
             pass
 
     def testRecord(self) :

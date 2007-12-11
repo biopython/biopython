@@ -327,7 +327,7 @@ class Parser:
         line = line.rstrip()  # no trailing whitespace        
 
         if len(line)<header_len: 
-            raise SyntaxError, "Incomplete header: "+rafLine
+            raise ValueError, "Incomplete header: "+rafLine
 
         seqMap.pdbid = line[0:4]
         chainid = line[4:5]
@@ -336,7 +336,7 @@ class Parser:
 
         #Raf format versions 0.01 and 0.02 are identical for practical purposes
         if(seqMap.version != "0.01" and  seqMap.version !="0.02") :
-            raise SyntaxError, "Incompatible RAF version: "+seqMap.version 
+            raise ValueError, "Incompatible RAF version: "+seqMap.version 
 
         seqMap.pdb_datestamp = line[14:20]
         seqMap.flags = line[21:27]
@@ -344,7 +344,7 @@ class Parser:
         for i in range(header_len, len(line), 7) :
             f = line[i : i+7]
             if len(f)!=7:
-                raise SyntaxError, "Corrupt Field: ("+f+")"
+                raise ValueError, "Corrupt Field: ("+f+")"
             r = Res()
             r.chainid = chainid
             r.resid =  f[0:5].strip()

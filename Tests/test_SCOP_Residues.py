@@ -81,7 +81,7 @@ class ResiduesTests(unittest.TestCase):
         try:
             r = Residues("09324923423hh./;,.389")
             assert 0, "Should never get here: "+str(r)
-        except SyntaxError, e :
+        except ValueError, e :
             pass
 
 def test_suite():

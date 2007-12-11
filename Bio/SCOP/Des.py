@@ -103,7 +103,7 @@ class Parser:
         entry = entry.rstrip()  # no trailing whitespace
         columns = entry.split("\t")  # separate the tab-delineated cols
         if len(columns) != 5:
-            raise SyntaxError, "I don't understand the format of %s" % entry
+            raise ValueError, "I don't understand the format of %s" % entry
         
         rec = Record()
         rec.sunid, rec.nodetype, rec.sccs, rec.name, rec.description = columns
