@@ -231,7 +231,7 @@ Of course, orchids are not only beautiful to look at, they are also extremely in
 
 After a little bit of reading up we discover that the Lady Slipper Orchids are in the Orchidaceae family and the Cypripedioideae sub-family and are made up of 5 genera:  \emph{Cypripedium}, \emph{Paphiopedilum}, \emph{Phragmipedium}, \emph{Selenipedium} and \emph{Mexipedium}.
 
-That gives us enough to get started delving for more information. So, let's look at how the Biopython tools can help us.  We'll start with sequence parsing in Section~\ref{sec:sequence-parsing}, but the orchids will be back later on as well - for example we'll extra data from Swiss-Prot from certain orchid proteins in Section~\ref{sec:swiss_prot}, search PubMed for papers about orchids in Section~\ref{sec:pub_med}, extract sequence data from GenBank in Section~\ref{genbank-retrieval}, and work with ClustalW multiple sequence alignments of orchid proteins in Section~\ref{sec:align_clustal}.
+That gives us enough to get started delving for more information. So, let's look at how the Biopython tools can help us.  We'll start with sequence parsing in Section~\ref{sec:sequence-parsing}, but the orchids will be back later on as well - for example we'll extra data from Swiss-Prot from certain orchid proteins in Chapter~\ref{chapter:swiss_prot}, search PubMed for papers about orchids in Section~\ref{sec:pub_med}, extract sequence data from GenBank in Section~\ref{genbank-retrieval}, and work with ClustalW multiple sequence alignments of orchid proteins in Section~\ref{sec:align_clustal}.
 
 \section{Parsing sequence file formats}
 \label{sec:sequence-parsing}
@@ -327,7 +327,7 @@ The next place to look for information about specific parsers and how to do cool
 One of the very common things that you need to do in bioinformatics is extract information from biological databases. It can be quite tedious to access these databases manually, especially if you have a lot of repetitive work to do. Biopython attempts to save you time and energy by making some on-line databases available from python scripts. Currently, Biopython has code to extract information from the following databases:
 
 \begin{itemize}
-  \item \href{http://www.expasy.org/}{ExPASy} -- See section~\ref{sec:swiss_prot} in the Cookbook for more information.
+  \item \href{http://www.expasy.org/}{ExPASy} -- See Chapter~\ref{chapter:swiss_prot} in the Cookbook for more information.
   \item \href{http://www.ncbi.nlm.nih.gov/Entrez/}{Entrez from NCBI} -- See below
   \item \href{http://www.ncbi.nlm.nih.gov/PubMed/}{PubMed from NCBI} -- See section~\ref{sec:pub_med} in the Cookbook for example code detailing how to use this.
   \item \href{http://scop.mrc-lmb.cam.ac.uk/scop/}{SCOP}
@@ -965,7 +965,7 @@ handle.close()
 \subsection{Parsing SwissProt sequences from the net}
 \label{sec:SeqIO_ExPASy_and_SwissProt}
 
-Now let's use a handle to download a SwissProt file from ExPASy, something covered in more depth in Section~\ref{sec:swiss_prot}.
+Now let's use a handle to download a SwissProt file from ExPASy, something covered in more depth in Chapter~\ref{chapter:swiss_prot}.
 As mentioned above, the \verb|Bio.SeqIO.read()| function is included in Biopython 1.45 or later.
 
 \begin{verbatim}
@@ -1854,71 +1854,212 @@ Hopefully the \verb|BlastErrorParser| will make it much easier to debug and deal
 
 We should write some stuff to make it easier to deal directly with PSIBlast from scripts (i.~e.~output the align file in the proper format from an alignment). I need to look at PSIBlast more and come up with some good ways of going this...
 
-\chapter{Cookbook -- Cool things to do with it}
-\label{chapter:cookbook}
+\chapter{Swiss-Prot, Prosite, Prodoc, and ExPASy}
+\label{chapter:swiss_prot}
 
-\section{SWISS-PROT}
-\label{sec:swiss_prot}
+\section{Bio.SwissProt: Parsing Swiss-Prot records}
 
-\subsection{Retrieving a SWISS-PROT record}
+Swiss-Prot (\url{http://www.expasy.org/sprot}) is a hand-curated database of protein sequences. In Section~\ref{sec:SeqIO_ExPASy_and_SwissProt}, we described how to extract the sequence of a Swiss-Prot record as a \verb|SeqRecord| object. Alternatively, you can store the Swiss-Prot record in a \verb|Bio.SwissProt.SProt.Record| object, which in fact stores the complete information contained in the Swiss-Prot record. In this Section, we describe how to extract \verb|Bio.SwissProt.SProt.Record| objects from a Swiss-Prot file.
 
-SwissProt (\url{http://www.expasy.org/sprot/sprot-top.html}) is a hand-curated database of protein sequences. Let's look at how we connect with it from a script and parse SwissProt formatted results. We touched on this briefly in Section~\ref{sec:SeqIO_ExPASy_and_SwissProt}.
-
-First, we need to retrieve some results to parse. Let's say we are looking at chalcone synthases for Orchids (see section~\ref{sec:orchids} for some justification for looking for interesting things about orchids). Chalcone synthase is involved in flavanoid biosynthesis in plants, and flavanoids make lots of cool things like pigment colors and UV protectants.
-
-If you do a search on SwissProt, you can find three orchid proteins for Chalcone Synthase, id numbers O23729, O23730, O23731. Now, let's write a script which grabs these, and parses out some interesting information.
-
-First, we grab the records, using the \verb|get_sprot_raw()| function of \verb|Bio.WWW.ExPASy|. This function is very nice since you can feed it an id and get back a raw text record (no html to mess with!). As we get the three records we are interested in, we'll just put them together into one big string, which we'll then use for parsing. The following code accomplishes what I just wrote:
-
+To parse a Swiss-Prot record, we first get a handle to a Swiss-Prot record. There are several ways to do so, depending on where and how the Swiss-Prot record is stored:
+\begin{itemize}
+\item Open a Swiss-Prot file locally: \newline
+\verb|>>> handle = open("myswissprotfile.dat")|
+\item Open a gzipped Swiss-Prot file:
 \begin{verbatim}
-from Bio.WWW import ExPASy
-
-ids = ["O23729", "O23730", "O23731"]
-
-all_results = ""
-for eid in ids:
-    results = ExPASy.get_sprot_raw(eid)
-    all_results = all_results + results.read()
+>>> import gzip
+>>> handle = gzip.open("myswissprotfile.dat.gz")
 \end{verbatim}
-
-Now that we've got the results, we are ready to parse them into interesting information. As with most parsers, we set up an iterator and parser. The parser we use here parses the SwissProt files into a Record object where the interesting features are attributes (there is another parser object which is used by \verb|Bio.SeqIO| which instead returns SeqRecord objects):
-
+\item Open a Swiss-Prot file over the internet:
 \begin{verbatim}
-from Bio.SwissProt import SProt
-from Bio import File
-
-s_parser = SProt.RecordParser()
-s_iterator = SProt.Iterator(File.StringHandle(all_results), s_parser)
+>>> import urllib
+>>> handle = urllib.urlopen("http://www.somelocation.org/data/someswissprotfile.dat")
 \end{verbatim}
-
-Note that we convert \verb|all_results|, which is a string, into a handle before passing it. The iterator requires a handle to be passed so that it can read in everything one line at a time. The \verb|Bio.File| module has a nice StringHandle, which conveniently will convert a string into a handle. Very nice! Now we are ready to start extracting information.
-
-To get out the information, we'll go through everything record by record using the iterator. For each record, we'll just print out some summary information:
-
+\item Open a Swiss-Prot file over the internet from the ExPASy database
+(see section \ref{subsec:expasy_swissprot}):
 \begin{verbatim}
-for cur_record in s_iterator:
-    print "description:", cur_record.description
-    for ref in cur_record.references:
-        print "authors:", ref.authors
-        print "title:", ref.title
-
-    print "classification:", cur_record.organism_classification
-    print
+>>> from Bio import ExPASy
+>>> handle = ExPASy.get_sprot_raw(myaccessionnumber)
 \end{verbatim}
+\end{itemize}
+The key point is that for the parser, it doesn't matter how the handle was created, as long as it points to data in the Swiss-Prot format.
 
-This prints out a summary like the following:
-
+To read one Swiss-Prot record from the handle, we use the function \verb|read()|:
 \begin{verbatim}
-description: CHALCONE SYNTHASE 8 (EC 2.3.1.74) (NARINGENIN-CHALCONE SYNTHASE 8)
+>>> from Bio import SwissProt
+>>> record = SwissProt.read(handle)
+\end{verbatim}
+This function should be used if the handle points to exactly one Swiss-Prot record. It raises a \verb|ValueError| if no Swiss-Prot record was found, and also if more than one record was found.
+
+We can now print out some information about this record:
+\begin{verbatim}
+>>> print record.description
+CHALCONE SYNTHASE 3 (EC 2.3.1.74) (NARINGENIN-CHALCONE SYNTHASE 3).
+>>> for ref in record.references:
+...     print "authors:", ref.authors
+...     print "title:", ref.title
+...
 authors: Liew C.F., Lim S.H., Loh C.S., Goh C.J.;
 title: "Molecular cloning and sequence analysis of chalcone synthase cDNAs of
 Bromheadia finlaysoniana.";
-classification: ['Eukaryota', 'Viridiplantae', 'Embryophyta', 'Tracheophyta',
-'Spermatophyta', 'Magnoliophyta', 'Liliopsida', 'Asparagales', 'Orchidaceae',
-'Bromheadia']
+>>> print record.organism_classification
+['Eukaryota', 'Viridiplantae', 'Embryophyta', 'Tracheophyta', 'Spermatophyta',
+'Magnoliophyta', 'Liliopsida', 'Asparagales', 'Orchidaceae', 'Bromheadia']
 \end{verbatim}
 
-It is equally easy to extract any kind of information you'd like from SwissProt records.
+To parse a file that contains more than one Swiss-Prot record, we use the \verb|parse| function instead. This function allows us to iterate over the records in the file. For example, let's parse the full Swiss-Prot database and collect all the descriptions. The full Swiss-Prot database, downloaded from ExPASy on 4 December 2007, contains 290484 Swiss-Prot records in a single gzipped-file \verb|uniprot_sprot.dat.gz|.
+
+\begin{verbatim}
+>>> import gzip
+>>> input = gzip.open("uniprot_sprot.dat.gz")
+>>> from Bio import SwissProt
+>>> records = SwissProt.parse(input)
+>>> descriptions = []
+>>> for record in records:
+...     description = record.description
+...     descriptions.append(description)
+...
+>>> len(descriptions)
+290484
+>>> descriptions[:3]
+['104 kDa microneme/rhoptry antigen precursor (p104).',
+ '104 kDa microneme/rhoptry antigen precursor (p104).',
+ 'Protein 108 precursor.']
+\end{verbatim}
+
+It is equally easy to extract any kind of information you'd like from Swiss-Prot records. To see the members of a Swiss-Prot record, use
+\begin{verbatim}
+>>> dir(record)
+['__doc__', '__init__', '__module__', 'accessions', 'annotation_update',
+'comments', 'created', 'cross_references', 'data_class', 'description',
+'entry_name', 'features', 'gene_name', 'host_organism', 'keywords',
+'molecule_type', 'organelle', 'organism', 'organism_classification',
+'references', 'seqinfo', 'sequence', 'sequence_length',
+'sequence_update', 'taxonomy_id']
+\end{verbatim}
+
+\section{Bio.Prosite: Parsing Prosite records}
+
+Prosite is a database containing protein domains, protein families, functional sites, as well as the patterns and profiles to recognize them. Prosite was developed in parallel with Swiss-Prot. In Biopython, a Prosite record is represented by the \verb|Bio.Prosite.Record| class, whose members correspond to the different fields in a Prosite record.
+
+In general, a Prosite file can contain more than one Prosite records. For example, the full set of Prosite records, which can be downloaded as a single file (\verb|prosite.dat|) from ExPASy, contains 2073 records in (version 20.24 released on 4 December 2007). To parse such a file, we again make use of an iterator:
+
+\begin{verbatim}
+>>> from Bio import Prosite
+>>> handle = open("myprositefile.dat")
+>>> records = Prosite.parse(handle)
+\end{verbatim}
+
+We can now take the records one at a time and print out some information. For example, using the file containing the complete Prosite database, we'd find
+\begin{verbatim}
+>>> from Bio import Prosite
+>>> handle = open("prosite.dat")
+>>> records = Prosite.parse(handle)
+>>> record = records.next()
+>>> record.accession
+'PS00001'
+>>> record.name
+'ASN_GLYCOSYLATION'
+>>> record.pdoc
+'PDOC00001'
+>>> record = records.next()
+>>> record.accession
+'PS00004'
+>>> record.name
+'CAMP_PHOSPHO_SITE'
+>>> record.pdoc
+'PDOC00004'
+>>> record = records.next()
+>>> record.accession
+'PS00005'
+>>> record.name
+'PKC_PHOSPHO_SITE'
+>>> record.pdoc
+'PDOC00005'
+\end{verbatim}
+and so on. If you're interested in how many Prosite records there are, you could use
+\begin{verbatim}
+>>> from Bio import Prosite
+>>> handle = open("prosite.dat")
+>>> records = Prosite.parse(handle)
+>>> n = 0
+>>> for record in records: n+=1
+...
+>>> print n
+2073
+\end{verbatim}
+
+To read exactly one Prosite from the handle, you can use the \verb|read| function:
+\begin{verbatim}
+>>> from Bio import Prosite
+>>> handle = open("mysingleprositerecord.dat")
+>>> record = Prosite.read(handle)
+\end{verbatim}
+This function raises a ValueError if no Prosite record is found, and also if more than one Prosite record is found.
+
+\section{Bio.Prosite.Prodoc: Parsing Prodoc records}
+
+In the Prosite example above, the \verb|record.pdoc| accession numbers \verb|'PDOC00001'|, \verb|'PDOC00004'|, \verb|'PDOC00005'| and so on refer to Prodoc records, which contain the Prosite Documentation. The Prodoc records are available from ExPASy as individual files, and as one file (\verb|prosite.doc|) containing all Prodoc records.
+
+We use the parser in \verb|Bio.Prosite.Prodoc| to parse Prodoc records. For example, to create a list of all Prodoc accession numbers, you can use
+
+\begin{verbatim}
+>>> from Bio.Prosite import Prodoc
+>>> handle = open("prosite.doc")
+>>> records = Prodoc.parse(handle)
+>>> accessions = [record.accession for record in records]
+\end{verbatim}
+
+Again a \verb|read()| function is provided to read exactly one Prodoc record from the handle.
+
+\section{Bio.ExPASy: Accessing the ExPASy server}
+
+Swiss-Prot, Prosite, and Prodoc records can be downloaded from the ExPASy web server at \url{http://www.expasy.org}. Six kinds of queries are available from ExPASy:
+\begin{description}
+\item[get\_prodoc\_entry]To download a Prodoc record in HTML format
+\item[get\_prosite\_entry]To download a Prosite record in HTML format
+\item[get\_prosite\_raw]To download a Prosite or Prodoc record in raw format
+\item[get\_sprot\_raw]To download a Swiss-Prot record in raw format
+\item[sprot\_search\_ful]To search for a Swiss-Prot record
+\item[sprot\_search\_de]To search for a Swiss-Prot record
+\end{description}
+To access this web server from a Python script, we use the \verb|Bio.ExPASy| module.
+
+\subsection{Retrieving a Swiss-Prot record}
+\label{subsec:expasy_swissprot}
+
+Let's say we are looking at chalcone synthases for Orchids (see section~\ref{sec:orchids} for some justification for looking for interesting things about orchids). Chalcone synthase is involved in flavanoid biosynthesis in plants, and flavanoids make lots of cool things like pigment colors and UV protectants. 
+
+If you do a search on Swiss-Prot, you can find three orchid proteins for Chalcone Synthase, id numbers O23729, O23730, O23731. Now, let's write a script which grabs these, and parses out some interesting information.
+
+First, we grab the records, using the \verb|get_sprot_raw()| function of \verb|Bio.ExPASy|. This function is very nice since you can feed it an id and get back a handle to a raw text record (no html to mess with!). We can the use \verb|Bio.SwissProt.read| to pull out the Swiss-Prot record, or \verb|Bio.SeqIO.read| to get a SeqRecord. The following code accomplishes what I just wrote:
+
+\begin{verbatim}
+>>> from Bio import ExPASy
+>>> from Bio import SwissProt
+
+>>> accessions = ["O23729", "O23730", "O23731"]
+>>> records = []
+
+>>> for accession in accessions:
+...     handle = ExPASy.get_sprot_raw(accession)
+...     record = SwissProt.read(handle)
+...     records.append(record)
+\end{verbatim}
+
+If the accession number you provided to \verb|ExPASy.get_sprot_raw| does not exist, then \verb|SwissProt.read(handle)| will raise a \verb|ValueError|. You can catch \verb|ValueException| exceptions to detect invalid accession numbers:
+
+\begin{verbatim}
+>>> for accession in accessions:
+...     handle = ExPASy.get_sprot_raw(accession)
+...     try:
+...         record = SwissProt.read(handle)
+...     except ValueException:
+...         print "WARNING: Accession %s not found" % accession
+...     records.append(record)
+\end{verbatim}
+
+\subsection{Searching Swiss-Prot}
 
 Now, you may remark that I knew the records' accession numbers
 beforehand. Indeed, \verb|get_sprot_raw()| needs either the entry name
@@ -1931,23 +2072,83 @@ functions.
 are detailed on
 \url{http://www.expasy.org/cgi-bin/sprot-search-de} and
 \url{http://www.expasy.org/cgi-bin/sprot-search-ful}
-respectively. Note that thet don't search in TrEMBL by default
+respectively. Note that they don't search in TrEMBL by default
 (argument \verb|trembl|). Note also that they return html pages;
 however, accession numbers are quite easily extractable:
 
 \begin{verbatim}
-from Bio.WWW import ExPASy
-import re
+>>> from Bio import ExPASy
+>>> import re
 
-handle = ExPASy.sprot_search_de("Orchid Chalcone Synthase")
-# or:
-# handle = ExPASy.sprot_search_ful("Orchid and {Chalcone Synthase}")
-html_results = handle.read()
-if "Number of sequences found" in html_results:
-    ids = re.findall(r'HREF="/uniprot/(\w+)"', html_results)
-else:
-    ids = re.findall(r'href="/cgi-bin/niceprot\.pl\?(\w+)"', html_results)
+>>> handle = ExPASy.sprot_search_de("Orchid Chalcone Synthase")
+>>> # or:
+>>> # handle = ExPASy.sprot_search_ful("Orchid and {Chalcone Synthase}")
+>>> html_results = handle.read()
+>>> if "Number of sequences found" in html_results:
+...     ids = re.findall(r'HREF="/uniprot/(\w+)"', html_results)
+... else:
+...     ids = re.findall(r'href="/cgi-bin/niceprot\.pl\?(\w+)"', html_results)
 \end{verbatim}
+
+\subsection{Retrieving Prosite and Prodoc records}
+
+Prosite and Prodoc records can be retrieved either in HTML format, or in raw format. To parse Prosite and Prodoc records with Biopython, you should retrieve the records in raw format. For other purposes, however, you may be interested in these records in HTML format.
+
+To retrieve a Prosite or Prodoc record in raw format, use \verb|get_prosite_raw()|. Although this function has \verb|prosite| in the name, it can be used for Prodoc records as well. For example, to download a Prosite record and print it out in raw text format, use
+
+\begin{verbatim}
+>>> from Bio import ExPASy
+>>> handle = ExPASy.get_prosite_raw('PS00001')
+>>> text = handle.read()
+>>> print text
+\end{verbatim}
+
+To retrieve a Prosite record and parse it into a \verb|Bio.Prosite.Record| object, use
+
+\begin{verbatim}
+>>> from Bio import ExPASy
+>>> from Bio import Prosite
+>>> handle = ExPASy.get_prosite_raw('PS00001')
+>>> record = Prosite.read(handle)
+\end{verbatim}
+
+Finally, to retrieve a Prodoc record and parse it into a \verb|Bio.Prosite.Prodoc.Record| object, use
+
+\begin{verbatim}
+>>> from Bio import ExPASy
+>>> from Bio.Prosite import Prodoc
+>>> handle = ExPASy.get_prosite_raw('PDOC00001')
+>>> record = Prodoc.read(handle)
+\end{verbatim}
+
+For non-existing accession numbers, \verb|ExPASy.get_prosite_raw| returns a handle to an emptry string. When faced with an empty string, \verb|Prosite.read| and \verb|Prodoc.read| will raise a ValueError. You can catch these exceptions to detect invalid accession numbers.
+
+The functions \verb|get_prosite_entry()| and \verb|get_prodoc_entry()| are used to download Prosite and Prodoc records in HTML format. To create a web page showing one Prosite record, you can use
+
+\begin{verbatim}
+>>> from Bio import ExPASy
+>>> handle = ExPASy.get_prosite_entry('PS00001')
+>>> html = handle.read()
+>>> output = open("myprositerecord.html", "w")
+>>> output.write(html)
+>>> output.close()
+\end{verbatim}
+
+and similarly for a Prodoc record:
+
+\begin{verbatim}
+>>> from Bio import ExPASy
+>>> handle = ExPASy.get_prodoc_entry('PDOC00001')
+>>> html = handle.read()
+>>> output = open("myprodocrecord.html", "w")
+>>> output.write(html)
+>>> output.close()
+\end{verbatim}
+
+For these functions, an invalid accession number returns an error message in HTML format.
+
+\chapter{Cookbook -- Cool things to do with it}
+\label{chapter:cookbook}
 
 \section{PubMed}
 \label{sec:pub_med}
@@ -3620,7 +3821,7 @@ sim_fst = ctrl.run_fdist(npops = 15, nsamples = fd_rec.num_pops, fst = fst,
     sample_size = samp_size, mut = 0, num_sims = 40000)
 \end{verbatim}
 
-\begin{itemize}
+\begin{description}
 \item[npops] Number of populations existing in nature. This is really a
     ``guestimate''. Has to be lower than 100.
 \item[nsamples] Number of populations sampled, has to be lower than npops.
@@ -3632,7 +3833,7 @@ sim_fst = ctrl.run_fdist(npops = 15, nsamples = fd_rec.num_pops, fst = fst,
     (this can be detected when plotting the confidence interval computed
     below) the value can be increased (a suggestion would be steps of 10000
     simulations).
-\end{itemize}
+\end{description}
 
 The confusion in wording between number of samples and sample size
 stems from the original application.
