@@ -41,7 +41,7 @@ def FastaIterator(handle, alphabet = single_letter_alphabet, title2ids = None) :
 
     while True :
         if line[0]<>">" :
-            raise SyntaxError("Records in Fasta files should start with '>' character")
+            raise ValueError("Records in Fasta files should start with '>' character")
         if title2ids :
             id, name, descr = title2ids(line[1:].rstrip())
         else :

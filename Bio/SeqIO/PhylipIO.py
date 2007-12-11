@@ -44,12 +44,12 @@ def PhylipIterator(handle, alphabet = single_letter_alphabet) :
     line = line.strip()
     parts = filter(None, line.split())
     if len(parts)<>2 :
-        raise SyntaxError("First line should have two integers")
+        raise ValueError("First line should have two integers")
     try :
         number_of_seqs = int(parts[0])
         length_of_seqs = int(parts[1])
     except ValueError:
-        raise SyntaxError("First line should have two integers")
+        raise ValueError("First line should have two integers")
 
     ids = []
     seqs = []
@@ -73,13 +73,13 @@ def PhylipIterator(handle, alphabet = single_letter_alphabet) :
             seqs[i].append(line.strip().replace(" ",""))
             line = handle.readline()
             if (not line) and i+1 < number_of_seqs :
-                raise SyntaxError("End of file mid-block")
+                raise ValueError("End of file mid-block")
         if not line : break #end of file
 
     for i in range(0,number_of_seqs) :
         seq = "".join(seqs[i])
         if len(seq)<>length_of_seqs :
-            raise SyntaxError("Sequence %i length %i, expected length %i" \
+            raise ValueError("Sequence %i length %i, expected length %i" \
                               % (i+1, len(seq), length_of_seqs))
         yield SeqRecord(Seq(seq, alphabet), id=ids[i], name=ids[i], description="")
 
@@ -333,7 +333,7 @@ Gorilla   AAACCCTTGC CGGTACGCTT AAACCATTGC CGGTACGCTT AA"""
         list5 = list(PhylipIterator(handle))
         assert len(list5)==5
         print "That should have failed..."
-    except SyntaxError :
+    except ValueError :
         print "Evil multiline non-interlaced example failed as expected"
     handle.close()
 

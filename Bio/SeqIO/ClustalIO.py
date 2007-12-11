@@ -39,7 +39,7 @@ def ClustalIterator(handle, alphabet = single_letter_alphabet) :
     line = handle.readline()
     if not line: return
     if not line[:7] == 'CLUSTAL':
-        raise SyntaxError("Did not find CLUSTAL header")
+        raise ValueError("Did not find CLUSTAL header")
 
     #There should be two blank lines after the header line
     line = handle.readline()
@@ -61,7 +61,7 @@ def ClustalIterator(handle, alphabet = single_letter_alphabet) :
             #We expect there to be two fields, there can be an optional
             #"sequence number" field containing the letter count.
             if len(fields) < 2 or len(fields) > 3:
-                raise SyntaxError("Could not parse line:\n%s" % line)
+                raise ValueError("Could not parse line:\n%s" % line)
 
             ids.append(fields[0])
             seqs.append(fields[1])
@@ -71,9 +71,9 @@ def ClustalIterator(handle, alphabet = single_letter_alphabet) :
                 try :
                     letters = int(fields[2])
                 except ValueError :
-                    raise SyntaxError("Could not parse line, bad sequence number:\n%s" % line)
+                    raise ValueError("Could not parse line, bad sequence number:\n%s" % line)
                 if len(fields[1].replace("-","")) <> letters :
-                    raise SyntaxError("Could not parse line, invalid sequence number:\n%s" % line)
+                    raise ValueError("Could not parse line, invalid sequence number:\n%s" % line)
         else :
             #Sequence consensus line...
             pass
@@ -98,10 +98,10 @@ def ClustalIterator(handle, alphabet = single_letter_alphabet) :
             #We expect there to be two fields, there can be an optional
             #"sequence number" field containing the letter count.
             if len(fields) < 2 or len(fields) > 3:
-                raise SyntaxError("Could not parse line:\n%s" % line)
+                raise ValueError("Could not parse line:\n%s" % line)
 
             if fields[0] <> ids[i] :
-                raise SyntaxError("Identifiers out of order? Got '%s' but expected '%s'" \
+                raise ValueError("Identifiers out of order? Got '%s' but expected '%s'" \
                                   % (fields[0], ids[i]))
 
             #Append the sequence
@@ -112,9 +112,9 @@ def ClustalIterator(handle, alphabet = single_letter_alphabet) :
                 try :
                     letters = int(fields[2])
                 except ValueError :
-                    raise SyntaxError("Could not parse line, bad sequence number:\n%s" % line)
+                    raise ValueError("Could not parse line, bad sequence number:\n%s" % line)
                 if len(seqs[i].replace("-","")) <> letters :
-                    raise SyntaxError("Could not parse line, invalid sequence number:\n%s" % line)
+                    raise ValueError("Could not parse line, invalid sequence number:\n%s" % line)
 
             #Read in the next line
             line = handle.readline()
@@ -123,7 +123,7 @@ def ClustalIterator(handle, alphabet = single_letter_alphabet) :
     alignment_length = len(seqs[0])
     for i in range(len(ids)) :
         if len(seqs[i]) <> alignment_length:
-            raise SyntaxError("Error parsing alignment - sequences of different length?")
+            raise ValueError("Error parsing alignment - sequences of different length?")
         yield SeqRecord(Seq(seqs[i], alphabet), id=ids[i])
     
 class ClustalWriter(SequenceWriter):

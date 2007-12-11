@@ -77,7 +77,7 @@ class StockholmIterator(InterlacedSequenceIterator) :
             #Empty file - just give up.
             return
         if not line.strip() == '# STOCKHOLM 1.0':
-            raise SyntaxError("Did not find STOCKHOLM header")
+            raise ValueError("Did not find STOCKHOLM header")
             #import sys
             #print >> sys.stderr, 'Warning file does not start with STOCKHOLM 1.0'
 
@@ -109,7 +109,7 @@ class StockholmIterator(InterlacedSequenceIterator) :
                 parts = [x.strip() for x in line.split(" ",1)]
                 if len(parts) <> 2 :
                     #This might be someone attempting to store a zero length sequence?
-                    raise SyntaxError("Could not split line into identifier " \
+                    raise ValueError("Could not split line into identifier " \
                                       + "and sequence:\n" + line)
                 id, seq = parts
                 if id not in ids :
@@ -167,7 +167,7 @@ class StockholmIterator(InterlacedSequenceIterator) :
                 if align_len is None :
                     align_len = len(seq)
                 elif align_len <> len(seq) :
-                    raise SyntaxError("Sequences have different lengths, or repeated identifier")
+                    raise ValueError("Sequences have different lengths, or repeated identifier")
             
 
         self.ids = ids
