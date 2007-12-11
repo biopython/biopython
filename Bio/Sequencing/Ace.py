@@ -295,7 +295,7 @@ class ACEParser(AbstractParser):
         firstline=handle.readline()
         # check if the file starts correctly
         if firstline[:2]!='AS':
-            raise SyntaxError, "File does not start with 'AS'."
+            raise ValueError, "File does not start with 'AS'."
         self.data.ncontigs=eval(firstline.split()[1])
         self.data.nreads=eval(firstline.split()[2])
         # now read all the records
@@ -361,7 +361,7 @@ class _Scanner:
             try:
                 read_and_call_while(uhandle,consumer.noevent,blank=1)
                 attempt_read_and_call(uhandle,consumer.ds,start='DS ')
-            except SyntaxError:
+            except ValueError:
                 # file ends
                 consumer.end_contig()
                 return
@@ -371,7 +371,7 @@ class _Scanner:
                 # something left 
                 try:
                     read_and_call_while(uhandle,consumer.noevent,blank=1)
-                except SyntaxError:
+                except ValueError:
                     # file ends here
                     consumer.end_contig()
                     return
@@ -513,7 +513,7 @@ class _RecordConsumer(AbstractConsumer):
     def ct_start(self,line):
         if not line.strip().endswith('{'):
             print line
-            raise SyntaxError, 'CT tag does not start with CT{'
+            raise ValueError, 'CT tag does not start with CT{'
         ctdata=ct()
         if self.data.ct is None:
             self.data.ct=[]
@@ -521,7 +521,7 @@ class _RecordConsumer(AbstractConsumer):
     
     def ct_data(self,taglines):
         if len(taglines)<1:
-            raise SyntaxError, 'Missing header line in CT tag'
+            raise ValueError, 'Missing header line in CT tag'
         header=taglines[0].split()
         self.data.ct[-1].name=header[0]
         self.data.ct[-1].tag_type=header[1]
@@ -535,7 +535,7 @@ class _RecordConsumer(AbstractConsumer):
 
     def rt_start(self,line):
         if not line.strip().endswith('{'):
-            raise SyntaxError, 'RT tag does not start with RT{'
+            raise ValueError, 'RT tag does not start with RT{'
         rtdata=rt()
         # now if we're at the end of the file, this rt could belong to a previous read, not the actual one
         # we store it here were it appears, the user can sort later. 
@@ -545,7 +545,7 @@ class _RecordConsumer(AbstractConsumer):
    
     def rt_data(self,taglines):
         if len(taglines)<1:
-            raise SyntaxError, 'Missing header line in RT tag'
+            raise ValueError, 'Missing header line in RT tag'
         header=taglines[0].split()
         self.data.reads[-1].rt[-1].name=header[0]
         self.data.reads[-1].rt[-1].tag_type=header[1]
@@ -556,7 +556,7 @@ class _RecordConsumer(AbstractConsumer):
     
     def wa_start(self,line):
         if not line.strip().endswith('{'):
-            raise SyntaxError, 'WA tag does not start with WA{'
+            raise ValueError, 'WA tag does not start with WA{'
         wadata=wa()
         if self.data.wa is None:
             self.data.wa=[]
@@ -564,7 +564,7 @@ class _RecordConsumer(AbstractConsumer):
     
     def wa_data(self,taglines):
         if len(taglines)<1:
-            raise SyntaxError, 'Missing header line in WA tag'
+            raise ValueError, 'Missing header line in WA tag'
         header=taglines[0].split()
         self.data.wa[-1].tag_type=header[0]
         self.data.wa[-1].program=header[1]
@@ -573,7 +573,7 @@ class _RecordConsumer(AbstractConsumer):
     
     def wr_start(self,line):
         if not line.strip().endswith('{'):
-            raise SyntaxError, 'WR tag does not start with WR{'
+            raise ValueError, 'WR tag does not start with WR{'
         wrdata=wr()
         if self.data.reads[-1].wr is None:
             self.data.reads[-1].wr=[]
@@ -581,7 +581,7 @@ class _RecordConsumer(AbstractConsumer):
     
     def wr_data(self,taglines):
         if len(taglines)<1:
-            raise SyntaxError, 'Missing header line in WR tag'
+            raise ValueError, 'Missing header line in WR tag'
         header=taglines[0].split()
         self.data.reads[-1].wr[-1].name=header[0]
         self.data.reads[-1].wr[-1].aligned=header[1]
