@@ -217,12 +217,12 @@ def check_simple_write_read(records, indent=" ") :
         #Now ready to read back from the handle...
         try :
             records2 = list(SeqIO.parse(handle=handle, format=format))
-        except SyntaxError, e :
+        except ValueError, e :
             #This is BAD.  We can't read our own output.
             #I want to see the output when called from the test harness,
             #run_tests.py (which can be funny about new lines on Windows)
             handle.seek(0)
-            raise SyntaxError("%s\n\n%s\n\n%s" \
+            raise ValueError("%s\n\n%s\n\n%s" \
                               % (str(e), repr(handle.read()), repr(records)))
 
         assert len(records2) == t_count
@@ -395,7 +395,7 @@ for (records, descr) in test_records :
         handle.seek(0)
         try :
             new_records = list(SeqIO.parse(handle, format))
-        except SyntaxError, e :
+        except ValueError, e :
             #THIS INDICATES A SIGNIFICANT PROBLEM,
             #as we can't read the file we just wrote!
             print " FAILED: %s" % str(e)
