@@ -283,7 +283,7 @@ def read_and_call(uhandle, method, **keywds):
     """read_and_call(uhandle, method[, start][, end][, contains][, blank][, has_re])
 
     Read a line from uhandle, check it, and pass it to the method.
-    Raises a SyntaxError if the line does not pass the checks.
+    Raises a ValueError if the line does not pass the checks.
 
     start, end, contains, blank, and has_re specify optional conditions
     that the line must pass.  start and end specifies what the line must
@@ -297,7 +297,7 @@ def read_and_call(uhandle, method, **keywds):
     line = safe_readline(uhandle)
     errmsg = _fails_conditions(*(line,), **keywds)
     if errmsg is not None:
-        raise SyntaxError, errmsg
+        raise ValueError, errmsg
     method(line)
 
 def read_and_call_while(uhandle, method, **keywds):
@@ -403,22 +403,22 @@ def safe_readline(handle):
     """safe_readline(handle) -> line
 
     Read a line from an UndoHandle and return it.  If there are no more
-    lines to read, I will raise a SyntaxError.
+    lines to read, I will raise a ValueError.
 
     """
     line = handle.readline()
     if not line:
-        raise SyntaxError, "Unexpected end of stream."
+        raise ValueError, "Unexpected end of stream."
     return line
 
 def safe_peekline(handle):
     """safe_peekline(handle) -> line
 
     Peek at the next line in an UndoHandle and return it.  If there are no
-    more lines to peek, I will raise a SyntaxError.
+    more lines to peek, I will raise a ValueError.
     
     """
     line = handle.peekline()
     if not line:
-        raise SyntaxError, "Unexpected end of stream."
+        raise ValueError, "Unexpected end of stream."
     return line
