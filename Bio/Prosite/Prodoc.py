@@ -19,7 +19,6 @@ Record             Holds Prodoc data.
 Reference          Holds data from a Prodoc reference.
 Iterator           Iterates over entries in a Prodoc file.
 Dictionary         Accesses a Prodoc file using a dictionary interface.
-ExPASyDictionary   Accesses Prodoc records from ExPASy.
 RecordParser       Parses a Prodoc record into a Record object.
 
 _Scanner           Scans Prodoc-formatted data.
@@ -36,7 +35,31 @@ import sgmllib
 from Bio import File
 from Bio import Index
 from Bio.ParserSupport import *
-from Bio.WWW import ExPASy
+
+def parse(handle):
+    import cStringIO
+    parser = RecordParser()
+    text = ""
+    for line in handle:
+        text += line
+        if line[:5] == '{END}':
+            handle = cStringIO.StringIO(text)
+            record = parser.parse(handle)
+            text = ""
+            yield record
+
+def read(handle):
+    parser = RecordParser()
+    record = parser.parse(handle)
+    # We should have reached the end of the record by now
+    remainder = handle.read()
+    if remainder:
+        raise ValueError, "More than one Prodoc record found"
+    return record
+
+
+# It may be a good idea to rewrite read(), parse() at some point to avoid
+# using the old-style "parser = RecordParser(); parser.parse(handle)" approach.
 
 class Record:
     """Holds information from a Prodoc record.
@@ -163,6 +186,10 @@ class ExPASyDictionary:
         between each query.
 
         """
+        import warnings
+        warnings.warn("Bio.Prosite.Prodoc.ExPASyDictionary is deprecated. Please use the function Bio.ExPASy.get_prosite_raw instead.",
+              DeprecationWarning)
+
         self.delay = delay
         self.parser = parser
         self.last_query_time = None
@@ -207,6 +234,7 @@ class ExPASyDictionary:
         
         """
         import time
+        from Bio.WWW import ExPASy
         # First, check to see if enough time has passed since my
         # last query.
         if self.last_query_time is not None:
@@ -337,16 +365,16 @@ class _RecordConsumer(AbstractConsumer):
     def accession(self, line):
         line = line.rstrip()
         if line[0] != '{' or line[-1] != '}':
-            raise SyntaxError, "I don't understand accession line\n%s" % line
+            raise ValueError, "I don't understand accession line\n%s" % line
         acc = line[1:-1]
         if acc[:4] != 'PDOC':
-            raise SyntaxError, "Invalid accession in line\n%s" % line
+            raise ValueError, "Invalid accession in line\n%s" % line
         self.data.accession = acc
 
     def prosite_reference(self, line):
         line = line.rstrip()
         if line[0] != '{' or line[-1] != '}':
-            raise SyntaxError, "I don't understand accession line\n%s" % line
+            raise ValueError, "I don't understand accession line\n%s" % line
         acc, name = line[1:-1].split('; ')
         self.data.prosite_refs.append((acc, name))
     
@@ -366,7 +394,7 @@ class _RecordConsumer(AbstractConsumer):
             self.data.references.append(self._ref)
         elif line[:4] == '    ':
             if not self._ref:
-                raise SyntaxError, "Unnumbered reference lines\n%s" % line
+                raise ValueError, "Unnumbered reference lines\n%s" % line
             self._ref.citation = self._ref.citation + line[5:]
         else:
             raise "I don't understand the reference line\n%s" % line
@@ -413,6 +441,8 @@ def index_file(filename, indexname, rec2key=None):
 
         index[key] = start, length
 
+# This function can be deprecated once Bio.Prosite.Prodoc.ExPASyDictionary
+# is removed.
 def _extract_record(handle):
     """_extract_record(handle) -> str
 
