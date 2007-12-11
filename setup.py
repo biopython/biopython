@@ -400,6 +400,7 @@ PACKAGES = [
     'Bio.PopGen.Async',
     'Bio.PopGen.FDist',
     'Bio.PopGen.GenePop',
+    'Bio.PopGen.SimCoal',
     'Bio.Prosite',
     'Bio.Rebase',
     'Bio.Restriction',
