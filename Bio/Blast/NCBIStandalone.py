@@ -205,7 +205,7 @@ class _Scanner:
             read_and_call_until(uhandle, consumer.query_info, blank=1)
             read_and_call_while(uhandle, consumer.noevent, blank=1)
         else :
-            raise SyntaxError("Invalid header?")
+            raise ValueError("Invalid header?")
 
         consumer.end_header()
 
@@ -260,7 +260,7 @@ class _Scanner:
         # blastpgp 2.0.10 from NCBI 9/19/99 for Solaris sometimes crashes here.
         # If this happens, the handle will yield no more information.
         if not uhandle.peekline():
-            raise SyntaxError, "Unexpected end of blast report.  " + \
+            raise ValueError, "Unexpected end of blast report.  " + \
                   "Looks suspiciously like a PSI-BLAST crash."
 
         # BLASTN 2.2.3 sometimes spews a bunch of warnings and errors here:
@@ -405,7 +405,7 @@ class _Scanner:
                 break
             elif is_blank_line(line):
                 # Check to make sure I haven't missed the Length line
-                raise SyntaxError, "I missed the Length in an alignment header"
+                raise ValueError, "I missed the Length in an alignment header"
             consumer.title(line)
 
         # Older versions of BLAST will have a line with some spaces.
@@ -561,7 +561,7 @@ class _Scanner:
         # file.
         try:
             read_and_call_while(uhandle, consumer.noevent, blank=1)
-        except SyntaxError, x:
+        except ValueError, x:
             if str(x) != "Unexpected end of stream.":
                 raise
         consumer.end_database_report()
@@ -845,7 +845,7 @@ class _DescriptionConsumer:
 
     def round(self, line):
         if not line.startswith('Results from round'):
-            raise SyntaxError, "I didn't understand the round line\n%s" % line
+            raise ValueError, "I didn't understand the round line\n%s" % line
         self._roundnum = _safe_int(line[18:].strip())
 
     def end_descriptions(self):
@@ -864,7 +864,7 @@ class _DescriptionConsumer:
         #   - sometimes there's an "N" score of '1'.
         cols = line.split()
         if len(cols) < 3:
-            raise SyntaxError, \
+            raise ValueError, \
                   "Line does not appear to contain description:\n%s" % line
         if self.__has_n:
             i = line.rfind(cols[-1])        # find start of N
@@ -915,7 +915,7 @@ class _AlignmentConsumer:
             try:
                 name, start, seq, end = line.split()
             except ValueError:
-                raise SyntaxError, "I do not understand the line\n%s" \
+                raise ValueError, "I do not understand the line\n%s" \
                       % line
             self._start_index = line.index(start, len(name))
             self._seq_index = line.index(seq,
@@ -982,12 +982,12 @@ class _AlignmentConsumer:
         #     else:
         #         aname, astart, aseq = align[0]
         #         if name != aname:
-        #             raise SyntaxError, "Query is not the first sequence"
+        #             raise ValueError, "Query is not the first sequence"
         #         aseq = aseq + seq
         #         align[0] = aname, astart, aseq
         # else:
         #     if len(align) == 0:
-        #         raise SyntaxError, "I could not find the query sequence"
+        #         raise ValueError, "I could not find the query sequence"
         #     qname, qstart, qseq = align[0]
         #     
         #     # Now find my sequence in the multiple alignment.
@@ -1035,7 +1035,7 @@ class _AlignmentConsumer:
         #                 seq = seq + ' '*(seqlen - len(seq))
         #                 align[i] = name, start, seq
         #             elif len(seq) > seqlen:
-        #                 raise SyntaxError, \
+        #                 raise ValueError, \
         #                       "Sequence %s is longer than the query" % name
         
         # Clean up some variables, if they exist.
@@ -1114,7 +1114,7 @@ class _HSPConsumer:
     def query(self, line):
         m = self._query_re.search(line)
         if m is None:
-            raise SyntaxError, "I could not find the query in line\n%s" % line
+            raise ValueError, "I could not find the query in line\n%s" % line
         
         # line below modified by Yair Benita, Sep 2004.
         # added the end attribute for the query
@@ -1137,7 +1137,7 @@ class _HSPConsumer:
             # Make sure the alignment is the same length as the query
             seq = seq + ' ' * (self._query_len-len(seq))
         elif len(seq) < self._query_len:
-            raise SyntaxError, "Match is longer than the query in line\n%s" % \
+            raise ValueError, "Match is longer than the query in line\n%s" % \
                   line
         self._hsp.match = self._hsp.match + seq
 
@@ -1147,7 +1147,7 @@ class _HSPConsumer:
     def sbjct(self, line):
         m = self._sbjct_re.search(line)
         if m is None:
-            raise SyntaxError, "I could not find the sbjct in line\n%s" % line
+            raise ValueError, "I could not find the sbjct in line\n%s" % line
         colon, start, seq, end = m.groups()
         #mikep 26/9/00
         #On occasion, there is a blast hit with no subject match
@@ -1161,7 +1161,7 @@ class _HSPConsumer:
 
         self._hsp.sbjct_end = _safe_int(end)
         if len(seq) != self._query_len:
-            raise SyntaxError, \
+            raise ValueError, \
                   "QUERY and SBJCT sequence lengths don't match in line\n%s" \
                   % line
 
@@ -1339,7 +1339,7 @@ class _ParametersConsumer:
             self._params.threshold, = _get_cols(
                 line, (3,), ncols=4, expected={0:"Neighboring", 1:"words", 2:"threshold:"})
         else :
-            raise SyntaxError("Unrecognised threshold line:\n%s" % line)
+            raise ValueError("Unrecognised threshold line:\n%s" % line)
         self._params.threshold = _safe_int(self._params.threshold)
         
     def window_size(self, line):
@@ -1350,7 +1350,7 @@ class _ParametersConsumer:
             self._params.window_size, = _get_cols(
                 line, (4,), ncols=5, expected={0:"Window", 2:"multiple", 3:"hits:"})
         else :
-            raise SyntaxError("Unrecognised window size line:\n%s" % line)
+            raise ValueError("Unrecognised window size line:\n%s" % line)
         self._params.window_size = _safe_int(self._params.window_size)
         
     def dropoff_1st_pass(self, line):
@@ -1435,7 +1435,7 @@ class _BlastConsumer(AbstractConsumer,
         try:
             self._alignment.hsps.append(self._hsp)
         except AttributeError:
-            raise SyntaxError, "Found an HSP before an alignment"
+            raise ValueError, "Found an HSP before an alignment"
 
     def end_database_report(self):
         _DatabaseReportConsumer.end_database_report(self)
@@ -1491,7 +1491,7 @@ class _PSIBlastConsumer(AbstractConsumer,
         try:
             self._alignment.hsps.append(self._hsp)
         except AttributeError:
-            raise SyntaxError, "Found an HSP before an alignment"
+            raise ValueError, "Found an HSP before an alignment"
 
     def end_database_report(self):
         _DatabaseReportConsumer.end_database_report(self)
@@ -1894,7 +1894,7 @@ def rpsblast(blastcmd, database, infile, align_view="7", **keywds):
 def _re_search(regex, line, error_msg):
     m = re.search(regex, line)
     if not m:
-        raise SyntaxError, error_msg
+        raise ValueError, error_msg
     return m.groups()
 
 def _get_cols(line, cols_to_get, ncols=None, expected={}):
@@ -1902,13 +1902,13 @@ def _get_cols(line, cols_to_get, ncols=None, expected={}):
 
     # Check to make sure number of columns is correct
     if ncols is not None and len(cols) != ncols:
-        raise SyntaxError, "I expected %d columns (got %d) in line\n%s" % \
+        raise ValueError, "I expected %d columns (got %d) in line\n%s" % \
               (ncols, len(cols), line)
 
     # Check to make sure columns contain the correct data
     for k in expected.keys():
         if cols[k] != expected[k]:
-            raise SyntaxError, "I expected '%s' in column %d in line\n%s" % (
+            raise ValueError, "I expected '%s' in column %d in line\n%s" % (
                 expected[k], k, line)
 
     # Construct the answer tuple
@@ -1964,7 +1964,7 @@ class BlastErrorParser(AbstractParser):
     """Attempt to catch and diagnose BLAST errors while parsing.
 
     This utilizes the BlastParser module but adds an additional layer
-    of complexity on top of it by attempting to diagnose SyntaxError's
+    of complexity on top of it by attempting to diagnose ValueErrors
     that may actually indicate problems during BLAST parsing.
 
     Current BLAST problems this detects are:
@@ -1973,7 +1973,7 @@ class BlastErrorParser(AbstractParser):
     nucleotide), BLAST will report an error with the sequence and be
     unable to search with this. This will lead to a badly formatted
     BLAST report that the parsers choke on. The parser will convert the
-    SyntaxError to a LowQualityBlastError and attempt to provide useful
+    ValueError to a LowQualityBlastError and attempt to provide useful
     information.
     
     """
@@ -1999,7 +1999,7 @@ class BlastErrorParser(AbstractParser):
 
         try:
             self._scanner.feed(File.StringHandle(results), self._consumer)
-        except SyntaxError, msg:
+        except ValueError, msg:
             # if we have a bad_report_file, save the info to it first
             if self._bad_report_handle:
                 # send the info to the error handle
