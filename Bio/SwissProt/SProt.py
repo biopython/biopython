@@ -574,20 +574,20 @@ class _RecordConsumer(AbstractConsumer):
             self.data.sequence_length = int(cols[3])
         else :
             #Should we print a warning an continue?
-            raise SyntaxError("ID line has unrecognised format:\n"+line)
+            raise ValueError("ID line has unrecognised format:\n"+line)
         
         # data class can be 'STANDARD' or 'PRELIMINARY'
         # ws:2001-12-05 added IPI
         # pjc:2006-11-02 added 'Reviewed' and 'Unreviewed'
         if self.data.data_class not in ['STANDARD', 'PRELIMINARY', 'IPI',
                                         'Reviewed', 'Unreviewed']: 
-            raise SyntaxError, "Unrecognized data class %s in line\n%s" % \
+            raise ValueError, "Unrecognized data class %s in line\n%s" % \
                   (self.data.data_class, line)
         # molecule_type should be 'PRT' for PRoTein
         # Note that has been removed in recent releases (set to None)
         if self.data.molecule_type is not None \
         and self.data.molecule_type != 'PRT':
-            raise SyntaxError, "Unrecognized molecule type %s in line\n%s" % \
+            raise ValueError, "Unrecognized molecule type %s in line\n%s" % \
                   (self.data.molecule_type, line)
     
     def accession(self, line):
@@ -686,7 +686,7 @@ class _RecordConsumer(AbstractConsumer):
             else:
                 assert False, "Shouldn't reach this line!"
         else:
-            raise SyntaxError, "I don't understand the date line %s" % line
+            raise ValueError, "I don't understand the date line %s" % line
     
     def description(self, line):
         self.data.description += line[5:]

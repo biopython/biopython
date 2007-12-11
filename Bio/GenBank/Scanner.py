@@ -76,7 +76,7 @@ class InsdcScanner :
             else :
                 #Ignore any header before the first ID/LOCUS line.
                 if self.debug > 1:
-	                print "Skipping header line before record:\n" + line
+                        print "Skipping header line before record:\n" + line
         self.line = line
         return line
 
@@ -94,7 +94,7 @@ class InsdcScanner :
         while True :
             line = self.handle.readline()
             if not line :
-                raise SyntaxError("Premature end of line during sequence data")
+                raise ValueError("Premature end of line during sequence data")
             line = line.rstrip()
             if line in self.FEATURE_START_MARKERS :
                 if self.debug : print "Found header table"
@@ -106,7 +106,7 @@ class InsdcScanner :
                 if self.debug : print "Found start of sequence"
                 break
             if line == "//" :
-                raise SyntaxError("Premature end of sequence data marker '//' found")
+                raise ValueError("Premature end of sequence data marker '//' found")
             header_lines.append(line)
         self.line = line
         return header_lines
@@ -132,19 +132,19 @@ class InsdcScanner :
         line = self.line
         while True :
             if not line :
-                raise SyntaxError("Premature end of line during features table")
+                raise ValueError("Premature end of line during features table")
             if line[:self.HEADER_WIDTH].rstrip() in self.SEQUENCE_HEADERS :
                 if self.debug : print "Found start of sequence"
                 break
             line = line.rstrip()
             if line == "//" :
-                raise SyntaxError("Premature end of features table, marker '//' found")
+                raise ValueError("Premature end of features table, marker '//' found")
             if line in self.FEATURE_END_MARKERS :
                 if self.debug : print "Found end of features"
                 line = self.handle.readline()
                 break
             if line[2:self.FEATURE_QUALIFIER_INDENT].strip() == "" :
-                raise SyntaxError("Expected a feature qualifier in line '%s'" % line)
+                raise ValueError("Expected a feature qualifier in line '%s'" % line)
 
             if skip :
                 line = self.handle.readline()
@@ -263,7 +263,7 @@ class InsdcScanner :
             return (feature_key, feature_location, qualifiers)
         except StopIteration:
             #Bummer
-            raise SyntaxError("Problem with '%s' feature:\n%s" \
+            raise ValueError("Problem with '%s' feature:\n%s" \
                               % (feature_key, "\n".join(lines)))
 
     def parse_footer(self) :
@@ -274,14 +274,14 @@ class InsdcScanner :
             while self.line[:self.HEADER_WIDTH].rstrip() not in self.SEQUENCE_HEADERS :
                 self.line = self.handle.readline()
                 if not self.line :
-                    raise SyntaxError("Premature end of file")
+                    raise ValueError("Premature end of file")
                 self.line = self.line.rstrip()
             
         assert self.line[:self.HEADER_WIDTH].rstrip() in self.SEQUENCE_HEADERS, \
                "Not at start of sequence"
         while True :
             line = self.handle.readline()
-            if not line : raise SyntaxError("Premature end of line during sequence data")
+            if not line : raise ValueError("Premature end of line during sequence data")
             line = line.rstrip()
             if line == "//" : break
         self.line = line
@@ -513,7 +513,7 @@ class EmblScanner(InsdcScanner) :
             misc_lines.append(self.line)
             self.line = self.handle.readline()
             if not self.line :
-                raise SyntaxError("Premature end of file")
+                raise ValueError("Premature end of file")
             self.line = self.line.rstrip()
 
         assert self.line[:self.HEADER_WIDTH] == " " * self.HEADER_WIDTH \
@@ -523,10 +523,10 @@ class EmblScanner(InsdcScanner) :
         line = self.line
         while True :
             if not line :
-                raise SyntaxError("Premature end of file in sequence data")
+                raise ValueError("Premature end of file in sequence data")
             line = line.strip()
             if not line :
-                raise SyntaxError("Blank line in sequence data")
+                raise ValueError("Blank line in sequence data")
             if line=='//' :
                 break
             assert self.line[:self.HEADER_WIDTH] == " " * self.HEADER_WIDTH, \
@@ -545,7 +545,7 @@ class EmblScanner(InsdcScanner) :
             #Looks like the pre 2006 style
             self._feed_first_line_old(consumer, line)
         else :
-            raise SyntaxError('Did not recognise the ID line layout:\n' + line)
+            raise ValueError('Did not recognise the ID line layout:\n' + line)
 
     def _feed_first_line_old(self, consumer, line) :
         #Expects an ID line in the style before 2006, e.g.
@@ -679,7 +679,7 @@ class EmblScanner(InsdcScanner) :
                     if self.debug :
                         print "Ignoring EMBL header line:\n%s" % line
         except StopIteration :
-            raise SyntaxError("Problem with header")
+            raise ValueError("Problem with header")
         
     def _feed_misc_lines(self, consumer, lines) :
         #TODO - Should we do something with the information on the SQ line(s)?
@@ -708,7 +708,7 @@ class GenBankScanner(InsdcScanner) :
             misc_lines.append(self.line)
             self.line = self.handle.readline()
             if not self.line :
-                raise SyntaxError("Premature end of file")
+                raise ValueError("Premature end of file")
             self.line = self.line.rstrip()
 
         assert self.line[:self.HEADER_WIDTH].rstrip() not in self.SEQUENCE_HEADERS, \
@@ -720,17 +720,17 @@ class GenBankScanner(InsdcScanner) :
         line = self.line
         while True :
             if not line :
-                raise SyntaxError("Premature end of file in sequence data")
+                raise ValueError("Premature end of file in sequence data")
             line = line.rstrip()
             if not line :
-                raise SyntaxError("Blank line in sequence data")
+                raise ValueError("Blank line in sequence data")
             if line=='//' :
                 break
             if line.find('CONTIG')==0 :
                 #What should we do with this?
                 break
             if len(line) > 9 and  line[9:10]<>' ' :
-                raise SyntaxError("Sequence line mal-formed, '%s'" % line)
+                raise ValueError("Sequence line mal-formed, '%s'" % line)
             seq_lines.append(line[10:].replace(" ",""))
             line = self.handle.readline()
 
@@ -898,7 +898,7 @@ class GenBankScanner(InsdcScanner) :
                 #We should be able to continue parsing... we need real world testcases!
                 print >> sys.stderr, "Warning: Minimal LOCUS line found - is this correct?\n" + line
         else :
-            raise SyntaxError('Did not recognise the LOCUS line layout:\n' + line)
+            raise ValueError('Did not recognise the LOCUS line layout:\n' + line)
 
 
     def _feed_header_lines(self, consumer, lines) :
@@ -1040,7 +1040,7 @@ class GenBankScanner(InsdcScanner) :
                     #Read in next line
                     line = line_iter.next()
         except StopIteration :
-            raise SyntaxError("Problem in header")
+            raise ValueError("Problem in header")
         
     def _feed_misc_lines(self, consumer, lines) :
         #Deals with a few misc lines between the features and the sequence
@@ -1070,11 +1070,11 @@ class GenBankScanner(InsdcScanner) :
                         elif line[:GENBANK_INDENT]==GENBANK_SPACER :
                             contig_location += line.rstrip()
                         else:
-                            raise SyntaxError('Expected CONTIG continuation line, got:\n' + line)
+                            raise ValueError('Expected CONTIG continuation line, got:\n' + line)
                     consumer.contig_location(contig_location)
             return
         except StopIteration :
-            raise SyntaxError("Problem in misc lines before sequence")
+            raise ValueError("Problem in misc lines before sequence")
         
 if __name__ == "__main__" :
     from StringIO import StringIO
