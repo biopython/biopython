@@ -9,7 +9,7 @@ import os
 import unittest
 
 # local stuff
-import Bio
+from Bio import MissingExternalDependencyError
 from Bio.Seq import Seq
 from Bio import Alphabet
 from Bio import GenBank
@@ -26,7 +26,18 @@ try :
     from setup_BioSQL import DBSCHEMA, SQL_FILE
 except NameError :
     message = "Enable tests in Tests/setup_BioSQL.py (not important if you do not plan to use BioSQL)."
-    raise Bio.MissingExternalDependencyError(message)
+    raise MissingExternalDependencyError(message)
+
+try :
+    server = BioSeqDatabase.open_database(driver = DBDRIVER,
+                                          user = DBUSER, passwd = DBPASSWD,
+                                          host = DBHOST)
+    del server
+except Exception, e :
+    #Include str(e) in the message?
+    message = "Connection failed, check settings in Tests/setup_BioSQL.py "\
+              "(not important if you do not plan to use BioSQL)."
+    raise MissingExternalDependencyError(message)
   
 def run_tests(argv):
     test_suite = testing_suite()

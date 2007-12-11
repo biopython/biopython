@@ -9,6 +9,7 @@ Goals:
 
 from sets import Set
 import os
+from Bio import MissingExternalDependencyError
 from Bio import SeqIO
 from StringIO import StringIO
 from Bio.SeqUtils.CheckSum import seguid
@@ -25,10 +26,9 @@ try :
     from setup_BioSQL import DBSCHEMA, SQL_FILE
 except NameError :
     message = "Enable tests in Tests/setup_BioSQL.py (not important if you do not plan to use BioSQL)."
-    raise Bio.MissingExternalDependencyError(message)
+    raise MissingExternalDependencyError(message)
 
 db_name = "biosql-seqio-test"
-
 #####################################################################
 
 #This list was based on a selection from test_SeqIO.py
@@ -232,9 +232,17 @@ def compare_records(old, new) :
 #####################################################################
 
 print "Connecting to database"
-server = BioSeqDatabase.open_database(driver = DBDRIVER,
+try :
+    server = BioSeqDatabase.open_database(driver = DBDRIVER,
                                       user = DBUSER, passwd = DBPASSWD,
-                                      host = DBHOST, db = TESTDB)
+                                      host = DBHOST)
+    del server
+except Exception, e :
+    #Include str(e) in the message?
+    message = "Connection failed, check settings in Tests/setup_BioSQL.py "\
+              "(not important if you do not plan to use BioSQL)."
+    raise MissingExternalDependencyError(message)
+    
 
 print "Removing existing sub-database '%s' (if exists)" % db_name
 if db_name in server.keys() :

@@ -2,7 +2,7 @@
 """Preparation for BioSQL tests, setting passwords etc
 """
 import os
-import Bio
+from Bio import MissingExternalDependencyError
 from BioSQL import BioSeqDatabase
 
 ##################################
@@ -36,7 +36,7 @@ except NameError:
     #This happens if the lines above are commented out
     message = "Enter your settings in Tests/setup_BioSQL.py " \
               "(not important if you do not plan to use BioSQL)."
-    raise Bio.MissingExternalDependencyError(message)
+    raise MissingExternalDependencyError(message)
 
 # Uses the SQL file in the Tests/BioSQL directory -- try to keep this current
 # with what is going on with BioSQL
@@ -49,17 +49,8 @@ try :
 except ImportError :
     message = "Install %s or correct Tests/setup_BioSQL.py "\
               "(not important if you do not plan to use BioSQL)." % DBDRIVER
-    raise Bio.MissingExternalDependencyError(message)
+    raise MissingExternalDependencyError(message)
 
-#Check the username, password and host work
-try :
-    server = BioSeqDatabase.open_database(driver = DBDRIVER,
-                                          user = DBUSER, passwd = DBPASSWD,
-                                          host = DBHOST)
-    del server
-except Exception, e :
-    #Include str(e) in the message?
-    message = "Connection failed, check settings in Tests/setup_BioSQL.py "\
-              "(not important if you do not plan to use BioSQL)."
-    raise Bio.MissingExternalDependencyError(message)
-    
+#Could check the username, password and host work here,
+#but this only seems to work for the first unit test
+#that tries to import this file.
