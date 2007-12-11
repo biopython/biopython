@@ -3,7 +3,6 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-import os
 import string
 import sys
 from Bio import File
@@ -66,7 +65,7 @@ safe_readline = ParserSupport.safe_readline
 print safe_readline(h)    # "This"
 print safe_readline(h)    # "file"
 try: safe_readline(h)
-except SyntaxError: print "correctly failed"
+except ValueError: print "correctly failed"
 else: print "ERROR, should have failed"
 
 
@@ -85,7 +84,7 @@ h.readline()
 print safe_peekline(h) # "file"
 h.readline()
 try: safe_peekline(h)
-except SyntaxError: print "correctly failed"
+except ValueError: print "correctly failed"
 else: print "ERROR, should have failed"
 h.saveline('hello')
 print safe_peekline(h) # 'hello'
@@ -119,19 +118,19 @@ rac(h, m, blank=0)
 
 # These should be errors.  If they're not, then complain.
 try: rac(h, m, blank=1)
-except SyntaxError: print "correctly failed"
+except ValueError: print "correctly failed"
 else: print "ERROR, should have failed"
 try: rac(h, m, start='foobar')
-except SyntaxError: print "correctly failed"
+except ValueError: print "correctly failed"
 else: print "ERROR, should have failed"
 try: rac(h, m, end='foobar')
-except SyntaxError: print "correctly failed"
+except ValueError: print "correctly failed"
 else: print "ERROR, should have failed"
 try: rac(h, m, contains='foobar')
-except SyntaxError: print "correctly failed"
+except ValueError: print "correctly failed"
 else: print "ERROR, should have failed"
 try: rac(h, m, blank=0)
-except SyntaxError: print "correctly failed"
+except ValueError: print "correctly failed"
 else: print "ERROR, should have failed"
         
 
