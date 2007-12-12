@@ -35,7 +35,7 @@ def load(handle):
     try:
         parser.readfp(handle)
     except ConfigParser.Error, x:
-        raise SyntaxError, x
+        raise ValueError, x
     stanzas = []
     for section in parser.sections():
         pairs = []

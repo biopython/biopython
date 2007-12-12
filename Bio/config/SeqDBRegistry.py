@@ -68,7 +68,7 @@ def _load_registry_objects(ini_file):
 
     try:
         stanzas = _stanzaformat.load(_openfu(ini_file))
-    except SyntaxError, x:
+    except ValueError, x:
         _warn("Can't load seqdb.  Syntax error in %s: %s" % (ini_file, str(x)))
         return None
 
