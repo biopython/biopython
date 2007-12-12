@@ -4,15 +4,20 @@
 # as part of this package.
 
 import os
-from types import *
-from Bio import File
-from Bio import ParserSupport
 from Bio.Prosite import Prodoc
 
 
-tests = [ 'pdoc00100.txt', 'pdoc00113.txt', 'pdoc00144.txt', 'pdoc00149.txt', \
-    'pdoc00340.txt', 'pdoc00424.txt', 'pdoc00472.txt', 'pdoc00640.txt', \
-     'pdoc00787.txt', 'pdoc00933.txt' ]
+tests = ['pdoc00100.txt',
+         'pdoc00113.txt',
+         'pdoc00144.txt',
+         'pdoc00149.txt',
+         'pdoc00340.txt',
+         'pdoc00424.txt',
+         'pdoc00472.txt',
+         'pdoc00640.txt',
+         'pdoc00787.txt',
+         'pdoc00933.txt',
+        ]
 
 def print_list( list ):
     for item in list:
@@ -25,7 +30,6 @@ def print_references( list ):
         print item.citation
 
 for test in tests:
-#    print "testing %s" % test
     datafile = os.path.join( 'Prosite', 'Doc', test )
     src_handle = open( datafile )
     data = Prodoc.read(src_handle)
