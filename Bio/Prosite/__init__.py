@@ -744,6 +744,7 @@ def scan_sequence_expasy(seq=None, id=None, exclude_frequent=None):
     will be excluded.
 
     """
+    from Bio import ExPASy
     if (seq and id) or not (seq or id):
         raise ValueError, "Please specify either a sequence or an id"
     handle = ExPASy.scanprosite1(seq, id, exclude_frequent)
