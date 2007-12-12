@@ -4,14 +4,14 @@
 # as part of this package.
 
 import os
-from types import *
-from Bio import File
-from Bio import ParserSupport
 from Bio import Prosite
 
-tests = [ 'ps00107.txt', 'ps00159.txt', 'ps00165.txt', 'ps00432.txt', \
-          'ps00488.txt', 'ps00546.txt' ]
-record_parser = Prosite.RecordParser()
+tests = [ 'ps00107.txt',
+          'ps00159.txt',
+          'ps00165.txt',
+          'ps00432.txt',
+          'ps00488.txt',
+          'ps00546.txt' ]
 
 def print_list( list ):
     for item in list:
@@ -20,8 +20,8 @@ def print_list( list ):
 for test in tests:
     print "testing %s" % test
     datafile = os.path.join( 'Prosite', test )
-    src_handle = open( datafile )
-    data = record_parser.parse( src_handle )
+    src_handle = open(datafile)
+    data = Prosite.read(src_handle)
     print data.name
     print data.type
     print data.accession
