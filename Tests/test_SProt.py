@@ -2,15 +2,14 @@
 """Test for the SProt parser on SwissProt files.
 """
 import os
+from Bio import SeqIO
+from Bio import SwissProt
 from Bio.SeqRecord import SeqRecord
 from Bio.SwissProt import SProt
 
 test_files = ['sp001', 'sp002', 'sp003', 'sp004', 'sp005',
               'sp006', 'sp007', 'sp008', 'sp009', 'sp010',
               'sp011', 'sp012', 'sp013', 'sp014', 'sp015']
-
-record_parser = SProt.RecordParser()
-sequence_parser = SProt.SequenceParser()
 
 # test the record parser
 for test_file in test_files:
@@ -19,7 +18,7 @@ for test_file in test_files:
 
     print "*Using SequenceParser"
     test_handle = open(datafile)
-    seq_record = sequence_parser.parse(test_handle)
+    seq_record = SeqIO.read(test_handle, "swiss")
     test_handle.close()
 
     assert isinstance(seq_record, SeqRecord)
@@ -31,7 +30,7 @@ for test_file in test_files:
 
     print "*Using RecordParser"
     test_handle = open(datafile)
-    record = record_parser.parse(test_handle)
+    record = SwissProt.read(test_handle)
     test_handle.close()
 
     # test a couple of things on the record -- this is not exhaustive
@@ -59,19 +58,9 @@ for test_file in test_files:
     #Now try using the Iterator - note that all these
     #test cases have only one record.
 
-    #First, no parser.
+    # With the SequenceParser
     test_handle = open(datafile)
-    records = list(SProt.Iterator(test_handle))
-    test_handle.close()
-
-    assert len(records) == 1
-    assert isinstance(records[0], basestring)
-    assert records[0][:3] == "ID "
-    assert records[0].rstrip().split("\n")[-1] == "//"
-
-    #Next, with the SequenceParser
-    test_handle = open(datafile)
-    records = list(SProt.Iterator(test_handle, sequence_parser))
+    records = list(SeqIO.parse(test_handle, "swiss"))
     test_handle.close()
 
     assert len(records) == 1
@@ -83,9 +72,9 @@ for test_file in test_files:
     assert records[0].name == seq_record.name
     assert records[0].id == seq_record.id
     
-    #Finally, with the RecordParser
+    # With the RecordParser
     test_handle = open(datafile)
-    records = list(SProt.Iterator(test_handle, record_parser))
+    records = list(SwissProt.parse(test_handle))
     test_handle.close()
 
     assert len(records) == 1
