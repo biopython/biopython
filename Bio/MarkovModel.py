@@ -50,7 +50,7 @@ class MarkovModel:
 def _readline_and_check_start(handle, start):
     line = handle.readline()
     if not line.startswith(start):
-        raise SyntaxError, "I expected %r but got %r" % (start, line)
+        raise ValueError, "I expected %r but got %r" % (start, line)
     return line
 
 def load(handle):

@@ -323,7 +323,7 @@ class _Scanner:
         elif line1.startswith('<PRE>'):
             is_pairwise = 1
         else:
-            raise SyntaxError, "Cannot resolve location at lines:\n%s\n%s" % (line1, line2)
+            raise ValueError, "Cannot resolve location at lines:\n%s\n%s" % (line1, line2)
 
         if is_pairwise:
             self._scan_pairwise_alignments(uhandle, consumer)
@@ -420,7 +420,7 @@ class _Scanner:
                 break
             elif is_blank_line(line):
                 # Check to make sure I haven't missed the Length line
-                raise SyntaxError, "I missed the Length in an alignment header"
+                raise ValueError, "I missed the Length in an alignment header"
             consumer.title(line)
 
         if not attempt_read_and_call(uhandle, consumer.noevent,

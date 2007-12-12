@@ -155,7 +155,7 @@ def search_for(search, reldate=None, mindate=None, maxdate=None,
             # of only integers.  Should I check to make sure it
             # meets a certain minimum length?
             if self._not_pmid_re.search(data):
-                raise SyntaxError, \
+                raise ValueError, \
                       "I expected an ID, but %s doesn't look like one." % \
                       repr(data)
             self.ids.append(data)
@@ -237,7 +237,7 @@ def find_related(pmid):
             # of only integers.  Should I check to make sure it
             # meets a certain minimum length?
             if self._not_pmid_re.search(data):
-                raise SyntaxError, \
+                raise ValueError, \
                       "I expected an ID, but '%s' doesn't look like one." % \
                       repr(data)
             self.ids.append(data)

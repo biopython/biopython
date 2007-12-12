@@ -120,15 +120,15 @@ class _IndexerHandler(handler.ContentHandler):
         self._elements.append(name)
         if name == 'MedlineCitation':
             if self._start is not None:
-                raise SyntaxError, "Found MedlineCitation, but already in one."
+                raise ValueError, "Found MedlineCitation, but already in one."
             self._start = self._offset
     def endElement(self, name):
         if not self._elements or self._elements[-1] != name:
-            raise SyntaxError, "Elements not nested: %s" % name
+            raise ValueError, "Elements not nested: %s" % name
         self._elements.pop()
         if name == 'MedlineCitation':
             if not self._pmid or not self._medline_id:  # didn't find an ID:
-                raise SyntaxError, "I couldn't find an id: %s %s" % (
+                raise ValueError, "I couldn't find an id: %s %s" % (
                     self._pmid, self._medline_id)
             self._citation_fn(
                 self._pmid, self._medline_id, self._start, self._offset)

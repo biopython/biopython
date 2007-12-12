@@ -297,12 +297,12 @@ class _Scanner:
             if line[0] == '\t' or qualifier == '' or \
                line[:13] == ' purification':
                 if prev_qualifier is None:
-                    raise SyntaxError, "Continuation on first line\n%s" % line
+                    raise ValueError, "Continuation on first line\n%s" % line
                 qualifier = prev_qualifier
             else:
                 # Make sure it contains a '-'
                 if len(line) < 5 or line[4] != '-':
-                    raise SyntaxError, \
+                    raise ValueError, \
                           "I don't understand the format of line %s" % line
             prev_qualifier = qualifier
             
