@@ -20,7 +20,6 @@ Record             Holds SwissProt data.
 Reference          Holds reference data from a SwissProt entry.
 Iterator           Iterates over entries in a SwissProt file.
 Dictionary         Accesses a SwissProt file using a dictionary interface.
-ExPASyDictionary   Accesses SwissProt records from ExPASy.
 RecordParser       Parses a SwissProt record into a Record object.
 SequenceParser     Parses a SwissProt record into a SeqRecord object.
 
@@ -41,8 +40,6 @@ from Bio import Alphabet
 from Bio import Seq
 from Bio import SeqRecord
 from Bio.ParserSupport import *
-from Bio.WWW import ExPASy
-from Bio.WWW import RequestLimiter
 
 _CHOMP = " \n\r\t.,;" #whitespace and trailing punctuation
 
@@ -231,6 +228,10 @@ class ExPASyDictionary:
         between each query.
 
         """
+        import warnings
+        from Bio.WWW import RequestLimiter
+        warnings.warn("Bio.SwissProt.ExPASyDictionary is deprecated. Please use the function Bio.ExPASy.get_sprot_raw instead.",
+              DeprecationWarning)
         self.parser = parser
         self.limiter = RequestLimiter(delay)
 
@@ -273,6 +274,7 @@ class ExPASyDictionary:
         for the entry.  Raises a KeyError if there's an error.
         
         """
+        from Bio.WWW import ExPASy
         # First, check to see if enough time has passed since my
         # last query.
         self.limiter.wait()
@@ -336,8 +338,7 @@ class _Scanner:
         else:
             uhandle = File.UndoHandle(handle)
         
-        while uhandle.peekline():
-            self._scan_record(uhandle, consumer)
+        self._scan_record(uhandle, consumer)
 
     def _skip_starstar(self, uhandle) :
         """Ignores any lines starting **"""
