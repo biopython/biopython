@@ -19,6 +19,10 @@ _open
 
 """
 
+import warnings
+warnings.warn("Bio.WWW.ExPASy is deprecated. The functions in Bio.WWW.ExPASy  are now available from Bio.ExPASy.",
+              DeprecationWarning)
+
 
 def get_prodoc_entry(id, cgi='http://www.expasy.ch/cgi-bin/get-prodoc-entry'):
     """get_prodoc_entry(id,
