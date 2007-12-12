@@ -1,7 +1,7 @@
 """Testing online code for fetching sequences, and parsing them
 
 Uses Bio.SeqIO to parse files downloaded with Bio.GenBank, Bio.WWW.NCBI, 
-Bio.WWW.ExPASy etc.
+Bio.ExPASy etc.
 
 Goals:
     Make sure that all retrieval is working as expected.
@@ -11,7 +11,7 @@ import requires_internet
 
 #We want to test these:
 from Bio import GenBank
-from Bio import WWW
+from Bio import ExPASy
 
 #In order to check any sequences returned
 from Bio import SeqIO
@@ -29,11 +29,11 @@ def checksum_summary(record) :
 
 #####################################################################
 
-print "Checking Bio.WWW.ExPASy.get_sprot_raw()"
+print "Checking Bio.ExPASy.get_sprot_raw()"
 id_list = ["O23729"]
 for identifier in id_list :
     print "- Fetching %s" % identifier
-    handle = WWW.ExPASy.get_sprot_raw(identifier)
+    handle = ExPASy.get_sprot_raw(identifier)
     records = list(SeqIO.parse(handle, "swiss"))
     assert len(records)==1
     record = records[0]
