@@ -21,7 +21,6 @@ Record                Holds Prosite data.
 PatternHit            Holds data from a hit against a Prosite pattern.
 Iterator              Iterates over entries in a Prosite file.
 Dictionary            Accesses a Prosite file using a dictionary interface.
-ExPASyDictionary      Accesses Prosite records from ExPASy.
 RecordParser          Parses a Prosite record into a Record object.
 
 _Scanner              Scans Prosite-formatted data.
@@ -41,8 +40,39 @@ import sgmllib
 from Bio import File
 from Bio import Index
 from Bio.ParserSupport import *
-from Bio.WWW import ExPASy
-from Bio.WWW import RequestLimiter
+
+
+# There is probably a cleaner way to write the read/parse functions
+# if we don't use the "parser = RecordParser(); parser.parse(handle)"
+# approach. Leaving that for the next revision of Bio.Prosite.
+def parse(handle):
+    import cStringIO
+    parser = RecordParser()
+    text = ""
+    for line in handle:
+        text += line
+        if line[:2]=='//':
+            handle = cStringIO.StringIO(text)
+            record = parser.parse(handle)
+            text = ""
+            if not record: # Then this was the copyright notice
+                continue
+            yield record
+
+def read(handle):
+    parser = RecordParser()
+    try:
+        record = parser.parse(handle)
+    except ValueError, error:
+        if error.message=="There doesn't appear to be a record":
+            raise ValueError, "No Prosite record found"
+        else:
+            raise error
+    # We should have reached the end of the record by now
+    remainder = handle.read()
+    if remainder:
+        raise ValueError, "More than one Prosite record found"
+    return record
 
 class Record:
     """Holds information from a Prosite record.
@@ -206,7 +236,7 @@ class Iterator:
                 if line[:2] == '//':
                     break
                 if line[:2] != 'CC':
-                    raise SyntaxError, \
+                    raise ValueError, \
                           "Oops, where's the copyright?"
         
         lines = []
@@ -277,6 +307,10 @@ class ExPASyDictionary:
         between each query.
 
         """
+        import warnings
+        from Bio.WWW import RequestLimiter
+        warnings.warn("Bio.Prosite.ExPASyDictionary is deprecated. Please use the function Bio.ExPASy.get_prosite_raw instead.",
+              DeprecationWarning)
         self.parser = parser
         self.limiter = RequestLimiter(delay)
 
@@ -319,6 +353,7 @@ class ExPASyDictionary:
         for the entry.  Raises a KeyError if there's an error.
         
         """
+        from Bio.WWW import ExPASy
         # First, check to see if enough time has passed since my
         # last query.
         self.limiter.wait()
@@ -368,7 +403,8 @@ class _Scanner:
         else:
             uhandle = File.UndoHandle(handle)
 
-        while 1:
+        consumer.finished = False
+        while not consumer.finished:
             line = uhandle.peekline()
             if not line:
                 break
@@ -381,7 +417,7 @@ class _Scanner:
             elif line[:2] == 'CC':
                 self._scan_copyrights(uhandle, consumer)
             else:
-                raise SyntaxError, "There doesn't appear to be a record"
+                raise ValueError, "There doesn't appear to be a record"
 
     def _scan_copyrights(self, uhandle, consumer):
         consumer.start_copyrights()
@@ -535,7 +571,7 @@ class _RecordConsumer(AbstractConsumer):
     def identification(self, line):
         cols = line.split()
         if len(cols) != 3:
-            raise SyntaxError, "I don't understand identification line\n%s" % \
+            raise ValueError, "I don't understand identification line\n%s" % \
                   line
         self.data.name = self._chomp(cols[1])    # don't want ';'
         self.data.type = self._chomp(cols[2])    # don't want '.'
@@ -543,7 +579,7 @@ class _RecordConsumer(AbstractConsumer):
     def accession(self, line):
         cols = line.split()
         if len(cols) != 2:
-            raise SyntaxError, "I don't understand accession line\n%s" % line
+            raise ValueError, "I don't understand accession line\n%s" % line
         self.data.accession = self._chomp(cols[1])
     
     def date(self, line):
@@ -554,7 +590,7 @@ class _RecordConsumer(AbstractConsumer):
         if cols[2] != '(CREATED);' or \
            cols[4] != '(DATA' or cols[5] != 'UPDATE);' or \
            cols[7][:4] != '(INF' or cols[8] != 'UPDATE).':
-            raise SyntaxError, "I don't understand date line\n%s" % line
+            raise ValueError, "I don't understand date line\n%s" % line
 
         self.data.created = cols[1]
         self.data.data_update = cols[3]
@@ -605,7 +641,7 @@ class _RecordConsumer(AbstractConsumer):
                 elif(qual == "/FALSE_POS"):
                     self.data.nr_false_pos = hits
             else:
-                raise SyntaxError, "Unknown qual %s in comment line\n%s" % \
+                raise ValueError, "Unknown qual %s in comment line\n%s" % \
                       (repr(qual), line)
     
     def comment(self, line):
@@ -647,7 +683,7 @@ class _RecordConsumer(AbstractConsumer):
             elif qual == '/VERSION':
                 self.data.cc_version = data
             else:
-                raise SyntaxError, "Unknown qual %s in comment line\n%s" % \
+                raise ValueError, "Unknown qual %s in comment line\n%s" % \
                       (repr(qual), line)
             
     def database_reference(self, line):
@@ -667,7 +703,7 @@ class _RecordConsumer(AbstractConsumer):
             elif type == '?':
                 self.data.dr_unknown.append((acc, name))
             else:
-                raise SyntaxError, "I don't understand type flag %s" % type
+                raise ValueError, "I don't understand type flag %s" % type
     
     def pdb_reference(self, line):
         cols = line.split()
@@ -683,7 +719,7 @@ class _RecordConsumer(AbstractConsumer):
         self.data.pdoc = self._chomp(self._clean(line))
 
     def terminator(self, line):
-        pass
+        self.finished = True
 
     def _chomp(self, word, to_chomp='.,;'):
         # Remove the punctuation at the end of a word.
@@ -744,7 +780,7 @@ def _extract_pattern_hits(handle):
                 self._last_found = 'pdoc'
             elif self._last_found == 'pdoc':
                 if data[:2] != 'PS':
-                    raise SyntaxError, "Expected accession but got:\n%s" % data
+                    raise ValueError, "Expected accession but got:\n%s" % data
                 self._current_hit.accession = data
                 self._last_found = 'accession'
             elif self._last_found == 'accession':
