@@ -7,8 +7,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-import os, sys, getopt, re, time
-from string import maketrans
+import re, time
 from Bio import SeqIO
 from Bio import Translate
 from Bio.Seq import Seq
@@ -277,8 +276,9 @@ def six_frame_translations(seq, genetic_code = 1):
    nice looking 6 frame translation with GC content - code from xbbtools
    similar to DNA Striders six-frame translation
    """
-   comp = complement(seq)
-   anti = reverse(comp)
+   from Bio.Seq import reverse_complement
+   anti = reverse_complement(seq)
+   comp = anti[::-1]
    length = len(seq)
    frames = {}
    for i in range(0,3):
@@ -399,6 +399,7 @@ def quicker_apply_on_multi_fasta(file, function, *args):
 # {{{ 
 
 if __name__ == '__main__':
+   import sys, getopt
    # crude command line options to use most functions directly on a FASTA file
    options = {'apply_on_multi_fasta':0,
               'quick':0,
