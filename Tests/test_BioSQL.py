@@ -11,6 +11,7 @@ import unittest
 # local stuff
 from Bio import MissingExternalDependencyError
 from Bio.Seq import Seq
+from Bio.SeqFeature import SeqFeature
 from Bio import Alphabet
 from Bio import GenBank
 
@@ -215,7 +216,7 @@ class SeqInterfaceTest(unittest.TestCase):
         # XXX should do something with annotations once they are like
         # a dictionary
         for feature in test_record.features:
-            assert isinstance(feature, Bio.SeqFeature.SeqFeature)
+            assert isinstance(feature, SeqFeature)
 
     def t_seq(self):
         """Make sure Seqs from BioSQL implement the right interface.
