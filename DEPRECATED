@@ -2,6 +2,12 @@ This file provides documentation for modules in Biopython that have been moved
 or deprecated in favor of other modules. This provides some quick and easy
 to find documentation about how to update your code to work again.
 
+Bio.WWW
+=======
+The modules under Bio.WWW are being deprecated as of Release 1.45
+The functionality in Bio.WWW.SCOP, Bio.WWW.InterPro and Bio.WWW.ExPASy
+is now available from Bio.SCOP, Bio.InterPro and Bio.ExPASy instead.
+
 Bio.Blast.NCBIWWW
 =================
 The deprecated functions blast and blasturl were removed in Release 1.44
