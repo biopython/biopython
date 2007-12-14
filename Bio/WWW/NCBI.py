@@ -8,8 +8,7 @@
 The main Entrez web page is available at:
 http://www.ncbi.nlm.nih.gov/Entrez/
 
-A list of the Entrez utilities (will go away Dec 2002) is available
-at:
+A list of the Entrez utilities is available at:
 http://www.ncbi.nlm.nih.gov/entrez/utils/utils_index.html
 
 Documentation for the e-utilies are available at:
@@ -20,7 +19,7 @@ http://www.ncbi.nlm.nih.gov/BLAST/
 
 
 Functions:
-query        Query Entrez.
+query        Query Entrez; retrieve results in HTML format.
 pmfetch      Retrieve results using a unique identifier.
 pmqty        Search PubMed.
 pmneighbor   Return a list of related articles for a PubMed entry.
@@ -34,14 +33,15 @@ import urllib
 
 from Bio import File
 
-def query(cmd, db, cgi='http://www.ncbi.nlm.nih.gov/entrez/query.fcgi',
+def query(cmd, db, cgi='http://www.ncbi.nlm.nih.gov/sites/entrez',
           **keywds):
-    """query(cmd, db, cgi='http://www.ncbi.nlm.nih.gov/entrez/query.fcgi',
+    """query(cmd, db, cgi='http://www.ncbi.nlm.nih.gov/sites/entrez',
     **keywds) -> handle
 
-    Query Entrez and return a handle to the results.  See the online
-    documentation for an explanation of the parameters:
-    http://www.ncbi.nlm.nih.gov/entrez/query/static/linking.html
+    Query Entrez and return a handle to the results, consisting of
+    a web page in HTML format.
+    See the online documentation for an explanation of the parameters:
+    http://www.ncbi.nlm.nih.gov/books/bv.fcgi?rid=helplinks.chapter.linkshelp
 
     Raises an IOError exception if there's a network error.
 
@@ -62,6 +62,7 @@ def pmfetch(db, id, report=None, mode=None,
     Raises an IOError exception if there's a network error.
     
     """
+    # NCBI has retired PmFetch!!!
     variables = {'db' : db, 'id' : id}
     if report is not None:
         variables['report'] = report
@@ -82,6 +83,7 @@ def pmqty(db, term, dopt=None,
     Raises an IOError exception if there's a network error.
     
     """
+    # NCBI has retired PmQty!!!
     variables = {'db' : db, 'term' : term}
     if dopt is not None:
         variables['dopt'] = dopt
@@ -100,6 +102,8 @@ def pmneighbor(pmid, display,
     Raises an IOError exception if there's a network error.
     
     """
+    # NCBI has retired PmNeighbor!!!
+    #
     # Warning: HUGE HACK HERE!  pmneighbor expects the display
     # parameter to be passed as just a tag, with no value.
     # Unfortunately, _open doesn't support these types of parameters,
