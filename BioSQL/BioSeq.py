@@ -5,9 +5,10 @@ a biopython-like Seq interface.
 """
 
 from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
 from Bio import SeqFeature
 
-class DBSeq:  # This implements the biopython Seq interface
+class DBSeq(Seq):  # This implements the biopython Seq interface
     def __init__(self, primary_id, adaptor, alphabet, start, length):
         self.primary_id = primary_id
         self.adaptor = adaptor
@@ -319,7 +320,7 @@ def _retrieve_taxon(adaptor, primary_id, taxon_id):
         a['taxonomy'] = taxonomy
     return a
 
-class DBSeqRecord(object):
+class DBSeqRecord(SeqRecord):
     """BioSQL equivalent of the biopython SeqRecord object.
     """
 
