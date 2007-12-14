@@ -192,12 +192,9 @@ def compare_records(old, new) :
     assert old.id == new.id
     assert old.name == new.name
     assert old.description == new.description
-    #database cross references:
-    if len(old.dbxrefs) > 0 and len(new.dbxrefs) > 0 : #hack
-        #See Bug 2421, BioSQL should store and retrieve a SeqRecord's dbxrefs
-        #See also how the db_rec.annotations['cross_references'] is related.
-        assert len(old.dbxrefs) == len(new.dbxrefs)
-        assert Set(old.dbxrefs) == Set(new.dbxrefs) #Should we allow change in order?
+    assert old.dbxrefs == new.dbxrefs, \
+           "dbxrefs mismatch\nOld: %s\nNew: %s" \
+           % (old.dbxrefs, new.dbxrefs)
     #Features:
     assert len(old.features) == len(new.features)
     for old_f, new_f in zip(old.features, new.features) :
