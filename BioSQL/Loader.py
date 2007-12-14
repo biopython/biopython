@@ -31,6 +31,7 @@ class DatabaseLoader:
         self._load_bioentry_date(record, bioentry_id)
         self._load_biosequence(record, bioentry_id)
         self._load_comment(record, bioentry_id)
+        self._load_dbxrefs(record, bioentry_id)
         references = record.annotations.get('references', ())
         for reference, rank in zip(references, range(len(references))):
             self._load_reference(reference, rank, bioentry_id)
@@ -531,7 +532,7 @@ class DatabaseLoader:
                 db = dbxref_data[0]
                 accessions = dbxref_data[1:]
             except:
-                raise Exception("Parsing of db_xref failed: %s; %s" % (key, accession))
+                raise ValueError("Parsing of db_xref failed: %s; %s" % (key, accession))
             # Loop over all the grabbed accessions, and attempt to fill the
             # table
             for accession in accessions:
@@ -583,11 +584,62 @@ class DatabaseLoader:
         """ Insert a seqfeature_dbxref row and return the seqfeature_id and
             dbxref_id
         """
-        sql = r'INSERT INTO seqfeature_dbxref VALUES' \
+        sql = r'INSERT INTO seqfeature_dbxref ' \
+              '(seqfeature_id, dbxref_id, rank) VALUES' \
               r'(%s, %s, %s)'
         self.adaptor.execute(sql, (seqfeature_id, dbxref_id, rank))
         return (seqfeature_id, dbxref_id)
-        
+
+    def _load_dbxrefs(self, record, bioentry_id) :
+        """Load any sequence level cross references into the database.
+
+        See table bioentry_dbxref"""
+        for rank, value in enumerate(record.dbxrefs):
+            # Split the DB:accession string at first colon.
+            # We have to cope with things like:
+            # "MGD:MGI:892" (db="MGD", accession="MGI:892")
+            # "GO:GO:123" (db="GO", accession="GO:123")
+            #
+            # Annoyingly I have seen the NCBI use both the style
+            # "GO:GO:123" and "GO:123" in different vintages.
+            assert value.count("\n")==0
+            try:
+                db, accession = value.split(':',1)
+                db = db.strip()
+                accession = accession.strip()
+            except:
+                raise ValueError("Parsing of dbxrefs list failed: %s; %s" % (key, accession))
+            # Get the dbxref_id value for the dbxref data
+            dbxref_id = self._get_dbxref_id(db, accession)
+            # Insert the bioentry_dbxref  data
+            self._get_bioentry_dbxref(bioentry_id, dbxref_id, rank+1)
+
+    def _get_bioentry_dbxref(self, bioentry_id, dbxref_id, rank):
+        """ Check for a pre-existing bioentry_dbxref entry with the passed
+            seqfeature_id and dbxref_id.  If one does not exist, insert new
+            data
+
+        """
+        # Check for an existing record
+        sql = r'SELECT bioentry_id, dbxref_id FROM bioentry_dbxref ' \
+              r'WHERE bioentry_id = "%s" AND dbxref_id = "%s"'
+        result = self.adaptor.execute_and_fetch_col0(sql, (bioentry_id,
+                                                           dbxref_id))
+        # If there was a record, return without executing anything, else create
+        # the record and return
+        if result:
+            return result
+        return self._add_bioentry_dbxref(bioentry_id, dbxref_id, rank)
+
+    def _add_bioentry_dbxref(self, bioentry_id, dbxref_id, rank):
+        """ Insert a bioentry_dbxref row and return the seqfeature_id and
+            dbxref_id
+        """
+        sql = r'INSERT INTO bioentry_dbxref ' \
+              '(bioentry_id,dbxref_id,rank) VALUES ' \
+              '(%s, %s, %s)'
+        self.adaptor.execute(sql, (bioentry_id, dbxref_id, rank))
+        return (bioentry_id, dbxref_id)
             
 class DatabaseRemover:
     """Complement the Loader functionality by fully removing a database.
@@ -613,3 +665,5 @@ class DatabaseRemover:
         self.adaptor.execute(sql, (self.dbid,))
         sql = r"DELETE FROM biodatabase WHERE biodatabase_id = %s"
         self.adaptor.execute(sql, (self.dbid,))
+
+        

@@ -118,7 +118,7 @@ def _retrieve_dbxrefs(adaptor, primary_id):
             v = "%s.%s" % (accession, version)
         else:
             v = accession
-        _dbxrefs.append((dbname, v))
+        _dbxrefs.append("%s:%s" % (dbname, v))
     return _dbxrefs
 
 def _retrieve_features(adaptor, primary_id):
