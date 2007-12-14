@@ -2249,7 +2249,7 @@ gi_list = GenBank.search_for("Opuntia AND rpl16")
 \verb|gi_list| will be a list of all of the GenBank identifiers that match our query:
 
 \begin{verbatim}
-['6273291', '6273290', '6273289', '6273287', '6273286', '6273285', '6273284']
+["6273291", "6273290", "6273289", "6273287", "6273286", "6273285", "6273284"]
 \end{verbatim}
 
 Now that we've got the GIs, we can use these to access the NCBI database through a dictionary interface. For instance, to retrieve the information for the first GI, we'll first have to create a dictionary that accesses NCBI:
@@ -2373,8 +2373,8 @@ Again, this example uses the file \verb|cor6_6.gb| which is included in the BioP
 
 \begin{verbatim}
 >>> from Bio import GenBank
->>> dict_file = 'cor6_6.gb'
->>> index_file = 'cor6_6.idx'
+>>> dict_file = "cor6_6.gb"
+>>> index_file = "cor6_6.idx"
 >>> GenBank.index_file(dict_file, index_file)
 \end{verbatim}
 
@@ -2452,8 +2452,8 @@ Once we've got this alignment, we can do some interesting things with it such as
 \begin{verbatim}
 all_records = alignment.get_all_seqs()
 
-print 'description:', all_records[0].description
-print 'sequence:', all_records[0].seq
+print "description:", all_records[0].description
+print "sequence:", all_records[0].seq
 \end{verbatim}
 
 This prints out the description and sequence object for the first sequence in the alignment:
@@ -2601,7 +2601,7 @@ T  1.0 0.0 0.0 6.0
 You can access any element of the PSSM by subscripting like \verb|your_pssm[sequence_number][residue_count_name]|. For instance, to get the counts for the 'A' residue in the second element of the above PSSM you would do:
 
 \begin{verbatim}
->>> print my_pssm[1]['A']
+>>> print my_pssm[1]["A"]
 7.0
 \end{verbatim}
 
