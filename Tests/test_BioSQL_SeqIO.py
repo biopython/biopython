@@ -235,8 +235,7 @@ print "Connecting to database"
 try :
     server = BioSeqDatabase.open_database(driver = DBDRIVER,
                                       user = DBUSER, passwd = DBPASSWD,
-                                      host = DBHOST)
-    del server
+                                      host = DBHOST, db = TESTDB)
 except Exception, e :
     #Include str(e) in the message?
     message = "Connection failed, check settings in Tests/setup_BioSQL.py "\
