@@ -107,6 +107,7 @@ def _retrieve_seq(adaptor, primary_id):
         return None
 
 def _retrieve_dbxrefs(adaptor, primary_id):
+    """Retrieve the database cross references for the sequence."""
     _dbxrefs = []
     dbxrefs = adaptor.execute_and_fetchall(
         "SELECT dbname, accession, version" \
@@ -221,7 +222,7 @@ def _retrieve_annotations(adaptor, primary_id, taxon_id):
     annotations = {}
     annotations.update(_retrieve_qualifier_value(adaptor, primary_id))
     annotations.update(_retrieve_reference(adaptor, primary_id))
-    annotations.update(_retrieve_dbxref(adaptor, primary_id))
+    #annotations.update(_retrieve_dbxref(adaptor, primary_id))
     annotations.update(_retrieve_taxon(adaptor, primary_id, taxon_id))
     return annotations
 
@@ -266,22 +267,25 @@ def _retrieve_reference(adaptor, primary_id):
         references.append(reference)
     return {'references': references}
 
-def _retrieve_dbxref(adaptor, primary_id):
-    # XXX dbxref_qualifier_value
-
-    refs = adaptor.execute_and_fetchall(
-        "SELECT dbname, accession, version" \
-        " FROM bioentry_dbxref JOIN dbxref USING (dbxref_id)" \
-        " WHERE bioentry_id = %s" \
-        " ORDER BY rank", (primary_id,))
-    dbxrefs = []
-    for dbname, accession, version in refs:
-        if version and version != "0":
-            v = "%s.%s" % (accession, version)
-        else:
-            v = accession
-        dbxrefs.append((dbname, v))
-    return {'cross_references': dbxrefs}
+#Why did this exist? The dbxrefs list is already accessable
+#via the record's .dbxrefs property as expected in a SeqRecord
+#
+#def _retrieve_dbxref(adaptor, primary_id):
+#    # XXX dbxref_qualifier_value
+#
+#    refs = adaptor.execute_and_fetchall(
+#        "SELECT dbname, accession, version" \
+#        " FROM bioentry_dbxref JOIN dbxref USING (dbxref_id)" \
+#        " WHERE bioentry_id = %s" \
+#        " ORDER BY rank", (primary_id,))
+#    dbxrefs = []
+#    for dbname, accession, version in refs:
+#        if version and version != "0":
+#            v = "%s.%s" % (accession, version)
+#        else:
+#            v = accession
+#        dbxrefs.append((dbname, v))
+#    return {'cross_references': dbxrefs}
 
 def _retrieve_taxon(adaptor, primary_id, taxon_id):
     a = {}
@@ -349,7 +353,8 @@ class DBSeqRecord(object):
         return self._dbxrefs
     def __set_dbxrefs(self, dbxrefs): self._dbxrefs = dbxrefs
     def __del_dbxrefs(self):      del self._dbxrefs
-    dbxrefs = property(__get_dbxrefs, __set_dbxrefs, __del_dbxrefs, "Dbxrefs")
+    dbxrefs = property(__get_dbxrefs, __set_dbxrefs, __del_dbxrefs,
+                       "Database cross references")
 
     def __get_features(self):
         if not hasattr(self, "_features"):
