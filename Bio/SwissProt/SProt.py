@@ -1039,7 +1039,26 @@ class _SequenceConsumer(AbstractConsumer):
         except KeyError :
             self.data.annotations['comment'] =  line[5:]
         #TODO - Follow SwissProt conventions more closely?
+
+    def database_cross_reference(self, line):
+        #Format of the line is described in the manual dated 04-Dec-2007 as:
+        #DR   DATABASE; PRIMARY; SECONDARY[; TERTIARY][; QUATERNARY].
+        #However, some older files only seem to have a single identifier:
+        #DR   DATABASE; PRIMARY.
+        #
+        #Also must cope with things like this from Tests/SwissProt/sp007,
+        #DR   PRODOM [Domain structure / List of seq. sharing at least 1 domain]
+        #
+        #Store these in the dbxref list, but for consistency with
+        #the GenBank parser and with what BioSQL can cope with,
+        #store only DATABASE_IDENTIFIER:PRIMARY_IDENTIFIER
+        parts = [x.strip() for x in line[5:].strip(_CHOMP).split(";")]
+        if len(parts) > 1 :
+            self.data.dbxrefs.append("%s:%s" % (parts[0], parts[1]))
+        #else :
+            #print "Bad DR line:\n%s" % line
             
+                    
     def date(self, line):
         date_str = line.split()[0]
         uprline = string.upper(line)
