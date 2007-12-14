@@ -1054,7 +1054,10 @@ class _SequenceConsumer(AbstractConsumer):
         #store only DATABASE_IDENTIFIER:PRIMARY_IDENTIFIER
         parts = [x.strip() for x in line[5:].strip(_CHOMP).split(";")]
         if len(parts) > 1 :
-            self.data.dbxrefs.append("%s:%s" % (parts[0], parts[1]))
+            value = "%s:%s" % (parts[0], parts[1])
+            #Avoid duplicate entries
+            if value not in self.data.dbxrefs :
+                self.data.dbxrefs.append(value)
         #else :
             #print "Bad DR line:\n%s" % line
             
