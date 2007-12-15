@@ -24,8 +24,8 @@ RecordParser       Parses a SwissProt record into a Record object.
 SequenceParser     Parses a SwissProt record into a SeqRecord object.
 
 _Scanner           Scans SwissProt-formatted data.
-_RecordConsumer    Consumes SwissProt data to a Record object.
-_SequenceConsumer  Consumes SwissProt data to a Seq object.
+_RecordConsumer    Consumes SwissProt data to a SProt.Record object.
+_SequenceConsumer  Consumes SwissProt data to a SeqRecord object.
 
 
 Functions:
@@ -823,17 +823,17 @@ class _RecordConsumer(AbstractConsumer):
     def reference_author(self, line):
         assert self.data.references, "RA: missing RN"
         ref = self.data.references[-1]
-        ref.authors = ref.authors + line[5:]
+        ref.authors += line[5:]
     
     def reference_title(self, line):
         assert self.data.references, "RT: missing RN"
         ref = self.data.references[-1]
-        ref.title = ref.title + line[5:]
+        ref.title += line[5:]
     
     def reference_location(self, line):
         assert self.data.references, "RL: missing RN"
         ref = self.data.references[-1]
-        ref.location = ref.location + line[5:]
+        ref.location += line[5:]
     
     def comment(self, line):
         if line[5:8] == '-!-':   # Make a new comment
@@ -843,16 +843,16 @@ class _RecordConsumer(AbstractConsumer):
                 # TCMO_STRGA in Release 37 has comment with no topic
                 self.data.comments.append(line[9:])
             else:
-                self.data.comments[-1] = self.data.comments[-1] + line[9:]
+                self.data.comments[-1] += line[9:]
         elif line[5:8] == '---':
             # If there are no comments, and it's not the closing line,
             # make a new comment.
             if not self.data.comments or self.data.comments[-1][:3] != '---':
                 self.data.comments.append(line[5:])
             else:
-                self.data.comments[-1] = self.data.comments[-1] + line[5:]
+                self.data.comments[-1] += line[5:]
         else:  # copyright notice
-            self.data.comments[-1] = self.data.comments[-1] + line[5:]
+            self.data.comments[-1] += line[5:]
     
     def database_cross_reference(self, line):
         # From CLD1_HUMAN, Release 39:
@@ -990,8 +990,12 @@ class _SequenceConsumer(AbstractConsumer):
         self.data = SeqRecord.SeqRecord(seq)
         self.data.description = ""
         self.data.name = ""
+        self._current_ref = None
         
     def end_record(self):
+        if self._current_ref is not None:
+            self.data.annotations['references'].append(self._current_ref)
+            self._current_ref = None
         self.data.description = self.data.description.rstrip()
 
     def identification(self, line):
@@ -1135,6 +1139,96 @@ class _SequenceConsumer(AbstractConsumer):
             self.data.annotations['taxonomy'].extend(ids)
         except KeyError:
             self.data.annotations['taxonomy'] = ids
+
+    def reference_number(self, line):
+        """RN line, reference number (start of new reference)."""
+        from Bio.SeqFeature import Reference
+        # if we have a current reference that hasn't been added to
+        # the list of references, add it.
+        if self._current_ref is not None:
+            self.data.annotations['references'].append(self._current_ref)
+        else:
+            self.data.annotations['references'] = []
+
+        self._current_ref = Reference()
+
+    def reference_position(self, line):
+        """RP line, reference position."""
+        assert self._current_ref is not None, "RP: missing RN"
+        #Should try and store this in self._current_ref.location
+        #but the SwissProt locations don't match easily to the
+        #format used in GenBank...
+        pass
+
+    def reference_cross_reference(self, line):
+        """RX line, reference cross-references."""
+        assert self._current_ref is not None, "RX: missing RN"
+        # The basic (older?) RX line is of the form:
+        # RX   MEDLINE; 85132727.
+        # or more recently:
+        # RX   MEDLINE=95385798; PubMed=7656980;
+        # RX   PubMed=15060122; DOI=10.1136/jmg 2003.012781;
+        # We look for these cases first and deal with them
+        if line.find("=") != -1:
+            cols = line[2:].split("; ")
+            cols = [x.strip() for x in cols]
+            cols = [x for x in cols if x]
+            for col in cols:
+                x = col.split("=")
+                assert len(x) == 2, "I don't understand RX line %s" % line
+                key, value = x[0].rstrip(_CHOMP), x[1].rstrip(_CHOMP)
+                if key == "MEDLINE" :
+                    self._current_ref.medline_id = value
+                elif key == "PubMed" :
+                    self._current_ref.pubmed_id = value
+                else :
+                    #Sadly the SeqFeature.Reference object doesn't
+                    #support anything else (yet)
+                    pass
+        # otherwise we assume we have the type 'RX   MEDLINE; 85132727.'
+        else:
+            # CLD1_HUMAN in Release 39 and DADR_DIDMA in Release 33
+            # have extraneous information in the RX line.  Check for
+            # this and chop it out of the line.
+            # (noticed by katel@worldpath.net)
+            ind = line.find('[NCBI, ExPASy, Israel, Japan]')
+            if ind >= 0:
+                line = line[:ind]
+            cols = line.split()
+            # normally we split into the three parts
+            assert len(cols) == 3, "I don't understand RX line %s" % line
+            key = cols[1].rstrip(_CHOMP)
+            value = cols[2].rstrip(_CHOMP)
+            if key == "MEDLINE" :
+                self._current_ref.medline_id = value
+            elif key == "PubMed" :
+                self._current_ref.pubmed_id = value
+            else :
+                #Sadly the SeqFeature.Reference object doesn't
+                #support anything else (yet)
+                pass
+
+    def reference_author(self, line):
+        """RA line, reference author(s)."""
+        assert self._current_ref is not None, "RA: missing RN"
+        self._current_ref.authors += line[5:].rstrip("\n")
+
+    def reference_title(self, line):
+        """RT line, reference title."""
+        assert self._current_ref is not None, "RT: missing RN"
+        self._current_ref.title += line[5:].rstrip("\n")
+    
+    def reference_location(self, line):
+        """RL line, reference 'location' - journal, volume, pages, year."""
+        assert self._current_ref is not None, "RL: missing RN"
+        self._current_ref.journal += line[5:].rstrip("\n")
+
+    def reference_comment(self, line):
+        """RC line, reference comment."""
+        assert self._current_ref is not None, "RC: missing RN"
+        #This has a key=value; structure...
+        #Can we do a better job with the current Reference class?
+        self._current_ref.comment += line[5:].rstrip("\n")
 
 def index_file(filename, indexname, rec2key=None):
     """index_file(filename, indexname, rec2key=None)
