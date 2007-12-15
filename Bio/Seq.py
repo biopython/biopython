@@ -22,7 +22,7 @@ class Seq:
         self.alphabet = alphabet                   # Seq API requirement
 
     def __repr__(self):
-        """Returns a (truncated) representation of the sequence for debugging"""
+        """Returns a (truncated) representation of the sequence for debugging."""
         if len(self) > 60 :
             #Shows the last three letters as it is often useful to see if there
             #is a stop codon at the end of a sequence.
@@ -35,7 +35,7 @@ class Seq:
                                    repr(self.data),
                                    repr(self.alphabet))
     def __str__(self):
-        """Returns the full sequence as a python string
+        """Returns the full sequence as a python string.
 
         Note that Biopython 1.44 and earlier would give a truncated
         version of repr(my_seq) for str(my_seq).  If you are writing code
@@ -86,10 +86,10 @@ class Seq:
 
 
     def tostring(self):                            # Seq API requirement
-        """Returns the full sequence as a python string
+        """Returns the full sequence as a python string.
 
         Although not formally deprecated, you are now encouraged to use
-        str(my_seq) instead of my_seq.tostring()"""
+        str(my_seq) instead of my_seq.tostring()."""
         return self.data
 
     def tomutable(self):   # Needed?  Or use a function?
@@ -183,7 +183,7 @@ class MutableSeq:
             self.data = data   # assumes the input is an array
         self.alphabet = alphabet
     def __repr__(self):
-        """Returns a (truncated) representation of the sequence for debugging"""
+        """Returns a (truncated) representation of the sequence for debugging."""
         if len(self) > 60 :
             #Shows the last three letters as it is often useful to see if there
             #is a stop codon at the end of a sequence.
@@ -196,22 +196,15 @@ class MutableSeq:
                                    str(self),
                                    repr(self.alphabet))
 
-        """Returns a representation of the sequence for debugging"""
-        #TODO - Truncate long entries?
-        #TODO - Show using a string for data rather than an array?
-        return "%s(%s, %s)" % (self.__class__.__name__,
-                               repr(self.data),
-                               repr(self.alphabet))
-
     def __str__(self):
-        """Returns the full sequence as a python string
+        """Returns the full sequence as a python string.
 
         Note that Biopython 1.44 and earlier would give a truncated
         version of repr(my_seq) for str(my_seq).  If you are writing code
         which need to be backwards compatible with old Biopython, you
-        should continue to use my_seq.tostring() rather than str(my_seq)
+        should continue to use my_seq.tostring() rather than str(my_seq).
         """
-        return string.join(self.data, "")
+        return "".join(self.data)
 
     def __cmp__(self, other):
         if isinstance(other, MutableSeq):
@@ -351,13 +344,13 @@ class MutableSeq:
         raise ValueError, "MutableSeq.index(x): x not in list"
 
     def reverse(self):
-        """Modify the MutableSequence to reverse itself
+        """Modify the MutableSequence to reverse itself.
 
         No return value"""
         self.data.reverse()
 
     def complement(self):
-        """Modify the MutableSequence to take on its complement
+        """Modify the MutableSequence to take on its complement.
 
         No return value"""
         if isinstance(self.alphabet, Alphabet.ProteinAlphabet) :
@@ -396,15 +389,15 @@ class MutableSeq:
                 self.data.append(c)
 
     def tostring(self):
-        """Returns the full sequence as a python string
+        """Returns the full sequence as a python string.
 
         Although not formally deprecated, you are now encouraged to use
-        str(my_seq) instead of my_seq.tostring()"""
-        return string.join(self.data, "")
+        str(my_seq) instead of my_seq.tostring()."""
+        return "".join(self.data)
 
     def toseq(self):
         """Returns the full sequence as a new immutable Seq object"""
-        return Seq(string.join(self.data, ""), self.alphabet)
+        return Seq("".join(self.data), self.alphabet)
 
 
 # The transcribe, backward_transcribe, and translate functions are
