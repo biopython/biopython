@@ -372,7 +372,9 @@ class DatabaseLoader:
                 dbxref_id = None
             authors = reference.authors or None
             title =  reference.title or None
-            journal = reference.journal or None
+            #The location/journal field cannot be Null, so default
+            #to an empty string rather than None:
+            journal = reference.journal or ""
             self.adaptor.execute(
                 "INSERT INTO reference (dbxref_id, location," \
                 " title, authors, crc)" \
