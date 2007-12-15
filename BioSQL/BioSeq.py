@@ -259,7 +259,8 @@ def _retrieve_reference(adaptor, primary_id):
         if start: start -= 1
         reference.location = [SeqFeature.FeatureLocation(start, end)]
         reference.authors = authors
-        reference.title = title
+        #Don't replace the default "" with None.
+        if title : reference.title = title
         reference.journal = location
         if dbname == 'PUBMED':
             reference.pubmed_id = accession
