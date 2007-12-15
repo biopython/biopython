@@ -7,8 +7,10 @@ unambiguous_dna_by_name = {}
 unambiguous_dna_by_id = {}
 unambiguous_rna_by_name = {}
 unambiguous_rna_by_id = {}
-generic_by_name = {}
-generic_by_id = {}
+generic_by_name = {} # unambiguous DNA or RNA
+generic_by_id = {} # unambiguous DNA or RNA
+ambiguous_generic_by_name = {} # ambiguous DNA or RNA
+ambiguous_generic_by_id = {} # ambiguous DNA or RNA 
 
 # standard IUPAC unambiguous codons
 standard_dna_table = None
@@ -701,5 +703,25 @@ for key, val in unambiguous_rna_by_id.items():
                                      IUPACData.ambiguous_rna_values,
                                      IUPAC.extended_protein,
                                      IUPACData.extended_protein_values)
-del key, val
 
+#The following isn't very elegant, but seems to work nicely.
+_merged_values = dict()
+_merged_values.update(IUPACData.ambiguous_rna_values)
+_merged_values.update(IUPACData.ambiguous_dna_values)
+
+for key, val in generic_by_name.items():
+    ambiguous_generic_by_name[key] = AmbiguousCodonTable(val,
+                                     Alphabet.NucleotideAlphabet(),
+                                     _merged_values,
+                                     IUPAC.extended_protein,
+                                     IUPACData.extended_protein_values)
+
+for key, val in generic_by_id.items():
+    ambiguous_generic_by_id[key] = AmbiguousCodonTable(val,
+                                     Alphabet.NucleotideAlphabet(),
+                                     _merged_values,
+                                     IUPAC.extended_protein,
+                                     IUPACData.extended_protein_values)
+
+del _merged_values
+del key, val
