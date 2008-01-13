@@ -1,11 +1,5 @@
-import string
-import copy
-import operator
-import urllib
 import sgmllib
 import Bio.File
-import Martel
-from mx import TextTools
 
 """
 The LocusLink site is:
@@ -298,7 +292,7 @@ class LocusLinkParser( sgmllib.SGMLParser ):
 
 
     def handle_data(self, newtext ):
-        newtext = string.strip( newtext )
+        newtext = newtext.strip()
         self.text = self.text + newtext
 
     def start_a( self, attrs ):

@@ -1,10 +1,7 @@
-import string
-import operator
 from Bio import File
 import Martel
 from Martel.Dispatch import Dispatcher
 from Martel import RecordReader
-from mx import TextTools
 from locus_format import locus_record
 
 """Parser for NCBI's LocusLink, curated sequence and descriptive information 
