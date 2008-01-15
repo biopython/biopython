@@ -7,13 +7,13 @@
 SimCoal2 execution module and support functions.
 '''
 
-from os import sep, access, F_OK
-from sys import path
+import os
+import sys
 
 #This is a workaround to work with the test system
 #In any case the problem is with the test system
-for instance in path:
-    test_path = instance + sep + sep.join(['Bio', 'PopGen', 'SimCoal', 'data'])
-    if access(test_path, F_OK):
+for instance in sys.path:
+    test_path = os.path.join(instance, 'Bio', 'PopGen', 'SimCoal', 'data')
+    if os.access(test_path, os.F_OK):
         builtin_tpl_dir = test_path
         break
