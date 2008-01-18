@@ -400,6 +400,7 @@ PACKAGES = [
     'Bio.PopGen.Async',
     'Bio.PopGen.FDist',
     'Bio.PopGen.GenePop',
+    'Bio.PopGen.SimCoal',
     'Bio.Prosite',
     'Bio.Rebase',
     'Bio.Restriction',
@@ -487,6 +488,7 @@ NUMPY_EXTENSIONS = [
 
 DATA_FILES=[
     "Bio/EUtils/DTDs/*.dtd",
+    "Bio/PopGen/SimCoal/data/*par"
     ]
 
 # EUtils contains dtd files that need to be installed in the same
