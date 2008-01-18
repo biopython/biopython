@@ -2,6 +2,9 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+
+# This module was deprecated, as it does not seem to have any users,
+# no documentation, and the example script is broken.
 """
 Immune system simulation based on ideas from Immunocomputing: a survey.
 I.Antoniou, S.Gutnikov, V.Ivanov, Yu.Melnikov, A.Tarakanov
@@ -19,6 +22,14 @@ The detectors start out with equal weights.  When a detector finds a suspicious 
 its weight is incremented so its chances of being selected in the future increases.
 Intended only for experimentation.
 """
+
+
+
+import warnings
+warnings.warn("Bio.AIS was deprecated, as it does not seem to have any users. If you do use this module, please contact the Biopython developers at biopython-dev@biopython.org to avoid permanent removal of this module")
+
+
+
 
 import os
 import sys
