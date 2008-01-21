@@ -3724,6 +3724,267 @@ being planned for Biopython. These extensions won't break compatibility in
 any way with the standard format.  In the medium term, we would also like to
 support the GenePop web service.
 
+\subsection{Coalescent simulation}
+
+A coalescent simulation is a backward model of population genetics with relation to
+time. A simulation of ancestry is done until the Most Recent Common Ancestor (MRCA) is found.
+This ancestry relationship starting on the MRCA and ending on the current generation
+sample is sometimes called a genealogy. Simple cases assume a population of constant
+size in time, haploidy, no population structure, and simulate the alleles of a single
+locus under no selection pressure.
+
+Coalescent theory is used in many fields like selection detection, estimation of
+demographic parameters of real populations or disease gene mapping.
+
+The strategy followed in the Biopython implementation of the coalescent was not
+to create a new, built-in, simulator from scratch but to use an existing one,
+SIMCOAL2 (\url{http://cmpg.unibe.ch/software/simcoal2/}). SIMCOAL2 allows for,
+among others, population structure, multiple demographic events, simulation
+of multiple types of loci (SNPs, sequences, STRs/microsatellites and RFLPs)
+with recombination, diploidy multiple chromosomes or ascertainment bias. Notably
+SIMCOAL2 doesn't support any selection model. We recommend reading SIMCOAL2's
+documentation, available in the link above.
+
+The input for SIMCOAL2 is a file specifying the desired demography and genome,
+the output is a set of files (typically around 1000) with the simulated genomes
+of a sample of individuals per subpopulation. This set of files can be used
+in many ways, like to compute confidence intervals where which certain
+statistics (e.g., $F_{st}$ or Tajima D) are expected to lie. Real population
+genetics datasets statistics can then be compared to those confidence intervals.
+
+Biopython coalescent code allows to create demographic scenarios and genomes and
+to run SIMCOAL2.
+
+\subsubsection{Creating scenarios}
+
+Creating a scenario involves both creating a demography and a chromosome structure.
+In many cases (e.g. when doing Approximate Bayesian Computations -- ABC) it is
+important to test many parameter variations (e.g. vary the effective population size,
+$N_e$, between 10, 50, 500 and 1000 individuals). The code provided allows for
+the simulation of scenarios with different demographic parameters very easily.
+
+Below we see how we can create scenarios and then how simulate them.
+
+\paragraph{Demography}
+
+A few predefined demographies are built-in, all have two shared parameters: sample size
+(called sample\_size on the template, see below for its use) per deme and deme size, i.e.
+subpopulation size (pop\_size). All demographies are available as templates where all
+parameters can be varied, each template has a system name. The prefedined
+demographies/templates are:
+
+\begin{description}
+\item[Single population, constant size] The standard parameters are enough to specifity
+it. Template name: simple.
+\item[Single population, bottleneck] As seen on figure \ref{fig:bottle}. The parameters
+are current population size (pop\_size on template ne3 on figure), time of expansion,
+given as the generation in the past when it occured (expand\_gen), 
+effective population size during bottleneck (ne2), time of contraction
+(contract\_gen) and original size in the remote past (ne3). Template name: bottle.
+\item[Island model] The typical island model. The total number of demes is specified
+by total\_demes and the migration rate by mig. Template name island.
+\item[Stepping stone model - 1 dimension] The stepping stone model in 1 dimension,
+extremes disconnected. The total number of demes is total\_demes, migration rate
+is mig. Template name is ssm\_1d.
+\item[Stepping stone model - 2 dimensions] The stepping stone model in 2 dimensions,
+extremes disconnected. The parameters are x for the horizontal dimension and y
+for the vertical (being the total number of demes x times y), migration rate is mig.
+Template name is ssm\_2d.
+\end{description}
+
+\begin{htmlonly}
+\label{fig:bottle}
+\imgsrc{images/bottle.png}
+\end{htmlonly}
+
+\begin{latexonly}
+\begin{figure}[htbp]
+\centering
+\includegraphics{images/bottle.png}
+\caption{A bottleneck}
+\label{fig:bottle}
+\end{figure}
+\end{latexonly}
+
+In our first example, we will generate a template for a single population, constant size
+model with a sample size of 30 and a deme size of 500. The code for this is:
+
+\begin{verbatim}
+from Bio.PopGen.SimCoal.Template import generate_simcoal_from_template
+
+generate_simcoal_from_template('simple',
+    [(1, [('SNP', [24, 0.0005, 0.0])])],
+    [('sample_size', [30]),
+    ('pop_size', [100])])
+\end{verbatim}
+
+Executing this code snippet will generate a file on the current directory called
+simple\_100\_300.par this file can be given as input to SIMCOAL2 to simulate the
+demography (below we will see how Biopython can take care of calling SIMCOAL2).
+
+This code consists of a single function call, lets discuss it paramter by parameter.
+
+The first parameter is the template id (from the list above). We are using the id
+'simple' which is the template for a single population of constant size along time.
+
+The second parameter is the chromosome structure. Please ignore it for now, it will be
+explained in the next section.
+
+The third parameter is a list of all required parameters (recall that the simple model
+only needs sample\_size and pop\_size) and possible values (in this case each
+parameter only has a possible value).
+
+Now, lets consider an example where we want to generate several island models, and we
+are interested in varying the number of demes: 10, 50 and 100 with a migration
+rate of 1\%. Sample size and deme
+size will be the same as before. Here is the code:
+
+
+\begin{verbatim}
+from Bio.PopGen.SimCoal.Template import generate_simcoal_from_template
+
+generate_simcoal_from_template('island',
+    [(1, [('SNP', [24, 0.0005, 0.0])])],
+    [('sample_size', [30]),
+    ('pop_size', [100]),
+    ('mig', [0.01]),
+    ('total_demes', [10, 50, 100])])
+\end{verbatim}
+
+In this case, 3 files will be generated: island\_100\_0.01\_100\_30.par,
+island\_10\_0.01\_100\_30.par and island\_50\_0.01\_100\_30.par. Notice the
+rule to make file names: template name, followed by parameter values in
+reverse order.
+
+A few, arguably more esoteric template demographies exist (please check the
+Bio/PopGen/SimCoal/data directory on Biopython source tree). Furthermore it is possible
+for the user to create new templates. That functionality will be discussed in a future
+version of this document.
+
+\paragraph{Chromosome structure}
+
+We strongly recommend reading SIMCOAL2 documentation to understand the full potential
+available in modeling chromosome structures. In this subsection we only discuss how
+to implement chromosome structures using the Biopython interface, not the underlying
+SIMCOAL2 capabilities.
+
+We will start by implementing a single chromosome, with 24 SNPs with
+a recombination rate immediately on the right of each locus of 0.0005 and a
+minimum frequency of the minor allele of 0. This will be specified by the
+following list (to be passed as second parameter to the function
+generate\_simcoal\_from\_template):
+
+\begin{verbatim}
+[(1, [('SNP', [24, 0.0005, 0.0])])]
+\end{verbatim}
+
+This is actually the chromosome structure used in the above examples.
+
+
+The chromosome structure is represented by a list of chromosomes,
+each chromosome (i.e., each element in the list)
+is composed by a tuple (a pair): the first element
+is the number of times the chromosome is to be repeated (as there
+might be interest in repeating the same chromosome many times).
+The second element is a list of the actual components of the chromosome.
+Each element is again a pair, the first member is the locus type and
+the second element the parameters for that locus type. Confused?
+Before showing more examples lets review the example above: We have
+a list with one element (thus one chromosome), the chromosome is
+a single instance (therefore not to be repeated), it is composed
+of 24 SNPs, with a recombination rate of 0.0005 between each
+consecutive SNP, the minimum frequency of the minor allele is
+0.0 (i.e, it can be absent from a certain population).
+
+Lets see a more complicated example:
+
+\begin{verbatim}
+[
+  (5, [
+       ('SNP', [24, 0.0005, 0.0])
+      ]
+  ),
+  (2, [
+       ('DNA', [10, 0.0, 0.00005, 0.33]),
+       ('RFLP', [1, 0.0, 0.0001]),
+       ('MICROSAT', [1, 0.0, 0.001, 0.0, 0.0])
+      ]
+  )
+]
+\end{verbatim}
+
+We start by having 5 chromosomes with the same structure as
+above (i.e., 24 SNPs). We then have 2 chromosomes which
+have a DNA sequence with 10 nucleotides, 0.0 recombination rate,
+0.0005 mutation rate, and a transition rate of 0.33. Then we
+have an RFLP with 0.0 recombination rate to the next locus and
+a 0.0001 mutation rate. Finally we have a microsatellite (or STR),
+with 0.0 recombination rate to the next locus (note, that as this
+is a single microsatellite which has no loci following, this
+recombination rate here is irrelevant), with a mutation rate
+of 0.001, geometric paramater of 0.0 and a range constraint
+of 0.0 (for information about this parameters please consult
+the SIMCOAL2 documentation, you can use them to simulate
+various mutation models, including the typical  -- for microsatellites --
+stepwise mutation model among others).
+
+
+\subsubsection{Running SIMCOAL2}
+
+We now discuss how to run SIMCOAL2 from inside Biopython. It is required
+that the binary for SIMCOAL2 is called simcoal2 (or simcoal2.exe on Windows
+based platforms), please note that the typical name when downloading the
+program is in the format simcoal2\_x\_y. As such renaming of the binary
+after download is needed.
+
+It is possible to run SIMCOAL2 on files that were not generated using the method
+above (e.g., writing a parameter file by hand), but we will show an
+example by creating a model using the framework presented above.
+
+\begin{verbatim}
+from Bio.PopGen.SimCoal.Template import generate_simcoal_from_template
+from Bio.PopGen.SimCoal.Controller import SimCoalController
+
+
+generate_simcoal_from_template('simple',
+    [
+      (5, [
+           ('SNP', [24, 0.0005, 0.0])
+          ]
+      ),
+      (2, [
+           ('DNA', [10, 0.0, 0.00005, 0.33]),
+           ('RFLP', [1, 0.0, 0.0001]),
+           ('MICROSAT', [1, 0.0, 0.001, 0.0, 0.0])
+          ]
+      )
+    ],
+    [('sample_size', [30]),
+    ('pop_size', [100])])
+
+ctrl = SimCoalController('.')
+ctrl.run_simcoal('simple_100_30.par', 50)
+\end{verbatim}
+
+The lines of interest are the last two (plus the new import).
+Firstly a controller for the
+application is created. The directory where the binary is located has
+to be specified.
+
+The simulator is then run on the last line: we know, from the rules explained
+above, that the input file name is simple\_100\_30.par for the
+simulation parameter file created. We then specify
+that we want to run 50 independent simulations, by default Biopython
+requests a simulation of diploid data, but a third parameter can
+be added to simulate haploid data (adding as a parameter the
+string '0'). SIMCOAL2 will now run (please
+note that this can take quite a lot of time) and will create a directory
+with the simulation results. The results can now be analysed (typically
+studying the data with Arlequin3). In the future Biopython might support
+reading the Arlequin3 format and thus allowing for the analysis of SIMCOAL2
+data inside Biopython.
+
+
 \subsection{Other applications}
 
 Here we discuss interfaces and utilities to deal with population genetics'
