@@ -1,52 +1,56 @@
-^PLATFORM=GEO Human 14K v 1.0
-!Platform_title = Human 14K long oligo array
+^PLATFORM = Murine 15K long oligo array version 2.0
+!Platform_title = Murine 15K long oligo array version 2.0
 !Platform_technology = spotted oligonucleotide
 !Platform_distribution = non-commercial
-!Platform_organism = Homo sapiens
-!Platform_manufacturer = GEO Labs
-!Platform_manufacture_protocol = as described in GEO Labs manual
+!Platform_organism = Mus musculus
+!Platform_manufacturer = Un. London microarray facility
+!Platform_manufacture_protocol =    1.  Oligos are arrayed in Greiner 384-well flat-bottom plates. Each well contains 600 pmol of 70-mer oligo.
+!Platform_manufacture_protocol =    2. Resuspend oligos in water to 20 uM and rearray 5 µL into 384-well, Genetix polystyrene V-bottom plates (cat# X6004).
+!Platform_manufacture_protocol =    3. Allow Genetix plates to dry through passive water evaporation in a protected environment (e.g., chemical hood).
+!Platform_manufacture_protocol =    4. Before printing, add 5 µL of 1X Printing Buffer to each well. This can be done the night before a print run is started.
+!Platform_manufacture_protocol =    5. Seal plates with Corning seals.
+!Platform_manufacture_protocol =    6. Incubate at 37°C for 30 minutes to aid resuspension of DNA.
+!Platform_manufacture_protocol =    7. Shake plates near maximum rotational speed on flat-bed shaker for 1 minute.
+!Platform_manufacture_protocol =    8. Centrifuge plates at 2000 rpm for 3 minutes.
+!Platform_manufacture_protocol =    9. Remove seals and cover with plate lids. Place in appropriate location of plate cassette. This should be done with first plates just before print run is started to minimize evaporation time before printing. For second and third cassettes, wait until 30 minutes before next cassette is needed to begin centrifugation.
+!Platform_manufacture_protocol =   10. Make sure plates rest behind both holding clips in the cassettes. Push plates back into the cassettes as far as they will go, putting them in the proper position for the server arm.
+!Platform_manufacture_protocol =   11. After the print run is completed, allow plates to dry through passive evaporation in a protected environment.	
+!Platform_manufacture_protocol =   12. For each subsequent preparation of these plates for a print run, add water to the wells instead of sodium phosphate buffer. The amount of water should be decreased by 0.25 µL per print run, as this is the amount drawn up by the pin capillary during each dip.	
 !Platform_support = glass
-!Platform_coating = unknown
-!Platform_description = This set includes 13971 oligonucleotides, mostly 70-mers, designed based upon representative sequences in build 155 of the human UniGene database.
-!Platform_web_link = http://geo.best-arrays.org
-!Platform_contributor = Jane,,Doe
+!Platform_coating = polysine	
+!Platform_web_link = http://www.microarray.protocols.html
+!Platform_contributor = Jane,Doe
 !Platform_contributor = John,A,Smith
 !Platform_contributor = Hans,van Elton
 !Platform_contributor = John,Smithers Jr
 !Platform_contributor = Jie,D,Chen
-!Platform_pubmed_id = 123456789
-#ID =
-#GB_ACC = GenBank accession number of sequence used to design oligonucleotide probe
-#GENE_NAME = Descriptive gene name, from UniGene Build 155
-#UNIGENE = UniGene cluster ID, Build 155
-#LOCUSLINK = LocusLink identifier
-#GENE_SYMBOL = Gene symbol, from UniGene Build 155
-#TIP_ID = Print tip ID
-#ROW = Row within array
-#COLUMN = Column within array
-#PLATE_ID = Plate identifier
-#FLAG = Passed validation
-#SEQUENCE = Sequence of oligonucleotide probe
-!Platform_table_begin
-ID	GB_ACC	GENE_NAME	UNIGENE	LOCUSLINK	GENE_SYMBOL	TIP_ID	ROW	COLUMN	PLATE_ID	FLAG	SEQUENCE
-1	NM_012115	CASP8 associated protein 2	122843	9994	CASP8AP2	1	1	1	HK1A1	1	GAGGGCCATCATTTAAAACATTTGCATATTTAGCCGCCAAGTTGGATAAAAATCCAAATCAGGTCTCAGA
-2	AF035444	tumor suppressing subtransferable candidate 3	154036	7262	TSSC3	5	1	1	HK1A2	1	CTCATCCAGTCATGCGGGGCTGGTGTGAAAGGCGCTGGGAACCGGCTTTGAATGAATAAATGAATCGTGT
-3	AK001420	PEF protein with a long N-terminal hydrophobic domain (peflin)	241531	23578	PEF	1	3	1	HK1A3	1	AATCTGACCAAGCATGAGAGAGATCTGTCTATGGGACCAGTGGCTTGGATTCTGCCACACCCATAAATCC
-4	M55150	fumarylacetoacetate hydrolase (fumarylacetoacetase)	73875	2184	FAH	5	3	1	HK1A4	1	TCCTGCCATCATGAGATTTTCTCTGCTCTTCTGGAAACAAAGGGCTCAAGCACCCCTTTCAACCCTGTGA
-5	AL121964					1	5	1	HK1A5	1	TCCCTGTGAAACTTTGGTTTCTTTCTATAAATGTGTGTGGTTTTCAGCGCTCAACTCCTGTCTTCAAATG
-6	NM_012094	peroxiredoxin 5	31731	25824	PRDX5	5	5	1	HK1A6	1	AATATCATCTCACAGCTCTGAGGCCCTGGGCCAGATTACTTCCTCCACCCCTCCCTATCTCACCTGCCCA
-7	AK001917	programmed cell death 6	80019	10016	PDCD6	1	7	1	HK1A7	1	TGTCACGTGGGGACCCAGCTGTACATATGTGGATAAGCTGATTAATGGTTTTGCAACTGTAATAGTAGCT
-8	AF135794	v-akt murine thymoma viral oncogene homolog 3 (protein kinase B, gamma)	278582	10000	AKT3	5	7	1	HK1A8	1	CTTTGGGAGAAGAGATGCTGCCATTTAACCCCTTGGTACTGAAAATGAGAAAATCCCCAACTATGCATGC
-9	U43342	nuclear factor of activated T-cells, cytoplasmic, calcineurin-dependent 2	248037	4773	NFATC2	1	9	1	HK1A9	1	CTACTTGGATGATGTTAATGAAATTATCAGGAAGGAGTTTTCAGGACCTCCTGCCAGAAATCAGACGTAA
-10	AF067724	non-metastatic cells 5, protein expressed in (nucleoside-diphosphate kinase)	72050	8382	NME5	5	9	1	HK1A10	1	TTTCATGCTCATGTGTCAGATATGCTTCCCTCAAACCTTGTTACAGCATCATCACATTACCTGTTTGATG
-11	M13452	lamin A/C	77886	4000	LMNA	1	11	1	HK1A11	1	GAGCCCTTGCCTCCCCATTTCCCATCTGCACCCCTTCTCTCCTCCCCAAATCAATACACTAGTTGTTTCT
-12	AJ242832	calpain 11	225953	11131	CAPN11	5	11	1	HK1A12	1	TGAACAACAAGGTAATGCAGGTCCTGGTGGCCAGGTATGCAGATGATGACCTGATCATAGACTTTGACAG
-13	AF041378	cell death-inducing DFFA-like effector a	249129	1149	CIDEA	2	1	1	HK1B1	1	AGGACTTCATCGGCTGCCTTAACGTGAAGGCCACCATGTATGAGATGTACTCCGTGTCCTACGACATCCG
-14	AF014955	programmed cell death 5	166468	9141	PDCD5	6	1	1	HK1B2	1	GAAAAGTAATGGACTCTGATGAAGATGACGATTATTGAACTACAAGTGCTCACAGACTAGAACTTAACGG
-15	D50857	dedicator of cyto-kinesis 1	82295	1793	DOCK1	2	3	1	HK1B3	1	TGTTCCAGCCGGTGGTGTGACTTCGTTGGTTGAGGTGTGTCTCCAACCTACATCAGACCATGAAGTTCAA
-16	AB011414	Kruppel-type zinc finger (C2H2)	142150	10224	ZK1	6	3	1	HK1B4	1	TGATACCTGCTGGGTATTGGTTCCAGCACTCCGTGAGCCATGTCCAGTCCCTTTTATAAAATGACATGTT
-17	AF064019	DNA fragmentation factor, 40kDa, beta polypeptide (caspase-activated DNase)	133089	1677	DFFB	2	5	1	HK1B5	1	CGGTCTGGAAGGAAACACGCGGATCTGAACAGCAGTAATCCTGGGGGATACGGGGGTTGGGCTAGATTAC
-18	U83857	apoptosis inhibitor 5	227913	8539	API5	6	5	1	HK1B6	1	TCACCGTTCCCCTTCCCTTTCGTAAGGCAATAGTGCACAACTTAGGTTATTTTTGCTTCCGAATTTGAAT
-19	J05243	spectrin, alpha, non-erythrocytic 1 (alpha-fodrin)	77196	6709	SPTAN1	2	7	1	HK1B7	1	TAGGAGAAAATGGTGCTTCACTAACCCGCTTCCGGTCCAGTCACAATCATCATGTCACTGTGGGACCCAG
-20	AB014541	apoptosis-associated tyrosine kinase	128316	9625	AATK	6	7	1	HK1B8	1	ATGTAAAGTTTATTGTTGCTTCGCAGGGGGATTTGTTTTGTGTTTTGTTTGAGGCTTAGAACGCTGGTGC
-!Platform_table_end
+#ID = 
+#GB_ACC = GenBank accession number of sequence used to design oligonucleotide probe   LINK_PRE:"http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=" 
+#Gene_Desc = Gene description
+#Gene_Sym = Gene symbols
+#SEQUENCE = Probe sequence information
+#SPOT_ID = alternative identifier
+!platform_table_begin
+ID	GB_ACC	Gene_Desc	Gene_Sym	SPOT_ID	SEQUENCE
+1	U02079	nuclear factor of activated T-cells, cytoplasmic 2	Nfatc2		ACCTGGATGACGCAGCCACTTCAGAAAGCTGGGTTGGGACAGAAAGGTATATAGAGAGAAAATTTTGGAA
+2	NM_008154	G-protein coupled receptor 3	Gpr3		CTGTACAATGCTCTCACTTACTACTCAGAGACAACGGTAACTCGGACTTATGTGATGCTGGCCTTGGTGT
+3	AK015719	tropomodulin 2	Tmod2		CACCAGGCTCAGTGCCTAGTATCGGCTTCACCTAGTGTGGTTACTCAGGGCACGCAGAGCTACAGAACAC
+4	AK003367	mitochondrial ribosomal protein L15	Mrpl15		CAAGAAGTCTAGAAATTCTGTGCAAGCCTATTCCATTCTTTCTGCGGGGACAACCAATTCCGAAAAGAAT
+5	BC003333	RIKEN cDNA 0610033I05 gene	0610033I05Rik		AGAACTGGGTGGCAGATATCCTAGAGTTTTGACCAACGTTCACAGCACACATATTGATCTTATAGGACCT
+6	NM_008462	killer cell lectin-like receptor, subfamily A, member 2	Klra2		TGAATTGAAGTTCCTTAAATCCCAACTTCAAAGAAACACATACTGGATTTCACTGACACATCATAAAAGC
+7	NM_008029	FMS-like tyrosine kinase 4	Flt4		GAGGTGCTGTGGGATGACCGCCGGGGCATGCGGGTGCCCACTCAACTGTTGCGCGATGCCCTGTACCTGC
+8	NM_054088	adiponutrin	Adpn		GTCTGAGTTCCATTCCAAAGACGAAGTCGTGGATGCCCTGGTGTGTTCCTGCTTCATTCCCCTCTTCTCT
+9	NM_009750	nerve growth factor receptor (TNFRSF16) associated protein 1	Ngfrap1		TACAGCTGAGAAATTGTCTACGCATCCTTATGGGGGAGCTGTCTAACCACCACGATCACCATGATGAATT
+10	AB045323	DNA segment, Chr 8, ERATO Doi 594, expressed	D8Ertd594e		GATTCAGACTCGGGAGGAGCATCCCAACCTCTCCTTGAGGATAAAGGCCTGAGCGATTGCCCTGGGGAGC
+11	AK005789	dynein, cytoplasmic, light chain 2B	Dncl2b		TGCAGAAGGCATTCCAATCCGAACAACCCTGGACAACTCCACAACGGTTCAGTATGCGGGTCTTCTCCAC
+12	NM_010517	insulin-like growth factor binding protein 4	Igfbp4		GGAGAAGCTGGCGCGCTGCCGCCCCCCCGTGGGTTGCGAGGAGTTGGTGCGGGAGCCAGGCTGCGGTTGT
+13	AK010722	RIKEN cDNA 2410075D05 gene	2410075D05Rik		GGAGCATCTGGAGTTCCGCTTACCGGAAATAAAGTCTTTACTATCGGTGATTGGAGGGCAGTTCACTAAC
+14	AK003755	DNA segment, Chr 4, ERATO Doi 421, expressed	D4Ertd421e		AGCAAAGAGATCTCCCTCAGTGTGCCCATAGGTGGCGGTGCGAGCTTGCGGTTATTGGCCAGTGACTTGC
+15	BC003241	cleavage stimulation factor, 3' pre-RNA, subunit 3	Cstf3		AAATTAGAAGAAAATCCATATGACCTTGATGCTTGGAGCATTCTCATTCGAGAGGCACAGAATCAACCTA
+16	AK004937	RIKEN cDNA 1300007O09 gene	1300007O09Rik		CAGACACAAACCCTAGGTTGTATTGTAGACCGGAGTTTAAGCAGGCACTACCTGTCTGTCTTTTCTTCAT
+17	AK004524	unnamed protein product; hypothetical SOCS domain			CGGAGCCCTGCGCGCCCAGAGCCCCCTCCCACCCGCTTCCACCAAGTGCATGGAGCCAACATCCGCATGG
+18	NM_025999	RIKEN cDNA 2610110L04 gene	2610110L04Rik		TGCATTGATAAATGGAGTGATCGACACAGGAACTGCCCCATTTGTCGCCTACAGATGACTGGAGCAAATG
+19				-- CONTROL	
+20	NM_023120	guanine nucleotide binding protein (G protein), beta polypeptide 1-like	Gnb1l		ACCGCCTGGTCCCAGATTTGTCCTCCGAGGCACACAGTCGGCTGTGAACACGCTCCATTTCTGCCCACCA
+!platform_table_end	
+
