@@ -631,8 +631,8 @@ def parse(handle, debug=0):
 if __name__ == '__main__':
     import sys
     import os
-    p = BlastParser()
-    r_list = p.parse(sys.argv[1])
+    handle = open(sys.argv[1])
+    r_list = parse(handle)
 
     for r in r_list :
         # Small test
