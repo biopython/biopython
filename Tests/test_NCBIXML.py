@@ -25,48 +25,44 @@ detailed_tests = [
 
 print "Running tests on NCBIXML.BlastParser"
 
-parser = NCBIXML.BlastParser()
 for test in all_tests:
     print "*" * 50, "TESTING %s" % test
     datafile = os.path.join("Blast", test)
     input = open(datafile)
 
-    result = parser.parse(input)
+    records = NCBIXML.parse(input)
 
-    # In 2006, in order to cope with the new style XML files
-    # for multiple queries introduced in Blast 2.2.14 the
-    # parser was changed to return a list or records
-    # (instead of one single record).
-    if isinstance(result, list) :
-        assert len(result)==1
-        result = result[0]
+    if not test in detailed_tests:
+        # Pull out the record, but don't print anything
+        for record in records:
+            pass
+        continue
 
-    if not test in detailed_tests: continue
+    for record in records:
+        alignments = record.alignments
+        print 'Blast of', record.query
+        print 'Found %s alignments with a total of %s HSPs' % (len(alignments),
+                  reduce(lambda a,b: a+b, [len(a.hsps) for a in alignments]))
+        for alignment in alignments:
+            print alignment.title[:50], alignment.length, 'bp', len(alignment.hsps), 'HSPs'
 
-    alignments = result.alignments
-    print 'Blast of', result.query
-    print 'Found %s alignments with a total of %s HSPs' % (len(alignments),
-              reduce(lambda a,b: a+b, [len(a.hsps) for a in alignments]))
-    for alignment in alignments:
-        print alignment.title[:50], alignment.length, 'bp', len(alignment.hsps), 'HSPs'
-
-    # Cookbook example
-    E_VALUE_THRESH = 0.04
-    for alignment in alignments:
-        for hsp in alignment.hsps:
-            if hsp.expect < E_VALUE_THRESH:
-                print '*****'
-                print 'sequence', alignment.title
-                print 'length', alignment.length
-                # The following is a quick and dirty hack to get the
-                # number of digits in the exponent to match that on record
-                # as the expected output.
-                f = str(hsp.expect)
-                if f.find("e-") <> -1 :
-                    matissa, exponent = str(f).split("e-")
-                    print 'e value %se-%02i' % (matissa, int(exponent))
-                else :
-                    print 'e value', hsp.expect
-                print hsp.query[:75] + '...'
-                print hsp.match[:75] + '...'
-                print hsp.sbjct[:75] + '...'
+        # Cookbook example
+        E_VALUE_THRESH = 0.04
+        for alignment in alignments:
+            for hsp in alignment.hsps:
+                if hsp.expect < E_VALUE_THRESH:
+                    print '*****'
+                    print 'sequence', alignment.title
+                    print 'length', alignment.length
+                    # The following is a quick and dirty hack to get the
+                    # number of digits in the exponent to match that on record
+                    # as the expected output.
+                    f = str(hsp.expect)
+                    if f.find("e-") <> -1 :
+                        matissa, exponent = str(f).split("e-")
+                        print 'e value %se-%02i' % (matissa, int(exponent))
+                    else :
+                        print 'e value', hsp.expect
+                    print hsp.query[:75] + '...'
+                    print hsp.match[:75] + '...'
+                    print hsp.sbjct[:75] + '...'
