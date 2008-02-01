@@ -7,6 +7,10 @@ http://www.ncbi.nlm.nih.gov/LocusLink/
 Parses a Locus web page.
 """
 
+import warnings
+warnings.warn("Bio.LocusLink was deprecated, as NCBI's LocusLink was superceded by Entrez Gene. If you still need this module, please get in touch with the Biopython developers (biopython-dev@biopython.org) to avoid permanent removal of this module", DeprecationWarning)
+
+
 def is_empty_container( item ):
     response = 0
     if is_container( item ):

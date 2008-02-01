@@ -11,6 +11,9 @@ The LocusLink site is:
 http://www.ncbi.nlm.nih.gov/LocusLink/
 """
 
+import warnings
+warnings.warn("Bio.LocusLink was deprecated, as NCBI's LocusLink was superceded by Entrez Gene. If you still need this module, please get in touch with the Biopython developers (biopython-dev@biopython.org) to avoid permanent removal of this module", DeprecationWarning)
+
 class Record( dict):
 
     def __init__( self ):

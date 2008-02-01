@@ -30,6 +30,10 @@ from Martel import AssertNot
 
 from Martel import RecordReader
 
+import warnings
+warnings.warn("Bio.LocusLink was deprecated, as NCBI's LocusLink was superceded by Entrez Gene. If you still need this module, please get in touch with the Biopython developers (biopython-dev@biopython.org) to avoid permanent removal of this module", DeprecationWarning)
+
+
 # --- First set up some helper constants and functions
 INDENT = 12
 
