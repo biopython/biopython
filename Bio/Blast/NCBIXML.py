@@ -111,10 +111,6 @@ class _XMLparser(ContentHandler):
 class BlastParser(_XMLparser):
     """Parse XML BLAST data into a Record.Blast object
 
-    Methods:
-    parse           Parses BLAST XML data.
-                    Returns a list of Blast records
-
     All XML 'action' methods are private methods and may be:
     _start_TAG      called when the start tag is found
     _end_TAG        called when the end tag is found
@@ -153,6 +149,8 @@ class BlastParser(_XMLparser):
 
         This method returns a list of Blast record objects.
         """
+        import warnings
+        warnings.warn("Bio.Blast.NCBIXML.BlastParser.parse has been deprecated; please use Bio.Blast.NCBIXML.parse instead", DeprecationWarning)
         self.reset()
         self._parser.parse(handler)
         return self._records

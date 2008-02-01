@@ -1804,7 +1804,7 @@ def rpsblast(blastcmd, database, infile, align_view="7", **keywds):
 
     Please note that this function will give XML output by default, by
     setting align_view to seven (i.e. command line option -m 7).
-    You should use the NCBIXML.BlastParser() to read the resulting output.
+    You should use the NCBIXML.parse() function to read the resulting output.
     This is because NCBIStandalone.BlastParser() does not understand the
     plain text output format from rpsblast.
 
