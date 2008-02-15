@@ -28,6 +28,13 @@ elink        Checks for the existence of an external or Related Articles link
              Articles;  creates a hyperlink to the primary LinkOut provider
              for a specific ID and database, or lists LinkOut URLs
              and Attributes for multiple IDs.
+einfo        Provides field index term counts, last update, and available
+             links for each database.
+esummary     Retrieves document summaries from a list of primary IDs or from
+             the user's environment.
+egquery      Provides Entrez database counts in XML for a single search
+             using Global Query.
+espell       Retrieves spelling suggestions.
 
 _open
 
@@ -128,7 +135,10 @@ def epost(db, id, cgi='http://www.ncbi.nlm.nih.gov/entrez/eutils/epost.fcgi',
           **keywds):
     """epost(db, id[, cgi]) -> handle
 
-    Query Entrez and return a handle to the results.  See the online
+    Query Entrez and return a handle to the results.
+
+    Posts a file containing a list of UIs for future use in the user's
+    environment to use with subsequent search strategies. See the online
     documentation for an explanation of the parameters:
     http://www.ncbi.nlm.nih.gov/entrez/query/static/epost_help.html
 
@@ -143,7 +153,10 @@ def efetch(db, cgi='http://www.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi',
           **keywds):
     """efetch(db[, cgi][...]) -> handle
 
-    Query Entrez and return a handle to the results.  See the online
+    Query Entrez and return a handle to the results.
+
+    EFetch retrieves records in the requested format from a list of one or
+    more UIs or from user's environment. See the online
     documentation for an explanation of the parameters:
     http://www.ncbi.nlm.nih.gov/entrez/query/static/efetch_help.html
 
@@ -159,7 +172,11 @@ def esearch(db, term,
             **keywds):
     """esearch(db, term[, cgi][...]) -> handle
 
-    Query Entrez and return a handle to the results.  See the online
+    Query Entrez and return a handle to the results.
+
+    ESearch searches and retrieves primary IDs (for use in EFetch, ELink
+    and ESummary) and term translations, and optionally retains results
+    for future use in the user's environment. See the online
     documentation for an explanation of the parameters:
     http://www.ncbi.nlm.nih.gov/entrez/query/static/esearch_help.html
 
@@ -175,9 +192,86 @@ def elink(cgi='http://www.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi',
           **keywds):
     """elink([, cgi][...]) -> handle
 
-    Query Entrez and return a handle to the results.  See the online
-    documentation for an explanation of the parameters:
+    Query Entrez and return a handle to the results.
+
+    ELink checks for the existence of an external or Related Articles link
+    from a list of one or more primary IDs;  retrieves IDs and relevancy
+    scores for links to Entrez databases or Related Articles; creates a
+    hyperlink to the primary LinkOut provider for a specific ID and
+    database, or lists LinkOut URLs and attributes for multiple IDs. See
+    the online documentation for an explanation of the parameters:
     http://www.ncbi.nlm.nih.gov/entrez/query/static/elink_help.html
+
+    Raises an IOError exception if there's a network error.
+
+    """
+    variables = {}
+    variables.update(keywds)
+    return _open(cgi, variables)
+
+def einfo(cgi='http://www.ncbi.nlm.nih.gov/entrez/eutils/einfo.fcgi',
+          **keywds):
+    """einfo([, cgi][...]) -> handle
+
+    Query Entrez and return a handle to the results.
+
+    EInfo provides field names, index term counts, last update, and
+    available links for each Entrez database. See the online
+    documentation for an explanation of the parameters:
+    http://www.ncbi.nlm.nih.gov/entrez/query/static/einfo_help.html
+
+    Raises an IOError exception if there's a network error.
+
+    """
+    variables = {}
+    variables.update(keywds)
+    return _open(cgi, variables)
+
+def esummary(cgi='http://www.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi',
+          **keywds):
+    """esummary([, cgi][...]) -> handle
+
+    Query Entrez and return a handle to the results.
+
+    ESummary retrieves document summaries from a list of primary IDs or
+    from the user's environment. See the online documentation for an
+    explanation of the parameters:
+    http://www.ncbi.nlm.nih.gov/entrez/query/static/esummary_help.html
+
+    Raises an IOError exception if there's a network error.
+
+    """
+    variables = {}
+    variables.update(keywds)
+    return _open(cgi, variables)
+
+def egquery(cgi='http://www.ncbi.nlm.nih.gov/entrez/eutils/egquery.fcgi',
+          **keywds):
+    """egquery([, cgi][...]) -> handle
+
+    Query Entrez and return a handle to the results.
+
+    EGQuery provides Entrez database counts in XML for a single search
+    using Global Query. See the online documentation for an explanation
+    of the parameters:
+    http://www.ncbi.nlm.nih.gov/entrez/query/static/egquery_help.html
+
+    Raises an IOError exception if there's a network error.
+
+    """
+    variables = {}
+    variables.update(keywds)
+    return _open(cgi, variables)
+
+def espell(cgi='http://www.ncbi.nlm.nih.gov/entrez/eutils/espell.fcgi',
+          **keywds):
+    """espell([, cgi][...]) -> handle
+
+    Query Entrez and return a handle to the results.
+
+    ESpell retrieves spelling suggestions, if available. See the online
+    documentation for an explanation of the parameters:
+    http://www.ncbi.nlm.nih.gov/entrez/query/static/espell_help.html
 
     Raises an IOError exception if there's a network error.
 
@@ -231,4 +325,3 @@ def _open(cgi, params={}, get=1):
         raise IOError, "ERROR, possibly because id not available?"
     # Should I check for 404?  timeout?  etc?
     return uhandle
-    
