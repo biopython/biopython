@@ -11,20 +11,24 @@ http://www.ncbi.nlm.nih.gov/Entrez/
 A list of the Entrez utilities is available at:
 http://www.ncbi.nlm.nih.gov/entrez/utils/utils_index.html
 
-Documentation for the e-utilies are available at:
-http://www.ncbi.nlm.nih.gov/entrez/query/static/eutils_help.html
-
-The main Blast web page is available at:
-http://www.ncbi.nlm.nih.gov/BLAST/
-
 
 Functions:
 query        Query Entrez; retrieve results in HTML format.
-pmfetch      Retrieve results using a unique identifier.
-pmqty        Search PubMed.
-pmneighbor   Return a list of related articles for a PubMed entry.
 
-efetch       Access the efetch script.
+efetch       Retrieves records in the requested format from a list of one or
+             more primary IDs or from the user's environment
+epost        Posts a file containing a list of primary IDs for future use in
+             the user's environment to use with subsequent search strategies
+esearch      Searches and retrieves primary IDs (for use in EFetch, ELink,
+             and ESummary) and term translations and optionally retains
+             results for future use in the user's environment.
+elink        Checks for the existence of an external or Related Articles link
+             from a list of one or more primary IDs.  Retrieves primary IDs
+             and relevancy scores for links to Entrez databases or Related
+             Articles;  creates a hyperlink to the primary LinkOut provider
+             for a specific ID and database, or lists LinkOut URLs
+             and Attributes for multiple IDs.
+
 _open
 
 """
@@ -62,6 +66,9 @@ def pmfetch(db, id, report=None, mode=None,
     
     """
     # NCBI has retired PmFetch!!!
+    import warnings
+    warnings.warn("pmfetch is deprecated, as NCBI has retired PmFetch. Please let the Biopython developers know (biopython-dev@biopython.org) if you still use this function", DeprecationWarning)
+
     variables = {'db' : db, 'id' : id}
     if report is not None:
         variables['report'] = report
@@ -83,6 +90,8 @@ def pmqty(db, term, dopt=None,
     
     """
     # NCBI has retired PmQty!!!
+    import warnings
+    warnings.warn("pmqty is deprecated, as NCBI has retired PmQty. Please let the Biopython developers know (biopython-dev@biopython.org) if you still use this function", DeprecationWarning)
     variables = {'db' : db, 'term' : term}
     if dopt is not None:
         variables['dopt'] = dopt
@@ -102,6 +111,8 @@ def pmneighbor(pmid, display,
     
     """
     # NCBI has retired PmNeighbor!!!
+    import warnings
+    warnings.warn("pmneighbor is deprecated, as NCBI has retired PmNeighbor. Please let the Biopython developers know (biopython-dev@biopython.org) if you still use this function", DeprecationWarning)
     #
     # Warning: HUGE HACK HERE!  pmneighbor expects the display
     # parameter to be passed as just a tag, with no value.
