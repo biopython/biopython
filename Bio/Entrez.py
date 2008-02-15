@@ -28,7 +28,6 @@ efetch       Access the efetch script.
 _open
 
 """
-import string
 import urllib
 
 from Bio import File
@@ -206,14 +205,14 @@ def _open(cgi, params={}, get=1):
         lines.append(uhandle.readline())
     for i in range(4, -1, -1):
         uhandle.saveline(lines[i])
-    data = string.join(lines, '')
+    data = ''.join(lines)
                    
-    if string.find(data, "500 Proxy Error") >= 0:
+    if "500 Proxy Error" in data:
         # Sometimes Entrez returns a Proxy Error instead of results
         raise IOError, "500 Proxy Error (NCBI busy?)"
-    elif string.find(data, "502 Proxy Error") >= 0:
+    elif "502 Proxy Error" in data:
         raise IOError, "502 Proxy Error (NCBI busy?)"
-    elif string.find(data, "WWW Error 500 Diagnostic") >= 0:
+    elif "WWW Error 500 Diagnostic" in data:
         raise IOError, "WWW Error 500 Diagnostic (NCBI busy?)"
     elif data[:5] == "ERROR":
         # XXX Possible bug here, because I don't know whether this really
