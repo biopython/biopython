@@ -290,7 +290,7 @@ def _open(cgi, params={}, get=1):
 
     """
     # Open a handle to Entrez.
-    options = urllib.urlencode(params)
+    options = urllib.urlencode(params, doseq=True)
     if get:  # do a GET
         fullcgi = cgi
         if options:
