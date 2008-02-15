@@ -28,6 +28,12 @@ efetch       Access the efetch script.
 _open
 
 """
+
+import warnings
+warnings.warn("Bio.WWW.NCBI is deprecated. The functions in Bio.WWW.NCBI are now available from Bio.Entrez.",
+              DeprecationWarning)
+
+
 import string
 import urllib
 
