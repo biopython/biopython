@@ -39,8 +39,7 @@ espell       Retrieves spelling suggestions.
 _open
 
 """
-import urllib
-
+import urllib, time
 from Bio import File
 
 def query(cmd, db, cgi='http://www.ncbi.nlm.nih.gov/sites/entrez',
@@ -280,25 +279,29 @@ def espell(cgi='http://www.ncbi.nlm.nih.gov/entrez/eutils/espell.fcgi',
     variables.update(keywds)
     return _open(cgi, variables)
 
-def _open(cgi, params={}, get=1):
-    """_open(cgi, params={}, get=1) -> UndoHandle
+def _open(cgi, params={}):
+    """_open(cgi, params={}) -> UndoHandle
 
     Open a handle to Entrez.  cgi is the URL for the cgi script to access.
-    params is a dictionary with the options to pass to it.  get is a boolean
-    that describes whether a GET should be used.  Does some
+    params is a dictionary with the options to pass to it.  Does some
     simple error checking, and will raise an IOError if it encounters one.
 
     """
+    # NCBI requirement: At least three seconds between queries
+    delay = 3.0
+    current = time.time()
+    wait = _open.previous + delay - current
+    if wait > 0:
+        time.sleep(wait)
+        _open.previous = current + wait
+    else:
+        _open.previous = current
     # Open a handle to Entrez.
+    if not "tool" in params:
+        params["tool"] = "biopython"
     options = urllib.urlencode(params, doseq=True)
-    if get:  # do a GET
-        fullcgi = cgi
-        if options:
-            fullcgi = "%s?%s" % (cgi, options)
-        # print fullcgi
-        handle = urllib.urlopen(fullcgi)
-    else:    # do a POST
-        handle = urllib.urlopen(cgi, options)
+    cgi += "?" + options
+    handle = urllib.urlopen(cgi)
 
     # Wrap the handle inside an UndoHandle.
     uhandle = File.UndoHandle(handle)
@@ -325,3 +328,5 @@ def _open(cgi, params={}, get=1):
         raise IOError, "ERROR, possibly because id not available?"
     # Should I check for 404?  timeout?  etc?
     return uhandle
+
+_open.previous = 0
