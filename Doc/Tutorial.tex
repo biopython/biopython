@@ -355,9 +355,9 @@ The first four terms define the search we are going to do. To use the Entrez mod
 Now that we've got this all set up, we can query Entrez and get a handle with the results. This is done with the following code:
 
 \begin{verbatim}
-from Bio.WWW import NCBI
+from Bio import Entrez
 
-result_handle = NCBI.query(search_command, search_database, term = search_term,
+result_handle = Entrez.query(search_command, search_database, term = search_term,
                            doptcmdl = return_format)
 \end{verbatim}
 
@@ -969,7 +969,7 @@ Now let's use a handle to download a SwissProt file from ExPASy, something cover
 As mentioned above, the \verb|Bio.SeqIO.read()| function is included in Biopython 1.45 or later.
 
 \begin{verbatim}
-from Bio.WWW import ExPASy
+from Bio import ExPASy
 from Bio import SeqIO
 handle = ExPASy.get_sprot_raw("O23729")
 seq_record = SeqIO.read(handle, "swiss")
@@ -2251,6 +2251,8 @@ To parse a Swiss-Prot record, we first get a handle to a Swiss-Prot record. Ther
 \end{verbatim}
 \end{itemize}
 The key point is that for the parser, it doesn't matter how the handle was created, as long as it points to data in the Swiss-Prot format.
+
+We can use Bio.SeqIO as described in Section~\ref{sec:SeqIO_ExPASy_and_SwissProt} to get file format agnostic \verb|SeqRecord| objects.  Alternatively, we can get \verb|Bio.SwissProt.SProt.Record| objects which are a much closer match to the underlying file format, using following code.
 
 To read one Swiss-Prot record from the handle, we use the function \verb|read()|:
 \begin{verbatim}
