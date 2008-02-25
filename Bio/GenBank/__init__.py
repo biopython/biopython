@@ -38,6 +38,7 @@ import cStringIO
 # other Biopython stuff
 from Bio.ParserSupport import AbstractConsumer
 from utils import FeatureValueCleaner
+from Bio import Entrez
 
 #There used to be a (GenBank only) class _Scanner in
 #this file.  Now use a more generic system which we import:
@@ -1284,7 +1285,6 @@ class NCBIDictionary:
         to change the results into another form.  If unspecified, then
         the raw contents of the file will be returned.
         """
-        from Bio.config.DBRegistry import db #See bug 2393
         self.parser = parser
         if database not in self.__class__.VALID_DATABASES:
             raise ValueError("Invalid database %s, should be one of %s" %
@@ -1293,15 +1293,9 @@ class NCBIDictionary:
             raise ValueError("Invalid format %s, should be one of %s" %
                     (format, self.__class__.VALID_FORMATS))
 
-        if format == 'fasta':
-            self.db = db["fasta-sequence-eutils"]
-        elif format == 'genbank':
-            if database == 'nucleotide':
-                self.db = db["nucleotide-genbank-eutils"]
-            elif database == 'protein':
-                self.db = db["protein-genbank-eutils"]
-            elif database == 'genome':
-                self.db = db["genome-genbank-eutils"]
+        if format=="genbank": format = "gb"
+        self.db = database
+        self.format = format
 
     def __len__(self):
         raise NotImplementedError, "GenBank contains lots of entries"
@@ -1340,7 +1334,7 @@ class NCBIDictionary:
         
         Raises a KeyError if there's an error.
         """
-        handle = self.db[id]
+        handle = Entrez.efetch(db = self.db, id = id, rettype = self.format)
         # Parse the record if a parser was passed in.
         if self.parser is not None:
             return self.parser.parse(handle)
