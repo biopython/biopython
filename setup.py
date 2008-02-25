@@ -351,6 +351,7 @@ PACKAGES = [
     'Bio.ECell',
     'Bio.Emboss',
     'Bio.Encodings',
+    'Bio.Entrez',
     'Bio.Enzyme',
     'Bio.expressions',
     'Bio.expressions.blast',
