@@ -1,4 +1,4 @@
-/* The C clustering library for cDNA microarray data.
+/* The C clustering library.
  * Copyright (C) 2002 Michiel Jan Laurens de Hoon.
  *
  * This library was written at the Laboratory of DNA Information Analysis,

@@ -94,9 +94,10 @@ def _savetree(jobname, tree, order, transpose):
   index = _treesort(order, nodeorder, nodecounts, tree)
   return index
 
-class DataFile:
-  """DataFile reads a file containing gene expression data following
-     Michael Eisen's format for Cluster/TreeView. A DataFile object
+class Record:
+  """A Record stores the gene expression data and related information
+     contained in a data file following the file format defined for
+     Michael Eisen's Cluster/TreeView program. A Record
      has the following members:
 data:     a matrix containing the gene expression data
 mask:     a matrix containing only 1's and 0's, denoting which values
@@ -117,9 +118,9 @@ eweight:  the weight to be used for each experimental condition when
 eorder:   an array of real numbers indication the preferred order in the
           output file of the experimental conditions
 uniqid:   the string that was used instead of UNIQID in the input file."""
-  def __init__(self, filename=None):
+  def __init__(self, handle=None):
     """Reads a data file in the format corresponding to Michael Eisen's
-Cluster/TreeView program, and stores the data in a DataFile object"""
+Cluster/TreeView program, and stores the data in a Record object"""
     self.data = None
     self.mask = None
     self.geneid = None
@@ -130,10 +131,8 @@ Cluster/TreeView program, and stores the data in a DataFile object"""
     self.eweight = None
     self.eorder = None
     self.uniqid = None
-    if not filename: return
-    inputfile = open(filename)
-    lines = inputfile.readlines()
-    inputfile.close()
+    if not handle: return
+    lines = handle.readlines()
     lines = [line.strip("\r\n").split("\t") for line in lines]
     line = lines[0]
     n = len(line)
@@ -316,7 +315,7 @@ expclusters=None:  For hierarchical clustering results, expclusters
           counter+=1
       cluster+=1
     outputfile.close();
-    return index
+    return sortedindex
 
   def _savedata(self, jobname, gid, aid, geneindex, expindex):
     if self.genename==None: genename = self.geneid
@@ -355,3 +354,14 @@ expclusters=None:  For hierarchical clustering results, expclusters
         if mask[i][j]: outputfile.write(str(self.data[i][j]))
       outputfile.write('\n')
     outputfile.close()
+
+def read(handle):
+    return Record(handle)
+
+class DataFile(Record):
+  def __init__(self, filename=None):
+    import warnings
+    warnings.warn("""The DataFile class has been deprecated.  Please use the Record class instead. To load data from a file into a Record object, use "record = read(open('mydatafile.txt'))" """, DeprecationWarning)
+    if filename: handle = open(filename)
+    else: handle = None
+    Record.__init__(self, handle)
