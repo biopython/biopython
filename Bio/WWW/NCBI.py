@@ -30,8 +30,7 @@ _open
 """
 
 import warnings
-warnings.warn("Bio.WWW.NCBI is deprecated. The functions in Bio.WWW.NCBI are now available from Bio.Entrez.",
-              DeprecationWarning)
+warnings.warn("Bio.WWW.NCBI is deprecated. The functions in Bio.WWW.NCBI are now available from Bio.Entrez; except for the pm* functions which the NCBI have retired.", DeprecationWarning)
 
 
 import string
