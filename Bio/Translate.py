@@ -11,8 +11,11 @@ class Translator:
         return "Translator object\n" + str(self.table)
 
     def translate(self, seq, stop_symbol = "*"):
-        assert seq.alphabet == self.table.nucleotide_alphabet, \
-               "cannot translate from the given alphabet (%s)" % seq.alphabet
+        #Allow different instances of the same class to be used:
+        assert seq.alphabet.__class__ == \
+               self.table.nucleotide_alphabet.__class__, \
+               "cannot translate from given alphabet (have %s, need %s)" %\
+               (seq.alphabet, self.table.nucleotide_alphabet)
         s = seq.data
         letters = []
         append = letters.append
@@ -33,7 +36,10 @@ class Translator:
                            
     def translate_to_stop(self, seq):
         # This doesn't have a stop encoding
-        assert seq.alphabet == self.table.nucleotide_alphabet, \
+
+        #Allow different instances of the same class to be used:
+        assert seq.alphabet.__class__ == \
+               self.table.nucleotide_alphabet.__class__, \
                "cannot translate from given alphabet (have %s, need %s)" %\
                (seq.alphabet, self.table.nucleotide_alphabet)
         s = seq.data
