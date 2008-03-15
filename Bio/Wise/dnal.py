@@ -1,8 +1,19 @@
 #!/usr/bin/env python
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+#
+# Bio.Wise contains modules for running and processing the output of
+# some of the models in the Wise2 package by Ewan Birney available from:
+# ftp://ftp.ebi.ac.uk/pub/software/unix/wise2/
+# http://www.ebi.ac.uk/Wise2/
+# 
+# Bio.Wise.psw is for protein Smith-Waterman alignments
+# Bio.Wise.dnal is for Smith-Waterman DNA alignments
 
 from __future__ import division
 
-__version__ = "$Revision: 1.10 $"
+__version__ = "$Revision: 1.11 $"
 
 import commands
 import itertools
