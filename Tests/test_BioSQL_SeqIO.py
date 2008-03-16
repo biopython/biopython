@@ -217,16 +217,28 @@ def compare_records(old, new) :
             assert len(old.annotations[key]) == len(new.annotations[key])
             for old_r, new_r in zip(old.annotations[key], new.annotations[key]) :
                 compare_references(old_r, new_r)
+        elif key == "taxonomy" or key == "organism" :
+            #If there is a taxon id recorded, these fields get overwritten
+            #by data from the taxon/taxon_name tables.  There is no
+            #guarantee that they will be identical after a load/retrieve.
+            assert isinstance(new.annotations[key], str) \
+                or isinstance(new.annotations[key], list)
         elif type(old.annotations[key]) == type(new.annotations[key]) :
-            assert old.annotations[key] == new.annotations[key]
+            assert old.annotations[key] == new.annotations[key], \
+                "Annotation '%s' changed by load/retrieve\nWas:%s\nNow:%s" \
+                % (key, old.annotations[key], new.annotations[key])
         elif isinstance(old.annotations[key], str) \
         and isinstance(new.annotations[key], list) :
             #Any annotation which is a single string gets turned into
             #a list containing one string by BioSQL at the moment.
-            assert [old.annotations[key]] == new.annotations[key]
+            assert [old.annotations[key]] == new.annotations[key], \
+                "Annotation '%s' changed by load/retrieve\nWas:%s\nNow:%s" \
+                % (key, old.annotations[key], new.annotations[key])
         elif isinstance(old.annotations[key], list) \
         and isinstance(new.annotations[key], str) :
-            assert old.annotations[key] == [new.annotations[key]]
+            assert old.annotations[key] == [new.annotations[key]], \
+                "Annotation '%s' changed by load/retrieve\nWas:%s\nNow:%s" \
+                % (key, old.annotations[key], new.annotations[key])
 
         
 #####################################################################
