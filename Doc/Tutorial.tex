@@ -840,11 +840,12 @@ Desription: C.irapeanum 5.8S rRNA gene and ITS1 and ITS2 DNA.
 /taxonomy=['Eukaryota', 'Viridiplantae', 'Streptophyta', ..., 'Cypripedium']
 /keywords=['5.8S ribosomal RNA', '5.8S rRNA gene', 'internal transcribed spacer', 'ITS1', 'ITS2']
 /references=[...]
+/accessions=['Z78533']
 /data_file_division=PLN
 /date=30-NOV-2006
 /organism=Cypripedium irapeanum
 /gi=2765658
-Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGGAATAAA ...', IUPACAmbiguousDNA())
+Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGG...CGC', IUPACAmbiguousDNA())
 \end{verbatim}
 
 \noindent The information we want, \emph{Cypripedium irapeanum}, is held in the annotations dictionary under `source' and `organism', which we can access like this:
@@ -858,6 +859,10 @@ print first_record.annotations["source"]
 \begin{verbatim}
 print first_record.annotations["organism"]
 \end{verbatim}
+
+In general, `organism' is used for the scientific name (in latin, e.g. \textit{Arabidopsis thaliana}),
+while `source' will often be the common name (e.g. thale cress).  In this example, as is often the case,
+the two fields are identical.  
 
 Now let's go through all the records, building up a list of the species each orchid sequence is from:
 
