@@ -1105,7 +1105,6 @@ class _SequenceConsumer(AbstractConsumer):
 
     def organism_host(self, line):
         #There is no SeqRecord convention from the GenBank parser,
-        #based on how it deals with taxonomy ids (list of strings)
         data = line[5:].rstrip(_CHOMP)
         index = data.find('=')
         if index >= 0:
@@ -1121,9 +1120,24 @@ class _SequenceConsumer(AbstractConsumer):
         except KeyError:
             self.data.annotations['organism_host'] = ids
 
-    def taxonomy_id(self, line):
+    def organism_classification(self, line):
         #Try and agree with SeqRecord convention from the GenBank parser,
-        #which stores these as a list of strings with key 'taxonomy'
+        #which stores this taxonomy lineage ese as a list of strings with
+        #key 'taxonomy'.
+        #Note that 'ncbi_taxid' is used for the taxonomy ID (line OX)
+        line = line[5:].rstrip(_CHOMP)
+        cols = [col.strip() for col in line.split(';')]
+        try :
+            #Append to any existing data
+            self.data.annotations['taxonomy'].extend(cols)
+        except KeyError:
+            self.data.annotations['taxonomy'] = cols
+
+    def taxonomy_id(self, line):
+        #Try and agree with SeqRecord convention expected in BioSQL
+        #the NCBI taxon id with key 'ncbi_taxid'.
+        #Note that 'taxonomy' is used for the taxonomy lineage
+        #(held as a list of strings, line type OC)
 
         line = line[5:].rstrip(_CHOMP)
         index = line.find('=')
@@ -1136,9 +1150,9 @@ class _SequenceConsumer(AbstractConsumer):
 
         try :
             #Append to any existing data
-            self.data.annotations['taxonomy'].extend(ids)
+            self.data.annotations['ncbi_taxid'].extend(ids)
         except KeyError:
-            self.data.annotations['taxonomy'] = ids
+            self.data.annotations['ncbi_taxid'] = ids
 
     def reference_number(self, line):
         """RN line, reference number (start of new reference)."""
