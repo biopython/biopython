@@ -1,6 +1,6 @@
 """General mechanisms to access applications in biopython.
 """
-import os
+import os, sys
 import StringIO
 import popen2
 
@@ -15,23 +15,37 @@ def generic_run(commandline):
     standard output and standard error.
     """
     # print str(commandline)
-    child = popen2.Popen3(str(commandline), 1)
-    # get information and close the files, so if we call this function
-    # repeatedly we won't end up with too many open files
+    if sys.platform[:3]=='win':
+        # Windows does not have popen2.Popen3
+        r, w, e = popen2.popen3(str(commandline))
+    
+        r_out = r.read()
+        e_out = e.read()
+        w.close()
+        r.close()
+        e.close()
 
-    # here are the file descriptors
-    r = child.fromchild
-    w = child.tochild
-    e = child.childerr
+        # No way to get the error code; setting it to a dummy variable
+        error_code = 0
+
+    else:
+        child = popen2.Popen3(str(commandline), 1)
+        # get information and close the files, so if we call this function
+        # repeatedly we won't end up with too many open files
+
+        # here are the file descriptors
+        r = child.fromchild
+        w = child.tochild
+        e = child.childerr
     
-    r_out = r.read()
-    e_out = e.read()
-    w.close()
-    r.close()
-    e.close()
+        r_out = r.read()
+        e_out = e.read()
+        w.close()
+        r.close()
+        e.close()
     
-    # capture error code
-    error_code = os.WEXITSTATUS(child.wait())
+        # capture error code
+        error_code = os.WEXITSTATUS(child.wait())
 
     return ApplicationResult(commandline, error_code), \
            File.UndoHandle(StringIO.StringIO(r_out)), \
