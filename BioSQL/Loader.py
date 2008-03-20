@@ -98,14 +98,37 @@ class DatabaseLoader:
        return self.adaptor.last_id("dbxref")
            
     def _get_taxon_id(self, record):
-        """Get the id corresponding to a taxon.
+        """Get the taxon id for this record.
 
-        If the species isn't in the taxon table, it is created.
+        record - a SeqRecord object
+
+        This searches the taxon/taxon_name tables using the
+        NCBI taxon ID, scientific name and common name to find
+        the matching taxon table entry's id.
+        
+        If the species isn't in the taxon table, and we have at
+        least the NCBI taxon ID, scientific name or common name,
+        a minimal stub entry is created in the table.
+
+        If this information is not in the record's annotation,
+        then None is returned.
+
+        See also the BioSQL script load_ncbi_taxonomy.pl which
+        will populate and update the taxon/taxon_name tables
+        with the latest information from the NCBI.
         """
-
-        ncbi_taxon_id = record.annotations.get("ncbi_taxid")
+        
+        # To find the NCBI taxid, first check for a top level annotation
+        ncbi_taxon_id = None
+        if "ncbi_taxid" in record.annotations :
+            #Could be a list of IDs.
+            if isinstance(record.annotations["ncbi_taxid"],list) :
+                if len(record.annotations["ncbi_taxid"])==1 :
+                    ncbi_taxon_id = record.annotations["ncbi_taxid"][0]
+            else :
+                ncbi_taxon_id = record.annotations["ncbi_taxid"]
         if not ncbi_taxon_id:
-            # Try the hard way...
+            # Secondly, look for a source feature
             for f in record.features:
                 if f.type == 'source':
                     quals = getattr(f, 'qualifiers', {})
@@ -114,36 +137,101 @@ class DatabaseLoader:
                             if db_xref.startswith("taxon:"):
                                 ncbi_taxon_id = int(db_xref[6:])
                                 break
-                            if ncbi_taxon_id: break
+                if ncbi_taxon_id: break
         if ncbi_taxon_id:
             taxa = self.adaptor.execute_and_fetch_col0(
                 "SELECT taxon_id FROM taxon WHERE ncbi_taxon_id = %s",
                 (ncbi_taxon_id,))
             if taxa:
+                #Good, we have mapped the NCBI taxid to a taxon table entry
                 return taxa[0]
+            #Bad, this NCBI taxon id is not in the database!
 
-        # Tough luck. Let's try the binomial
-        if record.annotations["organism"]:
+        
+        # Either we didn't find the NCBI taxid in the record, or it
+        # isn't in the database yet. Next, we'll try and find a match
+        # based on the species name (stored in GenBank files as the
+        # the organism and/or the source).
+
+        try :
+            scientific_name = record.annotations["organism"][:255]
+        except KeyError :
+            scientific_name = None
+        try :
+            common_name = record.annotations["source"][:255]
+        except KeyError :
+            common_name = None
+        # Note: The maximum length for taxon names in the schema is 255.
+        # Cropping it now should help in getting a match when searching,
+        # and avoids an error if we try and add these to the database.
+
+        if ncbi_taxon_id is None \
+        and not common_name and not scientific_name :
+            # Nothing to go on... and there is no point adding
+            # a new entry to the database.  We'll just leave this
+            # sequence's taxon as a NULL in the database.
+            return None
+
+        if scientific_name:
             taxa = self.adaptor.execute_and_fetch_col0(
                 "SELECT taxon_id FROM taxon_name" \
                 " WHERE name_class = 'scientific name' AND name = %s",
-                (record.annotations["organism"],))
+                (scientific_name,))
             if taxa:
+                #Good, mapped the scientific name to a taxon table entry
                 return taxa[0]
 
-
         # Last chance...
-        if record.annotations["source"]:
+        if common_name:
             taxa = self.adaptor.execute_and_fetch_col0(
                 "SELECT DISTINCT taxon_id FROM taxon_name" \
                 " WHERE name = %s",
-                (record.annotations["source"],))
+                (common_name,))
+            #Its natural that several distinct taxa will have the same common
+            #name - in which case we can't resolve the taxon uniquely.
             if len(taxa) > 1:
                 raise ValueError("Taxa: %d species have name %r" % (
                     len(taxa),
-                    record.annotations["source"]))
+                    common_name))
             if taxa:
+                #Good, mapped the common name to a taxon table entry
                 return taxa[0]
+
+        # At this point, as far as we can tell, this species isn't
+        # in the taxon table already.  So we'll have to add it.
+
+        """
+        # Possible simplification of the scary code below; pending
+        # discussion on the BioSQL mailing list...
+        #
+        # We will record the bare minimum; as long as the NCBI taxon
+        # id is present, then (re)running load_ncbi_taxonomy.pl should
+        # fill in the taxonomomy lineage.
+        #
+        # I am NOT going to try and record the lineage, even if it
+        # is in the record annotation as a list of names, as we won't
+        # know the NCBI taxon IDs for these parent nodes.
+        self.adaptor.execute(
+            "INSERT INTO taxon(parent_taxon_id, ncbi_taxon_id, node_rank,"\
+            " left_value, right_value)" \
+            " VALUES (%s, %s, %s, %s, %s)", (None,
+                                             ncbi_taxon_id,
+                                             "species",
+                                             None,
+                                             None))
+        taxon_id = self.adaptor.last_id("taxon")
+        if scientific_name:
+            self.adaptor.execute(
+                "INSERT INTO taxon_name(taxon_id, name, name_class)" \
+                "VALUES (%s, %s, 'scientific name')", (
+                taxon_id, scientific_name))
+        if common_name:
+            self.adaptor.execute(
+                "INSERT INTO taxon_name(taxon_id, name, name_class)" \
+                "VALUES (%s, %s, 'common name')", (
+                taxon_id, common_name))
+        return taxon_id
+        """
 
         # OK, let's try inserting the species.
         # Chances are we don't have enough information ...
@@ -193,15 +281,17 @@ class DatabaseLoader:
             taxon_id = self.adaptor.last_id("taxon")
             self.adaptor.execute(
                 "INSERT INTO taxon_name(taxon_id, name, name_class)" \
-                "VALUES (%s, %s, 'scientific name')", (taxon_id, taxon[2]))
+                "VALUES (%s, %s, 'scientific name')", (taxon_id, taxon[2][:255]))
+            #Note the name field is limited to 255, some SwissProt files
+            #have a multi-species name which can be longer.  So truncate this.
             left_value += 1
             right_value -= 1
             parent_taxon_id = taxon_id
-        if "source" in record.annotations:
+        if common_name:
             self.adaptor.execute(
                 "INSERT INTO taxon_name(taxon_id, name, name_class)" \
                 "VALUES (%s, %s, 'common name')", (
-                taxon_id, record.annotations["source"]))
+                taxon_id, common_name))
 
         return taxon_id
 
@@ -216,20 +306,20 @@ class DatabaseLoader:
         else: # otherwise just use a version of 0
             accession = record.id
             version = 0
-            
-#        taxon_id = self._get_taxon_id(record)
-        #taxon_id = "0" # inserted this because the taxon population code is out of date
-                       # with the tables
+
+        #Find the taxon id (this is not just the NCBI Taxon ID)
+        #NOTE - If the species isn't defined in the taxon table,
+        #a new minimal entry is created.
+        taxon_id = self._get_taxon_id(record)
+
         identifier = record.annotations.get('gi')
         description = getattr(record, 'description', None)
         division = record.annotations.get("data_file_division", "UNK")
         
-        # removed taxon_id field, as it was causing difficulties with the
-        # schema  - not inserting a value allows it to default to NULL,
-        # avoiding the foreign key constraint.        
         sql = """
         INSERT INTO bioentry (
          biodatabase_id,
+         taxon_id,
          name,
          accession,
          identifier,
@@ -243,8 +333,10 @@ class DatabaseLoader:
          %s,
          %s,
          %s,
+         %s,
          %s)"""
         self.adaptor.execute(sql, (self.dbid,
+                                   taxon_id,
                                    record.name, 
                                    accession,
                                    identifier,
