@@ -18,14 +18,19 @@ retieved correctly.  The DBSeq and DBSeqRecord classes now subclass the
 Seq and SeqRecord classes, which provides more functionality.
 
 The modules under Bio.WWW are being deprecated.
-Functionality in Bio.WWW.SCOP, Bio.WWW.InterPro and Bio.WWW.ExPASy is now
-available from Bio.SCOP, Bio.InterPro and Bio.ExPASy instead.
+Functionality in Bio.WWW.NCBI, Bio.WWW.SCOP, Bio.WWW.InterPro and
+Bio.WWW.ExPASy is now available from Bio.Entrez, Bio.SCOP, Bio.InterPro and
+Bio.ExPASy instead.
 
 Tiago Antao has included more functionality in the Population Genetics
-module, Bio.PopGen
+module, Bio.PopGen.
+
+The Bio.Cluster module has been updated to be more consistent with other
+Biopython code.
 
 The tutorial has been updated, including devoting a whole chapter to
-Swiss-Prot, Prosite, Prodoc, and ExPASy.
+Swiss-Prot, Prosite, Prodoc, and ExPASy. There is also a new chapter on
+Bio.Entrez.
 
 ===================================================================
 
