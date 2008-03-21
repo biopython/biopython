@@ -1,4 +1,8 @@
 #!/usr/bin/env python
+# Copyright 2002 by Tiaan Wessels.  All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
 
 """
 This file implements a SOAP interface into the Bibliographic database of
@@ -7,6 +11,13 @@ intended to be used by higher-level objects to build object representations
 from data retrieved by this interface. This file needs a version of the
 pywebsvcs package LATER than 0.97 available from www.sourceforge.net.
 """
+
+import warnings
+warnings.warn("Bio.biblio is deprecated because it seems to be out of date, "
+              "and no one came forward saying they use this module. If you "
+              "use Bio.biblio, please join the biopython mailing list and "
+              "email us.",
+              DeprecationWarning)
 
 import sys
 import SOAP
