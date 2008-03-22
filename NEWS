@@ -20,7 +20,7 @@ Seq and SeqRecord classes, which provides more functionality.
 The modules under Bio.WWW are being deprecated.
 Functionality in Bio.WWW.NCBI, Bio.WWW.SCOP, Bio.WWW.InterPro and
 Bio.WWW.ExPASy is now available from Bio.Entrez, Bio.SCOP, Bio.InterPro and
-Bio.ExPASy instead.
+Bio.ExPASy instead. Bio.Entrez was used to fix a nasty bug in Bio.GenBank.
 
 Tiago Antao has included more functionality in the Population Genetics
 module, Bio.PopGen.
