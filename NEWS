@@ -8,6 +8,8 @@ The latest news is at the top.
 
 ===================================================================
 
+March 22, 2008: Biopython 1.45 released.
+
 The Seq and MutableSeq objects act more like python strings, in particular
 str(object) now returns the full sequence as a plain string.  The existing
 tostring() method is preserved for backwards compatibility.
