@@ -34,6 +34,8 @@ The tutorial has been updated, including devoting a whole chapter to
 Swiss-Prot, Prosite, Prodoc, and ExPASy. There is also a new chapter on
 Bio.Entrez.
 
+Bio.biblio was deprecated.
+
 ===================================================================
 
 October 28, 2007: Biopython 1.44 released.
