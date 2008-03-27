@@ -590,9 +590,9 @@ class EmblScanner(InsdcScanner) :
 
         consumer.locus(fields[0])
 
-        #Should we also call the accession consumer?
-        #There should be an AC line later.
-        #consumer.accession(fields[0])
+        #Call the accession consumer now, to make sure we record
+        #something as the record.id, in case there is no AC line
+        consumer.accession(fields[0])
 
         #TODO - How to deal with the version field?  At the moment the consumer
         #will try and use this for the ID which isn't ideal for EMBL files.
