@@ -1,0 +1,73 @@
+ID   AAA03323; SV 1; linear; unassigned DNA; STD; INV; 1545 BP.
+XX
+PA   U01210.1
+XX
+DE   Anopheles merus alpha-amylase
+XX
+OS   Anopheles merus
+OC   Eukaryota; Metazoa; Arthropoda; Hexapoda; Insecta; Pterygota; Neoptera;
+OC   Endopterygota; Diptera; Nematocera; Culicoidea; Culicidae; Anophelinae;
+OC   Anopheles.
+OX   NCBI_TaxID=30066;
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..1545
+FT                   /organism="Anopheles merus"
+FT                   /mol_type="unassigned DNA"
+FT                   /clone_lib="V-12"
+FT                   /clone="s1/pg155/Hd4"
+FT   CDS             U01210.1:1212..2756
+FT                   /codon_start=1
+FT                   /gene="amy"
+FT                   /standard_name="amylase"
+FT                   /product="alpha-amylase"
+FT                   /function="digestive enzyme"
+FT                   /db_xref="GOA:Q17059"
+FT                   /db_xref="HSSP:P56634"
+FT                   /db_xref="InterPro:IPR006046"
+FT                   /db_xref="InterPro:IPR006047"
+FT                   /db_xref="InterPro:IPR006048"
+FT                   /db_xref="InterPro:IPR006589"
+FT                   /db_xref="InterPro:IPR013780"
+FT                   /db_xref="InterPro:IPR013781"
+FT                   /db_xref="UniProtKB/TrEMBL:Q17059"
+FT                   /protein_id="AAA03323.1"
+FT                   /translation="MKLLVRLAPILLLALTGRPVAAQHDPHFVRGHSTIVHLFEWKWSD
+FT                   IADECERFLGPKGYGGVQLSPVNENIVIRLADGSRPWWERYQPISFKLDTRSGSEAEFA
+FT                   DMSRRCNAAGVRLYVDIIINHMGATQPVEPAIGTGSSTAIPSDRQFPAVPFGWPDFNPP
+FT                   CAINDWGNAEQIRNCELVGLHDLNQAVPWVRDRVVDFLNHLIELGVAGFRVDAAKHMWP
+FT                   ADLAVIFGRLNNLNTAYGFAPGSRAFLAQEVIDMGAHEVVRKFEYTFLGTVTEFMFSHY
+FT                   LGRAFGGNDALRWLSNFGEAWGLLASRDAFVFVDNHDNQRGNYGILTYKQPKPYKMATA
+FT                   FAAAYPYGQLRIMSSFAFTDFDQGPPSDAQGNLLSPIINPDKTCGGGWVCEHRWRQMYS
+FT                   MIHFRNLAWGTPLQHWWDNGNNQIAFARGNVGFVAFNNEPFDMNVILQTGLPAGIYCDV
+FT                   ISGAREGETCTGLQVIVEPNGFASISIRANAEDGVIAIHSEVSVCVCCRMRSDGRV"
+XX
+SQ   Sequence 1545 BP; 287 A; 437 C; 498 G; 323 T; 0 other; 2371371509 CRC32;
+     atgaagcttt tagtgcgcct agcaccgatc ctgctgctag ccctaaccgg tcgcccggta        60
+     gccgctcagc acgatcccca ctttgtccgc ggccacagca cgatcgtgca tctgttcgag       120
+     tggaaatgga gcgacattgc ggacgagtgt gagcgcttcc tggggcccaa agggtacggc       180
+     ggtgtgcagc tgtctccagt gaacgagaac atcgtcattc gactggccga tggatctcgg       240
+     ccgtggtggg aacggtatca gccaatttcc ttcaagctgg acacgcgatc gggctcggag       300
+     gctgagtttg cggacatgtc gcggcgctgc aatgcggccg gcgtgcgtct gtacgtggac       360
+     atcatcatca accacatggg agcgacgcaa cccgtcgagc cagcgatcgg tacgggaagt       420
+     tccacggcca ttccctcgga ccgtcagttc ccggcggtac cgttcggatg gcccgacttt       480
+     aacccaccgt gtgccatcaa cgattggggc aatgcggagc agatccggaa ctgtgagctg       540
+     gtggggctgc acgatctgaa ccaggcggtg ccgtgggtgc gtgaccgtgt cgttgacttc       600
+     ctgaaccatc tgatcgagct cggagtggcc ggattccgcg tggatgcggc caaacacatg       660
+     tggcccgccg atctggcggt gatcttcgga cggctcaaca acctcaacac tgcgtacggg       720
+     tttgcgccgg gatcgcgcgc attcctcgcg caggaagtca tcgatatggg ggcgcacgaa       780
+     gtggttcgca agtttgagta cacgttcctc ggcacagtga cggagtttat gttctcgcac       840
+     tatcttggtc gtgccttcgg tggaaatgac gcgctccgct ggctgtcgaa ctttggcgaa       900
+     gcgtggggcc tgctggcgtc ccgcgatgcg ttcgtgttcg tggacaatca cgacaatcag       960
+     cgcggtaact atggtattct cacgtacaaa cagcccaaac cgtacaagat ggccaccgcg      1020
+     tttgcggccg cgtatccgta cggccagctg cgcatcatga gctcgttcgc gttcaccgac      1080
+     tttgaccagg gcccgccgtc cgatgcgcag ggcaacctgc tgtcgcccat catcaatccg      1140
+     gacaagacgt gcggcggcgg ctgggtgtgc gagcaccggt ggcgccagat gtacagcatg      1200
+     atccacttcc gcaaccttgc ctggggtacg ccgctgcagc actggtggga caatggcaac      1260
+     aaccagatcg cgtttgcccg cgggaacgtc ggctttgtgg cgttcaacaa cgaaccgttc      1320
+     gacatgaacg tgatcttgca gacggggctg ccggccggta tctactgtga tgtgatttcg      1380
+     ggtgctcgcg agggcgaaac gtgcaccggg ctgcaggtga ttgtagagcc gaacgggttc      1440
+     gcttcgattt ctatccgagc caacgcggag gacggtgtga ttgcgatcca cagtgaggta      1500
+     agtgtgtgtg tgtgttgccg aatgaggtct gatggccggg tgtga                      1545
+//

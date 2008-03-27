@@ -487,6 +487,13 @@ Testing reading embl format file EMBL/U87107.embl
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+Testing reading embl format file EMBL/AAA03323.embl
+ ID = 'AAA03323.1', Name='AAA03323',
+ Seq='ATGAAGCTTTTAGTGCGCCTAGCACCGATCCTGCTGCTAG...GGTGTGA', length=1545
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
 Testing reading stockholm format file Stockholm/simple.sth
  ID and Name='AP001509.1',
  Seq='UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAU...UUAAUGU', length=104

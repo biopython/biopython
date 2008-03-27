@@ -94,6 +94,7 @@ test_files = [ \
     ("embl",      False, 'EMBL/DD231055_edited.embl', 1),
     ("embl",      False, 'EMBL/SC10H5.embl', 1), # Pre 2006 style ID line
     ("embl",      False, 'EMBL/U87107.embl', 1), # Old ID line with SV line
+    ("embl",      False, 'EMBL/AAA03323.embl', 1), # 2008, PA line but no AC
     ("stockholm", True,  'Stockholm/simple.sth', 2),
     ("stockholm", True,  'Stockholm/funny.sth', 5),
 #Following PHYLIP files are currently only used here (test_SeqIO)
