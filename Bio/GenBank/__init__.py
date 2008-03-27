@@ -476,7 +476,13 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         self.data.annotations['organism'] = content
 
     def taxonomy(self, content):
-        self.data.annotations['taxonomy'] = self._split_taxonomy(content)
+        """Records (another line of) the taxonomy lineage.
+        """
+        lineage = self._split_taxonomy(content)
+        try :
+            self.data.annotations['taxonomy'].extend(lineage)
+        except KeyError :
+            self.data.annotations['taxonomy'] = lineage
         
     def reference_num(self, content):
         """Signal the beginning of a new reference object.
