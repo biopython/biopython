@@ -189,6 +189,8 @@ class BlastParser(_XMLparser):
         self._blast.gap_penalties = self._parameters.gap_penalties
         self._blast.filter = self._parameters.filter
         self._blast.expect = self._parameters.expect
+        self._blast.sc_match = self._parameters.sc_match
+        self._blast.sc_mismatch = self._parameters.sc_mismatch
 
         #Add to the list
         self._records.append(self._blast)
