@@ -1,6 +1,6 @@
 # Copyright 2000 by Bertrand Frottier .  All rights reserved.
 # Revisions 2005-2006 copyright Michiel de Hoon
-# Revisions 2006 copyright Peter Cock
+# Revisions 2006-2008 copyright Peter Cock
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -503,7 +503,7 @@ class BlastParser(_XMLparser):
     def _end_Statistics_db_len(self):
         """number of letters in the database
         """
-        self._blast._num_letters_in_database = int(self._value)
+        self._blast.num_letters_in_database = int(self._value)
 
     def _end_Statistics_hsp_len(self):
         """the effective HSP length
@@ -563,7 +563,8 @@ def parse(handle, debug=0):
     while text :
         #We are now starting a new XML file
         if not text.startswith(XML_START) :
-            raise ValueError("Your XML file did not start with <?xml...")
+            raise ValueError("Your XML file did not start with %s..." \
+                             % XML_START)
 
         expat_parser = expat.ParserCreate()
         blast_parser = BlastParser(debug)
