@@ -41,6 +41,8 @@ _open        Internally used function.
 
 """
 import urllib, time
+from xml.sax.handler import ContentHandler
+from xml.sax import make_parser
 from Bio import File
 
 def query(cmd, db, cgi='http://www.ncbi.nlm.nih.gov/sites/entrez',
@@ -209,6 +211,49 @@ def espell(cgi='http://www.ncbi.nlm.nih.gov/entrez/eutils/espell.fcgi',
     variables = {}
     variables.update(keywds)
     return _open(cgi, variables)
+
+class DataHandler(ContentHandler):
+    from Bio.Entrez import EInfo
+    _NameToModule = {"eInfoResult": EInfo,
+                    }
+
+    def __init__(self):
+        self.element = []
+        self.handleStartElement = None
+        self.handleEndElement = None
+
+    def startElement(self, name, attrs):
+        self.element.append(name)
+        self.content = ""
+        if self.handleStartElement:
+            self.handleStartElement(self, name, attrs)
+        elif name in DataHandler._NameToModule:
+            self.handleStartElement = DataHandler._NameToModule[name].startElement
+            self.handleEndElement = DataHandler._NameToModule[name].endElement
+            self.handleStartElement(self, name, attrs)
+        else:
+            raise RuntimeError("No parser available for " + name)
+
+    def endElement(self, name):
+        # Convert Unicode strings to plain strings
+        self.content = str(self.content)
+        if name in ("eInfoResult", "eSearchResult", "ePostResult"):
+            self.handleStartElement = None
+            self.handleEndElement = None
+        if self.handleEndElement:
+            self.handleEndElement(self, name)
+        self.element = self.element[:-1]
+
+    def characters(self, content):
+        self.content += content
+
+def read(handle):
+    saxparser = make_parser()
+    handler = DataHandler()
+    saxparser.setContentHandler(handler)
+    saxparser.parse(handle)
+    record = handler.record
+    return record
 
 def _open(cgi, params={}):
     """_open(cgi, params={}) -> UndoHandle
