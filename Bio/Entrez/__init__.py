@@ -213,8 +213,9 @@ def espell(cgi='http://www.ncbi.nlm.nih.gov/entrez/eutils/espell.fcgi',
     return _open(cgi, variables)
 
 class DataHandler(ContentHandler):
-    from Bio.Entrez import EInfo
+    from Bio.Entrez import EInfo, ESearch
     _NameToModule = {"eInfoResult": EInfo,
+                     "eSearchResult": ESearch,
                     }
 
     def __init__(self):
