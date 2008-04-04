@@ -213,9 +213,11 @@ def espell(cgi='http://www.ncbi.nlm.nih.gov/entrez/eutils/espell.fcgi',
     return _open(cgi, variables)
 
 class DataHandler(ContentHandler):
-    from Bio.Entrez import EInfo, ESearch
+    from Bio.Entrez import EInfo, ESearch, ESummary, EPost
     _NameToModule = {"eInfoResult": EInfo,
                      "eSearchResult": ESearch,
+                     "eSummaryResult": ESummary,
+                     "ePostResult": EPost,
                     }
 
     def __init__(self):
@@ -238,7 +240,7 @@ class DataHandler(ContentHandler):
     def endElement(self, name):
         # Convert Unicode strings to plain strings
         self.content = str(self.content)
-        if name in ("eInfoResult", "eSearchResult", "ePostResult"):
+        if name in DataHandler._NameToModule:
             self.handleStartElement = None
             self.handleEndElement = None
         if self.handleEndElement:
