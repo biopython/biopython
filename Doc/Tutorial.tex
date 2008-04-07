@@ -3409,6 +3409,17 @@ the simplified retrieval scheme!
 
 \section{BioSQL -- storing sequences in a relational database}
 
+\href{http://www.biosql.org/}{BioSQL} is a joint effort between the
+\href{http://open-bio.org/}{OBF} projects (BioPerl, BioJava etc) to support a
+shared database schema for storing sequence data. In theory, you could load a
+GenBank file into the database with BioPerl, then using Biopython extract this
+from the database as a record object with featues - and get more or less the same
+thing as if you had loaded the GenBank file directly as a SeqRecord using
+\verb|Bio.SeqIO| (Chapter~\ref{chapter:Bio.SeqIO}).
+
+Biopython's BioSQL module is currently documented at
+\url{http://biopython.org/wiki/BioSQL} which is part of our wiki pages.
+
 \section{BioCorba}
 
 Biocorba does some cool stuff with CORBA. Basically, it allows you to easily interact with code written in other languages, including Perl and Java. This is all done through an interface which is very similar to the standard biopython interface. Much work has been done to make it easy to use knowing only very little about CORBA. You should check out the biocorba specific documentation, which describes in detail how to use it.
