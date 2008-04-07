@@ -60,6 +60,7 @@ class Description:
     Members:
     title           Title of the hit.
     score           Number of bits.  (int)
+    bits            Bit score. (float)
     e               E value.  (float)
     num_alignments  Number of alignments for the same subject.  (int)
     
@@ -67,6 +68,7 @@ class Description:
     def __init__(self):
         self.title = ''
         self.score = None
+        self.bits = None
         self.e = None
         self.num_alignments = None
     def __str__(self):
