@@ -252,6 +252,12 @@ class DataHandler(ContentHandler):
         self.content += content
 
 def read(handle):
+    """read(hande) -> record
+    
+    This function parses an XML from Entrez, typically returning the
+    data as a list of dictionaries.  An appropriate parser will be
+    automatically be selected if available.
+    """
     saxparser = make_parser()
     handler = DataHandler()
     saxparser.setContentHandler(handler)
