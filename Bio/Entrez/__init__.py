@@ -213,7 +213,7 @@ def espell(cgi='http://www.ncbi.nlm.nih.gov/entrez/eutils/espell.fcgi',
     return _open(cgi, variables)
 
 class DataHandler(ContentHandler):
-    from Bio.Entrez import EInfo, ESearch, ESummary, EPost, ELink, EGQuery, ESpell, Taxon
+    from Bio.Entrez import EInfo, ESearch, ESummary, EPost, ELink, EGQuery, ESpell, Taxon, SerialSet
     _NameToModule = {"eInfoResult": EInfo,
                      "eSearchResult": ESearch,
                      "eSummaryResult": ESummary,
@@ -222,6 +222,7 @@ class DataHandler(ContentHandler):
                      "Result": EGQuery,
                      "eSpellResult": ESpell,
                      "TaxaSet": Taxon,
+                     "SerialSet": SerialSet,
                     }
 
     def __init__(self):
