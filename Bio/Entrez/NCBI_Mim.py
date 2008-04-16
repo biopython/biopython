@@ -2,8 +2,9 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-# This code is used to parse XML results returned by Entrez's eInfo.
-# as specified by NCBI's DTD file eInfo_020511.dtd (2006-12-04 21:51:33)
+# This code is used to parse XML results returned by Entrez's eFetch from
+# the OMIM database, as specified by NCBI's DTD file NCBI_Mim.dtd
+# (06/06/2006 23:03:48)
 # The code is not meant to be used by itself, but is called
 # from Bio.Entrez.__init__.py.
 
