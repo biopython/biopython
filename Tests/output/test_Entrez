@@ -1,0 +1,8 @@
+test_Entrez
+Test parsing database list returned by EInfo ... ok
+Test parsing database info returned by EInfo ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.921s
+
+OK

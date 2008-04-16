@@ -1,0 +1,731 @@
+<?xml version="1.0"?>
+<!DOCTYPE eInfoResult PUBLIC "-//NLM//DTD eInfoResult, 11 May 2002//EN" "http://www.ncbi.nlm.nih.gov/entrez/query/DTD/eInfo_020511.dtd">
+<eInfoResult>
+<DbInfo>
+	<DbName>pubmed</DbName>
+	<MenuName>PubMed</MenuName>
+	<Description>PubMed bibliographic record</Description>
+	<Count>17905967</Count>
+	<LastUpdate>2008/04/15 06:42</LastUpdate>
+	<FieldList>
+		<Field>
+			<Name>ALL</Name>
+			<FullName>All Fields</FullName>
+			<Description>All terms from all searchable fields</Description>
+			<TermCount>70792830</TermCount>
+			<IsDate>N</IsDate>
+			<IsNumerical>N</IsNumerical>
+			<SingleToken>N</SingleToken>
+			<Hierarchy>N</Hierarchy>
+			<IsHidden>N</IsHidden>
+		</Field>
+		<Field>
+			<Name>UID</Name>
+			<FullName>UID</FullName>
+			<Description>Unique number assigned to publication</Description>
+			<TermCount>0</TermCount>
+			<IsDate>N</IsDate>
+			<IsNumerical>Y</IsNumerical>
+			<SingleToken>Y</SingleToken>
+			<Hierarchy>N</Hierarchy>
+			<IsHidden>Y</IsHidden>
+		</Field>
+		<Field>
+			<Name>FILT</Name>
+			<FullName>Filter</FullName>
+			<Description>Limits the records</Description>
+			<TermCount>2769</TermCount>
+			<IsDate>N</IsDate>
+			<IsNumerical>N</IsNumerical>
+			<SingleToken>Y</SingleToken>
+			<Hierarchy>N</Hierarchy>
+			<IsHidden>N</IsHidden>
+		</Field>
+		<Field>
+			<Name>TITL</Name>
+			<FullName>Title</FullName>
+			<Description>Words in title of publication</Description>
+			<TermCount>10392026</TermCount>
+			<IsDate>N</IsDate>
+			<IsNumerical>N</IsNumerical>
+			<SingleToken>N</SingleToken>
+			<Hierarchy>N</Hierarchy>
+			<IsHidden>N</IsHidden>
+		</Field>
+		<Field>
+			<Name>WORD</Name>
+			<FullName>Text Word</FullName>
+			<Description>Free text associated with publication</Description>
+			<TermCount>30691290</TermCount>
+			<IsDate>N</IsDate>
+			<IsNumerical>N</IsNumerical>
+			<SingleToken>N</SingleToken>
+			<Hierarchy>N</Hierarchy>
+			<IsHidden>N</IsHidden>
+		</Field>
+		<Field>
+			<Name>MESH</Name>
+			<FullName>MeSH Terms</FullName>
+			<Description>Medical Subject Headings assigned to publication</Description>
+			<TermCount>529568</TermCount>
+			<IsDate>N</IsDate>
+			<IsNumerical>N</IsNumerical>
+			<SingleToken>Y</SingleToken>
+			<Hierarchy>Y</Hierarchy>
+			<IsHidden>N</IsHidden>
+		</Field>
+		<Field>
+			<Name>MAJR</Name>
+			<FullName>MeSH Major Topic</FullName>
+			<Description>MeSH terms of major importance to publication</Description>
+			<TermCount>469803</TermCount>
+			<IsDate>N</IsDate>
+			<IsNumerical>N</IsNumerical>
+			<SingleToken>Y</SingleToken>
+			<Hierarchy>Y</Hierarchy>
+			<IsHidden>N</IsHidden>
+		</Field>
+		<Field>
+			<Name>AUTH</Name>
+			<FullName>Author</FullName>
+			<Description>Author(s) of publication</Description>
+			<TermCount>10202499</TermCount>
+			<IsDate>N</IsDate>
+			<IsNumerical>N</IsNumerical>
+			<SingleToken>Y</SingleToken>
+			<Hierarchy>N</Hierarchy>
+			<IsHidden>N</IsHidden>
+		</Field>
+		<Field>
+			<Name>JOUR</Name>
+			<FullName>Journal</FullName>
+			<Description>Journal abbreviation of publication</Description>
+			<TermCount>100382</TermCount>
+			<IsDate>N</IsDate>
+			<IsNumerical>N</IsNumerical>
+			<SingleToken>Y</SingleToken>
+			<Hierarchy>N</Hierarchy>
+			<IsHidden>N</IsHidden>
+		</Field>
+		<Field>
+			<Name>AFFL</Name>
+			<FullName>Affiliation</FullName>
+			<Description>Author's institutional affiliation and address</Description>
+			<TermCount>13727838</TermCount>
+			<IsDate>N</IsDate>
+			<IsNumerical>N</IsNumerical>
+			<SingleToken>N</SingleToken>
+			<Hierarchy>N</Hierarchy>
+			<IsHidden>N</IsHidden>
+		</Field>
+		<Field>
+			<Name>ECNO</Name>
+			<FullName>EC/RN Number</FullName>
+			<Description>EC number for enzyme or CAS registry number</Description>
+			<TermCount>83110</TermCount>
+			<IsDate>N</IsDate>
+			<IsNumerical>N</IsNumerical>
+			<SingleToken>Y</SingleToken>
+			<Hierarchy>N</Hierarchy>
+			<IsHidden>N</IsHidden>
+		</Field>
+		<Field>
+			<Name>SUBS</Name>
+			<FullName>Substance Name</FullName>
+			<Description>CAS chemical name or MEDLINE Substance Name</Description>
+			<TermCount>185983</TermCount>
+			<IsDate>N</IsDate>
+			<IsNumerical>N</IsNumerical>
+			<SingleToken>Y</SingleToken>
+			<Hierarchy>N</Hierarchy>
+			<IsHidden>N</IsHidden>
+		</Field>
+		<Field>
+			<Name>PDAT</Name>
+			<FullName>Publication Date</FullName>
+			<Description>Date of publication</Description>
+			<TermCount>27889</TermCount>
+			<IsDate>Y</IsDate>
+			<IsNumerical>N</IsNumerical>
+			<SingleToken>Y</SingleToken>
+			<Hierarchy>N</Hierarchy>
+			<IsHidden>N</IsHidden>
+		</Field>
+		<Field>
+			<Name>EDAT</Name>
+			<FullName>Entrez Date</FullName>
+			<Description>Date publication first accessible through Entrez</Description>
+			<TermCount>26563</TermCount>
+			<IsDate>Y</IsDate>
+			<IsNumerical>N</IsNumerical>
+			<SingleToken>Y</SingleToken>
+			<Hierarchy>N</Hierarchy>
+			<IsHidden>N</IsHidden>
+		</Field>
+		<Field>
+			<Name>VOL</Name>
+			<FullName>Volume</FullName>
+			<Description>Volume number of publication</Description>
+			<TermCount>11513</TermCount>
+			<IsDate>N</IsDate>
+			<IsNumerical>N</IsNumerical>
+			<SingleToken>Y</SingleToken>
+			<Hierarchy>N</Hierarchy>
+			<IsHidden>N</IsHidden>
+		</Field>
+		<Field>
+			<Name>PAGE</Name>
+			<FullName>Pagination</FullName>
+			<Description>Page number(s) of publication</Description>
+			<TermCount>1145378</TermCount>
+			<IsDate>N</IsDate>
+			<IsNumerical>N</IsNumerical>
+			<SingleToken>Y</SingleToken>
+			<Hierarchy>N</Hierarchy>
+			<IsHidden>N</IsHidden>
+		</Field>
+		<Field>
+			<Name>PTYP</Name>
+			<FullName>Publication Type</FullName>
+			<Description>Type of publication (e.g., review)</Description>
+			<TermCount>67</TermCount>
+			<IsDate>N</IsDate>
+			<IsNumerical>N</IsNumerical>
+			<SingleToken>Y</SingleToken>
+			<Hierarchy>Y</Hierarchy>
+			<IsHidden>N</IsHidden>
+		</Field>
+		<Field>
+			<Name>LANG</Name>
+			<FullName>Language</FullName>
+			<Description>Language of publication</Description>
+			<TermCount>57</TermCount>
+			<IsDate>N</IsDate>
+			<IsNumerical>N</IsNumerical>
+			<SingleToken>Y</SingleToken>
+			<Hierarchy>N</Hierarchy>
+			<IsHidden>N</IsHidden>
+		</Field>
+		<Field>
+			<Name>ISS</Name>
+			<FullName>Issue</FullName>
+			<Description>Issue number of publication</Description>
+			<TermCount>16228</TermCount>
+			<IsDate>N</IsDate>
+			<IsNumerical>N</IsNumerical>
+			<SingleToken>Y</SingleToken>
+			<Hierarchy>N</Hierarchy>
+			<IsHidden>N</IsHidden>
+		</Field>
+		<Field>
+			<Name>SUBH</Name>
+			<FullName>MeSH Subheading</FullName>
+			<Description>Additional specificity for MeSH term</Description>
+			<TermCount>83</TermCount>
+			<IsDate>N</IsDate>
+			<IsNumerical>N</IsNumerical>
+			<SingleToken>Y</SingleToken>
+			<Hierarchy>Y</Hierarchy>
+			<IsHidden>N</IsHidden>
+		</Field>
+		<Field>
+			<Name>SI</Name>
+			<FullName>Secondary Source ID</FullName>
+			<Description>Cross-reference from publication to other databases</Description>
+			<TermCount>2725527</TermCount>
+			<IsDate>N</IsDate>
+			<IsNumerical>N</IsNumerical>
+			<SingleToken>Y</SingleToken>
+			<Hierarchy>N</Hierarchy>
+			<IsHidden>N</IsHidden>
+		</Field>
+		<Field>
+			<Name>MHDA</Name>
+			<FullName>MeSH Date</FullName>
+			<Description>Date publication was indexed with MeSH terms</Description>
+			<TermCount>26504</TermCount>
+			<IsDate>Y</IsDate>
+			<IsNumerical>N</IsNumerical>
+			<SingleToken>Y</SingleToken>
+			<Hierarchy>N</Hierarchy>
+			<IsHidden>N</IsHidden>
+		</Field>
+		<Field>
+			<Name>TIAB</Name>
+			<FullName>Title/Abstract</FullName>
+			<Description>Free text associated with Abstract/Title</Description>
+			<TermCount>27848498</TermCount>
+			<IsDate>N</IsDate>
+			<IsNumerical>N</IsNumerical>
+			<SingleToken>N</SingleToken>
+			<Hierarchy>N</Hierarchy>
+			<IsHidden>N</IsHidden>
+		</Field>
+		<Field>
+			<Name>OTRM</Name>
+			<FullName>Other Term</FullName>
+			<Description>Other terms associated with publication</Description>
+			<TermCount>196192</TermCount>
+			<IsDate>N</IsDate>
+			<IsNumerical>N</IsNumerical>
+			<SingleToken>N</SingleToken>
+			<Hierarchy>N</Hierarchy>
+			<IsHidden>Y</IsHidden>
+		</Field>
+		<Field>
+			<Name>INVR</Name>
+			<FullName>Investigator</FullName>
+			<Description>Investigator</Description>
+			<TermCount>41911</TermCount>
+			<IsDate>N</IsDate>
+			<IsNumerical>N</IsNumerical>
+			<SingleToken>Y</SingleToken>
+			<Hierarchy>N</Hierarchy>
+			<IsHidden>N</IsHidden>
+		</Field>
+		<Field>
+			<Name>COLN</Name>
+			<FullName>Corporate Author</FullName>
+			<Description>Corporate Author of publication</Description>
+			<TermCount>102592</TermCount>
+			<IsDate>N</IsDate>
+			<IsNumerical>N</IsNumerical>
+			<SingleToken>N</SingleToken>
+			<Hierarchy>N</Hierarchy>
+			<IsHidden>N</IsHidden>
+		</Field>
+		<Field>
+			<Name>CNTY</Name>
+			<FullName>Place of Publication</FullName>
+			<Description>Country of publication</Description>
+			<TermCount>279</TermCount>
+			<IsDate>N</IsDate>
+			<IsNumerical>N</IsNumerical>
+			<SingleToken>N</SingleToken>
+			<Hierarchy>N</Hierarchy>
+			<IsHidden>Y</IsHidden>
+		</Field>
+		<Field>
+			<Name>PAPX</Name>
+			<FullName>Pharmacological Action</FullName>
+			<Description>MeSH pharmacological action pre-explosions</Description>
+			<TermCount>402</TermCount>
+			<IsDate>N</IsDate>
+			<IsNumerical>N</IsNumerical>
+			<SingleToken>Y</SingleToken>
+			<Hierarchy>N</Hierarchy>
+			<IsHidden>N</IsHidden>
+		</Field>
+		<Field>
+			<Name>GRNT</Name>
+			<FullName>Grant Number</FullName>
+			<Description>NIH Grant Numbers</Description>
+			<TermCount>1930075</TermCount>
+			<IsDate>N</IsDate>
+			<IsNumerical>N</IsNumerical>
+			<SingleToken>Y</SingleToken>
+			<Hierarchy>N</Hierarchy>
+			<IsHidden>N</IsHidden>
+		</Field>
+		<Field>
+			<Name>MDAT</Name>
+			<FullName>Modification Date</FullName>
+			<Description>Date of last modification</Description>
+			<TermCount>2013</TermCount>
+			<IsDate>Y</IsDate>
+			<IsNumerical>N</IsNumerical>
+			<SingleToken>Y</SingleToken>
+			<Hierarchy>N</Hierarchy>
+			<IsHidden>Y</IsHidden>
+		</Field>
+		<Field>
+			<Name>CDAT</Name>
+			<FullName>Completion Date</FullName>
+			<Description>Date of completion</Description>
+			<TermCount>8625</TermCount>
+			<IsDate>Y</IsDate>
+			<IsNumerical>N</IsNumerical>
+			<SingleToken>Y</SingleToken>
+			<Hierarchy>N</Hierarchy>
+			<IsHidden>Y</IsHidden>
+		</Field>
+		<Field>
+			<Name>PID</Name>
+			<FullName>Publisher ID</FullName>
+			<Description>Publisher ID</Description>
+			<TermCount>6043826</TermCount>
+			<IsDate>N</IsDate>
+			<IsNumerical>N</IsNumerical>
+			<SingleToken>Y</SingleToken>
+			<Hierarchy>N</Hierarchy>
+			<IsHidden>Y</IsHidden>
+		</Field>
+		<Field>
+			<Name>FAUT</Name>
+			<FullName>First Author</FullName>
+			<Description>First Author of publication</Description>
+			<TermCount>5514697</TermCount>
+			<IsDate>N</IsDate>
+			<IsNumerical>N</IsNumerical>
+			<SingleToken>Y</SingleToken>
+			<Hierarchy>N</Hierarchy>
+			<IsHidden>N</IsHidden>
+		</Field>
+		<Field>
+			<Name>FULL</Name>
+			<FullName>Full Author Name</FullName>
+			<Description>Full Author Name(s) of publication</Description>
+			<TermCount>4969568</TermCount>
+			<IsDate>N</IsDate>
+			<IsNumerical>N</IsNumerical>
+			<SingleToken>Y</SingleToken>
+			<Hierarchy>N</Hierarchy>
+			<IsHidden>N</IsHidden>
+		</Field>
+		<Field>
+			<Name>FINV</Name>
+			<FullName>Full Investigator Name</FullName>
+			<Description>Full name of investigator</Description>
+			<TermCount>15509</TermCount>
+			<IsDate>N</IsDate>
+			<IsNumerical>N</IsNumerical>
+			<SingleToken>Y</SingleToken>
+			<Hierarchy>N</Hierarchy>
+			<IsHidden>N</IsHidden>
+		</Field>
+		<Field>
+			<Name>TT</Name>
+			<FullName>Transliterated Title</FullName>
+			<Description>Words in transliterated title of publication</Description>
+			<TermCount>2116560</TermCount>
+			<IsDate>N</IsDate>
+			<IsNumerical>N</IsNumerical>
+			<SingleToken>N</SingleToken>
+			<Hierarchy>N</Hierarchy>
+			<IsHidden>N</IsHidden>
+		</Field>
+		<Field>
+			<Name>LAUT</Name>
+			<FullName>Last Author</FullName>
+			<Description>Last Author of publication</Description>
+			<TermCount>5271761</TermCount>
+			<IsDate>N</IsDate>
+			<IsNumerical>N</IsNumerical>
+			<SingleToken>Y</SingleToken>
+			<Hierarchy>N</Hierarchy>
+			<IsHidden>N</IsHidden>
+		</Field>
+		<Field>
+			<Name>PPDT</Name>
+			<FullName>Print Publication Date</FullName>
+			<Description>Date of print publication</Description>
+			<TermCount>27887</TermCount>
+			<IsDate>Y</IsDate>
+			<IsNumerical>N</IsNumerical>
+			<SingleToken>Y</SingleToken>
+			<Hierarchy>N</Hierarchy>
+			<IsHidden>Y</IsHidden>
+		</Field>
+		<Field>
+			<Name>EPDT</Name>
+			<FullName>Electronic Publication Date</FullName>
+			<Description>Date of Electronic publication</Description>
+			<TermCount>3301</TermCount>
+			<IsDate>Y</IsDate>
+			<IsNumerical>N</IsNumerical>
+			<SingleToken>Y</SingleToken>
+			<Hierarchy>N</Hierarchy>
+			<IsHidden>Y</IsHidden>
+		</Field>
+		<Field>
+			<Name>LID</Name>
+			<FullName>Location ID</FullName>
+			<Description>ELocation ID</Description>
+			<TermCount>0</TermCount>
+			<IsDate>N</IsDate>
+			<IsNumerical>N</IsNumerical>
+			<SingleToken>Y</SingleToken>
+			<Hierarchy>N</Hierarchy>
+			<IsHidden>N</IsHidden>
+		</Field>
+	</FieldList>
+	<LinkList>
+		<Link>
+			<Name>pubmed_books_refs</Name>
+			<Menu>Cited in Books</Menu>
+			<Description>PubMed links associated with Books</Description>
+			<DbTo>books</DbTo>
+		</Link>
+		<Link>
+			<Name>pubmed_cancerchromosomes</Name>
+			<Menu>CancerChrom Links</Menu>
+			<Description>Related Cancer Chromosomes</Description>
+			<DbTo>cancerchromosomes</DbTo>
+		</Link>
+		<Link>
+			<Name>pubmed_cdd</Name>
+			<Menu>Domain Links</Menu>
+			<Description>Link to related CDD entry</Description>
+			<DbTo>cdd</DbTo>
+		</Link>
+		<Link>
+			<Name>pubmed_domains</Name>
+			<Menu>3D Domain Links</Menu>
+			<Description>Related 3D Domains</Description>
+			<DbTo>domains</DbTo>
+		</Link>
+		<Link>
+			<Name>pubmed_gds</Name>
+			<Menu>GEO DataSet Links</Menu>
+			<Description>Related GEO DataSets</Description>
+			<DbTo>gds</DbTo>
+		</Link>
+		<Link>
+			<Name>pubmed_gene</Name>
+			<Menu>Gene Links</Menu>
+			<Description>Link to related Genes</Description>
+			<DbTo>gene</DbTo>
+		</Link>
+		<Link>
+			<Name>pubmed_gene_citedinomim</Name>
+			<Menu>Gene (OMIM) Links</Menu>
+			<Description>PubMed links to Gene derived from pubmed_omim_cited links</Description>
+			<DbTo>gene</DbTo>
+		</Link>
+		<Link>
+			<Name>pubmed_gene_rif</Name>
+			<Menu>Gene (GeneRIF) Links</Menu>
+			<Description>Link to Gene for the GeneRIF subcategory</Description>
+			<DbTo>gene</DbTo>
+		</Link>
+		<Link>
+			<Name>pubmed_genome</Name>
+			<Menu>Genome Links</Menu>
+			<Description>Published genome sequences</Description>
+			<DbTo>genome</DbTo>
+		</Link>
+		<Link>
+			<Name>pubmed_genomeprj</Name>
+			<Menu>Project Links</Menu>
+			<Description>Related Projects</Description>
+			<DbTo>genomeprj</DbTo>
+		</Link>
+		<Link>
+			<Name>pubmed_gensat</Name>
+			<Menu>GENSAT Links</Menu>
+			<Description>Related GENSAT</Description>
+			<DbTo>gensat</DbTo>
+		</Link>
+		<Link>
+			<Name>pubmed_geo</Name>
+			<Menu>GEO Profile Links</Menu>
+			<Description>GEO records associated with pubmed record</Description>
+			<DbTo>geo</DbTo>
+		</Link>
+		<Link>
+			<Name>pubmed_homologene</Name>
+			<Menu>HomoloGene Links</Menu>
+			<Description>Related HomoloGene</Description>
+			<DbTo>homologene</DbTo>
+		</Link>
+		<Link>
+			<Name>pubmed_nuccore</Name>
+			<Menu>CoreNucleotide Links</Menu>
+			<Description>Published CoreNucleotide sequences</Description>
+			<DbTo>nuccore</DbTo>
+		</Link>
+		<Link>
+			<Name>pubmed_nuccore_refseq</Name>
+			<Menu>CoreNucleotide (RefSeq) Links</Menu>
+			<Description>Link to CoreNucleotide RefSeqs</Description>
+			<DbTo>nuccore</DbTo>
+		</Link>
+		<Link>
+			<Name>pubmed_nucest</Name>
+			<Menu>EST Links</Menu>
+			<Description>Published EST sequences</Description>
+			<DbTo>nucest</DbTo>
+		</Link>
+		<Link>
+			<Name>pubmed_nucest_refseq</Name>
+			<Menu>EST (RefSeq) Links</Menu>
+			<Description>Link to EST RefSeqs</Description>
+			<DbTo>nucest</DbTo>
+		</Link>
+		<Link>
+			<Name>pubmed_nucgss</Name>
+			<Menu>GSS Links</Menu>
+			<Description>Published GSS sequences</Description>
+			<DbTo>nucgss</DbTo>
+		</Link>
+		<Link>
+			<Name>pubmed_nucgss_refseq</Name>
+			<Menu>GSS (RefSeq) Links</Menu>
+			<Description>Link to GSS RefSeqs</Description>
+			<DbTo>nucgss</DbTo>
+		</Link>
+		<Link>
+			<Name>pubmed_nucleotide</Name>
+			<Menu>Nucleotide Links</Menu>
+			<Description>Published nucleotide sequences</Description>
+			<DbTo>nucleotide</DbTo>
+		</Link>
+		<Link>
+			<Name>pubmed_nucleotide_refseq</Name>
+			<Menu>Nucleotide (RefSeq) Links</Menu>
+			<Description>Link to Nucleotide RefSeqs</Description>
+			<DbTo>nucleotide</DbTo>
+		</Link>
+		<Link>
+			<Name>pubmed_omia</Name>
+			<Menu>OMIA Links</Menu>
+			<Description>Related OMIA articles</Description>
+			<DbTo>omia</DbTo>
+		</Link>
+		<Link>
+			<Name>pubmed_omim_calculated</Name>
+			<Menu>OMIM (calculated) Links</Menu>
+			<Description>OMIM (calculated) Links</Description>
+			<DbTo>omim</DbTo>
+		</Link>
+		<Link>
+			<Name>pubmed_omim_cited</Name>
+			<Menu>OMIM (cited) Links</Menu>
+			<Description>OMIM (cited) Links</Description>
+			<DbTo>omim</DbTo>
+		</Link>
+		<Link>
+			<Name>pubmed_pcassay</Name>
+			<Menu>BioAssay Links</Menu>
+			<Description>Related PubChem BioAssay</Description>
+			<DbTo>pcassay</DbTo>
+		</Link>
+		<Link>
+			<Name>pubmed_pccompound</Name>
+			<Menu>Compound Links</Menu>
+			<Description>Related PubChem Compound</Description>
+			<DbTo>pccompound</DbTo>
+		</Link>
+		<Link>
+			<Name>pubmed_pccompound_mesh</Name>
+			<Menu>Compound (MeSH Keyword)</Menu>
+			<Description>Related PubChem Compound via MeSH</Description>
+			<DbTo>pccompound</DbTo>
+		</Link>
+		<Link>
+			<Name>pubmed_pccompound_publisher</Name>
+			<Menu>Compound (Publisher) Links</Menu>
+			<Description>Publisher deposited structures linked to PubChem Compound</Description>
+			<DbTo>pccompound</DbTo>
+		</Link>
+		<Link>
+			<Name>pubmed_pcsubstance</Name>
+			<Menu>Substance Links</Menu>
+			<Description>Related PubChem Substance</Description>
+			<DbTo>pcsubstance</DbTo>
+		</Link>
+		<Link>
+			<Name>pubmed_pcsubstance_mesh</Name>
+			<Menu>Substance (MeSH Keyword)</Menu>
+			<Description>Related PubChem Substance</Description>
+			<DbTo>pcsubstance</DbTo>
+		</Link>
+		<Link>
+			<Name>pubmed_pcsubstance_publisher</Name>
+			<Menu>Substance (Publisher) Links</Menu>
+			<Description>PubChem Substances supplied by publisher</Description>
+			<DbTo>pcsubstance</DbTo>
+		</Link>
+		<Link>
+			<Name>pubmed_pmc</Name>
+			<Menu>PMC Links</Menu>
+			<Description>Free full text articles in PMC</Description>
+			<DbTo>pmc</DbTo>
+		</Link>
+		<Link>
+			<Name>pubmed_pmc_local</Name>
+			<Menu></Menu>
+			<Description>Free full text articles in PMC</Description>
+			<DbTo>pmc</DbTo>
+		</Link>
+		<Link>
+			<Name>pubmed_pmc_refs</Name>
+			<Menu>Cited in PMC</Menu>
+			<Description>PubMed links associated with PMC</Description>
+			<DbTo>pmc</DbTo>
+		</Link>
+		<Link>
+			<Name>pubmed_popset</Name>
+			<Menu>PopSet Links</Menu>
+			<Description>Published population set</Description>
+			<DbTo>popset</DbTo>
+		</Link>
+		<Link>
+			<Name>pubmed_probe</Name>
+			<Menu>Probe Links</Menu>
+			<Description>Related Probe entry</Description>
+			<DbTo>probe</DbTo>
+		</Link>
+		<Link>
+			<Name>pubmed_protein</Name>
+			<Menu>Protein Links</Menu>
+			<Description>Published protein sequences</Description>
+			<DbTo>protein</DbTo>
+		</Link>
+		<Link>
+			<Name>pubmed_protein_refseq</Name>
+			<Menu>Protein (RefSeq) Links</Menu>
+			<Description>Link to Protein RefSeqs</Description>
+			<DbTo>protein</DbTo>
+		</Link>
+		<Link>
+			<Name>pubmed_proteinclusters</Name>
+			<Menu>Protein Cluster Links</Menu>
+			<Description>Related Protein Clusters</Description>
+			<DbTo>proteinclusters</DbTo>
+		</Link>
+		<Link>
+			<Name>pubmed_pubmed</Name>
+			<Menu>Related Articles</Menu>
+			<Description>Related PubMed articles, obtained by matching text and MeSH terms</Description>
+			<DbTo>pubmed</DbTo>
+		</Link>
+		<Link>
+			<Name>pubmed_pubmed_refs</Name>
+			<Menu>Cited Articles</Menu>
+			<Description>Referenced PubMed articles</Description>
+			<DbTo>pubmed</DbTo>
+		</Link>
+		<Link>
+			<Name>pubmed_snp</Name>
+			<Menu>SNP Links</Menu>
+			<Description>PubMed to SNP links</Description>
+			<DbTo>snp</DbTo>
+		</Link>
+		<Link>
+			<Name>pubmed_structure</Name>
+			<Menu>Structure Links</Menu>
+			<Description>Published 3D structures</Description>
+			<DbTo>structure</DbTo>
+		</Link>
+		<Link>
+			<Name>pubmed_taxonomy_entrez</Name>
+			<Menu>Taxonomy via GenBank</Menu>
+			<Description>Related Taxonomy entry computed using other Entrez links</Description>
+			<DbTo>taxonomy</DbTo>
+		</Link>
+		<Link>
+			<Name>pubmed_unigene</Name>
+			<Menu>UniGene Links</Menu>
+			<Description>Related UniGene</Description>
+			<DbTo>unigene</DbTo>
+		</Link>
+		<Link>
+			<Name>pubmed_unists</Name>
+			<Menu>UniSTS Links</Menu>
+			<Description>Related UniSTS records</Description>
+			<DbTo>unists</DbTo>
+		</Link>
+	</LinkList>
+</DbInfo>
+</eInfoResult>
