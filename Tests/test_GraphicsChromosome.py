@@ -16,12 +16,17 @@ import cStringIO
 # PyUnit
 import unittest
 
+from Bio import MissingExternalDependencyError
+try:
+    # reportlab
+    from reportlab.lib import colors
+except:
+    raise MissingExternalDependencyError("Install reportlab if you want to use Bio.Graphics).")
+
 # local stuff
 from Bio.Graphics import BasicChromosome
 from Bio.Graphics.DisplayRepresentation import ChromosomeCounts
 
-# reportlab
-from reportlab.lib import colors
 
 # hold the chromosome info for testing
 # the info is structured as (label, color, scale)

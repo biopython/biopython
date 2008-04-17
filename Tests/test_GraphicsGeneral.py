@@ -21,6 +21,14 @@ import random
 # PyUnit
 import unittest
 
+from Bio import MissingExternalDependencyError
+try:
+    # Skip the test if reportlab is not installed
+    import reportlab as r
+    del r
+except:
+    raise MissingExternalDependencyError("Install reportlab if you want to use Bio.Graphics).")
+
 # the stuff we're testing
 from Bio.Graphics.Comparative import ComparativeScatterPlot
 
