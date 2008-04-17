@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!DOCTYPE eSearchResult PUBLIC "-//NLM//DTD eSearchResult, 11 May 2002//EN" "http://www.ncbi.nlm.nih.gov/entrez/query/DTD/eSearch_020511.dtd">
+<eSearchResult>
+	<Count>177</Count>
+	<RetMax>20</RetMax>
+	<RetStart>0</RetStart>
+	<IdList>
+		<Id>75</Id>
+		<Id>138</Id>
+		<Id>136</Id>
+		<Id>137</Id>
+		<Id>139</Id>
+		<Id>140</Id>
+		<Id>355</Id>
+		<Id>354</Id>
+		<Id>27731</Id>
+		<Id>439</Id>
+		<Id>564</Id>
+		<Id>617</Id>
+		<Id>749</Id>
+		<Id>735</Id>
+		<Id>815</Id>
+		<Id>905</Id>
+		<Id>903</Id>
+		<Id>932</Id>
+		<Id>933</Id>
+		<Id>875</Id>
+	</IdList>
+	<TranslationSet>
+	</TranslationSet>
+	<TranslationStack>
+		<TermSet>
+			<Term>obstetrics[All Fields]</Term>
+			<Field>All Fields</Field>
+			<Count>177</Count>
+			<Explode>Y</Explode>
+		</TermSet>
+		<OP>GROUP</OP>
+	</TranslationStack>
+	<QueryTranslation>obstetrics[All Fields]</QueryTranslation>
+</eSearchResult>

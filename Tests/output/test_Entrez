@@ -1,8 +1,16 @@
 test_Entrez
 Test parsing database list returned by EInfo ... ok
 Test parsing database info returned by EInfo ... ok
+Test parsing XML returned by ESearch from the Journals database ... ok
+Test parsing XML returned by ESearch when no items were found ... ok
+Test parsing XML returned by ESearch from the Nucleotide database ... ok
+Test parsing XML returned by ESearch from PubMed Central ... ok
+Test parsing XML returned by ESearch from the Protein database ... ok
+Test parsing XML returned by ESearch from PubMed (first test) ... ok
+Test parsing XML returned by ESearch from PubMed (second test) ... ok
+Test parsing XML returned by ESearch from PubMed (third test) ... ok
 
 ----------------------------------------------------------------------
-Ran 2 tests in 0.921s
+Ran 10 tests in 4.062s
 
 OK

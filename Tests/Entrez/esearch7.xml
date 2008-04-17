@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE eSearchResult PUBLIC "-//NLM//DTD eSearchResult, 11 May 2002//EN" "http://www.ncbi.nlm.nih.gov/entrez/query/DTD/eSearch_020511.dtd">
+<eSearchResult>
+	<Count>3</Count>
+	<RetMax>3</RetMax>
+	<RetStart>0</RetStart>
+	<IdList>
+		<Id>16766766</Id>
+		<Id>16422035</Id>
+		<Id>4104812</Id>
+	</IdList>
+	<TranslationSet>
+	</TranslationSet>
+	<TranslationStack>
+		<TermSet>
+			<Term>000200020[molecular weight]</Term>
+			<Field>molecular weight</Field>
+			<Count>3</Count>
+			<Explode>Y</Explode>
+		</TermSet>
+		<OP>GROUP</OP>
+	</TranslationStack>
+	<QueryTranslation>000200020[molecular weight]</QueryTranslation>
+</eSearchResult>

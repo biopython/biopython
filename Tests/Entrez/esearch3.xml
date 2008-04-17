@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE eSearchResult PUBLIC "-//NLM//DTD eSearchResult, 11 May 2002//EN" "http://www.ncbi.nlm.nih.gov/entrez/query/DTD/eSearch_020511.dtd">
+<eSearchResult>
+	<Count>2652</Count>
+	<RetMax>6</RetMax>
+	<RetStart>6</RetStart>
+	<IdList>
+		<Id>11121077</Id>
+		<Id>11121076</Id>
+		<Id>11121075</Id>
+		<Id>11121074</Id>
+		<Id>11121073</Id>
+		<Id>11121072</Id>
+	</IdList>
+	<TranslationSet>
+		<Translation>
+			<From>PNAS[ta]</From>
+			<To>&quot;Proc Natl Acad Sci U S A&quot;[Journal:__jrid6653]</To>
+		</Translation>
+	</TranslationSet>
+	<TranslationStack>
+		<TermSet>
+			<Term>&quot;Proc Natl Acad Sci U S A&quot;[Journal]</Term>
+			<Field>Journal</Field>
+			<Count>91806</Count>
+			<Explode>Y</Explode>
+		</TermSet>
+		<TermSet>
+			<Term>97[vi]</Term>
+			<Field>vi</Field>
+			<Count>58681</Count>
+			<Explode>Y</Explode>
+		</TermSet>
+		<OP>AND</OP>
+	</TranslationStack>
+	<QueryTranslation>&quot;Proc Natl Acad Sci U S A&quot;[Journal] AND 97[vi]</QueryTranslation>
+</eSearchResult>

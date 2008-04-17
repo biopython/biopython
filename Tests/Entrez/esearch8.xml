@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE eSearchResult PUBLIC "-//NLM//DTD eSearchResult, 11 May 2002//EN" "http://www.ncbi.nlm.nih.gov/entrez/query/DTD/eSearch_020511.dtd">
+<eSearchResult>
+	<Count>0</Count>
+	<RetMax>0</RetMax>
+	<RetStart>0</RetStart>
+	<IdList>
+	</IdList>
+	<TranslationSet>
+	</TranslationSet>
+	<QueryTranslation></QueryTranslation>
+	<ErrorList>
+		<PhraseNotFound>abcXYZ</PhraseNotFound>
+	</ErrorList>
+	<WarningList>
+		<OutputMessage>No items found.</OutputMessage>
+	</WarningList>
+</eSearchResult>
