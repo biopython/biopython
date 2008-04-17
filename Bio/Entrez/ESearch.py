@@ -12,10 +12,13 @@
 def startElement(self, name, attrs):
     if self.element==["eSearchResult"]:
         self.record = {}
-    if self.element==["eSearchResult", "ErrorList"]:
-        self.record["ErrorList"] = []
+    elif self.element==["eSearchResult", "ErrorList"]:
+        self.record["ErrorList"] = {"PhraseNotFound": [],
+                                    "FieldNotFound": []}
     elif self.element==["eSearchResult", "WarningList"]:
-        self.record["WarningList"] = []
+        self.record["WarningList"] = {"PhraseIgnored": [],
+                                      "QuotedPhraseNotFound": [],
+                                      "OutputMessage": []}
     elif self.element==["eSearchResult", "IdList"]:
         self.record["IdList"] = []
     elif self.element==["eSearchResult", "TranslationSet"]:
@@ -65,3 +68,16 @@ def endElement(self, name):
         termset = self.record["TranslationStack"][-1]
         if self.content=='Y': termset["Explode"] = True
         elif self.content=='N': termset["Explode"] = False
+    elif self.element==["eSearchResult", "ErrorList", "PhraseNotFound"]:
+        self.record["ErrorList"]["PhraseNotFound"].append(self.content)
+    elif self.element==["eSearchResult", "ErrorList", "FieldNotFound"]:
+        self.record["ErrorList"]["FieldNotFound"].append(self.content)
+    elif self.element==["eSearchResult", "WarningList", "PhraseIgnored"]:
+        self.record["WarningList"]["PhraseIgnored"].append(self.content)
+    elif self.element==["eSearchResult", "WarningList", "OutputMessage"]:
+        self.record["WarningList"]["OutputMessage"].append(self.content)
+    elif self.element==["eSearchResult", "WarningList", "QuotedPhraseNotFound"]:
+        self.record["WarningList"]["QuotedPhraseNotFound"].append(self.content)
+    elif self.element==["eSearchResult", "ERROR"]:
+        # Not sure when this occurs. Are we supposed to raise an Exception?
+        self.record["ERROR"] = self.content

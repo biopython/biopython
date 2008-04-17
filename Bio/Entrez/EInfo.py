@@ -80,3 +80,6 @@ def endElement(self, name):
     elif self.element==["eInfoResult", "DbInfo", "LinkList", "Link", "DbTo"]:
         link = self.record["LinkList"][-1]
         link["DbTo"] = self.content
+    elif self.element==["eInfoResult", "ERROR"]:
+        # Not sure when this occurs. Are we supposed to raise an Exception?
+        self.record["ERROR"] = self.content
