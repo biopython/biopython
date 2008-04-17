@@ -26,4 +26,4 @@ def endElement(self, name):
         self.record["SpelledQuery"]["Replaced"].append(self.content)
     elif self.element==["eSpellResult", "ERROR"]:
         # Not sure when this occurs. Are we supposed to raise an Exception?
-        self.record["Error"] = self.content
+        self.record["ERROR"] = self.content
