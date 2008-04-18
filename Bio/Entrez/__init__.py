@@ -63,9 +63,9 @@ def query(cmd, db, cgi='http://www.ncbi.nlm.nih.gov/sites/entrez',
     return _open(cgi, variables)
 
 # XXX retmode?
-def epost(db, id, cgi='http://www.ncbi.nlm.nih.gov/entrez/eutils/epost.fcgi',
+def epost(db, cgi='http://www.ncbi.nlm.nih.gov/entrez/eutils/epost.fcgi',
           **keywds):
-    """epost(db, id[, cgi]) -> handle
+    """epost(db, id|(WebEnv,query_key), [, cgi]) -> handle
 
     Query Entrez and return a handle to the results.
 
@@ -77,7 +77,7 @@ def epost(db, id, cgi='http://www.ncbi.nlm.nih.gov/entrez/eutils/epost.fcgi',
     Raises an IOError exception if there's a network error.
 
     """
-    variables = {'db' : db, 'id' : id}
+    variables = {'db' : db}
     variables.update(keywds)
     return _open(cgi, variables)
 
@@ -287,9 +287,10 @@ def _open(cgi, params={}):
         _open.previous = current + wait
     else:
         _open.previous = current
-    # Open a handle to Entrez.
+    # Tell Entrez that we are Biopython
     if not "tool" in params:
         params["tool"] = "biopython"
+    # Open a handle to Entrez.
     options = urllib.urlencode(params, doseq=True)
     cgi += "?" + options
     handle = urllib.urlopen(cgi)

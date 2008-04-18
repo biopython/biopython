@@ -9,31 +9,40 @@
 
 def startElement(self, name, attrs):
     if self.element==["eSummaryResult"]:
-        self.record = {}
+        self.record = []
+    elif self.element==["eSummaryResult", "DocSum"]:
+        self.record.append({})
     elif self.element[:3]==["eSummaryResult", "DocSum", "Item"]:
+        docsum = self.record[-1]
         itemname = str(attrs["Name"]) # convert from Unicode
-        if attrs["Type"]=="List":
-            item = [itemname, []]
-        elif attrs["Type"]=="String":
-            item = [itemname, ""]
-        if not "Item" in self.record:
-            self.record["Item"] = [item]
+        itemtype = str(attrs["Type"]) # convert from Unicode
+        item = [itemname, itemtype, None]
+        if itemtype in ["List", "Structure"]: item[2] = []
+        if not "Item" in docsum:
+            docsum["Item"] = [item]
         else:
             n = self.element.count("Item")
-            current = self.record["Item"]
+            current = docsum["Item"]
             while n > 1:
-                current = current[-1][1]
+                current = current[-1][2]
                 n-=1
             current.append(item)
 
 def endElement(self, name):
-    if self.element==["eSummaryResult", "DocSum", "Id"]:
-        self.record["Id"] = self.content
-    elif self.element[:3]==["eSummaryResult", "DocSum", "Item"]:
-        n = self.element.count("Item")
-        current = self.record["Item"]
-        while n > 1:
-            current = current[-1][1]
-            n-=1
-        if type(current[-1][1])==str:
-            current[-1][1] = self.content
+    if self.element==["eSummaryResult", "ERROR"]:
+        raise ValueError(self.content)
+    else:
+        docsum = self.record[-1]
+        if self.element==["eSummaryResult", "DocSum", "Id"]:
+            docsum["Id"] = self.content
+        elif self.element[:3]==["eSummaryResult", "DocSum", "Item"]:
+            n = self.element.count("Item")
+            current = docsum["Item"]
+            while n > 1:
+                current = current[-1][2]
+                n-=1
+            # Integer|Date|String|Structure|List|Flags|Qualifier|Enumerator|Unknown
+            if current[-1][1]=="Integer":
+                current[-1][2] = int(self.content)
+            elif not current[-1][1] in ("List", "Structure"):
+                current[-1][2] = self.content

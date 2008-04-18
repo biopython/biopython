@@ -18,9 +18,9 @@ def startElement(self, name, attrs):
 def endElement(self, name):
     if self.element==["ePostResult", "InvalidIdList", "Id"]:
         self.record["InvalidIdList"].append(self.content)
-    elif self.element==["ePostResult", "QueryEnv"]:
-        self.record["QueryEnv"] = self.content
+    elif self.element==["ePostResult", "QueryKey"]:
+        self.record["QueryKey"] = self.content
     elif self.element==["ePostResult", "WebEnv"]:
         self.record["WebEnv"] = self.content
-    elif self.element==["ePostResult", "Error"]:
-        self.record["Error"] = self.content
+    elif self.element==["ePostResult", "ERROR"]:
+        raise ValueError(self.content)
