@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE eSummaryResult PUBLIC "-//NLM//DTD eSummaryResult, 11 May 2002//EN" "http://www.ncbi.nlm.nih.gov/entrez/query/DTD/eSummary_041029.dtd">
+<eSummaryResult>
+
+<DocSum>
+<Id>28864546</Id>
+<Item Name="Caption" Type="String">AY207443</Item>
+<Item Name="Title" Type="String">Homo sapiens alpha hemoglobin (HBZP) pseudogene 3' UTR/AluJo repeat breakpoint junction</Item>
+<Item Name="Extra" Type="String">gi|28864546|gb|AY207443.1|[28864546]</Item>
+<Item Name="Gi" Type="Integer">28864546</Item>
+<Item Name="CreateDate" Type="String">2003/03/05</Item>
+<Item Name="UpdateDate" Type="String">2003/03/05</Item>
+<Item Name="Flags" Type="Integer">0</Item>
+<Item Name="TaxId" Type="Integer">9606</Item>
+<Item Name="Length" Type="Integer">491</Item>
+<Item Name="Status" Type="String">live</Item>
+<Item Name="ReplacedBy" Type="String"></Item>
+<Item Name="Comment" Type="String"><![CDATA[  ]]></Item>
+</DocSum>
+
+
+<DocSum>
+<Id>28800981</Id>
+<Item Name="Caption" Type="String">AY205604</Item>
+<Item Name="Title" Type="String">Homo sapiens hemochromatosis (HFE) mRNA, partial cds</Item>
+<Item Name="Extra" Type="String">gi|28800981|gb|AY205604.1|[28800981]</Item>
+<Item Name="Gi" Type="Integer">28800981</Item>
+<Item Name="CreateDate" Type="String">2003/03/03</Item>
+<Item Name="UpdateDate" Type="String">2003/03/03</Item>
+<Item Name="Flags" Type="Integer">0</Item>
+<Item Name="TaxId" Type="Integer">9606</Item>
+<Item Name="Length" Type="Integer">860</Item>
+<Item Name="Status" Type="String">live</Item>
+<Item Name="ReplacedBy" Type="String"></Item>
+<Item Name="Comment" Type="String"><![CDATA[  ]]></Item>
+</DocSum>
+
+</eSummaryResult>

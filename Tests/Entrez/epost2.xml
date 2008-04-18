@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<!DOCTYPE ePostResult PUBLIC "-//NLM//DTD ePostResult, 11 May 2002//EN" "http://www.ncbi.nlm.nih.gov/entrez/query/DTD/ePost_020511.dtd">
+<ePostResult>
+	<ERROR>Wrong DB name</ERROR>
+</ePostResult>

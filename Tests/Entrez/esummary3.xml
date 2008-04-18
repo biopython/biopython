@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE eSummaryResult PUBLIC "-//NLM//DTD eSummaryResult, 11 May 2002//EN" "http://www.ncbi.nlm.nih.gov/entrez/query/DTD/eSummary_041029.dtd">
+<eSummaryResult>
+
+<DocSum>
+<Id>28800982</Id>
+<Item Name="Caption" Type="String">AAO47091</Item>
+<Item Name="Title" Type="String">hemochromatosis [Homo sapiens]</Item>
+<Item Name="Extra" Type="String">gi|28800982|gb|AAO47091.1|[28800982]</Item>
+<Item Name="Gi" Type="Integer">28800982</Item>
+<Item Name="CreateDate" Type="String">2003/03/03</Item>
+<Item Name="UpdateDate" Type="String">2003/03/03</Item>
+<Item Name="Flags" Type="Integer">0</Item>
+<Item Name="TaxId" Type="Integer">9606</Item>
+<Item Name="Length" Type="Integer">268</Item>
+<Item Name="Status" Type="String">live</Item>
+<Item Name="ReplacedBy" Type="String"></Item>
+<Item Name="Comment" Type="String"><![CDATA[  ]]></Item>
+</DocSum>
+
+
+<DocSum>
+<Id>28628843</Id>
+<Item Name="Caption" Type="String">AAO49381</Item>
+<Item Name="Title" Type="String">erythroid associated factor [Homo sapiens]</Item>
+<Item Name="Extra" Type="String">gi|28628843|gb|AAO49381.1|AF485325_1[28628843]</Item>
+<Item Name="Gi" Type="Integer">28628843</Item>
+<Item Name="CreateDate" Type="String">2003/03/02</Item>
+<Item Name="UpdateDate" Type="String">2003/03/02</Item>
+<Item Name="Flags" Type="Integer">0</Item>
+<Item Name="TaxId" Type="Integer">9606</Item>
+<Item Name="Length" Type="Integer">102</Item>
+<Item Name="Status" Type="String">live</Item>
+<Item Name="ReplacedBy" Type="String"></Item>
+<Item Name="Comment" Type="String"><![CDATA[  ]]></Item>
+</DocSum>
+
+</eSummaryResult>

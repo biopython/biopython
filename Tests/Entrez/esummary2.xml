@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<!DOCTYPE eSummaryResult PUBLIC "-//NLM//DTD eSummaryResult, 29 October 2004//EN" "http://www.ncbi.nlm.nih.gov/entrez/query/DTD/eSummary_041029.dtd">
+<eSummaryResult>
+<DocSum>
+	<Id>27731</Id>
+	<Item Name="Title" Type="String">The American journal of obstetrics and diseases of women and children</Item>
+	<Item Name="MedAbbr" Type="String">Am J Obstet Dis Women Child</Item>
+	<Item Name="IsoAbbr" Type="String"></Item>
+	<Item Name="NlmId" Type="String">14820330R</Item>
+	<Item Name="pISSN" Type="String">0894-5543</Item>
+	<Item Name="eISSN" Type="String"></Item>
+	<Item Name="PublicationStartYear" Type="String">1868</Item>
+	<Item Name="PublicationEndYear" Type="String">1919</Item>
+	<Item Name="Publisher" Type="String">W.A. Townsend &amp; Adams, $c [1868-1919]</Item>
+	<Item Name="Language" Type="String">eng</Item>
+	<Item Name="Country" Type="String">United States</Item>
+	<Item Name="BroadHeading" Type="List"></Item>
+	<Item Name="ContinuationNotes" Type="String"></Item>
+</DocSum>
+
+<DocSum>
+	<Id>439</Id>
+	<Item Name="Title" Type="String">American journal of obstetrics and gynecology</Item>
+	<Item Name="MedAbbr" Type="String">Am J Obstet Gynecol</Item>
+	<Item Name="IsoAbbr" Type="String">Am. J. Obstet. Gynecol.</Item>
+	<Item Name="NlmId" Type="String">0370476</Item>
+	<Item Name="pISSN" Type="String">0002-9378</Item>
+	<Item Name="eISSN" Type="String">1097-6868</Item>
+	<Item Name="PublicationStartYear" Type="String">1920</Item>
+	<Item Name="PublicationEndYear" Type="String"></Item>
+	<Item Name="Publisher" Type="String">Elsevier,</Item>
+	<Item Name="Language" Type="String">eng</Item>
+	<Item Name="Country" Type="String">United States</Item>
+	<Item Name="BroadHeading" Type="List">
+		<Item Name="string" Type="String">Gynecology</Item>
+		<Item Name="string" Type="String">Obstetrics</Item>
+	</Item>
+	<Item Name="ContinuationNotes" Type="String">Continues: American journal of obstetrics and diseases of women and children. </Item>
+</DocSum>
+
+<DocSum>
+	<Id>735</Id>
+	<Item Name="Title" Type="String">Archives of gynecology and obstetrics</Item>
+	<Item Name="MedAbbr" Type="String">Arch Gynecol Obstet</Item>
+	<Item Name="IsoAbbr" Type="String">Arch. Gynecol. Obstet.</Item>
+	<Item Name="NlmId" Type="String">8710213</Item>
+	<Item Name="pISSN" Type="String">0932-0067</Item>
+	<Item Name="eISSN" Type="String">1432-0711</Item>
+	<Item Name="PublicationStartYear" Type="String">1987</Item>
+	<Item Name="PublicationEndYear" Type="String"></Item>
+	<Item Name="Publisher" Type="String">Springer Verlag</Item>
+	<Item Name="Language" Type="String">eng</Item>
+	<Item Name="Country" Type="String">Germany</Item>
+	<Item Name="BroadHeading" Type="List">
+		<Item Name="string" Type="String">Gynecology</Item>
+		<Item Name="string" Type="String">Obstetrics</Item>
+	</Item>
+	<Item Name="ContinuationNotes" Type="String">Continues: Archives of gynecology. </Item>
+</DocSum>
+
+<DocSum>
+	<Id>905</Id>
+	<Item Name="Title" Type="String">Asia-Oceania journal of obstetrics and gynaecology / AOFOG</Item>
+	<Item Name="MedAbbr" Type="String">Asia Oceania J Obstet Gynaecol</Item>
+	<Item Name="IsoAbbr" Type="String"></Item>
+	<Item Name="NlmId" Type="String">8102781</Item>
+	<Item Name="pISSN" Type="String">0389-2328</Item>
+	<Item Name="eISSN" Type="String"></Item>
+	<Item Name="PublicationStartYear" Type="String">1980</Item>
+	<Item Name="PublicationEndYear" Type="String">1994</Item>
+	<Item Name="Publisher" Type="String">University Of Tokyo Press</Item>
+	<Item Name="Language" Type="String">eng</Item>
+	<Item Name="Country" Type="String">Japan</Item>
+	<Item Name="BroadHeading" Type="List">
+		<Item Name="string" Type="String">Gynecology</Item>
+		<Item Name="string" Type="String">Obstetrics</Item>
+	</Item>
+	<Item Name="ContinuationNotes" Type="String">Continues: Journal of the Asian Federation of Obstetrics and Gynaecology. Continued by: Journal of obstetrics and gynaecology (Tokyo, Japan). </Item>
+</DocSum>
+
+</eSummaryResult>

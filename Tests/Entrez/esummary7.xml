@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE eSummaryResult PUBLIC "-//NLM//DTD eSummaryResult, 29 October 2004//EN" "http://www.ncbi.nlm.nih.gov/entrez/query/DTD/eSummary_041029.dtd">
+<eSummaryResult>
+<DocSum>
+	<Id>254085</Id>
+	<Item Name="Marker_Name" Type="String">SE234324</Item>
+	<Item Name="Map_Gene_Summary_List" Type="List">
+		<Item Name="Map_Gene_Summary" Type="Structure">
+			<Item Name="Org" Type="String">Sus scrofa</Item>
+			<Item Name="Chr" Type="String"> chromosome 7</Item>
+			<Item Name="Locus" Type="String"></Item>
+		</Item>
+	</Item>
+	<Item Name="EPCR_Summary" Type="String">Found by e-PCR in sequences from Sus scrofa.</Item>
+	<Item Name="LocusId" Type="String"></Item>
+</DocSum>
+
+<DocSum>
+	<Id>254086</Id>
+	<Item Name="Marker_Name" Type="String">SE259162</Item>
+	<Item Name="Map_Gene_Summary_List" Type="List">
+		<Item Name="Map_Gene_Summary" Type="Structure">
+			<Item Name="Org" Type="String">Sus scrofa</Item>
+			<Item Name="Chr" Type="String"> chromosome 12</Item>
+			<Item Name="Locus" Type="String"></Item>
+		</Item>
+	</Item>
+	<Item Name="EPCR_Summary" Type="String">Found by e-PCR in sequences from Sus scrofa.</Item>
+	<Item Name="LocusId" Type="String"></Item>
+</DocSum>
+
+</eSummaryResult>

@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!DOCTYPE eSummaryResult PUBLIC "-//NLM//DTD eSummaryResult, 29 October 2004//EN" "http://www.ncbi.nlm.nih.gov/entrez/query/DTD/eSummary_041029.dtd">
+<eSummaryResult>
+<DocSum>
+	<Id>9913</Id>
+	<Item Name="Rank" Type="String">species</Item>
+	<Item Name="Division" Type="String">even-toed ungulates</Item>
+	<Item Name="ScientificName" Type="String">Bos taurus</Item>
+	<Item Name="CommonName" Type="String">cattle</Item>
+	<Item Name="TaxId" Type="Integer">9913</Item>
+	<Item Name="NucNumber" Type="Integer">2264214</Item>
+	<Item Name="ProtNumber" Type="Integer">55850</Item>
+	<Item Name="StructNumber" Type="Integer">1517</Item>
+	<Item Name="GenNumber" Type="Integer">31</Item>
+	<Item Name="GeneNumber" Type="Integer">29651</Item>
+	<Item Name="Genus" Type="String"></Item>
+	<Item Name="Species" Type="String"></Item>
+	<Item Name="Subsp" Type="String"></Item>
+</DocSum>
+
+<DocSum>
+	<Id>30521</Id>
+	<Item Name="Rank" Type="String">species</Item>
+	<Item Name="Division" Type="String">even-toed ungulates</Item>
+	<Item Name="ScientificName" Type="String">Bos grunniens</Item>
+	<Item Name="CommonName" Type="String">domestic yak</Item>
+	<Item Name="TaxId" Type="Integer">30521</Item>
+	<Item Name="NucNumber" Type="Integer">560</Item>
+	<Item Name="ProtNumber" Type="Integer">254</Item>
+	<Item Name="StructNumber" Type="Integer">0</Item>
+	<Item Name="GenNumber" Type="Integer">1</Item>
+	<Item Name="GeneNumber" Type="Integer">13</Item>
+	<Item Name="Genus" Type="String"></Item>
+	<Item Name="Species" Type="String"></Item>
+	<Item Name="Subsp" Type="String"></Item>
+</DocSum>
+
+</eSummaryResult>

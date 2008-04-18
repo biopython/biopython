@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!DOCTYPE eSummaryResult PUBLIC "-//NLM//DTD eSummaryResult, 29 October 2004//EN" "http://www.ncbi.nlm.nih.gov/entrez/query/DTD/eSummary_041029.dtd">
+<eSummaryResult>
+<DocSum>
+	<Id>19923</Id>
+	<Item Name="PdbAcc" Type="String">1L5J</Item>
+	<Item Name="PdbDescr" Type="String">Crystal Structure Of E. Coli Aconitase B</Item>
+	<Item Name="EC" Type="String">4.2.1.3</Item>
+	<Item Name="Resolution" Type="String">2.4</Item>
+	<Item Name="ExpMethod" Type="String">X-Ray Diffraction</Item>
+	<Item Name="PdbClass" Type="String">Lyase</Item>
+	<Item Name="PdbReleaseDate" Type="String">2007/8/27</Item>
+	<Item Name="PdbDepositDate" Type="String">2002/3/7</Item>
+	<Item Name="DepositDate" Type="String">2007/10/25</Item>
+	<Item Name="ModifyDate" Type="String">2007/10/25</Item>
+	<Item Name="LigCode" Type="String">F3S|TRA</Item>
+	<Item Name="LigCount" Type="String">2</Item>
+	<Item Name="ModProteinResCount" Type="String">0</Item>
+	<Item Name="ModDNAResCount" Type="String">0</Item>
+	<Item Name="ModRNAResCount" Type="String">0</Item>
+	<Item Name="ProteinChainCount" Type="String">2</Item>
+	<Item Name="DNAChainCount" Type="String">0</Item>
+	<Item Name="RNAChainCount" Type="String">0</Item>
+</DocSum>
+
+<DocSum>
+	<Id>12120</Id>
+	<Item Name="PdbAcc" Type="String">1B0K</Item>
+	<Item Name="PdbDescr" Type="String">S642a:fluorocitrate Complex Of Aconitase</Item>
+	<Item Name="EC" Type="String">4.2.1.3</Item>
+	<Item Name="Resolution" Type="String">2.5</Item>
+	<Item Name="ExpMethod" Type="String">X-Ray Diffraction</Item>
+	<Item Name="PdbClass" Type="String">Lyase</Item>
+	<Item Name="PdbReleaseDate" Type="String">2007/8/27</Item>
+	<Item Name="PdbDepositDate" Type="String">1998/11/11</Item>
+	<Item Name="DepositDate" Type="String">2007/10/07</Item>
+	<Item Name="ModifyDate" Type="String">2007/10/07</Item>
+	<Item Name="LigCode" Type="String">FLC|O|SF4</Item>
+	<Item Name="LigCount" Type="String">3</Item>
+	<Item Name="ModProteinResCount" Type="String">0</Item>
+	<Item Name="ModDNAResCount" Type="String">0</Item>
+	<Item Name="ModRNAResCount" Type="String">0</Item>
+	<Item Name="ProteinChainCount" Type="String">1</Item>
+	<Item Name="DNAChainCount" Type="String">0</Item>
+	<Item Name="RNAChainCount" Type="String">0</Item>
+</DocSum>
+
+</eSummaryResult>
