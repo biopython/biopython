@@ -18,7 +18,7 @@ def testing_suite():
 
     test_loader = unittest.TestLoader()
     test_loader.testMethodPrefix = 't_'
-    tests = [EInfoTest, ESearchTest]
+    tests = [EInfoTest, ESearchTest, EPostTest, ESummaryTest]
     
     for test in tests:
         cur_suite = test_loader.loadTestsFromTestCase(test)
@@ -32,6 +32,8 @@ class EInfoTest(unittest.TestCase):
     def t_list(self):
         '''Test parsing database list returned by EInfo
         '''
+        # To create the XML file, use
+        # >>> Bio.Entrez.einfo()
         input = open('Entrez/einfo1.xml')
         record = Entrez.read(input)
         assert record==['pubmed',
@@ -75,6 +77,8 @@ class EInfoTest(unittest.TestCase):
     def t_pubmed(self):
         '''Test parsing database info returned by EInfo
         '''
+        # To create the XML file, use
+        # >>> Bio.Entrez.einfo(db="pubmed")
         input = open('Entrez/einfo2.xml')
         record = Entrez.read(input)
         assert record['DbName']=='pubmed'
@@ -145,7 +149,7 @@ class ESearchTest(unittest.TestCase):
         assert record['RetMax']==100
         assert record['RetStart']==0
         assert record['QueryKey']=='12'
-	assert record['WebEnv']=='0rYFb69LfbTFXfG7-0HPo2BU-ZFWF1s_51WtYR5e0fAzThQCR0WIW12inPQRRIj1xUzSfGgG9ovT9-@263F6CC86FF8F760_0173SID'
+        assert record['WebEnv']=='0rYFb69LfbTFXfG7-0HPo2BU-ZFWF1s_51WtYR5e0fAzThQCR0WIW12inPQRRIj1xUzSfGgG9ovT9-@263F6CC86FF8F760_0173SID'
         assert len(record['IdList'])==100
         assert record['IdList'][0]=='18411453'
         assert record['IdList'][1]=='18411431'
@@ -511,18 +515,439 @@ class ESearchTest(unittest.TestCase):
         assert len(record['IdList'])==0
         assert len(record['TranslationSet'])==0
         assert record['QueryTranslation']==''
-	assert len(record['ErrorList'])==2
-	assert "PhraseNotFound" in record['ErrorList']
-	assert "FieldNotFound" in record['ErrorList']
-	assert len(record['ErrorList']["PhraseNotFound"])==1
-	assert record['ErrorList']["PhraseNotFound"][0]=="abcXYZ"
-	assert len(record['ErrorList']["FieldNotFound"])==0
+        assert len(record['ErrorList'])==2
+        assert "PhraseNotFound" in record['ErrorList']
+        assert "FieldNotFound" in record['ErrorList']
+        assert len(record['ErrorList']["PhraseNotFound"])==1
+        assert record['ErrorList']["PhraseNotFound"][0]=="abcXYZ"
+        assert len(record['ErrorList']["FieldNotFound"])==0
         assert len(record['WarningList'])==3
         assert "PhraseIgnored" in record['WarningList']
         assert "QuotedPhraseNotFound" in record['WarningList']
         assert "OutputMessage" in record['WarningList']
         assert len(record['WarningList']["OutputMessage"])==1
         assert record['WarningList']["OutputMessage"][0]=="No items found."
+
+class EPostTest(unittest.TestCase):
+    '''Tests for parsing XML output returned by EPost
+    '''
+    # Don't know how to get an InvalidIdList in the XML returned by EPost;
+    # unable to test if we are parsing it correctly.
+    def t_epost(self):
+        '''Test parsing XML returned by EPost
+        '''
+        # To create the XML file, use
+        # >>> Bio.Entrez.epost(db="pubmed", id="11237011")
+        input = open('Entrez/epost1.xml')
+        record = Entrez.read(input)
+        assert record["QueryKey"]== '1'
+        assert record["WebEnv"]=='0zYsuLk3zG_lRMkblPBEqnT8nIENUGw4HAy8xXChTnoVm7GEnWY71jv3nz@1FC077F3806DE010_0042SID'
+
+    def t_wrong(self):
+        '''Test parsing XML returned by EPost with incorrect arguments
+        '''
+        # To create the XML file, use
+        # >>> Bio.Entrez.epost(db="nothing")
+        input = open('Entrez/epost2.xml')
+        exception_triggered = False
+        try:
+            record = Entrez.read(input)
+        except ValueError, exception:
+            assert exception.message=="Wrong DB name"
+            exception_triggered = True
+        assert exception_triggered
+
+
+class ESummaryTest(unittest.TestCase):
+    '''Tests for parsing XML output returned by ESummary
+    '''
+    # Items have a type, which can be
+    # (Integer|Date|String|Structure|List|Flags|Qualifier|Enumerator|Unknown)
+    # I don't have an XML file where the type "Flags", "Qualifier",
+    # "Enumerator", or "Unknown" is used, so they are not tested here.
+    def t_pubmed(self):
+        '''Test parsing XML returned by ESummary from PubMed
+        '''
+        # In PubMed display records for PMIDs 11850928 and 11482001 in
+        # xml retrieval mode
+        # To create the XML file, use
+        # >>> Bio.Entrez.esummary(db="pubmed", id=["11850928","11482001"],
+        #                         retmode="xml")
+        input = open('Entrez/esummary1.xml')
+        record = Entrez.read(input)
+        assert record[0]["Id"]=="11850928"
+        assert record[0]["Item"][0]==["PubDate", "Date", "1965 Aug"]
+        assert record[0]["Item"][1]==["EPubDate", "Date", ""]
+        assert record[0]["Item"][2]==["Source", "String", "Arch Dermatol"]
+        assert record[0]["Item"][3][:2]==["AuthorList", "List"]
+        assert len(record[0]["Item"][3][2])==2
+        assert record[0]["Item"][3][2][0]==["Author", "String", "LoPresti PJ"]
+        assert record[0]["Item"][3][2][1]==["Author", "String", "Hambrick GW Jr"]
+        assert record[0]["Item"][4]==["LastAuthor", "String", "Hambrick GW Jr"]
+        assert record[0]["Item"][5]==["Title", "String", "Zirconium granuloma following treatment of rhus dermatitis."]
+        assert record[0]["Item"][6]==["Volume", "String", "92"]
+        assert record[0]["Item"][7]==["Issue", "String", "2"]
+        assert record[0]["Item"][8]==["Pages", "String", "188-91"]
+        assert record[0]["Item"][9][:2]==["LangList", "List"]
+        assert len(record[0]["Item"][9][2])==1
+        assert record[0]["Item"][9][2][0]==["Lang", "String", "English"]
+        assert record[0]["Item"][10]==["NlmUniqueID", "String", "0372433"]
+        assert record[0]["Item"][11]==["ISSN", "String", "0003-987X"]
+        assert record[0]["Item"][12]==["ESSN", "String", "1538-3652"]
+        assert record[0]["Item"][13][:2]==["PubTypeList", "List"]
+        assert len(record[0]["Item"][13][2])==1
+        assert record[0]["Item"][13][2][0]==["PubType", "String", "Journal Article"]
+        assert record[0]["Item"][14]==["RecordStatus", "String", "PubMed - indexed for MEDLINE"]
+        assert record[0]["Item"][15]==["PubStatus", "String", "ppublish"]
+        assert record[0]["Item"][16][:2]==["ArticleIds", "List"]
+        assert len(record[0]["Item"][16][2])==1
+        assert record[0]["Item"][16][2][0]==["pubmed", "String", "11850928"]
+        assert record[0]["Item"][17][:2]==["History", "List"]
+        assert len(record[0]["Item"][17][2])==2
+        assert record[0]["Item"][17][2][0]==["pubmed", "Date", "1965/08/01 00:00"]
+        assert record[0]["Item"][17][2][1]==["medline", "Date", "2002/03/09 10:01"]
+        assert record[0]["Item"][18][:2]==["References", "List"]
+        assert len(record[0]["Item"][18][2])==0
+        assert record[0]["Item"][19]==["HasAbstract", "Integer", 1]
+        assert record[0]["Item"][20]==["PmcRefCount", "Integer", 0]
+        assert record[0]["Item"][21]==["FullJournalName", "String", "Archives of dermatology"]
+        assert record[0]["Item"][22]==["ELocationID", "String", ""]
+        assert record[0]["Item"][23]==["SO", "String", "1965 Aug;92(2):188-91"]
+
+        assert record[1]["Id"]=="11482001"
+        assert record[1]["Item"][0]==["PubDate", "Date", "2001 Jun"]
+        assert record[1]["Item"][1]==["EPubDate", "Date", ""]
+        assert record[1]["Item"][2]==["Source", "String", "Adverse Drug React Toxicol Rev"]
+        assert record[1]["Item"][3][:2]==["AuthorList", "List"]
+        assert record[1]["Item"][3][2][0]==["Author", "String", "Mantle D"]
+        assert record[1]["Item"][3][2][1]==["Author", "String", "Gok MA"]
+        assert record[1]["Item"][3][2][2]==["Author", "String", "Lennard TW"]
+        assert record[1]["Item"][4]==["LastAuthor", "String", "Lennard TW"]
+        assert record[1]["Item"][5]==["Title", "String", "Adverse and beneficial effects of plant extracts on skin and skin disorders."]
+        assert record[1]["Item"][6]==["Volume", "String", "20"]
+        assert record[1]["Item"][7]==["Issue", "String", "2"]
+        assert record[1]["Item"][8]==["Pages", "String", "89-103"]
+        assert record[1]["Item"][9][:2]==["LangList", "List"]
+        assert len(record[1]["Item"][9][2])==1
+        assert record[1]["Item"][9][2][0]==["Lang", "String", "English"]
+        assert record[1]["Item"][10]==["NlmUniqueID", "String", "9109474"]
+        assert record[1]["Item"][11]==["ISSN", "String", "0964-198X"]
+        assert record[1]["Item"][12]==["ESSN", "String", ""]
+        assert record[1]["Item"][13][:2]==["PubTypeList", "List"]
+        assert len(record[1]["Item"][13][2])==2
+        assert record[1]["Item"][13][2][0]==["PubType", "String", "Journal Article"]
+        assert record[1]["Item"][13][2][1]==["PubType", "String", "Review"]
+        assert record[1]["Item"][14]==["RecordStatus", "String", "PubMed - indexed for MEDLINE"]
+        assert record[1]["Item"][15]==["PubStatus", "String", "ppublish"]
+        assert record[1]["Item"][16][:2]==["ArticleIds", "List"]
+        assert len(record[1]["Item"][16][2])==1
+        assert record[1]["Item"][16][2][0]==["pubmed", "String", "11482001"]
+        assert record[1]["Item"][17][:2]==["History", "List"]
+        assert len(record[1]["Item"][17][2])==2
+        assert record[1]["Item"][17][2][0]==["pubmed", "Date", "2001/08/03 10:00"]
+        assert record[1]["Item"][17][2][1]==["medline", "Date", "2002/01/23 10:01"]
+        assert record[1]["Item"][18][:2]==["References", "List"]
+        assert len(record[1]["Item"][18][2])==0
+        assert record[1]["Item"][19]==["HasAbstract", "Integer", 1]
+        assert record[1]["Item"][20]==["PmcRefCount", "Integer", 0]
+        assert record[1]["Item"][21]==["FullJournalName", "String", "Adverse drug reactions and toxicological reviews"]
+        assert record[1]["Item"][22]==["ELocationID", "String", ""]
+        assert record[1]["Item"][23]==["SO", "String", "2001 Jun;20(2):89-103"]
+
+    def t_journals(self):
+        '''Test parsing XML returned by ESummary from the Journals database
+        '''
+        # In Journals display records for journal IDs 27731,439,735,905 
+        # To create the XML file, use
+        # >>> Bio.Entrez.esummary(db="journals", id="27731,439,735,905")
+        input = open('Entrez/esummary2.xml')
+        record = Entrez.read(input)
+        assert record[0]["Id"]=="27731"
+        assert record[0]["Item"][0]==["Title", "String", "The American journal of obstetrics and diseases of women and children"]
+        assert record[0]["Item"][1]==["MedAbbr", "String", "Am J Obstet Dis Women Child"]
+        assert record[0]["Item"][2]==["IsoAbbr", "String", ""]
+        assert record[0]["Item"][3]==["NlmId", "String", "14820330R"]
+        assert record[0]["Item"][4]==["pISSN", "String", "0894-5543"]
+        assert record[0]["Item"][5]==["eISSN", "String", ""]
+        assert record[0]["Item"][6]==["PublicationStartYear", "String", "1868"]
+        assert record[0]["Item"][7]==["PublicationEndYear", "String", "1919"]
+        assert record[0]["Item"][8]==["Publisher", "String", "W.A. Townsend & Adams, $c [1868-1919]"]
+        assert record[0]["Item"][9]==["Language", "String", "eng"]
+        assert record[0]["Item"][10]==["Country", "String", "United States"]
+        assert record[0]["Item"][11][:2]==["BroadHeading", "List"]
+        assert len(record[0]["Item"][11][2])==0
+        assert record[0]["Item"][12]==["ContinuationNotes", "String", ""]
+
+        assert record[1]["Id"]=="439"
+        assert record[1]["Item"][0]==["Title", "String", "American journal of obstetrics and gynecology"]
+        assert record[1]["Item"][1]==["MedAbbr", "String", "Am J Obstet Gynecol"]
+        assert record[1]["Item"][2]==["IsoAbbr", "String", "Am. J. Obstet. Gynecol."]
+        assert record[1]["Item"][3]==["NlmId", "String", "0370476"]
+        assert record[1]["Item"][4]==["pISSN", "String", "0002-9378"]
+        assert record[1]["Item"][5]==["eISSN", "String", "1097-6868"]
+        assert record[1]["Item"][6]==["PublicationStartYear", "String", "1920"]
+        assert record[1]["Item"][7]==["PublicationEndYear", "String", ""]
+        assert record[1]["Item"][8]==["Publisher", "String", "Elsevier,"]
+        assert record[1]["Item"][9]==["Language", "String", "eng"]
+        assert record[1]["Item"][10]==["Country", "String", "United States"]
+        assert record[1]["Item"][11][:2]==["BroadHeading", "List"]
+        assert len(record[1]["Item"][11][2])==2
+        assert record[1]["Item"][11][2][0]==["string", "String", "Gynecology"]
+        assert record[1]["Item"][11][2][1]==["string", "String", "Obstetrics"]
+        assert record[1]["Item"][12]==["ContinuationNotes", "String", "Continues: American journal of obstetrics and diseases of women and children. "]
+
+        assert record[2]["Id"]=="735"
+        assert record[2]["Item"][0]==["Title", "String", "Archives of gynecology and obstetrics"]
+        assert record[2]["Item"][1]==["MedAbbr", "String", "Arch Gynecol Obstet"]
+        assert record[2]["Item"][2]==["IsoAbbr", "String", "Arch. Gynecol. Obstet."]
+        assert record[2]["Item"][3]==["NlmId", "String", "8710213"]
+        assert record[2]["Item"][4]==["pISSN", "String", "0932-0067"]
+        assert record[2]["Item"][5]==["eISSN", "String", "1432-0711"]
+        assert record[2]["Item"][6]==["PublicationStartYear", "String", "1987"]
+        assert record[2]["Item"][7]==["PublicationEndYear", "String", ""]
+        assert record[2]["Item"][8]==["Publisher", "String", "Springer Verlag"]
+        assert record[2]["Item"][9]==["Language", "String", "eng"]
+        assert record[2]["Item"][10]==["Country", "String", "Germany"]
+        assert record[2]["Item"][11][:2]==["BroadHeading", "List"]
+        assert len(record[2]["Item"][11][2])==2
+        assert record[2]["Item"][11][2][0]==["string", "String", "Gynecology"]
+        assert record[2]["Item"][11][2][1]==["string", "String", "Obstetrics"]
+        assert record[2]["Item"][12]==["ContinuationNotes", "String", "Continues: Archives of gynecology. "]
+
+        assert record[3]["Id"]=="905"
+        assert record[3]["Item"][0]==["Title", "String", "Asia-Oceania journal of obstetrics and gynaecology / AOFOG"]
+        assert record[3]["Item"][1]==["MedAbbr", "String", "Asia Oceania J Obstet Gynaecol"]
+        assert record[3]["Item"][2]==["IsoAbbr", "String", ""]
+        assert record[3]["Item"][3]==["NlmId", "String", "8102781"]
+        assert record[3]["Item"][4]==["pISSN", "String", "0389-2328"]
+        assert record[3]["Item"][5]==["eISSN", "String", ""]
+        assert record[3]["Item"][6]==["PublicationStartYear", "String", "1980"]
+        assert record[3]["Item"][7]==["PublicationEndYear", "String", "1994"]
+        assert record[3]["Item"][8]==["Publisher", "String", "University Of Tokyo Press"]
+        assert record[3]["Item"][9]==["Language", "String", "eng"]
+        assert record[3]["Item"][10]==["Country", "String", "Japan"]
+        assert record[3]["Item"][11][:2]==["BroadHeading", "List"]
+        assert len(record[3]["Item"][11][2])==2
+        assert record[3]["Item"][11][2][0]==["string", "String", "Gynecology"]
+        assert record[3]["Item"][11][2][1]==["string", "String", "Obstetrics"]
+        assert record[3]["Item"][12]==["ContinuationNotes", "String", "Continues: Journal of the Asian Federation of Obstetrics and Gynaecology. Continued by: Journal of obstetrics and gynaecology (Tokyo, Japan). "]
+
+    def t_protein(self):
+        '''Test parsing XML returned by ESummary from the Protein database
+        '''
+        # In Protein display records for GIs 28800982 and 28628843 in xml retrieval mode
+        # To create the XML file, use
+        # >>> Bio.Entrez.esummary(db="protein", id="28800982,28628843", retmode="xml")
+        input = open('Entrez/esummary3.xml')
+        record = Entrez.read(input)
+
+        assert record[0]["Id"]=="28800982"
+        assert record[0]["Item"][0]==["Caption", "String", "AAO47091"]
+        assert record[0]["Item"][1]==["Title", "String", "hemochromatosis [Homo sapiens]"]
+        assert record[0]["Item"][2]==["Extra", "String", "gi|28800982|gb|AAO47091.1|[28800982]"]
+        assert record[0]["Item"][3]==["Gi", "Integer", 28800982]
+        assert record[0]["Item"][4]==["CreateDate", "String", "2003/03/03"]
+        assert record[0]["Item"][5]==["UpdateDate", "String", "2003/03/03"]
+        assert record[0]["Item"][6]==["Flags", "Integer", 0]
+        assert record[0]["Item"][7]==["TaxId", "Integer", 9606]
+        assert record[0]["Item"][8]==["Length", "Integer", 268]
+        assert record[0]["Item"][9]==["Status", "String", "live"]
+        assert record[0]["Item"][10]==["ReplacedBy", "String", ""]
+        assert record[0]["Item"][11]==["Comment", "String", "  "]
+
+        assert record[1]["Id"]=="28628843"
+        assert record[1]["Item"][0]==["Caption", "String", "AAO49381"]
+        assert record[1]["Item"][1]==["Title", "String", "erythroid associated factor [Homo sapiens]"]
+        assert record[1]["Item"][2]==["Extra", "String", "gi|28628843|gb|AAO49381.1|AF485325_1[28628843]"]
+        assert record[1]["Item"][3]==["Gi", "Integer", 28628843]
+        assert record[1]["Item"][4]==["CreateDate", "String", "2003/03/02"]
+        assert record[1]["Item"][5]==["UpdateDate", "String", "2003/03/02"]
+        assert record[1]["Item"][6]==["Flags", "Integer", 0]
+        assert record[1]["Item"][7]==["TaxId", "Integer", 9606]
+        assert record[1]["Item"][8]==["Length", "Integer", 102]
+        assert record[1]["Item"][9]==["Status", "String", "live"]
+        assert record[1]["Item"][10]==["ReplacedBy", "String", ""]
+        assert record[1]["Item"][11]==["Comment", "String", "  "]
+
+    def t_nucleotide(self):
+        '''Test parsing XML returned by ESummary from the Nucleotide database
+        '''
+        # In Nucleotide display records for GIs 28864546 and 28800981
+        # in xml retrieval mode
+        # To create the XML file, use
+        # >>> Bio.Entrez.esummary(db="nucleotide", id="28864546,28800981",
+        #                         retmode="xml")
+        input = open('Entrez/esummary4.xml')
+        record = Entrez.read(input)
+
+        assert record[0]["Id"]=="28864546"
+        assert record[0]["Item"][0]==["Caption", "String", "AY207443"]
+        assert record[0]["Item"][1]==["Title", "String", "Homo sapiens alpha hemoglobin (HBZP) pseudogene 3' UTR/AluJo repeat breakpoint junction"]
+        assert record[0]["Item"][2]==["Extra", "String", "gi|28864546|gb|AY207443.1|[28864546]"]
+        assert record[0]["Item"][3]==["Gi", "Integer", 28864546]
+        assert record[0]["Item"][4]==["CreateDate", "String", "2003/03/05"]
+        assert record[0]["Item"][5]==["UpdateDate", "String", "2003/03/05"]
+        assert record[0]["Item"][6]==["Flags", "Integer", 0]
+        assert record[0]["Item"][7]==["TaxId", "Integer", 9606]
+        assert record[0]["Item"][8]==["Length", "Integer", 491]
+        assert record[0]["Item"][9]==["Status", "String", "live"]
+        assert record[0]["Item"][10]==["ReplacedBy", "String", ""]
+        assert record[0]["Item"][11]==["Comment", "String", "  "]
+
+        assert record[1]["Id"]=="28800981"
+        assert record[1]["Item"][0]==["Caption", "String", "AY205604"]
+        assert record[1]["Item"][1]==["Title", "String", "Homo sapiens hemochromatosis (HFE) mRNA, partial cds"]
+        assert record[1]["Item"][2]==["Extra", "String", "gi|28800981|gb|AY205604.1|[28800981]"]
+        assert record[1]["Item"][3]==["Gi", "Integer", 28800981]
+        assert record[1]["Item"][4]==["CreateDate", "String", "2003/03/03"]
+        assert record[1]["Item"][5]==["UpdateDate", "String", "2003/03/03"]
+        assert record[1]["Item"][6]==["Flags", "Integer", 0]
+        assert record[1]["Item"][7]==["TaxId", "Integer", 9606]
+        assert record[1]["Item"][8]==["Length", "Integer", 860]
+        assert record[1]["Item"][9]==["Status", "String", "live"]
+        assert record[1]["Item"][10]==["ReplacedBy", "String", ""]
+        assert record[1]["Item"][11]==["Comment", "String", "  "]
+
+    def t_structure(self):
+        '''Test parsing XML returned by ESummary from the Structure database
+        '''
+        # In Nucleotide display records for GIs 28864546 and 28800981
+        # in xml retrieval mode
+        # To create the XML file, use
+        # >>> Bio.Entrez.esummary(db="structure", id=["19923","12120"],
+        #                         retmode="xml")
+        input = open('Entrez/esummary5.xml')
+        record = Entrez.read(input)
+        assert record[0]["Id"]=="19923"
+        assert record[0]["Item"][0]==["PdbAcc", "String", "1L5J"]
+        assert record[0]["Item"][1]==["PdbDescr", "String", "Crystal Structure Of E. Coli Aconitase B"]
+        assert record[0]["Item"][2]==["EC", "String", "4.2.1.3"]
+        assert record[0]["Item"][3]==["Resolution", "String", "2.4"]
+        assert record[0]["Item"][4]==["ExpMethod", "String", "X-Ray Diffraction"]
+        assert record[0]["Item"][5]==["PdbClass", "String", "Lyase"]
+        assert record[0]["Item"][6]==["PdbReleaseDate", "String", "2007/8/27"]
+        assert record[0]["Item"][7]==["PdbDepositDate", "String", "2002/3/7"]
+        assert record[0]["Item"][8]==["DepositDate", "String", "2007/10/25"]
+        assert record[0]["Item"][9]==["ModifyDate", "String", "2007/10/25"]
+        assert record[0]["Item"][10]==["LigCode", "String", "F3S|TRA"]
+        assert record[0]["Item"][11]==["LigCount", "String", "2"]
+        assert record[0]["Item"][12]==["ModProteinResCount", "String", "0"]
+        assert record[0]["Item"][13]==["ModDNAResCount", "String", "0"]
+        assert record[0]["Item"][14]==["ModRNAResCount", "String", "0"]
+        assert record[0]["Item"][15]==["ProteinChainCount", "String", "2"]
+        assert record[0]["Item"][16]==["DNAChainCount", "String", "0"]
+        assert record[0]["Item"][17]==["RNAChainCount", "String", "0"]
+
+        assert record[1]["Id"]=="12120"
+        assert record[1]["Item"][0]==["PdbAcc", "String", "1B0K"]
+        assert record[1]["Item"][1]==["PdbDescr", "String", "S642a:fluorocitrate Complex Of Aconitase"]
+        assert record[1]["Item"][2]==["EC", "String", "4.2.1.3"]
+        assert record[1]["Item"][3]==["Resolution", "String", "2.5"]
+        assert record[1]["Item"][4]==["ExpMethod", "String", "X-Ray Diffraction"]
+        assert record[1]["Item"][5]==["PdbClass", "String", "Lyase"]
+        assert record[1]["Item"][6]==["PdbReleaseDate", "String", "2007/8/27"]
+        assert record[1]["Item"][7]==["PdbDepositDate", "String", "1998/11/11"]
+        assert record[1]["Item"][8]==["DepositDate", "String", "2007/10/07"]
+        assert record[1]["Item"][9]==["ModifyDate", "String", "2007/10/07"]
+        assert record[1]["Item"][10]==["LigCode", "String", "FLC|O|SF4"]
+        assert record[1]["Item"][11]==["LigCount", "String", "3"]
+        assert record[1]["Item"][12]==["ModProteinResCount", "String", "0"]
+        assert record[1]["Item"][13]==["ModDNAResCount", "String", "0"]
+        assert record[1]["Item"][14]==["ModRNAResCount", "String", "0"]
+        assert record[1]["Item"][15]==["ProteinChainCount", "String", "1"]
+        assert record[1]["Item"][16]==["DNAChainCount", "String", "0"]
+        assert record[1]["Item"][17]==["RNAChainCount", "String", "0"]
+
+    def t_taxonomy(self):
+        '''Test parsing XML returned by ESummary from the Taxonomy database
+        '''
+        # In Taxonomy display records for TAXIDs 9913 and 30521 in
+        # xml retrieval mode 
+        # To create the XML file, use
+        # >>> Bio.Entrez.esummary(db="taxonomy", id=["9913","30521"],
+        #                         retmode="xml")
+        input = open('Entrez/esummary6.xml')
+        record = Entrez.read(input)
+        assert record[0]["Id"]=="9913"
+        assert record[0]["Item"][0]==["Rank", "String", "species"]
+        assert record[0]["Item"][1]==["Division", "String", "even-toed ungulates"]
+        assert record[0]["Item"][2]==["ScientificName", "String", "Bos taurus"]
+        assert record[0]["Item"][3]==["CommonName", "String", "cattle"]
+        assert record[0]["Item"][4]==["TaxId", "Integer", 9913]
+        assert record[0]["Item"][5]==["NucNumber", "Integer", 2264214]
+        assert record[0]["Item"][6]==["ProtNumber", "Integer", 55850]
+        assert record[0]["Item"][7]==["StructNumber", "Integer", 1517]
+        assert record[0]["Item"][8]==["GenNumber", "Integer", 31]
+        assert record[0]["Item"][9]==["GeneNumber", "Integer", 29651]
+        assert record[0]["Item"][10]==["Genus", "String", ""]
+        assert record[0]["Item"][11]==["Species", "String", ""]
+        assert record[0]["Item"][12]==["Subsp", "String", ""]
+
+        assert record[1]["Id"]=="30521"
+        assert record[1]["Item"][0]==["Rank", "String", "species"]
+        assert record[1]["Item"][1]==["Division", "String", "even-toed ungulates"]
+        assert record[1]["Item"][2]==["ScientificName", "String", "Bos grunniens"]
+        assert record[1]["Item"][3]==["CommonName", "String", "domestic yak"]
+        assert record[1]["Item"][4]==["TaxId", "Integer", 30521]
+        assert record[1]["Item"][5]==["NucNumber", "Integer", 560]
+        assert record[1]["Item"][6]==["ProtNumber", "Integer", 254]
+        assert record[1]["Item"][7]==["StructNumber", "Integer", 0]
+        assert record[1]["Item"][8]==["GenNumber", "Integer", 1]
+        assert record[1]["Item"][9]==["GeneNumber", "Integer", 13]
+        assert record[1]["Item"][10]==["Genus", "String", ""]
+        assert record[1]["Item"][11]==["Species", "String", ""]
+        assert record[1]["Item"][12]==["Subsp", "String", ""]
+
+    def t_unists(self):
+        '''Test parsing XML returned by ESummary from the UniSTS database
+        '''
+        # In UniSTS display records for IDs 254085 and 254086 in xml
+        # retrieval mode 
+        # To create the XML file, use
+        # >>> Bio.Entrez.esummary(db="unists", id=["254085","254086"],
+        #                         retmode="xml")
+        input = open('Entrez/esummary7.xml')
+        record = Entrez.read(input)
+
+        assert record[0]["Id"]=="254085"
+        assert record[0]["Item"][0]==["Marker_Name", "String", "SE234324"]
+        assert record[0]["Item"][1][:2]==["Map_Gene_Summary_List", "List"]
+        assert len(record[0]["Item"][1][2])==1
+        assert record[0]["Item"][1][2][0][:2]==["Map_Gene_Summary", "Structure"]
+        assert len(record[0]["Item"][1][2][0][2])==3
+        assert record[0]["Item"][1][2][0][2][0]==["Org", "String", "Sus scrofa"]
+        assert record[0]["Item"][1][2][0][2][1]==["Chr", "String", " chromosome 7"]
+        assert record[0]["Item"][1][2][0][2][2]==["Locus", "String", ""]
+        assert record[0]["Item"][2]==["EPCR_Summary", "String", "Found by e-PCR in sequences from Sus scrofa."]
+        assert record[0]["Item"][3]==["LocusId", "String", ""]
+
+        assert record[1]["Id"]=="254086"
+        assert record[1]["Item"][0]==["Marker_Name", "String", "SE259162"]
+        assert record[1]["Item"][1][:2]==["Map_Gene_Summary_List", "List"]
+        assert len(record[1]["Item"][1][2])==1
+        assert record[1]["Item"][1][2][0][:2]==["Map_Gene_Summary", "Structure"]
+        assert len(record[1]["Item"][1][2][0][2])==3
+        assert record[1]["Item"][1][2][0][2][0]==["Org", "String", "Sus scrofa"]
+        assert record[1]["Item"][1][2][0][2][1]==["Chr", "String", " chromosome 12"]
+        assert record[1]["Item"][1][2][0][2][2]==["Locus", "String", ""]
+        assert record[1]["Item"][2]==["EPCR_Summary", "String", "Found by e-PCR in sequences from Sus scrofa."]
+        assert record[1]["Item"][3]==["LocusId", "String", ""]
+
+    def t_wrong(self):
+        '''Test parsing XML returned by ESummary with incorrect arguments
+        '''
+        # To create the XML file, use
+        # >>> Bio.Entrez.esummary()
+        input = open('Entrez/esummary8.xml')
+        exception_triggered = False
+        try:
+            record = Entrez.read(input)
+        except ValueError, exception:
+            assert exception.message=="Neither query_key nor id specified"
+            exception_triggered = True
+        assert exception_triggered
+
+
 
 if __name__ == '__main__':
     sys.exit(run_tests(sys.argv))

@@ -9,8 +9,18 @@ Test parsing XML returned by ESearch from the Protein database ... ok
 Test parsing XML returned by ESearch from PubMed (first test) ... ok
 Test parsing XML returned by ESearch from PubMed (second test) ... ok
 Test parsing XML returned by ESearch from PubMed (third test) ... ok
+Test parsing XML returned by EPost ... ok
+Test parsing XML returned by EPost with incorrect arguments ... ok
+Test parsing XML returned by ESummary from the Journals database ... ok
+Test parsing XML returned by ESummary from the Nucleotide database ... ok
+Test parsing XML returned by ESummary from the Protein database ... ok
+Test parsing XML returned by ESummary from PubMed ... ok
+Test parsing XML returned by ESummary from the Structure database ... ok
+Test parsing XML returned by ESummary from the Taxonomy database ... ok
+Test parsing XML returned by ESummary from the UniSTS database ... ok
+Test parsing XML returned by ESummary with incorrect arguments ... ok
 
 ----------------------------------------------------------------------
-Ran 10 tests in 4.062s
+Ran 20 tests in 7.984s
 
 OK
