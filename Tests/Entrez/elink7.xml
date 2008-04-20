@@ -1,0 +1,227 @@
+<?xml version="1.0"?>
+<!DOCTYPE eLinkResult PUBLIC "-//NLM//DTD eLinkResult, 11 May 2002//EN" "http://www.ncbi.nlm.nih.gov/entrez/query/DTD/eLink_020511.dtd">
+<eLinkResult>
+<LinkSet>
+	<DbFrom>pubmed</DbFrom>
+	<IdCheckList>
+		<IdLinkSet>
+			<Id>12169658</Id>
+			<LinkInfo>
+				<DbTo>books</DbTo>
+				<LinkName>pubmed_books_refs</LinkName>
+				<MenuTag>Cited in Books</MenuTag>
+				<HtmlTag>Cited in Books</HtmlTag>
+				<Priority>185</Priority>
+			</LinkInfo>
+			<LinkInfo>
+				<DbTo>gene</DbTo>
+				<LinkName>pubmed_gene</LinkName>
+				<MenuTag>Gene Links</MenuTag>
+				<HtmlTag>Gene</HtmlTag>
+				<Priority>128</Priority>
+			</LinkInfo>
+			<LinkInfo>
+				<DbTo>geo</DbTo>
+				<LinkName>pubmed_geo</LinkName>
+				<MenuTag>GEO Profile Links</MenuTag>
+				<HtmlTag>GEO Profiles</HtmlTag>
+				<Priority>170</Priority>
+			</LinkInfo>
+			<LinkInfo>
+				<DbTo>homologene</DbTo>
+				<LinkName>pubmed_homologene</LinkName>
+				<MenuTag>HomoloGene Links</MenuTag>
+				<HtmlTag>HomoloGene</HtmlTag>
+				<Priority>128</Priority>
+			</LinkInfo>
+			<LinkInfo>
+				<DbTo>nuccore</DbTo>
+				<LinkName>pubmed_nuccore</LinkName>
+				<MenuTag>CoreNucleotide Links</MenuTag>
+				<HtmlTag>CoreNucleotide</HtmlTag>
+				<Priority>128</Priority>
+			</LinkInfo>
+			<LinkInfo>
+				<DbTo>nuccore</DbTo>
+				<LinkName>pubmed_nuccore_refseq</LinkName>
+				<MenuTag>CoreNucleotide (RefSeq) Links</MenuTag>
+				<HtmlTag>CoreNucleotide (RefSeq)</HtmlTag>
+				<Priority>128</Priority>
+			</LinkInfo>
+			<LinkInfo>
+				<DbTo>nucleotide</DbTo>
+				<LinkName>pubmed_nucleotide</LinkName>
+				<MenuTag>Nucleotide Links</MenuTag>
+				<HtmlTag>Nucleotide</HtmlTag>
+				<Priority>135</Priority>
+			</LinkInfo>
+			<LinkInfo>
+				<DbTo>nucleotide</DbTo>
+				<LinkName>pubmed_nucleotide_refseq</LinkName>
+				<MenuTag>Nucleotide (RefSeq) Links</MenuTag>
+				<HtmlTag>Nucleotide (RefSeq)</HtmlTag>
+				<Priority>128</Priority>
+			</LinkInfo>
+			<LinkInfo>
+				<DbTo>pcsubstance</DbTo>
+				<LinkName>pubmed_pcsubstance_mesh</LinkName>
+				<MenuTag>Substance (MeSH Keyword)</MenuTag>
+				<HtmlTag>Substance (MeSH Keyword)</HtmlTag>
+				<Priority>128</Priority>
+			</LinkInfo>
+			<LinkInfo>
+				<DbTo>pmc</DbTo>
+				<LinkName>pubmed_pmc_refs</LinkName>
+				<MenuTag>Cited in PMC</MenuTag>
+				<HtmlTag>Cited in PMC</HtmlTag>
+				<Url><![CDATA[http://www.pubmedcentral.gov/tocrender.fcgi?action=cited&tool=pubmed&pubmedid=<@UID@>]]></Url>
+				<Priority>180</Priority>
+			</LinkInfo>
+			<LinkInfo>
+				<DbTo>protein</DbTo>
+				<LinkName>pubmed_protein</LinkName>
+				<MenuTag>Protein Links</MenuTag>
+				<HtmlTag>Protein</HtmlTag>
+				<Priority>140</Priority>
+			</LinkInfo>
+			<LinkInfo>
+				<DbTo>protein</DbTo>
+				<LinkName>pubmed_protein_refseq</LinkName>
+				<MenuTag>Protein (RefSeq) Links</MenuTag>
+				<HtmlTag>Protein (RefSeq)</HtmlTag>
+				<Priority>128</Priority>
+			</LinkInfo>
+			<LinkInfo>
+				<DbTo>pubmed</DbTo>
+				<LinkName>pubmed_pubmed</LinkName>
+				<MenuTag>Related Articles</MenuTag>
+				<HtmlTag>Related Articles</HtmlTag>
+				<Priority>1</Priority>
+			</LinkInfo>
+			<LinkInfo>
+				<DbTo>taxonomy</DbTo>
+				<LinkName>pubmed_taxonomy_entrez</LinkName>
+				<MenuTag>Taxonomy via GenBank</MenuTag>
+				<HtmlTag>Taxonomy via GenBank</HtmlTag>
+				<Priority>128</Priority>
+			</LinkInfo>
+			<LinkInfo>
+				<DbTo>unigene</DbTo>
+				<LinkName>pubmed_unigene</LinkName>
+				<MenuTag>UniGene Links</MenuTag>
+				<HtmlTag>UniGene</HtmlTag>
+				<Priority>128</Priority>
+			</LinkInfo>
+			<LinkInfo>
+				<DbTo>LinkOut</DbTo>
+				<LinkName>ExternalLink</LinkName>
+				<MenuTag>LinkOut</MenuTag>
+				<HtmlTag>LinkOut</HtmlTag>
+				<Priority>255</Priority>
+			</LinkInfo>
+		</IdLinkSet>
+		<IdLinkSet>
+			<Id>11748140</Id>
+			<LinkInfo>
+				<DbTo>books</DbTo>
+				<LinkName>pubmed_books_refs</LinkName>
+				<MenuTag>Cited in Books</MenuTag>
+				<HtmlTag>Cited in Books</HtmlTag>
+				<Priority>185</Priority>
+			</LinkInfo>
+			<LinkInfo>
+				<DbTo>gene</DbTo>
+				<LinkName>pubmed_gene</LinkName>
+				<MenuTag>Gene Links</MenuTag>
+				<HtmlTag>Gene</HtmlTag>
+				<Priority>128</Priority>
+			</LinkInfo>
+			<LinkInfo>
+				<DbTo>geo</DbTo>
+				<LinkName>pubmed_geo</LinkName>
+				<MenuTag>GEO Profile Links</MenuTag>
+				<HtmlTag>GEO Profiles</HtmlTag>
+				<Priority>170</Priority>
+			</LinkInfo>
+			<LinkInfo>
+				<DbTo>nuccore</DbTo>
+				<LinkName>pubmed_nuccore</LinkName>
+				<MenuTag>CoreNucleotide Links</MenuTag>
+				<HtmlTag>CoreNucleotide</HtmlTag>
+				<Priority>128</Priority>
+			</LinkInfo>
+			<LinkInfo>
+				<DbTo>nuccore</DbTo>
+				<LinkName>pubmed_nuccore_refseq</LinkName>
+				<MenuTag>CoreNucleotide (RefSeq) Links</MenuTag>
+				<HtmlTag>CoreNucleotide (RefSeq)</HtmlTag>
+				<Priority>128</Priority>
+			</LinkInfo>
+			<LinkInfo>
+				<DbTo>nucleotide</DbTo>
+				<LinkName>pubmed_nucleotide</LinkName>
+				<MenuTag>Nucleotide Links</MenuTag>
+				<HtmlTag>Nucleotide</HtmlTag>
+				<Priority>135</Priority>
+			</LinkInfo>
+			<LinkInfo>
+				<DbTo>nucleotide</DbTo>
+				<LinkName>pubmed_nucleotide_refseq</LinkName>
+				<MenuTag>Nucleotide (RefSeq) Links</MenuTag>
+				<HtmlTag>Nucleotide (RefSeq)</HtmlTag>
+				<Priority>128</Priority>
+			</LinkInfo>
+			<LinkInfo>
+				<DbTo>pmc</DbTo>
+				<LinkName>pubmed_pmc_refs</LinkName>
+				<MenuTag>Cited in PMC</MenuTag>
+				<HtmlTag>Cited in PMC</HtmlTag>
+				<Url><![CDATA[http://www.pubmedcentral.gov/tocrender.fcgi?action=cited&tool=pubmed&pubmedid=<@UID@>]]></Url>
+				<Priority>180</Priority>
+			</LinkInfo>
+			<LinkInfo>
+				<DbTo>protein</DbTo>
+				<LinkName>pubmed_protein</LinkName>
+				<MenuTag>Protein Links</MenuTag>
+				<HtmlTag>Protein</HtmlTag>
+				<Priority>140</Priority>
+			</LinkInfo>
+			<LinkInfo>
+				<DbTo>protein</DbTo>
+				<LinkName>pubmed_protein_refseq</LinkName>
+				<MenuTag>Protein (RefSeq) Links</MenuTag>
+				<HtmlTag>Protein (RefSeq)</HtmlTag>
+				<Priority>128</Priority>
+			</LinkInfo>
+			<LinkInfo>
+				<DbTo>pubmed</DbTo>
+				<LinkName>pubmed_pubmed</LinkName>
+				<MenuTag>Related Articles</MenuTag>
+				<HtmlTag>Related Articles</HtmlTag>
+				<Priority>1</Priority>
+			</LinkInfo>
+			<LinkInfo>
+				<DbTo>taxonomy</DbTo>
+				<LinkName>pubmed_taxonomy_entrez</LinkName>
+				<MenuTag>Taxonomy via GenBank</MenuTag>
+				<HtmlTag>Taxonomy via GenBank</HtmlTag>
+				<Priority>128</Priority>
+			</LinkInfo>
+			<LinkInfo>
+				<DbTo>unigene</DbTo>
+				<LinkName>pubmed_unigene</LinkName>
+				<MenuTag>UniGene Links</MenuTag>
+				<HtmlTag>UniGene</HtmlTag>
+				<Priority>128</Priority>
+			</LinkInfo>
+			<LinkInfo>
+				<DbTo>LinkOut</DbTo>
+				<LinkName>ExternalLink</LinkName>
+				<MenuTag>LinkOut</MenuTag>
+				<HtmlTag>LinkOut</HtmlTag>
+				<Priority>255</Priority>
+			</LinkInfo>
+		</IdLinkSet>
+	</IdCheckList>
+</LinkSet>
+</eLinkResult>

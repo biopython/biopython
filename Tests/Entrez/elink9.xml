@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<!DOCTYPE eLinkResult PUBLIC "-//NLM//DTD eLinkResult, 11 May 2002//EN" "http://www.ncbi.nlm.nih.gov/entrez/query/DTD/eLink_020511.dtd">
+<eLinkResult>
+<LinkSet>
+	<DbFrom>cancerchromosomes</DbFrom>
+	<IdList>
+		<Id>2662</Id>
+	</IdList>
+</LinkSet>
+</eLinkResult>
