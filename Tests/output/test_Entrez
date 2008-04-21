@@ -28,8 +28,11 @@ Test parsing pubmed link returned by ELink (third test) ... ok
 Test parsing pubmed links returned by ELink (fourth test) ... ok
 Test parsing pubmed links returned by ELink (fifth test) ... ok
 Test parsing pubmed links returned by ELink (sixth test) ... ok
+Test parsing XML output returned by EGQuery (first test) ... ok
+Test parsing XML output returned by EGQuery (second test) ... ok
+Test parsing XML output returned by ESpell ... ok
 
 ----------------------------------------------------------------------
-Ran 29 tests in 11.765s
+Ran 32 tests in 12.796s
 
 OK

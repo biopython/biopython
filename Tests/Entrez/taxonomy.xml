@@ -1,0 +1,166 @@
+<?xml version="1.0"?>
+<!DOCTYPE TaxaSet PUBLIC "-//NLM//DTD Taxon, 14th January 2002//EN" "http://www.ncbi.nlm.nih.gov/entrez/query/DTD/taxon.dtd">
+<TaxaSet>
+
+<Taxon>
+  <TaxId>9685</TaxId>
+  <ScientificName>Felis catus</ScientificName>
+  <OtherNames>
+    <GenbankCommonName>domestic cat</GenbankCommonName>
+    <Synonym>Felis silvestris catus</Synonym>
+    <Synonym>Felis domesticus</Synonym>
+    <CommonName>cat</CommonName>
+    <CommonName>cats</CommonName>
+    <Includes>Korat cats</Includes>
+  </OtherNames>
+  <ParentTaxId>9682</ParentTaxId>
+  <Rank>species</Rank>
+  <Division>Mammals</Division>
+  <GeneticCode>
+    <GCId>1</GCId>
+    <GCName>Standard</GCName>
+  </GeneticCode>
+  <MitoGeneticCode>
+    <MGCId>2</MGCId>
+    <MGCName>Vertebrate Mitochondrial</MGCName>
+  </MitoGeneticCode>
+  <Lineage>cellular organisms; Eukaryota; Fungi/Metazoa group; Metazoa; Eumetazoa; Bilateria; Coelomata; Deuterostomia; Chordata; Craniata; Vertebrata; Gnathostomata; Teleostomi; Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Mammalia; Theria; Eutheria; Laurasiatheria; Carnivora; Feliformia; Felidae; Felinae; Felis</Lineage>
+  <LineageEx>
+    <Taxon>
+      <TaxId>131567</TaxId>
+      <ScientificName>cellular organisms</ScientificName>
+      <Rank>no rank</Rank>
+    </Taxon>
+    <Taxon>
+      <TaxId>2759</TaxId>
+      <ScientificName>Eukaryota</ScientificName>
+      <Rank>superkingdom</Rank>
+    </Taxon>
+    <Taxon>
+      <TaxId>33154</TaxId>
+      <ScientificName>Fungi/Metazoa group</ScientificName>
+      <Rank>no rank</Rank>
+    </Taxon>
+    <Taxon>
+      <TaxId>33208</TaxId>
+      <ScientificName>Metazoa</ScientificName>
+      <Rank>kingdom</Rank>
+    </Taxon>
+    <Taxon>
+      <TaxId>6072</TaxId>
+      <ScientificName>Eumetazoa</ScientificName>
+      <Rank>no rank</Rank>
+    </Taxon>
+    <Taxon>
+      <TaxId>33213</TaxId>
+      <ScientificName>Bilateria</ScientificName>
+      <Rank>no rank</Rank>
+    </Taxon>
+    <Taxon>
+      <TaxId>33316</TaxId>
+      <ScientificName>Coelomata</ScientificName>
+      <Rank>no rank</Rank>
+    </Taxon>
+    <Taxon>
+      <TaxId>33511</TaxId>
+      <ScientificName>Deuterostomia</ScientificName>
+      <Rank>no rank</Rank>
+    </Taxon>
+    <Taxon>
+      <TaxId>7711</TaxId>
+      <ScientificName>Chordata</ScientificName>
+      <Rank>phylum</Rank>
+    </Taxon>
+    <Taxon>
+      <TaxId>89593</TaxId>
+      <ScientificName>Craniata</ScientificName>
+      <Rank>subphylum</Rank>
+    </Taxon>
+    <Taxon>
+      <TaxId>7742</TaxId>
+      <ScientificName>Vertebrata</ScientificName>
+      <Rank>no rank</Rank>
+    </Taxon>
+    <Taxon>
+      <TaxId>7776</TaxId>
+      <ScientificName>Gnathostomata</ScientificName>
+      <Rank>superclass</Rank>
+    </Taxon>
+    <Taxon>
+      <TaxId>117570</TaxId>
+      <ScientificName>Teleostomi</ScientificName>
+      <Rank>no rank</Rank>
+    </Taxon>
+    <Taxon>
+      <TaxId>117571</TaxId>
+      <ScientificName>Euteleostomi</ScientificName>
+      <Rank>no rank</Rank>
+    </Taxon>
+    <Taxon>
+      <TaxId>8287</TaxId>
+      <ScientificName>Sarcopterygii</ScientificName>
+      <Rank>no rank</Rank>
+    </Taxon>
+    <Taxon>
+      <TaxId>32523</TaxId>
+      <ScientificName>Tetrapoda</ScientificName>
+      <Rank>no rank</Rank>
+    </Taxon>
+    <Taxon>
+      <TaxId>32524</TaxId>
+      <ScientificName>Amniota</ScientificName>
+      <Rank>no rank</Rank>
+    </Taxon>
+    <Taxon>
+      <TaxId>40674</TaxId>
+      <ScientificName>Mammalia</ScientificName>
+      <Rank>class</Rank>
+    </Taxon>
+    <Taxon>
+      <TaxId>32525</TaxId>
+      <ScientificName>Theria</ScientificName>
+      <Rank>no rank</Rank>
+    </Taxon>
+    <Taxon>
+      <TaxId>9347</TaxId>
+      <ScientificName>Eutheria</ScientificName>
+      <Rank>no rank</Rank>
+    </Taxon>
+    <Taxon>
+      <TaxId>314145</TaxId>
+      <ScientificName>Laurasiatheria</ScientificName>
+      <Rank>superorder</Rank>
+    </Taxon>
+    <Taxon>
+      <TaxId>33554</TaxId>
+      <ScientificName>Carnivora</ScientificName>
+      <Rank>order</Rank>
+    </Taxon>
+    <Taxon>
+      <TaxId>379583</TaxId>
+      <ScientificName>Feliformia</ScientificName>
+      <Rank>suborder</Rank>
+    </Taxon>
+    <Taxon>
+      <TaxId>9681</TaxId>
+      <ScientificName>Felidae</ScientificName>
+      <Rank>family</Rank>
+    </Taxon>
+    <Taxon>
+      <TaxId>338152</TaxId>
+      <ScientificName>Felinae</ScientificName>
+      <Rank>subfamily</Rank>
+    </Taxon>
+    <Taxon>
+      <TaxId>9682</TaxId>
+      <ScientificName>Felis</ScientificName>
+      <Rank>genus</Rank>
+    </Taxon>
+  </LineageEx>
+  <CreateDate>1995/02/27</CreateDate>
+  <UpdateDate>2007/09/04</UpdateDate>
+  <PubDate>1993/07/26</PubDate>
+</Taxon>
+
+
+</TaxaSet>

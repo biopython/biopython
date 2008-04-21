@@ -1,0 +1,262 @@
+<?xml version="1.0"?>
+<!DOCTYPE Result PUBLIC "-//NLM//DTD eSearchResult, January 2004//EN" "http://www.ncbi.nlm.nih.gov/entrez/query/DTD/egquery.dtd">
+
+<!--
+        $Id: egquery1.xml,v 1.1 2008-04-21 11:53:45 mdehoon Exp $
+-->
+<!-- ================================================================= -->
+
+<Result>
+
+        <Term>stem cells</Term>
+
+        <eGQueryResult>
+
+             <ResultItem>
+                  <DbName>pubmed</DbName>
+                  <MenuName>PubMed</MenuName>
+                  <Count>392</Count>
+                  <Status>Ok</Status>
+             </ResultItem>
+
+             <ResultItem>
+                  <DbName>pmc</DbName>
+                  <MenuName>PMC</MenuName>
+                  <Count>173</Count>
+                  <Status>Ok</Status>
+             </ResultItem>
+
+             <ResultItem>
+                  <DbName>journals</DbName>
+                  <MenuName>Journals</MenuName>
+                  <Count>0</Count>
+                  <Status>Term or Database is not found</Status>
+             </ResultItem>
+
+             <ResultItem>
+                  <DbName>mesh</DbName>
+                  <MenuName>MeSH</MenuName>
+                  <Count>0</Count>
+                  <Status>Term or Database is not found</Status>
+             </ResultItem>
+
+             <ResultItem>
+                  <DbName>books</DbName>
+                  <MenuName>Books</MenuName>
+                  <Count>10</Count>
+                  <Status>Ok</Status>
+             </ResultItem>
+
+             <ResultItem>
+                  <DbName>omim</DbName>
+                  <MenuName>OMIM</MenuName>
+                  <Count>0</Count>
+                  <Status>Term or Database is not found</Status>
+             </ResultItem>
+
+             <ResultItem>
+                  <DbName>omia</DbName>
+                  <MenuName>OMIA</MenuName>
+                  <Count>0</Count>
+                  <Status>Term or Database is not found</Status>
+             </ResultItem>
+
+             <ResultItem>
+                  <DbName>ncbisearch</DbName>
+                  <MenuName>NCBI Web Site</MenuName>
+                  <Count>0</Count>
+                  <Status>Term or Database is not found</Status>
+             </ResultItem>
+
+             <ResultItem>
+                  <DbName>nuccore</DbName>
+                  <MenuName>CoreNucleotide</MenuName>
+                  <Count>0</Count>
+                  <Status>Term or Database is not found</Status>
+             </ResultItem>
+
+             <ResultItem>
+                  <DbName>nucgss</DbName>
+                  <MenuName>GSS</MenuName>
+                  <Count>0</Count>
+                  <Status>Term or Database is not found</Status>
+             </ResultItem>
+
+             <ResultItem>
+                  <DbName>nucest</DbName>
+                  <MenuName>EST</MenuName>
+                  <Count>0</Count>
+                  <Status>Term or Database is not found</Status>
+             </ResultItem>
+
+             <ResultItem>
+                  <DbName>protein</DbName>
+                  <MenuName>Protein</MenuName>
+                  <Count>0</Count>
+                  <Status>Term or Database is not found</Status>
+             </ResultItem>
+
+             <ResultItem>
+                  <DbName>genome</DbName>
+                  <MenuName>Genome</MenuName>
+                  <Count>0</Count>
+                  <Status>Term or Database is not found</Status>
+             </ResultItem>
+
+             <ResultItem>
+                  <DbName>structure</DbName>
+                  <MenuName>Structure</MenuName>
+                  <Count>0</Count>
+                  <Status>Term or Database is not found</Status>
+             </ResultItem>
+
+             <ResultItem>
+                  <DbName>taxonomy</DbName>
+                  <MenuName>Taxonomy</MenuName>
+                  <Count>0</Count>
+                  <Status>Term or Database is not found</Status>
+             </ResultItem>
+
+             <ResultItem>
+                  <DbName>snp</DbName>
+                  <MenuName>SNP</MenuName>
+                  <Count>0</Count>
+                  <Status>Term or Database is not found</Status>
+             </ResultItem>
+
+             <ResultItem>
+                  <DbName>gene</DbName>
+                  <MenuName>Gene</MenuName>
+                  <Count>0</Count>
+                  <Status>Term or Database is not found</Status>
+             </ResultItem>
+
+             <ResultItem>
+                  <DbName>unigene</DbName>
+                  <MenuName>UniGene</MenuName>
+                  <Count>0</Count>
+                  <Status>Term or Database is not found</Status>
+             </ResultItem>
+
+             <ResultItem>
+                  <DbName>cdd</DbName>
+                  <MenuName>Conserved Domains</MenuName>
+                  <Count>0</Count>
+                  <Status>Term or Database is not found</Status>
+             </ResultItem>
+
+             <ResultItem>
+                  <DbName>domains</DbName>
+                  <MenuName>3D Domains</MenuName>
+                  <Count>0</Count>
+                  <Status>Term or Database is not found</Status>
+             </ResultItem>
+
+             <ResultItem>
+                  <DbName>unists</DbName>
+                  <MenuName>UniSTS</MenuName>
+                  <Count>0</Count>
+                  <Status>Term or Database is not found</Status>
+             </ResultItem>
+
+             <ResultItem>
+                  <DbName>popset</DbName>
+                  <MenuName>PopSet</MenuName>
+                  <Count>0</Count>
+                  <Status>Term or Database is not found</Status>
+             </ResultItem>
+
+             <ResultItem>
+                  <DbName>geo</DbName>
+                  <MenuName>GEO Profiles</MenuName>
+                  <Count>0</Count>
+                  <Status>Term or Database is not found</Status>
+             </ResultItem>
+
+             <ResultItem>
+                  <DbName>gds</DbName>
+                  <MenuName>GEO DataSets</MenuName>
+                  <Count>0</Count>
+                  <Status>Term or Database is not found</Status>
+             </ResultItem>
+
+             <ResultItem>
+                  <DbName>homologene</DbName>
+                  <MenuName>HomoloGene</MenuName>
+                  <Count>0</Count>
+                  <Status>Term or Database is not found</Status>
+             </ResultItem>
+
+             <ResultItem>
+                  <DbName>cancerchromosomes</DbName>
+                  <MenuName>CancerChromosomes</MenuName>
+                  <Count>0</Count>
+                  <Status>Term or Database is not found</Status>
+             </ResultItem>
+
+             <ResultItem>
+                  <DbName>pccompound</DbName>
+                  <MenuName>PubChem Compound</MenuName>
+                  <Count>0</Count>
+                  <Status>Term or Database is not found</Status>
+             </ResultItem>
+
+             <ResultItem>
+                  <DbName>pcsubstance</DbName>
+                  <MenuName>PubChem Substance</MenuName>
+                  <Count>0</Count>
+                  <Status>Term or Database is not found</Status>
+             </ResultItem>
+
+             <ResultItem>
+                  <DbName>pcassay</DbName>
+                  <MenuName>PubChem BioAssay</MenuName>
+                  <Count>0</Count>
+                  <Status>Term or Database is not found</Status>
+             </ResultItem>
+
+             <ResultItem>
+                  <DbName>nlmcatalog</DbName>
+                  <MenuName>NLM Catalog</MenuName>
+                  <Count>2</Count>
+                  <Status>Ok</Status>
+             </ResultItem>
+
+             <ResultItem>
+                  <DbName>gensat</DbName>
+                  <MenuName>GENSAT</MenuName>
+                  <Count>0</Count>
+                  <Status>Term or Database is not found</Status>
+             </ResultItem>
+
+             <ResultItem>
+                  <DbName>probe</DbName>
+                  <MenuName>Probe</MenuName>
+                  <Count>0</Count>
+                  <Status>Term or Database is not found</Status>
+             </ResultItem>
+
+             <ResultItem>
+                  <DbName>genomeprj</DbName>
+                  <MenuName>Genome Project</MenuName>
+                  <Count>0</Count>
+                  <Status>Term or Database is not found</Status>
+             </ResultItem>
+
+             <ResultItem>
+                  <DbName>gap</DbName>
+                  <MenuName>dbGaP</MenuName>
+                  <Count>0</Count>
+                  <Status>Term or Database is not found</Status>
+             </ResultItem>
+
+             <ResultItem>
+                  <DbName>proteinclusters</DbName>
+                  <MenuName>Protein Clusters</MenuName>
+                  <Count>0</Count>
+                  <Status>Term or Database is not found</Status>
+             </ResultItem>
+
+        </eGQueryResult>
+
+</Result>

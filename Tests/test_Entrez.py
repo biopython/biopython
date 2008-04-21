@@ -18,7 +18,7 @@ def testing_suite():
 
     test_loader = unittest.TestLoader()
     test_loader.testMethodPrefix = 't_'
-    tests = [EInfoTest, ESearchTest, EPostTest, ESummaryTest, ELinkTest]
+    tests = [EInfoTest, ESearchTest, EPostTest, ESummaryTest, ELinkTest, EFetchTest, EGQueryTest, ESpellTest]
     
     for test in tests:
         cur_suite = test_loader.loadTestsFromTestCase(test)
@@ -2717,6 +2717,390 @@ class ELinkTest(unittest.TestCase):
         assert record[0]["DbFrom"]=="cancerchromosomes"
 	assert record[0]["IdList"]==["2662"]
 
+
+class EGQueryTest(unittest.TestCase):
+    '''Tests for parsing XML output returned by EGQuery
+    '''
+    def t_egquery1(self):
+        '''Test parsing XML output returned by EGQuery (first test)
+        '''
+        # Display counts in XML for stem cells in each Entrez database
+        # To create the XML file, use
+        # >>> Bio.Entrez.egquery(term="stem cells")
+        input = open('Entrez/egquery1.xml')
+        record = Entrez.read(input)
+
+        assert record["Term"]=="stem cells"
+
+        assert record["eGQueryResult"][0]["DbName"]=="pubmed"
+        assert record["eGQueryResult"][0]["MenuName"]=="PubMed"
+        assert record["eGQueryResult"][0]["Count"]==392
+        assert record["eGQueryResult"][0]["Status"]=="Ok"
+        assert record["eGQueryResult"][1]["DbName"]=="pmc"
+        assert record["eGQueryResult"][1]["MenuName"]=="PMC"
+        assert record["eGQueryResult"][1]["Count"]==173
+        assert record["eGQueryResult"][1]["Status"]=="Ok"
+        assert record["eGQueryResult"][2]["DbName"]=="journals"
+        assert record["eGQueryResult"][2]["MenuName"]=="Journals"
+        assert record["eGQueryResult"][2]["Count"]==0
+        assert record["eGQueryResult"][2]["Status"]=="Term or Database is not found"
+        assert record["eGQueryResult"][3]["DbName"]=="mesh"
+        assert record["eGQueryResult"][3]["MenuName"]=="MeSH"
+        assert record["eGQueryResult"][3]["Count"]==0
+        assert record["eGQueryResult"][3]["Status"]=="Term or Database is not found"
+        assert record["eGQueryResult"][4]["DbName"]=="books"
+        assert record["eGQueryResult"][4]["MenuName"]=="Books"
+        assert record["eGQueryResult"][4]["Count"]==10
+        assert record["eGQueryResult"][4]["Status"]=="Ok"
+        assert record["eGQueryResult"][5]["DbName"]=="omim"
+        assert record["eGQueryResult"][5]["MenuName"]=="OMIM"
+        assert record["eGQueryResult"][5]["Count"]==0
+        assert record["eGQueryResult"][5]["Status"]=="Term or Database is not found"
+        assert record["eGQueryResult"][6]["DbName"]=="omia"
+        assert record["eGQueryResult"][6]["MenuName"]=="OMIA"
+        assert record["eGQueryResult"][6]["Count"]==0
+        assert record["eGQueryResult"][6]["Status"]=="Term or Database is not found"
+        assert record["eGQueryResult"][7]["DbName"]=="ncbisearch"
+        assert record["eGQueryResult"][7]["MenuName"]=="NCBI Web Site"
+        assert record["eGQueryResult"][7]["Count"]==0
+        assert record["eGQueryResult"][7]["Status"]=="Term or Database is not found"
+        assert record["eGQueryResult"][8]["DbName"]=="nuccore"
+        assert record["eGQueryResult"][8]["MenuName"]=="CoreNucleotide"
+        assert record["eGQueryResult"][8]["Count"]==0
+        assert record["eGQueryResult"][8]["Status"]=="Term or Database is not found"
+        assert record["eGQueryResult"][9]["DbName"]=="nucgss"
+        assert record["eGQueryResult"][9]["MenuName"]=="GSS"
+        assert record["eGQueryResult"][9]["Count"]==0
+        assert record["eGQueryResult"][9]["Status"]=="Term or Database is not found"
+        assert record["eGQueryResult"][10]["DbName"]=="nucest"
+        assert record["eGQueryResult"][10]["MenuName"]=="EST"
+        assert record["eGQueryResult"][10]["Count"]==0
+        assert record["eGQueryResult"][10]["Status"]=="Term or Database is not found"
+        assert record["eGQueryResult"][11]["DbName"]=="protein"
+        assert record["eGQueryResult"][11]["MenuName"]=="Protein"
+        assert record["eGQueryResult"][11]["Count"]==0
+        assert record["eGQueryResult"][11]["Status"]=="Term or Database is not found"
+        assert record["eGQueryResult"][12]["DbName"]=="genome"
+        assert record["eGQueryResult"][12]["MenuName"]=="Genome"
+        assert record["eGQueryResult"][12]["Count"]==0
+        assert record["eGQueryResult"][12]["Status"]=="Term or Database is not found"
+        assert record["eGQueryResult"][13]["DbName"]=="structure"
+        assert record["eGQueryResult"][13]["MenuName"]=="Structure"
+        assert record["eGQueryResult"][13]["Count"]==0
+        assert record["eGQueryResult"][13]["Status"]=="Term or Database is not found"
+        assert record["eGQueryResult"][14]["DbName"]=="taxonomy"
+        assert record["eGQueryResult"][14]["MenuName"]=="Taxonomy"
+        assert record["eGQueryResult"][14]["Count"]==0
+        assert record["eGQueryResult"][14]["Status"]=="Term or Database is not found"
+        assert record["eGQueryResult"][15]["DbName"]=="snp"
+        assert record["eGQueryResult"][15]["MenuName"]=="SNP"
+        assert record["eGQueryResult"][15]["Count"]==0
+        assert record["eGQueryResult"][15]["Status"]=="Term or Database is not found"
+        assert record["eGQueryResult"][16]["DbName"]=="gene"
+        assert record["eGQueryResult"][16]["MenuName"]=="Gene"
+        assert record["eGQueryResult"][16]["Count"]==0
+        assert record["eGQueryResult"][16]["Status"]=="Term or Database is not found"
+        assert record["eGQueryResult"][17]["DbName"]=="unigene"
+        assert record["eGQueryResult"][17]["MenuName"]=="UniGene"
+        assert record["eGQueryResult"][17]["Count"]==0
+        assert record["eGQueryResult"][17]["Status"]=="Term or Database is not found"
+        assert record["eGQueryResult"][18]["DbName"]=="cdd"
+        assert record["eGQueryResult"][18]["MenuName"]=="Conserved Domains"
+        assert record["eGQueryResult"][18]["Count"]==0
+        assert record["eGQueryResult"][18]["Status"]=="Term or Database is not found"
+        assert record["eGQueryResult"][19]["DbName"]=="domains"
+        assert record["eGQueryResult"][19]["MenuName"]=="3D Domains"
+        assert record["eGQueryResult"][19]["Count"]==0
+        assert record["eGQueryResult"][19]["Status"]=="Term or Database is not found"
+        assert record["eGQueryResult"][20]["DbName"]=="unists"
+        assert record["eGQueryResult"][20]["MenuName"]=="UniSTS"
+        assert record["eGQueryResult"][20]["Count"]==0
+        assert record["eGQueryResult"][20]["Status"]=="Term or Database is not found"
+        assert record["eGQueryResult"][21]["DbName"]=="popset"
+        assert record["eGQueryResult"][21]["MenuName"]=="PopSet"
+        assert record["eGQueryResult"][21]["Count"]==0
+        assert record["eGQueryResult"][21]["Status"]=="Term or Database is not found"
+        assert record["eGQueryResult"][22]["DbName"]=="geo"
+        assert record["eGQueryResult"][22]["MenuName"]=="GEO Profiles"
+        assert record["eGQueryResult"][22]["Count"]==0
+        assert record["eGQueryResult"][22]["Status"]=="Term or Database is not found"
+        assert record["eGQueryResult"][23]["DbName"]=="gds"
+        assert record["eGQueryResult"][23]["MenuName"]=="GEO DataSets"
+        assert record["eGQueryResult"][23]["Count"]==0
+        assert record["eGQueryResult"][23]["Status"]=="Term or Database is not found"
+        assert record["eGQueryResult"][24]["DbName"]=="homologene"
+        assert record["eGQueryResult"][24]["MenuName"]=="HomoloGene"
+        assert record["eGQueryResult"][24]["Count"]==0
+        assert record["eGQueryResult"][24]["Status"]=="Term or Database is not found"
+        assert record["eGQueryResult"][25]["DbName"]=="cancerchromosomes"
+        assert record["eGQueryResult"][25]["MenuName"]=="CancerChromosomes"
+        assert record["eGQueryResult"][25]["Count"]==0
+        assert record["eGQueryResult"][25]["Status"]=="Term or Database is not found"
+        assert record["eGQueryResult"][26]["DbName"]=="pccompound"
+        assert record["eGQueryResult"][26]["MenuName"]=="PubChem Compound"
+        assert record["eGQueryResult"][26]["Count"]==0
+        assert record["eGQueryResult"][26]["Status"]=="Term or Database is not found"
+        assert record["eGQueryResult"][27]["DbName"]=="pcsubstance"
+        assert record["eGQueryResult"][27]["MenuName"]=="PubChem Substance"
+        assert record["eGQueryResult"][27]["Count"]==0
+        assert record["eGQueryResult"][27]["Status"]=="Term or Database is not found"
+        assert record["eGQueryResult"][28]["DbName"]=="pcassay"
+        assert record["eGQueryResult"][28]["MenuName"]=="PubChem BioAssay"
+        assert record["eGQueryResult"][28]["Count"]==0
+        assert record["eGQueryResult"][28]["Status"]=="Term or Database is not found"
+        assert record["eGQueryResult"][29]["DbName"]=="nlmcatalog"
+        assert record["eGQueryResult"][29]["MenuName"]=="NLM Catalog"
+        assert record["eGQueryResult"][29]["Count"]==2
+        assert record["eGQueryResult"][29]["Status"]=="Ok"
+        assert record["eGQueryResult"][30]["DbName"]=="gensat"
+        assert record["eGQueryResult"][30]["MenuName"]=="GENSAT"
+        assert record["eGQueryResult"][30]["Count"]==0
+        assert record["eGQueryResult"][30]["Status"]=="Term or Database is not found"
+        assert record["eGQueryResult"][31]["DbName"]=="probe"
+        assert record["eGQueryResult"][31]["MenuName"]=="Probe"
+        assert record["eGQueryResult"][31]["Count"]==0
+        assert record["eGQueryResult"][31]["Status"]=="Term or Database is not found"
+        assert record["eGQueryResult"][32]["DbName"]=="genomeprj"
+        assert record["eGQueryResult"][32]["MenuName"]=="Genome Project"
+        assert record["eGQueryResult"][32]["Count"]==0
+        assert record["eGQueryResult"][32]["Status"]=="Term or Database is not found"
+        assert record["eGQueryResult"][33]["DbName"]=="gap"
+        assert record["eGQueryResult"][33]["MenuName"]=="dbGaP"
+        assert record["eGQueryResult"][33]["Count"]==0
+        assert record["eGQueryResult"][33]["Status"]=="Term or Database is not found"
+        assert record["eGQueryResult"][34]["DbName"]=="proteinclusters"
+        assert record["eGQueryResult"][34]["MenuName"]=="Protein Clusters"
+        assert record["eGQueryResult"][34]["Count"]==0
+        assert record["eGQueryResult"][34]["Status"]=="Term or Database is not found"
+
+    def t_egquery2(self):
+        '''Test parsing XML output returned by EGQuery (second test)
+        '''
+        # Display counts in XML for brca1 or brca2 for each Entrez database
+        # To create the XML file, use
+        # >>> Bio.Entrez.egquery(term="brca1 OR brca2")
+        input = open('Entrez/egquery2.xml')
+        record = Entrez.read(input)
+
+        assert record["Term"]=="brca1 OR brca2"
+
+        assert record["eGQueryResult"][0]["DbName"]=="pubmed"
+        assert record["eGQueryResult"][0]["MenuName"]=="PubMed"
+        assert record["eGQueryResult"][0]["Count"]==0
+        assert record["eGQueryResult"][0]["Status"]=="Term or Database is not found"
+        assert record["eGQueryResult"][1]["DbName"]=="pmc"
+        assert record["eGQueryResult"][1]["MenuName"]=="PMC"
+        assert record["eGQueryResult"][1]["Count"]==2739
+        assert record["eGQueryResult"][1]["Status"]=="Ok"
+        assert record["eGQueryResult"][2]["DbName"]=="journals"
+        assert record["eGQueryResult"][2]["MenuName"]=="Journals"
+        assert record["eGQueryResult"][2]["Count"]==0
+        assert record["eGQueryResult"][2]["Status"]=="Term or Database is not found"
+        assert record["eGQueryResult"][3]["DbName"]=="mesh"
+        assert record["eGQueryResult"][3]["MenuName"]=="MeSH"
+        assert record["eGQueryResult"][3]["Count"]==29
+        assert record["eGQueryResult"][3]["Status"]=="Ok"
+        assert record["eGQueryResult"][4]["DbName"]=="books"
+        assert record["eGQueryResult"][4]["MenuName"]=="Books"
+        assert record["eGQueryResult"][4]["Count"]==392
+        assert record["eGQueryResult"][4]["Status"]=="Ok"
+        assert record["eGQueryResult"][5]["DbName"]=="omim"
+        assert record["eGQueryResult"][5]["MenuName"]=="OMIM"
+        assert record["eGQueryResult"][5]["Count"]==149
+        assert record["eGQueryResult"][5]["Status"]=="Ok"
+        assert record["eGQueryResult"][6]["DbName"]=="omia"
+        assert record["eGQueryResult"][6]["MenuName"]=="OMIA"
+        assert record["eGQueryResult"][6]["Count"]==0
+        assert record["eGQueryResult"][6]["Status"]=="Term or Database is not found"
+        assert record["eGQueryResult"][7]["DbName"]=="ncbisearch"
+        assert record["eGQueryResult"][7]["MenuName"]=="NCBI Web Site"
+        assert record["eGQueryResult"][7]["Count"]==13
+        assert record["eGQueryResult"][7]["Status"]=="Ok"
+        assert record["eGQueryResult"][8]["DbName"]=="nuccore"
+        assert record["eGQueryResult"][8]["MenuName"]=="CoreNucleotide"
+        assert record["eGQueryResult"][8]["Count"]==4917
+        assert record["eGQueryResult"][8]["Status"]=="Ok"
+        assert record["eGQueryResult"][9]["DbName"]=="nucgss"
+        assert record["eGQueryResult"][9]["MenuName"]=="GSS"
+        assert record["eGQueryResult"][9]["Count"]==184
+        assert record["eGQueryResult"][9]["Status"]=="Ok"
+        assert record["eGQueryResult"][10]["DbName"]=="nucest"
+        assert record["eGQueryResult"][10]["MenuName"]=="EST"
+        assert record["eGQueryResult"][10]["Count"]==600
+        assert record["eGQueryResult"][10]["Status"]=="Ok"
+        assert record["eGQueryResult"][11]["DbName"]=="protein"
+        assert record["eGQueryResult"][11]["MenuName"]=="Protein"
+        assert record["eGQueryResult"][11]["Count"]==6779
+        assert record["eGQueryResult"][11]["Status"]=="Ok"
+        assert record["eGQueryResult"][12]["DbName"]=="genome"
+        assert record["eGQueryResult"][12]["MenuName"]=="Genome"
+        assert record["eGQueryResult"][12]["Count"]==44
+        assert record["eGQueryResult"][12]["Status"]=="Ok"
+        assert record["eGQueryResult"][13]["DbName"]=="structure"
+        assert record["eGQueryResult"][13]["MenuName"]=="Structure"
+        assert record["eGQueryResult"][13]["Count"]==29
+        assert record["eGQueryResult"][13]["Status"]=="Ok"
+        assert record["eGQueryResult"][14]["DbName"]=="taxonomy"
+        assert record["eGQueryResult"][14]["MenuName"]=="Taxonomy"
+        assert record["eGQueryResult"][14]["Count"]==0
+        assert record["eGQueryResult"][14]["Status"]=="Term or Database is not found"
+        assert record["eGQueryResult"][15]["DbName"]=="snp"
+        assert record["eGQueryResult"][15]["MenuName"]=="SNP"
+        assert record["eGQueryResult"][15]["Count"]==2013
+        assert record["eGQueryResult"][15]["Status"]=="Ok"
+        assert record["eGQueryResult"][16]["DbName"]=="gene"
+        assert record["eGQueryResult"][16]["MenuName"]=="Gene"
+        assert record["eGQueryResult"][16]["Count"]==1775
+        assert record["eGQueryResult"][16]["Status"]=="Ok"
+        assert record["eGQueryResult"][17]["DbName"]=="unigene"
+        assert record["eGQueryResult"][17]["MenuName"]=="UniGene"
+        assert record["eGQueryResult"][17]["Count"]==207
+        assert record["eGQueryResult"][17]["Status"]=="Ok"
+        assert record["eGQueryResult"][18]["DbName"]=="cdd"
+        assert record["eGQueryResult"][18]["MenuName"]=="Conserved Domains"
+        assert record["eGQueryResult"][18]["Count"]==17
+        assert record["eGQueryResult"][18]["Status"]=="Ok"
+        assert record["eGQueryResult"][19]["DbName"]=="domains"
+        assert record["eGQueryResult"][19]["MenuName"]=="3D Domains"
+        assert record["eGQueryResult"][19]["Count"]==131
+        assert record["eGQueryResult"][19]["Status"]=="Ok"
+        assert record["eGQueryResult"][20]["DbName"]=="unists"
+        assert record["eGQueryResult"][20]["MenuName"]=="UniSTS"
+        assert record["eGQueryResult"][20]["Count"]==198
+        assert record["eGQueryResult"][20]["Status"]=="Ok"
+        assert record["eGQueryResult"][21]["DbName"]=="popset"
+        assert record["eGQueryResult"][21]["MenuName"]=="PopSet"
+        assert record["eGQueryResult"][21]["Count"]==43
+        assert record["eGQueryResult"][21]["Status"]=="Ok"
+        assert record["eGQueryResult"][22]["DbName"]=="geo"
+        assert record["eGQueryResult"][22]["MenuName"]=="GEO Profiles"
+        assert record["eGQueryResult"][22]["Count"]==128692
+        assert record["eGQueryResult"][22]["Status"]=="Ok"
+        assert record["eGQueryResult"][23]["DbName"]=="gds"
+        assert record["eGQueryResult"][23]["MenuName"]=="GEO DataSets"
+        assert record["eGQueryResult"][23]["Count"]==21
+        assert record["eGQueryResult"][23]["Status"]=="Ok"
+        assert record["eGQueryResult"][24]["DbName"]=="homologene"
+        assert record["eGQueryResult"][24]["MenuName"]=="HomoloGene"
+        assert record["eGQueryResult"][24]["Count"]==50
+        assert record["eGQueryResult"][24]["Status"]=="Ok"
+        assert record["eGQueryResult"][25]["DbName"]=="cancerchromosomes"
+        assert record["eGQueryResult"][25]["MenuName"]=="CancerChromosomes"
+        assert record["eGQueryResult"][25]["Count"]==18
+        assert record["eGQueryResult"][25]["Status"]=="Ok"
+        assert record["eGQueryResult"][26]["DbName"]=="pccompound"
+        assert record["eGQueryResult"][26]["MenuName"]=="PubChem Compound"
+        assert record["eGQueryResult"][26]["Count"]==0
+        assert record["eGQueryResult"][26]["Status"]=="Term or Database is not found"
+        assert record["eGQueryResult"][27]["DbName"]=="pcsubstance"
+        assert record["eGQueryResult"][27]["MenuName"]=="PubChem Substance"
+        assert record["eGQueryResult"][27]["Count"]==26
+        assert record["eGQueryResult"][27]["Status"]=="Ok"
+        assert record["eGQueryResult"][28]["DbName"]=="pcassay"
+        assert record["eGQueryResult"][28]["MenuName"]=="PubChem BioAssay"
+        assert record["eGQueryResult"][28]["Count"]==0
+        assert record["eGQueryResult"][28]["Status"]=="Term or Database is not found"
+        assert record["eGQueryResult"][29]["DbName"]=="nlmcatalog"
+        assert record["eGQueryResult"][29]["MenuName"]=="NLM Catalog"
+        assert record["eGQueryResult"][29]["Count"]==31
+        assert record["eGQueryResult"][29]["Status"]=="Ok"
+        assert record["eGQueryResult"][30]["DbName"]=="gensat"
+        assert record["eGQueryResult"][30]["MenuName"]=="GENSAT"
+        assert record["eGQueryResult"][30]["Count"]==0
+        assert record["eGQueryResult"][30]["Status"]=="Term or Database is not found"
+        assert record["eGQueryResult"][31]["DbName"]=="probe"
+        assert record["eGQueryResult"][31]["MenuName"]=="Probe"
+        assert record["eGQueryResult"][31]["Count"]==1410
+        assert record["eGQueryResult"][31]["Status"]=="Ok"
+        assert record["eGQueryResult"][32]["DbName"]=="genomeprj"
+        assert record["eGQueryResult"][32]["MenuName"]=="Genome Project"
+        assert record["eGQueryResult"][32]["Count"]==0
+        assert record["eGQueryResult"][32]["Status"]=="Term or Database is not found"
+        assert record["eGQueryResult"][33]["DbName"]=="gap"
+        assert record["eGQueryResult"][33]["MenuName"]=="dbGaP"
+        assert record["eGQueryResult"][33]["Count"]==0
+        assert record["eGQueryResult"][33]["Status"]=="Term or Database is not found"
+        assert record["eGQueryResult"][34]["DbName"]=="proteinclusters"
+        assert record["eGQueryResult"][34]["MenuName"]=="Protein Clusters"
+        assert record["eGQueryResult"][34]["Count"]==0
+        assert record["eGQueryResult"][34]["Status"]=="Term or Database is not found"
+
+class ESpellTest(unittest.TestCase):
+    '''Tests for parsing XML output returned by ESpell
+    '''
+    def t_espell(self):
+        '''Test parsing XML output returned by ESpell
+        '''
+        # Request suggestions for the PubMed search biopythooon
+        # To create the XML file, use
+        # >>> Bio.Entrez.espell(db="pubmed", term="biopythooon")
+        input = open('Entrez/espell.xml')
+        record = Entrez.read(input)
+        assert record["Database"]=="pubmed"
+        assert record["Query"]=="biopythooon"
+        assert record["CorrectedQuery"]=="biopython"
+        assert len(record["SpelledQuery"])==2
+        assert record["SpelledQuery"]["Original"]==[]
+        assert record["SpelledQuery"]["Replaced"]==["biopython"]
+        assert record["ERROR"]==""
+
+
+class EFetchTest(unittest.TestCase):
+    '''Tests for parsing XML output returned by EFetch
+    '''
+    def t_taxonomy(self):
+        '''Test parsing XML returned by EFetch from the Taxonomy databases
+        '''
+        # Request suggestions for the PubMed search biopythooon
+        # To create the XML file, use
+        # >>> Bio.Entrez.efetch(db="taxonomy", id="9685", retmode="xml")
+        input = open('Entrez/taxonomy.xml')
+        record = Entrez.read(input)
+
+        assert len(record)==1
+        assert record[0]["TaxId"]==9685
+        assert record[0]["ScientificName"]=="Felis catus"
+        assert record[0]["OtherNames"][0]==("GenbankCommonName", "domestic cat")
+        assert record[0]["OtherNames"][1]==("Synonym", "Felis silvestris catus")
+        assert record[0]["OtherNames"][2]==("Synonym", "Felis domesticus")
+        assert record[0]["OtherNames"][3]==("CommonName", "cat")
+        assert record[0]["OtherNames"][4]==("CommonName", "cats")
+        assert record[0]["OtherNames"][5]==("Includes", "Korat cats")
+        assert record[0]["ParentTaxId"]==9682
+        assert record[0]["Rank"]=="species"
+        assert record[0]["Division"]=="Mammals"
+        assert record[0]["GeneticCode"]==[1, "Standard"]
+        assert record[0]["MitoGeneticCode"]==[2, "Vertebrate Mitochondrial"]
+        assert record[0]["Lineage"]=="cellular organisms; Eukaryota; Fungi/Metazoa group; Metazoa; Eumetazoa; Bilateria; Coelomata; Deuterostomia; Chordata; Craniata; Vertebrata; Gnathostomata; Teleostomi; Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Mammalia; Theria; Eutheria; Laurasiatheria; Carnivora; Feliformia; Felidae; Felinae; Felis"
+        assert record[0]["LineageEx"][0]==(131567, "cellular organisms", "no rank")
+        assert record[0]["LineageEx"][1]==(2759, "Eukaryota", "superkingdom")
+        assert record[0]["LineageEx"][2]==(33154, "Fungi/Metazoa group", "no rank")
+        assert record[0]["LineageEx"][3]==(33208, "Metazoa", "kingdom")
+        assert record[0]["LineageEx"][4]==(6072, "Eumetazoa", "no rank")
+        assert record[0]["LineageEx"][5]==(33213, "Bilateria", "no rank")
+        assert record[0]["LineageEx"][6]==(33316, "Coelomata", "no rank")
+        assert record[0]["LineageEx"][7]==(33511, "Deuterostomia", "no rank")
+        assert record[0]["LineageEx"][8]==(7711, "Chordata", "phylum")
+        assert record[0]["LineageEx"][9]==(89593, "Craniata", "subphylum")
+        assert record[0]["LineageEx"][10]==(7742, "Vertebrata", "no rank")
+        assert record[0]["LineageEx"][11]==(7776, "Gnathostomata", "superclass")
+        assert record[0]["LineageEx"][12]==(117570, "Teleostomi", "no rank")
+        assert record[0]["LineageEx"][13]==(117571, "Euteleostomi", "no rank")
+        assert record[0]["LineageEx"][14]==(8287, "Sarcopterygii", "no rank")
+        assert record[0]["LineageEx"][15]==(32523, "Tetrapoda", "no rank")
+        assert record[0]["LineageEx"][16]==(32524, "Amniota", "no rank")
+        assert record[0]["LineageEx"][17]==(40674, "Mammalia", "class")
+        assert record[0]["LineageEx"][18]==(32525, "Theria", "no rank")
+        assert record[0]["LineageEx"][19]==(9347, "Eutheria", "no rank")
+        assert record[0]["LineageEx"][20]==(314145, "Laurasiatheria", "superorder")
+        assert record[0]["LineageEx"][21]==(33554, "Carnivora", "order")
+        assert record[0]["LineageEx"][22]==(379583, "Feliformia", "suborder")
+        assert record[0]["LineageEx"][23]==(9681, "Felidae", "family")
+        assert record[0]["LineageEx"][24]==(338152, "Felinae", "subfamily")
+        assert record[0]["LineageEx"][25]==(9682, "Felis", "genus")
+        assert record[0]["CreateDate"]=="1995/02/27"
+        assert record[0]["UpdateDate"]=="2007/09/04"
+        assert record[0]["PubDate"]=="1993/07/26"
 
 if __name__ == '__main__':
     sys.exit(run_tests(sys.argv))

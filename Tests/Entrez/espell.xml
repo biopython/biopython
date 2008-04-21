@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<!DOCTYPE eSpellResult PUBLIC "-//NLM//DTD eSpellResult, 23 November 2004//EN" "http://www.ncbi.nlm.nih.gov/entrez/query/DTD/eSpell.dtd">
+<eSpellResult>
+	<Database>pubmed</Database>
+	<Query>biopythooon</Query>
+	<CorrectedQuery>biopython</CorrectedQuery>
+	<SpelledQuery><Replaced>biopython</Replaced></SpelledQuery>
+	<ERROR/>
+</eSpellResult>
