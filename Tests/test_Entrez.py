@@ -558,6 +558,19 @@ class EPostTest(unittest.TestCase):
         assert exception_triggered
 
 
+    def t_invalid(self):
+        '''Test parsing XML returned by EPost with an invalid id (overflow tag)
+        '''
+        # To create the XML file, use
+        # >>> Bio.Entrez.epost(db="pubmed", id=99999999999999999999999999999999)
+        input = open('Entrez/epost3.xml')
+        record = Entrez.read(input)
+
+        assert record["InvalidIdList"]==["-1"]
+        assert record["QueryKey"]=="1"
+        assert record["WebEnv"]=="08AIUeBsfIk6BfdzKnd3GM2RtCudczC9jm5aeb4US0o7azCTQCeCsr-xg0@1EDE54E680D03C40_0011SID"
+
+
 class ESummaryTest(unittest.TestCase):
     '''Tests for parsing XML output returned by ESummary
     '''
