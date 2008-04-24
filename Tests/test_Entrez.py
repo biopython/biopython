@@ -3061,6 +3061,26 @@ class ESpellTest(unittest.TestCase):
 class EFetchTest(unittest.TestCase):
     '''Tests for parsing XML output returned by EFetch
     '''
+    def t_journals(self):
+        '''Test parsing XML returned by EFetch from the Journals database
+        '''
+        # In Journals display records for journal IDs 22682,21698,1490
+        # To create the XML file, use
+        # >>> Bio.Entrez.efetch(db="journals", id=["22682","21698","1490"],
+        #                       rettype="full", retmode='xml')
+        input = open('Entrez/serialset.xml')
+        record = Entrez.read(input)
+
+    def t_omim(self):
+        '''Test parsing XML returned by EFetch from the OMIM database
+        '''
+        # In OMIM show the full record for MIM number 601100 as XML
+        # To create the XML file, use
+        # >>> Bio.Entrez.efetch(db="omim", id="601100", retmode='xml',
+        #                       rettype='full')
+        input = open('Entrez/ncbi_mim.xml')
+        record = Entrez.read(input)
+
     def t_taxonomy(self):
         '''Test parsing XML returned by EFetch from the Taxonomy databases
         '''
