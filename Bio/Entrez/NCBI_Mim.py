@@ -29,6 +29,10 @@ def startElement(self, name, attrs):
         self.record[-1]["Mim-entry_text"] = []
     elif self.element==["Mim-entries", "Mim-entry", "Mim-entry_text", "Mim-text"]:
         self.record[-1]["Mim-entry_text"].append({})
+    elif self.element==["Mim-entries", "Mim-entry", "Mim-entry_text", "Mim-text", "Mim-text_neighbors"]:
+        self.record[-1]["Mim-entry_text"][-1]["Mim-text_neighbors"] = []
+    elif self.element==["Mim-entries", "Mim-entry", "Mim-entry_text", "Mim-text", "Mim-text_neighbors", "Mim-link"]:
+        self.record[-1]["Mim-entry_text"][-1]["Mim-text_neighbors"].append({})
     elif self.element==["Mim-entries", "Mim-entry", "Mim-entry_textfields"]:
         self.record[-1]["Mim-entry_textfields"] = []
     elif self.element==["Mim-entries", "Mim-entry", "Mim-entry_textfields", "Mim-text"]:
@@ -218,6 +222,12 @@ def endElement(self, name):
         self.record[-1]["Mim-entry_text"][-1]["Mim-text_label"] = self.content
     elif self.element==["Mim-entries", "Mim-entry", "Mim-entry_text", "Mim-text", "Mim-text_text"]:
         self.record[-1]["Mim-entry_text"][-1]["Mim-text_text"] = self.content
+    elif self.element==["Mim-entries", "Mim-entry", "Mim-entry_text", "Mim-text", "Mim-text_neighbors", "Mim-link", "Mim-link_num"]:
+        self.record[-1]["Mim-entry_text"][-1]["Mim-text_neighbors"][-1]["Mim-link_num"] = int(self.content)
+    elif self.element==["Mim-entries", "Mim-entry", "Mim-entry_text", "Mim-text", "Mim-text_neighbors", "Mim-link", "Mim-link_uids"]:
+        self.record[-1]["Mim-entry_text"][-1]["Mim-text_neighbors"][-1]["Mim-link_uids"] = self.content
+    elif self.element==["Mim-entries", "Mim-entry", "Mim-entry_text", "Mim-text", "Mim-text_neighbors", "Mim-link", "Mim-link_numRelevant"]:
+        self.record[-1]["Mim-entry_text"][-1]["Mim-text_neighbors"][-1]["Mim-link_numRelevant"] = int(self.content)
     elif self.element==["Mim-entries", "Mim-entry", "Mim-entry_textfields", "Mim-text", "Mim-text_label"]:
         self.record[-1]["Mim-entry_textfields"][-1]["Mim-text_label"] = self.content
     elif self.element==["Mim-entries", "Mim-entry", "Mim-entry_textfields", "Mim-text", "Mim-text_text"]:
