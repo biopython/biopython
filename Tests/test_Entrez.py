@@ -3071,6 +3071,125 @@ class EFetchTest(unittest.TestCase):
         input = open('Entrez/serialset.xml')
         record = Entrez.read(input)
 
+        assert record[0]["NlmUniqueID"]=="100971611"
+        assert record[0]["Title"]=="21st century science & technology"
+        assert record[0]["MedlineTA"]=="21st Century Sci Technol"
+        assert len(record[0]["PublicationInfo"])==5
+        assert record[0]["PublicationInfo"]["Country"]=="United States"
+        assert record[0]["PublicationInfo"]["Place"]=="[Washington, D.C. :"
+        assert record[0]["PublicationInfo"]["Publisher"]=="21st Century Science Associates,"
+        assert record[0]["PublicationInfo"]["PublicationFirstYear"]=="1988"
+        assert record[0]["PublicationInfo"]["Frequency"]=="Quarterly,"
+        assert record[0]["ISSN"]==["Print", "0895-6820"]
+        assert record[0]["Language"]==["eng"]
+        assert record[0]["AcidFreeYN"]=="N"
+        assert record[0]["MinorTitleChangeYN"]=="N"
+        assert record[0]["CurrentlyIndexedYN"]=="N"
+        assert record[0]["IndexOnlineYN"]=="N"
+        assert record[0]["IndexingSubset"]=="S"
+        assert len(record[0]["CrossReferenceList"])==5
+        assert record[0]["CrossReferenceList"][0]==["X", "21 century"]
+        assert record[0]["CrossReferenceList"][1]==["A", "21st century science & technology."]
+        assert record[0]["CrossReferenceList"][2]==["X", "21st century science and technology"]
+        assert record[0]["CrossReferenceList"][3]==["X", "Twenty-first century science & technology"]
+        assert record[0]["CrossReferenceList"][4]==["X", "Twenty-first century science and technology"]
+        assert record[0]["SortSerialName"]=="21ST CENTURY SCIENCE & TECHNOLOGY"
+        assert record[0]["IlsCreatedTimestamp"]["Year"]=="2000"
+        assert record[0]["IlsCreatedTimestamp"]["Month"]=="11"
+        assert record[0]["IlsCreatedTimestamp"]["Day"]=="22"
+        assert record[0]["IlsUpdatedTimestamp"]["Year"]=="2006"
+        assert record[0]["IlsUpdatedTimestamp"]["Month"]=="10"
+        assert record[0]["IlsUpdatedTimestamp"]["Day"]=="21"
+
+        assert record[1]["DataCreationMethod"]=="P"
+        assert record[1]["NlmUniqueID"]=="100939625"
+        assert record[1]["Title"]=="AIHAJ : a journal for the science of occupational and environmental\nhealth and safety"
+        assert record[1]["MedlineTA"]=="AIHAJ"
+        assert len(record[1]["PublicationInfo"])==6
+        assert record[1]["PublicationInfo"]["Country"]=="United States"
+        assert record[1]["PublicationInfo"]["Place"]=="Fairfax, VA :"
+        assert record[1]["PublicationInfo"]["Publisher"]=="American Industrial Hygiene Association,"
+        assert record[1]["PublicationInfo"]["PublicationFirstYear"]=="2000"
+        assert record[1]["PublicationInfo"]["PublicationEndYear"]=="2001"
+        assert record[1]["PublicationInfo"]["Frequency"]=="Bimonthly"
+        assert record[1]["ISSN"]==["Print", "1529-8663"]
+        assert record[1]["Language"]==["eng"]
+        assert record[1]["AcidFreeYN"]=="N"
+        assert record[1]["ContinuationNotes"]=="Continues: American Industrial Hygiene Association\njournal. Continued by: AIHA journal. "
+        assert record[1]["MinorTitleChangeYN"]=="N"
+        assert len(record[1]["IndexingHistoryList"])==2
+        assert record[1]["IndexingHistoryList"][0]["CitationSubset"]=="IM"
+        assert record[1]["IndexingHistoryList"][0]["IndexingTreatment"]=="Full"
+        assert record[1]["IndexingHistoryList"][0]["IndexingStatus"]=="Currently-indexed-Title-changed"
+        assert record[1]["IndexingHistoryList"][0]["DateOfAction"]["Year"]=="2000"
+        assert record[1]["IndexingHistoryList"][0]["DateOfAction"]["Month"]=="03"
+        assert record[1]["IndexingHistoryList"][0]["DateOfAction"]["Day"]=="24"
+        assert record[1]["IndexingHistoryList"][0]["Coverage"]=="v61n1,Jan./Feb. 2000-v62n6,Nov./Dec. 2001"
+        assert record[1]["IndexingHistoryList"][1]["CitationSubset"]=="IM"
+        assert record[1]["IndexingHistoryList"][1]["IndexingTreatment"]=="Full"
+        assert record[1]["IndexingHistoryList"][1]["IndexingStatus"]=="Continued-by-another-indexed-title"
+        assert record[1]["IndexingHistoryList"][1]["DateOfAction"]["Year"]=="2002"
+        assert record[1]["IndexingHistoryList"][1]["DateOfAction"]["Month"]=="06"
+        assert record[1]["IndexingHistoryList"][1]["DateOfAction"]["Day"]=="03"
+        assert record[1]["CurrentlyIndexedYN"]=="N"
+        assert record[1]["IndexOnlineYN"]=="N"
+        assert record[1]["IndexingSubset"]=="IM"
+        assert record[1]["BroadJournalHeadingList"][0]=="Occupational Medicine"
+        assert len(record[1]["CrossReferenceList"])==2
+        assert record[1]["CrossReferenceList"][0]==["A", "AIHAJ :"]
+        assert record[1]["CrossReferenceList"][1]==["X", "American Industrial Hygiene Association journal"]
+        assert record[1]["SortSerialName"]=="AIHAJ : A JOURNAL FOR THE SCIENCE OF OCCUPATIONAL AND\nENVIRONMENTAL HEALTH AND SAFETY"
+        assert record[1]["IlsCreatedTimestamp"]["Year"]=="2000"
+        assert record[1]["IlsCreatedTimestamp"]["Month"]=="03"
+        assert record[1]["IlsCreatedTimestamp"]["Day"]=="22"
+        assert record[1]["IlsUpdatedTimestamp"]["Year"]=="2005"
+        assert record[1]["IlsUpdatedTimestamp"]["Month"]=="11"
+        assert record[1]["IlsUpdatedTimestamp"]["Day"]=="20"
+
+        assert record[2]["DataCreationMethod"]=="P"
+        assert record[2]["NlmUniqueID"]=="8403252"
+        assert record[2]["Title"]=="Acta crystallographica. Section B, Structural science"
+        assert record[2]["MedlineTA"]=="Acta Crystallogr B"
+        assert len(record[2]["PublicationInfo"])==5
+        assert record[2]["PublicationInfo"]["Country"]=="Denmark"
+        assert record[2]["PublicationInfo"]["Place"]=="Copenhagen"
+        assert record[2]["PublicationInfo"]["Publisher"]=="Munksgaard International Publishers For The International\nUnion Of Crystallography"
+        assert record[2]["PublicationInfo"]["PublicationFirstYear"]=="1983"
+        assert record[2]["PublicationInfo"]["Frequency"]=="Bimonthly"
+        assert record[2]["ISSN"]==["Print", "0108-7681"]
+        assert record[2]["ISOAbbreviation"]=="Acta Crystallogr., B"
+        assert record[2]["Language"]==["eng", "fre", "ger"]
+        assert record[2]["AcidFreeYN"]=="N"
+        assert record[2]["Coden"]=="ASBSDK"
+        assert record[2]["ContinuationNotes"]=="Continues: Acta crystallographica. Section B, Structural\ncrystallography and crystal chemistry. "
+        assert record[2]["MinorTitleChangeYN"]=="N"
+        assert len(record[2]["IndexingHistoryList"])==1
+        assert record[2]["IndexingHistoryList"][0]["CitationSubset"]=="IM"
+        assert record[2]["IndexingHistoryList"][0]["IndexingTreatment"]=="Selective"
+        assert record[2]["IndexingHistoryList"][0]["IndexingStatus"]=="Currently-indexed"
+        assert record[2]["IndexingHistoryList"][0]["DateOfAction"]["Year"]=="1989"
+        assert record[2]["IndexingHistoryList"][0]["DateOfAction"]["Month"]=="11"
+        assert record[2]["IndexingHistoryList"][0]["DateOfAction"]["Day"]=="06"
+        assert record[2]["IndexingHistoryList"][0]["Coverage"]=="v44n1, 1988-"
+        assert record[2]["CurrentlyIndexedYN"]=="Y"
+        assert record[2]["CurrentlyIndexedForSubset"]["CurrentSubset"]=="IM"
+        assert record[2]["CurrentlyIndexedForSubset"]["CurrentIndexingTreatment"]=="Selective"
+        assert record[2]["IndexOnlineYN"]=="N"
+        assert record[2]["IndexingSubset"]=="IM"
+        assert record[2]["BroadJournalHeadingList"][0]=="Chemistry, Analytical"
+        assert len(record[2]["CrossReferenceList"])==4
+        assert record[2]["CrossReferenceList"][0]==["A", "ACTA CRYSTALLOGR B"]
+        assert record[2]["CrossReferenceList"][1]==["A", "Acta Crystallogr.,Sect.B"]
+        assert record[2]["CrossReferenceList"][2]==["A", "Acta crystallographica. Section B, Structural\nscience."]
+        assert record[2]["CrossReferenceList"][3]==["X", "Structural science"]
+        assert record[2]["SortSerialName"]=="ACTA CRYSTALLOGRAPHICA. SECTION B, STRUCTURAL\nSCIENCE"
+        assert record[2]["IlsCreatedTimestamp"]["Year"]=="1998"
+        assert record[2]["IlsCreatedTimestamp"]["Month"]=="11"
+        assert record[2]["IlsCreatedTimestamp"]["Day"]=="05"
+        assert record[2]["IlsUpdatedTimestamp"]["Year"]=="2008"
+        assert record[2]["IlsUpdatedTimestamp"]["Month"]=="04"
+        assert record[2]["IlsUpdatedTimestamp"]["Day"]=="04"
+
     def t_omim(self):
         '''Test parsing XML returned by EFetch from the OMIM database
         '''
