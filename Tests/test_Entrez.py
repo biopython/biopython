@@ -3200,6 +3200,162 @@ class EFetchTest(unittest.TestCase):
         input = open('Entrez/ncbi_mim.xml')
         record = Entrez.read(input)
 
+        assert len(record)==1
+        assert record[0]["Mim-entry_mimNumber"]=="601100"
+        assert record[0]["Mim-entry_mimType"]==["star", "1"]
+        assert record[0]["Mim-entry_title"]=="STRESS 70 PROTEIN CHAPERONE, MICROSOME-ASSOCIATED, 60-KD; STCH"
+        assert record[0]["Mim-entry_copyright"]=="Copyright (c) 1966-2008 Johns Hopkins University"
+        assert record[0]["Mim-entry_symbol"]=="STCH"
+        assert record[0]["Mim-entry_locus"]=="21q11.1"
+        assert len(record[0]["Mim-entry_text"])==2
+        assert record[0]["Mim-entry_text"][0]["Mim-text_label"]=="TEXT"
+        assert record[0]["Mim-entry_text"][0]["Mim-text_text"]=="The stress-70 chaperone family consists of proteins that bind to denatured or incorrectly folded polypeptides and play a major role in the processing of cytosolic and secretory proteins. {2:Otterson et al. (1994)} cloned a human cDNA encoding a predicted 471-amino acid protein (60 kD) which they designated STCH. {1:Brodsky et al. (1995)} stated that the protein sequence is very similar to that of HSP70 ({140550}) and BiP ({138120}). As with other members of the family, the STCH protein contains an ATPase domain at the amino terminus whose activity was shown to be independent of peptide stimulation. The protein was found to be microsome-associated and constitutively expressed in all cell types examined."
+        assert len(record[0]["Mim-entry_text"][0]["Mim-text_neighbors"])==1
+        assert record[0]["Mim-entry_text"][0]["Mim-text_neighbors"][0]["Mim-link_num"]==30
+        assert record[0]["Mim-entry_text"][0]["Mim-text_neighbors"][0]["Mim-link_uids"]=="8131751,9358068,10675567,9488737,8757872,11048651,2559088,10982831,2105497,16572726,9083109,17181539,14508011,15028727,10651811,9108392,11599566,2661019,11836248,7594475,12406544,8536694,12389629,10430932,9177027,9837933,8522346,2928112,12834280,8702658"
+        assert record[0]["Mim-entry_text"][0]["Mim-text_neighbors"][0]["Mim-link_numRelevant"]==0
+        assert record[0]["Mim-entry_text"][1]["Mim-text_label"]=="TEXT"
+        assert record[0]["Mim-entry_text"][1]["Mim-text_text"]=="{1:Brodsky et al. (1995)} mapped the STCH gene to chromosome 21q11.1 with a high-resolution somatic cell hybrid panel for chromosome 21 and by fluorescence in situ hybridization with a YAC containing the gene. By interspecific backcross analysis, {3:Reeves et al. (1998)} mapped the mouse Stch gene to chromosome 16."
+        assert len(record[0]["Mim-entry_text"][1]["Mim-text_neighbors"])==1
+        assert record[0]["Mim-entry_text"][1]["Mim-text_neighbors"][0]["Mim-link_num"]==30
+        assert record[0]["Mim-entry_text"][1]["Mim-text_neighbors"][0]["Mim-link_uids"]=="1354597,8244375,8597637,8838809,9143508,1427875,7806216,9852683,7835904,11060461,10083745,7789175,7806232,7513297,8020937,12014109,1769649,2045096,9747039,8034329,8088815,1783375,8275716,8020959,7956352,8020952,10198174,7655454,8750197,11272792"
+        assert record[0]["Mim-entry_text"][1]["Mim-text_neighbors"][0]["Mim-link_numRelevant"]==0
+        assert record[0]["Mim-entry_hasSummary"]==False
+        assert record[0]["Mim-entry_hasSynopsis"]==False
+        assert len(record[0]["Mim-entry_editHistory"])==6
+        assert record[0]["Mim-entry_editHistory"][0]["Mim-edit-item_author"]=="terry"
+        assert record[0]["Mim-entry_editHistory"][0]["Mim-edit-item_modDate"]["Mim-date"]["Mim-date_year"]=="1999"
+        assert record[0]["Mim-entry_editHistory"][0]["Mim-edit-item_modDate"]["Mim-date"]["Mim-date_month"]=="3"
+        assert record[0]["Mim-entry_editHistory"][0]["Mim-edit-item_modDate"]["Mim-date"]["Mim-date_day"]=="9"
+        assert record[0]["Mim-entry_editHistory"][1]["Mim-edit-item_author"]=="carol"
+        assert record[0]["Mim-entry_editHistory"][1]["Mim-edit-item_modDate"]["Mim-date"]["Mim-date_year"]=="1999"
+        assert record[0]["Mim-entry_editHistory"][1]["Mim-edit-item_modDate"]["Mim-date"]["Mim-date_month"]=="3"
+        assert record[0]["Mim-entry_editHistory"][1]["Mim-edit-item_modDate"]["Mim-date"]["Mim-date_day"]=="7"
+        assert record[0]["Mim-entry_editHistory"][2]["Mim-edit-item_author"]=="carol"
+        assert record[0]["Mim-entry_editHistory"][2]["Mim-edit-item_modDate"]["Mim-date"]["Mim-date_year"]=="1998"
+        assert record[0]["Mim-entry_editHistory"][2]["Mim-edit-item_modDate"]["Mim-date"]["Mim-date_month"]=="7"
+        assert record[0]["Mim-entry_editHistory"][2]["Mim-edit-item_modDate"]["Mim-date"]["Mim-date_day"]=="8"
+        assert record[0]["Mim-entry_editHistory"][3]["Mim-edit-item_author"]=="terry"
+        assert record[0]["Mim-entry_editHistory"][3]["Mim-edit-item_modDate"]["Mim-date"]["Mim-date_year"]=="1996"
+        assert record[0]["Mim-entry_editHistory"][3]["Mim-edit-item_modDate"]["Mim-date"]["Mim-date_month"]=="5"
+        assert record[0]["Mim-entry_editHistory"][3]["Mim-edit-item_modDate"]["Mim-date"]["Mim-date_day"]=="24"
+        assert record[0]["Mim-entry_editHistory"][4]["Mim-edit-item_author"]=="mark"
+        assert record[0]["Mim-entry_editHistory"][4]["Mim-edit-item_modDate"]["Mim-date"]["Mim-date_year"]=="1996"
+        assert record[0]["Mim-entry_editHistory"][4]["Mim-edit-item_modDate"]["Mim-date"]["Mim-date_month"]=="3"
+        assert record[0]["Mim-entry_editHistory"][4]["Mim-edit-item_modDate"]["Mim-date"]["Mim-date_day"]=="1"
+        assert record[0]["Mim-entry_editHistory"][5]["Mim-edit-item_author"]=="mark"
+        assert record[0]["Mim-entry_editHistory"][5]["Mim-edit-item_modDate"]["Mim-date"]["Mim-date_year"]=="1996"
+        assert record[0]["Mim-entry_editHistory"][5]["Mim-edit-item_modDate"]["Mim-date"]["Mim-date_month"]=="3"
+        assert record[0]["Mim-entry_editHistory"][5]["Mim-edit-item_modDate"]["Mim-date"]["Mim-date_day"]=="1"
+        assert record[0]["Mim-entry_creationDate"]["Mim-edit-item"]["Mim-edit-item_author"]=="Alan F. Scott"
+        assert record[0]["Mim-entry_creationDate"]["Mim-edit-item"]["Mim-edit-item_modDate"]["Mim-date"]["Mim-date_year"]=="1996"
+        assert record[0]["Mim-entry_creationDate"]["Mim-edit-item"]["Mim-edit-item_modDate"]["Mim-date"]["Mim-date_month"]=="3"
+        assert record[0]["Mim-entry_creationDate"]["Mim-edit-item"]["Mim-edit-item_modDate"]["Mim-date"]["Mim-date_day"]=="1"
+        assert len(record[0]["Mim-entry_references"])==3
+        assert record[0]["Mim-entry_references"][0]["Mim-reference_number"]=="1"
+        assert record[0]["Mim-entry_references"][0]["Mim-reference_origNumber"]=="1"
+        assert record[0]["Mim-entry_references"][0]["Mim-reference_type"]=="citation"
+        assert len(record[0]["Mim-entry_references"][0]["Mim-reference_authors"])==6
+        assert record[0]["Mim-entry_references"][0]["Mim-reference_authors"][0]["Mim-author_name"]=="Brodsky, G."
+        assert record[0]["Mim-entry_references"][0]["Mim-reference_authors"][0]["Mim-author_index"]==1
+        assert record[0]["Mim-entry_references"][0]["Mim-reference_authors"][1]["Mim-author_name"]=="Otterson, G. A."
+        assert record[0]["Mim-entry_references"][0]["Mim-reference_authors"][1]["Mim-author_index"]==1
+        assert record[0]["Mim-entry_references"][0]["Mim-reference_authors"][2]["Mim-author_name"]=="Parry, B. B."
+        assert record[0]["Mim-entry_references"][0]["Mim-reference_authors"][2]["Mim-author_index"]==1
+        assert record[0]["Mim-entry_references"][0]["Mim-reference_authors"][3]["Mim-author_name"]=="Hart, I."
+        assert record[0]["Mim-entry_references"][0]["Mim-reference_authors"][3]["Mim-author_index"]==1
+        assert record[0]["Mim-entry_references"][0]["Mim-reference_authors"][4]["Mim-author_name"]=="Patterson, D."
+        assert record[0]["Mim-entry_references"][0]["Mim-reference_authors"][4]["Mim-author_index"]==1
+        assert record[0]["Mim-entry_references"][0]["Mim-reference_authors"][5]["Mim-author_name"]=="Kaye, F. J."
+        assert record[0]["Mim-entry_references"][0]["Mim-reference_authors"][5]["Mim-author_index"]==1
+        assert record[0]["Mim-entry_references"][0]["Mim-reference_primaryAuthor"]=="Brodsky"
+        assert record[0]["Mim-entry_references"][0]["Mim-reference_otherAuthors"]=="et al."
+        assert record[0]["Mim-entry_references"][0]["Mim-reference_citationTitle"]=="Localization of STCH to human chromosome 21q11.1."
+        assert record[0]["Mim-entry_references"][0]["Mim-reference_citationType"]=="0"
+        assert record[0]["Mim-entry_references"][0]["Mim-reference_volume"]=="30"
+        assert record[0]["Mim-entry_references"][0]["Mim-reference_journal"]=="Genomics"
+        assert record[0]["Mim-entry_references"][0]["Mim-reference_pubDate"]["Mim-date"]["Mim-date_year"]=="1995"
+        assert record[0]["Mim-entry_references"][0]["Mim-reference_pubDate"]["Mim-date"]["Mim-date_month"]=="0"
+        assert record[0]["Mim-entry_references"][0]["Mim-reference_pubDate"]["Mim-date"]["Mim-date_day"]=="0"
+        assert record[0]["Mim-entry_references"][0]["Mim-reference_pages"]["Mim-page"]["Mim-page_from"]==627
+        assert record[0]["Mim-entry_references"][0]["Mim-reference_pages"]["Mim-page"]["Mim-page_to"]==628
+        assert record[0]["Mim-entry_references"][0]["Mim-reference_pubmedUID"]=="8825657"
+        assert record[0]["Mim-entry_references"][0]["Mim-reference_ambiguous"]==False
+        assert record[0]["Mim-entry_references"][0]["Mim-reference_noLink"]==False
+        assert record[0]["Mim-entry_references"][1]["Mim-reference_number"]=="2"
+        assert record[0]["Mim-entry_references"][1]["Mim-reference_origNumber"]=="2"
+        assert record[0]["Mim-entry_references"][1]["Mim-reference_type"]=="citation"
+        assert len(record[0]["Mim-entry_references"][1]["Mim-reference_authors"])==6
+        assert record[0]["Mim-entry_references"][1]["Mim-reference_authors"][0]["Mim-author_name"]=="Otterson, G. A."
+        assert record[0]["Mim-entry_references"][1]["Mim-reference_authors"][0]["Mim-author_index"]==1
+        assert record[0]["Mim-entry_references"][1]["Mim-reference_authors"][1]["Mim-author_name"]=="Flynn, G. C."
+        assert record[0]["Mim-entry_references"][1]["Mim-reference_authors"][1]["Mim-author_index"]==1
+        assert record[0]["Mim-entry_references"][1]["Mim-reference_authors"][2]["Mim-author_name"]=="Kratzke, R. A."
+        assert record[0]["Mim-entry_references"][1]["Mim-reference_authors"][2]["Mim-author_index"]==1
+        assert record[0]["Mim-entry_references"][1]["Mim-reference_authors"][3]["Mim-author_name"]=="Coxon, A."
+        assert record[0]["Mim-entry_references"][1]["Mim-reference_authors"][3]["Mim-author_index"]==1
+        assert record[0]["Mim-entry_references"][1]["Mim-reference_authors"][4]["Mim-author_name"]=="Johnston, P. G."
+        assert record[0]["Mim-entry_references"][1]["Mim-reference_authors"][4]["Mim-author_index"]==1
+        assert record[0]["Mim-entry_references"][1]["Mim-reference_authors"][5]["Mim-author_name"]=="Kaye, F. J."
+        assert record[0]["Mim-entry_references"][1]["Mim-reference_authors"][5]["Mim-author_index"]==1
+        assert record[0]["Mim-entry_references"][1]["Mim-reference_primaryAuthor"]=="Otterson"
+        assert record[0]["Mim-entry_references"][1]["Mim-reference_otherAuthors"]=="et al."
+        assert record[0]["Mim-entry_references"][1]["Mim-reference_citationTitle"]=="Stch encodes the 'ATPase core' of a microsomal stress70 protein."
+        assert record[0]["Mim-entry_references"][1]["Mim-reference_citationType"]=="0"
+        assert record[0]["Mim-entry_references"][1]["Mim-reference_volume"]=="13"
+        assert record[0]["Mim-entry_references"][1]["Mim-reference_journal"]=="EMBO J."
+        assert record[0]["Mim-entry_references"][1]["Mim-reference_pubDate"]["Mim-date"]["Mim-date_year"]=="1994"
+        assert record[0]["Mim-entry_references"][1]["Mim-reference_pubDate"]["Mim-date"]["Mim-date_month"]=="0"
+        assert record[0]["Mim-entry_references"][1]["Mim-reference_pubDate"]["Mim-date"]["Mim-date_day"]=="0"
+        assert record[0]["Mim-entry_references"][1]["Mim-reference_pages"]["Mim-page"]["Mim-page_from"]==1216
+        assert record[0]["Mim-entry_references"][1]["Mim-reference_pages"]["Mim-page"]["Mim-page_to"]==1225
+        assert record[0]["Mim-entry_references"][1]["Mim-reference_pubmedUID"]=="8131751"
+        assert record[0]["Mim-entry_references"][1]["Mim-reference_ambiguous"]==False
+        assert record[0]["Mim-entry_references"][1]["Mim-reference_noLink"]==False
+        assert record[0]["Mim-entry_references"][2]["Mim-reference_number"]=="3"
+        assert record[0]["Mim-entry_references"][2]["Mim-reference_origNumber"]=="3"
+        assert record[0]["Mim-entry_references"][2]["Mim-reference_type"]=="citation"
+        assert len(record[0]["Mim-entry_references"][2]["Mim-reference_authors"])==4
+        assert record[0]["Mim-entry_references"][2]["Mim-reference_authors"][0]["Mim-author_name"]=="Reeves, R. H."
+        assert record[0]["Mim-entry_references"][2]["Mim-reference_authors"][0]["Mim-author_index"]==1
+        assert record[0]["Mim-entry_references"][2]["Mim-reference_authors"][1]["Mim-author_name"]=="Rue, E."
+        assert record[0]["Mim-entry_references"][2]["Mim-reference_authors"][1]["Mim-author_index"]==1
+        assert record[0]["Mim-entry_references"][2]["Mim-reference_authors"][2]["Mim-author_name"]=="Yu, J."
+        assert record[0]["Mim-entry_references"][2]["Mim-reference_authors"][2]["Mim-author_index"]==1
+        assert record[0]["Mim-entry_references"][2]["Mim-reference_authors"][3]["Mim-author_name"]=="Kao, F.-T."
+        assert record[0]["Mim-entry_references"][2]["Mim-reference_authors"][3]["Mim-author_index"]==1
+        assert record[0]["Mim-entry_references"][2]["Mim-reference_primaryAuthor"]=="Reeves"
+        assert record[0]["Mim-entry_references"][2]["Mim-reference_otherAuthors"]=="et al."
+        assert record[0]["Mim-entry_references"][2]["Mim-reference_citationTitle"]=="Stch maps to mouse chromosome 16, extending the conserved synteny with human chromosome 21."
+        assert record[0]["Mim-entry_references"][2]["Mim-reference_citationType"]=="0"
+        assert record[0]["Mim-entry_references"][2]["Mim-reference_volume"]=="49"
+        assert record[0]["Mim-entry_references"][2]["Mim-reference_journal"]=="Genomics"
+        assert record[0]["Mim-entry_references"][2]["Mim-reference_pubDate"]["Mim-date"]["Mim-date_year"]=="1998"
+        assert record[0]["Mim-entry_references"][2]["Mim-reference_pubDate"]["Mim-date"]["Mim-date_month"]=="0"
+        assert record[0]["Mim-entry_references"][2]["Mim-reference_pubDate"]["Mim-date"]["Mim-date_day"]=="0"
+        assert record[0]["Mim-entry_references"][2]["Mim-reference_pages"]["Mim-page"]["Mim-page_from"]==156
+        assert record[0]["Mim-entry_references"][2]["Mim-reference_pages"]["Mim-page"]["Mim-page_to"]==157
+        assert record[0]["Mim-entry_references"][2]["Mim-reference_pubmedUID"]=="9570963"
+        assert record[0]["Mim-entry_references"][2]["Mim-reference_ambiguous"]==False
+        assert record[0]["Mim-entry_references"][2]["Mim-reference_noLink"]==False
+        assert record[0]["Mim-entry_attribution"][0]["Mim-edit-item_author"]=="Carol A. Bocchini - updated"
+        assert record[0]["Mim-entry_attribution"][0]["Mim-edit-item_modDate"]["Mim-date"]["Mim-date_year"]=="1999"
+        assert record[0]["Mim-entry_attribution"][0]["Mim-edit-item_modDate"]["Mim-date"]["Mim-date_month"]=="3"
+        assert record[0]["Mim-entry_attribution"][0]["Mim-edit-item_modDate"]["Mim-date"]["Mim-date_day"]=="7"
+        assert record[0]["Mim-entry_numGeneMaps"]==1
+        assert len(record[0]["Mim-entry_medlineLinks"])==1
+        assert record[0]["Mim-entry_medlineLinks"][0]["Mim-link_num"]==3
+        assert record[0]["Mim-entry_medlineLinks"][0]["Mim-link_uids"]=="8825657,8131751,9570963"
+        assert record[0]["Mim-entry_medlineLinks"][0]["Mim-link_numRelevant"]==0
+        assert len(record[0]["Mim-entry_proteinLinks"])==1
+        assert record[0]["Mim-entry_proteinLinks"][0]["Mim-link_num"]==7
+        assert record[0]["Mim-entry_proteinLinks"][0]["Mim-link_uids"]=="148747550,67461586,48928056,30089677,2352621,1351125,460148"
+        assert record[0]["Mim-entry_proteinLinks"][0]["Mim-link_numRelevant"]==0
+        assert len(record[0]["Mim-entry_nucleotideLinks"])==1
+        assert record[0]["Mim-entry_nucleotideLinks"][0]["Mim-link_num"]==5
+        assert record[0]["Mim-entry_nucleotideLinks"][0]["Mim-link_uids"]=="148747549,55741785,48928055,2352620,460147"
+        assert record[0]["Mim-entry_nucleotideLinks"][0]["Mim-link_numRelevant"]==0
+
     def t_taxonomy(self):
         '''Test parsing XML returned by EFetch from the Taxonomy databases
         '''
