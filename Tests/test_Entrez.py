@@ -3061,6 +3061,176 @@ class ESpellTest(unittest.TestCase):
 class EFetchTest(unittest.TestCase):
     '''Tests for parsing XML output returned by EFetch
     '''
+    def t_pubmed1(self):
+        '''Test parsing XML returned by EFetch from PubMed (first test)
+        '''
+        # In PubMed display PMIDs 12091962 and 9997 in xml retrieval mode
+        # and abstract retrieval type.
+        # To create the XML file, use
+        # >>> Bio.Entrez.efetch(db='pubmed', id='12091962,9997',
+        #                       retmode='xml', rettype='abstract')
+        input = open('Entrez/pubmed1.xml')
+        record = Entrez.read(input)
+
+        assert record[0]["MedlineCitation"]["Owner"]=="KIE"
+        assert record[0]["MedlineCitation"]["Status"]=="MEDLINE"
+        assert record[0]["MedlineCitation"]["PMID"]=="12091962"
+        assert record[0]["MedlineCitation"]["DateCreated"]["Year"]=="1991"
+        assert record[0]["MedlineCitation"]["DateCreated"]["Month"]=="01"
+        assert record[0]["MedlineCitation"]["DateCreated"]["Day"]=="22"
+        assert record[0]["MedlineCitation"]["DateCompleted"]["Year"]=="1991"
+        assert record[0]["MedlineCitation"]["DateCompleted"]["Month"]=="01"
+        assert record[0]["MedlineCitation"]["DateCompleted"]["Day"]=="22"
+        assert record[0]["MedlineCitation"]["DateRevised"]["Year"]=="2007"
+        assert record[0]["MedlineCitation"]["DateRevised"]["Month"]=="11"
+        assert record[0]["MedlineCitation"]["DateRevised"]["Day"]=="15"
+        assert record[0]["MedlineCitation"]["Article"]["PubModel"]=="Print"
+        assert record[0]["MedlineCitation"]["Article"]["Journal"]["ISSN"]==["Print", "1043-1578"]
+        assert record[0]["MedlineCitation"]["Article"]["Journal"]["JournalIssue"]["CitedMedium"]=="Print"
+        assert record[0]["MedlineCitation"]["Article"]["Journal"]["JournalIssue"]["Volume"]=="17"
+        assert record[0]["MedlineCitation"]["Article"]["Journal"]["JournalIssue"]["Issue"]=="1"
+        assert record[0]["MedlineCitation"]["Article"]["Journal"]["JournalIssue"]["PubDate"]["Year"]=="1990"
+        assert record[0]["MedlineCitation"]["Article"]["Journal"]["JournalIssue"]["PubDate"]["Season"]=="Spring"
+        assert record[0]["MedlineCitation"]["Article"]["Journal"]["Title"]=="Social justice (San Francisco, Calif.)"
+        assert record[0]["MedlineCitation"]["Article"]["ArticleTitle"]=="The treatment of AIDS behind the walls of correctional facilities."
+        assert record[0]["MedlineCitation"]["Article"]["Pagination"]["MedlinePgn"]=="113-25"
+        assert record[0]["MedlineCitation"]["Article"]["AuthorList"][0]=='Y'
+        assert record[0]["MedlineCitation"]["Article"]["AuthorList"][1]["ValidYN"]=="Y"
+        assert record[0]["MedlineCitation"]["Article"]["AuthorList"][1]["LastName"]=="Olivero"
+        assert record[0]["MedlineCitation"]["Article"]["AuthorList"][1]["ForeName"]=="J Michael"
+        assert record[0]["MedlineCitation"]["Article"]["AuthorList"][1]["Initials"]=="JM"
+        assert record[0]["MedlineCitation"]["Article"]["Language"]==["eng"]
+        assert record[0]["MedlineCitation"]["Article"]["PublicationTypeList"]==["Journal Article", "Review"]
+        assert record[0]["MedlineCitation"]["MedlineJournalInfo"]["Country"]=="United States"
+        assert record[0]["MedlineCitation"]["MedlineJournalInfo"]["MedlineTA"]=="Soc Justice"
+        assert record[0]["MedlineCitation"]["MedlineJournalInfo"]["NlmUniqueID"]=="9891830"
+        assert record[0]["MedlineCitation"]["CitationSubset"]=="E"
+        assert record[0]["MedlineCitation"]["MeshHeadingList"][0]["DescriptorName"]==["N", "AIDS Serodiagnosis"]
+        assert record[0]["MedlineCitation"]["MeshHeadingList"][1]["DescriptorName"]==["Y", "Acquired Immunodeficiency Syndrome"]
+        assert record[0]["MedlineCitation"]["MeshHeadingList"][2]["DescriptorName"]==["N", "Civil Rights"]
+        assert record[0]["MedlineCitation"]["MeshHeadingList"][3]["DescriptorName"]==["Y", "HIV Seropositivity"]
+        assert record[0]["MedlineCitation"]["MeshHeadingList"][4]["DescriptorName"]==["N", "Humans"]
+        assert record[0]["MedlineCitation"]["MeshHeadingList"][5]["DescriptorName"]==["Y", "Jurisprudence"]
+        assert record[0]["MedlineCitation"]["MeshHeadingList"][6]["DescriptorName"]==["N", "Law Enforcement"]
+        assert record[0]["MedlineCitation"]["MeshHeadingList"][7]["DescriptorName"]==["N", "Mass Screening"]
+        assert record[0]["MedlineCitation"]["MeshHeadingList"][8]["DescriptorName"]==["N", "Minority Groups"]
+        assert record[0]["MedlineCitation"]["MeshHeadingList"][9]["DescriptorName"]==["N", "Organizational Policy"]
+        assert record[0]["MedlineCitation"]["MeshHeadingList"][10]["DescriptorName"]==["N", "Patient Care"]
+        assert record[0]["MedlineCitation"]["MeshHeadingList"][11]["DescriptorName"]==["N", "Prejudice"]
+        assert record[0]["MedlineCitation"]["MeshHeadingList"][12]["DescriptorName"]==["Y", "Prisoners"]
+        assert record[0]["MedlineCitation"]["MeshHeadingList"][13]["DescriptorName"]==["Y", "Public Policy"]
+        assert record[0]["MedlineCitation"]["MeshHeadingList"][14]["DescriptorName"]==["N", "Quarantine"]
+        assert record[0]["MedlineCitation"]["MeshHeadingList"][15]["DescriptorName"]==["N", "Social Control, Formal"]
+        assert record[0]["MedlineCitation"]["MeshHeadingList"][16]["DescriptorName"]==["N", "Statistics as Topic"]
+        assert record[0]["MedlineCitation"]["MeshHeadingList"][17]["DescriptorName"]==["N", "Stereotyping"]
+        assert record[0]["MedlineCitation"]["MeshHeadingList"][18]["DescriptorName"]==["N", "United States"]
+        assert record[0]["MedlineCitation"]["NumberOfReferences"]==63
+        assert record[0]["MedlineCitation"]["OtherID"]==[["KIE", "31840"]]
+        assert record[0]["MedlineCitation"]["KeywordList"][0]=="KIE"
+        assert record[0]["MedlineCitation"]["KeywordList"][1]==["N", "Health Care and Public Health"]
+        assert record[0]["MedlineCitation"]["KeywordList"][2]==["N", "Legal Approach"]
+        assert record[0]["MedlineCitation"]["GeneralNote"][0]==["KIE", "14 fn."]
+        assert record[0]["MedlineCitation"]["GeneralNote"][1]==["KIE", "KIE BoB Subject Heading: AIDS"]
+        assert record[0]["MedlineCitation"]["GeneralNote"][2]==["KIE", "63 refs."]
+        assert record[0]["PubmedData"]["History"][0]["PubStatus"]=="pubmed"
+        assert record[0]["PubmedData"]["History"][0]["Year"]=="1990"
+        assert record[0]["PubmedData"]["History"][0]["Month"]=="4"
+        assert record[0]["PubmedData"]["History"][0]["Day"]=="1"
+        assert record[0]["PubmedData"]["History"][0]["Hour"]=="0"
+        assert record[0]["PubmedData"]["History"][0]["Minute"]=="0"
+        assert record[0]["PubmedData"]["History"][1]["PubStatus"]=="medline"
+        assert record[0]["PubmedData"]["History"][1]["Year"]=="2002"
+        assert record[0]["PubmedData"]["History"][1]["Month"]=="7"
+        assert record[0]["PubmedData"]["History"][1]["Day"]=="16"
+        assert record[0]["PubmedData"]["History"][1]["Hour"]=="10"
+        assert record[0]["PubmedData"]["History"][1]["Minute"]=="1"
+        assert record[0]["PubmedData"]["PublicationStatus"]=="ppublish"
+        assert len(record[0]["PubmedData"]["ArticleIdList"])==1
+        assert record[0]["PubmedData"]["ArticleIdList"][0]==["pubmed", "12091962"]
+        assert record[1]["MedlineCitation"]["Owner"]=="NLM"
+        assert record[1]["MedlineCitation"]["Status"]=="MEDLINE"
+        assert record[1]["MedlineCitation"]["PMID"]=="9997"
+        assert record[1]["MedlineCitation"]["DateCreated"]["Year"]=="1976"
+        assert record[1]["MedlineCitation"]["DateCreated"]["Month"]=="12"
+        assert record[1]["MedlineCitation"]["DateCreated"]["Day"]=="30"
+        assert record[1]["MedlineCitation"]["DateCompleted"]["Year"]=="1976"
+        assert record[1]["MedlineCitation"]["DateCompleted"]["Month"]=="12"
+        assert record[1]["MedlineCitation"]["DateCompleted"]["Day"]=="30"
+        assert record[1]["MedlineCitation"]["DateRevised"]["Year"]=="2003"
+        assert record[1]["MedlineCitation"]["DateRevised"]["Month"]=="11"
+        assert record[1]["MedlineCitation"]["DateRevised"]["Day"]=="14"
+        assert record[1]["MedlineCitation"]["Article"]["PubModel"]=="Print"
+        assert record[1]["MedlineCitation"]["Article"]["Journal"]["ISSN"]==["Print", "0006-3002"]
+        assert record[1]["MedlineCitation"]["Article"]["Journal"]["JournalIssue"]["CitedMedium"]=="Print"
+        assert record[1]["MedlineCitation"]["Article"]["Journal"]["JournalIssue"]["Volume"]=="446"
+        assert record[1]["MedlineCitation"]["Article"]["Journal"]["JournalIssue"]["Issue"]=="1"
+        assert record[1]["MedlineCitation"]["Article"]["Journal"]["JournalIssue"]["PubDate"]["Year"]=="1976"
+        assert record[1]["MedlineCitation"]["Article"]["Journal"]["JournalIssue"]["PubDate"]["Month"]=="Sep"
+        assert record[1]["MedlineCitation"]["Article"]["Journal"]["JournalIssue"]["PubDate"]["Day"]=="28"
+        assert record[1]["MedlineCitation"]["Article"]["Journal"]["Title"]=="Biochimica et biophysica acta"
+        assert record[1]["MedlineCitation"]["Article"]["Journal"]["ISOAbbreviation"]=="Biochim. Biophys. Acta"
+        assert record[1]["MedlineCitation"]["Article"]["ArticleTitle"]=="Magnetic studies of Chromatium flavocytochrome C552. A mechanism for heme-flavin interaction."
+        assert record[1]["MedlineCitation"]["Article"]["Pagination"]["MedlinePgn"]=="179-91"
+        assert record[1]["MedlineCitation"]["Article"]["Abstract"]["AbstractText"]=="Electron paramagnetic resonance and magnetic susceptibility studies of Chromatium flavocytochrome C552 and its diheme flavin-free subunit at temperatures below 45 degrees K are reported. The results show that in the intact protein and the subunit the two low-spin (S = 1/2) heme irons are distinguishable, giving rise to separate EPR signals. In the intact protein only, one of the heme irons exists in two different low spin environments in the pH range 5.5 to 10.5, while the other remains in a constant environment. Factors influencing the variable heme iron environment also influence flavin reactivity, indicating the existence of a mechanism for heme-flavin interaction."
+        assert record[1]["MedlineCitation"]["Article"]["AuthorList"][0]=="Y"
+        assert record[1]["MedlineCitation"]["Article"]["AuthorList"][1]["ValidYN"]=="Y"
+        assert record[1]["MedlineCitation"]["Article"]["AuthorList"][1]["LastName"]=="Strekas"
+        assert record[1]["MedlineCitation"]["Article"]["AuthorList"][1]["ForeName"]=="T C"
+        assert record[1]["MedlineCitation"]["Article"]["AuthorList"][1]["Initials"]=="TC"
+        assert record[1]["MedlineCitation"]["Article"]["Language"]==["eng"]
+        assert record[1]["MedlineCitation"]["Article"]["PublicationTypeList"]==["Journal Article"]
+        assert record[1]["MedlineCitation"]["MedlineJournalInfo"]["Country"]=="NETHERLANDS"
+        assert record[1]["MedlineCitation"]["MedlineJournalInfo"]["MedlineTA"]=="Biochim Biophys Acta"
+        assert record[1]["MedlineCitation"]["MedlineJournalInfo"]["NlmUniqueID"]=="0217513"
+        assert record[1]["MedlineCitation"]["ChemicalList"][0]["RegistryNumber"]=="0"
+        assert record[1]["MedlineCitation"]["ChemicalList"][0]["NameOfSubstance"]=="Cytochrome c Group"
+        assert record[1]["MedlineCitation"]["ChemicalList"][1]["RegistryNumber"]=="0"
+        assert record[1]["MedlineCitation"]["ChemicalList"][1]["NameOfSubstance"]=="Flavins"
+        assert record[1]["MedlineCitation"]["ChemicalList"][2]["RegistryNumber"]=="14875-96-8"
+        assert record[1]["MedlineCitation"]["ChemicalList"][2]["NameOfSubstance"]=="Heme"
+        assert record[1]["MedlineCitation"]["ChemicalList"][3]["RegistryNumber"]=="7439-89-6"
+        assert record[1]["MedlineCitation"]["ChemicalList"][3]["NameOfSubstance"]=="Iron"
+        assert record[1]["MedlineCitation"]["CitationSubset"]=="IM"
+        assert record[1]["MedlineCitation"]["MeshHeadingList"][0]["DescriptorName"]==["N", "Binding Sites"]
+        assert record[1]["MedlineCitation"]["MeshHeadingList"][1]["DescriptorName"]==["N", "Chromatium"]
+        assert record[1]["MedlineCitation"]["MeshHeadingList"][1]["QualifierName"]==["Y", "enzymology"]
+        assert record[1]["MedlineCitation"]["MeshHeadingList"][2]["DescriptorName"]==["Y", "Cytochrome c Group"]
+        assert record[1]["MedlineCitation"]["MeshHeadingList"][3]["DescriptorName"]==["N", "Electron Spin Resonance Spectroscopy"]
+        assert record[1]["MedlineCitation"]["MeshHeadingList"][4]["DescriptorName"]==["N", "Flavins"]
+        assert record[1]["MedlineCitation"]["MeshHeadingList"][5]["DescriptorName"]==["N", "Heme"]
+        assert record[1]["MedlineCitation"]["MeshHeadingList"][6]["DescriptorName"]==["N", "Hydrogen-Ion Concentration"]
+        assert record[1]["MedlineCitation"]["MeshHeadingList"][7]["DescriptorName"]==["N", "Iron"]
+        assert record[1]["MedlineCitation"]["MeshHeadingList"][7]["QualifierName"]==["N", "analysis"]
+        assert record[1]["MedlineCitation"]["MeshHeadingList"][8]["DescriptorName"]==["N", "Magnetics"]
+        assert record[1]["MedlineCitation"]["MeshHeadingList"][9]["DescriptorName"]==["N", "Oxidation-Reduction"]
+        assert record[1]["MedlineCitation"]["MeshHeadingList"][10]["DescriptorName"]==["N", "Protein Binding"]
+        assert record[1]["MedlineCitation"]["MeshHeadingList"][11]["DescriptorName"]==["N", "Protein Conformation"]
+        assert record[1]["MedlineCitation"]["MeshHeadingList"][12]["DescriptorName"]==["N", "Temperature"]
+        assert record[1]["PubmedData"]["History"][0]["PubStatus"]=="pubmed"
+        assert record[1]["PubmedData"]["History"][0]["Year"]=="1976"
+        assert record[1]["PubmedData"]["History"][0]["Month"]=="9"
+        assert record[1]["PubmedData"]["History"][0]["Day"]=="28"
+        assert record[1]["PubmedData"]["History"][1]["PubStatus"]=="medline"
+        assert record[1]["PubmedData"]["History"][1]["Year"]=="1976"
+        assert record[1]["PubmedData"]["History"][1]["Month"]=="9"
+        assert record[1]["PubmedData"]["History"][1]["Day"]=="28"
+        assert record[1]["PubmedData"]["History"][1]["Hour"]=="0"
+        assert record[1]["PubmedData"]["History"][1]["Minute"]=="1"
+        assert record[1]["PubmedData"]["PublicationStatus"]=="ppublish"
+        assert len(record[1]["PubmedData"]["ArticleIdList"])==1
+        assert record[1]["PubmedData"]["ArticleIdList"][0]==["pubmed", "9997"]
+
+
+    def t_pubmed2(self):
+        '''Test parsing XML returned by EFetch from PubMed (second test)
+        '''
+        # In PubMed display PMIDs in xml retrieval mode.
+        # To create the XML file, use
+        # >>> Bio.Entrez.efetch(db='pubmed', id="11748933,11700088",
+        #                       retmode="xml")
+        input = open('Entrez/pubmed2.xml')
+        record = Entrez.read(input)
+
     def t_journals(self):
         '''Test parsing XML returned by EFetch from the Journals database
         '''

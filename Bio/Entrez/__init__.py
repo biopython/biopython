@@ -213,7 +213,7 @@ def espell(cgi='http://www.ncbi.nlm.nih.gov/entrez/eutils/espell.fcgi',
     return _open(cgi, variables)
 
 class DataHandler(ContentHandler):
-    from Bio.Entrez import EInfo, ESearch, ESummary, EPost, ELink, EGQuery, ESpell, Taxon, SerialSet, NCBI_Mim
+    from Bio.Entrez import EInfo, ESearch, ESummary, EPost, ELink, EGQuery, ESpell, Taxon, PubmedArticleSet, SerialSet, NCBI_Mim
     _NameToModule = {"eInfoResult": EInfo,
                      "eSearchResult": ESearch,
                      "eSummaryResult": ESummary,
@@ -222,6 +222,7 @@ class DataHandler(ContentHandler):
                      "Result": EGQuery,
                      "eSpellResult": ESpell,
                      "TaxaSet": Taxon,
+                     "PubmedArticleSet": PubmedArticleSet,
                      "SerialSet": SerialSet,
                      "Mim-entries": NCBI_Mim,
                     }
@@ -245,7 +246,10 @@ class DataHandler(ContentHandler):
 
     def endElement(self, name):
         # Convert Unicode strings to plain strings
-        self.content = str(self.content)
+        try:
+            self.content = str(self.content)
+        except UnicodeEncodeError:
+            pass
         if name in DataHandler._NameToModule:
             self.handleStartElement = None
             self.handleEndElement = None

@@ -31,12 +31,14 @@ Test parsing pubmed links returned by ELink (fifth test) ... ok
 Test parsing pubmed links returned by ELink (sixth test) ... ok
 Test parsing XML returned by EFetch from the Journals database ... ok
 Test parsing XML returned by EFetch from the OMIM database ... ok
+Test parsing XML returned by EFetch from PubMed (first test) ... ok
+Test parsing XML returned by EFetch from PubMed (second test) ... ok
 Test parsing XML returned by EFetch from the Taxonomy databases ... ok
 Test parsing XML output returned by EGQuery (first test) ... ok
 Test parsing XML output returned by EGQuery (second test) ... ok
 Test parsing XML output returned by ESpell ... ok
 
 ----------------------------------------------------------------------
-Ran 36 tests in 18.853s
+Ran 38 tests in 21.078s
 
 OK
