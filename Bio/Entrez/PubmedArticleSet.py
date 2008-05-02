@@ -26,8 +26,28 @@ articles = Entrez.read(handle)
 assert len(articles)==1
 """
 
+
+class DescriptorName(str):
+    """Corresponds to one <DescriptorName> block.
+       The attribute "MajorTopic" is stored as .attributes["MajorTopic"]
+    """
+    tag = "DescriptorName"
+    def __init__(self, s):
+        str.__init__(self, s)
+        self.attributes = {}
+
+
+class QualifierName(str):
+    """Corresponds to one <QualifierName> block.
+       The attribute "MajorTopic" is stored as .attributes["MajorTopic"]
+    """
+    tag = "QualifierName"
+    def __init__(self, s):
+        str.__init__(self, s)
+        self.attributes = {}
+
+
 def startElement(self, name, attrs):
-    self._last_attrs = attrs
     assert self.element
     if self.element==["PubmedArticleSet"]:
         self.record = []
@@ -77,13 +97,11 @@ def startElement(self, name, attrs):
     elif self.element==["PubmedArticleSet", "PubmedArticle", "MedlineCitation", "MeshHeadingList"]:
         self.record[-1]["MedlineCitation"]["MeshHeadingList"] = []
     elif self.element==["PubmedArticleSet", "PubmedArticle", "MedlineCitation", "MeshHeadingList", "MeshHeading"]:
-        self.record[-1]["MedlineCitation"]["MeshHeadingList"].append({})
+        self.record[-1]["MedlineCitation"]["MeshHeadingList"].append([])
     elif self.element==["PubmedArticleSet", "PubmedArticle", "MedlineCitation", "MeshHeadingList", "MeshHeading", "DescriptorName"]:
-        MajorTopicYN = str(attrs["MajorTopicYN"])
-        self.record[-1]["MedlineCitation"]["MeshHeadingList"][-1]["DescriptorName"] = [MajorTopicYN, None]
+        self._attributes = attrs
     elif self.element==["PubmedArticleSet", "PubmedArticle", "MedlineCitation", "MeshHeadingList", "MeshHeading", "QualifierName"]:
-        MajorTopicYN = str(attrs["MajorTopicYN"])
-        self.record[-1]["MedlineCitation"]["MeshHeadingList"][-1]["QualifierName"] = [MajorTopicYN, None]
+        self._attributes = attrs
     elif self.element==["PubmedArticleSet", "PubmedArticle", "MedlineCitation", "OtherID"]:
         if not "OtherID" in self.record[-1]["MedlineCitation"]:
             self.record[-1]["MedlineCitation"]["OtherID"] = []
@@ -144,9 +162,15 @@ def endElement(self, name):
         elif self.element[3:]==["MedlineJournalInfo", "NlmUniqueID"] :
             self.record[-1]["MedlineCitation"]["MedlineJournalInfo"]["NlmUniqueID"] = self.content
         elif self.element[3:]==["MeshHeadingList", "MeshHeading", "DescriptorName"]:
-            self.record[-1]["MedlineCitation"]["MeshHeadingList"][-1]["DescriptorName"][1] = self.content
+            d = DescriptorName(self.content)
+            d.attributes["MajorTopicYN"] = str(self._attributes["MajorTopicYN"])
+            del self._attributes
+            self.record[-1]["MedlineCitation"]["MeshHeadingList"][-1].append(d)
         elif self.element[3:]==["MeshHeadingList", "MeshHeading", "QualifierName"]:
-            self.record[-1]["MedlineCitation"]["MeshHeadingList"][-1]["QualifierName"][1] = self.content
+            q = QualifierName(self.content)
+            q.attributes["MajorTopicYN"] = str(self._attributes["MajorTopicYN"])
+            del self._attributes
+            self.record[-1]["MedlineCitation"]["MeshHeadingList"][-1].append(q)
         elif self.element[3:]==["NumberOfReferences"]:
             self.record[-1]["MedlineCitation"]["NumberOfReferences"] = int(self.content)
         elif self.element[3:]==["OtherID"]:
@@ -180,14 +204,16 @@ def endElement(self, name):
                 self.record[-1]["MedlineCitation"]["Article"]["Journal"]["ISOAbbreviation"] = self.content
             elif self.element[4:]==["Abstract","AbstractText"] :
                 self.record[-1]["MedlineCitation"]["Article"]["Abstract"]["AbstractText"] = self.content
+            elif self.element[4:]==["Abstract","CopyrightInformation"] :
+                self.record[-1]["MedlineCitation"]["Article"]["Abstract"]["CopyrightInformation"] = self.content
             elif self.element[4:]==["Pagination", "MedlinePgn"] :
                 self.record[-1]["MedlineCitation"]["Article"]["Pagination"]["MedlinePgn"] = self.content
             elif len(self.element) == 5 and self.element[-1]=="Language":
                 self.record[-1]["MedlineCitation"]["Article"]["Language"].append(self.content)
             elif self.element[4:]==["ArticleTitle"]:
                 self.record[-1]["MedlineCitation"]["Article"]["ArticleTitle"] = self.content
-            elif len(self.element) == 5 and str(self.element[-1]) in ["Language", "Affiliation"]:
-                self.record[-1][str(self.element[-1])] = self.content
+            elif len(self.element) == 5 and self.element[-1]=="Affiliation":
+                self.record[-1]["MedlineCitation"]["Article"]["Affiliation"] = self.content
     elif self.element[:3]==["PubmedArticleSet", "PubmedArticle", "PubmedData"] :
         if self.element[3:]==["PublicationStatus"]:
             self.record[-1]["PubmedData"]["PublicationStatus"] = self.content
