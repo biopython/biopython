@@ -25,7 +25,8 @@ try :
     from setup_BioSQL import DBHOST, DBUSER, DBPASSWD, TESTDB
     from setup_BioSQL import DBSCHEMA, SQL_FILE
 except NameError :
-    message = "Enable tests in Tests/setup_BioSQL.py (not important if you do not plan to use BioSQL)."
+    message = "Check settings in Tests/setup_BioSQL.py "\
+              "if you plan to use BioSQL."
     raise MissingExternalDependencyError(message)
 
 db_name = "biosql-seqio-test"
@@ -243,17 +244,23 @@ def compare_records(old, new) :
         
 #####################################################################
 
+#TODO - Should we re-use the create_database() function currently
+#       defined in test_BioSQL.py here too?  This would allow us
+#       to deal with the error of an unknown database...
+#
+#print "Creating database"
+#from setup_BioSQL import create_database
+#create_database()
+
 print "Connecting to database"
 try :
     server = BioSeqDatabase.open_database(driver = DBDRIVER,
                                       user = DBUSER, passwd = DBPASSWD,
                                       host = DBHOST, db = TESTDB)
 except Exception, e :
-    #Include str(e) in the message?
     message = "Connection failed, check settings in Tests/setup_BioSQL.py "\
-              "(not important if you do not plan to use BioSQL)."
+              "if you plan to use BioSQL: %s" % str(e)
     raise MissingExternalDependencyError(message)
-    
 
 print "Removing existing sub-database '%s' (if exists)" % db_name
 if db_name in server.keys() :

@@ -26,7 +26,8 @@ try :
     from setup_BioSQL import DBHOST, DBUSER, DBPASSWD, TESTDB
     from setup_BioSQL import DBSCHEMA, SQL_FILE
 except NameError :
-    message = "Enable tests in Tests/setup_BioSQL.py (not important if you do not plan to use BioSQL)."
+    message = "Check settings in Tests/setup_BioSQL.py "\
+              "if you plan to use BioSQL."
     raise MissingExternalDependencyError(message)
 
 try :
@@ -35,9 +36,8 @@ try :
                                           host = DBHOST)
     del server
 except Exception, e :
-    #Include str(e) in the message?
     message = "Connection failed, check settings in Tests/setup_BioSQL.py "\
-              "(not important if you do not plan to use BioSQL)."
+              "if you plan to use BioSQL: %s" % str(e)
     raise MissingExternalDependencyError(message)
   
 def run_tests(argv):
