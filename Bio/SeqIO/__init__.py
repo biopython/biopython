@@ -6,10 +6,11 @@
 #Nice link:
 # http://www.ebi.ac.uk/help/formats_frame.html
 
-"""Sequence input/output designed to look similar to the bioperl design.
+"""Sequence input/output as SeqRecord objects
 
 The Bio.SeqIO module is also documented by a whole chapter in the Biopython
-tutorial, and by this wiki on the webage, http://biopython.org/wiki/SeqIO
+tutorial, and by the wiki http://biopython.org/wiki/SeqIO on the website.
+The approach is designed to be similar to the bioperl SeqIO design.
 
 Input
 =====
@@ -22,14 +23,14 @@ and format string.  This returns an iterator giving SeqRecord objects.
         print record
     handle.close()
 
-Note that the parse() function will all invoke the relevant parser for
-the format with its default settings.  You may want more control, in which case
+Note that the parse() function will all invoke the relevant parser for the
+format with its default settings.  You may want more control, in which case
 you need to create a format specific sequence iterator directly.
 
 For non-interlaced files (e.g. Fasta, GenBank, EMBL) with multiple records
-using a sequence iterator can save you a lot of memory (RAM).  There is less
-benefit for interlaced file formats (e.g. most multiple alignment file formats).
-However, an iterator only lets you access the records one by one.
+using a sequence iterator can save you a lot of memory (RAM).  There is
+less benefit for interlaced file formats (e.g. most multiple alignment file
+formats).  However, an iterator only lets you access the records one by one.
 
 If you want random access to the records by number, turn this into a list:
 
@@ -39,8 +40,8 @@ If you want random access to the records by number, turn this into a list:
     handle.close()
     print records[0]
 
-If you want random access to the records by a key such as the record id, turn
-the iterator into a dictionary:
+If you want random access to the records by a key such as the record id,
+turn the iterator into a dictionary:
 
     from Bio import SeqIO
     handle = open("example.fasta", "rU")
@@ -49,8 +50,8 @@ the iterator into a dictionary:
     print record["gi:12345678"]
 
 If you expect your file to contain one-and-only-one record, then we provide
-the following 'helper' function which will return a single SeqRecord, or raise
-an exception if there are no records or more than one record:
+the following 'helper' function which will return a single SeqRecord, or
+raise an exception if there are no records or more than one record:
 
     from Bio import SeqIO
     handle = open("example.fasta", "rU")
@@ -58,11 +59,11 @@ an exception if there are no records or more than one record:
     handle.close()
     print record
 
-This style is useful when you expect a single record only (and would consider
-multiple records an error).  For example, when dealing with GenBank files for
-bacterial genomes or chromosomes, there is normally only a single record.
-Alternatively, use this with a handle when download a single record from the
-internet.
+This style is useful when you expect a single record only (and would
+consider multiple records an error).  For example, when dealing with GenBank
+files for bacterial genomes or chromosomes, there is normally only a single
+record.  Alternatively, use this with a handle when download a single record
+from the internet.
 
 However, if you just want the first record from a file containing multiple
 record, use the iterator's next() method:
@@ -92,9 +93,9 @@ directly from SeqRecord objects.
 
 Output
 ======
-Use the function Bio.SeqIO.write(...), which takes a complete set of SeqRecord
-objects (either as a list, or an iterator), an output file handle and of course
-the file format.
+Use the function Bio.SeqIO.write(...), which takes a complete set of
+SeqRecord objects (either as a list, or an iterator), an output file handle
+and of course the file format.
 
     from Bio import SeqIO
     records = ...
@@ -102,22 +103,23 @@ the file format.
     SeqIO.write(records, handle, "fasta")
     handle.close()
 
-In general, you are expected to call this function once (with all your records)
-and then close the file handle.
+In general, you are expected to call this function once (with all your
+records) and then close the file handle.
 
 Output - Advanced
 =================
 The effect of calling write() multiple times on a single file will vary
-depending on the file format, and is best avoided unless you have a strong reason
-to do so.
+depending on the file format, and is best avoided unless you have a strong
+reason to do so.
 
-Trying this for certain alignment formats (e.g. phylip, clustal, stockholm) would
-have the effect of concatenating several multiple sequence alignments together.
-Such files are created by the PHYLIP suite of programs for bootstrap analysis.
+Trying this for certain alignment formats (e.g. phylip, clustal, stockholm)
+would have the effect of concatenating several multiple sequence alignments
+together.  Such files are created by the PHYLIP suite of programs for
+bootstrap analysis.
 
-For sequential files formats (e.g. fasta, genbank) each "record block" holds a
-single sequence.  For these files it would probably be safe to call write()
-multiple times.
+For sequential files formats (e.g. fasta, genbank) each "record block" holds
+a single sequence.  For these files it would probably be safe to call
+write() multiple times.
 
 File Formats
 ============
@@ -150,26 +152,30 @@ removed.
 """
 FAO BioPython Developers
 ========================
-The way I envision this SeqIO system working as that for any sequence file format
-we have an iterator that returns SeqRecord objects.
+The way I envision this SeqIO system working as that for any sequence file
+format we have an iterator that returns SeqRecord objects.
 
-This also applies to interlaced fileformats (like clustal) where the file cannot
-be read record by record.  You should still return an iterator!
+This also applies to interlaced fileformats (like clustal) where the file
+cannot be read record by record.  You should still return an iterator!
 
 These file format specific sequence iterators may be implemented as:
 * Classes which take a handle for __init__ and provide the __iter__ method
 * Functions that take a handle, and return an iterator object
 * Generator functions that take a handle, and yeild SeqRecord objects
 
-It is then trivial to turn this iterator into a list of SeqRecord objects, an in
-memory dictionary, or a multiple sequence alignment object.
+It is then trivial to turn this iterator into a list of SeqRecord objects,
+an in memory dictionary, or a multiple sequence alignment object.
 
-For building the dictionary by default the id propery of each SeqRecord is used
-as the key.  You should always populate the id property, and it should be unique.
-For some file formats the accession number is a good choice.
+For building the dictionary by default the id propery of each SeqRecord is
+used as the key.  You should always populate the id property, and it should
+be unique. For some file formats the accession number is a good choice.
 
-When adding a new file format, please use the same lower case format name as
-BioPerl, or if they have not defined one, try the names used by EMBOSS.
+When adding a new file format, please use the same lower case format name
+as BioPerl, or if they have not defined one, try the names used by EMBOSS.
+
+See also http://biopython.org/wiki/SeqIO_dev
+
+--Peter
 """
 
 import os
