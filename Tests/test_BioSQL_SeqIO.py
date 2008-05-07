@@ -218,7 +218,7 @@ def compare_records(old, new) :
             assert len(old.annotations[key]) == len(new.annotations[key])
             for old_r, new_r in zip(old.annotations[key], new.annotations[key]) :
                 compare_references(old_r, new_r)
-        elif key == "taxonomy" or key == "organism" :
+        elif key in ["taxonomy", "organism", "source"]:
             #If there is a taxon id recorded, these fields get overwritten
             #by data from the taxon/taxon_name tables.  There is no
             #guarantee that they will be identical after a load/retrieve.
