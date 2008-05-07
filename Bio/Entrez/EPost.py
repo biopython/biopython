@@ -10,17 +10,32 @@
 
 
 def startElement(self, name, attrs):
-    if self.element==["ePostResult"]:
-        self.record = {}
-    elif self.element==["ePostResult", "InvalidIdList"]:
-        self.record["InvalidIdList"] = []
+    if name=="ePostResult":
+        object = {}
+	self.path = []
+        self.record = object
+    else:
+        previous = self.path[-1]
+        if name=="InvalidIdList":
+            object = []
+        else:
+            object = ""
+        if object=="":
+            pass
+        else:
+            previous[name] = object
+    self.path.append(object)
 
 def endElement(self, name):
-    if self.element==["ePostResult", "InvalidIdList", "Id"]:
-        self.record["InvalidIdList"].append(self.content)
-    elif self.element==["ePostResult", "QueryKey"]:
-        self.record["QueryKey"] = self.content
-    elif self.element==["ePostResult", "WebEnv"]:
-        self.record["WebEnv"] = self.content
-    elif self.element==["ePostResult", "ERROR"]:
+    self.path = self.path[:-1]
+    if name=="ERROR":
         raise ValueError(self.content)
+    if name in ("Id", "QueryKey", "WebEnv"):
+        value = self.content
+    else:
+        return
+    previous = self.path[-1]
+    if type(previous)==list:
+        previous.append(value)
+    elif type(previous)==dict:
+        previous[name] = value
