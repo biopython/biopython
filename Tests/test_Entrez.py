@@ -515,15 +515,11 @@ class ESearchTest(unittest.TestCase):
         assert len(record['IdList'])==0
         assert len(record['TranslationSet'])==0
         assert record['QueryTranslation']==''
-        assert len(record['ErrorList'])==2
+        assert len(record['ErrorList'])==1
         assert "PhraseNotFound" in record['ErrorList']
-        assert "FieldNotFound" in record['ErrorList']
         assert len(record['ErrorList']["PhraseNotFound"])==1
         assert record['ErrorList']["PhraseNotFound"][0]=="abcXYZ"
-        assert len(record['ErrorList']["FieldNotFound"])==0
-        assert len(record['WarningList'])==3
-        assert "PhraseIgnored" in record['WarningList']
-        assert "QuotedPhraseNotFound" in record['WarningList']
+        assert len(record['WarningList'])==1
         assert "OutputMessage" in record['WarningList']
         assert len(record['WarningList']["OutputMessage"])==1
         assert record['WarningList']["OutputMessage"][0]=="No items found."

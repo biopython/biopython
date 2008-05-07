@@ -10,74 +10,67 @@
 
 
 def startElement(self, name, attrs):
-    if self.element==["eSearchResult"]:
-        self.record = {}
-    elif self.element==["eSearchResult", "ErrorList"]:
-        self.record["ErrorList"] = {"PhraseNotFound": [],
-                                    "FieldNotFound": []}
-    elif self.element==["eSearchResult", "WarningList"]:
-        self.record["WarningList"] = {"PhraseIgnored": [],
-                                      "QuotedPhraseNotFound": [],
-                                      "OutputMessage": []}
-    elif self.element==["eSearchResult", "IdList"]:
-        self.record["IdList"] = []
-    elif self.element==["eSearchResult", "TranslationSet"]:
-        self.record["TranslationSet"] = []
-    elif self.element==["eSearchResult", "TranslationSet", "Translation"]:
-        translation = {}
-        self.record["TranslationSet"].append(translation)
-    elif self.element==["eSearchResult", "TranslationStack"]:
-        self.record["TranslationStack"] = []
-    elif self.element==["eSearchResult", "TranslationStack", "TermSet"]:
-        termset = {}
-        self.record["TranslationStack"].append(termset)
+    if name=="eSearchResult":
+        object = {}
+        self.record = object
+        self.path = []
+    else:
+        if name in ("ErrorList", "WarningList", "Translation", "TermSet"):
+            object = {}
+        elif name in ("PhraseNotFound",
+                      "FieldNotFound",
+                      "PhraseIgnored",
+                      "QuotedPhraseNotFound",
+                      "OutputMessage",
+                      "IdList",
+                      "TranslationSet",
+                      "TranslationStack"):
+            object = []
+        else:
+            object = ""
+        if object=="":
+            pass
+        else:
+            previous = self.path[-1]
+            if type(previous)==list:
+                previous.append(object)
+            elif type(previous)==dict:
+                previous[name] = object
+    self.path.append(object)
 
 def endElement(self, name):
-    if self.element==["eSearchResult", "Count"]:
-        self.record["Count"] = int(self.content)
-    elif self.element==["eSearchResult", "RetMax"]:
-        self.record["RetMax"] = int(self.content)
-    elif self.element==["eSearchResult", "RetStart"]:
-        self.record["RetStart"] = int(self.content)
-    elif self.element==["eSearchResult", "QueryKey"]:
-        self.record["QueryKey"] = self.content
-    elif self.element==["eSearchResult", "QueryTranslation"]:
-        self.record["QueryTranslation"] = self.content
-    elif self.element==["eSearchResult", "WebEnv"]:
-        self.record["WebEnv"] = self.content
-    elif self.element==["eSearchResult", "IdList", "Id"]:
-        self.record["IdList"].append(self.content)
-    elif self.element==["eSearchResult", "TranslationSet", "Translation", "From"]:
-        translation = self.record["TranslationSet"][-1]
-        translation["From"] = self.content
-    elif self.element==["eSearchResult", "TranslationSet", "Translation", "To"]:
-        translation = self.record["TranslationSet"][-1]
-        translation["To"] = self.content
-    elif self.element==["eSearchResult", "TranslationStack", "OP"]:
-        self.record["TranslationStack"].append(self.content)
-    elif self.element==["eSearchResult", "TranslationStack", "TermSet", "Term"]:
-        termset = self.record["TranslationStack"][-1]
-        termset["Term"] = self.content
-    elif self.element==["eSearchResult", "TranslationStack", "TermSet", "Field"]:
-        termset = self.record["TranslationStack"][-1]
-        termset["Field"] = self.content
-    elif self.element==["eSearchResult", "TranslationStack", "TermSet", "Count"]:
-        termset = self.record["TranslationStack"][-1]
-        termset["Count"] = int(self.content)
-    elif self.element==["eSearchResult", "TranslationStack", "TermSet", "Explode"]:
-        termset = self.record["TranslationStack"][-1]
-        if self.content=='Y': termset["Explode"] = True
-        elif self.content=='N': termset["Explode"] = False
-    elif self.element==["eSearchResult", "ErrorList", "PhraseNotFound"]:
-        self.record["ErrorList"]["PhraseNotFound"].append(self.content)
-    elif self.element==["eSearchResult", "ErrorList", "FieldNotFound"]:
-        self.record["ErrorList"]["FieldNotFound"].append(self.content)
-    elif self.element==["eSearchResult", "WarningList", "PhraseIgnored"]:
-        self.record["WarningList"]["PhraseIgnored"].append(self.content)
-    elif self.element==["eSearchResult", "WarningList", "OutputMessage"]:
-        self.record["WarningList"]["OutputMessage"].append(self.content)
-    elif self.element==["eSearchResult", "WarningList", "QuotedPhraseNotFound"]:
-        self.record["WarningList"]["QuotedPhraseNotFound"].append(self.content)
-    elif self.element==["eSearchResult", "ERROR"]:
-        # Not sure when this occurs. Are we supposed to raise an Exception?
-        self.record["ERROR"] = self.content
+    self.path = self.path[:-1]
+    if name=="ERROR":
+        error = self.content
+        raise RuntimeError(error)
+    if name in ("PhraseNotFound",
+                "FieldNotFound",
+                "PhraseIgnored",
+                "OutputMessage",
+                "QuotedPhraseNotFound"):
+        self.path[-1][name].append(self.content)
+    else:
+        previous = self.path[-1]
+        if name in ("Count", "RetMax", "RetStart"):
+            value = int(self.content)
+        elif name in ("QueryKey",
+                      "QueryTranslation",
+                      "WebEnv",
+                      "From",
+                      "To",
+                      "Term",
+                      "Field",
+                      "Id",
+                      "OP"):
+            value = self.content
+        elif name=="Explode":
+            if self.content=='Y':
+                value = True
+            elif self.content=='N':
+                value = False
+        else:
+            return
+        if type(previous)==dict:
+            self.path[-1][name] = value
+        elif type(previous)==list:
+            self.path[-1].append(value)
