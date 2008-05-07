@@ -29,7 +29,7 @@ def startElement(self, name, attrs):
 def endElement(self, name):
     self.path = self.path[:-1]
     if name=="ERROR":
-        raise ValueError(self.content)
+        raise RuntimeError(self.content)
     if name in ("Id", "QueryKey", "WebEnv"):
         value = self.content
     else:
