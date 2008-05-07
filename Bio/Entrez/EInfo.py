@@ -8,78 +8,56 @@
 # from Bio.Entrez.__init__.py.
 
 def startElement(self, name, attrs):
-    if self.element==["eInfoResult", "DbList"]:
-        self.record = []
-    elif self.element==["eInfoResult", "DbInfo"]:
-        self.record = {}
-    elif self.element==["eInfoResult", "DbInfo", "FieldList"]:
-        self.record["FieldList"] = []
-    elif self.element==["eInfoResult", "DbInfo", "FieldList", "Field"]:
-        field = {}
-        self.record["FieldList"].append(field)
-    elif self.element==["eInfoResult", "DbInfo", "LinkList"]:
-        self.record["LinkList"] = []
-    elif self.element==["eInfoResult", "DbInfo", "LinkList", "Link"]:
-        link = {}
-        self.record["LinkList"].append(link)
+    if name=="eInfoResult":
+        object = {}
+        self.record = object
+        self.path = []
+    else:
+        previous = self.path[-1]
+        if name in ("DbList", "FieldList", "LinkList"):
+            object = []
+        elif name in ("DbInfo", "Field", "Link"):
+            object = {}
+        else:
+            object = ""
+        if object=="":
+            pass
+        elif type(previous)==dict:
+            previous[name] = object
+        elif type(previous)==list:
+            previous.append(object)
+    self.path.append(object)
 
 def endElement(self, name):
-    if self.element==["eInfoResult", "DbList", "DbName"]:
-        self.record.append(self.content)
-    elif self.element==["eInfoResult", "DbInfo", "DbName"]:
-        self.record["DbName"] = self.content
-    elif self.element==["eInfoResult", "DbInfo", "MenuName"]:
-        self.record["MenuName"] = self.content
-    elif self.element==["eInfoResult", "DbInfo", "Description"]:
-        self.record["Description"] = self.content
-    elif self.element==["eInfoResult", "DbInfo", "Count"]:
-        self.record["Count"] = int(self.content)
-    elif self.element==["eInfoResult", "DbInfo", "LastUpdate"]:
-        self.record["LastUpdate"] = self.content
-    elif self.element==["eInfoResult", "DbInfo", "FieldList", "Field", "Name"]:
-        field = self.record["FieldList"][-1]
-        field["Name"] = self.content
-    elif self.element==["eInfoResult", "DbInfo", "FieldList", "Field", "FullName"]:
-        field = self.record["FieldList"][-1]
-        field["FullName"] = self.content
-    elif self.element==["eInfoResult", "DbInfo", "FieldList", "Field", "Description"]:
-        field = self.record["FieldList"][-1]
-        field["Description"] = self.content
-    elif self.element==["eInfoResult", "DbInfo", "FieldList", "Field", "TermCount"]:
-        field = self.record["FieldList"][-1]
-        field["TermCount"] = int(self.content)
-    elif self.element==["eInfoResult", "DbInfo", "FieldList", "Field", "IsDate"]:
-        field = self.record["FieldList"][-1]
-        if self.content=='Y': field["IsDate"] = True
-        elif self.content=='N': field["IsDate"] = False
-    elif self.element==["eInfoResult", "DbInfo", "FieldList", "Field", "IsNumerical"]:
-        field = self.record["FieldList"][-1]
-        if self.content=='Y': field["IsNumerical"] = True
-        elif self.content=='N': field["IsNumerical"] = False
-    elif self.element==["eInfoResult", "DbInfo", "FieldList", "Field", "SingleToken"]:
-        field = self.record["FieldList"][-1]
-        if self.content=='Y': field["SingleToken"] = True
-        elif self.content=='N': field["SingleToken"] = False
-    elif self.element==["eInfoResult", "DbInfo", "FieldList", "Field", "Hierarchy"]:
-        field = self.record["FieldList"][-1]
-        if self.content=='Y': field["Hierarchy"] = True
-        elif self.content=='N': field["Hierarchy"] = False
-    elif self.element==["eInfoResult", "DbInfo", "FieldList", "Field", "IsHidden"]:
-        field = self.record["FieldList"][-1]
-        if self.content=='Y': field["IsHidden"] = True
-        elif self.content=='N': field["IsHidden"] = False
-    elif self.element==["eInfoResult", "DbInfo", "LinkList", "Link", "Name"]:
-        link = self.record["LinkList"][-1]
-        link["Name"] = self.content
-    elif self.element==["eInfoResult", "DbInfo", "LinkList", "Link", "Menu"]:
-        link = self.record["LinkList"][-1]
-        link["Menu"] = self.content
-    elif self.element==["eInfoResult", "DbInfo", "LinkList", "Link", "Description"]:
-        link = self.record["LinkList"][-1]
-        link["Description"] = self.content
-    elif self.element==["eInfoResult", "DbInfo", "LinkList", "Link", "DbTo"]:
-        link = self.record["LinkList"][-1]
-        link["DbTo"] = self.content
-    elif self.element==["eInfoResult", "ERROR"]:
-        # Not sure when this occurs. Are we supposed to raise an Exception?
-        self.record["ERROR"] = self.content
+    self.path = self.path[:-1]
+    if name=="ERROR":
+        error = self.content
+        raise RuntimeError(error)
+    if name in ("DbName",
+                "Name",
+                "Menu",
+                "DbTo",
+                "LastUpdate",
+                "Name",
+                "FullName",
+                "MenuName",
+                "Description"):
+        value = self.content
+    elif name in ("TermCount", "Count"):
+        value = int(self.content)
+    elif name in ("IsDate",
+                  "IsNumerical",
+                  "SingleToken",
+                  "Hierarchy",
+                  "IsHidden"):
+        if self.content=='Y':
+            value = True
+        elif self.content=='N':
+            value = False
+    else:
+        return
+    previous = self.path[-1]
+    if type(previous)==list:
+        previous.append(value)
+    elif type(previous)==dict:
+        previous[name] = value
