@@ -13,6 +13,8 @@ all_tests = [
     'xbt003.xml', # BLASTX 2.2.12, gi|1347369|gb|G25137.1|G25137
     'xbt004.xml', # TBLASTN 2.2.12, gi|729325|sp|P39483|DHG2_BACME
     'xbt005.xml', # TBLASTX 2.2.12, gi|1348853|gb|G26621.1|G26621, BLOSUM80
+    'xbt006.xml', # BLASTP 2.2.18+, gi|160837788|ref|NP_075631.2|
+                  # NOTE - no date in version field, downloaded 2008/05/08
     ]
 
 detailed_tests = [
@@ -20,6 +22,9 @@ detailed_tests = [
     'xbt002.xml', # BLASTN 2.2.12, gi|1348916|gb|G26684.1|G26684
     'xbt003.xml', # BLASTX 2.2.12, gi|1347369|gb|G25137.1|G25137
     ]
+
+for test in detailed_tests :
+    assert test in all_tests
 
 ### NCBIXML.BlastParser
 

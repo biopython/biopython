@@ -208,12 +208,27 @@ class BlastParser(_XMLparser):
         self._header.application = self._value.upper()
 
     def _end_BlastOutput_version(self):
-        """version number of the BLAST engine (e.g., 2.1.2)
+        """version number and date of the BLAST engine.
+
+        e.g. "BLASTX 2.2.12 [Aug-07-2005]" but there can also be
+        variants like "BLASTP 2.2.18+" without the date.
 
         Save this to put on each blast record object
         """
-        self._header.version = self._value.split()[1]
-        self._header.date = self._value.split()[2][1:-1]
+        parts = self._value.split()
+        #TODO - Check the first word starts with BLAST?
+
+        #The version is the second word (field one)
+        self._header.version = parts[1]
+        
+        #Check there is a third word (the date)
+        if len(parts) >= 3 :
+            if parts[2][0] == "[" and parts[2][-1] == "]" :
+                self._header.date = parts[2][1:-1]
+            else :
+                #Assume this is still a date, but without the
+                #square brackets
+                self._header.date = parts[2]
 
     def _end_BlastOutput_reference(self):
         """a reference to the article describing the algorithm
