@@ -7,100 +7,79 @@
 # The code is not meant to be used by itself, but is called
 # from Bio.Entrez.__init__.py.
 
-
+class AttributedString(str): pass
 
 def startElement(self, name, attrs):
     if self.element==["eLinkResult"]:
-        self.record = []
-    elif self.element==["eLinkResult", "LinkSet"]:
-        self.record.append({})
-    elif self.element==["eLinkResult", "LinkSet", "IdList"]:
-        self.record[-1]["IdList"] = []
-    elif self.element==["eLinkResult", "LinkSet", "LinkSetDb"]:
-        self.record[-1]["LinkSetDb"] = {"Link": []}
-    if self.element==["eLinkResult", "LinkSet", "LinkSetDb", "Link"]:
-        self.record[-1]["LinkSetDb"]["Link"].append({})
-    elif self.element==["eLinkResult", "LinkSet", "IdUrlList"]:
-        self.record[-1]["IdUrlList"] = []
-    elif self.element==["eLinkResult", "LinkSet", "IdUrlList", "IdUrlSet"]:
-        self.record[-1]["IdUrlList"].append({"ObjUrl": []})
-    elif self.element==["eLinkResult", "LinkSet", "IdUrlList", "IdUrlSet", "ObjUrl"]:
-        d = {"SubjectType": [], "Attribute": []}
-        self.record[-1]["IdUrlList"][-1]["ObjUrl"].append(d)
-    elif self.element==["eLinkResult", "LinkSet", "IdUrlList", "IdUrlSet", "ObjUrl", "Provider"]:
-        self.record[-1]["IdUrlList"][-1]["ObjUrl"][-1]["Provider"] = {}
-    elif self.element==["eLinkResult", "LinkSet", "IdCheckList"]:
-        self.record[-1]["IdCheckList"] = []
-    elif self.element==["eLinkResult", "LinkSet", "IdCheckList", "Id"]:
-        row = [None, None, None]
+        object = []
+        self.path = []
+        self.record = object
+    elif name=="LinkSet":
+        object = {}
+        self.path[-1].append(object)
+    elif name in ("IdList", "IdUrlList", "IdCheckList"):
+        object = []
+        self.path[-1][name] = object
+    elif name=="LinkSetDb":
+        object = {"Link": []}
+        self.path[-1][name] = object
+    elif name in ("Link", "LinkInfo"):
+        object = {}
+        self.path[-1][name].append(object)
+    elif name=="IdUrlSet":
+        object = {"ObjUrl": []}
+        self.path[-1].append(object)
+    elif name=="ObjUrl":
+        object = {"SubjectType": [], "Attribute": []}
+        self.path[-1][name].append(object)
+    elif name=="Provider":
+        object = {}
+        self.path[-1][name] = object
+    elif name=="Id":
+        object = ""
+        attributes = {}
         if "HasLinkOut" in attrs:
-            if attrs["HasLinkOut"]=='Y': row[1] = True
-            elif attrs["HasLinkOut"]=='N': row[1] = False
+            if attrs["HasLinkOut"]=='Y': attributes["HasLinkOut"] = True
+            elif attrs["HasLinkOut"]=='N': attributes["HasLinkOut"] = False
         if "HasNeighbor" in attrs:
-            if attrs["HasNeighbor"]=='Y': row[2] = True
-            elif attrs["HasNeighbor"]=='N': row[2] = False
-        self.record[-1]["IdCheckList"].append(row)
-    elif self.element==["eLinkResult", "LinkSet", "IdCheckList", "IdLinkSet"]:
+            if attrs["HasNeighbor"]=='Y': attributes["HasNeighbor"] = True
+            elif attrs["HasNeighbor"]=='N': attributes["HasNeighbor"] = False
+        self.attributes = attributes
+    elif name=="IdLinkSet":
         # This is not in the DTD, but this is what I found when using the
         # following query:
         # >>> Bio.Entrez.elink(dbfrom="pubmed", id="12169658,11748140",
         #                      cmd="acheck")
-        d = {"LinkInfo": []}
-        self.record[-1]["IdCheckList"].append(d)
-    elif self.element==["eLinkResult", "LinkSet", "IdCheckList", "IdLinkSet", "LinkInfo"]:
-        self.record[-1]["IdCheckList"][-1]["LinkInfo"].append({})
+        object = {"LinkInfo": []}
+        self.path[-1].append(object)
+    else:
+        object = ""
+    self.path.append(object)
 
 def endElement(self, name):
+    self.path.pop()
     if name=="Error":
         error = self.content
         raise RuntimeError(error)
-    if self.element==["eLinkResult", "LinkSet", "DbFrom"]:
-        self.record[-1]["DbFrom"] = self.content
-    elif self.element==["eLinkResult", "LinkSet", "IdList", "Id"]:
-        self.record[-1]["IdList"].append(self.content)
-    elif self.element==["eLinkResult", "LinkSet", "LinkSetDb", "DbTo"]:
-        self.record[-1]["LinkSetDb"]["DbTo"] = self.content
-    elif self.element==["eLinkResult", "LinkSet", "LinkSetDb", "LinkName"]:
-        self.record[-1]["LinkSetDb"]["LinkName"] = self.content
-    elif self.element==["eLinkResult", "LinkSet", "LinkSetDb", "Link", "Id"]:
-        self.record[-1]["LinkSetDb"]["Link"][-1]["Id"] = self.content
-    elif self.element==["eLinkResult", "LinkSet", "LinkSetDb", "Link", "Score"]:
-        self.record[-1]["LinkSetDb"]["Link"][-1]["Score"] = int(self.content)
-    elif self.element==["eLinkResult", "LinkSet", "IdUrlList", "IdUrlSet", "Id"]:
-        self.record[-1]["IdUrlList"][-1]["Id"] = self.content
-    elif self.element==["eLinkResult", "LinkSet", "IdUrlList", "IdUrlSet", "ObjUrl", "Url"]:
-        self.record[-1]["IdUrlList"][-1]["ObjUrl"][-1]["Url"] = self.content
-    elif self.element==["eLinkResult", "LinkSet", "IdUrlList", "IdUrlSet", "ObjUrl", "IconUrl"]:
-        self.record[-1]["IdUrlList"][-1]["ObjUrl"][-1]["IconUrl"] = self.content
-    elif self.element==["eLinkResult", "LinkSet", "IdUrlList", "IdUrlSet", "ObjUrl", "LinkName"]:
-        self.record[-1]["IdUrlList"][-1]["ObjUrl"][-1]["LinkName"] = self.content
-    elif self.element==["eLinkResult", "LinkSet", "IdUrlList", "IdUrlSet", "ObjUrl", "SubjectType"]:
-        self.record[-1]["IdUrlList"][-1]["ObjUrl"][-1]["SubjectType"].append(self.content)
-    elif self.element==["eLinkResult", "LinkSet", "IdUrlList", "IdUrlSet", "ObjUrl", "Attribute"]:
-        self.record[-1]["IdUrlList"][-1]["ObjUrl"][-1]["Attribute"].append(self.content)
-    elif self.element==["eLinkResult", "LinkSet", "IdUrlList", "IdUrlSet", "ObjUrl", "Provider", "Name"]:
-        self.record[-1]["IdUrlList"][-1]["ObjUrl"][-1]["Provider"]["Name"] = self.content
-    elif self.element==["eLinkResult", "LinkSet", "IdUrlList", "IdUrlSet", "ObjUrl", "Provider", "NameAbbr"]:
-        self.record[-1]["IdUrlList"][-1]["ObjUrl"][-1]["Provider"]["NameAbbr"] = self.content
-    elif self.element==["eLinkResult", "LinkSet", "IdUrlList", "IdUrlSet", "ObjUrl", "Provider", "Id"]:
-        self.record[-1]["IdUrlList"][-1]["ObjUrl"][-1]["Provider"]["Id"] = self.content
-    elif self.element==["eLinkResult", "LinkSet", "IdUrlList", "IdUrlSet", "ObjUrl", "Provider", "Url"]:
-        self.record[-1]["IdUrlList"][-1]["ObjUrl"][-1]["Provider"]["Url"] = self.content
-    elif self.element==["eLinkResult", "LinkSet", "IdUrlList", "IdUrlSet", "ObjUrl", "Provider", "IconUrl"]:
-        self.record[-1]["IdUrlList"][-1]["ObjUrl"][-1]["Provider"]["IconUrl"] = self.content
-    elif self.element==["eLinkResult", "LinkSet", "IdCheckList", "Id"]:
-        self.record[-1]["IdCheckList"][-1][0] = self.content
-    elif self.element==["eLinkResult", "LinkSet", "IdCheckList", "IdLinkSet", "Id"]:
-        self.record[-1]["IdCheckList"][-1]["Id"] = self.content
-    elif self.element==["eLinkResult", "LinkSet", "IdCheckList", "IdLinkSet", "LinkInfo", "DbTo"]:
-        self.record[-1]["IdCheckList"][-1]["LinkInfo"][-1]["DbTo"] = self.content
-    elif self.element==["eLinkResult", "LinkSet", "IdCheckList", "IdLinkSet", "LinkInfo", "LinkName"]:
-        self.record[-1]["IdCheckList"][-1]["LinkInfo"][-1]["LinkName"] = self.content
-    elif self.element==["eLinkResult", "LinkSet", "IdCheckList", "IdLinkSet", "LinkInfo", "MenuTag"]:
-        self.record[-1]["IdCheckList"][-1]["LinkInfo"][-1]["MenuTag"] = self.content
-    elif self.element==["eLinkResult", "LinkSet", "IdCheckList", "IdLinkSet", "LinkInfo", "HtmlTag"]:
-        self.record[-1]["IdCheckList"][-1]["LinkInfo"][-1]["HtmlTag"] = self.content
-    elif self.element==["eLinkResult", "LinkSet", "IdCheckList", "IdLinkSet", "LinkInfo", "Url"]:
-        self.record[-1]["IdCheckList"][-1]["LinkInfo"][-1]["Url"] = self.content
-    elif self.element==["eLinkResult", "LinkSet", "IdCheckList", "IdLinkSet", "LinkInfo", "Priority"]:
-        self.record[-1]["IdCheckList"][-1]["LinkInfo"][-1]["Priority"] = int(self.content)
+    if name=="Id":
+        attributes = self.attributes
+        value = AttributedString(self.content)
+        value.attributes = attributes
+        if type(self.path[-1])==list:
+            self.path[-1].append(value)
+        elif type(self.path[-1])==dict:
+            self.path[-1][name] = value
+    elif name in ("DbFrom",
+                  "DbTo",
+                  "Name",
+                  "NameAbbr",
+                  "IconUrl",
+                  "MenuTag",
+                  "HtmlTag",
+                  "Url",
+                  "LinkName"):
+        self.path[-1][name] = self.content
+    elif name in ("Score", "Priority"):
+        self.path[-1][name] = int(self.content)
+    elif name in ("SubjectType", "Attribute"):
+        self.path[-1][name].append(self.content)

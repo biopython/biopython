@@ -2686,7 +2686,9 @@ class ELinkTest(unittest.TestCase):
         assert len(record[0])==2
         assert record[0]["DbFrom"]=="pubmed"
         assert len(record[0]["IdCheckList"][0])
-        assert record[0]["IdCheckList"][0]==["12068369", None, True]
+        assert record[0]["IdCheckList"][0]=="12068369"
+        assert len(record[0]["IdCheckList"][0].attributes)==1
+        assert record[0]["IdCheckList"][0].attributes["HasNeighbor"]==True
 
     def t_cancerchromosomes(self):
         '''Test parsing cancerchromosomes links returned by ELink
