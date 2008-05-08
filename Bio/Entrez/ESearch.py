@@ -15,14 +15,18 @@ def startElement(self, name, attrs):
         self.record = object
         self.path = []
     else:
-        if name in ("ErrorList", "WarningList", "Translation", "TermSet"):
+        if name=="ErrorList":
+            object = {"PhraseNotFound": [],
+                      "FieldNotFound": [],
+                     }
+        elif name=="WarningList":
+            object = {"PhraseIgnored": [],
+                      "QuotedPhraseNotFound": [],
+                      "OutputMessage": [],
+                     }
+        elif name in ("Translation", "TermSet"):
             object = {}
-        elif name in ("PhraseNotFound",
-                      "FieldNotFound",
-                      "PhraseIgnored",
-                      "QuotedPhraseNotFound",
-                      "OutputMessage",
-                      "IdList",
+        elif name in ("IdList",
                       "TranslationSet",
                       "TranslationStack"):
             object = []
