@@ -548,7 +548,7 @@ class EPostTest(unittest.TestCase):
         exception_triggered = False
         try:
             record = Entrez.read(input)
-        except ValueError, exception:
+        except RuntimeError, exception:
             assert exception.message=="Wrong DB name"
             exception_triggered = True
         assert exception_triggered
@@ -585,83 +585,71 @@ class ESummaryTest(unittest.TestCase):
         input = open('Entrez/esummary1.xml')
         record = Entrez.read(input)
         assert record[0]["Id"]=="11850928"
-        assert record[0]["Item"][0]==["PubDate", "Date", "1965 Aug"]
-        assert record[0]["Item"][1]==["EPubDate", "Date", ""]
-        assert record[0]["Item"][2]==["Source", "String", "Arch Dermatol"]
-        assert record[0]["Item"][3][:2]==["AuthorList", "List"]
-        assert len(record[0]["Item"][3][2])==2
-        assert record[0]["Item"][3][2][0]==["Author", "String", "LoPresti PJ"]
-        assert record[0]["Item"][3][2][1]==["Author", "String", "Hambrick GW Jr"]
-        assert record[0]["Item"][4]==["LastAuthor", "String", "Hambrick GW Jr"]
-        assert record[0]["Item"][5]==["Title", "String", "Zirconium granuloma following treatment of rhus dermatitis."]
-        assert record[0]["Item"][6]==["Volume", "String", "92"]
-        assert record[0]["Item"][7]==["Issue", "String", "2"]
-        assert record[0]["Item"][8]==["Pages", "String", "188-91"]
-        assert record[0]["Item"][9][:2]==["LangList", "List"]
-        assert len(record[0]["Item"][9][2])==1
-        assert record[0]["Item"][9][2][0]==["Lang", "String", "English"]
-        assert record[0]["Item"][10]==["NlmUniqueID", "String", "0372433"]
-        assert record[0]["Item"][11]==["ISSN", "String", "0003-987X"]
-        assert record[0]["Item"][12]==["ESSN", "String", "1538-3652"]
-        assert record[0]["Item"][13][:2]==["PubTypeList", "List"]
-        assert len(record[0]["Item"][13][2])==1
-        assert record[0]["Item"][13][2][0]==["PubType", "String", "Journal Article"]
-        assert record[0]["Item"][14]==["RecordStatus", "String", "PubMed - indexed for MEDLINE"]
-        assert record[0]["Item"][15]==["PubStatus", "String", "ppublish"]
-        assert record[0]["Item"][16][:2]==["ArticleIds", "List"]
-        assert len(record[0]["Item"][16][2])==1
-        assert record[0]["Item"][16][2][0]==["pubmed", "String", "11850928"]
-        assert record[0]["Item"][17][:2]==["History", "List"]
-        assert len(record[0]["Item"][17][2])==2
-        assert record[0]["Item"][17][2][0]==["pubmed", "Date", "1965/08/01 00:00"]
-        assert record[0]["Item"][17][2][1]==["medline", "Date", "2002/03/09 10:01"]
-        assert record[0]["Item"][18][:2]==["References", "List"]
-        assert len(record[0]["Item"][18][2])==0
-        assert record[0]["Item"][19]==["HasAbstract", "Integer", 1]
-        assert record[0]["Item"][20]==["PmcRefCount", "Integer", 0]
-        assert record[0]["Item"][21]==["FullJournalName", "String", "Archives of dermatology"]
-        assert record[0]["Item"][22]==["ELocationID", "String", ""]
-        assert record[0]["Item"][23]==["SO", "String", "1965 Aug;92(2):188-91"]
+        assert record[0]["PubDate"]=="1965 Aug"
+        assert record[0]["EPubDate"]==""
+        assert record[0]["Source"]=="Arch Dermatol"
+        assert len(record[0]["AuthorList"])==2
+        assert record[0]["AuthorList"][0]=="LoPresti PJ"
+        assert record[0]["AuthorList"][1]=="Hambrick GW Jr"
+        assert record[0]["LastAuthor"]=="Hambrick GW Jr"
+        assert record[0]["Title"]=="Zirconium granuloma following treatment of rhus dermatitis."
+        assert record[0]["Volume"]=="92"
+        assert record[0]["Issue"]=="2"
+        assert record[0]["Pages"]=="188-91"
+        assert record[0]["LangList"]==["English"]
+        assert record[0]["NlmUniqueID"]=="0372433"
+        assert record[0]["ISSN"]=="0003-987X"
+        assert record[0]["ESSN"]=="1538-3652"
+        assert len(record[0]["PubTypeList"])==1
+        assert record[0]["PubTypeList"][0]=="Journal Article"
+        assert record[0]["RecordStatus"]=="PubMed - indexed for MEDLINE"
+        assert record[0]["PubStatus"]=="ppublish"
+        assert len(record[0]["ArticleIds"])==1
+        assert record[0]["ArticleIds"]["pubmed"]==["11850928"]
+        assert len(record[0]["History"])==2
+        assert record[0]["History"]["pubmed"]==["1965/08/01 00:00"]
+        assert record[0]["History"]["medline"]==["2002/03/09 10:01"]
+        assert len(record[0]["References"])==0
+        assert record[0]["HasAbstract"]==1
+        assert record[0]["PmcRefCount"]==0
+        assert record[0]["FullJournalName"]=="Archives of dermatology"
+        assert record[0]["ELocationID"]==""
+        assert record[0]["SO"]=="1965 Aug;92(2):188-91"
 
         assert record[1]["Id"]=="11482001"
-        assert record[1]["Item"][0]==["PubDate", "Date", "2001 Jun"]
-        assert record[1]["Item"][1]==["EPubDate", "Date", ""]
-        assert record[1]["Item"][2]==["Source", "String", "Adverse Drug React Toxicol Rev"]
-        assert record[1]["Item"][3][:2]==["AuthorList", "List"]
-        assert record[1]["Item"][3][2][0]==["Author", "String", "Mantle D"]
-        assert record[1]["Item"][3][2][1]==["Author", "String", "Gok MA"]
-        assert record[1]["Item"][3][2][2]==["Author", "String", "Lennard TW"]
-        assert record[1]["Item"][4]==["LastAuthor", "String", "Lennard TW"]
-        assert record[1]["Item"][5]==["Title", "String", "Adverse and beneficial effects of plant extracts on skin and skin disorders."]
-        assert record[1]["Item"][6]==["Volume", "String", "20"]
-        assert record[1]["Item"][7]==["Issue", "String", "2"]
-        assert record[1]["Item"][8]==["Pages", "String", "89-103"]
-        assert record[1]["Item"][9][:2]==["LangList", "List"]
-        assert len(record[1]["Item"][9][2])==1
-        assert record[1]["Item"][9][2][0]==["Lang", "String", "English"]
-        assert record[1]["Item"][10]==["NlmUniqueID", "String", "9109474"]
-        assert record[1]["Item"][11]==["ISSN", "String", "0964-198X"]
-        assert record[1]["Item"][12]==["ESSN", "String", ""]
-        assert record[1]["Item"][13][:2]==["PubTypeList", "List"]
-        assert len(record[1]["Item"][13][2])==2
-        assert record[1]["Item"][13][2][0]==["PubType", "String", "Journal Article"]
-        assert record[1]["Item"][13][2][1]==["PubType", "String", "Review"]
-        assert record[1]["Item"][14]==["RecordStatus", "String", "PubMed - indexed for MEDLINE"]
-        assert record[1]["Item"][15]==["PubStatus", "String", "ppublish"]
-        assert record[1]["Item"][16][:2]==["ArticleIds", "List"]
-        assert len(record[1]["Item"][16][2])==1
-        assert record[1]["Item"][16][2][0]==["pubmed", "String", "11482001"]
-        assert record[1]["Item"][17][:2]==["History", "List"]
-        assert len(record[1]["Item"][17][2])==2
-        assert record[1]["Item"][17][2][0]==["pubmed", "Date", "2001/08/03 10:00"]
-        assert record[1]["Item"][17][2][1]==["medline", "Date", "2002/01/23 10:01"]
-        assert record[1]["Item"][18][:2]==["References", "List"]
-        assert len(record[1]["Item"][18][2])==0
-        assert record[1]["Item"][19]==["HasAbstract", "Integer", 1]
-        assert record[1]["Item"][20]==["PmcRefCount", "Integer", 0]
-        assert record[1]["Item"][21]==["FullJournalName", "String", "Adverse drug reactions and toxicological reviews"]
-        assert record[1]["Item"][22]==["ELocationID", "String", ""]
-        assert record[1]["Item"][23]==["SO", "String", "2001 Jun;20(2):89-103"]
+        assert record[1]["PubDate"]=="2001 Jun"
+        assert record[1]["EPubDate"]==""
+        assert record[1]["Source"]=="Adverse Drug React Toxicol Rev"
+        assert len(record[1]["AuthorList"])==3
+        assert record[1]["AuthorList"][0]=="Mantle D"
+        assert record[1]["AuthorList"][1]=="Gok MA"
+        assert record[1]["AuthorList"][2]=="Lennard TW"
+        assert record[1]["LastAuthor"]=="Lennard TW"
+        assert record[1]["Title"]=="Adverse and beneficial effects of plant extracts on skin and skin disorders."
+        assert record[1]["Volume"]=="20"
+        assert record[1]["Issue"]=="2"
+        assert record[1]["Pages"]=="89-103"
+        assert len(record[1]["LangList"])==1
+        assert record[1]["LangList"][0]=="English"
+        assert record[1]["NlmUniqueID"]=="9109474"
+        assert record[1]["ISSN"]=="0964-198X"
+        assert record[1]["ESSN"]==""
+        assert len(record[1]["PubTypeList"])==2
+        assert record[1]["PubTypeList"][0]=="Journal Article"
+        assert record[1]["PubTypeList"][1]=="Review"
+        assert record[1]["RecordStatus"]=="PubMed - indexed for MEDLINE"
+        assert record[1]["PubStatus"]=="ppublish"
+        assert len(record[1]["ArticleIds"])==1
+        assert record[1]["ArticleIds"]["pubmed"]==["11482001"]
+        assert len(record[1]["History"])==2
+        assert record[1]["History"]["pubmed"]==["2001/08/03 10:00"]
+        assert record[1]["History"]["medline"]==["2002/01/23 10:01"]
+        assert len(record[1]["References"])==0
+        assert record[1]["HasAbstract"]==1
+        assert record[1]["PmcRefCount"]==0
+        assert record[1]["FullJournalName"]=="Adverse drug reactions and toxicological reviews"
+        assert record[1]["ELocationID"]==""
+        assert record[1]["SO"]=="2001 Jun;20(2):89-103"
 
     def t_journals(self):
         '''Test parsing XML returned by ESummary from the Journals database
@@ -672,74 +660,70 @@ class ESummaryTest(unittest.TestCase):
         input = open('Entrez/esummary2.xml')
         record = Entrez.read(input)
         assert record[0]["Id"]=="27731"
-        assert record[0]["Item"][0]==["Title", "String", "The American journal of obstetrics and diseases of women and children"]
-        assert record[0]["Item"][1]==["MedAbbr", "String", "Am J Obstet Dis Women Child"]
-        assert record[0]["Item"][2]==["IsoAbbr", "String", ""]
-        assert record[0]["Item"][3]==["NlmId", "String", "14820330R"]
-        assert record[0]["Item"][4]==["pISSN", "String", "0894-5543"]
-        assert record[0]["Item"][5]==["eISSN", "String", ""]
-        assert record[0]["Item"][6]==["PublicationStartYear", "String", "1868"]
-        assert record[0]["Item"][7]==["PublicationEndYear", "String", "1919"]
-        assert record[0]["Item"][8]==["Publisher", "String", "W.A. Townsend & Adams, $c [1868-1919]"]
-        assert record[0]["Item"][9]==["Language", "String", "eng"]
-        assert record[0]["Item"][10]==["Country", "String", "United States"]
-        assert record[0]["Item"][11][:2]==["BroadHeading", "List"]
-        assert len(record[0]["Item"][11][2])==0
-        assert record[0]["Item"][12]==["ContinuationNotes", "String", ""]
+        assert record[0]["Title"]=="The American journal of obstetrics and diseases of women and children"
+        assert record[0]["MedAbbr"]=="Am J Obstet Dis Women Child"
+        assert record[0]["IsoAbbr"]==""
+        assert record[0]["NlmId"]=="14820330R"
+        assert record[0]["pISSN"]=="0894-5543"
+        assert record[0]["eISSN"]==""
+        assert record[0]["PublicationStartYear"]=="1868"
+        assert record[0]["PublicationEndYear"]=="1919"
+        assert record[0]["Publisher"]=="W.A. Townsend & Adams, $c [1868-1919]"
+        assert record[0]["Language"]=="eng"
+        assert record[0]["Country"]=="United States"
+        assert len(record[0]["BroadHeading"])==0
+        assert record[0]["ContinuationNotes"]==""
 
         assert record[1]["Id"]=="439"
-        assert record[1]["Item"][0]==["Title", "String", "American journal of obstetrics and gynecology"]
-        assert record[1]["Item"][1]==["MedAbbr", "String", "Am J Obstet Gynecol"]
-        assert record[1]["Item"][2]==["IsoAbbr", "String", "Am. J. Obstet. Gynecol."]
-        assert record[1]["Item"][3]==["NlmId", "String", "0370476"]
-        assert record[1]["Item"][4]==["pISSN", "String", "0002-9378"]
-        assert record[1]["Item"][5]==["eISSN", "String", "1097-6868"]
-        assert record[1]["Item"][6]==["PublicationStartYear", "String", "1920"]
-        assert record[1]["Item"][7]==["PublicationEndYear", "String", ""]
-        assert record[1]["Item"][8]==["Publisher", "String", "Elsevier,"]
-        assert record[1]["Item"][9]==["Language", "String", "eng"]
-        assert record[1]["Item"][10]==["Country", "String", "United States"]
-        assert record[1]["Item"][11][:2]==["BroadHeading", "List"]
-        assert len(record[1]["Item"][11][2])==2
-        assert record[1]["Item"][11][2][0]==["string", "String", "Gynecology"]
-        assert record[1]["Item"][11][2][1]==["string", "String", "Obstetrics"]
-        assert record[1]["Item"][12]==["ContinuationNotes", "String", "Continues: American journal of obstetrics and diseases of women and children. "]
+        assert record[1]["Title"]=="American journal of obstetrics and gynecology"
+        assert record[1]["MedAbbr"]=="Am J Obstet Gynecol"
+        assert record[1]["IsoAbbr"]=="Am. J. Obstet. Gynecol."
+        assert record[1]["NlmId"]=="0370476"
+        assert record[1]["pISSN"]=="0002-9378"
+        assert record[1]["eISSN"]=="1097-6868"
+        assert record[1]["PublicationStartYear"]=="1920"
+        assert record[1]["PublicationEndYear"]==""
+        assert record[1]["Publisher"]=="Elsevier,"
+        assert record[1]["Language"]=="eng"
+        assert record[1]["Country"]=="United States"
+        assert len(record[1]["BroadHeading"])==2
+        assert record[1]["BroadHeading"][0]=="Gynecology"
+        assert record[1]["BroadHeading"][1]=="Obstetrics"
+        assert record[1]["ContinuationNotes"]=="Continues: American journal of obstetrics and diseases of women and children. "
 
         assert record[2]["Id"]=="735"
-        assert record[2]["Item"][0]==["Title", "String", "Archives of gynecology and obstetrics"]
-        assert record[2]["Item"][1]==["MedAbbr", "String", "Arch Gynecol Obstet"]
-        assert record[2]["Item"][2]==["IsoAbbr", "String", "Arch. Gynecol. Obstet."]
-        assert record[2]["Item"][3]==["NlmId", "String", "8710213"]
-        assert record[2]["Item"][4]==["pISSN", "String", "0932-0067"]
-        assert record[2]["Item"][5]==["eISSN", "String", "1432-0711"]
-        assert record[2]["Item"][6]==["PublicationStartYear", "String", "1987"]
-        assert record[2]["Item"][7]==["PublicationEndYear", "String", ""]
-        assert record[2]["Item"][8]==["Publisher", "String", "Springer Verlag"]
-        assert record[2]["Item"][9]==["Language", "String", "eng"]
-        assert record[2]["Item"][10]==["Country", "String", "Germany"]
-        assert record[2]["Item"][11][:2]==["BroadHeading", "List"]
-        assert len(record[2]["Item"][11][2])==2
-        assert record[2]["Item"][11][2][0]==["string", "String", "Gynecology"]
-        assert record[2]["Item"][11][2][1]==["string", "String", "Obstetrics"]
-        assert record[2]["Item"][12]==["ContinuationNotes", "String", "Continues: Archives of gynecology. "]
+        assert record[2]["Title"]=="Archives of gynecology and obstetrics"
+        assert record[2]["MedAbbr"]=="Arch Gynecol Obstet"
+        assert record[2]["IsoAbbr"]=="Arch. Gynecol. Obstet."
+        assert record[2]["NlmId"]=="8710213"
+        assert record[2]["pISSN"]=="0932-0067"
+        assert record[2]["eISSN"]=="1432-0711"
+        assert record[2]["PublicationStartYear"]=="1987"
+        assert record[2]["PublicationEndYear"]==""
+        assert record[2]["Publisher"]=="Springer Verlag"
+        assert record[2]["Language"]=="eng"
+        assert record[2]["Country"]=="Germany"
+        assert len(record[2]["BroadHeading"])==2
+        assert record[2]["BroadHeading"][0]=="Gynecology"
+        assert record[2]["BroadHeading"][1]=="Obstetrics"
+        assert record[2]["ContinuationNotes"]=="Continues: Archives of gynecology. "
 
         assert record[3]["Id"]=="905"
-        assert record[3]["Item"][0]==["Title", "String", "Asia-Oceania journal of obstetrics and gynaecology / AOFOG"]
-        assert record[3]["Item"][1]==["MedAbbr", "String", "Asia Oceania J Obstet Gynaecol"]
-        assert record[3]["Item"][2]==["IsoAbbr", "String", ""]
-        assert record[3]["Item"][3]==["NlmId", "String", "8102781"]
-        assert record[3]["Item"][4]==["pISSN", "String", "0389-2328"]
-        assert record[3]["Item"][5]==["eISSN", "String", ""]
-        assert record[3]["Item"][6]==["PublicationStartYear", "String", "1980"]
-        assert record[3]["Item"][7]==["PublicationEndYear", "String", "1994"]
-        assert record[3]["Item"][8]==["Publisher", "String", "University Of Tokyo Press"]
-        assert record[3]["Item"][9]==["Language", "String", "eng"]
-        assert record[3]["Item"][10]==["Country", "String", "Japan"]
-        assert record[3]["Item"][11][:2]==["BroadHeading", "List"]
-        assert len(record[3]["Item"][11][2])==2
-        assert record[3]["Item"][11][2][0]==["string", "String", "Gynecology"]
-        assert record[3]["Item"][11][2][1]==["string", "String", "Obstetrics"]
-        assert record[3]["Item"][12]==["ContinuationNotes", "String", "Continues: Journal of the Asian Federation of Obstetrics and Gynaecology. Continued by: Journal of obstetrics and gynaecology (Tokyo, Japan). "]
+        assert record[3]["Title"]=="Asia-Oceania journal of obstetrics and gynaecology / AOFOG"
+        assert record[3]["MedAbbr"]=="Asia Oceania J Obstet Gynaecol"
+        assert record[3]["IsoAbbr"]==""
+        assert record[3]["NlmId"]=="8102781"
+        assert record[3]["pISSN"]=="0389-2328"
+        assert record[3]["eISSN"]==""
+        assert record[3]["PublicationStartYear"]=="1980"
+        assert record[3]["PublicationEndYear"]=="1994"
+        assert record[3]["Publisher"]=="University Of Tokyo Press"
+        assert record[3]["Language"]=="eng"
+        assert record[3]["Country"]=="Japan"
+        assert len(record[3]["BroadHeading"])==2
+        assert record[3]["BroadHeading"][0]=="Gynecology"
+        assert record[3]["BroadHeading"][1]=="Obstetrics"
+        assert record[3]["ContinuationNotes"]=="Continues: Journal of the Asian Federation of Obstetrics and Gynaecology. Continued by: Journal of obstetrics and gynaecology (Tokyo, Japan). "
 
     def t_protein(self):
         '''Test parsing XML returned by ESummary from the Protein database
@@ -751,32 +735,32 @@ class ESummaryTest(unittest.TestCase):
         record = Entrez.read(input)
 
         assert record[0]["Id"]=="28800982"
-        assert record[0]["Item"][0]==["Caption", "String", "AAO47091"]
-        assert record[0]["Item"][1]==["Title", "String", "hemochromatosis [Homo sapiens]"]
-        assert record[0]["Item"][2]==["Extra", "String", "gi|28800982|gb|AAO47091.1|[28800982]"]
-        assert record[0]["Item"][3]==["Gi", "Integer", 28800982]
-        assert record[0]["Item"][4]==["CreateDate", "String", "2003/03/03"]
-        assert record[0]["Item"][5]==["UpdateDate", "String", "2003/03/03"]
-        assert record[0]["Item"][6]==["Flags", "Integer", 0]
-        assert record[0]["Item"][7]==["TaxId", "Integer", 9606]
-        assert record[0]["Item"][8]==["Length", "Integer", 268]
-        assert record[0]["Item"][9]==["Status", "String", "live"]
-        assert record[0]["Item"][10]==["ReplacedBy", "String", ""]
-        assert record[0]["Item"][11]==["Comment", "String", "  "]
+        assert record[0]["Caption"]=="AAO47091"
+        assert record[0]["Title"]=="hemochromatosis [Homo sapiens]"
+        assert record[0]["Extra"]=="gi|28800982|gb|AAO47091.1|[28800982]"
+        assert record[0]["Gi"]==28800982
+        assert record[0]["CreateDate"]=="2003/03/03"
+        assert record[0]["UpdateDate"]=="2003/03/03"
+        assert record[0]["Flags"]==0
+        assert record[0]["TaxId"]==9606
+        assert record[0]["Length"]==268
+        assert record[0]["Status"]=="live"
+        assert record[0]["ReplacedBy"]==""
+        assert record[0]["Comment"]=="  "
 
         assert record[1]["Id"]=="28628843"
-        assert record[1]["Item"][0]==["Caption", "String", "AAO49381"]
-        assert record[1]["Item"][1]==["Title", "String", "erythroid associated factor [Homo sapiens]"]
-        assert record[1]["Item"][2]==["Extra", "String", "gi|28628843|gb|AAO49381.1|AF485325_1[28628843]"]
-        assert record[1]["Item"][3]==["Gi", "Integer", 28628843]
-        assert record[1]["Item"][4]==["CreateDate", "String", "2003/03/02"]
-        assert record[1]["Item"][5]==["UpdateDate", "String", "2003/03/02"]
-        assert record[1]["Item"][6]==["Flags", "Integer", 0]
-        assert record[1]["Item"][7]==["TaxId", "Integer", 9606]
-        assert record[1]["Item"][8]==["Length", "Integer", 102]
-        assert record[1]["Item"][9]==["Status", "String", "live"]
-        assert record[1]["Item"][10]==["ReplacedBy", "String", ""]
-        assert record[1]["Item"][11]==["Comment", "String", "  "]
+        assert record[1]["Caption"]=="AAO49381"
+        assert record[1]["Title"]=="erythroid associated factor [Homo sapiens]"
+        assert record[1]["Extra"]=="gi|28628843|gb|AAO49381.1|AF485325_1[28628843]"
+        assert record[1]["Gi"]== 28628843
+        assert record[1]["CreateDate"]=="2003/03/02"
+        assert record[1]["UpdateDate"]=="2003/03/02"
+        assert record[1]["Flags"]==0
+        assert record[1]["TaxId"]==9606
+        assert record[1]["Length"]==102
+        assert record[1]["Status"]=="live"
+        assert record[1]["ReplacedBy"]==""
+        assert record[1]["Comment"]=="  "
 
     def t_nucleotide(self):
         '''Test parsing XML returned by ESummary from the Nucleotide database
@@ -790,32 +774,32 @@ class ESummaryTest(unittest.TestCase):
         record = Entrez.read(input)
 
         assert record[0]["Id"]=="28864546"
-        assert record[0]["Item"][0]==["Caption", "String", "AY207443"]
-        assert record[0]["Item"][1]==["Title", "String", "Homo sapiens alpha hemoglobin (HBZP) pseudogene 3' UTR/AluJo repeat breakpoint junction"]
-        assert record[0]["Item"][2]==["Extra", "String", "gi|28864546|gb|AY207443.1|[28864546]"]
-        assert record[0]["Item"][3]==["Gi", "Integer", 28864546]
-        assert record[0]["Item"][4]==["CreateDate", "String", "2003/03/05"]
-        assert record[0]["Item"][5]==["UpdateDate", "String", "2003/03/05"]
-        assert record[0]["Item"][6]==["Flags", "Integer", 0]
-        assert record[0]["Item"][7]==["TaxId", "Integer", 9606]
-        assert record[0]["Item"][8]==["Length", "Integer", 491]
-        assert record[0]["Item"][9]==["Status", "String", "live"]
-        assert record[0]["Item"][10]==["ReplacedBy", "String", ""]
-        assert record[0]["Item"][11]==["Comment", "String", "  "]
+        assert record[0]["Caption"]=="AY207443"
+        assert record[0]["Title"]=="Homo sapiens alpha hemoglobin (HBZP) pseudogene 3' UTR/AluJo repeat breakpoint junction"
+        assert record[0]["Extra"]=="gi|28864546|gb|AY207443.1|[28864546]"
+        assert record[0]["Gi"]==28864546
+        assert record[0]["CreateDate"]=="2003/03/05"
+        assert record[0]["UpdateDate"]=="2003/03/05"
+        assert record[0]["Flags"]==0
+        assert record[0]["TaxId"]==9606
+        assert record[0]["Length"]==491
+        assert record[0]["Status"]=="live"
+        assert record[0]["ReplacedBy"]==""
+        assert record[0]["Comment"]=="  "
 
         assert record[1]["Id"]=="28800981"
-        assert record[1]["Item"][0]==["Caption", "String", "AY205604"]
-        assert record[1]["Item"][1]==["Title", "String", "Homo sapiens hemochromatosis (HFE) mRNA, partial cds"]
-        assert record[1]["Item"][2]==["Extra", "String", "gi|28800981|gb|AY205604.1|[28800981]"]
-        assert record[1]["Item"][3]==["Gi", "Integer", 28800981]
-        assert record[1]["Item"][4]==["CreateDate", "String", "2003/03/03"]
-        assert record[1]["Item"][5]==["UpdateDate", "String", "2003/03/03"]
-        assert record[1]["Item"][6]==["Flags", "Integer", 0]
-        assert record[1]["Item"][7]==["TaxId", "Integer", 9606]
-        assert record[1]["Item"][8]==["Length", "Integer", 860]
-        assert record[1]["Item"][9]==["Status", "String", "live"]
-        assert record[1]["Item"][10]==["ReplacedBy", "String", ""]
-        assert record[1]["Item"][11]==["Comment", "String", "  "]
+        assert record[1]["Caption"]=="AY205604"
+        assert record[1]["Title"]=="Homo sapiens hemochromatosis (HFE) mRNA, partial cds"
+        assert record[1]["Extra"]=="gi|28800981|gb|AY205604.1|[28800981]"
+        assert record[1]["Gi"]==28800981
+        assert record[1]["CreateDate"]=="2003/03/03"
+        assert record[1]["UpdateDate"]=="2003/03/03"
+        assert record[1]["Flags"]==0
+        assert record[1]["TaxId"]==9606
+        assert record[1]["Length"]==860
+        assert record[1]["Status"]=="live"
+        assert record[1]["ReplacedBy"]==""
+        assert record[1]["Comment"]=="  "
 
     def t_structure(self):
         '''Test parsing XML returned by ESummary from the Structure database
@@ -828,44 +812,44 @@ class ESummaryTest(unittest.TestCase):
         input = open('Entrez/esummary5.xml')
         record = Entrez.read(input)
         assert record[0]["Id"]=="19923"
-        assert record[0]["Item"][0]==["PdbAcc", "String", "1L5J"]
-        assert record[0]["Item"][1]==["PdbDescr", "String", "Crystal Structure Of E. Coli Aconitase B"]
-        assert record[0]["Item"][2]==["EC", "String", "4.2.1.3"]
-        assert record[0]["Item"][3]==["Resolution", "String", "2.4"]
-        assert record[0]["Item"][4]==["ExpMethod", "String", "X-Ray Diffraction"]
-        assert record[0]["Item"][5]==["PdbClass", "String", "Lyase"]
-        assert record[0]["Item"][6]==["PdbReleaseDate", "String", "2007/8/27"]
-        assert record[0]["Item"][7]==["PdbDepositDate", "String", "2002/3/7"]
-        assert record[0]["Item"][8]==["DepositDate", "String", "2007/10/25"]
-        assert record[0]["Item"][9]==["ModifyDate", "String", "2007/10/25"]
-        assert record[0]["Item"][10]==["LigCode", "String", "F3S|TRA"]
-        assert record[0]["Item"][11]==["LigCount", "String", "2"]
-        assert record[0]["Item"][12]==["ModProteinResCount", "String", "0"]
-        assert record[0]["Item"][13]==["ModDNAResCount", "String", "0"]
-        assert record[0]["Item"][14]==["ModRNAResCount", "String", "0"]
-        assert record[0]["Item"][15]==["ProteinChainCount", "String", "2"]
-        assert record[0]["Item"][16]==["DNAChainCount", "String", "0"]
-        assert record[0]["Item"][17]==["RNAChainCount", "String", "0"]
+        assert record[0]["PdbAcc"]=="1L5J"
+        assert record[0]["PdbDescr"]=="Crystal Structure Of E. Coli Aconitase B"
+        assert record[0]["EC"]=="4.2.1.3"
+        assert record[0]["Resolution"]=="2.4"
+        assert record[0]["ExpMethod"]=="X-Ray Diffraction"
+        assert record[0]["PdbClass"]=="Lyase"
+        assert record[0]["PdbReleaseDate"]=="2007/8/27"
+        assert record[0]["PdbDepositDate"]=="2002/3/7"
+        assert record[0]["DepositDate"]=="2007/10/25"
+        assert record[0]["ModifyDate"]=="2007/10/25"
+        assert record[0]["LigCode"]=="F3S|TRA"
+        assert record[0]["LigCount"]=="2"
+        assert record[0]["ModProteinResCount"]=="0"
+        assert record[0]["ModDNAResCount"]=="0"
+        assert record[0]["ModRNAResCount"]=="0"
+        assert record[0]["ProteinChainCount"]=="2"
+        assert record[0]["DNAChainCount"]=="0"
+        assert record[0]["RNAChainCount"]=="0"
 
         assert record[1]["Id"]=="12120"
-        assert record[1]["Item"][0]==["PdbAcc", "String", "1B0K"]
-        assert record[1]["Item"][1]==["PdbDescr", "String", "S642a:fluorocitrate Complex Of Aconitase"]
-        assert record[1]["Item"][2]==["EC", "String", "4.2.1.3"]
-        assert record[1]["Item"][3]==["Resolution", "String", "2.5"]
-        assert record[1]["Item"][4]==["ExpMethod", "String", "X-Ray Diffraction"]
-        assert record[1]["Item"][5]==["PdbClass", "String", "Lyase"]
-        assert record[1]["Item"][6]==["PdbReleaseDate", "String", "2007/8/27"]
-        assert record[1]["Item"][7]==["PdbDepositDate", "String", "1998/11/11"]
-        assert record[1]["Item"][8]==["DepositDate", "String", "2007/10/07"]
-        assert record[1]["Item"][9]==["ModifyDate", "String", "2007/10/07"]
-        assert record[1]["Item"][10]==["LigCode", "String", "FLC|O|SF4"]
-        assert record[1]["Item"][11]==["LigCount", "String", "3"]
-        assert record[1]["Item"][12]==["ModProteinResCount", "String", "0"]
-        assert record[1]["Item"][13]==["ModDNAResCount", "String", "0"]
-        assert record[1]["Item"][14]==["ModRNAResCount", "String", "0"]
-        assert record[1]["Item"][15]==["ProteinChainCount", "String", "1"]
-        assert record[1]["Item"][16]==["DNAChainCount", "String", "0"]
-        assert record[1]["Item"][17]==["RNAChainCount", "String", "0"]
+        assert record[1]["PdbAcc"]=="1B0K"
+        assert record[1]["PdbDescr"]=="S642a:fluorocitrate Complex Of Aconitase"
+        assert record[1]["EC"]=="4.2.1.3"
+        assert record[1]["Resolution"]=="2.5"
+        assert record[1]["ExpMethod"]=="X-Ray Diffraction"
+        assert record[1]["PdbClass"]=="Lyase"
+        assert record[1]["PdbReleaseDate"]=="2007/8/27"
+        assert record[1]["PdbDepositDate"]=="1998/11/11"
+        assert record[1]["DepositDate"]=="2007/10/07"
+        assert record[1]["ModifyDate"]=="2007/10/07"
+        assert record[1]["LigCode"]=="FLC|O|SF4"
+        assert record[1]["LigCount"]=="3"
+        assert record[1]["ModProteinResCount"]=="0"
+        assert record[1]["ModDNAResCount"]=="0"
+        assert record[1]["ModRNAResCount"]=="0"
+        assert record[1]["ProteinChainCount"]=="1"
+        assert record[1]["DNAChainCount"]=="0"
+        assert record[1]["RNAChainCount"]=="0"
 
     def t_taxonomy(self):
         '''Test parsing XML returned by ESummary from the Taxonomy database
@@ -878,34 +862,34 @@ class ESummaryTest(unittest.TestCase):
         input = open('Entrez/esummary6.xml')
         record = Entrez.read(input)
         assert record[0]["Id"]=="9913"
-        assert record[0]["Item"][0]==["Rank", "String", "species"]
-        assert record[0]["Item"][1]==["Division", "String", "even-toed ungulates"]
-        assert record[0]["Item"][2]==["ScientificName", "String", "Bos taurus"]
-        assert record[0]["Item"][3]==["CommonName", "String", "cattle"]
-        assert record[0]["Item"][4]==["TaxId", "Integer", 9913]
-        assert record[0]["Item"][5]==["NucNumber", "Integer", 2264214]
-        assert record[0]["Item"][6]==["ProtNumber", "Integer", 55850]
-        assert record[0]["Item"][7]==["StructNumber", "Integer", 1517]
-        assert record[0]["Item"][8]==["GenNumber", "Integer", 31]
-        assert record[0]["Item"][9]==["GeneNumber", "Integer", 29651]
-        assert record[0]["Item"][10]==["Genus", "String", ""]
-        assert record[0]["Item"][11]==["Species", "String", ""]
-        assert record[0]["Item"][12]==["Subsp", "String", ""]
+        assert record[0]["Rank"]=="species"
+        assert record[0]["Division"]=="even-toed ungulates"
+        assert record[0]["ScientificName"]=="Bos taurus"
+        assert record[0]["CommonName"]=="cattle"
+        assert record[0]["TaxId"]==9913
+        assert record[0]["NucNumber"]==2264214
+        assert record[0]["ProtNumber"]==55850
+        assert record[0]["StructNumber"]==1517
+        assert record[0]["GenNumber"]==31
+        assert record[0]["GeneNumber"]==29651
+        assert record[0]["Genus"]==""
+        assert record[0]["Species"]==""
+        assert record[0]["Subsp"]==""
 
         assert record[1]["Id"]=="30521"
-        assert record[1]["Item"][0]==["Rank", "String", "species"]
-        assert record[1]["Item"][1]==["Division", "String", "even-toed ungulates"]
-        assert record[1]["Item"][2]==["ScientificName", "String", "Bos grunniens"]
-        assert record[1]["Item"][3]==["CommonName", "String", "domestic yak"]
-        assert record[1]["Item"][4]==["TaxId", "Integer", 30521]
-        assert record[1]["Item"][5]==["NucNumber", "Integer", 560]
-        assert record[1]["Item"][6]==["ProtNumber", "Integer", 254]
-        assert record[1]["Item"][7]==["StructNumber", "Integer", 0]
-        assert record[1]["Item"][8]==["GenNumber", "Integer", 1]
-        assert record[1]["Item"][9]==["GeneNumber", "Integer", 13]
-        assert record[1]["Item"][10]==["Genus", "String", ""]
-        assert record[1]["Item"][11]==["Species", "String", ""]
-        assert record[1]["Item"][12]==["Subsp", "String", ""]
+        assert record[1]["Rank"]=="species"
+        assert record[1]["Division"]=="even-toed ungulates"
+        assert record[1]["ScientificName"]=="Bos grunniens"
+        assert record[1]["CommonName"]=="domestic yak"
+        assert record[1]["TaxId"]==30521
+        assert record[1]["NucNumber"]==560
+        assert record[1]["ProtNumber"]==254
+        assert record[1]["StructNumber"]==0
+        assert record[1]["GenNumber"]==1
+        assert record[1]["GeneNumber"]==13
+        assert record[1]["Genus"]==""
+        assert record[1]["Species"]==""
+        assert record[1]["Subsp"]==""
 
     def t_unists(self):
         '''Test parsing XML returned by ESummary from the UniSTS database
@@ -919,28 +903,22 @@ class ESummaryTest(unittest.TestCase):
         record = Entrez.read(input)
 
         assert record[0]["Id"]=="254085"
-        assert record[0]["Item"][0]==["Marker_Name", "String", "SE234324"]
-        assert record[0]["Item"][1][:2]==["Map_Gene_Summary_List", "List"]
-        assert len(record[0]["Item"][1][2])==1
-        assert record[0]["Item"][1][2][0][:2]==["Map_Gene_Summary", "Structure"]
-        assert len(record[0]["Item"][1][2][0][2])==3
-        assert record[0]["Item"][1][2][0][2][0]==["Org", "String", "Sus scrofa"]
-        assert record[0]["Item"][1][2][0][2][1]==["Chr", "String", " chromosome 7"]
-        assert record[0]["Item"][1][2][0][2][2]==["Locus", "String", ""]
-        assert record[0]["Item"][2]==["EPCR_Summary", "String", "Found by e-PCR in sequences from Sus scrofa."]
-        assert record[0]["Item"][3]==["LocusId", "String", ""]
+        assert record[0]["Marker_Name"]=="SE234324"
+        assert len(record[0]["Map_Gene_Summary_List"])==1
+        assert record[0]["Map_Gene_Summary_List"][0]["Org"]=="Sus scrofa"
+        assert record[0]["Map_Gene_Summary_List"][0]["Chr"]==" chromosome 7"
+        assert record[0]["Map_Gene_Summary_List"][0]["Locus"]==""
+        assert record[0]["EPCR_Summary"]=="Found by e-PCR in sequences from Sus scrofa."
+        assert record[0]["LocusId"]==""
 
         assert record[1]["Id"]=="254086"
-        assert record[1]["Item"][0]==["Marker_Name", "String", "SE259162"]
-        assert record[1]["Item"][1][:2]==["Map_Gene_Summary_List", "List"]
-        assert len(record[1]["Item"][1][2])==1
-        assert record[1]["Item"][1][2][0][:2]==["Map_Gene_Summary", "Structure"]
-        assert len(record[1]["Item"][1][2][0][2])==3
-        assert record[1]["Item"][1][2][0][2][0]==["Org", "String", "Sus scrofa"]
-        assert record[1]["Item"][1][2][0][2][1]==["Chr", "String", " chromosome 12"]
-        assert record[1]["Item"][1][2][0][2][2]==["Locus", "String", ""]
-        assert record[1]["Item"][2]==["EPCR_Summary", "String", "Found by e-PCR in sequences from Sus scrofa."]
-        assert record[1]["Item"][3]==["LocusId", "String", ""]
+        assert record[1]["Marker_Name"]=="SE259162"
+        assert len(record[1]["Map_Gene_Summary_List"])==1
+        assert record[1]["Map_Gene_Summary_List"][0]["Org"]=="Sus scrofa"
+        assert record[1]["Map_Gene_Summary_List"][0]["Chr"]==" chromosome 12"
+        assert record[1]["Map_Gene_Summary_List"][0]["Locus"]==""
+        assert record[1]["EPCR_Summary"]=="Found by e-PCR in sequences from Sus scrofa."
+        assert record[1]["LocusId"]==""
 
     def t_wrong(self):
         '''Test parsing XML returned by ESummary with incorrect arguments
@@ -951,7 +929,7 @@ class ESummaryTest(unittest.TestCase):
         exception_triggered = False
         try:
             record = Entrez.read(input)
-        except ValueError, exception:
+        except RuntimeError, exception:
             assert exception.message=="Neither query_key nor id specified"
             exception_triggered = True
         assert exception_triggered

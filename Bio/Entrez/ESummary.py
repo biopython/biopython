@@ -8,41 +8,54 @@
 # from Bio.Entrez.__init__.py.
 
 def startElement(self, name, attrs):
-    if self.element==["eSummaryResult"]:
-        self.record = []
-    elif self.element==["eSummaryResult", "DocSum"]:
-        self.record.append({})
-    elif self.element[:3]==["eSummaryResult", "DocSum", "Item"]:
-        docsum = self.record[-1]
+    if name=="eSummaryResult":
+        object = []
+        self.record = object
+        self.path = []
+    elif name=="DocSum":
+        object = {}
+        self.path[-1].append(object)
+    elif name=="Item":
+        previous = self.path[-1]
         itemname = str(attrs["Name"]) # convert from Unicode
         itemtype = str(attrs["Type"]) # convert from Unicode
-        item = [itemname, itemtype, None]
-        if itemtype in ["List", "Structure"]: item[2] = []
-        if not "Item" in docsum:
-            docsum["Item"] = [item]
+        if itemtype=="Structure" or itemname in ("ArticleIds", "History"):
+            object = {}
+        elif itemtype=="List":
+            object = []
         else:
-            n = self.element.count("Item")
-            current = docsum["Item"]
-            while n > 1:
-                current = current[-1][2]
-                n-=1
-            current.append(item)
+            object = ""
+            self.itemname = itemname
+            self.itemtype = itemtype
+            if itemname in ("pubmed", "medline"):
+                previous[itemname] = []
+        if object!="":
+            if type(previous)==dict:
+                previous[itemname] = object
+            elif type(previous)==list:
+                previous.append(object)
+    else:
+        object = ""
+    self.path.append(object)
 
 def endElement(self, name):
-    if self.element==["eSummaryResult", "ERROR"]:
-        raise ValueError(self.content)
-    else:
-        docsum = self.record[-1]
-        if self.element==["eSummaryResult", "DocSum", "Id"]:
-            docsum["Id"] = self.content
-        elif self.element[:3]==["eSummaryResult", "DocSum", "Item"]:
-            n = self.element.count("Item")
-            current = docsum["Item"]
-            while n > 1:
-                current = current[-1][2]
-                n-=1
-            # Integer|Date|String|Structure|List|Flags|Qualifier|Enumerator|Unknown
-            if current[-1][1]=="Integer":
-                current[-1][2] = int(self.content)
-            elif not current[-1][1] in ("List", "Structure"):
-                current[-1][2] = self.content
+    current = self.path.pop()
+    if name=="ERROR":
+        raise RuntimeError(self.content)
+    # Integer|Date|String|Structure|List|Flags|Qualifier|Enumerator|Unknown
+    if current!="": return
+    previous = self.path[-1]
+    if name=="Id":
+        previous[name] = self.content
+    elif name=="Item":
+        if type(previous)==list:
+            previous.append(self.content)
+        elif type(previous)==dict:
+            itemname = self.itemname
+            itemtype = self.itemtype
+            value = self.content
+            if itemtype=="Integer": value = int(value)
+            if itemname in ("pubmed", "medline"):
+                previous[itemname].append(value)
+            else:
+                previous[itemname] = value
