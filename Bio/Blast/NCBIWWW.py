@@ -747,7 +747,7 @@ def qblast(program, database, sequence,
     message = urllib.urlencode(query)
 
     # Send off the initial query to qblast.
-    request = urllib2.Request("http://www.ncbi.nlm.nih.gov/blast/Blast.cgi",
+    request = urllib2.Request("http://blast.ncbi.nlm.nih.gov/Blast.cgi",
                               message,
                               {"User-Agent":"BiopythonClient"})
     handle = urllib2.urlopen(request)
@@ -779,7 +779,7 @@ def qblast(program, database, sequence,
     limiter = RequestLimiter(3)
     while 1:
         limiter.wait()
-        request = urllib2.Request("http://www.ncbi.nlm.nih.gov/blast/Blast.cgi",
+        request = urllib2.Request("http://blast.ncbi.nlm.nih.gov/Blast.cgi",
                                   message,
                                   {"User-Agent":"BiopythonClient"})
         handle = urllib2.urlopen(request)
