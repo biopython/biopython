@@ -9,108 +9,73 @@
 # from Bio.Entrez.__init__.py.
 
 def startElement(self, name, attrs):
-    if self.element==["SerialSet"]:
-        self.record = []
-    elif self.element==["SerialSet", "Serial"]:
-        d = {}
-        if "DataCreationMethod" in attrs:
-            d["DataCreationMethod"] = str(attrs["DataCreationMethod"])
-        self.record.append(d)
-    elif self.element==["SerialSet", "Serial", "PublicationInfo"]:
-        self.record[-1]["PublicationInfo"] = {}
-    elif self.element==["SerialSet", "Serial", "ISSN"]:
-        self.record[-1]["ISSN"] = [str(attrs["IssnType"]), None]
-    elif self.element==["SerialSet", "Serial", "IndexingHistoryList"]:
-        self.record[-1]["IndexingHistoryList"] = []
-    elif self.element==["SerialSet", "Serial", "IndexingHistoryList", "IndexingHistory"]:
-        d = {}
-        for key in attrs.keys():
-            d[str(key)] = str(attrs.getValue(key))
-        self.record[-1]["IndexingHistoryList"].append(d)
-    elif self.element==["SerialSet", "Serial", "IndexingHistoryList", "IndexingHistory", "DateOfAction"]:
-        self.record[-1]["IndexingHistoryList"][-1]["DateOfAction"] = {}
-    elif self.element==["SerialSet", "Serial", "CurrentlyIndexedForSubset"]:
-        d = {}
-        for key in attrs.keys():
-            d[str(key)] = str(attrs.getValue(key))
-        self.record[-1]["CurrentlyIndexedForSubset"] = d
-    elif self.element==["SerialSet", "Serial", "BroadJournalHeadingList"]:
-        self.record[-1]["BroadJournalHeadingList"] = []
-    elif self.element==["SerialSet", "Serial", "CrossReferenceList"]:
-        self.record[-1]["CrossReferenceList"] = []
-    elif self.element==["SerialSet", "Serial", "CrossReferenceList", "CrossReference"]:
-        self.record[-1]["CrossReferenceList"].append([str(attrs["XrType"]), None])
-    elif self.element==["SerialSet", "Serial", "IlsCreatedTimestamp"]:
-        self.record[-1]["IlsCreatedTimestamp"] = {}
-    elif self.element==["SerialSet", "Serial", "IlsUpdatedTimestamp"]:
-        self.record[-1]["IlsUpdatedTimestamp"] = {}
+    if name=="SerialSet":
+        object = []
+        self.path = []
+        self.record = object
+    else:
+        if name in ("IndexingHistoryList",
+                    "BroadJournalHeadingList",
+                    "CrossReferenceList"):
+            object = []
+        elif name in ("PublicationInfo",
+                      "DateOfAction",
+                      "IlsCreatedTimestamp",
+                      "IlsUpdatedTimestamp"):
+            object = {}
+        elif name in ("Serial",
+                      "IndexingHistory",
+                      "CurrentlyIndexedForSubset"):
+            object = {}
+            keys = attrs.keys()
+            for key in keys:
+                object[str(key)] = str(attrs[key])
+        elif name=="CrossReference":
+            object = [str(attrs["XrType"]), None]
+        elif name=="ISSN":
+            object = [str(attrs["IssnType"]), None]
+        else:
+            object = ""
+        if object!="":
+            current = self.path[-1]
+            if type(current)==list:
+                current.append(object)
+            elif type(current)==dict:
+                current[name] = object
+    self.path.append(object)
 
 def endElement(self, name):
-    if self.element==["SerialSet"]:
-        self.record = []
-    elif self.element==["SerialSet", "Serial", "NlmUniqueID"]:
-        self.record[-1]["NlmUniqueID"] = self.content
-    elif self.element==["SerialSet", "Serial", "Title"]:
-        self.record[-1]["Title"] = self.content
-    elif self.element==["SerialSet", "Serial", "MedlineTA"]:
-        self.record[-1]["MedlineTA"] = self.content
-    elif self.element==["SerialSet", "Serial", "PublicationInfo", "Country"]:
-        self.record[-1]["PublicationInfo"]["Country"] = self.content
-    elif self.element==["SerialSet", "Serial", "PublicationInfo", "Place"]:
-        self.record[-1]["PublicationInfo"]["Place"] = self.content
-    elif self.element==["SerialSet", "Serial", "PublicationInfo", "Publisher"]:
-        self.record[-1]["PublicationInfo"]["Publisher"] = self.content
-    elif self.element==["SerialSet", "Serial", "PublicationInfo", "PublicationFirstYear"]:
-        self.record[-1]["PublicationInfo"]["PublicationFirstYear"] = self.content
-    elif self.element==["SerialSet", "Serial", "PublicationInfo", "PublicationEndYear"]:
-        self.record[-1]["PublicationInfo"]["PublicationEndYear"] = self.content
-    elif self.element==["SerialSet", "Serial", "PublicationInfo", "Frequency"]:
-        self.record[-1]["PublicationInfo"]["Frequency"] = self.content
-    elif self.element==["SerialSet", "Serial", "ISSN"]:
-        self.record[-1]["ISSN"][1] = self.content
-    elif self.element==["SerialSet", "Serial", "ISOAbbreviation"]:
-        self.record[-1]["ISOAbbreviation"] = self.content
-    elif self.element==["SerialSet", "Serial", "Language"]:
-        if not "Language" in self.record[-1]:
-            self.record[-1]["Language"] = []
-        self.record[-1]["Language"].append(self.content)
-    elif self.element==["SerialSet", "Serial", "ContinuationNotes"]:
-        self.record[-1]["ContinuationNotes"] = self.content
-    elif self.element==["SerialSet", "Serial", "AcidFreeYN"]:
-        self.record[-1]["AcidFreeYN"] = self.content
-    elif self.element==["SerialSet", "Serial", "Coden"]:
-        self.record[-1]["Coden"] = self.content
-    elif self.element==["SerialSet", "Serial", "MinorTitleChangeYN"]:
-        self.record[-1]["MinorTitleChangeYN"] = self.content
-    elif self.element==["SerialSet", "Serial", "IndexingHistoryList", "IndexingHistory", "DateOfAction", "Year"]:
-        self.record[-1]["IndexingHistoryList"][-1]["DateOfAction"]["Year"] = self.content
-    elif self.element==["SerialSet", "Serial", "IndexingHistoryList", "IndexingHistory", "DateOfAction", "Month"]:
-        self.record[-1]["IndexingHistoryList"][-1]["DateOfAction"]["Month"] = self.content
-    elif self.element==["SerialSet", "Serial", "IndexingHistoryList", "IndexingHistory", "DateOfAction", "Day"]:
-        self.record[-1]["IndexingHistoryList"][-1]["DateOfAction"]["Day"] = self.content
-    elif self.element==["SerialSet", "Serial", "IndexingHistoryList", "IndexingHistory", "Coverage"]:
-        self.record[-1]["IndexingHistoryList"][-1]["Coverage"] = self.content
-    elif self.element==["SerialSet", "Serial", "CurrentlyIndexedYN"]:
-        self.record[-1]["CurrentlyIndexedYN"] = self.content
-    elif self.element==["SerialSet", "Serial", "IndexOnlineYN"]:
-        self.record[-1]["IndexOnlineYN"] = self.content
-    elif self.element==["SerialSet", "Serial", "IndexingSubset"]:
-        self.record[-1]["IndexingSubset"] = self.content
-    elif self.element==["SerialSet", "Serial", "BroadJournalHeadingList", "BroadJournalHeading"]:
-        self.record[-1]["BroadJournalHeadingList"].append(self.content)
-    elif self.element==["SerialSet", "Serial", "CrossReferenceList", "CrossReference", "XrTitle"]:
-        self.record[-1]["CrossReferenceList"][-1][1] = self.content
-    elif self.element==["SerialSet", "Serial", "SortSerialName"]:
-        self.record[-1]["SortSerialName"] = self.content
-    elif self.element==["SerialSet", "Serial", "IlsCreatedTimestamp", "Year"]:
-        self.record[-1]["IlsCreatedTimestamp"]["Year"] = self.content
-    elif self.element==["SerialSet", "Serial", "IlsCreatedTimestamp", "Month"]:
-        self.record[-1]["IlsCreatedTimestamp"]["Month"] = self.content
-    elif self.element==["SerialSet", "Serial", "IlsCreatedTimestamp", "Day"]:
-        self.record[-1]["IlsCreatedTimestamp"]["Day"] = self.content
-    elif self.element==["SerialSet", "Serial", "IlsUpdatedTimestamp", "Year"]:
-        self.record[-1]["IlsUpdatedTimestamp"]["Year"] = self.content
-    elif self.element==["SerialSet", "Serial", "IlsUpdatedTimestamp", "Month"]:
-        self.record[-1]["IlsUpdatedTimestamp"]["Month"] = self.content
-    elif self.element==["SerialSet", "Serial", "IlsUpdatedTimestamp", "Day"]:
-        self.record[-1]["IlsUpdatedTimestamp"]["Day"] = self.content
+    self.path.pop()
+    if name=="Language":
+        if not "Language" in self.path[-1]:
+            self.path[-1]["Language"] = []
+        self.path[-1]["Language"].append(self.content)
+    elif name=="BroadJournalHeading":
+        self.path[-1].append(self.content)
+    elif name=="XrTitle":
+        self.path[-1][1] = self.content
+    elif name=="ISSN":
+        self.path[-1][name][1] = self.content
+    elif name in ("SortSerialName",
+                  "Year",
+                  "Month",
+                  "Day",
+                  "IndexingSubset",
+                  "IndexOnlineYN",
+                  "CurrentlyIndexedYN",
+                  "Coverage",
+                  "MinorTitleChangeYN",
+                  "Coden",
+                  "AcidFreeYN",
+                  "ContinuationNotes",
+                  "NlmUniqueID",
+                  "Title",
+                  "MedlineTA",
+                  "Country",
+                  "Place",
+                  "Publisher",
+                  "PublicationFirstYear",
+                  "PublicationEndYear",
+                  "Frequency",
+                  "ISOAbbreviation"):
+        self.path[-1][name] = self.content
