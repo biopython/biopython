@@ -9,21 +9,23 @@
 
 def startElement(self, name, attrs):
     if self.element==["eSpellResult"]:
-        self.record = {}
-    elif self.element==["eSpellResult", "SpelledQuery"]:
-        self.record["SpelledQuery"] = {"Original": [], "Replaced": []}
+        object = {}
+        self.path = []
+        self.record = object
+    elif name=="SpelledQuery":
+        object = {"Original": [], "Replaced": []}
+        self.path[-1][name] = object
+    else:
+        object = ""
+    self.path.append(object)
 
 def endElement(self, name):
-    if self.element==["eSpellResult", "Database"]:
-        self.record["Database"] = self.content
-    elif self.element==["eSpellResult", "Query"]:
-        self.record["Query"] = self.content
-    elif self.element==["eSpellResult", "CorrectedQuery"]:
-        self.record["CorrectedQuery"] = self.content
-    elif self.element==["eSpellResult", "SpelledQuery", "Original"]:
-        self.record["SpelledQuery"]["Original"].append(self.content)
-    elif self.element==["eSpellResult", "SpelledQuery", "Replaced"]:
-        self.record["SpelledQuery"]["Replaced"].append(self.content)
-    elif self.element==["eSpellResult", "ERROR"]:
-        # Not sure when this occurs. Are we supposed to raise an Exception?
-        self.record["ERROR"] = self.content
+    self.path.pop()
+    if name=="ERROR":
+        error = self.content
+        if error:
+            raise RuntimeError(error)
+    if name in ("Database", "Query", "CorrectedQuery", "ERROR"):
+        self.path[-1][name] = self.content
+    elif name in ("Original", "Replaced"):
+        self.path[-1][name].append(self.content)

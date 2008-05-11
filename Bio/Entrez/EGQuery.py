@@ -8,21 +8,26 @@
 # from Bio.Entrez.__init__.py.
 
 def startElement(self, name, attrs):
-    if self.element==["Result"]:
-        self.record = {}
-    elif self.element==["Result", "eGQueryResult"]:
-        self.record["eGQueryResult"] = []
-    elif self.element==["Result", "eGQueryResult", "ResultItem"]:
-        self.record["eGQueryResult"].append({})
+    if name=="Result":
+        object = {}
+        self.path = []
+        self.record = object
+    elif name=="eGQueryResult":
+        object = []
+        self.path[-1][name] = object
+    elif name=="ResultItem":
+        object = {}
+        self.path[-1].append(object)
+    else:
+        object = ""
+    self.path.append(object)
 
 def endElement(self, name):
-    if self.element==["Result", "Term"]:
-        self.record["Term"] = self.content
-    elif self.element==["Result", "eGQueryResult", "ResultItem", "DbName"]:
-        self.record["eGQueryResult"][-1]["DbName"] = self.content
-    elif self.element==["Result", "eGQueryResult", "ResultItem", "MenuName"]:
-        self.record["eGQueryResult"][-1]["MenuName"] = self.content
-    elif self.element==["Result", "eGQueryResult", "ResultItem", "Count"]:
-        self.record["eGQueryResult"][-1]["Count"] = int(self.content)
-    elif self.element==["Result", "eGQueryResult", "ResultItem", "Status"]:
-        self.record["eGQueryResult"][-1]["Status"] = self.content
+    self.path.pop()
+    if name in ("Term", "DbName", "MenuName", "Status"):
+        value = self.content
+    elif name=="Count":
+        value = int(self.content)
+    else:
+        return
+    self.path[-1][name] = value
