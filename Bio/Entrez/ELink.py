@@ -10,32 +10,38 @@
 class AttributedString(str): pass
 
 def startElement(self, name, attrs):
-    if self.element==["eLinkResult"]:
+    if name=="eLinkResult":	# (LinkSet*, ERROR?)
         object = []
         self.path = []
         self.record = object
-    elif name=="LinkSet":
+    elif name=="LinkSet":	# (DbFrom,  ((IdList?, LinkSetDb*) | IdUrlList | IdCheckList | ERROR)
         object = {}
         self.path[-1].append(object)
-    elif name in ("IdList", "IdUrlList", "IdCheckList"):
+    elif name in ("IdList",		# (Id*)
+                  "IdUrlList",		# (IdUrlSet*,ERROR?)
+                  "IdCheckList"):	# (Id*,ERROR?)
         object = []
         self.path[-1][name] = object
-    elif name=="LinkSetDb":
+    elif name=="LinkSetDb":	# (DbTo, LinkName, (Link*|Info), ERROR?)
         object = {"Link": []}
         self.path[-1][name] = object
-    elif name in ("Link", "LinkInfo"):
+    elif name in ("Link",	# (Id, Score?)
+                  "LinkInfo"):
         object = {}
         self.path[-1][name].append(object)
-    elif name=="IdUrlSet":
+    elif name=="IdUrlSet":	# (Id,(ObjUrl+|Info))
         object = {"ObjUrl": []}
         self.path[-1].append(object)
-    elif name=="ObjUrl":
+    elif name=="ObjUrl":	# (Url, IconUrl?, LinkName?, SubjectType*, Attribute*, Provider)
         object = {"SubjectType": [], "Attribute": []}
         self.path[-1][name].append(object)
-    elif name=="Provider":
+    elif name=="Provider":	# (Name, NameAbbr, Id, Url, IconUrl?)
         object = {}
         self.path[-1][name] = object
-    elif name=="Id":
+    elif name=="Id":	# (#PCDATA)>	<!-- \d+ -->
+			# ATTLIST
+			# HasLinkOut  (Y|N)	#IMPLIED	
+			# HasNeighbor (Y|N)	#IMPLIED
         object = ""
         attributes = {}
         if "HasLinkOut" in attrs:
@@ -58,7 +64,7 @@ def startElement(self, name, attrs):
 
 def endElement(self, name):
     self.path.pop()
-    if name=="Error":
+    if name=="ERROR":		# (#PCDATA)	<!-- .+ -->
         error = self.content
         raise RuntimeError(error)
     if name=="Id":
@@ -69,17 +75,20 @@ def endElement(self, name):
             self.path[-1].append(value)
         elif type(self.path[-1])==dict:
             self.path[-1][name] = value
-    elif name in ("DbFrom",
-                  "DbTo",
-                  "Name",
-                  "NameAbbr",
-                  "IconUrl",
-                  "MenuTag",
-                  "HtmlTag",
-                  "Url",
-                  "LinkName"):
+    elif name in ("DbFrom",	# (#PCDATA)	<!-- \S+ -->
+                  "DbTo",	# (#PCDATA)	<!-- \S+ -->
+                  "Name",	# (#PCDATA)	<!-- .+ -->
+                  "NameAbbr",	# (#PCDATA)	<!-- \S+ -->
+                  "IconUrl",	# (#PCDATA)	<!-- \S+ -->
+                  "Info",	# (#PCDATA)>	<!-- .+ -->
+                  "Url",	# (#PCDATA)	<!-- \S+ -->
+                  "LinkName",	# (#PCDATA)	<!-- \S+ -->
+                  "MenuTag",	# Not in the DTD, but found in the XML output
+                  "HtmlTag"):	# Not in the DTD, but found in the XML output
         self.path[-1][name] = self.content
-    elif name in ("Score", "Priority"):
+    elif name in ("Score",	# (#PCDATA)	<!-- \d+ -->
+                  "Priority"):
         self.path[-1][name] = int(self.content)
-    elif name in ("SubjectType", "Attribute"):
+    elif name in ("SubjectType",	# (#PCDATA)	<!-- .+ -->
+                  "Attribute"):		# (#PCDATA)	<!-- .+ -->
         self.path[-1][name].append(self.content)
