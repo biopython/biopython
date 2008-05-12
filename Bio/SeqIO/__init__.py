@@ -1,4 +1,4 @@
-# Copyright 2006-2007 by Peter Cock.  All rights reserved.
+# Copyright 2006-2008 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -188,9 +188,6 @@ from Bio.Align.Generic import Alignment
 
 import FastaIO
 import InsdcIO #EMBL and GenBank
-import StockholmIO
-import ClustalIO
-import PhylipIO
 import NexusIO
 import SwissIO
 
@@ -200,23 +197,19 @@ import SwissIO
 #Note that this simple system copes with defining
 #multiple possible iterators for a given format/extension
 #with the -subtype suffix
+#
+#Most alignment file formats will be handled via Bio.AlignIO
 
 _FormatToIterator ={"fasta" : FastaIO.FastaIterator,
                     "genbank" : InsdcIO.GenBankIterator,
                     "genbank-cds" : InsdcIO.GenBankCdsFeatureIterator,
                     "embl" : InsdcIO.EmblIterator,
                     "embl-cds" : InsdcIO.EmblCdsFeatureIterator,
-                    "clustal" : ClustalIO.ClustalIterator,
-                    "phylip" : PhylipIO.PhylipIterator,
                     "nexus" : NexusIO.NexusIterator,
-                    "stockholm" : StockholmIO.StockholmIterator,
                     "swiss" : SwissIO.SwissIterator,
                     }
 
 _FormatToWriter ={"fasta" : FastaIO.FastaWriter,
-                  "phylip" : PhylipIO.PhylipWriter,
-                  "stockholm" : StockholmIO.StockholmWriter,
-                  "clustal" : ClustalIO.ClustalWriter,
                   }
 
 def write(sequences, handle, format) :
@@ -230,6 +223,8 @@ def write(sequences, handle, format) :
 
     There is no return value.
     """
+    from Bio import AlignIO
+
 
     #Try and give helpful error messages:
     if isinstance(handle, basestring) :
@@ -244,15 +239,18 @@ def write(sequences, handle, format) :
         raise ValueError("Use a SeqRecord list/iterator, not just a single SeqRecord")
 
     #Map the file format to a writer class
-    try :
+    if format in _FormatToWriter :
         writer_class = _FormatToWriter[format]
-    except KeyError :
+        writer_class(handle).write_file(sequences)
+        #Don't close the file, as that would prevent things like
+        #creating concatenated phylip files for bootstrapping.
+    elif format in AlignIO._FormatToIterator :
+        #Try and turn all the records into a single alignment,
+        #and write that using Bio.AlignIO
+        AlignIO.write([to_alignment(sequences)], handle, format)
+    else :
         raise ValueError("Unknown format '%s'" % format)
 
-    writer_class(handle).write_file(sequences)
-    #Don't close the file, as that would prevent things like
-    #creating concatenated phylip files for bootstrapping.
-    #handle.close()
     return
     
 def parse(handle, format) :
@@ -280,6 +278,7 @@ def parse(handle, format) :
     Use the Bio.SeqIO.read(handle, format) function when you expect
     a single record only.
     """
+    from Bio import AlignIO
 
     #Try and give helpful error messages:
     if isinstance(handle, basestring) :
@@ -292,13 +291,22 @@ def parse(handle, format) :
         raise ValueError("Format string '%s' should be lower case" % format)
 
     #Map the file format to a sequence iterator:    
-    try :
+    if format in _FormatToIterator :
         iterator_generator = _FormatToIterator[format]
-    except KeyError :
+        return iterator_generator(handle)
+    elif format in AlignIO._FormatToWriter :
+        #Use Bio.AlignIO to read in the alignments
+        return _iterate_via_AlignIO(handle, format)
+    else :
         raise ValueError("Unknown format '%s'" % format)
 
-    #Its up to the caller to close this handle - they opened it.
-    return iterator_generator(handle)
+#This is a generator function
+def _iterate_via_AlignIO(handle, format) :
+    """Private function to iterate over all records in several alignments."""
+    from Bio import AlignIO
+    for align in AlignIO.parse(handle, format) :
+        for record in align :
+            yield record
 
 def read(handle, format) :
     """Turns a sequence file into a single SeqRecord.
@@ -398,7 +406,9 @@ def to_alignment(sequences, alphabet=generic_alphabet, strict=True) :
                 raise ValueError("Sequences of different lengths")
             
             if not isinstance(record.seq.alphabet, alphabet.__class__) :
-                raise ValueError("Incompatible sequence alphabet")
+                raise ValueError("Incompatible sequence alphabet" \
+                                 + "%s for a %s alignment" \
+                                 % (record.seq.alphabet, alphabet))
             
             #ToDo, additional checks on the specified alignment...
             #Should we look at the alphabet.contains() method?
