@@ -14,7 +14,7 @@ class AlignmentIterator :
     """
     #TODO - Should the default be Gapped(single_letter_alphabet) instead?
     def __init__(self, handle, count=None,
-                 alphabet = Gapped(single_letter_alphabet)) :
+                 alphabet = single_letter_alphabet) :
         """Create an AlignmentIterator object.
 
         handle   - input file

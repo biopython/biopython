@@ -13,14 +13,42 @@ class ClustalWriter(SequentialAlignmentWriter) :
     def write_alignment(self, alignment) :
         """Use this to write (another) single alignment to an open file."""
 
-        #TODO - Replace this quick hack?
-        #Maybe just copy the __str__ code from Bio.Clustalw.ClustalAlignment?
-        if isinstance(alignment, ClustalAlignment) :
-            clustal_alignment = alignment
-        else :
-            clustal_alignment = ClustalAlignment(alignment._alphabet)
-            clustal_alignment._records = alignment._records
-        self.handle.write(str(clustal_alignment))
+        #This was a copy the __str__ code from Bio.Clustalw.ClustalAlignment
+        #but here we use the record.id and NOT the description.
+        output = "CLUSTAL X (1.81) multiple sequence alignment\n\n\n"
+        cur_char = 0
+        max_length = len(alignment._records[0].seq)
+
+        # keep displaying sequences until we reach the end
+        while cur_char != max_length:
+            # calculate the number of sequences to show, which will
+            # be less if we are at the end of the sequence
+            if (cur_char + 50) > max_length:
+                show_num = max_length - cur_char
+            else:
+                show_num = 50
+
+            # go through all of the records and print out the sequences
+            # when we output, we do a nice 80 column output, although this
+            # may result in truncation of the ids.
+            for record in alignment._records:
+                #Make sure we don't get any spaces in the record
+                #identifier when output in the file by replacing
+                #them with underscores:
+                line = record.id[0:30].replace(" ","_").ljust(36)
+                line += record.seq.data[cur_char:(cur_char + show_num)]
+                output += line + "\n"
+
+            # now we need to print out the star info, if we've got it
+            if hasattr(alignment, "_star_info") and alignment._star_info != '':
+                output += (" " * 36) + \
+                     self._star_info[cur_char:(cur_char + show_num)] + "\n"
+
+            output += "\n"
+            cur_char += show_num
+
+        # have a extra newline, so strip two off and add one before returning
+        self.handle.write(output.rstrip() + "\n")
 
 class ClustalIterator(AlignmentIterator) :
     """Clustalw alignment iterator."""
@@ -127,8 +155,7 @@ class ClustalIterator(AlignmentIterator) :
                 line = handle.readline()
 
         assert len(ids) == len(seqs)
-
-        if len(seqs[0]) == 0 :
+        if len(seqs) == 0 or len(seqs[0]) == 0 :
             return None
 
         if self.records_per_alignment is not None \

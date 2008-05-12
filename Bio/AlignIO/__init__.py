@@ -98,7 +98,6 @@ from Bio.Alphabet import generic_alphabet, generic_protein
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align.Generic import Alignment
-import Bio.SeqIO
 
 import StockholmIO
 import ClustalIO
@@ -133,6 +132,7 @@ def write(alignments, handle, format) :
 
     There is no return value.
     """
+    from Bio import SeqIO
 
     #Try and give helpful error messages:
     if isinstance(handle, basestring) :
@@ -150,11 +150,11 @@ def write(alignments, handle, format) :
     if format in _FormatToIterator :
         writer_class = _FormatToWriter[format]
         writer_class(handle).write_file(alignments)
-    elif format in Bio.SeqIO._FormatToIterator :
+    elif format in SeqIO._FormatToIterator :
         #Exploit the existing SeqIO parser to the dirty work!
         #This may not work perfectly...
         for alignment in alignments :
-            Bio.SeqIO.write(alignment.get_all_seqs(), format)
+            SeqIO.write(alignment.get_all_seqs(), format)
     else :
         raise ValueError("Unknown format '%s'" % format)
 
@@ -162,7 +162,7 @@ def write(alignments, handle, format) :
 
 #This is a generator function!
 def _SeqIO_to_alignment_iterator(handle, format, count=None) :
-    """Uses Bio.SeqIO to create an Alignment iterator.
+    """Private function, uses Bio.SeqIO to create an Alignment iterator.
 
     handle   - handle to the file.
     format   - string describing the file format.
@@ -172,24 +172,28 @@ def _SeqIO_to_alignment_iterator(handle, format, count=None) :
     If count is omitted (default) then all the sequences in
     the file are combined into a single Alignment.
     """
+    from Bio import SeqIO
+
+    assert format in SeqIO._FormatToIterator
+
     if count :
         #Use the count to split the records into batches.
-        seq_record_iterator = Bio.SeqIO.parse(handle, format)
+        seq_record_iterator = SeqIO.parse(handle, format)
 
         records = []
         for record in seq_record_iterator :
             records.append(record)
             if len(records) == count :
-                yield Bio.SeqIO.to_alignment(records)
+                yield SeqIO.to_alignment(records)
                 records = []
         if len(records) > 0 :
             raise ValueError("Check count argument, not enough sequences?")
     else :
         #Must assume that there is a single alignment using all
         #the SeqRecord objects:
-        records = list(Bio.SeqIO.parse(handle, format))
+        records = list(SeqIO.parse(handle, format))
         if records :
-            yield Bio.SeqIO.to_alignment(records)
+            yield SeqIO.to_alignment(records)
         else :
             #No alignment found!
             pass
@@ -216,6 +220,7 @@ def parse(handle, format, count=None) :
     Use the Bio.AlignIO.read(handle, format[, count]) function when you expect
     a single record only.
     """
+    from Bio import SeqIO
 
     #Try and give helpful error messages:
     if isinstance(handle, basestring) :
@@ -231,7 +236,7 @@ def parse(handle, format, count=None) :
     if format in _FormatToIterator :
         iterator_generator = _FormatToIterator[format]
         return iterator_generator(handle, count)
-    elif format in Bio.SeqIO._FormatToIterator :
+    elif format in SeqIO._FormatToIterator :
         #Exploit the existing SeqIO parser to the dirty work!
         return _SeqIO_to_alignment_iterator(handle, format, count)
     else :
