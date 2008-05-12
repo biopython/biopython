@@ -14,7 +14,7 @@ from Bio.SwissProt import SProt
     
 #This is a normal function!
 def SwissIterator(handle) :
-    """Breaks up a Swiss-Prot/UniProt file into SeqRecord objects
+    """Breaks up a Swiss-Prot/UniProt file into SeqRecord objects.
 
     Every section from the ID line to the terminating // becomes
     a single SeqRecord with associated annotation and features.

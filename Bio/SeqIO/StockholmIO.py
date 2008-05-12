@@ -14,7 +14,7 @@ from Bio.SeqRecord import SeqRecord
 from Interfaces import InterlacedSequenceIterator, SequentialSequenceWriter
 
 class StockholmIterator(InterlacedSequenceIterator) :
-    """Loads a Stockholm file from PFAM into SeqRecord objects
+    """Loads a Stockholm file from PFAM into SeqRecord objects.
 
     The entire file is loaded, and any sequence can be accessed using
     the [index] notation.
@@ -223,7 +223,7 @@ class StockholmIterator(InterlacedSequenceIterator) :
         return answer
 
     def _populate_meta_data(self, identifier, record) :
-        """Adds meta-date to a SecRecord's annotations dictionary
+        """Adds meta-date to a SecRecord's annotations dictionary.
 
         This function applies the PFAM conventions."""
 
@@ -254,7 +254,7 @@ class StockholmIterator(InterlacedSequenceIterator) :
                 record.annotations["GR:" + feature] = seq_col_data[feature]
     
     def __getitem__(self, i):
-        """Provides random access to the SeqRecords"""
+        """Provides random access to the SeqRecords."""
         if i < 0 or i >= len(self.ids) : raise ValueError
         id = self.ids[i]
         seq_len = len(self.sequences[id])
@@ -275,7 +275,7 @@ class StockholmIterator(InterlacedSequenceIterator) :
         return record
 
 class StockholmWriter(SequentialSequenceWriter):
-    """Class to write PFAM style Stockholm format files
+    """Class to write PFAM style Stockholm format files.
 
     Note that sequences and their annotation are recorded
     together (rather than having a block of annotation followed
@@ -297,7 +297,7 @@ class StockholmWriter(SequentialSequenceWriter):
                        "look" : "LO"}
 
     def __init__(self, handle):
-        """Creates the writer object
+        """Creates the writer object.
 
         Use the method write_file() to actually record your sequence records."""
         SequentialSequenceWriter.__init__(self, handle)
@@ -305,7 +305,7 @@ class StockholmWriter(SequentialSequenceWriter):
         self._length_of_sequences = None
 
     def write_header(self, count):
-        """Must supply the number of records (count)"""
+        """Must supply the number of records (count)."""
         SequentialSequenceWriter.write_header(self) # sets flags
         self.handle.write("# STOCKHOLM 1.0\n")
         self.handle.write("#=GF SQ %i\n" % count)
@@ -339,7 +339,7 @@ class StockholmWriter(SequentialSequenceWriter):
         #self.close()
 
     def write_record(self, record):
-        """Write a single Stockholm record to the file"""
+        """Write a single Stockholm record to the file."""
         assert self._header_written
         assert not self._footer_written
         self._record_written = True

@@ -19,7 +19,7 @@ from Bio.Nexus import Nexus
     
 #This is a generator function!
 def NexusIterator(handle) :
-    """Returns SeqRecord objects from a Nexus file
+    """Returns SeqRecord objects from a Nexus file.
 
     Thus uses the Bio.Nexus module to do the hard work."""
     n = Nexus.Nexus(handle)

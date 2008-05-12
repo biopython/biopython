@@ -32,7 +32,8 @@ class SequenceIterator :
         #####################################################
 
     def next(self) :
-        """Return the next record in the file
+        """Return the next record in the file.
+
         This method should be replaced by any derived class to do something useful."""
         raise NotImplementedError, "This object should be subclassed"
         #####################################################
@@ -42,7 +43,7 @@ class SequenceIterator :
         #####################################################
 
     def __iter__(self):
-        """Iterate over the entries as a SeqRecord objects
+        """Iterate over the entries as a SeqRecord objects.
 
         Example usage for Fasta files:
 
@@ -55,7 +56,7 @@ class SequenceIterator :
         return iter(self.next, None)
 
 class InterlacedSequenceIterator(SequenceIterator) :
-    """This class should be subclassed by any iterator for a non-sequential file type.
+    """Base class for any iterator of a non-sequential file type.
 
     This object is not intended for use directly.
     
@@ -78,7 +79,7 @@ class InterlacedSequenceIterator(SequenceIterator) :
     """
 
     def __init__(self) :
-        """Create the object
+        """Create the object.
 
         This method should be replaced by any derived class to do something useful."""
         #We assume that your implementation of __init__ will ensure self._n=0
@@ -89,7 +90,7 @@ class InterlacedSequenceIterator(SequenceIterator) :
         #####################################################
 
     def __len__(self) :
-        """Return the number of record
+        """Return the number of records.
 
         This method should be replaced by any derived class to do something useful."""
         raise NotImplementedError, "This object method should be subclassed"
@@ -98,7 +99,7 @@ class InterlacedSequenceIterator(SequenceIterator) :
         #####################################################
 
     def __getitem__(self, i) :
-        """Return the requested record
+        """Return the requested record.
 
         This method should be replaced by any derived class to do something
         useful.
@@ -133,13 +134,13 @@ class SequenceWriter:
     the SequentialSequenceWriter class instead.
     """
     def __init__(self, handle):
-        """Creates the writer object
+        """Creates the writer object.
 
         Use the method write_file() to actually record your sequence records."""
         self.handle = handle
 
     def clean(self, text) :
-        """Use this to avoid getting newlines in the output"""
+        """Use this to avoid getting newlines in the output."""
         answer = text
         for x in ["\n", "\r"] :
             answer = answer.replace(x, " ")

@@ -20,7 +20,7 @@ from Bio.Clustalw import ClustalAlignment
 #This is a generator function!
 #TODO - Should the default be Gapped(single_letter_alphabet) instead?
 def ClustalIterator(handle, alphabet = single_letter_alphabet) :
-    """Reads a Clustalw file returning a SeqRecord object iterator
+    """Reads a Clustalw file returning a SeqRecord object iterator.
 
     The entire file is loaded at once, but the SeqRecord objects
     are only created "on request".
@@ -127,9 +127,9 @@ def ClustalIterator(handle, alphabet = single_letter_alphabet) :
         yield SeqRecord(Seq(seqs[i], alphabet), id=ids[i])
     
 class ClustalWriter(SequenceWriter):
-    """Write Clustal sequence alignments"""
+    """Write Clustal sequence alignments."""
     def __init__(self, handle):
-        """Creates the writer object
+        """Creates the writer object.
 
         Use the method write_file() to actually record your sequence records."""
         self.handle = handle

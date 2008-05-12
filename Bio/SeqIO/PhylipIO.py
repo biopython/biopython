@@ -28,7 +28,7 @@ from sets import Set
 #This is a generator function!
 #TODO - Should the default be Gapped(single_letter_alphabet) instead?
 def PhylipIterator(handle, alphabet = single_letter_alphabet) :
-    """Reads a Phylip alignment file returning a SeqRecord object iterator
+    """Reads a Phylip alignment file returning a SeqRecord object iterator.
 
     Record identifiers are limited to at most 10 characters.
 
@@ -84,7 +84,7 @@ def PhylipIterator(handle, alphabet = single_letter_alphabet) :
         yield SeqRecord(Seq(seq, alphabet), id=ids[i], name=ids[i], description="")
 
 class PhylipWriter(SequenceWriter):
-    """Write interlaced Phylip sequence alignments
+    """Write interlaced Phylip sequence alignments.
 
     For more information on the file format, please see:
     http://evolution.genetics.washington.edu/phylip/doc/sequence.html
@@ -139,8 +139,9 @@ class PhylipWriter(SequenceWriter):
                     parentheses ("(" and ")"), square brackets ("[" and "]"),
                     colon (":"), semicolon (";") and comma (","). If you forget
                     to extend the names to ten characters in length by blanks,
-                    the program [i.e. PHYLIP] will get out of synchronization with
-                    the contents of the data file, and an error message will result.
+                    the program [i.e. PHYLIP] will get out of synchronization
+                    with the contents of the data file, and an error message
+                    will result.
 
                     Note that Tab characters count as only one character in the
                     species names. Their inclusion can cause trouble.

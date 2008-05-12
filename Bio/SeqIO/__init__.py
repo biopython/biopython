@@ -6,7 +6,7 @@
 #Nice link:
 # http://www.ebi.ac.uk/help/formats_frame.html
 
-"""Sequence input/output as SeqRecord objects
+"""Sequence input/output as SeqRecord objects.
 
 The Bio.SeqIO module is also documented by a whole chapter in the Biopython
 tutorial, and by the wiki http://biopython.org/wiki/SeqIO on the website.
@@ -220,7 +220,7 @@ _FormatToWriter ={"fasta" : FastaIO.FastaWriter,
                   }
 
 def write(sequences, handle, format) :
-    """Write complete set of sequences to a file
+    """Write complete set of sequences to a file.
 
     sequences - A list (or iterator) of SeqRecord objects
     handle    - File handle object to write to
@@ -256,7 +256,7 @@ def write(sequences, handle, format) :
     return
     
 def parse(handle, format) :
-    """Turns a sequence file into a iterator returning SeqRecords.
+    """Turns a sequence file into an iterator returning SeqRecords.
 
     handle   - handle to the file.
     format   - string describing the file format.

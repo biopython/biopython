@@ -28,7 +28,7 @@ from Bio.Alphabet import generic_protein
 # http://www.ddbj.nig.ac.jp/
 
 def GenBankIterator(handle) :
-    """Breaks up a Genbank file into SeqRecord objects
+    """Breaks up a Genbank file into SeqRecord objects.
 
     Every section from the LOCUS line to the terminating // becomes
     a single SeqRecord with associated annotation and features.
@@ -39,7 +39,7 @@ def GenBankIterator(handle) :
     return GenBankScanner(debug=0).parse_records(handle)
 
 def EmblIterator(handle) :
-    """Breaks up an EMBL file into SeqRecord objects
+    """Breaks up an EMBL file into SeqRecord objects.
 
     Every section from the LOCUS line to the terminating // becomes
     a single SeqRecord with associated annotation and features.
@@ -50,7 +50,7 @@ def EmblIterator(handle) :
     return EmblScanner(debug=0).parse_records(handle)
 
 def GenBankCdsFeatureIterator(handle, alphabet=generic_protein) :
-    """Breaks up a Genbank file into SeqRecord objects for each CDS feature
+    """Breaks up a Genbank file into SeqRecord objects for each CDS feature.
 
     Every section from the LOCUS line to the terminating // can contain
     many CDS features.  These are returned as with the stated amino acid
@@ -60,7 +60,7 @@ def GenBankCdsFeatureIterator(handle, alphabet=generic_protein) :
     return GenBankScanner(debug=0).parse_cds_features(handle, alphabet)
     
 def EmblCdsFeatureIterator(handle, alphabet=generic_protein) :
-    """Breaks up a EMBL file into SeqRecord objects for each CDS feature
+    """Breaks up a EMBL file into SeqRecord objects for each CDS feature.
 
     Every section from the LOCUS line to the terminating // can contain
     many CDS features.  These are returned as with the stated amino acid
