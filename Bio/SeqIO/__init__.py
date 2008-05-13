@@ -403,7 +403,7 @@ def to_alignment(sequences, alphabet=generic_alphabet, strict=True) :
             if alignment_length is None :
                 alignment_length = len(record.seq)
             elif alignment_length <> len(record.seq) :
-                raise ValueError("Sequences of different lengths")
+                raise ValueError("Sequences must all be the same length")
             
             if not isinstance(record.seq.alphabet, alphabet.__class__) :
                 raise ValueError("Incompatible sequence alphabet" \
