@@ -545,4 +545,5 @@ setup(
     packages=PACKAGES,
     ext_modules=EXTENSIONS,
     data_files=DATA_FILES,
+    package_data = {'Bio.Entrez': ['DTDs/*.dtd']}
     )

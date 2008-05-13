@@ -1,0 +1,134 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "seqres.asn"
+     ::DATATOOL:: by application DATATOOL version 1.9.0
+     ::DATATOOL:: on 04/10/2008 16:04:22
+     ============================================ -->
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "NCBI-Seqres"
+================================================= -->
+
+<!--
+$Revision: 1.1 $
+**********************************************************************
+
+  NCBI Sequence Analysis Results (other than alignments)
+  by James Ostell, 1990
+
+**********************************************************************
+-->
+
+<!-- Elements used by other modules:
+          Seq-graph -->
+
+<!-- Elements referenced from other modules:
+          Seq-loc FROM NCBI-Seqloc -->
+<!-- ============================================ -->
+
+<!--
+*** Sequence Graph ********************************
+*
+*   for values mapped by residue or range to sequence
+*
+-->
+<!ELEMENT Seq-graph (
+        Seq-graph_title?, 
+        Seq-graph_comment?, 
+        Seq-graph_loc, 
+        Seq-graph_title-x?, 
+        Seq-graph_title-y?, 
+        Seq-graph_comp?, 
+        Seq-graph_a?, 
+        Seq-graph_b?, 
+        Seq-graph_numval, 
+        Seq-graph_graph)>
+
+<!ELEMENT Seq-graph_title (#PCDATA)>
+
+<!ELEMENT Seq-graph_comment (#PCDATA)>
+
+<!-- region this applies to -->
+<!ELEMENT Seq-graph_loc (Seq-loc)>
+
+<!-- title for x-axis -->
+<!ELEMENT Seq-graph_title-x (#PCDATA)>
+
+<!ELEMENT Seq-graph_title-y (#PCDATA)>
+
+<!-- compression (residues/value) -->
+<!ELEMENT Seq-graph_comp (%INTEGER;)>
+
+<!-- for scaling values -->
+<!ELEMENT Seq-graph_a (%REAL;)>
+
+<!-- display = (a x value) + b -->
+<!ELEMENT Seq-graph_b (%REAL;)>
+
+<!-- number of values in graph -->
+<!ELEMENT Seq-graph_numval (%INTEGER;)>
+
+<!ELEMENT Seq-graph_graph (
+        Seq-graph_graph_real | 
+        Seq-graph_graph_int | 
+        Seq-graph_graph_byte)>
+
+<!ELEMENT Seq-graph_graph_real (Real-graph)>
+
+<!ELEMENT Seq-graph_graph_int (Int-graph)>
+<!-- integer from 0-255 -->
+<!ELEMENT Seq-graph_graph_byte (Byte-graph)>
+
+
+<!ELEMENT Real-graph (
+        Real-graph_max, 
+        Real-graph_min, 
+        Real-graph_axis, 
+        Real-graph_values)>
+
+<!-- top of graph -->
+<!ELEMENT Real-graph_max (%REAL;)>
+
+<!-- bottom of graph -->
+<!ELEMENT Real-graph_min (%REAL;)>
+
+<!-- value to draw axis on -->
+<!ELEMENT Real-graph_axis (%REAL;)>
+
+<!ELEMENT Real-graph_values (Real-graph_values_E*)>
+
+
+<!ELEMENT Real-graph_values_E (%REAL;)>
+
+
+<!ELEMENT Int-graph (
+        Int-graph_max, 
+        Int-graph_min, 
+        Int-graph_axis, 
+        Int-graph_values)>
+
+<!ELEMENT Int-graph_max (%INTEGER;)>
+
+<!ELEMENT Int-graph_min (%INTEGER;)>
+
+<!ELEMENT Int-graph_axis (%INTEGER;)>
+
+<!ELEMENT Int-graph_values (Int-graph_values_E*)>
+
+
+<!ELEMENT Int-graph_values_E (%INTEGER;)>
+
+<!-- integer from 0-255 -->
+<!ELEMENT Byte-graph (
+        Byte-graph_max, 
+        Byte-graph_min, 
+        Byte-graph_axis, 
+        Byte-graph_values)>
+
+<!ELEMENT Byte-graph_max (%INTEGER;)>
+
+<!ELEMENT Byte-graph_min (%INTEGER;)>
+
+<!ELEMENT Byte-graph_axis (%INTEGER;)>
+
+<!ELEMENT Byte-graph_values (%OCTETS;)>
+

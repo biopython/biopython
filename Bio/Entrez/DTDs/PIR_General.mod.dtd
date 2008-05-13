@@ -1,0 +1,78 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "seqblock.asn"
+     ::DATATOOL:: by application DATATOOL version 1.9.0
+     ::DATATOOL:: on 04/10/2008 16:04:22
+     ============================================ -->
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "PIR-General"
+================================================= -->
+
+<!--
+*********************************************************************
+
+  PIR specific data
+  This block of specifications was developed by Jim Ostell of
+      NCBI
+
+*********************************************************************
+-->
+
+<!-- Elements used by other modules:
+          PIR-block -->
+
+<!-- Elements referenced from other modules:
+          Seq-id FROM NCBI-Seqloc -->
+<!-- ============================================ -->
+
+<!-- PIR specific descriptions -->
+<!ELEMENT PIR-block (
+        PIR-block_had-punct?, 
+        PIR-block_host?, 
+        PIR-block_source?, 
+        PIR-block_summary?, 
+        PIR-block_genetic?, 
+        PIR-block_includes?, 
+        PIR-block_placement?, 
+        PIR-block_superfamily?, 
+        PIR-block_keywords?, 
+        PIR-block_cross-reference?, 
+        PIR-block_date?, 
+        PIR-block_seq-raw?, 
+        PIR-block_seqref?)>
+
+<!-- had punctuation in sequence ? -->
+<!ELEMENT PIR-block_had-punct EMPTY>
+<!ATTLIST PIR-block_had-punct value ( true | false ) #REQUIRED >
+
+
+<!ELEMENT PIR-block_host (#PCDATA)>
+
+<!-- source line -->
+<!ELEMENT PIR-block_source (#PCDATA)>
+
+<!ELEMENT PIR-block_summary (#PCDATA)>
+
+<!ELEMENT PIR-block_genetic (#PCDATA)>
+
+<!ELEMENT PIR-block_includes (#PCDATA)>
+
+<!ELEMENT PIR-block_placement (#PCDATA)>
+
+<!ELEMENT PIR-block_superfamily (#PCDATA)>
+
+<!ELEMENT PIR-block_keywords (PIR-block_keywords_E*)>
+
+
+<!ELEMENT PIR-block_keywords_E (#PCDATA)>
+
+<!ELEMENT PIR-block_cross-reference (#PCDATA)>
+
+<!ELEMENT PIR-block_date (#PCDATA)>
+
+<!-- seq with punctuation -->
+<!ELEMENT PIR-block_seq-raw (#PCDATA)>
+
+<!-- xref to other sequences -->
+<!ELEMENT PIR-block_seqref (Seq-id*)>
+

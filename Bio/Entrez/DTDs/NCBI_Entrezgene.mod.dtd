@@ -1,0 +1,378 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "entrezgene.asn"
+     ::DATATOOL:: by application DATATOOL version 1.9.0
+     ::DATATOOL:: on 04/10/2008 16:04:22
+     ============================================ -->
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "NCBI-Entrezgene"
+================================================= -->
+
+<!--
+$Revision: 1.1 $ 
+********************************************************************** 
+ 
+  NCBI Entrezgene 
+  by James Ostell, 2001 
+   
+  Generic "Gene" object for Entrez Genes 
+    This object is designed to incorporate a subset of information from 
+    LocusLink and from records in Entrez Genomes to provide indexing, 
+    linkage, and a useful summary report in Entrez for "Genes" 
+ 
+********************************************************************** 
+-->
+
+<!-- Elements used by other modules:
+          Entrezgene,
+          Entrezgene-Set -->
+
+<!-- Elements referenced from other modules:
+          Gene-ref FROM NCBI-Gene,
+          Prot-ref FROM NCBI-Protein,
+          BioSource FROM NCBI-BioSource,
+          RNA-ref FROM NCBI-RNA,
+          Dbtag,
+          Date FROM NCBI-General,
+          Seq-loc FROM NCBI-Seqloc,
+          Pub FROM NCBI-Pub -->
+<!-- ============================================ -->
+
+<!--
+******************************************** 
+ Entrezgene is the "document" indexed in Entrez 
+  and presented in the full display 
+ It also contains the Entrez ID and date information 
+******************************************* 
+-->
+<!ELEMENT Entrezgene (
+        Entrezgene_track-info?, 
+        Entrezgene_type, 
+        Entrezgene_source, 
+        Entrezgene_gene, 
+        Entrezgene_prot?, 
+        Entrezgene_rna?, 
+        Entrezgene_summary?, 
+        Entrezgene_location?, 
+        Entrezgene_gene-source?, 
+        Entrezgene_locus?, 
+        Entrezgene_properties?, 
+        Entrezgene_refgene?, 
+        Entrezgene_homology?, 
+        Entrezgene_comments?, 
+        Entrezgene_unique-keys?, 
+        Entrezgene_xtra-index-terms?, 
+        Entrezgene_xtra-properties?, 
+        Entrezgene_xtra-iq?, 
+        Entrezgene_non-unique-keys?)>
+
+<!-- not in submission, but in retrieval  -->
+<!ELEMENT Entrezgene_track-info (Gene-track)>
+<!-- type of Gene -->
+<!ELEMENT Entrezgene_type (%INTEGER;)>
+<!ATTLIST Entrezgene_type value (
+        unknown |
+        tRNA |
+        rRNA |
+        snRNA |
+        scRNA |
+        snoRNA |
+        protein-coding |
+        pseudo |
+        transposon |
+        miscRNA |
+        other
+        ) #IMPLIED >
+
+
+<!ELEMENT Entrezgene_source (BioSource)>
+
+<!-- for locus-tag see note 3 -->
+<!ELEMENT Entrezgene_gene (Gene-ref)>
+
+<!ELEMENT Entrezgene_prot (Prot-ref)>
+
+<!ELEMENT Entrezgene_rna (RNA-ref)>
+
+<!-- short summary  -->
+<!ELEMENT Entrezgene_summary (#PCDATA)>
+
+<!ELEMENT Entrezgene_location (Maps*)>
+
+<!-- NCBI source to Entrez  -->
+<!ELEMENT Entrezgene_gene-source (Gene-source)>
+
+<!--
+ location of gene on chromosome (if known)
+ and all information about products
+ (mRNA, proteins and so on)
+-->
+<!ELEMENT Entrezgene_locus (Gene-commentary*)>
+
+<!ELEMENT Entrezgene_properties (Gene-commentary*)>
+
+<!-- NG for this?  -->
+<!ELEMENT Entrezgene_refgene (Gene-commentary*)>
+
+<!ELEMENT Entrezgene_homology (Gene-commentary*)>
+
+<!ELEMENT Entrezgene_comments (Gene-commentary*)>
+
+<!-- see note 3 -->
+<!ELEMENT Entrezgene_unique-keys (Dbtag*)>
+
+<!-- see note 2 -->
+<!ELEMENT Entrezgene_xtra-index-terms (Entrezgene_xtra-index-terms_E*)>
+
+
+<!ELEMENT Entrezgene_xtra-index-terms_E (#PCDATA)>
+
+<!-- see note 2 -->
+<!ELEMENT Entrezgene_xtra-properties (Xtra-Terms*)>
+
+<!-- see note 2 -->
+<!ELEMENT Entrezgene_xtra-iq (Xtra-Terms*)>
+
+<!ELEMENT Entrezgene_non-unique-keys (Dbtag*)>
+
+
+<!ELEMENT Entrezgene-Set (Entrezgene*)>
+
+
+<!ELEMENT Gene-track (
+        Gene-track_geneid, 
+        Gene-track_status?, 
+        Gene-track_current-id?, 
+        Gene-track_create-date, 
+        Gene-track_update-date, 
+        Gene-track_discontinue-date?)>
+
+<!-- required unique document id  -->
+<!ELEMENT Gene-track_geneid (%INTEGER;)>
+
+<!ELEMENT Gene-track_status (%INTEGER;)>
+
+<!--
+    secondary	-  synonym with merged
+    discontinued	-  'deleted', still index and display to public
+    newentry	-   for GeneRif submission
+-->
+<!ATTLIST Gene-track_status value (
+        live |
+        secondary |
+        discontinued |
+        newentry
+        ) #IMPLIED >
+
+
+<!-- see note 1 below -->
+<!ELEMENT Gene-track_current-id (Dbtag*)>
+
+<!-- date created in Entrez  -->
+<!ELEMENT Gene-track_create-date (Date)>
+
+<!-- last date updated in Entrez  -->
+<!ELEMENT Gene-track_update-date (Date)>
+
+<!-- -->
+<!ELEMENT Gene-track_discontinue-date (Date)>
+
+
+<!ELEMENT Gene-source (
+        Gene-source_src, 
+        Gene-source_src-int?, 
+        Gene-source_src-str1?, 
+        Gene-source_src-str2?, 
+        Gene-source_gene-display?, 
+        Gene-source_locus-display?, 
+        Gene-source_extra-terms?)>
+
+<!-- key to the source within NCBI locuslink, Ecoli, etc  -->
+<!ELEMENT Gene-source_src (#PCDATA)>
+
+<!-- eg. locuslink id  -->
+<!ELEMENT Gene-source_src-int (%INTEGER;)>
+
+<!-- eg. chromosome1  -->
+<!ELEMENT Gene-source_src-str1 (#PCDATA)>
+
+<!-- see note 3 -->
+<!ELEMENT Gene-source_src-str2 (#PCDATA)>
+
+<!-- do we have a URL for gene display?  -->
+<!ELEMENT Gene-source_gene-display EMPTY>
+<!ATTLIST Gene-source_gene-display value ( true | false ) "false" >
+
+
+<!-- do we have a URL for map/locus display?  -->
+<!ELEMENT Gene-source_locus-display EMPTY>
+<!ATTLIST Gene-source_locus-display value ( true | false ) "false" >
+
+
+<!-- do we have a URL for extra indexing terms?  -->
+<!ELEMENT Gene-source_extra-terms EMPTY>
+<!ATTLIST Gene-source_extra-terms value ( true | false ) "false" >
+
+
+
+<!ELEMENT Gene-commentary (
+        Gene-commentary_type, 
+        Gene-commentary_heading?, 
+        Gene-commentary_label?, 
+        Gene-commentary_text?, 
+        Gene-commentary_accession?, 
+        Gene-commentary_version?, 
+        Gene-commentary_xtra-properties?, 
+        Gene-commentary_refs?, 
+        Gene-commentary_source?, 
+        Gene-commentary_genomic-coords?, 
+        Gene-commentary_seqs?, 
+        Gene-commentary_products?, 
+        Gene-commentary_properties?, 
+        Gene-commentary_comment?, 
+        Gene-commentary_create-date?, 
+        Gene-commentary_update-date?)>
+<!-- type of Gene Commentary -->
+<!ELEMENT Gene-commentary_type (%INTEGER;)>
+
+<!--
+    property	-  used to display tag/value pair
+         for this type label is used as property tag, text is used as property value, 
+         other fields are not used.
+    reference	-  currently not used             
+    generif	-  to include generif in the main blob             
+    phenotype	-  to display phenotype information
+    complex	-  used (but not limited) to identify resulting 
+         interaction complexes
+    compound	-  pubchem entities
+-->
+<!ATTLIST Gene-commentary_type value (
+        genomic |
+        pre-RNA |
+        mRNA |
+        rRNA |
+        tRNA |
+        snRNA |
+        scRNA |
+        peptide |
+        other-genetic |
+        genomic-mRNA |
+        cRNA |
+        mature-peptide |
+        pre-protein |
+        miscRNA |
+        snoRNA |
+        property |
+        reference |
+        generif |
+        phenotype |
+        complex |
+        compound |
+        comment |
+        other
+        ) #IMPLIED >
+
+
+<!-- appears above text  -->
+<!ELEMENT Gene-commentary_heading (#PCDATA)>
+
+<!--
+ occurs to left of text
+ for protein and RNA types it is a name
+ for property type it is a property tag  
+-->
+<!ELEMENT Gene-commentary_label (#PCDATA)>
+
+<!--
+ block of text 
+ for property type it is a property value  
+-->
+<!ELEMENT Gene-commentary_text (#PCDATA)>
+
+<!-- accession for the gi in the seqloc, see note 3 -->
+<!ELEMENT Gene-commentary_accession (#PCDATA)>
+
+<!-- version for the accession above -->
+<!ELEMENT Gene-commentary_version (%INTEGER;)>
+
+<!-- see note 2 -->
+<!ELEMENT Gene-commentary_xtra-properties (Xtra-Terms*)>
+
+<!-- refs for this  -->
+<!ELEMENT Gene-commentary_refs (Pub*)>
+
+<!-- links and refs  -->
+<!ELEMENT Gene-commentary_source (Other-source*)>
+
+<!-- referenced sequences in genomic coords -->
+<!ELEMENT Gene-commentary_genomic-coords (Seq-loc*)>
+
+<!-- referenced sequences in non-genomic coords -->
+<!ELEMENT Gene-commentary_seqs (Seq-loc*)>
+
+<!ELEMENT Gene-commentary_products (Gene-commentary*)>
+
+<!ELEMENT Gene-commentary_properties (Gene-commentary*)>
+
+<!ELEMENT Gene-commentary_comment (Gene-commentary*)>
+
+<!ELEMENT Gene-commentary_create-date (Date)>
+
+<!ELEMENT Gene-commentary_update-date (Date)>
+
+
+<!ELEMENT Other-source (
+        Other-source_src?, 
+        Other-source_pre-text?, 
+        Other-source_anchor?, 
+        Other-source_url?, 
+        Other-source_post-text?)>
+
+<!-- key to non-ncbi source  -->
+<!ELEMENT Other-source_src (Dbtag)>
+
+<!-- text before anchor  -->
+<!ELEMENT Other-source_pre-text (#PCDATA)>
+
+<!-- text to show as highlight  -->
+<!ELEMENT Other-source_anchor (#PCDATA)>
+
+<!-- if present, use this URL not Dbtag and datbase  -->
+<!ELEMENT Other-source_url (#PCDATA)>
+
+<!-- text after anchor  -->
+<!ELEMENT Other-source_post-text (#PCDATA)>
+
+
+<!ELEMENT Maps (
+        Maps_display-str, 
+        Maps_method)>
+
+<!ELEMENT Maps_display-str (#PCDATA)>
+
+<!ELEMENT Maps_method (
+        Maps_method_proxy | 
+        Maps_method_map-type)>
+
+<!--url to non mapviewer mapviewing resource -->
+<!ELEMENT Maps_method_proxy (#PCDATA)>
+<!-- units used in display-str to query mapviewer  -->
+<!ELEMENT Maps_method_map-type %ENUM;>
+<!ATTLIST Maps_method_map-type value (
+        cyto |
+        bp |
+        cM |
+        cR |
+        min
+        ) #REQUIRED >
+
+
+<!-- see note 2 -->
+<!ELEMENT Xtra-Terms (
+        Xtra-Terms_tag, 
+        Xtra-Terms_value)>
+
+<!ELEMENT Xtra-Terms_tag (#PCDATA)>
+
+<!ELEMENT Xtra-Terms_value (#PCDATA)>
+

@@ -1,0 +1,120 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "pub.asn"
+     ::DATATOOL:: by application DATATOOL version 1.9.0
+     ::DATATOOL:: on 04/10/2008 16:04:22
+     ============================================ -->
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "NCBI-Pub"
+================================================= -->
+
+<!--
+$Revision: 1.1 $
+********************************************************************
+
+  Publication common set
+  James Ostell, 1990
+
+  This is the base class definitions for Publications of all sorts
+
+  support for PubMedId added in 1996
+********************************************************************
+-->
+
+<!-- Elements used by other modules:
+          Pub,
+          Pub-set,
+          Pub-equiv -->
+
+<!-- Elements referenced from other modules:
+          Medline-entry FROM NCBI-Medline,
+          Cit-art,
+          Cit-jour,
+          Cit-book,
+          Cit-proc,
+          Cit-pat,
+          Id-pat,
+          Cit-gen,
+          Cit-let,
+          Cit-sub,
+          PubMedId FROM NCBI-Biblio -->
+<!-- ============================================ -->
+
+
+<!ELEMENT Pub (
+        Pub_gen | 
+        Pub_sub | 
+        Pub_medline | 
+        Pub_muid | 
+        Pub_article | 
+        Pub_journal | 
+        Pub_book | 
+        Pub_proc | 
+        Pub_patent | 
+        Pub_pat-id | 
+        Pub_man | 
+        Pub_equiv | 
+        Pub_pmid)>
+
+<!-- general or generic unparsed -->
+<!ELEMENT Pub_gen (Cit-gen)>
+
+<!-- submission -->
+<!ELEMENT Pub_sub (Cit-sub)>
+
+<!ELEMENT Pub_medline (Medline-entry)>
+
+<!-- medline uid -->
+<!ELEMENT Pub_muid (%INTEGER;)>
+
+<!ELEMENT Pub_article (Cit-art)>
+
+<!ELEMENT Pub_journal (Cit-jour)>
+
+<!ELEMENT Pub_book (Cit-book)>
+
+<!-- proceedings of a meeting -->
+<!ELEMENT Pub_proc (Cit-proc)>
+
+<!ELEMENT Pub_patent (Cit-pat)>
+
+<!-- identify a patent -->
+<!ELEMENT Pub_pat-id (Id-pat)>
+
+<!-- manuscript, thesis, or letter -->
+<!ELEMENT Pub_man (Cit-let)>
+
+<!-- to cite a variety of ways -->
+<!ELEMENT Pub_equiv (Pub-equiv)>
+
+<!-- PubMedId -->
+<!ELEMENT Pub_pmid (PubMedId)>
+
+<!-- equivalent identifiers for same citation -->
+<!ELEMENT Pub-equiv (Pub*)>
+
+
+<!ELEMENT Pub-set (
+        Pub-set_pub | 
+        Pub-set_medline | 
+        Pub-set_article | 
+        Pub-set_journal | 
+        Pub-set_book | 
+        Pub-set_proc | 
+        Pub-set_patent)>
+
+<!ELEMENT Pub-set_pub (Pub*)>
+
+<!ELEMENT Pub-set_medline (Medline-entry*)>
+
+<!ELEMENT Pub-set_article (Cit-art*)>
+
+<!ELEMENT Pub-set_journal (Cit-jour*)>
+
+<!ELEMENT Pub-set_book (Cit-book*)>
+
+<!-- proceedings of a meeting -->
+<!ELEMENT Pub-set_proc (Cit-proc*)>
+
+<!ELEMENT Pub-set_patent (Cit-pat*)>
+

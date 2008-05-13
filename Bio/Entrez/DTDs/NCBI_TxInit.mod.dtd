@@ -1,0 +1,184 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "seqfeat.asn"
+     ::DATATOOL:: by application DATATOOL version 1.9.0
+     ::DATATOOL:: on 04/10/2008 16:04:22
+     ============================================ -->
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "NCBI-TxInit"
+================================================= -->
+
+<!--
+********************************************************************
+
+  Transcription Initiation Site Feature Data Block
+  James Ostell, 1991
+  Philip Bucher, David Ghosh
+  version 1.1
+
+  
+
+********************************************************************
+-->
+
+<!-- Elements used by other modules:
+          Txinit -->
+
+<!-- Elements referenced from other modules:
+          Gene-ref FROM NCBI-Gene,
+          Prot-ref FROM NCBI-Protein,
+          Org-ref FROM NCBI-Organism -->
+<!-- ============================================ -->
+
+
+<!ELEMENT Txinit (
+        Txinit_name, 
+        Txinit_syn?, 
+        Txinit_gene?, 
+        Txinit_protein?, 
+        Txinit_rna?, 
+        Txinit_expression?, 
+        Txinit_txsystem, 
+        Txinit_txdescr?, 
+        Txinit_txorg?, 
+        Txinit_mapping-precise?, 
+        Txinit_location-accurate?, 
+        Txinit_inittype?, 
+        Txinit_evidence?)>
+
+<!-- descriptive name of initiation site -->
+<!ELEMENT Txinit_name (#PCDATA)>
+
+<!-- synonyms -->
+<!ELEMENT Txinit_syn (Txinit_syn_E*)>
+
+
+<!ELEMENT Txinit_syn_E (#PCDATA)>
+
+<!-- gene(s) transcribed -->
+<!ELEMENT Txinit_gene (Gene-ref*)>
+
+<!-- protein(s) produced -->
+<!ELEMENT Txinit_protein (Prot-ref*)>
+
+<!-- rna(s) produced -->
+<!ELEMENT Txinit_rna (Txinit_rna_E*)>
+
+
+<!ELEMENT Txinit_rna_E (#PCDATA)>
+
+<!-- tissue/time of expression -->
+<!ELEMENT Txinit_expression (#PCDATA)>
+<!-- transcription apparatus used at this site -->
+<!ELEMENT Txinit_txsystem %ENUM;>
+
+<!--
+    pol1	-  eukaryotic Pol I
+    pol2	-  eukaryotic Pol II
+    pol3	-  eukaryotic Pol III
+    rna	-  RNA replicase
+-->
+<!ATTLIST Txinit_txsystem value (
+        unknown |
+        pol1 |
+        pol2 |
+        pol3 |
+        bacterial |
+        viral |
+        rna |
+        organelle |
+        other
+        ) #REQUIRED >
+
+
+<!-- modifiers on txsystem -->
+<!ELEMENT Txinit_txdescr (#PCDATA)>
+
+<!-- organism supplying transcription apparatus -->
+<!ELEMENT Txinit_txorg (Org-ref)>
+
+<!-- mapping precise or approx -->
+<!ELEMENT Txinit_mapping-precise EMPTY>
+<!ATTLIST Txinit_mapping-precise value ( true | false ) "false" >
+
+
+<!-- does Seq-loc reflect mapping -->
+<!ELEMENT Txinit_location-accurate EMPTY>
+<!ATTLIST Txinit_location-accurate value ( true | false ) "false" >
+
+
+<!ELEMENT Txinit_inittype %ENUM;>
+<!ATTLIST Txinit_inittype value (
+        unknown |
+        single |
+        multiple |
+        region
+        ) #REQUIRED >
+
+
+<!ELEMENT Txinit_evidence (Tx-evidence*)>
+
+
+<!ELEMENT Tx-evidence (
+        Tx-evidence_exp-code, 
+        Tx-evidence_expression-system?, 
+        Tx-evidence_low-prec-data?, 
+        Tx-evidence_from-homolog?)>
+
+<!ELEMENT Tx-evidence_exp-code %ENUM;>
+
+<!--
+    rna-seq	-  direct RNA sequencing
+    rna-size	-  RNA length measurement
+    np-map	-  nuclease protection mapping with homologous sequence ladder
+    np-size	-  nuclease protected fragment length measurement
+    pe-seq	-  dideoxy RNA sequencing 
+    cDNA-seq	-  full-length cDNA sequencing
+    pe-map	-  primer extension mapping with homologous sequence ladder    
+    pe-size	-  primer extension product length measurement
+    pseudo-seq	-  full-length processed pseudogene sequencing
+    rev-pe-map	-  see NOTE (1) below
+-->
+<!ATTLIST Tx-evidence_exp-code value (
+        unknown |
+        rna-seq |
+        rna-size |
+        np-map |
+        np-size |
+        pe-seq |
+        cDNA-seq |
+        pe-map |
+        pe-size |
+        pseudo-seq |
+        rev-pe-map |
+        other
+        ) #REQUIRED >
+
+
+<!ELEMENT Tx-evidence_expression-system %ENUM;>
+<!ATTLIST Tx-evidence_expression-system value (
+        unknown |
+        physiological |
+        in-vitro |
+        oocyte |
+        transfection |
+        transgenic |
+        other
+        ) #REQUIRED >
+
+
+<!ELEMENT Tx-evidence_low-prec-data EMPTY>
+<!ATTLIST Tx-evidence_low-prec-data value ( true | false ) "false" >
+
+
+<!-- experiment actually done on -->
+<!ELEMENT Tx-evidence_from-homolog EMPTY>
+<!ATTLIST Tx-evidence_from-homolog value ( true | false ) "false" >
+<!--
+  close homolog
+ NOTE (1) length measurement of a reverse direction primer-extension
+          product (blocked  by  RNA  5'end)  by  comparison with
+          homologous sequence ladder (J. Mol. Biol. 199, 587)
+-->
+
+

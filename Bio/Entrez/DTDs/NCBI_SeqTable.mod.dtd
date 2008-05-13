@@ -1,0 +1,390 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "seqtable.asn"
+     ::DATATOOL:: by application DATATOOL version 1.9.0
+     ::DATATOOL:: on 04/10/2008 16:04:22
+     ============================================ -->
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "NCBI-SeqTable"
+================================================= -->
+
+<!--
+$Revision: 1.1 $
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                            PUBLIC DOMAIN NOTICE
+                National Center for Biotechnology Information
+
+  This software/database is a "United States Government Work" under the terms
+  of the United States Copyright Act.  It was written as part of the author's
+  official duties as a United States Government employee and thus cannot be
+  copyrighted.  This software/database is freely available to the public for
+  use.  The National Library of Medicine and the U.S. Government have not
+  placed any restriction on its use or reproduction.
+
+  Although all reasonable efforts have been taken to ensure the accuracy and
+  reliability of the software and data, the NLM and the U.S. Government do not
+  and cannot warrant the performance or results that may be obtained by using
+  this software or data.  The NLM and the U.S. Government disclaim all
+  warranties, express or implied, including warranties of performance,
+  merchantability or fitness for any particular purpose.
+
+  Please cite the authors in any work or product based on this material.
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  Authors: Mike DiCuccio, Eugene Vasilchenko
+
+  ASN.1 interface to table readers
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-->
+
+<!-- Elements used by other modules:
+          SeqTable-column-info,
+          SeqTable-column,
+          Seq-table -->
+
+<!-- Elements referenced from other modules:
+          Seq-id,
+          Seq-loc,
+          Seq-interval FROM NCBI-Seqloc -->
+<!-- ============================================ -->
+
+
+<!ELEMENT SeqTable-column-info (
+        SeqTable-column-info_title?, 
+        SeqTable-column-info_field-id?, 
+        SeqTable-column-info_field-name?)>
+
+<!-- user friendly column name, can be skipped -->
+<!ELEMENT SeqTable-column-info_title (#PCDATA)>
+<!--
+ identification of the column data in the objects described by the table
+ known column data types
+ position types
+-->
+<!ELEMENT SeqTable-column-info_field-id (%INTEGER;)>
+
+<!--
+    location	-  location as Seq-loc
+    location-id	-  location Seq-id
+    location-gi	-  gi
+    location-from	-  interval from
+    location-to	-  interval to
+    location-strand	-  location strand
+    product	-  product as Seq-loc
+    product-id	-  product Seq-id
+    product-gi	-  product gi
+    product-from	-  product interval from
+    product-to	-  product interval to
+    product-strand	-  product strand
+    id-local	-  main feature fields
+         id.local.id
+    xref-id-local	-  xref.id.local.id
+    ext	-  field-name must be "E.xxx", see below
+    qual	-  field-name must be "Q.xxx", see below
+    dbxref	-  field-name must be "D.xxx", see below
+    data-imp-key	-  various data fields
+    ext-type	-  extra fields, see also special values for str below
+-->
+<!ATTLIST SeqTable-column-info_field-id value (
+        location |
+        location-id |
+        location-gi |
+        location-from |
+        location-to |
+        location-strand |
+        location-fuzz-from-lim |
+        location-fuzz-to-lim |
+        product |
+        product-id |
+        product-gi |
+        product-from |
+        product-to |
+        product-strand |
+        product-fuzz-from-lim |
+        product-fuzz-to-lim |
+        id-local |
+        xref-id-local |
+        partial |
+        comment |
+        title |
+        ext |
+        qual |
+        dbxref |
+        data-imp-key |
+        data-region |
+        data-cdregion-frame |
+        ext-type |
+        qual-qual |
+        qual-val |
+        dbxref-db |
+        dbxref-tag
+        ) #IMPLIED >
+
+
+<!--
+ any column can be identified by ASN.1 text locator string
+ with omitted object type.
+ examples:
+   "data.gene.locus" for Seq-feat.data.gene.locus
+   "data.imp.key" for Seq-feat.data.imp.key
+   "qual.qual"
+    - Seq-feat.qual is SEQUENCE so several columns are allowed
+      see also "Q.xxx" special value for shorter qual representation
+   "ext.type.str"
+   "ext.data.label.str"
+   "ext.data.data.int"
+      see also "E.xxx" special value for shorter ext representation
+ special values start with capital letter:
+   "E.xxx" - ext.data.label.str = xxx, ext.data.data = data
+    - Seq-feat.ext.data is SEQUENCE so several columns are allowed
+   "Q.xxx" - qual.qual = xxx, qual.val = data
+    - Seq-feat.qual is SEQUENCE so several columns are allowed
+   "D.xxx" - dbxref.id = xxx, dbxref.tag = data
+    - Seq-feat.dbxref is SET so several columns are allowed
+-->
+<!ELEMENT SeqTable-column-info_field-name (#PCDATA)>
+
+
+<!ELEMENT CommonString-table (
+        CommonString-table_strings, 
+        CommonString-table_indexes)>
+
+<!-- set of possible values -->
+<!ELEMENT CommonString-table_strings (CommonString-table_strings_E*)>
+
+
+<!ELEMENT CommonString-table_strings_E (#PCDATA)>
+
+<!-- indexes of values -->
+<!ELEMENT CommonString-table_indexes (CommonString-table_indexes_E*)>
+
+
+<!ELEMENT CommonString-table_indexes_E (%INTEGER;)>
+
+
+<!ELEMENT CommonBytes-table (
+        CommonBytes-table_bytes, 
+        CommonBytes-table_indexes)>
+
+<!-- set of possible values -->
+<!ELEMENT CommonBytes-table_bytes (CommonBytes-table_bytes_E*)>
+
+
+<!ELEMENT CommonBytes-table_bytes_E (%OCTETS;)>
+
+<!-- indexes of values -->
+<!ELEMENT CommonBytes-table_indexes (CommonBytes-table_indexes_E*)>
+
+
+<!ELEMENT CommonBytes-table_indexes_E (%INTEGER;)>
+
+
+<!ELEMENT SeqTable-multi-data (
+        SeqTable-multi-data_int | 
+        SeqTable-multi-data_real | 
+        SeqTable-multi-data_string | 
+        SeqTable-multi-data_bytes | 
+        SeqTable-multi-data_common-string | 
+        SeqTable-multi-data_common-bytes | 
+        SeqTable-multi-data_bit | 
+        SeqTable-multi-data_loc | 
+        SeqTable-multi-data_id | 
+        SeqTable-multi-data_interval)>
+
+<!-- a set of integers, one per row -->
+<!ELEMENT SeqTable-multi-data_int (SeqTable-multi-data_int_E*)>
+
+
+<!ELEMENT SeqTable-multi-data_int_E (%INTEGER;)>
+
+<!-- a set of reals, one per row -->
+<!ELEMENT SeqTable-multi-data_real (SeqTable-multi-data_real_E*)>
+
+
+<!ELEMENT SeqTable-multi-data_real_E (%REAL;)>
+
+<!-- a set of strings, one per row -->
+<!ELEMENT SeqTable-multi-data_string (SeqTable-multi-data_string_E*)>
+
+
+<!ELEMENT SeqTable-multi-data_string_E (#PCDATA)>
+
+<!-- a set of byte arrays, one per row -->
+<!ELEMENT SeqTable-multi-data_bytes (SeqTable-multi-data_bytes_E*)>
+
+
+<!ELEMENT SeqTable-multi-data_bytes_E (%OCTETS;)>
+
+<!-- a set of string with small set of possible values -->
+<!ELEMENT SeqTable-multi-data_common-string (CommonString-table)>
+
+<!-- a set of byte arrays with small set of possible values -->
+<!ELEMENT SeqTable-multi-data_common-bytes (CommonBytes-table)>
+
+<!--
+ a set of bits, one per row
+ this uses bm::bvector<> as its storage mechanism
+-->
+<!ELEMENT SeqTable-multi-data_bit (%OCTETS;)>
+
+<!-- a set of locations, one per row -->
+<!ELEMENT SeqTable-multi-data_loc (Seq-loc*)>
+
+<!ELEMENT SeqTable-multi-data_id (Seq-id*)>
+
+<!ELEMENT SeqTable-multi-data_interval (Seq-interval*)>
+
+
+<!ELEMENT SeqTable-single-data (
+        SeqTable-single-data_int | 
+        SeqTable-single-data_real | 
+        SeqTable-single-data_string | 
+        SeqTable-single-data_bytes | 
+        SeqTable-single-data_bit | 
+        SeqTable-single-data_loc | 
+        SeqTable-single-data_id | 
+        SeqTable-single-data_interval)>
+
+<!-- integer -->
+<!ELEMENT SeqTable-single-data_int (%INTEGER;)>
+
+<!-- real -->
+<!ELEMENT SeqTable-single-data_real (%REAL;)>
+
+<!-- string -->
+<!ELEMENT SeqTable-single-data_string (#PCDATA)>
+
+<!-- byte array -->
+<!ELEMENT SeqTable-single-data_bytes (%OCTETS;)>
+
+<!-- bit -->
+<!ELEMENT SeqTable-single-data_bit EMPTY>
+<!ATTLIST SeqTable-single-data_bit value ( true | false ) #REQUIRED >
+
+
+<!-- location -->
+<!ELEMENT SeqTable-single-data_loc (Seq-loc)>
+
+<!ELEMENT SeqTable-single-data_id (Seq-id)>
+
+<!ELEMENT SeqTable-single-data_interval (Seq-interval)>
+
+
+<!ELEMENT SeqTable-sparse-index (
+        SeqTable-sparse-index_indexes | 
+        SeqTable-sparse-index_bit-set)>
+
+<!-- indexed of rows with values -->
+<!ELEMENT SeqTable-sparse-index_indexes (SeqTable-sparse-index_indexes_E*)>
+
+
+<!ELEMENT SeqTable-sparse-index_indexes_E (%INTEGER;)>
+
+<!-- bitset of rows with values -->
+<!ELEMENT SeqTable-sparse-index_bit-set (%OCTETS;)>
+
+
+<!ELEMENT SeqTable-column (
+        SeqTable-column_header, 
+        SeqTable-column_data?, 
+        SeqTable-column_sparse?, 
+        SeqTable-column_default?, 
+        SeqTable-column_sparse-other?)>
+
+<!--
+ column description or reference to previously defined info
+ information about data
+-->
+<!ELEMENT SeqTable-column_header (SeqTable-column-info)>
+
+<!-- row data -->
+<!ELEMENT SeqTable-column_data (SeqTable-multi-data)>
+
+<!-- in case not all rows contain data this field will contain sparse info -->
+<!ELEMENT SeqTable-column_sparse (SeqTable-sparse-index)>
+
+<!-- default value for sparse table, or if row data is too short -->
+<!ELEMENT SeqTable-column_default (SeqTable-single-data)>
+
+<!-- single value for indexes not listed in sparse table -->
+<!ELEMENT SeqTable-column_sparse-other (SeqTable-single-data)>
+
+
+<!ELEMENT Seq-table (
+        Seq-table_feat-type, 
+        Seq-table_feat-subtype?, 
+        Seq-table_num-rows, 
+        Seq-table_columns)>
+
+<!-- type of features in this table, equal to Seq-feat.data variant index -->
+<!ELEMENT Seq-table_feat-type (%INTEGER;)>
+
+<!-- subtype of features in this table, defined in header SeqFeatData.hpp -->
+<!ELEMENT Seq-table_feat-subtype (%INTEGER;)>
+
+<!-- number of rows -->
+<!ELEMENT Seq-table_num-rows (%INTEGER;)>
+
+<!-- data in columns -->
+<!ELEMENT Seq-table_columns (SeqTable-column*)>
+

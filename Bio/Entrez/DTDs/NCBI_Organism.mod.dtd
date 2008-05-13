@@ -1,0 +1,222 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "seqfeat.asn"
+     ::DATATOOL:: by application DATATOOL version 1.9.0
+     ::DATATOOL:: on 04/10/2008 16:04:22
+     ============================================ -->
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "NCBI-Organism"
+================================================= -->
+
+<!--
+**********************************************************************
+
+  NCBI Organism
+  by James Ostell, 1994
+  version 3.0
+
+**********************************************************************
+-->
+
+<!-- Elements used by other modules:
+          Org-ref -->
+
+<!-- Elements referenced from other modules:
+          Dbtag FROM NCBI-General -->
+<!-- ============================================ -->
+
+<!--
+*** Org-ref ***********************************************
+*
+*  Reference to an organism
+*     defines only the organism.. lower levels of detail for biological
+*     molecules are provided by the Source object
+*
+-->
+<!ELEMENT Org-ref (
+        Org-ref_taxname?, 
+        Org-ref_common?, 
+        Org-ref_mod?, 
+        Org-ref_db?, 
+        Org-ref_syn?, 
+        Org-ref_orgname?)>
+
+<!-- preferred formal name -->
+<!ELEMENT Org-ref_taxname (#PCDATA)>
+
+<!-- common name -->
+<!ELEMENT Org-ref_common (#PCDATA)>
+
+<!-- unstructured modifiers -->
+<!ELEMENT Org-ref_mod (Org-ref_mod_E*)>
+
+
+<!ELEMENT Org-ref_mod_E (#PCDATA)>
+
+<!-- ids in taxonomic or culture dbases -->
+<!ELEMENT Org-ref_db (Dbtag*)>
+
+<!-- synonyms for taxname or common -->
+<!ELEMENT Org-ref_syn (Org-ref_syn_E*)>
+
+
+<!ELEMENT Org-ref_syn_E (#PCDATA)>
+
+<!ELEMENT Org-ref_orgname (OrgName)>
+
+
+<!ELEMENT OrgName (
+        OrgName_name?, 
+        OrgName_attrib?, 
+        OrgName_mod?, 
+        OrgName_lineage?, 
+        OrgName_gcode?, 
+        OrgName_mgcode?, 
+        OrgName_div?)>
+
+<!ELEMENT OrgName_name (
+        OrgName_name_binomial | 
+        OrgName_name_virus | 
+        OrgName_name_hybrid | 
+        OrgName_name_namedhybrid | 
+        OrgName_name_partial)>
+
+<!-- genus/species type name -->
+<!ELEMENT OrgName_name_binomial (BinomialOrgName)>
+
+<!-- virus names are different -->
+<!ELEMENT OrgName_name_virus (#PCDATA)>
+
+<!-- hybrid between organisms -->
+<!ELEMENT OrgName_name_hybrid (MultiOrgName)>
+
+<!-- some hybrids have genus x species name -->
+<!ELEMENT OrgName_name_namedhybrid (BinomialOrgName)>
+
+<!-- when genus not known -->
+<!ELEMENT OrgName_name_partial (PartialOrgName)>
+
+<!-- attribution of name -->
+<!ELEMENT OrgName_attrib (#PCDATA)>
+
+<!ELEMENT OrgName_mod (OrgMod*)>
+
+<!-- lineage with semicolon separators -->
+<!ELEMENT OrgName_lineage (#PCDATA)>
+
+<!-- genetic code (see CdRegion) -->
+<!ELEMENT OrgName_gcode (%INTEGER;)>
+
+<!-- mitochondrial genetic code -->
+<!ELEMENT OrgName_mgcode (%INTEGER;)>
+
+<!-- GenBank division code -->
+<!ELEMENT OrgName_div (#PCDATA)>
+
+
+<!ELEMENT OrgMod (
+        OrgMod_subtype, 
+        OrgMod_subname, 
+        OrgMod_attrib?)>
+
+<!ELEMENT OrgMod_subtype (%INTEGER;)>
+
+<!--
+    dosage	-  chromosome dosage of hybrid
+    nat-host	-  natural host of this specimen
+    gb-acronym	-  used by taxonomy database
+    gb-anamorph	-  used by taxonomy database
+    gb-synonym	-  used by taxonomy database
+    other	-  ASN5: old-name (254) will be added to next spec
+-->
+<!ATTLIST OrgMod_subtype value (
+        strain |
+        substrain |
+        type |
+        subtype |
+        variety |
+        serotype |
+        serogroup |
+        serovar |
+        cultivar |
+        pathovar |
+        chemovar |
+        biovar |
+        biotype |
+        group |
+        subgroup |
+        isolate |
+        common |
+        acronym |
+        dosage |
+        nat-host |
+        sub-species |
+        specimen-voucher |
+        authority |
+        forma |
+        forma-specialis |
+        ecotype |
+        synonym |
+        anamorph |
+        teleomorph |
+        breed |
+        gb-acronym |
+        gb-anamorph |
+        gb-synonym |
+        culture-collection |
+        bio-material |
+        metagenome-source |
+        old-lineage |
+        old-name |
+        other
+        ) #IMPLIED >
+
+
+<!ELEMENT OrgMod_subname (#PCDATA)>
+
+<!-- attribution/source of name -->
+<!ELEMENT OrgMod_attrib (#PCDATA)>
+
+
+<!ELEMENT BinomialOrgName (
+        BinomialOrgName_genus, 
+        BinomialOrgName_species?, 
+        BinomialOrgName_subspecies?)>
+
+<!-- required -->
+<!ELEMENT BinomialOrgName_genus (#PCDATA)>
+
+<!-- species required if subspecies used -->
+<!ELEMENT BinomialOrgName_species (#PCDATA)>
+
+<!ELEMENT BinomialOrgName_subspecies (#PCDATA)>
+
+<!-- the first will be used to assign division -->
+<!ELEMENT MultiOrgName (OrgName*)>
+
+<!-- when we don't know the genus -->
+<!ELEMENT PartialOrgName (TaxElement*)>
+
+
+<!ELEMENT TaxElement (
+        TaxElement_fixed-level, 
+        TaxElement_level?, 
+        TaxElement_name)>
+
+<!ELEMENT TaxElement_fixed-level (%INTEGER;)>
+
+<!--
+    other	-  level must be set in string
+-->
+<!ATTLIST TaxElement_fixed-level value (
+        other |
+        family |
+        order |
+        class
+        ) #IMPLIED >
+
+
+<!ELEMENT TaxElement_level (#PCDATA)>
+
+<!ELEMENT TaxElement_name (#PCDATA)>
+

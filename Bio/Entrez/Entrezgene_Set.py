@@ -9,43 +9,33 @@
 # from Bio.Entrez.__init__.py.
 
 def startElement(self, name, attrs):
-    if self.element==["Entrezgene-Set"]:
-        self.record = []
-    elif self.element==["Entrezgene-Set", "Entrezgene"]:
-        entrezgene = {}
-        self.record.append(entrezgene)
-    elif self.element==["Entrezgene-Set", "Entrezgene", "Entrezgene_track-info"]:
-        entrezgene = self.record[-1]
-        entrezgene["track-info"] = {}
-    elif self.element==["Entrezgene-Set", "Entrezgene", "Entrezgene_track-info", "Gene-track"]:
-        entrezgene = self.record[-1]
-        entrezgene["track-info"]["Gene-track"] = {}
-    elif self.element==["Entrezgene-Set", "Entrezgene", "Entrezgene_track-info", "Gene-track", "Gene-track_status"]:
-        entrezgene = self.record[-1]
-        entrezgene["track-info"]["Gene-track"]["status"] = [attrs["value"],None]
-    elif self.element==["Entrezgene-Set", "Entrezgene", "Entrezgene_type"]:
-        entrezgene = self.record[-1]
-        entrezgene["Entrezgene_type"] = [attrs["value"],None]
-    elif self.element==["Entrezgene-Set", "Entrezgene", "Entrezgene_gene"]:
-        entrezgene = self.record[-1]
-        entrezgene["gene"] = {}
-    elif self.element==["Entrezgene-Set", "Entrezgene", "Entrezgene_gene", "Gene-ref"]:
-        entrezgene = self.record[-1]
-        entrezgene["gene"]["ref"] = {}
+    if name=="Entrezgene-Set":
+        object = []
+        self.path = []
+        self.record = object
+    elif name=="Entrezgene":
+        object = {}
+        self.path[-1].append(object)
+    elif name in ("Entrezgene_track-info",
+                  "Gene-track",
+                  "Entrezgene_gene",
+                  "Gene-ref"):
+        object = {}
+        self.path[-1][name] = {}
+    elif name in ("Gene-track_status",
+                  "Entrezgene_type"):
+        object = [attrs["value"],None]
+        self.path[-1][name] = object
+    else:
+        object = ""
+    self.path.append(object)
 
 def endElement(self, name):
-    if self.element==["Entrezgene-Set", "Entrezgene", "Entrezgene_track-info", "Gene-track", "Gene-track_geneid"]:
-        entrezgene = self.record[-1]
-        entrezgene["track-info"]["Gene-track"]["geneid"] = str(self.content)
-    elif self.element==["Entrezgene-Set", "Entrezgene", "Entrezgene_track-info", "Gene-track", "Gene-track_status"]:
-        entrezgene = self.record[-1]
-        entrezgene["track-info"]["Gene-track"]["status"][1] = int(self.content)
-    elif self.element==["Entrezgene-Set", "Entrezgene", "Entrezgene_type"]:
-        entrezgene = self.record[-1]
-        entrezgene["Entrezgene_type"][1] = int(self.content)
-    elif self.element==["Entrezgene-Set", "Entrezgene", "Entrezgene_summary"]:
-        entrezgene = self.record[-1]
-        entrezgene["summary"] = self.content
-    elif self.element==["Entrezgene-Set", "Entrezgene", "Entrezgene_gene", "Gene-ref", "Gene-ref_locus"]:
-        entrezgene = self.record[-1]
-        entrezgene["gene"]["ref"]["locus"] = self.content
+    object = self.path.pop()
+    if name in ("Entrezgene_summary",
+                "Gene-ref_locus",
+                "Gene-track_geneid"):
+        self.path[-1][name] = str(self.content)
+    elif name in ("Gene-track_status",
+                  "Entrezgene_type"):
+        self.path[-1][name][1] = int(self.content)

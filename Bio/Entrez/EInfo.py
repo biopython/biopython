@@ -7,57 +7,51 @@
 # The code is not meant to be used by itself, but is called
 # from Bio.Entrez.__init__.py.
 
+error = "ERROR"		# (#PCDATA)>	<!-- .+ -->
+
+booleans = (
+    "IsDate",		# (#PCDATA)	<!-- (Y|N) -->
+    "IsNumerical",	# (#PCDATA)	<!-- (Y|N) -->
+    "SingleToken",	# (#PCDATA)	<!-- (Y|N) -->
+    "Hierarchy",	# (#PCDATA)	<!-- (Y|N) -->
+    "IsHidden",		# (#PCDATA)	<!-- (Y|N) -->
+)
+
+integers = (
+    "TermCount",	# (#PCDATA)	<!-- \d+ -->
+    "Count",		# (#PCDATA)	<!-- \d+ -->
+)
+
+strings = (
+    "DbName",		# (#PCDATA)>    <!-- \S+ -->
+    "Name",		# (#PCDATA)>    <!-- .+ -->
+    "Menu",		# (#PCDATA)>    <!-- .+ -->
+    "DbTo",		# (#PCDATA)>    <!-- \S+ -->
+    "LastUpdate",	# (#PCDATA)>    <!-- \d+ -->
+    "FullName",		# (#PCDATA)>    <!-- .+ -->
+    "MenuName",		# (#PCDATA)>    <!-- .+ -->
+    "Description",	# (#PCDATA)>    <!-- .+ -->
+)
+
+lists = (
+    "DbList",		# (DbName+)
+    "FieldList",	# (Field*)
+    "LinkList",		# (Link*)
+)
+
+dictionaries = (
+    "eInfoResult",	# (DbList|DbInfo|ERROR)
+    "DbInfo",	# (DbName, MenuName, Description, Count, LastUpdate, FieldList, LinkList?)
+    "Field",	# (Name, FullName, Description, TermCount, IsDate, IsNumerical, SingleToken, Hierarchy, IsHidden)
+    "Link",	# (Name,Menu,Description,DbTo)
+)
+
+structures = {}
+
+items = ()
+
 def startElement(self, name, attrs):
-    if name=="eInfoResult":
-        object = {}
-        self.record = object
-        self.path = []
-    else:
-        previous = self.path[-1]
-        if name in ("DbList", "FieldList", "LinkList"):
-            object = []
-        elif name in ("DbInfo", "Field", "Link"):
-            object = {}
-        else:
-            object = ""
-        if object=="":
-            pass
-        elif type(previous)==dict:
-            previous[name] = object
-        elif type(previous)==list:
-            previous.append(object)
-    self.path.append(object)
+    return
 
 def endElement(self, name):
     self.path = self.path[:-1]
-    if name=="ERROR":
-        error = self.content
-        raise RuntimeError(error)
-    if name in ("DbName",
-                "Name",
-                "Menu",
-                "DbTo",
-                "LastUpdate",
-                "Name",
-                "FullName",
-                "MenuName",
-                "Description"):
-        value = self.content
-    elif name in ("TermCount", "Count"):
-        value = int(self.content)
-    elif name in ("IsDate",
-                  "IsNumerical",
-                  "SingleToken",
-                  "Hierarchy",
-                  "IsHidden"):
-        if self.content=='Y':
-            value = True
-        elif self.content=='N':
-            value = False
-    else:
-        return
-    previous = self.path[-1]
-    if type(previous)==list:
-        previous.append(value)
-    elif type(previous)==dict:
-        previous[name] = value

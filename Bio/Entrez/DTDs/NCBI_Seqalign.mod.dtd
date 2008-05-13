@@ -1,0 +1,565 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "seqalign.asn"
+     ::DATATOOL:: by application DATATOOL version 1.9.0
+     ::DATATOOL:: on 04/10/2008 16:04:22
+     ============================================ -->
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "NCBI-Seqalign"
+================================================= -->
+
+<!--
+$Revision: 1.1 $
+**********************************************************************
+
+  NCBI Sequence Alignment elements
+  by James Ostell, 1990
+
+**********************************************************************
+-->
+
+<!-- Elements used by other modules:
+          Seq-align,
+          Score,
+          Score-set,
+          Seq-align-set -->
+
+<!-- Elements referenced from other modules:
+          Seq-id,
+          Seq-loc,
+          Na-strand FROM NCBI-Seqloc,
+          User-object,
+          Object-id FROM NCBI-General -->
+<!-- ============================================ -->
+
+<!--
+*** Sequence Alignment ********************************
+*
+-->
+<!ELEMENT Seq-align-set (Seq-align*)>
+
+
+<!ELEMENT Seq-align (
+        Seq-align_type, 
+        Seq-align_dim?, 
+        Seq-align_score?, 
+        Seq-align_segs, 
+        Seq-align_bounds?, 
+        Seq-align_id?, 
+        Seq-align_ext?)>
+
+<!ELEMENT Seq-align_type %ENUM;>
+
+<!--
+    diags	-  unbroken, but not ordered, diagonals
+    partial	-  mapping pieces together
+    disc	-  discontinuous alignment
+-->
+<!ATTLIST Seq-align_type value (
+        not-set |
+        global |
+        diags |
+        partial |
+        disc |
+        other
+        ) #REQUIRED >
+
+
+<!-- dimensionality -->
+<!ELEMENT Seq-align_dim (%INTEGER;)>
+
+<!-- for whole alignment -->
+<!ELEMENT Seq-align_score (Score*)>
+<!-- alignment data -->
+<!ELEMENT Seq-align_segs (
+        Seq-align_segs_dendiag | 
+        Seq-align_segs_denseg | 
+        Seq-align_segs_std | 
+        Seq-align_segs_packed | 
+        Seq-align_segs_disc | 
+        Seq-align_segs_spliced | 
+        Seq-align_segs_sparse)>
+
+<!ELEMENT Seq-align_segs_dendiag (Dense-diag*)>
+<!--
+ Dense-seg: the densist packing for sequence alignments only.
+            a start of -1 indicates a gap for that sequence of
+            length lens.
+
+ id=100  AAGGCCTTTTAGAGATGATGATGATGATGA
+ id=200  AAGGCCTTTTAG.......GATGATGATGA
+ id=300  ....CCTTTTAGAGATGATGAT....ATGA
+
+ dim = 3, numseg = 6, ids = { 100, 200, 300 }
+ starts = { 0,0,-1, 4,4,0, 12,-1,8, 19,12,15, 22,15,-1, 26,19,18 }
+ lens = { 4, 8, 7, 3, 4, 4 }
+
+ for (multiway) global or partial alignments
+-->
+<!ELEMENT Seq-align_segs_denseg (Dense-seg)>
+
+<!ELEMENT Seq-align_segs_std (Std-seg*)>
+<!-- for (multiway) global or partial alignments -->
+<!ELEMENT Seq-align_segs_packed (Packed-seg)>
+<!--
+*** Sequence Alignment ********************************
+*
+-->
+<!ELEMENT Seq-align_segs_disc (Seq-align-set)>
+
+<!ELEMENT Seq-align_segs_spliced (Spliced-seg)>
+<!--
+ ==========================================================================
+
+ Sparse-seg follows the semantics of dense-seg and is more optimal for
+ representing sparse multiple alignments
+
+ ==========================================================================
+-->
+<!ELEMENT Seq-align_segs_sparse (Sparse-seg)>
+
+<!--
+ regions of sequence over which align
+  was computed
+-->
+<!ELEMENT Seq-align_bounds (Seq-loc*)>
+
+<!-- alignment id -->
+<!ELEMENT Seq-align_id (Object-id*)>
+
+<!--extra info -->
+<!ELEMENT Seq-align_ext (User-object*)>
+
+<!-- for (multiway) diagonals -->
+<!ELEMENT Dense-diag (
+        Dense-diag_dim?, 
+        Dense-diag_ids, 
+        Dense-diag_starts, 
+        Dense-diag_len, 
+        Dense-diag_strands?, 
+        Dense-diag_scores?)>
+
+<!-- dimensionality -->
+<!ELEMENT Dense-diag_dim (%INTEGER;)>
+
+<!-- sequences in order -->
+<!ELEMENT Dense-diag_ids (Seq-id*)>
+
+<!-- start OFFSETS in ids order -->
+<!ELEMENT Dense-diag_starts (Dense-diag_starts_E*)>
+
+
+<!ELEMENT Dense-diag_starts_E (%INTEGER;)>
+
+<!-- len of aligned segments -->
+<!ELEMENT Dense-diag_len (%INTEGER;)>
+
+<!ELEMENT Dense-diag_strands (Na-strand*)>
+
+<!ELEMENT Dense-diag_scores (Score*)>
+
+<!--
+ Dense-seg: the densist packing for sequence alignments only.
+            a start of -1 indicates a gap for that sequence of
+            length lens.
+
+ id=100  AAGGCCTTTTAGAGATGATGATGATGATGA
+ id=200  AAGGCCTTTTAG.......GATGATGATGA
+ id=300  ....CCTTTTAGAGATGATGAT....ATGA
+
+ dim = 3, numseg = 6, ids = { 100, 200, 300 }
+ starts = { 0,0,-1, 4,4,0, 12,-1,8, 19,12,15, 22,15,-1, 26,19,18 }
+ lens = { 4, 8, 7, 3, 4, 4 }
+
+ for (multiway) global or partial alignments
+-->
+<!ELEMENT Dense-seg (
+        Dense-seg_dim?, 
+        Dense-seg_numseg, 
+        Dense-seg_ids, 
+        Dense-seg_starts, 
+        Dense-seg_lens, 
+        Dense-seg_strands?, 
+        Dense-seg_scores?)>
+
+<!-- dimensionality -->
+<!ELEMENT Dense-seg_dim (%INTEGER;)>
+
+<!-- number of segments here -->
+<!ELEMENT Dense-seg_numseg (%INTEGER;)>
+
+<!-- sequences in order -->
+<!ELEMENT Dense-seg_ids (Seq-id*)>
+
+<!-- start OFFSETS in ids order within segs -->
+<!ELEMENT Dense-seg_starts (Dense-seg_starts_E*)>
+
+
+<!ELEMENT Dense-seg_starts_E (%INTEGER;)>
+
+<!-- lengths in ids order within segs -->
+<!ELEMENT Dense-seg_lens (Dense-seg_lens_E*)>
+
+
+<!ELEMENT Dense-seg_lens_E (%INTEGER;)>
+
+<!ELEMENT Dense-seg_strands (Na-strand*)>
+
+<!-- score for each seg -->
+<!ELEMENT Dense-seg_scores (Score*)>
+
+<!-- for (multiway) global or partial alignments -->
+<!ELEMENT Packed-seg (
+        Packed-seg_dim?, 
+        Packed-seg_numseg, 
+        Packed-seg_ids, 
+        Packed-seg_starts, 
+        Packed-seg_present, 
+        Packed-seg_lens, 
+        Packed-seg_strands?, 
+        Packed-seg_scores?)>
+
+<!-- dimensionality -->
+<!ELEMENT Packed-seg_dim (%INTEGER;)>
+
+<!-- number of segments here -->
+<!ELEMENT Packed-seg_numseg (%INTEGER;)>
+
+<!-- sequences in order -->
+<!ELEMENT Packed-seg_ids (Seq-id*)>
+
+<!-- start OFFSETS in ids order for whole alignment -->
+<!ELEMENT Packed-seg_starts (Packed-seg_starts_E*)>
+
+
+<!ELEMENT Packed-seg_starts_E (%INTEGER;)>
+
+<!--
+ Boolean if each sequence present or absent in
+   each segment
+-->
+<!ELEMENT Packed-seg_present (%OCTETS;)>
+
+<!-- length of each segment -->
+<!ELEMENT Packed-seg_lens (Packed-seg_lens_E*)>
+
+
+<!ELEMENT Packed-seg_lens_E (%INTEGER;)>
+
+<!ELEMENT Packed-seg_strands (Na-strand*)>
+
+<!-- score for each segment -->
+<!ELEMENT Packed-seg_scores (Score*)>
+
+
+<!ELEMENT Std-seg (
+        Std-seg_dim?, 
+        Std-seg_ids?, 
+        Std-seg_loc, 
+        Std-seg_scores?)>
+
+<!-- dimensionality -->
+<!ELEMENT Std-seg_dim (%INTEGER;)>
+
+<!ELEMENT Std-seg_ids (Seq-id*)>
+
+<!ELEMENT Std-seg_loc (Seq-loc*)>
+
+<!ELEMENT Std-seg_scores (Score*)>
+
+
+<!ELEMENT Spliced-seg (
+        Spliced-seg_product-id?, 
+        Spliced-seg_genomic-id?, 
+        Spliced-seg_product-strand?, 
+        Spliced-seg_genomic-strand?, 
+        Spliced-seg_product-type, 
+        Spliced-seg_exons, 
+        Spliced-seg_poly-a?, 
+        Spliced-seg_product-length?, 
+        Spliced-seg_modifiers?)>
+
+<!-- product is either protein or transcript (cDNA) -->
+<!ELEMENT Spliced-seg_product-id (Seq-id)>
+
+<!ELEMENT Spliced-seg_genomic-id (Seq-id)>
+
+<!-- should be 'plus' or 'minus' -->
+<!ELEMENT Spliced-seg_product-strand (Na-strand)>
+
+<!ELEMENT Spliced-seg_genomic-strand (Na-strand)>
+
+<!ELEMENT Spliced-seg_product-type %ENUM;>
+<!ATTLIST Spliced-seg_product-type value (
+        transcript |
+        protein
+        ) #REQUIRED >
+
+
+<!--
+ set of segments involved
+ each segment corresponds to one exon
+ exons are always in biological order
+-->
+<!ELEMENT Spliced-seg_exons (Spliced-exon*)>
+
+<!-- optional poly(A) tail -->
+<!ELEMENT Spliced-seg_poly-a (%INTEGER;)>
+
+<!--
+ length of the product, in bases/residues
+ from this, a 3' unaligned length can be extracted; this also captures
+ the case in which a protein aligns leaving a partial codon alignment
+ at the 3' end
+-->
+<!ELEMENT Spliced-seg_product-length (%INTEGER;)>
+
+<!--
+ alignment descriptors / modifiers
+ this provides us a set for extension
+-->
+<!ELEMENT Spliced-seg_modifiers (Spliced-seg-modifier*)>
+
+
+<!ELEMENT Spliced-seg-modifier (
+        Spliced-seg-modifier_start-codon-found | 
+        Spliced-seg-modifier_stop-codon-found)>
+
+<!--
+ protein aligns from the start and the first codon 
+ on both product and genomic is start codon
+-->
+<!ELEMENT Spliced-seg-modifier_start-codon-found EMPTY>
+<!ATTLIST Spliced-seg-modifier_start-codon-found value ( true | false ) #REQUIRED >
+
+
+<!--
+ protein aligns to it's end and there is stop codon 
+ on the genomic right after the alignment
+-->
+<!ELEMENT Spliced-seg-modifier_stop-codon-found EMPTY>
+<!ATTLIST Spliced-seg-modifier_stop-codon-found value ( true | false ) #REQUIRED >
+
+
+<!--
+ complete or partial exon
+ two consecutive Spliced-exons may belong to one exon
+-->
+<!ELEMENT Spliced-exon (
+        Spliced-exon_product-start, 
+        Spliced-exon_product-end, 
+        Spliced-exon_genomic-start, 
+        Spliced-exon_genomic-end, 
+        Spliced-exon_product-id?, 
+        Spliced-exon_genomic-id?, 
+        Spliced-exon_product-strand?, 
+        Spliced-exon_genomic-strand?, 
+        Spliced-exon_parts?, 
+        Spliced-exon_scores?, 
+        Spliced-exon_splice-5-prime?, 
+        Spliced-exon_splice-3-prime?, 
+        Spliced-exon_partial?, 
+        Spliced-exon_ext?)>
+
+<!-- product-end >= product-start -->
+<!ELEMENT Spliced-exon_product-start (Product-pos)>
+
+<!ELEMENT Spliced-exon_product-end (Product-pos)>
+
+<!-- genomic-end >= genomic-start -->
+<!ELEMENT Spliced-exon_genomic-start (%INTEGER;)>
+
+<!ELEMENT Spliced-exon_genomic-end (%INTEGER;)>
+
+<!-- product is either protein or transcript (cDNA) -->
+<!ELEMENT Spliced-exon_product-id (Seq-id)>
+
+<!ELEMENT Spliced-exon_genomic-id (Seq-id)>
+
+<!-- should be 'plus' or 'minus' -->
+<!ELEMENT Spliced-exon_product-strand (Na-strand)>
+
+<!-- genomic-strand represents the strand of translation -->
+<!ELEMENT Spliced-exon_genomic-strand (Na-strand)>
+
+<!-- basic seqments always are in biologic order -->
+<!ELEMENT Spliced-exon_parts (Spliced-exon-chunk*)>
+
+<!-- scores for this exon -->
+<!ELEMENT Spliced-exon_scores (Score-set)>
+
+<!-- splice sites -->
+<!ELEMENT Spliced-exon_splice-5-prime (Splice-site)>
+<!-- site involved in splice -->
+<!ELEMENT Spliced-exon_splice-3-prime (Splice-site)>
+
+<!-- flag: is this exon complete or partial? -->
+<!ELEMENT Spliced-exon_partial EMPTY>
+<!ATTLIST Spliced-exon_partial value ( true | false ) #REQUIRED >
+
+
+<!--extra info -->
+<!ELEMENT Spliced-exon_ext (User-object*)>
+
+
+<!ELEMENT Product-pos (
+        Product-pos_nucpos | 
+        Product-pos_protpos)>
+
+<!ELEMENT Product-pos_nucpos (%INTEGER;)>
+<!-- codon based position on protein (1/3 of aminoacid) -->
+<!ELEMENT Product-pos_protpos (Prot-pos)>
+
+<!-- codon based position on protein (1/3 of aminoacid) -->
+<!ELEMENT Prot-pos (
+        Prot-pos_amin, 
+        Prot-pos_frame?)>
+
+<!-- standard protein position -->
+<!ELEMENT Prot-pos_amin (%INTEGER;)>
+
+<!--
+ 0, 1, 2, or 3 as for Cdregion
+ 0 = not set
+ 1, 2, 3 = actual frame
+-->
+<!ELEMENT Prot-pos_frame (%INTEGER;)>
+
+<!--
+ Spliced-exon-chunk: piece of an exon
+ lengths are given in nucleotide bases (1/3 of aminoacid when product is a
+ protein)
+-->
+<!ELEMENT Spliced-exon-chunk (
+        Spliced-exon-chunk_match | 
+        Spliced-exon-chunk_mismatch | 
+        Spliced-exon-chunk_diag | 
+        Spliced-exon-chunk_product-ins | 
+        Spliced-exon-chunk_genomic-ins)>
+
+<!-- both sequences represented, product and genomic sequences match -->
+<!ELEMENT Spliced-exon-chunk_match (%INTEGER;)>
+
+<!-- both sequences represented, product and genomic sequences do not match -->
+<!ELEMENT Spliced-exon-chunk_mismatch (%INTEGER;)>
+
+<!--
+ both sequences are represented, there is sufficient similarity 
+ between product and genomic sequences. Can be used to replace stretches
+ of matches and mismatches, mostly for protein to genomic where 
+ definition of match or mismatch depends on translation table
+-->
+<!ELEMENT Spliced-exon-chunk_diag (%INTEGER;)>
+
+<!-- insertion in product sequence (i.e. gap in the genomic sequence) -->
+<!ELEMENT Spliced-exon-chunk_product-ins (%INTEGER;)>
+
+<!-- insertion in genomic sequence (i.e. gap in the product sequence) -->
+<!ELEMENT Spliced-exon-chunk_genomic-ins (%INTEGER;)>
+
+<!-- site involved in splice -->
+<!ELEMENT Splice-site (
+        Splice-site_bases)>
+
+<!--
+ typically two bases in the intronic region, always
+ in IUPAC format
+-->
+<!ELEMENT Splice-site_bases (#PCDATA)>
+
+<!--
+ ==========================================================================
+
+ Sparse-seg follows the semantics of dense-seg and is more optimal for
+ representing sparse multiple alignments
+
+ ==========================================================================
+-->
+<!ELEMENT Sparse-seg (
+        Sparse-seg_master-id?, 
+        Sparse-seg_rows, 
+        Sparse-seg_row-scores?, 
+        Sparse-seg_ext?)>
+
+<!ELEMENT Sparse-seg_master-id (Seq-id)>
+
+<!-- pairwise alignments constituting this multiple alignment -->
+<!ELEMENT Sparse-seg_rows (Sparse-align*)>
+
+<!-- per-row scores -->
+<!ELEMENT Sparse-seg_row-scores (Score*)>
+
+<!-- index of extra items -->
+<!ELEMENT Sparse-seg_ext (Sparse-seg-ext*)>
+
+
+<!ELEMENT Sparse-align (
+        Sparse-align_first-id, 
+        Sparse-align_second-id, 
+        Sparse-align_numseg, 
+        Sparse-align_first-starts, 
+        Sparse-align_second-starts, 
+        Sparse-align_lens, 
+        Sparse-align_second-strands?, 
+        Sparse-align_seg-scores?)>
+
+<!ELEMENT Sparse-align_first-id (Seq-id)>
+
+<!ELEMENT Sparse-align_second-id (Seq-id)>
+
+<!--number of segments -->
+<!ELEMENT Sparse-align_numseg (%INTEGER;)>
+
+<!--starts on the first sequence [numseg] -->
+<!ELEMENT Sparse-align_first-starts (Sparse-align_first-starts_E*)>
+
+
+<!ELEMENT Sparse-align_first-starts_E (%INTEGER;)>
+
+<!--starts on the second sequence [numseg] -->
+<!ELEMENT Sparse-align_second-starts (Sparse-align_second-starts_E*)>
+
+
+<!ELEMENT Sparse-align_second-starts_E (%INTEGER;)>
+
+<!--lengths of segments [numseg] -->
+<!ELEMENT Sparse-align_lens (Sparse-align_lens_E*)>
+
+
+<!ELEMENT Sparse-align_lens_E (%INTEGER;)>
+
+<!ELEMENT Sparse-align_second-strands (Na-strand*)>
+
+<!-- per-segment scores -->
+<!ELEMENT Sparse-align_seg-scores (Score*)>
+
+
+<!ELEMENT Sparse-seg-ext (
+        Sparse-seg-ext_index)>
+
+<!--
+seg-ext SET OF {
+    index INTEGER,
+    data User-field
+ }
+-->
+<!ELEMENT Sparse-seg-ext_index (%INTEGER;)>
+
+<!-- use of Score is discouraged for external ASN.1 specifications -->
+<!ELEMENT Score (
+        Score_id?, 
+        Score_value)>
+
+<!ELEMENT Score_id (Object-id)>
+
+<!ELEMENT Score_value (
+        Score_value_real | 
+        Score_value_int)>
+
+<!ELEMENT Score_value_real (%REAL;)>
+
+<!ELEMENT Score_value_int (%INTEGER;)>
+
+<!-- use of Score-set is encouraged for external ASN.1 specifications -->
+<!ELEMENT Score-set (Score*)>
+

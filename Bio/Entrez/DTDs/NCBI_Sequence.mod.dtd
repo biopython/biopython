@@ -1,0 +1,1048 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "seq.asn"
+     ::DATATOOL:: by application DATATOOL version 1.9.0
+     ::DATATOOL:: on 04/10/2008 16:04:22
+     ============================================ -->
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "NCBI-Sequence"
+================================================= -->
+
+<!--
+$Revision: 1.1 $
+**********************************************************************
+
+  NCBI Sequence elements
+  by James Ostell, 1990
+  Version 3.0 - June 1994
+
+**********************************************************************
+-->
+
+<!-- Elements used by other modules:
+          Annotdesc,
+          Annot-descr,
+          Bioseq,
+          GIBB-mol,
+          Heterogen,
+          MolInfo,
+          Numbering,
+          Pubdesc,
+          Seq-annot,
+          Seq-data,
+          Seqdesc,
+          Seq-descr,
+          Seq-ext,
+          Seq-hist,
+          Seq-inst,
+          Seq-literal,
+          Seqdesc,
+          Delta-ext -->
+
+<!-- Elements referenced from other modules:
+          Date,
+          Int-fuzz,
+          Dbtag,
+          Object-id,
+          User-object FROM NCBI-General,
+          Seq-align FROM NCBI-Seqalign,
+          Seq-feat FROM NCBI-Seqfeat,
+          Seq-graph FROM NCBI-Seqres,
+          Pub-equiv FROM NCBI-Pub,
+          Org-ref FROM NCBI-Organism,
+          BioSource FROM NCBI-BioSource,
+          Seq-id,
+          Seq-loc FROM NCBI-Seqloc,
+          GB-block FROM GenBank-General,
+          PIR-block FROM PIR-General,
+          EMBL-block FROM EMBL-General,
+          SP-block FROM SP-General,
+          PRF-block FROM PRF-General,
+          PDB-block FROM PDB-General,
+          Seq-table FROM NCBI-SeqTable -->
+<!-- ============================================ -->
+
+<!--
+*** Sequence ********************************
+*
+-->
+<!ELEMENT Bioseq (
+        Bioseq_id, 
+        Bioseq_descr?, 
+        Bioseq_inst, 
+        Bioseq_annot?)>
+
+<!-- equivalent identifiers -->
+<!ELEMENT Bioseq_id (Seq-id*)>
+
+<!-- descriptors -->
+<!ELEMENT Bioseq_descr (Seq-descr)>
+
+<!-- the sequence data -->
+<!ELEMENT Bioseq_inst (Seq-inst)>
+
+<!ELEMENT Bioseq_annot (Seq-annot*)>
+
+<!--
+*** Descriptors *****************************
+*
+-->
+<!ELEMENT Seq-descr (Seqdesc*)>
+
+
+<!ELEMENT Seqdesc (
+        Seqdesc_mol-type | 
+        Seqdesc_modif | 
+        Seqdesc_method | 
+        Seqdesc_name | 
+        Seqdesc_title | 
+        Seqdesc_org | 
+        Seqdesc_comment | 
+        Seqdesc_num | 
+        Seqdesc_maploc | 
+        Seqdesc_pir | 
+        Seqdesc_genbank | 
+        Seqdesc_pub | 
+        Seqdesc_region | 
+        Seqdesc_user | 
+        Seqdesc_sp | 
+        Seqdesc_dbxref | 
+        Seqdesc_embl | 
+        Seqdesc_create-date | 
+        Seqdesc_update-date | 
+        Seqdesc_prf | 
+        Seqdesc_pdb | 
+        Seqdesc_het | 
+        Seqdesc_source | 
+        Seqdesc_molinfo)>
+
+<!-- type of molecule -->
+<!ELEMENT Seqdesc_mol-type (GIBB-mol)>
+
+<!-- modifiers -->
+<!ELEMENT Seqdesc_modif (GIBB-mod*)>
+
+<!-- sequencing method -->
+<!ELEMENT Seqdesc_method (GIBB-method)>
+
+<!-- a name for this sequence -->
+<!ELEMENT Seqdesc_name (#PCDATA)>
+
+<!-- a title for this sequence -->
+<!ELEMENT Seqdesc_title (#PCDATA)>
+
+<!-- if all from one organism -->
+<!ELEMENT Seqdesc_org (Org-ref)>
+
+<!-- a more extensive comment -->
+<!ELEMENT Seqdesc_comment (#PCDATA)>
+
+<!-- a numbering system -->
+<!ELEMENT Seqdesc_num (Numbering)>
+
+<!-- map location of this sequence -->
+<!ELEMENT Seqdesc_maploc (Dbtag)>
+
+<!-- PIR specific info -->
+<!ELEMENT Seqdesc_pir (PIR-block)>
+
+<!-- GenBank specific info -->
+<!ELEMENT Seqdesc_genbank (GB-block)>
+
+<!-- a reference to the publication -->
+<!ELEMENT Seqdesc_pub (Pubdesc)>
+
+<!-- overall region (globin locus) -->
+<!ELEMENT Seqdesc_region (#PCDATA)>
+
+<!-- user defined object -->
+<!ELEMENT Seqdesc_user (User-object)>
+
+<!-- SWISSPROT specific info -->
+<!ELEMENT Seqdesc_sp (SP-block)>
+
+<!-- xref to other databases -->
+<!ELEMENT Seqdesc_dbxref (Dbtag)>
+
+<!-- EMBL specific information -->
+<!ELEMENT Seqdesc_embl (EMBL-block)>
+
+<!-- date entry first created/released -->
+<!ELEMENT Seqdesc_create-date (Date)>
+
+<!-- date of last update -->
+<!ELEMENT Seqdesc_update-date (Date)>
+
+<!-- PRF specific information -->
+<!ELEMENT Seqdesc_prf (PRF-block)>
+
+<!-- PDB specific information -->
+<!ELEMENT Seqdesc_pdb (PDB-block)>
+
+<!-- cofactor, etc associated but not bound -->
+<!ELEMENT Seqdesc_het (Heterogen)>
+
+<!-- source of materials, includes Org-ref -->
+<!ELEMENT Seqdesc_source (BioSource)>
+
+<!-- info on the molecule and techniques -->
+<!ELEMENT Seqdesc_molinfo (MolInfo)>
+
+<!--
+******* NOTE:
+*       mol-type, modif, method, and org are consolidated and expanded
+*       in Org-ref, BioSource, and MolInfo in this specification. They
+*       will be removed in later specifications. Do not use them in the
+*       the future. Instead expect the new structures.
+*
+***************************
+********************************************************************
+
+ MolInfo gives information on the
+ classification of the type and quality of the sequence
+
+ WARNING: this will replace GIBB-mol, GIBB-mod, GIBB-method
+
+********************************************************************
+-->
+<!ELEMENT MolInfo (
+        MolInfo_biomol?, 
+        MolInfo_tech?, 
+        MolInfo_techexp?, 
+        MolInfo_completeness?, 
+        MolInfo_gbmoltype?)>
+
+<!ELEMENT MolInfo_biomol (%INTEGER;)>
+
+<!--
+    pre-RNA	-  precursor RNA of any sort really 
+    other-genetic	-  other genetic material
+    genomic-mRNA	-  reported a mix of genomic and cdna sequence
+    cRNA	-  viral RNA genome copy intermediate
+    snoRNA	-  small nucleolar RNA
+    transcribed-RNA	-  transcribed RNA other than existing classes
+-->
+<!ATTLIST MolInfo_biomol value (
+        unknown |
+        genomic |
+        pre-RNA |
+        mRNA |
+        rRNA |
+        tRNA |
+        snRNA |
+        scRNA |
+        peptide |
+        other-genetic |
+        genomic-mRNA |
+        cRNA |
+        snoRNA |
+        transcribed-RNA |
+        ncRNA |
+        tmRNA |
+        other
+        ) #IMPLIED >
+
+
+<!ELEMENT MolInfo_tech (%INTEGER;)>
+
+<!--
+    standard	-  standard sequencing
+    est	-  Expressed Sequence Tag
+    sts	-  Sequence Tagged Site
+    survey	-  one-pass genomic sequence
+    genemap	-  from genetic mapping techniques
+    physmap	-  from physical mapping techniques
+    derived	-  derived from other data, not a primary entity
+    concept-trans	-  conceptual translation
+    seq-pept	-  peptide was sequenced
+    both	-  concept transl. w/ partial pept. seq.
+    seq-pept-overlap	-  sequenced peptide, ordered by overlap
+    seq-pept-homol	-  sequenced peptide, ordered by homology
+    concept-trans-a	-  conceptual transl. supplied by author
+    htgs-1	-  unordered High Throughput sequence contig
+    htgs-2	-  ordered High Throughput sequence contig
+    htgs-3	-  finished High Throughput sequence
+    fli-cdna	-  full length insert cDNA
+    htgs-0	-  single genomic reads for coordination
+    htc	-  high throughput cDNA
+    wgs	-  whole genome shotgun sequencing
+    barcode	-  barcode of life project
+    composite-wgs-htgs	-  composite of WGS and HTGS
+    tsa	-  transcriptome shotgun assembly
+    other	-  use Source.techexp
+-->
+<!ATTLIST MolInfo_tech value (
+        unknown |
+        standard |
+        est |
+        sts |
+        survey |
+        genemap |
+        physmap |
+        derived |
+        concept-trans |
+        seq-pept |
+        both |
+        seq-pept-overlap |
+        seq-pept-homol |
+        concept-trans-a |
+        htgs-1 |
+        htgs-2 |
+        htgs-3 |
+        fli-cdna |
+        htgs-0 |
+        htc |
+        wgs |
+        barcode |
+        composite-wgs-htgs |
+        tsa |
+        other
+        ) #IMPLIED >
+
+
+<!--
+ explanation if tech not enough
+
+ Completeness is not indicated in most records.  For genomes, assume
+ the sequences are incomplete unless specifically marked as complete.
+ For mRNAs, assume the ends are not known exactly unless marked as
+ having the left or right end.
+
+-->
+<!ELEMENT MolInfo_techexp (#PCDATA)>
+
+<!ELEMENT MolInfo_completeness (%INTEGER;)>
+
+<!--
+    complete	-  complete biological entity
+    partial	-  partial but no details given
+    no-left	-  missing 5' or NH3 end
+    no-right	-  missing 3' or COOH end
+    no-ends	-  missing both ends
+    has-left	-  5' or NH3 end present
+    has-right	-  3' or COOH end present
+-->
+<!ATTLIST MolInfo_completeness value (
+        unknown |
+        complete |
+        partial |
+        no-left |
+        no-right |
+        no-ends |
+        has-left |
+        has-right |
+        other
+        ) #IMPLIED >
+
+
+<!-- identifies particular ncRNA -->
+<!ELEMENT MolInfo_gbmoltype (#PCDATA)>
+
+<!-- type of molecule represented -->
+<!ELEMENT GIBB-mol %ENUM;>
+
+<!--
+    pre-mRNA	-  precursor RNA of any sort really 
+    other-genetic	-  other genetic material
+    genomic-mRNA	-  reported a mix of genomic and cdna sequence
+-->
+<!ATTLIST GIBB-mol value (
+        unknown |
+        genomic |
+        pre-mRNA |
+        mRNA |
+        rRNA |
+        tRNA |
+        snRNA |
+        scRNA |
+        peptide |
+        other-genetic |
+        genomic-mRNA |
+        other
+        ) #REQUIRED >
+
+
+<!-- GenInfo Backbone modifiers -->
+<!ELEMENT GIBB-mod %ENUM;>
+
+<!--
+    mutagen	-  subject of mutagenesis ?
+    natmut	-  natural mutant ?
+    no-left	-  missing left end (5' for na, NH2 for aa)
+    no-right	-  missing right end (3' or COOH)
+    est	-  expressed sequence tag
+    sts	-  sequence tagged site
+    survey	-  one pass survey sequence
+    genemap	-  is a genetic map
+    restmap	-  is an ordered restriction map
+    physmap	-  is a physical map (not ordered restriction map)
+-->
+<!ATTLIST GIBB-mod value (
+        dna |
+        rna |
+        extrachrom |
+        plasmid |
+        mitochondrial |
+        chloroplast |
+        kinetoplast |
+        cyanelle |
+        synthetic |
+        recombinant |
+        partial |
+        complete |
+        mutagen |
+        natmut |
+        transposon |
+        insertion-seq |
+        no-left |
+        no-right |
+        macronuclear |
+        proviral |
+        est |
+        sts |
+        survey |
+        chromoplast |
+        genemap |
+        restmap |
+        physmap |
+        other
+        ) #REQUIRED >
+
+
+<!-- sequencing methods -->
+<!ELEMENT GIBB-method %ENUM;>
+
+<!--
+    concept-trans	-  conceptual translation
+    seq-pept	-  peptide was sequenced
+    both	-  concept transl. w/ partial pept. seq.
+    seq-pept-overlap	-  sequenced peptide, ordered by overlap
+    seq-pept-homol	-  sequenced peptide, ordered by homology
+    concept-trans-a	-  conceptual transl. supplied by author
+-->
+<!ATTLIST GIBB-method value (
+        concept-trans |
+        seq-pept |
+        both |
+        seq-pept-overlap |
+        seq-pept-homol |
+        concept-trans-a |
+        other
+        ) #REQUIRED >
+
+
+<!-- any display numbering system -->
+<!ELEMENT Numbering (
+        Numbering_cont | 
+        Numbering_enum | 
+        Numbering_ref | 
+        Numbering_real)>
+
+<!-- continuous numbering -->
+<!ELEMENT Numbering_cont (Num-cont)>
+
+<!-- enumerated names for residues -->
+<!ELEMENT Numbering_enum (Num-enum)>
+
+<!-- by reference to another sequence -->
+<!ELEMENT Numbering_ref (Num-ref)>
+
+<!-- supports mapping to a float system -->
+<!ELEMENT Numbering_real (Num-real)>
+
+<!-- continuous display numbering system -->
+<!ELEMENT Num-cont (
+        Num-cont_refnum?, 
+        Num-cont_has-zero?, 
+        Num-cont_ascending?)>
+
+<!-- number assigned to first residue -->
+<!ELEMENT Num-cont_refnum (%INTEGER;)>
+
+<!-- 0 used? -->
+<!ELEMENT Num-cont_has-zero EMPTY>
+<!ATTLIST Num-cont_has-zero value ( true | false ) "false" >
+
+
+<!-- ascending numbers? -->
+<!ELEMENT Num-cont_ascending EMPTY>
+<!ATTLIST Num-cont_ascending value ( true | false ) "true" >
+
+
+<!-- any tags to residues -->
+<!ELEMENT Num-enum (
+        Num-enum_num, 
+        Num-enum_names)>
+
+<!-- number of tags to follow -->
+<!ELEMENT Num-enum_num (%INTEGER;)>
+
+<!-- the tags -->
+<!ELEMENT Num-enum_names (Num-enum_names_E*)>
+
+
+<!ELEMENT Num-enum_names_E (#PCDATA)>
+
+<!-- by reference to other sequences -->
+<!ELEMENT Num-ref (
+        Num-ref_type, 
+        Num-ref_aligns?)>
+<!-- type of reference -->
+<!ELEMENT Num-ref_type %ENUM;>
+
+<!--
+    sources	-  by segmented or const seq sources
+    aligns	-  by alignments given below
+-->
+<!ATTLIST Num-ref_type value (
+        not-set |
+        sources |
+        aligns
+        ) #REQUIRED >
+
+
+<!ELEMENT Num-ref_aligns (Seq-align)>
+
+<!-- mapping to floating point system -->
+<!ELEMENT Num-real (
+        Num-real_a, 
+        Num-real_b, 
+        Num-real_units?)>
+
+<!-- from an integer system used by Bioseq -->
+<!ELEMENT Num-real_a (%REAL;)>
+
+<!-- position = (a * int_position) + b -->
+<!ELEMENT Num-real_b (%REAL;)>
+
+<!ELEMENT Num-real_units (#PCDATA)>
+
+<!-- how sequence presented in pub -->
+<!ELEMENT Pubdesc (
+        Pubdesc_pub, 
+        Pubdesc_name?, 
+        Pubdesc_fig?, 
+        Pubdesc_num?, 
+        Pubdesc_numexc?, 
+        Pubdesc_poly-a?, 
+        Pubdesc_maploc?, 
+        Pubdesc_seq-raw?, 
+        Pubdesc_align-group?, 
+        Pubdesc_comment?, 
+        Pubdesc_reftype?)>
+
+<!-- the citation(s) -->
+<!ELEMENT Pubdesc_pub (Pub-equiv)>
+
+<!-- name used in paper -->
+<!ELEMENT Pubdesc_name (#PCDATA)>
+
+<!-- figure in paper -->
+<!ELEMENT Pubdesc_fig (#PCDATA)>
+
+<!-- numbering from paper -->
+<!ELEMENT Pubdesc_num (Numbering)>
+
+<!-- numbering problem with paper -->
+<!ELEMENT Pubdesc_numexc EMPTY>
+<!ATTLIST Pubdesc_numexc value ( true | false ) #REQUIRED >
+
+
+<!-- poly A tail indicated in figure? -->
+<!ELEMENT Pubdesc_poly-a EMPTY>
+<!ATTLIST Pubdesc_poly-a value ( true | false ) #REQUIRED >
+
+
+<!-- map location reported in paper -->
+<!ELEMENT Pubdesc_maploc (#PCDATA)>
+
+<!-- original sequence from paper -->
+<!ELEMENT Pubdesc_seq-raw (#PCDATA)>
+
+<!-- this seq aligned with others in paper -->
+<!ELEMENT Pubdesc_align-group (%INTEGER;)>
+
+<!-- any comment on this pub in context -->
+<!ELEMENT Pubdesc_comment (#PCDATA)>
+<!-- type of reference in a GenBank record -->
+<!ELEMENT Pubdesc_reftype (%INTEGER;)>
+
+<!--
+    seq	-  refers to sequence
+    sites	-  refers to unspecified features
+    feats	-  refers to specified features
+    no-target	-  nothing specified (EMBL)
+-->
+<!ATTLIST Pubdesc_reftype value (
+        seq |
+        sites |
+        feats |
+        no-target
+        ) #IMPLIED >
+
+
+<!-- cofactor, prosthetic group, inhibitor, etc -->
+<!ELEMENT Heterogen (#PCDATA)>
+
+<!--
+*** Instances of sequences *******************************
+*
+ the sequence data itself
+-->
+<!ELEMENT Seq-inst (
+        Seq-inst_repr, 
+        Seq-inst_mol, 
+        Seq-inst_length?, 
+        Seq-inst_fuzz?, 
+        Seq-inst_topology?, 
+        Seq-inst_strand?, 
+        Seq-inst_seq-data?, 
+        Seq-inst_ext?, 
+        Seq-inst_hist?)>
+<!-- representation class -->
+<!ELEMENT Seq-inst_repr %ENUM;>
+
+<!--
+    not-set	-  empty
+    virtual	-  no seq data
+    raw	-  continuous sequence
+    seg	-  segmented sequence
+    const	-  constructed sequence
+    ref	-  reference to another sequence
+    consen	-  consensus sequence or pattern
+    map	-  ordered map of any kind
+    delta	-  sequence made by changes (delta) to others
+-->
+<!ATTLIST Seq-inst_repr value (
+        not-set |
+        virtual |
+        raw |
+        seg |
+        const |
+        ref |
+        consen |
+        map |
+        delta |
+        other
+        ) #REQUIRED >
+
+<!-- molecule class in living organism -->
+<!ELEMENT Seq-inst_mol %ENUM;>
+
+<!--
+    not-set	-    > cdna = rna
+    na	-  just a nucleic acid
+-->
+<!ATTLIST Seq-inst_mol value (
+        not-set |
+        dna |
+        rna |
+        aa |
+        na |
+        other
+        ) #REQUIRED >
+
+
+<!-- length of sequence in residues -->
+<!ELEMENT Seq-inst_length (%INTEGER;)>
+
+<!-- length uncertainty -->
+<!ELEMENT Seq-inst_fuzz (Int-fuzz)>
+<!-- topology of molecule -->
+<!ELEMENT Seq-inst_topology %ENUM;>
+
+<!--
+    tandem	-  some part of tandem repeat
+-->
+<!ATTLIST Seq-inst_topology value (
+        not-set |
+        linear |
+        circular |
+        tandem |
+        other
+        ) #REQUIRED >
+
+<!-- strandedness in living organism -->
+<!ELEMENT Seq-inst_strand %ENUM;>
+
+<!--
+    ss	-  single strand
+    ds	-  double strand
+    other	-  default ds for DNA, ss for RNA, pept
+-->
+<!ATTLIST Seq-inst_strand value (
+        not-set |
+        ss |
+        ds |
+        mixed |
+        other
+        ) #REQUIRED >
+
+
+<!-- the sequence -->
+<!ELEMENT Seq-inst_seq-data (Seq-data)>
+
+<!-- extensions for special types -->
+<!ELEMENT Seq-inst_ext (Seq-ext)>
+
+<!-- sequence history -->
+<!ELEMENT Seq-inst_hist (Seq-hist)>
+
+<!--
+*** Sequence Extensions **********************************
+*  for representing more complex types
+*  const type uses Seq-hist.assembly
+-->
+<!ELEMENT Seq-ext (
+        Seq-ext_seg | 
+        Seq-ext_ref | 
+        Seq-ext_map | 
+        Seq-ext_delta)>
+
+<!-- segmented sequences -->
+<!ELEMENT Seq-ext_seg (Seg-ext)>
+
+<!-- hot link to another sequence (a view) -->
+<!ELEMENT Seq-ext_ref (Ref-ext)>
+
+<!-- ordered map of markers -->
+<!ELEMENT Seq-ext_map (Map-ext)>
+
+<!ELEMENT Seq-ext_delta (Delta-ext)>
+
+
+<!ELEMENT Seg-ext (Seq-loc*)>
+
+
+<!ELEMENT Ref-ext (Seq-loc)>
+
+
+<!ELEMENT Map-ext (Seq-feat*)>
+
+
+<!ELEMENT Delta-ext (Delta-seq*)>
+
+
+<!ELEMENT Delta-seq (
+        Delta-seq_loc | 
+        Delta-seq_literal)>
+
+<!-- point to a sequence -->
+<!ELEMENT Delta-seq_loc (Seq-loc)>
+
+<!-- a piece of sequence -->
+<!ELEMENT Delta-seq_literal (Seq-literal)>
+
+
+<!ELEMENT Seq-literal (
+        Seq-literal_length, 
+        Seq-literal_fuzz?, 
+        Seq-literal_seq-data?)>
+
+<!-- must give a length in residues -->
+<!ELEMENT Seq-literal_length (%INTEGER;)>
+
+<!-- could be unsure -->
+<!ELEMENT Seq-literal_fuzz (Int-fuzz)>
+
+<!-- may have the data -->
+<!ELEMENT Seq-literal_seq-data (Seq-data)>
+
+<!--
+*** Sequence History Record ***********************************
+** assembly = records how seq was assembled from others
+** replaces = records sequences made obsolete by this one
+** replaced-by = this seq is made obsolete by another(s)
+-->
+<!ELEMENT Seq-hist (
+        Seq-hist_assembly?, 
+        Seq-hist_replaces?, 
+        Seq-hist_replaced-by?, 
+        Seq-hist_deleted?)>
+
+<!-- how was this assembled? -->
+<!ELEMENT Seq-hist_assembly (Seq-align*)>
+
+<!-- seq makes these seqs obsolete -->
+<!ELEMENT Seq-hist_replaces (Seq-hist-rec)>
+
+<!-- these seqs make this one obsolete -->
+<!ELEMENT Seq-hist_replaced-by (Seq-hist-rec)>
+
+<!ELEMENT Seq-hist_deleted (
+        Seq-hist_deleted_bool | 
+        Seq-hist_deleted_date)>
+
+<!ELEMENT Seq-hist_deleted_bool EMPTY>
+<!ATTLIST Seq-hist_deleted_bool value ( true | false ) #REQUIRED >
+
+
+<!ELEMENT Seq-hist_deleted_date (Date)>
+
+
+<!ELEMENT Seq-hist-rec (
+        Seq-hist-rec_date?, 
+        Seq-hist-rec_ids)>
+
+<!ELEMENT Seq-hist-rec_date (Date)>
+
+<!ELEMENT Seq-hist-rec_ids (Seq-id*)>
+
+<!--
+*** Various internal sequence representations ************
+*      all are controlled, fixed length forms
+ sequence representations
+-->
+<!ELEMENT Seq-data (
+        Seq-data_iupacna | 
+        Seq-data_iupacaa | 
+        Seq-data_ncbi2na | 
+        Seq-data_ncbi4na | 
+        Seq-data_ncbi8na | 
+        Seq-data_ncbipna | 
+        Seq-data_ncbi8aa | 
+        Seq-data_ncbieaa | 
+        Seq-data_ncbipaa | 
+        Seq-data_ncbistdaa | 
+        Seq-data_gap)>
+
+<!-- IUPAC 1 letter nuc acid code -->
+<!ELEMENT Seq-data_iupacna (IUPACna)>
+
+<!-- IUPAC 1 letter amino acid code -->
+<!ELEMENT Seq-data_iupacaa (IUPACaa)>
+
+<!-- 2 bit nucleic acid code -->
+<!ELEMENT Seq-data_ncbi2na (NCBI2na)>
+
+<!-- 4 bit nucleic acid code -->
+<!ELEMENT Seq-data_ncbi4na (NCBI4na)>
+
+<!-- 8 bit extended nucleic acid code -->
+<!ELEMENT Seq-data_ncbi8na (NCBI8na)>
+
+<!-- nucleic acid probabilities -->
+<!ELEMENT Seq-data_ncbipna (NCBIpna)>
+
+<!-- 8 bit extended amino acid codes -->
+<!ELEMENT Seq-data_ncbi8aa (NCBI8aa)>
+
+<!-- extended ASCII 1 letter aa codes -->
+<!ELEMENT Seq-data_ncbieaa (NCBIeaa)>
+
+<!-- amino acid probabilities -->
+<!ELEMENT Seq-data_ncbipaa (NCBIpaa)>
+
+<!-- consecutive codes for std aas -->
+<!ELEMENT Seq-data_ncbistdaa (NCBIstdaa)>
+
+<!-- gap types -->
+<!ELEMENT Seq-data_gap (Seq-gap)>
+
+
+<!ELEMENT Seq-gap (
+        Seq-gap_type, 
+        Seq-gap_linkage?)>
+
+<!ELEMENT Seq-gap_type (%INTEGER;)>
+<!ATTLIST Seq-gap_type value (
+        unknown |
+        fragment |
+        clone |
+        short-arm |
+        heterochromatin |
+        centromere |
+        telomere |
+        repeat |
+        contig |
+        other
+        ) #IMPLIED >
+
+
+<!ELEMENT Seq-gap_linkage (%INTEGER;)>
+<!ATTLIST Seq-gap_linkage value (
+        unlinked |
+        linked |
+        other
+        ) #IMPLIED >
+
+
+<!-- IUPAC 1 letter codes, no spaces -->
+<!ELEMENT IUPACna (#PCDATA)>
+
+<!-- IUPAC 1 letter codes, no spaces -->
+<!ELEMENT IUPACaa (#PCDATA)>
+
+<!-- 00=A, 01=C, 10=G, 11=T -->
+<!ELEMENT NCBI2na (%OCTETS;)>
+
+<!--
+ 1 bit each for agct
+ 0001=A, 0010=C, 0100=G, 1000=T/U
+ 0101=Purine, 1010=Pyrimidine, etc
+-->
+<!ELEMENT NCBI4na (%OCTETS;)>
+
+<!-- for modified nucleic acids -->
+<!ELEMENT NCBI8na (%OCTETS;)>
+
+<!--
+ 5 octets/base, prob for a,c,g,t,n
+ probabilities are coded 0-255 = 0.0-1.0
+-->
+<!ELEMENT NCBIpna (%OCTETS;)>
+
+<!-- for modified amino acids -->
+<!ELEMENT NCBI8aa (%OCTETS;)>
+
+<!--
+ ASCII extended 1 letter aa codes
+ IUPAC codes + U=selenocysteine
+-->
+<!ELEMENT NCBIeaa (#PCDATA)>
+
+<!--
+ 25 octets/aa, prob for IUPAC aas in order:
+ A-Y,B,Z,X,(ter),anything
+ probabilities are coded 0-255 = 0.0-1.0
+-->
+<!ELEMENT NCBIpaa (%OCTETS;)>
+
+<!-- codes 0-25, 1 per byte -->
+<!ELEMENT NCBIstdaa (%OCTETS;)>
+
+<!--
+*** Sequence Annotation *************************************
+*
+-->
+<!ELEMENT Annot-id (
+        Annot-id_local | 
+        Annot-id_ncbi | 
+        Annot-id_general)>
+
+<!ELEMENT Annot-id_local (Object-id)>
+
+<!ELEMENT Annot-id_ncbi (%INTEGER;)>
+
+<!ELEMENT Annot-id_general (Dbtag)>
+
+
+<!ELEMENT Annot-descr (Annotdesc*)>
+
+
+<!ELEMENT Annotdesc (
+        Annotdesc_name | 
+        Annotdesc_title | 
+        Annotdesc_comment | 
+        Annotdesc_pub | 
+        Annotdesc_user | 
+        Annotdesc_create-date | 
+        Annotdesc_update-date | 
+        Annotdesc_src | 
+        Annotdesc_align | 
+        Annotdesc_region)>
+
+<!-- a short name for this collection -->
+<!ELEMENT Annotdesc_name (#PCDATA)>
+
+<!-- a title for this collection -->
+<!ELEMENT Annotdesc_title (#PCDATA)>
+
+<!-- a more extensive comment -->
+<!ELEMENT Annotdesc_comment (#PCDATA)>
+
+<!-- a reference to the publication -->
+<!ELEMENT Annotdesc_pub (Pubdesc)>
+
+<!-- user defined object -->
+<!ELEMENT Annotdesc_user (User-object)>
+
+<!-- date entry first created/released -->
+<!ELEMENT Annotdesc_create-date (Date)>
+
+<!-- date of last update -->
+<!ELEMENT Annotdesc_update-date (Date)>
+
+<!-- source sequence from which annot came -->
+<!ELEMENT Annotdesc_src (Seq-id)>
+
+<!-- definition of the SeqAligns -->
+<!ELEMENT Annotdesc_align (Align-def)>
+
+<!-- all contents cover this region -->
+<!ELEMENT Annotdesc_region (Seq-loc)>
+
+
+<!ELEMENT Align-def (
+        Align-def_align-type, 
+        Align-def_ids?)>
+<!-- class of align Seq-annot -->
+<!ELEMENT Align-def_align-type (%INTEGER;)>
+
+<!--
+    ref	-  set of alignments to the same sequence
+    alt	-  set of alternate alignments of the same seqs
+    blocks	-  set of aligned blocks in the same seqs
+-->
+<!ATTLIST Align-def_align-type value (
+        ref |
+        alt |
+        blocks |
+        other
+        ) #IMPLIED >
+
+
+<!-- used for the one ref seqid for now -->
+<!ELEMENT Align-def_ids (Seq-id*)>
+
+<!-- features in table form -->
+<!ELEMENT Seq-annot (
+        Seq-annot_id?, 
+        Seq-annot_db?, 
+        Seq-annot_name?, 
+        Seq-annot_desc?, 
+        Seq-annot_data)>
+
+<!ELEMENT Seq-annot_id (Annot-id*)>
+<!-- source of annotation -->
+<!ELEMENT Seq-annot_db (%INTEGER;)>
+<!ATTLIST Seq-annot_db value (
+        genbank |
+        embl |
+        ddbj |
+        pir |
+        sp |
+        bbone |
+        pdb |
+        other
+        ) #IMPLIED >
+
+
+<!-- source if "other" above -->
+<!ELEMENT Seq-annot_name (#PCDATA)>
+
+<!-- used only for stand alone Seq-annots -->
+<!ELEMENT Seq-annot_desc (Annot-descr)>
+
+<!ELEMENT Seq-annot_data (
+        Seq-annot_data_ftable | 
+        Seq-annot_data_align | 
+        Seq-annot_data_graph | 
+        Seq-annot_data_ids | 
+        Seq-annot_data_locs | 
+        Seq-annot_data_seq-table)>
+
+<!ELEMENT Seq-annot_data_ftable (Seq-feat*)>
+
+<!ELEMENT Seq-annot_data_align (Seq-align*)>
+
+<!ELEMENT Seq-annot_data_graph (Seq-graph*)>
+
+<!-- used for communication between tools -->
+<!ELEMENT Seq-annot_data_ids (Seq-id*)>
+
+<!-- used for communication between tools -->
+<!ELEMENT Seq-annot_data_locs (Seq-loc*)>
+
+<!ELEMENT Seq-annot_data_seq-table (Seq-table)>
+

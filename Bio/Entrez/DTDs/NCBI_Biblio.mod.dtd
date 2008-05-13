@@ -1,0 +1,689 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "biblio.asn"
+     ::DATATOOL:: by application DATATOOL version 1.9.0
+     ::DATATOOL:: on 04/10/2008 16:04:22
+     ============================================ -->
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "NCBI-Biblio"
+================================================= -->
+
+<!--
+$Revision: 1.1 $
+****************************************************************
+
+  NCBI Bibliographic data elements
+  by James Ostell, 1990
+
+  Taken from the American National Standard for
+      Bibliographic References
+      ANSI Z39.29-1977
+  Version 3.0 - June 1994
+  PubMedId added in 1996
+  ArticleIds and eprint elements added in 1999
+
+****************************************************************
+-->
+
+<!-- Elements used by other modules:
+          Cit-art,
+          Cit-jour,
+          Cit-book,
+          Cit-pat,
+          Cit-let,
+          Id-pat,
+          Cit-gen,
+          Cit-proc,
+          Cit-sub,
+          Title,
+          Author,
+          PubMedId -->
+
+<!-- Elements referenced from other modules:
+          Person-id,
+          Date,
+          Dbtag FROM NCBI-General -->
+<!-- ============================================ -->
+
+<!--
+ Article Ids
+ can be many ids for an article
+-->
+<!ELEMENT ArticleId (
+        ArticleId_pubmed | 
+        ArticleId_medline | 
+        ArticleId_doi | 
+        ArticleId_pii | 
+        ArticleId_pmcid | 
+        ArticleId_pmcpid | 
+        ArticleId_pmpid | 
+        ArticleId_other)>
+
+<!-- see types below -->
+<!ELEMENT ArticleId_pubmed (PubMedId)>
+<!-- Id from MEDLINE -->
+<!ELEMENT ArticleId_medline (MedlineUID)>
+<!-- Document Object Identifier -->
+<!ELEMENT ArticleId_doi (DOI)>
+<!-- Controlled Publisher Identifier -->
+<!ELEMENT ArticleId_pii (PII)>
+<!-- PubMed Central Id -->
+<!ELEMENT ArticleId_pmcid (PmcID)>
+<!-- Publisher Id supplied to PubMed Central -->
+<!ELEMENT ArticleId_pmcpid (PmcPid)>
+<!-- Publisher Id supplied to PubMed -->
+<!ELEMENT ArticleId_pmpid (PmPid)>
+
+<!-- generic catch all -->
+<!ELEMENT ArticleId_other (Dbtag)>
+
+<!-- Id from the PubMed database at NCBI -->
+<!ELEMENT PubMedId (%INTEGER;)>
+
+<!-- Id from MEDLINE -->
+<!ELEMENT MedlineUID (%INTEGER;)>
+
+<!-- Document Object Identifier -->
+<!ELEMENT DOI (#PCDATA)>
+
+<!-- Controlled Publisher Identifier -->
+<!ELEMENT PII (#PCDATA)>
+
+<!-- PubMed Central Id -->
+<!ELEMENT PmcID (%INTEGER;)>
+
+<!-- Publisher Id supplied to PubMed Central -->
+<!ELEMENT PmcPid (#PCDATA)>
+
+<!-- Publisher Id supplied to PubMed -->
+<!ELEMENT PmPid (#PCDATA)>
+
+
+<!ELEMENT ArticleIdSet (ArticleId*)>
+
+<!--
+ Status Dates
+ points of publication
+-->
+<!ELEMENT PubStatus (%INTEGER;)>
+
+<!--
+    received	-  date manuscript received for review
+    accepted	-  accepted for publication
+    epublish	-  published electronically by publisher
+    ppublish	-  published in print by publisher
+    revised	-  article revised by publisher/author
+    pmc	-  article first appeared in PubMed Central
+    pmcr	-  article revision in PubMed Central
+    pubmed	-  article citation first appeared in PubMed
+    pubmedr	-  article citation revision in PubMed
+    aheadofprint	-  epublish, but will be followed by print
+    premedline	-  date into PreMedline status
+    medline	-  date made a MEDLINE record
+-->
+<!ATTLIST PubStatus value (
+        received |
+        accepted |
+        epublish |
+        ppublish |
+        revised |
+        pmc |
+        pmcr |
+        pubmed |
+        pubmedr |
+        aheadofprint |
+        premedline |
+        medline |
+        other
+        ) #IMPLIED >
+
+
+<!-- done as a structure so fields can be added -->
+<!ELEMENT PubStatusDate (
+        PubStatusDate_pubstatus, 
+        PubStatusDate_date)>
+<!--
+ Status Dates
+ points of publication
+-->
+<!ELEMENT PubStatusDate_pubstatus (PubStatus)>
+
+<!-- time may be added later -->
+<!ELEMENT PubStatusDate_date (Date)>
+
+
+<!ELEMENT PubStatusDateSet (PubStatusDate*)>
+
+<!--
+ Citation Types
+ article in journal or book
+-->
+<!ELEMENT Cit-art (
+        Cit-art_title?, 
+        Cit-art_authors?, 
+        Cit-art_from, 
+        Cit-art_ids?)>
+
+<!-- title of paper (ANSI requires) -->
+<!ELEMENT Cit-art_title (Title)>
+
+<!-- authors (ANSI requires) -->
+<!ELEMENT Cit-art_authors (Auth-list)>
+<!-- journal or book -->
+<!ELEMENT Cit-art_from (
+        Cit-art_from_journal | 
+        Cit-art_from_book | 
+        Cit-art_from_proc)>
+<!-- Journal citation -->
+<!ELEMENT Cit-art_from_journal (Cit-jour)>
+<!-- Book citation -->
+<!ELEMENT Cit-art_from_book (Cit-book)>
+<!-- Meeting proceedings -->
+<!ELEMENT Cit-art_from_proc (Cit-proc)>
+
+<!-- lots of ids -->
+<!ELEMENT Cit-art_ids (ArticleIdSet)>
+
+<!-- Journal citation -->
+<!ELEMENT Cit-jour (
+        Cit-jour_title, 
+        Cit-jour_imp)>
+
+<!-- title of journal -->
+<!ELEMENT Cit-jour_title (Title)>
+<!-- Imprint group -->
+<!ELEMENT Cit-jour_imp (Imprint)>
+
+<!-- Book citation -->
+<!ELEMENT Cit-book (
+        Cit-book_title, 
+        Cit-book_coll?, 
+        Cit-book_authors, 
+        Cit-book_imp)>
+
+<!-- Title of book -->
+<!ELEMENT Cit-book_title (Title)>
+
+<!-- part of a collection -->
+<!ELEMENT Cit-book_coll (Title)>
+
+<!-- authors -->
+<!ELEMENT Cit-book_authors (Auth-list)>
+<!-- Imprint group -->
+<!ELEMENT Cit-book_imp (Imprint)>
+
+<!-- Meeting proceedings -->
+<!ELEMENT Cit-proc (
+        Cit-proc_book, 
+        Cit-proc_meet)>
+
+<!-- citation to meeting -->
+<!ELEMENT Cit-proc_book (Cit-book)>
+
+<!-- time and location of meeting -->
+<!ELEMENT Cit-proc_meet (Meeting)>
+
+<!--
+ Patent number and date-issue were made optional in 1997 to
+   support patent applications being issued from the USPTO
+   Semantically a Cit-pat must have either a patent number or
+   an application number (or both) to be valid
+ patent citation
+-->
+<!ELEMENT Cit-pat (
+        Cit-pat_title, 
+        Cit-pat_authors, 
+        Cit-pat_country, 
+        Cit-pat_doc-type, 
+        Cit-pat_number?, 
+        Cit-pat_date-issue?, 
+        Cit-pat_class?, 
+        Cit-pat_app-number?, 
+        Cit-pat_app-date?, 
+        Cit-pat_applicants?, 
+        Cit-pat_assignees?, 
+        Cit-pat_priority?, 
+        Cit-pat_abstract?)>
+
+<!ELEMENT Cit-pat_title (#PCDATA)>
+
+<!-- author/inventor -->
+<!ELEMENT Cit-pat_authors (Auth-list)>
+
+<!-- Patent Document Country -->
+<!ELEMENT Cit-pat_country (#PCDATA)>
+
+<!-- Patent Document Type -->
+<!ELEMENT Cit-pat_doc-type (#PCDATA)>
+
+<!-- Patent Document Number -->
+<!ELEMENT Cit-pat_number (#PCDATA)>
+
+<!-- Patent Issue/Pub Date -->
+<!ELEMENT Cit-pat_date-issue (Date)>
+
+<!-- Patent Doc Class Code  -->
+<!ELEMENT Cit-pat_class (Cit-pat_class_E*)>
+
+
+<!ELEMENT Cit-pat_class_E (#PCDATA)>
+
+<!-- Patent Doc Appl Number -->
+<!ELEMENT Cit-pat_app-number (#PCDATA)>
+
+<!-- Patent Appl File Date -->
+<!ELEMENT Cit-pat_app-date (Date)>
+
+<!-- Applicants -->
+<!ELEMENT Cit-pat_applicants (Auth-list)>
+
+<!-- Assignees -->
+<!ELEMENT Cit-pat_assignees (Auth-list)>
+
+<!-- Priorities -->
+<!ELEMENT Cit-pat_priority (Patent-priority*)>
+
+<!-- abstract of patent -->
+<!ELEMENT Cit-pat_abstract (#PCDATA)>
+
+
+<!ELEMENT Patent-priority (
+        Patent-priority_country, 
+        Patent-priority_number, 
+        Patent-priority_date)>
+
+<!-- Patent country code -->
+<!ELEMENT Patent-priority_country (#PCDATA)>
+
+<!-- number assigned in that country -->
+<!ELEMENT Patent-priority_number (#PCDATA)>
+
+<!-- date of application -->
+<!ELEMENT Patent-priority_date (Date)>
+
+<!-- just to identify a patent -->
+<!ELEMENT Id-pat (
+        Id-pat_country, 
+        Id-pat_id, 
+        Id-pat_doc-type?)>
+
+<!-- Patent Document Country -->
+<!ELEMENT Id-pat_country (#PCDATA)>
+
+<!ELEMENT Id-pat_id (
+        Id-pat_id_number | 
+        Id-pat_id_app-number)>
+
+<!-- Patent Document Number -->
+<!ELEMENT Id-pat_id_number (#PCDATA)>
+
+<!-- Patent Doc Appl Number -->
+<!ELEMENT Id-pat_id_app-number (#PCDATA)>
+
+<!-- Patent Doc Type -->
+<!ELEMENT Id-pat_doc-type (#PCDATA)>
+
+<!-- letter, thesis, or manuscript -->
+<!ELEMENT Cit-let (
+        Cit-let_cit, 
+        Cit-let_man-id?, 
+        Cit-let_type?)>
+
+<!-- same fields as a book -->
+<!ELEMENT Cit-let_cit (Cit-book)>
+
+<!-- Manuscript identifier -->
+<!ELEMENT Cit-let_man-id (#PCDATA)>
+
+<!ELEMENT Cit-let_type %ENUM;>
+<!ATTLIST Cit-let_type value (
+        manuscript |
+        letter |
+        thesis
+        ) #REQUIRED >
+
+
+<!--
+ NOTE: this is just to cite a
+ direct data submission, see NCBI-Submit
+ for the form of a sequence submission
+ citation for a direct submission
+-->
+<!ELEMENT Cit-sub (
+        Cit-sub_authors, 
+        Cit-sub_imp?, 
+        Cit-sub_medium?, 
+        Cit-sub_date?, 
+        Cit-sub_descr?)>
+
+<!-- not necessarily authors of the paper -->
+<!ELEMENT Cit-sub_authors (Auth-list)>
+
+<!-- this only used to get date.. will go -->
+<!ELEMENT Cit-sub_imp (Imprint)>
+<!-- medium of submission -->
+<!ELEMENT Cit-sub_medium %ENUM;>
+<!ATTLIST Cit-sub_medium value (
+        paper |
+        tape |
+        floppy |
+        email |
+        other
+        ) #REQUIRED >
+
+
+<!-- replaces imp, will become required -->
+<!ELEMENT Cit-sub_date (Date)>
+
+<!-- description of changes for public view -->
+<!ELEMENT Cit-sub_descr (#PCDATA)>
+
+<!-- NOT from ANSI, this is a catchall -->
+<!ELEMENT Cit-gen (
+        Cit-gen_cit?, 
+        Cit-gen_authors?, 
+        Cit-gen_muid?, 
+        Cit-gen_journal?, 
+        Cit-gen_volume?, 
+        Cit-gen_issue?, 
+        Cit-gen_pages?, 
+        Cit-gen_date?, 
+        Cit-gen_serial-number?, 
+        Cit-gen_title?, 
+        Cit-gen_pmid?)>
+
+<!-- anything, not parsable -->
+<!ELEMENT Cit-gen_cit (#PCDATA)>
+<!-- Authorship Group -->
+<!ELEMENT Cit-gen_authors (Auth-list)>
+
+<!-- medline uid -->
+<!ELEMENT Cit-gen_muid (%INTEGER;)>
+<!--
+ Title Group
+ Valid for = A = Analytic (Cit-art)
+             J = Journals (Cit-jour)
+             B = Book (Cit-book)
+ Valid for:
+-->
+<!ELEMENT Cit-gen_journal (Title)>
+
+<!ELEMENT Cit-gen_volume (#PCDATA)>
+
+<!ELEMENT Cit-gen_issue (#PCDATA)>
+
+<!ELEMENT Cit-gen_pages (#PCDATA)>
+
+<!ELEMENT Cit-gen_date (Date)>
+
+<!-- for GenBank style references -->
+<!ELEMENT Cit-gen_serial-number (%INTEGER;)>
+
+<!-- eg. cit="unpublished",title="title" -->
+<!ELEMENT Cit-gen_title (#PCDATA)>
+
+<!-- PubMed Id -->
+<!ELEMENT Cit-gen_pmid (PubMedId)>
+
+<!-- Authorship Group -->
+<!ELEMENT Auth-list (
+        Auth-list_names, 
+        Auth-list_affil?)>
+
+<!ELEMENT Auth-list_names (
+        Auth-list_names_std | 
+        Auth-list_names_ml | 
+        Auth-list_names_str)>
+
+<!-- full citations -->
+<!ELEMENT Auth-list_names_std (Author*)>
+
+<!-- MEDLINE, semi-structured -->
+<!ELEMENT Auth-list_names_ml (Auth-list_names_ml_E*)>
+
+
+<!ELEMENT Auth-list_names_ml_E (#PCDATA)>
+
+<!-- free for all -->
+<!ELEMENT Auth-list_names_str (Auth-list_names_str_E*)>
+
+
+<!ELEMENT Auth-list_names_str_E (#PCDATA)>
+
+<!-- author affiliation -->
+<!ELEMENT Auth-list_affil (Affil)>
+
+
+<!ELEMENT Author (
+        Author_name, 
+        Author_level?, 
+        Author_role?, 
+        Author_affil?, 
+        Author_is-corr?)>
+
+<!-- Author, Primary or Secondary -->
+<!ELEMENT Author_name (Person-id)>
+
+<!ELEMENT Author_level %ENUM;>
+<!ATTLIST Author_level value (
+        primary |
+        secondary
+        ) #REQUIRED >
+
+<!-- Author Role Indicator -->
+<!ELEMENT Author_role %ENUM;>
+<!ATTLIST Author_role value (
+        compiler |
+        editor |
+        patent-assignee |
+        translator
+        ) #REQUIRED >
+
+
+<!ELEMENT Author_affil (Affil)>
+
+<!-- TRUE if corresponding author -->
+<!ELEMENT Author_is-corr EMPTY>
+<!ATTLIST Author_is-corr value ( true | false ) #REQUIRED >
+
+
+
+<!ELEMENT Affil (
+        Affil_str | 
+        Affil_std)>
+
+<!-- unparsed string -->
+<!ELEMENT Affil_str (#PCDATA)>
+<!-- std representation -->
+<!ELEMENT Affil_std (
+        Affil_std_affil?, 
+        Affil_std_div?, 
+        Affil_std_city?, 
+        Affil_std_sub?, 
+        Affil_std_country?, 
+        Affil_std_street?, 
+        Affil_std_email?, 
+        Affil_std_fax?, 
+        Affil_std_phone?, 
+        Affil_std_postal-code?)>
+
+<!-- Author Affiliation, Name -->
+<!ELEMENT Affil_std_affil (#PCDATA)>
+
+<!-- Author Affiliation, Division -->
+<!ELEMENT Affil_std_div (#PCDATA)>
+
+<!-- Author Affiliation, City -->
+<!ELEMENT Affil_std_city (#PCDATA)>
+
+<!-- Author Affiliation, County Sub -->
+<!ELEMENT Affil_std_sub (#PCDATA)>
+
+<!-- Author Affiliation, Country -->
+<!ELEMENT Affil_std_country (#PCDATA)>
+
+<!-- street address, not ANSI -->
+<!ELEMENT Affil_std_street (#PCDATA)>
+
+<!ELEMENT Affil_std_email (#PCDATA)>
+
+<!ELEMENT Affil_std_fax (#PCDATA)>
+
+<!ELEMENT Affil_std_phone (#PCDATA)>
+
+<!ELEMENT Affil_std_postal-code (#PCDATA)>
+
+<!--
+ Title Group
+ Valid for = A = Analytic (Cit-art)
+             J = Journals (Cit-jour)
+             B = Book (Cit-book)
+ Valid for:
+-->
+<!ELEMENT Title (Title_E*)>
+
+
+
+<!ELEMENT Title_E (
+        Title_E_name | 
+        Title_E_tsub | 
+        Title_E_trans | 
+        Title_E_jta | 
+        Title_E_iso-jta | 
+        Title_E_ml-jta | 
+        Title_E_coden | 
+        Title_E_issn | 
+        Title_E_abr | 
+        Title_E_isbn)>
+
+<!-- Title, Anal,Coll,Mono    AJB -->
+<!ELEMENT Title_E_name (#PCDATA)>
+
+<!-- Title, Subordinate       A B -->
+<!ELEMENT Title_E_tsub (#PCDATA)>
+
+<!-- Title, Translated        AJB -->
+<!ELEMENT Title_E_trans (#PCDATA)>
+
+<!-- Title, Abbreviated        J -->
+<!ELEMENT Title_E_jta (#PCDATA)>
+
+<!-- specifically ISO jta      J -->
+<!ELEMENT Title_E_iso-jta (#PCDATA)>
+
+<!-- specifically MEDLINE jta  J -->
+<!ELEMENT Title_E_ml-jta (#PCDATA)>
+
+<!-- a coden                   J -->
+<!ELEMENT Title_E_coden (#PCDATA)>
+
+<!-- ISSN                      J -->
+<!ELEMENT Title_E_issn (#PCDATA)>
+
+<!-- Title, Abbreviated         B -->
+<!ELEMENT Title_E_abr (#PCDATA)>
+
+<!-- ISBN                       B -->
+<!ELEMENT Title_E_isbn (#PCDATA)>
+
+<!-- Imprint group -->
+<!ELEMENT Imprint (
+        Imprint_date, 
+        Imprint_volume?, 
+        Imprint_issue?, 
+        Imprint_pages?, 
+        Imprint_section?, 
+        Imprint_pub?, 
+        Imprint_cprt?, 
+        Imprint_part-sup?, 
+        Imprint_language?, 
+        Imprint_prepub?, 
+        Imprint_part-supi?, 
+        Imprint_retract?, 
+        Imprint_pubstatus?, 
+        Imprint_history?)>
+
+<!-- date of publication -->
+<!ELEMENT Imprint_date (Date)>
+
+<!ELEMENT Imprint_volume (#PCDATA)>
+
+<!ELEMENT Imprint_issue (#PCDATA)>
+
+<!ELEMENT Imprint_pages (#PCDATA)>
+
+<!ELEMENT Imprint_section (#PCDATA)>
+
+<!-- publisher, required for book -->
+<!ELEMENT Imprint_pub (Affil)>
+
+<!-- copyright date, "    "   " -->
+<!ELEMENT Imprint_cprt (Date)>
+
+<!-- part/sup of volume -->
+<!ELEMENT Imprint_part-sup (#PCDATA)>
+
+<!-- put here for simplicity -->
+<!ELEMENT Imprint_language (#PCDATA)>
+<!-- for prepublication citations -->
+<!ELEMENT Imprint_prepub %ENUM;>
+
+<!--
+    submitted	-  submitted, not accepted
+    in-press	-  accepted, not published
+-->
+<!ATTLIST Imprint_prepub value (
+        submitted |
+        in-press |
+        other
+        ) #REQUIRED >
+
+
+<!-- part/sup on issue -->
+<!ELEMENT Imprint_part-supi (#PCDATA)>
+
+<!-- retraction info -->
+<!ELEMENT Imprint_retract (CitRetract)>
+
+<!-- current status of this publication -->
+<!ELEMENT Imprint_pubstatus (PubStatus)>
+
+<!-- dates for this record -->
+<!ELEMENT Imprint_history (PubStatusDateSet)>
+
+
+<!ELEMENT CitRetract (
+        CitRetract_type, 
+        CitRetract_exp?)>
+<!-- retraction of an entry -->
+<!ELEMENT CitRetract_type %ENUM;>
+
+<!--
+    retracted	-  this citation retracted
+    notice	-  this citation is a retraction notice
+    in-error	-  an erratum was published about this
+    erratum	-  this is a published erratum
+-->
+<!ATTLIST CitRetract_type value (
+        retracted |
+        notice |
+        in-error |
+        erratum
+        ) #REQUIRED >
+
+
+<!-- citation and/or explanation -->
+<!ELEMENT CitRetract_exp (#PCDATA)>
+
+
+<!ELEMENT Meeting (
+        Meeting_number, 
+        Meeting_date, 
+        Meeting_place?)>
+
+<!ELEMENT Meeting_number (#PCDATA)>
+
+<!ELEMENT Meeting_date (Date)>
+
+<!ELEMENT Meeting_place (Affil)>
+

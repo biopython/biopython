@@ -1,0 +1,56 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "seqblock.asn"
+     ::DATATOOL:: by application DATATOOL version 1.8.1
+     ::DATATOOL:: on 01/18/2007 23:07:18
+     ============================================ -->
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "PRF-General"
+================================================= -->
+
+<!--
+**********************************************************************
+ PRF specific definition
+    PRF is a protein sequence database crated and maintained by
+    Protein Research Foundation, Minoo-city, Osaka, Japan.
+
+    Written by A.Ogiwara, Inst.Chem.Res. (Dr.Kanehisa's Lab),
+            Kyoto Univ., Japan
+
+**********************************************************************
+-->
+
+<!-- Elements used by other modules:
+          PRF-block -->
+<!-- ============================================ -->
+
+
+<!ELEMENT PRF-block (
+        PRF-block_extra-src?, 
+        PRF-block_keywords?)>
+
+<!ELEMENT PRF-block_extra-src (PRF-ExtraSrc)>
+
+<!ELEMENT PRF-block_keywords (PRF-block_keywords_E*)>
+
+
+<!ELEMENT PRF-block_keywords_E (#PCDATA)>
+
+
+<!ELEMENT PRF-ExtraSrc (
+        PRF-ExtraSrc_host?, 
+        PRF-ExtraSrc_part?, 
+        PRF-ExtraSrc_state?, 
+        PRF-ExtraSrc_strain?, 
+        PRF-ExtraSrc_taxon?)>
+
+<!ELEMENT PRF-ExtraSrc_host (#PCDATA)>
+
+<!ELEMENT PRF-ExtraSrc_part (#PCDATA)>
+
+<!ELEMENT PRF-ExtraSrc_state (#PCDATA)>
+
+<!ELEMENT PRF-ExtraSrc_strain (#PCDATA)>
+
+<!ELEMENT PRF-ExtraSrc_taxon (#PCDATA)>
+

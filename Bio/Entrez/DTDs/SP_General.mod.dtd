@@ -1,0 +1,94 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "seqblock.asn"
+     ::DATATOOL:: by application DATATOOL version 1.9.0
+     ::DATATOOL:: on 04/10/2008 16:04:22
+     ============================================ -->
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "SP-General"
+================================================= -->
+
+<!--
+*********************************************************************
+
+  SWISSPROT specific data
+  This block of specifications was developed by Mark Cavanaugh of
+      NCBI working with Amos Bairoch of SWISSPROT
+
+*********************************************************************
+-->
+
+<!-- Elements used by other modules:
+          SP-block -->
+
+<!-- Elements referenced from other modules:
+          Date,
+          Dbtag FROM NCBI-General,
+          Seq-id FROM NCBI-Seqloc -->
+<!-- ============================================ -->
+
+<!-- SWISSPROT specific descriptions -->
+<!ELEMENT SP-block (
+        SP-block_class, 
+        SP-block_extra-acc?, 
+        SP-block_imeth?, 
+        SP-block_plasnm?, 
+        SP-block_seqref?, 
+        SP-block_dbref?, 
+        SP-block_keywords?, 
+        SP-block_created?, 
+        SP-block_sequpd?, 
+        SP-block_annotupd?)>
+
+<!ELEMENT SP-block_class %ENUM;>
+
+<!--
+    standard	-  conforms to all SWISSPROT checks
+    prelim	-  only seq and biblio checked
+-->
+<!ATTLIST SP-block_class value (
+        not-set |
+        standard |
+        prelim |
+        other
+        ) #REQUIRED >
+
+
+<!-- old SWISSPROT ids -->
+<!ELEMENT SP-block_extra-acc (SP-block_extra-acc_E*)>
+
+
+<!ELEMENT SP-block_extra-acc_E (#PCDATA)>
+
+<!-- seq known to start with Met -->
+<!ELEMENT SP-block_imeth EMPTY>
+<!ATTLIST SP-block_imeth value ( true | false ) "false" >
+
+
+<!-- plasmid names carrying gene -->
+<!ELEMENT SP-block_plasnm (SP-block_plasnm_E*)>
+
+
+<!ELEMENT SP-block_plasnm_E (#PCDATA)>
+
+<!-- xref to other sequences -->
+<!ELEMENT SP-block_seqref (Seq-id*)>
+
+<!-- xref to non-sequence dbases -->
+<!ELEMENT SP-block_dbref (Dbtag*)>
+
+<!-- keywords -->
+<!ELEMENT SP-block_keywords (SP-block_keywords_E*)>
+
+
+<!ELEMENT SP-block_keywords_E (#PCDATA)>
+
+<!-- creation date -->
+<!ELEMENT SP-block_created (Date)>
+
+<!-- sequence update -->
+<!ELEMENT SP-block_sequpd (Date)>
+
+<!-- annotation update -->
+<!ELEMENT SP-block_annotupd (Date)>
+

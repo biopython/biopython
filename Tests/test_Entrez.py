@@ -610,8 +610,9 @@ class ESummaryTest(unittest.TestCase):
         assert record[0]["PubTypeList"][0]=="Journal Article"
         assert record[0]["RecordStatus"]=="PubMed - indexed for MEDLINE"
         assert record[0]["PubStatus"]=="ppublish"
-        assert len(record[0]["ArticleIds"])==1
+        assert len(record[0]["ArticleIds"])==2
         assert record[0]["ArticleIds"]["pubmed"]==["11850928"]
+        assert record[0]["ArticleIds"]["medline"]==[]
         assert len(record[0]["History"])==2
         assert record[0]["History"]["pubmed"]==["1965/08/01 00:00"]
         assert record[0]["History"]["medline"]==["2002/03/09 10:01"]
@@ -645,8 +646,9 @@ class ESummaryTest(unittest.TestCase):
         assert record[1]["PubTypeList"][1]=="Review"
         assert record[1]["RecordStatus"]=="PubMed - indexed for MEDLINE"
         assert record[1]["PubStatus"]=="ppublish"
-        assert len(record[1]["ArticleIds"])==1
+        assert len(record[1]["ArticleIds"])==2
         assert record[1]["ArticleIds"]["pubmed"]==["11482001"]
+        assert record[1]["ArticleIds"]["medline"]==[]
         assert len(record[1]["History"])==2
         assert record[1]["History"]["pubmed"]==["2001/08/03 10:00"]
         assert record[1]["History"]["medline"]==["2002/01/23 10:01"]

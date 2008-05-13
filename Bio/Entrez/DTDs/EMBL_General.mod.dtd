@@ -1,0 +1,133 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "seqblock.asn"
+     ::DATATOOL:: by application DATATOOL version 1.8.1
+     ::DATATOOL:: on 01/18/2007 23:07:18
+     ============================================ -->
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "EMBL-General"
+================================================= -->
+
+<!--
+$Revision: 1.1 $
+*********************************************************************
+
+ 1990 - J.Ostell
+ Version 3.0 - June 1994
+
+*********************************************************************
+*********************************************************************
+
+  EMBL specific data
+  This block of specifications was developed by Reiner Fuchs of EMBL
+  Updated by J.Ostell, 1994
+
+*********************************************************************
+-->
+
+<!-- Elements used by other modules:
+          EMBL-dbname,
+          EMBL-xref,
+          EMBL-block -->
+
+<!-- Elements referenced from other modules:
+          Date,
+          Object-id FROM NCBI-General -->
+<!-- ============================================ -->
+
+
+<!ELEMENT EMBL-dbname (
+        EMBL-dbname_code | 
+        EMBL-dbname_name)>
+
+<!ELEMENT EMBL-dbname_code %ENUM;>
+<!ATTLIST EMBL-dbname_code value (
+        embl |
+        genbank |
+        ddbj |
+        geninfo |
+        medline |
+        swissprot |
+        pir |
+        pdb |
+        epd |
+        ecd |
+        tfd |
+        flybase |
+        prosite |
+        enzyme |
+        mim |
+        ecoseq |
+        hiv |
+        other
+        ) #REQUIRED >
+
+
+<!ELEMENT EMBL-dbname_name (#PCDATA)>
+
+
+<!ELEMENT EMBL-xref (
+        EMBL-xref_dbname, 
+        EMBL-xref_id)>
+
+<!ELEMENT EMBL-xref_dbname (EMBL-dbname)>
+
+<!ELEMENT EMBL-xref_id (Object-id*)>
+
+
+<!ELEMENT EMBL-block (
+        EMBL-block_class?, 
+        EMBL-block_div?, 
+        EMBL-block_creation-date, 
+        EMBL-block_update-date, 
+        EMBL-block_extra-acc?, 
+        EMBL-block_keywords?, 
+        EMBL-block_xref?)>
+
+<!ELEMENT EMBL-block_class %ENUM;>
+<!ATTLIST EMBL-block_class value (
+        not-set |
+        standard |
+        unannotated |
+        other
+        ) #REQUIRED >
+
+
+<!ELEMENT EMBL-block_div %ENUM;>
+<!ATTLIST EMBL-block_div value (
+        fun |
+        inv |
+        mam |
+        org |
+        phg |
+        pln |
+        pri |
+        pro |
+        rod |
+        syn |
+        una |
+        vrl |
+        vrt |
+        pat |
+        est |
+        sts |
+        other
+        ) #REQUIRED >
+
+
+<!ELEMENT EMBL-block_creation-date (Date)>
+
+<!ELEMENT EMBL-block_update-date (Date)>
+
+<!ELEMENT EMBL-block_extra-acc (EMBL-block_extra-acc_E*)>
+
+
+<!ELEMENT EMBL-block_extra-acc_E (#PCDATA)>
+
+<!ELEMENT EMBL-block_keywords (EMBL-block_keywords_E*)>
+
+
+<!ELEMENT EMBL-block_keywords_E (#PCDATA)>
+
+<!ELEMENT EMBL-block_xref (EMBL-xref*)>
+

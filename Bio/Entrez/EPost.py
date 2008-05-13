@@ -8,34 +8,34 @@
 # from Bio.Entrez.__init__.py.
 
 
+error = "ERROR"		# (#PCDATA)>	<!-- .+ -->
+
+booleans = (
+)
+
+integers = (
+)
+
+strings = (
+    "Id",		# (#PCDATA)>	<!-- \d+ -->
+    "QueryKey",		# (#PCDATA)>	<!-- \d+ -->
+    "WebEnv",		# (#PCDATA)>	<!-- \S+ -->
+)
+
+lists = (
+    "InvalidIdList",	# (Id+)
+)
+
+dictionaries = (
+    "ePostResult",	# (InvalidIdList?,(QueryKey,WebEnv)?,ERROR?)
+)
+
+structures = {}
+
+items = ()
 
 def startElement(self, name, attrs):
-    if name=="ePostResult":
-        object = {}
-	self.path = []
-        self.record = object
-    else:
-        previous = self.path[-1]
-        if name=="InvalidIdList":
-            object = []
-        else:
-            object = ""
-        if object=="":
-            pass
-        else:
-            previous[name] = object
-    self.path.append(object)
+    return
 
 def endElement(self, name):
     self.path = self.path[:-1]
-    if name=="ERROR":
-        raise RuntimeError(self.content)
-    if name in ("Id", "QueryKey", "WebEnv"):
-        value = self.content
-    else:
-        return
-    previous = self.path[-1]
-    if type(previous)==list:
-        previous.append(value)
-    elif type(previous)==dict:
-        previous[name] = value

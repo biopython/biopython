@@ -7,74 +7,72 @@
 # The code is not meant to be used by itself, but is called
 # from Bio.Entrez.__init__.py.
 
+error = "ERROR"	# (#PCDATA)	<!-- .+ -->
 
+booleans = (
+    "Explode",	# (#PCDATA)	<!-- (Y|N) -->
+)
+
+integers = (
+    "Count",	# (#PCDATA)	<!-- \d+ -->
+    "RetMax",	# (#PCDATA)	<!-- \d+ -->
+    "RetStart",	# (#PCDATA)	<!-- \d+ -->
+)
+
+strings = (
+    "QueryKey",		# (#PCDATA)	<!-- \d+ -->
+    "QueryTranslation",	# (#PCDATA)>	<!-- .+ -->
+    "WebEnv",		# (#PCDATA)	<!-- \S+ -->
+    "From",		# (#PCDATA)	<!-- .+ -->
+    "To",		# (#PCDATA)	<!-- .+ -->
+    "Term",		# (#PCDATA)	<!-- .+ -->
+    "Field",		# (#PCDATA)	<!-- .+ -->
+    "Id",		# (#PCDATA)	<!-- \d+ -->
+    "OP",		# (#PCDATA)	<!-- (AND|OR|NOT|RANGE|GROUP) -->
+    "PhraseNotFound",		# (#PCDATA)	<!-- .+ -->
+    "FieldNotFound",		# (#PCDATA)	<!-- .+ -->
+    "PhraseIgnored",		# (#PCDATA)	<!-- .+ -->
+    "OutputMessage",		# (#PCDATA)	<!-- .+ -->
+    "QuotedPhraseNotFound",	# (#PCDATA)	<!-- .+ -->
+)
+
+lists = (
+    "IdList",			# (Id*)
+    "TranslationSet",		# (Translation*)
+    "TranslationStack",		# ((TermSet|OP)*)
+)
+
+dictionaries = (
+    "eSearchResult",	# (((Count,
+			#       (RetMax,
+			#        RetStart,
+			#        QueryKey?,
+			#        WebEnv?,
+			#        IdList,
+			#        TranslationSet,
+			#        TranslationStack?,
+			#        QueryTranslation
+			#       )?
+			#   ) | ERROR
+			#  ),
+			#  ErrorList?,
+			#  WarningList?
+			# )
+    "Translation",	# (From, To)
+    "TermSet",		# (Term, Field, Count, Explode)
+)
+
+structures = {
+    "ErrorList": ("PhraseNotFound", "FieldNotFound"),
+	# (PhraseNotFound*,FieldNotFound*)
+    "WarningList": ("PhraseIgnored", "QuotedPhraseNotFound", "OutputMessage"),
+	# (PhraseIgnored*, QuotedPhraseNotFound*, OutputMessage*)
+}
+
+items = ()
 
 def startElement(self, name, attrs):
-    if name=="eSearchResult":
-        object = {}
-        self.record = object
-        self.path = []
-    else:
-        if name=="ErrorList":
-            object = {"PhraseNotFound": [],
-                      "FieldNotFound": [],
-                     }
-        elif name=="WarningList":
-            object = {"PhraseIgnored": [],
-                      "QuotedPhraseNotFound": [],
-                      "OutputMessage": [],
-                     }
-        elif name in ("Translation", "TermSet"):
-            object = {}
-        elif name in ("IdList",
-                      "TranslationSet",
-                      "TranslationStack"):
-            object = []
-        else:
-            object = ""
-        if object=="":
-            pass
-        else:
-            previous = self.path[-1]
-            if type(previous)==list:
-                previous.append(object)
-            elif type(previous)==dict:
-                previous[name] = object
-    self.path.append(object)
+    return
 
 def endElement(self, name):
     self.path = self.path[:-1]
-    if name=="ERROR":
-        error = self.content
-        raise RuntimeError(error)
-    if name in ("PhraseNotFound",
-                "FieldNotFound",
-                "PhraseIgnored",
-                "OutputMessage",
-                "QuotedPhraseNotFound"):
-        self.path[-1][name].append(self.content)
-    else:
-        previous = self.path[-1]
-        if name in ("Count", "RetMax", "RetStart"):
-            value = int(self.content)
-        elif name in ("QueryKey",
-                      "QueryTranslation",
-                      "WebEnv",
-                      "From",
-                      "To",
-                      "Term",
-                      "Field",
-                      "Id",
-                      "OP"):
-            value = self.content
-        elif name=="Explode":
-            if self.content=='Y':
-                value = True
-            elif self.content=='N':
-                value = False
-        else:
-            return
-        if type(previous)==dict:
-            self.path[-1][name] = value
-        elif type(previous)==list:
-            self.path[-1].append(value)

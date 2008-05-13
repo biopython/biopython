@@ -1,0 +1,70 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "seqblock.asn"
+     ::DATATOOL:: by application DATATOOL version 1.9.0
+     ::DATATOOL:: on 04/10/2008 16:04:22
+     ============================================ -->
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "PDB-General"
+================================================= -->
+
+<!--
+*********************************************************************
+
+  PDB specific data
+  This block of specifications was developed by Jim Ostell and
+      Steve Bryant of NCBI
+
+*********************************************************************
+-->
+
+<!-- Elements used by other modules:
+          PDB-block -->
+
+<!-- Elements referenced from other modules:
+          Date FROM NCBI-General -->
+<!-- ============================================ -->
+
+<!-- PDB specific descriptions -->
+<!ELEMENT PDB-block (
+        PDB-block_deposition, 
+        PDB-block_class, 
+        PDB-block_compound, 
+        PDB-block_source, 
+        PDB-block_exp-method?, 
+        PDB-block_replace?)>
+
+<!-- deposition date  month,year -->
+<!ELEMENT PDB-block_deposition (Date)>
+
+<!ELEMENT PDB-block_class (#PCDATA)>
+
+<!ELEMENT PDB-block_compound (PDB-block_compound_E*)>
+
+
+<!ELEMENT PDB-block_compound_E (#PCDATA)>
+
+<!ELEMENT PDB-block_source (PDB-block_source_E*)>
+
+
+<!ELEMENT PDB-block_source_E (#PCDATA)>
+
+<!-- present if NOT X-ray diffraction -->
+<!ELEMENT PDB-block_exp-method (#PCDATA)>
+
+<!-- replacement history -->
+<!ELEMENT PDB-block_replace (PDB-replace)>
+
+
+<!ELEMENT PDB-replace (
+        PDB-replace_date, 
+        PDB-replace_ids)>
+
+<!ELEMENT PDB-replace_date (Date)>
+
+<!-- entry ids replace by this one -->
+<!ELEMENT PDB-replace_ids (PDB-replace_ids_E*)>
+
+
+<!ELEMENT PDB-replace_ids_E (#PCDATA)>
+

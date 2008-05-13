@@ -1,0 +1,65 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "seqblock.asn"
+     ::DATATOOL:: by application DATATOOL version 1.9.0
+     ::DATATOOL:: on 04/10/2008 16:04:22
+     ============================================ -->
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "GenBank-General"
+================================================= -->
+
+<!--
+*********************************************************************
+
+  GenBank specific data
+  This block of specifications was developed by Jim Ostell of
+      NCBI
+
+*********************************************************************
+-->
+
+<!-- Elements used by other modules:
+          GB-block -->
+
+<!-- Elements referenced from other modules:
+          Date FROM NCBI-General -->
+<!-- ============================================ -->
+
+<!-- GenBank specific descriptions -->
+<!ELEMENT GB-block (
+        GB-block_extra-accessions?, 
+        GB-block_source?, 
+        GB-block_keywords?, 
+        GB-block_origin?, 
+        GB-block_date?, 
+        GB-block_entry-date?, 
+        GB-block_div?, 
+        GB-block_taxonomy?)>
+
+<!ELEMENT GB-block_extra-accessions (GB-block_extra-accessions_E*)>
+
+
+<!ELEMENT GB-block_extra-accessions_E (#PCDATA)>
+
+<!-- source line -->
+<!ELEMENT GB-block_source (#PCDATA)>
+
+<!ELEMENT GB-block_keywords (GB-block_keywords_E*)>
+
+
+<!ELEMENT GB-block_keywords_E (#PCDATA)>
+
+<!ELEMENT GB-block_origin (#PCDATA)>
+
+<!-- OBSOLETE old form Entry Date -->
+<!ELEMENT GB-block_date (#PCDATA)>
+
+<!-- replaces date -->
+<!ELEMENT GB-block_entry-date (Date)>
+
+<!-- GenBank division -->
+<!ELEMENT GB-block_div (#PCDATA)>
+
+<!-- continuation line of organism -->
+<!ELEMENT GB-block_taxonomy (#PCDATA)>
+

@@ -1,0 +1,54 @@
+<!--    
+                This is the Current DTD for Entrez eInfo
+$Id: eInfo_020511.dtd,v 1.1 2008-05-13 11:17:44 mdehoon Exp $
+-->
+<!-- ================================================================= -->
+
+<!ELEMENT	DbName		(#PCDATA)>	<!-- \S+ -->
+<!ELEMENT	Name		(#PCDATA)>	<!-- .+ -->
+<!ELEMENT	FullName	(#PCDATA)>	<!-- .+ -->
+<!ELEMENT	Description	(#PCDATA)>	<!-- .+ -->
+<!ELEMENT	TermCount	(#PCDATA)>	<!-- \d+ -->
+<!ELEMENT	Menu		(#PCDATA)>	<!-- .+ -->
+<!ELEMENT	DbTo		(#PCDATA)>	<!-- \S+ -->
+<!ELEMENT	MenuName	(#PCDATA)>	<!-- .+ -->
+<!ELEMENT	Count		(#PCDATA)>	<!-- \d+ -->
+<!ELEMENT	LastUpdate	(#PCDATA)>	<!-- \d+ -->
+
+<!ELEMENT	ERROR		(#PCDATA)>	<!-- .+ -->
+
+<!ELEMENT	IsDate		(#PCDATA)>	<!-- (Y|N) -->
+<!ELEMENT	IsNumerical	(#PCDATA)>	<!-- (Y|N) -->
+<!ELEMENT	SingleToken	(#PCDATA)>	<!-- (Y|N) -->
+<!ELEMENT	Hierarchy	(#PCDATA)>	<!-- (Y|N) -->
+<!ELEMENT	IsHidden	(#PCDATA)>	<!-- (Y|N) -->
+
+
+<!ELEMENT	DbList		(DbName+)>
+
+<!ELEMENT	Field		(Name,
+                FullName,
+				Description,
+				TermCount,
+				IsDate,
+				IsNumerical,
+				SingleToken,
+				Hierarchy,
+                IsHidden)>
+
+<!ELEMENT	Link		(Name,Menu,Description,DbTo)>
+
+
+<!ELEMENT	LinkList	(Link*)>
+<!ELEMENT	FieldList	(Field*)>
+
+
+<!ELEMENT	DbInfo		(DbName,
+				MenuName,
+				Description,
+				Count,
+				LastUpdate,
+				FieldList,
+				LinkList?)>
+				
+<!ELEMENT	eInfoResult	(DbList|DbInfo|ERROR)>

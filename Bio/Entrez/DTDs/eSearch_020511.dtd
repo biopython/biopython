@@ -1,0 +1,64 @@
+<!--    
+                This is the Current DTD for Entrez eSearch
+$Id: eSearch_020511.dtd,v 1.1 2008-05-13 11:17:44 mdehoon Exp $
+-->
+<!-- ================================================================= -->
+
+<!ELEMENT       Count           (#PCDATA)>	<!-- \d+ -->
+<!ELEMENT       RetMax          (#PCDATA)>	<!-- \d+ -->
+<!ELEMENT       RetStart        (#PCDATA)>	<!-- \d+ -->
+<!ELEMENT       Id              (#PCDATA)>	<!-- \d+ -->
+
+<!ELEMENT       From            (#PCDATA)>	<!-- .+ -->
+<!ELEMENT       To              (#PCDATA)>	<!-- .+ -->
+<!ELEMENT       Term            (#PCDATA)>	<!-- .+ -->
+
+<!ELEMENT       Field           (#PCDATA)>	<!-- .+ -->
+
+<!ELEMENT        QueryKey       (#PCDATA)>	<!-- \d+ -->
+<!ELEMENT        WebEnv         (#PCDATA)>	<!-- \S+ -->
+ 
+<!ELEMENT       Explode         (#PCDATA)>	<!-- (Y|N) -->
+<!ELEMENT       OP              (#PCDATA)>	<!-- (AND|OR|NOT|RANGE|GROUP) -->
+<!ELEMENT       IdList          (Id*)>
+
+<!ELEMENT       Translation     (From, To)>
+<!ELEMENT       TranslationSet  (Translation*)>
+
+<!ELEMENT       TermSet (Term, Field, Count, Explode)>
+<!ELEMENT       TranslationStack        ((TermSet|OP)*)>
+
+<!-- Error message tags  -->
+
+<!ELEMENT        ERROR                  (#PCDATA)>	<!-- .+ -->
+
+<!ELEMENT        OutputMessage		    (#PCDATA)>	<!-- .+ -->
+<!ELEMENT        QuotedPhraseNotFound   (#PCDATA)>	<!-- .+ -->
+<!ELEMENT        PhraseIgnored          (#PCDATA)>	<!-- .+ -->
+<!ELEMENT        FieldNotFound          (#PCDATA)>	<!-- .+ -->
+<!ELEMENT        PhraseNotFound         (#PCDATA)>	<!-- .+ -->
+<!ELEMENT        QueryTranslation       (#PCDATA)>	<!-- .+ -->
+
+<!ELEMENT        ErrorList      (PhraseNotFound*,FieldNotFound*)>
+<!ELEMENT        WarningList   	(PhraseIgnored*,
+				QuotedPhraseNotFound*,
+				OutputMessage*)>
+<!-- Response tags -->
+
+
+<!ELEMENT       eSearchResult   (((
+                                Count,
+                                    (RetMax,
+                                    RetStart,
+                                    QueryKey?,
+                                    WebEnv?,
+                                    IdList,
+                                    TranslationSet,
+                                    TranslationStack?,
+                                    QueryTranslation
+                                    )?
+                                ) | ERROR),
+				ErrorList?,
+				WarningList?
+				)>
+

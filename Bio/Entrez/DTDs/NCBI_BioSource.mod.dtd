@@ -1,0 +1,160 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "seqfeat.asn"
+     ::DATATOOL:: by application DATATOOL version 1.9.0
+     ::DATATOOL:: on 04/10/2008 16:04:22
+     ============================================ -->
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "NCBI-BioSource"
+================================================= -->
+
+<!--
+**********************************************************************
+
+  NCBI BioSource
+  by James Ostell, 1994
+  version 3.0
+
+**********************************************************************
+-->
+
+<!-- Elements used by other modules:
+          BioSource -->
+
+<!-- Elements referenced from other modules:
+          Org-ref FROM NCBI-Organism -->
+<!-- ============================================ -->
+
+<!--
+********************************************************************
+
+ BioSource gives the source of the biological material
+   for sequences
+
+********************************************************************
+-->
+<!ELEMENT BioSource (
+        BioSource_genome?, 
+        BioSource_origin?, 
+        BioSource_org, 
+        BioSource_subtype?, 
+        BioSource_is-focus?)>
+<!-- biological context -->
+<!ELEMENT BioSource_genome (%INTEGER;)>
+<!ATTLIST BioSource_genome value (
+        unknown |
+        genomic |
+        chloroplast |
+        chromoplast |
+        kinetoplast |
+        mitochondrion |
+        plastid |
+        macronuclear |
+        extrachrom |
+        plasmid |
+        transposon |
+        insertion-seq |
+        cyanelle |
+        proviral |
+        virion |
+        nucleomorph |
+        apicoplast |
+        leucoplast |
+        proplastid |
+        endogenous-virus |
+        hydrogenosome |
+        chromosome |
+        chromatophore
+        ) #IMPLIED >
+
+
+<!ELEMENT BioSource_origin (%INTEGER;)>
+
+<!--
+    natural	-  normal biological entity
+    natmut	-  naturally occurring mutant
+    mut	-  artificially mutagenized
+    artificial	-  artificially engineered
+    synthetic	-  purely synthetic
+-->
+<!ATTLIST BioSource_origin value (
+        unknown |
+        natural |
+        natmut |
+        mut |
+        artificial |
+        synthetic |
+        other
+        ) #IMPLIED >
+
+
+<!ELEMENT BioSource_org (Org-ref)>
+
+<!ELEMENT BioSource_subtype (SubSource*)>
+
+<!-- to distinguish biological focus -->
+<!ELEMENT BioSource_is-focus EMPTY>
+
+
+<!ELEMENT SubSource (
+        SubSource_subtype, 
+        SubSource_name, 
+        SubSource_attrib?)>
+
+<!ELEMENT SubSource_subtype (%INTEGER;)>
+
+<!--
+    lat-lon	-  +/- decimal degrees
+    collection-date	-  DD-MMM-YYYY format
+    collected-by	-  name of person who collected the sample
+    identified-by	-  name of person who identified the sample
+    fwd-primer-seq	-  sequence (possibly more than one; semicolon-separated)
+    rev-primer-seq	-  sequence (possibly more than one; semicolon-separated)
+-->
+<!ATTLIST SubSource_subtype value (
+        chromosome |
+        map |
+        clone |
+        subclone |
+        haplotype |
+        genotype |
+        sex |
+        cell-line |
+        cell-type |
+        tissue-type |
+        clone-lib |
+        dev-stage |
+        frequency |
+        germline |
+        rearranged |
+        lab-host |
+        pop-variant |
+        tissue-lib |
+        plasmid-name |
+        transposon-name |
+        insertion-seq-name |
+        plastid-name |
+        country |
+        segment |
+        endogenous-virus-name |
+        transgenic |
+        environmental-sample |
+        isolation-source |
+        lat-lon |
+        collection-date |
+        collected-by |
+        identified-by |
+        fwd-primer-seq |
+        rev-primer-seq |
+        fwd-primer-name |
+        rev-primer-name |
+        metagenomic |
+        other
+        ) #IMPLIED >
+
+
+<!ELEMENT SubSource_name (#PCDATA)>
+
+<!-- attribution/source of this name -->
+<!ELEMENT SubSource_attrib (#PCDATA)>
+

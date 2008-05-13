@@ -1,0 +1,245 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "medline.asn"
+     ::DATATOOL:: by application DATATOOL version 1.9.0
+     ::DATATOOL:: on 04/10/2008 16:04:22
+     ============================================ -->
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "NCBI-Medline"
+================================================= -->
+
+<!--
+$Revision: 1.1 $
+**********************************************************************
+
+  MEDLINE data definitions
+  James Ostell, 1990
+
+  enhanced in 1996 to support PubMed records as well by simply adding
+    the PubMedId and making MedlineId optional
+
+**********************************************************************
+-->
+
+<!-- Elements used by other modules:
+          Medline-entry,
+          Medline-si -->
+
+<!-- Elements referenced from other modules:
+          Cit-art,
+          PubMedId FROM NCBI-Biblio,
+          Date FROM NCBI-General -->
+<!-- ============================================ -->
+
+<!--
+ a MEDLINE or PubMed entry
+ regular medline record
+-->
+<!ELEMENT Medline-entry (
+        Medline-entry_uid?, 
+        Medline-entry_em, 
+        Medline-entry_cit, 
+        Medline-entry_abstract?, 
+        Medline-entry_mesh?, 
+        Medline-entry_substance?, 
+        Medline-entry_xref?, 
+        Medline-entry_idnum?, 
+        Medline-entry_gene?, 
+        Medline-entry_pmid?, 
+        Medline-entry_pub-type?, 
+        Medline-entry_mlfield?, 
+        Medline-entry_status?)>
+
+<!-- MEDLINE UID, sometimes not yet available if from PubMed -->
+<!ELEMENT Medline-entry_uid (%INTEGER;)>
+
+<!-- Entry Month -->
+<!ELEMENT Medline-entry_em (Date)>
+
+<!-- article citation -->
+<!ELEMENT Medline-entry_cit (Cit-art)>
+
+<!ELEMENT Medline-entry_abstract (#PCDATA)>
+
+<!ELEMENT Medline-entry_mesh (Medline-mesh*)>
+
+<!ELEMENT Medline-entry_substance (Medline-rn*)>
+
+<!ELEMENT Medline-entry_xref (Medline-si*)>
+
+<!-- ID Number (grants, contracts) -->
+<!ELEMENT Medline-entry_idnum (Medline-entry_idnum_E*)>
+
+
+<!ELEMENT Medline-entry_idnum_E (#PCDATA)>
+
+<!ELEMENT Medline-entry_gene (Medline-entry_gene_E*)>
+
+
+<!ELEMENT Medline-entry_gene_E (#PCDATA)>
+
+<!-- MEDLINE records may include the PubMedId -->
+<!ELEMENT Medline-entry_pmid (PubMedId)>
+
+<!-- may show publication types (review, etc) -->
+<!ELEMENT Medline-entry_pub-type (Medline-entry_pub-type_E*)>
+
+
+<!ELEMENT Medline-entry_pub-type_E (#PCDATA)>
+
+<!-- additional Medline field types -->
+<!ELEMENT Medline-entry_mlfield (Medline-field*)>
+
+<!ELEMENT Medline-entry_status (%INTEGER;)>
+
+<!--
+    publisher	-  record as supplied by publisher
+    premedline	-  premedline record
+-->
+<!ATTLIST Medline-entry_status value (
+        publisher |
+        premedline |
+        medline
+        ) #IMPLIED >
+
+
+
+<!ELEMENT Medline-mesh (
+        Medline-mesh_mp?, 
+        Medline-mesh_term, 
+        Medline-mesh_qual?)>
+
+<!-- TRUE if main point (*) -->
+<!ELEMENT Medline-mesh_mp EMPTY>
+<!ATTLIST Medline-mesh_mp value ( true | false ) "false" >
+
+
+<!-- the MeSH term -->
+<!ELEMENT Medline-mesh_term (#PCDATA)>
+
+<!-- qualifiers -->
+<!ELEMENT Medline-mesh_qual (Medline-qual*)>
+
+
+<!ELEMENT Medline-qual (
+        Medline-qual_mp?, 
+        Medline-qual_subh)>
+
+<!-- TRUE if main point -->
+<!ELEMENT Medline-qual_mp EMPTY>
+<!ATTLIST Medline-qual_mp value ( true | false ) "false" >
+
+
+<!-- the subheading -->
+<!ELEMENT Medline-qual_subh (#PCDATA)>
+
+<!-- medline substance records -->
+<!ELEMENT Medline-rn (
+        Medline-rn_type, 
+        Medline-rn_cit?, 
+        Medline-rn_name)>
+<!-- type of record -->
+<!ELEMENT Medline-rn_type %ENUM;>
+
+<!--
+    cas	-  CAS number
+    ec	-  EC number
+-->
+<!ATTLIST Medline-rn_type value (
+        nameonly |
+        cas |
+        ec
+        ) #REQUIRED >
+
+
+<!-- CAS or EC number if present -->
+<!ELEMENT Medline-rn_cit (#PCDATA)>
+
+<!-- name (always present) -->
+<!ELEMENT Medline-rn_name (#PCDATA)>
+
+<!-- medline cross reference records -->
+<!ELEMENT Medline-si (
+        Medline-si_type, 
+        Medline-si_cit?)>
+<!-- type of xref -->
+<!ELEMENT Medline-si_type %ENUM;>
+
+<!--
+    ddbj	-  DNA Data Bank of Japan
+    carbbank	-  Carbohydrate Structure Database
+    embl	-  EMBL Data Library
+    hdb	-  Hybridoma Data Bank
+    genbank	-  GenBank
+    hgml	-  Human Gene Map Library
+    mim	-  Mendelian Inheritance in Man
+    msd	-  Microbial Strains Database
+    pdb	-  Protein Data Bank (Brookhaven)
+    pir	-  Protein Identification Resource
+    prfseqdb	-  Protein Research Foundation (Japan)
+    psd	-  Protein Sequence Database (Japan)
+    swissprot	-  SwissProt
+    gdb	-  Genome Data Base
+-->
+<!ATTLIST Medline-si_type value (
+        ddbj |
+        carbbank |
+        embl |
+        hdb |
+        genbank |
+        hgml |
+        mim |
+        msd |
+        pdb |
+        pir |
+        prfseqdb |
+        psd |
+        swissprot |
+        gdb
+        ) #REQUIRED >
+
+
+<!-- the citation/accession number -->
+<!ELEMENT Medline-si_cit (#PCDATA)>
+
+
+<!ELEMENT Medline-field (
+        Medline-field_type, 
+        Medline-field_str, 
+        Medline-field_ids?)>
+<!-- Keyed type -->
+<!ELEMENT Medline-field_type (%INTEGER;)>
+
+<!--
+    other	-  look in line code
+    comment	-  comment line
+    erratum	-  retracted, corrected, etc
+-->
+<!ATTLIST Medline-field_type value (
+        other |
+        comment |
+        erratum
+        ) #IMPLIED >
+
+
+<!-- the text -->
+<!ELEMENT Medline-field_str (#PCDATA)>
+
+<!-- pointers relevant to this text -->
+<!ELEMENT Medline-field_ids (DocRef*)>
+
+<!-- reference to a document -->
+<!ELEMENT DocRef (
+        DocRef_type, 
+        DocRef_uid)>
+
+<!ELEMENT DocRef_type (%INTEGER;)>
+<!ATTLIST DocRef_type value (
+        medline |
+        pubmed |
+        ncbigi
+        ) #IMPLIED >
+
+
+<!ELEMENT DocRef_uid (%INTEGER;)>
+
