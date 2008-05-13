@@ -7,27 +7,37 @@
 # The code is not meant to be used by itself, but is called
 # from Bio.Entrez.__init__.py.
 
+error = ""
+
+booleans = (
+)
+
+integers = (
+    "Count",		# (#PCDATA)	<!-- \d+ -->
+)
+
+strings = (
+    "DbName",		# (#PCDATA)	<!-- .+ -->
+    "MenuName",		# (#PCDATA)	<!-- .+ -->
+    "Status",		# (#PCDATA)	<!-- .+ -->
+    "Term",		# (#PCDATA)	<!-- .+ -->
+)
+
+lists = (
+    "eGQueryResult",	# (ResultItem+)
+)
+
+dictionaries = (
+    "Result",		# (Term, eGQueryResult)
+    "ResultItem",	# (DbName, MenuName, Count, Status)
+)
+
+structures = {}
+
+items = ()
+
 def startElement(self, name, attrs):
-    if name=="Result":
-        object = {}
-        self.path = []
-        self.record = object
-    elif name=="eGQueryResult":
-        object = []
-        self.path[-1][name] = object
-    elif name=="ResultItem":
-        object = {}
-        self.path[-1].append(object)
-    else:
-        object = ""
-    self.path.append(object)
+    return
 
 def endElement(self, name):
-    self.path.pop()
-    if name in ("Term", "DbName", "MenuName", "Status"):
-        value = self.content
-    elif name=="Count":
-        value = int(self.content)
-    else:
-        return
-    self.path[-1][name] = value
+    self.path = self.path[:-1]

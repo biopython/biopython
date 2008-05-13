@@ -7,25 +7,39 @@
 # The code is not meant to be used by itself, but is called
 # from Bio.Entrez.__init__.py.
 
+
+error = "ERROR"		# (#PCDATA)	<!-- \d+ -->
+
+booleans = (
+)
+
+integers = (
+)
+
+strings = (
+    "Original",		# (#PCDATA)	<!-- \d+ -->
+    "Replaced",		# (#PCDATA)	<!-- \d+ -->
+    "Database",		# (#PCDATA)	<!-- \d+ -->
+    "Query",		# (#PCDATA)	<!-- \d+ -->
+    "CorrectedQuery",	# (#PCDATA)	<!-- \d+ -->
+)
+
+lists = (
+)
+
+dictionaries = (
+    "eSpellResult",	# (Database, Query, CorrectedQuery, SpelledQuery, ERROR)
+)
+
+structures = {
+    "SpelledQuery": ["Replaced", "Original"],
+			# (Replaced|Original)*	<!-- \d+ -->
+}
+
+items = ()
+
 def startElement(self, name, attrs):
-    if self.element==["eSpellResult"]:
-        object = {}
-        self.path = []
-        self.record = object
-    elif name=="SpelledQuery":
-        object = {"Original": [], "Replaced": []}
-        self.path[-1][name] = object
-    else:
-        object = ""
-    self.path.append(object)
+    return
 
 def endElement(self, name):
-    self.path.pop()
-    if name=="ERROR":
-        error = self.content
-        if error:
-            raise RuntimeError(error)
-    if name in ("Database", "Query", "CorrectedQuery", "ERROR"):
-        self.path[-1][name] = self.content
-    elif name in ("Original", "Replaced"):
-        self.path[-1][name].append(self.content)
+    self.path = self.path[:-1]

@@ -1,0 +1,20 @@
+<!--    
+This is the Current DTD for Entrez eSpell
+$Id:
+-->
+<!-- ================================================================= -->
+
+<!ELEMENT Original                     (#PCDATA)>           <!-- \d+ -->
+<!ELEMENT Replaced                     (#PCDATA)>           <!-- \d+ -->
+
+<!ELEMENT Database                     (#PCDATA)>           <!-- \d+ -->
+<!ELEMENT Query                        (#PCDATA)>           <!-- \d+ -->
+<!ELEMENT CorrectedQuery               (#PCDATA)>           <!-- \d+ -->
+<!ELEMENT SpelledQuery                 (Replaced|Original)*> <!-- \d+ -->
+<!ELEMENT ERROR                        (#PCDATA)>           <!-- \d+ -->
+
+<!ELEMENT eSpellResult    (Database, Query, CorrectedQuery, SpelledQuery, ERROR)>
+
+
+
+

@@ -263,6 +263,9 @@ class DataHandler(ContentHandler, EntityResolver):
                          "eSearch_020511.dtd": ESearch,
                          "ePost_020511.dtd": EPost,
                          "eSummary_041029.dtd": ESummary,
+                         "eLink_020511.dtd": ELink,
+                         "eSpell.dtd": ESpell,
+                         "egquery.dtd": EGQuery,
                          "NCBI_Entrezgene.mod.dtd": NCBI_Entrezgene,
                          "NCBI_Seqloc.mod.dtd": NCBI_Seqloc,
                         }
@@ -293,9 +296,9 @@ class DataHandler(ContentHandler, EntityResolver):
                 current = self.path[-1]
             except IndexError:
                 current = None
-            if type(current)==dict:
+            if isinstance(current, dict):
                 current[name] = object
-            elif type(current)==list:
+            elif isinstance(current, list):
                 current.append(object)
             self.path.append(object)
         elif name in self.dictionaries:
@@ -304,17 +307,17 @@ class DataHandler(ContentHandler, EntityResolver):
                 current = self.path[-1]
             except IndexError:
                 current = None
-            if type(current)==dict:
+            if isinstance(current, dict):
                 current[name] = object
-            elif type(current)==list:
+            elif isinstance(current, list):
                 current.append(object)
             self.path.append(object)
         elif name in self.structures:
             current = self.path[-1]
             object = Structure(self.structures[name])
-            if type(current)==dict:
+            if isinstance(current, dict):
                 current[name] = object
-            elif type(current)==list:
+            elif isinstance(current, list):
                 current.append(object)
             self.path.append(object)
         elif name in self.items:	# Only appears in ESummary
@@ -332,9 +335,9 @@ class DataHandler(ContentHandler, EntityResolver):
             self.itemname = itemname
             self.itemtype = itemtype
             if object!="":
-                if type(current)==dict:
+                if isinstance(current, dict):
                     current[itemname] = object
-                elif type(current)==list:
+                elif isinstance(current, list):
                     current.append(object)
             self.path.append(object)
         elif self.strings: # Just for checking if this is the new approach
@@ -361,7 +364,7 @@ class DataHandler(ContentHandler, EntityResolver):
         except UnicodeEncodeError:
             pass
         value = self.content
-        if name==self.error:
+        if name==self.error and value!="":
             raise RuntimeError(value)
         elif name in self.booleans:
             self.path = self.path[:-1]
@@ -400,7 +403,7 @@ class DataHandler(ContentHandler, EntityResolver):
             object = self.path.pop()
             if object=="":
                 current = self.path[-1]
-                if type(current)==list:
+                if isinstance(current, list):
                     current.append(self.content)
                 elif isinstance(current, dict):
                     itemname = self.itemname
