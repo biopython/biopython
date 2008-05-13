@@ -6,13 +6,22 @@
 import os
 from sets import Set
 from Bio import SeqIO
+from Bio import AlignIO
 from Bio.SeqRecord import SeqRecord
 from Bio.Seq import Seq
 from StringIO import StringIO
 from Bio.Alphabet import generic_protein, generic_rna, generic_dna
 
-#Longer list including alignment only file formats we can read AND write:
-test_write_read_alignment_formats = SeqIO._FormatToWriter.keys()[:]
+#List of formats including alignment only file formats we can read AND write.
+#The list is initially hard coded to preserve the original order of the unit
+#test output, with any new formats added since appended to the end.
+test_write_read_alignment_formats = ["fasta","clustal","phylip","stockholm"]
+for format in SeqIO._FormatToWriter :
+    if format not in test_write_read_alignment_formats :
+        test_write_read_alignment_formats.append(format)
+for format in AlignIO._FormatToWriter :
+    if format not in test_write_read_alignment_formats :
+        test_write_read_alignment_formats.append(format)
 
 # test_files is a list of tuples containing:
 # - string:  file format
@@ -198,7 +207,7 @@ def alignment_summary(alignment, index=" ") :
 
 def check_simple_write_read(records, indent=" ") :
     #print indent+"Checking we can write and then read back these records"
-    for format in SeqIO._FormatToWriter.keys() :
+    for format in test_write_read_alignment_formats :
         print indent+"Checking can write/read as '%s' format" % format
         
         #Going to write to a handle...
@@ -376,7 +385,7 @@ print "(Note that some of these are expected to 'fail' and say why)"
 print
 for (records, descr) in test_records :
     print "Testing can write/read %s" % descr
-    for format in SeqIO._FormatToWriter.keys() :
+    for format in test_write_read_alignment_formats :
         print " Checking can write/read as '%s' format" % format
 
         #################
