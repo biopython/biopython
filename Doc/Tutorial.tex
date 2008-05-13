@@ -238,7 +238,7 @@ That gives us enough to get started delving for more information. So, let's look
 
 A large part of much bioinformatics work involves dealing with the many types of file formats designed to hold biological data. These files are loaded with interesting biological data, and a special challenge is parsing these files into a format so that you can manipulate them with some kind of programming language. However the task of parsing these files can be frustrated by the fact that the formats can change quite regularly, and that formats may contain small subtleties which can break even the most well designed parsers.
 
-We are going to briefly introduce the \verb|Bio.SeqIO| module, available in Biopython 1.43 and later.  If you are using an older version of Biopython we encourage you to update (or find an old edition of this tutorial!). You can find out more in Chapter~\ref{chapter:Bio.SeqIO}.
+We are now going to briefly introduce the \verb|Bio.SeqIO| module -- you can find out more in Chapter~\ref{chapter:Bio.SeqIO}.
 
 We'll start with an online search for our friends, the lady slipper orchids. Let's just take a look through the nucleotide databases at NCBI, using an Entrez online search (\url{http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?db=Nucleotide}) for everything mentioning the text Cypripedioideae (this is the subfamily of lady slipper orchids). When this tutorial was originally written, this search gave us only 94 hits, which we saved as a FASTA formatted text file (\href{examples/ls_orchid.fasta}{ls\_orchid.fasta}; also available online \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.fasta}{here}) and as a GenBank formatted text file (\href{examples/ls_orchid.gbk}{ls\_orchid.gbk}; also available online \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.gbk}{here}).
 
@@ -318,6 +318,8 @@ This time \verb|Bio.SeqIO| has been able to choose a sensible alphabet, IUPAC Am
 Biopython has a lot of parsers, and each has its own little special niches based on the sequence format it is parsing and all of that.  While the most popular file formats have parsers integrated into \verb|Bio.SeqIO|, for some of the rarer and unloved file formats there is either no parser at all, or an old parser which has not been linked in yet.
 
 Chapter~\ref{chapter:Bio.SeqIO} covers \verb|Bio.SeqIO| in more detail.  Please also check the wiki page (\url{http://biopython.org/wiki/SeqIO}) for the latest information, or ask on the mailing list. The wiki page should includes an up to date list of supported file types, and more examples including writing sequences to a file, and converting between file formats.
+
+If you are interested in sequence alignments, then look at the \verb|Bio.AlignIO| module introduced in Chapter~\ref{chapter:Bio.AlignIO}.  Again, there is a wiki page for this too (\url{http://biopython.org/wiki/AlignIO}).
 
 The next place to look for information about specific parsers and how to do cool things with them is in the Cookbook, Section~\ref{chapter:cookbook} of this Tutorial. If you don't find the information you are looking for, please consider helping out your poor overworked documentors and submitting a cookbook entry about it! (once you figure out how to do it, that is!)
 
@@ -632,7 +634,7 @@ This contains an unambiguous alphabet, so to transcribe we would do the followin
 Seq('GAUCGAUGGGCCUAUAUAGGAUCGAAAAUCGC', IUPACUnambiguousRNA())
 \end{verbatim}
 
-The alphabet of the new RNA Seq object is created for free, so again, dealing with a Seq object is no more difficult then dealing with a simple string.
+The alphabet of the new RNA Seq object is created for free, so again, dealing with a \verb|Seq| object is no more difficult then dealing with a simple string.
 
 You can also reverse transcribe RNA sequences:
 
@@ -1298,6 +1300,141 @@ records = [make_rc_record(rec) for rec in \
            if len(rec.seq) < 700]
 SeqIO.write(records, open("rev_comp.fasta", "w"), "fasta")
 \end{verbatim}
+
+\chapter{Sequence Alignment Input/Output}
+\label{chapter:Bio.AlignIO}
+
+In this chapter we'll discuss the \verb|Bio.AlignIO| module, which is very similar to the \verb|Bio.SeqIO| module from the previous chapter, but deals with \verb|Alignment| objects rather than \verb|SeqRecord| objects.  This is new interface, which aims to provide a simple interface for working with assorted sequence alignment file formats in a uniform way.
+
+Note that both \verb|Bio.SeqIO| and \verb|Bio.AlignIO| can read and write sequence alignment files.  The appropriate choice will depend largely on what you want to do with the data.
+
+\section{Parsing or Reading Sequence Alignments}
+
+We have two functions for reading in sequence alignments, \verb|Bio.AlignIO.read()| and \verb|Bio.AlignIO.parse()| which following the convention introduced in \verb|Bio.SeqIO| are for files containing one or multiple alignments respectively.
+
+Both functions expects two mandatory arguments:
+
+\begin{enumerate}
+\item The first argument is a {\it handle} to read the data from, typically an open file (see Section~\ref{sec:appendix-handles}).
+\item The second argument is a lower case string specifying sequence format.  As in \verb|Bio.SeqIO| we don't try and guess the file format for you!
+\end{enumerate}
+
+Using \verb|Bio.AlignIO.parse()| will return an {\it iterator} which gives \verb|Alignment| objects.  Iterators are typically used in a for loop.  Examples of situations where you will have multiple different alignments include resampled alignments from the PHYLIP tool \verb|seqboot|, or multiple pairwise alignments from the EMBOSS tools \verb|water| or \verb|needle|.
+
+However, in many situations would will be dealing with files which contain only a single alignment.  In this case, you should use the \verb|Bio.AlignIO.read()| function which return a single \verb|Alignment| object.
+
+\subsection{Single Alignments}
+As an example, consider the following annotation rich protein alignment in the PFAM or Stockholm file format:
+
+\begin{verbatim}
+# STOCKHOLM 1.0
+#=GS COATB_BPIKE/30-81  AC P03620.1
+#=GS COATB_BPIKE/30-81  DR PDB; 1ifl ; 1-52;
+#=GS Q9T0Q8_BPIKE/1-52  AC Q9T0Q8.1
+#=GS COATB_BPI22/32-83  AC P15416.1
+#=GS COATB_BPM13/24-72  AC P69541.1
+#=GS COATB_BPM13/24-72  DR PDB; 2cpb ; 1-49;
+#=GS COATB_BPM13/24-72  DR PDB; 2cps ; 1-49;
+#=GS COATB_BPZJ2/1-49   AC P03618.1
+#=GS Q9T0Q9_BPFD/1-49   AC Q9T0Q9.1
+#=GS Q9T0Q9_BPFD/1-49   DR PDB; 1nh4 A; 1-49;
+#=GS COATB_BPIF1/22-73  AC P03619.2
+#=GS COATB_BPIF1/22-73  DR PDB; 1ifk ; 1-50;
+COATB_BPIKE/30-81             AEPNAATNYATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIRLFKKFSSKA
+#=GR COATB_BPIKE/30-81  SS    -HHHHHHHHHHHHHH--HHHHHHHH--HHHHHHHHHHHHHHHHHHHHH----
+Q9T0Q8_BPIKE/1-52             AEPNAATNYATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIKLFKKFVSRA
+COATB_BPI22/32-83             DGTSTATSYATEAMNSLKTQATDLIDQTWPVVTSVAVAGLAIRLFKKFSSKA
+COATB_BPM13/24-72             AEGDDP...AKAAFNSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFTSKA
+#=GR COATB_BPM13/24-72  SS    ---S-T...CHCHHHHCCCCTCCCTTCHHHHHHHHHHHHHHHHHHHHCTT--
+COATB_BPZJ2/1-49              AEGDDP...AKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFASKA
+Q9T0Q9_BPFD/1-49              AEGDDP...AKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFTSKA
+#=GR Q9T0Q9_BPFD/1-49   SS    ------...-HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH--
+COATB_BPIF1/22-73             FAADDATSQAKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKLFKKFVSRA
+#=GR COATB_BPIF1/22-73  SS    XX-HHHH--HHHHHH--HHHHHHH--HHHHHHHHHHHHHHHHHHHHHHH---
+#=GC SS_cons                  XHHHHHHHHHHHHHHHCHHHHHHHHCHHHHHHHHHHHHHHHHHHHHHHHC--
+#=GC seq_cons                 AEssss...AptAhDSLpspAT-hIu.sWshVsslVsAsluIKLFKKFsSKA
+//
+\end{verbatim}
+
+This is the seed alignment for the Phage\_Coat\_Gp8 (PF05371) PFAM entry, downloaded as a compressed archive from \url{http://pfam.sanger.ac.uk/family/alignment/download/gzipped?acc=PF05371&alnType=seed}.  We can load this file as follows (assuming it has been saved to disk as ``PF05371\_seed.sth'' in the current working directory):
+
+\begin{verbatim}
+from Bio import AlignIO
+alignment = AlignIO.read(open("PF05371_seed.sth"), "stockholm")
+print "Alignment length %i" % alignment.get_alignment_length()
+for record in alignment :
+    print record.seq, record.id
+\end{verbatim}
+
+\noindent This will give the following output:
+
+\begin{verbatim}
+Alignment length 52
+AEPNAATNYATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIRLFKKFSSKA COATB_BPIKE/30-81
+AEPNAATNYATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIKLFKKFVSRA Q9T0Q8_BPIKE/1-52
+DGTSTATSYATEAMNSLKTQATDLIDQTWPVVTSVAVAGLAIRLFKKFSSKA COATB_BPI22/32-83
+AEGDDP---AKAAFNSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFTSKA COATB_BPM13/24-72
+AEGDDP---AKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFASKA COATB_BPZJ2/1-49
+AEGDDP---AKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFTSKA Q9T0Q9_BPFD/1-49
+FAADDATSQAKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKLFKKFVSRA COATB_BPIF1/22-73
+\end{verbatim}
+
+Did you notice in the raw file above that several of the sequences included database cross-references to PDB and the associated known secondary strucutre?  Try this:
+
+\begin{verbatim}
+for record in alignment :
+    if record.dbxrefs :
+        print record.id, record.dbxrefs
+\end{verbatim}
+
+\noindent giving:
+
+\begin{verbatim}
+COATB_BPIKE/30-81 ['PDB; 1ifl ; 1-52;']
+COATB_BPM13/24-72 ['PDB; 2cpb ; 1-49;', 'PDB; 2cps ; 1-49;']
+Q9T0Q9_BPFD/1-49 ['PDB; 1nh4 A; 1-49;']
+COATB_BPIF1/22-73 ['PDB; 1ifk ; 1-50;']
+\end{verbatim}
+
+Sanger provide a nice web interface at \url{http://pfam.sanger.ac.uk/family?acc=PF05371} which will actually let you download this alignment in several other formats.  This is what the file looks like in the FASTA file format:
+
+\begin{verbatim}
+>COATB_BPIKE/30-81
+AEPNAATNYATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIRLFKKFSSKA
+>Q9T0Q8_BPIKE/1-52
+AEPNAATNYATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIKLFKKFVSRA
+>COATB_BPI22/32-83
+DGTSTATSYATEAMNSLKTQATDLIDQTWPVVTSVAVAGLAIRLFKKFSSKA
+>COATB_BPM13/24-72
+AEGDDP...AKAAFNSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFTSKA
+>COATB_BPZJ2/1-49
+AEGDDP...AKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFASKA
+>Q9T0Q9_BPFD/1-49
+AEGDDP...AKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFTSKA
+>COATB_BPIF1/22-73
+FAADDATSQAKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKLFKKFVSRA
+\end{verbatim}
+
+Assuming you download and save this as file ``PF05371\_seed.faa'' then you can load it with almost exactly the code:
+
+\begin{verbatim}
+from Bio import AlignIO
+alignment = AlignIO.read(open("PF05371_seed.faa"), "fasta")
+print "Alignment length %i" % alignment.get_alignment_length()
+for record in alignment :
+    print record.seq, record.id
+\end{verbatim}
+
+All that has changed here is the filename and the format string.  You'll get the same output as before, the sequences and record identifiers are the same.  However, as you should expect, if you check each \verb|SeqRecord| there is no annotation nor database cross-references because these are not included in the FASTA file format.
+
+\subsection{Multiple Alignments}
+
+Pending...
+
+\section{Writing Alignments}
+
+Pending...
+
 
 \chapter{BLAST}
 \label{chapter:blast}
