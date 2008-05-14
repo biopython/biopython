@@ -1312,16 +1312,18 @@ Note that both \verb|Bio.SeqIO| and \verb|Bio.AlignIO| can read and write sequen
 
 We have two functions for reading in sequence alignments, \verb|Bio.AlignIO.read()| and \verb|Bio.AlignIO.parse()| which following the convention introduced in \verb|Bio.SeqIO| are for files containing one or multiple alignments respectively.
 
-Both functions expects two mandatory arguments:
+Using \verb|Bio.AlignIO.parse()| will return an {\it iterator} which gives \verb|Alignment| objects.  Iterators are typically used in a for loop.  Examples of situations where you will have multiple different alignments include resampled alignments from the PHYLIP tool \verb|seqboot|, or multiple pairwise alignments from the EMBOSS tools \verb|water| or \verb|needle|.
+
+However, in many situations would will be dealing with files which contain only a single alignment.  In this case, you should use the \verb|Bio.AlignIO.read()| function which return a single \verb|Alignment| object.
+
+Both functions expect two mandatory arguments:
 
 \begin{enumerate}
 \item The first argument is a {\it handle} to read the data from, typically an open file (see Section~\ref{sec:appendix-handles}).
 \item The second argument is a lower case string specifying sequence format.  As in \verb|Bio.SeqIO| we don't try and guess the file format for you!
 \end{enumerate}
 
-Using \verb|Bio.AlignIO.parse()| will return an {\it iterator} which gives \verb|Alignment| objects.  Iterators are typically used in a for loop.  Examples of situations where you will have multiple different alignments include resampled alignments from the PHYLIP tool \verb|seqboot|, or multiple pairwise alignments from the EMBOSS tools \verb|water| or \verb|needle|.
-
-However, in many situations would will be dealing with files which contain only a single alignment.  In this case, you should use the \verb|Bio.AlignIO.read()| function which return a single \verb|Alignment| object.
+\noindent There is also an optional \verb|count| argument which is discussed in Section~\ref{sec:AlignIO-count-argument} below for dealing with ambigous file formats which may contain more than one alignment.
 
 \subsection{Single Alignments}
 As an example, consider the following annotation rich protein alignment in the PFAM or Stockholm file format:
@@ -1379,7 +1381,7 @@ AEGDDP---AKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFTSKA Q9T0Q9_BPFD/1-49
 FAADDATSQAKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKLFKKFVSRA COATB_BPIF1/22-73
 \end{verbatim}
 
-Did you notice in the raw file above that several of the sequences included database cross-references to PDB and the associated known secondary strucutre?  Try this:
+Did you notice in the raw file above that several of the sequences include database cross-references to the PDB and the associated known secondary strucutre?  Try this:
 
 \begin{verbatim}
 for record in alignment :
@@ -1427,18 +1429,257 @@ for record in alignment :
 
 All that has changed here is the filename and the format string.  You'll get the same output as before, the sequences and record identifiers are the same.  However, as you should expect, if you check each \verb|SeqRecord| there is no annotation nor database cross-references because these are not included in the FASTA file format.
 
+You can also use \verb|Bio.AlignIO| to convert the original Stockholm format file into a FASTA file yourself.
+
 \subsection{Multiple Alignments}
 
-Pending...
+The previous section focused on reading files containing a single alignment.  In general however, files can contain more than one alignment, and to read these files we must use the \verb|Bio.AlignIO.parse()| function.
+
+Pending... will probably use the output of the EMBOSS water or needle programs as an example here.  Or PHYLIP bootseq perhaps?
+
+\subsection{Ambiguous Alignments}
+\label{sec:AlignIO-count-argument}
+Many alignment file formats can explicitly store more than one alignment, and the division between each alignment is clear.  However, when a general sequence file format has been used there is no such block structure.  The most common such situation is when alignments have been saved in the FASTA file format.  For example consider the following:
+
+\begin{verbatim}
+>Alpha
+ACTACGACTAGCTCAG--G
+>Beta
+ACTACCGCTAGCTCAGAAG
+>Gamma
+ACTACGGCTAGCACAGAAG
+>Alpha
+ACTACGACTAGCTCAGG--
+>Beta
+ACTACCGCTAGCTCAGAAG
+>Gamma
+ACTACGGCTAGCACAGAAG
+\end{verbatim}
+
+\noindent This could be a single alignment containing six sequences (with repeated identifiers).  Or, judging from the identifiers, this is probably two different alignments each with three sequences, which happen to all have the same length.
+
+What about this next example?
+
+\begin{verbatim}
+>Alpha
+ACTACGACTAGCTCAG--G
+>Beta
+ACTACCGCTAGCTCAGAAG
+>Alpha
+ACTACGACTAGCTCAGG--
+>Gamma
+ACTACGGCTAGCACAGAAG
+>Alpha
+ACTACGACTAGCTCAGG--
+>Delta
+ACTACGGCTAGCACAGAAG
+\end{verbatim}
+
+\noindent Again, this could be a single alignment with six sequences.  However this time based on the identifiers we might guess this is three pairwise alignments which by chance have all got the same lengths.
+
+This final example is similar:
+
+\begin{verbatim}
+>Alpha
+ACTACGACTAGCTCAG--G
+>XXX
+ACTACCGCTAGCTCAGAAG
+>Alpha
+ACTACGACTAGCTCAGG
+>YYY
+ACTACGGCAAGCACAGG
+>Alpha
+--ACTACGAC--TAGCTCAGG
+>ZZZ
+GGACTACGACAATAGCTCAGG
+\end{verbatim}
+
+\noindent In this third example, because of the differing lengths, this cannot be treated as a single alignment containing all six records.  However, it could be three pairwise alignments.
+
+Using \verb|Bio.AlignIO.read()| to read these example would give a single alignment containing all six records for the first two examples, but would raise an exception in the final case because the lengths differ.
+
+If we want to interpret these FASTA examples as several separate alignments, we can use \verb|Bio.AlignIO.parse()| with the optional \verb|count| argument which specifies how many sequences are expected in each alignment (in these examples, 3, 2 and 2 respectively).  i.e. using the third example as the input data:
+
+\begin{verbatim}
+for alignment in AlignIO.parse(handle, "fasta", count=2) :
+    print "Alignment length %i" % alignment.get_alignment_length()
+    for record in alignment :
+        print record.seq, record.id
+    print
+\end{verbatim}
+
+\noindent giving:
+
+\begin{verbatim}
+Alignment length 19
+ACTACGACTAGCTCAG--G Alpha
+ACTACCGCTAGCTCAGAAG XXX
+
+Alignment length 17
+ACTACGACTAGCTCAGG Alpha
+ACTACGGCAAGCACAGG YYY
+
+Alignment length 21
+--ACTACGAC--TAGCTCAGG Alpha
+GGACTACGACAATAGCTCAGG ZZZ
+
+\end{verbatim}
+
+If the file format itself has a block structure allowing \verb|Bio.AlignIO| to determine the number of sequences in each alignment directly, then the \verb|count| argument is not needed.  If it is supplied, and doesn't agree with the file contents, and error is raised.
+
+Note that this optional \verb|count| argument assumes each alignment in the file has the same number of sequences.  Hypothetically you may come across stranger situations, for example a FASTA file containing several alignments each with a different number of sequences -- although I would love to hear of a real world example of this.  Assuming you cannot get the data in a nicer file format, there is no straight forward way to deal with this using \verb|Bio.AlignIO|.  In this case, you could consider reading in the sequences themselves using \verb|Bio.SeqIO| and batching them together to create the alignments as appropriate.
 
 \section{Writing Alignments}
 
-Pending...
+We've talked about using \verb|Bio.AlignIO.read()| and \verb|Bio.AlignIO.parse()| for alignment input (reading files), and now we'll look at \verb|Bio.AlignIO.write()| which is for alignment output (writing files).  This is a function taking three arguments: some \verb|Alignment| objects, a handle to write to, and a sequence format.
 
+Here is an example, where we start by creating a few \verb|Alignment| objects the hard way (by hand, rather than by loading them from a file):
+
+\begin{verbatim}
+...               
+my_alignments = [align1, align2, align3]
+\end{verbatim}
+
+\noindent Now we have a list of \verb|Alignment| objects, we'll write them to a PHYLIP format file:
+
+\begin{verbatim}
+from Bio import AlignIO
+handle = open("my_example.phy", "w")
+SeqIO.write(my_alignments, handle, "phylip")
+handle.close()
+\end{verbatim}
+
+\noindent And if you open this file in your favourite text editor it should look like this:
+
+\begin{verbatim}
+...
+\end{verbatim}
+
+\subsection{Converting between sequence alignment file formats}
+
+Converting between sequence alignment file formats with \verb|Bio.AlignIO| works in the same way as converting between sequence file formats with \verb|Bio.SeqIO| i.e. We load generally the alignment(s) using \verb|Bio.AlignIO.parse()| and then save them using the \verb|Bio.AlignIO.write()|.
+
+For this example, we'll load the PFAM/Stockholm format file used earlier and save it as a Clustal W format file:
+
+\begin{verbatim}
+from Bio import AlignIO
+alignments = AlignIO.parse(open("PF05371_seed.sth"), "stockholm")
+handle = open("PF05371_seed.aln","w")
+AlignIO.write(alignments, handle, "clustal")
+handle.close()
+\end{verbatim}
+
+The \verb|Bio.AlignIO.write()| function expects to be given multiple alignment objects.  In the example above we gave it the alignment iterator returned by \verb|Bio.AlignIO.parse()|.
+
+In this case, we know there is only one alignment in the file so we could instead have used \verb|Bio.AlignIO.read()| but notice we have to pass this alignment to \verb|Bio.AlignIO.write()| as a single element list:
+
+\begin{verbatim}
+from Bio import AlignIO
+alignment = AlignIO.read(open("PF05371_seed.sth"), "stockholm")
+handle = open("PF05371_seed.aln","w")
+AlignIO.write([alignment], handle, "clustal")
+handle.close()
+\end{verbatim}
+
+Either way, you should end up with the same new Clustal W format file ``PF05371\_seed.aln"'' with the following content:
+
+\begin{verbatim}
+CLUSTAL X (1.81) multiple sequence alignment
+
+
+COATB_BPIKE/30-81                   AEPNAATNYATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIRLFKKFSS
+Q9T0Q8_BPIKE/1-52                   AEPNAATNYATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIKLFKKFVS
+COATB_BPI22/32-83                   DGTSTATSYATEAMNSLKTQATDLIDQTWPVVTSVAVAGLAIRLFKKFSS
+COATB_BPM13/24-72                   AEGDDP---AKAAFNSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFTS
+COATB_BPZJ2/1-49                    AEGDDP---AKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFAS
+Q9T0Q9_BPFD/1-49                    AEGDDP---AKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFTS
+COATB_BPIF1/22-73                   FAADDATSQAKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKLFKKFVS
+
+COATB_BPIKE/30-81                   KA
+Q9T0Q8_BPIKE/1-52                   RA
+COATB_BPI22/32-83                   KA
+COATB_BPM13/24-72                   KA
+COATB_BPZJ2/1-49                    KA
+Q9T0Q9_BPFD/1-49                    KA
+COATB_BPIF1/22-73                   RA
+\end{verbatim}
+
+Alternatively, you could make a PHYLIP format file which we'll name ``PF05371\_seed.phy'':
+
+\begin{verbatim}
+from Bio import AlignIO
+alignment = AlignIO.read(open("PF05371_seed.sth"), "stockholm")
+handle = open("PF05371_seed.phy","w")
+AlignIO.write([alignment], handle, "phylip")
+handle.close()
+\end{verbatim}
+
+This time the output looks like this:
+
+\begin{verbatim}
+ 7 52
+COATB_BPIK AEPNAATNYA TEAMDSLKTQ AIDLISQTWP VVTTVVVAGL VIRLFKKFSS
+Q9T0Q8_BPI AEPNAATNYA TEAMDSLKTQ AIDLISQTWP VVTTVVVAGL VIKLFKKFVS
+COATB_BPI2 DGTSTATSYA TEAMNSLKTQ ATDLIDQTWP VVTSVAVAGL AIRLFKKFSS
+COATB_BPM1 AEGDDP---A KAAFNSLQAS ATEYIGYAWA MVVVIVGATI GIKLFKKFTS
+COATB_BPZJ AEGDDP---A KAAFDSLQAS ATEYIGYAWA MVVVIVGATI GIKLFKKFAS
+Q9T0Q9_BPF AEGDDP---A KAAFDSLQAS ATEYIGYAWA MVVVIVGATI GIKLFKKFTS
+COATB_BPIF FAADDATSQA KAAFDSLTAQ ATEMSGYAWA LVVLVVGATV GIKLFKKFVS
+
+           KA
+           RA
+           KA
+           KA
+           KA
+           KA
+           RA
+\end{verbatim}
+
+One of the big handicaps of the PHYLIP alignment file format is that the sequence identifiers are strictly truncated at ten characters.  In this example, as you can see the resulting names are still unique - but they are not very readable.  In this particular case, there is no clear way to compress the identifers, but for the sake of argument you may want to assign your own names or numbering system.  This following bit of code manipulates the record identifiers before saving the output:
+
+\begin{verbatim}
+from Bio import AlignIO
+alignment = AlignIO.read(open("PF05371_seed.sth"), "stockholm")
+name_mapping = {}
+for i,record in enumerate(alignment) :
+    name_mapping[i] = record.id
+    record.id = "seq%i" % i
+print name_mapping
+
+handle = open("PF05371_seed.phy","w")
+AlignIO.write([alignment], handle, "phylip")
+handle.close()
+\end{verbatim}
+
+\noindent This code using a python dictionary to record a simple mapping from the new sequence system to the original identifier:
+\begin{verbatim}
+{0: 'COATB_BPIKE/30-81', 1: 'Q9T0Q8_BPIKE/1-52', 2: 'COATB_BPI22/32-83', ...}
+\end{verbatim}
+
+\noindent Here is the new PHYLIP format output:
+\begin{verbatim}
+ 7 52
+seq0       AEPNAATNYA TEAMDSLKTQ AIDLISQTWP VVTTVVVAGL VIRLFKKFSS
+seq1       AEPNAATNYA TEAMDSLKTQ AIDLISQTWP VVTTVVVAGL VIKLFKKFVS
+seq2       DGTSTATSYA TEAMNSLKTQ ATDLIDQTWP VVTSVAVAGL AIRLFKKFSS
+seq3       AEGDDP---A KAAFNSLQAS ATEYIGYAWA MVVVIVGATI GIKLFKKFTS
+seq4       AEGDDP---A KAAFDSLQAS ATEYIGYAWA MVVVIVGATI GIKLFKKFAS
+seq5       AEGDDP---A KAAFDSLQAS ATEYIGYAWA MVVVIVGATI GIKLFKKFTS
+seq6       FAADDATSQA KAAFDSLTAQ ATEMSGYAWA LVVLVVGATV GIKLFKKFVS
+
+           KA
+           RA
+           KA
+           KA
+           KA
+           KA
+           RA
+\end{verbatim}
+
+\noindent In general, because of the identifier limitation, working with PHYLIP file formats shouldn't be your first choice.  Using the PFAM/Stockholm format on the other hand allows you to record a lot of additional annotation too.
 
 \chapter{BLAST}
 \label{chapter:blast}
-
 Hey, everybody loves BLAST right? I mean, geez, how can get it get any easier to do comparisons between one of your sequences and every other sequence in the known world? Heck, if I was writing the code to do that it would probably take about a day and a half to complete, and the results still wouldn't be as good. But, of course, this section isn't about how cool BLAST is, since we already know that. It is about the problem with BLAST -- it can be really difficult to deal with the volume of data generated by large runs, and to automate BLAST runs in general.
 
 Fortunately, the Biopython folks know this only too well, so they've developed lots of tools for dealing with BLAST and making things much easier. This section details how to use these tools and do useful things with 'em.
