@@ -151,6 +151,8 @@ dictionaries = (
 
 structures = {}
 
+items = ()
+
 def startElement(self, name, attrs):
     return
 
