@@ -8,11 +8,17 @@ The latest news is at the top.
 
 ===================================================================
 
-Bio.Entrez now has several Entrez format XML parsers.
+Bio.Entrez now has several Entrez format XML parsers, and a chapter
+in the tutorial.
+
+Addition of new Bio.AlignIO module for working with sequence alignments
+in the style introduced with Bio.SeqIO in recent releases, with a whole
+chapter in the tutorial.
 
 A problem parsing certain EMBL files was fixed.
 
-Several minor fixes were made to the NCBI BLAST XML parser.
+Several minor fixes were made to the NCBI BLAST XML parser, including
+support for the online version 2.2.18+ introduced in May 2008.
 
 ===================================================================
 
