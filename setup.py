@@ -328,6 +328,7 @@ PACKAGES = [
     'Bio',
     'Bio.Ais',
     'Bio.Align',
+    'Bio.AlignIO',
     'Bio.AlignAce',
     'Bio.Alphabet',
     'Bio.Application',
