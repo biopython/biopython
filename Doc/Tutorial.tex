@@ -1417,7 +1417,7 @@ AEGDDP...AKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFTSKA
 FAADDATSQAKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKLFKKFVSRA
 \end{verbatim}
 
-Assuming you download and save this as file ``PF05371\_seed.faa'' then you can load it with almost exactly the code:
+\noindent Assuming you download and save this as file ``PF05371\_seed.faa'' then you can load it with almost exactly the same code:
 
 \begin{verbatim}
 from Bio import AlignIO
@@ -1435,7 +1435,101 @@ You can also use \verb|Bio.AlignIO| to convert the original Stockholm format fil
 
 The previous section focused on reading files containing a single alignment.  In general however, files can contain more than one alignment, and to read these files we must use the \verb|Bio.AlignIO.parse()| function.
 
-Pending... will probably use the output of the EMBOSS water or needle programs as an example here.  Or PHYLIP bootseq perhaps?
+Suppose you have a small alignment in PHYLIP format:
+
+\begin{verbatim}
+    5    6
+Alpha     AACAAC
+Beta      AACCCC
+Gamma     ACCAAC
+Delta     CCACCA
+Epsilon   CCAAAC
+\end{verbatim}
+
+If you wanted to bootstrap a phylogenetic tree using the PHYLIP tools, one of the steps would be to create a set of many resampled alignments using the tool \verb|bootseq|.  This would give output something like this, which has been abbreviated for conciseness:
+
+\begin{verbatim}
+    5     6
+Alpha     AAACCA
+Beta      AAACCC
+Gamma     ACCCCA
+Delta     CCCAAC
+Epsilon   CCCAAA
+    5     6
+Alpha     AAACAA
+Beta      AAACCC
+Gamma     ACCCAA
+Delta     CCCACC
+Epsilon   CCCAAA
+    5     6
+Alpha     AAAAAC
+Beta      AAACCC
+Gamma     AACAAC
+Delta     CCCCCA
+Epsilon   CCCAAC
+...
+    5     6
+Alpha     AAAACC
+Beta      ACCCCC
+Gamma     AAAACC
+Delta     CCCCAA
+Epsilon   CAAACC
+\end{verbatim}
+
+If you wanted to read this in using \verb|Bio.AlignIO| you could use:
+
+\begin{verbatim}
+from Bio import AlignIO
+alignments = AlignIO.parse(open("resampled.phy"), "phylip")
+for alignment in alignments :
+    print "Alignment length %i" % alignment.get_alignment_length()
+    for record in alignment :
+        print record.seq, record.id
+    print
+\end{verbatim}
+
+\noindent This would give the following output, again abbreviated for display:
+
+\begin{verbatim}
+Alignment length 6
+AAACCA Alpha
+AAACCC Beta
+ACCCCA Gamma
+CCCAAC Delta
+CCCAAA Epsilon
+
+Alignment length 6
+AAACAA Alpha
+AAACCC Beta
+ACCCAA Gamma
+CCCACC Delta
+CCCAAA Epsilon
+
+Alignment length 6
+AAAAAC Alpha
+AAACCC Beta
+AACAAC Gamma
+CCCCCA Delta
+CCCAAC Epsilon
+
+...
+
+Alignment length 6
+AAAACC Alpha
+ACCCCC Beta
+AAAACC Gamma
+CCCCAA Delta
+CAAACC Epsilon
+\end{verbatim}
+
+As with the function \verb|Bio.SeqIO.parse()|, using \verb|Bio.alignIO.parse()| returns an iterator.  If you want to keep all the alignments in memory at once, which will allow you to access them in any order, then turn the iterator into a list:
+
+\begin{verbatim}
+from Bio import AlignIO
+alignments = list(AlignIO.parse(open("resampled.phy"), "phylip"))
+last_align = alignments[-1]
+first_align = alignments[0]
+\end{verbatim}
 
 \subsection{Ambiguous Alignments}
 \label{sec:AlignIO-count-argument}
@@ -1536,7 +1630,25 @@ We've talked about using \verb|Bio.AlignIO.read()| and \verb|Bio.AlignIO.parse()
 Here is an example, where we start by creating a few \verb|Alignment| objects the hard way (by hand, rather than by loading them from a file):
 
 \begin{verbatim}
-...               
+from Bio.Align.Generic import Alignment
+from Bio.Alphabet import IUPAC, Gapped
+alphabet = Gapped(IUPAC.unambiguous_dna)
+
+align1 = Alignment(alphabet)
+align1.add_sequence("Alpha", "ACTGCTAGCTAG")
+align1.add_sequence("Beta",  "ACT-CTAGCTAG")
+align1.add_sequence("Gamma", "ACTGCTAGDTAG")
+
+align2 = Alignment(alphabet)
+align2.add_sequence("Delta",  "GTCAGC-AG")
+align2.add_sequence("Epislon","GACAGCTAG")
+align2.add_sequence("Zeta",   "GTCAGCTAG")
+
+align3 = Alignment(alphabet)
+align3.add_sequence("Eta",   "ACTAGTACAGCTG")
+align3.add_sequence("Theta", "ACTAGTACAGCT-")
+align3.add_sequence("Iota",  "-CTACTACAGGTG")
+
 my_alignments = [align1, align2, align3]
 \end{verbatim}
 
@@ -1552,8 +1664,21 @@ handle.close()
 \noindent And if you open this file in your favourite text editor it should look like this:
 
 \begin{verbatim}
-...
+ 3 12
+Alpha      ACTGCTAGCT AG
+Beta       ACT-CTAGCT AG
+Gamma      ACTGCTAGDT AG
+ 3 9
+Delta      GTCAGC-AG
+Epislon    GACAGCTAG
+Zeta       GTCAGCTAG
+ 3 13
+Eta        ACTAGTACAG CTG
+Theta      ACTAGTACAG CT-
+Iota       -CTACTACAG GTG
 \end{verbatim}
+
+Its more common to want to load an existing alignment, and save that, perhaps after some simple manipulation like removing certain rows or columns.
 
 \subsection{Converting between sequence alignment file formats}
 
