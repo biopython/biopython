@@ -84,8 +84,6 @@ def check_dependencies():
          "http://www.egenix.com/files/python/eGenix-mx-Extensions.html"),
         ("Numerical Python", is_Numpy_installed, 0,
          "http://numpy.sourceforge.net/"),
-        ("Reportlab", is_reportlab_installed, 0,
-         "http://www.reportlab.org/downloads.html"),
         ]
 
     for name, is_installed_fn, is_required, url in dependencies:
@@ -324,9 +322,6 @@ def is_mxTextTools_installed():
 def is_Numpy_installed():
     return can_import("Numeric")
 
-def is_reportlab_installed():
-    return can_import("reportlab")
-                  
 # --- set up the packages we are going to install
 # standard biopython packages
 PACKAGES = [
@@ -531,7 +526,7 @@ PACKAGES.append("BioSQL")
 
 setup(
     name='biopython',
-    version='1.45',
+    version='1.45a',
     author='The Biopython Consortium',
     author_email='biopython@biopython.org',
     url='http://www.biopython.org/',
