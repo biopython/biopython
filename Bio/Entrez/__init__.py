@@ -232,6 +232,15 @@ class AttributedString(str):
             self.attributes[key] = attributes[key]
         return self
 
+class AttributedDictionary(dict):
+    def __new__(cls, attributes):
+        self = dict.__new__(cls)
+        self.attributes = {}
+        keys = attributes.keys()
+        for key in keys:
+            self.attributes[key] = attributes[key]
+        return self
+
 class Structure(dict):
     def __init__(self, keys):
         dict.__init__(self)
@@ -255,7 +264,6 @@ class DataHandler(ContentHandler, EntityResolver):
                      "eSpellResult": ESpell,
                      "TaxaSet": Taxon,
                      "PubmedArticleSet": PubmedArticleSet,
-                     "SerialSet": SerialSet,
                      "Mim-entries": NCBI_Mim,
                      "Entrezgene-Set": Entrezgene_Set,
                     }
@@ -275,10 +283,15 @@ class DataHandler(ContentHandler, EntityResolver):
         self.items = []
         self.handleStartElement = None
         self.handleEndElement = None
+        self.initialized = False
 
     def startElement(self, name, attrs):
-        self.attributes = attrs
         self.element.append(name)
+        if not self.initialized:
+            # This XML file does not have a DTD; load its definitions here
+            # using the first element in the XML.
+            self.load_dtd_definitions(name)
+        self.attributes = attrs
         self.content = ""
         if name in self.lists:
             object = []
@@ -292,7 +305,11 @@ class DataHandler(ContentHandler, EntityResolver):
                 current.append(object)
             self.path.append(object)
         elif name in self.dictionaries:
-            object = {}
+            if attrs:
+                object = AttributedDictionary(attrs)
+                del self.attributes
+            else:
+                object = {}
             try:
                 current = self.path[-1]
             except IndexError:
@@ -305,6 +322,12 @@ class DataHandler(ContentHandler, EntityResolver):
         elif name in self.structures:
             current = self.path[-1]
             object = Structure(self.structures[name])
+            if attrs:
+                object.attributes = {}
+                keys = attrs.keys()
+                for key in keys:
+                    object.attributes[key] = attrs[key]
+                del self.attributes
             if isinstance(current, dict):
                 current[name] = object
             elif isinstance(current, list):
@@ -314,6 +337,7 @@ class DataHandler(ContentHandler, EntityResolver):
             current = self.path[-1]
             itemname = str(attrs["Name"]) # convert from Unicode
             itemtype = str(attrs["Type"]) # convert from Unicode
+            del self.attributes
             if itemtype=="Structure":
                 object = {}
             elif itemname in ("ArticleIds", "History"):
@@ -371,6 +395,7 @@ class DataHandler(ContentHandler, EntityResolver):
             self.path = self.path[:-1]
             if self.attributes:
                 value = AttributedInteger(self.content, self.attributes)
+                del self.attributes
             else:
                 value = int(self.content)
             current = self.path[-1]
@@ -382,6 +407,7 @@ class DataHandler(ContentHandler, EntityResolver):
             self.path = self.path[:-1]
             if self.attributes:
                 value = AttributedString(self.content, self.attributes)
+                del self.attributes
             else:
                 value = self.content
             current = self.path[-1]
@@ -444,6 +470,8 @@ class DataHandler(ContentHandler, EntityResolver):
             import NCBI_Entrezgene as module
         elif filename=="NCBI_Seqloc.mod.dtd":
             import NCBI_Seqloc as module
+        elif filename=="SerialSet":
+            import  SerialSet as module
         else:
             return
         self.error = module.error
@@ -456,6 +484,7 @@ class DataHandler(ContentHandler, EntityResolver):
         self.items.extend(module.items)
         self.handleStartElement = module.startElement
         self.handleEndElement = module.endElement
+        self.initialized = True
 
 def read(handle):
     """read(hande) -> record
