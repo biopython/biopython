@@ -102,20 +102,20 @@ from Bio.Align.Generic import Alignment
 import StockholmIO
 import ClustalIO
 import PhylipIO
-#import NexusIO
-#import SwissIO
+import EmbossIO
 
 #Convention for format names is "mainname-subtype" in lower case.
 #Please use the same names as BioPerl and EMBOSS where possible.
 
 _FormatToIterator ={#"fasta" and "nexus" are done via Bio.SeqIO
                     "clustal" : ClustalIO.ClustalIterator,
+                    "emboss" : EmbossIO.EmbossIterator,
                     "phylip" : PhylipIO.PhylipIterator,
-                    #"nexus" : NexusIO.NexusIterator,
                     "stockholm" : StockholmIO.StockholmIterator,
                     }
 
 _FormatToWriter ={#"fasta" is done via Bio.SeqIO
+                  #"emboss" : EmbossIO.EmbossWriter,
                   "phylip" : PhylipIO.PhylipWriter,
                   "stockholm" : StockholmIO.StockholmWriter,
                   "clustal" : ClustalIO.ClustalWriter,
