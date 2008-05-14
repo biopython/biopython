@@ -240,14 +240,28 @@ def check_simple_write_read(records, indent=" ") :
                               % (str(e), repr(handle.read()), repr(records)))
 
         assert len(records2) == t_count
-        for i in range(t_count) :
+        for r1, r2 in zip(records, records2) :
             #Check the bare minimum (ID and sequence) as
             #many formats can't store more than that.
-            #
-            #Note some formats allow spaces, others don't.
-            #Assume spaces are turned into underscores.
-            records[i].id.replace(" ","_") == records2[i].id.replace(" ","_")
-            records[i].seq.data == records2[i].seq.data
+
+            #Check the sequence
+            assert r1.seq.tostring() == r2.seq.tostring()
+            #Beware of different quirks and limitations in the
+            #valid character sets and the identifier lengths!
+            if format=="phylip" :
+                assert r1.id.replace("[","").replace("]","")[:10] == r2.id, \
+                       "'%s' vs '%s'" % (r1.id, r2.id)
+            elif format=="clustal" :
+                assert r1.id.replace(" ","_")[:30] == r2.id, \
+                       "'%s' vs '%s'" % (r1.id, r2.id)
+            elif format=="stockholm" :
+                assert r1.id.replace(" ","_") == r2.id, \
+                       "'%s' vs '%s'" % (r1.id, r2.id)
+            elif format=="fasta" :
+                assert r1.id.split()[0] == r2.id
+            else :
+                assert r1.id == r2.id, \
+                       "'%s' vs '%s'" % (r1.id, r2.id)
 
 for (t_format, t_alignment, t_filename, t_count) in test_files :
     print "Testing reading %s format file %s" % (t_format, t_filename)
