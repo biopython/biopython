@@ -294,7 +294,7 @@ def parse(handle, format) :
     if format in _FormatToIterator :
         iterator_generator = _FormatToIterator[format]
         return iterator_generator(handle)
-    elif format in AlignIO._FormatToWriter :
+    elif format in AlignIO._FormatToIterator :
         #Use Bio.AlignIO to read in the alignments
         return _iterate_via_AlignIO(handle, format)
     else :
