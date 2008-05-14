@@ -13,11 +13,17 @@ class ClustalWriter(SequentialAlignmentWriter) :
     def write_alignment(self, alignment) :
         """Use this to write (another) single alignment to an open file."""
 
+        if len(alignment.get_all_seqs()) == 0 :
+            raise ValueError("Must have at least one sequence")
+
         #This was a copy the __str__ code from Bio.Clustalw.ClustalAlignment
         #but here we use the record.id and NOT the description.
         output = "CLUSTAL X (1.81) multiple sequence alignment\n\n\n"
         cur_char = 0
         max_length = len(alignment._records[0].seq)
+
+        if max_length <= 0 :
+            raise ValueError("Non-empty sequences are required")
 
         # keep displaying sequences until we reach the end
         while cur_char != max_length:
