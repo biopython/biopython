@@ -683,6 +683,61 @@ Testing reading phylip format file Phylip/interlaced2.phy as an alignment
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+Testing reading emboss format file Emboss/alignret.txt
+ ID = 'IXI_234', Name='<unknown name>',
+ Seq='TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGRPCC...AGDRSHE', length=131
+ ID = 'IXI_235', Name='<unknown name>',
+ Seq='TSPASIRPPAGPSSR---------RPSPPGPRRPTGRPCC...AGDRSHE', length=131
+ ID = 'IXI_236', Name='<unknown name>',
+ Seq='TSPASIRPPAGPSSRPAMVSSR--RPSPPPPRRPPGRPCC...AGDRSHE', length=131
+ ID = 'IXI_237', Name='<unknown name>',
+ Seq='TSPASLRPPAGPSSRPAMVSSRR-RPSPPGPRRPT----C...AGDRSHE', length=131
+Testing reading emboss format file Emboss/alignret.txt as an alignment
+ TTTT alignment column 0
+ SSSS alignment column 1
+ PPPP alignment column 2
+ AAAA alignment column 3
+ SSSS alignment column 4
+ |||| ...
+ EEEE alignment column 130
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading emboss format file Emboss/needle.txt
+ ID = 'ref_rec', Name='<unknown name>',
+ Seq='KILIVDD----QYGIRILLNEVFNKEGYQTFQAANGLQAL...-------', length=124
+ ID = 'gi|94968718|receiver', Name='<unknown name>',
+ Seq='-VLLADDHALVRRGFRLMLED--DPEIEIVAEAGDGAQAV...RVANGET', length=124
+ ID = 'ref_rec', Name='<unknown name>',
+ Seq='KILIVDDQYGIRILLNEVFNKEGYQTFQAANGLQALDIVT...-------', length=119
+ ...
+ ID = 'gi|94970041|receiver', Name='<unknown name>',
+ Seq='TVLLVEDEEGVRKLVRGILSRQGYHVLEATSGEEALEIVR...AVLQKRQ', length=125
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'phylip' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'stockholm' format
+ Failed: Sequences must all be the same length
+Testing reading emboss format file Emboss/water.txt
+ ID = 'IXI_234', Name='<unknown name>',
+ Seq='TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGRPCC...AGDRSHE', length=131
+ ID = 'IXI_235', Name='<unknown name>',
+ Seq='TSPASIRPPAGPSSR---------RPSPPGPRRPTGRPCC...AGDRSHE', length=131
+Testing reading emboss format file Emboss/water.txt as an alignment
+ TT alignment column 0
+ SS alignment column 1
+ PP alignment column 2
+ AA alignment column 3
+ SS alignment column 4
+ || ...
+ EE alignment column 130
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
 Finished tested reading files
 
 Starting testing writing records

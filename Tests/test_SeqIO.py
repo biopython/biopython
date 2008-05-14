@@ -1,4 +1,4 @@
-# Copyright 2007 by Peter Cock.  All rights reserved.
+# Copyright 2007-2008 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -115,6 +115,10 @@ test_files = [ \
     ("phylip",    True,  'Phylip/random.phy', 10),
     ("phylip",    True,  'Phylip/interlaced.phy', 3),
     ("phylip",    True,  'Phylip/interlaced2.phy', 4),
+#Following are EMBOSS simple or pairs format alignments
+    ("emboss",    True,  'Emboss/alignret.txt', 4),
+    ("emboss",    False,  'Emboss/needle.txt', 10),
+    ("emboss",    True,  'Emboss/water.txt', 2),
     ]
 
 # This is a list of two-tuples.  Each tuple contains a
@@ -251,7 +255,8 @@ for (t_format, t_alignment, t_filename, t_count) in test_files :
 
     #Try as an iterator using handle
     records  = list(SeqIO.parse(handle=open(t_filename,"r"), format=t_format))
-    assert len(records)  == t_count
+    assert len(records)  == t_count, \
+         "Found %i records but expected %i" % (len(records), t_count)
 
     #Try using the iterator with a for loop
     records2 = []
