@@ -1,0 +1,170 @@
+test_AlignIO
+Testing reading clustal format file Clustalw/cw02.aln with 1 alignments
+ Alignment 0, with 2 sequences of length 601
+  MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVN...SVV gi|4959044|gb|AAD34209.1|AF069
+  ---------MSPQTETKASVGFKAGVKEYKLTYYTP...--- gi|671626|emb|CAA85685.1|
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'stockholm' format
+Testing reading clustal format file Clustalw/opuntia.aln with 1 alignments
+ Alignment 0, with 7 sequences of length 156
+  TTTTTTT alignment column 0
+  AAAAAAA alignment column 1
+  TTTTTTT alignment column 2
+  AAAAAAA alignment column 3
+  CCCCCCC alignment column 4
+  ||||||| ...
+  AAAAAAA alignment column 155
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'stockholm' format
+Testing reading fasta format file GFF/multi.fna with 1 alignments
+ Alignment 0, with 3 sequences of length 8
+  ACGTCGCG test1
+  GGGGCCCC test2
+  AAACACAC test3
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'stockholm' format
+Testing reading nexus format file Nexus/test_Nexus_input.nex with 1 alignments
+ Alignment 0, with 9 sequences of length 48
+  AAAAAAAAc alignment column 0
+  -----c?tc alignment column 1
+  CCCCCCCCc alignment column 2
+  --c-?a-tc alignment column 3
+  GGGGGGGGc alignment column 4
+  ||||||||| ...
+  tt--?ag?c alignment column 47
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'stockholm' format
+Testing reading stockholm format file Stockholm/simple.sth with 1 alignments
+ Alignment 0, with 2 sequences of length 104
+  UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCA...UGU AP001509.1
+  AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGA...GAU AE007476.1
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'stockholm' format
+Testing reading stockholm format file Stockholm/funny.sth with 1 alignments
+ Alignment 0, with 5 sequences of length 43
+  MMMEE alignment column 0
+  TQIVV alignment column 1
+  CHEMM alignment column 2
+  RVALL alignment column 3
+  ASDTT alignment column 4
+  ||||| ...
+  SYSEE alignment column 42
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'stockholm' format
+Testing reading phylip format file Phylip/reference_dna.phy with 1 alignments
+ Alignment 0, with 6 sequences of length 13
+  CCTTCG alignment column 0
+  GGAAAG alignment column 1
+  ATAAAC alignment column 2
+  TTTTAA alignment column 3
+  GAGGAG alignment column 4
+  |||||| ...
+  CTTTTC alignment column 12
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'stockholm' format
+Testing reading phylip format file Phylip/reference_dna2.phy with 1 alignments
+ Alignment 0, with 6 sequences of length 39
+  CCTTCG alignment column 0
+  GGAAAG alignment column 1
+  ATAAAC alignment column 2
+  TTTTAA alignment column 3
+  GAGGAG alignment column 4
+  |||||| ...
+  CTTTTC alignment column 38
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'stockholm' format
+Testing reading phylip format file Phylip/hennigian.phy with 1 alignments
+ Alignment 0, with 10 sequences of length 40
+  CCCCCAAAAA alignment column 0
+  AAAAACCCCC alignment column 1
+  CCCAAAAAAA alignment column 2
+  AAACCAAAAA alignment column 3
+  CCAAAAAAAA alignment column 4
+  |||||||||| ...
+  AAAAAAAAAA alignment column 39
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'stockholm' format
+Testing reading phylip format file Phylip/horses.phy with 1 alignments
+ Alignment 0, with 10 sequences of length 40
+  AACCCCCCCC alignment column 0
+  AAAACCCCCC alignment column 1
+  AAAAAAAAAC alignment column 2
+  ACAAAAAAAA alignment column 3
+  ACACCCCCCC alignment column 4
+  |||||||||| ...
+  AAAAAAAAAA alignment column 39
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'stockholm' format
+Testing reading phylip format file Phylip/random.phy with 1 alignments
+ Alignment 0, with 10 sequences of length 40
+  CAAAACAAAC alignment column 0
+  AACAACCACC alignment column 1
+  CAAAACAAAA alignment column 2
+  ACAACACACA alignment column 3
+  CCAAAACCAA alignment column 4
+  |||||||||| ...
+  AAAAAAAAAA alignment column 39
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'stockholm' format
+Testing reading phylip format file Phylip/interlaced.phy with 1 alignments
+ Alignment 0, with 3 sequences of length 384
+  -----MKVILLFVLAVFTVFVSS-------------...I-- CYS1_DICDI
+  MAHARVLLLALAVLATAAVAVASSSSFADSNPIRPV...VAA ALEU_HORVU
+  ------MWATLPLLCAGAWLLGV--------PVCGA...PLV CATH_HUMAN
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'stockholm' format
+Testing reading phylip format file Phylip/interlaced2.phy with 1 alignments
+ Alignment 0, with 4 sequences of length 131
+  TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTG...SHE IXI_234
+  TSPASIRPPAGPSSR---------RPSPPGPRRPTG...SHE IXI_235
+  TSPASIRPPAGPSSRPAMVSSR--RPSPPPPRRPPG...SHE IXI_236
+  TSPASLRPPAGPSSRPAMVSSRR-RPSPPGPRRPT-...SHE IXI_237
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'stockholm' format
+Testing reading emboss format file Emboss/alignret.txt with 1 alignments
+ Alignment 0, with 4 sequences of length 131
+  TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTG...SHE IXI_234
+  TSPASIRPPAGPSSR---------RPSPPGPRRPTG...SHE IXI_235
+  TSPASIRPPAGPSSRPAMVSSR--RPSPPPPRRPPG...SHE IXI_236
+  TSPASLRPPAGPSSRPAMVSSRR-RPSPPGPRRPT-...SHE IXI_237
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'stockholm' format
+Testing reading emboss format file Emboss/needle.txt with 5 alignments
+ Alignment 0, with 2 sequences of length 124
+  KILIVDD----QYGIRILLNEVFNKEGYQTFQAANG...--- ref_rec
+  -VLLADDHALVRRGFRLMLED--DPEIEIVAEAGDG...GET gi|94968718|receiver
+ Alignment 1, with 2 sequences of length 119
+  KILIVDDQYGIRILLNEVFNKEGYQTFQAANGLQAL...--- ref_rec
+  -ILIVDDEANTLASLSRAFRLAGHEATVCDNAVRAL...LKR gi|94968761|receiver
+ Alignment 2, with 2 sequences of length 120
+  -KILIVDDQYGIRILLNEVFNKEGYQTFQAANGLQA...--- ref_rec
+  LHIVVVDDDPGTCVYIESVFAELGHTCKSFVRPEAA...HKE gi|94967506|receiver
+ ...
+ Alignment 4, with 2 sequences of length 125
+  KILIVDDQYGIRILLNEVFNKEGYQTFQAANGLQAL...--- ref_rec
+  TVLLVEDEEGVRKLVRGILSRQGYHVLEATSGEEAL...KRQ gi|94970041|receiver
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'stockholm' format
+Testing reading emboss format file Emboss/water.txt with 1 alignments
+ Alignment 0, with 2 sequences of length 131
+  TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTG...SHE IXI_234
+  TSPASIRPPAGPSSR---------RPSPPGPRRPTG...SHE IXI_235
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'stockholm' format
+Finished tested reading files

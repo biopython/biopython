@@ -1,0 +1,221 @@
+# Copyright 2008 by Peter Cock.  All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
+import os
+from StringIO import StringIO
+from Bio import AlignIO
+from Bio.Align.Generic import Alignment
+
+test_write_read_alignment_formats = AlignIO._FormatToWriter.keys()
+
+# test_files is a list of tuples containing:
+# - string:  file format
+# - integer: number of sequences per alignment
+# - integer: number of alignments
+# - string:  relative filename
+#
+# Most of the input files are also used by test_SeqIO.py,
+# and by other additional tests as noted below.
+test_files = [ \
+#Following examples are also used in test_Clustalw.py
+    ("clustal", 2, 1, 'Clustalw/cw02.aln'),
+    ("clustal", 7, 1, 'Clustalw/opuntia.aln'),
+#Following examples are also used in test_GFF.py
+    ("fasta", 3, 1, 'GFF/multi.fna'), #Trivial nucleotide alignment
+#Following example is also used in test_Nexus.py
+    ("nexus", 9, 1, 'Nexus/test_Nexus_input.nex'),
+    ("stockholm", 2, 1, 'Stockholm/simple.sth'),
+    ("stockholm", 5, 1, 'Stockholm/funny.sth'),
+    ("phylip", 6, 1, 'Phylip/reference_dna.phy'),
+    ("phylip", 6, 1, 'Phylip/reference_dna2.phy'),
+    ("phylip",10, 1, 'Phylip/hennigian.phy'),
+    ("phylip",10, 1, 'Phylip/horses.phy'),
+    ("phylip",10, 1, 'Phylip/random.phy'),
+    ("phylip", 3, 1, 'Phylip/interlaced.phy'),
+    ("phylip", 4, 1, 'Phylip/interlaced2.phy'),
+    ("emboss", 4, 1, 'Emboss/alignret.txt'),
+    ("emboss", 2, 5, 'Emboss/needle.txt'),
+    ("emboss", 2, 1, 'Emboss/water.txt'),
+    ]
+
+def str_summary(text, max_len=40) :
+    if len(text) <= max_len :
+        return text
+    else :
+        return text[:max_len-4] + "..." + text[-3:]
+
+def alignment_summary(alignment, index="  ", vertical_threshold=5) :
+    """Returns a concise summary of an Alignment object as a string"""
+    answer = []
+    alignment_len = alignment.get_alignment_length()
+    rec_count = len(alignment.get_all_seqs())
+    if rec_count < vertical_threshold :
+        #Show each sequence row horizontally
+        for record in alignment :
+            answer.append("%s%s %s" \
+            % (index,str_summary(record.seq.tostring()),record.id))
+    else :
+        #Show each sequence row vertically
+        for i in range(min(5,alignment_len)) :
+            answer.append(index + str_summary(alignment.get_column(i)) \
+                                + " alignment column %i" % i)
+        if alignment_len > 5 :
+            i = alignment_len - 1
+            answer.append(index + str_summary("|" * rec_count) \
+                                + " ...")
+            answer.append(index + str_summary(alignment.get_column(i)) \
+                                + " alignment column %i" % i)
+    return "\n".join(answer)
+
+
+def check_simple_write_read(alignments, indent=" ") :
+    #print indent+"Checking we can write and then read back these alignments"
+    for format in test_write_read_alignment_formats :
+        print indent+"Checking can write/read as '%s' format" % format
+        
+        #Going to write to a handle...
+        handle = StringIO()
+        
+        try :
+            AlignIO.write(alignments, handle=handle, format=format)
+        except ValueError, e :
+            #This is often expected to happen, for example when we try and
+            #write sequences of different lengths to an alignment file.
+            print indent+"Failed: %s" % str(e)
+            #Carry on to the next format:
+            continue
+
+        handle.flush()
+        handle.seek(0)
+        #Now ready to read back from the handle...
+        try :
+            alignments2 = list(AlignIO.parse(handle=handle, format=format))
+        except ValueError, e :
+            #This is BAD.  We can't read our own output.
+            #I want to see the output when called from the test harness,
+            #run_tests.py (which can be funny about new lines on Windows)
+            handle.seek(0)
+            raise ValueError("%s\n\n%s\n\n%s" \
+                              % (str(e), repr(handle.read()), repr(alignments2)))
+
+        assert len(alignments2) == t_count
+        for a1, a2 in zip(alignments, alignments2) :
+            assert a1.get_alignment_length() == a2.get_alignment_length()
+            assert len(a1.get_all_seqs()) == len(a2.get_all_seqs())
+            for r1, r2 in zip(a1,a2) :
+                #Check the bare minimum (ID and sequence) as
+                #many formats can't store more than that.
+
+                #Check the sequence
+                assert r1.seq.tostring() == r2.seq.tostring()
+                
+                #Beware of different quirks and limitations in the
+                #valid character sets and the identifier lengths!
+                if format=="phylip" :
+                    assert r1.id.replace("[","").replace("]","")[:10] == r2.id, \
+                           "'%s' vs '%s'" % (r1.id, r2.id)
+                elif format=="clustal" :
+                    assert r1.id.replace(" ","_")[:30] == r2.id, \
+                           "'%s' vs '%s'" % (r1.id, r2.id)
+                elif format=="stockholm" :
+                    assert r1.id.replace(" ","_") == r2.id, \
+                           "'%s' vs '%s'" % (r1.id, r2.id)
+                elif format=="fasta" :
+                    assert r1.id.split()[0] == r2.id
+                else :
+                    assert r1.id == r2.id, \
+                           "'%s' vs '%s'" % (r1.id, r2.id)
+
+for (t_format, t_per, t_count, t_filename) in test_files :
+    print "Testing reading %s format file %s with %i alignments" \
+          % (t_format, t_filename, t_count)
+    assert os.path.isfile(t_filename), t_filename
+
+    #Try as an iterator using handle
+    alignments  = list(AlignIO.parse(handle=open(t_filename,"r"), format=t_format))
+    assert len(alignments)  == t_count, \
+         "Found %i alignments but expected %i" % (len(alignments), t_count)
+    for alignment in alignments :
+        assert len(alignment.get_all_seqs()) == t_per, \
+            "Expected %i records per alignment, got %i" \
+            % (t_per, len(alignment.get_all_seqs()))
+
+    #Try using the iterator with a for loop
+    alignments2 = []
+    for record in AlignIO.parse(handle=open(t_filename,"r"), format=t_format) :
+        alignments2.append(record)
+    assert len(alignments2) == t_count
+
+    #Try using the iterator with the next() method
+    alignments3 = []
+    seq_iterator = AlignIO.parse(handle=open(t_filename,"r"), format=t_format)
+    while True :
+        try :
+            record = seq_iterator.next()
+        except StopIteration :
+            record = None
+        if record :
+            alignments3.append(record)
+        else :
+            break
+
+    #Try a mixture of next() and list (a torture test!)
+    seq_iterator = AlignIO.parse(handle=open(t_filename,"r"), format=t_format)
+    try :
+        record = seq_iterator.next()
+    except StopIteration :
+        record = None
+    if record is not None :
+        alignments4 = [record]
+        alignments4.extend(list(seq_iterator))
+    else :
+        alignments4 = []
+    assert len(alignments4) == t_count
+
+    #Try a mixture of next() and for loop (a torture test!)
+    seq_iterator = AlignIO.parse(handle=open(t_filename,"r"), format=t_format)
+    try :
+        record = seq_iterator.next()
+    except StopIteration :
+        record = None
+    if record is not None :
+        alignments5 = [record]
+        for record in seq_iterator :
+            alignments5.append(record)
+    else :
+        alignments5 = []
+    assert len(alignments5) == t_count
+
+    # Check Bio.AlignIO.read(...)
+    if t_count == 1 :
+        alignment = AlignIO.read(handle=open(t_filename), format=t_format)
+        assert isinstance(alignment, Alignment)
+    else :
+        try :
+            alignment = AlignIO.read(open(t_filename), t_format)
+            assert False, "Bio.AlignIO.read(...) should have failed"
+        except ValueError :
+            #Expected to fail
+            pass
+
+    #Print the alignment
+    for i,alignment in enumerate(alignments) :
+        if i < 3 or i+1 == t_count :
+            print " Alignment %i, with %i sequences of length %i" \
+                  % (i,
+                     len(alignment.get_all_seqs()),
+                     alignment.get_alignment_length())
+            print alignment_summary(alignment)
+        elif i==3 :
+            print " ..."
+
+    #Some alignment file formats have magic characters which mean
+    #use the letter in this position in the first sequence.
+    #They should all have been converted by the parser, but if
+    #not reversing the record order might expose an error.  Maybe.
+    alignments.reverse()
+    check_simple_write_read(alignments)
+
+print "Finished tested reading files"
