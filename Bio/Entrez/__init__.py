@@ -245,7 +245,7 @@ class Structure(dict):
             dict.__setitem__(self, key, value)
 
 class DataHandler(ContentHandler, EntityResolver):
-    from Bio.Entrez import EInfo, ESearch, ESummary, EPost, ELink, EGQuery, ESpell, Taxon, PubmedArticleSet, SerialSet, NCBI_Mim, Entrezgene_Set, NCBI_Entrezgene, NCBI_Seqloc
+    from Bio.Entrez import EInfo, ESearch, ESummary, EPost, ELink, EGQuery, ESpell, Taxon, PubmedArticleSet, SerialSet, NCBI_Mim, Entrezgene_Set
     _NameToModule = {"eInfoResult": EInfo,
                      "eSearchResult": ESearch,
                      "eSummaryResult": ESummary,
@@ -259,16 +259,6 @@ class DataHandler(ContentHandler, EntityResolver):
                      "Mim-entries": NCBI_Mim,
                      "Entrezgene-Set": Entrezgene_Set,
                     }
-    _FileNameToModule = {"eInfo_020511.dtd": EInfo,
-                         "eSearch_020511.dtd": ESearch,
-                         "ePost_020511.dtd": EPost,
-                         "eSummary_041029.dtd": ESummary,
-                         "eLink_020511.dtd": ELink,
-                         "eSpell.dtd": ESpell,
-                         "egquery.dtd": EGQuery,
-                         "NCBI_Entrezgene.mod.dtd": NCBI_Entrezgene,
-                         "NCBI_Seqloc.mod.dtd": NCBI_Seqloc,
-                        }
 
     DTDs = os.path.join(__path__[0], "DTDs")
 
@@ -423,18 +413,7 @@ class DataHandler(ContentHandler, EntityResolver):
 
     def resolveEntity(self, publicId, systemId):
         location, filename = os.path.split(systemId)
-        if filename in DataHandler._FileNameToModule:
-            module = DataHandler._FileNameToModule[filename]
-            self.error = module.error
-            self.booleans.extend(module.booleans)
-            self.integers.extend(module.integers)
-            self.strings.extend(module.strings)
-            self.lists.extend(module.lists)
-            self.dictionaries.extend(module.dictionaries)
-            self.structures.update(module.structures)
-            self.items.extend(module.items)
-            self.handleStartElement = module.startElement
-            self.handleEndElement = module.endElement
+        self.load_dtd_definitions(filename)
         path = os.path.join(DataHandler.DTDs, filename)
         try:
             handle = open(path)
@@ -444,6 +423,39 @@ class DataHandler(ContentHandler, EntityResolver):
             handle = EntityResolver.resolveEntity(self, publicId, systemId)
         return handle
 
+    def load_dtd_definitions(self, filename):
+        if filename=="eInfo_020511.dtd":
+            import EInfo as module
+        elif filename=="eSearch_020511.dtd":
+            import ESearch as module
+        elif filename=="ePost_020511.dtd":
+            import EPost as module
+        elif filename=="eSummary_041029.dtd":
+            import ESummary as module
+        elif filename=="eLink_020511.dtd":
+            import ELink as module
+        elif filename=="eSpell.dtd":
+            import ESpell as module
+        elif filename=="egquery.dtd":
+            import EGQuery as module
+        elif filename=="NCBI_BioSource.mod.dtd":
+            import NCBI_BioSource as module
+        elif filename=="NCBI_Entrezgene.mod.dtd":
+            import NCBI_Entrezgene as module
+        elif filename=="NCBI_Seqloc.mod.dtd":
+            import NCBI_Seqloc as module
+        else:
+            return
+        self.error = module.error
+        self.booleans.extend(module.booleans)
+        self.integers.extend(module.integers)
+        self.strings.extend(module.strings)
+        self.lists.extend(module.lists)
+        self.dictionaries.extend(module.dictionaries)
+        self.structures.update(module.structures)
+        self.items.extend(module.items)
+        self.handleStartElement = module.startElement
+        self.handleEndElement = module.endElement
 
 def read(handle):
     """read(hande) -> record
