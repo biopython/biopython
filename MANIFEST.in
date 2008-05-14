@@ -45,4 +45,5 @@ exclude Martel/.cvsignore
 
 # Make sure the proper files in EUtils are included.
 include Bio/EUtils/DTDs/*.dtd  # Include DTD files for EUtils
+include Bio/Entrez/DTDs/*.dtd  # Include DTD files for Entrez
 include Bio/PopGen/SimCoal/data/*.par    # Include SimCoal data files
