@@ -1,0 +1,168 @@
+########################################
+# Program: needle
+# Rundate: Sun 27 Apr 2007 17:20:35
+# Commandline: needle
+#    [-asequence] Spo0F.faa
+#    [-bsequence] paired_r.faa
+#    -sformat2 pearson
+# Align_format: srspair
+# Report_file: ref_rec .needle
+########################################
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: ref_rec
+# 2: gi|94968718|receiver
+# Matrix: EBLOSUM62
+# Gap_penalty: 10.0
+# Extend_penalty: 0.5
+#
+# Length: 124
+# Identity:      32/124 (25.8%)
+# Similarity:    64/124 (51.6%)
+# Gaps:          17/124 (13.7%)
+# Score: 112.0
+# 
+#
+#=======================================
+
+ref_rec            1 KILIVDD----QYGIRILLNEVFNKEGYQTFQAANGLQALDIVTKERPDL     46
+                      :|:.||    :.|.|::|.:  :.|.....:|.:|.||:.:..:..|.:
+gi|94968718|r      1 -VLLADDHALVRRGFRLMLED--DPEIEIVAEAGDGAQAVKLAGELHPRV     47
+
+ref_rec           47 VLLDMKIPGMDGIEILKRMKVIDENIRVIIMTAYGELDMIQESKELGALT     96
+                     |::|..:|||.|::..|:::....:|.|:::|.:.|...::.:.|.||..
+gi|94968718|r     48 VVMDCAMPGMSGMDATKQIRTQWPDIAVLMLTMHSEDTWVRLALEAGANG     97
+
+ref_rec           97 HFAK-PFDIDEIRDAV--------    111
+                     :..| ..|:|.|: ||        
+gi|94968718|r     98 YILKSAIDLDLIQ-AVRRVANGET    120
+
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: ref_rec
+# 2: gi|94968761|receiver
+# Matrix: EBLOSUM62
+# Gap_penalty: 10.0
+# Extend_penalty: 0.5
+#
+# Length: 119
+# Identity:      34/119 (28.6%)
+# Similarity:    58/119 (48.7%)
+# Gaps:           9/119 ( 7.6%)
+# Score: 154.0
+# 
+#
+#=======================================
+
+ref_rec            1 KILIVDDQYGIRILLNEVFNKEGYQTFQAANGLQALDIVTKERPDLVLLD     50
+                      ||||||:......|:..|...|::.....|.::||:|...:..||:|.|
+gi|94968761|r      1 -ILIVDDEANTLASLSRAFRLAGHEATVCDNAVRALEIAKSKPFDLILSD     49
+
+ref_rec           51 MKIPGMDGIEILKRMKVIDENIRVIIMTAYGELDMIQESKELGALTHFAK    100
+                     :.:||.||:.:|:.:|.......|::|:....::|..::..||||....|
+gi|94968761|r     50 VVMPGRDGLTLLEDLKTAGVQAPVVMMSGQAHIEMAVKATRLGALDFLEK     99
+
+ref_rec          101 PFDIDEIRDAV--------    111
+                     |...|::...|        
+gi|94968761|r    100 PLSTDKLLLTVENALKLKR    118
+
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: ref_rec
+# 2: gi|94967506|receiver
+# Matrix: EBLOSUM62
+# Gap_penalty: 10.0
+# Extend_penalty: 0.5
+#
+# Length: 120
+# Identity:      29/120 (24.2%)
+# Similarity:    53/120 (44.2%)
+# Gaps:           9/120 ( 7.5%)
+# Score: 121.0
+# 
+#
+#=======================================
+
+ref_rec            1 -KILIVDDQYGIRILLNEVFNKEGYQTFQAANGLQALDIVTKERPDLVLL     49
+                      .|::|||..|..:.:..||.:.|:..........|.:.:.....||.::
+gi|94967506|r      1 LHIVVVDDDPGTCVYIESVFAELGHTCKSFVRPEAAEEYILTHPVDLAIV     50
+
+ref_rec           50 DMKIPGMDGIEILKRMKVIDENIRVIIMTAYGELDMIQESKELGALTHFA     99
+                     |:.:....|:|:|:|.:|....:..:|:|....|:|...|...||:.:..
+gi|94967506|r     51 DVYLGSTTGVEVLRRCRVHRPKLYAVIITGQISLEMAARSIAEGAVDYIQ    100
+
+ref_rec          100 KPFDIDEIRDAV--------    111
+                     ||.|||.:.:..        
+gi|94967506|r    101 KPIDIDALLNIAERALEHKE    120
+
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: ref_rec
+# 2: gi|94970045|receiver
+# Matrix: EBLOSUM62
+# Gap_penalty: 10.0
+# Extend_penalty: 0.5
+#
+# Length: 118
+# Identity:      30/118 (25.4%)
+# Similarity:    64/118 (54.2%)
+# Gaps:           9/118 ( 7.6%)
+# Score: 126.0
+# 
+#
+#=======================================
+
+ref_rec            1 KILIVDDQYGIRILLNEVFNKEGYQTFQAANGLQALDIVTK--ERPDLVL     48
+                      :|:|:|:..:|....:.....||:...|.:|.:||.:.:|  ||.|:::
+gi|94970045|r      1 -VLLVEDEEALRAAAGDFLETRGYKIMTARDGTEALSMASKFAERIDVLI     49
+
+ref_rec           49 LDMKIPGMDGIEILKRMKVIDENIRVIIMTAYGELDMIQESKELGALTHF     98
+                     .|:.:||:.|..:.:.:..|....:|:.|:.|.: :.:..:.|:.:.:.|
+gi|94970045|r     50 TDLVMPGISGRVLAQELVKIHPETKVMYMSGYDD-ETVMVNGEIDSSSAF     98
+
+ref_rec           99 -AKPFDID----EIRDAV    111
+                      .|||.:|    :||:.:
+gi|94970045|r     99 LRKPFRMDALSAKIREVL    116
+
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: ref_rec
+# 2: gi|94970041|receiver
+# Matrix: EBLOSUM62
+# Gap_penalty: 10.0
+# Extend_penalty: 0.5
+#
+# Length: 125
+# Identity:      35/125 (28.0%)
+# Similarity:    70/125 (56.0%)
+# Gaps:          18/125 (14.4%)
+# Score: 156.5
+# 
+#
+#=======================================
+
+ref_rec            1 KILIVDDQYGIRILLNEVFNKEGYQTFQAANGLQALDIV--TKERPDLVL     48
+                     .:|:|:|:.|:|.|:..:.:::||...:|.:|.:||:||  :.::.|::|
+gi|94970041|r      1 TVLLVEDEEGVRKLVRGILSRQGYHVLEATSGEEALEIVRESTQKIDMLL     50
+
+ref_rec           49 LDMKIPGMDGIEILKRMKVIDENIRVIIMTAYGELDMIQESKELGALTHF     98
+                     .|:.:.||.|.|:.:|:::...:::||.|:.|.:..:::.    |.||..
+gi|94970041|r     51 SDVVLVGMSGRELSERLRIQMPSLKVIYMSGYTDDAIVRH----GVLTES     96
+
+ref_rec           99 A----KPFDIDEIRDAV--------    111
+                     |    |||..|.:...|        
+gi|94970041|r     97 AEFLQKPFTSDSLLRKVRAVLQKRQ    121
+
+
+#---------------------------------------
+#---------------------------------------
