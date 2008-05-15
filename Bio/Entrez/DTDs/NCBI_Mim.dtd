@@ -1,0 +1,17 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "mim.asn"
+     ::DATATOOL:: by application DATATOOL version 1.5.0
+     ::DATATOOL:: on 06/06/2006 23:03:48
+     ============================================ -->
+
+<!-- NCBI_Mim.dtd
+  This file is built from a series of basic modules.
+  The actual ELEMENT and ENTITY declarations are in the modules.
+  This file is used to put them together.
+-->
+
+<!ENTITY % NCBI_Entity_module PUBLIC "-//NCBI//NCBI Entity Module//EN" "NCBI_Entity.mod.dtd">
+%NCBI_Entity_module;
+
+<!ENTITY % NCBI_Mim_module PUBLIC "-//NCBI//NCBI Mim Module//EN" "NCBI_Mim.mod.dtd">
+%NCBI_Mim_module;

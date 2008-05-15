@@ -470,6 +470,8 @@ class DataHandler(ContentHandler, EntityResolver):
             import NCBI_Entrezgene as module
         elif filename=="NCBI_Seqloc.mod.dtd":
             import NCBI_Seqloc as module
+        elif filename=="NCBI_Mim.mod.dtd":
+            import NCBI_Mim as module
         elif filename=="SerialSet":
             import  SerialSet as module
         else:
