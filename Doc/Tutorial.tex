@@ -708,7 +708,7 @@ The workhorse function \verb|Bio.SeqIO.parse()| is used to read in sequence data
 
 \begin{enumerate}
 \item The first argument is a {\it handle} to read the data from. A handle is typically a file opened for reading, but could be the output from a command line program, or data downloaded from the internet (see Section~\ref{sec:SeqIO_Online}).  See Section~\ref{sec:appendix-handles} for more about handles.
-\item The second argument is a lower case string specifying sequence format -- we don't try and guess the file format for you!
+\item The second argument is a lower case string specifying sequence format -- we don't try and guess the file format for you!  See \url{http://biopython.org/wiki/SeqIO} for a full listing of supported formats.
 \end{enumerate}
 
 \noindent This returns an {\it iterator} which gives \verb|SeqRecord| objects.  Iterators are typically used in a for loop.
@@ -1320,10 +1320,10 @@ Both functions expect two mandatory arguments:
 
 \begin{enumerate}
 \item The first argument is a {\it handle} to read the data from, typically an open file (see Section~\ref{sec:appendix-handles}).
-\item The second argument is a lower case string specifying sequence format.  As in \verb|Bio.SeqIO| we don't try and guess the file format for you!
+\item The second argument is a lower case string specifying sequence coformat.  As in \verb|Bio.SeqIO| we don't try and guess the file format for you!  See \url{http://biopython.org/wiki/AlignIO} for a full listing of supported formats.
 \end{enumerate}
 
-\noindent There is also an optional \verb|count| argument which is discussed in Section~\ref{sec:AlignIO-count-argument} below for dealing with ambigous file formats which may contain more than one alignment.
+\noindent There is also an optional \verb|seq\_count| argument which is discussed in Section~\ref{sec:AlignIO-count-argument} below for dealing with ambigous file formats which may contain more than one alignment.
 
 \subsection{Single Alignments}
 As an example, consider the following annotation rich protein alignment in the PFAM or Stockholm file format:
@@ -1429,7 +1429,9 @@ for record in alignment :
 
 All that has changed here is the filename and the format string.  You'll get the same output as before, the sequences and record identifiers are the same.  However, as you should expect, if you check each \verb|SeqRecord| there is no annotation nor database cross-references because these are not included in the FASTA file format.
 
-You can also use \verb|Bio.AlignIO| to convert the original Stockholm format file into a FASTA file yourself.
+Note that rather than using the Sanger website, you could have used \verb|Bio.AlignIO| to convert the original Stockholm format file into a FASTA file yourself (see below).
+
+With any supported file format, you can load an alignment in exactly the same way just by changing the format string.  For example, use ``phylip'' for PHYLIP files, ``nexus'' for NEXUS files or ``emboss'' for the alignments output by the EMBOSS tools.  There is a full listing on the wiki page (\url{http://biopython.org/wiki/AlignIO}).
 
 \subsection{Multiple Alignments}
 
@@ -1590,12 +1592,12 @@ GGACTACGACAATAGCTCAGG
 
 \noindent In this third example, because of the differing lengths, this cannot be treated as a single alignment containing all six records.  However, it could be three pairwise alignments.
 
-Using \verb|Bio.AlignIO.read()| to read these example would give a single alignment containing all six records for the first two examples, but would raise an exception in the final case because the lengths differ.
+Clearly trying to store more than one alignment in a FASTA file is not ideal.  However, if you are forced to deal with these as input files \verb|Bio.AlignIO| can cope with the most common situation where all the alignment have the same number of records.  One example of this is a collection of pairwise alignments, which can be produced by the EMBOSS tools \verb|needle| and \verb|water| -- although in this situation, \verb|Bio.AlignIO| should be able to understand their native output using ``emboss'' as the format string.
 
-If we want to interpret these FASTA examples as several separate alignments, we can use \verb|Bio.AlignIO.parse()| with the optional \verb|count| argument which specifies how many sequences are expected in each alignment (in these examples, 3, 2 and 2 respectively).  i.e. using the third example as the input data:
+If we want to interpret these FASTA examples as several separate alignments, we can use \verb|Bio.AlignIO.parse()| with the optional \verb|seq_count| argument which specifies how many sequences are expected in each alignment (in these examples, 3, 2 and 2 respectively).  i.e. using the third example as the input data:
 
 \begin{verbatim}
-for alignment in AlignIO.parse(handle, "fasta", count=2) :
+for alignment in AlignIO.parse(handle, "fasta", seq_count=2) :
     print "Alignment length %i" % alignment.get_alignment_length()
     for record in alignment :
         print record.seq, record.id
@@ -1616,12 +1618,13 @@ ACTACGGCAAGCACAGG YYY
 Alignment length 21
 --ACTACGAC--TAGCTCAGG Alpha
 GGACTACGACAATAGCTCAGG ZZZ
-
 \end{verbatim}
 
-If the file format itself has a block structure allowing \verb|Bio.AlignIO| to determine the number of sequences in each alignment directly, then the \verb|count| argument is not needed.  If it is supplied, and doesn't agree with the file contents, and error is raised.
+Using \verb|Bio.AlignIO.read()| or \verb|Bio.AlignIO.parse()| without the \verb|seq_count| argument would give a single alignment containing all six records for the first two examples.  For the third example, an exception would be raised because the lengths differ preventing them being turned into a single alignment.
 
-Note that this optional \verb|count| argument assumes each alignment in the file has the same number of sequences.  Hypothetically you may come across stranger situations, for example a FASTA file containing several alignments each with a different number of sequences -- although I would love to hear of a real world example of this.  Assuming you cannot get the data in a nicer file format, there is no straight forward way to deal with this using \verb|Bio.AlignIO|.  In this case, you could consider reading in the sequences themselves using \verb|Bio.SeqIO| and batching them together to create the alignments as appropriate.
+If the file format itself has a block structure allowing \verb|Bio.AlignIO| to determine the number of sequences in each alignment directly, then the \verb|seq_count| argument is not needed.  If it is supplied, and doesn't agree with the file contents, an error is raised.
+
+Note that this optional \verb|seq_count| argument assumes each alignment in the file has the same number of sequences.  Hypothetically you may come across stranger situations, for example a FASTA file containing several alignments each with a different number of sequences -- although I would love to hear of a real world example of this.  Assuming you cannot get the data in a nicer file format, there is no straight forward way to deal with this using \verb|Bio.AlignIO|.  In this case, you could consider reading in the sequences themselves using \verb|Bio.SeqIO| and batching them together to create the alignments as appropriate.
 
 \section{Writing Alignments}
 

@@ -36,13 +36,13 @@ If you want random access to the alignments by number, turn this into a list:
     print alignments[0]
 
 Most alignment file formats can be concatenated so as to hold as many
-different multiple sequence alignments as possible.  One common example is the
-output of the tool seqboot in the PHLYIP suite.
+different multiple sequence alignments as possible.  One common example
+is the output of the tool seqboot in the PHLYIP suite.
 
 The optional argument for the number of sequences per alignment is usually
-needed with the alignments stored in the FASTA format.  Otherwise there is no
-clear way to tell if you have say a single alignment of 20 sequences, or four
-alignments of 5 sequences:
+only needed with the alignments stored in the FASTA format.  Otherwise
+there is no clear way to tell if you have say a single alignment of 20
+sequences, or four alignments of 5 sequences:
 
     from Bio import AlignIO
     handle = open("example.faa", "rU")
@@ -52,9 +52,9 @@ alignments of 5 sequences:
 
 Output
 ======
-Use the function Bio.AlignIO.write(...), which takes a complete set of Alignment
-objects (either as a list, or an iterator), an output file handle and of course
-the file format.
+Use the function Bio.AlignIO.write(...), which takes a complete set of
+Alignment objects (either as a list, or an iterator), an output file handle
+and of course the file format.
 
     from Bio import AlignIO
     alignments = ...
@@ -63,9 +63,9 @@ the file format.
     handle.close()
 
 In general, you are expected to call this function once (with all your
-alignments) and then close the file handle.  However, for file formats where
-multiple alignments are stored sequentially, then multiple calls to the write
-function should work as expected.
+alignments) and then close the file handle.  However, for file formats
+where multiple alignments are stored sequentially, then multiple calls to
+the write function should work as expected.
 
 File Formats
 ============
@@ -115,7 +115,7 @@ _FormatToIterator ={#"fasta" and "nexus" are done via Bio.SeqIO
                     }
 
 _FormatToWriter ={#"fasta" is done via Bio.SeqIO
-                  #"emboss" : EmbossIO.EmbossWriter,
+                  #"emboss" : EmbossIO.EmbossWriter, (unfinished)
                   "phylip" : PhylipIO.PhylipWriter,
                   "stockholm" : StockholmIO.StockholmWriter,
                   "clustal" : ClustalIO.ClustalWriter,
@@ -161,12 +161,12 @@ def write(alignments, handle, format) :
     return
 
 #This is a generator function!
-def _SeqIO_to_alignment_iterator(handle, format, count=None) :
+def _SeqIO_to_alignment_iterator(handle, format, seq_count=None) :
     """Private function, uses Bio.SeqIO to create an Alignment iterator.
 
     handle   - handle to the file.
     format   - string describing the file format.
-    count    - Optional interger, number of sequences expected in
+    seq_count- Optional interger, number of sequences expected in
                each alignment.  Recommended for fasta format files.
 
     If count is omitted (default) then all the sequences in
@@ -176,14 +176,14 @@ def _SeqIO_to_alignment_iterator(handle, format, count=None) :
 
     assert format in SeqIO._FormatToIterator
 
-    if count :
+    if seq_count :
         #Use the count to split the records into batches.
         seq_record_iterator = SeqIO.parse(handle, format)
 
         records = []
         for record in seq_record_iterator :
             records.append(record)
-            if len(records) == count :
+            if len(records) == seq_count :
                 yield SeqIO.to_alignment(records)
                 records = []
         if len(records) > 0 :
@@ -198,12 +198,12 @@ def _SeqIO_to_alignment_iterator(handle, format, count=None) :
             #No alignment found!
             pass
     
-def parse(handle, format, count=None) :
+def parse(handle, format, seq_count=None) :
     """Turns a sequence file into an iterator returning Alignment objects.
 
     handle   - handle to the file.
     format   - string describing the file format.
-    count    - Optional interger, number of sequences expected in
+    seq_count- Optional interger, number of sequences expected in
                each alignment.  Recommended for fasta format files.
 
     If you have the file name in a string 'filename', use:
@@ -217,8 +217,8 @@ def parse(handle, format, count=None) :
     from StringIO import StringIO
     my_iterator = AlignIO.parse(StringIO(data), format)
 
-    Use the Bio.AlignIO.read(handle, format[, count]) function when you expect
-    a single record only.
+    Use the Bio.AlignIO.read(handle, format[, seq_count]) function when
+    you expect a single record only.
     """
     from Bio import SeqIO
 
@@ -235,19 +235,19 @@ def parse(handle, format, count=None) :
     #Map the file format to a sequence iterator:
     if format in _FormatToIterator :
         iterator_generator = _FormatToIterator[format]
-        return iterator_generator(handle, count)
+        return iterator_generator(handle, seq_count)
     elif format in SeqIO._FormatToIterator :
         #Exploit the existing SeqIO parser to the dirty work!
-        return _SeqIO_to_alignment_iterator(handle, format, count)
+        return _SeqIO_to_alignment_iterator(handle, format, seq_count)
     else :
         raise ValueError("Unknown format '%s'" % format)
 
-def read(handle, format, count=None) :
+def read(handle, format, seq_count=None) :
     """Turns an alignment file into a single Alignment object.
 
     handle   - handle to the file.
     format   - string describing the file format.
-    count    - Optional interger, number of sequences expected in
+    seq_count- Optional interger, number of sequences expected in
                the alignment to check you got what you expected.
 
     If the handle contains no alignments, or more than one alignment,
@@ -257,17 +257,17 @@ def read(handle, format, count=None) :
     from Bio import AlignIO
     align = AlignIO.read(open("example.sth"), "stockholm")
 
-    If however you want the first alignments from a file containing,
+    If however you want the first alignment from a file containing
     multiple alignments this function would raise an exception.
     Instead use:
 
     from Bio import AlignIO
     align = AlignIO.parse(open("example.sth"), "stockholm").next()
 
-    Use the Bio.AlignIO.parse(handle, format[, count]) function if you want
-    to read multiple records from the handle.
+    Use the Bio.AlignIO.parse(handle, format[, count]) function if you
+    want to read multiple records from the handle.
     """
-    iterator = parse(handle, format, count)
+    iterator = parse(handle, format, seq_count)
     try :
         first = iterator.next()
     except StopIteration :
@@ -280,8 +280,8 @@ def read(handle, format, count=None) :
         second = None
     if second is not None :
         raise ValueError, "More than one record found in handle"
-    if count :
-        assert len(first.get_all_seqs())==count
+    if seq_count :
+        assert len(first.get_all_seqs())==seq_count
     return first
 
            
@@ -294,7 +294,7 @@ if __name__ == "__main__" :
         print "parse(handle to empty file)"
         iterator = parse(StringIO(""), format=format)
         assert len(list(iterator))==0
-        iterator = parse(StringIO(""), format=format, count = 42)
+        iterator = parse(StringIO(""), format=format, seq_count = 42)
         assert len(list(iterator))==0
     print
 
@@ -1097,7 +1097,7 @@ ORIGIN
             assert as_list[0].get_all_seqs()[-1].seq.tostring() == last_seq
 
         print "Bio.AlignIO.parse(handle, format, count)"
-        as_list2 = list(parse(StringIO(data), format=format, count=rec_count))
+        as_list2 = list(parse(StringIO(data), format=format, seq_count=rec_count))
         assert len(as_list2) == len(as_list)
         for a1, a2 in zip(as_list, as_list2) :
             assert align_cmp(a1, a2)
@@ -1109,7 +1109,7 @@ ORIGIN
             #but fail for things parsed by Bio.AlignIO itself, like phylip,
             #clustal, stockholm, ...
             try :
-                list(parse(StringIO(data), format=format, count=half))
+                list(parse(StringIO(data), format=format, seq_count=half))
                 assert format not in _FormatToIterator
             except ValueError, e :
                 assert format in _FormatToIterator, \
