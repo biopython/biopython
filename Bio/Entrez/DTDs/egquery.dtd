@@ -1,0 +1,22 @@
+<!--
+        This is the Current DTD for Entrez eGSearch
+        $Id: egquery.dtd,v 1.1 2008-05-16 11:33:40 mdehoon Exp $
+-->
+<!-- ================================================================= -->
+
+<!ELEMENT       DbName          (#PCDATA)>      <!-- .+ -->
+<!ELEMENT       MenuName        (#PCDATA)>      <!-- .+ -->
+<!ELEMENT       Count           (#PCDATA)>      <!-- \d+ -->
+<!ELEMENT       Status          (#PCDATA)>      <!-- .+ -->
+<!ELEMENT       Term            (#PCDATA)>      <!-- .+ -->
+
+<!ELEMENT       ResultItem      (
+                                     DbName,
+                                     MenuName,
+                                     Count,
+                                     Status
+                                )>
+<!ELEMENT       eGQueryResult  (ResultItem+)>
+
+<!ELEMENT       Result         (Term, eGQueryResult)>
+
