@@ -249,7 +249,7 @@ class Structure(dict):
             dict.__setitem__(self, key, value)
 
 class DataHandler(ContentHandler, EntityResolver):
-    from Bio.Entrez import EInfo, ESearch, ESummary, EPost, ELink, EGQuery, ESpell, Taxon, SerialSet, NCBI_Mim, Entrezgene_Set
+    from Bio.Entrez import EInfo, ESearch, ESummary, EPost, ELink, EGQuery, ESpell, Taxon, SerialSet, NCBI_Mim
     _NameToModule = {"eInfoResult": EInfo,
                      "eSearchResult": ESearch,
                      "eSummaryResult": ESummary,
@@ -259,7 +259,6 @@ class DataHandler(ContentHandler, EntityResolver):
                      "eSpellResult": ESpell,
                      "TaxaSet": Taxon,
                      "Mim-entries": NCBI_Mim,
-                     "Entrezgene-Set": Entrezgene_Set,
                     }
 
     DTDs = os.path.join(__path__[0], "DTDs")
@@ -470,6 +469,8 @@ class DataHandler(ContentHandler, EntityResolver):
             import NCBI_BioSource as module
         elif filename=="NCBI_Entrezgene.mod.dtd":
             import NCBI_Entrezgene as module
+        elif filename=="NCBI_General.mod.dtd":
+            import NCBI_General as module
         elif filename=="NCBI_Seqloc.mod.dtd":
             import NCBI_Seqloc as module
         elif filename=="NCBI_Mim.mod.dtd":

@@ -157,8 +157,8 @@ dictionaries = (
 				#  Gene-commentary_comment?, 
 				#  Gene-commentary_create-date?, 
 				#  Gene-commentary_update-date?)
-    "Gene-commentary_create-date",	# (Date)>
-    "Gene-commentary_update-date",	# (Date)>
+    "Gene-commentary_create-date",	# (Date)
+    "Gene-commentary_update-date",	# (Date)
     "Gene-source",	# (Gene-source_src,
 			#  Gene-source_src-int?,
 			#  Gene-source_src-str1?,
