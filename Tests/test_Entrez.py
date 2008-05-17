@@ -3796,44 +3796,105 @@ class EFetchTest(unittest.TestCase):
         assert len(record)==1
         assert record[0]["TaxId"]==9685
         assert record[0]["ScientificName"]=="Felis catus"
-        assert record[0]["OtherNames"][0]==("GenbankCommonName", "domestic cat")
-        assert record[0]["OtherNames"][1]==("Synonym", "Felis silvestris catus")
-        assert record[0]["OtherNames"][2]==("Synonym", "Felis domesticus")
-        assert record[0]["OtherNames"][3]==("CommonName", "cat")
-        assert record[0]["OtherNames"][4]==("CommonName", "cats")
-        assert record[0]["OtherNames"][5]==("Includes", "Korat cats")
+        # assert record[0]["OtherNames"][0]==("GenbankCommonName", "domestic cat")
+        # assert record[0]["OtherNames"][1]==("Synonym", "Felis silvestris catus")
+        # assert record[0]["OtherNames"][2]==("Synonym", "Felis domesticus")
+        # assert record[0]["OtherNames"][3]==("CommonName", "cat")
+        # assert record[0]["OtherNames"][4]==("CommonName", "cats")
+        # assert record[0]["OtherNames"][5]==("Includes", "Korat cats")
+        assert record[0]["OtherNames"]["GenbankCommonName"]=="domestic cat"
+        assert record[0]["OtherNames"]["Synonym"][0]=="Felis silvestris catus"
+        assert record[0]["OtherNames"]["Synonym"][1]=="Felis domesticus"
+        assert record[0]["OtherNames"]["CommonName"][0]=="cat"
+        assert record[0]["OtherNames"]["CommonName"][1]=="cats"
+        assert record[0]["OtherNames"]["Includes"][0]=="Korat cats"
         assert record[0]["ParentTaxId"]==9682
         assert record[0]["Rank"]=="species"
         assert record[0]["Division"]=="Mammals"
-        assert record[0]["GeneticCode"]==[1, "Standard"]
-        assert record[0]["MitoGeneticCode"]==[2, "Vertebrate Mitochondrial"]
+        assert record[0]["GeneticCode"]["GCId"]==1
+        assert record[0]["GeneticCode"]["GCName"]=="Standard"
+        assert record[0]["MitoGeneticCode"]["MGCId"]==2
+        assert record[0]["MitoGeneticCode"]["MGCName"]=="Vertebrate Mitochondrial"
         assert record[0]["Lineage"]=="cellular organisms; Eukaryota; Fungi/Metazoa group; Metazoa; Eumetazoa; Bilateria; Coelomata; Deuterostomia; Chordata; Craniata; Vertebrata; Gnathostomata; Teleostomi; Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Mammalia; Theria; Eutheria; Laurasiatheria; Carnivora; Feliformia; Felidae; Felinae; Felis"
-        assert record[0]["LineageEx"][0]==(131567, "cellular organisms", "no rank")
-        assert record[0]["LineageEx"][1]==(2759, "Eukaryota", "superkingdom")
-        assert record[0]["LineageEx"][2]==(33154, "Fungi/Metazoa group", "no rank")
-        assert record[0]["LineageEx"][3]==(33208, "Metazoa", "kingdom")
-        assert record[0]["LineageEx"][4]==(6072, "Eumetazoa", "no rank")
-        assert record[0]["LineageEx"][5]==(33213, "Bilateria", "no rank")
-        assert record[0]["LineageEx"][6]==(33316, "Coelomata", "no rank")
-        assert record[0]["LineageEx"][7]==(33511, "Deuterostomia", "no rank")
-        assert record[0]["LineageEx"][8]==(7711, "Chordata", "phylum")
-        assert record[0]["LineageEx"][9]==(89593, "Craniata", "subphylum")
-        assert record[0]["LineageEx"][10]==(7742, "Vertebrata", "no rank")
-        assert record[0]["LineageEx"][11]==(7776, "Gnathostomata", "superclass")
-        assert record[0]["LineageEx"][12]==(117570, "Teleostomi", "no rank")
-        assert record[0]["LineageEx"][13]==(117571, "Euteleostomi", "no rank")
-        assert record[0]["LineageEx"][14]==(8287, "Sarcopterygii", "no rank")
-        assert record[0]["LineageEx"][15]==(32523, "Tetrapoda", "no rank")
-        assert record[0]["LineageEx"][16]==(32524, "Amniota", "no rank")
-        assert record[0]["LineageEx"][17]==(40674, "Mammalia", "class")
-        assert record[0]["LineageEx"][18]==(32525, "Theria", "no rank")
-        assert record[0]["LineageEx"][19]==(9347, "Eutheria", "no rank")
-        assert record[0]["LineageEx"][20]==(314145, "Laurasiatheria", "superorder")
-        assert record[0]["LineageEx"][21]==(33554, "Carnivora", "order")
-        assert record[0]["LineageEx"][22]==(379583, "Feliformia", "suborder")
-        assert record[0]["LineageEx"][23]==(9681, "Felidae", "family")
-        assert record[0]["LineageEx"][24]==(338152, "Felinae", "subfamily")
-        assert record[0]["LineageEx"][25]==(9682, "Felis", "genus")
+
+        assert record[0]["LineageEx"][0]["TaxId"]==131567
+        assert record[0]["LineageEx"][0]["ScientificName"]=="cellular organisms"
+        assert record[0]["LineageEx"][0]["Rank"]=="no rank"
+        assert record[0]["LineageEx"][1]["TaxId"]==2759
+        assert record[0]["LineageEx"][1]["ScientificName"]=="Eukaryota"
+        assert record[0]["LineageEx"][1]["Rank"]=="superkingdom"
+        assert record[0]["LineageEx"][2]["TaxId"]==33154
+        assert record[0]["LineageEx"][2]["ScientificName"]=="Fungi/Metazoa group"
+        assert record[0]["LineageEx"][2]["Rank"]=="no rank"
+        assert record[0]["LineageEx"][3]["TaxId"]==33208
+        assert record[0]["LineageEx"][3]["ScientificName"]=="Metazoa"
+        assert record[0]["LineageEx"][3]["Rank"]=="kingdom"
+        assert record[0]["LineageEx"][4]["TaxId"]==6072
+        assert record[0]["LineageEx"][4]["ScientificName"]=="Eumetazoa"
+        assert record[0]["LineageEx"][4]["Rank"]=="no rank"
+        assert record[0]["LineageEx"][5]["TaxId"]==33213
+        assert record[0]["LineageEx"][5]["ScientificName"]=="Bilateria"
+        assert record[0]["LineageEx"][5]["Rank"]=="no rank"
+        assert record[0]["LineageEx"][6]["TaxId"]==33316
+        assert record[0]["LineageEx"][6]["ScientificName"]=="Coelomata"
+        assert record[0]["LineageEx"][6]["Rank"]=="no rank"
+        assert record[0]["LineageEx"][7]["TaxId"]==33511
+        assert record[0]["LineageEx"][7]["ScientificName"]=="Deuterostomia"
+        assert record[0]["LineageEx"][7]["Rank"]=="no rank"
+        assert record[0]["LineageEx"][8]["TaxId"]==7711
+        assert record[0]["LineageEx"][8]["ScientificName"]=="Chordata"
+        assert record[0]["LineageEx"][8]["Rank"]=="phylum"
+        assert record[0]["LineageEx"][9]["TaxId"]==89593
+        assert record[0]["LineageEx"][9]["ScientificName"]=="Craniata"
+        assert record[0]["LineageEx"][9]["Rank"]=="subphylum"
+        assert record[0]["LineageEx"][10]["TaxId"]==7742
+        assert record[0]["LineageEx"][10]["ScientificName"]=="Vertebrata"
+        assert record[0]["LineageEx"][10]["Rank"]=="no rank"
+        assert record[0]["LineageEx"][11]["TaxId"]==7776
+        assert record[0]["LineageEx"][11]["ScientificName"]=="Gnathostomata"
+        assert record[0]["LineageEx"][11]["Rank"]=="superclass"
+        assert record[0]["LineageEx"][12]["TaxId"]==117570
+        assert record[0]["LineageEx"][12]["ScientificName"]=="Teleostomi"
+        assert record[0]["LineageEx"][12]["Rank"]=="no rank"
+        assert record[0]["LineageEx"][13]["TaxId"]==117571
+        assert record[0]["LineageEx"][13]["ScientificName"]=="Euteleostomi"
+        assert record[0]["LineageEx"][13]["Rank"]=="no rank"
+        assert record[0]["LineageEx"][14]["TaxId"]==8287
+        assert record[0]["LineageEx"][14]["ScientificName"]=="Sarcopterygii"
+        assert record[0]["LineageEx"][14]["Rank"]=="no rank"
+        assert record[0]["LineageEx"][15]["TaxId"]==32523
+        assert record[0]["LineageEx"][15]["ScientificName"]=="Tetrapoda"
+        assert record[0]["LineageEx"][15]["Rank"]=="no rank"
+        assert record[0]["LineageEx"][16]["TaxId"]==32524
+        assert record[0]["LineageEx"][16]["ScientificName"]=="Amniota"
+        assert record[0]["LineageEx"][16]["Rank"]=="no rank"
+        assert record[0]["LineageEx"][17]["TaxId"]==40674
+        assert record[0]["LineageEx"][17]["ScientificName"]=="Mammalia"
+        assert record[0]["LineageEx"][17]["Rank"]=="class"
+        assert record[0]["LineageEx"][18]["TaxId"]==32525
+        assert record[0]["LineageEx"][18]["ScientificName"]=="Theria"
+        assert record[0]["LineageEx"][18]["Rank"]=="no rank"
+        assert record[0]["LineageEx"][19]["TaxId"]==9347
+        assert record[0]["LineageEx"][19]["ScientificName"]=="Eutheria"
+        assert record[0]["LineageEx"][19]["Rank"]=="no rank"
+        assert record[0]["LineageEx"][20]["TaxId"]==314145
+        assert record[0]["LineageEx"][20]["ScientificName"]=="Laurasiatheria"
+        assert record[0]["LineageEx"][20]["Rank"]=="superorder"
+        assert record[0]["LineageEx"][21]["TaxId"]==33554
+        assert record[0]["LineageEx"][21]["ScientificName"]=="Carnivora"
+        assert record[0]["LineageEx"][21]["Rank"]=="order"
+        assert record[0]["LineageEx"][22]["TaxId"]==379583
+        assert record[0]["LineageEx"][22]["ScientificName"]=="Feliformia"
+        assert record[0]["LineageEx"][22]["Rank"]=="suborder"
+        assert record[0]["LineageEx"][23]["TaxId"]==9681
+        assert record[0]["LineageEx"][23]["ScientificName"]=="Felidae"
+        assert record[0]["LineageEx"][23]["Rank"]=="family"
+        assert record[0]["LineageEx"][24]["TaxId"]==338152
+        assert record[0]["LineageEx"][24]["ScientificName"]=="Felinae"
+        assert record[0]["LineageEx"][24]["Rank"]=="subfamily"
+        assert record[0]["LineageEx"][25]["TaxId"]==9682
+        assert record[0]["LineageEx"][25]["ScientificName"]=="Felis"
+        assert record[0]["LineageEx"][25]["Rank"]=="genus"
         assert record[0]["CreateDate"]=="1995/02/27"
         assert record[0]["UpdateDate"]=="2007/09/04"
         assert record[0]["PubDate"]=="1993/07/26"

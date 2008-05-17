@@ -482,6 +482,8 @@ class DataHandler(ContentHandler, EntityResolver):
             import NLMSharedCatCit as module
         elif filename=="nlmcommon_080101.dtd":
             import NLMCommon as module
+        elif filename=="taxon.dtd":
+            import Taxon as module
         elif filename=="SerialSet":
             import  SerialSet as module
         else:

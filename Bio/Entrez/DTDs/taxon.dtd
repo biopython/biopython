@@ -1,0 +1,131 @@
+<!-- ?xml version="1.0"? -->
+<!-- DOCTYPE TaxaSet PUBLIC "-//NLM//DTD TaxaSet, 20 February 2004//EN" "taxon.dtd" -->
+
+<!-- $Id: taxon.dtd,v 1.1 2008-05-17 06:10:25 mdehoon Exp $ -->
+
+<!-- ELEMENTS -->
+<!ELEMENT TaxId       (#PCDATA)>
+<!ELEMENT ParentTaxId (#PCDATA)>
+<!ELEMENT Division    (#PCDATA)>
+<!ELEMENT Rank        (#PCDATA)>
+<!ELEMENT ClassCDE    (#PCDATA)>
+<!ELEMENT DispName    (#PCDATA)>
+<!ELEMENT UniqueName  (#PCDATA)>
+<!ELEMENT GCId        (#PCDATA)>
+<!ELEMENT GCName      (#PCDATA)>
+<!ELEMENT MGCId       (#PCDATA)>
+<!ELEMENT MGCName     (#PCDATA)>
+<!ELEMENT Lineage     (#PCDATA)>
+<!ELEMENT PropName    (#PCDATA)>
+<!ELEMENT CreateDate  (#PCDATA)>
+<!ELEMENT UpdateDate  (#PCDATA)>
+<!ELEMENT PubDate     (#PCDATA)>
+<!ELEMENT CitId       (#PCDATA)>
+<!ELEMENT CitKey      (#PCDATA)>
+<!ELEMENT CitUrl      (#PCDATA)>
+<!ELEMENT CitText     (#PCDATA)>
+<!ELEMENT CitPubmedId (#PCDATA)>
+<!ELEMENT CitMedlineId (#PCDATA)>
+<!ELEMENT ModId       (#PCDATA)>
+<!ELEMENT ModType     (#PCDATA)>
+<!ELEMENT ModName     (#PCDATA)>
+<!ELEMENT ModGBhidden (#PCDATA)>
+<!ELEMENT RModId      (#PCDATA)>
+<!ELEMENT RTaxId      (#PCDATA)>
+<!ELEMENT ScientificName (#PCDATA)>
+<!ELEMENT GenbankCommonName (#PCDATA)>
+<!ELEMENT GenbankAcronym (#PCDATA)>
+<!ELEMENT BlastName   (#PCDATA)>
+<!ELEMENT EquivalentName   (#PCDATA)>
+<!ELEMENT Synonym     (#PCDATA)>
+<!ELEMENT Acronym     (#PCDATA)>
+<!ELEMENT Misspelling (#PCDATA)>
+<!ELEMENT Anamorph    (#PCDATA)>
+<!ELEMENT Includes    (#PCDATA)>
+<!ELEMENT CommonName  (#PCDATA)>
+<!ELEMENT Inpart      (#PCDATA)>
+<!ELEMENT Misnomer    (#PCDATA)>
+<!ELEMENT Teleomorph  (#PCDATA)>
+<!ELEMENT GenbankSynonym  (#PCDATA)>
+<!ELEMENT GenbankAnamorph (#PCDATA)>
+<!ELEMENT PropValueInt (#PCDATA)>
+<!ELEMENT PropValueBool (#PCDATA)>
+<!ELEMENT PropValueString (#PCDATA)>
+
+<!-- Taxon structural entities -->
+<!ELEMENT TaxaSet ( Taxon+ )>
+
+<!ELEMENT Taxon (
+                 TaxId,
+                 ScientificName,
+                 OtherNames?, 
+                 ParentTaxId?,
+                 Rank?, 
+                 Division?,
+                 GeneticCode?,
+                 MitoGeneticCode?,
+                 Lineage?,
+                 LineageEx?,
+                 Citations?,
+                 Modifiers?,
+                 Properties?,
+                 CreateDate?,
+                 UpdateDate?,
+                 PubDate?,
+                 AkaTaxIds?
+                )>
+
+
+<!ELEMENT OtherNames	( GenbankCommonName?,
+                          GenbankAcronym?,
+                          BlastName?,
+                          ( EquivalentName |
+	                    Synonym        |
+	                    Acronym        |
+                            Misspelling    |
+	                    Anamorph       |
+	                    Includes       |
+	                    CommonName     |
+	                    Inpart         |
+	                    Misnomer       |
+	                    Teleomorph     |
+	                    GenbankSynonym |
+	                    GenbankAnamorph
+                          )*,
+                          Name*
+                        )>
+
+<!ELEMENT Name ( ClassCDE, DispName, UniqueName? )>
+
+<!ELEMENT GeneticCode ( GCId, GCName )>
+
+<!ELEMENT MitoGeneticCode ( MGCId, MGCName )>
+
+<!ELEMENT Citations ( Citation+ )>
+
+<!ELEMENT Citation ( CitId,
+                     CitKey,
+                     CitUrl?,
+                     CitText?,
+                     CitPubmedId?,
+                     CitMedlineId?
+                   )>
+
+<!ELEMENT Modifiers ( Modifier+ )>
+
+<!ELEMENT Modifier ( ModId,
+                     ModType,
+                     ModName,
+                     ModGBhidden,
+                     ( RModId | RTaxId )?
+                   )>
+
+<!ELEMENT Properties ( Property+ )>
+
+<!ELEMENT Property ( PropName, ( PropValueInt |
+                                 PropValueBool |
+                                 PropValueString ) )>
+
+<!ELEMENT AkaTaxIds ( TaxId* )>
+
+<!ELEMENT LineageEx ( Taxon* )>
