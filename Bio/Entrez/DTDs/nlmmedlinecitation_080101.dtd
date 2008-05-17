@@ -1,0 +1,107 @@
+<!-- NLMMedlineCitation DTD   
+
+     Comments and suggestions are welcome.
+     January 1, 2008
+     
+          
+   NOTE:  The use of "Medline" in a DTD or element name does not mean the record 
+    represents a citation from a Medline-selected journal.  When the NLM DTDs and 
+    XML elements were first created, MEDLINE records were the only data exported. 
+    Now NLM exports citations other than MEDLINE records using these tools. To 
+    minimize unnecessary disruption to users of the data and tools, NLM has
+    retained the original DTD and element names (e.g., NLMMedline DTD, MedlineTA,
+    MedlineJournalInfo)).       
+       
+  * = 0 or more occurrences (optional element, repeatable)
+  ? = 0 or 1 occurrences (optional element, at most 1)
+  + = 1 or more occurrences (required element, repeatable)
+  | = choice, one or the other but not both 
+  no symbol = required element
+-->
+<!-- ================================================================= -->
+<!--   Revision Notes Section 
+
+The following changes were made in the nlmmedlinecitation_080101.dtd:
+
+     a. Changed entity reference from "nlmsharedcatcit_070101.dtd" 
+             to: "nlmsharedcatcit_080101.dtd" 
+     
+     b. Added entity EIdType with doi and pii values
+  
+   
+  
+     Historic Revision notes for previous versions of NLMMedlineCitation DTD
+     See:
+     http://www.nlm.nih.gov/databases/dtd/history_dtd_medlinecitation.html
+
+ -->
+<!-- ================================================================= -->
+<!-- external DTD entities -->
+<!ENTITY % EIdType "(doi | pii) #REQUIRED">
+<!-- ================================================================= -->
+<!-- internal DTD entities -->
+<!ENTITY % Owner "(NLM | NASA | PIP | KIE | HSR | HMD | SIS | NOTNLM)">
+<!ENTITY % Ref.template "(RefSource,
+                          PMID?, Note?)">
+<!ENTITY % PubModel "(Print | Print-Electronic | Electronic | Electronic-Print) #REQUIRED">
+<!ENTITY % Source "(NASA | KIE | PIP | POP | ARPL | CPC |
+                    IND | CPFH | CLML | IM | SGC | NRCBL | QCICL | QCIM) #REQUIRED">
+<!ENTITY % Status "(Completed | In-Process | PubMed-not-MEDLINE |
+                    In-Data-Review | Publisher | MEDLINE | OLDMEDLINE) #REQUIRED">
+<!ENTITY % Type "(AAMC | AIDS | KIE | PIP | NASA | Consumer) #REQUIRED">
+<!-- ================================================================= -->
+<!-- ================================================================= -->
+<!-- Reference to Where the NLM Common DTD via NLMSharedCatCit DTD is located  -->
+<!ENTITY % NlmSharedCatCit PUBLIC "-//NLM//DTD SharedCatCit, 1st January 2008//EN" 
+"nlmsharedcatcit_080101.dtd" >  
+%NlmSharedCatCit;
+<!-- =================================================================  -->
+<!-- This is the top level element for MedlineCitation -->
+<!ELEMENT MedlineCitation (%NlmDcmsID.Ref;, %PMID.Ref;, %DateCreated.Ref;, DateCompleted?,
+                           DateRevised?, Article, MedlineJournalInfo, ChemicalList?, 
+                           CitationSubset*, CommentsCorrections?, GeneSymbolList?, 
+                           MeshHeadingList?, NumberOfReferences?, PersonalNameSubjectList?,
+                           OtherID*, OtherAbstract*, KeywordList*, SpaceFlightMission*, 
+                           InvestigatorList?, GeneralNote*)>
+<!ATTLIST MedlineCitation
+	Owner %Owner; "NLM"
+	Status %Status;
+>
+<!ATTLIST Article
+          PubModel %PubModel;
+>
+<!-- End of MedlineCitation group -->
+<!-- ================================================================= -->
+<!--             Further Definition of NLM Tags         -->
+<!ELEMENT CitationSubset (#PCDATA)>
+<!ELEMENT CommentIn (%Ref.template;)>
+<!ELEMENT CommentOn (%Ref.template;)>
+<!ELEMENT CommentsCorrections (CommentOn*, CommentIn*, ErratumIn*, ErratumFor*,
+                               PartialRetractionIn*, PartialRetractionOf*,
+                               RepublishedFrom*, RepublishedIn*, RetractionOf*,
+                               RetractionIn*, UpdateIn*, UpdateOf*, 
+                               SummaryForPatientsIn*, OriginalReportIn*, ReprintOf*, ReprintIn*)>
+<!ELEMENT ErratumFor (%Ref.template;)>
+<!ELEMENT ErratumIn (%Ref.template;)>
+<!ATTLIST GeneralNote
+	Owner %Owner; "NLM"
+>
+<!ELEMENT GeneSymbol (#PCDATA)>
+<!ELEMENT GeneSymbolList (GeneSymbol+)>
+<!ELEMENT NlmDcmsID (#PCDATA)>
+<!ELEMENT Note (#PCDATA)>
+<!ELEMENT NumberOfReferences (#PCDATA)>
+<!ELEMENT OriginalReportIn (%Ref.template;)>
+<!ELEMENT PartialRetractionIn (%Ref.template;)>
+<!ELEMENT PartialRetractionOf (%Ref.template;)>
+<!ELEMENT RefSource (#PCDATA)>
+<!ELEMENT ReprintIn (%Ref.template;)>
+<!ELEMENT ReprintOf (%Ref.template;)>
+<!ELEMENT RepublishedFrom (%Ref.template;)>
+<!ELEMENT RepublishedIn (%Ref.template;)>
+<!ELEMENT RetractionIn (%Ref.template;)>
+<!ELEMENT RetractionOf (%Ref.template;)>
+<!ELEMENT SummaryForPatientsIn (%Ref.template;)>
+<!ELEMENT UpdateIn (%Ref.template;)>
+<!ELEMENT UpdateOf (%Ref.template;)>
+<!-- ================================================================= -->

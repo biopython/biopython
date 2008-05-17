@@ -232,14 +232,9 @@ class AttributedString(str):
             self.attributes[key] = attributes[key]
         return self
 
-class AttributedDictionary(dict):
-    def __new__(cls, attributes):
-        self = dict.__new__(cls)
-        self.attributes = {}
-        keys = attributes.keys()
-        for key in keys:
-            self.attributes[key] = attributes[key]
-        return self
+class AttributedList(list): pass
+
+class AttributedDictionary(dict): pass
 
 class Structure(dict):
     def __init__(self, keys):
@@ -254,7 +249,7 @@ class Structure(dict):
             dict.__setitem__(self, key, value)
 
 class DataHandler(ContentHandler, EntityResolver):
-    from Bio.Entrez import EInfo, ESearch, ESummary, EPost, ELink, EGQuery, ESpell, Taxon, PubmedArticleSet, SerialSet, NCBI_Mim, Entrezgene_Set
+    from Bio.Entrez import EInfo, ESearch, ESummary, EPost, ELink, EGQuery, ESpell, Taxon, SerialSet, NCBI_Mim, Entrezgene_Set
     _NameToModule = {"eInfoResult": EInfo,
                      "eSearchResult": ESearch,
                      "eSummaryResult": ESummary,
@@ -263,7 +258,6 @@ class DataHandler(ContentHandler, EntityResolver):
                      "Result": EGQuery,
                      "eSpellResult": ESpell,
                      "TaxaSet": Taxon,
-                     "PubmedArticleSet": PubmedArticleSet,
                      "Mim-entries": NCBI_Mim,
                      "Entrezgene-Set": Entrezgene_Set,
                     }
@@ -294,7 +288,12 @@ class DataHandler(ContentHandler, EntityResolver):
         self.attributes = attrs
         self.content = ""
         if name in self.lists:
-            object = []
+            if attrs:
+                object = AttributedList()
+                object.attributes = dict(self.attributes)
+                del self.attributes
+            else:
+                object = []
             try:
                 current = self.path[-1]
             except IndexError:
@@ -306,7 +305,8 @@ class DataHandler(ContentHandler, EntityResolver):
             self.path.append(object)
         elif name in self.dictionaries:
             if attrs:
-                object = AttributedDictionary(attrs)
+                object = AttributedDictionary()
+                object.attributes = dict(self.attributes)
                 del self.attributes
             else:
                 object = {}
@@ -464,6 +464,8 @@ class DataHandler(ContentHandler, EntityResolver):
             import ESpell as module
         elif filename=="egquery.dtd":
             import EGQuery as module
+        elif filename=="pubmed_080101.dtd":
+            import PubmedArticleSet as module
         elif filename=="NCBI_BioSource.mod.dtd":
             import NCBI_BioSource as module
         elif filename=="NCBI_Entrezgene.mod.dtd":
@@ -472,6 +474,14 @@ class DataHandler(ContentHandler, EntityResolver):
             import NCBI_Seqloc as module
         elif filename=="NCBI_Mim.mod.dtd":
             import NCBI_Mim as module
+        elif filename=="nlmmedline_080101.dtd":
+            import NLMMedline as module
+        elif filename=="nlmmedlinecitation_080101.dtd":
+            import NLMMedlineCitation as module
+        elif filename=="nlmsharedcatcit_080101.dtd":
+            import NLMSharedCatCit as module
+        elif filename=="nlmcommon_080101.dtd":
+            import NLMCommon as module
         elif filename=="SerialSet":
             import  SerialSet as module
         else:
