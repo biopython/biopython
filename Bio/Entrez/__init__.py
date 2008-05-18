@@ -214,23 +214,12 @@ def espell(cgi='http://www.ncbi.nlm.nih.gov/entrez/eutils/espell.fcgi',
     variables.update(keywds)
     return _open(cgi, variables)
 
-class AttributedInteger(int):
-    def __new__(cls, value, attributes):
-        self = int.__new__(cls, value)
-        self.attributes = {}
-        keys = attributes.keys()
-        for key in keys:
-            self.attributes[key] = attributes[key]
-        return self
+# The following four classes are used to add a member .attributes to integers,
+# strings, lists, and dictionaries, respectively.
 
-class AttributedString(str):
-    def __new__(cls, value, attributes):
-        self = str.__new__(cls, value)
-        self.attributes = {}
-        keys = attributes.keys()
-        for key in keys:
-            self.attributes[key] = attributes[key]
-        return self
+class AttributedInteger(int): pass
+
+class AttributedString(str): pass
 
 class AttributedList(list): pass
 
@@ -249,22 +238,10 @@ class Structure(dict):
             dict.__setitem__(self, key, value)
 
 class DataHandler(ContentHandler, EntityResolver):
-    from Bio.Entrez import EInfo, ESearch, ESummary, EPost, ELink, EGQuery, ESpell, Taxon, SerialSet, NCBI_Mim
-    _NameToModule = {"eInfoResult": EInfo,
-                     "eSearchResult": ESearch,
-                     "eSummaryResult": ESummary,
-                     "ePostResult": EPost,
-                     "eLinkResult": ELink,
-                     "Result": EGQuery,
-                     "eSpellResult": ESpell,
-                     "TaxaSet": Taxon,
-                     "Mim-entries": NCBI_Mim,
-                    }
 
     DTDs = os.path.join(__path__[0], "DTDs")
 
     def __init__(self):
-        self.element = []
         self.path = []
 	self.error = None
 	self.booleans = []
@@ -274,103 +251,56 @@ class DataHandler(ContentHandler, EntityResolver):
         self.dictionaries = []
         self.structures = {}
         self.items = []
-        self.handleStartElement = None
-        self.handleEndElement = None
         self.initialized = False
 
     def startElement(self, name, attrs):
-        self.element.append(name)
         if not self.initialized:
             # This XML file does not have a DTD; load its definitions here
             # using the first element in the XML.
             self.load_dtd_definitions(name)
-        self.attributes = attrs
         self.content = ""
         if name in self.lists:
             if attrs:
                 object = AttributedList()
-                object.attributes = dict(self.attributes)
-                del self.attributes
+                object.attributes = dict(attrs)
             else:
                 object = []
-            try:
-                current = self.path[-1]
-            except IndexError:
-                current = None
-            if isinstance(current, dict):
-                current[name] = object
-            elif isinstance(current, list):
-                current.append(object)
-            self.path.append(object)
         elif name in self.dictionaries:
             if attrs:
                 object = AttributedDictionary()
-                object.attributes = dict(self.attributes)
-                del self.attributes
+                object.attributes = dict(attrs)
             else:
                 object = {}
-            try:
-                current = self.path[-1]
-            except IndexError:
-                current = None
-            if isinstance(current, dict):
-                current[name] = object
-            elif isinstance(current, list):
-                current.append(object)
-            self.path.append(object)
         elif name in self.structures:
-            current = self.path[-1]
             object = Structure(self.structures[name])
             if attrs:
-                object.attributes = {}
-                keys = attrs.keys()
-                for key in keys:
-                    object.attributes[key] = attrs[key]
-                del self.attributes
-            if isinstance(current, dict):
-                current[name] = object
-            elif isinstance(current, list):
-                current.append(object)
-            self.path.append(object)
+                object.attributes = dict(attrs)
         elif name in self.items:	# Only appears in ESummary
-            current = self.path[-1]
-            itemname = str(attrs["Name"]) # convert from Unicode
+            name = str(attrs["Name"]) # convert from Unicode
             itemtype = str(attrs["Type"]) # convert from Unicode
-            del self.attributes
             if itemtype=="Structure":
                 object = {}
-            elif itemname in ("ArticleIds", "History"):
+            elif name in ("ArticleIds", "History"):
                 object = Structure(["pubmed", "medline"])
             elif itemtype=="List":
                 object = []
             else:
                 object = ""
-            self.itemname = itemname
-            self.itemtype = itemtype
-            if object!="":
-                if isinstance(current, dict):
-                    current[itemname] = object
-                elif isinstance(current, list):
-                    current.append(object)
-            self.path.append(object)
-        elif self.strings: # Just for checking if this is the new approach
-            current = self.path[-1]
-            object = ""
-            self.path.append(object)
-        elif self.handleStartElement:
-            self.handleStartElement(self, name, attrs)
-        elif name in DataHandler._NameToModule:
-            self.handleStartElement = DataHandler._NameToModule[name].startElement
-            self.handleEndElement = DataHandler._NameToModule[name].endElement
-            self.handleStartElement(self, name, attrs)
+                self.itemname = name
+                self.itemtype = itemtype
         else:
-            raise RuntimeError("No parser available for " + name)
+            object = ""
+            self.attributes = attrs
+        if object!="" and len(self.path)!=0:
+            current = self.path[-1]
+            try:
+                current.append(object)
+            except AttributeError:
+                current[name] = object
+        self.path.append(object)
 
     def endElement(self, name):
-        try:
-            self.object = self.path[-1]
-        except IndexError:
-            self.object = None # This will only occur for the Taxonomy parser
+        self.object = self.path.pop()
         # Convert Unicode strings to plain strings
         try:
             self.content = str(self.content)
@@ -380,58 +310,36 @@ class DataHandler(ContentHandler, EntityResolver):
         if name==self.error and value!="":
             raise RuntimeError(value)
         elif name in self.booleans:
-            self.path = self.path[:-1]
-            if self.content=='Y':
+            if value=='Y':
                 value = True
-            elif self.content=='N':
+            elif value=='N':
                 value = False
-            current = self.path[-1]
-            if isinstance(current, list):
-                current.append(value)
-            elif isinstance(current, dict):
-                current[name] = value
         elif name in self.integers:
-            self.path = self.path[:-1]
             if self.attributes:
-                value = AttributedInteger(self.content, self.attributes)
+                value = AttributedInteger(self.content)
+                value.attributes = dict(self.attributes)
                 del self.attributes
             else:
                 value = int(self.content)
-            current = self.path[-1]
-            if isinstance(current, list):
-                current.append(value)
-            elif isinstance(current, dict):
-                current[name] = value
         elif name in self.strings:
-            self.path = self.path[:-1]
             if self.attributes:
-                value = AttributedString(self.content, self.attributes)
+                value = AttributedString(self.content)
+                value.attributes = dict(self.attributes)
                 del self.attributes
             else:
                 value = self.content
-            current = self.path[-1]
-            if isinstance(current, list):
-                current.append(value)
-            elif isinstance(current, dict):
-                current[name] = value
         elif name in self.items:
-            object = self.path.pop()
-            if object=="":
-                current = self.path[-1]
-                if isinstance(current, list):
-                    current.append(self.content)
-                elif isinstance(current, dict):
-                    itemname = self.itemname
-                    itemtype = self.itemtype
-                    value = self.content
-                    if itemtype=="Integer": value = int(value)
-                    current[itemname] = value
-        elif name in DataHandler._NameToModule:
-            self.handleStartElement = None
-            self.handleEndElement = None
-        elif self.handleEndElement:
-            self.handleEndElement(self, name)
-        self.element = self.element[:-1]
+            if self.object!="": return
+            name = self.itemname
+            value = self.content
+            if self.itemtype=="Integer": value = int(value)
+        else:
+            return
+        current = self.path[-1]
+        try:
+            current.append(value)
+        except AttributeError:
+            current[name] = value
 
     def characters(self, content):
         self.content += content
@@ -467,14 +375,29 @@ class DataHandler(ContentHandler, EntityResolver):
             import PubmedArticleSet as module
         elif filename=="NCBI_BioSource.mod.dtd":
             import NCBI_BioSource as module
+        elif filename=="NCBI_Entity.mod.dtd":
+            # Nothing of interest in this DTD
+            return
+        elif filename=="NCBI_Entrezgene.dtd":
+            # Nothing of interest in this DTD
+            return
         elif filename=="NCBI_Entrezgene.mod.dtd":
             import NCBI_Entrezgene as module
+        elif filename=="NCBI_Gene.mod.dtd":
+            import NCBI_Gene as module
         elif filename=="NCBI_General.mod.dtd":
             import NCBI_General as module
         elif filename=="NCBI_Seqloc.mod.dtd":
             import NCBI_Seqloc as module
+        elif filename=="NCBI_Mim.dtd":
+            # Nothing of interest in this DTD
+            return
         elif filename=="NCBI_Mim.mod.dtd":
             import NCBI_Mim as module
+        elif filename=="NCBI_Organism.mod.dtd":
+            import NCBI_Organism as module
+        elif filename=="NCBI_Protein.mod.dtd":
+            import NCBI_Protein as module
         elif filename=="nlmmedline_080101.dtd":
             import NLMMedline as module
         elif filename=="nlmmedlinecitation_080101.dtd":
@@ -488,6 +411,8 @@ class DataHandler(ContentHandler, EntityResolver):
         elif filename=="SerialSet":
             import  SerialSet as module
         else:
+            import warnings
+            warnings.warn("No parser available for %s; skipping its elements" % filename)
             return
         self.error = module.error
         self.booleans.extend(module.booleans)
@@ -497,8 +422,6 @@ class DataHandler(ContentHandler, EntityResolver):
         self.dictionaries.extend(module.dictionaries)
         self.structures.update(module.structures)
         self.items.extend(module.items)
-        self.handleStartElement = module.startElement
-        self.handleEndElement = module.endElement
         self.initialized = True
 
 def read(handle):
@@ -513,10 +436,7 @@ def read(handle):
     saxparser.setContentHandler(handler)
     saxparser.setEntityResolver(handler)
     saxparser.parse(handle)
-    if handler.object:
-        record = handler.object
-    else:
-        record = handler.record # Only for the Taxonompy parser
+    record = handler.object
     return record
 
 def _open(cgi, params={}):

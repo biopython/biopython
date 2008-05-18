@@ -146,10 +146,3 @@ structures = {
 }
 
 items = ()
-
-
-def startElement(self, name, attrs):
-    return
-
-def endElement(self, name):
-    self.path.pop()
