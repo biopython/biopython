@@ -50,6 +50,14 @@ class DatabaseLoader:
             self._load_seqfeature(seq_feature, seq_feature_num, bioentry_id)
 
     def _get_ontology_id(self, name, definition=None):
+        """Returns the identifier for the named ontology.
+
+        This looks through the onotology table for a the given entry name.
+        If it is not found, a row is added for this ontology (using the
+        definition if supplied).  In either case, the id corresponding to
+        the provided name is returned, so that you can reference it in
+        another table.
+        """
         oids = self.adaptor.execute_and_fetch_col0(
             "SELECT ontology_id FROM ontology WHERE name = %s",
             (name,))
@@ -99,7 +107,7 @@ class DatabaseLoader:
             return self.adaptor.last_id("term")
 
     def _add_dbxref(self, dbname, accession, version):
-       """Insert a dbxref and return its id"""
+       """Insert a dbxref and return its id."""
        
        self.adaptor.execute(
            "INSERT INTO dbxref(dbname, accession, version)" \
@@ -306,6 +314,8 @@ class DatabaseLoader:
 
     def _load_bioentry_table(self, record):
         """Fill the bioentry table with sequence information.
+
+        record - SeqRecord object to add to the database.
         """
         # get the pertinent info and insert it
         
@@ -359,6 +369,9 @@ class DatabaseLoader:
 
     def _load_bioentry_date(self, record, bioentry_id):
         """Add the effective date of the entry into the database.
+
+        record - a SeqRecord object with an annotated date
+        bioentry_id - corresponding database identifier
         """
         # dates are GenBank style, like:
         # 14-SEP-2000
@@ -372,7 +385,10 @@ class DatabaseLoader:
         self.adaptor.execute(sql, (bioentry_id, date_id, date))
 
     def _load_biosequence(self, record, bioentry_id):
-        """Load the biosequence table in the database.
+        """Record a SeqRecord's sequence and alphabet in the database.
+
+        record - a SeqRecord object with a seq property
+        bioentry_id - corresponding database identifier
         """
         # determine the string representation of the alphabet
         if isinstance(record.seq.alphabet, Alphabet.DNAAlphabet):
@@ -393,6 +409,11 @@ class DatabaseLoader:
                                    alphabet))
 
     def _load_comment(self, record, bioentry_id):
+        """Record a SeqRecord's annotated comment in the database.
+
+        record - a SeqRecord object with an annotated comment
+        bioentry_id - corresponding database identifier
+        """
         # Assume annotations['comment'] is not a list
         comment = record.annotations.get('comment')
         if not comment:
@@ -404,7 +425,15 @@ class DatabaseLoader:
         self.adaptor.execute(sql, (bioentry_id, comment, 1))
         
     def _load_annotations(self, record, bioentry_id) :
-        """Record misc annotations in the bioentry_qualifier_value table"""
+        """Record a SeqRecord's misc annotations in the database.
+
+        The annotation strings are recorded in the bioentry_qualifier_value
+        table, except for special cases like the reference, comment and
+        taxonomy which are handled with their own tables.
+
+        record - a SeqRecord object with an annotations dictionary
+        bioentry_id - corresponding database identifier
+        """
         mono_sql = "INSERT INTO bioentry_qualifier_value" \
                    "(bioentry_id, term_id, value)" \
                    " VALUES (%s, %s, %s)"
@@ -440,6 +469,11 @@ class DatabaseLoader:
 
 
     def _load_reference(self, reference, rank, bioentry_id):
+        """Record a SeqRecord's annotated references in the database.
+
+        record - a SeqRecord object with annotated references
+        bioentry_id - corresponding database identifier
+        """
 
         refs = None
         if reference.medline_id:
@@ -608,7 +642,7 @@ class DatabaseLoader:
 
 
     def _load_seqfeature_dbxref(self, dbxrefs, seqfeature_id):
-        """ _load_seqfeature_dbxref(self, dbxrefs, seqfeature_id)
+        """Add the database crossreferences of a SeqFeature to the database.
 
             o dbxrefs           List, dbxref data from the source file in the
                                 format <database>:<accession>
