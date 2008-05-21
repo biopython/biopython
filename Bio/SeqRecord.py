@@ -28,8 +28,8 @@ class SeqRecord:
         Arguments:
         seq         - Sequence, required (Seq object)
         id          - Sequence identifier, recommended (string)
-        name        - Seqeuence name, optional (string)
-        description - Seqeuence description, optional (string)
+        name        - Sequence name, optional (string)
+        description - Sequence description, optional (string)
         dbxrefs     - Database cross references, optional (list of strings)
         features    - Any (sub)features, optional (list of SeqFeature objects)
 
@@ -60,7 +60,7 @@ class SeqRecord:
         lines = []
         if self.id : lines.append("ID: %s" % self.id)
         if self.name : lines.append("Name: %s" % self.name)
-        if self.description : lines.append("Desription: %s" % self.description)
+        if self.description : lines.append("Description: %s" % self.description)
         if self.dbxrefs : lines.append("Database cross-references: " \
                                        + ", ".join(self.dbxrefs))
         for a in self.annotations:
