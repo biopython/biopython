@@ -1,0 +1,484 @@
+# /opt/fasta/fasta34 -m 10 -y 10 -X "-13 -17" -Q -d 2 NC_002127.faa NC_002695.faa
+FASTA searches a protein or DNA sequence data bank
+ version 34.26 January 12, 2007
+Please cite:
+ W.R. Pearson & D.J. Lipman PNAS (1988) 85:2444-2448
+
+Query library NC_002127.faa vs NC_002695.faa library
+searching NC_002695.faa library
+
+  1>>>gi|10955263|ref|NP_052604.1| plasmid mobilization [Escherichia coli O157:H7 s 107 aa - 107 aa
+ vs  NC_002695.faa library
+
+       opt      E()
+< 20     1     0:=
+  22     0     0:           one = represents 8 library sequences
+  24     0     0:
+  26     0     0:
+  28     1     1:*
+  30     4     7:*
+  32    32    28:===*
+  34    87    76:=========*=
+  36   180   156:===================*===
+  38   308   258:================================*======
+  40   354   359:============================================*
+  42   471   439:======================================================*====
+  44   458   484:========================================================== *
+  46   412   493:====================================================       *
+  48   450   472:========================================================= *
+  50   430   431:=====================================================*
+  52   380   379:===============================================*
+  54   301   324:======================================  *
+  56   272   270:=================================*
+  58   218   222:===========================*
+  60   191   180:======================*=
+  62   152   144:=================*=
+  64   133   115:==============*==
+  66    99    91:===========*=
+  68    84    71:========*==
+  70    53    56:======*
+  72    54    44:=====*=
+  74    27    34:====*
+  76    20    26:===*
+  78    24    21:==*
+  80    15    16:=*
+  82     6    12:=*
+  84    11    10:=*
+  86     5     7:*
+  88     4     6:*          inset = represents 1 library sequences
+  90     2     4:*
+  92     8     3:*         :==*=====
+  94     2     3:*         :==*
+  96     1     2:*         :=*
+  98     2     2:*         :=*
+ 100     0     1:*         :*
+ 102     0     1:*         :*
+ 104     0     1:*         :*
+ 106     0     1:*         :*
+ 108     0     0:          *
+ 110     1     0:=         *=
+ 112     0     0:          *
+ 114     0     0:          *
+ 116     0     0:          *
+ 118     0     0:          *
+>120     0     0:          *
+1578204 residues in  5253 sequences
+  Expectation_n fit: rho(ln(x))= 4.3805+/-0.00127; mu= 8.3307+/- 0.071
+ mean_var=55.5989+/-11.432, 0's: 1 Z-trim: 1  B-trim: 0 in 0/43
+ Lambda= 0.172005
+ Kolmogorov-Smirnov  statistic: 0.0215 (N=29) at  42
+
+FASTA (3.5 Sept 2006) function [optimized, BL50 matrix (15:-5)] ktup: 2
+ join: 36, opt: 24, open/ext: -10/-2, width:  10
+ Scan time:  0.200
+The best scores are:                                      opt bits E(5253)
+gi|162139799|ref|NP_309634.2| 23S rRNA pseudouridi ( 207)   77 26.5     1.2
+gi|15831859|ref|NP_310632.1| trehalose-6-phosphate ( 266)   69 24.6     5.8
+gi|15832986|ref|NP_311759.1| EivE [Escherichia col ( 381)   70 25.0     6.4
+gi|15829430|ref|NP_308203.1| undecaprenyl pyrophos ( 253)   67 24.1     7.9
+gi|15832380|ref|NP_311153.1| sn-glycerol-3-phospha ( 542)   69 24.9     9.9
+
+>>>gi|10955263|ref|NP_052604.1|, 107 aa vs NC_002695.faa library
+; pg_name: /opt/fasta/fasta34
+; pg_ver: 34.26
+; pg_argv: /opt/fasta/fasta34 -m 10 -y 10 -X -13 -17 -Q -d 2 NC_002127.faa NC_002695.faa
+; pg_name: FASTA
+; pg_ver: 3.5 Sept 2006
+; pg_matrix: BL50 (15:-5)
+; pg_open-ext: -10 -2
+; pg_ktup: 2
+; pg_optcut: 24
+; pg_cgap: 36
+; mp_extrap: 60000 5253
+; mp_stats:  Expectation_n fit: rho(ln(x))= 4.3805+/-0.00127; mu= 8.3307+/- 0.071  mean_var=55.5989+/-11.432, 0's: 1 Z-trim: 1  B-trim: 0 in 0/43  Lambda= 0.172005
+; mp_KS: 0.0215 (N=29) at  42
+>>gi|162139799|ref|NP_309634.2| 23S rRNA pseudouridine synthase E [Escherichia coli O157:H7 str. Sakai]
+; fa_frame: f
+; fa_initn:  55
+; fa_init1:  55
+; fa_opt:  77
+; fa_z-score: 110.8
+; fa_bits: 26.5
+; fa_expect:    1.2
+; sw_score: 77
+; sw_ident: 0.284
+; sw_sim: 0.545
+; sw_overlap: 88
+>gi|10955263| ..
+; sq_len: 107
+; sq_offset: 1
+; sq_type: p
+; al_start: 5
+; al_stop: 89
+; al_display_start: 1
+-----------MTKRSGSNTRRRAISRPVR--LTAEEDQEIRKRAAECG-
+KTVSGFLRAAALGKKVNSLTDDRVLKEVMRLGALQKKLFIDGKRVGDREY
+AEVLIAITEYHRALLSRLMAD
+>gi|162139799|ref|NP_309634.2| ..
+; sq_len: 207
+; sq_type: p
+; al_start: 16
+; al_stop: 103
+; al_display_start: 1
+MQKTSFRNHQVKRFSSQRSTRRKPENQPTRVILFNKPYDVLPQFTDEAGR
+KTLKEFIPVQGVYAAGRLDRDSEGLLVLTNNGALQARLTQPGKRTGKIYY
+VQVEGIPTQDALEALRNGVTLNDGPTLPAGAELVDEPAWLWPRNPPIRER
+KSIPTSWLKITLYEGRNRQVRRMTAHVGFP
+>>gi|15831859|ref|NP_310632.1| trehalose-6-phosphate phosphatase [Escherichia coli O157:H7 str. Sakai]
+; fa_frame: f
+; fa_initn:  43
+; fa_init1:  43
+; fa_opt:  69
+; fa_z-score: 98.6
+; fa_bits: 24.6
+; fa_expect:    5.8
+; sw_score: 69
+; sw_ident: 0.283
+; sw_sim: 0.660
+; sw_overlap: 53
+>gi|10955263| ..
+; sq_len: 107
+; sq_offset: 1
+; sq_type: p
+; al_start: 27
+; al_stop: 74
+; al_display_start: 1
+----MTKRSGSNTRRRAISRPVRLTAEEDQEIRKRAAECGKTVSGFLRAA
+A-LGKKV----NSLTDDRVLKEVMRLGALQKKLFIDGKRVGDREYAEVLI
+AITEYHRALLSRLMAD
+>gi|15831859|ref|NP_310632.1| ..
+; sq_len: 266
+; sq_type: p
+; al_start: 167
+; al_stop: 219
+; al_display_start: 137
+PQHEDALMTLAQRITQIWPQMALQQGKCVVEIKPRGTSKGEAIAAFMQEA
+PFIGRTPVFLGDDLTDESGFAVVNRLGGMSVKIGTGATQASWRLAGVPDV
+WSWLEMITTALQQKRENNRS
+  2>>>gi|10955264|ref|NP_052605.1| hypothetical protein pOSAK1_02 [Escherichia coli O157:H7 s 126 aa - 126 aa
+ vs  NC_002695.faa library
+
+       opt      E()
+< 20     0     0:
+  22     0     0:           one = represents 9 library sequences
+  24     0     0:
+  26     0     0:
+  28     0     1:*
+  30     3     7:*
+  32    10    28:== *
+  34    57    76:======= *
+  36   184   156:=================*===
+  38   286   258:============================*===
+  40   413   359:=======================================*======
+  42   455   439:================================================*==
+  44   512   484:=====================================================*===
+  46   456   493:===================================================   *
+  48   451   472:=================================================== *
+  50   400   431:=============================================  *
+  52   333   379:=====================================     *
+  54   341   324:===================================*==
+  56   289   270:=============================*===
+  58   191   222:======================  *
+  60   178   180:===================*
+  62   153   144:===============*=
+  64   102   115:============*
+  66    95    91:==========*
+  68    71    71:=======*
+  70    45    56:===== *
+  72    58    44:====*==
+  74    46    34:===*==
+  76    33    26:==*=
+  78    21    21:==*
+  80    21    16:=*=
+  82    14    12:=*
+  84     5    10:=*
+  86     6     7:*
+  88     2     6:*          inset = represents 1 library sequences
+  90     3     4:*
+  92     6     3:*         :==*===
+  94     5     3:*         :==*==
+  96     2     2:*         :=*
+  98     2     2:*         :=*
+ 100     1     1:*         :*
+ 102     1     1:*         :*
+ 104     1     1:*         :*
+ 106     1     1:*         :*
+ 108     0     0:          *
+ 110     0     0:          *
+ 112     0     0:          *
+ 114     0     0:          *
+ 116     0     0:          *
+ 118     0     0:          *
+>120     0     0:          *
+1578204 residues in  5253 sequences
+  Expectation_n fit: rho(ln(x))= 3.9868+/-0.00133; mu= 9.5505+/- 0.074
+ mean_var=58.9770+/-12.363, 0's: 0 Z-trim: 0  B-trim: 194 in 1/42
+ Lambda= 0.167006
+ Kolmogorov-Smirnov  statistic: 0.0212 (N=29) at  44
+
+FASTA (3.5 Sept 2006) function [optimized, BL50 matrix (15:-5)] ktup: 2
+ join: 36, opt: 24, open/ext: -10/-2, width:  10
+ Scan time:  0.180
+The best scores are:                                      opt bits E(5253)
+gi|15829419|ref|NP_308192.1| serine endoprotease [ ( 474)   77 27.0     2.3
+gi|15832592|ref|NP_311365.1| phosphoribosylaminoim ( 237)   74 26.0     2.4
+gi|15833483|ref|NP_312256.1| DNA adenine methylase ( 278)   72 25.6     3.7
+gi|15831563|ref|NP_310336.1| NAD(P) transhydrogena ( 510)   73 26.1     4.7
+gi|15834523|ref|NP_313296.1| hypothetical protein  ( 404)   71 25.5     5.6
+gi|15829964|ref|NP_308737.1| glutaminyl-tRNA synth ( 554)   72 25.9     5.8
+gi|15831153|ref|NP_309926.1| putative LACI-type tr ( 332)   69 24.9     6.9
+gi|15832760|ref|NP_311533.1| hypothetical lipoprot ( 131)   65 23.5     7.2
+gi|15830381|ref|NP_309154.1| hypothetical protein  (  60)   61 22.2     8.4
+gi|15831794|ref|NP_310567.1| carboxy-terminal prot ( 682)   70 25.5     9.4
+gi|15830925|ref|NP_309698.1| hypothetical protein  ( 122)   63 23.0     9.6
+
+>>>gi|10955264|ref|NP_052605.1|, 126 aa vs NC_002695.faa library
+; pg_name: /opt/fasta/fasta34
+; pg_ver: 34.26
+; pg_argv: /opt/fasta/fasta34 -m 10 -y 10 -X -13 -17 -Q -d 2 NC_002127.faa NC_002695.faa
+; pg_name: FASTA
+; pg_ver: 3.5 Sept 2006
+; pg_matrix: BL50 (15:-5)
+; pg_open-ext: -10 -2
+; pg_ktup: 2
+; pg_optcut: 24
+; pg_cgap: 36
+; mp_extrap: 60000 5253
+; mp_stats:  Expectation_n fit: rho(ln(x))= 3.9868+/-0.00133; mu= 9.5505+/- 0.074  mean_var=58.9770+/-12.363, 0's: 0 Z-trim: 0  B-trim: 194 in 1/42  Lambda= 0.167006
+; mp_KS: 0.0212 (N=29) at  44
+>>gi|15829419|ref|NP_308192.1| serine endoprotease [Escherichia coli O157:H7 str. Sakai]
+; fa_frame: f
+; fa_initn:  64
+; fa_init1:  40
+; fa_opt:  77
+; fa_z-score: 105.8
+; fa_bits: 27.0
+; fa_expect:    2.3
+; sw_score: 77
+; sw_ident: 0.250
+; sw_sim: 0.620
+; sw_overlap: 92
+>gi|10955264| ..
+; sq_len: 126
+; sq_offset: 1
+; sq_type: p
+; al_start: 31
+; al_stop: 117
+; al_display_start: 1
+MKKDKKYQIEAIKNKDKTLFIVYATDIYSPSEFFSKIESDLKKKKSKGDV
+FFDLIIPNG-----GKKDRYVYTSFNGEKFSSYTLNKVTKTDEYNDLSEL
+SASFFKKNFDKINVNLLSKATSFALKKGIPI
+>gi|15829419|ref|NP_308192.1| ..
+; sq_len: 474
+; sq_type: p
+; al_start: 296
+; al_stop: 384
+; al_display_start: 266
+FAIPSNMVKNLTSQMVEYGQVKRGELGIMGTELNSELAKAMKVDAQRG-A
+FVSQVLPNSSAAKAGIKAGDVITSLNGKPISSFAALRA-QVGTMPVGSKL
+TLGLLRDG-KQVNVNLELQQSSQNQVDSSSIFNGIEGAEMSNKGKDQGVV
+VNNVKTGTPAAQIGLKKGDVIIGANQQAVK
+>>gi|15832592|ref|NP_311365.1| phosphoribosylaminoimidazole-succinocarboxamide synthase [Escherichia coli O157:H7 str. Sakai]
+; fa_frame: f
+; fa_initn:  73
+; fa_init1:  45
+; fa_opt:  74
+; fa_z-score: 105.5
+; fa_bits: 26.0
+; fa_expect:    2.4
+; sw_score: 74
+; sw_ident: 0.274
+; sw_sim: 0.589
+; sw_overlap: 73
+>gi|10955264| ..
+; sq_len: 126
+; sq_offset: 1
+; sq_type: p
+; al_start: 51
+; al_stop: 123
+; al_display_start: 21
+IVYATDIYSPSEFFSKIESDLKKKKSKGDVFFDLIIPNGGKKDRYVYTSF
+NGEKFSSYTLNKVTKTDEYNDLSELSASFFKKNFDKINVNLLSKATSFAL
+KKGIPI
+>gi|15832592|ref|NP_311365.1| ..
+; sq_len: 237
+; sq_type: p
+; al_start: 117
+; al_stop: 185
+; al_display_start: 87
+VPVECVVRNRAAGSLVKRLGIEEGIELNPPLFDLFLKNDAMHDPMVNESY
+C-ETFGWVSKENLARMKE---LTYKANDVLKKLFDDAGLILVDFKLEFGL
+YKGEVVLGDEFSPDGSRLWDKETLEKMDKDRFRQSLGGLIEAYEAVARRL
+GVQLD
+  3>>>gi|10955265|ref|NP_052606.1| hypothetical protein pOSAK1_03 [Escherichia coli O157:H7 s 346 aa - 346 aa
+ vs  NC_002695.faa library
+
+       opt      E()
+< 20     0     0:
+  22     0     0:           one = represents 9 library sequences
+  24     0     0:
+  26     0     0:
+  28     0     1:*
+  30     8     7:*
+  32    20    28:===*
+  34    81    76:========*
+  36   147   156:=================*
+  38   283   258:============================*===
+  40   380   359:=======================================*===
+  42   450   439:================================================*=
+  44   480   484:=====================================================*
+  46   496   493:======================================================*=
+  48   467   472:====================================================*
+  50   444   431:===============================================*==
+  52   370   379:==========================================*
+  54   315   324:===================================*
+  56   271   270:=============================*=
+  58   218   222:========================*
+  60   154   180:================== *
+  62   143   144:===============*
+  64   114   115:============*
+  66    83    91:==========*
+  68    77    71:=======*=
+  70    51    56:======*
+  72    55    44:====*==
+  74    28    34:===*
+  76    27    26:==*
+  78    21    21:==*
+  80    13    16:=*
+  82    15    12:=*
+  84     7    10:=*
+  86     6     7:*
+  88     7     6:*          inset = represents 1 library sequences
+  90     3     4:*
+  92     3     3:*         :==*
+  94     2     3:*         :==*
+  96     1     2:*         :=*
+  98     3     2:*         :=*=
+ 100     0     1:*         :*
+ 102     3     1:*         :*==
+ 104     1     1:*         :*
+ 106     2     1:*         :*=
+ 108     0     0:          *
+ 110     2     0:=         *==
+ 112     1     0:=         *=
+ 114     0     0:          *
+ 116     1     0:=         *=
+ 118     0     0:          *
+>120     0     0:          *
+1578204 residues in  5253 sequences
+  Expectation_n fit: rho(ln(x))= 4.3951+/-0.00131; mu= 12.1593+/- 0.073
+ mean_var=61.9743+/-12.803, 0's: 0 Z-trim: 1  B-trim: 15 in 1/42
+ Lambda= 0.162918
+ Kolmogorov-Smirnov  statistic: 0.0096 (N=29) at  50
+
+FASTA (3.5 Sept 2006) function [optimized, BL50 matrix (15:-5)] ktup: 2
+ join: 37, opt: 25, open/ext: -10/-2, width:  10
+ Scan time:  0.350
+The best scores are:                                      opt bits E(5253)
+gi|38704138|ref|NP_311957.2| hypothetical protein  ( 111)   86 28.6    0.51
+gi|15833861|ref|NP_312634.1| hypothetical protein  ( 330)   87 29.2    0.95
+gi|15830902|ref|NP_309675.1| host specificity prot (1132)   90 30.4     1.4
+gi|15830597|ref|NP_309370.1| TerW [Escherichia col ( 155)   81 27.5     1.5
+gi|15830637|ref|NP_309410.1| hypothetical protein  ( 171)   80 27.3     1.9
+gi|15832101|ref|NP_310874.1| putative UDP-galactos ( 331)   82 28.1     2.2
+gi|15830086|ref|NP_308859.1| putative minor tail p ( 192)   79 27.1     2.4
+gi|15833543|ref|NP_312316.1| putative regulator [E ( 345)   80 27.6     3.1
+gi|15833652|ref|NP_312425.1| putative cytochrome C ( 465)   81 28.0     3.2
+gi|15830726|ref|NP_309499.1| acyl carrier protein  (  78)   72 25.1     3.9
+gi|15832800|ref|NP_311573.1| transcriptional repre ( 176)   74 25.9       5
+gi|15830949|ref|NP_309722.1| hypothetical protein  (  93)   70 24.7     6.1
+gi|15831415|ref|NP_310188.1| putative host specifi (1159)   81 28.3     6.2
+gi|15831371|ref|NP_310144.1| predicted lipoprotein (1343)   81 28.4     6.9
+gi|15831965|ref|NP_310738.1| hypothetical protein  ( 216)   71 25.3     9.5
+
+>>>gi|10955265|ref|NP_052606.1|, 346 aa vs NC_002695.faa library
+; pg_name: /opt/fasta/fasta34
+; pg_ver: 34.26
+; pg_argv: /opt/fasta/fasta34 -m 10 -y 10 -X -13 -17 -Q -d 2 NC_002127.faa NC_002695.faa
+; pg_name: FASTA
+; pg_ver: 3.5 Sept 2006
+; pg_matrix: BL50 (15:-5)
+; pg_open-ext: -10 -2
+; pg_ktup: 2
+; pg_optcut: 25
+; pg_cgap: 37
+; mp_extrap: 60000 5253
+; mp_stats:  Expectation_n fit: rho(ln(x))= 4.3951+/-0.00131; mu= 12.1593+/- 0.073  mean_var=61.9743+/-12.803, 0's: 0 Z-trim: 1  B-trim: 15 in 1/42  Lambda= 0.162918
+; mp_KS: 0.0096 (N=29) at  50
+>>gi|38704138|ref|NP_311957.2| hypothetical protein ECs3930 [Escherichia coli O157:H7 str. Sakai]
+; fa_frame: f
+; fa_initn:  50
+; fa_init1:  50
+; fa_opt:  86
+; fa_z-score: 117.5
+; fa_bits: 28.6
+; fa_expect:   0.51
+; sw_score: 86
+; sw_ident: 0.302
+; sw_sim: 0.635
+; sw_overlap: 63
+>gi|10955265| ..
+; sq_len: 346
+; sq_offset: 1
+; sq_type: p
+; al_start: 188
+; al_stop: 246
+; al_display_start: 158
+YLQIASLINDFMCSILNMKEIVEQKNKEFNVDIKK-ETIESELHSKLPKS
+IDKIHEDIKKQLSCSLI--MKKID-VEMEDYSTYCFSALRAIEGFIYQIL
+NDVCNPSSSKNLGEYFTENKPKYIIREIHQETINGEIAEVLCECYTYWHE
+NRHGLFHMKPGIADTKTINKLESIAIIDTV
+>gi|38704138|ref|NP_311957.2| ..
+; sq_len: 111
+; sq_type: p
+; al_start: 14
+; al_stop: 76
+; al_display_start: 1
+-----------------MALNTYQYRETTMIDPKKIEQIARQVHESMPKG
+IREFGEDVEKKIRQTLQAQLTRLDLVSREEFDVQTQVLLRTREKLALLEQ
+RSSELEARNNSVADLQSPPAIPPIDKAE
+>>gi|15833861|ref|NP_312634.1| hypothetical protein ECs4607 [Escherichia coli O157:H7 str. Sakai]
+; fa_frame: f
+; fa_initn:  32
+; fa_init1:  32
+; fa_opt:  87
+; fa_z-score: 112.7
+; fa_bits: 29.2
+; fa_expect:   0.95
+; sw_score: 87
+; sw_ident: 0.210
+; sw_sim: 0.580
+; sw_overlap: 157
+>gi|10955265| ..
+; sq_len: 346
+; sq_offset: 1
+; sq_type: p
+; al_start: 131
+; al_stop: 281
+; al_display_start: 101
+DDDRANLFEFLSEEGITITEDNNNDPNCKHQYIMTTSNGDRVRAKIYKRG
+SIQFQGKYLQIASLINDFMCSILNMKEIVEQKNKEFNVDI---KKETI-E
+SELHSKLPKSIDKIHEDIKKQLSCSLIMKKIDV-EMEDYSTYCFSALRA-
+IEGFIYQILNDVCNPSSSKNLGEYFTENKPKYIIREIHQETINGEIAEVL
+CECYTYWHENRHGLFHMKPGIADTKTINKLESIAIIDTVC
+>gi|15833861|ref|NP_312634.1| ..
+; sq_len: 330
+; sq_type: p
+; al_start: 10
+; al_stop: 155
+; al_display_start: 1
+---------------------MDFSGRNVKEFIRLLSDHDQFEKDQISEL
+TVAANALKLEVAK--NNY-----NMKYSFDTQTERRMIELIREQKDLIPE
+KYLHQSGIKKL-KLHED---EFSSLLVDAERQVLEGSSFVLCCGEKINST
+ISELLSKKITDLTHPTESFTLSEYFSYDVYEEIFKKVVFTPGECDLVRDS
+LVQDGIKPEKIAKIISCLSSRTGIRNLFYACSQAFHVAND
+>>><<<
+
+
+579 residues in 3 query   sequences
+1578204 residues in 5253 library sequences
+ Scomplib [34.26]
+ start: Fri May 23 14:05:39 2008 done: Fri May 23 14:05:40 2008
+ Total Scan time:  0.730 Total Display time:  0.000
+
+Function used was FASTA [version 34.26 January 12, 2007]

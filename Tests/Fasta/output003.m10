@@ -1,0 +1,208 @@
+# /opt/fasta/fasta34 -p -m 10 -Q -b 2 -E 0.5 NC_009653.faa NC_002127.faa
+FASTA searches a protein or DNA sequence data bank
+ version 34.26 January 12, 2007
+Please cite:
+ W.R. Pearson & D.J. Lipman PNAS (1988) 85:2444-2448
+
+Query library NC_009653.faa vs NC_002127.faa library
+searching NC_002127.faa library
+
+  1>>>gi|152973837|ref|YP_001338874.1| hypothetical protein KPN_pKPN7p10262 [Klebsiella pneumoniae subsp. pneumonia 183 aa - 183 aa
+ vs  NC_002127.faa library
+
+    579 residues in     3 sequences
+ Altschul/Gish params: n0: 183 Lambda: 0.158 K: 0.019 H: 0.100
+
+FASTA (3.5 Sept 2006) function [optimized, BL50 matrix (15:-5)] ktup: 2
+ join: 36, opt: 24, open/ext: -10/-2, width:  16
+ Scan time:  0.000
+The best scores are:                                      opt bits E(3)
+gi|10955263|ref|NP_052604.1| plasmid mobilization  ( 107)   45 17.7    0.26
+
+>>>gi|152973837|ref|YP_001338874.1|, 183 aa vs NC_002127.faa library
+; pg_name: /opt/fasta/fasta34
+; pg_ver: 34.26
+; pg_argv: /opt/fasta/fasta34 -p -m 10 -Q -b 2 -E 0.5 NC_009653.faa NC_002127.faa
+; pg_name: FASTA
+; pg_ver: 3.5 Sept 2006
+; pg_matrix: BL50 (15:-5)
+; pg_open-ext: -10 -2
+; pg_ktup: 2
+; pg_optcut: 24
+; pg_cgap: 36
+; mp_extrap: 60000 3
+; mp_stats: Altschul/Gish params: n0: 183 Lambda: 0.158 K: 0.019 H: 0.100
+; mp_KS: -0.0000 (N=0) at 8159228
+>>gi|10955263|ref|NP_052604.1| plasmid mobilization [Escherichia coli O157:H7 str. Sakai]
+; fa_frame: f
+; fa_initn:  43
+; fa_init1:  43
+; fa_opt:  45
+; fa_z-score: 64.1
+; fa_bits: 17.7
+; fa_expect:   0.26
+; sw_score: 59
+; sw_ident: 0.255
+; sw_sim: 0.673
+; sw_overlap: 55
+>gi|152973837 ..
+; sq_len: 183
+; sq_offset: 1
+; sq_type: p
+; al_start: 87
+; al_stop: 141
+; al_display_start: 57
+VLKRKIRAKSVNDKGLSNLYSFEPLIEKLLISISNNKDQYEELQKEQGER
+DLKTVDQLVRIAAAGGGLRLSASTKTVDQLVRIAAAAGNSITPNKAKLVL
+FDLESKTVDELVRIAAAGKG
+>gi|10955263|ref|NP_052604.1| ..
+; sq_len: 107
+; sq_type: p
+; al_start: 18
+; al_stop: 69
+; al_display_start: 1
+-------------MTKRSGSNTRRRAISRPVRLTAEEDQ--EIRKRAAEC
+G-KTVSGFLRAAALGKKVNSLTDDRVLKEVMRLGALQKKLFIDGKRVGDR
+EYAEVLIAITEYHRALLSRL
+  2>>>gi|152973838|ref|YP_001338875.1| hypothetical protein KPN_pKPN7p10263 [Klebsiella pneumoniae subsp. pneumonia 76 aa - 76 aa
+ vs  NC_002127.faa library
+
+    579 residues in     3 sequences
+ Altschul/Gish params: n0: 76 Lambda: 0.158 K: 0.019 H: 0.100
+
+FASTA (3.5 Sept 2006) function [optimized, BL50 matrix (15:-5)] ktup: 2
+ join: 36, opt: 24, open/ext: -10/-2, width:  16
+ Scan time:  0.000
+!! No library sequences with E() < 0.5
+  3>>>gi|152973839|ref|YP_001338876.1| hypothetical protein KPN_pKPN7p10264 [Klebsiella pneumoniae subsp. pneumonia 112 aa - 112 aa
+ vs  NC_002127.faa library
+
+    579 residues in     3 sequences
+ Altschul/Gish params: n0: 112 Lambda: 0.158 K: 0.019 H: 0.100
+
+FASTA (3.5 Sept 2006) function [optimized, BL50 matrix (15:-5)] ktup: 2
+ join: 36, opt: 24, open/ext: -10/-2, width:  16
+ Scan time:  0.000
+!! No library sequences with E() < 0.5
+  4>>>gi|152973840|ref|YP_001338877.1| RNA one modulator-like protein [Klebsiella pneumoniae subsp. pneumoniae  63 aa - 63 aa
+ vs  NC_002127.faa library
+
+    579 residues in     3 sequences
+ Altschul/Gish params: n0: 63 Lambda: 0.158 K: 0.019 H: 0.100
+
+FASTA (3.5 Sept 2006) function [optimized, BL50 matrix (15:-5)] ktup: 2
+ join: 36, opt: 24, open/ext: -10/-2, width:  16
+ Scan time:  0.000
+The best scores are:                                      opt bits E(3)
+gi|10955265|ref|NP_052606.1| hypothetical protein  ( 346)   38 19.2    0.11
+
+>>>gi|152973840|ref|YP_001338877.1|, 63 aa vs NC_002127.faa library
+; pg_name: /opt/fasta/fasta34
+; pg_ver: 34.26
+; pg_argv: /opt/fasta/fasta34 -p -m 10 -Q -b 2 -E 0.5 NC_009653.faa NC_002127.faa
+; pg_name: FASTA
+; pg_ver: 3.5 Sept 2006
+; pg_matrix: BL50 (15:-5)
+; pg_open-ext: -10 -2
+; pg_ktup: 2
+; pg_optcut: 24
+; pg_cgap: 36
+; mp_extrap: 60000 3
+; mp_stats: Altschul/Gish params: n0: 63 Lambda: 0.158 K: 0.019 H: 0.100
+; mp_KS: -0.0000 (N=0) at 8159228
+>>gi|10955265|ref|NP_052606.1| hypothetical protein pOSAK1_03 [Escherichia coli O157:H7 str. Sakai]
+; fa_frame: f
+; fa_initn:  35
+; fa_init1:  35
+; fa_opt:  38
+; fa_z-score: 71.3
+; fa_bits: 19.2
+; fa_expect:   0.11
+; sw_score: 38
+; sw_ident: 0.364
+; sw_sim: 0.636
+; sw_overlap: 22
+>gi|152973840 ..
+; sq_len: 63
+; sq_offset: 1
+; sq_type: p
+; al_start: 43
+; al_stop: 63
+; al_display_start: 13
+KFIQHQSLLLLEKLNELDLDAEADLCEKLHDDAEHLFRTLSSR-LDALQD
+GN
+>gi|10955265|ref|NP_052606.1| ..
+; sq_len: 346
+; sq_type: p
+; al_start: 102
+; al_stop: 123
+; al_display_start: 72
+YFDEIALIIKENCLYSDTKNFEYTIPKFSDDDRANLFEFLSEEGITITED
+NNNDPNCKHQYIMTTSNGDRVRAKIYKRGSIQFQGKYLQIASLINDFMCS
+ILNMKEIVEQKNKEFNVDIK
+  5>>>gi|152973841|ref|YP_001338878.1| Excl1 protein [Klebsiella pneumoniae subsp. pneumoniae  133 aa - 133 aa
+ vs  NC_002127.faa library
+
+    579 residues in     3 sequences
+ Altschul/Gish params: n0: 133 Lambda: 0.158 K: 0.019 H: 0.100
+
+FASTA (3.5 Sept 2006) function [optimized, BL50 matrix (15:-5)] ktup: 2
+ join: 36, opt: 24, open/ext: -10/-2, width:  16
+ Scan time:  0.000
+The best scores are:                                      opt bits E(3)
+gi|10955264|ref|NP_052605.1| hypothetical protein  ( 126)   57 20.4   0.036
+
+>>>gi|152973841|ref|YP_001338878.1|, 133 aa vs NC_002127.faa library
+; pg_name: /opt/fasta/fasta34
+; pg_ver: 34.26
+; pg_argv: /opt/fasta/fasta34 -p -m 10 -Q -b 2 -E 0.5 NC_009653.faa NC_002127.faa
+; pg_name: FASTA
+; pg_ver: 3.5 Sept 2006
+; pg_matrix: BL50 (15:-5)
+; pg_open-ext: -10 -2
+; pg_ktup: 2
+; pg_optcut: 24
+; pg_cgap: 36
+; mp_extrap: 60000 3
+; mp_stats: Altschul/Gish params: n0: 133 Lambda: 0.158 K: 0.019 H: 0.100
+; mp_KS: -0.0000 (N=0) at 8159228
+>>gi|10955264|ref|NP_052605.1| hypothetical protein pOSAK1_02 [Escherichia coli O157:H7 str. Sakai]
+; fa_frame: f
+; fa_initn:  37
+; fa_init1:  37
+; fa_opt:  57
+; fa_z-score: 80.0
+; fa_bits: 20.4
+; fa_expect:  0.036
+; sw_score: 57
+; sw_ident: 0.254
+; sw_sim: 0.651
+; sw_overlap: 63
+>gi|152973841 ..
+; sq_len: 133
+; sq_offset: 1
+; sq_type: p
+; al_start: 49
+; al_stop: 109
+; al_display_start: 19
+TLHRLIKAGDLSTCSGERNAKMVDTSELLRVFGSFEQPKGEHLSGQVSEQ
+--RDTAFADQNEQVIRHLKQEIEHLNTLLLSKDSHIDSLKQAMLLLENHQ
+AKLTESPAPWWKFWKKS
+>gi|10955264|ref|NP_052605.1| ..
+; sq_len: 126
+; sq_type: p
+; al_start: 66
+; al_stop: 124
+; al_display_start: 36
+KIESDLKKKKSKGDVFFDLIIPNGGKKDRYVYTSFN---GEKFSSYTLNK
+VTKTDEYNDLSELSASFFKKNFDKINVNLLSKATSF-ALKKGIPI
+>>><<<
+
+
+567 residues in 5 query   sequences
+579 residues in 3 library sequences
+ Scomplib [34.26]
+ start: Fri May 23 14:15:30 2008 done: Fri May 23 14:15:30 2008
+ Total Scan time:  0.000 Total Display time:  0.000
+
+Function used was FASTA [version 34.26 January 12, 2007]

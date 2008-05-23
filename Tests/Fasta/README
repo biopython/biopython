@@ -4,16 +4,26 @@ FASTA TEST DATA FILES
 This directory contains various data files for testing the
 Fasta-related code in Biopython.
 
-
-
-FASTA TEST FILES
-----------------
+The following are the common sequence file format, originally
+introduced as the input file format for Bill Pearson's FASTA
+tools.  These are for tested in Bio.SeqIO and Bio.AlignIO
+(where the format is called "fasta") as well as other older
+parts of Biopython such as the Bio.Fasta module.
 
 ID     Description
 f001   1 protein sequence
 f002   3 DNA sequences
-
+f003   2 proteins, with comments
 fa01   fasta alignment
 
+The following are example "machine readable" pairwise alignment
+output files from the FASTA tools when using the -m 10 command
+line option.  These are for testing the Bio.AlignIO code where
+the format is called "fasta-m10".
 
-
+output001.m10 - fasta35 protein-protein, 3 query sequences,
+                no histogram, with expectation threshold
+output002.m10 - fasta34 protein-protein, 3 query sequences,
+                with offsets and word size, max 2 hits per query
+output003.m10 - fasta34 protein-protein, 5 query sequences,
+                very strict threshold so not all have hits.
