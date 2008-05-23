@@ -173,6 +173,13 @@ class _Scanner:
         attempt_read_and_call(uhandle, consumer.reference, start="RID:")
         read_and_call_while(uhandle, consumer.noevent, blank=1)
 
+        # blastpgp may have a reference for compositional score matrix
+        # adjustment (see Bug 2502):
+        if attempt_read_and_call(
+            uhandle, consumer.reference, start="Reference"):
+            read_and_call_until(uhandle, consumer.reference, blank=1)
+            read_and_call_while(uhandle, consumer.noevent, blank=1)
+
         # blastpgp has a Reference for composition-based statistics.
         if attempt_read_and_call(
             uhandle, consumer.reference, start="Reference"):
