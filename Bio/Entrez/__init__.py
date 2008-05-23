@@ -41,11 +41,10 @@ _open        Internally used function.
 
 """
 import urllib, time
-from xml.sax.handler import ContentHandler, EntityResolver
-from xml.sax import make_parser
 import os.path
 from Bio import File
 
+from xml.parsers import expat
 
 def query(cmd, db, cgi='http://www.ncbi.nlm.nih.gov/sites/entrez',
           **keywds):
@@ -217,13 +216,15 @@ def espell(cgi='http://www.ncbi.nlm.nih.gov/entrez/eutils/espell.fcgi',
 # The following four classes are used to add a member .attributes to integers,
 # strings, lists, and dictionaries, respectively.
 
-class AttributedInteger(int): pass
+class IntegerElement(int): pass
 
-class AttributedString(str): pass
+class StringElement(str): pass
 
-class AttributedList(list): pass
+class UnicodeElement(unicode): pass
 
-class AttributedDictionary(dict): pass
+class ListElement(list): pass
+
+class DictionaryElement(dict): pass
 
 class Structure(dict):
     def __init__(self, keys):
@@ -237,13 +238,13 @@ class Structure(dict):
         else:
             dict.__setitem__(self, key, value)
 
-class DataHandler(ContentHandler, EntityResolver):
+class DataHandler:
 
     DTDs = os.path.join(__path__[0], "DTDs")
 
     def __init__(self):
         self.path = []
-	self.error = None
+	self.errors = []
 	self.booleans = []
 	self.integers = []
 	self.strings = []
@@ -253,24 +254,34 @@ class DataHandler(ContentHandler, EntityResolver):
         self.items = []
         self.initialized = False
 
+    def run(self, handle):
+        self.parser = expat.ParserCreate()
+        self.parser.SetParamEntityParsing(expat.XML_PARAM_ENTITY_PARSING_ALWAYS)
+        self.parser.StartElementHandler = self.startElement
+        self.parser.EndElementHandler = self.endElement
+        self.parser.CharacterDataHandler = self.characters
+        self.parser.ExternalEntityRefHandler = self.external_entity_ref_handler
+        self.parser.ParseFile(handle)
+        self.parser = None
+        return self.object
+
     def startElement(self, name, attrs):
         if not self.initialized:
             # This XML file does not have a DTD; load its definitions here
             # using the first element in the XML.
-            self.load_dtd_definitions(name)
+            self.load_definitions(name)
         self.content = ""
         if name in self.lists:
             if attrs:
-                object = AttributedList()
+                object = ListElement()
                 object.attributes = dict(attrs)
             else:
                 object = []
         elif name in self.dictionaries:
+            object = DictionaryElement()
+            object.tag = name
             if attrs:
-                object = AttributedDictionary()
                 object.attributes = dict(attrs)
-            else:
-                object = {}
         elif name in self.structures:
             object = Structure(self.structures[name])
             if attrs:
@@ -307,7 +318,7 @@ class DataHandler(ContentHandler, EntityResolver):
         except UnicodeEncodeError:
             pass
         value = self.content
-        if name==self.error and value!="":
+        if name in self.errors and value!="":
             raise RuntimeError(value)
         elif name in self.booleans:
             if value=='Y':
@@ -316,18 +327,20 @@ class DataHandler(ContentHandler, EntityResolver):
                 value = False
         elif name in self.integers:
             if self.attributes:
-                value = AttributedInteger(self.content)
+                value = IntegerElement(self.content)
                 value.attributes = dict(self.attributes)
                 del self.attributes
             else:
                 value = int(self.content)
         elif name in self.strings:
+            try:
+                value = StringElement(self.content)
+            except UnicodeEncodeError:
+                value = UnicodeElement(self.content)
+            value.tag = name
             if self.attributes:
-                value = AttributedString(self.content)
                 value.attributes = dict(self.attributes)
                 del self.attributes
-            else:
-                value = self.content
         elif name in self.items:
             if self.object!="": return
             name = self.itemname
@@ -344,77 +357,92 @@ class DataHandler(ContentHandler, EntityResolver):
     def characters(self, content):
         self.content += content
 
-    def resolveEntity(self, publicId, systemId):
+    def elementDecl(self, name, model):
+        if name.upper()=="ERROR":
+            self.errors.append(name)
+            return
+        if name=='Item' and model==(expat.model.XML_CTYPE_MIXED,
+                                    expat.model.XML_CQUANT_REP,
+                                    None, ((expat.model.XML_CTYPE_NAME,
+                                            expat.model.XML_CQUANT_NONE,
+                                            'Item',
+                                            ()
+                                           ),
+                                          )
+                                   ):
+            # Special case. As far as I can tell, this only occurs in the
+            # eSummary DTD.
+            self.items.append(name)
+            return
+        # First, remove ignorable parentheses around declarations
+        while (model[0] in (expat.model.XML_CTYPE_SEQ,
+                            expat.model.XML_CTYPE_CHOICE)
+          and model[1] in (expat.model.XML_CQUANT_NONE,
+                           expat.model.XML_CQUANT_OPT)
+          and len(model[3])==1):
+            model = model[3][0]
+        if model[0] in (expat.model.XML_CTYPE_MIXED,
+                        expat.model.XML_CTYPE_EMPTY):
+            self.strings.append(name)
+            return
+        if (model[0] in (expat.model.XML_CTYPE_CHOICE,
+                         expat.model.XML_CTYPE_SEQ) and
+            model[1] in (expat.model.XML_CQUANT_PLUS,
+                         expat.model.XML_CQUANT_REP)):
+            self.lists.append(name)
+            return
+        single = []
+        multiple = []
+        def count(model):
+            quantifier, name, children = model[1:]
+            if name==None:
+                if quantifier in (expat.model.XML_CQUANT_PLUS,
+                                  expat.model.XML_CQUANT_REP):
+                    for child in children:
+                        multiple.append(child[2])
+                else:
+                    for child in children:
+                        count(child)
+            elif name.upper()!="ERROR":
+                if quantifier in (expat.model.XML_CQUANT_NONE,
+                                  expat.model.XML_CQUANT_OPT):
+                    single.append(name)
+                elif quantifier in (expat.model.XML_CQUANT_PLUS,
+                                    expat.model.XML_CQUANT_REP):
+                    multiple.append(name)
+        count(model)
+        if len(single)==0 and len(multiple)==1:
+            self.lists.append(name)
+        elif len(multiple)==0:
+            self.dictionaries.append(name)
+        else:
+            self.structures.update({name: multiple})
+
+    def external_entity_ref_handler(self, context, base, systemId, publicId):
+        self.initialized = True
         location, filename = os.path.split(systemId)
-        self.load_dtd_definitions(filename)
         path = os.path.join(DataHandler.DTDs, filename)
         try:
             handle = open(path)
         except IOError:
             import warnings
             warnings.warn("DTD file %s not found in Biopython installation; trying to retrieve it from NCBI" % filename)
-            handle = EntityResolver.resolveEntity(self, publicId, systemId)
-        return handle
+            import urllib
+            handle = urllib.urlopen(systemId)
+        parser = self.parser.ExternalEntityParserCreate(context)
+        parser.ElementDeclHandler = self.elementDecl
+        parser.ParseFile(handle)
+        return 1
 
-    def load_dtd_definitions(self, filename):
-        if filename=="eInfo_020511.dtd":
-            import EInfo as module
-        elif filename=="eSearch_020511.dtd":
-            import ESearch as module
-        elif filename=="ePost_020511.dtd":
-            import EPost as module
-        elif filename=="eSummary_041029.dtd":
-            import ESummary as module
-        elif filename=="eLink_020511.dtd":
-            import ELink as module
-        elif filename=="eSpell.dtd":
-            import ESpell as module
-        elif filename=="egquery.dtd":
-            import EGQuery as module
-        elif filename=="pubmed_080101.dtd":
-            import PubmedArticleSet as module
-        elif filename=="NCBI_BioSource.mod.dtd":
-            import NCBI_BioSource as module
-        elif filename=="NCBI_Entity.mod.dtd":
-            # Nothing of interest in this DTD
-            return
-        elif filename=="NCBI_Entrezgene.dtd":
-            # Nothing of interest in this DTD
-            return
-        elif filename=="NCBI_Entrezgene.mod.dtd":
-            import NCBI_Entrezgene as module
-        elif filename=="NCBI_Gene.mod.dtd":
-            import NCBI_Gene as module
-        elif filename=="NCBI_General.mod.dtd":
-            import NCBI_General as module
-        elif filename=="NCBI_Seqloc.mod.dtd":
-            import NCBI_Seqloc as module
-        elif filename=="NCBI_Mim.dtd":
-            # Nothing of interest in this DTD
-            return
-        elif filename=="NCBI_Mim.mod.dtd":
-            import NCBI_Mim as module
-        elif filename=="NCBI_Organism.mod.dtd":
-            import NCBI_Organism as module
-        elif filename=="NCBI_Protein.mod.dtd":
-            import NCBI_Protein as module
-        elif filename=="nlmmedline_080101.dtd":
-            import NLMMedline as module
-        elif filename=="nlmmedlinecitation_080101.dtd":
-            import NLMMedlineCitation as module
-        elif filename=="nlmsharedcatcit_080101.dtd":
-            import NLMSharedCatCit as module
-        elif filename=="nlmcommon_080101.dtd":
-            import NLMCommon as module
-        elif filename=="taxon.dtd":
-            import Taxon as module
-        elif filename=="SerialSet":
+    def load_definitions(self, filename):
+        self.initialized = True
+        if filename=="SerialSet":
             import  SerialSet as module
         else:
             import warnings
             warnings.warn("No parser available for %s; skipping its elements" % filename)
             return
-        self.error = module.error
+        self.errors.extend(module.errors)
         self.booleans.extend(module.booleans)
         self.integers.extend(module.integers)
         self.strings.extend(module.strings)
@@ -422,7 +450,6 @@ class DataHandler(ContentHandler, EntityResolver):
         self.dictionaries.extend(module.dictionaries)
         self.structures.update(module.structures)
         self.items.extend(module.items)
-        self.initialized = True
 
 def read(handle):
     """read(hande) -> record
@@ -431,12 +458,8 @@ def read(handle):
     data as a list of dictionaries.  An appropriate parser will be
     automatically be selected if available.
     """
-    saxparser = make_parser()
     handler = DataHandler()
-    saxparser.setContentHandler(handler)
-    saxparser.setEntityResolver(handler)
-    saxparser.parse(handle)
-    record = handler.object
+    record = handler.run(handle)
     return record
 
 def _open(cgi, params={}):

@@ -1,6 +1,6 @@
 <!--    
                 This is the Current DTD for Entrez eLink
-$Id: eLink_020511.dtd,v 1.1 2008-05-13 15:02:01 mdehoon Exp $
+$Id: eLink_020511.dtd,v 1.2 2008-05-23 16:45:57 mdehoon Exp $
 -->
 <!-- ================================================================= -->
 
@@ -58,7 +58,14 @@ $Id: eLink_020511.dtd,v 1.1 2008-05-13 15:02:01 mdehoon Exp $
 
 
 <!-- cmd=ncheck & lcheck -->
-<!ELEMENT	IdCheckList	(Id*,ERROR?)>
+<!ELEMENT	IdCheckList	(Id*,IdLinkSet*,ERROR?)>
+<!-- This line was modified by the Biopython team -->
+<!ELEMENT	IdLinkSet	(Id,LinkInfo*)>
+<!ELEMENT	LinkInfo	(DbTo,LinkName,MenuTag,HtmlTag,Priority)> 
+<!ELEMENT	MenuTag		(#PCDATA)>
+<!ELEMENT	HtmlTag		(#PCDATA)>
+<!ELEMENT	Priority	(#PCDATA)>
+<!-- These five lines were added by the Biopython team -->
 
 
 <!-- Common -->

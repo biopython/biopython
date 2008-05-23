@@ -5,10 +5,10 @@
 # This code is used to parse XML results returned by Entrez's eFetch
 # from the "journals" database. No DTD file seems to be associated with
 # these XML files.
-# The code is not meant to be used by itself, but is called
+# The code is not meant to be used by itself, but is used
 # from Bio.Entrez.__init__.py.
 
-error = None
+errors = ()
 booleans = ()
 integers = ()
 strings = (
