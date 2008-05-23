@@ -38,6 +38,9 @@ test_files = [ \
     ("emboss", 4, 1, 'Emboss/alignret.txt'),
     ("emboss", 2, 5, 'Emboss/needle.txt'),
     ("emboss", 2, 1, 'Emboss/water.txt'),
+    ("fasta-m10", 2, 4, 'Fasta/output001.m10'),
+    ("fasta-m10", 2, 6, 'Fasta/output002.m10'),
+    ("fasta-m10", 2, 3, 'Fasta/output003.m10'),
     ]
 
 def str_summary(text, max_len=40) :
@@ -210,6 +213,14 @@ for (t_format, t_per, t_count, t_filename) in test_files :
             print alignment_summary(alignment)
         elif i==3 :
             print " ..."
+
+    if t_count==1 and t_format not in ["nexus","emboss","fasta-m10"] :
+        #print " Trying to read a triple concatenation of the input file"
+        data = open(t_filename,"r").read()
+        handle = StringIO()
+        handle.write(data + "\n\n" + data + "\n\n" + data)
+        handle.seek(0)
+        assert 3 == len(list(AlignIO.parse(handle=handle, format=t_format, seq_count=t_per)))
 
     #Some alignment file formats have magic characters which mean
     #use the letter in this position in the first sequence.

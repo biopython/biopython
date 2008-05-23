@@ -167,4 +167,50 @@ Testing reading emboss format file Emboss/water.txt with 1 alignments
  Checking can write/read as 'phylip' format
  Checking can write/read as 'clustal' format
  Checking can write/read as 'stockholm' format
+Testing reading fasta-m10 format file Fasta/output001.m10 with 4 alignments
+ Alignment 0, with 2 sequences of length 108
+  SGSNT-RRRAISRPVRLTAEED---QEIRKRAAECG...LSR gi|10955263|ref|NP_052604.1|
+  AGSGAPRRRGSGLASRISEQSEALLQEAAKHAAEFG...LSR gi|152973457|ref|YP_001338508.1|
+ Alignment 1, with 2 sequences of length 64
+  AAECGKTVSGFLRAAALGKKVNSLTDDRVLKEV-MR...AIT gi|10955263|ref|NP_052604.1|
+  ASRQGCTVGG--KMDSVQDKASDKDKERVMKNINIM...TLT gi|152973588|ref|YP_001338639.1|
+ Alignment 2, with 2 sequences of length 38
+  MKKDKKYQIEAIKNKDKTLFIVYATDIYSPSEFFSKIE gi|10955264|ref|NP_052605.1|
+  IKKDLGVSFLKLKNREKTLIVDALKKKYPVAELLSVLQ gi|152973462|ref|YP_001338513.1|
+ Alignment 3, with 2 sequences of length 43
+  SELHSKLPKSIDKIHEDIKKQLSC-SLIMKKIDVEM...TYC gi|10955265|ref|NP_052606.1|
+  SRINSDVARRIPGIHRDPKDRLSSLKQVEEALDMLI...EYC gi|152973545|ref|YP_001338596.1|
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'stockholm' format
+Testing reading fasta-m10 format file Fasta/output002.m10 with 6 alignments
+ Alignment 0, with 2 sequences of length 88
+  SGSNTRRRAISRPVR--LTAEEDQEIRKRAAECG-K...AEV gi|10955263|ref|NP_052604.1|
+  SQRSTRRKPENQPTRVILFNKPYDVLPQFTDEAGRK...VQV gi|162139799|ref|NP_309634.2|
+ Alignment 1, with 2 sequences of length 53
+  EIRKRAAECGKTVSGFLRAAA-LGKKV----NSLTD...KKL gi|10955263|ref|NP_052604.1|
+  EIKPRGTSKGEAIAAFMQEAPFIGRTPVFLGDDLTD...VKI gi|15831859|ref|NP_310632.1|
+ Alignment 2, with 2 sequences of length 92
+  SEFFSKIESDLKKKKSKGDVFFDLIIPNG-----GK...ATS gi|10955264|ref|NP_052605.1|
+  TELNSELAKAMKVDAQRG-AFVSQVLPNSSAAKAGI...QSS gi|15829419|ref|NP_308192.1|
+ ...
+ Alignment 5, with 2 sequences of length 157
+  QYIMTTSNGDRVRAKIYKRGSIQFQGKYLQIASLIN...REI gi|10955265|ref|NP_052606.1|
+  EFIRLLSDHDQFEKDQISELTVAANALKLEVAK--N...KKV gi|15833861|ref|NP_312634.1|
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'stockholm' format
+Testing reading fasta-m10 format file Fasta/output003.m10 with 3 alignments
+ Alignment 0, with 2 sequences of length 55
+  ISISNNKDQYEELQKEQGERDLKTVDQLVRIAAAGG...IAA gi|152973837|ref|YP_001338874.1|
+  VRLTAEEDQ--EIRKRAAECG-KTVSGFLRAAALGK...LGA gi|10955263|ref|NP_052604.1|
+ Alignment 1, with 2 sequences of length 22
+  DDAEHLFRTLSSR-LDALQDGN gi|152973840|ref|YP_001338877.1|
+  DDRANLFEFLSEEGITITEDNN gi|10955265|ref|NP_052606.1|
+ Alignment 2, with 2 sequences of length 63
+  VFGSFEQPKGEHLSGQVSEQ--RDTAFADQNEQVIR...QAM gi|152973841|ref|YP_001338878.1|
+  VYTSFN---GEKFSSYTLNKVTKTDEYNDLSELSAS...KGI gi|10955264|ref|NP_052605.1|
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'stockholm' format
 Finished tested reading files
