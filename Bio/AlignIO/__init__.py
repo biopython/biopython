@@ -78,12 +78,18 @@ When specifying the file format, use lowercase strings.  The same format
 names are also used in Bio.SeqIO and include the following:
 
 clustal   - Ouput from Clustal W or X, see also the module Bio.Clustalw
-fasta     - The generic sequence file format which each record starts with a
-            ">" character.  This is NOT the same as the FASTA tools output.
+            which can be used to run the command line tool from Biopython.
+emboss    - The "pairs" and "simple" alignment format from the EMBOSS tools.
+fasta     - The generic sequence file format where each record starts with a
+            identifer line starting with a ">" character, followed by lines
+            of sequence.
+fasta-m10 - For the pairswise alignments output by Bill Pearson's FASTA
+            tools when used with the -m 10 command line option for machine
+            readable output.
 nexus     - Output from NEXUS, see also the module Bio.Nexus which can also
             read any phylogenetic trees in these files.
 phylip    - Used by the PHLIP tools.
-stockholm - A richly annotated alignment file format used by PFAM          
+stockholm - A richly annotated alignment file format used by PFAM.
 
 Further Information
 ===================
@@ -124,6 +130,7 @@ import StockholmIO
 import ClustalIO
 import PhylipIO
 import EmbossIO
+import FastaIO
 
 #Convention for format names is "mainname-subtype" in lower case.
 #Please use the same names as BioPerl and EMBOSS where possible.
@@ -131,6 +138,7 @@ import EmbossIO
 _FormatToIterator ={#"fasta" and "nexus" are done via Bio.SeqIO
                     "clustal" : ClustalIO.ClustalIterator,
                     "emboss" : EmbossIO.EmbossIterator,
+                    "fasta-m10" : FastaIO.FastaM10Iterator,
                     "phylip" : PhylipIO.PhylipIterator,
                     "stockholm" : StockholmIO.StockholmIterator,
                     }
