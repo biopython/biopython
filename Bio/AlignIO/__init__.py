@@ -21,11 +21,12 @@ one alignment):
 
 For the general case, when the handle could contain any number of alignments,
 use the function Bio.AlignIO.parse(...) which takes the same arguments, but
-returns an iterator giving Alignment objects:
+returns an iterator giving Alignment objects.  For example, using the output
+from the EMBOSS water or needle pairwise alignment prorams:
 
     from Bio import AlignIO
-    handle = open("example.aln", "rU")
-    for alignment in AlignIO.parse(handle, "clustal") :
+    handle = open("example.txt", "rU")
+    for alignment in AlignIO.parse(handle, "emboss") :
         print alignment
 
 If you want random access to the alignments by number, turn this into a list:
@@ -37,18 +38,21 @@ If you want random access to the alignments by number, turn this into a list:
 
 Most alignment file formats can be concatenated so as to hold as many
 different multiple sequence alignments as possible.  One common example
-is the output of the tool seqboot in the PHLYIP suite.
+is the output of the tool seqboot in the PHLYIP suite.  Sometimes there
+can be a file header and footer, as seen in the EMBOSS alignment output.
 
-The optional argument for the number of sequences per alignment is usually
-only needed with the alignments stored in the FASTA format.  Otherwise
-there is no clear way to tell if you have say a single alignment of 20
-sequences, or four alignments of 5 sequences:
+There is an optional argument for the number of sequences per alignment which
+is usually only needed with the alignments stored in the FASTA format.
+Without this information, there is no clear way to tell if you have say a
+single alignment of 20 sequences, or four alignments of 5 sequences.  e.g.
 
     from Bio import AlignIO
     handle = open("example.faa", "rU")
-    for alignment in AlignIO.parse(handle, "fasta", 5) :
+    for alignment in AlignIO.parse(handle, "fasta", seq_count=5) :
         print alignment
 
+The above code would split up the FASTA files, and try and batch every five
+sequences into an alignment.
 
 Output
 ======
@@ -64,13 +68,30 @@ and of course the file format.
 
 In general, you are expected to call this function once (with all your
 alignments) and then close the file handle.  However, for file formats
-where multiple alignments are stored sequentially, then multiple calls to
-the write function should work as expected.
+like PHYLIP where multiple alignments are stored sequentially (with no file
+header and footer), then multiple calls to the write function should work as
+expected.
 
 File Formats
 ============
-When specifying formats, use lowercase strings.
+When specifying the file format, use lowercase strings.  The same format
+names are also used in Bio.SeqIO and include the following:
 
+clustal   - Ouput from Clustal W or X, see also the module Bio.Clustalw
+fasta     - The generic sequence file format which each record starts with a
+            ">" character.  This is NOT the same as the FASTA tools output.
+nexus     - Output from NEXUS, see also the module Bio.Nexus which can also
+            read any phylogenetic trees in these files.
+phylip    - Used by the PHLIP tools.
+stockholm - A richly annotated alignment file format used by PFAM          
+
+Further Information
+===================
+See the wiki page biopython.org/wiki/AlignIO and also the Bio.AlignIO chapter
+in the Biopython Tutorial and Cookbook which is also available online:
+
+http://biopython.org/DIST/docs/tutorial/Tutorial.html
+http://biopython.org/DIST/docs/tutorial/Tutorial.pdf
 """
 
 #TODO
@@ -166,7 +187,7 @@ def _SeqIO_to_alignment_iterator(handle, format, seq_count=None) :
 
     handle   - handle to the file.
     format   - string describing the file format.
-    seq_count- Optional interger, number of sequences expected in
+    seq_count- Optional integer, number of sequences expected in
                each alignment.  Recommended for fasta format files.
 
     If count is omitted (default) then all the sequences in
@@ -203,7 +224,7 @@ def parse(handle, format, seq_count=None) :
 
     handle   - handle to the file.
     format   - string describing the file format.
-    seq_count- Optional interger, number of sequences expected in
+    seq_count- Optional integer, number of sequences expected in
                each alignment.  Recommended for fasta format files.
 
     If you have the file name in a string 'filename', use:
@@ -264,8 +285,8 @@ def read(handle, format, seq_count=None) :
     from Bio import AlignIO
     align = AlignIO.parse(open("example.sth"), "stockholm").next()
 
-    Use the Bio.AlignIO.parse(handle, format[, count]) function if you
-    want to read multiple records from the handle.
+    Use the Bio.AlignIO.parse() function if you want to read multiple
+    records from the handle.
     """
     iterator = parse(handle, format, seq_count)
     try :
@@ -1076,7 +1097,7 @@ ORIGIN
         alignment = read(StringIO(data), format)
         assert len(alignment.get_all_seqs()) == rec_count
 
-        print "Bio.AlignIO.read(handle, format, count)"
+        print "Bio.AlignIO.read(handle, format, seq_count)"
         alignment = read(StringIO(data), format, rec_count)
         assert len(alignment.get_all_seqs()) == rec_count
         
@@ -1096,7 +1117,7 @@ ORIGIN
         if last_seq :
             assert as_list[0].get_all_seqs()[-1].seq.tostring() == last_seq
 
-        print "Bio.AlignIO.parse(handle, format, count)"
+        print "Bio.AlignIO.parse(handle, format, seq_count)"
         as_list2 = list(parse(StringIO(data), format=format, seq_count=rec_count))
         assert len(as_list2) == len(as_list)
         for a1, a2 in zip(as_list, as_list2) :
