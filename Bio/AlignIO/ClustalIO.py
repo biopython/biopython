@@ -53,8 +53,8 @@ class ClustalWriter(SequentialAlignmentWriter) :
             output += "\n"
             cur_char += show_num
 
-        # have a extra newline, so strip two off and add one before returning
-        self.handle.write(output.rstrip() + "\n")
+        # Want a trailing blank new line in case the output is concatenated
+        self.handle.write(output + "\n")
 
 class ClustalIterator(AlignmentIterator) :
     """Clustalw alignment iterator."""
@@ -282,4 +282,15 @@ HISJ_E_COLI                    LKAKKIDAIMSSLSITEKRQQEIAFTDKLYAADSRLV
 
     print "Checking empty file..."
     assert 0 == len(list(ClustalIterator(StringIO(""))))
+
+    print "Checking write/read..."
+    alignments = list(ClustalIterator(StringIO(aln_example1))) \
+               + list(ClustalIterator(StringIO(aln_example2)))*2
+    handle = StringIO()
+    ClustalWriter(handle).write_file(alignments)
+    handle.seek(0)
+    for i,a in enumerate(ClustalIterator(handle)) :
+        assert a.get_alignment_length() == alignments[i].get_alignment_length()
+    handle.seek(0)
+
     print "The End"
