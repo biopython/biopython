@@ -1,0 +1,305 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "gbseq.asn"
+     ::DATATOOL:: by application DATATOOL version 1.9.0
+     ::DATATOOL:: on 04/10/2008 16:04:22
+     ============================================ -->
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "NCBI-GBSeq"
+================================================= -->
+
+<!--
+$Revision: 1.1 $
+*********************************************************
+
+ ASN.1 and XML for the components of a GenBank format sequence
+ J.Ostell 2002
+ Updated 14 December 2005
+
+*********************************************************
+-->
+
+<!--
+********
+  GBSeq represents the elements in a GenBank style report
+    of a sequence with some small additions to structure and support
+    for protein (GenPept) versions of GenBank format as seen in
+    Entrez. While this represents the simplification, reduction of
+    detail, and flattening to a single sequence perspective of GenBank
+    format (compared with the full ASN.1 or XML from which GenBank and
+    this format is derived at NCBI), it is presented in ASN.1 or XML for
+    automated parsing and processing. It is hoped that this compromise
+    will be useful for those bulk processing at the GenBank format level
+    of detail today. Since it is a compromise, a number of pragmatic
+    decisions have been made.
+
+  In pursuit of simplicity and familiarity a number of
+    fields do not have full substructure defined here where there is
+    already a standard GenBank format string. For example:
+
+    Date  DD-Mon-YYYY
+    Authors   LastName, Intials (with periods)
+   Journal   JounalName Volume (issue), page-range (year)
+   FeatureLocations as per GenBank feature table, but FeatureIntervals
+    may also be provided as a convenience
+   FeatureQualifiers  as per GenBank feature table
+   Primary has a string that represents a table to construct
+    a third party (TPA) sequence.
+   other-seqids can have strings with the "vertical bar format" sequence
+    identifiers used in BLAST for example, when they are non-genbank types.
+    Currently in GenBank format you only see GI, but there are others, like
+    patents, submitter clone names, etc which will appear here, as they
+    always have in the ASN.1 format, and full XML format.
+   source-db is a formatted text block for peptides in GenPept format that
+    carries information from the source protein database.
+
+  There are also a number of elements that could have been
+   more exactly specified, but in the interest of simplicity
+   have been simply left as options. For example..
+
+  accession and accession.version will always appear in a GenBank record
+   they are optional because this format can also be used for non-GenBank
+   sequences, and in that case will have only "other-seqids".
+
+  sequences will normally all have "sequence" filled in. But contig records
+    will have a "join" statement in the "contig" slot, and no "sequence".
+    We also may consider a retrieval option with no sequence of any kind
+     and no feature table to quickly check minimal values.
+
+  a reference may have an author list, or be from a consortium, or both.
+
+  some fields, such as taxonomy, do appear as separate elements in GenBank
+    format but without a specific linetype (in GenBank format this comes
+    under ORGANISM). Another example is the separation of primary accession
+    from the list of secondary accessions. In GenBank format primary
+    accession is just the first one on the list that includes all secondaries
+    after it.
+
+  create-date deserves special comment. The date you see on the right hand
+    side of the LOCUS line in GenBank format is actually the last date the
+    the record was modified (or the update-date). The date the record was
+    first submitted to GenBank appears in the first submission citation in
+    the reference section. Internally in the databases and ASN.1 NCBI keeps
+    the first date the record was released into the sequence database at
+    NCBI as create-date. For records from EMBL, which supports create-date,
+    it is the date provided by EMBL. For DDBJ records, which do not supply
+    a create-date (same as GenBank format) the create-date is the first date
+    NCBI saw the record from DDBJ. For older GenBank records, before NCBI
+    took responsibility for GenBank, it is just the first date NCBI saw the
+    record. Create-date can be very useful, so we expose it here, but users
+    must understand it is only an approximation and comes from many sources,
+    and with many exceptions and caveats. It does NOT tell you the first
+    date the public might have seen this record and thus is NOT an accurate
+    measure for legal issues of precedence.
+
+********
+-->
+<!ELEMENT GBSeq (
+        GBSeq_locus, 
+        GBSeq_length, 
+        GBSeq_strandedness?, 
+        GBSeq_moltype, 
+        GBSeq_topology?, 
+        GBSeq_division, 
+        GBSeq_update-date, 
+        GBSeq_create-date?, 
+        GBSeq_update-release?, 
+        GBSeq_create-release?, 
+        GBSeq_definition, 
+        GBSeq_primary-accession?, 
+        GBSeq_entry-version?, 
+        GBSeq_accession-version?, 
+        GBSeq_other-seqids?, 
+        GBSeq_secondary-accessions?, 
+        GBSeq_project?, 
+        GBSeq_keywords?, 
+        GBSeq_segment?, 
+        GBSeq_source?, 
+        GBSeq_organism?, 
+        GBSeq_taxonomy?, 
+        GBSeq_references?, 
+        GBSeq_comment?, 
+        GBSeq_primary?, 
+        GBSeq_source-db?, 
+        GBSeq_database-reference?, 
+        GBSeq_feature-table?, 
+        GBSeq_sequence?, 
+        GBSeq_contig?)>
+
+<!ELEMENT GBSeq_locus (#PCDATA)>
+
+<!ELEMENT GBSeq_length (%INTEGER;)>
+
+<!ELEMENT GBSeq_strandedness (#PCDATA)>
+
+<!ELEMENT GBSeq_moltype (#PCDATA)>
+
+<!ELEMENT GBSeq_topology (#PCDATA)>
+
+<!ELEMENT GBSeq_division (#PCDATA)>
+
+<!ELEMENT GBSeq_update-date (#PCDATA)>
+
+<!ELEMENT GBSeq_create-date (#PCDATA)>
+
+<!ELEMENT GBSeq_update-release (#PCDATA)>
+
+<!ELEMENT GBSeq_create-release (#PCDATA)>
+
+<!ELEMENT GBSeq_definition (#PCDATA)>
+
+<!ELEMENT GBSeq_primary-accession (#PCDATA)>
+
+<!ELEMENT GBSeq_entry-version (#PCDATA)>
+
+<!ELEMENT GBSeq_accession-version (#PCDATA)>
+
+<!ELEMENT GBSeq_other-seqids (GBSeqid*)>
+
+<!ELEMENT GBSeq_secondary-accessions (GBSecondary-accn*)>
+
+<!ELEMENT GBSeq_project (#PCDATA)>
+
+<!ELEMENT GBSeq_keywords (GBKeyword*)>
+
+<!ELEMENT GBSeq_segment (#PCDATA)>
+
+<!ELEMENT GBSeq_source (#PCDATA)>
+
+<!ELEMENT GBSeq_organism (#PCDATA)>
+
+<!ELEMENT GBSeq_taxonomy (#PCDATA)>
+
+<!ELEMENT GBSeq_references (GBReference*)>
+
+<!ELEMENT GBSeq_comment (#PCDATA)>
+
+<!ELEMENT GBSeq_primary (#PCDATA)>
+
+<!ELEMENT GBSeq_source-db (#PCDATA)>
+
+<!ELEMENT GBSeq_database-reference (#PCDATA)>
+
+<!ELEMENT GBSeq_feature-table (GBFeature*)>
+
+<!-- Optional for other dump forms -->
+<!ELEMENT GBSeq_sequence (#PCDATA)>
+
+<!ELEMENT GBSeq_contig (#PCDATA)>
+
+
+<!ELEMENT GBSecondary-accn (#PCDATA)>
+
+
+<!ELEMENT GBSeqid (#PCDATA)>
+
+
+<!ELEMENT GBKeyword (#PCDATA)>
+
+
+<!ELEMENT GBReference (
+        GBReference_reference, 
+        GBReference_position?, 
+        GBReference_authors?, 
+        GBReference_consortium?, 
+        GBReference_title?, 
+        GBReference_journal, 
+        GBReference_xref?, 
+        GBReference_pubmed?, 
+        GBReference_remark?)>
+
+<!ELEMENT GBReference_reference (#PCDATA)>
+
+<!ELEMENT GBReference_position (#PCDATA)>
+
+<!ELEMENT GBReference_authors (GBAuthor*)>
+
+<!ELEMENT GBReference_consortium (#PCDATA)>
+
+<!ELEMENT GBReference_title (#PCDATA)>
+
+<!ELEMENT GBReference_journal (#PCDATA)>
+
+<!ELEMENT GBReference_xref (GBXref*)>
+
+<!ELEMENT GBReference_pubmed (%INTEGER;)>
+
+<!ELEMENT GBReference_remark (#PCDATA)>
+
+
+<!ELEMENT GBAuthor (#PCDATA)>
+
+
+<!ELEMENT GBXref (
+        GBXref_dbname, 
+        GBXref_id)>
+
+<!ELEMENT GBXref_dbname (#PCDATA)>
+
+<!ELEMENT GBXref_id (#PCDATA)>
+
+
+<!ELEMENT GBFeature (
+        GBFeature_key, 
+        GBFeature_location, 
+        GBFeature_intervals?, 
+        GBFeature_operator?, 
+        GBFeature_partial5?, 
+        GBFeature_partial3?, 
+        GBFeature_quals?)>
+
+<!ELEMENT GBFeature_key (#PCDATA)>
+
+<!ELEMENT GBFeature_location (#PCDATA)>
+
+<!ELEMENT GBFeature_intervals (GBInterval*)>
+
+<!ELEMENT GBFeature_operator (#PCDATA)>
+
+<!ELEMENT GBFeature_partial5 EMPTY>
+<!ATTLIST GBFeature_partial5 value ( true | false ) #REQUIRED >
+
+
+<!ELEMENT GBFeature_partial3 EMPTY>
+<!ATTLIST GBFeature_partial3 value ( true | false ) #REQUIRED >
+
+
+<!ELEMENT GBFeature_quals (GBQualifier*)>
+
+
+<!ELEMENT GBInterval (
+        GBInterval_from?, 
+        GBInterval_to?, 
+        GBInterval_point?, 
+        GBInterval_iscomp?, 
+        GBInterval_interbp?, 
+        GBInterval_accession)>
+
+<!ELEMENT GBInterval_from (%INTEGER;)>
+
+<!ELEMENT GBInterval_to (%INTEGER;)>
+
+<!ELEMENT GBInterval_point (%INTEGER;)>
+
+<!ELEMENT GBInterval_iscomp EMPTY>
+<!ATTLIST GBInterval_iscomp value ( true | false ) #REQUIRED >
+
+
+<!ELEMENT GBInterval_interbp EMPTY>
+<!ATTLIST GBInterval_interbp value ( true | false ) #REQUIRED >
+
+
+<!ELEMENT GBInterval_accession (#PCDATA)>
+
+
+<!ELEMENT GBQualifier (
+        GBQualifier_name, 
+        GBQualifier_value?)>
+
+<!ELEMENT GBQualifier_name (#PCDATA)>
+
+<!ELEMENT GBQualifier_value (#PCDATA)>
+
+
+<!ELEMENT GBSet (GBSeq*)>
+

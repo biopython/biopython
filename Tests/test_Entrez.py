@@ -3047,7 +3047,7 @@ class EFetchTest(unittest.TestCase):
     '''Tests for parsing XML output returned by EFetch
     '''
     def t_pubmed1(self):
-        '''Test parsing XML returned by EFetch from PubMed (first test)
+        '''Test parsing XML returned by EFetch, PubMed database (first test)
         '''
         # In PubMed display PMIDs 12091962 and 9997 in xml retrieval mode
         # and abstract retrieval type.
@@ -3251,7 +3251,7 @@ class EFetchTest(unittest.TestCase):
 
 
     def t_pubmed2(self):
-        '''Test parsing XML returned by EFetch from PubMed (second test)
+        '''Test parsing XML returned by EFetch, PubMed database (second test)
         '''
         # In PubMed display PMIDs in xml retrieval mode.
         # To create the XML file, use
@@ -3465,7 +3465,7 @@ class EFetchTest(unittest.TestCase):
         assert record[1]["PubmedData"]["ArticleIdList"][2].attributes["IdType"]=="pii"
 
     def t_journals(self):
-        '''Test parsing XML returned by EFetch from the Journals database
+        '''Test parsing XML returned by EFetch, Journals database
         '''
         # In Journals display records for journal IDs 22682,21698,1490
         # To create the XML file, use
@@ -3609,7 +3609,7 @@ class EFetchTest(unittest.TestCase):
         assert record[2]["IlsUpdatedTimestamp"]["Day"]=="04"
 
     def t_omim(self):
-        '''Test parsing XML returned by EFetch from the OMIM database
+        '''Test parsing XML returned by EFetch, OMIM database
         '''
         # In OMIM show the full record for MIM number 601100 as XML
         # To create the XML file, use
@@ -3787,9 +3787,9 @@ class EFetchTest(unittest.TestCase):
         assert record[0]["Mim-entry_nucleotideLinks"]["Mim-link"]["Mim-link_numRelevant"]=="0"
 
     def t_taxonomy(self):
-        '''Test parsing XML returned by EFetch from the Taxonomy databases
+        '''Test parsing XML returned by EFetch, Taxonomy database
         '''
-        # Request suggestions for the PubMed search biopythooon
+        # Access the Taxonomy database using efetch.
         # To create the XML file, use
         # >>> Bio.Entrez.efetch(db="taxonomy", id="9685", retmode="xml")
         input = open('Entrez/taxonomy.xml')
@@ -3894,6 +3894,254 @@ class EFetchTest(unittest.TestCase):
         assert record[0]["CreateDate"]=="1995/02/27"
         assert record[0]["UpdateDate"]=="2007/09/04"
         assert record[0]["PubDate"]=="1993/07/26"
+
+    def t_nucleotide1(self):
+        '''Test parsing XML returned by EFetch, Nucleotide database (first test)
+        '''
+        # Access the nucleotide database using efetch.
+        # To create the XML file, use
+        # >>> Bio.Entrez.efetch(db='nucleotide', id=5, retmode='xml')
+        input = open('Entrez/nucleotide1.xml')
+        record = Entrez.read(input)
+
+        assert record[0]["GBSeq_locus"]=="X60065"
+        assert record[0]["GBSeq_length"]=="1136"
+        assert record[0]["GBSeq_strandedness"]=="single"
+        assert record[0]["GBSeq_moltype"]=="mRNA"
+        assert record[0]["GBSeq_topology"]=="linear"
+        assert record[0]["GBSeq_division"]=="MAM"
+        assert record[0]["GBSeq_update-date"]=="14-NOV-2006"
+        assert record[0]["GBSeq_create-date"]=="05-MAY-1992"
+        assert record[0]["GBSeq_definition"]=="B.bovis beta-2-gpI mRNA for beta-2-glycoprotein I"
+        assert record[0]["GBSeq_primary-accession"]=="X60065"
+        assert record[0]["GBSeq_accession-version"]=="X60065.1"
+        assert record[0]["GBSeq_other-seqids"][0]=="emb|X60065.1|"
+        assert record[0]["GBSeq_other-seqids"][1]=="gi|5"
+        assert record[0]["GBSeq_keywords"][0]=="beta-2 glycoprotein I"
+        assert record[0]["GBSeq_source"]=="Bos taurus (cattle)"
+        assert record[0]["GBSeq_organism"]=="Bos taurus"
+        assert record[0]["GBSeq_taxonomy"]=="Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia; Eutheria; Laurasiatheria; Cetartiodactyla; Ruminantia; Pecora; Bovidae; Bovinae; Bos"
+        assert record[0]["GBSeq_references"][0]["GBReference_reference"]=="1"
+        assert record[0]["GBSeq_references"][0]["GBReference_authors"][0]=="Bendixen,E."
+        assert record[0]["GBSeq_references"][0]["GBReference_authors"][1]=="Halkier,T."
+        assert record[0]["GBSeq_references"][0]["GBReference_authors"][2]=="Magnusson,S."
+        assert record[0]["GBSeq_references"][0]["GBReference_authors"][3]=="Sottrup-Jensen,L."
+        assert record[0]["GBSeq_references"][0]["GBReference_authors"][4]=="Kristensen,T."
+        assert record[0]["GBSeq_references"][0]["GBReference_title"]=="Complete primary structure of bovine beta 2-glycoprotein I: localization of the disulfide bridges"
+        assert record[0]["GBSeq_references"][0]["GBReference_journal"]=="Biochemistry 31 (14), 3611-3617 (1992)"
+        assert record[0]["GBSeq_references"][0]["GBReference_pubmed"]=="1567819"
+        assert record[0]["GBSeq_references"][1]["GBReference_reference"]=="2"
+        assert record[0]["GBSeq_references"][1]["GBReference_position"]=="1..1136"
+        assert record[0]["GBSeq_references"][1]["GBReference_authors"][0]=="Kristensen,T."
+        assert record[0]["GBSeq_references"][1]["GBReference_title"]=="Direct Submission"
+        assert record[0]["GBSeq_references"][1]["GBReference_journal"]=="Submitted (11-JUN-1991) T. Kristensen, Dept of Mol Biology, University of Aarhus, C F Mollers Alle 130, DK-8000 Aarhus C, DENMARK"
+        assert len(record[0]["GBSeq_feature-table"])==7
+        assert record[0]["GBSeq_feature-table"][0]["GBFeature_key"]=="source"
+        assert record[0]["GBSeq_feature-table"][0]["GBFeature_location"]=="1..1136"
+        assert record[0]["GBSeq_feature-table"][0]["GBFeature_intervals"][0]["GBInterval_from"]=="1"
+        assert record[0]["GBSeq_feature-table"][0]["GBFeature_intervals"][0]["GBInterval_to"]=="1136"
+        assert record[0]["GBSeq_feature-table"][0]["GBFeature_intervals"][0]["GBInterval_accession"]=="X60065.1"
+        assert record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][0]["GBQualifier_name"]=="organism"
+        assert record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][0]["GBQualifier_value"]=="Bos taurus"
+        assert record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][1]["GBQualifier_name"]=="mol_type"
+        assert record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][1]["GBQualifier_value"]=="mRNA"
+        assert record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][2]["GBQualifier_name"]=="db_xref"
+        assert record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][2]["GBQualifier_value"]=="taxon:9913"
+        assert record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][3]["GBQualifier_name"]=="clone"
+        assert record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][3]["GBQualifier_value"]=="pBB2I"
+        assert record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][4]["GBQualifier_name"]=="tissue_type"
+        assert record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][4]["GBQualifier_value"]=="liver"
+        assert record[0]["GBSeq_feature-table"][1]["GBFeature_key"]=="gene"
+        assert record[0]["GBSeq_feature-table"][1]["GBFeature_location"]=="<1..1136"
+        assert record[0]["GBSeq_feature-table"][1]["GBFeature_intervals"][0]["GBInterval_from"]=="1"
+        assert record[0]["GBSeq_feature-table"][1]["GBFeature_intervals"][0]["GBInterval_to"]=="1136"
+        assert record[0]["GBSeq_feature-table"][1]["GBFeature_intervals"][0]["GBInterval_accession"]=="X60065.1"
+        assert record[0]["GBSeq_feature-table"][1]["GBFeature_partial5"]==""
+        assert record[0]["GBSeq_feature-table"][1]["GBFeature_partial5"].attributes["value"]=="true"
+        assert record[0]["GBSeq_feature-table"][1]["GBFeature_quals"][0]["GBQualifier_name"]=="gene"
+        assert record[0]["GBSeq_feature-table"][1]["GBFeature_quals"][0]["GBQualifier_value"]=="beta-2-gpI"
+        assert record[0]["GBSeq_feature-table"][2]["GBFeature_key"]=="CDS"
+        assert record[0]["GBSeq_feature-table"][2]["GBFeature_location"]=="<1..1029"
+        assert record[0]["GBSeq_feature-table"][2]["GBFeature_intervals"][0]["GBInterval_from"]=="1"
+        assert record[0]["GBSeq_feature-table"][2]["GBFeature_intervals"][0]["GBInterval_to"]=="1029"
+        assert record[0]["GBSeq_feature-table"][2]["GBFeature_intervals"][0]["GBInterval_accession"]=="X60065.1"
+        assert record[0]["GBSeq_feature-table"][2]["GBFeature_partial5"]==""
+        assert record[0]["GBSeq_feature-table"][2]["GBFeature_partial5"].attributes["value"]=="true"
+        assert record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][0]["GBQualifier_name"]=="gene"
+        assert record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][0]["GBQualifier_value"]=="beta-2-gpI"
+        assert record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][1]["GBQualifier_name"]=="codon_start"
+        assert record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][1]["GBQualifier_value"]=="1"
+        assert record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][2]["GBQualifier_name"]=="transl_table"
+        assert record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][2]["GBQualifier_value"]=="1"
+        assert record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][3]["GBQualifier_name"]=="product"
+        assert record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][3]["GBQualifier_value"]=="beta-2-glycoprotein I"
+        assert record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][4]["GBQualifier_name"]=="protein_id"
+        assert record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][4]["GBQualifier_value"]=="CAA42669.1"
+        assert record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][5]["GBQualifier_name"]=="db_xref"
+        assert record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][5]["GBQualifier_value"]=="GI:6"
+        assert record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][6]["GBQualifier_name"]=="db_xref"
+        assert record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][6]["GBQualifier_value"]=="GOA:P17690"
+        assert record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][7]["GBQualifier_name"]=="db_xref"
+        assert record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][7]["GBQualifier_value"]=="UniProtKB/Swiss-Prot:P17690"
+        assert record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][8]["GBQualifier_name"]=="translation"
+        assert record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][8]["GBQualifier_value"]=="PALVLLLGFLCHVAIAGRTCPKPDELPFSTVVPLKRTYEPGEQIVFSCQPGYVSRGGIRRFTCPLTGLWPINTLKCMPRVCPFAGILENGTVRYTTFEYPNTISFSCHTGFYLKGASSAKCTEEGKWSPDLPVCAPITCPPPPIPKFASLSVYKPLAGNNSFYGSKAVFKCLPHHAMFGNDTVTCTEHGNWTQLPECREVRCPFPSRPDNGFVNHPANPVLYYKDTATFGCHETYSLDGPEEVECSKFGNWSAQPSCKASCKLSIKRATVIYEGERVAIQNKFKNGMLHGQKVSFFCKHKEKKCSYTEDAQCIDGTIEIPKCFKEHSSLAFWKTDASDVKPC"
+        assert record[0]["GBSeq_feature-table"][3]["GBFeature_key"]=="sig_peptide"
+        assert record[0]["GBSeq_feature-table"][3]["GBFeature_location"]=="<1..48"
+        assert record[0]["GBSeq_feature-table"][3]["GBFeature_intervals"][0]["GBInterval_from"]=="1"
+        assert record[0]["GBSeq_feature-table"][3]["GBFeature_intervals"][0]["GBInterval_to"]=="48"
+        assert record[0]["GBSeq_feature-table"][3]["GBFeature_intervals"][0]["GBInterval_accession"]=="X60065.1"
+        assert record[0]["GBSeq_feature-table"][3]["GBFeature_partial5"]==""
+        assert record[0]["GBSeq_feature-table"][3]["GBFeature_partial5"].attributes["value"]=="true"
+        assert record[0]["GBSeq_feature-table"][3]["GBFeature_quals"][0]["GBQualifier_name"]=="gene"
+        assert record[0]["GBSeq_feature-table"][3]["GBFeature_quals"][0]["GBQualifier_value"]=="beta-2-gpI"
+        assert record[0]["GBSeq_feature-table"][4]["GBFeature_key"]=="mat_peptide"
+        assert record[0]["GBSeq_feature-table"][4]["GBFeature_location"]=="49..1026"
+        assert record[0]["GBSeq_feature-table"][4]["GBFeature_intervals"][0]["GBInterval_from"]=="49"
+        assert record[0]["GBSeq_feature-table"][4]["GBFeature_intervals"][0]["GBInterval_to"]=="1026"
+        assert record[0]["GBSeq_feature-table"][4]["GBFeature_intervals"][0]["GBInterval_accession"]=="X60065.1"
+        assert record[0]["GBSeq_feature-table"][4]["GBFeature_quals"][0]["GBQualifier_name"]=="gene"
+        assert record[0]["GBSeq_feature-table"][4]["GBFeature_quals"][0]["GBQualifier_value"]=="beta-2-gpI"
+        assert record[0]["GBSeq_feature-table"][4]["GBFeature_quals"][1]["GBQualifier_name"]=="product"
+        assert record[0]["GBSeq_feature-table"][4]["GBFeature_quals"][1]["GBQualifier_value"]=="beta-2-glycoprotein I"
+        assert record[0]["GBSeq_feature-table"][5]["GBFeature_key"]=="polyA_signal"
+        assert record[0]["GBSeq_feature-table"][5]["GBFeature_location"]=="1101..1106"
+        assert record[0]["GBSeq_feature-table"][5]["GBFeature_intervals"][0]["GBInterval_from"]=="1101"
+        assert record[0]["GBSeq_feature-table"][5]["GBFeature_intervals"][0]["GBInterval_to"]=="1106"
+        assert record[0]["GBSeq_feature-table"][5]["GBFeature_intervals"][0]["GBInterval_accession"]=="X60065.1"
+        assert record[0]["GBSeq_feature-table"][5]["GBFeature_quals"][0]["GBQualifier_name"]=="gene"
+        assert record[0]["GBSeq_feature-table"][5]["GBFeature_quals"][0]["GBQualifier_value"]=="beta-2-gpI"
+        assert record[0]["GBSeq_feature-table"][6]["GBFeature_key"]=="polyA_site"
+        assert record[0]["GBSeq_feature-table"][6]["GBFeature_location"]=="1130"
+        assert record[0]["GBSeq_feature-table"][6]["GBFeature_intervals"][0]["GBInterval_point"]=="1130"
+        assert record[0]["GBSeq_feature-table"][6]["GBFeature_intervals"][0]["GBInterval_accession"]=="X60065.1"
+        assert record[0]["GBSeq_feature-table"][6]["GBFeature_quals"][0]["GBQualifier_name"]=="gene"
+        assert record[0]["GBSeq_feature-table"][6]["GBFeature_quals"][0]["GBQualifier_value"]=="beta-2-gpI"
+        assert record[0]["GBSeq_sequence"]=="ccagcgctcgtcttgctgttggggtttctctgccacgttgctatcgcaggacgaacctgccccaagccagatgagctaccgttttccacggtggttccactgaaacggacctatgagcccggggagcagatagtcttctcctgccagccgggctacgtgtcccggggagggatccggcggtttacatgcccgctcacaggactctggcccatcaacacgctgaaatgcatgcccagagtatgtccttttgctgggatcttagaaaacggaacggtacgctatacaacgtttgagtatcccaacaccatcagcttttcttgccacacggggttttatctgaaaggagctagttctgcaaaatgcactgaggaagggaagtggagcccagaccttcctgtctgtgcccctataacctgccctccaccacccatacccaagtttgcaagtctcagcgtttacaagccgttggctgggaacaactccttctatggcagcaaggcagtctttaagtgcttgccacaccacgcgatgtttggaaatgacaccgttacctgcacggaacatgggaactggacgcagttgccagaatgcagggaagtaagatgcccattcccatcaagaccagacaatgggtttgtgaaccatcctgcaaatccagtgctctactataaggacaccgccacctttggctgccatgaaacgtattccttggatggaccggaagaagtagaatgcagcaaattcggaaactggtctgcacagccaagctgtaaagcatcttgtaagttatctattaaaagagctactgtgatatatgaaggagagagagtagctatccagaacaaatttaagaatggaatgctgcatggccaaaaggtttctttcttctgcaagcataaggaaaagaagtgcagctacacagaagatgctcagtgcatagacggcaccatcgagattcccaaatgcttcaaggagcacagttctttagctttctggaaaacggatgcatctgacgtaaaaccatgctaagctggttttcacactgaaaattaaatgtcatgcttatatgtgtctgtctgagaatctgatggaaacggaaaaataaagagactgaatttaccgtgtcaagaaaaaaa"
+
+    def t_nucleotide2(self):
+        '''Test parsing XML returned by EFetch, Nucleotide database (second test)
+        '''
+        # Access the nucleotide database using efetch.
+        # To create the XML file, use
+        # >>> Bio.handle = Entrez.efetch(db='nucleotide', id=5,
+        #                                rettype='fasta', complexity=0,
+        #                                retmode='xml')
+        input = open('Entrez/nucleotide2.xml')
+        record = Entrez.read(input)
+
+        assert record[0]["TSeq_seqtype"]==""
+        assert record[0]["TSeq_seqtype"].attributes["value"]=="nucleotide"
+        assert record[0]["TSeq_gi"]=="5"
+        assert record[0]["TSeq_accver"]=="X60065.1"
+        assert record[0]["TSeq_taxid"]=="9913"
+        assert record[0]["TSeq_orgname"]=="Bos taurus"
+        assert record[0]["TSeq_defline"]=="B.bovis beta-2-gpI mRNA for beta-2-glycoprotein I"
+        assert record[0]["TSeq_length"]=="1136"
+        assert record[0]["TSeq_sequence"]=="CCAGCGCTCGTCTTGCTGTTGGGGTTTCTCTGCCACGTTGCTATCGCAGGACGAACCTGCCCCAAGCCAGATGAGCTACCGTTTTCCACGGTGGTTCCACTGAAACGGACCTATGAGCCCGGGGAGCAGATAGTCTTCTCCTGCCAGCCGGGCTACGTGTCCCGGGGAGGGATCCGGCGGTTTACATGCCCGCTCACAGGACTCTGGCCCATCAACACGCTGAAATGCATGCCCAGAGTATGTCCTTTTGCTGGGATCTTAGAAAACGGAACGGTACGCTATACAACGTTTGAGTATCCCAACACCATCAGCTTTTCTTGCCACACGGGGTTTTATCTGAAAGGAGCTAGTTCTGCAAAATGCACTGAGGAAGGGAAGTGGAGCCCAGACCTTCCTGTCTGTGCCCCTATAACCTGCCCTCCACCACCCATACCCAAGTTTGCAAGTCTCAGCGTTTACAAGCCGTTGGCTGGGAACAACTCCTTCTATGGCAGCAAGGCAGTCTTTAAGTGCTTGCCACACCACGCGATGTTTGGAAATGACACCGTTACCTGCACGGAACATGGGAACTGGACGCAGTTGCCAGAATGCAGGGAAGTAAGATGCCCATTCCCATCAAGACCAGACAATGGGTTTGTGAACCATCCTGCAAATCCAGTGCTCTACTATAAGGACACCGCCACCTTTGGCTGCCATGAAACGTATTCCTTGGATGGACCGGAAGAAGTAGAATGCAGCAAATTCGGAAACTGGTCTGCACAGCCAAGCTGTAAAGCATCTTGTAAGTTATCTATTAAAAGAGCTACTGTGATATATGAAGGAGAGAGAGTAGCTATCCAGAACAAATTTAAGAATGGAATGCTGCATGGCCAAAAGGTTTCTTTCTTCTGCAAGCATAAGGAAAAGAAGTGCAGCTACACAGAAGATGCTCAGTGCATAGACGGCACCATCGAGATTCCCAAATGCTTCAAGGAGCACAGTTCTTTAGCTTTCTGGAAAACGGATGCATCTGACGTAAAACCATGCTAAGCTGGTTTTCACACTGAAAATTAAATGTCATGCTTATATGTGTCTGTCTGAGAATCTGATGGAAACGGAAAAATAAAGAGACTGAATTTACCGTGTCAAGAAAAAAA"
+        assert record[1]["TSeq_seqtype"]==""
+        assert record[1]["TSeq_seqtype"].attributes["value"]=="protein"
+        assert record[1]["TSeq_gi"]=="6"
+        assert record[1]["TSeq_accver"]=="CAA42669.1"
+        assert record[1]["TSeq_taxid"]=="9913"
+        assert record[1]["TSeq_orgname"]=="Bos taurus"
+        assert record[1]["TSeq_defline"]=="beta-2-glycoprotein I [Bos taurus]"
+        assert record[1]["TSeq_length"]=="342"
+        assert record[1]["TSeq_sequence"]=="PALVLLLGFLCHVAIAGRTCPKPDELPFSTVVPLKRTYEPGEQIVFSCQPGYVSRGGIRRFTCPLTGLWPINTLKCMPRVCPFAGILENGTVRYTTFEYPNTISFSCHTGFYLKGASSAKCTEEGKWSPDLPVCAPITCPPPPIPKFASLSVYKPLAGNNSFYGSKAVFKCLPHHAMFGNDTVTCTEHGNWTQLPECREVRCPFPSRPDNGFVNHPANPVLYYKDTATFGCHETYSLDGPEEVECSKFGNWSAQPSCKASCKLSIKRATVIYEGERVAIQNKFKNGMLHGQKVSFFCKHKEKKCSYTEDAQCIDGTIEIPKCFKEHSSLAFWKTDASDVKPC"
+
+    def t_nucleotide2(self):
+        '''Test parsing XML returned by EFetch, Protein database
+        '''
+        # Access the protein database using efetch.
+        # To create the XML file, use
+        # >>> Bio.handle = Entrez.efetch(db='protein', id=8,
+        #                                rettype='gp', retmode='xml')
+        input = open('Entrez/protein.xml')
+        record = Entrez.read(input)
+
+        assert record[0]["GBSeq_locus"]=="CAA35997"
+        assert record[0]["GBSeq_length"]=="100"
+        assert record[0]["GBSeq_moltype"]=="AA"
+        assert record[0]["GBSeq_topology"]=="linear"
+        assert record[0]["GBSeq_division"]=="MAM"
+        assert record[0]["GBSeq_update-date"]=="12-SEP-1993"
+        assert record[0]["GBSeq_create-date"]=="03-APR-1990"
+        assert record[0]["GBSeq_definition"]=="unnamed protein product [Bos taurus]"
+        assert record[0]["GBSeq_primary-accession"]=="CAA35997"
+        assert record[0]["GBSeq_accession-version"]=="CAA35997.1"
+        assert record[0]["GBSeq_other-seqids"][0]=="emb|CAA35997.1|"
+        assert record[0]["GBSeq_other-seqids"][1]=="gi|8"
+        assert record[0]["GBSeq_source"]=="Bos taurus (cattle)"
+        assert record[0]["GBSeq_organism"]=="Bos taurus"
+        assert record[0]["GBSeq_taxonomy"]=="Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia; Eutheria; Laurasiatheria; Cetartiodactyla; Ruminantia; Pecora; Bovidae; Bovinae; Bos"
+        assert record[0]["GBSeq_references"][0]["GBReference_reference"]=="1"
+        assert record[0]["GBSeq_references"][0]["GBReference_position"]=="1..100"
+        assert record[0]["GBSeq_references"][0]["GBReference_authors"][0]=="Kiefer,M.C."
+        assert record[0]["GBSeq_references"][0]["GBReference_authors"][1]=="Saphire,A.C.S."
+        assert record[0]["GBSeq_references"][0]["GBReference_authors"][2]=="Bauer,D.M."
+        assert record[0]["GBSeq_references"][0]["GBReference_authors"][3]=="Barr,P.J."
+        assert record[0]["GBSeq_references"][0]["GBReference_journal"]=="Unpublished"
+        assert record[0]["GBSeq_references"][1]["GBReference_reference"]=="2"
+        assert record[0]["GBSeq_references"][1]["GBReference_position"]=="1..100"
+        assert record[0]["GBSeq_references"][1]["GBReference_authors"][0]=="Kiefer,M.C."
+        assert record[0]["GBSeq_references"][1]["GBReference_title"]=="Direct Submission"
+        assert record[0]["GBSeq_references"][1]["GBReference_journal"]=="Submitted (30-JAN-1990) Kiefer M.C., Chiron Corporation, 4560 Hortom St, Emeryville CA 94608-2916, U S A"
+        assert record[0]["GBSeq_comment"]=="See <X15699> for Human sequence.~Data kindly reviewed (08-MAY-1990) by Kiefer M.C."
+        assert record[0]["GBSeq_source-db"]=="embl accession X51700.1"
+        assert record[0]["GBSeq_feature-table"][0]["GBFeature_key"]=="source"
+        assert record[0]["GBSeq_feature-table"][0]["GBFeature_location"]=="1..100"
+        assert record[0]["GBSeq_feature-table"][0]["GBFeature_intervals"][0]["GBInterval_from"]=="1"
+        assert record[0]["GBSeq_feature-table"][0]["GBFeature_intervals"][0]["GBInterval_to"]=="100"
+        assert record[0]["GBSeq_feature-table"][0]["GBFeature_intervals"][0]["GBInterval_accession"]=="CAA35997.1"
+        assert record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][0]["GBQualifier_name"]=="organism"
+        assert record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][0]["GBQualifier_value"]=="Bos taurus"
+        assert record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][1]["GBQualifier_name"]=="db_xref"
+        assert record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][1]["GBQualifier_value"]=="taxon:9913"
+        assert record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][2]["GBQualifier_name"]=="clone"
+        assert record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][2]["GBQualifier_value"]=="bBGP-3"
+        assert record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][3]["GBQualifier_name"]=="tissue_type"
+        assert record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][3]["GBQualifier_value"]=="bone matrix"
+        assert record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][4]["GBQualifier_name"]=="clone_lib"
+        assert record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][4]["GBQualifier_value"]=="Zap-bb"
+        assert record[0]["GBSeq_feature-table"][1]["GBFeature_key"]=="Protein"
+        assert record[0]["GBSeq_feature-table"][1]["GBFeature_location"]=="1..100"
+        assert record[0]["GBSeq_feature-table"][1]["GBFeature_intervals"][0]["GBInterval_from"]=="1"
+        assert record[0]["GBSeq_feature-table"][1]["GBFeature_intervals"][0]["GBInterval_to"]=="100"
+        assert record[0]["GBSeq_feature-table"][1]["GBFeature_intervals"][0]["GBInterval_accession"]=="CAA35997.1"
+        assert record[0]["GBSeq_feature-table"][1]["GBFeature_quals"][0]["GBQualifier_name"]=="name"
+        assert record[0]["GBSeq_feature-table"][1]["GBFeature_quals"][0]["GBQualifier_value"]=="unnamed protein product"
+        assert record[0]["GBSeq_feature-table"][2]["GBFeature_key"]=="Region"
+        assert record[0]["GBSeq_feature-table"][2]["GBFeature_location"]=="33..97"
+        assert record[0]["GBSeq_feature-table"][2]["GBFeature_intervals"][0]["GBInterval_from"]=="33"
+        assert record[0]["GBSeq_feature-table"][2]["GBFeature_intervals"][0]["GBInterval_to"]=="97"
+        assert record[0]["GBSeq_feature-table"][2]["GBFeature_intervals"][0]["GBInterval_accession"]=="CAA35997.1"
+        assert record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][0]["GBQualifier_name"]=="region_name"
+        assert record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][0]["GBQualifier_value"]=="Gla"
+        assert record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][1]["GBQualifier_name"]=="note"
+        assert record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][1]["GBQualifier_value"]=="Vitamin K-dependent carboxylation/gamma-carboxyglutamic (GLA) domain. This domain is responsible for the high-affinity binding of calcium ions. This domain contains post-translational modifications of many glutamate residues by Vitamin K-dependent...; cl02449"
+        assert record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][2]["GBQualifier_name"]=="db_xref"
+        assert record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][2]["GBQualifier_value"]=="CDD:92835"
+        assert record[0]["GBSeq_feature-table"][3]["GBFeature_key"]=="CDS"
+        assert record[0]["GBSeq_feature-table"][3]["GBFeature_location"]=="1..100"
+        assert record[0]["GBSeq_feature-table"][3]["GBFeature_intervals"][0]["GBInterval_from"]=="1"
+        assert record[0]["GBSeq_feature-table"][3]["GBFeature_intervals"][0]["GBInterval_to"]=="100"
+        assert record[0]["GBSeq_feature-table"][3]["GBFeature_intervals"][0]["GBInterval_accession"]=="CAA35997.1"
+        assert record[0]["GBSeq_feature-table"][3]["GBFeature_quals"][0]["GBQualifier_name"]=="coded_by"
+        assert record[0]["GBSeq_feature-table"][3]["GBFeature_quals"][0]["GBQualifier_value"]=="X51700.1:28..330"
+        assert record[0]["GBSeq_feature-table"][3]["GBFeature_quals"][1]["GBQualifier_name"]=="note"
+        assert record[0]["GBSeq_feature-table"][3]["GBFeature_quals"][1]["GBQualifier_value"]=="bone Gla precursor (100 AA)"
+        assert record[0]["GBSeq_feature-table"][3]["GBFeature_quals"][2]["GBQualifier_name"]=="db_xref"
+        assert record[0]["GBSeq_feature-table"][3]["GBFeature_quals"][2]["GBQualifier_value"]=="GOA:P02820"
+        assert record[0]["GBSeq_feature-table"][3]["GBFeature_quals"][3]["GBQualifier_name"]=="db_xref"
+        assert record[0]["GBSeq_feature-table"][3]["GBFeature_quals"][3]["GBQualifier_value"]=="InterPro:IPR000294"
+        assert record[0]["GBSeq_feature-table"][3]["GBFeature_quals"][4]["GBQualifier_name"]=="db_xref"
+        assert record[0]["GBSeq_feature-table"][3]["GBFeature_quals"][4]["GBQualifier_value"]=="InterPro:IPR002384"
+        assert record[0]["GBSeq_feature-table"][3]["GBFeature_quals"][5]["GBQualifier_name"]=="db_xref"
+        assert record[0]["GBSeq_feature-table"][3]["GBFeature_quals"][5]["GBQualifier_value"]=="PDB:1Q3M"
+        assert record[0]["GBSeq_feature-table"][3]["GBFeature_quals"][6]["GBQualifier_name"]=="db_xref"
+        assert record[0]["GBSeq_feature-table"][3]["GBFeature_quals"][6]["GBQualifier_value"]=="UniProtKB/Swiss-Prot:P02820"
+        assert record[0]["GBSeq_sequence"]=="mrtpmllallalatlclagradakpgdaesgkgaafvskqegsevvkrlrryldhwlgapapypdplepkrevcelnpdcdeladhigfqeayrrfygpv"
+
+
 
 if __name__ == '__main__':
     sys.exit(run_tests(sys.argv))

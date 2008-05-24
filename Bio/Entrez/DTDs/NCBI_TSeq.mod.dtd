@@ -1,0 +1,66 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "tinyseq.asn"
+     ::DATATOOL:: by application DATATOOL version 1.8.1
+     ::DATATOOL:: on 01/18/2007 23:07:18
+     ============================================ -->
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "NCBI-TSeq"
+================================================= -->
+
+<!--
+$Revision: 1.1 $
+**********************************************************************
+
+  ASN.1 for a tiny Bioseq in XML
+    basically a structured FASTA file with a few extras
+    in this case we drop all modularity of components
+      All ids are Optional - simpler structure, less checking
+      Components of organism are hard coded - can't easily add or change
+      sequence is just string whether DNA or protein
+  by James Ostell, 2000
+
+**********************************************************************
+-->
+
+
+<!ELEMENT TSeq (
+        TSeq_seqtype, 
+        TSeq_gi?, 
+        TSeq_accver?, 
+        TSeq_sid?, 
+        TSeq_local?, 
+        TSeq_taxid?, 
+        TSeq_orgname?, 
+        TSeq_defline, 
+        TSeq_length, 
+        TSeq_sequence)>
+
+<!ELEMENT TSeq_seqtype %ENUM;>
+<!ATTLIST TSeq_seqtype value (
+        nucleotide |
+        protein
+        ) #REQUIRED >
+
+
+<!ELEMENT TSeq_gi (%INTEGER;)>
+
+<!ELEMENT TSeq_accver (#PCDATA)>
+
+<!ELEMENT TSeq_sid (#PCDATA)>
+
+<!ELEMENT TSeq_local (#PCDATA)>
+
+<!ELEMENT TSeq_taxid (%INTEGER;)>
+
+<!ELEMENT TSeq_orgname (#PCDATA)>
+
+<!ELEMENT TSeq_defline (#PCDATA)>
+
+<!ELEMENT TSeq_length (%INTEGER;)>
+
+<!ELEMENT TSeq_sequence (#PCDATA)>
+
+<!-- a bunch of them -->
+<!ELEMENT TSeqSet (TSeq*)>
+

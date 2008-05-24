@@ -1,0 +1,166 @@
+<?xml version="1.0"?>
+<!DOCTYPE GBSet PUBLIC "-//NCBI//NCBI GBSeq/EN" "http://www.ncbi.nlm.nih.gov/dtd/NCBI_GBSeq.dtd">
+<GBSet>
+<GBSeq>
+  <GBSeq_locus>CAA35997</GBSeq_locus>
+  <GBSeq_length>100</GBSeq_length>
+  <GBSeq_moltype>AA</GBSeq_moltype>
+  <GBSeq_topology>linear</GBSeq_topology>
+  <GBSeq_division>MAM</GBSeq_division>
+  <GBSeq_update-date>12-SEP-1993</GBSeq_update-date>
+  <GBSeq_create-date>03-APR-1990</GBSeq_create-date>
+  <GBSeq_definition>unnamed protein product [Bos taurus]</GBSeq_definition>
+  <GBSeq_primary-accession>CAA35997</GBSeq_primary-accession>
+  <GBSeq_accession-version>CAA35997.1</GBSeq_accession-version>
+  <GBSeq_other-seqids>
+    <GBSeqid>emb|CAA35997.1|</GBSeqid>
+    <GBSeqid>gi|8</GBSeqid>
+  </GBSeq_other-seqids>
+  <GBSeq_source>Bos taurus (cattle)</GBSeq_source>
+  <GBSeq_organism>Bos taurus</GBSeq_organism>
+  <GBSeq_taxonomy>Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia; Eutheria; Laurasiatheria; Cetartiodactyla; Ruminantia; Pecora; Bovidae; Bovinae; Bos</GBSeq_taxonomy>
+  <GBSeq_references>
+    <GBReference>
+      <GBReference_reference>1</GBReference_reference>
+      <GBReference_position>1..100</GBReference_position>
+      <GBReference_authors>
+        <GBAuthor>Kiefer,M.C.</GBAuthor>
+        <GBAuthor>Saphire,A.C.S.</GBAuthor>
+        <GBAuthor>Bauer,D.M.</GBAuthor>
+        <GBAuthor>Barr,P.J.</GBAuthor>
+      </GBReference_authors>
+      <GBReference_journal>Unpublished</GBReference_journal>
+    </GBReference>
+    <GBReference>
+      <GBReference_reference>2</GBReference_reference>
+      <GBReference_position>1..100</GBReference_position>
+      <GBReference_authors>
+        <GBAuthor>Kiefer,M.C.</GBAuthor>
+      </GBReference_authors>
+      <GBReference_title>Direct Submission</GBReference_title>
+      <GBReference_journal>Submitted (30-JAN-1990) Kiefer M.C., Chiron Corporation, 4560 Hortom St, Emeryville CA 94608-2916, U S A</GBReference_journal>
+    </GBReference>
+  </GBSeq_references>
+  <GBSeq_comment>See &lt;X15699&gt; for Human sequence.~Data kindly reviewed (08-MAY-1990) by Kiefer M.C.</GBSeq_comment>
+  <GBSeq_source-db>embl accession X51700.1</GBSeq_source-db>
+  <GBSeq_feature-table>
+    <GBFeature>
+      <GBFeature_key>source</GBFeature_key>
+      <GBFeature_location>1..100</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_from>1</GBInterval_from>
+          <GBInterval_to>100</GBInterval_to>
+          <GBInterval_accession>CAA35997.1</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>organism</GBQualifier_name>
+          <GBQualifier_value>Bos taurus</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>taxon:9913</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>clone</GBQualifier_name>
+          <GBQualifier_value>bBGP-3</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>tissue_type</GBQualifier_name>
+          <GBQualifier_value>bone matrix</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>clone_lib</GBQualifier_name>
+          <GBQualifier_value>Zap-bb</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Protein</GBFeature_key>
+      <GBFeature_location>1..100</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_from>1</GBInterval_from>
+          <GBInterval_to>100</GBInterval_to>
+          <GBInterval_accession>CAA35997.1</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>name</GBQualifier_name>
+          <GBQualifier_value>unnamed protein product</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Region</GBFeature_key>
+      <GBFeature_location>33..97</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_from>33</GBInterval_from>
+          <GBInterval_to>97</GBInterval_to>
+          <GBInterval_accession>CAA35997.1</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>region_name</GBQualifier_name>
+          <GBQualifier_value>Gla</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>Vitamin K-dependent carboxylation/gamma-carboxyglutamic (GLA) domain. This domain is responsible for the high-affinity binding of calcium ions. This domain contains post-translational modifications of many glutamate residues by Vitamin K-dependent...; cl02449</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>CDD:92835</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>CDS</GBFeature_key>
+      <GBFeature_location>1..100</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_from>1</GBInterval_from>
+          <GBInterval_to>100</GBInterval_to>
+          <GBInterval_accession>CAA35997.1</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>coded_by</GBQualifier_name>
+          <GBQualifier_value>X51700.1:28..330</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>bone Gla precursor (100 AA)</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>GOA:P02820</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>InterPro:IPR000294</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>InterPro:IPR002384</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>PDB:1Q3M</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>UniProtKB/Swiss-Prot:P02820</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+  </GBSeq_feature-table>
+  <GBSeq_sequence>mrtpmllallalatlclagradakpgdaesgkgaafvskqegsevvkrlrryldhwlgapapypdplepkrevcelnpdcdeladhigfqeayrrfygpv</GBSeq_sequence>
+</GBSeq>
+</GBSet>
