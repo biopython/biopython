@@ -9,7 +9,6 @@
 # from Bio.Entrez.__init__.py.
 
 errors = ()
-booleans = ()
 integers = ()
 strings = (
     "SortSerialName",
