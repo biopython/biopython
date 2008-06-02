@@ -224,7 +224,7 @@ class FastaM10Iterator(AlignmentIterator) :
         assert record.seq.tostring() == query_align_seq
         record.id = self._query_descr.split()[0].strip(",")
         record.name = "query"
-        record.annotations["original_length"] = int(match_annotation["sq_len"])
+        record.annotations["original_length"] = int(query_annotation["sq_len"])
         
         alignment.add_sequence(match_descr, match_align_seq)
         record = alignment.get_all_seqs()[-1]
@@ -232,7 +232,7 @@ class FastaM10Iterator(AlignmentIterator) :
         assert record.seq.tostring() == match_align_seq
         record.id = match_descr.split()[0].strip(",")
         record.name = "match"
-        record.annotations["original_length"] = int(query_annotation["sq_len"])
+        record.annotations["original_length"] = int(match_annotation["sq_len"])
 
         return alignment
 
