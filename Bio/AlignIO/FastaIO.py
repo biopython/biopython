@@ -196,6 +196,11 @@ class FastaM10Iterator(AlignmentIterator) :
 
         if len(query_align_seq) <> len(match_align_seq) :
             raise ValueError("Problem parsing the alignment sequence coordinates")
+        if "sw_overlap" in alignment_annotation :
+            if int(alignment_annotation["sw_overlap"]) <> len(query_align_seq) :
+                raise ValueError("Specified sw_overlap = %s does not match expected value %i" \
+                                 % (alignment_annotation["sw_overlap"],
+                                    len(query_align_seq)))
 
         #TODO - Look at the "sq_type" to assign a sensible alphabet?
         alignment = Alignment(self.alphabet)
