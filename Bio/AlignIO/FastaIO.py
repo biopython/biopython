@@ -201,13 +201,14 @@ class FastaM10Iterator(AlignmentIterator) :
         alignment = Alignment(self.alphabet)
 
         #TODO - Introduce an annotated alignment class?
-        #Force some annotation into the alignment by adding a new property:
-        alignment.annotations = {}
+        #For now, store the annotation a new private property:
+        alignment._annotations = {}
+        
         #Want to record both the query header tags, and the alignment tags.
         for key, value in self._query_header_annotation.iteritems() :
-            alignment.annotations[key] = value
+            alignment._annotations[key] = value
         for key, value in alignment_annotation.iteritems() :
-            alignment.annotations[key] = value
+            alignment._annotations[key] = value
             
 
         #TODO - Once the alignment object gets an append method, use it.

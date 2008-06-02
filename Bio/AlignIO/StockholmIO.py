@@ -11,8 +11,8 @@ class StockholmWriter(SequentialAlignmentWriter) :
 
     #These dictionaries should be kept in sync with those
     #defined in the StockholmIterator class.
-    pfam_gr_mapping = { "secondary_structure" : "SS",
-                        "surface_accessibility" : "SA",
+    pfam_gr_mapping = {"secondary_structure" : "SS",
+                       "surface_accessibility" : "SA",
                        "transmembrane" : "TM",
                        "posterior_probability" : "PP",
                        "ligand_binding" : "LI",
@@ -196,6 +196,7 @@ class StockholmIterator(AlignmentIterator) :
         ids = []
         gs = {}
         gr = {}
+        gf = {}
         passed_end_alignment = False
         while 1:
             line = self.handle.readline()
@@ -230,7 +231,13 @@ class StockholmIterator(AlignmentIterator) :
                 if line[:5] == "#=GF " :
                     #Generic per-File annotation, free text
                     #Format: #=GF <feature> <free text>
-                    pass
+                    feature, text = line[5:].strip().split(None,1)
+                    #Each feature key could be used more than once,
+                    #so store the entries as a list of strings.
+                    if feature not in gf :
+                        gf[feature] = [text]
+                    else :
+                        gf[feature].append(text)
                 elif line[:5] == '#=GC ':
                     #Generic per-Column annotation, exactly 1 char per column
                     #Format: "#=GC <feature> <exactly 1 char per column>"
@@ -281,6 +288,11 @@ class StockholmIterator(AlignmentIterator) :
                                  % (len(ids), self.records_per_alignment))
 
             alignment = Alignment(self.alphabet)
+
+            #TODO - Introduce an annotated alignment class?
+            #For now, store the annotation a new private property:
+            alignment._annotations = gr
+
             alignment_length = len(seqs.values()[0])
             for id in ids :
                 seq = seqs[id]
