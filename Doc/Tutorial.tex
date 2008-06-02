@@ -1312,9 +1312,9 @@ Note that both \verb|Bio.SeqIO| and \verb|Bio.AlignIO| can read and write sequen
 
 We have two functions for reading in sequence alignments, \verb|Bio.AlignIO.read()| and \verb|Bio.AlignIO.parse()| which following the convention introduced in \verb|Bio.SeqIO| are for files containing one or multiple alignments respectively.
 
-Using \verb|Bio.AlignIO.parse()| will return an {\it iterator} which gives \verb|Alignment| objects.  Iterators are typically used in a for loop.  Examples of situations where you will have multiple different alignments include resampled alignments from the PHYLIP tool \verb|seqboot|, or multiple pairwise alignments from the EMBOSS tools \verb|water| or \verb|needle|.
+Using \verb|Bio.AlignIO.parse()| will return an {\it iterator} which gives \verb|Alignment| objects.  Iterators are typically used in a for loop.  Examples of situations where you will have multiple different alignments include resampled alignments from the PHYLIP tool \verb|seqboot|, or multiple pairwise alignments from the EMBOSS tools \verb|water| or \verb|needle|, or Bill Pearson's FASTA tools.
 
-However, in many situations would will be dealing with files which contain only a single alignment.  In this case, you should use the \verb|Bio.AlignIO.read()| function which return a single \verb|Alignment| object.
+However, in many situations you will be dealing with files which contain only a single alignment.  In this case, you should use the \verb|Bio.AlignIO.read()| function which return a single \verb|Alignment| object.
 
 Both functions expect two mandatory arguments:
 
@@ -1323,7 +1323,7 @@ Both functions expect two mandatory arguments:
 \item The second argument is a lower case string specifying sequence coformat.  As in \verb|Bio.SeqIO| we don't try and guess the file format for you!  See \url{http://biopython.org/wiki/AlignIO} for a full listing of supported formats.
 \end{enumerate}
 
-\noindent There is also an optional \verb|seq\_count| argument which is discussed in Section~\ref{sec:AlignIO-count-argument} below for dealing with ambigous file formats which may contain more than one alignment.
+\noindent There is also an optional \verb|seq_count| argument which is discussed in Section~\ref{sec:AlignIO-count-argument} below for dealing with ambigous file formats which may contain more than one alignment.
 
 \subsection{Single Alignments}
 As an example, consider the following annotation rich protein alignment in the PFAM or Stockholm file format:
@@ -1363,22 +1363,43 @@ This is the seed alignment for the Phage\_Coat\_Gp8 (PF05371) PFAM entry, downlo
 \begin{verbatim}
 from Bio import AlignIO
 alignment = AlignIO.read(open("PF05371_seed.sth"), "stockholm")
+print alignment
+\end{verbatim}
+
+\noindent This code will print out a summary of the alignment:
+
+\begin{verbatim}
+SingleLetterAlphabet() alignment with 7 rows and 52 columns
+AEPNAATNYATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIRL...SKA COATB_BPIKE/30-81
+AEPNAATNYATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIKL...SRA Q9T0Q8_BPIKE/1-52
+DGTSTATSYATEAMNSLKTQATDLIDQTWPVVTSVAVAGLAIRL...SKA COATB_BPI22/32-83
+AEGDDP---AKAAFNSLQASATEYIGYAWAMVVVIVGATIGIKL...SKA COATB_BPM13/24-72
+AEGDDP---AKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKL...SKA COATB_BPZJ2/1-49
+AEGDDP---AKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKL...SKA Q9T0Q9_BPFD/1-49
+FAADDATSQAKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKL...SRA COATB_BPIF1/22-73
+\end{verbatim}
+
+You'll notice in the above output the sequences have been truncated.  We could instead write our own code to format this as we please by iterating over the rows as \verb|SeqRecord| objects:
+
+\begin{verbatim}
+from Bio import AlignIO
+alignment = AlignIO.read(open("PF05371_seed.sth"), "stockholm")
 print "Alignment length %i" % alignment.get_alignment_length()
 for record in alignment :
-    print record.seq, record.id
+    print "%s - %s" % (record.seq, record.id)
 \end{verbatim}
 
 \noindent This will give the following output:
 
 \begin{verbatim}
 Alignment length 52
-AEPNAATNYATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIRLFKKFSSKA COATB_BPIKE/30-81
-AEPNAATNYATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIKLFKKFVSRA Q9T0Q8_BPIKE/1-52
-DGTSTATSYATEAMNSLKTQATDLIDQTWPVVTSVAVAGLAIRLFKKFSSKA COATB_BPI22/32-83
-AEGDDP---AKAAFNSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFTSKA COATB_BPM13/24-72
-AEGDDP---AKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFASKA COATB_BPZJ2/1-49
-AEGDDP---AKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFTSKA Q9T0Q9_BPFD/1-49
-FAADDATSQAKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKLFKKFVSRA COATB_BPIF1/22-73
+AEPNAATNYATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIRLFKKFSSKA - COATB_BPIKE/30-81
+AEPNAATNYATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIKLFKKFVSRA - Q9T0Q8_BPIKE/1-52
+DGTSTATSYATEAMNSLKTQATDLIDQTWPVVTSVAVAGLAIRLFKKFSSKA - COATB_BPI22/32-83
+AEGDDP---AKAAFNSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFTSKA - COATB_BPM13/24-72
+AEGDDP---AKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFASKA - COATB_BPZJ2/1-49
+AEGDDP---AKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFTSKA - Q9T0Q9_BPFD/1-49
+FAADDATSQAKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKLFKKFVSRA - COATB_BPIF1/22-73
 \end{verbatim}
 
 Did you notice in the raw file above that several of the sequences include database cross-references to the PDB and the associated known secondary strucutre?  Try this:
@@ -1397,6 +1418,14 @@ COATB_BPM13/24-72 ['PDB; 2cpb ; 1-49;', 'PDB; 2cps ; 1-49;']
 Q9T0Q9_BPFD/1-49 ['PDB; 1nh4 A; 1-49;']
 COATB_BPIF1/22-73 ['PDB; 1ifk ; 1-50;']
 \end{verbatim}
+
+\noindent To have a look at all the sequence annotation, try this:
+
+\begin{verbatim}
+for record in alignment :
+    print record
+\end{verbatim}
+
 
 Sanger provide a nice web interface at \url{http://pfam.sanger.ac.uk/family?acc=PF05371} which will actually let you download this alignment in several other formats.  This is what the file looks like in the FASTA file format:
 
@@ -1422,12 +1451,11 @@ FAADDATSQAKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKLFKKFVSRA
 \begin{verbatim}
 from Bio import AlignIO
 alignment = AlignIO.read(open("PF05371_seed.faa"), "fasta")
-print "Alignment length %i" % alignment.get_alignment_length()
-for record in alignment :
-    print record.seq, record.id
+print alignment
 \end{verbatim}
 
-All that has changed here is the filename and the format string.  You'll get the same output as before, the sequences and record identifiers are the same.  However, as you should expect, if you check each \verb|SeqRecord| there is no annotation nor database cross-references because these are not included in the FASTA file format.
+All that has changed in this code is the filename and the format string.  You'll get the same output as before, the sequences and record identifiers are the same.
+However, as you should expect, if you check each \verb|SeqRecord| there is no annotation nor database cross-references because these are not included in the FASTA file format.
 
 Note that rather than using the Sanger website, you could have used \verb|Bio.AlignIO| to convert the original Stockholm format file into a FASTA file yourself (see below).
 
@@ -1484,30 +1512,28 @@ If you wanted to read this in using \verb|Bio.AlignIO| you could use:
 from Bio import AlignIO
 alignments = AlignIO.parse(open("resampled.phy"), "phylip")
 for alignment in alignments :
-    print "Alignment length %i" % alignment.get_alignment_length()
-    for record in alignment :
-        print record.seq, record.id
+    print alignment
     print
 \end{verbatim}
 
 \noindent This would give the following output, again abbreviated for display:
 
 \begin{verbatim}
-Alignment length 6
+SingleLetterAlphabet() alignment with 5 rows and 6 columns
 AAACCA Alpha
 AAACCC Beta
 ACCCCA Gamma
 CCCAAC Delta
 CCCAAA Epsilon
 
-Alignment length 6
+SingleLetterAlphabet() alignment with 5 rows and 6 columns
 AAACAA Alpha
 AAACCC Beta
 ACCCAA Gamma
 CCCACC Delta
 CCCAAA Epsilon
 
-Alignment length 6
+SingleLetterAlphabet() alignment with 5 rows and 6 columns
 AAAAAC Alpha
 AAACCC Beta
 AACAAC Gamma
@@ -1516,7 +1542,7 @@ CCCAAC Epsilon
 
 ...
 
-Alignment length 6
+SingleLetterAlphabet() alignment with 5 rows and 6 columns
 AAAACC Alpha
 ACCCCC Beta
 AAAACC Gamma
@@ -1524,7 +1550,8 @@ CCCCAA Delta
 CAAACC Epsilon
 \end{verbatim}
 
-As with the function \verb|Bio.SeqIO.parse()|, using \verb|Bio.alignIO.parse()| returns an iterator.  If you want to keep all the alignments in memory at once, which will allow you to access them in any order, then turn the iterator into a list:
+As with the function \verb|Bio.SeqIO.parse()|, using \verb|Bio.AlignIO.parse()| returns an iterator.
+If you want to keep all the alignments in memory at once, which will allow you to access them in any order, then turn the iterator into a list:
 
 \begin{verbatim}
 from Bio import AlignIO
@@ -1592,15 +1619,17 @@ GGACTACGACAATAGCTCAGG
 
 \noindent In this third example, because of the differing lengths, this cannot be treated as a single alignment containing all six records.  However, it could be three pairwise alignments.
 
-Clearly trying to store more than one alignment in a FASTA file is not ideal.  However, if you are forced to deal with these as input files \verb|Bio.AlignIO| can cope with the most common situation where all the alignment have the same number of records.  One example of this is a collection of pairwise alignments, which can be produced by the EMBOSS tools \verb|needle| and \verb|water| -- although in this situation, \verb|Bio.AlignIO| should be able to understand their native output using ``emboss'' as the format string.
+Clearly trying to store more than one alignment in a FASTA file is not ideal.  However, if you are forced to deal with these as input files \verb|Bio.AlignIO| can cope with the most common situation where all the alignments have the same number of records.
+One example of this is a collection of pairwise alignments, which can be produced by the EMBOSS tools \verb|needle| and \verb|water| -- although in this situation, \verb|Bio.AlignIO| should be able to understand their native output using ``emboss'' as the format string.
 
-If we want to interpret these FASTA examples as several separate alignments, we can use \verb|Bio.AlignIO.parse()| with the optional \verb|seq_count| argument which specifies how many sequences are expected in each alignment (in these examples, 3, 2 and 2 respectively).  i.e. using the third example as the input data:
+To interpret these FASTA examples as several separate alignments, we can use \verb|Bio.AlignIO.parse()| with the optional \verb|seq_count| argument which specifies how many sequences are expected in each alignment (in these examples, 3, 2 and 2 respectively).
+For example, using the third example as the input data:
 
 \begin{verbatim}
 for alignment in AlignIO.parse(handle, "fasta", seq_count=2) :
     print "Alignment length %i" % alignment.get_alignment_length()
     for record in alignment :
-        print record.seq, record.id
+        print "%s - %s" % (record.seq, record.id)
     print
 \end{verbatim}
 
@@ -1608,16 +1637,16 @@ for alignment in AlignIO.parse(handle, "fasta", seq_count=2) :
 
 \begin{verbatim}
 Alignment length 19
-ACTACGACTAGCTCAG--G Alpha
-ACTACCGCTAGCTCAGAAG XXX
+ACTACGACTAGCTCAG--G - Alpha
+ACTACCGCTAGCTCAGAAG - XXX
 
 Alignment length 17
-ACTACGACTAGCTCAGG Alpha
-ACTACGGCAAGCACAGG YYY
+ACTACGACTAGCTCAGG - Alpha
+ACTACGGCAAGCACAGG - YYY
 
 Alignment length 21
---ACTACGAC--TAGCTCAGG Alpha
-GGACTACGACAATAGCTCAGG ZZZ
+--ACTACGAC--TAGCTCAGG - Alpha
+GGACTACGACAATAGCTCAGG - ZZZ
 \end{verbatim}
 
 Using \verb|Bio.AlignIO.read()| or \verb|Bio.AlignIO.parse()| without the \verb|seq_count| argument would give a single alignment containing all six records for the first two examples.  For the third example, an exception would be raised because the lengths differ preventing them being turned into a single alignment.
@@ -1685,7 +1714,7 @@ Its more common to want to load an existing alignment, and save that, perhaps af
 
 \subsection{Converting between sequence alignment file formats}
 
-Converting between sequence alignment file formats with \verb|Bio.AlignIO| works in the same way as converting between sequence file formats with \verb|Bio.SeqIO| i.e. We load generally the alignment(s) using \verb|Bio.AlignIO.parse()| and then save them using the \verb|Bio.AlignIO.write()|.
+Converting between sequence alignment file formats with \verb|Bio.AlignIO| works in the same way as converting between sequence file formats with \verb|Bio.SeqIO| -- we load generally the alignment(s) using \verb|Bio.AlignIO.parse()| and then save them using the \verb|Bio.AlignIO.write()|.
 
 For this example, we'll load the PFAM/Stockholm format file used earlier and save it as a Clustal W format file:
 
@@ -1769,7 +1798,7 @@ One of the big handicaps of the PHYLIP alignment file format is that the sequenc
 from Bio import AlignIO
 alignment = AlignIO.read(open("PF05371_seed.sth"), "stockholm")
 name_mapping = {}
-for i,record in enumerate(alignment) :
+for i, record in enumerate(alignment) :
     name_mapping[i] = record.id
     record.id = "seq%i" % i
 print name_mapping
