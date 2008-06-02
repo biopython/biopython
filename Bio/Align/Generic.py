@@ -40,7 +40,7 @@ class Alignment:
         if len(record.seq) <= 50 :
             return "%s %s" % (record.seq, record.id)
         else :
-            return "%s..%s %s" \
+            return "%s...%s %s" \
                    % (record.seq[:44], record.seq[-3:], record.id)
 
     def __str__(self) :
