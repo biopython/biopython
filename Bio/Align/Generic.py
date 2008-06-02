@@ -32,6 +32,62 @@ class Alignment:
         # hold everything at a list of seq record objects
         self._records = []
 
+    def _str_line(self, record) :
+        """Returns a truncated string representation of a SeqRecord.
+
+        This is a PRIVATE function used by the __str__ method.
+        """
+        if len(record.seq) <= 50 :
+            return "%s %s" % (record.seq, record.id)
+        else :
+            return "%s..%s %s" \
+                   % (record.seq[:44], record.seq[-3:], record.id)
+
+    def __str__(self) :
+        """Returns a multi-line string summary of the alignment.
+
+        This output is intended to be readable, but large alignments are
+        shown truncated.  A maximum of 20 rows (sequences) and 50 columns
+        are shown, with the record identifiers.  This should fit nicely on a
+        single screen.  e.g.
+
+        DNAAlphabet() alignment with 3 rows and 14 columns
+        ACGATCAGCTAGCT Alpha
+        CCGATCAGCTAGCT Beta
+        ACGATGAGCTAGCT Gamma        
+        """
+        rows = len(self._records)
+        lines = ["%s alignment with %i rows and %i columns" \
+                 % (str(self._alphabet), rows, self.get_alignment_length())]
+        if rows <= 20 :
+            lines.extend([self._str_line(rec) for rec in self._records])
+        else :
+            lines.extend([self._str_line(rec) for rec in self._records[:18]])
+            lines.append("...")
+            lines.append(self._str_line(self._records[-1]))
+        return "\n".join(lines)
+
+    def __repr__(self) :
+        """Returns a representation of the object for debugging.
+
+        The representation cannot be used with eval() to recreate the object,
+        which is usually possible with simple python ojects.  For example:
+
+        <Bio.Align.Generic.Alignment instance (2 records of length 14,
+        SingleLetterAlphabet()) at a3c184c>
+
+        The hex string is the memory address of the object, see help(id).
+        This provides a simple way to visually distinguish alignments of
+        the same size.
+        """
+        return "<%s instance (%i records of length %i, %s) at %x>" % \
+               (self.__class__, len(self._records),
+                self.get_alignment_length(), repr(self._alphabet), id(self))
+        #This version is useful for doing eval(repr(alignment)),
+        #but it can be VERY long:
+        #return "%s(%s, %s)" \
+        #       % (self.__class__, repr(self._records), repr(self._alphabet))
+
     def get_all_seqs(self):
         """Return all of the sequences involved in the alignment.
 
@@ -51,7 +107,7 @@ class Alignment:
         return iter(self._records) 
 
     def get_seq_by_num(self, number):
-        """Retrieve a sequence by the number of the sequence in the consensus.
+        """Retrieve a sequence by row number.
 
         Returns:
         o A Seq object for the requested sequence.
@@ -128,7 +184,7 @@ class Alignment:
         self._records.append(new_record)
         
     def get_column(self,col):
-        """Returns a string containing a given column"""
+        """Returns a string containing a given column."""
         col_str = ''
         assert col >= 0 and col <= self.get_alignment_length()
         for rec in self._records:
@@ -143,6 +199,14 @@ if __name__ == "__main__" :
     a.add_sequence("Alpha", raw_data[0], weight=2)
     a.add_sequence("Beta",  raw_data[1])
     a.add_sequence("Gamma", raw_data[2])
+
+    print
+    print "str(a):"
+    print str(a)
+    print
+    print "repr(a):"
+    print repr(a)
+    print
 
     #Iterating over the rows...
     for rec in a :
