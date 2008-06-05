@@ -62,7 +62,7 @@ class DBSeq(Seq):  # This implements the biopython Seq interface
             i = self._length
 
         if index.stop is None :
-            j = -1
+            j = self._length
         else :
             j = index.stop
         if j < 0 :
@@ -88,11 +88,21 @@ class DBSeq(Seq):  # This implements the biopython Seq interface
             return Seq(full[::index.step], self.alphabet)
         
     def tostring(self):
+        """Returns the full sequence as a python string.
+
+        Although not formally deprecated, you are now encouraged to use
+        str(my_seq) instead of my_seq.tostring()."""
+        return self.adaptor.get_subseq_as_string(self.primary_id,
+                                                 self.start,
+                                                 self.start + self._length)
+    def __str__(self):
+        """Returns the full sequence as a python string."""
         return self.adaptor.get_subseq_as_string(self.primary_id,
                                                  self.start,
                                                  self.start + self._length)
 
-    data = property(tostring)
+
+    data = property(tostring, doc="Sequence as string (DEPRECATED)")
 
 def _retrieve_seq(adaptor, primary_id):
     seqs = adaptor.execute_and_fetchall(
@@ -231,7 +241,6 @@ def _retrieve_annotations(adaptor, primary_id, taxon_id):
     annotations = {}
     annotations.update(_retrieve_qualifier_value(adaptor, primary_id))
     annotations.update(_retrieve_reference(adaptor, primary_id))
-    #annotations.update(_retrieve_dbxref(adaptor, primary_id))
     annotations.update(_retrieve_taxon(adaptor, primary_id, taxon_id))
     return annotations
 
@@ -277,26 +286,6 @@ def _retrieve_reference(adaptor, primary_id):
         references.append(reference)
     return {'references': references}
 
-#Why did this exist? The dbxrefs list is already accessable
-#via the record's .dbxrefs property as expected in a SeqRecord
-#
-#def _retrieve_dbxref(adaptor, primary_id):
-#    # XXX dbxref_qualifier_value
-#
-#    refs = adaptor.execute_and_fetchall(
-#        "SELECT dbname, accession, version" \
-#        " FROM bioentry_dbxref JOIN dbxref USING (dbxref_id)" \
-#        " WHERE bioentry_id = %s" \
-#        " ORDER BY rank", (primary_id,))
-#    dbxrefs = []
-#    for dbname, accession, version in refs:
-#        if version and version != "0":
-#            v = "%s.%s" % (accession, version)
-#        else:
-#            v = accession
-#        dbxrefs.append((dbname, v))
-#    return {'cross_references': dbxrefs}
-
 def _retrieve_taxon(adaptor, primary_id, taxon_id):
     a = {}
     common_names = adaptor.execute_and_fetch_col0(
@@ -314,17 +303,35 @@ def _retrieve_taxon(adaptor, primary_id, taxon_id):
     if ncbi_taxids and ncbi_taxids[0] and ncbi_taxids[0] != "0":
         a['ncbi_taxid'] = ncbi_taxids[0]
 
-    # XXX 'no rank' or not?
-    # If we keep them, perhaps add " AND parent.parent_taxon_id <> 1"
-    taxonomy = adaptor.execute_and_fetch_col0(
-        "SELECT taxon_name.name" \
-        " FROM taxon t, taxon parent, taxon_name" \
-        " WHERE parent.taxon_id=taxon_name.taxon_id" \
-        " AND t.left_value BETWEEN parent.left_value AND parent.right_value" \
-        " AND name_class='scientific name'" \
-        " AND parent.node_rank <> 'no rank'" \
-        " AND t.taxon_id = %s" \
-        " ORDER BY parent.left_value", (taxon_id,))
+    #Old code used the left/right values in the taxon table to get the
+    #taxonomy lineage in one SQL command.  This was actually very slow,
+    #and would fail if the (optional) left/right values were missing.
+    #
+    #The following code is based on a contribution from Eric Gibert, and
+    #relies on the taxon table's parent_taxon_id field only (ignoring the
+    #optional left/right values).  This means that it has to make a
+    #separate SQL query for each entry in the lineage, but it does still
+    #appear to be *much* faster.  See Bug 2494. 
+    taxonomy = []
+    while taxon_id :
+        name, rank, parent_taxon_id = adaptor.execute_one(
+        "SELECT taxon_name.name, taxon.node_rank, taxon.parent_taxon_id" \
+        " FROM taxon, taxon_name" \
+        " WHERE taxon.taxon_id=taxon_name.taxon_id" \
+        " AND taxon_name.name_class='scientific name'" \
+        " AND taxon.taxon_id = %s", (taxon_id,))
+        if taxon_id == parent_taxon_id :
+            # If the taxon table has been populated by the BioSQL script
+            # load_ncbi_taxonomy.pl this is how top parent nodes are stored.
+            # Personally, I would have used a NULL parent_taxon_id here.
+            break
+        if rank <> "no rank" :
+            #For consistency with older versions of Biopython, we are only
+            #interested in taxonomy entries with a stated rank.
+            #Add this to the start of the lineage list.
+            taxonomy.insert(0, name)
+        taxon_id = parent_taxon_id
+
     if taxonomy:
         a['taxonomy'] = taxonomy
     return a
