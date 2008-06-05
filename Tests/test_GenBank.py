@@ -59,11 +59,12 @@ for parser in all_parsers:
         while 1:
             cur_record = iterator.next()
 
-            if not(cur_record):
+            if cur_record is None:
                 break
 
             if isinstance(parser, GenBank.FeatureParser):
-                print "***Record from the FeatureParser"
+                print "***Record from %s with the FeatureParser" \
+                      % filename.split(os.path.sep)[-1]
                 print "Seq:", repr(cur_record.seq)
                 print "Id:", cur_record.id
                 print "Name:", cur_record.name
@@ -84,7 +85,9 @@ for parser in all_parsers:
                 for feature in cur_record.features:
                     print feature
             elif isinstance(parser, GenBank.RecordParser):
-                print "***Record from the RecordParser"
+                print "***Record from %s with the RecordParser" \
+                      % filename.split(os.path.sep)[-1]
+                print "sequence length: %i" % len(cur_record.sequence)
                 print "locus:", cur_record.locus
                 print "definition:", cur_record.definition
                 print "accession:", cur_record.accession
