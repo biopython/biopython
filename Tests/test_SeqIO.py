@@ -286,7 +286,10 @@ for (t_format, t_alignment, t_filename, t_count) in test_files :
             record = seq_iterator.next()
         except StopIteration :
             record = None
-        if record :
+        #Note that if the SeqRecord class has a __len__ method,
+        #and it has a zero-length sequence, this would fail an
+        #"if record" test.
+        if record is not None :
             records3.append(record)
         else :
             break
