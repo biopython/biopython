@@ -6,7 +6,6 @@
 
 from Bio.Align.Generic import Alignment
 from Interfaces import AlignmentIterator, SequentialAlignmentWriter
-from Bio.Clustalw import ClustalAlignment
 
 class ClustalWriter(SequentialAlignmentWriter) :
     """Clustalw alignment writer."""
