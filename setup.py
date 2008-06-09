@@ -484,7 +484,46 @@ NUMPY_EXTENSIONS = [
 ]
 
 DATA_FILES=[
+    "Bio/Entrez/DTDs/*.dtd",
+    "Bio/EUtils/DTDs/*.dtd",
+    "Bio/PopGen/SimCoal/data/*.par"
     ]
+
+# EUtils contains dtd files that need to be installed in the same
+# directory as the python modules.  Distutils doesn't have a simple
+# way of handling this, and we need to subclass install_data.  This
+# code is adapted from the mx.TextTools distribution.
+
+# We can use install_data instead once we require Python 2.4 or higher.
+
+class install_data_biopython(install_data):
+    def finalize_options(self):
+        if self.install_dir is None:
+            installobj = self.distribution.get_command_obj('install')
+            self.install_dir = installobj.install_platlib
+        install_data.finalize_options(self)
+
+    def run (self):
+        import glob
+        if not self.dry_run:
+            self.mkpath(self.install_dir)
+        data_files = self.get_inputs()
+        for entry in data_files:
+            if type(entry) is not type(""):
+                raise ValueError, "data_files must be strings"
+            # Unix- to platform-convention conversion
+            entry = os.sep.join(entry.split("/"))
+            filenames = glob.glob(entry)
+            for filename in filenames:
+                dst = os.path.join(self.install_dir, filename)
+                dstdir = os.path.split(dst)[0]
+                if not self.dry_run:
+                    self.mkpath(dstdir)
+                    outfile = self.copy_file(filename, dst)[0]
+                else:
+                    outfile = dst
+                self.outfiles.append(outfile)
+
 
 # Install BioSQL.
 PACKAGES.append("BioSQL")
@@ -499,12 +538,11 @@ setup(
         "install" : install_biopython,
         "build_py" : build_py_biopython,
         "build_ext" : build_ext_biopython,
+        "install_data" : install_data_biopython,
         "test" : test_biopython,
         },
     packages=PACKAGES,
     ext_modules=EXTENSIONS,
-    package_data = {'Bio.Entrez': ['DTDs/*.dtd'],
-                    'Bio.EUtils': ['DTDs/*.dtd'],
-                    'Bio.PopGen': ['SimCoal/data/*.par'],
-                   }
+    data_files=DATA_FILES,
+    package_data = {'Bio.Entrez': ['DTDs/*.dtd']}
     )
