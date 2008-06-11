@@ -1279,32 +1279,3 @@ def index_file(filename, indexname, rec2key=None):
             raise KeyError, "duplicate key %s found" % key
 
         index[key] = start, length
-        
-if __name__ == "__main__" :
-    print "Quick self test..."
-
-    example_filename = "../../Tests/SwissProt/sp008"
-
-    import os
-    if not os.path.isfile(example_filename) :
-        print "Missing test file %s" % example_filename
-    else :
-        #Try parsing it!
-        
-        handle = open(example_filename)
-        for record in Iterator(handle, RecordParser()) :
-            print record.entry_name
-            print ",".join(record.accessions)
-            print record.keywords
-            print repr(record.organism)
-            print record.sequence[:20] + "..."
-        handle.close()
-
-        handle = open(example_filename)
-        for record in Iterator(handle, SequenceParser()) :
-            print record.name
-            print record.id
-            print record.annotations['keywords']
-            print repr(record.annotations['organism'])
-            print record.seq.tostring()[:20] + "..."
-        handle.close()

@@ -35,3 +35,25 @@ def read(handle):
     if remainder:
         raise ValueError, "More than one SwissProt record found"
     return record
+
+
+if __name__ == "__main__" :
+    print "Quick self test..."
+
+    example_filename = "../../Tests/SwissProt/sp008"
+
+    import os
+    if not os.path.isfile(example_filename):
+        print "Missing test file %s" % example_filename
+    else :
+        #Try parsing it!
+        
+        handle = open(example_filename)
+        records = parse(handle)
+        for record in records:
+            print record.entry_name
+            print ",".join(record.accessions)
+            print record.keywords
+            print repr(record.organism)
+            print record.sequence[:20] + "..."
+        handle.close()
