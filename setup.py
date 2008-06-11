@@ -167,7 +167,7 @@ class CplusplusExtension(Extension):
     Python2.3 defines an extension attribute, which can be used in
     'build_extension' to work around problems Python has with always
     using the C++ compiler to compile C++ code.
-
+    
     This should be able to be removed once we move to requiring Python 2.3 or
     better.
     """
@@ -287,9 +287,13 @@ def is_Martel_installed():
     sys.path = old_path
     if m:
         bundled_martel_version = m.__version__
+        del sys.modules["Martel"]   # Unload the bundled version of Martel.
     else:
+        #We won't be able to import the bundled version of Martel if an
+        #external dependency like mxTextTools is missing.
+        #In this case, we can't compare versions to any pre-installed Martel
+        #(even if that could be imported).
         bundled_martel_version = None
-    del sys.modules["Martel"]   # Delete the old version of Martel.
 
     # Now try and import a Martel that's not bundled with Biopython.
     # To do that, I need to delete all the references to the current
@@ -305,6 +309,8 @@ def is_Martel_installed():
     if m:
         old_martel_version = m.__version__
     else:
+        #Either there is no pre-installed copy of Martel, or if there is
+        #it cannot be imported (e.g. missing a dependency like mxTextTools).
         old_martel_version = None
 
     installed = 0
