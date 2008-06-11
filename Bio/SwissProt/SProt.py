@@ -142,6 +142,10 @@ class Iterator:
         If set to None, then the raw contents of the file will be returned.
 
         """
+        import warnings
+        warnings.warn("Bio.SwissProt.SProt.Iterator is deprecated. Please use the function Bio.SwissProt.parse instead if you want to get a SwissProt.SProt.Record, or Bio.SeqIO.parse if you want to get a SeqRecord. If these solutions do not work for you, please get in contact with the Biopython developers (biopython-dev@biopython.org).",
+              DeprecationWarning)
+
         if type(handle) is not FileType and type(handle) is not InstanceType:
             raise ValueError, "I expected a file handle or file-like object"
         self._uhandle = File.UndoHandle(handle)
@@ -1254,25 +1258,26 @@ def index_file(filename, indexname, rec2key=None):
     the entry name will be used.
 
     """
+    from Bio.SwissProt import parse
     if not os.path.exists(filename):
         raise ValueError, "%s does not exist" % filename
     
     index = Index.Index(indexname, truncate=1)
     index[Dictionary._Dictionary__filename_key] = filename
     
-    iter = Iterator(open(filename), parser=RecordParser())
-    while 1:
-        start = iter._uhandle.tell()
-        rec = iter.next()
-        length = iter._uhandle.tell() - start
+    handle = open(filename)
+    records = parse(handle)
+    end = 0L
+    for record in records:
+        start = end
+        end = long(handle.tell())
+        length = end - start
         
-        if rec is None:
-            break
         if rec2key is not None:
-            key = rec2key(rec)
+            key = rec2key(record)
         else:
-            key = rec.entry_name
-            
+            key = record.entry_name
+
         if not key:
             raise KeyError, "empty sequence key was produced"
         elif index.has_key(key):
