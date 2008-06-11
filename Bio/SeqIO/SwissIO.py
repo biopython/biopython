@@ -11,6 +11,7 @@ See also the Bio.SwissProt module which offers more than just accessing
 the sequences as SeqRecord objects."""
 
 from Bio.SwissProt import SProt
+import cStringIO
     
 #This is a normal function!
 def SwissIterator(handle) :
@@ -30,4 +31,14 @@ def SwissIterator(handle) :
     For consistency with BioPerl and EMBOSS we call this the "swiss"
     format.
     """
-    return SProt.Iterator(handle, SProt.SequenceParser())
+    parser = SProt.SequenceParser()
+    lines = []
+    for line in handle:
+        lines.append(line)
+        if line[:2]=='//':
+            handle = cStringIO.StringIO("".join(lines))
+            record = parser.parse(handle)
+            lines = []
+            yield record
+    #If there are more lines, it could only be a partial record.
+    #Should we try and parse them anyway?
