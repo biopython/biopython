@@ -1,5 +1,7 @@
 test_Ace
 Test to check that ACEParser can parse the whole file into one record. ... 
+Input file: Ace/contig1.ace
+
 Contigs: 2 ; Reads: 16
 all WA:
 phrap_params phrap 040203:114710 ['phrap 304_nuclsu.fasta.screen -new_ace -retain_duplicates', 'phrap version 0.990329']
@@ -118,6 +120,8 @@ WR:
 BL060c2-LR0R.b.ab1 unaligned phrap 040217:110357
 ok
 Test to check that record parser parses each contig into a record. ... 
+Input file: Ace/contig1.ace
+
 --------------------
 Contig no. 0 has 2 reads.
 CO: Contig1 856 2 31 U
@@ -232,8 +236,99 @@ BL060c5-LR0R.b.ab1 matchElsewhereHighQual phrap 617 631 040217:110357
 WR:
 BL060c2-LR0R.b.ab1 unaligned phrap 040217:110357
 ok
+Test to check that ACEParser can parse the whole file into one record. ... 
+Input file: Ace/seq.cap.ace
+
+Contigs: 1 ; Reads: 6
+all WA: none
+
+--------------------
+Contig no. 0 has 6 reads.
+CO: Contig1 1222 6 0 U
+AGTTTTAGTT ... TGTGCGCGCA ... ATATCACATT
+[61, 66, 67, 70, 71, 73, 73, 77, 77, 87] ... [97, 97, 97, 97, 97, 97, 97, 97, 97, 97] ... [56, 51, 49, 41, 38, 39, 45, 44, 49, 46]
+# AF: 6 ; # BS: 0
+AF(3) R5 C 320 ; AF(-1) R6 C 517 ;
+BS: none
+CT: none
+WA: none
+RD: R3 919 0 0 NNNNNNNNNN ... ATGTGCGCTC ... CAGCTCACCA
+QA: 55 916 55 916
+DS: CHROMAT_FILE:  PHD_FILE:  TIME:  CHEM:  DYE:  TEMPLATE:  DIRECTION: 
+RT: none
+WR: none
+RD: R1 864 0 0 AGCCGGTACC ... GGGATGGCAC ... GGGCTGGGAG
+QA: 12 863 12 863
+DS: CHROMAT_FILE:  PHD_FILE:  TIME:  CHEM:  DYE:  TEMPLATE:  DIRECTION: 
+RT: none
+WR: none
+RD: R2 1026 0 0 NNNNNNNNNN ... GGATGCCTGG ... GGTTGAGGCC
+QA: 55 1000 55 1000
+DS: CHROMAT_FILE:  PHD_FILE:  TIME:  CHEM:  DYE:  TEMPLATE:  DIRECTION: 
+RT: none
+WR: none
+RD: R5 925 0 0 NNNNNNNNNN ... CCTCCCTACA ... GCCCCCGGNN
+QA: 293 874 293 874
+DS: CHROMAT_FILE:  PHD_FILE:  TIME:  CHEM:  DYE:  TEMPLATE:  DIRECTION: 
+RT: none
+WR: none
+RD: R4 816 0 0 CACTCAGCTC ... TCCAAAGGGT ... AGCTGAATCG
+QA: 1 799 1 799
+DS: CHROMAT_FILE:  PHD_FILE:  TIME:  CHEM:  DYE:  TEMPLATE:  DIRECTION: 
+RT: none
+WR: none
+RD: R6 857 0 0 CCGGCAGTGA ... AAAAAAAACC ... NNNNNNNNNN
+QA: 24 706 24 706
+DS: CHROMAT_FILE:  PHD_FILE:  TIME:  CHEM:  DYE:  TEMPLATE:  DIRECTION: 
+RT: none
+WR: none
+ok
+Test to check that record parser parses each contig into a record. ... 
+Input file: Ace/seq.cap.ace
+
+--------------------
+Contig no. 0 has 6 reads.
+CO: Contig1 1222 6 0 U
+AGTTTTAGTT ... TGTGCGCGCA ... ATATCACATT
+[61, 66, 67, 70, 71, 73, 73, 77, 77, 87] ... [97, 97, 97, 97, 97, 97, 97, 97, 97, 97] ... [56, 51, 49, 41, 38, 39, 45, 44, 49, 46]
+# AF: 6 ; # BS: 0
+AF(3) R5 C 320 ; AF(-1) R6 C 517 ;
+BS: none
+CT: none
+WA: none
+RD: R3 919 0 0 NNNNNNNNNN ... ATGTGCGCTC ... CAGCTCACCA
+QA: 55 916 55 916
+DS: CHROMAT_FILE:  PHD_FILE:  TIME:  CHEM:  DYE:  TEMPLATE:  DIRECTION: 
+RT: none
+WR: none
+RD: R1 864 0 0 AGCCGGTACC ... GGGATGGCAC ... GGGCTGGGAG
+QA: 12 863 12 863
+DS: CHROMAT_FILE:  PHD_FILE:  TIME:  CHEM:  DYE:  TEMPLATE:  DIRECTION: 
+RT: none
+WR: none
+RD: R2 1026 0 0 NNNNNNNNNN ... GGATGCCTGG ... GGTTGAGGCC
+QA: 55 1000 55 1000
+DS: CHROMAT_FILE:  PHD_FILE:  TIME:  CHEM:  DYE:  TEMPLATE:  DIRECTION: 
+RT: none
+WR: none
+RD: R5 925 0 0 NNNNNNNNNN ... CCTCCCTACA ... GCCCCCGGNN
+QA: 293 874 293 874
+DS: CHROMAT_FILE:  PHD_FILE:  TIME:  CHEM:  DYE:  TEMPLATE:  DIRECTION: 
+RT: none
+WR: none
+RD: R4 816 0 0 CACTCAGCTC ... TCCAAAGGGT ... AGCTGAATCG
+QA: 1 799 1 799
+DS: CHROMAT_FILE:  PHD_FILE:  TIME:  CHEM:  DYE:  TEMPLATE:  DIRECTION: 
+RT: none
+WR: none
+RD: R6 857 0 0 CCGGCAGTGA ... AAAAAAAACC ... NNNNNNNNNN
+QA: 24 706 24 706
+DS: CHROMAT_FILE:  PHD_FILE:  TIME:  CHEM:  DYE:  TEMPLATE:  DIRECTION: 
+RT: none
+WR: none
+ok
 
 ----------------------------------------------------------------------
-Ran 2 tests in 0.241s
+Ran 4 tests in 0.171s
 
 OK

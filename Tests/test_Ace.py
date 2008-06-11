@@ -16,7 +16,7 @@ def testing_suite():
 
     test_loader = unittest.TestLoader()
     test_loader.testMethodPrefix = 't_'
-    tests = [AceTestOne]
+    tests = [AceTestOne, AceTestTwo]
     
     for test in tests:
         cur_suite = test_loader.loadTestsFromTestCase(test)
@@ -42,9 +42,12 @@ class AceTestOne(unittest.TestCase):
         for i in (len(c.af)/2,-1):
             print 'AF(%d) %s %s %d' % (i,c.af[i].name,c.af[i].coru,c.af[i].padded_start),';',
         print
-        for i in (len(c.bs)/2,-1):
-            print 'BS(%d) %s %d %d' % (i,c.bs[i].name,c.bs[i].padded_start,c.bs[i].padded_end),';',
-        print
+        if c.bs :
+            for i in (len(c.bs)/2,-1):
+                print 'BS(%d) %s %d %d' % (i,c.bs[i].name,c.bs[i].padded_start,c.bs[i].padded_end),';',
+            print
+        else :
+            print 'BS: none'
         print 'CT:',
         if not c.ct:
             print 'none'
@@ -88,6 +91,7 @@ class AceTestOne(unittest.TestCase):
         aceparser=Ace.ACEParser()
         record=aceparser.parse(self.handle)
         x=0
+        print '\nInput file: %s' % self.handle.name
         print '\nContigs:',record.ncontigs,'; Reads:',record.nreads
         print 'all WA:',
         if not record.wa:
@@ -105,12 +109,23 @@ class AceTestOne(unittest.TestCase):
         recparser=Ace.RecordParser()
         it=Ace.Iterator(self.handle,recparser)
         x=0
+        print '\nInput file: %s' % self.handle.name
         while 1:
             r=it.next()
             if not r:
                 break
             self.contig_summary(r,x)
             x+=1
+
+
+class AceTestTwo(AceTestOne) :
+    """Test parsing example output from CAP3.
+
+    The sample input file seq.cap.ace was downloaded from:
+    http://genome.cs.mtu.edu/cap/data/seq.cap.ace
+    """
+    def setUp(self):
+        self.handle = open("Ace/seq.cap.ace")
 
 if __name__ == "__main__":
     sys.exit(run_tests(sys.argv))
