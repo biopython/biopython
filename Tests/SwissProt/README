@@ -30,12 +30,12 @@ sp015  IPI    IPI00383150.2  Only two DT lines, strange format of DT lines
 sp016            FOS_HUMAN   New PE line from UniProtKB rel 12.0, 24-Jul-2007
 
 
-KEYWLIST TEST FILES
--------------------
+KEYWLIST TEST FILE
+------------------
 
-ID     Version
-kw001  38
-kw002  37
+ID            Version
+keywlist.txt  55.5 of 10-Jun-2008; most records were removed from this
+              file to reduce its size and create a manageable test file.
 
 
 

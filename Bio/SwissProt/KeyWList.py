@@ -10,6 +10,16 @@ http://www.expasy.ch/sprot/sprot-top.html
 
 
 Classes:
+Record            Stores the information about one keyword or one category
+                  in the keywlist.txt file.
+
+Functions:
+parse             Parses the keywlist.txt file and returns an iterator to
+                  the records it contains.
+
+DEPRECATED:
+
+Classes:
 ListParser        Parses a keywlist.txt file into a list of keywords.
 
 _Scanner          Scans the keywlist.txt file.
@@ -21,6 +31,62 @@ extract_keywords  Return the keywords from a keywlist.txt file.
 
 """
 
+
+class Record(dict):
+    """
+    This record stores the information of one keyword or category in the
+    keywlist.txt as a Python dictionary. The keys in this dictionary are
+    the line codes that can appear in the keywlist.txt file:
+
+    ---------  ---------------------------     ----------------------
+    Line code  Content                         Occurrence in an entry
+    ---------  ---------------------------     ----------------------
+    ID         Identifier (keyword)            Once; starts a keyword entry
+    IC         Identifier (category)           Once; starts a category entry
+    AC         Accession (KW-xxxx)             Once
+    DE         Definition                      Once or more
+    SY         Synonyms                        Optional; once or more
+    GO         Gene ontology (GO) mapping      Optional; once or more
+    HI         Hierarchy                       Optional; once or more
+    WW         Relevant WWW site               Optional; once or more
+    CA         Category                        Once per keyword entry; absent
+                                               in category entries
+    """
+    def __init__(self):
+        dict.__init__(self)
+        for keyword in ("DE", "SY", "GO", "HI", "WW"):
+            self[keyword] = []
+    
+def parse(handle):
+    # First, skip the header
+    for line in handle:
+        if line.startswith("______________________________________"):
+            break
+    # Now parse the records
+    record = Record()
+    for line in handle:
+        if line.startswith("-------------------------------------"):
+            # We have reached the footer
+            break
+        key = line[:2]
+        if key=="//":
+            record["DE"] = " ".join(record["DE"])
+            record["SY"] = " ".join(record["SY"])
+            yield record
+            record = Record()
+        else:
+            value = line[5:].strip()
+            if key in ("ID", "IC", "AC", "CA"):
+                record[key] = value
+            elif key in ("DE", "SY", "GO", "HI", "WW"):
+                record[key].append(value)
+    # Read the footer and throw it away
+    for line in handle:
+        pass
+
+
+# Everything below is deprecated.
+
 from types import *
 
 from Bio import File
@@ -31,6 +97,9 @@ class ListParser(AbstractParser):
 
     """
     def __init__(self):
+        import warnings
+        warnings.warn("Bio.SwissProt.KeyWList.ListParser is deprecated. Please use the function Bio.SwissProt.KeyWList.parse instead to parse the keywlist.txt file.  In case of any problems, please contact the Biopython developers (biopython-dev@biopython.org).",
+              DeprecationWarning)
         self._scanner = _Scanner()
         self._consumer = _ListConsumer()
 
@@ -46,6 +115,11 @@ class _Scanner:
     Release 37
     Release 38
     """
+
+    def __init__(self):
+        import warnings
+        warnings.warn("Bio.SwissProt.KeyWList._Scanner is deprecated. Please use the function Bio.SwissProt.KeyWList.parse instead to parse the keywlist.txt file.  In case of any problems, please contact the Biopython developers (biopython-dev@biopython.org).",
+              DeprecationWarning)
 
     def feed(self, handle, consumer):
         """feed(self, handle, consumer)
@@ -127,6 +201,9 @@ class _ListConsumer(AbstractConsumer):
 
     """
     def __init__(self):
+        import warnings
+        warnings.warn("Bio.SwissProt.KeyWList._ListConsumer is deprecated. Please use the function Bio.SwissProt.KeyWList.parse instead to parse the keywlist.txt file.  In case of any problems, please contact the Biopython developers (biopython-dev@biopython.org).",
+              DeprecationWarning)
         self.keywords = None
 
     def start_keywords(self):
@@ -141,6 +218,9 @@ def extract_keywords(keywlist_handle):
     Return the keywords from a keywlist.txt file.
 
     """
+    import warnings
+    warnings.warn("Bio.SwissProt.KeyWList.extract_keywords is deprecated. Please use the function Bio.SwissProt.KeyWList.parse instead to parse the keywlist.txt file.  In case of any problems, please contact the Biopython developers (biopython-dev@biopython.org).",
+              DeprecationWarning)
     if type(keywlist_handle) is not FileType and \
        type(keywlist_handle) is not InstanceType:
         raise ValueError, "I expected a file handle or file-like object"

@@ -2687,7 +2687,9 @@ In addition to the eight Entrez Programming Utilities, you can also create URLs 
 \chapter{Swiss-Prot, Prosite, Prodoc, and ExPASy}
 \label{chapter:swiss_prot}
 
-\section{Bio.SwissProt: Parsing Swiss-Prot records}
+\section{Bio.SwissProt: Parsing Swiss-Prot files}
+
+\subsection{Parsing Swiss-Prot records}
 
 Swiss-Prot (\url{http://www.expasy.org/sprot}) is a hand-curated database of protein sequences. In Section~\ref{sec:SeqIO_ExPASy_and_SwissProt}, we described how to extract the sequence of a Swiss-Prot record as a \verb|SeqRecord| object. Alternatively, you can store the Swiss-Prot record in a \verb|Bio.SwissProt.SProt.Record| object, which in fact stores the complete information contained in the Swiss-Prot record. In this Section, we describe how to extract \verb|Bio.SwissProt.SProt.Record| objects from a Swiss-Prot file.
 
@@ -2768,6 +2770,56 @@ It is equally easy to extract any kind of information you'd like from Swiss-Prot
 'molecule_type', 'organelle', 'organism', 'organism_classification',
 'references', 'seqinfo', 'sequence', 'sequence_length',
 'sequence_update', 'taxonomy_id']
+\end{verbatim}
+
+\subsection{Parsing the Swiss-Prot keyword and category list}
+
+Swiss-Prot also distributes a file \verb+keywlist.txt+, which lists the keywords and categories used in Swiss-Prot. The file contains entries in the following form:
+
+\begin{verbatim}
+ID   2Fe-2S.
+AC   KW-0001
+DE   Protein which contains at least one 2Fe-2S iron-sulfur cluster: 2 iron
+DE   atoms complexed to 2 inorganic sulfides and 4 sulfur atoms of
+DE   cysteines from the protein.
+SY   Fe2S2; [2Fe-2S] cluster; [Fe2S2] cluster; Fe2/S2 (inorganic) cluster;
+SY   Di-mu-sulfido-diiron; 2 iron, 2 sulfur cluster binding.
+GO   GO:0051537; 2 iron, 2 sulfur cluster binding
+HI   Ligand: Iron; Iron-sulfur; 2Fe-2S.
+HI   Ligand: Metal-binding; 2Fe-2S.
+CA   Ligand.
+//
+ID   3D-structure.
+AC   KW-0002
+DE   Protein, or part of a protein, whose three-dimensional structure has
+DE   been resolved experimentally (for example by X-ray crystallography or
+DE   NMR spectroscopy) and whose coordinates are available in the PDB
+DE   database. Can also be used for theoretical models.
+HI   Technical term: 3D-structure.
+CA   Technical term.
+//
+ID   3Fe-4S.
+...
+\end{verbatim}
+
+The entries in this file can be parsed by the \verb+parse+ function in the \verb+Bio.SwissProt.KeyWList+ module. Each entry is then stored as a \verb+Bio.SwissProt.KeyWList.Record+, which is a Python dictionary.
+
+\begin{verbatim}
+>>> from Bio.SwissProt import KeyWList
+>>> handle = open("keywlist.txt")
+>>> records = KeyWList.parse(handle)
+>>> for record in records:
+...     print record['ID']
+...     print record['DE']
+\end{verbatim}
+
+This prints
+\begin{verbatim}
+2Fe-2S.
+Protein which contains at least one 2Fe-2S iron-sulfur cluster: 2 iron atoms
+complexed to 2 inorganic sulfides and 4 sulfur atoms of cysteines from the
+protein.
+...
 \end{verbatim}
 
 \section{Bio.Prosite: Parsing Prosite records}
@@ -5743,17 +5795,6 @@ record
     sequence_header
     sequence_data
     terminator
-\end{verbatim}
-
-The KeyWList.py modules works with the keywlist.txt file included with
-the SwissProt distribution.
-The KeyWList scanner produces the following events:
-\begin{verbatim}
-header
-keywords
-    keyword
-footer
-    copyright
 \end{verbatim}
 
 \subsection{NBRF}
