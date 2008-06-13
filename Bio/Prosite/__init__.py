@@ -16,22 +16,23 @@ Release 17.0, Dec 2001
 Release 19.0, Mar 2006
 
 
-Classes:
-Record                Holds Prosite data.
-PatternHit            Holds data from a hit against a Prosite pattern.
-Iterator              Iterates over entries in a Prosite file.
-Dictionary            Accesses a Prosite file using a dictionary interface.
-RecordParser          Parses a Prosite record into a Record object.
-
-_Scanner              Scans Prosite-formatted data.
-_RecordConsumer       Consumes Prosite data to a Record object.
-
-
 Functions:
+parse                 Iterates over entries in a Prosite file.
 scan_sequence_expasy  Scan a sequence for occurrences of Prosite patterns.
 index_file            Index a Prosite file for a Dictionary.
 _extract_record       Extract Prosite data from a web page.
 _extract_pattern_hits Extract Prosite patterns from a web page.
+
+
+Classes:
+Record                Holds Prosite data.
+PatternHit            Holds data from a hit against a Prosite pattern.
+Dictionary            Accesses a Prosite file using a dictionary interface.
+RecordParser          Parses a Prosite record into a Record object.
+Iterator              Iterates over entries in a Prosite file; DEPRECATED.
+
+_Scanner              Scans Prosite-formatted data.
+_RecordConsumer       Consumes Prosite data to a Record object.
 
 """
 from types import *
@@ -214,6 +215,9 @@ class Iterator:
         If set to None, then the raw contents of the file will be returned.
 
         """
+        import warnings
+        warnings.warn("Bio.Prosite.Iterator is deprecated; we recommend using the function Bio.Prosite.parse instead. Please contact the Biopython developers at biopython-dev@biopython.org you cannot use Bio.Prosite.parse instead of Bio.Prosite.Iterator.",
+              DeprecationWarning)
         if type(handle) is not FileType and type(handle) is not InstanceType:
             raise ValueError, "I expected a file handle or file-like object"
         self._uhandle = File.UndoHandle(handle)
@@ -826,24 +830,25 @@ def index_file(filename, indexname, rec2key=None):
     the id name will be used.
 
     """
+    import os
     if not os.path.exists(filename):
         raise ValueError, "%s does not exist" % filename
 
     index = Index.Index(indexname, truncate=1)
     index[Dictionary._Dictionary__filename_key] = filename
     
-    iter = Iterator(open(filename), parser=RecordParser())
-    while 1:
-        start = iter._uhandle.tell()
-        rec = iter.next()
-        length = iter._uhandle.tell() - start
+    handle = open(filename)
+    records = parse(handle)
+    end = 0L
+    for record in records:
+        start = end
+        end = long(handle.tell())
+        length = end - start
         
-        if rec is None:
-            break
         if rec2key is not None:
-            key = rec2key(rec)
+            key = rec2key(record)
         else:
-            key = rec.name
+            key = record.name
             
         if not key:
             raise KeyError, "empty key was produced"
@@ -852,6 +857,8 @@ def index_file(filename, indexname, rec2key=None):
 
         index[key] = start, length
 
+# This function can be deprecated once Bio.Prosite.ExPASyDictionary
+# is removed.
 def _extract_record(handle):
     """_extract_record(handle) -> str
 

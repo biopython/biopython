@@ -14,23 +14,25 @@ Release 16.0, July 1999
 Release 20.22, 13 November 2007
 
 
+Functions:
+parse              Iterates over entries in a Prodoc file.
+index_file         Index a Prodoc file for a Dictionary.
+_extract_record    Extract Prodoc data from a web page.
+
+
 Classes:
 Record             Holds Prodoc data.
 Reference          Holds data from a Prodoc reference.
-Iterator           Iterates over entries in a Prodoc file.
 Dictionary         Accesses a Prodoc file using a dictionary interface.
 RecordParser       Parses a Prodoc record into a Record object.
 
 _Scanner           Scans Prodoc-formatted data.
 _RecordConsumer    Consumes Prodoc data to a Record object.
-
-
-Functions:
-index_file         Index a Prodoc file for a Dictionary.
-_extract_record    Extract Prodoc data from a web page.
-
+Iterator           Iterates over entries in a Prodoc file; DEPRECATED.
 """
+
 from types import *
+import os
 import sgmllib
 from Bio import File
 from Bio import Index
@@ -106,6 +108,9 @@ class Iterator:
         If set to None, then the raw contents of the file will be returned.
 
         """
+        import warnings
+        warnings.warn("Bio.Prosite.Prodoc.Iterator is deprecated; we recommend using the function Bio.Prosite.Prodoc.parse instead. Please contact the Biopython developers at biopython-dev@biopython.org you cannot use Bio.Prosite.Prodoc.parse instead of Bio.Prosite.Prodoc.Iterator.",
+              DeprecationWarning)
         if type(handle) is not FileType and type(handle) is not InstanceType:
             raise ValueError, "I expected a file handle or file-like object"
         self._uhandle = File.UndoHandle(handle)
@@ -415,24 +420,25 @@ def index_file(filename, indexname, rec2key=None):
     the id name will be used.
 
     """
+    import os
     if not os.path.exists(filename):
         raise ValueError, "%s does not exist" % filename
 
     index = Index.Index(indexname, truncate=1)
     index[Dictionary._Dictionary__filename_key] = filename
-    
-    iter = Iterator(open(filename), parser=RecordParser())
-    while 1:
-        start = iter._uhandle.tell()
-        rec = iter.next()
-        length = iter._uhandle.tell() - start
-        
-        if rec is None:
-            break
+
+    handle = open(filename)
+    records = parse(handle)
+    end = 0L
+    for record in records:
+        start = end
+        end = long(handle.tell())
+        length = end - start
+
         if rec2key is not None:
-            key = rec2key(rec)
+            key = rec2key(record)
         else:
-            key = rec.accession
+            key = record.accession
             
         if not key:
             raise KeyError, "empty key was produced"
