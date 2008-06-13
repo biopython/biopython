@@ -21,13 +21,11 @@ download_many  Download many articles from PubMed in batch mode.
 
 """
 
-import string
 import re
 import sgmllib
 
 from Bio import File
-from Bio.WWW import RequestLimiter
-from Bio.WWW import NCBI
+from Bio import Entrez
 from Bio import Medline
 
 class Dictionary:
@@ -36,18 +34,16 @@ class Dictionary:
     Methods:
     
     """
-    def __init__(self, delay=5.0, parser=None):
-        """Dictionary(delay=5.0, parser=None)
+    def __init__(self, parser=None):
+        """Dictionary(parser=None)
 
         Create a new Dictionary to access PubMed.  parser is an optional
         parser (e.g. Medline.RecordParser) object to change the results
         into another form.  If set to None, then the raw contents of the
-        file will be returned.  delay is the number of seconds to wait
-        between each query.
+        file will be returned.
 
         """
         self.parser = parser
-        self.limiter = RequestLimiter(delay)
 
     def __len__(self):
         raise NotImplementedError, "PubMed contains lots of entries"
@@ -89,12 +85,8 @@ class Dictionary:
         error.
         
         """
-        # First, check to see if enough time has passed since my
-        # last query.
-        self.limiter.wait()
-        
         try:
-            handle = NCBI.efetch(
+            handle = Entrez.efetch(
                 db="pubmed", id=id, retmode='text', rettype='medlars')
         except IOError, x:
             # raise a KeyError instead of an IOError
@@ -106,10 +98,9 @@ class Dictionary:
         return handle.read()
 
 def search_for(search, reldate=None, mindate=None, maxdate=None,
-               batchsize=100, delay=2, callback_fn=None,
-               start_id=0, max_ids=None):
+               batchsize=100, callback_fn=None, start_id=0, max_ids=None):
     """search_for(search[, reldate][, mindate][, maxdate]
-    [, batchsize][, delay][, callback_fn][, start_id][, max_ids]) -> ids
+    [, batchsize][, callback_fn][, start_id][, max_ids]) -> ids
 
     Search PubMed and return a list of the PMID's that match the
     criteria.  search is the search string used to search the
@@ -117,12 +108,10 @@ def search_for(search, reldate=None, mindate=None, maxdate=None,
     date to restrict the search.  mindate and maxdate are the dates to
     restrict the search, e.g. 2002/01/01.  batchsize specifies the
     number of ids to return at one time.  By default, it is set to
-    10000, the maximum.  delay is the number of seconds to wait
-    between queries (default 2).  callback_fn is an optional callback
-    function that will be called as passed a PMID as results are
-    retrieved.  start_id specifies the index of the first id to
-    retrieve and max_ids specifies the maximum number of id's to
-    retrieve.
+    10000, the maximum.  callback_fn is an optional callback function
+    that will be called as passed a PMID as results are retrieved.
+    start_id specifies the index of the first id to retrieve and
+    max_ids specifies the maximum number of id's to retrieve.
 
     XXX The date parameters don't seem to be working with NCBI's
     script.  Please let me know if you can get it to work.
@@ -147,7 +136,7 @@ def search_for(search, reldate=None, mindate=None, maxdate=None,
             if not self.in_id:
                 return
             # If data is just whitespace, then ignore it.
-            data = string.strip(data)
+            data = data.strip()
             if not data:
                 return
             # Everything here should be a PMID.  Check and make sure
@@ -171,15 +160,10 @@ def search_for(search, reldate=None, mindate=None, maxdate=None,
         if v is None:
             del params[k]
 
-    limiter = RequestLimiter(delay)
     ids = []
     while max_ids is None or len(ids) < max_ids:
         parser = ResultParser()
         
-        # Check to make sure enough time has passed before my
-        # last search.  If not, then wait.
-        limiter.wait()
-
         start = start_id + len(ids)
         max = batchsize
         if max_ids is not None and max > max_ids - len(ids):
@@ -187,7 +171,7 @@ def search_for(search, reldate=None, mindate=None, maxdate=None,
 
         params['retstart'] = start
         params['retmax'] = max
-        h = NCBI.esearch(**params)
+        h = Entrez.esearch(**params)
         parser.feed(h.read())
         ids.extend(parser.ids)
         if callback_fn is not None:
@@ -244,21 +228,20 @@ def find_related(pmid):
 
     parser = ResultParser()
     if type(pmid) is type([]):
-        pmid = string.join(pmid, ',')
-    h = NCBI.elink(dbfrom='pubmed', id=pmid)
+        pmid = ','.join(pmid)
+    h = Entrez.elink(dbfrom='pubmed', id=pmid)
     parser.feed(h.read())
     return parser.ids
 
-def download_many(ids, callback_fn, broken_fn=None, delay=120.0, faildelay=5.0,
+def download_many(ids, callback_fn, broken_fn=None, 
                   batchsize=500, parser=None):
-    """download_many(ids, callback_fn[, broken_fn][, delay][, faildelay][, batchsize])
+    """download_many(ids, callback_fn[, broken_fn][, batchsize])
 
     Download many records from PubMed.  ids is a list of either the
     Medline Unique ID or the PubMed ID's of the articles.  Each time a
     record is downloaded, callback_fn is called with the text of the
     record.  broken_fn is an optional function that is called with the
-    id of records that were not able to be downloaded.  delay is the
-    number of seconds to wait between requests.  batchsize is the
+    id of records that were not able to be downloaded.  batchsize is the
     number of records to request each time.
 
     """
@@ -268,7 +251,6 @@ def download_many(ids, callback_fn, broken_fn=None, delay=120.0, faildelay=5.0,
     # in the parser may disrupt the whole download process.
     if batchsize > 500 or batchsize < 1:
         raise ValueError, "batchsize must be between 1 and 500"
-    limiter = RequestLimiter(delay)
     current_batchsize = batchsize
     
     # Loop until all the ids are processed.  We want to process as
@@ -288,15 +270,10 @@ def download_many(ids, callback_fn, broken_fn=None, delay=120.0, faildelay=5.0,
         
         id_str = ','.join(ids[:current_batchsize])
 
-        # Make sure enough time has passed before I do another query.
-        if not nsuccesses:
-            limiter.wait(faildelay)
-        else:
-            limiter.wait()
         try:
             # Query PubMed.  If one or more of the id's are broken,
             # this will raise an IOError.
-            handle = NCBI.efetch(
+            handle = Entrez.efetch(
                 db="pubmed", id=id_str, retmode='text', rettype='medlars')
 
             # I'm going to check to make sure PubMed returned the same
