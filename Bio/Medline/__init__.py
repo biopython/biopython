@@ -15,7 +15,6 @@ _Scanner         Scans a Medline record.
 _RecordConsumer  Consumes Medline data to a Record object.
 
 """
-from types import *
 
 from Bio import File
 from Bio.ParserSupport import *
@@ -151,9 +150,7 @@ class Iterator:
         If set to None, then the raw contents of the file will be returned.
 
         """
-        if type(handle) is not FileType and type(handle) is not InstanceType:
-            raise ValueError, "I expected a file handle or file-like object"
-        self._uhandle = File.UndoHandle(handle)
+        self._handle = handle
         self._parser = parser
 
     def __iter__(self):
@@ -167,26 +164,15 @@ class Iterator:
 
         """
         lines = []
-        while 1:
-            line = self._uhandle.readline()
-            if not line:
-                break
+        for line in self.handle:
             lines.append(line)
-            if string.rstrip(line) == '':
+            if line.strip()=='':
                 break
-        while 1:  # read remaining blank lines
-            line = self._uhandle.readline()
-            if not line:
-                break
-            if string.rstrip(line) != '':
-                self._uhandle.saveline(line)
-                break
-            lines.append(line)
-            
-        if not lines:
+        else:
             raise StopIteration
             
-        data = string.join(lines, '')
+        data = ''.join(lines)
+
         if self._parser is not None:
             return self._parser.parse_str(data)
         return data
@@ -289,7 +275,7 @@ class _Scanner:
             # 2) continuation, with just data
 
             # Check to see if it's a continuation line.
-            qualifier = string.rstrip(line[:4])
+            qualifier = line[:4].rstrip()
             # There's a bug in some MH lines where the "isolation &
             # purification" subheading gets split across lines and
             # purification at the beginning of the line, with only 1
@@ -510,7 +496,7 @@ class _RecordConsumer(AbstractConsumer):
         self.data.undefined.append(line)
 
     def _clean(self, line, rstrip=1):
-        tab = string.find(line, '\t')
+        tab = line.find('\t')
         if tab >= 0:
             nospace = line[tab+1:]
         elif line[:13] == ' purification':
@@ -518,7 +504,7 @@ class _RecordConsumer(AbstractConsumer):
         else:
             nospace = line[6:]
         if rstrip:
-            return string.rstrip(nospace)
+            return nospace.rstrip()
         return nospace
 
     _needs_stripping = [
@@ -529,5 +515,5 @@ class _RecordConsumer(AbstractConsumer):
         # Remove trailing newlines
         for m in self._needs_stripping:
             value = getattr(rec, m)
-            setattr(rec, m, string.rstrip(value))
+            setattr(rec, m, value.rstrip())
 
