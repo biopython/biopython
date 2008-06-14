@@ -22,6 +22,10 @@ Functions:
 index_file         Index a FASTA file for a Dictionary.
 
 """
+
+import warnings
+warnings.warn("Bio.Gobase is deprecated, as this module doesn't seem to have any users. If you are using Bio.Gobase, please get in contact with the Biopython developers at biopython-dev@biopython.org to avoid permanent removal of this module.", DeprecationWarning)
+
 from types import *
 import string
 import re
