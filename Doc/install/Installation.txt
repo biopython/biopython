@@ -289,13 +289,14 @@ up your python interpreter and import it with no errors:
 3.2  Numerical Python
 =====================
   
-  The Numerical Python distribution (also known an Numeric or Numpy) is
-a fast implementation of arrays and associated array functionality. This
-is important for a number of Biopython modules that deal with number
-processing. The main web site for Numeric is:
-http://sourceforge.net/projects/numpy and downloads are available from:
+  The Numerical Python distribution is a fast implementation of arrays
+and associated array functionality. This is important for a number of
+Biopython modules that deal with number processing. The main web site
+for Numeric is: http://sourceforge.net/projects/numpy and downloads are
+available from:
 http://sourceforge.net/project/showfiles.php?group_id=1369&package_id=13
-51.
+51. Biopython still uses the "old" Numerical Python (version 24.2) and
+has not yet switched to the "new" NumPy (currently at version 1.1.0).
   
 
 3.2.1  UNIX and Mac OS X systems
