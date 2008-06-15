@@ -2,13 +2,7 @@
 """
 
 import os
-import sys
-
 import Bio.CDD
-from Bio.FilteredReader import FilteredReader
-from Bio.FilteredReader import remove_empty_line
-from Bio.FilteredReader import remove_leading_whitespace
-from Bio.SGMLExtractor import SGMLExtractorHandle
 
 testfiles   = [  'pfam00035', 'pfam01356', 'pfam02903', 'smart00499', 'smart00505' ]
 for file in testfiles:
