@@ -69,7 +69,7 @@
 
 \title{Biopython Tutorial and Cookbook}
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, Michiel de Hoon, Peter Cock}
-\date{Last Update--22 March 2008}
+\date{Last Update--15 June 2008}
 
 \maketitle
 \tableofcontents
@@ -2641,6 +2641,8 @@ In addition to the eight Entrez Programming Utilities, you can also create URLs 
 \section{Examples}
 \label{sec:entrez_examples}
 
+\subsection{Searching and downloading Entrez Nucleotide records}
+
 Here we'll show a simple example of performing a remote Entrez query. In section~\ref{sec:orchids} of the parsing examples, we talked about using NCBI's Entrez website to search the NCBI nucleotide databases for info on Cypripedioideae, our friends the lady slipper orchids. Now, we'll look at how to automate that process using a Python script. In this example, we'll just show how to connect, get the results, and parse them.
 
 We first query Entrez and get a handle with the results. This is done with the following code:
@@ -2708,6 +2710,37 @@ Cypripedium calceolus
 \end{verbatim}
 
 You could use this to quickly set up searches that you want to repeat on a daily basis. Hopefully whatever your task, the \verb+Bio.Entrez+ code will make things a lot easier for you!
+
+\subsection{Finding the lineage of an organism}
+
+Staying with the same organism, let's now find its lineage. First, we search the Taxonomy database for Cypripedioideae. We find exactly one accession number:
+\begin{verbatim}
+>>> handle = Entrez.esearch(db="Taxonomy", term="Cypripedioideae")
+>>> record = Entrez.read(handle)
+>>> record["IdList"]
+['158330']
+>>> record["IdList"][0]
+'158330'
+\end{verbatim}
+Now, we use \verb+efetch+ to download this entry in the Taxonomy database and to parse it:
+\begin{verbatim}
+>>> handle = Entrez.efetch(db="Taxonomy", id="158330", retmode='xml')
+>>> records = Entrez.read(handle)
+\end{verbatim}
+Again, this record stores lots of information:
+\begin{verbatim}
+>>> records[0].keys()
+[u'Lineage', u'Division', u'ParentTaxId', u'PubDate', u'LineageEx',
+ u'CreateDate', u'TaxId', u'Rank', u'GeneticCode', u'ScientificName',
+ u'MitoGeneticCode', u'UpdateDate']
+\end{verbatim}
+We can get the lineage directly from this record:
+\begin{verbatim}
+>>> records[0]['Lineage']
+'cellular organisms; Eukaryota; Viridiplantae; Streptophyta; Streptophytina;
+ Embryophyta; Tracheophyta; Euphyllophyta; Spermatophyta; Magnoliophyta;
+ Liliopsida; Asparagales; Orchidaceae'
+\end{verbatim}
 
 \chapter{Swiss-Prot, Prosite, Prodoc, and ExPASy}
 \label{chapter:swiss_prot}
