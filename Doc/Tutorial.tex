@@ -330,58 +330,12 @@ One of the very common things that you need to do in bioinformatics is extract i
 
 \begin{itemize}
   \item \href{http://www.expasy.org/}{ExPASy} -- See Chapter~\ref{chapter:swiss_prot} in the Cookbook for more information.
-  \item \href{http://www.ncbi.nlm.nih.gov/Entrez/}{Entrez from NCBI} -- See below
+  \item \href{http://www.ncbi.nlm.nih.gov/Entrez/}{Entrez from NCBI} -- See Chapter~\ref{sec:entrez_examples}.
   \item \href{http://www.ncbi.nlm.nih.gov/PubMed/}{PubMed from NCBI} -- See section~\ref{sec:pub_med} in the Cookbook for example code detailing how to use this.
   \item \href{http://scop.mrc-lmb.cam.ac.uk/scop/}{SCOP}
 \end{itemize}
 
 The code is these modules basically makes it easy to write python code that interact with the CGI scripts on these pages, so that you can get results in an easy to deal with format. In some cases, the results can be tightly integrated with the Biopython parsers to make it even easier to extract information.
-
-Here we'll show a simple example of performing a remote Entrez query. More information on the other services is available in the Cookbook, which begins on page~\pageref{chapter:cookbook}.
-
-In section~\ref{sec:orchids} of the parsing examples, we talked about using Entrez website to search the NCBI nucleotide databases for info on Cypripedioideae, our friends the lady slipper orchids. Now, we'll look at how to automate that process using a python script. For Entrez searching, this is more useful for displaying results then as a tool for getting sequences. The NCBI web site is mostly set up to allow remote queries so that you could write our own local CGI scripts that return information from NCBI pages. For this reason, the results are returned as HTML and it is pretty tough to get a flat file in a quick manner.
-
-In this example, we'll just show how to connect, get the results, and display them in a web browser. First, we'll start by defining our search and how to display the results:
-
-\begin{verbatim}
-search_command = 'Search'
-search_database = 'Nucleotide'
-return_format = 'FASTA'
-search_term = 'Cypripedioideae'
-
-my_browser = 'lynx'
-\end{verbatim}
-
-The first four terms define the search we are going to do. To use the Entrez module, you'll need to know a bit about how the remote CGI scripts at NCBI work, and you can find out more about this at \url{http://www.ncbi.nlm.nih.gov/entrez/query/static/linking.html}. The final term just describes the browser to display the results in.
-
-Now that we've got this all set up, we can query Entrez and get a handle with the results. This is done with the following code:
-
-\begin{verbatim}
-from Bio import Entrez
-
-result_handle = Entrez.query(search_command, search_database, term = search_term,
-                           doptcmdl = return_format)
-\end{verbatim}
-
-The query function does all of the work of preparing the CGI script command line and rounding up the HTML results.
-
-Now that we've got the results, we are ready to save them to a file and display them in our browser, which we can do with code like:
-
-\begin{verbatim}
-import os
-
-result_file_name = os.path.join(os.getcwd(), "results.html")
-result_file = open(result_file_name, "w")
-result_file.write(result_handle.read())
-result_file.close()
-
-if my_browser == "lynx":
-    os.system("lynx -force_html " + result_file_name)
-elif my_browser == "netscape":
-    os.system("netscape file:" + result_file_name)
-\end{verbatim}
-
-Snazzy! We can fetch things and display them automatically -- you could use this to quickly set up searches that you want to repeat on a daily basis and check by hand, or to set up a small CGI script to do queries and locally save the results before displaying them (as a kind of lab notebook of our search results). Hopefully whatever your task, the database connectivity code will make things lots easier for you!
 
 \section{What to do next}
 
@@ -2683,6 +2637,77 @@ See the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/espell\_help.html}
 \section{Creating web links to the Entrez databases}
 
 In addition to the eight Entrez Programming Utilities, you can also create URLs to information of the Entrez databases in HTML format. This is primarily intended to create links or bookmarks to the Entrez databases. To do so, you can use the function \verb+Bio.Entrez.query+. Detailed information of this service is available from \href{http://www.ncbi.nlm.nih.gov/books/bv.fcgi?rid=helplinks.chapter.linkshelp}{NCBI}. For heavy usage of the NCBI databases, please use the Entrez Programming Utilities instead of \verb+Bio.Entrez.query+.
+
+\section{Examples}
+\label{sec:entrez_examples}
+
+Here we'll show a simple example of performing a remote Entrez query. In section~\ref{sec:orchids} of the parsing examples, we talked about using NCBI's Entrez website to search the NCBI nucleotide databases for info on Cypripedioideae, our friends the lady slipper orchids. Now, we'll look at how to automate that process using a Python script. In this example, we'll just show how to connect, get the results, and parse them.
+
+We first query Entrez and get a handle with the results. This is done with the following code:
+\begin{verbatim}
+>>> from Bio import Entrez
+>>> handle = Entrez.esearch(db='nucleotide', term='Cypripedioideae', retmax=1000)
+\end{verbatim}
+The Entrez module does all of the work of preparing the CGI script command line. The \verb+retmax+ parameter is the maximum number of results we'd like to see from our search. We'll check below if 1000 was large enough.
+Now that we've got a handle to the results, we can parse them into a Python object.
+\begin{verbatim}
+>>> record = Entrez.read(handle)
+\end{verbatim}
+Here, \verb+record+ is a Python dictionary containing the search results and some auxiliary information. Just for information, let's look at what is stored in this dictionary:
+\begin{verbatim}
+>>> print record.keys()
+[u'Count', u'RetMax', u'IdList', u'TranslationSet', u'RetStart', u'QueryTranslation']
+\end{verbatim}
+First, let's check how many results were found:
+\begin{verbatim}
+>>> print record['Count']
+'814'
+\end{verbatim}
+This is less than the maximum of 1000 we specified, so we're not losing any results. The 814 results are stored in \verb+record['IdList']+:
+\begin{verbatim}
+>>> print len(record['IdList'])
+814
+\end{verbatim}
+Let's look at the first five results:
+\begin{verbatim}
+>>> print record['IdList'][:5]
+['187237168', '187372713', '187372690', '187372688', '187372686']
+\end{verbatim}
+We can download these records using \verb+efetch+:
+\begin{verbatim}
+>>> idlist = ",".join(record['IdList'][:5])
+>>> print idlist
+187237168,187372713,187372690,187372688,187372686
+>>> handle = Entrez.efetch(db='nucleotide', id=idlist, retmode='xml')
+>>> records = Entrez.read(handle)
+>>> print len(records)
+5
+\end{verbatim}
+Each of these records corresponds to one GenBank record.
+\begin{verbatim}
+>>> print records[0].keys()
+[u'GBSeq_moltype', u'GBSeq_source', u'GBSeq_sequence',
+ u'GBSeq_primary-accession', u'GBSeq_definition', u'GBSeq_accession-version',
+ u'GBSeq_topology', u'GBSeq_length', u'GBSeq_feature-table',
+ u'GBSeq_create-date', u'GBSeq_other-seqids', u'GBSeq_division',
+ u'GBSeq_taxonomy', u'GBSeq_references', u'GBSeq_update-date',
+ u'GBSeq_organism', u'GBSeq_locus', u'GBSeq_strandedness']
+
+>>> print records[0]['GBSeq_primary-accession']
+DQ110336
+
+>>> print records[0]['GBSeq_other-seqids']
+['gb|DQ110336.1|', 'gi|187237168']
+
+>>> print records[0]['GBSeq_definition']
+Cypripedium calceolus voucher Davis 03-03 A maturase (matR) gene, partial cds;
+mitochondrial
+
+>>> print records[0]['GBSeq_organism']
+Cypripedium calceolus
+\end{verbatim}
+
+You could use this to quickly set up searches that you want to repeat on a daily basis. Hopefully whatever your task, the \verb+Bio.Entrez+ code will make things a lot easier for you!
 
 \chapter{Swiss-Prot, Prosite, Prodoc, and ExPASy}
 \label{chapter:swiss_prot}
