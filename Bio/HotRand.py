@@ -3,17 +3,11 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""handles true random numbers supplied from the the web server of fourmilab. Based on
-atmospheric noise.  The motivation is to support biosimulations that rely on random numbers.
+"""handles true random numbers supplied from the the web server of fourmilab. Based on atmospheric noise.  The motivation is to support biosimulations that rely on random numbers.
 """
 
-import os
-import sys
 import string
-from urllib import FancyURLopener
-from urllib import urlencode
-
-from Bio.SGMLExtractor import SGMLExtractorHandle
+import urllib
 
 
 def hex_convert( text ):
@@ -44,16 +38,10 @@ class HotCache:
         self.fill_hot_cache()
 
     def fill_hot_cache( self ):
-        bases   = [ 'a', 'g', 'c', 't' ]
-        url = self.url + urlencode( self.query )
-        url_opener = FancyURLopener( )
-        fh = url_opener.open( url )
-        hot_rand_handle = SGMLExtractorHandle( fh, [ 'pre', ] )
-
-        hot_cache = fh.read()
-        self.hot_cache = hot_cache
+        url = self.url + urllib.urlencode( self.query )
+        fh = urllib.urlopen( url )
+        self.hot_cache = fh.read()
         fh.close()
-        return self.hot_cache
 
     def next_num( self, num_digits = 4 ):
         cache = self.hot_cache

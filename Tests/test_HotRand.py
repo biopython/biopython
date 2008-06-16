@@ -3,7 +3,6 @@
 """
 # standard library
 import sys
-import random
 
 # local stuff
 import requires_internet
