@@ -37,7 +37,7 @@ class SeqRecord:
         unique id string for each record.  This is especially important
         if you wish to write your sequences to a file.
 
-        You can create a 'blank' SeqRecord object can then populated the
+        You can create a 'blank' SeqRecord object, and then populated the
         attributes later.  Note that currently the annotations dictionary
         cannot be specified when creating the SeqRecord."""
         self.seq = seq
@@ -76,7 +76,26 @@ class SeqRecord:
          + "(seq=%s, id=%s, name=%s, description=%s, dbxrefs=%s)" \
          % tuple(map(repr, (self.seq, self.id, self.name,
                             self.description, self.dbxrefs)))
-        
+    
+    def __len__(self) :
+        """Returns the length of the sequence."""
+        return len(self.seq)
+
+    def __nonzero__(self) :
+        """Returns True regardless of the length of the sequence.
+
+        This behaviour is for backwards compatibility, since until the
+        __len__ method was added, a SeqRecord always evaluated as True.
+
+        Note that in comparison, a Seq object will evaluate to False if it
+        has a zero length sequence.
+
+        WARNING: The SeqRecord may in future evaluate to False when its
+        sequence is of zero length (in order to better match the Seq
+        object behaviour)!
+        """
+        return True
+
 if __name__ == "__main__" :
     #The following is a very quick example of how to create a SeqRecord object
     from Bio.Seq import Seq
@@ -95,6 +114,9 @@ if __name__ == "__main__" :
 
     print str(record)
     print repr(record)
+    assert 178 == len(record)
 
     #One way to create a minimal record.
     record2 = SeqRecord(Seq(""))
+    assert record2 #True eeven though length is zero
+    assert not len(record2)
