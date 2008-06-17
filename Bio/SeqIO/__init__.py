@@ -179,9 +179,7 @@ See also http://biopython.org/wiki/SeqIO_dev
 """
 
 import os
-#from cStringIO import StringIO
 from StringIO import StringIO
-from Bio.Alphabet import generic_alphabet, generic_protein
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align.Generic import Alignment
@@ -385,7 +383,7 @@ def to_dict(sequences, key_function=None) :
         d[key] = record
     return d
 
-def to_alignment(sequences, alphabet=generic_alphabet, strict=True) :
+def to_alignment(sequences, alphabet=None, strict=True) :
     """Returns a multiple sequence alignment.
 
     sequences -An iterator that returns SeqRecord objects,
@@ -396,6 +394,13 @@ def to_alignment(sequences, alphabet=generic_alphabet, strict=True) :
                be done?
     """
     #TODO - Move this functionality into the Alignment class instead?
+    from Bio.Alphabet import Alphabet, Gapped, generic_alphabet
+    if alphabet is None :
+        alphabet = Gapped(generic_alphabet)
+
+    if not (isinstance(alphabet, Alphabet) or isinstance(alphabet, Gapped)) :
+        raise ValueError("Invalid alignment alphabet")
+
     alignment_length = None
     alignment = Alignment(alphabet)
     for record in sequences :
@@ -404,12 +409,39 @@ def to_alignment(sequences, alphabet=generic_alphabet, strict=True) :
                 alignment_length = len(record.seq)
             elif alignment_length <> len(record.seq) :
                 raise ValueError("Sequences must all be the same length")
-            
-            if not isinstance(record.seq.alphabet, alphabet.__class__) :
-                raise ValueError("Incompatible sequence alphabet" \
-                                 + "%s for a %s alignment" \
-                                 % (record.seq.alphabet, alphabet))
-            
+
+            assert isinstance(record.seq.alphabet, Alphabet) \
+            or isinstance(record.seq.alphabet, Gapped), \
+                "Sequence does not have a valid alphabet"
+
+            #TODO - Move this alphabet comparison code into the Alphabet module/class?
+            #TODO - Is a normal alphabet "ungapped" by default, or does it just mean
+            #undecided?
+            if isinstance(record.seq.alphabet, Alphabet) \
+            and isinstance(alphabet, Alphabet) :
+                #Comparing two non-gapped alphabets            
+                if not isinstance(record.seq.alphabet, alphabet.__class__) :
+                    raise ValueError("Incompatible sequence alphabet " \
+                                     + "%s for %s alignment" \
+                                     % (record.seq.alphabet, alphabet))
+            elif isinstance(record.seq.alphabet, Gapped) \
+            and isinstance(alphabet, Alphabet) :
+                raise ValueError("Sequence has a gapped alphabet, alignment does not")
+            elif isinstance(record.seq.alphabet, Alphabet) \
+            and isinstance(alphabet, Gapped) :
+                #Sequence isn't gapped, alignment is.
+                if not isinstance(record.seq.alphabet, alphabet.alphabet.__class__) :
+                    raise ValueError("Incompatible sequence alphabet " \
+                                     + "%s for %s alignment" \
+                                     % (record.seq.alphabet, alphabet))
+            else :
+                #Comparing two gapped alphabets
+                if not isinstance(record.seq.alphabet, alphabet.__class__) :
+                    raise ValueError("Incompatible sequence alphabet " \
+                                     + "%s for %s alignment" \
+                                     % (record.seq.alphabet, alphabet))
+                if record.seq.alphabet.gap_char <> alphabet.gap_char :
+                    raise ValueError("Sequence gap characters <> alignment gap char")
             #ToDo, additional checks on the specified alignment...
             #Should we look at the alphabet.contains() method?
             
