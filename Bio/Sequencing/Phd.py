@@ -1,6 +1,9 @@
+# Copyright 2004 by Cymon J. Cox and Frank Kauff.  All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
 """
-Parser for PHD files output by PHRED and used by PHRAP and
-CONSED.
+Parser for PHD files output by PHRED and used by PHRAP and CONSED.
 
 Works fine with PHRED 0.020425.c
 
@@ -16,9 +19,7 @@ import os
 from types import *
 
 from Bio import File
-from Bio import Index
 from Bio import Seq
-from Bio import SeqRecord
 from Bio.ParserSupport import *
 from Bio.Alphabet import IUPAC
 
@@ -27,9 +28,7 @@ CKEYWORDS=['CHROMAT_FILE','ABI_THUMBPRINT','PHRED_VERSION','CALL_METHOD',\
         'TRIM','TRACE_PEAK_AREA_RATIO','CHEM','DYE']
 
 class Record:
-    """Hold information from a PHD file
-
-    """
+    """Hold information from a PHD file."""
     def __init__(self):
         self.file_name = ''
         self.comments={}
@@ -41,7 +40,7 @@ class Record:
 
 
 class Iterator:
-    """Iterates over a file of multiple PHD records
+    """Iterates over a file of multiple PHD records.
     
     Methods: 
     next    Return the next record from the stream, or None.
@@ -87,12 +86,11 @@ class Iterator:
         return data
     
     def __iter__(self):
+        """Iterate over the PHY file record bt record."""
         return iter(self.next, None)
 
 class RecordParser(AbstractParser):
-    """Parses PHD file data into a Record object
-
-    """
+    """Parses PHD file data into a Record object."""
     def __init__(self):
         self._scanner = _Scanner()
         self._consumer = _RecordConsumer()
@@ -107,13 +105,13 @@ class RecordParser(AbstractParser):
 
 
 class _Scanner:
-    """Scans a PHD-formatted file
+    """Scans a PHD-formatted file.
     
     Methods:
     feed - Feed one PHD record.
     """
     def feed(self, handle, consumer):
-        """feed(self, handle, consumer)
+        """Reads in PDH data from the handle for scanning.
 
         Feed in PHD data for scanning.  handle is a file-like object
         containing PHD data.  consumer is a Consumer object that will
@@ -160,9 +158,7 @@ class _Scanner:
         
         
 class _RecordConsumer(AbstractConsumer):
-    """Consumer that converts a PHD record to a Record object
-
-    """
+    """Consumer that converts a PHD record to a Record object."""
     def __init__(self):
         self.data = None
 
