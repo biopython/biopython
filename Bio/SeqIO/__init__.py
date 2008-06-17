@@ -187,6 +187,7 @@ from Bio.Align.Generic import Alignment
 import FastaIO
 import InsdcIO #EMBL and GenBank
 import NexusIO
+import PhdIO
 import SwissIO
 
 #Convention for format names is "mainname-subtype" in lower case.
@@ -205,6 +206,7 @@ _FormatToIterator ={"fasta" : FastaIO.FastaIterator,
                     "embl-cds" : InsdcIO.EmblCdsFeatureIterator,
                     "nexus" : NexusIO.NexusIterator,
                     "swiss" : SwissIO.SwissIterator,
+                    "phd" : PhdIO.PhdIterator,
                     }
 
 _FormatToWriter ={"fasta" : FastaIO.FastaWriter,
