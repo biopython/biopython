@@ -1,3 +1,7 @@
+# Copyright 2004 by Frank Kauff and Cymon J. Cox.  All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
 """
 Parser for (new) ACE files output by PHRAP.
 
@@ -14,48 +18,50 @@ the whole file at once and the RecordParser() reads contig after
 contig.
     
 1) Parse whole ace file at once:
+
+        from Bio.Sequencing import Ace
         aceparser=Ace.ACEParser()
         acefilerecord=aceparser.parse(open('my_ace_file.ace','r'))
 
-gives you 
+This gives you:
         acefilerecord.ncontigs (the number of contigs in the ace file)
         acefilerecord.nreads (the number of reads in the ace file)
         acefilerecord.contigs[] (one instance of the Contig class for each contig)
-        The Contig class holds the info of the CO tag, CT and WA tags, and all the reads used
-        for this contig in a list of instances of the Read class, e.g.:
+
+The Contig class holds the info of the CO tag, CT and WA tags, and all the reads used
+for this contig in a list of instances of the Read class, e.g.:
+
         contig3=acefilerecord.contigs[2]
         read4=contig3.reads[3]
         RD_of_read4=read4.rd
         DS_of_read4=read4.ds
 
-        CT, WA, RT tags from the end of the file can appear anywhere are automatically
-        sorted into the right place.
+CT, WA, RT tags from the end of the file can appear anywhere are automatically
+sorted into the right place.
 
-        see _RecordConsumer for details.
+see _RecordConsumer for details.
 
-2) *** DEPRECATED: not entirely suitable for ACE files! 
-        Or you can iterate over the contigs of an ace file one by one in the ususal way:        
+2) Or you can iterate over the contigs of an ace file one by one in the ususal way:
+
+        from Bio.Sequencing import Ace
         recordparser=Ace.RecordParser()
         iterator=Ace.Iterator(open('my_ace_file.ace','r'),recordparser)
-        while 1:
-            contig=iterator.next()
-            if contig is None:
-                break
+        for contig in iterator :
+            print contig.name
             ...
 
-        if WA, CT, RT, WR tags are at the end and the iterator is used, they will be returned
-        with the last contig record. This is is necessarily the case when using an interator.
-        Thus an ace file does not entirerly suit the concept of iterating. If WA, CT, RT, WR tags
-        are needed, the ACEParser instead of the RecordParser might be appropriate.
-        
+Please note that for memory efficiency, when using the iterator approach, only one
+contig is kept in memory at once.  However, there can be a footer to the ACE file
+containing WA, CT, RT or WR tags which contain additional meta-data on the contigs.
+Because the parser doesn't see this data until the final record, it cannot be added to
+the appropriate records.  Instead these tags will be returned with the last contig record.
+Thus an ace file does not entirerly suit the concept of iterating. If WA, CT, RT, WR tags
+are needed, the ACEParser instead of the RecordParser might be appropriate.
 """
 import os
 from types import *
 
 from Bio import File
-from Bio import Index
-#from Bio import Seq
-#from Bio import SeqRecord
 from Bio.ParserSupport import *
 from Bio.Alphabet import IUPAC
 
@@ -220,13 +226,11 @@ class Iterator:
         return data
 
     def __iter__(self) :
-        """Iterate over the ACE file as Record objects."""
+        """Iterate over the ACE file record by record."""
         return iter(self.next, None)
 
 class RecordParser(AbstractParser):
-    """Parses ACE file data into a Record object.
-
-    """
+    """Parses ACE file data into a Record object."""
     def __init__(self):
         self._scanner = _Scanner()
         self._consumer = _RecordConsumer()
@@ -602,4 +606,13 @@ class _RecordConsumer(AbstractConsumer):
         self.data.reads[-1].wr[-1].program=header[2]
         self.data.reads[-1].wr[-1].date=header[3]
     
-    
+if __name__ == "__main__" :
+    print "Quick self test"
+    #Test the iterator,
+    handle = open("../../Tests/Ace/contig1.ace")
+    recordparser = RecordParser()
+    iterator = Iterator(handle,recordparser)
+    for contig in iterator :
+        print contig.name, len(contig.sequence)
+    handle.close()
+    print "Done"
