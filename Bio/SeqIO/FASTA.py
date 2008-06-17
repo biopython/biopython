@@ -2,6 +2,10 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""This is deprecated module.
+
+Please look at Bio.SeqIO with the "fasta" format instead."""
+
 import warnings
 warnings.warn("Bio.SeqIO.FASTA is deprecated." \
               + " We hope the new code in Bio.SeqIO will be suitable for" \

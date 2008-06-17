@@ -1,8 +1,29 @@
-# Copyright 2007 by Peter Cock.  All rights reserved.
+# Copyright 2007, 2008 by Peter Cock.  All rights reserved.
 #
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
-# as part of this package.
+# as part of this package..
+
+"""Bio.SeqIO support for the "genbank" and "embl" file formats.
+
+You are expected to use this module via the Bio.SeqIO functions.
+Note that internally this module calls Bio.GenBank to do the actual
+parsing of both GenBank and EMBL files.
+
+See also:
+
+International Nucleotide Sequence Database Collaboration
+http://www.insdc.org/
+ 
+GenBank
+http://www.ncbi.nlm.nih.gov/Genbank/
+
+EMBL Nucleotide Sequence Database
+http://www.ebi.ac.uk/embl/
+
+DDBJ (DNA Data Bank of Japan)
+http://www.ddbj.nig.ac.jp/
+"""
 
 from Bio.GenBank.Scanner import GenBankScanner, EmblScanner
 from Bio.Alphabet import generic_protein
@@ -12,20 +33,6 @@ from Bio.Alphabet import generic_protein
 # The "brains" for parsing GenBank and EMBL files (and any
 # other flat file variants from the INSDC in future) is in
 # Bio.GenBank.Scanner (plus the _FeatureConsumer in Bio.GenBank)
-#
-# See also
-# ========
-# International Nucleotide Sequence Database Collaboration
-# http://www.insdc.org/
-# 
-# GenBank
-# http://www.ncbi.nlm.nih.gov/Genbank/
-#
-# EMBL Nucleotide Sequence Database
-# http://www.ebi.ac.uk/embl/
-#
-# DDBJ (DNA Data Bank of Japan)
-# http://www.ddbj.nig.ac.jp/
 
 def GenBankIterator(handle) :
     """Breaks up a Genbank file into SeqRecord objects.
