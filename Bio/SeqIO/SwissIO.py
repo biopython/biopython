@@ -13,7 +13,7 @@ the sequences as SeqRecord objects."""
 from Bio.SwissProt import SProt
 import cStringIO
     
-#This is a normal function!
+#This is a generator function!
 def SwissIterator(handle) :
     """Breaks up a Swiss-Prot/UniProt file into SeqRecord objects.
 
