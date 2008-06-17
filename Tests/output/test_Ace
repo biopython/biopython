@@ -327,8 +327,128 @@ DS: CHROMAT_FILE:  PHD_FILE:  TIME:  CHEM:  DYE:  TEMPLATE:  DIRECTION:
 RT: none
 WR: none
 ok
+Test to check that ACEParser can parse the whole file into one record. ... 
+Input file: Ace/consed_sample.ace
+
+Contigs: 1 ; Reads: 8
+all WA:
+phrap_params phrap 990621:161947 ['/usr/local/genome/bin/phrap standard.fasta.screen -new_ace -view', 'phrap version 0.990319']
+
+--------------------
+Contig no. 0 has 8 reads.
+CO: Contig1 1475 8 156 U
+agccccgggc ... CTTCCCCAGG ... gttgggtttg
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0] ... [90, 90, 90, 90, 90, 90, 90, 90, 89, 89] ... [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+# AF: 8 ; # BS: 156
+AF(4) K26-291s U 828 ; AF(-1) K26-766c C 408 ;
+BS(78) K26-394c 987 987 ; BS(-1) K26-822c 1303 1475 ;
+CT:
+Contig1 repeat consed 976 986 971218:180623 []
+Contig1 comment consed 996 1007 971218:180623 ['This is line 1 of a comment', 'There may be any number of lines']
+Contig1 oligo consed 963 987 971218:180623 ['standard.1 acataagacattctaaatttttact 50 U', 'seq from clone']
+WA:
+phrap_params phrap 990621:161947 ['/usr/local/genome/bin/phrap standard.fasta.screen -new_ace -view', 'phrap version 0.990319']
+RD: K26-217c 563 0 0 tcccCgtgag ... CTCCTGcctg ... ggcccccctc
+QA: 19 349 19 424
+DS: CHROMAT_FILE: K26-217c PHD_FILE: K26-217c.phd.1 TIME: Thu Sep 12 15:42:38 1996 CHEM:  DYE:  TEMPLATE:  DIRECTION: 
+RT: none
+WR: none
+RD: K26-526t 687 0 0 ccgtcctgag ... cacagcccT* ... Ttttgtttta
+QA: 12 353 9 572
+DS: CHROMAT_FILE: K26-526t PHD_FILE: K26-526t.phd.1 TIME: Thu Sep 12 15:42:33 1996 CHEM:  DYE:  TEMPLATE:  DIRECTION: 
+RT: none
+WR: none
+RD: K26-961c 517 0 0 aatattaccg ... CAGATGGGTT ... ctattcaggg
+QA: 20 415 26 514
+DS: CHROMAT_FILE: K26-961c PHD_FILE: K26-961c.phd.1 TIME: Thu Sep 12 15:42:37 1996 CHEM:  DYE:  TEMPLATE:  DIRECTION: 
+RT: none
+WR: none
+RD: K26-394c 628 0 0 ctgcgtatcg ... AGGATTGCTT ... aaccctgggt
+QA: 18 368 11 502
+DS: CHROMAT_FILE: K26-394c PHD_FILE: K26-394c.phd.1 TIME: Thu Sep 12 15:42:32 1996 CHEM:  DYE:  TEMPLATE:  DIRECTION: 
+RT: none
+WR: none
+RD: K26-291s 556 0 0 gaggatcgct ... GTgcgaggat ... caggcagatg
+QA: 11 373 11 476
+DS: CHROMAT_FILE: K26-291s PHD_FILE: K26-291s.phd.1 TIME: Thu Sep 12 15:42:31 1996 CHEM:  DYE:  TEMPLATE:  DIRECTION: 
+RT: none
+WR: none
+RD: K26-822c 593 0 0 ggggatccg* ... GCaAgacCCt ... gttgggtttg
+QA: 25 333 16 593
+DS: CHROMAT_FILE: K26-822c PHD_FILE: K26-822c.phd.1 TIME: Thu Sep 12 15:42:36 1996 CHEM:  DYE:  TEMPLATE:  DIRECTION: 
+RT: none
+WR: none
+RD: K26-572c 594 0 0 agccccgggc ... ggatcACATA ... aatagtaaca
+QA: 249 584 1 586
+DS: CHROMAT_FILE: K26-572c PHD_FILE: K26-572c.phd.1 TIME: Thu Sep 12 15:42:34 1996 CHEM:  DYE:  TEMPLATE:  DIRECTION: 
+RT: none
+WR: none
+RD: K26-766c 603 0 0 gaataattgg ... TggCCCATCT ... gaaccacacg
+QA: 240 584 126 583
+DS: CHROMAT_FILE: K26-766c PHD_FILE: K26-766c.phd.1 TIME: Thu Sep 12 15:42:35 1996 CHEM:  DYE:  TEMPLATE:  DIRECTION: 
+RT: none
+WR: none
+ok
+Test to check that record parser parses each contig into a record. ... 
+Input file: Ace/consed_sample.ace
+
+--------------------
+Contig no. 0 has 8 reads.
+CO: Contig1 1475 8 156 U
+agccccgggc ... CTTCCCCAGG ... gttgggtttg
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0] ... [90, 90, 90, 90, 90, 90, 90, 90, 89, 89] ... [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+# AF: 8 ; # BS: 156
+AF(4) K26-291s U 828 ; AF(-1) K26-766c C 408 ;
+BS(78) K26-394c 987 987 ; BS(-1) K26-822c 1303 1475 ;
+CT:
+Contig1 repeat consed 976 986 971218:180623 []
+Contig1 comment consed 996 1007 971218:180623 ['This is line 1 of a comment', 'There may be any number of lines']
+Contig1 oligo consed 963 987 971218:180623 ['standard.1 acataagacattctaaatttttact 50 U', 'seq from clone']
+WA:
+phrap_params phrap 990621:161947 ['/usr/local/genome/bin/phrap standard.fasta.screen -new_ace -view', 'phrap version 0.990319']
+RD: K26-217c 563 0 0 tcccCgtgag ... CTCCTGcctg ... ggcccccctc
+QA: 19 349 19 424
+DS: CHROMAT_FILE: K26-217c PHD_FILE: K26-217c.phd.1 TIME: Thu Sep 12 15:42:38 1996 CHEM:  DYE:  TEMPLATE:  DIRECTION: 
+RT: none
+WR: none
+RD: K26-526t 687 0 0 ccgtcctgag ... cacagcccT* ... Ttttgtttta
+QA: 12 353 9 572
+DS: CHROMAT_FILE: K26-526t PHD_FILE: K26-526t.phd.1 TIME: Thu Sep 12 15:42:33 1996 CHEM:  DYE:  TEMPLATE:  DIRECTION: 
+RT: none
+WR: none
+RD: K26-961c 517 0 0 aatattaccg ... CAGATGGGTT ... ctattcaggg
+QA: 20 415 26 514
+DS: CHROMAT_FILE: K26-961c PHD_FILE: K26-961c.phd.1 TIME: Thu Sep 12 15:42:37 1996 CHEM:  DYE:  TEMPLATE:  DIRECTION: 
+RT: none
+WR: none
+RD: K26-394c 628 0 0 ctgcgtatcg ... AGGATTGCTT ... aaccctgggt
+QA: 18 368 11 502
+DS: CHROMAT_FILE: K26-394c PHD_FILE: K26-394c.phd.1 TIME: Thu Sep 12 15:42:32 1996 CHEM:  DYE:  TEMPLATE:  DIRECTION: 
+RT: none
+WR: none
+RD: K26-291s 556 0 0 gaggatcgct ... GTgcgaggat ... caggcagatg
+QA: 11 373 11 476
+DS: CHROMAT_FILE: K26-291s PHD_FILE: K26-291s.phd.1 TIME: Thu Sep 12 15:42:31 1996 CHEM:  DYE:  TEMPLATE:  DIRECTION: 
+RT: none
+WR: none
+RD: K26-822c 593 0 0 ggggatccg* ... GCaAgacCCt ... gttgggtttg
+QA: 25 333 16 593
+DS: CHROMAT_FILE: K26-822c PHD_FILE: K26-822c.phd.1 TIME: Thu Sep 12 15:42:36 1996 CHEM:  DYE:  TEMPLATE:  DIRECTION: 
+RT: none
+WR: none
+RD: K26-572c 594 0 0 agccccgggc ... ggatcACATA ... aatagtaaca
+QA: 249 584 1 586
+DS: CHROMAT_FILE: K26-572c PHD_FILE: K26-572c.phd.1 TIME: Thu Sep 12 15:42:34 1996 CHEM:  DYE:  TEMPLATE:  DIRECTION: 
+RT: none
+WR: none
+RD: K26-766c 603 0 0 gaataattgg ... TggCCCATCT ... gaaccacacg
+QA: 240 584 126 583
+DS: CHROMAT_FILE: K26-766c PHD_FILE: K26-766c.phd.1 TIME: Thu Sep 12 15:42:35 1996 CHEM:  DYE:  TEMPLATE:  DIRECTION: 
+RT: none
+WR: none
+ok
 
 ----------------------------------------------------------------------
-Ran 4 tests in 0.171s
+Ran 6 tests in 0.206s
 
 OK

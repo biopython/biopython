@@ -16,7 +16,7 @@ def testing_suite():
 
     test_loader = unittest.TestLoader()
     test_loader.testMethodPrefix = 't_'
-    tests = [AceTestOne, AceTestTwo]
+    tests = [AceTestOne, AceTestTwo, AceTestThree]
     
     for test in tests:
         cur_suite = test_loader.loadTestsFromTestCase(test)
@@ -126,6 +126,16 @@ class AceTestTwo(AceTestOne) :
     """
     def setUp(self):
         self.handle = open("Ace/seq.cap.ace")
+
+class AceTestThree(AceTestOne) :
+    """Test parsing example ACE input file for CONSED.
+
+    The sample input file was downloaded from:
+    http://bozeman.mbt.washington.edu/consed/distributions/README.16.0.txt
+    """
+    def setUp(self):
+        self.handle = open("Ace/consed_sample.ace")
+
 
 if __name__ == "__main__":
     sys.exit(run_tests(sys.argv))
