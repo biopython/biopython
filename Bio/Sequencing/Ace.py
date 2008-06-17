@@ -59,8 +59,6 @@ Thus an ace file does not entirerly suit the concept of iterating. If WA, CT, RT
 are needed, the ACEParser instead of the RecordParser might be appropriate.
 """
 import os
-from types import *
-
 from Bio import File
 from Bio.ParserSupport import *
 from Bio.Alphabet import IUPAC
@@ -185,9 +183,6 @@ class Iterator:
         is an optional Parser object to change the results into another form.
         If set to None, then the raw contents of the file will be returned.
         """
-
-        if type(handle) is not FileType and type(handle) is not InstanceType:
-            raise ValueError, "I expected a file handle or file-like object"
         self._uhandle = File.UndoHandle(handle)
         self._parser = parser
 

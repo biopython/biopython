@@ -16,8 +16,6 @@ Uses the Biopython Parser interface for parsing: ParserSupport.py
 """
 
 import os
-from types import *
-
 from Bio import File
 from Bio import Seq
 from Bio.ParserSupport import *
@@ -53,9 +51,6 @@ class Iterator:
         is an optional Parser object to change the results into another form.
         If set to None, then the raw contents of the file will be returned.
         """
-
-        if type(handle) is not FileType and type(handle) is not InstanceType:
-            raise ValueError, "I expected a file handle or file-like object"
         self._uhandle = File.UndoHandle(handle)
         self._parser = parser
 
@@ -213,3 +208,13 @@ class _RecordConsumer(AbstractConsumer):
         base, quality, location = line.split()
         self.data.sites.append((base, quality, location))
 
+if __name__ == "__main__" :
+    print "Quick self test"
+    #Test the iterator,
+    handle = open("../../Tests/Phd/Phd1")
+    recordparser = RecordParser()
+    iterator = Iterator(handle,recordparser)
+    for record in iterator :
+        print record.file_name, len(record.seq)
+    handle.close()
+    print "Done"
