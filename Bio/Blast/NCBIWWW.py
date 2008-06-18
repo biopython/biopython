@@ -684,8 +684,8 @@ def qblast(program, database, sequence,
 
     Supports all parameters of the qblast API for Put and Get.
     Some useful parameters:
-    program        BLASTP or BLASTN
-    database       Which database to search against.
+    program        blastn, blastp, blastx, tblastn, or tblastx (lower case)
+    database       Which database to search against (e.g. "nr").
     sequence       The sequence to search.
     ncbi_gi        TRUE/FALSE whether to give 'gi' identifier.
     descriptions   Number of descriptions to show.  Def 500.
@@ -705,7 +705,7 @@ def qblast(program, database, sequence,
     import urllib, urllib2
     from Bio.WWW import RequestLimiter
 
-    assert program == 'blastn' or program == 'blastp'
+    assert program in ['blastn', 'blastp', 'blastx', 'tblastn', 'tblastx']
 
     # Format the "Put" command, which sends search requests to qblast.
     # Parameters taken from http://www.ncbi.nlm.nih.gov/BLAST/Doc/node5.html on 9 July 2007
