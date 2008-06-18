@@ -1,0 +1,98 @@
+# Copyright 2008 by Peter Cock.  All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
+"""Testing online code for fetching NCBI qblast.
+
+Uses Bio.Blast.NCBIWWW.qblast() to run some online blast queries, get XML
+blast results back, and then checks Bio.Blast.NCBIXML.parse() can read them.
+
+Goals:
+    Make sure that all retrieval is working as expected.
+    Make sure we can parse the latest XML format being used by the NCBI.
+"""
+import requires_internet
+
+#We want to test these:
+from Bio.Blast import NCBIWWW
+from Bio.Blast import NCBIXML
+
+
+#####################################################################
+
+#List of qblast requests stored as a tuple of parameters:
+# - program
+# - database
+# - query identifier or sequence
+# - expectation value threshold
+# - Entrez filter string (or None)
+# - list of hit identifiers expected to be found (or None if expect 0)
+tests = [ \
+    #Simple protein blast filtered for rat only, using protein GI:160837788
+    #the actin related protein 2/3 complex, subunit 1B [Mus musculus]
+    ("blastp", "nr", "160837788", 0.001,
+     "rat [ORGN]", ['9506405','13592137','37589612','149064087','56912225']),
+    #This next example finds PCR primer matches in Chimpanzees, e.g. BRCA1:
+    ("blastn", "nr", "GTACCTTGATTTCGTATTC"+("N"*30)+"GACTCTACTACCTTTACCC",
+     10, "pan [ORGN]", ["37953274"]),
+    #Try an orchid EST (nucleotide) sequence against NR using BLASTX
+    ("blastx", "nr", "116660609",
+     0.0000001, None, ["157341404","21554275","18409071"]),
+
+    
+]
+
+print "Checking Bio.Blast.NCBIWWW.qblast() with various queries"
+for program,database,query,e_value,entrez_filter,expected_hits in tests :
+    print 'qblast("%s", "%s", "%s", ...)' % (program, database, query)
+    handle = NCBIWWW.qblast(program, database, query, \
+                            alignments=10, descriptions=10, \
+                            hitlist_size=10, \
+                            entrez_query=entrez_filter,
+                            expect=e_value)
+    records = list(NCBIXML.parse(handle))
+    assert len(records)==1
+    record = records[0]
+
+    if record.query == "No definition line" :
+        #We used a sequence as the query
+        assert len(query) == record.query_letters
+    else :
+        #We used an identifier as the query
+        assert query in record.query_id.split("|")
+
+    #Check the recorded input parameters agree with those requested
+    assert float(record.expect) == e_value
+    assert record.application.lower() == program
+    assert len(record.alignments) <= 10
+    assert len(record.descriptions) <= 10
+
+    #Check the expected result(s) are found in the alignments
+    if expected_hits is None :
+        assert len(record.alignments)==0, "Expected no alignments!"
+    else :
+        assert len(record.alignments) > 0, "Expected some alignments!"
+        for expected_hit in expected_hits :
+            found_result = False
+            for alignment in record.alignments :
+                if expected_hit in alignment.hit_id.split("|") :
+                    found_result = True
+                    break
+            assert found_result, "Missing %s in alignments" % expected_hit
+
+    #Check the expected result(s) are found in the descriptions
+    if expected_hits is None :
+        assert len(record.descriptions)==0, "Expected no descriptions!"
+    else :
+        assert len(record.descriptions) > 0, "Expected some descriptions!"
+        for expected_hit in expected_hits :
+            found_result = False
+            for descr in record.descriptions :
+                if expected_hit == descr.accession \
+                or expected_hit in descr.title.split(None,1)[0].split("|") :
+                    found_result = True
+                    break
+            assert found_result, "Missing %s in descriptions" % expected_hit
+
+print "Done"
