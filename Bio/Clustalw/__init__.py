@@ -213,20 +213,21 @@ class ClustalAlignment(Alignment):
             # may result in truncation of the ids.
             for record in self._records:
                 line = record.description[0:30].ljust(36)
-                line = line + record.seq.data[cur_char:(cur_char + show_num)]
+                line += record.seq.data[cur_char:(cur_char + show_num)]
                 
-                output = output + line + "\n"
+                output += line + "\n"
 
             # now we need to print out the star info, if we've got it
             if self._star_info != '':
-                output = output + (" " * 36) + \
+                output += (" " * 36) + \
                      self._star_info[cur_char:(cur_char + show_num)] + "\n"
 
             output = output + "\n"
             cur_char = cur_char + show_num
 
         # have a extra newline, so strip two off and add one before returning
-        return output.rstrip() + "\n"
+        # (don't want to strip the final line of consensus which may be blank)
+        return output.rstrip("\n") + "\n"
             
 
     def _add_star_info(self, stars):
