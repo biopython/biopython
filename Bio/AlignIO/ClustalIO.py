@@ -15,9 +15,13 @@ class ClustalWriter(SequentialAlignmentWriter) :
         if len(alignment.get_all_seqs()) == 0 :
             raise ValueError("Must have at least one sequence")
 
-        #This was a copy the __str__ code from Bio.Clustalw.ClustalAlignment
-        #but here we use the record.id and NOT the description.
-        output = "CLUSTAL X (1.81) multiple sequence alignment\n\n\n"
+        #Old versions of the parser in Bio.Clustalw used a ._version property,
+        try :
+            version = self._version
+        except AttributeError :
+            version = '1.18'
+        output = "CLUSTAL X (%s) multiple sequence alignment\n\n\n" % version
+        
         cur_char = 0
         max_length = len(alignment._records[0].seq)
 
@@ -45,6 +49,7 @@ class ClustalWriter(SequentialAlignmentWriter) :
                 output += line + "\n"
 
             # now we need to print out the star info, if we've got it
+            # This was stored by Bio.Clustalw using a ._star_info property.
             if hasattr(alignment, "_star_info") and alignment._star_info != '':
                 output += (" " * 36) + \
                      self._star_info[cur_char:(cur_char + show_num)] + "\n"
@@ -73,6 +78,16 @@ class ClustalIterator(AlignmentIterator) :
             return None
         if line[:7] <> 'CLUSTAL':
             raise ValueError("Did not find CLUSTAL header")
+
+
+        # find the clustal version in the header line
+        version = None
+        for word in line.split() :
+            if word[0]=='(' and word[-1]==')':
+                word = word[1:-1]
+            if word[0] in '0123456789':
+                version = word
+        
 
         #There should be two blank lines after the header line
         line = handle.readline()
@@ -174,6 +189,10 @@ class ClustalIterator(AlignmentIterator) :
             if len(seqs[i]) <> alignment_length:
                 raise ValueError("Error parsing alignment - sequences of different length?")
             alignment.add_sequence(ids[i], seqs[i])
+        if version :
+            #TODO - Handle alignment annotation better, for now
+            #mimic the old parser in Bio.Clustalw
+            alignment._version = version
         return alignment
     
 if __name__ == "__main__" :
@@ -253,6 +272,7 @@ HISJ_E_COLI                    LKAKKIDAIMSSLSITEKRQQEIAFTDKLYAADSRLV
 
     alignments = list(ClustalIterator(StringIO(aln_example1)))
     assert 1 == len(alignments)
+    assert alignments[0]._version == "1.81"
     records = alignments[0].get_all_seqs()
     assert 2 == len(records)
     assert records[0].id == "gi|4959044|gb|AAD34209.1|AF069"
@@ -266,6 +286,7 @@ HISJ_E_COLI                    LKAKKIDAIMSSLSITEKRQQEIAFTDKLYAADSRLV
 
     alignments = list(ClustalIterator(StringIO(aln_example2)))
     assert 1 == len(alignments)
+    assert alignments[0]._version == "1.83"
     records = alignments[0].get_all_seqs()
     assert 9 == len(records)
     assert records[-1].id == "HISJ_E_COLI"
