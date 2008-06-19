@@ -6,18 +6,15 @@
 
 """Bio.SeqIO support for the "phylip" (PHYLIP) file format.
 
-You are expected to use this module via the Bio.SeqIO functions.
+You were expected to use this module via the Bio.SeqIO functions.
+This module has now been replaced by Bio.AlignIO.PhylipIO, and is
+deprecated."""
 
-Note:
-In TREE_PUZZLE (Schmidt et al. 2003) and PHYML (Guindon and Gascuel 2003)
-a dot/period (".") in a sequence is interpreted as meaning the same
-character as in the first sequence.  The PHYLIP 3.6 documentation says:
-
-   "a period was also previously allowed but it is no longer allowed,
-   because it sometimes is used in different senses in other programs"
-
-At the time of writing, we do nothing special with a dot/period.
-"""
+import warnings
+warnings.warn("Bio.SeqIO.PhylipIO is deprecated.  You can continue to read" \
+              + " and write 'clustal' files with Bio.SeqIO, but this is now" \
+              + " handled via Bio.AlignIO internally.",
+              DeprecationWarning)
 
 from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq

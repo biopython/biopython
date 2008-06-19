@@ -6,7 +6,15 @@
 
 """Bio.SeqIO support for the "stockholm" (aka PFAM) file format.
 
-You are expected to use this module via the Bio.SeqIO functions."""
+You were expected to use this module via the Bio.SeqIO functions.
+This module has now been replaced by Bio.AlignIO.PhylipIO, and is
+deprecated."""
+
+import warnings
+warnings.warn("Bio.SeqIO.StockholmIO is deprecated.  You can continue to read" \
+              + " and write 'clustal' files with Bio.SeqIO, but this is now" \
+              + " handled via Bio.AlignIO internally.",
+              DeprecationWarning)
 
 from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq

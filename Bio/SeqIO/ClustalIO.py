@@ -6,7 +6,15 @@
 
 """Bio.SeqIO support for the "clustal" (aka ClustalW) file format.
 
-You are expected to use this module via the Bio.SeqIO functions."""
+You were expected to use this module via the Bio.SeqIO functions.
+This module has now been replaced by Bio.AlignIO.ClustalIO, and is
+deprecated."""
+
+import warnings
+warnings.warn("Bio.SeqIO.ClustalIO is deprecated.  You can continue to read" \
+              + " and write 'clustal' files with Bio.SeqIO, but this is now" \
+              + " handled via Bio.AlignIO internally.",
+              DeprecationWarning)
 
 #For reading alignments:
 from Bio.Alphabet import single_letter_alphabet
