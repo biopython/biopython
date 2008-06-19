@@ -553,9 +553,11 @@ class _RecordConsumer(AbstractConsumer):
         
     def start_record(self):
         self.data = Record()
+        self._sequence_lines = []
         
     def end_record(self):
         self._clean_record(self.data)
+        self.data.sequence = "".join(self._sequence_lines)
 
     def identification(self, line):
         cols = line.split()
@@ -944,8 +946,8 @@ class _RecordConsumer(AbstractConsumer):
         self.data.seqinfo = int(cols[2]), int(cols[4]), cols[6]
     
     def sequence_data(self, line):
-        seq = line.replace(" ", "").rstrip()
-        self.data.sequence = self.data.sequence + seq
+        #It should be faster to make a list of strings, and join them at the end.
+        self._sequence_lines.append(line.replace(" ", "").rstrip())
     
     def terminator(self, line):
         pass
@@ -995,12 +997,14 @@ class _SequenceConsumer(AbstractConsumer):
         self.data.description = ""
         self.data.name = ""
         self._current_ref = None
+        self._sequence_lines = []
         
     def end_record(self):
         if self._current_ref is not None:
             self.data.annotations['references'].append(self._current_ref)
             self._current_ref = None
         self.data.description = self.data.description.rstrip()
+        self.data.seq = Seq.Seq("".join(self._sequence_lines), self.alphabet)
 
     def identification(self, line):
         cols = line.split()
@@ -1027,9 +1031,8 @@ class _SequenceConsumer(AbstractConsumer):
                                 line[5:].strip() + "\n"
         
     def sequence_data(self, line):
-        seq = Seq.Seq(line.replace(" ", "").rstrip(),
-                      self.alphabet)
-        self.data.seq = self.data.seq + seq
+        #It should be faster to make a list of strings, and join them at the end.
+        self._sequence_lines.append(line.replace(" ", "").rstrip())
 
     def gene_name(self, line):
         #We already store the identification/accession as the records name/id
