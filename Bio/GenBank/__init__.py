@@ -990,6 +990,9 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         # seq type or have strange sequence information.
         seq_alphabet = Alphabet.generic_alphabet
 
+        # now set the sequence
+        sequence = "".join(self._seq_data)
+
         if self._seq_type:
             # mRNA is really also DNA, since it is actually cDNA
             if self._seq_type.find('DNA') != -1 or \
@@ -1014,8 +1017,6 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 raise ValueError("Could not determine alphabet for seq_type %s"
                                  % self._seq_type)
 
-        # now set the sequence
-        sequence = "".join(self._seq_data)
         self.data.seq = Seq(sequence, seq_alphabet)
 
 class _RecordConsumer(_BaseGenBankConsumer):
