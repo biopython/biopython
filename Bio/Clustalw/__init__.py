@@ -48,8 +48,14 @@ def parse_file(file_name, alphabet = IUPAC.unambiguous_dna, debug_level = 0):
     handle.close()
 
     #Force this generic alignment into a ClustalAlignment... nasty hack
-    clustal_alignment = ClustalAlignment(Alphabet.Gapped(alphabet))
+    if isinstance(alphabet, Alphabet.Gapped) :
+        alpha = alphabet
+    else :
+        alpha = Alphabet.Gapped(alphabet)
+    clustal_alignment = ClustalAlignment(alpha)
     clustal_alignment._records = generic_alignment._records
+    for record in clustal_alignment._records :
+        record.seq.alphabet = alpha
     clustal_alignment._version = generic_alignment._version
     clustal_alignment._star_info = generic_alignment._star_info
 
