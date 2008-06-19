@@ -120,7 +120,7 @@ test_files = [ \
     ("emboss",    False,  'Emboss/needle.txt', 10),
     ("emboss",    True,  'Emboss/water.txt', 2),
 #Following PHD (PHRAP) sequencing files are also used in test_Phd.py
-    ("phd",       False,  'Phd/Phd1', 3),
+    ("phd",       False,  'Phd/phd1', 3),
     ]
 
 # This is a list of two-tuples.  Each tuple contains a
