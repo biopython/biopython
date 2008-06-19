@@ -12,30 +12,81 @@ This requires clustalw available from:
 ftp://ftp-igbmc.u-strasbg.fr/pub/ClustalW/.
 
 functions:
+o read
 o parse_file
 o do_alignment
 
 classes:
 o ClustalAlignment
-o _AlignCreator
 o MultipleAlignCL"""
 
 # standard library
 import os
 import sys
-import string #Obsolete - we should switch to using string object methods instead!
 
 # biopython
-from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
 from Bio import Alphabet
 from Bio.Alphabet import IUPAC
-import clustal_format
 from Bio.Align.Generic import Alignment
 
-# PyXML package
-from xml.sax import saxutils
-from xml.sax import handler
+
+def read(handle, alphabet = IUPAC.unambiguous_dna):
+    """Read an *.aln file from the handle, and return it as a
+       ClustalAlignment object.
+    
+    Arguments:
+    o handle   - A open file or file-like object, or a list of lines.
+    o alphabet - The type of alphabet to use for the alignment sequences.
+    This should correspond to the type of information contained in the file.
+    Defaults to be unambiguous_dna sequence.
+    """
+
+    # first, create an empty record
+    record = ClustalAlignment(alphabet)
+
+    # store sequence info in a dictionary
+    names = []
+    sequences = {}
+    star = ''
+
+    # treat the header line separately
+    try:
+        line = handle.readline() # handle is a file-like object
+    except AttributeError:
+        try:
+            line = handle[0]         # handle is a list of lines
+        except TypeError:
+            raise ValueError("Failed to obtain a line from the handle")
+
+    # find the clustal version in the header line
+    words = line.split()
+    for word in words:
+        if word[0]=='(' and word[-1]==')':
+            word = word[1:-1]
+        if word[0] in '0123456789':
+            record._add_version(word)
+
+    # now read the rest of the file
+    for line in handle:
+        line = line.strip("\r\n")
+        if not line:
+            continue
+        elif line[0]==' ':
+            star += line[-n:]
+        else:
+            name, sequence = line.split()[:2]
+            n = len(sequence)
+            if not name in sequences:
+                names.append(name)
+                sequences[name] = ""
+            sequences[name] += sequence
+
+    # store all data in the record and return it
+    for name in names:
+        record.add_sequence(name, sequences[name])
+    record._add_star_info(star)
+
+    return record
 
 def parse_file(file_name, alphabet = IUPAC.unambiguous_dna, debug_level = 0):
     """Parse the given file into a clustal aligment object.
@@ -46,17 +97,10 @@ def parse_file(file_name, alphabet = IUPAC.unambiguous_dna, debug_level = 0):
     This should correspond to the type of information contained in the file.
     Defaults to be unambiguous_dna sequence.
     """ 
-    align_handler = _AlignCreator(Alphabet.Gapped(alphabet))
-
-    parser = clustal_format.format.make_parser(debug_level)
-    parser.setContentHandler(align_handler)
-    parser.setErrorHandler(handler.ErrorHandler())
-
-    to_parse = open(file_name, 'r')
-    parser.parseFile(to_parse)
-    to_parse.close()
-
-    return align_handler.align
+    handle = open(file_name, 'r')
+    record = read(handle, Alphabet.Gapped(alphabet))
+    handle.close()
+    return record
 
 def do_alignment(command_line, alphabet=None):
     """Perform an alignment with the given command line.
@@ -182,7 +226,7 @@ class ClustalAlignment(Alignment):
             cur_char = cur_char + show_num
 
         # have a extra newline, so strip two off and add one before returning
-        return string.rstrip(output) + "\n"
+        return output.rstrip() + "\n"
             
 
     def _add_star_info(self, stars):
@@ -195,109 +239,6 @@ class ClustalAlignment(Alignment):
         """
         self._version = version
 
-class _AlignCreator(handler.ContentHandler):
-    """Handler to create a ClustalAlignment object from clustal file info.
-
-    This handler is used to accept events coming from a Martel parsing
-    stream, and acts like a normal SAX handler.
-
-    After parsing, the alignment object created is available as the
-    align attribute of the class.
-    """
-    def __init__(self, alphabet):
-        """Create a new handler ready to deal with output from Martel parsing.
-
-        Arguments:
-        o alphabet - The alphabet to create all of the new sequences with.
-        """
-        self.align = ClustalAlignment(alphabet)
-
-        # store sequence info in a dictionary
-        self.all_info = {}
-        self.all_keys = []
-
-        # the current id we are working with
-        self.cur_id = None
-
-        # info so we know how big the ids and sequences are
-        self.id_size = 0
-        self.space_size = 0
-        self.seq_size = 0
-        
-        # flags so we can keep track of where we are during the parse
-        self.in_version = 0
-        self.in_stars = 0
-        self.in_seq_id = 0
-        self.in_space = 0
-        self.in_seq = 0
-        self.all_star_info = ''
-
-    def startElement(self, name, attrs):
-        """Check the various tags for the info we are interested in."""
-        if name == "version":
-            self.in_version = 1
-            self.version_info = ''
-        elif name == "seq_id":
-            self.in_seq_id = 1
-            self.seq_id_info = ''
-        elif name == "seq_space":
-            self.in_space = 1
-            self.space_info = ''
-        elif name == "seq_info":
-            self.in_seq = 1
-            self.seq_info = ''
-        elif name == "match_stars":
-            self.in_stars = 1
-            self.star_info = ''
-
-    def characters(self, content):
-        if self.in_version:
-            self.version_info = self.version_info + content
-        elif self.in_seq_id:
-            self.seq_id_info = self.seq_id_info + content
-        elif self.in_space:
-            self.space_info = self.space_info + content
-        elif self.in_seq:
-            self.seq_info = self.seq_info + content
-        elif self.in_stars:
-            self.star_info = self.star_info + content
-
-    def endElement(self, name):
-        if name == "version":
-            self.in_version = 0
-            self.align._add_version(string.strip(self.version_info))
-        elif name == "seq_id":
-            self.in_seq_id = 0
-            self.id_size = len(self.seq_id_info)
-            self.cur_id = self.seq_id_info
-        elif name == "seq_space":
-            self.in_space = 0
-            self.space_size = len(self.space_info)
-        elif name == "seq_info":
-            self.in_seq = 0
-            self.seq_size = len(self.seq_info)
-
-            # if the id is already there, add the sequence info
-            if self.cur_id in self.all_info.keys():
-                self.all_info[self.cur_id] = self.all_info[self.cur_id] + \
-                                             self.seq_info
-            else:
-                self.all_info[self.cur_id] = self.seq_info
-                self.all_keys.append(self.cur_id)
-                
-        elif name == "match_stars":
-            id_length = self.id_size + self.space_size
-            line_length = id_length + self.seq_size
-            
-            self.all_star_info = self.all_star_info + \
-                            self.star_info[id_length:line_length]
-                                                                           
-    def endDocument(self):
-        # when we are done parsing add all of the info we need
-        self.align._add_star_info(self.all_star_info)
-
-        for id in self.all_keys:
-            self.align.add_sequence(id, self.all_info[id])
         
 class MultipleAlignCL:
     """Represent a clustalw multiple alignment command line.
@@ -503,7 +444,7 @@ class MultipleAlignCL:
         self.output_file = output_file
 
         if output_type:
-            output_type = string.upper(output_type)
+            output_type = output_type.upper()
             if output_type not in self.OUTPUT_TYPES:
                 raise ValueError("Invalid output type %s. Valid choices are %s"
                                  % (output_type, self.OUTPUT_TYPES))
@@ -511,7 +452,7 @@ class MultipleAlignCL:
                 self.output_type = output_type
 
         if output_order:
-            output_order = string.upper(output_order)
+            output_order = output_order.upper()
             if output_order not in self.OUTPUT_ORDER:
                 raise ValueError("Invalid output order %s. Valid choices are %s"
                                  % (output_order, self.OUTPUT_ORDER))
@@ -519,7 +460,7 @@ class MultipleAlignCL:
                 self.output_order = output_order
 
         if change_case:
-            change_case = string.upper(change_case)
+            change_case = change_case.upper()
             if output_type != "GDE":
                 raise ValueError("Change case only valid for GDE output.")
             elif change_case not in self.CHANGE_CASE:
@@ -529,7 +470,7 @@ class MultipleAlignCL:
                 self.change_case = change_case
 
         if add_seqnos:
-            add_seqnos = string.upper(add_seqnos)
+            add_seqnos = add_seqnos.upper()
             if output_type:
                 raise ValueError("Add SeqNos only valid for CLUSTAL output.")
             elif add_seqnos not in self.OUTPUT_SEQNOS:
@@ -560,22 +501,21 @@ class MultipleAlignCL:
         Protein matrix can be either one of the defined types (blosum, pam,
         gonnet or id) or a file with your own defined matrix.
         """
-        if string.upper(protein_matrix) in self.PROTEIN_MATRIX:
-            self.protein_matrix = string.upper(protein_matrix)
+        if protein_matrix.upper() in self.PROTEIN_MATRIX:
+            self.protein_matrix = protein_matrix.upper()
         elif os.path.exists(protein_matrix):
             self.protein_matrix = protein_matrix
         else:
             raise ValueError("Invalid matrix %s. Options are %s or a file." %
-                             (string.upper(protein_matrix),
-                              self.PROTEIN_MATRIX))
+                             (protein_matrix.upper(), self.PROTEIN_MATRIX))
 
     def set_dna_matrix(self, dna_matrix):
         """Set the type of DNA matrix to use.
 
         The dna_matrix can either be one of the defined types (iub or clustalw)
         or a file with the matrix to use."""
-        if string.upper(dna_matrix) in self.DNA_MATRIX:
-            self.dna_matrix = string.upper(dna_matrix)
+        if dna_matrix.upper() in self.DNA_MATRIX:
+            self.dna_matrix = dna_matrix.upper()
         elif os.path.exists(dna_matrix):
             self.dna_matrix = dna_matrix
         else:
@@ -590,7 +530,7 @@ class MultipleAlignCL:
         protein or DNA you are working with, so this allows you to set it
         explicitly.
         """
-        residue_type = string.upper(residue_type)
+        residue_type = residue_type.upper()
         if residue_type in self.RESIDUE_TYPES:
             self.type = residue_type
         else:
