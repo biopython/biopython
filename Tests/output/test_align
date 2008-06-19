@@ -39,6 +39,8 @@ gi|6273289|gb|AF191663.1|AF191      ACCAGA
 gi|6273291|gb|AF191665.1|AF191      ACCAGA
                                     ******
 
+
+
 CLUSTAL X (1.81) multiple sequence alignment
 
 
@@ -92,6 +94,9 @@ gi|671626|emb|CAA85685.1|           KARNEG---RDLAAEGNAIIREACKWSPELAAACEVWKEIKFEF
 
 gi|4959044|gb|AAD34209.1|AF069      V
 gi|671626|emb|CAA85685.1|           -
+                                     
+
+
 
 all_seqs...
 description: gi|6273285|gb|AF191659.1|AF191
@@ -868,4 +873,6 @@ gi|6273286|gb|AF191660.1|AF191      ACCAGA
 gi|6273290|gb|AF191664.1|AF191      ACCAGA
 gi|6273289|gb|AF191663.1|AF191      ACCAGA
 gi|6273291|gb|AF191665.1|AF191      ACCAGA
+
+
 
