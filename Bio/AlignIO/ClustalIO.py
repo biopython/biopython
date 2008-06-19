@@ -118,7 +118,7 @@ class ClustalIterator(AlignmentIterator) :
 
                 #Record the sequence position to get the consensus
                 if seq_cols is None :
-                    start = line.find(fields[1])
+                    start = len(fields[0]) + line[len(fields[0]):].find(fields[1])
                     end = start + len(fields[1])
                     seq_cols = slice(start, end)
                     del start, end
@@ -173,8 +173,8 @@ class ClustalIterator(AlignmentIterator) :
                                       % (fields[0], ids[i]))
 
                 if fields[1] <> line[seq_cols] :
-                    start = line.find(fields[1])
-                    assert start == seq_cols.start
+                    start = len(fields[0]) + line[len(fields[0]):].find(fields[1])
+                    assert start == seq_cols.start, 'Old location %s -> %i:XX' % (seq_cols, start)
                     end = start + len(fields[1])
                     seq_cols = slice(start, end)
                     del start, end
@@ -345,5 +345,15 @@ HISJ_E_COLI                    LKAKKIDAIMSSLSITEKRQQEIAFTDKLYAADSRLV
     for i,a in enumerate(ClustalIterator(handle)) :
         assert a.get_alignment_length() == alignments[i].get_alignment_length()
     handle.seek(0)
+
+    print "Testing write/read when there is only one sequence..."
+    alignment._records = alignment._records[0:1]
+    handle = StringIO()
+    ClustalWriter(handle).write_file([alignment])
+    handle.seek(0)
+    for i,a in enumerate(ClustalIterator(handle)) :
+        assert a.get_alignment_length() == alignment.get_alignment_length()
+        assert len(a.get_all_seqs()) == 1
+        
 
     print "The End"
