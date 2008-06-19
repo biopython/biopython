@@ -29,65 +29,6 @@ from Bio import Alphabet
 from Bio.Alphabet import IUPAC
 from Bio.Align.Generic import Alignment
 
-
-def read(handle, alphabet = IUPAC.unambiguous_dna):
-    """Read an *.aln file from the handle, and return it as a
-       ClustalAlignment object.
-    
-    Arguments:
-    o handle   - A open file or file-like object, or a list of lines.
-    o alphabet - The type of alphabet to use for the alignment sequences.
-    This should correspond to the type of information contained in the file.
-    Defaults to be unambiguous_dna sequence.
-    """
-
-    # first, create an empty record
-    record = ClustalAlignment(alphabet)
-
-    # store sequence info in a dictionary
-    names = []
-    sequences = {}
-    star = ''
-
-    # treat the header line separately
-    try:
-        line = handle.readline() # handle is a file-like object
-    except AttributeError:
-        try:
-            line = handle[0]         # handle is a list of lines
-        except TypeError:
-            raise ValueError("Failed to obtain a line from the handle")
-
-    # find the clustal version in the header line
-    words = line.split()
-    for word in words:
-        if word[0]=='(' and word[-1]==')':
-            word = word[1:-1]
-        if word[0] in '0123456789':
-            record._add_version(word)
-
-    # now read the rest of the file
-    for line in handle:
-        line = line.strip("\r\n")
-        if not line:
-            continue
-        elif line[0]==' ':
-            star += line[-n:]
-        else:
-            name, sequence = line.split()[:2]
-            n = len(sequence)
-            if not name in sequences:
-                names.append(name)
-                sequences[name] = ""
-            sequences[name] += sequence
-
-    # store all data in the record and return it
-    for name in names:
-        record.add_sequence(name, sequences[name])
-    record._add_star_info(star)
-
-    return record
-
 def parse_file(file_name, alphabet = IUPAC.unambiguous_dna, debug_level = 0):
     """Parse the given file into a clustal aligment object.
     
@@ -96,15 +37,27 @@ def parse_file(file_name, alphabet = IUPAC.unambiguous_dna, debug_level = 0):
     o alphabet - The type of alphabet to use for the alignment sequences.
     This should correspond to the type of information contained in the file.
     Defaults to be unambiguous_dna sequence.
+
+    There is a deprecated optional argument debug_level which has no effect.
     """ 
+
+    # Avoid code duplication by calling Bio.AlignIO to do this for us.
     handle = open(file_name, 'r')
-    record = read(handle, Alphabet.Gapped(alphabet))
+    from Bio import AlignIO
+    generic_alignment = AlignIO.read(handle, "clustal")
     handle.close()
-    return record
+
+    #Force this generic alignment into a ClustalAlignment... nasty hack
+    clustal_alignment = ClustalAlignment(Alphabet.Gapped(alphabet))
+    clustal_alignment._records = generic_alignment._records
+    clustal_alignment._version = generic_alignment._version
+    clustal_alignment._star_info = generic_alignment._star_info
+
+    return clustal_alignment
 
 def do_alignment(command_line, alphabet=None):
     """Perform an alignment with the given command line.
-
+    
     Arguments:
     o command_line - A command line object that can give out
     the command line we will input into clustalw.
@@ -189,45 +142,13 @@ class ClustalAlignment(Alignment):
         The output produced from this should also be formatted in valid
         clustal format.
         """
-        # if the version isn't set, we need to use the default
-        if self._version == '':
-            self._version = self.DEFAULT_VERSION
-        
-        output = "CLUSTAL X (%s) multiple sequence alignment\n\n\n" % \
-                 self._version
-
-        cur_char = 0
-        max_length = len(self._records[0].seq)
-
-        # keep displaying sequences until we reach the end
-        while cur_char != max_length:
-            # calculate the number of sequences to show, which will
-            # be less if we are at the end of the sequence
-            if (cur_char + 50) > max_length:
-                show_num = max_length - cur_char
-            else:
-                show_num = 50
-
-            # go through all of the records and print out the sequences
-            # when we output, we do a nice 80 column output, although this
-            # may result in truncation of the ids.
-            for record in self._records:
-                line = record.description[0:30].ljust(36)
-                line += record.seq.data[cur_char:(cur_char + show_num)]
-                
-                output += line + "\n"
-
-            # now we need to print out the star info, if we've got it
-            if self._star_info != '':
-                output += (" " * 36) + \
-                     self._star_info[cur_char:(cur_char + show_num)] + "\n"
-
-            output = output + "\n"
-            cur_char = cur_char + show_num
-
-        # have a extra newline, so strip two off and add one before returning
-        # (don't want to strip the final line of consensus which may be blank)
-        return output.rstrip("\n") + "\n"
+        # Avoid code duplication by calling Bio.AlignIO to do this for us.
+        from Bio import AlignIO
+        from StringIO import StringIO
+        handle = StringIO()
+        AlignIO.write([self], handle, "clustal")
+        handle.seek(0)
+        return handle.read()
             
 
     def _add_star_info(self, stars):
