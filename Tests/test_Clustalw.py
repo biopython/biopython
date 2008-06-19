@@ -28,11 +28,7 @@ def compare(a1, a2) :
         assert str(r1.seq) == str(r2.seq)
 
     assert a1._version == a2._version
-    #assert a1._star_info == a2._star_info
-    try :
-        assert a1._star_info == a2._star_info
-    except AttributeError :
-        pass
+    assert a1._star_info == a2._star_info
     return True
 
 

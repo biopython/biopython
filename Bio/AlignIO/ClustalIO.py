@@ -52,7 +52,7 @@ class ClustalWriter(SequentialAlignmentWriter) :
             # This was stored by Bio.Clustalw using a ._star_info property.
             if hasattr(alignment, "_star_info") and alignment._star_info != '':
                 output += (" " * 36) + \
-                     self._star_info[cur_char:(cur_char + show_num)] + "\n"
+                     alignment._star_info[cur_char:(cur_char + show_num)] + "\n"
 
             output += "\n"
             cur_char += show_num
@@ -99,6 +99,8 @@ class ClustalIterator(AlignmentIterator) :
         #dictionary based parser will merge their sequences.  Fix this?
         ids = []
         seqs = []
+        consensus = ""
+        seq_cols = None #: Used to extract the consensus
 
         #Use the first block to get the sequence identifiers
         while line.strip() <> "" :
@@ -114,6 +116,14 @@ class ClustalIterator(AlignmentIterator) :
                 ids.append(fields[0])
                 seqs.append(fields[1])
 
+                #Record the sequence position to get the consensus
+                if seq_cols is None :
+                    start = line.find(fields[1])
+                    end = start + len(fields[1])
+                    seq_cols = slice(start, end)
+                    del start, end
+                assert fields[1] == line[seq_cols]
+
                 if len(fields) == 3 :
                     #This MAY be an old style file with a letter count...
                     try :
@@ -124,11 +134,14 @@ class ClustalIterator(AlignmentIterator) :
                         raise ValueError("Could not parse line, invalid sequence number:\n%s" % line)
             else :
                 #Sequence consensus line...
-                pass
+                assert seq_cols is not None
+                consensus = line[seq_cols]
+                assert not line[seq_cols.stop:].strip()
             line = handle.readline()
             if not line : break #end of file
 
         assert line.strip() == ""
+        assert seq_cols is not None
 
         #Loop over any remaining blocks...
         done = False
@@ -136,10 +149,16 @@ class ClustalIterator(AlignmentIterator) :
             #There should be a blank line between each block.
             #Also want to ignore any consensus line from the
             #previous block.
-            while (not line) or line.strip() == "" or line[0]==" ":
+            while (not line) or line.strip() == "" :
                 line = handle.readline()
                 if not line : break # end of file
             if not line : break # end of file
+
+            if line[:7] == 'CLUSTAL':
+                #Found concatenated alignment.
+                done = True
+                self._header = line
+                break
 
             for i in range(len(ids)) :
                 fields = line.rstrip().split()
@@ -147,17 +166,18 @@ class ClustalIterator(AlignmentIterator) :
                 #We expect there to be two fields, there can be an optional
                 #"sequence number" field containing the letter count.
                 if len(fields) < 2 or len(fields) > 3:
-                    if line[:7] == 'CLUSTAL':
-                        #Found concatenated alignment.
-                        done = True
-                        self._header = line
-                        break
-                    else :
-                        raise ValueError("Could not parse line:\n%s" % line)
+                    raise ValueError("Could not parse line:\n%s" % line)
 
                 if fields[0] <> ids[i] :
                     raise ValueError("Identifiers out of order? Got '%s' but expected '%s'" \
                                       % (fields[0], ids[i]))
+
+                if fields[1] <> line[seq_cols] :
+                    start = line.find(fields[1])
+                    assert start == seq_cols.start
+                    end = start + len(fields[1])
+                    seq_cols = slice(start, end)
+                    del start, end
 
                 #Append the sequence
                 seqs[i] += fields[1]
@@ -173,6 +193,14 @@ class ClustalIterator(AlignmentIterator) :
 
                 #Read in the next line
                 line = handle.readline()
+            #There should now be a consensus line
+            if consensus :
+                assert seq_cols is not None
+                consensus += line[seq_cols]
+                assert not line[seq_cols.stop:].strip()
+                #Read in the next line
+                line = handle.readline()
+
 
         assert len(ids) == len(seqs)
         if len(seqs) == 0 or len(seqs[0]) == 0 :
@@ -189,10 +217,15 @@ class ClustalIterator(AlignmentIterator) :
             if len(seqs[i]) <> alignment_length:
                 raise ValueError("Error parsing alignment - sequences of different length?")
             alignment.add_sequence(ids[i], seqs[i])
+        #TODO - Handle alignment annotation better, for now
+        #mimic the old parser in Bio.Clustalw
         if version :
-            #TODO - Handle alignment annotation better, for now
-            #mimic the old parser in Bio.Clustalw
             alignment._version = version
+        if consensus :
+            assert len(consensus) == alignment_length, \
+                   "Alignment length is %i, consensus length is %i, '%s'" \
+                   % (alignment_length, len(consensus), consensus)
+            alignment._star_info = consensus
         return alignment
     
 if __name__ == "__main__" :
