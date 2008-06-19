@@ -1,0 +1,28 @@
+test_Clustalw
+Checking Bio.AlignIO and Bio.Clustalw can read example files...
+
+Testing reading clustal format file Clustalw/cw02.aln with 1 alignments
+Using Bio.AlignIO.parse(...)
+
+SingleLetterAlphabet() alignment with 2 rows and 601 columns
+MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYR...SVV gi|4959044|gb|AAD34209.1|AF069
+---------MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTD...--- gi|671626|emb|CAA85685.1|
+
+Using Bio.AlignIO.read(...)
+Using Bio.Clustalw.parse_file(...)
+
+Testing reading clustal format file Clustalw/opuntia.aln with 1 alignments
+Using Bio.AlignIO.parse(...)
+
+SingleLetterAlphabet() alignment with 7 rows and 156 columns
+TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273285|gb|AF191659.1|AF191
+TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273284|gb|AF191658.1|AF191
+TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273287|gb|AF191661.1|AF191
+TATACATAAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273286|gb|AF191660.1|AF191
+TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273290|gb|AF191664.1|AF191
+TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273289|gb|AF191663.1|AF191
+TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273291|gb|AF191665.1|AF191
+
+Using Bio.AlignIO.read(...)
+Using Bio.Clustalw.parse_file(...)
+Finished tested reading files
