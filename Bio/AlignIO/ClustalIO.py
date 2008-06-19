@@ -19,7 +19,7 @@ class ClustalWriter(SequentialAlignmentWriter) :
         try :
             version = self._version
         except AttributeError :
-            version = '1.18'
+            version = '1.81'
         output = "CLUSTAL X (%s) multiple sequence alignment\n\n\n" % version
         
         cur_char = 0
