@@ -995,9 +995,14 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             if self._seq_type.find('DNA') != -1 or \
                self._seq_type.find('mRNA') != -1:
                 seq_alphabet = IUPAC.ambiguous_dna
-            # are there every really RNA sequences in GenBank?
+            # are there ever really RNA sequences in GenBank?
             elif self._seq_type.find('RNA') != -1:
-                seq_alphabet = IUPAC.ambiguous_rna
+                #Even for data which was from RNA, the sequence string
+                #is usually given as DNA (T not U).  Bug 2408
+                if "T" in sequence and "U" not in sequence:
+                    seq_alphabet = IUPAC.ambiguous_dna
+                else :
+                    seq_alphabet = IUPAC.ambiguous_rna
             elif self._seq_type.find('PROTEIN') != -1 :
                 seq_alphabet = IUPAC.protein  # or extended protein?
             # work around ugly GenBank records which have circular or
