@@ -162,10 +162,11 @@ class _RecordConsumer(AbstractConsumer):
         self.data.file_name = line[15:].rstrip() 
 
     def end_sequence(self):
-        self.data.seq = Seq.Seq(''.join([n[0] for n in self.data.sites]), IUPAC.IUPACAmbiguousDNA()) 
-        first = self.data.comments['trim'][0]
-        last = self.data.comments['trim'][1]
-        self.data.seq_trimmed = Seq.Seq(self.data.seq.tostring()[first : last], IUPAC.IUPACAmbiguousDNA())
+        self.data.seq = Seq.Seq(''.join([n[0] for n in self.data.sites]), IUPAC.IUPACAmbiguousDNA())
+        if self.data.comments['trim'] is not None :
+            first = self.data.comments['trim'][0]
+            last = self.data.comments['trim'][1]
+            self.data.seq_trimmed = self.data.seq[first:last]
 
     def chromat_file(self, line):
         self.data.comments['chromat_file'] = line[13:-1].strip()
@@ -211,7 +212,7 @@ class _RecordConsumer(AbstractConsumer):
 if __name__ == "__main__" :
     print "Quick self test"
     #Test the iterator,
-    handle = open("../../Tests/Phd/Phd1")
+    handle = open("../../Tests/Phd/phd1")
     recordparser = RecordParser()
     iterator = Iterator(handle,recordparser)
     for record in iterator :

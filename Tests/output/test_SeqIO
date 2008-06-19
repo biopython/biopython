@@ -738,7 +738,7 @@ Testing reading emboss format file Emboss/water.txt as an alignment
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
-Testing reading phd format file Phd/Phd1
+Testing reading phd format file Phd/phd1
  ID and Name='34_222_(80-A03-19).b.ab1',
  Seq='ctccgtcggaacatcatcggatcctatcacagagtttttg...aagcgtg', length=876
  ID and Name='425_103_(81-A03-19).g.ab1',
@@ -752,6 +752,13 @@ Testing reading phd format file Phd/Phd1
  Failed: Sequences must all be the same length
  Checking can write/read as 'stockholm' format
  Failed: Sequences must all be the same length
+Testing reading phd format file Phd/phd2
+ ID and Name='ML4924R',
+ Seq='actttggtcgcctgcaggtaccggtccgngattcccgggt...ggtgaga', length=180
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
 Finished tested reading files
 
 Starting testing writing records
