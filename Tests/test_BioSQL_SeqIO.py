@@ -123,13 +123,20 @@ def compare_features(old_f, new_f) :
     assert old_f.strand == new_f.strand \
         or not old_f.strand or not new_f.strand
 
-    #TODO - BioSQL does not store/retrieve feature's id
+    #TODO - BioSQL does not store/retrieve feature's id (Bug 2526)   
     #assert old_f.id == new_f.id
     assert new_f.id == "<unknown id>"
 
-    #TODO: assert old_f.location_operator == new_f.location_operator
-    #TODO: assert str(old_f.location) == str(new_f.location)
+    #TODO: assert old_f.location_operator == new_f.location_operator, \
+    #        "%s -> %s" % (old_f.location_operator, new_f.location_operator)
+    #TODO: assert str(old_f.location) == str(new_f.location), \
+    #       "%s -> %s" % (str(old_f.location), str(new_f.location))
     assert len(old_f.sub_features) == len(new_f.sub_features)
+    for old_sub, new_sub in zip(old_f.sub_features, new_f.sub_features) :
+        assert old_sub.type == new_sub.type
+        #TODO: assert old_sub.strand == new_sub.strand
+        #TODO: assert str(old_sub.location) == str(new_sub.location), \
+        #       "%s -> %s" % (str(old_sub.location), str(new_sub.location))
     assert len(old_f.qualifiers) == len(new_f.qualifiers)    
     assert Set(old_f.qualifiers.keys()) == Set(new_f.qualifiers.keys())
     for key in old_f.qualifiers.keys() :
