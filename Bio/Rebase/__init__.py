@@ -22,6 +22,11 @@ Functions:
 index_file         Index a FASTA file for a Dictionary.
 
 """
+
+import warnings
+warnings.warn("Bio.Rebase was deprecated, as it does not seem to be able to parse recent HTML files from Rebase. If you want to continue to use this module, please get in contact with the Biopython developers at biopython-dev@biopython.org to avoid permanent removal of this module from Biopython", DeprecationWarning)
+
+
 from types import *
 import string
 from Bio import File
