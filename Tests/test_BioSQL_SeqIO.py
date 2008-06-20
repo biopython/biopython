@@ -122,7 +122,11 @@ def compare_features(old_f, new_f) :
     #TODO - Sort out zero/None in strand
     assert old_f.strand == new_f.strand \
         or not old_f.strand or not new_f.strand
-    assert old_f.id == new_f.id
+
+    #TODO - BioSQL does not store/retrieve feature's id
+    #assert old_f.id == new_f.id
+    assert new_f.id == "<unknown id>"
+
     #TODO: assert old_f.location_operator == new_f.location_operator
     #TODO: assert str(old_f.location) == str(new_f.location)
     assert len(old_f.sub_features) == len(new_f.sub_features)
