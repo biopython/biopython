@@ -133,7 +133,20 @@ def compare_features(old_f, new_f) :
     assert len(old_f.qualifiers) == len(new_f.qualifiers)    
     assert Set(old_f.qualifiers.keys()) == Set(new_f.qualifiers.keys())
     for key in old_f.qualifiers.keys() :
-        assert Set(old_f.qualifiers[key]) == Set(new_f.qualifiers[key])
+        if isinstance(old_f.qualifiers[key], str) :
+            if isinstance(new_f.qualifiers[key], str) :
+                assert old_f.qualifiers[key] == new_f.qualifiers[key]
+            elif isinstance(new_f.qualifiers[key], list) :
+                #Maybe a string turning into a list of strings?
+                assert [old_f.qualifiers[key]] == new_f.qualifiers[key], \
+                        "%s -> %s" \
+                        % (repr(old_f.qualifiers[key]),
+                           repr(new_f.qualifiers[key]))
+            else :
+                assert False, "Problem with feature's '%s' qualifier" & key
+        else :
+            #Should both be lists of strings...
+            assert old_f.qualifiers[key] == new_f.qualifiers[key]
 
 def compare_sequences(old, new) :
     """Compare two Seq or DBSeq objects"""
