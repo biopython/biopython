@@ -623,8 +623,13 @@ class DatabaseLoader:
                 qualifier_key_id = self._get_term_id(qualifier_key,
                                                   ontology_id=tag_ontology_id)
                 # now add all of the values to their table
-                for qual_value_rank in range(len(qualifiers[qualifier_key])):
-                    qualifier_value = qualifiers[qualifier_key][qual_value_rank]
+                entries = qualifiers[qualifier_key]
+                if not isinstance(entries, list) :
+                    # Could be a plain string, or an int or a float.
+                    # However, we exect a list of strings here.
+                    entries = [entries]
+                for qual_value_rank in range(len(entries)):
+                    qualifier_value = entries[qual_value_rank]
                     sql = r"INSERT INTO seqfeature_qualifier_value "\
                           r" (seqfeature_id, term_id, rank, value) VALUES"\
                           r" (%s, %s, %s, %s)"
