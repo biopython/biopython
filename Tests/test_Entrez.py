@@ -557,7 +557,7 @@ class EPostTest(unittest.TestCase):
         try:
             record = Entrez.read(input)
         except RuntimeError, exception:
-            assert exception.message=="Wrong DB name"
+            assert str(exception)=="Wrong DB name"
             exception_triggered = True
         assert exception_triggered
 
@@ -940,7 +940,7 @@ class ESummaryTest(unittest.TestCase):
         try:
             record = Entrez.read(input)
         except RuntimeError, exception:
-            assert exception.message=="Neither query_key nor id specified"
+            assert str(exception)=="Neither query_key nor id specified"
             exception_triggered = True
         assert exception_triggered
 
