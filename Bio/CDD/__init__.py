@@ -5,6 +5,10 @@
 """Deal with Conserved Domain Database (CDD) entries from NCBI.
 """
 
+import warnings
+warnings.warn("Bio.CDD was deprecated, as it cannot parse recent HTML files from the CDD database. If you want to continue to use this module, please get in contact with the Biopython developers at biopython-dev@biopython.org to avoid permanent removal of this module from Biopython", DeprecationWarning)
+
+
 # standard library
 import string
 import array
