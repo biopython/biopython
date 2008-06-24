@@ -33,6 +33,21 @@ detailed_tests = [
     'bt042',   # 2.0.11 blastp
     ]
 
+
+#Check the simple detection of command injection,
+for func in [NCBIStandalone.blastall,
+             NCBIStandalone.blastpgp,
+             NCBIStandalone.rpsblast] :
+    try :
+        handle = func("/somewhere/blast", "blastz", "nr",
+                      "/tmp/example.fasta", \
+                      matrix= "IDENTITY -F 0; cat /etc/passwd'")
+        assert False, "Attempted command injection not caught!"
+    except ValueError, e:
+        assert str(e) == "Rejecting suspicious argument for matrix"
+        #Good
+
+
 ### _Scanner
 
 print "Running tests on _Scanner"

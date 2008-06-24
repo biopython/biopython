@@ -1600,7 +1600,7 @@ def blastall(blastcmd, program, database, infile, align_view='7', **keywds):
     search_length       Effective length of search space.
 
         Processing
-    filter              Filter query sequence?  T/F
+    filter              Filter query sequence for low complexity (with SEG)?  T/F
     believe_query       Believe the query defline.  T/F
     restrict_gi         Restrict search to these GI's.
     nprocessors         Number of processors to use.
@@ -1616,6 +1616,12 @@ def blastall(blastcmd, program, database, infile, align_view='7', **keywds):
     seqalign_file       seqalign file to output.
 
     """
+
+    _security_check_parameters(keywds)
+
+
+    _security_check_parameters(keywds)
+
     att2param = {
         'matrix' : '-M',
         'gap_open' : '-G',
@@ -1714,7 +1720,7 @@ def blastpgp(blastcmd, database, infile, align_view='7', **keywds):
         Processing
     XXX should document default values
     program             The blast program to use. (PHI-BLAST)
-    filter              Filter query sequence with SEG?  T/F
+    filter              Filter query sequence  for low complexity (with SEG)?  T/F
     believe_query       Believe the query defline?  T/F
     nprocessors         Number of processors to use.
 
@@ -1731,9 +1737,15 @@ def blastpgp(blastcmd, database, infile, align_view='7', **keywds):
     restart_infile      Input file for PSI-BLAST restart.
     hit_infile          Hit file for PHI-BLAST.
     matrix_outfile      Output file for PSI-BLAST matrix in ASCII.
+
+    _security_check_parameters(keywds)
+
     align_infile        Input alignment file for PSI-BLAST restart.
     
     """
+
+    _security_check_parameters(keywds)
+
     att2param = {
         'matrix' : '-M',
         'gap_open' : '-G',
@@ -1835,7 +1847,7 @@ def rpsblast(blastcmd, database, infile, align_view="7", **keywds):
     db_length           Effective database length.
 
         Processing
-    filter              Filter query sequence with SEG?  T/F
+    filter              Filter query sequence for low complexity?  T/F
     case_filter         Use lower case filtering of FASTA sequence T/F, default F
     believe_query       Believe the query defline.  T/F
     nprocessors         Number of processors to use.
@@ -1846,12 +1858,18 @@ def rpsblast(blastcmd, database, infile, align_view="7", **keywds):
     descriptions        Number of one-line descriptions.
     alignments          Number of alignments.
     align_view          Alignment view.  Integer 0-11,
+
+    _security_check_parameters(keywds)
+    
                         passed as a string or integer.
     show_gi             Show GI's in deflines?  T/F
     seqalign_file       seqalign file to output.
     align_outfile       Output file for alignment.
     
     """
+
+    _security_check_parameters(keywds)
+    
     att2param = {
         'multihit' : '-P',
         'gapped' : '-g',
@@ -1955,6 +1973,19 @@ def _safe_float(str):
         str = str.replace(',', '')
     # try again.
     return float(str)
+
+def _security_check_parameters(param_dict) :
+    """Look for any attempt to insert a command into a parameter.
+
+    e.g. blastall(..., matrix='IDENTITY -F 0; rm -rf /etc/passwd')
+
+    Looks for ";" or "&&" in the strings (Unix and Windows syntax
+    for appending a command line), and if found raises an exception.
+    """
+    for key, value in param_dict.iteritems() :
+        if ";" in value or "&&" in value :
+            raise ValueError("Rejecting suspicious argument for %s" % key)
+
 
 class _BlastErrorConsumer(_BlastConsumer):
     def __init__(self):
