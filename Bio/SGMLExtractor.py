@@ -31,6 +31,11 @@ SGMLExtractor( [ 'dt', 'dd' ] ) would return 'rat that ate the malttcat ate  the
     <dd><big>all forlorns</big></dd>
 </dl>
 """
+
+import warnings
+warnings.warn("Bio.SGMLExtractor was deprecated, as all Biopython modules that use Bio.SGMLExtractor have been deprecated. If you do use this module, please contact the Biopython developers at biopython-dev@biopython.org to avoid permanent removal of this module")
+
+
 import os
 import string
 import StringIO
