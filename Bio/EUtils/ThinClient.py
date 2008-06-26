@@ -529,6 +529,7 @@ At the time of this writing they are:
 """ # "  # Emacs cruft
 
 import urllib, urllib2, cStringIO
+import time
 
 DUMP_URL = 0
 DUMP_RESULT = 0
@@ -560,6 +561,10 @@ def _dbids_to_id_string(dbids):
     id_string = ",".join(dbids.ids)
     assert id_string.count(",") == len(dbids.ids)-1, "double checking"
     return id_string
+
+#Record the time at module level, in case the user has multiple copies
+#of the ThinClient class in operation at once.
+_open_previous = time.time()
 
 class ThinClient:
     """Client-side interface to the EUtils services
@@ -630,6 +635,15 @@ class ThinClient:
     def _get(self, program, query):
         """Internal function: send the query string to the program as GET"""
         # NOTE: epost uses a different interface
+
+        # In case the calling code hasn't done this, enforce the NCBI
+        # requirement of a least three seconds between queries:
+        global _open_previous
+        delay = 3.0
+        wait = _open_previous + delay - time.time()
+        if wait > 0:
+            time.sleep(wait)
+        _open_previous = time.time()
 
         q = self._fixup_query(query)
         url = self.baseurl + program + "?" + q
