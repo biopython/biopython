@@ -631,19 +631,25 @@ class ThinClient:
 
         # Convert the query into the form needed for a GET.
         return urllib.urlencode(q)
+
+    def _wait(self, delay = 3.0) :
+        """Enforce the NCBI requirement of one request every three seconds.
+
+        Ideally the calling code would have respected the 3 second rule,
+        but as this often hasn't happenend we check this here.
+
+        wait - number of seconds between queries."""
+        global _open_previous
+        wait = _open_previous + delay - time.time()
+        if wait > 0:
+            time.sleep(wait)
+        _open_previous = time.time()
     
     def _get(self, program, query):
         """Internal function: send the query string to the program as GET"""
         # NOTE: epost uses a different interface
 
-        # In case the calling code hasn't done this, enforce the NCBI
-        # requirement of a least three seconds between queries:
-        global _open_previous
-        delay = 3.0
-        wait = _open_previous + delay - time.time()
-        if wait > 0:
-            time.sleep(wait)
-        _open_previous = time.time()
+        self._wait()
 
         q = self._fixup_query(query)
         url = self.baseurl + program + "?" + q
@@ -748,6 +754,8 @@ class ThinClient:
                  "WebEnv": webenv,
                  }
         q = self._fixup_query(query)
+
+        self._wait()
 
         # Need to use a POST since the data set can be *very* long;
         # even too long for GET.
