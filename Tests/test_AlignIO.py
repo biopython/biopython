@@ -7,6 +7,7 @@ import os
 from StringIO import StringIO
 from Bio import AlignIO
 from Bio.Align.Generic import Alignment
+from Bio.Align import AlignInfo
 
 test_write_read_alignment_formats = AlignIO._FormatToWriter.keys()
 
@@ -50,7 +51,7 @@ def str_summary(text, max_len=40) :
         return text[:max_len-4] + "..." + text[-3:]
 
 def alignment_summary(alignment, index="  ", vertical_threshold=5) :
-    """Returns a concise summary of an Alignment object as a string"""
+    """Returns a concise summary of an Alignment object as a string."""
     answer = []
     alignment_len = alignment.get_alignment_length()
     rec_count = len(alignment.get_all_seqs())
@@ -213,6 +214,19 @@ for (t_format, t_per, t_count, t_filename) in test_files :
             print alignment_summary(alignment)
         elif i==3 :
             print " ..."
+
+    #Check AlignInfo.SummaryInfo likes the alignment
+    summary = AlignInfo.SummaryInfo(alignment)
+    dumb_consensus = summary.dumb_consensus()
+    gap_consensus = summary.gap_consensus()
+    pssm = summary.pos_specific_score_matrix()
+    rep_dict = summary.replacement_dictionary()
+    try :
+        info_content = summary.information_content()
+    except ValueError, e :
+        if str(e) <> "Error in alphabet: not Nucleotide or Protein, supply expected frequencies" :
+            raise e
+        pass
 
     if t_count==1 and t_format not in ["nexus","emboss","fasta-m10"] :
         #print " Trying to read a triple concatenation of the input file"
