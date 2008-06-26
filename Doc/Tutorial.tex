@@ -1892,17 +1892,14 @@ more detail).
 >>> record = records.next()
 \end{verbatim}
 
-Now we take the sequence as a plain string from the SeqRecord:
-\begin{verbatim}
->>> sequence = record.seq.data
-\end{verbatim}
+Now we can take the sequence as a plain string from the SeqRecord
 and run BLAST on it. The code to do the simplest possible BLAST
 (a simple blastn of the FASTA file against all of the non-redundant
 databases) is:
 
 \begin{verbatim}
 >>> from Bio.Blast import NCBIWWW
->>> result_handle = NCBIWWW.qblast("blastn", "nr", sequence)
+>>> result_handle = NCBIWWW.qblast("blastn", "nr", record.seq.tostring())
 \end{verbatim}
 
 The \verb|qblast| function also take a number of other option arguments
@@ -1913,16 +1910,17 @@ but for this I'll just talk about the first few arguments, which are
 the most important. The first three are non-optional.
 
 \begin{itemize}
-\item The first argument is the blast program to use for the search. The
-options and descriptions of the programs are available at
-\url{http://www.ncbi.nlm.nih.gov/BLAST/blast_program.html}.
-Currently \verb|qblast| only works with blastn and blastp as program
-arguments --- let us known if you want to use one of the other blast
-programs instead.
+\item The first argument is the blast program to use for the search, as a
+lower case string. The options and descriptions of the programs are
+available at \url{http://www.ncbi.nlm.nih.gov/BLAST/blast_program.html}.
+Currently \verb|qblast| only works with blastn, blastp, blastx, tblast
+and tblastx.
 \item The second argument specifies the databases to search against. Again,
 the options for this are available on the NCBI web pages at
 \url{http://www.ncbi.nlm.nih.gov/BLAST/blast_databases.html}.
-\item The third argument is your Fasta sequence as a plain string.
+\item The third argument is a string containing your query sequence.  This
+can either be the sequence itself (as above), the sequence in fasta format,
+or an identifier like a GI number.
 \item The \verb|qblast| function can return the BLAST results in various
 formats, which you can choose with the optional \verb|format_type| keyword:
 \verb|"HTML"|, \verb|"Text"|, \verb|"ASN.1"|, or \verb|"XML"|.
