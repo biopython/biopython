@@ -20,6 +20,13 @@ A problem parsing certain EMBL files was fixed.
 Several minor fixes were made to the NCBI BLAST XML parser, including
 support for the online version 2.2.18+ introduced in May 2008.
 
+The NCBIWWW.qblast() function now allows other programs in addition to
+just blastn and blastp.
+
+Bio.EUtils has been updated to explicitly enforce the NCBI's rule of at
+most one query every 3 seconds, rather than assuming the user would obey
+this.
+
 ===================================================================
 
 March 22, 2008: Biopython 1.45 released.
@@ -84,7 +91,7 @@ Fix for a bug in Bio.Cluster, which caused kcluster() to hang on some platforms.
 Bio.expressions has been deprecated.
 
 Bio.SeqUtils.CheckSum created, including new methods from Sebastian Bassi,
-and functions crc32 and crc64 which were moved from Bio/crc.py
+and functions crc32 and crc64 which were moved from Bio/crc.py.
 Bio.crc is now deprecated. Bio.lcc was updated and moved to Bio.SeqUtils.lcc.
 
 Bio.SwissProt parser updated to cope with recent file format updates.
