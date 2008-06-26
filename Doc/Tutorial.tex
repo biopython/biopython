@@ -876,26 +876,75 @@ all_species == [seq_record.description.split()[1] for seq_record in \
 print all_species
 \end{verbatim}
 
-In general, extracting information from the FASTA description line is not very nice.  If you can get your sequences in a well annotated file format like GenBank or EMBL, then this sort of annotation information is much easier to deal with.
+In general, extracting information from the FASTA description line is not very nice.
+If you can get your sequences in a well annotated file format like GenBank or EMBL,
+then this sort of annotation information is much easier to deal with.
 
 \section{Parsing sequences from the net}
 \label{sec:SeqIO_Online}
-
 In the previous section, we looked at parsing sequence data from a file handle.
-We hinted that handles are not always from files, and in this section we'll use handles to internet connections to download sequences.
+We hinted that handles are not always from files, and in this section we'll use
+handles to internet connections to download sequences.
+
+Note that just because you \emph{can} download sequence data and parse it into
+a \verb|SeqRecord| object in one go doesn't mean this is always a good idea.
+In general, you should probably download sequences \emph{once} and save them to
+a file for reuse.
 
 \subsection{Parsing GenBank records from the net}
 \label{sec:SeqIO_GenBank_Online}
+Section~\ref{sec:efetch} talks about the Entrez EFetch interface in more detail,
+but for now let's just connect to the NCBI and get a few orchid proteins from
+GenBank using their GI numbers.
 
-Section~\ref{genbank-retrieval} covers fetching sequences from GenBank in more depth, including how to do searches to get lists of GI numbers, but for now let's just connect to the NCBI and get a few orchid proteins from GenBank using their GI numbers:
+First of all, let's fetch just one record.  Remember, when you expect the handle
+to contain one and only one record, use the \verb|Bio.SeqIO.read()| function:
 
 \begin{verbatim}
-from Bio import GenBank
-from Bio import SeqIO
-handle = GenBank.download_many(["6273291", "6273290", "6273289"])
+from Bio import Entrez
+form Bio import SeqIO
+handle = Entrez.efetch(db="protein", rettype="genbank", id="6273291")
+seq_record = SeqIO.read(handle, "genbank")
+handle.close()
+print "%s with %i features" % (seq_record.id, len(seq_record.features))
+\end{verbatim}
+
+\noindent Expected output:
+
+\begin{verbatim}
+gi|6273291|gb|AF191665.1|AF191665 with 3 features
+\end{verbatim}
+
+The NCBI will also let you ask for the file in other formats, for example as a
+FASTA file.  If you don't care about the annotations and features in a GenBank
+file, this is a better choice because the its a smaller file.
+
+\begin{verbatim}
+from Bio import Entrez
+form Bio import SeqIO
+handle = Entrez.efetch(db="protein", rettype="fasta", id="6273291")
+seq_record = SeqIO.read(handle, "fasta")
+handle.close()
+print "%s with %i features" % (seq_record.id, len(seq_record.features))
+\end{verbatim}
+
+\noindent Expected output:
+
+\begin{verbatim}
+gi|6273291|gb|AF191665.1|AF191665 with 0 features
+\end{verbatim}
+
+Now lets fetch several records.  This time the handle contains multiple records,
+so we must use the \verb|Bio.SeqIO.parse()| function:
+
+\begin{verbatim}
+from Bio import Entrez
+form Bio import SeqIO
+handle = Entrez.efetch(db="protein", rettype="genbank", \
+                       id="6273291,6273290,6273289")
 for seq_record in SeqIO.parse(handle, "genbank") :
     print seq_record.id, seq_record.description[:50] + "..."
-    print "Sequence length %i," % len(seq_record.seq),
+    print "Sequence length %i," % len(seq_record),
     print "%i features," % len(seq_record.features),
     print "from: %s" % seq_record.annotations['source']
 handle.close()
@@ -912,19 +961,10 @@ AF191663.1 Opuntia bradtiana rpl16 gene; chloroplast gene for...
 Sequence length 899, 3 features, from: chloroplast Opuntia bradtianaa
 \end{verbatim}
 
-Suppose you only want to download a single record?  When you expect the handle to contain one and only one record, in Biopython 1.45 or later you can use the \verb|Bio.SeqIO.read()| function:
-
-\begin{verbatim}
-from Bio import GenBank
-from Bio import SeqIO
-handle = GenBank.download_many(["6273291"])
-seq_record = SeqIO.read(handle, "genbank")
-handle.close()
-\end{verbatim}
+See Chapter~\ref{chapter:entrez} for more about the \verb|Bio.Entrez| module.
 
 \subsection{Parsing SwissProt sequences from the net}
 \label{sec:SeqIO_ExPASy_and_SwissProt}
-
 Now let's use a handle to download a SwissProt file from ExPASy, something covered in more depth in Chapter~\ref{chapter:swiss_prot}.
 As mentioned above, the \verb|Bio.SeqIO.read()| function is included in Biopython 1.45 or later.
 
