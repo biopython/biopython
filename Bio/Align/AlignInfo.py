@@ -108,7 +108,7 @@ class SummaryInfo:
 
         # we need to guess a consensus alphabet if one isn't specified
         if consensus_alpha is None:
-            consensus_alpha = self._guess_consensus_alphabet()
+            consensus_alpha = self._guess_consensus_alphabet(ambiguous)
 
         return Seq(consensus, consensus_alpha)
 
@@ -165,11 +165,11 @@ class SummaryInfo:
         # we need to guess a consensus alphabet if one isn't specified
         if consensus_alpha is None:
             #TODO - Should we make this into a Gapped alphabet?
-            consensus_alpha = self._guess_consensus_alphabet()
+            consensus_alpha = self._guess_consensus_alphabet(ambiguous)
 
         return Seq(consensus, consensus_alpha)
             
-    def _guess_consensus_alphabet(self):
+    def _guess_consensus_alphabet(self, ambiguous):
         """Pick an (ungapped) alphabet for an alignment consesus sequence.
 
         This just looks at the sequences we have, checks their type, and
@@ -199,6 +199,29 @@ class SummaryInfo:
             if not isinstance(alt, a.__class__) :
                 raise ValueError \
                 ("Alignment contains a sequence with an incompatible alphabet.")
+
+        #Check the ambiguous character we are going to use in the consensus
+        #is in the alphabet's list of valid letters (if defined).
+        if hasattr(a, "letters") and a.letters is not None \
+        and ambiguous not in a.letters :
+            #We'll need to pick a more generic alphabet...
+            if isinstance(a, IUPAC.IUPACUnambiguousDNA) :
+                if ambiguous in IUPAC.IUPACUnambiguousDNA().letters :
+                    a = IUPAC.IUPACUnambiguousDNA()
+                else :
+                    a = Alphabet.generic_dna
+            elif isinstance(a, IUPAC.IUPACUnambiguousRNA) :
+                if ambiguous in IUPAC.IUPACUnambiguousRNA().letters :
+                    a = IUPAC.IUPACUnambiguousRNA()
+                else :
+                    a = Alphabet.generic_rna
+            elif isinstance(a, IUPAC.IUPACProtein) :
+                if ambiguous in IUPAC.ExtendedIUPACProtein().letters :
+                    a = IUPAC.ExtendedIUPACProtein()
+                else :
+                    a = Alphabet.generic_protein
+            else :
+                a = Alphabet.single_letter_alphabet
         return a
 
     def replacement_dictionary(self, skip_chars = []):
@@ -300,7 +323,7 @@ class SummaryInfo:
         """Returns a string containing the expected letters in the alignment."""
         all_letters = self.alignment._alphabet.letters
         if all_letters is None \
-        or (isinstance(self.alignment._alphabet, AlphabetGapped) \
+        or (isinstance(self.alignment._alphabet, Alphabet.Gapped) \
         and all_letters == self.alignment._alphabet.gap_char):
             #We are dealing with a generic alphabet class where the
             #letters are not defined!  We must build a list of the
@@ -680,8 +703,8 @@ if __name__ == "__main__" :
     filename = "../../Tests/GFF/multi.fna"
     format = "fasta"
 
-    filename = "../../Tests/Phylip/horses.phy"
-    format = "phylip"
+    #filename = "../../Tests/Phylip/horses.phy"
+    #format = "phylip"
     
     alignment = AlignIO.read(open(filename), format)
     for record in alignment :
