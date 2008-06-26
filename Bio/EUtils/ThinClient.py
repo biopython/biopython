@@ -570,7 +570,7 @@ class ThinClient:
                  opener = None,
                  tool = TOOL,
                  email = EMAIL,
-                 baseurl = "http://www.ncbi.nlm.nih.gov/entrez/eutils/"):
+                 baseurl = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/"):
         """opener = None, tool = TOOL, email = EMAIL, baseurl = ".../eutils/"
 
         'opener' -- an object which implements the 'open' method like a
