@@ -37,7 +37,16 @@ tests = [ \
     ("blastn", "nr", "GTACCTTGATTTCGTATTC"+("N"*30)+"GACTCTACTACCTTTACCC",
      10, "pan [ORGN]", ["37953274"]),
     #Try an orchid EST (nucleotide) sequence against NR using BLASTX
-    ("blastx", "nr", "116660609",
+    ("blastx", "nr", """>gi|116660609|gb|EG558220.1|EG558220 CR02019H04 Leaf CR02 cDNA library Catharanthus roseus cDNA clone CR02019H04 5', mRNA sequence
+CTCCATTCCCTCTCTATTTTCAGTCTAATCAAATTAGAGCTTAAAAGAATGAGATTTTTAACAAATAAAA
+AAACATAGGGGAGATTTCATAAAAGTTATATTAGTGATTTGAAGAATATTTTAGTCTATTTTTTTTTTTT
+TCTTTTTTTGATGAAGAAAGGGTATATAAAATCAAGAATCTGGGGTGTTTGTGTTGACTTGGGTCGGGTG
+TGTATAATTCTTGATTTTTTCAGGTAGTTGAAAAGGTAGGGAGAAAAGTGGAGAAGCCTAAGCTGATATT
+GAAATTCATATGGATGGAAAAGAACATTGGTTTAGGATTGGATCAAAAAATAGGTGGACATGGAACTGTA
+CCACTACGTCCTTACTATTTTTGGCCGAGGAAAGATGCTTGGGAAGAACTTAAAACAGTTTTAGAAAGCA
+AGCCATGGATTTCTCAGAAGAAAATGATTATACTTCTTAATCAGGCAACTGATATTATCAATTTATGGCA
+GCAGAGTGGTGGCTCCTTGTCCCAGCAGCAGTAATTACTTTTTTTTCTCTTTTTGTTTCCAAATTAAGAA
+ACATTAGTATCATATGGCTATTTGCTCAATTGCAGATTTCTTTCTTTTGTGAATG""",
      0.0000001, None, ["157341404","21554275","18409071"]),
 
     
@@ -45,7 +54,7 @@ tests = [ \
 
 print "Checking Bio.Blast.NCBIWWW.qblast() with various queries"
 for program,database,query,e_value,entrez_filter,expected_hits in tests :
-    print 'qblast("%s", "%s", "%s", ...)' % (program, database, query)
+    print "qblast('%s', '%s', %s, ...)" % (program, database, repr(query))
     handle = NCBIWWW.qblast(program, database, query, \
                             alignments=10, descriptions=10, \
                             hitlist_size=10, \
@@ -58,6 +67,9 @@ for program,database,query,e_value,entrez_filter,expected_hits in tests :
     if record.query == "No definition line" :
         #We used a sequence as the query
         assert len(query) == record.query_letters
+    elif query.startswith(">") :
+        #We used a FASTA record as the query
+        assert query[1:].split("\n",1)[0] == (record.query)
     else :
         #We used an identifier as the query
         assert query in record.query_id.split("|")
