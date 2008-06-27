@@ -2541,6 +2541,7 @@ For each of these databases, we can use EInfo again to obtain more information:
 Try \verb+record["DbInfo"].keys()+ for other information stored in this record.
 
 \section{ESearch: Searching the Entrez databases}
+\label{sec:entrez-esearch}
 To search any of these databases, we use \verb+Bio.Entrez.esearch()+. For example, let's search in PubMed for publications related to Biopython:
 \begin{verbatim}
 >>> from Bio import Entrez
@@ -2722,6 +2723,7 @@ ESpell retrieves spelling suggestions. In this example, we use \verb+Bio.Entrez.
 \end{verbatim}
 See the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/espell\_help.html}{ESpell help page} for more information.
 
+
 \section{Examples}
 \label{sec:entrez_examples}
 
@@ -2768,7 +2770,12 @@ Let's look at the first five results:
 >>> print record['IdList'][:5]
 ['187237168', '187372713', '187372690', '187372688', '187372686']
 \end{verbatim}
-We can download these records using \verb+efetch+. To reduce the load on NCBI's servers, it is better to fetch a bunch of records at the same time instead of one-by-one:
+
+\label{sec:entrez-batched-efetch}
+We can download these records using \verb+efetch+.
+While you could download these records one by one, to reduce the load on NCBI's servers, it is better to fetch a bunch of records at the same time, shown below.
+However, in this situation you should ideally be using the history feature described later in Section~\ref{sec:entrez-webenv}.
+
 \begin{verbatim}
 >>> idlist = ",".join(record['IdList'][:5])
 >>> print idlist
@@ -2803,7 +2810,7 @@ mitochondrial
 Cypripedium calceolus
 \end{verbatim}
 
-You could use this to quickly set up searches that you want to repeat on a daily basis.  Remember, in addition to getting the sequences back in XML format, the NCBI will also return FASTA of GenBank format files which you could parse with \verb|Bio.SeqIO| (see Section~\ref{sec:SeqIO_GenBank_Online} and Section~\ref{sec:efetch} for examples).
+You could use this to quickly set up searches -- but for heavy usage, see Section~\ref{sec:entrez-webenv}.
 
 \subsection{Finding the lineage of an organism}
 
@@ -2836,6 +2843,30 @@ We can get the lineage directly from this record:
  Embryophyta; Tracheophyta; Euphyllophyta; Spermatophyta; Magnoliophyta;
  Liliopsida; Asparagales; Orchidaceae'
 \end{verbatim}
+
+\section{Using the history and WebEnv}
+\label{sec:entrez-webenv}
+
+Often you will want to make a series of linked queries.  Most typically, running a search, perhaps refining the search, and then retrieving detailed search results.  You \emph{can} do this by making a series of separate calls to Entrez.  However, the NCBI prefer you to take advantage of their history support.
+
+For example, suppose we want to search and download all Orchid rpl16 nucleotide sequences, and store them in a FASTA file.  We could naively combine the example code for \verb|Bio.Entrez.esearch()| (Section~\ref{sec:entrez-esearch}) to get a list of GI numbers, and then repeatedly call \verb|Bio.Entrez.efetch()| (Section~\ref{sec:efetch}) to download them all.  You could reduce the number of queries by asking for the records in batches (see Section~\ref{sec:entrez-batched-efetch}).  That would probably be better, but is still not what the NCBI encourage.
+
+The approved approach is to run the search with the history feature.  Then, we can fetch the results by reference to the search results - which the NCBI can anticipate and cache.
+
+\begin{verbatim}
+from Bio import Entrezsearch_handle = Entrez.esearch(db="nucleotide",term="Opuntia and rpl16",                               usehistory="y", email="history.user@example.com")search_results = Entrez.read(search_handle)search_handle.close()gi_list = search_results["IdList"]count = int(search_results["Count"])
+assert count == len(gi_list)session_cookie = search_results["WebEnv"]query_key = search_results["QueryKey"] 
+\end{verbatim}
+
+In addition to the GI numbers of the sequences found in the search, because we have asked to use the history feature the XML search results also include {\tt WebEnv} and {\tt QueryKey} values which are used to refer to these search results.  Having stored these values in variables {\tt session\_cookie} and {\tt query\_key} we can use them as parameters to \verb|Bio.Entrez.efetch()| instead of giving the GI numbers as identifiers.  
+
+While for small searches you might be OK downloading everything at once, its better download in batches.  You use the {\tt retstart} and {\tt retmax} parameters to specify which range of search results you want returned (starting entry using zero-based counting, and maximum number of results to return).  For example,
+
+\begin{verbatim}
+batch_size = 3out_handle = open("orchid_rpl16.fasta", "w")for start in range(0,count,batch_size) :    end = min(count, start+batch_size)    print "Going to download record %i to %i" % (start+1, end)    fetch_handle = Entrez.efetch(db="nucleotide", rettype="fasta",                                 retstart=start, retmax=batch_size,                                 webenv=session_cookie, query_key=query_key,                                 email="history.user@example.com")    data = fetch_handle.read()    fetch_handle.close()    assert data.startswith(">"), "This isn't FASTA data:\n%s" % data    out_handle.write(data)out_handle.close()
+\end{verbatim}
+
+You'll notice in the above example that we explicitly check the data returned to make sure it isn't an error message.
 
 \chapter{Swiss-Prot, Prosite, Prodoc, and ExPASy}
 \label{chapter:swiss_prot}
