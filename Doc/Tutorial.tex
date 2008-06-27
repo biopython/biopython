@@ -923,7 +923,7 @@ gi|6273291|gb|AF191665.1|AF191665 with 3 features
 
 The NCBI will also let you ask for the file in other formats, for example as a
 FASTA file.  If you don't care about the annotations and features in a GenBank
-file, this is a better choice to download because its a smaller file:
+file, this is a better choice to download because it's a smaller file:
 
 \begin{verbatim}
 from Bio import Entrez
@@ -2723,16 +2723,22 @@ In addition to the eight Entrez Programming Utilities, you can also create URLs 
 
 \subsection{Searching and downloading Entrez Nucleotide records}
 
-Here we'll show a simple example of performing a remote Entrez query. In section~\ref{sec:orchids} of the parsing examples, we talked about using NCBI's Entrez website to search the NCBI nucleotide databases for info on Cypripedioideae, our friends the lady slipper orchids. Now, we'll look at how to automate that process using a Python script. In this example, we'll just show how to connect, get the results, and parse them.
+Here we'll show a simple example of performing a remote Entrez query. In section~\ref{sec:orchids} of the parsing examples, we talked about using NCBI's Entrez website to search the NCBI nucleotide databases for info on Cypripedioideae, our friends the lady slipper orchids. Now, we'll look at how to automate that process using a Python script. In this example, we'll just show how to connect, get the results, and parse them, with the Entrez module doing all of the work.
 
-We first query Entrez and get a handle with the results. This is done with the following code:
+First, we use EGQuery to find out the number of results we will get before actually downloading them:
 \begin{verbatim}
 >>> from Bio import Entrez
->>> handle = Entrez.esearch(db='nucleotide', term='Cypripedioideae', retmax=1000)
+>>> handle = Entrez.egquery(term='Cypripedioideae')
+>>> record = Entrez.read(handle)
+>>> for row in record['eGQueryResult']:
+...     if row['DbName']=='nuccore':
+...         print row['Count']
+814
 \end{verbatim}
-The Entrez module does all of the work of preparing the CGI script command line. The \verb+retmax+ parameter is the maximum number of results we'd like to see from our search. We'll check below if 1000 was large enough.
-Now that we've got a handle to the results, we can parse them into a Python object.
+So, we expect to find 814 Entrez Nucleotide records. If you find some ridiculously high number of hits, you may want to reconsider if you really want to download all of them, which is our next step:
 \begin{verbatim}
+>>> from Bio import Entrez
+>>> handle = Entrez.esearch(db='nucleotide', term='Cypripedioideae', retmax=814)
 >>> record = Entrez.read(handle)
 \end{verbatim}
 Here, \verb+record+ is a Python dictionary containing the search results and some auxiliary information. Just for information, let's look at what is stored in this dictionary:
@@ -2745,7 +2751,7 @@ First, let's check how many results were found:
 >>> print record['Count']
 '814'
 \end{verbatim}
-This is less than the maximum of 1000 we specified, so we're not losing any results. The 814 results are stored in \verb+record['IdList']+:
+which is the number we expected. The 814 results are stored in \verb+record['IdList']+:
 \begin{verbatim}
 >>> print len(record['IdList'])
 814
@@ -2755,7 +2761,7 @@ Let's look at the first five results:
 >>> print record['IdList'][:5]
 ['187237168', '187372713', '187372690', '187372688', '187372686']
 \end{verbatim}
-We can download these records using \verb+efetch+:
+We can download these records using \verb+efetch+. To reduce the load on NCBI's servers, it is better to fetch a bunch of records at the same time instead of one-by-one:
 \begin{verbatim}
 >>> idlist = ",".join(record['IdList'][:5])
 >>> print idlist
@@ -2765,7 +2771,7 @@ We can download these records using \verb+efetch+:
 >>> print len(records)
 5
 \end{verbatim}
-Each of these records corresponds to one GenBank record (in XML format).
+Each of these records corresponds to one GenBank record.
 \begin{verbatim}
 >>> print records[0].keys()
 [u'GBSeq_moltype', u'GBSeq_source', u'GBSeq_sequence',
@@ -2789,9 +2795,7 @@ mitochondrial
 Cypripedium calceolus
 \end{verbatim}
 
-You could use this to quickly set up searches that you want to repeat on a daily basis.  Remember, in addition to getting the sequences back in XML format, the NCBI will also return FASTA of GenBank format files which you could parse with \verb|Bio.SeqIO| (see Section~\ref{sec:SeqIO_GenBank_Online} and Section~\ref{sec:efetch} for examples).
-
-Hopefully whatever your task, the \verb+Bio.Entrez+ code will make things a lot easier for you!
+You could use this to quickly set up searches that you want to repeat on a daily basis. Hopefully whatever your task, the \verb+Bio.Entrez+ code will make things a lot easier for you!
 
 \subsection{Finding the lineage of an organism}
 
