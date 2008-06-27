@@ -93,7 +93,7 @@ def efetch(db, cgi=None, **keywds):
     See the online documentation for an explanation of the parameters:
     http://www.ncbi.nlm.nih.gov/entrez/query/static/efetch_help.html
 
-    Return a handle to the results, by default in XML format.
+    Return a handle to the results.
 
     Raises an IOError exception if there's a network error.
 
