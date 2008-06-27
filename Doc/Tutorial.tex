@@ -1712,6 +1712,7 @@ Iota       -CTACTACAG GTG
 Its more common to want to load an existing alignment, and save that, perhaps after some simple manipulation like removing certain rows or columns.
 
 \subsection{Converting between sequence alignment file formats}
+\label{sec:converting-alignments}
 
 Converting between sequence alignment file formats with \verb|Bio.AlignIO| works in the same way as converting between sequence file formats with \verb|Bio.SeqIO| -- we load generally the alignment(s) using \verb|Bio.AlignIO.parse()| and then save them using the \verb|Bio.AlignIO.write()|.
 
@@ -2446,7 +2447,7 @@ To paraphrase:
 
 For large queries, the NCBI also recommend using their session history feature (the WebEnv session cookie string).  This is only slightly more complicated.
 
-In conclusion, be sensible with your usage levels.  If you plan to download lots of data, consider other options.  For example, if you want easy access to all the human genes, consider fetching each chromosome by FTP as a GenBank file, and importing these into your own BioSQL database.
+In conclusion, be sensible with your usage levels.  If you plan to download lots of data, consider other options.  For example, if you want easy access to all the human genes, consider fetching each chromosome by FTP as a GenBank file, and importing these into your own BioSQL database (see Section~\ref{sec:BioSQL}).
 
 \section{EInfo: Obtaining information about the Entrez databases}
 
@@ -2854,8 +2855,18 @@ For example, suppose we want to search and download all Orchid rpl16 nucleotide 
 The approved approach is to run the search with the history feature.  Then, we can fetch the results by reference to the search results - which the NCBI can anticipate and cache.
 
 \begin{verbatim}
-from Bio import Entrezsearch_handle = Entrez.esearch(db="nucleotide",term="Opuntia and rpl16",                               usehistory="y", email="history.user@example.com")search_results = Entrez.read(search_handle)search_handle.close()gi_list = search_results["IdList"]count = int(search_results["Count"])
-assert count == len(gi_list)session_cookie = search_results["WebEnv"]query_key = search_results["QueryKey"] 
+from Bio import Entrez
+search_handle = Entrez.esearch(db="nucleotide",term="Opuntia and rpl16",
+                               usehistory="y", email="history.user@example.com")
+search_results = Entrez.read(search_handle)
+search_handle.close()
+
+gi_list = search_results["IdList"]
+count = int(search_results["Count"])
+assert count == len(gi_list)
+
+session_cookie = search_results["WebEnv"]
+query_key = search_results["QueryKey"] 
 \end{verbatim}
 
 In addition to the GI numbers of the sequences found in the search, because we have asked to use the history feature the XML search results also include {\tt WebEnv} and {\tt QueryKey} values which are used to refer to these search results.  Having stored these values in variables {\tt session\_cookie} and {\tt query\_key} we can use them as parameters to \verb|Bio.Entrez.efetch()| instead of giving the GI numbers as identifiers.  
@@ -2863,10 +2874,24 @@ In addition to the GI numbers of the sequences found in the search, because we h
 While for small searches you might be OK downloading everything at once, its better download in batches.  You use the {\tt retstart} and {\tt retmax} parameters to specify which range of search results you want returned (starting entry using zero-based counting, and maximum number of results to return).  For example,
 
 \begin{verbatim}
-batch_size = 3out_handle = open("orchid_rpl16.fasta", "w")for start in range(0,count,batch_size) :    end = min(count, start+batch_size)    print "Going to download record %i to %i" % (start+1, end)    fetch_handle = Entrez.efetch(db="nucleotide", rettype="fasta",                                 retstart=start, retmax=batch_size,                                 webenv=session_cookie, query_key=query_key,                                 email="history.user@example.com")    data = fetch_handle.read()    fetch_handle.close()    assert data.startswith(">"), "This isn't FASTA data:\n%s" % data    out_handle.write(data)out_handle.close()
+batch_size = 3
+out_handle = open("orchid_rpl16.fasta", "w")
+for start in range(0,count,batch_size) :
+    end = min(count, start+batch_size)
+    print "Going to download record %i to %i" % (start+1, end)
+    fetch_handle = Entrez.efetch(db="nucleotide", rettype="fasta",
+                                 retstart=start, retmax=batch_size,
+                                 webenv=session_cookie, query_key=query_key,
+                                 email="history.user@example.com")
+    data = fetch_handle.read()
+    fetch_handle.close()
+    
+    assert data.startswith(">"), "This isn't FASTA data:\n%s" % data
+    out_handle.write(data)
+out_handle.close()
 \end{verbatim}
 
-You'll notice in the above example that we explicitly check the data returned to make sure it isn't an error message.
+You'll notice in the above example that we explicitly check the data returned to make sure it isn't an error message.  And finally, don't forget to include your \emph{own} email address in the Entrez calls.
 
 \chapter{Swiss-Prot, Prosite, Prodoc, and ExPASy}
 \label{chapter:swiss_prot}
@@ -3436,48 +3461,6 @@ This just iterates over a GenBank file, parsing it into SeqRecord and SeqFeature
 
 As with other formats, you have lots of tools for dealing with GenBank records. This should make it possible to do whatever you need to with GenBank.
 
-\subsection{Making your very own GenBank database}
-
-One very cool thing that you can do is set up your own personal GenBank database and access it like a dictionary (this can be extra cool because you can also allow access to these local databases over a network using BioCorba -- see the BioCorba documentation for more information).
-
-Note - this is only worth doing if your GenBank file contains more than one record.
-
-Making a local database first involves creating an index file, which will allow quick access to any record in the file. To do this, we use the index file function.
-Again, this example uses the file \verb|cor6_6.gb| which is included in the BioPython source code under the Tests/GenBank/ directory:
-
-\begin{verbatim}
->>> from Bio import GenBank
->>> dict_file = "cor6_6.gb"
->>> index_file = "cor6_6.idx"
->>> GenBank.index_file(dict_file, index_file)
-\end{verbatim}
-
-This will create a directory called \verb|cor6_6.idx| containing the index files. Now, we can use this index to create a dictionary object that allows individual access to every record. Like the Iterator and NCBIDictionary interfaces, we can either get back raw records, or we can pass the dictionary a parser that will parse the records before returning them. In this case, we pass a \verb|FeatureParser| so that when we get a record, then we retrieve a SeqRecord object.
-
-Setting up the dictionary is as easy as one line:
-
-\begin{verbatim}
->>> gb_dict = GenBank.Dictionary(index_file, GenBank.FeatureParser())
-\end{verbatim}
-
-Now we can deal with this like a dictionary. For instance:
-
-\begin{verbatim}
->>> len(gb_dict)
-6
->>> gb_dict.keys()
-['L31939', 'AJ237582', 'X62281', 'AF297471', 'M81224', 'X55053']
-\end{verbatim}
-
-Finally, we retrieve objects using subscripting:
-
-\begin{verbatim}
->>> gb_dict['AJ237582']
-<Bio.SeqRecord.SeqRecord instance at 0x102fdd8c>
->>> print len(gb_dict['X55053'].features)
-3
-\end{verbatim}
-
 \section{Dealing with alignments}
 
 It is often very useful to be able to align particular sequences. I do this quite often to get a quick and dirty idea of relationships between sequences. Consequently, it is very nice to be able to quickly write up a python script that does an alignment and gives you back objects that are easy to work with. The alignment related code in Biopython is meant to allow python-level access to alignment programs so that you can run alignments quickly from within scripts.
@@ -3760,43 +3743,9 @@ info_content = summary_align.information_content(5, 30, log_base = 10
 Well, now you are ready to calculate information content. If you want to try applying this to some real life problems, it would probably be best to dig into the literature on information content to get an idea of how it is used. Hopefully your digging won't reveal any mistakes made in coding this function!
 
 \subsection{Translating between Alignment formats}
-\label{sec:align_translate}
 
-One thing that you always end up having to do is convert between different formats. Biopython does this using a FormatConverter class for alignment objects. First, let's say we have just parsed an alignment from clustal format into a \verb|ClustalAlignment| object:
-
-\begin{verbatim}
-import os
-from Bio import Clustalw
-
-alignment = Clustalw.parse_file(os.path.join(os.curdir, "test.aln"))
-\end{verbatim}
-
-Now, let's convert this alignment into FASTA format. First, we create a converter object:
-
-\begin{verbatim}
-from Bio.Align.FormatConvert import FormatConverter
-
-converter = FormatConverter(alignment)
-\end{verbatim}
-
-We pass the converter the alignment that we want to convert. Now, to get this in FASTA alignment format, we simply do the following:
-
-\begin{verbatim}
-fasta_align = converter.to_fasta()
-\end{verbatim}
-
-Looking at the newly created \verb|fasta_align| object using \verb|print fasta_align| gives:
-
-\begin{verbatim}
->gi|6273285|gb|AF191659.1|AF191
-TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----
-------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGA
-...
-\end{verbatim}
-
-The conversion process will, of course, lose information specific to a particular alignment format. Howerver, most of the basic information about the alignment will be retained.
-
-As more formats are added the converter will be beefed up to read and write all of these different formats.
+One thing that you always end up having to do is convert between different formats.
+You can do this using the \verb|Bio.AlignIO| module, see Section~\ref{sec:converting-alignments}.
 
 \section{Substitution Matrices}
 \label{sec:sub_matrix}
@@ -4107,7 +4056,7 @@ Cool, now we can add our own databases to the registry and make use of
 the simplified retrieval scheme!
 
 \section{BioSQL -- storing sequences in a relational database}
-
+\label{sec:BioSQL}
 \href{http://www.biosql.org/}{BioSQL} is a joint effort between the
 \href{http://open-bio.org/}{OBF} projects (BioPerl, BioJava etc) to support a
 shared database schema for storing sequence data. In theory, you could load a
