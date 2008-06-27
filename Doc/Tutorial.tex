@@ -2432,26 +2432,28 @@ For sequence databases, the Entrez Programming Utilities can also generate outpu
 
 \section{Entrez Guidelines}
 \label{sec:entrez-guidelines}
-Before using Biopython to access the NCBI's online resources (via \verb|Bio.Entez| or some of the other modules), please read the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/eutils_help.html#UserSystemRequirements}{NCBI's Entrez User Requirements}.  To paraphrase:
+Before using Biopython to access the NCBI's online resources (via \verb|Bio.Entrez| or some of the other modules), please read the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/eutils_help.html#UserSystemRequirements}{NCBI's Entrez User Requirements}.  If the NCBI finds you are abusing their systems, they can and will ban your access! 
+
+To paraphrase:
 
 \begin{itemize}
 \item For any series of more than 100 requests, do this at weekends or outside USA peak times.  This is up to you to obey.
 \item Use the \url{http://eutils.ncbi.nlm.nih.gov} address, not the standard NCBI Web address.  Biopython should follow this.
 \item Make no more than one request every 3 seconds.  Biopython should follow this.
-\item Use optional email parameter so the NCBI can contact you if there is a problem.
-\item If you are using Biopython within some larger software suite, use the tool parameter to specify this, and display the NCBI's Disclaimer and Copyright notice must be evident to users of your service.  The tool parameter will default to Biopython.
+\item Use the optional email parameter so the NCBI can contact you if there is a problem.  In the examples below, we have used {\tt email="A.N.Other@example.com"} for illustrative purposes.  The {\tt example.com} address is a reserved domain name specifically for documentation (RFC 2606).  Please DO NOT use a random email -- its better not to give an email at all.
+\item If you are using Biopython within some larger software suite, use the tool parameter to specify this.  The tool parameter will default to Biopython.
 \end{itemize}
 
 For large queries, the NCBI also recommend using their session history feature (the WebEnv session cookie string).  This is only slightly more complicated.
 
-If the NCBI finds you are abusing their systems, they can and will ban your access!  So be sensible, and if you plan to download lots of data, consider other options.  For example, if you want easy access to all the human genes, consider fetching each Chromosome by FTP as a GenBank file, and importing this into your own BioSQL database.
+In conclusion, be sensible with your usage levels.  If you plan to download lots of data, consider other options.  For example, if you want easy access to all the human genes, consider fetching each chromosome by FTP as a GenBank file, and importing these into your own BioSQL database.
 
 \section{EInfo: Obtaining information about the Entrez databases}
 
 EInfo provides field index term counts, last update, and available links for each of NCBI's databases. In addition, you can use EInfo to obtain a list of all database names accessible through the Entrez utilities:
 \begin{verbatim}
 >>> from Bio import Entrez
->>> handle = Entrez.einfo()
+>>> handle = Entrez.einfo(email="A.N.Other@example.com")
 >>> result = handle.read()
 \end{verbatim}
 The variable \verb+result+ now contains a list of databases in XML format:
@@ -2506,7 +2508,7 @@ The variable \verb+result+ now contains a list of databases in XML format:
 Since this is a fairly simple XML file, we could extract the information it contains simply by string searching. Using \verb+Bio.Entrez+'s parser instead, we can directly parse this XML file into a Python object:
 \begin{verbatim}
 >>> from Bio import Entrez
->>> handle = Entrez.einfo()
+>>> handle = Entrez.einfo(email="A.N.Other@example.com")
 >>> record = Entrez.read(handle)
 \end{verbatim}
 Now \verb+record+ is a dictionary with exactly one key:
@@ -2527,7 +2529,7 @@ The values stored in this key is the list of database names shown in the XML abo
 
 For each of these databases, we can use EInfo again to obtain more information:
 \begin{verbatim}
->>> handle = Entrez.einfo(db="pubmed")
+>>> handle = Entrez.einfo(db="pubmed", email="A.N.Other@example.com")
 >>> record = Entrez.read(handle)
 >>> record["DbInfo"]["Description"]
 'PubMed bibliographic record'
@@ -2542,17 +2544,20 @@ Try \verb+record["DbInfo"].keys()+ for other information stored in this record.
 To search any of these databases, we use \verb+Bio.Entrez.esearch()+. For example, let's search in PubMed for publications related to Biopython:
 \begin{verbatim}
 >>> from Bio import Entrez
->>> handle = Entrez.esearch(db="pubmed", term="biopython")
+>>> handle = Entrez.esearch(db="pubmed", term="biopython", email="A.N.Other@example.com")
 >>> record = Entrez.read(handle)
 >>> record["IdList"]
 ['16403221', '16377612', '14871861', '14630660', '12230038']
 \end{verbatim}
 In this output, you see five PubMed IDs (16403221, 16377612, 14871861, 14630660, 12230038), which can be retrieved by EFetch (see section \ref{sec:efetch}).
 
+Note that we've included the optional email address (edit this to your own address!) as recommended by the NCBI Entrez guidelines (see Section~\ref{sec:entrez-guidelines}).
+
 You can also use ESearch to search GenBank. Here we'll do a quick search for the \emph{rpl16} gene in \emph{Opuntia}:
 
 \begin{verbatim}
->>> handle = Entrez.esearch(db="nucleotide",term="Opuntia and rpl16")
+>>> handle = Entrez.esearch(db="nucleotide",term="Opuntia and rpl16",
+                            email="A.N.Other@example.com")
 >>> record = Entrez.read(handle)
 >>> record["Count"]
 '9'
@@ -2565,7 +2570,8 @@ Each of the IDs (57240072, 57240071, 6273287...) is a GenBank identifier. See se
 
 As a final example, let's get a list of computational journal titles:
 \begin{verbatim}
->>> handle = Entrez.esearch(db="journals", term="computational")
+>>> handle = Entrez.esearch(db="journals", term="computational",
+                            email="A.N.Other@example.com")
 >>> record = Entrez.read(handle)
 >>> record["Count"]
 '16'
@@ -2585,7 +2591,7 @@ EPost posts a list of UIs for use in subsequent search strategies; see the  \hre
 ESummary retrieves document summaries from a list of primary IDs (see the  \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/esummary\_help.html}{ESummary help page} for more information). In Biopython, ESummary is available as \verb+Bio.Entrez.esummary()+. Using the search result above, we can for example find out more about the journal with ID 30367:
 \begin{verbatim}
 >>> from Bio import Entrez
->>> handle = Entrez.esummary(db="journals", id="30367")
+>>> handle = Entrez.esummary(db="journals", id="30367", email="A.N.Other@example.com")
 >>> record = Entrez.read(handle)
 >>> record[0]["Id"]
 '30367'
@@ -2602,7 +2608,8 @@ EFetch is what you use when you want to retrieve a full record from Entrez.
 For the \emph{Opuntia} example above, we can download GenBank record 57240072 using \verb+Bio.Entrez.efetch+:
 
 \begin{verbatim}
->>> handle = Entrez.efetch(db="nucleotide", id="57240072",rettype="genbank")
+>>> handle = Entrez.efetch(db="nucleotide", id="57240072", rettype="genbank", 
+                           email="A.N.Other@example.com")
 >>> print handle.read()
 LOCUS       AY851612                 892 bp    DNA     linear   PLN 10-APR-2007
 DEFINITION  Opuntia subulata rpl16 gene, intron; chloroplast.
@@ -2659,7 +2666,8 @@ If you fetch the record in one of the formats accepted by \verb+Bio.SeqIO+ (see 
 
 \begin{verbatim}
 >>> from Bio import Entrez, SeqIO
->>> handle = Entrez.efetch(db="nucleotide", id="57240072",rettype="genbank")
+>>> handle = Entrez.efetch(db="nucleotide", id="57240072",rettype="genbank",
+                           email="A.N.Other@example.com")
 >>> record = SeqIO.read(handle, "genbank")
 >>> print record
 ID: AY851612.1
@@ -2670,11 +2678,12 @@ Desription: Opuntia subulata rpl16 gene, intron; chloroplast.
 ....
 \end{verbatim}
 
-If you specifically ask for output in XML format, you can use the parser in \verb+Bio.Entrez+:
+By default you get the output in XML format, which you can parse using the \verb+Bio.Entrez.read()+ function:
 
 \begin{verbatim}
 >>> from Bio import Entrez
->>> handle = Entrez.efetch(db="nucleotide", id="57240072", rettype="genbank", retmode="xml")
+>>> handle = Entrez.efetch(db="nucleotide", id="57240072",
+                           email="A.N.Other@example.com")
 >>> record = Entrez.read(handle)
 >>> record[0]["GBSeq_definition"]
 'Opuntia subulata rpl16 gene, intron; chloroplast'
@@ -2690,7 +2699,8 @@ For help on ELink, see the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static
 EGQuery provides counts for a search term in each of the Entrez databases. In this example, we use \verb+Bio.Entrez.egquery()+ to obtain the counts for ``Biopython'':
 
 \begin{verbatim}
->>> handle = Entrez.egquery(term="biopython") 
+>>> handle = Entrez.egquery(term="biopython",
+                            email="A.N.Other@example.com") 
 >>> record = Entrez.read(handle)
 >>> record["eGQueryResult"][0]["DbName"]
 'pubmed'
@@ -2705,7 +2715,7 @@ ESpell retrieves spelling suggestions. In this example, we use \verb+Bio.Entrez.
 
 \begin{verbatim}
 >>> from Bio import Entrez
->>> handle = Entrez.espell(term="biopythooon")
+>>> handle = Entrez.espell(term="biopythooon", email="A.N.Other@example.com")
 >>> record = Entrez.read(handle)
 >>> record["Query"]
 'biopythooon'
@@ -2728,19 +2738,22 @@ Here we'll show a simple example of performing a remote Entrez query. In section
 First, we use EGQuery to find out the number of results we will get before actually downloading them:
 \begin{verbatim}
 >>> from Bio import Entrez
->>> handle = Entrez.egquery(term='Cypripedioideae')
+>>> handle = Entrez.egquery(term='Cypripedioideae', email="A.N.Other@example.com")
 >>> record = Entrez.read(handle)
 >>> for row in record['eGQueryResult']:
 ...     if row['DbName']=='nuccore':
 ...         print row['Count']
 814
 \end{verbatim}
+
 So, we expect to find 814 Entrez Nucleotide records. If you find some ridiculously high number of hits, you may want to reconsider if you really want to download all of them, which is our next step:
 \begin{verbatim}
 >>> from Bio import Entrez
->>> handle = Entrez.esearch(db='nucleotide', term='Cypripedioideae', retmax=814)
+>>> handle = Entrez.esearch(db='nucleotide', term='Cypripedioideae', retmax=814,
+                            email="A.N.Other@example.com")
 >>> record = Entrez.read(handle)
 \end{verbatim}
+
 Here, \verb+record+ is a Python dictionary containing the search results and some auxiliary information. Just for information, let's look at what is stored in this dictionary:
 \begin{verbatim}
 >>> print record.keys()
@@ -2766,7 +2779,8 @@ We can download these records using \verb+efetch+. To reduce the load on NCBI's 
 >>> idlist = ",".join(record['IdList'][:5])
 >>> print idlist
 187237168,187372713,187372690,187372688,187372686
->>> handle = Entrez.efetch(db='nucleotide', id=idlist, retmode='xml')
+>>> handle = Entrez.efetch(db='nucleotide', id=idlist, retmode='xml',
+                           email="A.N.Other@example.com")
 >>> records = Entrez.read(handle)
 >>> print len(records)
 5
@@ -2795,13 +2809,14 @@ mitochondrial
 Cypripedium calceolus
 \end{verbatim}
 
-You could use this to quickly set up searches that you want to repeat on a daily basis. Hopefully whatever your task, the \verb+Bio.Entrez+ code will make things a lot easier for you!
+You could use this to quickly set up searches that you want to repeat on a daily basis.  Remember, in addition to getting the sequences back in XML format, the NCBI will also return FASTA of GenBank format files which you could parse with \verb|Bio.SeqIO| (see Section~\ref{sec:SeqIO_GenBank_Online} and Section~\ref{sec:efetch} for examples).
 
 \subsection{Finding the lineage of an organism}
 
 Staying with the same organism, let's now find its lineage. First, we search the Taxonomy database for Cypripedioideae. We find exactly one accession number:
 \begin{verbatim}
->>> handle = Entrez.esearch(db="Taxonomy", term="Cypripedioideae")
+>>> handle = Entrez.esearch(db="Taxonomy", term="Cypripedioideae",
+                            email="A.N.Other@example.com")
 >>> record = Entrez.read(handle)
 >>> record["IdList"]
 ['158330']
