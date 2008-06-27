@@ -2888,13 +2888,11 @@ for start in range(0,count,batch_size) :
                                  email="history.user@example.com")
     data = fetch_handle.read()
     fetch_handle.close()
-    
-    assert data.startswith(">"), "This isn't FASTA data:\n%s" % data
     out_handle.write(data)
 out_handle.close()
 \end{verbatim}
 
-You'll notice in the above example that we explicitly check the data returned to make sure it isn't an error message.  And finally, don't forget to include your \emph{own} email address in the Entrez calls.
+And finally, don't forget to include your \emph{own} email address in the Entrez calls.
 
 \chapter{Swiss-Prot, Prosite, Prodoc, and ExPASy}
 \label{chapter:swiss_prot}
@@ -3670,27 +3668,27 @@ The structure of the PSSM class hopefully makes it easy both to access elements 
 \subsection{Information Content}
 \label{sec:getting_info_content}
 
-A potentially useful measure of evolutionary conservation is the information ceontent of a sequence.
+A potentially useful measure of evolutionary conservation is the information content of a sequence.
 
 A useful introduction to information theory targetted towards molecular biologists can be found at \url{http://www.lecb.ncifcrf.gov/~toms/paper/primer/}. For our purposes, we will be looking at the information content of a consesus sequence, or a portion of a consensus sequence. We calculate information content at a particular column in a multiple sequence alignment using the following formula:
 
 \begin{displaymath}
-IC_{j} = \sum_{i=1}^{N_{a}} P_{ij} * log(\frac{P_{ij}}{Q_{i}})
+IC_{j} = \sum_{i=1}^{N_{a}} P_{ij} \mathrm{log}\left(\frac{P_{ij}}{Q_{i}}\right)
 \end{displaymath}
 
-where:
+\noindent where:
 
 \begin{itemize}
-  \item $IC_{j}$ -- The information content for the jth column in an alignment.
+  \item $IC_{j}$ -- The information content for the $j$-th column in an alignment.
   \item $N_{a}$ -- The number of letters in the alphabet.
-  \item $P_{ij}$ -- The frequency of a particular letter in the column (i.~e.~if G occured 3 out of 6 times in an aligment column, this would be 0.5)
-  \item $Q_{i}$ --  The expected frequency of a letter. This is an
+  \item $P_{ij}$ -- The frequency of a particular letter $i$ in the $j$-th column (i.~e.~if G occured 3 out of 6 times in an aligment column, this would be 0.5)
+  \item $Q_{i}$ --  The expected frequency of a letter $i$. This is an
   optional argument, usage of which is left at the user's
-  discretion. By default, it is automatically assigned to 0.05 for a
-  protein alphabet, and 0.25 for a nucleic acid alphabet. This is for
+  discretion. By default, it is automatically assigned to $0.05 = 1/20$ for a
+  protein alphabet, and $0.25 = 1/4$ for a nucleic acid alphabet. This is for
   geting the information content without any assumption of prior
   distribtions. When assuming priors, or when using a non-standard
-  alphabet, user should supply the values for $Q_{i}$.
+  alphabet, you should supply the values for $Q_{i}$.
 \end{itemize}
 
 Well, now that we have an idea what information content is being calculated in Biopython, let's look at how to get it for a particular region of the alignment.
