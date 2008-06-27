@@ -50,33 +50,31 @@ from Bio import File
 
 def query(cmd, db, cgi='http://www.ncbi.nlm.nih.gov/sites/entrez',
           **keywds):
-    """query(cmd, db, cgi='http://www.ncbi.nlm.nih.gov/sites/entrez',
-    **keywds) -> handle
+    """Query Entrez and return a handle to the HTML results (DEPRECATED).
 
-    Query Entrez and return a handle to the results, consisting of
-    a web page in HTML format.
     See the online documentation for an explanation of the parameters:
     http://www.ncbi.nlm.nih.gov/books/bv.fcgi?rid=helplinks.chapter.linkshelp
 
-    Raises an IOError exception if there's a network error.
+    Return a handle to the results.
 
+    Raises an IOError exception if there's a network error.
     """
     import warnings
     warnings.warn("Bio.Entrez.query is deprecated, since it breaks NCBI's rule to only use the E-Utilities URL.", DeprecationWarning)
 
 # XXX retmode?
 def epost(db, cgi=None, **keywds):
-    """epost(db, id|(WebEnv,query_key)) -> handle
-
-    Query Entrez and return a handle to the results.
+    """Post a file of identifiers for future use.
 
     Posts a file containing a list of UIs for future use in the user's
-    environment to use with subsequent search strategies. See the online
-    documentation for an explanation of the parameters:
+    environment to use with subsequent search strategies.
+
+    See the online documentation for an explanation of the parameters:
     http://www.ncbi.nlm.nih.gov/entrez/query/static/epost_help.html
 
-    Raises an IOError exception if there's a network error.
+    Return a handle to the results.
 
+    Raises an IOError exception if there's a network error.
     """
     if cgi:
         import warnings
@@ -87,17 +85,23 @@ def epost(db, cgi=None, **keywds):
     return _open(cgi, variables)
 
 def efetch(db, cgi=None, **keywds):
-    """efetch(db[, ...]) -> handle
-
-    Query Entrez and return a handle to the results.
+    """Fetches Entrez results which are returned as a handle.
 
     EFetch retrieves records in the requested format from a list of one or
-    more UIs or from user's environment. See the online
-    documentation for an explanation of the parameters:
+    more UIs or from user's environment.
+
+    See the online documentation for an explanation of the parameters:
     http://www.ncbi.nlm.nih.gov/entrez/query/static/efetch_help.html
+
+    Return a handle to the results, by default in XML format.
 
     Raises an IOError exception if there's a network error.
 
+    Short example:
+
+    from Bio import Entrez
+    handle = Entrez.efetch(db="nucleotide", id="57240072", rettype="genbank")
+    print handle.read()
     """
     if cgi:
         import warnings
@@ -108,18 +112,26 @@ def efetch(db, cgi=None, **keywds):
     return _open(cgi, variables)
 
 def esearch(db, term, cgi=None, **keywds):
-    """esearch(db, term[...]) -> handle
-
-    Query Entrez and return a handle to the results.
+    """ESearch runs an Entrez search and returns a handle to the results.
 
     ESearch searches and retrieves primary IDs (for use in EFetch, ELink
     and ESummary) and term translations, and optionally retains results
-    for future use in the user's environment. See the online
-    documentation for an explanation of the parameters:
+    for future use in the user's environment.
+
+    See the online documentation for an explanation of the parameters:
     http://www.ncbi.nlm.nih.gov/entrez/query/static/esearch_help.html
+
+    Return a handle to the results which are always in XML format.
 
     Raises an IOError exception if there's a network error.
 
+    Short example:
+
+    from Bio import Entez
+    handle = Entrez.esearch(db="nucleotide", retmax=10, term="Opuntia")
+    record = Entrez.read(handle)
+    print record["Count"]
+    print record["IdList"]
     """
     if cgi:
         import warnings
@@ -131,20 +143,20 @@ def esearch(db, term, cgi=None, **keywds):
     return _open(cgi, variables)
 
 def elink(cgi=None, **keywds):
-    """elink([...]) -> handle
-
-    Query Entrez and return a handle to the results.
+    """ELink checks for linked external articles and returns a handle.
 
     ELink checks for the existence of an external or Related Articles link
     from a list of one or more primary IDs;  retrieves IDs and relevancy
     scores for links to Entrez databases or Related Articles; creates a
     hyperlink to the primary LinkOut provider for a specific ID and
-    database, or lists LinkOut URLs and attributes for multiple IDs. See
-    the online documentation for an explanation of the parameters:
+    database, or lists LinkOut URLs and attributes for multiple IDs.
+
+    See the online documentation for an explanation of the parameters:
     http://www.ncbi.nlm.nih.gov/entrez/query/static/elink_help.html
 
-    Raises an IOError exception if there's a network error.
+    Return a handle to the results, by default in XML format.
 
+    Raises an IOError exception if there's a network error.
     """
     if cgi:
         import warnings
@@ -155,17 +167,23 @@ def elink(cgi=None, **keywds):
     return _open(cgi, variables)
 
 def einfo(cgi=None, **keywds):
-    """einfo([...]) -> handle
-
-    Query Entrez and return a handle to the results.
+    """EInfo returns a summary of the Entez databases as a results handle.
 
     EInfo provides field names, index term counts, last update, and
-    available links for each Entrez database. See the online
-    documentation for an explanation of the parameters:
+    available links for each Entrez database.
+
+    See the online documentation for an explanation of the parameters:
     http://www.ncbi.nlm.nih.gov/entrez/query/static/einfo_help.html
+
+    Return a handle to the results, by default in XML format.
 
     Raises an IOError exception if there's a network error.
 
+    Short example:
+
+    from Bio import Entrez 
+    record = Entrez.read(Entrez.einfo())
+    print record['DbList']
     """
     if cgi:
         import warnings
@@ -176,17 +194,17 @@ def einfo(cgi=None, **keywds):
     return _open(cgi, variables)
 
 def esummary(cgi=None, **keywds):
-    """esummary([...]) -> handle
-
-    Query Entrez and return a handle to the results.
+    """ESummary retrieves document summaries as a results handle.
 
     ESummary retrieves document summaries from a list of primary IDs or
-    from the user's environment. See the online documentation for an
-    explanation of the parameters:
+    from the user's environment.
+
+    See the online documentation for an explanation of the parameters:
     http://www.ncbi.nlm.nih.gov/entrez/query/static/esummary_help.html
 
-    Raises an IOError exception if there's a network error.
+    Return a handle to the results, by default in XML format.
 
+    Raises an IOError exception if there's a network error.
     """
     if cgi:
         import warnings
@@ -197,17 +215,17 @@ def esummary(cgi=None, **keywds):
     return _open(cgi, variables)
 
 def egquery(cgi=None, **keywds):
-    """egquery([...]) -> handle
-
-    Query Entrez and return a handle to the results.
+    """EGQuery provides Entrez database counts for a global search.
 
     EGQuery provides Entrez database counts in XML for a single search
-    using Global Query. See the online documentation for an explanation
-    of the parameters:
+    using Global Query.
+
+    See the online documentation for an explanation of the parameters:
     http://www.ncbi.nlm.nih.gov/entrez/query/static/egquery_help.html
 
-    Raises an IOError exception if there's a network error.
+    Return a handle to the results in XML format.
 
+    Raises an IOError exception if there's a network error.
     """
     if cgi:
         import warnings
@@ -218,16 +236,23 @@ def egquery(cgi=None, **keywds):
     return _open(cgi, variables)
 
 def espell(cgi=None, **keywds):
-    """espell([...]) -> handle
+    """ESpell retrieves spelling suggestions, returned in a results handle.
 
-    Query Entrez and return a handle to the results.
+    ESpell retrieves spelling suggestions, if available.
 
-    ESpell retrieves spelling suggestions, if available. See the online
-    documentation for an explanation of the parameters:
+    See the online documentation for an explanation of the parameters:
     http://www.ncbi.nlm.nih.gov/entrez/query/static/espell_help.html
+
+    Return a handle to the results, by default in XML format.
 
     Raises an IOError exception if there's a network error.
 
+    Short example:
+
+    from Bio import Entrez 
+    record = Entrez.read(Entrez.espell(term="biopythooon")) 
+    print record["Query"] 
+    print record["CorrectedQuery"] 
     """
     if cgi:
         import warnings
@@ -238,7 +263,7 @@ def espell(cgi=None, **keywds):
     return _open(cgi, variables)
 
 def read(handle):
-    """read(hande) -> record
+    """Parses an XML file from the NCBI Entrez Utilities into python objects.
     
     This function parses an XML file created by NCBI's Entrez Utilities,
     returning a multilevel data structure of Python lists and dictionaries.
@@ -259,12 +284,14 @@ def read(handle):
     return record
 
 def _open(cgi, params={}):
-    """_open(cgi, params={}) -> UndoHandle
+    """Helper function to build the URL and open a handle to it (PRIVATE).
 
     Open a handle to Entrez.  cgi is the URL for the cgi script to access.
     params is a dictionary with the options to pass to it.  Does some
     simple error checking, and will raise an IOError if it encounters one.
 
+    This function also enforces the "three second rule" to avoid abusing
+    the NCBI servers.
     """
     # NCBI requirement: At least three seconds between queries
     delay = 3.0
