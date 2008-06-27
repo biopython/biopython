@@ -2,7 +2,7 @@
 #
 # Trees.py 
 #
-# Copyright 2005 by Frank Kauff & Cymon J. Cox. All rights reserved.
+# Copyright 2005-2008 by Frank Kauff & Cymon J. Cox. All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
@@ -11,7 +11,7 @@
 # descriptions, get information about trees (monphyly of taxon sets, congruence between trees, common ancestors,...)
 # and to manipulate trees (reroot trees, split terminal nodes).
 #
-# Bug reports welcome: fkauff@duke.edu
+# Bug reports welcome: fkauff@biologie.uni-kl.de
 #
 
 import sys, random, sets
@@ -503,11 +503,11 @@ class Tree(Nodes.Chain):
             treeline.append('[&W%s]' % str(round(float(self.weight),3)))
         if self.rooted:
             treeline.append('[&R]')
-        treeline.append('(%s);' % ','.join(map(newickize,self.node(self.root).succ)))
+        treeline.append('(%s)' % ','.join(map(newickize,self.node(self.root).succ)))
         if plain_newick:
-            return treeline[-2]
+            return treeline[-1]
         else:
-            return ' '.join(treeline)
+            return ' '.join(treeline)+';'
         
     def __str__(self):
         """Short version of to_string(), gives plain tree"""
@@ -616,8 +616,9 @@ class Tree(Nodes.Chain):
          
 def consensus(trees, threshold=0.5,outgroup=None):
     """Compute a majority rule consensus tree of all clades with relative frequency>=threshold from a list of trees."""
-    
+
     total=len(trees)
+
     if total==0:
         return None
     # shouldn't we make sure that it's NodeData or subclass??
@@ -630,7 +631,8 @@ def consensus(trees, threshold=0.5,outgroup=None):
     c=0
     for t in trees:
         c+=1
-        #if c%50==0:
+        #print c
+        #if c%1==0:
         #    print c
         if alltaxa!=sets.Set(t.get_taxa()):
             raise TreeError, 'Trees for consensus must contain the same taxa'

@@ -1,11 +1,11 @@
 # Nexus.py - a NEXUS parser
 #
-# Copyright 2005 by Frank Kauff & Cymon J. Cox. All rights reserved.
+# Copyright 2005-2008 by Frank Kauff & Cymon J. Cox. All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 # 
-# Bug reports welcome: fkauff@duke.edu
+# Bug reports welcome: fkauff@biologie.uni-kl.de
 #
 
 """Nexus class. Parse the contents of a nexus file.
@@ -15,8 +15,6 @@ Maddison, Swofford, Maddison. 1997. Syst. Biol. 46(4):590-621
 
 import os,sys, math, random, copy
 import sets
-
-from copy import deepcopy
 
 from Bio.Alphabet import IUPAC
 from Bio.Data import IUPACData
@@ -33,8 +31,8 @@ else:
 
 INTERLEAVE=70
 SPECIAL_COMMANDS=['charstatelabels','charlabels','taxlabels', 'taxset', 'charset','charpartition','taxpartition',\
-        'matrix','tree', 'utree','translate']
-KNOWN_NEXUS_BLOCKS = ['trees','data', 'characters', 'taxa', 'sets']
+        'matrix','tree', 'utree','translate','codonposset','title']
+KNOWN_NEXUS_BLOCKS = ['trees','data', 'characters', 'taxa', 'sets','codons']
 PUNCTUATION='()[]{}/\,;:=*\'"`+-<>'
 MRBAYESSAFE='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_'
 WHITESPACE=' \t\n'
@@ -42,6 +40,7 @@ WHITESPACE=' \t\n'
 SPECIALCOMMENTS=['&'] # supported special comment ('tree' command), all others are ignored
 CHARSET='chars'
 TAXSET='taxa'
+CODONPOSITIONS='codonpositions'
 
 class NexusError(Exception): pass
 
@@ -347,6 +346,11 @@ def combine(matrices):
         combined.nchar+=m.nchar # update nchar and ntax
         combined.ntax+=len(m_only)
         
+    # some prefer partitions, some charsets:
+    # make separate charset for ecah initial dataset
+    for c in combined.charpartitions['combined']:
+        combined.charsets[c]=combined.charpartitions['combined'][c]
+
     return combined
 
 def _kill_comments_and_break_lines(text):
@@ -496,7 +500,7 @@ class Nexus(object):
     def __init__(self, input=None):
         self.ntax=0                     # number of taxa
         self.nchar=0                    # number of characters
-        self.taxlabels=[]             # labels for taxa, ordered by their id
+        self.taxlabels=[]               # labels for taxa, ordered by their id
         self.charlabels=None            # ... and for characters
         self.statelabels=None           # ... and for states
         self.datatype='dna'             # (standard), dna, rna, nucleotide, protein
@@ -517,12 +521,13 @@ class Nexus(object):
         self.charsets={}
         self.charpartitions={}
         self.taxpartitions={}
-        self.trees=[]                   # list of Trees (instances of tree class)
+        self.trees=[]                   # list of Trees (instances of Tree class)
         self.translate=None             # Dict to translate taxon <-> taxon numbers
         self.structured=[]              # structured input representation
         self.set={}                     # dict of the set command to set various options 
         self.options={}                 # dict of the options command in the data block
-   
+        self.codonposset=None           # name of the charpartition that defines codon positions
+
         # some defaults
         self.options['gapmode']='missing'
         
@@ -633,6 +638,9 @@ class Nexus(object):
                 raise
                 raise NexusError, 'Unknown command: %s ' % line.command
     
+    def _title(self,options):
+        pass
+
     def _dimensions(self,options):
         if options.has_key('ntax'):
             self.ntax=eval(options['ntax'])
@@ -658,17 +666,17 @@ class Nexus(object):
         if options.has_key('datatype'):
             self.datatype=options['datatype'].lower()
             if self.datatype=='dna' or self.datatype=='nucleotide':
-                self.alphabet=deepcopy(IUPAC.ambiguous_dna)
-                self.ambiguous_values=deepcopy(IUPACData.ambiguous_dna_values)
-                self.unambiguous_letters=deepcopy(IUPACData.unambiguous_dna_letters)
+                self.alphabet=IUPAC.ambiguous_dna
+                self.ambiguous_values=IUPACData.ambiguous_dna_values
+                self.unambiguous_letters=IUPACData.unambiguous_dna_letters
             elif self.datatype=='rna':
-                self.alphabet=deepcopy(IUPAC.ambiguous_rna)
-                self.ambiguous_values=deepcopy(IUPACData.ambiguous_rna_values)
-                self.unambiguous_letters=deepcopy(IUPACData.unambiguous_rna_letters)
+                self.alphabet=IUPAC.ambiguous_rna
+                self.ambiguous_values=IUPACData.ambiguous_rna_values
+                self.unambiguous_letters=IUPACData.unambiguous_rna_letters
             elif self.datatype=='protein':
-                self.alphabet=deepcopy(IUPAC.protein)
-                self.ambiguous_values={'B':'DN','Z':'EQ','X':deepcopy(IUPACData.protein_letters)} # that's how PAUP handles it
-                self.unambiguous_letters=deepcopy(IUPACData.protein_letters)+'*' # stop-codon
+                self.alphabet=IUPAC.protein
+                self.ambiguous_values={'B':'DN','Z':'EQ','X':IUPACData.protein_letters} # that's how PAUP handles it
+                self.unambiguous_letters=IUPACData.protein_letters+'*' # stop-codon
             elif self.datatype=='standard':
                 raise NexusError('Datatype standard is not yet supported.')
                 #self.alphabet=None
@@ -865,7 +873,7 @@ class Nexus(object):
         #check all sequences for length according to nchar
         for taxon in self.matrix:
             if len(self.matrix[taxon])!=self.nchar:
-                raise NexusError,'Nchar ('+str(self.nchar)+') does not match data for taxon '+taxon
+                raise NexusError,'Matrx Nchar %d does not match data length (%d) for taxon %s' % (self.nchar, len(self.matrix[taxon]),taxon)
 
     def _translate(self,options):
         self.translate={}
@@ -962,6 +970,23 @@ class Nexus(object):
                 sub+=w
         self.taxpartitions[name]=taxpartition
 
+    def _codonposset(self,options):
+        """Read codon positions from a codons block as written from McClade.
+        Here codonposset is just a fancy name for a character partition with the name CodonPositions and the partitions N,1,2,3
+        """
+
+        prev_partitions=self.charpartitions.keys()
+        self._charpartition(options)
+        # mcclade calls it CodonPositions, but you never know...
+        codonname=[n for n in self.charpartitions.keys() if n not in prev_partitions]
+        if codonname==[] or len(codonname)>1:
+            raise NexusError, 'Formatting Error in codonposset: %s ' % options
+        else:
+            self.codonposset=codonname[0]
+  
+    def _codeset(self,options):
+        pass
+
     def _charpartition(self, options):
         charpartition={}
         quotelevel=False
@@ -988,7 +1013,7 @@ class Nexus(object):
 
     def _get_indices(self,options,set_type=CHARSET,separator='='):
         """Parse the taxset/charset specification 
-            '1 2   3 - 5 dog cat   10- 20 \\ 3' --> [0,1,2,3,4,'dog','cat',10,13,16,19]
+            '1 2   3 - 5 dog cat   10 - 20 \\ 3' --> [0,1,2,3,4,'dog','cat',9,12,15,18]
         """
         opts=CharBuffer(options)
         name=self._name_n_vector(opts,separator=separator)
@@ -1001,6 +1026,9 @@ class Nexus(object):
         """Extract name and check that it's not in vector format."""
         rest=opts.rest()
         name=opts.next_word()
+        # we ignore * before names
+        if name=='*':
+            name=opts.next_word()
         if not name:
             raise NexusError, 'Formatting error in line: %s ' % rest
         name=quotestrip(name)
@@ -1017,7 +1045,7 @@ class Nexus(object):
         return name
     
     def _parse_list(self,options_buffer,set_type):
-        """Parse a NEXUS list: [1, 2, 4-8\\2, dog, cat] --> [1,2,4,6,8,17-21],
+        """Parse a NEXUS list: [1, 2, 4-8\\2, dog, cat] --> [1,2,4,6,8,17,21],
         (assuming dog is taxon no. 17 and cat is taxon no. 21).
         """
         plain_list=[]
@@ -1162,7 +1190,8 @@ class Nexus(object):
     
     def write_nexus_data(self, filename=None, matrix=None, exclude=[], delete=[],\
             blocksize=None, interleave=False, interleave_by_partition=False,\
-            comment=None,omit_NEXUS=False,append_sets=True,mrbayes=False):
+            comment=None,omit_NEXUS=False,append_sets=True,mrbayes=False,\
+            codons_block=True):
         """ Writes a nexus file with data and sets block. Character sets and partitions 
             are appended by default, and are adjusted according
             to excluded characters (i.e. character sets still point to the same sites (not necessarily same positions),
@@ -1266,15 +1295,22 @@ class Nexus(object):
                     fh.write(cropped_matrix[taxon][seek:seek+blocksize]+'\n')
         fh.write(';\nend;\n')
         if append_sets:
-            fh.write(self.append_sets(exclude=exclude,delete=delete,mrbayes=mrbayes))
+            if codons_block:
+                fh.write(self.append_sets(exclude=exclude,delete=delete,mrbayes=mrbayes,include_codons=False))
+                fh.write(self.append_sets(exclude=exclude,delete=delete,mrbayes=mrbayes,codons_only=True))
+            else:
+                fh.write(self.append_sets(exclude=exclude,delete=delete,mrbayes=mrbayes))
         fh.close()
         return filename
 
-    def append_sets(self,exclude=[],delete=[],mrbayes=False):
-        """Appends a sets block to <filename>."""
+    def append_sets(self,exclude=[],delete=[],mrbayes=False,include_codons=True,codons_only=False):
+        """Returns a sets block"""
         if not self.charsets and not self.taxsets and not self.charpartitions:
             return ''
-        sets=['\nbegin sets']
+        if codons_only:
+            sets=['\nbegin codons']
+        else:
+            sets=['\nbegin sets']
         # - now if characters have been excluded, the character sets need to be adjusted,
         #   so that they still point to the right character positions
         # calculate a list of offsets: for each deleted character, the following character position
@@ -1288,15 +1324,20 @@ class Nexus(object):
             else:
                 offlist.append(c-offset)
         # now adjust each of the character sets
-        for n,ns in self.charsets.items():
-            cset=[offlist[c] for c in ns if c not in exclude]
-            if cset: 
-                sets.append('charset %s = %s' % (safename(n),_compact4nexus(cset))) 
-        for n,s in self.taxsets.items():
-            tset=[safename(t,mrbayes=mrbayes) for t in s if t not in delete]
-            if tset:
-                sets.append('taxset %s = %s' % (safename(n),' '.join(tset))) 
+        if not codons_only:
+            for n,ns in self.charsets.items():
+                cset=[offlist[c] for c in ns if c not in exclude]
+                if cset: 
+                    sets.append('charset %s = %s' % (safename(n),_compact4nexus(cset))) 
+            for n,s in self.taxsets.items():
+                tset=[safename(t,mrbayes=mrbayes) for t in s if t not in delete]
+                if tset:
+                    sets.append('taxset %s = %s' % (safename(n),' '.join(tset))) 
         for n,p in self.charpartitions.items():
+            if not include_codons and n==CODONPOSITIONS:
+                continue
+            elif codons_only and n!=CODONPOSITIONS:
+                continue
             # as characters have been excluded, the partitions must be adjusted
             # if a partition is empty, it will be omitted from the charpartition command
             # (although paup allows charpartition part=t1:,t2:,t3:1-100)
@@ -1307,7 +1348,11 @@ class Nexus(object):
                 if nsp:
                     newpartition[sn]=nsp
             if newpartition:
-                sets.append('charpartition %s = %s' % (safename(n),\
+                if include_codons and n==CODONPOSITIONS:
+                    command='codonposset'
+                else:
+                    command='charpartition'
+                sets.append('%s %s = %s' % (command,safename(n),\
                 ', '.join(['%s: %s' % (sn,_compact4nexus(newpartition[sn])) for sn in names if sn in newpartition])))
         # now write charpartititions, much easier than charpartitions
         for n,p in self.taxpartitions.items():
@@ -1322,8 +1367,10 @@ class Nexus(object):
                 ', '.join(['%s: %s' % (safename(sn),' '.join(map(safename,newpartition[sn]))) for sn in names if sn in newpartition])))
         # add 'end' and return everything
         sets.append('end;\n')
-        return ';\n'.join(sets)
-        f.close()
+        if len(sets)==2: # begin and end only
+                return ''
+        else:
+            return ';\n'.join(sets)
     
     def export_fasta(self, filename=None, width=70):
         """Writes matrix into a fasta file: (self, filename=None, width=70)."""       
@@ -1339,6 +1386,19 @@ class Nexus(object):
                 fh.write(self.matrix[taxon].tostring()[i:i+width] + '\n')    
         fh.close()
 
+    def export_phylip(self, filename=None):
+        """Writes matrix into a fasta file: (self, filename=None, width=70)."""       
+        if not filename:
+            if '.' in filename and self.filename.split('.')[-1].lower() in ['paup','nexus','nex','dat']:
+                filename='.'.join(self.filename.split('.')[:-1])+'.phy'
+            else:
+                filename=self.filename+'.phy'
+        fh=open(filename,'w')
+        fh.write('%d %d\n' % (self.ntax,self.nchar))
+        for taxon in self.taxlabels:
+            fh.write('%s %s\n' % (safename(taxon),self.matrix[taxon].tostring()))
+        fh.close()
+    
     def constant(self,matrix=None,delete=[],exclude=[]):
         """Return a list with all constant characters."""
         if not matrix:

@@ -1,4 +1,4 @@
-# Copyright 2005 by Frank Kauff & Cymon J. Cox. All rights reserved.
+# Copyright 2005-2008 by Frank Kauff & Cymon J. Cox. All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
@@ -11,7 +11,7 @@
 #
 # Subclassed by Nexus.Trees to store phylogenetic trees.
 #
-# Bug reports to Frank Kauff (fkauff@duke.edu)
+# Bug reports to Frank Kauff (fkauff@biologie.uni-kl.de)
 #
 
 class ChainException(Exception):
