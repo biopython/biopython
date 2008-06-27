@@ -2551,8 +2551,6 @@ To search any of these databases, we use \verb+Bio.Entrez.esearch()+. For exampl
 \end{verbatim}
 In this output, you see five PubMed IDs (16403221, 16377612, 14871861, 14630660, 12230038), which can be retrieved by EFetch (see section \ref{sec:efetch}).
 
-Note that we've included the optional email address (edit this to your own address!) as recommended by the NCBI Entrez guidelines (see Section~\ref{sec:entrez-guidelines}).
-
 You can also use ESearch to search GenBank. Here we'll do a quick search for the \emph{rpl16} gene in \emph{Opuntia}:
 
 \begin{verbatim}
@@ -2723,10 +2721,6 @@ ESpell retrieves spelling suggestions. In this example, we use \verb+Bio.Entrez.
 'biopython'
 \end{verbatim}
 See the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/espell\_help.html}{ESpell help page} for more information.
-
-\section{Creating web links to the Entrez databases}
-
-In addition to the eight Entrez Programming Utilities, you can also create URLs to information of the Entrez databases in HTML format. This is primarily intended to create links or bookmarks to the Entrez databases. To do so, you can use the function \verb+Bio.Entrez.query+. Detailed information of this service is available from \href{http://www.ncbi.nlm.nih.gov/books/bv.fcgi?rid=helplinks.chapter.linkshelp}{NCBI}. For heavy usage of the NCBI databases, please use the Entrez Programming Utilities instead of \verb+Bio.Entrez.query+.
 
 \section{Examples}
 \label{sec:entrez_examples}
