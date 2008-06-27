@@ -1931,7 +1931,7 @@ say we want to BLAST info we have in a FASTA formatted file against
 the database. First, we need to get the info in the FASTA file.
 
 The easiest way to do this is to use the \verb|Bio.SeqIO| module (see
-Chapter~\ref{sec:SeqIO}).  In this example we'll use the
+Chapter~\ref{chapter:Bio.SeqIO}).  In this example we'll use the
 \verb|Bio.SeqIO.read| function to turn a FASTA file containing a single
 entry into a SeqRecord object:
 
@@ -2439,9 +2439,9 @@ To paraphrase:
 
 \begin{itemize}
 \item For any series of more than 100 requests, do this at weekends or outside USA peak times.  This is up to you to obey.
-\item Use the \url{http://eutils.ncbi.nlm.nih.gov} address, not the standard NCBI Web address.  Biopython should follow this.
-\item Make no more than one request every 3 seconds.  Biopython should follow this.
-\item Use the optional email parameter so the NCBI can contact you if there is a problem.  In the examples below, we have used {\tt email="A.N.Other@example.com"} for illustrative purposes.  The {\tt example.com} address is a reserved domain name specifically for documentation (RFC 2606).  Please DO NOT use a random email -- its better not to give an email at all.
+\item Use the \url{http://eutils.ncbi.nlm.nih.gov} address, not the standard NCBI Web address.  Biopython uses this web address.
+\item Make no more than one request every 3 seconds.  This is automatically enforced by Biopython.
+\item Use the optional email parameter so the NCBI can contact you if there is a problem.  In the examples below, we have used {\tt email="A.N.Other@example.com"} for illustrative purposes.  The {\tt example.com} address is a reserved domain name specifically for documentation (RFC 2606).  Please DO NOT use a random email -- it's better not to give an email at all.
 \item If you are using Biopython within some larger software suite, use the tool parameter to specify this.  The tool parameter will default to Biopython.
 \end{itemize}
 
@@ -2696,7 +2696,9 @@ By default you get the output in XML format, which you can parse using the \verb
 For help on ELink, see the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/elink\_help.html}{ELink help page}. ELink is available from Biopython through \verb+Bio.Entrez.elink()+.
 
 \section{EGQuery: Obtaining counts for search terms}
-EGQuery provides counts for a search term in each of the Entrez databases. In this example, we use \verb+Bio.Entrez.egquery()+ to obtain the counts for ``Biopython'':
+EGQuery provides counts for a search term in each of the Entrez databases. This is particularly useful to find out how many items a search will return before actually performing the search with ESearch (see the example in \ref{subsec:entrez_example_genbank} below).
+
+In this example, we use \verb+Bio.Entrez.egquery()+ to obtain the counts for ``Biopython'':
 
 \begin{verbatim}
 >>> handle = Entrez.egquery(term="biopython",
@@ -2729,6 +2731,7 @@ See the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/espell\_help.html}
 \label{sec:entrez_examples}
 
 \subsection{Searching and downloading Entrez Nucleotide records}
+\label{subsec:entrez_example_genbank}
 
 Here we'll show a simple example of performing a remote Entrez query. In section~\ref{sec:orchids} of the parsing examples, we talked about using NCBI's Entrez website to search the NCBI nucleotide databases for info on Cypripedioideae, our friends the lady slipper orchids. Now, we'll look at how to automate that process using a Python script. In this example, we'll just show how to connect, get the results, and parse them, with the Entrez module doing all of the work.
 
@@ -2775,7 +2778,7 @@ Let's look at the first five results:
 \label{sec:entrez-batched-efetch}
 We can download these records using \verb+efetch+.
 While you could download these records one by one, to reduce the load on NCBI's servers, it is better to fetch a bunch of records at the same time, shown below.
-However, in this situation you should ideally be using the history feature described later in Section~\ref{sec:entrez-webenv}.
+However, in this situation you should ideally be using the history feature described later in Section~\ref{subsec:entrez-webenv}.
 
 \begin{verbatim}
 >>> idlist = ",".join(record['IdList'][:5])
@@ -2811,7 +2814,7 @@ mitochondrial
 Cypripedium calceolus
 \end{verbatim}
 
-You could use this to quickly set up searches -- but for heavy usage, see Section~\ref{sec:entrez-webenv}.
+You could use this to quickly set up searches -- but for heavy usage, see Section~\ref{subsec:entrez-webenv}.
 
 \subsection{Finding the lineage of an organism}
 
@@ -2845,8 +2848,8 @@ We can get the lineage directly from this record:
  Liliopsida; Asparagales; Orchidaceae'
 \end{verbatim}
 
-\section{Using the history and WebEnv}
-\label{sec:entrez-webenv}
+\subsection{Using the history and WebEnv}
+\label{subsec:entrez-webenv}
 
 Often you will want to make a series of linked queries.  Most typically, running a search, perhaps refining the search, and then retrieving detailed search results.  You \emph{can} do this by making a series of separate calls to Entrez.  However, the NCBI prefer you to take advantage of their history support.
 
