@@ -19,7 +19,7 @@ based on documentation for Lincoln Stein's Perl Bio::DB::GFF
 
 """
 
-__version__ = "$Revision: 1.7 $"
+__version__ = "$Revision: 1.8 $"
 # $Source: /home/bartek/cvs2bzr/biopython_fastimport/cvs_repo/biopython/Bio/GFF/__init__.py,v $
 
 import exceptions
@@ -137,9 +137,10 @@ class Feature(object):
     Seq('AATAAA', Alphabet())
     >>> print feature.location()
     NC_001802x.fna:73..78
-    >>> from Bio.SeqIO.FASTA import FastaWriter
-    >>> writer = FastaWriter(sys.stdout)
-    >>> writer.write(feature.record())
+    >>> from Bio import SeqIO
+    >>> record = feature.record()
+    >>> records = [record]
+    >>> SeqIO.write(records, sys.stdout, 'fasta')
     > NC_001802x.fna:73..78
     AATAAA
     >>> feature2 = Feature(location=easy.LocationFromString("NC_001802x.fna:73..78"))

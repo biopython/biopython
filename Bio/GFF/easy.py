@@ -11,7 +11,7 @@ Bio.GFF.easy: some functions to ease the use of Biopython
 
 from __future__ import generators # requires Python 2.2
 
-__version__ = "$Revision: 1.8 $"
+__version__ = "$Revision: 1.9 $"
 # $Source: /home/bartek/cvs2bzr/biopython_fastimport/cvs_repo/biopython/Bio/GFF/easy.py,v $
 
 import copy
@@ -24,11 +24,7 @@ from Bio import GenBank
 from Bio.Data import IUPACData
 from Bio.Seq import Seq
 
-#from Bio.SeqIO.FASTA import FastaReader, FastaWriter
-#The whole of Bio.SeqIO.FASTA has been deprecated, so
-#we'll use the new Bio.SeqIO functions instead:
 from Bio import SeqIO
-
 from Bio import SeqUtils
 
 import GenericTools
