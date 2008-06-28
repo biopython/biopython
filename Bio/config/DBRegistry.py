@@ -54,21 +54,13 @@ class DBObject(RegisterableObject):
     _unmake_pickleable   Turn the pickleable object back into the original
 
     """
-    def __init__(self, name, abbrev=None, doc=None, delay=None, timeout=None):
-        """DBObject(name[, abbrev][, doc][, delay][, timeout])"""
+    def __init__(self, name, abbrev=None, doc=None, delay=None):
+        """DBObject(name[, abbrev][, doc][, delay])"""
         import _support
         abbrev = _clean_abbrev(abbrev or name)
         RegisterableObject.__init__(self, name, abbrev, doc)
         if delay is not None:
             x = _support.make_rate_limited_function(self._get, delay)
-            setattr(self, "_get", x)
-        if timeout is not None:
-            import warnings
-            warnings.warn("Using timeouts has been deprecated, as this code relies on Bio.MultiProc, which itself has been deprecated. If you need this functionality, please let the Biopython developers know by sending an email to biopython-dev@biopython.org.",
-              DeprecationWarning)
-            x = _support.make_timed_function(
-                self._get, timeout,
-                self._make_pickleable, self._unmake_pickleable)
             setattr(self, "_get", x)
 
     def set(self, key, data):
@@ -126,36 +118,28 @@ class DBGroup(RegisterableGroup):
     """Groups DBObjects that return the same kind of data.
 
     """
-    def __init__(self, name, abbrev=None, doc=None,
-                 behavior="serial", cache=None):
-        """DBGroup(name[, abbrev][, behavior][, doc])
+    def __init__(self, name, abbrev=None, doc=None, cache=None):
+        """DBGroup(name[, abbrev][, doc])
 
         name is the name of the object, and abbrev is an abbreviation
         for the name.
-
-        behavior is either "serial" or "concurrent".  "serial" means
-        that I'll run each object until I get one that finishes
-        successfully.  "concurrent" means that I'll run each object at
-        the same time and return the one that finishes.
-
         """
         abbrev = _clean_abbrev(abbrev or name)
         RegisterableGroup.__init__(self, name, abbrev, doc)
-        if behavior not in ['concurrent', 'serial']:
-            raise ValueError, "behavior must be 'concurrent' or 'serial'"
-        if behavior=='concurrent':
-            import warnings
-            warnings.warn("Concurrent behavior has been deprecated, as this functionality needs Bio.MultiProc, which itself has been deprecated. If you need the concurrent behavior, please let the Biopython developers know by sending an email to biopython-dev@biopython.org to avoid permanent removal of this feature.",
-              DeprecationWarning)
-        self.behavior = behavior
         self._last_object_used = None
 
     def __getitem__(self, key):
-        if self.behavior == "concurrent":
-            data = self._run_concurrent(key)
-        else:
-            data = self._run_serial(key)
-        return data
+        for obj in self.objs:
+            try:
+                handle = obj[key]
+            except SystemError, KeyboardInterrupt:
+                raise
+            except Exception, x:
+                continue
+            else:
+                self._last_object_used = obj
+                return handle
+        raise KeyError, "I could not get any results."
 
     def get(self, key, default=None):
         try:
@@ -168,60 +152,6 @@ class DBGroup(RegisterableGroup):
         """S.get_as(key[, to_io][, default]) -> object"""
         data = self.get(key, default=default)
         return self._last_object_used._convert_to(data, to_io)
-
-    def _run_concurrent(self, key):
-        import time
-        from Bio.MultiProc.copen import copen_fn
-        
-        def get_pickleable(obj, key):
-            return obj._make_pickleable(obj[key])
-        def unpickleable(obj, data):
-            return obj._unmake_pickleable(data)
-
-        fnhandles = []    # list of (obj, running function)
-        for obj in self.objs:
-            fnhandles.append((obj, copen_fn(get_pickleable, obj, key)))
-        # Check each of the function handles until one of them
-        # finishes or they all fail.
-        i = 0
-        while fnhandles:
-            if i >= len(fnhandles):
-                i = 0
-                time.sleep(0.1)
-            try:
-                ready = fnhandles[i][1].poll()
-            except SystemError, KeyboardInterrupt:
-                raise
-            except Exception, x:
-                # This handle failed, so get rid of it.
-                del fnhandles[i]
-                continue
-            if ready:
-                obj, fnhandle = fnhandles.pop(i)
-                retval = unpickleable(obj, fnhandle.read())
-                self._last_object_used = obj
-                break
-            else:
-                i += 1
-        else:
-            raise KeyError, "I could not get any results."
-        # Shut down all the other requests that didn't finish.
-        for x, h in fnhandles:
-            h.close()
-        return retval
-            
-    def _run_serial(self, key):
-        for obj in self.objs:
-            try:
-                handle = obj[key]
-            except SystemError, KeyboardInterrupt:
-                raise
-            except Exception, x:
-                continue
-            else:
-                self._last_object_used = obj
-                return handle
-        raise KeyError, "I could not get any results."
 
 class TextLikeMixin:
     """Mixin class with useful functionality for retrival of text files.

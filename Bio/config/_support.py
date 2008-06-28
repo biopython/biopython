@@ -13,7 +13,6 @@ load_module       Load a module and return it.  Raise ImportError if not found.
 safe_load_module  Like load_module, but returns None if not found.
 
 make_rate_limited_function   Limit the rate at which a function can run.
-make_timed_function          Limit the amount of time a function can run.
 
 make_cached_expression       Caches the make_parser method of expressions.
 
@@ -106,43 +105,6 @@ class make_rate_limited_function:
         self.limiter.wait()
         return self.fn(*args, **keywds)
 
-class make_timed_function:
-    """make_timed_function(function, timeout[, retval2pickleable_fn][, pickleable2retval_fn]) -> callable object
-
-    Create a version of function that times out if it does not
-    complete within timeout seconds.
-
-    Currently, there's an implementation limitation such that function
-    must return a pickleable object (or nothing).  If the function
-    returns an object that's not pickleable, then please set
-    retval2pickleable_fn and pickleable2retval_fn to a pair of
-    callbacks to convert the return value of the function to a
-    pickleable form.  If this is impossible, then this function should
-    not be used.
-
-    """
-    def __init__(self, function, timeout,
-                 retval2pickleable_fn=None, pickleable2retval_fn=None):
-        self.fn = function
-        self.timeout = timeout
-        self.retval2pickleable_fn = retval2pickleable_fn or (lambda x: x)
-        self.pickleable2retval_fn = pickleable2retval_fn or (lambda x: x)
-    def _call_fn(self, *args, **keywds):
-        retval = self.fn(*args, **keywds)
-        return self.retval2pickleable_fn(retval)
-    def __call__(self, *args, **keywds):
-        from Bio.MultiProc.copen import copen_fn
-        end_time = time.time() + self.timeout
-        handle = copen_fn(self._call_fn, *args, **keywds)
-        while time.time() < end_time:
-            if handle.poll():
-                break
-            time.sleep(0.01)
-        else:
-            handle.close()
-            raise IOError, "timed out"
-        pickleable = handle.read()
-        return self.pickleable2retval_fn(pickleable)
 
 # Only caches parsers for make_parser, not iterators
 class make_cached_expression:
