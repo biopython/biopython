@@ -1165,21 +1165,6 @@ class _RecordConsumer(_BaseGenBankConsumer):
         # add on the last feature
         self._add_feature()
 
-def _strip_and_combine(line_list):
-    """Combine multiple lines of content separated by spaces.
-
-    This function is used by the EventGenerator callback function to
-    combine multiple lines of information. The lines are first
-    stripped to remove whitepsace, and then combined so they are separated
-    by a space. This is a simple minded way to combine lines, but should
-    work for most cases.
-    """
-    # first strip out extra whitespace
-    stripped_line_list = [x.strip() for x in line_list]
-
-    # now combine everything with spaces
-    return ' '.join(stripped_line_list)
-
 
 class NCBIDictionary:
     """Access GenBank using a read-only dictionary interface.
