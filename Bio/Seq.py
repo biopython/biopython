@@ -498,7 +498,11 @@ def translate(sequence, table = "Standard", stop_symbol = "*"):
         get = table.forward_table.get
         protein = [get(sequence[i:i+3], stop_symbol) for i in xrange(0,n-n%3,3)]
         protein = "".join(protein)
-        alphabet = Alphabet.HasStopCodon(table.protein_alphabet)
+        if stop_symbol in protein :
+            alphabet = Alphabet.HasStopCodon(table.protein_alphabet,
+                                             stop_symbol = stop_symbol)
+        else :
+            alphabet = table.protein_alphabet
         return Seq(protein, alphabet)
     else:
         if id==None:
@@ -583,4 +587,11 @@ if __name__ == "__main__" :
                 assert c == my_obj[start:end].count("A")
                 #This one is a bit silly:
                 assert my_str[start:end:-1].count("A") == my_obj[start:end:-1].count("A")
-                
+
+    print repr(translate(Seq("GCTGTTATGGGTCGTTGGAAGGGTGGTCGTGCTGCTGGT",
+                             IUPAC.unambiguous_dna)))
+    print repr(translate(Seq("GCTGTTATGGGTCGTTGGAAGGGTGGTCGTGCTGCTGGTTAG",
+                             IUPAC.unambiguous_dna)))
+    print repr(translate(Seq("GCTGTTATGGGTCGTTGGAAGGGTGGTCGTGCTGCTGGTTAG",
+                             IUPAC.unambiguous_dna), stop_symbol="@"))
+    
