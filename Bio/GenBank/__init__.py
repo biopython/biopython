@@ -28,7 +28,6 @@ LocationParserError   Exception indiciating a problem with the spark based
                       location parser.
 
 Functions:
-index_file            Get a GenBank file ready to be used as a Dictionary.
 search_for            Do a query against GenBank.
 download_many         Download many GenBank records.
 
@@ -44,11 +43,6 @@ from Bio import Entrez
 #this file.  Now use a more generic system which we import:
 from Scanner import GenBankScanner
 
-#These are used by the index_file function and Dictionary class:
-#Moved the import inside the deprecated functions
-#from Bio import Mindy
-#from Bio.Mindy import SimpleSeqRecord
-
 #These are used for downloading files from GenBank
 from Bio import EUtils
 from Bio.EUtils import DBIds, DBIdsClient
@@ -62,65 +56,6 @@ FEATURE_KEY_INDENT = 5
 FEATURE_QUALIFIER_INDENT = 21
 FEATURE_KEY_SPACER = " " * FEATURE_KEY_INDENT
 FEATURE_QUALIFIER_SPACER = " " * FEATURE_QUALIFIER_INDENT
-        
-class Dictionary:
-    """Access a GenBank file using a dictionary-like interface.
-    """
-    def __init__(self, indexname, parser = None):
-        """Initialize and open up a GenBank dictionary. DEPRECATED
-
-        Each entry is a full GenBank record (i.e. from the LOCUS line
-        to the // at  the end of the sequence).
-
-        Most GenBank files have only one such "entry", in which case
-        using this dictionary class is rather unnecessary.
-
-        Arguments:
-        o indexname - The name of the index for the file. This should have been
-        created using the index_file function.
-        o parser - An optional argument specifying a parser object that
-        the records should be run through before returning the output. If
-        parser is None then the unprocessed contents of the file will be
-        returned.
-        """
-
-        import warnings
-        warnings.warn("Bio.GenBank.index_file Bio.GenBank.Dictionary are deprecated." \
-                      + " We hope an in memory dictionary, for example using the" \
-                      + " Bio.SeqIO.to_dict() function, will be suitable for" \
-                      + " most users.  Please get in touch on the mailing lists if" \
-                      + " this (or its removal) causes any problems for you.",
-                      DeprecationWarning)
-
-        from Bio import Mindy
-        self._index = Mindy.open(indexname)
-        self._parser = parser
-    
-    def __len__(self):
-        return len(self.keys())
-
-    def __getitem__(self, key):
-        # first try to retrieve by the base id
-        try:
-            seqs = self._index.lookup(id = key)
-        # if we can't do that, we have to try and fetch by alias
-        except KeyError:
-            seqs = self._index.lookup(aliases = key)
-
-        if len(seqs) == 1:
-            seq = seqs[0]
-        else:
-            raise KeyError("Multiple sequences found for %s" % key)
-
-        if self._parser:
-            handle = cStringIO.StringIO(seq.text)
-            return self._parser.parse(handle)
-        else:
-            return seq.text
-
-    def keys(self):
-        primary_key_retriever = self._index['id']
-        return primary_key_retriever.keys()
         
 class Iterator:
     """Iterator interface to move over a file of GenBank entries one at a time.
@@ -1245,39 +1180,6 @@ def _strip_and_combine(line_list):
     # now combine everything with spaces
     return ' '.join(stripped_line_list)
 
-def index_file(filename, indexname, rec2key = None, use_berkeley = 0):
-    """Index a GenBank file to prepare it for use as a dictionary. DEPRECATED
-
-    Arguments:
-    filename - The name of the GenBank file to be indexed.
-    indexname - The name of the index to create
-    rec2key - A reference to a function object which, when called with a 
-    SeqRecord object, will return a key to be used for the record. If no 
-    function is specified then the records will be indexed by the 'id'
-    attribute of the SeqRecord (the versioned GenBank id).
-    use_berkeley - specifies whether to use the BerkeleyDB indexer, which 
-    uses the bsddb3 wrappers around the embedded database Berkeley DB. By
-    default, the standard flat file (non-Berkeley) indexes are used.
-    """
-
-    import warnings
-    warnings.warn("Bio.GenBank.index_file Bio.GenBank.Dictionary are deprecated." \
-                  + " We hope an in memory dictionary, for example using the" \
-                  + " Bio.SeqIO.to_dict() function, will be suitable for" \
-                  + " most users.  Please get in touch on the mailing lists if" \
-                  + " this (or its removal) causes any problems for you.",
-                  DeprecationWarning)
-
-    from Bio.Mindy import SimpleSeqRecord
-    if rec2key:
-        indexer = SimpleSeqRecord.FunctionIndexer(rec2key)
-    else:
-        indexer = SimpleSeqRecord.SimpleIndexer()
-
-    if use_berkeley:
-        SimpleSeqRecord.create_berkeleydb([filename], indexname, indexer)
-    else:
-        SimpleSeqRecord.create_flatdb([filename], indexname, indexer)
 
 class NCBIDictionary:
     """Access GenBank using a read-only dictionary interface.
