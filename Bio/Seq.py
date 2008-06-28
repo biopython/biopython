@@ -459,7 +459,11 @@ def translate(sequence, table = "Standard", stop_symbol = "*"):
     table - Which codon table to use?  This can be either a name
            (string) or an identifier (integer)
 
-    NOTE - Does NOT support unambiguous nucleotide sequences
+    NOTE - Does NOT support ambiguous nucleotide sequences which
+    could code for a stop codon.  This will throw a TranslationError.
+
+    NOTE - Does NOT support gapped sequences.
+    
     It will however translate either DNA or RNA."""
     try:
         id = int(table)
@@ -490,9 +494,9 @@ def translate(sequence, table = "Standard", stop_symbol = "*"):
                 table = CodonTable.ambiguous_rna_by_id[id]
         else:
             if id==None:
-                table = CodonTable.generic_by_name[table]
+                table = CodonTable.ambiguous_generic_by_name[table]
             else:
-                table = CodonTable.generic_by_id[id]
+                table = CodonTable.ambiguous_generic_by_id[id]
         sequence = sequence.tostring().upper()
         n = len(sequence)
         get = table.forward_table.get
@@ -506,9 +510,9 @@ def translate(sequence, table = "Standard", stop_symbol = "*"):
         return Seq(protein, alphabet)
     else:
         if id==None:
-            table = CodonTable.generic_by_name[table]
+            table = CodonTable.ambiguous_generic_by_name[table]
         else:
-            table = CodonTable.generic_by_id[id]
+            table = CodonTable.ambiguous_generic_by_id[id]
         get = table.forward_table.get
         sequence = sequence.upper()
         n = len(sequence)
@@ -595,3 +599,29 @@ if __name__ == "__main__" :
     print repr(translate(Seq("GCTGTTATGGGTCGTTGGAAGGGTGGTCGTGCTGCTGGTTAG",
                              IUPAC.unambiguous_dna), stop_symbol="@"))
     
+    ambig = Set(IUPAC.IUPACAmbiguousDNA.letters)
+    for c1 in ambig :
+        for c2 in ambig :
+            for c3 in ambig :
+                values = Set([translate(a+b+c, table=1) \
+                              for a in ambiguous_dna_values[c1] \
+                              for b in ambiguous_dna_values[c2] \
+                              for c in ambiguous_dna_values[c3]])
+                try :
+                    t = translate(c1+c2+c3)
+                except CodonTable.TranslationError :
+                    assert "*" in values
+                    continue
+                if t=="*" :
+                    assert values == Set(["*"])
+                elif t=="X" :
+                    assert len(values) > 1, \
+                        "translate('%s') = '%s' not '%s'" \
+                        % (c1+c2+c3, t, ",".join(values))
+                elif t=="Z" :
+                    assert values == Set(("E", "Q"))
+                elif t=="B" :
+                    assert values == Set(["D", "N"])
+                else :
+                    assert values == Set(t)
+ 

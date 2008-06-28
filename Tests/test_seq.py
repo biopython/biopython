@@ -238,6 +238,36 @@ for nucleotide_seq in test_seqs:
 	% (repr(nucleotide_seq) , str(e))
     
 print
+print "Ambiguous Translations"
+print "======================"
+ambig = Set(IUPAC.IUPACAmbiguousDNA.letters)
+for c1 in ambig :
+    for c2 in ambig :
+        for c3 in ambig :
+            values = Set([Seq.translate(a+b+c, table=1) \
+                          for a in ambiguous_dna_values[c1] \
+                          for b in ambiguous_dna_values[c2] \
+                          for c in ambiguous_dna_values[c3]])
+            if "*" in values and len(values) > 1 :
+                #Translation is expected to fail.
+                continue
+            t = Seq.translate(c1+c2+c3)
+
+            if t=="*" :
+                assert values == Set(["*"])
+            elif t=="X" :
+                assert len(values) > 1, \
+                    "translate('%s') = '%s' not '%s'" \
+                    % (c1+c2+c3, t, ",".join(values))
+            elif t=="Z" :
+                assert values == Set(("E", "Q"))
+            elif t=="B" :
+                assert values == Set(["D", "N"])
+            else :
+                assert values == Set(t)
+
+
+print
 print "Seq's .complement() method"
 print "=========================="
 for nucleotide_seq in test_seqs:

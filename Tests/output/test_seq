@@ -160,19 +160,22 @@ Seq('T', IUPACAmbiguousDNA())
 Seq('TCAAAAGGATGCATCATGT', IUPACAmbiguousDNA())
 -> Seq('SKGCIM', ExtendedIUPACProtein())
 Seq('ATGAAACTG', Alphabet())
--> Seq('MKL', IUPACProtein())
+-> Seq('MKL', ExtendedIUPACProtein())
 Seq('AUGAAACUG', DNAAlphabet())
--> Seq('MKL', IUPACProtein())
+-> Seq('MKL', ExtendedIUPACProtein())
 Seq('ATGAAACTG', RNAAlphabet())
--> Seq('MKL', IUPACProtein())
+-> Seq('MKL', ExtendedIUPACProtein())
 Seq('ATGAAACTG', NucleotideAlphabet())
--> Seq('MKL', IUPACProtein())
+-> Seq('MKL', ExtendedIUPACProtein())
 Seq('AUGAAACTG', NucleotideAlphabet())
--> Seq('MKL', IUPACProtein())
+-> Seq('MKL', ExtendedIUPACProtein())
 MutableSeq('ATGAAACTG', RNAAlphabet())
--> Seq('MKL', IUPACProtein())
+-> Seq('MKL', ExtendedIUPACProtein())
 Seq('ACTGTCGTCT', ProteinAlphabet())
 -> Proteins cannot be translated!
+
+Ambiguous Translations
+======================
 
 Seq's .complement() method
 ==========================
