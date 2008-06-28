@@ -57,27 +57,3 @@ def parse(handle):
             row = line.split("\t")
             record.table_rows.append(row)
     yield record
-
-
-class Iterator:
-    """Iterator interface to move over a file of Geo entries one at a time.
-
-    Uses the fact that each GEO record begins with a line starting ^ (caret).
-    """
-    def __init__(self, handle, parser = None):
-        """Initialize the iterator.
-
-        Arguments:
-        o handle - A handle with GEO entries to iterate through.
-        returning them. If None, then the raw entry will be returned.
-        """
-        import warnings
-        warnings.warn("Bio.Geo.Iterator(handle, parser) is deprecated. Please use Bio.Geo.parse(handle) instead. It also returns an iterator.""",
-              DeprecationWarning)
-        self.records = parse(handle)
-
-    def next(self):
-        return self.records.next()
-
-    def __iter__(self):
-        return iter(self.next, None)

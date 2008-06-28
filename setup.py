@@ -408,7 +408,6 @@ PACKAGES = [
     'Bio.MEME',
     'Bio.MetaTool',
     'Bio.Mindy',
-    'Bio.MultiProc',
     'Bio.NBRF',
     'Bio.Ndb',
     'Bio.NeuralNetwork',

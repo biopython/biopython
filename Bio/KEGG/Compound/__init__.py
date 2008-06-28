@@ -10,7 +10,6 @@ This module provides code to work with the KEGG Ligand/Compound database.
 
 Classes:
 Record
-Iterator
 """
 
 # other Biopython stuff
@@ -170,32 +169,3 @@ def parse(handle):
                 values.extend(data.split())
                 row = key, values
                 record.dblinks[-1] = row
-
-
-
-class Iterator:
-    """Iterator to read a file of KEGG Ligand/Compund entries one at a time.
-    """
-    def __init__(self, handle, parser = None):
-        """Initialize the iterator.
-
-        Arguments:
-        o handle - A handle with Compound entries to iterate through.
-        o parser - An optional parser to pass the entries through before
-        returning them. If None, then the raw entry will be returned.
-        """
-        import warnings
-        warnings.warn("Bio.KEGG.Compound.Iterator(handle, parser) is deprecated. Please use Bio.KEGG.Compound.parse(handle) instead. It also returns an iterator.",
-              DeprecationWarning)
-        self.records = parse(handle)
-
-    def next(self):
-        """Return the next KEGG Ligand/Compound record from the handle.
-
-        Will return None if we ran out of records.
-        """
-        return self.records.next()
-
-    def __iter__(self):
-        return iter(self.next, None)
-

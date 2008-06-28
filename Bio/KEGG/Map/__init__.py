@@ -16,38 +16,9 @@ RXXXXX:[X.X.X.X:] 3C <=> 2 D + E
 
 where RXXXXX is a five-digit reaction id, and X.X.X.X is the optional
 EC number of the enzyme that catalyze the reaction.
-
-
-Classes:
-Iterator             -- Iterates through a file of map file.
-
 """
 
 from Bio.Pathway import Reaction
-
-class Iterator:
-    """Iterator to read a file of KEGG reactions one at a time.
-    """
-    def __init__(self, handle, parser = None):
-        """Initialize the iterator.
-
-        Arguments:
-        o handle - A handle to a map file to iterate through.
-        """
-        import warnings
-        warnings.warn("Bio.KEGG.Map.Iterator(handle, parser) is deprecated. Please use Bio.KEGG.Map.parse(handle) instead. It also returns an iterator.", DeprecationWarning)
-        self.records = parse(handle)
-
-
-    def next(self):
-        """Return the next Pathway.Reaction object from the handle.
-
-        Will return None if we ran out of records.
-        """
-        return self.records.next()
-    
-    def __iter__(self):
-        return iter(self.next, None)
 
 
 def parse(handle):
