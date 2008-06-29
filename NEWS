@@ -8,6 +8,8 @@ The latest news is at the top.
 
 ===================================================================
 
+June 29, 2008: Biopython 1.46 released.
+
 Bio.Entrez now has several Entrez format XML parsers, and a chapter
 in the tutorial.
 
@@ -20,12 +22,19 @@ A problem parsing certain EMBL files was fixed.
 Several minor fixes were made to the NCBI BLAST XML parser, including
 support for the online version 2.2.18+ introduced in May 2008.
 
-The NCBIWWW.qblast() function now allows other programs in addition to
-just blastn and blastp.
+The NCBIWWW.qblast() function now allows other programs (blastx, tblastn,
+tblastx) in addition to just blastn and blastp.
 
 Bio.EUtils has been updated to explicitly enforce the NCBI's rule of at
 most one query every 3 seconds, rather than assuming the user would obey
 this.
+
+Iterators in Bio.Medline, Bio.SCOP, Bio.Prosite, Bio.Prosite.Prodoc,
+Bio.SwissProt, and others to make them more generally usable.
+
+Phylip export added to Bio.Nexus.
+
+Improved handling of ambiguous nucleotides andstop codons in Bio.Seq.Translate.
 
 ===================================================================
 
