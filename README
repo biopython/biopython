@@ -26,10 +26,6 @@ python setup.py install
 
 o "Python 2.3 or better":http://www.python.org/
 
-o "mxTextTools":http://www.egenix.com/files/python/mxTextTools.html
-  This is used in many of the text handling routines in Biopython.
-  Much of Biopython will not work without it.
-
 o "Numerical Python":http://numpy.sourceforge.net/ (optional)
   This package is only used in the computationally-oriented modules.
   It is required for Bio.Cluster and a few other modules.  If you
@@ -41,6 +37,10 @@ o "Numerical Python":http://numpy.sourceforge.net/ (optional)
   Biopython with the "new" NumPy (versions 0.9.6 and later) works for
   most purposes, but some tweaking will be needed when compiling and
   using Biopython.
+
+o "mxTextTools":http://www.egenix.com/files/python/mxTextTools.html (optional)
+  This is used in some of Biopython's parsers. Most of the commonly
+  used parsers in Biopython do not need mxTextTools.
 
 o "ReportLab":http://www.reportlab.org/downloads.html (optional)
   This package is used in some code that generates graphical displays
@@ -102,7 +102,7 @@ data format has changed and broken the parsing code.  (The BLAST and
 GenBank formats seem to be particularly fragile.)  Thus, the parsing
 code in Biopython is updated faster than we can build Biopython
 releases.  You can get the most recent parser by pulling the relevant
-files (e.g. genbank_format.py) out of 
+files (e.g. the ones in Bio.SeqIO or Bio.Blast) out of 
 "anonymous cvs":http://cvs.biopython.org/ .
 However, be careful when doing this, because the code in CVS is not as
 well-tested as released code, and may contain new dependencies.
