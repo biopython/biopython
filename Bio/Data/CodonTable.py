@@ -67,7 +67,7 @@ class CodonTable:
         else :
             #Should be either RNA or generic nucleotides,
             #e.g. Bio.Data.CodonTable.generic_by_id[1]
-            letters = "TCAG"
+            letters = "UCAG"
 
         #Build the table...
         answer=answer + "\n\n  |" + "|".join( \
@@ -705,9 +705,8 @@ for key, val in unambiguous_rna_by_id.items():
                                      IUPACData.extended_protein_values)
 
 #The following isn't very elegant, but seems to work nicely.
-_merged_values = dict()
-_merged_values.update(IUPACData.ambiguous_rna_values)
-_merged_values.update(IUPACData.ambiguous_dna_values)
+_merged_values = dict(IUPACData.ambiguous_rna_values.iteritems())
+_merged_values["T"] = "U"
 
 for key, val in generic_by_name.items():
     ambiguous_generic_by_name[key] = AmbiguousCodonTable(val,
@@ -722,6 +721,28 @@ for key, val in generic_by_id.items():
                                      _merged_values,
                                      IUPAC.extended_protein,
                                      IUPACData.extended_protein_values)
+
+#Basic sanity test,
+for id in ambiguous_generic_by_id.keys() :
+    assert ambiguous_rna_by_id[id].forward_table["GUU"] == "V"
+    assert ambiguous_rna_by_id[id].forward_table["GUN"] == "V"
+    assert ambiguous_rna_by_id[id].forward_table["UUN"] == "X" #F or L
+
+    assert ambiguous_dna_by_id[id].forward_table["GTT"] == "V"
+    assert ambiguous_dna_by_id[id].forward_table["TTN"] == "X" #F or L
+    assert ambiguous_dna_by_id[id].forward_table["GTN"] == "V"
+
+    assert ambiguous_generic_by_id[id].forward_table.get("TTN") == "X"
+    assert ambiguous_generic_by_id[id].forward_table["ACN"] == "T"
+    assert ambiguous_generic_by_id[id].forward_table["GUU"] == "V"
+    assert ambiguous_generic_by_id[id].forward_table["GUN"] == "V"
+    assert ambiguous_generic_by_id[id].forward_table["UUN"] == "X" #F or L
+    assert ambiguous_generic_by_id[id].forward_table["GTT"] == "V"
+    assert ambiguous_generic_by_id[id].forward_table["TTN"] == "X" #F or L
+    assert ambiguous_generic_by_id[id].forward_table["GTN"] == "V"
+    #And finally something evil, an RNA-DNA mixture:
+    assert ambiguous_generic_by_id[id].forward_table["UTN"] == "X" #F or L
+    assert ambiguous_generic_by_id[id].forward_table["UTU"] == "F"
 
 del _merged_values
 del key, val
