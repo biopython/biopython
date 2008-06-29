@@ -18,7 +18,6 @@ The latest CLA file can be found
 from types import *
 
 from Residues import * 
-from FileIndex import FileIndex
 
 
 class Record:
@@ -111,29 +110,43 @@ class Parser:
         for ht in h:
             ht[1] = int(ht[1])
         rec.hierarchy = h
-        
 
         return rec
 
 
-class Index(FileIndex):
-    """A CLA file indexed by SCOP identifiers."""
-    def __init__(self, filename, ) :
-        iterator = lambda f : Iterator(f, Parser())
-        key_gen  = lambda rec : rec.sid
+class Index(dict):
+    """A CLA file indexed by SCOP identifiers, allowing rapid
+       random access into a file."""
+    def __init__(self, filename):
+        """
+        Arguments:
+        
+          filename  -- The file to index
+        """
+        dict.__init__(self)
+        self.filename = filename
+        f = open(self.filename)
+        try:
+            loc = 0
+            i = Iterator(f, Parser())
+            while 1 :
+                record = i.next()
+                if record is None : break
+                key = record.sid
+                if key != None :
+                    self[key]=loc
+                loc = f.tell()
+        finally :
+            f.close()
 
-        FileIndex.__init__(self, filename, iterator, key_gen)
+    def __getitem__(self, key) :
+        """ Return an item from the indexed file. """
+        loc = dict.__getitem__(self,key)
 
-
-       
-    
-
-    
-
-
-
-
-
-
-
-
+        f = open(self.filename)
+        try:
+            f.seek(loc)
+            record = Iterator(f, Parser()).next()
+        finally:
+            f.close()
+        return record

@@ -6,6 +6,11 @@
 # This functionality may be of general use, in which case this module should
 # be moved out of the SCOP package.
 
+import warnings
+warnings.warn("Bio.SCOP.FileIndex was deprecated, as it does not seem to have any users. If you do use this module, please contact the Biopython developers at biopython-dev@biopython.org to avoid permanent removal of this module")
+
+
+
 class defaultdict(dict):
 
     def __init__(self, default=None):
@@ -67,13 +72,3 @@ class FileIndex(dict) :
         finally:
             f.close()
         return thing
-
-
-
-
-
-
-
-
-
-

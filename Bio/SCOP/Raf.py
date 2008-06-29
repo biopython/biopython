@@ -30,7 +30,6 @@ from copy import copy
 from types import *
 
 from Residues import Residues
-from FileIndex import FileIndex
 
 # This table is taken from the RAF release notes, and includes the
 # undocumented mapping "UNK" -> "X"
@@ -81,8 +80,7 @@ def normalize_letters(one_letter_code) :
     else :
         return one_letter_code.upper()
 
-
-class SeqMapIndex(FileIndex) :
+class SeqMapIndex(dict):
     """An RAF file index.
 
     The RAF file itself is about 50 MB. This index provides rapid, random
@@ -93,16 +91,41 @@ class SeqMapIndex(FileIndex) :
     chain IDs.    
     """
 
-    def __init__(self, raf_filename) :
-        #We take a shortcut when making the index to avoid having to parse
-        #every line
-        iterator_gen = Iterator
-        key_gen = lambda rec : rec[0:5]
-        FileIndex.__init__(self, raf_filename, iterator_gen, key_gen)
-
-        #Replace Iterator with Parsing version
-        self.iterator_gen = lambda  fh : Iterator(fh, Parser())
+    def __init__(self, filename) :
+        """
+        Arguments:
         
+          filename  -- The file to index
+        """
+        dict.__init__(self)
+        self.filename = filename
+
+        f = open(self.filename)
+        try:
+            loc = 0
+            i = Iterator(f)
+            while 1 :
+                record = i.next()
+                if record is None : break
+                key = record[0:5]
+                if key != None :
+                    self[key]=loc
+                loc = f.tell()
+        finally :
+            f.close()
+
+    def __getitem__(self, key) :
+        """ Return an item from the indexed file. """
+        loc = dict.__getitem__(self,key)
+
+        f = open(self.filename)
+        try:
+            f.seek(loc)
+            record = Iterator(f, Parser()).next()
+        finally:
+            f.close()
+        return record
+
 
     def getSeqMap(self, residues) :
         """Get the sequence map for a collection of residues.
@@ -354,13 +377,3 @@ class Parser:
             seqMap.res.append(r)
 
         return seqMap
-
-
-
-
-
-
-
-
-
-
