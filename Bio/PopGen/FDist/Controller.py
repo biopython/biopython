@@ -33,7 +33,7 @@ class FDistController:
         self.tmp_idx = 0
         self.fdist_dir = fdist_dir
         self.os_name = os.name
-        if self.os_name=='nt':
+        if self.os_name=='nt' or platform=='cygwin':
             py_ext = '.exe'
         else:
             py_ext = ''

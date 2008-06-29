@@ -6,6 +6,7 @@ This module allows to control Simcoal2.
 """
 
 import os
+import sys
 import tempfile
 from shutil import copyfile
 from logging import debug
@@ -20,7 +21,7 @@ class SimCoalController:
         """
         self.simcoal_dir = simcoal_dir
         self.os_name = os.name
-        if self.os_name=='nt':
+        if self.os_name=='nt' or sys.platform=='cygwin':
             self.bin_name = 'simcoal2.exe'
             #this is wrong (the exe name), most probably
         else:
