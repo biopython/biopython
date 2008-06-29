@@ -174,9 +174,6 @@ MutableSeq('ATGAAACTG', RNAAlphabet())
 Seq('ACTGTCGTCT', ProteinAlphabet())
 -> Proteins cannot be translated!
 
-Ambiguous Translations
-======================
-
 Seq's .complement() method
 ==========================
 Seq('TCAAAAGGATGCATCATG', IUPACUnambiguousDNA()) -> Seq('AGTTTTCCTACGTAGTAC', IUPACUnambiguousDNA())
