@@ -1,7 +1,7 @@
 # Copyright 2000-2001, Dalke Scientific Software, LLC
 # Distributed under the Biopython License Agreement (see the LICENSE file).
 
-__version__ = "1.45"
+__version__ = "1.46"
 
 import Expression
 import convert_re
