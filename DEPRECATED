@@ -2,9 +2,22 @@ This file provides documentation for modules in Biopython that have been moved
 or deprecated in favor of other modules. This provides some quick and easy
 to find documentation about how to update your code to work again.
 
+
+Bio.Rebase
+==========
+Deprecated as of Release 1.46.
+
+Bio.Gobase
+==========
+Deprecated as of Release 1.46.
+
+Bio.CDD
+=======
+Deprecated as of Release 1.46.
+
 Bio.biblio
 ==========
-Deprecated as of Release 1.45
+Deprecated as of Release 1.45.
 
 Bio.WWW
 =======
