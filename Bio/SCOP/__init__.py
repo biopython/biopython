@@ -199,41 +199,37 @@ class Scop:
                 root.description = 'SCOP Root'
 
                 # Build the rest of the nodes using the DES file
-                i = Des.Iterator(des_handle, Des.Parser())
-                while 1 :
-                    rec = i.next() 
-                    if rec is None : break
-                    if rec.nodetype =='px' :
+                records = Des.parse(des_handle)
+                for record in records:
+                    if record.nodetype =='px' :
                         n = Domain()
-                        n.sid = rec.name
+                        n.sid = record.name
                         domains.append(n)
                     else : 
                         n = Node()
-                    n.sunid = rec.sunid
-                    n.type = rec.nodetype
-                    n.sccs = rec.sccs
-                    n.description = rec.description
+                    n.sunid = record.sunid
+                    n.type = record.nodetype
+                    n.sccs = record.sccs
+                    n.description = record.description
                     
                     sunidDict[n.sunid] = n
  
                 # Glue all of the Nodes together using the HIE file
-                i = Hie.Iterator(hie_handle, Hie.Parser())
-                while 1 :
-                    rec = i.next()
-                    if rec is None : break
-                    if not sunidDict.has_key(rec.sunid) :
-                        print rec.sunid
+                records = Hie.parse(hie_handle)
+                for record in records:
+                    if not sunidDict.has_key(record.sunid) :
+                        print record.sunid
                         
-                    n = sunidDict[rec.sunid]
+                    n = sunidDict[record.sunid]
     
-                    if rec.parent != '' : # Not root node
+                    if record.parent != '' : # Not root node
     
-                        if not sunidDict.has_key(rec.parent):
+                        if not sunidDict.has_key(record.parent):
                             raise ValueError, "Incomplete data?"
                                        
-                        n.parent = sunidDict[rec.parent]
+                        n.parent = sunidDict[record.parent]
                 
-                    for c in rec.children:
+                    for c in record.children:
                         if not sunidDict.has_key(c) :
                             raise ValueError, "Incomplete data?"
                         n.children.append(sunidDict[c])
@@ -241,14 +237,12 @@ class Scop:
                         
                 # Fill in the gaps with information from the CLA file
                 sidDict = {}
-                i = Cla.Iterator(cla_handle, Cla.Parser())
-                while 1 :
-                    rec = i.next()
-                    if rec is None : break
-                    n = sunidDict[rec.sunid]
-                    assert n.sccs == rec.sccs
-                    assert n.sid == rec.sid
-                    n.residues = rec.residues
+                records = Cla.parse(cla_handle)
+                for record in records:
+                    n = sunidDict[record.sunid]
+                    assert n.sccs == record.sccs
+                    assert n.sid == record.sid
+                    n.residues = record.residues
                     sidDict[n.sid] = n
 
                 # Clean up

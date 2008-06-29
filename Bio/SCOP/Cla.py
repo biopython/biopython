@@ -15,7 +15,6 @@ The latest CLA file can be found
 """
 
 
-from types import *
 
 from Residues import * 
 
@@ -35,13 +34,31 @@ class Record:
                     location of this domain in the SCOP hierarchy.
                     See the Scop module for a description of nodetypes.
     """
-    def __init__(self):
+    def __init__(self, line=None):
         self.sid = ''
         self.residues = None 
         self.sccs = ''
         self.sunid =''
         self.hierarchy = []
+        if line:
+            self._process(line)
         
+    def _process(self, line):
+        line = line.rstrip()         # no trailing whitespace
+        columns = line.split('\t')   # separate the tab-delineated cols
+        if len(columns) != 6:
+            raise ValueError, "I don't understand the format of %s" % line
+        
+        self.sid, pdbid, residues, self.sccs, self.sunid, hierarchy = columns
+        self.residues = Residues(residues)
+        self.residues.pdbid = pdbid
+        self.sunid = int(self.sunid)
+        
+        for ht in hierarchy.split(",") :
+            key, value = ht.split('=')
+            value = int(value)
+            self.hierarchy.append([key, value])
+
     def __str__(self):
         s = []
         s.append(self.sid)
@@ -60,7 +77,7 @@ class Iterator:
     """Iterates over a CLA file.
     """
     def __init__(self, handle, parser=None):
-        """Create an object that iterates over a DES file.
+        """Create an object that iterates over a CLA file.
 
         handle -- file-like object.
 
@@ -69,6 +86,9 @@ class Iterator:
                   of the file will be returned.
 
         """
+        import warnings
+        warnings.warn("Bio.SCOP.Cla.Iterator is deprecated. Please use Bio.SCOP.Cla.parse() instead.", DeprecationWarning)
+        from types import FileType, InstanceType
         if type(handle) is not FileType and type(handle) is not InstanceType:
             raise TypeError, "I expected a file handle or file-like object"
         self._handle = handle
@@ -91,27 +111,34 @@ class Iterator:
 class Parser:
     """Parses tab-deliminated CLA records.
     """
+    def __init__(self):
+        import warnings
+        warnings.warn("""Bio.SCOP.Cla.Parser is deprecated.
+        Instead of
+
+        parser = Cla.Parser()
+        record = parser.parse(entry)
+
+        please use
+
+        record = Cla.Record(entry)
+        """, DeprecationWarning)
+
     def parse(self, entry):
         """Returns a Cla Record """        
-        entry = entry.rstrip()        # no trailing whitespace
-        columns = entry.split('\t')   # separate the tab-delineated cols
-        if len(columns) != 6:
-            raise ValueError, "I don't understand the format of %s" % entry
-        
-        rec = Record()
-        rec.sid, pdbid, residues, rec.sccs, rec.sunid, hierarchy = columns
-        rec.residues = Residues(residues)
-        rec.residues.pdbid = pdbid
-        rec.sunid = int(rec.sunid)
-        
-        h = []
-        for ht in hierarchy.split(",") :
-            h.append( ht.split('='))        
-        for ht in h:
-            ht[1] = int(ht[1])
-        rec.hierarchy = h
+        return Record(entry)
 
-        return rec
+
+def parse(handle):
+    """Iterates over a CLA file, returning a Cla record for each line
+    in the file.
+
+    Arguments:
+
+        handle -- file-like object.
+    """
+    for line in handle:
+        yield Record(line)
 
 
 class Index(dict):
@@ -127,26 +154,27 @@ class Index(dict):
         self.filename = filename
         f = open(self.filename)
         try:
-            loc = 0
-            i = Iterator(f, Parser())
-            while 1 :
-                record = i.next()
-                if record is None : break
+            position = 0
+            while True:
+                line = f.readline()
+                if not line: break
+                record = Record(line)
                 key = record.sid
                 if key != None :
-                    self[key]=loc
-                loc = f.tell()
-        finally :
+                    self[key] = position
+                position = f.tell()
+        finally:
             f.close()
 
     def __getitem__(self, key) :
         """ Return an item from the indexed file. """
-        loc = dict.__getitem__(self,key)
+        position = dict.__getitem__(self,key)
 
         f = open(self.filename)
         try:
-            f.seek(loc)
-            record = Iterator(f, Parser()).next()
+            f.seek(position)
+            line = f.readline()
+            record = Record(line)
         finally:
             f.close()
         return record

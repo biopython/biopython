@@ -26,8 +26,7 @@ class RafTests(unittest.TestCase):
 
     def testParse(self):
         """Can we parse a RAF record?"""
-        p = Raf.Parser()
-        r = p.parse(self.rafLine)
+        r = Raf.SeqMap(self.rafLine)
 
         assert r.pdbid == "101m"
         assert r.pdb_datestamp =="010301"  
@@ -40,15 +39,14 @@ class RafTests(unittest.TestCase):
         assert res.seqres =="A"
         assert res.atom =="A"
 
-        r = p.parse(self.rafLine2)   
+        r = Raf.SeqMap(self.rafLine2)   
         res = r.res[r.index("6A", chainid="A")]
         assert res.resid =="6A"
         assert res.atom=="E"
 
     def testSeqMapAdd(self) :
-        p = Raf.Parser()
-        r2 = p.parse(self.rafLine2)
-        r3 = p.parse(self.rafLine3)
+        r2 = Raf.SeqMap(self.rafLine2)
+        r3 = Raf.SeqMap(self.rafLine3)
 
         l = len(r2.res) + len(r3.res)
         r2 += r3
@@ -66,7 +64,7 @@ class RafTests(unittest.TestCase):
         
 
     def testSeqMapSlice(self) :
-        r = Raf.Parser().parse(self.rafLine)
+        r = Raf.SeqMap(self.rafLine)
         r = r[ r.index("124"): r.index("135")+1]
         assert len(r.res) ==12
 

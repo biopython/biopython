@@ -16,8 +16,6 @@ The latest HIE file can be found
 """
 
 
-from types import *
-
 class Record:
     """Holds information for one node in the SCOP hierarchy.
 
@@ -27,11 +25,48 @@ class Record:
 
     children   -- Sequence of childrens sunids
     """
-    def __init__(self):
+    def __init__(self, line=None):
         self.sunid = ''
         self.parent = ''
         self.children = []
+        if line:
+            self._process(line)
+
+    def _process(self, line):
+        """Parses HIE records.
+
+        Records consist of 3 tab deliminated fields; node's sunid,
+        parent's sunid, and a list of children's sunids.
+        """
+        #For example ::
+        #
+        #0       -       46456,48724,51349,53931,56572,56835,56992,57942
+        #21953   49268   -
+        #49267   49266   49268,49269
+        line = line.rstrip()        # no trailing whitespace
+        columns = line.split('\t')   # separate the tab-delineated cols
+        if len(columns) != 3:
+            raise ValueError, "I don't understand the format of %s" % line
         
+        sunid, parent, children = columns
+
+        if sunid =='-':
+            self.sunid = ''
+        else:
+            self.sunid = int(sunid)
+
+        if parent=='-':
+            self.parent = ''
+        else:
+            self.parent = int(parent)
+
+        if children=='-':
+            self.children = ()
+        else:
+            children = children.split(',')
+            self.children = map(int, children)
+
+
     def __str__(self):
         s = []
         s.append(str(self.sunid))
@@ -54,6 +89,18 @@ class Record:
         return "\t".join(s) + "\n"
 
 
+def parse(handle):
+    """Iterates over a HIE file, returning a Hie record for each line
+    in the file.
+
+    Arguments:
+
+        handle -- file-like object.
+    """
+    for line in handle:
+        yield Record(line)
+
+
 class Iterator:
     """Iterates over a HIE file.
     """
@@ -67,6 +114,9 @@ class Iterator:
                   of the file will be returned.
                   
         """
+        import warnings
+        warnings.warn("Bio.SCOP.Hie.Iterator is deprecated. Please use Bio.SCOP.Hie.parse() instead.", DeprecationWarning)
+        from types import FileType, InstanceType
         if type(handle) is not FileType and type(handle) is not InstanceType:
             raise TypeError, "I expected a file handle or file-like object"
         self._handle = handle
@@ -87,50 +137,19 @@ class Iterator:
 
 
 class Parser:
-    """Parses HIE records.
+    def __init__(self):
+        import warnings
+        warnings.warn("""Bio.SCOP.Hie.Parser is deprecated.
+        Instead of
 
-    Records consist of 3 tab deliminated fields; node's sunid,
-    parent's sunid, and a list of children's sunids.
-    """
-    #For example ::
-    #
-    #0       -       46456,48724,51349,53931,56572,56835,56992,57942
-    #21953   49268   -
-    #49267   49266   49268,49269
+        parser = Hie.Parser()
+        record = parser.parse(entry)
+
+        please use
+
+        record = Hie.Record(entry)
+        """, DeprecationWarning)
+
     def parse(self, entry):
         """Returns a Hie Record """
-        entry = entry.rstrip()        # no trailing whitespace
-        columns = entry.split('\t')   # separate the tab-delineated cols
-        if len(columns) != 3:
-            raise ValueError, "I don't understand the format of %s" % entry
-        
-        rec = Record()
-        rec.sunid, rec.parent, children = columns
-
-        if rec.sunid =='-' : rec.sunid = ''
-        if rec.parent =='-' : rec.parent = ''
-        else : rec.parent = int( rec.parent )
-
-        if children =='-' :
-            rec.children = ()
-        else :
-            rec.children = children.split(',')
-            rec.children = map ( int, rec.children )
-
-        rec.sunid = int(rec.sunid)
-
-        return rec
-
-
-       
-    
-
-    
-
-
-
-
-
-
-
-
+        return Record(entry)

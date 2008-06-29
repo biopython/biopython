@@ -33,10 +33,7 @@ class DomTests(unittest.TestCase):
        f = open(self.filename)
        try: 
            count = 0
-           i = Dom.Iterator(f, Dom.Parser())
-           while 1 :
-               rec = i.next() 
-               if rec is None : break
+           for record in Dom.parse(f):
                count +=1
            self.assertEquals(count,10)
        finally:
@@ -45,26 +42,22 @@ class DomTests(unittest.TestCase):
     def testStr(self):
        f = open(self.filename)
        try: 
-           p = Dom.Parser()
-           i = Dom.Iterator(f)
-           while 1 :
-               line = i.next() 
-               if line is None : break
-               rec = p.parse(line)
-               #End of line is platform dependant. Strip it off
-               self.assertEquals(str(rec).rstrip(),line.rstrip())
+           for line in f:
+               record = Dom.Record(line)
+               #End of line is platform dependent. Strip it off
+               self.assertEquals(str(record).rstrip(),line.rstrip())
        finally:
-           f.close()        
+           f.close()
 
     def testError(self) :
         corruptDom = "49xxx268\tsp\tb.1.2.1\t-\n"
-        self.assertRaises(ValueError, Dom.Parser().parse, corruptDom)
+        self.assertRaises(ValueError, Dom.Record, corruptDom)
 
 
     def testRecord(self) :
         recLine = 'd7hbib_\t7hbi\tb:\t1.001.001.001.001.001'
 
-        rec = Dom.Parser().parse(recLine)
+        rec = Dom.Record(recLine)
         self.assertEquals(rec.sid, 'd7hbib_')
         self.assertEquals(rec.residues.pdbid,'7hbi')
         self.assertEquals(rec.residues.fragments,(('b','',''),) )        

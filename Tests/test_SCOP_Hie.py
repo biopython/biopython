@@ -31,10 +31,7 @@ class HieTests(unittest.TestCase):
        f = open(self.filename)
        try: 
            count = 0
-           i = Hie.Iterator(f, Hie.Parser())
-           while 1 :
-               rec = i.next() 
-               if rec is None : break
+           for record in Hie.parse(f):
                count +=1
            assert count == 21, "Wrong number of records?! "+str(count)
        finally:
@@ -43,23 +40,18 @@ class HieTests(unittest.TestCase):
     def testStr(self):
        f = open(self.filename)
        try: 
-           p = Hie.Parser()
-           i = Hie.Iterator(f)
-           while 1 :
-               line = i.next() 
-               if line is None : break
-               rec = p.parse(line)
-               #End of line is plateform dependant. Strip it off
-               assert str(rec).rstrip() == line.rstrip()
+           for line in f:
+               record = Hie.Record(line)
+               #End of line is platform dependent. Strip it off
+               assert str(record).rstrip() == line.rstrip()
        finally:
            f.close()        
 
     def testError(self) :
         corruptRec = "4926sdfhjhfgyjdfyg"
-        p = Hie.Parser()
 
         try:
-            rec = p.parse(corruptRec)
+            rec = Hie.Record(corruptRec)
             assert False, "Should never get here"
         except ValueError, e :
             pass
@@ -69,11 +61,3 @@ def test_suite():
 
 if __name__ == '__main__':
     unittest.main()
-
-
-
-
-
-
-
-

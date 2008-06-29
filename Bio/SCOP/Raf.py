@@ -102,26 +102,26 @@ class SeqMapIndex(dict):
 
         f = open(self.filename)
         try:
-            loc = 0
-            i = Iterator(f)
-            while 1 :
-                record = i.next()
-                if record is None : break
-                key = record[0:5]
+            position = 0
+            while True:
+                line = f.readline()
+                if not line: break
+                key = line[0:5]
                 if key != None :
-                    self[key]=loc
-                loc = f.tell()
+                    self[key]=position
+                position = f.tell()
         finally :
             f.close()
 
     def __getitem__(self, key) :
         """ Return an item from the indexed file. """
-        loc = dict.__getitem__(self,key)
+        position = dict.__getitem__(self,key)
 
         f = open(self.filename)
         try:
-            f.seek(loc)
-            record = Iterator(f, Parser()).next()
+            f.seek(position)
+            line = f.readline()
+            record = SeqMap(line)
         finally:
             f.close()
         return record
@@ -185,13 +185,51 @@ class SeqMap :
     res -- A list of Res objects, one for each residue in this sequence map
     """
 
-    def __init__(self) :
+    def __init__(self, line=None):
         self.pdbid = ''
         self.pdb_datestamp = ''
         self.version = ''
         self.flags = ''
         self.res = []
+        if line:
+            self._process(line)
         
+
+    def _process(self, line):
+        """Parses a RAF record into a SeqMap object.
+        """
+        header_len = 38
+ 
+        line = line.rstrip()  # no trailing whitespace        
+
+        if len(line)<header_len: 
+            raise ValueError, "Incomplete header: "+line
+
+        self.pdbid = line[0:4]
+        chainid = line[4:5]
+        
+        self.version = line[6:10]
+
+        #Raf format versions 0.01 and 0.02 are identical for practical purposes
+        if(self.version != "0.01" and  self.version !="0.02") :
+            raise ValueError, "Incompatible RAF version: "+self.version 
+
+        self.pdb_datestamp = line[14:20]
+        self.flags = line[21:27]
+
+        for i in range(header_len, len(line), 7) :
+            f = line[i : i+7]
+            if len(f)!=7:
+                raise ValueError, "Corrupt Field: ("+f+")"
+            r = Res()
+            r.chainid = chainid
+            r.resid =  f[0:5].strip()
+            r.atom = normalize_letters(f[5:6])
+            r.seqres = normalize_letters(f[6:7])
+
+            self.res.append(r)
+
+
     def index(self, resid, chainid="_") :
         for i in range(0, len(self.res)) :
             if self.res[i].resid == resid and self.res[i].chainid == chainid :
@@ -306,7 +344,18 @@ class Res :
         self.seqres = ''
 
 
+def parse(handle):
+    """Iterates over a RAF file, returning a SeqMap object for each line
+    in the file.
 
+    Arguments:
+        
+        handle -- file-like object.
+    """ 
+    for line in handle:
+        yield SeqMap(line)
+
+    
 class Iterator:
     """Iterates over a RAF file.
     """
@@ -320,6 +369,10 @@ class Iterator:
                   of the file will be returned.
                   
         """
+        import warnings
+        warnings.warn("Bio.SCOP.Raf.Iterator is deprecated. Please use Bio.SCOP.Raf.parse() instead.", DeprecationWarning)
+
+        from types import FileType, InstanceType
         if type(handle) is not FileType and type(handle) is not InstanceType:
             raise TypeError, "I expected a file handle or file-like object"
         self._handle = handle
@@ -340,40 +393,20 @@ class Iterator:
 
 
 class Parser:
-    """Parses a RAF record into a SeqMap object.
-    """
+    def __init__(self):
+        import warnings
+        warnings.warn("""Bio.SCOP.Raf.Parser is deprecated.
+        Instead of
+
+        parser = Raf.Parser()
+        record = parser.parse(entry)
+
+        please use
+
+        record = Raf.SeqMap(entry)
+        """, DeprecationWarning)
+
+
     def parse(self, line):
         """Returns a SeqMap """
-        header_len = 38
- 
-        seqMap = SeqMap()
-        line = line.rstrip()  # no trailing whitespace        
-
-        if len(line)<header_len: 
-            raise ValueError, "Incomplete header: "+rafLine
-
-        seqMap.pdbid = line[0:4]
-        chainid = line[4:5]
-        
-        seqMap.version = line[6:10]
-
-        #Raf format versions 0.01 and 0.02 are identical for practical purposes
-        if(seqMap.version != "0.01" and  seqMap.version !="0.02") :
-            raise ValueError, "Incompatible RAF version: "+seqMap.version 
-
-        seqMap.pdb_datestamp = line[14:20]
-        seqMap.flags = line[21:27]
-
-        for i in range(header_len, len(line), 7) :
-            f = line[i : i+7]
-            if len(f)!=7:
-                raise ValueError, "Corrupt Field: ("+f+")"
-            r = Res()
-            r.chainid = chainid
-            r.resid =  f[0:5].strip()
-            r.atom = normalize_letters(f[5:6])
-            r.seqres = normalize_letters(f[6:7])
-
-            seqMap.res.append(r)
-
-        return seqMap
+        return SeqMap(line)

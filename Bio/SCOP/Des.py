@@ -14,7 +14,6 @@ The latest DES file can be found
 "Release 1.55":http://scop.berkeley.edu/parse/des.cla.scop.txt_1.55 (July 2001)
 """
 
-from types import *
 
 class Record:
     """Holds information for one node in the SCOP hierarchy.
@@ -33,13 +32,39 @@ class Record:
     description --  e.g. "All beta proteins","Fibronectin type III", 
     
     """
-    def __init__(self):
+    def __init__(self, line=None):
         self.sunid = ''
         self.nodetype = ''
         self.sccs = ''
         self.name = ''
         self.description =''
+        if line:
+            self._process(line)
         
+    def _process(self, line):
+        """Parses DES records.
+    
+        Records consist of 5 tab deliminated fields,
+        sunid, node type, sccs, node name, node description.
+        """
+        #For example ::
+        #
+        #21953   px      b.1.2.1 d1dan.1 1dan T:,U:91-106
+        #48724   cl      b       -       All beta proteins
+        #48725   cf      b.1     -       Immunoglobulin-like beta-sandwich
+        #49265   sf      b.1.2   -       Fibronectin type III
+        #49266   fa      b.1.2.1 -       Fibronectin type III
+
+        line = line.rstrip()  # no trailing whitespace
+        columns = line.split("\t")  # separate the tab-delineated cols
+        if len(columns) != 5:
+            raise ValueError, "I don't understand the format of %s" % line
+        
+        sunid, self.nodetype, self.sccs, self.name, self.description = columns
+        if self.name=='-': self.name =''
+        self.sunid = int(sunid)
+
+
     def __str__(self):
         s = []
         s.append(self.sunid)
@@ -51,6 +76,18 @@ class Record:
             s.append("-")
         s.append(self.description)        
         return "\t".join(map(str,s)) + "\n"
+
+
+def parse(handle):
+    """Iterates over a DES file, returning a Des record for each line
+    in the file.
+
+    Arguments:
+        handle -- file-like object
+    """
+    for line in handle:
+        yield Record(line)
+
 
 class Iterator:
     """Iterates over a DES file.
@@ -65,6 +102,9 @@ class Iterator:
                   of the file will be returned.
                   
         """
+        import warnings
+        warnings.warn("Bio.SCOP.Des.Iterator is deprecated. Please use Bio.SCOP.Des.parse() instead.", DeprecationWarning)
+        from types import FileType, InstanceType
         if type(handle) is not FileType and type(handle) is not InstanceType:
             raise TypeError, "I expected a file handle or file-like object"
         self._handle = handle
@@ -85,32 +125,19 @@ class Iterator:
 
 
 class Parser:
-    """Parses DES records.
-    
-    Records consist of 5 tab deliminated fields,
-    sunid, node type, sccs, node name, node description.
-    """
-    #For example ::
-    #
-    #21953   px      b.1.2.1 d1dan.1 1dan T:,U:91-106
-    #48724   cl      b       -       All beta proteins
-    #48725   cf      b.1     -       Immunoglobulin-like beta-sandwich
-    #49265   sf      b.1.2   -       Fibronectin type III
-    #49266   fa      b.1.2.1 -       Fibronectin type III
+    def __init__(self):
+        import warnings
+        warnings.warn("""Bio.SCOP.Des.Parser is deprecated.
+        Instead of
+
+        parser = Des.Parser()
+        record = parser.parse(entry)
+
+        please use
+
+        record = Des.Record(entry)
+        """, DeprecationWarning)
 
     def parse(self, entry):
         """Returns a Des Record """
-        entry = entry.rstrip()  # no trailing whitespace
-        columns = entry.split("\t")  # separate the tab-delineated cols
-        if len(columns) != 5:
-            raise ValueError, "I don't understand the format of %s" % entry
-        
-        rec = Record()
-        rec.sunid, rec.nodetype, rec.sccs, rec.name, rec.description = columns
-        if rec.name == '-' : rec.name =''
-        rec.sunid = int(rec.sunid)
-        return rec
-
-
-
-
+        return Record(entry)

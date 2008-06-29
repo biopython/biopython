@@ -31,10 +31,8 @@ class DesTests(unittest.TestCase):
        f = open(self.filename)
        try: 
            count = 0
-           i = Des.Iterator(f, Des.Parser())
-           while 1 :
-               rec = i.next() 
-               if rec is None : break
+           records = Des.parse(f)
+           for record in records:
                count +=1
            assert count == 20, "Wrong number of records?!"
        finally:
@@ -43,23 +41,17 @@ class DesTests(unittest.TestCase):
     def testStr(self):
        f = open(self.filename)
        try: 
-           p = Des.Parser()
-           i = Des.Iterator(f)
-           while 1 :
-               line = i.next() 
-               if line is None : break
-               rec = p.parse(line)
+           for line in f:
+               record = Des.Record(line)
                #End of line is plateform dependant. Strip it off
-               assert str(rec).rstrip() == line.rstrip()
+               assert str(record).rstrip() == line.rstrip()
        finally:
            f.close()        
 
     def testError(self) :
         corruptRec = "49268\tsp\tb.1.2.1\t-\n"
-        p = Des.Parser()
-
         try:
-            rec = p.parse(corruptRec)
+            record = Des.Record(corruptRec)
             assert False, "Should never get here"
         except ValueError, e :
             pass
@@ -68,12 +60,12 @@ class DesTests(unittest.TestCase):
         recLine = '49268\tsp\tb.1.2.1\t-\tHuman (Homo sapiens)    \n'
         recFields = (49268,'sp','b.1.2.1','','Human (Homo sapiens)')
 
-        rec = Des.Parser().parse(recLine)
-        assert rec.sunid == recFields[0]
-        assert rec.nodetype == recFields[1]
-        assert rec.sccs == recFields[2]
-        assert rec.name == recFields[3]                
-        assert rec.description == recFields[4]
+        record = Des.Record(recLine)
+        assert record.sunid == recFields[0]
+        assert record.nodetype == recFields[1]
+        assert record.sccs == recFields[2]
+        assert record.name == recFields[3]                
+        assert record.description == recFields[4]
 
 
 def test_suite():

@@ -34,10 +34,8 @@ class ClaTests(unittest.TestCase):
         f=open(self.filename)
         try: 
             count = 0
-            i = Cla.Iterator(f, Cla.Parser())
-            while 1 :
-                rec = i.next() 
-                if rec is None : break
+            records = Cla.parse(f)
+            for record in records:
                 count +=1
             assert count == 14, "Wrong number of records?!"
         finally:
@@ -46,23 +44,18 @@ class ClaTests(unittest.TestCase):
     def testStr(self):
         f = open(self.filename)
         try: 
-            p = Cla.Parser()
-            i = Cla.Iterator(f)
-            while 1 :
-                line = i.next() 
-                if line is None : break
-                rec = p.parse(line)
-                #End of line is plateform dependant. Strip it off
-                assert str(rec).rstrip() == line.rstrip()
+            for line in f:
+                record = Cla.Record(line)
+                #End of line is platform dependent. Strip it off
+                assert str(record).rstrip() == line.rstrip()
         finally:
             f.close()        
 
     def testError(self) :
         corruptRec = "49268\tsp\tb.1.2.1\t-\n"
-        p = Cla.Parser()
 
         try:
-            rec = p.parse(corruptRec)
+            record = Cla.Record(corruptRec)
             assert False, "Should never get here"
         except ValueError, e :
             pass
@@ -70,15 +63,15 @@ class ClaTests(unittest.TestCase):
     def testRecord(self) :
         recLine = 'd1dan.1\t1dan\tT:,U:91-106\tb.1.2.1\t21953\tcl=48724,cf=48725,sf=49265,fa=49266,dm=49267,sp=49268,px=21953'
 
-        rec = Cla.Parser().parse(recLine)
-        assert rec.sid =='d1dan.1'
-        assert rec.residues.pdbid =='1dan'
-        assert rec.residues.fragments ==(('T','',''),('U','91','106'))
-        assert rec.sccs == 'b.1.2.1'
-        assert rec.sunid == 21953
-        assert rec.hierarchy == [['cl',48724],['cf',48725],['sf',49265],
+        record = Cla.Record(recLine)
+        assert record.sid =='d1dan.1'
+        assert record.residues.pdbid =='1dan'
+        assert record.residues.fragments ==(('T','',''),('U','91','106'))
+        assert record.sccs == 'b.1.2.1'
+        assert record.sunid == 21953
+        assert record.hierarchy == [['cl',48724],['cf',48725],['sf',49265],
              ['fa',49266],['dm',49267],['sp',49268],
-             ['px',21953]], rec.hierarchy
+             ['px',21953]], record.hierarchy
 
     def testIndex(self) :
         index = Cla.Index(self.filename)
