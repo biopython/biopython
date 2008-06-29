@@ -3,6 +3,10 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+import warnings
+warnings.warn("Bio.ECell was deprecated, as it does not seem to have any users. If you do use this module, please contact the Biopython developers at biopython-dev@biopython.org to avoid permanent removal of this module")
+
+
 # standard library
 import sys
 import string
