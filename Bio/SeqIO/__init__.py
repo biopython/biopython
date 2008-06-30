@@ -80,16 +80,9 @@ silently ignored.
 
 Input - Alignments
 ==================
-Currently an alignment class cannot be created from SeqRecord objects.
-Instead, use the to_alignment(...) function, like so:
-
-    from Bio import SeqIO
-    handle = open("example.aln", "rU")
-    alignment = SeqIO.to_alignment(SeqIO.parse(handle, "clustal"))
-    handle.close()
-
-This function may be removed in future once alignments can be created
-directly from SeqRecord objects.
+You can read in alignment files as Alignment objects using Bio.AlignIO.
+Alternatively, reading in an alignment file format via Bio.SeqIO will give
+you a SeqRecord for each row of each alignment.
 
 Output
 ======
@@ -124,11 +117,6 @@ write() multiple times.
 File Formats
 ============
 When specifying formats, use lowercase strings.
-
-Old Files
-=========
-The modules Bio.SeqIO.FASTA and Bio.SeqIO.generic are depreciated and may be
-removed.
 """
 
 #TODO
@@ -386,7 +374,7 @@ def to_dict(sequences, key_function=None) :
     return d
 
 def to_alignment(sequences, alphabet=None, strict=True) :
-    """Returns a multiple sequence alignment.
+    """Returns a multiple sequence alignment (OBSOLETE).
 
     sequences -An iterator that returns SeqRecord objects,
                or simply a list of SeqRecord objects.
@@ -394,6 +382,16 @@ def to_alignment(sequences, alphabet=None, strict=True) :
     alphabet - Optional alphabet.  Stongly recommended.
     strict   - Optional, defaults to True.  Should error checking
                be done?
+
+    Using this function is now discouraged.  Rather doing this:
+
+    from Bio import SeqIO
+    alignment = SeqIO.to_alignment(SeqIO.parse(handle, format))
+
+    You are now encouraged to use Bio.AlignIO instead, e.g.
+
+    from Bio import AlignIO
+    alignment = AlignIO.read(handle, format)
     """
     #TODO - Move this functionality into the Alignment class instead?
     from Bio.Alphabet import Alphabet, Gapped, generic_alphabet
