@@ -675,6 +675,12 @@ class AmbiguousForwardTable:
 
 #Prepare the ambiguous tables for DNA, RNA and Generic (DNA or RNA)
 ambiguous_dna_by_name = {}
+for key, val in unambiguous_dna_by_name.items():
+    ambiguous_dna_by_name[key] = AmbiguousCodonTable(val,
+                                     IUPAC.ambiguous_dna,
+                                     IUPACData.ambiguous_dna_values,
+                                     IUPAC.extended_protein,
+                                     IUPACData.extended_protein_values)
 ambiguous_dna_by_id = {}
 for key, val in unambiguous_dna_by_id.items():
     ambiguous_dna_by_id[key] = AmbiguousCodonTable(val,
@@ -682,10 +688,14 @@ for key, val in unambiguous_dna_by_id.items():
                                      IUPACData.ambiguous_dna_values,
                                      IUPAC.extended_protein,
                                      IUPACData.extended_protein_values)
-    for name in unambiguous_dna_by_name:
-        ambiguous_dna_by_name[name] = ambiguous_dna_by_id[key]
 
 ambiguous_rna_by_name = {}
+for key, val in unambiguous_rna_by_name.items():
+    ambiguous_rna_by_name[key] = AmbiguousCodonTable(val,
+                                     IUPAC.ambiguous_rna,
+                                     IUPACData.ambiguous_rna_values,
+                                     IUPAC.extended_protein,
+                                     IUPACData.extended_protein_values)
 ambiguous_rna_by_id = {}
 for key, val in unambiguous_rna_by_id.items():
     ambiguous_rna_by_id[key] = AmbiguousCodonTable(val,
@@ -693,12 +703,17 @@ for key, val in unambiguous_rna_by_id.items():
                                      IUPACData.ambiguous_rna_values,
                                      IUPAC.extended_protein,
                                      IUPACData.extended_protein_values)
-    for name in unambiguous_rna_by_name:
-        ambiguous_rna_by_name[name] = ambiguous_rna_by_id[key]
 
 #The following isn't very elegant, but seems to work nicely.
 _merged_values = dict(IUPACData.ambiguous_rna_values.iteritems())
 _merged_values["T"] = "U"
+
+for key, val in generic_by_name.items():
+    ambiguous_generic_by_name[key] = AmbiguousCodonTable(val,
+                                     Alphabet.NucleotideAlphabet(),
+                                     _merged_values,
+                                     IUPAC.extended_protein,
+                                     IUPACData.extended_protein_values)
 
 for key, val in generic_by_id.items():
     ambiguous_generic_by_id[key] = AmbiguousCodonTable(val,
@@ -706,14 +721,8 @@ for key, val in generic_by_id.items():
                                      _merged_values,
                                      IUPAC.extended_protein,
                                      IUPACData.extended_protein_values)
-    for name in generic_by_name:
-        ambiguous_generic_by_name[name] = ambiguous_generic_by_id[key]
 
-#Basic sanity tests,
-assert len(ambiguous_dna_by_name.keys()) == len(unambiguous_dna_by_name.keys())
-assert len(ambiguous_rna_by_name.keys()) == len(unambiguous_rna_by_name.keys())
-assert len(ambiguous_generic_by_name.keys()) == len(generic_by_name.keys())
-
+#Basic sanity test,
 for id in ambiguous_generic_by_id.keys() :
     assert ambiguous_rna_by_id[id].forward_table["GUU"] == "V"
     assert ambiguous_rna_by_id[id].forward_table["GUN"] == "V"
@@ -735,5 +744,8 @@ for id in ambiguous_generic_by_id.keys() :
     assert ambiguous_generic_by_id[id].forward_table["UTN"] == "X" #F or L
     assert ambiguous_generic_by_id[id].forward_table["UTU"] == "F"
 
+assert ambiguous_generic_by_id[1].stop_codons == ambiguous_generic_by_name["Standard"].stop_codons
+assert ambiguous_generic_by_id[4].stop_codons == ambiguous_generic_by_name["SGC3"].stop_codons
+assert ambiguous_generic_by_id[15].stop_codons == ambiguous_generic_by_name['Blepharisma Macronuclear'].stop_codons
 del _merged_values
 del key, val
