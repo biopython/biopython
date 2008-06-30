@@ -117,11 +117,15 @@ test_files = [ \
     ("phylip",    True,  'Phylip/interlaced2.phy', 4),
 #Following are EMBOSS simple or pairs format alignments
     ("emboss",    True,  'Emboss/alignret.txt', 4),
-    ("emboss",    False,  'Emboss/needle.txt', 10),
+    ("emboss",    False, 'Emboss/needle.txt', 10),
     ("emboss",    True,  'Emboss/water.txt', 2),
 #Following PHD (PHRAP) sequencing files are also used in test_Phd.py
-    ("phd",       False,  'Phd/phd1', 3),
-    ("phd",       False,  'Phd/phd2', 1),
+    ("phd",       False, 'Phd/phd1', 3),
+    ("phd",       False, 'Phd/phd2', 1),
+#Following ACE assembly files are also used in test_Phd.py
+    ("ace",       False, 'Ace/contig1.ace', 2),
+    ("ace",       False, 'Ace/consed_sample.ace', 1),
+    ("ace",       False, 'Ace/seq.cap.ace', 1),
     ]
 
 # This is a list of two-tuples.  Each tuple contains a

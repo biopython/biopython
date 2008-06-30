@@ -759,6 +759,32 @@ Testing reading phd format file Phd/phd2
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+Testing reading ace format file Ace/contig1.ace
+ ID and Name='Contig1',
+ Seq='aatacgGGATTGCCCTAGTAACGGCGAGTGAAGCGGCAAC...CTAGtac', length=856
+ ID and Name='Contig2',
+ Seq='cacggatgatagcttcgcgacactagcttttcagctaacc...cttgtag', length=3296
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'phylip' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'stockholm' format
+ Failed: Sequences must all be the same length
+Testing reading ace format file Ace/consed_sample.ace
+ ID and Name='Contig1',
+ Seq='agccccgggccgtggggttccttgagcactcccaaagttc...gggtttg', length=1475
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading ace format file Ace/seq.cap.ace
+ ID and Name='Contig1',
+ Seq='AGTTTTAGTTTTCCTCTGAAGCAAGCACACCTTCCCTTTC...TCACATT', length=1222
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
 Finished tested reading files
 
 Starting testing writing records

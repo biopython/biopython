@@ -172,6 +172,7 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align.Generic import Alignment
 
+import AceIO
 import FastaIO
 import InsdcIO #EMBL and GenBank
 import NexusIO
@@ -195,6 +196,7 @@ _FormatToIterator ={"fasta" : FastaIO.FastaIterator,
                     "nexus" : NexusIO.NexusIterator,
                     "swiss" : SwissIO.SwissIterator,
                     "phd" : PhdIO.PhdIterator,
+                    "ace" : AceIO.AceIterator,
                     }
 
 _FormatToWriter ={"fasta" : FastaIO.FastaWriter,
