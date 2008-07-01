@@ -8,12 +8,8 @@
 """
 # standard library
 import os
-import copy
-import sys
 
 # Biopython
-from Bio import File
-
 from Bio import MetaTool
 
 

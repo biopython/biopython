@@ -11,13 +11,6 @@ list_uids=10222413&dopt=Abstract
 
 # standard library
 import string
-import array
-import os
-import re
-import sys
-import sgmllib
-import urlparse
-import copy
 import Matrix
 
 # XML from python 2.0
@@ -25,13 +18,9 @@ from xml.sax import handler
 
 # Martel
 import Martel
-# from Martel import Opt, Alt, Integer, SignedInteger, Group, Str, MaxRepeat
-# from Martel import Any, AnyBut, RepN, Rep, Rep1, ToEol
 from Martel import RecordReader
 
 from Bio.ParserSupport import EventGenerator
-from Bio.ParserSupport import AbstractConsumer
-from Bio.SeqFeature import Reference
 from Bio import File
 import metatool_format
 import Record
@@ -198,13 +187,13 @@ class _RecordConsumer:
         for reaction in reactions:
             items = reaction.split()
             item = string.join( items[ 1: ] )
-            self._reactions.append( item.strip() )
+            self._reactions.append(item)
 
     def enzyme( self, enzymes ):
         for enzyme in enzymes:
             items = enzyme.split()
             item = string.join( items[ 1: ] )
-            self._enzymes.append( item.strip() )
+            self._enzymes.append(item)
 
     def sum_is_constant_line( self, lines ):
         for line in lines:
@@ -378,7 +367,7 @@ def _strip_and_combine(line_list):
     stripped_line_list = map(string.strip, line_list)
 
     # now combine everything with spaces
-    return string.join(stripped_line_list, ' ')
+    return string.join(stripped_line_list)
 
 
 
