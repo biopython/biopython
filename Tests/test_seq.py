@@ -236,6 +236,25 @@ for nucleotide_seq in test_seqs:
     except ValueError, e :
 	print "%s\n-> %s" \
 	% (repr(nucleotide_seq) , str(e))
+
+misc_stops = "TAATAGTGAAGAAGG"
+for nucleotide_seq in [misc_stops, Seq.Seq(misc_stops),
+                       Seq.Seq(misc_stops, Alphabet.generic_nucleotide),
+                       Seq.Seq(misc_stops, Alphabet.DNAAlphabet()),
+                       Seq.Seq(misc_stops, IUPAC.unambiguous_dna)] :
+    assert "***RR" == str(Seq.translate(nucleotide_seq))
+    assert "***RR" == str(Seq.translate(nucleotide_seq, table=1))
+    assert "***RR" == str(Seq.translate(nucleotide_seq, table="SGC0"))
+    assert "**W**" == str(Seq.translate(nucleotide_seq, table=2))
+    assert "**WRR" == str(Seq.translate(nucleotide_seq, \
+                                        table='Yeast Mitochondrial'))
+    assert "**WSS" == str(Seq.translate(nucleotide_seq, table=5))
+    assert "**WSS" == str(Seq.translate(nucleotide_seq, table=9))
+    assert "**CRR" == str(Seq.translate(nucleotide_seq, \
+                                        table='Euplotid Nuclear'))
+    assert "***RR" == str(Seq.translate(nucleotide_seq, table=11))
+    assert "***RR" == str(Seq.translate(nucleotide_seq, table='Bacterial'))
+del misc_stops
     
 print
 print "Seq's .complement() method"
