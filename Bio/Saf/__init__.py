@@ -7,29 +7,13 @@
 http://www.embl-heidelberg.de/predictprotein/Dexa/optin_safDes.html
 """
 
-# standard library
-import string
-import array
-import os
-import re
-import sgmllib
-import urlparse
-
-# XML from python 2.0
-from xml.sax import handler
-from xml.sax.handler import ContentHandler
-
 # Martel
 import Martel
 from Martel import RecordReader
 from Martel import Dispatch
 
 
-from Bio.ParserSupport import EventGenerator
-from Bio.ParserSupport import AbstractConsumer
 from Bio import File
-from Bio.Align.Generic import Alignment
-import Bio.Alphabet
 import saf_format
 import Record
 

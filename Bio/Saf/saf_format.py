@@ -20,14 +20,11 @@ Just so I remember -- the new end of line syntax is:
 This helps us have endlines be consistent across platforms.
 
 """
-# standard library
 #http://www.embl-heidelberg.de/predictprotein/Dexa/optin_safDes.html
 
-import string
 
 # Martel
 import Martel
-from Martel import RecordReader
 from Martel import Str
 from Martel import AnyEol
 from Martel import ToEol
@@ -36,8 +33,6 @@ from Martel import Alt
 from Martel import Rep
 from Martel import Rep1
 from Martel import Any
-from Martel import AnyBut
-from Martel import RepN
 from Martel import Opt
 from Martel import ToSep
 from Martel.Expression import Assert

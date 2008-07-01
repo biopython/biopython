@@ -20,11 +20,7 @@ Just so I remember -- the new end of line syntax is:
 This helps us have endlines be consistent across platforms.
 
 """
-# standard library
-import string
 
-
-from Bio.Seq import Seq
 from Bio.Align.Generic import Alignment
 import Bio.Alphabet
 
@@ -54,7 +50,6 @@ class Record:
         sequences = self.alignment.get_all_seqs()
         for sequence_record in sequences:
             output = output + '%s\n' % sequence_record.description
-#            output = output + out_sequence( sequence_record.seq.data )
             output = output + out_sequence( sequence_record.seq.data )
         return output
 
