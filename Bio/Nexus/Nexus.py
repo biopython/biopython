@@ -452,6 +452,14 @@ def _replace_parenthesized_ambigs(seq,rev_ambig_values):
         opening=seq.find('(')
     return seq
 
+def _unique_label(previous_labels,label):
+    """returns a unique name if label is already in previous_labels."""
+    while label in previous_labels:
+        if label.split('.')[-1].startswith('copy'):
+            label='.'.join(label.split('.')[:-1])+'.copy'+str(eval('0'+label.split('.')[-1][4:])+1)
+        else:
+            label+='.copy'
+    return label
 
 class Commandline:
     """Represent a commandline as command and options."""
@@ -738,14 +746,18 @@ class Nexus(object):
         self.eliminate=options
 
     def _taxlabels(self,options):
-        """Get taxon labels."""
-        self.taxlabels=[]
-        opts=CharBuffer(options)
-        while True:
-            taxon=quotestrip(opts.next_word())
-            if not taxon:
-                break
-            self.taxlabels.append(taxon)
+        """Get taxon labels. As the taxon names are already in the matrix, this is superflous except for transpose matrices,
+        which are currently unspupported anyway.
+        Thus, we ignore the taxlabels command to make handling of duplicate taxon names easier.i
+        """
+        pass
+        #self.taxlabels=[]
+        #opts=CharBuffer(options)
+        #while True:
+        #    taxon=quotestrip(opts.next_word())
+        #    if not taxon:
+        #        break
+        #    self.taxlabels.append(taxon)
 
     def _check_taxlabels(self,taxon): 
         """Check for presence of taxon in self.taxlabels."""
@@ -790,10 +802,10 @@ class Nexus(object):
     def _matrix(self,options):
         if not self.ntax or not self.nchar:
             raise NexusError,'Dimensions must be specified before matrix!'
-        taxlabels_present=(self.taxlabels!=[])
         self.matrix={}
         taxcount=0
-        block_interleave=0
+        first_matrix_block=True
+    
         #eliminate empty lines and leading/trailing whitespace 
         lines=[l.strip() for l in options.split('\n') if l.strip()<>'']
         lineiter=iter(lines)
@@ -815,13 +827,11 @@ class Nexus(object):
                     raise NexusError, 'Too many taxa in matrix - should matrix be interleaved?'
                 else:
                     taxcount=1
-                    block_interleave=1
+                    first_matrix_block=False
             #get taxon name and sequence
             linechars=CharBuffer(l)
             id=quotestrip(linechars.next_word())
             l=linechars.rest().strip()
-            if taxlabels_present and not self._check_taxlabels(id):
-                raise NexusError,'Taxon '+id+' not found in taxlabels.'
             chars=''
             if self.interleave:
                 #interleaved matrix
@@ -853,27 +863,27 @@ class Nexus(object):
                     raise NexusError, 'Taxon %s: Illegal character %s in line: %s (check dimensions / interleaving)'\
                             % (id,c,l[i-10:i+10])
             #add sequence to matrix
-            if block_interleave==0:
-                while self.matrix.has_key(id):
-                    if id.split('.')[-1].startswith('copy'):
-                        id='.'.join(id.split('.')[:-1])+'.copy'+str(eval('0'+id.split('.')[-1][4:])+1)
-                    else:
-                        id+='.copy'
-                    #raise NexusError, id+' already in matrix!\nError in: '+l
+            if first_matrix_block:
+                id=_unique_label(self.matrix.keys(),id)
                 self.matrix[id]=iupac_seq
-                # add taxon name only if taxlabels is not alredy present
-                if not taxlabels_present:
-                    self.taxlabels.append(id)
+                self.taxlabels.append(id)
             else:
+                id=_unique_label(self.taxlabels[:taxcount-1],id)
                 taxon_present=self._check_taxlabels(id)
                 if taxon_present:
                     self.matrix[taxon_present]+=iupac_seq
                 else:
-                    raise NexusError, 'Taxon %s not in first block of interleaved matrix.' % id
+                    raise NexusError, 'Taxon %s not in first block of interleaved matrix. Check matrix dimensions and interleave.' % id
         #check all sequences for length according to nchar
         for taxon in self.matrix:
             if len(self.matrix[taxon])!=self.nchar:
                 raise NexusError,'Matrx Nchar %d does not match data length (%d) for taxon %s' % (self.nchar, len(self.matrix[taxon]),taxon)
+        #check that taxlabels is identical with matrix.keys. If not, it's a problem
+        matrixkeys=self.matrix.keys()
+        matrixkeys.sort()
+        taxlabelssort=self.taxlabels[:]
+        taxlabelssort.sort()
+        assert matrixkeys==taxlabelssort,"ERROR: TAXLABELS must be identical with MATRIX. Please Report this as a bug, and send in data file."
 
     def _translate(self,options):
         self.translate={}
