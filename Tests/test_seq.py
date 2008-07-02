@@ -255,7 +255,34 @@ for nucleotide_seq in [misc_stops, Seq.Seq(misc_stops),
     assert "***RR" == str(Seq.translate(nucleotide_seq, table=11))
     assert "***RR" == str(Seq.translate(nucleotide_seq, table='Bacterial'))
 del misc_stops
-    
+
+ambig = Set(IUPAC.IUPACAmbiguousDNA.letters)
+for c1 in ambig :
+    for c2 in ambig :
+        for c3 in ambig :
+            values = Set([Seq.translate(a+b+c, table=1) \
+                          for a in ambiguous_dna_values[c1] \
+                          for b in ambiguous_dna_values[c2] \
+                          for c in ambiguous_dna_values[c3]])
+            if "*" in values and len(values) > 1 :
+                #Translation is expected to fail.
+                #TODO - Confirm it fails with a try/except
+                continue
+            t = Seq.translate(c1+c2+c3)
+            if t=="*" :
+                assert values == Set(["*"])
+            elif t=="X" :
+                assert len(values) > 1, \
+                    "translate('%s') = '%s' not '%s'" \
+                    % (c1+c2+c3, t, ",".join(values))
+            elif t=="Z" :
+                assert values == Set(("E", "Q"))
+            elif t=="B" :
+                assert values == Set(["D", "N"])
+            else :
+                assert values == Set(t)
+del t,c1,c2,c3,ambig
+
 print
 print "Seq's .complement() method"
 print "=========================="
