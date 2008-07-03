@@ -13,7 +13,7 @@ class AlignmentIterator :
     method as well.
     """
     #TODO - Should the default be Gapped(single_letter_alphabet) instead?
-    def __init__(self, handle, count=None,
+    def __init__(self, handle, seq_count=None,
                  alphabet = single_letter_alphabet) :
         """Create an AlignmentIterator object.
 
@@ -28,7 +28,7 @@ class AlignmentIterator :
         - you do not have to require an alphabet (?).
         - you can add additional optional arguments."""
         self.handle = handle
-        self.records_per_alignment = count
+        self.records_per_alignment = seq_count
         self.alphabet = alphabet
         #####################################################
         # You may want to subclass this, for example        #
