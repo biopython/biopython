@@ -132,6 +132,12 @@ def check_simple_write_read(alignments, indent=" ") :
                     assert r1.id == r2.id, \
                            "'%s' vs '%s'" % (r1.id, r2.id)
 
+#Check parsers can cope with an empty file
+for t_format in AlignIO._FormatToIterator :
+     handle = StringIO()
+     alignments = list(AlignIO.parse(handle, t_format))
+     assert len(alignments) == 0
+
 for (t_format, t_per, t_count, t_filename) in test_files :
     print "Testing reading %s format file %s with %i alignments" \
           % (t_format, t_filename, t_count)

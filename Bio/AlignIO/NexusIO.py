@@ -29,6 +29,9 @@ def NexusIterator(handle, seq_count=None) :
     NOTE - We only expect ONE alignment matrix per Nexus file,
     meaning this iterator will only yield one Alignment."""
     n = Nexus.Nexus(handle)
+    if not n.matrix :
+        #No alignment found
+        raise StopIteration
     alignment = Alignment(n.alphabet)
 
     #Bio.Nexus deals with duplicated names by adding a '.copy' suffix.
@@ -104,4 +107,8 @@ if __name__ == "__main__" :
         print a
         for r in a :
             print repr(r.seq), r.name, r.id
+    print "Done"
+    print
+    print "Reading an empty file"
+    assert 0 == len(list(NexusIterator(StringIO())))
     print "Done"
