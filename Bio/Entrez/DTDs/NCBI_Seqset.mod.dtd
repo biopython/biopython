@@ -1,0 +1,128 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "seqset.asn"
+     ::DATATOOL:: by application DATATOOL version 1.9.0
+     ::DATATOOL:: on 04/10/2008 16:04:22
+     ============================================ -->
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "NCBI-Seqset"
+================================================= -->
+
+<!--
+$Revision: 1.1 $
+**********************************************************************
+
+  NCBI Sequence Collections
+  by James Ostell, 1990
+
+  Version 3.0 - 1994
+
+**********************************************************************
+-->
+
+<!-- Elements used by other modules:
+          Bioseq-set,
+          Seq-entry -->
+
+<!-- Elements referenced from other modules:
+          Bioseq,
+          Seq-annot,
+          Seq-descr FROM NCBI-Sequence,
+          Object-id,
+          Dbtag,
+          Date FROM NCBI-General -->
+<!-- ============================================ -->
+
+<!--
+*** Sequence Collections ********************************
+*
+ just a collection
+-->
+<!ELEMENT Bioseq-set (
+        Bioseq-set_id?, 
+        Bioseq-set_coll?, 
+        Bioseq-set_level?, 
+        Bioseq-set_class?, 
+        Bioseq-set_release?, 
+        Bioseq-set_date?, 
+        Bioseq-set_descr?, 
+        Bioseq-set_seq-set, 
+        Bioseq-set_annot?)>
+
+<!ELEMENT Bioseq-set_id (Object-id)>
+
+<!-- to identify a collection -->
+<!ELEMENT Bioseq-set_coll (Dbtag)>
+
+<!-- nesting level -->
+<!ELEMENT Bioseq-set_level (%INTEGER;)>
+
+<!ELEMENT Bioseq-set_class %ENUM;>
+
+<!--
+    nuc-prot	-  nuc acid and coded proteins
+    segset	-  segmented sequence + parts
+    conset	-  constructed sequence + parts
+    parts	-  parts for 2 or 3
+    gibb	-  geninfo backbone
+    gi	-  geninfo
+    genbank	-  converted genbank
+    pir	-  converted pir
+    pub-set	-  all the seqs from a single publication
+    equiv	-  a set of equivalent maps or seqs
+    swissprot	-  converted SWISSPROT
+    pdb-entry	-  a complete PDB entry
+    mut-set	-  set of mutations
+    pop-set	-  population study
+    phy-set	-  phylogenetic study
+    eco-set	-  ecological sample study
+    gen-prod-set	-  genomic products, chrom+mRNa+protein
+    wgs-set	-  whole genome shotgun project
+-->
+<!ATTLIST Bioseq-set_class value (
+        not-set |
+        nuc-prot |
+        segset |
+        conset |
+        parts |
+        gibb |
+        gi |
+        genbank |
+        pir |
+        pub-set |
+        equiv |
+        swissprot |
+        pdb-entry |
+        mut-set |
+        pop-set |
+        phy-set |
+        eco-set |
+        gen-prod-set |
+        wgs-set |
+        other
+        ) #REQUIRED >
+
+
+<!ELEMENT Bioseq-set_release (#PCDATA)>
+
+<!ELEMENT Bioseq-set_date (Date)>
+
+<!ELEMENT Bioseq-set_descr (Seq-descr)>
+
+<!ELEMENT Bioseq-set_seq-set (Seq-entry*)>
+
+<!ELEMENT Bioseq-set_annot (Seq-annot*)>
+
+
+<!ELEMENT Seq-entry (
+        Seq-entry_seq | 
+        Seq-entry_set)>
+
+<!ELEMENT Seq-entry_seq (Bioseq)>
+<!--
+*** Sequence Collections ********************************
+*
+ just a collection
+-->
+<!ELEMENT Seq-entry_set (Bioseq-set)>
+
