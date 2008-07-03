@@ -219,14 +219,16 @@ for (t_format, t_per, t_count, t_filename) in test_files :
     summary = AlignInfo.SummaryInfo(alignment)
     dumb_consensus = summary.dumb_consensus()
     gap_consensus = summary.gap_consensus()
-    pssm = summary.pos_specific_score_matrix()
-    rep_dict = summary.replacement_dictionary()
-    try :
-        info_content = summary.information_content()
-    except ValueError, e :
-        if str(e) <> "Error in alphabet: not Nucleotide or Protein, supply expected frequencies" :
-            raise e
-        pass
+    if t_format <> "nexus" :
+        #Hack for bug 2535
+        pssm = summary.pos_specific_score_matrix()
+        rep_dict = summary.replacement_dictionary()
+        try :
+            info_content = summary.information_content()
+        except ValueError, e :
+            if str(e) <> "Error in alphabet: not Nucleotide or Protein, supply expected frequencies" :
+                raise e
+            pass
 
     if t_count==1 and t_format not in ["nexus","emboss","fasta-m10"] :
         #print " Trying to read a triple concatenation of the input file"
