@@ -270,6 +270,13 @@ def check_simple_write_read(records, indent=" ") :
                 assert r1.id == r2.id, \
                        "'%s' vs '%s'" % (r1.id, r2.id)
 
+
+#Check parsers can cope with an empty file
+for t_format in SeqIO._FormatToIterator :
+    handle = StringIO()
+    records = list(SeqIO.parse(handle, t_format))
+    assert len(records) == 0
+
 for (t_format, t_alignment, t_filename, t_count) in test_files :
     print "Testing reading %s format file %s" % (t_format, t_filename)
     assert os.path.isfile(t_filename), t_filename
