@@ -132,10 +132,6 @@ When specifying formats, use lowercase strings.
 #
 # - MSF multiple alignment format, aka GCG, aka PileUp format (*.msf)
 #   http://www.bioperl.org/wiki/MSF_multiple_alignment_format 
-#
-# - Writing NEXUS multiple alignment format (*.nxs)
-#   http://www.bioperl.org/wiki/NEXUS_multiple_alignment_format
-#   Can be simply offload to Bio.Nexus for this?
 
 """
 FAO BioPython Developers
@@ -175,7 +171,6 @@ from Bio.Align.Generic import Alignment
 import AceIO
 import FastaIO
 import InsdcIO #EMBL and GenBank
-import NexusIO
 import PhdIO
 import SwissIO
 
@@ -193,7 +188,6 @@ _FormatToIterator ={"fasta" : FastaIO.FastaIterator,
                     "genbank-cds" : InsdcIO.GenBankCdsFeatureIterator,
                     "embl" : InsdcIO.EmblIterator,
                     "embl-cds" : InsdcIO.EmblCdsFeatureIterator,
-                    "nexus" : NexusIO.NexusIterator,
                     "swiss" : SwissIO.SwissIterator,
                     "phd" : PhdIO.PhdIterator,
                     "ace" : AceIO.AceIterator,
@@ -1552,7 +1546,7 @@ SQ   SEQUENCE   102 AA;  10576 MW;  CFBAA1231C3A5E92 CRC64;
     print "#########################################################"
     print
 
-    general_output_formats = ["fasta"]
+    general_output_formats = _FormatToWriter.keys()
     alignment_formats = ["phylip","stockholm","clustal"]
     for (in_data, in_format, rec_count, last_id, last_seq, unique_ids) in tests:
         if unique_ids :

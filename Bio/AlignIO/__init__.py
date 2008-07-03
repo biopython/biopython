@@ -113,10 +113,6 @@ http://biopython.org/DIST/docs/tutorial/Tutorial.pdf
 #
 # - MSF multiple alignment format, aka GCG, aka PileUp format (*.msf)
 #   http://www.bioperl.org/wiki/MSF_multiple_alignment_format 
-#
-# - Writing NEXUS multiple alignment format (*.nxs)
-#   http://www.bioperl.org/wiki/NEXUS_multiple_alignment_format
-#   Can be simply offload to Bio.Nexus for this?
 
 import os
 #from cStringIO import StringIO
@@ -128,6 +124,7 @@ from Bio.Align.Generic import Alignment
 
 import StockholmIO
 import ClustalIO
+import NexusIO
 import PhylipIO
 import EmbossIO
 import FastaIO
@@ -135,10 +132,11 @@ import FastaIO
 #Convention for format names is "mainname-subtype" in lower case.
 #Please use the same names as BioPerl and EMBOSS where possible.
 
-_FormatToIterator ={#"fasta" and "nexus" are done via Bio.SeqIO
+_FormatToIterator ={#"fasta" is done via Bio.SeqIO
                     "clustal" : ClustalIO.ClustalIterator,
                     "emboss" : EmbossIO.EmbossIterator,
                     "fasta-m10" : FastaIO.FastaM10Iterator,
+                    "nexus" : NexusIO.NexusIterator,
                     "phylip" : PhylipIO.PhylipIterator,
                     "stockholm" : StockholmIO.StockholmIterator,
                     }
@@ -216,7 +214,7 @@ def _SeqIO_to_alignment_iterator(handle, format, seq_count=None) :
                 yield SeqIO.to_alignment(records)
                 records = []
         if len(records) > 0 :
-            raise ValueError("Check count argument, not enough sequences?")
+            raise ValueError("Check seq_count argument, not enough sequences?")
     else :
         #Must assume that there is a single alignment using all
         #the SeqRecord objects:

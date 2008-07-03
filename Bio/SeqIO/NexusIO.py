@@ -3,12 +3,17 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-
 """Bio.SeqIO support for the "nexus" file format.
 
-You are expected to use this module via the Bio.SeqIO functions.
-See also the Bio.Nexus module which offers more than just accessing
-the sequences in a Nexus alignments as SeqRecord objects."""
+You were expected to use this module via the Bio.SeqIO functions.
+This module has now been replaced by Bio.AlignIO.NexusIO, and is
+deprecated."""
+
+import warnings
+warnings.warn("Bio.SeqIO.NexusIO is deprecated.  You can continue to read" \
+              + " 'nexus' files with Bio.SeqIO, but this is now" \
+              + " handled via Bio.AlignIO internally.",
+              DeprecationWarning)
 
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
