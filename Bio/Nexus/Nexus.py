@@ -41,7 +41,7 @@ SPECIALCOMMENTS=['&'] # supported special comment ('tree' command), all others a
 CHARSET='chars'
 TAXSET='taxa'
 CODONPOSITIONS='codonpositions'
-
+DEFAULTNEXUS='#NEXUS\nbegin data; dimensions ntax=0 nchar=0; format datatype=dna; end; '
 class NexusError(Exception): pass
 
 class CharBuffer:
@@ -248,6 +248,15 @@ def _make_unique(l):
     l.sort()
     return l
 
+def _unique_label(previous_labels,label):
+    """Returns a unique name if label is already in previous_labels."""
+    while label in previous_labels:
+        if label.split('.')[-1].startswith('copy'):
+            label='.'.join(label.split('.')[:-1])+'.copy'+str(eval('0'+label.split('.')[-1][4:])+1)
+        else:
+            label+='.copy'
+    return label
+
 def _seqmatrix2strmatrix(matrix):
     """Converts a Seq-object matrix to a plain sequence-string matrix."""
     return dict([(t,matrix[t].tostring()) for t in matrix])
@@ -452,15 +461,6 @@ def _replace_parenthesized_ambigs(seq,rev_ambig_values):
         opening=seq.find('(')
     return seq
 
-def _unique_label(previous_labels,label):
-    """returns a unique name if label is already in previous_labels."""
-    while label in previous_labels:
-        if label.split('.')[-1].startswith('copy'):
-            label='.'.join(label.split('.')[:-1])+'.copy'+str(eval('0'+label.split('.')[-1][4:])+1)
-        else:
-            label+='.copy'
-    return label
-
 class Commandline:
     """Represent a commandline as command and options."""
     
@@ -508,6 +508,7 @@ class Nexus(object):
     def __init__(self, input=None):
         self.ntax=0                     # number of taxa
         self.nchar=0                    # number of characters
+        self.unaltered_taxlabels=[]          # taxlabels as the appear in the input file (incl. duplicates, etc.)
         self.taxlabels=[]               # labels for taxa, ordered by their id
         self.charlabels=None            # ... and for characters
         self.statelabels=None           # ... and for states
@@ -541,6 +542,8 @@ class Nexus(object):
         
         if input:
             self.read(input)
+        else:
+            self.read(DEFAULTNEXUS)
 
     def get_original_taxon_order(self):
         """Included for backwards compatibility."""
@@ -746,9 +749,9 @@ class Nexus(object):
         self.eliminate=options
 
     def _taxlabels(self,options):
-        """Get taxon labels. As the taxon names are already in the matrix, this is superflous except for transpose matrices,
-        which are currently unspupported anyway.
-        Thus, we ignore the taxlabels command to make handling of duplicate taxon names easier.i
+        """Get taxon labels. As the taxon names are already in the matrix, this is superfluous except for transpose matrices,
+        which are currently unsupported anyway.
+        Thus, we ignore the taxlabels command to make handling of duplicate taxon names easier.
         """
         pass
         #self.taxlabels=[]
@@ -864,10 +867,12 @@ class Nexus(object):
                             % (id,c,l[i-10:i+10])
             #add sequence to matrix
             if first_matrix_block:
+                self.unaltered_taxlabels.append(id)
                 id=_unique_label(self.matrix.keys(),id)
                 self.matrix[id]=iupac_seq
                 self.taxlabels.append(id)
             else:
+                # taxon names need to be in the same order in each interleaved block
                 id=_unique_label(self.taxlabels[:taxcount-1],id)
                 taxon_present=self._check_taxlabels(id)
                 if taxon_present:
@@ -1531,6 +1536,9 @@ class Nexus(object):
         """Adds a sequence to the matrix."""
         if not name:
             raise NexusError, 'New sequence must have a name'
+        elif self.matrix and name in self.matrix:
+            raise NexusError, 'Taxon %s already in matrix' % name
+
         diff=self.nchar-len(sequence)
         if diff<0:
             self.insert_gap(self.nchar,-diff)
