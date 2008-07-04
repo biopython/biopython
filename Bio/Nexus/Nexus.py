@@ -1207,10 +1207,20 @@ class Nexus(object):
             blocksize=None, interleave=False, interleave_by_partition=False,\
             comment=None,omit_NEXUS=False,append_sets=True,mrbayes=False,\
             codons_block=True):
-        """ Writes a nexus file with data and sets block. Character sets and partitions 
-            are appended by default, and are adjusted according
-            to excluded characters (i.e. character sets still point to the same sites (not necessarily same positions),
-            without including the deleted characters. 
+        """Writes a nexus file with data and sets block to a file or handle.
+
+        Character sets and partitions are appended by default, and are
+        adjusted according to excluded characters (i.e. character sets
+        still point to the same sites (not necessarily same positions),
+        without including the deleted characters.
+
+        filename - Either a filename as a string (which will be opened,
+                   written to and closed), or a handle object (which will
+                   be written to but NOT closed).
+        omit_NEXUS - Boolean.  If true, the '#NEXUS' line normally at the
+                   start of the file is ommited.
+
+        Returns the filename/handle used to write the data.
         """
         if not matrix:
             matrix=self.matrix
@@ -1242,8 +1252,10 @@ class Nexus(object):
                 fh=open(filename,'w')
             except IOError:
                 raise NexusError, 'Could not open %s for writing.' % filename
-        elif isinstance(filename,file):
+        elif hasattr(file, "write"):
             fh=filename
+        else :
+            raise ValueError, "Neither a filename nor a handle was supplied"
         if not omit_NEXUS:
             fh.write('#NEXUS\n')
         if comment:
@@ -1315,8 +1327,14 @@ class Nexus(object):
                 fh.write(self.append_sets(exclude=exclude,delete=delete,mrbayes=mrbayes,codons_only=True))
             else:
                 fh.write(self.append_sets(exclude=exclude,delete=delete,mrbayes=mrbayes))
-        fh.close()
-        return filename
+
+        if fh == filename :
+            #We were given the handle, don't close it.
+            return filename
+        else :
+            #We opened the handle, so we should close it.
+            fh.close()
+            return filename
 
     def append_sets(self,exclude=[],delete=[],mrbayes=False,include_codons=True,codons_only=False):
         """Returns a sets block"""
