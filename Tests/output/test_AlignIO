@@ -213,4 +213,16 @@ Testing reading fasta-m10 format file Fasta/output003.m10 with 3 alignments
  Checking can write/read as 'phylip' format
  Checking can write/read as 'clustal' format
  Checking can write/read as 'stockholm' format
+Testing reading ig format file IntelliGenetics/VIF_mase-pro.txt with 1 alignments
+ Alignment 0, with 16 sequences of length 298
+  MMMMMMMMMMMMMMMM alignment column 0
+  EEEEEEETEEEENEEE alignment column 1
+  NNNNNNNAEEEEQRKK alignment column 2
+  --------DEEEEE-- alignment column 3
+  --------KKKKKK-- alignment column 4
+  |||||||||||||||| ...
+  HHHHHHH-AAAAL-R- alignment column 297
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'stockholm' format
 Finished tested reading files

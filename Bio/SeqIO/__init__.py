@@ -170,6 +170,7 @@ from Bio.Align.Generic import Alignment
 
 import AceIO
 import FastaIO
+import IgIO #IntelliGenetics or MASE format
 import InsdcIO #EMBL and GenBank
 import PhdIO
 import SwissIO
@@ -188,6 +189,7 @@ _FormatToIterator ={"fasta" : FastaIO.FastaIterator,
                     "genbank-cds" : InsdcIO.GenBankCdsFeatureIterator,
                     "embl" : InsdcIO.EmblIterator,
                     "embl-cds" : InsdcIO.EmblCdsFeatureIterator,
+                    "ig" : IgIO.IgIterator,
                     "swiss" : SwissIO.SwissIterator,
                     "phd" : PhdIO.PhdIterator,
                     "ace" : AceIO.AceIterator,

@@ -785,6 +785,62 @@ Testing reading ace format file Ace/seq.cap.ace
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+Testing reading ig format file IntelliGenetics/TAT_mase_nuc.txt
+ ID and Name='A_U455',
+ Seq='ATGGAGCCAGTAGATCCTAACCTAGAGCCCTGGAAACACC...ATTCGCT', length=303
+ ID and Name='B_HXB2R',
+ Seq='ATGGAGCCAGTAGATCCTAGACTAGAGCCCTGGAAGCATC...CGATTAG', length=306
+ ID and Name='C_UG268A',
+ Seq='%CAGGAAGTCAGCCTAAAACTCCTTGTACTAAGTGTTTTG...AGATTAA', length=267
+ ...
+ ID and Name='SYK_SYK',
+ Seq='ATGTCCTCAACGGACCAGATATGCCAGACACAGAGGGTAC...GAATCTT', length=330
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'phylip' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'stockholm' format
+ Failed: Sequences must all be the same length
+Testing reading ig format file IntelliGenetics/VIF_mase-pro.txt
+ ID and Name='most-likely',
+ Seq='MEN--RW-QVMIVWQVDRMRIRTWKSLVKHHMYRSKKA-K...-----GH', length=298
+ ID and Name='U455',
+ Seq='MEN--RW-QVMIVWQVDRMKIRTWNSLVKHHMYVSKKA-Q...-----RH', length=298
+ ID and Name='HXB2R',
+ Seq='MEN--RW-QVMIVWQVDRMRIRTWKSLVKHHMYVSGKA-R...-----GH', length=298
+ ...
+ ID and Name='SYK',
+ Seq='MEK--EW-IVVPTWRMTPRQIDRLQHIIKTHKYKSKELEK...-------', length=298
+Testing reading ig format file IntelliGenetics/VIF_mase-pro.txt as an alignment
+ MMMMMMMMMMMMMMMM alignment column 0
+ EEEEEEETEEEENEEE alignment column 1
+ NNNNNNNAEEEEQRKK alignment column 2
+ --------DEEEEE-- alignment column 3
+ --------KKKKKK-- alignment column 4
+ |||||||||||||||| ...
+ HHHHHHH-AAAAL-R- alignment column 297
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+Testing reading ig format file IntelliGenetics/vpu_nucaligned.txt
+ ID and Name='VPU_CONSENSUS',
+ Seq='ATGc?tcattt?ga??t?ttagcaaTaa?agcattaatag...?gA?ctg', length=294
+ ID and Name='A_U455',
+ Seq='ATGACACCTTTGGAAATCTGGGCAATAACAGGGCTGATAG...-AATTTG', length=294
+ ID and Name='B_SF2',
+ Seq='ATGCAATCTTTACAAATATTAGCAATAGTATCATTAGTAG...-GATCTG', length=294
+ ...
+ ID and Name='CPZANT',
+ Seq='ATGACTAATATATTTGAGTATGCTTTT-------------...-GACGAA', length=294
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'phylip' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'stockholm' format
+ Failed: Sequences must all be the same length
 Finished tested reading files
 
 Starting testing writing records

@@ -106,7 +106,7 @@ test_files = [ \
     ("embl",      False, 'EMBL/AAA03323.embl', 1), # 2008, PA line but no AC
     ("stockholm", True,  'Stockholm/simple.sth', 2),
     ("stockholm", True,  'Stockholm/funny.sth', 5),
-#Following PHYLIP files are currently only used here (test_SeqIO)
+#Following PHYLIP files are currently only used here and in test_AlignIO.py,
 #and are mostly from Joseph Felsenstein's PHYLIP v3.6 documentation:
     ("phylip",    True,  'Phylip/reference_dna.phy', 6),
     ("phylip",    True,  'Phylip/reference_dna2.phy', 6),
@@ -126,6 +126,13 @@ test_files = [ \
     ("ace",       False, 'Ace/contig1.ace', 2),
     ("ace",       False, 'Ace/consed_sample.ace', 1),
     ("ace",       False, 'Ace/seq.cap.ace', 1),
+#Following IntelliGenetics / MASE files are also used in test_intelligenetics.py
+    ("ig",        False, 'IntelliGenetics/TAT_mase_nuc.txt', 17),
+    ("ig",        True,  'IntelliGenetics/VIF_mase-pro.txt', 16),
+    #This next file is a MASE alignment but sequence O_ANT70 is shorter than
+    #the others (so the to_alignment() call will fail).  Perhaps MASE doesn't
+    #write trailing gaps?
+    ("ig",        False,  'IntelliGenetics/vpu_nucaligned.txt', 9),
     ]
 
 # This is a list of two-tuples.  Each tuple contains a
