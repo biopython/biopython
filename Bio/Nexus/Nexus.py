@@ -1552,21 +1552,28 @@ class Nexus(object):
 
     def add_sequence(self,name,sequence):
         """Adds a sequence to the matrix."""
+        
         if not name:
             raise NexusError, 'New sequence must have a name'
-        elif self.matrix and name in self.matrix:
-            raise NexusError, 'Taxon %s already in matrix' % name
 
         diff=self.nchar-len(sequence)
         if diff<0:
             self.insert_gap(self.nchar,-diff)
         elif diff>0:
             sequence+=self.missing*diff
-        
-        self.matrix[name]=Seq(sequence,self.alphabet)
+
+        if name in self.taxlabels:
+            unique_name=_unique_label(self.taxlabels,name)
+            print "WARNING: Sequence name %s is already present. Sequence was added as %s." % (name,unique_name)
+        else:
+            unique_name=name
+
+        assert unique_name not in self.matrix.keys(), "ERROR. There is a discrepancy between taxlabels and matrix keys. Report this as a bug."
+
+        self.matrix[unique_name]=Seq(sequence,self.alphabet)
         self.ntax+=1
-        self.taxlabels.append(name)
-        #taxlabels?
+        self.taxlabels.append(unique_name)
+        self.unaltered_taxlabels.append(name)
 
     def insert_gap(self,pos,n=1,leftgreedy=False):
         """Add a gap into the matrix and adjust charsets and partitions.
