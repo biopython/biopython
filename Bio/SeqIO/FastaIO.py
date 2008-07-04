@@ -1,9 +1,9 @@
-# Copyright 2006, 2007 by Peter Cock.  All rights reserved.
+# Copyright 2006-2008 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 #
-# This module is for reading and writting FASTA format files as SeqRecord
+# This module is for reading and writing FASTA format files as SeqRecord
 # objects.  The code is partly inspired  by earlier Biopython modules,
 # Bio.Fasta.* and the now deprecated Bio.SeqIO.FASTA
 
@@ -66,7 +66,7 @@ def FastaIterator(handle, alphabet = single_letter_alphabet, title2ids = None) :
     assert False, "Should not reach this line"
 
 class FastaWriter(SequentialSequenceWriter):
-    """Class to write Fasta format files"""
+    """Class to write Fasta format files."""
     def __init__(self, handle, wrap=60, record2title=None):
         """Create a Fasta writer.
 
@@ -107,7 +107,7 @@ class FastaWriter(SequentialSequenceWriter):
         self.record2title = record2title
 
     def write_record(self, record):
-        """Write a single Fasta record to the file"""
+        """Write a single Fasta record to the file."""
         assert self._header_written
         assert not self._footer_written
         self._record_written = True
