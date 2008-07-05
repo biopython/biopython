@@ -3122,7 +3122,7 @@ If a memory error occurs, pslcluster returns NULL.
     free(temp);
     return NULL;
   }
-  result = malloc(nnodes*sizeof(Node));
+  result = malloc(nelements*sizeof(Node));
   if(!result)
   { free(vector);
     free(index);
@@ -3130,14 +3130,12 @@ If a memory error occurs, pslcluster returns NULL.
     return NULL;
   }
 
-  for (i = 0; i < nnodes; i++)
-  { vector[i] = i;
-    result[i].distance = DBL_MAX;
-  }
+  for (i = 0; i < nnodes; i++) vector[i] = i;
 
   if(distmatrix)
   { for (i = 0; i < nrows; i++)
-    { for (j = 0; j < i; j++) temp[j] = distmatrix[i][j];
+    { result[i].distance = DBL_MAX;
+      for (j = 0; j < i; j++) temp[j] = distmatrix[i][j];
       for (j = 0; j < i; j++)
       { k = vector[j];
         if (result[j].distance >= temp[j])
@@ -3148,7 +3146,9 @@ If a memory error occurs, pslcluster returns NULL.
         else if (temp[j] < temp[k]) temp[k] = temp[j];
       }
       for (j = 0; j < i; j++)
+      {
         if (result[j].distance >= result[vector[j]].distance) vector[j] = i;
+      }
     }
   }
   else
@@ -3159,7 +3159,8 @@ If a memory error occurs, pslcluster returns NULL.
          setmetric(dist);
 
     for (i = 0; i < nelements; i++)
-    { for (j = 0; j < i; j++) temp[j] =
+    { result[i].distance = DBL_MAX;
+      for (j = 0; j < i; j++) temp[j] =
         metric(ndata, data, data, mask, mask, weight, i, j, transpose);
       for (j = 0; j < i; j++)
       { k = vector[j];
@@ -3189,6 +3190,8 @@ If a memory error occurs, pslcluster returns NULL.
   }
   free(vector);
   free(index);
+
+  result = realloc(result, nnodes*sizeof(Node));
 
   return result;
 }

@@ -1256,6 +1256,20 @@ static PyTypeObject PyTreeType = {
 /* -- Methods --------------------------------------------------------------- */
 /* ========================================================================== */
 
+/* version */
+static char version__doc__[] =
+"version()\n"
+"\n"
+"This function returns the version number of the C Clustering Library\n"
+"as a string.\n";
+
+static PyObject*
+py_version (PyObject* self)
+{
+  return PyString_FromString( CLUSTERVERSION );
+} 
+/* end of wrapper for version */
+
 /* kcluster */
 static char kcluster__doc__[] =
 "kcluster(data, nclusters=2, mask=None, weight=None,\n"
@@ -2607,6 +2621,7 @@ py_distancematrix (PyObject* self, PyObject* args, PyObject* keywords)
 
 
 static struct PyMethodDef methods[] = {
+   {"version", (PyCFunction) py_version, METH_NOARGS, version__doc__},
    {"kcluster", (PyCFunction) py_kcluster, METH_KEYWORDS, kcluster__doc__},
    {"kmedoids", (PyCFunction) py_kmedoids, METH_KEYWORDS, kmedoids__doc__},
    {"treecluster", (PyCFunction) py_treecluster, METH_KEYWORDS, treecluster__doc__},
