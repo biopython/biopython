@@ -3,6 +3,11 @@ or deprecated in favor of other modules. This provides some quick and easy
 to find documentation about how to update your code to work again.
 
 
+Bio.ECell
+=========
+Deprecated as of Release 1.47, as it appears to have no users, and the code
+does not seem relevant for ECell 3.
+
 Bio.Rebase
 ==========
 Deprecated as of Release 1.46.

@@ -6,6 +6,25 @@ about the biopython project.
 
 The latest news is at the top.
 
+
+===================================================================
+
+July 5, 2008: Biopython 1.47 released.
+
+Improved handling of ambiguous nucleotides in Bio.Seq.Translate().
+Better handling of stop codons in the alphabet from a translation.
+Fixed some codon tables.
+
+Updated Nexus file handling.
+
+Fixed a bug in Bio.Cluster potentially causing segfaults in the
+single-linkage hierarchical clustering library.
+
+Added some DTDs to be able to parse EFetch results from the
+nucleotide database.
+
+Added IntelliGenetics/MASE format to Bio.SeqIO.
+
 ===================================================================
 
 June 29, 2008: Biopython 1.46 released.
