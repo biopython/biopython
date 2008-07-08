@@ -41,6 +41,7 @@ for func in [NCBIStandalone.blastall,
     try :
         handle = func("/somewhere/blast", "blastz", "nr",
                       "/tmp/example.fasta", \
+                      expectation=10**-4,
                       matrix= "IDENTITY -F 0; cat /etc/passwd'")
         assert False, "Attempted command injection not caught!"
     except ValueError, e:
