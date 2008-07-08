@@ -6,7 +6,6 @@ from xml.sax import handler
 
 # Martel
 import Martel
-from Martel import RecordReader
 
 # biopython stuff
 from Bio.ParserSupport import AbstractConsumer
