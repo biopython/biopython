@@ -17,10 +17,18 @@ class ClustalWriter(SequentialAlignmentWriter) :
 
         #Old versions of the parser in Bio.Clustalw used a ._version property,
         try :
-            version = alignment._version
+            version = str(alignment._version)
         except AttributeError :
+            version = ""
+        if not version :
             version = '1.81'
-        output = "CLUSTAL X (%s) multiple sequence alignment\n\n\n" % version
+        if version.startswith("2.") :
+            #e.g. 2.0.x
+            output = "CLUSTAL %s multiple sequence alignment\n\n\n" % version
+        else :
+            #e.g. 1.81 or 1.83
+            output = "CLUSTAL X (%s) multiple sequence alignment\n\n\n" % version
+        
         
         cur_char = 0
         max_length = len(alignment._records[0].seq)
@@ -103,8 +111,8 @@ class ClustalIterator(AlignmentIterator) :
         seq_cols = None #: Used to extract the consensus
 
         #Use the first block to get the sequence identifiers
-        while line.strip() <> "" :
-            if line[0] <> " " :
+        while True :
+            if line[0] <> " " and line.strip() <> "" :
                 #Sequences identifier...
                 fields = line.rstrip().split()
 
@@ -132,16 +140,32 @@ class ClustalIterator(AlignmentIterator) :
                         raise ValueError("Could not parse line, bad sequence number:\n%s" % line)
                     if len(fields[1].replace("-","")) <> letters :
                         raise ValueError("Could not parse line, invalid sequence number:\n%s" % line)
-            else :
+            elif line[0] == " " :
                 #Sequence consensus line...
+                assert len(ids) == len(seqs)
+                assert len(ids) > 0
                 assert seq_cols is not None
                 consensus = line[seq_cols]
+                assert not line[:seq_cols.start].strip()
                 assert not line[seq_cols.stop:].strip()
+                #Check for blank line (or end of file)
+                line = handle.readline()
+                assert line.strip() == ""
+                break
+            else :
+                #No consensus
+                break
             line = handle.readline()
             if not line : break #end of file
 
         assert line.strip() == ""
         assert seq_cols is not None
+
+        #Confirm all same length
+        for s in seqs :
+            assert len(s) == len(seqs[0])
+        if consensus :
+            assert len(consensus) == len(seqs[0])
 
         #Loop over any remaining blocks...
         done = False
@@ -161,12 +185,13 @@ class ClustalIterator(AlignmentIterator) :
                 break
 
             for i in range(len(ids)) :
+                assert line[0] <> " ", "Unexpected line:\n%s" % repr(line)
                 fields = line.rstrip().split()
                 
                 #We expect there to be two fields, there can be an optional
                 #"sequence number" field containing the letter count.
                 if len(fields) < 2 or len(fields) > 3:
-                    raise ValueError("Could not parse line:\n%s" % line)
+                    raise ValueError("Could not parse line:\n%s" % repr(line))
 
                 if fields[0] <> ids[i] :
                     raise ValueError("Identifiers out of order? Got '%s' but expected '%s'" \
@@ -181,6 +206,7 @@ class ClustalIterator(AlignmentIterator) :
 
                 #Append the sequence
                 seqs[i] += fields[1]
+                assert len(seqs[i]) == len(seqs[0])
 
                 if len(fields) == 3 :
                     #This MAY be an old style file with a letter count...
@@ -195,12 +221,15 @@ class ClustalIterator(AlignmentIterator) :
                 line = handle.readline()
             #There should now be a consensus line
             if consensus :
+                assert line[0] == " "
                 assert seq_cols is not None
                 consensus += line[seq_cols]
+                assert len(consensus) == len(seqs[0])
+                assert not line[:seq_cols.start].strip()
                 assert not line[seq_cols.stop:].strip()
                 #Read in the next line
                 line = handle.readline()
-
+            
 
         assert len(ids) == len(seqs)
         if len(seqs) == 0 or len(seqs[0]) == 0 :
@@ -354,6 +383,73 @@ HISJ_E_COLI                    LKAKKIDAIMSSLSITEKRQQEIAFTDKLYAADSRLV
     for i,a in enumerate(ClustalIterator(handle)) :
         assert a.get_alignment_length() == alignment.get_alignment_length()
         assert len(a.get_all_seqs()) == 1
-        
+
+    aln_example3 = \
+"""CLUSTAL 2.0.9 multiple sequence alignment
+
+
+Test1seq             ------------------------------------------------------------
+AT3G20900.1-SEQ      ATGAACAAAGTAGCGAGGAAGAACAAAACATCAGGTGAACAAAAAAAAAACTCAATCCAC
+AT3G20900.1-CDS      ------------------------------------------------------------
+                                                                                 
+
+Test1seq             -----AGTTACAATAACTGACGAAGCTAAGTAGGCTACTAATTAACGTCATCAACCTAAT
+AT3G20900.1-SEQ      ATCAAAGTTACAATAACTGACGAAGCTAAGTAGGCTAGAAATTAAAGTCATCAACCTAAT
+AT3G20900.1-CDS      ------------------------------------------------------------
+                                                                                 
+
+Test1seq             ACATAGCACTTAGAAAAAAGTGAAGTAAGAAAATATAAAATAATAAAAGGGTGGGTTATC
+AT3G20900.1-SEQ      ACATAGCACTTAGAAAAAAGTGAAGCAAGAAAATATAAAATAATAAAAGGGTGGGTTATC
+AT3G20900.1-CDS      ------------------------------------------------------------
+                                                                                 
+
+Test1seq             AATTGATAGTGTAAATCATCGTATTCCGGTGATATACCCTACCACAAAAACTCAAACCGA
+AT3G20900.1-SEQ      AATTGATAGTGTAAATCATAGTTGATTTTTGATATACCCTACCACAAAAACTCAAACCGA
+AT3G20900.1-CDS      ------------------------------------------------------------
+                                                                                 
+
+Test1seq             CTTGATTCAAATCATCTCAATAAATTAGCGCCAAAATAATGAAAAAAATAATAACAAACA
+AT3G20900.1-SEQ      CTTGATTCAAATCATCTCAAAAAACAAGCGCCAAAATAATGAAAAAAATAATAACAAAAA
+AT3G20900.1-CDS      ------------------------------------------------------------
+                                                                                 
+
+Test1seq             AAAACAAACCAAAATAAGAAAAAACATTACGCAAAACATAATAATTTACTCTTCGTTATT
+AT3G20900.1-SEQ      CAAACAAACCAAAATAAGAAAAAACATTACGCAAAACATAATAATTTACTCTTCGTTATT
+AT3G20900.1-CDS      ------------------------------------------------------------
+                                                                                 
+
+Test1seq             GTATTAACAAATCAAAGAGCTGAATTTTGATCACCTGCTAATACTACTTTCTGTATTGAT
+AT3G20900.1-SEQ      GTATTAACAAATCAAAGAGATGAATTTTGATCACCTGCTAATACTACTTTCTGTATTGAT
+AT3G20900.1-CDS      ------------------------------------------------------------
+                                                                                 
+
+Test1seq             CCTATATCAACGTAAACAAAGATACTAATAATTAACTAAAAGTACGTTCATCGATCGTGT
+AT3G20900.1-SEQ      CCTATATCAAAAAAAAAAAAGATACTAATAATTAACTAAAAGTACGTTCATCGATCGTGT
+AT3G20900.1-CDS      ------------------------------------------------------ATGAAC
+                                                                             *   
+
+Test1seq             TCGTTGACGAAGAAGAGCTCTATCTCCGGCGGAGCAAAGAAAACGATCTGTCTCCGTCGT
+AT3G20900.1-SEQ      GCGTTGACGAAGAAGAGCTCTATCTCCGGCGGAGCAAAGAAAACGATCTGTCTCCGTCGT
+AT3G20900.1-CDS      AAAGTAGCGAGGAAGAACAAAACATC------AGCAAAGAAAACGATCTGTCTCCGTCGT
+                         *  *** ***** *   *  **      ****************************
+
+Test1seq             AACACACGGTCGCTAGAGAAACTTTGCTTCTTCGGCGCCGGTGGACACGTCAGCATCTCC
+AT3G20900.1-SEQ      AACACACAGTTTTTCGAGACCCTTTGCTTCTTCGGCGCCGGTGGACACGTCAGCATCTCC
+AT3G20900.1-CDS      AACACACAGTTTTTCGAGACCCTTTGCTTCTTCGGCGCCGGTGGACACGTCAGCATCTCC
+                     ******* **   * ****  ***************************************
+
+Test1seq             GGTATCCTAGACTTCTTGGCTTTCGGGGTACAACAACCGCGTGGTGACGTCAGCACCGCT
+AT3G20900.1-SEQ      GGTATCCTAGACTTCTTGGCTTTCGGGGTACAACAACCGCCTGGTGACGTCAGCACCGCT
+AT3G20900.1-CDS      GGTATCCTAGACTTCTTGGCTTTCGGGGTACAACAACCGCCTGGTGACGTCAGCACCGCT
+                     **************************************** *******************
+
+Test1seq             GCTGGGGATGGAGAGGGAACAGAGTT-
+AT3G20900.1-SEQ      GCTGGGGATGGAGAGGGAACAGAGTAG
+AT3G20900.1-CDS      GCTGGGGATGGAGAGGGAACAGAGTAG
+                     *************************  
+"""
+    alignments = list(ClustalIterator(StringIO(aln_example3)))
+    assert 1 == len(alignments)
+    assert alignments[0]._version == "2.0.9"
 
     print "The End"
