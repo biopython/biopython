@@ -17,7 +17,7 @@ class ClustalWriter(SequentialAlignmentWriter) :
 
         #Old versions of the parser in Bio.Clustalw used a ._version property,
         try :
-            version = self._version
+            version = alignment._version
         except AttributeError :
             version = '1.81'
         output = "CLUSTAL X (%s) multiple sequence alignment\n\n\n" % version
