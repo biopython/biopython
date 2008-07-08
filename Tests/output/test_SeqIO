@@ -60,6 +60,24 @@ Testing reading clustal format file Clustalw/hedgehog.aln as an alignment
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+Testing reading clustal format file Clustalw/odd_consensus.aln
+ ID = 'AT3G20900.1-CDS', Name='<unknown name>',
+ Seq='----------------------------------------...AGAGTAG', length=687
+ ID = 'AT3G20900.1-SEQ', Name='<unknown name>',
+ Seq='ATGAACAAAGTAGCGAGGAAGAACAAAACATCAGGTGAAC...AGAGTAG', length=687
+Testing reading clustal format file Clustalw/odd_consensus.aln as an alignment
+ -A alignment column 0
+ -T alignment column 1
+ -G alignment column 2
+ -A alignment column 3
+ -A alignment column 4
+ || ...
+ GG alignment column 686
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Failed: Repeated identifier, possibly due to truncation
+ Checking can write/read as 'stockholm' format
 Testing reading fasta format file Nucleic/lupine.nu
  ID and Name='gi|5049839|gb|AI730987.1|AI730987',
  Seq='GAAAATTCATTTTCTTTGGACTTTCTCTGAAATCCGAGTC...GGTTTTT', length=655

@@ -34,6 +34,7 @@ test_files = [ \
     ("clustal",True,  'Clustalw/cw02.aln', 2),
     ("clustal",True,  'Clustalw/opuntia.aln', 7),
     ("clustal",True,  'Clustalw/hedgehog.aln', 5),
+    ("clustal",True,  'Clustalw/odd_consensus.aln', 2),
 #Following nucleic examples are also used in test_Fasta2.py
     ("fasta",  False, 'Nucleic/lupine.nu', 1),
     ("fasta",  False, 'Nucleic/elderberry.nu', 1),

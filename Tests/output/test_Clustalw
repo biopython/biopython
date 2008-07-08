@@ -26,6 +26,16 @@ TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273291|gb|AF191665.1|AF19
 Using Bio.AlignIO.read(...)
 Using Bio.Clustalw.parse_file(...)
 
+Testing reading clustal format file Clustalw/odd_consensus.aln with 1 alignments
+Using Bio.AlignIO.parse(...)
+
+SingleLetterAlphabet() alignment with 2 rows and 687 columns
+--------------------------------------------...TAG AT3G20900.1-CDS
+ATGAACAAAGTAGCGAGGAAGAACAAAACATCAGGTGAACAAAA...TAG AT3G20900.1-SEQ
+
+Using Bio.AlignIO.read(...)
+Using Bio.Clustalw.parse_file(...)
+
 Testing reading clustal format file Clustalw/hedgehog.aln with 1 alignments
 Using Bio.AlignIO.parse(...)
 
