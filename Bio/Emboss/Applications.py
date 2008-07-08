@@ -5,7 +5,7 @@ programs.
 """
 
 from Bio import Application
-from Bio.Application import _Option, _Argument
+from Bio.Application import _Option
 
 class Primer3Commandline(Application.AbstractCommandline):
     """Commandline object for the Primer3 interface from EMBOSS.
