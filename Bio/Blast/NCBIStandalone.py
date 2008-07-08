@@ -1983,7 +1983,8 @@ def _security_check_parameters(param_dict) :
     for appending a command line), and if found raises an exception.
     """
     for key, value in param_dict.iteritems() :
-        if ";" in value or "&&" in value :
+        str_value = str(value) # Could easily be an int or a float
+        if ";" in str_value or "&&" in str_value :
             raise ValueError("Rejecting suspicious argument for %s" % key)
 
 
