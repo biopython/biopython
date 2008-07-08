@@ -23,6 +23,7 @@ test_files = [ \
 #Following examples are also used in test_Clustalw.py
     ("clustal", 2, 1, 'Clustalw/cw02.aln'),
     ("clustal", 7, 1, 'Clustalw/opuntia.aln'),
+    ("clustal", 5, 1, 'Clustalw/hedgehog.aln'),
 #Following examples are also used in test_GFF.py
     ("fasta", 3, 1, 'GFF/multi.fna'), #Trivial nucleotide alignment
 #Following example is also used in test_Nexus.py

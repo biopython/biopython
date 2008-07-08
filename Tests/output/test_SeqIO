@@ -38,6 +38,28 @@ Testing reading clustal format file Clustalw/opuntia.aln as an alignment
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+Testing reading clustal format file Clustalw/hedgehog.aln
+ ID = 'gi|167877390|gb|EDS40773.1|', Name='<unknown name>',
+ Seq='MFNLVSGTGGSSCCHRRNCFANRKKFFTMLLIFLLYMVSQ...-------', length=447
+ ID = 'gi|167234445|ref|NP_001107837.', Name='<unknown name>',
+ Seq='---------------------MRSASAAALLLAALLVVQA...-------', length=447
+ ID = 'gi|74100009|gb|AAZ99217.1|', Name='<unknown name>',
+ Seq='-------------MPQR----SLRHQLGMILVFFLLVTSH...D------', length=447
+ ...
+ ID = 'gi|56122354|gb|AAV74328.1|', Name='<unknown name>',
+ Seq='----------------------LAADDQGRLLYSDFLTFL...GMAVKSS', length=447
+Testing reading clustal format file Clustalw/hedgehog.aln as an alignment
+ M---- alignment column 0
+ F---- alignment column 1
+ N---- alignment column 2
+ L---- alignment column 3
+ V---- alignment column 4
+ ||||| ...
+ ---SS alignment column 446
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
 Testing reading fasta format file Nucleic/lupine.nu
  ID and Name='gi|5049839|gb|AI730987.1|AI730987',
  Seq='GAAAATTCATTTTCTTTGGACTTTCTCTGAAATCCGAGTC...GGTTTTT', length=655

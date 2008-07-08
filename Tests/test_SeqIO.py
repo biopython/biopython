@@ -33,6 +33,7 @@ test_files = [ \
 #Following examples are also used in test_Clustalw.py
     ("clustal",True,  'Clustalw/cw02.aln', 2),
     ("clustal",True,  'Clustalw/opuntia.aln', 7),
+    ("clustal",True,  'Clustalw/hedgehog.aln', 5),
 #Following nucleic examples are also used in test_Fasta2.py
     ("fasta",  False, 'Nucleic/lupine.nu', 1),
     ("fasta",  False, 'Nucleic/elderberry.nu', 1),

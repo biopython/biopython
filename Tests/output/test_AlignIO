@@ -18,6 +18,18 @@ Testing reading clustal format file Clustalw/opuntia.aln with 1 alignments
  Checking can write/read as 'phylip' format
  Checking can write/read as 'clustal' format
  Checking can write/read as 'stockholm' format
+Testing reading clustal format file Clustalw/hedgehog.aln with 1 alignments
+ Alignment 0, with 5 sequences of length 447
+  M---- alignment column 0
+  F---- alignment column 1
+  N---- alignment column 2
+  L---- alignment column 3
+  V---- alignment column 4
+  ||||| ...
+  ---SS alignment column 446
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'stockholm' format
 Testing reading fasta format file GFF/multi.fna with 1 alignments
  Alignment 0, with 3 sequences of length 8
   ACGTCGCG test1

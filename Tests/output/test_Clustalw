@@ -25,4 +25,17 @@ TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273291|gb|AF191665.1|AF19
 
 Using Bio.AlignIO.read(...)
 Using Bio.Clustalw.parse_file(...)
+
+Testing reading clustal format file Clustalw/hedgehog.aln with 1 alignments
+Using Bio.AlignIO.parse(...)
+
+SingleLetterAlphabet() alignment with 5 rows and 447 columns
+MFNLVSGTGGSSCCHRRNCFANRKKFFTMLLIFLLYMVSQVQSC...--- gi|167877390|gb|EDS40773.1|
+---------------------MRSASAAALLLAALLVVQAVRAC...--- gi|167234445|ref|NP_001107837.
+-------------MPQR----SLRHQLGMILVFFLLVTSHSLAC...--- gi|74100009|gb|AAZ99217.1|
+------------MSPAR----LRPRLHFCLVLLLLLVVPAAWGC...AGS gi|13990994|dbj|BAA33523.2|
+----------------------LAADDQGRLLYSDFLTFLDRDD...KSS gi|56122354|gb|AAV74328.1|
+
+Using Bio.AlignIO.read(...)
+Using Bio.Clustalw.parse_file(...)
 Finished tested reading files

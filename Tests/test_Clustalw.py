@@ -15,8 +15,11 @@ from Bio.Align.Generic import Alignment
 # - integer: number of alignments
 # - string:  relative filename
 test_files = [ \
+    #clustalw 1.81
     (2, 1, 'Clustalw/cw02.aln'),
     (7, 1, 'Clustalw/opuntia.aln'),
+    # clustalw 2.0.9
+    (5, 1, 'Clustalw/hedgehog.aln'),
     ]
 
 
