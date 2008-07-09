@@ -1,5 +1,4 @@
-# Copyright 2004-2008 by Cymon J. Cox, Frank Kauff and Michiel de Hoon.
-# All rights reserved.
+# Copyright 2004 by Cymon J. Cox and Frank Kauff.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -36,64 +35,6 @@ class Record:
         self.seq = ''
         self.seq_trimmed = ''
 
-def parse(handle):
-
-    for line in handle:
-        if line.startswith('BEGIN_SEQUENCE'):
-            record = Record()
-            record.file_name = line[15:].rstrip() 
-            print "Reading record", line
-            break
-
-    for line in handle:
-        if line.startswith('BEGIN_COMMENT'):
-            break
-
-    for line in handle:
-        if ':' in line:
-            keyword, value = line.split(":", 1)
-            keyword = keyword.lower()
-            value = value.strip()
-            if keyword in ('chromat_file',
-                           'phred_version',
-                           'call_method',
-                           'time',
-                           'chem',
-                           'dye'):
-                record.comments[keyword] = value
-            elif keyword in ('abi_thumbprint',
-                             'quality_levels',
-                             'trace_array_min_index',
-                             'trace_array_max_index'):
-                record.comments[keyword] = int(value)
-            elif keyword=='trace_peak_area_ratio':
-                record.comments[keyword] = float(value)
-        elif line.startswith("trim:"):
-            first, last, prob = line[5:-1].split()
-            record.comments['trim'] = (int(first), int(last), float(prob))
-        elif line.startswith('END_COMMENT'):
-            break
-            
-    for line in handle:
-        if line.startswith('BEGIN_DNA'):
-            break
-
-    for line in handle:
-        if line.startswith('END_DNA'):
-            record.seq = Seq.Seq(''.join([n[0] for n in record.sites]), IUPAC.IUPACAmbiguousDNA())
-            if record.comments['trim'] is not None :
-                first, last = record.comments['trim'][:2]
-                record.seq_trimmed = record.seq[first:last]
-            break
-        else:
-            base, quality, location = line.split()
-            record.sites.append((base, quality, location))
-
-    for line in handle:
-        if line.startswith('END_SEQUENCE'):
-            print "Yielding record", record.file_name
-            yield record
-            break
 
 def read(handle):
     for line in handle:
@@ -356,8 +297,3 @@ if __name__ == "__main__" :
         print record.file_name, len(record.seq)
     handle.close()
     print "Done"
-    handle = open("../../Tests/Phd/phd1")
-    records = parse(handle)
-    for record in records:
-        print record.file_name, len(record.seq)
-    handle.close()
