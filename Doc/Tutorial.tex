@@ -799,7 +799,7 @@ Name: Z78533
 Desription: C.irapeanum 5.8S rRNA gene and ITS1 and ITS2 DNA.
 /source=Cypripedium irapeanum
 /taxonomy=['Eukaryota', 'Viridiplantae', 'Streptophyta', ..., 'Cypripedium']
-/keywords=['5.8S ribosomal RNA', '5.8S rRNA gene', 'internal transcribed spacer', 'ITS1', 'ITS2']
+/keywords=['5.8S ribosomal RNA', '5.8S rRNA gene', ..., 'ITS1', 'ITS2']
 /references=[...]
 /accessions=['Z78533']
 /data_file_division=PLN
@@ -837,7 +837,7 @@ handle.close()
 print all_species
 \end{verbatim}
 
-Another way of writing this code is to use a list comprehension (introduced in Python 2.0) like this:
+Another way of writing this code is to use a list comprehension:
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -873,7 +873,7 @@ print all_species
 ['C.irapeanum', 'C.californicum', 'C.fasciculatum', 'C.margaritaceum', ..., 'P.barbatum']
 \end{verbatim}
 
-The concise alternative using list comprehensions (Python 2.0 or later) would be:
+The concise alternative using list comprehensions would be:
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -1253,7 +1253,7 @@ SeqIO.write(records, out_handle, "fasta")
 out_handle.close()
 \end{verbatim}
 
-This is an excellent place to demonstrate the power of list comprehensions (added to Python 2.0) which in their simplest are a long-winded equivalent to using \verb|map()|, like this:
+This is an excellent place to demonstrate the power of list comprehensions which in their simplest are a long-winded equivalent to using \verb|map()|, like this:
 
 \begin{verbatim}
 records = [make_rc_record(rec) for rec in SeqIO.parse(in_handle, "fasta")]
