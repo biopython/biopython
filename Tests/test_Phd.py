@@ -34,14 +34,10 @@ class PhdTestOne(unittest.TestCase):
     def t_check_record_parser(self):
         """Test to check that record parser parses all records of a contig.
         """
-        recparser = Phd.RecordParser()
-        it = Phd.Iterator(self.handle,recparser)
+        rs = Phd.parse(self.handle)
         x=0
         print
-        while 1:
-            r=it.next()
-            if not r:
-                break
+        for r in rs:
             x+=1
             print '---- Record',x,'----'
             print 'Filename:',r.file_name

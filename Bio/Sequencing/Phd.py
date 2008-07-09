@@ -9,9 +9,8 @@ Works fine with PHRED 0.020425.c
 
 Version 1.1, 03/09/2004
 written by Cymon J. Cox (cymon@duke.edu) and Frank Kauff (fkauff@duke.edu)
-Comments, bugs, problems, suggestions to one uf us are welcome!
+Comments, bugs, problems, suggestions to one of us are welcome!
 
-Uses the Biopython Parser interface for parsing: ParserSupport.py
 
 """
 
@@ -35,6 +34,86 @@ class Record:
         self.sites = []
         self.seq = ''
         self.seq_trimmed = ''
+
+
+def read(handle):
+    for line in handle:
+        if line.startswith("BEGIN_SEQUENCE"):
+            record = Record()
+            record.file_name = line[15:].rstrip() 
+            break
+    else:
+        return # No record found
+
+    for line in handle:
+        if line.startswith("BEGIN_COMMENT"):
+            break
+    else:
+        raise ValueError, "Failed to find BEGIN_COMMENT line"
+       
+    for line in handle:
+        line = line.strip()
+        if not line:
+            continue
+        if line=="END_COMMENT":
+            break
+        keyword, value = line.split(":", 1)
+        keyword = keyword.lower()
+        value = value.strip()
+        if keyword in ('chromat_file',
+                       'phred_version',
+                       'call_method',
+                       'chem',
+                       'dye',
+                       'time'):
+            record.comments[keyword] = value
+        elif keyword in ('abi_thumbprint',
+                         'quality_levels',
+                         'trace_array_min_index',
+                         'trace_array_max_index'):
+            record.comments[keyword] = int(value)
+        elif keyword=='trace_peak_area_ratio':
+            record.comments[keyword] = float(value)
+        elif keyword=='trim':
+            first, last, prob = value.split()
+            record.comments[keyword] = (int(first), int(last), float(prob))
+    else:
+        raise ValueError, "Failed to find END_COMMENT line"
+
+    for line in handle:
+        if line.startswith('BEGIN_DNA'):
+            break
+    else:
+        raise ValueError, "Failed to find BEGIN_DNA line"
+
+    for line in handle:
+        if line.startswith('END_DNA'):
+            break
+        else:
+            base, quality, location = line.split()
+            record.sites.append((base, quality, location))
+
+    for line in handle:
+        if line.startswith("END_SEQUENCE"):
+            break
+    else:
+        raise ValueError, "Failed to find END_SEQUENCE line"
+
+    alphabet = IUPAC.IUPACAmbiguousDNA()
+    record.seq = Seq.Seq(''.join([n[0] for n in record.sites]), alphabet)
+    if record.comments['trim'] is not None:
+        first, last = record.comments['trim'][:2]
+        record.seq_trimmed = record.seq[first:last]
+
+    return record
+
+
+def parse(handle):
+    while True:
+        record = read(handle)
+        if not record:
+            return
+        yield record
 
 
 class Iterator:
@@ -81,7 +160,7 @@ class Iterator:
         return data
     
     def __iter__(self):
-        """Iterate over the PHY file record bt record."""
+        """Iterate over the PHY file record by record."""
         return iter(self.next, None)
 
 class RecordParser(AbstractParser):
@@ -213,9 +292,8 @@ if __name__ == "__main__" :
     print "Quick self test"
     #Test the iterator,
     handle = open("../../Tests/Phd/phd1")
-    recordparser = RecordParser()
-    iterator = Iterator(handle,recordparser)
-    for record in iterator :
+    records = parse(handle)
+    for record in records:
         print record.file_name, len(record.seq)
     handle.close()
     print "Done"

@@ -21,7 +21,8 @@ def PhdIterator(handle) :
     This uses the Bio.Sequencing.Phy module to do the hard work.
     """
 
-    for phd_record in Phd.Iterator(handle, Phd.RecordParser()) :
+    phd_records = Phd.parse(handle)
+    for phd_record in phd_records:
         #Convert the PHY record into a SeqRecord...
         seq_record = SeqRecord(phd_record.seq,
                                id = phd_record.file_name,
