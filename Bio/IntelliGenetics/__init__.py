@@ -2,10 +2,18 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""Parser for the MASE/Intelligenetics alignment file format.
+"""Parser for the MASE/IntelliGenetics alignment file format (DEPRECATED).
 
-http://pbil.univ-lyon1.fr/help/formats.html
-"""
+Please use Bio.SeqIO with the "ig" format instead."""
+
+import warnings
+warnings.warn("Bio.IntelliGenetics is deprecated." \
+              + " We hope the new 'ig' format support in Bio.SeqIO will be" \
+              + " suitable for most users.  Please get in touch on the " \
+              + " mailing lists if this (or its removal) causes any problems "\
+              + "for you.",
+              DeprecationWarning)
+
 
 # standard library
 import string

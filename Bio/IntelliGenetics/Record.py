@@ -3,21 +3,10 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Martel based parser to read IntelliGenetics formatted files.
+"""Martel based parser to read IntelliGenetics formatted files (DEPRECATED).
 
-This is a huge regular regular expression for IntelliGenetics, built using
-the 'regular expressiona on steroids' capabilities of Martel.
-
-http://hiv-web.lanl.gov/ALIGN_97/HIV12SIV-index.html
-
-Notes:
-Just so I remember -- the new end of line syntax is:
-  New regexp syntax - \R
-     \R    means "\n|\r\n?"
-     [\R]  means "[\n\r]"
-
-This helps us have endlines be consistent across platforms.
-
+This module defines a Record class to hold a sequence from the IntelliGenetics/
+MASE file format in a similar represenation to the original raw file.
 """
 # standard library
 import string

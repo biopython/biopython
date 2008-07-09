@@ -2,6 +2,9 @@ This file provides documentation for modules in Biopython that have been moved
 or deprecated in favor of other modules. This provides some quick and easy
 to find documentation about how to update your code to work again.
 
+Bio.IntelliGenetics
+===================
+Deprecated in favor of the "ig" format in Bio.SeqIO
 
 Bio.ECell
 =========

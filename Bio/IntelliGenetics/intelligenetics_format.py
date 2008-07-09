@@ -3,9 +3,10 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Martel regular expression for Intelligenetic format.
+"""Martel regular expression for Intelligenetic format (DEPRECATED).
 
-http://hiv-web.lanl.gov/ALIGN_97/HIV12SIV-index.html
+This is a huge regular regular expression for the IntelliGenetics/MASE format,
+built using the 'regular expressions on steroids' capabilities of Martel.
 """
 # standard library
 #http://immuno.bme.nwu.edu/seqhunt.html
