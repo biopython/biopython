@@ -174,6 +174,7 @@ import IgIO #IntelliGenetics or MASE format
 import InsdcIO #EMBL and GenBank
 import PhdIO
 import SwissIO
+import TabIO
 
 #Convention for format names is "mainname-subtype" in lower case.
 #Please use the same names as BioPerl where possible.
@@ -193,9 +194,11 @@ _FormatToIterator ={"fasta" : FastaIO.FastaIterator,
                     "swiss" : SwissIO.SwissIterator,
                     "phd" : PhdIO.PhdIterator,
                     "ace" : AceIO.AceIterator,
+                    "tab" : TabIO.TabIterator,
                     }
 
 _FormatToWriter ={"fasta" : FastaIO.FastaWriter,
+                  "tab" : TabIO.TabWriter,
                   }
 
 def write(sequences, handle, format) :
