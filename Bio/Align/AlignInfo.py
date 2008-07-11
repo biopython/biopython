@@ -19,6 +19,7 @@ import sys
 from Bio import Alphabet
 from Bio.Alphabet import IUPAC
 from Bio.Seq import Seq
+from Bio.SubsMat import FreqTable
 
 # Expected random distributions for 20-letter protein, and
 # for 4-letter nucleotide alphabets
@@ -168,6 +169,19 @@ class SummaryInfo:
             consensus_alpha = self._guess_consensus_alphabet(ambiguous)
 
         return Seq(consensus, consensus_alpha)
+
+    def _get_base_alphabet(self, alphabet=None) :
+        """Returns the non-gapped non-stop-codon Alphabet object (PRIVATE)."""
+        #TODO - Add this functionality to the Alphabet objects?
+        if alphabet is None :
+            a = self.alignment._alphabet
+        else :
+            a = alphabet
+        while isinstance(a, Alphabet.AlphabetEncoder) :
+            a = a.alphabet
+        assert isinstance(a, Alphabet.Alphabet), \
+               "Invalid alphabet found, %s" % repr(a)
+        return a
             
     def _guess_consensus_alphabet(self, ambiguous):
         """Pick an (ungapped) alphabet for an alignment consesus sequence.
@@ -177,25 +191,12 @@ class SummaryInfo:
         sequences we've got.
         """
         #Start with the (un-gapped version of) the alignment alphabet
-        if isinstance(self.alignment._alphabet, Alphabet.Gapped) :
-            a = self.alignment._alphabet.alphabet
-        elif isinstance(self.alignment._alphabet, Alphabet.Alphabet) :
-            a = self.alignment._alphabet
-        else :
-            raise ValueError \
-                  ("Alignment's alphabet property is invalid.")
+        a = self._get_base_alphabet()
 
         #Now check its compatible with all the rest of the sequences
         for record in self.alignment :
             #Get the (un-gapped version of) the sequence's alphabet
-            if isinstance(record.seq.alphabet, Alphabet.Gapped) :
-                alt = record.seq.alphabet.alphabet
-            elif isinstance(record.seq.alphabet, Alphabet.Alphabet) :
-                alt = record.seq.alphabet
-            else :
-                raise ValueError \
-                ("Non-alphabet found in first of the alignment sequences.")
-            
+            alt =  self._get_base_alphabet(record.seq.alphabet)
             if not isinstance(alt, a.__class__) :
                 raise ValueError \
                 ("Alignment contains a sequence with an incompatible alphabet.")
@@ -461,8 +462,8 @@ class SummaryInfo:
         first position in the seq is 203 in the initial sequence, for
         the info content, we need to use zero). This defaults to the entire
         length of the first sequence.
-        o e_freq_table - A FreqTable object  specifying the expected frequencies
-        for each letter in the alphabet we are using (ie. {'G' : 0.4,
+        o e_freq_table - A FreqTable object specifying the expected frequencies
+        for each letter in the alphabet we are using (e.g. {'G' : 0.4,
         'C' : 0.4, 'T' : 0.1, 'A' : 0.1}). Gap characters should not be
         included, since these should not have expected frequencies.
         o log_base - The base of the logathrim to use in calculating the
@@ -485,25 +486,20 @@ class SummaryInfo:
                   ("Start (%s) and end (%s) are not in the range %s to %s"
                    % (start, end, 0, len(self.alignment._records[0].seq)))
         # determine random expected frequencies, if necessary
-        # Iddo Friedberg, 1-JUL-2004: fixed self.alignment._alphabet.alphabet to 
-        # self.alignment._alphabet
         random_expected = None
         if not e_freq_table:
-            if isinstance(self.alignment._alphabet,
-                Alphabet.ProteinAlphabet):
+            #TODO - What about ambiguous alphabets?
+            if isinstance(self._get_base_alphabet(), Alphabet.ProteinAlphabet) :
                 random_expected = Protein20Random
-            elif isinstance(self.alignment._alphabet, Alphabet.NucleotideAlphabet):
+            elif isinstance(self._get_base_alphabet(), Alphabet.NucleotideAlphabet) :
                 random_expected = Nucleotide4Random
-            # Iddo, 15-FEB-2005: added the following for encoded Alpahbets (e.g. Gapped())
-            elif isinstance(self.alignment._alphabet, Alphabet.AlphabetEncoder):
-                if isinstance(self.alignment._alphabet.alphabet, Alphabet.ProteinAlphabet):
-                    random_expected = Protein20Random
-                elif isinstance(self.alignment._alphabet.alphabet, Alphabet.NucleotideAlphabet):
-                    random_expected = Nucleotide4Random
-            if not random_expected :
+            else :
                 errstr = "Error in alphabet: not Nucleotide or Protein, "
                 errstr += "supply expected frequencies"
                 raise ValueError, errstr
+        elif not isinstance(e_freq_table, FreqTable.FreqTable) :
+            raise ValueError("e_freq_table should be a FreqTable object")
+            
 
         # determine all of the letters we have to deal with
         all_letters = self._get_all_letters()
@@ -581,6 +577,8 @@ class SummaryInfo:
         info content.
         """
         if e_freq_table:
+            if not isinstance(e_freq_table, FreqTable.FreqTable) :
+                raise ValueError("e_freq_table should be a FreqTable object")
             # check the expected freq information to make sure it is good
             for key in obs_freq.keys():
                 if (key != self.alignment._alphabet.gap_char and
@@ -697,10 +695,13 @@ def print_info_content(summary_info,fout=None,rep_record=0):
 if __name__ == "__main__" :
     print "Quick test"
     from Bio import AlignIO
+    from Bio.Align.Generic import Alignment
 
     filename = "../../Tests/GFF/multi.fna"
     format = "fasta"
-    expected = {"A":0.25,"G":0.25,"T":0.25,"C":0.25}
+    expected = FreqTable.FreqTable({"A":0.25,"G":0.25,"T":0.25,"C":0.25},
+                                   FreqTable.FREQ,
+                                   IUPAC.unambiguous_dna)
 
     alignment = AlignIO.read(open(filename), format)
     for record in alignment :
@@ -721,4 +722,25 @@ if __name__ == "__main__" :
     print summary.information_content(e_freq_table=expected,
                                       chars_to_ignore=['-'])
     print
+    print "Trying a protein sequence with gaps and stops"
+
+    alpha = Alphabet.HasStopCodon(Alphabet.Gapped(Alphabet.generic_protein, "-"), "*")
+    a = Alignment(alpha)
+    a.add_sequence("ID001", "MHQAIFIYQIGYP*LKSGYIQSIRSPEYDNWY")
+    a.add_sequence("ID002", "MH--IFIYQIGYAYLKSGYIQSIRSPEY-NW*")
+    a.add_sequence("ID003", "MHQAIFIYQIGYPYLKSGYIQSIRSPEYDNW*")
+    print a
+    print "="*a.get_alignment_length()
+
+    s = SummaryInfo(a)
+    c = s.dumb_consensus(ambiguous="X")
+    print c
+    c = s.gap_consensus(ambiguous="X")
+    print c
+    print
+    print s.pos_specific_score_matrix(chars_to_ignore=['-', '*'], axis_seq=c)
+
+    print s.information_content(chars_to_ignore=['-', '*'])
+
+    
     print "Done"
