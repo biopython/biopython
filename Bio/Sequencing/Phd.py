@@ -8,7 +8,8 @@ Parser for PHD files output by PHRED and used by PHRAP and CONSED.
 Works fine with PHRED 0.020425.c
 
 Version 1.1, 03/09/2004
-written by Cymon J. Cox and Frank Kauff (fkauff 'AT' biologie.uni-kl.de).
+written by Cymon J. Cox (cymon.cox@gmail.com ) and
+Frank Kauff (fkauff 'AT' biologie.uni-kl.de).
 Comments, bugs, problems, suggestions to one of us are welcome!
 
 
@@ -37,6 +38,9 @@ class Record:
 
 
 def read(handle):
+    """This function reads PHD file data line by line from the handle,
+    and returns a single Record object."""
+
     for line in handle:
         if line.startswith("BEGIN_SEQUENCE"):
             record = Record()
@@ -107,8 +111,19 @@ def read(handle):
 
     return record
 
-
 def parse(handle):
+    """Iterates over a file of multiple PHD records.
+    The date are read line by line from the handle. The handle can be a list
+    of lines, an open file, or similar; the only requirement is that we can
+    iterate over the handle to retrieve lines from it.
+
+    Typical usage:
+
+    records = parse(handle)
+    for record in records:
+        # do something with the record object
+    """
+
     while True:
         record = read(handle)
         if not record:
@@ -134,12 +149,6 @@ class Iterator:
         self._parser = parser
 
     def next(self):
-        """next(self) -> object
-
-        Return the next PHD record from the file. If no more records
-        return None.
-        """
-
         lines = []
         while 1:
             line = self._uhandle.readline()
