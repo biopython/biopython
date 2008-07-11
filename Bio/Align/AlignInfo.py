@@ -559,9 +559,15 @@ class SummaryInfo:
                                  % (record.seq[residue_num],
                                     self.alignment._alphabet))
 
-        # now convert the counts into frequencies
-        for letter in freq_info.keys():
-            freq_info[letter] = freq_info[letter] / total_count
+        if total_count == 0 :
+            # This column must be entirely ignored characters
+            for letter in freq_info.keys():
+                assert freq_info[letter] == 0
+                #TODO - Map this to NA or NaN?
+        else :
+            # now convert the counts into frequencies
+            for letter in freq_info.keys():
+                freq_info[letter] = freq_info[letter] / total_count
 
         return freq_info
             
@@ -726,7 +732,7 @@ if __name__ == "__main__" :
 
     alpha = Alphabet.HasStopCodon(Alphabet.Gapped(Alphabet.generic_protein, "-"), "*")
     a = Alignment(alpha)
-    a.add_sequence("ID001", "MHQAIFIYQIGYP*LKSGYIQSIRSPEYDNWY")
+    a.add_sequence("ID001", "MHQAIFIYQIGYP*LKSGYIQSIRSPEYDNW-")
     a.add_sequence("ID002", "MH--IFIYQIGYAYLKSGYIQSIRSPEY-NW*")
     a.add_sequence("ID003", "MHQAIFIYQIGYPYLKSGYIQSIRSPEYDNW*")
     print a
