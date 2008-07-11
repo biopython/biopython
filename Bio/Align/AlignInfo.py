@@ -492,15 +492,13 @@ class SummaryInfo:
             if isinstance(self.alignment._alphabet,
                 Alphabet.ProteinAlphabet):
                 random_expected = Protein20Random
-            elif isinstance(self.alignment._alphabet, Alphabet.RNAAlphabet) or \
-                 isinstance(self.alignment._alphabet, Alphabet.DNAAlphabet):
+            elif isinstance(self.alignment._alphabet, Alphabet.NucleotideAlphabet):
                 random_expected = Nucleotide4Random
             # Iddo, 15-FEB-2005: added the following for encoded Alpahbets (e.g. Gapped())
             elif isinstance(self.alignment._alphabet, Alphabet.AlphabetEncoder):
                 if isinstance(self.alignment._alphabet.alphabet, Alphabet.ProteinAlphabet):
                     random_expected = Protein20Random
-                elif isinstance(self.alignment._alphabet.alphabet, Alphabet.RNAAlphabet) or \
-                     isinstance(self.alignment._alphabet.alphabet, Alphabet.DNAAlphabet):
+                elif isinstance(self.alignment._alphabet.alphabet, Alphabet.NucleotideAlphabet):
                     random_expected = Nucleotide4Random
             if not random_expected :
                 errstr = "Error in alphabet: not Nucleotide or Protein, "
@@ -702,10 +700,8 @@ if __name__ == "__main__" :
 
     filename = "../../Tests/GFF/multi.fna"
     format = "fasta"
+    expected = {"A":0.25,"G":0.25,"T":0.25,"C":0.25}
 
-    #filename = "../../Tests/Phylip/horses.phy"
-    #format = "phylip"
-    
     alignment = AlignIO.read(open(filename), format)
     for record in alignment :
         print record.seq.tostring()
@@ -720,6 +716,9 @@ if __name__ == "__main__" :
     print summary.pos_specific_score_matrix(chars_to_ignore=['-'],
                                             axis_seq=consensus)
     print
-    print summary.information_content()
+    #Have a generic alphabet, without a declared gap char, so must tell
+    #provide the frequencies and chars to ignore explicitly.
+    print summary.information_content(e_freq_table=expected,
+                                      chars_to_ignore=['-'])
     print
     print "Done"
