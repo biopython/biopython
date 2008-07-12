@@ -1320,7 +1320,7 @@ Both functions expect two mandatory arguments:
 
 \begin{enumerate}
 \item The first argument is a {\it handle} to read the data from, typically an open file (see Section~\ref{sec:appendix-handles}).
-\item The second argument is a lower case string specifying sequence coformat.  As in \verb|Bio.SeqIO| we don't try and guess the file format for you!  See \url{http://biopython.org/wiki/AlignIO} for a full listing of supported formats.
+\item The second argument is a lower case string specifying the alignment format.  As in \verb|Bio.SeqIO| we don't try and guess the file format for you!  See \url{http://biopython.org/wiki/AlignIO} for a full listing of supported formats.
 \end{enumerate}
 
 \noindent There is also an optional \verb|seq_count| argument which is discussed in Section~\ref{sec:AlignIO-count-argument} below for dealing with ambigous file formats which may contain more than one alignment.
@@ -1920,7 +1920,7 @@ results, go to Section~\ref{sec:parsing-blast}
 
 The first step in automating BLASTing is to make everything accessible
 from Python scripts. So, Biopython contains code that allows you to
-run the WWW version of BLAST (\url{http://www.ncbi.nlm.nih.gov/BLAST/})
+run the WWW version of BLAST (\url{http://blast.ncbi.nlm.nih.gov/Blast.cgi})
 directly from your Python scripts. This is very nice, especially since
 otherwise BLAST can be a real pain to deal with from scripts, especially
 with the whole BLAST queue thing and the separate results page.
