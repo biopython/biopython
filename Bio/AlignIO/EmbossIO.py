@@ -134,9 +134,18 @@ class EmbossIterator(AlignmentIterator) :
                     assert id==ids[index] or id == ids[index][:len(id)]
 
                     #Check the start...
-                    assert int(start) - 1 == len(seqs[index].replace("-","")), \
-                        "Found %i chars so far for %s, file says start %i:\n%s" \
-                            % (len(seqs[index]), id, int(start), seqs[index])
+                    if int(start) == 0:
+                        #Special case when one sequence starts long before the other
+                        assert len(seqs[index].replace("-",""))==0
+                        assert len(seq.replace("-","")) == 0, line
+                    elif int(start) == len(seqs[index].replace("-","")) :
+                        #Special case when one sequence ends long before the other
+                        assert len(seq.replace("-","")) == 0, line
+                    else :
+                        assert int(start) - 1 == len(seqs[index].replace("-","")), \
+                        "Found %i chars so far for sequence %i (%s), file says start %i:\n%s" \
+                            % (len(seqs[index].replace("-","")), index, id,
+                               int(start), seqs[index])
                     
                     seqs[index] += seq
 
@@ -448,8 +457,96 @@ gi|94970041|r     97 AEFLQKPFTSDSLLRKVRAVLQKRQ    121
 #---------------------------------------
 #---------------------------------------
 
-"""                 
+"""
 
+    pair_example3 = """########################################
+# Program: needle
+# Rundate: Mon 14 Jul 2008 11:45:42
+# Commandline: needle
+#    [-asequence] asis:TGTGGTTAGGTTTGGTTTTATTGGGGGCTTGGTTTGGGCCCACCCCAAATAGGGAGTGGGGGTATGACCTCAGATAGACGAGCTTATTTTAGGGCGGCGACTATAATTATTTCGTTTCCTACAAGGATTAAAGTTTTTTCTTTTACTGTGGGAGGGGGTTTGGTATTAAGAAACGCTAGTCCGGATGTGGCTCTCCATGATACTTATTGTGTAGTAGCTCATTTTCATTATGTTCTTCGAATGGGAGCAGTCATTGGTATTTTTTTGGTTTTTTTTTGAAATTTTTAGGTTATTTAGACCATTTTTTTTTGTTTCGCTAATTAGAATTTTATTAGCCTTTGGTTTTTTTTTATTTTTTGGGGTTAAGACAAGGTGTCGTTGAATTAGTTTAGCAAAATACTGCTTAAGGTAGGCTATAGGATCTACCTTTTATCTTTCTAATCTTTTGTTTTAGTATAATTGGTCTTCGATTCAACAATTTTTAGTCTTCAGTCTTTTTTTTTATTTTGAAAAGGTTTTAACACTCTTGGTTTTGGAGGCTTTGGCTTTCTTCTTACTCTTAGGAGGATGGGCGCTAGAAAGAGTTTTAAGAGGGTGTGAAAGGGGGTTAATAGC
+#    [-bsequence] asis:TTATTAATCTTATGGTTTTGCCGTAAAATTTCTTTCTTTATTTTTTATTGTTAGGATTTTGTTGATTTTATTTTTCTCAAGAATTTTTAGGTCAATTAGACCGGCTTATTTTTTTGTCAGTGTTTAAAGTTTTATTAATTTTTGGGGGGGGGGGGAGACGGGGTGTTATCTGAATTAGTTTTTGGGAGTCTCTAGACATCTCATGGGTTGGCCGGGGGCCTGCCGTCTATAGTTCTTATTCCTTTTAAGGGAGTAAGAATTTCGATTCAGCAACTTTAGTTCACAGTCTTTTTTTTTATTAAGAAAGGTTT
+#    -filter
+# Align_format: srspair
+# Report_file: stdout
+########################################
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: asis
+# 2: asis
+# Matrix: EDNAFULL
+# Gap_penalty: 10.0
+# Extend_penalty: 0.5
+#
+# Length: 667
+# Identity:     210/667 (31.5%)
+# Similarity:   210/667 (31.5%)
+# Gaps:         408/667 (61.2%)
+# Score: 561.0
+# 
+#
+#=======================================
+
+asis               1 TGTGGTTAGGTTTGGTTTTATTGGGGGCTTGGTTTGGGCCCACCCCAAAT     50
+                                                                       
+asis               0 --------------------------------------------------      0
+
+asis              51 AGGGAGTGGGGGTATGACCTCAGATAGACGAGCTTATTTTAGGGCGGCGA    100
+                                                                       
+asis               0 --------------------------------------------------      0
+
+asis             101 CTATAATTATTTCGTTTCCTACAAGGATTAAAGTTTTTTCTTTTACTGTG    150
+                                                                       
+asis               0 --------------------------------------------------      0
+
+asis             151 GGAGGGGGTTTGGTATTAAGAAACGCTAGTCCGGATGTGGCTCTCCATGA    200
+                                 .||||||                               
+asis               1 ------------TTATTAA-------------------------------      7
+
+asis             201 TACTTATTGT------GTAGTAGCTCATTTTCATTATGTTCTTCGAATGG    244
+                      .|||||.||      |||..|..||  ||||.||||.||.|    ||.|
+asis               8 -TCTTATGGTTTTGCCGTAAAATTTC--TTTCTTTATTTTTT----ATTG     50
+
+asis             245 GAGCAGTCATTGGTATTTTTTTGGTTTTTTTTT------GAAATTTTTAG    288
+                              ||.|.|||||.|||.||||.||||      | |||||||||
+asis              51 ---------TTAGGATTTTGTTGATTTTATTTTTCTCAAG-AATTTTTAG     90
+
+asis             289 GTTATTTAGACC-----ATTTTTTTTT--GTTTCGCTAATTAGAATTTTA    331
+                     ||.|.|||||||     ||||||||.|  ||.|      |||.|.|||||
+asis              91 GTCAATTAGACCGGCTTATTTTTTTGTCAGTGT------TTAAAGTTTTA    134
+
+asis             332 TTAGCCTTTGGTTTTTTTTTATTTTT----TGGGGTTAAGACAAGGTGTC    377
+                     |||                 ||||||    .||||...||||..|||||.
+asis             135 TTA-----------------ATTTTTGGGGGGGGGGGGAGACGGGGTGTT    167
+
+asis             378 GT-TGAATTAGTTTAGCAAAATACTGCTTAAGGTAGGCTATA--------    418
+                     .| |||||||||||             ||  ||.||.||.||        
+asis             168 ATCTGAATTAGTTT-------------TT--GGGAGTCTCTAGACATCTC    202
+
+asis             419 -------------GGATCTACCTTTTATCTTTCTAAT--CTTTT----GT    449
+                                  ||..||.||.|.|||..||||.||  |||||    | 
+asis             203 ATGGGTTGGCCGGGGGCCTGCCGTCTATAGTTCTTATTCCTTTTAAGGG-    251
+
+asis             450 TTTAGT-ATAATTGGTCTTCGATTCAACAATTTTTAGTCTTCAGTCTTTT    498
+                        ||| |.|||     |||||||||.||| .||||||...|||||||||
+asis             252 ---AGTAAGAAT-----TTCGATTCAGCAA-CTTTAGTTCACAGTCTTTT    292
+
+asis             499 TTTTTATTTTGAAAAGGTTTTAACACTCTTGGTTTTGGAGGCTTTGGCTT    548
+                     ||||||||..| ||||||||                              
+asis             293 TTTTTATTAAG-AAAGGTTT------------------------------    311
+
+asis             549 TCTTCTTACTCTTAGGAGGATGGGCGCTAGAAAGAGTTTTAAGAGGGTGT    598
+                                                                       
+asis             311 --------------------------------------------------    311
+
+asis             599 GAAAGGGGGTTAATAGC    615
+                                      
+asis             311 -----------------    311
+
+
+#---------------------------------------
+#---------------------------------------"""
 
     from StringIO import StringIO
 
@@ -487,5 +584,13 @@ gi|94970041|r     97 AEFLQKPFTSDSLLRKVRAVLQKRQ    121
            == ["ref_rec", "gi|94968718|receiver"]
     assert [r.id for r in alignments[4].get_all_seqs()] \
            == ["ref_rec", "gi|94970041|receiver"]
+
+
+
+    alignments = list(EmbossIterator(StringIO(pair_example3)))
+    assert len(alignments) == 1
+    assert len(alignments[0].get_all_seqs()) == 2
+    assert [r.id for r in alignments[0].get_all_seqs()] \
+           == ["asis","asis"]
 
     print "Done"
