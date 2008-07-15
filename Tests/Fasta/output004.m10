@@ -1,0 +1,109 @@
+# /Users/pjcock/Downloads/Software/fasta-35.4.1/bin/fasta35 -m 10 -Q -H -B -E 0.1 -L -n -r +3/-2 NC_002127.ffn NC_002695.ffn
+FASTA searches a protein or DNA sequence data bank
+ version 35.04 Jun. 29, 2008
+Please cite:
+ W.R. Pearson & D.J. Lipman PNAS (1988) 85:2444-2448
+
+Query: NC_002127.ffn
+  1>>>ref|NC_002127.1|:413-736 - 324 nt
+Library: NC_002695.ffn 4744434 residues in  5230 sequences
+
+4744434 residues in  5230 sequences
+Statistics:  Expectation_n fit: rho(ln(x))= 3.2253+/-0.0011; mu= 14.3262+/- 0.073
+ mean_var=39.3286+/- 8.052, 0's: 0 Z-trim: 0  B-trim: 2 in 1/43
+ Lambda= 0.204513
+Algorithm: FASTA (3.5 Sept 2006) [optimized]
+Parameters: +3/-2 matrix (3:-2) ktup: 6
+ join: 35, opt: 20, open/ext: -12/-4, width:  16
+ Scan time:  1.660
+!! No sequences with E() < 0.100000
+  2>>>ref|NC_002127.1|:c1351-971 - 381 nt
+Library: NC_002695.ffn 4744434 residues in  5230 sequences
+
+4744434 residues in  5230 sequences
+Statistics:  Expectation_n fit: rho(ln(x))= 1.8467+/-0.00109; mu= 22.5671+/- 0.073
+ mean_var=40.1160+/- 8.182, 0's: 0 Z-trim: 2  B-trim: 0 in 0/44
+ Lambda= 0.202496
+Algorithm: FASTA (3.5 Sept 2006) [optimized]
+Parameters: +3/-2 matrix (3:-2) ktup: 6
+ join: 35, opt: 20, open/ext: -12/-4, width:  16
+ Scan time:  1.770
+
+The best scores are:                                      opt z-sc E(5230)
+ref|NC_002695.1|:1970775-1971404               ( 630) [f]   91 139.3   0.045
+
+>>>ref|NC_002127.1|:c1351-971, 381 nt vs NC_002695.ffn library
+; pg_name: /Users/pjcock/Downloads/Software/fasta-35.4.1/bin/fasta35
+; pg_ver: 35.03
+; pg_argv: /Users/pjcock/Downloads/Software/fasta-35.4.1/bin/fasta35 -m 10 -Q -H -B -E 0.1 -L -n -r +3/-2 NC_002127.ffn NC_002695.ffn
+; pg_name_alg: FASTA
+; pg_ver_rel: 3.5 Sept 2006
+; pg_matrix: +3/-2 (3:-2)
+; pg_open-ext: -12 -4
+; pg_ktup: 6
+; pg_optcut: 20
+; pg_cgap: 35
+; mp_extrap: 60000 5228
+; mp_stats:  Expectation_n fit: rho(ln(x))= 1.8467+/-0.00109; mu= 22.5671+/- 0.073  mean_var=40.1160+/- 8.182, 0's: 0 Z-trim: 2  B-trim: 0 in 0/44  Lambda= 0.202496
+; mp_KS: -0.0000 (N=1079006385) at  20
+; mp_Algorithm: FASTA (3.5 Sept 2006) [optimized]
+; mp_Parameters: +3/-2 matrix (3:-2) ktup: 6  join: 35, opt: 20, open/ext: -12/-4, width:  16
+>>ref|NC_002695.1|:1970775-1971404
+; fa_frame: f
+; fa_initn:  54
+; fa_init1:  54
+; fa_opt:  91
+; fa_z-score: 139.3
+; fa_bits: 35.2
+; fa_expect:  0.045
+; bs_ident: 0.578
+; bs_sim: 0.578
+; bs_overlap: 102
+>ref|NC_00212 ..
+; sq_len: 381
+; sq_offset: 1
+; sq_type: D
+; al_start: 4
+; al_stop: 105
+; al_display_start: 1
+---------------------------ATGAAAAAAGATAAAAAATATCA
+AATAGAAGCAATAAAAAATAAAGATAAAACTTTATTTATTGTCTATGCTA
+CTGATATTTATAGCCCGAGCGAATTTTTCTCAAAAATCGAATCCGACTTG
+AAGAAAAAGAAAAGCAAGGGTGATGTTTTT
+>ref|NC_002695.1|:1970775-1971404 ..
+; sq_len: 630
+; sq_offset: 1
+; sq_type: D
+; al_start: 313
+; al_stop: 414
+; al_display_start: 283
+AACTATTTTCAGAGTGTCATGGCAGAACACAGAGAAAATAAAACAAGTAA
+TAAAATATTAATGGAAAAAATAAATTCTTGTTTATTTAGACCTGATTCTA
+ATCACTTTTCTTGCCCGGAGTCATTTTTGACATGCCCGATAACGCTGGAC
+ACACCTGAGACTGGGGTGTTCATGAGAAAC
+; al_cons:
+                              : : :: :::::: :  : :
+ : :  :  :::  :::: : : ::     ::::::::      :: :::
+ : :  ::: : :::::     ::::::  ::
+  3>>>ref|NC_002127.1|:c2388-1348 - 1041 nt
+Library: NC_002695.ffn 4744434 residues in  5230 sequences
+
+4744434 residues in  5230 sequences
+Statistics:  Expectation_n fit: rho(ln(x))= 3.0829+/-0.00118; mu= 17.6472+/- 0.080
+ mean_var=43.5957+/- 8.728, 0's: 0 Z-trim: 0  B-trim: 0 in 0/44
+ Lambda= 0.194246
+Algorithm: FASTA (3.5 Sept 2006) [optimized]
+Parameters: +3/-2 matrix (3:-2) ktup: 6
+ join: 40, opt: 25, open/ext: -12/-4, width:  16
+ Scan time:  3.060
+!! No sequences with E() < 0.100000
+>>><<<
+
+
+1746 residues in 3 query   sequences
+4744434 residues in 5230 library sequences
+ Scomplib [35.03]
+ start: Tue Jul 15 16:47:15 2008 done: Tue Jul 15 16:47:22 2008
+ Total Scan time:  6.490 Total Display time:  0.010
+
+Function used was FASTA [version 35.04 Jun. 29, 2008]
