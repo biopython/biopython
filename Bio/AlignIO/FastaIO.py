@@ -165,9 +165,29 @@ class FastaM10Iterator(AlignmentIterator) :
         assert not line.startswith("; ")
 
         #Now should have the aligned query sequence with flanking region...
-        while not (line.startswith(">") or ">>>" in line):
+        #but before that, since FASTA 35.4.1 there can be an consensus here,
+        """
+        ; al_cons:
+        .::. : :. ---.  :: :. . :  ..-:::-:  :.:  ..:...: 
+        etc
+        """
+        while not (line.startswith("; ") or line.startswith(">") or ">>>" in line):
             match_seq_parts.append(line.strip())
             line = handle.readline()
+        if line.startswith("; ") :
+            assert line.strip() == "; al_cons:"
+            align_consensus_parts = []
+            line = handle.readline()
+            while not (line.startswith("; ") or line.startswith(">") or ">>>" in line):
+                align_consensus_parts.append(line.strip())
+                line = handle.readline()
+            #If we do anything with this in future, must remove any flanking region.
+            align_consensus = "".join(align_consensus_parts)
+            del align_consensus_parts
+            assert not line.startswith("; ")
+        else :
+            align_consensus = None
+        assert (line.startswith(">") or ">>>" in line)
         self._header = line
 
         #We built a list of strings and then joined them because
@@ -181,6 +201,7 @@ class FastaM10Iterator(AlignmentIterator) :
         #Remove the flanking regions,
         query_align_seq = self._extract_alignment_region(query_seq, query_annotation)
         match_align_seq = self._extract_alignment_region(match_seq, match_annotation)
+        #How can we do this for the (optional) consensus?
 
         #The "sq_offset" values can be specified with the -X command line option.
         #The appear to just shift the origin used in the calculation of the coordinates.
@@ -648,5 +669,5 @@ Function used was FASTA [version 34.26 January 12, 2007]
             print
             print filename
             print "="*len(filename)
-            for a in FastaM10Iterator(open(os.path.join(path,filename))):
-                print a
+            for i,a in enumerate(FastaM10Iterator(open(os.path.join(path,filename)))):
+                print "#%i, %s" % (i+1,a)
