@@ -17,6 +17,9 @@ which can also be used to store a multiple sequence alignments.
 
 from Bio.Align.Generic import Alignment
 from Interfaces import AlignmentIterator
+from Bio.Alphabet import single_letter_alphabet, generic_dna, generic_protein
+from Bio.Alphabet import Gapped
+
 
 class FastaM10Iterator(AlignmentIterator) :
     """Alignment iterator for the FASTA tool's pairwise alignment output.
@@ -215,7 +218,8 @@ class FastaM10Iterator(AlignmentIterator) :
                                     len(query_align_seq)))
 
         #TODO - Look at the "sq_type" to assign a sensible alphabet?
-        alignment = Alignment(self.alphabet)
+        alphabet = self.alphabet
+        alignment = Alignment(alphabet)
 
         #TODO - Introduce an annotated alignment class?
         #For now, store the annotation a new private property:
@@ -237,6 +241,18 @@ class FastaM10Iterator(AlignmentIterator) :
         record.id = self._query_descr.split()[0].strip(",")
         record.name = "query"
         record.annotations["original_length"] = int(query_annotation["sq_len"])
+
+        #TODO - What if a specific alphabet has been requested?
+        #TODO - Use an IUPAC alphabet?
+        #TODO - Can FASTA output RNA?
+        if alphabet == single_letter_alphabet and "sq_type" in query_annotation :
+            if query_annotation["sq_type"] == "D" :
+                record.seq.alphabet = generic_dna
+            elif query_annotation["sq_type"] == "p" :
+                record.seq.alphabet = generic_protein
+        if "-" in query_align_seq :
+            if not hasattr(record.seq.alphabet,"gap_char") :
+                record.seq.alphabet = Gapped(record.seq.alphabet, "-")
         
         alignment.add_sequence(match_descr, match_align_seq)
         record = alignment.get_all_seqs()[-1]
@@ -245,6 +261,16 @@ class FastaM10Iterator(AlignmentIterator) :
         record.id = match_descr.split()[0].strip(",")
         record.name = "match"
         record.annotations["original_length"] = int(match_annotation["sq_len"])
+
+        #This is still very crude way:
+        if alphabet == single_letter_alphabet and "sq_type" in match_annotation :
+            if match_annotation["sq_type"] == "D" :
+                record.seq.alphabet = generic_dna
+            elif match_annotation["sq_type"] == "p" :
+                record.seq.alphabet = generic_protein
+        if "-" in match_align_seq :
+            if not hasattr(record.seq.alphabet,"gap_char") :
+                record.seq.alphabet = Gapped(record.seq.alphabet, "-")
 
         return alignment
 
@@ -664,3 +690,8 @@ Function used was FASTA [version 34.26 January 12, 2007]
             print "="*len(filename)
             for i,a in enumerate(FastaM10Iterator(open(os.path.join(path,filename)))):
                 print "#%i, %s" % (i+1,a)
+                for r in a :
+                    if "-" in r.seq :
+                        assert r.seq.alphabet.gap_char == "-"
+                    else :
+                        assert not hasattr(r.seq.alphabet, "gap_char")
