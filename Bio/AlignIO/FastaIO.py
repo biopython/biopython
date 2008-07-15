@@ -204,17 +204,8 @@ class FastaM10Iterator(AlignmentIterator) :
         #How can we do this for the (optional) consensus?
 
         #The "sq_offset" values can be specified with the -X command line option.
-        #The appear to just shift the origin used in the calculation of the coordinates.
+        #They appear to just shift the origin used in the calculation of the coordinates.
         
-        if ("sq_offset" in query_annotation and query_annotation["sq_offset"]<>"1") \
-        or ("sq_offset" in match_annotation and match_annotation["sq_offset"]<>"1") :
-            #Note that until some point in the v35 series, FASTA always recorded one
-            #for the query offset, and ommitted the match offset (even when these were
-            #query_seq the -X command line option).
-            #TODO - Work out how exactly the use of -X offsets changes things.
-            #raise ValueError("Offsets from the -X command line option are not (yet) supported")
-            pass
-
         if len(query_align_seq) <> len(match_align_seq) :
             raise ValueError("Problem parsing the alignment sequence coordinates")
         if "sw_overlap" in alignment_annotation :
@@ -379,6 +370,8 @@ class FastaM10Iterator(AlignmentIterator) :
         Note that this code seems to work fine even when the "sq_offset"
         entries are prsent as a result of using the -X command line option.
         """
+        if int(annotation['al_start']) > int(annotation['al_stop']) :
+            raise ValueError("Unsupported inverted sequence found (from the -i option?)")
         align_stripped = alignment_seq_with_flanking.strip("-")
         start = int(annotation['al_start']) \
               - int(annotation['al_display_start'])
