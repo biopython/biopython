@@ -250,6 +250,13 @@ Testing reading fasta-m10 format file Fasta/output004.m10 with 1 alignments
  Failed: Repeated identifier, possibly due to truncation
  Checking can write/read as 'clustal' format
  Checking can write/read as 'stockholm' format
+Testing reading fasta-m10 format file Fasta/output005.m10 with 1 alignments
+ Alignment 0, with 2 sequences of length 110
+  IKNKDKTLFIVYAT-DIYSPSEFFSKIESDLKKKKS...LSK gi|10955264|ref|NP_052605.1|
+  IKDELPVAFCSWASLDLECEVKYINDVTSLYAKDWM...MSE gi|10955282|ref|NP_052623.1|
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'stockholm' format
 Testing reading ig format file IntelliGenetics/VIF_mase-pro.txt with 1 alignments
  Alignment 0, with 16 sequences of length 298
   MMMMMMMMMMMMMMMM alignment column 0

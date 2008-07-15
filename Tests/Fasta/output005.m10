@@ -1,0 +1,99 @@
+# /Users/pjcock/Downloads/Software/fasta-35.3.6/ssearch35 -m 10 -q -E 0.5 -H NC_002127.faa NC_002128.faa
+SSEARCH searches a sequence data bank
+ version 35.03 Feb. 18, 2008
+Please cite:
+ T. F. Smith and M. S. Waterman, (1981) J. Mol. Biol. 147:195-197; 
+ W.R. Pearson (1991) Genomics 11:635-650
+
+Query: NC_002127.faa
+  1>>>gi|10955263|ref|NP_052604.1| plasmid mobilization [Escherichia coli O157:H7 s 107 aa - 107 aa
+Library: NC_002128.faa   24233 residues in    85 sequences
+
+  24233 residues in    85 sequences
+Statistics: (shuffled [500]) Expectation_n fit: rho(ln(x))= 5.2595+/-0.00883; mu= 8.9348+/- 0.464
+ mean_var=48.7394+/-11.263, 0's: 0 Z-trim: 0  B-trim: 0 in 0/29
+ Lambda= 0.183711
+Algorithm: Smith-Waterman (SSE2, Michael Farrar 2006) (6.0 Mar 2007)
+Parameters: BL50 matrix (15:-5), open/ext: -10/-2
+ Scan time:  0.010
+!! No sequences with E() < 0.500000
+  2>>>gi|10955264|ref|NP_052605.1| hypothetical protein pOSAK1_02 [Escherichia coli O157:H7 s 126 aa - 126 aa
+Library: NC_002128.faa   24233 residues in    85 sequences
+
+  24233 residues in    85 sequences
+Statistics: (shuffled [500]) Expectation_n fit: rho(ln(x))= 5.9214+/-0.00691; mu= 3.1033+/- 0.354
+ mean_var=36.9389+/- 8.060, 0's: 0 Z-trim: 0  B-trim: 0 in 0/29
+ Lambda= 0.211024
+Algorithm: Smith-Waterman (SSE2, Michael Farrar 2006) (6.0 Mar 2007)
+Parameters: BL50 matrix (15:-5), open/ext: -10/-2
+ Scan time:  0.010
+
+The best scores are:                                      s-w bits E(85)
+gi|10955282|ref|NP_052623.1| hemolysin C [Escheric ( 163)   69 26.0   0.025
+
+>>>gi|10955264|ref|NP_052605.1|, 126 aa vs NC_002128.faa library
+; pg_name: /Users/pjcock/Downloads/Software/fasta-35.3.6/ssearch35
+; pg_ver: 35.03
+; pg_argv: /Users/pjcock/Downloads/Software/fasta-35.3.6/ssearch35 -m 10 -q -E 0.5 -H NC_002127.faa NC_002128.faa
+; pg_name: Smith-Waterman (SSE2, Michael Farrar 2006)
+; pg_ver: 6.0 Mar 2007
+; pg_matrix: BL50 (15:-5)
+; pg_open-ext: -10 -2
+; mp_extrap: 60000 500
+; mp_stats: (shuffled [500]) Expectation_n fit: rho(ln(x))= 5.9214+/-0.00691; mu= 3.1033+/- 0.354  mean_var=36.9389+/- 8.060, 0's: 0 Z-trim: 0  B-trim: 0 in 0/29  Lambda= 0.211024
+; mp_KS: -0.0000 (N=0) at  20
+; mp_Algorithm: Smith-Waterman (SSE2, Michael Farrar 2006) (6.0 Mar 2007)
+; mp_Parameters: BL50 matrix (15:-5), open/ext: -10/-2
+>>gi|10955282|ref|NP_052623.1| hemolysin C [Escherichia coli O157:H7 str. Sakai]
+; sw_frame: f
+; sw_s-w opt:  69
+; sw_z-score: 108.8
+; sw_bits: 26.0
+; sw_expect:  0.025
+; sw_score: 69
+; sw_ident: 0.209
+; sw_sim: 0.555
+; sw_overlap: 110
+>gi|10955264| ..
+; sq_len: 126
+; sq_offset: 1
+; sq_type: p
+; al_start: 12
+; al_stop: 114
+; al_display_start: 1
+-------------------MKKDKKYQIEAIKNKDKTLFIVYAT-DIYSP
+SEFFSKIESDLKKKKSKGDV--FFDLIIPNGGKKD--RYVYTSFNGEKFS
+SYTLNKVTKTDEYNDL--SELSASFFKKNFDKINVNLLSKATSFALKKGI
+PI
+>gi|10955282|ref|NP_052623.1| ..
+; sq_len: 163
+; sq_offset: 1
+; sq_type: p
+; al_start: 39
+; al_stop: 148
+; al_display_start: 9
+ACSPLHKKWPLSVFAINVIPAIQTNQFALLIKDELPVAFCSWASLDLECE
+VKYINDVTSLYAKDWMSGERKWFIDWIAPFGHNMELYKYMRKKYPYELFR
+AIRLDESSKTGKIAEFHGGGIDKKLASKIFRQYHHELMSEVKNRQDFNFN
+IEKEN
+  3>>>gi|10955265|ref|NP_052606.1| hypothetical protein pOSAK1_03 [Escherichia coli O157:H7 s 346 aa - 346 aa
+Library: NC_002128.faa   24233 residues in    85 sequences
+
+  24233 residues in    85 sequences
+Statistics: (shuffled [500]) Expectation_n fit: rho(ln(x))= 6.4605+/-0.00918; mu= 7.4169+/- 0.474
+ mean_var=67.9947+/-15.439, 0's: 0 Z-trim: 0  B-trim: 0 in 0/29
+ Lambda= 0.155538
+Algorithm: Smith-Waterman (SSE2, Michael Farrar 2006) (6.0 Mar 2007)
+Parameters: BL50 matrix (15:-5), open/ext: -10/-2
+ Scan time:  0.030
+!! No sequences with E() < 0.500000
+>>><<<
+
+
+579 residues in 3 query   sequences
+24233 residues in 85 library sequences
+ Scomplib [35.03]
+ start: Tue Jul 15 17:49:23 2008 done: Tue Jul 15 17:49:23 2008
+ Total Scan time:  0.050 Total Display time:  0.000
+
+Function used was SSEARCH [version 35.03 Feb. 18, 2008]
