@@ -1,18 +1,16 @@
 # Copyright 2004 by Cymon J. Cox and Frank Kauff.  All rights reserved.
+# Copyright 2008 by Michiel de Hoon.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """
 Parser for PHD files output by PHRED and used by PHRAP and CONSED.
 
-Works fine with PHRED 0.020425.c
+This module can be used used directly which will return Record objects
+which should contain all the original data in the file.
 
-Version 1.1, 03/09/2004
-written by Cymon J. Cox (cymon.cox@gmail.com ) and
-Frank Kauff (fkauff 'AT' biologie.uni-kl.de).
-Comments, bugs, problems, suggestions to one of us are welcome!
-
-
+Alternatively, using Bio.SeqIO with the "phd" format will call this module
+internally.  This will give SeqRecord objects for each contig sequence.
 """
 
 from Bio import Seq
@@ -35,9 +33,11 @@ class Record:
 
 
 def read(handle):
-    """This function reads PHD file data line by line from the handle,
-    and returns a single Record object."""
+    """Reads the next PHD record from the file, returning it as a Record object.
 
+    This function reads PHD file data line by line from the handle,
+    and returns a single Record object.
+    """
     for line in handle:
         if line.startswith("BEGIN_SEQUENCE"):
             record = Record()
@@ -109,8 +109,9 @@ def read(handle):
     return record
 
 def parse(handle):
-    """Iterates over a file of multiple PHD records.
-    The date are read line by line from the handle. The handle can be a list
+    """Iterates over a file returning multiple PHD records.
+
+    The data is read line by line from the handle. The handle can be a list
     of lines, an open file, or similar; the only requirement is that we can
     iterate over the handle to retrieve lines from it.
 
@@ -120,7 +121,6 @@ def parse(handle):
     for record in records:
         # do something with the record object
     """
-
     while True:
         record = read(handle)
         if not record:
@@ -135,14 +135,14 @@ from Bio.ParserSupport import *
 
 
 class Iterator:
-    """Iterates over a file of multiple PHD records.
+    """Iterates over a file of multiple PHD records (DEPRECATED).
     
     Methods: 
     next    Return the next record from the stream, or None.
     """
 
     def __init__(self, handle, parser=None):
-        """__init__(self, handle, parser=None)
+        """Create a new iterator.
         
         Create a new iterator.  handle is a file-like object.  parser
         is an optional Parser object to change the results into another form.
@@ -178,7 +178,7 @@ class Iterator:
         return iter(self.next, None)
 
 class RecordParser(AbstractParser):
-    """Parses PHD file data into a Record object."""
+    """Parses PHD file data into a Record object (DEPRECATED)."""
     def __init__(self):
         import warnings
         warnings.warn("Bio.Sequencing.Ace.RecordParser is deprecated. Please use Bio.Sequencing.Ace.read(handle) instead of Bio.Sequencing.Ace.RecordParser().parse(handle)", DeprecationWarning)
@@ -195,7 +195,7 @@ class RecordParser(AbstractParser):
 
 
 class _Scanner:
-    """Scans a PHD-formatted file.
+    """Scans a PHD-formatted file (DEPRECATED).
     
     Methods:
     feed - Feed one PHD record.
@@ -248,7 +248,7 @@ class _Scanner:
         
         
 class _RecordConsumer(AbstractConsumer):
-    """Consumer that converts a PHD record to a Record object."""
+    """Consumer that converts a PHD record to a Record object (DEPRECATED)."""
     def __init__(self):
         self.data = None
 
