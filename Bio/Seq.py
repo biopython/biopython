@@ -1,6 +1,6 @@
 # Copyright 2000-2002 Brad Chapman.
 # Copyright 2004-2005 by M de Hoon.
-# Copyright 2007 by Peter Cock.
+# Copyright 2007-2008 by Peter Cock.
 # All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -13,6 +13,11 @@ from Data.IUPACData import ambiguous_dna_complement, ambiguous_rna_complement
 from Bio.Data import CodonTable
 
 class Seq:
+    """A read-only sequence object (essentially a string with an alphabet).
+
+    Like normal python strings, our basic sequence object is immuatable.
+    This prevents you from doing my_seq[5] = "A" for example, but does allow
+    Seq objects to be used as dictionary keys."""
     def __init__(self, data, alphabet = Alphabet.generic_alphabet):
         # Enforce string storage
         assert (type(data) == type("") or # must use a string
@@ -176,6 +181,28 @@ class Seq:
         return self.complement()[::-1]
 
 class MutableSeq:
+    """An editable sequence object (with an alphabet).
+
+    Unlike normal python strings and our basic sequence object (the Seq class)
+    which are immuatable, the MutableSeq lets you edit the sequence in place.
+    However, this means you cannot use a MutableSeq object as a dictionary key.
+
+    >>> from Bio.Seq import MutableSeq
+    >>> from Bio.Alphabet import generic_dna
+    >>> my_seq = MutableSeq("ACTCGTCGTCG", generic_dna)
+    >>> my_seq
+    MutableSeq('ACTCGTCGTCG', DNAAlphabet())
+    >>> my_seq[5]
+    'T'
+    >>> my_seq[5] = "A"
+    >>> my_seq
+    MutableSeq('ACTCGACGTCG', DNAAlphabet())
+    >>> my_seq[5]
+    'A'
+    >>> my_seq[5:8] = "NNN"
+    >>> my_seq
+    MutableSeq('ACTCGNNNTCG', DNAAlphabet())    
+    """
     def __init__(self, data, alphabet = Alphabet.generic_alphabet):
         if type(data) == type(""):
             self.data = array.array("c", data)
@@ -201,7 +228,7 @@ class MutableSeq:
 
         Note that Biopython 1.44 and earlier would give a truncated
         version of repr(my_seq) for str(my_seq).  If you are writing code
-        which need to be backwards compatible with old Biopython, you
+        which needs to be backwards compatible with old Biopython, you
         should continue to use my_seq.tostring() rather than str(my_seq).
         """
         return "".join(self.data)
@@ -346,7 +373,7 @@ class MutableSeq:
     def reverse(self):
         """Modify the MutableSequence to reverse itself.
 
-        No return value"""
+        No return value."""
         self.data.reverse()
 
     def complement(self):
@@ -371,7 +398,7 @@ class MutableSeq:
     def reverse_complement(self):
         """Modify the MutableSequence to take on its reverse complement.
 
-        No return value"""
+        No return value."""
         if isinstance(self.alphabet, Alphabet.ProteinAlphabet) :
             raise ValueError, "Proteins do not have complements!"
         self.complement()
@@ -392,7 +419,17 @@ class MutableSeq:
         """Returns the full sequence as a python string.
 
         Although not formally deprecated, you are now encouraged to use
-        str(my_seq) instead of my_seq.tostring()."""
+        str(my_seq) instead of my_seq.tostring().
+
+        Because str(my_seq) will give you the full sequence as a python string,
+        there is often no need to make an explicit conversion.  For example,
+        
+        print "ID={%s}, sequence={%s}" % (my_name, my_seq)
+
+        On Biopython 1.44 or older you would have to have done this:
+
+        print "ID={%s}, sequence={%s}" % (my_name, my_seq.tostring())
+        """
         return "".join(self.data)
 
     def toseq(self):
