@@ -187,7 +187,11 @@ test_seqs = [s,t,u,
              #Seq.Seq("".join(ambiguous_dna_values), IUPAC.IUPACAmbiguousRNA()),
              #Seq.Seq("AWGAARCKG", Alphabet.generic_dna), 
              Seq.Seq("AUGAAACUG", Alphabet.generic_dna), 
+             Seq.Seq("ATGAAACUG", IUPAC.unambiguous_dna), 
+             Seq.Seq("ATGAAACUGWN", IUPAC.ambiguous_dna), 
              Seq.Seq("ATGAAACTG", Alphabet.generic_rna), 
+             Seq.Seq("ATGAAACTG", IUPAC.unambiguous_rna), 
+             Seq.Seq("ATGAAACTGWN", IUPAC.ambiguous_rna), 
              Seq.Seq("ATGAAACTG", Alphabet.generic_nucleotide), 
              Seq.Seq("AUGAAACTG", Alphabet.generic_nucleotide), #U and T
              Seq.MutableSeq("ATGAAACTG", Alphabet.generic_rna),
@@ -210,7 +214,7 @@ print "============================"
 for nucleotide_seq in test_seqs:
     try :
         print "%s -> %s" \
-        % (repr(nucleotide_seq) , repr(Seq.transcribe(nucleotide_seq)))
+        % (repr(nucleotide_seq) , repr(Seq.back_transcribe(nucleotide_seq)))
     except ValueError, e :
         print "%s -> %s" \
         % (repr(nucleotide_seq) , str(e))
@@ -220,22 +224,22 @@ print "Reverse Complement"
 print "=================="
 for nucleotide_seq in test_seqs:
     try :
-	print "%s\n-> %s" \
-	% (repr(nucleotide_seq) , repr(Seq.reverse_complement(nucleotide_seq)))
+        print "%s\n-> %s" \
+        % (repr(nucleotide_seq) , repr(Seq.reverse_complement(nucleotide_seq)))
     except ValueError, e :
-	print "%s\n-> %s" \
-	% (repr(nucleotide_seq) , str(e))
+        print "%s\n-> %s" \
+        % (repr(nucleotide_seq) , str(e))
         
 print
 print "Translating"
 print "==========="
 for nucleotide_seq in test_seqs:
     try :
-	print "%s\n-> %s" \
-	% (repr(nucleotide_seq) , repr(Seq.translate(nucleotide_seq)))
+        print "%s\n-> %s" \
+        % (repr(nucleotide_seq) , repr(Seq.translate(nucleotide_seq)))
     except ValueError, e :
-	print "%s\n-> %s" \
-	% (repr(nucleotide_seq) , str(e))
+        print "%s\n-> %s" \
+        % (repr(nucleotide_seq) , str(e))
 
 misc_stops = "TAATAGTGAAGAAGG"
 for nucleotide_seq in [misc_stops, Seq.Seq(misc_stops),

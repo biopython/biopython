@@ -437,7 +437,7 @@ def back_transcribe(rna):
         if isinstance(rna.alphabet, Alphabet.ProteinAlphabet) :
             raise ValueError, "Proteins cannot be (back)transcribed!"
         #TODO - Raise an error if already is DNA alphabet?
-        dna = rna.data.replace('U','T').replace('u','t')
+        dna = rna.tostring().replace('U','T').replace('u','t')
 	if rna.alphabet==IUPAC.unambiguous_rna:
             alphabet = IUPAC.unambiguous_dna
         elif rna.alphabet==IUPAC.ambiguous_rna:
