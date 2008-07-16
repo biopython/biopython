@@ -4,6 +4,14 @@
 # as part of this package.
 """Parser for SAF (Simple Alignment Format).
 
+This is a fairly liberal multiple sequence alignment format, where
+record names may contain up to 14 characters and no blanks.  Lines
+beginging with a hash (#) are ignored.
+
+A current URL describing this file format is:
+http://www.predictprotein.org/Dexa/optin_saf.html
+
+This appears to replace the old URL of:
 http://www.embl-heidelberg.de/predictprotein/Dexa/optin_safDes.html
 """
 
