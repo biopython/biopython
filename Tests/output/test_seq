@@ -111,23 +111,23 @@ Seq('ATGAAACTG', Alphabet()) -> Seq('AUGAAACUG', RNAAlphabet())
 Seq('AUGAAACUG', DNAAlphabet()) -> Seq('AUGAAACUG', RNAAlphabet())
 Seq('ATGAAACUG', IUPACUnambiguousDNA()) -> Seq('AUGAAACUG', IUPACUnambiguousRNA())
 Seq('ATGAAACUGWN', IUPACAmbiguousDNA()) -> Seq('AUGAAACUGWN', IUPACAmbiguousRNA())
-Seq('ATGAAACTG', RNAAlphabet()) -> Seq('AUGAAACUG', RNAAlphabet())
-Seq('ATGAAACTG', IUPACUnambiguousRNA()) -> Seq('AUGAAACUG', RNAAlphabet())
-Seq('ATGAAACTGWN', IUPACAmbiguousRNA()) -> Seq('AUGAAACUGWN', RNAAlphabet())
+Seq('ATGAAACTG', RNAAlphabet()) -> RNA cannot be transcribed!
+Seq('ATGAAACTG', IUPACUnambiguousRNA()) -> RNA cannot be transcribed!
+Seq('ATGAAACTGWN', IUPACAmbiguousRNA()) -> RNA cannot be transcribed!
 Seq('ATGAAACTG', NucleotideAlphabet()) -> Seq('AUGAAACUG', RNAAlphabet())
 Seq('AUGAAACTG', NucleotideAlphabet()) -> Seq('AUGAAACUG', RNAAlphabet())
-MutableSeq('ATGAAACTG', RNAAlphabet()) -> Seq('AUGAAACUG', RNAAlphabet())
+MutableSeq('ATGAAACTG', RNAAlphabet()) -> RNA cannot be transcribed!
 Seq('ACTGTCGTCT', ProteinAlphabet()) -> Proteins cannot be transcribed!
 
 Back-transcribe RNA into DNA
 ============================
-Seq('TCAAAAGGATGCATCATG', IUPACUnambiguousDNA()) -> Seq('TCAAAAGGATGCATCATG', DNAAlphabet())
-Seq('T', IUPACAmbiguousDNA()) -> Seq('T', DNAAlphabet())
-Seq('TCAAAAGGATGCATCATGT', IUPACAmbiguousDNA()) -> Seq('TCAAAAGGATGCATCATGT', DNAAlphabet())
+Seq('TCAAAAGGATGCATCATG', IUPACUnambiguousDNA()) -> DNA cannot be back transcribed!
+Seq('T', IUPACAmbiguousDNA()) -> DNA cannot be back transcribed!
+Seq('TCAAAAGGATGCATCATGT', IUPACAmbiguousDNA()) -> DNA cannot be back transcribed!
 Seq('ATGAAACTG', Alphabet()) -> Seq('ATGAAACTG', DNAAlphabet())
-Seq('AUGAAACUG', DNAAlphabet()) -> Seq('ATGAAACTG', DNAAlphabet())
-Seq('ATGAAACUG', IUPACUnambiguousDNA()) -> Seq('ATGAAACTG', DNAAlphabet())
-Seq('ATGAAACUGWN', IUPACAmbiguousDNA()) -> Seq('ATGAAACTGWN', DNAAlphabet())
+Seq('AUGAAACUG', DNAAlphabet()) -> DNA cannot be back transcribed!
+Seq('ATGAAACUG', IUPACUnambiguousDNA()) -> DNA cannot be back transcribed!
+Seq('ATGAAACUGWN', IUPACAmbiguousDNA()) -> DNA cannot be back transcribed!
 Seq('ATGAAACTG', RNAAlphabet()) -> Seq('ATGAAACTG', DNAAlphabet())
 Seq('ATGAAACTG', IUPACUnambiguousRNA()) -> Seq('ATGAAACTG', IUPACUnambiguousDNA())
 Seq('ATGAAACTGWN', IUPACAmbiguousRNA()) -> Seq('ATGAAACTGWN', IUPACAmbiguousDNA())

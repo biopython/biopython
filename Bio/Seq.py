@@ -413,9 +413,10 @@ def transcribe(dna):
     if isinstance(dna, Seq) or isinstance(dna, MutableSeq):
         if isinstance(dna.alphabet, Alphabet.ProteinAlphabet) :
             raise ValueError, "Proteins cannot be transcribed!"
-        #TODO - Raise an error if already is RNA alphabet?
+        if isinstance(dna.alphabet, Alphabet.RNAAlphabet) :
+            raise ValueError, "RNA cannot be transcribed!"
         rna = dna.tostring().replace('T','U').replace('t','u')
-	if dna.alphabet==IUPAC.unambiguous_dna:
+        if dna.alphabet==IUPAC.unambiguous_dna:
             alphabet = IUPAC.unambiguous_rna
         elif dna.alphabet==IUPAC.ambiguous_dna:
             alphabet = IUPAC.ambiguous_rna
@@ -436,9 +437,10 @@ def back_transcribe(rna):
     if isinstance(rna, Seq) or isinstance(rna, MutableSeq):
         if isinstance(rna.alphabet, Alphabet.ProteinAlphabet) :
             raise ValueError, "Proteins cannot be (back)transcribed!"
-        #TODO - Raise an error if already is DNA alphabet?
+        if isinstance(rna.alphabet, Alphabet.DNAAlphabet) :
+            raise ValueError, "DNA cannot be back transcribed!"
         dna = rna.tostring().replace('U','T').replace('u','t')
-	if rna.alphabet==IUPAC.unambiguous_rna:
+        if rna.alphabet==IUPAC.unambiguous_rna:
             alphabet = IUPAC.unambiguous_dna
         elif rna.alphabet==IUPAC.ambiguous_rna:
             alphabet = IUPAC.ambiguous_dna
