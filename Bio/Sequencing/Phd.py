@@ -15,10 +15,7 @@ Comments, bugs, problems, suggestions to one of us are welcome!
 
 """
 
-import os
-from Bio import File
 from Bio import Seq
-from Bio.ParserSupport import *
 from Bio.Alphabet import IUPAC
 
 CKEYWORDS=['CHROMAT_FILE','ABI_THUMBPRINT','PHRED_VERSION','CALL_METHOD',\
@@ -131,6 +128,12 @@ def parse(handle):
         yield record
 
 
+# ---------- Everything below is deprecated
+
+from Bio import File
+from Bio.ParserSupport import *
+
+
 class Iterator:
     """Iterates over a file of multiple PHD records.
     
@@ -145,6 +148,8 @@ class Iterator:
         is an optional Parser object to change the results into another form.
         If set to None, then the raw contents of the file will be returned.
         """
+        import warnings
+        warnings.warn("Bio.Sequencing.Ace.Iterator is deprecated. Please use Bio.Sequencing.Ace.parse(handle) instead of Bio.Sequencing.Ace.Iterator(handle, RecordParser())", DeprecationWarning)
         self._uhandle = File.UndoHandle(handle)
         self._parser = parser
 
@@ -175,6 +180,8 @@ class Iterator:
 class RecordParser(AbstractParser):
     """Parses PHD file data into a Record object."""
     def __init__(self):
+        import warnings
+        warnings.warn("Bio.Sequencing.Ace.RecordParser is deprecated. Please use Bio.Sequencing.Ace.read(handle) instead of Bio.Sequencing.Ace.RecordParser().parse(handle)", DeprecationWarning)
         self._scanner = _Scanner()
         self._consumer = _RecordConsumer()
 
