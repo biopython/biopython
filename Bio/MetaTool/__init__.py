@@ -49,9 +49,6 @@ class Iterator:
 
         if self._parser is not None:
             if data:
-                dumpfile = open( 'dump', 'w' )
-                dumpfile.write( data )
-                dumpfile.close()
                 return self._parser.parse(File.StringHandle(data))
 
         return data
