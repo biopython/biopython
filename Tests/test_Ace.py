@@ -106,15 +106,11 @@ class AceTestOne(unittest.TestCase):
     
     def t_check_record_parser(self):
         """Test to check that record parser parses each contig into a record."""
-        recparser=Ace.RecordParser()
-        it=Ace.Iterator(self.handle,recparser)
+        records=Ace.parse(self.handle)
         x=0
         print '\nInput file: %s' % self.handle.name
-        while 1:
-            r=it.next()
-            if not r:
-                break
-            self.contig_summary(r,x)
+        for record in records:
+            self.contig_summary(record,x)
             x+=1
 
 

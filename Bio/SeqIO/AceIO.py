@@ -23,7 +23,7 @@ def AceIterator(handle) :
     by iterating over the file in a single pass, we are forced to ignore any
     WA, CT, RT or WR footer tags."""
 
-    for ace_contig in Ace.Iterator(handle, Ace.RecordParser()) :
+    for ace_contig in Ace.parse(handle) :
         #Convert the ACE contig record into a SeqRecord...
         consensus_seq_str = ace_contig.sequence
         if "*" in consensus_seq_str :
