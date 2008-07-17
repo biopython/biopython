@@ -414,7 +414,7 @@ You can access elements of the sequence in the same way as for strings (but reme
 \begin{verbatim}
 >>> print my_seq[0] #first element
 >>> print my_seq[2] #third element
->>> print my_seq[-1] #list element
+>>> print my_seq[-1] #last element
 \end{verbatim}
 
 The \verb|Seq| object has a \verb|.count()| method, just like a string:
@@ -424,11 +424,22 @@ The \verb|Seq| object has a \verb|.count()| method, just like a string:
 32
 >>> my_seq.count("G")
 10
->>> float(my_seq.count("G") + my_seq.count("C")) / len(my_seq)
-0.46875
+>>> 100 * float(my_seq.count("G") + my_seq.count("C")) / len(my_seq)
+46.875
 \end{verbatim}
 
-\noindent While you could use the above snippet of code to calculate a GC\%, note that Biopython does have some GC functions already built in, see the \verb|Bio.SeqUtils| module.
+While you could use the above snippet of code to calculate a GC\%, note that  the \verb|Bio.SeqUtils| module has several GC functions already built.  For example:
+
+\begin{verbatim}
+>>> from Bio.Seq import Seq
+>>> from Bio.Alphabet import IUPAC
+>>> from Bio.SeqUtils import GC
+>>> my_seq = Seq('GATCGATGGGCCTATATAGGATCGAAAATCGC', IUPAC.unambiguous_dna)
+>>> GC(my_seq)
+46.875
+\end{verbatim}
+
+\noindent Note that using the \verb|Bio.SeqUtils.GC()| function should automatically cope with mixed case sequences and the ambiguous nucleotide S which means G or C.
 
 \section{Slicing a sequence}
 
