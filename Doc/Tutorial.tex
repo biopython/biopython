@@ -467,7 +467,11 @@ Seq('CGCTAAAAGCTAGGATATATCCGGGTAGCTAG', IUPACUnambiguousDNA())
 \section{Turning Seq objects into strings}
 
 If you are really do just need a plain string, for example to print out, write to a file, or insert into a database, then this is very easy to get:
-
+\begin{verbatim}
+>>> str(my_seq)
+'GATCGATGGGCCTATATAGGATCGAAAATCGC'
+\end{verbatim}
+\noindent or:
 \begin{verbatim}
 >>> my_seq.tostring()
 'GATCGATGGGCCTATATAGGATCGAAAATCGC'
@@ -567,42 +571,129 @@ MutableSeq('GACGTTGGGCCTATATAGGATCGAAAATCGC', IUPACUnambiguousDNA())
 MutableSeq('CGCTAAAAGCTAGGATATATCCGGGTTGCAG', IUPACUnambiguousDNA())
 \end{verbatim}
 
-\section{Transcribing and Translation}
+\section{Transcription}
+Before talking about transcription, I want to try and clarify the strand issue.
+Consider the following (made up) stretch of double stranded DNA which
+encodes a short peptide:
 
-Now that the nature of the sequence object makes some sense, the next
-thing to look at is what kind of things we can do with a sequence. The
-\verb|Bio| directory contains two useful modules to transcribe and
-translate a sequence object. These tools work based on the alphabet of
-the sequence.
+\begin{tabular}{rcl}
+\\
+   & {\small DNA coding strand (aka Crick strand, strand $+1$)} & \\
+5' & \texttt{ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG} & 3' \\
+   & \texttt{|||||||||||||||||||||||||||||||||||||||} & \\
+3' & \texttt{TACCGGTAACATTACCCGGCGACTTTCCCACGGGCTATC} & 5' \\
+   & {\small DNA template strand (aka Watson strand, strand $-1$)} & \\
+\\
+   & {\LARGE $|$} &\\
+   & Transcription & \\
+   & {\LARGE $\downarrow$} &\\
+\\
+5' & \texttt{AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG} & 3' \\
+   & {\small Single stranded messenger RNA} & \\
+\\
+\end{tabular}
 
-For instance, let's supposed we want to transcribe a DNA sequence:
+The actual biological transcription process works from the template strand, doing a reverse complement (TCAG $\rightarrow$ CUGA) to give the mRNA.  However, in Biopython and bioinformatics in general, we typically work directly with the coding strand because this means we can get the mRNA sequence just by switching T $\rightarrow$ U.
 
+Now lets actually get down to doing a transcription in Biopython.  First, let's create \verb|Seq| objects for the coding and template DNA strands:
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import IUPAC
->>> my_seq = Seq("GATCGATGGGCCTATATAGGATCGAAAATCGC", IUPAC.unambiguous_dna)
+>>> coding_dna = Seq("ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG", IUPAC.unambiguous_dna)
+>>> coding_dna
+Seq('ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG', IUPACUnambiguousDNA())
+>>> template_dna = coding_dna.reverse_complement()
+>>> template_dna
+Seq('CTATCGGGCACCCTTTCAGCGGCCCATTACAATGGCCAT', IUPACUnambiguousDNA())
 \end{verbatim}
+\noindent These should match the figure above - remember by convention nucleotide sequences are normally read from the 5' to 3' direction, while in the figure the template strand is shown reversed.
 
-This contains an unambiguous alphabet, so to transcribe we would do the following:
-
+Now let's transcribe the coding strand into the corresponding mRNA:
 \begin{verbatim}
->>> from Bio import Transcribe
->>> transcriber = Transcribe.unambiguous_transcriber
->>> my_rna_seq = transcriber.transcribe(my_seq)
->>> print my_rna_seq
-Seq('GAUCGAUGGGCCUAUAUAGGAUCGAAAAUCGC', IUPACUnambiguousRNA())
+>>> from Bio.Seq import transcribe
+>>> coding_dna
+Seq('ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG', IUPACUnambiguousDNA())
+>>> messenger_rna = transcribe(coding_dna)
+>>> messenger_rna
+Seq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG', IUPACUnambiguousRNA())
 \end{verbatim}
+\noindent As you can see, all this does is switch T $\rightarrow$ U, and adjust the alphabet.
 
-The alphabet of the new RNA Seq object is created for free, so again, dealing with a \verb|Seq| object is no more difficult then dealing with a simple string.
-
-You can also reverse transcribe RNA sequences:
-
+If you do want to do a true biological transcription starting with the template strand, then this becomes a two-step process:
 \begin{verbatim}
->>> transcriber.back_transcribe(my_rna_seq)
-Seq('GATCGATGGGCCTATATAGGATCGAAAATCGC', IUPACUnambiguousDNA())
+>>> transcribe(template_dna.reverse_complement())
+Seq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG', IUPACUnambiguousRNA())
 \end{verbatim}
 
-To translate our DNA object we have quite a few choices. First, we can use any number of translation tables depending on what we know about our DNA sequence. The translation tables available in biopython were taken from information at \url{ftp://ftp.ncbi.nlm.nih.gov/entrez/misc/data/gc.prt}. So, you have tons of choices to pick from. For this, let's just focus on two choices: the Standard translation table, and the Translation table for Vertebrate Mitochondrial DNA. These tables are labeled with id numbers 1 and 2, respectively. Now that we know what tables we are looking to get, we're all set to perform a basic translation. First, we need to get our translators that use these tables. Since we are still dealing with our unambiguous DNA object, we want to fetch translators that take this into account:
+The \verb|Bio.Seq| module also includes a back-translation function for going from the mRNA to the coding strand of the DNA.  Again, this is a simple U $\rightarrow$ T substitution and associated change of alphabet:
+\begin{verbatim}
+>>> from Bio.Seq import Seq, back_transcribe
+>>> from Bio.Alphabet import IUPAC
+>>> messenger_rna = Seq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG', IUPAC.unambiguous_rna)
+>>> messenger_rna
+Seq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG', IUPACUnambiguousRNA())
+>>> back_transcribe(messenger_rna)
+Seq('ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG', IUPACUnambiguousDNA())
+\end{verbatim}
+
+\section{Translation}
+Sticking with the same example discussed in the transcription section above,
+now let's translate this mRNA into the corresponding protein sequence:
+\begin{verbatim}
+>>> from Bio.Seq import Seq, translate
+>>> from Bio.Alphabet import IUPAC
+>>> messenger_rna = Seq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG', IUPAC.unambiguous_rna)
+>>> messenger_rna
+Seq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG', IUPACUnambiguousRNA())
+>>> translate(messenger_rna)
+Seq('MAIVMGR*KGAR*', HasStopCodon(IUPACProtein(), '*'))
+\end{verbatim}
+
+You can also translate directly from the coding strand DNA sequence:
+\begin{verbatim}
+>>> from Bio.Seq import Seq, translate
+>>> from Bio.Alphabet import IUPAC
+>>> coding_dna = Seq("ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG", IUPAC.unambiguous_dna)
+>>> coding_dna
+Seq('ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG', IUPACUnambiguousDNA())
+>>> translate(coding_dna)
+Seq('MAIVMGR*KGAR*', HasStopCodon(IUPACProtein(), '*'))
+\end{verbatim}
+
+You should notice in the above protein sequences that in addition to the end stop character, there is an internal stop as well.  This was a deliberate choice of example, as it gives an excuse to talk about different translation tables (Genetic Codes).  
+
+The translation tables available in Biopython were taken from information at \url{ftp://ftp.ncbi.nlm.nih.gov/entrez/misc/data/gc.prt}. So, you have tons of choices to pick from. 
+By default, the \verb|Bio.Seq.translate()| function will use the \emph{standard} genetic code (NCBI table 1).
+
+Suppose you we dealing with a mitochondrial sequence?  We need to tell the translation function to use the relevant genetic code instead:
+\begin{verbatim}
+>>> translate(coding_dna, table="Vertebrate Mitochondrial")
+Seq('MAIVMGRWKGAR*', HasStopCodon(IUPACProtein(), '*'))
+\end{verbatim}
+
+You can also specify the table using the NCBI table number which is shorter, and often included in the feature annotation of GenBank files:
+\begin{verbatim}
+>>> translate(coding_dna, table=2)
+Seq('MAIVMGRWKGAR*', HasStopCodon(IUPACProtein(), '*'))
+\end{verbatim}
+
+The \verb|Bio.Seq.translate()| function is intended to be simple and easy to use.  However, is isn't flexible enough to do things like translate up to the first stop codon for example.  For that, see the next section.
+
+\subsection{Transcription and Translation Continued}
+
+In the previous sections we talked about the transcription and translation functions in the \verb|Bio.Seq| module, which are intended to be very simple and easy to use.
+
+There is also an older \verb|Bio.Translate| module which has a few more advanced options, but is more complicated to use.  Additionally there is also an older \verb|Bio.Transcribe| module, but as this now obsolete and likely to be deprecated, we will not discuss it here.
+
+To translate our DNA object we have quite a few choices. First, we can use any number
+of translation tables depending on what we know about our DNA sequence.
+%The translation tables available in biopython were taken from information at
+%\url{ftp://ftp.ncbi.nlm.nih.gov/entrez/misc/data/gc.prt}.
+So, you have tons of choices to pick from. As before, let's just focus on two choices:
+the Standard translation table, and the Translation table for Vertebrate Mitochondrial
+DNA. These tables are labeled with id numbers 1 and 2, respectively.
+
+Now that we know what tables we are looking to get, we're all set to perform a basic translation. First, we need to get to create a translator objects that use these tables. Since we are still dealing with our unambiguous DNA object, we want to fetch translators that take this into account:
 
 \begin{verbatim}
 >>> from Bio import Translate
@@ -610,7 +701,64 @@ To translate our DNA object we have quite a few choices. First, we can use any n
 >>> mito_translator = Translate.unambiguous_dna_by_id[2]
 \end{verbatim}
 
-Once we've got the proper translators, it's time to go ahead and translate a sequence:
+You compare the actual tables visually by printing the translator objects:
+
+\begin{verbatim}
+>>> print standard_translator
+Translator object
+Table 1 Standard, SGC0
+
+  |  T      |  C      |  A      |  G      |
+--+---------+---------+---------+---------+--
+T | TTT F   | TCT S   | TAT Y   | TGT C   | T
+T | TTC F   | TCC S   | TAC Y   | TGC C   | C
+T | TTA L   | TCA S   | TAA Stop| TGA Stop| A
+T | TTG L(s)| TCG S   | TAG Stop| TGG W   | G
+--+---------+---------+---------+---------+--
+C | CTT L   | CCT P   | CAT H   | CGT R   | T
+C | CTC L   | CCC P   | CAC H   | CGC R   | C
+C | CTA L   | CCA P   | CAA Q   | CGA R   | A
+C | CTG L(s)| CCG P   | CAG Q   | CGG R   | G
+--+---------+---------+---------+---------+--
+A | ATT I   | ACT T   | AAT N   | AGT S   | T
+A | ATC I   | ACC T   | AAC N   | AGC S   | C
+A | ATA I   | ACA T   | AAA K   | AGA R   | A
+A | ATG M(s)| ACG T   | AAG K   | AGG R   | G
+--+---------+---------+---------+---------+--
+G | GTT V   | GCT A   | GAT D   | GGT G   | T
+G | GTC V   | GCC A   | GAC D   | GGC G   | C
+G | GTA V   | GCA A   | GAA E   | GGA G   | A
+G | GTG V   | GCG A   | GAG E   | GGG G   | G
+--+---------+---------+---------+---------+--
+>>> print mito_translator
+Translator object
+Table 2 Vertebrate Mitochondrial, SGC1
+
+  |  T      |  C      |  A      |  G      |
+--+---------+---------+---------+---------+--
+T | TTT F   | TCT S   | TAT Y   | TGT C   | T
+T | TTC F   | TCC S   | TAC Y   | TGC C   | C
+T | TTA L   | TCA S   | TAA Stop| TGA W   | A
+T | TTG L   | TCG S   | TAG Stop| TGG W   | G
+--+---------+---------+---------+---------+--
+C | CTT L   | CCT P   | CAT H   | CGT R   | T
+C | CTC L   | CCC P   | CAC H   | CGC R   | C
+C | CTA L   | CCA P   | CAA Q   | CGA R   | A
+C | CTG L   | CCG P   | CAG Q   | CGG R   | G
+--+---------+---------+---------+---------+--
+A | ATT I(s)| ACT T   | AAT N   | AGT S   | T
+A | ATC I(s)| ACC T   | AAC N   | AGC S   | C
+A | ATA M(s)| ACA T   | AAA K   | AGA Stop| A
+A | ATG M(s)| ACG T   | AAG K   | AGG Stop| G
+--+---------+---------+---------+---------+--
+G | GTT V   | GCT A   | GAT D   | GGT G   | T
+G | GTC V   | GCC A   | GAC D   | GGC G   | C
+G | GTA V   | GCA A   | GAA E   | GGA G   | A
+G | GTG V(s)| GCG A   | GAG E   | GGG G   | G
+--+---------+---------+---------+---------+--
+\end{verbatim}
+
+Once we've got the relevant translator object, it's time to go ahead and translate a sequence:
 
 \begin{verbatim}
 >>> my_seq = Seq("GCCATTGTAATGGGCCGCTGAAAGGGTGCCCGA", IUPAC.unambiguous_dna)
@@ -635,9 +783,11 @@ Similar to the transcriber, it is also possible to reverse translate a protein i
 Seq('GCTGTTATGGGTCGTTGGAAGGGTGGTCGTGCTGCTGGT', IUPACUnambiguousDNA())
 \end{verbatim}
 
+Note that  this only gives you one possible back-translation, and doesn't attempt to show any freedom with ambiguous nucleotides.
+
 \section{Working with directly strings}
 
-To close this chapter, for those you who \emph{really} don't want to use the sequence objects, there are a few module level functions in \verb|Bio.Seq| which will accept plain python strings (or \verb|Seq| objects or \verb|MutableSeq| objects):
+To close this chapter, for those you who \emph{really} don't want to use the sequence objects, the module level functions in \verb|Bio.Seq| which will also accept plain python strings (in addition to \verb|Seq| objects or \verb|MutableSeq| objects):
 
 \begin{verbatim}
 >>> from Bio.Seq import reverse_complement, transcribe, back_transcribe, translate
@@ -652,7 +802,7 @@ To close this chapter, for those you who \emph{really} don't want to use the seq
 'AVMGRWKGGRAAG*'
 \end{verbatim}
 
-\noindent You are however, encouraged to work with the \verb|Seq| object by default.
+\noindent You are however, encouraged to work with \verb|Seq| objects by default.
 
 \chapter{Sequence Input/Output}
 \label{chapter:Bio.SeqIO}
