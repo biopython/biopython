@@ -605,7 +605,7 @@ class _RecordConsumer(AbstractConsumer):
                 self.data.accessions.append(ac.strip())
     
     def date(self, line):
-        uprline = string.upper(line)
+        uprline = line.upper()
         cols = line.rstrip().split()
                 
         if uprline.find('CREATED') >= 0 \
@@ -1075,7 +1075,7 @@ class _SequenceConsumer(AbstractConsumer):
                     
     def date(self, line):
         date_str = line.split()[0]
-        uprline = string.upper(line)
+        uprline = line.upper()
         if uprline.find('CREATED') >= 0 :
             #Try and agree with SeqRecord convention from the GenBank parser,
             #which stores the submitted date as 'date'
