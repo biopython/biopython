@@ -6,11 +6,12 @@
 """ Handle the SCOP CLAssification file, which describes SCOP domains.
 
 The file format is described in the scop
-"release notes.":http://scop.berkeley.edu/release-notes-1.55.html 
+"release notes.":http://scop.mrc-lmb.cam.ac.uk/scop/release-notes.html
 The latest CLA file can be found
 "elsewhere at SCOP.":http://scop.mrc-lmb.cam.ac.uk/scop/parse/
   
-"Release 1.55":http://scop.berkeley.edu/parse/dir.cla.scop.txt_1.55 (July 2001)
+"Release 1.73": http://scop.mrc-lmb.cam.ac.uk/scop/parse/dir.cla.scop.txt_1.73
+(July 2008)
 
 """
 
@@ -138,6 +139,8 @@ def parse(handle):
         handle -- file-like object.
     """
     for line in handle:
+        if line.startswith('#'):
+            continue
         yield Record(line)
 
 
