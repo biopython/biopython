@@ -26,7 +26,6 @@ is_blank_line          Test whether a line is blank.
 """
 
 import sys
-import string
 import traceback
 from types import *
 
@@ -109,7 +108,7 @@ class TaggingConsumer(AbstractConsumer):
             # Write the tag and line.
             self._handle.write("%-*s: %s\n" % (
                 self._colwidth, name[:self._colwidth],
-                string.rstrip(data[:self._maxwidth-self._colwidth-2])))
+                data[:self._maxwidth-self._colwidth-2].rstrip()))
 
     def __getattr__(self, attr):
         if attr[:6] == 'start_' or attr[:4] == 'end_':
@@ -366,10 +365,10 @@ def _fails_conditions(line, start=None, end=None, contains=None, blank=None,
         if line[:len(start)] != start:
             return "Line does not start with '%s':\n%s" % (start, line)
     if end is not None:
-        if string.rstrip(line)[-len(end):] != end:
+        if line.rstrip()[-len(end):] != end:
             return "Line does not end with '%s':\n%s" % (end, line)
     if contains is not None:
-        if string.find(line, contains) == -1:
+        if line.find(contains) == -1:
             return "Line does not contain '%s':\n%s" % (contains, line)
     if blank is not None:
         if blank:
@@ -396,7 +395,7 @@ def is_blank_line(line, allow_spaces=0):
     if not line:
         return 1
     if allow_spaces:
-        return string.rstrip(line) == ''
+        return line.rstrip() == ''
     return line[0] == '\n' or line[0] == '\r'
 
 def safe_readline(handle):
