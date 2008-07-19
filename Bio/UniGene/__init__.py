@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 #
-# $Id: __init__.py,v 1.10 2007-04-18 09:19:03 peterc Exp $
+# $Id: __init__.py,v 1.11 2008-07-19 12:43:40 peterc Exp $
 # Sean Davis <sdavis2 at mail dot nih dot gov>
 # National Cancer Institute
 # National Institutes of Health
@@ -359,7 +359,7 @@ class Iterator:
 		if not lines:
 			return None
 		lines.append('//')
-		data = string.join(lines,'')
+		data = ''.join(lines)
 		if self._parser is not None:
 			return self._parser.parse(File.StringHandle(data))
 		return data
