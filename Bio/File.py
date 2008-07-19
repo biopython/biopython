@@ -15,7 +15,6 @@ SGMLStripper   Object that strips SGML.
 
 """
 import os
-import string
 import StringIO
 import sgmllib
 
@@ -47,7 +46,7 @@ class UndoHandle:
 
     def read(self, size=-1):
         if size == -1:
-            saved = string.join(self._saved, "")
+            saved = "".join(self._saved)
             self._saved[:] = []
         else:
             saved = ''
