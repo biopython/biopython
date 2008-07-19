@@ -527,8 +527,8 @@ class AmbiguousCodonTable(CodonTable):
                             # These two are WRONG!  I need to get the
                             # list of ambiguous codons which code for
                             # the stop codons  XXX
-                            list_ambiguous_codons(codon_table.start_codons),
-                            list_ambiguous_codons(codon_table.stop_codons)
+                            list_ambiguous_codons(codon_table.start_codons, ambiguous_nucleotide_values),
+                            list_ambiguous_codons(codon_table.stop_codons, ambiguous_nucleotide_values)
                             )
         self._codon_table = codon_table
 
@@ -560,9 +560,59 @@ def list_possible_proteins(codon, forward_table, ambiguous_nucleotide_values):
             raise KeyError, codon
         return possible.keys()
 
-def list_ambiguous_codons(codons):
-    # XXX not implemented!
-    return codons
+def list_ambiguous_codons(codons, ambiguous_nucleotide_values):
+    """Extends a codon list to include all possible ambigous codons.
+
+    e.g. ['TAG', 'TAA'] -> ['TAG', 'TAA', 'TAR']
+         ['UAG', 'UGA'] -> ['UAG', 'UGA', 'URA']
+
+    Note that ['TAG', 'TGA'] -> ['TAG', 'TGA'], this does not add 'TRR'.
+    Thus only two more codons are added in the following:
+
+    e.g. ['TGA', 'TAA', 'TAG'] -> ['TGA', 'TAA', 'TAG', 'TRA', 'TAR']
+
+    Returns a new (longer) list of codon strings.
+    """
+
+    #Note ambiguous_nucleotide_values['R'] = 'AG' (etc)
+    #This will generate things like 'TRR' from ['TAG', 'TGA'], which
+    #we don't want to include:
+    from sets import Set
+    c1_list = [letter for (letter, meanings) \
+               in ambiguous_nucleotide_values.iteritems() \
+               if Set([codon[0] for codon in codons]).issuperset(Set(meanings))]
+    c2_list = [letter for (letter, meanings) \
+               in ambiguous_nucleotide_values.iteritems() \
+               if Set([codon[1] for codon in codons]).issuperset(Set(meanings))]
+    c3_list = [letter for (letter, meanings) \
+               in ambiguous_nucleotide_values.iteritems() \
+               if Set([codon[2] for codon in codons]).issuperset(Set(meanings))]
+    set2 = Set([codon[1] for codon in codons])
+    set3 = Set([codon[2] for codon in codons])
+    candidates = Set([c1+c2+c3 for c1 in c1_list for c2 in c2_list for c3 in c3_list])
+    candidates.difference_update(codons)
+    answer = codons[:] #copy
+    #print "Have %i new candidates" % len(candidates)
+    for ambig_codon in candidates :
+        wanted = True
+        #e.g. 'TRR' -> 'TAA', 'TAG', 'TGA', 'TGG'
+        for codon in [c1+c2+c3 \
+                      for c1 in ambiguous_nucleotide_values[ambig_codon[0]] \
+                      for c2 in ambiguous_nucleotide_values[ambig_codon[1]] \
+                      for c3 in ambiguous_nucleotide_values[ambig_codon[2]]]:
+            if codon not in codons :
+                #This ambiguous codon can code for a non-stop, exclude it!
+                wanted=False
+                #print "Rejecting %s" % ambig_codon
+                continue
+        if wanted :
+            answer.append(ambig_codon)
+    return answer
+assert list_ambiguous_codons(['TGA', 'TAA'],IUPACData.ambiguous_dna_values) == ['TGA', 'TAA', 'TRA']
+assert list_ambiguous_codons(['TAG', 'TGA'],IUPACData.ambiguous_dna_values) == ['TAG', 'TGA']
+assert list_ambiguous_codons(['TAG', 'TAA'],IUPACData.ambiguous_dna_values) == ['TAG', 'TAA', 'TAR']
+assert list_ambiguous_codons(['UAG', 'UAA'],IUPACData.ambiguous_rna_values) == ['UAG', 'UAA', 'UAR']
+assert list_ambiguous_codons(['TGA', 'TAA', 'TAG'],IUPACData.ambiguous_dna_values) == ['TGA', 'TAA', 'TAG', 'TAR', 'TRA']
 
 # Forward translation is "onto", that is, any given codon always maps
 # to the same protein, or it doesn't map at all.  Thus, I can build
@@ -721,31 +771,27 @@ for key, val in generic_by_id.items():
                                      _merged_values,
                                      IUPAC.extended_protein,
                                      IUPACData.extended_protein_values)
+del _merged_values
+del key, val
 
 #Basic sanity test,
-for id in ambiguous_generic_by_id.keys() :
-    assert ambiguous_rna_by_id[id].forward_table["GUU"] == "V"
-    assert ambiguous_rna_by_id[id].forward_table["GUN"] == "V"
-    assert ambiguous_rna_by_id[id].forward_table["UUN"] == "X" #F or L
-
-    assert ambiguous_dna_by_id[id].forward_table["GTT"] == "V"
-    assert ambiguous_dna_by_id[id].forward_table["TTN"] == "X" #F or L
-    assert ambiguous_dna_by_id[id].forward_table["GTN"] == "V"
-
-    assert ambiguous_generic_by_id[id].forward_table.get("TTN") == "X"
-    assert ambiguous_generic_by_id[id].forward_table["ACN"] == "T"
-    assert ambiguous_generic_by_id[id].forward_table["GUU"] == "V"
-    assert ambiguous_generic_by_id[id].forward_table["GUN"] == "V"
-    assert ambiguous_generic_by_id[id].forward_table["UUN"] == "X" #F or L
-    assert ambiguous_generic_by_id[id].forward_table["GTT"] == "V"
-    assert ambiguous_generic_by_id[id].forward_table["TTN"] == "X" #F or L
-    assert ambiguous_generic_by_id[id].forward_table["GTN"] == "V"
-    #And finally something evil, an RNA-DNA mixture:
-    assert ambiguous_generic_by_id[id].forward_table["UTN"] == "X" #F or L
-    assert ambiguous_generic_by_id[id].forward_table["UTU"] == "F"
-
+for n in ambiguous_generic_by_id.keys() :
+    assert ambiguous_rna_by_id[n].forward_table["GUU"] == "V"
+    assert ambiguous_rna_by_id[n].forward_table["GUN"] == "V"
+    assert ambiguous_rna_by_id[n].forward_table["UUN"] == "X" #F or L
+    #R = A or G, so URR = UAA or UGA / TRA = TAA or TGA = stop codons
+    if "UAA" in unambiguous_rna_by_id[n].stop_codons \
+    and "UGA" in unambiguous_rna_by_id[n].stop_codons :
+        try :
+            print ambiguous_dna_by_id[n].forward_table["TRA"]
+            assert False, "Should be a stop only"
+        except KeyError :
+            pass
+        assert "URA" in ambiguous_generic_by_id[n].stop_codons
+        assert "URA" in ambiguous_rna_by_id[n].stop_codons
+        assert "TRA" in ambiguous_generic_by_id[n].stop_codons
+        assert "TRA" in ambiguous_dna_by_id[n].stop_codons
+del n
 assert ambiguous_generic_by_id[1].stop_codons == ambiguous_generic_by_name["Standard"].stop_codons
 assert ambiguous_generic_by_id[4].stop_codons == ambiguous_generic_by_name["SGC3"].stop_codons
 assert ambiguous_generic_by_id[15].stop_codons == ambiguous_generic_by_name['Blepharisma Macronuclear'].stop_codons
-del _merged_values
-del key, val
