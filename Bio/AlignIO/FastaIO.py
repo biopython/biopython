@@ -133,7 +133,7 @@ class FastaM10Iterator(AlignmentIterator) :
         """
         if not (line.startswith(">") and line.strip().endswith("..")):
             raise ValueError("Expected line starting '>' and ending '..'")
-        assert self._query_descr.startswith(line[1:].split()[0])
+        assert self._query_descr.startswith(line[1:].split(None,1)[0])
         
         #Handle the following "query alignment" tagged data
         line = handle.readline()
@@ -160,7 +160,7 @@ class FastaM10Iterator(AlignmentIterator) :
         #Match identifier
         if not (line.startswith(">") and line.strip().endswith("..")):
             raise ValueError("Expected line starting '>' and ending '..', got '%s'" % repr(line))
-        assert match_descr.startswith(line[1:].split()[0])
+        assert match_descr.startswith(line[1:].split(None,1)[0])
         
         #Tagged data,
         line = handle.readline()
@@ -238,7 +238,7 @@ class FastaM10Iterator(AlignmentIterator) :
         record = alignment.get_all_seqs()[-1]
         assert record.id == self._query_descr or record.description == self._query_descr
         assert record.seq.tostring() == query_align_seq
-        record.id = self._query_descr.split()[0].strip(",")
+        record.id = self._query_descr.split(None,1)[0].strip(",")
         record.name = "query"
         record.annotations["original_length"] = int(query_annotation["sq_len"])
 
@@ -258,7 +258,7 @@ class FastaM10Iterator(AlignmentIterator) :
         record = alignment.get_all_seqs()[-1]
         assert record.id == match_descr or record.description == match_descr
         assert record.seq.tostring() == match_align_seq
-        record.id = match_descr.split()[0].strip(",")
+        record.id = match_descr.split(None,1)[0].strip(",")
         record.name = "match"
         record.annotations["original_length"] = int(match_annotation["sq_len"])
 
@@ -320,7 +320,8 @@ class FastaM10Iterator(AlignmentIterator) :
         gi|152973462|ref|YP_001338513.1| hypothetical prot ( 101)   58 23.3    0.22
         gi|152973501|ref|YP_001338552.1| hypothetical prot ( 245)   55 22.5    0.93
         """
-        #Sometime have queries with no matches, in which case we continue to the next query block:
+        #Sometimes have queries with no matches, in which case we continue to the
+        #next query block:
         """
           2>>>gi|152973838|ref|YP_001338875.1| hypothetical protein KPN_pKPN7p10263 [Klebsiella pneumoniae subsp. pneumonia 76 aa - 76 aa
          vs  NC_002127.faa library
@@ -337,12 +338,12 @@ class FastaM10Iterator(AlignmentIterator) :
         self._query_header_annotation = {}
         self._query_descr = ""
 
-        assert ">>>" in line and not line.startswith(">>>")
+        assert ">>>" in line and not line[0:3] == ">>>"
         #There is nothing useful in this line, the query description is truncated.
         
         line = self.handle.readline()
         #We ignore the free form text...
-        while not line.startswith(">>>") :
+        while not line[0:3] == ">>>" :
             #print "Ignoring %s" % line.strip()
             line = self.handle.readline()
             if not line :
@@ -372,14 +373,14 @@ class FastaM10Iterator(AlignmentIterator) :
         ; mp_Parameters: BL50 matrix (15:-5) ktup: 2  join: 36, opt: 24, open/ext: -10/-2, width:  16
         """
 
-        assert line.startswith(">>>"), line
+        assert line[0:3] == ">>>", line
         self._query_descr = line[3:].strip()
 
         #Handle the following "program" tagged data,
         line = self.handle.readline()
         line = self._parse_tag_section(line, self._query_header_annotation)
-        assert not line.startswith("; "), line
-        assert line.startswith(">>"), line
+        assert not line[0:2] == "; ", line
+        assert line[0:2] == ">>", line
         return line
 
 
@@ -415,13 +416,14 @@ class FastaM10Iterator(AlignmentIterator) :
         dictionary - where to record the tagged values
 
         Returns a string, the first line following the tagged section."""
-        if not line.startswith("; ") :
+        if not line[0:2] == "; " :
             raise ValueError("Expected line starting '; '")
-        while line.startswith("; ") :
+        while line[0:2] == "; " :
             tag, value = line[2:].strip().split(": ",1)
-            #fasta34 and fasta35 will reuse the pg_name and pg_ver tags
-            #for the program executable and name, and the program version
-            #and the algorithm version, respectively.  This may be a bug.
+            #fasta34 and early versions of fasta35 will reuse the pg_name and
+            #pg_ver tags for the program executable and name, and the program
+            #version and the algorithm version, respectively.  This is fixed
+            #in FASTA 35.4.1, but we can't assume the tags are unique:
             #if tag in dictionary :
             #    raise ValueError("Repeated tag '%s' in section" % tag)
             dictionary[tag] = value
