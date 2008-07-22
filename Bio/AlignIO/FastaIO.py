@@ -86,8 +86,9 @@ class FastaM10Iterator(AlignmentIterator) :
             #Reached the end of the alignments, no need to read the footer...
             return None
 
-            
-        assert line.startswith(">>") and not line.startswith(">>>"), line
+
+        #Should start >>... and not >>>...
+        assert line[0:2] == ">>" and not line[2] == ">", line
 
         query_seq_parts, match_seq_parts = [], []
         query_annotation, match_annotation = {}, {}
@@ -110,14 +111,14 @@ class FastaM10Iterator(AlignmentIterator) :
         ; sw_sim: 0.651
         ; sw_overlap: 43
         """
-        if not line.startswith(">>") and not line.startswith(">>>") :
+        if (not line[0:2] == ">>") or line[0:3] == ">>>" :
             raise ValueError("Expected target line starting '>>'")
         match_descr = line[2:].strip()
         #Handle the following "alignment hit" tagged data, e.g.
         line = handle.readline()
         line = self._parse_tag_section(line, alignment_annotation)
-        assert not line.startswith("; ")
-
+        assert not line[0:2] == "; "
+        
         #Then we have the alignment numbers and sequence for the query
         """
         >gi|10955265| ..
@@ -131,17 +132,17 @@ class FastaM10Iterator(AlignmentIterator) :
         QLSC-SLIMKKIDVEMEDYSTYCFSALRAIEGFIYQILNDVCNPSSSKNL
         GEYFTENKPKYIIREIHQET
         """
-        if not (line.startswith(">") and line.strip().endswith("..")):
+        if not (line[0] == ">" and line.strip().endswith("..")):
             raise ValueError("Expected line starting '>' and ending '..'")
         assert self._query_descr.startswith(line[1:].split(None,1)[0])
         
         #Handle the following "query alignment" tagged data
         line = handle.readline()
         line = self._parse_tag_section(line, query_annotation)
-        assert not line.startswith("; ")
+        assert not line[0:2] == "; "
 
         #Now should have the aligned query sequence (with leading flanking region)
-        while not line.startswith(">") :
+        while not line[0] == ">" :
             query_seq_parts.append(line.strip())
             line = handle.readline()
         
@@ -158,14 +159,14 @@ class FastaM10Iterator(AlignmentIterator) :
         QDFAFTRKMRREARQVEQSW
         """
         #Match identifier
-        if not (line.startswith(">") and line.strip().endswith("..")):
+        if not (line[0] == ">" and line.strip().endswith("..")):
             raise ValueError("Expected line starting '>' and ending '..', got '%s'" % repr(line))
         assert match_descr.startswith(line[1:].split(None,1)[0])
         
         #Tagged data,
         line = handle.readline()
         line = self._parse_tag_section(line, match_annotation)
-        assert not line.startswith("; ")
+        assert not line[0:2] == "; "
 
         #Now should have the aligned query sequence with flanking region...
         #but before that, since FASTA 35.4.1 there can be an consensus here,
@@ -174,23 +175,23 @@ class FastaM10Iterator(AlignmentIterator) :
         .::. : :. ---.  :: :. . :  ..-:::-:  :.:  ..:...: 
         etc
         """
-        while not (line.startswith("; ") or line.startswith(">") or ">>>" in line):
+        while not (line[0:2] == "; " or line[0] == ">" or ">>>" in line):
             match_seq_parts.append(line.strip())
             line = handle.readline()
-        if line.startswith("; ") :
+        if line[0:2] == "; " :
             assert line.strip() == "; al_cons:"
             align_consensus_parts = []
             line = handle.readline()
-            while not (line.startswith("; ") or line.startswith(">") or ">>>" in line):
+            while not (line[0:2] == "; " or line[0] == ">" or ">>>" in line):
                 align_consensus_parts.append(line.strip())
                 line = handle.readline()
             #If we do anything with this in future, must remove any flanking region.
             align_consensus = "".join(align_consensus_parts)
             del align_consensus_parts
-            assert not line.startswith("; ")
+            assert not line[0:2] == "; "
         else :
             align_consensus = None
-        assert (line.startswith(">") or ">>>" in line)
+        assert (line[0] == ">" or ">>>" in line)
         self._header = line
 
         #We built a list of strings and then joined them because
@@ -237,7 +238,7 @@ class FastaM10Iterator(AlignmentIterator) :
         alignment.add_sequence(self._query_descr, query_align_seq)
         record = alignment.get_all_seqs()[-1]
         assert record.id == self._query_descr or record.description == self._query_descr
-        assert record.seq.tostring() == query_align_seq
+        #assert record.seq.tostring() == query_align_seq
         record.id = self._query_descr.split(None,1)[0].strip(",")
         record.name = "query"
         record.annotations["original_length"] = int(query_annotation["sq_len"])
@@ -257,12 +258,12 @@ class FastaM10Iterator(AlignmentIterator) :
         alignment.add_sequence(match_descr, match_align_seq)
         record = alignment.get_all_seqs()[-1]
         assert record.id == match_descr or record.description == match_descr
-        assert record.seq.tostring() == match_align_seq
+        #assert record.seq.tostring() == match_align_seq
         record.id = match_descr.split(None,1)[0].strip(",")
         record.name = "match"
         record.annotations["original_length"] = int(match_annotation["sq_len"])
 
-        #This is still very crude way:
+        #This is still a very crude way of dealing with the alphabet:
         if alphabet == single_letter_alphabet and "sq_type" in match_annotation :
             if match_annotation["sq_type"] == "D" :
                 record.seq.alphabet = generic_dna
@@ -400,10 +401,11 @@ class FastaM10Iterator(AlignmentIterator) :
         if int(annotation['al_start']) > int(annotation['al_stop']) :
             raise ValueError("Unsupported inverted sequence found (from the -i option?)")
         align_stripped = alignment_seq_with_flanking.strip("-")
+        display_start = int(annotation['al_display_start'])
         start = int(annotation['al_start']) \
-              - int(annotation['al_display_start'])
+              - display_start
         end   = int(annotation['al_stop']) \
-              - int(annotation['al_display_start']) \
+              - display_start \
               + align_stripped.count("-") + 1
         return align_stripped[start:end]
 
