@@ -2076,9 +2076,9 @@ Dealing with proprietary or unpublished sequence data can be another reason to r
 
 Biopython provides lots of nice code to enable you to call local BLAST executables from your scripts, and have full access to the many command line options that these executables provide. You can obtain local BLAST precompiled for a number of platforms at \url{ftp://ftp.ncbi.nlm.nih.gov/blast/executables/}, or can compile it yourself in the NCBI toolbox (\url{ftp://ftp.ncbi.nlm.nih.gov/toolbox/}).
 
-The code for dealing with local BLAST is found in \verb|Bio.Blast.NCBIStandalone|, specifically in the functions \verb|blastall|, \verb|blastpgp| and \verb|rpsblast|, which correspond with the BLAST executables that their names imply.
+The code for calling local ``standalone'' BLAST is found in \verb|Bio.Blast.NCBIStandalone|, specifically the functions \verb|blastall|, \verb|blastpgp| and \verb|rpsblast|, which correspond with the BLAST executables that their names imply.
 
-Let's use these functions to run a \verb|blastall| against a local database and return the results. First, we want to set up the paths to everything that we'll need to do the BLAST. What we need to know is the path to the database (which should have been prepared using \verb|formatdb|, see \url{ftp://ftp.ncbi.nlm.nih.gov/blast/documents/formatdb.html}) to search against, the path to the file we want to search, and the path to the \verb|blastall| executable.
+Let's use these functions to run \verb|blastall| against a local database and return the results. First, we want to set up the paths to everything that we'll need to do the BLAST. What we need to know is the path to the database (which should have been prepared using \verb|formatdb|, see \url{ftp://ftp.ncbi.nlm.nih.gov/blast/documents/formatdb.html}) to search against, the path to the file we want to search, and the path to the \verb|blastall| executable.
 
 On Linux or Mac OS X your paths might look like this:
 
@@ -2126,7 +2126,7 @@ Note that the Biopython interfaces to local blast programs returns two values. T
 
 The error info can be hard to deal with, because if you try to do a \verb|error_handle.read()| and there was no error info returned, then the \verb|read()| call will block and not return, locking your script. In my opinion, the best way to deal with the error is only to print it out if you are not getting \verb|result_handle| results to be parsed, but otherwise to leave it alone.
 
-This command will generate BLAST output in XML format, as that is the format expected by the XML parser, described in Section~\ref{sec:parsing-blast}. For plain text output, use the \verb|align_view='0'| keyword. To parse text output instead of XML output, see the Section~\ref{sec:parsing-blast-deprecated} below. However, parsing text output is not recommended, as the BLAST plain text output changes frequently, breaking our parsers.
+This command will generate BLAST output in XML format, as that is the format expected by the XML parser, described in Section~\ref{sec:parsing-blast}. For plain text output, use the \verb|align_view="0"| keyword. To parse text output instead of XML output, see Section~\ref{sec:parsing-blast-deprecated} below. However, parsing text output is not recommended, as the BLAST plain text output changes frequently, breaking our parsers.
 
 If you are interested in saving your results to a file before parsing them,
 see Section~\ref{sec:saving-blast-output}. To find out how to parse the BLAST
@@ -2135,40 +2135,8 @@ results, go to Section~\ref{sec:parsing-blast}
 \section{Running BLAST over the Internet}
 \label{sec:running-www-blast}
 
-The first step in automating BLASTing is to make everything accessible
-from Python scripts. So, Biopython contains code that allows you to
-run the WWW version of BLAST (\url{http://blast.ncbi.nlm.nih.gov/Blast.cgi})
-directly from your Python scripts. This is very nice, especially since
-otherwise BLAST can be a real pain to deal with from scripts, especially
-with the whole BLAST queue thing and the separate results page.
-
-The code to deal with the WWW version of BLAST is found in the
-\verb|Bio.Blast.NCBIWWW| module, and the \verb|qblast| function. Let's
-say we want to BLAST info we have in a FASTA formatted file against
-the database. First, we need to get the info in the FASTA file.
-
-The easiest way to do this is to use the \verb|Bio.SeqIO| module (see
-Chapter~\ref{chapter:Bio.SeqIO}).  In this example we'll use the
-\verb|Bio.SeqIO.read| function to turn a FASTA file containing a single
-entry into a SeqRecord object:
-
-\begin{verbatim}
->>> from Bio import SeqIO
->>> record = SeqIO.read(open("m_cold.fasta"), format="fasta")
-\end{verbatim}
-
-Now we can take the sequence as a plain string from the SeqRecord
-and run BLAST on it. The code to do the simplest possible BLAST
-(a simple blastn of the FASTA file against all of the non-redundant
-databases) is:
-
-\begin{verbatim}
->>> from Bio.Blast import NCBIWWW
->>> result_handle = NCBIWWW.qblast("blastn", "nr", record.seq.tostring())
-\end{verbatim}
-
-The first three arguments to our \verb|NCBIWWW.qblast| function are non-optional:
-
+We use the function \verb|qblast()| in the \verb|Bio.Blast.NCBIWWW| module
+call the online version of BLAST.  This has three non-optional arguments:
 \begin{itemize}
 \item The first argument is the blast program to use for the search, as a
 lower case string. The options and descriptions of the programs are
@@ -2179,7 +2147,7 @@ and tblastx.
 the options for this are available on the NCBI web pages at
 \url{http://www.ncbi.nlm.nih.gov/BLAST/blast_databases.html}.
 \item The third argument is a string containing your query sequence.  This
-can either be the sequence itself (as above), the sequence in fasta format,
+can either be the sequence itself, the sequence in fasta format,
 or an identifier like a GI number.
 \end{itemize}
 
@@ -2204,16 +2172,50 @@ documentation, or that built into Biopython:
 >>> help(NCBIWWW.qblast)
 \end{verbatim}
 
-After you have set the search options, you are all ready to BLAST.
-Biopython takes care of worrying about when the results are available,
-and will pause until it can get the results and return them.
+For example, if you have a nucleotide sequence you want to search against
+the non-redundant database using BLASTN, and you know the GI number of your
+query sequence, you can use:
+
+\begin{verbatim}
+>>> from Bio.Blast import NCBIWWW
+>>> result_handle = NCBIWWW.qblast("blastn", "nr", "8332116")
+\end{verbatim}
+
+Alternatively, if we have our query sequence already in a FASTA formatted
+file, we just need to open the file and read in this record as a string,
+and use that as the query argument:
+
+\begin{verbatim}
+>>> from Bio.Blast import NCBIWWW
+>>> fasta_string = open("m_cold.fasta").read()
+>>> result_handle = NCBIWWW.qblast("blastn", "nr", fasta_string)
+\end{verbatim}
+
+We could also have read in the FASTA file as a \verb|SeqRecord| and then
+supplied just the sequence itself:
+
+\begin{verbatim}
+>>> from Bio.Blast import NCBIWWW
+>>> from Bio import SeqIO
+>>> record = SeqIO.read(open("m_cold.fasta"), format="fasta")
+>>> result_handle = NCBIWWW.qblast("blastn", "nr", record.seq)
+\end{verbatim}
+
+This approach makes more sense if you have your sequence(s) in a
+non-FASTA file format which could extract using \verb|Bio.SeqIO|.
+
+Whatever arguments you give the \verb|qblast()| function, you should
+get back your results in a handle object (by default in XML format).
+The next step would be to parse the XML output into python objects
+representing the search results (Section~\ref{sec:parsing-blast}),
+but you might want to save a local copy of the output file first.
 
 \section{Saving BLAST output}
 \label{sec:saving-blast-output}
 
 Before parsing the results, it is often useful to save them into a
 file so that you can use them later without having to go back and
-re-blast everything. I find this especially useful when debugging my
+re-blasting everything. I find this especially useful when debugging my
 code that extracts info from the BLAST files, but it could also be
 useful just for making backups of things you've done.
 
@@ -2256,8 +2258,8 @@ feed directly into the BLAST parser:
 \end{verbatim}
 \end{itemize}
 
-Now that we've got the BLAST results, we are ready to do
-something with them, so this leads us right into the parsing section.
+Now that we've got the BLAST results back into a handle again, we are ready
+to do something with them, so this leads us right into the parsing section.
 
 \section{Parsing BLAST output}
 \label{sec:parsing-blast}
@@ -2305,13 +2307,11 @@ of input the BLAST parser (and most other Biopython parsers) take.
 
 If you followed the code above for interacting with BLAST through a
 script, then you already have \verb|result_handle|, the handle to the
-BLAST results.  For example:
+BLAST results.  For example, using a GI number to do an online search:
 
 \begin{verbatim}
->>> from Bio import SeqIO
->>> record = SeqIO.read(open("m_cold.fasta"), format="fasta")
 >>> from Bio.Blast import NCBIWWW
->>> result_handle = NCBIWWW.qblast("blastn", "nr", record.seq.tostring())
+>>> result_handle = NCBIWWW.qblast("blastn", "nr", "8332116")
 \end{verbatim}
 
 If instead you ran BLAST some other way, and have the
@@ -2340,10 +2340,10 @@ BLAST parser will return one BLAST record.
 \item The BLAST output may therefore be huge.
 \end{itemize}
 
-To be able to handle these situations, \verb|NCBIXML.parse| returns an
-iterator (just like \verb|Bio.SeqIO.parse|). In plain English, an iterator
-allows you to step through the BLAST output, retrieving BLAST records one
-by one for each BLAST search:
+To be able to handle these situations, \verb|NCBIXML.parse()| returns an
+iterator (like \verb|Bio.SeqIO.parse()|, see Chapter~\ref{chapter:Bio.SeqIO}).
+In plain English, an iterator allows you to step through the BLAST output,
+retrieving BLAST records one by one for each BLAST search:
 
 \begin{verbatim}
 >>> blast_record = blast_records.next()
@@ -2373,7 +2373,7 @@ you can convert the iterator into a list:
 >>> blast_records = list(blast_records)
 \end{verbatim}
 Now you can access each BLAST record in the list with an index as usual.
-If your BLAST file is huge though, you may run into problems trying to
+If your BLAST file is huge though, you may run into memory problems trying to
 save them all in a list.
 
 Usually, you'll be running one BLAST search at a time. Then, all you need
@@ -2474,9 +2474,14 @@ parsers in working order. Basically, any small change to the BLAST output in
 newly released BLAST versions tends to cause the plain text and HTML parsers
 to break. We therefore recommend parsing BLAST output in XML format, as
 described in section~\ref{sec:parsing-blast}.
-Whereas the plain text and HTML parsers are still available in
-Biopython, use them at your own risk. They may or may not work, depending on
-which BLAST versions you're using.
+
+The HTML parser in \verb|Bio.Blast.NCBIWWW| has been officially deprecated
+and will issue warnings if you try and use it.  We plan to remove this
+completely in a few releases time.
+
+Our plain text BLAST parser works a bit better, but use it at your own risk.
+It may or may not work, depending on which BLAST versions or programs you're
+using.
 
 \subsection{Parsing plain-text BLAST output}
 
@@ -2628,7 +2633,11 @@ Hopefully the \verb|BlastErrorParser| will make it much easier to debug and deal
 
 \section{Dealing with PSIBlast}
 
-We should write some stuff to make it easier to deal directly with PSIBlast from scripts (i.~e.~output the align file in the proper format from an alignment). I need to look at PSIBlast more and come up with some good ways of going this...
+Note that the \verb|Bio.Blast.NCBIXML| parser can read the XML output from
+current versions of PSI-BLAST, but information like which sequences in each
+iteration is new or reused isn't present in the XML file.
+If you care about this information you may have more joy with the plain text
+output at the \verb|PSIBlastParser| in \verb|Bio.Blast.NCBIStandalone|.
 
 \chapter{Accessing NCBI's Entrez databases}
 \label{chapter:entrez}
