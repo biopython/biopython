@@ -12,7 +12,7 @@ the contig consensus sequences in an ACE file as SeqRecord objects."""
 
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.Alphabet import generic_nucleotide, Gapped
+from Bio.Alphabet import generic_nucleotide, generic_dna, generic_rna, Gapped
 from Bio.Sequencing import Ace
     
 #This is a generator function!
@@ -26,14 +26,24 @@ def AceIterator(handle) :
     for ace_contig in Ace.parse(handle) :
         #Convert the ACE contig record into a SeqRecord...
         consensus_seq_str = ace_contig.sequence
+        #Assume its DNA unless there is a U in it,
+        if "U" in consensus_seq_str :
+            if "T" in consensus_seq_str :
+                #Very odd! Error?
+                alpha = generic_ncleotide
+            else :
+                alpha = generic_rna
+        else :
+            alpha = generic_dna
+            
         if "*" in consensus_seq_str :
             #For consistency with most other file formats, map
             #any * gaps into 0 gaps.
             assert "-" not in consensus_seq_str
             consensus_seq = Seq(consensus_seq_str.replace("*","-"),
-                                Gapped(generic_nucleotide, gap_char="-"))
+                                Gapped(alpha, gap_char="-"))
         else :
-            consensus_seq = Seq(consensus_seq_str, generic_nucleotide)
+            consensus_seq = Seq(consensus_seq_str, alpha)
 
         #TODO - Consensus base quality (BQ lines).  Note that any gaps
         #(* character) in the consensus does not get a quality entry.
