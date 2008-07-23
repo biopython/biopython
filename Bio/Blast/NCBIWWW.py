@@ -9,14 +9,15 @@
 """
 This module provides code to work with the WWW version of BLAST
 provided by the NCBI.
-http://www.ncbi.nlm.nih.gov/BLAST/
-
-Classes:
-BlastParser   Parses output from WWW blast.
-_Scanner      Scans output from NCBI's BLAST WWW server.
+http://blast.ncbi.nlm.nih.gov/
 
 Functions:
 qblast        Do a BLAST search using the QBLAST API.
+
+Deprecated classes:
+BlastParser   Parses output from WWW blast.
+_Scanner      Scans output from NCBI's BLAST WWW server.
+
 
 """
 import re
@@ -29,11 +30,18 @@ except ImportError:
 from Bio.ParserSupport import *
 
 class BlastParser(AbstractParser):
-    """Parses WWW BLAST data into a Record.Blast object.
+    """Parses WWW BLAST data into a Record.Blast object (DEPRECATED).
 
+	This is a parser for the NCBI's HTML (web page) BLAST output.
     """
     def __init__(self):
-        """__init__(self)"""
+        """Create a BlastParser object (DEPRECATED)."""
+        import warnings 	 
+        warnings.warn("Bio.Blast.NCBIWWW.BlastParser is deprecated." \
+                      + " We recommend you use the XML output with" \
+                      + " the parser in Bio.Blast.NCBIXML instead.",
+                      DeprecationWarning)
+                       
         import NCBIStandalone
         self._scanner = _Scanner()
         self._consumer = SGMLStrippingConsumer(NCBIStandalone._BlastConsumer())
@@ -44,14 +52,15 @@ class BlastParser(AbstractParser):
         return self._consumer.data
     
 class _Scanner:
-    """Scan BLAST output from NCBI's web server at:
+    """Scanner for the HTML BLAST parser (PRIVATE, DEPRECATED).
+    
+    Scan BLAST output from NCBI's web server at:
     http://www.ncbi.nlm.nih.gov/BLAST/
     
     Tested with BLAST v2.0.10
 
     Methods:
     feed     Feed data into the scanner.
-    
     """
     def feed(self, handle, consumer):
         """S.feed(handle, consumer)
@@ -796,7 +805,7 @@ def qblast(program, database, sequence,
     return StringIO.StringIO(results)
 
 def _parse_qblast_ref_page(handle):
-    """Return tuple of RID, RTOE."""
+    """Extract a tuple of RID, RTOE from the 'please wait' page (PRIVATE)."""
     s = handle.read()
     i = s.find("RID =")
     j = s.find("\n", i)
