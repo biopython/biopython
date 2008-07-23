@@ -461,7 +461,12 @@ for (records, descr) in test_records :
         #################
         assert len(new_records) == len(records)
         for record, new_record in zip(records, new_records) :
-            assert record.id == new_record.id
+            if format == "nexus" :
+                #The nexus parser will dis-ambiguate repeated record ids.
+                assert record.id == new_record.id or \
+                       new_record.id.startswith(record.id+".copy")
+            else :
+                assert record.id == new_record.id
             assert record.seq.tostring() == new_record.seq.tostring()
             #Using records_match(record, new_record) is too strict
 

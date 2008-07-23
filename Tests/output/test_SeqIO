@@ -17,6 +17,8 @@ Testing reading clustal format file Clustalw/cw02.aln as an alignment
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Need a DNA, RNA or Protein alphabet
 Testing reading clustal format file Clustalw/opuntia.aln
  ID = 'gi|6273285|gb|AF191659.1|AF191', Name='<unknown name>',
  Seq='TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCG...TACCAGA', length=156
@@ -40,6 +42,8 @@ Testing reading clustal format file Clustalw/opuntia.aln as an alignment
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Need a DNA, RNA or Protein alphabet
 Testing reading clustal format file Clustalw/hedgehog.aln
  ID = 'gi|167877390|gb|EDS40773.1|', Name='<unknown name>',
  Seq='MFNLVSGTGGSSCCHRRNCFANRKKFFTMLLIFLLYMVSQ...-------', length=447
@@ -63,6 +67,8 @@ Testing reading clustal format file Clustalw/hedgehog.aln as an alignment
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Need a DNA, RNA or Protein alphabet
 Testing reading clustal format file Clustalw/odd_consensus.aln
  ID = 'AT3G20900.1-CDS', Name='<unknown name>',
  Seq='----------------------------------------...AGAGTAG', length=687
@@ -82,6 +88,8 @@ Testing reading clustal format file Clustalw/odd_consensus.aln as an alignment
  Failed: Repeated identifier, possibly due to truncation
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Need a DNA, RNA or Protein alphabet
 Testing reading fasta format file Nucleic/lupine.nu
  ID and Name='gi|5049839|gb|AI730987.1|AI730987',
  Seq='GAAAATTCATTTTCTTTGGACTTTCTCTGAAATCCGAGTC...GGTTTTT', length=655
@@ -90,6 +98,8 @@ Testing reading fasta format file Nucleic/lupine.nu
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Need a DNA, RNA or Protein alphabet
 Testing reading fasta format file Nucleic/elderberry.nu
  ID and Name='gi|4218935|gb|AF074388.1|AF074388',
  Seq='ATGAAGTTAAGCACTCTTCTCATCTTATCTTTTCCTTTCC...GTCGTTT', length=2050
@@ -98,6 +108,8 @@ Testing reading fasta format file Nucleic/elderberry.nu
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Need a DNA, RNA or Protein alphabet
 Testing reading fasta format file Nucleic/phlox.nu
  ID and Name='gi|5052071|gb|AF067555.1|AF067555',
  Seq='TCGAAACCTGCCTAGCAGAACGACCCGCGAACTTGTATTC...CACGACC', length=623
@@ -106,6 +118,8 @@ Testing reading fasta format file Nucleic/phlox.nu
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Need a DNA, RNA or Protein alphabet
 Testing reading fasta format file Nucleic/centaurea.nu
  ID and Name='gi|4104054|gb|AH007193.1|SEG_CVIGS',
  Seq='CCTGTCACTTAACTTTTTGTTCATAAGGTATATATGGGGG...GTTAGAG', length=1002
@@ -114,6 +128,8 @@ Testing reading fasta format file Nucleic/centaurea.nu
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Need a DNA, RNA or Protein alphabet
 Testing reading fasta format file Nucleic/wisteria.nu
  ID and Name='gi|5817701|gb|AF142731.1|AF142731',
  Seq='GCTCCATTTTTTACACATTTCTATGAACTAATTGGTTCAT...ATGATGA', length=2551
@@ -122,6 +138,8 @@ Testing reading fasta format file Nucleic/wisteria.nu
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Need a DNA, RNA or Protein alphabet
 Testing reading fasta format file Nucleic/sweetpea.nu
  ID and Name='gi|3176602|gb|U78617.1|LOU78617',
  Seq='CAGGCTGCGCGGTTTCTATTTATGAAGAACAAGGTCCGTA...GTTTGTT', length=309
@@ -130,6 +148,8 @@ Testing reading fasta format file Nucleic/sweetpea.nu
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Need a DNA, RNA or Protein alphabet
 Testing reading fasta format file Nucleic/lavender.nu
  ID and Name='gi|5690369|gb|AF158246.1|AF158246',
  Seq='GGCTCTTAAGTCATGTCTAGGCAGGTGTGCACAAGTTTAG...GTAGGTG', length=550
@@ -138,6 +158,8 @@ Testing reading fasta format file Nucleic/lavender.nu
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Need a DNA, RNA or Protein alphabet
 Testing reading fasta format file Amino/aster.pro
  ID and Name='gi|3298468|dbj|BAA31520.1|',
  Seq='GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLL...FIVGANI', length=107
@@ -146,6 +168,8 @@ Testing reading fasta format file Amino/aster.pro
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Need a DNA, RNA or Protein alphabet
 Testing reading fasta format file Amino/loveliesbleeding.pro
  ID and Name='gi|2781234|pdb|1JLY|B',
  Seq='XAGLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKIL...IELGQNN', length=304
@@ -154,6 +178,8 @@ Testing reading fasta format file Amino/loveliesbleeding.pro
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Need a DNA, RNA or Protein alphabet
 Testing reading fasta format file Amino/rose.pro
  ID and Name='gi|4959044|gb|AAD34209.1|AF069992_1',
  Seq='MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSE...GNRESVV', length=600
@@ -162,6 +188,8 @@ Testing reading fasta format file Amino/rose.pro
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Need a DNA, RNA or Protein alphabet
 Testing reading fasta format file Amino/rosemary.pro
  ID and Name='gi|671626|emb|CAA85685.1|',
  Seq='MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAF...FEFPAMD', length=473
@@ -170,6 +198,8 @@ Testing reading fasta format file Amino/rosemary.pro
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Need a DNA, RNA or Protein alphabet
 Testing reading fasta format file Fasta/f001
  ID and Name='gi|3318709|pdb|1A91|',
  Seq='MENLNMDLLYMAAAVMMGLAAIGAAIGIGILGGKFLEGAA...YVMFAVA', length=79
@@ -178,6 +208,8 @@ Testing reading fasta format file Fasta/f001
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Need a DNA, RNA or Protein alphabet
 Testing reading fasta format file Fasta/f002
  ID and Name='gi|1348912|gb|G26680|G26680',
  Seq='CGGACCAGACGGACACAGGGAGAAGCTAGTTTCTTTCATG...GGTTTNA', length=633
@@ -193,6 +225,8 @@ Testing reading fasta format file Fasta/f002
  Checking can write/read as 'stockholm' format
  Failed: Sequences must all be the same length
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Sequences must all be the same length
 Testing reading fasta format file Fasta/fa01
  ID and Name='AK1H_ECOLI/1-378',
  Seq='CPDSINAALICRGEKMSIAIMAGVLEARGH-N--VTVIDP...INIVAIA', length=378
@@ -206,6 +240,8 @@ Testing reading fasta format file Fasta/fa01
  Checking can write/read as 'stockholm' format
  Failed: Sequences must all be the same length
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Sequences must all be the same length
 Testing reading fasta format file GFF/NC_001802.fna
  ID and Name='gi|9629357|ref|NC_001802.1|',
  Seq='GGTCTCTCTGGTTAGACCAGATCTGAGCCTGGGAGCTCTC...GTGCTTC', length=9181
@@ -214,6 +250,8 @@ Testing reading fasta format file GFF/NC_001802.fna
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Need a DNA, RNA or Protein alphabet
 Testing reading fasta format file GFF/NC_001802lc.fna
  ID and Name='gi|9629357|ref|nc_001802.1|',
  Seq='ggtctctctggttagaccagatctgagcctgggagctctc...gtgcttc', length=9181
@@ -222,6 +260,8 @@ Testing reading fasta format file GFF/NC_001802lc.fna
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Need a DNA, RNA or Protein alphabet
 Testing reading fasta format file GFF/multi.fna
  ID and Name='test1',
  Seq='ACGTCGCG', length=8
@@ -242,6 +282,8 @@ Testing reading fasta format file GFF/multi.fna as an alignment
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Need a DNA, RNA or Protein alphabet
 Testing reading fasta format file Registry/seqs.fasta
  ID and Name='gi|1348916|gb|G26684|G26684',
  Seq='GATCCCTACCCTTNCCGTTGGTCTCTNTCGCTGACTCGAG...TTATTTC', length=285
@@ -255,6 +297,8 @@ Testing reading fasta format file Registry/seqs.fasta
  Checking can write/read as 'stockholm' format
  Failed: Sequences must all be the same length
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Sequences must all be the same length
 Testing reading nexus format file Nexus/test_Nexus_input.nex
  ID and Name='t1',
  Seq='A-C-G-Tc-gtgtgtgctct-t-t------ac-gtgtgtgctct-t-t', length=48
@@ -278,6 +322,7 @@ Testing reading nexus format file Nexus/test_Nexus_input.nex as an alignment
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
 Testing reading swiss format file SwissProt/sp001
  ID = 'Q13454', Name='N33_HUMAN',
  Seq='MGARGAPSRRRQAGRRLRYLPTGSFPFLLLLLLLCIQLGG...YSDLDFE', length=348
@@ -286,6 +331,7 @@ Testing reading swiss format file SwissProt/sp001
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
 Testing reading swiss format file SwissProt/sp002
  ID = 'P54101', Name='CSP_MOUSE',
  Seq='MADQRQRSLSTSGESLYHVLGLDKNATSDDIKKSYRKLAL...YHTDGFN', length=198
@@ -294,6 +340,7 @@ Testing reading swiss format file SwissProt/sp002
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
 Testing reading swiss format file SwissProt/sp003
  ID = 'P42655', Name='143E_HUMAN',
  Seq='MDDREDLVYQAKLAEQAERYDEMVESMKKVAGMDVELTVE...DVEDENQ', length=255
@@ -302,6 +349,7 @@ Testing reading swiss format file SwissProt/sp003
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
 Testing reading swiss format file SwissProt/sp004
  ID = 'P23082', Name='NDOA_PSEPU',
  Seq='TVKWIEAVALSDILEGDVLGVTVEGKELALYEVEGEIYAT...RVMIDLS', length=103
@@ -310,6 +358,7 @@ Testing reading swiss format file SwissProt/sp004
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
 Testing reading swiss format file SwissProt/sp005
  ID = 'P24973', Name='NU3M_BALPH',
  Seq='MNLLLTLLTNTTLALLLVFIAFWLPQLNVYAEKTSPYECG...EGLEWAE', length=115
@@ -318,6 +367,7 @@ Testing reading swiss format file SwissProt/sp005
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
 Testing reading swiss format file SwissProt/sp006
  ID = 'P39896', Name='TCMO_STRGA',
  Seq='MTPHTHVRGPGDILQLTMAFYGSRALISAVELDLFTLLAG...AIGRKPR', length=339
@@ -326,6 +376,7 @@ Testing reading swiss format file SwissProt/sp006
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
 Testing reading swiss format file SwissProt/sp007
  ID = 'O95832', Name='CLD1_HUMAN',
  Seq='MANAGLQLLGFILAFLGWIGAIVSTALPQWRIYSYAGDNI...SSGKDYV', length=211
@@ -334,6 +385,7 @@ Testing reading swiss format file SwissProt/sp007
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
 Testing reading swiss format file SwissProt/sp008
  ID = 'P01892', Name='1A02_HUMAN',
  Seq='MAVMAPRTLVLLLSGALALTQTWAGSHSMRYFFTSVSRPG...SLTACKV', length=365
@@ -342,6 +394,7 @@ Testing reading swiss format file SwissProt/sp008
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
 Testing reading swiss format file SwissProt/sp009
  ID = 'O23729', Name='CHS3_BROFI',
  Seq='MAPAMEEIRQAQRAEGPAAVLAIGTSTPPNALYQADYPDY...VPIAGAE', length=394
@@ -350,6 +403,7 @@ Testing reading swiss format file SwissProt/sp009
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
 Testing reading swiss format file SwissProt/sp010
  ID = 'Q13639', Name='5H4_HUMAN',
  Seq='MDKLDANVSSEEGFGSVEKVVLLTFLSTVILMAILGNLLV...AAQPSDT', length=388
@@ -358,6 +412,7 @@ Testing reading swiss format file SwissProt/sp010
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
 Testing reading swiss format file SwissProt/sp011
  ID = 'P16235', Name='LSHR_RAT',
  Seq='MGRRVPALRQLLVLAVLLLKPSQLQSRELSGSRCPEPCDC...PPRALTH', length=700
@@ -366,6 +421,7 @@ Testing reading swiss format file SwissProt/sp011
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
 Testing reading swiss format file SwissProt/sp012
  ID and Name='Q9Y736',
  Seq='MQIFVKTLTGKTITLEVESSDTIDNVKTKIQDKEGIPPDQ...LRLRGGN', length=153
@@ -374,6 +430,7 @@ Testing reading swiss format file SwissProt/sp012
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
 Testing reading swiss format file SwissProt/sp013
  ID and Name='P82909',
  Seq='MGSKMASASRVVQVVKPHTPLIRFPDRRDNPKPNVSEALR...IQRGGPE', length=102
@@ -382,6 +439,7 @@ Testing reading swiss format file SwissProt/sp013
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
 Testing reading swiss format file SwissProt/sp014
  ID = 'P12166', Name='PSBL_ORYSA',
  Seq='TQSNPNEQNVELNRTSLYWGLLLIFVLAVLFSNYFFN', length=37
@@ -390,6 +448,7 @@ Testing reading swiss format file SwissProt/sp014
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
 Testing reading swiss format file SwissProt/sp015
  ID = 'IPI00383150', Name='IPI00383150.2',
  Seq='MSFQAPRRLLELAGQSLLRDQALAISVLDELPRELFPRLF...FIGPTPC', length=457
@@ -398,6 +457,7 @@ Testing reading swiss format file SwissProt/sp015
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
 Testing reading swiss format file SwissProt/sp016
  ID = 'P01100', Name='FOS_HUMAN',
  Seq='MMFSGFNADYEASSSRCSSASPAGDSLSYYHSPADSFSSM...SPTLLAL', length=380
@@ -406,6 +466,7 @@ Testing reading swiss format file SwissProt/sp016
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
 Testing reading swiss format file Registry/EDD_RAT.dat
  ID = 'Q62671', Name='EDD_RAT',
  Seq='ARRERMTAREEASLRTLEGRRRATLLSARQGMMSARGDFL...TKNFGFV', length=920
@@ -414,6 +475,7 @@ Testing reading swiss format file Registry/EDD_RAT.dat
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
 Testing reading genbank format file GenBank/noref.gb
  ID = 'NM_006141.1', Name='NM_006141',
  Seq='GGCAAGATGGCGCCGGTGGGGGTGGAGAAGAAGCTGCTGC...AAAAAAA', length=1622
@@ -422,6 +484,7 @@ Testing reading genbank format file GenBank/noref.gb
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
 Testing reading genbank format file GenBank/cor6_6.gb
  ID = 'X55053.1', Name='ATCOR66M',
  Seq='AACAAAACACACATCAAAAACGATTTTACAAGAAAAAAAT...AAAAAAA', length=513
@@ -440,6 +503,8 @@ Testing reading genbank format file GenBank/cor6_6.gb
  Checking can write/read as 'stockholm' format
  Failed: Sequences must all be the same length
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Sequences must all be the same length
 Testing reading genbank format file GenBank/iro.gb
  ID = 'AL109817.1', Name='IRO125195',
  Seq='CACAGGCCCAGAGCCACTCCTGCCTACAGGTTCTGAGGGC...AAAAAAA', length=1326
@@ -448,6 +513,7 @@ Testing reading genbank format file GenBank/iro.gb
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
 Testing reading genbank format file GenBank/pri1.gb
  ID = 'U05344.1', Name='HUGLUT1',
  Seq='GATCATGCATGCACTCCAGCCTGGGACAAGAGCGAAACTC...GTTTGCA', length=741
@@ -456,6 +522,7 @@ Testing reading genbank format file GenBank/pri1.gb
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
 Testing reading genbank format file GenBank/arab1.gb
  ID = 'AC007323.5', Name='AC007323',
  Seq='AAGCTTTGCTACGATCTACATTTGGGAATGTGAGTCTCTT...GAAGCTT', length=86436
@@ -464,6 +531,7 @@ Testing reading genbank format file GenBank/arab1.gb
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
 Testing reading genbank format file GenBank/protein_refseq.gb
  ID = 'NP_034640.1', Name='NP_034640',
  Seq='MNNRWILHAAFLLCFSTTALSINYKQLQLQERTNIRKCQE...LTRNFQN', length=182
@@ -472,6 +540,7 @@ Testing reading genbank format file GenBank/protein_refseq.gb
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
 Testing reading genbank format file GenBank/protein_refseq2.gb
  ID = 'NP_034640.1', Name='NP_034640',
  Seq='MNNRWILHAAFLLCFSTTALSINYKQLQLQERTNIRKCQE...LTRNFQN', length=182
@@ -480,6 +549,7 @@ Testing reading genbank format file GenBank/protein_refseq2.gb
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
 Testing reading genbank format file GenBank/extra_keywords.gb
  ID = 'AL138972.1', Name='DMBR25B3',
  Seq='TCCAGGGGATTCACGCGCAATATGTTTCCCTCGCTCGTCT...TCGATTG', length=154329
@@ -488,6 +558,7 @@ Testing reading genbank format file GenBank/extra_keywords.gb
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
 Testing reading genbank format file GenBank/one_of.gb
  ID = 'U18266.1', Name='HSTMPO1',
  Seq='GAATTCAGATAGAATGTAGACAAGAGGGATGGTGAGGAAA...CAAAGGC', length=2509
@@ -496,6 +567,7 @@ Testing reading genbank format file GenBank/one_of.gb
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
 Testing reading genbank format file GenBank/NT_019265.gb
  ID = 'NT_019265.6', Name='NT_019265',
  Seq='', length=0
@@ -507,6 +579,8 @@ Testing reading genbank format file GenBank/NT_019265.gb
  Checking can write/read as 'stockholm' format
  Failed: Non-empty sequences are required
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Non-empty sequences are required
 Testing reading genbank format file GenBank/origin_line.gb
  ID = 'NC_002678.1', Name='NC_002678',
  Seq='TTAATTAACTGTCTTCGATTGCGTTTAATTGACGGTTTTC...TCAGCGC', length=180
@@ -515,6 +589,7 @@ Testing reading genbank format file GenBank/origin_line.gb
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
 Testing reading genbank format file GenBank/blank_seq.gb
  ID = 'NP_001832.1', Name='NP_001832',
  Seq='MEECWVTEIANGSKDGLDSNPMKDYMILSGPQKTAVAVLC...DLDLSDC', length=360
@@ -523,6 +598,7 @@ Testing reading genbank format file GenBank/blank_seq.gb
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
 Testing reading genbank format file GenBank/dbsource_wrap.gb
  ID = 'P01485', Name='SCX3_BUTOC',
  Seq='VKDGYIVDDRNCTYFCGRNAYCNEECTKLKGESGYCQWAS...KGPGRCN', length=64
@@ -531,6 +607,7 @@ Testing reading genbank format file GenBank/dbsource_wrap.gb
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
 Testing reading genbank format file GenBank/gbvrl1_start.seq
  ID = 'AB000048.1', Name='AB000048',
  Seq='ATGTCTGGCAACCAGTATACTGAGGAAGTTATGGAGGGAG...GGATTAA', length=2007
@@ -546,6 +623,8 @@ Testing reading genbank format file GenBank/gbvrl1_start.seq
  Checking can write/read as 'stockholm' format
  Failed: Sequences must all be the same length
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Sequences must all be the same length
 Testing reading genbank format file GFF/NC_001422.gbk
  ID = 'NC_001422.1', Name='NC_001422',
  Seq='GAGTTTTATCGCTTCCATGACGCAGAAGTTAACACTTTCG...ACCTGCA', length=5386
@@ -554,6 +633,7 @@ Testing reading genbank format file GFF/NC_001422.gbk
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
 Testing reading embl format file EMBL/TRBG361.embl
  ID = 'X56734.1', Name='X56734',
  Seq='AAACAAACCAAATATGGATTTTATTGTAGCCATATTTGCT...AAAAAAA', length=1859
@@ -562,6 +642,7 @@ Testing reading embl format file EMBL/TRBG361.embl
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
 Testing reading embl format file EMBL/DD231055_edited.embl
  ID = 'DD231055.1', Name='DD231055',
  Seq='GCCGAGCTGACCCAGTCTCCATCCTCCCTGTCTGCATCTG...TATGAGA', length=315
@@ -570,6 +651,7 @@ Testing reading embl format file EMBL/DD231055_edited.embl
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
 Testing reading embl format file EMBL/SC10H5.embl
  ID = 'AL031232', Name='SC10H5',
  Seq='GATCAGTAGACCCAGCGACAGCAGGGCGGGGCCCAGCAGG...CGAGCAT', length=4870
@@ -578,6 +660,7 @@ Testing reading embl format file EMBL/SC10H5.embl
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
 Testing reading embl format file EMBL/U87107.embl
  ID = 'U87107.1', Name='U87107',
  Seq='CAATTACTGCAATGCCCTCGTAATTAAGTGAATTTACAAT...CATCACC', length=8840
@@ -586,6 +669,7 @@ Testing reading embl format file EMBL/U87107.embl
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
 Testing reading embl format file EMBL/AAA03323.embl
  ID = 'AAA03323.1', Name='AAA03323',
  Seq='ATGAAGCTTTTAGTGCGCCTAGCACCGATCCTGCTGCTAG...GGTGTGA', length=1545
@@ -594,6 +678,7 @@ Testing reading embl format file EMBL/AAA03323.embl
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
 Testing reading stockholm format file Stockholm/simple.sth
  ID and Name='AP001509.1',
  Seq='UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAU...UUAAUGU', length=104
@@ -612,6 +697,8 @@ Testing reading stockholm format file Stockholm/simple.sth as an alignment
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Need a DNA, RNA or Protein alphabet
 Testing reading stockholm format file Stockholm/funny.sth
  ID = 'O83071/192-246', Name='O83071',
  Seq='MTCRAQLIAVPRASSLAE--AIACAQKM----RVSRVPVYERS', length=43
@@ -635,6 +722,8 @@ Testing reading stockholm format file Stockholm/funny.sth as an alignment
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Need a DNA, RNA or Protein alphabet
 Testing reading phylip format file Phylip/reference_dna.phy
  ID and Name='Archaeopt',
  Seq='CGATGCTTACCGC', length=13
@@ -658,6 +747,8 @@ Testing reading phylip format file Phylip/reference_dna.phy as an alignment
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Need a DNA, RNA or Protein alphabet
 Testing reading phylip format file Phylip/reference_dna2.phy
  ID and Name='Archaeopt',
  Seq='CGATGCTTACCGCCGATGCTTACCGCCGATGCTTACCGC', length=39
@@ -681,6 +772,8 @@ Testing reading phylip format file Phylip/reference_dna2.phy as an alignment
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Need a DNA, RNA or Protein alphabet
 Testing reading phylip format file Phylip/hennigian.phy
  ID and Name='A',
  Seq='CACACACAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAA', length=40
@@ -704,6 +797,8 @@ Testing reading phylip format file Phylip/hennigian.phy as an alignment
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Need a DNA, RNA or Protein alphabet
 Testing reading phylip format file Phylip/horses.phy
  ID and Name='Mesohippus',
  Seq='AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', length=40
@@ -727,6 +822,8 @@ Testing reading phylip format file Phylip/horses.phy as an alignment
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Need a DNA, RNA or Protein alphabet
 Testing reading phylip format file Phylip/random.phy
  ID and Name='A',
  Seq='CACACAACCAAACAAACCACAAAAAAAAAAAAAAAAAAAA', length=40
@@ -750,6 +847,8 @@ Testing reading phylip format file Phylip/random.phy as an alignment
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Need a DNA, RNA or Protein alphabet
 Testing reading phylip format file Phylip/interlaced.phy
  ID and Name='CYS1_DICDI',
  Seq='-----MKVILLFVLAVFTVFVSS---------------RG...STSII--', length=384
@@ -770,6 +869,8 @@ Testing reading phylip format file Phylip/interlaced.phy as an alignment
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Need a DNA, RNA or Protein alphabet
 Testing reading phylip format file Phylip/interlaced2.phy
  ID and Name='IXI_234',
  Seq='TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGRPCC...AGDRSHE', length=131
@@ -792,6 +893,8 @@ Testing reading phylip format file Phylip/interlaced2.phy as an alignment
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Need a DNA, RNA or Protein alphabet
 Testing reading emboss format file Emboss/alignret.txt
  ID = 'IXI_234', Name='<unknown name>',
  Seq='TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGRPCC...AGDRSHE', length=131
@@ -814,6 +917,8 @@ Testing reading emboss format file Emboss/alignret.txt as an alignment
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Need a DNA, RNA or Protein alphabet
 Testing reading emboss format file Emboss/needle.txt
  ID = 'ref_rec', Name='<unknown name>',
  Seq='KILIVDD----QYGIRILLNEVFNKEGYQTFQAANGLQAL...-------', length=124
@@ -832,6 +937,8 @@ Testing reading emboss format file Emboss/needle.txt
  Checking can write/read as 'stockholm' format
  Failed: Sequences must all be the same length
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Sequences must all be the same length
 Testing reading emboss format file Emboss/water.txt
  ID = 'IXI_234', Name='<unknown name>',
  Seq='TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGRPCC...AGDRSHE', length=131
@@ -850,6 +957,8 @@ Testing reading emboss format file Emboss/water.txt as an alignment
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Need a DNA, RNA or Protein alphabet
 Testing reading phd format file Phd/phd1
  ID and Name='34_222_(80-A03-19).b.ab1',
  Seq='ctccgtcggaacatcatcggatcctatcacagagtttttg...aagcgtg', length=876
@@ -865,6 +974,8 @@ Testing reading phd format file Phd/phd1
  Checking can write/read as 'stockholm' format
  Failed: Sequences must all be the same length
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Sequences must all be the same length
 Testing reading phd format file Phd/phd2
  ID and Name='ML4924R',
  Seq='actttggtcgcctgcaggtaccggtccgngattcccgggt...ggtgaga', length=180
@@ -873,6 +984,7 @@ Testing reading phd format file Phd/phd2
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
 Testing reading ace format file Ace/contig1.ace
  ID and Name='Contig1',
  Seq='aatacgGGATTGCCCTAGTAACGGCGAGTGAAGCGGCAAC...CTAGtac', length=856
@@ -886,6 +998,8 @@ Testing reading ace format file Ace/contig1.ace
  Checking can write/read as 'stockholm' format
  Failed: Sequences must all be the same length
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Sequences must all be the same length
 Testing reading ace format file Ace/consed_sample.ace
  ID and Name='Contig1',
  Seq='agccccgggccgtggggttccttgagcactcccaaagttc...gggtttg', length=1475
@@ -894,6 +1008,7 @@ Testing reading ace format file Ace/consed_sample.ace
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
 Testing reading ace format file Ace/seq.cap.ace
  ID and Name='Contig1',
  Seq='AGTTTTAGTTTTCCTCTGAAGCAAGCACACCTTCCCTTTC...TCACATT', length=1222
@@ -902,6 +1017,7 @@ Testing reading ace format file Ace/seq.cap.ace
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
 Testing reading ig format file IntelliGenetics/TAT_mase_nuc.txt
  ID and Name='A_U455',
  Seq='ATGGAGCCAGTAGATCCTAACCTAGAGCCCTGGAAACACC...ATTCGCT', length=303
@@ -920,6 +1036,8 @@ Testing reading ig format file IntelliGenetics/TAT_mase_nuc.txt
  Checking can write/read as 'stockholm' format
  Failed: Sequences must all be the same length
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Sequences must all be the same length
 Testing reading ig format file IntelliGenetics/VIF_mase-pro.txt
  ID and Name='most-likely',
  Seq='MEN--RW-QVMIVWQVDRMRIRTWKSLVKHHMYRSKKA-K...-----GH', length=298
@@ -943,6 +1061,8 @@ Testing reading ig format file IntelliGenetics/VIF_mase-pro.txt as an alignment
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Need a DNA, RNA or Protein alphabet
 Testing reading ig format file IntelliGenetics/vpu_nucaligned.txt
  ID and Name='VPU_CONSENSUS',
  Seq='ATGc?tcattt?ga??t?ttagcaaTaa?agcattaatag...?gA?ctg', length=294
@@ -961,6 +1081,8 @@ Testing reading ig format file IntelliGenetics/vpu_nucaligned.txt
  Checking can write/read as 'stockholm' format
  Failed: Sequences must all be the same length
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Sequences must all be the same length
 Finished tested reading files
 
 Starting testing writing records
@@ -975,6 +1097,8 @@ Testing can write/read zero records
  Checking can write/read as 'stockholm' format
  Failed: Must have at least one sequence
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Must have at least one sequence
 Testing can write/read three peptides of different lengths
  Checking can write/read as 'fasta' format
  Checking can write/read as 'clustal' format
@@ -984,24 +1108,29 @@ Testing can write/read three peptides of different lengths
  Checking can write/read as 'stockholm' format
  Failed: Sequences must all be the same length
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Sequences must all be the same length
 Testing can write/read three proteins alignment
  Checking can write/read as 'fasta' format
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
 Testing can write/read three DNA sequence alignment
  Checking can write/read as 'fasta' format
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
 Testing can write/read 3 DNA seq alignment with CR/LF in name/descr
  Checking can write/read as 'fasta' format
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
 Testing can write/read alignment with repeated record
  Checking can write/read as 'fasta' format
  Checking can write/read as 'clustal' format
@@ -1010,4 +1139,5 @@ Testing can write/read alignment with repeated record
  Checking can write/read as 'stockholm' format
  Failed: Duplicate record identifier: Beta
  Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
 Finished tested writing files
