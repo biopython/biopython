@@ -120,14 +120,14 @@ def _get_base_alphabet(alphabet) :
     return a
     
 def _consensus_base_alphabet(alphabets) :
-    """Returns a common but often generic alphabet object (PRIVATE)."""
+    """Returns a common but often generic base alphabet object (PRIVATE).
+
+    This throws away any AlphabetEncoder information, e.g. Gapped alphabets."""
     common = None
     for alpha in alphabets :
         a = _get_base_alphabet(alpha)
         if common is None :
-            common = alpha
-        elif common == alpha :
-            pass
+            common = a
         elif common == a :
             pass
         elif isinstance(a, common.__class__) :
