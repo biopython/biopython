@@ -374,6 +374,7 @@ def to_dict(sequences, key_function=None) :
         d[key] = record
     return d
 
+
 def to_alignment(sequences, alphabet=None, strict=True) :
     """Returns a multiple sequence alignment (OBSOLETE).
 
@@ -395,11 +396,13 @@ def to_alignment(sequences, alphabet=None, strict=True) :
     alignment = AlignIO.read(handle, format)
     """
     #TODO - Move this functionality into the Alignment class instead?
-    from Bio.Alphabet import Alphabet, Gapped, generic_alphabet
+    from Bio.Alphabet import Alphabet, AlphabetEncoder, generic_alphabet
+    from Bio.Alphabet import _consensus_alphabet
     if alphabet is None :
-        alphabet = Gapped(generic_alphabet)
+        sequences = list(sequences)
+        alphabet = _consensus_alphabet([rec.seq.alphabet for rec in sequences])
 
-    if not (isinstance(alphabet, Alphabet) or isinstance(alphabet, Gapped)) :
+    if not (isinstance(alphabet, Alphabet) or isinstance(alphabet, AlphabetEncoder)) :
         raise ValueError("Invalid alignment alphabet")
 
     alignment_length = None
@@ -412,7 +415,7 @@ def to_alignment(sequences, alphabet=None, strict=True) :
                 raise ValueError("Sequences must all be the same length")
 
             assert isinstance(record.seq.alphabet, Alphabet) \
-            or isinstance(record.seq.alphabet, Gapped), \
+            or isinstance(record.seq.alphabet, AlphabetEncoder), \
                 "Sequence does not have a valid alphabet"
 
             #TODO - Move this alphabet comparison code into the Alphabet module/class?
@@ -425,7 +428,7 @@ def to_alignment(sequences, alphabet=None, strict=True) :
                     raise ValueError("Incompatible sequence alphabet " \
                                      + "%s for %s alignment" \
                                      % (record.seq.alphabet, alphabet))
-            elif isinstance(record.seq.alphabet, Gapped) \
+            elif isinstance(record.seq.alphabet, AlphabetEncoder) \
             and isinstance(alphabet, Alphabet) :
                 raise ValueError("Sequence has a gapped alphabet, alignment does not")
             elif isinstance(record.seq.alphabet, Alphabet) \

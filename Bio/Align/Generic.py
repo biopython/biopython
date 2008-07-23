@@ -28,6 +28,9 @@ class Alignment:
         o alphabet - The alphabet to use for the sequence objects that are
         created. This alphabet must be a gapped type.
         """
+        if not (isinstance(alphabet, Alphabet.Alphabet) \
+        or isinstance(alphabet, Alphabet.AlphabetEncoder)):
+            raise ValueError("Invalid alphabet argument")
         self._alphabet = alphabet
         # hold everything at a list of seq record objects
         self._records = []
@@ -96,7 +99,7 @@ class Alignment:
         return self._records
 
     def __iter__(self) :
-        """Iterate over alignment rows as SeqRecord objects
+        """Iterate over alignment rows as SeqRecord objects.
 
         e.g.
 
@@ -114,6 +117,16 @@ class Alignment:
 
         Raises:
         o IndexError - If the specified number is out of range.
+
+        NOTE: This is a legacy method.  In new code where you need to access
+        the rows of the alignment (i.e. the sequences) consider iterating
+        over them or accessing them as SeqRecord objects.  e.g.
+
+        for record in alignment :
+            print record.id
+            print record.seq
+        first_record = alignment[0]
+        last_record = alignment[-1]
         """
         return self._records[number].seq
 
@@ -185,12 +198,32 @@ class Alignment:
         
     def get_column(self,col):
         """Returns a string containing a given column."""
+        #TODO - Support negative indices?
         col_str = ''
         assert col >= 0 and col <= self.get_alignment_length()
         for rec in self._records:
             col_str += rec.seq[col]
         return col_str
-                
+
+    def __getitem__(self, index) :
+        """Access part of the alignment.
+
+        You can access a row of the alignment as a SeqRecord using an integer
+        index (think of the alignment as a list of SeqRecord objects here):
+
+        first_record = my_alignment[0]
+        last_record = my_alignment[-1]
+
+        Right now, this is the ONLY indexing operation supported.  The
+        use of two indices and splice notation to extract a sub-alignment,
+        row, column or letter is under discussion for a future update."""
+        if isinstance(index, int) :
+            #e.g. result = align[x]
+            #Return a SeqRecord
+            return self._records[index]
+        else :
+            raise TypeError, "Not currently supported, but may be in future."
+
 if __name__ == "__main__" :
     print "Mini self test..."
 
@@ -215,4 +248,8 @@ if __name__ == "__main__" :
         assert isinstance(rec, SeqRecord)
         assert raw_data[r] == rec.seq.tostring()
         if r==0 : assert rec.annotations['weight']==2
-    print "Alignment iteraction as SeqRecord OK"
+    print "Alignment iteration as SeqRecord OK"
+
+    print
+    print "SeqRecord access by row:"
+    print a[0].id, "...", a[-1].id

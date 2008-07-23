@@ -169,20 +169,7 @@ class SummaryInfo:
             consensus_alpha = self._guess_consensus_alphabet(ambiguous)
 
         return Seq(consensus, consensus_alpha)
-
-    def _get_base_alphabet(self, alphabet=None) :
-        """Returns the non-gapped non-stop-codon Alphabet object (PRIVATE)."""
-        #TODO - Add this functionality to the Alphabet objects?
-        if alphabet is None :
-            a = self.alignment._alphabet
-        else :
-            a = alphabet
-        while isinstance(a, Alphabet.AlphabetEncoder) :
-            a = a.alphabet
-        assert isinstance(a, Alphabet.Alphabet), \
-               "Invalid alphabet found, %s" % repr(a)
-        return a
-            
+          
     def _guess_consensus_alphabet(self, ambiguous):
         """Pick an (ungapped) alphabet for an alignment consesus sequence.
 
@@ -191,12 +178,12 @@ class SummaryInfo:
         sequences we've got.
         """
         #Start with the (un-gapped version of) the alignment alphabet
-        a = self._get_base_alphabet()
+        a = Alphabet._get_base_alphabet(self.alignment._alphabet)
 
         #Now check its compatible with all the rest of the sequences
         for record in self.alignment :
             #Get the (un-gapped version of) the sequence's alphabet
-            alt =  self._get_base_alphabet(record.seq.alphabet)
+            alt =  Alphabet._get_base_alphabet(record.seq.alphabet)
             if not isinstance(alt, a.__class__) :
                 raise ValueError \
                 ("Alignment contains a sequence with an incompatible alphabet.")
@@ -489,14 +476,16 @@ class SummaryInfo:
         random_expected = None
         if not e_freq_table:
             #TODO - What about ambiguous alphabets?
-            if isinstance(self._get_base_alphabet(), Alphabet.ProteinAlphabet) :
+            base_alpha = Alphabet._get_base_alphabet(self.alignment._alphabet)
+            if isinstance(base_alpha, Alphabet.ProteinAlphabet) :
                 random_expected = Protein20Random
-            elif isinstance(self._get_base_alphabet(), Alphabet.NucleotideAlphabet) :
+            elif isinstance(base_alpha, Alphabet.NucleotideAlphabet) :
                 random_expected = Nucleotide4Random
             else :
                 errstr = "Error in alphabet: not Nucleotide or Protein, "
                 errstr += "supply expected frequencies"
                 raise ValueError, errstr
+            del base_alpha
         elif not isinstance(e_freq_table, FreqTable.FreqTable) :
             raise ValueError("e_freq_table should be a FreqTable object")
             
@@ -582,26 +571,32 @@ class SummaryInfo:
         o log_base - The base of the logathrim to use in calculating the
         info content.
         """
+        try :
+            gap_char = self.alignment._alphabet.gap_char
+        except AttributeError :
+            #The alphabet doesn't declare a gap - there could be none
+            #in the sequence... or just a vague alphabet.
+            gap_char = "-" #Safe?
+            
         if e_freq_table:
             if not isinstance(e_freq_table, FreqTable.FreqTable) :
                 raise ValueError("e_freq_table should be a FreqTable object")
             # check the expected freq information to make sure it is good
             for key in obs_freq.keys():
-                if (key != self.alignment._alphabet.gap_char and
-                    key not in e_freq_table):
+                if (key != gap_char and key not in e_freq_table):
                     raise ValueError("Expected frequency letters %s" +
                                      " do not match observed %s"
                            % (e_freq_table.keys(), obs_freq.keys() -
-                              [self.alignment._alphabet.gap_char]))
+                              [gap_char]))
         
-        total_info = 0
+        total_info = 0.0
 
         for letter in obs_freq.keys():
-            inner_log = 0.
+            inner_log = 0.0
             # if we have expected frequencies, modify the log value by them
             # gap characters do not have expected frequencies, so they
             # should just be the observed frequency.
-            if letter != self.alignment._alphabet.gap_char:
+            if letter != gap_char:
                 if e_freq_table:
                     inner_log = obs_freq[letter] / e_freq_table[letter]
                 else:

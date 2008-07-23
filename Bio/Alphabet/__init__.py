@@ -109,3 +109,86 @@ class HasStopCodon(AlphabetEncoder):
     def contains(self, other):
         return other.stop_symbol == self.stop_symbol and \
                self.alphabet.contains(other.alphabet)
+
+def _get_base_alphabet(alphabet) :
+    """Returns the non-gapped non-stop-codon Alphabet object (PRIVATE)."""
+    a = alphabet
+    while isinstance(a, AlphabetEncoder) :
+        a = a.alphabet
+    assert isinstance(a, Alphabet), \
+           "Invalid alphabet found, %s" % repr(a)
+    return a
+    
+def _consensus_base_alphabet(alphabets) :
+    """Returns a common but often generic alphabet object (PRIVATE)."""
+    common = None
+    for alpha in alphabets :
+        a = _get_base_alphabet(alpha)
+        if common is None :
+            common = alpha
+        elif common == alpha :
+            pass
+        elif common == a :
+            pass
+        elif isinstance(a, common.__class__) :
+            pass
+        elif isinstance(common, a.__class__) :
+            common = a
+        elif isinstance(a, NucleotideAlphabet) \
+        and isinstance(common, NucleotideAlphabet) :
+            #e.g. Give a mix of RNA and DNA alphabets
+            common = generic_nucleotide
+        elif isinstance(a, SingleLetterAlphabet) \
+        and isinstance(common, SingleLetterAlphabet) :
+            #This is a pretty big mis-match!
+            common = single_letter_alphabet
+        else :
+            #We have a major mis-match... take the easy way out!
+            return generic_alphabet
+    if common is None :
+        #Given NO alphabets!
+        return generic_alphabet
+    return common
+
+def _consensus_alphabet(alphabets) :
+    """Returns a common but often generic alphabet object (PRIVATE).
+
+    This is aware of Gapped and HasStopCodon and new letters added by
+    other AlphabetEncoders."""
+    base = _consensus_base_alphabet(alphabets)
+    gap = None
+    stop = None
+    new_letters = ""
+    for alpha in alphabets :
+        #Gaps...
+        if not hasattr(alpha, "gap_char") :
+            pass
+        elif gap is None :
+            gap = alpha.gap_char
+        elif gap == alpha.gap_char :
+            pass
+        else :
+            raise ValueError("More than one gap character present")
+        #Stops...
+        if not hasattr(alpha, "stop_symbol") :
+            pass
+        elif stop is None :
+            stop = alpha.stop_symbol
+        elif stop == alpha.stop_symbol :
+            pass
+        else :
+            raise ValueError("More than one stop symbol present")
+        #New letters...
+        if hasattr(alpha, "new_letters") :
+            for letter in alpha.new_letters :
+                if letter not in new_letters and letter <> gap and letter <> stop :
+                    new_letters += letter
+
+    alpha = base
+    if new_letters :
+        alpha = AlphabetEncoder(alpha, new_letters)
+    if gap :
+        alpha = Gapped(alpha, gap_char=gap)
+    if stop :
+        alpha = HasStopCodon(alpha, stop_symbol=stop)
+    return alpha
