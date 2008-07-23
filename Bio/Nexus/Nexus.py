@@ -101,8 +101,9 @@ class CharBuffer:
         return ''.join(self.buffer[:len(word)])==word
     
     def next_word(self):
-        """Return the next NEXUS word from a string, dealing with single and double quotes,
-        whitespace and punctuation.
+        """Return the next NEXUS word from a string.
+
+        This deals with single and double quotes, whitespace and punctuation.
         """
 
         word=[]
@@ -137,6 +138,7 @@ class CharBuffer:
 
 class StepMatrix:
     """Calculate a stepmatrix for weighted parsimony.
+
     See Wheeler (1990), Cladistics 6:269-275.
     """
     
@@ -199,8 +201,12 @@ class StepMatrix:
     
 def safename(name,mrbayes=False):
     """Return a taxon identifier according to NEXUS standard.
-    Wrap quotes around names with punctuation or whitespace, and double single quotes.
-    mrbayes=True: write names without quotes, whitespace or punctuation for mrbayes.
+
+    Wrap quotes around names with punctuation or whitespace, and double
+    single quotes.
+
+    mrbayes=True: write names without quotes, whitespace or punctuation
+    for the mrbayes software package.
     """
     if mrbayes:
         safe=name.replace(' ','_')
@@ -220,7 +226,9 @@ def quotestrip(word):
     return word
 
 def get_start_end(sequence, skiplist=['-','?']):
-    """Return position of first and last character which is not in skiplist (defaults to ['-','?'])."""
+    """Return position of first and last character which is not in skiplist.
+
+    Skiplist defaults to ['-','?'])."""
 
     length=len(sequence)
     if length==0:
@@ -299,8 +307,8 @@ def combine(matrices):
     """Combine matrices in [(name,nexus-instance),...] and return new nexus instance.
 
     combined_matrix=combine([(name1,nexus_instance1),(name2,nexus_instance2),...]
-    Character sets, character partitions and taxon sets are prefixed, readjusted and present in
-    the combined matrix. 
+    Character sets, character partitions and taxon sets are prefixed, readjusted
+    and present in the combined matrix. 
     """
     
     if not matrices:
@@ -423,7 +431,7 @@ def _kill_comments_and_break_lines(text):
 
 
 def _adjust_lines(lines):
-    """Adjust linebreaks to match ';', strip leading/trailing whitespace 
+    """Adjust linebreaks to match ';', strip leading/trailing whitespace.
 
     list_of_commandlines=_adjust_lines(input_text)
     Lines are adjusted so that no linebreaks occur within a commandline 
@@ -496,7 +504,7 @@ class Commandline:
                     raise NexusError, 'Incorrect formatting in line: %s' % line
                 
 class Block:
-    """Represent a NEXUS block with block name and list of commandlines ."""
+    """Represent a NEXUS block with block name and list of commandlines."""
     def __init__(self,title=None):
         self.title=title
         self.commandlines=[]
@@ -546,15 +554,15 @@ class Nexus(object):
             self.read(DEFAULTNEXUS)
 
     def get_original_taxon_order(self):
-        """Included for backwards compatibility."""
+        """Included for backwards compatibility (DEPRECATED)."""
         return self.taxlabels
     def set_original_taxon_order(self,value):
-        """Included for backwards compatibility."""
+        """Included for backwards compatibility (DEPRECATED)."""
         self.taxlabels=value
     original_taxon_order=property(get_original_taxon_order,set_original_taxon_order)
     
     def read(self,input):
-        """Read and parse NEXUS imput (filename, file-handle, string."""
+        """Read and parse NEXUS imput (a filename, file-handle, or string)."""
         
         # 1. Assume we have the name of a file in the execution dir
         # Note we need to add parsing of the path to dir/filename
@@ -636,7 +644,7 @@ class Nexus(object):
         self.unknown_blocks.append(block)        
 
     def _parse_nexus_block(self,title, contents):
-        """Parse a known Nexus Block """
+        """Parse a known Nexus Block (PRIVATE)."""
         # attached the structered block representation
         self._apply_block_structure(title, contents)
         #now check for taxa,characters,data blocks. If this stuff is defined more than once
@@ -749,9 +757,12 @@ class Nexus(object):
         self.eliminate=options
 
     def _taxlabels(self,options):
-        """Get taxon labels. As the taxon names are already in the matrix, this is superfluous except for transpose matrices,
-        which are currently unsupported anyway.
-        Thus, we ignore the taxlabels command to make handling of duplicate taxon names easier.
+        """Get taxon labels (PRIVATE).
+
+        As the taxon names are already in the matrix, this is superfluous
+        except for transpose matrices, which are currently unsupported anyway.
+        Thus, we ignore the taxlabels command to make handling of duplicate
+        taxon names easier.
         """
         pass
         #self.taxlabels=[]
@@ -987,7 +998,9 @@ class Nexus(object):
 
     def _codonposset(self,options):
         """Read codon positions from a codons block as written from McClade.
-        Here codonposset is just a fancy name for a character partition with the name CodonPositions and the partitions N,1,2,3
+
+        Here codonposset is just a fancy name for a character partition with
+        the name CodonPositions and the partitions N,1,2,3
         """
 
         prev_partitions=self.charpartitions.keys()
@@ -1027,8 +1040,10 @@ class Nexus(object):
         self.charpartitions[name]=charpartition
 
     def _get_indices(self,options,set_type=CHARSET,separator='='):
-        """Parse the taxset/charset specification 
-            '1 2   3 - 5 dog cat   10 - 20 \\ 3' --> [0,1,2,3,4,'dog','cat',9,12,15,18]
+        """Parse the taxset/charset specification (PRIVATE).
+
+        e.g. '1 2   3 - 5 dog cat   10 - 20 \\ 3'
+        --> [0,1,2,3,4,'dog','cat',9,12,15,18]
         """
         opts=CharBuffer(options)
         name=self._name_n_vector(opts,separator=separator)
@@ -1060,7 +1075,9 @@ class Nexus(object):
         return name
     
     def _parse_list(self,options_buffer,set_type):
-        """Parse a NEXUS list: [1, 2, 4-8\\2, dog, cat] --> [1,2,4,6,8,17,21],
+        """Parse a NEXUS list (PRIVATE).
+
+        e.g. [1, 2, 4-8\\2, dog, cat] --> [1,2,4,6,8,17,21],
         (assuming dog is taxon no. 17 and cat is taxon no. 21).
         """
         plain_list=[]
@@ -1102,6 +1119,7 @@ class Nexus(object):
         
     def _resolve(self,identifier,set_type=None):
         """Translate identifier in list into character/taxon index.
+
         Characters (which are referred to by their index in Nexus.py):
             Plain numbers are returned minus 1 (Nexus indices to python indices)
             Text identifiers are translaterd into their indices (if plain character indentifiers),
@@ -1169,8 +1187,10 @@ class Nexus(object):
 
     def write_nexus_data_partitions(self, matrix=None, filename=None, blocksize=None, interleave=False,
             exclude=[], delete=[], charpartition=None, comment='',mrbayes=False):
-        """Writes a nexus file for each partition in charpartition. 
-           Only non-excluded characters and non-deleted taxa are included, just the data block is written.
+        """Writes a nexus file for each partition in charpartition.
+
+        Only non-excluded characters and non-deleted taxa are included,
+        just the data block is written.
         """
 
         if not matrix:
@@ -1337,7 +1357,7 @@ class Nexus(object):
             return filename
 
     def append_sets(self,exclude=[],delete=[],mrbayes=False,include_codons=True,codons_only=False):
-        """Returns a sets block"""
+        """Returns a sets block."""
         if not self.charsets and not self.taxsets and not self.charpartitions:
             return ''
         if codons_only:
@@ -1420,7 +1440,10 @@ class Nexus(object):
         fh.close()
 
     def export_phylip(self, filename=None):
-        """Writes matrix into a fasta file: (self, filename=None, width=70)."""       
+        """Writes matrix into a PHYLIP file: (self, filename=None, width=70).
+
+        Note that this writes a relaxed PHYLIP format file, where the names
+        are not truncated, nor checked for invalid characters."""
         if not filename:
             if '.' in filename and self.filename.split('.')[-1].lower() in ['paup','nexus','nex','dat']:
                 filename='.'.join(self.filename.split('.')[:-1])+'.phy'
@@ -1472,6 +1495,7 @@ class Nexus(object):
 
     def cstatus(self,site,delete=[],narrow=True):
         """Summarize character.
+
         narrow=True:  paup-mode (a c ? --> ac; ? ? ? --> ?)
         narrow=false:           (a c ? --> a c g t -; ? ? ? --> a c g t -)
         """
@@ -1495,6 +1519,7 @@ class Nexus(object):
 
     def weighted_stepmatrix(self,name='your_name_here',exclude=[],delete=[]):
         """Calculates a stepmatrix for weighted parsimony.
+
         See Wheeler (1990), Cladistics 6:269-275 and
         Felsenstein (1981), Biol. J. Linn. Soc. 16:183-196
         """    
@@ -1551,7 +1576,7 @@ class Nexus(object):
         return dict(zip(undelete,bootstrapseqs)) 
 
     def add_sequence(self,name,sequence):
-        """Adds a sequence to the matrix."""
+        """Adds a sequence (string) to the matrix."""
         
         if not name:
             raise NexusError, 'New sequence must have a name'
@@ -1564,7 +1589,7 @@ class Nexus(object):
 
         if name in self.taxlabels:
             unique_name=_unique_label(self.taxlabels,name)
-            print "WARNING: Sequence name %s is already present. Sequence was added as %s." % (name,unique_name)
+            #print "WARNING: Sequence name %s is already present. Sequence was added as %s." % (name,unique_name)
         else:
             unique_name=name
 
