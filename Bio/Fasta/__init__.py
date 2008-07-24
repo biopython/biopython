@@ -1,16 +1,62 @@
-"""Utilities for working with FASTA-formatted sequences.
-
-This module uses Martel-based parsing to speed up the parsing process.
+"""Utilities for working with FASTA-formatted sequences (OBSOLETE).
 
 Classes:
 Record             Holds FASTA sequence data.
 Iterator           Iterates over sequence data in a FASTA file.
 Dictionary         Accesses a FASTA file using a dictionary interface.
 RecordParser       Parses FASTA sequence data into a Record object.
-SequenceParser     Parses FASTA sequence data into a Sequence object.
+SequenceParser     Parses FASTA sequence data into a SeqRecord object.
 
-Functions:
-index_file         Index a FASTA file for a Dictionary.
+For a long time this module was the most commonly used and best documented
+FASTA parser in Biopython.  However, we now recommend using Bio.SeqIO instead.
+
+In view of this, while you can continue to use Bio.Fasta for the moment, it is
+considered to be a legacy module and should not be used if you are writing new
+code.  At some point Bio.Fasta may be officially deprecated (with warning
+messages when used) before finally being removed.
+
+If you are already using Bio.Fasta with the SequenceParser to get SeqRecord
+objects, then you should be able to switch to the more recent Bio.SeqIO module
+very easily as that too uses SeqRecord objects.  For example,
+
+from Bio import Fasta
+handle = open("example.fas")
+for seq_record in Fasta.Iterator(handle, Fasta.SequenceParser()) :
+    print seq_record.description
+    print seq_record.seq
+handle.close()
+
+Using Bio.SeqIO instead this becomes:
+
+from Bio import SeqIO
+handle = open("example.fas")
+for seq_record in SeqIO.parse(handle, "fasta") :
+    print seq_record.description
+    print seq_record.seq
+handle.close()
+
+Converting an existing code which uses the RecordParser is a little more
+complicated as the Bio.Fasta.Record object differs from the SeqRecord.
+
+from Bio import Fasta
+handle = open("example.fas")
+for record in Fasta.Iterator(handle, Fasta.RecordParser()) :
+    #record is a Bio.Fasta.Record object
+    print record.title #The full title line as a string
+    print record.sequence #The sequence as a string
+handle.close()
+
+Using Bio.SeqIO instead this becomes:
+
+from Bio import SeqIO
+handle = open("example.fas")
+for seq_record in SeqIO.parse(handle, "fasta") :
+    print seq_record.description #The full title line as a string
+    print seq_record.seq.tostring() #The sequence as a string
+handle.close()
+
+
+
 """
 from Bio import Seq
 from Bio import SeqRecord
