@@ -2,11 +2,12 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-
 """
-This module provides code to access resources at ExPASy over the WWW.
-http://www.expasy.ch/
+This module provides online access to resources at ExPASy (DEPRECATED).
 
+The functions in Bio.WWW.ExPASy are now available from Bio.ExPASy instead.
+
+See http://www.expasy.ch/
 
 Functions:
 get_prodoc_entry  Interface to the get-prodoc-entry CGI script.
@@ -15,7 +16,7 @@ get_prosite_raw   Interface to the get-prosite-raw CGI script.
 get_sprot_raw     Interface to the get-sprot-raw CGI script.
 sprot_search_ful  Interface to the sprot-search-ful CGI script.
 sprot_search_de   Interface to the sprot-search-de CGI script.
-_open
+_open             Private
 
 """
 
