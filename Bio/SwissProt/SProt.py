@@ -278,7 +278,7 @@ class ExPASyDictionary:
         for the entry.  Raises a KeyError if there's an error.
         
         """
-        from Bio.WWW import ExPASy
+        from Bio import ExPASy
         # First, check to see if enough time has passed since my
         # last query.
         self.limiter.wait()
@@ -341,9 +341,8 @@ class _Scanner:
             uhandle = handle
         else:
             uhandle = File.UndoHandle(handle)
-        
         self._scan_record(uhandle, consumer)
-
+        
     def _skip_starstar(self, uhandle) :
         """Ignores any lines starting **"""
         #See Bug 2353, some files from the EBI have extra lines
@@ -434,7 +433,7 @@ class _Scanner:
         self._scan_line('OH', uhandle, consumer.organism_host, any_number=1)
 
     def _scan_reference(self, uhandle, consumer):
-        while 1:
+        while True:
             if safe_peekline(uhandle)[:2] != 'RN':
                 break
             self._scan_rn(uhandle, consumer)

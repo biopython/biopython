@@ -357,7 +357,7 @@ class ExPASyDictionary:
         for the entry.  Raises a KeyError if there's an error.
         
         """
-        from Bio.WWW import ExPASy
+        from Bio import ExPASy
         # First, check to see if enough time has passed since my
         # last query.
         self.limiter.wait()

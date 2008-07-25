@@ -239,7 +239,7 @@ class ExPASyDictionary:
         
         """
         import time
-        from Bio.WWW import ExPASy
+        from Bio import ExPASy
         # First, check to see if enough time has passed since my
         # last query.
         if self.last_query_time is not None:
