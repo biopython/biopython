@@ -1,7 +1,13 @@
 # Information about the IUPAC alphabets
 
 protein_letters = "ACDEFGHIKLMNPQRSTVWY"
-extended_protein_letters = "ACDEFGHIKLMNPQRSTVWYBXZ"
+extended_protein_letters = "ACDEFGHIKLMNPQRSTVWYBXZJUO"
+#   B = "Asx";  aspartic acid or asparagine (D or N)
+#   X = "Xxx";  unknown or 'other' amino acid
+#   Z = "Glx";  glutamic acid or glutamine (E or Q)
+#   J = "Xle";  leucine or isoleucine (L or I, used in mass-spec)
+#   U = "Sec";  selenocysteine
+#   O = "Pyl";  pyrrolysine
 ambiguous_dna_letters = "GATCRYWSMKHBVDN"
 unambiguous_dna_letters = "GATC"
 ambiguous_rna_letters = "GAUCRYWSMKHBVDN"
@@ -119,6 +125,8 @@ def _make_ambiguous_ranges(dict, weight_table):
     range_d = {}
     avg_d = {}
     for letter, values in dict.items():
+        #Following line is a quick hack to skip undefined weights for U and O
+        if len(values)==1 and values[0] not in weight_table : continue
         weights = map(weight_table.get, values)
         range_d[letter] = (min(weights), max(weights))
         total_w = 0.0
@@ -148,11 +156,13 @@ protein_weights = {
     "L": 131.18,
     "M": 149.21,
     "N": 132.12,
+    #"O": 0.0, # Needs to be recorded!
     "P": 115.13,
     "Q": 146.15,
     "R": 174.20,
     "S": 105.09,
     "T": 119.12,
+    #"U": 168.05, # To be confirmed
     "V": 117.15,
     "W": 204.23,
     "Y": 181.19
@@ -168,18 +178,23 @@ extended_protein_values = {
     "G": "G",
     "H": "H",
     "I": "I",
+    "J": "IL",
     "K": "K",
     "L": "L",
     "M": "M",
     "N": "N",
+    "O": "O",
     "P": "P",
     "Q": "Q",
     "R": "R",
     "S": "S",
     "T": "T",
+    "U": "U",
     "V": "V",
     "W": "W",
     "X": "ACDEFGHIKLMNPQRSTVWY",
+    #TODO - Include U and O in the possible values of X?
+    #This could alter the extended_protein_weight_ranges ...
     "Y": "Y",
     "Z": "QE",
 }

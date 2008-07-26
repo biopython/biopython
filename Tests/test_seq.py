@@ -283,8 +283,12 @@ for c1 in ambig :
                 assert values == Set(("E", "Q"))
             elif t=="B" :
                 assert values == Set(["D", "N"])
+            elif t=="J" :
+                assert values == Set(["L", "I"])
             else :
                 assert values == Set(t)
+            #TODO - Use the Bio.Data.IUPACData module for the
+            #ambiguous protein mappings?
 del t,c1,c2,c3,ambig
 
 print

@@ -7,25 +7,29 @@ from Bio.Data import IUPACData
 
 # From the IUPAC definition at:
 #   http://www.chem.qmw.ac.uk/iupac/AminoAcid/A2021.html#AA21
-class IUPACProtein(Alphabet.ProteinAlphabet):
+
+# If you use X for selenocysteines, then you'll need a new alphabet.
+class ExtendedIUPACProtein(Alphabet.ProteinAlphabet):
+    """Extended IUPAC protein single letter alphabet including X etc.
+
+    In addition to the standard 20 single letter protein codes, this includes:
+    
+    B = "Asx";  Aspartic acid (R) or Asparagine (N)
+    X = "Xxx";  Unknown or 'other' amino acid
+    Z = "Glx";  Glutamic acid (E) or Glutamine (Q)
+    J = "Xle";  Leucine (L) or Isoleucine (I), used in mass-spec (NMR)
+    U = "Sec";  Selenocysteine
+    O = "Pyl";  Pyrrolysine
+    """
+    letters = IUPACData.extended_protein_letters
+
+extended_protein = ExtendedIUPACProtein()
+
+class IUPACProtein(ExtendedIUPACProtein):
+    """IUPAC protein single letter alphabet of the 20 standard amino acids."""
     letters = IUPACData.protein_letters
 
 protein = IUPACProtein()
-
-# This could be considered the base class for the standard IUPAC
-# protein, except that some encodings will use "X" to mean "unknown
-# character", which causes a collision.  If you use X for
-# selenocysteines, then you'll need a new alphabet.
-
-class ExtendedIUPACProtein(Alphabet.ProteinAlphabet):
-    letters = IUPACData.extended_protein_letters
-    # B = "Asx";  aspartic acid or asparagine
-    # X = "Sec";  selenocysteine  Note: IUPAC is moving to use 'U' for this
-    # Z = "Glx";  glutamic acid or glutamine (or substances such as
-    #         4-carboxyglutamic acid and 5-oxoproline that yield glutamic
-    #         acid on acid hydrolysis of peptides)
-
-extended_protein = ExtendedIUPACProtein()
 
 ##################### DNA
 
