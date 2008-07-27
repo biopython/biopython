@@ -659,6 +659,8 @@ if __name__ == "__main__" :
                         % (c1+c2+c3, t, ",".join(values))
                 elif t=="Z" :
                     assert values == Set(("E", "Q"))
+                elif t=="J" :
+                    assert values == Set(("I", "L"))
                 elif t=="B" :
                     assert values == Set(["D", "N"])
                 else :
