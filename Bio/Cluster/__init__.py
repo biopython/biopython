@@ -357,11 +357,3 @@ expclusters=None:  For hierarchical clustering results, expclusters
 
 def read(handle):
     return Record(handle)
-
-class DataFile(Record):
-  def __init__(self, filename=None):
-    import warnings
-    warnings.warn("""The DataFile class has been deprecated.  Please use the Record class instead. To load data from a file into a Record object, use "record = read(open('mydatafile.txt'))" """, DeprecationWarning)
-    if filename: handle = open(filename)
-    else: handle = None
-    Record.__init__(self, handle)
