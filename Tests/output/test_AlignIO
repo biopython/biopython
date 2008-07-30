@@ -8,6 +8,8 @@ Testing reading clustal format file Clustalw/cw02.aln with 1 alignments
  Checking can write/read as 'phylip' format
  Checking can write/read as 'clustal' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'tab' format
 Testing reading clustal format file Clustalw/opuntia.aln with 1 alignments
  Alignment 0, with 7 sequences of length 156
   TTTTTTT alignment column 0
@@ -22,6 +24,8 @@ Testing reading clustal format file Clustalw/opuntia.aln with 1 alignments
  Checking can write/read as 'phylip' format
  Checking can write/read as 'clustal' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'tab' format
 Testing reading clustal format file Clustalw/hedgehog.aln with 1 alignments
  Alignment 0, with 5 sequences of length 447
   M---- alignment column 0
@@ -36,6 +40,8 @@ Testing reading clustal format file Clustalw/hedgehog.aln with 1 alignments
  Checking can write/read as 'phylip' format
  Checking can write/read as 'clustal' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'tab' format
 Testing reading clustal format file Clustalw/odd_consensus.aln with 1 alignments
  Alignment 0, with 2 sequences of length 687
   ------------------------------------...TAG AT3G20900.1-CDS
@@ -46,6 +52,8 @@ Testing reading clustal format file Clustalw/odd_consensus.aln with 1 alignments
  Failed: Repeated identifier, possibly due to truncation
  Checking can write/read as 'clustal' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'tab' format
 Testing reading fasta format file GFF/multi.fna with 1 alignments
  Alignment 0, with 3 sequences of length 8
   ACGTCGCG test1
@@ -56,6 +64,8 @@ Testing reading fasta format file GFF/multi.fna with 1 alignments
  Checking can write/read as 'phylip' format
  Checking can write/read as 'clustal' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'tab' format
 Testing reading nexus format file Nexus/test_Nexus_input.nex with 1 alignments
  Alignment 0, with 9 sequences of length 48
   AAAAAAAAc alignment column 0
@@ -69,6 +79,8 @@ Testing reading nexus format file Nexus/test_Nexus_input.nex with 1 alignments
  Checking can write/read as 'phylip' format
  Checking can write/read as 'clustal' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'tab' format
 Testing reading stockholm format file Stockholm/simple.sth with 1 alignments
  Alignment 0, with 2 sequences of length 104
   UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCA...UGU AP001509.1
@@ -78,6 +90,8 @@ Testing reading stockholm format file Stockholm/simple.sth with 1 alignments
  Checking can write/read as 'phylip' format
  Checking can write/read as 'clustal' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'tab' format
 Testing reading stockholm format file Stockholm/funny.sth with 1 alignments
  Alignment 0, with 5 sequences of length 43
   MMMEE alignment column 0
@@ -92,6 +106,8 @@ Testing reading stockholm format file Stockholm/funny.sth with 1 alignments
  Checking can write/read as 'phylip' format
  Checking can write/read as 'clustal' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'tab' format
 Testing reading phylip format file Phylip/reference_dna.phy with 1 alignments
  Alignment 0, with 6 sequences of length 13
   CCTTCG alignment column 0
@@ -106,6 +122,8 @@ Testing reading phylip format file Phylip/reference_dna.phy with 1 alignments
  Checking can write/read as 'phylip' format
  Checking can write/read as 'clustal' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'tab' format
 Testing reading phylip format file Phylip/reference_dna2.phy with 1 alignments
  Alignment 0, with 6 sequences of length 39
   CCTTCG alignment column 0
@@ -120,6 +138,8 @@ Testing reading phylip format file Phylip/reference_dna2.phy with 1 alignments
  Checking can write/read as 'phylip' format
  Checking can write/read as 'clustal' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'tab' format
 Testing reading phylip format file Phylip/hennigian.phy with 1 alignments
  Alignment 0, with 10 sequences of length 40
   CCCCCAAAAA alignment column 0
@@ -134,6 +154,8 @@ Testing reading phylip format file Phylip/hennigian.phy with 1 alignments
  Checking can write/read as 'phylip' format
  Checking can write/read as 'clustal' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'tab' format
 Testing reading phylip format file Phylip/horses.phy with 1 alignments
  Alignment 0, with 10 sequences of length 40
   AACCCCCCCC alignment column 0
@@ -148,6 +170,8 @@ Testing reading phylip format file Phylip/horses.phy with 1 alignments
  Checking can write/read as 'phylip' format
  Checking can write/read as 'clustal' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'tab' format
 Testing reading phylip format file Phylip/random.phy with 1 alignments
  Alignment 0, with 10 sequences of length 40
   CAAAACAAAC alignment column 0
@@ -162,6 +186,8 @@ Testing reading phylip format file Phylip/random.phy with 1 alignments
  Checking can write/read as 'phylip' format
  Checking can write/read as 'clustal' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'tab' format
 Testing reading phylip format file Phylip/interlaced.phy with 1 alignments
  Alignment 0, with 3 sequences of length 384
   -----MKVILLFVLAVFTVFVSS-------------...I-- CYS1_DICDI
@@ -172,6 +198,8 @@ Testing reading phylip format file Phylip/interlaced.phy with 1 alignments
  Checking can write/read as 'phylip' format
  Checking can write/read as 'clustal' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'tab' format
 Testing reading phylip format file Phylip/interlaced2.phy with 1 alignments
  Alignment 0, with 4 sequences of length 131
   TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTG...SHE IXI_234
@@ -183,6 +211,8 @@ Testing reading phylip format file Phylip/interlaced2.phy with 1 alignments
  Checking can write/read as 'phylip' format
  Checking can write/read as 'clustal' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'tab' format
 Testing reading emboss format file Emboss/alignret.txt with 1 alignments
  Alignment 0, with 4 sequences of length 131
   TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTG...SHE IXI_234
@@ -194,6 +224,8 @@ Testing reading emboss format file Emboss/alignret.txt with 1 alignments
  Checking can write/read as 'phylip' format
  Checking can write/read as 'clustal' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'tab' format
 Testing reading emboss format file Emboss/needle.txt with 5 alignments
  Alignment 0, with 2 sequences of length 124
   KILIVDD----QYGIRILLNEVFNKEGYQTFQAANG...--- ref_rec
@@ -213,6 +245,8 @@ Testing reading emboss format file Emboss/needle.txt with 5 alignments
  Checking can write/read as 'phylip' format
  Checking can write/read as 'clustal' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'tab' format
 Testing reading emboss format file Emboss/needle_asis.txt with 1 alignments
  Alignment 0, with 2 sequences of length 3653
   TATTTTTTGGATTTTTTTCTAGATTTTCTAGGTTAT...GAA asis
@@ -224,6 +258,8 @@ Testing reading emboss format file Emboss/needle_asis.txt with 1 alignments
  Checking can write/read as 'clustal' format
  Checking can write/read as 'stockholm' format
  Failed: Duplicate record identifier: asis
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'tab' format
 Testing reading emboss format file Emboss/water.txt with 1 alignments
  Alignment 0, with 2 sequences of length 131
   TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTG...SHE IXI_234
@@ -233,6 +269,8 @@ Testing reading emboss format file Emboss/water.txt with 1 alignments
  Checking can write/read as 'phylip' format
  Checking can write/read as 'clustal' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'tab' format
 Testing reading fasta-m10 format file Fasta/output001.m10 with 4 alignments
  Alignment 0, with 2 sequences of length 108
   SGSNT-RRRAISRPVRLTAEED---QEIRKRAAECG...LSR gi|10955263|ref|NP_052604.1|
@@ -251,6 +289,8 @@ Testing reading fasta-m10 format file Fasta/output001.m10 with 4 alignments
  Checking can write/read as 'phylip' format
  Checking can write/read as 'clustal' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'tab' format
 Testing reading fasta-m10 format file Fasta/output002.m10 with 6 alignments
  Alignment 0, with 2 sequences of length 88
   SGSNTRRRAISRPVR--LTAEEDQEIRKRAAECG-K...AEV gi|10955263|ref|NP_052604.1|
@@ -270,6 +310,8 @@ Testing reading fasta-m10 format file Fasta/output002.m10 with 6 alignments
  Checking can write/read as 'phylip' format
  Checking can write/read as 'clustal' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'tab' format
 Testing reading fasta-m10 format file Fasta/output003.m10 with 3 alignments
  Alignment 0, with 2 sequences of length 55
   ISISNNKDQYEELQKEQGERDLKTVDQLVRIAAAGG...IAA gi|152973837|ref|YP_001338874.1|
@@ -285,6 +327,8 @@ Testing reading fasta-m10 format file Fasta/output003.m10 with 3 alignments
  Checking can write/read as 'phylip' format
  Checking can write/read as 'clustal' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'tab' format
 Testing reading fasta-m10 format file Fasta/output004.m10 with 1 alignments
  Alignment 0, with 2 sequences of length 102
   AAAAAAGATAAAAAATATCAAATAGAAGCAATAAAA...TCA ref|NC_002127.1|:c1351-971
@@ -295,6 +339,8 @@ Testing reading fasta-m10 format file Fasta/output004.m10 with 1 alignments
  Failed: Repeated identifier, possibly due to truncation
  Checking can write/read as 'clustal' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'tab' format
 Testing reading fasta-m10 format file Fasta/output005.m10 with 1 alignments
  Alignment 0, with 2 sequences of length 110
   IKNKDKTLFIVYAT-DIYSPSEFFSKIESDLKKKKS...LSK gi|10955264|ref|NP_052605.1|
@@ -304,6 +350,8 @@ Testing reading fasta-m10 format file Fasta/output005.m10 with 1 alignments
  Checking can write/read as 'phylip' format
  Checking can write/read as 'clustal' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'tab' format
 Testing reading ig format file IntelliGenetics/VIF_mase-pro.txt with 1 alignments
  Alignment 0, with 16 sequences of length 298
   MMMMMMMMMMMMMMMM alignment column 0
@@ -318,4 +366,6 @@ Testing reading ig format file IntelliGenetics/VIF_mase-pro.txt with 1 alignment
  Checking can write/read as 'phylip' format
  Checking can write/read as 'clustal' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'tab' format
 Finished tested reading files

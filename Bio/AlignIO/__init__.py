@@ -182,7 +182,7 @@ def write(alignments, handle, format) :
         #Exploit the existing SeqIO parser to the dirty work!
         #This may not work perfectly...
         for alignment in alignments :
-            SeqIO.write(alignment.get_all_seqs(), format)
+            SeqIO.write(alignment, handle, format)
     else :
         raise ValueError("Unknown format '%s'" % format)
 

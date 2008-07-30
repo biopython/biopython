@@ -10,6 +10,8 @@ from Bio.Align.Generic import Alignment
 from Bio.Align import AlignInfo
 
 test_write_read_alignment_formats = AlignIO._FormatToWriter.keys()
+test_write_read_align_with_seq_count = test_write_read_alignment_formats \
+                                     + ["fasta", "tab"]
 
 # test_files is a list of tuples containing:
 # - string:  file format
@@ -82,7 +84,16 @@ def alignment_summary(alignment, index="  ", vertical_threshold=5) :
 
 def check_simple_write_read(alignments, indent=" ") :
     #print indent+"Checking we can write and then read back these alignments"
-    for format in test_write_read_alignment_formats :
+    for format in test_write_read_align_with_seq_count :
+        records_per_alignment = len(alignments[0].get_all_seqs())
+        for a in alignments :
+            if records_per_alignment <> len(a.get_all_seqs()) :
+                records_per_alignment = None
+        #Can we expect this format to work?
+        if not records_per_alignment \
+        and format not in test_write_read_alignment_formats :
+            continue
+        
         print indent+"Checking can write/read as '%s' format" % format
         
         #Going to write to a handle...
@@ -97,46 +108,66 @@ def check_simple_write_read(alignments, indent=" ") :
             #Carry on to the next format:
             continue
 
-        handle.flush()
-        handle.seek(0)
-        #Now ready to read back from the handle...
-        try :
-            alignments2 = list(AlignIO.parse(handle=handle, format=format))
-        except ValueError, e :
-            #This is BAD.  We can't read our own output.
-            #I want to see the output when called from the test harness,
-            #run_tests.py (which can be funny about new lines on Windows)
+        #First, try with the seq_count
+        if records_per_alignment :
+            handle.flush()
             handle.seek(0)
-            raise ValueError("%s\n\n%s\n\n%s" \
-                              % (str(e), repr(handle.read()), repr(alignments2)))
+            try :
+                alignments2 = list(AlignIO.parse(handle=handle, format=format, \
+                                                 seq_count=records_per_alignment))
+            except ValueError, e :
+                #This is BAD.  We can't read our own output.
+                #I want to see the output when called from the test harness,
+                #run_tests.py (which can be funny about new lines on Windows)
+                handle.seek(0)
+                raise ValueError("%s\n\n%s\n\n%s" \
+                                  % (str(e), repr(handle.read()), repr(alignments2)))
+            simple_alignment_comparison(alignments, alignments2, format)
 
-        assert len(alignments2) == t_count
-        for a1, a2 in zip(alignments, alignments2) :
-            assert a1.get_alignment_length() == a2.get_alignment_length()
-            assert len(a1.get_all_seqs()) == len(a2.get_all_seqs())
-            for r1, r2 in zip(a1,a2) :
-                #Check the bare minimum (ID and sequence) as
-                #many formats can't store more than that.
+        if format in test_write_read_alignment_formats :
+            #Don't need the seq_count
+            handle.flush()
+            handle.seek(0)
+            try :
+                alignments2 = list(AlignIO.parse(handle=handle, format=format))
+            except ValueError, e :
+                #This is BAD.  We can't read our own output.
+                #I want to see the output when called from the test harness,
+                #run_tests.py (which can be funny about new lines on Windows)
+                handle.seek(0)
+                raise ValueError("%s\n\n%s\n\n%s" \
+                                  % (str(e), repr(handle.read()), repr(alignments2)))
+            simple_alignment_comparison(alignments, alignments2, format)
 
-                #Check the sequence
-                assert r1.seq.tostring() == r2.seq.tostring()
-                
-                #Beware of different quirks and limitations in the
-                #valid character sets and the identifier lengths!
-                if format=="phylip" :
-                    assert r1.id.replace("[","").replace("]","")[:10] == r2.id, \
-                           "'%s' vs '%s'" % (r1.id, r2.id)
-                elif format=="clustal" :
-                    assert r1.id.replace(" ","_")[:30] == r2.id, \
-                           "'%s' vs '%s'" % (r1.id, r2.id)
-                elif format=="stockholm" :
-                    assert r1.id.replace(" ","_") == r2.id, \
-                           "'%s' vs '%s'" % (r1.id, r2.id)
-                elif format=="fasta" :
-                    assert r1.id.split()[0] == r2.id
-                else :
-                    assert r1.id == r2.id, \
-                           "'%s' vs '%s'" % (r1.id, r2.id)
+def simple_alignment_comparison(alignments, alignments2, format) :
+    assert len(alignments) == len(alignments2)
+    for a1, a2 in zip(alignments, alignments2) :
+        assert a1.get_alignment_length() == a2.get_alignment_length()
+        assert len(a1.get_all_seqs()) == len(a2.get_all_seqs())
+        for r1, r2 in zip(a1,a2) :
+            #Check the bare minimum (ID and sequence) as
+            #many formats can't store more than that.
+
+            #Check the sequence
+            assert r1.seq.tostring() == r2.seq.tostring()
+            
+            #Beware of different quirks and limitations in the
+            #valid character sets and the identifier lengths!
+            if format=="phylip" :
+                assert r1.id.replace("[","").replace("]","")[:10] == r2.id, \
+                       "'%s' vs '%s'" % (r1.id, r2.id)
+            elif format=="clustal" :
+                assert r1.id.replace(" ","_")[:30] == r2.id, \
+                       "'%s' vs '%s'" % (r1.id, r2.id)
+            elif format=="stockholm" :
+                assert r1.id.replace(" ","_") == r2.id, \
+                       "'%s' vs '%s'" % (r1.id, r2.id)
+            elif format=="fasta" :
+                assert r1.id.split()[0] == r2.id
+            else :
+                assert r1.id == r2.id, \
+                       "'%s' vs '%s'" % (r1.id, r2.id)
+    return True
 
 #Check parsers can cope with an empty file
 for t_format in AlignIO._FormatToIterator :
