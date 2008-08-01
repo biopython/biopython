@@ -3,9 +3,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """
-Parser for (new) ACE files output by PHRAP.
+Parser for ACE files output by PHRAP.
 
-version 1.3, 05/06/2004
 Written by Frank Kauff (fkauff@duke.edu) and
 Cymon J. Cox (cymon@duke.edu)
 
@@ -13,15 +12,14 @@ Uses the Biopython Parser interface: ParserSupport.py
 
 Usage:
 
-There are two ways of reading an ace file: The ACEParser() reads
-the whole file at once and the RecordParser() reads contig after
-contig.
+There are two ways of reading an ace file:
+1) The function 'read' reads the whole file at once;
+2) The function 'parse' reads the file contig after contig.
     
 1) Parse whole ace file at once:
 
         from Bio.Sequencing import Ace
-        aceparser=Ace.ACEParser()
-        acefilerecord=aceparser.parse(open('my_ace_file.ace','r'))
+        acefilerecord=Ace.read(open('my_ace_file.ace'))
 
 This gives you:
         acefilerecord.ncontigs (the number of contigs in the ace file)
@@ -44,9 +42,8 @@ see _RecordConsumer for details.
 2) Or you can iterate over the contigs of an ace file one by one in the ususal way:
 
         from Bio.Sequencing import Ace
-        recordparser=Ace.RecordParser()
-        iterator=Ace.Iterator(open('my_ace_file.ace','r'),recordparser)
-        for contig in iterator :
+        contigs=Ace.parse(open('my_ace_file.ace'))
+        for contig in contigs:
             print contig.name
             ...
 
@@ -56,11 +53,8 @@ containing WA, CT, RT or WR tags which contain additional meta-data on the conti
 Because the parser doesn't see this data until the final record, it cannot be added to
 the appropriate records.  Instead these tags will be returned with the last contig record.
 Thus an ace file does not entirerly suit the concept of iterating. If WA, CT, RT, WR tags
-are needed, the ACEParser instead of the RecordParser might be appropriate.
+are needed, the 'read' function rather than the 'parse' function might be more appropriate.
 """
-import os
-from Bio import File
-from Bio.ParserSupport import *
 
 
 class rd:
@@ -161,6 +155,7 @@ class ct:
         self.date=''
         self.notrans=''
         self.info=[]
+        self.comment=[]
         if line:
             header=line.split()
             self.name = header[0]
@@ -239,6 +234,19 @@ class Contig:
             self.uorc = header[5]
 
 def parse(handle):
+    """parse(handle)
+        
+    where handle is a file-like object.
+    
+    This function returns an iterator that allows you to iterate
+    over the ACE file record by record:
+
+        records = parse(handle)
+        for record in records:
+            # do something with the record
+
+    where each record is a Contig object.
+    """
 
     handle = iter(handle)
 
@@ -399,8 +407,16 @@ def parse(handle):
                     record.ct.append(ct(line))
                     for line in handle:
                         line=line.strip()
-                        if line=='}': break
-                        record.ct[-1].info.append(line)
+                        if line=="COMMENT{":
+                            for line in handle:
+                                line = line.strip()
+                                if line.endswith("C}"):
+                                    break
+                                record.ct[-1].comment.append(line)
+                        elif line=='}':
+                            break
+                        else:
+                            record.ct[-1].info.append(line)
                     line = ""
                 else:
                     break
@@ -409,75 +425,6 @@ def parse(handle):
                 break    
 
         yield record
-    
-class Iterator:
-    """Iterates over an ACE-file with multiple contigs.
-    
-    Methods: 
-    next    Return the next record from the stream, or None.
-    """
-
-    def __init__(self, handle, parser=None):
-        """__init__(self, handle, parser=None)
-        
-        Create a new iterator.  handle is a file-like object.  parser
-        is an optional Parser object to change the results into another form.
-        If set to None, then the raw contents of the file will be returned.
-        """
-        self._uhandle = File.UndoHandle(handle)
-        self._parser = parser
-
-    def next(self):
-        """next(self) -> object
-
-        Return the next contig record from the file. If no more records
-        return None.
-        """
-
-        lines = []
-        while 1: 
-            # if at beginning, skip the AS and look for first CO command
-            line=self._uhandle.readline()
-            if not line:                    # empty or corrupt file
-                return None
-            if line[:2]=='CO':
-                lines.append(line)
-                break
-        while 1:
-            line = self._uhandle.readline()
-            if not line:
-                break
-            # If a new record, then put the line back and stop.
-            if lines and line[:2] == 'CO':
-                self._uhandle.saveline(line)
-                break
-            lines.append(line)
-
-        if not lines:
-            return None
-
-        data = ''.join(lines)
-        if self._parser is not None:
-            return self._parser.parse(File.StringHandle(data))
-        return data
-
-    def __iter__(self) :
-        """Iterate over the ACE file record by record."""
-        return iter(self.next, None)
-
-class RecordParser(AbstractParser):
-    """Parses ACE file data into a Record object."""
-    def __init__(self):
-        self._scanner = _Scanner()
-        self._consumer = _RecordConsumer()
-
-    def parse(self, handle):
-        if isinstance(handle, File.UndoHandle):
-            uhandle = handle
-        else:
-            uhandle = File.UndoHandle(handle)
-        self._scanner.feed(uhandle, self._consumer)
-        return self._consumer.data
 
 class ACEFileRecord:
     """Holds data of an ACE file.
@@ -537,12 +484,122 @@ class ACEFileRecord:
                                 self.contigs[i].reads[j].wr=[]
                             self.contigs[i].reads[j].wr.append(wr_tag)
        
+def read(handle):
+    """Parses the full ACE file in list of contigs.
+
+    """
+
+    handle = iter(handle)
+
+    record=ACEFileRecord()
+
+    try:
+        line = handle.next()
+    except StopIteration:
+        raise ValueError, "Premature end of file"
+
+    # check if the file starts correctly
+    if not line.startswith('AS'):
+        raise ValueError, "File does not start with 'AS'."
+
+    words = line.split()
+    record.ncontigs, record.nreads = map(int, words[1:3])
+
+    # now read all the records
+    record.contigs = list(parse(handle))
+    # wa, ct, rt rags are usually at the end of the file, but not necessarily (correct?).
+    # If the iterator is used, the tags are returned with the contig or the read after which they appear,
+    # if all tags are at the end, they are read with the last contig. The concept of an
+    # iterator leaves no other choice. But if the user uses the ACEParser, we can check
+    # them and put them into the appropriate contig/read instance.
+    # Conclusion: An ACE file is not a filetype for which iteration is 100% suitable...
+    record.sort()
+    return record
+
+#### Everything below is deprecated
+    
+from Bio import File
+from Bio.ParserSupport import *
+
+class Iterator:
+    """Iterates over an ACE-file with multiple contigs.
+    
+    Methods: 
+    next    Return the next record from the stream, or None.
+    """
+
+    def __init__(self, handle, parser=None):
+        """__init__(self, handle, parser=None)
+        
+        Create a new iterator.  handle is a file-like object.  parser
+        is an optional Parser object to change the results into another form.
+        If set to None, then the raw contents of the file will be returned.
+        """
+        import warnings
+        warnings.warn("Ace.Iterator is deprecated. Instead of Ace.Iterator(handle, Ace.RecordParser()), please use Ace.parse(handle)", DeprecationWarning)
+        self._uhandle = File.UndoHandle(handle)
+        self._parser = parser
+
+    def next(self):
+        """next(self) -> object
+
+        Return the next contig record from the file. If no more records
+        return None.
+        """
+
+        lines = []
+        while 1: 
+            # if at beginning, skip the AS and look for first CO command
+            line=self._uhandle.readline()
+            if not line:                    # empty or corrupt file
+                return None
+            if line[:2]=='CO':
+                lines.append(line)
+                break
+        while 1:
+            line = self._uhandle.readline()
+            if not line:
+                break
+            # If a new record, then put the line back and stop.
+            if lines and line[:2] == 'CO':
+                self._uhandle.saveline(line)
+                break
+            lines.append(line)
+
+        if not lines:
+            return None
+
+        data = ''.join(lines)
+        if self._parser is not None:
+            return self._parser.parse(File.StringHandle(data))
+        return data
+
+    def __iter__(self) :
+        """Iterate over the ACE file record by record."""
+        return iter(self.next, None)
+
+class RecordParser(AbstractParser):
+    """Parses ACE file data into a Record object."""
+    def __init__(self):
+        self._scanner = _Scanner()
+        self._consumer = _RecordConsumer()
+
+    def parse(self, handle):
+        if isinstance(handle, File.UndoHandle):
+            uhandle = handle
+        else:
+            uhandle = File.UndoHandle(handle)
+        self._scanner.feed(uhandle, self._consumer)
+        return self._consumer.data
+
 class ACEParser(AbstractParser):
     """Parses full ACE file in list of contigs.
 
     """
 
     def __init__(self):
+        import warnings
+        warnings.warn("Ace.ACEParser is deprecated. Instead of Ace.ACEParser().parse(handle), please use Ace.read(handle)", DeprecationWarning)
         self.data=ACEFileRecord()
         
     def parse(self,handle):
@@ -840,8 +897,8 @@ if __name__ == "__main__" :
     print "Quick self test"
     #Test the iterator,
     handle = open("../../Tests/Ace/contig1.ace")
-    iterator = parse(handle)
-    for contig in iterator :
+    contigs = parse(handle)
+    for contig in contigs:
         print contig.name, len(contig.sequence), len(contig.reads)
     handle.close()
     print "Done"
