@@ -88,8 +88,7 @@ class AceTestOne(unittest.TestCase):
 
     def t_check_ACEParser(self):
         """Test to check that ACEParser can parse the whole file into one record."""
-        aceparser=Ace.ACEParser()
-        record=aceparser.parse(self.handle)
+        record=Ace.read(self.handle)
         x=0
         print '\nInput file: %s' % self.handle.name
         print '\nContigs:',record.ncontigs,'; Reads:',record.nreads
