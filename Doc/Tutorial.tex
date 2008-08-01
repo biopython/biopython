@@ -1529,6 +1529,30 @@ records = [make_rc_record(rec) for rec in \
 SeqIO.write(records, open("rev_comp.fasta", "w"), "fasta")
 \end{verbatim}
 
+\subsection{Getting your SeqRecord objects as formatted strings}
+\label{sec:Bio.SeqIO-and-StringIO}
+Suppose that you don't really want to write your records to a file or handle -- instead you want a string containing the records in a particular file format.  The \verb|Bio.SeqIO| interface is based on file handles, but python has a useful built in module which provides a string based handle.
+
+For an example of how you might use this, let's load in a bunch of SeqRecord objects from our orchids GenBank file, and create a string containing the records in FASTA format:
+
+\begin{verbatim}
+from Bio import SeqIO
+from StringIO import StringIO
+
+records = SeqIO.parse(open("ls_orchid.gbk", "r"), "genbank")
+
+out_handle = StringIO()
+SeqIO.write(records, out_handle, "fasta")
+#Now need to "rewind" the StringIO handle back to the start...
+out_handle.seek(0)
+#...and we can read back what was written to it as a string:
+fasta_data = out_handle.read()
+
+print fasta_data
+\end{verbatim}
+
+This isn't entirely straight forward to first time you see it, although some related enhancements are being discussed for a future release of Biopython.
+
 \chapter{Sequence Alignment Input/Output}
 \label{chapter:Bio.AlignIO}
 
@@ -2063,6 +2087,27 @@ seq6       FAADDATSQA KAAFDSLTAQ ATEMSGYAWA LVVLVVGATV GIKLFKKFVS
 \end{verbatim}
 
 \noindent In general, because of the identifier limitation, working with PHYLIP file formats shouldn't be your first choice.  Using the PFAM/Stockholm format on the other hand allows you to record a lot of additional annotation too.
+
+\subsection{Getting your Alignment objects as formatted strings}
+The \verb|Bio.AlignIO| interface is based on handles, which means if you want to get your alignment(s) into a string in a particular file format you need to do a little bit more work.  As described in Section~\ref{sec:Bio.SeqIO-and-StringIO} for \verb|Bio.SeqIO|, you can do this using the python \verb|StringIO| module.  For example, the following short example loads a Stockholm/PFAM file and then gets a string containing this in Clustal format.
+
+\begin{verbatim}
+from Bio import AlignIO
+from StringIO import StringIO
+
+alignments = AlignIO.parse(open("PF05371_seed.sth"), "stockholm")
+
+out_handle = StringIO()
+AlignIO.write(alignments, out_handle, "clustal")
+#Now need to "rewind" the StringIO handle back to the start...
+out_handle.seek(0)
+#...and we can read back what was written to it as a string:
+clustal_data = out_handle.read()
+
+print clustal_data
+\end{verbatim}
+
+Future enhancements are being discussed to make this kind of operation a little easier!
 
 \chapter{BLAST}
 \label{chapter:blast}
