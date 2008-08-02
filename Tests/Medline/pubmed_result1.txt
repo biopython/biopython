@@ -1,0 +1,42 @@
+
+PMID- 12230038
+OWN - NLM
+STAT- MEDLINE
+DA  - 20020916
+DCOM- 20030606
+LR  - 20041117
+PUBM- Print
+IS  - 1467-5463 (Print)
+VI  - 3
+IP  - 3
+DP  - 2002 Sep
+TI  - The Bio* toolkits--a brief overview.
+PG  - 296-302
+AB  - Bioinformatics research is often difficult to do with commercial software. The
+      Open Source BioPerl, BioPython and Biojava projects provide toolkits with
+      multiple functionality that make it easier to create customised pipelines or
+      analysis. This review briefly compares the quirks of the underlying languages and
+      the functionality, documentation, utility and relative advantages of the Bio
+      counterparts, particularly from the point of view of the beginning biologist
+      programmer.
+AD  - tacg Informatics, Irvine, CA 92612, USA. hjm@tacgi.com
+FAU - Mangalam, Harry
+AU  - Mangalam H
+LA  - eng
+PT  - Journal Article
+PL  - England
+TA  - Brief Bioinform
+JT  - Briefings in bioinformatics
+JID - 100912837
+SB  - IM
+MH  - *Computational Biology
+MH  - Computer Systems
+MH  - Humans
+MH  - Internet
+MH  - *Programming Languages
+MH  - *Software
+MH  - User-Computer Interface
+EDAT- 2002/09/17 10:00
+MHDA- 2003/06/07 05:00
+PST - ppublish
+SO  - Brief Bioinform. 2002 Sep;3(3):296-302.

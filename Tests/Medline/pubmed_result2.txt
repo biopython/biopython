@@ -1,0 +1,248 @@
+
+PMID- 16403221
+OWN - NLM
+STAT- MEDLINE
+DA  - 20060220
+DCOM- 20060314
+PUBM- Electronic
+IS  - 1471-2105 (Electronic)
+VI  - 7
+DP  - 2006
+TI  - A high level interface to SCOP and ASTRAL implemented in python.
+PG  - 10
+AB  - BACKGROUND: Benchmarking algorithms in structural bioinformatics often involves
+      the construction of datasets of proteins with given sequence and structural
+      properties. The SCOP database is a manually curated structural classification
+      which groups together proteins on the basis of structural similarity. The ASTRAL 
+      compendium provides non redundant subsets of SCOP domains on the basis of
+      sequence similarity such that no two domains in a given subset share more than a 
+      defined degree of sequence similarity. Taken together these two resources provide
+      a 'ground truth' for assessing structural bioinformatics algorithms. We present a
+      small and easy to use API written in python to enable construction of datasets
+      from these resources. RESULTS: We have designed a set of python modules to
+      provide an abstraction of the SCOP and ASTRAL databases. The modules are designed
+      to work as part of the Biopython distribution. Python users can now manipulate
+      and use the SCOP hierarchy from within python programs, and use ASTRAL to return 
+      sequences of domains in SCOP, as well as clustered representations of SCOP from
+      ASTRAL. CONCLUSION: The modules make the analysis and generation of datasets for 
+      use in structural genomics easier and more principled.
+AD  - Bioinformatics, Institute of Cell and Molecular Science, School of Medicine and
+      Dentistry, Queen Mary, University of London, London EC1 6BQ, UK.
+      j.a.casbon@qmul.ac.uk
+FAU - Casbon, James A
+AU  - Casbon JA
+FAU - Crooks, Gavin E
+AU  - Crooks GE
+FAU - Saqi, Mansoor A S
+AU  - Saqi MA
+LA  - eng
+PT  - Evaluation Studies
+PT  - Journal Article
+DEP - 20060110
+PL  - England
+TA  - BMC Bioinformatics
+JT  - BMC bioinformatics
+JID - 100965194
+SB  - IM
+MH  - *Database Management Systems
+MH  - *Databases, Protein
+MH  - Information Storage and Retrieval/*methods
+MH  - Programming Languages
+MH  - Sequence Alignment/*methods
+MH  - Sequence Analysis, Protein/*methods
+MH  - Sequence Homology, Amino Acid
+MH  - *Software
+MH  - *User-Computer Interface
+PMC - PMC1373603
+EDAT- 2006/01/13 09:00
+MHDA- 2006/03/15 09:00
+PHST- 2005/06/17 [received]
+PHST- 2006/01/10 [accepted]
+PHST- 2006/01/10 [aheadofprint]
+AID - 1471-2105-7-10 [pii]
+AID - 10.1186/1471-2105-7-10 [doi]
+PST - epublish
+SO  - BMC Bioinformatics. 2006 Jan 10;7:10.
+
+PMID- 16377612
+OWN - NLM
+STAT- MEDLINE
+DA  - 20060223
+DCOM- 20060418
+LR  - 20061115
+PUBM- Print-Electronic
+IS  - 1367-4803 (Print)
+VI  - 22
+IP  - 5
+DP  - 2006 Mar 1
+TI  - GenomeDiagram: a python package for the visualization of large-scale genomic
+      data.
+PG  - 616-7
+AB  - SUMMARY: We present GenomeDiagram, a flexible, open-source Python module for the 
+      visualization of large-scale genomic, comparative genomic and other data with
+      reference to a single chromosome or other biological sequence. GenomeDiagram may 
+      be used to generate publication-quality vector graphics, rastered images and
+      in-line streamed graphics for webpages. The package integrates with datatypes
+      from the BioPython project, and is available for Windows, Linux and Mac OS X
+      systems. AVAILABILITY: GenomeDiagram is freely available as source code (under
+      GNU Public License) at http://bioinf.scri.ac.uk/lp/programs.html, and requires
+      Python 2.3 or higher, and recent versions of the ReportLab and BioPython
+      packages. SUPPLEMENTARY INFORMATION: A user manual, example code and images are
+      available at http://bioinf.scri.ac.uk/lp/programs.html.
+AD  - Plant Pathogen Programme, Scottish Crop Research Institute, Invergowrie, Dundee
+      DD2 5DA, Scotland, UK. lpritc@scri.ac.uk
+FAU - Pritchard, Leighton
+AU  - Pritchard L
+FAU - White, Jennifer A
+AU  - White JA
+FAU - Birch, Paul R J
+AU  - Birch PR
+FAU - Toth, Ian K
+AU  - Toth IK
+LA  - eng
+PT  - Journal Article
+PT  - Research Support, Non-U.S. Gov't
+DEP - 20051223
+PL  - England
+TA  - Bioinformatics
+JT  - Bioinformatics (Oxford, England)
+JID - 9808944
+SB  - IM
+MH  - Chromosome Mapping/*methods
+MH  - *Computer Graphics
+MH  - *Database Management Systems
+MH  - *Databases, Genetic
+MH  - Information Storage and Retrieval/methods
+MH  - *Programming Languages
+MH  - *Software
+MH  - *User-Computer Interface
+EDAT- 2005/12/27 09:00
+MHDA- 2006/04/19 09:00
+PHST- 2005/12/23 [aheadofprint]
+AID - btk021 [pii]
+AID - 10.1093/bioinformatics/btk021 [doi]
+PST - ppublish
+SO  - Bioinformatics. 2006 Mar 1;22(5):616-7. Epub 2005 Dec 23.
+
+PMID- 14871861
+OWN - NLM
+STAT- MEDLINE
+DA  - 20040611
+DCOM- 20050104
+LR  - 20061115
+PUBM- Print-Electronic
+IS  - 1367-4803 (Print)
+VI  - 20
+IP  - 9
+DP  - 2004 Jun 12
+TI  - Open source clustering software.
+PG  - 1453-4
+AB  - SUMMARY: We have implemented k-means clustering, hierarchical clustering and
+      self-organizing maps in a single multipurpose open-source library of C routines, 
+      callable from other C and C++ programs. Using this library, we have created an
+      improved version of Michael Eisen's well-known Cluster program for Windows, Mac
+      OS X and Linux/Unix. In addition, we generated a Python and a Perl interface to
+      the C Clustering Library, thereby combining the flexibility of a scripting
+      language with the speed of C. AVAILABILITY: The C Clustering Library and the
+      corresponding Python C extension module Pycluster were released under the Python 
+      License, while the Perl module Algorithm::Cluster was released under the Artistic
+      License. The GUI code Cluster 3.0 for Windows, Macintosh and Linux/Unix, as well 
+      as the corresponding command-line program, were released under the same license
+      as the original Cluster code. The complete source code is available at
+      http://bonsai.ims.u-tokyo.ac.jp/mdehoon/software/cluster. Alternatively,
+      Algorithm::Cluster can be downloaded from CPAN, while Pycluster is also available
+      as part of the Biopython distribution.
+AD  - Human Genome Center, Institute of Medical Science, University of Tokyo, 4-6-1
+      Shirokanedai, Minato-ku, Tokyo, 108-8639 Japan. mdehoon@ims.u-tokyo.ac.jp
+FAU - de Hoon, M J L
+AU  - de Hoon MJ
+FAU - Imoto, S
+AU  - Imoto S
+FAU - Nolan, J
+AU  - Nolan J
+FAU - Miyano, S
+AU  - Miyano S
+LA  - eng
+PT  - Comparative Study
+PT  - Evaluation Studies
+PT  - Journal Article
+PT  - Validation Studies
+DEP - 20040210
+PL  - England
+TA  - Bioinformatics
+JT  - Bioinformatics (Oxford, England)
+JID - 9808944
+SB  - IM
+MH  - *Algorithms
+MH  - *Cluster Analysis
+MH  - Gene Expression Profiling/*methods
+MH  - Pattern Recognition, Automated/methods
+MH  - *Programming Languages
+MH  - Sequence Alignment/*methods
+MH  - Sequence Analysis, DNA/*methods
+MH  - *Software
+EDAT- 2004/02/12 05:00
+MHDA- 2005/01/05 09:00
+PHST- 2004/02/10 [aheadofprint]
+AID - 10.1093/bioinformatics/bth078 [doi]
+AID - bth078 [pii]
+PST - ppublish
+SO  - Bioinformatics. 2004 Jun 12;20(9):1453-4. Epub 2004 Feb 10.
+
+PMID- 14630660
+OWN - NLM
+STAT- MEDLINE
+DA  - 20031121
+DCOM- 20040722
+LR  - 20061115
+PUBM- Print
+IS  - 1367-4803 (Print)
+VI  - 19
+IP  - 17
+DP  - 2003 Nov 22
+TI  - PDB file parser and structure class implemented in Python.
+PG  - 2308-10
+AB  - The biopython project provides a set of bioinformatics tools implemented in
+      Python. Recently, biopython was extended with a set of modules that deal with
+      macromolecular structure. Biopython now contains a parser for PDB files that
+      makes the atomic information available in an easy-to-use but powerful data
+      structure. The parser and data structure deal with features that are often left
+      out or handled inadequately by other packages, e.g. atom and residue disorder (if
+      point mutants are present in the crystal), anisotropic B factors, multiple models
+      and insertion codes. In addition, the parser performs some sanity checking to
+      detect obvious errors. AVAILABILITY: The Biopython distribution (including source
+      code and documentation) is freely available (under the Biopython license) from
+      http://www.biopython.org
+AD  - Department of Cellular and Molecular Interactions, Vlaams Interuniversitair
+      Instituut voor Biotechnologie and Computational Modeling Lab, Department of
+      Computer Science, Vrije Universiteit Brussel, Pleinlaan 2, 1050 Brussels,
+      Belgium. thamelry@vub.ac.be
+FAU - Hamelryck, Thomas
+AU  - Hamelryck T
+FAU - Manderick, Bernard
+AU  - Manderick B
+LA  - eng
+PT  - Comparative Study
+PT  - Evaluation Studies
+PT  - Journal Article
+PT  - Research Support, Non-U.S. Gov't
+PT  - Validation Studies
+PL  - England
+TA  - Bioinformatics
+JT  - Bioinformatics (Oxford, England)
+JID - 9808944
+RN  - 0 (Macromolecular Substances)
+SB  - IM
+MH  - Computer Simulation
+MH  - Database Management Systems/*standards
+MH  - *Databases, Protein
+MH  - Information Storage and Retrieval/*methods/*standards
+MH  - Macromolecular Substances
+MH  - *Models, Molecular
+MH  - *Programming Languages
+MH  - Protein Conformation
+MH  - *Software
+EDAT- 2003/11/25 05:00
+MHDA- 2004/07/23 05:00
+PST - ppublish
+SO  - Bioinformatics. 2003 Nov 22;19(17):2308-10.
