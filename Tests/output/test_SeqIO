@@ -16,6 +16,8 @@ Testing reading clustal format file Clustalw/cw02.aln as an alignment
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
+ Failed: Locus identifier 'gi|671626|emb|CAA85685.1|' is too long
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
@@ -41,6 +43,8 @@ Testing reading clustal format file Clustalw/opuntia.aln as an alignment
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
+ Failed: Locus identifier 'gi|6273291|gb|AF191665.1|AF191' is too long
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
@@ -66,6 +70,8 @@ Testing reading clustal format file Clustalw/hedgehog.aln as an alignment
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
+ Failed: Locus identifier 'gi|56122354|gb|AAV74328.1|' is too long
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
@@ -87,6 +93,8 @@ Testing reading clustal format file Clustalw/odd_consensus.aln as an alignment
  Checking can write/read as 'phylip' format
  Failed: Repeated identifier, possibly due to truncation
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
+ Failed: Need a Nucleotide or Protein alphabet
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
@@ -97,6 +105,8 @@ Testing reading fasta format file Nucleic/lupine.nu
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
+ Failed: Locus identifier 'gi|5049839|gb|AI730987.1|AI730987' is too long
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
@@ -107,6 +117,8 @@ Testing reading fasta format file Nucleic/elderberry.nu
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
+ Failed: Locus identifier 'gi|4218935|gb|AF074388.1|AF074388' is too long
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
@@ -117,6 +129,8 @@ Testing reading fasta format file Nucleic/phlox.nu
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
+ Failed: Locus identifier 'gi|5052071|gb|AF067555.1|AF067555' is too long
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
@@ -127,6 +141,8 @@ Testing reading fasta format file Nucleic/centaurea.nu
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
+ Failed: Locus identifier 'gi|4104054|gb|AH007193.1|SEG_CVIGS' is too long
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
@@ -137,6 +153,8 @@ Testing reading fasta format file Nucleic/wisteria.nu
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
+ Failed: Locus identifier 'gi|5817701|gb|AF142731.1|AF142731' is too long
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
@@ -147,6 +165,8 @@ Testing reading fasta format file Nucleic/sweetpea.nu
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
+ Failed: Locus identifier 'gi|3176602|gb|U78617.1|LOU78617' is too long
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
@@ -157,6 +177,8 @@ Testing reading fasta format file Nucleic/lavender.nu
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
+ Failed: Locus identifier 'gi|5690369|gb|AF158246.1|AF158246' is too long
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
@@ -167,6 +189,8 @@ Testing reading fasta format file Amino/aster.pro
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
+ Failed: Locus identifier 'gi|3298468|dbj|BAA31520.1|' is too long
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
@@ -177,6 +201,8 @@ Testing reading fasta format file Amino/loveliesbleeding.pro
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
+ Failed: Locus identifier 'gi|2781234|pdb|1JLY|B' is too long
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
@@ -187,6 +213,8 @@ Testing reading fasta format file Amino/rose.pro
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
+ Failed: Locus identifier 'gi|4959044|gb|AAD34209.1|AF069992_1' is too long
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
@@ -197,6 +225,8 @@ Testing reading fasta format file Amino/rosemary.pro
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
+ Failed: Locus identifier 'gi|671626|emb|CAA85685.1|' is too long
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
@@ -207,6 +237,8 @@ Testing reading fasta format file Fasta/f001
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
+ Failed: Locus identifier 'gi|3318709|pdb|1A91|' is too long
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
@@ -224,6 +256,8 @@ Testing reading fasta format file Fasta/f002
  Failed: Sequences must all be the same length
  Checking can write/read as 'stockholm' format
  Failed: Sequences must all be the same length
+ Checking can write/read as 'genbank' format
+ Failed: Locus identifier 'gi|1592936|gb|G29385|G29385' is too long
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Sequences must all be the same length
@@ -239,6 +273,8 @@ Testing reading fasta format file Fasta/fa01
  Failed: Sequences must all be the same length
  Checking can write/read as 'stockholm' format
  Failed: Sequences must all be the same length
+ Checking can write/read as 'genbank' format
+ Failed: Need a Nucleotide or Protein alphabet
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Sequences must all be the same length
@@ -249,6 +285,8 @@ Testing reading fasta format file GFF/NC_001802.fna
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
+ Failed: Locus identifier 'gi|9629357|ref|NC_001802.1|' is too long
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
@@ -259,6 +297,8 @@ Testing reading fasta format file GFF/NC_001802lc.fna
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
+ Failed: Locus identifier 'gi|9629357|ref|nc_001802.1|' is too long
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
@@ -281,6 +321,8 @@ Testing reading fasta format file GFF/multi.fna as an alignment
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
+ Failed: Need a Nucleotide or Protein alphabet
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
@@ -296,6 +338,8 @@ Testing reading fasta format file Registry/seqs.fasta
  Failed: Sequences must all be the same length
  Checking can write/read as 'stockholm' format
  Failed: Sequences must all be the same length
+ Checking can write/read as 'genbank' format
+ Failed: Locus identifier 'gi|129628|sp|P07175|PARA_AGRTU' is too long
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Sequences must all be the same length
@@ -321,6 +365,8 @@ Testing reading nexus format file Nexus/test_Nexus_input.nex as an alignment
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
+ Failed: Locus identifier 'one should be punished, for (that)!' is too long
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
 Testing reading swiss format file SwissProt/sp001
@@ -330,6 +376,7 @@ Testing reading swiss format file SwissProt/sp001
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
 Testing reading swiss format file SwissProt/sp002
@@ -339,6 +386,7 @@ Testing reading swiss format file SwissProt/sp002
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
 Testing reading swiss format file SwissProt/sp003
@@ -348,6 +396,7 @@ Testing reading swiss format file SwissProt/sp003
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
 Testing reading swiss format file SwissProt/sp004
@@ -357,6 +406,7 @@ Testing reading swiss format file SwissProt/sp004
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
 Testing reading swiss format file SwissProt/sp005
@@ -366,6 +416,7 @@ Testing reading swiss format file SwissProt/sp005
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
 Testing reading swiss format file SwissProt/sp006
@@ -375,6 +426,7 @@ Testing reading swiss format file SwissProt/sp006
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
 Testing reading swiss format file SwissProt/sp007
@@ -384,6 +436,7 @@ Testing reading swiss format file SwissProt/sp007
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
 Testing reading swiss format file SwissProt/sp008
@@ -393,6 +446,7 @@ Testing reading swiss format file SwissProt/sp008
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
 Testing reading swiss format file SwissProt/sp009
@@ -402,6 +456,7 @@ Testing reading swiss format file SwissProt/sp009
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
 Testing reading swiss format file SwissProt/sp010
@@ -411,6 +466,7 @@ Testing reading swiss format file SwissProt/sp010
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
 Testing reading swiss format file SwissProt/sp011
@@ -420,6 +476,7 @@ Testing reading swiss format file SwissProt/sp011
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
 Testing reading swiss format file SwissProt/sp012
@@ -429,6 +486,7 @@ Testing reading swiss format file SwissProt/sp012
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
 Testing reading swiss format file SwissProt/sp013
@@ -438,6 +496,7 @@ Testing reading swiss format file SwissProt/sp013
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
 Testing reading swiss format file SwissProt/sp014
@@ -447,6 +506,7 @@ Testing reading swiss format file SwissProt/sp014
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
 Testing reading swiss format file SwissProt/sp015
@@ -456,6 +516,7 @@ Testing reading swiss format file SwissProt/sp015
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
 Testing reading swiss format file SwissProt/sp016
@@ -465,6 +526,7 @@ Testing reading swiss format file SwissProt/sp016
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
 Testing reading swiss format file Registry/EDD_RAT.dat
@@ -474,6 +536,7 @@ Testing reading swiss format file Registry/EDD_RAT.dat
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
 Testing reading genbank format file GenBank/noref.gb
@@ -483,6 +546,7 @@ Testing reading genbank format file GenBank/noref.gb
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
 Testing reading genbank format file GenBank/cor6_6.gb
@@ -502,6 +566,7 @@ Testing reading genbank format file GenBank/cor6_6.gb
  Failed: Sequences must all be the same length
  Checking can write/read as 'stockholm' format
  Failed: Sequences must all be the same length
+ Checking can write/read as 'genbank' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Sequences must all be the same length
@@ -512,6 +577,7 @@ Testing reading genbank format file GenBank/iro.gb
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
 Testing reading genbank format file GenBank/pri1.gb
@@ -521,6 +587,7 @@ Testing reading genbank format file GenBank/pri1.gb
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
 Testing reading genbank format file GenBank/arab1.gb
@@ -530,6 +597,7 @@ Testing reading genbank format file GenBank/arab1.gb
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
 Testing reading genbank format file GenBank/protein_refseq.gb
@@ -539,6 +607,7 @@ Testing reading genbank format file GenBank/protein_refseq.gb
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
 Testing reading genbank format file GenBank/protein_refseq2.gb
@@ -548,6 +617,7 @@ Testing reading genbank format file GenBank/protein_refseq2.gb
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
 Testing reading genbank format file GenBank/extra_keywords.gb
@@ -557,6 +627,7 @@ Testing reading genbank format file GenBank/extra_keywords.gb
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
 Testing reading genbank format file GenBank/one_of.gb
@@ -566,6 +637,7 @@ Testing reading genbank format file GenBank/one_of.gb
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
 Testing reading genbank format file GenBank/NT_019265.gb
@@ -578,6 +650,7 @@ Testing reading genbank format file GenBank/NT_019265.gb
  Failed: Non-empty sequences are required
  Checking can write/read as 'stockholm' format
  Failed: Non-empty sequences are required
+ Checking can write/read as 'genbank' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Non-empty sequences are required
@@ -588,6 +661,7 @@ Testing reading genbank format file GenBank/origin_line.gb
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
 Testing reading genbank format file GenBank/blank_seq.gb
@@ -597,6 +671,7 @@ Testing reading genbank format file GenBank/blank_seq.gb
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
 Testing reading genbank format file GenBank/dbsource_wrap.gb
@@ -606,6 +681,7 @@ Testing reading genbank format file GenBank/dbsource_wrap.gb
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
 Testing reading genbank format file GenBank/gbvrl1_start.seq
@@ -622,6 +698,7 @@ Testing reading genbank format file GenBank/gbvrl1_start.seq
  Failed: Sequences must all be the same length
  Checking can write/read as 'stockholm' format
  Failed: Sequences must all be the same length
+ Checking can write/read as 'genbank' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Sequences must all be the same length
@@ -632,6 +709,7 @@ Testing reading genbank format file GFF/NC_001422.gbk
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
 Testing reading embl format file EMBL/TRBG361.embl
@@ -641,6 +719,7 @@ Testing reading embl format file EMBL/TRBG361.embl
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
 Testing reading embl format file EMBL/DD231055_edited.embl
@@ -650,6 +729,7 @@ Testing reading embl format file EMBL/DD231055_edited.embl
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
 Testing reading embl format file EMBL/SC10H5.embl
@@ -659,6 +739,7 @@ Testing reading embl format file EMBL/SC10H5.embl
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
 Testing reading embl format file EMBL/U87107.embl
@@ -668,6 +749,7 @@ Testing reading embl format file EMBL/U87107.embl
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
 Testing reading embl format file EMBL/AAA03323.embl
@@ -677,6 +759,7 @@ Testing reading embl format file EMBL/AAA03323.embl
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
 Testing reading stockholm format file Stockholm/simple.sth
@@ -696,6 +779,8 @@ Testing reading stockholm format file Stockholm/simple.sth as an alignment
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
+ Failed: Need a Nucleotide or Protein alphabet
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
@@ -721,6 +806,8 @@ Testing reading stockholm format file Stockholm/funny.sth as an alignment
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
+ Failed: Need a Nucleotide or Protein alphabet
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
@@ -746,6 +833,8 @@ Testing reading phylip format file Phylip/reference_dna.phy as an alignment
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
+ Failed: Need a Nucleotide or Protein alphabet
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
@@ -771,6 +860,8 @@ Testing reading phylip format file Phylip/reference_dna2.phy as an alignment
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
+ Failed: Need a Nucleotide or Protein alphabet
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
@@ -796,6 +887,8 @@ Testing reading phylip format file Phylip/hennigian.phy as an alignment
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
+ Failed: Need a Nucleotide or Protein alphabet
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
@@ -821,6 +914,8 @@ Testing reading phylip format file Phylip/horses.phy as an alignment
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
+ Failed: Need a Nucleotide or Protein alphabet
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
@@ -846,6 +941,8 @@ Testing reading phylip format file Phylip/random.phy as an alignment
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
+ Failed: Need a Nucleotide or Protein alphabet
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
@@ -868,6 +965,8 @@ Testing reading phylip format file Phylip/interlaced.phy as an alignment
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
+ Failed: Need a Nucleotide or Protein alphabet
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
@@ -892,6 +991,8 @@ Testing reading phylip format file Phylip/interlaced2.phy as an alignment
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
+ Failed: Need a Nucleotide or Protein alphabet
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
@@ -916,6 +1017,8 @@ Testing reading emboss format file Emboss/alignret.txt as an alignment
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
+ Failed: Need a Nucleotide or Protein alphabet
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
@@ -936,6 +1039,8 @@ Testing reading emboss format file Emboss/needle.txt
  Failed: Sequences must all be the same length
  Checking can write/read as 'stockholm' format
  Failed: Sequences must all be the same length
+ Checking can write/read as 'genbank' format
+ Failed: Locus identifier 'gi|94970041|receiver' is too long
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Sequences must all be the same length
@@ -956,6 +1061,8 @@ Testing reading emboss format file Emboss/water.txt as an alignment
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
+ Failed: Need a Nucleotide or Protein alphabet
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
@@ -973,6 +1080,8 @@ Testing reading phd format file Phd/phd1
  Failed: Sequences must all be the same length
  Checking can write/read as 'stockholm' format
  Failed: Sequences must all be the same length
+ Checking can write/read as 'genbank' format
+ Failed: Locus identifier '425_7_(71-A03-19).b.ab1' is too long
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Sequences must all be the same length
@@ -983,6 +1092,7 @@ Testing reading phd format file Phd/phd2
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
 Testing reading ace format file Ace/contig1.ace
@@ -997,6 +1107,7 @@ Testing reading ace format file Ace/contig1.ace
  Failed: Sequences must all be the same length
  Checking can write/read as 'stockholm' format
  Failed: Sequences must all be the same length
+ Checking can write/read as 'genbank' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Sequences must all be the same length
@@ -1007,6 +1118,7 @@ Testing reading ace format file Ace/consed_sample.ace
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
 Testing reading ace format file Ace/seq.cap.ace
@@ -1016,6 +1128,7 @@ Testing reading ace format file Ace/seq.cap.ace
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
 Testing reading ig format file IntelliGenetics/TAT_mase_nuc.txt
@@ -1035,6 +1148,8 @@ Testing reading ig format file IntelliGenetics/TAT_mase_nuc.txt
  Failed: Sequences must all be the same length
  Checking can write/read as 'stockholm' format
  Failed: Sequences must all be the same length
+ Checking can write/read as 'genbank' format
+ Failed: Need a Nucleotide or Protein alphabet
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Sequences must all be the same length
@@ -1060,6 +1175,8 @@ Testing reading ig format file IntelliGenetics/VIF_mase-pro.txt as an alignment
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
+ Failed: Need a Nucleotide or Protein alphabet
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
@@ -1080,6 +1197,8 @@ Testing reading ig format file IntelliGenetics/vpu_nucaligned.txt
  Failed: Sequences must all be the same length
  Checking can write/read as 'stockholm' format
  Failed: Sequences must all be the same length
+ Checking can write/read as 'genbank' format
+ Failed: Need a Nucleotide or Protein alphabet
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Sequences must all be the same length
@@ -1096,6 +1215,7 @@ Testing can write/read zero records
  Failed: Must have at least one sequence
  Checking can write/read as 'stockholm' format
  Failed: Must have at least one sequence
+ Checking can write/read as 'genbank' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Must have at least one sequence
@@ -1107,6 +1227,7 @@ Testing can write/read three peptides of different lengths
  Failed: Sequences must all be the same length
  Checking can write/read as 'stockholm' format
  Failed: Sequences must all be the same length
+ Checking can write/read as 'genbank' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Sequences must all be the same length
@@ -1115,6 +1236,7 @@ Testing can write/read three proteins alignment
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
 Testing can write/read three DNA sequence alignment
@@ -1122,6 +1244,7 @@ Testing can write/read three DNA sequence alignment
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
 Testing can write/read 3 DNA seq alignment with CR/LF in name/descr
@@ -1129,6 +1252,8 @@ Testing can write/read 3 DNA seq alignment with CR/LF in name/descr
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
+ Failed: Locus identifier 'The\nMystery\rSequece:\nX' is too long
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
 Testing can write/read alignment with repeated record
@@ -1138,6 +1263,7 @@ Testing can write/read alignment with repeated record
  Failed: Repeated identifier, possibly due to truncation
  Checking can write/read as 'stockholm' format
  Failed: Duplicate record identifier: Beta
+ Checking can write/read as 'genbank' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
 Finished tested writing files

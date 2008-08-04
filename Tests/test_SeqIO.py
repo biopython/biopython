@@ -239,6 +239,8 @@ def check_simple_write_read(records, indent=" ") :
             #This is often expected to happen, for example when we try and
             #write sequences of different lengths to an alignment file.
             print indent+"Failed: %s" % str(e)
+            assert format <> t_format, \
+                   "Should be able to re-write in the original format!"
             #Carry on to the next format:
             continue
 
@@ -261,7 +263,11 @@ def check_simple_write_read(records, indent=" ") :
             #many formats can't store more than that.
 
             #Check the sequence
-            assert r1.seq.tostring() == r2.seq.tostring()
+            if format == "genbank" :
+                #The GenBank parser will convert everything to upper case.
+                assert r1.seq.tostring().upper() == r2.seq.tostring()
+            else :
+                assert r1.seq.tostring() == r2.seq.tostring()
             #Beware of different quirks and limitations in the
             #valid character sets and the identifier lengths!
             if format=="phylip" :
