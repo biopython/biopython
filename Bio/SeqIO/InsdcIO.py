@@ -211,6 +211,11 @@ class GenBankWriter(SequentialSequenceWriter) :
         self.handle.write(line)
 
     def _get_annotation_str(self, record, key, default=".", just_first=False) :
+        """Get an annotation dictionary entry (as a string).
+
+        Some entries are lists, in which case if just_first=True the first entry
+        is returned.  If just_first=False (default) this verifies there is only
+        one entry before returning it."""
         try :
             answer = record.annotations[key]
         except KeyError :
@@ -310,13 +315,14 @@ if __name__ == "__main__" :
             for key in ["gi", "keywords", "source", "taxonomy"] :
                 if key in r1.annotations :
                     assert r1.annotations[key] == r2.annotations[key], key
-            for key in ["source"] :
+            for key in ["organism"] :
                 if key in r1.annotations :
-                    assert len(r1.annotations[key]) == len(r2.annotations[key])
-                    for v1,v2 in zip(r1.annotations[key],r2.annotations[key]) :
-                        #SwissProt sources can be too long to record in GenBank format
-                        assert v1 == v2 or \
-                               (v2.endwith("...") and v1.startswith(v2[-3:]))
+                    v1 = r1.annotations[key]
+                    v2 = r2.annotations[key]
+                    assert isinstance(v1, str) and isinstance(v2, str)
+                    #SwissProt organism can be too long to record in GenBank format
+                    assert v1 == v2 or \
+                           (v2.endswith("...") and v1.startswith(v2[:-3])), key
 
     for filename in os.listdir("../../Tests/GenBank") :
         if not filename.endswith(".gbk") and not filename.endswith(".gb") :
