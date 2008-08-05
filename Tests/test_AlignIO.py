@@ -27,6 +27,7 @@ test_files = [ \
     ("clustal", 7, 1, 'Clustalw/opuntia.aln'),
     ("clustal", 5, 1, 'Clustalw/hedgehog.aln'),
     ("clustal", 2, 1, 'Clustalw/odd_consensus.aln'),
+    ("clustal",20, 1, 'Clustalw/protein.aln'), #Used in the tutorial
 #Following examples are also used in test_GFF.py
     ("fasta", 3, 1, 'GFF/multi.fna'), #Trivial nucleotide alignment
 #Following example is also used in test_Nexus.py
