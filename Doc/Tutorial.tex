@@ -69,7 +69,7 @@
 
 \title{Biopython Tutorial and Cookbook}
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, Michiel de Hoon, Peter Cock}
-\date{Last Update--15 June 2008}
+\date{Last Update--August 2008}
 
 \maketitle
 \tableofcontents
@@ -1533,7 +1533,7 @@ SeqIO.write(records, open("rev_comp.fasta", "w"), "fasta")
 \label{sec:Bio.SeqIO-and-StringIO}
 Suppose that you don't really want to write your records to a file or handle -- instead you want a string containing the records in a particular file format.  The \verb|Bio.SeqIO| interface is based on file handles, but python has a useful built in module which provides a string based handle.
 
-For an example of how you might use this, let's load in a bunch of SeqRecord objects from our orchids GenBank file, and create a string containing the records in FASTA format:
+For an example of how you might use this, let's load in a bunch of \verb|SeqRecord| objects from our orchids GenBank file, and create a string containing the records in FASTA format:
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -1551,7 +1551,7 @@ fasta_data = out_handle.read()
 print fasta_data
 \end{verbatim}
 
-This isn't entirely straight forward to first time you see it, although some related enhancements are being discussed for a future release of Biopython.
+This isn't entirely straight forward the first time you see it!  On the bright side, some related enhancements are being discussed for a future release of Biopython to make getting \verb|SeqRecord| objects as strings much easier.
 
 \chapter{Sequence Alignment Input/Output}
 \label{chapter:Bio.AlignIO}
