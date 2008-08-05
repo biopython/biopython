@@ -16,7 +16,6 @@ import gzip
 
 # biopython
 from Bio import GenBank
-import Martel
 
 def do_comparison(good_record, test_record):
     """Compare two records to see if they are the same.
@@ -58,13 +57,8 @@ def write_format(file):
         cur_handle = open(file, "r")
         compare_handle = open(file, "r")
 
-    # if the file is something.seq.gz, assume it was downloaded from GenBank
-    header = 0
-    if file.find("seq.gz") >= 0:
-        header = 1
-
-    iterator = GenBank.Iterator(cur_handle, record_parser, has_header = header)
-    compare_iterator = GenBank.Iterator(compare_handle, has_header = header)
+    iterator = GenBank.Iterator(cur_handle, record_parser)
+    compare_iterator = GenBank.Iterator(compare_handle)
         
     while 1:
         cur_record = iterator.next()
