@@ -1460,7 +1460,7 @@ new records:
 from Bio.SeqRecord import SeqRecord
 
 def make_rc_record(record) :
-    """Returns a new SeqRecord with the reverse complement sequence"""
+    """Returns a new SeqRecord with the reverse complement sequence."""
     rc_rec = SeqRecord(seq = record.seq.reverse_complement(), \
                        id = "rc_" + record.id, \
                        name = "rc_" + record.name, \
@@ -2061,7 +2061,7 @@ AlignIO.write([alignment], handle, "phylip")
 handle.close()
 \end{verbatim}
 
-\noindent This code using a python dictionary to record a simple mapping from the new sequence system to the original identifier:
+\noindent This code used a python dictionary to record a simple mapping from the new sequence system to the original identifier:
 \begin{verbatim}
 {0: 'COATB_BPIKE/30-81', 1: 'Q9T0Q8_BPIKE/1-52', 2: 'COATB_BPI22/32-83', ...}
 \end{verbatim}
@@ -3857,7 +3857,7 @@ The \verb|SummaryInfo| object, described in section~\ref{sec:summary_info}, prov
 consensus = summary_align.dumb_consensus()
 \end{verbatim}
 
-As the name suggests, this is a really simple consensus calculator, and will just add up all of the residues at each point in the consensus, and if the most common value is higher than some threshold value (the default is .3) will add the common residue to the consensus. If it doesn't reach the threshold, it adds an ambiguity character to the consensus. The returned consensus object is Seq object whose alphabet is inferred from the alphabets of the sequences making up the consensus. So doing a \verb|print consensus| would give:
+As the name suggests, this is a really simple consensus calculator, and will just add up all of the residues at each point in the consensus, and if the most common value is higher than some threshold value will add the common residue to the consensus. If it doesn't reach the threshold, it adds an ambiguity character to the consensus. The returned consensus object is Seq object whose alphabet is inferred from the alphabets of the sequences making up the consensus. So doing a \verb|print consensus| would give:
 
 \begin{verbatim}
 consensus Seq('TATACATNAAAGNAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAAAAAAATGAAT
@@ -3867,7 +3867,7 @@ consensus Seq('TATACATNAAAGNAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAAAAAAATGAAT
 You can adjust how \verb|dumb_consensus| works by passing optional parameters:
 
 \begin{description}
-\item[the threshold] This is the threshold specifying how common a particular residue has to be at a position before it is added. The default is .7.
+\item[the threshold] This is the threshold specifying how common a particular residue has to be at a position before it is added. The default is $0.7$ (meaning $70\%$).
 
 \item[the ambiguous character] This is the ambiguity character to use. The default is 'N'.
 
