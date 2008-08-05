@@ -3692,7 +3692,7 @@ While GenBank files are nice and have lots of information, at the same time you 
 
 Depending on the type of GenBank files you are interested in, they will either contain a single record, or multiple records.  Each record will start with a {\tt LOCUS} line, various other header lines, a list of features, and finally the sequence data, ending with a {\tt //} line.
 
-Dealing with a GenBank file containing a single record is very easy.  For example, let's use a small bacterial genome, \emph{Nanoarchaeum equitans Kin4-M} (RefSeq NC\_005213, GenBank AE017199) which can be downloaded from the NCBI here \href{ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Bacteria/Nanoarchaeum_equitans/AE017199.gbk} (only 1.15 MB):
+Dealing with a GenBank file containing a single record is very easy.  For example, let's use a small bacterial genome, \emph{Nanoarchaeum equitans Kin4-M} (RefSeq NC\_005213, GenBank AE017199) which can be downloaded from the \url{ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Bacteria/Nanoarchaeum_equitans/AE017199.gbk}{NCBI FTP site} (only 1.15 MB):
 
 \begin{verbatim}
 from Bio import GenBank
@@ -4021,7 +4021,7 @@ Now, \verb|info_content| will contain the relative information content over the 
 The value return is calculated using base 2 as the logarithm base in the formula above. You can modify this by passing the parameter \verb|log_base| as the base you want:
 
 \begin{verbatim}
-info_content = summary_align.information_content(5, 30, log_base = 10
+info_content = summary_align.information_content(5, 30, log_base = 10,
                                                  chars_to_ignore = ['N'])
 \end{verbatim}
 
@@ -4549,7 +4549,7 @@ would have hetfield {}``H\_GLC{}''. It's residue id could e.g. be ({}``H\_GLC{}'
 Parse a PDB file, and extract some Model, Chain, Residue and Atom objects.
 
 \begin{verbatim}
-from PDBParser import PDBParser
+from Bio.PDB.PDBParser import PDBParser
 
 parser=PDBParser()
 
@@ -4594,7 +4594,7 @@ for model in structure.get_list():
 Print out all the residues that contain disordered atoms.
 
 \begin{verbatim}
-for model in structure.get_list()
+for model in structure.get_list():
   for chain in model.get_list():
     for residue in chain.get_list():
       if residue.is_disordered():
@@ -4610,7 +4610,7 @@ This will make sure that the SMCRA data structure will behave as if only the
 atoms with altloc A are present.
 
 \begin{verbatim}
-for model in structure.get_list()
+for model in structure.get_list():
   for chain in model.get_list():
     for residue in chain.get_list():
       if residue.is_disordered():
