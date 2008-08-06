@@ -205,9 +205,9 @@ _FormatToWriter ={"fasta" : FastaIO.FastaWriter,
 def write(sequences, handle, format) :
     """Write complete set of sequences to a file.
 
-    sequences - A list (or iterator) of SeqRecord objects
-    handle    - File handle object to write to
-    format    - What format to use.
+    sequences - A list (or iterator) of SeqRecord objects.
+    handle    - File handle object to write to.
+    format    - lower case string describing the file format to write.
 
     You should close the handle after calling this function.
 
@@ -234,10 +234,12 @@ def write(sequences, handle, format) :
         writer_class(handle).write_file(sequences)
         #Don't close the file, as that would prevent things like
         #creating concatenated phylip files for bootstrapping.
-    elif format in AlignIO._FormatToIterator :
+    elif format in AlignIO._FormatToWriter :
         #Try and turn all the records into a single alignment,
         #and write that using Bio.AlignIO
         AlignIO.write([to_alignment(sequences)], handle, format)
+    elif format in _FormatToIterator or format in AlignIO._FormatToIterator :
+        raise ValueError("Reading format '%s' is supported, but not writing" % format)
     else :
         raise ValueError("Unknown format '%s'" % format)
 
@@ -247,7 +249,7 @@ def parse(handle, format) :
     """Turns a sequence file into an iterator returning SeqRecords.
 
     handle   - handle to the file.
-    format   - string describing the file format.
+    format   - lower case string describing the file format.
 
     If you have the file name in a string 'filename', use:
 
@@ -286,6 +288,8 @@ def parse(handle, format) :
         return iterator_generator(handle)
     elif format in AlignIO._FormatToIterator :
         #Use Bio.AlignIO to read in the alignments
+        #TODO - Once we drop support for Python 2.3, this helper function can be
+        #replaced with a generator expression.
         return _iterate_via_AlignIO(handle, format)
     else :
         raise ValueError("Unknown format '%s'" % format)

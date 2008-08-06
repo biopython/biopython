@@ -149,12 +149,19 @@ _FormatToWriter ={#"fasta" is done via Bio.SeqIO
                   "clustal" : ClustalIO.ClustalWriter,
                   }
 
+#This is a generator function
+def _multiple_alignment_record_iterator(alignments) :
+    """Private function to loop over all the records in many alignments."""
+    for alignment in alignments :
+        for record in alignment :
+            yield record
+
 def write(alignments, handle, format) :
     """Write complete set of alignments to a file.
 
     sequences - A list (or iterator) of Alignment objects
     handle    - File handle object to write to
-    format    - What format to use.
+    format    - lower case string describing the file format to write.
 
     You should close the handle after calling this function.
 
@@ -172,17 +179,19 @@ def write(alignments, handle, format) :
     if format <> format.lower() :
         raise ValueError("Format string '%s' should be lower case" % format)
     if isinstance(alignments, Alignment) :
-        raise TypeError("Need a list of alignments, not simply an Alignment")
+        raise TypeError("Need an Alignment list/iterator, not just a single Alignment")
 
     #Map the file format to a writer class
     if format in _FormatToIterator :
         writer_class = _FormatToWriter[format]
         writer_class(handle).write_file(alignments)
-    elif format in SeqIO._FormatToIterator :
+    elif format in SeqIO._FormatToWriter :
         #Exploit the existing SeqIO parser to the dirty work!
-        #This may not work perfectly...
-        for alignment in alignments :
-            SeqIO.write(alignment, handle, format)
+        #TODO - Once we drop support for Python 2.3, this helper function can be
+        #replaced with a generator expression.
+        SeqIO.write(_multiple_alignment_record_iterator(alignments), handle, format)
+    elif format in _FormatToIterator or format in SeqIO._FormatToIterator :
+        raise ValueError("Reading format '%s' is supported, but not writing" % format)
     else :
         raise ValueError("Unknown format '%s'" % format)
 
