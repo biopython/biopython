@@ -2962,11 +2962,11 @@ Desription: Opuntia subulata rpl16 gene, intron; chloroplast.
 ....
 \end{verbatim}
 
-By default you get the output in XML format, which you can parse using the \verb+Bio.Entrez.read()+ function:
+To get the output in XML format, which you can parse using the \verb+Bio.Entrez.read()+ function, use \verb+retmode='xml'+:
 
 \begin{verbatim}
 >>> from Bio import Entrez
->>> handle = Entrez.efetch(db="nucleotide", id="57240072",
+>>> handle = Entrez.efetch(db="nucleotide", id="57240072", retmode="xml",
                            email="A.N.Other@example.com")
 >>> record = Entrez.read(handle)
 >>> record[0]["GBSeq_definition"]
@@ -3030,7 +3030,7 @@ First, we use EGQuery to find out the number of results we will get before actua
 814
 \end{verbatim}
 
-So, we expect to find 814 Entrez Nucleotide records. If you find some ridiculously high number of hits, you may want to reconsider if you really want to download all of them, which is our next step:
+So, we expect to find 814 Entrez Nucleotide records (this is the number I obtained in 2008; it is likely to increase in the future). If you find some ridiculously high number of hits, you may want to reconsider if you really want to download all of them, which is our next step:
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> handle = Entrez.esearch(db='nucleotide', term='Cypripedioideae', retmax=814,
