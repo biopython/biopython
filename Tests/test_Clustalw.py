@@ -18,10 +18,13 @@ test_files = [ \
     #clustalw 1.81
     (2, 1, 'Clustalw/cw02.aln'),
     (7, 1, 'Clustalw/opuntia.aln'),
+    (20, 1, 'Clustalw/protein.aln'),
     # clustalw 2.0.8
     (2, 1, 'Clustalw/odd_consensus.aln'),
     # clustalw 2.0.9
     (5, 1, 'Clustalw/hedgehog.aln'),
+    # PROMALS3D
+    (20, 1, 'Clustalw/promals3d.aln'),
     ]
 
 
@@ -32,8 +35,14 @@ def compare(a1, a2) :
         assert r1.id == r2.id
         assert str(r1.seq) == str(r2.seq)
 
-    assert a1._version == a2._version
-    assert a1._star_info == a2._star_info
+    if hasattr(a1, "_version") and a1._version \
+    and hasattr(a2, "_version") and a2._version :
+        assert a1._version == a2._version
+
+    if hasattr(a1, "_star_info") and a1._star_info \
+    and hasattr(a2, "_star_info") and a2._star_info :
+        assert a1._star_info == a2._star_info \
+    
     return True
 
 
