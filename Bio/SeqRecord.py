@@ -76,7 +76,42 @@ class SeqRecord:
          + "(seq=%s, id=%s, name=%s, description=%s, dbxrefs=%s)" \
          % tuple(map(repr, (self.seq, self.id, self.name,
                             self.description, self.dbxrefs)))
-    
+
+    def format(self, format) :
+        """Returns the record as a string in the specified file format.
+
+        The format should be a lower case string supported as an output
+        format by Bio.SeqIO, which is used to turn the SeqRecord into a
+        string.
+
+        e.g.
+        print my_record.to_format("fasta")
+
+        This will NOT work on every possible file format supported by
+        Bio.SeqIO (e.g. some are for multiple sequences only).
+        """
+        #See also the __format__ added for Python 2.6 / 3.0, PEP 3101
+        #See also the Bio.Align.Generic.Alignment class and its format()
+        return self.__format__(format)
+
+    def __format__(self, format_spec) :
+        """Returns the record as a string in the specified file format.
+
+        This method supports the python format() function added in
+        Python 2.6/3.0.  The format_spec should be a lower case
+        string supported by Bio.SeqIO as an output file format.
+        See also the SeqRecord's format() method."""
+        if format_spec:
+            from StringIO import StringIO
+            from Bio import SeqIO
+            handle = StringIO()
+            SeqIO.write([self], handle, format_spec)
+            handle.seek(0)
+            return handle.read()
+        else :
+            #Follow python convention and default to using __str__
+            return str(self)    
+
     def __len__(self) :
         """Returns the length of the sequence."""
         return len(self.seq)
@@ -113,8 +148,13 @@ if __name__ == "__main__" :
     record.annotations["note"] = "This annotation was added later"
 
     print str(record)
+    print
     print repr(record)
     assert 178 == len(record)
+    print
+    print "Using .format('fasta'),", repr(record.format("fasta"))
+    print
+    print "Using .format('tab'),", repr(record.format("tab"))
 
     #One way to create a minimal record.
     record2 = SeqRecord(Seq(""))

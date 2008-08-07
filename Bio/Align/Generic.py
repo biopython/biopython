@@ -91,6 +91,40 @@ class Alignment:
         #return "%s(%s, %s)" \
         #       % (self.__class__, repr(self._records), repr(self._alphabet))
 
+    def format(self, format) :
+        """Returns the alignment as a string in the specified file format.
+
+        The format should be a lower case string supported as an output
+        format by Bio.AlignIO, which is used to turn the alignment into a
+        string.
+
+        e.g.
+        print my_alignment.format("clustal")
+        print my_alignment.format("fasta")
+        """
+        #See also the __format__ added for Python 2.6 / 3.0, PEP 3101
+        #See also the SeqRecord class and its format() method using Bio.SeqIO
+        return self.__format__(format)
+
+
+    def __format__(self, format_spec) :
+        """Returns the alignment as a string in the specified file format.
+
+        This method supports the python format() function added in
+        Python 2.6/3.0.  The format_spec should be a lower case
+        string supported by Bio.AlignIO as an output file format.
+        See also the alignment's format() method."""
+        if format_spec:
+            from StringIO import StringIO
+            from Bio import AlignIO
+            handle = StringIO()
+            AlignIO.write([self], handle, format_spec)
+            handle.seek(0)
+            return handle.read()
+        else :
+            #Follow python convention and default to using __str__
+            return str(self)    
+
     def get_all_seqs(self):
         """Return all of the sequences involved in the alignment.
 
@@ -253,3 +287,10 @@ if __name__ == "__main__" :
     print
     print "SeqRecord access by row:"
     print a[0].id, "...", a[-1].id
+
+    print
+    for format in ["fasta","phylip","clustal"] :
+        print "="*60
+        print "Using .format('%s')," % format
+        print "="*60
+        print a.format(format)
