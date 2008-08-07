@@ -39,6 +39,8 @@ def parse_file(file_name, alphabet = IUPAC.unambiguous_dna, debug_level = 0):
     Defaults to be unambiguous_dna sequence.
 
     There is a deprecated optional argument debug_level which has no effect.
+
+    Since Biopython 1.46, this has called Bio.AlignIO internally.
     """ 
 
     # Avoid code duplication by calling Bio.AlignIO to do this for us.
@@ -56,8 +58,18 @@ def parse_file(file_name, alphabet = IUPAC.unambiguous_dna, debug_level = 0):
     clustal_alignment._records = generic_alignment._records
     for record in clustal_alignment._records :
         record.seq.alphabet = alpha
-    clustal_alignment._version = generic_alignment._version
-    clustal_alignment._star_info = generic_alignment._star_info
+
+    try :
+        clustal_alignment._version = generic_alignment._version
+    except AttributeError :
+        #Missing the version, could be a 3rd party tool's output
+        pass
+
+    try :       
+        clustal_alignment._star_info = generic_alignment._star_info
+    except AttributeError :
+        #Missing the consensus, again, this is not always present
+        pass
 
     return clustal_alignment
 
@@ -156,18 +168,6 @@ class ClustalAlignment(Alignment):
         handle.seek(0)
         return handle.read()
             
-
-    def _add_star_info(self, stars):
-        """Add all of the stars, which indicate consensus sequence.
-        """
-        self._star_info = stars
-
-    def _add_version(self, version):
-        """Add the version information about the clustal file being read.
-        """
-        self._version = version
-
-        
 class MultipleAlignCL:
     """Represent a clustalw multiple alignment command line.
 
