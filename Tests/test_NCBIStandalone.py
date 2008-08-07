@@ -48,6 +48,18 @@ for func in [NCBIStandalone.blastall,
         assert str(e) == "Rejecting suspicious argument for matrix"
         #Good
 
+    #Now check something similar using pipe redirection
+    try :
+        handle = func("/somewhere/blast", "blastz", "nr",
+                      "/tmp/example.fasta", \
+                      nprocessors=4,
+                      expectation="0.001",
+                      filter= "F > /etc/passwd'")
+        assert False, "Attempted output redirection not caught!"
+    except ValueError, e:
+        assert str(e) == "Rejecting suspicious argument for filter"
+        #Good
+
 
 ### _Scanner
 

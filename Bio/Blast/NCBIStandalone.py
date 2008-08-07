@@ -1980,13 +1980,14 @@ def _security_check_parameters(param_dict) :
     e.g. blastall(..., matrix='IDENTITY -F 0; rm -rf /etc/passwd')
 
     Looks for ";" or "&&" in the strings (Unix and Windows syntax
-    for appending a command line), and if found raises an exception.
+    for appending a command line), or ">", "<" or "|" (redirection)
+    and if any are found raises an exception.
     """
     for key, value in param_dict.iteritems() :
         str_value = str(value) # Could easily be an int or a float
-        if ";" in str_value or "&&" in str_value :
-            raise ValueError("Rejecting suspicious argument for %s" % key)
-
+        for bad_str in [";", "&&", ">", "<", "|"] :
+            if bad_str in str_value :
+                raise ValueError("Rejecting suspicious argument for %s" % key)
 
 class _BlastErrorConsumer(_BlastConsumer):
     def __init__(self):
