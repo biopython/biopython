@@ -2,9 +2,18 @@ This file provides documentation for modules in Biopython that have been moved
 or deprecated in favor of other modules. This provides some quick and easy
 to find documentation about how to update your code to work again.
 
+Bio.Blast.NCBIWWW
+=================
+The HTML BLAST parser was deprecated as of Release 1.48
+
+Bio.Saf
+=======
+Deprecated as of Release 1.48, as it appears to have no users, and relies
+on Martel which doesn't work properly with mxTextTools 3.0
+
 Bio.IntelliGenetics
 ===================
-Deprecated in favor of the "ig" format in Bio.SeqIO
+Deprecated as of Release 1.48 in favor of the "ig" format in Bio.SeqIO
 
 Bio.ECell
 =========
@@ -54,7 +63,7 @@ Bio.FormatIO
 ============
 This was removed in Release 1.44
 
-Bio.expressions
+Bio.expressions (and therefore Bio.config, Bio.dbdefs, Bio.formatdefs, Bio.dbdefs)
 ===============
 This has been deprecated as of Release 1.44
 
