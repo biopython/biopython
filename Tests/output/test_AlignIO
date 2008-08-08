@@ -402,4 +402,14 @@ Testing reading ig format file IntelliGenetics/VIF_mase-pro.txt with 1 alignment
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fasta' format
  Checking can write/read as 'tab' format
+Testing reading pir format file NBRF/clustalw.pir with 1 alignments
+ Alignment 0, with 2 sequences of length 2527
+  ------------------------------------...--- 804Angiostrongylus_cantonensis
+  ------------------------------------...--- 815Parelaphostrongylus_odocoil
+ Checking can write/read as 'nexus' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'tab' format
 Finished tested reading files

@@ -173,6 +173,7 @@ import FastaIO
 import IgIO #IntelliGenetics or MASE format
 import InsdcIO #EMBL and GenBank
 import PhdIO
+import PirIO
 import SwissIO
 import TabIO
 
@@ -195,6 +196,7 @@ _FormatToIterator ={"fasta" : FastaIO.FastaIterator,
                     "phd" : PhdIO.PhdIterator,
                     "ace" : AceIO.AceIterator,
                     "tab" : TabIO.TabIterator,
+                    "pir" : PirIO.PirIterator,
                     }
 
 _FormatToWriter ={"fasta" : FastaIO.FastaWriter,

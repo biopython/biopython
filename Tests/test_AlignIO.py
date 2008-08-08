@@ -52,6 +52,7 @@ test_files = [ \
     ("fasta-m10", 2, 1, 'Fasta/output004.m10'),
     ("fasta-m10", 2, 1, 'Fasta/output005.m10'),
     ("ig", 16, 1, 'IntelliGenetics/VIF_mase-pro.txt'),
+    ("pir", 2, 1,  'NBRF/clustalw.pir'),
     ]
 
 def str_summary(text, max_len=40) :

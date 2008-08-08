@@ -1202,6 +1202,110 @@ Testing reading ig format file IntelliGenetics/vpu_nucaligned.txt
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Sequences must all be the same length
+Testing reading pir format file NBRF/B_nuc.pir
+ ID and Name='HLA:HLA00132',
+ Seq='ATGCTGGTCATGGCGCCCCGAACCGTCCTCCTGCTGCTCT...AGCTTGA', length=1089
+ ID and Name='HLA:HLA00133',
+ Seq='ATGCTGGTCATGGCGCCCCGAACCGTCCTCCTGCTGCTCT...AAGAGTT', length=1009
+ ID and Name='HLA:HLA00134',
+ Seq='GCTCCCACTCCATGAGGTATTTCTACACCTCCGTGTCCCG...CGCGCTG', length=546
+ ...
+ ID and Name='HLA:HLA01135',
+ Seq='ATGCGGGTCACGGCGCCCCGAACCCTCCTCCTGCTGCTCT...CGCGCGG', length=619
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'phylip' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'stockholm' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'genbank' format
+ Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Sequences must all be the same length
+Testing reading pir format file NBRF/Cw_prot.pir
+ ID and Name='HLA:HLA00401',
+ Seq='MRVMAPRTLILLLSGALALTETWACSHSMKYFFTSVSRPG...SLIACKA', length=366
+ ID and Name='HLA:HLA00402',
+ Seq='MRVMAPRTLILLLSGALALTETWACSHSMKYFFTSVSRPG...SLIACKA', length=366
+ ID and Name='HLA:HLA01075',
+ Seq='MRVMAPRTLILLLSGALALTETWACSHSMKYFFTSVSRPG...SLIACKA', length=366
+ ...
+ ID and Name='HLA:HLA00484',
+ Seq='MRVMAPRALLLLLSGGLALTETWACSHSMRYFDTAVSRPG...SLIACKA', length=366
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'phylip' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'stockholm' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'genbank' format
+ Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Sequences must all be the same length
+Testing reading pir format file NBRF/DMA_nuc.pir
+ ID and Name='HLA:HLA00485',
+ Seq='ATGGGTCATGAACAGAACCAAGGAGCTGCGCTGCTACAGA...TGACTGA', length=786
+ ID and Name='HLA:HLA00486',
+ Seq='CTCCTACTCCAATGTGGCCAGATGACCTGCAAAACCACAC...TATTGGG', length=564
+ ID and Name='HLA:HLA00487',
+ Seq='GGGTTTCCTATCGCTGAAGTGTTCACGCTGAAGCCCCTGG...CTATTGG', length=279
+ ID and Name='HLA:HLA00488',
+ Seq='GGGTTTCCTATCGCTGAAGTGTTCACGCTGAAGCCCCTGG...CTATTGG', length=279
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'phylip' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'stockholm' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'genbank' format
+ Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Sequences must all be the same length
+Testing reading pir format file NBRF/DMB_prot.pir
+ ID and Name='HLA:HLA00489',
+ Seq='MITFLPLLLGLSLGCTGAGGFVAHVESTCLLDDAGTPKDF...SEGWHIS', length=263
+ ID and Name='HLA:HLA00490',
+ Seq='PPSVQVAKTTPFNTREPVMLACYVWGFYPAEVTITWRKNG...EPILRDW', length=94
+ ID and Name='HLA:HLA00491',
+ Seq='PPSVQVAKTTPFNTREPVMLACYVWGFYPAEVTITWRKNG...EPILRDW', length=94
+ ...
+ ID and Name='HLA:HLA01083',
+ Seq='GFVAHVESTCLLDDAGTPKDFTYCIFFNKDLLTCWDPEEN...EPILRDW', length=188
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'phylip' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'stockholm' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'genbank' format
+ Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Sequences must all be the same length
+Testing reading pir format file NBRF/clustalw.pir
+ ID and Name='804Angiostrongylus_cantonensis',
+ Seq='----------------------------------------...-------', length=2527
+ ID and Name='815Parelaphostrongylus_odocoil',
+ Seq='----------------------------------------...-------', length=2527
+Testing reading pir format file NBRF/clustalw.pir as an alignment
+ -- alignment column 0
+ -- alignment column 1
+ -- alignment column 2
+ -- alignment column 3
+ -- alignment column 4
+ || ...
+ -- alignment column 2526
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
+ Failed: Locus identifier '815Parelaphostrongylus_odocoil' is too long
+ Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
 Finished tested reading files
 
 Starting testing writing records

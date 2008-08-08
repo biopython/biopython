@@ -101,40 +101,46 @@ test_files = [ \
 #Following files are also used in test_GFF.py
     ("genbank",False, 'GFF/NC_001422.gbk', 1),
 #Following files are currently only used here:
-    ("embl",      False, 'EMBL/TRBG361.embl', 1),
-    ("embl",      False, 'EMBL/DD231055_edited.embl', 1),
-    ("embl",      False, 'EMBL/SC10H5.embl', 1), # Pre 2006 style ID line
-    ("embl",      False, 'EMBL/U87107.embl', 1), # Old ID line with SV line
-    ("embl",      False, 'EMBL/AAA03323.embl', 1), # 2008, PA line but no AC
+    ("embl",   False, 'EMBL/TRBG361.embl', 1),
+    ("embl",   False, 'EMBL/DD231055_edited.embl', 1),
+    ("embl",   False, 'EMBL/SC10H5.embl', 1), # Pre 2006 style ID line
+    ("embl",   False, 'EMBL/U87107.embl', 1), # Old ID line with SV line
+    ("embl",   False, 'EMBL/AAA03323.embl', 1), # 2008, PA line but no AC
     ("stockholm", True,  'Stockholm/simple.sth', 2),
     ("stockholm", True,  'Stockholm/funny.sth', 5),
 #Following PHYLIP files are currently only used here and in test_AlignIO.py,
 #and are mostly from Joseph Felsenstein's PHYLIP v3.6 documentation:
-    ("phylip",    True,  'Phylip/reference_dna.phy', 6),
-    ("phylip",    True,  'Phylip/reference_dna2.phy', 6),
-    ("phylip",    True,  'Phylip/hennigian.phy', 10),
-    ("phylip",    True,  'Phylip/horses.phy', 10),
-    ("phylip",    True,  'Phylip/random.phy', 10),
-    ("phylip",    True,  'Phylip/interlaced.phy', 3),
-    ("phylip",    True,  'Phylip/interlaced2.phy', 4),
+    ("phylip", True,  'Phylip/reference_dna.phy', 6),
+    ("phylip", True,  'Phylip/reference_dna2.phy', 6),
+    ("phylip", True,  'Phylip/hennigian.phy', 10),
+    ("phylip", True,  'Phylip/horses.phy', 10),
+    ("phylip", True,  'Phylip/random.phy', 10),
+    ("phylip", True,  'Phylip/interlaced.phy', 3),
+    ("phylip", True,  'Phylip/interlaced2.phy', 4),
 #Following are EMBOSS simple or pairs format alignments
-    ("emboss",    True,  'Emboss/alignret.txt', 4),
-    ("emboss",    False, 'Emboss/needle.txt', 10),
-    ("emboss",    True,  'Emboss/water.txt', 2),
+    ("emboss", True,  'Emboss/alignret.txt', 4),
+    ("emboss", False, 'Emboss/needle.txt', 10),
+    ("emboss", True,  'Emboss/water.txt', 2),
 #Following PHD (PHRAP) sequencing files are also used in test_Phd.py
-    ("phd",       False, 'Phd/phd1', 3),
-    ("phd",       False, 'Phd/phd2', 1),
+    ("phd", False, 'Phd/phd1', 3),
+    ("phd", False, 'Phd/phd2', 1),
 #Following ACE assembly files are also used in test_Phd.py
-    ("ace",       False, 'Ace/contig1.ace', 2),
-    ("ace",       False, 'Ace/consed_sample.ace', 1),
-    ("ace",       False, 'Ace/seq.cap.ace', 1),
+    ("ace", False, 'Ace/contig1.ace', 2),
+    ("ace", False, 'Ace/consed_sample.ace', 1),
+    ("ace", False, 'Ace/seq.cap.ace', 1),
 #Following IntelliGenetics / MASE files are also used in test_intelligenetics.py
-    ("ig",        False, 'IntelliGenetics/TAT_mase_nuc.txt', 17),
-    ("ig",        True,  'IntelliGenetics/VIF_mase-pro.txt', 16),
+    ("ig",  False, 'IntelliGenetics/TAT_mase_nuc.txt', 17),
+    ("ig",  True,  'IntelliGenetics/VIF_mase-pro.txt', 16),
     #This next file is a MASE alignment but sequence O_ANT70 is shorter than
     #the others (so the to_alignment() call will fail).  Perhaps MASE doesn't
     #write trailing gaps?
-    ("ig",        False,  'IntelliGenetics/vpu_nucaligned.txt', 9),
+    ("ig",  False,  'IntelliGenetics/vpu_nucaligned.txt', 9),
+#Following NBRD-PIR files are used in test_nbrf.py
+    ("pir", False, 'NBRF/B_nuc.pir', 444),
+    ("pir", False, 'NBRF/Cw_prot.pir', 111),
+    ("pir", False, 'NBRF/DMA_nuc.pir', 4),
+    ("pir", False, 'NBRF/DMB_prot.pir', 6),
+    ("pir", True,  'NBRF/clustalw.pir', 2),
     ]
 
 # This is a list of two-tuples.  Each tuple contains a
