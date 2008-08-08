@@ -6,6 +6,22 @@ about the biopython project.
 
 The latest news is at the top.
 
+===================================================================
+
+The SeqRecord and Alignment objects have a new method to format the
+object as a string in a requested file format (handled via Bio.SeqIO
+and Bio.AlignIO).
+
+Additional file formats supported in Bio.SeqIO and Bio.AlignIO:
+- reading and writing "tab" format (simple tab separated)
+- writing "nexus" files.
+- reading "pir" files (NBRF/PIR)
+- basic support for writing "genbank" files (GenBank plain text)
+
+Fixed some problems reading Clustal alignments (introduced in
+Biopython 1.46 when consolidating Bio.AlignIO and Bio.Clustalw).
+
+Updates to the Bio.Sequencing parsers.
 
 ===================================================================
 
@@ -23,7 +39,7 @@ single-linkage hierarchical clustering library.
 Added some DTDs to be able to parse EFetch results from the
 nucleotide database.
 
-Added IntelliGenetics/MASE format to Bio.SeqIO.
+Added IntelliGenetics/MASE parsing to Bio.SeqIO (as the "ig" format).
 
 ===================================================================
 
@@ -53,7 +69,8 @@ Bio.SwissProt, and others to make them more generally usable.
 
 Phylip export added to Bio.Nexus.
 
-Improved handling of ambiguous nucleotides andstop codons in Bio.Seq.Translate.
+Improved handling of ambiguous nucleotides and stop codons in Bio.Seq.Translate
+[plus a regression fixed in Biopython 1.47].
 
 ===================================================================
 
