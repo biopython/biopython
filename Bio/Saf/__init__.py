@@ -8,12 +8,22 @@ This is a fairly liberal multiple sequence alignment format, where
 record names may contain up to 14 characters and no blanks.  Lines
 beginging with a hash (#) are ignored.
 
+SAF has been described as a simplified subset of MSF, dropping the
+checksum and with more flexibility in terms of line length.
+
 A current URL describing this file format is:
 http://www.predictprotein.org/Dexa/optin_saf.html
 
 This appears to replace the old URL of:
 http://www.embl-heidelberg.de/predictprotein/Dexa/optin_safDes.html
 """
+
+import warnings
+warnings.warn("Bio.Saf has been deprecated, due to problems with Martel"\
+              +" and recent versions of mxTextTools. If you want to"\
+              +" continue to use this module (or read this file format),"\
+              +" please get touch to avoid permanent removal of this"\
+              +" module from Biopython.", DeprecationWarning)
 
 # Martel
 import Martel
@@ -161,7 +171,7 @@ class _RecordConsumer( Dispatch.Dispatcher ):
         self._refresh()
 
 class RecordParser:
-    """Parse Saf files into Record objects
+    """Parse Saf files into Record objects.
     """
     def __init__(self, debug_level = 0):
         """Initialize the parser.
