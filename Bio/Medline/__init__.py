@@ -7,7 +7,13 @@
 This module provides code to work with Medline.
 
 Classes:
-Record           Holds Medline data.
+Record           A dictionary holding Medline data.
+
+Functions:
+read             Reads one Medline record
+parse            Allows you to iterate over a bunch of Medline records
+
+Deprecated classes:
 Iterator         Iterates over a file containing Medline records.
 RecordParser     Parses a Medline record into a Record object.
 
@@ -16,97 +22,114 @@ _RecordConsumer  Consumes Medline data to a Record object.
 
 """
 
-from Bio import File
-from Bio.ParserSupport import *
+class Record(dict):
+    """A dictionary holding information from a Medline record.
+    All data are stored under the mnemonic appearing in the Medline
+    file. These mnemonics have the following interpretations:
 
-class Record:
-    """Holds information from a Medline record.
-
-    Members:
-    id                     Medline ID.
-    pubmed_id              Pubmed ID.
-
-    mesh_headings          List of MeSH headings.
-    mesh_tree_numbers      List of MeSH Tree Numbers.
-    mesh_subheadings       List of MeSH subheadings.
-
-    abstract               The abstract.
-    comments               List of references to comments.
-    abstract_author        The author of the abstract.
-    english_abstract       "A" if a foreign article has an english abstract.
-    
-    source                 Bibliographic information.
-    publication_types      List of type of publication.
-    number_of_references   Number of bibliographic references, for REVIEW pubs.
-
-    authors                List of authors.
-    no_author              "A" for anonymous.
-    address                Address of the first author.
-
-    journal_title_code     Three-character code assigned to the journal.
-    title_abbreviation     Abbreviation of journal title.
-    issn                   International Standard Serial Number.
-    journal_subsets        List of strings that describe journal groupings.
-    country                Country of publication
-    languages              List of languages of the article.
-    
-    title                  Article title.
-    transliterated_title   Title in the original language.
-    call_number            The call number of the journal issue.
-    issue_part_supplement  Issue, part, or supplement of journal published.
-    volume_issue           Volume number of journal.
-    publication_date       Date published (string).
-    year                   Year published (string).
-    pagination             Inclusive pages of an indexed item.
-    
-    special_list           Coding for the database of the citation.
-
-    substance_name         Preferred name for a chemical or drug.
-    gene_symbols           List of abbreviated gene names.
-    secondary_source_ids   List of source databanks and accessions.
-    identifications        List of research grant or contract numbers.
-    registry_numbers       List of CAS or EC numbers.
-    
-    personal_name_as_subjects  List of individuals who are subjects.
-    
-    record_originators     List of people who worked on record.
-    entry_date             Date record made machine readable (YYMMDD).
-    entry_month            YYMM entered into Medline.
-    class_update_date      Date touched by Class Maintenance action (string).
-    last_revision_date     Date for minor revision.
-    major_revision_date    Date for major revision.
-
-    undefined              List of lines that don't match the standard.
-    
+    Mnemonic  Description
+    AB        Abstract
+    CI        Copyright Information
+    AD        Affiliation
+    IRAD      Investigator Affiliation
+    AID       Article Identifier
+    AU        Author
+    FAU       Full Author
+    CN        Corporate Author
+    DCOM      Date Completed
+    DA        Date Created
+    LR        Date Last Revised
+    DEP       Date of Electronic Publication
+    DP        Date of Publication
+    EDAT      Entrez Date
+    GS        Gene Symbol
+    GN        General Note
+    GR        Grant Number
+    IR        Investigator Name
+    FIR       Full Investigator Name
+    IS        ISSN
+    IP        Issue
+    TA        Journal Title Abbreviation
+    JT        Journal Title
+    LA        Language
+    LID       Location Identifier
+    MID       Manuscript Identifier
+    MHDA      MeSH Date
+    MH        MeSH Terms
+    JID       NLM Unique ID
+    RF        Number of References
+    OAB       Other Abstract
+    OCI       Other Copyright Information
+    OID       Other ID
+    OT        Other Term
+    OTO       Other Term Owner
+    OWN       Owner
+    PG        Pagination
+    PS        Personal Name as Subject
+    FPS       Full Personal Name as Subject
+    PL        Place of Publication
+    PHST      Publication History Status
+    PST       Publication Status
+    PT        Publication Type
+    PUBM      Publishing Model
+    PMC       PubMed Central Identifier
+    PMID      PubMed Unique Identifier
+    RN        Registry Number/EC Number
+    NM        Substance Name
+    SI        Secondary Source ID
+    SO        Source
+    SFM       Space Flight Mission
+    STAT      Status
+    SB        Subset
+    TI        Title
+    TT        Transliterated Title
+    VI        Volume
+    CON       Comment on
+    CIN       Comment in
+    EIN       Erratum in
+    EFR       Erratum for
+    CRI       Corrected and Republished in
+    CRF       Corrected and Republished from
+    PRIN      Partial retraction in
+    PROF      Partial retraction of
+    RPI       Republished in
+    RPF       Republished from
+    RIN       Retraction in
+    ROF       Retraction of
+    UIN       Update in
+    UOF       Update of
+    SPIN      Summary for patients in
+    ORI       Original report in
     """
     def __init__(self):
+        # The __init__ function can be removed when we remove the old parser
         self.id = ''
         self.pubmed_id = ''
-        
+
         self.mesh_headings = []
         self.mesh_tree_numbers = []
         self.mesh_subheadings = []
-        
+
         self.abstract = ''
         self.comments = []
         self.abstract_author = ''
         self.english_abstract = ''
-        
+
         self.source = ''
         self.publication_types = []
         self.number_of_references = ''
-        
+
         self.authors = []
         self.no_author = ''
         self.address = ''
-        
+
         self.journal_title_code = ''
         self.title_abbreviation = ''
         self.issn = ''
         self.journal_subsets = []
         self.country = ''
         self.languages = []
-        
+
         self.title = ''
         self.transliterated_title = ''
         self.call_number = ''
@@ -115,15 +138,15 @@ class Record:
         self.publication_date = ''
         self.year = ''
         self.pagination = ''
-        
+
         self.special_list = ''
-        
+
         self.substance_name = ''
         self.gene_symbols = []
         self.secondary_source_ids = []
         self.identifications = []
         self.registry_numbers = []
-        
+
         self.personal_name_as_subjects = []
 
         self.record_originators = []
@@ -134,7 +157,92 @@ class Record:
         self.major_revision_date = ''
 
         self.undefined = []
-        
+
+
+def parse(handle):
+    """Read Medline records one by one from the handle.
+
+    The handle is either is a Medline file, a file-like object, or a list
+    of lines describing one or more Medline records.
+
+    Typical usage:
+
+        from Bio import Medline
+        handle = open("mymedlinefile")
+        records = Medline.parse(handle)
+        for record in record:
+            print record['TI']
+
+    """
+    # These keys can occur only once in the record, and their value consists
+    # of a single line
+    single = ("ID", "PMID", "SO", "RF", "NI", "JC", "TA", "IS", "CY", "TT",
+              "CA", "IP", "VI", "DP", "YR", "PG", "LID", "DA", "LR", "OWN",
+              "STAT", "DCOM", "PUBM", "DEP", "PL", "JT", "JID", "SB", "PMC",
+              "EDAT", "MHDA", "PST")
+    # These keys can also occur only once in the record, but their value
+    # can consist of multiple lines
+    multiline = ("AB", "AD", "EA", "TI")
+    handle = iter(handle)
+    # First skip blank lines
+    for line in handle:
+        line = line.rstrip()
+        if line:
+            break
+    else:
+        return
+    record = Record()
+    finished = False
+    while not finished:
+        if line[:6]=="      ": # continuation line
+            record[key].append(line[6:])
+        elif line:
+            key = line[:4].rstrip()
+            if key in single:
+                record[key] = line[6:]
+            else:
+                if not key in record:
+                    record[key] = []
+                record[key].append(line[6:])
+        try:
+            line = handle.next()
+        except StopIteration:
+            finished = True
+        else:
+            line = line.rstrip()
+            if line:
+                continue
+        # Some strings were temporarily stored as a list of strings.
+        # Join each list of strings into one string.
+        for key in multiline:
+            if key in record:
+                record[key] = " ".join(record[key])
+        if record:
+            yield record
+        record = Record()
+
+def read(handle):
+    """Read a single Medline records from the handle.
+
+    The handle is either is a Medline file, a file-like object, or a list
+    of lines describing a Medline record.
+
+    Typical usage:
+
+        from Bio import Medline
+        handle = open("mymedlinefile")
+        record = Medline.read(handle)
+        print record['TI']
+
+    """
+    records = parse(handle)
+    return records.next()
+
+### Everything below is deprecated
+
+from Bio import File
+from Bio.ParserSupport import *
+
 class Iterator:
     """Returns one record at a time from a file of Medline records.
 
@@ -150,6 +258,8 @@ class Iterator:
         If set to None, then the raw contents of the file will be returned.
 
         """
+        import warnings
+        warnings.warn("Bio.Medline.Iterator is deprecated. Instead of Bio.Medline.Iterator(handle, Bio.Medline.RecordParser()), please use Bio.Medline.parse(handle)", DeprecationWarning)
         self._handle = handle
         self._parser = parser
 
@@ -164,7 +274,7 @@ class Iterator:
 
         """
         lines = []
-        for line in self.handle:
+        for line in self._handle:
             lines.append(line)
             if line.strip()=='':
                 break
@@ -182,6 +292,8 @@ class RecordParser(AbstractParser):
 
     """
     def __init__(self):
+        import warnings
+        warnings.warn("Bio.Medline.RecordParser is deprecated. Instead of Bio.Medline.RecordParser().parse(handle)), please use Bio.Medline.read(handle)", DeprecationWarning)
         self._scanner = _Scanner()
         self._consumer = _RecordConsumer()
 
@@ -516,4 +628,3 @@ class _RecordConsumer(AbstractConsumer):
         for m in self._needs_stripping:
             value = getattr(rec, m)
             setattr(rec, m, value.rstrip())
-
