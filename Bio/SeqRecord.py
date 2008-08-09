@@ -63,6 +63,7 @@ class SeqRecord:
         if self.description : lines.append("Description: %s" % self.description)
         if self.dbxrefs : lines.append("Database cross-references: " \
                                        + ", ".join(self.dbxrefs))
+        lines.append("Number of features: %i" % len(self.features))
         for a in self.annotations:
             lines.append("/%s=%s" % (a, str(self.annotations[a])))
         #Don't want to include the entire sequence,
