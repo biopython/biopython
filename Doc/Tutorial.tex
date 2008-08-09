@@ -2715,6 +2715,8 @@ For the DOM and SAX parsers, see the Python documentation. The parser in \verb+B
 
 For sequence databases, the Entrez Programming Utilities can also generate output in other formats (such as the Fasta and GenBank file format). This can then be parsed into a SeqRecord using \verb+Bio.SeqIO+ (see Chapter~\ref{chapter:Bio.SeqIO}, and the example below).
 
+For the literature databases, 
+
 \section{Entrez Guidelines}
 \label{sec:entrez-guidelines}
 Before using Biopython to access the NCBI's online resources (via \verb|Bio.Entrez| or some of the other modules), please read the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/eutils_help.html#UserSystemRequirements}{NCBI's Entrez User Requirements}.  If the NCBI finds you are abusing their systems, they can and will ban your access! 
@@ -2962,7 +2964,7 @@ Desription: Opuntia subulata rpl16 gene, intron; chloroplast.
 ....
 \end{verbatim}
 
-To get the output in XML format, which you can parse using the \verb+Bio.Entrez.read()+ function, use \verb+retmode='xml'+:
+To get the output in XML format, which you can parse using the \verb+Bio.Entrez.read()+ function, use \verb+retmode="xml"+:
 
 \begin{verbatim}
 >>> from Bio import Entrez
@@ -3012,7 +3014,11 @@ See the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/espell\_help.html}
 
 \section{Specialized parsers}
 
-The \verb+Bio.Entrez.read+ function can parse most (if not all) XML output returned by Entrez. Entrez typically allows you to retrieve records in other formats, which may have some advantages compared to the XML format in terms of readability. Currently, Biopython contains a parser for one such alternative file format: the \verb+MEDLINE+ format for Medline records in PubMed.
+The \verb+Bio.Entrez.read+ function can parse most (if not all) XML output returned by Entrez. Entrez typically allows you to retrieve records in other formats, which may have some advantages compared to the XML format in terms of readability.
+
+To request a specific file format from Entrez using \verb|Bio.Entrez.efetch()| requires specifying the \verb|rettype| and/or \verb|retmode| optional arguments.  The different combinations are described for each database type on the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/efetch_help.html}{NCBI efetch webpage}.
+
+One obvious case is you may prefer to download sequences in the FASTA or GenBank plain text formats (which can then be parsed with \verb|Bio.SeqIO|, see Sections~\ref{sec:SeqIO_GenBank_Online} and~\ref{sec:efetch}).  For the literature databases, also Biopython contains a parser for the \verb+MEDLINE+ format, for Medline records in PubMed.
 
 \subsection{Parsing Medline records}
 
@@ -3104,7 +3110,8 @@ For comparison, here we show an example using the XML format:
 \begin{verbatim}
 >>> idlist = record["IdList"]
 >>> handle = Entrez.efetch(db='pubmed',id=idlist,rettype='medline',retmode='xml')
->>> records = Entrez.read(handle)>>> for record in records:
+>>> records = Entrez.read(handle)
+>>> for record in records:
 ...     print record["MedlineCitation"]["Article"]["ArticleTitle"]
 Enzymes/non-enzymes classification model complexity based on composition, sequence, 3D
  and topological indices.
