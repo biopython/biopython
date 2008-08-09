@@ -1551,7 +1551,50 @@ fasta_data = out_handle.read()
 print fasta_data
 \end{verbatim}
 
-This isn't entirely straight forward the first time you see it!  On the bright side, some related enhancements are being discussed for a future release of Biopython to make getting \verb|SeqRecord| objects as strings much easier.
+This isn't entirely straightforward the first time you see it!  On the bright side, for the special case where you would like a string containing a single record in a particular file format, Biopython 1.48 adds a new \verb|format()| method to the \verb|SeqRecord| class:
+
+\begin{verbatim}
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
+from Bio.Alphabet import generic_protein
+
+record = SeqRecord(Seq("MMYQQGCFAGGTVLRLAKDLAENNRGARVLVVCSEITAVTFRGPSETHLDSMVGQALFGD" \
+                      +"GAGAVIVGSDPDLSVERPLYELVWTGATLLPDSEGAIDGHLREVGLTFHLLKDVPGLISK" \
+                      +"NIEKSLKEAFTPLGISDWNSTFWIAHPGGPAILDQVEAKLGLKEEKMRATREVLSEYGNM" \
+                      +"SSAC", generic_protein),
+                   id="gi|14150838|gb|AAK54648.1|AF376133_1",
+                   description="chalcone synthase [Cucumis sativus]")
+                   
+print record.format("fasta")
+\end{verbatim}
+\noindent which should give:
+\begin{verbatim}
+>gi|14150838|gb|AAK54648.1|AF376133_1 chalcone synthase [Cucumis sativus]
+MMYQQGCFAGGTVLRLAKDLAENNRGARVLVVCSEITAVTFRGPSETHLDSMVGQALFGD
+GAGAVIVGSDPDLSVERPLYELVWTGATLLPDSEGAIDGHLREVGLTFHLLKDVPGLISK
+NIEKSLKEAFTPLGISDWNSTFWIAHPGGPAILDQVEAKLGLKEEKMRATREVLSEYGNM
+SSAC
+\end{verbatim}
+
+This \verb|format| method takes a single mandatory argument, a lower case string which is supported by \verb|Bio.SeqIO| as an output format.  However, some of the file formats \verb|Bio.SeqIO| can write to \emph{require} more than one record (typically the case for multiple sequence alignment formats), and thus won't work via this \verb|format()| method.
+
+Note that although we don't encourage it, you \emph{can} use the \verb|format()| method to write to a file, like this:
+\begin{verbatim}
+from Bio import SeqIO
+record_iterator = SeqIO.parse(open("ls_orchid.gbk"), "genbank")
+out_handle = open("ls_orchid.tab", "w")
+for record in record_iterator :
+    out_handle.write(record.format("tab"))
+out_handle.close()
+\end{verbatim}
+\noindent While this style of code will work for a simple sequential file format like FASTA or the simple tab separated format used in this example, it will \emph{not} work for more complex or interlaced file formats.  This is why we still recommend using \verb|Bio.SeqIO.write()|, as in the following example:
+\begin{verbatim}
+from Bio import SeqIO
+record_iterator = SeqIO.parse(open("ls_orchid.gbk"), "genbank")
+out_handle = open("ls_orchid.tab", "w")
+SeqIO.write(record_iterator, out_handle, "tab")
+out_handle.close()
+\end{verbatim}
 
 \chapter{Sequence Alignment Input/Output}
 \label{chapter:Bio.AlignIO}
@@ -1981,7 +2024,7 @@ handle.close()
 
 The \verb|Bio.AlignIO.write()| function expects to be given multiple alignment objects.  In the example above we gave it the alignment iterator returned by \verb|Bio.AlignIO.parse()|.
 
-In this case, we know there is only one alignment in the file so we could instead have used \verb|Bio.AlignIO.read()| but notice we have to pass this alignment to \verb|Bio.AlignIO.write()| as a single element list:
+In this case, we know there is only one alignment in the file so we could have used \verb|Bio.AlignIO.read()| instead, but notice we have to pass this alignment to \verb|Bio.AlignIO.write()| as a single element list:
 
 \begin{verbatim}
 from Bio import AlignIO
@@ -1991,7 +2034,7 @@ AlignIO.write([alignment], handle, "clustal")
 handle.close()
 \end{verbatim}
 
-Either way, you should end up with the same new Clustal W format file ``PF05371\_seed.aln"'' with the following content:
+Either way, you should end up with the same new Clustal W format file ``PF05371\_seed.aln'' with the following content:
 
 \begin{verbatim}
 CLUSTAL X (1.81) multiple sequence alignment
@@ -2089,7 +2132,18 @@ seq6       FAADDATSQA KAAFDSLTAQ ATEMSGYAWA LVVLVVGATV GIKLFKKFVS
 \noindent In general, because of the identifier limitation, working with PHYLIP file formats shouldn't be your first choice.  Using the PFAM/Stockholm format on the other hand allows you to record a lot of additional annotation too.
 
 \subsection{Getting your Alignment objects as formatted strings}
-The \verb|Bio.AlignIO| interface is based on handles, which means if you want to get your alignment(s) into a string in a particular file format you need to do a little bit more work.  As described in Section~\ref{sec:Bio.SeqIO-and-StringIO} for \verb|Bio.SeqIO|, you can do this using the python \verb|StringIO| module.  For example, the following short example loads a Stockholm/PFAM file and then gets a string containing this in Clustal format.
+The \verb|Bio.AlignIO| interface is based on handles, which means if you want to get your alignment(s) into a string in a particular file format you need to do a little bit more work (see below).  
+However, you will probably prefer to take advantage of the new \verb|format()| method added to the \verb|Alignment| object in Biopython 1.48.  This takes a single mandatory argument, a lower case string which is supported by \verb|Bio.AlignIO| as an output format.  For example:
+
+\begin{verbatim}
+from Bio import AlignIO
+alignment = AlignIO.read(open("PF05371_seed.sth"), "stockholm")
+print alignment.format("clustal")
+\end{verbatim}
+
+As described in Section~\ref{sec:Bio.SeqIO-and-StringIO}, the \verb|SeqRecord| object has a similar method using output formats supported by \verb|Bio.SeqIO|.
+
+Interally the \verb|format()| method is using the \verb|StringIO| string based handle and calling\verb|Bio.AlignIO.write()|.  You can do this in your own code if for example you are using an older version of Biopython:
 
 \begin{verbatim}
 from Bio import AlignIO
@@ -2107,7 +2161,7 @@ clustal_data = out_handle.read()
 print clustal_data
 \end{verbatim}
 
-Future enhancements are being discussed to make this kind of operation a little easier!
+
 
 \chapter{BLAST}
 \label{chapter:blast}
