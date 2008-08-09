@@ -3010,6 +3010,110 @@ ESpell retrieves spelling suggestions. In this example, we use \verb+Bio.Entrez.
 \end{verbatim}
 See the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/espell\_help.html}{ESpell help page} for more information.
 
+\section{Specialized parsers}
+
+The \verb+Bio.Entrez.read+ function can parse most (if not all) XML output returned by Entrez. Entrez typically allows you to retrieve records in other formats, which may have some advantages compared to the XML format in terms of readability. Currently, Biopython contains a parser for one such alternative file format: the \verb+MEDLINE+ format for Medline records in PubMed.
+
+\subsection{Parsing Medline records}
+
+You can find the Medline parser in \verb+Bio.Medline+. Suppose we want to parse the file \verb+pubmed_result1.txt+, containing one Medline record. You can find this file in Biopython's \verb+Tests\Medline+ directory. The file looks like this:
+
+\begin{verbatim}
+PMID- 12230038
+OWN - NLM
+STAT- MEDLINE
+DA  - 20020916
+DCOM- 20030606
+LR  - 20041117
+PUBM- Print
+IS  - 1467-5463 (Print)
+VI  - 3
+IP  - 3
+DP  - 2002 Sep
+TI  - The Bio* toolkits--a brief overview.
+PG  - 296-302
+AB  - Bioinformatics research is often difficult to do with commercial software. The
+      Open Source BioPerl, BioPython and Biojava projects provide toolkits with
+...
+\end{verbatim}We first open the file and then parse it:
+\begin{verbatim}
+>>> from Bio import Medline
+>>> input = open("pubmed_result1.txt")
+>>> record = Medline.read(input)
+\end{verbatim}
+The \verb+record+ now contains the Medline record as a Python dictionary:
+\begin{verbatim}
+>>> record["PMID"]
+'12230038'
+>>> record["AB"]
+'Bioinformatics research is often difficult to do with commercial software.
+The Open Source BioPerl, BioPython and Biojava projects provide toolkits with
+multiple functionality that make it easier to create customised pipelines or
+analysis. This review briefly compares the quirks of the underlying languages
+and the functionality, documentation, utility and relative advantages of the
+Bio counterparts, particularly from the point of view of the beginning
+biologist programmer.'
+\end{verbatim}
+The key names used in a Medline record can be rather obscure; use
+\begin{verbatim}
+>>> help(record)
+\end{verbatim}
+for a brief summary.
+
+To parse a file containing multipe Medline records, you can use the \verb+parse+ function instead:
+\begin{verbatim}
+>>> from Bio import Medline
+>>> input = open("pubmed_result2.txt")
+>>> records = Medline.parse(input)
+>>> for record in records:
+...     print record["TI"]
+A high level interface to SCOP and ASTRAL implemented in python.
+GenomeDiagram: a python package for the visualization of large-scale genomic data.
+Open source clustering software.
+PDB file parser and structure class implemented in Python.
+\end{verbatim}
+
+Instead of parsing Medline records stored in files, you can also parse Medline records downloaded by \verb+Bio.Entrez.efetch+. For example, let's look at all Medline records in PubMed related to Biopython:
+\begin{verbatim}
+>>> from Bio import Entrez
+>>> handle = Entrez.esearch(db='pubmed',term='biopython')
+>>> record = Entrez.read(handle)
+>>> record["IdList"]
+['18606172', '16403221', '16377612', '14871861', '14630660', '12230038']
+\end{verbatim}
+We now use \verb+Bio.Entrez.efetch+ to download these Medline records:
+\begin{verbatim}
+>>> idlist = record["IdList"]
+>>> handle = Entrez.efetch(db='pubmed',id=idlist,rettype='medline',retmode='text')
+\end{verbatim}
+Here, we specify \verb+rettype='medline', retmode='text'+ to obtain the Medline records in plain-text Medline format. Now we use \verb+Bio.Medline+ to parse these records:
+\begin{verbatim}
+>>> from Bio import Medline
+>>> records = Medline.parse(handle)
+>>> for record in records:
+...     print record["AU"]
+['Munteanu CR', 'Gonzalez-Diaz H', 'Magalhaes AL']
+['Casbon JA', 'Crooks GE', 'Saqi MA']
+['Pritchard L', 'White JA', 'Birch PR', 'Toth IK']
+['de Hoon MJ', 'Imoto S', 'Nolan J', 'Miyano S']
+['Hamelryck T', 'Manderick B']
+['Mangalam H']
+\end{verbatim}
+
+For comparison, here we show an example using the XML format:
+\begin{verbatim}
+>>> idlist = record["IdList"]
+>>> handle = Entrez.efetch(db='pubmed',id=idlist,rettype='medline',retmode='xml')
+>>> records = Entrez.read(handle)>>> for record in records:
+...     print record["MedlineCitation"]["Article"]["ArticleTitle"]
+Enzymes/non-enzymes classification model complexity based on composition, sequence, 3D
+ and topological indices.
+A high level interface to SCOP and ASTRAL implemented in python.
+GenomeDiagram: a python package for the visualization of large-scale genomic data.
+Open source clustering software.
+PDB file parser and structure class implemented in Python.
+The Bio* toolkits--a brief overview.
+\end{verbatim}
 
 \section{Examples}
 \label{sec:entrez_examples}
