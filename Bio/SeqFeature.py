@@ -89,8 +89,26 @@ class SeqFeature:
         self.ref = ref 
         self.ref_db = ref_db
 
+    def __repr__(self):
+        """A string representation of the record for debugging."""
+        answer = "%s(%s" % (self.__class__, repr(self.location))
+        if self.type :
+            answer += ", type=%s" % repr(self.type)
+        if self.location_operator :
+            answer += ", location_operator=%s" % repr(self.location_operator)
+        if self.strand :
+            answer += ", strand=%s" % repr(self.strand)
+        if self.id and self.id <> "<unknown id>" :
+            answer += ", id=%s" % repr(self.id)
+        if self.ref :
+            answer += ", ref=%s" % repr(self.ref)
+        if self.ref_db :
+            answer += ", ref_db=%s" % repr(self.ref_db)
+        answer += ")"
+        return answer
+
     def __str__(self):
-        """Make it easier to debug features.
+        """A readable summary of the feature intended to be printed to screen.
         """
         out = "type: %s\n" % self.type
         out += "location: %s\n" % self.location
@@ -193,11 +211,18 @@ class FeatureLocation:
             self._end = ExactPosition(end)
 
     def __str__(self):
-        """Returns a representation of the location.  For the simple case this
-        uses the python splicing syntax, [122:150] (zero based counting) which
-        GenBank would call 123..150 (one based counting).
+        """Returns a representation of the location (with python counting).
+
+        For the simple case this uses the python splicing syntax, [122:150]
+        (zero based counting) which GenBank would call 123..150 (one based
+        counting).
         """
         return "[%s:%s]" % (self._start, self._end)
+
+    def __repr__(self):
+        """A string representation of the location for debugging."""
+        return "%s(%s,%s)" \
+               % (self.__class__, repr(self.start), repr(self.end))
 
     def __getattr__(self, attr):
         """Make it easy to get non-fuzzy starts and ends.
@@ -231,6 +256,11 @@ class AbstractPosition:
         self.position = position
         self.extension = extension
 
+    def __repr__(self) :
+        """String representation of the location for debugging."""
+        return "%s(%s,%s)" \
+               % (self.__class__, repr(self.position), repr(self.extension))
+
     def __cmp__(self, other):
         """A simple comparison function for positions.
 
@@ -258,6 +288,11 @@ class ExactPosition(AbstractPosition):
             raise AttributeError("Non-zero extension %s for exact position."
                                  % extension)
         AbstractPosition.__init__(self, position, 0)
+
+    def __repr__(self) :
+        """String representation of the ExactPosition location for debugging."""
+        assert self.extension == 0
+        return "%s(%s)" % (self.__class__, repr(self.position))
 
     def __str__(self):
         return str(self.position)
@@ -316,6 +351,11 @@ class BeforePosition(AbstractPosition):
                                  % extension)
         AbstractPosition.__init__(self, position, 0)
 
+    def __repr__(self) :
+        """A string representation of the location for debugging."""
+        assert self.extension == 0
+        return "%s(%s)" % (self.__class__, repr(self.position))
+
     def __str__(self):
         return "<%s" % self.position
 
@@ -336,6 +376,11 @@ class AfterPosition(AbstractPosition):
             raise AttributeError("Non-zero extension %s for exact position."
                                  % extension)
         AbstractPosition.__init__(self, position, 0)
+
+    def __repr__(self) :
+        """A string representation of the location for debugging."""
+        assert self.extension == 0
+        return "%s(%s)" % (self.__class__, repr(self.position))
 
     def __str__(self):
         return ">%s" % self.position
@@ -372,6 +417,10 @@ class OneOfPosition(AbstractPosition):
         # initialize with our definition of position and extension
         AbstractPosition.__init__(self, smallest, largest - smallest)
 
+    def __repr__(self) :
+        """String representation of the OneOfPosition location for debugging."""
+        return "%s(%s)" % (self.__class__, repr(self.position_choices))
+
     def __str__(self):
         out = "one-of("
         for position in self.position_choices:
@@ -388,6 +437,10 @@ class PositionGap:
         """
         self.gap_size = gap_size
 
+    def __repr__(self) :
+        """A string representation of the position gap for debugging."""
+        return "%s(%s)" % (self.__class__, repr(self.gap_size))
+    
     def __str__(self):
         out = "gap(%s)" % self.gap_size
         return out
