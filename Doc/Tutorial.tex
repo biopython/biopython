@@ -970,7 +970,7 @@ This will check there are no extra unexpected records present.
 
 \subsection{Getting a list of the records in a sequence file}
 
-In the previous section we talked about the fact that \verb|Bio.SeqIO.parse()| gives you a \verb|SeqRecord| iterator, and that you get the records one by one.  Very often you need to be able to access the records in any order. The Python {\it list} data type is perfect for this, and we can turn the record iterator into a list of \verb|SeqRecord| objects using the built-in Python function \verb|list()| like so:
+In the previous section we talked about the fact that \verb|Bio.SeqIO.parse()| gives you a \verb|SeqRecord| iterator, and that you get the records one by one.  Very often you need to be able to access the records in any order. The Python \verb|list| data type is perfect for this, and we can turn the record iterator into a list of \verb|SeqRecord| objects using the built-in Python function \verb|list()| like so:
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -984,13 +984,13 @@ print "The last record"
 last_record = records[-1] #using Python's list tricks
 print last_record.id
 print repr(last_record.seq)
-print len(last_record.seq)
+print len(last_record)
 
 print "The first record"
 first_record = records[0] #remember, Python counts from zero
 print first_record.id
 print repr(first_record.seq)
-print len(first_record.seq)
+print len(first_record)
 \end{verbatim}
 
 \noindent Giving:
@@ -1011,7 +1011,8 @@ You can of course still use a for loop with a list of \verb|SeqRecord| objects. 
 
 \subsection{Extracting data}
 
-Suppose you wanted to extract a list of the species from the \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.gbk}{ls\_orchid.gbk} GenBank file.  Let's have a close look at the first record in the file and see where the species gets stored:
+As an example of how annotations are stored, we'll look at the output from parsing
+a GenBank file.  Let's have a close look at the first record in the file \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.gbk}{ls\_orchid.gbk}, 
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -1025,7 +1026,9 @@ print first_record
 \begin{verbatim}
 ID: Z78533.1
 Name: Z78533
-Desription: C.irapeanum 5.8S rRNA gene and ITS1 and ITS2 DNA.
+Description: C.irapeanum 5.8S rRNA gene and ITS1 and ITS2 DNA.
+Number of features: 5
+/sequence_version=1
 /source=Cypripedium irapeanum
 /taxonomy=['Eukaryota', 'Viridiplantae', 'Streptophyta', ..., 'Cypripedium']
 /keywords=['5.8S ribosomal RNA', '5.8S rRNA gene', ..., 'ITS1', 'ITS2']
@@ -1038,16 +1041,32 @@ Desription: C.irapeanum 5.8S rRNA gene and ITS1 and ITS2 DNA.
 Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGG...CGC', IUPACAmbiguousDNA())
 \end{verbatim}
 
-\noindent The information we want, \emph{Cypripedium irapeanum}, is held in the annotations dictionary under `source' and `organism', which we can access like this:
+This gives a human readable summary of most of the annotation data for the \verb|SeqRecord|.  For any python object you can get some clues as to how to interact with it using the python built in function \verb|dir()| which lists all the properties and methods 
+of an object:
 
 \begin{verbatim}
-print first_record.annotations["source"]
+>>> dir(first_record)
+[..., 'annotations', 'dbxrefs', 'description', 'features', 'format', 'id', 'name', 'seq']
+\end{verbatim}
+
+In the above list, we've omitted the special cases whose names start with an underscore.  You've already met the \verb|SeqRecord| object's \verb|.description|, \verb|.id| and \verb|.name| properties (all simple strings) and the \verb|.seq| property (the sequence itself as a \verb|Seq| object).  We'll talk about the \verb|.format()| method later (Section~\ref{sec:Bio.SeqIO-and-StringIO}). 
+
+That leaves two more properties, \verb|.features| which is a list of \verb|SeqFeature| objects (see Section~\ref{sec:advanced-seq}), and \verb|.annotations| which is a python dictionary used to hold any other annotation.  These annotations were shown when we printed the record above.  In general, the annotation values are strings, or lists of strings.  One special case is any references in the file get stored as reference objects.  Like any python dictionary, you can easily get a list of the keys:
+
+\begin{verbatim}
+>>> print first_record.annotations.keys()
+\end{verbatim}
+
+Suppose you wanted to extract a list of the species from the \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.gbk}{ls\_orchid.gbk} GenBank file.  The information we want, \emph{Cypripedium irapeanum}, is held in the annotations dictionary under `source' and `organism', which we can access like this:
+
+\begin{verbatim}
+>>> print first_record.annotations["source"]
 \end{verbatim}
 
 \noindent or:
 
 \begin{verbatim}
-print first_record.annotations["organism"]
+>>> print first_record.annotations["organism"]
 \end{verbatim}
 
 In general, `organism' is used for the scientific name (in latin, e.g. \textit{Arabidopsis thaliana}),
@@ -3879,7 +3898,7 @@ While GenBank files are nice and have lots of information, at the same time you 
 \begin{enumerate}
   \item RecordParser -- This parses the raw record into a GenBank specific Record object. This object models the information in a raw record very closely, so this is good to use if you are just interested in GenBank records themselves.
 
-  \item FeatureParser -- This parses the raw record in a SeqRecord object with all of the feature table information represented in SeqFeatures (see section~\ref{sec:advanced-seq} for more info on these objects). This is best to use if you are interested in getting things in a more standard format.  If you use \verb|Bio.SeqIO| (Chapter~\ref{chapter:Bio.SeqIO}) to read a GenBank file, it will call this FeatureParser for you.
+  \item FeatureParser -- This parses the raw record in a SeqRecord object with all of the feature table information represented in SeqFeatures (see Section~\ref{sec:advanced-seq} for more info on these objects). This is best to use if you are interested in getting things in a more standard format.  If you use \verb|Bio.SeqIO| (Chapter~\ref{chapter:Bio.SeqIO}) to read a GenBank file, it will call this FeatureParser for you.
 \end{enumerate}
 
 Depending on the type of GenBank files you are interested in, they will either contain a single record, or multiple records.  Each record will start with a {\tt LOCUS} line, various other header lines, a list of features, and finally the sequence data, ending with a {\tt //} line.
@@ -3934,7 +3953,9 @@ for cur_record in SeqIO.parse(open("cor6_6.gb"), "genbank") :
    print repr(cur_record.seq)
 \end{verbatim}
 
-This just iterates over a GenBank file, parsing it into SeqRecord and SeqFeature objects, and prints out the Seq objects representing the sequences in the record.
+This just iterates over a GenBank file, parsing it into \verb|SeqRecord| and
+\verb|SeqFeature| objects, and prints out the \verb|Seq| objects representing the
+sequences in the record.
 
 As with other formats, you have lots of tools for dealing with GenBank records. This should make it possible to do whatever you need to with GenBank.
 
@@ -5552,24 +5573,26 @@ The \verb|Bio.InterPro.Record| contains:
 \label{sec:advanced-seq}
 
 You read all about the basic Biopython sequence class in Chapter~\ref{chapter:Bio.Seq}, which described how to do many useful things with just the sequence. However, many times sequences have important additional properties associated with them -- as you will have seen with the \verb|SeqRecord| object in Chapter~\ref{chapter:Bio.SeqIO}.
-This section described how Biopython handles these higher level descriptions of a sequence.
+This section describes how Biopython handles these higher level descriptions of a sequence.
 
-\subsection{Sequence ids and Descriptions -- dealing with SeqRecords}
+\subsection{Sequence IDs and Descriptions -- dealing with SeqRecords}
 
 Immediately above the Sequence class is the Sequence Record class, defined in the \verb|Bio.SeqRecord| module. This class allows higher level features such as ids and features to be associated with the sequence, and is used thoughout the sequence input/output interface \verb|Bio.SeqIO|, described in Chapter~\ref{chapter:Bio.SeqIO}. The \verb|SeqRecord|class itself is very simple, and offers the following information as attributes:
 
 \begin{description}
   \item[seq] -- The sequence itself -- A \verb|Seq| object
 
-  \item[id] -- The primary id used to identify the sequence. In most cases this is something like an accession number.
+  \item[id] -- The primary ID used to identify the sequence -- a string. In most cases this is something like an accession number.
 
-  \item[name] -- A ``common'' name/id for the sequence. In some cases this will be the same as the accession number, but it could also be a clone name. I think of this as being analagous to the LOCUS id in a GenBank record.
+  \item[name] -- A ``common'' name/id for the sequence -- a string. In some cases this will be the same as the accession number, but it could also be a clone name. I think of this as being analagous to the LOCUS id in a GenBank record.
 
-  \item[description] -- A human readible description or expressive name for the sequence. This is similar to what follows the id information in a FASTA formatted entry.
+  \item[description] -- A human readible description or expressive name for the sequence -- as string. This is similar to what follows the id information in a FASTA formatted entry.
 
   \item[annotations] -- A dictionary of additional information about the sequence. The keys are the name of the information, and the information is contained in the value. This allows the addition of more ``unstructed'' information to the sequence.
 
   \item[features] -- A list of \verb|SeqFeature| objects with more structured information about the features on a sequence. The structure of sequence features is described below in Section~\ref{sec:seq_features}.
+  
+  \item[dbxrefs] - A list of database cross references as strings.
 \end{description}
 
 Using a \verb|SeqRecord| class is not very complicated, since all of the information is stored as attributes of the class. Initializing the class just involves passing a \verb|Seq| object to the \verb|SeqRecord|:
@@ -5613,7 +5636,7 @@ Sequence features are an essential part of describing a sequence. Once you get b
 
 \subsubsection{SeqFeatures themselves}
 
-The first level of dealing with Sequence features is the \verb|SeqFeature| class itself. This class has a number of attributes, so first we'll list them and there general features, and then work through an example to show how this applies to a real life example, a GenBank feature table. The attributes of a SeqFeature are:
+The first level of dealing with sequence features is the \verb|SeqFeature| class itself. This class has a number of attributes, so first we'll list them and there general features, and then work through an example to show how this applies to a real life example, a GenBank feature table. The attributes of a SeqFeature are:
 
 \begin{description}
   \item[location] -- The location of the \verb|SeqFeature| on the sequence that you are dealing with. The locations end-points may be fuzzy -- section~\ref{sec:locations} has a lot more description on how to deal with descriptions.
