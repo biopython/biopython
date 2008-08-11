@@ -76,6 +76,7 @@ Sequence codes and their meanings:
 
 P1 - Protein (complete)
 F1 - Protein (fragment)
+D1 - DNA (e.g. EMBOSS seqret output)
 DL - DNA (linear)
 DC - DNA (circular)
 RL - RNA (linear)
@@ -91,6 +92,7 @@ from Bio.SeqRecord import SeqRecord
 
 _pir_alphabets = {"P1" : generic_protein,
                   "F1" : generic_protein,
+                  "D1" : generic_dna,
                   "DL" : generic_dna,
                   "DC" : generic_dna,
                   "RL" : generic_rna,
