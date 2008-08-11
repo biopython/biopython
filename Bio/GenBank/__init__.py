@@ -910,7 +910,11 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         from Bio.Seq import Seq
 
         #Try and append the version number to the accession for the full id
-        if self.data.id.count('.') == 0 :
+        if self.data.id is None :
+            assert 'accessions' not in self.data.annotations, \
+                   self.data.annotations['accessions']
+            self.data.id = self.data.name #Good fall back?
+        elif self.data.id.count('.') == 0 :
             try :
                 self.data.id+='.%i' % self.data.annotations['sequence_version']
             except KeyError :

@@ -897,6 +897,12 @@ class GenBankScanner(InsdcScanner) :
                 #Must just have just "LOCUS       ", is this even legitimate?
                 #We should be able to continue parsing... we need real world testcases!
                 print >> sys.stderr, "Warning: Minimal LOCUS line found - is this correct?\n" + line
+        elif len(line.split())>=4 and line.split()[3] in ["aa","bp"] :
+            #Cope with EMBOSS seqret output where it seems the locus id can cause
+            #the other fields to overflow.  We just IGNORE the other fields!
+            consumer.locus(line.split()[1])
+            consumer.size(line.split()[2])
+            print >> sys.stderr, "Warning: Malformed LOCUS line found - is this correct?\n" + line
         else :
             raise ValueError('Did not recognise the LOCUS line layout:\n' + line)
 
