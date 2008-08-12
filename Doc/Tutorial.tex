@@ -1011,8 +1011,8 @@ You can of course still use a for loop with a list of \verb|SeqRecord| objects. 
 
 \subsection{Extracting data}
 
-As an example of how annotations are stored, we'll look at the output from parsing
-a GenBank file.  Let's have a close look at the first record in the file \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.gbk}{ls\_orchid.gbk}, 
+The \verb|SeqRecord| object and its annotation structures are described more fully in
+Section~\ref{sec:advanced-seq}.  For now, as an example of how annotations are stored, we'll look at the output from parsing the first record in the GenBank file \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.gbk}{ls\_orchid.gbk}.
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -1049,24 +1049,40 @@ of an object:
 [..., 'annotations', 'dbxrefs', 'description', 'features', 'format', 'id', 'name', 'seq']
 \end{verbatim}
 
-In the above list, we've omitted the special cases whose names start with an underscore.  You've already met the \verb|SeqRecord| object's \verb|.description|, \verb|.id| and \verb|.name| properties (all simple strings) and the \verb|.seq| property (the sequence itself as a \verb|Seq| object).  We'll talk about the \verb|.format()| method later (Section~\ref{sec:Bio.SeqIO-and-StringIO}). 
+In the above list, we've omitted the special cases whose names start with an underscore.  You've already met the \verb|SeqRecord| object's \verb|.description|, \verb|.id| and \verb|.name| properties (all simple strings) and the \verb|.seq| property (the sequence itself as a \verb|Seq| object).
+The \verb|.dbxrefs| property is a list of database cross-references (as strings).
+We'll talk about the \verb|.format()| method later (Section~\ref{sec:Bio.SeqIO-and-StringIO}). 
 
-That leaves two more properties, \verb|.features| which is a list of \verb|SeqFeature| objects (see Section~\ref{sec:advanced-seq}), and \verb|.annotations| which is a python dictionary used to hold any other annotation.  These annotations were shown when we printed the record above.  In general, the annotation values are strings, or lists of strings.  One special case is any references in the file get stored as reference objects.  Like any python dictionary, you can easily get a list of the keys:
+That leaves two more properties, \verb|.features| which is a list of \verb|SeqFeature| objects (sequence annotation associated with a particular sub-sequence, like genes -- see Section~\ref{sec:advanced-seq}), and \verb|.annotations| which is a python dictionary used to hold any other annotation (associated with the full sequence, for example a description or the species it is from).
 
+The contents of this annotations dictionary were shown when we printed the record above.
+You can also print them out directly:
 \begin{verbatim}
->>> print first_record.annotations.keys()
+print first_record.annotations
 \end{verbatim}
+\noindent Like any python dictionary, you can easily get a list of the keys:
+\begin{verbatim}
+print first_record.annotations.keys()
+\end{verbatim}
+\noindent or values:
+\begin{verbatim}
+print first_record.annotations.values()
+\end{verbatim}
+
+In general, the annotation values are strings, or lists of strings.  One special case is any references in the file get stored as reference objects.  
 
 Suppose you wanted to extract a list of the species from the \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.gbk}{ls\_orchid.gbk} GenBank file.  The information we want, \emph{Cypripedium irapeanum}, is held in the annotations dictionary under `source' and `organism', which we can access like this:
 
 \begin{verbatim}
 >>> print first_record.annotations["source"]
+Cypripedium irapeanum
 \end{verbatim}
 
 \noindent or:
 
 \begin{verbatim}
 >>> print first_record.annotations["organism"]
+Cypripedium irapeanum
 \end{verbatim}
 
 In general, `organism' is used for the scientific name (in latin, e.g. \textit{Arabidopsis thaliana}),
@@ -1101,9 +1117,18 @@ print all_species
 ['Cypripedium irapeanum', 'Cypripedium californicum', ..., 'Paphiopedilum barbatum']
 \end{verbatim}
 
-Great.  That was pretty easy because GenBank files are annotated in a standardised way.  Now, let's suppose you wanted to extract a list of the species from your FASTA file, rather than the GenBank file.  The bad news is you will have to write some code to extract the data you want from the record's description line - if the information is in the file in the first place!
+Great.  That was pretty easy because GenBank files are annotated in a standardised way.
 
-For this example, notice that if you break up the description line at the spaces, then the species is there as field number one (field zero is the record identifier).  That means we can do this:
+Now, let's suppose you wanted to extract a list of the species from a FASTA file, rather than the GenBank file.  The bad news is you will have to write some code to extract the data you want from the record's description line - if the information is in the file in the first place!  Our example FASTA format file \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.fasta}{ls\_orchid.fasta} starts like this:
+
+\begin{verbatim}
+>gi|2765658|emb|Z78533.1|CIZ78533 C.irapeanum 5.8S rRNA gene and ITS1 and ITS2 DNA
+CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGGAATAAACGATCGAGTG
+AATCCGGAGGACCGGTGTACTCAGCTCACCGGGGGCATTGCTCCCGTGGTGACCCTGATTTGTTGTTGGG
+...
+\end{verbatim}
+
+You can check by hand, but for every record the species name is in the description line as the second word.  This means if we break up each record's \verb|.description| at the spaces, then the species is there as field number one (field zero is the record identifier).  That means we can do this:
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -1219,8 +1244,10 @@ See Chapter~\ref{chapter:entrez} for more about the \verb|Bio.Entrez| module, an
 
 \subsection{Parsing SwissProt sequences from the net}
 \label{sec:SeqIO_ExPASy_and_SwissProt}
-Now let's use a handle to download a SwissProt file from ExPASy, something covered in more depth in Chapter~\ref{chapter:swiss_prot}.
-As mentioned above, the \verb|Bio.SeqIO.read()| function is included in Biopython 1.45 or later.
+Now let's use a handle to download a SwissProt file from ExPASy,
+something covered in more depth in Chapter~\ref{chapter:swiss_prot}.
+As mentioned above, when you expect the handle to contain one and only one record,
+use the \verb|Bio.SeqIO.read()| function:
 
 \begin{verbatim}
 from Bio import ExPASy
@@ -1249,9 +1276,9 @@ Length 394
 
 \section{Sequence files as Dictionaries}
 
-The next thing that we'll do with our ubiquitous orchid files is to show how to index them and access them like a database using the Python {\it dictionary} datatype (like a hash in Perl). This is very useful for large files where you only need to access certain elements of the file, and makes for a nice quick 'n dirty database.
+The next thing that we'll do with our ubiquitous orchid files is to show how to index them and access them like a database using the Python \verb|dictionary| datatype (like a hash in Perl). This is very useful for large files where you only need to access certain elements of the file, and makes for a nice quick 'n dirty database.
 
-You can use the function \verb|SeqIO.to_dict()| to make a SeqRecord dictionary (in memory).  By default this will use each record's identifier (i.e. the \verb|.id| attribute) as the key.  Let's try this using our GenBank file:
+You can use the function \verb|Bio.SeqIO.to_dict()| to make a SeqRecord dictionary (in memory).  By default this will use each record's identifier (i.e. the \verb|.id| attribute) as the key.  Let's try this using our GenBank file:
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -1279,6 +1306,8 @@ Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGTTGAGATCACAT...GGT', IUPACAmbiguo
 
 So, it is very easy to create an in memory ``database'' of our GenBank records.  Next we'll try this for the FASTA file instead.
 
+Note that those of you with prior python experience should all be able to construct a dictionary like this ``by hand''.  However, typical dictionary construction methods will not deal with the case of repeated keys very nicely.  Using the \verb|Bio.SeqIO.to_dict()| will explicitly check for duplicate keys, and raise an exception if any are found.
+
 \subsection{Specifying the dictionary keys}
 
 Using the same code as above, but for the FASTA file instead:
@@ -1304,7 +1333,7 @@ First you must write your own function to return the key you want (as a string) 
 
 \begin{verbatim}
 def get_accession(record) :
-    """"Given a SeqRecord, return the accession number as a string
+    """"Given a SeqRecord, return the accession number as a string.
   
     e.g. "gi|2765613|emb|Z78488.1|PTZ78488" -> "Z78488.1"
     """
@@ -1334,7 +1363,7 @@ print orchid_dict.keys()
 
 \subsection{Indexing a dictionary using the SEGUID checksum}
 
-To give another example of working with dictionaries of SeqRecord objects, we'll use the SEGUID checksum function (added in Biopython 1.44).  This is a relatively recent checksum, and collisions should be very rare (i.e. two different sequences with the same checksum), an improvement on the CRC64 checksum.
+To give another example of working with dictionaries of \verb|SeqRecord| objects, we'll use the SEGUID checksum function (added in Biopython 1.44).  This is a relatively recent checksum, and collisions should be very rare (i.e. two different sequences with the same checksum), an improvement on the CRC64 checksum.
 
 Once again, working with the orchids GenBank file:
 
@@ -1354,7 +1383,7 @@ Z78532.1 MN/s0q9zDoCVEEc+k/IFwCNF2pY
 Z78439.1 H+JfaShya/4yyAj7IbMqgNkxdxQ
 \end{verbatim}
 
-Now, recall the \verb|Bio.SeqIO.to_dict()| function's \verb|key_function| argument expects a function which turns a SeqRecord into a string.  We can't use the \verb|seguid()| function directly because it expects to be given a Seq object (or a string).  However, we can use python's \verb|lambda| feature to create a ``one off'' function to give to \verb|Bio.SeqIO.to_dict()| instead:
+Now, recall the \verb|Bio.SeqIO.to_dict()| function's \verb|key_function| argument expects a function which turns a \verb|SeqRecord| into a string.  We can't use the \verb|seguid()| function directly because it expects to be given a \verb|Seq| object (or a string).  However, we can use python's \verb|lambda| feature to create a ``one off'' function to give to \verb|Bio.SeqIO.to_dict()| instead:
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -1538,7 +1567,7 @@ records = (make_rc_record(rec) for rec in \
 SeqIO.write(records, open("rev_comp.fasta", "w"), "fasta")
 \end{verbatim}
 
-\noindent or, for Python 2.3 or older,
+\noindent or, for Python 2.3 with a list comprehension,
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -5592,7 +5621,7 @@ Immediately above the Sequence class is the Sequence Record class, defined in th
 
   \item[features] -- A list of \verb|SeqFeature| objects with more structured information about the features on a sequence. The structure of sequence features is described below in Section~\ref{sec:seq_features}.
   
-  \item[dbxrefs] - A list of database cross references as strings.
+  \item[dbxrefs] - A list of database cross-references as strings.
 \end{description}
 
 Using a \verb|SeqRecord| class is not very complicated, since all of the information is stored as attributes of the class. Initializing the class just involves passing a \verb|Seq| object to the \verb|SeqRecord|:
