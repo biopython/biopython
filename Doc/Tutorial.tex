@@ -2191,7 +2191,7 @@ print alignment.format("clustal")
 
 As described in Section~\ref{sec:Bio.SeqIO-and-StringIO}, the \verb|SeqRecord| object has a similar method using output formats supported by \verb|Bio.SeqIO|.
 
-Interally the \verb|format()| method is using the \verb|StringIO| string based handle and calling\verb|Bio.AlignIO.write()|.  You can do this in your own code if for example you are using an older version of Biopython:
+Internally the \verb|format()| method is using the \verb|StringIO| string based handle and calling\verb|Bio.AlignIO.write()|.  You can do this in your own code if for example you are using an older version of Biopython:
 
 \begin{verbatim}
 from Bio import AlignIO
@@ -2797,14 +2797,15 @@ Note that the \verb|Bio.Blast.NCBIXML| parser can read the XML output from
 current versions of PSI-BLAST, but information like which sequences in each
 iteration is new or reused isn't present in the XML file.
 If you care about this information you may have more joy with the plain text
-output at the \verb|PSIBlastParser| in \verb|Bio.Blast.NCBIStandalone|.
+output and the \verb|PSIBlastParser| in \verb|Bio.Blast.NCBIStandalone|.
 
 \chapter{Accessing NCBI's Entrez databases}
 \label{chapter:entrez}
 
 Entrez (\url{http://www.ncbi.nlm.nih.gov/Entrez}) is a data retrieval system that provides users access to NCBI's databases such as PubMed, GenBank, GEO, and many others. You can access Entrez from a web browser to manually enter queries, or you can use Biopython's \verb+Bio.Entrez+ module for programmatic access to Entrez. The latter allows you for example to search PubMed or download GenBank records from within a Python script.
 
-The \verb+Bio.Entrez+ module makes use of the Entrez Programming Utilities, consisting of eight tools that are described in detail on NCBI's page at \url{http://www.ncbi.nlm.nih.gov/entrez/utils/}. Each of these tools corresponds to one Python function in the \verb+Bio.Entrez+ module, as described in the sections below. This module makes sure that the correct URL is used for the queries, and that not more than one request is made every three seconds, as required by NCBI.
+The \verb+Bio.Entrez+ module makes use of the Entrez Programming Utilities (also known as EUtils), consisting of eight tools that are described in detail on NCBI's page at \url{http://www.ncbi.nlm.nih.gov/entrez/utils/}.
+Each of these tools corresponds to one Python function in the \verb+Bio.Entrez+ module, as described in the sections below. This module makes sure that the correct URL is used for the queries, and that not more than one request is made every three seconds, as required by NCBI.
 
 The output returned by the Entrez Programming Utilities is typically in XML format. To parse such output, you have several options:
 \begin{enumerate}
@@ -2815,9 +2816,7 @@ The output returned by the Entrez Programming Utilities is typically in XML form
 \end{enumerate}
 For the DOM and SAX parsers, see the Python documentation. The parser in \verb+Bio.Entrez+ is discussed below.
 
-For sequence databases, the Entrez Programming Utilities can also generate output in other formats (such as the Fasta and GenBank file format). This can then be parsed into a SeqRecord using \verb+Bio.SeqIO+ (see Chapter~\ref{chapter:Bio.SeqIO}, and the example below).
-
-For the literature databases, 
+The Entrez Programming Utilities can also generate output in other formats, such as the Fasta or GenBank file formats for sequence databases, or the MedlLine format for the literature database, discussed in Section~\ref{sec:entrez-specialized-parsers}.
 
 \section{Entrez Guidelines}
 \label{sec:entrez-guidelines}
@@ -3115,6 +3114,7 @@ ESpell retrieves spelling suggestions. In this example, we use \verb+Bio.Entrez.
 See the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/espell\_help.html}{ESpell help page} for more information.
 
 \section{Specialized parsers}
+\label{sec:entrez-specialized-parsers}
 
 The \verb+Bio.Entrez.read+ function can parse most (if not all) XML output returned by Entrez. Entrez typically allows you to retrieve records in other formats, which may have some advantages compared to the XML format in terms of readability.
 
