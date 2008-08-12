@@ -174,15 +174,11 @@ def parse(handle):
             print record['TI']
 
     """
-    # These keys can occur only once in the record, and their value consists
-    # of a single line
-    single = ("ID", "PMID", "SO", "RF", "NI", "JC", "TA", "IS", "CY", "TT",
-              "CA", "IP", "VI", "DP", "YR", "PG", "LID", "DA", "LR", "OWN",
-              "STAT", "DCOM", "PUBM", "DEP", "PL", "JT", "JID", "SB", "PMC",
-              "EDAT", "MHDA", "PST")
-    # These keys can also occur only once in the record, but their value
-    # can consist of multiple lines
-    multiline = ("AB", "AD", "EA", "TI")
+    # These keys point to string values
+    textkeys = ("ID", "PMID", "SO", "RF", "NI", "JC", "TA", "IS", "CY", "TT",
+                "CA", "IP", "VI", "DP", "YR", "PG", "LID", "DA", "LR", "OWN",
+                "STAT", "DCOM", "PUBM", "DEP", "PL", "JID", "SB", "PMC",
+                "EDAT", "MHDA", "PST", "AB", "AD", "EA", "TI", "JT")
     handle = iter(handle)
     # First skip blank lines
     for line in handle:
@@ -198,12 +194,9 @@ def parse(handle):
             record[key].append(line[6:])
         elif line:
             key = line[:4].rstrip()
-            if key in single:
-                record[key] = line[6:]
-            else:
-                if not key in record:
-                    record[key] = []
-                record[key].append(line[6:])
+            if not key in record:
+                record[key] = []
+            record[key].append(line[6:])
         try:
             line = handle.next()
         except StopIteration:
@@ -212,9 +205,8 @@ def parse(handle):
             line = line.rstrip()
             if line:
                 continue
-        # Some strings were temporarily stored as a list of strings.
         # Join each list of strings into one string.
-        for key in multiline:
+        for key in textkeys:
             if key in record:
                 record[key] = " ".join(record[key])
         if record:
