@@ -5,10 +5,14 @@
 # Please see the LICENSE file that should have been included as part
 # of this package.
 
-import commands
-import re
 from Bio import MissingExternalDependencyError
+import sys
+if sys.platform=="win32" :
+    #Someone needs to find out if dnal works nicely on windows,
+    #and if so where it is typically installed.
+    raise MissingExternalDependencyError("Don't know how to find the dnal on Windows")
 
+import commands
 not_found_types = ["command not found", "dnal: not found"]
 dnal_output = commands.getoutput("dnal")
 
