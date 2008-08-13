@@ -253,7 +253,7 @@ Of course, orchids are not only beautiful to look at, they are also extremely in
 
 After a little bit of reading up we discover that the Lady Slipper Orchids are in the Orchidaceae family and the Cypripedioideae sub-family and are made up of 5 genera:  \emph{Cypripedium}, \emph{Paphiopedilum}, \emph{Phragmipedium}, \emph{Selenipedium} and \emph{Mexipedium}.
 
-That gives us enough to get started delving for more information. So, let's look at how the Biopython tools can help us.  We'll start with sequence parsing in Section~\ref{sec:sequence-parsing}, but the orchids will be back later on as well - for example we'll extra data from Swiss-Prot from certain orchid proteins in Chapter~\ref{chapter:swiss_prot}, search PubMed for papers about orchids in Section~\ref{sec:pub_med}, extract sequence data from GenBank in Section~\ref{genbank-retrieval}, and work with ClustalW multiple sequence alignments of orchid proteins in Section~\ref{sec:align_clustal}.
+That gives us enough to get started delving for more information. So, let's look at how the Biopython tools can help us.  We'll start with sequence parsing in Section~\ref{sec:sequence-parsing}, but the orchids will be back later on as well - for example we'll extra data from Swiss-Prot from certain orchid proteins in Chapter~\ref{chapter:swiss_prot}, search PubMed for papers about orchids in Section~\ref{subsec:pub_med}, extract sequence data from GenBank in Section~\ref{genbank-retrieval}, and work with ClustalW multiple sequence alignments of orchid proteins in Section~\ref{sec:align_clustal}.
 
 \section{Parsing sequence file formats}
 \label{sec:sequence-parsing}
@@ -353,7 +353,7 @@ One of the very common things that you need to do in bioinformatics is extract i
 \begin{itemize}
   \item \href{http://www.expasy.org/}{ExPASy} -- See Chapter~\ref{chapter:swiss_prot}.
   \item \href{http://www.ncbi.nlm.nih.gov/Entrez/}{Entrez from NCBI} -- See Chapter~\ref{chapter:entrez}.
-  \item \href{http://www.ncbi.nlm.nih.gov/PubMed/}{PubMed from NCBI} -- See Section~\ref{sec:pub_med} in the Cookbook for example code detailing how to use this.
+  \item \href{http://www.ncbi.nlm.nih.gov/PubMed/}{PubMed from NCBI} -- See Section~\ref{subsec:pub_med} in the Cookbook for example code detailing how to use this.
   \item \href{http://scop.mrc-lmb.cam.ac.uk/scop/}{SCOP}
 \end{itemize}
 
@@ -3227,6 +3227,90 @@ The Bio* toolkits--a brief overview.
 \section{Examples}
 \label{sec:entrez_examples}
 
+\subsection{PubMed}
+\label{subsec:pub_med}
+
+If you are in the medical field or interested in human issues (and many times even if you are not!), PubMed (\url{http://www.ncbi.nlm.nih.gov/PubMed/}) is an excellent source of all kinds of goodies. So like other things, we'd like to be able to grab information from it and use it in python scripts.
+
+In this example, we will query PubMed for all articles having to do with orchids (see section~\ref{sec:orchids} for our motivation). We first check how many of such articles there are:
+
+\begin{verbatim}
+>>> from Bio import Entrez
+>>> handle = Entrez.egquery(term='orchid')
+>>> record = Entrez.read(handle)
+>>> for row in record['eGQueryResult']:
+...     if row['DbName']=='pubmed':
+...         print row['Count']
+463
+\end{verbatim}
+
+Now we use the \verb+Bio.Entrez.efetch+ function to download the PubMed IDs of these 463 articles:
+\begin{verbatim}
+>>> handle = Entrez.esearch(db='pubmed', term='orchid', retmax=463)
+>>> record = Entrez.read(handle)
+>>> idlist = record["IdList"]
+>>> print idlist
+\end{verbatim}
+
+
+This returns a python list containing all of the PubMed IDs of articles related to orchids:
+
+\begin{verbatim}
+['18680603', '18665331', '18661158', '18627489', '18627452', '18612381',
+'18594007', '18591784', '18589523', '18579475', '18575811', '18575690',
+...
+\end{verbatim}
+
+Now that we've got them, we obviously want to get the corresponding Medline records and extract the information from them. Here, we'll download the Medline records in the Medline flat-file format, and use the \verb+Bio.Medline+ module to parse them:
+
+\begin{verbatim}
+>>> from Bio import Medline
+>>> handle = Entrez.efetch(db='pubmed', id=idlist, rettype='medline',
+                           retmode='text')
+>>> records = Medline.parse(handle)
+\end{verbatim}
+
+Keep in mind that \verb+records+ is an iterator, so you can iterate through the records only once. If you want to save the records, you can convert them to a list:
+
+\begin{verbatim}
+>>> records = list(records)
+\end{verbatim}
+
+Let's now iterate over the records to print out some information about each record:
+
+\begin{verbatim}
+>>> for record in records:
+...     print 'title:', record["TI"]
+...     if "AU" in records:
+...         print 'authors:', record["AU"]
+...     print 'source:', record["CO"]
+...     print
+\end{verbatim}
+
+The output for this looks like:
+
+\begin{verbatim}
+title: Sex pheromone mimicry in the early spider orchid (ophrys sphegodes):
+patterns of hydrocarbons as the key mechanism for pollination by sexual
+deception [In Process Citation]
+authors: ['Schiestl FP', 'Ayasse M', 'Paulus HF', 'Lofstedt C', 'Hansson BS',
+'Ibarra F', 'Francke W']
+source: J Comp Physiol [A] 2000 Jun;186(6):567-74
+\end{verbatim}
+
+Especially interesting to note is the list of authors, which is returned as a standard python list. This makes it easy to manipulate and search using standard python tools. For instance, we could loop through a whole bunch of entries searching for a particular author with code like the following:
+
+\begin{verbatim}
+>>> search_author = 'Waits T'
+
+>>> for record in records:
+...     if not 'AU' in record:
+...         continue
+...     if search_author in record['AU']:
+...         print "Author %s found: %s" % (search_author, record["SO"])
+\end{verbatim}
+
+Hopefully this section gave you an idea of the power and flexibility of the Entrez and Medline interfaces and how they can be used together.
 \subsection{Searching and downloading Entrez Nucleotide records}
 \label{subsec:entrez_example_genbank}
 
@@ -3767,88 +3851,6 @@ For these functions, an invalid accession number returns an error message in HTM
 
 \chapter{Cookbook -- Cool things to do with it}
 \label{chapter:cookbook}
-
-\section{PubMed}
-\label{sec:pub_med}
-
-The \verb|Bio.PubMed| module uses \verb|Bio.Entrez| internally to access the NCBI.
-\emph{Please} remember to read and observe the NCBI's guidelines on using their Entrez online facilities responsibly.  If you are found to be abusing their servers, they can and will block your access!  See Section~\ref{sec:entrez-guidelines}.
-
-\subsection{Sending a query to PubMed}
-
-If you are in the Medical field or interested in human issues (and many times even if you are not!), PubMed (\url{http://www.ncbi.nlm.nih.gov/PubMed/}) is an excellent source of all kinds of goodies. So like other things, we'd like to be able to grab information from it and use it in python scripts.
-
-Querying PubMed using Biopython is extremely painless. To get all of the article ids for articles having to do with orchids (see section~\ref{sec:orchids} for our motivation), we only need the following three lines of code:
-
-\begin{verbatim}
-from Bio import PubMed
-
-search_term = 'orchid'
-orchid_ids = PubMed.search_for(search_term)
-\end{verbatim}
-
-This returns a python list containing all of the orchid ids
-
-\begin{verbatim}
-['11070358', '11064040', '11028023', '10947239', '10938351', '10936520',
-'10905611', '10899814', '10856762', '10854740', '10758893', '10716342',
-...
-\end{verbatim}
-
-With this list of ids we are ready to start retrieving the records, so follow on ahead to the next section.
-
-\subsection{Retrieving a PubMed record}
-
-The previous section described how to get a bunch of article ids. Now that we've got them, we obviously want to get the corresponding Medline records and extract the information from them.
-
-The interface for retrieving records from PubMed should be very intuitive to python programmers -- it models a python dictionary. To set up this interface, we need to set up a parser that will parse the results that we retrieve. The following lines of code get everything set up:
-
-\begin{verbatim}
-from Bio import PubMed
-from Bio import Medline
-
-rec_parser = Medline.RecordParser()
-medline_dict = PubMed.Dictionary(parser = rec_parser)
-\end{verbatim}
-
-What we've done is create a dictionary like object \verb|medline_dict|. To get an article we access it like \verb|medline_dict[id_to_get]|. What this does is connect with PubMed, get the article you ask for, parse it into a record object, and return it. Very cool!
-
-Now let's look at how to use this nice dictionary to print out some information about some ids. We just need to loop through our ids (\verb|orchid_ids| from the previous section) and print out the information we are interested in:
-
-\begin{verbatim}
-for oid in orchid_ids[0:5]:
-    cur_record = medline_dict[oid]
-    print 'title:', cur_record.title.rstrip()
-    print 'authors:', cur_record.authors
-    print 'source:', cur_record.source.strip()
-    print
-\end{verbatim}
-
-The output for this looks like:
-
-\begin{verbatim}
-title: Sex pheromone mimicry in the early spider orchid (ophrys sphegodes):
-patterns of hydrocarbons as the key mechanism for pollination by sexual
-deception [In Process Citation]
-authors: ['Schiestl FP', 'Ayasse M', 'Paulus HF', 'Lofstedt C', 'Hansson BS',
-'Ibarra F', 'Francke W']
-source: J Comp Physiol [A] 2000 Jun;186(6):567-74
-\end{verbatim}
-
-Especially interesting to note is the list of authors, which is returned as a standard python list. This makes it easy to manipulate and search using standard python tools. For instance, we could loop through a whole bunch of entries searching for a particular author with code like the following:
-
-\begin{verbatim}
-search_author = 'Waits T'
-
-for our_id in our_id_list:
-    cur_record = medline_dict[our_id]
-   
-    if search_author in cur_record.authors:
-        print "Author %s found: %s" % (search_author,
-                                       cur_record.source.strip())
-\end{verbatim}
-
-The PubMed and Medline interfaces are very mature and nice to work with -- hopefully this section gave you an idea of the power of the interfaces and how they can be used.
 
 \section{GenBank}
 
