@@ -11,6 +11,12 @@ class Alphabet:
         return self.__class__.__name__ + "()"
 
     def contains(self, other):
+        """Does this alphabet 'contain' the other (OBSOLETE?).
+
+        Returns a boolean.  This relies on the Alphabet subclassing
+        hierarchy only, and does not check the letters property.
+        This isn't ideal, and doesn't seem to work as intended
+        with the AlphabetEncoder classes."""
         return isinstance(other, self.__class__)
 
 generic_alphabet = Alphabet()
@@ -84,6 +90,10 @@ class AlphabetEncoder:
                                self.new_letters)
 
     def contains(self, other):
+        """Does this alphabet 'contain' the other (OBSOLETE?).
+
+        This is isn't implemented for the base AlphabetEncoder,
+        which will always return 0 (False)."""
         return 0
     
 class Gapped(AlphabetEncoder):
@@ -92,6 +102,12 @@ class Gapped(AlphabetEncoder):
         self.gap_char = gap_char
 
     def contains(self, other):
+        """Does this alphabet 'contain' the other (OBSOLETE?).
+
+        Returns a boolean.  This relies on the Alphabet subclassing
+        hierarchy, and attempts to check the gap character.  This fails
+        if the other alphabet does not have a gap character!
+        """
         return other.gap_char == self.gap_char and \
                self.alphabet.contains(other.alphabet)
                
@@ -107,6 +123,12 @@ class HasStopCodon(AlphabetEncoder):
         return x
 
     def contains(self, other):
+        """Does this alphabet 'contain' the other (OBSOLETE?).
+
+        Returns a boolean.  This relies on the Alphabet subclassing
+        hierarchy, and attempts to check the stop symbol.  This fails
+        if the other alphabet does not have a stop symbol!
+        """
         return other.stop_symbol == self.stop_symbol and \
                self.alphabet.contains(other.alphabet)
 
@@ -122,7 +144,10 @@ def _get_base_alphabet(alphabet) :
 def _consensus_base_alphabet(alphabets) :
     """Returns a common but often generic base alphabet object (PRIVATE).
 
-    This throws away any AlphabetEncoder information, e.g. Gapped alphabets."""
+    This throws away any AlphabetEncoder information, e.g. Gapped alphabets.
+
+    Note that DNA+RNA -> Nucleotide, and Nucleotide+Protein-> generic single
+    letter.  These DO NOT raise an exception!"""
     common = None
     for alpha in alphabets :
         a = _get_base_alphabet(alpha)
@@ -153,8 +178,12 @@ def _consensus_base_alphabet(alphabets) :
 def _consensus_alphabet(alphabets) :
     """Returns a common but often generic alphabet object (PRIVATE).
 
+    Note that DNA+RNA -> Nucleotide, and Nucleotide+Protein-> generic single
+    letter.  These DO NOT raise an exception!
+    
     This is aware of Gapped and HasStopCodon and new letters added by
-    other AlphabetEncoders."""
+    other AlphabetEncoders.  This WILL raise an exception if more than
+    one gap character or stop symbol is present."""
     base = _consensus_base_alphabet(alphabets)
     gap = None
     stop = None
@@ -192,3 +221,27 @@ def _consensus_alphabet(alphabets) :
     if stop :
         alpha = HasStopCodon(alpha, stop_symbol=stop)
     return alpha
+
+def _check_type_compatible(alphabets) :
+    """Returns True except for DNA+RNA or Nucleotide+Protein (PRIVATE).
+
+    This relies on the Alphabet subclassing hierarchy.  It does not
+    check things like gap characters or stop symbols."""
+    dna, rna, nucl, protein = False, False, False, False
+    for alpha in alphabets :
+        a = _get_base_alphabet(alpha)
+        if isinstance(a, DNAAlphabet) :
+            dna = True
+            nucl = True
+            if rna or protein : return False
+        elif isinstance(a, RNAAlphabet) :
+            rna = True
+            nucl = True
+            if dna or protein : return False
+        elif isinstance(a, NucleotideAlphabet) :
+            nucl = True
+            if protein : return False
+        elif isinstance(a, ProteinAlphabet) :
+            protein = True
+            if nucl : return False
+    return True

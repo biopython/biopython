@@ -7,6 +7,7 @@ import string
 
 # biopython
 from Bio.Seq import MutableSeq
+from Bio.Alphabet import SingleLetterAlphabet
 
 # local stuff
 from Bio.GA.Organism               import Organism
@@ -33,7 +34,7 @@ def run_tests(argv):
         cur_suite = test_loader.loadTestsFromTestCase(test)
         runner.run(cur_suite)
 
-class TestAlphabet:
+class TestAlphabet(SingleLetterAlphabet):
     """Simple test alphabet.
     """
     letters = ["1", "2", "3"]

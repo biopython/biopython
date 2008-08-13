@@ -49,12 +49,22 @@ class Seq:
         """
         return self.data
 
-    # I don't think I like this method...
-##    def __cmp__(self, other):
-##        if isinstance(other, Seq):
-##            return cmp(self.data, other.data)
-##        else:
-##            return cmp(self.data, other)
+    """
+    TODO - Work out why this breaks test_Restriction.py
+    def __cmp__(self, other):
+        if hasattr(other, "alphabet") :
+            #other should be a Seq or a MutableSeq
+            if not Alphabet._check_type_compatible([self.alphabet,
+                                                    other.alphabet]) :
+                raise TypeError, ("incompatable alphabets", str(self.alphabet),
+                                  str(other.alphabet))
+            #They should be the same sequence type (or one of them is generic)
+            return cmp(str(self), str(other))
+        elif isinstance(other, basestring) :
+            return cmp(str(self), str(other))
+        else :
+            raise TypeError
+    """
 
     def __len__(self): return len(self.data)       # Seq API requirement
 
@@ -70,25 +80,37 @@ class Seq:
             return Seq(self.data[index], self.alphabet)
 
     def __add__(self, other):
-        if type(other) == type(' '):
-            return self.__class__(self.data + other, self.alphabet)
-        elif self.alphabet.contains(other.alphabet):
-            return self.__class__(self.data + other.data, self.alphabet)
-        elif other.alphabet.contains(self.alphabet):
-            return self.__class__(self.data + other.data, other.alphabet)
-        else:
-            raise TypeError, ("incompatable alphabets", str(self.alphabet),
-                              str(other.alphabet))
-        
-    def __radd__(self, other):
-        if self.alphabet.contains(other.alphabet):
-            return self.__class__(other.data + self.data, self.alphabet)
-        elif other.alphabet.contains(self.alphabet):
-            return self.__class__(other.data + self.data, other.alphabet)
-        else:
-            raise TypeError, ("incompatable alphabets", str(self.alphabet),
-                              str(other.alphabet))
+        """Add another sequence or string to this sequence."""
+        if hasattr(other, "alphabet") :
+            #other should be a Seq or a MutableSeq
+            if not Alphabet._check_type_compatible([self.alphabet,
+                                                    other.alphabet]) :
+                raise TypeError, ("incompatable alphabets", str(self.alphabet),
+                                  str(other.alphabet))
+            #They should be the same sequence type (or one of them is generic)
+            a = Alphabet._consensus_alphabet([self.alphabet, other.alphabet])
+            return self.__class__(str(self) + str(other), a)
+        elif isinstance(other, basestring) :
+            #other is a plain string - use the current alphabet
+            return self.__class__(str(self) + str(other), self.alphabet)
+        else :
+            raise TypeError
 
+    def __radd__(self, other):
+        if hasattr(other, "alphabet") :
+            #other should be a Seq or a MutableSeq
+            if not Alphabet._check_type_compatible([self.alphabet,
+                                                    other.alphabet]) :
+                raise TypeError, ("incompatable alphabets", str(self.alphabet),
+                                  str(other.alphabet))
+            #They should be the same sequence type (or one of them is generic)
+            a = Alphabet._consensus_alphabet([self.alphabet, other.alphabet])
+            return self.__class__(str(other) + str(self), a)
+        elif isinstance(other, basestring) :
+            #other is a plain string - use the current alphabet
+            return self.__class__(str(other) + str(self), self.alphabet)
+        else :
+            raise TypeError
 
     def tostring(self):                            # Seq API requirement
         """Returns the full sequence as a python string.
@@ -231,23 +253,35 @@ class MutableSeq:
         which needs to be backwards compatible with old Biopython, you
         should continue to use my_seq.tostring() rather than str(my_seq).
         """
+        #See test_GAQueens.py for an historic usage of a non-string alphabet!
         return "".join(self.data)
 
     def __cmp__(self, other):
-        if isinstance(other, MutableSeq):
-            x = cmp(self.alphabet, other.alphabet)
-            if x == 0:
+        """Compare the sequence for to another sequence or a string.
+
+        If compared to another sequence the alphabets must be compatible.
+        Comparing DNA to RNA, or Nucleotide to Protein will raise an
+        exception.
+
+        Otherwise only the sequence itself is compared, not the precise
+        alphabet.
+
+        This method indirectly supports ==, < , etc."""
+        if hasattr(other, "alphabet") :
+            #other should be a Seq or a MutableSeq
+            if not Alphabet._check_type_compatible([self.alphabet,
+                                                    other.alphabet]) :
+                raise TypeError, ("incompatable alphabets", str(self.alphabet),
+                                  str(other.alphabet))
+            #They should be the same sequence type (or one of them is generic)
+            if isinstance(other, MutableSeq):
                 return cmp(self.data, other.data)
-            return x
-        elif type(other) == type(""):
-            return cmp(self.data.tostring(), other)
-        elif isinstance(other, Seq):
-            x = cmp(self.alphabet, other.alphabet)
-            if x == 0:
-                return cmp(self.data.tostring(), other.data)
-            return x
-        else:
-            return cmp(self.data, other)
+            else :
+                return cmp(str(self), str(other))
+        elif isinstance(other, basestring) :
+            return cmp(str(self), str(other))
+        else :
+            raise TypeError
 
     def __len__(self): return len(self.data)
 
@@ -287,21 +321,37 @@ class MutableSeq:
         del self.data[index]
     
     def __add__(self, other):
-        if self.alphabet.contains(other.alphabet):
-            return self.__class__(self.data + other.data, self.alphabet)
-        elif other.alphabet.contains(self.alphabet):
-            return self.__class__(self.data + other.data, other.alphabet)
-        else:
-            raise TypeError, ("incompatable alphabets", str(self.alphabet),
-                              str(other.alphabet))
+        """Add another sequence or string to this sequence."""
+        if hasattr(other, "alphabet") :
+            #other should be a Seq or a MutableSeq
+            if not Alphabet._check_type_compatible([self.alphabet,
+                                                    other.alphabet]) :
+                raise TypeError, ("incompatable alphabets", str(self.alphabet),
+                                  str(other.alphabet))
+            #They should be the same sequence type (or one of them is generic)
+            a = Alphabet._consensus_alphabet([self.alphabet, other.alphabet])
+            return self.__class__(str(self) + str(other), a)
+        elif isinstance(other, basestring) :
+            #other is a plain string - use the current alphabet
+            return self.__class__(str(self) + str(other), self.alphabet)
+        else :
+            raise TypeError
+
     def __radd__(self, other):
-        if self.alphabet.contains(other.alphabet):
-            return self.__class__(other.data + self.data, self.alphabet)
-        elif other.alphabet.contains(self.alphabet):
-            return self.__class__(other.data + self.data, other.alphabet)
-        else:
-            raise TypeError, ("incompatable alphabets", str(self.alphabet),
-                              str(other.alphabet))
+        if hasattr(other, "alphabet") :
+            #other should be a Seq or a MutableSeq
+            if not Alphabet._check_type_compatible([self.alphabet,
+                                                    other.alphabet]) :
+                raise TypeError, ("incompatable alphabets", str(self.alphabet),
+                                  str(other.alphabet))
+            #They should be the same sequence type (or one of them is generic)
+            a = Alphabet._consensus_alphabet([self.alphabet, other.alphabet])
+            return self.__class__(str(other) + str(self), a)
+        elif isinstance(other, basestring) :
+            #other is a plain string - use the current alphabet
+            return self.__class__(str(other) + str(self), self.alphabet)
+        else :
+            raise TypeError
 
     def append(self, c):
         self.data.append(c)
@@ -665,4 +715,42 @@ if __name__ == "__main__" :
                     assert values == Set(["D", "N"])
                 else :
                     assert values == Set(t)
- 
+
+    print "Checking addition"
+    p = Seq("PKLPAK", Alphabet.generic_protein)
+    q = Seq("PKL-PAK", Alphabet.Gapped(Alphabet.generic_protein,"-"))
+    r = Seq("PKL-PAK*", Alphabet.Gapped(Alphabet.HasStopCodon(Alphabet.generic_protein,"*"),"-"))
+    s = Seq("PKL-PAK*", Alphabet.HasStopCodon(Alphabet.Gapped(Alphabet.generic_protein,"-"),"*"))
+    t = Seq("PKLPAK*", Alphabet.HasStopCodon(Alphabet.generic_protein,"*"))
+    u = "PAPKXALOA"
+    v = Seq("PKLPAK!", Alphabet.HasStopCodon(Alphabet.generic_protein,"!"))
+    w = Seq("PKL.PAK", Alphabet.Gapped(Alphabet.generic_protein,"."))
+    for a in [p,q,r,s,t,u,v,w] :
+        for b in [p,q,r,s,t,u,v,w] :
+            try :
+                c = a+b
+            except (TypeError,ValueError), e :
+                print "%s and %s -> %s" % (a.alphabet, b.alphabet, str(e))
+        try :
+            c = a+Seq("ACTG", Alphabet.generic_dna)
+            assert isinstance(a,str), "Should have failed"
+        except TypeError, e :
+            pass
+
+    for a in [Alphabet.generic_protein, Alphabet.HasStopCodon(Alphabet.Gapped(Alphabet.generic_protein,"-"),"*")] :
+        assert Seq("A",a) == Seq("A",a)
+        assert Seq("A",a) == Seq("A")
+        assert Seq("ABC",a) == Seq("A") + Seq("B", Alphabet.generic_protein) + Seq("C",a)
+        assert Seq("A",a) <> Seq("B")
+        assert Seq("ABC",a) <= Seq("ABD")
+        assert Seq("ABC",a) < Seq("ABD")
+        try :
+            assert Seq("A",a) == Seq("A",Alphabet.generic_dna)
+            assert False
+        except TypeError :
+            pass
+        assert "" == str(Seq("",a))
+        assert "" == str(MutableSeq("",a))
+    assert "" == str(Seq(""))
+    assert "" == str(MutableSeq(""))
+    

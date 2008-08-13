@@ -41,7 +41,6 @@ t = Seq.Seq("T", IUPAC.ambiguous_dna)
 u = s + t
 print str(u.alphabet)
 
-
 from Bio.Seq import MutableSeq
 import array
 
@@ -119,6 +118,90 @@ for test_seq in [string_seq]:
     print "Setting wobble codon to N (set slice with stride 3):"
     test_seq[2::3] = "N" * len(test_seq[2::3])
     print repr(test_seq)
+
+###########################################################################
+print
+print "Testing Seq addition"
+print "===================="
+dna = [Seq.Seq("ATCG", IUPAC.ambiguous_dna),
+       Seq.Seq("GTCA", Alphabet.generic_dna),
+       Seq.MutableSeq("GGTCA", Alphabet.generic_dna),
+       Seq.Seq("CTG-CA", Alphabet.Gapped(IUPAC.unambiguous_dna, "-")),
+       "TGGTCA"]
+rna = [Seq.Seq("AUUUCG", IUPAC.ambiguous_rna),
+       Seq.MutableSeq("AUUCG", IUPAC.ambiguous_rna),
+       Seq.Seq("UCAG", Alphabet.generic_rna),
+       Seq.MutableSeq("UC-AG", Alphabet.Gapped(Alphabet.generic_rna, "-")),
+       Seq.Seq("U.CAG", Alphabet.Gapped(Alphabet.generic_rna, ".")),
+       "UGCAU"]
+nuc = [Seq.Seq("ATCG", Alphabet.generic_nucleotide),"UUUTTTACG"]
+protein = [Seq.Seq("ATCGPK", IUPAC.protein),
+           Seq.Seq("T.CGPK", Alphabet.Gapped(IUPAC.protein, ".")),
+           Seq.Seq("T-CGPK", Alphabet.Gapped(IUPAC.protein, "-")),
+           Seq.Seq("MEDG-KRXR*", Alphabet.Gapped(Alphabet.HasStopCodon(IUPAC.extended_protein, "*"), "-")),
+           Seq.MutableSeq("ME-K-DRXR*XU", Alphabet.Gapped(Alphabet.HasStopCodon(IUPAC.extended_protein, "*"), "-")),
+           Seq.Seq("MEDG-KRXR@", Alphabet.HasStopCodon(Alphabet.Gapped(IUPAC.extended_protein, "-"), "*")),
+           Seq.Seq("ME-KR@", Alphabet.HasStopCodon(Alphabet.Gapped(IUPAC.protein, "-"), "@")),
+           Seq.Seq("MEDG.KRXR@", Alphabet.Gapped(Alphabet.HasStopCodon(IUPAC.extended_protein, "@"), ".")),
+           "TEDDF"]
+for a in dna+rna :
+    for b in nuc :
+        c=a+b
+        assert str(c) == str(a) + str(b)
+for a in rna :
+    for b in rna :
+        try :
+            c=a+b
+            assert str(c) == str(a) + str(b)
+        except ValueError, e :
+            print "%s + %s\n-> %s" % (repr(a.alphabet), repr(b.alphabet), str(e))
+for a in dna :
+    for b in dna :
+        try :
+            c=a+b
+            assert str(c) == str(a) + str(b)
+        except ValueError, e :
+            print "%s + %s\n-> %s" % (repr(a.alphabet), repr(b.alphabet), str(e))
+    for b in rna :
+        try :
+            c=a+b
+            assert (isinstance(a,str) or isinstance(b,str)), \
+                   "DNA+RNA addition should fail!"
+        except TypeError :
+            pass
+        try :
+            c=b+a
+            assert (isinstance(a,str) or isinstance(b,str)), \
+                   "RNA+DNA addition should fail!"
+        except TypeError :
+            pass
+for a in protein :
+    for b in protein :
+        try :
+            c=a+b
+            assert str(c) == str(a) + str(b)
+        except ValueError, e:
+            print "%s + %s\n-> %s" % (repr(a.alphabet), repr(b.alphabet), str(e))
+    for b in nuc+dna+rna :
+        try :
+            c=a+b
+            assert (isinstance(a,str) or isinstance(b,str)), \
+                   "Protein+Nucleotide addition should fail!"
+        except TypeError :
+            pass
+for a in nuc :
+    for b in dna+rna+nuc :
+        c=a+b
+        assert str(c) == str(a) + str(b)
+for a in dna+rna+nuc :
+    for b in protein :
+        try :
+            c=a+b
+            assert (isinstance(a,str) or isinstance(b,str)), \
+                   "Nucleotide+Protein addition should fail!"
+        except TypeError :
+            pass
+del dna, rna, nuc, protein
 
 ###########################################################################
 from Bio.Data.IUPACData import ambiguous_dna_complement, ambiguous_rna_complement

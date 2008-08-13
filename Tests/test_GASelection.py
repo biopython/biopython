@@ -7,6 +7,7 @@ import random
 
 # biopython
 from Bio.Seq import MutableSeq
+from Bio.Alphabet import SingleLetterAlphabet
 
 # local stuff
 from Bio.GA.Organism import Organism
@@ -31,7 +32,7 @@ def run_tests(argv):
 
 # --- helper classes and functions
 
-class TestAlphabet:
+class TestAlphabet(SingleLetterAlphabet):
     """Simple test alphabet.
     """                        
     letters = ["0", "1", "2", "3"]

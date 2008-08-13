@@ -51,6 +51,65 @@ MutableSeq('AATGGTTT', IUPACAmbiguousDNA())
 Setting wobble codon to N (set slice with stride 3):
 MutableSeq('GTNCTNCGNAGNAANAANGANTTN', IUPACAmbiguousDNA())
 
+Testing Seq addition
+====================
+Gapped(RNAAlphabet(), '-') + Gapped(RNAAlphabet(), '.')
+-> More than one gap character present
+Gapped(RNAAlphabet(), '.') + Gapped(RNAAlphabet(), '-')
+-> More than one gap character present
+Gapped(IUPACProtein(), '.') + Gapped(IUPACProtein(), '-')
+-> More than one gap character present
+Gapped(IUPACProtein(), '.') + Gapped(HasStopCodon(ExtendedIUPACProtein(), '*'), '-')
+-> More than one gap character present
+Gapped(IUPACProtein(), '.') + Gapped(HasStopCodon(ExtendedIUPACProtein(), '*'), '-')
+-> More than one gap character present
+Gapped(IUPACProtein(), '.') + HasStopCodon(Gapped(ExtendedIUPACProtein(), '-'), '*')
+-> More than one gap character present
+Gapped(IUPACProtein(), '.') + HasStopCodon(Gapped(IUPACProtein(), '-'), '@')
+-> More than one gap character present
+Gapped(IUPACProtein(), '-') + Gapped(IUPACProtein(), '.')
+-> More than one gap character present
+Gapped(IUPACProtein(), '-') + Gapped(HasStopCodon(ExtendedIUPACProtein(), '@'), '.')
+-> More than one gap character present
+Gapped(HasStopCodon(ExtendedIUPACProtein(), '*'), '-') + Gapped(IUPACProtein(), '.')
+-> More than one gap character present
+Gapped(HasStopCodon(ExtendedIUPACProtein(), '*'), '-') + HasStopCodon(Gapped(IUPACProtein(), '-'), '@')
+-> More than one stop symbol present
+Gapped(HasStopCodon(ExtendedIUPACProtein(), '*'), '-') + Gapped(HasStopCodon(ExtendedIUPACProtein(), '@'), '.')
+-> More than one gap character present
+Gapped(HasStopCodon(ExtendedIUPACProtein(), '*'), '-') + Gapped(IUPACProtein(), '.')
+-> More than one gap character present
+Gapped(HasStopCodon(ExtendedIUPACProtein(), '*'), '-') + HasStopCodon(Gapped(IUPACProtein(), '-'), '@')
+-> More than one stop symbol present
+Gapped(HasStopCodon(ExtendedIUPACProtein(), '*'), '-') + Gapped(HasStopCodon(ExtendedIUPACProtein(), '@'), '.')
+-> More than one gap character present
+HasStopCodon(Gapped(ExtendedIUPACProtein(), '-'), '*') + Gapped(IUPACProtein(), '.')
+-> More than one gap character present
+HasStopCodon(Gapped(ExtendedIUPACProtein(), '-'), '*') + HasStopCodon(Gapped(IUPACProtein(), '-'), '@')
+-> More than one stop symbol present
+HasStopCodon(Gapped(ExtendedIUPACProtein(), '-'), '*') + Gapped(HasStopCodon(ExtendedIUPACProtein(), '@'), '.')
+-> More than one gap character present
+HasStopCodon(Gapped(IUPACProtein(), '-'), '@') + Gapped(IUPACProtein(), '.')
+-> More than one gap character present
+HasStopCodon(Gapped(IUPACProtein(), '-'), '@') + Gapped(HasStopCodon(ExtendedIUPACProtein(), '*'), '-')
+-> More than one stop symbol present
+HasStopCodon(Gapped(IUPACProtein(), '-'), '@') + Gapped(HasStopCodon(ExtendedIUPACProtein(), '*'), '-')
+-> More than one stop symbol present
+HasStopCodon(Gapped(IUPACProtein(), '-'), '@') + HasStopCodon(Gapped(ExtendedIUPACProtein(), '-'), '*')
+-> More than one stop symbol present
+HasStopCodon(Gapped(IUPACProtein(), '-'), '@') + Gapped(HasStopCodon(ExtendedIUPACProtein(), '@'), '.')
+-> More than one gap character present
+Gapped(HasStopCodon(ExtendedIUPACProtein(), '@'), '.') + Gapped(IUPACProtein(), '-')
+-> More than one gap character present
+Gapped(HasStopCodon(ExtendedIUPACProtein(), '@'), '.') + Gapped(HasStopCodon(ExtendedIUPACProtein(), '*'), '-')
+-> More than one gap character present
+Gapped(HasStopCodon(ExtendedIUPACProtein(), '@'), '.') + Gapped(HasStopCodon(ExtendedIUPACProtein(), '*'), '-')
+-> More than one gap character present
+Gapped(HasStopCodon(ExtendedIUPACProtein(), '@'), '.') + HasStopCodon(Gapped(ExtendedIUPACProtein(), '-'), '*')
+-> More than one gap character present
+Gapped(HasStopCodon(ExtendedIUPACProtein(), '@'), '.') + HasStopCodon(Gapped(IUPACProtein(), '-'), '@')
+-> More than one gap character present
+
 Checking ambiguous complements
 ==============================
 
