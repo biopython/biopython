@@ -3120,7 +3120,7 @@ The \verb+Bio.Entrez.read+ function can parse most (if not all) XML output retur
 
 To request a specific file format from Entrez using \verb|Bio.Entrez.efetch()| requires specifying the \verb|rettype| and/or \verb|retmode| optional arguments.  The different combinations are described for each database type on the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/efetch_help.html}{NCBI efetch webpage}.
 
-One obvious case is you may prefer to download sequences in the FASTA or GenBank plain text formats (which can then be parsed with \verb|Bio.SeqIO|, see Sections~\ref{sec:SeqIO_GenBank_Online} and~\ref{sec:efetch}).  For the literature databases, also Biopython contains a parser for the \verb+MEDLINE+ format, for Medline records in PubMed.
+One obvious case is you may prefer to download sequences in the FASTA or GenBank plain text formats (which can then be parsed with \verb|Bio.SeqIO|, see Sections~\ref{sec:SeqIO_GenBank_Online} and~\ref{sec:efetch}).  For the literature databases, Biopython contains a parser for the \verb+MEDLINE+ format used in PubMed.
 
 \subsection{Parsing Medline records}
 
@@ -3184,7 +3184,7 @@ PDB file parser and structure class implemented in Python.
 Instead of parsing Medline records stored in files, you can also parse Medline records downloaded by \verb+Bio.Entrez.efetch+. For example, let's look at all Medline records in PubMed related to Biopython:
 \begin{verbatim}
 >>> from Bio import Entrez
->>> handle = Entrez.esearch(db='pubmed',term='biopython')
+>>> handle = Entrez.esearch(db="pubmed",term="biopython")
 >>> record = Entrez.read(handle)
 >>> record["IdList"]
 ['18606172', '16403221', '16377612', '14871861', '14630660', '12230038']
@@ -3192,9 +3192,9 @@ Instead of parsing Medline records stored in files, you can also parse Medline r
 We now use \verb+Bio.Entrez.efetch+ to download these Medline records:
 \begin{verbatim}
 >>> idlist = record["IdList"]
->>> handle = Entrez.efetch(db='pubmed',id=idlist,rettype='medline',retmode='text')
+>>> handle = Entrez.efetch(db="pubmed",id=idlist,rettype="medline",retmode="text")
 \end{verbatim}
-Here, we specify \verb+rettype='medline', retmode='text'+ to obtain the Medline records in plain-text Medline format. Now we use \verb+Bio.Medline+ to parse these records:
+Here, we specify \verb+rettype="medline", retmode="text"+ to obtain the Medline records in plain-text Medline format. Now we use \verb+Bio.Medline+ to parse these records:
 \begin{verbatim}
 >>> from Bio import Medline
 >>> records = Medline.parse(handle)
@@ -3211,7 +3211,7 @@ Here, we specify \verb+rettype='medline', retmode='text'+ to obtain the Medline 
 For comparison, here we show an example using the XML format:
 \begin{verbatim}
 >>> idlist = record["IdList"]
->>> handle = Entrez.efetch(db='pubmed',id=idlist,rettype='medline',retmode='xml')
+>>> handle = Entrez.efetch(db="pubmed",id=idlist,rettype="medline",retmode="xml")
 >>> records = Entrez.read(handle)
 >>> for record in records:
 ...     print record["MedlineCitation"]["Article"]["ArticleTitle"]
@@ -3236,17 +3236,17 @@ In this example, we will query PubMed for all articles having to do with orchids
 
 \begin{verbatim}
 >>> from Bio import Entrez
->>> handle = Entrez.egquery(term='orchid')
+>>> handle = Entrez.egquery(term="orchid")
 >>> record = Entrez.read(handle)
->>> for row in record['eGQueryResult']:
-...     if row['DbName']=='pubmed':
-...         print row['Count']
+>>> for row in record["eGQueryResult"]:
+...     if row["DbName"]=="pubmed":
+...         print row["Count"]
 463
 \end{verbatim}
 
 Now we use the \verb+Bio.Entrez.efetch+ function to download the PubMed IDs of these 463 articles:
 \begin{verbatim}
->>> handle = Entrez.esearch(db='pubmed', term='orchid', retmax=463)
+>>> handle = Entrez.esearch(db="pubmed", term="orchid", retmax=463)
 >>> record = Entrez.read(handle)
 >>> idlist = record["IdList"]
 >>> print idlist
@@ -3301,12 +3301,12 @@ source: J Comp Physiol [A] 2000 Jun;186(6):567-74
 Especially interesting to note is the list of authors, which is returned as a standard python list. This makes it easy to manipulate and search using standard python tools. For instance, we could loop through a whole bunch of entries searching for a particular author with code like the following:
 
 \begin{verbatim}
->>> search_author = 'Waits T'
+>>> search_author = "Waits T"
 
 >>> for record in records:
 ...     if not 'AU' in record:
 ...         continue
-...     if search_author in record['AU']:
+...     if search_author in record["AU"]:
 ...         print "Author %s found: %s" % (search_author, record["SO"])
 \end{verbatim}
 
@@ -3319,10 +3319,10 @@ Here we'll show a simple example of performing a remote Entrez query. In section
 First, we use EGQuery to find out the number of results we will get before actually downloading them:
 \begin{verbatim}
 >>> from Bio import Entrez
->>> handle = Entrez.egquery(term='Cypripedioideae', email="A.N.Other@example.com")
+>>> handle = Entrez.egquery(term="Cypripedioideae", email="A.N.Other@example.com")
 >>> record = Entrez.read(handle)
->>> for row in record['eGQueryResult']:
-...     if row['DbName']=='nuccore':
+>>> for row in record["eGQueryResult"]:
+...     if row["DbName"]=="nuccore":
 ...         print row['Count']
 814
 \end{verbatim}
@@ -3347,12 +3347,12 @@ First, let's check how many results were found:
 \end{verbatim}
 which is the number we expected. The 814 results are stored in \verb+record['IdList']+:
 \begin{verbatim}
->>> print len(record['IdList'])
+>>> print len(record["IdList"])
 814
 \end{verbatim}
 Let's look at the first five results:
 \begin{verbatim}
->>> print record['IdList'][:5]
+>>> print record["IdList"][:5]
 ['187237168', '187372713', '187372690', '187372688', '187372686']
 \end{verbatim}
 
@@ -3362,10 +3362,10 @@ While you could download these records one by one, to reduce the load on NCBI's 
 However, in this situation you should ideally be using the history feature described later in Section~\ref{subsec:entrez-webenv}.
 
 \begin{verbatim}
->>> idlist = ",".join(record['IdList'][:5])
+>>> idlist = ",".join(record["IdList"][:5])
 >>> print idlist
 187237168,187372713,187372690,187372688,187372686
->>> handle = Entrez.efetch(db='nucleotide', id=idlist, retmode='xml',
+>>> handle = Entrez.efetch(db="nucleotide", id=idlist, retmode="xml",
                            email="A.N.Other@example.com")
 >>> records = Entrez.read(handle)
 >>> print len(records)
@@ -3423,7 +3423,7 @@ Again, this record stores lots of information:
 \end{verbatim}
 We can get the lineage directly from this record:
 \begin{verbatim}
->>> records[0]['Lineage']
+>>> records[0]["Lineage"]
 'cellular organisms; Eukaryota; Viridiplantae; Streptophyta; Streptophytina;
  Embryophyta; Tracheophyta; Euphyllophyta; Spermatophyta; Magnoliophyta;
  Liliopsida; Asparagales; Orchidaceae'
