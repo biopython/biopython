@@ -32,11 +32,11 @@ from Bio.ParserSupport import *
 class BlastParser(AbstractParser):
     """Parses WWW BLAST data into a Record.Blast object (DEPRECATED).
 
-	This is a parser for the NCBI's HTML (web page) BLAST output.
+    This is a parser for the NCBI's HTML (web page) BLAST output.
     """
     def __init__(self):
         """Create a BlastParser object (DEPRECATED)."""
-        import warnings 	 
+        import warnings      
         warnings.warn("Bio.Blast.NCBIWWW.BlastParser is deprecated." \
                       + " We recommend you use the XML output with" \
                       + " the parser in Bio.Blast.NCBIXML instead.",
@@ -103,7 +103,7 @@ class _Scanner:
                             has_re=re.compile(r'<b>.?BLAST'))
 
         self._scan_header(uhandle, consumer)
-	self._scan_rounds(uhandle, consumer)
+        self._scan_rounds(uhandle, consumer)
         self._scan_database_report(uhandle, consumer)
         self._scan_parameters(uhandle, consumer)
 
@@ -712,7 +712,7 @@ def qblast(program, database, sequence,
 
     """
     import urllib, urllib2
-    from Bio.WWW import RequestLimiter
+    import time
 
     assert program in ['blastn', 'blastp', 'blastx', 'tblastn', 'tblastx']
 
@@ -756,6 +756,9 @@ def qblast(program, database, sequence,
     message = urllib.urlencode(query)
 
     # Send off the initial query to qblast.
+    # Note the NCBI do not currently impose a rate limit here, other
+    # than the request not to make say 50 queries at once using multiple
+    # threads.
     request = urllib2.Request("http://blast.ncbi.nlm.nih.gov/Blast.cgi",
                               message,
                               {"User-Agent":"BiopythonClient"})
@@ -784,10 +787,18 @@ def qblast(program, database, sequence,
     query = [x for x in parameters if x[1] is not None]
     message = urllib.urlencode(query)
 
-    # Poll NCBI until the results are ready.
-    limiter = RequestLimiter(3)
-    while 1:
-        limiter.wait()
+    # Poll NCBI until the results are ready.  Use a 3 second wait
+    delay = 3.0
+    previous = time.time()
+    while True:
+        current = time.time()
+        wait = previous + delay - current
+        if wait > 0:
+            time.sleep(wait)
+            previous = current + wait
+        else:
+            previous = current
+
         request = urllib2.Request("http://blast.ncbi.nlm.nih.gov/Blast.cgi",
                                   message,
                                   {"User-Agent":"BiopythonClient"})
