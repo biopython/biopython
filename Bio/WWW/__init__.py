@@ -1,6 +1,21 @@
-"""Deal with various biological databases and services on the web.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+"""Deal with various biological databases and services on the web (DEPRECATED).
+
+The functionality within Bio.WWW and its sub modules was deprecated in
+Biopython 1.45, however most individual functions simply been moved:
+
+Bio.WWW.ExPASy -> Bio.ExPASy
+Bio.WWW.InterPro -> Bio.InterPro
+Bio.WWW.NCBI -> Bio.Entrez
+Bio.WWW.SCOP -> Bio.SCOP
 """
 import time
+import warnings
+warnings.warn("Bio.WWW was deprecated.  Most of its functionality is now "\
+              +"available from Bio.ExPASy, Bio.InterPro, Bio.Entrez and "\
+              +"Bio.SCOP.")
 
 class RequestLimiter:
     # This class implements a simple countdown timer for delaying WWW
