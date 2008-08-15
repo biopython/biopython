@@ -1225,7 +1225,7 @@ for seq_record in SeqIO.parse(handle, "genbank") :
     print seq_record.id, seq_record.description[:50] + "..."
     print "Sequence length %i," % len(seq_record),
     print "%i features," % len(seq_record.features),
-    print "from: %s" % seq_record.annotations['source']
+    print "from: %s" % seq_record.annotations["source"]
 handle.close()
 \end{verbatim}
 
@@ -1260,7 +1260,7 @@ print seq_record.name
 print seq_record.description
 print repr(seq_record.seq)
 print "Length %i" % len(seq_record)
-print seq_record.annotations['keywords']
+print seq_record.annotations["keywords"]
 \end{verbatim}
 
 \noindent Assuming your network connection is OK, you should get back:
@@ -3236,17 +3236,17 @@ In this example, we will query PubMed for all articles having to do with orchids
 
 \begin{verbatim}
 >>> from Bio import Entrez
->>> handle = Entrez.egquery(term='orchid')
+>>> handle = Entrez.egquery(term="orchid")
 >>> record = Entrez.read(handle)
->>> for row in record['eGQueryResult']:
-...     if row['DbName']=='pubmed':
-...         print row['Count']
+>>> for row in record["eGQueryResult"]:
+...     if row["DbName"]=="pubmed":
+...         print row["Count"]
 463
 \end{verbatim}
 
 Now we use the \verb+Bio.Entrez.efetch+ function to download the PubMed IDs of these 463 articles:
 \begin{verbatim}
->>> handle = Entrez.esearch(db='pubmed', term='orchid', retmax=463)
+>>> handle = Entrez.esearch(db="pubmed", term="orchid", retmax=463)
 >>> record = Entrez.read(handle)
 >>> idlist = record["IdList"]
 >>> print idlist
@@ -3265,8 +3265,8 @@ Now that we've got them, we obviously want to get the corresponding Medline reco
 
 \begin{verbatim}
 >>> from Bio import Medline
->>> handle = Entrez.efetch(db='pubmed', id=idlist, rettype='medline',
-                           retmode='text')
+>>> handle = Entrez.efetch(db="pubmed", id=idlist, rettype="medline",
+                           retmode="text")
 >>> records = Medline.parse(handle)
 \end{verbatim}
 
@@ -3280,10 +3280,10 @@ Let's now iterate over the records to print out some information about each reco
 
 \begin{verbatim}
 >>> for record in records:
-...     print 'title:', record["TI"]
+...     print "title:", record["TI"]
 ...     if "AU" in records:
-...         print 'authors:', record["AU"]
-...     print 'source:', record["CO"]
+...         print "authors:", record["AU"]
+...     print "source:", record["CO"]
 ...     print
 \end{verbatim}
 
@@ -3301,12 +3301,12 @@ source: J Comp Physiol [A] 2000 Jun;186(6):567-74
 Especially interesting to note is the list of authors, which is returned as a standard python list. This makes it easy to manipulate and search using standard python tools. For instance, we could loop through a whole bunch of entries searching for a particular author with code like the following:
 
 \begin{verbatim}
->>> search_author = 'Waits T'
+>>> search_author = "Waits T"
 
 >>> for record in records:
-...     if not 'AU' in record:
+...     if not "AU" in record:
 ...         continue
-...     if search_author in record['AU']:
+...     if search_author in record["	AU"]:
 ...         print "Author %s found: %s" % (search_author, record["SO"])
 \end{verbatim}
 
@@ -3320,18 +3320,18 @@ Here we'll show a simple example of performing a remote Entrez query. In section
 First, we use EGQuery to find out the number of results we will get before actually downloading them:
 \begin{verbatim}
 >>> from Bio import Entrez
->>> handle = Entrez.egquery(term='Cypripedioideae', email="A.N.Other@example.com")
+>>> handle = Entrez.egquery(term="Cypripedioideae", email="A.N.Other@example.com")
 >>> record = Entrez.read(handle)
->>> for row in record['eGQueryResult']:
-...     if row['DbName']=='nuccore':
-...         print row['Count']
+>>> for row in record["eGQueryResult"]:
+...     if row["DbName"]=="nuccore":
+...         print row["Count"]
 814
 \end{verbatim}
 
 So, we expect to find 814 Entrez Nucleotide records (this is the number I obtained in 2008; it is likely to increase in the future). If you find some ridiculously high number of hits, you may want to reconsider if you really want to download all of them, which is our next step:
 \begin{verbatim}
 >>> from Bio import Entrez
->>> handle = Entrez.esearch(db='nucleotide', term='Cypripedioideae', retmax=814,
+>>> handle = Entrez.esearch(db="nucleotide", term="Cypripedioideae", retmax=814,
                             email="A.N.Other@example.com")
 >>> record = Entrez.read(handle)
 \end{verbatim}
@@ -3343,17 +3343,17 @@ Here, \verb+record+ is a Python dictionary containing the search results and som
 \end{verbatim}
 First, let's check how many results were found:
 \begin{verbatim}
->>> print record['Count']
+>>> print record["Count"]
 '814'
 \end{verbatim}
 which is the number we expected. The 814 results are stored in \verb+record['IdList']+:
 \begin{verbatim}
->>> print len(record['IdList'])
+>>> print len(record["IdList"])
 814
 \end{verbatim}
 Let's look at the first five results:
 \begin{verbatim}
->>> print record['IdList'][:5]
+>>> print record["IdList"][:5]
 ['187237168', '187372713', '187372690', '187372688', '187372686']
 \end{verbatim}
 
@@ -3363,10 +3363,10 @@ While you could download these records one by one, to reduce the load on NCBI's 
 However, in this situation you should ideally be using the history feature described later in Section~\ref{subsec:entrez-webenv}.
 
 \begin{verbatim}
->>> idlist = ",".join(record['IdList'][:5])
+>>> idlist = ",".join(record["IdList"][:5])
 >>> print idlist
 187237168,187372713,187372690,187372688,187372686
->>> handle = Entrez.efetch(db='nucleotide', id=idlist, retmode='xml',
+>>> handle = Entrez.efetch(db="nucleotide", id=idlist, retmode="xml",
                            email="A.N.Other@example.com")
 >>> records = Entrez.read(handle)
 >>> print len(records)
@@ -3382,17 +3382,17 @@ Each of these records corresponds to one GenBank record.
  u'GBSeq_taxonomy', u'GBSeq_references', u'GBSeq_update-date',
  u'GBSeq_organism', u'GBSeq_locus', u'GBSeq_strandedness']
 
->>> print records[0]['GBSeq_primary-accession']
+>>> print records[0]["GBSeq_primary-accession"]
 DQ110336
 
->>> print records[0]['GBSeq_other-seqids']
+>>> print records[0]["GBSeq_other-seqids"]
 ['gb|DQ110336.1|', 'gi|187237168']
 
->>> print records[0]['GBSeq_definition']
+>>> print records[0]["GBSeq_definition"]
 Cypripedium calceolus voucher Davis 03-03 A maturase (matR) gene, partial cds;
 mitochondrial
 
->>> print records[0]['GBSeq_organism']
+>>> print records[0]["GBSeq_organism"]
 Cypripedium calceolus
 \end{verbatim}
 
@@ -3409,17 +3409,17 @@ First, we want to make a query and find out the ids of the records to retrieve. 
 
 \begin{verbatim}
 >>> from Bio import Entrez
->>> handle = Entrez.egquery(term='Opuntia AND rpl16')
+>>> handle = Entrez.egquery(term="Opuntia AND rpl16")
 >>> record = Entrez.read(handle)
->>> for row in record['eGQueryResult']:
-...     if row["DbName"]=='nuccore':
+>>> for row in record["eGQueryResult"]:
+...     if row["DbName"]=="nuccore":
 ...         print row["Count"]
 ...
 9
 \end{verbatim}
 Now we download the list of GenBank identifiers:
 \begin{verbatim}
->>> handle = Entrez.esearch(db='nuccore', term='Opuntia AND rpl16')
+>>> handle = Entrez.esearch(db="nuccore", term="Opuntia AND rpl16")
 >>> record = Entrez.read(handle)
 >>> gi_list = record["IdList"]
 >>> gi_list
@@ -3431,7 +3431,7 @@ Now we use these GIs to download the GenBank records:
 
 \begin{verbatim}
 >>> gi_list = ",".join(gi_list)
->>> handle = Entrez.efetch(db='nuccore', id=gi_list, rettype='genbank')
+>>> handle = Entrez.efetch(db="nuccore", id=gi_list, rettype="genbank")
 \end{verbatim}
 
 If you want to look at the raw GenBank files, you can read from this handle and print out the result:
@@ -3458,14 +3458,14 @@ In this case, we are just getting the raw records. To get the records in a more 
 
 \begin{verbatim}
 >>> from Bio import SeqIO
->>> handle = Entrez.efetch(db='nuccore', id=gi_list, rettype='genbank')
+>>> handle = Entrez.efetch(db="nuccore", id=gi_list, rettype="genbank")
 >>> records = SeqIO.parse(handle, 'genbank')
 \end{verbatim}
 
 We can now step through the records and look at the information we are interested in:
 \begin{verbatim}
->>> handle = Entrez.efetch(db='nuccore', id=gi_list, rettype='genbank')
->>> records = SeqIO.parse(handle, 'genbank')
+>>> handle = Entrez.efetch(db="nuccore", id=gi_list, rettype="genbank")
+>>> records = SeqIO.parse(handle, "genbank")
 >>> for record in records:
 ...     print record.name
 ...
@@ -3480,7 +3480,6 @@ AF191659
 AF191658
 \end{verbatim}
 
-
 Using these automated query retrieval functionality is a big plus over doing things by hand.   Although the module should obey the NCBI's three-second rule, the NCBI have other recommendations like avoiding peak hours.  See Section~\ref{sec:entrez-guidelines}.
 
 Depending on which GenBank files you are looking at, they will either contain a single record, or multiple records.  Each record will start with a {\tt LOCUS} line, various other header lines, a list of features, and finally the sequence data, ending with a {\tt //} line.
@@ -3490,7 +3489,7 @@ Dealing with a GenBank file containing a single record is very easy.  For exampl
 \begin{verbatim}
 >>> from Bio import SeqIO
 >>> handle = open("AE017199.gbk")
->>> record = SeqIO.read(handle, 'genbank')
+>>> record = SeqIO.read(handle, "genbank")
 # now do something with the record
 >>> print "Name %s, %i features" % (record.name, len(record.features))
 >>> print repr(record.seq)
@@ -3504,7 +3503,7 @@ For multi-record GenBank files, the most common usage will be to iterate through
 
 \begin{verbatim}
 >>> from Bio import SeqIO
->>> records = SeqIO.parse(open("cor6_6.gb"), 'genbank')
+>>> records = SeqIO.parse(open("cor6_6.gb"), "genbank")
 >>> for record in records:
 ...     print "Name %s, %i features" % (record.name, len(record.features))
 ...     print repr(record.seq)
@@ -3540,7 +3539,7 @@ Staying with the same organism, let's now find its lineage. First, we search the
 \end{verbatim}
 Now, we use \verb+efetch+ to download this entry in the Taxonomy database and to parse it:
 \begin{verbatim}
->>> handle = Entrez.efetch(db="Taxonomy", id="158330", retmode='xml')
+>>> handle = Entrez.efetch(db="Taxonomy", id="158330", retmode="xml")
 >>> records = Entrez.read(handle)
 \end{verbatim}
 Again, this record stores lots of information:
@@ -3552,7 +3551,7 @@ Again, this record stores lots of information:
 \end{verbatim}
 We can get the lineage directly from this record:
 \begin{verbatim}
->>> records[0]['Lineage']
+>>> records[0]["Lineage"]
 'cellular organisms; Eukaryota; Viridiplantae; Streptophyta; Streptophytina;
  Embryophyta; Tracheophyta; Euphyllophyta; Spermatophyta; Magnoliophyta;
  Liliopsida; Asparagales; Orchidaceae'
