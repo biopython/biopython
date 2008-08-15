@@ -96,7 +96,7 @@ The main Biopython releases have lots of functionality, including:
     \item FASTA
     \item GenBank
     \item PubMed and Medline
-    \item Expasy files, like Enzyme, Prodoc and Prosite
+    \item ExPASy files, like Enzyme, Prodoc and Prosite
     \item SCOP, including `dom' and `lin' files
     \item UniGene
     \item SwissProt
@@ -108,7 +108,7 @@ The main Biopython releases have lots of functionality, including:
 
   \begin{itemize}
     \item NCBI -- Blast, Entrez and PubMed services
-    \item Expasy -- Prodoc and Prosite entries
+    \item ExPASy -- Prodoc and Prosite entries
   \end{itemize}
 
   \item Interfaces to common bioinformatics programs such as:
@@ -132,7 +132,7 @@ The main Biopython releases have lots of functionality, including:
 
   \item Extensive documentation and help with using the modules, including this file, on-line wiki documentation, the web site, and the mailing list.
 
-  \item Integration with other languages, including the Bioperl and Biojava projects, using the BioCorba interface standard (available with the biopython-corba module).
+  \item Integration with BioSQL, a sequence database schema also supported by the BioPerl and BioJava projects.
 
 \end{itemize}
 
@@ -205,7 +205,7 @@ One thing to note about Biopython is that it often provides multiple ways of ``d
 \section{Working with sequences}
 \label{sec:sequences}
 
-Disputedly (of course!), the central object in bioinformatics is the sequence. Thus, we'll start with a quick introduction to the Biopython mechanisms for dealing with sequences, the \verb|Seq| object, which we'll discuss in more detail in Chapter~\ref{chapter:Bio.Seq}.
+Disputably (of course!), the central object in bioinformatics is the sequence. Thus, we'll start with a quick introduction to the Biopython mechanisms for dealing with sequences, the \verb|Seq| object, which we'll discuss in more detail in Chapter~\ref{chapter:Bio.Seq}.
 
 Most of the time when we think about sequences we have in my mind a string of letters like \verb|'AGTACACTGGT'|. You can create such \verb|Seq| object with this sequence as follows - the ``$>>>$'' represents the python prompt followed by what you would type in:
 
@@ -253,7 +253,7 @@ Of course, orchids are not only beautiful to look at, they are also extremely in
 
 After a little bit of reading up we discover that the Lady Slipper Orchids are in the Orchidaceae family and the Cypripedioideae sub-family and are made up of 5 genera:  \emph{Cypripedium}, \emph{Paphiopedilum}, \emph{Phragmipedium}, \emph{Selenipedium} and \emph{Mexipedium}.
 
-That gives us enough to get started delving for more information. So, let's look at how the Biopython tools can help us.  We'll start with sequence parsing in Section~\ref{sec:sequence-parsing}, but the orchids will be back later on as well - for example we'll extra data from Swiss-Prot from certain orchid proteins in Chapter~\ref{chapter:swiss_prot}, search PubMed for papers about orchids in Section~\ref{subsec:pub_med}, extract sequence data from GenBank in Section~\ref{genbank-retrieval}, and work with ClustalW multiple sequence alignments of orchid proteins in Section~\ref{sec:align_clustal}.
+That gives us enough to get started delving for more information. So, let's look at how the Biopython tools can help us.  We'll start with sequence parsing in Section~\ref{sec:sequence-parsing}, but the orchids will be back later on as well - for example we'll extra data from Swiss-Prot from certain orchid proteins in Chapter~\ref{chapter:swiss_prot}, search PubMed for papers about orchids in Section~\ref{subsec:pub_med}, extract sequence data from GenBank in Section~\ref{subsec:genbank}, and work with ClustalW multiple sequence alignments of orchid proteins in Section~\ref{sec:align_clustal}.
 
 \section{Parsing sequence file formats}
 \label{sec:sequence-parsing}
@@ -385,7 +385,7 @@ and Threonines?
 
 The alphabet object is perhaps the important thing that makes the \verb|Seq| object more than just a string. The currently available alphabets for Biopython are defined in the \verb|Bio.Alphabet| module. We'll use the IUPAC alphabets (\url{http://www.chem.qmw.ac.uk/iupac/}) here to deal with some of our favorite objects: DNA, RNA and Proteins.
 
-\verb|Bio.Alphabet.IUPAC| provides basic definitions for proteins, DNA and RNA, but additionally provides the ability to extend and customize the basic definitions. For instance, for proteins, there is a basic IUPACProtein class, but there is an additional ExtendedIUPACProtein class providing for the additional elements ``Asx'' (asparagine or aspartic acid), ``Sec'' (selenocysteine), and ``Glx'' (glutamine or glutamic acid). For DNA you've got choices of IUPACUnambiguousDNA, which provides for just the basic letters, IUPACAmbiguousDNA (which provides for ambiguity letters for every possible situation) and ExtendedIUPACDNA, which allows letters for modified bases. Similarly, RNA can be represented by IUPACAmbiguousRNA or IUPACUnambiguousRNA.
+\verb|Bio.Alphabet.IUPAC| provides basic definitions for proteins, DNA and RNA, but additionally provides the ability to extend and customize the basic definitions. For instance, for proteins, there is a basic IUPACProtein class, but there is an additional ExtendedIUPACProtein class providing for the additional elements ``U'' (or ``Sec'' for selenocysteine) and ``O'' (or ``Pyl'' for pyrrolysine), plus the ambiguous symbols ``B'' (or ``Asx'' for asparagine or aspartic acid), ``Z'' (or ``Glx'' for glutamine or glutamic acid), ``J'' (or ``Xle'' for leucine isoleucine) and ``X'' (or ``Xxx'' for an unknown amino acid). For DNA you've got choices of IUPACUnambiguousDNA, which provides for just the basic letters, IUPACAmbiguousDNA (which provides for ambiguity letters for every possible situation) and ExtendedIUPACDNA, which allows letters for modified bases. Similarly, RNA can be represented by IUPACAmbiguousRNA or IUPACUnambiguousRNA.
 
 The advantages of having an alphabet class are two fold. First, this gives an idea of the type of information the Seq object contains. Secondly, this provides a means of constraining the information, as a means of type checking.
 
@@ -576,7 +576,7 @@ Seq('CTAGCTACCCGGATATATCCTAGCTTTTAGCG', IUPACUnambiguousDNA())
 Seq('GCGATTTTCGATCCTATATAGGCCCATCGATC', IUPACUnambiguousDNA())
 \end{verbatim}
 
-In all of these operations, the alphabet property is maintained. This is very useful in case you accidentally end up trying to do something weird like take the (reverse)complement of a protein seuqence:
+In all of these operations, the alphabet property is maintained. This is very useful in case you accidentally end up trying to do something weird like take the (reverse)complement of a protein sequence:
 
 \begin{verbatim}
 >>> protein_seq = Seq("EVRNAK", IUPAC.protein)
@@ -830,7 +830,7 @@ MutableSeq('GCCATTGTAATGGGCCGCTGAAAGGGTGCCCGA', IUPACUnambiguousDNA())
 
 Alternatively, you can create a \verb|MutableSeq| object directly from a string:
 \begin{verbatim}
->>> from Bio.Seq import MutalbeSeq
+>>> from Bio.Seq import MutableSeq
 >>> from Bio.Alphabet import IUPAC
 >>> mutable_seq = MutableSeq("GCCATTGTAATGGGCCGCTGAAAGGGTGCCCGA", IUPAC.unambiguous_dna)
 \end{verbatim}
@@ -888,7 +888,7 @@ To close this chapter, for those you who \emph{really} don't want to use the seq
 
 In this chapter we'll discuss in more detail the \verb|Bio.SeqIO| module, which was briefly introduced in Chapter~\ref{chapter:quick-start}. This is a relatively new interface, added in Biopython 1.43, which aims to provide a simple interface for working with assorted sequence file formats in a uniform way.
 
-The ``catch'' is that you have to work with \verb|SeqRecord| ojects - which contain a \verb|Seq| object (as described in Chapter~\ref{chapter:Bio.Seq}) plus annotation like an identifier and description.  We'll introduce the basics of \verb|SeqRecord| object in this chapter, but see Section~\ref{sec:advanced-seq} for more details.
+The ``catch'' is that you have to work with \verb|SeqRecord| objects - which contain a \verb|Seq| object (as described in Chapter~\ref{chapter:Bio.Seq}) plus annotation like an identifier and description.  We'll introduce the basics of \verb|SeqRecord| object in this chapter, but see Section~\ref{sec:advanced-seq} for more details.
 
 \section{Parsing or Reading Sequences}
 
@@ -1085,7 +1085,7 @@ Cypripedium irapeanum
 Cypripedium irapeanum
 \end{verbatim}
 
-In general, `organism' is used for the scientific name (in latin, e.g. \textit{Arabidopsis thaliana}),
+In general, `organism' is used for the scientific name (in Latin, e.g. \textit{Arabidopsis thaliana}),
 while `source' will often be the common name (e.g. thale cress).  In this example, as is often the case,
 the two fields are identical.  
 
@@ -1276,7 +1276,7 @@ Length 394
 
 \section{Sequence files as Dictionaries}
 
-The next thing that we'll do with our ubiquitous orchid files is to show how to index them and access them like a database using the Python \verb|dictionary| datatype (like a hash in Perl). This is very useful for large files where you only need to access certain elements of the file, and makes for a nice quick 'n dirty database.
+The next thing that we'll do with our ubiquitous orchid files is to show how to index them and access them like a database using the Python \verb|dictionary| data type (like a hash in Perl). This is very useful for large files where you only need to access certain elements of the file, and makes for a nice quick 'n dirty database.
 
 You can use the function \verb|Bio.SeqIO.to_dict()| to make a SeqRecord dictionary (in memory).  By default this will use each record's identifier (i.e. the \verb|.id| attribute) as the key.  Let's try this using our GenBank file:
 
@@ -1327,7 +1327,7 @@ print orchid_dict.keys()
  ..., 'gi|2765613|emb|Z78488.1|PTZ78488', 'gi|2765583|emb|Z78458.1|PHZ78458']
 \end{verbatim}
 
-You should recognise these strings from when we parsed the FASTA file earlier in Section~\ref{sec:fasta-parsing}.  Suppose you would rather have something else as the keys - like the accesion numbers.  This brings us nicely to \verb|SeqIO.to_dict()|'s optional argument \verb|key_function|, which lets you define what to use as the dictionary key for your records.
+You should recognise these strings from when we parsed the FASTA file earlier in Section~\ref{sec:fasta-parsing}.  Suppose you would rather have something else as the keys - like the accession numbers.  This brings us nicely to \verb|SeqIO.to_dict()|'s optional argument \verb|key_function|, which lets you define what to use as the dictionary key for your records.
 
 First you must write your own function to return the key you want (as a string) when given a \verb|SeqRecord| object.  In general, the details of function will depend on the sort of input records you are dealing with.  But for our orchids, we can just split up the record's identifier using the ``pipe'' character (the vertical line) and return the fourth entry (field three):
 
@@ -1465,7 +1465,7 @@ TGEGLEWGVLFGFGPGLTVETVVLHSVAT
 
 \subsection{Converting between sequence file formats}
 
-In previous example we used a list of \verb|SeqRecord| objects as input to the \verb|Bio.SeqIO.write()| function, but it will also accept a \verb|SeqRecord| interator like we get from \verb|Bio.SeqIO.parse()| -- this lets us do file conversion very succinctly. For this example we'll read in the GenBank format file \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.gbk}{ls\_orchid.gbk} and write it out in FASTA format:
+In previous example we used a list of \verb|SeqRecord| objects as input to the \verb|Bio.SeqIO.write()| function, but it will also accept a \verb|SeqRecord| iterator like we get from \verb|Bio.SeqIO.parse()| -- this lets us do file conversion very succinctly. For this example we'll read in the GenBank format file \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.gbk}{ls\_orchid.gbk} and write it out in FASTA format:
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -1485,7 +1485,7 @@ SeqIO.write(SeqIO.parse(open("ls_orchid.gbk"), "genbank"), open("my_example.faa"
 
 \subsection{Converting a file of sequences to their reverse complements}
 
-Suppose you had a file of nucleotide sequences, and you wanted to turn it into a file containing their reverse complement sequences.  This time a little bit of work is required to transform the SeqRecords we get from our input file into something suitable for saving to our output file.
+Suppose you had a file of nucleotide sequences, and you wanted to turn it into a file containing their reverse complement sequences.  This time a little bit of work is required to transform the \verb|SeqRecord| objects we get from our input file into something suitable for saving to our output file.
 
 To start with, we'll use \verb|Bio.SeqIO.parse()| to load some nucleotide
 sequences from a file, then print out their reverse complements using
@@ -1536,7 +1536,7 @@ This is an excellent place to demonstrate the power of list comprehensions which
 records = [make_rc_record(rec) for rec in SeqIO.parse(in_handle, "fasta")]
 \end{verbatim}
 
-\noindent Now list comprehensions have a nice trick up their sleaves, you can add a conditional statement:
+\noindent Now list comprehensions have a nice trick up their sleeves, you can add a conditional statement:
 
 \begin{verbatim}
 records = [make_rc_record(rec) for rec in SeqIO.parse(in_handle, "fasta") if len(rec)<700]
@@ -1667,7 +1667,7 @@ Both functions expect two mandatory arguments:
 \item The second argument is a lower case string specifying the alignment format.  As in \verb|Bio.SeqIO| we don't try and guess the file format for you!  See \url{http://biopython.org/wiki/AlignIO} for a full listing of supported formats.
 \end{enumerate}
 
-\noindent There is also an optional \verb|seq_count| argument which is discussed in Section~\ref{sec:AlignIO-count-argument} below for dealing with ambigous file formats which may contain more than one alignment.
+\noindent There is also an optional \verb|seq_count| argument which is discussed in Section~\ref{sec:AlignIO-count-argument} below for dealing with ambiguous file formats which may contain more than one alignment.
 
 \subsection{Single Alignments}
 As an example, consider the following annotation rich protein alignment in the PFAM or Stockholm file format:
@@ -1746,7 +1746,7 @@ AEGDDP---AKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFTSKA - Q9T0Q9_BPFD/1-49
 FAADDATSQAKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKLFKKFVSRA - COATB_BPIF1/22-73
 \end{verbatim}
 
-Did you notice in the raw file above that several of the sequences include database cross-references to the PDB and the associated known secondary strucutre?  Try this:
+Did you notice in the raw file above that several of the sequences include database cross-references to the PDB and the associated known secondary structure?  Try this:
 
 \begin{verbatim}
 for record in alignment :
@@ -2448,7 +2448,7 @@ doesn't matter how the output was generated, as long as it is in the XML format.
 section~\ref{sec:running-local-blast}.
 \item You can use Biopython to run BLAST over the internet, as described in
 section~\ref{sec:running-www-blast}.
-\item You can do the BLAST seach yourself on the NCBI site through your
+\item You can do the BLAST search yourself on the NCBI site through your
 web browser, and then save the results. You need to choose XML as the format
 in which to receive the results, and save the final BLAST page you get
 (you know, the one with all of the interesting results!) to a file.
@@ -2816,7 +2816,7 @@ The output returned by the Entrez Programming Utilities is typically in XML form
 \end{enumerate}
 For the DOM and SAX parsers, see the Python documentation. The parser in \verb+Bio.Entrez+ is discussed below.
 
-The Entrez Programming Utilities can also generate output in other formats, such as the Fasta or GenBank file formats for sequence databases, or the MedlLine format for the literature database, discussed in Section~\ref{sec:entrez-specialized-parsers}.
+The Entrez Programming Utilities can also generate output in other formats, such as the Fasta or GenBank file formats for sequence databases, or the MedLine format for the literature database, discussed in Section~\ref{sec:entrez-specialized-parsers}.
 
 \section{Entrez Guidelines}
 \label{sec:entrez-guidelines}
@@ -3059,7 +3059,7 @@ If you fetch the record in one of the formats accepted by \verb+Bio.SeqIO+ (see 
 >>> print record
 ID: AY851612.1
 Name: AY851612
-Desription: Opuntia subulata rpl16 gene, intron; chloroplast.
+Description: Opuntia subulata rpl16 gene, intron; chloroplast.
 /sequence_version=1
 /source=chloroplast Austrocylindropuntia subulata
 ....
@@ -3168,7 +3168,7 @@ The key names used in a Medline record can be rather obscure; use
 \end{verbatim}
 for a brief summary.
 
-To parse a file containing multipe Medline records, you can use the \verb+parse+ function instead:
+To parse a file containing multiple Medline records, you can use the \verb+parse+ function instead:
 \begin{verbatim}
 >>> from Bio import Medline
 >>> input = open("pubmed_result2.txt")
@@ -3454,7 +3454,7 @@ REFERENCE   1  (bases 1 to 892)
 ...
 \end{verbatim}
 
-In this case, we are just getting the raw records. To get the records in a more Python-friendly form, we can use Biopython's parsers. In this section, we'll use \verb+Bio.SeqIO+ to parse the GenBank data into SeqRecords, including the SeqFeature objects:
+In this case, we are just getting the raw records. To get the records in a more Python-friendly form, we can use Biopython's parsers. In this section, we'll use \verb+Bio.SeqIO+ to parse the GenBank data into \verb|SeqRecord| objects, including the \verb|SeqFeature| objects:
 
 \begin{verbatim}
 >>> from Bio import SeqIO
@@ -3665,7 +3665,7 @@ Bromheadia finlaysoniana.";
 To parse a file that contains more than one Swiss-Prot record, we use the \verb|parse| function instead. This function allows us to iterate over the records in the file.
 
 For example, let's parse the full Swiss-Prot database and collect all the descriptions.
-You can download this from the \href{ftp://ftp.expasy.org/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.dat.gz}{ExPAYy FTP site} as a single gzipped-file \verb|uniprot_sprot.dat.gz| (about 300MB).  This is a compressed file containing a single file, \verb|uniprot_sprot.dat| (over 1.5GB).
+You can download this from the \href{ftp://ftp.expasy.org/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.dat.gz}{ExPAYs FTP site} as a single gzipped-file \verb|uniprot_sprot.dat.gz| (about 300MB).  This is a compressed file containing a single file, \verb|uniprot_sprot.dat| (over 1.5GB).
 
 As described at the start of this section, you can use the python library \verb|gzip| to open and uncompress a \texttt{.gz} file, like this:
 
