@@ -3227,7 +3227,7 @@ The Bio* toolkits--a brief overview.
 \section{Examples}
 \label{sec:entrez_examples}
 
-\subsection{PubMed}
+\subsection{PubMed and Medline}
 \label{subsec:pub_med}
 
 If you are in the medical field or interested in human issues (and many times even if you are not!), PubMed (\url{http://www.ncbi.nlm.nih.gov/PubMed/}) is an excellent source of all kinds of goodies. So like other things, we'd like to be able to grab information from it and use it in python scripts.
@@ -3236,17 +3236,17 @@ In this example, we will query PubMed for all articles having to do with orchids
 
 \begin{verbatim}
 >>> from Bio import Entrez
->>> handle = Entrez.egquery(term="orchid")
+>>> handle = Entrez.egquery(term='orchid')
 >>> record = Entrez.read(handle)
->>> for row in record["eGQueryResult"]:
-...     if row["DbName"]=="pubmed":
-...         print row["Count"]
+>>> for row in record['eGQueryResult']:
+...     if row['DbName']=='pubmed':
+...         print row['Count']
 463
 \end{verbatim}
 
 Now we use the \verb+Bio.Entrez.efetch+ function to download the PubMed IDs of these 463 articles:
 \begin{verbatim}
->>> handle = Entrez.esearch(db="pubmed", term="orchid", retmax=463)
+>>> handle = Entrez.esearch(db='pubmed', term='orchid', retmax=463)
 >>> record = Entrez.read(handle)
 >>> idlist = record["IdList"]
 >>> print idlist
@@ -3301,17 +3301,18 @@ source: J Comp Physiol [A] 2000 Jun;186(6):567-74
 Especially interesting to note is the list of authors, which is returned as a standard python list. This makes it easy to manipulate and search using standard python tools. For instance, we could loop through a whole bunch of entries searching for a particular author with code like the following:
 
 \begin{verbatim}
->>> search_author = "Waits T"
+>>> search_author = 'Waits T'
 
 >>> for record in records:
 ...     if not 'AU' in record:
 ...         continue
-...     if search_author in record["AU"]:
+...     if search_author in record['AU']:
 ...         print "Author %s found: %s" % (search_author, record["SO"])
 \end{verbatim}
 
 Hopefully this section gave you an idea of the power and flexibility of the Entrez and Medline interfaces and how they can be used together.
-\subsection{Searching and downloading Entrez Nucleotide records}
+
+\subsection{Searching, downloading, and parsing Entrez Nucleotide records with Bio.Entrez}
 \label{subsec:entrez_example_genbank}
 
 Here we'll show a simple example of performing a remote Entrez query. In section~\ref{sec:orchids} of the parsing examples, we talked about using NCBI's Entrez website to search the NCBI nucleotide databases for info on Cypripedioideae, our friends the lady slipper orchids. Now, we'll look at how to automate that process using a Python script. In this example, we'll just show how to connect, get the results, and parse them, with the Entrez module doing all of the work.
@@ -3319,10 +3320,10 @@ Here we'll show a simple example of performing a remote Entrez query. In section
 First, we use EGQuery to find out the number of results we will get before actually downloading them:
 \begin{verbatim}
 >>> from Bio import Entrez
->>> handle = Entrez.egquery(term="Cypripedioideae", email="A.N.Other@example.com")
+>>> handle = Entrez.egquery(term='Cypripedioideae', email="A.N.Other@example.com")
 >>> record = Entrez.read(handle)
->>> for row in record["eGQueryResult"]:
-...     if row["DbName"]=="nuccore":
+>>> for row in record['eGQueryResult']:
+...     if row['DbName']=='nuccore':
 ...         print row['Count']
 814
 \end{verbatim}
@@ -3347,12 +3348,12 @@ First, let's check how many results were found:
 \end{verbatim}
 which is the number we expected. The 814 results are stored in \verb+record['IdList']+:
 \begin{verbatim}
->>> print len(record["IdList"])
+>>> print len(record['IdList'])
 814
 \end{verbatim}
 Let's look at the first five results:
 \begin{verbatim}
->>> print record["IdList"][:5]
+>>> print record['IdList'][:5]
 ['187237168', '187372713', '187372690', '187372688', '187372686']
 \end{verbatim}
 
@@ -3362,10 +3363,10 @@ While you could download these records one by one, to reduce the load on NCBI's 
 However, in this situation you should ideally be using the history feature described later in Section~\ref{subsec:entrez-webenv}.
 
 \begin{verbatim}
->>> idlist = ",".join(record["IdList"][:5])
+>>> idlist = ",".join(record['IdList'][:5])
 >>> print idlist
 187237168,187372713,187372690,187372688,187372686
->>> handle = Entrez.efetch(db="nucleotide", id=idlist, retmode="xml",
+>>> handle = Entrez.efetch(db='nucleotide', id=idlist, retmode='xml',
                            email="A.N.Other@example.com")
 >>> records = Entrez.read(handle)
 >>> print len(records)
@@ -3397,6 +3398,134 @@ Cypripedium calceolus
 
 You could use this to quickly set up searches -- but for heavy usage, see Section~\ref{subsec:entrez-webenv}.
 
+\subsection{Searching, downloading, and parsing GenBank records using Bio.Entrez and Bio.SeqIO}
+\label{subsec:genbank}
+
+The GenBank record format is a very popular method of holding information about sequences, sequence features, and other associated sequence information. The format is a good way to get information from the NCBI databases at \url{http://www.ncbi.nlm.nih.gov/}.
+
+In this example we'll show how to query the NCBI databases, and to retrieve the records from the query - something touched on in Section~\ref{sec:SeqIO_GenBank_Online}. This time, we're using \verb+Bio.SeqIO+ to parse the GenBank data.
+
+First, we want to make a query and find out the ids of the records to retrieve. Here we'll do a quick search for our favorite organism, \emph{Opuntia}. We can do quick search and get back the GIs (GenBank identifiers) for all of the corresponding records. First we check how many records there are:
+
+\begin{verbatim}
+>>> from Bio import Entrez
+>>> handle = Entrez.egquery(term='Opuntia AND rpl16')
+>>> record = Entrez.read(handle)
+>>> for row in record['eGQueryResult']:
+...     if row["DbName"]=='nuccore':
+...         print row["Count"]
+...
+9
+\end{verbatim}
+Now we download the list of GenBank identifiers:
+\begin{verbatim}
+>>> handle = Entrez.esearch(db='nuccore', term='Opuntia AND rpl16')
+>>> record = Entrez.read(handle)
+>>> gi_list = record["IdList"]
+>>> gi_list
+['57240072', '57240071', '6273287', '6273291', '6273290', '6273289', '6273286',
+'6273285', '6273284']
+\end{verbatim}
+
+Now we use these GIs to download the GenBank records:
+
+\begin{verbatim}
+>>> gi_list = ",".join(gi_list)
+>>> handle = Entrez.efetch(db='nuccore', id=gi_list, rettype='genbank')
+\end{verbatim}
+
+If you want to look at the raw GenBank files, you can read from this handle and print out the result:
+
+\begin{verbatim}
+>>> text = handle.read()
+>>> print text
+LOCUS       AY851612                 892 bp    DNA     linear   PLN 10-APR-2007
+DEFINITION  Opuntia subulata rpl16 gene, intron; chloroplast.
+ACCESSION   AY851612
+VERSION     AY851612.1  GI:57240072
+KEYWORDS    .
+SOURCE      chloroplast Austrocylindropuntia subulata
+  ORGANISM  Austrocylindropuntia subulata
+            Eukaryota; Viridiplantae; Streptophyta; Embryophyta; Tracheophyta;
+            Spermatophyta; Magnoliophyta; eudicotyledons; core eudicotyledons;
+            Caryophyllales; Cactaceae; Opuntioideae; Austrocylindropuntia.
+REFERENCE   1  (bases 1 to 892)
+  AUTHORS   Butterworth,C.A. and Wallace,R.S.
+...
+\end{verbatim}
+
+In this case, we are just getting the raw records. To get the records in a more Python-friendly form, we can use Biopython's parsers. In this section, we'll use \verb+Bio.SeqIO+ to parse the GenBank data into SeqRecords, including the SeqFeature objects:
+
+\begin{verbatim}
+>>> from Bio import SeqIO
+>>> handle = Entrez.efetch(db='nuccore', id=gi_list, rettype='genbank')
+>>> records = SeqIO.parse(handle, 'genbank')
+\end{verbatim}
+
+We can now step through the records and look at the information we are interested in:
+\begin{verbatim}
+>>> handle = Entrez.efetch(db='nuccore', id=gi_list, rettype='genbank')
+>>> records = SeqIO.parse(handle, 'genbank')
+>>> for record in records:
+...     print record.name
+...
+AY851612
+AY851611
+AF191661
+AF191665
+AF191664
+AF191663
+AF191660
+AF191659
+AF191658
+\end{verbatim}
+
+
+Using these automated query retrieval functionality is a big plus over doing things by hand.   Although the module should obey the NCBI's three-second rule, the NCBI have other recommendations like avoiding peak hours.  See Section~\ref{sec:entrez-guidelines}.
+
+Depending on which GenBank files you are looking at, they will either contain a single record, or multiple records.  Each record will start with a {\tt LOCUS} line, various other header lines, a list of features, and finally the sequence data, ending with a {\tt //} line.
+
+Dealing with a GenBank file containing a single record is very easy.  For example, let's use a small bacterial genome, \emph{Nanoarchaeum equitans Kin4-M} (RefSeq NC\_005213, GenBank AE017199) which can be downloaded from the \url{ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Bacteria/Nanoarchaeum_equitans/AE017199.gbk}{NCBI FTP site} (only 1.15 MB):
+
+\begin{verbatim}
+>>> from Bio import SeqIO
+>>> handle = open("AE017199.gbk")
+>>> record = SeqIO.read(handle, 'genbank')
+# now do something with the record
+>>> print "Name %s, %i features" % (record.name, len(record.features))
+>>> print repr(record.seq)
+Name AE017199, 1107 features
+Seq('TCTCGCAGAGTTCTTTTTTGTATTAACAAACCCAAAACCCATAGAATTTAATGA...TTA', IUPACAmbiguousDNA())
+\end{verbatim}
+
+See Chapter~\ref{chapter:Bio.SeqIO} for more information about \verb|Bio.SeqIO|.
+
+For multi-record GenBank files, the most common usage will be to iterate through the file record by record. Doing this is very similar to how things are done in other formats, as the following code demonstrates, using an example file \href{http://biopython.org/SRC/biopython/Tests/GenBank/cor6_6.gb}{cor6\_6.gb} which is included in the BioPython source code under the Tests/GenBank/ directory:
+
+\begin{verbatim}
+>>> from Bio import SeqIO
+>>> records = SeqIO.parse(open("cor6_6.gb"), 'genbank')
+>>> for record in records:
+...     print "Name %s, %i features" % (record.name, len(record.features))
+...     print repr(record.seq)
+...
+Name ATCOR66M, 3 features
+Seq('AACAAAACACACATCAAAAACGATTTTACAAGAAAAAAATATCTGAAAAATGTC...AAA', IUPACAmbiguousDNA())
+Name ATKIN2, 15 features
+Seq('ATTTGGCCTATAAATATAAACCCTTAAGCCCACATATCTTCTCAATCCATCACA...ATA', IUPACAmbiguousDNA())
+Name BNAKINI, 6 features
+Seq('AAAAAAACACAACAAAACTCAATAAATAAACAAATGGCAGACAACAAGCAGAGC...TTC', IUPACAmbiguousDNA())
+Name ARU237582, 7 features
+Seq('GGACAAGGCCAAGGATGCTGCTGCTGCAGCTGGAGCTTCCGCGCAACAAGTAAA...GGC', IUPACAmbiguousDNA())
+Name BRRBIF72, 3 features
+Seq('AACAAAACTCAATAAATAAACAAATGGCAGACAACAAGCAGAGCTTCCAAGCCG...TTT', IUPACAmbiguousDNA())
+Name AF297471, 4 features
+Seq('ATGGCAGACAACAAGCAGAGCTTCCAAGCCGGTCAAGCCGCTGGTCGTGCTGAG...TAG', IUPACAmbiguousDNA())
+\end{verbatim}
+
+This just iterates over a GenBank file, parsing it into \verb|SeqRecord| and
+\verb|SeqFeature| objects, and prints out the \verb|Seq| objects representing the sequences in the record.
+
 \subsection{Finding the lineage of an organism}
 
 Staying with the same organism, let's now find its lineage. First, we search the Taxonomy database for Cypripedioideae. We find exactly one accession number:
@@ -3423,7 +3552,7 @@ Again, this record stores lots of information:
 \end{verbatim}
 We can get the lineage directly from this record:
 \begin{verbatim}
->>> records[0]["Lineage"]
+>>> records[0]['Lineage']
 'cellular organisms; Eukaryota; Viridiplantae; Streptophyta; Streptophytina;
  Embryophyta; Tracheophyta; Euphyllophyta; Spermatophyta; Magnoliophyta;
  Liliopsida; Asparagales; Orchidaceae'
@@ -3851,144 +3980,6 @@ For these functions, an invalid accession number returns an error message in HTM
 
 \chapter{Cookbook -- Cool things to do with it}
 \label{chapter:cookbook}
-
-\section{GenBank}
-
-The GenBank record format is a very popular method of holding information about sequences, sequence features, and other associated sequence information. The format is a good way to get information from the NCBI databases at \url{http://www.ncbi.nlm.nih.gov/}.
-
-The \verb|Bio.GenBank| module uses the NCBI's Entrez interface to run searches and fetch data.
-\emph{Please} remember to read and observe the NCBI's guidelines on using their Entrez online facilities responsibly.  If you are found to be abusing their servers, they can and will block your access!  See Section~\ref{sec:entrez-guidelines}.
-
-\subsection{Retrieving GenBank entries from NCBI}
-\label{genbank-retrieval}
-
-One very nice feature of the GenBank libraries is the ability to automate retrieval of entries from GenBank. This is very convenient for creating scripts that automate a lot of your daily work. In this example we'll show how to query the NCBI databases, and to retrieve the records from the query - something touched on in Section~\ref{sec:SeqIO_GenBank_Online}.
-
-First, we want to make a query and find out the ids of the records to retrieve. Here we'll do a quick search for our favorite organism, \emph{Opuntia}. We can do quick search and get back the GIs (GenBank identifiers) for all of the corresponding records:
-
-\begin{verbatim}
-from Bio import GenBank
-
-gi_list = GenBank.search_for("Opuntia AND rpl16")
-\end{verbatim}
-
-\verb|gi_list| will be a list of all of the GenBank identifiers that match our query:
-
-\begin{verbatim}
-["6273291", "6273290", "6273289", "6273287", "6273286", "6273285", "6273284"]
-\end{verbatim}
-
-Now that we've got the GIs, we can use these to access the NCBI database through a dictionary interface. For instance, to retrieve the information for the first GI, we'll first have to create a dictionary that accesses NCBI:
-
-\begin{verbatim}
-ncbi_dict = GenBank.NCBIDictionary("nucleotide", "genbank")
-\end{verbatim}
-
-Now that we've got this, we do the retrieval:
-
-\begin{verbatim}
-gb_record = ncbi_dict[gi_list[0]]
-\end{verbatim}
-
-In this case, \verb|gb_record| will be GenBank formatted record:
-
-\begin{verbatim}
-LOCUS       AF191665      902 bp    DNA             PLN       07-NOV-1999
-DEFINITION  Opuntia marenae rpl16 gene; chloroplast gene for chloroplast
-            product, partial intron sequence.
-ACCESSION   AF191665
-VERSION     AF191665.1  GI:6273291
-...
-\end{verbatim}
-
-In this case, we are just getting the raw records. We can also pass these records directly into a parser and return the parsed record. For instance, if we wanted to get back SeqRecord objects with the GenBank file parsed into SeqFeature objects we would need to create the dictionary with the GenBank FeatureParser:
-
-\begin{verbatim}
-record_parser = GenBank.FeatureParser()
-ncbi_dict = GenBank.NCBIDictionary("nucleotide", "genbank",
-                                   parser = record_parser)
-\end{verbatim}
-
-Now retrieving a record will give you a SeqRecord object instead of the raw record:
-
-\begin{verbatim}
->>> gb_seqrecord = ncbi_dict[gi_list[0]]
->>> print gb_seqrecord
-<Bio.SeqRecord.SeqRecord instance at 0x102f9404>
-\end{verbatim}
-
-Using these automated query retrieval functionality is a big plus over doing things by hand.   Although the module should obey the NCBI's three-second rule, the NCBI have other recommendations like avoiding peak hours.  See Section~\ref{sec:entrez-guidelines}.
-
-For more information of formats you can parse GenBank records into, please see section~\ref{sec:gb-parsing}.
-
-\subsection{Parsing GenBank records}
-\label{sec:gb-parsing}
-
-While GenBank files are nice and have lots of information, at the same time you probably only want to extract a small amount of that information at a time. The key to doing this is parsing out the information. Biopython provides GenBank parsers which help you accomplish this task. Right now the GenBank module provides the following parsers:
-
-\begin{enumerate}
-  \item RecordParser -- This parses the raw record into a GenBank specific Record object. This object models the information in a raw record very closely, so this is good to use if you are just interested in GenBank records themselves.
-
-  \item FeatureParser -- This parses the raw record in a SeqRecord object with all of the feature table information represented in SeqFeatures (see Section~\ref{sec:advanced-seq} for more info on these objects). This is best to use if you are interested in getting things in a more standard format.  If you use \verb|Bio.SeqIO| (Chapter~\ref{chapter:Bio.SeqIO}) to read a GenBank file, it will call this FeatureParser for you.
-\end{enumerate}
-
-Depending on the type of GenBank files you are interested in, they will either contain a single record, or multiple records.  Each record will start with a {\tt LOCUS} line, various other header lines, a list of features, and finally the sequence data, ending with a {\tt //} line.
-
-Dealing with a GenBank file containing a single record is very easy.  For example, let's use a small bacterial genome, \emph{Nanoarchaeum equitans Kin4-M} (RefSeq NC\_005213, GenBank AE017199) which can be downloaded from the \url{ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Bacteria/Nanoarchaeum_equitans/AE017199.gbk}{NCBI FTP site} (only 1.15 MB):
-
-\begin{verbatim}
-from Bio import GenBank
-feature_parser = GenBank.FeatureParser()
-gb_record = feature_parser.parse(open("AE017199.gbk"))
-# now do something with the record
-print "Name %s, %i features" % (gb_record.name, len(gb_record.features))
-print repr(gb_record.seq)
-\end{verbatim}
-
-Or, using \verb|Bio.SeqIO| instead (see Chapter~\ref{chapter:Bio.SeqIO}):
-
-\begin{verbatim}
-from Bio import SeqIO
-gb_record = SeqIO.read(open("AE017199.gbk"), "genbank")
-print "Name %s, %i features" % (gb_record.name, len(gb_record.features))
-print repr(gb_record.seq)
-\end{verbatim}
-
-Either should give the following output:
-
-\begin{verbatim}
-Name AE017199, 1107 features
-Seq('TCTCGCAGAGTTCTTTTTTGTATTAACAAACCCAAAACCCATAGAATTTAATGA...TTA', IUPACAmbiguousDNA())
-\end{verbatim}
-
-\subsection{Iterating over GenBank records}
-\label{sec:gb-parsing-iterator}
-
-For multi-record GenBank files, the most common usage will be creating an iterator, and parsing through the file record by record. Doing this is very similar to how things are done in other formats, as the following code demonstrates, using an example file \href{http://biopython.org/SRC/biopython/Tests/GenBank/cor6_6.gb}{cor6\_6.gb} which is included in the BioPython source code under the Tests/GenBank/ directory:
-
-\begin{verbatim}
-from Bio import GenBank
-feature_parser = GenBank.FeatureParser()
-gb_iterator = GenBank.Iterator(open("cor6_6.gb"), feature_parser)
-for cur_record in gb_iterator :
-   print "Name %s, %i features" % (cur_record.name, len(cur_record.features))
-   print repr(cur_record.seq)
-\end{verbatim}
-
-Or, using \verb|Bio.SeqIO| instead (see Chapter~\ref{chapter:Bio.SeqIO}):
-
-\begin{verbatim}
-from Bio import SeqIO
-for cur_record in SeqIO.parse(open("cor6_6.gb"), "genbank") :
-   print "Name %s, %i features" % (cur_record.name, len(cur_record.features))
-   print repr(cur_record.seq)
-\end{verbatim}
-
-This just iterates over a GenBank file, parsing it into \verb|SeqRecord| and
-\verb|SeqFeature| objects, and prints out the \verb|Seq| objects representing the
-sequences in the record.
-
-As with other formats, you have lots of tools for dealing with GenBank records. This should make it possible to do whatever you need to with GenBank.
 
 \section{Dealing with alignments}
 
