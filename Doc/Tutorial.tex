@@ -4397,10 +4397,6 @@ thing as if you had loaded the GenBank file directly as a SeqRecord using
 Biopython's BioSQL module is currently documented at
 \url{http://biopython.org/wiki/BioSQL} which is part of our wiki pages.
 
-\section{BioCorba}
-
-Biocorba does some cool stuff with CORBA. Basically, it allows you to easily interact with code written in other languages, including Perl and Java. This is all done through an interface which is very similar to the standard biopython interface. Much work has been done to make it easy to use knowing only very little about CORBA. You should check out the biocorba specific documentation, which describes in detail how to use it.
-
 \section{Going 3D: The PDB module}
 
 Biopython also allows you to explore the extensive realm of macromolecular structure.
@@ -4410,7 +4406,14 @@ can be used to access the atomic data in the file in a convenient manner.
 \subsection{Structure representation}
 
 A macromolecular structure is represented using a structure, model chain,
-residue, atom (or SMCRA) hierarchy. Fig. \ref{fig:smcra} shows a UML
+residue, atom (or SMCRA) hierarchy.
+\begin{htmlonly}
+The figure below
+\end{htmlonly}
+\begin{latexonly}
+Figure~\ref{fig:smcra}
+\end{latexonly}
+shows a UML
 class diagram of the SMCRA data structure.  Such a data structure is not
 necessarily best suited for the representation of the macromolecular content of
 a structure, but it is absolutely necessary for a good interpretation of the
@@ -4423,17 +4426,17 @@ detect likely problems. We will give several examples of this in section
 \ref{problem structures}.
 
 \begin{htmlonly}
-\label{fig:smcra}
 \imgsrc[width=650, height=750]{images/smcra.png}
+\label{fig:smcra}
 \end{htmlonly}
 
 \begin{latexonly}
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.8\textwidth]{images/smcra.png}
-\label{fig:smcra}
 \caption{UML diagram of the SMCRA data structure
 used to represent a macromolecular structure.}
+\label{fig:smcra}
 \end{figure}
 \end{latexonly}
 
