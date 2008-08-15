@@ -406,7 +406,7 @@ However, where possible you should specify the alphabet explicitly when creating
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import IUPAC
->>> my_seq = Seq('AGTACACTGGT', IUPAC.unambiguous_dna)
+>>> my_seq = Seq("AGTACACTGGT", IUPAC.unambiguous_dna)
 >>> my_seq
 Seq('AGTACACTGGT', IUPACUnambiguousDNA())
 >>> my_seq.alphabet
@@ -420,7 +420,7 @@ In many ways, we can deal with Seq objects as if they were normal python strings
 \begin{verbatim}
 from Bio.Seq import Seq
 from Bio.Alphabet import IUPAC
-my_seq = Seq('GATCGATGGGCCTATATAGGATCGAAAATCGC', IUPAC.unambiguous_dna)
+my_seq = Seq("GATCGATGGGCCTATATAGGATCGAAAATCGC", IUPAC.unambiguous_dna)
 for index, letter in enumerate(my_seq) :
     print index, letter
 print len(letter)
@@ -467,12 +467,12 @@ A more complicated example, let's get a slice of the sequence:
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import IUPAC
->>> my_seq = Seq('GATCGATGGGCCTATATAGGATCGAAAATCGC', IUPAC.unambiguous_dna)
+>>> my_seq = Seq("GATCGATGGGCCTATATAGGATCGAAAATCGC", IUPAC.unambiguous_dna)
 >>> my_seq[4:12]
 Seq('GATGGGCC', IUPACUnambiguousDNA())
 \end{verbatim}
 
-Two things are interesting to note. First, this follows the normal conventions for python strings.  So the first element of the sequence is 0 (which is normal for computer science, but not so normal for biology). When you do a slice the first item is included (i.~e.~4 in this case) and the last is excluded (12 in this case), which is the way things work in python, but of course not necessarily the way everyone in the world would expect. The main goal is to stay consistent with what python does.
+Two things are interesting to note. First, this follows the normal conventions for python strings.  So the first element of the sequence is 0 (which is normal for computer science, but not so normal for biology). When you do a slice the first item is included (i.e.~4 in this case) and the last is excluded (12 in this case), which is the way things work in python, but of course not necessarily the way everyone in the world would expect. The main goal is to stay consistent with what python does.
 
 The second thing to notice is that the slice is performed on the sequence data string, but the new object produced is another \verb|Seq| object which retains the alphabet information from the original \verb|Seq| object.
 
@@ -497,7 +497,7 @@ Seq('CGCTAAAAGCTAGGATATATCCGGGTAGCTAG', IUPACUnambiguousDNA())
 \section{Turning Seq objects into strings}
 \label{sec:seq-to-string}
 
-If you are really do just need a plain string, for example to print out, write to a file, or insert into a database, then this is very easy to get:
+If you really do just need a plain string, for example to print out, write to a file, or insert into a database, then this is very easy to get:
 \begin{verbatim}
 >>> str(my_seq)
 'GATCGATGGGCCTATATAGGATCGAAAATCGC'
@@ -519,9 +519,9 @@ For example, you can use the \verb|Seq| object directly with a \verb|%s| placeho
 GATCGATGGGCCTATATAGGATCGAAAATCGC
 \end{verbatim}
 
-\noindent This line of code constructs a simple FASTA format record.  Chapter~\ref{chapter:Bio.SeqIO} covers using the \verb|Bio.SeqIO| module for writing FASTA and other format sequence files.  For FASTA output, using \verb|Bio.SeqIO| will automatically include line wrapping for long sequences (required by some external programs to read the data).
+\noindent This line of code constructs a simple FASTA format record.  Chapter~\ref{chapter:Bio.SeqIO} covers using the \verb|Bio.SeqIO| module for writing FASTA and other format sequence files.  For writing FASTA files \verb|Bio.SeqIO.write()| will automatically include line wrapping for long sequences (required by some external programs to read the data), while Section~\ref{sec:Bio.SeqIO-and-StringIO} describes a neat way to get a FASTA formatted string.
 
-\emph{NOTE:} If you are using Biopython 1.44 or older, you must explicitly call \verb|my_seq.tostring()| as \verb|str(my_seq)| would give just a truncated representation.
+\emph{NOTE:} If you are using Biopython 1.44 or older, you must explicitly call \verb|my_seq.tostring()| as using \verb|str(my_seq)| would give just a truncated representation.
 
 \section{Concatenating or adding sequences}
 
@@ -552,8 +552,8 @@ Here is an example of adding a generic nucleotide sequence to an unambiguous IUP
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import generic_nucleotide
 >>> from Bio.Alphabet import IUPAC
->>> nuc_seq = Seq('GATCGATGC', generic_nucleotide)
->>> dna_seq = Seq('ACGT', IUPAC.unambiguous_dna)
+>>> nuc_seq = Seq("GATCGATGC", generic_nucleotide)
+>>> dna_seq = Seq("ACGT", IUPAC.unambiguous_dna)
 >>> nuc_seq
 Seq('GATCGATGC', NucleotideAlphabet())
 >>> dna_seq
@@ -613,7 +613,7 @@ encodes a short peptide:
 
 The actual biological transcription process works from the template strand, doing a reverse complement (TCAG $\rightarrow$ CUGA) to give the mRNA.  However, in Biopython and bioinformatics in general, we typically work directly with the coding strand because this means we can get the mRNA sequence just by switching T $\rightarrow$ U.
 
-Now lets actually get down to doing a transcription in Biopython.  First, let's create \verb|Seq| objects for the coding and template DNA strands:
+Now let's actually get down to doing a transcription in Biopython.  First, let's create \verb|Seq| objects for the coding and template DNA strands:
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import IUPAC
@@ -647,7 +647,7 @@ The \verb|Bio.Seq| module also includes a back-translation function for going fr
 \begin{verbatim}
 >>> from Bio.Seq import Seq, back_transcribe
 >>> from Bio.Alphabet import IUPAC
->>> messenger_rna = Seq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG', IUPAC.unambiguous_rna)
+>>> messenger_rna = Seq("AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG", IUPAC.unambiguous_rna)
 >>> messenger_rna
 Seq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG', IUPACUnambiguousRNA())
 >>> back_transcribe(messenger_rna)
@@ -660,7 +660,7 @@ now let's translate this mRNA into the corresponding protein sequence:
 \begin{verbatim}
 >>> from Bio.Seq import Seq, translate
 >>> from Bio.Alphabet import IUPAC
->>> messenger_rna = Seq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG', IUPAC.unambiguous_rna)
+>>> messenger_rna = Seq("AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG", IUPAC.unambiguous_rna)
 >>> messenger_rna
 Seq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG', IUPACUnambiguousRNA())
 >>> translate(messenger_rna)
@@ -5185,7 +5185,7 @@ Executing this code snippet will generate a file on the current directory called
 simple\_100\_300.par this file can be given as input to SIMCOAL2 to simulate the
 demography (below we will see how Biopython can take care of calling SIMCOAL2).
 
-This code consists of a single function call, lets discuss it paramter by parameter.
+This code consists of a single function call, let's discuss it parameter by parameter.
 
 The first parameter is the template id (from the list above). We are using the id
 'simple' which is the template for a single population of constant size along time.
@@ -5197,7 +5197,7 @@ The third parameter is a list of all required parameters (recall that the simple
 only needs sample\_size and pop\_size) and possible values (in this case each
 parameter only has a possible value).
 
-Now, lets consider an example where we want to generate several island models, and we
+Now, let's consider an example where we want to generate several island models, and we
 are interested in varying the number of demes: 10, 50 and 100 with a migration
 rate of 1\%. Sample size and deme
 size will be the same as before. Here is the code:
@@ -5252,14 +5252,14 @@ might be interest in repeating the same chromosome many times).
 The second element is a list of the actual components of the chromosome.
 Each element is again a pair, the first member is the locus type and
 the second element the parameters for that locus type. Confused?
-Before showing more examples lets review the example above: We have
+Before showing more examples let's review the example above: We have
 a list with one element (thus one chromosome), the chromosome is
 a single instance (therefore not to be repeated), it is composed
 of 24 SNPs, with a recombination rate of 0.0005 between each
 consecutive SNP, the minimum frequency of the minor allele is
 0.0 (i.e, it can be absent from a certain population).
 
-Lets see a more complicated example:
+Let's see a more complicated example:
 
 \begin{verbatim}
 [
