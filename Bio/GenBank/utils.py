@@ -1,8 +1,5 @@
 """Useful utilities for helping in parsing GenBank files.
 """
-# standard library
-import string
-
 class FeatureValueCleaner:
     """Provide specialized capabilities for cleaning up values in features.
 
@@ -48,4 +45,4 @@ class FeatureValueCleaner:
         """Concatenate a translation value to one long protein string.
         """
         translation_parts = value.split()
-        return string.join(translation_parts, '')
+        return "".join(translation_parts)
