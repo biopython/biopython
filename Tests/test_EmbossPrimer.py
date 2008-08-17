@@ -9,8 +9,7 @@ import os
 import unittest
 
 # local stuff
-from Bio.Emboss.Primer import Primer3Parser, PrimerSearchParser
-from Bio.Emboss.Primer import PrimerSearchInputRecord
+from Bio.Emboss import PrimerSearch, Primer3
 
 def run_tests(argv):
     test_suite = testing_suite()
@@ -46,19 +45,17 @@ class Primer3ParseTest(unittest.TestCase):
     def t_simple_parse(self):
         """Make sure that we can parse all primer3 files.
         """
-        parser = Primer3Parser(debug_level = 0)
         for file in self.test_files:
             h = open(file, "r")
-            parser.parse(h)
+            Primer3.read(h)
             h.close()
 
     def t_indepth_regular_parse(self):
         """Make sure we get the data from normal primer3 files okay.
         """
         regular_file = self.test_files[0]
-        parser = Primer3Parser()
         h = open(regular_file, "r")
-        primer_info = parser.parse(h)
+        primer_info = Primer3.read(h)
         h.close()
 
         assert len(primer_info.primers) == 5, \
@@ -83,9 +80,8 @@ class Primer3ParseTest(unittest.TestCase):
         """Make sure we get info right from a single primer find.
         """
         file = self.test_files[1]
-        parser = Primer3Parser()
         h = open(file, "r")
-        primer_info = parser.parse(h)
+        primer_info = Primer3.read(h)
         h.close()
 
         assert len(primer_info.primers) == 5
@@ -98,9 +94,8 @@ class Primer3ParseTest(unittest.TestCase):
         ''' Make sure we can parse an internal oligo file correctly '''
         # these files are generated when designing hybridization probes.
         file = self.test_files[4]
-        parser = Primer3Parser()
         h = open(file, "r")
-        primer_info = parser.parse(h)
+        primer_info = Primer3.read(h)
         h.close()
 
         assert len(primer_info.primers) == 5
@@ -119,19 +114,17 @@ class PrimersearchParseTest(unittest.TestCase):
     def t_simple_parse(self):
         """Make sure that we can parse all primersearch files.
         """
-        parser = PrimerSearchParser(debug_level = 0)
         for file in self.test_files:
             h = open(file, "r")
-            parser.parse(h)
+            PrimerSearch.read(h)
             h.close()
 
     def t_in_depth_normal_parse(self):
         """Make sure the output from a simple primersearch file is correct.
         """
         file = self.test_files[0]
-        parser = PrimerSearchParser()
         h = open(file, "r")
-        amp_info = parser.parse(h)
+        amp_info = PrimerSearch.read(h)
         h.close()
 
         assert len(amp_info.amplifiers.keys()) == 1
@@ -157,7 +150,7 @@ class PrimerSearchInputTest(unittest.TestCase):
     def t_primer_representation(self):
         """Make sure we can output primer information correctly.
         """
-        p_info = PrimerSearchInputRecord()
+        p_info = PrimerSearch.InputRecord()
         p_info.add_primer_set("Test", "GATC", "CATG")
         p_info.add_primer_set("Test2", "AATA", "TTAT")
 

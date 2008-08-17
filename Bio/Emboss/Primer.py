@@ -14,6 +14,22 @@ from Bio.ParserSupport import EventGenerator
 import primersearch_format
 import primer3_format
 
+import warnings
+warnings.DeprecationWarning("""\
+Bio.Emboss.Primer has been deprecated.
+Please use Bio.Emboss.Primer3 or Bio.Emboss.PrimerSearch instead.\n
+
+To parse primersearch output into a PrimerSearch.OutputRecord, use
+    from Bio.Emboss import PrimerSearch
+    handle = open('myprimersearchoutputfile.txt')
+    record = PrimerSearch.read(handle)
+
+To parse primer3 output into a Primer3.Record, use
+    from Bio.Emboss import Primer3
+    handle = open('myprimer3outputfile.txt')
+    record = Primer3.read(handle)
+""")
+
 # --- primersearch
 
 class PrimerSearchInputRecord:
