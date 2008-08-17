@@ -1,5 +1,3 @@
-import string, re
-
 # This is used by sequences which contain a finite number of similar
 # words.
 
