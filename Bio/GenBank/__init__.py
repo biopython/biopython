@@ -43,10 +43,6 @@ from Bio import Entrez
 #this file.  Now use a more generic system which we import:
 from Scanner import GenBankScanner
 
-#These are used for downloading files from GenBank
-from Bio import EUtils
-from Bio.EUtils import DBIds, DBIdsClient
-
 #Constants used to parse GenBank header lines
 GENBANK_INDENT = 12
 GENBANK_SPACER = " " * GENBANK_INDENT
@@ -1257,10 +1253,12 @@ def search_for(search, database='nucleotide',
     search.  mindate and maxdate are the dates to restrict the search,
     e.g. 2002/01/01.  start_id is the number to begin retrieval on.
     max_ids specifies the maximum number of id's to retrieve.
-    
-    batchsize, delay and callback_fn are old parameters for
-    compatibility -- do not set them.
     """
+    #TODO - Convert this to using Bio.Entrez (the dates bit in particular),
+    #or deprecate the whole function!
+    from Bio import EUtils
+    from Bio.EUtils import DBIdsClient
+
     # deal with dates
     date_restrict = None
     if reldate:
@@ -1281,19 +1279,14 @@ def download_many(ids, database = 'nucleotide'):
 
     Download many records from GenBank.  ids is a list of gis or
     accessions.  
-
-    callback_fn, broken_fn, delay, faildelay, batchsize, parser are old
-    parameter for compatibility. They should not be used.
     """
-    db_ids = DBIds(database, ids)
     if database in ['nucleotide']:
         format = 'gb'
     elif database in ['protein']:
         format = 'gp'
     else:
         raise ValueError("Unexpected database: %s" % database)
-
-    eutils_client = DBIdsClient.from_dbids(db_ids)
-    result_handle = eutils_client.efetch(retmode = "text", rettype = format)
+    #TODO - Batch the queries?
+    result_handle = Entrez.efetch(database, id=ids, retmode = "text", rettype = format)
     return cStringIO.StringIO(result_handle.read())
 

@@ -1,6 +1,9 @@
 """EUtils is a client-side library for the Entrez databases at NCBI.
 """
 import re
+import warnings
+warnings.warn("Bio.UEtils has been deprecated. Please use Bio.Entrez instead,"\
+              " which is described in the tutorial.", DeprecationWarning)
 
 __version__ = "1.0p1"
 __authors__ = ["Andrew Dalke, Dalke Scientific Software"]
