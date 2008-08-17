@@ -1,5 +1,8 @@
 """
-Code to deal with alignments written in Fasta format.
+Code to deal with alignments written in Fasta format (OBSOLETE).
+
+This module is considered obsolete and likely to be deprecated.  Please use
+Bio.AlignIO instead for reading and writing alignments in FASTA format.
 
 This mostly just uses the regular Fasta parsing stuff written by Jeff
 to deal with all of the input and output formats.

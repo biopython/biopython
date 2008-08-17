@@ -1,5 +1,9 @@
 """
-Utility for conversion between different formats for representing alignments.
+For conversion between different formats for representing alignments (OBSOLETE).
+
+This module is considered obsolete and likely to be deprecated.  Please use
+Bio.AlignIO instead for reading and writing alignments in different file
+formats.
 
 classes:
 FormatConverter
