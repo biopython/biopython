@@ -1251,28 +1251,38 @@ def search_for(search, database='nucleotide',
     'nucleotide', 'protein', 'popset' and 'genome'.  reldate is
     the number of dates prior to the current date to restrict the
     search.  mindate and maxdate are the dates to restrict the search,
-    e.g. 2002/01/01.  start_id is the number to begin retrieval on.
+    e.g. 2002/12/20.  start_id is the number to begin retrieval on.
     max_ids specifies the maximum number of id's to retrieve.
     """
-    #TODO - Convert this to using Bio.Entrez (the dates bit in particular),
-    #or deprecate the whole function!
-    from Bio import EUtils
-    from Bio.EUtils import DBIdsClient
+    # mindate and maxdate are NCBI parameters in "YYYY/MM/DD" format
+    # (and both should be supplied or neither)
+    # relate is an NCBI parameter for "within N days"
 
-    # deal with dates
-    date_restrict = None
-    if reldate:
-        date_restrict = EUtils.WithinNDays(reldate)
-    elif mindate:
-        date_restrict = EUtils.DateRange(mindate, maxdate)
+    #Following date checking from Bio/EUtils/Datatypes.py,
+    import re
+    _date_re_match = re.compile(r"\d{4}(/\d\d(/\d\d)?)?$").match
+    errinfo = None
+    if mindate is not None and _date_re_match(mindate) is None:
+        errinfo = ("mindate", mindate)
+    elif maxdate is not None and _date_re_match(maxdate) is None:
+        errinfo = ("maxdate", maxdate)
+    if errinfo:
+        raise TypeError(
+            "%s is not in YYYY/MM/DD format (month and "
+            "day are optional): %r" % errinfo)        
 
-    eutils_client = DBIdsClient.DBIdsClient()
-    db_ids = eutils_client.search(search, database, daterange = date_restrict,
-            retstart = start_id, retmax = max_ids)
-    ids = []
-    for db_id in db_ids:
-        ids.append(db_id.dbids.ids[0])
-    return ids
+    #If Entrez.esearch etc could automatically ignore arguments which
+    #are None this could be much simpler...
+    #handle = Entrez.esearch(database, search, retmode="xml",
+    #                        retstart=start_id, retmax=max_ids,
+    #                        mindate=mindate, maxdate=maxdate,
+    #                        reldate=reldate)
+    variables = {"retmode":"xml", "retstart":start_id, "retmax": max_ids}
+    if reldate is not None : variables["reldate"] = reldate
+    if mindate is not None : variables["mindate"] = mindate
+    if maxdate is not None : variables["maxdate"] = maxdate
+    handle = Entrez.esearch(database, search, None, **variables)
+    return Entrez.read(handle)["IdList"]
 
 def download_many(ids, database = 'nucleotide'):
     """download_many(ids, database) -> handle of results
