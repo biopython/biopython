@@ -1297,6 +1297,8 @@ def download_many(ids, database = 'nucleotide'):
     else:
         raise ValueError("Unexpected database: %s" % database)
     #TODO - Batch the queries?
-    result_handle = Entrez.efetch(database, id=ids, retmode = "text", rettype = format)
+    result_handle = Entrez.efetch(database,
+                                  id=",".join(ids),
+                                  retmode = "text",
+                                  rettype = format)
     return cStringIO.StringIO(result_handle.read())
-
