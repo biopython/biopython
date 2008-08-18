@@ -18,6 +18,10 @@ from Bio import SeqIO
 from StringIO import StringIO
 from Bio.SeqUtils.CheckSum import seguid
 
+#This lets us set the email address to be sent to NCBI Entrez:
+from Bio import Entrez
+Entrez.email = "biopython-dev@biopython.org"
+
 def checksum_summary(record) :
     if len(record.seq) < 25 :
         short = record.seq.tostring()
