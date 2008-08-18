@@ -6,13 +6,26 @@
 
 """Code to work with GenBank formatted files.
 
+Rather than using Bio.GenBank, you are now encouraged to use Bio.SeqIO with
+the "genbank" or "embl" format names to parse GenBank or EMBL files into
+SeqRecord and SeqFeature objects (see the Biopython tutorial for details).
+
+Also, rather than using Bio.GenBank to search or download files from the NCBI,
+you are now encouraged to use Bio.Entrez instead (again, see the Biopython
+tutorial for details).
+
+Currently the ONLY reason to use Bio.GenBank directly is for the RecordParser
+which turns a GenBank file into GenBank-specific Record objects.  This is a
+much closer representation to the raw file contents that the SeqRecord
+alternative from the FeatureParser (used in Bio.SeqIO).
+
 Classes:
 Iterator              Iterate through a file of GenBank entries
 Dictionary            Access a GenBank file using a dictionary interface.
 ErrorFeatureParser    Catch errors caused during parsing.
-FeatureParser         Parse GenBank data in Seq and SeqFeature objects.
+FeatureParser         Parse GenBank data in SeqRecord and SeqFeature objects.
 RecordParser          Parse GenBank data into a Record object.
-NCBIDictionary        Access GenBank using a dictionary interface.
+NCBIDictionary        Access GenBank using a dictionary interface (OBSOLETE).
 
 _BaseGenBankConsumer  A base class for GenBank consumer that implements
                       some helpful functions that are in common between
@@ -28,8 +41,8 @@ LocationParserError   Exception indiciating a problem with the spark based
                       location parser.
 
 Functions:
-search_for            Do a query against GenBank.
-download_many         Download many GenBank records.
+search_for            Do a query against GenBank (OBSOLETE).
+download_many         Download many GenBank records (OBSOLETE).
 
 """
 import cStringIO
@@ -1167,7 +1180,10 @@ class _RecordConsumer(_BaseGenBankConsumer):
 
 
 class NCBIDictionary:
-    """Access GenBank using a read-only dictionary interface.
+    """Access GenBank using a read-only dictionary interface (OBSOLETE).
+
+    This object is considered obsolete and likely to be deprecated
+    in the next release of Biopython.  Please use Bio.Entrez instead.
     """
     VALID_DATABASES = ['nucleotide', 'protein', 'genome']
     VALID_FORMATS = ['genbank', 'fasta']
@@ -1242,8 +1258,10 @@ class NCBIDictionary:
 def search_for(search, database='nucleotide',
                reldate=None, mindate=None, maxdate=None,
                start_id = 0, max_ids = 50000000):
-    """search_for(search[, reldate][, mindate][, maxdate]
-    [, batchsize][, delay][, callback_fn][, start_id][, max_ids]) -> ids
+    """Do an online search at the NCBI, returns a list of IDs (OBSOLETE).
+
+    This function is obsolete and likely to be deprecated in the next
+    release of Biopython.  Please use Bio.Entrez instead.
 
     Search GenBank and return a list of the GenBank identifiers (gi's)
     that match the criteria.  search is the search string used to
@@ -1271,24 +1289,21 @@ def search_for(search, database='nucleotide',
             "%s is not in YYYY/MM/DD format (month and "
             "day are optional): %r" % errinfo)        
 
-    #If Entrez.esearch etc could automatically ignore arguments which
-    #are None this could be much simpler...
-    #handle = Entrez.esearch(database, search, retmode="xml",
-    #                        retstart=start_id, retmax=max_ids,
-    #                        mindate=mindate, maxdate=maxdate,
-    #                        reldate=reldate)
-    variables = {"retmode":"xml", "retstart":start_id, "retmax": max_ids}
-    if reldate is not None : variables["reldate"] = reldate
-    if mindate is not None : variables["mindate"] = mindate
-    if maxdate is not None : variables["maxdate"] = maxdate
-    handle = Entrez.esearch(database, search, None, **variables)
+    #Bio.Entrez can now ignore None arguments automatically
+    handle = Entrez.esearch(database, search, retmode="xml",
+                            retstart=start_id, retmax=max_ids,
+                            mindate=mindate, maxdate=maxdate,
+                            reldate=reldate)
     return Entrez.read(handle)["IdList"]
 
 def download_many(ids, database = 'nucleotide'):
-    """download_many(ids, database) -> handle of results
+    """Download multiple NCBI GenBank records, returned as a handle (OBSOLETE).
+
+    This function is obsolete and likely to be deprecated in the next
+    release of Biopython.  Please use Bio.Entrez instead.
 
     Download many records from GenBank.  ids is a list of gis or
-    accessions.  
+    accessions.
     """
     if database in ['nucleotide']:
         format = 'gb'

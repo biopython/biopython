@@ -4,7 +4,12 @@
 # as part of this package.
 
 """
-This module provides code to work with PubMed from the NCBI.
+This module provides code to work with PubMed from the NCBI (OBSOLETE).
+
+This module is considered obsolete and is likely to be deprecated in the next
+release of Biopython.  Please use Bio.Entrez instead.
+
+See also:
 http://www.ncbi.nlm.nih.gov/PubMed/
 
 Online documentation for linking to PubMed is available at:
@@ -29,10 +34,10 @@ from Bio import Entrez
 from Bio import Medline
 
 class Dictionary:
-    """Access PubMed using a read-only dictionary interface.
+    """Access PubMed using a read-only dictionary interface (OBSOLETE).
 
-    Methods:
-    
+    This object is considered obsolete and likely to be deprecated
+    in the next release of Biopython.  Please use Bio.Entrez instead.
     """
     def __init__(self, parser=None):
         """Dictionary(parser=None)
@@ -99,8 +104,10 @@ class Dictionary:
 
 def search_for(search, reldate=None, mindate=None, maxdate=None,
                batchsize=100, callback_fn=None, start_id=0, max_ids=None):
-    """search_for(search[, reldate][, mindate][, maxdate]
-    [, batchsize][, callback_fn][, start_id][, max_ids]) -> ids
+    """Search PubMed, returns a list of IDs (OBSOLETE).
+
+    This function is obsolete and likely to be deprecated in the next
+    release of Biopython.  Please use Bio.Entrez instead.
 
     Search PubMed and return a list of the PMID's that match the
     criteria.  search is the search string used to search the
@@ -156,9 +163,7 @@ def search_for(search, reldate=None, mindate=None, maxdate=None,
         'mindate' : mindate,
         'maxdate' : maxdate
         }
-    for k, v in params.items():
-        if v is None:
-            del params[k]
+    #Note that Bio.Entrez can now cope with None arguments (it ignores them)
 
     ids = []
     while max_ids is None or len(ids) < max_ids:
@@ -183,11 +188,13 @@ def search_for(search, reldate=None, mindate=None, maxdate=None,
     return ids
 
 def find_related(pmid):
-    """find_related(pmid) -> ids
+    """Find related articles in PubMed, returns an ID list (OBSOLETE).
+
+    This function is obsolete and likely to be deprecated in the next
+    release of Biopython.  Please use Bio.Entrez instead.
 
     Search PubMed for a list of citations related to pmid.  pmid can
     be a PubMed ID, a MEDLINE UID, or a list of those.
-
     """
     class ResultParser(sgmllib.SGMLParser):
         # Parse the ID's out of the HTML-formatted page that PubMed
@@ -235,7 +242,10 @@ def find_related(pmid):
 
 def download_many(ids, callback_fn, broken_fn=None, 
                   batchsize=500, parser=None):
-    """download_many(ids, callback_fn[, broken_fn][, batchsize])
+    """Download multiple PubMed records, no return value (OBSOLETE).
+
+    This function is obsolete and likely to be deprecated in the next
+    release of Biopython.  Please use Bio.Entrez instead.
 
     Download many records from PubMed.  ids is a list of either the
     Medline Unique ID or the PubMed ID's of the articles.  Each time a

@@ -2,6 +2,17 @@ This file provides documentation for modules in Biopython that have been moved
 or deprecated in favor of other modules. This provides some quick and easy
 to find documentation about how to update your code to work again.
 
+Bio.GenBank
+===========
+The online functionality (search_for, download_many, and NCBIDictionary) was
+declared obsolete in Release 1.48, with the intention of an official deprecation
+in the following release.  Please use Bio.Entrez instead.
+
+Bio.PubMed
+==========
+Declared obsolete in Release 1.48, with the intention of an official deprecation
+in the following release.  Please use Bio.Entrez instead.
+
 Bio.EUtils
 ==========
 Deprecated in favor of Bio.Entrez in Release 1.48
