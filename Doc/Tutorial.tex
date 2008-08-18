@@ -262,7 +262,7 @@ A large part of much bioinformatics work involves dealing with the many types of
 
 We are now going to briefly introduce the \verb|Bio.SeqIO| module -- you can find out more in Chapter~\ref{chapter:Bio.SeqIO}.  We'll start with an online search for our friends, the lady slipper orchids. To keep this introduction simple, we're just using the NCBI website by hand.  Let's just take a look through the nucleotide databases at NCBI, using an Entrez online search (\url{http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?db=Nucleotide}) for everything mentioning the text Cypripedioideae (this is the subfamily of lady slipper orchids).  
 
-When this tutorial was originally written, this search gave us only 94 hits, which we saved as a FASTA formatted text file (\href{examples/ls_orchid.fasta}{ls\_orchid.fasta}; also available online \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.fasta}{here}) and as a GenBank formatted text file (\href{examples/ls_orchid.gbk}{ls\_orchid.gbk}; also available online \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.gbk}{here}).
+When this tutorial was originally written, this search gave us only 94 hits, which we saved as a FASTA formatted text file and as a GenBank formatted text file (files \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.fasta}{\tt ls\_orchid.fasta} and \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.gbk}{\tt ls\_orchid.gbk}, also included with the Biopython source code under {\tt docs/tutorial/examples/}).
 
 % The GenBank version is actually new - it was created by filtering out the original 94 hits from the
 % latest search of over 400 hits.
@@ -272,7 +272,7 @@ If you run the search today, you'll get hundreds of results!  When following the
 \subsection{Simple FASTA parsing example}
 \label{sec:fasta-parsing}
 
-If you open the lady slipper orchids FASTA file in your favourite text editor, you'll see that the file starts like this:
+If you open the lady slipper orchids FASTA file \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.fasta}{\tt ls\_orchid.fasta} in your favourite text editor, you'll see that the file starts like this:
 
 \begin{verbatim}
 >gi|2765658|emb|Z78533.1|CIZ78533 C.irapeanum 5.8S rRNA gene and ITS1 and ITS2 DNA
@@ -309,7 +309,7 @@ Notice that the FASTA format does not specify the alphabet, so \verb|Bio.SeqIO| 
 
 \subsection{Simple GenBank parsing example}
 
-Now let's load the GenBank file instead - notice that the code to do this is almost identical to the snippet used above for a FASTA file - the only difference is we changed the filename and the format string:
+Now let's load the GenBank file \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.gbk}{\tt ls\_orchid.gbk} instead - notice that the code to do this is almost identical to the snippet used above for the FASTA file - the only difference is we change the filename and the format string:
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -337,11 +337,10 @@ This time \verb|Bio.SeqIO| has been able to choose a sensible alphabet, IUPAC Am
 
 \subsection{I love parsing -- please don't stop talking about it!}
 
-Biopython has a lot of parsers, and each has its own little special niches based on the sequence format it is parsing and all of that.  While the most popular file formats have parsers integrated into \verb|Bio.SeqIO|, for some of the rarer and unloved file formats there is either no parser at all, or an old parser which has not been linked in yet.
+Biopython has a lot of parsers, and each has its own little special niches based on the sequence format it is parsing and all of that.  Chapter~\ref{chapter:Bio.SeqIO} covers \verb|Bio.SeqIO| in more detail, while Chapter~\ref{chapter:Bio.AlignIO} introduces \verb|Bio.AlignIO| for sequence alignments.
 
-Chapter~\ref{chapter:Bio.SeqIO} covers \verb|Bio.SeqIO| in more detail.  Please also check the wiki page (\url{http://biopython.org/wiki/SeqIO}) for the latest information, or ask on the mailing list. The wiki page should includes an up to date list of supported file types, and more examples including writing sequences to a file, and converting between file formats.
-
-If you are interested in sequence alignments, then look at the \verb|Bio.AlignIO| module introduced in Chapter~\ref{chapter:Bio.AlignIO}.  Again, there is a wiki page for this too (\url{http://biopython.org/wiki/AlignIO}).
+While the most popular file formats have parsers integrated into \verb|Bio.SeqIO| and/or \verb|Bio.AlignIO|, for some of the rarer and unloved file formats there is either no parser at all, or an old parser which has not been linked in yet.
+Please also check the wiki pages \url{http://biopython.org/wiki/SeqIO} and \url{http://biopython.org/wiki/AlignIO} for the latest information, or ask on the mailing list. The wiki pages should include an up to date list of supported file types, and some additional  examples.
 
 The next place to look for information about specific parsers and how to do cool things with them is in the Cookbook (Chapter~\ref{chapter:cookbook} of this Tutorial). If you don't find the information you are looking for, please consider helping out your poor overworked documentors and submitting a cookbook entry about it! (once you figure out how to do it, that is!)
 
@@ -351,10 +350,9 @@ The next place to look for information about specific parsers and how to do cool
 One of the very common things that you need to do in bioinformatics is extract information from biological databases. It can be quite tedious to access these databases manually, especially if you have a lot of repetitive work to do. Biopython attempts to save you time and energy by making some on-line databases available from python scripts. Currently, Biopython has code to extract information from the following databases:
 
 \begin{itemize}
+  \item \href{http://www.ncbi.nlm.nih.gov/Entrez/}{Entrez} from \href{http://www.ncbi.nlm.nih.gov/PubMed/}{PubMed} from the NCBI -- See Chapter~\ref{chapter:entrez}.
   \item \href{http://www.expasy.org/}{ExPASy} -- See Chapter~\ref{chapter:swiss_prot}.
-  \item \href{http://www.ncbi.nlm.nih.gov/Entrez/}{Entrez from NCBI} -- See Chapter~\ref{chapter:entrez}.
-  \item \href{http://www.ncbi.nlm.nih.gov/PubMed/}{PubMed from NCBI} -- See Section~\ref{subsec:pub_med} in the Cookbook for example code detailing how to use this.
-  \item \href{http://scop.mrc-lmb.cam.ac.uk/scop/}{SCOP}
+  \item \href{http://scop.mrc-lmb.cam.ac.uk/scop/}{SCOP} -- See the \verb|Bio.SCOP.search()| function.
 \end{itemize}
 
 The code is these modules basically makes it easy to write python code that interact with the CGI scripts on these pages, so that you can get results in an easy to deal with format. In some cases, the results can be tightly integrated with the Biopython parsers to make it even easier to extract information.
@@ -3537,7 +3535,7 @@ For example, suppose we want to search and download all Orchid rpl16 nucleotide 
 
 However, the approved approach is to run the search with the history feature.  Then, we can fetch the results by reference to the search results - which the NCBI can anticipate and cache.
 
-You call \verb|Bio.Entrez.esearch()| as normal, but with the additional argument of \verb|usehistory="y"|.
+To do this, you call \verb|Bio.Entrez.esearch()| as normal, but with the additional argument of \verb|usehistory="y"|,
 
 \begin{verbatim}
 >>> from Bio import Entrez
@@ -3556,7 +3554,7 @@ You call \verb|Bio.Entrez.esearch()| as normal, but with the additional argument
 >>> assert count == len(gi_list)
 \end{verbatim}
 
-\noindent However, you also get given two additional pieces of information, the{\tt WebEnv} session cookie, and the{\tt QueryKey}:
+\noindent However, you also get given two additional pieces of information, the {\tt WebEnv} session cookie, and the{\tt QueryKey}:
 
 \begin{verbatim}
 >>> session_cookie = search_results["WebEnv"]
