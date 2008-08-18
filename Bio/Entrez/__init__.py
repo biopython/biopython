@@ -318,10 +318,10 @@ def _open(cgi, params={}):
             warnings.warn("""\
 Unknown email address. Please specify your email address to be sent with
 your Entrez request. For example, if your email address is
-charles.darwin@cam.ac.uk, use
+charles.darwin@example.com, use
 
         >>> from Bio import Entrez
-        >>> Entrez.email = "charles.darwin@cam.ac.uk"
+        >>> Entrez.email = "charles.darwin@example.com"
 """)
         else:
             params["email"] = email
