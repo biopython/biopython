@@ -44,9 +44,12 @@ read         Parses the XML results returned by any of the above functions.
 _open        Internally used function.
 
 """
-import urllib, time
+import urllib, time, warnings
 import os.path
 from Bio import File
+
+
+email = None
 
 def query(cmd, db, cgi='http://www.ncbi.nlm.nih.gov/sites/entrez',
           **keywds):
@@ -302,9 +305,26 @@ def _open(cgi, params={}):
         _open.previous = current + wait
     else:
         _open.previous = current
-    # Tell Entrez that we are Biopython
+    # Remove None values from the parameters
+    for key, value in params.items():
+        if value is None:
+            del params[key]
+    # Tell Entrez that we are using Biopython
     if not "tool" in params:
         params["tool"] = "biopython"
+    # Tell Entrez who we are
+    if not "email" in params:
+        if email==None:
+            warnings.warn("""\
+Unknown email address. Please specify your email address to be sent with
+your Entrez request. For example, if your email address is
+charles.darwin@cam.ac.uk, use
+
+        >>> from Bio import Entrez
+        >>> Entrez.email = "charles.darwin@cam.ac.uk"
+""")
+        else:
+            params["email"] = email
     # Open a handle to Entrez.
     options = urllib.urlencode(params, doseq=True)
     cgi += "?" + options
