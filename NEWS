@@ -1,16 +1,16 @@
 News for the Biopython Project
 ==============================
 
-This file contains release notes and general news 
-about the biopython project.
+This file contains release notes and general news about the Biopython
+project.  See also the DEPRECATED file which tracks the removal of
+obsolete modules or functions.
 
 The latest news is at the top.
 
 ===================================================================
 
-The SeqRecord and Alignment objects have a new method to format the
-object as a string in a requested file format (handled via Bio.SeqIO
-and Bio.AlignIO).
+The SeqRecord and Alignment objects have a new method to format the object as
+a string in a requested file format (handled via Bio.SeqIO and Bio.AlignIO).
 
 Additional file formats supported in Bio.SeqIO and Bio.AlignIO:
 - reading and writing "tab" format (simple tab separated)
@@ -18,10 +18,19 @@ Additional file formats supported in Bio.SeqIO and Bio.AlignIO:
 - reading "pir" files (NBRF/PIR)
 - basic support for writing "genbank" files (GenBank plain text)
 
-Fixed some problems reading Clustal alignments (introduced in
-Biopython 1.46 when consolidating Bio.AlignIO and Bio.Clustalw).
+Fixed some problems reading Clustal alignments (introduced in Biopython 1.46
+when consolidating Bio.AlignIO and Bio.Clustalw).
 
 Updates to the Bio.Sequencing parsers.
+
+Bio.PubMed and the online code in Bio.GenBank are now considered obsolete,
+and we intend to deprecate them after the next release. For accessing PubMed
+and GenBank, please use Bio.Entrez instead.
+
+Bio.Fasta is now considered to be obsolete, please use Bio.SeqIO instead. We
+do intend to deprecate this module eventually, however, for several years
+this was the primary FASTA parsing module in Biopython and is likely to be in
+use in many existing scripts.
 
 ===================================================================
 
@@ -29,7 +38,7 @@ July 5, 2008: Biopython 1.47 released.
 
 Improved handling of ambiguous nucleotides in Bio.Seq.Translate().
 Better handling of stop codons in the alphabet from a translation.
-Fixed some codon tables.
+Fixed some codon tables (problem introduced in Biopython 1.46).
 
 Updated Nexus file handling.
 
@@ -69,8 +78,8 @@ Bio.SwissProt, and others to make them more generally usable.
 
 Phylip export added to Bio.Nexus.
 
-Improved handling of ambiguous nucleotides and stop codons in Bio.Seq.Translate
-[plus a regression fixed in Biopython 1.47].
+Improved handling of ambiguous nucleotides and stop codons in
+Bio.Seq.Translate (plus introduced a regression fixed in Biopython 1.47).
 
 ===================================================================
 
