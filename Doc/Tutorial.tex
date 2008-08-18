@@ -253,7 +253,7 @@ Of course, orchids are not only beautiful to look at, they are also extremely in
 
 After a little bit of reading up we discover that the Lady Slipper Orchids are in the Orchidaceae family and the Cypripedioideae sub-family and are made up of 5 genera:  \emph{Cypripedium}, \emph{Paphiopedilum}, \emph{Phragmipedium}, \emph{Selenipedium} and \emph{Mexipedium}.
 
-That gives us enough to get started delving for more information. So, let's look at how the Biopython tools can help us.  We'll start with sequence parsing in Section~\ref{sec:sequence-parsing}, but the orchids will be back later on as well - for example we'll extra data from Swiss-Prot from certain orchid proteins in Chapter~\ref{chapter:swiss_prot}, search PubMed for papers about orchids in Section~\ref{subsec:pub_med}, extract sequence data from GenBank in Section~\ref{subsec:genbank}, and work with ClustalW multiple sequence alignments of orchid proteins in Section~\ref{sec:align_clustal}.
+That gives us enough to get started delving for more information. So, let's look at how the Biopython tools can help us.  We'll start with sequence parsing in Section~\ref{sec:sequence-parsing}, but the orchids will be back later on as well - for example we'll extra data from Swiss-Prot from certain orchid proteins in Chapter~\ref{chapter:swiss_prot}, search PubMed for papers about orchids in Section~\ref{subsec:pub_med}, extract sequence data from GenBank in Section~\ref{sec:entrez-search-fetch-genbank}, and work with ClustalW multiple sequence alignments of orchid proteins in Section~\ref{sec:align_clustal}.
 
 \section{Parsing sequence file formats}
 \label{sec:sequence-parsing}
@@ -2828,16 +2828,15 @@ To paraphrase:
 \item For any series of more than 100 requests, do this at weekends or outside USA peak times.  This is up to you to obey.
 \item Use the \url{http://eutils.ncbi.nlm.nih.gov} address, not the standard NCBI Web address.  Biopython uses this web address.
 \item Make no more than one request every 3 seconds.  This is automatically enforced by Biopython.
-\item Use the optional email parameter so the NCBI can contact you if there is a problem.  You can either explicitly set the email address as a parameter with each call to Entrez (e.g., {\tt email="A.N.Other@example.com"} in the argument list), or you can set a global email address:
+\item Use the optional email parameter so the NCBI can contact you if there is a problem.  You can either explicitly set the email address as a parameter with each call to Entrez (e.g., include {\tt email = "A.N.Other@example.com"} in the argument list), or as of Biopython 1.48, you can set a global email address:
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"
 \end{verbatim}
 {\tt Bio.Entrez} will then use this email address with each call to Entrez.  The {\tt example.com} address is a reserved domain name specifically for documentation (RFC 2606).  Please DO NOT use a random email -- it's better not to give an email at all.
 \item If you are using Biopython within some larger software suite, use the tool parameter to specify this.  The tool parameter will default to Biopython.
+\item For large queries, the NCBI also recommend using their session history feature (the WebEnv session cookie string, see Section~\ref{sec:entrez-webenv}).  This is only slightly more complicated.
 \end{itemize}
-
-For large queries, the NCBI also recommend using their session history feature (the WebEnv session cookie string).  This is only slightly more complicated.
 
 In conclusion, be sensible with your usage levels.  If you plan to download lots of data, consider other options.  For example, if you want easy access to all the human genes, consider fetching each chromosome by FTP as a GenBank file, and importing these into your own BioSQL database (see Section~\ref{sec:BioSQL}).
 
@@ -3083,6 +3082,8 @@ To get the output in XML format, which you can parse using the \verb+Bio.Entrez.
 'chloroplast Austrocylindropuntia subulata'
 ....
 \end{verbatim}
+
+If you want to perform a search with \verb|Bio.Entrez.esearch()|, and then download the records with \verb|Bio.Entrez.efetch()|, you should use the WebEnv history feature -- see Section~\ref{sec:entrez-webenv}.
 
 \section{ELink}
 For help on ELink, see the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/elink\_help.html}{ELink help page}. ELink is available from Biopython through \verb+Bio.Entrez.elink()+.
@@ -3369,7 +3370,7 @@ Let's look at the first five results:
 \label{sec:entrez-batched-efetch}
 We can download these records using \verb+efetch+.
 While you could download these records one by one, to reduce the load on NCBI's servers, it is better to fetch a bunch of records at the same time, shown below.
-However, in this situation you should ideally be using the history feature described later in Section~\ref{subsec:entrez-webenv}.
+However, in this situation you should ideally be using the history feature described later in Section~\ref{sec:entrez-webenv}.
 
 \begin{verbatim}
 >>> idlist = ",".join(record["IdList"][:5])
@@ -3404,14 +3405,16 @@ mitochondrial
 Cypripedium calceolus
 \end{verbatim}
 
-You could use this to quickly set up searches -- but for heavy usage, see Section~\ref{subsec:entrez-webenv}.
+You could use this to quickly set up searches -- but for heavy usage, see Section~\ref{sec:entrez-webenv}.
 
 \subsection{Searching, downloading, and parsing GenBank records using Bio.Entrez and Bio.SeqIO}
-\label{subsec:genbank}
+\label{sec:entrez-search-fetch-genbank}
 
 The GenBank record format is a very popular method of holding information about sequences, sequence features, and other associated sequence information. The format is a good way to get information from the NCBI databases at \url{http://www.ncbi.nlm.nih.gov/}.
 
-In this example we'll show how to query the NCBI databases, and to retrieve the records from the query - something touched on in Section~\ref{sec:SeqIO_GenBank_Online}. This time, we're using \verb+Bio.SeqIO+ to parse the GenBank data.
+In this example we'll show how to query the NCBI databases,to retrieve the records from the query, and then parse them using \verb+Bio.SeqIO+  - something touched on in Section~\ref{sec:SeqIO_GenBank_Online}.
+
+For simplicity, this example \emph{does not} take advantage of the WebEnv history feature -- see Section~\ref{sec:entrez-webenv} for this.
 
 First, we want to make a query and find out the ids of the records to retrieve. Here we'll do a quick search for our favorite organism, \emph{Opuntia}. We can do quick search and get back the GIs (GenBank identifiers) for all of the corresponding records. First we check how many records there are:
 
@@ -3436,11 +3439,11 @@ Now we download the list of GenBank identifiers:
 '6273285', '6273284']
 \end{verbatim}
 
-Now we use these GIs to download the GenBank records:
+Now we use these GIs to download the GenBank records - note that you have to supply a comma separated list of GI numbers to Entrez:
 
 \begin{verbatim}
->>> gi_list = ",".join(gi_list)
->>> handle = Entrez.efetch(db="nuccore", id=gi_list, rettype="genbank")
+>>> gi_str = ",".join(gi_list)
+>>> handle = Entrez.efetch(db="nuccore", id= gi_str, rettype="genbank")
 \end{verbatim}
 
 If you want to look at the raw GenBank files, you can read from this handle and print out the result:
@@ -3463,76 +3466,34 @@ REFERENCE   1  (bases 1 to 892)
 ...
 \end{verbatim}
 
-In this case, we are just getting the raw records. To get the records in a more Python-friendly form, we can use Biopython's parsers. In this section, we'll use \verb+Bio.SeqIO+ to parse the GenBank data into \verb|SeqRecord| objects, including the \verb|SeqFeature| objects:
+In this case, we are just getting the raw records. To get the records in a more Python-friendly form, we can use \verb+Bio.SeqIO+ to parse the GenBank data into \verb|SeqRecord| objects, including \verb|SeqFeature| objects (see Chapter~\ref{chapter:Bio.SeqIO}):
 
 \begin{verbatim}
 >>> from Bio import SeqIO
->>> handle = Entrez.efetch(db="nuccore", id=gi_list, rettype="genbank")
->>> records = SeqIO.parse(handle, 'genbank')
+>>> handle = Entrez.efetch(db="nuccore", id=gi_str, rettype="genbank")
+>>> records = SeqIO.parse(handle, "genbank")
 \end{verbatim}
 
-We can now step through the records and look at the information we are interested in:
+\noindent We can now step through the records and look at the information we are interested in:
 \begin{verbatim}
->>> handle = Entrez.efetch(db="nuccore", id=gi_list, rettype="genbank")
->>> records = SeqIO.parse(handle, "genbank")
->>> for record in records:
-...     print record.name
-...
-AY851612
-AY851611
-AF191661
-AF191665
-AF191664
-AF191663
-AF191660
-AF191659
-AF191658
+>>> for record in records: 
+>>> ...    print "%s, length %i, with %i features" \
+>>> ...           % (record.name, len(record), len(record.features))
+AY851612, length 892, with 3 features
+AY851611, length 881, with 3 features
+AF191661, length 895, with 3 features
+AF191665, length 902, with 3 features
+AF191664, length 899, with 3 features
+AF191663, length 899, with 3 features
+AF191660, length 893, with 3 features
+AF191659, length 894, with 3 features
+AF191658, length 896, with 3 features
 \end{verbatim}
 
 Using these automated query retrieval functionality is a big plus over doing things by hand.   Although the module should obey the NCBI's three-second rule, the NCBI have other recommendations like avoiding peak hours.  See Section~\ref{sec:entrez-guidelines}.
+In particular, please note that for simplicity, this example does not use the WebEnv history feature.  You should use this for any non-trivial search and download work, see Section~\ref{sec:entrez-webenv}.
 
-Depending on which GenBank files you are looking at, they will either contain a single record, or multiple records.  Each record will start with a {\tt LOCUS} line, various other header lines, a list of features, and finally the sequence data, ending with a {\tt //} line.
-
-Dealing with a GenBank file containing a single record is very easy.  For example, let's use a small bacterial genome, \emph{Nanoarchaeum equitans Kin4-M} (RefSeq NC\_005213, GenBank AE017199) which can be downloaded from the \url{ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Bacteria/Nanoarchaeum_equitans/AE017199.gbk}{NCBI FTP site} (only 1.15 MB):
-
-\begin{verbatim}
->>> from Bio import SeqIO
->>> handle = open("AE017199.gbk")
->>> record = SeqIO.read(handle, "genbank")
-# now do something with the record
->>> print "Name %s, %i features" % (record.name, len(record.features))
->>> print repr(record.seq)
-Name AE017199, 1107 features
-Seq('TCTCGCAGAGTTCTTTTTTGTATTAACAAACCCAAAACCCATAGAATTTAATGA...TTA', IUPACAmbiguousDNA())
-\end{verbatim}
-
-See Chapter~\ref{chapter:Bio.SeqIO} for more information about \verb|Bio.SeqIO|.
-
-For multi-record GenBank files, the most common usage will be to iterate through the file record by record. Doing this is very similar to how things are done in other formats, as the following code demonstrates, using an example file \href{http://biopython.org/SRC/biopython/Tests/GenBank/cor6_6.gb}{cor6\_6.gb} which is included in the BioPython source code under the Tests/GenBank/ directory:
-
-\begin{verbatim}
->>> from Bio import SeqIO
->>> records = SeqIO.parse(open("cor6_6.gb"), "genbank")
->>> for record in records:
-...     print "Name %s, %i features" % (record.name, len(record.features))
-...     print repr(record.seq)
-...
-Name ATCOR66M, 3 features
-Seq('AACAAAACACACATCAAAAACGATTTTACAAGAAAAAAATATCTGAAAAATGTC...AAA', IUPACAmbiguousDNA())
-Name ATKIN2, 15 features
-Seq('ATTTGGCCTATAAATATAAACCCTTAAGCCCACATATCTTCTCAATCCATCACA...ATA', IUPACAmbiguousDNA())
-Name BNAKINI, 6 features
-Seq('AAAAAAACACAACAAAACTCAATAAATAAACAAATGGCAGACAACAAGCAGAGC...TTC', IUPACAmbiguousDNA())
-Name ARU237582, 7 features
-Seq('GGACAAGGCCAAGGATGCTGCTGCTGCAGCTGGAGCTTCCGCGCAACAAGTAAA...GGC', IUPACAmbiguousDNA())
-Name BRRBIF72, 3 features
-Seq('AACAAAACTCAATAAATAAACAAATGGCAGACAACAAGCAGAGCTTCCAAGCCG...TTT', IUPACAmbiguousDNA())
-Name AF297471, 4 features
-Seq('ATGGCAGACAACAAGCAGAGCTTCCAAGCCGGTCAAGCCGCTGGTCGTGCTGAG...TAG', IUPACAmbiguousDNA())
-\end{verbatim}
-
-This just iterates over a GenBank file, parsing it into \verb|SeqRecord| and
-\verb|SeqFeature| objects, and prints out the \verb|Seq| objects representing the sequences in the record.
+Finally, if plan to repeat your analysis, rather than downloading the files from the NCBI and parsing them immediately, consider just downloading the files \emph{once} and saving them to your hard disk.
 
 \subsection{Finding the lineage of an organism}
 
@@ -3567,14 +3528,16 @@ We can get the lineage directly from this record:
  Liliopsida; Asparagales; Orchidaceae'
 \end{verbatim}
 
-\subsection{Using the history and WebEnv}
-\label{subsec:entrez-webenv}
+\section{Using the history and WebEnv}
+\label{sec:entrez-webenv}
 
 Often you will want to make a series of linked queries.  Most typically, running a search, perhaps refining the search, and then retrieving detailed search results.  You \emph{can} do this by making a series of separate calls to Entrez.  However, the NCBI prefer you to take advantage of their history support.
 
-For example, suppose we want to search and download all Orchid rpl16 nucleotide sequences, and store them in a FASTA file.  We could naively combine the example code for \verb|Bio.Entrez.esearch()| (Section~\ref{sec:entrez-esearch}) to get a list of GI numbers, and then repeatedly call \verb|Bio.Entrez.efetch()| (Section~\ref{sec:efetch}) to download them all.  You could reduce the number of queries by asking for the records in batches (see Section~\ref{sec:entrez-batched-efetch}).  That would probably be better, but is still not what the NCBI encourage.
+For example, suppose we want to search and download all Orchid rpl16 nucleotide sequences, and store them in a FASTA file.  As shown in Section~\ref{sec:entrez-search-fetch-genbank}, we can naively combine \verb|Bio.Entrez.esearch()| (Section~\ref{sec:entrez-esearch}) to get a list of GI numbers, and then call \verb|Bio.Entrez.efetch()| (Section~\ref{sec:efetch}) to download them all.
 
-The approved approach is to run the search with the history feature.  Then, we can fetch the results by reference to the search results - which the NCBI can anticipate and cache.
+However, the approved approach is to run the search with the history feature.  Then, we can fetch the results by reference to the search results - which the NCBI can anticipate and cache.
+
+You call \verb|Bio.Entrez.esearch()| as normal, but with the additional argument of \verb|usehistory="y"|.
 
 \begin{verbatim}
 >>> from Bio import Entrez
@@ -3583,16 +3546,24 @@ The approved approach is to run the search with the history feature.  Then, we c
                                    usehistory="y")
 >>> search_results = Entrez.read(search_handle)
 >>> search_handle.close()
+\end{verbatim}
 
+\noindent When you get the XML output back, it will still include the usual search results:
+
+\begin{verbatim}
 >>> gi_list = search_results["IdList"]
 >>> count = int(search_results["Count"])
 >>> assert count == len(gi_list)
+\end{verbatim}
 
+\noindent However, you also get given two additional pieces of information, the{\tt WebEnv} session cookie, and the{\tt QueryKey}:
+
+\begin{verbatim}
 >>> session_cookie = search_results["WebEnv"]
 >>> query_key = search_results["QueryKey"] 
 \end{verbatim}
 
-In addition to the GI numbers of the sequences found in the search, because we have asked to use the history feature the XML search results also include {\tt WebEnv} and {\tt QueryKey} values which are used to refer to these search results.  Having stored these values in variables {\tt session\_cookie} and {\tt query\_key} we can use them as parameters to \verb|Bio.Entrez.efetch()| instead of giving the GI numbers as identifiers.  
+Having stored these values in variables {\tt session\_cookie} and {\tt query\_key} we can use them as parameters to \verb|Bio.Entrez.efetch()| instead of giving the GI numbers as identifiers.  
 
 While for small searches you might be OK downloading everything at once, its better download in batches.  You use the {\tt retstart} and {\tt retmax} parameters to specify which range of search results you want returned (starting entry using zero-based counting, and maximum number of results to return).  For example,
 
