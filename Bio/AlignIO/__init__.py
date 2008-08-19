@@ -92,15 +92,24 @@ fasta     - The generic sequence file format where each record starts with a
 fasta-m10 - For the pairswise alignments output by Bill Pearson's FASTA
             tools when used with the -m 10 command line option for machine
             readable output.
+ig        - The IntelliGenetics file format, apparently the same as the
+            MASE alignment format.
 nexus     - Output from NEXUS, see also the module Bio.Nexus which can also
             read any phylogenetic trees in these files.
 phylip    - Used by the PHLIP tools.
 stockholm - A richly annotated alignment file format used by PFAM.
 
+Note that while Bio.AlignIO can read all the above file formats, it cannot
+write to all of them.
+
+You can also use any file format supported by Bio.SeqIO, such as "fasta" or
+"ig" (which are listed above), PROVIDED the sequences in your file are all the
+same length.
+
 Further Information
 ===================
-See the wiki page biopython.org/wiki/AlignIO and also the Bio.AlignIO chapter
-in the Biopython Tutorial and Cookbook which is also available online:
+See the wiki page http://biopython.org/wiki/AlignIO and also the Bio.AlignIO
+chapter in the Biopython Tutorial and Cookbook which is also available online:
 
 http://biopython.org/DIST/docs/tutorial/Tutorial.html
 http://biopython.org/DIST/docs/tutorial/Tutorial.pdf

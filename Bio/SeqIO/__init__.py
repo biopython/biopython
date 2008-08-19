@@ -116,7 +116,41 @@ write() multiple times.
 
 File Formats
 ============
-When specifying formats, use lowercase strings.
+When specifying the file format, use lowercase strings.  The same format
+names are also used in Bio.AlignIO and include the following:
+
+ace       - Reads the contig sequences from an ACE assembly file.
+embl      - The EMBL flat file format. Uses Bio.GenBank internally.
+fasta     - The generic sequence file format where each record starts with
+            an identifer line starting with a ">" character, followed by
+            lines of sequence.
+genbank   - The GenBank or GenPept flat file format.
+ig        - The IntelliGenetics file format, apparently the same as the
+            MASE alignment format.
+phd       - Output from PHRED, used by PHRAP and CONSED for input.
+pir       - A "FASTA like" format introduced by the National Biomedical
+            Research Foundation (NBRF) for the Protein Information Resource
+            (PIR) database, now part of UniProt.
+swiss     - Plain text Swiss-Prot aka UniProt format.
+tab       - Simple two column tab separated sequence files, where each
+            line holds a record's identifier and sequence. For example,
+            this is used as by Aligent's eArray software when saving
+            microarray probes in a minimal tab delimited text file. 
+
+Note that while Bio.SeqIO can read all the above file formats, it cannot write
+to all of them.
+
+You can also use any file format supported by Bio.AlignIO, such as "nexus",
+"phlip" and "stockholm", which gives you access to the individual sequences
+making up each alignment as SeqRecords.
+
+Further Information
+===================
+See the wiki page http://biopython.org/wiki/SeqIO and also the Bio.SeqIO
+chapter in the Biopython Tutorial and Cookbook which is also available online:
+
+http://biopython.org/DIST/docs/tutorial/Tutorial.html
+http://biopython.org/DIST/docs/tutorial/Tutorial.pdf
 """
 
 #TODO
