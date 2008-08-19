@@ -314,16 +314,7 @@ def _open(cgi, params={}):
         params["tool"] = "biopython"
     # Tell Entrez who we are
     if not "email" in params:
-        if email==None:
-            warnings.warn("""\
-Unknown email address. Please specify your email address to be sent with
-your Entrez request. For example, if your email address is
-charles.darwin@example.com, use
-
-        >>> from Bio import Entrez
-        >>> Entrez.email = "charles.darwin@example.com"
-""")
-        else:
+        if email!=None:
             params["email"] = email
     # Open a handle to Entrez.
     options = urllib.urlencode(params, doseq=True)
