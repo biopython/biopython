@@ -9,21 +9,12 @@ http://www.psc.edu/general/software/packages/seq-intro/nbrffile.html
 
 # standard library
 import string
-import array
-import os
-import re
-import sgmllib
-import urlparse
-
-# XML from python 2.0
-from xml.sax import handler
 
 # Martel
 import Martel
 from Martel import RecordReader
 
 from Bio.ParserSupport import EventGenerator
-from Bio.ParserSupport import AbstractConsumer
 from Bio import File
 import nbrf_format
 import Record

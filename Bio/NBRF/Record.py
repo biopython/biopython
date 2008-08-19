@@ -20,8 +20,6 @@ Just so I remember -- the new end of line syntax is:
 This helps us have endlines be consistent across platforms.
 
 """
-# standard library
-import string
 
 
 from Bio.Seq import Seq

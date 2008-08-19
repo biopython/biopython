@@ -10,21 +10,15 @@ the 'regular expressiona on steroids' capabilities of Martel.
 
 http://www-nbrf.georgetown.edu/pirwww/pirhome.shtml
 """
-# standard library
-#http://www-nbrf.georgetown.edu/pirwww/pirhome.shtml
-import string
 
 # Martel
 import Martel
-from Martel import RecordReader
 from Martel import Str
 from Martel import AnyEol, UntilEol
-from Martel import ToEol
 from Martel import Group
-from Martel import Alt, Opt
+from Martel import Alt
 from Martel import Rep
 from Martel import Rep1
-from Martel import Any
 from Martel import AnyBut
 from Martel import UntilSep
 
