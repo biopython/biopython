@@ -3,12 +3,21 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+"""
+Bio.AlignIO support for the "emboss" alignment output from EMBOSS tools.
+
+You are expected to use this module via the Bio.AlignIO functions (or the
+Bio.SeqIO functions if you want to work directly with the gapped sequences).
+
+This module contains a parser for the EMBOSS pairs/simple file format, for
+example from the alignret, water and needle tools.
+"""
 
 from Bio.Align.Generic import Alignment
 from Interfaces import AlignmentIterator, SequentialAlignmentWriter
 
 class EmbossWriter(SequentialAlignmentWriter) :
-    """Emboss alignment writer
+    """Emboss alignment writer (WORK IN PROGRESS).
 
     Writes a simplfied version of the EMBOSS pairs/simple file format.
     A lot of the information their tools record in their headers is not
@@ -50,7 +59,7 @@ class EmbossWriter(SequentialAlignmentWriter) :
         assert False
 
 class EmbossIterator(AlignmentIterator) :
-    """Emboss alignment iterator
+    """Emboss alignment iterator.
 
     For reading the (pairwise) alignments from EMBOSS tools in what they
     call the "pairs" and "simple" formats.

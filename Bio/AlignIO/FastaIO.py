@@ -4,8 +4,13 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """
+Bio.AlignIO support for "fasta-m10" output from Bill Pearson's FASTA tools.
+
+You are expected to use this module via the Bio.AlignIO functions (or the
+Bio.SeqIO functions if you want to work directly with the gapped sequences).
+
 This module contains a parser for the pairwise alignments produced by Bill
-Pearson's FASTA tool, for use from the Bio.AlignIO interface where it is
+Pearson's FASTA tools, for use from the Bio.AlignIO interface where it is
 refered to as the "fasta-m10" file format (as we only support the machine
 readable output format selected with the -m 10 command line option).
 

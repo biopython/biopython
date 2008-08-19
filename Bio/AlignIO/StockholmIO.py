@@ -2,7 +2,12 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+"""
+Bio.AlignIO support for the "stockholm" format (used the PFAM database).
 
+You are expected to use this module via the Bio.AlignIO functions (or the
+Bio.SeqIO functions if you want to work directly with the gapped sequences).
+"""
 from Bio.Align.Generic import Alignment
 from Interfaces import AlignmentIterator, SequentialAlignmentWriter
 

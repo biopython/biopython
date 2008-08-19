@@ -2,6 +2,12 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+"""
+AlignIO support module (not for general use).
+
+Unless you are writing a new parser or writer for Bio.AlignIO, you should not
+use this module.  It provides base classes to try and simplify things.
+"""
 
 from Bio.Alphabet import single_letter_alphabet, Gapped
    

@@ -3,7 +3,13 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Alignment input/output designed to look similar to Bio.SeqIO.
+"""Multiple sequence alignment input/output as Alignment objects.
+
+The Bio.AlignIO interface is deliberately very similar to Bio.SeqIO, and in
+fact the two are connected internally.  Both modules use the same set of file
+format names (lower case strings).  From the user's perspective, you can read
+in a PHYLIP file containing one or more alignments using Bio.AlignIO, or you
+can read in the sequences within these alignmenta using Bio.SeqIO.
 
 Input
 =====
