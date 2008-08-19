@@ -2,10 +2,17 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""Parser for the NBRF/PIR file format.
+"""Parser for the NBRF/PIR file format (DEPRECATED).
 
-http://www.psc.edu/general/software/packages/seq-intro/nbrffile.html
-"""
+Please use Bio.SeqIO with the "pir" format instead."""
+
+import warnings
+warnings.warn("Bio.NBRF is deprecated." \
+              + " We hope the new 'pir' format support in Bio.SeqIO will be" \
+              + " suitable for most users.  Please get in touch on the " \
+              + " mailing lists if this (or its removal) causes any problems "\
+              + "for you.",
+              DeprecationWarning)
 
 # standard library
 import string

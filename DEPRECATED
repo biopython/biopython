@@ -27,6 +27,10 @@ Bio.Saf
 Deprecated as of Release 1.48, as it appears to have no users, and relies
 on Martel which doesn't work properly with mxTextTools 3.0
 
+Bio.NBRF
+========
+Deprecated as of Release 1.48 in favor of the "pir" format in Bio.SeqIO
+
 Bio.IntelliGenetics
 ===================
 Deprecated as of Release 1.48 in favor of the "ig" format in Bio.SeqIO
