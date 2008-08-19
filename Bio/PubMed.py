@@ -124,38 +124,6 @@ def search_for(search, reldate=None, mindate=None, maxdate=None,
     script.  Please let me know if you can get it to work.
     
     """
-    class ResultParser(sgmllib.SGMLParser):
-        # Parse the ID's out of the XML-formatted page that PubMed
-        # returns.  The format of the page is:
-        # [...]
-        #    <Id>...</Id>
-        # [...]
-        def __init__(self):
-            sgmllib.SGMLParser.__init__(self)
-            self.ids = []
-            self.in_id = 0
-        def start_id(self, attributes):
-            self.in_id = 1
-        def end_id(self):
-            self.in_id = 0
-        _not_pmid_re = re.compile(r'\D')
-        def handle_data(self, data):
-            if not self.in_id:
-                return
-            # If data is just whitespace, then ignore it.
-            data = data.strip()
-            if not data:
-                return
-            # Everything here should be a PMID.  Check and make sure
-            # data really is one.  A PMID should be a string consisting
-            # of only integers.  Should I check to make sure it
-            # meets a certain minimum length?
-            if self._not_pmid_re.search(data):
-                raise ValueError, \
-                      "I expected an ID, but %s doesn't look like one." % \
-                      repr(data)
-            self.ids.append(data)
-
     params = {
         'db' : 'pubmed',
         'term' : search,
@@ -167,8 +135,6 @@ def search_for(search, reldate=None, mindate=None, maxdate=None,
 
     ids = []
     while max_ids is None or len(ids) < max_ids:
-        parser = ResultParser()
-        
         start = start_id + len(ids)
         max = batchsize
         if max_ids is not None and max > max_ids - len(ids):
@@ -177,13 +143,14 @@ def search_for(search, reldate=None, mindate=None, maxdate=None,
         params['retstart'] = start
         params['retmax'] = max
         h = Entrez.esearch(**params)
-        parser.feed(h.read())
-        ids.extend(parser.ids)
+        record = Entrez.read(h)
+        idlist = record["IdList"]
+        ids.extend(idlist)
         if callback_fn is not None:
             # Call the callback function with each of the new ID's.
-            for id in parser.ids:
+            for id in idlist:
                 callback_fn(id)
-        if len(parser.ids) < max or not parser.ids:  # no more id's to read
+        if len(idlist) < max:  # no more id's to read
             break
     return ids
 
