@@ -15,7 +15,7 @@ import primersearch_format
 import primer3_format
 
 import warnings
-warnings.DeprecationWarning("""\
+warnings.warn("""\
 Bio.Emboss.Primer has been deprecated.
 Please use Bio.Emboss.Primer3 or Bio.Emboss.PrimerSearch instead.\n
 
@@ -28,7 +28,7 @@ To parse primer3 output into a Primer3.Record, use
     from Bio.Emboss import Primer3
     handle = open('myprimer3outputfile.txt')
     record = Primer3.read(handle)
-""")
+""", DeprecationWarning)
 
 # --- primersearch
 
