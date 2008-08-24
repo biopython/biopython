@@ -48,7 +48,7 @@ def FastaIterator(handle, alphabet = single_letter_alphabet, title2ids = None) :
             descr = line[1:].rstrip()
             id   = descr.split()[0]
             name = id
-            
+
         lines = []
         line = handle.readline()
         while True:
@@ -57,7 +57,7 @@ def FastaIterator(handle, alphabet = single_letter_alphabet, title2ids = None) :
             #Remove trailing whitespace, and any internal spaces
             lines.append(line.rstrip().replace(" ",""))
             line = handle.readline()
-            
+
         #Return the record and then continue...
         yield SeqRecord(Seq("".join(lines), alphabet),
                          id = id, name = name, description = descr)
@@ -111,9 +111,9 @@ class FastaWriter(SequentialSequenceWriter):
         assert self._header_written
         assert not self._footer_written
         self._record_written = True
-        
+
         if self.record2title :
-            title=self.clean(record2title(record))
+            title=self.clean(self.record2title(record))
         else :
             id = self.clean(record.id)
             description = self.clean(record.description)
@@ -141,15 +141,15 @@ class FastaWriter(SequentialSequenceWriter):
 
 if __name__ == "__main__" :
     print "Running quick self test"
-    
+
     import os
     from Bio.Alphabet import generic_protein, generic_nucleotide
-    
+
     #Download the files from here:
     #ftp://ftp.ncbi.nlm.nih.gov/genomes/Bacteria/Nanoarchaeum_equitans
     fna_filename = "NC_005213.fna"
     faa_filename = "NC_005213.faa"
-        
+
     def genbank_name_function(text) :
         text, descr = text.split(None,1)
         id = text.split("|")[3]
