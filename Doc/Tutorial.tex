@@ -1171,8 +1171,8 @@ a file for reuse.
 \subsection{Parsing GenBank records from the net}
 \label{sec:SeqIO_GenBank_Online}
 Section~\ref{sec:efetch} talks about the Entrez EFetch interface in more detail,
-but for now let's just connect to the NCBI and get a few orchid proteins from
-GenBank using their GI numbers.
+but for now let's just connect to the NCBI and get a few \textit{Opuntia} (prickly-pear)
+proteins from GenBank using their GI numbers.
 
 First of all, let's fetch just one record.  Remember, when you expect the handle
 to contain one and only one record, use the \verb|Bio.SeqIO.read()| function:
@@ -2944,7 +2944,7 @@ To search any of these databases, we use \verb+Bio.Entrez.esearch()+. For exampl
 \end{verbatim}
 In this output, you see five PubMed IDs (16403221, 16377612, 14871861, 14630660, 12230038), which can be retrieved by EFetch (see section \ref{sec:efetch}).
 
-You can also use ESearch to search GenBank. Here we'll do a quick search for the \emph{rpl16} gene in \emph{Opuntia}:
+You can also use ESearch to search GenBank. Here we'll do a quick search for the \emph{rpl16} gene in \emph{Opuntia} (prickly-pear cacti):
 
 \begin{verbatim}
 >>> handle = Entrez.esearch(db="nucleotide",term="Opuntia and rpl16")
@@ -3129,7 +3129,7 @@ To request a specific file format from Entrez using \verb|Bio.Entrez.efetch()| r
 One obvious case is you may prefer to download sequences in the FASTA or GenBank plain text formats (which can then be parsed with \verb|Bio.SeqIO|, see Sections~\ref{sec:SeqIO_GenBank_Online} and~\ref{sec:efetch}).  For the literature databases, Biopython contains a parser for the \verb+MEDLINE+ format used in PubMed.
 
 \subsection{Parsing Medline records}
-
+\label{subsec:entrez-and-medline}
 You can find the Medline parser in \verb+Bio.Medline+. Suppose we want to parse the file \verb+pubmed_result1.txt+, containing one Medline record. You can find this file in Biopython's \verb+Tests\Medline+ directory. The file looks like this:
 
 \begin{verbatim}
@@ -3414,7 +3414,7 @@ In this example we'll show how to query the NCBI databases,to retrieve the recor
 
 For simplicity, this example \emph{does not} take advantage of the WebEnv history feature -- see Section~\ref{sec:entrez-webenv} for this.
 
-First, we want to make a query and find out the ids of the records to retrieve. Here we'll do a quick search for our favorite organism, \emph{Opuntia}. We can do quick search and get back the GIs (GenBank identifiers) for all of the corresponding records. First we check how many records there are:
+First, we want to make a query and find out the ids of the records to retrieve. Here we'll do a quick search for one of our favorite organisms, \emph{Opuntia} (prickly-pear cacti). We can do quick search and get back the GIs (GenBank identifiers) for all of the corresponding records. First we check how many records there are:
 
 \begin{verbatim}
 >>> from Bio import Entrez
@@ -3441,7 +3441,7 @@ Now we use these GIs to download the GenBank records - note that you have to sup
 
 \begin{verbatim}
 >>> gi_str = ",".join(gi_list)
->>> handle = Entrez.efetch(db="nuccore", id= gi_str, rettype="genbank")
+>>> handle = Entrez.efetch(db="nuccore", id=gi_str, rettype="genbank")
 \end{verbatim}
 
 If you want to look at the raw GenBank files, you can read from this handle and print out the result:
@@ -3495,7 +3495,7 @@ Finally, if plan to repeat your analysis, rather than downloading the files from
 
 \subsection{Finding the lineage of an organism}
 
-Staying with the same organism, let's now find its lineage. First, we search the Taxonomy database for Cypripedioideae. We find exactly one accession number:
+Staying with the same organism, let's now find its lineage. First, we search the Taxonomy database for Cypripedioideae (an orchid family). We find exactly one accession number:
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
@@ -3531,7 +3531,8 @@ We can get the lineage directly from this record:
 
 Often you will want to make a series of linked queries.  Most typically, running a search, perhaps refining the search, and then retrieving detailed search results.  You \emph{can} do this by making a series of separate calls to Entrez.  However, the NCBI prefer you to take advantage of their history support.
 
-For example, suppose we want to search and download all Orchid rpl16 nucleotide sequences, and store them in a FASTA file.  As shown in Section~\ref{sec:entrez-search-fetch-genbank}, we can naively combine \verb|Bio.Entrez.esearch()| (Section~\ref{sec:entrez-esearch}) to get a list of GI numbers, and then call \verb|Bio.Entrez.efetch()| (Section~\ref{sec:efetch}) to download them all.
+\subsection{Searching for and downloading sequences using the history}
+For example, suppose we want to search and download all the \textit{Opuntia} rpl16 nucleotide sequences, and store them in a FASTA file.  As shown in Section~\ref{sec:entrez-search-fetch-genbank}, we can naively combine \verb|Bio.Entrez.esearch()| (Section~\ref{sec:entrez-esearch}) to get a list of GI numbers, and then call \verb|Bio.Entrez.efetch()| (Section~\ref{sec:efetch}) to download them all.
 
 However, the approved approach is to run the search with the history feature.  Then, we can fetch the results by reference to the search results - which the NCBI can anticipate and cache.
 
@@ -3579,6 +3580,17 @@ for start in range(0,count,batch_size) :
     out_handle.write(data)
 out_handle.close()
 \end{verbatim}
+
+\noindent For illustrative purposes, this example downloaded the FASTA records in batches of three.  Unless you are downloading genomes or chromosomes, you would normally pick a larger batch size.
+
+\subsection{Searching for and downloading abstracts using the history}
+Here is another history example, searching for papers published in the last year about the \textit{Opuntia}, and then download them into a file in MedLine format:
+
+\begin{verbatim}
+from Bio import EntrezEntrez.email = "history.user@example.com"search_results = Entrez.read(Entrez.esearch(db="pubmed",                                            term="Opuntia[ORGN]",                                            reldate=365, datetype="pdat",                                            usehistory="y"))count = int(search_results["Count"])print "Found %i results" % countbatch_size = 10out_handle = open("recent_orchid_papers.txt", "w")for start in range(0,count,batch_size) :    end = min(count, start+batch_size)    print "Going to download record %i to %i" % (start+1, end)    fetch_handle = Entrez.efetch(db="pubmed", rettype="medline",                                 retstart=start, retmax=batch_size,                                 webenv=search_results["WebEnv"],                                 query_key=search_results["QueryKey"])    data = fetch_handle.read()    fetch_handle.close()    out_handle.write(data)out_handle.close()
+\end{verbatim}
+
+\noindent At the time of writing, this gave 28 matches - but because this is a date dependent search, this will of course vary.  As described in Section~\ref{subsec:entrez-and-medline} above, you can then use \verb|Bio.Medline| to parse the saved records.
 
 And finally, don't forget to include your \emph{own} email address in the Entrez calls.
 
@@ -3968,7 +3980,7 @@ It is often very useful to be able to align particular sequences. I do this quit
 
 Clustalx (\url{http://www-igbmc.u-strasbg.fr/BioInfo/ClustalX/Top.html}) is a very nice program for doing multiple alignments. Biopython offers access to alignments in clustal format (these normally have a \verb|*.aln| extension) that are produced by Clustalx. It also offers access to clustalw, which the is command line version of clustalx.
 
-We'll need some sequences to align, such as \href{examples/opuntia.fasta}{opuntia.fasta} (also available online \href{http://biopython.org/DIST/docs/tutorial/examples/opuntia.fasta}{here}) which is a small FASTA file containing seven orchid gene DNA sequences, which you can also from \verb|Doc/examples/| in the Biopython source distribution.
+We'll need some sequences to align, such as \href{examples/opuntia.fasta}{opuntia.fasta} (also available online \href{http://biopython.org/DIST/docs/tutorial/examples/opuntia.fasta}{here}) which is a small FASTA file containing seven prickly-pear DNA sequences (from the cactus family \textit{opuntia}), which you can also from \verb|Doc/examples/| in the Biopython source distribution.
 
 The first step in interacting with clustalw is to set up a command line you want to pass to the program. Clustalw has a ton of command line options, and if you set a lot of parameters, you can end up typing in a huge ol' command line quite a bit. This command line class models the command line by making all of the options be attributes of the class that can be set. A few convenience functions also exist to set certain parameters, so that some error checking on the parameters can be done.
 
