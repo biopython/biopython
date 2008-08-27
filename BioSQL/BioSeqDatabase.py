@@ -156,15 +156,19 @@ class Adaptor:
         return self.dbutils.last_id(self.cursor, table)
 
     def autocommit(self, y=True):
+        """Set the autocommit mode. True values enable; False value disable."""
         return self.dbutils.autocommit(self.conn, y)
 
     def commit(self):
+        """Commits the current transaction."""
         return self.conn.commit()
 
     def rollback(self):
+        """Rolls backs the current transaction."""
         return self.conn.rollback()
 
     def close(self):
+        """Close the connection. No further activity possible."""
         return self.conn.close()
 
     def fetch_dbid_by_dbname(self, dbname):
@@ -419,3 +423,4 @@ class BioSeqDatabase:
             num_records += 1
             db_loader.load_seqrecord(cur_record)
         return num_records
+
