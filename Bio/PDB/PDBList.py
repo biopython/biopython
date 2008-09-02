@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 #
 # PDBList.py
 #
@@ -65,8 +64,9 @@ class PDBList:
 
     alternative_download_url = "http://www.rcsb.org/pdb/files/"
     # just append PDB code to this, and then it works.
+    # (above URL verified with a XXXX.pdb appended on 2 Sept 2008)
     
-    def __init__(self,server='ftp://ftp.rcsb.org', pdb=os.getcwd(), obsolete_pdb=None):
+    def __init__(self,server='ftp://ftp.wwpdb.org', pdb=os.getcwd(), obsolete_pdb=None):
         """Initialize the class with the default server or a custom one."""
         # remote pdb server
         self.pdb_server = server
@@ -178,7 +178,7 @@ OBSLTE     26-SEP-03 1DYV      1UN2
 
 
 
-    def retrieve_pdb_file(self,pdb_code, obsolete=0, compression='.Z', 
+    def retrieve_pdb_file(self,pdb_code, obsolete=0, compression='.gz', 
             uncompress="gunzip", pdir=None):
         """Retrieves a PDB structure file from the PDB server and
         stores it in a local file tree.
