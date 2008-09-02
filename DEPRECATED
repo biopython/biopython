@@ -2,6 +2,21 @@ This file provides documentation for modules in Biopython that have been moved
 or deprecated in favor of other modules. This provides some quick and easy
 to find documentation about how to update your code to work again.
 
+Martel
+======
+Declared obsolete in Release 1.48, with the intention of an official deprecation
+or removal in a future release.
+
+Bio.Mindy
+=========
+Declared obsolete in Release 1.48, with the intention of an official deprecation
+in the following release.
+
+Bio.MetaTool
+============
+Deprecated in Release 1.48, this was a parser from the output of MetaTool 3.5
+which is now obsolete.
+
 Bio.GenBank
 ===========
 The online functionality (search_for, download_many, and NCBIDictionary) was

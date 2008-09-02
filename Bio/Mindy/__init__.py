@@ -1,5 +1,13 @@
 import os, sys
 
+"""Bio.Mindy provides functionality building on the Martel parser (OBSOLETE).
+
+Andrew Dalke is no longer maintaining Martel or Bio.Mindy, and these modules
+are considered to be obsolete.  They are no longer used in any of the current
+Biopython parsers, and are likely to be deprecated and then removed in future
+releases of Biopython.
+"""
+
 _open = open  # rename for internal use -- gets redefined below
 
 def open(dbname, mode = "r"):

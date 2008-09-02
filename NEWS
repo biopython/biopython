@@ -32,6 +32,13 @@ do intend to deprecate this module eventually, however, for several years
 this was the primary FASTA parsing module in Biopython and is likely to be in
 use in many existing scripts.
 
+Martel and Bio.Mindy are now considered to be obsolete, and are likely to be
+deprecated and removed in a future release.
+
+In addition a number of other modules have been deprecated, including:
+Bio.MetaTool, Bio.EUtils, Bio.Saf, Bio.NBRF, and Bio.IntelliGenetics
+See the DEPRECATED file for full details.
+
 ===================================================================
 
 July 5, 2008: Biopython 1.47 released.

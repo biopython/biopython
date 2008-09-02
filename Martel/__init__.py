@@ -1,6 +1,24 @@
 # Copyright 2000-2001, Dalke Scientific Software, LLC
 # Distributed under the Biopython License Agreement (see the LICENSE file).
 
+"""Martel is a 'regular expressions on steroids' parser generator (OBSOLETE).
+
+A goal of the Biopython project is to reduce the amount of effort needed to
+do computational biology. A large part of that work turns out to be parsing
+file formats, which lead to the development of Martel, a parser generator
+which uses a regular expression as the format description to create a parser
+that returns the parse tree using the SAX API common in XML processing.
+
+While intended to be both fast and relatively easy to understand, Martel did
+struggle with some very large records (e.g. GenBank files for whole genomes or
+chromosomes), and in practice debugging the Martel format specifications for
+evolving file formats like GenBank proved non-trivial.
+
+Andrew Dalke is no longer maintaining Martel or Bio.Mindy, and these modules
+are considered to be obsolete.  They are no longer used in any of the current
+Biopython parsers, and are likely to be deprecated and then removed in future
+releases of Biopython.
+"""
 __version__ = "1.47"
 
 import Expression
