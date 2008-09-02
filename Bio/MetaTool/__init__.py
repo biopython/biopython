@@ -2,12 +2,18 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""Parser for output from MetaTool, a program which defines metabolic routes
-within networks.
+"""Parser for output from MetaTool 3.5 (DEPRECATED).
+
+MetaTool is a program which defines metabolic routes within networks.
+This parser does not support the current version, MetaTool 5.0.
 
 http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&
 list_uids=10222413&dopt=Abstract
 """
+
+import warnings
+warnings.warn("Bio.MetalTool was deprecated, as it only supported the obsolete"
+              +"MetaTool 3.5 output.")
 
 # standard library
 import string
