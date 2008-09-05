@@ -16,8 +16,8 @@ the 'Installing Python Modules' distutils documentation, available from:
 
 http://python.org/sigs/distutils-sig/doc/
 
-Or, if all else fails, feel free to write to the biopython list at
-biopython@biopython.org and ask for help.
+Or, if all else fails, feel free to write to the sign up to the Biopython
+mailing list and ask for help.  See http://biopython.org/wiki/Mailing_lists
 """
 import sys
 import os
