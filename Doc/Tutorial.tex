@@ -353,16 +353,16 @@ The next place to look for information about specific parsers and how to do cool
 One of the very common things that you need to do in bioinformatics is extract information from biological databases. It can be quite tedious to access these databases manually, especially if you have a lot of repetitive work to do. Biopython attempts to save you time and energy by making some on-line databases available from python scripts. Currently, Biopython has code to extract information from the following databases:
 
 \begin{itemize}
-  \item \href{http://www.ncbi.nlm.nih.gov/Entrez/}{Entrez} and \href{http://www.ncbi.nlm.nih.gov/PubMed/}{PubMed} from the NCBI -- See Chapter~\ref{chapter:entrez}.
+  \item \href{http://www.ncbi.nlm.nih.gov/Entrez/}{Entrez} (and \href{http://www.ncbi.nlm.nih.gov/PubMed/}{PubMed}) from the NCBI -- See Chapter~\ref{chapter:entrez}.
   \item \href{http://www.expasy.org/}{ExPASy} -- See Chapter~\ref{chapter:swiss_prot}.
   \item \href{http://scop.mrc-lmb.cam.ac.uk/scop/}{SCOP} -- See the \verb|Bio.SCOP.search()| function.
 \end{itemize}
 
-The code is these modules basically makes it easy to write python code that interact with the CGI scripts on these pages, so that you can get results in an easy to deal with format. In some cases, the results can be tightly integrated with the Biopython parsers to make it even easier to extract information.
+The code in these modules basically makes it easy to write python code that interact with the CGI scripts on these pages, so that you can get results in an easy to deal with format. In some cases, the results can be tightly integrated with the Biopython parsers to make it even easier to extract information.
 
 \section{What to do next}
 
-Now that you've made it this far, you hopefully have a good understanding of the basics of Biopython and are ready to start using it for doing useful work. The best thing to do now is to start snooping around in the source code and looking at the automatically generated documentation.
+Now that you've made it this far, you hopefully have a good understanding of the basics of Biopython and are ready to start using it for doing useful work. The best thing to do now is finish reading this tutorial, and then if you want start snooping around in the source code, and looking at the automatically generated documentation.
 
 Once you get a picture of what you want to do, and what libraries in Biopython will do it, you should take a peak at the Cookbook (Chapter~\ref{chapter:cookbook}), which may have example code to do something similar to what you want to do.
 
@@ -1364,7 +1364,7 @@ print orchid_dict.keys()
 
 \subsection{Indexing a dictionary using the SEGUID checksum}
 
-To give another example of working with dictionaries of \verb|SeqRecord| objects, we'll use the SEGUID checksum function (added in Biopython 1.44).  This is a relatively recent checksum, and collisions should be very rare (i.e. two different sequences with the same checksum), an improvement on the CRC64 checksum.
+To give another example of working with dictionaries of \verb|SeqRecord| objects, we'll use the SEGUID checksum function.  This is a relatively recent checksum, and collisions should be very rare (i.e. two different sequences with the same checksum), an improvement on the CRC64 checksum.
 
 Once again, working with the orchids GenBank file:
 
