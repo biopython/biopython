@@ -3,51 +3,52 @@ CONTRIBUTORS
 
 This is a list of people who have made contributions to Biopython.
 This is certainly not comprehensive, and if you've been overlooked
-(sorry!), please write Iddo at idoerg@burnham.org
+(sorry!), please write Iddo at idoerg at the domain burnham.org
+or mention it on the development mailing list.
 
-Cecilia Alsmark <Cecilia.Alsmark@ebc.uu.se>
+Cecilia Alsmark <Cecilia.Alsmark at domain ebc.uu.se>
 Tiago Antao <tiagoantao at gmail.com>
-Sebastian Bassi <sbassi@asalup.org>
-Bill Barnard <bill@barnard-engineering.com>
-Yves Bastide <ybastide@irisa.fr>
-Yair Benita <Y.Benita@pharm.uu.nl>
-Peter Bienstman <Peter.Bienstman@rug.ac.be>
-Bob Bussell <rgb2003@med.cornell.edu>
-Diego Brouard <diego@conysis.com>
-James Casbon <j.a.casbon@qmul.ac.uk>
-Hye-Shik Chang <perky@fallin.lv>
-Jeffrey Chang <jchang@smi.stanford.edu>
-Brad Chapman <chapmanb@arches.uga.edu>
-Peter Cock (http://www2.warwick.ac.uk/fac/sci/moac/currentstudents/peter_cock/python)
-Marc Colosimo <mcolosimo@mitre.org>
-Cymon J Cox <cymon@duke.edu>
-Gavin E Crooks <gec@compbio.berkeley.edu>
-Andrew Dalke <dalke@acm.org>
-Michiel de Hoon <mdehoon@c2b2.columbia.edu>
-Sjoerd de Vries <sjoerd@nmr.chem.uu.nl>
-Iddo Friedberg <idoerg@burnham.org>
-Bertrand Frottier <bertrand.frottier@free.fr>
-Jason A. Hackney <jhackney@stanford.edu>
-Thomas Hamelryck <thamelry@binf.ku.dk>
-Michael Hoffman <hoffman+biopython@ebi.ac.uk>
-Yu Huang <krocea@yahoo.com.cn>
-Frank Kauff <fkauff@duke.edu>
-Andreas Kuntzagk <andreas.kuntzagk@mdc-berlin.de>
-Michal Kurowski <michal@genesilico.pl>
+Sebastian Bassi <sbassi at domain asalup.org>
+Bill Barnard <bill at domain barnard-engineering.com>
+Yves Bastide <ybastide at domain irisa.fr>
+Yair Benita <Y.Benita at domain pharm.uu.nl>
+Peter Bienstman <Peter.Bienstman at domain rug.ac.be>
+Bob Bussell <rgb2003 at domain med.cornell.edu>
+Diego Brouard <diego at domain conysis.com>
+James Casbon <j.a.casbon at domain qmul.ac.uk>
+Hye-Shik Chang <perky at domain fallin.lv>
+Jeffrey Chang <jchang at domain smi.stanford.edu>
+Brad Chapman <chapmanb at domain arches.uga.edu>
+Peter Cock <biopython at domain maubp.freeserve.co.uk>
+Marc Colosimo <mcolosimo at domain mitre.org>
+Cymon J Cox <cymon at domain duke.edu>
+Gavin E Crooks <gec at domain compbio.berkeley.edu>
+Andrew Dalke <dalke at domain acm.org>
+Michiel de Hoon <mdehoon at domain c2b2.columbia.edu>
+Sjoerd de Vries <sjoerd at domain nmr.chem.uu.nl>
+Iddo Friedberg <idoerg at domain burnham.org>
+Bertrand Frottier <bertrand.frottier at domain free.fr>
+Jason A. Hackney <jhackney at domain stanford.edu>
+Thomas Hamelryck <thamelry at domain binf.ku.dk>
+Michael Hoffman <hoffman+biopython at domain ebi.ac.uk>
+Yu Huang <krocea at domain yahoo.com.cn>
+Frank Kauff <fkauff at domain duke.edu>
+Andreas Kuntzagk <andreas.kuntzagk at domain mdc-berlin.de>
+Michal Kurowski <michal at domain genesilico.pl>
 Chris Lasher <chris.lasher at gmail.com>
-Gaetan Lehman <gaetan.lehmann@jouy.inra.fr>
-Katharine Lindner <katel@worldpath.net>
-Tarjei Mikkelsen <tarjei@genome.wi.mit.edu>
+Gaetan Lehman <gaetan.lehmann at domain jouy.inra.fr>
+Katharine Lindner <katel at domain worldpath.net>
+Tarjei Mikkelsen <tarjei at domain genome.wi.mit.edu>
 Cheng Soon Ong <chengsoon.ong at tuebingen.mpg.de>
-Mike Poidinger <Michael.Poidinger@eBioinformatics.com>
-Leighton Pritchard <lpritc@scri.sari.ac.uk>
-Wolfgang Schueler <wolfgang@proceryon.at>
-Peter Slickers <piet@clondiag.com>
-Thomas Sicheritz-Ponten <thomas@cbs.dtu.dk>
-Frederic Sohm <fsms@users.sourceforge.net>
-Thomas Rosleff Soerensen <rosleff@mpiz-koeln.mpg.de>
-Johann Visagie <wjv@cityip.co.za>
-Dan Vogel <dmv@andrew.cmu.edu>
-David Weisman <david.weisman@acm.org>
-Bartek Wilczynski <bartek@rezolwenta.eu.org>
-Harry Zuzan <iliketobicycle@yahoo.ca>
+Mike Poidinger <Michael.Poidinger at domain eBioinformatics.com>
+Leighton Pritchard <lpritc at domain scri.sari.ac.uk>
+Wolfgang Schueler <wolfgang at domain proceryon.at>
+Peter Slickers <piet at domain clondiag.com>
+Thomas Sicheritz-Ponten <thomas at domain cbs.dtu.dk>
+Frederic Sohm <fsms at domain users.sourceforge.net>
+Thomas Rosleff Soerensen <rosleff at domain mpiz-koeln.mpg.de>
+Johann Visagie <wjv at domain cityip.co.za>
+Dan Vogel <dmv at domain andrew.cmu.edu>
+David Weisman <david.weisman at domain acm.org>
+Bartek Wilczynski <bartek at domain rezolwenta.eu.org>
+Harry Zuzan <iliketobicycle at domain yahoo.ca>
