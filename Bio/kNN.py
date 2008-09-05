@@ -29,14 +29,13 @@ try:
 except ImportError, x:
     raise ImportError, "This module requires Numeric (precursor to NumPy)"
 
-from Bio import listfns
 from Bio import distance
 
 class kNN:
     """Holds information necessary to do nearest neighbors classification.
 
     Members:
-    classes  List of the possible classes.
+    classes  Set of the possible classes.
     xs       List of the neighbors.
     ys       List of the classes that the neighbors belong to.
     k        Number of neighbors to look at.
@@ -44,7 +43,7 @@ class kNN:
     """
     def __init__(self):
         """kNN()"""
-        self.classes = []
+        self.classes = set()
         self.xs = []
         self.ys = []
         self.k = None
@@ -65,7 +64,7 @@ def train(xs, ys, k, typecode=None):
     
     """
     knn = kNN()
-    knn.classes = listfns.items(ys)
+    knn.classes = set(ys)
     knn.xs = asarray(xs, typecode)
     knn.ys = ys
     knn.k = k

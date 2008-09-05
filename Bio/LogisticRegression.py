@@ -19,7 +19,6 @@ try:
 except ImportError, x:
     raise ImportError, "This module requires Numeric (precursor to NumPy) with the LinearAlgebra lib"
 
-from Bio import listfns
 
 class LogisticRegression:
     """Holds information necessary to do logistic regression
@@ -47,9 +46,8 @@ def train(xs, ys, update_fn=None, typecode=None):
         raise ValueError, "xs and ys should be the same length."
     if not xs or not xs[0]:
         raise ValueError, "No observations or observation of 0 dimension."
-    classes = listfns.items(ys)
-    classes.sort()
-    if classes != [0, 1]:
+    classes = set(ys)
+    if classes != set([0, 1]):
         raise ValueError, "Classes should be 0's and 1's"
     if typecode is None:
         typecode = Float

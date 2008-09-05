@@ -7,13 +7,10 @@ euclidean_py    Pure Python implementation of euclidean.
 
 """
 # XXX cosine distance
-import math
 try:
     from Numeric import *
 except ImportError, x:
     raise ImportError, "This module requires Numeric (precursor to NumPy)"
-
-from Bio import listfns
 
 def euclidean(x, y):
     """euclidean(x, y) -> euclidean distance between x and y"""
@@ -34,7 +31,7 @@ def euclidean_py(x, y):
     sum = 0
     for i in range(len(x)):
         sum += (x[i]-y[i])**2
-    return math.sqrt(sum)
+    return sqrt(sum)
 
 # Try and load C implementations of functions.  If I can't,
 # then just ignore and use the pure python implementations.
