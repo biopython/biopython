@@ -69,7 +69,7 @@
 
 \title{Biopython Tutorial and Cookbook}
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, Michiel de Hoon, Peter Cock}
-\date{Last Update--August 2008}
+\date{Last Update -- September 2008}
 
 \maketitle
 \tableofcontents
@@ -155,9 +155,9 @@ sudo python setup.py install
 
 The longer version of our installation instructions covers
 installation of python, Biopython dependencies and Biopython itself.
-It is available in pdf
+It is available in PDF
 (\url{http://biopython.org/DIST/docs/install/Installation.pdf})
-and html formats
+and HTML formats
 (\url{http://biopython.org/DIST/docs/install/Installation.html}).
 
 \section{FAQ}
@@ -169,6 +169,9 @@ and html formats
 
   \item \emph{Why doesn't} \verb|Bio.SeqIO.read()| \emph{work? The module imports fine but there is no read function!} \\
   You need Biopython 1.45 or later.
+
+  \item \emph{What file formats do} \verb|Bio.SeqIO| \emph{and} \verb|Bio.AlignIO| \emph{read and write?} \\
+  See \url{http://biopython.org/wiki/SeqIO} and \url{http://biopython.org/wiki/AlignIO} on the wiki for the latest listing.
   
   \item \emph{Why doesn't} \verb|str(...)| \emph{give me the full sequence of a} \verb|Seq| \emph{object?} \\
   You need Biopython 1.45 or later.  Alternatively, rather than \verb|str(my_seq)|, use \verb|my_seq.tostring()| (which will also work on recent versions of Biopython).
@@ -198,9 +201,9 @@ Now that that is all out of the way, let's get into what we can do with Biopytho
 
 \section{General overview of what Biopython provides}
 
-As mentioned in the introduction, Biopython is a set of libraries to provide the ability to deal with ''things'' of interest to biologists working on the computer. In general this means that you will need to have at least some programming experience (in python, of course!) or at least an interest in learning to program. Biopython's job is to make your job easier as a programmer by supplying reusable libraries so that you can focus on answering your specific question of interest, instead of focusing on the internals of parsing a particular file format (of course, if you want to help by writing a parser that doesn't exist and contributing it to Biopython, please go ahead!). So Biopython's job is to make you happy!
+As mentioned in the introduction, Biopython is a set of libraries to provide the ability to deal with ``things'' of interest to biologists working on the computer. In general this means that you will need to have at least some programming experience (in python, of course!) or at least an interest in learning to program. Biopython's job is to make your job easier as a programmer by supplying reusable libraries so that you can focus on answering your specific question of interest, instead of focusing on the internals of parsing a particular file format (of course, if you want to help by writing a parser that doesn't exist and contributing it to Biopython, please go ahead!). So Biopython's job is to make you happy!
 
-One thing to note about Biopython is that it often provides multiple ways of ``doing the same thing.'' To me, this can be frustrating since I often way to just know the one right way to do something. However, this is also a real benefit because it gives you lots of flexibility and control over the libraries. The tutorial helps to show you the common or easy ways to do things so that you can just make things work. To learn more about the alternative possibilities, look into the Cookbook (Chapter~\ref{chapter:cookbook}, this has some cools tricks and tips) and the Advanced section (which provides you with as much detail as you'd ever want to know!).
+One thing to note about Biopython is that it often provides multiple ways of ``doing the same thing.'' Things have improved in recent releases, but this can still be frustrating to me since I often way to just know the one right way to do something. However, this is also a real benefit because it gives you lots of flexibility and control over the libraries. The tutorial helps to show you the common or easy ways to do things so that you can just make things work. To learn more about the alternative possibilities, look into the Cookbook (Chapter~\ref{chapter:cookbook}, this has some cools tricks and tips) and the Advanced section (which provides you with as much detail as you'd ever want to know!).
 
 \section{Working with sequences}
 \label{sec:sequences}
@@ -233,7 +236,7 @@ Seq('TCATGTGACCA', Alphabet())
 Seq('ACCAGTGTACT', Alphabet())
 \end{verbatim}
 
-The next most important class is the \verb|SeqRecord| or Sequence Record.  This holds a sequence (as a \verb|Seq| object) with additional annotation including an identifier, name and description.  The \verb|Bio.SeqIO| module for reading and writing sequence file formats works with \verb|SeqRecord| objects, which will be introduced below and cover in more detail by Chapter~\ref{chapter:Bio.SeqIO}.
+The next most important class is the \verb|SeqRecord| or Sequence Record.  This holds a sequence (as a \verb|Seq| object) with additional annotation including an identifier, name and description.  The \verb|Bio.SeqIO| module for reading and writing sequence file formats works with \verb|SeqRecord| objects, which will be introduced below and covered in more detail by Chapter~\ref{chapter:Bio.SeqIO}.
 
 This covers the basic features and uses of the Biopython sequence class.
 Now that you've got some idea of what it is like to interact with the Biopython libraries, it's time to delve into the fun, fun world of dealing with biological file formats!
@@ -253,7 +256,7 @@ Of course, orchids are not only beautiful to look at, they are also extremely in
 
 After a little bit of reading up we discover that the Lady Slipper Orchids are in the Orchidaceae family and the Cypripedioideae sub-family and are made up of 5 genera:  \emph{Cypripedium}, \emph{Paphiopedilum}, \emph{Phragmipedium}, \emph{Selenipedium} and \emph{Mexipedium}.
 
-That gives us enough to get started delving for more information. So, let's look at how the Biopython tools can help us.  We'll start with sequence parsing in Section~\ref{sec:sequence-parsing}, but the orchids will be back later on as well - for example we'll extra data from Swiss-Prot from certain orchid proteins in Chapter~\ref{chapter:swiss_prot}, search PubMed for papers about orchids in Section~\ref{subsec:pub_med}, extract sequence data from GenBank in Section~\ref{sec:entrez-search-fetch-genbank}, and work with ClustalW multiple sequence alignments of orchid proteins in Section~\ref{sec:align_clustal}.
+That gives us enough to get started delving for more information. So, let's look at how the Biopython tools can help us.  We'll start with sequence parsing in Section~\ref{sec:sequence-parsing}, but the orchids will be back later on as well - for example we'll search PubMed for papers about orchids and extract sequence data from GenBank in Chapter~\ref{chapter:entrez}, extra data from Swiss-Prot from certain orchid proteins in Chapter~\ref{chapter:swiss_prot}, and work with ClustalW multiple sequence alignments of orchid proteins in Section~\ref{sec:align_clustal}.
 
 \section{Parsing sequence file formats}
 \label{sec:sequence-parsing}
@@ -2944,19 +2947,17 @@ To search any of these databases, we use \verb+Bio.Entrez.esearch()+. For exampl
 \end{verbatim}
 In this output, you see five PubMed IDs (16403221, 16377612, 14871861, 14630660, 12230038), which can be retrieved by EFetch (see section \ref{sec:efetch}).
 
-You can also use ESearch to search GenBank. Here we'll do a quick search for the \emph{rpl16} gene in \emph{Opuntia} (prickly-pear cacti):
+You can also use ESearch to search GenBank. Here we'll do a quick search for the \emph{matK} gene in \emph{Cypripedioideae} orchids:
 
 \begin{verbatim}
->>> handle = Entrez.esearch(db="nucleotide",term="Opuntia and rpl16")
+>>> handle = Entrez.esearch(db="nucleotide",term="Cypripedioideae[Orgn] AND matK[Gene]")
 >>> record = Entrez.read(handle)
 >>> record["Count"]
-'9'
+'25'
 >>> record["IdList"]
-['57240072', '57240071', '6273287', '6273291', '6273290',
- '6273289', '6273286', '6273285', '6273284']
+['186972394', '186972384', '186972382', '186972378', ..., '61585484']
 \end{verbatim}
-
-Each of the IDs (57240072, 57240071, 6273287...) is a GenBank identifier. See section~\ref{sec:efetch} for information on how to actually download these GenBank records.
+Each of the IDs (186972394, 186972384, 186972382, \ldots) is a GenBank identifier. See section~\ref{sec:efetch} for information on how to actually download these GenBank records.
 
 As a final example, let's get a list of computational journal titles:
 \begin{verbatim}
@@ -2995,59 +2996,82 @@ ESummary retrieves document summaries from a list of primary IDs (see the  \href
 \label{sec:efetch}
 
 EFetch is what you use when you want to retrieve a full record from Entrez.
-For the \emph{Opuntia} example above, we can download GenBank record 57240072 using \verb+Bio.Entrez.efetch+:
+From the \emph{Cypripedioideae} example above, we can download GenBank record 186972394 using \verb+Bio.Entrez.efetch+:
 
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
->>> handle = Entrez.efetch(db="nucleotide", id="57240072", rettype="genbank")
+>>> handle = Entrez.efetch(db="nucleotide", id="186972394", rettype="genbank")
 >>> print handle.read()
-LOCUS       AY851612                 892 bp    DNA     linear   PLN 10-APR-2007
-DEFINITION  Opuntia subulata rpl16 gene, intron; chloroplast.
-ACCESSION   AY851612
-VERSION     AY851612.1  GI:57240072
+LOCUS       EU490707                1302 bp    DNA     linear   PLN 05-MAY-2008
+DEFINITION  Selenipedium aequinoctiale maturase K (matK) gene, partial cds;
+            chloroplast.
+ACCESSION   EU490707
+VERSION     EU490707.1  GI:186972394
 KEYWORDS    .
-SOURCE      chloroplast Austrocylindropuntia subulata
-  ORGANISM  Austrocylindropuntia subulata
+SOURCE      chloroplast Selenipedium aequinoctiale
+  ORGANISM  Selenipedium aequinoctiale
             Eukaryota; Viridiplantae; Streptophyta; Embryophyta; Tracheophyta;
-            Spermatophyta; Magnoliophyta; eudicotyledons; core eudicotyledons;
-            Caryophyllales; Cactaceae; Opuntioideae; Austrocylindropuntia.
-REFERENCE   1  (bases 1 to 892)
-  AUTHORS   Butterworth,C.A. and Wallace,R.S.
-  TITLE     Molecular Phylogenetics of the Leafy Cactus Genus Pereskia
-            (Cactaceae)
-  JOURNAL   Syst. Bot. 30 (4), 800-808 (2005)
-REFERENCE   2  (bases 1 to 892)
-  AUTHORS   Butterworth,C.A. and Wallace,R.S.
+            Spermatophyta; Magnoliophyta; Liliopsida; Asparagales; Orchidaceae;
+            Cypripedioideae; Selenipedium.
+REFERENCE   1  (bases 1 to 1302)
+  AUTHORS   Neubig,K.M., Whitten,W.M., Carlsward,B.S., Blanco,M.A.,
+            Endara,C.L., Williams,N.H. and Moore,M.J.
+  TITLE     Phylogenetic utility of ycf1 in orchids
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 1302)
+  AUTHORS   Neubig,K.M., Whitten,W.M., Carlsward,B.S., Blanco,M.A.,
+            Endara,C.L., Williams,N.H. and Moore,M.J.
   TITLE     Direct Submission
-  JOURNAL   Submitted (10-DEC-2004) Desert Botanical Garden, 1201 North Galvin
-            Parkway, Phoenix, AZ 85008, USA
+  JOURNAL   Submitted (14-FEB-2008) Department of Botany, University of
+            Florida, 220 Bartram Hall, Gainesville, FL 32611-8526, USA
 FEATURES             Location/Qualifiers
-     source          1..892
-                     /organism="Austrocylindropuntia subulata"
+     source          1..1302
+                     /organism="Selenipedium aequinoctiale"
                      /organelle="plastid:chloroplast"
                      /mol_type="genomic DNA"
-                     /db_xref="taxon:106982"
-     gene            <1..>892
-                     /gene="rpl16"
-     intron          <1..>892
-                     /gene="rpl16"
+                     /specimen_voucher="FLAS:Blanco 2475"
+                     /db_xref="taxon:256374"
+     gene            <1..>1302
+                     /gene="matK"
+     CDS             <1..>1302
+                     /gene="matK"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="maturase K"
+                     /protein_id="ACC99456.1"
+                     /db_xref="GI:186972395"
+                     /translation="IFYEPVEIFGYDNKSSLVLVKRLITRMYQQNFLISSVNDSNQKG
+                     FWGHKHFFSSHFSSQMVSEGFGVILEIPFSSQLVSSLEEKKIPKYQNLRSIHSIFPFL
+                     EDKFLHLNYVSDLLIPHPIHLEILVQILQCRIKDVPSLHLLRLLFHEYHNLNSLITSK
+                     KFIYAFSKRKKRFLWLLYNSYVYECEYLFQFLRKQSSYLRSTSSGVFLERTHLYVKIE
+                     HLLVVCCNSFQRILCFLKDPFMHYVRYQGKAILASKGTLILMKKWKFHLVNFWQSYFH
+                     FWSQPYRIHIKQLSNYSFSFLGYFSSVLENHLVVRNQMLENSFIINLLTKKFDTIAPV
+                     ISLIGSLSKAQFCTVLGHPISKPIWTDFSDSDILDRFCRICRNLCRYHSGSSKKQVLY
+                     RIKYILRLSCARTLARKHKSTVRTFMRRLGSGLLEEFFMEEE"
 ORIGIN      
-        1 cattaaagaa gggggatgcg gataaatgga aaggcgaaag aaagaaaaaa atgaatctaa
-       61 atgatatacg attccactat gtaaggtctt tgaatcatat cataaaagac aatgtaataa
-      121 agcatgaata cagattcaca cataattatc tgatatgaat ctattcatag aaaaaagaaa
-      181 aaagtaagag cctccggcca ataaagacta agagggttgg ctcaagaaca aagttcatta
-      241 agagctccat tgtagaattc agacctaatc attaatcaag aagcgatggg aacgatgtaa
-      301 tccatgaata cagaagattc aattgaaaaa gatcctaatg atcattggga aggatggcgg
-      361 aacgaaccag agaccaattc atctattctg aaaagtgata aactaatcct ataaaactaa
-      421 aatagatatt gaaagagtaa atattcgccc gcgaaaattc cttttttatt aaattgctca
-      481 tattttattt tagcaatgca atctaataaa atatatctat acaaaaaaat atagacaaac
-      541 tatatatata taatatattt caaatttcct tatataccca aatataaaaa tatctaataa
-      601 attagatgaa tatcaaagaa tctattgatt tagtgtatta ttaaatgtat atcttaattc
-      661 aatattatta ttctattcat ttttattcat tttcaaattt ataatatatt aatctatata
-      721 ttaatttata attctattct aattcgaatt caatttttaa atattcatat tcaattaaaa
-      781 ttgaaatttt ttcattcgcg aggagccgga tgagaagaaa ctctcatgtc cggttctgta
-      841 gtagagatgg aattaagaaa aaaccatcaa ctataacccc aagagaacca ga
+        1 attttttacg aacctgtgga aatttttggt tatgacaata aatctagttt agtacttgtg
+       61 aaacgtttaa ttactcgaat gtatcaacag aattttttga tttcttcggt taatgattct
+      121 aaccaaaaag gattttgggg gcacaagcat tttttttctt ctcatttttc ttctcaaatg
+      181 gtatcagaag gttttggagt cattctggaa attccattct cgtcgcaatt agtatcttct
+      241 cttgaagaaa aaaaaatacc aaaatatcag aatttacgat ctattcattc aatatttccc
+      301 tttttagaag acaaattttt acatttgaat tatgtgtcag atctactaat accccatccc
+      361 atccatctgg aaatcttggt tcaaatcctt caatgccgga tcaaggatgt tccttctttg
+      421 catttattgc gattgctttt ccacgaatat cataatttga atagtctcat tacttcaaag
+      481 aaattcattt acgccttttc aaaaagaaag aaaagattcc tttggttact atataattct
+      541 tatgtatatg aatgcgaata tctattccag tttcttcgta aacagtcttc ttatttacga
+      601 tcaacatctt ctggagtctt tcttgagcga acacatttat atgtaaaaat agaacatctt
+      661 ctagtagtgt gttgtaattc ttttcagagg atcctatgct ttctcaagga tcctttcatg
+      721 cattatgttc gatatcaagg aaaagcaatt ctggcttcaa agggaactct tattctgatg
+      781 aagaaatgga aatttcatct tgtgaatttt tggcaatctt attttcactt ttggtctcaa
+      841 ccgtatagga ttcatataaa gcaattatcc aactattcct tctcttttct ggggtatttt
+      901 tcaagtgtac tagaaaatca tttggtagta agaaatcaaa tgctagagaa ttcatttata
+      961 ataaatcttc tgactaagaa attcgatacc atagccccag ttatttctct tattggatca
+     1021 ttgtcgaaag ctcaattttg tactgtattg ggtcatccta ttagtaaacc gatctggacc
+     1081 gatttctcgg attctgatat tcttgatcga ttttgccgga tatgtagaaa tctttgtcgt
+     1141 tatcacagcg gatcctcaaa aaaacaggtt ttgtatcgta taaaatatat acttcgactt
+     1201 tcgtgtgcta gaactttggc acggaaacat aaaagtacag tacgcacttt tatgcgaaga
+     1261 ttaggttcgg gattattaga agaattcttt atggaagaag aa
 //
 \end{verbatim}
 
@@ -3057,28 +3081,26 @@ If you fetch the record in one of the formats accepted by \verb+Bio.SeqIO+ (see 
 
 \begin{verbatim}
 >>> from Bio import Entrez, SeqIO
->>> handle = Entrez.efetch(db="nucleotide", id="57240072",rettype="genbank")
+>>> handle = Entrez.efetch(db="nucleotide", id="186972394",rettype="genbank")
 >>> record = SeqIO.read(handle, "genbank")
 >>> print record
-ID: AY851612.1
-Name: AY851612
-Description: Opuntia subulata rpl16 gene, intron; chloroplast.
-/sequence_version=1
-/source=chloroplast Austrocylindropuntia subulata
-....
-\end{verbatim}
+ID: EU490707.1
+Name: EU490707
+Description: Selenipedium aequinoctiale maturase K (matK) gene, partial cds; chloroplast.
+Number of features: 3
+...
+Seq('ATTTTTTACGAACCTGTGGAAATTTTTGGTTATGACAATAAATCTAGTTTAGTA...GAA', IUPACAmbiguousDNA())\end{verbatim}
 
 To get the output in XML format, which you can parse using the \verb+Bio.Entrez.read()+ function, use \verb+retmode="xml"+:
 
 \begin{verbatim}
 >>> from Bio import Entrez
->>> handle = Entrez.efetch(db="nucleotide", id="57240072", retmode="xml")
+>>> handle = Entrez.efetch(db="nucleotide", id="186972394", retmode="xml")
 >>> record = Entrez.read(handle)
->>> record[0]["GBSeq_definition"]
-'Opuntia subulata rpl16 gene, intron; chloroplast'
->>> record[0]["GBSeq_source"]
-'chloroplast Austrocylindropuntia subulata'
-....
+>>> record[0]["GBSeq_definition"] 
+'Selenipedium aequinoctiale maturase K (matK) gene, partial cds; chloroplast'
+>>> record[0]["GBSeq_source"] 
+'chloroplast Selenipedium aequinoctiale'
 \end{verbatim}
 
 If you want to perform a search with \verb|Bio.Entrez.esearch()|, and then download the records with \verb|Bio.Entrez.efetch()|, you should use the WebEnv history feature -- see Section~\ref{sec:entrez-webenv}.
@@ -3087,7 +3109,7 @@ If you want to perform a search with \verb|Bio.Entrez.esearch()|, and then downl
 For help on ELink, see the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/elink\_help.html}{ELink help page}. ELink is available from Biopython through \verb+Bio.Entrez.elink()+.
 
 \section{EGQuery: Obtaining counts for search terms}
-EGQuery provides counts for a search term in each of the Entrez databases. This is particularly useful to find out how many items a search will return before actually performing the search with ESearch (see the example in \ref{subsec:entrez_example_genbank} below).
+EGQuery provides counts for a search term in each of the Entrez databases. This is particularly useful to find out how many items your search terms would find in each database without actually performing lots of separate searches with ESearch (see the example in \ref{subsec:entrez_example_genbank} below).
 
 In this example, we use \verb+Bio.Entrez.egquery()+ to obtain the counts for ``Biopython'':
 
@@ -3096,12 +3118,13 @@ In this example, we use \verb+Bio.Entrez.egquery()+ to obtain the counts for ``B
 >>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
 >>> handle = Entrez.egquery(term="biopython")
 >>> record = Entrez.read(handle)
->>> record["eGQueryResult"][0]["DbName"]
-'pubmed'
->>> record["eGQueryResult"][0]["Count"]
-'5'
+>>> for row in record["eGQueryResult"]: print row["DbName"], row["Count"]
+...
+pubmed 6
+pmc 62
+journals 0
+...
 \end{verbatim}
-
 See the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/egquery\_help.html}{EGQuery help page} for more information.
 
 \section{ESpell: Obtaining spelling suggestions}
@@ -3325,7 +3348,7 @@ Hopefully this section gave you an idea of the power and flexibility of the Entr
 
 Here we'll show a simple example of performing a remote Entrez query. In section~\ref{sec:orchids} of the parsing examples, we talked about using NCBI's Entrez website to search the NCBI nucleotide databases for info on Cypripedioideae, our friends the lady slipper orchids. Now, we'll look at how to automate that process using a Python script. In this example, we'll just show how to connect, get the results, and parse them, with the Entrez module doing all of the work.
 
-First, we use EGQuery to find out the number of results we will get before actually downloading them:
+First, we use EGQuery to find out the number of results we will get before actually downloading them.  EGQuery will tell us how many search results were found in each of the databases, but for this example we are only interested in nucleotides:
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
@@ -3587,7 +3610,28 @@ out_handle.close()
 Here is another history example, searching for papers published in the last year about the \textit{Opuntia}, and then download them into a file in MedLine format:
 
 \begin{verbatim}
-from Bio import EntrezEntrez.email = "history.user@example.com"search_results = Entrez.read(Entrez.esearch(db="pubmed",                                            term="Opuntia[ORGN]",                                            reldate=365, datetype="pdat",                                            usehistory="y"))count = int(search_results["Count"])print "Found %i results" % countbatch_size = 10out_handle = open("recent_orchid_papers.txt", "w")for start in range(0,count,batch_size) :    end = min(count, start+batch_size)    print "Going to download record %i to %i" % (start+1, end)    fetch_handle = Entrez.efetch(db="pubmed", rettype="medline",                                 retstart=start, retmax=batch_size,                                 webenv=search_results["WebEnv"],                                 query_key=search_results["QueryKey"])    data = fetch_handle.read()    fetch_handle.close()    out_handle.write(data)out_handle.close()
+from Bio import Entrez
+Entrez.email = "history.user@example.com"
+search_results = Entrez.read(Entrez.esearch(db="pubmed",
+                                            term="Opuntia[ORGN]",
+                                            reldate=365, datetype="pdat",
+                                            usehistory="y"))
+count = int(search_results["Count"])
+print "Found %i results" % count
+
+batch_size = 10
+out_handle = open("recent_orchid_papers.txt", "w")
+for start in range(0,count,batch_size) :
+    end = min(count, start+batch_size)
+    print "Going to download record %i to %i" % (start+1, end)
+    fetch_handle = Entrez.efetch(db="pubmed", rettype="medline",
+                                 retstart=start, retmax=batch_size,
+                                 webenv=search_results["WebEnv"],
+                                 query_key=search_results["QueryKey"])
+    data = fetch_handle.read()
+    fetch_handle.close()
+    out_handle.write(data)
+out_handle.close()
 \end{verbatim}
 
 \noindent At the time of writing, this gave 28 matches - but because this is a date dependent search, this will of course vary.  As described in Section~\ref{subsec:entrez-and-medline} above, you can then use \verb|Bio.Medline| to parse the saved records.
