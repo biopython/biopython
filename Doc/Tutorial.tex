@@ -682,9 +682,9 @@ Seq('MAIVMGR*KGAR*', HasStopCodon(IUPACProtein(), '*'))
 You should notice in the above protein sequences that in addition to the end stop character, there is an internal stop as well.  This was a deliberate choice of example, as it gives an excuse to talk about different translation tables (Genetic Codes).  
 
 The translation tables available in Biopython were taken from information at \url{ftp://ftp.ncbi.nlm.nih.gov/entrez/misc/data/gc.prt}. So, you have tons of choices to pick from. 
-By default, the \verb|Bio.Seq.translate()| function will use the \emph{standard} genetic code (NCBI table 1).
+By default, the function \verb|Bio.Seq.translate()| will use the \emph{standard} genetic code (NCBI table 1).
 
-Suppose you we dealing with a mitochondrial sequence?  We need to tell the translation function to use the relevant genetic code instead:
+Suppose we are dealing with a mitochondrial sequence.  We need to tell the translation function to use the relevant genetic code instead:
 \begin{verbatim}
 >>> translate(coding_dna, table="Vertebrate Mitochondrial")
 Seq('MAIVMGRWKGAR*', HasStopCodon(IUPACProtein(), '*'))
@@ -702,7 +702,7 @@ The \verb|Bio.Seq.translate()| function is intended to be simple and easy to use
 
 In the previous sections we talked about the transcription and translation functions in the \verb|Bio.Seq| module, which are intended to be very simple and easy to use.
 
-There is also an older \verb|Bio.Translate| module which has a few more advanced options, but is more complicated to use.  Additionally there is also an older \verb|Bio.Transcribe| module, but as this now obsolete and likely to be deprecated, we will not discuss it here.
+There is also an older \verb|Bio.Translate| module which has a few more advanced options, but is more complicated to use.  Additionally there is also an older \verb|Bio.Transcribe| module, but as this is now obsolete and likely to be deprecated, we will not discuss it here.
 
 To translate our DNA object we have quite a few choices. First, we can use any number
 of translation tables depending on what we know about our DNA sequence.
@@ -712,7 +712,7 @@ So, you have tons of choices to pick from. As before, let's just focus on two ch
 the Standard translation table, and the Translation table for Vertebrate Mitochondrial
 DNA. These tables are labeled with id numbers 1 and 2, respectively.
 
-Now that we know what tables we are looking to get, we're all set to perform a basic translation. First, we need to get to create a translator objects that use these tables. Since we are still dealing with our unambiguous DNA object, we want to fetch translators that take this into account:
+Now that we know what tables we are trying to use, we're all set to perform a basic translation. First, we need to create translator objects that use the relevant tables. Since we are still dealing with our unambiguous DNA object, we want to fetch translators that take this into account:
 
 \begin{verbatim}
 >>> from Bio import Translate
@@ -796,7 +796,7 @@ Notice that the default translation will just go ahead and proceed blindly throu
 Seq('AIVMGR', IUPACProtein())
 \end{verbatim}
 
-Similar to the transcriber, it is also possible to reverse translate a protein into a DNA sequence:
+It is also possible to reverse translate a protein into a DNA sequence:
 
 \begin{verbatim}
 >>> my_protein = Seq("AVMGRWKGGRAAG", IUPAC.protein)
@@ -804,7 +804,7 @@ Similar to the transcriber, it is also possible to reverse translate a protein i
 Seq('GCTGTTATGGGTCGTTGGAAGGGTGGTCGTGCTGCTGGT', IUPACUnambiguousDNA())
 \end{verbatim}
 
-Note that  this only gives you one possible back-translation, and doesn't attempt to show any freedom with ambiguous nucleotides.
+Note that this only gives you one possible back-translation, and doesn't attempt to show any freedom with ambiguous nucleotides.
 
 \section{MutableSeq objects}
 \label{sec:mutable-seq}
