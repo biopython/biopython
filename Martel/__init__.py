@@ -19,7 +19,7 @@ are considered to be obsolete.  They are no longer used in any of the current
 Biopython parsers, and are likely to be deprecated and then removed in future
 releases of Biopython.
 """
-__version__ = "1.47"
+__version__ = "1.48"
 
 import Expression
 import convert_re
