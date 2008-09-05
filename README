@@ -16,11 +16,12 @@ see the LICENSE file for further details.
 
 **For the impatient**
 
-To build and install Biopython, type:
+To build and install Biopython, download and unzip the source code,
+go to this directory at the command line, and type:
+
 python setup.py build
 python setup.py test
 python setup.py install
-
 
 **System Requirements**
 
@@ -33,14 +34,8 @@ o "Numerical Python":http://numpy.sourceforge.net/ (optional)
   Python first.  Also, please install if you are seeing
   error messages such as:
   ImportError: No module named Numeric
-  Biopython uses the "old" Numerical Python (version 24.2). Using
-  Biopython with the "new" NumPy (versions 0.9.6 and later) works for
-  most purposes, but some tweaking will be needed when compiling and
-  using Biopython.
-
-o "mxTextTools":http://www.egenix.com/files/python/mxTextTools.html (optional)
-  This is used in some of Biopython's parsers. Most of the commonly
-  used parsers in Biopython do not need mxTextTools.
+  Biopython currently uses the "old" Numerical Python (version 24.2).
+  Support for "new" NumPy is expected in the next release.
 
 o "ReportLab":http://www.reportlab.org/downloads.html (optional)
   This package is used in some code that generates graphical displays
@@ -52,15 +47,23 @@ o "psycopg":http://initd.org/software/psycopg/ (optional) or
   These packages are used by BioSQL to access a PostgreSQL database.
 
 o "MySQLdb":http://sourceforge.net/projects/mysql-python (optional)
-  This package is only used by Bio.GFF to access a MySQL database.
+  This package is used by BioSQL or Bio.GFF to access a MySQL database.
+
+o "mxTextTools":http://www.egenix.com/files/python/mxTextTools.html (rare)
+  You probably won't need mxTextTools.  This was used in some of Biopython's
+  older parsers, and Martel/Mindy, but none of the commonly used parsers in
+  Biopython need mxTextTools anymore.
+
+In addition there are a number of useful third party tools you may wish to
+install such as standalone NCBI BLAST or ClustalW.
 
 
 **Installation**
 
 *** Make sure that Python is installed correctly ***
 
-Installation should be as simple as going to the biopython directory,
-and typing:
+Installation should be as simple as going to the biopython source code
+directory, and typing:
 
 	'python setup.py install'
 
@@ -72,13 +75,17 @@ Distutils.
 
 **Testing**
 
-Biopython includes a suite of regression tests to check if
-everything's running correctly.  To do the tests, type:
-drevil:~/biopython> python setup.py test
+Biopython includes a suite of regression tests to check if 
+everything is running correctly.  To do the tests, go to the
+biopython source code directory and type:
+
+	'python setup.py test'
 
 If you have Tk installed, this will run a nice GUI that displays the
 results of the tests.  Otherwise, you will see results on the command
-line.
+line.  You can request no GUI with:
+
+	'python setup.py test --no-gui'
 
 Do not panic if you see messages warning of skipped tests:
     test_DocSQL ... skipping. Install MySQLdb if you want to use Bio.DocSQL.
