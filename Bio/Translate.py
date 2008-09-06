@@ -1,3 +1,8 @@
+"""Code to translate DNA or RNA into proteins.
+
+You are encouraged to use the translate function in Bio.Seq instead,
+however this does not yet offer the full functionality of Bio.Translate
+at this time."""
 import string
 from Bio import Alphabet, Seq
 from Bio.Data import CodonTable

@@ -1,3 +1,6 @@
+"""Code to transcribe DNA into RNA or back (OBSOLETE).
+
+You are now encouraged to use the functions in Bio.Seq instead."""
 import string
 
 from Bio import Alphabet, Seq
