@@ -160,7 +160,7 @@ test_records = [
       SeqRecord(Seq("TTTCCTCGGAGGCCAATCTGGATCAAGACCAT",generic_dna), id="Z")],
      "three DNA sequence alignment"),
     ([SeqRecord(Seq("AATAAACCTTGCTGGCCATTGTGATCCATCCA",generic_dna), id="X",
-                name="The\nMystery\rSequece:%sX" % os.linesep),
+                name="The\nMystery\rSequece:\r\nX"),
       SeqRecord(Seq("ACTCAACCTTGCTGGTCATTGTGACCCCAGCA",generic_dna), id="Y",
                 description="an%sevil\rdescription right\nhere" % os.linesep),
       SeqRecord(Seq("TTTCCTCGGAGGCCAATCTGGATCAAGACCAT",generic_dna), id="Z")],
