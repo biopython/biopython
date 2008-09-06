@@ -1630,7 +1630,11 @@ class Nexus(object):
             raise NexusError('Illegal gap position: %d' % pos)
         if n==0:
             return
-        sitesm=zip(*[self.matrix[t].tostring() for t in self.taxlabels])
+        if self.taxlabels :
+            #python 2.3 does not support zip(*[])
+            sitesm=zip(*[self.matrix[t].tostring() for t in self.taxlabels])
+        else :
+            sitesm=[]
         sitesm[pos:pos]=[['-']*len(self.taxlabels)]*n
         # #self.matrix=dict([(taxon,Seq(map(''.join,zip(*sitesm))[i],self.alphabet)) for\
         #        i,taxon in enumerate(self.taxlabels)])
