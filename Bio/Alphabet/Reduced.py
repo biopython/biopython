@@ -1,5 +1,6 @@
 from Bio import Alphabet
-"""
+"""Reduced alphabets which lump together several amino-acids into one letter.
+
 Reduced (redundant or simplified) alphabets are used to represent protein sequences using an
 alternative alphabet which lumps together several amino-acids into one letter, based
 on physico-chemical traits. For example, all the aliphatics (I,L,V) are usually

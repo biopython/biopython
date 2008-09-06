@@ -1,4 +1,5 @@
 # Define the IUPAC Alphabets you know and love
+"""Standard nucleotide and protein alphabets defined by IUPAC."""
 
 from Bio import Alphabet
 from Bio.Data import IUPACData

@@ -1,5 +1,6 @@
 # This is used by sequences which contain a finite number of similar
 # words.
+"""Alphabets used in Seq objects etc to declare sequence type and letters."""
 
 class Alphabet:
     size = None     # no fixed size for words
