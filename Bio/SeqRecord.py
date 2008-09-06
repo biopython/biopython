@@ -1,4 +1,5 @@
 # Stores data about the sequence
+"""Represent a Sequence Record, a sequence with annotation."""
 
 # NEEDS TO BE SYNCH WITH THE REST OF BIOPYTHON AND BIOPERL
 # In particular, the SeqRecord and BioSQL.BioSeq.DBSeqRecord classes
