@@ -1,6 +1,13 @@
 from Numeric import *
 from cluster import *
+"""Support for commonly used data clustering methods.
 
+Bio.Cluster implements the most commonly used clustering methods for gene
+expression data analysis, wrapping C code with a python API.  Routines for
+hierarchical (pairwise simple, complete, average, and centroid linkage)
+clustering, k-means and k-medians clustering, and 2D self-organizing maps
+are included.
+"""
 
 def _treesort(order, nodeorder, nodecounts, tree):
   nNodes = len(tree)

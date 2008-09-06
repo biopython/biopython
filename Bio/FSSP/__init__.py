@@ -4,9 +4,13 @@ import fssp_rec
 from Bio.Align import Generic
 from Bio import Alphabet
 fff_rec = fssp_rec.fff_rec
-"""
-A module to handle FSSP files. For now it parses only the header, summary and alignment
-sections.
+"""Parser for FSSP files, used in a database of protein fold classifications.
+
+This is a module to handle FSSP files. For now it parses only the header,
+summary and alignment sections.
+
+See: Holm and Sander (1996) The FSSP database: fold classification based on
+structure-structure alignment of proteins.
 
 functions: read_fssp(file_handle): reads an fssp file into the records. Returns a
 tuple of two instances.
