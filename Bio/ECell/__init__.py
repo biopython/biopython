@@ -2,10 +2,22 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+"""For reading the ECell spreadsheet format from Ecell2 (DEPRECATED).
 
+Ecell converts the ECell input from spreadsheet format to an intermediate
+format, described in http://www.e-cell.org/manual/chapter2E.html#3.2.  It
+provides an alternative to the perl script supplied with the Ecell2
+distribution at http://bioinformatics.org/project/?group_id=49.
+
+ECell expects a spreadsheet exported in delimited text format. The file should
+be read with FilteredReader using the default filter chain to remove extraneous
+characters.
+"""
 import warnings
-warnings.warn("Bio.ECell was deprecated, as it does not seem to have any users. If you do use this module, please contact the Biopython developers at biopython-dev@biopython.org to avoid permanent removal of this module")
-
+warnings.warn("Bio.ECell was deprecated, as it does not seem to have any" \
+              + " users. If you do use this module, please contact the"\
+              + " Biopython developers at biopython-dev@biopython.org to"\
+              + " avoid permanent removal of this module", DeprecationWarning)
 
 # standard library
 import sys
@@ -31,15 +43,6 @@ from Bio.Align.Generic import Alignment
 import Bio.Alphabet
 import ecell_format
 import Record
-
-"""
-Ecell converts the ECell input from spreadsheet format to an intermediate format, described in
-http://www.e-cell.org/manual/chapter2E.html#3.2.  It provides an alternative to the perl script
-supplied with the Ecell2 distribution at http://bioinformatics.org/project/?group_id=49.
-
-ECell expects a spreadsheet exported in delimited text format. The file should be read with
-FilteredReader using the default filter chain to remove extraneous characters.
-"""
 
 class Error( Exception ):
     """

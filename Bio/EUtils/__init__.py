@@ -1,4 +1,6 @@
-"""EUtils is a client-side library for the Entrez databases at NCBI.
+"""A client-side library for the Entrez databases at NCBI (DEPRECATED).
+
+Please use Bio.Entrez instead.
 """
 import re
 import warnings

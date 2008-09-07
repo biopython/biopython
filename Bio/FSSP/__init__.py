@@ -1,9 +1,3 @@
-import string
-import re
-import fssp_rec
-from Bio.Align import Generic
-from Bio import Alphabet
-fff_rec = fssp_rec.fff_rec
 """Parser for FSSP files, used in a database of protein fold classifications.
 
 This is a module to handle FSSP files. For now it parses only the header,
@@ -16,6 +10,12 @@ functions: read_fssp(file_handle): reads an fssp file into the records. Returns 
 tuple of two instances.
 mult_align: returns a Biopyton alignment object
 """
+import string
+import re
+import fssp_rec
+from Bio.Align import Generic
+from Bio import Alphabet
+fff_rec = fssp_rec.fff_rec
 header_records = {
    'database' : re.compile('^DATABASE'),
    'pdbid': re.compile('^PDBID'),
