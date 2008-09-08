@@ -1,4 +1,14 @@
-# Decode elements from a Std/Martel parsed XML stream
+# Copyright 2002 by Andrew Dalke.
+# All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+"""Decode elements from a Std/Martel parsed XML stream (OBSOLETE).
+
+Andrew Dalke is no longer maintaining Martel or Bio.Mindy, and these modules
+(and therefore Bio.Decode) are considered to be obsolete.  They are no longer
+used in any of the current Biopython parsers, and are likely to be deprecated
+and then removed in future releases of Biopython."""
 
 import string
 from Bio.Parsers.spark import GenericScanner, GenericParser
