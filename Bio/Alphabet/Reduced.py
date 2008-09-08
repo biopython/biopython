@@ -1,4 +1,9 @@
-from Bio import Alphabet
+# Copyright 2004 by Iddo Friedberg.
+# All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
 """Reduced alphabets which lump together several amino-acids into one letter.
 
 Reduced (redundant or simplified) alphabets are used to represent protein sequences using an
@@ -13,6 +18,9 @@ http://viscose.ifg.uni-muenster.de/html/alphabets.html
 Bio.utils.reduce_sequence is used to take a Protein alphabet, and reduce it using one of
 the tables here, or a user-defined table.
 """
+
+from Bio import Alphabet
+
 # The Murphy tables are from here:
 #  	Murphy L.R., Wallqvist A, Levy RM. (2000) Simplified amino acid alphabets for protein
 #  	fold recognition and implications for folding. Protein Eng. 13(3):149-152

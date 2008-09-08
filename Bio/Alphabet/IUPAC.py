@@ -1,4 +1,10 @@
-# Define the IUPAC Alphabets you know and love
+# Copyright 2000-2001 by Andrew Dalke.
+# Revisions copyright 2008 by Peter Cock.
+# All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
 """Standard nucleotide and protein alphabets defined by IUPAC."""
 
 from Bio import Alphabet
