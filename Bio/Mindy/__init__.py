@@ -1,5 +1,8 @@
-import os, sys
-
+# Copyright 2002 by Andrew Dalke.
+# All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
 """Bio.Mindy provides functionality building on the Martel parser (OBSOLETE).
 
 Andrew Dalke is no longer maintaining Martel or Bio.Mindy, and these modules
@@ -7,6 +10,7 @@ are considered to be obsolete.  They are no longer used in any of the current
 Biopython parsers, and are likely to be deprecated and then removed in future
 releases of Biopython.
 """
+import os, sys
 
 _open = open  # rename for internal use -- gets redefined below
 
