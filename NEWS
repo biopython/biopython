@@ -9,7 +9,7 @@ The latest news is at the top.
 
 ===================================================================
 
-September 5, 2008: Biopython 1.48 released.
+September 8, 2008: Biopython 1.48 released.
 
 The SeqRecord and Alignment objects have a new method to format the object as
 a string in a requested file format (handled via Bio.SeqIO and Bio.AlignIO).
