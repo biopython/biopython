@@ -27,15 +27,15 @@ python setup.py install
 
 o "Python 2.3 or better":http://www.python.org/
 
-o "Numerical Python":http://numpy.sourceforge.net/ (optional)
+o "NumPy":http://numpy.scipy.org/ (optional)
   This package is only used in the computationally-oriented modules.
   It is required for Bio.Cluster and a few other modules.  If you
-  think you might need these modules, then please install Numeric
-  Python first.  Also, please install if you are seeing
+  think you might need these modules, then please install NumPy
+  first. Also, please install if you are seeing
   error messages such as:
-  ImportError: No module named Numeric
-  Biopython currently uses the "old" Numerical Python (version 24.2).
-  Support for "new" NumPy is expected in the next release.
+  ImportError: No module named numpy
+  Please note that this is the current NumPy distribution. Older distributions
+  (Numeric and Numarray) are no longer officially supported.
 
 o "ReportLab":http://www.reportlab.org/downloads.html (optional)
   This package is used in some code that generates graphical displays

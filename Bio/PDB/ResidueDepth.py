@@ -6,7 +6,10 @@
 # make yield compatible with Python 2.2
 from __future__ import generators
 
-from Numeric import array, sum, sqrt
+try:
+    from Numeric import array, sum, sqrt
+except ImportError:
+    from numpy.oldnumeric import array, sum, sqrt
 import tempfile
 import os
 import sys

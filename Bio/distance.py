@@ -10,7 +10,8 @@ euclidean_py    Pure Python implementation of euclidean.
 try:
     from Numeric import *
 except ImportError, x:
-    raise ImportError, "This module requires Numeric (precursor to NumPy)"
+    from numpy.oldnumeric import *
+    #raise ImportError, "This module requires Numeric (precursor to NumPy)"
 
 def euclidean(x, y):
     """euclidean(x, y) -> euclidean distance between x and y"""

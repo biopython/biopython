@@ -456,13 +456,13 @@ record = Std.record(Martel.Group("genbank_record",
                       Martel.Opt(pid_line) + \
                       Martel.Opt(version_line) + \
                       Martel.Opt(db_source_block) + \
-                      keywords_block + \
+                      Martel.Opt(keywords_block) + \
                       Martel.Opt(segment_line) + \
                       source_block + \
                       organism_block + \
                       Martel.Rep(reference) + \
                       Martel.Opt(primary) +\
-                      Martel.Opt(comment_block) + \
+                      Martel.Rep(comment_block) + \
                       features_line + \
                       feature_block + \
                       Martel.Alt(Martel.Opt(base_count_line) +

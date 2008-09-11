@@ -6,7 +6,11 @@
 # Python stuff
 import sys
 from string import split
-from Numeric import array, Float0
+try:
+    from Numeric import array, Float0
+except ImportError:
+    from numpy.oldnumeric import array, Float0
+
 
 # My stuff
 from StructureBuilder import StructureBuilder

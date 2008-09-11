@@ -19,7 +19,9 @@ try:
     from Numeric import *
     from LinearAlgebra import solve_linear_equations
 except ImportError, x:
-    raise ImportError, "This module requires Numeric (precursor to NumPy) with the LinearAlgebra and MLab libraries"
+    from numpy.oldnumeric import *
+    from numpy.oldnumeric.linear_algebra import solve_linear_equations
+    #raise ImportError, "This module requires Numeric (precursor to NumPy) with the LinearAlgebra and MLab libraries"
 
 try:
     from Bio.Cluster import median
@@ -30,7 +32,8 @@ except ImportError, x:
     try:
         from MLab import median
     except ImportError, x:
-        raise ImportError, "This module requires Numeric (precursor to NumPy) with the LinearAlgebra and MLab libraries"
+        from numpy.oldnumeric.mlab import median
+        #raise ImportError, "This module requires Numeric (precursor to NumPy) with the LinearAlgebra and MLab libraries"
 
 def lowess(x, y, f=2./3., iter=3):
   """lowess(x, y, f=2./3., iter=3) -> yest

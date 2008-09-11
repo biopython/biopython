@@ -3,7 +3,11 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.  
 
-from Numeric import sqrt, argmin, argmax, sum, power, concatenate, array, Float0
+try:
+    from Numeric import sqrt, argmin, argmax, sum, power, concatenate, array, Float0
+except ImportError:
+    from numpy.oldnumeric import (sqrt, argmin, argmax, sum, power,
+            concatenate, array, Float0)
 import os
 
 # My Stuff

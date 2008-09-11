@@ -6,8 +6,11 @@ hierarchical (pairwise simple, complete, average, and centroid linkage)
 clustering, k-means and k-medians clustering, and 2D self-organizing maps
 are included.
 """
-from Numeric import *
 from cluster import *
+try:
+    from Numeric import *
+except ImportError:
+    from numpy.oldnumeric import *
 
 def _treesort(order, nodeorder, nodecounts, tree):
   nNodes = len(tree)

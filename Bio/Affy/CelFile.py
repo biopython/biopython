@@ -16,7 +16,10 @@ class CelRecord: stores the information from a cel file
 # import _cel
 
 from Bio.ParserSupport import AbstractConsumer
-from Numeric import *
+try:
+    from Numeric import *
+except ImportError:
+    from numpy.oldnumeric import *
 
 class CelScanner:
     """Scannner for Affymetrix CEL files.

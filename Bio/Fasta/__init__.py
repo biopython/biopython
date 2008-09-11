@@ -106,7 +106,7 @@ class Iterator:
         #Skip any text before the first record (e.g. blank lines)
         while True :
             line = handle.readline()
-            if line[0] == ">" :
+            if not line or line[0] == ">" :
                 break
             if debug : print "Skipping: " + line
         self._lookahead = line

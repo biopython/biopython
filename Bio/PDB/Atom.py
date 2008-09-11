@@ -4,8 +4,10 @@
 # as part of this package.           
 
 # Python stuff
-from Numeric import array, sum, sqrt, matrixmultiply
-
+try:
+    from Numeric import array, sum, sqrt, matrixmultiply
+except ImportError:
+    from numpy.oldnumeric import array, sum, sqrt, matrixmultiply
 # My stuff
 from Entity import DisorderedEntityWrapper
 from Vector import Vector

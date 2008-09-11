@@ -17,7 +17,9 @@ try:
     from Numeric import *
     from LinearAlgebra import *  # inverse
 except ImportError, x:
-    raise ImportError, "This module requires Numeric (precursor to NumPy) with the LinearAlgebra lib"
+    from numpy.oldnumeric import *
+    from numpy.oldnumeric.linear_algebra import *
+    #raise ImportError, "This module requires Numeric (precursor to NumPy) with the LinearAlgebra lib"
 
 
 class LogisticRegression:

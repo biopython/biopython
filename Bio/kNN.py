@@ -27,7 +27,8 @@ equal_weight    Every example is given a weight of 1.
 try:
     from Numeric import *
 except ImportError, x:
-    raise ImportError, "This module requires Numeric (precursor to NumPy)"
+    from numpy.oldnumeric import *
+    #raise ImportError, "This module requires Numeric (precursor to NumPy)"
 
 from Bio import distance
 

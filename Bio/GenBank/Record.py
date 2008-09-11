@@ -252,24 +252,30 @@ class Record:
     def _accession_line(self):
         """Output for the ACCESSION line.
         """
-        output = Record.BASE_FORMAT % "ACCESSION"
+        if self.accession:
+            output = Record.BASE_FORMAT % "ACCESSION"
 
-        acc_info = ""
-        for accession in self.accession:
-            acc_info += "%s " % accession
-        # strip off an extra space at the end
-        acc_info = acc_info.rstrip()
-        output += _wrapped_genbank(acc_info, Record.GB_BASE_INDENT)
+            acc_info = ""
+            for accession in self.accession:
+                acc_info += "%s " % accession
+            # strip off an extra space at the end
+            acc_info = acc_info.rstrip()
+            output += _wrapped_genbank(acc_info, Record.GB_BASE_INDENT)
+        else:
+            output = ""
         
         return output
 
     def _version_line(self):
         """Output for the VERSION line.
         """
-        output = Record.BASE_FORMAT % "VERSION"
-        output += self.version
-        output += "  GI:"
-        output += "%s\n" % self.gi
+        if self.version:
+            output = Record.BASE_FORMAT % "VERSION"
+            output += self.version
+            output += "  GI:"
+            output += "%s\n" % self.gi
+        else:
+            output = ""
         return output
 
     def _nid_line(self):

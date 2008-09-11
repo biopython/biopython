@@ -15,7 +15,7 @@ class Primer3Commandline(Application.AbstractCommandline):
         self.program_name = cmd
 
         self.parameters = \
-          [_Option(["-sequence"], ["input"], None, 1, 
+          [_Option(["-sequence"], ["input"], None, 1,
                    "Sequence to choose primers from"),
            _Option(["-outfile"], ["output", "file"], None, 1,
                    "Output file name"),
@@ -60,7 +60,11 @@ class Primer3Commandline(Application.AbstractCommandline):
            _Option(["-oligodnaconc"], ["input"], None, 0),
            _Option(["-oligoselfany"], ["input"], None, 0),
            _Option(["-oligoselfend"], ["input"], None, 0),
-           _Option(["-oligomaxpolyx"], ["input"], None, 0)]
+           _Option(["-oligomaxpolyx"], ["input"], None, 0),
+           _Option(["-mispriminglibraryfile"], ["input"], None, 0),
+           _Option(["-maxmispriming"], ["input"], None, 0),
+           _Option(["-oligomishyblibraryfile"], ["input"], None, 0),
+           _Option(["-oligomaxmishyb"], ["input"], None, 0),]
 
 class PrimerSearchCommandline(Application.AbstractCommandline):
     """Commandline object for the primersearch program from EMBOSS.
@@ -472,3 +476,28 @@ class TranalignCommandline(Application.AbstractCommandline):
                  "Output sequence file."),
          _Option(["-table"], ["input"], None, 0,
                  "Code to use")]
+
+class DiffseqCommandline(Application.AbstractCommandline):
+    """Commandline object for the diffseq program from EMBOSS.
+    """
+    def __init__(self, cmd = "diffseq"):
+        Application.AbstractCommandline.__init__(self)
+        self.program_name = cmd
+
+        self.parameters = [
+         _Option(["-asequence"], ["input", "file"], None, 1,
+                 "First sequence to compare"),
+         _Option(["-bsequence"], ["input", "file"], None, 1,
+                 "Second sequence to compare"),
+         _Option(["-wordsize"], ["input"], None, 1,
+                 "Word size to use for comparisons (10 default)"),
+         _Option(["-outfile"], ["output", "file"], None, 1,
+                "Output report file name"),
+         _Option(["-aoutfeat"], ["output", "file"], None, 1,
+                "File for output of first sequence's features"),
+         _Option(["-boutfeat"], ["output", "file"], None, 1,
+                "File for output of second sequence's features"),
+         _Option(["-rformat"], ["output"], None, 0,
+                 "Output report file format")
+         ]
+

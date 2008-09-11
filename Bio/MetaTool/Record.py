@@ -4,7 +4,10 @@
 # standard modules
 import string
 
-import Matrix
+try:
+    import Matrix
+except ImportError:
+    import numpy.oldnumeric.matrix as Matrix
 
 # local stuff
 import Bio.MetaTool

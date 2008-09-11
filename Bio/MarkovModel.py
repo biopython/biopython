@@ -17,8 +17,12 @@ MarkovModel     Holds the description of a markov model
 """
 import math
 
-from Numeric import *
-import RandomArray
+try:
+    from Numeric import *
+    import RandomArray
+except ImportError:
+    from numpy.oldnumeric import *
+    import numpy.oldnumeric.random_array as RandomArray
 
 import StringIO     # StringIO is in Numeric's namespace, so import this after.
 
@@ -173,12 +177,15 @@ def _baum_welch(N, M, training_outputs,
                 pseudo_initial=None, pseudo_transition=None,
                 pseudo_emission=None, update_fn=None):
     # Returns (p_initial, p_transition, p_emission)
-    p_initial = _safe_copy_and_check(p_initial, (N,)) or \
-                _random_norm(N)
-    p_transition = _safe_copy_and_check(p_transition, (N,N)) or \
-                   _random_norm((N,N))
-    p_emission = _safe_copy_and_check(p_emission, (N,M)) or \
-                 _random_norm((N,M))
+    p_initial = _safe_copy_and_check(p_initial, (N,))
+    if not p_initial.any():
+        p_initial = _random_norm(N)
+    p_transition = _safe_copy_and_check(p_transition, (N,N))
+    if not p_transition.any():
+        p_transition = _random_norm((N,N))
+    p_emission = _safe_copy_and_check(p_emission, (N,M))
+    if not p_emission.any():
+         p_emission = _random_norm((N,M))
 
     # Do all the calculations in log space to avoid underflows.
     lp_initial, lp_transition, lp_emission = map(

@@ -723,7 +723,8 @@ static void _SWIG_exception(int code, const char *msg) {
 
 
 	#include "KDTree.h"
-	#include <Numeric/arrayobject.h> 
+/*	#include <Numeric/arrayobject.h> */
+	#include <numpy/oldnumeric.h> 
 
 
 	PyObject *KDTree_get_indices(KDTree *kdtree)

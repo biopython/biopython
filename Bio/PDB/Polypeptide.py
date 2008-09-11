@@ -3,7 +3,10 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-from Numeric import sum
+try:
+    from Numeric import sum
+except ImportError:
+    from numpy.oldnumeric import sum
 from types import StringType
 
 from Bio.Alphabet import ProteinAlphabet

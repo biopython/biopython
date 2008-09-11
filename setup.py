@@ -82,7 +82,7 @@ def check_dependencies():
     dependencies = [
         ("mxTextTools", is_mxTextTools_installed, 0,
          "http://www.egenix.com/files/python/eGenix-mx-Extensions.html"),
-        ("Numerical Python", is_Numpy_installed, 0,
+        ("Numerical Python (NumPy)", is_Numpy_installed, 0,
          "http://numpy.sourceforge.net/"),
         ]
 
@@ -125,13 +125,16 @@ all platforms. Hence, Bio.KDTree is not built by default.
 Would you like to build Bio.KDTree ?"""
 
     if get_yes_or_no (kdtree_msg, 0):
-        NUMPY_PACKAGES.append("Bio.KDTree")
-        NUMPY_EXTENSIONS.append(
-            CplusplusExtension('Bio.KDTree._CKDTree', 
-                               ["Bio/KDTree/KDTree.cpp",
-                                "Bio/KDTree/KDTree.swig.cpp"],
-                               libraries=["stdc++"],
-                               language="c++"))
+        if is_Numpy_installed():
+            import numpy
+            NUMPY_PACKAGES.append("Bio.KDTree")
+            NUMPY_EXTENSIONS.append(
+                CplusplusExtension('Bio.KDTree._CKDTree',
+                                   ["Bio/KDTree/KDTree.cpp",
+                                    "Bio/KDTree/KDTree.swig.cpp"],
+                                   include_dirs=[numpy.get_include()],
+                                   libraries=["stdc++"],
+                                   language="c++"))
     
     
     return 1
@@ -209,6 +212,14 @@ class build_ext_biopython(build_ext):
             return
         # add software that requires NumPy to install
         if is_Numpy_installed():
+            import numpy
+            NUMPY_EXTENSIONS.append(
+                Extension('Bio.Cluster.cluster',
+                          ['Bio/Cluster/clustermodule.c',
+                           'Bio/Cluster/cluster.c'],
+                          include_dirs=[numpy.get_include()],
+                          #include_dirs=["Bio/Cluster"]
+                          ))
             self.extensions.extend(NUMPY_EXTENSIONS)
         build_ext.run(self)
 
@@ -348,7 +359,7 @@ def is_mxTextTools_installed():
     return can_import("mx.TextTools")
 
 def is_Numpy_installed():
-    return can_import("Numeric")
+    return can_import("numpy")
 
 # --- set up the packages we are going to install
 # standard biopython packages
@@ -499,11 +510,6 @@ EXTENSIONS = [
 
 # extensions that require numeric python
 NUMPY_EXTENSIONS = [
-    Extension('Bio.Cluster.cluster',
-              ['Bio/Cluster/clustermodule.c',
-               'Bio/Cluster/cluster.c'],
-              include_dirs=["Bio/Cluster"]
-              ),
 #   CplusplusExtension('Bio.Affy._cel',  # The file parser in celmodule.cc was
 #            ['Bio/Affy/celmodule.cc'],  # replaced by a scanner/consumer in
 #            language="c++"              # CelFile.py, using Biopython's

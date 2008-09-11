@@ -1,5 +1,6 @@
 #include "Python.h"
-#include "Numeric/arrayobject.h"
+//#include "Numeric/arrayobject.h"
+#include "numpy/oldnumeric.h"
 #include <stdio.h>
 #include <string.h>
 #include <float.h>

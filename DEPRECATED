@@ -2,6 +2,12 @@ This file provides documentation for modules in Biopython that have been moved
 or deprecated in favor of other modules. This provides some quick and easy
 to find documentation about how to update your code to work again.
 
+Numeric support
+===============
+Following the release of 1.48, Numeric support in Biopython is discontinued. Limited
+support is still available for python modules via back compatible imports, but C 
+modules will not work. Please move to NumPy.
+
 Martel
 ======
 Declared obsolete in Release 1.48, with the intention of an official deprecation

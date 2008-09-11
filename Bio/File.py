@@ -32,6 +32,15 @@ class UndoHandle:
         self._handle = handle
         self._saved = []
 
+    def __iter__(self):
+        return self
+
+    def next(self):
+        next = self.readline()
+        if not next:
+            raise StopIteration
+        return next
+
     def readlines(self, *args, **keywds):
         lines = self._saved + self._handle.readlines(*args,**keywds)
         self._saved = []

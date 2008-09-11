@@ -54,7 +54,7 @@
 \begin{document}
 
 \title{Biopython Installation}
-\author{Brad Chapman (chapmanb@uga.edu)}
+\author{Brad Chapman}
 
 \maketitle
 \tableofcontents
@@ -281,69 +281,63 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>>
 \end{verbatim}
 
-\subsection{Numerical Python (strongly recommended)}
+\subsection{Numerical Python (NumPy) (strongly recommended)}
 
 The Numerical Python distribution is a fast implementation of arrays and
 associated array functionality. This is important for a number of Biopython
-modules that deal with number processing (e.g. Bio.Cluster and Bio.PB).
+modules that deal with number processing (e.g. Bio.Cluster and Bio.PDB).
 
-Biopython still uses the "old" Numerical Python (version 24.2) and has not yet
-switched to the "new" NumPy (currently at version 1.1.0).
+Biopython supports the standard NumPy distribution; limited support is
+available for the old Numeric and Numarray modules, but we recommend moving to
+NumPy as soon as possible.
 
-The main web site for Numeric is:
-\ahrefurl{\url{http://sourceforge.net/projects/numpy}} and downloads are
-available from:
-\ahrefurl{\url{http://sourceforge.net/project/showfiles.php?group_id=1369&package_id=1351}}.
+The main web site for NumPy is:
+\ahrefurl{\url{http://numpy.scipy.org/}}.
 
 \subsubsection{UNIX and Mac OS X systems}
 
-As with mxTextTools, you should download the \verb|tar.gz| file. Version
-23.8 of Numerical Python (\verb|Numeric-23.8.tar.gz|) compiles out of the box.
-The build process is exactly the same as with mxTextTools:
+You should download the \verb|tar.gz| file, and follow the standard python
+build process:
 
 \begin{verbatim}
-$ gunzip Numeric-23.8.tar.gz 
-$ tar -xvpf Numeric-23.8.tar
-$ cd Numeric-23.8
-$ python setup.py build
+> tar -xzvpf numpy-1.1.1.tar.gz
+> cd numpy-1.1.1/
+> python setup.py build
 \end{verbatim}
 
 Once it is built, you should become root, and then install it:
 
 \begin{verbatim}
-$ python setup.py install
+> python setup.py install
 \end{verbatim}
 
-One important note if you use an RPM-based system and not installing
-Numeric from source as described above: you need to also
-install the Numeric header files which are not included with some
-Numeric packages. As with the main python distribution, this means
-you'll need to look for something like \verb|python-numeric-devel| 
-and make sure to install this as well as the basic Numeric package.
+One important note if you use an package system and not installing
+NumPy from source: you may also need to
+install the header files which are not included with some
+packages. As with the main python distribution, this means
+you'll need to look for something like \verb|python-numpy-devel| 
+and make sure to install this as well as the basic package.
 
 \subsubsection{Windows systems}
 
-Once again, Windows installers are available for Numeric so you should
-follow the now-standard procedure of downloading the installer
-(\verb|Numeric-24.2.win32-py2.3.exe| or \verb|Numeric-24.2.win32-py2.4.exe|
-at the current time), double
+We recommend using the NumPy provided windows installers for your installed
+version of python. For python 2.5, at the current time this would be
+\verb|numpy-1.1.1-win32-superpack-python2.5.exe|. You should follow the 
+now-standard procedure of downloading the installer, double
 clicking it and then following the installation instructions. As before,
 you will need to have administrator permissions to do this.
-
-The is no official version of the Numeric Windows installer for Python 2.5,
-but we have made one available at \ahrefurl{\url{http://biopython.org/DIST/Numeric-24.2.win32-py2.5.exe}} instead.
 
 \subsubsection{Making sure it installed correctly}
 
 To make sure everything went okay during the install, fire up the python
-interpreter and ensure you can import Numeric without any errors:
+interpreter and ensure you can import NumPy without any errors:
 
 \begin{verbatim}
-$ python
-Python 2.4 (#1, Dec  5 2004, 20:47:03)
-[GCC 3.3.3] on cygwin
-Type "help", "copyright", "credits" or "license" for more information.
->>> from Numeric import *
+> python2.5
+Python 2.5.2 (r252:60911, Apr 27 2008, 11:46:35) 
+[GCC 4.2.3 (Debian 4.2.3-3)] on linux2
+Type ``help'', ``copyright'', ``credits'' or ``license'' for more information.
+>>> import numpy
 >>>
 \end{verbatim}
 

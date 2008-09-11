@@ -3,7 +3,10 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-from Numeric import array, Float0, zeros
+try:
+    from Numeric import array, Float0, zeros
+except ImportError:
+    from numpy.oldnumeric import array, Float0, zeros
 import os
 
 from Bio.SVDSuperimposer import SVDSuperimposer

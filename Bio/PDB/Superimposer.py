@@ -3,7 +3,10 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-from Numeric import Float0, zeros
+try:
+    from Numeric import Float0, zeros
+except ImportError:
+    from numpy.oldnumeric import Float0, zeros
 
 from Bio.SVDSuperimposer import SVDSuperimposer
 from Bio.PDB.PDBExceptions import PDBException

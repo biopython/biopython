@@ -12,7 +12,10 @@ try:
     from Numeric import sum, sqrt
     from RandomArray import *
 except ImportError:
-    raise ImportError, "This module requires Numeric (precursor to NumPy)"
+    from numpy.oldnumeric import sum, sqrt
+    import numpy.oldnumeric as Numeric
+    from numpy.oldnumeric.random_array import *
+    #raise ImportError, "This module requires Numeric (precursor to NumPy)"
 
 import CKDTree 
 

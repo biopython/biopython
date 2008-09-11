@@ -1,4 +1,7 @@
-from Numeric import *
+try:
+    from Numeric import *
+except ImportError:
+    from numpy.oldnumeric import *
 
 from Bio.SVDSuperimposer import *
 

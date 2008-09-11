@@ -3,7 +3,10 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-from Numeric import array
+try:
+    from Numeric import array
+except ImportError:
+    from numpy.oldnumeric import array
 
 from Bio.KDTree import *
 from PDBExceptions import PDBException

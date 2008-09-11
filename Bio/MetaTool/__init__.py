@@ -17,7 +17,10 @@ warnings.warn("Bio.MetalTool was deprecated, as it only supported the obsolete"
 
 # standard library
 import string
-import Matrix
+try:
+    import Matrix
+except ImportError:
+    import numpy.oldnumeric.matrix as Matrix
 
 # XML from python 2.0
 from xml.sax import handler
