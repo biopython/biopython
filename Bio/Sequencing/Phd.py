@@ -66,7 +66,9 @@ def read(handle):
                        'call_method',
                        'chem',
                        'dye',
-                       'time'):
+                       'time',
+                       'basecaller_version',
+                       'trace_processor_version'):
             record.comments[keyword] = value
         elif keyword in ('abi_thumbprint',
                          'quality_levels',
