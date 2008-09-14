@@ -8,16 +8,12 @@ Otfried Schwarzkopf). Author: Thomas Hamelryck.
 """
 
 try:
-    import Numeric
-    from Numeric import sum, sqrt
-    from RandomArray import *
+    from numpy import sum, sqrt
+    from numpy.random import random
 except ImportError:
-    from numpy.oldnumeric import sum, sqrt
-    import numpy.oldnumeric as Numeric
-    from numpy.oldnumeric.random_array import *
-    #raise ImportError, "This module requires Numeric (precursor to NumPy)"
+    raise ImportError, "This module requires Numeric (precursor to NumPy)"
 
-import CKDTree 
+import _CKDTree 
 
 def _dist(p, q):
     diff=p-q
@@ -35,18 +31,18 @@ def _neighbor_test(nr_points, dim, bucket_size, radius):
     o radius - radius of search (typically 0.05 or so) 
     """
     # KD tree search
-    kdt=CKDTree.KDTree(dim, bucket_size)
+    kdt=_CKDTree.KDTree(dim, bucket_size)
     coords=random((nr_points, dim)).astype("f")
-    kdt.set_data(coords, nr_points)
-    kdt.neighbor_search(radius)
-    r=kdt.neighbor_get_radii()
+    kdt.set_data(coords)
+    neighbors = kdt.neighbor_search(radius)
+    r = [neighbor.radius for neighbor in neighbors]
     if r is None:
         l1=0
     else:
         l1=len(r)
     # now do a slow search to compare results
-    kdt.neighbor_simple_search(radius)
-    r=kdt.neighbor_get_radii()
+    neighbors = kdt.neighbor_simple_search(radius)
+    r = [neighbor.radius for neighbor in neighbors]
     if r is None:
         l2=0
     else:
@@ -67,10 +63,10 @@ def _test(nr_points, dim, bucket_size, radius):
     o radius - radius of search (typically 0.05 or so) 
     """
     # kd tree search
-    kdt=CKDTree.KDTree(dim, bucket_size)
+    kdt=_CKDTree.KDTree(dim, bucket_size)
     coords=random((nr_points, dim)).astype("f")
     center=coords[0]
-    kdt.set_data(coords, nr_points)
+    kdt.set_data(coords)
     kdt.search_center_radius(center, radius)
     r=kdt.get_indices()
     if r is None:
@@ -123,7 +119,7 @@ class KDTree:
 
     def __init__(self, dim, bucket_size=1):
         self.dim=dim
-        self.kdt=CKDTree.KDTree(dim, bucket_size)
+        self.kdt=_CKDTree.KDTree(dim, bucket_size)
         self.built=0
 
     # Set data
@@ -141,7 +137,7 @@ class KDTree:
                 raise Exception, "Expected a Nx%i Numeric array" % self.dim
         if coords.typecode()!="f":
                 raise Exception, "Expected a Numeric array of type float" 
-        self.kdt.set_data(coords, coords.shape[0])
+        self.kdt.set_data(coords)
         self.built=1
 
     # Fixed radius search for a point
@@ -199,7 +195,7 @@ class KDTree:
         """
         if not self.built:
                 raise Exception, "No point set specified"
-        self.kdt.neighbor_search(radius)
+        self.neighbors = self.kdt.neighbor_search(radius)
 
     def all_get_indices(self):
         """Return All Fixed Neighbor Search results.
@@ -208,12 +204,7 @@ class KDTree:
         the indices of the point pairs, where N
         is the number of neighbor pairs.
         """
-        a=self.kdt.neighbor_get_indices()
-        if a is None:
-            return [] 
-        # return as Nx2 dim Numeric array, where N
-        # is number of neighbor pairs.
-        a.shape=(-1, 2)
+        a = array([[neighbor.index1, neighbor.index2] for neighbor in self.neighbors])
         return a
 
     def all_get_radii(self):
@@ -223,10 +214,7 @@ class KDTree:
         of all the point pairs, where N is the number 
         of neighbor pairs..
         """
-        a=self.kdt.neighbor_get_radii()
-        if a is None:
-            return [] 
-        return a
+        return [neighbor.radius for neighbor in self.neighbors]
 
 if __name__=="__main__":
 
