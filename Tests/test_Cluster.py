@@ -1,7 +1,4 @@
-try:
-    from Numeric import *
-except ImportError:
-    from numpy.oldnumeric import *
+import numpy
 
 import unittest
 import sys
@@ -27,7 +24,7 @@ class TestCluster(unittest.TestCase):
         elif TestCluster.module=='Pycluster':
             from Pycluster import mean, median
 
-        data = array([ 34.3, 3, 2 ])
+        data = numpy.array([ 34.3, 3, 2 ])
         self.assertAlmostEqual(mean(data), 13.1, 3)
         self.assertAlmostEqual(median(data), 3.0, 3)
 
@@ -51,19 +48,19 @@ class TestCluster(unittest.TestCase):
             from Pycluster import treecluster
 
         # Normal matrix, no errors
-        data1 = array([[ 1.1, 1.2 ],
-                       [ 1.4, 1.3 ],
-                       [ 1.1, 1.5 ],
-                       [ 2.0, 1.5 ],
-                       [ 1.7, 1.9 ],
-                       [ 1.7, 1.9 ],
-                       [ 5.7, 5.9 ],
-                       [ 5.7, 5.9 ],
-                       [ 3.1, 3.3 ],
-                       [ 5.4, 5.3 ],
-                       [ 5.1, 5.5 ],
-                       [ 5.0, 5.5 ],
-                       [ 5.1, 5.2 ]])
+        data1 = numpy.array([[ 1.1, 1.2 ],
+                             [ 1.4, 1.3 ],
+                             [ 1.1, 1.5 ],
+                             [ 2.0, 1.5 ],
+                             [ 1.7, 1.9 ],
+                             [ 1.7, 1.9 ],
+                             [ 5.7, 5.9 ],
+                             [ 5.7, 5.9 ],
+                             [ 3.1, 3.3 ],
+                             [ 5.4, 5.3 ],
+                             [ 5.1, 5.5 ],
+                             [ 5.0, 5.5 ],
+                             [ 5.1, 5.2 ]])
       
         # Another normal matrix, no errors; written as a list
         data2 =  [[  1.1, 2.2, 3.3, 4.4, 5.5 ], 
@@ -92,7 +89,6 @@ class TestCluster(unittest.TestCase):
         data7 = {'a': [[2.3,1.2],[3.3,5.6]]}
         data8 = []
         data9 = [None]
-        data10 = [[None]]
       
         try:
             treecluster(data1)
@@ -111,7 +107,6 @@ class TestCluster(unittest.TestCase):
         self.assertRaises(TypeError, lambda : treecluster(data7))
         self.assertRaises(TypeError, lambda : treecluster(data8))
         self.assertRaises(TypeError, lambda : treecluster(data9))
-        #self.assertRaises(TypeError, lambda : treecluster(data10))
 
     def test_kcluster(self):
         if TestCluster.module=='Bio.Cluster':
@@ -121,15 +116,15 @@ class TestCluster(unittest.TestCase):
 
         nclusters = 3
         # First data set
-        weight = array([1,1,1,1,1])
-        data   = array([[ 1.1, 2.2, 3.3, 4.4, 5.5],
-                        [ 3.1, 3.2, 1.3, 2.4, 1.5], 
-                        [ 4.1, 2.2, 0.3, 5.4, 0.5], 
-                        [12.1, 2.0, 0.0, 5.0, 0.0]]) 
-        mask =  array([[ 1, 1, 1, 1, 1], 
-                       [ 1, 1, 1, 1, 1], 
-                       [ 1, 1, 1, 1, 1], 
-                       [ 1, 1, 1, 1, 1]]) 
+        weight = numpy.array([1,1,1,1,1])
+        data   = numpy.array([[ 1.1, 2.2, 3.3, 4.4, 5.5],
+                              [ 3.1, 3.2, 1.3, 2.4, 1.5], 
+                              [ 4.1, 2.2, 0.3, 5.4, 0.5], 
+                              [12.1, 2.0, 0.0, 5.0, 0.0]]) 
+        mask =  numpy.array([[ 1, 1, 1, 1, 1], 
+                             [ 1, 1, 1, 1, 1], 
+                             [ 1, 1, 1, 1, 1], 
+                             [ 1, 1, 1, 1, 1]], int) 
       
         clusterid, error, nfound = kcluster(data, nclusters=nclusters, mask=mask, weight=weight, transpose=0, npass=100, method='a', dist='e')
         self.assertEqual(len(clusterid), len(data))
@@ -140,8 +135,8 @@ class TestCluster(unittest.TestCase):
             self.assertEqual(clusterid[i], mapping[correct[i]])
       
         # Second data set
-        weight = array([1,1])
-        data = array([[ 1.1, 1.2 ],
+        weight = numpy.array([1,1])
+        data = numpy.array([[ 1.1, 1.2 ],
                       [ 1.4, 1.3 ],
                       [ 1.1, 1.5 ],
                       [ 2.0, 1.5 ],
@@ -154,19 +149,19 @@ class TestCluster(unittest.TestCase):
                       [ 5.1, 5.5 ],
                       [ 5.0, 5.5 ],
                       [ 5.1, 5.2 ]])
-        mask = array([[ 1, 1 ],
-                      [ 1, 1 ],
-                      [ 1, 1 ],
-                      [ 1, 1 ],
-                      [ 1, 1 ],
-                      [ 1, 1 ],
-                      [ 1, 1 ],
-                      [ 1, 1 ],
-                      [ 1, 1 ],
-                      [ 1, 1 ],
-                      [ 1, 1 ],
-                      [ 1, 1 ],
-                      [ 1, 1 ]])
+        mask = numpy.array([[ 1, 1 ],
+                            [ 1, 1 ],
+                            [ 1, 1 ],
+                            [ 1, 1 ],
+                            [ 1, 1 ],
+                            [ 1, 1 ],
+                            [ 1, 1 ],
+                            [ 1, 1 ],
+                            [ 1, 1 ],
+                            [ 1, 1 ],
+                            [ 1, 1 ],
+                            [ 1, 1 ],
+                            [ 1, 1 ]], int)
 
         clusterid, error, nfound = kcluster(data, nclusters=3, mask=mask, weight=weight, transpose=0, npass=100, method='a', dist='e')
         self.assertEqual(len(clusterid), len(data))
@@ -183,15 +178,15 @@ class TestCluster(unittest.TestCase):
             from Pycluster import clusterdistance
 
         # First data set
-        weight = array([ 1,1,1,1,1 ])
-        data   = array([[  1.1, 2.2, 3.3, 4.4, 5.5, ], 
-                        [  3.1, 3.2, 1.3, 2.4, 1.5, ], 
-                        [  4.1, 2.2, 0.3, 5.4, 0.5, ], 
-                        [ 12.1, 2.0, 0.0, 5.0, 0.0, ]])
-        mask   = array([[ 1, 1, 1, 1, 1], 
-                        [ 1, 1, 1, 1, 1], 
-                        [ 1, 1, 1, 1, 1], 
-                        [ 1, 1, 1, 1, 1]])
+        weight = numpy.array([ 1,1,1,1,1 ])
+        data   = numpy.array([[  1.1, 2.2, 3.3, 4.4, 5.5, ], 
+                              [  3.1, 3.2, 1.3, 2.4, 1.5, ], 
+                              [  4.1, 2.2, 0.3, 5.4, 0.5, ], 
+                              [ 12.1, 2.0, 0.0, 5.0, 0.0, ]])
+        mask   = numpy.array([[ 1, 1, 1, 1, 1], 
+                              [ 1, 1, 1, 1, 1], 
+                              [ 1, 1, 1, 1, 1], 
+                              [ 1, 1, 1, 1, 1]], int)
 
         # Cluster assignments
         c1 = [0]
@@ -206,8 +201,8 @@ class TestCluster(unittest.TestCase):
         self.assertAlmostEqual(distance, 15.118, 3)
 
         # Second data set
-        weight =  array([ 1,1 ])
-        data   =  array([[ 1.1, 1.2 ],
+        weight =  numpy.array([ 1,1 ])
+        data   =  numpy.array([[ 1.1, 1.2 ],
                          [ 1.4, 1.3 ],
                          [ 1.1, 1.5 ],
                          [ 2.0, 1.5 ],
@@ -220,19 +215,19 @@ class TestCluster(unittest.TestCase):
                          [ 5.1, 5.5 ],
                          [ 5.0, 5.5 ],
                          [ 5.1, 5.2 ]])
-        mask = array([[ 1, 1 ],
-                      [ 1, 1 ],
-                      [ 1, 1 ],
-                      [ 1, 1 ],
-                      [ 1, 1 ],
-                      [ 1, 1 ],
-                      [ 1, 1 ],
-                      [ 1, 1 ],
-                      [ 1, 1 ],
-                      [ 1, 1 ],
-                      [ 1, 1 ],
-                      [ 1, 1 ],
-                      [ 1, 1 ]])
+        mask = numpy.array([[ 1, 1 ],
+                            [ 1, 1 ],
+                            [ 1, 1 ],
+                            [ 1, 1 ],
+                            [ 1, 1 ],
+                            [ 1, 1 ],
+                            [ 1, 1 ],
+                            [ 1, 1 ],
+                            [ 1, 1 ],
+                            [ 1, 1 ],
+                            [ 1, 1 ],
+                            [ 1, 1 ],
+                            [ 1, 1 ]], int)
 
         # Cluster assignments
         c1 = [ 0, 1, 2, 3 ]
@@ -255,14 +250,14 @@ class TestCluster(unittest.TestCase):
 
         # First data set
         weight1 =  [ 1,1,1,1,1 ]
-        data1   =  array([[  1.1, 2.2, 3.3, 4.4, 5.5], 
-                          [  3.1, 3.2, 1.3, 2.4, 1.5], 
-                          [  4.1, 2.2, 0.3, 5.4, 0.5], 
-                          [ 12.1, 2.0, 0.0, 5.0, 0.0]])
-        mask1 = array([[ 1, 1, 1, 1, 1], 
-                       [ 1, 1, 1, 1, 1], 
-                       [ 1, 1, 1, 1, 1], 
-                       [ 1, 1, 1, 1, 1]])
+        data1   =  numpy.array([[  1.1, 2.2, 3.3, 4.4, 5.5], 
+                                [  3.1, 3.2, 1.3, 2.4, 1.5], 
+                                [  4.1, 2.2, 0.3, 5.4, 0.5], 
+                                [ 12.1, 2.0, 0.0, 5.0, 0.0]])
+        mask1 = numpy.array([[ 1, 1, 1, 1, 1], 
+                             [ 1, 1, 1, 1, 1], 
+                             [ 1, 1, 1, 1, 1], 
+                             [ 1, 1, 1, 1, 1]], int)
       
         # test first data set
         # Pairwise average-linkage clustering"
@@ -319,32 +314,32 @@ class TestCluster(unittest.TestCase):
       
         # Second data set
         weight2 =  [ 1,1 ]
-        data2 = array([[ 0.8223, 0.9295 ],
-                       [ 1.4365, 1.3223 ],
-                       [ 1.1623, 1.5364 ],
-                       [ 2.1826, 1.1934 ],
-                       [ 1.7763, 1.9352 ],
-                       [ 1.7215, 1.9912 ],
-                       [ 2.1812, 5.9935 ],
-                       [ 5.3290, 5.9452 ],
-                       [ 3.1491, 3.3454 ],
-                       [ 5.1923, 5.3156 ],
-                       [ 4.7735, 5.4012 ],
-                       [ 5.1297, 5.5645 ],
-                       [ 5.3934, 5.1823 ]])
-        mask2 = array([[ 1, 1 ],
-                       [ 1, 1 ],
-                       [ 1, 1 ],
-                       [ 1, 1 ],
-                       [ 1, 1 ],
-                       [ 1, 1 ],
-                       [ 1, 1 ],
-                       [ 1, 1 ],
-                       [ 1, 1 ],
-                       [ 1, 1 ],
-                       [ 1, 1 ],
-                       [ 1, 1 ],
-                       [ 1, 1 ]])
+        data2 = numpy.array([[ 0.8223, 0.9295 ],
+                             [ 1.4365, 1.3223 ],
+                             [ 1.1623, 1.5364 ],
+                             [ 2.1826, 1.1934 ],
+                             [ 1.7763, 1.9352 ],
+                             [ 1.7215, 1.9912 ],
+                             [ 2.1812, 5.9935 ],
+                             [ 5.3290, 5.9452 ],
+                             [ 3.1491, 3.3454 ],
+                             [ 5.1923, 5.3156 ],
+                             [ 4.7735, 5.4012 ],
+                             [ 5.1297, 5.5645 ],
+                             [ 5.3934, 5.1823 ]])
+        mask2 = numpy.array([[ 1, 1 ],
+                             [ 1, 1 ],
+                             [ 1, 1 ],
+                             [ 1, 1 ],
+                             [ 1, 1 ],
+                             [ 1, 1 ],
+                             [ 1, 1 ],
+                             [ 1, 1 ],
+                             [ 1, 1 ],
+                             [ 1, 1 ],
+                             [ 1, 1 ],
+                             [ 1, 1 ],
+                             [ 1, 1 ]], int)
       
         # Test second data set
         # Pairwise average-linkage clustering
@@ -515,14 +510,14 @@ class TestCluster(unittest.TestCase):
 
         # First data set
         weight = [ 1,1,1,1,1 ]
-        data = array([[  1.1, 2.2, 3.3, 4.4, 5.5], 
-                      [  3.1, 3.2, 1.3, 2.4, 1.5], 
-                      [  4.1, 2.2, 0.3, 5.4, 0.5], 
-                      [ 12.1, 2.0, 0.0, 5.0, 0.0]])
-        mask = array([[ 1, 1, 1, 1, 1], 
-                      [ 1, 1, 1, 1, 1], 
-                      [ 1, 1, 1, 1, 1], 
-                      [ 1, 1, 1, 1, 1]])
+        data = numpy.array([[  1.1, 2.2, 3.3, 4.4, 5.5], 
+                            [  3.1, 3.2, 1.3, 2.4, 1.5], 
+                            [  4.1, 2.2, 0.3, 5.4, 0.5], 
+                            [ 12.1, 2.0, 0.0, 5.0, 0.0]])
+        mask = numpy.array([[ 1, 1, 1, 1, 1], 
+                            [ 1, 1, 1, 1, 1], 
+                            [ 1, 1, 1, 1, 1], 
+                            [ 1, 1, 1, 1, 1]], int)
 
         clusterid, celldata = somcluster(data=data, mask=mask, weight=weight, transpose=0, nxgrid=10, nygrid=10, inittau=0.02, niter=100, dist='e')
         self.assertEqual(len(clusterid), len(data))
@@ -530,32 +525,32 @@ class TestCluster(unittest.TestCase):
 
         # Second data set
         weight =  [ 1,1 ]
-        data = array([[ 1.1, 1.2 ],
-                      [ 1.4, 1.3 ],
-                      [ 1.1, 1.5 ],
-                      [ 2.0, 1.5 ],
-                      [ 1.7, 1.9 ],
-                      [ 1.7, 1.9 ],
-                      [ 5.7, 5.9 ],
-                      [ 5.7, 5.9 ],
-                      [ 3.1, 3.3 ],
-                      [ 5.4, 5.3 ],
-                      [ 5.1, 5.5 ],
-                      [ 5.0, 5.5 ],
-                      [ 5.1, 5.2 ]])
-        mask = array([[ 1, 1 ],
-                      [ 1, 1 ],
-                      [ 1, 1 ],
-                      [ 1, 1 ],
-                      [ 1, 1 ],
-                      [ 1, 1 ],
-                      [ 1, 1 ],
-                      [ 1, 1 ],
-                      [ 1, 1 ],
-                      [ 1, 1 ],
-                      [ 1, 1 ],
-                      [ 1, 1 ],
-                      [ 1, 1 ]])
+        data = numpy.array([[ 1.1, 1.2 ],
+                            [ 1.4, 1.3 ],
+                            [ 1.1, 1.5 ],
+                            [ 2.0, 1.5 ],
+                            [ 1.7, 1.9 ],
+                            [ 1.7, 1.9 ],
+                            [ 5.7, 5.9 ],
+                            [ 5.7, 5.9 ],
+                            [ 3.1, 3.3 ],
+                            [ 5.4, 5.3 ],
+                            [ 5.1, 5.5 ],
+                            [ 5.0, 5.5 ],
+                            [ 5.1, 5.2 ]])
+        mask = numpy.array([[ 1, 1 ],
+                            [ 1, 1 ],
+                            [ 1, 1 ],
+                            [ 1, 1 ],
+                            [ 1, 1 ],
+                            [ 1, 1 ],
+                            [ 1, 1 ],
+                            [ 1, 1 ],
+                            [ 1, 1 ],
+                            [ 1, 1 ],
+                            [ 1, 1 ],
+                            [ 1, 1 ],
+                            [ 1, 1 ]], int)
 
         clusterid, celldata = somcluster(data=data, mask=mask, weight=weight, transpose=0, nxgrid=10, nygrid=10, inittau=0.02, niter=100, dist='e')
         self.assertEqual(len(clusterid), len(data))
@@ -567,25 +562,25 @@ class TestCluster(unittest.TestCase):
         elif TestCluster.module=='Pycluster':
             from Pycluster import distancematrix, kmedoids
 
-        data = array([[2.2, 3.3, 4.4],
-                      [2.1, 1.4, 5.6],
-                      [7.8, 9.0, 1.2],
-                      [4.5, 2.3, 1.5],
-                      [4.2, 2.4, 1.9],
-                      [3.6, 3.1, 9.3],
-                      [2.3, 1.2, 3.9],
-                      [4.2, 9.6, 9.3],
-                      [1.7, 8.9, 1.1]])
-        mask = array([[1, 1, 1],
-                      [1, 1, 1],
-                      [0, 1, 1],
-                      [1, 1, 1],
-                      [1, 1, 1],
-                      [0, 1, 0],
-                      [1, 1, 1],
-                      [1, 0, 1],
-                      [1, 1, 1]])
-        weight = array([2.0, 1.0, 0.5])
+        data = numpy.array([[2.2, 3.3, 4.4],
+                            [2.1, 1.4, 5.6],
+                            [7.8, 9.0, 1.2],
+                            [4.5, 2.3, 1.5],
+                            [4.2, 2.4, 1.9],
+                            [3.6, 3.1, 9.3],
+                            [2.3, 1.2, 3.9],
+                            [4.2, 9.6, 9.3],
+                            [1.7, 8.9, 1.1]])
+        mask = numpy.array([[1, 1, 1],
+                            [1, 1, 1],
+                            [0, 1, 1],
+                            [1, 1, 1],
+                            [1, 1, 1],
+                            [0, 1, 0],
+                            [1, 1, 1],
+                            [1, 0, 1],
+                            [1, 1, 1]], int)
+        weight = numpy.array([2.0, 1.0, 0.5])
         matrix = distancematrix(data, mask=mask, weight=weight)
 
         self.assertAlmostEqual(matrix[1][0], 1.243, 3)
@@ -632,8 +627,15 @@ class TestCluster(unittest.TestCase):
         self.assertAlmostEqual(matrix[8][6], 18.266, 3)
         self.assertAlmostEqual(matrix[8][7], 18.448, 3)
         clusterid, error, nfound = kmedoids(matrix, npass=1000)
-        self.assertEqual(clusterid.any(), array([5, 5, 2, 5, 5, 5, 5, 5,
-            2]).any())
+        self.assertEqual(clusterid[0], 5)
+        self.assertEqual(clusterid[1], 5)
+        self.assertEqual(clusterid[2], 2)
+        self.assertEqual(clusterid[3], 5)
+        self.assertEqual(clusterid[4], 5)
+        self.assertEqual(clusterid[5], 5)
+        self.assertEqual(clusterid[6], 5)
+        self.assertEqual(clusterid[7], 5)
+        self.assertEqual(clusterid[8], 2)
         self.assertAlmostEqual(error, 7.680, 3)
 
 if __name__ == "__main__" :
