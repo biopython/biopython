@@ -1,21 +1,11 @@
-"""Support for commonly used data clustering methods.
-
-Bio.Cluster implements the most commonly used clustering methods for gene
-expression data analysis, wrapping C code with a python API.  Routines for
-hierarchical (pairwise simple, complete, average, and centroid linkage)
-clustering, k-means and k-medians clustering, and 2D self-organizing maps
-are included.
-"""
+import numpy
 from cluster import *
-try:
-    from Numeric import *
-except ImportError:
-    from numpy.oldnumeric import *
+
 
 def _treesort(order, nodeorder, nodecounts, tree):
   nNodes = len(tree)
   nElements = nNodes + 1
-  neworder = zeros(nElements,'d')
+  neworder = numpy.zeros(nElements)
   clusterids = range(nElements)
   for i in range(nNodes):
     i1 = tree[i].left
@@ -53,7 +43,7 @@ def _treesort(order, nodeorder, nodecounts, tree):
         if clusterid==i1 and order1>order2: neworder[j] += increase
         if clusterid==i2 and order1<=order2: neworder[j] += increase
         if clusterid==i1 or clusterid==i2: clusterids[j] = -i-1
-  return argsort(neworder)
+  return numpy.argsort(neworder)
 
 def _savetree(jobname, tree, order, transpose):
   if transpose==0:
@@ -66,9 +56,9 @@ def _savetree(jobname, tree, order, transpose):
   outputfile = open(jobname+extension, "w");
   nodeindex = 0
   nodeID = [''] * (nnodes)
-  nodecounts = zeros(nnodes)
-  nodeorder = zeros(nnodes,'d')
-  nodedist = array([node.distance for node in tree])
+  nodecounts = numpy.zeros(nnodes, int)
+  nodeorder = numpy.zeros(nnodes)
+  nodedist = numpy.array([node.distance for node in tree])
   for nodeindex in range(nnodes):
     min1 = tree[nodeindex].left
     min2 = tree[nodeindex].right
@@ -194,11 +184,11 @@ Cluster/TreeView program, and stores the data in a Record object"""
           rowmask.append(1)
       self.data.append(rowdata)
       self.mask.append(rowmask)
-    self.data = array(self.data)
-    if needmask: self.mask = array(self.mask)
+    self.data = numpy.array(self.data)
+    if needmask: self.mask = numpy.array(self.mask, int)
     else: self.mask = None
-    if self.gweight: self.gweight = array(self.gweight)
-    if self.gorder: self.gorder = array(self.gorder)
+    if self.gweight: self.gweight = numpy.array(self.gweight)
+    if self.gorder: self.gorder = numpy.array(self.gorder)
 
   def treecluster(self, transpose=0, method='m', dist='e'):
     if transpose==0: weight = self.eweight
@@ -263,9 +253,9 @@ expclusters=None:  For hierarchical clustering results, expclusters
            calculated by kcluster.
 """
     (ngenes,nexps) = shape(self.data)
-    if self.gorder==None: gorder = arange(ngenes)
+    if self.gorder==None: gorder = numpy.arange(ngenes)
     else: gorder = self.gorder
-    if self.eorder==None: eorder = arange(nexps)
+    if self.eorder==None: eorder = numpy.arange(nexps)
     else: eorder = self.eorder
     if geneclusters and expclusters:
       assert type(geneclusters)==type(expclusters), "found one k-means and one hierarchical clustering solution in geneclusters and expclusters"
@@ -285,7 +275,7 @@ expclusters=None:  For hierarchical clustering results, expclusters
       geneindex = self._savekmeans(kggfilename, geneclusters, gorder, 0)
       postfix = "_G%d" % k
     else:
-      geneindex = argsort(gorder)
+      geneindex = numpy.argsort(gorder)
     if type(expclusters)==Tree:
       # Hierarchical clustering result
       expindex = _savetree(jobname, expclusters, eorder, 1)
@@ -298,7 +288,7 @@ expclusters=None:  For hierarchical clustering results, expclusters
       expindex = self._savekmeans(kagfilename, expclusters, eorder, 1)
       postfix += "_A%d" % k
     else:
-      expindex = argsort(eorder)
+      expindex = numpy.argsort(eorder)
     filename = filename + postfix
     self._savedata(filename,gid,aid,geneindex,expindex)
 
@@ -312,9 +302,9 @@ expclusters=None:  For hierarchical clustering results, expclusters
     outputfile = open(filename, "w");
     if not outputfile: raise "Error: Unable to open output file"
     outputfile.write(label + "\tGROUP\n")
-    index = argsort(order)
+    index = numpy.argsort(order)
     n = len(names)
-    sortedindex = zeros(n)
+    sortedindex = numpy.zeros(n, int)
     counter = 0
     cluster = 0
     while counter < n:
@@ -330,15 +320,15 @@ expclusters=None:  For hierarchical clustering results, expclusters
   def _savedata(self, jobname, gid, aid, geneindex, expindex):
     if self.genename==None: genename = self.geneid
     else: genename = self.genename
-    (ngenes, nexps) = shape(self.data)
+    (ngenes, nexps) = numpy.shape(self.data)
     outputfile = open(jobname+'.cdt', 'w')
     if not outputfile: return "Error: Unable to open output file"
     if self.mask: mask = self.mask
-    else: mask = ones((ngenes,nexps))
+    else: mask = numpy.ones((ngenes,nexps), int)
     if self.gweight: gweight = self.gweight
-    else: gweight = ones(ngenes)
+    else: gweight = numpy.ones(ngenes)
     if self.eweight: eweight = self.eweight
-    else: eweight = ones(nexps)
+    else: eweight = numpy.ones(nexps)
     if gid: outputfile.write ('GID\t')
     outputfile.write(self.uniqid)
     outputfile.write('\tNAME\tGWEIGHT')

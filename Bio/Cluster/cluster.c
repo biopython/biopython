@@ -1225,10 +1225,17 @@ Otherwise, the distance between two columns in the matrix is calculated.
       }
     }
   }
-  if (m==0) return 0;
+  if (m==0)
+  { free(tdata1);
+    free(tdata2);
+    return 0;
+  }
   rank1 = getrank(m, tdata1);
   free(tdata1);
-  if(!rank1) return 0.0; /* Memory allocation error */
+  if(!rank1)
+  { free(tdata2);
+    return 0.0; /* Memory allocation error */
+  }
   rank2 = getrank(m, tdata2);
   free(tdata2);
   if(!rank2) /* Memory allocation error */
