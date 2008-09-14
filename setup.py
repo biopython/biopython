@@ -114,29 +114,6 @@ you see ImportErrors."""
             "Do you want to continue this installation?", default):
             return 0
         
-    
-    # Compile KDTree ? Not compiled by default
-    print "\n*** Bio.KDTree *** NOT built by default "
-    kdtree_msg = """
-The Bio.PDB.NeighborSearch module depends on the Bio.KDTree module,
-which in turn, depends on C++ code that does not compile cleanly on
-all platforms. Hence, Bio.KDTree is not built by default.
-
-Would you like to build Bio.KDTree ?"""
-
-    if get_yes_or_no (kdtree_msg, 0):
-        if is_Numpy_installed():
-            import numpy
-            NUMPY_PACKAGES.append("Bio.KDTree")
-            NUMPY_EXTENSIONS.append(
-                CplusplusExtension('Bio.KDTree._CKDTree',
-                                   ["Bio/KDTree/KDTree.cpp",
-                                    "Bio/KDTree/KDTree.swig.cpp"],
-                                   include_dirs=[numpy.get_include()],
-                                   libraries=["stdc++"],
-                                   language="c++"))
-    
-    
     return 1
 
 class install_biopython(install):
@@ -186,26 +163,6 @@ class build_py_biopython(build_py):
                 self.copy_file(filename, dst)
 
 
-class CplusplusExtension(Extension):
-    """Hack-y wrapper around Extension to support C++ and Python2.2.
-
-    Python2.3 defines an extension attribute, which can be used in
-    'build_extension' to work around problems Python has with always
-    using the C++ compiler to compile C++ code.
-    
-    This should be able to be removed once we move to requiring Python 2.3 or
-    better.
-    """
-    def __init__(self, *args, **kw):
-        # fix the language -- 2.2 doesn't have languages
-        if sys.version_info[1] < 3:
-            try:
-                self.language = kw['language']
-                del kw['language']
-            except KeyError:
-                pass
-        Extension.__init__(self, *args, **kw)
-
 class build_ext_biopython(build_ext):
     def run(self):
         if not check_dependencies_once():
@@ -213,55 +170,21 @@ class build_ext_biopython(build_ext):
         # add software that requires NumPy to install
         if is_Numpy_installed():
             import numpy
-            NUMPY_EXTENSIONS.append(
+            numpy_include_dir = numpy.get_include()
+            self.extensions.append(
                 Extension('Bio.Cluster.cluster',
                           ['Bio/Cluster/clustermodule.c',
                            'Bio/Cluster/cluster.c'],
-                          include_dirs=[numpy.get_include()],
-                          #include_dirs=["Bio/Cluster"]
+                          include_dirs=[numpy_include_dir],
                           ))
-            self.extensions.extend(NUMPY_EXTENSIONS)
+            self.extensions.append(
+                Extension('Bio.KDTree._CKDTree',
+                          ["Bio/KDTree/KDTree.c",
+                           "Bio/KDTree/KDTreemodule.c"],
+                          include_dirs=[numpy_include_dir],
+                          ))
         build_ext.run(self)
 
-    def build_extensions(self):
-        # Unix C compiler plus others
-        if hasattr(self.compiler, "compiler_so"):
-            self._original_compiler_so = self.compiler.compiler_so
-        # MSVC -- others?
-        else:
-            self._original_compiler_so = self.compiler.cc
-
-        build_ext.build_extensions(self)
-
-    def build_extension(self, ext):
-        """Work around distutils bug which uses the C compiler for C++ code.
-        """
-        # build this extension by default
-        build = 1
-        if hasattr(ext, "language") and ext.language == "c++":
-            # C++ didn't build in the past with msvc
-            # mingw32 seems fine now
-            if self.compiler.compiler_type=="msvc":
-                build = 0
-            # fix for distutils where C++ is not handled well. This includes
-            # Python 2.2.x -- need to find the C++ compiler
-            cxx = None
-            if (sys.version_info[1] < 3) and build: # Python 2.2
-                cxx = sysconfig.get_config_vars("CXX")
-                if os.environ.has_key("CXX"):
-                    cxx = os.environ["CXX"]
-            # set the C++ compiler if it doesn't exist in distutils
-            if cxx:
-                self.compiler.set_executable("compiler", cxx)
-                self.compiler.set_executable("compiler_so", cxx)
-                self.compiler.set_executable("linker_so",
-                        cxx + ["-shared"])
-        else:
-            self.compiler.compiler_so = self._original_compiler_so
-
-        # C++ extensions just plain won't build on some platforms
-        if build:
-            build_ext.build_extension(self, ext)
 
 class test_biopython(Command):
     """Run all of the tests for the package.
@@ -460,6 +383,7 @@ PACKAGES = [
 NUMPY_PACKAGES = [
     'Bio.Affy',
     'Bio.Cluster',
+    'Bio.KDTree',
 ]
 
 EXTENSIONS = [
@@ -507,14 +431,6 @@ EXTENSIONS = [
               ['Bio/Restriction/DNAUtils.c']
               ),
     ]
-
-# extensions that require numeric python
-NUMPY_EXTENSIONS = [
-#   CplusplusExtension('Bio.Affy._cel',  # The file parser in celmodule.cc was
-#            ['Bio/Affy/celmodule.cc'],  # replaced by a scanner/consumer in
-#            language="c++"              # CelFile.py, using Biopython's
-#            ),                          # parser framework
-]
 
 DATA_FILES=[
     "Bio/Entrez/DTDs/*.dtd",
