@@ -13,13 +13,9 @@ class CelRecord: stores the information from a cel file
 
 """
 
-# import _cel
 
 from Bio.ParserSupport import AbstractConsumer
-try:
-    from Numeric import *
-except ImportError:
-    from numpy.oldnumeric import *
+from numpy import *
 
 class CelScanner:
     """Scannner for Affymetrix CEL files.
@@ -78,9 +74,9 @@ class CelConsumer(AbstractConsumer):
         self._rows = int(value)
 
     def StartIntensity(self):
-        self._mean  = zeros((self._rows, self._cols), Float)
-        self._stdev = zeros((self._rows, self._cols), Float)
-        self._npix  = zeros((self._rows, self._cols), Int)
+        self._mean  = zeros((self._rows, self._cols))
+        self._stdev = zeros((self._rows, self._cols))
+        self._npix  = zeros((self._rows, self._cols), int)
 
     def ReadIntensity(self, line):
         y, x, mean, stdev, npix = map(float, line.split())
