@@ -230,12 +230,22 @@ def makeTableX(table):
 # end of hacks
 
 def seq3(seq):
-   """
-   Method that returns the amino acid sequence as a
-   list of three letter codes. Output follows the IUPAC standard plus 'Ter' for
-   terminator. Any unknown character, including the default
-   unknown character 'X', is changed into 'Xaa'. A noncoded
-   aminoacid selenocystein is recognized (Sel, U).
+   """Turn a one letter code protein sequence into one with three letter codes.
+
+   The single input argument 'seq' should be a protein sequence using single
+   letter codes, either as a python string or as a Seq or MutableSeq object.
+
+   This function returns the amino acid sequence as a string using the three
+   letter amino acid codes. Output follows the IUPAC standard (including
+   ambiguous characters B for "Asx", J for "Xle" and X for "Xaa", and also U
+   for "Sel" and O for "Pyl") plus "Ter" for a terminator given as an asterisk.  Any unknown
+   character (including possible gap characters), is changed into 'Xaa'.
+
+   e.g.
+   >>> seq3("MAIVMGRWKGAR*")
+   'MetAlaIleValMetGlyArgTrpLysGlyAlaArgTer'
+
+   This function was inspired by BioPerl's seq3.
    """
    threecode = {'A':'Ala', 'B':'Asx', 'C':'Cys', 'D':'Asp',
                 'E':'Glu', 'F':'Phe', 'G':'Gly', 'H':'His',
@@ -243,10 +253,11 @@ def seq3(seq):
                 'N':'Asn', 'P':'Pro', 'Q':'Gln', 'R':'Arg',
                 'S':'Ser', 'T':'Thr', 'V':'Val', 'W':'Trp',
                 'Y':'Tyr', 'Z':'Glx', 'X':'Xaa', '*':'Ter',
-                'U':'Sel'
+                'U':'Sel', 'O':'Pyl', 'J':'Xle',
                 }
-
-   return ''.join([threecode.get(aa,'Xer') for aa in seq])
+   #We use a default of 'Xaa' for undefined letters
+   #Note this will map '-' to 'Xaa' which may be undesirable!
+   return ''.join([threecode.get(aa,'Xaa') for aa in seq])
 
 
 # }}}
