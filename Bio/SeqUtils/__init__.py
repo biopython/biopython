@@ -7,6 +7,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Miscellaneous functions for dealing with sequences."""
+
 import re, time
 from Bio import SeqIO
 from Bio import Translate
@@ -357,18 +359,47 @@ def fasta_uniqids(file):
       print '>%s\n%s' % (name, seq)
 
 def quick_FASTA_reader(file):
-   " simple and FASTA reader, preferable to be used on large files "
+   """Simple FASTA reader, returning a list of string tuples (OBSOLETE).
+
+   The single argument 'file' should be the filename of a FASTA format file.
+   This function will open and read in the entire file, constructing a list
+   of all the records, each held as a tuple of strings (the sequence name or
+   title, and its sequence).
+
+   This function is obsolete.  It was originally intended for use on large
+   files, where its low overhead was helpful.  However, because it returns
+   the data as a single in memory list, this is not necessarily as good idea.
+
+   You are encouraged to use Bio.SeqIO.parse(handle, "fasta") which returns
+   a generator, allowing you to iterate over the records one by one (avoiding
+   having all the records in memory at once).  Note that rather than simple
+   strings, Bio.SeqIO uses SeqRecord objects for each record in the file.
+   """
    txt = open(file).read()
    entries = []
    for entry in txt.split('>')[1:]:
       name,seq= entry.split('\n',1)
       seq = seq.replace('\n','').replace(' ','').upper()
       entries.append((name, seq))
-      
+   txt.close()      
    return entries
     
 def apply_on_multi_fasta(file, function, *args):
-   " apply function on each sequence in a multiple FASTA file "
+   """Apply a function on each sequence in a multiple FASTA file (OBSOLETE).
+
+   file - filename of a FASTA format file
+   function - the function you wish to invoke on each record
+   *args - any extra arguments you want passed to the function
+   
+   This function will iterate over each record in a FASTA file as SeqRecord
+   objects, calling your function with the record (and supplied args) as
+   arguments.
+
+   This function returns a list.  For those records where your function
+   returns a value, this is taken as a sequence and used to construct a
+   FASTA format string.  If your function never has a return value, this
+   means apply_on_multi_fasta will return an empty list.
+   """
    try:
       f = globals()[function]
    except:
@@ -382,11 +413,27 @@ def apply_on_multi_fasta(file, function, *args):
       for arg in args: arguments.append(arg)
       result = f(*arguments)
       if result:
-         results.append('>%s\n%s' % (record.title, result))
+         results.append('>%s\n%s' % (record.name, result))
+   handle.close()
    return results
          
 def quicker_apply_on_multi_fasta(file, function, *args):
-   " apply function on each sequence in a multiple FASTA file "
+   """Apply a function on each sequence in a multiple FASTA file (OBSOLETE).
+
+   file - filename of a FASTA format file
+   function - the function you wish to invoke on each record
+   *args - any extra arguments you want passed to the function
+   
+   This function will use quick_FASTA_reader to load every record in the
+   FASTA file into memory as a list of tuples.  For each record, it will
+   call your supplied function with the record as a tuple of the name and
+   sequence as strings (plus any supplied args).
+
+   This function returns a list.  For those records where your function
+   returns a value, this is taken as a sequence and used to construct a
+   FASTA format string.  If your function never has a return value, this
+   means quicker_apply_on_multi_fasta will return an empty list.
+   """
    try:
       f = globals()[function]
    except:
@@ -400,6 +447,7 @@ def quicker_apply_on_multi_fasta(file, function, *args):
       result = f(*arguments)
       if result:
          results.append('>%s\n%s' % (name, result))
+   handle.close()
    return results
 
 # }}}
