@@ -1,3 +1,11 @@
+# Copyright 2004-2008 by Sebastian Bassi.
+# All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
+"""Calculate the thermodynamic melting temperatures of nucleotide sequences."""
+
 import math
 def Tm_staluc(s,dnac=50,saltc=50,rna=0):
     """Returns DNA/DNA tm using nearest neighbor thermodynamics.
