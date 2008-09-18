@@ -1661,6 +1661,9 @@ def blastall(blastcmd, program, database, infile, align_view='7', **keywds):
 
     if not os.path.exists(blastcmd):
         raise ValueError, "blastall does not exist at %s" % blastcmd
+    if " " in blastcmd :
+        #Must wrap the blast exe path with spaces
+        blastcmd = '"%s"' % blastcmd
     
     params = []
 
@@ -1794,6 +1797,9 @@ def blastpgp(blastcmd, database, infile, align_view='7', **keywds):
         
     if not os.path.exists(blastcmd):
         raise ValueError, "blastpgp does not exist at %s" % blastcmd
+    if " " in blastcmd :
+        #Must wrap the blast exe path with spaces
+        blastcmd = '"%s"' % blastcmd
     
     params = []
 
@@ -1902,6 +1908,9 @@ def rpsblast(blastcmd, database, infile, align_view="7", **keywds):
         
     if not os.path.exists(blastcmd):
         raise ValueError, "rpsblast does not exist at %s" % blastcmd
+    if " " in blastcmd :
+        #Must wrap the blast exe path with spaces
+        blastcmd = '"%s"' % blastcmd
     
     params = []
 
