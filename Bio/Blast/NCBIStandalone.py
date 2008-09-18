@@ -1664,6 +1664,11 @@ def blastall(blastcmd, program, database, infile, align_view='7', **keywds):
     if " " in blastcmd :
         #Must wrap the blast exe path with spaces
         blastcmd = '"%s"' % blastcmd
+    if os.path.exists(infile) and " " in infile :
+        #Must wrap the input filename with spaces
+        #(the path exists check allows for the fact the user may have
+        #already added the quotes)
+        infile = '"%s"' % infile        
     
     params = []
 
@@ -1800,6 +1805,11 @@ def blastpgp(blastcmd, database, infile, align_view='7', **keywds):
     if " " in blastcmd :
         #Must wrap the blast exe path with spaces
         blastcmd = '"%s"' % blastcmd
+    if os.path.exists(infile) and " " in infile :
+        #Must wrap the input filename with spaces
+        #(the path exists check allows for the fact the user may have
+        #already added the quotes)
+        infile = '"%s"' % infile        
     
     params = []
 
@@ -1911,6 +1921,11 @@ def rpsblast(blastcmd, database, infile, align_view="7", **keywds):
     if " " in blastcmd :
         #Must wrap the blast exe path with spaces
         blastcmd = '"%s"' % blastcmd
+    if os.path.exists(infile) and " " in infile :
+        #Must wrap the input filename with spaces
+        #(the path exists check allows for the fact the user may have
+        #already added the quotes)
+        infile = '"%s"' % infile        
     
     params = []
 
