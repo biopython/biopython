@@ -1,7 +1,7 @@
 # Copyright 2000-2001, Dalke Scientific Software, LLC
 # Distributed under the Biopython License Agreement (see the LICENSE file).
 
-"""Martel is a 'regular expressions on steroids' parser generator (OBSOLETE).
+"""Martel is a 'regular expressions on steroids' parser generator (DEPRECATED).
 
 A goal of the Biopython project is to reduce the amount of effort needed to
 do computational biology. A large part of that work turns out to be parsing
@@ -15,11 +15,19 @@ chromosomes), and in practice debugging the Martel format specifications for
 evolving file formats like GenBank proved non-trivial.
 
 Andrew Dalke is no longer maintaining Martel or Bio.Mindy, and these modules
-are considered to be obsolete.  They are no longer used in any of the current
-Biopython parsers, and are likely to be deprecated and then removed in future
-releases of Biopython.
+are now deprecated.  They are no longer used in any of the current Biopython
+parsers, and are likely to be removed in a future release of Biopython.
 """
 __version__ = "1.48"
+
+#If we add a warning here it will be triggered by setup.py which is nasty
+#import warnings
+#warnings.warn("Martel and those parts of Biopython depending on it" \
+#              +" directly, such as Bio.Mindy, are now deprecated, and will" \
+#              +" be removed in a future release of Biopython.  If you want"\
+#              +" to continue to use this code, please get in contact with"\
+#              +" the Biopython developers via the mailing lists to avoid"\
+#              +" its permanent removal from Biopython", DeprecationWarning)
 
 import Expression
 import convert_re

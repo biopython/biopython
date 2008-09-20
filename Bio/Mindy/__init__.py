@@ -1,17 +1,20 @@
-# Copyright 2002 by Andrew Dalke.
-# All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-"""Bio.Mindy provides functionality building on the Martel parser (OBSOLETE).
+"""Bio.Mindy provides functionality building on the Martel parser (DEPRECATED).
 
 Andrew Dalke is no longer maintaining Martel or Bio.Mindy, and these modules
-are considered to be obsolete.  They are no longer used in any of the current
-Biopython parsers, and are likely to be deprecated and then removed in future
-releases of Biopython.
+are now deprecated.  They are no longer used in any of the current Biopython
+parsers, and are likely to be removed in a future release.
 """
-import os, sys
 
+import warnings
+warnings.warn("Martel and those parts of Biopython depending on it" \
+              +" directly (such as Bio.Mindy) are now deprecated, and will" \
+              +" be removed in a future release of Biopython.  If you want"\
+              +" to continue to use this code, please get in contact with"\
+              +" the Biopython developers via the mailing lists to avoid"\
+              +" its permanent removal from Biopython.", \
+              DeprecationWarning)
+
+import os, sys
 _open = open  # rename for internal use -- gets redefined below
 
 def open(dbname, mode = "r"):
