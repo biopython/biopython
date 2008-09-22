@@ -1,3 +1,4 @@
+"""Part of an old unused and undocumented sequence writing framework (DEPRECATED)."""
 from Bio import Writer
 
 class WriteFasta(Writer.Writer):

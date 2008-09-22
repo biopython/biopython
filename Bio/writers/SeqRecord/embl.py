@@ -1,3 +1,4 @@
+"""Part of an old unused and undocumented sequence writing framework (DEPRECATED)."""
 # Not clear on the distinction, if any, between 'embl' and 'embl/65'.  This
 # code might apply to either or both.
 
