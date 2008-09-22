@@ -3555,7 +3555,8 @@ We can get the lineage directly from this record:
 Often you will want to make a series of linked queries.  Most typically, running a search, perhaps refining the search, and then retrieving detailed search results.  You \emph{can} do this by making a series of separate calls to Entrez.  However, the NCBI prefer you to take advantage of their history support.
 
 \subsection{Searching for and downloading sequences using the history}
-For example, suppose we want to search and download all the \textit{Opuntia} rpl16 nucleotide sequences, and store them in a FASTA file.  As shown in Section~\ref{sec:entrez-search-fetch-genbank}, we can naively combine \verb|Bio.Entrez.esearch()| (Section~\ref{sec:entrez-esearch}) to get a list of GI numbers, and then call \verb|Bio.Entrez.efetch()| (Section~\ref{sec:efetch}) to download them all.
+For example, suppose we want to search and download all the \textit{Opuntia} rpl16 nucleotide sequences, and store them in a FASTA file.  As shown in Section~\ref{sec:entrez-search-fetch-genbank}, we can naively combine \verb|Bio.Entrez.esearch()|
+to get a list of GI numbers, and then call \verb|Bio.Entrez.efetch()| to download them all.
 
 However, the approved approach is to run the search with the history feature.  Then, we can fetch the results by reference to the search results - which the NCBI can anticipate and cache.
 
@@ -3578,7 +3579,7 @@ To do this, you call \verb|Bio.Entrez.esearch()| as normal, but with the additio
 >>> assert count == len(gi_list)
 \end{verbatim}
 
-\noindent However, you also get given two additional pieces of information, the {\tt WebEnv} session cookie, and the{\tt QueryKey}:
+\noindent However, you also get given two additional pieces of information, the {\tt WebEnv} session cookie, and the {\tt QueryKey}:
 
 \begin{verbatim}
 >>> session_cookie = search_results["WebEnv"]
@@ -3607,7 +3608,7 @@ out_handle.close()
 \noindent For illustrative purposes, this example downloaded the FASTA records in batches of three.  Unless you are downloading genomes or chromosomes, you would normally pick a larger batch size.
 
 \subsection{Searching for and downloading abstracts using the history}
-Here is another history example, searching for papers published in the last year about the \textit{Opuntia}, and then download them into a file in MedLine format:
+Here is another history example, searching for papers published in the last year about the \textit{Opuntia}, and then downloading them into a file in MedLine format:
 
 \begin{verbatim}
 from Bio import Entrez
