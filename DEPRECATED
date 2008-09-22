@@ -4,19 +4,21 @@ to find documentation about how to update your code to work again.
 
 Numeric support
 ===============
-Following the release of 1.48, Numeric support in Biopython is discontinued. Limited
-support is still available for python modules via back compatible imports, but C 
-modules will not work. Please move to NumPy.
+Following the release of 1.48, Numeric support in Biopython is discontinued.
+Limited support is still available for python modules via back compatible
+imports, but C modules will not work. Please move to NumPy.
 
 Martel
 ======
-Declared obsolete in Release 1.48, with the intention of an official deprecation
-or removal in a future release.
+Declared obsolete in Release 1.48, deprecated in Release 1.49
 
 Bio.Mindy
 =========
-Declared obsolete in Release 1.48, with the intention of an official deprecation
-in the following release.
+Declared obsolete in Release 1.48, deprecated in Release 1.49
+
+Bio.builders
+============
+Part of the Martle/Mindy infrastructure, this was deprecated in Release 1.49
 
 Bio.MetaTool
 ============
@@ -104,7 +106,7 @@ This was removed in Release 1.44
 
 Bio.expressions (and therefore Bio.config, Bio.dbdefs, Bio.formatdefs, Bio.dbdefs)
 ===============
-This has been deprecated as of Release 1.44
+These were deprecated in Release 1.44, and removed in Release 1.49
 
 Bio.Kabat
 =========
@@ -113,14 +115,14 @@ This was deprecated in Release 1.43 and removed in Release 1.44
 Bio.SeqUtils
 ============
 The functions 'complement' and 'antiparallel' in Bio.SeqUtils have been
-deprecated as of Release 1.31. Use the functions 'complement' and
-'reverse_complement' in Bio.Seq instead.
+deprecated as of Release 1.31, and removed in Release 1.43.
+Use the functions 'complement' and 'reverse_complement' in Bio.Seq instead.
 
 Bio.GFF
 =======
 The functions 'forward_complement' and 'antiparallel' in Bio.GFF.easy have been
-deprecated as of Release 1.31. Use the functions 'complement' and
-'reverse_complement' in Bio.Seq instead.
+deprecated as of Release 1.31, and removed in Release 1.43.
+Use the functions 'complement' and 'reverse_complement' in Bio.Seq instead.
 
 Bio.sequtils
 ============
