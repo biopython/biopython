@@ -16,8 +16,8 @@ Bio.Mindy
 =========
 Declared obsolete in Release 1.48, deprecated in Release 1.49
 
-Bio.builders
-============
+Bio.builders, Bio.Std, Bio.StdHandler, Bio.Decode
+=================================================
 Part of the Martle/Mindy infrastructure, this was deprecated in Release 1.49
 
 Bio.Writer and Bio.writers

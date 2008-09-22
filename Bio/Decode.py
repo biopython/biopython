@@ -6,9 +6,19 @@
 """Decode elements from a Std/Martel parsed XML stream (OBSOLETE).
 
 Andrew Dalke is no longer maintaining Martel or Bio.Mindy, and these modules
-(and therefore Bio.Decode) are considered to be obsolete.  They are no longer
-used in any of the current Biopython parsers, and are likely to be deprecated
-and then removed in future releases of Biopython."""
+(and therefore Bio.Decode) have been deprecated.  They are no longer used in
+any of the current Biopython parsers, and are likely to be removed in a
+future release."""
+
+import warnings
+warnings.warn("Martel and those parts of Biopython depending on it" \
+              +" directly (such as Bio.Mindy and Bio.Decode) are now" \
+              +" deprecated, and will be removed in a future release of"\
+              +" Biopython.  If you want to continue to use this code,"\
+              +" please get in contact with the Biopython developers via"\
+              +" the mailing lists to avoid its permanent removal from"\
+              +" Biopython.", \
+              DeprecationWarning)
 
 import string
 from Bio.Parsers.spark import GenericScanner, GenericParser
