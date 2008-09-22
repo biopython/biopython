@@ -96,6 +96,18 @@ Bio.SeqIO
 The old Bio.SeqIO.FASTA and Bio.SeqIO.generic were deprecated in favour of
 the new Bio.SeqIO module as of Release 1.44, removed in Release 1.47
 
+Bio.Medline.NLMMedlineXML
+=========================
+Deprecated in Release 1.44, removed in 1.46
+
+Bio.MultiProc
+=============
+Deprecated in Release 1.44, removed in 1.46
+
+Bio.MarkupEditor
+================
+Deprecated in Release 1.44, removed in 1.46
+
 Bio.lcc
 =======
 Deprecated in favor of Bio.SeqUtils.lcc in Release 1.44, removed in 1.46
