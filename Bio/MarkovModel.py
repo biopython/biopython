@@ -177,16 +177,30 @@ def _baum_welch(N, M, training_outputs,
                 pseudo_initial=None, pseudo_transition=None,
                 pseudo_emission=None, update_fn=None):
     # Returns (p_initial, p_transition, p_emission)
-    p_initial = _safe_copy_and_check(p_initial, (N,))
-    if not p_initial.any():
-        p_initial = _random_norm(N)
-    p_transition = _safe_copy_and_check(p_transition, (N,N))
-    if not p_transition.any():
-        p_transition = _random_norm((N,N))
-    p_emission = _safe_copy_and_check(p_emission, (N,M))
-    if not p_emission.any():
-         p_emission = _random_norm((N,M))
 
+    #The following is a work around for a change in array behaviour
+    #between Numeric (which allowed evaluation of arrays as booleans)
+    #and numpy (which instead adds an any attribute).
+    try :
+        #This code works on numpy
+        p_initial = _safe_copy_and_check(p_initial, (N,))
+        if not p_initial.any():
+            p_initial = _random_norm(N)
+        p_transition = _safe_copy_and_check(p_transition, (N,N))
+        if not p_transition.any():
+            p_transition = _random_norm((N,N))
+        p_emission = _safe_copy_and_check(p_emission, (N,M))
+        if not p_emission.any():
+             p_emission = _random_norm((N,M))
+    except AttributeError :
+        #This code works on Numeric
+        p_initial = _safe_copy_and_check(p_initial, (N,)) or \
+                    _random_norm(N)
+        p_transition = _safe_copy_and_check(p_transition, (N,N)) or \
+                       _random_norm((N,N))
+        p_emission = _safe_copy_and_check(p_emission, (N,M)) or \
+                     _random_norm((N,M))
+    
     # Do all the calculations in log space to avoid underflows.
     lp_initial, lp_transition, lp_emission = map(
         log, (p_initial, p_transition, p_emission))
