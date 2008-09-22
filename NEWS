@@ -9,6 +9,19 @@ The latest news is at the top.
 
 ===================================================================
 
+Biopython is transitioning from Numeric to NumPy.  Currently limited support
+is still available for python modules via back compatible imports, but C
+modules will not work. Please move to NumPy.
+
+As part of the Numeric to NumPy migration, Bio.KDTree has been rewritten in C
+instead of C++ which therefore simplifies building Biopython from source.
+
+Martel and Bio.Mindy are now considered to be deprecated, meaning mxTextTools
+is no longer required to use Biopython.  See the DEPRECATED file for details
+of other deprecations.
+
+===================================================================
+
 September 8, 2008: Biopython 1.48 released.
 
 The SeqRecord and Alignment objects have a new method to format the object as
