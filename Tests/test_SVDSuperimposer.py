@@ -43,14 +43,20 @@ def simple_matrix_print(matrix) :
 
     This should give the same output on multiple systems.  This is
     needed because a simple "print matrix" uses scientific notation
-    which varies between platforms."""
+    which varies between platforms.
+
+    Only 5 decimal places are used to avoid false test failures due
+    to slight differences in the calculation (e.g. due to different
+    versions of the underlying libraries or the compilation options
+    they used).
+    """
 
     #This uses a fancy double nested list expression.
     #If and when Biopython requires Python 2.4 or later,
     #it would be slightly nicer to use generator expressions.
     return "[" \
     + "\n ".join(["[" \
-                 + " ".join(["% 1.6f" % val for val in row]) \
+                 + " ".join(["% 1.5f" % val for val in row]) \
                  + "]" for row in matrix]) \
     + "]"
 
