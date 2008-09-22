@@ -83,7 +83,7 @@ def check_dependencies():
         ("mxTextTools", is_mxTextTools_installed, 0,
          "http://www.egenix.com/files/python/eGenix-mx-Extensions.html"),
         ("Numerical Python (NumPy)", is_Numpy_installed, 0,
-         "http://numpy.sourceforge.net/"),
+         "http://numpy.scipy.org/"),
         ]
 
     for name, is_installed_fn, is_required, url in dependencies:
