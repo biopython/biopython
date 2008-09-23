@@ -80,8 +80,10 @@ def check_dependencies():
     # - is packaged required, boolean
     # - package website, string
     dependencies = [
-        ("mxTextTools", is_mxTextTools_installed, 0,
-         "http://www.egenix.com/files/python/eGenix-mx-Extensions.html"),
+        #mxTextTools is only used by Martel and other deprecated code.
+        #We therefore won't worry about if it is installed or not.
+        #("mxTextTools", is_mxTextTools_installed, 0,
+        # "http://www.egenix.com/files/python/eGenix-mx-Extensions.html"),
         ("Numerical Python (NumPy)", is_Numpy_installed, 0,
          "http://numpy.scipy.org/"),
         ]
