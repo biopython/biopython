@@ -41,12 +41,3 @@ Running tests on attempt_read_and_call
 0
 0
 1
-Running tests on EventGenerator
-Test the basic callback functionality. ... ok
-Test the ability to exempt tags from being processed by a finalizer. ... ok
-Test the ability to pass a finalizer to the consumer. ... ok
-
-----------------------------------------------------------------------
-Ran 3 tests in 0.111s
-
-OK
