@@ -24,6 +24,11 @@ Bio.Writer and Bio.writers
 ==========================
 Deprecated in Release 1.48
 
+Bio.Emboss.Primer
+=================
+Deprecated in Release 1.48, this parser was replaced by Bio.Emboss.Primer3 and
+Bio.Emboss.PrimerSearch instead.
+
 Bio.MetaTool
 ============
 Deprecated in Release 1.48, this was a parser from the output of MetaTool 3.5
