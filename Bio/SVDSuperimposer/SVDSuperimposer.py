@@ -4,10 +4,10 @@
 # as part of this package.
 
 try:
-    from Numeric import matrixmultiply, transpose, sum, sqrt
+    from Numeric import dot, transpose, sum, sqrt
     from LinearAlgebra import singular_value_decomposition, determinant
 except ImportError:
-    from numpy.oldnumeric import matrixmultiply, transpose, sum, sqrt
+    from numpy.oldnumeric import dot, transpose, sum, sqrt
     from numpy.oldnumeric.linear_algebra import singular_value_decomposition, \
          determinant
 
@@ -81,14 +81,14 @@ class SVDSuperimposer:
         coords=coords-av1
         reference_coords=reference_coords-av2
         # correlation matrix
-        a=matrixmultiply(transpose(coords), reference_coords)
+        a=dot(transpose(coords), reference_coords)
         u, d, vt=singular_value_decomposition(a)
-        self.rot=transpose(matrixmultiply(transpose(vt), transpose(u)))
+        self.rot=transpose(dot(transpose(vt), transpose(u)))
         # check if we have found a reflection
         if determinant(self.rot)<0:
             vt[2]=-vt[2]
-            self.rot=transpose(matrixmultiply(transpose(vt), transpose(u)))
-        self.tran=av2-matrixmultiply(av1, self.rot)
+            self.rot=transpose(dot(transpose(vt), transpose(u)))
+        self.tran=av2-dot(av1, self.rot)
 
     def get_transformed(self):
         "Get the transformed coordinate set."
@@ -97,7 +97,7 @@ class SVDSuperimposer:
         if self.rot is None:
             raise Exception, "Nothing superimposed yet."
         if self.transformed_coords is None:
-            self.transformed_coords=matrixmultiply(self.coords, self.rot)+self.tran
+            self.transformed_coords=dot(self.coords, self.rot)+self.tran
         return self.transformed_coords
 
     def get_rotran(self):
@@ -155,7 +155,7 @@ if __name__=="__main__":
     rot, tran=sup.get_rotran()
 
     # rotate y on x
-    y_on_x1=matrixmultiply(y, rot)+tran
+    y_on_x1=dot(y, rot)+tran
 
     # same thing
     y_on_x2=sup.get_transformed()
