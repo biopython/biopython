@@ -80,10 +80,6 @@ def check_dependencies():
     # - is packaged required, boolean
     # - package website, string
     dependencies = [
-        #mxTextTools is only used by Martel and other deprecated code.
-        #We therefore won't worry about if it is installed or not.
-        #("mxTextTools", is_mxTextTools_installed, 0,
-        # "http://www.egenix.com/files/python/eGenix-mx-Extensions.html"),
         ("Numerical Python (NumPy)", is_Numpy_installed, 0,
          "http://numpy.scipy.org/"),
         ]
@@ -134,10 +130,6 @@ class build_py_biopython(build_py):
     def run(self):
         if not check_dependencies_once():
             return
-        # Check to see if Martel is installed.  If not, then install
-        # it automatically.
-        if not is_Martel_installed():
-            self.packages.append("Martel")
         # Add software that requires Numpy to be installed.
         if is_Numpy_installed():
             self.packages.extend(NUMPY_PACKAGES)
@@ -235,54 +227,6 @@ def can_import(module_name):
         return None
     raise AssertionError, "how did I get here?"
 
-def is_Martel_installed():
-    old_path = sys.path[:]
-
-    # First, check the version of the Martel that's bundled with
-    # Biopython.
-    sys.path.insert(0, '')   # Make sure I'm importing the current one.
-    m = can_import("Martel")
-    sys.path = old_path
-    if m:
-        bundled_martel_version = m.__version__
-        del sys.modules["Martel"]   # Unload the bundled version of Martel.
-    else:
-        #We won't be able to import the bundled version of Martel if an
-        #external dependency like mxTextTools is missing.
-        #In this case, we can't compare versions to any pre-installed Martel
-        #(even if that could be imported).
-        bundled_martel_version = None
-
-    # Now try and import a Martel that's not bundled with Biopython.
-    # To do that, I need to delete all the references to the current
-    # path from sys.path.
-    i = 0
-    while i < len(sys.path):
-        if sys.path[i] in ['', '.', os.getcwd()]:
-            del sys.path[i]
-        else:
-            i += 1
-    m = can_import("Martel")
-    sys.path = old_path
-    if m:
-        old_martel_version = m.__version__
-    else:
-        #Either there is no pre-installed copy of Martel, or if there is
-        #it cannot be imported (e.g. missing a dependency like mxTextTools).
-        old_martel_version = None
-
-    installed = 0
-    # If the bundled one is the older, then ignore it
-    if old_martel_version and bundled_martel_version and \
-           bundled_martel_version < old_martel_version:
-        installed = 1
-    return installed
-
-def is_mxTextTools_installed():
-    if can_import("TextTools"):
-        return 1
-    return can_import("mx.TextTools")
-
 def is_Numpy_installed():
     return can_import("numpy")
 
@@ -369,6 +313,9 @@ PACKAGES = [
     'Bio.writers.SeqRecord',
     'Bio.Wise',
     'Bio.WWW',
+    #Other top level packages,
+    'BioSQL',
+    'Martel', #Deprecated as of Biopython 1.49
     ]
 
 # packages that require Numeric Python
@@ -464,10 +411,6 @@ class install_data_biopython(install_data):
                 else:
                     outfile = dst
                 self.outfiles.append(outfile)
-
-
-# Install BioSQL.
-PACKAGES.append("BioSQL")
 
 setup(
     name='biopython',
