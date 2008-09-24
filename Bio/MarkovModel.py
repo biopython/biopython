@@ -273,7 +273,7 @@ def _baum_welch_one(N, M, outputs,
         lp_arcout[i] = _logsum(lp_arcout_t[i,:])
 
     # UPDATE P_INITIAL.
-    lp_initial[:] = lp_arcout_t[:,0]
+    lp_initial = lp_arcout_t[:,0]
     if lpseudo_initial:
         lp_initial = _logvecadd(lp_initial, lpseudo_initial)
         lp_initial = lp_initial - _logsum(lp_initial)
