@@ -45,7 +45,7 @@ def simple_matrix_print(matrix) :
     needed because a simple "print matrix" uses scientific notation
     which varies between platforms.
 
-    Only 5 decimal places are used to avoid false test failures due
+    Only 4 decimal places are used to avoid false test failures due
     to slight differences in the calculation (e.g. due to different
     versions of the underlying libraries or the compilation options
     they used).
@@ -56,7 +56,7 @@ def simple_matrix_print(matrix) :
     #it would be slightly nicer to use generator expressions.
     return "[" \
     + "\n ".join(["[" \
-                 + " ".join(["% 1.5f" % val for val in row]) \
+                 + " ".join(["% 1.4f" % val for val in row]) \
                  + "]" for row in matrix]) \
     + "]"
 
