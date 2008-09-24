@@ -1,5 +1,35 @@
-"""Code to interact with various Primer-related programs from EMBOSS.
+"""Code to interact with Primer-related programs from EMBOSS (DEPRECATED).
+
+Bio.Emboss.Primer has been deprecated, please use Bio.Emboss.Primer3 or
+Bio.Emboss.PrimerSearch instead.
+
+To parse primersearch output into a PrimerSearch.OutputRecord, use
+    from Bio.Emboss import PrimerSearch
+    handle = open('myprimersearchoutputfile.txt')
+    record = PrimerSearch.read(handle)
+
+To parse primer3 output into a Primer3.Record, use
+    from Bio.Emboss import Primer3
+    handle = open('myprimer3outputfile.txt')
+    record = Primer3.read(handle)
 """
+
+import warnings
+warnings.warn("""\
+Bio.Emboss.Primer has been deprecated.
+Please use Bio.Emboss.Primer3 or Bio.Emboss.PrimerSearch instead.
+
+To parse primersearch output into a PrimerSearch.OutputRecord, use
+    from Bio.Emboss import PrimerSearch
+    handle = open('myprimersearchoutputfile.txt')
+    record = PrimerSearch.read(handle)
+
+To parse primer3 output into a Primer3.Record, use
+    from Bio.Emboss import Primer3
+    handle = open('myprimer3outputfile.txt')
+    record = Primer3.read(handle)
+""", DeprecationWarning)
+
 # standard library
 import string
 from xml.sax import handler
@@ -13,22 +43,6 @@ from Bio.ParserSupport import EventGenerator
 
 import primersearch_format
 import primer3_format
-
-import warnings
-warnings.warn("""\
-Bio.Emboss.Primer has been deprecated.
-Please use Bio.Emboss.Primer3 or Bio.Emboss.PrimerSearch instead.\n
-
-To parse primersearch output into a PrimerSearch.OutputRecord, use
-    from Bio.Emboss import PrimerSearch
-    handle = open('myprimersearchoutputfile.txt')
-    record = PrimerSearch.read(handle)
-
-To parse primer3 output into a Primer3.Record, use
-    from Bio.Emboss import Primer3
-    handle = open('myprimer3outputfile.txt')
-    record = Primer3.read(handle)
-""", DeprecationWarning)
 
 # --- primersearch
 
