@@ -20,14 +20,14 @@ parsers, and are likely to be removed in a future release of Biopython.
 """
 __version__ = "1.48"
 
-#If we add a warning here it will be triggered by setup.py which is nasty
-#import warnings
-#warnings.warn("Martel and those parts of Biopython depending on it" \
-#              +" directly, such as Bio.Mindy, are now deprecated, and will" \
-#              +" be removed in a future release of Biopython.  If you want"\
-#              +" to continue to use this code, please get in contact with"\
-#              +" the Biopython developers via the mailing lists to avoid"\
-#              +" its permanent removal from Biopython", DeprecationWarning)
+import warnings
+warnings.warn("Martel and those parts of Biopython depending on it" \
+              +" directly, such as Bio.Mindy, are now deprecated, and will" \
+              +" be removed in a future release of Biopython.  If you want"\
+              +" to continue to use this code, please get in contact with"\
+              +" the Biopython developers via the mailing lists to avoid"\
+              +" its permanent removal from Biopython", \
+              DeprecationWarning)
 
 import Expression
 import convert_re
