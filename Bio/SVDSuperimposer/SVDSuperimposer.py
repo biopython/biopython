@@ -8,9 +8,8 @@ try:
     from LinearAlgebra import singular_value_decomposition, determinant
 except ImportError:
     from numpy.oldnumeric import matrixmultiply, transpose, sum, sqrt
-    from numpy.oldnumeric.linear_algebra import (singular_value_decomposition,
-            determinant)
-
+    from numpy.oldnumeric.linear_algebra import singular_value_decomposition, \
+         determinant
 
 class SVDSuperimposer:
     """

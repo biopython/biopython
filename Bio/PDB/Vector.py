@@ -4,13 +4,13 @@
 # as part of this package.
 
 try:
-    from Numeric import (array, sum, sqrt, arccos, matrixmultiply, transpose,
-            cos, sin, zeros, trace)
+    from Numeric import array, sum, sqrt, arccos, matrixmultiply, \
+         transpose, cos, sin, zeros, trace
     from LinearAlgebra import determinant, eigenvectors
     from MLab import eye
 except ImportError:
-    from numpy.oldnumeric import (array, sum, sqrt, arccos, matrixmultiply,
-            transpose, cos, sin, zeros, trace)
+    from numpy.oldnumeric import array, sum, sqrt, arccos, matrixmultiply, \
+         transpose, cos, sin, zeros, trace
     from numpy.oldnumeric.linear_algebra import determinant, eigenvectors
     from numpy.oldnumeric.mlab import eye
 from math import acos
