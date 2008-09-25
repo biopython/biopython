@@ -932,6 +932,23 @@ handle.close()
 
 Similarly, if you wanted to read in a file in another file format, then assuming \verb|Bio.SeqIO.parse()| supports it you would just need to change the format string as appropriate, for example ``swiss'' for SwissProt files or ``embl'' for EMBL text files. There is a full listing on the wiki page (\url{http://biopython.org/wiki/SeqIO}).
 
+Another very common way to use a python iterator is within a list comprehension (or
+a generator expression).  For example, if all you wanted to extract from the file was
+a list of the record identifiers we can easily do this with the following list comprehension:
+
+\begin{verbatim}
+>>> from Bio import SeqIO
+>>> handle = open("ls_orchid.gbk")
+>>> identifiers = [seq_record.id for seq_record in SeqIO.parse(handle, "genbank")]
+>>> handle.close()
+>>> identifiers
+['Z78533.1', 'Z78532.1', 'Z78531.1', 'Z78530.1', 'Z78529.1', 'Z78527.1', ..., 'Z78439.1']
+\end{verbatim}
+
+\noindent There are more examples using \verb|SeqIO.parse()| in a list
+comprehension like this in Section~\ref{seq:sequence-parsing-plus-pylab}
+(e.g. for plotting sequence lengths or GC\%).
+
 \subsection{Iterating over the records in a sequence file}
 
 In the above examples, we have usually used a for loop to iterate over all the records one by one.  You can use the for loop with all sorts of Python objects (including lists, tuples and strings) which support the iteration interface.
@@ -4015,6 +4032,136 @@ For these functions, an invalid accession number returns an error message in HTM
 
 \chapter{Cookbook -- Cool things to do with it}
 \label{chapter:cookbook}
+
+\section{Sequence parsing plus simple plots}
+\label{seq:sequence-parsing-plus-pylab}
+
+This section shows some more examples of sequence parsing, using the \verb|Bio.SeqIO|
+module described in Chapter~\ref{chapter:Bio.SeqIO}, plus the python library matplotlib's \verb|pylab| plotting interface (see \href{http://matplotlib.sourceforge.net/tutorial.html}{the matplotlib tutorial}).  Note that to follow these examples you will need matplotlib installed - but without it you can still try the data parsing bits.
+
+\subsection{Histogram of sequence lengths}
+
+There are lots of times when you might want to visualise the distribution of sequence
+lengths in a dataset -- for example the range of contig sizes in a genome assembly
+project.  In this example we'll reuse our orchid FASTA file \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.fasta}{\tt ls\_orchid.fasta} which has only 94 sequences.
+
+First of all, we will use \verb|Bio.SeqIO| to parse the FASTA file and compile a list
+of all the sequence lengths.  You could do this with a for loop, but I find a list
+comprehension more pleasing:
+
+\begin{verbatim}
+>>> from Bio import SeqIO
+>>> handle = open("ls_orchid.fasta")
+>>> sizes = [len(seq_record) for seq_record in SeqIO.parse(handle, "fasta")]
+>>> handle.close()
+>>> len(sizes), min(sizes), max(sizes)
+(94, 572, 789)
+>>> sizes
+[740, 753, 748, 744, 733, 718, 730, 704, 740, 709, 700, 726, ..., 592]
+\end{verbatim}
+
+Now that we have the lengths of all the genes (as a list of integers), we can use the
+matplotlib histogram function to display it.
+
+\begin{verbatim}
+from Bio import SeqIO
+handle = open("ls_orchid.fasta")
+sizes = [len(seq_record) for seq_record in SeqIO.parse(handle, "fasta")]
+handle.close()
+
+import pylab
+pylab.hist(sizes, bins=20)
+pylab.title("%i orchid sequences\nLengths %i to %i" \
+            % (len(sizes),min(sizes),max(sizes)))
+pylab.xlabel("Sequence length (bp)")
+pylab.ylabel("Count")
+pylab.show()
+\end{verbatim}
+
+%
+% Have a HTML version and a PDF version to display nicely...
+%
+\begin{htmlonly}
+\noindent That should pop up a new window containing the following graph:
+\imgsrc[width=600, height=450]{images/hist_plot.png}
+\end{htmlonly}
+%
+% Now the PDF equivalent where we cannot always expect the figure
+% to be positioned right next to the text, so will use a reference.
+%
+\begin{latexonly}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{images/hist_plot.png}
+\caption{Histogram of orchid sequence lengths.}
+\label{fig:seq-len-hist}
+\end{figure}
+\noindent That should pop up a new window containing the graph
+shown in Figure~\ref{fig:seq-len-hist}.
+\end{latexonly}
+%
+% The text now continues...
+%
+Notice that most of these orchid sequences are about $740$ bp long, and there could be
+two distinct classes of sequence here with a subset of shorter sequences.
+
+\subsection{Plot of sequence GC\%}
+
+Another easily calculated quantity of a nucleotide sequence is the GC\%.  You might
+want to look at the GC\% of all the genes in a bacterial genome for example, and
+investigate any outliers which could have been recently acquired by horizontal gene
+transfer.  Again, for this example we'll reuse our orchid FASTA file \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.fasta}{\tt ls\_orchid.fasta}.
+
+First of all, we will use \verb|Bio.SeqIO| to parse the FASTA file and compile a list
+of all the GC percentages.  Again, you could do this with a for loop, but I prefer the
+list comprehension used here:
+
+\begin{verbatim}
+from Bio import SeqIO
+from Bio.SeqUtils import GC
+
+handle = open("ls_orchid.fasta")
+gc_values = [GC(seq_record.seq) for seq_record in SeqIO.parse(handle, "fasta")]
+gc_values.sort()
+handle.close()
+\end{verbatim}
+
+Having read in each sequence and calculated the GC\%, we then sorted them into ascending
+order. Now we'll take this list of floating point values and plot them with matplotlib:
+
+\begin{verbatim}
+import pylab
+
+pylab.plot(gc_values)pylab.title("%i orchid sequences\nGC%% %0.1f to %0.1f" \
+            % (len(gc_values),min(gc_values),max(gc_values)))
+pylab.xlabel("Genes")pylab.ylabel("GC%")pylab.savefig("gc_plot.png")pylab.show()\end{verbatim}
+
+%
+% Have a HTML version and a PDF version to display nicely...
+%
+\begin{htmlonly}
+\noindent As in the previous example, that should pop up a new window containing a graph:
+\imgsrc[width=600, height=450]{images/gc_plot.png}
+\end{htmlonly}
+%
+% Now the PDF equivalent where we cannot always expect the figure
+% to be positioned right next to the text, so will use a reference.
+%
+\begin{latexonly}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{images/gc_plot.png}
+\caption{Histogram of orchid sequence lengths.}
+\label{fig:seq-gc-plot}
+\end{figure}
+\noindent As in the previous example, that should pop up a new window, this time
+containing the graph shown in Figure~\ref{fig:seq-gc-plot}.
+\end{latexonly}
+%
+% The text now continues...
+%
+If you tried this on the full set of genes from one organism, you'd probably get a much
+smoother plot than this.
 
 \section{Dealing with alignments}
 
