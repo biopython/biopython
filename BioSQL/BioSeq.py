@@ -12,6 +12,7 @@ This allows retrival of items stored in a BioSQL database using
 a biopython-like Seq interface.
 """
 
+from Bio import Alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio import SeqFeature
@@ -111,13 +112,18 @@ def _retrieve_seq(adaptor, primary_id):
     if seqs:
         moltype, length = seqs[0]
         moltype = moltype.lower() #might be upper case in database
-        from Bio.Alphabet import IUPAC
+        #We have no way of knowing if these sequences will use IUPAC
+        #alphabets, and we certainly can't assume they are unambiguous!
         if moltype == "dna":
-            alphabet = IUPAC.unambiguous_dna
+            alphabet = Alphabet.generic_dna
         elif moltype == "rna":
-            alphabet = IUPAC.unambiguous_rna
+            alphabet = Alphabet.generic_rna
         elif moltype == "protein":
-            alphabet = IUPAC.protein
+            alphabet = Alphabet.generic_protein
+        elif moltype == "unknown":
+            #This is used in BioSQL/Loader.py and would happen
+            #for any generic or nucleotide alphabets.
+            alphabet = Alphabet.single_letter_alphabet
         else:
             raise AssertionError("Unknown moltype: %s" % moltype)
         seq = DBSeq(primary_id, adaptor, alphabet, 0, int(length))
