@@ -4133,10 +4133,13 @@ order. Now we'll take this list of floating point values and plot them with matp
 
 \begin{verbatim}
 import pylab
-
-pylab.plot(gc_values)pylab.title("%i orchid sequences\nGC%% %0.1f to %0.1f" \
+pylab.plot(gc_values)
+pylab.title("%i orchid sequences\nGC%% %0.1f to %0.1f" \
             % (len(gc_values),min(gc_values),max(gc_values)))
-pylab.xlabel("Genes")pylab.ylabel("GC%")pylab.savefig("gc_plot.png")pylab.show()\end{verbatim}
+pylab.xlabel("Genes")
+pylab.ylabel("GC%")
+pylab.show()
+\end{verbatim}
 
 %
 % Have a HTML version and a PDF version to display nicely...
@@ -4167,6 +4170,84 @@ containing the graph shown in Figure~\ref{fig:seq-gc-plot}.
 If you tried this on the full set of genes from one organism, you'd probably get a much
 smoother plot than this.
 
+\subsection{Nucleotide dot plot}
+
+A dot plot is a way of visually comparing two nucleotide sequences for similarity to
+each other.  A sliding window is used to compare short sub-sequences to each other,
+often with a mis-match threshold.  Here for simplicity we'll only look for perfect
+matches (shown in black on the plot).
+
+To start off, we'll need two sequences.  For the sake of argument, we'll just take
+the first two from our orchid FASTA file \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.fasta}{\tt ls\_orchid.fasta}:
+
+\begin{verbatim}
+from Bio import SeqIO
+handle = open("ls_orchid.fasta")
+record_iterator = SeqIO.parse(handle, "fasta")
+rec_one = record_iterator.next()
+rec_two = record_iterator.next()
+handle.close()
+\end{verbatim}
+
+Next we have to compile a similarity matrix.  You could construct a matrix or array
+object, but here we just use a list of lists of booleans created with a nested list
+comprehension:
+
+\begin{verbatim}
+window = 7
+seq_one = rec_one.seq.tostring()
+seq_two = rec_two.seq.tostring()
+print "Comparing %s to %s" % (rec_one.id, rec_two.id)
+data = [[(seq_one[i:i+window] <> seq_two[j:j+window]) \
+        for j in range(len(seq_one)-window)] \
+       for i in range(len(seq_two)-window)]
+\end{verbatim}
+
+Finally, we'll use the matplotlib's \verb|pylab.imshow()| function to display this data,
+first requesting the gray color scheme so this is done in black and white:
+
+\begin{verbatim}
+import pylab
+pylab.gray()
+pylab.imshow(data)
+pylab.xlabel("%s (length %i bp)" % (rec_one.id, len(rec_one)))
+pylab.ylabel("%s (length %i bp)" % (rec_two.id, len(rec_two)))
+pylab.title("Dot plot using window size %i\n(allowing no mis-matches)" \
+           % window)
+pylab.show()
+\end{verbatim}
+%pylab.savefig("dot_plot.png", dpi=75)
+%pylab.savefig("dot_plot.pdf")
+
+%
+% Have a HTML version and a PDF version to display nicely...
+%
+\begin{htmlonly}
+\noindent That should pop up a new window containing a graph like this:
+
+\imgsrc[width=600, height=450]{images/dot_plot.png}
+
+\end{htmlonly}
+%
+% Now the PDF equivalent where we cannot always expect the figure
+% to be positioned right next to the text, so will use a reference.
+%
+\begin{latexonly}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{images/dot_plot.png}
+\caption{Nucleotide dot plot of two orchid sequence lengths.}
+\label{fig:nuc-dot-plot}
+\end{figure}
+\noindent That should pop up a new window, this time
+containing the graph shown in Figure~\ref{fig:nuc-dot-plot}.
+\end{latexonly}
+%
+% The text now continues...
+%
+As you might have expected, these two sequences are very similar with a partial line
+of window sized matches along the diagonal.  There are no off diagonal matches which
+would be indicative of inversions or other interesting events.
 \section{Dealing with alignments}
 
 It is often very useful to be able to align particular sequences. I do this quite often to get a quick and dirty idea of relationships between sequences. Consequently, it is very nice to be able to quickly write up a python script that does an alignment and gives you back objects that are easy to work with. The alignment related code in Biopython is meant to allow python-level access to alignment programs so that you can run alignments quickly from within scripts.
