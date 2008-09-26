@@ -34,6 +34,29 @@ db_name = "biosql-seqio-test"
 
 #This list was based on a selection from test_SeqIO.py
 test_files = [ \
+#Following nucleic examples are also used in test_Fasta2.py
+    ("fasta",  False, 'Nucleic/lupine.nu', 1),
+    ("fasta",  False, 'Nucleic/elderberry.nu', 1),
+    ("fasta",  False, 'Nucleic/phlox.nu', 1),
+    ("fasta",  False, 'Nucleic/centaurea.nu', 1),
+    ("fasta",  False, 'Nucleic/wisteria.nu', 1),
+    ("fasta",  False, 'Nucleic/sweetpea.nu', 1),
+    ("fasta",  False, 'Nucleic/lavender.nu', 1),
+#Following protein examples are also used in test_Fasta2.py
+    ("fasta",  False, 'Amino/aster.pro', 1),
+    ("fasta",  False, 'Amino/loveliesbleeding.pro', 1),
+    ("fasta",  False, 'Amino/rose.pro', 1),
+    ("fasta",  False, 'Amino/rosemary.pro', 1),
+#Following examples are also used in test_Fasta.py
+    ("fasta",  False, 'Fasta/f001', 1), #Protein
+    ("fasta",  False, 'Fasta/f002', 3), #DNA
+    #("fasta", False, 'Fasta/f003', 2), #Protein with comments
+    ("fasta",  False, 'Fasta/fa01', 2), #Protein with gaps
+#Following examples are also used in test_GFF.py
+    ("fasta",  False, 'GFF/NC_001802.fna', 1), #upper case
+    ("fasta",  True,  'GFF/multi.fna', 3), #Trivial nucleotide alignment
+#Following example is also used in test_registry.py
+    ("fasta",  False, 'Registry/seqs.fasta', 2), #contains blank line
 #Following examples are also used in test_SwissProt.py
     ("swiss",  False, 'SwissProt/sp001', 1),
     ("swiss",  False, 'SwissProt/sp002', 1),
