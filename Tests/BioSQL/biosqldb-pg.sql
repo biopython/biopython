@@ -1,4 +1,4 @@
--- $Id: biosqldb-pg.sql,v 1.4 2008-05-07 09:59:16 peterc Exp $ 
+-- $Id: biosqldb-pg.sql,v 1.5 2008-09-26 12:31:42 peterc Exp $ 
 --
 -- Copyright 2002-2003 Ewan Birney, Elia Stupka, Chris Mungall
 -- Copyright 2003-2008 Hilmar Lapp 
@@ -253,7 +253,7 @@ CREATE TABLE bioentry (
 	 biodatabase_id INTEGER NOT NULL , 
 	 taxon_id INTEGER , 
 	 name VARCHAR ( 40 ) NOT NULL , 
-	 accession VARCHAR ( 40 ) NOT NULL , 
+	 accession VARCHAR ( 128 ) NOT NULL , 
 	 identifier VARCHAR ( 40 ) , 
 	 division VARCHAR ( 6 ) , 
 	 description TEXT , 
@@ -334,7 +334,7 @@ CREATE SEQUENCE dbxref_pk_seq;
 CREATE TABLE dbxref ( 
 	 dbxref_id INTEGER DEFAULT nextval ( 'dbxref_pk_seq' ) NOT NULL , 
 	 dbname VARCHAR ( 40 ) NOT NULL , 
-	 accession VARCHAR ( 40 ) NOT NULL , 
+	 accession VARCHAR ( 128 ) NOT NULL , 
 	 version INTEGER NOT NULL , 
 	 PRIMARY KEY ( dbxref_id ) , 
 	 UNIQUE ( accession , dbname , version ) ) ; 

@@ -1,4 +1,4 @@
--- $Id: biosqldb-mysql.sql,v 1.4 2008-05-07 09:59:16 peterc Exp $
+-- $Id: biosqldb-mysql.sql,v 1.5 2008-09-26 12:31:42 peterc Exp $
 --
 -- Copyright 2002-2003 Ewan Birney, Elia Stupka, Chris Mungall
 -- Copyright 2003-2008 Hilmar Lapp 
@@ -247,7 +247,7 @@ CREATE TABLE bioentry (
   	biodatabase_id  INT(10) UNSIGNED NOT NULL,
   	taxon_id     	INT(10) UNSIGNED,
   	name		VARCHAR(40) NOT NULL,
-  	accession    	VARCHAR(40) BINARY NOT NULL,
+  	accession    	VARCHAR(128) BINARY NOT NULL,
   	identifier   	VARCHAR(40) BINARY,
 	division	VARCHAR(6),
   	description  	TEXT,
@@ -330,7 +330,7 @@ CREATE TABLE biosequence (
 CREATE TABLE dbxref (
         dbxref_id	INT(10) UNSIGNED NOT NULL auto_increment,
         dbname          VARCHAR(40) BINARY NOT NULL,
-        accession       VARCHAR(40) BINARY NOT NULL,
+        accession       VARCHAR(128) BINARY NOT NULL,
 	version		SMALLINT UNSIGNED NOT NULL,
 	PRIMARY KEY (dbxref_id),
         UNIQUE(accession, dbname, version)
