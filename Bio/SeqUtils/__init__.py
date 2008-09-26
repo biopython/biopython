@@ -375,15 +375,19 @@ def quick_FASTA_reader(file):
    having all the records in memory at once).  Note that rather than simple
    strings, Bio.SeqIO uses SeqRecord objects for each record in the file.
    """
-   txt = open(file).read()
+   #Want to split on "\n>" not just ">" in case there are any extra ">"
+   #in the name/description.  So, in order to make sure we also split on
+   #the first entry, prepend a "\n" to the start of the file.
+   handle = open(file)
+   txt = "\n" + handle.read()
+   handle.close()
    entries = []
-   for entry in txt.split('>')[1:]:
+   for entry in txt.split('\n>')[1:]:
       name,seq= entry.split('\n',1)
       seq = seq.replace('\n','').replace(' ','').upper()
       entries.append((name, seq))
-   txt.close()      
    return entries
-    
+
 def apply_on_multi_fasta(file, function, *args):
    """Apply a function on each sequence in a multiple FASTA file (OBSOLETE).
 

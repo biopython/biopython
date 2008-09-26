@@ -1,12 +1,26 @@
-# Copyright 2007 by Peter Cock.  All rights reserved.
+# Copyright 2007-2008 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+from Bio.SeqUtils import GC, quick_FASTA_reader
 from Bio.SeqUtils.CheckSum import crc32, crc64, gcg, seguid
 from Bio.SeqUtils.lcc import lcc_simp, lcc_mult
 from Bio.Seq import Seq, MutableSeq
 from Bio.Alphabet import single_letter_alphabet
+from Bio import SeqIO
+
+######################
+# quick_FASTA_reader #
+######################
+
+tuple_records = quick_FASTA_reader("Fasta/f002")
+assert len(tuple_records)==3
+seq_records = list(SeqIO.parse(open("Fasta/f002"),"fasta"))
+assert len(seq_records)==3
+for tuple_record, seq_record in zip(tuple_records, seq_records) :
+    assert tuple_record == (seq_record.description, seq_record.seq.tostring())
+    print "%s has GC%% of %0.1f" % (seq_record.name, GC(seq_record.seq))
 
 ###################
 # crc64 collision #
