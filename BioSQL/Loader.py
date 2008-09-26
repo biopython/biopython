@@ -319,21 +319,37 @@ class DatabaseLoader:
         """
         # get the pertinent info and insert it
         
-        if record.id.find('.') >= 0: # try to get a version from the id
+        if record.id.count(".") == 1: # try to get a version from the id
+            #This assumes the string is something like "XXXXXXXX.123"
             accession, version = record.id.split('.')
-            version = int(version)
+            try :
+                version = int(version)
+            except ValueError :
+                accession = record.id
+                version = 0
         else: # otherwise just use a version of 0
             accession = record.id
             version = 0
+
+        if "accessions" in record.annotations \
+        and isinstance(record.annotations["accessions"],list) \
+        and record.annotations["accessions"] :
+            #Take the first accession (one if there is more than one)
+            accession = record.annotations["accessions"][0]
 
         #Find the taxon id (this is not just the NCBI Taxon ID)
         #NOTE - If the species isn't defined in the taxon table,
         #a new minimal entry is created.
         taxon_id = self._get_taxon_id(record)
 
-        identifier = record.annotations.get('gi')
+        if "gi" in record.annotations :
+            identifier = record.annotations["gi"]
+        else :
+            identifier = record.id
+
+        #Allow description and division to default to NULL as in BioPerl.
         description = getattr(record, 'description', None)
-        division = record.annotations.get("data_file_division", "UNK")
+        division = record.annotations.get("data_file_division", None)
         
         sql = """
         INSERT INTO bioentry (
@@ -808,4 +824,3 @@ class DatabaseRemover:
         sql = r"DELETE FROM biodatabase WHERE biodatabase_id = %s"
         self.adaptor.execute(sql, (self.dbid,))
 
-        
