@@ -359,21 +359,22 @@ def fasta_uniqids(file):
       print '>%s\n%s' % (name, seq)
 
 def quick_FASTA_reader(file):
-   """Simple FASTA reader, returning a list of string tuples (OBSOLETE).
+   """Simple FASTA reader, returning a list of string tuples.
 
    The single argument 'file' should be the filename of a FASTA format file.
    This function will open and read in the entire file, constructing a list
    of all the records, each held as a tuple of strings (the sequence name or
    title, and its sequence).
 
-   This function is obsolete.  It was originally intended for use on large
-   files, where its low overhead was helpful.  However, because it returns
-   the data as a single in memory list, this is not necessarily as good idea.
-
-   You are encouraged to use Bio.SeqIO.parse(handle, "fasta") which returns
-   a generator, allowing you to iterate over the records one by one (avoiding
-   having all the records in memory at once).  Note that rather than simple
-   strings, Bio.SeqIO uses SeqRecord objects for each record in the file.
+   This function was originally intended for use on large files, where its
+   low overhead makes it very fast.  However, because it returns the data as
+   a single in memory list, this can require a lot of RAM on large files.
+   
+   You are generally encouraged to use Bio.SeqIO.parse(handle, "fasta") which
+   allows you to iterate over the records one by one (avoiding having all the
+   records in memory at once).  Using Bio.SeqIO also makes it easy to switch
+   between different input file formats.  However, please note that rather
+   than simple strings, Bio.SeqIO uses SeqRecord objects for each record.
    """
    #Want to split on "\n>" not just ">" in case there are any extra ">"
    #in the name/description.  So, in order to make sure we also split on
