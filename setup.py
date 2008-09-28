@@ -418,6 +418,8 @@ setup(
     author='The Biopython Consortium',
     author_email='biopython@biopython.org',
     url='http://www.biopython.org/',
+    description='Freely available tools for computational molecular biology.',
+    download_url='http://biopython.org/DIST/',
     cmdclass={
         "install" : install_biopython,
         "build_py" : build_py_biopython,
@@ -428,6 +430,10 @@ setup(
     packages=PACKAGES,
     ext_modules=EXTENSIONS,
     data_files=DATA_FILES,
+    #install_requires = ['numpy>=1.1'],
+    #extras_require = {
+    #    'PDF' : ['reportlab>=2.0']
+    #    }
     # package_data = {'Bio.Entrez': ['DTDs/*.dtd']}
     ## Use this once we require Python version >= 2.4.
     )
