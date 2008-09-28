@@ -9,7 +9,7 @@ python setup.py install
 For more in-depth instructions, see the installation section of the
 biopython manual, linked to from:
 
-http://www.biopython.org/documentation/
+http://biopython.org/wiki/Documentation
 
 Or for more details about the options available from distutils, look at
 the 'Installing Python Modules' distutils documentation, available from:
@@ -17,7 +17,9 @@ the 'Installing Python Modules' distutils documentation, available from:
 http://python.org/sigs/distutils-sig/doc/
 
 Or, if all else fails, feel free to write to the sign up to the Biopython
-mailing list and ask for help.  See http://biopython.org/wiki/Mailing_lists
+mailing list and ask for help.  See:
+
+http://biopython.org/wiki/Mailing_lists
 """
 import sys
 import os
@@ -45,7 +47,7 @@ def get_yes_or_no(question, default):
         option_str = "(y/N)"
         default_str = 'n'
 
-    while 1:
+    while True:
         print "%s %s " % (question, option_str),
         response = raw_input().lower()
         if not response:
