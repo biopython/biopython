@@ -1619,9 +1619,6 @@ def blastall(blastcmd, program, database, infile, align_view='7', **keywds):
 
     _security_check_parameters(keywds)
 
-
-    _security_check_parameters(keywds)
-
     att2param = {
         'matrix' : '-M',
         'gap_open' : '-G',
@@ -1745,8 +1742,6 @@ def blastpgp(blastcmd, database, infile, align_view='7', **keywds):
     restart_infile      Input file for PSI-BLAST restart.
     hit_infile          Hit file for PHI-BLAST.
     matrix_outfile      Output file for PSI-BLAST matrix in ASCII.
-
-    _security_check_parameters(keywds)
 
     align_infile        Input alignment file for PSI-BLAST restart.
     
@@ -1874,14 +1869,11 @@ def rpsblast(blastcmd, database, infile, align_view="7", **keywds):
     descriptions        Number of one-line descriptions.
     alignments          Number of alignments.
     align_view          Alignment view.  Integer 0-11,
-
-    _security_check_parameters(keywds)
-    
                         passed as a string or integer.
+
     show_gi             Show GI's in deflines?  T/F
     seqalign_file       seqalign file to output.
     align_outfile       Output file for alignment.
-    
     """
 
     _security_check_parameters(keywds)
