@@ -127,8 +127,9 @@ class DatabaseLoader:
         least the NCBI taxon ID, scientific name or common name,
         a minimal stub entry is created in the table.
 
-        If this information is not in the record's annotation,
-        then None is returned.
+        Returns the taxon id (database key for the taxon table,
+        not an NCBI taxon ID), or None if the taxonomy information
+        is missing.
 
         See also the BioSQL script load_ncbi_taxonomy.pl which
         will populate and update the taxon/taxon_name tables
@@ -155,20 +156,6 @@ class DatabaseLoader:
                                 ncbi_taxon_id = int(db_xref[6:])
                                 break
                 if ncbi_taxon_id: break
-        if ncbi_taxon_id:
-            taxa = self.adaptor.execute_and_fetch_col0(
-                "SELECT taxon_id FROM taxon WHERE ncbi_taxon_id = %s",
-                (ncbi_taxon_id,))
-            if taxa:
-                #Good, we have mapped the NCBI taxid to a taxon table entry
-                return taxa[0]
-            #Bad, this NCBI taxon id is not in the database!
-
-        
-        # Either we didn't find the NCBI taxid in the record, or it
-        # isn't in the database yet. Next, we'll try and find a match
-        # based on the species name (stored in GenBank files as the
-        # the organism and/or the source).
 
         try :
             scientific_name = record.annotations["organism"][:255]
@@ -182,13 +169,23 @@ class DatabaseLoader:
         # Cropping it now should help in getting a match when searching,
         # and avoids an error if we try and add these to the database.
 
-        if ncbi_taxon_id is None \
-        and not common_name and not scientific_name :
+
+        if ncbi_taxon_id:
+            #Good, we have the NCBI taxon to go on - this is unambiguous :)
+            #Note that the scientific name and common name will only be
+            #used if we have to record a stub entry.
+            return self._get_taxon_id_from_ncbi_taxon_id(ncbi_taxon_id,
+                                                         scientific_name,
+                                                         common_name)
+        
+        if not common_name and not scientific_name :
             # Nothing to go on... and there is no point adding
             # a new entry to the database.  We'll just leave this
             # sequence's taxon as a NULL in the database.
             return None
 
+        # Next, we'll try to find a match based on the species name
+        # (stored in GenBank files as the organism and/or the source).
         if scientific_name:
             taxa = self.adaptor.execute_and_fetch_col0(
                 "SELECT taxon_id FROM taxon_name" \
@@ -216,40 +213,9 @@ class DatabaseLoader:
 
         # At this point, as far as we can tell, this species isn't
         # in the taxon table already.  So we'll have to add it.
-
-        """
-        # Possible simplification of the scary code below; pending
-        # discussion on the BioSQL mailing list...
+        # We don't have an NCBI taxonomy ID, so if we do record just
+        # a stub entry, there is no simple way to fix this later.
         #
-        # We will record the bare minimum; as long as the NCBI taxon
-        # id is present, then (re)running load_ncbi_taxonomy.pl should
-        # fill in the taxonomomy lineage.
-        #
-        # I am NOT going to try and record the lineage, even if it
-        # is in the record annotation as a list of names, as we won't
-        # know the NCBI taxon IDs for these parent nodes.
-        self.adaptor.execute(
-            "INSERT INTO taxon(parent_taxon_id, ncbi_taxon_id, node_rank,"\
-            " left_value, right_value)" \
-            " VALUES (%s, %s, %s, %s, %s)", (None,
-                                             ncbi_taxon_id,
-                                             "species",
-                                             None,
-                                             None))
-        taxon_id = self.adaptor.last_id("taxon")
-        if scientific_name:
-            self.adaptor.execute(
-                "INSERT INTO taxon_name(taxon_id, name, name_class)" \
-                "VALUES (%s, %s, 'scientific name')", (
-                taxon_id, scientific_name))
-        if common_name:
-            self.adaptor.execute(
-                "INSERT INTO taxon_name(taxon_id, name, name_class)" \
-                "VALUES (%s, %s, 'common name')", (
-                taxon_id, common_name))
-        return taxon_id
-        """
-
         # OK, let's try inserting the species.
         # Chances are we don't have enough information ...
         # Furthermore, it won't be in the hierarchy.
@@ -310,6 +276,67 @@ class DatabaseLoader:
                 "VALUES (%s, %s, 'common name')", (
                 taxon_id, common_name))
 
+        return taxon_id
+
+    def _get_taxon_id_from_ncbi_taxon_id(self, ncbi_taxon_id, scientific_name, common_name):
+        """Get the taxon id for this record from the NCBI taxon ID.
+
+        ncbi_taxon_id - string containing an NCBI taxon id
+        scientific_name - string, used if a stub entry is recorded
+        common_name - string, used if a stub entry is recorded
+        
+        This searches the taxon table using ONLY the NCBI taxon ID
+        to find the matching taxon table entry's ID (database key).
+        
+        If the species isn't in the taxon table, the NCBI taxon ID,
+        scientific name and common name are recorded as a minimal
+        stub entry in the taxon and taxon_name tables.  Any partial
+        information about the lineage from the SeqRecord is NOT
+        recorded.  This should mean that (re)running the BioSQL
+        script load_ncbi_taxonomy.pl can fill in the taxonomomy
+        lineage.
+
+        Returns the taxon id (database key for the taxon table, not
+        an NCBI taxon ID).
+        """
+        assert ncbi_taxon_id
+
+        taxon_id = self.adaptor.execute_and_fetch_col0(
+            "SELECT taxon_id FROM taxon WHERE ncbi_taxon_id = %s",
+            (ncbi_taxon_id,))
+        if taxon_id:
+            #Good, we have mapped the NCBI taxid to a taxon table entry
+            return taxon_id[0]
+
+        # At this point, as far as we can tell, this species isn't
+        # in the taxon table already.  So we'll have to add it.
+        #
+        # We will record the bare minimum; as long as the NCBI taxon
+        # id is present, then (re)running load_ncbi_taxonomy.pl should
+        # fill in the taxonomomy lineage (and update the species names).
+        #
+        # I am NOT going to try and record the lineage, even if it
+        # is in the record annotation as a list of names, as we won't
+        # know the NCBI taxon IDs for these parent nodes.
+        self.adaptor.execute(
+            "INSERT INTO taxon(parent_taxon_id, ncbi_taxon_id, node_rank,"\
+            " left_value, right_value)" \
+            " VALUES (%s, %s, %s, %s, %s)", (None,
+                                             ncbi_taxon_id,
+                                             "species",
+                                             None,
+                                             None))
+        taxon_id = self.adaptor.last_id("taxon")
+        if scientific_name:
+            self.adaptor.execute(
+                "INSERT INTO taxon_name(taxon_id, name, name_class)" \
+                "VALUES (%s, %s, 'scientific name')", (
+                taxon_id, scientific_name))
+        if common_name:
+            self.adaptor.execute(
+                "INSERT INTO taxon_name(taxon_id, name, name_class)" \
+                "VALUES (%s, %s, 'common name')", (
+                taxon_id, common_name))
         return taxon_id
 
     def _load_bioentry_table(self, record):
