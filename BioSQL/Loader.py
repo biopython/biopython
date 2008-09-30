@@ -20,18 +20,27 @@ from time import gmtime, strftime
 # biopython
 from Bio import Alphabet
 from Bio.SeqUtils.CheckSum import crc64
-
+from Bio import Entrez
 
 class DatabaseLoader:
-    """Load a database with biopython objects.
-    """
-    def __init__(self, adaptor, dbid):
+    """Object used to load SeqRecord objects into a BioSQL database."""
+    def __init__(self, adaptor, dbid, fetch_NCBI_taxonomy=False):
         """Initialize with connection information for the database.
 
-        XXX Figure out what I need to load a database and document it.
+        Creating a DatabaseLoader object is normally handled via the
+        BioSeqDatabase DBServer object, for example:
+
+        from BioSQL import BioSeqDatabase
+        server = BioSeqDatabase.open_database(driver="MySQLdb", user="gbrowse",
+                         passwd = "biosql", host = "localhost", db="test_biosql")
+        try :
+            db = server["test"]
+        except KeyError :
+            db = server.new_database("test", description="For testing GBrowse")
         """
         self.adaptor = adaptor
         self.dbid = dbid
+        self.fetch_NCBI_taxonomy = fetch_NCBI_taxonomy
     
     def load_seqrecord(self, record):
         """Load a Biopython SeqRecord into the database.
@@ -50,7 +59,7 @@ class DatabaseLoader:
             self._load_seqfeature(seq_feature, seq_feature_num, bioentry_id)
 
     def _get_ontology_id(self, name, definition=None):
-        """Returns the identifier for the named ontology.
+        """Returns the identifier for the named ontology (PRIVATE).
 
         This looks through the onotology table for a the given entry name.
         If it is not found, a row is added for this ontology (using the
@@ -74,7 +83,7 @@ class DatabaseLoader:
                      ontology_id=None,
                      definition=None,
                      identifier=None):
-        """Get the id that corresponds to a term.
+        """Get the id that corresponds to a term (PRIVATE).
 
         This looks through the term table for a the given term. If it
         is not found, a new id corresponding to this term is created.
@@ -115,7 +124,7 @@ class DatabaseLoader:
        return self.adaptor.last_id("dbxref")
            
     def _get_taxon_id(self, record):
-        """Get the taxon id for this record.
+        """Get the taxon id for this record (PRIVATE).
 
         record - a SeqRecord object
 
@@ -125,7 +134,7 @@ class DatabaseLoader:
         
         If the species isn't in the taxon table, and we have at
         least the NCBI taxon ID, scientific name or common name,
-        a minimal stub entry is created in the table.
+        at least a minimal stub entry is created in the table.
 
         Returns the taxon id (database key for the taxon table,
         not an NCBI taxon ID), or None if the taxonomy information
@@ -216,6 +225,9 @@ class DatabaseLoader:
         # We don't have an NCBI taxonomy ID, so if we do record just
         # a stub entry, there is no simple way to fix this later.
         #
+        # TODO - Should we try searching the NCBI taxonomy using the
+        # species name?
+        #
         # OK, let's try inserting the species.
         # Chances are we don't have enough information ...
         # Furthermore, it won't be in the hierarchy.
@@ -278,8 +290,39 @@ class DatabaseLoader:
 
         return taxon_id
 
-    def _get_taxon_id_from_ncbi_taxon_id(self, ncbi_taxon_id, scientific_name, common_name):
-        """Get the taxon id for this record from the NCBI taxon ID.
+    def _fix_name_class(self, entrez_name) :
+        """Map Entrez name terms to those used in taxdump (PRIVATE).
+
+        We need to make this conversion to match the taxon_name.name_class
+        values used by the BioSQL load_ncbi_taxonomy.pl script.
+        
+        e.g.
+        "ScientificName" -> "scientific name",
+        "EquivalentName" -> "equivalent name",
+        "Synonym" -> "synonym",
+        """
+        #Add any special cases here:
+        #
+        #known = {}
+        #try :
+        #    return known[entrez_name]
+        #except KeyError:
+        #    pass
+
+        #Try automatically by adding spaces before each capital
+        def add_space(letter) :
+            if letter.isupper() :
+                return " "+letter.lower()
+            else :
+                return letter
+        answer = "".join([add_space(letter) for letter in entrez_name]).strip()
+        assert answer == answer.lower()
+        return answer
+
+    def _get_taxon_id_from_ncbi_taxon_id(self, ncbi_taxon_id,
+                                         scientific_name = None,
+                                         common_name = None):
+        """Get the taxon id for this record from the NCBI taxon ID (PRIVATE).
 
         ncbi_taxon_id - string containing an NCBI taxon id
         scientific_name - string, used if a stub entry is recorded
@@ -288,13 +331,17 @@ class DatabaseLoader:
         This searches the taxon table using ONLY the NCBI taxon ID
         to find the matching taxon table entry's ID (database key).
         
-        If the species isn't in the taxon table, the NCBI taxon ID,
-        scientific name and common name are recorded as a minimal
-        stub entry in the taxon and taxon_name tables.  Any partial
-        information about the lineage from the SeqRecord is NOT
-        recorded.  This should mean that (re)running the BioSQL
-        script load_ncbi_taxonomy.pl can fill in the taxonomomy
-        lineage.
+        If the species isn't in the taxon table, and the fetch_NCBI_taxonomy
+        flag is true, Biopython will attempt to go online using Bio.Entrez
+        to fetch the official NCBI lineage, recursing up the tree until an
+        existing entry is found in the database or the full lineage has been
+        fetched.
+
+        Otherwise the NCBI taxon ID, scientific name and common name are
+        recorded as a minimal stub entry in the taxon and taxon_name tables.
+        Any partial information about the lineage from the SeqRecord is NOT
+        recorded.  This should mean that (re)running the BioSQL script
+        load_ncbi_taxonomy.pl can fill in the taxonomy lineage.
 
         Returns the taxon id (database key for the taxon table, not
         an NCBI taxon ID).
@@ -310,37 +357,136 @@ class DatabaseLoader:
 
         # At this point, as far as we can tell, this species isn't
         # in the taxon table already.  So we'll have to add it.
-        #
-        # We will record the bare minimum; as long as the NCBI taxon
-        # id is present, then (re)running load_ncbi_taxonomy.pl should
-        # fill in the taxonomomy lineage (and update the species names).
-        #
-        # I am NOT going to try and record the lineage, even if it
-        # is in the record annotation as a list of names, as we won't
-        # know the NCBI taxon IDs for these parent nodes.
+
+        parent_taxon_id = None
+        rank = "species"
+        genetic_code = None
+        mito_genetic_code = None
+        species_names = []
+        if scientific_name :
+            species_names.append(("scientific name", scientific_name))
+        if common_name :
+            species_names.append(("common name", common_name))
+        
+        if self.fetch_NCBI_taxonomy :
+            #Go online to get the parent taxon ID!
+            handle = Entrez.efetch(db="taxonomy",id=ncbi_taxon_id,retmode="XML")
+            taxonomic_record = Entrez.read(handle)
+            if len(taxonomic_record) == 1:
+                assert taxonomic_record[0]["TaxId"] == str(ncbi_taxon_id), \
+                       "%s versus %s" % (taxonomic_record[0]["TaxId"],
+                                         ncbi_taxon_id)
+                parent_taxon_id = self._get_taxon_id_from_ncbi_lineage( \
+                                            taxonomic_record[0]["LineageEx"])
+                rank = taxonomic_record[0]["Rank"]
+                genetic_code = taxonomic_record[0]["GeneticCode"]["GCId"]
+                mito_genetic_code = taxonomic_record[0]["MitoGeneticCode"]["MGCId"]
+                species_names = [("scientific name",
+                                  taxonomic_record[0]["ScientificName"])]
+                try :
+                    for name_class, names in taxonomic_record[0]["OtherNames"].iteritems():
+                        name_class = self._fix_name_class(name_class)
+                        if not isinstance(names, list) :
+                            #The Entrez parser seems to return single entry
+                            #lists as just a string which is annoying.
+                            names = [names]
+                        for name in names :
+                            #Want to ignore complex things like ClassCDE entries
+                            if isinstance(name, basestring) :
+                                species_names.append((name_class, name))
+                except KeyError :
+                    #OtherNames isn't always present,
+                    #e.g. NCBI taxon 41205, Bromheadia finlaysoniana
+                    pass
+        else :
+            pass
+            # If we are not allowed to go online, we will record the bare minimum;
+            # as long as the NCBI taxon id is present, then (re)running
+            # load_ncbi_taxonomy.pl should fill in the taxonomomy lineage
+            # (and update the species names).
+            #
+            # I am NOT going to try and record the lineage, even if it
+            # is in the record annotation as a list of names, as we won't
+            # know the NCBI taxon IDs for these parent nodes.
+
         self.adaptor.execute(
             "INSERT INTO taxon(parent_taxon_id, ncbi_taxon_id, node_rank,"\
-            " left_value, right_value)" \
-            " VALUES (%s, %s, %s, %s, %s)", (None,
-                                             ncbi_taxon_id,
-                                             "species",
-                                             None,
-                                             None))
+            " genetic_code, mito_genetic_code, left_value, right_value)" \
+            " VALUES (%s, %s, %s, %s, %s, %s, %s)", (parent_taxon_id,
+                                                     ncbi_taxon_id,
+                                                     rank,
+                                                     genetic_code,
+                                                     mito_genetic_code,
+                                                     None,
+                                                     None))
         taxon_id = self.adaptor.last_id("taxon")
-        if scientific_name:
+
+        #Record the scientific name, common name, etc
+        for name_class, name in species_names :
             self.adaptor.execute(
                 "INSERT INTO taxon_name(taxon_id, name, name_class)" \
-                "VALUES (%s, %s, 'scientific name')", (
-                taxon_id, scientific_name))
-        if common_name:
-            self.adaptor.execute(
-                "INSERT INTO taxon_name(taxon_id, name, name_class)" \
-                "VALUES (%s, %s, 'common name')", (
-                taxon_id, common_name))
+                " VALUES (%s, %s, %s)", (taxon_id, 
+                                         name[:255], 
+                                         name_class))
         return taxon_id
 
+    def _get_taxon_id_from_ncbi_lineage(self, taxonomic_lineage) :
+        """This is recursive! (PRIVATE).
+
+        taxonomic_lineage - list of taxonomy dictionaries from Bio.Entrez
+
+        First dictionary in list is the taxonomy root, highest would be the species.
+        Each dictionary includes:
+        - TaxID (string, NCBI taxon id)
+        - Rank (string, e.g. "species", "genus", ..., "phylum", ...)
+        - ScientificName (string)
+        (and that is all at the time of writing)
+
+        This method will record all the lineage given, returning the the taxon id
+        (database key, not NCBI taxon id) of the final entry (the species).
+        """
+        ncbi_taxon_id = taxonomic_lineage[-1]["TaxId"]
+
+        #Is this in the database already?  Check the taxon table...
+        taxon_id = self.adaptor.execute_and_fetch_col0(
+            "SELECT taxon_id FROM taxon" \
+            " WHERE ncbi_taxon_id=%s" % ncbi_taxon_id)
+        if taxon_id:
+            # we could verify that the Scientific Name etc in the database
+            # is the same and update it or print a warning if not...
+            if isinstance(taxon_id, list) :
+                assert len(taxon_id)==1
+                return taxon_id[0]
+            else :
+                return taxon_id
+
+        #We have to record this.
+        if len(taxonomic_lineage) > 1 :
+            #Use recursion to find out the taxon id (database key) of the parent.
+            parent_taxon_id = self._get_taxon_id_from_ncbi_lineage(taxonomic_lineage[:-1])
+            assert isinstance(parent_taxon_id, int) or isinstance(parent_taxon_id, long), repr(parent_taxon_id)
+        else :
+            parent_taxon_id = None
+
+        # INSERT new taxon
+        rank = taxonomic_lineage[-1].get("Rank", None)
+        self.adaptor.execute(
+                "INSERT INTO taxon(ncbi_taxon_id, parent_taxon_id, node_rank)"\
+                " VALUES (%s, %s, %s)", (ncbi_taxon_id, parent_taxon_id, rank))
+        taxon_id = self.adaptor.last_id("taxon")
+        assert isinstance(taxon_id, int) or isinstance(taxon_id, long), repr(taxon_id)
+        # ... and its name in taxon_name
+        scientific_name = taxonomic_lineage[-1].get("ScientificName", None)
+        if scientific_name :
+            self.adaptor.execute(
+                    "INSERT INTO taxon_name(taxon_id, name, name_class)" \
+                    " VALUES (%s, %s, 'scientific name')", (taxon_id, 
+                                                            scientific_name[:255]))
+        return taxon_id
+
+
     def _load_bioentry_table(self, record):
-        """Fill the bioentry table with sequence information.
+        """Fill the bioentry table with sequence information (PRIVATE).
 
         record - SeqRecord object to add to the database.
         """
@@ -428,7 +574,7 @@ class DatabaseLoader:
         self.adaptor.execute(sql, (bioentry_id, date_id, date))
 
     def _load_biosequence(self, record, bioentry_id):
-        """Record a SeqRecord's sequence and alphabet in the database.
+        """Record a SeqRecord's sequence and alphabet in the database (PRIVATE).
 
         record - a SeqRecord object with a seq property
         bioentry_id - corresponding database identifier
@@ -452,7 +598,7 @@ class DatabaseLoader:
                                    alphabet))
 
     def _load_comment(self, record, bioentry_id):
-        """Record a SeqRecord's annotated comment in the database.
+        """Record a SeqRecord's annotated comment in the database (PRIVATE).
 
         record - a SeqRecord object with an annotated comment
         bioentry_id - corresponding database identifier
@@ -468,7 +614,7 @@ class DatabaseLoader:
         self.adaptor.execute(sql, (bioentry_id, comment, 1))
         
     def _load_annotations(self, record, bioentry_id) :
-        """Record a SeqRecord's misc annotations in the database.
+        """Record a SeqRecord's misc annotations in the database (PRIVATE).
 
         The annotation strings are recorded in the bioentry_qualifier_value
         table, except for special cases like the reference, comment and
@@ -512,7 +658,7 @@ class DatabaseLoader:
 
 
     def _load_reference(self, reference, rank, bioentry_id):
-        """Record a SeqRecord's annotated references in the database.
+        """Record a SeqRecord's annotated references in the database (PRIVATE).
 
         record - a SeqRecord object with annotated references
         bioentry_id - corresponding database identifier
@@ -577,7 +723,7 @@ class DatabaseLoader:
                                    start, end, rank + 1))
         
     def _load_seqfeature(self, feature, feature_rank, bioentry_id):
-        """Load a biopython SeqFeature into the database.
+        """Load a biopython SeqFeature into the database (PRIVATE).
         """
         seqfeature_id = self._load_seqfeature_basic(feature.type, feature_rank,
                                                     bioentry_id)
@@ -585,7 +731,7 @@ class DatabaseLoader:
         self._load_seqfeature_qualifiers(feature.qualifiers, seqfeature_id)
 
     def _load_seqfeature_basic(self, feature_type, feature_rank, bioentry_id):
-        """Load the first tables of a seqfeature and returns the id.
+        """Load the first tables of a seqfeature and returns the id (PRIVATE).
 
         This loads the "key" of the seqfeature (ie. CDS, gene) and
         the basic seqfeature table itself.
@@ -609,7 +755,7 @@ class DatabaseLoader:
         return seqfeature_id
 
     def _load_seqfeature_locations(self, feature, seqfeature_id):
-        """Load all of the locations for a SeqFeature into tables.
+        """Load all of the locations for a SeqFeature into tables (PRIVATE).
 
         This adds the locations related to the SeqFeature into the
         seqfeature_location table. Fuzzies are not handled right now.
@@ -632,7 +778,7 @@ class DatabaseLoader:
                                                  seqfeature_id)
 
     def _insert_seqfeature_location(self, feature, rank, seqfeature_id):
-        """Add a location of a SeqFeature to the seqfeature_location table.
+        """Add a location of a SeqFeature to the seqfeature_location table (PRIVATE).
         """
         sql = r"INSERT INTO location (seqfeature_id, " \
               r"start_pos, end_pos, strand, rank) " \
@@ -651,7 +797,7 @@ class DatabaseLoader:
         self.adaptor.execute(sql, (seqfeature_id, start, end, strand, rank))
 
     def _load_seqfeature_qualifiers(self, qualifiers, seqfeature_id):
-        """Insert the (key, value) pair qualifiers relating to a feature.
+        """Insert the (key, value) pair qualifiers relating to a feature (PRIVATE).
 
         Qualifiers should be a dictionary of the form:
             {key : [value1, value2]}
@@ -690,7 +836,7 @@ class DatabaseLoader:
 
 
     def _load_seqfeature_dbxref(self, dbxrefs, seqfeature_id):
-        """Add the database crossreferences of a SeqFeature to the database.
+        """Add database crossreferences of a SeqFeature to the database (PRIVATE).
 
             o dbxrefs           List, dbxref data from the source file in the
                                 format <database>:<accession>
@@ -776,9 +922,9 @@ class DatabaseLoader:
         return (seqfeature_id, dbxref_id)
 
     def _load_dbxrefs(self, record, bioentry_id) :
-        """Load any sequence level cross references into the database.
+        """Load any sequence level cross references into the database (PRIVATE).
 
-        See table bioentry_dbxref"""
+        See table bioentry_dbxref."""
         for rank, value in enumerate(record.dbxrefs):
             # Split the DB:accession string at first colon.
             # We have to cope with things like:

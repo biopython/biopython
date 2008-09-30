@@ -403,7 +403,7 @@ class BioSeqDatabase:
         """
         return self[seqid]
 
-    def load(self, record_iterator):
+    def load(self, record_iterator, fetch_NCBI_taxonomy=False):
         """Load a set of SeqRecords into the BioSQL database.
 
         record_iterator is either a list of SeqRecord objects, or an
@@ -411,13 +411,19 @@ class BioSeqDatabase:
         output from the Bio.SeqIO.parse() function), which will be
         used to populate the database.
 
+        fetch_NCBI_taxonomy is boolean flag allowing or preventing
+        connection to the taxonomic database on the NCBI server
+        (via Bio.Entrez) to fetch a detailed taxonomy for each
+        SeqRecord.
+
         Example:
         from Bio import SeqIO
         count = db.load(SeqIO.parse(open(filename), format))
 
         Returns the number of records loaded.
         """
-        db_loader = Loader.DatabaseLoader(self.adaptor, self.dbid)
+        db_loader = Loader.DatabaseLoader(self.adaptor, self.dbid, \
+                                          fetch_NCBI_taxonomy)
         num_records = 0
         for cur_record in record_iterator :
             num_records += 1
