@@ -1564,14 +1564,15 @@ class Iterator:
         return iter(self.next, None)
 
 def blastall(blastcmd, program, database, infile, align_view='7', **keywds):
-    """blastall(blastcmd, program, database, infile, align_view='7', **keywds)
-    -> read, error Undohandles
+    """Execute and retrieve data from standalone BLASTPALL as handles.
     
     Execute and retrieve data from blastall.  blastcmd is the command
     used to launch the 'blastall' executable.  program is the blast program
     to use, e.g. 'blastp', 'blastn', etc.  database is the path to the database
     to search against.  infile is the path to the file containing
     the sequence to search with.
+
+    The return values are two handles, for standard output and standard error.
 
     You may pass more parameters to **keywds to change the behavior of
     the search.  Otherwise, optional values will be chosen by blastall.
@@ -1656,40 +1657,26 @@ def blastall(blastcmd, program, database, infile, align_view='7', **keywds):
         'seqalign_file' : '-O'
         }
 
-    if not os.path.exists(blastcmd):
-        raise ValueError, "blastall does not exist at %s" % blastcmd
-    if " " in blastcmd :
-        #Must wrap the blast exe path with spaces
-        blastcmd = '"%s"' % blastcmd
-    if os.path.exists(infile) and " " in infile :
-        #Must wrap the input filename with spaces
-        #(the path exists check allows for the fact the user may have
-        #already added the quotes)
-        infile = '"%s"' % infile        
-    
     params = []
-
     params.extend([att2param['program'], program])
     params.extend([att2param['database'], database])
-    params.extend([att2param['infile'], infile])
+    params.extend([att2param['infile'], _escape_filename(infile)])
     params.extend([att2param['align_view'], str(align_view)])
 
     for attr in keywds.keys():
         params.extend([att2param[attr], str(keywds[attr])])
 
-    w, r, e = os.popen3(" ".join([blastcmd] + params))
-    w.close()
-    return File.UndoHandle(r), File.UndoHandle(e)
-
+    return _invoke_blast(blastcmd, params)
 
 def blastpgp(blastcmd, database, infile, align_view='7', **keywds):
-    """blastpgp(blastcmd, database, infile, align_view='7', **keywds) ->
-    read, error Undohandles
+    """Execute and retrieve data from standalone BLASTPGP as handles.
     
     Execute and retrieve data from blastpgp.  blastcmd is the command
     used to launch the 'blastpgp' executable.  database is the path to the
     database to search against.  infile is the path to the file containing
     the sequence to search with.
+
+    The return values are two handles, for standard output and standard error.
 
     You may pass more parameters to **keywds to change the behavior of
     the search.  Otherwise, optional values will be chosen by blastpgp.
@@ -1794,40 +1781,26 @@ def blastpgp(blastcmd, database, infile, align_view='7', **keywds):
         'matrix_outfile' : '-Q',
         'align_infile' : '-B'
         }
-        
-    if not os.path.exists(blastcmd):
-        raise ValueError, "blastpgp does not exist at %s" % blastcmd
-    if " " in blastcmd :
-        #Must wrap the blast exe path with spaces
-        blastcmd = '"%s"' % blastcmd
-    if os.path.exists(infile) and " " in infile :
-        #Must wrap the input filename with spaces
-        #(the path exists check allows for the fact the user may have
-        #already added the quotes)
-        infile = '"%s"' % infile        
-    
-    params = []
 
+    params = []
     params.extend([att2param['database'], database])
-    params.extend([att2param['infile'], infile])
+    params.extend([att2param['infile'], _escape_filename(infile)])
     params.extend([att2param['align_view'], str(align_view)])
 
     for attr in keywds.keys():
         params.extend([att2param[attr], str(keywds[attr])])
 
-    w, r, e = os.popen3(" ".join([blastcmd] + params))
-    w.close()
-    return File.UndoHandle(r), File.UndoHandle(e)
-
+    return _invoke_blast(blastcmd, params)
 
 def rpsblast(blastcmd, database, infile, align_view="7", **keywds):
-    """rpsblast(blastcmd, database, infile, **keywds) ->
-    read, error Undohandles
+    """Execute and retrieve data from standalone RPS-BLAST as handles.
     
     Execute and retrieve data from standalone RPS-BLAST.  blastcmd is the
     command used to launch the 'rpsblast' executable.  database is the path
     to the database to search against.  infile is the path to the file
     containing the sequence to search with.
+
+    The return values are two handles, for standard output and standard error.
 
     You may pass more parameters to **keywds to change the behavior of
     the search.  Otherwise, optional values will be chosen by rpsblast.
@@ -1870,10 +1843,10 @@ def rpsblast(blastcmd, database, infile, align_view="7", **keywds):
     alignments          Number of alignments.
     align_view          Alignment view.  Integer 0-11,
                         passed as a string or integer.
-
     show_gi             Show GI's in deflines?  T/F
     seqalign_file       seqalign file to output.
     align_outfile       Output file for alignment.
+    
     """
 
     _security_check_parameters(keywds)
@@ -1908,29 +1881,16 @@ def rpsblast(blastcmd, database, infile, align_view="7", **keywds):
         'align_outfile' : '-o'
         }
         
-    if not os.path.exists(blastcmd):
-        raise ValueError, "rpsblast does not exist at %s" % blastcmd
-    if " " in blastcmd :
-        #Must wrap the blast exe path with spaces
-        blastcmd = '"%s"' % blastcmd
-    if os.path.exists(infile) and " " in infile :
-        #Must wrap the input filename with spaces
-        #(the path exists check allows for the fact the user may have
-        #already added the quotes)
-        infile = '"%s"' % infile        
-    
     params = []
 
     params.extend([att2param['database'], database])
-    params.extend([att2param['infile'], infile])
+    params.extend([att2param['infile'], _escape_filename(infile)])
     params.extend([att2param['align_view'], str(align_view)])
 
     for attr in keywds.keys():
         params.extend([att2param[attr], str(keywds[attr])])
 
-    w, r, e = os.popen3(" ".join([blastcmd] + params))
-    w.close()
-    return File.UndoHandle(r), File.UndoHandle(e)
+    return _invoke_blast(blastcmd, params)
 
 def _re_search(regex, line, error_msg):
     m = re.search(regex, line)
@@ -1989,6 +1949,47 @@ def _safe_float(str):
         str = str.replace(',', '')
     # try again.
     return float(str)
+
+def _escape_filename(filename) :
+    """Escape filenames with spaces (PRIVATE)."""
+    if " " not in filename :
+        return filename
+
+    #See Bug 2480 - is adding the following helpful?
+    #if os.path.isfile(filename) :
+    #    #On Windows, if the file exists, we can ask for
+    #    #its alternative short name (DOS style 8.3 format)
+    #    #which has no spaces in it.
+    #    try :
+    #        import win32api
+    #        short = win32api.GetShortPathName(filename)
+    #        assert os.path.isfile(short)
+    #        return short
+    #    except ImportError :
+    #        pass
+
+    #We'll just quote it - works on Mac etc
+    if filename.startswith('"') and filename.endswith('"') :
+        #Its already quoted
+        return filename
+    else :
+        return '"%s"' % filename
+
+def _invoke_blast(blast_cmd, params) :
+    """Start BLAST and returns undo-handles for stdout and stderr (PRIVATE).
+
+    Tries to deal with spaces in the BLAST executable path.
+    """
+    if not os.path.exists(blast_cmd):
+        raise ValueError, "BLAST executable does not exist at %s" % blast_cmd
+
+    cmd_string = " ".join([_escape_filename(blast_cmd)] + params)
+
+    #subprocess isn't available on python 2.3
+    write_handle, result_handle, error_handle \
+                  = os.popen3(cmd_string)
+    write_handle.close()
+    return File.UndoHandle(result_handle), File.UndoHandle(error_handle)
 
 def _security_check_parameters(param_dict) :
     """Look for any attempt to insert a command into a parameter.
