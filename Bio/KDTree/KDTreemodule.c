@@ -461,7 +461,7 @@ static char PyTree_get_indices__doc__[] =
 
 static PyObject *PyTree_get_indices(PyTree *self)
 {
-	int length;
+	npy_intp length;
 	PyArrayObject *array;
 	struct KDTree* tree = self->tree;
  
@@ -473,7 +473,7 @@ static PyObject *PyTree_get_indices(PyTree *self)
 		return Py_None;
 	}
 
-	array=(PyArrayObject *) PyArray_FromDims(1, &length, PyArray_LONG);
+	array=(PyArrayObject *) PyArray_SimpleNew(1, &length, PyArray_LONG);
 	if (!array)
 	{
 		PyErr_SetString(PyExc_MemoryError,
@@ -491,7 +491,7 @@ static char PyTree_get_radii__doc__[] =
 
 static PyObject *PyTree_get_radii(PyTree *self)
 {
-	int length;
+	npy_intp length;
 	PyArrayObject *array;
 	struct KDTree* tree = self->tree;
 	 
@@ -503,7 +503,7 @@ static PyObject *PyTree_get_radii(PyTree *self)
 		return Py_None;
 	}
 		
-	array=(PyArrayObject *) PyArray_FromDims(1, &length, PyArray_FLOAT);
+	array=(PyArrayObject *) PyArray_SimpleNew(1, &length, PyArray_FLOAT);
 	if (!array)
 	{
 		PyErr_SetString(PyExc_MemoryError,
