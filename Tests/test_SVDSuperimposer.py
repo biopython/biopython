@@ -33,7 +33,7 @@ rms=sup.get_rms()
 rot, tran=sup.get_rotran()
 
 # rotate y on x manually
-y_on_x1=matrixmultiply(y, rot)+tran
+y_on_x1=dot(y, rot)+tran
 
 # same thing
 y_on_x2=sup.get_transformed()
