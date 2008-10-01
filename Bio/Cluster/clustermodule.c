@@ -90,8 +90,8 @@ parse_data(PyObject* object, PyArrayObject** array)
 static void
 free_data(PyArrayObject* array, double** data)
 { if(data[0]!=PyArray_DATA(array))
-  { int i;
-    const int nrows = PyArray_DIM(array, 0);
+  { npy_intp i;
+    npy_intp nrows = PyArray_DIM(array, 0);
     for (i=0; i<nrows; i++) free(data[i]);
   }
   free (data);
@@ -270,11 +270,11 @@ free_weight(PyArrayObject* array, double* weight)
 /* -- initialid ------------------------------------------------------------- */
 
 static PyArrayObject*
-parse_initialid(PyObject* object, int* nclusters, int nitems)
+parse_initialid(PyObject* object, int* nclusters, npy_intp nitems)
 /* This function creates the clusterid variable for the kcluster and kmedoids
  * routines, and fills it with the initial clustering solution if specified
  * by the user in object. */
-{ int i;
+{ npy_intp i;
   npy_intp stride;
   const char* p;
   int* q;
@@ -282,7 +282,7 @@ parse_initialid(PyObject* object, int* nclusters, int nitems)
   PyArrayObject* array;
   /* -- First we create the clusterid variable ------------------------ */
   PyArrayObject* clusterid =
-    (PyArrayObject*) PyArray_FromDims(1, &nitems, NPY_INT);
+    (PyArrayObject*) PyArray_SimpleNew(1, &nitems, NPY_INT);
   if (!clusterid)
   { strcpy(message, "could not create clusterid array");
     PyErr_SetString (PyExc_MemoryError, buffer);
@@ -319,7 +319,8 @@ parse_initialid(PyObject* object, int* nclusters, int nitems)
   { /* no checking on last dimension of expected size 1 */
     if (nitems!=1 && nitems!=PyArray_DIM(array, 0)) 
     { sprintf(message,
-              "initialid has incorrect extent (%" NPY_INTP_FMT " expected %d)",
+              "initialid has incorrect extent (%" NPY_INTP_FMT
+              " expected %" NPY_INTP_FMT ")",
               PyArray_DIM(array, 0), nitems);
       PyErr_SetString (PyExc_ValueError, buffer);
       Py_DECREF((PyObject*) array);
@@ -366,7 +367,8 @@ parse_initialid(PyObject* object, int* nclusters, int nitems)
   free(number);
   Py_DECREF((PyObject*) array);
   if (i < (*nclusters)) /* Due to the break above */
-  { sprintf (message, "argument initialid: Cluster %d is empty", i);
+  { sprintf(message, "argument initialid: Cluster %" NPY_INTP_FMT
+                     " is empty", i);
     PyErr_SetString(PyExc_ValueError, buffer);
     Py_DECREF((PyObject*) clusterid);
     return NULL;
@@ -655,7 +657,15 @@ parse_distance(PyObject* object, PyArrayObject** array, int* n)
   if (PyArray_NDIM(*array) == 1)
   { const npy_intp stride = PyArray_STRIDE(*array, 0);
     const char* p = PyArray_BYTES(*array);
-    const int m = PyArray_DIM(*array, 0);
+    const int m = (const int) PyArray_DIM(*array, 0);
+    if (m != PyArray_DIM(*array, 0))
+    { strcpy(message, "Array size of distance is too large");
+      PyErr_SetString(PyExc_ValueError, buffer);
+      Py_DECREF((PyObject*) (*array));
+      *array = NULL;
+      *n = 0;
+      return NULL;
+    }
     *n = (int) ((1+sqrt(1+8*m))/2);
     if ((*n)*(*n)-(*n) != 2 * m)
     { strcpy(message,
@@ -679,10 +689,17 @@ parse_distance(PyObject* object, PyArrayObject** array, int* n)
   }
   else if (PyArray_NDIM(*array) == 2)
   { const char* p = PyArray_BYTES(*array);
-    *n = PyArray_DIM(*array, 0);
+    *n = (int) PyArray_DIM(*array, 0);
+    if ((*n) != PyArray_DIM(*array, 0))
+    { strcpy(message, "The distance matrix is too large");
+      PyErr_SetString(PyExc_ValueError, buffer);
+      Py_DECREF((PyObject*) (*array));
+      *array = NULL;
+      *n = 0;
+      return NULL;
+    }
     if ((*n) != PyArray_DIM(*array, 1))
-    { strcpy(message,
-        "The distance matrix should be square");
+    { strcpy(message, "The distance matrix should be square");
       PyErr_SetString(PyExc_ValueError, buffer);
       Py_DECREF((PyObject*) (*array));
       *array = NULL;
@@ -721,14 +738,19 @@ parse_distance(PyObject* object, PyArrayObject** array, int* n)
 static double***
 create_celldata(int nxgrid, int nygrid, int ndata, PyArrayObject** array)
 { int i;
-  int shape[3];
+  npy_intp shape[3];
   double* p;
   double** pp;
   double*** ppp;
-  shape[0] = nxgrid;
-  shape[1] = nygrid;
-  shape[2] = ndata;
-  *array = (PyArrayObject*) PyArray_FromDims(3, shape, NPY_DOUBLE);
+  shape[0] = (npy_intp) nxgrid;
+  shape[1] = (npy_intp) nygrid;
+  shape[2] = (npy_intp) ndata;
+  if (shape[0]!=nxgrid || shape[1]!=nygrid || shape[2]!=ndata)
+  { strcpy(message, "celldata array too large");
+    PyErr_SetString(PyExc_RuntimeError, buffer);
+    return NULL;
+  }
+  *array = (PyArrayObject*) PyArray_SimpleNew(3, shape, NPY_DOUBLE);
   pp = malloc(nxgrid*nygrid*sizeof(double*));
   ppp = malloc(nxgrid*sizeof(double**));
   if (!(*array) || !pp || !ppp)
@@ -794,8 +816,15 @@ parse_index(PyObject* object, PyArrayObject** array, int* n)
     } 
   }
   /* We have an array */
-  *n = PyArray_DIM(*array, 0);
-  if(PyArray_NDIM(*array) != 1 && (PyArray_NDIM(*array) > 0 || PyArray_DIM(*array, 0) != 1))
+  *n = (int) PyArray_DIM(*array, 0);
+  if(PyArray_DIM(*array, 0) != *n)
+  { PyErr_SetString (PyExc_ValueError, "data array is too large");
+    Py_DECREF(object); /* can only happen if *array==(PyArrayObject*)object */
+    *array = NULL;
+    *n = 0;
+    return NULL;
+  }
+  if(PyArray_NDIM(*array) != 1 && (PyArray_NDIM(*array) > 0 || *n != 1))
   { sprintf(message,
             "index argument has incorrect rank (%d expected 1)",
             PyArray_NDIM(*array));
@@ -1168,9 +1197,14 @@ static char PyTree_cut__doc__[] =
 static PyObject*
 PyTree_cut(PyTree* self, PyObject* args)
 { int nclusters = 2;
-  int n = self->n + 1;
+  npy_intp n = (npy_intp) (self->n + 1);
   PyArrayObject* aCLUSTERID = (PyArrayObject*) NULL;
   int* clusterid = NULL;
+  /* -- Check to make sure the tree isn't too large ---------------------- */
+  if (n != (int)n)
+  { PyErr_SetString (PyExc_RuntimeError, "cut: tree is too large");
+    return NULL;
+  }
   /* -- Read the input variables ----------------------------------------- */
   if(!PyArg_ParseTuple(args, "|i", &nclusters)) return NULL;
   /* -- Check the nclusters variable ------------------------------------- */
@@ -1185,7 +1219,7 @@ PyTree_cut(PyTree* self, PyObject* args)
     return NULL;
   }
   /* -- Create the clusterid output variable ----------------------------- */
-  aCLUSTERID = (PyArrayObject*) PyArray_FromDims(1, &n, NPY_INT);
+  aCLUSTERID = (PyArrayObject*) PyArray_SimpleNew(1, &n, NPY_INT);
   if (!aCLUSTERID)
   { PyErr_SetString (PyExc_MemoryError,
       "cut: Could not create array for return value");
@@ -1193,10 +1227,10 @@ PyTree_cut(PyTree* self, PyObject* args)
   }
   clusterid = PyArray_DATA(aCLUSTERID);
   /* --------------------------------------------------------------------- */
-  cuttree(n, self->nodes, nclusters, clusterid);
+  cuttree((int) n, self->nodes, nclusters, clusterid);
   /* -- Check for errors flagged by the C routine ------------------------ */
   if (clusterid[0]==-1)
-  { PyErr_SetString (PyExc_MemoryError, "cut: error in the cuttree routine");
+  { PyErr_SetString (PyExc_MemoryError, "cut: Error in the cuttree routine");
     Py_DECREF((PyObject*) aCLUSTERID);
     return NULL;
   }
@@ -1398,8 +1432,18 @@ py_kcluster (PyObject* self, PyObject* args, PyObject* keywords)
   /* -- Check the data input array --------------------------------------- */
   data = parse_data(DATA, &aDATA);
   if (!data) return NULL;
-  nrows = PyArray_DIM(aDATA, 0);
-  ncolumns = PyArray_DIM(aDATA, 1);
+  nrows = (int) PyArray_DIM(aDATA, 0);
+  ncolumns = (int) PyArray_DIM(aDATA, 1);
+  if (nrows!=PyArray_DIM(aDATA, 0) || ncolumns!=PyArray_DIM(aDATA, 1))
+  { char* message = strchr(buffer, '\0');
+    sprintf(message,
+            "received too many data (%" NPY_INTP_FMT " x %" NPY_INTP_FMT
+            "data matrix received)",
+            PyArray_DIM(aDATA, 0), PyArray_DIM(aDATA, 1));
+    PyErr_SetString (PyExc_ValueError, buffer);
+    free_data(aDATA, data);
+    return NULL;
+  }
   /* -- Check the mask input --------------------------------------------- */
   mask = parse_mask(MASK, &aMASK, PyArray_DIMS(aDATA));
   if (!mask)
@@ -1409,7 +1453,7 @@ py_kcluster (PyObject* self, PyObject* args, PyObject* keywords)
   /* -- Create the clusterid output variable ----------------------------- */
   ndata = TRANSPOSE ? nrows : ncolumns;
   nitems = TRANSPOSE ? ncolumns : nrows;
-  aCLUSTERID = parse_initialid(INITIALID, &NCLUSTERS, nitems);
+  aCLUSTERID = parse_initialid(INITIALID, &NCLUSTERS, (npy_intp) nitems);
   if (!aCLUSTERID)
   { free_data(aDATA, data);
     free_mask(aMASK, mask, nrows);
@@ -1553,7 +1597,7 @@ py_kmedoids (PyObject* self, PyObject* args, PyObject* keywords)
   distances = parse_distance(DISTANCES, &aDISTANCES, &nitems);
   if (!distances) return NULL;
   /* -- Create the clusterid output variable ----------------------------- */
-  aCLUSTERID = parse_initialid(INITIALID, &NCLUSTERS, nitems);
+  aCLUSTERID = parse_initialid(INITIALID, &NCLUSTERS, (npy_intp) nitems);
   if (!aCLUSTERID)
   { free_distances(DISTANCES, aDISTANCES, distances, nitems);
     return NULL;
@@ -1745,10 +1789,15 @@ py_treecluster (PyObject* self, PyObject* args, PyObject* keywords)
     /* -- Check the data input array --------------------------------------- */
     data = parse_data(DATA, &aDATA);
     if (!data) return NULL;
-    nrows = PyArray_DIM(aDATA, 0);
-    ncolumns = PyArray_DIM(aDATA, 1);
+    nrows = (int) PyArray_DIM(aDATA, 0);
+    ncolumns = (int) PyArray_DIM(aDATA, 1);
     ndata = TRANSPOSE ? nrows : ncolumns;
     nitems = TRANSPOSE ? ncolumns : nrows;
+    if (nrows!=PyArray_DIM(aDATA, 0) || ncolumns!=PyArray_DIM(aDATA, 1))
+    { free_data(aDATA, data);
+      PyErr_SetString (PyExc_ValueError, "data array is too large");
+      return NULL;
+    }
     /* -- Check the mask input --------------------------------------------- */
     mask = parse_mask(MASK, &aMASK, PyArray_DIMS(aDATA));
     if (!mask)
@@ -1885,7 +1934,7 @@ py_somcluster (PyObject* self, PyObject* args, PyObject* keywords)
   PyArrayObject* aCELLDATA = NULL;
   double*** celldata = NULL;
   PyArrayObject* aCLUSTERID = NULL;
-  int shape[2];
+  npy_intp shape[2];
 
   /* -- Read the input variables ----------------------------------------- */
   static char* kwlist[] = { "data",
@@ -1943,10 +1992,16 @@ py_somcluster (PyObject* self, PyObject* args, PyObject* keywords)
   /* -- Check the data input array --------------------------------------- */
   data = parse_data(DATA, &aDATA);
   if (!data) return NULL;
-  nrows = PyArray_DIM(aDATA, 0);
-  ncolumns = PyArray_DIM(aDATA, 1);
+  nrows = (int) PyArray_DIM(aDATA, 0);
+  ncolumns = (int) PyArray_DIM(aDATA, 1);
   nitems = TRANSPOSE ? ncolumns : nrows;
   ndata = TRANSPOSE ? nrows : ncolumns;
+  if (nrows!=PyArray_DIM(aDATA, 0) || ncolumns!=PyArray_DIM(aDATA, 1))
+  { strcpy(message, "data array too large");
+    PyErr_SetString(PyExc_RuntimeError, buffer);
+    free_data(aDATA, data);
+    return NULL;
+  }
   /* -- Check the mask input --------------------------------------------- */
   mask = parse_mask(MASK, &aMASK, PyArray_DIMS(aDATA));
   if (!mask)
@@ -1963,7 +2018,7 @@ py_somcluster (PyObject* self, PyObject* args, PyObject* keywords)
   /* --------------------------------------------------------------------- */
   shape[0] = nitems;
   shape[1] = 2;
-  aCLUSTERID = (PyArrayObject*) PyArray_FromDims(2, shape, NPY_INT);
+  aCLUSTERID = (PyArrayObject*) PyArray_SimpleNew(2, shape, NPY_INT);
   if (!aCLUSTERID)
   { strcpy(buffer, "somcluster: Could not create clusterid array");
     PyErr_SetString (PyExc_MemoryError, buffer);
@@ -2253,9 +2308,14 @@ py_clusterdistance (PyObject* self, PyObject* args, PyObject* keywords)
   /* -- Check the data input array --------------------------------------- */
   data = parse_data(DATA, &aDATA);
   if (!data) return NULL;
-  nrows = PyArray_DIM(aDATA, 0);
-  ncolumns = PyArray_DIM(aDATA, 1);
+  nrows = (int) PyArray_DIM(aDATA, 0);
+  ncolumns = (int) PyArray_DIM(aDATA, 1);
   ndata = TRANSPOSE ? nrows : ncolumns;
+  if (nrows!=PyArray_DIM(aDATA, 0) || ncolumns!=PyArray_DIM(aDATA, 1))
+  { free_data(aDATA, data);
+    PyErr_SetString (PyExc_ValueError, "data array is too large");
+    return NULL;
+  }
   /* -- Check the mask input --------------------------------------------- */
   mask = parse_mask(MASK, &aMASK, PyArray_DIMS(aDATA));
   if (!mask)
@@ -2357,7 +2417,7 @@ py_clustercentroids(PyObject* self, PyObject* args, PyObject* keywords)
   PyArrayObject* aCLUSTERID = NULL;
   int* clusterid;
   char METHOD = 'a';
-  int shape[2];
+  npy_intp shape[2];
   PyArrayObject* aCDATA = NULL;
   double** cdata;
   PyArrayObject* aCMASK = NULL;
@@ -2388,9 +2448,14 @@ py_clustercentroids(PyObject* self, PyObject* args, PyObject* keywords)
   /* -- Check the data input array --------------------------------------- */
   data = parse_data(DATA, &aDATA);
   if (!data) return NULL;
-  nrows = PyArray_DIM(aDATA, 0);
-  ncolumns = PyArray_DIM(aDATA, 1);
+  nrows = (int) PyArray_DIM(aDATA, 0);
+  ncolumns = (int) PyArray_DIM(aDATA, 1);
   nitems = TRANSPOSE ? ncolumns : nrows;
+  if (nrows!=PyArray_DIM(aDATA, 0) || ncolumns!=PyArray_DIM(aDATA, 1))
+  { PyErr_SetString(PyExc_RuntimeError, "data array is too large");
+    free_data(aDATA, data);
+    return NULL;
+  }
   /* -- Check the mask input --------------------------------------------- */
   mask = parse_mask(MASK, &aMASK, PyArray_DIMS(aDATA));
   if (!mask)
@@ -2407,7 +2472,7 @@ py_clustercentroids(PyObject* self, PyObject* args, PyObject* keywords)
   /* -- Create the centroid data output variable ------------------------- */
   shape[0] = TRANSPOSE ? nrows : nclusters;
   shape[1] = TRANSPOSE ? nclusters : ncolumns;
-  aCDATA = (PyArrayObject*) PyArray_FromDims(2, shape, NPY_DOUBLE);
+  aCDATA = (PyArrayObject*) PyArray_SimpleNew(2, shape, NPY_DOUBLE);
   if (!aCDATA)
   { strcpy(message, "could not create centroids array");
     PyErr_SetString (PyExc_MemoryError, buffer);
@@ -2420,7 +2485,7 @@ py_clustercentroids(PyObject* self, PyObject* args, PyObject* keywords)
   for (i=0; i<shape[0]; i++)
     cdata[i] = ((double*) PyArray_DATA(aCDATA)) + i*shape[1];
   /* -- Create the centroid mask output variable ------------------------- */
-  aCMASK = (PyArrayObject*) PyArray_FromDims(2, shape, NPY_INT);
+  aCMASK = (PyArrayObject*) PyArray_SimpleNew(2, shape, NPY_INT);
   if (!aCMASK)
   { strcpy(message, "could not create centroids array");
     PyErr_SetString (PyExc_MemoryError, buffer);
@@ -2546,8 +2611,13 @@ py_distancematrix (PyObject* self, PyObject* args, PyObject* keywords)
   /* -- Check the data input array --------------------------------------- */
   data = parse_data(DATA, &aDATA);
   if (!data) return NULL;
-  nrows = PyArray_DIM(aDATA, 0);
-  ncolumns = PyArray_DIM(aDATA, 1);
+  nrows = (int) PyArray_DIM(aDATA, 0);
+  ncolumns = (int) PyArray_DIM(aDATA, 1);
+  if (nrows!=PyArray_DIM(aDATA, 0) || ncolumns!=PyArray_DIM(aDATA, 1))
+  { strcpy(message, "data array is too large");
+    PyErr_SetString(PyExc_RuntimeError, buffer);
+    return NULL;
+  }
   ndata = (TRANSPOSE==0) ? ncolumns : nrows;
   nelements = (TRANSPOSE==0) ? nrows : ncolumns;
   /* -- Check the mask input --------------------------------------------- */
@@ -2566,7 +2636,7 @@ py_distancematrix (PyObject* self, PyObject* args, PyObject* keywords)
   /* -- Create the matrix output variable -------------------------------- */
   result = PyList_New(nelements);
   if (result)
-  { int i, j;
+  { npy_intp i, j;
     /* ------------------------------------------------------------------- */
     distances = distancematrix (nrows,
                                 ncolumns,
@@ -2579,7 +2649,7 @@ py_distancematrix (PyObject* self, PyObject* args, PyObject* keywords)
     if (distances)
     { for (i = 0; i < nelements; i++)
       { double* rowdata = NULL;
-        PyObject* row = PyArray_FromDims(1, &i, NPY_DOUBLE);
+        PyObject* row = PyArray_SimpleNew(1, &i, NPY_DOUBLE);
         if (!row)
         { strcpy(message, "could not create distance matrix");
           PyErr_SetString (PyExc_MemoryError, buffer);
