@@ -39,7 +39,14 @@ training_data = [
 print "Training HMM"
 mm = MarkovModel.train_visible(states, alphabet, training_data)
 print "Classifying"
-print MarkovModel.find_states(mm, "AACGTT")
+
+#print MarkovModel.find_states(mm, "AACGTT")
+#Don't just print this, as the float may have different
+#precision on different platforms.  This returns a list
+#containing a tuple containing a list (fine), and a float.
+states = MarkovModel.find_states(mm, "AACGTT")
+for state_list, state_float in states :
+    print "State %s, %0.10f" % (repr(state_list), state_float)
 print_mm(mm)
 
 

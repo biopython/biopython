@@ -2,7 +2,7 @@ test_MarkovModel
 TESTING train_visible
 Training HMM
 Classifying
-[(['0', '0', '1', '2', '3', '3'], 0.0082128906250000053)]
+State ['0', '0', '1', '2', '3', '3'], 0.0082128906
 STATES: 0 1 2 3
 ALPHABET: A C G T
 INITIAL:
