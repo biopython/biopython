@@ -8,6 +8,7 @@
 """Represent a sequence or mutable sequence, with an alphabet."""
 
 import string, array
+import sys
 
 import Alphabet
 from Alphabet import IUPAC
@@ -124,10 +125,10 @@ class Seq:
     def tomutable(self):   # Needed?  Or use a function?
         return MutableSeq(self.data, self.alphabet)
     
-    def count(self, sub, start=None, end=None):
+    def count(self, sub, start=0, end=sys.maxint):
         """Count method, like that of a python string.
 
-        Return an integer, the number of occurrences of substring
+        Returns an integer, the number of occurrences of substring
         argument sub in the (sub)sequence given by [start:end].
         Optional arguments start and end are interpreted as in slice
         notation.
@@ -153,16 +154,10 @@ class Seq:
             #Assume sub is a string.
             search = sub
 
-        #TODO - More elegant way of doing this splice notation
-        if start is None and end is None :
-            return self.data.count(search)
-        elif end is None :
-            return self.data.count(search, start)
-        else :
-            return self.data.count(search, start, end)
+        return self.tostring().count(search, start, end)
 
     def __maketrans(self, alphabet) :
-        """Seq.__maketrans(alphabet) -> translation table.
+        """Seq.__maketrans(alphabet) -> translation table (PRIVATE).
 
         Return a translation table for use with complement()
         and reverse_complement().
@@ -370,12 +365,15 @@ class MutableSeq:
 
     def append(self, c):
         self.data.append(c)
+
     def insert(self, i, c):
         self.data.insert(i, c)
+
     def pop(self, i = (-1)):
         c = self.data[i]
         del self.data[i]
         return c
+
     def remove(self, item):
         for i in range(len(self.data)):
             if self.data[i] == item:
@@ -383,7 +381,7 @@ class MutableSeq:
                 return
         raise ValueError, "MutableSeq.remove(x): x not in list"
 
-    def count(self, sub, start=None, end=None):
+    def count(self, sub, start=0, end=sys.maxint):
         """Count method, like that of a python string.
 
         Return an integer, the number of occurrences of substring
@@ -403,31 +401,21 @@ class MutableSeq:
         print my_mseq.count(Seq("AT"))
         print my_mseq.count("AT", 2, -1)
         """
-        if len(sub) == 1 :
-            #Try and be efficient and work directly from the array.
-            try :
-                #Assume item is a single letter Seq/MutableSeq
-                #TODO - Should we check the alphabet?
-                letter = sub.tostring()
-            except AttributeError :
-                letter = sub
+        try :
+            #TODO - Should we check the alphabet?
+            search = sub.tostring()
+        except AttributeError :
+            search = sub
 
+        if len(search) == 1 :
+            #Try and be efficient and work directly from the array.
             count = 0
-            #TODO - More elegant way of doing this splice notation
-            if start is None and end is None :
-                for c in self.data:
-                    if c == letter: count += 1
-            elif end is None :
-                for c in self.data[start:]:
-                    if c == letter: count += 1
-            else :
-                for c in self.data[start:end]:
-                    if c == letter: count += 1
+            for c in self.data[start:end]:
+                if c == search: count += 1
             return count
         else :
             #TODO - Can we do this more efficiently?
-            #We could use the self.tostring().count(...) method
-            return self.toseq().count(sub, start, end)
+            return self.tostring().count(search, start, end)
 
     def index(self, item):
         for i in range(len(self.data)):
