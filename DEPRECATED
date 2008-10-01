@@ -10,19 +10,19 @@ imports, but C modules will not work. Please move to NumPy.
 
 Martel
 ======
-Declared obsolete in Release 1.48, deprecated in Release 1.49
+Declared obsolete in Release 1.48, deprecated in Release 1.49.
 
 Bio.Mindy
 =========
-Declared obsolete in Release 1.48, deprecated in Release 1.49
+Declared obsolete in Release 1.48, deprecated in Release 1.49.
 
 Bio.builders, Bio.Std, Bio.StdHandler, Bio.Decode
 =================================================
-Part of the Martel/Mindy infrastructure, these were deprecated in Release 1.49
+Part of the Martel/Mindy infrastructure, these were deprecated in Release 1.49.
 
 Bio.Writer and Bio.writers
 ==========================
-Deprecated in Release 1.48
+Deprecated in Release 1.48.
 
 Bio.Emboss.Primer
 =================
@@ -31,7 +31,7 @@ Bio.Emboss.PrimerSearch instead.
 
 Bio.MetaTool
 ============
-Deprecated in Release 1.48, this was a parser from the output of MetaTool 3.5
+Deprecated in Release 1.48, this was a parser for the output of MetaTool 3.5
 which is now obsolete.
 
 Bio.GenBank
@@ -47,17 +47,17 @@ in the following release.  Please use Bio.Entrez instead.
 
 Bio.EUtils
 ==========
-Deprecated in favor of Bio.Entrez in Release 1.48
+Deprecated in favor of Bio.Entrez in Release 1.48.
 
 Bio.Blast.NCBIWWW
 =================
-The HTML BLAST parser was deprecated as of Release 1.48
-The deprecated functions blast and blasturl were removed in Release 1.44
+The HTML BLAST parser was deprecated as of Release 1.48.
+The deprecated functions blast and blasturl were removed in Release 1.44.
 
 Bio.Saf
 =======
 Deprecated as of Release 1.48, as it appears to have no users, and relies
-on Martel which doesn't work properly with mxTextTools 3.0
+on Martel which doesn't work properly with mxTextTools 3.0.
 
 Bio.NBRF
 ========
@@ -70,7 +70,7 @@ Deprecated as of Release 1.48 in favor of the "ig" format in Bio.SeqIO
 Bio.ECell
 =========
 Deprecated as of Release 1.47, as it appears to have no users, and the code
-does not seem relevant for ECell 3.
+does not seem relevant for ECell 3.  Removed in Release 1.49.
 
 Bio.SGMLExtractor
 =================
@@ -103,39 +103,39 @@ is now available from Bio.SCOP, Bio.InterPro and Bio.ExPASy instead.
 Bio.SeqIO
 =========
 The old Bio.SeqIO.FASTA and Bio.SeqIO.generic were deprecated in favour of
-the new Bio.SeqIO module as of Release 1.44, removed in Release 1.47
+the new Bio.SeqIO module as of Release 1.44, removed in Release 1.47.
 
 Bio.Medline.NLMMedlineXML
 =========================
-Deprecated in Release 1.44, removed in 1.46
+Deprecated in Release 1.44, removed in 1.46.
 
 Bio.MultiProc
 =============
-Deprecated in Release 1.44, removed in 1.46
+Deprecated in Release 1.44, removed in 1.46.
 
 Bio.MarkupEditor
 ================
-Deprecated in Release 1.44, removed in 1.46
+Deprecated in Release 1.44, removed in 1.46.
 
 Bio.lcc
 =======
-Deprecated in favor of Bio.SeqUtils.lcc in Release 1.44, removed in 1.46
+Deprecated in favor of Bio.SeqUtils.lcc in Release 1.44, removed in 1.46.
 
 Bio.crc
 =======
-Deprecated in favor of Bio.SeqUtils.CheckSum in Release 1.44, removed in 1.46
+Deprecated in favor of Bio.SeqUtils.CheckSum in Release 1.44, removed in 1.46.
 
 Bio.FormatIO
 ============
-This was removed in Release 1.44
+This was removed in Release 1.44 (a deprecation was not possible).
 
 Bio.expressions (and therefore Bio.config, Bio.dbdefs, Bio.formatdefs, Bio.dbdefs)
 ===============
-These were deprecated in Release 1.44, and removed in Release 1.49
+These were deprecated in Release 1.44, and removed in Release 1.49.
 
 Bio.Kabat
 =========
-This was deprecated in Release 1.43 and removed in Release 1.44
+This was deprecated in Release 1.43 and removed in Release 1.44.
 
 Bio.SeqUtils
 ============
@@ -151,12 +151,12 @@ Use the functions 'complement' and 'reverse_complement' in Bio.Seq instead.
 
 Bio.sequtils
 ============
-Deprecated as of Release 1.30, removed in Release 1.42
+Deprecated as of Release 1.30, removed in Release 1.42.
 Use Bio.SeqUtils instead.
 
 Bio.SVM
 =======
-Deprecated as of Release 1.30, removed in Release 1.42
+Deprecated as of Release 1.30, removed in Release 1.42.
 The Support Vector Machine code in Biopython has been superceeded by a 
 more robust (and maintained) SVM library, which includes a python
 interface. We recommend using LIBSVM:
@@ -165,7 +165,7 @@ http://www.csie.ntu.edu.tw/~cjlin/libsvm/
 
 Bio.RecordFile
 ==============
-Deprecated as of Release 1.30, removed in Release 1.42
+Deprecated as of Release 1.30, removed in Release 1.42.
 RecordFile wasn't completely implemented and duplicates the work 
 of most standard parsers. We recommend using a specific iterator 
 (Bio.Fasta.Iterator for example) without a parser to get back
@@ -173,7 +173,7 @@ text records.
 
 Bio.kMeans and Bio.xkMeans
 ==========================
-Deprecated as of Release 1.30, removed in Release 1.42
+Deprecated as of Release 1.30, removed in Release 1.42.
 
 The k-Means algorithm is an algorithm for unsupervised clustering of data.
 Biopython includes an implementation of the k-means clustering algorithm

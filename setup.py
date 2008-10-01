@@ -248,7 +248,6 @@ PACKAGES = [
     'Bio.Clustalw',
     'Bio.Crystal',
     'Bio.Data',
-    'Bio.ECell',
     'Bio.Emboss',
     'Bio.Encodings',
     'Bio.Entrez',
