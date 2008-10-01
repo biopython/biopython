@@ -18,7 +18,7 @@ Declared obsolete in Release 1.48, deprecated in Release 1.49
 
 Bio.builders, Bio.Std, Bio.StdHandler, Bio.Decode
 =================================================
-Part of the Martel/Mindy infrastructure, these was deprecated in Release 1.49
+Part of the Martel/Mindy infrastructure, these were deprecated in Release 1.49
 
 Bio.Writer and Bio.writers
 ==========================
@@ -72,17 +72,21 @@ Bio.ECell
 Deprecated as of Release 1.47, as it appears to have no users, and the code
 does not seem relevant for ECell 3.
 
+Bio.SGMLExtractor
+=================
+Deprecated as of Release 1.46, removed in Release 1.49.
+
 Bio.Rebase
 ==========
-Deprecated as of Release 1.46.
+Deprecated as of Release 1.46, removed in Release 1.49.
 
 Bio.Gobase
 ==========
-Deprecated as of Release 1.46.
+Deprecated as of Release 1.46, removed in Release 1.49.
 
 Bio.CDD
 =======
-Deprecated as of Release 1.46.
+Deprecated as of Release 1.46, removed in Release 1.49.
 
 Bio.biblio
 ==========
