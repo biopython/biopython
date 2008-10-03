@@ -67,6 +67,12 @@ Bio.IntelliGenetics
 ===================
 Deprecated as of Release 1.48 in favor of the "ig" format in Bio.SeqIO
 
+Bio.SeqIO submodules PhylipIO, ClustalIO, NexusIO and StockholmIO
+=================================================================
+You can still use the "phylip", "clustal", "nexus" and "stockholm" formats
+in Bio.SeqIO, however these are now supported via Bio.AlignIO, with the
+old code deprecated in Releases 1.46 or 1.47, and removed in Release 1.49.
+
 Bio.ECell
 =========
 Deprecated as of Release 1.47, as it appears to have no users, and the code
