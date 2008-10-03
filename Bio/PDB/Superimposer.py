@@ -34,7 +34,7 @@ class Superimposer:
         @type fixed,moving: [L{Atom}, L{Atom},...]
         """
         if not (len(fixed)==len(moving)):
-            raise PDBException, "Fixed and moving atom lists differ in size"
+            raise PDBException("Fixed and moving atom lists differ in size")
         l=len(fixed)
         fixed_coord=zeros((l, 3), 'd')
         moving_coord=zeros((l, 3), 'd')
@@ -52,7 +52,7 @@ class Superimposer:
         Rotate/translate a list of atoms.
         """
         if self.rotran is None:
-            raise PDBException, "No transformation has been calculated yet"
+            raise PDBException("No transformation has been calculated yet")
         rot, tran=self.rotran
         rot=rot.astype(Float0)
         tran=tran.astype(Float0)

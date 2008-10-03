@@ -193,7 +193,7 @@ class DSSP(AbstractResiduePropertyMap):
                 if _dssp_cys.match(aa):
                     aa='C'
             if not (resname==aa):
-                raise PDBException, "Structure/DSSP mismatch at "+str(res) 
+                raise PDBException("Structure/DSSP mismatch at "+str(res))
             dssp_map[key]=((res, ss, acc, rel_acc))
             dssp_list.append((res, ss, acc, rel_acc))
         AbstractResiduePropertyMap.__init__(self, dssp_map, dssp_keys, dssp_list)

@@ -137,7 +137,7 @@ class Fragment:
         @type ca_coord: Numeric array with length 3
         """
         if self.counter>=self.length:
-            raise PDBException, "Fragment boundary exceeded."
+            raise PDBException("Fragment boundary exceeded.")
         self.resname_list.append(resname)
         self.coords_ca[self.counter]=ca_coord
         self.counter=self.counter+1
@@ -191,9 +191,9 @@ def _make_fragment_list(pp, length):
             if residue.has_id("CA"):
                 ca=residue["CA"]
             else:
-                raise "CHAINBREAK"
+                raise PDBException("CHAINBREAK")
             if ca.is_disordered():
-                raise "CHAINBREAK"
+                raise PDBException("CHAINBREAK")
             ca_coord=ca.get_coord()
             f.add_residue(resname, ca_coord)
         frag_list.append(f)
@@ -250,7 +250,7 @@ class FragmentMapper:
         elif flength==7:
             self.edge=3
         else:
-            raise PDBException, "Fragment length should be 5 or 7."
+            raise PDBException("Fragment length should be 5 or 7.")
         self.flength=flength
         self.lsize=lsize
         self.reflist=_read_fragments(lsize, flength, fdir)

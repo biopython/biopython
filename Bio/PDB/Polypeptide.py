@@ -281,7 +281,7 @@ class _PPBuilder:
         elif level=="C":
             chain_list=[entity]
         else:
-            raise PDBException, "Entity should be Structure, Model or Chain."
+            raise PDBException("Entity should be Structure, Model or Chain.")
         pp_list=[]
         for chain in chain_list:
             chain_it=iter(chain)

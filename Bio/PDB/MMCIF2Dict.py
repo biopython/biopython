@@ -26,7 +26,7 @@ class MMCIF2Dict(UserDict):
         # entry for garbage
         self.data[None]=[]
         if not os.path.isfile(filename):
-            raise IOError, "File not found."
+            raise IOError("File not found.")
         Bio.PDB.mmCIF.MMCIFlex.open_file(filename)
         self._make_mmcif_dict()
         Bio.PDB.mmCIF.MMCIFlex.close_file()

@@ -44,7 +44,7 @@ def unfold_entities(entity_list, target_level):
     o target_level - char (A, R, C, M, S)
     """
     if not target_level in entity_levels:
-        raise PDBException, "%s: Not an entity level." % target_level
+        raise PDBException("%s: Not an entity level." % target_level)
     if type(entity_list)!=ListType:
         # single entity
         entity_list=[entity_list]
@@ -52,7 +52,7 @@ def unfold_entities(entity_list, target_level):
     level=entity_list[0].get_level()
     for entity in entity_list:
         if not (entity.get_level()==level):
-            raise PDBException, "Entity list is not homogeneous."
+            raise PDBException("Entity list is not homogeneous.")
     target_index=entity_levels.index(target_level)
     level_index=entity_levels.index(level)
     if level_index==target_index:

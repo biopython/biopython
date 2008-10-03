@@ -234,7 +234,7 @@ class PDBParser:
             print "Exception ignored.\nSome atoms or residues will be missing in the data structure."
         else:
             # exceptions are fatal - raise again with new message (including line nr)
-            raise PDBConstructionException, message
+            raise PDBConstructionException(message)
 
 
 if __name__=="__main__":
