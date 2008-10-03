@@ -6,8 +6,10 @@
 __doc__="Some Bio.PDB specific exceptions."
 
 # General error
-PDBException="PDBException"
+class PDBException(Exception):
+    pass
 
 # The PDB file cannot be unambiguously represented in the SMCRA 
 # data structure
-PDBConstructionException="PDBConstructionException"
+class PDBConstructionException(Exception):
+    pass
