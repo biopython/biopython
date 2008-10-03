@@ -27,7 +27,8 @@ try:
     import reportlab as r
     del r
 except:
-    raise MissingExternalDependencyError("Install reportlab if you want to use Bio.Graphics).")
+    raise MissingExternalDependencyError(\
+        "Install reportlab if you want to use Bio.Graphics.")
 
 # the stuff we're testing
 from Bio.Graphics.Comparative import ComparativeScatterPlot

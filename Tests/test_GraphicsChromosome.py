@@ -21,7 +21,8 @@ try:
     # reportlab
     from reportlab.lib import colors
 except:
-    raise MissingExternalDependencyError("Install reportlab if you want to use Bio.Graphics).")
+    raise MissingExternalDependencyError(\
+        "Install reportlab if you want to use Bio.Graphics.")
 
 # local stuff
 from Bio.Graphics import BasicChromosome
