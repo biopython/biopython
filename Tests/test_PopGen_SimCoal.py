@@ -27,7 +27,8 @@ for path in os.environ['PATH'].split(os.pathsep):
     except os.error:
         pass #Path doesn't exist - correct to pass
 if not found:
-    raise MissingExternalDependencyError("SimCoal not found (not a problem if you do not intend to use it).")
+    raise MissingExternalDependencyError(\
+        "Install SIMCOAL2 if you want to use Bio.PopGen.SimCoal.")
 
 def run_tests(argv):
     test_suite = testing_suite()
