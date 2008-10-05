@@ -29,12 +29,7 @@ classify       Classify an observation into a class.
 # add code to help discretize data
 # use objects
 
-try:
-    from Numeric import *
-except ImportError, x:
-    from numpy.oldnumeric import *
-    #raise ImportError, "This module requires Numeric (precursor to NumPy)"
-
+from numpy.oldnumeric import *
 from Bio import mathfns, listfns
 
 class NaiveBayes:

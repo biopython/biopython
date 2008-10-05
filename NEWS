@@ -9,9 +9,7 @@ The latest news is at the top.
 
 ===================================================================
 
-Biopython is transitioning from Numeric to NumPy.  Currently limited support
-is still available for python modules via back compatible imports, but C
-modules will not work. Please move to NumPy.
+Biopython has transitioned from Numeric to NumPy.  Please move to NumPy.
 
 As part of the Numeric to NumPy migration, Bio.KDTree has been rewritten in C
 instead of C++ which therefore simplifies building Biopython from source.

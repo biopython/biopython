@@ -13,10 +13,7 @@ XXX ref
 
 """
 import math
-try:
-    from Numeric import *
-except ImportError:
-    from numpy.oldnumeric import *
+from numpy.oldnumeric import *
 from Bio import listfns
 
 # XXX typecodes for Numeric

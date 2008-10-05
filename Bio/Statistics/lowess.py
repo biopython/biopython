@@ -15,25 +15,16 @@ approach to regression analysis by local fitting", Journal of the American
 Statistical Association, September 1988, volume 83, number 403, pp. 596-610.
 """
 
-try:
-    from Numeric import *
-    from LinearAlgebra import solve_linear_equations
-except ImportError, x:
-    from numpy.oldnumeric import *
-    from numpy.oldnumeric.linear_algebra import solve_linear_equations
-    #raise ImportError, "This module requires Numeric (precursor to NumPy) with the LinearAlgebra and MLab libraries"
+from numpy.oldnumeric import *
+from numpy.oldnumeric.linear_algebra import solve_linear_equations
 
 try:
     from Bio.Cluster import median
     # The function median in Bio.Cluster is faster than the function median
     # in Numeric's MLab, as it does not require a full sort.
 except ImportError, x:
-    # Use the median function in Numeric's MLab if Bio.Cluster is not available
-    try:
-        from MLab import median
-    except ImportError, x:
-        from numpy.oldnumeric.mlab import median
-        #raise ImportError, "This module requires Numeric (precursor to NumPy) with the LinearAlgebra and MLab libraries"
+    # Use the median function in numpy's MLab if Bio.Cluster is not available
+    from numpy.oldnumeric.mlab import median
 
 def lowess(x, y, f=2./3., iter=3):
   """lowess(x, y, f=2./3., iter=3) -> yest

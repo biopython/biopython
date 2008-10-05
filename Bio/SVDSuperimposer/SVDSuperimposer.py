@@ -3,13 +3,9 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-try:
-    from Numeric import dot, transpose, sum, sqrt
-    from LinearAlgebra import singular_value_decomposition, determinant
-except ImportError:
-    from numpy.oldnumeric import dot, transpose, sum, sqrt
-    from numpy.oldnumeric.linear_algebra import singular_value_decomposition, \
-         determinant
+from numpy.oldnumeric import dot, transpose, sum, sqrt
+from numpy.oldnumeric.linear_algebra import singular_value_decomposition, \
+     determinant
 
 class SVDSuperimposer:
     """
