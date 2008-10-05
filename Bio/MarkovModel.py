@@ -17,14 +17,10 @@ MarkovModel     Holds the description of a markov model
 """
 import math
 
-try:
-    from Numeric import *
-    import RandomArray
-except ImportError:
-    from numpy.oldnumeric import *
-    import numpy.oldnumeric.random_array as RandomArray
+from numpy.oldnumeric import *
+import numpy.oldnumeric.random_array as RandomArray
 
-import StringIO     # StringIO is in Numeric's namespace, so import this after.
+import StringIO # StringIO was in Numeric's namespace, so import this after.
 
 from Bio import listfns
 
@@ -178,28 +174,16 @@ def _baum_welch(N, M, training_outputs,
                 pseudo_emission=None, update_fn=None):
     # Returns (p_initial, p_transition, p_emission)
 
-    #The following is a work around for a change in array behaviour
-    #between Numeric (which allowed evaluation of arrays as booleans)
-    #and numpy (which instead adds an any attribute).
-    try :
-        #This code works on numpy
-        p_initial = _safe_copy_and_check(p_initial, (N,))
-        if not p_initial.any():
-            p_initial = _random_norm(N)
-        p_transition = _safe_copy_and_check(p_transition, (N,N))
-        if not p_transition.any():
-            p_transition = _random_norm((N,N))
-        p_emission = _safe_copy_and_check(p_emission, (N,M))
-        if not p_emission.any():
-             p_emission = _random_norm((N,M))
-    except AttributeError :
-        #This code works on Numeric
-        p_initial = _safe_copy_and_check(p_initial, (N,)) or \
-                    _random_norm(N)
-        p_transition = _safe_copy_and_check(p_transition, (N,N)) or \
-                       _random_norm((N,N))
-        p_emission = _safe_copy_and_check(p_emission, (N,M)) or \
-                     _random_norm((N,M))
+    #This code works on numpy (but not on Numeric which lacks the "any" method)
+    p_initial = _safe_copy_and_check(p_initial, (N,))
+    if not p_initial.any():
+        p_initial = _random_norm(N)
+    p_transition = _safe_copy_and_check(p_transition, (N,N))
+    if not p_transition.any():
+        p_transition = _random_norm((N,N))
+    p_emission = _safe_copy_and_check(p_emission, (N,M))
+    if not p_emission.any():
+         p_emission = _random_norm((N,M))
     
     # Do all the calculations in log space to avoid underflows.
     lp_initial, lp_transition, lp_emission = map(
