@@ -13,13 +13,8 @@ train        Train a new classifier.
 calculate    Calculate the probabilities of each class, given an observation.
 classify     Classify an observation into a class.
 """
-try:
-    from Numeric import *
-    from LinearAlgebra import *  # inverse
-except ImportError, x:
-    from numpy.oldnumeric import *
-    from numpy.oldnumeric.linear_algebra import *
-    #raise ImportError, "This module requires Numeric (precursor to NumPy) with the LinearAlgebra lib"
+from numpy import *
+from numpy.linalg import *
 
 
 class LogisticRegression:
@@ -32,7 +27,7 @@ class LogisticRegression:
     """
     def __init__(self):
         """LogisticRegression()"""
-        beta = []
+        self.beta = []
 
 def train(xs, ys, update_fn=None, typecode=None):
     """train(xs, ys[, update_fn]) -> LogisticRegression
@@ -46,17 +41,17 @@ def train(xs, ys, update_fn=None, typecode=None):
     """
     if len(xs) != len(ys):
         raise ValueError, "xs and ys should be the same length."
-    if not xs or not xs[0]:
-        raise ValueError, "No observations or observation of 0 dimension."
     classes = set(ys)
     if classes != set([0, 1]):
         raise ValueError, "Classes should be 0's and 1's"
     if typecode is None:
-        typecode = Float
+        typecode = 'd'
 
     # Dimensionality of the data is the dimensionality of the
     # observations plus a constant dimension.
     N, ndims = len(xs), len(xs[0]) + 1
+    if N==0 or ndims==1:
+        raise ValueError, "No observations or observation of 0 dimension."
 
     # Make an X array, with a constant first dimension.
     X = ones((N, ndims), typecode)
@@ -101,7 +96,7 @@ def train(xs, ys, update_fn=None, typecode=None):
         #u, s, vt = singular_value_decomposition(XtWX)
         #print "U", u
         #print "S", s
-        delta = dot(inverse(XtWX), Xtyp)
+        delta = solve(XtWX, Xtyp)
         if fabs(stepsize-1.0) > 0.001:
             delta = delta * stepsize
         beta = beta + delta                 # Update beta.
