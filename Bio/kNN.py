@@ -24,13 +24,7 @@ classify     Classify an observation into a class.
 equal_weight    Every example is given a weight of 1.
 
 """
-try:
-    from Numeric import *
-except ImportError, x:
-    from numpy.oldnumeric import *
-    #raise ImportError, "This module requires Numeric (precursor to NumPy)"
-
-from Bio import distance
+from numpy import *
 
 class kNN:
     """Holds information necessary to do nearest neighbors classification.
@@ -71,23 +65,34 @@ def train(xs, ys, k, typecode=None):
     knn.k = k
     return knn
 
-def calculate(knn, x, weight_fn=equal_weight, distance_fn=distance.euclidean):
+def calculate(knn, x, weight_fn=equal_weight, distance_fn=None):
     """calculate(knn, x[, weight_fn][, distance_fn]) -> weight dict
 
     Calculate the probability for each class.  knn is a kNN object.  x
     is the observed data.  weight_fn is an optional function that
     takes x and a training example, and returns a weight.  distance_fn
     is an optional function that takes two points and returns the
-    distance between them.  Returns a dictionary of the class to the
-    weight given to the class.
+    distance between them.  If distance_fn is None (the default), the
+    Euclidean distance is used.  Returns a dictionary of the class to
+    the weight given to the class.
     
     """
     x = asarray(x)
 
     order = []  # list of (distance, index)
-    for i in range(len(knn.xs)):
-        dist = distance_fn(x, knn.xs[i])
-        order.append((dist, i))
+    if distance_fn:
+        for i in range(len(knn.xs)):
+            dist = distance_fn(x, knn.xs[i])
+            order.append((dist, i))
+    else:
+        # Default: Use a fast implementation of the Euclidean distance
+        temp = zeros(len(x))
+        # Predefining temp allows reuse of this array, making this
+        # function about twice as fast.
+        for i in range(len(knn.xs)):
+            temp[:] = x - knn.xs[i]
+            dist = sqrt(dot(temp,temp))
+            order.append((dist, i))
     order.sort()
 
     # first 'k' are the ones I want.
@@ -100,13 +105,13 @@ def calculate(knn, x, weight_fn=equal_weight, distance_fn=distance.euclidean):
 
     return weights
 
-def classify(knn, x, weight_fn=equal_weight, distance_fn=distance.euclidean):
+def classify(knn, x, weight_fn=equal_weight, distance_fn=None):
     """classify(knn, x[, weight_fn][, distance_fn]) -> class
 
     Classify an observation into a class.  If not specified, weight_fn will
-    give all neighbors equal weight and distance_fn will be the euclidean
-    distance.
-
+    give all neighbors equal weight.  distance_fn is an optional function
+    that takes two points and returns the distance between them.  If
+    distance_fn is None (the default), the Euclidean distance is used.
     """
     weights = calculate(
         knn, x, weight_fn=weight_fn, distance_fn=distance_fn)

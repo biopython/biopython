@@ -7,11 +7,11 @@ euclidean_py    Pure Python implementation of euclidean.
 
 """
 # XXX cosine distance
-try:
-    from Numeric import *
-except ImportError, x:
-    from numpy.oldnumeric import *
-    #raise ImportError, "This module requires Numeric (precursor to NumPy)"
+
+import warnings
+warnings.warn("Bio.distance is deprecated. If you use this module, please notify the Biopython developers at biopython-dev@biopython.org", DeprecationWarning)
+
+from numpy import *
 
 def euclidean(x, y):
     """euclidean(x, y) -> euclidean distance between x and y"""
@@ -33,10 +33,3 @@ def euclidean_py(x, y):
     for i in range(len(x)):
         sum += (x[i]-y[i])**2
     return sqrt(sum)
-
-# Try and load C implementations of functions.  If I can't,
-# then just ignore and use the pure python implementations.
-try:
-    from cdistance import *
-except ImportError:
-    pass

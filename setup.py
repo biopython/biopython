@@ -335,11 +335,6 @@ EXTENSIONS = [
     Extension('Bio.cstringfns',
               ['Bio/cstringfnsmodule.c']
               ),
-    Extension('Bio.cdistance',
-              ['Bio/cdistancemodule.c',
-               'Bio/csupport.c'],
-              include_dirs=["Bio"]
-              ),
     Extension('Bio.cpairwise2',
               ['Bio/cpairwise2module.c',
                'Bio/csupport.c'],
