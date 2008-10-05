@@ -1,8 +1,4 @@
-try:
-    from Numeric import *
-except ImportError:
-    from numpy.oldnumeric import *
-
+from numpy.oldnumeric import *
 from Bio.SVDSuperimposer import *
 
 # start with two coordinate sets (Nx3 arrays - Float0)

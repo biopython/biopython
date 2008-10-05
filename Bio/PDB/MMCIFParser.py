@@ -5,10 +5,8 @@
 
 #Python stuff
 from string import atoi, atof, letters
-try:
-    from Numeric import array, Float0
-except ImportError:
-    from numpy.oldnumeric import array, Float0
+
+from numpy.oldnumeric import array, Float0
 
 # My stuff
 from MMCIF2Dict import MMCIF2Dict

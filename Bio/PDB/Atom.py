@@ -4,16 +4,13 @@
 # as part of this package.           
 
 # Python stuff
-try:
-    from Numeric import array, sum, sqrt, matrixmultiply
-except ImportError:
-    from numpy.oldnumeric import array, sum, sqrt, matrixmultiply
+from numpy.oldnumeric import array, sum, sqrt, matrixmultiply
+
 # My stuff
 from Entity import DisorderedEntityWrapper
 from Vector import Vector
 
 __doc__="Atom class, used in Structure objects."
-
 
 class Atom:
     def __init__(self, name, coord, bfactor, occupancy, altloc, fullname, serial_number):

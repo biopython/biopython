@@ -3,17 +3,12 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-try:
-    from Numeric import Float0, zeros
-except ImportError:
-    from numpy.oldnumeric import Float0, zeros
+from numpy.oldnumeric import Float0, zeros
 
 from Bio.SVDSuperimposer import SVDSuperimposer
 from Bio.PDB.PDBExceptions import PDBException
 
-
 __doc__="Superimpose two structures."
-
 
 class Superimposer:
     """
@@ -61,9 +56,8 @@ class Superimposer:
 
 
 if __name__=="__main__":
-
     import sys
-    from Numeric import *
+    from numpy.oldnumeric import *
 
     from Bio.PDB import *
 

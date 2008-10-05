@@ -4,10 +4,7 @@ import StringIO
 from operator import truth
 
 from Bio import MarkovModel
-try:
-    from Numeric import ones, zeros, log, asarray
-except ImportError:
-    from numpy.oldnumeric import ones, zeros, log, asarray
+from numpy.oldnumeric import ones, zeros, log, asarray
 
 def print_mm(markov_model):
     print "STATES: %s" % ' '.join(markov_model.states)

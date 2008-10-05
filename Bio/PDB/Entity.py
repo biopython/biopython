@@ -5,10 +5,7 @@
 
 from __future__ import generators
 
-try:
-    from Numeric import Float0
-except ImportError:
-    from numpy.oldnumeric import Float0
+from numpy.oldnumeric import Float0
 from copy import copy
 
 from PDBExceptions import PDBConstructionException, PDBException

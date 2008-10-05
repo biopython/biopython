@@ -3,16 +3,10 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-try:
-    from Numeric import array, sum, sqrt, arccos, matrixmultiply, \
-         transpose, cos, sin, zeros, trace
-    from LinearAlgebra import determinant, eigenvectors
-    from MLab import eye
-except ImportError:
-    from numpy.oldnumeric import array, sum, sqrt, arccos, matrixmultiply, \
-         transpose, cos, sin, zeros, trace
-    from numpy.oldnumeric.linear_algebra import determinant, eigenvectors
-    from numpy.oldnumeric.mlab import eye
+from numpy.oldnumeric import array, sum, sqrt, arccos, matrixmultiply, \
+     transpose, cos, sin, zeros, trace
+from numpy.oldnumeric.linear_algebra import determinant, eigenvectors
+from numpy.oldnumeric.mlab import eye
 from math import acos
 import sys
 from math import pi
@@ -323,7 +317,7 @@ if __name__=="__main__":
 
         from math import pi
         from RandomArray import *
-        from Numeric import *
+        from numpy.oldnumeric import *
 
         v1=Vector(0,0,1)
         v2=Vector(0,0,0)

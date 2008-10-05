@@ -3,19 +3,14 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-try:
-    from Numeric import array
-except ImportError:
-    from numpy.oldnumeric import array
+from numpy.oldnumeric import array
 
 from Bio.KDTree import *
 from PDBExceptions import PDBException
-from Selection import unfold_entities, get_unique_parents, entity_levels, uniqueify
-
+from Selection import unfold_entities, get_unique_parents, entity_levels, \
+     uniqueify
 
 __doc__="Fast atom neighbor lookup using a KD tree (implemented in C++)."
-
-
 
 class NeighborSearch:
     """
