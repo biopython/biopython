@@ -120,7 +120,7 @@ class SVDSuperimposer:
 
 if __name__=="__main__":
 
-    from Numeric import *
+    from numpy.oldnumeric import *
 
     # start with two coordinate sets (Nx3 arrays - Float0)
 
