@@ -87,7 +87,6 @@ class NexusTest1(unittest.TestCase):
         print t3
         print 'Monophyletic t6,t7,t8,t9:',t3.is_monophyletic(['t8','t9','t6','t7'])
         print 'Monophyletic t1,t5:',t3.is_monophyletic(['t1','t5'])
-        print 'Subtree t1,t5:',t3.set_subtree(t3.is_monophyletic(['t1','t5']))
         t3.split(parent_id=t3.search_taxon('t9'))
         print 'The tree looks as follows:'
         t3.display()

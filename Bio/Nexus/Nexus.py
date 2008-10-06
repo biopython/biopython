@@ -29,6 +29,13 @@ except ImportError:
 else:
     C=True
 
+try:
+    #Check the built in set function is present (python 2.4+)
+    set = set
+except NameError:
+    #For python 2.3 fall back on the sets module (deprecated in python 2.6)
+    from sets import Set as set
+
 INTERLEAVE=70
 SPECIAL_COMMANDS=['charstatelabels','charlabels','taxlabels', 'taxset', 'charset','charpartition','taxpartition',\
         'matrix','tree', 'utree','translate','codonposset','title']
@@ -213,7 +220,7 @@ def safename(name,mrbayes=False):
         safe=''.join([c for c in safe if c in MRBAYESSAFE])
     else:
         safe=name.replace("'","''")
-        if sets.Set(safe).intersection(sets.Set(WHITESPACE+PUNCTUATION)):
+        if set(safe).intersection(set(WHITESPACE+PUNCTUATION)):
             safe="'"+safe+"'"
     return safe
 
@@ -252,7 +259,7 @@ def _sort_keys_by_values(p):
     
 def _make_unique(l):
     """Check that all values in list are unique and return a pruned and sorted list."""
-    l=list(sets.Set(l))
+    l=list(set(l))
     l.sort()
     return l
 
@@ -276,7 +283,7 @@ def _compact4nexus(orig_list):
     
     if not orig_list:
         return ''
-    orig_list=list(sets.Set(orig_list))
+    orig_list=list(set(orig_list))
     orig_list.sort()
     shortlist=[]
     clist=orig_list[:]
@@ -315,7 +322,7 @@ def combine(matrices):
         return None
     name=matrices[0][0]
     combined=copy.deepcopy(matrices[0][1]) # initiate with copy of first matrix
-    mixed_datatypes=(len(sets.Set([n[1].datatype for n in matrices]))>1)
+    mixed_datatypes=(len(set([n[1].datatype for n in matrices]))>1)
     if mixed_datatypes:
         combined.datatype='None'    # dealing with mixed matrices is application specific. You take care of that yourself!
     #    raise NexusError, 'Matrices must be of same datatype' 
@@ -597,12 +604,13 @@ class Nexus(object):
             commandlines=_adjust_lines(decommented.split(chr(7)))
         else:
             commandlines=_adjust_lines(_kill_comments_and_break_lines(file_contents))
-        # get rid of stupid 'NEXUS token'
-        try:
-            if commandlines[0][:6].upper()=='#NEXUS':
-                commandlines[0]=commandlines[0][6:].strip()
-        except:
-            pass
+        # get rid of stupid 'NEXUS token - in merged treefiles, this might appear multiple times'
+        for i,cl in enumerate(commandlines):
+            try:
+                if cl[:6].upper()=='#NEXUS':
+                    commandlines[i]=cl[6:].strip()
+            except:
+                pass
         # now loop through blocks (we parse only data in known blocks, thus ignoring non-block commands
         nexus_block_gen = self._get_nexus_block(commandlines)
         while 1:
@@ -681,7 +689,7 @@ class Nexus(object):
                 self.symbols=self.symbols[1:-1].replace(' ','')
             if not self.respectcase:
                 self.symbols=self.symbols.lower()+self.symbols.upper()
-                self.symbols=list(sets.Set(self.symbols))
+                self.symbols=list(set(self.symbols))
         if options.has_key('datatype'):
             self.datatype=options['datatype'].lower()
             if self.datatype=='dna' or self.datatype=='nucleotide':
@@ -1249,7 +1257,7 @@ class Nexus(object):
         if not filename:
             filename=self.filename
         if [t for t in delete if not self._check_taxlabels(t)]:
-            raise NexusError, 'Unknown taxa: %s' % ', '.join(sets.Set(delete).difference(sets.Set(self.taxlabels)))
+            raise NexusError, 'Unknown taxa: %s' % ', '.join(set(delete).difference(set(self.taxlabels)))
         if interleave_by_partition:
             if not interleave_by_partition in self.charpartitions:
                 raise NexusError, 'Unknown partition: '+interleave_by_partition
@@ -1361,9 +1369,9 @@ class Nexus(object):
         if not self.charsets and not self.taxsets and not self.charpartitions:
             return ''
         if codons_only:
-            sets=['\nbegin codons']
+            setsb=['\nbegin codons']
         else:
-            sets=['\nbegin sets']
+            setsb=['\nbegin sets']
         # - now if characters have been excluded, the character sets need to be adjusted,
         #   so that they still point to the right character positions
         # calculate a list of offsets: for each deleted character, the following character position
@@ -1381,11 +1389,11 @@ class Nexus(object):
             for n,ns in self.charsets.items():
                 cset=[offlist[c] for c in ns if c not in exclude]
                 if cset: 
-                    sets.append('charset %s = %s' % (safename(n),_compact4nexus(cset))) 
+                    setsb.append('charset %s = %s' % (safename(n),_compact4nexus(cset))) 
             for n,s in self.taxsets.items():
                 tset=[safename(t,mrbayes=mrbayes) for t in s if t not in delete]
                 if tset:
-                    sets.append('taxset %s = %s' % (safename(n),' '.join(tset))) 
+                    setsb.append('taxset %s = %s' % (safename(n),' '.join(tset))) 
         for n,p in self.charpartitions.items():
             if not include_codons and n==CODONPOSITIONS:
                 continue
@@ -1405,7 +1413,7 @@ class Nexus(object):
                     command='codonposset'
                 else:
                     command='charpartition'
-                sets.append('%s %s = %s' % (command,safename(n),\
+                setsb.append('%s %s = %s' % (command,safename(n),\
                 ', '.join(['%s: %s' % (sn,_compact4nexus(newpartition[sn])) for sn in names if sn in newpartition])))
         # now write charpartititions, much easier than charpartitions
         for n,p in self.taxpartitions.items():
@@ -1416,14 +1424,14 @@ class Nexus(object):
                 if nsp:
                     newpartition[sn]=nsp
             if newpartition:
-                sets.append('taxpartition %s = %s' % (safename(n),\
+                setsb.append('taxpartition %s = %s' % (safename(n),\
                 ', '.join(['%s: %s' % (safename(sn),' '.join(map(safename,newpartition[sn]))) for sn in names if sn in newpartition])))
         # add 'end' and return everything
-        sets.append('end;\n')
-        if len(sets)==2: # begin and end only
+        setsb.append('end;\n')
+        if len(setsb)==2: # begin and end only
                 return ''
         else:
-            return ';\n'.join(sets)
+            return ';\n'.join(setsb)
     
     def export_fasta(self, filename=None, width=70):
         """Writes matrix into a fasta file: (self, filename=None, width=70)."""       
@@ -1480,7 +1488,7 @@ class Nexus(object):
                     # subset of an ambig or only missing in previous -> take subset
                     newconstant.append((site[0],self.ambiguous_values.get(seqsite,seqsite)))
                 elif seqsite in self.ambiguous_values:  # is it an ambig: check the intersection with prev. values
-                    intersect=sets.Set(self.ambiguous_values[seqsite]).intersection(sets.Set(site[1]))
+                    intersect=sets.set(self.ambiguous_values[seqsite]).intersection(sets.set(site[1]))
                     if intersect:
                         newconstant.append((site[0],''.join(intersect)))
                     #    print 'ok'
@@ -1536,7 +1544,7 @@ class Nexus(object):
         if not matrix:
             matrix=self.matrix
         if [t for t in delete if not self._check_taxlabels(t)]:
-            raise NexusError, 'Unknwon taxa: %s' % ', '.join(sets.Set(delete).difference(self.taxlabels))
+            raise NexusError, 'Unknwon taxa: %s' % ', '.join(sets.set(delete).difference(self.taxlabels))
         if exclude!=[]:
             undelete=[t for t in self.taxlabels if t in matrix and t not in delete]
             if not undelete:
@@ -1689,11 +1697,11 @@ class Nexus(object):
 
     def gaponly(self,include_missing=False):
         """Return gap-only sites."""
-        gap=sets.Set(self.gap)
+        gap=set(self.gap)
         if include_missing:
             gap.add(self.missing)
         sitesm=zip(*[self.matrix[t].tostring() for t in self.taxlabels])
-        gaponly=[i for i,site in enumerate(sitesm) if sets.Set(site).issubset(gap)]
+        gaponly=[i for i,site in enumerate(sitesm) if set(site).issubset(gap)]
         return gaponly 
         
     def terminal_gap_to_missing(self,missing=None,skip_n=True):
