@@ -638,13 +638,19 @@ if __name__ == "__main__" :
     print "Quick self test"
     from Bio.Data.IUPACData import ambiguous_dna_values, ambiguous_rna_values#
     from Bio.Alphabet import generic_dna, generic_rna
-    from sets import Set
+
+    #TODO - Remove this work around once we drop python 2.3 support
+    try:
+       set = set
+    except NameError:
+       from sets import Set as set
+
     print ambiguous_dna_complement
     for ambig_char, values in ambiguous_dna_values.iteritems() :
         compl_values = reverse_complement(values)[::-1]
         print "%s={%s} --> {%s}=%s" % \
             (ambig_char, values, compl_values, ambiguous_dna_complement[ambig_char])
-        assert Set(compl_values) == Set(ambiguous_dna_values[ambiguous_dna_complement[ambig_char]])
+        assert set(compl_values) == set(ambiguous_dna_values[ambiguous_dna_complement[ambig_char]])
 
     for s in ["".join(ambiguous_dna_values),
               Seq("".join(ambiguous_dna_values)),
@@ -691,11 +697,11 @@ if __name__ == "__main__" :
     print repr(translate(Seq("GCTGTTATGGGTCGTTGGAAGGGTGGTCGTGCTGCTGGTTAG",
                              IUPAC.unambiguous_dna), stop_symbol="@"))
     
-    ambig = Set(IUPAC.IUPACAmbiguousDNA.letters)
+    ambig = set(IUPAC.IUPACAmbiguousDNA.letters)
     for c1 in ambig :
         for c2 in ambig :
             for c3 in ambig :
-                values = Set([translate(a+b+c, table=1) \
+                values = set([translate(a+b+c, table=1) \
                               for a in ambiguous_dna_values[c1] \
                               for b in ambiguous_dna_values[c2] \
                               for c in ambiguous_dna_values[c3]])
@@ -705,19 +711,19 @@ if __name__ == "__main__" :
                     assert "*" in values
                     continue
                 if t=="*" :
-                    assert values == Set(["*"])
+                    assert values == set("*")
                 elif t=="X" :
                     assert len(values) > 1, \
                         "translate('%s') = '%s' not '%s'" \
                         % (c1+c2+c3, t, ",".join(values))
                 elif t=="Z" :
-                    assert values == Set(("E", "Q"))
+                    assert values == set("EQ")
                 elif t=="J" :
-                    assert values == Set(("I", "L"))
+                    assert values == set("IL")
                 elif t=="B" :
-                    assert values == Set(["D", "N"])
+                    assert values == set("DN")
                 else :
-                    assert values == Set(t)
+                    assert values == set(t)
 
     print "Checking addition"
     p = Seq("PKLPAK", Alphabet.generic_protein)
