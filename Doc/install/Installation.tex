@@ -218,9 +218,9 @@ The Numerical Python distribution is a fast implementation of arrays and
 associated array functionality. This is important for a number of Biopython
 modules that deal with number processing (e.g. Bio.Cluster and Bio.PDB).
 
-Biopython supports the standard NumPy distribution; limited support is
-available for the older Numeric module, but we now recommend moving to
-NumPy as soon as possible.
+As of release 1.49, Biopython supports the standard NumPy distribution.
+Previous releases instead used the older Numeric module (which is no
+longer being maintained).
 
 The main web site for NumPy is:
 \ahrefurl{\url{http://numpy.scipy.org/}}.
@@ -649,7 +649,7 @@ few notes and tricks to keep you going:
     should work.
 
   \item Building some C modules, such as \verb|Bio.Cluster| require that 
-    the Numeric include files (normally installed in
+    the numpy/Numeric include files (normally installed in
     \verb|your_dir/include/python/Numeric|) be available. If the
     compiler can't find these directories you'll normally get an error
     like:
@@ -668,7 +668,7 @@ Bio/Cluster/clustermodule.c:2: Numeric/arrayobject.h: No such file or directory
     \end{verbatim}
 
     and adjust it so that it includes the include directory where the
-    numeric libraries were installed:
+    numpy/Numeric libraries were installed:
     
     \begin{verbatim}
     include_dirs=["Bio/Cluster", "your_dir/include/python"]
