@@ -23,8 +23,6 @@ parsing.
 XXX need to implement Locator
 
 """
-from __future__ import generators
-
 import urllib, traceback, sys
 from xml.sax import handler, saxutils
 import Parser, RecordReader

@@ -9,9 +9,7 @@
 Bio.GFF.easy: some functions to ease the use of Biopython
 """
 
-from __future__ import generators # requires Python 2.2
-
-__version__ = "$Revision: 1.9 $"
+__version__ = "$Revision: 1.10 $"
 # $Source: /home/bartek/cvs2bzr/biopython_fastimport/cvs_repo/biopython/Bio/GFF/easy.py,v $
 
 import copy

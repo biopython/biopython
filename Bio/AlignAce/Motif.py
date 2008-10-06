@@ -9,7 +9,6 @@ Changes:
 9.2007 (BW) : added the to_faste() and .weblogo() methods allowing to use the Berkeley weblogo server at http://weblogo.berkeley.edu/
 """
 
-from __future__ import generators
 from Bio.SubsMat import FreqTable
 
 class Motif(object):

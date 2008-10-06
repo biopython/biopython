@@ -5,7 +5,6 @@
 # Patches by Mike Poidinger to support multiple databases.
 # Updated by Peter Cock in 2007 to do a better job on BLAST 2.2.15
 
-
 """
 This module provides code to work with the standalone version of
 BLAST, either blastall or blastpgp, provided by the NCBI.
@@ -35,7 +34,6 @@ rpsblast        Execute rpsblast.
 
 """
 
-from __future__ import generators
 import os
 import re
 

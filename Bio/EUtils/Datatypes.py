@@ -1,6 +1,4 @@
-"""various EUtils datatypes"""
-
-from __future__ import generators
+"""Various EUtils datatypes."""
 
 import re, types
 

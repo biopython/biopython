@@ -5,9 +5,6 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-# make yield compatible with Python2.2
-from __future__ import generators
-
 """
 Bio.DocSQL: easy access to DB API databases.
 
@@ -25,7 +22,7 @@ Bio.DocSQL: easy access to DB API databases.
 CreatePeople(message=Success)
 """
 
-__version__ = "$Revision: 1.11 $"
+__version__ = "$Revision: 1.12 $"
 # $Source: /home/bartek/cvs2bzr/biopython_fastimport/cvs_repo/biopython/Bio/DocSQL.py,v $
 
 import exceptions

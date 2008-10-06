@@ -72,8 +72,6 @@ The latest version of this code can be found at
 # This software has been released to the public domain.  No
 # copyright is asserted.
 
-from __future__ import generators
-
 # Implementation inheritence -- not asserting a class hierarchy here
 #
 # If there is a class hierarchy, OrderedMultiDict is a child of

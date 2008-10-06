@@ -6,12 +6,10 @@
 # as part of this package.
 
 """
-Docstring
+A set of generic bits of code under Bio.GFF (possibly obsolete).
 """
 
-from __future__ import generators
-
-__version__ = "$Revision: 1.4 $"
+__version__ = "$Revision: 1.5 $"
 # $Source: /home/bartek/cvs2bzr/biopython_fastimport/cvs_repo/biopython/Bio/GFF/GenericTools.py,v $
 
 import exceptions

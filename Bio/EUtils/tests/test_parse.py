@@ -1,5 +1,3 @@
-from __future__ import generators
-
 import unittest, cStringIO, re
 from Bio.EUtils import parse, Datatypes, MultiDict
 
