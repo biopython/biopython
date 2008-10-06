@@ -4,7 +4,13 @@
 # as part of this package.
 
 import os
-from sets import Set
+
+#TODO - Remove this work around once we drop python 2.3 support
+try:
+    set = set
+except NameError:
+    from sets import Set as set
+
 from Bio import SeqIO
 from Bio import AlignIO
 from Bio.SeqRecord import SeqRecord
@@ -373,7 +379,7 @@ for (t_format, t_alignment, t_filename, t_count) in test_files :
             for acc in accs :
                 assert acc and acc == acc.strip(), \
                     "Bad accession in annotations: %s" % repr(acc)
-            assert len(Set(accs)) == len(accs), \
+            assert len(set(accs)) == len(accs), \
                    "Repeated accession in annotations: %s" % repr(accs)
         for ref in record.dbxrefs :
             assert ref and ref == ref.strip(), \

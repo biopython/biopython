@@ -6,9 +6,14 @@ and checks we can retreive them again.
 Goals:
     Make sure that BioSQL preserves SeqRecord objects.
 """
-
-from sets import Set
 import os
+
+#TODO - Remove this work around once we drop python 2.3 support
+try:
+    set = set
+except NameError:
+    from sets import Set as set
+
 from Bio import MissingExternalDependencyError
 from Bio import SeqIO
 from StringIO import StringIO
@@ -161,7 +166,7 @@ def compare_features(old_f, new_f) :
         #TODO: assert str(old_sub.location) == str(new_sub.location), \
         #       "%s -> %s" % (str(old_sub.location), str(new_sub.location))
     assert len(old_f.qualifiers) == len(new_f.qualifiers)    
-    assert Set(old_f.qualifiers.keys()) == Set(new_f.qualifiers.keys())
+    assert set(old_f.qualifiers.keys()) == set(new_f.qualifiers.keys())
     for key in old_f.qualifiers.keys() :
         if isinstance(old_f.qualifiers[key], str) :
             if isinstance(new_f.qualifiers[key], str) :
@@ -256,11 +261,11 @@ def compare_records(old, new) :
     #
     #assert len(old.annotations) == len(new.annotations), \
     #       "Different annotations\nOld extra: %s\nNew extra: %s" % \
-    #       (Set(old.annotations.keys()).difference(new.annotations.keys()),
-    #        Set(new.annotations.keys()).difference(old.annotations.keys()))
+    #       (set(old.annotations.keys()).difference(new.annotations.keys()),
+    #        set(new.annotations.keys()).difference(old.annotations.keys()))
     #
     #In the short term, just compare any shared keys:
-    for key in Set(old.annotations.keys()).intersection(new.annotations.keys()) :
+    for key in set(old.annotations.keys()).intersection(new.annotations.keys()) :
         if key == "references" :
             assert len(old.annotations[key]) == len(new.annotations[key])
             for old_r, new_r in zip(old.annotations[key], new.annotations[key]) :
@@ -350,7 +355,7 @@ for (t_format, t_alignment, t_filename, t_count) in test_files :
             print "OK"
         
         if "accessions" in record.annotations :
-            accs = Set(record.annotations["accessions"])
+            accs = set(record.annotations["accessions"])
             for key in accs :
                 assert key, "Blank accession in annotation %s" % repr(accs)
                 try :

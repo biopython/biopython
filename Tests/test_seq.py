@@ -1,6 +1,14 @@
+#TODO - Remove this work around once we drop python 2.3 support
+try:
+    set = set
+except NameError:
+    from sets import Set as set
+
 from Bio import Seq
 from Bio.Alphabet import IUPAC
 from Bio import Alphabet
+from Bio.Data.IUPACData import ambiguous_dna_complement, ambiguous_rna_complement
+from Bio.Data.IUPACData import ambiguous_dna_values, ambiguous_rna_values
 
 print
 print "Testing Seq"
@@ -204,10 +212,6 @@ for a in dna+rna+nuc :
 del dna, rna, nuc, protein
 
 ###########################################################################
-from Bio.Data.IUPACData import ambiguous_dna_complement, ambiguous_rna_complement
-from Bio.Data.IUPACData import ambiguous_dna_values, ambiguous_rna_values
-from sets import Set
-
 print
 print "Checking ambiguous complements"
 print "=============================="
@@ -228,7 +232,7 @@ for ambig_char, values in ambiguous_dna_values.iteritems() :
     compl_values = complement(values)
     print "%s={%s} --> {%s}=%s" % \
         (ambig_char, values, compl_values, ambiguous_dna_complement[ambig_char])
-    assert Set(compl_values) == Set(ambiguous_dna_values[ambiguous_dna_complement[ambig_char]])
+    assert set(compl_values) == set(ambiguous_dna_values[ambiguous_dna_complement[ambig_char]])
     
 print
 print "RNA Ambiguity mapping:", ambiguous_rna_values
@@ -237,7 +241,7 @@ for ambig_char, values in ambiguous_rna_values.iteritems() :
     compl_values = complement(values).replace("T","U") #need to help as no alphabet
     print "%s={%s} --> {%s}=%s" % \
         (ambig_char, values, compl_values, ambiguous_rna_complement[ambig_char])
-    assert Set(compl_values) == Set(ambiguous_rna_values[ambiguous_rna_complement[ambig_char]])
+    assert set(compl_values) == set(ambiguous_rna_values[ambiguous_rna_complement[ambig_char]])
 
 print
 print "Reverse complements:"
@@ -343,11 +347,11 @@ for nucleotide_seq in [misc_stops, Seq.Seq(misc_stops),
     assert "***RR" == str(Seq.translate(nucleotide_seq, table='Bacterial'))
 del misc_stops
 
-ambig = Set(IUPAC.IUPACAmbiguousDNA.letters)
+ambig = set(IUPAC.IUPACAmbiguousDNA.letters)
 for c1 in ambig :
     for c2 in ambig :
         for c3 in ambig :
-            values = Set([Seq.translate(a+b+c, table=1) \
+            values = set([Seq.translate(a+b+c, table=1) \
                           for a in ambiguous_dna_values[c1] \
                           for b in ambiguous_dna_values[c2] \
                           for c in ambiguous_dna_values[c3]])
@@ -357,19 +361,19 @@ for c1 in ambig :
                 continue
             t = Seq.translate(c1+c2+c3)
             if t=="*" :
-                assert values == Set(["*"])
+                assert values == set("*")
             elif t=="X" :
                 assert len(values) > 1, \
                     "translate('%s') = '%s' not '%s'" \
                     % (c1+c2+c3, t, ",".join(values))
             elif t=="Z" :
-                assert values == Set(("E", "Q"))
+                assert values == set("EQ")
             elif t=="B" :
-                assert values == Set(["D", "N"])
+                assert values == set("DN")
             elif t=="J" :
-                assert values == Set(["L", "I"])
+                assert values == set("LI")
             else :
-                assert values == Set(t)
+                assert values == set(t)
             #TODO - Use the Bio.Data.IUPACData module for the
             #ambiguous protein mappings?
 del t,c1,c2,c3,ambig
