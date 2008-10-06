@@ -9,11 +9,16 @@ o SummaryInfo
 o PSSM
 """
 
-
 # standard library
 import string
 import math
 import sys
+
+#TODO - Remove this work around once we drop python 2.3 support
+try:
+   set = set
+except NameError:
+   from sets import Set as set
 
 # biopython modules
 from Bio import Alphabet
@@ -316,10 +321,11 @@ class SummaryInfo:
             #We are dealing with a generic alphabet class where the
             #letters are not defined!  We must build a list of the
             #letters used...
-            from sets import Set
-            set_letters = Set()
+            set_letters = set()
             for record in self.alignment :
-                set_letters.union_update(record.seq)
+                #Note the built in set does not have a union_update
+                #which was provided by the sets module's Set
+                set_letters = set_letters.union(record.seq)
             list_letters = list(set_letters)
             list_letters.sort()
             all_letters = "".join(list_letters)
