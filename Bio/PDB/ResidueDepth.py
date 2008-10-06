@@ -3,9 +3,6 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-# make yield compatible with Python 2.2
-from __future__ import generators
-
 from numpy.oldnumeric import array, sum, sqrt
 import tempfile
 import os

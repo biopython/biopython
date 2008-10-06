@@ -3,8 +3,6 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.  
 
-from __future__ import generators
-
 from numpy.oldnumeric import Float0
 from copy import copy
 
