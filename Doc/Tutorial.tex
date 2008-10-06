@@ -164,6 +164,11 @@ and HTML formats
 
 \begin{enumerate}
 
+  \item \emph{Which ``Numerical Python'' do I need?} \\
+  For Biopython 1.48 or earlier, you need the old Numeric module.
+  For Biopython 1.49 onwards, you need the newer NumPy instead.
+  See also: \url{http://numpy.scipy.org/}
+
   \item \emph{Why doesn't} \verb|Bio.SeqIO| \emph{work? It imports fine but there is no parse function etc.} \\
   You need Biopython 1.43 or later.  Older versions did contain some related code under the \verb|Bio.SeqIO| name which has since been deprecated - and this is why the import ``works''.
 
