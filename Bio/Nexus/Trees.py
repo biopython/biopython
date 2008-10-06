@@ -22,7 +22,7 @@ try:
 except NameError:
     #For python 2.3 fall back on the sets module (deprecated in python 2.6)
     from sets import Set as set
-    from sets import frozenset
+    from sets import ImmutableSet as frozenset
 
 PRECISION_BRANCHLENGTH=6
 PRECISION_SUPPORT=6
