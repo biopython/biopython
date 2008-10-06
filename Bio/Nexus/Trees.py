@@ -80,15 +80,19 @@ class Tree(Nodes.Chain):
         if tree.count('(')!=tree.count(')'):
             raise TreeError, 'Parentheses do not match in (sub)tree: '+tree
         if tree.count('(')==0: # a leaf
+            #check if there's a colon, or a special comment, or both  after the taxon name
             nodecomment=tree.find(NODECOMMENT_START)
-            if nodecomment>-1: # a special comment
+            colon=tree.find(':')
+            if colon==-1 and nodecomment==-1: # none
+                return [tree,[None]]
+            elif colon==-1 and nodecomment>-1: # only special comment
                 return [tree[:nodecomment],self._get_values(tree[nodecomment:])]
+            elif colon>-1 and nodecomment==-1: # only numerical values
+                return [tree[:colon],self._get_values(tree[colon+1:])]
+            elif colon < nodecomment: # taxon name ends at first colon or with special comment
+                return [tree[:colon],self._get_values(tree[colon+1:])]
             else:
-                colon=tree.find(':')   # no special comment, but some values?
-                if colon>-1:
-                    return [tree[:colon],self._get_values(tree[colon+1:])]
-                else:
-                    return [tree,[None]]
+                return [tree[:nodecomment],self._get_values(tree[nodecomment:])]
         else:
             closing=tree.rfind(')')
             val=self._get_values(tree[closing+1:])
@@ -156,12 +160,13 @@ class Tree(Nodes.Chain):
        
         if text=='':
             return None
-        if text.startswith(NODECOMMENT_START):
+        if NODECOMMENT_START in text: # if there's a [&....] comment, cut it out
+            nc_start=text.find(NODECOMMENT_START)
             nc_end=text.find(NODECOMMENT_END)
             if nc_end==-1:
                 raise TreeError, 'Error in tree description: Found %s without matching %s' % (NODECOMMENT_START, NODECOMMENT_END)
-            nodecomment=text[:nc_end+1]
-            text=text[nc_end+1:]
+            nodecomment=text[nc_start:nc_end+1]
+            text=text[:nc_start]+text[nc_end+1:]
             values=[float(t) for t in text.split(':') if t.strip()]
             values.append(nodecomment)
         else:
