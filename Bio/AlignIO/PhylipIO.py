@@ -20,9 +20,13 @@ character as in the first sequence.  The PHYLIP 3.6 documentation says:
 At the time of writing, we do nothing special with a dot/period.
 """
 
+#TODO - Remove this work around once we drop python 2.3 support
+try:
+   set = set
+except NameError:
+   from sets import Set as set
+   
 from Bio.Alphabet import single_letter_alphabet
-from sets import Set
-
 from Bio.Align.Generic import Alignment
 from Interfaces import AlignmentIterator, SequentialAlignmentWriter
 
@@ -53,7 +57,7 @@ class PhylipWriter(SequentialAlignmentWriter) :
         if length_of_seqs <= 0 :
             raise ValueError("Non-empty sequences are required")
         
-        if len(records) > len(Set([r.id[:truncate] for r in records])) :
+        if len(records) > len(set([r.id[:truncate] for r in records])) :
             raise ValueError("Repeated identifier, possibly due to truncation")
 
 
