@@ -124,6 +124,27 @@ class Seq:
 
     def tomutable(self):   # Needed?  Or use a function?
         return MutableSeq(self.data, self.alphabet)
+
+    def _get_seq_str_and_check_alphabet(self, other_sequence) :
+        """string/Seq/MutableSeq to string, checking alphabet (PRIVATE).
+
+        For a string argument, returns the string.
+
+        For a Seq or MutableSeq, it checks the alphabet is compatible
+        (raising an exception if it isn't), and then returns a string.
+        """
+        try :
+            other_alpha = other_sequence.alphabet
+        except AttributeError :
+            #Assume other_sequence is a string
+            return other_sequence
+
+        #Other should be a Seq or a MutableSeq
+        if not Alphabet._check_type_compatible([self.alphabet, other_alpha]) :
+            raise TypeError, ("incompatable alphabets", str(self.alphabet),
+                              str(other_alpha))
+        #Return as a string
+        return other_sequence.tostring()
     
     def count(self, sub, start=0, end=sys.maxint):
         """Count method, like that of a python string.
@@ -145,16 +166,87 @@ class Seq:
         print my_seq.count(Seq("AT"))
         print my_seq.count("AT", 2, -1)
         """
-        try :
-            #Assume sub is a Seq or MutableSeq object, so pass
-            #it to the string's count method as a string.
-            #TODO - Should we check the alphabet?
-            search = sub.tostring()
-        except AttributeError:
-            #Assume sub is a string.
-            search = sub
+        #If it has one, check the alphabet:
+        sub_str = self._get_seq_str_and_check_alphabet(sub)
+        return self.tostring().count(sub_str, start, end)
 
-        return self.tostring().count(search, start, end)
+    def find(self, sub, start=0, end=sys.maxint):
+        """Find method, like that of a python string.
+
+        Returns an integer, the index of the first occurrence of substring
+        argument sub in the (sub)sequence given by [start:end].
+
+        Returns -1 if the subsequence is NOT found.
+        """
+        #If it has one, check the alphabet:
+        sub_str = self._get_seq_str_and_check_alphabet(sub)
+        return self.tostring().find(sub_str, start, end)
+    
+    def split(self, sep=None, maxsplit=-1) :
+        """Split method, like that of a python string.
+
+        This behaves like the python string method of the same name.
+
+        Return a list of the 'words' in the string (as Seq objects),
+        using sep as the delimiter string.  If maxsplit is given, at
+        most maxsplit splits are done.  If maxsplit is ommited, all
+        splits are made.
+
+        Following the python string method, sep will by default be any
+        white space (tabs, spaces, newlines) but this is unlikely to
+        apply to biological sequences.
+        
+        e.g. print my_seq.split("*")
+        """
+        #If it has one, check the alphabet:
+        sep_str = self._get_seq_str_and_check_alphabet(sep)
+        return [Seq(chunk, self.alphabet) \
+                for chunk in str(self).split(sep_str, maxsplit)]
+
+    def strip(self, chars=None) :
+        """Returns a new Seq object with leading and trailing ends stripped.
+
+        This behaves like the python string method of the same name.
+
+        Optional argument chars defines which characters to remove.  If
+        ommitted or None (default) then as for the python string method,
+        this defaults to removing any white space.
+        
+        e.g. print my_seq.strip("-")
+        """
+        #If it has one, check the alphabet:
+        strip_str = self._get_seq_str_and_check_alphabet(chars)
+        return Seq(str(self).strip(strip_str), self.alphabet)
+
+    def lstrip(self, chars=None) :
+        """Returns a new Seq object with leading (left) end stripped.
+
+        This behaves like the python string method of the same name.
+
+        Optional argument chars defines which characters to remove.  If
+        ommitted or None (default) then as for the python string method,
+        this defaults to removing any white space.
+        
+        e.g. print my_seq.lstrip("-")
+        """
+        #If it has one, check the alphabet:
+        strip_str = self._get_seq_str_and_check_alphabet(chars)
+        return Seq(str(self).lstrip(strip_str), self.alphabet)
+
+    def rstrip(self, chars=None) :
+        """Returns a new Seq object with trailing (right) end stripped.
+
+        This behaves like the python string method of the same name.
+
+        Optional argument chars defines which characters to remove.  If
+        ommitted or None (default) then as for the python string method,
+        this defaults to removing any white space.
+        
+        e.g. print my_seq.lstrip("-")
+        """
+        #If it has one, check the alphabet:
+        strip_str = self._get_seq_str_and_check_alphabet(chars)
+        return Seq(str(self).rstrip(strip_str), self.alphabet)
 
     def __maketrans(self, alphabet) :
         """Seq.__maketrans(alphabet) -> translation table (PRIVATE).
@@ -745,6 +837,31 @@ if __name__ == "__main__" :
             assert isinstance(a,str), "Should have failed"
         except TypeError, e :
             pass
+
+    print "Checking split, strip, count and find"
+    for s in [p,q,r,s,t,v,w] :
+        assert [x.tostring() for x in s.split()] == s.tostring().split()
+        assert [x.tostring() for x in s.split("-")] == s.tostring().split("-")
+        for sep, max_split in [(None,-1),(None,1),("-",-1),("L-",-1),
+                               (Seq("L",Alphabet.generic_protein),2)] :
+            assert [x.tostring() for x in s.split(sep,max_split)] \
+                   == s.tostring().split(str(sep),max_split)
+            
+        assert s.strip().tostring() == s.tostring().strip()
+        assert s.strip("*").tostring() == s.tostring().strip("*")
+        assert s.rstrip("*").tostring() == s.tostring().rstrip("*")
+        assert s.lstrip("PK").tostring() == s.tostring().lstrip("PK")
+        assert s.lstrip(Seq("PK",Alphabet.generic_protein)).tostring() \
+               == s.tostring().lstrip("PK")
+
+        for text in ["-","-P", "P"] :
+            assert s.find(text) == s.tostring().find(text)
+            assert s.find(text,1,-2) == s.tostring().find(text,1,-2)
+            assert s.find(text,2,-2) == s.tostring().find(text,2,-2)
+            assert s.count(text) == s.tostring().count(text)
+            assert s.count(text,1,-2) == s.tostring().count(text,1,-2)
+            assert s.count(text,2,-2) == s.tostring().count(text,2,-2)
+    print
 
     print "Checking comparisons"
     for a in [Alphabet.generic_protein, Alphabet.HasStopCodon(Alphabet.Gapped(Alphabet.generic_protein,"-"),"*")] :

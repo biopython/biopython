@@ -209,8 +209,49 @@ for a in dna+rna+nuc :
                    "Nucleotide+Protein addition should fail!"
         except TypeError :
             pass
-del dna, rna, nuc, protein
 
+###########################################################################
+print
+print "Testing Seq string methods"
+print "=========================="
+for a in dna + rna + nuc + protein :
+    if not isinstance(a, Seq.Seq) : continue
+    assert a.strip().tostring() == a.tostring().strip()
+    assert a.lstrip().tostring() == a.tostring().lstrip()
+    assert a.rstrip().tostring() == a.tostring().rstrip()
+    test_chars = ["-", Seq.Seq("-"), Seq.Seq("*"), "-X@"]
+    alpha = Alphabet._get_base_alphabet(a.alphabet)
+    if isinstance(alpha, Alphabet.DNAAlphabet) :
+        test_chars.append(Seq.Seq("A", IUPAC.ambiguous_dna))
+    if isinstance(alpha, Alphabet.RNAAlphabet) :
+        test_chars.append(Seq.Seq("A", IUPAC.ambiguous_rna))
+    if isinstance(alpha, Alphabet.NucleotideAlphabet) :
+        test_chars.append(Seq.Seq("A", Alphabet.generic_nucleotide))
+    if isinstance(alpha, Alphabet.ProteinAlphabet) :
+        test_chars.append(Seq.Seq("K", Alphabet.generic_protein))
+        test_chars.append(Seq.Seq("K-", Alphabet.Gapped(Alphabet.generic_protein,"-")))
+        test_chars.append(Seq.Seq("K@", Alphabet.Gapped(IUPAC.protein,"@")))
+        #Setup a clashing alphabet sequence
+        b = Seq.Seq("-", Alphabet.generic_nucleotide)
+    else :
+        b = Seq.Seq("-", Alphabet.generic_protein)
+    try :
+        print a.strip(b).tostring()
+        assert False, "Alphabet should have clashed!"
+    except TypeError :
+        pass #Good!
+            
+    for chars in  test_chars:
+        str_chars = str(chars)
+        assert a.strip(chars).tostring() == a.tostring().strip(str_chars)
+        assert a.lstrip(chars).tostring() == a.tostring().lstrip(str_chars)
+        assert a.rstrip(chars).tostring() == a.tostring().rstrip(str_chars)
+        assert a.find(chars) == a.tostring().find(str_chars)
+        assert a.find(chars,2,-2) == a.tostring().find(str_chars,2,-2)
+        assert a.count(chars) == a.tostring().count(str_chars)
+        assert a.count(chars,2,-2) == a.tostring().count(str_chars,2,-2)
+del a, alpha, chars, str_chars, test_chars
+del dna, rna, nuc, protein
 ###########################################################################
 print
 print "Checking ambiguous complements"

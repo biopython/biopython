@@ -110,6 +110,9 @@ Gapped(HasStopCodon(ExtendedIUPACProtein(), '@'), '.') + HasStopCodon(Gapped(Ext
 Gapped(HasStopCodon(ExtendedIUPACProtein(), '@'), '.') + HasStopCodon(Gapped(IUPACProtein(), '-'), '@')
 -> More than one gap character present
 
+Testing Seq string methods
+==========================
+
 Checking ambiguous complements
 ==============================
 
