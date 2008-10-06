@@ -214,8 +214,7 @@ class RestrictionType(type) :
         instantiated when importing the module.
         
         see below."""
-        #Following line fails on python 2.6 (Bug 2604), fix pending:
-        super(RestrictionType, cls).__init__(name, bases, dct)
+        super(RestrictionType, cls).__init__(cls, name, bases, dct)
         cls.compsite = re.compile(cls.compsite)
         
     def __add__(cls, other) :
