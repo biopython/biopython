@@ -14,7 +14,6 @@ Maddison, Swofford, Maddison. 1997. Syst. Biol. 46(4):590-621
 """
 
 import os,sys, math, random, copy
-import sets
 
 from Bio.Alphabet import IUPAC
 from Bio.Data import IUPACData
