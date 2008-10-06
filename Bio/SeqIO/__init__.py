@@ -499,7 +499,12 @@ def to_alignment(sequences, alphabet=None, strict=True) :
 if __name__ == "__main__" :
     #Run some tests...
     from Bio.Alphabet import generic_nucleotide
-    from sets import Set
+
+    #TODO - Remove this work around once we drop python 2.3 support
+    try:
+       set = set
+    except NameError:
+       from sets import Set as set
     
     # Fasta file with unusual layout, from here:
     # http://virgil.ruc.dk/kurser/Sekvens/Treedraw.htm
@@ -1511,11 +1516,11 @@ SQ   SEQUENCE   102 AA;  10576 MW;  CFBAA1231C3A5E92 CRC64;
         if dict_check :
             print "to_dict(parse(...))"
             seq_dict = to_dict(parse(StringIO(data), format=format))
-            assert Set(seq_dict.keys()) == Set([r.id for r in as_list])
+            assert set(seq_dict.keys()) == set([r.id for r in as_list])
             assert last_id in seq_dict
             assert seq_dict[last_id].seq.tostring() == as_list[-1].seq.tostring()
 
-        if len(Set([len(r.seq) for r in as_list]))==1 :
+        if len(set([len(r.seq) for r in as_list]))==1 :
             #All the sequences in the example are the same length,
             #so it make sense to try turning this file into an alignment.
             print "to_alignment(parse(handle))"
@@ -1549,7 +1554,7 @@ SQ   SEQUENCE   102 AA;  10576 MW;  CFBAA1231C3A5E92 CRC64;
     aln_list = list(parse(StringIO(aln_example), format="clustal"))
     phy_list = list(parse(StringIO(phy_example), format="phylip"))
     assert len(aln_list) == len(phy_list)
-    assert Set([r.id[0:10] for r in aln_list]) == Set([r.id for r in phy_list])
+    assert set([r.id[0:10] for r in aln_list]) == set([r.id for r in phy_list])
     for i in range(0, len(aln_list)) :
         assert aln_list[i].id[0:10] == phy_list[i].id
         assert aln_list[i].seq.tostring() == phy_list[i].seq.tostring()
@@ -1581,8 +1586,8 @@ SQ   SEQUENCE   102 AA;  10576 MW;  CFBAA1231C3A5E92 CRC64;
     aln_dict = to_dict(parse(StringIO(aln_example), format="clustal"))
     faa_dict = to_dict(parse(StringIO(faa_example), format="fasta"))
 
-    ids = Set(aln_dict.keys())
-    assert ids == Set(faa_dict.keys())
+    ids = set(aln_dict.keys())
+    assert ids == set(faa_dict.keys())
 
     for id in ids :
         #The aln file contains gaps as "-", and this fasta file does not

@@ -1,3 +1,9 @@
+#TODO - Remove this work around once we drop python 2.3 support
+try:
+   set = set
+except NameError:
+   from sets import Set as set
+
 import string
 from Bio import Alphabet
 from Bio.Alphabet import IUPAC
@@ -577,19 +583,18 @@ def list_ambiguous_codons(codons, ambiguous_nucleotide_values):
     #Note ambiguous_nucleotide_values['R'] = 'AG' (etc)
     #This will generate things like 'TRR' from ['TAG', 'TGA'], which
     #we don't want to include:
-    from sets import Set
     c1_list = [letter for (letter, meanings) \
                in ambiguous_nucleotide_values.iteritems() \
-               if Set([codon[0] for codon in codons]).issuperset(Set(meanings))]
+               if set([codon[0] for codon in codons]).issuperset(set(meanings))]
     c2_list = [letter for (letter, meanings) \
                in ambiguous_nucleotide_values.iteritems() \
-               if Set([codon[1] for codon in codons]).issuperset(Set(meanings))]
+               if set([codon[1] for codon in codons]).issuperset(set(meanings))]
     c3_list = [letter for (letter, meanings) \
                in ambiguous_nucleotide_values.iteritems() \
-               if Set([codon[2] for codon in codons]).issuperset(Set(meanings))]
-    set2 = Set([codon[1] for codon in codons])
-    set3 = Set([codon[2] for codon in codons])
-    candidates = Set([c1+c2+c3 for c1 in c1_list for c2 in c2_list for c3 in c3_list])
+               if set([codon[2] for codon in codons]).issuperset(set(meanings))]
+    set2 = set([codon[1] for codon in codons])
+    set3 = set([codon[2] for codon in codons])
+    candidates = set([c1+c2+c3 for c1 in c1_list for c2 in c2_list for c3 in c3_list])
     candidates.difference_update(codons)
     answer = codons[:] #copy
     #print "Have %i new candidates" % len(candidates)
