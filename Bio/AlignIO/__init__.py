@@ -340,7 +340,6 @@ def read(handle, format, seq_count=None) :
 if __name__ == "__main__" :
     #Run some tests...
     from Bio.Alphabet import generic_nucleotide
-    from sets import Set
 
     for format in _FormatToIterator :
         print "parse(handle to empty file)"
