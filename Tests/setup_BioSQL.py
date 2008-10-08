@@ -13,8 +13,8 @@ from BioSQL import BioSeqDatabase
 # The BioSQL unit tests will call this code, and will only run if it works.
 
 # -- MySQL
-DBDRIVER = 'MySQLdb'
-DBTYPE = 'mysql'
+#DBDRIVER = 'MySQLdb'
+#DBTYPE = 'mysql'
 # -- PostgreSQL
 #DBDRIVER = 'psycopg'
 #DBTYPE = 'pg'
