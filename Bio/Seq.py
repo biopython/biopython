@@ -197,11 +197,36 @@ class Seq:
         apply to biological sequences.
         
         e.g. print my_seq.split("*")
+
+        See also the rsplit method.
         """
         #If it has one, check the alphabet:
         sep_str = self._get_seq_str_and_check_alphabet(sep)
         return [Seq(chunk, self.alphabet) \
                 for chunk in str(self).split(sep_str, maxsplit)]
+
+    def rsplit(self, sep=None, maxsplit=-1) :
+        """Right split method, like that of a python string.
+
+        This behaves like the python string method of the same name.
+
+        Return a list of the 'words' in the string (as Seq objects),
+        using sep as the delimiter string.  If maxsplit is given, at
+        most maxsplit splits are done COUNTING FROM THE RIGHT.
+        If maxsplit is ommited, all splits are made.
+
+        Following the python string method, sep will by default be any
+        white space (tabs, spaces, newlines) but this is unlikely to
+        apply to biological sequences.
+        
+        e.g. print my_seq.split("*")
+
+        See also the split method.
+        """
+        #If it has one, check the alphabet:
+        sep_str = self._get_seq_str_and_check_alphabet(sep)
+        return [Seq(chunk, self.alphabet) \
+                for chunk in str(self).rsplit(sep_str, maxsplit)]
 
     def strip(self, chars=None) :
         """Returns a new Seq object with leading and trailing ends stripped.
@@ -213,6 +238,8 @@ class Seq:
         this defaults to removing any white space.
         
         e.g. print my_seq.strip("-")
+
+        See also the lstrip and rstrip methods.
         """
         #If it has one, check the alphabet:
         strip_str = self._get_seq_str_and_check_alphabet(chars)
@@ -228,6 +255,8 @@ class Seq:
         this defaults to removing any white space.
         
         e.g. print my_seq.lstrip("-")
+
+        See also the strip and rstrip methods.
         """
         #If it has one, check the alphabet:
         strip_str = self._get_seq_str_and_check_alphabet(chars)
@@ -243,6 +272,8 @@ class Seq:
         this defaults to removing any white space.
         
         e.g. print my_seq.lstrip("-")
+
+        See also the strip and lstrip methods.
         """
         #If it has one, check the alphabet:
         strip_str = self._get_seq_str_and_check_alphabet(chars)
@@ -842,7 +873,11 @@ if __name__ == "__main__" :
     for s in [p,q,r,s,t,v,w] :
         assert [x.tostring() for x in s.split()] == s.tostring().split()
         assert [x.tostring() for x in s.split("-")] == s.tostring().split("-")
-        for sep, max_split in [(None,-1),(None,1),("-",-1),("L-",-1),
+        assert [x.tostring() for x in s.split(None,1)] == s.tostring().split(None,1)
+        assert [x.tostring() for x in s.split("-",1)] == s.tostring().split("-",1)
+        assert [x.tostring() for x in s.rsplit()] == s.tostring().rsplit()
+        for sep, max_split in [(None,-1),(None,1),("-",1),("L-",1),
+                               ("P",1),(Seq("P"),2),
                                (Seq("L",Alphabet.generic_protein),2)] :
             assert [x.tostring() for x in s.split(sep,max_split)] \
                    == s.tostring().split(str(sep),max_split)

@@ -250,6 +250,16 @@ for a in dna + rna + nuc + protein :
         assert a.find(chars,2,-2) == a.tostring().find(str_chars,2,-2)
         assert a.count(chars) == a.tostring().count(str_chars)
         assert a.count(chars,2,-2) == a.tostring().count(str_chars,2,-2)
+        #Now check splits
+        assert [x.tostring() for x in a.split(chars)] \
+               == a.tostring().split(str(chars))
+        assert [x.tostring() for x in a.rsplit(chars)] \
+               == a.tostring().rsplit(str(chars))
+        for max_sep in [0,1,2,999] :
+            assert [x.tostring() for x in a.split(chars, max_sep)] \
+                   == a.tostring().split(str(chars), max_sep)
+            assert [x.tostring() for x in a.rsplit(chars, max_sep)] \
+                   == a.tostring().rsplit(str(chars), max_sep)
 del a, alpha, chars, str_chars, test_chars
 del dna, rna, nuc, protein
 ###########################################################################
